@@ -770,6 +770,8 @@ gtk_cargs = [
   '-DGTK_DATA_PREFIX="'+ get_option('prefix') + '"',
 ]
 
+gtk_gen_headers = [gtkmarshal_h, gtktypebuiltins_h, gtkprivatetypebuiltins_h, gtkversion]
+
 gtk_sources += [
   gtk_dbus_src,
   gtk_deprecated_sources,
@@ -840,11 +842,38 @@ if cc.has_header('langinfo.h')
   endforeach
 endif
 
-# check token HAVE__NL_MEASUREMENT_MEASUREMENT
-# check token HAVE__NL_PAPER_HEIGHT
-# check token HAVE__NL_PAPER_WIDTH
-# check token HAVE__NL_TIME_FIRST_WEEKDAY
+# Input methods
 
+gen_headers = [gtk_gen_headers, gsk_gen_headers, gdk_gen_headers]
+
+included_input_modules = []
+foreach m : inc_im_method_defs       # populated in modules/input/meson.build
+  im_name = m[0]
+  im_srcs = m[1]
+  im_args = m[2]
+  im_libs = m[3]
+
+  included_input_modules += static_library('im-@0@'.format(im_name),
+    im_srcs, gen_headers,
+    c_args : im_args,
+    include_directories : [confinc, gdkinc, gtkinc],
+    dependencies : gtk_deps + im_libs)
+endforeach
+
+foreach m : dyn_im_method_defs       # populated in modules/input/meson.build
+  im_name = m[0]
+  im_srcs = m[1]
+  im_args = m[2]
+  im_libs = m[3]
+
+  shared_module('im-@0@'.format(im_name), im_srcs, gen_headers,
+    c_args : im_args,
+    include_directories : [confinc, gdkinc, gtkinc],
+    dependencies : gtk_deps + im_libs,
+    name_prefix : '',   # we want im-foo.so not libim-foo.so
+    install_dir : immodules_install_dir,
+    install : true)
+endforeach
 
 # Library
 
@@ -853,7 +882,7 @@ libgtk = shared_library('gtk-4',
   c_args: gtk_cargs,
   include_directories: [confinc, gdkinc, gtkinc],
   dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
-  link_with: [libgdk, libgsk],
+  link_with: [libgdk, libgsk, included_input_modules],
   link_args: ['-Bsymbolic'],
   install: true)
 

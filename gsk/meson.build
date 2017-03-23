@@ -143,6 +143,7 @@ gskresources = gnome.compile_resources('gskresources',
   c_name: '_gsk',
   extra_args: '--manual-register')
 
+gsk_gen_headers = [gskenum_h]
 
 gsk_deps = [
   graphene_dep,
