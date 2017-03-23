@@ -146,7 +146,7 @@ wlinc = include_directories('.')
 
 
 gdk_deps = [
-  mlib,
+  libm,
   pixbuf_dep,
   cairo_dep,
   pango_dep,

@@ -795,7 +795,7 @@ gtk_deps = [
   pixbuf_dep,
   atk_dep,
   epoxy_dep,
-  mlib,
+  libm,
   graphene_dep
 ]
 

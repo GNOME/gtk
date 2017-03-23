@@ -310,8 +310,6 @@ if win32_enabled
                         '-lcfgmgr32']
 endif
 
-mlib = cc.find_library('m', required: false)
-
 # Check for bind_textdomain_codeset, including -lintl if GLib brings it in
 if cc.has_function('bind_textdomain_codeset', dependencies: glib_dep)
   cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
