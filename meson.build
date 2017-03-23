@@ -122,25 +122,7 @@ endforeach
 # Maths functions might be implemented in libm
 libm = cc.find_library('m', required : false)
 
-# check token HAVE_BIND_TEXTDOMAIN_CODESET
-# check token HAVE_CUPS_API_1_6
-# check token HAVE_GETTEXT
-# check token HAVE_GIO_UNIX
-# check token HAVE_GNU_FTW
-# check token HAVE_HTTPGETAUTHSTRING
-# check token HAVE_HTTP_AUTHSTRING
-# check token HAVE_IPRINTDIALOGCALLBACK
-# check token HAVE_LC_MESSAGES
-# check token HAVE_LOCALTIME_R
-# check token HAVE_SOCKADDR_UN_SUN_LEN
-# check token HAVE_SOLARIS_XINERAMA
-# check token HAVE_XFREE_XINERAMA
-# check token HAVE_XINERAMA
-# check token HAVE__NL_MEASUREMENT_MEASUREMENT
-# check token HAVE__NL_PAPER_HEIGHT
-# check token HAVE__NL_PAPER_WIDTH
-# check token HAVE__NL_TIME_FIRST_WEEKDAY
-# check token HAVE__NSGETENVIRON
+# FIXME: HAVE_XFREE_XINERAMA
 
 check_functions = [
   'dcgettext',
@@ -329,6 +311,11 @@ if win32_enabled
 endif
 
 mlib = cc.find_library('m', required: false)
+
+# Check for bind_textdomain_codeset, including -lintl if GLib brings it in
+if cc.has_function('bind_textdomain_codeset', dependencies: glib_dep)
+  cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
+endif
 
 cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
 

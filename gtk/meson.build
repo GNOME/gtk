@@ -829,6 +829,25 @@ endif
 # org.gtk.Settings.Debug.gschema.xml
 gnome.compile_schemas()
 
+# Check for more things
+
+if cc.has_header('langinfo.h')
+  foreach nl_enum : [ '_NL_MEASUREMENT_MEASUREMENT',
+                      '_NL_PAPER_HEIGHT',
+                      '_NL_PAPER_WIDTH',
+                      '_NL_TIME_FIRST_WEEKDAY' ]
+    cdata.set('HAVE_' + nl_enum, cc.has_header_symbol('langinfo.h', nl_enum))
+  endforeach
+endif
+
+# check token HAVE__NL_MEASUREMENT_MEASUREMENT
+# check token HAVE__NL_PAPER_HEIGHT
+# check token HAVE__NL_PAPER_WIDTH
+# check token HAVE__NL_TIME_FIRST_WEEKDAY
+
+
+# Library
+
 libgtk = shared_library('gtk-4',
   sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
   c_args: gtk_cargs,

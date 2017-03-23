@@ -47,14 +47,8 @@
 /* Define to 1 if you have the `getresuid' function. */
 #mesondefine HAVE_GETRESUID
 
-/* Define if the GNU gettext() function is already present or preinstalled. */
-#mesondefine HAVE_GETTEXT
-
 /* Define if gio-unix is available */
 #mesondefine HAVE_GIO_UNIX
-
-/* Have GNU ftw */
-#mesondefine HAVE_GNU_FTW
 
 /* Define to 1 if you have the `httpGetAuthString' function. */
 #mesondefine HAVE_HTTPGETAUTHSTRING
@@ -68,14 +62,8 @@
 /* Define to 1 if the system has the type `IPrintDialogCallback'. */
 #mesondefine HAVE_IPRINTDIALOGCALLBACK
 
-/* Define if your <locale.h> file defines LC_MESSAGES. */
-#mesondefine HAVE_LC_MESSAGES
-
 /* Define to 1 if you have the <locale.h> header file. */
 #mesondefine HAVE_LOCALE_H
-
-/* Define to 1 if you have the `localtime_r' function. */
-#mesondefine HAVE_LOCALTIME_R
 
 /* Define to 1 if you have the `lstat' function. */
 #mesondefine HAVE_LSTAT
@@ -119,12 +107,6 @@
 /* Define to 1 if you ahve the `exp2` function */
 #mesondefine HAVE_EXP2
 
-/* Have the sockaddr_un.sun_len member */
-#mesondefine HAVE_SOCKADDR_UN_SUN_LEN
-
-/* Define to 1 if solaris xinerama is available */
-#mesondefine HAVE_SOLARIS_XINERAMA
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #mesondefine HAVE_STDINT_H
 
@@ -145,12 +127,6 @@
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #mesondefine HAVE_SYS_STAT_H
-
-/* Define to 1 if sys/sysinfo.h is available */
-#mesondefine HAVE_SYS_SYSINFO_H
-
-/* Define to 1 if sys/systeminfo.h is available */
-#mesondefine HAVE_SYS_SYSTEMINFO_H
 
 /* Define to 1 if you have the <sys/time.h> header file. */
 #mesondefine HAVE_SYS_TIME_H
@@ -179,9 +155,6 @@
 /* Have XGenericEvent */
 #mesondefine HAVE_XGENERICEVENTS
 
-/* Define to 1 if xinerama is available */
-#mesondefine HAVE_XINERAMA
-
 /* Define to use XKB extension */
 #mesondefine HAVE_XKB
 
@@ -205,9 +178,6 @@
 
 /* Define if _NL_TIME_FIRST_WEEKDAY is available */
 #mesondefine HAVE__NL_TIME_FIRST_WEEKDAY
-
-/* Define to 1 if you have the `_NSGetEnviron' function. */
-#mesondefine HAVE__NSGETENVIRON
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #mesondefine LT_OBJDIR
