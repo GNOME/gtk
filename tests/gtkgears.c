@@ -35,7 +35,6 @@
  * Jul 13, 2010
  */
 
-#define _GNU_SOURCE
 #include "config.h"
 
 #include <math.h>
