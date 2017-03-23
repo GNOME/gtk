@@ -213,9 +213,6 @@
 /* Define to 1 if you have the ANSI C header files. */
 #mesondefine STDC_HEADERS
 
-/* Define to 1 if gmodule works and should be used */
-#mesondefine USE_GMODULE
-
 /* Enable extensions on AIX 3, Interix.  */
 #ifndef _ALL_SOURCE
 # undef _ALL_SOURCE

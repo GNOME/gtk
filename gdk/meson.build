@@ -144,6 +144,7 @@ gdkinc = include_directories('.')
 xinc = include_directories('x11')
 wlinc = include_directories('.')
 
+gdk_gen_headers = [gdkenum_h, gdkmarshal_h, gdkconfig, gdkversionmacros]
 
 gdk_deps = [
   libm,

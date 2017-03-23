@@ -183,6 +183,8 @@ graphene_dep   = dependency('graphene-1.0', version: graphene_req,
 fontconfig_dep = [] # only used in x11 backend
 atkbridge_dep  = [] # only used in x11 backend
 
+backend_immodules = []
+
 pc_gdk_extra_libs = []
 
 cairo_backends = []
@@ -228,6 +230,8 @@ if x11_enabled
   xcomposite_dep = dependency('xcomposite', required: false)
   fontconfig_dep = dependency('fontconfig')
   atkbridge_dep  = dependency('atk-bridge-2.0', version: atk_req)
+
+  backend_immodules += ['xim']
 
   x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr']
 
@@ -310,16 +314,19 @@ endif
 
 if broadway_enabled
   pc_gdk_extra_libs += ['-lz']
+  backend_immodules += ['broadway']
 endif
 
 if quartz_enabled
   pc_gdk_extra_libs += ['-framework Cocoa', '-framework Carbon']
+  backend_immodules += ['quartz']
 endif
 
 if win32_enabled
   pc_gdk_extra_libs += ['-lgdi32', '-limm32', '-lshell32', '-lole32',
                         '-Wl,-luuid', '-lwinmm', '-ldwmapi', '-lsetupapi',
                         '-lcfgmgr32']
+  backend_immodules += ['ime']
 endif
 
 # Check for bind_textdomain_codeset, including -lintl if GLib brings it in
@@ -346,6 +353,7 @@ else
   message('Vulkan support explicitly disabled')
 endif
 
+subdir('modules/input')
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
