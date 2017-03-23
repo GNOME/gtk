@@ -1040,13 +1040,13 @@ _gdk_x11_screen_get_edge_monitors (GdkScreen *screen,
                                    gint      *left,
                                    gint      *right)
 {
+#ifdef HAVE_XFREE_XINERAMA
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   gint          top_most_pos = x11_screen->height;
   gint          left_most_pos = x11_screen->width;
   gint          bottom_most_pos = 0;
   gint          right_most_pos = 0;
   gint          i;
-#ifdef HAVE_XFREE_XINERAMA
   XineramaScreenInfo *x_monitors;
   int x_n_monitors;
 #endif
