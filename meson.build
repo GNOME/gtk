@@ -341,13 +341,8 @@ enable_vulkan = get_option('enable-vulkan')
 if enable_vulkan != 'no'
   vulkan_lib = cc.find_library('vulkan', required : false)
   if vulkan_lib.found() and cc.has_function('vkCreateInstance', dependencies : vulkan_lib) and cc.has_header('vulkan/vulkan.h')
-    glslc = find_program('glslc', required : false)
-    if glslc.found()
-      have_vulkan = true
-      pc_gdk_extra_libs += ['-lvulkan']
-    else
-      error('Need glslc for Vulkan support. See https://github.com/google/shaderc or compile with -Denable-vulkan=no')
-    endif
+    have_vulkan = true
+    pc_gdk_extra_libs += ['-lvulkan']
   endif
 else
   message('Vulkan support explicitly disabled')
