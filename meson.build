@@ -8,6 +8,8 @@ project('gtk+-4.0', 'c',
         license: 'LGPLv2.1+')
 
 glib_req          = '>= 2.49.4'
+glib_min_required = 'GLIB_VERSION_2_48'
+glib_max_allowed  = 'GLIB_VERSION_2_50'
 pango_req         = '>= 1.37.3'
 atk_req           = '>= 2.15.1'
 cairo_req         = '>= 1.14.0'
@@ -22,10 +24,11 @@ epoxy_req         = '>= 1.0'
 
 gnome = import('gnome')
 
-# FIXME: add GLIB_MIN_REQUIRED_VERSION and GLIB_MAX_ALLOWED_VERSION
 add_project_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
 add_project_arguments('-DG_ENABLE_DEBUG', language: 'c')
 add_project_arguments('-DG_ENABLE_CONSISTENCY_CHECKS', language: 'c')
+add_project_arguments('-DGLIB_MIN_REQUIRED_VERSION=' + glib_min_required, language: 'c')
+add_project_arguments('-DGLIB_MAX_ALLOWED_VERSION=' + glib_max_allowed, language: 'c')
 
 # Making releases:
 #  1. gtk_micro_version += 1;
