@@ -122,14 +122,8 @@ endforeach
 # Maths functions might be implemented in libm
 libm = cc.find_library('m', required : false)
 
-check_functions = [
 # check token HAVE_BIND_TEXTDOMAIN_CODESET
 # check token HAVE_CUPS_API_1_6
-  ['HAVE_DCGETTEXT', 'dcgettext', '#include<libintl.h>'],
-  ['HAVE_DECL_ISINF', 'isinf', '#include<math.h>', libm],
-  ['HAVE_DECL_ISNAN', 'isnan', '#include<math.h>', libm],
-  ['HAVE_GETPAGESIZE', 'getpagesize', '#include<unistd.h>'],
-  ['HAVE_GETRESUID', 'getresuid', '#define _GNU_SOURCE\n#include<unistd.h>'],
 # check token HAVE_GETTEXT
 # check token HAVE_GIO_UNIX
 # check token HAVE_GNU_FTW
@@ -138,19 +132,6 @@ check_functions = [
 # check token HAVE_IPRINTDIALOGCALLBACK
 # check token HAVE_LC_MESSAGES
 # check token HAVE_LOCALTIME_R
-  ['HAVE_LSTAT', 'lstat', '#include<sys/stat.h>'],
-  ['HAVE_MMAP', 'mmap', '#include<sys/mman.h>'],
-  ['HAVE_NEARBYINT', 'nearbyint', '#include<math.h>', libm],
-  ['HAVE_POSIX_FALLOCATE', 'posix_fallocate', '#include<fcntl.h>'],
-  ['HAVE__LOCK_FILE', '_lock_file', '#include<stdio.h>'],
-  ['HAVE_FLOCKFILE', 'flockfile', '#include<stdio.h>'],
-  ['HAVE_MKSTEMP', 'mkstemp', '#include<stdlib.h>'],
-  ['HAVE_MALLINFO', 'mallinfo', '#include<malloc.h>'],
-  ['HAVE_ROUND', 'round', '#include<math.h>', libm],
-  ['HAVE_RINT', 'rint', '#include<math.h>', libm],
-  ['HAVE_LOG2', 'log2', '#include<math.h>', libm],
-  ['HAVE_EXP2', 'exp2', '#include<math.h>', libm],
-  ['HAVE_SINCOS', 'sincos', '#define _GNU_SOURCE\n#include<math.h>', libm],
 # check token HAVE_SOCKADDR_UN_SUN_LEN
 # check token HAVE_SOLARIS_XINERAMA
 # check token HAVE_XFREE_XINERAMA
@@ -160,13 +141,34 @@ check_functions = [
 # check token HAVE__NL_PAPER_WIDTH
 # check token HAVE__NL_TIME_FIRST_WEEKDAY
 # check token HAVE__NSGETENVIRON
+
+check_functions = [
+  'dcgettext',
+  'getpagesize',
+  'getresuid',
+  'lstat',
+  'mmap',
+  'nearbyint',
+  'posix_fallocate',
+  '_lock_file',
+  'flockfile',
+  'mkstemp',
+  'mallinfo',
+  'round',
+  'rint',
+  'log2',
+  'exp2',
+  'sincos',
 ]
 
-foreach f : check_functions
-  if cc.has_function(f.get(1), prefix : f.get(2), dependencies : f.get(3, []))
-    cdata.set(f.get(0), 1)
+foreach func : check_functions
+  if cc.has_function(func, dependencies : libm)
+    cdata.set('HAVE_' + func.underscorify().to_upper(), 1)
   endif
 endforeach
+
+cdata.set('HAVE_DECL_ISINF', cc.has_header_symbol('math.h', 'isinf'))
+cdata.set('HAVE_DECL_ISNAN', cc.has_header_symbol('math.h', 'isnan'))
 
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with
