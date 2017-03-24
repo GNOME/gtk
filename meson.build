@@ -266,15 +266,17 @@ if x11_enabled
     cdata.set('HAVE_XSYNC', 1)
   endif
 
-  if cc.has_function('XGetEventData', dependencies : x11_dep,
-                     prefix : '#include <X11/Xlib.h>')
+  if cc.has_function('XGetEventData', dependencies : x11_dep)
     cdata.set('HAVE_XGENERICEVENTS', 1)
   endif
 
-  if xi_dep.found() and cc.has_header('X11/extensions/XInput2.h')
+  if xi_dep.found() and cc.has_header('X11/extensions/XInput2.h', dependencies : xi_dep)
     cdata.set('XINPUT_2', 1)
+    # Note that we also check that the XIScrollClassInfo struct is defined,
+    # because at least Ubuntu Oneiric seems to have XIAllowTouchEvents(),
+    # but not the XIScrollClassInfo struct
     prefix = '#include<X11/Xlib.h>\n#include<X11/extensions/XInput2.h>'
-    if cc.has_function('XIAllowTouchEvents', prefix: prefix) and cc.has_member('XIScrollClassInfo', 'number', prefix: prefix)
+    if cc.has_function('XIAllowTouchEvents', dependencies : xi_dep) and cc.has_member('XIScrollClassInfo', 'number', prefix: prefix, dependencies : xi_dep)
       cdata.set('XINPUT_2_2', 1)
     endif
   endif
