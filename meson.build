@@ -122,8 +122,6 @@ endforeach
 # Maths functions might be implemented in libm
 libm = cc.find_library('m', required : false)
 
-# FIXME: HAVE_XFREE_XINERAMA
-
 check_functions = [
   'dcgettext',
   'getpagesize',
@@ -231,8 +229,6 @@ if x11_enabled
   fontconfig_dep = dependency('fontconfig')
   atkbridge_dep  = dependency('atk-bridge-2.0', version: atk_req)
 
-  # FIXME: check for xinerama + add to x11_pkgs
-
   x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr']
 
   if xcursor_dep.found()
@@ -279,6 +275,20 @@ if x11_enabled
     if cc.has_function('XIAllowTouchEvents', dependencies : xi_dep) and cc.has_member('XIScrollClassInfo', 'number', prefix: prefix, dependencies : xi_dep)
       cdata.set('XINPUT_2_2', 1)
     endif
+  endif
+
+  enable_xinerama = get_option('enable-xinerama')
+  if enable_xinerama != 'no'
+    want_xinerama = enable_xinerama == 'yes'
+    xinerama_dep = dependency('xinerama', required : want_xinerama)
+    if xinerama_dep.found() and cc.has_header_symbol('X11/extensions/Xinerama.h', 'XineramaQueryExtension', dependencies : xinerama_dep)
+      cdata.set('HAVE_XFREE_XINERAMA', 1)
+      x11_pkgs += ['xinerama']
+    elif want_xinerama
+      error('No function XineramaQueryExtension in xinerama dependency which was explicitly requested.')
+    endif
+  else
+    xinerama_dep = []
   endif
 
   cdata.set('HAVE_RANDR', xrandr_dep.found())
@@ -329,6 +339,8 @@ if enable_vulkan != 'no'
   if vulkan_lib.found() and cc.has_function('vkCreateInstance', dependencies : vulkan_lib) and cc.has_header('vulkan/vulkan.h')
     have_vulkan = true
     pc_gdk_extra_libs += ['-lvulkan']
+  elif enable_vulkan == 'yes'
+    error('Vulkan support not found, but was explicitly requested.')
   endif
 else
   message('Vulkan support explicitly disabled')

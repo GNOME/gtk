@@ -18,3 +18,5 @@ option('enable-papi-print-backend', type: 'combo', choices : ['yes', 'no', 'auto
   description : 'Enable the papi print backend')
 option('enable-cloudprint-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Enable the cloudprint print backend')
+option('enable-xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable support for the Xinerama extension')

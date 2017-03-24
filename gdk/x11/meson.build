@@ -64,6 +64,7 @@ gdk_x11_deps = [
   xfixes_dep,
   xcomposite_dep,
   xrandr_dep,
+  xinerama_dep,
 ]
 
 libgdk_x11 = static_library('libgdk-x11',
