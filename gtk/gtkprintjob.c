@@ -781,7 +781,7 @@ gtk_print_job_get_page_ranges (GtkPrintJob *job,
 /**
  * gtk_print_job_set_page_ranges:
  * @job: a #GtkPrintJob
- * @ranges: (array length=n_ranges): pointer to an array of
+ * @ranges: (array length=n_ranges) (transfer full): pointer to an array of
  *    #GtkPageRange structs
  * @n_ranges: the length of the @ranges array
  *
@@ -794,6 +794,7 @@ gtk_print_job_set_page_ranges (GtkPrintJob  *job,
                                GtkPageRange *ranges,
                                gint          n_ranges)
 {
+  g_free (job->priv->page_ranges);
   job->priv->page_ranges = ranges;
   job->priv->num_page_ranges = n_ranges;
 }
