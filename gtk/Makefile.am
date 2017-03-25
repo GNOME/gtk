@@ -1217,10 +1217,6 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
 	echo "<gresources>" >> $@; \
 	echo "  <gresource prefix='/org/gtk/libgtk'>" >> $@; \
-	for f in $(srcdir)/theme/Raleigh/*.css; do \
-	  n=`basename $$f`; \
-	  echo "    <file alias='theme/Raleigh/gtk.css'>theme/Raleigh/$$n</file>" >> $@; \
-	done; \
         echo "    <file>theme/Adwaita/gtk.css</file>" >> $@; \
         echo "    <file>theme/Adwaita/gtk-dark.css</file>" >> $@; \
         echo "    <file>theme/Adwaita/gtk-contained.css</file>" >> $@; \
@@ -1315,8 +1311,7 @@ theme_sources = 				\
 	theme/HighContrast/gtk-contained-inverse.css \
 	theme/HighContrast/gtk.css 		\
 	theme/HighContrast/gtk-inverse.css 	\
-	theme/HighContrast/parse-sass.sh 	\
-	theme/Raleigh/gtk-default.css
+	theme/HighContrast/parse-sass.sh
 
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/gtk.gresource.xml)
 
