@@ -81,6 +81,7 @@
 
 struct _GtkFontChooserWidgetPrivate
 {
+  GtkWidget    *grid;
   GtkWidget    *search_entry;
   GtkWidget    *family_face_list;
   GtkTreeViewColumn *family_face_column;
@@ -171,7 +172,7 @@ static void     gtk_font_chooser_widget_cell_data_func         (GtkTreeViewColum
 
 static void gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkFontChooserWidget, gtk_font_chooser_widget, GTK_TYPE_BOX,
+G_DEFINE_TYPE_WITH_CODE (GtkFontChooserWidget, gtk_font_chooser_widget, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkFontChooserWidget)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FONT_CHOOSER,
                                                 gtk_font_chooser_widget_iface_init))
@@ -565,6 +566,58 @@ row_deleted_cb  (GtkTreeModel *model,
 }
 
 static void
+gtk_font_chooser_widget_measure (GtkWidget       *widget,
+                                 GtkOrientation  orientation,
+                                 int             for_size,
+                                 int            *minimum,
+                                 int            *natural,
+                                 int            *minimum_baseline,
+                                 int            *natural_baseline)
+{
+  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (self);
+
+  gtk_widget_measure (priv->grid, orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_font_chooser_widget_snapshot (GtkWidget   *widget,
+                                  GtkSnapshot *snapshot)
+{
+  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (self);
+
+  gtk_widget_snapshot_child (widget, priv->grid, snapshot);
+}
+
+static void
+gtk_font_chooser_widget_size_allocate (GtkWidget     *widget,
+                                       GtkAllocation *allocation)
+{
+  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (self);
+
+  gtk_widget_size_allocate (priv->grid, allocation);
+}
+
+static void
+gtk_font_chooser_widget_dispose (GObject *object)
+{
+  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (object);
+  GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (self);
+
+  if (priv->grid)
+    {
+      gtk_widget_unparent (priv->grid);
+      priv->grid = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_font_chooser_widget_parent_class)->dispose (object);
+}
+
+static void
 gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -575,8 +628,12 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
 
   widget_class->screen_changed = gtk_font_chooser_widget_screen_changed;
   widget_class->style_updated = gtk_font_chooser_widget_style_updated;
+  widget_class->measure = gtk_font_chooser_widget_measure;
+  widget_class->size_allocate = gtk_font_chooser_widget_size_allocate;
+  widget_class->snapshot = gtk_font_chooser_widget_snapshot;
 
   gobject_class->finalize = gtk_font_chooser_widget_finalize;
+  gobject_class->dispose = gtk_font_chooser_widget_dispose;
   gobject_class->set_property = gtk_font_chooser_widget_set_property;
   gobject_class->get_property = gtk_font_chooser_widget_get_property;
 
@@ -597,6 +654,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, preview);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_spin);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_slider);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, grid);
 
   gtk_widget_class_bind_template_callback (widget_class, text_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, stop_search_cb);
@@ -620,6 +678,8 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   fontchooser->priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   priv = fontchooser->priv;
+
+  gtk_widget_set_has_window (GTK_WIDGET (fontchooser), FALSE);
 
   gtk_widget_init_template (GTK_WIDGET (fontchooser));
 

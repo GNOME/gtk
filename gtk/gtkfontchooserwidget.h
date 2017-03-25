@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -39,7 +39,7 @@ typedef struct _GtkFontChooserWidgetClass         GtkFontChooserWidgetClass;
 
 struct _GtkFontChooserWidget
 {
-  GtkBox parent_instance;
+  GtkWidget parent_instance;
 
   /*< private >*/
   GtkFontChooserWidgetPrivate *priv;
@@ -51,7 +51,7 @@ struct _GtkFontChooserWidget
  */
 struct _GtkFontChooserWidgetClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< private >*/
 
