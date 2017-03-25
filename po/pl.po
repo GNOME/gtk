@@ -1,5 +1,5 @@
 # Polish translation for gtk+.
-# Copyright © 1998-2016 the gtk+ authors.
+# Copyright © 1998-2017 the gtk+ authors.
 # This file is distributed under the same license as the gtk+ package.
 # Krzysztof Krzyżaniak <eloy@venco.com.pl>, 1998.
 # Tomasz Kłoczko <kloczek@rudy.mif.pg.gda.pl>, 1999.
@@ -8,15 +8,15 @@
 # Artur Flinta <aflinta@at.kernel.pl>, 2003-2006.
 # Wadim Dziedzic <wdziedzic@aviary.pl>, 2007-2009.
 # Tomasz Dominikowski <dominikowski@gmail.com>, 2007-2009.
-# Piotr Drąg <piotrdrag@gmail.com>, 2010-2016.
-# Aviary.pl <community-poland@mozilla.org>, 2007-2016.
+# Piotr Drąg <piotrdrag@gmail.com>, 2010-2017.
+# Aviary.pl <community-poland@mozilla.org>, 2007-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-12 19:22+0200\n"
-"PO-Revision-Date: 2016-10-12 19:23+0200\n"
+"POT-Creation-Date: 2017-03-25 23:04+0100\n"
+"PO-Revision-Date: 2017-03-25 23:05+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -755,7 +755,7 @@ msgstr "Marginesy z drukarki…"
 #: ../gtk/gtkcustompaperunixdialog.c:746
 #, c-format
 msgid "Custom Size %d"
-msgstr "Niestandardowy rozmiar %d"
+msgstr "%d. niestandardowy rozmiar"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1054
 msgid "_Width:"
@@ -789,15 +789,15 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: ../gtk/gtkentry.c:8747 ../gtk/gtktextview.c:7976
+#: ../gtk/gtkentry.c:8773 ../gtk/gtktextview.c:7996
 msgid "Input _Methods"
 msgstr "_Metoda wprowadzania"
 
-#: ../gtk/gtkentry.c:8761 ../gtk/gtktextview.c:7990
+#: ../gtk/gtkentry.c:8787 ../gtk/gtktextview.c:8010
 msgid "_Insert Unicode Control Character"
 msgstr "_Wstaw znak kontrolny Unikodu"
 
-#: ../gtk/gtkentry.c:10135
+#: ../gtk/gtkentry.c:10161
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
@@ -1559,7 +1559,7 @@ msgstr "Nie można zakończyć procesu o PID %d: %s"
 #: ../gtk/gtknotebook.c:4745 ../gtk/gtknotebook.c:7351
 #, c-format
 msgid "Page %u"
-msgstr "Strona %u"
+msgstr "%u. strona"
 
 #: ../gtk/gtkpagesetup.c:597 ../gtk/gtkpapersize.c:826
 #: ../gtk/gtkpapersize.c:868
@@ -1584,10 +1584,10 @@ msgid ""
 " Bottom: %s %s"
 msgstr ""
 "Marginesy:\n"
-" Lewy: %s %s\n"
-" Prawy: %s %s\n"
-" Górny: %s %s\n"
-" Dolny: %s %s"
+" Lewy: %s %s\n"
+" Prawy: %s %s\n"
+" Górny: %s %s\n"
+" Dolny: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:846 ../gtk/gtkprintunixdialog.c:3286
 msgid "Manage Custom Sizes..."
@@ -1640,7 +1640,7 @@ msgstr "_Zapis w katalogu:"
 #: ../gtk/gtkprintoperation.c:190
 #, c-format
 msgid "%s job #%d"
-msgstr "%s: zadanie #%d"
+msgstr "%s: %d. zadanie"
 
 #: ../gtk/gtkprintoperation.c:1709
 msgctxt "print operation status"
@@ -2198,10 +2198,10 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1173 ../gtk/gtkrecentmanager.c:1186
-#: ../gtk/gtkrecentmanager.c:1323 ../gtk/gtkrecentmanager.c:1333
-#: ../gtk/gtkrecentmanager.c:1386 ../gtk/gtkrecentmanager.c:1395
-#: ../gtk/gtkrecentmanager.c:1410
+#: ../gtk/gtkrecentmanager.c:1182 ../gtk/gtkrecentmanager.c:1195
+#: ../gtk/gtkrecentmanager.c:1332 ../gtk/gtkrecentmanager.c:1342
+#: ../gtk/gtkrecentmanager.c:1395 ../gtk/gtkrecentmanager.c:1404
+#: ../gtk/gtkrecentmanager.c:1419
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Nie można odnaleźć elementu z adresem URI „%s”"
@@ -3534,7 +3534,7 @@ msgstr "Legal rządowy"
 #: ../gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "Government Letter"
-msgstr "List rządowy"
+msgstr "Letter rządowy"
 
 #: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
@@ -3569,27 +3569,27 @@ msgstr "Tabloid"
 #: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
-msgstr "US Legal"
+msgstr "Legal USA"
 
 #: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr "Legal USA ekstra"
+msgstr "Legal USA Ekstra"
 
 #: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "US Letter"
-msgstr "List USA"
+msgstr "Letter USA"
 
 #: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr "List USA ekstra"
+msgstr "Letter USA Ekstra"
 
 #: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr "List USA plus"
+msgstr "Letter USA Plus"
 
 #: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
