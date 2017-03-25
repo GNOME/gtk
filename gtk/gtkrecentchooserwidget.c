@@ -62,7 +62,7 @@ static void     gtk_recent_chooser_widget_finalize     (GObject               *o
 
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserWidget,
 		         gtk_recent_chooser_widget,
-			 GTK_TYPE_BOX,
+                         GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkRecentChooserWidget)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
 						_gtk_recent_chooser_delegate_iface_init))
@@ -74,8 +74,8 @@ gtk_recent_chooser_widget_constructed (GObject *gobject)
 
   self->priv->chooser = _gtk_recent_chooser_default_new (self->priv->manager);
 
-  gtk_container_add (GTK_CONTAINER (self), self->priv->chooser);
-  gtk_widget_show (self->priv->chooser);
+  gtk_widget_set_parent (self->priv->chooser, GTK_WIDGET (self));
+
   _gtk_recent_chooser_set_delegate (GTK_RECENT_CHOOSER (self),
 				    GTK_RECENT_CHOOSER (self->priv->chooser));
 }
@@ -120,19 +120,63 @@ gtk_recent_chooser_widget_finalize (GObject *object)
   GtkRecentChooserWidget *self = GTK_RECENT_CHOOSER_WIDGET (object);
 
   self->priv->manager = NULL;
-  
+
+  gtk_widget_unparent (self->priv->chooser);
+
   G_OBJECT_CLASS (gtk_recent_chooser_widget_parent_class)->finalize (object);
+}
+
+static void
+gtk_recent_chooser_widget_measure (GtkWidget       *widget,
+                                 GtkOrientation  orientation,
+                                 int             for_size,
+                                 int            *minimum,
+                                 int            *natural,
+                                 int            *minimum_baseline,
+                                 int            *natural_baseline)
+{
+  GtkRecentChooserWidget *self = GTK_RECENT_CHOOSER_WIDGET (widget);
+  GtkRecentChooserWidgetPrivate *priv = gtk_recent_chooser_widget_get_instance_private (self);
+
+  gtk_widget_measure (priv->chooser, orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_recent_chooser_widget_snapshot (GtkWidget   *widget,
+                                  GtkSnapshot *snapshot)
+{
+  GtkRecentChooserWidget *self = GTK_RECENT_CHOOSER_WIDGET (widget);
+  GtkRecentChooserWidgetPrivate *priv = gtk_recent_chooser_widget_get_instance_private (self);
+
+  gtk_widget_snapshot_child (widget, priv->chooser, snapshot);
+}
+
+static void
+gtk_recent_chooser_widget_size_allocate (GtkWidget     *widget,
+                                       GtkAllocation *allocation)
+{
+  GtkRecentChooserWidget *self = GTK_RECENT_CHOOSER_WIDGET (widget);
+  GtkRecentChooserWidgetPrivate *priv = gtk_recent_chooser_widget_get_instance_private (self);
+
+  gtk_widget_size_allocate (priv->chooser, allocation);
 }
 
 static void
 gtk_recent_chooser_widget_class_init (GtkRecentChooserWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gobject_class->constructed = gtk_recent_chooser_widget_constructed;
   gobject_class->set_property = gtk_recent_chooser_widget_set_property;
   gobject_class->get_property = gtk_recent_chooser_widget_get_property;
   gobject_class->finalize = gtk_recent_chooser_widget_finalize;
+
+  widget_class->measure = gtk_recent_chooser_widget_measure;
+  widget_class->size_allocate = gtk_recent_chooser_widget_size_allocate;
+  widget_class->snapshot = gtk_recent_chooser_widget_snapshot;
 
   _gtk_recent_chooser_install_properties (gobject_class);
 }
@@ -142,8 +186,7 @@ gtk_recent_chooser_widget_init (GtkRecentChooserWidget *widget)
 {
   widget->priv = gtk_recent_chooser_widget_get_instance_private (widget);
 
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (widget),
-                                  GTK_ORIENTATION_VERTICAL);
+  gtk_widget_set_has_window (GTK_WIDGET (widget), FALSE);
 }
 
 /*

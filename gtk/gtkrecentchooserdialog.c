@@ -25,6 +25,7 @@
 #include "gtktypebuiltins.h"
 #include "gtksettings.h"
 #include "gtkdialogprivate.h"
+#include "gtkbox.h"
 
 #include <stdarg.h>
 
@@ -206,7 +207,6 @@ gtk_recent_chooser_dialog_constructed (GObject *object)
 
   gtk_box_pack_start (GTK_BOX (content_area),
                       priv->chooser, TRUE, TRUE);
-  gtk_widget_show (priv->chooser);
 
   _gtk_recent_chooser_set_delegate (GTK_RECENT_CHOOSER (object),
   				    GTK_RECENT_CHOOSER (priv->chooser));

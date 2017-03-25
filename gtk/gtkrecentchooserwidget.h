@@ -24,7 +24,7 @@
 #endif
 
 #include <gtk/gtkrecentchooser.h>
-#include <gtk/gtkbox.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -42,7 +42,7 @@ typedef struct _GtkRecentChooserWidgetPrivate GtkRecentChooserWidgetPrivate;
 
 struct _GtkRecentChooserWidget
 {
-  GtkBox parent_instance;
+  GtkWidget parent_instance;
 
   /*< private >*/
   GtkRecentChooserWidgetPrivate *priv;
@@ -50,7 +50,7 @@ struct _GtkRecentChooserWidget
 
 struct _GtkRecentChooserWidgetClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
