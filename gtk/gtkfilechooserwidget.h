@@ -41,7 +41,7 @@ typedef struct _GtkFileChooserWidgetClass   GtkFileChooserWidgetClass;
 
 struct _GtkFileChooserWidget
 {
-  GtkBox parent_instance;
+  GtkWidget parent_instance;
 
   GtkFileChooserWidgetPrivate *priv;
 };
@@ -52,7 +52,7 @@ struct _GtkFileChooserWidget
  */
 struct _GtkFileChooserWidgetClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< private >*/
 

@@ -215,6 +215,8 @@ struct _GtkFileChooserWidgetPrivate {
 
   GtkFileSystem *file_system;
 
+  GtkWidget *box;
+
   /* Save mode widgets */
   GtkWidget *save_widgets;
   GtkWidget *save_widgets_table;
@@ -612,7 +614,7 @@ static void     switch_to_home_dir           (GtkFileChooserWidget *impl);
 
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_BOX,
+G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkFileChooserWidget)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
                                                 gtk_file_chooser_widget_iface_init)
@@ -3650,6 +3652,12 @@ gtk_file_chooser_widget_dispose (GObject *object)
     {
       location_entry_disconnect (impl);
       priv->external_entry = NULL;
+    }
+
+  if (priv->box)
+    {
+      gtk_widget_unparent (priv->box);
+      priv->box = NULL;
     }
 
   g_clear_object (&priv->long_press_gesture);
@@ -8063,6 +8071,43 @@ add_normal_and_shifted_binding (GtkBindingSet   *binding_set,
 }
 
 static void
+gtk_file_chooser_widget_measure (GtkWidget       *widget,
+                                 GtkOrientation  orientation,
+                                 int             for_size,
+                                 int            *minimum,
+                                 int            *natural,
+                                 int            *minimum_baseline,
+                                 int            *natural_baseline)
+{
+  GtkFileChooserWidget *self = GTK_FILE_CHOOSER_WIDGET (widget);
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
+
+  gtk_widget_measure (priv->box, orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_file_chooser_widget_snapshot (GtkWidget   *widget,
+                                  GtkSnapshot *snapshot)
+{
+  GtkFileChooserWidget *self = GTK_FILE_CHOOSER_WIDGET (widget);
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
+
+  gtk_widget_snapshot_child (widget, priv->box, snapshot);
+}
+
+static void
+gtk_file_chooser_widget_size_allocate (GtkWidget     *widget,
+                                       GtkAllocation *allocation)
+{
+  GtkFileChooserWidget *self = GTK_FILE_CHOOSER_WIDGET (widget);
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
+
+  gtk_widget_size_allocate (priv->box, allocation);
+}
+
+static void
 gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 {
   static const guint quick_bookmark_keyvals[10] = {
@@ -8086,6 +8131,9 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->style_updated = gtk_file_chooser_widget_style_updated;
   widget_class->screen_changed = gtk_file_chooser_widget_screen_changed;
   widget_class->key_press_event = gtk_file_chooser_widget_key_press_event;
+  widget_class->measure = gtk_file_chooser_widget_measure;
+  widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;
+  widget_class->snapshot = gtk_file_chooser_widget_snapshot;
 
   /*
    * Signals
@@ -8478,6 +8526,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_error_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_popover);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, remote_warning_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, box);
 
   /* And a *lot* of callbacks to bind ... */
   gtk_widget_class_bind_template_callback (widget_class, browse_files_key_press_event_cb);
@@ -8606,6 +8655,8 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 #endif
   impl->priv = gtk_file_chooser_widget_get_instance_private (impl);
   priv = impl->priv;
+
+  gtk_widget_set_has_window (GTK_WIDGET (impl), FALSE);
 
   priv->local_only = FALSE;
   priv->preview_widget_active = TRUE;
