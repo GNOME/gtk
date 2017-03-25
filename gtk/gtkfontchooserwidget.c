@@ -109,16 +109,6 @@ struct _GtkFontChooserWidgetPrivate
   guint last_fontconfig_timestamp;
 };
 
-/* This is the initial fixed height and the top padding of the preview entry */
-#define PREVIEW_HEIGHT 72
-#define PREVIEW_TOP_PADDING 6
-
-/* These are the sizes of the font, style & size lists. */
-#define FONT_LIST_HEIGHT  136
-#define FONT_LIST_WIDTH   190
-#define FONT_STYLE_LIST_WIDTH 170
-#define FONT_SIZE_LIST_WIDTH  60
-
 /* Keep in line with GtkTreeStore defined in gtkfontchooserwidget.ui */
 enum {
   FAMILY_COLUMN,
