@@ -190,7 +190,7 @@ static void      gtk_info_bar_buildable_custom_finished    (GtkBuildable  *build
                                                             gpointer       user_data);
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkInfoBar, gtk_info_bar, GTK_TYPE_BOX,
+G_DEFINE_TYPE_WITH_CODE (GtkInfoBar, gtk_info_bar, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkInfoBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_info_bar_buildable_interface_init))
@@ -308,6 +308,58 @@ gtk_info_bar_close (GtkInfoBar *info_bar)
 }
 
 static void
+gtk_info_bar_measure (GtkWidget       *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
+{
+  GtkInfoBar *self = GTK_INFO_BAR (widget);
+  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (self);
+
+  gtk_widget_measure (priv->revealer, orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_info_bar_size_allocate (GtkWidget     *widget,
+                            GtkAllocation *allocation)
+{
+  GtkInfoBar *self = GTK_INFO_BAR (widget);
+  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (self);
+
+  gtk_widget_size_allocate (priv->revealer, allocation);
+}
+
+static void
+gtk_info_bar_snapshot (GtkWidget   *widget,
+                       GtkSnapshot *snapshot)
+{
+  GtkInfoBar *self = GTK_INFO_BAR (widget);
+  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (self);
+
+  gtk_widget_snapshot_child (widget, priv->revealer, snapshot);
+}
+
+static void
+gtk_info_bar_dispose (GObject *object)
+{
+  GtkInfoBar *self = GTK_INFO_BAR (object);
+  GtkInfoBarPrivate *priv = gtk_info_bar_get_instance_private (self);
+
+  if (priv->revealer)
+    {
+      gtk_widget_unparent (priv->revealer);
+      priv->revealer = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_info_bar_parent_class)->dispose (object);
+}
+
+static void
 gtk_info_bar_class_init (GtkInfoBarClass *klass)
 {
   GtkWidgetClass *widget_class;
@@ -319,6 +371,11 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
 
   object_class->get_property = gtk_info_bar_get_property;
   object_class->set_property = gtk_info_bar_set_property;
+  object_class->dispose = gtk_info_bar_dispose;
+
+  widget_class->measure = gtk_info_bar_measure;
+  widget_class->size_allocate = gtk_info_bar_size_allocate;
+  widget_class->snapshot = gtk_info_bar_snapshot;
 
   klass->close = gtk_info_bar_close;
 
@@ -433,7 +490,7 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
 
   priv = info_bar->priv = gtk_info_bar_get_instance_private (info_bar);
 
-  gtk_widget_set_redraw_on_allocate (widget, TRUE);
+  gtk_widget_set_has_window (GTK_WIDGET (info_bar), FALSE);
 
   /* message-type is a CONSTRUCT property, so we init to a value
    * different from its default to trigger its property setter

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
-  <template class="GtkInfoBar" parent="GtkBox">
+  <template class="GtkInfoBar" parent="GtkWidget">
     <child>
       <object class="GtkRevealer" id="revealer">
         <property name="visible">1</property>

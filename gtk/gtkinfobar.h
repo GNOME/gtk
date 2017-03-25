@@ -56,7 +56,7 @@ typedef struct _GtkInfoBar GtkInfoBar;
 
 struct _GtkInfoBar
 {
-  GtkBox parent;
+  GtkWidget parent_instance;
 
   /*< private > */
   GtkInfoBarPrivate *priv;
@@ -65,7 +65,7 @@ struct _GtkInfoBar
 
 struct _GtkInfoBarClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 
   /* Signals */
   void (* response) (GtkInfoBar *info_bar, gint response_id);
