@@ -12165,6 +12165,15 @@ static GQuark		 quark_builder_atk_relations = 0;
 static GQuark            quark_builder_set_name = 0;
 
 static void
+gtk_widget_buildable_add_child (GtkBuildable  *buildable,
+                                GtkBuilder    *builder,
+                                GObject       *child,
+                                const gchar   *type)
+{
+  gtk_widget_set_parent (GTK_WIDGET (child), GTK_WIDGET (buildable));
+}
+
+static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
   quark_builder_has_default = g_quark_from_static_string ("gtk-builder-has-default");
@@ -12179,6 +12188,7 @@ gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
   iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
   iface->custom_finished = gtk_widget_buildable_custom_finished;
+  iface->add_child = gtk_widget_buildable_add_child;
 }
 
 static void
