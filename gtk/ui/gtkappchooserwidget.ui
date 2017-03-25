@@ -28,8 +28,7 @@
   <object class="GtkTreeModelSort" id="program_list_sort">
     <property name="model">program_list_store</property>
   </object>
-  <template class="GtkAppChooserWidget" parent="GtkBox">
-    <property name="orientation">vertical</property>
+  <template class="GtkAppChooserWidget" parent="GtkWidget">
     <child>
       <object class="GtkOverlay" id="overlay">
         <property name="visible">1</property>
@@ -129,9 +128,6 @@
           </object>
         </child>
       </object>
-      <packing>
-        <property name="expand">1</property>
-      </packing>
     </child>
   </template>
 </interface>

@@ -75,6 +75,8 @@
 struct _GtkAppChooserWidgetPrivate {
   GAppInfo *selected_app_info;
 
+  GtkWidget *overlay;
+
   gchar *content_type;
   gchar *default_text;
 
@@ -136,7 +138,7 @@ static guint signals[N_SIGNALS] = { 0, };
 
 static void gtk_app_chooser_widget_iface_init (GtkAppChooserIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkAppChooserWidget, gtk_app_chooser_widget, GTK_TYPE_BOX,
+G_DEFINE_TYPE_WITH_CODE (GtkAppChooserWidget, gtk_app_chooser_widget, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkAppChooserWidget)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER,
                                                 gtk_app_chooser_widget_iface_init));
@@ -928,10 +930,54 @@ static void
 gtk_app_chooser_widget_dispose (GObject *object)
 {
   GtkAppChooserWidget *self = GTK_APP_CHOOSER_WIDGET (object);
+  GtkAppChooserWidgetPrivate *priv = gtk_app_chooser_widget_get_instance_private (self);
 
-  g_clear_object (&self->priv->selected_app_info);
+  g_clear_object (&priv->selected_app_info);
+
+  if (priv->overlay)
+    {
+      gtk_widget_unparent (priv->overlay);
+      priv->overlay = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->dispose (object);
+}
+
+static void
+gtk_app_chooser_widget_measure (GtkWidget       *widget,
+                                GtkOrientation  orientation,
+                                int             for_size,
+                                int            *minimum,
+                                int            *natural,
+                                int            *minimum_baseline,
+                                int            *natural_baseline)
+{
+  GtkAppChooserWidget *self = GTK_APP_CHOOSER_WIDGET (widget);
+  GtkAppChooserWidgetPrivate *priv = gtk_app_chooser_widget_get_instance_private (self);
+
+  gtk_widget_measure (priv->overlay, orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_app_chooser_widget_snapshot (GtkWidget   *widget,
+                                 GtkSnapshot *snapshot)
+{
+  GtkAppChooserWidget *self = GTK_APP_CHOOSER_WIDGET (widget);
+  GtkAppChooserWidgetPrivate *priv = gtk_app_chooser_widget_get_instance_private (self);
+
+  gtk_widget_snapshot_child (widget, priv->overlay, snapshot);
+}
+
+static void
+gtk_app_chooser_widget_size_allocate (GtkWidget     *widget,
+                                      GtkAllocation *allocation)
+{
+  GtkAppChooserWidget *self = GTK_APP_CHOOSER_WIDGET (widget);
+  GtkAppChooserWidgetPrivate *priv = gtk_app_chooser_widget_get_instance_private (self);
+
+  gtk_widget_size_allocate (priv->overlay, allocation);
 }
 
 static void
@@ -947,6 +993,12 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   gobject_class->set_property = gtk_app_chooser_widget_set_property;
   gobject_class->get_property = gtk_app_chooser_widget_get_property;
   gobject_class->constructed = gtk_app_chooser_widget_constructed;
+
+  widget_class = GTK_WIDGET_CLASS (klass);
+  widget_class->measure = gtk_app_chooser_widget_measure;
+  widget_class->size_allocate = gtk_app_chooser_widget_size_allocate;
+  widget_class->snapshot = gtk_app_chooser_widget_snapshot;
+
 
   g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
 
@@ -1098,7 +1150,6 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
 
   /* Bind class to template
    */
-  widget_class = GTK_WIDGET_CLASS (klass);
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/ui/gtkappchooserwidget.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, program_list);
@@ -1108,6 +1159,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, secondary_padding);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, no_apps_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, no_apps);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserWidget, overlay);
   gtk_widget_class_bind_template_callback (widget_class, refresh_and_emit_app_selected);
   gtk_widget_class_bind_template_callback (widget_class, program_list_selection_activated);
   gtk_widget_class_bind_template_callback (widget_class, widget_button_press_event_cb);
@@ -1122,6 +1174,8 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
   GtkTreeModel *sort;
 
   self->priv = gtk_app_chooser_widget_get_instance_private (self);
+
+  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
