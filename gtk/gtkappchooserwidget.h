@@ -29,7 +29,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtkwidget.h>
 #include <gtk/gtkmenu.h>
 #include <gio/gio.h>
 
@@ -47,7 +47,7 @@ typedef struct _GtkAppChooserWidgetClass   GtkAppChooserWidgetClass;
 typedef struct _GtkAppChooserWidgetPrivate GtkAppChooserWidgetPrivate;
 
 struct _GtkAppChooserWidget {
-  GtkBox parent;
+  GtkWidget parent_instance;
 
   /*< private >*/
   GtkAppChooserWidgetPrivate *priv;
@@ -64,7 +64,7 @@ struct _GtkAppChooserWidget {
  *    popup over an application item.
  */
 struct _GtkAppChooserWidgetClass {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 
   /*< public >*/
 

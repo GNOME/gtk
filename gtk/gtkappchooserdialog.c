@@ -348,7 +348,6 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
   /* Need to build the appchooser widget after, because of the content-type construct-only property */
   self->priv->app_chooser_widget = gtk_app_chooser_widget_new (self->priv->content_type);
   gtk_box_pack_start (GTK_BOX (self->priv->inner_box), self->priv->app_chooser_widget, TRUE, TRUE);
-  gtk_widget_show (self->priv->app_chooser_widget);
 
   g_signal_connect (self->priv->app_chooser_widget, "application-selected",
                     G_CALLBACK (widget_application_selected_cb), self);
