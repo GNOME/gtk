@@ -89,13 +89,6 @@
  * epiphany has for page loading progress.
  */
 
-#define MIN_HORIZONTAL_BAR_WIDTH   150
-#define MIN_HORIZONTAL_BAR_HEIGHT  6
-#define MIN_VERTICAL_BAR_WIDTH     7
-#define MIN_VERTICAL_BAR_HEIGHT    80
-
-#define DEFAULT_PULSE_DURATION     250000000
-
 struct _GtkProgressBarPrivate
 {
   gchar         *text;
