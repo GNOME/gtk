@@ -553,7 +553,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (priv->combo_box),
                                   priv->name_cell, "text", 1, NULL);
 
-
+  gtk_widget_hide (priv->combo_box);
   gtk_widget_set_parent (priv->combo_box, GTK_WIDGET (button));
 
   priv->child = priv->button;
