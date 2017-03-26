@@ -127,7 +127,7 @@
  * ├── undershoot.left
  * ├── undershoot.right
  * ├── [selection]
- * ├── [progress[.pulse]]
+ * ├── [progressbar]
  * ╰── [window.popup]
  * ]|
  *
@@ -191,15 +191,7 @@ struct _GtkEntryPrivate
 
   gchar        *im_module;
 
-  gdouble       progress_fraction;
-  gdouble       progress_pulse_fraction;
-  gdouble       progress_pulse_current;
-
   guint              tick_id;
-  GtkProgressTracker tracker;
-  gint64             pulse1;
-  gint64             pulse2;
-  gdouble            last_iteration;
 
   gchar        *placeholder_text;
 
@@ -215,9 +207,10 @@ struct _GtkEntryPrivate
   GtkGesture    *multipress_gesture;
 
   GtkCssGadget  *gadget;
-  GtkCssGadget  *progress_gadget;
   GtkCssNode    *selection_node;
   GtkCssNode    *undershoot_node[2];
+
+  GtkWidget     *progress_bar;
 
   int           text_x;
   int           text_width;
@@ -265,7 +258,6 @@ struct _GtkEntryPrivate
   guint         mouse_cursor_obscured   : 1;
   guint         need_im_reset           : 1;
   guint         progress_pulse_mode     : 1;
-  guint         progress_pulse_way_back : 1;
   guint         real_changed            : 1;
   guint         resolved_dir            : 4; /* PangoDirection */
   guint         select_words            : 1;
@@ -2272,11 +2264,11 @@ gtk_entry_get_property (GObject         *object,
       break;
 
     case PROP_PROGRESS_FRACTION:
-      g_value_set_double (value, priv->progress_fraction);
+      g_value_set_double (value, gtk_entry_get_progress_fraction (entry));
       break;
 
     case PROP_PROGRESS_PULSE_STEP:
-      g_value_set_double (value, priv->progress_pulse_fraction);
+      g_value_set_double (value, gtk_entry_get_progress_pulse_step (entry));
       break;
 
     case PROP_PLACEHOLDER_TEXT:
@@ -2472,8 +2464,6 @@ gtk_entry_init (GtkEntry *entry)
   priv->xalign = 0.0;
   priv->caps_lock_warning = TRUE;
   priv->caps_lock_warning_shown = FALSE;
-  priv->progress_fraction = 0.0;
-  priv->progress_pulse_fraction = 0.1;
 
   gtk_drag_dest_set (GTK_WIDGET (entry), 0, NULL, 0,
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
@@ -2732,7 +2722,9 @@ gtk_entry_finalize (GObject *object)
   if (priv->attrs)
     pango_attr_list_unref (priv->attrs);
 
-  g_clear_object (&priv->progress_gadget);
+  if (priv->progress_bar)
+    gtk_widget_unparent (priv->progress_bar);
+
   g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
@@ -2937,8 +2929,6 @@ update_node_state (GtkEntry *entry)
   state = gtk_widget_get_state_flags (GTK_WIDGET (entry));
   state &= ~GTK_STATE_FLAG_DROP_ACTIVE;
 
-  if (priv->progress_gadget)
-    gtk_css_gadget_set_state (priv->progress_gadget, state);
   if (priv->selection_node)
     gtk_css_node_set_state (priv->selection_node, state);
 
@@ -2953,13 +2943,6 @@ update_node_ordering (GtkEntry *entry)
   EntryIconInfo *icon_info;
   GtkEntryIconPosition icon_pos;
   GtkCssNode *sibling, *parent;
-
-  if (priv->progress_gadget)
-    {
-      gtk_css_node_insert_before (gtk_css_gadget_get_node (priv->gadget),
-                                  gtk_css_gadget_get_node (priv->progress_gadget),
-                                  NULL);
-    }
 
   if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
     icon_pos = GTK_ENTRY_ICON_SECONDARY;
@@ -3302,15 +3285,12 @@ gtk_entry_measure (GtkCssGadget   *gadget,
 
   pango_font_metrics_unref (metrics);
 
-  if (priv->progress_gadget && gtk_css_gadget_get_visible (priv->progress_gadget))
+  if (priv->progress_bar && _gtk_widget_is_drawable (priv->progress_bar))
     {
       int prog_min, prog_nat;
 
-      gtk_css_gadget_get_preferred_size (priv->progress_gadget,
-                                         orientation,
-                                         for_size,
-                                         &prog_min, &prog_nat,
-                                         NULL, NULL);
+      gtk_widget_measure (priv->progress_bar, orientation, for_size,
+                          &prog_min, &prog_nat, NULL, NULL);
 
       *minimum = MAX (*minimum, prog_min);
       *natural = MAX (*natural, prog_nat);
@@ -3438,38 +3418,20 @@ gtk_entry_allocate (GtkCssGadget        *gadget,
       gdk_rectangle_union (out_clip, &clip, out_clip);
     }
 
-  if (priv->progress_gadget && gtk_css_gadget_get_visible (priv->progress_gadget))
+  if (priv->progress_bar && _gtk_widget_is_drawable (priv->progress_bar))
     {
       int extra_width, req_width;
       GtkAllocation progress_alloc;
       GdkRectangle clip;
 
-      gtk_css_gadget_get_preferred_size (priv->progress_gadget,
-                                         GTK_ORIENTATION_HORIZONTAL,
-                                         allocation->height,
-                                         &req_width, NULL,
-                                         NULL, NULL);
+      gtk_widget_measure (priv->progress_bar, GTK_ORIENTATION_HORIZONTAL, allocation->height,
+                          &req_width, NULL, NULL, NULL);
       extra_width = allocation->width - req_width;
 
       progress_alloc = *allocation;
 
-      if (priv->progress_pulse_mode)
-        {
-          gdouble value = priv->progress_pulse_current;
-
-          progress_alloc.x += (gint) floor (value * extra_width);
-          progress_alloc.width = req_width + (gint) ceil (priv->progress_pulse_fraction * extra_width);
-        }
-      else
-        {
-          gdouble value = priv->progress_fraction;
-
-          progress_alloc.width = req_width + (gint) nearbyint (value * extra_width);
-          if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-            progress_alloc.x += allocation->width - progress_alloc.width;
-        }
-
-      gtk_css_gadget_allocate (priv->progress_gadget, &progress_alloc, baseline, &clip);
+      gtk_widget_size_allocate_with_baseline (priv->progress_bar, &progress_alloc, baseline);
+      gtk_widget_get_clip (priv->progress_bar, &clip);
 
       gdk_rectangle_union (out_clip, &clip, out_clip);
     }
@@ -3597,8 +3559,8 @@ gtk_entry_render (GtkCssGadget *gadget,
   priv = entry->priv;
 
   /* Draw progress */
-  if (priv->progress_gadget && gtk_css_gadget_get_visible (priv->progress_gadget))
-    gtk_css_gadget_snapshot (priv->progress_gadget, snapshot);
+  if (priv->progress_bar && _gtk_widget_is_drawable (priv->progress_bar))
+    gtk_widget_snapshot_child (widget, priv->progress_bar, snapshot);
 
   /* Draw text and cursor */
   cr = gtk_snapshot_append_cairo (snapshot,
@@ -9813,78 +9775,28 @@ tick_cb (GtkWidget     *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   gint64 frame_time;
-  gdouble iteration, pulse_iterations, current_iterations, fraction;
-
-  if (priv->pulse2 == 0 && priv->pulse1 == 0)
-    return G_SOURCE_CONTINUE;
 
   frame_time = gdk_frame_clock_get_frame_time (frame_clock);
-  gtk_progress_tracker_advance_frame (&priv->tracker, frame_time);
-
-  g_assert (priv->pulse2 > priv->pulse1);
-
-  pulse_iterations = (priv->pulse2 - priv->pulse1) / (gdouble) G_USEC_PER_SEC;
-  current_iterations = (frame_time - priv->pulse1) / (gdouble) G_USEC_PER_SEC;
-
-  iteration = gtk_progress_tracker_get_iteration (&priv->tracker);
-  /* Determine the fraction to move the block from one frame
-   * to the next when pulse_fraction is how far the block should
-   * move between two calls to gtk_entry_progress_pulse().
-   */
-  fraction = priv->progress_pulse_fraction * (iteration - priv->last_iteration) / MAX (pulse_iterations, current_iterations);
-  priv->last_iteration = iteration;
-
-  if (current_iterations > 3 * pulse_iterations)
-    return G_SOURCE_CONTINUE;
 
   /* advance the block */
-  if (priv->progress_pulse_way_back)
-    {
-      priv->progress_pulse_current -= fraction;
-
-      if (priv->progress_pulse_current < 0.0)
-        {
-          priv->progress_pulse_current = 0.0;
-          priv->progress_pulse_way_back = FALSE;
-        }
-    }
-  else
-    {
-      priv->progress_pulse_current += fraction;
-
-      if (priv->progress_pulse_current > 1.0 - priv->progress_pulse_fraction)
-        {
-          priv->progress_pulse_current = 1.0 - priv->progress_pulse_fraction;
-          priv->progress_pulse_way_back = TRUE;
-        }
-    }
-
-  gtk_widget_queue_allocate (widget);
+  if (priv->progress_bar)
+    gtk_progress_bar_pulse (GTK_PROGRESS_BAR (priv->progress_bar));
 
   return G_SOURCE_CONTINUE;
 }
 
 static void
-gtk_entry_ensure_progress_gadget (GtkEntry *entry)
+gtk_entry_ensure_progress_bar (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
 
-  if (priv->progress_gadget)
+  if (priv->progress_bar)
     return;
 
-  priv->progress_gadget = gtk_css_custom_gadget_new ("progress",
-                                                     GTK_WIDGET (entry),
-                                                     priv->gadget,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
-  gtk_css_gadget_set_state (priv->progress_gadget,
-      gtk_css_node_get_state (gtk_widget_get_css_node (GTK_WIDGET (entry))));
-
-  update_node_ordering (entry);
+  priv->progress_bar = gtk_progress_bar_new ();
+  gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (priv->progress_bar),
+                                   1.0 / 60.0);
+  gtk_widget_set_parent (priv->progress_bar, GTK_WIDGET (entry));
 }
 
 static void
@@ -9895,23 +9807,11 @@ gtk_entry_start_pulse_mode (GtkEntry *entry)
   if (priv->progress_pulse_mode)
     return;
 
-  gtk_entry_ensure_progress_gadget (entry);
-  gtk_css_gadget_set_visible (priv->progress_gadget, TRUE);
-  gtk_css_gadget_add_class (priv->progress_gadget, GTK_STYLE_CLASS_PULSE);
+  gtk_entry_ensure_progress_bar (entry);
+  gtk_widget_set_visible (priv->progress_bar, TRUE);
 
   priv->progress_pulse_mode = TRUE;
-  /* How long each pulse should last depends on calls to gtk_entry_progress_pulse.
-   * Just start the tracker to repeat forever with iterations every second. */
-  gtk_progress_tracker_start (&priv->tracker, G_USEC_PER_SEC, 0, INFINITY);
   priv->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (entry), tick_cb, NULL, NULL);
-
-  priv->progress_fraction = 0.0;
-  priv->progress_pulse_way_back = FALSE;
-  priv->progress_pulse_current = 0.0;
-
-  priv->pulse2 = 0;
-  priv->pulse1 = 0;
-  priv->last_iteration = 0;
 }
 
 static void
@@ -9921,8 +9821,7 @@ gtk_entry_stop_pulse_mode (GtkEntry *entry)
 
   if (priv->progress_pulse_mode)
     {
-      gtk_css_gadget_set_visible (priv->progress_gadget, FALSE);
-      gtk_css_gadget_remove_class (priv->progress_gadget, GTK_STYLE_CLASS_PULSE);
+      gtk_widget_set_visible (priv->progress_bar, FALSE);
 
       priv->progress_pulse_mode = FALSE;
       gtk_widget_remove_tick_callback (GTK_WIDGET (entry), priv->tick_id);
@@ -9934,13 +9833,8 @@ static void
 gtk_entry_update_pulse (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
-  gint64 pulse_time = g_get_monotonic_time ();
 
-  if (priv->pulse2 == pulse_time)
-    return;
-
-  priv->pulse1 = priv->pulse2;
-  priv->pulse2 = pulse_time;
+  gtk_progress_bar_pulse (GTK_PROGRESS_BAR (priv->progress_bar));
 }
 
 /**
@@ -9958,34 +9852,32 @@ void
 gtk_entry_set_progress_fraction (GtkEntry *entry,
                                  gdouble   fraction)
 {
-  GtkWidget       *widget;
-  GtkEntryPrivate *private;
-  gdouble          old_fraction;
+  GtkWidget *widget;
+  GtkEntryPrivate *priv;
+  gdouble old_fraction;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   widget = GTK_WIDGET (entry);
-  private = entry->priv;
+  priv = entry->priv;
 
-  if (private->progress_pulse_mode)
+  if (priv->progress_pulse_mode)
     old_fraction = -1;
   else
-    old_fraction = private->progress_fraction;
+    old_fraction = gtk_entry_get_progress_fraction (entry);
 
   gtk_entry_stop_pulse_mode (entry);
 
-  gtk_entry_ensure_progress_gadget (entry);
+  gtk_entry_ensure_progress_bar (entry);
 
   fraction = CLAMP (fraction, 0.0, 1.0);
-  private->progress_fraction = fraction;
-  private->progress_pulse_current = 0.0;
-
-  if (fraction != old_fraction)
+  if (fraction != gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (priv->progress_bar)))
     {
-      gtk_css_gadget_set_visible (private->progress_gadget, fraction > 0);
+      gtk_widget_set_visible (priv->progress_bar, fraction > 0);
+      gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (priv->progress_bar),
+                                     fraction);
 
       g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_PROGRESS_FRACTION]);
-      gtk_widget_queue_allocate (widget);
     }
 }
 
@@ -10005,7 +9897,10 @@ gtk_entry_get_progress_fraction (GtkEntry *entry)
 {
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0.0);
 
-  return entry->priv->progress_fraction;
+  if (entry->priv->progress_bar == NULL)
+    return 0;
+
+  return gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR (entry->priv->progress_bar));
 }
 
 /**
@@ -10022,17 +9917,20 @@ void
 gtk_entry_set_progress_pulse_step (GtkEntry *entry,
                                    gdouble   fraction)
 {
-  GtkEntryPrivate *private;
+  GtkEntryPrivate *priv;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  private = entry->priv;
+  priv = entry->priv;
 
   fraction = CLAMP (fraction, 0.0, 1.0);
 
-  if (fraction != private->progress_pulse_fraction)
+  if (priv->progress_bar == NULL)
+    return;
+
+  if (fraction != gtk_progress_bar_get_pulse_step (GTK_PROGRESS_BAR (priv->progress_bar)))
     {
-      private->progress_pulse_fraction = fraction;
+      gtk_progress_bar_set_pulse_step (GTK_PROGRESS_BAR (priv->progress_bar), fraction);
       g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_PROGRESS_PULSE_STEP]);
     }
 }
@@ -10052,7 +9950,10 @@ gtk_entry_get_progress_pulse_step (GtkEntry *entry)
 {
   g_return_val_if_fail (GTK_IS_ENTRY (entry), 0.0);
 
-  return entry->priv->progress_pulse_fraction;
+  if (entry->priv->progress_bar == NULL)
+    return 0.0;
+
+  return gtk_progress_bar_get_pulse_step (GTK_PROGRESS_BAR (entry->priv->progress_bar));
 }
 
 /**
