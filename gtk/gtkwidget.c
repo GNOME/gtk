@@ -3812,6 +3812,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->focus_on_click = TRUE;
 #ifdef G_ENABLE_DEBUG
   priv->highlight_resize = FALSE;
+  priv->in_size_allocate = FALSE;
 #endif
 
   switch (_gtk_widget_get_direction (widget))
@@ -5112,6 +5113,9 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (widget->priv->in_size_allocate)
+    g_warning ("%s on %s %p while in size_allocate", __FUNCTION__, G_OBJECT_TYPE_NAME (widget), widget);
+
   if (_gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
 
@@ -5176,6 +5180,9 @@ gtk_widget_queue_resize (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (widget->priv->in_size_allocate)
+    g_warning ("%s on %s %p while in size_allocate", __FUNCTION__, G_OBJECT_TYPE_NAME (widget), widget);
+
   if (_gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
 
@@ -5195,6 +5202,9 @@ void
 gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (widget->priv->in_size_allocate)
+    g_warning ("%s on %s %p while in size_allocate", __FUNCTION__, G_OBJECT_TYPE_NAME (widget), widget);
 
   gtk_widget_queue_resize_internal (widget);
 }
@@ -5337,6 +5347,8 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
   if (!priv->visible && !_gtk_widget_is_toplevel (widget))
     return;
+
+  priv->in_size_allocate = TRUE;
 
   gtk_widget_push_verify_invariants (widget);
 
@@ -5536,6 +5548,8 @@ out:
     gtk_widget_ensure_allocate (widget);
 
   gtk_widget_pop_verify_invariants (widget);
+
+  priv->in_size_allocate = FALSE;
 }
 
 

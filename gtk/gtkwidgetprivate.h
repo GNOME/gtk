@@ -47,6 +47,7 @@ struct _GtkWidgetPrivate
 
 #ifdef G_ENABLE_DEBUG
   guint highlight_resize      : 1;
+  guint in_size_allocate      : 1;
 #endif
 
   guint in_destruction        : 1;
