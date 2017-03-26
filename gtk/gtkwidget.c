@@ -15439,8 +15439,14 @@ gtk_widget_snapshot (GtkWidget   *widget,
   double opacity;
   cairo_rectangle_int_t offset_clip;
 
-  if (_gtk_widget_get_alloc_needed (widget))
+  if (!_gtk_widget_is_drawable (widget))
     return;
+
+  if (_gtk_widget_get_alloc_needed (widget))
+    {
+      g_warning ("Trying to snapshot %s %p without a current allocation", G_OBJECT_TYPE_NAME (widget), widget);
+      return;
+    }
 
   priv = widget->priv;
   offset_clip = priv->clip;
