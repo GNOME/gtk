@@ -1803,7 +1803,7 @@ gtk_text_buffer_delete_interactive (GtkTextBuffer *buffer,
  * and character indexes into the buffer. Contrast with
  * gtk_text_buffer_get_slice().
  *
- * Return value: an allocated UTF-8 string
+ * Return value: (transfer full): an allocated UTF-8 string
  **/
 gchar*
 gtk_text_buffer_get_text (GtkTextBuffer     *buffer,
@@ -1841,7 +1841,7 @@ gtk_text_buffer_get_text (GtkTextBuffer     *buffer,
  * text as well, so it is not a reliable indicator that a pixbuf or
  * widget is in the buffer.
  *
- * Return value: an allocated UTF-8 string
+ * Return value: (transfer full): an allocated UTF-8 string
  **/
 gchar*
 gtk_text_buffer_get_slice (GtkTextBuffer     *buffer,
