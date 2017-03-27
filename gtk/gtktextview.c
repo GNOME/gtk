@@ -6417,7 +6417,7 @@ move_cursor (GtkTextView       *text_view,
 }
 
 static gboolean
-iter_line_is_rtl (GtkTextIter *iter)
+iter_line_is_rtl (const GtkTextIter *iter)
 {
   GtkTextIter start, end;
   char *text;
