@@ -123,7 +123,7 @@ gsk_color_node_peek_color (GskRenderNode *node)
 
 /**
  * gsk_color_node_new:
- * @color: the #GskColor
+ * @rgba: the #GskColor
  * @bounds: the rectangle to render the color into
  *
  * Creates a #GskRenderNode that will render the given
@@ -303,11 +303,14 @@ static const GskRenderNodeClass GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS = {
 
 /**
  * gsk_linear_gradient_node_new:
- * @linear_gradient: the #GskLinearGradient
- * @bounds: the rectangle to render the linear_gradient into
+ * @bounds: the rectangle to render the linear gradient into
+ * @start: the point at which the linear gradient will begin
+ * @end: the point at which the linear gradient will finish
+ * @color_stops: a pointer to an array of #GskColorStop defining the gradient
+ * @n_color_stops: the number of elements in @color_stops
  *
- * Creates a #GskRenderNode that will render the given
- * @linear_gradient into the area given by @bounds.
+ * Creates a #GskRenderNode that will create a linear gradient from the given
+ * points and color stops, and render that into the area given by @bounds.
  *
  * Returns: A new #GskRenderNode
  *
@@ -2818,7 +2821,7 @@ static const GskRenderNodeClass GSK_REPEAT_NODE_CLASS = {
  * gsk_repeat_node_new:
  * @bounds: The bounds of the area to be painted
  * @child: The child to repeat
- * @child_bounds: (optional): The area of the child to repeat or %NULL to
+ * @child_bounds: (allow-none): The area of the child to repeat or %NULL to
  *     use the child's bounds
  *
  * Creates a #GskRenderNode that will repeat the drawing of @child across

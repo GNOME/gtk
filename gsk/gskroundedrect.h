@@ -67,7 +67,7 @@ struct _GskRoundedRect
 
 GDK_AVAILABLE_IN_3_90
 GskRoundedRect *        gsk_rounded_rect_init                   (GskRoundedRect           *self,
-                                                                 const graphene_rect_t    *rect,
+                                                                 const graphene_rect_t    *bounds,
                                                                  const graphene_size_t    *top_left,
                                                                  const graphene_size_t    *top_right,
                                                                  const graphene_size_t    *bottom_right,

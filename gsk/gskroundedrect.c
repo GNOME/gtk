@@ -179,8 +179,8 @@ gsk_rounded_rect_normalize (GskRoundedRect *self)
 /**
  * gsk_rounded_rect_offset:
  * @self: a #GskRoundedRect
- * @d_x: the horizontal offset
- * @d_y: the vertical offset
+ * @dx: the horizontal offset
+ * @dy: the vertical offset
  *
  * Offsets the bound's origin by @dx and @dy.
  *
@@ -222,7 +222,7 @@ border_radius_shrink (graphene_size_t *corner,
 
 /**
  * gsk_rounded_rect_shrink:
- * @self: The @GskRoundedRect to shrink or grow
+ * @self: The #GskRoundedRect to shrink or grow
  * @top: How far to move the top side downwards
  * @right: How far to move the right side to the left
  * @bottom: How far to move the bottom side upwards
@@ -236,7 +236,7 @@ border_radius_shrink (graphene_size_t *corner,
  * This function also works for growing rectangles if you pass
  * negative values for the @top, @right, @bottom or @left.
  *
- * Returns: @self
+ * Returns: (transfer none): the resized #GskRoundedRect
  **/
 GskRoundedRect *
 gsk_rounded_rect_shrink (GskRoundedRect *self,
@@ -275,7 +275,7 @@ gsk_rounded_rect_shrink (GskRoundedRect *self,
   return self;
 }
 
-/* XXX: Fina a better name */
+/* XXX: Find a better name */
 gboolean
 gsk_rounded_rect_is_circular (const GskRoundedRect *self)
 {

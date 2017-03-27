@@ -849,7 +849,7 @@ static struct {
 
 /**
  * gsk_renderer_new_for_window:
- * @display: a #GdkDisplay
+ * @window: a #GdkWindow
  *
  * Creates an appropriate #GskRenderer instance for the given @window.
  *
@@ -922,6 +922,19 @@ gsk_renderer_create_cairo_surface (GskRenderer    *renderer,
   return GSK_RENDERER_GET_CLASS (renderer)->create_cairo_surface (renderer, format, width, height);
 }
 
+/**
+ * gsk_renderer_begin_draw_frame:
+ * @renderer: a #GskRenderer
+ * @region: the #cairo_region_t that you wish to draw
+ *
+ * Indicates that you are beginning the process of redrawing @region using
+ * @renderer, and provides you with a #GdkDrawingContext to use for this.
+ *
+ * Returns: (transfer none): a #GdkDrawingContext context that should be used to
+ * draw the contents of the @renderer. This context is owned by GDK.
+ *
+ * Since: 3.90
+ */
 GdkDrawingContext *
 gsk_renderer_begin_draw_frame (GskRenderer          *renderer,
                                const cairo_region_t *region)
