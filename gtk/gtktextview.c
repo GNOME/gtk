@@ -43,7 +43,6 @@
 #include "gtkselectionprivate.h"
 #include "gtktextbufferrichtext.h"
 #include "gtktextdisplay.h"
-#include "gtktextiterprivate.h"
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gtkprivate.h"
