@@ -123,11 +123,11 @@ gsk_color_node_peek_color (GskRenderNode *node)
 
 /**
  * gsk_color_node_new:
- * @rgba: the #GskColor
+ * @rgba: a #GdkRGBA specifying a color
  * @bounds: the rectangle to render the color into
  *
- * Creates a #GskRenderNode that will render the given
- * @color into the area given by @bounds.
+ * Creates a #GskRenderNode that will render the color specified by @rgba into
+ * the area given by @bounds.
  *
  * Returns: A new #GskRenderNode
  *
@@ -1835,7 +1835,7 @@ gsk_cairo_node_new_for_surface (const graphene_rect_t *bounds,
 
 /**
  * gsk_cairo_node_new:
- * @bounds: the rectangle to render the to
+ * @bounds: the rectangle to render to
  *
  * Creates a #GskRenderNode that will render a cairo surface
  * into the area given by @bounds. You can draw to the cairo
