@@ -42,7 +42,6 @@
 #include "gtkstock.h"
 #include "gtktextbufferrichtext.h"
 #include "gtktextdisplay.h"
-#include "gtktextiterprivate.h"
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
