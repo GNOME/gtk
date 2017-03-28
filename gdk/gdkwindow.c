@@ -4024,12 +4024,10 @@ static void
 before_process_all_updates (void)
 {
   GSList *displays, *l;
-  GdkDisplayClass *display_class;
 
   displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  display_class = GDK_DISPLAY_GET_CLASS (displays->data);
   for (l = displays; l; l = l->next)
-    display_class->before_process_all_updates (l->data);
+    GDK_DISPLAY_GET_CLASS (l->data)->before_process_all_updates (l->data);
 
   g_slist_free (displays);
 }
@@ -4038,12 +4036,10 @@ static void
 after_process_all_updates (void)
 {
   GSList *displays, *l;
-  GdkDisplayClass *display_class;
 
   displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  display_class = GDK_DISPLAY_GET_CLASS (displays->data);
   for (l = displays; l; l = l->next)
-    display_class->after_process_all_updates (l->data);
+    GDK_DISPLAY_GET_CLASS (l->data)->after_process_all_updates (l->data);
 
   g_slist_free (displays);
 }
