@@ -46,6 +46,9 @@ struct _GtkCssImageIconTheme
   GdkRGBA error;
   gint scale;
   char *name;
+
+  int cached_size;
+  GskTexture *cached_texture;
 };
 
 struct _GtkCssImageIconThemeClass
