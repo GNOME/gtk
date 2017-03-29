@@ -181,6 +181,7 @@ gsk_gl_renderer_dispose (GObject *gobject)
   GskGLRenderer *self = GSK_GL_RENDERER (gobject);
 
   g_clear_object (&self->gl_context);
+  g_clear_pointer (&self->render_items, g_array_unref);
 
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (gobject);
 }
@@ -997,8 +998,6 @@ gsk_gl_renderer_validate_tree (GskGLRenderer           *self,
 
   gdk_gl_context_make_current (self->gl_context);
 
-  self->render_items = g_array_new (FALSE, FALSE, sizeof (RenderItem));
-
   gsk_gl_driver_begin_frame (self->gl_driver);
 
   GSK_NOTE (OPENGL, g_print ("RenderNode -> RenderItem\n"));
@@ -1022,7 +1021,7 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 
   gdk_gl_context_make_current (self->gl_context);
 
-  g_clear_pointer (&self->render_items, g_array_unref);
+  g_array_remove_range (self->render_items, 0, self->render_items->len);
 
   removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
   removed_vaos = gsk_gl_driver_collect_vaos (self->gl_driver);
@@ -1238,6 +1237,8 @@ gsk_gl_renderer_init (GskGLRenderer *self)
   gsk_ensure_resources ();
 
   graphene_matrix_init_identity (&self->mvp);
+
+  self->render_items = g_array_new (FALSE, FALSE, sizeof (RenderItem));
 
 #ifdef G_ENABLE_DEBUG
   {
