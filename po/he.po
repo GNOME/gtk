@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2B\n"
-"POT-Creation-Date: 2017-03-30 18:12+0300\n"
-"PO-Revision-Date: 2017-03-30 18:13+0300\n"
+"POT-Creation-Date: 2017-03-30 19:25+0300\n"
+"PO-Revision-Date: 2017-03-30 19:28+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -1773,7 +1773,6 @@ msgid "Can't parse file: %s\n"
 msgstr "Can't parse file: %s\n"
 
 #: gtk/gtk-builder-tool.c:1056
-#, fuzzy
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] FILE\n"
@@ -2910,7 +2909,7 @@ msgstr "מעטפת Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d: ‏%s"
 
-#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7389
+#: gtk/gtknotebook.c:5168 gtk/gtknotebook.c:7436
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
