@@ -521,6 +521,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 
   direction = gtk_widget_get_direction (widget);
   sizes = g_newa (GtkRequestedSize, nvis_children);
+  memset (sizes, 0, nvis_children * sizeof (GtkRequestedSize));
 
   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
     size = allocation->width - (nvis_children - 1) * private->spacing;
@@ -1220,7 +1221,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
-  
+
   gtk_widget_set_clip (widget, &clip);
 }
 
@@ -1763,6 +1764,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
     return;
 
   sizes = g_newa (GtkRequestedSize, nvis_children);
+  memset (sizes, 0, nvis_children * sizeof (GtkRequestedSize));
   size = avail_size - (nvis_children - 1) * private->spacing;
 
   /* Retrieve desired size for visible children */
