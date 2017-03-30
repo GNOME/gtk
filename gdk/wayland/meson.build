@@ -82,7 +82,7 @@ foreach p : proto_sources
     command: [genprotocols, wayland_scanner, '@INPUT@', '@OUTPUT@', 'code'])
 endforeach
 
-libgdk_wayland = static_library('libgdk-wayland',
+libgdk_wayland = static_library('gdk-wayland',
   gdk_wayland_sources, gdk_wayland_gen_headers, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],

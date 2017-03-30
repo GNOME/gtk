@@ -32,7 +32,7 @@ gdk_broadway_public_headers = [
 
 gdk_broadway_deps = [shmlib]
 
-libgdk_broadway = static_library('libgdk-broadway',
+libgdk_broadway = static_library('gdk-broadway',
   gdk_broadway_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
