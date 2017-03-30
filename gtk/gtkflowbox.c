@@ -2996,7 +2996,9 @@ gtk_flow_box_drag_gesture_end (GtkGestureDrag *gesture,
       if (!priv->rubberband_extend && !priv->rubberband_modify)
         gtk_flow_box_unselect_all_internal (box);
 
-      gtk_flow_box_select_all_between (box, priv->rubberband_first, priv->rubberband_last, priv->rubberband_modify);
+      if (priv->rubberband_first && priv->rubberband_last)
+        gtk_flow_box_select_all_between (box, priv->rubberband_first, priv->rubberband_last, priv->rubberband_modify);
+
       gtk_flow_box_stop_rubberband (box);
 
       g_signal_emit (box, signals[SELECTED_CHILDREN_CHANGED], 0);
