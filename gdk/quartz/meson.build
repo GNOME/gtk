@@ -39,7 +39,7 @@ install_headers('gdkquartz.h', subdir: 'gtk-4.0/gdk/')
 gdk_quartz_deps = [ # FIXME
 ]
 
-libgdk_quartz = static_library('libgdk-quartz',
+libgdk_quartz = static_library('gdk-quartz',
   gdk_quartz_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-xobjective-c'],

@@ -24,7 +24,7 @@ gdk_mir_deps = [
   libcontent_hub_glib_dep,
 ]
 
-libgdk_mir = static_library('libgdk-mir',
+libgdk_mir = static_library('gdk-mir',
   gdk_mir_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
