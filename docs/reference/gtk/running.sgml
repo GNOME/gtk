@@ -565,12 +565,19 @@ nevertheless.
     <envar>GTK_DEBUG=interactive</envar> environment variable.
   </para>
   <para>
+    There are a few more environment variables that can be set to influence
+    how the inspector renders its UI. <envar>GTK_INSPECTOR_DISPLAY</envar> and
+    <envar>GTK_INSPECTOR_RENDERER</envar> determine the GDK display and
+    the GSK renderer that the inspector is using.
+  </para>
+
+  <para>
     In some situations, it may be inappropriate to give users access to the
     GTK+ inspector. The keyboard shortcuts can be disabled with the
     `enable-inspector-keybinding` key in the `org.gtk.Settings.Debug`
     GSettings schema.
   </para>
- 
+
 </refsect2>
 
 </refsect1>
