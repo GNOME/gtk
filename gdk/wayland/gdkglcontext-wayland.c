@@ -221,7 +221,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
                                                     context_wayland->egl_config);
 
-  if (display_wayland->have_egl_swap_buffers_with_damage)
+  if (display_wayland->have_egl_swap_buffers_with_damage && damage != NULL)
     {
       int i, j, n_rects = cairo_region_num_rectangles (damage);
       EGLint *rects = g_new (EGLint, n_rects * 4);
