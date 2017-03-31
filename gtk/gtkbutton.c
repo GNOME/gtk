@@ -473,7 +473,7 @@ gtk_button_init (GtkButton *button)
   g_signal_connect (priv->gesture, "released", G_CALLBACK (multipress_released_cb), button);
   g_signal_connect (priv->gesture, "update", G_CALLBACK (multipress_gesture_update_cb), button);
   g_signal_connect (priv->gesture, "cancel", G_CALLBACK (multipress_gesture_cancel_cb), button);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_CAPTURE);
 
   priv->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (button)),
                                                      GTK_WIDGET (button),
@@ -977,12 +977,8 @@ gtk_button_enter_notify (GtkWidget        *widget,
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
 
-  if ((event->window == button->priv->event_window) &&
-      (event->detail != GDK_NOTIFY_INFERIOR))
-    {
-      priv->in_button = TRUE;
-      gtk_button_update_state (button);
-    }
+  priv->in_button = TRUE;
+  gtk_button_update_state (button);
 
   return FALSE;
 }
@@ -994,12 +990,8 @@ gtk_button_leave_notify (GtkWidget        *widget,
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
 
-  if ((event->window == button->priv->event_window) &&
-      (event->detail != GDK_NOTIFY_INFERIOR))
-    {
-      priv->in_button = FALSE;
-      gtk_button_update_state (button);
-    }
+  priv->in_button = FALSE;
+  gtk_button_update_state (button);
 
   return FALSE;
 }

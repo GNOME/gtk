@@ -32,7 +32,6 @@ struct _GtkButtonPrivate
   GtkCssGadget          *gadget;
 
   GdkDevice             *grab_keyboard;
-  GdkWindow             *event_window;
 
   GtkGesture            *gesture;
 

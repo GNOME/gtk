@@ -872,18 +872,6 @@ gtk_model_button_allocate (GtkCssGadget        *gadget,
       gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
     }
 
-  if (gtk_widget_get_realized (widget))
-    {
-      GtkAllocation border_allocation;
-      gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
-
-      gdk_window_move_resize (GTK_BUTTON (widget)->priv->event_window,
-                              border_allocation.x,
-                              border_allocation.y,
-                              border_allocation.width,
-                              border_allocation.height);
-    }
-
   gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
   gdk_rectangle_union (out_clip, &check_clip, out_clip);
 }
