@@ -160,6 +160,9 @@ struct _GtkWidgetPrivate
   GtkWidget *last_child;
 
   GtkWidget *focus_child;
+
+  /* Pointer cursor */
+  GdkCursor *cursor;
 };
 
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
@@ -315,6 +318,11 @@ gboolean          gtk_widget_focus_move                    (GtkWidget        *wi
 
 GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,
                                                             GtkWidget *widget_b);
+
+void              gtk_widget_set_cursor                    (GtkWidget *widget,
+                                                            GdkCursor *cursor);
+GdkCursor *       gtk_widget_get_cursor                    (GtkWidget *widget);
+
 
 /* inline getters */
 

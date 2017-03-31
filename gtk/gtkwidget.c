@@ -15992,3 +15992,16 @@ gtk_widget_get_focus_child (GtkWidget *widget)
 
   return priv->focus_child;
 }
+
+void
+gtk_widget_set_cursor (GtkWidget *widget,
+                       GdkCursor *cursor)
+{
+  g_set_object (&widget->priv->cursor, cursor);
+}
+
+GdkCursor *
+gtk_widget_get_cursor (GtkWidget *widget)
+{
+  return widget->priv->cursor;
+}
