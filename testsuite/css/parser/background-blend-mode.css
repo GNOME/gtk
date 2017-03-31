@@ -15,5 +15,5 @@ d {
 }
 
 e {
-  background-blend-mode: color-burn, color-dodge, color, darken, difference, exclusion, hard-light, hue, lighten, luminosity, multiply, normal, overlay, saturate, screen, soft-light;
+  background-blend-mode: color-burn, color-dodge, color, darken, difference, exclusion, hard-light, hue, lighten, luminosity, multiply, normal, overlay, saturation, screen, soft-light;
 }
