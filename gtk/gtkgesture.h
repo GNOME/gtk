@@ -90,13 +90,6 @@ GDK_AVAILABLE_IN_3_14
 gboolean    gtk_gesture_is_recognized        (GtkGesture       *gesture);
 
 GDK_AVAILABLE_IN_3_14
-GdkWindow * gtk_gesture_get_window           (GtkGesture       *gesture);
-
-GDK_AVAILABLE_IN_3_14
-void        gtk_gesture_set_window           (GtkGesture       *gesture,
-                                              GdkWindow        *window);
-
-GDK_AVAILABLE_IN_3_14
 void        gtk_gesture_group                (GtkGesture       *group_gesture,
                                               GtkGesture       *gesture);
 GDK_AVAILABLE_IN_3_14

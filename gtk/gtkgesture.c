@@ -160,8 +160,6 @@ struct _GtkGesturePrivate
 {
   GHashTable *points;
   GdkEventSequence *last_sequence;
-  GdkWindow *user_window;
-  GdkWindow *window;
   GdkDevice *device;
   GList *group_link;
   guint n_points;
@@ -193,9 +191,6 @@ gtk_gesture_get_property (GObject    *object,
     case PROP_N_POINTS:
       g_value_set_uint (value, priv->n_points);
       break;
-    case PROP_WINDOW:
-      g_value_set_object (value, priv->user_window);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -213,10 +208,6 @@ gtk_gesture_set_property (GObject      *object,
     {
     case PROP_N_POINTS:
       priv->n_points = g_value_get_uint (value);
-      break;
-    case PROP_WINDOW:
-      gtk_gesture_set_window (GTK_GESTURE (object),
-                              g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -391,29 +382,6 @@ _gtk_gesture_check_recognized (GtkGesture       *gesture,
   return priv->recognized;
 }
 
-/* Finds the first window pertaining to the controller's widget */
-static GdkWindow *
-_find_widget_window (GtkGesture *gesture,
-                     GdkWindow  *window)
-{
-  GtkWidget *widget, *window_widget;
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-
-  while (window && !gdk_window_is_destroyed (window))
-    {
-      gdk_window_get_user_data (window, (gpointer*) &window_widget);
-
-      if (window_widget == widget ||
-          gtk_widget_get_window (widget) == window)
-        return window;
-
-      window = gdk_window_get_parent (window);
-    }
-
-  return NULL;
-}
-
 static void
 _update_touchpad_deltas (PointData *data)
 {
@@ -467,44 +435,11 @@ static void
 _update_widget_coordinates (GtkGesture *gesture,
                             PointData  *data)
 {
-  GdkWindow *window, *event_widget_window;
-  GtkWidget *event_widget, *widget;
-  GtkAllocation allocation;
   gdouble event_x, event_y;
-  gint wx, wy, x, y;
 
-  event_widget = gtk_get_event_widget (data->event);
-
-  if (!event_widget)
-    return;
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  event_widget_window = gtk_widget_get_window (event_widget);
   _get_event_coordinates (data, &event_x, &event_y);
-  window = data->event->any.window;
-
-  while (window && window != event_widget_window)
-    {
-      gdk_window_get_position (window, &wx, &wy);
-      event_x += wx;
-      event_y += wy;
-      window = gdk_window_get_parent (window);
-    }
-
-  if (!window)
-    return;
-
-  if (!gtk_widget_get_has_window (event_widget))
-    {
-      gtk_widget_get_allocation (event_widget, &allocation);
-      event_x -= allocation.x;
-      event_y -= allocation.y;
-    }
-
-  gtk_widget_translate_coordinates (event_widget, widget,
-                                    event_x, event_y, &x, &y);
-  data->widget_x = x;
-  data->widget_y = y;
+  data->widget_x = event_x;
+  data->widget_y = event_y;
 }
 
 static GtkEventSequenceState
@@ -536,7 +471,6 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
                            gboolean        add)
 {
   GdkEventSequence *sequence;
-  GdkWindow *widget_window;
   GtkGesturePrivate *priv;
   GdkDevice *device;
   gboolean existed, touchpad;
@@ -551,11 +485,6 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
     return FALSE;
 
   priv = gtk_gesture_get_instance_private (gesture);
-  widget_window = _find_widget_window (gesture, event->any.window);
-
-  if (!widget_window)
-    return FALSE;
-
   touchpad = EVENT_IS_TOUCHPAD_GESTURE (event);
 
   if (add)
@@ -565,10 +494,6 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
        */
       if (priv->device && priv->device != device)
         return FALSE;
-      if (priv->window && priv->window != widget_window)
-        return FALSE;
-      if (priv->user_window && priv->user_window != widget_window)
-        return FALSE;
 
       /* Make touchpad and touchscreen gestures mutually exclusive */
       if (touchpad && g_hash_table_size (priv->points) > 0)
@@ -576,7 +501,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
       else if (!touchpad && priv->touchpad)
         return FALSE;
     }
-  else if (!priv->device || !priv->window)
+  else if (!priv->device)
     return FALSE;
 
   sequence = gdk_event_get_event_sequence (event);
@@ -591,7 +516,6 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
 
       if (g_hash_table_size (priv->points) == 0)
         {
-          priv->window = widget_window;
           priv->device = device;
           priv->touchpad = touchpad;
         }
@@ -630,7 +554,6 @@ _gtk_gesture_check_empty (GtkGesture *gesture)
 
   if (g_hash_table_size (priv->points) == 0)
     {
-      priv->window = NULL;
       priv->device = NULL;
       priv->touchpad = FALSE;
     }
@@ -1573,68 +1496,6 @@ _gtk_gesture_cancel_sequence (GtkGesture       *gesture,
   _gtk_gesture_check_recognized (gesture, sequence);
 
   return TRUE;
-}
-
-/**
- * gtk_gesture_get_window:
- * @gesture: a #GtkGesture
- *
- * Returns the user-defined window that receives the events
- * handled by @gesture. See gtk_gesture_set_window() for more
- * information.
- *
- * Returns: (nullable) (transfer none): the user defined window, or %NULL if none
- *
- * Since: 3.14
- **/
-GdkWindow *
-gtk_gesture_get_window (GtkGesture *gesture)
-{
-  GtkGesturePrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_GESTURE (gesture), NULL);
-
-  priv = gtk_gesture_get_instance_private (gesture);
-
-  return priv->user_window;
-}
-
-/**
- * gtk_gesture_set_window:
- * @gesture: a #GtkGesture
- * @window: (allow-none): a #GdkWindow, or %NULL
- *
- * Sets a specific window to receive events about, so @gesture
- * will effectively handle only events targeting @window, or
- * a child of it. @window must pertain to gtk_event_controller_get_widget().
- *
- * Since: 3.14
- **/
-void
-gtk_gesture_set_window (GtkGesture *gesture,
-                        GdkWindow  *window)
-{
-  GtkGesturePrivate *priv;
-
-  g_return_if_fail (GTK_IS_GESTURE (gesture));
-  g_return_if_fail (!window || GDK_IS_WINDOW (window));
-
-  priv = gtk_gesture_get_instance_private (gesture);
-
-  if (window)
-    {
-      GtkWidget *window_widget;
-
-      gdk_window_get_user_data (window, (gpointer*) &window_widget);
-      g_return_if_fail (window_widget ==
-                        gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)));
-    }
-
-  if (priv->user_window == window)
-    return;
-
-  priv->user_window = window;
-  g_object_notify (G_OBJECT (gesture), "window");
 }
 
 GList *

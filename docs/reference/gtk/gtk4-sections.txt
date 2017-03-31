@@ -6738,8 +6738,6 @@ gtk_event_controller_get_type
 <TITLE>GtkGesture</TITLE>
 GtkGesture
 gtk_gesture_get_device
-gtk_gesture_get_window
-gtk_gesture_set_window
 gtk_gesture_is_active
 gtk_gesture_is_recognized
 GtkEventSequenceState
