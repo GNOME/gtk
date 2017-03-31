@@ -433,11 +433,6 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
     {
       GtkAllocation border_allocation;
       gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
-      gdk_window_move_resize (GTK_BUTTON (widget)->priv->event_window,
-                              border_allocation.x,
-                              border_allocation.y,
-                              border_allocation.width,
-                              border_allocation.height);
     }
 }
 

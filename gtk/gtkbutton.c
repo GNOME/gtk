@@ -119,10 +119,7 @@ static void gtk_button_get_property   (GObject            *object,
                                        GParamSpec         *pspec);
 static void gtk_button_screen_changed (GtkWidget          *widget,
 				       GdkScreen          *previous_screen);
-static void gtk_button_realize (GtkWidget * widget);
 static void gtk_button_unrealize (GtkWidget * widget);
-static void gtk_button_map (GtkWidget * widget);
-static void gtk_button_unmap (GtkWidget * widget);
 static void gtk_button_size_allocate (GtkWidget * widget,
 				      GtkAllocation * allocation);
 static void gtk_button_snapshot (GtkWidget * widget, GtkSnapshot *snapshot);
@@ -225,10 +222,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   widget_class->measure = gtk_button_measure_;
   widget_class->screen_changed = gtk_button_screen_changed;
-  widget_class->realize = gtk_button_realize;
   widget_class->unrealize = gtk_button_unrealize;
-  widget_class->map = gtk_button_map;
-  widget_class->unmap = gtk_button_unmap;
   widget_class->size_allocate = gtk_button_size_allocate;
   widget_class->snapshot = gtk_button_snapshot;
   widget_class->grab_broken_event = gtk_button_grab_broken;
@@ -343,32 +337,28 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
 static gboolean
 touch_release_in_button (GtkButton *button)
 {
-  GtkButtonPrivate *priv;
-  gint width, height;
+  GtkAllocation allocation;
   GdkEvent *event;
   gdouble x, y;
 
-  priv = button->priv;
   event = gtk_get_current_event ();
 
   if (!event)
     return FALSE;
 
-  if (event->type != GDK_TOUCH_END ||
-      event->touch.window != priv->event_window)
+  if (event->type != GDK_TOUCH_END)
     {
       gdk_event_free (event);
       return FALSE;
     }
 
   gdk_event_get_coords (event, &x, &y);
-  width = gdk_window_get_width (priv->event_window);
-  height = gdk_window_get_height (priv->event_window);
+  gtk_widget_get_allocation (GTK_WIDGET (button), &allocation);
 
   gdk_event_free (event);
 
-  if (x >= 0 && x <= width &&
-      y >= 0 && y <= height)
+  if (x >= 0 && x <= allocation.width &&
+      y >= 0 && y <= allocation.height)
     return TRUE;
 
   return FALSE;
@@ -776,23 +766,6 @@ gtk_button_get_relief (GtkButton *button)
 }
 
 static void
-gtk_button_realize (GtkWidget *widget)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
-  GtkAllocation allocation;
-
-  GTK_WIDGET_CLASS (gtk_button_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                             GDK_ALL_EVENTS_MASK,
-                                             &allocation);
-  gtk_widget_register_window (widget, priv->event_window);
-}
-
-static void
 gtk_button_unrealize (GtkWidget *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
@@ -801,41 +774,7 @@ gtk_button_unrealize (GtkWidget *widget)
   if (priv->activate_timeout)
     gtk_button_finish_activate (button, FALSE);
 
-  if (priv->event_window)
-    {
-      gtk_widget_unregister_window (widget, priv->event_window);
-      gdk_window_destroy (priv->event_window);
-      priv->event_window = NULL;
-    }
-
   GTK_WIDGET_CLASS (gtk_button_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_button_map (GtkWidget *widget)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
-
-  GTK_WIDGET_CLASS (gtk_button_parent_class)->map (widget);
-
-  if (priv->event_window)
-    gdk_window_show (priv->event_window);
-}
-
-static void
-gtk_button_unmap (GtkWidget *widget)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
-
-  if (priv->event_window)
-    {
-      gdk_window_hide (priv->event_window);
-      priv->in_button = FALSE;
-    }
-
-  GTK_WIDGET_CLASS (gtk_button_parent_class)->unmap (widget);
 }
 
 static void
@@ -877,17 +816,6 @@ gtk_button_allocate (GtkCssGadget        *gadget,
       gtk_widget_size_allocate_with_baseline (child, (GtkAllocation *)allocation, baseline);
       gtk_widget_get_clip (child, &clip);
       gdk_rectangle_union (&clip, out_clip, out_clip);
-    }
-
-  if (gtk_widget_get_realized (widget))
-    {
-      GtkAllocation border_allocation;
-      gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
-      gdk_window_move_resize (GTK_BUTTON (widget)->priv->event_window,
-                              border_allocation.x,
-                              border_allocation.y,
-                              border_allocation.width,
-                              border_allocation.height);
     }
 }
 
@@ -1027,13 +955,8 @@ gtk_real_button_activate (GtkButton *button)
        */
       if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
 	{
-          if (gdk_seat_grab (gdk_device_get_seat (device), priv->event_window,
-                             GDK_SEAT_CAPABILITY_KEYBOARD, TRUE,
-                             NULL, NULL, NULL, NULL) == GDK_GRAB_SUCCESS)
-            {
-              gtk_device_grab_add (widget, device, TRUE);
-              priv->grab_keyboard = device;
-	    }
+          gtk_device_grab_add (widget, device, TRUE);
+          priv->grab_keyboard = device;
 	}
 
       priv->activate_timeout = gdk_threads_add_timeout (ACTIVATE_TIMEOUT,
