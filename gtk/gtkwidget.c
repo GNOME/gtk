@@ -4448,6 +4448,19 @@ gtk_widget_hide_on_delete (GtkWidget *widget)
   return TRUE;
 }
 
+static void
+update_cursor_on_state_change (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (!GTK_IS_WINDOW (toplevel))
+    return;
+
+  gtk_window_update_pointer_focus_on_state_change (GTK_WINDOW (toplevel),
+                                                   widget);
+}
+
 /**
  * gtk_widget_map:
  * @widget: a #GtkWidget
@@ -4470,6 +4483,8 @@ gtk_widget_map (GtkWidget *widget)
         gtk_widget_realize (widget);
 
       g_signal_emit (widget, widget_signals[MAP], 0);
+
+      update_cursor_on_state_change (widget);
 
       if (!_gtk_widget_get_has_window (widget))
         gtk_widget_queue_draw (widget);
@@ -4500,6 +4515,8 @@ gtk_widget_unmap (GtkWidget *widget)
       _gtk_tooltip_hide (widget);
 
       g_signal_emit (widget, widget_signals[UNMAP], 0);
+
+      update_cursor_on_state_change (widget);
 
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
@@ -8405,6 +8422,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
         }
 
       gtk_widget_propagate_state (widget, &data);
+      update_cursor_on_state_change (widget);
     }
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SENSITIVE]);

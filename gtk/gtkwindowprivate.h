@@ -154,6 +154,9 @@ void             gtk_window_update_pointer_focus (GtkWindow        *window,
                                                   gdouble           x,
                                                   gdouble           y);
 
+void             gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
+                                                                  GtkWidget *widget);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */

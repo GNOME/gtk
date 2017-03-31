@@ -11456,3 +11456,31 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
       gtk_window_add_pointer_focus (window, focus);
     }
 }
+
+void
+gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
+                                                 GtkWidget *widget)
+{
+  GList *l = window->priv->foci, *cur;
+
+  while (l)
+    {
+      GtkPointerFocus *focus = l->data;
+
+      cur = l;
+      focus = cur->data;
+      l = cur->next;
+
+      if (GTK_WIDGET (focus->toplevel) == widget)
+        {
+          /* Unmapping the toplevel, remove pointer focus */
+          gtk_window_remove_pointer_focus (window, focus);
+          gtk_pointer_focus_free (focus);
+        }
+      else if (focus->target == widget ||
+               gtk_widget_is_ancestor (focus->target, widget))
+        {
+          gtk_pointer_focus_repick_target (focus);
+        }
+    }
+}
