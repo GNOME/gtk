@@ -2514,40 +2514,6 @@ gtk_notebook_arrow_button_press (GtkNotebook      *notebook,
 }
 
 static gboolean
-get_widget_coordinates (GtkWidget       *widget,
-                        const GdkEvent  *event,
-                        gdouble         *x,
-                        gdouble         *y)
-{
-  GdkWindow *window = ((GdkEventAny *)event)->window;
-  gdouble tx, ty;
-
-  if (!gdk_event_get_coords (event, &tx, &ty))
-    return FALSE;
-
-  while (window && window != gtk_widget_get_window (widget))
-    {
-      gint window_x, window_y;
-
-      gdk_window_get_position (window, &window_x, &window_y);
-      tx += window_x;
-      ty += window_y;
-
-      window = gdk_window_get_parent (window);
-    }
-
-  if (window)
-    {
-      *x = tx;
-      *y = ty;
-
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
-static gboolean
 gtk_notebook_page_tab_label_is_visible (GtkNotebookPage *page)
 {
   return page->tab_label
@@ -2562,8 +2528,10 @@ get_tab_at_pos (GtkNotebook *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
-  GtkAllocation allocation;
+  GtkAllocation notebook_allocation, allocation;
   GList *children;
+
+  gtk_widget_get_allocation (GTK_WIDGET (notebook), &notebook_allocation);
 
   for (children = priv->children; children; children = children->next)
     {
@@ -2573,6 +2541,9 @@ get_tab_at_pos (GtkNotebook *notebook,
         continue;
 
       gtk_css_gadget_get_border_allocation (page->gadget, &allocation, NULL);
+      allocation.x -= notebook_allocation.x;
+      allocation.y -= notebook_allocation.y;
+
       if ((x >= allocation.x) &&
           (y >= allocation.y) &&
           (x <= (allocation.x + allocation.width)) &&
@@ -2606,9 +2577,6 @@ gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
 
   if (event->type != GDK_BUTTON_PRESS || !priv->children)
     return;
-
-  if (!get_widget_coordinates (widget, event, &x, &y))
-    return ;
 
   arrow = gtk_notebook_get_arrow (notebook, x, y);
   if (arrow != ARROW_NONE)
@@ -2980,7 +2948,7 @@ tab_prelight (GtkNotebook *notebook,
   GList *tab;
   gdouble x, y;
 
-  if (get_widget_coordinates (GTK_WIDGET (notebook), (const GdkEvent *)event, &x, &y))
+  if (gdk_event_get_coords (event, &x, &y))
     {
       tab = get_tab_at_pos (notebook, x, y);
       update_prelight_tab (notebook, tab == NULL ? NULL : tab->data);
@@ -3006,7 +2974,7 @@ gtk_notebook_leave_notify (GtkWidget        *widget,
   GtkNotebookPrivate *priv = notebook->priv;
   gdouble x, y;
 
-  if (get_widget_coordinates (widget, (const GdkEvent *)event, &x, &y))
+  if (gdk_event_get_coords ((GdkEvent *) event, &x, &y))
     {
       if (priv->prelight_tab != NULL)
         {
