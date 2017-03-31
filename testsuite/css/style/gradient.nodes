@@ -6,4 +6,4 @@
     background-image: repeating-linear-gradient(to top right, rgba(255,100,60,0.5), rgb(255,0,255) 100%); /* gradient.css:6:95 */
 
     label:dir(ltr)
-      background-image: radial-gradient(circle farthest-corner at center 30px, rgb(255,255,0), rgb(255,0,0) 30%, rgb(0,0,255)); /* gradient.css:10:87 */
+      background-image: radial-gradient(ellipse farthest-corner at center 30px, rgb(255,255,0), rgb(255,0,0) 30%, rgb(0,0,255)); /* gradient.css:10:87 */
