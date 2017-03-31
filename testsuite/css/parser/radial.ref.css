@@ -1,5 +1,5 @@
 a {
-  background-image: radial-gradient(circle farthest-corner at center, rgb(255,255,0), rgb(0,128,0));
+  background-image: radial-gradient(ellipse farthest-corner at center, rgb(255,255,0), rgb(0,128,0));
 }
 
 b {
@@ -7,7 +7,7 @@ b {
 }
 
 c {
-  background-image: radial-gradient(circle farthest-corner at center, rgb(255,255,0), rgb(0,128,0));
+  background-image: radial-gradient(ellipse farthest-corner at center, rgb(255,255,0), rgb(0,128,0));
 }
 
 d {
@@ -15,15 +15,15 @@ d {
 }
 
 e {
-  background-image: radial-gradient(circle farthest-corner at center, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
+  background-image: radial-gradient(ellipse farthest-corner at center, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
 }
 
 f {
-  background-image: radial-gradient(circle farthest-side at left bottom, rgb(255,0,0), rgb(255,255,0) 50px, rgb(0,128,0));
+  background-image: radial-gradient(ellipse farthest-side at left bottom, rgb(255,0,0), rgb(255,255,0) 50px, rgb(0,128,0));
 }
 
 g {
-  background-image: radial-gradient(circle closest-side at 20px 30px, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
+  background-image: radial-gradient(ellipse closest-side at 20px 30px, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
 }
 
 h {
