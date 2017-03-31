@@ -544,8 +544,6 @@ gtk_expander_realize (GtkWidget *widget)
                                              | GDK_LEAVE_NOTIFY_MASK,
                                              &allocation);
   gtk_widget_register_window (widget, priv->event_window);
-
-  gtk_gesture_set_window (priv->multipress_gesture, priv->event_window);
 }
 
 static void
@@ -555,7 +553,6 @@ gtk_expander_unrealize (GtkWidget *widget)
 
   if (priv->event_window)
     {
-      gtk_gesture_set_window (priv->multipress_gesture, NULL);
       gtk_widget_unregister_window (widget, priv->event_window);
       gdk_window_destroy (priv->event_window);
       priv->event_window = NULL;
