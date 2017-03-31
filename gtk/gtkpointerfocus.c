@@ -79,12 +79,40 @@ gtk_pointer_focus_get_target (GtkPointerFocus *focus)
 }
 
 void
+gtk_pointer_focus_set_implicit_grab (GtkPointerFocus *focus,
+                                     GtkWidget       *grab_widget)
+{
+  focus->grab_widget = grab_widget;
+}
+
+GtkWidget *
+gtk_pointer_focus_get_implicit_grab (GtkPointerFocus *focus)
+{
+  return focus->grab_widget;
+}
+
+void
 gtk_pointer_focus_set_coordinates (GtkPointerFocus *focus,
                                    gdouble          x,
                                    gdouble          y)
 {
   focus->x = x;
   focus->y = y;
+}
+
+GtkWidget *
+gtk_pointer_focus_get_effective_target (GtkPointerFocus *focus)
+{
+  GtkWidget *target;
+
+  target = focus->target;
+
+  if (focus->grab_widget &&
+      focus->grab_widget != target &&
+      !gtk_widget_is_ancestor (target, focus->grab_widget))
+    target = focus->grab_widget;
+
+  return target;
 }
 
 void
