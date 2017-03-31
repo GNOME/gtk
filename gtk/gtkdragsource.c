@@ -146,11 +146,6 @@ gtk_drag_source_set (GtkWidget            *widget,
 
   site = g_object_get_data (G_OBJECT (widget), "gtk-site-data");
 
-  gtk_widget_add_events (widget,
-                         gtk_widget_get_events (widget) |
-                         GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                         GDK_BUTTON_MOTION_MASK);
-
   if (site)
     {
       if (site->target_list)

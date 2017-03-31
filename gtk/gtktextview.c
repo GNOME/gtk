@@ -9777,13 +9777,7 @@ text_window_realize (GtkTextWindow *win,
   gdk_window_lower (win->window);
 
   win->bin_window = gdk_window_new_child (win->window,
-                                          gtk_widget_get_events (win->widget)
-                                          | GDK_SCROLL_MASK
-                                          | GDK_SMOOTH_SCROLL_MASK
-                                          | GDK_KEY_PRESS_MASK
-                                          | GDK_BUTTON_PRESS_MASK
-                                          | GDK_BUTTON_RELEASE_MASK
-                                          | GDK_POINTER_MOTION_MASK,
+                                          GDK_ALL_EVENTS_MASK,
                                           &(GdkRectangle) {
                                             0, 0,
                                             win->allocation.width, win->allocation.height});

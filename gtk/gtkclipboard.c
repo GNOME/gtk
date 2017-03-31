@@ -439,9 +439,6 @@ make_clipboard_widget (GdkDisplay *display,
 
   if (provider)
     {
-      /* We need this for gdk_x11_get_server_time() */
-      gtk_widget_add_events (widget, GDK_PROPERTY_CHANGE_MASK);
-      
       g_signal_connect (widget, "selection-get",
 			G_CALLBACK (selection_get_cb), NULL);
       g_signal_connect (widget, "selection-clear-event",

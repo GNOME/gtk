@@ -305,9 +305,6 @@ _gtk_magnifier_init (GtkMagnifier *magnifier)
 
   priv = _gtk_magnifier_get_instance_private (magnifier);
 
-  gtk_widget_set_events (widget,
-                         gtk_widget_get_events (widget));
-
   gtk_widget_set_has_window (widget, FALSE);
   priv->magnification = 1;
   priv->resize = FALSE;

@@ -695,8 +695,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
 
-  gtk_widget_add_events (priv->preview, GDK_SCROLL_MASK);
-
   /* Set the upper values of the spin/scale with G_MAXINT / PANGO_SCALE */
   gtk_spin_button_set_range (GTK_SPIN_BUTTON (priv->size_spin),
 			     1.0, (gdouble)(G_MAXINT / PANGO_SCALE));

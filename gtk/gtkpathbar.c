@@ -474,8 +474,7 @@ gtk_path_bar_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   path_bar->priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                                       gtk_widget_get_events (widget)
-                                                       | GDK_SCROLL_MASK,
+                                                       GDK_ALL_EVENTS_MASK,
                                                        &allocation);
   gtk_widget_register_window (widget, path_bar->priv->event_window);
 }
@@ -1469,7 +1468,6 @@ make_directory_button (GtkPathBar  *path_bar,
   button_data->button = gtk_toggle_button_new ();
   atk_obj = gtk_widget_get_accessible (button_data->button);
   gtk_widget_set_focus_on_click (button_data->button, FALSE);
-  gtk_widget_add_events (button_data->button, GDK_SCROLL_MASK);
 
   switch (button_data->type)
     {

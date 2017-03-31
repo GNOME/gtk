@@ -229,18 +229,13 @@ quit (void)
 int
 main (int argc, char *argv[])
 {
-  GList *devices, *d;
-  GdkEventMask event_mask;
   GtkWidget *window;
   GtkWidget *drawing_area;
   GtkWidget *vbox;
   GtkWidget *button;
   GdkWindow *gdk_win;
-  GdkSeat *seat;
 
   gtk_init ();
-
-  seat = gdk_display_get_default_seat (gdk_display_get_default ());
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "Test Input");
@@ -281,28 +276,6 @@ main (int argc, char *argv[])
 		    G_CALLBACK (leave_notify_event), NULL);
   g_signal_connect (drawing_area, "proximity_out_event",
 		    G_CALLBACK (proximity_out_event), NULL);
-
-  event_mask = GDK_EXPOSURE_MASK |
-    GDK_LEAVE_NOTIFY_MASK |
-    GDK_BUTTON_PRESS_MASK |
-    GDK_KEY_PRESS_MASK |
-    GDK_POINTER_MOTION_MASK |
-    GDK_PROXIMITY_OUT_MASK;
-
-  gtk_widget_set_events (drawing_area, event_mask);
-
-  devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL_POINTING);
-
-  for (d = devices; d; d = d->next)
-    {
-      GdkDevice *device;
-
-      device = d->data;
-      gtk_widget_set_device_events (drawing_area, device, event_mask);
-      gdk_device_set_mode (device, GDK_MODE_SCREEN);
-    }
-
-  g_list_free (devices);
 
   gtk_widget_set_can_focus (drawing_area, TRUE);
   gtk_widget_grab_focus (drawing_area);

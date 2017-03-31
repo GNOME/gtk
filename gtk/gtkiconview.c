@@ -1272,15 +1272,7 @@ gtk_icon_view_realize (GtkWidget *widget)
 
   /* Make the window for the icon view */
   icon_view->priv->bin_window = gdk_window_new_child (icon_view->priv->view_window,
-                                                      gtk_widget_get_events (widget)
-                                                      | GDK_SCROLL_MASK
-                                                      | GDK_SMOOTH_SCROLL_MASK
-                                                      | GDK_POINTER_MOTION_MASK
-                                                      | GDK_LEAVE_NOTIFY_MASK
-                                                      | GDK_BUTTON_PRESS_MASK
-                                                      | GDK_BUTTON_RELEASE_MASK
-                                                      | GDK_KEY_PRESS_MASK
-                                                      | GDK_KEY_RELEASE_MASK,
+                                                      GDK_ALL_EVENTS_MASK,
                                                       &(GdkRectangle) { 0, 0,
                                                       MAX (icon_view->priv->width, allocation.width),
                                                       MAX (icon_view->priv->height, allocation.height)});

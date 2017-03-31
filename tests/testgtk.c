@@ -4280,7 +4280,6 @@ create_cursors (GtkWidget *widget)
 			"draw",
 			G_CALLBACK (cursor_draw),
 			NULL);
-      gtk_widget_set_events (darea, GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK);
       g_signal_connect (darea, "button_press_event",
 			G_CALLBACK (cursor_event), entry);
       gtk_widget_show (darea);
@@ -6057,11 +6056,6 @@ shape_create_icon (GdkScreen *screen,
   gtk_container_add (GTK_CONTAINER (window), fixed);
   gtk_widget_show (fixed);
   
-  gtk_widget_set_events (window, 
-			 gtk_widget_get_events (window) |
-			 GDK_BUTTON_MOTION_MASK |
-			 GDK_BUTTON_PRESS_MASK);
-
   gtk_widget_realize (window);
 
   pixbuf = gdk_pixbuf_new_from_file (xpm_file, NULL);
@@ -7836,8 +7830,6 @@ create_scroll_test (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (hbox), drawing_area);
       gtk_widget_show (drawing_area);
 
-      gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK | GDK_SCROLL_MASK);
-
       adjustment = gtk_adjustment_new (0.0, 0.0, 1000.0, 1.0, 180.0, 200.0);
       scroll_test_pos = 0.0;
 
@@ -8123,7 +8115,6 @@ void create_layout (GtkWidget *widget)
       gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (layout), hadjustment);
       gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (layout), vadjustment);
 
-      gtk_widget_set_events (layout_widget, GDK_EXPOSURE_MASK);
       g_signal_connect (layout, "draw",
 			G_CALLBACK (layout_draw_handler), NULL);
 

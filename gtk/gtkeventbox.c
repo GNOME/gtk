@@ -387,13 +387,7 @@ gtk_event_box_realize (GtkWidget *widget)
   if (visible_window)
     {
       window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                     gtk_widget_get_events (widget)
-                                     | GDK_BUTTON_MOTION_MASK
-                                     | GDK_BUTTON_PRESS_MASK
-                                     | GDK_BUTTON_RELEASE_MASK
-                                     | GDK_EXPOSURE_MASK
-                                     | GDK_ENTER_NOTIFY_MASK
-                                     | GDK_LEAVE_NOTIFY_MASK,
+                                     GDK_ALL_EVENTS_MASK,
                                      &allocation);
 
       gtk_widget_set_window (widget, window);
@@ -414,13 +408,7 @@ gtk_event_box_realize (GtkWidget *widget)
           allocation.y = 0;
         }
       priv->event_window = gdk_window_new_input (window,
-                                                 gtk_widget_get_events (widget)
-                                                 | GDK_BUTTON_MOTION_MASK
-                                                 | GDK_BUTTON_PRESS_MASK
-                                                 | GDK_BUTTON_RELEASE_MASK
-                                                 | GDK_EXPOSURE_MASK
-                                                 | GDK_ENTER_NOTIFY_MASK
-                                                 | GDK_LEAVE_NOTIFY_MASK,
+                                                 GDK_ALL_EVENTS_MASK,
                                                  &allocation);
       gtk_widget_register_window (widget, priv->event_window);
     }

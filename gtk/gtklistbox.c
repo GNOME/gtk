@@ -2156,12 +2156,7 @@ gtk_list_box_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   priv->view_window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                            gtk_widget_get_events (widget)
-                                            | GDK_ENTER_NOTIFY_MASK
-                                            | GDK_LEAVE_NOTIFY_MASK
-                                            | GDK_POINTER_MOTION_MASK
-                                            | GDK_BUTTON_PRESS_MASK
-                                            | GDK_BUTTON_RELEASE_MASK,
+                                            GDK_ALL_EVENTS_MASK,
                                             &allocation);
   gdk_window_set_user_data (priv->view_window, (GObject*) widget);
 

@@ -1528,7 +1528,7 @@ gtk_paned_create_child_window (GtkPaned  *paned,
     }
 
   window = gdk_window_new_child (gtk_widget_get_window (widget),
-                                 gtk_widget_get_events (widget),
+                                 GDK_ALL_EVENTS_MASK,
                                  &allocation);
   gtk_widget_register_window (widget, window);
 
@@ -1547,12 +1547,7 @@ gtk_paned_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_paned_parent_class)->realize (widget);
 
   priv->handle = gdk_window_new_input (gtk_widget_get_window (widget),
-                                       gtk_widget_get_events (widget)
-                                       | GDK_BUTTON_PRESS_MASK
-                                       | GDK_BUTTON_RELEASE_MASK
-                                       | GDK_ENTER_NOTIFY_MASK
-                                       | GDK_LEAVE_NOTIFY_MASK
-                                       | GDK_POINTER_MOTION_MASK,
+                                       GDK_ALL_EVENTS_MASK,
                                        &priv->handle_pos);
 
   if (gtk_widget_is_sensitive (widget))

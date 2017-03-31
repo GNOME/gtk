@@ -820,8 +820,6 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   priv->button = gtk_button_new ();
   g_object_ref_sink (priv->button);
 
-  gtk_widget_add_events (priv->button, GDK_POINTER_MOTION_MASK);
-
   g_signal_connect (priv->button, "event",
 		    G_CALLBACK (gtk_tree_view_column_button_event),
 		    tree_column);
@@ -1319,11 +1317,7 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   gtk_widget_get_allocation (priv->button, &allocation);
 
   priv->window = gdk_window_new_input (_gtk_tree_view_get_header_window (tree_view),
-                                       gtk_widget_get_events (GTK_WIDGET (tree_view)) |
-                                       GDK_BUTTON_PRESS_MASK |
-                                       GDK_BUTTON_RELEASE_MASK |
-                                       GDK_POINTER_MOTION_MASK |
-                                       GDK_KEY_PRESS_MASK,
+                                       GDK_ALL_EVENTS_MASK,
                                        &(GdkRectangle) {(allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2, 0,
                                                         TREE_VIEW_DRAG_WIDTH, _gtk_tree_view_get_header_height (tree_view)});
   cursor = gdk_cursor_new_from_name (display, "col-resize");

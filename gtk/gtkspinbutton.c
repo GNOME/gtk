@@ -886,8 +886,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 
   update_node_ordering (spin_button);
 
-  gtk_widget_add_events (GTK_WIDGET (spin_button), GDK_SCROLL_MASK);
-
   priv->swipe_gesture = gtk_gesture_swipe_new (GTK_WIDGET (spin_button));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->swipe_gesture), TRUE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->swipe_gesture),
@@ -931,8 +929,6 @@ gtk_spin_button_realize (GtkWidget *widget)
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   gboolean return_val;
 
-  gtk_widget_set_events (widget, gtk_widget_get_events (widget) |
-                         GDK_KEY_RELEASE_MASK);
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->realize (widget);
 
   return_val = FALSE;

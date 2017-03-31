@@ -365,8 +365,6 @@ gtk_scale_button_init (GtkScaleButton *button)
   g_object_ref_sink (priv->adjustment);
   gtk_range_set_adjustment (GTK_RANGE (priv->scale), priv->adjustment);
 
-  gtk_widget_add_events (GTK_WIDGET (button), GDK_SMOOTH_SCROLL_MASK);
-
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
   gtk_style_context_add_class (context, "scale");
 }

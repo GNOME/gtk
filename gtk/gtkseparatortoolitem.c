@@ -276,10 +276,7 @@ gtk_separator_tool_item_realize (GtkWidget *widget)
   g_object_ref (window);
 
   priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
-                                             gtk_widget_get_events (widget)
-                                             | GDK_BUTTON_PRESS_MASK
-                                             | GDK_BUTTON_RELEASE_MASK
-                                             | GDK_POINTER_MOTION_MASK,
+                                             GDK_ALL_EVENTS_MASK,
                                              &allocation);
   gtk_widget_register_window (widget, priv->event_window);
 }

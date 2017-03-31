@@ -2884,14 +2884,7 @@ realize_icon_info (GtkWidget            *widget,
   g_return_if_fail (icon_info != NULL);
 
   icon_info->window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                            gtk_widget_get_events (widget)
-                                            | GDK_BUTTON_PRESS_MASK
-                                            | GDK_BUTTON_RELEASE_MASK
-                                            | GDK_BUTTON1_MOTION_MASK
-                                            | GDK_BUTTON3_MOTION_MASK
-                                            | GDK_POINTER_MOTION_MASK
-                                            | GDK_ENTER_NOTIFY_MASK
-                                            | GDK_LEAVE_NOTIFY_MASK,
+                                            GDK_ALL_EVENTS_MASK,
                                             &(GdkRectangle) { 0, 0, 1, 1});
   gtk_widget_register_window (widget, icon_info->window);
 

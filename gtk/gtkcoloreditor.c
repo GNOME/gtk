@@ -346,14 +346,6 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_type_ensure (GTK_TYPE_COLOR_SWATCH);
   gtk_widget_init_template (GTK_WIDGET (editor));
 
-  /* Some post processing is needed in code to set this up */
-  gtk_widget_set_events (editor->priv->swatch,
-			 gtk_widget_get_events (editor->priv->swatch)
-                                 & ~(GDK_BUTTON_PRESS_MASK
-                                     | GDK_BUTTON_RELEASE_MASK
-                                     | GDK_KEY_PRESS_MASK
-                                     | GDK_KEY_RELEASE_MASK));
-
   if (gtk_widget_get_direction (editor->priv->h_slider) == GTK_TEXT_DIR_RTL)
     gtk_style_context_add_class (gtk_widget_get_style_context (editor->priv->h_slider),
                                  "marks-before");

@@ -57,7 +57,6 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  gtk_widget_set_events (window, GDK_POINTER_MOTION_MASK);
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   g_signal_connect (window, "map-event", G_CALLBACK (on_map_event), NULL);
 

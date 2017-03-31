@@ -628,14 +628,6 @@ do_event_axes (GtkWidget *toplevel)
       box = gtk_event_box_new ();
       gtk_container_add (GTK_CONTAINER (window), box);
       gtk_widget_set_support_multidevice (box, TRUE);
-      gtk_widget_add_events (box,
-			     GDK_POINTER_MOTION_MASK |
-			     GDK_BUTTON_PRESS_MASK |
-			     GDK_BUTTON_RELEASE_MASK |
-			     GDK_SMOOTH_SCROLL_MASK |
-			     GDK_ENTER_NOTIFY_MASK |
-			     GDK_LEAVE_NOTIFY_MASK |
-			     GDK_TOUCH_MASK);
 
       event_data = event_data_new ();
       g_object_set_data_full (G_OBJECT (box), "gtk-demo-event-data",

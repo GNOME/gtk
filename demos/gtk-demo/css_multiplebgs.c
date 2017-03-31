@@ -92,10 +92,6 @@ do_css_multiplebgs (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       container = gtk_overlay_new ();
-      gtk_widget_add_events (container,
-                             GDK_ENTER_NOTIFY_MASK |
-                             GDK_LEAVE_NOTIFY_MASK |
-                             GDK_POINTER_MOTION_MASK);
       gtk_container_add (GTK_CONTAINER (window), container);
 
       child = gtk_drawing_area_new ();
@@ -106,10 +102,6 @@ do_css_multiplebgs (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (container), child);
 
       child = gtk_button_new ();
-      gtk_widget_add_events (child,
-                             GDK_ENTER_NOTIFY_MASK |
-                             GDK_LEAVE_NOTIFY_MASK |
-                             GDK_POINTER_MOTION_MASK);
       gtk_overlay_add_overlay (GTK_OVERLAY (container), child);
       gtk_widget_set_name (child, "bricks-button");
       gtk_widget_set_halign (child, GTK_ALIGN_CENTER);

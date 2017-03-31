@@ -1046,8 +1046,6 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   g_type_ensure (GTK_TYPE_TREE_MENU);
   gtk_widget_init_template (GTK_WIDGET (combo_box));
 
-  gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
-
   context = gtk_widget_get_style_context (priv->button);
   gtk_style_context_remove_class (context, "toggle");
   gtk_style_context_add_class (context, "combo");

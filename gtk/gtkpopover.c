@@ -381,13 +381,7 @@ gtk_popover_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 gtk_widget_get_events (widget)
-                                 | GDK_POINTER_MOTION_MASK
-                                 | GDK_BUTTON_MOTION_MASK
-                                 | GDK_BUTTON_PRESS_MASK
-                                 | GDK_BUTTON_RELEASE_MASK
-                                 | GDK_ENTER_NOTIFY_MASK
-                                 | GDK_LEAVE_NOTIFY_MASK,
+                                 GDK_ALL_EVENTS_MASK,
                                  &(GdkRectangle) { 0, 0, allocation.width, allocation.height });
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);

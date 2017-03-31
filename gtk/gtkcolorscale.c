@@ -154,8 +154,6 @@ gtk_color_scale_init (GtkColorScale *scale)
 
   scale->priv = gtk_color_scale_get_instance_private (scale);
 
-  gtk_widget_add_events (GTK_WIDGET (scale), GDK_TOUCH_MASK);
-
   scale->priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (scale));
   g_signal_connect (scale->priv->long_press_gesture, "pressed",
                     G_CALLBACK (hold_action), scale);

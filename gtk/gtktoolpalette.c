@@ -707,12 +707,7 @@ gtk_tool_palette_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 gtk_widget_get_events (widget)
-                                 | GDK_VISIBILITY_NOTIFY_MASK
-                                 | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
-                                 | GDK_BUTTON_MOTION_MASK
-                                 | GDK_SCROLL_MASK | GDK_SMOOTH_SCROLL_MASK
-                                 | GDK_TOUCH_MASK,
+                                 GDK_ALL_EVENTS_MASK,
                                  &allocation);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);

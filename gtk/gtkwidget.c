@@ -573,7 +573,6 @@ enum {
   PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
   PROP_RECEIVES_DEFAULT,
-  PROP_EVENTS,
   PROP_HAS_TOOLTIP,
   PROP_TOOLTIP_MARKUP,
   PROP_TOOLTIP_TEXT,
@@ -757,9 +756,6 @@ static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
 					   gint                height);
 
-static void gtk_widget_add_events_internal (GtkWidget *widget,
-                                            GdkDevice *device,
-                                            gint       events);
 static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
                                                     GdkDevice *device,
                                                     gboolean   recurse,
@@ -785,8 +781,6 @@ static GParamSpecPool  *style_property_spec_pool = NULL;
 static GQuark		quark_property_parser = 0;
 static GQuark		quark_accel_path = 0;
 static GQuark		quark_accel_closures = 0;
-static GQuark		quark_event_mask = 0;
-static GQuark           quark_device_event_mask = 0;
 static GQuark		quark_parent_window = 0;
 static GQuark		quark_shape_info = 0;
 static GQuark		quark_input_shape_info = 0;
@@ -1032,8 +1026,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
   quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
   quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
-  quark_event_mask = g_quark_from_static_string ("gtk-event-mask");
-  quark_device_event_mask = g_quark_from_static_string ("gtk-device-event-mask");
   quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
   quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
   quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
@@ -1239,14 +1231,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("If TRUE, the widget will receive the default action when it is focused"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  widget_props[PROP_EVENTS] =
-      g_param_spec_flags ("events",
-                          P_("Events"),
-                          P_("The event mask that decides what kind of GdkEvents this widget gets"),
-                          GDK_TYPE_EVENT_MASK,
-                          GDK_STRUCTURE_MASK,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
 /**
  * GtkWidget:has-tooltip:
@@ -3296,10 +3280,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_RECEIVES_DEFAULT:
       gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
       break;
-    case PROP_EVENTS:
-      if (!_gtk_widget_get_realized (widget) && _gtk_widget_get_has_window (widget))
-	gtk_widget_set_events (widget, g_value_get_flags (value));
-      break;
     case PROP_HAS_TOOLTIP:
       gtk_widget_real_set_has_tooltip (widget,
 				       g_value_get_boolean (value), FALSE);
@@ -3416,8 +3396,6 @@ gtk_widget_get_property (GObject         *object,
 
   switch (prop_id)
     {
-      gpointer *eventp;
-
     case PROP_NAME:
       if (priv->name)
 	g_value_set_string (value, priv->name);
@@ -3467,10 +3445,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_RECEIVES_DEFAULT:
       g_value_set_boolean (value, gtk_widget_get_receives_default (widget));
-      break;
-    case PROP_EVENTS:
-      eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
-      g_value_set_flags (value, GPOINTER_TO_INT (eventp));
       break;
     case PROP_HAS_TOOLTIP:
       g_value_set_boolean (value, gtk_widget_get_has_tooltip (widget));
@@ -4523,31 +4497,6 @@ gtk_widget_unmap (GtkWidget *widget)
     }
 }
 
-static void
-_gtk_widget_enable_device_events (GtkWidget *widget)
-{
-  GHashTable *device_events;
-  GHashTableIter iter;
-  gpointer key, value;
-
-  device_events = g_object_get_qdata (G_OBJECT (widget), quark_device_event_mask);
-
-  if (!device_events)
-    return;
-
-  g_hash_table_iter_init (&iter, device_events);
-
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      GdkDevice *device;
-      GdkEventMask event_mask;
-
-      device = key;
-      event_mask = GPOINTER_TO_UINT (value);
-      gtk_widget_add_events_internal (widget, device, event_mask);
-    }
-}
-
 typedef struct {
   GtkWidget *widget;
   GdkDevice *device;
@@ -4964,7 +4913,6 @@ gtk_widget_realize (GtkWidget *widget)
       if (priv->multidevice)
         gdk_window_set_support_multidevice (priv->window, TRUE);
 
-      _gtk_widget_enable_device_events (widget);
       gtk_widget_update_devices_mask (widget, TRUE);
 
       gtk_widget_update_alpha (widget);
@@ -6729,26 +6677,6 @@ _gtk_widget_set_captured_event_handler (GtkWidget               *widget,
                                         GtkCapturedEventHandler  callback)
 {
   g_object_set_data (G_OBJECT (widget), "captured-event-handler", callback);
-}
-
-static GdkEventMask
-_gtk_widget_get_controllers_evmask (GtkWidget *widget)
-{
-  EventControllerData *data;
-  GdkEventMask evmask = 0;
-  GtkWidgetPrivate *priv;
-  GList *l;
-
-  priv = widget->priv;
-
-  for (l = priv->event_controllers; l; l = l->next)
-    {
-      data = l->data;
-      if (data->controller)
-        evmask |= gtk_event_controller_get_event_mask (GTK_EVENT_CONTROLLER (data->controller));
-    }
-
-  return evmask;
 }
 
 static gboolean
@@ -9903,84 +9831,6 @@ gtk_widget_has_size_request (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_events:
- * @widget: a #GtkWidget
- * @events: event mask
- *
- * Sets the event mask (see #GdkEventMask) for a widget. The event
- * mask determines which events a widget will receive. Keep in mind
- * that different widgets have different default event masks, and by
- * changing the event mask you may disrupt a widget’s functionality,
- * so be careful. This function must be called while a widget is
- * unrealized. Consider gtk_widget_add_events() for widgets that are
- * already realized, or if you want to preserve the existing event
- * mask. This function can’t be used with widgets that have no window.
- * (See gtk_widget_get_has_window()).  To get events on those widgets,
- * place them inside a #GtkEventBox and receive events on the event
- * box.
- **/
-void
-gtk_widget_set_events (GtkWidget *widget,
-		       gint	  events)
-{
-  gint e;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!_gtk_widget_get_realized (widget));
-
-  e = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask));
-  if (e != events)
-    {
-      g_object_set_qdata (G_OBJECT (widget), quark_event_mask,
-                          GINT_TO_POINTER (events));
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_EVENTS]);
-    }
-}
-
-/**
- * gtk_widget_set_device_events:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- * @events: event mask
- *
- * Sets the device event mask (see #GdkEventMask) for a widget. The event
- * mask determines which events a widget will receive from @device. Keep
- * in mind that different widgets have different default event masks, and by
- * changing the event mask you may disrupt a widget’s functionality,
- * so be careful. This function must be called while a widget is
- * unrealized. Consider gtk_widget_add_device_events() for widgets that are
- * already realized, or if you want to preserve the existing event
- * mask. This function can’t be used with windowless widgets (which return
- * %FALSE from gtk_widget_get_has_window());
- * to get events on those widgets, place them inside a #GtkEventBox
- * and receive events on the event box.
- *
- * Since: 3.0
- **/
-void
-gtk_widget_set_device_events (GtkWidget    *widget,
-                              GdkDevice    *device,
-                              GdkEventMask  events)
-{
-  GHashTable *device_events;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (!_gtk_widget_get_realized (widget));
-
-  device_events = g_object_get_qdata (G_OBJECT (widget), quark_device_event_mask);
-
-  if (G_UNLIKELY (!device_events))
-    {
-      device_events = g_hash_table_new (NULL, NULL);
-      g_object_set_qdata_full (G_OBJECT (widget), quark_device_event_mask, device_events,
-                               (GDestroyNotify) g_hash_table_unref);
-    }
-
-  g_hash_table_insert (device_events, device, GUINT_TO_POINTER (events));
-}
-
-/**
  * gtk_widget_set_device_enabled:
  * @widget: a #GtkWidget
  * @device: a #GdkDevice
@@ -10039,137 +9889,6 @@ gtk_widget_get_device_enabled (GtkWidget *widget,
   enabled_devices = g_object_get_qdata (G_OBJECT (widget), quark_enabled_devices);
 
   return g_list_find (enabled_devices, device) != NULL;
-}
-
-static void
-gtk_widget_add_events_internal_list (GtkWidget    *widget,
-                                     GdkDevice    *device,
-                                     GdkEventMask  events,
-                                     GList        *window_list)
-{
-  GdkEventMask controllers_mask;
-  GList *l;
-
-  controllers_mask = _gtk_widget_get_controllers_evmask (widget);
-
-  for (l = window_list; l != NULL; l = l->next)
-    {
-      GdkWindow *window = l->data;
-      GtkWidget *window_widget;
-
-      gdk_window_get_user_data (window, (gpointer *)&window_widget);
-      if (window_widget == widget)
-        {
-          GList *children;
-
-          if (device)
-            gdk_window_set_device_events (window, device,
-                                          gdk_window_get_events (window)
-                                          | events
-                                          | controllers_mask);
-          else
-            gdk_window_set_events (window,
-                                   gdk_window_get_events (window)
-                                   | events
-                                   | controllers_mask);
-
-          children = gdk_window_peek_children (window);
-          gtk_widget_add_events_internal_list (widget, device, events, children);
-        }
-    }
-}
-
-static void
-gtk_widget_add_events_internal (GtkWidget *widget,
-                                GdkDevice *device,
-                                gint       events)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-  GList *window_list;
-  GList win;
-
-  if (!_gtk_widget_get_has_window (widget))
-    window_list = gdk_window_peek_children (priv->window);
-  else
-    {
-      win.data = priv->window;
-      win.prev = win.next = NULL;
-      window_list = &win;
-    }
-
-  gtk_widget_add_events_internal_list (widget, device, events, window_list);
-}
-
-/**
- * gtk_widget_add_events:
- * @widget: a #GtkWidget
- * @events: an event mask, see #GdkEventMask
- *
- * Adds the events in the bitfield @events to the event mask for
- * @widget. See gtk_widget_set_events() and the
- * [input handling overview][event-masks] for details.
- **/
-void
-gtk_widget_add_events (GtkWidget *widget,
-		       gint	  events)
-{
-  gint old_events;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  old_events = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask));
-  g_object_set_qdata (G_OBJECT (widget), quark_event_mask,
-                      GINT_TO_POINTER (old_events | events));
-
-  if (_gtk_widget_get_realized (widget))
-    {
-      gtk_widget_add_events_internal (widget, NULL, events);
-      gtk_widget_update_devices_mask (widget, FALSE);
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_EVENTS]);
-}
-
-/**
- * gtk_widget_add_device_events:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- * @events: an event mask, see #GdkEventMask
- *
- * Adds the device events in the bitfield @events to the event mask for
- * @widget. See gtk_widget_set_device_events() for details.
- *
- * Since: 3.0
- **/
-void
-gtk_widget_add_device_events (GtkWidget    *widget,
-                              GdkDevice    *device,
-                              GdkEventMask  events)
-{
-  GdkEventMask old_events;
-  GHashTable *device_events;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  old_events = gtk_widget_get_device_events (widget, device);
-
-  device_events = g_object_get_qdata (G_OBJECT (widget), quark_device_event_mask);
-
-  if (G_UNLIKELY (!device_events))
-    {
-      device_events = g_hash_table_new (NULL, NULL);
-      g_object_set_qdata_full (G_OBJECT (widget), quark_device_event_mask, device_events,
-                               (GDestroyNotify) g_hash_table_unref);
-    }
-
-  g_hash_table_insert (device_events, device,
-                       GUINT_TO_POINTER (old_events | events));
-
-  if (_gtk_widget_get_realized (widget))
-    gtk_widget_add_events_internal (widget, device, events);
-
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_EVENTS]);
 }
 
 /**
@@ -10263,58 +9982,6 @@ gtk_widget_get_settings (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   return gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
-}
-
-/**
- * gtk_widget_get_events:
- * @widget: a #GtkWidget
- *
- * Returns the event mask (see #GdkEventMask) for the widget. These are the
- * events that the widget will receive.
- *
- * Note: Internally, the widget event mask will be the logical OR of the event
- * mask set through gtk_widget_set_events() or gtk_widget_add_events(), and the
- * event mask necessary to cater for every #GtkEventController created for the
- * widget.
- *
- * Returns: event mask for @widget
- **/
-gint
-gtk_widget_get_events (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-
-  return GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_event_mask)) |
-    _gtk_widget_get_controllers_evmask (widget);
-}
-
-/**
- * gtk_widget_get_device_events:
- * @widget: a #GtkWidget
- * @device: a #GdkDevice
- *
- * Returns the events mask for the widget corresponding to an specific device. These
- * are the events that the widget will receive when @device operates on it.
- *
- * Returns: device event mask for @widget
- *
- * Since: 3.0
- **/
-GdkEventMask
-gtk_widget_get_device_events (GtkWidget *widget,
-                              GdkDevice *device)
-{
-  GHashTable *device_events;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
-
-  device_events = g_object_get_qdata (G_OBJECT (widget), quark_device_event_mask);
-
-  if (!device_events)
-    return 0;
-
-  return GPOINTER_TO_UINT (g_hash_table_lookup (device_events, device));
 }
 
 /**
@@ -13395,11 +13062,6 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
 				   gdk_window_get_events (priv->window) |
 				   GDK_LEAVE_NOTIFY_MASK |
 				   GDK_POINTER_MOTION_MASK);
-
-	  if (_gtk_widget_get_has_window (widget))
-	      gtk_widget_add_events (widget,
-				     GDK_LEAVE_NOTIFY_MASK |
-				     GDK_POINTER_MOTION_MASK);
 	}
 
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_TOOLTIP]);
@@ -15406,17 +15068,6 @@ event_controller_grab_notify (GtkWidget           *widget,
 }
 
 static void
-_gtk_widget_update_evmask (GtkWidget *widget)
-{
-  if (_gtk_widget_get_realized (widget))
-    {
-      gint events = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget),
-                                                         quark_event_mask));
-      gtk_widget_add_events_internal (widget, NULL, events);
-    }
-}
-
-static void
 event_controller_sequence_state_changed (GtkGesture            *gesture,
                                          GdkEventSequence      *sequence,
                                          GtkEventSequenceState  state,
@@ -15496,7 +15147,6 @@ _gtk_widget_add_controller (GtkWidget          *widget,
     }
 
   priv->event_controllers = g_list_prepend (priv->event_controllers, data);
-  _gtk_widget_update_evmask (widget);
 }
 
 void

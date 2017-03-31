@@ -787,10 +787,7 @@ gtk_layout_realize (GtkWidget *widget)
   gtk_widget_register_window (widget, window);
 
   priv->bin_window = gdk_window_new_child (window,
-                                           gtk_widget_get_events (widget)
-                                           | GDK_EXPOSURE_MASK
-                                           | GDK_SCROLL_MASK
-                                           | GDK_SMOOTH_SCROLL_MASK,
+                                           GDK_ALL_EVENTS_MASK,
                                            &(GdkRectangle) {
                                              - gtk_adjustment_get_value (priv->hadjustment),
                                              - gtk_adjustment_get_value (priv->vadjustment),

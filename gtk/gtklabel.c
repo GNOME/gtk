@@ -5088,12 +5088,7 @@ gtk_label_create_window (GtkLabel *label)
   gtk_widget_get_allocation (widget, &allocation);
 
   priv->select_info->window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                                    gtk_widget_get_events (widget)
-                                                    | GDK_BUTTON_PRESS_MASK
-                                                    | GDK_BUTTON_RELEASE_MASK
-                                                    | GDK_LEAVE_NOTIFY_MASK
-                                                    | GDK_BUTTON_MOTION_MASK
-                                                    | GDK_POINTER_MOTION_MASK,
+                                                    GDK_ALL_EVENTS_MASK,
                                                     &allocation);
 
   if (gtk_widget_is_sensitive (widget) && priv->select_info->selectable)

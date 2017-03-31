@@ -151,9 +151,6 @@ do_gestures (GtkWidget *do_widget)
 
       drawing_area = gtk_drawing_area_new ();
       gtk_container_add (GTK_CONTAINER (window), drawing_area);
-      gtk_widget_add_events (drawing_area,
-                             GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                             GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK);
 
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (drawing_area),
                                       drawing_area_draw,

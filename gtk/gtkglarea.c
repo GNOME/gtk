@@ -287,7 +287,7 @@ gtk_gl_area_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
-                                             gtk_widget_get_events (widget),
+                                             GDK_ALL_EVENTS_MASK,
                                              &allocation);
   gtk_widget_register_window (widget, priv->event_window);
 

@@ -786,20 +786,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_widget_get_size_request    (GtkWidget           *widget,
                                            gint                *width,
                                            gint                *height);
-GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_set_events	  (GtkWidget	       *widget,
-					   gint			events);
-GDK_AVAILABLE_IN_ALL
-void       gtk_widget_add_events          (GtkWidget           *widget,
-					   gint	                events);
-GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_set_device_events	  (GtkWidget	       *widget,
-                                           GdkDevice           *device,
-					   GdkEventMask		events);
-GDK_AVAILABLE_IN_ALL
-void       gtk_widget_add_device_events   (GtkWidget           *widget,
-                                           GdkDevice           *device,
-					   GdkEventMask         events);
 GDK_AVAILABLE_IN_3_8
 void	   gtk_widget_set_opacity	  (GtkWidget	       *widget,
 					   double		opacity);
@@ -913,12 +899,6 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_margin_bottom (GtkWidget *widget,
                                        gint       margin);
 
-
-GDK_AVAILABLE_IN_ALL
-gint	     gtk_widget_get_events	(GtkWidget	*widget);
-GDK_AVAILABLE_IN_ALL
-GdkEventMask gtk_widget_get_device_events (GtkWidget	*widget,
-                                           GdkDevice    *device);
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_is_ancestor	(GtkWidget	*widget,
 					 GtkWidget	*ancestor);

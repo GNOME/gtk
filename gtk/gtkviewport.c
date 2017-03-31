@@ -625,21 +625,19 @@ gtk_viewport_realize (GtkWidget *widget)
   GtkAdjustment *vadjustment = priv->vadjustment;
   GtkAllocation view_allocation;
   GtkWidget *child;
-  gint event_mask;
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->realize (widget);
 
-  event_mask = gtk_widget_get_events (widget);
   gtk_css_gadget_get_content_allocation (priv->gadget,
                                          &view_allocation, NULL);
 
   priv->view_window = gdk_window_new_child (gtk_widget_get_window (widget),
-                                            event_mask | GDK_SCROLL_MASK | GDK_TOUCH_MASK | GDK_SMOOTH_SCROLL_MASK,
+                                            GDK_ALL_EVENTS_MASK,
                                             &view_allocation);
   gtk_widget_register_window (widget, priv->view_window);
 
   priv->bin_window = gdk_window_new_child (priv->view_window,
-                                           event_mask,
+                                           GDK_ALL_EVENTS_MASK,
                                            &(GdkRectangle) {
                                              - gtk_adjustment_get_value (hadjustment),
                                              - gtk_adjustment_get_value (vadjustment),

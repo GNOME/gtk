@@ -162,14 +162,6 @@ activate (GtkApplication *app,
   g_signal_connect (drawing_area, "button-press-event",
                     G_CALLBACK (button_press_event_cb), NULL);
 
-  /* Ask to receive events the drawing area doesn't normally
-   * subscribe to. In particular, we need to ask for the
-   * button press and motion notify events that want to handle.
-   */
-  gtk_widget_set_events (drawing_area, gtk_widget_get_events (drawing_area)
-                                     | GDK_BUTTON_PRESS_MASK
-                                     | GDK_POINTER_MOTION_MASK);
-
   gtk_widget_show (window);
 }
 

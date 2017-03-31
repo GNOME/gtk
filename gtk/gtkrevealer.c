@@ -352,7 +352,7 @@ gtk_revealer_real_realize (GtkWidget *widget)
 
   priv->view_window =
     gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                          gtk_widget_get_events (widget),
+                          GDK_ALL_EVENTS_MASK,
                           &allocation);
   gtk_widget_register_window (widget, priv->view_window);
 
@@ -380,7 +380,7 @@ gtk_revealer_real_realize (GtkWidget *widget)
 
   priv->bin_window =
     gdk_window_new_child (priv->view_window,
-                          gtk_widget_get_events (widget),
+                          GDK_ALL_EVENTS_MASK,
                           &child_allocation);
   gtk_widget_register_window (widget, priv->bin_window);
 

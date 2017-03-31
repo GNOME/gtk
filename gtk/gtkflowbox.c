@@ -3046,14 +3046,8 @@ gtk_flow_box_realize (GtkWidget *widget)
   gtk_widget_get_allocation (GTK_WIDGET (box), &allocation);
 
   priv->view_window = gdk_window_new_child (gtk_widget_get_parent_window (GTK_WIDGET (box)),
-                                 gtk_widget_get_events (GTK_WIDGET (box))
-                                 | GDK_ENTER_NOTIFY_MASK
-                                 | GDK_LEAVE_NOTIFY_MASK
-                                 | GDK_POINTER_MOTION_MASK
-                                 | GDK_KEY_PRESS_MASK
-                                 | GDK_BUTTON_PRESS_MASK
-                                 | GDK_BUTTON_RELEASE_MASK,
-                                 &allocation);
+                                            GDK_ALL_EVENTS_MASK,
+                                            &allocation);
   gtk_widget_register_window (GTK_WIDGET (box), priv->view_window);
 
   for (iter = g_sequence_get_begin_iter (priv->children);

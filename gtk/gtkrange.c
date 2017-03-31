@@ -1980,14 +1980,7 @@ gtk_range_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
-                                             gtk_widget_get_events (widget)
-                                             | GDK_BUTTON_PRESS_MASK
-                                             | GDK_BUTTON_RELEASE_MASK
-                                             | GDK_SCROLL_MASK
-                                             | GDK_SMOOTH_SCROLL_MASK
-                                             | GDK_ENTER_NOTIFY_MASK
-                                             | GDK_LEAVE_NOTIFY_MASK
-                                             | GDK_POINTER_MOTION_MASK,
+                                             GDK_ALL_EVENTS_MASK,
                                              &allocation);
   gtk_widget_register_window (widget, priv->event_window);
 }

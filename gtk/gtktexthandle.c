@@ -284,12 +284,6 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
 
       widget = gtk_event_box_new ();
       gtk_event_box_set_visible_window (GTK_EVENT_BOX (widget), TRUE);
-      gtk_widget_set_events (widget,
-                             GDK_BUTTON_PRESS_MASK |
-                             GDK_BUTTON_RELEASE_MASK |
-                             GDK_ENTER_NOTIFY_MASK |
-                             GDK_LEAVE_NOTIFY_MASK |
-                             GDK_POINTER_MOTION_MASK);
 
       gtk_widget_set_direction (widget, priv->windows[pos].dir);
 

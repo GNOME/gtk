@@ -2619,10 +2619,7 @@ gtk_menu_realize (GtkWidget *widget)
   get_arrows_border (menu, &arrow_border);
 
   priv->view_window = gdk_window_new_child (gtk_widget_get_window (widget),
-                                            gtk_widget_get_events (widget)
-                                            | GDK_KEY_PRESS_MASK
-                                            | GDK_ENTER_NOTIFY_MASK
-                                            | GDK_LEAVE_NOTIFY_MASK,
+                                            GDK_ALL_EVENTS_MASK,
                                             &(GdkRectangle) {
                                               allocation.x + padding.left,
                                               allocation.y + padding.top + arrow_border.top,
@@ -2632,10 +2629,7 @@ gtk_menu_realize (GtkWidget *widget)
   gtk_widget_register_window (widget, priv->view_window);
 
   priv->bin_window = gdk_window_new_child (priv->view_window,
-                                           gtk_widget_get_events (widget)
-                                           | GDK_KEY_PRESS_MASK
-                                           | GDK_ENTER_NOTIFY_MASK
-                                           | GDK_LEAVE_NOTIFY_MASK,
+                                           GDK_ALL_EVENTS_MASK,
                                            &(GdkRectangle) {
                                              0,
                                              - priv->scroll_offset,

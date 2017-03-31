@@ -143,7 +143,7 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
   gtk_overlay_compute_child_allocation (overlay, child, &allocation, NULL);
 
   window = gdk_window_new_child (gtk_widget_get_window (widget),
-                                 gtk_widget_get_events (widget),
+                                 GDK_ALL_EVENTS_MASK,
                                  &allocation);
   gtk_widget_register_window (widget, window);
 

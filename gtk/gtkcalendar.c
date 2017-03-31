@@ -1545,9 +1545,7 @@ calendar_realize_arrows (GtkCalendar *calendar)
           rect.y += allocation.y;
 
           priv->arrow_win[i] = gdk_window_new_input (gtk_widget_get_window (widget),
-                                                     gtk_widget_get_events (widget)
-                                                     | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK
-                                                     | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK,
+                                                     GDK_ALL_EVENTS_MASK,
                                                      &rect);
           gtk_widget_register_window (widget, priv->arrow_win[i]);
         }
@@ -1639,12 +1637,7 @@ gtk_calendar_realize (GtkWidget *widget)
   rect.height = priv->main_h;
 
   priv->main_win = gdk_window_new_input (gtk_widget_get_window (widget),
-                                         gtk_widget_get_events (widget)
-                                         | GDK_SCROLL_MASK
-                                         | GDK_BUTTON_PRESS_MASK
-                                         | GDK_BUTTON_RELEASE_MASK
-                                         | GDK_POINTER_MOTION_MASK
-                                         | GDK_LEAVE_NOTIFY_MASK,
+                                         GDK_ALL_EVENTS_MASK,
                                          &rect);
 
   gtk_widget_register_window (widget, priv->main_win);

@@ -263,17 +263,6 @@ do_drawingarea (GtkWidget *do_widget)
                         G_CALLBACK (scribble_motion_notify_event), NULL);
       g_signal_connect (da, "button-press-event",
                         G_CALLBACK (scribble_button_press_event), NULL);
-
-
-      /* Ask to receive events the drawing area doesn't normally
-       * subscribe to
-       */
-      gtk_widget_set_events (da, gtk_widget_get_events (da)
-                             | GDK_LEAVE_NOTIFY_MASK
-                             | GDK_BUTTON_PRESS_MASK
-                             | GDK_POINTER_MOTION_MASK
-                             | GDK_POINTER_MOTION_HINT_MASK);
-
     }
 
   if (!gtk_widget_get_visible (window))

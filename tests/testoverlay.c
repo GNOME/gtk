@@ -344,7 +344,6 @@ test_chase (void)
   gtk_window_set_title (GTK_WINDOW (win), "Chase");
 
   overlay = gtk_overlay_new ();
-  gtk_widget_set_events (overlay, GDK_ENTER_NOTIFY_MASK|GDK_LEAVE_NOTIFY_MASK);
   gtk_container_add (GTK_CONTAINER (win), overlay);
 
   sw = gtk_scrolled_window_new (NULL, NULL);

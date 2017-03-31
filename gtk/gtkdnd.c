@@ -1613,7 +1613,6 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
       gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
       gtk_window_set_screen (GTK_WINDOW (info->icon_window), screen);
       gtk_widget_set_size_request (info->icon_window, 24, 24);
-      gtk_widget_set_events (info->icon_window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
       gtk_style_context_remove_class (gtk_widget_get_style_context (info->icon_window), "background");
 
       gtk_window_set_hardcoded_window (GTK_WINDOW (info->icon_window),

@@ -2246,14 +2246,7 @@ gtk_tree_view_realize (GtkWidget *widget)
 
   /* Make the window for the tree */
   tree_view->priv->bin_window = gdk_window_new_child (window,
-                                                      gtk_widget_get_events (widget)
-                                                      | GDK_SCROLL_MASK
-                                                      | GDK_SMOOTH_SCROLL_MASK
-                                                      | GDK_POINTER_MOTION_MASK
-                                                      | GDK_ENTER_NOTIFY_MASK
-                                                      | GDK_LEAVE_NOTIFY_MASK
-                                                      | GDK_BUTTON_PRESS_MASK
-                                                      | GDK_BUTTON_RELEASE_MASK,
+                                                      GDK_ALL_EVENTS_MASK,
                                                       &(GdkRectangle) {
                                                         0,
                                                         gtk_tree_view_get_effective_header_height (tree_view),
@@ -2263,14 +2256,7 @@ gtk_tree_view_realize (GtkWidget *widget)
 
   /* Make the column header window */
   tree_view->priv->header_window = gdk_window_new_child (window,
-                                                         gtk_widget_get_events (widget)
-                                                         | GDK_SCROLL_MASK
-                                                         | GDK_ENTER_NOTIFY_MASK
-                                                         | GDK_LEAVE_NOTIFY_MASK
-                                                         | GDK_BUTTON_PRESS_MASK
-                                                         | GDK_BUTTON_RELEASE_MASK
-                                                         | GDK_KEY_PRESS_MASK
-                                                         | GDK_KEY_RELEASE_MASK,
+                                                         GDK_ALL_EVENTS_MASK,
                                                          &(GdkRectangle) {
                                                            0,
                                                            0,

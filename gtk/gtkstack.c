@@ -318,7 +318,6 @@ gtk_stack_realize (GtkWidget *widget)
   GtkAllocation allocation;
   GtkStackChildInfo *info;
   GList *l;
-  gint event_mask;
 
   GTK_WIDGET_CLASS (gtk_stack_parent_class)->realize (widget);
 
@@ -326,20 +325,13 @@ gtk_stack_realize (GtkWidget *widget)
 
   priv->view_window =
     gdk_window_new_child (gtk_widget_get_window (GTK_WIDGET (stack)),
-                          gtk_widget_get_events (widget),
+                          GDK_ALL_EVENTS_MASK,
                           &allocation);
   gtk_widget_register_window (widget, priv->view_window);
 
-  event_mask = gtk_widget_get_events (widget);
-  for (l = priv->children; l != NULL; l = l->next)
-    {
-      info = l->data;
-      event_mask |= gtk_widget_get_events (info->widget);
-    }
-
   priv->bin_window =
     gdk_window_new_child (priv->view_window,
-                          event_mask,
+                          GDK_ALL_EVENTS_MASK,
                           &(GdkRectangle) {
                             get_bin_window_x (stack, &allocation),
                             get_bin_window_y (stack, &allocation),
@@ -1239,8 +1231,7 @@ gtk_stack_add (GtkContainer *container,
 
   if (priv->bin_window)
     gdk_window_set_events (priv->bin_window,
-                           gdk_window_get_events (priv->bin_window) |
-                           gtk_widget_get_events (child));
+                           GDK_ALL_EVENTS_MASK);
 
   g_signal_connect (child, "notify::visible",
                     G_CALLBACK (stack_child_visibility_notify_cb), stack);

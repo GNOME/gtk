@@ -363,12 +363,6 @@ gtk_inspector_on_inspect (GtkWidget          *button,
   if (!iw->invisible)
     {
       iw->invisible = gtk_invisible_new_for_screen (gdk_screen_get_default ());
-      gtk_widget_add_events (iw->invisible,
-                             GDK_POINTER_MOTION_MASK |
-                             GDK_BUTTON_PRESS_MASK |
-                             GDK_BUTTON_RELEASE_MASK |
-                             GDK_KEY_PRESS_MASK |
-                             GDK_KEY_RELEASE_MASK);
       gtk_widget_realize (iw->invisible);
       gtk_widget_show (iw->invisible);
     }
