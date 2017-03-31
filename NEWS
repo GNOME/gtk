@@ -1,3 +1,33 @@
+Overview of Changes in GTK+ 3.90.0
+==================================
+
+* Allow a custom renderer for the inspector, by setting GTK_INSPECTOR_RENDERER
+
+* Move more container functionality, such as focus handling, to GtkWidget
+
+* Bugs fixed:
+ 686838 gtk_enumerate_printers() hangs
+ 778853 propagate-natural-width/height request too much with !overlay-scrolling...
+ 779081 GtkTextView: expose API to get Pango line direction
+ 780019 gtk+3 3.22.10 does not compile on macOS Yosemite
+ 780234 gtk_print_job_set_page_ranges() has unclear ownership transfer
+ 734946 Implement GContentType on OSX
+ 773228 third parameter of gtk_widget_intersect not listed as 'out'
+ 774148 Gtk.Popover misplacement in Wayland
+ 780735 flowbox: don’t select when rubberbanding over nothing
+        fix flicker caused by buffer age
+        fix hi-dpi fallback rendering
+        force window titles to be valid UTF8
+
+* Translation updates:
+ Friulian
+ German
+ Indonesian
+ Latvian
+ Polish
+ Russian
+
+
 Overview of Changes in GTK+ 3.89.5
 ==================================
 
