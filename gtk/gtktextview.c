@@ -5344,9 +5344,6 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
       get_buffer (text_view) == NULL)
     return FALSE;
 
-  if (event->any.window != priv->text_window->bin_window)
-    return FALSE;
-
   if (get_event_coordinates (event, &x, &y))
     {
       GtkTextIter iter;
@@ -5551,13 +5548,6 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
   gtk_widget_grab_focus (GTK_WIDGET (text_view));
-
-  if (gdk_event_get_window (event) != priv->text_window->bin_window)
-    {
-      /* Remove selection if any. */
-      gtk_text_view_unselect (text_view);
-      return;
-    }
 
   gtk_gesture_set_sequence_state (GTK_GESTURE (gesture), sequence,
                                   GTK_EVENT_SEQUENCE_CLAIMED);
