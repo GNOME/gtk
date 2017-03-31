@@ -216,9 +216,6 @@ plane_realize (GtkWidget *widget)
                                              &allocation);
   gtk_widget_register_window (widget, priv->input_window);
 
-  gtk_gesture_set_window (priv->drag_gesture, priv->input_window);
-  gtk_gesture_set_window (priv->long_press_gesture, priv->input_window);
-
   create_surface (GTK_COLOR_PLANE (widget));
 }
 
@@ -229,9 +226,6 @@ plane_unrealize (GtkWidget *widget)
   GtkColorPlanePrivate *priv = gtk_color_plane_get_instance_private (plane);
 
   g_clear_pointer (&priv->surface, cairo_surface_destroy);
-
-  gtk_gesture_set_window (priv->drag_gesture, NULL);
-  gtk_gesture_set_window (priv->long_press_gesture, NULL);
 
   gtk_widget_unregister_window (widget, priv->input_window);
   gdk_window_destroy (priv->input_window);
