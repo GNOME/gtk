@@ -182,7 +182,6 @@ struct _GtkEntryPrivate
   GtkIMContext          *im_context;
   GtkWidget             *popup_menu;
 
-  GdkWindow             *text_area;
   int                    text_baseline;
 
   PangoLayout           *cached_layout;
@@ -2822,6 +2821,16 @@ _gtk_entry_get_display_text (GtkEntry *entry,
 }
 
 static void
+set_text_cursor (GtkWidget *widget)
+{
+  GdkCursor *cursor;
+
+  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
+  gtk_widget_set_cursor (widget, cursor);
+  g_clear_object (&cursor);
+}
+
+static void
 update_cursors (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
@@ -2830,6 +2839,8 @@ update_cursors (GtkWidget *widget)
   GdkDisplay *display;
   GdkCursor *cursor;
   gint i;
+
+  display = gtk_widget_get_display (widget);
 
   for (i = 0; i < MAX_ICONS; i++)
     {
@@ -2848,7 +2859,6 @@ update_cursors (GtkWidget *widget)
               (icon_info->insensitive || 
                (icon_info->nonactivatable && icon_info->target_list == NULL)))
             {
-              display = gtk_widget_get_display (widget);
               cursor = gdk_cursor_new_from_name (display, "text");
               gdk_window_set_cursor (icon_info->window, cursor);
               g_clear_object (&cursor);
@@ -2859,6 +2869,8 @@ update_cursors (GtkWidget *widget)
             }
         }
     }
+
+  set_text_cursor (widget);
 }
 
 static void
@@ -3018,8 +3030,6 @@ gtk_entry_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->map (widget);
 
-  gdk_window_show (priv->text_area);
-
   for (i = 0; i < MAX_ICONS; i++)
     {
       if ((icon_info = priv->icons[i]) != NULL)
@@ -3055,8 +3065,6 @@ gtk_entry_unmap (GtkWidget *widget)
         }
     }
 
-  gdk_window_hide (priv->text_area);
-
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->unmap (widget);
 }
 
@@ -3086,28 +3094,6 @@ gtk_entry_realize (GtkWidget *widget)
   priv = entry->priv;
 
   gtk_entry_get_text_allocation (entry, &text_allocation);
-
-  priv->text_area = gdk_window_new_input (gtk_widget_get_window (widget),
-                                          gtk_widget_get_events (widget)
-                                          | GDK_BUTTON_PRESS_MASK
-                                          | GDK_BUTTON_RELEASE_MASK
-                                          | GDK_BUTTON1_MOTION_MASK
-                                          | GDK_BUTTON3_MOTION_MASK
-                                          | GDK_POINTER_MOTION_MASK
-                                          | GDK_ENTER_NOTIFY_MASK
-                                          | GDK_LEAVE_NOTIFY_MASK,
-                                          &text_allocation);
-
-  if (gtk_widget_is_sensitive (widget))
-    {
-      GdkCursor *cursor;
-
-      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
-      gdk_window_set_cursor (priv->text_area, cursor);
-      g_object_unref (cursor);
-    }
-
-  gtk_widget_register_window (widget, priv->text_area);
 
   gtk_im_context_set_client_widget (priv->im_context, widget);
 
@@ -3144,13 +3130,6 @@ gtk_entry_unrealize (GtkWidget *widget)
   clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY);
   if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))
     gtk_clipboard_clear (clipboard);
-  
-  if (priv->text_area)
-    {
-      gtk_widget_unregister_window (widget, priv->text_area);
-      gdk_window_destroy (priv->text_area);
-      priv->text_area = NULL;
-    }
 
   if (priv->popup_menu)
     {
@@ -3322,7 +3301,6 @@ place_windows (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info;
-  GtkAllocation content_allocation;
 
   icon_info = priv->icons[GTK_ENTRY_ICON_PRIMARY];
   if (icon_info)
@@ -3345,11 +3323,6 @@ place_windows (GtkEntry *entry)
                               secondary.x, secondary.y,
                               secondary.width, secondary.height);
     }
-
-  gtk_entry_get_text_allocation (entry, &content_allocation);
-  gdk_window_move_resize (priv->text_area,
-                          content_allocation.x, content_allocation.y,
-                          content_allocation.width, content_allocation.height);
 }
 
 static void
@@ -3824,12 +3797,12 @@ gtk_entry_update_handles (GtkEntry          *entry,
                           GtkTextHandleMode  mode)
 {
   GtkEntryPrivate *priv = entry->priv;
-  gint strong_x, height;
+  GtkAllocation text_allocation;
+  gint strong_x;
   gint cursor, bound;
 
   _gtk_text_handle_set_mode (priv->text_handle, mode);
-
-  height = gdk_window_get_height (priv->text_area);
+  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   gtk_entry_get_cursor_locations (entry, &strong_x, NULL);
   cursor = strong_x - priv->scroll_offset;
@@ -3853,13 +3826,13 @@ gtk_entry_update_handles (GtkEntry          *entry,
 
       /* Update start selection bound */
       gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_START,
-                             start, 0, height);
+                             start, 0, text_allocation.height);
       gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_SELECTION_END,
-                             end, 0, height);
+                             end, 0, text_allocation.height);
     }
   else
     gtk_entry_move_handle (entry, GTK_TEXT_HANDLE_POSITION_CURSOR,
-                           cursor, 0, height);
+                           cursor, 0, text_allocation.height);
 }
 
 static gboolean
@@ -3874,14 +3847,9 @@ gtk_entry_event (GtkWidget *widget,
   gint i;
 
   if (event->type == GDK_MOTION_NOTIFY &&
-      priv->mouse_cursor_obscured &&
-      event->any.window == priv->text_area)
+      priv->mouse_cursor_obscured)
     {
-      GdkCursor *cursor;
-
-      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
-      gdk_window_set_cursor (priv->text_area, cursor);
-      g_object_unref (cursor);
+      set_text_cursor (widget);
       priv->mouse_cursor_obscured = FALSE;
       return GDK_EVENT_PROPAGATE;
     }
@@ -4252,11 +4220,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
 
   if (priv->mouse_cursor_obscured)
     {
-      GdkCursor *cursor;
-
-      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
-      gdk_window_set_cursor (priv->text_area, cursor);
-      g_object_unref (cursor);
+      set_text_cursor (widget);
       priv->mouse_cursor_obscured = FALSE;
     }
 
@@ -4294,16 +4258,18 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
     }
   else
     {
+      GtkAllocation text_allocation;
       GdkInputSource input_source;
       GdkDevice *source;
       guint length;
       gint tmp_pos;
 
       length = gtk_entry_buffer_get_length (get_buffer (entry));
+      gtk_entry_get_text_allocation (entry, &text_allocation);
 
       if (y < 0)
 	tmp_pos = 0;
-      else if (y >= gdk_window_get_height (priv->text_area))
+      else if (y >= text_allocation.height)
 	tmp_pos = length;
       else
 	tmp_pos = gtk_entry_find_position (entry, x);
@@ -4409,12 +4375,12 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
 }
 
 static void
-set_invisible_cursor (GdkWindow *window)
+set_invisible_cursor (GtkWidget *widget)
 {
   GdkCursor *cursor;
 
-  cursor = gdk_cursor_new_from_name (gdk_window_get_display (window), "none");
-  gdk_window_set_cursor (window, cursor);
+  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "none");
+  gtk_widget_set_cursor (widget, cursor);
   g_object_unref (cursor);
 }
 
@@ -4426,11 +4392,8 @@ gtk_entry_obscure_mouse_cursor (GtkEntry *entry)
   if (priv->mouse_cursor_obscured)
     return;
 
-  if (priv->text_area)
-    {
-      set_invisible_cursor (priv->text_area);
-      priv->mouse_cursor_obscured = TRUE;
-    }
+  set_invisible_cursor (GTK_WIDGET (entry));
+  priv->mouse_cursor_obscured = TRUE;
 }
 
 static gint
@@ -4670,22 +4633,10 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
-  GdkCursor *cursor;
 
   if (gtk_widget_get_realized (widget))
     {
-      if (gtk_widget_is_sensitive (widget))
-        cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
-      else
-        cursor = NULL;
-
-      gdk_window_set_cursor (priv->text_area, cursor);
-
-      if (cursor)
-        g_object_unref (cursor);
-
       priv->mouse_cursor_obscured = FALSE;
-
       update_cursors (widget);
     }
 
@@ -8887,7 +8838,6 @@ popup_targets_received (GtkClipboard     *clipboard,
   PopupInfo *info = user_data;
   GtkEntry *entry = info->entry;
   GtkEntryPrivate *info_entry_priv = entry->priv;
-  GdkRectangle rect = { 0, 0, 1, 0 };
 
   if (gtk_widget_get_realized (GTK_WIDGET (entry)))
     {
@@ -8942,16 +8892,11 @@ popup_targets_received (GtkClipboard     *clipboard,
         gtk_menu_popup_at_pointer (GTK_MENU (menu), info->trigger_event);
       else
         {
-          gtk_entry_get_cursor_locations (entry, &rect.x, NULL);
-          rect.x -= info_entry_priv->scroll_offset;
-          rect.height = gdk_window_get_height (info_entry_priv->text_area);
-
-          gtk_menu_popup_at_rect (GTK_MENU (menu),
-                                  info_entry_priv->text_area,
-                                  &rect,
-                                  GDK_GRAVITY_SOUTH_EAST,
-                                  GDK_GRAVITY_NORTH_WEST,
-                                  info->trigger_event);
+          gtk_menu_popup_at_widget (GTK_MENU (menu),
+                                    GTK_WIDGET (entry),
+                                    GDK_GRAVITY_SOUTH_EAST,
+                                    GDK_GRAVITY_NORTH_WEST,
+                                    info->trigger_event);
 
           gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
         }
