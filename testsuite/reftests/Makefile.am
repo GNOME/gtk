@@ -144,9 +144,6 @@ testdata = \
 	border-image-excess-size.css \
 	border-image-excess-size.ref.ui \
 	border-image-excess-size.ui \
-	border-image-gradient.css \
-	border-image-gradient.ref.ui \
-	border-image-gradient.ui \
 	border-image-url-scaled.css \
 	border-image-url-scaled.ref.ui \
 	border-image-url-scaled.ui \
