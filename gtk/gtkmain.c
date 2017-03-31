@@ -2304,3 +2304,26 @@ _gtk_propagate_captured_event (GtkWidget *widget,
 {
   return propagate_event (widget, event, TRUE, topmost);
 }
+
+GtkWidget *
+_gtk_toplevel_pick (GtkWindow *toplevel,
+                    gdouble    x,
+                    gdouble    y,
+                    gdouble   *x_out,
+                    gdouble   *y_out)
+{
+  GtkWidget *target = NULL, *widget = GTK_WIDGET (toplevel);
+
+  while (widget)
+    {
+      target = widget;
+      widget = GTK_WIDGET_GET_CLASS (target)->pick (widget, x, y, &x, &y);
+    }
+
+  if (x_out)
+    *x_out = x;
+  if (y_out)
+    *y_out = y;
+
+  return target;
+}

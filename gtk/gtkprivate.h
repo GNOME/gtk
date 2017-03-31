@@ -91,6 +91,11 @@ gboolean        _gtk_propagate_captured_event  (GtkWidget       *widget,
                                                 GdkEvent        *event,
                                                 GtkWidget       *topmost);
 
+GtkWidget *     _gtk_toplevel_pick (GtkWindow *toplevel,
+                                    gdouble    x,
+                                    gdouble    y,
+                                    gdouble   *x_out,
+                                    gdouble   *y_out);
 
 gdouble _gtk_get_slowdown (void);
 void    _gtk_set_slowdown (gdouble slowdown_factor);
