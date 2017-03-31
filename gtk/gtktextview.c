@@ -4710,6 +4710,7 @@ gtk_text_view_map (GtkWidget *widget)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
+  GdkCursor *cursor;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4727,6 +4728,10 @@ gtk_text_view_map (GtkWidget *widget)
 
   if (priv->bottom_window)
     text_window_map (priv->bottom_window);
+
+  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
+  gtk_widget_set_cursor (widget, cursor);
+  g_object_unref (cursor);
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->map (widget);
 }
