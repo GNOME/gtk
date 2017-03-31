@@ -46,7 +46,12 @@ struct GdkMirScreen
   /* Current monitor configuration */
   MirDisplayConfig *display_config;
 
+  /* Root window */
   GdkWindow *root_window;
+
+  /* Settings */
+  GHashTable *settings_objects;
+  GHashTable *current_settings;
 };
 
 struct GdkMirScreenClass
@@ -138,6 +143,11 @@ _gdk_mir_screen_new (GdkDisplay *display)
 static void
 gdk_mir_screen_dispose (GObject *object)
 {
+  GdkMirScreen *screen = GDK_MIR_SCREEN (object);
+
+  g_clear_pointer (&screen->current_settings, g_hash_table_unref);
+  g_clear_pointer (&screen->settings_objects, g_hash_table_unref);
+
   G_OBJECT_CLASS (gdk_mir_screen_parent_class)->dispose (object);
 }
 
@@ -337,260 +347,568 @@ gdk_mir_screen_get_monitor_workarea (GdkScreen    *screen,
   gdk_mir_screen_get_monitor_geometry (screen, monitor_num, dest);
 }
 
+static void setting_changed (GSettings    *settings,
+                             const gchar  *key,
+                             GdkMirScreen *screen);
+
+static GSettings *
+get_settings (GdkMirScreen *screen,
+              const gchar  *schema_id)
+{
+  GSettings *settings;
+  GSettingsSchemaSource *source;
+  GSettingsSchema *schema;
+
+  settings = g_hash_table_lookup (screen->settings_objects, schema_id);
+
+  if (settings)
+    return g_object_ref (settings);
+
+  source = g_settings_schema_source_get_default ();
+
+  if (!source)
+    {
+      g_warning ("no schemas installed");
+      return NULL;
+    }
+
+  schema = g_settings_schema_source_lookup (source, schema_id, TRUE);
+
+  if (!schema)
+    {
+      g_warning ("schema not found: %s", schema_id);
+      return NULL;
+    }
+
+  settings = g_settings_new_full (schema, NULL, NULL);
+  g_signal_connect (settings, "changed", G_CALLBACK (setting_changed), screen);
+  g_hash_table_insert (screen->settings_objects, g_strdup (schema_id), g_object_ref (settings));
+  g_settings_schema_unref (schema);
+  return settings;
+}
+
+static GVariant *
+read_setting (GdkMirScreen *screen,
+              const gchar  *schema_id,
+              const gchar  *key)
+{
+  GSettings *settings;
+  GVariant *variant;
+
+  settings = get_settings (screen, schema_id);
+
+  if (!settings)
+    return NULL;
+
+  variant = g_settings_get_value (settings, key);
+  g_object_unref (settings);
+  return variant;
+}
+
+static void
+change_setting (GdkMirScreen *screen,
+                const gchar  *name,
+                GVariant     *variant)
+{
+  GVariant *old_variant;
+  GdkEventSetting event;
+
+  old_variant = g_hash_table_lookup (screen->current_settings, name);
+
+  if (variant == old_variant)
+    return;
+
+  if (variant && old_variant && g_variant_equal (variant, old_variant))
+    return;
+
+  event.type = GDK_SETTING;
+  event.window = gdk_screen_get_root_window (GDK_SCREEN (screen));
+  event.send_event = FALSE;
+  event.name = g_strdup (name);
+
+  if (variant)
+    {
+      event.action = old_variant ? GDK_SETTING_ACTION_CHANGED : GDK_SETTING_ACTION_NEW;
+      g_hash_table_insert (screen->current_settings, g_strdup (name), g_variant_ref_sink (variant));
+    }
+  else
+    {
+      event.action = GDK_SETTING_ACTION_DELETED;
+      g_hash_table_remove (screen->current_settings, name);
+    }
+
+  gdk_event_put ((const GdkEvent *) &event);
+  g_free (event.name);
+}
+
+static const struct
+{
+  const gchar *name;
+  const gchar *schema_id;
+  const gchar *key;
+} SETTINGS_MAP[] = {
+  {
+    "gtk-double-click-time",
+    "org.gnome.settings-daemon.peripherals.mouse",
+    "double-click"
+  },
+  {
+    "gtk-cursor-blink",
+    "org.gnome.desktop.interface",
+    "cursor-blink"
+  },
+  {
+    "gtk-cursor-blink-time",
+    "org.gnome.desktop.interface",
+    "cursor-blink-time"
+  },
+  {
+    "gtk-cursor-blink-timeout",
+    "org.gnome.desktop.interface",
+    "cursor-blink-timeout"
+  },
+  {
+    "gtk-theme-name",
+    "org.gnome.desktop.interface",
+    "gtk-theme"
+  },
+  {
+    "gtk-icon-theme-name",
+    "org.gnome.desktop.interface",
+    "icon-theme"
+  },
+  {
+    "gtk-key-theme-name",
+    "org.gnome.desktop.interface",
+    "gtk-key-theme"
+  },
+  {
+    "gtk-dnd-drag-threshold",
+    "org.gnome.settings-daemon.peripherals.mouse",
+    "drag-threshold"
+  },
+  {
+    "gtk-font-name",
+    "org.gnome.desktop.interface",
+    "font-name"
+  },
+  {
+    "gtk-xft-antialias",
+    "org.gnome.settings-daemon.plugins.xsettings",
+    "antialiasing"
+  },
+  {
+    "gtk-xft-hinting",
+    "org.gnome.settings-daemon.plugins.xsettings",
+    "hinting"
+  },
+  {
+    "gtk-xft-hintstyle",
+    "org.gnome.settings-daemon.plugins.xsettings",
+    "hinting"
+  },
+  {
+    "gtk-xft-rgba",
+    "org.gnome.settings-daemon.plugins.xsettings",
+    "rgba-order"
+  },
+  {
+    "gtk-xft-dpi",
+    "org.gnome.desktop.interface",
+    "text-scaling-factor"
+  },
+  {
+    "gtk-cursor-theme-name",
+    "org.gnome.desktop.interface",
+    "cursor-theme"
+  },
+  {
+    "gtk-cursor-theme-size",
+    "org.gnome.desktop.interface",
+    "cursor-size"
+  },
+  {
+    "gtk-enable-animations",
+    "org.gnome.desktop.interface",
+    "enable-animations"
+  },
+  {
+    "gtk-im-module",
+    "org.gnome.desktop.interface",
+    "gtk-im-module"
+  },
+  {
+    "gtk-recent-files-max-age",
+    "org.gnome.desktop.privacy",
+    "recent-files-max-age"
+  },
+  {
+    "gtk-sound-theme-name",
+    "org.gnome.desktop.sound",
+    "theme-name"
+  },
+  {
+    "gtk-enable-input-feedback-sounds",
+    "org.gnome.desktop.sound",
+    "input-feedback-sounds"
+  },
+  {
+    "gtk-enable-event-sounds",
+    "org.gnome.desktop.sound",
+    "event-sounds"
+  },
+  {
+    "gtk-shell-shows-desktop",
+    "org.gnome.desktop.background",
+    "show-desktop-icons"
+  },
+  {
+    "gtk-decoration-layout",
+    "org.gnome.desktop.wm.preferences",
+    "button-layout"
+  },
+  {
+    "gtk-titlebar-double-click",
+    "org.gnome.desktop.wm.preferences",
+    "action-double-click-titlebar"
+  },
+  {
+    "gtk-titlebar-middle-click",
+    "org.gnome.desktop.wm.preferences",
+    "action-middle-click-titlebar"
+  },
+  {
+    "gtk-titlebar-right-click",
+    "org.gnome.desktop.wm.preferences",
+    "action-right-click-titlebar"
+  },
+  {
+    "gtk-enable-primary-paste",
+    "org.gnome.desktop.interface",
+    "gtk-enable-primary-paste"
+  },
+  {
+    "gtk-recent-files-enabled",
+    "org.gnome.desktop.privacy",
+    "remember-recent-files"
+  },
+  {
+    "gtk-keynav-use-caret",
+    "org.gnome.desktop.a11y",
+    "always-show-text-caret"
+  },
+  { NULL }
+};
+
+static guint
+get_scaling_factor (GdkMirScreen *screen)
+{
+  GVariant *variant;
+  guint scaling_factor;
+
+  variant = read_setting (screen, "org.gnome.desktop.interface", "scaling-factor");
+
+  if (!variant)
+    {
+      g_warning ("no scaling factor: org.gnome.desktop.interface.scaling-factor");
+      variant = g_variant_ref_sink (g_variant_new_uint32 (0));
+    }
+
+  scaling_factor = g_variant_get_uint32 (variant);
+  g_variant_unref (variant);
+
+  if (scaling_factor)
+    return scaling_factor;
+
+  scaling_factor = 1;
+
+  /* TODO: scaling_factor = 2 if HiDPI >= 2 * 96 */
+
+  return scaling_factor;
+}
+
+static void
+update_setting (GdkMirScreen *screen,
+                const gchar  *name)
+{
+  GVariant *variant;
+  GVariant *antialiasing_variant;
+  gboolean gtk_xft_antialias;
+  gboolean gtk_xft_hinting;
+  gdouble text_scaling_factor;
+  gint cursor_size;
+  gint i;
+
+  if (!g_strcmp0 (name, "gtk-modules"))
+    {
+      /* TODO: X-GTK-Module-Enabled-Schema, X-GTK-Module-Enabled-Key */
+      /* TODO: org.gnome.settings-daemon.plugins.xsettings.enabled-gtk-modules */
+      /* TODO: org.gnome.settings-daemon.plugins.xsettings.disabled-gtk-modules */
+      return;
+    }
+  else
+    {
+      for (i = 0; SETTINGS_MAP[i].name; i++)
+        if (!g_strcmp0 (name, SETTINGS_MAP[i].name))
+          break;
+
+      if (!SETTINGS_MAP[i].name)
+        return;
+
+      variant = read_setting (screen, SETTINGS_MAP[i].schema_id, SETTINGS_MAP[i].key);
+
+      if (!variant)
+        {
+          g_warning ("no setting for %s: %s.%s", SETTINGS_MAP[i].name, SETTINGS_MAP[i].schema_id, SETTINGS_MAP[i].key);
+          return;
+        }
+    }
+
+  if (!g_strcmp0 (name, "gtk-xft-antialias"))
+    {
+      gtk_xft_antialias = g_strcmp0 (g_variant_get_string (variant, NULL), "none");
+      g_variant_unref (variant);
+      variant = g_variant_ref_sink (g_variant_new_int32 (gtk_xft_antialias ? 1 : 0));
+    }
+  else if (!g_strcmp0 (name, "gtk-xft-hinting"))
+    {
+      gtk_xft_hinting = g_strcmp0 (g_variant_get_string (variant, NULL), "none");
+      g_variant_unref (variant);
+      variant = g_variant_ref_sink (g_variant_new_int32 (gtk_xft_hinting ? 1 : 0));
+    }
+  else if (!g_strcmp0 (name, "gtk-xft-hintstyle"))
+    {
+      if (!g_strcmp0 (g_variant_get_string (variant, NULL), "none"))
+        {
+          g_variant_unref (variant);
+          variant = g_variant_ref_sink (g_variant_new_string ("hintnone"));
+        }
+      else if (!g_strcmp0 (g_variant_get_string (variant, NULL), "slight"))
+        {
+          g_variant_unref (variant);
+          variant = g_variant_ref_sink (g_variant_new_string ("hintslight"));
+        }
+      else if (!g_strcmp0 (g_variant_get_string (variant, NULL), "medium"))
+        {
+          g_variant_unref (variant);
+          variant = g_variant_ref_sink (g_variant_new_string ("hintmedium"));
+        }
+      else if (!g_strcmp0 (g_variant_get_string (variant, NULL), "full"))
+        {
+          g_variant_unref (variant);
+          variant = g_variant_ref_sink (g_variant_new_string ("hintfull"));
+        }
+      else
+        {
+          g_warning ("unknown org.gnome.settings-daemon.plugins.xsettings.hinting value: %s", g_variant_get_string (variant, NULL));
+          g_variant_unref (variant);
+          return;
+        }
+    }
+  else if (!g_strcmp0 (name, "gtk-xft-rgba"))
+    {
+      antialiasing_variant = read_setting (screen, "org.gnome.settings-daemon.plugins.xsettings", "antialiasing");
+
+      if (g_strcmp0 (g_variant_get_string (antialiasing_variant, NULL), "rgba"))
+        {
+          g_variant_unref (variant);
+          variant = g_variant_ref_sink (g_variant_new_string ("none"));
+        }
+      else if (g_strcmp0 (g_variant_get_string (variant, NULL), "rgba"))
+        {
+          g_variant_unref (variant);
+          variant = g_variant_ref_sink (g_variant_new_string ("rgb"));
+        }
+
+      g_variant_unref (antialiasing_variant);
+    }
+  else if (!g_strcmp0 (name, "gtk-xft-dpi"))
+    {
+      text_scaling_factor = g_variant_get_double (variant);
+      g_variant_unref (variant);
+      variant = g_variant_ref_sink (g_variant_new_int32 (1024 * get_scaling_factor (screen) * text_scaling_factor + 0.5));
+    }
+  else if (!g_strcmp0 (name, "gtk-cursor-theme-size"))
+    {
+      cursor_size = g_variant_get_int32 (variant);
+      g_variant_unref (variant);
+      variant = g_variant_ref_sink (g_variant_new_int32 (get_scaling_factor (screen) * cursor_size));
+    }
+  else if (!g_strcmp0 (name, "gtk-enable-animations"))
+    {
+      /* TODO: disable under vnc/vino/llvmpipe */
+    }
+
+  change_setting (screen, name, variant);
+  g_variant_unref (variant);
+}
+
+static void
+setting_changed (GSettings    *settings,
+                 const gchar  *key,
+                 GdkMirScreen *screen)
+{
+  gchar *schema_id;
+  gint i;
+
+  g_object_get (settings, "schema-id", &schema_id, NULL);
+
+  for (i = 0; SETTINGS_MAP[i].name; i++)
+    if (!g_strcmp0 (schema_id, SETTINGS_MAP[i].schema_id) && !g_strcmp0 (key, SETTINGS_MAP[i].key))
+      update_setting (screen, SETTINGS_MAP[i].name);
+
+  if (!g_strcmp0 (schema_id, "org.gnome.settings-daemon.plugins.xsettings"))
+    {
+      if (!g_strcmp0 (key, "enabled-gtk-modules"))
+        update_setting (screen, "gtk-modules");
+      else if (!g_strcmp0 (key, "disabled-gtk-modules"))
+        update_setting (screen, "gtk-modules");
+      else if (!g_strcmp0 (key, "antialiasing"))
+        update_setting (screen, "rgba-order");
+    }
+  else if (!g_strcmp0 (schema_id, "org.gnome.desktop.interface"))
+    {
+      if (!g_strcmp0 (key, "scaling-factor"))
+        {
+          update_setting (screen, "gtk-xft-dpi");
+          update_setting (screen, "gtk-cursor-theme-size");
+        }
+    }
+
+  g_free (schema_id);
+}
+
+static gboolean
+is_known_setting (const gchar *name)
+{
+  if (!g_strcmp0 (name, "gtk-double-click-time"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-double-click-distance"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-cursor-blink"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-cursor-blink-time"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-cursor-blink-timeout"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-split-cursor"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-theme-name"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-icon-theme-name"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-key-theme-name"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-dnd-drag-threshold"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-font-name"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-modules"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-xft-antialias"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-xft-hinting"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-xft-hintstyle"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-xft-rgba"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-xft-dpi"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-cursor-theme-name"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-cursor-theme-size"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-alternative-button-order"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-alternative-sort-arrows"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-enable-animations"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-error-bell"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-print-backends"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-print-preview-command"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-enable-accels"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-im-module"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-recent-files-max-age"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-fontconfig-timestamp"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-sound-theme-name"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-enable-input-feedback-sounds"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-enable-event-sounds"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-primary-button-warps-slider"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-application-prefer-dark-theme"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-entry-select-on-focus"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-entry-password-hint-timeout"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-label-select-on-focus"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-shell-shows-app-menu"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-shell-shows-menubar"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-shell-shows-desktop"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-decoration-layout"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-titlebar-double-click"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-titlebar-middle-click"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-titlebar-right-click"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-dialogs-use-header"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-enable-primary-paste"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-recent-files-enabled"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-long-press-time"))
+    return TRUE;
+  if (!g_strcmp0 (name, "gtk-keynav-use-caret"))
+    return TRUE;
+
+  return FALSE;
+}
+
 static gboolean
 gdk_mir_screen_get_setting (GdkScreen   *screen,
                             const gchar *name,
                             GValue      *value)
 {
-  if (strcmp (name, "gtk-theme-name") == 0)
+  GdkMirScreen *mir_screen;
+  GVariant *variant;
+
+  mir_screen = GDK_MIR_SCREEN (screen);
+  variant = g_hash_table_lookup (mir_screen->current_settings, name);
+
+  if (!variant)
+    update_setting (mir_screen, name);
+
+  variant = g_hash_table_lookup (mir_screen->current_settings, name);
+
+  if (!variant)
     {
-      g_value_set_string (value, "Ambiance");
-      return TRUE;
+      if (!is_known_setting (name))
+        g_warning ("unknown setting: %s", name);
+
+      return FALSE;
     }
 
-  if (strcmp (name, "gtk-font-name") == 0)
-    {
-      g_value_set_string (value, "Ubuntu");
-      return TRUE;
-    }
-
-  if (strcmp (name, "gtk-enable-animations") == 0)
-    {
-      g_value_set_boolean (value, TRUE);
-      return TRUE;
-    }
-
-  if (strcmp (name, "gtk-xft-dpi") == 0)
-    {
-      g_value_set_int (value, 96 * 1024);
-      return TRUE;
-    }
-
-  if (strcmp (name, "gtk-xft-antialias") == 0)
-    {
-      g_value_set_int (value, TRUE);
-      return TRUE;
-    }
-
-  if (strcmp (name, "gtk-xft-hinting") == 0)
-    {
-      g_value_set_int (value, TRUE);
-      return TRUE;
-    }
-
-  if (strcmp (name, "gtk-xft-hintstyle") == 0)
-    {
-      g_value_set_static_string (value, "hintfull");
-      return TRUE;
-    }
-
-  if (strcmp (name, "gtk-xft-rgba") == 0)
-    {
-      g_value_set_static_string (value, "rgba");
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-modules"))
-    {
-      g_value_set_string (value, NULL);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-application-prefer-dark-theme"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-key-theme-name"))
-    {
-      g_value_set_string (value, NULL);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-double-click-time"))
-    {
-      g_value_set_int (value, 250);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-double-click-distance"))
-    {
-      g_value_set_int (value, 5);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-cursor-theme-name"))
-    {
-      g_value_set_string (value, "Raleigh");
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-cursor-theme-size"))
-    {
-      g_value_set_int (value, 128);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-icon-theme-name"))
-    {
-      g_value_set_string (value, "hicolor");
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-shell-shows-app-menu"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-shell-shows-menubar"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-shell-shows-desktop"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-recent-files-enabled"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-alternative-sort-arrows"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-enable-accels"))
-    {
-      g_value_set_boolean (value, TRUE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-enable-mnemonics"))
-    {
-      g_value_set_boolean (value, TRUE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-menu-images"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-button-images"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-split-cursor"))
-    {
-      g_value_set_boolean (value, TRUE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-im-module"))
-    {
-      g_value_set_string (value, NULL);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-menu-bar-accel"))
-    {
-      g_value_set_string (value, "F10");
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-cursor-blink"))
-    {
-      g_value_set_boolean (value, TRUE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-cursor-blink-time"))
-    {
-      g_value_set_int (value, 1200);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-cursor-blink-timeout"))
-    {
-      g_value_set_int (value, 10);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-entry-select-on-focus"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-error-bell"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-label-select-on-focus"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-decoration-layout"))
-    {
-      g_value_set_string (value, "menu:minimize,maximize,close");
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-dnd-drag-threshold"))
-    {
-      g_value_set_int (value, 8);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-dialogs-use-header"))
-    {
-      g_value_set_boolean (value, FALSE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-long-press-time"))
-    {
-      g_value_set_uint (value, 500);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-primary-button-warps-slider"))
-    {
-      g_value_set_boolean (value, TRUE);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-recent-files-max-age"))
-    {
-      g_value_set_int (value, 30);
-      return TRUE;
-    }
-
-  if (g_str_equal (name, "gtk-titlebar-double-click"))
-    {
-      g_value_set_string (value, "toggle-maximize");
-      return TRUE;
-    }
-
-  g_warning ("unknown property %s", name);
-
-  return FALSE;
+  g_dbus_gvariant_to_gvalue (variant, value);
+  return TRUE;
 }
 
 static gint
@@ -604,6 +922,8 @@ gdk_mir_screen_get_monitor_scale_factor (GdkScreen *screen,
 static void
 gdk_mir_screen_init (GdkMirScreen *screen)
 {
+  screen->settings_objects = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+  screen->current_settings = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_variant_unref);
 }
 
 static void
