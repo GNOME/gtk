@@ -68,6 +68,7 @@
 #include "inspector/init.h"
 #include "inspector/window.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkpointerfocusprivate.h"
 
 #include "gdk/gdk-private.h"
 
@@ -273,6 +274,8 @@ struct _GtkWindowPrivate
   GtkCssNode *decoration_node;
 
   GskRenderer *renderer;
+
+  GList *foci;
 };
 
 static const GtkTargetEntry dnd_dest_targets [] = {
@@ -1627,11 +1630,37 @@ node_style_changed_cb (GtkCssNode        *node,
 }
 
 static void
+device_removed_cb (GdkSeat   *seat,
+                   GdkDevice *device,
+                   gpointer   user_data)
+{
+  GtkWindow *window = user_data;
+  GList *l = window->priv->foci, *cur;
+
+  while (l)
+    {
+      GtkPointerFocus *focus = l->data;
+
+      cur = l;
+      focus = cur->data;
+      l = cur->next;
+
+      if (focus->device == device)
+        {
+          gtk_pointer_focus_free (focus);
+          window->priv->foci =
+            g_list_delete_link (window->priv->foci, cur);
+        }
+    }
+}
+
+static void
 gtk_window_init (GtkWindow *window)
 {
   GtkWindowPrivate *priv;
   GtkWidget *widget;
   GtkCssNode *widget_node;
+  GdkSeat *seat;
 
   widget = GTK_WIDGET (window);
 
@@ -1697,6 +1726,10 @@ gtk_window_init (GtkWindow *window)
                      GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
                      dnd_dest_targets, G_N_ELEMENTS (dnd_dest_targets),
                      GDK_ACTION_MOVE);
+
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
+  g_signal_connect (seat, "device-removed",
+                    G_CALLBACK (device_removed_cb), window);
 }
 
 static void
@@ -11333,4 +11366,93 @@ gtk_window_get_renderer (GtkWindow *window)
   GtkWindowPrivate *priv = window->priv;
 
   return priv->renderer;
+}
+
+static void
+gtk_window_add_pointer_focus (GtkWindow       *window,
+                              GtkPointerFocus *focus)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  priv->foci = g_list_prepend (priv->foci, focus);
+}
+
+static void
+gtk_window_remove_pointer_focus (GtkWindow       *window,
+                                 GtkPointerFocus *focus)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  priv->foci = g_list_remove (priv->foci, focus);
+}
+
+static GtkPointerFocus *
+gtk_window_lookup_pointer_focus (GtkWindow        *window,
+                                 GdkDevice        *device,
+                                 GdkEventSequence *sequence)
+{
+  GList *l;
+
+  for (l = window->priv->foci; l; l = l->next)
+    {
+      GtkPointerFocus *focus = l->data;
+
+      if (focus->device == device && focus->sequence == sequence)
+        return focus;
+    }
+
+  return NULL;
+}
+
+GtkWidget *
+gtk_window_lookup_pointer_focus_widget (GtkWindow        *window,
+                                        GdkDevice        *device,
+                                        GdkEventSequence *sequence)
+{
+  GtkPointerFocus *focus;
+
+  focus = gtk_window_lookup_pointer_focus (window, device, sequence);
+  return focus ? gtk_pointer_focus_get_target (focus) : NULL;
+}
+
+GtkWidget *
+gtk_window_lookup_effective_pointer_focus_widget (GtkWindow        *window,
+                                                  GdkDevice        *device,
+                                                  GdkEventSequence *sequence)
+{
+  GtkPointerFocus *focus;
+
+  focus = gtk_window_lookup_pointer_focus (window, device, sequence);
+  return focus ? gtk_pointer_focus_get_effective_target (focus) : NULL;
+}
+
+void
+gtk_window_update_pointer_focus (GtkWindow        *window,
+                                 GdkDevice        *device,
+                                 GdkEventSequence *sequence,
+                                 GtkWidget        *target,
+                                 gdouble           x,
+                                 gdouble           y)
+{
+  GtkPointerFocus *focus;
+
+  focus = gtk_window_lookup_pointer_focus (window, device, sequence);
+  if (focus)
+    {
+      if (target)
+        {
+          gtk_pointer_focus_set_target (focus, target);
+          gtk_pointer_focus_set_coordinates (focus, x, y);
+        }
+      else
+        {
+          gtk_window_remove_pointer_focus (window, focus);
+          gtk_pointer_focus_free (focus);
+        }
+    }
+  else if (target)
+    {
+      focus = gtk_pointer_focus_new (window, target, device, sequence, x, y);
+      gtk_window_add_pointer_focus (window, focus);
+    }
 }

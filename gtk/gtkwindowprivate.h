@@ -22,6 +22,7 @@
 #include <gdk/gdk.h>
 
 #include "gtkwindow.h"
+#include "gtkpointerfocusprivate.h"
 
 G_BEGIN_DECLS
 
@@ -138,6 +139,20 @@ gboolean      gtk_window_export_handle   (GtkWindow               *window,
 void          gtk_window_unexport_handle (GtkWindow               *window);
 
 GskRenderer *gtk_window_get_renderer (GtkWindow *window);
+
+GtkWidget *      gtk_window_lookup_pointer_focus_widget (GtkWindow        *window,
+                                                         GdkDevice        *device,
+                                                         GdkEventSequence *sequence);
+GtkWidget *      gtk_window_lookup_effective_pointer_focus_widget (GtkWindow        *window,
+                                                                   GdkDevice        *device,
+                                                                   GdkEventSequence *sequence);
+
+void             gtk_window_update_pointer_focus (GtkWindow        *window,
+                                                  GdkDevice        *device,
+                                                  GdkEventSequence *sequence,
+                                                  GtkWidget        *target,
+                                                  gdouble           x,
+                                                  gdouble           y);
 
 G_END_DECLS
 
