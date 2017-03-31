@@ -1301,6 +1301,213 @@ check_event_in_child_popover (GtkWidget *event_widget,
   return (popover_parent == grab_widget || gtk_widget_is_ancestor (popover_parent, grab_widget));
 }
 
+static GdkNotifyType
+get_virtual_notify_type (GdkNotifyType notify_type)
+{
+  switch (notify_type)
+    {
+    case GDK_NOTIFY_ANCESTOR:
+    case GDK_NOTIFY_INFERIOR:
+      return GDK_NOTIFY_VIRTUAL;
+    case GDK_NOTIFY_NONLINEAR:
+      return GDK_NOTIFY_NONLINEAR_VIRTUAL;
+    default:
+      g_assert_not_reached ();
+      return GDK_NOTIFY_UNKNOWN;
+    }
+}
+
+static void
+synth_crossing_for_motion (GtkWidget     *widget,
+                           GtkWidget     *toplevel,
+                           gboolean       enter,
+                           GtkWidget     *other_widget,
+                           GdkEvent      *source,
+                           GdkNotifyType  notify_type)
+{
+  GdkEvent *event;
+  gdouble x, y;
+
+  event = gdk_event_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY);
+  gdk_event_set_device (event, gdk_event_get_device (source));
+  gdk_event_set_source_device (event, gdk_event_get_source_device (source));
+
+  event->any.window = g_object_ref (gtk_widget_get_window (toplevel));
+  if (other_widget)
+    event->crossing.subwindow = g_object_ref (gtk_widget_get_window (other_widget));
+
+  gdk_event_get_coords (source, &x, &y);
+  event->crossing.x = x;
+  event->crossing.y = y;
+  event->crossing.mode = GDK_CROSSING_NORMAL;
+  event->crossing.detail = notify_type;
+
+  gtk_widget_event (widget, event);
+  gdk_event_free (event);
+}
+
+static GtkWidget *
+update_pointer_focus_state (GtkWindow *toplevel,
+                            GdkEvent  *event,
+                            GtkWidget *new_target)
+{
+  GtkWidget *old_target = NULL, *ancestor = NULL, *widget;
+  GdkNotifyType enter_type, leave_type, notify_type;
+  GdkEventSequence *sequence;
+  GdkDevice *device;
+  gdouble x, y;
+
+  device = gdk_event_get_device (event);
+  sequence = gdk_event_get_event_sequence (event);
+  old_target = gtk_window_lookup_pointer_focus_widget (toplevel, device, sequence);
+  if (old_target == new_target)
+    return old_target;
+
+  gdk_event_get_coords (event, &x, &y);
+  gtk_window_update_pointer_focus (toplevel, device, sequence,
+                                   new_target, x, y);
+
+  if (sequence != NULL)
+    return old_target;
+
+  if (old_target && new_target)
+    ancestor = gtk_widget_common_ancestor (old_target, new_target);
+
+  if (ancestor == old_target)
+    {
+      leave_type = GDK_NOTIFY_INFERIOR;
+      enter_type = GDK_NOTIFY_ANCESTOR;
+    }
+  else if (ancestor == new_target)
+    {
+      leave_type = GDK_NOTIFY_ANCESTOR;
+      enter_type = GDK_NOTIFY_INFERIOR;
+    }
+  else
+    enter_type = leave_type = GDK_NOTIFY_NONLINEAR;
+
+  if (old_target)
+    {
+      widget = old_target;
+
+      while (widget != ancestor)
+        {
+          notify_type = (widget == old_target) ?
+            leave_type : get_virtual_notify_type (leave_type);
+
+          synth_crossing_for_motion (widget, GTK_WIDGET (toplevel), FALSE,
+                                     new_target, event, notify_type);
+          widget = gtk_widget_get_parent (widget);
+        }
+    }
+
+  if (new_target)
+    {
+      GSList *widgets = NULL;
+
+      widget = new_target;
+
+      while (widget != ancestor)
+        {
+          widgets = g_slist_prepend (widgets, widget);
+          widget = gtk_widget_get_parent (widget);
+        }
+
+      while (widgets)
+        {
+          widget = widgets->data;
+          widgets = g_slist_delete_link (widgets, widgets);
+          notify_type = (widget == new_target) ?
+            enter_type : get_virtual_notify_type (enter_type);
+
+          synth_crossing_for_motion (widget, GTK_WIDGET (toplevel), TRUE,
+                                     old_target, event, notify_type);
+        }
+    }
+
+  return old_target;
+}
+
+static gboolean
+is_pointing_event (GdkEvent *event)
+{
+  switch (event->type)
+    {
+    case GDK_MOTION_NOTIFY:
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_SCROLL:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_TOUCHPAD_SWIPE:
+      return TRUE;
+      break;
+    default:
+      return FALSE;
+    }
+}
+
+static GtkWidget *
+handle_pointing_event (GdkEvent *event)
+{
+  GtkWidget *target = NULL, *old_target = NULL, *widget;
+  GtkWindow *toplevel;
+  GdkEventSequence *sequence;
+  GdkDevice *device;
+  gdouble x, y;
+
+  widget = gtk_get_event_widget (event);
+  device = gdk_event_get_device (event);
+  if (!device || !gdk_event_get_coords (event, &x, &y))
+    return widget;
+
+  toplevel = GTK_WINDOW (gtk_widget_get_toplevel (widget));
+  if (!GTK_IS_WINDOW (toplevel))
+    return widget;
+
+  sequence = gdk_event_get_event_sequence (event);
+
+  switch (event->type)
+    {
+    case GDK_LEAVE_NOTIFY:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+      old_target = update_pointer_focus_state (toplevel, event, NULL);
+      break;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_MOTION_NOTIFY:
+    case GDK_ENTER_NOTIFY:
+      target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
+      old_target = update_pointer_focus_state (toplevel, event, target);
+
+      /* Let it take the effective pointer focus anyway, as it may change due
+       * to implicit grabs.
+       */
+      target = NULL;
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_SCROLL:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_TOUCHPAD_SWIPE:
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  if (!target)
+    target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
+                                                               device,
+                                                               sequence);
+  return target ? target : old_target;
+}
+
 /**
  * gtk_main_do_event:
  * @event: An event to process (normally passed by GDK)
@@ -1393,6 +1600,12 @@ gtk_main_do_event (GdkEvent *event)
       event = rewritten_event;
       event_widget = gtk_get_event_widget (event);
     }
+
+  if (is_pointing_event (event))
+    event_widget = handle_pointing_event (event);
+
+  if (!event_widget)
+    return;
 
   /* Push the event onto a stack of current events for
    * gtk_current_event_get().
