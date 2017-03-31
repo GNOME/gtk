@@ -19,7 +19,7 @@ e {
 }
 
 f {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAABmJLR0QA/wD/AP+gvaeTAAAAFUlEQVQImQXBAQEAAACAEP9PF1CpMCnkBftPnd1xAAAAAElFTkSuQmCC");
+  background-image: none /* FIXME */;
 }
 
 g {
