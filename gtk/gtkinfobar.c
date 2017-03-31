@@ -163,11 +163,6 @@ enum
 static GParamSpec *props[LAST_PROP] = { NULL, };
 static guint signals[LAST_SIGNAL];
 
-#define ACTION_AREA_DEFAULT_BORDER 5
-#define ACTION_AREA_DEFAULT_SPACING 6
-#define CONTENT_AREA_DEFAULT_BORDER 8
-#define CONTENT_AREA_DEFAULT_SPACING 16
-
 static void     gtk_info_bar_set_property (GObject        *object,
                                            guint           prop_id,
                                            const GValue   *value,
