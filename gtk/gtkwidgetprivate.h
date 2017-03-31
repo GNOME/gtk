@@ -313,6 +313,9 @@ gboolean          gtk_widget_focus_move                    (GtkWidget        *wi
                                                             GtkDirectionType  direction,
                                                             GPtrArray        *focus_order);
 
+GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,
+                                                            GtkWidget *widget_b);
+
 /* inline getters */
 
 static inline gboolean
