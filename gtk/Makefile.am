@@ -513,6 +513,7 @@ gtk_private_h_sources =		\
 	gtkplacessidebarprivate.h	\
 	gtkplacesviewprivate.h	\
 	gtkplacesviewrowprivate.h	\
+	gtkpointerfocusprivate.h	\
 	gtkpopoverprivate.h	\
 	gtkprintoperation-private.h \
 	gtkprintutils.h		\
@@ -832,6 +833,7 @@ gtk_base_c_sources = 		\
 	gtkprivatetypebuiltins.c \
 	gtkprogressbar.c	\
 	gtkprogresstracker.c	\
+	gtkpointerfocus.c	\
 	gtkpopover.c		\
 	gtkpopovermenu.c	\
 	gtkradiobutton.c	\
