@@ -319,12 +319,6 @@ test_data = \
 	declarations-valid-17.ref.css \
 	declarations-valid-18.css \
 	declarations-valid-18.ref.css \
-	declarations-valid-19.css \
-	declarations-valid-19.ref.css \
-	declarations-valid-20.css \
-	declarations-valid-20.ref.css \
-	declarations-valid-21.css \
-	declarations-valid-21.ref.css \
 	declarations-valid-22.css \
 	declarations-valid-22.ref.css \
 	declarations-valid-23.css \
