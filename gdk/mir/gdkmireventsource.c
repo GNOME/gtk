@@ -605,8 +605,12 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
     case mir_event_type_close_window:
       handle_close_event (window);
       break;
+    case mir_event_type_keymap:
+      break;
     case mir_event_type_window_output:
       handle_window_output_event (window, mir_event_get_window_output_event (event));
+      break;
+    case mir_event_type_input_device_state:
       break;
     case mir_event_type_window_placement:
       handle_window_placement_event (window, mir_event_get_window_placement_event (event));
