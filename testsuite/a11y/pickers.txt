@@ -17,36 +17,23 @@ window1
     layer: widget
     alpha: 1
     button3
-      "push button"
+      "unknown"
       parent: grid1
       index: 0
-      name: Sans Regular
-      state: enabled focusable sensitive showing visible
+      state: enabled sensitive visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
     button2
-      "push button"
+      "unknown"
       parent: grid1
       index: 1
-      state: enabled focusable sensitive showing visible
+      state: enabled sensitive visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
     button1
       "combo box"
       parent: grid1
@@ -60,11 +47,11 @@ window1
       action 0 name: press
       action 0 description: Presses the combobox
       <AtkSelection>
-      unnamed-GtkMenuAccessible-0
+      popup_widget
         "menu"
         parent: button1
         index: 0
-        state: enabled sensitive
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup

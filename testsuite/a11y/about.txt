@@ -33,8 +33,29 @@ window1
         name: About
         member-of: unnamed-GtkRadioButtonAccessible-1
                    unnamed-GtkRadioButtonAccessible-2
+                   unnamed-GtkRadioButtonAccessible-3
                    unnamed-GtkRadioButtonAccessible-0
         state: checked enabled focusable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
+      unnamed-GtkRadioButtonAccessible-3
+        "radio button"
+        parent: stack_switcher
+        index: 1
+        name: Credits
+        member-of: unnamed-GtkRadioButtonAccessible-1
+                   unnamed-GtkRadioButtonAccessible-2
+                   unnamed-GtkRadioButtonAccessible-3
+                   unnamed-GtkRadioButtonAccessible-0
+        state: enabled focusable sensitive
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -48,10 +69,11 @@ window1
       unnamed-GtkRadioButtonAccessible-2
         "radio button"
         parent: stack_switcher
-        index: 1
-        name: Credits
+        index: 2
+        name: License
         member-of: unnamed-GtkRadioButtonAccessible-1
                    unnamed-GtkRadioButtonAccessible-2
+                   unnamed-GtkRadioButtonAccessible-3
                    unnamed-GtkRadioButtonAccessible-0
         state: enabled focusable sensitive
         toolkit: gtk
@@ -67,10 +89,11 @@ window1
       unnamed-GtkRadioButtonAccessible-1
         "radio button"
         parent: stack_switcher
-        index: 2
-        name: License
+        index: 3
+        name: System
         member-of: unnamed-GtkRadioButtonAccessible-1
                    unnamed-GtkRadioButtonAccessible-2
+                   unnamed-GtkRadioButtonAccessible-3
                    unnamed-GtkRadioButtonAccessible-0
         state: enabled focusable sensitive
         toolkit: gtk
@@ -252,68 +275,59 @@ window1
                                 weight: <omitted>
                                 wrap-mode: word
             <AtkHypertext>
-          hbox
-            "filler"
+          website_label
+            "label"
             parent: page_vbox
             index: 2
-            state: enabled horizontal sensitive showing visible
+            name: Website
+            state: enabled focusable multi-line sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            website_label
-              "label"
-              parent: hbox
-              index: 0
-              name: Website
-              state: enabled focusable multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: Website
-              character count: 7
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: left
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-              <AtkHypertext>
+            <AtkText>
+            text: Website
+            character count: 7
+            caret offset: 0
+            default attributes: bg-color: <omitted>
+                                bg-full-height: 0
+                                direction: <omitted>
+                                editable: false
+                                family-name: <omitted>
+                                fg-color: <omitted>
+                                indent: 0
+                                invisible: false
+                                justification: left
+                                language: <omitted>
+                                left-margin: 0
+                                pixels-above-lines: 0
+                                pixels-below-lines: 0
+                                pixels-inside-wrap: 0
+                                right-margin: 0
+                                rise: 0
+                                scale: 1
+                                size: <omitted>
+                                stretch: <omitted>
+                                strikethrough: false
+                                style: <omitted>
+                                underline: none
+                                variant: <omitted>
+                                weight: <omitted>
+                                wrap-mode: word
+            <AtkHypertext>
+              <AtkHyperlink>
+              start index: 0
+              end index: 7
+              anchors: http://www.gtk.org
+            unnamed-GtkLabelAccessibleLinkImpl-4
+              "link"
+              parent: website_label
+              state: enabled focusable focused multi-line sensitive showing visible
+              <AtkHyperlinkImpl>
                 <AtkHyperlink>
                 start index: 0
                 end index: 7
                 anchors: http://www.gtk.org
-              unnamed-GtkLabelAccessibleLinkImpl-3
-                "link"
-                parent: website_label
-                state: enabled focusable focused multi-line sensitive showing visible
-                <AtkHyperlinkImpl>
-                  <AtkHyperlink>
-                  start index: 0
-                  end index: 7
-                  anchors: http://www.gtk.org
           copyright_label
             "label"
             parent: page_vbox
@@ -400,7 +414,7 @@ See the GNU General Public License, version 3 or later for details.
               start index: 56
               end index: 102
               anchors: http://www.gnu.org/licenses/gpl-3.0.html
-            unnamed-GtkLabelAccessibleLinkImpl-4
+            unnamed-GtkLabelAccessibleLinkImpl-5
               "link"
               parent: license_label
               state: enabled focusable focused multi-line sensitive showing visible

@@ -63,7 +63,7 @@ window1
       parent: headerbar
       index: 0
       name: Cancel
-      state: enabled focusable sensitive showing visible
+      state: enabled focusable sensitive visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

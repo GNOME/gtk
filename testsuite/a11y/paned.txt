@@ -11,21 +11,21 @@ window1
     "split pane"
     parent: window1
     index: 0
-    state: enabled focusable horizontal sensitive
+    state: enabled focusable horizontal sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
     <AtkValue>
     minimum value: 0.000000
-    maximum value: 2147483647.000000
-    current value: 0.000000
+    maximum value: 58.000000
+    current value: 25.000000
     label1
       "label"
       parent: paned1
       index: 0
       name: Left
-      state: enabled multi-line sensitive visible
+      state: enabled multi-line sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -65,7 +65,7 @@ window1
       parent: paned1
       index: 1
       name: Right
-      state: enabled multi-line sensitive visible
+      state: enabled multi-line sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
