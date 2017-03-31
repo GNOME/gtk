@@ -40,11 +40,13 @@
  *
  * |[<!-- language="plain" -->
  * switch
- * ╰── slider
+ * ├── slider
+ * ├── label
+ * ╰── label
  * ]|
  *
- * GtkSwitch has two css nodes, the main node with the name switch and a subnode
- * named slider. Neither of them is using any style classes.
+ * GtkSwitch has four css nodes, the main node with the name switch and subnodes
+ * for the slider and the on and off labels. Neither of them is using any style classes.
  */
 
 #include "config.h"
