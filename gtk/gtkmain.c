@@ -1505,6 +1505,9 @@ handle_pointing_event (GdkEvent *event)
       if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
         update_cursor (toplevel, device, target);
 
+      if (event->type == GDK_TOUCH_BEGIN)
+        gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
+
       /* Let it take the effective pointer focus anyway, as it may change due
        * to implicit grabs.
        */
@@ -1512,6 +1515,13 @@ handle_pointing_event (GdkEvent *event)
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+      target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
+                                                                 device,
+                                                                 sequence);
+      gtk_window_set_pointer_focus_grab (toplevel, device, sequence,
+                                         event->type == GDK_BUTTON_PRESS ?
+                                         target : NULL);
+      break;
     case GDK_SCROLL:
     case GDK_TOUCHPAD_PINCH:
     case GDK_TOUCHPAD_SWIPE:

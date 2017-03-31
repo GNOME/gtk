@@ -11484,3 +11484,16 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
         }
     }
 }
+
+void
+gtk_window_set_pointer_focus_grab (GtkWindow        *window,
+                                   GdkDevice        *device,
+                                   GdkEventSequence *sequence,
+                                   GtkWidget        *grab_widget)
+{
+  GtkPointerFocus *focus;
+
+  focus = gtk_window_lookup_pointer_focus (window, device, sequence);
+  g_assert (focus != NULL);
+  gtk_pointer_focus_set_implicit_grab (focus, grab_widget);
+}
