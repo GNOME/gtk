@@ -2,10 +2,6 @@
   color: red;
 }
 
-:prelight {
-  color: red;
-}
-
 :hover {
   color: red;
 }
@@ -14,23 +10,11 @@
   color: red;
 }
 
-:insensitive {
-  color: red;
-}
-
 :disabled {
   color: red;
 }
 
-:inconsistent {
-  color: red;
-}
-
 :indeterminate {
-  color: red;
-}
-
-:focused {
   color: red;
 }
 

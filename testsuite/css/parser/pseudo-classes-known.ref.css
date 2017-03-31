@@ -6,10 +6,6 @@
   color: rgb(255,0,0);
 }
 
-:hover {
-  color: rgb(255,0,0);
-}
-
 :selected {
   color: rgb(255,0,0);
 }
@@ -18,19 +14,7 @@
   color: rgb(255,0,0);
 }
 
-:disabled {
-  color: rgb(255,0,0);
-}
-
 :indeterminate {
-  color: rgb(255,0,0);
-}
-
-:indeterminate {
-  color: rgb(255,0,0);
-}
-
-:focus {
   color: rgb(255,0,0);
 }
 
