@@ -11507,6 +11507,8 @@ gtk_window_set_pointer_focus_grab (GtkWindow        *window,
   GtkPointerFocus *focus;
 
   focus = gtk_window_lookup_pointer_focus (window, device, sequence);
+  if (!focus && !grab_widget)
+    return;
   g_assert (focus != NULL);
   gtk_pointer_focus_set_implicit_grab (focus, grab_widget);
 }
