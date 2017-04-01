@@ -177,7 +177,7 @@ _gdk_mir_display_open (const gchar *display_name)
   GdkMirDisplay *display;
   GDBusConnection *session;
 
-  connection = mir_connect_sync (NULL, "GDK-Mir");
+  connection = mir_connect_sync (NULL, g_get_prgname ());
   if (!connection)
      return NULL;
 
