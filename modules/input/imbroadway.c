@@ -34,7 +34,7 @@
 typedef struct _GtkIMContextBroadway
 {
   GtkIMContextSimple parent;
-  GdkWindow *client_window;
+  GtkWidget *client_widget;
 } GtkIMContextBroadway;
 
 typedef struct _GtkIMContextBroadwayClass
@@ -66,11 +66,11 @@ static const GtkIMContextInfo *info_list[] =
 #endif
 
 static void
-broadway_set_client_window (GtkIMContext *context, GdkWindow *window)
+broadway_set_client_widget (GtkIMContext *context, GtkWidget *widget)
 {
   GtkIMContextBroadway *bw = GTK_IM_CONTEXT_BROADWAY (context);
 
-  bw->client_window = window;
+  bw->client_widget = widget;
 }
 
 static void
@@ -79,9 +79,9 @@ broadway_focus_in (GtkIMContext *context)
   GtkIMContextBroadway *bw = GTK_IM_CONTEXT_BROADWAY (context);
   GdkDisplay *display;
 
-  if (bw->client_window)
+  if (bw->client_widget)
     {
-      display = gdk_window_get_display (bw->client_window);
+      display = gtk_widget_get_display (bw->client_widget);
       gdk_broadway_display_show_keyboard (GDK_BROADWAY_DISPLAY (display));
     }
 }
@@ -92,9 +92,9 @@ broadway_focus_out (GtkIMContext *context)
   GtkIMContextBroadway *bw = GTK_IM_CONTEXT_BROADWAY (context);
   GdkDisplay *display;
 
-  if (bw->client_window)
+  if (bw->client_widget)
     {
-      display = gdk_window_get_display (bw->client_window);
+      display = gtk_widget_get_display (bw->client_widget);
       gdk_broadway_display_hide_keyboard (GDK_BROADWAY_DISPLAY (display));
     }
 }
@@ -106,7 +106,7 @@ gtk_im_context_broadway_class_init (GtkIMContextClass *klass)
 
   klass->focus_in = broadway_focus_in;
   klass->focus_out = broadway_focus_out;
-  klass->set_client_window = broadway_set_client_window;
+  klass->set_client_widget = broadway_set_client_widget;
 }
 
 static void

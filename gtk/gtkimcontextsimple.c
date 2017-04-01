@@ -117,8 +117,8 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 							  gchar                   **str,
 							  PangoAttrList           **attrs,
 							  gint                     *cursor_pos);
-static void     gtk_im_context_simple_set_client_window  (GtkIMContext             *context,
-                                                          GdkWindow                *window);
+static void     gtk_im_context_simple_set_client_widget  (GtkIMContext             *context,
+                                                          GtkWidget                *widget);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT)
 
@@ -131,7 +131,7 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
   im_context_class->filter_keypress = gtk_im_context_simple_filter_keypress;
   im_context_class->reset = gtk_im_context_simple_reset;
   im_context_class->get_preedit_string = gtk_im_context_simple_get_preedit_string;
-  im_context_class->set_client_window = gtk_im_context_simple_set_client_window;
+  im_context_class->set_client_widget = gtk_im_context_simple_set_client_widget;
   gobject_class->finalize = gtk_im_context_simple_finalize;
 }
 
@@ -1390,22 +1390,22 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 }
 
 static void
-gtk_im_context_simple_set_client_window  (GtkIMContext *context,
-                                          GdkWindow    *window)
+gtk_im_context_simple_set_client_widget  (GtkIMContext *context,
+                                          GtkWidget    *widget)
 {
   GtkIMContextSimple *im_context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   gboolean run_compose_table = FALSE;
 
-  if (!window)
+  if (!widget)
     return;
 
   /* Load compose table for X11 or Wayland. */
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gdk_window_get_display (window)))
+  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (widget)))
     run_compose_table = TRUE;
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gdk_window_get_display (window)))
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
     run_compose_table = TRUE;
 #endif
 

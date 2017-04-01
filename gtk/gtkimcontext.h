@@ -23,7 +23,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gdk/gdk.h>
+#include <gtk/gtkwidget.h>
 
 
 G_BEGIN_DECLS
@@ -61,8 +61,8 @@ struct _GtkIMContextClass
 				    gint          n_chars);
 
   /* Virtual functions */
-  void     (*set_client_window)   (GtkIMContext   *context,
-				   GdkWindow      *window);
+  void     (*set_client_widget)   (GtkIMContext   *context,
+				   GtkWidget      *widget);
   void     (*get_preedit_string)  (GtkIMContext   *context,
 				   gchar         **str,
 				   PangoAttrList **attrs,
@@ -97,8 +97,8 @@ GDK_AVAILABLE_IN_ALL
 GType    gtk_im_context_get_type            (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-void     gtk_im_context_set_client_window   (GtkIMContext       *context,
-					     GdkWindow          *window);
+void     gtk_im_context_set_client_widget   (GtkIMContext       *context,
+                                             GtkWidget          *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_im_context_get_preedit_string  (GtkIMContext       *context,
 					     gchar             **str,

@@ -42,7 +42,7 @@ struct _GtkIMMulticontextPrivate
 {
   GtkIMContext          *slave;
 
-  GdkWindow             *client_window;
+  GtkWidget             *client_widget;
   GdkRectangle           cursor_location;
 
   gchar                 *context_id;
@@ -61,8 +61,8 @@ static void     gtk_im_multicontext_set_slave          (GtkIMMulticontext       
 							GtkIMContext            *slave,
 							gboolean                 finalizing);
 
-static void     gtk_im_multicontext_set_client_window  (GtkIMContext            *context,
-							GdkWindow               *window);
+static void     gtk_im_multicontext_set_client_widget  (GtkIMContext            *context,
+							GtkWidget               *widget);
 static void     gtk_im_multicontext_get_preedit_string (GtkIMContext            *context,
 							gchar                  **str,
 							PangoAttrList          **attrs,
@@ -114,7 +114,7 @@ gtk_im_multicontext_class_init (GtkIMMulticontextClass *class)
 
   gobject_class->notify = gtk_im_multicontext_notify;
 
-  im_context_class->set_client_window = gtk_im_multicontext_set_client_window;
+  im_context_class->set_client_widget = gtk_im_multicontext_set_client_widget;
   im_context_class->get_preedit_string = gtk_im_multicontext_get_preedit_string;
   im_context_class->filter_keypress = gtk_im_multicontext_filter_keypress;
   im_context_class->focus_in = gtk_im_multicontext_focus_in;
@@ -230,8 +230,8 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
 
       if (!priv->use_preedit)	/* Default is TRUE */
 	gtk_im_context_set_use_preedit (slave, FALSE);
-      if (priv->client_window)
-	gtk_im_context_set_client_window (slave, priv->client_window);
+      if (priv->client_widget)
+	gtk_im_context_set_client_widget (slave, priv->client_widget);
       if (priv->have_cursor_location)
 	gtk_im_context_set_cursor_location (slave, &priv->cursor_location);
       if (priv->focus_in)
@@ -292,8 +292,8 @@ im_module_setting_changed (GtkSettings *settings,
 
 
 static void
-gtk_im_multicontext_set_client_window (GtkIMContext *context,
-				       GdkWindow    *window)
+gtk_im_multicontext_set_client_widget (GtkIMContext *context,
+				       GtkWidget    *widget)
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMMulticontextPrivate *priv = multicontext->priv;
@@ -302,11 +302,11 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
   GtkSettings *settings;
   gboolean connected;
 
-  priv->client_window = window;
+  priv->client_widget = widget;
 
-  if (window)
+  if (widget)
     {
-      screen = gdk_window_get_screen (window);
+      screen = gtk_widget_get_screen (widget);
       settings = gtk_settings_get_for_screen (screen);
 
       connected = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings),
@@ -324,7 +324,7 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
 
   slave = gtk_im_multicontext_get_slave (multicontext);
   if (slave)
-    gtk_im_context_set_client_window (slave, window);
+    gtk_im_context_set_client_widget (slave, widget);
 }
 
 static void

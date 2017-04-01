@@ -9808,8 +9808,8 @@ text_window_realize (GtkTextWindow *win,
           g_clear_object (&cursor);
         }
 
-      gtk_im_context_set_client_window (GTK_TEXT_VIEW (widget)->priv->im_context,
-                                        win->window);
+      gtk_im_context_set_client_widget (GTK_TEXT_VIEW (widget)->priv->im_context,
+                                        widget);
       break;
     default:
       break;
@@ -9829,7 +9829,7 @@ text_window_unrealize (GtkTextWindow *win)
 {
   if (win->type == GTK_TEXT_WINDOW_TEXT)
     {
-      gtk_im_context_set_client_window (GTK_TEXT_VIEW (win->widget)->priv->im_context,
+      gtk_im_context_set_client_widget (GTK_TEXT_VIEW (win->widget)->priv->im_context,
                                         NULL);
     }
 

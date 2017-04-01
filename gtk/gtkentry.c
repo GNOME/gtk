@@ -3109,7 +3109,7 @@ gtk_entry_realize (GtkWidget *widget)
 
   gtk_widget_register_window (widget, priv->text_area);
 
-  gtk_im_context_set_client_window (priv->im_context, priv->text_area);
+  gtk_im_context_set_client_widget (priv->im_context, widget);
 
   gtk_entry_adjust_scroll (entry);
   gtk_entry_update_primary_selection (entry);
@@ -3139,7 +3139,7 @@ gtk_entry_unrealize (GtkWidget *widget)
 
   gtk_entry_reset_layout (entry);
   
-  gtk_im_context_set_client_window (priv->im_context, NULL);
+  gtk_im_context_set_client_widget (priv->im_context, NULL);
 
   clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_PRIMARY);
   if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (entry))

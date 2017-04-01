@@ -159,7 +159,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  *   #GtkIMContext::retrieve-surrounding signal.
  * @delete_surrounding: Default handler of the
  *   #GtkIMContext::delete-surrounding signal.
- * @set_client_window: Called via gtk_im_context_set_client_window() when the
+ * @set_client_widget: Called via gtk_im_context_set_client_widget() when the
  *   input window where the entered text will appear changes. Override this to
  *   keep track of the current input window, for instance for the purpose of
  *   positioning a status display of your input method.
@@ -437,27 +437,27 @@ gtk_im_context_real_get_surrounding (GtkIMContext *context,
 }
 
 /**
- * gtk_im_context_set_client_window:
+ * gtk_im_context_set_client_widget:
  * @context: a #GtkIMContext
- * @window: (allow-none):  the client window. This may be %NULL to indicate
- *           that the previous client window no longer exists.
+ * @widget: (allow-none):  the client widget. This may be %NULL to indicate
+ *           that the previous client widget no longer exists.
  * 
  * Set the client window for the input context; this is the
- * #GdkWindow in which the input appears. This window is
+ * #GtkWidget holding the input focus. This widget is
  * used in order to correctly position status windows, and may
  * also be used for purposes internal to the input method.
  **/
 void
-gtk_im_context_set_client_window (GtkIMContext *context,
-				  GdkWindow    *window)
+gtk_im_context_set_client_widget (GtkIMContext *context,
+                                  GtkWidget    *widget)
 {
   GtkIMContextClass *klass;
   
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
-  if (klass->set_client_window)
-    klass->set_client_window (context, window);
+  if (klass->set_client_widget)
+    klass->set_client_widget (context, widget);
 }
 
 /**

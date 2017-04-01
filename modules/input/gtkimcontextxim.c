@@ -106,8 +106,8 @@ struct _StatusWindow
 static void     gtk_im_context_xim_class_init         (GtkIMContextXIMClass  *class);
 static void     gtk_im_context_xim_init               (GtkIMContextXIM       *im_context_xim);
 static void     gtk_im_context_xim_finalize           (GObject               *obj);
-static void     gtk_im_context_xim_set_client_window  (GtkIMContext          *context,
-						       GdkWindow             *client_window);
+static void     gtk_im_context_xim_set_client_widget  (GtkIMContext          *context,
+                                                       GtkWidget             *widget);
 static gboolean gtk_im_context_xim_filter_keypress    (GtkIMContext          *context,
 						       GdkEventKey           *key);
 static void     gtk_im_context_xim_reset              (GtkIMContext          *context);
@@ -478,7 +478,7 @@ gtk_im_context_xim_class_init (GtkIMContextXIMClass *class)
 
   parent_class = g_type_class_peek_parent (class);
 
-  im_context_class->set_client_window = gtk_im_context_xim_set_client_window;
+  im_context_class->set_client_widget = gtk_im_context_xim_set_client_widget;
   im_context_class->filter_keypress = gtk_im_context_xim_filter_keypress;
   im_context_class->reset = gtk_im_context_xim_reset;
   im_context_class->get_preedit_string = gtk_im_context_xim_get_preedit_string;
@@ -596,12 +596,13 @@ set_ic_client_window (GtkIMContextXIM *context_xim,
 }
 
 static void
-gtk_im_context_xim_set_client_window (GtkIMContext          *context,
-				      GdkWindow             *client_window)
+gtk_im_context_xim_set_client_widget (GtkIMContext *context,
+                                      GtkWidget    *widget)
 {
   GtkIMContextXIM *context_xim = GTK_IM_CONTEXT_XIM (context);
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
-  set_ic_client_window (context_xim, client_window);
+  set_ic_client_window (context_xim, gtk_widget_get_window (toplevel));
 }
 
 GtkIMContext *
