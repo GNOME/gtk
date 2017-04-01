@@ -27,7 +27,7 @@
 
 struct _GtkStackCombo
 {
-  GtkBox box;
+  GtkWidget parent_instance;
 
   GtkComboBox *combo;
   GtkStack *stack;
@@ -35,7 +35,7 @@ struct _GtkStackCombo
 };
 
 struct _GtkStackComboClass {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 enum {
@@ -43,15 +43,16 @@ enum {
   PROP_STACK
 };
 
-G_DEFINE_TYPE (GtkStackCombo, gtk_stack_combo, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GtkStackCombo, gtk_stack_combo, GTK_TYPE_WIDGET)
 
 static void
 gtk_stack_combo_init (GtkStackCombo *self)
 {
+  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+
   self->stack = NULL;
   self->combo = GTK_COMBO_BOX (gtk_combo_box_text_new ());
-  gtk_widget_show (GTK_WIDGET (self->combo));
-  gtk_box_pack_start (GTK_BOX (self), GTK_WIDGET (self->combo), FALSE, FALSE);
+  gtk_widget_set_parent (GTK_WIDGET (self->combo), GTK_WIDGET (self));
 }
 
 static void gtk_stack_combo_set_stack (GtkStackCombo *self,
@@ -213,7 +214,47 @@ gtk_stack_combo_dispose (GObject *object)
 
   gtk_stack_combo_set_stack (self, NULL);
 
+  if (self->combo)
+    {
+      gtk_widget_unparent (GTK_WIDGET (self->combo));
+      self->combo = NULL;
+    }
+
   G_OBJECT_CLASS (gtk_stack_combo_parent_class)->dispose (object);
+}
+
+static void
+gtk_stack_combo_measure (GtkWidget       *widget,
+                         GtkOrientation  orientation,
+                         int             for_size,
+                         int            *minimum,
+                         int            *natural,
+                         int            *minimum_baseline,
+                         int            *natural_baseline)
+{
+  GtkStackCombo *self = GTK_STACK_COMBO (widget);
+
+  gtk_widget_measure (GTK_WIDGET (self->combo), orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_stack_combo_snapshot (GtkWidget   *widget,
+                          GtkSnapshot *snapshot)
+{
+  GtkStackCombo *self = GTK_STACK_COMBO (widget);
+
+  gtk_widget_snapshot_child (widget, GTK_WIDGET (self->combo), snapshot);
+}
+
+static void
+gtk_stack_combo_size_allocate (GtkWidget     *widget,
+                               GtkAllocation *allocation)
+{
+  GtkStackCombo *self = GTK_STACK_COMBO (widget);
+
+  gtk_widget_size_allocate (GTK_WIDGET (self->combo), allocation);
 }
 
 static void
@@ -225,6 +266,10 @@ gtk_stack_combo_class_init (GtkStackComboClass *class)
   object_class->get_property = gtk_stack_combo_get_property;
   object_class->set_property = gtk_stack_combo_set_property;
   object_class->dispose = gtk_stack_combo_dispose;
+
+  widget_class->measure = gtk_stack_combo_measure;
+  widget_class->size_allocate = gtk_stack_combo_size_allocate;
+  widget_class->snapshot = gtk_stack_combo_snapshot;
 
   g_object_class_install_property (object_class,
                                    PROP_STACK,
