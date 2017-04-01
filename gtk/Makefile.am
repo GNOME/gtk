@@ -1284,20 +1284,16 @@ gesture_sources = 				\
 	gesture/gesture-two-finger-swipe-right-symbolic.svg
 
 adwaita_theme_scss = \
-	theme/Adwaita/_colors-public.scss 	\
 	theme/Adwaita/_colors.scss 		\
+	theme/Adwaita/_colors-public.scss 	\
 	theme/Adwaita/_common.scss 		\
 	theme/Adwaita/_drawing.scss 		\
-	theme/Adwaita/gtk-contained-dark.scss 	\
-	theme/Adwaita/gtk-contained.scss 	\
 	$()
 
 highcontrast_theme_scss = \
 	theme/HighContrast/_colors.scss 	\
 	theme/HighContrast/_common.scss 	\
 	theme/HighContrast/_drawing.scss 	\
-	theme/HighContrast/gtk-contained-inverse.scss \
-	theme/HighContrast/gtk-contained.scss 	\
 	$()
 
 if REBUILD_SCSS
@@ -1308,16 +1304,16 @@ scss_verbose = $(scss_verbose_@AM_V@)
 scss_verbose_ = $(scss_verbose_@AM_DEFAULT_V@)
 scss_verbose_0 = @echo "  SCSS     $@";
 
-theme/Adwaita/gtk-contained.css: $(top_srcdir)/gtk/theme/Adwaita/gtk-contained.scss
+theme/Adwaita/gtk-contained.css: $(top_srcdir)/gtk/theme/Adwaita/gtk-contained.scss $(adwaita_theme_scss)
 	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
 
-theme/Adwaita/gtk-contained-dark.css: $(top_srcdir)/gtk/theme/Adwaita/gtk-contained-dark.scss
+theme/Adwaita/gtk-contained-dark.css: $(top_srcdir)/gtk/theme/Adwaita/gtk-contained-dark.scss $(adwaita_theme_scss)
 	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
 
-theme/HighContrast/gtk-contained.css: $(top_srcdir)/gtk/theme/HighContrast/gtk-contained.scss
+theme/HighContrast/gtk-contained.css: $(top_srcdir)/gtk/theme/HighContrast/gtk-contained.scss $(highcontrast_theme_scss)
 	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
 
-theme/HighContrast/gtk-contained-inverse.css: $(top_srcdir)/gtk/theme/HighContrast/gtk-contained-inverse.scss
+theme/HighContrast/gtk-contained-inverse.css: $(top_srcdir)/gtk/theme/HighContrast/gtk-contained-inverse.scss $(highcontrast_theme_scss)
 	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
 
 endif # REBUILD_SCSS
@@ -1326,6 +1322,8 @@ theme_sources = 				\
 	theme/win32/gtk.css	 		\
 	theme/win32/gtk-win32-base.css 		\
 	$(adwaita_theme_scss)			\
+	theme/Adwaita/gtk-contained.scss 	\
+	theme/Adwaita/gtk-contained-dark.scss 	\
 	theme/Adwaita/assets.txt 		\
 	theme/Adwaita/assets.svg 		\
 	theme/Adwaita/README 			\
@@ -1334,6 +1332,8 @@ theme_sources = 				\
 	theme/Adwaita/gtk.css 			\
 	theme/Adwaita/gtk-dark.css 		\
 	$(highcontrast_theme_scss)		\
+	theme/HighContrast/gtk-contained.scss 	\
+	theme/HighContrast/gtk-contained-inverse.scss \
 	theme/HighContrast/gtk-contained.css 	\
 	theme/HighContrast/gtk-contained-inverse.css \
 	theme/HighContrast/gtk.css 		\
