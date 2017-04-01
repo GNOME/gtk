@@ -61,6 +61,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkdrawingarea.h"
 
 
 /**
@@ -1552,6 +1553,8 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
 {
   GtkDragSourceInfo *info;
 
+  g_return_if_fail (!GTK_IS_WINDOW (widget));
+
   info = gtk_drag_get_source_info (context, FALSE);
   if (info == NULL)
     {
@@ -1595,14 +1598,6 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
       gtk_widget_show (info->icon_window);
     }
 
-  if (GTK_IS_WINDOW (widget))
-    {
-      gtk_widget_hide (widget);
-      gtk_widget_unrealize (widget);
-      gtk_widget_set_parent_window (widget, gtk_widget_get_window (info->icon_window));
-      gtk_widget_show (widget);
-    }
-
   if (gtk_bin_get_child (GTK_BIN (info->icon_window)))
     gtk_container_remove (GTK_CONTAINER (info->icon_window), gtk_bin_get_child (GTK_BIN (info->icon_window)));
   gtk_container_add (GTK_CONTAINER (info->icon_window), widget);
@@ -1634,34 +1629,6 @@ gtk_drag_set_icon_widget (GdkDragContext *context,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_drag_set_icon_widget_internal (context, widget, hot_x, hot_y, FALSE);
-}
-
-static void
-gtk_drag_draw_icon_pattern (GtkWidget *window,
-                            cairo_t   *cr,
-                            gpointer   pattern)
-{
-  cairo_set_source (cr, pattern);
-  cairo_paint (cr);
-}
-
-static void
-gtk_drag_draw_icon_pattern_and_background (GtkWidget *window,
-                                           cairo_t   *cr,
-                                           gpointer   pattern)
-{
-  GtkStyleContext *context;
-  int width, height;
-
-  context = gtk_widget_get_style_context (window);
-  width = gtk_widget_get_allocated_width (window);
-  height = gtk_widget_get_allocated_height (window);
-
-  gtk_render_background (context, cr, 0, 0, width, height);
-  gtk_render_frame (context, cr, 0, 0, width, height);
-
-  cairo_set_source (cr, pattern);
-  cairo_paint (cr);
 }
 
 static void
@@ -1719,44 +1686,6 @@ gtk_drag_set_icon_pixbuf (GdkDragContext *context,
   gtk_image_definition_unref (def);
 }
 
-/* XXX: This function is in gdk, too. Should it be in Cairo? */
-static gboolean
-_gtk_cairo_surface_extents (cairo_surface_t *surface,
-                            GdkRectangle    *extents)
-{
-  double x1, x2, y1, y2;
-  cairo_t *cr;
-
-  g_return_val_if_fail (surface != NULL, FALSE);
-  g_return_val_if_fail (extents != NULL, FALSE);
-
-  cr = cairo_create (surface);
-  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
-  cairo_destroy (cr);
-
-  x1 = floor (x1);
-  y1 = floor (y1);
-  x2 = ceil (x2);
-  y2 = ceil (y2);
-  x2 -= x1;
-  y2 -= y1;
-  
-  if (x1 < G_MININT || x1 > G_MAXINT ||
-      y1 < G_MININT || y1 > G_MAXINT ||
-      x2 > G_MAXINT || y2 > G_MAXINT)
-    {
-      extents->x = extents->y = extents->width = extents->height = 0;
-      return FALSE;
-    }
-
-  extents->x = x1;
-  extents->y = y1;
-  extents->width = x2;
-  extents->height = y2;
-
-  return TRUE;
-}
-
 /**
  * gtk_drag_set_icon_surface: (method)
  * @context: the context for a drag (This must be called
@@ -1776,47 +1705,18 @@ void
 gtk_drag_set_icon_surface (GdkDragContext  *context,
                            cairo_surface_t *surface)
 {
-  GtkWidget *window;
-  GdkDisplay *display;
-  GdkScreen *screen;
-  GdkRectangle extents;
-  cairo_pattern_t *pattern;
-  cairo_matrix_t matrix;
+  GtkWidget *widget;
+  double hot_x, hot_y;
 
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (surface != NULL);
 
-  _gtk_cairo_surface_extents (surface, &extents);
+  cairo_surface_get_device_offset (surface, &hot_x, &hot_y);
+  cairo_surface_set_device_offset (surface, 0, 0);
 
-  display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
-  screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
+  widget = gtk_image_new_from_surface (surface);
 
-  window = gtk_window_new (GTK_WINDOW_POPUP);
-
-  gtk_window_set_screen (GTK_WINDOW (window), screen);
-
-  gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
-
-  gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
-
-  gtk_widget_set_size_request (window, extents.width, extents.height);
-  gtk_widget_realize (window);
-
-  gtk_style_context_remove_class (gtk_widget_get_style_context (window), "background");
-
-  pattern = cairo_pattern_create_for_surface (surface);
-  cairo_matrix_init_translate (&matrix, extents.x, extents.y);
-  cairo_pattern_set_matrix (pattern, &matrix);
-
-  g_signal_connect_data (window,
-                         "draw",
-                         gdk_display_is_composited (display) ? G_CALLBACK (gtk_drag_draw_icon_pattern)
-                                                             : G_CALLBACK (gtk_drag_draw_icon_pattern_and_background),
-                         pattern,
-                         (GClosureNotify) cairo_pattern_destroy,
-                         G_CONNECT_AFTER);
-
-  gtk_drag_set_icon_widget_internal (context, window, extents.x, extents.y, TRUE);
+  gtk_drag_set_icon_widget_internal (context, widget, (int)hot_x, (int)hot_y, TRUE);
 }
 
 /**
