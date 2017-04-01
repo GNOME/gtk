@@ -115,7 +115,7 @@ main(int argc, char **argv)
     {
       GskRenderer *renderer;
       GdkWindow *window;
-      GskTexture *texture;
+      GskTexture *texture = NULL;
 
       window = gdk_window_new_toplevel (gdk_display_get_default(), 0, 10 , 10);
       renderer = gsk_renderer_new_for_window (window);
