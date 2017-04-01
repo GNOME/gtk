@@ -253,6 +253,25 @@ gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
   return NULL;
 }
 
+static void
+revoke_implicit_grabs (GtkWindowGroup *window_group,
+                       GdkDevice      *device,
+                       GtkWidget      *grab_widget)
+{
+  GList *windows, *l;
+
+  windows = gtk_window_group_list_windows (window_group);
+
+  for (l = windows; l; l = l->next)
+    {
+      gtk_window_maybe_revoke_implicit_grab (l->data,
+                                             device,
+                                             grab_widget);
+    }
+
+  g_list_free (windows);
+}
+
 void
 _gtk_window_group_add_grab (GtkWindowGroup *window_group,
                             GtkWidget      *widget)
@@ -261,6 +280,8 @@ _gtk_window_group_add_grab (GtkWindowGroup *window_group,
 
   priv = window_group->priv;
   priv->grabs = g_slist_prepend (priv->grabs, widget);
+
+  revoke_implicit_grabs (window_group, NULL, widget);
 }
 
 void
@@ -290,6 +311,8 @@ _gtk_window_group_add_device_grab (GtkWindowGroup *window_group,
   info->block_others = block_others;
 
   priv->device_grabs = g_slist_prepend (priv->device_grabs, info);
+
+  revoke_implicit_grabs (window_group, device, widget);
 }
 
 void

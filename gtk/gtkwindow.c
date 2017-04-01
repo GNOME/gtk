@@ -11471,6 +11471,34 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
 }
 
 void
+gtk_window_maybe_revoke_implicit_grab (GtkWindow *window,
+                                       GdkDevice *device,
+                                       GtkWidget *grab_widget)
+{
+  GList *l = window->priv->foci, *cur;
+
+  while (l)
+    {
+      GtkPointerFocus *focus = l->data;
+
+      cur = l;
+      focus = cur->data;
+      l = cur->next;
+
+      if (focus->toplevel != window)
+        continue;
+
+      if (device && focus->device == device &&
+          focus->target != grab_widget &&
+          !gtk_widget_is_ancestor (focus->target, grab_widget))
+        gtk_window_set_pointer_focus_grab (window,
+                                           focus->device,
+                                           focus->sequence,
+                                           NULL);
+    }
+}
+
+void
 gtk_window_set_pointer_focus_grab (GtkWindow        *window,
                                    GdkDevice        *device,
                                    GdkEventSequence *sequence,
