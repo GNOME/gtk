@@ -119,6 +119,8 @@ gsk_private_source_shaders = \
 	resources/glsl/blend.vs.glsl \
 	resources/glsl/blit.fs.glsl \
 	resources/glsl/blit.vs.glsl \
+	resources/glsl/color.vs.glsl \
+	resources/glsl/color.fs.glsl \
 	resources/glsl/es2_common.fs.glsl \
 	resources/glsl/es2_common.vs.glsl \
 	resources/glsl/gl3_common.fs.glsl \
