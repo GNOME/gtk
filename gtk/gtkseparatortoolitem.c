@@ -53,7 +53,6 @@
 struct _GtkSeparatorToolItemPrivate
 {
   GtkCssGadget *gadget;
-  GdkWindow *event_window;
   guint draw : 1;
 };
 
@@ -84,10 +83,6 @@ static void     gtk_separator_tool_item_snapshot          (GtkWidget            
                                                            GtkSnapshot               *snapshot);
 static void     gtk_separator_tool_item_add               (GtkContainer              *container,
                                                            GtkWidget                 *child);
-static void     gtk_separator_tool_item_realize           (GtkWidget                 *widget);
-static void     gtk_separator_tool_item_unrealize         (GtkWidget                 *widget);
-static void     gtk_separator_tool_item_map               (GtkWidget                 *widget);
-static void     gtk_separator_tool_item_unmap             (GtkWidget                 *widget);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM)
 
@@ -121,10 +116,6 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
   widget_class->measure = gtk_separator_tool_item_measure;
   widget_class->size_allocate = gtk_separator_tool_item_size_allocate;
   widget_class->snapshot = gtk_separator_tool_item_snapshot;
-  widget_class->realize = gtk_separator_tool_item_realize;
-  widget_class->unrealize = gtk_separator_tool_item_unrealize;
-  widget_class->map = gtk_separator_tool_item_map;
-  widget_class->unmap = gtk_separator_tool_item_unmap;
 
   toolitem_class->create_menu_proxy = gtk_separator_tool_item_create_menu_proxy;
   
@@ -244,81 +235,12 @@ gtk_separator_tool_item_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->event_window,
-                            allocation->x,
-                            allocation->y,
-                            allocation->width,
-                            allocation->height);
-
   gtk_css_gadget_allocate (priv->gadget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
   gtk_widget_set_clip (widget, &clip);
-}
-
-static void
-gtk_separator_tool_item_realize (GtkWidget *widget)
-{
-  GtkAllocation allocation;
-  GtkSeparatorToolItem *separator = GTK_SEPARATOR_TOOL_ITEM (widget);
-  GtkSeparatorToolItemPrivate *priv = separator->priv;
-  GdkWindow *window;
-
-  gtk_widget_set_realized (widget, TRUE);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, window);
-  g_object_ref (window);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
-                                             GDK_ALL_EVENTS_MASK,
-                                             &allocation);
-  gtk_widget_register_window (widget, priv->event_window);
-}
-
-static void
-gtk_separator_tool_item_unrealize (GtkWidget *widget)
-{
-  GtkSeparatorToolItem *separator = GTK_SEPARATOR_TOOL_ITEM (widget);
-  GtkSeparatorToolItemPrivate *priv = separator->priv;
-
-  if (priv->event_window)
-    {
-      gtk_widget_unregister_window (widget, priv->event_window);
-      gdk_window_destroy (priv->event_window);
-      priv->event_window = NULL;
-    }
-
-  GTK_WIDGET_CLASS (gtk_separator_tool_item_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_separator_tool_item_map (GtkWidget *widget)
-{
-  GtkSeparatorToolItem *separator = GTK_SEPARATOR_TOOL_ITEM (widget);
-  GtkSeparatorToolItemPrivate *priv = separator->priv;
-
-  GTK_WIDGET_CLASS (gtk_separator_tool_item_parent_class)->map (widget);
-
-  if (priv->event_window)
-    gdk_window_show (priv->event_window);
-}
-
-static void
-gtk_separator_tool_item_unmap (GtkWidget *widget)
-{
-  GtkSeparatorToolItem *separator = GTK_SEPARATOR_TOOL_ITEM (widget);
-  GtkSeparatorToolItemPrivate *priv = separator->priv;
-
-  if (priv->event_window)
-    gdk_window_hide (priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_separator_tool_item_parent_class)->unmap (widget);
 }
 
 static void
