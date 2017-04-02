@@ -80,10 +80,8 @@ struct _GtkToolItemPrivate
   guint visible_vertical      : 1;
   guint homogeneous           : 1;
   guint expand                : 1;
-  guint use_drag_window       : 1;
   guint is_important          : 1;
 
-  GdkWindow *drag_window;
   gchar *menu_item_id;
   GtkWidget *menu_item;
 };
@@ -101,10 +99,6 @@ static void gtk_tool_item_get_property (GObject         *object,
 					GParamSpec      *pspec);
 static void gtk_tool_item_property_notify (GObject      *object,
 					   GParamSpec   *pspec);
-static void gtk_tool_item_realize       (GtkWidget      *widget);
-static void gtk_tool_item_unrealize     (GtkWidget      *widget);
-static void gtk_tool_item_map           (GtkWidget      *widget);
-static void gtk_tool_item_unmap         (GtkWidget      *widget);
 static void gtk_tool_item_size_allocate (GtkWidget      *widget,
 					 GtkAllocation  *allocation);
 
@@ -127,10 +121,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   object_class->finalize     = gtk_tool_item_finalize;
   object_class->notify       = gtk_tool_item_property_notify;
 
-  widget_class->realize       = gtk_tool_item_realize;
-  widget_class->unrealize     = gtk_tool_item_unrealize;
-  widget_class->map           = gtk_tool_item_map;
-  widget_class->unmap         = gtk_tool_item_unmap;
   widget_class->size_allocate = gtk_tool_item_size_allocate;
   widget_class->parent_set    = gtk_tool_item_parent_set;
 
@@ -316,95 +306,13 @@ gtk_tool_item_property_notify (GObject    *object,
 }
 
 static void
-create_drag_window (GtkToolItem *toolitem)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget;
-
-  g_return_if_fail (toolitem->priv->use_drag_window == TRUE);
-
-  widget = GTK_WIDGET (toolitem);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  toolitem->priv->drag_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
-                                                      GDK_ALL_EVENTS_MASK,
-                                                      &allocation);
-  gtk_widget_register_window (widget, toolitem->priv->drag_window);
-}
-
-static void
-gtk_tool_item_realize (GtkWidget *widget)
-{
-  GtkToolItem *toolitem = GTK_TOOL_ITEM (widget);
-
-  GTK_WIDGET_CLASS (gtk_tool_item_parent_class)->realize (widget);
-
-  if (toolitem->priv->use_drag_window)
-    create_drag_window(toolitem);
-}
-
-static void
-destroy_drag_window (GtkToolItem *toolitem)
-{
-  if (toolitem->priv->drag_window)
-    {
-      gtk_widget_unregister_window (GTK_WIDGET (toolitem), toolitem->priv->drag_window);
-      gdk_window_destroy (toolitem->priv->drag_window);
-      toolitem->priv->drag_window = NULL;
-    }
-}
-
-static void
-gtk_tool_item_unrealize (GtkWidget *widget)
-{
-  GtkToolItem *toolitem;
-
-  toolitem = GTK_TOOL_ITEM (widget);
-
-  destroy_drag_window (toolitem);
-  
-  GTK_WIDGET_CLASS (gtk_tool_item_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_tool_item_map (GtkWidget *widget)
-{
-  GtkToolItem *toolitem;
-
-  toolitem = GTK_TOOL_ITEM (widget);
-  GTK_WIDGET_CLASS (gtk_tool_item_parent_class)->map (widget);
-  if (toolitem->priv->drag_window)
-    gdk_window_show (toolitem->priv->drag_window);
-}
-
-static void
-gtk_tool_item_unmap (GtkWidget *widget)
-{
-  GtkToolItem *toolitem;
-
-  toolitem = GTK_TOOL_ITEM (widget);
-  if (toolitem->priv->drag_window)
-    gdk_window_hide (toolitem->priv->drag_window);
-  GTK_WIDGET_CLASS (gtk_tool_item_parent_class)->unmap (widget);
-}
-
-static void
 gtk_tool_item_size_allocate (GtkWidget     *widget,
 			     GtkAllocation *allocation)
 {
-  GtkToolItem *toolitem = GTK_TOOL_ITEM (widget);
   GtkAllocation child_allocation;
   GtkWidget *child;
 
   gtk_widget_set_allocation (widget, allocation);
-
-  if (toolitem->priv->drag_window)
-    gdk_window_move_resize (toolitem->priv->drag_window,
-                            allocation->x,
-                            allocation->y,
-                            allocation->width,
-                            allocation->height);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
@@ -832,66 +740,6 @@ gtk_tool_item_set_tooltip_markup (GtkToolItem *tool_item,
 }
 
 /**
- * gtk_tool_item_set_use_drag_window:
- * @tool_item: a #GtkToolItem 
- * @use_drag_window: Whether @tool_item has a drag window.
- * 
- * Sets whether @tool_item has a drag window. When %TRUE the
- * toolitem can be used as a drag source through gtk_drag_source_set().
- * When @tool_item has a drag window it will intercept all events,
- * even those that would otherwise be sent to a child of @tool_item.
- * 
- * Since: 2.4
- **/
-void
-gtk_tool_item_set_use_drag_window (GtkToolItem *toolitem,
-				   gboolean     use_drag_window)
-{
-  g_return_if_fail (GTK_IS_TOOL_ITEM (toolitem));
-
-  use_drag_window = use_drag_window != FALSE;
-
-  if (toolitem->priv->use_drag_window != use_drag_window)
-    {
-      toolitem->priv->use_drag_window = use_drag_window;
-      
-      if (use_drag_window)
-	{
-	  if (!toolitem->priv->drag_window &&
-              gtk_widget_get_realized (GTK_WIDGET (toolitem)))
-	    {
-	      create_drag_window(toolitem);
-	      if (gtk_widget_get_mapped (GTK_WIDGET (toolitem)))
-		gdk_window_show (toolitem->priv->drag_window);
-	    }
-	}
-      else
-	{
-	  destroy_drag_window (toolitem);
-	}
-    }
-}
-
-/**
- * gtk_tool_item_get_use_drag_window:
- * @tool_item: a #GtkToolItem 
- * 
- * Returns whether @tool_item has a drag window. See
- * gtk_tool_item_set_use_drag_window().
- * 
- * Returns: %TRUE if @tool_item uses a drag window.
- * 
- * Since: 2.4
- **/
-gboolean
-gtk_tool_item_get_use_drag_window (GtkToolItem *toolitem)
-{
-  g_return_val_if_fail (GTK_IS_TOOL_ITEM (toolitem), FALSE);
-
-  return toolitem->priv->use_drag_window;
-}
-
-/**
  * gtk_tool_item_set_visible_horizontal:
  * @tool_item: a #GtkToolItem
  * @visible_horizontal: Whether @tool_item is visible when in horizontal mode
@@ -1140,9 +988,6 @@ gtk_tool_item_toolbar_reconfigured (GtkToolItem *tool_item)
   g_return_if_fail (GTK_IS_TOOL_ITEM (tool_item));
 
   g_signal_emit (tool_item, toolitem_signals[TOOLBAR_RECONFIGURED], 0);
-  
-  if (tool_item->priv->drag_window)
-    gdk_window_raise (tool_item->priv->drag_window);
 
   gtk_widget_queue_resize (GTK_WIDGET (tool_item));
 }

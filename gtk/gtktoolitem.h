@@ -99,13 +99,6 @@ void            gtk_tool_item_set_tooltip_text         (GtkToolItem *tool_item,
 GDK_AVAILABLE_IN_ALL
 void            gtk_tool_item_set_tooltip_markup       (GtkToolItem *tool_item,
 							const gchar *markup);
-
-GDK_AVAILABLE_IN_ALL
-void            gtk_tool_item_set_use_drag_window      (GtkToolItem *tool_item,
-							gboolean     use_drag_window);
-GDK_AVAILABLE_IN_ALL
-gboolean        gtk_tool_item_get_use_drag_window      (GtkToolItem *tool_item);
-
 GDK_AVAILABLE_IN_ALL
 void            gtk_tool_item_set_visible_horizontal   (GtkToolItem *tool_item,
 							gboolean     visible_horizontal);
