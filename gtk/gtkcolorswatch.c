@@ -58,8 +58,6 @@ struct _GtkColorSwatchPrivate
   guint    selectable       : 1;
   guint    has_menu         : 1;
 
-  GdkWindow *event_window;
-
   GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
   GtkCssGadget *gadget;
@@ -439,59 +437,6 @@ tap_action (GtkGestureMultiPress *gesture,
 }
 
 static void
-swatch_map (GtkWidget *widget)
-{
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-
-  GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->map (widget);
-
-  if (swatch->priv->event_window)
-    gdk_window_show (swatch->priv->event_window);
-}
-
-static void
-swatch_unmap (GtkWidget *widget)
-{
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-
-  if (swatch->priv->event_window)
-    gdk_window_hide (swatch->priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->unmap (widget);
-}
-
-static void
-swatch_realize (GtkWidget *widget)
-{
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  GtkAllocation allocation;
-
-  GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  swatch->priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                                     GDK_ALL_EVENTS_MASK,
-                                                     &allocation);
-  gtk_widget_register_window (widget, swatch->priv->event_window);
-}
-
-static void
-swatch_unrealize (GtkWidget *widget)
-{
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-
-  if (swatch->priv->event_window)
-    {
-      gtk_widget_unregister_window (widget, swatch->priv->event_window);
-      gdk_window_destroy (swatch->priv->event_window);
-      swatch->priv->event_window = NULL;
-    }
-
-  GTK_WIDGET_CLASS (gtk_color_swatch_parent_class)->unrealize (widget);
-}
-
-static void
 swatch_size_allocate (GtkWidget     *widget,
                       GtkAllocation *allocation)
 {
@@ -512,18 +457,6 @@ swatch_size_allocate (GtkWidget     *widget,
   gdk_rectangle_union (&clip, &clip2, &clip);
 
   gtk_widget_set_clip (widget, &clip);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      GtkAllocation border_allocation;
-      gtk_css_gadget_get_border_allocation(swatch->priv->gadget, &border_allocation, NULL);
-      gdk_window_move_resize (swatch->priv->event_window,
-                              border_allocation.x,
-                              border_allocation.y,
-                              border_allocation.width,
-                              border_allocation.height);
-    }
-
 }
 
 static void
@@ -681,10 +614,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->popup_menu = swatch_popup_menu;
   widget_class->enter_notify_event = swatch_enter_notify;
   widget_class->leave_notify_event = swatch_leave_notify;
-  widget_class->realize = swatch_realize;
-  widget_class->unrealize = swatch_unrealize;
-  widget_class->map = swatch_map;
-  widget_class->unmap = swatch_unmap;
   widget_class->size_allocate = swatch_size_allocate;
   widget_class->state_flags_changed = swatch_state_flags_changed;
 
