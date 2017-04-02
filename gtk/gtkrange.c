@@ -87,8 +87,6 @@ struct _GtkRangePrivate
   GtkSensitivityType lower_sensitivity;
   GtkSensitivityType upper_sensitivity;
 
-  GdkWindow         *event_window;
-
   /* Steppers are: < > ---- < >
    *               a b      c d
    */
@@ -186,9 +184,6 @@ static void gtk_range_measure_       (GtkWidget      *widget,
                                       int            *natural_baseline);
 static void gtk_range_size_allocate  (GtkWidget        *widget,
                                       GtkAllocation    *allocation);
-static void gtk_range_realize        (GtkWidget        *widget);
-static void gtk_range_unrealize      (GtkWidget        *widget);
-static void gtk_range_map            (GtkWidget        *widget);
 static void gtk_range_unmap          (GtkWidget        *widget);
 static void gtk_range_snapshot       (GtkWidget        *widget,
                                       GtkSnapshot      *snapshot);
@@ -324,9 +319,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->destroy = gtk_range_destroy;
   widget_class->measure = gtk_range_measure_;
   widget_class->size_allocate = gtk_range_size_allocate;
-  widget_class->realize = gtk_range_realize;
-  widget_class->unrealize = gtk_range_unrealize;
-  widget_class->map = gtk_range_map;
   widget_class->unmap = gtk_range_unmap;
   widget_class->snapshot = gtk_range_snapshot;
   widget_class->event = gtk_range_event;
@@ -1956,11 +1948,6 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->event_window,
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
-
   gtk_css_gadget_allocate (priv->gadget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
@@ -1969,57 +1956,11 @@ gtk_range_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_range_realize (GtkWidget *widget)
-{
-  GtkAllocation allocation;
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-
-  GTK_WIDGET_CLASS (gtk_range_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
-                                             GDK_ALL_EVENTS_MASK,
-                                             &allocation);
-  gtk_widget_register_window (widget, priv->event_window);
-}
-
-static void
-gtk_range_unrealize (GtkWidget *widget)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-
-  gtk_range_remove_step_timer (range);
-
-  gtk_widget_unregister_window (widget, priv->event_window);
-  gdk_window_destroy (priv->event_window);
-  priv->event_window = NULL;
-
-  GTK_WIDGET_CLASS (gtk_range_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_range_map (GtkWidget *widget)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-
-  gdk_window_show (priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_range_parent_class)->map (widget);
-}
-
-static void
 gtk_range_unmap (GtkWidget *widget)
 {
   GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
 
   stop_scrolling (range);
-
-  gdk_window_hide (priv->event_window);
 
   GTK_WIDGET_CLASS (gtk_range_parent_class)->unmap (widget);
 }
@@ -2167,7 +2108,7 @@ range_grab_add (GtkRange      *range,
 
   /* Don't perform any GDK/GTK+ grab here. Since a button
    * is down, there's an ongoing implicit grab on
-   * priv->event_window, which pretty much guarantees this
+   * the widget, which pretty much guarantees this
    * is the only widget receiving the pointer events.
    */
   priv->grab_location = location;
