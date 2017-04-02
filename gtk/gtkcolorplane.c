@@ -33,7 +33,6 @@ struct _GtkColorPlanePrivate
   GtkAdjustment *s_adj;
   GtkAdjustment *v_adj;
 
-  GdkWindow *input_window;
   cairo_surface_t *surface;
 
   GtkGesture *drag_gesture;
@@ -187,29 +186,13 @@ plane_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->size_allocate (widget, allocation);
 
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (plane->priv->input_window,
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
-
   create_surface (plane);
 }
 
 static void
 plane_realize (GtkWidget *widget)
 {
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-  GtkColorPlanePrivate *priv = gtk_color_plane_get_instance_private (plane);
-  GtkAllocation allocation;
-
   GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->input_window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                             GDK_ALL_EVENTS_MASK,
-                                             &allocation);
-  gtk_widget_register_window (widget, priv->input_window);
 
   create_surface (GTK_COLOR_PLANE (widget));
 }
@@ -222,33 +205,7 @@ plane_unrealize (GtkWidget *widget)
 
   g_clear_pointer (&priv->surface, cairo_surface_destroy);
 
-  gtk_widget_unregister_window (widget, priv->input_window);
-  gdk_window_destroy (priv->input_window);
-  priv->input_window = NULL;
-
   GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->unrealize (widget);
-}
-
-static void
-plane_map (GtkWidget *widget)
-{
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-  GtkColorPlanePrivate *priv = gtk_color_plane_get_instance_private (plane);
-
-  gdk_window_show (priv->input_window);
-
-  GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->map (widget);
-}
-
-static void
-plane_unmap (GtkWidget *widget)
-{
-  GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
-  GtkColorPlanePrivate *priv = gtk_color_plane_get_instance_private (plane);
-
-  GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->unmap (widget);
-
-  gdk_window_hide (priv->input_window);
 }
 
 static void
@@ -559,8 +516,6 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   widget_class->size_allocate = plane_size_allocate;
   widget_class->realize = plane_realize;
   widget_class->unrealize = plane_unrealize;
-  widget_class->map = plane_map;
-  widget_class->unmap = plane_unmap;
   widget_class->key_press_event = plane_key_press;
 
   g_object_class_install_property (object_class,
