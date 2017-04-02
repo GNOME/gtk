@@ -122,8 +122,6 @@ struct _GtkToolbarPrivate
   GtkWidget       *arrow;
   GtkWidget       *arrow_button;
 
-  GdkWindow       *event_window;
-
   GtkCssGadget    *gadget;
   GtkAllocation    prev_allocation;
 
@@ -197,8 +195,6 @@ static void       gtk_toolbar_get_property         (GObject             *object,
 						    GParamSpec          *pspec);
 static void       gtk_toolbar_snapshot             (GtkWidget           *widget,
                                                     GtkSnapshot         *snapshot);
-static void       gtk_toolbar_realize              (GtkWidget           *widget);
-static void       gtk_toolbar_unrealize            (GtkWidget           *widget);
 static void       gtk_toolbar_measure_             (GtkWidget      *widget,
                                                     GtkOrientation  orientation,
                                                     int             for_size,
@@ -215,8 +211,6 @@ static void       gtk_toolbar_move_focus           (GtkWidget           *widget,
 						    GtkDirectionType     dir);
 static void       gtk_toolbar_screen_changed       (GtkWidget           *widget,
 						    GdkScreen           *previous_screen);
-static void       gtk_toolbar_map                  (GtkWidget           *widget);
-static void       gtk_toolbar_unmap                (GtkWidget           *widget);
 static void       gtk_toolbar_set_child_property   (GtkContainer        *container,
 						    GtkWidget           *child,
 						    guint                property_id,
@@ -415,10 +409,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                    G_CALLBACK (gtk_toolbar_move_focus));
 
   widget_class->screen_changed = gtk_toolbar_screen_changed;
-  widget_class->realize = gtk_toolbar_realize;
-  widget_class->unrealize = gtk_toolbar_unrealize;
-  widget_class->map = gtk_toolbar_map;
-  widget_class->unmap = gtk_toolbar_unmap;
   widget_class->popup_menu = gtk_toolbar_popup_menu;
   widget_class->direction_changed = gtk_toolbar_direction_changed;
   
@@ -748,63 +738,6 @@ gtk_toolbar_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-gtk_toolbar_map (GtkWidget *widget)
-{
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->map (widget);
-
-  if (priv->event_window)
-    gdk_window_show_unraised (priv->event_window);
-}
-
-static void
-gtk_toolbar_unmap (GtkWidget *widget)
-{
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  if (priv->event_window)
-    gdk_window_hide (priv->event_window);
-  
-  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unmap (widget);
-}
-
-static void
-gtk_toolbar_realize (GtkWidget *widget)
-{
-  GtkAllocation allocation;
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                             GDK_ALL_EVENTS_MASK,
-                                             &allocation);
-  gtk_widget_register_window (widget, priv->event_window);
-}
-
-static void
-gtk_toolbar_unrealize (GtkWidget *widget)
-{
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  if (priv->event_window)
-    {
-      gtk_widget_unregister_window (widget, priv->event_window);
-      gdk_window_destroy (priv->event_window);
-      priv->event_window = NULL;
-    }
-
-  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unrealize (widget);
 }
 
 static gboolean
@@ -1739,13 +1672,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
-
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->event_window,
-                            allocation->x,
-                            allocation->y,
-                            allocation->width,
-                            allocation->height);
 
   gtk_css_gadget_allocate (priv->gadget,
                            allocation,
