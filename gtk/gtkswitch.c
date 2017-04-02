@@ -75,7 +75,6 @@
 
 struct _GtkSwitchPrivate
 {
-  GdkWindow *event_window;
   GtkActionHelper *action_helper;
 
   GtkGesture *pan_gesture;
@@ -286,11 +285,8 @@ gtk_switch_enter (GtkWidget        *widget,
 {
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
 
-  if (event->window == priv->event_window)
-    {
-      priv->in_switch = TRUE;
-      gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
-    }
+  priv->in_switch = TRUE;
+  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
 
   return FALSE;
 }
@@ -301,11 +297,8 @@ gtk_switch_leave (GtkWidget        *widget,
 {
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
 
-  if (event->window == priv->event_window)
-    {
-      priv->in_switch = FALSE;
-      gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
-    }
+  priv->in_switch = FALSE;
+  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
 
   return FALSE;
 }
@@ -411,18 +404,6 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
   child_alloc.y = allocation->y + (allocation->height - min) / 2;
   child_alloc.height = min;
   gtk_widget_size_allocate (priv->off_label, &child_alloc);
-
-
-  if (gtk_widget_get_realized (GTK_WIDGET (self)))
-    {
-      GtkAllocation border_allocation;
-      gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
-      gdk_window_move_resize (priv->event_window,
-                              border_allocation.x,
-                              border_allocation.y,
-                              border_allocation.width,
-                              border_allocation.height);
-    }
 }
 
 static void
@@ -440,65 +421,6 @@ gtk_switch_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_clip (widget, &clip);
 }
-
-static void
-gtk_switch_realize (GtkWidget *widget)
-{
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-  GdkWindow *parent_window;
-  GtkAllocation allocation;
-
-  GTK_WIDGET_CLASS (gtk_switch_parent_class)->realize (widget);
-
-  parent_window = gtk_widget_get_parent_window (widget);
-  gtk_widget_set_window (widget, parent_window);
-  g_object_ref (parent_window);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->event_window = gdk_window_new_input (parent_window,
-                                             GDK_ALL_EVENTS_MASK,
-                                             &allocation);
-  gtk_widget_register_window (widget, priv->event_window);
-}
-
-static void
-gtk_switch_unrealize (GtkWidget *widget)
-{
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-
-  if (priv->event_window != NULL)
-    {
-      gtk_widget_unregister_window (widget, priv->event_window);
-      gdk_window_destroy (priv->event_window);
-      priv->event_window = NULL;
-    }
-
-  GTK_WIDGET_CLASS (gtk_switch_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_switch_map (GtkWidget *widget)
-{
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-
-  GTK_WIDGET_CLASS (gtk_switch_parent_class)->map (widget);
-
-  if (priv->event_window)
-    gdk_window_show (priv->event_window);
-}
-
-static void
-gtk_switch_unmap (GtkWidget *widget)
-{
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-
-  if (priv->event_window)
-    gdk_window_hide (priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_switch_parent_class)->unmap (widget);
-}
-
 
 static gboolean
 gtk_switch_snapshot_trough (GtkCssGadget *gadget,
@@ -718,10 +640,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   widget_class->measure = gtk_switch_measure;
   widget_class->size_allocate = gtk_switch_size_allocate;
-  widget_class->realize = gtk_switch_realize;
-  widget_class->unrealize = gtk_switch_unrealize;
-  widget_class->map = gtk_switch_map;
-  widget_class->unmap = gtk_switch_unmap;
   widget_class->snapshot = gtk_switch_snapshot;
   widget_class->enter_notify_event = gtk_switch_enter;
   widget_class->leave_notify_event = gtk_switch_leave;
@@ -834,7 +752,7 @@ gtk_switch_init (GtkSwitch *self)
   g_signal_connect (gesture, "drag-end",
                     G_CALLBACK (gtk_switch_pan_gesture_drag_end), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
-                                              GTK_PHASE_BUBBLE);
+                                              GTK_PHASE_CAPTURE);
   priv->pan_gesture = gesture;
 
   /* Translators: if the "on" state label requires more than three
