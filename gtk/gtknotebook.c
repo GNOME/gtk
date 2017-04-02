@@ -177,7 +177,6 @@ struct _GtkNotebookPrivate
   GtkWidget                 *menu;
 
   GdkWindow               *drag_window;
-  GdkWindow               *event_window;
 
   GtkCssGadget              *gadget;
   GtkCssGadget              *stack_gadget;
@@ -359,9 +358,7 @@ static void gtk_notebook_finalize            (GObject         *object);
 
 /*** GtkWidget Methods ***/
 static void gtk_notebook_destroy             (GtkWidget        *widget);
-static void gtk_notebook_map                 (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
-static void gtk_notebook_realize             (GtkWidget        *widget);
 static void gtk_notebook_unrealize           (GtkWidget        *widget);
 static void gtk_notebook_measure (GtkWidget      *widget,
                                   GtkOrientation  orientation,
@@ -707,9 +704,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   gobject_class->finalize = gtk_notebook_finalize;
 
   widget_class->destroy = gtk_notebook_destroy;
-  widget_class->map = gtk_notebook_map;
   widget_class->unmap = gtk_notebook_unmap;
-  widget_class->realize = gtk_notebook_realize;
   widget_class->unrealize = gtk_notebook_unrealize;
   widget_class->measure = gtk_notebook_measure;
   widget_class->size_allocate = gtk_notebook_size_allocate;
@@ -1167,7 +1162,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->children = NULL;
   priv->first_tab = NULL;
   priv->focus_tab = NULL;
-  priv->event_window = NULL;
   priv->menu = NULL;
 
   priv->show_tabs = TRUE;
@@ -1668,7 +1662,6 @@ gtk_notebook_get_property (GObject         *object,
  * gtk_notebook_destroy
  * gtk_notebook_map
  * gtk_notebook_unmap
- * gtk_notebook_realize
  * gtk_notebook_size_allocate
  * gtk_notebook_snapshot
  * gtk_notebook_scroll
@@ -1778,8 +1771,8 @@ gtk_notebook_direction_changed (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
-                                        GdkRectangle *rectangle)
+gtk_notebook_get_tab_area_position (GtkNotebook  *notebook,
+                                    GdkRectangle *rectangle)
 {
   GtkNotebookPrivate *priv = notebook->priv;
 
@@ -1803,45 +1796,13 @@ gtk_notebook_get_event_window_position (GtkNotebook  *notebook,
 }
 
 static void
-gtk_notebook_map (GtkWidget *widget)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-
-  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->map (widget);
-
-  if (gtk_notebook_get_event_window_position (notebook, NULL))
-    gdk_window_show_unraised (priv->event_window);
-}
-
-static void
 gtk_notebook_unmap (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
 
   stop_scrolling (notebook);
 
-  gdk_window_hide (priv->event_window);
-
   GTK_WIDGET_CLASS (gtk_notebook_parent_class)->unmap (widget);
-}
-
-static void
-gtk_notebook_realize (GtkWidget *widget)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-  GdkRectangle event_window_pos;
-
-  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->realize (widget);
-
-  gtk_css_gadget_get_border_allocation (priv->header_gadget, &event_window_pos, NULL);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                             GDK_ALL_EVENTS_MASK,
-                                             &event_window_pos);
-  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -1849,10 +1810,6 @@ gtk_notebook_unrealize (GtkWidget *widget)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-
-  gtk_widget_unregister_window (widget, priv->event_window);
-  gdk_window_destroy (priv->event_window);
-  priv->event_window = NULL;
 
   if (priv->drag_window)
     {
@@ -2330,22 +2287,6 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
                            &clip);
 
   gtk_widget_set_clip (widget, &clip);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      GdkRectangle position;
-
-      if (gtk_notebook_get_event_window_position (notebook, &position))
-        {
-          gdk_window_move_resize (priv->event_window,
-                                  position.x, position.y,
-                                  position.width, position.height);
-          if (gtk_widget_get_mapped (GTK_WIDGET (notebook)))
-            gdk_window_show_unraised (priv->event_window);
-        }
-      else
-        gdk_window_hide (priv->event_window);
-    }
 }
 
 static gboolean
@@ -2990,15 +2931,18 @@ get_pointer_position (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget = GTK_WIDGET (notebook);
+  GdkRectangle area;
   gint wx, wy, width, height;
   gboolean is_rtl;
 
   if (!priv->scrollable)
     return POINTER_BETWEEN;
 
-  gdk_window_get_position (priv->event_window, &wx, &wy);
-  width = gdk_window_get_width (priv->event_window);
-  height = gdk_window_get_height (priv->event_window);
+  gtk_notebook_get_tab_area_position (notebook, &area);
+  wx = area.x;
+  wy = area.y;
+  width = area.width;
+  height = area.height;
 
   if (priv->tab_pos == GTK_POS_TOP ||
       priv->tab_pos == GTK_POS_BOTTOM)
@@ -3059,7 +3003,6 @@ check_threshold (GtkNotebook *notebook,
                  gint         current_x,
                  gint         current_y)
 {
-  GtkNotebookPrivate *priv = notebook->priv;
   gint dnd_threshold;
   GdkRectangle rectangle = { 0, }; /* shut up gcc */
   GtkSettings *settings;
@@ -3070,10 +3013,7 @@ check_threshold (GtkNotebook *notebook,
   /* we want a large threshold */
   dnd_threshold *= DND_THRESHOLD_MULTIPLIER;
 
-  gdk_window_get_position (priv->event_window, &rectangle.x, &rectangle.y);
-  rectangle.width = gdk_window_get_width (priv->event_window);
-  rectangle.height = gdk_window_get_height (priv->event_window);
-
+  gtk_notebook_get_tab_area_position (notebook, &rectangle);
   rectangle.x -= dnd_threshold;
   rectangle.width += 2 * dnd_threshold;
   rectangle.y -= dnd_threshold;
@@ -3661,7 +3601,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
   x += allocation.x;
   y += allocation.y;
 
-  if (gtk_notebook_get_event_window_position (notebook, &position) &&
+  if (gtk_notebook_get_tab_area_position (notebook, &position) &&
       x >= position.x && x <= position.x + position.width &&
       y >= position.y && y <= position.y + position.height &&
       (tab = get_tab_at_pos (notebook, x, y)))
