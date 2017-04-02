@@ -6322,7 +6322,6 @@ add_custom_button_to_dialog (GtkDialog   *dialog,
 
   button = gtk_button_new_with_mnemonic (mnemonic_label);
   gtk_widget_set_can_default (button, TRUE);
-  gtk_widget_show (button);
 
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
 }
