@@ -326,7 +326,6 @@ typedef struct
 
 struct _GtkLabelSelectionInfo
 {
-  GdkWindow *window;
   gint selection_anchor;
   gint selection_end;
   GtkWidget *popup_menu;
@@ -413,8 +412,6 @@ static gboolean gtk_label_focus         (GtkWidget         *widget,
                                          GtkDirectionType   direction);
 
 static void gtk_label_realize           (GtkWidget        *widget);
-static void gtk_label_unrealize         (GtkWidget        *widget);
-static void gtk_label_map               (GtkWidget        *widget);
 static void gtk_label_unmap             (GtkWidget        *widget);
 
 static gboolean gtk_label_motion            (GtkWidget        *widget,
@@ -453,8 +450,7 @@ static void gtk_label_screen_changed             (GtkWidget     *widget,
 						  GdkScreen     *old_screen);
 static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
 
-static void gtk_label_create_window       (GtkLabel *label);
-static void gtk_label_destroy_window      (GtkLabel *label);
+static void gtk_label_set_selectable_hint (GtkLabel *label);
 static void gtk_label_ensure_select_info  (GtkLabel *label);
 static void gtk_label_clear_select_info   (GtkLabel *label);
 static void gtk_label_update_cursor       (GtkLabel *label);
@@ -613,8 +609,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->query_tooltip = gtk_label_query_tooltip;
   widget_class->snapshot = gtk_label_snapshot;
   widget_class->realize = gtk_label_realize;
-  widget_class->unrealize = gtk_label_unrealize;
-  widget_class->map = gtk_label_map;
   widget_class->unmap = gtk_label_unmap;
   widget_class->motion_notify_event = gtk_label_motion;
   widget_class->leave_notify_event = gtk_label_leave_notify;
@@ -3777,13 +3771,6 @@ gtk_label_size_allocate (GtkWidget     *widget,
   if (priv->layout)
     gtk_label_update_layout_width (label);
 
-  if (priv->select_info && priv->select_info->window)
-    gdk_window_move_resize (priv->select_info->window,
-                            allocation->x,
-                            allocation->y,
-                            allocation->width,
-                            allocation->height);
-
   gtk_label_get_ink_rect (label, &clip_rect);
   gdk_rectangle_union (&clip_rect, &clip, &clip_rect);
   gtk_widget_set_clip (widget, &clip_rect);
@@ -3819,7 +3806,7 @@ gtk_label_update_cursor (GtkLabel *label)
       else
         cursor = NULL;
 
-      gdk_window_set_cursor (priv->select_info->window, cursor);
+      gtk_widget_set_cursor (widget, cursor);
 
       if (cursor)
         g_object_unref (cursor);
@@ -4238,31 +4225,7 @@ gtk_label_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_label_parent_class)->realize (widget);
 
   if (priv->select_info)
-    gtk_label_create_window (label);
-}
-
-static void
-gtk_label_unrealize (GtkWidget *widget)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = label->priv;
-
-  if (priv->select_info)
-    gtk_label_destroy_window (label);
-
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_label_map (GtkWidget *widget)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = label->priv;
-
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->map (widget);
-
-  if (priv->select_info)
-    gdk_window_show (priv->select_info->window);
+    gtk_label_set_selectable_hint (label);
 }
 
 static void
@@ -4273,8 +4236,6 @@ gtk_label_unmap (GtkWidget *widget)
 
   if (priv->select_info)
     {
-      gdk_window_hide (priv->select_info->window);
-
       if (priv->select_info->popup_menu)
         {
           gtk_widget_destroy (priv->select_info->popup_menu);
@@ -5072,50 +5033,22 @@ gtk_label_leave_notify (GtkWidget        *widget,
 }
 
 static void
-gtk_label_create_window (GtkLabel *label)
+gtk_label_set_selectable_hint (GtkLabel *label)
 {
   GtkLabelPrivate *priv = label->priv;
-  GtkAllocation allocation;
   GtkWidget *widget;
 
   g_assert (priv->select_info);
   widget = GTK_WIDGET (label);
-  g_assert (gtk_widget_get_realized (widget));
 
-  if (priv->select_info->window)
-    return;
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->select_info->window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                                    GDK_ALL_EVENTS_MASK,
-                                                    &allocation);
-
-  if (gtk_widget_is_sensitive (widget) && priv->select_info->selectable)
+  if (priv->select_info->selectable)
     {
       GdkCursor *cursor;
 
       cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
-      gdk_window_set_cursor (priv->select_info->window, cursor);
+      gtk_widget_set_cursor (widget, cursor);
       g_object_unref (cursor);
     }
-
-  gtk_widget_register_window (widget, priv->select_info->window);
-}
-
-static void
-gtk_label_destroy_window (GtkLabel *label)
-{
-  GtkLabelPrivate *priv = label->priv;
-
-  g_assert (priv->select_info);
-
-  if (priv->select_info->window == NULL)
-    return;
-
-  gtk_widget_unregister_window (GTK_WIDGET (label), priv->select_info->window);
-  gdk_window_destroy (priv->select_info->window);
-  priv->select_info->window = NULL;
 }
 
 static void
@@ -5130,10 +5063,7 @@ gtk_label_ensure_select_info (GtkLabel *label)
       gtk_widget_set_can_focus (GTK_WIDGET (label), TRUE);
 
       if (gtk_widget_get_realized (GTK_WIDGET (label)))
-	gtk_label_create_window (label);
-
-      if (gtk_widget_get_mapped (GTK_WIDGET (label)))
-        gdk_window_show (priv->select_info->window);
+	gtk_label_set_selectable_hint (label);
 
       priv->select_info->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (label));
       g_signal_connect (priv->select_info->drag_gesture, "drag-begin",
@@ -5162,13 +5092,13 @@ gtk_label_clear_select_info (GtkLabel *label)
 
   if (!priv->select_info->selectable && !priv->select_info->links)
     {
-      gtk_label_destroy_window (label);
-
       g_object_unref (priv->select_info->drag_gesture);
       g_object_unref (priv->select_info->multipress_gesture);
 
       g_free (priv->select_info);
       priv->select_info = NULL;
+
+      gtk_widget_set_cursor (GTK_WIDGET (label), NULL);
 
       gtk_widget_set_can_focus (GTK_WIDGET (label), FALSE);
     }
