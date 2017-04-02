@@ -138,7 +138,6 @@
 
 typedef struct {
   GdkGLContext *context;
-  GdkWindow *event_window;
   GError *error;
 
   gboolean have_buffers;
@@ -280,16 +279,8 @@ gtk_gl_area_realize (GtkWidget *widget)
 {
   GtkGLArea *area = GTK_GL_AREA (widget);
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-  GtkAllocation allocation;
 
   GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_parent_window (widget),
-                                             GDK_ALL_EVENTS_MASK,
-                                             &allocation);
-  gtk_widget_register_window (widget, priv->event_window);
 
   g_clear_error (&priv->error);
   priv->context = NULL;
@@ -581,38 +572,7 @@ gtk_gl_area_unrealize (GtkWidget *widget)
   g_clear_object (&priv->context);
   g_clear_error (&priv->error);
 
-  if (priv->event_window != NULL)
-    {
-      gtk_widget_unregister_window (widget, priv->event_window);
-      gdk_window_destroy (priv->event_window);
-      priv->event_window = NULL;
-    }
-
   GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_gl_area_map (GtkWidget *widget)
-{
-  GtkGLArea *area = GTK_GL_AREA (widget);
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  if (priv->event_window != NULL)
-    gdk_window_show (priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->map (widget);
-}
-
-static void
-gtk_gl_area_unmap (GtkWidget *widget)
-{
-  GtkGLArea *area = GTK_GL_AREA (widget);
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  if (priv->event_window != NULL)
-    gdk_window_hide (priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->unmap (widget);
 }
 
 static void
@@ -625,16 +585,7 @@ gtk_gl_area_size_allocate (GtkWidget     *widget,
   GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->size_allocate (widget, allocation);
 
   if (gtk_widget_get_realized (widget))
-    {
-      if (priv->event_window != NULL)
-        gdk_window_move_resize (priv->event_window,
-                                allocation->x,
-                                allocation->y,
-                                allocation->width,
-                                allocation->height);
-
-      priv->needs_resize = TRUE;
-    }
+    priv->needs_resize = TRUE;
 }
 
 static void
@@ -749,8 +700,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
 
   widget_class->realize = gtk_gl_area_realize;
   widget_class->unrealize = gtk_gl_area_unrealize;
-  widget_class->map = gtk_gl_area_map;
-  widget_class->unmap = gtk_gl_area_unmap;
   widget_class->size_allocate = gtk_gl_area_size_allocate;
   widget_class->draw = gtk_gl_area_draw;
 
