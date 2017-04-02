@@ -50,8 +50,6 @@ struct _GtkPathBarPrivate
   GIcon *home_icon;
   GIcon *desktop_icon;
 
-  GdkWindow *event_window;
-
   GList *button_list;
   GList *first_scrolled_button;
   GList *fake_root;
@@ -115,8 +113,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkPathBar, gtk_path_bar, GTK_TYPE_CONTAINER)
 
 static void gtk_path_bar_finalize                 (GObject          *object);
 static void gtk_path_bar_dispose                  (GObject          *object);
-static void gtk_path_bar_realize                  (GtkWidget        *widget);
-static void gtk_path_bar_unrealize                (GtkWidget        *widget);
 static void gtk_path_bar_measure (GtkWidget *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
@@ -124,7 +120,6 @@ static void gtk_path_bar_measure (GtkWidget *widget,
                                   int            *natural,
                                   int            *minimum_baseline,
                                   int            *natural_baseline);
-static void gtk_path_bar_map                      (GtkWidget        *widget);
 static void gtk_path_bar_unmap                    (GtkWidget        *widget);
 static void gtk_path_bar_size_allocate            (GtkWidget        *widget,
 						   GtkAllocation    *allocation);
@@ -222,9 +217,6 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   gobject_class->dispose = gtk_path_bar_dispose;
 
   widget_class->measure = gtk_path_bar_measure;
-  widget_class->realize = gtk_path_bar_realize;
-  widget_class->unrealize = gtk_path_bar_unrealize;
-  widget_class->map = gtk_path_bar_map;
   widget_class->unmap = gtk_path_bar_unmap;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
   widget_class->style_updated = gtk_path_bar_style_updated;
@@ -447,50 +439,11 @@ gtk_path_bar_update_slider_buttons (GtkPathBar *path_bar)
 }
 
 static void
-gtk_path_bar_map (GtkWidget *widget)
-{
-  gdk_window_show (GTK_PATH_BAR (widget)->priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->map (widget);
-}
-
-static void
 gtk_path_bar_unmap (GtkWidget *widget)
 {
   gtk_path_bar_stop_scrolling (GTK_PATH_BAR (widget));
-  gdk_window_hide (GTK_PATH_BAR (widget)->priv->event_window);
 
   GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->unmap (widget);
-}
-
-static void
-gtk_path_bar_realize (GtkWidget *widget)
-{
-  GtkPathBar *path_bar = GTK_PATH_BAR (widget);
-  GtkAllocation allocation;
-
-  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  path_bar->priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                                       GDK_ALL_EVENTS_MASK,
-                                                       &allocation);
-  gtk_widget_register_window (widget, path_bar->priv->event_window);
-}
-
-static void
-gtk_path_bar_unrealize (GtkWidget *widget)
-{
-  GtkPathBar *path_bar;
-
-  path_bar = GTK_PATH_BAR (widget);
-
-  gtk_widget_unregister_window (widget, path_bar->priv->event_window);
-  gdk_window_destroy (path_bar->priv->event_window);
-  path_bar->priv->event_window = NULL;
-
-  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->unrealize (widget);
 }
 
 /* This is a tad complicated
@@ -512,11 +465,6 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   GtkRequisition child_requisition;
 
   gtk_widget_set_allocation (widget, allocation);
-
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (path_bar->priv->event_window,
-			    allocation->x, allocation->y,
-			    allocation->width, allocation->height);
 
   /* No path is set; we don't have to allocate anything. */
   if (path_bar->priv->button_list == NULL)
