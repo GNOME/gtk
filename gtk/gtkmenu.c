@@ -3310,11 +3310,12 @@ definitely_within_item (GtkWidget *widget,
                         gint       x,
                         gint       y)
 {
-  GdkWindow *window = GTK_MENU_ITEM (widget)->priv->event_window;
+  GtkAllocation allocation;
   int w, h;
 
-  w = gdk_window_get_width (window);
-  h = gdk_window_get_height (window);
+  gtk_widget_get_allocation (widget, &allocation);
+  w = allocation.width;
+  h = allocation.height;
 
   return
     check_threshold (widget, 0, 0, x, y) &&

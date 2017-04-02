@@ -137,10 +137,6 @@ static void gtk_menu_item_get_property   (GObject          *object,
                                           GValue           *value,
                                           GParamSpec       *pspec);
 static void gtk_menu_item_destroy        (GtkWidget        *widget);
-static void gtk_menu_item_realize        (GtkWidget        *widget);
-static void gtk_menu_item_unrealize      (GtkWidget        *widget);
-static void gtk_menu_item_map            (GtkWidget        *widget);
-static void gtk_menu_item_unmap          (GtkWidget        *widget);
 static gboolean gtk_menu_item_enter      (GtkWidget        *widget,
                                           GdkEventCrossing *event);
 static gboolean gtk_menu_item_leave      (GtkWidget        *widget,
@@ -390,11 +386,6 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   
   gtk_widget_set_allocation (widget, allocation);
 
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (priv->event_window,
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
-
   gtk_css_gadget_allocate (priv->gadget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
@@ -591,10 +582,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->destroy = gtk_menu_item_destroy;
   widget_class->size_allocate = gtk_menu_item_size_allocate;
   widget_class->snapshot = gtk_menu_item_snapshot;
-  widget_class->realize = gtk_menu_item_realize;
-  widget_class->unrealize = gtk_menu_item_unrealize;
-  widget_class->map = gtk_menu_item_map;
-  widget_class->unmap = gtk_menu_item_unmap;
   widget_class->enter_notify_event = gtk_menu_item_enter;
   widget_class->leave_notify_event = gtk_menu_item_leave;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
@@ -1220,58 +1207,6 @@ gtk_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   g_signal_emit (menu_item, menu_item_signals[TOGGLE_SIZE_ALLOCATE], 0, allocation);
-}
-
-static void
-gtk_menu_item_realize (GtkWidget *widget)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkAllocation allocation;
-
-  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
-                                             GDK_ALL_EVENTS_MASK,
-                                             &allocation);
-  gtk_widget_register_window (widget, priv->event_window);
-}
-
-static void
-gtk_menu_item_unrealize (GtkWidget *widget)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-
-  gtk_widget_unregister_window (widget, priv->event_window);
-  gdk_window_destroy (priv->event_window);
-  priv->event_window = NULL;
-
-  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_menu_item_map (GtkWidget *widget)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-
-  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->map (widget);
-
-  gdk_window_show (priv->event_window);
-}
-
-static void
-gtk_menu_item_unmap (GtkWidget *widget)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-
-  gdk_window_hide (priv->event_window);
-
-  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->unmap (widget);
 }
 
 static gboolean
