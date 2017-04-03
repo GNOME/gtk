@@ -141,8 +141,6 @@
 
 #include "fallback-c89.c"
 
-#define DEFAULT_BLOCK_SIZE 3
-
 enum {
   PROP_VALUE = 1,
   PROP_MIN_VALUE,
