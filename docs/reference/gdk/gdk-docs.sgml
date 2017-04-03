@@ -8,11 +8,11 @@
   <bookinfo>
     <title>GDK 4 Reference Manual</title>
     <releaseinfo>
-      This document is for the GDK 3 library, version &version;
+      This document is for the GDK 4 library, version &version;.
       The latest versions can be found online at
-      <ulink role="online-location" url="http://developer.gnome.org/gdk3/">http://developer.gnome.org/gdk3/</ulink>.
-      If you are looking for the older GDK 2 series of libraries,
-      see <ulink role="online-location" url="http://developer.gnome.org/gdk2/">http://developer.gnome.org/gdk2/</ulink>.
+      <ulink role="online-location" url="http://developer.gnome.org/gdk4/">http://developer.gnome.org/gdk4/</ulink>.
+      If you are looking for the older GDK 3 series of libraries,
+      see <ulink role="online-location" url="http://developer.gnome.org/gdk3/">http://developer.gnome.org/gdk3/</ulink>.
     </releaseinfo>
   </bookinfo>
 
