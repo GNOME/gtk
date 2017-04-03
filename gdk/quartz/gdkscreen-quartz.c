@@ -80,7 +80,7 @@ gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
 
   nsscreen = [[NSScreen screens] objectAtIndex:0];
   _gdk_screen_set_resolution (screen,
-                              72.0 * [nsscreen userSpaceScaleFactor]);
+                              [[nsscreen deviceDescription][NSDeviceResolution] width]);
 
   gdk_quartz_screen_calculate_layout (quartz_screen);
 
@@ -110,8 +110,6 @@ gdk_quartz_screen_dispose (GObject *object)
 static void
 gdk_quartz_screen_finalize (GObject *object)
 {
-  GdkQuartzScreen *screen = GDK_QUARTZ_SCREEN (object);
-
   G_OBJECT_CLASS (gdk_quartz_screen_parent_class)->finalize (object);
 }
 
@@ -337,17 +335,9 @@ gdk_quartz_screen_get_height (GdkScreen *screen)
 static gint
 get_mm_from_pixels (NSScreen *screen, int pixels)
 {
-  /* userSpaceScaleFactor is in "pixels per point", 
-   * 72 is the number of points per inch, 
-   * and 25.4 is the number of millimeters per inch.
-   */
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_3
-  float dpi = [screen userSpaceScaleFactor] * 72.0;
-#else
-  float dpi = 96.0 / 72.0;
-#endif
-
-  return (pixels / dpi) * 25.4;
+  const float mm_per_inch = 25.4;
+  float dpi = [[screen deviceDescription][NSDeviceResolution] width];
+  return (pixels / dpi) * mm_per_inch;
 }
 
 static gchar *
