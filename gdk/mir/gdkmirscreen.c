@@ -778,110 +778,59 @@ setting_changed (GSettings    *settings,
   g_free (schema_id);
 }
 
-static gboolean
-is_known_setting (const gchar *name)
+static const gchar * const KNOWN_SETTINGS[] =
 {
-  if (!g_strcmp0 (name, "gtk-double-click-time"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-double-click-distance"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-cursor-blink"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-cursor-blink-time"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-cursor-blink-timeout"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-split-cursor"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-theme-name"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-icon-theme-name"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-key-theme-name"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-dnd-drag-threshold"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-font-name"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-modules"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-xft-antialias"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-xft-hinting"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-xft-hintstyle"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-xft-rgba"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-xft-dpi"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-cursor-theme-name"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-cursor-theme-size"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-alternative-button-order"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-alternative-sort-arrows"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-enable-animations"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-error-bell"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-print-backends"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-print-preview-command"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-enable-accels"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-im-module"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-recent-files-max-age"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-fontconfig-timestamp"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-sound-theme-name"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-enable-input-feedback-sounds"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-enable-event-sounds"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-primary-button-warps-slider"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-application-prefer-dark-theme"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-entry-select-on-focus"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-entry-password-hint-timeout"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-label-select-on-focus"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-shell-shows-app-menu"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-shell-shows-menubar"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-shell-shows-desktop"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-decoration-layout"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-titlebar-double-click"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-titlebar-middle-click"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-titlebar-right-click"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-dialogs-use-header"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-enable-primary-paste"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-recent-files-enabled"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-long-press-time"))
-    return TRUE;
-  if (!g_strcmp0 (name, "gtk-keynav-use-caret"))
-    return TRUE;
-
-  return FALSE;
-}
+  "gtk-double-click-time",
+  "gtk-double-click-distance",
+  "gtk-cursor-blink",
+  "gtk-cursor-blink-time",
+  "gtk-cursor-blink-timeout",
+  "gtk-split-cursor",
+  "gtk-theme-name",
+  "gtk-icon-theme-name",
+  "gtk-key-theme-name",
+  "gtk-dnd-drag-threshold",
+  "gtk-font-name",
+  "gtk-modules",
+  "gtk-xft-antialias",
+  "gtk-xft-hinting",
+  "gtk-xft-hintstyle",
+  "gtk-xft-rgba",
+  "gtk-xft-dpi",
+  "gtk-cursor-theme-name",
+  "gtk-cursor-theme-size",
+  "gtk-alternative-button-order",
+  "gtk-alternative-sort-arrows",
+  "gtk-enable-animations",
+  "gtk-error-bell",
+  "gtk-print-backends",
+  "gtk-print-preview-command",
+  "gtk-enable-accels",
+  "gtk-im-module",
+  "gtk-recent-files-max-age",
+  "gtk-fontconfig-timestamp",
+  "gtk-sound-theme-name",
+  "gtk-enable-input-feedback-sounds",
+  "gtk-enable-event-sounds",
+  "gtk-primary-button-warps-slider",
+  "gtk-application-prefer-dark-theme",
+  "gtk-entry-select-on-focus",
+  "gtk-entry-password-hint-timeout",
+  "gtk-label-select-on-focus",
+  "gtk-shell-shows-app-menu",
+  "gtk-shell-shows-menubar",
+  "gtk-shell-shows-desktop",
+  "gtk-decoration-layout",
+  "gtk-titlebar-double-click",
+  "gtk-titlebar-middle-click",
+  "gtk-titlebar-right-click",
+  "gtk-dialogs-use-header",
+  "gtk-enable-primary-paste",
+  "gtk-recent-files-enabled",
+  "gtk-long-press-time",
+  "gtk-keynav-use-caret",
+  NULL
+};
 
 static gboolean
 gdk_mir_screen_get_setting (GdkScreen   *screen,
@@ -901,7 +850,7 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
 
   if (!variant)
     {
-      if (!is_known_setting (name))
+      if (!g_strv_contains (KNOWN_SETTINGS, name))
         g_warning ("unknown setting: %s", name);
 
       return FALSE;
