@@ -243,8 +243,6 @@ gdk_quartz_display_dispose (GObject *object)
 static void
 gdk_quartz_display_finalize (GObject *object)
 {
-  GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (object);
-
   G_OBJECT_CLASS (gdk_quartz_display_parent_class)->finalize (object);
 }
 

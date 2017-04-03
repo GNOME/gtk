@@ -374,6 +374,22 @@ gdk_quartz_screen_is_composited (GdkScreen *screen)
   return TRUE;
 }
 
+static NSScreen *
+get_nsscreen_for_monitor (gint monitor_num)
+{
+  NSArray *array;
+  NSScreen *screen;
+
+  GDK_QUARTZ_ALLOC_POOL;
+
+  array = [NSScreen screens];
+  screen = [array objectAtIndex:monitor_num];
+
+  GDK_QUARTZ_RELEASE_POOL;
+
+  return screen;
+}
+
 static gint
 gdk_quartz_screen_get_width_mm (GdkScreen *screen)
 {
