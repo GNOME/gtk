@@ -35,11 +35,11 @@ How do I get started with GTK+?
 </para></question>
 
 <answer><para>
-The GTK+ <ulink url="http://www.gtk.org">website</ulink> offers some
-<ulink url="http://www.gtk.org/documentation.php">tutorials</ulink> and other
+The GTK+ <ulink url="https://www.gtk.org">website</ulink> offers some
+<ulink url="https://www.gtk.org/documentation.php">tutorials</ulink> and other
 documentation (most of it about GTK+ 2.x, but mostly still applicable).
 More documentation ranging from whitepapers to online books can be found at
-the <ulink url="http://developer.gnome.org">GNOME developer's site</ulink>.
+the <ulink url="https://developer.gnome.org">GNOME developer's site</ulink>.
 After studying these materials you should be well prepared to come back to
 this reference manual for details.
 </para></answer>
@@ -77,7 +77,7 @@ specific widgets and functions.
 <para>
 If you have a question not covered in the manual, feel free to
 ask on the mailing lists and please <ulink
-url="http://bugzilla.gnome.org">file a bug report</ulink> against the
+url="https://bugzilla.gnome.org">file a bug report</ulink> against the
 documentation.
 </para>
 
@@ -106,7 +106,7 @@ For strings returned from functions, they will be declared "const"
 if they should not be freed. Non-const strings should be
 freed with g_free(). Arrays follow the same rule. If you find an
 undocumented exception to the rules, please report a bug to <ulink
-url="http://bugzilla.gnome.org">http://bugzilla.gnome.org</ulink>.
+url="https://bugzilla.gnome.org">https://bugzilla.gnome.org</ulink>.
 </para>
 
 </answer>
@@ -180,7 +180,7 @@ How do I internationalize a GTK+ program?
 
 <answer>
 <para>
-Most people use <ulink url="http://www.gnu.org/software/gettext/">GNU
+Most people use <ulink url="https://www.gnu.org/software/gettext/">GNU
 gettext</ulink>, already required in order to install GLib. On a UNIX
 or Linux system with gettext installed, type <literal>info gettext</literal>
 to read the documentation.
@@ -281,7 +281,7 @@ zero-terminated strings.
 </para></listitem>
 </itemizedlist>
 More information about Unicode and UTF-8 can be found in the
-<ulink url="http://www.cl.cam.ac.uk/~mgk25/unicode.html">UTF-8 and Unicode
+<ulink url="https://www.cl.cam.ac.uk/~mgk25/unicode.html">UTF-8 and Unicode
 FAQ for Unix/Linux</ulink>.
 GLib provides functions for converting strings between UTF-8 and other
 encodings, see g_locale_to_utf8() and g_convert().
@@ -376,7 +376,7 @@ How do I use GTK+ with C++?
 There are two ways to approach this. The GTK+ header files use the subset
 of C that's also valid C++, so you can simply use the normal GTK+ API
 in a C++ program. Alternatively, you can use a "C++ binding"
-such as <ulink url="http://gtkmm.sourceforge.net/">gtkmm</ulink>
+such as <ulink url="https://www.gtkmm.org/">gtkmm</ulink>
 which provides a native C++ API.
 </para>
 <para>
@@ -415,9 +415,9 @@ How do I use GTK+ with other non-C languages?
 
 <answer>
 <para>
-See the <ulink url="http://www.gtk.org/language-bindings.php">list of language
+See the <ulink url="https://www.gtk.org/language-bindings.php">list of language
 bindings</ulink> on <ulink
-url="http://www.gtk.org">http://www.gtk.org</ulink>.
+url="https://www.gtk.org">https://www.gtk.org</ulink>.
 </para>
 
 </answer>
@@ -473,8 +473,8 @@ To draw a piece of text, use a Pango layout and pango_cairo_show_layout().
 
 <para>
 See also the
-<ulink url="http://developer.gnome.org/pango/stable/pango-Cairo-Rendering.html">Cairo Rendering</ulink>
-section of <ulink url="http://developer.gnome.org/pango/stable/">Pango manual</ulink>.
+<ulink url="https://developer.gnome.org/pango/stable/pango-Cairo-Rendering.html">Cairo Rendering</ulink>
+section of <ulink url="https://developer.gnome.org/pango/stable/">Pango manual</ulink>.
 </para>
 </answer>
 
@@ -505,8 +505,8 @@ pango_layout_get_pixel_size(), using code like the following:
 
 <para>
 See also the
-<ulink url="http://developer.gnome.org/pango/stable/pango-Layout-Objects.html">Layout Objects</ulink>
-section of <ulink url="http://developer.gnome.org/pango/stable/">Pango manual</ulink>.
+<ulink url="https://developer.gnome.org/pango/stable/pango-Layout-Objects.html">Layout Objects</ulink>
+section of <ulink url="https://developer.gnome.org/pango/stable/">Pango manual</ulink>.
 </para>
 </answer>
 </qandaentry>

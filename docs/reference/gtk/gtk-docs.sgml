@@ -12,9 +12,9 @@
     <releaseinfo>
       This document is for the GTK+ 4 library, version &version;.
       The latest versions can be found online at
-      <ulink role="online-location" url="http://developer.gnome.org/gtk4/">http://developer.gnome.org/gtk4/</ulink>.
+      <ulink role="online-location" url="https://developer.gnome.org/gtk4/">https://developer.gnome.org/gtk4/</ulink>.
       If you are looking for the older GTK+ 3 series of libraries,
-      see <ulink role="online-location" url="http://developer.gnome.org/gtk3/">http://developer.gnome.org/gtk3/</ulink>.
+      see <ulink role="online-location" url="https://developer.gnome.org/gtk3/">https://developer.gnome.org/gtk3/</ulink>.
     </releaseinfo>
   </bookinfo>
 
