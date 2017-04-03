@@ -140,7 +140,7 @@ How to compile GTK+ itself
       <listitem>
         <para>
           <ulink
-          url="http://pkg-config.freedesktop.org">pkg-config</ulink>
+          url="https://www.freedesktop.org/wiki/Software/pkg-config/">pkg-config</ulink>
           is a tool for tracking the compilation flags needed for
           libraries that are used by the GTK+ libraries. (For each
           library, a small <literal>.pc</literal> text file is installed
@@ -153,7 +153,7 @@ How to compile GTK+ itself
           The GTK+ makefiles will mostly work with different versions
           of <command>make</command>, however, there tends to be
           a few incompatibilities, so the GTK+ team recommends
-          installing <ulink url="http://www.gnu.org/software/make">GNU
+          installing <ulink url="https://www.gnu.org/software/make">GNU
             make</ulink> if you don't already have it on your system
           and using it. (It may be called <command>gmake</command>
           rather than <command>make</command>.)
@@ -171,24 +171,24 @@ How to compile GTK+ itself
           The GLib library provides core non-graphical functionality
           such as high level data types, Unicode manipulation, and
           an object and type system to C programs. It is available
-          from the <ulink url="http://ftp.gtk.org/pub/glib/">GTK+
+          from the <ulink url="https://ftp.gtk.org/pub/glib/">GTK+
           FTP site</ulink> or
-          <ulink url="http://download.gnome.org/sources/glib/">here</ulink>.
+          <ulink url="https://download.gnome.org/sources/glib/">here</ulink>.
         </para>
       </listitem>
       <listitem>
         <para>
-          The <ulink url="http://git.gnome.org/browse/gdk-pixbuf/">GdkPixbuf library</ulink>
+          The <ulink url="https://git.gnome.org/browse/gdk-pixbuf/">GdkPixbuf library</ulink>
           provides facilities for loading images in a variety of file formats.
           It is available
-          <ulink url="http://download.gnome.org/sources/gdk-pixbuf/">here</ulink>.
+          <ulink url="https://download.gnome.org/sources/gdk-pixbuf/">here</ulink>.
         </para>
       </listitem>
       <listitem>
         <para>
           <ulink url="http://www.pango.org">Pango</ulink> is a library
           for internationalized text handling. It is available
-          <ulink url="http://download.gnome.org/sources/pango/">here</ulink>.
+          <ulink url="https://download.gnome.org/sources/pango/">here</ulink>.
         </para>
       </listitem>
       <listitem>
@@ -197,7 +197,7 @@ How to compile GTK+ itself
           interfaces allowing accessibility technologies such as
           screen readers to interact with a graphical user interface.
           It is available
-          <ulink url="http://download.gnome.org/sources/atk/">here</ulink>.
+          <ulink url="https://download.gnome.org/sources/atk/">here</ulink>.
         </para>
       </listitem>
       <listitem>
@@ -205,7 +205,7 @@ How to compile GTK+ itself
           <ulink url="https://wiki.gnome.org/Projects/GObjectIntrospection">Gobject Introspection</ulink>
           is a framework for making introspection data available to
           language bindings. It is available
-          <ulink url="http://download.gnome.org/sources/gobject-introspection/">here</ulink>.
+          <ulink url="https://download.gnome.org/sources/gobject-introspection/">here</ulink>.
         </para>
       </listitem>
     </itemizedlist>
@@ -213,7 +213,7 @@ How to compile GTK+ itself
       <title>External dependencies</title>
       <listitem>
         <para>
-          The <ulink url="http://www.gnu.org/software/libiconv/">GNU
+          The <ulink url="https://www.gnu.org/software/libiconv/">GNU
           libiconv library</ulink> is needed to build GLib if your
           system doesn't have the <function>iconv()</function>
           function for doing conversion between character
@@ -224,7 +224,7 @@ How to compile GTK+ itself
       <listitem>
         <para>
           The libintl library from the <ulink
-          url="http://www.gnu.org/software/gettext/">GNU gettext
+          url="https://www.gnu.org/software/gettext/">GNU gettext
           package</ulink> is needed if your system doesn't have the
           <function>gettext()</function> functionality for handling
           message translation databases.
@@ -241,14 +241,14 @@ How to compile GTK+ itself
       </listitem>
       <listitem>
         <para>
-          The <ulink url="http://www.fontconfig.org">fontconfig</ulink>
+          The <ulink url="https://www.freedesktop.org/wiki/Software/fontconfig/">fontconfig</ulink>
           library provides Pango with a standard way of locating
           fonts and matching them against font names.
         </para>
       </listitem>
       <listitem>
         <para>
-          <ulink url="http://www.cairographics.org">Cairo</ulink>
+          <ulink url="https://www.cairographics.org">Cairo</ulink>
           is a graphics library that supports vector graphics and image
           compositing. Both Pango and GTK+ use cairo for all of their
           drawing.
@@ -263,13 +263,13 @@ How to compile GTK+ itself
       </listitem>
       <listitem>
         <para>
-          The <ulink url="http://wayland.freedesktop.org">Wayland</ulink> libraries
+          The <ulink url="https://wayland.freedesktop.org">Wayland</ulink> libraries
           are needed to build GTK+ with the Wayland backend.
         </para>
       </listitem>
       <listitem>
         <para>
-          The <ulink url="http://www.freedesktop.org/wiki/Software/shared-mime-info">shared-mime-info</ulink>
+          The <ulink url="https://www.freedesktop.org/wiki/Software/shared-mime-info">shared-mime-info</ulink>
           package is not a hard dependency of GTK+, but it contains definitions
           for mime types that are used by GIO and, indirectly, by GTK+.
           gdk-pixbuf will use GIO for mime type detection if possible. For this

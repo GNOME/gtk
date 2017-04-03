@@ -94,7 +94,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       The calc() notation adds considerable expressive power. There are limits
       on what types can be combined in such an expression (e.g. it does not make
       sense to add a number and a time). For the full details, see the
-      <ulink url="http://www.w3.org/TR/css3-values/#calc-notation">CSS3 Values and
+      <ulink url="https://www.w3.org/TR/css3-values/#calc-notation">CSS3 Values and
       Units</ulink> spec.
     </para>
 
@@ -134,8 +134,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>rgba(1,1,1,1)</code></entry>
               <entry>✓</entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-color">CSS2</ulink>,
-                    <ulink url="http://www.w3.org/TR/css3-color/#foreground">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-color">CSS2</ulink>,
+                    <ulink url="https://www.w3.org/TR/css3-color/#foreground">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -144,7 +144,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>1</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-color/#opacity">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-color/#opacity">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>
@@ -172,8 +172,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>gtk-font-name setting</entry>
               <entry>✓</entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#propdef-font-family">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-fonts/#font-family-prop">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#propdef-font-family">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-fonts/#font-family-prop">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -182,8 +182,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>gtk-font-name setting</entry>
               <entry>✓</entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#font-size-props">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-fonts/#font-size-prop">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#font-size-props">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-fonts/#font-size-prop">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -192,8 +192,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>normal</code></entry>
               <entry>✓</entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#propdef-font-style">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-fonts/#font-style-prop">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#propdef-font-style">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-fonts/#font-style-prop">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -202,8 +202,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>normal</code></entry>
               <entry>✓</entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#propdef-font-variant">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-fonts/#descdef-font-variant">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#propdef-font-variant">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-fonts/#descdef-font-variant">CSS3</ulink></entry>
               <entry>only CSS2 values supported</entry>
             </row>
             <row>
@@ -212,8 +212,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>normal</code></entry>
               <entry>✓</entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#propdef-font-weight">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-fonts/#font-weight-prop">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#propdef-font-weight">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-fonts/#font-weight-prop">CSS3</ulink></entry>
               <entry>normal is synonymous with 400, bold with 700</entry>
             </row>
             <row>
@@ -222,7 +222,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>normal</code></entry>
               <entry>✓</entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-fonts/#font-stretch-prop">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-fonts/#font-stretch-prop">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -245,8 +245,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>font</entry>
               <entry><code>[ 〈font-style〉 || 〈font-variant〉 || 〈font-weight〉 || 〈font-stretch〉 ]? 〈font-size〉 〈font-family〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#font-shorthand">CSS2</ulink>,
-<ulink url="http://www.w3.org/TR/css3-fonts/#font-prop">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/fonts.html#font-shorthand">CSS2</ulink>,
+<ulink url="https://www.w3.org/TR/css3-fonts/#font-prop">CSS3</ulink></entry>
               <entry>CSS allows line-height, etc</entry>
             </row>
           </tbody>
@@ -278,7 +278,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>currentColor</code></entry>
               <entry>✓</entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-ui/#caret-color">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-ui/#caret-color">CSS3</ulink></entry>
               <entry>CSS allows an auto value</entry>
             </row>
             <row>
@@ -314,7 +314,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry>✓</entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-text/#letter-spacing">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-text/#letter-spacing">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -323,8 +323,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/text.html#propdef-text-decoration">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css-text-decor-3/#text-decoration-line-property">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/text.html#propdef-text-decoration">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css-text-decor-3/#text-decoration-line-property">CSS3</ulink></entry>
               <entry>CSS allows overline</entry>
             </row>
             <row>
@@ -333,7 +333,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>currentColor</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/css-text-decor-3/#text-decoration-color-property">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css-text-decor-3/#text-decoration-color-property">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -342,7 +342,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>solid</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css-text-decor-3/#text-decoration-style-property">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css-text-decor-3/#text-decoration-style-property">CSS3</ulink></entry>
               <entry>CSS allows dashed and dotted</entry>
             </row>
             <row>
@@ -351,7 +351,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry>✓</entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/css-text-decor-3/#text-shadow-property">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css-text-decor-3/#text-shadow-property">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>
@@ -365,7 +365,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>text‑decoration</entry>
               <entry><code>〈text-decoration-line〉 || 〈text-decoration-style〉 || 〈text-decoration-color〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/css-text-decor-3/#text-decoration-property">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css-text-decor-3/#text-decoration-property">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>
@@ -500,8 +500,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/visudet.html#propdef-min-width">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#min-width">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/visudet.html#propdef-min-width">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#min-width">CSS3</ulink></entry>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
@@ -510,8 +510,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/visudet.html#propdef-min-height">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#min-height">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/visudet.html#propdef-min-height">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#min-height">CSS3</ulink></entry>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
@@ -520,8 +520,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin-top">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#margin-top">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin-top">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#margin-top">CSS3</ulink></entry>
               <entry>CSS allows percentages or auto</entry>
             </row>
             <row>
@@ -530,8 +530,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin-right">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#margin-right">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin-right">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#margin-right">CSS3</ulink></entry>
               <entry>CSS allows percentages or auto</entry>
             </row>
             <row>
@@ -540,8 +540,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin-bottom">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#margin-bottom">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin-bottom">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#margin-bottom">CSS3</ulink></entry>
               <entry>CSS allows percentages or auto</entry>
             </row>
             <row>
@@ -550,8 +550,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin-left">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#margin-left">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin-left">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#margin-left">CSS3</ulink></entry>
               <entry>CSS allows percentages or auto</entry>
             </row>
             <row>
@@ -560,8 +560,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding-top">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#padding-top">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding-top">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#padding-top">CSS3</ulink></entry>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
@@ -570,8 +570,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding-right">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#padding-right">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding-right">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#padding-right">CSS3</ulink></entry>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
@@ -580,8 +580,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding-bottom">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#padding-bottom">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding-bottom">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#padding-bottom">CSS3</ulink></entry>
               <entry>CSS allows percentages</entry>
             </row>
             <row>
@@ -590,8 +590,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding-left">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#padding-left">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding-left">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#padding-left">CSS3</ulink></entry>
               <entry>CSS allows percentages</entry>
             </row>
           </tbody>
@@ -605,16 +605,16 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>margin</entry>
               <entry><code>〈length〉{1,4}</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#margin">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-margin">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#margin">CSS3</ulink></entry>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
               <entry>padding</entry>
               <entry><code>〈length〉{1,4}</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-box/#padding">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-padding">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-box/#padding">CSS3</ulink></entry>
               <entry>a 'four sides' shorthand</entry>
             </row>
           </tbody>
@@ -636,8 +636,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-width">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-width">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-width">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-width">CSS3</ulink></entry>
               <entry>CSS allows other values</entry>
             </row>
             <row>
@@ -646,8 +646,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right-width">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/css3-background/#the-border-width">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right-width">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/css3-background/#the-border-width">CSS3</ulink></entry>
               <entry>CSS allows other values</entry>
             </row>
             <row>
@@ -656,8 +656,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-width">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-width">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-width">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-width">CSS3</ulink></entry>
               <entry>CSS allows other values</entry>
             </row>
             <row>
@@ -666,8 +666,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right-width">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-width">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right-width">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-width">CSS3</ulink></entry>
               <entry>CSS allows other values</entry>
             </row>
             <row>
@@ -676,8 +676,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-style">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-style">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -686,8 +686,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right-style">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right-style">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -696,8 +696,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-style">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-style">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -706,8 +706,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-left-style">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-left-style">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -716,8 +716,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-right-radius">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-radius">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-right-radius">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-radius">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -726,8 +726,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-right-radius">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-radius">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-right-radius">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-radius">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -736,8 +736,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-left-radius">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-radius">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-left-radius">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-radius">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -746,8 +746,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-left-radius">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-radius">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-left-radius">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-radius">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -756,8 +756,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>currentColor</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-color">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-color">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top-color">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-color">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -766,8 +766,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>currentColor</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right-color">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-color">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right-color">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-color">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -776,8 +776,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>currentColor</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-color">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-color">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom-color">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-color">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -786,8 +786,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>currentColor</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-left-color">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-color">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-left-color">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-color">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -796,7 +796,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-background/#the-border-image-source">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-background/#the-border-image-source">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -805,7 +805,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>stretch</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR//css3-background/#the-border-image-repeat">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR//css3-background/#the-border-image-repeat">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -814,7 +814,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>100%</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR//css3-background/#the-border-image-slice">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR//css3-background/#the-border-image-slice">CSS3</ulink></entry>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
@@ -823,7 +823,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>1</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR//css3-background/#the-border-image-width">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR//css3-background/#the-border-image-width">CSS3</ulink></entry>
               <entry>a 'four sides' shorthand</entry>
             </row>
 
@@ -838,77 +838,77 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>border‑width</entry>
               <entry><code>〈length〉{1,4}</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-width">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-width">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-width">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-width">CSS3</ulink></entry>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
               <entry>border‑style</entry>
               <entry><code>〈border style〉{1,4}</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-style">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-style">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#the-border-style">CSS3</ulink></entry>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
               <entry>border‑color</entry>
               <entry><code>〈color〉{1,4}</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-background/#border-color">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-background/#border-color">CSS3</ulink></entry>
               <entry>a 'four sides' shorthand</entry>
             </row>
             <row>
               <entry>border‑top</entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#border-top">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-top">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#border-top">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
               <entry>border‑left</entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-left">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#border-left">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-left">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#border-left">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
               <entry>border‑bottom</entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#border-bottom">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-bottom">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#border-bottom">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
               <entry>border‑right</entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#border-right">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#border-right">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
               <entry>border</entry>
               <entry><code>〈length〉 || 〈border style〉 || 〈color〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#border">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/box.html#propdef-border-right">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#border">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
               <entry>border‑radius</entry>
               <entry><code>[ 〈length〉 | 〈percentage〉 ]{1,4} [ / [ 〈length〉 | 〈percentage> ]{1,4} ]?</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-background/#border-radius">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-background/#border-radius">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
               <entry>border‑image</entry>
               <entry><code>〈border-image-source〉 || 〈border-image-slice〉 [ / 〈border-image-width〉 | / 〈border-image-width〉? / 〈border-image-outset〉 ]? || 〈border-image-repeat〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-background/#border-image">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-background/#border-image">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>
@@ -934,8 +934,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline-style">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-ui/#outline-style">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline-style">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-ui/#outline-style">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -944,8 +944,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline-width">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-ui/#outline-width">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline-width">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-ui/#outline-width">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -954,8 +954,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>currentColor</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline-color">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-ui/#outline-color">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline-color">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-ui/#outline-color">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -964,7 +964,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0px</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-ui/#outline-offset">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-ui/#outline-offset">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1014,8 +1014,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>outline</entry>
               <entry><code>〈outline-color〉 || 〈outline-style〉 || 〈outline-width〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-ui/#propdef-outline">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/ui.html#propdef-outline">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-ui/#propdef-outline">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1048,8 +1048,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>rgba(0,0,0,0)</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background-color">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#background-color">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background-color">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#background-color">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1058,7 +1058,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>border-box</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-background/#background-clip">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-background/#background-clip">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1067,7 +1067,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>padding-box</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-background/#background-origin">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-background/#background-origin">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1076,7 +1076,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>auto</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-background/#background-size">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-background/#background-size">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1085,8 +1085,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background-position">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#background-position">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background-position">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#background-position">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1095,8 +1095,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>repeat</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background-repeat">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#background-repeat">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background-repeat">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#background-repeat">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1105,8 +1105,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background-image">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#background-image">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background-image">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#background-image">CSS3</ulink></entry>
               <entry>not supported: urls without quotes, CSS radial gradients, colors in crossfades</entry>
             </row>
             <row>
@@ -1124,7 +1124,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry>✓</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-background/#box-shadow">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-background/#box-shadow">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>
@@ -1138,8 +1138,8 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><para>background</para></entry>
               <entry><code>[ 〈bg-layer〉 , ]* 〈final-bg-layer〉</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background">CSS2</ulink>,
-                     <ulink url="http://www.w3.org/TR/css3-background/#background">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/2011/REC-CSS2-20110607/colors.html#propdef-background">CSS2</ulink>,
+                     <ulink url="https://www.w3.org/TR/css3-background/#background">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>
@@ -1181,7 +1181,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>all</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-transitions/#transition-property">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-transitions/#transition-property">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1190,7 +1190,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0s</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-transitions/#transition-duration">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-transitions/#transition-duration">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1199,7 +1199,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>ease</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-transitions/#transition-timing-function">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-transitions/#transition-timing-function">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1208,7 +1208,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0s</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-transitions/#transition-delay">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-transitions/#transition-delay">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>
@@ -1222,7 +1222,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>transition</entry>
               <entry><code>〈single-transition〉 [ , 〈single-transition〉 ]*</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-transitions/#transition">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-transitions/#transition">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>
@@ -1250,7 +1250,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-animations/#animation-name">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation-name">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1259,7 +1259,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0s</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-animations/#animation-duration">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation-duration">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1268,7 +1268,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>ease</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-animations/#animation-timing-function">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation-timing-function">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1277,7 +1277,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>1</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-animations/#animation-iteration-count">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation-iteration-count">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1286,7 +1286,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>normal</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-animations/#animation-direction">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation-direction">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1295,7 +1295,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>running</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-animations/#animation-play-state">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation-play-state">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1304,7 +1304,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>0s</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-animations/#animation-delay">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation-delay">CSS3</ulink></entry>
               <entry></entry>
             </row>
             <row>
@@ -1313,7 +1313,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry><code>none</code></entry>
               <entry></entry>
               <entry></entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-animations/#animation-fill-mode">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation-fill-mode">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>
@@ -1327,7 +1327,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
               <entry>animation</entry>
               <entry><code>〈single‑animation〉 [ , 〈single‑animation〉]*</code></entry>
               <entry>see individual properties</entry>
-              <entry><ulink url="http://www.w3.org/TR/css3-animations/#animation">CSS3</ulink></entry>
+              <entry><ulink url="https://www.w3.org/TR/css3-animations/#animation">CSS3</ulink></entry>
               <entry></entry>
             </row>
           </tbody>

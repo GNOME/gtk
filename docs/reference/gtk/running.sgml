@@ -528,9 +528,9 @@ nevertheless.
   <para>
     GTK+ uses these environment variables to locate icon themes
     and MIME information. For more information, see
-    <ulink url="http://freedesktop.org/Standards/icon-theme-spec">Icon Theme Specification</ulink>,
-    the <ulink url="http://freedesktop.org/Standards/shared-mime-info-spec">Shared MIME-info Database</ulink>
-    and the <ulink url="http://freedesktop.org/Standards/basedir-spec">Base Directory Specification</ulink>.
+    <ulink url="https://freedesktop.org/Standards/icon-theme-spec">Icon Theme Specification</ulink>,
+    the <ulink url="https://freedesktop.org/Standards/shared-mime-info-spec">Shared MIME-info Database</ulink>
+    and the <ulink url="https://freedesktop.org/Standards/basedir-spec">Base Directory Specification</ulink>.
   </para>
 </formalpara>
 
@@ -539,7 +539,7 @@ nevertheless.
 
   <para>
     GTK+ uses this environment variable to provide startup notification
-    according to the <ulink url="http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt">Startup Notification Spec</ulink>.
+    according to the <ulink url="https://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt">Startup Notification Spec</ulink>.
     Following the specification, GTK+ unsets this variable after reading
     it (to keep it from leaking to child processes). So, if you need its
     value for your own purposes, you have to read it before calling
