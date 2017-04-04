@@ -11383,3 +11383,56 @@ gtk_window_set_pointer_focus_grab (GtkWindow        *window,
   g_assert (focus != NULL);
   gtk_pointer_focus_set_implicit_grab (focus, grab_widget);
 }
+
+static void
+update_cursor (GtkWindow *toplevel,
+               GdkDevice *device,
+               GtkWidget *target)
+{
+  GdkCursor *cursor = NULL;
+  GList *widgets = NULL, *l;
+
+  while (target)
+    {
+      widgets = g_list_prepend (widgets, target);
+      target = _gtk_widget_get_parent (target);
+    }
+
+  for (l = widgets; l; l = l->next)
+    {
+      cursor = gtk_widget_get_cursor (l->data);
+      if (cursor)
+        break;
+    }
+
+  gdk_window_set_device_cursor (gtk_widget_get_window (GTK_WIDGET (toplevel)),
+                                device, cursor);
+  g_list_free (widgets);
+}
+
+void
+gtk_window_maybe_update_cursor (GtkWindow *window,
+                                GtkWidget *widget,
+                                GdkDevice *device)
+{
+  GList *l = window->priv->foci;
+
+  for (l = window->priv->foci; l; l = l->next)
+    {
+      GtkPointerFocus *focus = l->data;
+
+      if (focus->sequence)
+        continue;
+      if (device && device != focus->device)
+        continue;
+
+      if (widget != focus->target &&
+          !gtk_widget_is_ancestor (focus->target, widget))
+        continue;
+
+      update_cursor (focus->toplevel, focus->device, focus->target);
+
+      if (device)
+        break;
+    }
+}
