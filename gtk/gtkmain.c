@@ -1301,23 +1301,6 @@ check_event_in_child_popover (GtkWidget *event_widget,
   return (popover_parent == grab_widget || gtk_widget_is_ancestor (popover_parent, grab_widget));
 }
 
-static void
-update_cursor (GtkWindow *toplevel,
-               GdkDevice *device,
-               GtkWidget *target)
-{
-  GdkCursor *cursor = NULL;
-
-  while (!cursor && target)
-    {
-      cursor = gtk_widget_get_cursor (target);
-      target = _gtk_widget_get_parent (target);
-    }
-
-  gdk_window_set_device_cursor (gtk_widget_get_window (GTK_WIDGET (toplevel)),
-                                device, cursor);
-}
-
 static GdkNotifyType
 get_virtual_notify_type (GdkNotifyType notify_type)
 {
@@ -1503,7 +1486,7 @@ handle_pointing_event (GdkEvent *event)
       target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
       old_target = update_pointer_focus_state (toplevel, event, target);
       if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
-        update_cursor (toplevel, device, target);
+        gtk_window_maybe_update_cursor (toplevel, target, device);
 
       if (event->type == GDK_TOUCH_BEGIN)
         gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
