@@ -223,7 +223,7 @@ gtk_tool_palette_init (GtkToolPalette *palette)
       dnd_target_atom_group = gdk_atom_intern_static_string (dnd_targets[1].target);
     }
 
-  gtk_widget_set_has_window (GTK_WIDGET (palette), TRUE);
+  gtk_widget_set_has_window (GTK_WIDGET (palette), FALSE);
 }
 
 static void
@@ -602,8 +602,8 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   if (remaining_space > 0)
     offset = 0;
 
-  x = 0;
-  child_allocation.y = 0;
+  x = allocation->x;
+  child_allocation.y = allocation->y;
 
   if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
     child_allocation.y -= offset;
@@ -694,29 +694,6 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
                                 page_size * 0.9,
                                 page_size);
     }
-}
-
-static void
-gtk_tool_palette_realize (GtkWidget *widget)
-{
-  GtkAllocation allocation;
-  GdkWindow *window;
-
-  gtk_widget_set_realized (widget, TRUE);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 GDK_ALL_EVENTS_MASK,
-                                 &allocation);
-  gtk_widget_set_window (widget, window);
-  gtk_widget_register_window (widget, window);
-
-  gtk_container_forall (GTK_CONTAINER (widget),
-                        (GtkCallback) gtk_widget_set_parent_window,
-                        window);
-
-  gtk_widget_queue_resize_no_redraw (widget);
 }
 
 static void
@@ -892,7 +869,6 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
 
   wclass->measure             = gtk_tool_palette_measure;
   wclass->size_allocate       = gtk_tool_palette_size_allocate;
-  wclass->realize             = gtk_tool_palette_realize;
   wclass->draw                = gtk_tool_palette_draw;
 
   cclass->add                 = gtk_tool_palette_add;
