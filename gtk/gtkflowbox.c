@@ -734,7 +734,6 @@ struct _GtkFlowBoxPrivate {
 
   GSequence        *children;
 
-  GdkWindow        *view_window;
   GtkCssGadget     *gadget;
   GtkFlowBoxFilterFunc filter_func;
   gpointer             filter_data;
@@ -1486,16 +1485,9 @@ static void
 gtk_flow_box_size_allocate (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxPrivate  *priv = BOX_PRIV (box);
   GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
-
-  if (priv->view_window)
-    gdk_window_move_resize (priv->view_window,
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
 
   gtk_css_gadget_allocate (BOX_PRIV (widget)->gadget,
                            allocation,
@@ -3036,65 +3028,13 @@ gtk_flow_box_key_press_event (GtkWidget   *widget,
 /* Realize and map {{{3 */
 
 static void
-gtk_flow_box_realize (GtkWidget *widget)
-{
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  GtkAllocation allocation;
-  GSequenceIter *iter;
-
-  gtk_widget_get_allocation (GTK_WIDGET (box), &allocation);
-
-  priv->view_window = gdk_window_new_child (gtk_widget_get_parent_window (GTK_WIDGET (box)),
-                                            GDK_ALL_EVENTS_MASK,
-                                            &allocation);
-  gtk_widget_register_window (GTK_WIDGET (box), priv->view_window);
-
-  for (iter = g_sequence_get_begin_iter (priv->children);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    {
-      gtk_widget_set_parent_window (g_sequence_get (iter), priv->view_window);
-    }
-
-  GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->realize (widget);
-}
-
-static void
-gtk_flow_box_unrealize (GtkWidget *widget)
-{
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-
-  gtk_widget_unregister_window (widget, priv->view_window);
-  gdk_window_destroy (priv->view_window);
-  priv->view_window = NULL;
-
-  GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_flow_box_map (GtkWidget *widget)
-{
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-
-  gdk_window_show (priv->view_window);
-
-  GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->map (widget);
-}
-
-static void
 gtk_flow_box_unmap (GtkWidget *widget)
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
   remove_autoscroll (box);
 
   GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->unmap (widget);
-
-  gdk_window_hide (priv->view_window);
 }
 
 /* GtkContainer implementation {{{2 */
@@ -3651,9 +3591,6 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   widget_class->leave_notify_event = gtk_flow_box_leave_notify_event;
   widget_class->motion_notify_event = gtk_flow_box_motion_notify_event;
   widget_class->size_allocate = gtk_flow_box_size_allocate;
-  widget_class->realize = gtk_flow_box_realize;
-  widget_class->unrealize = gtk_flow_box_unrealize;
-  widget_class->map = gtk_flow_box_map;
   widget_class->unmap = gtk_flow_box_unmap;
   widget_class->focus = gtk_flow_box_focus;
   widget_class->snapshot = gtk_flow_box_snapshot;
@@ -4161,8 +4098,6 @@ gtk_flow_box_insert (GtkFlowBox *box,
   gtk_flow_box_insert_css_node (box, GTK_WIDGET (child), iter);
 
   CHILD_PRIV (child)->iter = iter;
-  if (priv->view_window)
-    gtk_widget_set_parent_window (GTK_WIDGET (child), priv->view_window);
   gtk_widget_set_parent (GTK_WIDGET (child), GTK_WIDGET (box));
   gtk_flow_box_apply_filter (box, child);
 }
