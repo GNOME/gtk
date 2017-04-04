@@ -15668,7 +15668,14 @@ void
 gtk_widget_set_cursor (GtkWidget *widget,
                        GdkCursor *cursor)
 {
-  g_set_object (&widget->priv->cursor, cursor);
+  GtkWidget *toplevel;
+
+  if (!g_set_object (&widget->priv->cursor, cursor))
+    return;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    gtk_window_maybe_update_cursor (GTK_WINDOW (toplevel), widget, NULL);
 }
 
 GdkCursor *
