@@ -4643,6 +4643,10 @@ gtk_widget_list_action_prefixes
 gtk_widget_get_action_group
 gtk_widget_measure
 gtk_widget_snapshot_child
+gtk_widget_get_next_sibling
+gtk_widget_get_prev_sibling
+gtk_widget_get_first_child
+gtk_widget_get_last_child
 
 <SUBSECTION>
 gtk_widget_get_path
