@@ -2076,6 +2076,7 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
   GtkTreeViewColumnPrivate *priv;
   gboolean                  rtl;
   GtkAllocation             allocation = { 0, 0, 0, 0 };
+  GtkAllocation             widget_allocation;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
@@ -2088,11 +2089,12 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
   priv->width = width;
 
   gtk_cell_area_context_allocate (priv->cell_area_context, priv->width - priv->padding, -1);
+  gtk_widget_get_allocation (priv->tree_view, &widget_allocation);
 
   if (gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
     {
-      allocation.x      = x_offset;
-      allocation.y      = 0;
+      allocation.x      = widget_allocation.x + x_offset;
+      allocation.y      = widget_allocation.y;
       allocation.width  = width;
       allocation.height = _gtk_tree_view_get_header_height (GTK_TREE_VIEW (priv->tree_view));
 
