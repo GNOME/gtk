@@ -1243,6 +1243,14 @@ GDK_AVAILABLE_IN_3_90
 GtkWidget *             gtk_widget_get_next_sibling     (GtkWidget *widget);
 GDK_AVAILABLE_IN_3_90
 GtkWidget *             gtk_widget_get_prev_sibling     (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_92
+void                    gtk_widget_insert_after         (GtkWidget *widget,
+                                                         GtkWidget *parent,
+                                                         GtkWidget *previous_sibling);
+GDK_AVAILABLE_IN_3_92
+void                    gtk_widget_insert_before        (GtkWidget *widget,
+                                                         GtkWidget *parent,
+                                                         GtkWidget *next_sibling);
 GDK_AVAILABLE_IN_3_90
 void                    gtk_widget_set_focus_child      (GtkWidget *widget,
                                                          GtkWidget *child);
