@@ -70,6 +70,7 @@ struct _GtkWidgetPrivate
   guint child_visible         : 1;
   guint multidevice           : 1;
   guint has_shape_mask        : 1;
+  guint pass_through          : 1;
 
   /* Queue-resize related flags */
   guint resize_needed         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
@@ -323,6 +324,9 @@ void              gtk_widget_set_cursor                    (GtkWidget *widget,
                                                             GdkCursor *cursor);
 GdkCursor *       gtk_widget_get_cursor                    (GtkWidget *widget);
 
+void              gtk_widget_set_pass_through              (GtkWidget *widget,
+                                                            gboolean   pass_through);
+gboolean          gtk_widget_get_pass_through              (GtkWidget *widget);
 
 /* inline getters */
 

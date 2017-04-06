@@ -989,7 +989,8 @@ gtk_widget_real_pick (GtkWidget *widget,
     {
       gdouble tx = x, ty = y;
 
-      if (!gtk_widget_is_sensitive (child) ||
+      if (gtk_widget_get_pass_through (child) ||
+          !gtk_widget_is_sensitive (child) ||
           !gtk_widget_is_drawable (child))
         continue;
 
@@ -15682,4 +15683,17 @@ GdkCursor *
 gtk_widget_get_cursor (GtkWidget *widget)
 {
   return widget->priv->cursor;
+}
+
+void
+gtk_widget_set_pass_through (GtkWidget *widget,
+                             gboolean   pass_through)
+{
+  widget->priv->pass_through = !!pass_through;
+}
+
+gboolean
+gtk_widget_get_pass_through (GtkWidget *widget)
+{
+  return widget->priv->pass_through;
 }
