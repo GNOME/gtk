@@ -743,7 +743,7 @@ gtk_layout_init (GtkLayout *layout)
 {
   GtkLayoutPrivate *priv;
 
-  gtk_widget_set_has_window (GTK_WIDGET (layout), TRUE);
+  gtk_widget_set_has_window (GTK_WIDGET (layout), FALSE);
 
   layout->priv = gtk_layout_get_instance_private (layout);
   priv = layout->priv;
@@ -773,24 +773,17 @@ gtk_layout_realize (GtkWidget *widget)
   GtkLayout *layout = GTK_LAYOUT (widget);
   GtkLayoutPrivate *priv = layout->priv;
   GtkAllocation allocation;
-  GdkWindow *window;
   GList *tmp_list;
 
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_layout_parent_class)->realize (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 GDK_VISIBILITY_NOTIFY_MASK,
-                                 &allocation);
-  gtk_widget_set_window (widget, window);
-  gtk_widget_register_window (widget, window);
-
-  priv->bin_window = gdk_window_new_child (window,
+  priv->bin_window = gdk_window_new_child (gtk_widget_get_window (widget),
                                            GDK_ALL_EVENTS_MASK,
                                            &(GdkRectangle) {
-                                             - gtk_adjustment_get_value (priv->hadjustment),
-                                             - gtk_adjustment_get_value (priv->vadjustment),
+                                             allocation.x - gtk_adjustment_get_value (priv->hadjustment),
+                                             allocation.y - gtk_adjustment_get_value (priv->vadjustment),
                                              MAX (priv->width, allocation.width),
                                              MAX (priv->height, allocation.height)});
   gtk_widget_register_window (widget, priv->bin_window);
@@ -828,7 +821,6 @@ gtk_layout_map (GtkWidget *widget)
     }
 
   gdk_window_show (priv->bin_window);
-  gdk_window_show (gtk_widget_get_window (widget));
 }
 
 static void 
@@ -879,17 +871,17 @@ gtk_layout_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_move_resize (gtk_widget_get_window (widget),
-			      allocation->x, allocation->y,
-			      allocation->width, allocation->height);
-
-      gdk_window_resize (priv->bin_window,
-			 MAX (priv->width, allocation->width),
-			 MAX (priv->height, allocation->height));
+      gdk_window_move_resize (priv->bin_window,
+                              allocation->x - gtk_adjustment_get_value (priv->hadjustment),
+                              allocation->y - gtk_adjustment_get_value (priv->vadjustment),
+                              MAX (priv->width, allocation->width),
+                              MAX (priv->height, allocation->height));
     }
 
   gtk_layout_set_hadjustment_values (layout);
   gtk_layout_set_vadjustment_values (layout);
+
+  gtk_widget_set_clip (widget, allocation);
 }
 
 /* Container methods
@@ -982,8 +974,11 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 
   if (gtk_widget_get_realized (GTK_WIDGET (layout)))
     {
+      GtkAllocation allocation;
+
+      gtk_widget_get_allocation (GTK_WIDGET (layout), &allocation);
       gdk_window_move (priv->bin_window,
-		       - gtk_adjustment_get_value (priv->hadjustment),
-		       - gtk_adjustment_get_value (priv->vadjustment));
+		       allocation.x - gtk_adjustment_get_value (priv->hadjustment),
+		       allocation.y - gtk_adjustment_get_value (priv->vadjustment));
     }
 }
