@@ -356,6 +356,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   priv->titlebar_icon = button;
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
+                  gtk_style_context_add_class (gtk_widget_get_style_context (button), "icon");
                   gtk_widget_set_size_request (button, 20, 20);
                   gtk_widget_show (button);
                   if (!_gtk_header_bar_update_window_icon (bar, window))
@@ -374,6 +375,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), menu);
                   gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), TRUE);
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
+                  gtk_style_context_add_class (gtk_widget_get_style_context (button), "appmenu");
                   image = gtk_image_new ();
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
