@@ -83,7 +83,6 @@ typedef struct {
   guint transition_duration;
 
   GdkWindow* bin_window;
-  GdkWindow* view_window;
 
   gdouble current_pos;
   gdouble source_pos;
@@ -101,8 +100,6 @@ static void     gtk_revealer_real_add                            (GtkContainer  
                                                                   GtkWidget     *child);
 static void     gtk_revealer_real_size_allocate                  (GtkWidget     *widget,
                                                                   GtkAllocation *allocation);
-static void     gtk_revealer_real_map                            (GtkWidget     *widget);
-static void     gtk_revealer_real_unmap                          (GtkWidget     *widget);
 static void gtk_revealer_measure (GtkWidget      *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
@@ -208,6 +205,27 @@ gtk_revealer_set_property (GObject      *object,
 }
 
 static void
+gtk_revealer_unmap (GtkWidget *widget)
+{
+  GtkRevealer *revealer = GTK_REVEALER (widget);
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
+
+  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->unmap (widget);
+
+  /* Finish & stop the animation */
+  if (priv->current_pos != priv->target_pos)
+    {
+      priv->current_pos = priv->target_pos;
+      g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
+    }
+  if (priv->tick_id != 0)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (revealer), priv->tick_id);
+      priv->tick_id = 0;
+    }
+}
+
+static void
 gtk_revealer_class_init (GtkRevealerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -220,9 +238,8 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
 
   widget_class->realize = gtk_revealer_real_realize;
   widget_class->unrealize = gtk_revealer_real_unrealize;
+  widget_class->unmap = gtk_revealer_unmap;
   widget_class->size_allocate = gtk_revealer_real_size_allocate;
-  widget_class->map = gtk_revealer_real_map;
-  widget_class->unmap = gtk_revealer_real_unmap;
   widget_class->measure = gtk_revealer_measure;
   widget_class->snapshot = gtk_revealer_snapshot;
 
@@ -350,12 +367,6 @@ gtk_revealer_real_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  priv->view_window =
-    gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                          GDK_ALL_EVENTS_MASK,
-                          &allocation);
-  gtk_widget_register_window (widget, priv->view_window);
-
   gtk_revealer_get_child_allocation (revealer, &allocation, &child_allocation);
 
   gtk_revealer_get_padding (revealer, &padding);
@@ -379,7 +390,7 @@ gtk_revealer_real_realize (GtkWidget *widget)
    }
 
   priv->bin_window =
-    gdk_window_new_child (priv->view_window,
+    gdk_window_new_child (gtk_widget_get_window (widget),
                           GDK_ALL_EVENTS_MASK,
                           &child_allocation);
   gtk_widget_register_window (widget, priv->bin_window);
@@ -400,10 +411,6 @@ gtk_revealer_real_unrealize (GtkWidget *widget)
   gtk_widget_unregister_window (widget, priv->bin_window);
   gdk_window_destroy (priv->bin_window);
   priv->bin_window = NULL;
-
-  gtk_widget_unregister_window (widget, priv->view_window);
-  gdk_window_destroy (priv->view_window);
-  priv->view_window = NULL;
 
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->unrealize (widget);
 }
@@ -431,7 +438,6 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkAllocation child_allocation;
   GtkWidget *child;
-  gboolean window_visible;
   int bin_x, bin_y;
   GtkRevealerTransitionType transition;
   GtkBorder padding;
@@ -447,23 +453,6 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      if (gtk_widget_get_mapped (widget))
-        {
-          window_visible = allocation->width > 0 && allocation->height > 0;
-
-          if (!window_visible && gdk_window_is_visible (priv->view_window))
-            gdk_window_hide (priv->view_window);
-
-          if (window_visible && !gdk_window_is_visible (priv->view_window))
-            gdk_window_show (priv->view_window);
-        }
-
-      /* The view window will follow the revealer allocation, which is modified
-       * along the animation */
-      gdk_window_move_resize (priv->view_window,
-                              allocation->x, allocation->y,
-                              allocation->width, allocation->height);
-
       gtk_revealer_get_padding (revealer, &padding);
       bin_x = 0;
       bin_y = 0;
@@ -508,7 +497,8 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
        }
 
       gdk_window_move_resize (priv->bin_window,
-                              bin_x, bin_y,
+                              bin_x + allocation->x,
+                              bin_y + allocation->y,
                               child_allocation.width, child_allocation.height);
     }
 }
@@ -608,53 +598,6 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
     {
       gtk_revealer_set_position (revealer, target);
     }
-}
-
-static void
-gtk_revealer_stop_animation (GtkRevealer *revealer)
-{
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  if (priv->current_pos != priv->target_pos)
-    {
-      priv->current_pos = priv->target_pos;
-      g_object_notify_by_pspec (G_OBJECT (revealer), props[PROP_CHILD_REVEALED]);
-    }
-  if (priv->tick_id != 0)
-    {
-      gtk_widget_remove_tick_callback (GTK_WIDGET (revealer), priv->tick_id);
-      priv->tick_id = 0;
-    }
-}
-
-static void
-gtk_revealer_real_map (GtkWidget *widget)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  GtkAllocation allocation;
-
-  if (!gtk_widget_get_mapped (widget))
-    {
-      gtk_widget_get_allocation (widget, &allocation);
-
-      if (allocation.width > 0 && allocation.height > 0)
-        gdk_window_show (priv->view_window);
-    }
-
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->map (widget);
-}
-
-static void
-gtk_revealer_real_unmap (GtkWidget *widget)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
-  gdk_window_hide (priv->view_window);
-
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->unmap (widget);
-
-  gtk_revealer_stop_animation (revealer);
 }
 
 /**
