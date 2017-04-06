@@ -973,7 +973,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       gtk_widget_get_realized (priv->tree_view))
     {
       if (priv->visible &&
-          gdk_window_is_visible (_gtk_tree_view_get_header_window (GTK_TREE_VIEW (priv->tree_view))))
+          gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
 	{
           gtk_widget_show (priv->button);
 
@@ -1310,13 +1310,12 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   g_return_if_fail (gtk_widget_get_realized (priv->tree_view));
   g_return_if_fail (priv->button != NULL);
 
-  g_return_if_fail (_gtk_tree_view_get_header_window (tree_view) != NULL);
-  gtk_widget_set_parent_window (priv->button, _gtk_tree_view_get_header_window (tree_view));
+  gtk_widget_set_parent_window (priv->button, gtk_widget_get_window (priv->tree_view));
 
-  display = gdk_window_get_display (_gtk_tree_view_get_header_window (tree_view));
+  display = gtk_widget_get_display (priv->tree_view);
   gtk_widget_get_allocation (priv->button, &allocation);
 
-  priv->window = gdk_window_new_input (_gtk_tree_view_get_header_window (tree_view),
+  priv->window = gdk_window_new_input (gtk_widget_get_window (priv->tree_view),
                                        GDK_ALL_EVENTS_MASK,
                                        &(GdkRectangle) {(allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2, 0,
                                                         TREE_VIEW_DRAG_WIDTH, _gtk_tree_view_get_header_height (tree_view)});
@@ -1368,10 +1367,6 @@ _gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
   g_assert (priv->tree_view == NULL);
 
   priv->tree_view = GTK_WIDGET (tree_view);
-
-  /* make sure we own a reference to it as well. */
-  if (_gtk_tree_view_get_header_window (tree_view))
-    gtk_widget_set_parent_window (priv->button, _gtk_tree_view_get_header_window (tree_view));
 
   gtk_widget_set_parent (priv->button, GTK_WIDGET (tree_view));
 
