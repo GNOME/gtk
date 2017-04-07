@@ -2484,6 +2484,16 @@ gtk_list_box_remove (GtkContainer *container,
 
   was_visible = gtk_widget_get_visible (child);
 
+  if (child == priv->placeholder)
+    {
+      gtk_widget_unparent (child);
+      priv->placeholder = NULL;
+      if (was_visible && gtk_widget_get_visible (widget))
+        gtk_widget_queue_resize (widget);
+
+      return;
+    }
+
   if (!GTK_IS_LIST_BOX_ROW (child))
     {
       row = g_hash_table_lookup (priv->header_hash, child);
@@ -2565,7 +2575,7 @@ gtk_list_box_forall (GtkContainer *container,
   GSequenceIter *iter;
   GtkListBoxRow *row;
 
-  if (priv->placeholder != NULL && include_internals)
+  if (priv->placeholder != NULL)
     callback (priv->placeholder, callback_target);
 
   iter = g_sequence_get_begin_iter (priv->children);
