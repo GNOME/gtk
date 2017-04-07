@@ -124,6 +124,7 @@
 #include "gtkbuiltiniconprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
+#include "gtkiconprivate.h"
 
 
 #define TIMEOUT_EXPAND 500
@@ -146,8 +147,8 @@ struct _GtkExpanderPrivate
   GdkWindow        *event_window;
 
   GtkCssGadget     *gadget;
-  GtkCssGadget     *title_gadget;
-  GtkCssGadget     *arrow_gadget;
+  GtkWidget        *title_widget;
+  GtkWidget        *arrow_widget;
 
   GtkGesture       *multipress_gesture;
   gint              spacing;
@@ -200,10 +201,6 @@ static void gtk_expander_add    (GtkContainer *container,
                                  GtkWidget    *widget);
 static void gtk_expander_remove (GtkContainer *container,
                                  GtkWidget    *widget);
-static void gtk_expander_forall (GtkContainer *container,
-                                 gboolean        include_internals,
-                                 GtkCallback     callback,
-                                 gpointer        callback_data);
 
 static void gtk_expander_activate (GtkExpander *expander);
 
@@ -226,8 +223,6 @@ static void gtk_expander_measure (GtkWidget      *widget,
                                   int            *natural_baseline);
 static void gtk_expander_state_flags_changed (GtkWidget        *widget,
                                               GtkStateFlags     previous_state);
-static void gtk_expander_direction_changed   (GtkWidget        *widget,
-                                              GtkTextDirection  previous_direction);
 
 /* Gestures */
 static void     gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
@@ -242,6 +237,16 @@ G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_BIN,
                                                 gtk_expander_buildable_init))
 
 static void
+gtk_expander_finalize (GObject *obj)
+{
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (GTK_EXPANDER (obj));
+
+  gtk_widget_unparent (priv->title_widget);
+
+  G_OBJECT_CLASS (gtk_expander_parent_class)->finalize (obj);
+}
+
+static void
 gtk_expander_class_init (GtkExpanderClass *klass)
 {
   GObjectClass *gobject_class;
@@ -252,6 +257,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class    = (GtkWidgetClass *) klass;
   container_class = (GtkContainerClass *) klass;
 
+  gobject_class->finalize     = gtk_expander_finalize;
   gobject_class->set_property = gtk_expander_set_property;
   gobject_class->get_property = gtk_expander_get_property;
 
@@ -269,11 +275,9 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class->drag_leave           = gtk_expander_drag_leave;
   widget_class->measure              = gtk_expander_measure;
   widget_class->state_flags_changed  = gtk_expander_state_flags_changed;
-  widget_class->direction_changed  = gtk_expander_direction_changed;
 
   container_class->add    = gtk_expander_add;
   container_class->remove = gtk_expander_remove;
-  container_class->forall = gtk_expander_forall;
 
   klass->activate = gtk_expander_activate;
 
@@ -380,21 +384,16 @@ gtk_expander_init (GtkExpander *expander)
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (expander));
   priv->gadget = gtk_box_gadget_new_for_node (widget_node, GTK_WIDGET (expander));
   gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), GTK_ORIENTATION_VERTICAL);
-  priv->title_gadget = gtk_box_gadget_new ("title",
-                                           GTK_WIDGET (expander),
-                                           priv->gadget,
-                                           NULL);
-  gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->title_gadget), GTK_ORIENTATION_HORIZONTAL);
-  gtk_box_gadget_set_draw_focus (GTK_BOX_GADGET (priv->title_gadget), TRUE);
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), -1, priv->title_gadget, FALSE, GTK_ALIGN_START);
+  priv->title_widget = g_object_new (GTK_TYPE_BOX,
+                                     "css-name", "title",
+                                     NULL);
+  gtk_widget_set_parent (priv->title_widget, GTK_WIDGET (expander));
+  gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->gadget), -1, priv->title_widget);
 
-  priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
-                                             GTK_WIDGET (expander),
-                                             priv->title_gadget,
-                                             NULL);
-  gtk_css_gadget_add_class (priv->arrow_gadget, GTK_STYLE_CLASS_HORIZONTAL);
-
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->title_gadget), -1, priv->arrow_gadget, FALSE, GTK_ALIGN_CENTER);
+  priv->arrow_widget = gtk_icon_new ("arrow");
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->arrow_widget),
+                               GTK_STYLE_CLASS_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (priv->title_widget), priv->arrow_widget);
 
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
@@ -522,8 +521,6 @@ gtk_expander_destroy (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->destroy (widget);
 
-  g_clear_object (&priv->arrow_gadget);
-  g_clear_object (&priv->title_gadget);
   g_clear_object (&priv->gadget);
 }
 
@@ -587,7 +584,7 @@ gtk_expander_size_allocate (GtkWidget     *widget,
     {
       GtkAllocation title_allocation;
 
-      gtk_css_gadget_get_border_allocation (priv->title_gadget, &title_allocation, NULL);
+      gtk_widget_get_allocation (priv->title_widget, &title_allocation);
       gdk_window_move_resize (priv->event_window,
                               title_allocation.x, title_allocation.y,
                               title_allocation.width, title_allocation.height);
@@ -599,8 +596,7 @@ gtk_expander_map (GtkWidget *widget)
 {
   GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
 
-  if (priv->label_widget)
-    gtk_widget_map (priv->label_widget);
+  gtk_widget_map (priv->title_widget);
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->map (widget);
 
@@ -617,9 +613,6 @@ gtk_expander_unmap (GtkWidget *widget)
     gdk_window_hide (priv->event_window);
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->unmap (widget);
-
-  if (priv->label_widget)
-    gtk_widget_unmap (priv->label_widget);
 }
 
 static void
@@ -653,14 +646,14 @@ update_node_state (GtkExpander *expander)
   else
     state &= ~GTK_STATE_FLAG_PRELIGHT;
 
-  gtk_css_gadget_set_state (priv->title_gadget, state);
+  gtk_widget_set_state_flags (priv->title_widget, state, TRUE);
 
   if (priv->expanded)
     state |= GTK_STATE_FLAG_CHECKED;
   else
     state &= ~GTK_STATE_FLAG_CHECKED;
 
-  gtk_css_gadget_set_state (priv->arrow_gadget, state);
+  gtk_widget_set_state_flags (priv->arrow_widget, state, TRUE);
 }
 
 static void
@@ -670,27 +663,6 @@ gtk_expander_state_flags_changed (GtkWidget     *widget,
   update_node_state (GTK_EXPANDER (widget));
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->state_flags_changed (widget, previous_state);
-}
-
-static void
-gtk_expander_direction_changed (GtkWidget        *widget,
-                                GtkTextDirection  previous_direction)
-{
-  GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
-  GtkAlign align;
-
-  gtk_box_gadget_reverse_children (GTK_BOX_GADGET (priv->title_gadget));
-
-  align = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL ? GTK_ALIGN_END : GTK_ALIGN_START;
-  gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->gadget), priv->title_gadget);
-  gtk_box_gadget_insert_gadget (GTK_BOX_GADGET (priv->gadget), 0, priv->title_gadget, FALSE, align);
-
-  gtk_box_gadget_set_allocate_reverse (GTK_BOX_GADGET (priv->title_gadget),
-                                       gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
-  gtk_box_gadget_set_align_reverse (GTK_BOX_GADGET (priv->title_gadget),
-                                    gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
-
-  GTK_WIDGET_CLASS (gtk_expander_parent_class)->direction_changed (widget, previous_direction);
 }
 
 static gboolean
@@ -1010,24 +982,6 @@ gtk_expander_remove (GtkContainer *container,
       gtk_box_gadget_remove_widget (GTK_BOX_GADGET (expander->priv->gadget), widget);
       GTK_CONTAINER_CLASS (gtk_expander_parent_class)->remove (container, widget);
     }
-}
-
-static void
-gtk_expander_forall (GtkContainer *container,
-                     gboolean      include_internals,
-                     GtkCallback   callback,
-                     gpointer      callback_data)
-{
-  GtkBin *bin = GTK_BIN (container);
-  GtkExpanderPrivate *priv = GTK_EXPANDER (container)->priv;
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (bin);
-  if (child)
-    (* callback) (child, callback_data);
-
-  if (priv->label_widget)
-    (* callback) (priv->label_widget, callback_data);
 }
 
 static void
@@ -1356,7 +1310,6 @@ gtk_expander_set_label_widget (GtkExpander *expander,
 {
   GtkExpanderPrivate *priv;
   GtkWidget *widget;
-  int pos;
 
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (label_widget == NULL || GTK_IS_WIDGET (label_widget));
@@ -1369,9 +1322,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
 
   if (priv->label_widget)
     {
-      gtk_box_gadget_remove_widget (GTK_BOX_GADGET (priv->title_gadget), priv->label_widget);
-      gtk_widget_set_state_flags (priv->label_widget, 0, TRUE);
-      gtk_widget_unparent (priv->label_widget);
+      gtk_container_remove (GTK_CONTAINER (priv->title_widget), priv->label_widget);
     }
 
   priv->label_widget = label_widget;
@@ -1380,13 +1331,11 @@ gtk_expander_set_label_widget (GtkExpander *expander,
   if (label_widget)
     {
       priv->label_widget = label_widget;
-      gtk_widget_set_parent (label_widget, widget);
 
       if (priv->prelight)
         gtk_widget_set_state_flags (label_widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
 
-      pos = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL ? 0 : 1;
-      gtk_box_gadget_insert_widget (GTK_BOX_GADGET (priv->title_gadget), pos, label_widget);
+      gtk_container_add (GTK_CONTAINER (priv->title_widget), label_widget);
     }
 
   if (gtk_widget_get_visible (widget))
