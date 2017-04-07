@@ -1813,6 +1813,11 @@ microphone-sensitivity-medium-symbolic</property>
                             <child>
                               <object class="GtkListBox" id="listbox">
                                 <property name="selection-mode">none</property>
+                                <child type="placeholder">
+                                  <object class="GtkLabel">
+                                    <property name="label">No rows found</property>
+                                  </object>
+                                </child>
                                 <child>
                                   <object class="GtkListBoxRow" id="listboxrow1">
                                     <property name="activatable">0</property>
