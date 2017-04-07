@@ -727,6 +727,17 @@ gtk_window_measure (GtkWidget      *widget,
     }
 }
 
+static void
+gtk_window_add (GtkContainer *container,
+                GtkWidget    *child)
+{
+  /* Insert the child's css node now at the end so the order wrt. decoration_node is correct */
+  gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (container)),
+                              gtk_widget_get_css_node (child),
+                              NULL);
+
+  GTK_CONTAINER_CLASS (gtk_window_parent_class)->add (container, child);
+}
 
 static void
 gtk_window_class_init (GtkWindowClass *klass)
@@ -774,6 +785,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->snapshot = gtk_window_snapshot;
   widget_class->queue_draw_region = gtk_window_queue_draw_region;
 
+  container_class->add = gtk_window_add;
   container_class->remove = gtk_window_remove;
   container_class->check_resize = gtk_window_check_resize;
   container_class->forall = gtk_window_forall;
@@ -4010,6 +4022,11 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   gtk_window_enable_csd (window);
   priv->title_box = titlebar;
+  /* Same reason as in gtk_window_add */
+  gtk_css_node_insert_before (gtk_widget_get_css_node (GTK_WIDGET (window)),
+                              gtk_widget_get_css_node (titlebar),
+                              NULL);
+
   gtk_widget_set_parent (priv->title_box, widget);
   if (GTK_IS_HEADER_BAR (titlebar))
     {
