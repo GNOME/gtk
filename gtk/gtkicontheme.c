@@ -2910,6 +2910,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
       GFile *file;
       GFileInfo *file_info;
       const gchar *content_type;
+      const gchar *mime_type;
 
       file = g_file_icon_get_file (G_FILE_ICON (icon_info->loadable));
       file_info = g_file_query_info (file, 
@@ -2920,11 +2921,16 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
         {
           content_type = g_file_info_get_content_type (file_info);
 
-          if (content_type && strcmp (content_type, "image/svg+xml") == 0)
-            is_svg = TRUE;
+          if (content_type)
+            {
+              mime_type = g_content_type_get_mime_type (content_type);
+
+              if (mime_type && strcmp (mime_type, "image/svg+xml") == 0)
+                is_svg = TRUE;
+            }
 
           g_object_unref (file_info);
-       }
+        }
     }
 
   if (is_svg)
