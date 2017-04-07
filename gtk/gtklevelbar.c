@@ -121,7 +121,6 @@
 
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkintl.h"
 #include "gtkorientableprivate.h"
 #include "gtklevelbar.h"
@@ -133,6 +132,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkgizmoprivate.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -175,8 +175,8 @@ struct _GtkLevelBarPrivate {
 
   GList *offsets;
 
-  GtkCssGadget *trough_gadget;
-  GtkCssGadget **block_gadget;
+  GtkWidget *trough_widget;
+  GtkWidget **block_widget;
   guint n_blocks;
 
   guint inverted : 1;
@@ -302,16 +302,16 @@ gtk_level_bar_get_min_block_size (GtkLevelBar *self,
 
   for (i = 0; i < n_blocks; i++)
     {
-      gtk_css_gadget_get_preferred_size (self->priv->block_gadget[i],
-                                         GTK_ORIENTATION_HORIZONTAL,
-                                         -1,
-                                         &width, NULL,
-                                         NULL, NULL);
-      gtk_css_gadget_get_preferred_size (self->priv->block_gadget[i],
-                                         GTK_ORIENTATION_VERTICAL,
-                                         -1,
-                                         &height, NULL,
-                                         NULL, NULL);
+      gtk_widget_measure (self->priv->block_widget[i],
+                          GTK_ORIENTATION_HORIZONTAL,
+                          -1,
+                          &width, NULL,
+                          NULL, NULL);
+      gtk_widget_measure (self->priv->block_widget[i],
+                          GTK_ORIENTATION_VERTICAL,
+                          -1,
+                          &height, NULL,
+                          NULL, NULL);
 
       *block_width = MAX (width, *block_width);
       *block_height = MAX (height, *block_height);
@@ -328,49 +328,34 @@ gtk_level_bar_get_real_inverted (GtkLevelBar *self)
   return self->priv->inverted;
 }
 
-static void
-gtk_level_bar_snapshot_fill_continuous (GtkLevelBar *self,
-                                        GtkSnapshot *snapshot)
-{
-  gboolean inverted;
-
-  inverted = gtk_level_bar_get_real_inverted (self);
-
-  /* render the empty (unfilled) part */
-  gtk_css_gadget_snapshot (self->priv->block_gadget[inverted ? 0 : 1], snapshot);
-
-  /* now render the filled part on top of it */
-  gtk_css_gadget_snapshot (self->priv->block_gadget[inverted ? 1 : 0], snapshot);
-}
-
-static void
-gtk_level_bar_snapshot_fill_discrete (GtkLevelBar *self,
-                                      GtkSnapshot *snapshot)
-{
-  gint num_blocks, i;
-
-  num_blocks = gtk_level_bar_get_num_blocks (self);
-
-  for (i = 0; i < num_blocks; i++)
-    gtk_css_gadget_snapshot (self->priv->block_gadget[i], snapshot);
-}
-
 static gboolean
-gtk_level_bar_render_trough (GtkCssGadget *gadget,
-                             GtkSnapshot  *snapshot,
-                             int           x,
-                             int           y,
-                             int           width,
-                             int           height,
-                             gpointer      data)
+gtk_level_bar_render_trough (GtkGizmo    *gizmo,
+                             GtkSnapshot *snapshot)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkLevelBar *self = GTK_LEVEL_BAR (widget);
+  GtkWidget *widget = GTK_WIDGET (gizmo);
+  GtkLevelBar *self = GTK_LEVEL_BAR (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
 
   if (self->priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
-    gtk_level_bar_snapshot_fill_continuous (self, snapshot);
+    {
+      gboolean inverted;
+
+      inverted = gtk_level_bar_get_real_inverted (self);
+
+      /* render the empty (unfilled) part */
+      gtk_widget_snapshot_child (widget, self->priv->block_widget[inverted ? 0 : 1], snapshot);
+
+      /* now render the filled part on top of it */
+      gtk_widget_snapshot_child (widget, self->priv->block_widget[inverted ? 1 : 0], snapshot);
+    }
   else
-    gtk_level_bar_snapshot_fill_discrete (self, snapshot);
+    {
+      gint num_blocks, i;
+
+      num_blocks = gtk_level_bar_get_num_blocks (self);
+
+      for (i = 0; i < num_blocks; i++)
+        gtk_widget_snapshot_child (widget, self->priv->block_widget[i], snapshot);
+    }
 
   return FALSE;
 }
@@ -381,21 +366,20 @@ gtk_level_bar_snapshot (GtkWidget   *widget,
 {
   GtkLevelBar *self = GTK_LEVEL_BAR (widget);
 
-  gtk_css_gadget_snapshot (self->priv->trough_gadget, snapshot);
+  gtk_widget_snapshot_child (widget, self->priv->trough_widget, snapshot);
 }
 
 static void
-gtk_level_bar_measure_trough (GtkCssGadget   *gadget,
+gtk_level_bar_measure_trough (GtkGizmo       *gizmo,
                               GtkOrientation  orientation,
                               int             for_size,
                               int            *minimum,
                               int            *natural,
                               int            *minimum_baseline,
-                              int            *natural_baseline,
-                              gpointer        data)
+                              int            *natural_baseline)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkLevelBar *self = GTK_LEVEL_BAR (widget);
+  GtkWidget *widget = GTK_WIDGET (gizmo);
+  GtkLevelBar *self = GTK_LEVEL_BAR (gtk_widget_get_parent (widget));
   gint num_blocks, size;
   gint block_width, block_height;
 
@@ -430,11 +414,11 @@ gtk_level_bar_measure (GtkWidget      *widget,
                        int            *minimum_baseline,
                        int            *natural_baseline)
 {
-  gtk_css_gadget_get_preferred_size (GTK_LEVEL_BAR (widget)->priv->trough_gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
+  gtk_widget_measure (GTK_LEVEL_BAR (widget)->priv->trough_widget,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
 }
 
 static void
@@ -451,10 +435,10 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
 
   /* allocate the empty (unfilled) part */
   block_area = *allocation;
-  gtk_css_gadget_allocate (self->priv->block_gadget[inverted ? 0 : 1],
-                           &block_area,
-                           baseline,
-                           out_clip);
+  gtk_widget_size_allocate_with_baseline (self->priv->block_widget[inverted ? 0 : 1],
+                                          &block_area,
+                                          baseline);
+  gtk_widget_get_clip (self->priv->block_widget[inverted ? 0 : 1], out_clip);
 
   /* now allocate the filled part */
   block_area = *allocation;
@@ -476,10 +460,10 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
         block_area.y += allocation->height - block_area.height;
     }
 
-  gtk_css_gadget_allocate (self->priv->block_gadget[inverted ? 1 : 0],
-                           &block_area,
-                           baseline,
-                           &clip);
+  gtk_widget_size_allocate_with_baseline (self->priv->block_widget[inverted ? 1 : 0],
+                                          &block_area,
+                                          baseline);
+  gtk_widget_get_clip (self->priv->block_widget[inverted ? 1 : 0], &clip);
   gdk_rectangle_intersect (out_clip, &clip, out_clip);
 }
 
@@ -514,10 +498,10 @@ gtk_level_bar_allocate_trough_discrete (GtkLevelBar *self,
 
   for (i = 0; i < num_blocks; i++)
     {
-      gtk_css_gadget_allocate (self->priv->block_gadget[i],
-                               &block_area,
-                               baseline,
-                               &clip);
+      gtk_widget_size_allocate_with_baseline (self->priv->block_widget[i],
+                                              &block_area,
+                                              baseline);
+      gtk_widget_get_clip (self->priv->block_widget[i], &clip);
       gdk_rectangle_intersect (out_clip, &clip, out_clip);
 
       if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -528,14 +512,13 @@ gtk_level_bar_allocate_trough_discrete (GtkLevelBar *self,
 }
 
 static void
-gtk_level_bar_allocate_trough (GtkCssGadget        *gadget,
+gtk_level_bar_allocate_trough (GtkGizmo            *gizmo,
                                const GtkAllocation *allocation,
                                int                  baseline,
-                               GtkAllocation       *out_clip,
-                               gpointer             data)
+                               GtkAllocation       *out_clip)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkLevelBar *self = GTK_LEVEL_BAR (widget);
+  GtkWidget *widget = GTK_WIDGET (gizmo);
+  GtkLevelBar *self = GTK_LEVEL_BAR (gtk_widget_get_parent (widget));
 
   if (self->priv->bar_mode == GTK_LEVEL_BAR_MODE_CONTINUOUS)
     gtk_level_bar_allocate_trough_continuous (self, allocation, baseline, out_clip);
@@ -547,14 +530,13 @@ static void
 gtk_level_bar_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
+  GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (GTK_LEVEL_BAR (widget));
   GtkAllocation clip;
 
   GTK_WIDGET_CLASS (gtk_level_bar_parent_class)->size_allocate (widget, allocation);
 
-  gtk_css_gadget_allocate (GTK_LEVEL_BAR (widget)->priv->trough_gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
+  gtk_widget_size_allocate (priv->trough_widget, allocation);
+  gtk_widget_get_clip (priv->trough_widget, &clip);
 
   gtk_widget_set_clip (widget, &clip);
 }
@@ -563,7 +545,6 @@ static void
 update_block_nodes (GtkLevelBar *self)
 {
   GtkLevelBarPrivate *priv = self->priv;
-  GtkCssNode *trough_node = gtk_css_gadget_get_node (priv->trough_gadget);
   guint n_blocks;
   guint i;
 
@@ -575,24 +556,18 @@ update_block_nodes (GtkLevelBar *self)
     {
       for (i = n_blocks; i < priv->n_blocks; i++)
         {
-          gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->block_gadget[i]), NULL);
-          g_clear_object (&priv->block_gadget[i]);
+          gtk_widget_unparent (priv->block_widget[i]);
         }
-      priv->block_gadget = g_renew (GtkCssGadget*, priv->block_gadget, n_blocks);
+      priv->block_widget = g_renew (GtkWidget*, priv->block_widget, n_blocks);
       priv->n_blocks = n_blocks;
     }
   else
     {
-      priv->block_gadget = g_renew (GtkCssGadget*, priv->block_gadget, n_blocks);
+      priv->block_widget = g_renew (GtkWidget*, priv->block_widget, n_blocks);
       for (i = priv->n_blocks; i < n_blocks; i++)
         {
-          priv->block_gadget[i] = gtk_css_custom_gadget_new ("block",
-                                                             GTK_WIDGET (self),
-                                                             priv->trough_gadget,
-                                                             NULL,
-                                                             NULL, NULL, NULL,
-                                                             NULL, NULL);
-          gtk_css_gadget_set_state (priv->block_gadget[i], gtk_css_node_get_state (trough_node));
+          priv->block_widget[i] = gtk_gizmo_new ("block", NULL, NULL, NULL);
+          gtk_widget_insert_before (priv->block_widget[i], GTK_WIDGET (priv->trough_widget), NULL);
         }
       priv->n_blocks = n_blocks;
     }
@@ -618,29 +593,10 @@ update_mode_style_classes (GtkLevelBar *self)
 }
 
 static void
-gtk_level_bar_state_flags_changed (GtkWidget     *widget,
-                                   GtkStateFlags  previous_state)
-{
-  GtkLevelBar *self = GTK_LEVEL_BAR (widget);
-  GtkLevelBarPrivate *priv = self->priv;
-  GtkStateFlags state;
-  gint i;
-
-  state = gtk_widget_get_state_flags (widget);
-
-  gtk_css_gadget_set_state (priv->trough_gadget, state);
-  for (i = 0; i < priv->n_blocks; i++)
-    gtk_css_gadget_set_state (priv->block_gadget[i], state);
-
-  GTK_WIDGET_CLASS (gtk_level_bar_parent_class)->state_flags_changed (widget, previous_state);
-}
-
-static void
 update_level_style_classes (GtkLevelBar *self)
 {
   GtkLevelBarPrivate *priv = self->priv;
   gdouble value;
-  const gchar *classes[3] = { NULL, NULL, NULL };
   const gchar *value_class = NULL;
   GtkLevelBarOffset *offset, *prev_offset;
   GList *l;
@@ -680,15 +636,33 @@ update_level_style_classes (GtkLevelBar *self)
   else
     num_filled = MIN (num_blocks, (gint) round (priv->cur_value) - (gint) round (priv->min_value));
 
-  classes[0] = "filled";
-  classes[1] = value_class;
   for (i = 0; i < num_filled; i++)
-    gtk_css_node_set_classes (gtk_css_gadget_get_node (priv->block_gadget[inverted ? num_blocks - 1 - i : i]), classes);
+    {
+      GtkStyleContext *context = gtk_widget_get_style_context (priv->block_widget[inverted ? num_blocks - 1 - i : i]);
+      GList *classes = gtk_style_context_list_classes (context);
 
-  classes[0] = "empty";
-  classes[1] = NULL;
+      for (l = classes; l; l = l->next)
+        gtk_style_context_remove_class (context, l->data);
+
+      g_list_free (classes);
+
+      gtk_style_context_add_class (context, "filled");
+      if (value_class)
+        gtk_style_context_add_class (context, value_class);
+    }
+
   for (; i < num_blocks; i++)
-    gtk_css_node_set_classes (gtk_css_gadget_get_node (priv->block_gadget[inverted ? num_blocks - 1 - i : i]), classes);
+    {
+      GtkStyleContext *context = gtk_widget_get_style_context (priv->block_widget[inverted ? num_blocks - 1 - i : i]);
+      GList *classes = gtk_style_context_list_classes (context);
+
+      for (l = classes; l; l = l->next)
+        gtk_style_context_remove_class (context, l->data);
+
+      g_list_free (classes);
+
+      gtk_style_context_add_class (context, "empty");
+    }
 }
 
 static void
@@ -940,10 +914,11 @@ gtk_level_bar_finalize (GObject *obj)
   g_list_free_full (priv->offsets, (GDestroyNotify) gtk_level_bar_offset_free);
 
   for (i = 0; i < priv->n_blocks; i++)
-    g_clear_object (&priv->block_gadget[i]);
-  g_free (priv->block_gadget);
+    gtk_widget_unparent (priv->block_widget[i]);
 
-  g_clear_object (&priv->trough_gadget);
+  g_free (priv->block_widget);
+
+  gtk_widget_unparent (priv->trough_widget);
 
   G_OBJECT_CLASS (gtk_level_bar_parent_class)->finalize (obj);
 }
@@ -961,7 +936,6 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   wclass->snapshot = gtk_level_bar_snapshot;
   wclass->size_allocate = gtk_level_bar_size_allocate;
   wclass->measure = gtk_level_bar_measure;
-  wclass->state_flags_changed = gtk_level_bar_state_flags_changed;
   wclass->direction_changed = gtk_level_bar_direction_changed;
 
   g_object_class_override_property (oclass, PROP_ORIENTATION, "orientation");
@@ -1082,7 +1056,6 @@ static void
 gtk_level_bar_init (GtkLevelBar *self)
 {
   GtkLevelBarPrivate *priv;
-  GtkCssNode *widget_node, *trough_node;
 
   priv = self->priv = gtk_level_bar_get_instance_private (self);
 
@@ -1098,23 +1071,17 @@ gtk_level_bar_init (GtkLevelBar *self)
 
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
 
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
-  priv->trough_gadget = gtk_css_custom_gadget_new ("trough",
-                                                   GTK_WIDGET (self),
-                                                   NULL, NULL,
-                                                   gtk_level_bar_measure_trough,
-                                                   gtk_level_bar_allocate_trough,
-                                                   gtk_level_bar_render_trough,
-                                                   NULL, NULL);
-  trough_node = gtk_css_gadget_get_node (priv->trough_gadget);
-  gtk_css_node_set_parent (trough_node, widget_node);
-  gtk_css_node_set_state (trough_node, gtk_css_node_get_state (widget_node));
+  priv->trough_widget = gtk_gizmo_new ("trough",
+                                       gtk_level_bar_measure_trough,
+                                       gtk_level_bar_allocate_trough,
+                                       gtk_level_bar_render_trough);
+  gtk_widget_set_parent (priv->trough_widget, GTK_WIDGET (self));
 
   gtk_level_bar_ensure_offset (self, GTK_LEVEL_BAR_OFFSET_LOW, 0.25);
   gtk_level_bar_ensure_offset (self, GTK_LEVEL_BAR_OFFSET_HIGH, 0.75);
   gtk_level_bar_ensure_offset (self, GTK_LEVEL_BAR_OFFSET_FULL, 1.0);
 
-  priv->block_gadget = NULL;
+  priv->block_widget = NULL;
   priv->n_blocks = 0;
 
   priv->bar_mode = GTK_LEVEL_BAR_MODE_CONTINUOUS;
@@ -1221,7 +1188,7 @@ gtk_level_bar_set_value_internal (GtkLevelBar *self,
 {
   self->priv->cur_value = value;
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_VALUE]);
-  gtk_widget_queue_allocate (GTK_WIDGET (self));
+  gtk_widget_queue_allocate (GTK_WIDGET (self->priv->trough_widget));
 }
 
 /**
