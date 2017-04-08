@@ -1,3 +1,31 @@
+Overview of Changes in GTK+ 3.22.12
+===================================
+
+* Bugs:
+ 686838 gtk_enumerate_printers() hangs
+ 734946 Implement GContentType on OSX
+ 773228 third parameter of gtk_widget_intersect not listed as 'out'
+ 776472 Crash in gnome-terminal due to gdk_window_process_all_updates calling...
+ 778853 propagate-natural-width/height request too much with !overlay-scrolling...
+ 779081 GtkTextView: expose API to get Pango line direction
+ 779184 Gtk+4 (3.89.4) with Quartz backend: all apps segfault
+ 780041 Optionally depend on sassc to generate the theme CSS
+ 780234 gtk_print_job_set_page_ranges() has unclear ownership transfer
+ 780734 flowbox: don’t try to focus or draw NULL widgets
+ 780735 flowbox: don’t select when rubberbanding over nothing
+ 780878 docs: Point links to correct versions
+ 780994 Icons are blurry
+
+* Translation updates:
+ Catalan
+ Greek
+ Hebrew
+ Indonesian
+ Norwegian bokmål
+ Polish
+ Russian
+
+
 Overview of Changes in GTK+ 3.22.11
 ===================================
 
