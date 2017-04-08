@@ -18,22 +18,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.20.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-11 19:44+0000\n"
-"PO-Revision-Date: 2016-09-16 16:41+0300\n"
-"Last-Translator: Tom Tryfonidis <tomtryf@gmail.com>\n"
+"POT-Creation-Date: 2017-04-06 14:27+0000\n"
+"PO-Revision-Date: 2017-04-08 19:35+0300\n"
+"Last-Translator: Tom Tryfonidis <tomtryf@gnome.org>\n"
 "Language-Team: www.gnome.gr\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
-msgstr "Δεν υποστηρίζεται ο τύπος οθόνης μπροντγουέι: %s"
+msgstr "Δεν υποστηρίζεται ο τύπος οθόνης broadway: %s"
 
 #: gdk/gdk.c:182
 #, c-format
@@ -93,11 +93,11 @@ msgstr "ΣΗΜΑΙΕΣ"
 msgid "GDK debugging flags to unset"
 msgstr "Σημαίες αποσφαλμάτωσης του GDK για αφαίρεση"
 
-#: gdk/gdkwindow.c:2808
+#: gdk/gdkwindow.c:2826
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Η υποστήριξη GL απενεργοποιήθηκε μέσα από το GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2819
+#: gdk/gdkwindow.c:2837
 msgid "The current backend does not support OpenGL"
 msgstr "Το τρέχον σύστημα υποστήριξης δεν υποστηρίζει OpenGL"
 
@@ -443,27 +443,27 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Aναστολή"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1631
-#: gdk/wayland/gdkglcontext-wayland.c:421 gdk/win32/gdkglcontext-win32.c:556
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2226
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:796
 #: gdk/x11/gdkglcontext-x11.c:1274
 msgid "No GL implementation is available"
 msgstr "Δεν υπάρχει διαθέσιμη εφαρμογή GL"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:510 gdk/x11/gdkglcontext-x11.c:720
+#: gdk/win32/gdkglcontext-win32.c:747 gdk/x11/gdkglcontext-x11.c:720
 #: gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
 msgstr "Αδύνατη η δημιουργία περιβάλλοντος GL"
 
-#: gdk/mir/gdkmirwindowimpl.c:1593 gdk/mir/gdkmirwindowimpl.c:1603
-#: gdk/wayland/gdkglcontext-wayland.c:382
-#: gdk/wayland/gdkglcontext-wayland.c:392 gdk/win32/gdkglcontext-win32.c:482
+#: gdk/mir/gdkmirwindowimpl.c:2188 gdk/mir/gdkmirwindowimpl.c:2198
+#: gdk/wayland/gdkglcontext-wayland.c:418
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:702
 #: gdk/x11/gdkglcontext-x11.c:968
 msgid "No available configurations for the given pixel format"
 msgstr ""
 "Δεν υπάρχουν διαθέσιμες διαμορφώσεις για τη δεδομένη μορφή εικονοστοιχείου"
 
-#: gdk/mir/gdkmirwindowimpl.c:1639
+#: gdk/mir/gdkmirwindowimpl.c:2234
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "Ο πυρήνας 3.2 του προφίλ GL δεν είναι διαθέσιμος στην εφαρμογή EGL"
 
@@ -471,17 +471,9 @@ msgstr "Ο πυρήνας 3.2 του προφίλ GL δεν είναι διαθ�
 msgid "Not implemented on OS X"
 msgstr "Δεν έχει υλοποιηθεί στο OS X"
 
-#: gdk/wayland/gdkglcontext-wayland.c:429
+#: gdk/wayland/gdkglcontext-wayland.c:476
 msgid "Core GL is not available on EGL implementation"
 msgstr "Ο πυρήνας GL δεν είναι διαθέσιμος στην εφαρμογή EGL"
-
-#: gdk/win32/gdkglcontext-win32.c:565
-msgid ""
-"The WGL_ARB_create_context extension needed to create core profiles is not "
-"available"
-msgstr ""
-"Δεν είναι διαθέσιμη η επέκταση GLX_ARB_create_context που απαιτείται για τη "
-"δημιουργία προφίλ πυρήνα"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:53
@@ -670,15 +662,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Κλείσιμο"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:408 gtk/gtkwindow.c:9025
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406 gtk/gtkwindow.c:9045
 msgid "Minimize"
 msgstr "Ελαχιστοποίηση"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:9034
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9054
 msgid "Maximize"
 msgstr "Μεγιστοποίηση"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:431 gtk/gtkwindow.c:8991
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9011
 msgid "Restore"
 msgstr "Επαναφορά"
 
@@ -1224,12 +1216,12 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:514 gtk/gtkfilechoosernative.c:606
-#: gtk/gtkfilechooserwidget.c:1477 gtk/gtkfilechooserwidget.c:6380
+#: gtk/gtkfilechooserwidget.c:1477 gtk/gtkfilechooserwidget.c:6384
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12492 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12514 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1278,7 +1270,7 @@ msgid "_Apply"
 msgstr "_Εφαρμογή"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12493
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12515
 msgid "_OK"
 msgstr "_Εντάξει"
 
@@ -1427,7 +1419,7 @@ msgstr "Έξοδος σε αυτόν το κατάλογο αντί για cwd"
 msgid "Invalid size %s\n"
 msgstr "Άκυρο μέγεθος %s\n"
 
-#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:618
+#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:671
 #, c-format
 msgid "Can't load file: %s\n"
 msgstr "Αδύνατη η φόρτωση του αρχείου: %s\n"
@@ -1442,7 +1434,7 @@ msgstr "Αδύνατη η αποθήκευση του αρχείου %s : %s\n"
 msgid "Can't close stream"
 msgstr "Αδύνατο το κλείσιμο της ροής"
 
-#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:221
+#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:206
 msgid "License"
 msgstr "Άδεια χρήσης"
 
@@ -1642,23 +1634,23 @@ msgstr "Επιλογή εφαρμογής"
 #: gtk/gtkappchooserdialog.c:208
 #, c-format
 msgid "Opening “%s”."
-msgstr "Άνοιγμα του “%s”."
+msgstr "Άνοιγμα του «%s»."
 
 #: gtk/gtkappchooserdialog.c:209
 #, c-format
 msgid "No applications found for “%s”"
-msgstr "Δεν βρέθηκαν διαθέσιμες εφαρμογές για το “%s”"
+msgstr "Δεν βρέθηκαν διαθέσιμες εφαρμογές για το «%s»"
 
 #. Translators: %s is a file type description
 #: gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "Opening “%s” files."
-msgstr "Άνοιγμα “%s” αρχείων."
+msgstr "Άνοιγμα «%s» αρχείων."
 
 #: gtk/gtkappchooserdialog.c:217
 #, c-format
 msgid "No applications found for “%s” files"
-msgstr "Δεν βρέθηκαν διαθέσιμες εφαρμογές για “%s” αρχεία"
+msgstr "Δεν βρέθηκαν διαθέσιμες εφαρμογές για «%s» αρχεία"
 
 #: gtk/gtkappchooserdialog.c:310
 msgid "Forget association"
@@ -1675,7 +1667,7 @@ msgstr "Προεπιλεγμένη εφαρμογή"
 #: gtk/gtkappchooserwidget.c:675
 #, c-format
 msgid "No applications found for “%s”."
-msgstr "Δεν βρέθηκαν διαθέσιμες εφαρμογές για το “%s”."
+msgstr "Δεν βρέθηκαν διαθέσιμες εφαρμογές για το «%s»."
 
 #: gtk/gtkappchooserwidget.c:758
 msgid "Recommended Applications"
@@ -1689,7 +1681,7 @@ msgstr "Σχετικές εφαρμογές"
 msgid "Other Applications"
 msgstr "Άλλες εφαρμογές"
 
-#: gtk/gtkapplicationwindow.c:342 gtk/gtkprintoperation-unix.c:482
+#: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:484
 #: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Εφαρμογή"
@@ -1719,34 +1711,34 @@ msgstr "Το στοιχείο <%s> δεν επιτρέπεται στην κορ
 msgid "Text may not appear inside <%s>"
 msgstr "Το κείμενο μπορεί να μην εμφανιστεί μέσα στο <%s>"
 
-#: gtk/gtk-builder-tool.c:119
+#: gtk/gtk-builder-tool.c:124
 #, c-format
 msgid "Packing property %s::%s not found\n"
 msgstr "Η ιδιότητα συσκευασίας %s::%s δεν βρέθηκε\n"
 
-#: gtk/gtk-builder-tool.c:121
+#: gtk/gtk-builder-tool.c:126
 #, c-format
 msgid "Cell property %s::%s not found\n"
 msgstr "Η ιδιότητα κελιού %s::%s δεν βρέθηκε\n"
 
-#: gtk/gtk-builder-tool.c:123
+#: gtk/gtk-builder-tool.c:128
 #, c-format
 msgid "Property %s::%s not found\n"
 msgstr "Η ιδιότητα %s::%s δεν βρέθηκε\n"
 
-#: gtk/gtk-builder-tool.c:131
+#: gtk/gtk-builder-tool.c:136
 #, c-format
 msgid "Couldn't parse value for %s::%s: %s\n"
 msgstr ""
 "Αδύνατη η ανάλυση της τιμής για το %s::%s: %s\n"
 "\n"
 
-#: gtk/gtk-builder-tool.c:639
+#: gtk/gtk-builder-tool.c:692
 #, c-format
 msgid "Can't parse file: %s\n"
 msgstr "Αδύνατη η ανάλυση του αρχείου: %s\n"
 
-#: gtk/gtk-builder-tool.c:982
+#: gtk/gtk-builder-tool.c:1056
 #, c-format
 msgid ""
 "Usage:\n"
@@ -1754,9 +1746,12 @@ msgid ""
 "\n"
 "Commands:\n"
 "  validate           Validate the file\n"
-"  simplify           Simplify the file\n"
+"  simplify [OPTIONS] Simplify the file\n"
 "  enumerate          List all named objects\n"
 "  preview [OPTIONS]  Preview the file\n"
+"\n"
+"Simplify Options:\n"
+"  --replace          Replace the file\n"
 "\n"
 "Preview Options:\n"
 "  --id=ID            Preview only the named object\n"
@@ -1769,9 +1764,12 @@ msgstr ""
 "\n"
 "Εντολές:\n"
 "  validate           Επικύρωση του αρχείου\n"
-"  simplify           Απλοποίηση του αρχείου\n"
+"  simplify [ΕΠΙΛΟΓΕΣ] Απλοποίηση του αρχείου\n"
 "  enumerate          Εμφάνιση όλων των ονομαζόμενων αντικειμένων\n"
 "  preview [ΕΠΙΛΟΓΕΣ]  Προεπισκόπηση του αρχείου\n"
+"\n"
+"Επιλογές απλοποίησης:\n"
+"  --replace          Αντικατάσταση του αρχείου\n"
 "\n"
 "Επιλογές προεπισκόπησης:\n"
 "  --id=ID            Προεπισκόπηση μόνο των ονομαζόμενου αρχείου\n"
@@ -2105,7 +2103,7 @@ msgstr "Δημιουργία προσαρμοσμένου χρώματος"
 msgid "Custom color %d: %s"
 msgstr "Προσαρμοσμένο χρώμα %d: %s"
 
-#: gtk/gtkcolorplane.c:401
+#: gtk/gtkcolorplane.c:409
 msgid "Color Plane"
 msgstr "Επίπεδο χρώματος"
 
@@ -2187,44 +2185,44 @@ msgstr "_Δεξιά:"
 msgid "Paper Margins"
 msgstr "Περιθώρια χαρτιού"
 
-#: gtk/gtkentry.c:9467 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
+#: gtk/gtkentry.c:9508 gtk/gtklabel.c:6665 gtk/gtktextview.c:9448
 msgid "Cu_t"
 msgstr "Αποκο_πή"
 
-#: gtk/gtkentry.c:9471 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
+#: gtk/gtkentry.c:9512 gtk/gtklabel.c:6666 gtk/gtktextview.c:9452
 msgid "_Copy"
 msgstr "_Αντιγραφή"
 
-#: gtk/gtkentry.c:9475 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
+#: gtk/gtkentry.c:9516 gtk/gtklabel.c:6667 gtk/gtktextview.c:9454
 msgid "_Paste"
 msgstr "_Επικόλληση"
 
-#: gtk/gtkentry.c:9478 gtk/gtkfilechooserwidget.c:1478
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6669 gtk/gtktextview.c:9432
+#: gtk/gtkentry.c:9519 gtk/gtkfilechooserwidget.c:1478
+#: gtk/gtkfilechooserwidget.c:2278 gtk/gtklabel.c:6669 gtk/gtktextview.c:9457
 msgid "_Delete"
 msgstr "_Διαγραφή"
 
-#: gtk/gtkentry.c:9489 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
+#: gtk/gtkentry.c:9530 gtk/gtklabel.c:6678 gtk/gtktextview.c:9471
 msgid "Select _All"
 msgstr "Επιλογή ό_λων"
 
-#: gtk/gtkentry.c:9662 gtk/gtktextview.c:9671
+#: gtk/gtkentry.c:9703 gtk/gtktextview.c:9696
 msgid "Select all"
 msgstr "Επιλογή όλων"
 
-#: gtk/gtkentry.c:9665 gtk/gtktextview.c:9674
+#: gtk/gtkentry.c:9706 gtk/gtktextview.c:9699
 msgid "Cut"
 msgstr "Αποκοπή"
 
-#: gtk/gtkentry.c:9668 gtk/gtktextview.c:9677
+#: gtk/gtkentry.c:9709 gtk/gtktextview.c:9702
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-#: gtk/gtkentry.c:9671 gtk/gtktextview.c:9680
+#: gtk/gtkentry.c:9712 gtk/gtktextview.c:9705
 msgid "Paste"
 msgstr "Επικόλληση"
 
-#: gtk/gtkentry.c:10738
+#: gtk/gtkentry.c:10779
 msgid "Caps Lock is on"
 msgstr "Είναι πατημένο το Caps Lock"
 
@@ -2250,11 +2248,11 @@ msgstr "Όν_ομα"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1642
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1640
 msgid "_Open"
 msgstr "Άν_οιγμα"
 
-#: gtk/gtkfilechoosernative.c:600 gtk/inspector/css-editor.c:209
+#: gtk/gtkfilechoosernative.c:600 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "Απ_οθήκευση"
 
@@ -2337,27 +2335,27 @@ msgstr "Υπάρχει ήδη ένα αρχείο με το ίδιο όνομα.
 
 #: gtk/gtkfilechooserwidget.c:1058
 msgid "A folder cannot be called “.”"
-msgstr "Ένας φάκελος δεν μπορεί να ονομαστεί “.”"
+msgstr "Ένας φάκελος δεν μπορεί να ονομαστεί «.»"
 
 #: gtk/gtkfilechooserwidget.c:1059
 msgid "A file cannot be called “.”"
-msgstr "Ένα αρχείο δεν μπορεί να ονομαστεί “.”"
+msgstr "Ένα αρχείο δεν μπορεί να ονομαστεί «.»"
 
 #: gtk/gtkfilechooserwidget.c:1062
 msgid "A folder cannot be called “..”"
-msgstr "Ένας φάκελος δεν μπορεί να ονομαστεί “..”"
+msgstr "Ένας φάκελος δεν μπορεί να ονομαστεί «..»"
 
 #: gtk/gtkfilechooserwidget.c:1063
 msgid "A file cannot be called “..”"
-msgstr "Ένα αρχείο δεν μπορεί να ονομαστεί “..”"
+msgstr "Ένα αρχείο δεν μπορεί να ονομαστεί «..»"
 
 #: gtk/gtkfilechooserwidget.c:1066
 msgid "Folder names cannot contain “/”"
-msgstr "Τα ονόματα του φακέλου δεν μπορούν να περιέχουν το “/”"
+msgstr "Τα ονόματα του φακέλου δεν μπορούν να περιέχουν το «/»"
 
 #: gtk/gtkfilechooserwidget.c:1067
 msgid "File names cannot contain “/”"
-msgstr "Τα ονόματα αρχείων δεν μπορούν να περιέχουν το “/”"
+msgstr "Τα ονόματα αρχείων δεν μπορούν να περιέχουν το «/»"
 
 #: gtk/gtkfilechooserwidget.c:1093
 msgid "Folder names should not begin with a space"
@@ -2377,16 +2375,16 @@ msgstr "Τα ονόματα αρχείων δεν πρέπει να τελειώ
 
 #: gtk/gtkfilechooserwidget.c:1102
 msgid "Folder names starting with a “.” are hidden"
-msgstr "Τα ονόματα φακέλων που ξεκινούν με ένα “.” είναι κρυφά"
+msgstr "Τα ονόματα φακέλων που ξεκινούν με «.» είναι κρυφά"
 
 #: gtk/gtkfilechooserwidget.c:1103
 msgid "File names starting with a “.” are hidden"
-msgstr "Τα ονόματα αρχείων που ξεκινούν με ένα “.” είναι κρυφά"
+msgstr "Τα ονόματα αρχείων που ξεκινούν με «.» είναι κρυφά"
 
 #: gtk/gtkfilechooserwidget.c:1473
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
-msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε μόνιμα το “%s”;"
+msgstr "Είστε σίγουροι ότι επιθυμείτε να διαγράψετε μόνιμα το «%s»;"
 
 #: gtk/gtkfilechooserwidget.c:1476
 #, c-format
@@ -2397,154 +2395,154 @@ msgstr "Αν διαγράψετε ένα στοιχείο, αυτό θα χαθ�
 msgid "The file could not be renamed"
 msgstr "Το αρχείο δεν μπόρεσε να μετονομαστεί"
 
-#: gtk/gtkfilechooserwidget.c:1922
+#: gtk/gtkfilechooserwidget.c:1924
 msgid "Could not select file"
 msgstr "Αδυναμία επιλογής αρχείου"
 
-#: gtk/gtkfilechooserwidget.c:2271
+#: gtk/gtkfilechooserwidget.c:2273
 msgid "_Visit File"
 msgstr "Επίσκε_ψη του αρχείου"
 
-#: gtk/gtkfilechooserwidget.c:2272
+#: gtk/gtkfilechooserwidget.c:2274
 msgid "_Open With File Manager"
 msgstr "Ά_νοιγμα με τον διαχειριστή αρχείων"
 
-#: gtk/gtkfilechooserwidget.c:2273
+#: gtk/gtkfilechooserwidget.c:2275
 msgid "_Copy Location"
 msgstr "Αντιγραφή _τοποθεσίας"
 
-#: gtk/gtkfilechooserwidget.c:2274
+#: gtk/gtkfilechooserwidget.c:2276
 msgid "_Add to Bookmarks"
 msgstr "Προσ_θήκη στους σελιδοδείκτες"
 
-#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2529
+#: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2529
 #: gtk/ui/gtkfilechooserwidget.ui:525
 msgid "_Rename"
 msgstr "_Μετονομασία"
 
-#: gtk/gtkfilechooserwidget.c:2277
+#: gtk/gtkfilechooserwidget.c:2279
 msgid "_Move to Trash"
 msgstr "_Μετακίνηση στα Απορρίμματα"
 
-#: gtk/gtkfilechooserwidget.c:2281
+#: gtk/gtkfilechooserwidget.c:2283
 msgid "Show _Hidden Files"
 msgstr "Προβολή _κρυφών αρχείων"
 
-#: gtk/gtkfilechooserwidget.c:2282
+#: gtk/gtkfilechooserwidget.c:2284
 msgid "Show _Size Column"
-msgstr "Προβολή στήλης _μεγέθους"
+msgstr "Προβολή _μεγέθους στήλης"
 
-#: gtk/gtkfilechooserwidget.c:2283
+#: gtk/gtkfilechooserwidget.c:2285
 msgid "Show _Time"
 msgstr "Εμφάνιση _χρόνου"
 
-#: gtk/gtkfilechooserwidget.c:2284
+#: gtk/gtkfilechooserwidget.c:2286
 msgid "Sort _Folders before Files"
 msgstr "Ταξινόμηση _φακέλων πριν από τα αρχεία"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2608 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2610 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Τοποθεσία"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2699
+#: gtk/gtkfilechooserwidget.c:2703
 msgid "_Name:"
 msgstr "Όν_ομα:"
 
-#: gtk/gtkfilechooserwidget.c:3321
+#: gtk/gtkfilechooserwidget.c:3325
 msgid "Searching"
 msgstr "Αναζήτηση"
 
-#: gtk/gtkfilechooserwidget.c:3326 gtk/gtkfilechooserwidget.c:3340
+#: gtk/gtkfilechooserwidget.c:3330 gtk/gtkfilechooserwidget.c:3344
 #, c-format
 msgid "Searching in %s"
 msgstr "Αναζήτηση στο %s"
 
-#: gtk/gtkfilechooserwidget.c:3350
+#: gtk/gtkfilechooserwidget.c:3354
 msgid "Enter location"
 msgstr "Εισαγωγή τοποθεσίας"
 
-#: gtk/gtkfilechooserwidget.c:3352
+#: gtk/gtkfilechooserwidget.c:3356
 msgid "Enter location or URL"
-msgstr "Εισαγωγή τοποθεσίας ή URL"
+msgstr "Εισαγωγή τοποθεσίας ή διεύθυνσης"
 
-#: gtk/gtkfilechooserwidget.c:4390 gtk/gtkfilechooserwidget.c:7307
+#: gtk/gtkfilechooserwidget.c:4394 gtk/gtkfilechooserwidget.c:7311
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
 msgstr "Τροποποιήθηκε"
 
-#: gtk/gtkfilechooserwidget.c:4668
+#: gtk/gtkfilechooserwidget.c:4672
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Αδυναμία ανάγνωσης των περιεχομένων του %s"
 
-#: gtk/gtkfilechooserwidget.c:4672
+#: gtk/gtkfilechooserwidget.c:4676
 msgid "Could not read the contents of the folder"
 msgstr "Αδυναμία ανάγνωσης των περιεχομένων του φακέλου"
 
-#: gtk/gtkfilechooserwidget.c:4802 gtk/gtkfilechooserwidget.c:4850
+#: gtk/gtkfilechooserwidget.c:4806 gtk/gtkfilechooserwidget.c:4854
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4804 gtk/gtkfilechooserwidget.c:4852
+#: gtk/gtkfilechooserwidget.c:4808 gtk/gtkfilechooserwidget.c:4856
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4808
+#: gtk/gtkfilechooserwidget.c:4812
 msgid "Yesterday"
 msgstr "Χθες"
 
-#: gtk/gtkfilechooserwidget.c:4816
+#: gtk/gtkfilechooserwidget.c:4820
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4820
+#: gtk/gtkfilechooserwidget.c:4824
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5055 gtk/inspector/prop-editor.c:1689
+#: gtk/gtkfilechooserwidget.c:5059 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: gtk/gtkfilechooserwidget.c:5094 gtk/gtkplacessidebar.c:961
+#: gtk/gtkfilechooserwidget.c:5098 gtk/gtkplacessidebar.c:961
 msgid "Home"
 msgstr "Προσωπικός φάκελος"
 
-#: gtk/gtkfilechooserwidget.c:5587
+#: gtk/gtkfilechooserwidget.c:5591
 msgid "Cannot change to folder because it is not local"
 msgstr "Αποτυχία μετάβασης στο φάκελο διότι δεν είναι τοπικός"
 
-#: gtk/gtkfilechooserwidget.c:6373 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6377 gtk/gtkprintunixdialog.c:664
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "Ένα αρχείο με όνομα “%s” υπάρχει ήδη. Θέλετε να το αντικαταστήσετε;"
+msgstr "Ένα αρχείο με όνομα «%s» υπάρχει ήδη. Θέλετε να το αντικαταστήσετε;"
 
-#: gtk/gtkfilechooserwidget.c:6376 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:6380 gtk/gtkprintunixdialog.c:668
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
-"Το αρχείο υπάρχει ήδη στο “%s”. Η αντικατάσταση του θα επικαλύψει τα "
+"Το αρχείο υπάρχει ήδη στο «%s». Η αντικατάσταση του θα επικαλύψει τα "
 "περιεχόμενα του."
 
-#: gtk/gtkfilechooserwidget.c:6381 gtk/gtkprintunixdialog.c:676
+#: gtk/gtkfilechooserwidget.c:6385 gtk/gtkprintunixdialog.c:676
 msgid "_Replace"
 msgstr "_Αντικατάσταση"
 
-#: gtk/gtkfilechooserwidget.c:6595
+#: gtk/gtkfilechooserwidget.c:6599
 msgid "You do not have access to the specified folder."
 msgstr "Δεν έχετε πρόσβαση στον συγκεκριμένο φάκελο."
 
-#: gtk/gtkfilechooserwidget.c:7218
+#: gtk/gtkfilechooserwidget.c:7222
 msgid "Could not start the search process"
 msgstr "Αποτυχία εκκίνησης της διεργασίας αναζήτησης"
 
-#: gtk/gtkfilechooserwidget.c:7219
+#: gtk/gtkfilechooserwidget.c:7223
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2552,11 +2550,11 @@ msgstr ""
 "Το πρόγραμμα δεν κατάφερε να συνδεθεί με την υπηρεσία δημιουργίας "
 "ευρετηρίων. Βεβαιωθείτε ότι η υπηρεσία εκτελείται."
 
-#: gtk/gtkfilechooserwidget.c:7231
+#: gtk/gtkfilechooserwidget.c:7235
 msgid "Could not send the search request"
 msgstr "Αδυναμία αποστολής του αιτήματος αναζήτησης"
 
-#: gtk/gtkfilechooserwidget.c:7525
+#: gtk/gtkfilechooserwidget.c:7529
 msgid "Accessed"
 msgstr "Προσπελάστηκε"
 
@@ -2586,18 +2584,18 @@ msgstr "Καμία"
 msgid "OpenGL context creation failed"
 msgstr "Αποτυχία δημιουργίας περιεχομένου OpenGL"
 
-#: gtk/gtkheaderbar.c:387
+#: gtk/gtkheaderbar.c:385
 msgid "Application menu"
 msgstr "Μενού εφαρμογής"
 
-#: gtk/gtkheaderbar.c:449 gtk/gtkwindow.c:9061
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9081
 msgid "Close"
 msgstr "Κλείσιμο"
 
 #: gtk/gtkicontheme.c:2341 gtk/gtkicontheme.c:2405
 #, c-format
 msgid "Icon '%s' not present in theme %s"
-msgstr "Το εικονίδιο '%s' δεν περιέχεται στο θέμα %s"
+msgstr "Το εικονίδιο «%s» δεν περιέχεται στο θέμα %s"
 
 #: gtk/gtkicontheme.c:4077 gtk/gtkicontheme.c:4444
 msgid "Failed to load icon"
@@ -2656,7 +2654,7 @@ msgstr "Εμφάνιση έκδοσης του προγράμματος"
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
-msgstr "ΕΦΑΡΜΟΓΗ [URI...] - εκτελέστε μια ΕΦΑΡΜΟΓΗ"
+msgstr "ΕΦΑΡΜΟΓΗ [URI…] — εκτελέστε μια ΕΦΑΡΜΟΓΗ"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -2677,7 +2675,7 @@ msgstr "Σφάλμα ανάλυσης επιλογών της γραμμής ε�
 #: gtk/gtk-launch.c:92 gtk/gtk-launch.c:113
 #, c-format
 msgid "Try \"%s --help\" for more information."
-msgstr "Δοκιμάστε \"%s --help\" για περισσότερες πληροφορίες."
+msgstr "Δοκιμάστε «%s --help» για περισσότερες πληροφορίες."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
@@ -2772,16 +2770,16 @@ msgstr "Σημαίες αποσφαλμάτωσης του GTK+ για ορισ�
 msgid "GTK+ debugging flags to unset"
 msgstr "Σημαίες αποσφαλμάτωσης του GTK+ για αφαίρεση"
 
-#: gtk/gtkmain.c:805
+#: gtk/gtkmain.c:807
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Αδυναμία ανοίγματος της οθόνης: %s"
 
-#: gtk/gtkmain.c:914
+#: gtk/gtkmain.c:919
 msgid "GTK+ Options"
 msgstr "Επιλογές GTK+"
 
-#: gtk/gtkmain.c:914
+#: gtk/gtkmain.c:919
 msgid "Show GTK+ Options"
 msgstr "Εμφάνιση επιλογών GTK+"
 
@@ -2790,7 +2788,7 @@ msgstr "Εμφάνιση επιλογών GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1242
+#: gtk/gtkmain.c:1259
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2889,7 +2887,7 @@ msgstr "Κέλυφος Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Αδυναμία τερματισμού διεργασίας με PID %d: %s"
 
-#: gtk/gtknotebook.c:5113 gtk/gtknotebook.c:7382
+#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7389
 #, c-format
 msgid "Page %u"
 msgstr "Σελίδα %u"
@@ -2970,7 +2968,7 @@ msgstr "Άνοιγμα των απορριμμάτων"
 #: gtk/gtkplacessidebar.c:1313
 #, c-format
 msgid "Mount and open “%s”"
-msgstr "Προσάρτηση και άνοιγμα του “%s”"
+msgstr "Προσάρτηση και άνοιγμα του «%s»"
 
 #: gtk/gtkplacessidebar.c:1193
 msgid "Open the contents of the file system"
@@ -3046,12 +3044,12 @@ msgstr "Κλείδ_ωμα συσκευής"
 #: gtk/gtkplacessidebar.c:2210 gtk/gtkplacessidebar.c:3182
 #, c-format
 msgid "Unable to start “%s”"
-msgstr "Αδύνατη η εκκίνηση του “%s”"
+msgstr "Αδύνατη η εκκίνηση του «%s»"
 
 #: gtk/gtkplacessidebar.c:2240
 #, c-format
 msgid "Unable to access “%s”"
-msgstr "Αδυναμία πρόσβασης στο “%s”"
+msgstr "Αδυναμία πρόσβασης στο «%s»"
 
 #: gtk/gtkplacessidebar.c:2454
 msgid "This name is already taken"
@@ -3066,33 +3064,33 @@ msgstr "Όνομα"
 #: gtk/gtkplacessidebar.c:2723
 #, c-format
 msgid "Unable to unmount “%s”"
-msgstr "Αδύνατη η αποπροσάρτηση του “%s”"
+msgstr "Αδύνατη η αποπροσάρτηση του «%s»"
 
 #: gtk/gtkplacessidebar.c:2899
 #, c-format
 msgid "Unable to stop “%s”"
-msgstr "Αδύνατη η διακοπή του “%s”"
+msgstr "Αδύνατη η διακοπή του «%s»"
 
 #: gtk/gtkplacessidebar.c:2928
 #, c-format
 msgid "Unable to eject “%s”"
-msgstr "Αδύνατη η εξαγωγή του “%s”"
+msgstr "Αδύνατη η εξαγωγή του «%s»"
 
 #: gtk/gtkplacessidebar.c:2957 gtk/gtkplacessidebar.c:2986
 #, c-format
 msgid "Unable to eject %s"
-msgstr "Αδυναμία εξαγωγής του %s"
+msgstr "Αδύνατη η εξαγωγή του %s"
 
 #: gtk/gtkplacessidebar.c:3134
 #, c-format
 msgid "Unable to poll “%s” for media changes"
-msgstr "Αδύνατη η ερώτηση του “%s” για αλλαγές μέσων"
+msgstr "Αδύνατη η ερώτηση του «%s» για αλλαγές μέσων"
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1652
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1650
 msgid "Open in New _Tab"
 msgstr "Άνοιγμα σε νέα _καρτέλα"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1663
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1661
 msgid "Open in New _Window"
 msgstr "Άνοιγμα σε νέο _παράθυρο"
 
@@ -3108,11 +3106,11 @@ msgstr "Α_φαίρεση"
 msgid "Rename…"
 msgstr "Μετονομασία…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1697
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1695
 msgid "_Mount"
 msgstr "_Προσάρτηση"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1687
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1685
 msgid "_Unmount"
 msgstr "Α_ποπροσάρτηση"
 
@@ -3124,55 +3122,55 @@ msgstr "Ε_ξαγωγή"
 msgid "_Detect Media"
 msgstr "Εντοπισμός _μέσων"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1080
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1078
 msgid "Computer"
 msgstr "Υπολογιστής"
 
-#: gtk/gtkplacesview.c:892
+#: gtk/gtkplacesview.c:889
 msgid "Searching for network locations"
 msgstr "Αναζήτηση για τοποθεσίες δικτύου"
 
-#: gtk/gtkplacesview.c:899
+#: gtk/gtkplacesview.c:896
 msgid "No network locations found"
 msgstr "Δεν βρέθηκαν τοποθεσίες δικτύων"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1191 gtk/gtkplacesview.c:1266
+#: gtk/gtkplacesview.c:1189 gtk/gtkplacesview.c:1264
 msgid "Unable to access location"
 msgstr "Αδυναμία πρόσβασης στη θέση"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1209 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1207 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "_Σύνδεση"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1329
+#: gtk/gtkplacesview.c:1327
 msgid "Unable to unmount volume"
 msgstr "Αδύνατη η αποπροσάρτηση τόμου"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1430
+#: gtk/gtkplacesview.c:1428
 msgid "Cance_l"
 msgstr "Α_κύρωση"
 
-#: gtk/gtkplacesview.c:1687
+#: gtk/gtkplacesview.c:1685
 msgid "_Disconnect"
 msgstr "Απο_σύνδεση"
 
-#: gtk/gtkplacesview.c:1697
+#: gtk/gtkplacesview.c:1695
 msgid "_Connect"
 msgstr "_Σύνδεση"
 
-#: gtk/gtkplacesview.c:1838
+#: gtk/gtkplacesview.c:1836
 msgid "Unable to get remote server location"
 msgstr "Αδύνατη η λήψη της θέσης του απομακρυσμένου διακομιστή"
 
-#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
+#: gtk/gtkplacesview.c:1975 gtk/gtkplacesview.c:1984
 msgid "Networks"
 msgstr "Δίκτυα"
 
-#: gtk/gtkplacesview.c:1977 gtk/gtkplacesview.c:1986
+#: gtk/gtkplacesview.c:1975 gtk/gtkplacesview.c:1984
 msgid "On This Computer"
 msgstr "Σε αυτό τον υπολογιστή"
 
@@ -3180,18 +3178,18 @@ msgstr "Σε αυτό τον υπολογιστή"
 #. * should be based on the free space available.
 #. * i.e. 1 GB / 24 GB available.
 #.
-#: gtk/gtkplacesviewrow.c:132
+#: gtk/gtkplacesviewrow.c:134
 #, c-format
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
 msgstr[0] "%s / %s διαθέσιμο"
 msgstr[1] "%s / %s διαθέσιμα"
 
-#: gtk/gtkplacesviewrow.c:470
+#: gtk/gtkplacesviewrow.c:481
 msgid "Disconnect"
 msgstr "Αποσύνδεση"
 
-#: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:67
+#: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
 msgid "Unmount"
 msgstr "Αποπροσάρτηση"
 
@@ -3220,72 +3218,72 @@ msgstr "Μη διαθέσιμο"
 msgid "%s job #%d"
 msgstr "%s εκτύπωση #%d"
 
-#: gtk/gtkprintoperation.c:1818
+#: gtk/gtkprintoperation.c:1802
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Αρχική κατάσταση"
 
-#: gtk/gtkprintoperation.c:1819
+#: gtk/gtkprintoperation.c:1803
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Προετοιμασία εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:1820
+#: gtk/gtkprintoperation.c:1804
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Παραγωγή δεδομένων"
 
-#: gtk/gtkprintoperation.c:1821
+#: gtk/gtkprintoperation.c:1805
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Αποστολή δεδομένων"
 
-#: gtk/gtkprintoperation.c:1822
+#: gtk/gtkprintoperation.c:1806
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Αναμονή"
 
-#: gtk/gtkprintoperation.c:1823
+#: gtk/gtkprintoperation.c:1807
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Διακοπή λόγω προβλήματος"
 
-#: gtk/gtkprintoperation.c:1824
+#: gtk/gtkprintoperation.c:1808
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Εκτύπωση"
 
-#: gtk/gtkprintoperation.c:1825
+#: gtk/gtkprintoperation.c:1809
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Ολοκληρώθηκε"
 
-#: gtk/gtkprintoperation.c:1826
+#: gtk/gtkprintoperation.c:1810
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Ολοκληρώθηκε με σφάλμα"
 
-#: gtk/gtkprintoperation.c:2390
+#: gtk/gtkprintoperation.c:2374
 #, c-format
 msgid "Preparing %d"
 msgstr "Προετοιμασία %d"
 
-#: gtk/gtkprintoperation.c:2392 gtk/gtkprintoperation.c:3021
+#: gtk/gtkprintoperation.c:2376 gtk/gtkprintoperation.c:3005
 #, c-format
 msgid "Preparing"
 msgstr "Προετοιμασία"
 
-#: gtk/gtkprintoperation.c:2395
+#: gtk/gtkprintoperation.c:2379
 #, c-format
 msgid "Printing %d"
 msgstr "Εκτύπωση %d"
 
-#: gtk/gtkprintoperation.c:3052
+#: gtk/gtkprintoperation.c:3036
 #, c-format
 msgid "Error creating print preview"
 msgstr "Σφάλμα παραγωγής προεπισκόπησης εκτύπωσης"
 
-#: gtk/gtkprintoperation.c:3055
+#: gtk/gtkprintoperation.c:3039
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Η πιθανότερη αιτία είναι η αδυναμία δημιουργίας προσωρινού αρχείου."
@@ -3306,7 +3304,7 @@ msgstr "Τελείωσε το χαρτί"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:621
-#: modules/printbackends/cups/gtkprintbackendcups.c:2572
+#: modules/printbackends/cups/gtkprintbackendcups.c:2588
 msgid "Paused"
 msgstr "Σε παύση"
 
@@ -3374,42 +3372,42 @@ msgstr "Λήψη πληροφοριών εκτυπωτή…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3098
-#: modules/printbackends/cups/gtkprintbackendcups.c:5356
+#: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, top to bottom"
 msgstr "Από αριστερά προς δεξιά, από πάνω προς τα κάτω"
 
 #: gtk/gtkprintunixdialog.c:3098
-#: modules/printbackends/cups/gtkprintbackendcups.c:5356
+#: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, bottom to top"
 msgstr "Από αριστερά προς δεξιά, από κάτω προς τα πάνω"
 
 #: gtk/gtkprintunixdialog.c:3099
-#: modules/printbackends/cups/gtkprintbackendcups.c:5357
+#: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, top to bottom"
 msgstr "Από δεξιά προς αριστερά, από πάνω προς τα κάτω"
 
 #: gtk/gtkprintunixdialog.c:3099
-#: modules/printbackends/cups/gtkprintbackendcups.c:5357
+#: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, bottom to top"
 msgstr "Από δεξιά προς αριστερά, από κάτω προς τα πάνω"
 
 #: gtk/gtkprintunixdialog.c:3100
-#: modules/printbackends/cups/gtkprintbackendcups.c:5358
+#: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, left to right"
 msgstr "Από πάνω προς τα κάτω, από αριστερά προς δεξιά"
 
 #: gtk/gtkprintunixdialog.c:3100
-#: modules/printbackends/cups/gtkprintbackendcups.c:5358
+#: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, right to left"
 msgstr "Από πάνω προς τα κάτω, από δεξιά προς αριστερά"
 
 #: gtk/gtkprintunixdialog.c:3101
-#: modules/printbackends/cups/gtkprintbackendcups.c:5359
+#: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, left to right"
 msgstr "Από κάτω προς τα πάνω, από αριστερά προς δεξιά"
 
 #: gtk/gtkprintunixdialog.c:3101
-#: modules/printbackends/cups/gtkprintbackendcups.c:5359
+#: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, right to left"
 msgstr "Από κάτω προς τα πάνω, από δεξιά προς αριστερά"
 
@@ -3433,7 +3431,7 @@ msgstr "Από πάνω προς τα κάτω"
 msgid "Bottom to top"
 msgstr "Από κάτω προς τα πάνω"
 
-#: gtk/gtkprogressbar.c:698
+#: gtk/gtkprogressbar.c:729
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3442,7 +3440,7 @@ msgstr "%.0f %%"
 #: gtk/gtkrecentchooserdefault.c:1075 gtk/gtkrecentchooserdefault.c:1112
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr "Δε βρέθηκε αντικείμενο με URI '%s'"
+msgstr "Δε βρέθηκε αντικείμενο με URI «%s»"
 
 #: gtk/gtkrecentchooserdefault.c:1239
 msgid "Untitled filter"
@@ -3489,7 +3487,7 @@ msgstr "Δε βρέθηκαν αντικείμενα"
 #: gtk/gtkrecentchoosermenu.c:534 gtk/gtkrecentchoosermenu.c:590
 #, c-format
 msgid "No recently used resource found with URI '%s'"
-msgstr "Δε βρέθηκε πρόσφατα χρησιμοποιημένος πόρος με URI '%s'"
+msgstr "Δε βρέθηκε πρόσφατα χρησιμοποιημένος πόρος με URI «%s»"
 
 #: gtk/gtkrecentchoosermenu.c:789
 #, c-format
@@ -3520,23 +3518,23 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1041 gtk/gtkrecentmanager.c:1054
-#: gtk/gtkrecentmanager.c:1191 gtk/gtkrecentmanager.c:1201
-#: gtk/gtkrecentmanager.c:1253 gtk/gtkrecentmanager.c:1262
+#: gtk/gtkrecentmanager.c:1053 gtk/gtkrecentmanager.c:1066
+#: gtk/gtkrecentmanager.c:1203 gtk/gtkrecentmanager.c:1213
+#: gtk/gtkrecentmanager.c:1265 gtk/gtkrecentmanager.c:1274
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Αδυναμία εύρεσης αντικειμένου με URI '%s'"
+msgstr "Αδυναμία εύρεσης αντικειμένου με URI «%s»"
 
-#: gtk/gtkrecentmanager.c:1277
+#: gtk/gtkrecentmanager.c:1289
 #, c-format
 msgid "Unable to move the item with URI '%s' to '%s'"
-msgstr "Αδυναμία μετακίνησης του αντικειμένου με URI '%s' στο '%s'"
+msgstr "Αδυναμία μετακίνησης του αντικειμένου με URI «%s» στο «%s»"
 
-#: gtk/gtkrecentmanager.c:2467
+#: gtk/gtkrecentmanager.c:2507
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
-"Δεν βρέθηκε καταχωρημένη εφαρμογή με όνομα '%s' για το στοιχείο με URI '%s'"
+"Δεν βρέθηκε καταχωρημένη εφαρμογή με όνομα «%s» για το στοιχείο με URI «%s»"
 
 #: gtk/gtksearchentry.c:371
 msgid "Search"
@@ -3641,38 +3639,38 @@ msgstr "Δε βρέθηκε συνάρτηση αποσειριοποίησης 
 #: gtk/gtktextbufferserialize.c:784 gtk/gtktextbufferserialize.c:810
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
-msgstr "Τόσο το \"id\" όσο και το \"name\" βρέθηκαν στο στοιχείο <%s>"
+msgstr "Τόσο το «id» όσο και το «name» βρέθηκαν στο στοιχείο <%s>"
 
 #: gtk/gtktextbufferserialize.c:794 gtk/gtktextbufferserialize.c:820
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr "Το γνώρισμα \"%s\" βρέθηκε δύο φορές στο στοιχείο <%s>"
+msgstr "Το γνώρισμα «%s» βρέθηκε δύο φορές στο στοιχείο <%s>"
 
 #: gtk/gtktextbufferserialize.c:836
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "Το στοιχείο <%s> έχει άκυρη ταυτότητα \"%s\""
+msgstr "Το στοιχείο <%s> έχει άκυρο αναγνωριστικό «%s»"
 
 #: gtk/gtktextbufferserialize.c:846
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "Το στοιχείο <%s> δεν διαθέτει γνώρισμα \"name\" ή \"id\""
+msgstr "Το στοιχείο <%s> δεν διαθέτει γνώρισμα «name» ή «id»"
 
 #: gtk/gtktextbufferserialize.c:933
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr "Το γνώρισμα \"%s\" επαναλαμβάνεται δύο φορές στο ίδιο στοιχείο <%s>"
+msgstr "Το γνώρισμα «%s» επαναλαμβάνεται δύο φορές στο ίδιο στοιχείο <%s>"
 
 #: gtk/gtktextbufferserialize.c:951 gtk/gtktextbufferserialize.c:976
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr ""
-"Το γνώρισμα \"%s\" είναι άκυρο για το στοιχείο <%s> σε αυτό το περιεχόμενο"
+"Το γνώρισμα «%s» είναι άκυρο για το στοιχείο <%s> σε αυτό το περιεχόμενο"
 
 #: gtk/gtktextbufferserialize.c:1015
 #, c-format
 msgid "Tag \"%s\" has not been defined."
-msgstr "Η ετικέτα \"%s\" δεν έχει οριστεί."
+msgstr "Η ετικέτα «%s» δεν έχει οριστεί."
 
 #: gtk/gtktextbufferserialize.c:1027
 msgid "Anonymous tag found and tags can not be created."
@@ -3682,7 +3680,7 @@ msgstr "Βρέθηκε ανώνυμη ετικέτα και δεν μπορού�
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
-"Η ετικέτα \"%s\" δεν υπάρχει στην ενδιάμεση μνήμη και δεν μπορούν να "
+"Η ετικέτα «%s» δεν υπάρχει στην ενδιάμεση μνήμη και δεν μπορούν να "
 "δημιουργηθούν ετικέτες."
 
 #: gtk/gtktextbufferserialize.c:1139 gtk/gtktextbufferserialize.c:1214
@@ -3694,35 +3692,34 @@ msgstr "Το στοιχείο <%s> δεν επιτρέπεται κάτω από
 #: gtk/gtktextbufferserialize.c:1170
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr "Το \"%s\" δεν είναι έγκυρος τύπος γνωρίσματος"
+msgstr "Το «%s» δεν είναι έγκυρος τύπος γνωρίσματος"
 
 #: gtk/gtktextbufferserialize.c:1178
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr "Το \"%s\" δεν είναι έγκυρο όνομα γνωρίσματος"
+msgstr "Το «%s» δεν είναι έγκυρο όνομα γνωρίσματος"
 
 #: gtk/gtktextbufferserialize.c:1188
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"Το \"%s\" δεν μπορεί να μετατραπεί σε τιμή τύπου \"%s\" για το γνώρισμα \"%s"
-"\""
+"Το «%s» δεν μπορεί να μετατραπεί σε τιμή τύπου «%s» για το γνώρισμα «%s»"
 
 #: gtk/gtktextbufferserialize.c:1197
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr "Το \"%s\" δεν είναι έγκυρη τιμή για το γνώρισμα \"%s\""
+msgstr "Το «%s» δεν είναι έγκυρη τιμή για το γνώρισμα «%s»"
 
 #: gtk/gtktextbufferserialize.c:1282
 #, c-format
 msgid "Tag \"%s\" already defined"
-msgstr "Η ετικέτα \"%s\" έχει ήδη οριστεί"
+msgstr "Η ετικέτα «%s» έχει ήδη οριστεί"
 
 #: gtk/gtktextbufferserialize.c:1295
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
-msgstr "Η ετικέτα \"%s\" έχει άκυρη προτεραιότητα \"%s\""
+msgstr "Η ετικέτα «%s» έχει άκυρη προτεραιότητα «%s»"
 
 #: gtk/gtktextbufferserialize.c:1348
 #, c-format
@@ -3814,24 +3811,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9009
+#: gtk/gtkwindow.c:9029
 msgid "Move"
 msgstr "Μετακίνηση"
 
-#: gtk/gtkwindow.c:9017
+#: gtk/gtkwindow.c:9037
 msgid "Resize"
 msgstr "Αλλαγή μεγέθους"
 
-#: gtk/gtkwindow.c:9048
+#: gtk/gtkwindow.c:9068
 msgid "Always on Top"
 msgstr "Πάντα στην κορυφή"
 
-#: gtk/gtkwindow.c:12480
+#: gtk/gtkwindow.c:12502
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Θέλετε να χρησιμοποιήσετε τον επόπτη GTK+;"
 
-#: gtk/gtkwindow.c:12482
+#: gtk/gtkwindow.c:12504
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3842,9 +3839,9 @@ msgstr ""
 "εξερευνήσετε και να τροποποιήσετε κάθε εφαρμογή GTK+. Χρησιμοποιώντας το "
 "μπορεί να προκαλέσετε την κατάρρευση της εφαρμογής."
 
-#: gtk/gtkwindow.c:12487
+#: gtk/gtkwindow.c:12509
 msgid "Don't show this message again"
-msgstr "Να μην εμφανιστεί αυτό το μήνυμα ξανά"
+msgstr "Να μην εμφανιστεί ξανά αυτό το μήνυμα"
 
 #: gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -3868,12 +3865,12 @@ msgstr "Ενεργοποιημένο"
 msgid "Parameter Type"
 msgstr "Τύπος παραμέτρου"
 
-#: gtk/inspector/css-editor.c:118
+#: gtk/inspector/css-editor.c:112
 msgid "You can type here any CSS rule recognized by GTK+."
 msgstr ""
 "Πληκτρολογήστε εδώ οποιοδήποτε κανόνα CSS όπου αναγνωρίζεται από το GTK+."
 
-#: gtk/inspector/css-editor.c:119
+#: gtk/inspector/css-editor.c:113
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
@@ -3881,11 +3878,11 @@ msgstr ""
 "Μπορείτε να απενεργοποιήσετε προσωρινά αυτό το προσαρμοσμένο CSS πατώντας "
 "στο κουμπί “Παύση”."
 
-#: gtk/inspector/css-editor.c:120
+#: gtk/inspector/css-editor.c:114
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr "Οι αλλαγές εφαρμόζονται κατευθείαν και καθολικά, για όλη την εφαρμογή."
 
-#: gtk/inspector/css-editor.c:169
+#: gtk/inspector/css-editor.c:162
 #, c-format
 msgid "Saving CSS failed"
 msgstr "Αποτυχία αποθήκευσης CSS"
@@ -3919,12 +3916,12 @@ msgstr "Τιμή"
 msgid "Show data"
 msgstr "Εμφάνιση δεδομένων"
 
-#: gtk/inspector/general.c:275
+#: gtk/inspector/general.c:309
 msgctxt "GL version"
 msgid "None"
 msgstr "Καμία"
 
-#: gtk/inspector/general.c:276
+#: gtk/inspector/general.c:310
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Κανένας"
@@ -4295,19 +4292,19 @@ msgstr "Άθροισμα"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Ενεργοποίηση στατιστικών με GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:371 gtk/inspector/visual.c:386
+#: gtk/inspector/visual.c:406 gtk/inspector/visual.c:421
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Το θέμα είναι προκαθορισμένο από το GTK_THEME"
 
-#: gtk/inspector/visual.c:592
+#: gtk/inspector/visual.c:631
 msgid "Backend does not support window scaling"
 msgstr "Το σύστημα υποστήριξης δεν υποστηρίζει εστίαση παραθύρου"
 
-#: gtk/inspector/visual.c:687
+#: gtk/inspector/visual.c:726
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Η ρύθμιση είναι προκαθορισμένη από το GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:752
+#: gtk/inspector/visual.c:791
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4315,8 +4312,8 @@ msgstr ""
 "Δεν μπορεί να οριστεί στο περιβάλλον εκτέλεσης.\n"
 "Χρησιμοποιήστε GDK_GL=always ή GDK_GL=disable"
 
-#: gtk/inspector/visual.c:766 gtk/inspector/visual.c:767
-#: gtk/inspector/visual.c:768
+#: gtk/inspector/visual.c:805 gtk/inspector/visual.c:806
+#: gtk/inspector/visual.c:807
 msgid "GL rendering is disabled"
 msgstr "Η απεικόνιση GL είναι απενεργοποιημένη"
 
@@ -4370,7 +4367,7 @@ msgstr "Κινούμενα εφέ"
 
 #: gtk/inspector/visual.ui:415
 msgid "Slowdown"
-msgstr ""
+msgstr "Μείωση ταχύτητας"
 
 #: gtk/inspector/visual.ui:474
 msgid "Rendering Mode"
@@ -5446,11 +5443,11 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/ui/gtkaboutdialog.ui:148
+#: gtk/ui/gtkaboutdialog.ui:133
 msgid "About"
 msgstr "Περί"
 
-#: gtk/ui/gtkaboutdialog.ui:188
+#: gtk/ui/gtkaboutdialog.ui:173
 msgid "Credits"
 msgstr "Μνεία"
 
@@ -5642,6 +5639,7 @@ msgstr ""
 "διεύθυνση. Παραδείγματα:"
 
 #: gtk/ui/gtkplacesview.ui:57
+#| msgid "smb://foo.example.com, ssh://192.168.0.1, ftp://[2001:db8::1]"
 msgid "smb://foo.example.com, ssh://192.168.0.1"
 msgstr "smb://foo.example.com, ssh://192.168.0.1"
 
@@ -5681,6 +5679,11 @@ msgstr "ftp:// ή ftps://"
 #: gtk/ui/gtkplacesview.ui:205
 msgid "smb://"
 msgstr "smb://"
+
+#. Translators: do not translate sftp:// and ssh://
+#: gtk/ui/gtkplacesview.ui:216
+msgid "sftp:// or ssh://"
+msgstr "sftp:// ή ssh://"
 
 #. Translators: do not translate dav:// and davs://
 #: gtk/ui/gtkplacesview.ui:227
@@ -6045,7 +6048,7 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"Χωρίς αρχείο ευρετηρίου θέματος στο '%s'.\n"
+"Χωρίς αρχείο ευρετηρίου θέματος στο «%s».\n"
 "Αν θέλετε να δημιουργήσετε εδώ κρυφή μνήμη εικονιδίων, χρησιμοποιήστε το --"
 "ignore-theme-index.\n"
 
@@ -6156,439 +6159,439 @@ msgstr "Σε αδράνεια"
 msgid "Pages per _sheet:"
 msgstr "Σελίδες ανά _φύλλο:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1090
-#: modules/printbackends/cups/gtkprintbackendcups.c:1399
+#: modules/printbackends/cups/gtkprintbackendcups.c:1106
+#: modules/printbackends/cups/gtkprintbackendcups.c:1415
 msgid "Username:"
 msgstr "Όνομα χρήστη:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1091
-#: modules/printbackends/cups/gtkprintbackendcups.c:1408
+#: modules/printbackends/cups/gtkprintbackendcups.c:1107
+#: modules/printbackends/cups/gtkprintbackendcups.c:1424
 msgid "Password:"
 msgstr "Κωδικός πρόσβασης:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1130
-#: modules/printbackends/cups/gtkprintbackendcups.c:1421
+#: modules/printbackends/cups/gtkprintbackendcups.c:1146
+#: modules/printbackends/cups/gtkprintbackendcups.c:1437
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
-"Απαιτείται πιστοποίηση για την εκτύπωση του εγγράφου “%s” στον εκτυπωτή %s"
+"Απαιτείται πιστοποίηση για την εκτύπωση του εγγράφου «%s» στον εκτυπωτή %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1132
+#: modules/printbackends/cups/gtkprintbackendcups.c:1148
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Απαιτείται πιστοποίηση για την εκτύπωση ενός εγγράφου στο %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1136
+#: modules/printbackends/cups/gtkprintbackendcups.c:1152
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
-msgstr "Απαιτείται πιστοποίηση για τη λήψη των ιδιοτήτων της εργασίας “%s”"
+msgstr "Απαιτείται πιστοποίηση για τη λήψη των ιδιοτήτων της εργασίας «%s»"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1138
+#: modules/printbackends/cups/gtkprintbackendcups.c:1154
 msgid "Authentication is required to get attributes of a job"
 msgstr "Απαιτείται πιστοποίηση για τη λήψη των ιδιοτήτων μιας εργασίας"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1142
+#: modules/printbackends/cups/gtkprintbackendcups.c:1158
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Απαιτείται πιστοποίηση για τη λήψη των ιδιοτήτων του εκτυπωτή %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1144
+#: modules/printbackends/cups/gtkprintbackendcups.c:1160
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Απαιτείται πιστοποίηση για τη λήψη των ιδιοτήτων ενός εκτυπωτή"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1147
+#: modules/printbackends/cups/gtkprintbackendcups.c:1163
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Απαιτείται πιστοποίηση για τη λήψη του προεπιλεγμένου εκτυπωτή του %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1150
+#: modules/printbackends/cups/gtkprintbackendcups.c:1166
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Απαιτείται πιστοποίηση για τη λήψη των εκτυπωτών από το %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1155
+#: modules/printbackends/cups/gtkprintbackendcups.c:1171
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Απαιτείται πιστοποίηση για τη λήψη ενός αρχείου από το %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1157
+#: modules/printbackends/cups/gtkprintbackendcups.c:1173
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Απαιτείται πιστοποίηση στο %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1393
+#: modules/printbackends/cups/gtkprintbackendcups.c:1409
 msgid "Domain:"
 msgstr "Τομέας:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1423
+#: modules/printbackends/cups/gtkprintbackendcups.c:1439
 #, c-format
 msgid "Authentication is required to print document “%s”"
-msgstr "Απαιτείται πιστοποίηση για την εκτύπωση του εγγράφου “%s”"
+msgstr "Απαιτείται πιστοποίηση για την εκτύπωση του εγγράφου «%s»"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1428
+#: modules/printbackends/cups/gtkprintbackendcups.c:1444
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Απαιτείται πιστοποίηση για την εκτύπωση του εγγράφου στον εκτυπωτή %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1430
+#: modules/printbackends/cups/gtkprintbackendcups.c:1446
 msgid "Authentication is required to print this document"
 msgstr "Απαιτείται πιστοποίηση για την εκτύπωση του εγγράφου"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2501
+#: modules/printbackends/cups/gtkprintbackendcups.c:2517
 #, c-format
 msgid "Printer “%s” is low on toner."
-msgstr "Τελειώνει ο γραφίτης στον εκτυπωτή “%s”."
+msgstr "Τελειώνει ο γραφίτης στον εκτυπωτή «%s»."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2505
+#: modules/printbackends/cups/gtkprintbackendcups.c:2521
 #, c-format
 msgid "Printer “%s” has no toner left."
-msgstr "Τελείωσε ο γραφίτης στον εκτυπωτή “%s”."
+msgstr "Τελείωσε ο γραφίτης στον εκτυπωτή «%s»."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2510
+#: modules/printbackends/cups/gtkprintbackendcups.c:2526
 #, c-format
 msgid "Printer “%s” is low on developer."
-msgstr "Τελειώνει ο εμφανιστής στον εκτυπωτή “%s”."
+msgstr "Τελειώνει ο εμφανιστής στον εκτυπωτή «%s»."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2515
+#: modules/printbackends/cups/gtkprintbackendcups.c:2531
 #, c-format
 msgid "Printer “%s” is out of developer."
-msgstr "Τελείωσε ο εμφανιστής στον εκτυπωτή “%s”."
+msgstr "Τελείωσε ο εμφανιστής στον εκτυπωτή «%s»."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2520
+#: modules/printbackends/cups/gtkprintbackendcups.c:2536
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
-msgstr "Τελειώνει τουλάχιστον ένα δοχείο έγχρωμου μελανιού στον εκτυπωτή “%s”."
+msgstr "Τελειώνει τουλάχιστον ένα δοχείο έγχρωμου μελανιού στον εκτυπωτή «%s»."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2525
-#, c-format
-msgid "Printer “%s” is out of at least one marker supply."
-msgstr "Τελείωσε τουλάχιστον ένα δοχείο έγχρωμου μελανιού στον εκτυπωτή “%s”."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:2529
-#, c-format
-msgid "The cover is open on printer “%s”."
-msgstr "Είναι ανοιχτό το κάλυμμα του εκτυπωτή “%s”."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:2533
-#, c-format
-msgid "The door is open on printer “%s”."
-msgstr "Είναι ανοιχτή η θύρα του εκτυπωτή “%s”."
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:2537
-#, c-format
-msgid "Printer “%s” is low on paper."
-msgstr "Τελειώνει το χαρτί στον εκτυπωτή “%s”."
-
 #: modules/printbackends/cups/gtkprintbackendcups.c:2541
 #, c-format
-msgid "Printer “%s” is out of paper."
-msgstr "Τελείωσε το χαρτί στον εκτυπωτή “%s”."
+msgid "Printer “%s” is out of at least one marker supply."
+msgstr "Τελείωσε τουλάχιστον ένα δοχείο έγχρωμου μελανιού στον εκτυπωτή «%s»."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2545
 #, c-format
-msgid "Printer “%s” is currently offline."
-msgstr "Ο εκτυπωτής “%s” είναι προς το παρόν αποσυνδεδεμένος."
+msgid "The cover is open on printer “%s”."
+msgstr "Είναι ανοιχτό το κάλυμμα του εκτυπωτή «%s»."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2549
 #, c-format
+msgid "The door is open on printer “%s”."
+msgstr "Είναι ανοιχτή η θύρα του εκτυπωτή «%s»."
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2553
+#, c-format
+msgid "Printer “%s” is low on paper."
+msgstr "Τελειώνει το χαρτί στον εκτυπωτή «%s»."
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2557
+#, c-format
+msgid "Printer “%s” is out of paper."
+msgstr "Τελείωσε το χαρτί στον εκτυπωτή «%s»."
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2561
+#, c-format
+msgid "Printer “%s” is currently offline."
+msgstr "Ο εκτυπωτής «%s» είναι προς το παρόν αποσυνδεδεμένος."
+
+#: modules/printbackends/cups/gtkprintbackendcups.c:2565
+#, c-format
 msgid "There is a problem on printer “%s”."
-msgstr "Υπάρχει πρόβλημα στον εκτυπωτή “%s”."
+msgstr "Υπάρχει πρόβλημα στον εκτυπωτή «%s»."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2569
+#: modules/printbackends/cups/gtkprintbackendcups.c:2585
 msgid "Paused; Rejecting Jobs"
 msgstr "Σε παύση· απόρριψη εκτυπώσεων"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2575
+#: modules/printbackends/cups/gtkprintbackendcups.c:2591
 msgid "Rejecting Jobs"
 msgstr "Απόρριψη εκτυπώσεων"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2616
+#: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4302
-#: modules/printbackends/cups/gtkprintbackendcups.c:4369
+#: modules/printbackends/cups/gtkprintbackendcups.c:4318
+#: modules/printbackends/cups/gtkprintbackendcups.c:4385
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Διπλής όψης"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4303
+#: modules/printbackends/cups/gtkprintbackendcups.c:4319
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Τύπος χαρτιού"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4304
+#: modules/printbackends/cups/gtkprintbackendcups.c:4320
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Πηγή χαρτιού"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4305
-#: modules/printbackends/cups/gtkprintbackendcups.c:4370
+#: modules/printbackends/cups/gtkprintbackendcups.c:4321
+#: modules/printbackends/cups/gtkprintbackendcups.c:4386
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Συρτάρι εξόδου"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4306
+#: modules/printbackends/cups/gtkprintbackendcups.c:4322
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Ανάλυση"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4307
+#: modules/printbackends/cups/gtkprintbackendcups.c:4323
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Προφιλτράρισμα GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4316
+#: modules/printbackends/cups/gtkprintbackendcups.c:4332
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Μονής όψης"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4318
+#: modules/printbackends/cups/gtkprintbackendcups.c:4334
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Μακρύ άκρο (κανονικό)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4320
+#: modules/printbackends/cups/gtkprintbackendcups.c:4336
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Βραχύ άκρο (αναστροφή)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4322
-#: modules/printbackends/cups/gtkprintbackendcups.c:4324
-#: modules/printbackends/cups/gtkprintbackendcups.c:4332
+#: modules/printbackends/cups/gtkprintbackendcups.c:4338
+#: modules/printbackends/cups/gtkprintbackendcups.c:4340
+#: modules/printbackends/cups/gtkprintbackendcups.c:4348
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Αυτόματη επιλογή"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4326
-#: modules/printbackends/cups/gtkprintbackendcups.c:4328
-#: modules/printbackends/cups/gtkprintbackendcups.c:4330
-#: modules/printbackends/cups/gtkprintbackendcups.c:4334
+#: modules/printbackends/cups/gtkprintbackendcups.c:4342
+#: modules/printbackends/cups/gtkprintbackendcups.c:4344
+#: modules/printbackends/cups/gtkprintbackendcups.c:4346
+#: modules/printbackends/cups/gtkprintbackendcups.c:4350
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Προεπιλογή εκτυπωτή"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4336
+#: modules/printbackends/cups/gtkprintbackendcups.c:4352
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Ενσωμάτωση μόνο των γραμματοσειρών GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4338
+#: modules/printbackends/cups/gtkprintbackendcups.c:4354
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Μετατροπή σε PS επιπέδου 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4340
+#: modules/printbackends/cups/gtkprintbackendcups.c:4356
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Μετατροπή σε PS επιπέδου 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4342
+#: modules/printbackends/cups/gtkprintbackendcups.c:4358
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Χωρίς προφιλτράρισμα"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:4351
+#: modules/printbackends/cups/gtkprintbackendcups.c:4367
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Διάφορα"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4378
+#: modules/printbackends/cups/gtkprintbackendcups.c:4394
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Μονής όψης"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4380
+#: modules/printbackends/cups/gtkprintbackendcups.c:4396
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Μακρύ άκρο (τυπικό)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4382
+#: modules/printbackends/cups/gtkprintbackendcups.c:4398
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Βραχύ άκρο (αναστροφή)"
 
 #. Translators: Top output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4385
+#: modules/printbackends/cups/gtkprintbackendcups.c:4401
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Πάνω δοχείο"
 
 #. Translators: Middle output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4387
+#: modules/printbackends/cups/gtkprintbackendcups.c:4403
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Μεσαίο δοχείο"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4389
+#: modules/printbackends/cups/gtkprintbackendcups.c:4405
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Κάτω δοχείο"
 
 #. Translators: Side output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4391
+#: modules/printbackends/cups/gtkprintbackendcups.c:4407
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Πλευρικό δοχείο"
 
 #. Translators: Left output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4393
+#: modules/printbackends/cups/gtkprintbackendcups.c:4409
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Αριστερό κάδο"
 
 #. Translators: Right output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4395
+#: modules/printbackends/cups/gtkprintbackendcups.c:4411
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Δεξιό δοχείο"
 
 #. Translators: Center output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4397
+#: modules/printbackends/cups/gtkprintbackendcups.c:4413
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Κεντρικό δοχείο"
 
 #. Translators: Rear output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4399
+#: modules/printbackends/cups/gtkprintbackendcups.c:4415
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Πίσω δοχείο"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4401
+#: modules/printbackends/cups/gtkprintbackendcups.c:4417
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Δοχείο άνω όψης"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4403
+#: modules/printbackends/cups/gtkprintbackendcups.c:4419
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Δοχείο κάτω όψης"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4405
+#: modules/printbackends/cups/gtkprintbackendcups.c:4421
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Δοχείο μεγάλης χωρητικότητας"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4427
+#: modules/printbackends/cups/gtkprintbackendcups.c:4443
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Μονάδα στοίβαξης %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4431
+#: modules/printbackends/cups/gtkprintbackendcups.c:4447
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Γραμματοκιβώτιο %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/cups/gtkprintbackendcups.c:4435
+#: modules/printbackends/cups/gtkprintbackendcups.c:4451
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Το γραμματοκιβώτιο μου"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4439
+#: modules/printbackends/cups/gtkprintbackendcups.c:4455
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Δίσκος %d"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4910
+#: modules/printbackends/cups/gtkprintbackendcups.c:4926
 msgid "Printer Default"
 msgstr "Προεπιλογή εκτυπωτή"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5351
+#: modules/printbackends/cups/gtkprintbackendcups.c:5367
 msgid "Urgent"
 msgstr "Επείγον"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5351
+#: modules/printbackends/cups/gtkprintbackendcups.c:5367
 msgid "High"
 msgstr "Υψηλή"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5351
+#: modules/printbackends/cups/gtkprintbackendcups.c:5367
 msgid "Medium"
 msgstr "Μεσαία"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5351
+#: modules/printbackends/cups/gtkprintbackendcups.c:5367
 msgid "Low"
 msgstr "Χαμηλή"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5381
+#: modules/printbackends/cups/gtkprintbackendcups.c:5397
 msgid "Job Priority"
 msgstr "Προτεραιότητα"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5392
+#: modules/printbackends/cups/gtkprintbackendcups.c:5408
 msgid "Billing Info"
 msgstr "Πληροφορίες τιμολόγησης"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5416
+#: modules/printbackends/cups/gtkprintbackendcups.c:5432
 msgctxt "cover page"
 msgid "None"
 msgstr "Κανένα"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5417
+#: modules/printbackends/cups/gtkprintbackendcups.c:5433
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Διαβαθμισμένο"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5418
+#: modules/printbackends/cups/gtkprintbackendcups.c:5434
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Εμπιστευτικό"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5419
+#: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Απόρρητο"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5420
+#: modules/printbackends/cups/gtkprintbackendcups.c:5436
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Τυπικό"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5421
+#: modules/printbackends/cups/gtkprintbackendcups.c:5437
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Άκρως απόρρητο"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5422
+#: modules/printbackends/cups/gtkprintbackendcups.c:5438
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Μη διαβαθμισμένο"
@@ -6596,7 +6599,7 @@ msgstr "Μη διαβαθμισμένο"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5434
+#: modules/printbackends/cups/gtkprintbackendcups.c:5450
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Σελίδες ανά φύλλο"
@@ -6604,7 +6607,7 @@ msgstr "Σελίδες ανά φύλλο"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5451
+#: modules/printbackends/cups/gtkprintbackendcups.c:5467
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Σειρά σελίδων"
@@ -6612,7 +6615,7 @@ msgstr "Σειρά σελίδων"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5493
+#: modules/printbackends/cups/gtkprintbackendcups.c:5509
 msgctxt "printer option"
 msgid "Before"
 msgstr "Πριν"
@@ -6620,7 +6623,7 @@ msgstr "Πριν"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5508
+#: modules/printbackends/cups/gtkprintbackendcups.c:5524
 msgctxt "printer option"
 msgid "After"
 msgstr "Μετά"
@@ -6629,7 +6632,7 @@ msgstr "Μετά"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5528
+#: modules/printbackends/cups/gtkprintbackendcups.c:5544
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Εκτύπωση"
@@ -6637,7 +6640,7 @@ msgstr "Εκτύπωση"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5539
+#: modules/printbackends/cups/gtkprintbackendcups.c:5555
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Εκτύπωση"
@@ -6647,18 +6650,18 @@ msgstr "Εκτύπωση"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5581
+#: modules/printbackends/cups/gtkprintbackendcups.c:5597
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Προσαρμοσμένο %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5690
+#: modules/printbackends/cups/gtkprintbackendcups.c:5706
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Προφίλ εκτυπωτή"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5697
+#: modules/printbackends/cups/gtkprintbackendcups.c:5713
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Μη διαθέσιμο"
@@ -6693,7 +6696,7 @@ msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "Postscript"
-msgstr "Postscript"
+msgstr "PostScript"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "SVG"
@@ -6753,6 +6756,34 @@ msgstr "δοκιμαστικό.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Εκτύπωση σε δοκιμαστικό εκτυπωτή"
+
+#~ msgid "Vulkan support disabled via GDK_DEBUG"
+#~ msgstr "Η υποστήριξη Vulkan απενεργοποιήθηκε μέσα από το GDK_DEBUG"
+
+#~ msgid "Open “%s”"
+#~ msgstr "Άνοιγμα του «%s»"
+
+#~ msgid "Swipe left"
+#~ msgstr "Πέρασμα αριστερά"
+
+#~ msgid "Swipe right"
+#~ msgstr "Πέρασμα δεξιά"
+
+#~ msgid "Saving RenderNode failed"
+#~ msgstr "Αποτυχία αποθήκευσης RenderNode"
+
+#~ msgid "Snapshot Debug Nodes"
+#~ msgstr "Κόμβοι αποσφαλμάτωσης του στιγμιότυπου"
+
+#~ msgid "Recorder"
+#~ msgstr "Εγγραφή"
+
+#~ msgid ""
+#~ "The WGL_ARB_create_context extension needed to create core profiles is "
+#~ "not available"
+#~ msgstr ""
+#~ "Δεν είναι διαθέσιμη η επέκταση GLX_ARB_create_context που απαιτείται για "
+#~ "τη δημιουργία προφίλ πυρήνα"
 
 #~ msgid "Changes are applied instantly, only for this selected widget."
 #~ msgstr ""
