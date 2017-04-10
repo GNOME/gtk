@@ -1264,20 +1264,13 @@ gtk_icon_view_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  /* Make the main, clipping window */
-  icon_view->priv->view_window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                                       GDK_VISIBILITY_NOTIFY_MASK,
-                                                       &allocation);
-  gtk_widget_register_window (widget, icon_view->priv->view_window);
-
   /* Make the window for the icon view */
-  icon_view->priv->bin_window = gdk_window_new_child (icon_view->priv->view_window,
+  icon_view->priv->bin_window = gdk_window_new_child (gtk_widget_get_window (widget),
                                                       GDK_ALL_EVENTS_MASK,
                                                       &(GdkRectangle) { 0, 0,
                                                       MAX (icon_view->priv->width, allocation.width),
                                                       MAX (icon_view->priv->height, allocation.height)});
   gtk_widget_register_window (widget, icon_view->priv->bin_window);
-  gdk_window_show (icon_view->priv->bin_window);
 }
 
 static void
@@ -1291,10 +1284,6 @@ gtk_icon_view_unrealize (GtkWidget *widget)
   gdk_window_destroy (icon_view->priv->bin_window);
   icon_view->priv->bin_window = NULL;
 
-  gtk_widget_unregister_window (widget, icon_view->priv->view_window);
-  gdk_window_destroy (icon_view->priv->view_window);
-  icon_view->priv->view_window = NULL;
-
   GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize (widget);
 }
 
@@ -1303,7 +1292,7 @@ gtk_icon_view_map (GtkWidget *widget)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
-  gdk_window_show (icon_view->priv->view_window);
+  gdk_window_show (icon_view->priv->bin_window);
 
   GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->map (widget);
 }
@@ -1315,7 +1304,7 @@ gtk_icon_view_unmap (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unmap (widget);
 
-  gdk_window_hide (icon_view->priv->view_window);
+  gdk_window_hide (icon_view->priv->bin_window);
 }
 
 static gint
@@ -1692,12 +1681,10 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_window_move_resize (icon_view->priv->view_window,
-			      allocation->x, allocation->y,
-			      allocation->width, allocation->height);
-      gdk_window_resize (icon_view->priv->bin_window,
-			 MAX (icon_view->priv->width, allocation->width),
-			 MAX (icon_view->priv->height, allocation->height));
+      gdk_window_move_resize (icon_view->priv->bin_window,
+                              allocation->x + MAX (icon_view->priv->width, allocation->width),
+                              allocation->y + MAX (icon_view->priv->height, allocation->height),
+                              allocation->width, allocation->height);
     }
 
   gtk_icon_view_allocate_children (icon_view);
@@ -1856,6 +1843,20 @@ rubberband_scroll_timeout (gpointer data)
   return TRUE;
 }
 
+static GtkIconViewItem *
+_gtk_icon_view_get_item_at_widget_coords (GtkIconView      *icon_view,
+                                          gint              x,
+                                          gint              y,
+                                          gboolean          only_in_cell,
+                                          GtkCellRenderer **cell_at_pos)
+{
+  x += gtk_adjustment_get_value (icon_view->priv->hadjustment);
+  y += gtk_adjustment_get_value (icon_view->priv->vadjustment);
+
+  return _gtk_icon_view_get_item_at_coords (icon_view, x, y,
+                                            only_in_cell, cell_at_pos);
+}
+
 static gboolean
 gtk_icon_view_motion (GtkWidget      *widget,
 		      GdkEventMotion *event)
@@ -1904,10 +1905,10 @@ gtk_icon_view_motion (GtkWidget      *widget,
       GtkCellRenderer *cell = NULL;
 
       last_prelight_item = icon_view->priv->last_prelight;
-      item = _gtk_icon_view_get_item_at_coords (icon_view,
-                                               event->x, event->y,
-                                               FALSE,
-                                               &cell);
+      item = _gtk_icon_view_get_item_at_widget_coords (icon_view,
+                                                       event->x, event->y,
+                                                       FALSE,
+                                                       &cell);
 
       if (item != last_prelight_item)
         {
@@ -2173,9 +2174,6 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 
   icon_view = GTK_ICON_VIEW (widget);
 
-  if (event->window != icon_view->priv->bin_window)
-    return FALSE;
-
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
@@ -2190,10 +2188,10 @@ gtk_icon_view_button_press (GtkWidget      *widget,
       modify_mod_mask =
         gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
 
-      item = _gtk_icon_view_get_item_at_coords (icon_view, 
-					       event->x, event->y,
-					       FALSE,
-					       &cell);
+      item = _gtk_icon_view_get_item_at_widget_coords (icon_view,
+                                                       event->x, event->y,
+                                                       FALSE,
+                                                       &cell);
 
       /*
        * We consider only the cells' area as the item area if the
@@ -2295,10 +2293,10 @@ gtk_icon_view_button_press (GtkWidget      *widget,
       && event->button == GDK_BUTTON_PRIMARY
       && event->type == GDK_2BUTTON_PRESS)
     {
-      item = _gtk_icon_view_get_item_at_coords (icon_view,
-					       event->x, event->y,
-					       FALSE,
-					       NULL);
+      item = _gtk_icon_view_get_item_at_widget_coords (icon_view,
+                                                       event->x, event->y,
+                                                       FALSE,
+                                                       NULL);
 
       if (item && item == icon_view->priv->last_single_clicked)
 	{
@@ -2347,10 +2345,10 @@ gtk_icon_view_button_release (GtkWidget      *widget,
     {
       GtkIconViewItem *item;
 
-      item = _gtk_icon_view_get_item_at_coords (icon_view,
-                                                event->x, event->y,
-                                                FALSE,
-                                                NULL);
+      item = _gtk_icon_view_get_item_at_widget_coords (icon_view,
+                                                       event->x, event->y,
+                                                       FALSE,
+                                                       NULL);
       if (item == icon_view->priv->last_single_clicked)
         {
           GtkTreePath *path;
@@ -6088,12 +6086,15 @@ remove_scroll_timeout (GtkIconView *icon_view)
 static void
 gtk_icon_view_autoscroll (GtkIconView *icon_view)
 {
+  GtkAllocation allocation;
   gint px, py, width, height;
   gint hoffset, voffset;
 
+  gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
   px = icon_view->priv->event_last_x;
   py = icon_view->priv->event_last_y;
-  gdk_window_get_geometry (icon_view->priv->view_window, NULL, NULL, &width, &height);
+  width = allocation.width;
+  height = allocation.height;
 
   /* see if we are near the edge. */
   voffset = py - 2 * SCROLL_EDGE_SIZE;
