@@ -76,11 +76,10 @@ static void
 gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
 {
   GdkScreen *screen = GDK_SCREEN (quartz_screen);
-  NSScreen *nsscreen;
+  NSDictionary *dd = [[[NSScreen screens] objectAtIndex:0] deviceDescription];
+  NSSize size = [[dd valueForKey:NSDeviceResolution] sizeValue];
 
-  nsscreen = [[NSScreen screens] objectAtIndex:0];
-  _gdk_screen_set_resolution (screen,
-                              [[nsscreen deviceDescription][NSDeviceResolution] width]);
+  _gdk_screen_set_resolution (screen, size.width);
 
   gdk_quartz_screen_calculate_layout (quartz_screen);
 
@@ -336,7 +335,9 @@ static gint
 get_mm_from_pixels (NSScreen *screen, int pixels)
 {
   const float mm_per_inch = 25.4;
-  float dpi = [[screen deviceDescription][NSDeviceResolution] width];
+  NSDictionary *dd = [[[NSScreen screens] objectAtIndex:0] deviceDescription];
+  NSSize size = [[dd valueForKey:NSDeviceResolution] sizeValue];
+  float dpi = size.width;
   return (pixels / dpi) * mm_per_inch;
 }
 
