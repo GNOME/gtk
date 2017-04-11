@@ -398,7 +398,9 @@ gtk_places_view_destroy (GtkWidget *widget)
   priv->destroyed = 1;
 
   g_signal_handlers_disconnect_by_func (priv->volume_monitor, update_places, widget);
-  g_signal_handlers_disconnect_by_func (priv->network_monitor, update_places, widget);
+
+  if (priv->network_monitor)
+    g_signal_handlers_disconnect_by_func (priv->network_monitor, update_places, widget);
 
   g_cancellable_cancel (priv->cancellable);
   g_cancellable_cancel (priv->networks_fetching_cancellable);
