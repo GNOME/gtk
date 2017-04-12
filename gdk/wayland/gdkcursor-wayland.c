@@ -308,6 +308,10 @@ _gdk_wayland_cursor_set_scale (GdkCursor *cursor,
 
   wayland_cursor->scale = scale;
 
+  /* Blank cursor case */
+  if (g_strcmp0 (wayland_cursor->name, "none") == 0)
+    return;
+
   _gdk_wayland_cursor_update (display_wayland, wayland_cursor);
 }
 
@@ -345,12 +349,18 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
                           "cursor-type", GDK_CURSOR_IS_PIXMAP,
                           "display", display,
                           NULL);
-  private->name = g_strdup (name);
-  private->scale = scale;
 
   /* Blank cursor case */
   if (!name || g_str_equal (name, "none") || g_str_equal (name, "blank_cursor"))
-    return GDK_CURSOR (private);
+    {
+      private->name = g_strdup ("none");
+      private->scale = scale;
+
+      return GDK_CURSOR (private);
+    }
+
+  private->name = g_strdup (name);
+  private->scale = scale;
 
   if (!_gdk_wayland_cursor_update (display_wayland, private))
     {
