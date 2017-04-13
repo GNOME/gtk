@@ -227,7 +227,6 @@ struct _GdkWaylandSeat
   guint32 repeat_key;
   guint32 repeat_count;
   gint64 repeat_deadline;
-  gint32 nkeys;
   GSettings *keyboard_settings;
   uint32_t keyboard_time;
   uint32_t keyboard_key_serial;
@@ -1870,7 +1869,7 @@ keyboard_handle_enter (void               *data,
 
   seat->keyboard_focus = wl_surface_get_user_data (surface);
   g_object_ref (seat->keyboard_focus);
-  seat->nkeys = 0;
+  seat->repeat_key = 0;
 
   event = gdk_event_new (GDK_FOCUS_CHANGE);
   event->focus_change.window = g_object_ref (seat->keyboard_focus);
@@ -1927,7 +1926,7 @@ keyboard_handle_leave (void               *data,
 
   g_object_unref (seat->keyboard_focus);
   seat->keyboard_focus = NULL;
-  seat->nkeys = 0;
+  seat->repeat_key = 0;
 
   GDK_NOTE (EVENTS,
             g_message ("focus out, seat %p surface %p",
@@ -2127,12 +2126,11 @@ deliver_key_event (GdkWaylandSeat *seat,
 
   GDK_NOTE (EVENTS,
             g_message ("keyboard %s event%s, code %d, sym %d, "
-                       "string %s, mods 0x%x, with %i key%s pressed",
+                       "string %s, mods 0x%x",
                        (state ? "press" : "release"),
                        (from_key_repeat ? " (repeat)" : ""),
                        event->key.hardware_keycode, event->key.keyval,
-                       event->key.string, event->key.state,
-                       seat->nkeys, (seat->nkeys > 1 ? "s" : "")));
+                       event->key.string, event->key.state));
 
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
     return;
@@ -2145,16 +2143,14 @@ deliver_key_event (GdkWaylandSeat *seat,
       if (state) /* Another key is pressed */
         {
           seat->repeat_key = key;
-          seat->nkeys++;
         }
-      else /* a key is released */
+      else if (seat->repeat_key == key) /* Repeated key is released */
         {
-          /* The compositor may send us more key releases than key presses */
-          seat->nkeys = MAX (0, seat->nkeys - 1);
+          seat->repeat_key = 0;
         }
     }
 
-  if (seat->nkeys == 0)
+  if (!seat->repeat_key)
     return;
 
   seat->repeat_count++;
