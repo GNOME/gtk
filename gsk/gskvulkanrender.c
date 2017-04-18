@@ -1,5 +1,7 @@
 #include "config.h"
 
+#include "gskprivate.h"
+
 #include "gskvulkanrenderprivate.h"
 
 #include "gskrendererprivate.h"
