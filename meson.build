@@ -77,14 +77,19 @@ endif
 
 os_unix = not os_win32
 
+gtk_prefix = get_option('prefix')
+gtk_libdir = join_paths(gtk_prefix, get_option('libdir'))
+gtk_datadir = join_paths(gtk_prefix, get_option('datadir'))
+gtk_localedir = join_paths(gtk_prefix, get_option('localedir'))
 
 cc = meson.get_compiler('c')
+
 cdata = configuration_data()
-cdata.set('PACKAGE_VERSION', '"'+meson.project_version()+'"')
-cdata.set('GTK_LOCALEDIR', '"'+get_option('localedir')+'"')
-cdata.set('GTK_DATADIR', '"'+get_option('datadir')+'"')
-cdata.set('GTK_LIBDIR', '"'+get_option('libdir')+'"')
-cdata.set('GETTEXT_PACKAGE', '"gtk40"')
+cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
+cdata.set_quoted('GTK_LOCALEDIR', gtk_localedir)
+cdata.set_quoted('GTK_DATADIR', gtk_datadir)
+cdata.set_quoted('GTK_LIBDIR', gtk_libdir)
+cdata.set_quoted('GETTEXT_PACKAGE', 'gtk40')
 cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
 cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
 cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
