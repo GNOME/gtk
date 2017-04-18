@@ -96,7 +96,7 @@ gdkresources = gnome.compile_resources('gdkresources',
   c_name: '_gdk',
   extra_args: '--manual-register')
 
-gdk_headers = gdk_public_headers  + gdk_private_h_sources
+gdk_headers = gdk_public_headers
 
 gdk_enums = gnome.mkenums('gdkenumtypes',
   sources: gdk_public_headers,
@@ -167,7 +167,8 @@ gdk_sources += [
   gdk_marshalers,
   gdkresources,
   gdkversionmacros,
-  gdk_headers
+  gdk_private_h_sources,
+  gdk_public_headers
 ]
 
 if wayland_enabled or broadway_enabled
