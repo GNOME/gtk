@@ -255,6 +255,22 @@ foreach cflag: test_cflags
   endif
 endforeach
 
+# Symbol visibility
+if get_option('default_library') != 'static'
+  if host_machine.system() == 'windows'
+    cdata.set('DLL_EXPORT', true)
+    if cc.get_id() == 'msvc'
+      cdata.set('_GDK_EXTERN', '__declspec(dllexport) extern')
+    else
+      cdata.set('_GDK_EXTERN', '__attribute__((visibility("default"))) __declspec(dllexport) extern')
+      common_cflags += ['-fvisibility=hidden']
+    endif
+  else
+    cdata.set('_GDK_EXTERN', '__attribute__((visibility("default"))) extern')
+    common_cflags += ['-fvisibility=hidden']
+  endif
+endif
+
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
 gtkinc = include_directories('gtk')
