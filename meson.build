@@ -198,7 +198,7 @@ atk_dep        = dependency('atk', version: atk_req)
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req)
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: '>= 0.2.0')
-graphene_dep   = dependency('graphene-1.0', version: graphene_req,
+graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback : ['graphene', 'graphene_dep'])
 
 fontconfig_dep = [] # only used in x11 backend
