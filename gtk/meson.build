@@ -756,17 +756,16 @@ gtkversion = configure_file(
   input  : 'gtkversion.h.in',
   output : 'gtkversion.h',
   configuration: gtkversion_cdata,
-  install_dir: 'include/gtk-4.0/gtk/'
+  install_dir: 'include/gtk-4.0/gtk'
 )
 
 gtk_cargs = [
   '-DGTK_COMPILATION',
   '-DG_LOG_DOMAIN="Gtk"',
   '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
-  '-DGTK_BINARY_VERSION="' + gtk_binary_version + '"',
-  '-DGTK_HOST="' + host_machine.system() + '"',
-  '-DGTK_SYSCONFDIR="' + get_option('sysconfdir') + '"',
-  '-DGTK_DATA_PREFIX="'+ get_option('prefix') + '"',
+  '-DGTK_BINARY_VERSION="@0@"'.format(gtk_binary_version),
+  '-DGTK_HOST="@0@"'.format(host_machine.system()),
+  '-DGTK_DATA_PREFIX="@0@"'.format(gtk_prefix),
 ]
 
 gtk_gen_headers = [gtkmarshal_h, gtktypebuiltins_h, gtkprivatetypebuiltins_h, gtkversion]
