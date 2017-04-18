@@ -101,7 +101,6 @@ gdk_public_h_sources = 				\
 	gdkevents.h				\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
-	gdkkeysyms-compat.h			\
 	gdkmain.h				\
 	gdkpango.h				\
 	gdkpixbuf.h				\
