@@ -7,9 +7,23 @@ project('gtk+-4.0', 'c',
         meson_version : '>= 0.39.1',
         license: 'LGPLv2.1+')
 
-glib_req          = '>= 2.49.4'
-glib_min_required = 'GLIB_VERSION_2_48'
-glib_max_allowed  = 'GLIB_VERSION_2_50'
+glib_major_req = 2
+glib_minor_req = 49
+glib_micro_req = 4
+
+if glib_minor_req.is_odd()
+  glib_min_required = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req - 1)
+else
+  glib_min_required = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req)
+endif
+
+if glib_minor_req.is_odd()
+  glib_max_allowed = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req + 1)
+else
+  glib_max_allowed = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req)
+endif
+
+glib_req          = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
 pango_req         = '>= 1.37.3'
 atk_req           = '>= 2.15.1'
 cairo_req         = '>= 1.14.0'
