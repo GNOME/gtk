@@ -2,7 +2,7 @@ subdir('deprecated')
 subdir('a11y')
 subdir('inspector')
 
-gtk_sources = files([
+gtk_public_sources = files([
   'fallback-c89.c',
   'fnmatch.c',
   'gdkpixbufutils.c',
@@ -374,9 +374,6 @@ gtk_private_headers = gtk_private_type_headers + files([
 ])
 
 gtk_public_headers = files([
-  'gtk-a11y.h',
-  'gtk-autocleanups.h',
-  'gtk.h',
   'gtkaboutdialog.h',
   'gtkaccelgroup.h',
   'gtkaccellabel.h',
@@ -590,9 +587,14 @@ gtk_public_headers = files([
   'gtkwidgetpath.h',
   'gtkwindow.h',
   'gtkwindowgroup.h',
+  'gtk-a11y.h',
+  'gtk-autocleanups.h',
+  'gtk.h',
 ])
 
 install_headers(gtk_public_headers, subdir: 'gtk-4.0/gtk/')
+
+gtk_sources = gtk_public_sources
 
 if os_unix
   gtk_unix_print_headers = [
@@ -891,6 +893,64 @@ libgtk_dep = declare_dependency(
   dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
   link_with: libgtk,
   link_args: common_ldflags)
+
+# Introspection
+if not meson.is_cross_build()
+  gir_args = [
+    '--c-include=gtk/gtk.h',
+  ]
+
+  gdk_gir = gnome.generate_gir(libgtk,
+                     sources: gdk_public_headers + gdk_public_sources + [ gdkenum_h ],
+                     namespace: 'Gdk',
+                     nsversion: gtk_api_version,
+                     identifier_prefix: 'Gdk',
+                     symbol_prefix: 'gdk',
+                     export_packages: 'gtk+-4.0',
+                     includes: [ 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'cairo-1.0', ],
+                     install: true,
+                     extra_args: gir_args + [
+                       '-DGDK_COMPILATION',
+                     ])
+  gdk_gir_dep = declare_dependency(link_with: libgtk, sources: gdk_gir)
+
+  gsk_gir = gnome.generate_gir(libgtk,
+                     sources: gsk_public_headers + gsk_public_sources + [ gskenum_h ],
+                     namespace: 'Gsk',
+                     nsversion: gtk_api_version,
+                     identifier_prefix: 'Gsk',
+                     symbol_prefix: 'gsk',
+                     export_packages: 'gtk+-4.0',
+                     includes: [ 'Graphene-1.0', 'Gdk-4.0' ],
+                     install: true,
+                     dependencies: gdk_gir_dep,
+                     extra_args: gir_args + [
+                       '--include-uninstalled=./gtk/Gdk-4.0.gir',
+                       '-DGSK_COMPILATION',
+                     ])
+
+  gsk_gir_dep = declare_dependency(link_with: libgtk, dependencies: gdk_gir_dep, sources: gsk_gir)
+
+  gnome.generate_gir(libgtk,
+                     sources: gtk_public_headers + gtk_public_sources + dnd_sources + a11y_headers + a11y_sources + [
+                       gtktypebuiltins_h,
+                       gtkversion,
+                     ],
+                     namespace: 'Gtk',
+                     nsversion: gtk_api_version,
+                     identifier_prefix: 'Gtk',
+                     symbol_prefix: 'gtk',
+                     export_packages: 'gtk+-4.0',
+                     includes: [ 'Atk-1.0', ],
+                     install: true,
+                     dependencies: [ gdk_gir_dep, gsk_gir_dep ],
+                     extra_args: gir_args + [
+                       '--include-uninstalled=./gtk/Gdk-4.0.gir',
+                       '--include-uninstalled=./gtk/Gsk-4.0.gir',
+                       '-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API',
+                       '-DGTK_COMPILATION',
+                     ])
+endif
 
 # Installed tools
 

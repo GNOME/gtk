@@ -1,4 +1,4 @@
-gdk_sources = files([
+gdk_public_sources = files([
   'gdk.c',
   'gdkapplaunchcontext.c',
   'gdkcairo.c',
@@ -75,6 +75,8 @@ gdk_public_headers = files([
   'gdkwindow.h',
 ])
 install_headers(gdk_public_headers, subdir: 'gtk-4.0/gdk/')
+
+gdk_sources = gdk_public_sources
 
 gdk_private_h_sources = files([
   'gdkdevicetoolprivate.h',
