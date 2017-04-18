@@ -877,7 +877,7 @@ endforeach
 
 libgtk = shared_library('gtk-4',
   sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
-  c_args: gtk_cargs,
+  c_args: gtk_cargs + common_cflags,
   include_directories: [confinc, gdkinc, gtkinc],
   dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
   link_with: [libgdk, libgsk, included_input_modules],

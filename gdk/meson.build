@@ -199,7 +199,7 @@ endforeach
 # FIXME: might have to add '-xobjective-c' to c_args for quartz backend?
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
-  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
+  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'] + common_cflags,
   include_directories: [confinc, xinc, wlinc],
   link_with: gdk_backends,
   dependencies: gdk_deps)

@@ -176,17 +176,91 @@ cdata.set('HAVE_DECL_ISNAN', cc.has_header_symbol('math.h', 'isnan'))
 # a stable GTK version.
 # We don't ever want to turn off deprecation warnings for master however, because
 # that's where we get rid of deprecated API we use.
-if gtk_minor_version % 2 == 0
+if gtk_minor_version.is_even()
   cdata.set('GLIB_DISABLE_DEPRECATION_WARNINGS', 1)
 endif
 
+# Compiler flags
+if cc.get_id() == 'msvc'
+  # Compiler options taken from msvc_recommended_pragmas.h
+  # in GLib, based on _Win32_Programming_ by Rector and Newcomer
+  test_cflags = [
+    '-we4002', # too many actual parameters for macro
+    '-we4003', # not enough actual parameters for macro
+    '-w14010', # single-line comment contains line-continuation character
+    '-we4013', # 'function' undefined; assuming extern returning int
+    '-w14016', # no function return type; using int as default
+    '-we4020', # too many actual parameters
+    '-we4021', # too few actual parameters
+    '-we4027', # function declared without formal parameter list
+    '-we4029', # declared formal parameter list different from definition
+    '-we4033', # 'function' must return a value
+    '-we4035', # 'function' : no return value
+    '-we4045', # array bounds overflow
+    '-we4047', # different levels of indirection
+    '-we4049', # terminating line number emission
+    '-we4053', # an expression of type void was used as an operand
+    '-we4071', # no function prototype given
+    '-we4819', # the file contains a character that cannot be represented in the current code page
+  ]
+elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+  test_cflags = [
+    '-fno-strict-aliasing',
+    '-Wpointer-arith',
+    '-Wmissing-declarations',
+    '-Wimplicit-function-declaration',
+    '-Wformat=2',
+    '-Wformat-nonliteral',
+    '-Wformat-security',
+    '-Wstrict-prototypes',
+    '-Wmissing-prototypes',
+    '-Wnested-externs',
+    '-Wold-style-definition',
+    '-Wundef',
+    '-Wunused',
+    '-Wcast-align',
+    '-Wmissing-noreturn',
+    '-Wmissing-format-attribute',
+    '-Wmissing-include-dirs',
+    '-Wlogical-op',
+    '-Wno-uninitialized',
+    '-Wno-shadow',
+    '-Wno-int-conversion',
+    '-Wno-discarded-qualifiers',
+    '-Werror=redundant-decls',
+    '-Werror=implicit',
+    '-Werror=nonnull',
+    '-Werror=init-self',
+    '-Werror=main',
+    '-Werror=missing-braces',
+    '-Werror=sequence-point',
+    '-Werror=return-type',
+    '-Werror=trigraphs',
+    '-Werror=array-bounds',
+    '-Werror=write-strings',
+    '-Werror=address',
+    '-Werror=int-to-pointer-cast',
+    '-Werror=pointer-to-int-cast',
+    '-Werror=empty-body',
+    '-Werror=write-strings',
+  ]
+else
+  test_cflags = []
+endif
+
+common_cflags = []
+foreach cflag: test_cflags
+  if cc.has_argument(cflag)
+    common_cflags += [ cflag ]
+  endif
+endforeach
 
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
 gtkinc = include_directories('gtk')
 
 glib_dep       = dependency('glib-2.0', version: glib_req)
-giounix_dep    = dependency('gio-unix-2.0', version: glib_req, required : false)
+giounix_dep    = dependency('gio-unix-2.0', version: glib_req, required: false)
 pango_dep      = dependency('pango', version: pango_req)
 pangoft_dep    = dependency('pangoft2', required: wayland_enabled or x11_enabled)
 cairo_dep      = dependency('cairo', version: cairo_req)
@@ -401,8 +475,7 @@ pkgconf.set('includedir', '${prefix}/@0@'.format(get_option('includedir')))
 pkgconf.set('GTK_API_VERSION', gtk_api_version)
 pkgconf.set('VERSION', meson.project_version())
 pkgconf.set('GTK_BINARY_VERSION', gtk_binary_version)
-hm = host_machine
-pkgconf.set('host', '@0@-@1@'.format(hm.cpu_family(), hm.system())) # FIXME
+pkgconf.set('host', '@0@-@1@'.format(host_machine.cpu_family(), host_machine.system())) # FIXME
 
 # Requires
 pango_pkgname = win32_enabled ? 'pangowin32' : 'pango'
