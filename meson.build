@@ -1,8 +1,9 @@
 project('gtk+-4.0', 'c',
-        version: '3.89.50',
+        version: '3.91.1',
         default_options: [
           'buildtype=debugoptimized',
-          'warning_level=1'
+          'warning_level=1',
+          'c_std=c99',
         ],
         meson_version : '>= 0.39.1',
         license: 'LGPLv2.1+')
