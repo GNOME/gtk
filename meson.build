@@ -141,7 +141,7 @@ foreach h : check_headers
 endforeach
 
 # Maths functions might be implemented in libm
-libm = cc.find_library('m', required : false)
+libm = cc.find_library('m', required: false)
 
 check_functions = [
   'dcgettext',
@@ -163,7 +163,7 @@ check_functions = [
 ]
 
 foreach func : check_functions
-  if cc.has_function(func, dependencies : libm)
+  if cc.has_function(func, dependencies: libm)
     cdata.set('HAVE_' + func.underscorify().to_upper(), 1)
   endif
 endforeach
@@ -214,7 +214,7 @@ foreach backend : [['cairo-xlib', x11_enabled],
                    ['cairo-quartz', quartz_enabled],
                    ['cairo', broadway_enabled or wayland_enabled or mir_enabled]]
  if backend[1]
-   dependency(backend[0], version : cairo_req)
+   dependency(backend[0], version: cairo_req)
    cairo_backends += [backend[0]]
  endif
 endforeach
@@ -386,10 +386,9 @@ subdir('examples')
 
 # config.h
 
-configure_file(
-  input : 'config.h.meson',
-  output: 'config.h',
-  configuration: cdata)
+configure_file(input: 'config.h.meson',
+               output: 'config.h',
+               configuration: cdata)
 
 # pkg-config files - bit of a mess all of this
 
