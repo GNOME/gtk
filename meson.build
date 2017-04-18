@@ -68,6 +68,8 @@ gtk_binary_version = '4.0.0'
 
 gtk_binary_age = 100 * gtk_minor_version + gtk_micro_version
 
+gtk_soversion = '0.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk_interface_age)
+
 gtk_api_version = '4.0'
 
 x11_enabled      = get_option('enable-x11-backend')
@@ -270,6 +272,21 @@ if get_option('default_library') != 'static'
     cdata.set('_GDK_EXTERN', '__attribute__((visibility("default"))) extern')
     common_cflags += ['-fvisibility=hidden']
   endif
+endif
+
+common_ldflags = []
+
+if host_machine.system() == 'linux'
+  foreach ldflag: [ '-Wl,-Bsymbolic', '-Wl,-z,relro', '-Wl,-z,now', ]
+    if cc.has_argument(ldflag)
+      common_ldflags += [ ldflag ]
+    endif
+  endforeach
+endif
+
+# Maintain compatibility with autotools
+if host_machine.system() == 'darwin'
+  common_ldflags += [ '-compatibility_version=1', '-current_version=1.0', ]
 endif
 
 confinc = include_directories('.')
