@@ -75,7 +75,6 @@ gdk_public_h_sources = 				\
 	gdkglcontext.h				\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
-	gdkkeysyms-compat.h			\
 	gdkmain.h				\
 	gdkmonitor.h				\
 	gdkpango.h				\
@@ -224,11 +223,12 @@ endif
 
 if HAVE_INTROSPECTION
 
-introspection_files = 		\
-	$(filter-out gdkkeysyms-compat.h, $(gdk_h_sources))	\
-	$(gdk_c_sources)	\
-        gdkenumtypes.c		\
-        gdkenumtypes.h
+introspection_files = \
+	$(gdk_h_sources) \
+	$(gdk_c_sources) \
+        gdkenumtypes.c \
+        gdkenumtypes.h \
+	$()
 
 Gdk-noinst-4.0.gir: libgdk-4.la Makefile
 Gdk_noinst_4_0_gir_SCANNERFLAGS = 	\

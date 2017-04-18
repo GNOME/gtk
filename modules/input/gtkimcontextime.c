@@ -31,7 +31,7 @@
 
 #include "imm-extra.h"
 
-#include "gdk/gdkkeysyms-compat.h"
+#include "gdk/gdkkeysyms.h"
 #include "gdk/win32/gdkwin32.h"
 #include "gdk/gdkkeysyms.h"
 
@@ -51,7 +51,7 @@
 /* #define BUFSIZE 4096 */
 
 #define IS_DEAD_KEY(k) \
-    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
+    ((k) >= GDK_KEY_dead_grave && (k) <= (GDK_KEY_dead_dasia+1))
 
 #define FREE_PREEDIT_BUFFER(ctx) \
 {                                \
@@ -311,7 +311,7 @@ _gtk_im_context_ime_dead_key_unichar (guint    keyval,
   switch (keyval)
     {
 #define CASE(keysym, unicode, spacing_unicode) \
-      case GDK_dead_##keysym: return (spacing) ? spacing_unicode : unicode;
+      case GDK_KEY_dead_##keysym: return (spacing) ? spacing_unicode : unicode;
 
       CASE (grave, 0x0300, 0x0060);
       CASE (acute, 0x0301, 0x00b4);
@@ -388,7 +388,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return FALSE;
 
-  if (event->keyval == GDK_space &&
+  if (event->keyval == GDK_KEY_space &&
       context_ime->priv->dead_key_keyval != 0)
     {
       c = _gtk_im_context_ime_dead_key_unichar (context_ime->priv->dead_key_keyval, TRUE);
