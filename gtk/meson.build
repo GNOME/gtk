@@ -765,8 +765,7 @@ gtk_cargs = [
   '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
   '-DGTK_BINARY_VERSION="' + gtk_binary_version + '"',
   '-DGTK_HOST="' + host_machine.system() + '"',
-  '-DGTK_SYSCONFDIR="' + get_option('prefix') + '/etc"',
-  '-DGTK_DATADIR="' + get_option('datadir') + '"',
+  '-DGTK_SYSCONFDIR="' + get_option('sysconfdir') + '"',
   '-DGTK_DATA_PREFIX="'+ get_option('prefix') + '"',
 ]
 
