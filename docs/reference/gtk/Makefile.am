@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = 1.6
 DOC_MODULE=gtk4
 
 # The top-level SGML file.
-DOC_MAIN_SGML_FILE=gtk-docs.sgml
+DOC_MAIN_SGML_FILE=gtk4-docs.xml
 
 # Extra options to supply to gtkdoc-scan
 SCAN_OPTIONS=--deprecated-guards="GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED"
