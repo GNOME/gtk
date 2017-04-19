@@ -6,7 +6,7 @@ AUTOMAKE_OPTIONS = 1.6
 DOC_MODULE=gdk4
 
 # The top-level SGML file.
-DOC_MAIN_SGML_FILE=gdk-docs.sgml
+DOC_MAIN_SGML_FILE=gdk4-docs.xml
 
 # Extra options to supply to gtkdoc-scan
 SCAN_OPTIONS=--deprecated-guards=GDK_DISABLE_DEPRECATED \
