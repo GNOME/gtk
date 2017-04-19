@@ -87,7 +87,7 @@ gdk_private_h_sources = files([
 ])
 
 gdk_gresource_xml = configure_file(output : 'gdk.gresource.xml',
-  input : 'gen-gsk-resources-xml.py',
+  input : 'gen-gdk-gresources-xml.py',
   command : [find_program('gen-gdk-gresources-xml.py'),
              meson.current_source_dir(), '@OUTPUT@'])
 
