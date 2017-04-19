@@ -56,6 +56,7 @@ mp_confdir = join_paths(sysconfdir, 'gtk-4.0')
 mp_cargs = [
  '-DMULTIPRESS_LOCALEDIR=""', # FIXME: where is $(mplocaledir) ever set?
  '-DMULTIPRESS_CONFDIR="@0@"'.format(mp_confdir),
+ '-DGDK_DISABLE_DEPRECATION_WARNINGS',
 ]
 install_data('im-multipress.conf', install_dir : mp_confdir)
 
