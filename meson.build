@@ -291,7 +291,9 @@ endif
 
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
+gskinc = include_directories('gsk')
 gtkinc = include_directories('gtk')
+testinc = include_directories('tests')
 
 glib_dep       = dependency('glib-2.0', version: glib_req)
 giounix_dep    = dependency('gio-unix-2.0', version: glib_req, required: false)
@@ -577,3 +579,8 @@ endif
 
 subdir('po')
 subdir('po-properties')
+
+if get_option('enable-documentation')
+  subdir('docs/tools')
+  subdir('docs/reference')
+endif

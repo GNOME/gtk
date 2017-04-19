@@ -24,3 +24,5 @@ option('disable-modules', type: 'boolean', value : 'false',
   description : 'Disable dynamic module loading')
 option('with-included-immodules', type: 'string', value : '',
   description : 'Build the specified input methods into gtk (comma-separated list or "all" or "none")')
+option('enable-documentation', type: 'boolean', value: 'false',
+  description : 'Build API reference and tools documentation')
