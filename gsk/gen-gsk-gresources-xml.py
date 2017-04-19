@@ -2,7 +2,7 @@
 #
 # Generate gsk.resources.xml
 #
-# Usage: gen-gsk-resources-xml OUTPUT-FILE [INPUT-FILE1] [INPUT-FILE2] ...
+# Usage: gen-gsk-gresources-xml OUTPUT-FILE [INPUT-FILE1] [INPUT-FILE2] ...
 
 import os, sys
 

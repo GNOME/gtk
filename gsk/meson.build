@@ -118,8 +118,8 @@ if have_vulkan
 endif # have_vulkan
 
 gsk_resources_xml = configure_file(output : 'gsk.resources.xml',
-  input : 'gen-gsk-resources-xml.py',
-  command : [find_program('gen-gsk-resources-xml.py'),
+  input : 'gen-gsk-gresources-xml.py',
+  command : [find_program('gen-gsk-gresources-xml.py'),
              '@OUTPUT@',
              gsk_private_source_shaders,
              gsk_private_vulkan_compiled_shaders,
