@@ -2273,7 +2273,7 @@ should_map_as_subsurface (GdkWindow *window)
       if (impl_parent->mapped)
         return TRUE;
       else
-        g_warning ("Couldn't map window %p as susburface because its parent is not mapped.",
+        g_warning ("Couldn't map window %p as subsurface because its parent is not mapped.",
                    window);
 
     }
