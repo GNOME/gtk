@@ -61,7 +61,7 @@ show_dialog (void)
 
 
   gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
-                      label, TRUE);
+                      label);
   gtk_widget_show (label);
 
   label = gtk_label_new ("? x ?");

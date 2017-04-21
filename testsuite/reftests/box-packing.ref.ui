@@ -24,8 +24,6 @@
                 <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -38,15 +36,11 @@
                 <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -63,8 +57,6 @@
                 <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -77,15 +69,11 @@
                 <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -102,8 +90,6 @@
                 <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -116,15 +102,11 @@
                 <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -141,8 +123,6 @@
                 <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -155,15 +135,11 @@
                 <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
         </child>
@@ -185,8 +161,6 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -199,15 +173,11 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -225,8 +195,6 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -239,15 +207,11 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -265,8 +229,6 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -279,15 +241,11 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -305,8 +263,6 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -319,22 +275,16 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">4</property>
           </packing>
         </child>
@@ -351,10 +301,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkEventBox" id="eventbox18">
@@ -364,10 +310,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkEventBox" id="eventbox19">
@@ -377,10 +319,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkEventBox" id="eventbox20">
@@ -390,10 +328,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkEventBox" id="eventbox21">
@@ -403,10 +337,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkEventBox" id="eventbox22">
@@ -416,16 +346,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-          </packing>
         </child>
       </object>
     </child>

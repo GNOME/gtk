@@ -396,8 +396,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -419,7 +417,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="icon_name">document-save</property>
               </object>
               <packing>
-                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -433,7 +430,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="icon_name">document-open</property>
               </object>
               <packing>
-                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -444,7 +440,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="can_focus">False</property>
               </object>
               <packing>
-                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -458,7 +453,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="icon_name">edit-find</property>
               </object>
               <packing>
-                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -472,7 +466,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -492,13 +485,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -529,8 +519,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -550,8 +538,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -564,8 +550,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="text" translatable="yes">entry</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -579,8 +563,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="text" translatable="yes">entry</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -598,8 +580,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">label</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -612,8 +592,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">label</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -626,8 +604,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="adjustment">adjustment2</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -639,15 +615,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="invisible_char">•</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">3</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">4</property>
                   </packing>
                 </child>
@@ -899,15 +871,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -919,8 +887,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="orientation">vertical</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -941,8 +907,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="receives_default">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -956,8 +920,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="receives_default">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -971,8 +933,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="active">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -987,8 +947,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="active">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
@@ -1007,8 +965,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">5</property>
                   </packing>
                 </child>
@@ -1028,8 +984,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">6</property>
                   </packing>
                 </child>
@@ -1041,8 +995,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="receives_default">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">6</property>
                   </packing>
                 </child>
@@ -1055,8 +1007,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="rgba">#31316867a09f</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">8</property>
                   </packing>
                 </child>
@@ -1067,15 +1017,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">8</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -1087,8 +1033,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="orientation">vertical</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
             </child>
@@ -1115,8 +1059,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="fraction">0.5</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -1129,15 +1071,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="inverted">True</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -1165,8 +1103,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="draw_value">False</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -1182,22 +1118,16 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="draw_value">False</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -1223,8 +1153,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="fraction">0.5</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -1238,15 +1166,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="inverted">True</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -1270,8 +1194,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="draw_value">False</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -1289,22 +1211,16 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="draw_value">False</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -1333,8 +1249,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -1388,22 +1302,16 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">4</property>
               </packing>
             </child>
@@ -1415,8 +1323,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="orientation">vertical</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">5</property>
               </packing>
             </child>
@@ -1456,8 +1362,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -1490,8 +1394,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -1523,9 +1425,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
                   </packing>
                 </child>
                 <child>
@@ -1557,15 +1456,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">6</property>
               </packing>
             </child>
@@ -1577,8 +1472,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="orientation">vertical</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">7</property>
               </packing>
             </child>
@@ -1645,8 +1538,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -1666,22 +1557,16 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">8</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -1692,8 +1577,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
             <property name="can_focus">False</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
         </child>
@@ -1788,8 +1671,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -1875,8 +1756,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -1962,8 +1841,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -2049,15 +1926,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">4</property>
           </packing>
         </child>
@@ -2068,8 +1941,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
             <property name="can_focus">False</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">5</property>
           </packing>
         </child>

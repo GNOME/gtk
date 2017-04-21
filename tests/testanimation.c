@@ -330,13 +330,13 @@ do_image (const char *filename)
   g_free (escaped);
   g_free (str);
 
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), label);
 
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
   gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
-  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), frame);
 
   image = gtk_image_new_from_pixbuf (NULL);
   gtk_container_add (GTK_CONTAINER (frame), image);
@@ -384,13 +384,13 @@ do_nonprogressive (const gchar *filename)
   g_free (escaped);
   g_free (str);
 
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), label);
 
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
   gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
-  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), frame);
 
   image = gtk_image_new_from_file (filename);
   gtk_container_add (GTK_CONTAINER (frame), image);

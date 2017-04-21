@@ -37,9 +37,6 @@
                 <property name="visible">1</property>
                 <property name="icon-name">image-missing</property>
               </object>
-              <packing>
-                <property name="fill">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="name_label">
@@ -49,7 +46,6 @@
                 <property name="selectable">1</property>
               </object>
               <packing>
-                <property name="fill">0</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -74,9 +70,6 @@
                         <property name="justify">center</property>
                         <property name="selectable">1</property>
                       </object>
-                      <packing>
-                        <property name="fill">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="comments_label">
@@ -87,9 +80,6 @@
                         <property name="selectable">1</property>
                         <property name="max-width-chars">60</property>
                       </object>
-                      <packing>
-                        <property name="fill">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="website_label">
@@ -98,9 +88,6 @@
                         <property name="selectable">1</property>
                         <signal name="activate-link" handler="emit_activate_link" object="GtkAboutDialog" swapped="yes"/>
                       </object>
-                      <packing>
-                        <property name="fill">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="copyright_label">
@@ -111,9 +98,6 @@
                         <property name="selectable">1</property>
                         <property name="max-width-chars">60</property>
                       </object>
-                      <packing>
-                        <property name="fill">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="license_label">
@@ -125,9 +109,6 @@
                         <property name="selectable">1</property>
                         <property name="max-width-chars">60</property>
                       </object>
-                      <packing>
-                        <property name="fill">0</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>

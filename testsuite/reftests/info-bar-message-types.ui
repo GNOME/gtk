@@ -11,7 +11,6 @@
         <child>
           <object class="GtkInfoBar" id="infobar1">
             <property name="visible">True</property>
-            <property name="app_paintable">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">horizontal</property>
             <property name="message_type">info</property>
@@ -26,8 +25,6 @@
                     <property name="label" translatable="yes">Info</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -52,7 +49,6 @@
         <child>
           <object class="GtkInfoBar" id="infobar2">
             <property name="visible">True</property>
-            <property name="app_paintable">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">horizontal</property>
             <property name="message_type">warning</property>
@@ -67,8 +63,6 @@
                     <property name="label" translatable="yes">Warning</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -93,7 +87,6 @@
         <child>
           <object class="GtkInfoBar" id="infobar3">
             <property name="visible">True</property>
-            <property name="app_paintable">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">horizontal</property>
             <property name="message_type">question</property>
@@ -108,8 +101,6 @@
                     <property name="label" translatable="yes">Question</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -134,7 +125,6 @@
         <child>
           <object class="GtkInfoBar" id="infobar4">
             <property name="visible">True</property>
-            <property name="app_paintable">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">horizontal</property>
             <property name="message_type">error</property>
@@ -149,8 +139,6 @@
                     <property name="label" translatable="yes">Error</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -175,7 +163,6 @@
         <child>
           <object class="GtkInfoBar" id="infobar5">
             <property name="visible">True</property>
-            <property name="app_paintable">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">horizontal</property>
             <property name="message_type">other</property>
@@ -190,8 +177,6 @@
                     <property name="label" translatable="yes">Other</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>

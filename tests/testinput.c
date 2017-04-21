@@ -257,7 +257,7 @@ main (int argc, char *argv[])
   drawing_area = gtk_drawing_area_new ();
   gtk_widget_set_size_request (drawing_area, 200, 200);
   gtk_widget_set_vexpand (drawing_area, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), drawing_area);
 
   gtk_widget_show (drawing_area);
 
@@ -309,7 +309,7 @@ main (int argc, char *argv[])
 
   /* .. And create some buttons */
   button = gtk_button_new_with_label ("Quit");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), button);
 
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_widget_destroy),

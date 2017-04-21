@@ -100,7 +100,7 @@ main (int    argc,
   for (j = 0; j < 2; j++)
     {
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
       char *aligns_names[] = { "FILL", "BASELINE" };
       GtkAlign aligns[] = { GTK_ALIGN_FILL, GTK_ALIGN_BASELINE};
@@ -136,7 +136,7 @@ main (int    argc,
     }
 
   grid_hbox = hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
   combo = gtk_combo_box_text_new ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), baseline_pos_str[0]);
@@ -148,7 +148,7 @@ main (int    argc,
   for (j = 0; j < 2; j++)
     {
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
       g_signal_connect (G_OBJECT (combo), "changed",
 			G_CALLBACK (baseline_position_changed), hbox);
@@ -227,7 +227,7 @@ main (int    argc,
 			    vbox, gtk_label_new ("grid"));
 
   grid_hbox = hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
   label = gtk_label_new ("Align me:");
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
@@ -295,7 +295,7 @@ main (int    argc,
   gtk_container_add (GTK_CONTAINER (hbox), grid);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
   adjustment = gtk_adjustment_new (0.0, -1.0, 5.0, 1.0, 1.0, 0.0);
   spin = gtk_spin_button_new (adjustment, 1.0, 0);
@@ -320,7 +320,7 @@ main (int    argc,
 			    vbox, gtk_label_new ("button box"));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
   adjustment = gtk_adjustment_new (34.0, 1.0, 64.0, 1.0, 1.0, 0.0);
   spin = gtk_spin_button_new (adjustment, 1.0, 0);
@@ -333,7 +333,7 @@ main (int    argc,
   for (j = 0; j < 3; j++)
     {
       hbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
       gtk_box_set_baseline_position (GTK_BOX (hbox), j);
 

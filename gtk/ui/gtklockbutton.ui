@@ -13,9 +13,6 @@
           <object class="GtkImage" id="image">
             <property name="icon-name">image-missing</property>
           </object>
-          <packing>
-            <property name="fill">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkStack" id="stack">

@@ -20,8 +20,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -32,8 +30,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -44,8 +40,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -56,8 +50,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
             </child>
@@ -68,8 +60,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">4</property>
               </packing>
             </child>
@@ -80,8 +70,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">5</property>
               </packing>
             </child>
@@ -92,8 +80,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">6</property>
               </packing>
             </child>
@@ -114,8 +100,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -126,8 +110,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -138,8 +120,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -150,8 +130,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
             </child>
@@ -162,8 +140,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">4</property>
               </packing>
             </child>
@@ -174,8 +150,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">5</property>
               </packing>
             </child>
@@ -186,8 +160,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">6</property>
               </packing>
             </child>
@@ -208,8 +180,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -220,8 +190,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -232,8 +200,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -244,8 +210,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
             </child>
@@ -256,8 +220,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">4</property>
               </packing>
             </child>
@@ -268,8 +230,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">5</property>
               </packing>
             </child>
@@ -280,8 +240,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">6</property>
               </packing>
             </child>
@@ -302,8 +260,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -314,8 +270,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -326,8 +280,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -338,8 +290,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
             </child>
@@ -350,8 +300,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">4</property>
               </packing>
             </child>
@@ -362,8 +310,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">5</property>
               </packing>
             </child>
@@ -374,8 +320,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">6</property>
               </packing>
             </child>
@@ -396,8 +340,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -408,8 +350,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -420,8 +360,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -432,8 +370,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">3</property>
               </packing>
             </child>
@@ -444,8 +380,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">4</property>
               </packing>
             </child>
@@ -456,8 +390,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">5</property>
               </packing>
             </child>
@@ -468,8 +400,6 @@
                 <property name="label" translatable="yes"> X X X </property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">6</property>
               </packing>
             </child>

@@ -90,7 +90,6 @@
                 </style>
               </object>
               <packing>
-                <property name="fill">0</property>
                 <property name="pack_type">end</property>
                 <property name="position">2</property>
               </packing>

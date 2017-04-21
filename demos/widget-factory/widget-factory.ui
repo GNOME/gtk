@@ -450,9 +450,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <item>Jet McQuack</item>
                             </items>
                           </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkComboBoxText" id="comboboxtext2">
@@ -466,7 +463,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -479,7 +475,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <signal name="icon-release" handler="on_entry_icon_release" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
@@ -491,7 +486,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="text" translatable="yes">entry</property>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
@@ -515,7 +509,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="icon-name">window-close-symbolic</property>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -597,7 +590,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="adjustment">adjustment2</property>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">2</property>
                               </packing>
                             </child>
@@ -610,14 +602,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="max-width-chars">2</property>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">3</property>
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkGrid" id="grid1">
@@ -803,14 +791,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="fill">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkSeparator" id="separator1">
@@ -830,9 +812,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="can_focus">1</property>
                             <property name="receives_default">1</property>
                           </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkToggleButton" id="togglebutton2">
@@ -842,7 +821,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="receives_default">1</property>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -854,7 +832,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="active">1</property>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
@@ -867,7 +844,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="active">1</property>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
@@ -899,7 +875,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">6</property>
                           </packing>
                         </child>
@@ -909,7 +884,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="receives_default">1</property>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">6</property>
                           </packing>
                         </child>
@@ -964,7 +938,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                       </object>
                       <packing>
-                        <property name="fill">0</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -989,9 +962,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkProgressBar" id="progressbar1">
                                 <property name="fraction">0.5</property>
                               </object>
-                              <packing>
-                                <property name="fill">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkProgressBar" id="progressbar2">
@@ -999,7 +969,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="inverted">1</property>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -1009,7 +978,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="show_text">1</property>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">2</property>
                               </packing>
                             </child>
@@ -1037,9 +1005,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="box27">
@@ -1074,7 +1039,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -1105,10 +1069,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkBox" id="box28">
                                 <property name="vexpand">1</property>
                                 <property name="spacing">6</property>
+                                <property name="homogeneous">1</property>
                                 <child>
                                   <object class="GtkProgressBar" id="progressbar5">
                                     <property name="orientation">vertical</property>
                                     <property name="fraction">0.5</property>
+                                    <property name="halign">end</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1116,20 +1082,19 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="orientation">vertical</property>
                                     <property name="fraction">0.5</property>
                                     <property name="inverted">1</property>
+                                    <property name="halign">start</property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="fill">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkBox" id="box23">
                                 <property name="vexpand">1</property>
                                 <property name="spacing">6</property>
+                                <property name="homogeneous">1</property>
                                 <child>
                                   <object class="GtkScale" id="scale3">
                                     <property name="height_request">100</property>
@@ -1140,6 +1105,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="fill_level">75</property>
                                     <property name="draw_value">1</property>
                                     <property name="digits">-1</property>
+                                    <property name="halign">end</property>
                                     <signal name="format-value" handler="scale_format_value"/>
                                   </object>
                                 </child>
@@ -1154,6 +1120,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="fill_level">75</property>
                                     <property name="draw_value">1</property>
                                     <property name="digits">-1</property>
+                                    <property name="halign">start</property>
                                     <signal name="format-value" handler="scale_format_value_blank"/>
                                   </object>
                                   <packing>
@@ -1162,7 +1129,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>

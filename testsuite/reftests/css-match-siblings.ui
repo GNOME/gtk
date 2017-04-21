@@ -16,8 +16,6 @@
             <property name="label" translatable="yes">normal</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -28,8 +26,6 @@
             <property name="label" translatable="yes">Red</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -40,8 +36,6 @@
             <property name="label" translatable="yes">Green</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -52,8 +46,6 @@
             <property name="label" translatable="yes">Blue</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
         </child>
@@ -64,8 +56,6 @@
             <property name="label" translatable="yes">Purple</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">4</property>
           </packing>
         </child>

@@ -321,15 +321,15 @@ create_custom_widget (GtkPrintOperation *operation,
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox);
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("Font:");
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), label);
   gtk_widget_show (label);
 
   font = gtk_font_button_new_with_font  (data->font);
-  gtk_box_pack_start (GTK_BOX (hbox), font, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), font);
   gtk_widget_show (font);
   data->font_button = font;
 

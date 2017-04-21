@@ -54,31 +54,23 @@ create_box_window (void)
   box3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   gtk_box_pack_start (GTK_BOX (box1),
-                      gtk_label_new ("VBox 1 Top"),
-                      FALSE);
+                      gtk_label_new ("VBox 1 Top"));
   gtk_box_pack_start (GTK_BOX (box1),
-                      box2,
-                       TRUE);
+                      box2);
   gtk_box_pack_end (GTK_BOX (box1),
-                    gtk_label_new ("VBox 1 Bottom"),
-                    FALSE);
+                    gtk_label_new ("VBox 1 Bottom"));
 
   gtk_box_pack_start (GTK_BOX (box2),
-                      gtk_label_new ("HBox 2 Left"),
-                      FALSE);
+                      gtk_label_new ("HBox 2 Left"));
   gtk_box_pack_start (GTK_BOX (box2),
-                      box3,
-                      TRUE);
+                      box3);
   gtk_box_pack_end (GTK_BOX (box2),
-                    gtk_label_new ("HBox 2 Right"),
-                    FALSE);
+                    gtk_label_new ("HBox 2 Right"));
 
   gtk_box_pack_start (GTK_BOX (box3),
-                      gtk_label_new ("VBox 3 Top"),
-                      FALSE);
+                      gtk_label_new ("VBox 3 Top"));
   gtk_box_pack_end (GTK_BOX (box3),
-                    gtk_label_new ("VBox 3 Bottom"),
-                    FALSE);
+                    gtk_label_new ("VBox 3 Bottom"));
 
   colorbox = gtk_frame_new (NULL);
 
@@ -90,7 +82,7 @@ create_box_window (void)
                     G_CALLBACK (on_toggle_hexpand), NULL);
   gtk_container_add (GTK_CONTAINER (colorbox), toggle);
 
-  gtk_box_pack_start (GTK_BOX (box3), colorbox, TRUE);
+  gtk_box_pack_start (GTK_BOX (box3), colorbox);
 
   colorbox = gtk_frame_new (NULL);
 
@@ -101,7 +93,7 @@ create_box_window (void)
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_vexpand), NULL);
   gtk_container_add (GTK_CONTAINER (colorbox), toggle);
-  gtk_box_pack_start (GTK_BOX (box3), colorbox, TRUE);
+  gtk_box_pack_start (GTK_BOX (box3), colorbox);
 
   gtk_container_add (GTK_CONTAINER (window), box1);
   gtk_widget_show (window);

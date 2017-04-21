@@ -27,13 +27,13 @@ add_section (GtkWidget   *box,
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_margin_top (label, 10);
   gtk_widget_set_margin_bottom (label, 10);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), label);
   section = gtk_flow_box_new ();
   gtk_widget_set_halign (section, GTK_ALIGN_START);
   gtk_flow_box_set_selection_mode (GTK_FLOW_BOX (section), GTK_SELECTION_NONE);
   gtk_flow_box_set_min_children_per_line (GTK_FLOW_BOX (section), 2);
   gtk_flow_box_set_max_children_per_line (GTK_FLOW_BOX (section), 20);
-  gtk_box_pack_start (GTK_BOX (box), section, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), section);
 
   return section;
 }

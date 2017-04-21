@@ -124,13 +124,11 @@ palette_drop_item (GtkToolItem      *drag_item,
 
   if (GTK_TOOL_ITEM_GROUP (drag_group) != drop_group)
     {
-      gboolean homogeneous, expand, fill, new_row;
+      gboolean homogeneous, new_row;
 
       g_object_ref (drag_item);
       gtk_container_child_get (GTK_CONTAINER (drag_group), GTK_WIDGET (drag_item),
                                "homogeneous", &homogeneous,
-                               "expand", &expand,
-                               "fill", &fill,
                                "new-row", &new_row,
                                NULL);
       gtk_container_remove (GTK_CONTAINER (drag_group), GTK_WIDGET (drag_item));
@@ -138,8 +136,6 @@ palette_drop_item (GtkToolItem      *drag_item,
                                   drag_item, drop_position);
       gtk_container_child_set (GTK_CONTAINER (drop_group), GTK_WIDGET (drag_item),
                                "homogeneous", homogeneous,
-                               "expand", expand,
-                               "fill", fill,
                                "new-row", new_row,
                                NULL);
       g_object_unref (drag_item);
@@ -473,7 +469,7 @@ do_toolpalette (GtkWidget *do_widget)
                                       "text", 0,
                                       NULL);
       gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_orientation), &iter);
-      gtk_box_pack_start (GTK_BOX (box), combo_orientation, FALSE);
+      gtk_box_pack_start (GTK_BOX (box), combo_orientation);
 
       /* Style combo box: */
       style_model = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
@@ -512,11 +508,11 @@ do_toolpalette (GtkWidget *do_widget)
                                       "text", 0,
                                       NULL);
       gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_style), &iter);
-      gtk_box_pack_start (GTK_BOX (box), combo_style, FALSE);
+      gtk_box_pack_start (GTK_BOX (box), combo_style);
 
       /* Add hbox */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-      gtk_box_pack_start (GTK_BOX (box), hbox, TRUE);
+      gtk_box_pack_start (GTK_BOX (box), hbox);
 
       /* Add and fill the ToolPalette: */
       palette = gtk_tool_palette_new ();
@@ -549,7 +545,7 @@ do_toolpalette (GtkWidget *do_widget)
 
       notebook = gtk_notebook_new ();
       g_object_set (notebook, "margin", 6, NULL);
-      gtk_box_pack_end (GTK_BOX(hbox), notebook, FALSE);
+      gtk_box_pack_end (GTK_BOX(hbox), notebook);
 
       /* ===== DnD for tool items ===== */
 
@@ -751,19 +747,19 @@ load_special_items (GtkToolPalette *palette)
   item = create_entry_item ("homogeneous=FALSE, expand=TRUE");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_container_child_set (GTK_CONTAINER (group), GTK_WIDGET (item),
-                           "homogeneous", FALSE, "expand", TRUE,
+                           "homogeneous", FALSE,
                            NULL);
 
   item = create_entry_item ("homogeneous=FALSE, expand=TRUE, fill=FALSE");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_container_child_set (GTK_CONTAINER (group), GTK_WIDGET (item),
-                           "homogeneous", FALSE, "expand", TRUE,
-                           "fill", FALSE, NULL);
+                           "homogeneous", FALSE,
+                           NULL);
 
   item = create_entry_item ("homogeneous=FALSE, expand=TRUE, new-row=TRUE");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_container_child_set (GTK_CONTAINER (group), GTK_WIDGET (item),
-                           "homogeneous", FALSE, "expand", TRUE,
+                           "homogeneous", FALSE,
                            "new-row", TRUE, NULL);
 
   item = gtk_tool_button_new (NULL, NULL);

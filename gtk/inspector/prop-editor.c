@@ -938,7 +938,7 @@ property_editor (GObject                *object,
               first = b;
             g_object_set_data (G_OBJECT (b), "index", GINT_TO_POINTER (j));
             gtk_widget_show (b);
-            gtk_box_pack_start (GTK_BOX (box), b, FALSE);
+            gtk_box_pack_start (GTK_BOX (box), b);
             connect_controller (G_OBJECT (b), "toggled",
                                 object, spec, G_CALLBACK (enum_modified));
             ++j;
@@ -980,7 +980,7 @@ property_editor (GObject                *object,
             b = gtk_check_button_new_with_label (fclass->values[j].value_name);
             g_object_set_data (G_OBJECT (b), "index", GINT_TO_POINTER (j));
             gtk_widget_show (b);
-            gtk_box_pack_start (GTK_BOX (box), b, FALSE);
+            gtk_box_pack_start (GTK_BOX (box), b);
             connect_controller (G_OBJECT (b), "toggled",
                                 object, spec, G_CALLBACK (flags_modified));
           }
@@ -1605,7 +1605,7 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
   gtk_widget_set_halign (button, GTK_ALIGN_END);
   gtk_widget_show (button);
   gtk_widget_set_sensitive (button, FALSE);
-  gtk_box_pack_end (GTK_BOX (row), button, FALSE);
+  gtk_box_pack_end (GTK_BOX (row), button);
 
   switch (_gtk_settings_get_setting_source (GTK_SETTINGS (object), name))
     {

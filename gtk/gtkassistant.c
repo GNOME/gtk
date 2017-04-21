@@ -1727,14 +1727,14 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 
   priv->pages = g_list_insert (priv->pages, page_info, position);
 
-  gtk_box_pack_start (GTK_BOX (priv->sidebar), page_info->regular_title, FALSE);
-  gtk_box_pack_start (GTK_BOX (priv->sidebar), page_info->current_title, FALSE);
+  gtk_box_pack_start (GTK_BOX (priv->sidebar), page_info->regular_title);
+  gtk_box_pack_start (GTK_BOX (priv->sidebar), page_info->current_title);
   gtk_box_reorder_child (GTK_BOX (priv->sidebar), page_info->regular_title, 2 * position);
   gtk_box_reorder_child (GTK_BOX (priv->sidebar), page_info->current_title, 2 * position + 1);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_show (box);
-  gtk_box_pack_start (GTK_BOX (box), page, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), page);
   g_object_set (box, "margin", 12, NULL);
   g_signal_connect (box, "remove", G_CALLBACK (assistant_remove_page_cb), assistant);
 
@@ -1837,7 +1837,7 @@ add_to_action_area (GtkAssistant *assistant,
 
   gtk_widget_set_valign (child, GTK_ALIGN_BASELINE);
 
-  gtk_box_pack_end (GTK_BOX (priv->action_area), child, FALSE);
+  gtk_box_pack_end (GTK_BOX (priv->action_area), child);
 }
 
 /**
