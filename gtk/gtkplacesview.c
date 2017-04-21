@@ -1533,82 +1533,33 @@ popup_menu_detach_cb (GtkWidget *attach_widget,
 }
 
 static void
-get_view_and_file (GtkPlacesViewRow  *row,
-                   GtkWidget        **view,
-                   GFile            **file)
-{
-  if (view)
-    *view = gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_PLACES_VIEW);
-
-  if (file)
-    {
-      GVolume *volume;
-      GMount *mount;
-
-      volume = gtk_places_view_row_get_volume (row);
-      mount = gtk_places_view_row_get_mount (row);
-
-      if (mount)
-        {
-          *file = g_mount_get_default_location (mount);
-        }
-      else if (volume)
-        {
-          *file = g_volume_get_activation_root (volume);
-        }
-      else
-        {
-          *file = gtk_places_view_row_get_file (row);
-          if (*file) {
-            g_object_ref (*file);
-          }
-        }
-    }
-}
-
-static void
 open_cb (GtkMenuItem      *item,
          GtkPlacesViewRow *row)
 {
-  GtkWidget *view;
-  GFile *file;
+  GtkPlacesView *self;
 
-  get_view_and_file (row, &view, &file);
-
-  if (file)
-    emit_open_location (GTK_PLACES_VIEW (view), file, GTK_PLACES_OPEN_NORMAL);
-
-  g_clear_object (&file);
+  self = GTK_PLACES_VIEW (gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_PLACES_VIEW));
+  activate_row (self, row, GTK_PLACES_OPEN_NORMAL);
 }
 
 static void
 open_in_new_tab_cb (GtkMenuItem      *item,
                     GtkPlacesViewRow *row)
 {
-  GtkWidget *view;
-  GFile *file;
+  GtkPlacesView *self;
 
-  get_view_and_file (row, &view, &file);
-
-  if (file)
-    emit_open_location (GTK_PLACES_VIEW (view), file, GTK_PLACES_OPEN_NEW_TAB);
-
-  g_clear_object (&file);
+  self = GTK_PLACES_VIEW (gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_PLACES_VIEW));
+  activate_row (self, row, GTK_PLACES_OPEN_NEW_TAB);
 }
 
 static void
 open_in_new_window_cb (GtkMenuItem      *item,
                        GtkPlacesViewRow *row)
 {
-  GtkWidget *view;
-  GFile *file;
+  GtkPlacesView *self;
 
-  get_view_and_file (row, &view, &file);
-
-  if (file)
-    emit_open_location (GTK_PLACES_VIEW (view), file, GTK_PLACES_OPEN_NEW_WINDOW);
-
-  g_clear_object (&file);
+  self = GTK_PLACES_VIEW (gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_PLACES_VIEW));
+  activate_row (self, row, GTK_PLACES_OPEN_NEW_WINDOW);
 }
 
 static void
