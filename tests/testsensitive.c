@@ -65,15 +65,15 @@ int main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), box);
 
   w = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 15);
-  gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE);
-  gtk_box_pack_start (GTK_BOX (w), gtk_entry_new (), TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), w, TRUE);
+  gtk_box_pack_start (GTK_BOX (w), gtk_entry_new (), TRUE);
   bu = gtk_button_new_with_label ("Bu");
-  gtk_box_pack_start (GTK_BOX (w), bu, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (w), bu, TRUE);
   c = gtk_switch_new ();
   gtk_switch_set_active (GTK_SWITCH (c), TRUE);
   gtk_widget_set_halign (c, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (c, GTK_ALIGN_CENTER);
-  gtk_box_pack_start (GTK_BOX (box), c, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), c, TRUE);
   g_signal_connect (bu, "clicked", G_CALLBACK (set_insensitive), w);
   g_signal_connect (bu, "state-flags-changed", G_CALLBACK (state_flags_changed), NULL);
 

@@ -134,7 +134,7 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
     return;
 
   if (should_have_separator)
-    gtk_box_pack_start (GTK_BOX (box), box->separator, FALSE, FALSE);
+    gtk_box_pack_start (GTK_BOX (box), box->separator, FALSE);
   else
     gtk_container_remove (GTK_CONTAINER (box), box->separator);
 }
@@ -326,10 +326,7 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
   g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
 
   gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
-  if (box->iconic)
-    gtk_box_pack_start (GTK_BOX (box->item_box), widget, TRUE, TRUE);
-  else
-    gtk_container_add (GTK_CONTAINER (box->item_box), widget);
+  gtk_container_add (GTK_CONTAINER (box->item_box), widget);
   gtk_box_reorder_child (GTK_BOX (box->item_box), widget, position);
 
   gtk_menu_section_box_schedule_separator_sync (box);
@@ -346,7 +343,7 @@ gtk_menu_section_box_init (GtkMenuSectionBox *box)
 
   item_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   box->item_box = GTK_BOX (item_box);
-  gtk_box_pack_end (GTK_BOX (box), item_box, FALSE, FALSE);
+  gtk_box_pack_end (GTK_BOX (box), item_box, FALSE);
   gtk_widget_set_halign (GTK_WIDGET (item_box), GTK_ALIGN_FILL);
 
   gtk_widget_set_halign (GTK_WIDGET (box), GTK_ALIGN_FILL);
@@ -454,7 +451,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
   g_object_set_data (G_OBJECT (button), "focus", focus);
   g_object_set_data (G_OBJECT (focus), "focus", button);
 
-  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE);
 
   g_signal_connect (focus, "clicked", G_CALLBACK (open_submenu), item);
   g_signal_connect (button, "clicked", G_CALLBACK (close_submenu), item);
@@ -487,6 +484,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
 
   if (hint && g_str_equal (hint, "horizontal-buttons"))
     {
+      gtk_box_set_homogeneous (box->item_box, TRUE);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
       gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), GTK_STYLE_CLASS_LINKED);
       box->iconic = TRUE;
@@ -514,17 +512,17 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_widget_set_valign (separator, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (box->separator), separator, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (box->separator), separator, TRUE);
 
       title = gtk_label_new (label);
       g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
       gtk_style_context_add_class (gtk_widget_get_style_context (title), GTK_STYLE_CLASS_SEPARATOR);
       gtk_widget_set_halign (title, GTK_ALIGN_START);
-      gtk_box_pack_start (GTK_BOX (box->separator), title, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (box->separator), title, FALSE);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_widget_set_valign (separator, GTK_ALIGN_CENTER);
-      gtk_box_pack_start (GTK_BOX (box->separator), separator, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (box->separator), separator, TRUE);
     }
   else
     {

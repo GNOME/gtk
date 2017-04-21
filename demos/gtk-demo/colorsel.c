@@ -87,7 +87,7 @@ do_colorsel (GtkWidget *do_widget)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
-      gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE);
 
       da = gtk_drawing_area_new ();
       gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 200);
@@ -100,7 +100,7 @@ do_colorsel (GtkWidget *do_widget)
       gtk_widget_set_halign (button, GTK_ALIGN_END);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
 
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE);
 
       g_signal_connect (button, "clicked",
                         G_CALLBACK (change_color_callback), NULL);

@@ -57,7 +57,7 @@ prepare_window_for_orientation (GtkOrientation orientation)
       gtk_widget_set_halign (GTK_WIDGET (spin), GTK_ALIGN_CENTER);
 
       GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-      gtk_box_pack_start (GTK_BOX (hbox), spin, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (hbox), spin, FALSE);
       gtk_container_add (GTK_CONTAINER (mainbox), hbox);
     }
 

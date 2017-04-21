@@ -328,7 +328,8 @@ make_window (gint view_type)
 
   /* Put them together */
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE);
+  gtk_widget_set_vexpand (scrolled_window, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE);
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC,
@@ -337,7 +338,7 @@ make_window (gint view_type)
 
   /* buttons */
   button = gtk_button_new_with_label ("gtk_tree_store_remove");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE);
   g_signal_connect (selection, "changed",
                     G_CALLBACK (selection_changed),
                     button);
@@ -349,9 +350,9 @@ make_window (gint view_type)
   button = gtk_button_new_with_label ("gtk_tree_store_insert");
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   entry = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
-  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE);
   g_object_set_data (G_OBJECT (button), "user_data", entry);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (iter_insert),
@@ -360,9 +361,9 @@ make_window (gint view_type)
   button = gtk_button_new_with_label ("gtk_tree_store_set");
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   entry = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
-  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE);
   g_object_set_data (G_OBJECT (button), "user_data", entry);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (iter_change),
@@ -371,16 +372,16 @@ make_window (gint view_type)
   button = gtk_button_new_with_label ("gtk_tree_store_insert_with_values");
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   entry = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
-  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE);
   g_object_set_data (G_OBJECT (button), "user_data", entry);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (iter_insert_with_values),
 		    tree_view);
 
   button = gtk_button_new_with_label ("gtk_tree_store_insert_before");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (iter_insert_before),
                     tree_view);
@@ -390,7 +391,7 @@ make_window (gint view_type)
   gtk_widget_set_sensitive (button, FALSE);
 
   button = gtk_button_new_with_label ("gtk_tree_store_insert_after");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (iter_insert_after),
                     tree_view);
@@ -400,13 +401,13 @@ make_window (gint view_type)
   gtk_widget_set_sensitive (button, FALSE);
 
   button = gtk_button_new_with_label ("gtk_tree_store_prepend");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (iter_prepend),
                     tree_view);
 
   button = gtk_button_new_with_label ("gtk_tree_store_append");
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (iter_append),
                     tree_view);

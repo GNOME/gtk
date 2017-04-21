@@ -68,17 +68,17 @@ add_string (GtkInspectorStrvEditor *editor,
   entry = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (entry), str);
   gtk_widget_show (entry);
-  gtk_box_pack_start (GTK_BOX (box), entry, FALSE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), entry, TRUE);
   g_object_set_data (G_OBJECT (box), "entry", entry);
   g_signal_connect_swapped (entry, "notify::text", G_CALLBACK (emit_changed), editor);
 
   button = gtk_button_new_from_icon_name ("user-trash-symbolic", GTK_ICON_SIZE_MENU);
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
   gtk_widget_show (button);
-  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE);
   g_signal_connect (button, "clicked", G_CALLBACK (remove_string), editor);
 
-  gtk_box_pack_start (GTK_BOX (editor->box), box, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (editor->box), box, FALSE);
 
   gtk_widget_grab_focus (entry);
 
@@ -107,8 +107,8 @@ gtk_inspector_strv_editor_init (GtkInspectorStrvEditor *editor)
   gtk_widget_show (editor->button);
   g_signal_connect (editor->button, "clicked", G_CALLBACK (add_cb), editor);
 
-  gtk_box_pack_start (GTK_BOX (editor), editor->box, FALSE, TRUE);
-  gtk_box_pack_start (GTK_BOX (editor), editor->button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (editor), editor->box, TRUE);
+  gtk_box_pack_start (GTK_BOX (editor), editor->button, FALSE);
 }
 
 static void

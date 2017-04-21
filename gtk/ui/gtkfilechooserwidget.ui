@@ -9,8 +9,10 @@
         <child>
           <object class="GtkBox" id="browse_widgets_box">
             <property name="orientation">vertical</property>
+            <property name="vexpand">1</property>
             <child>
               <object class="GtkPaned" id="browse_widgets_hpaned">
+                <property name="vexpand">1</property>
                 <child>
                   <object class="GtkPlacesSidebar" id="places_sidebar">
                     <property name="hscrollbar-policy">never</property>
@@ -51,11 +53,9 @@
                                     <property name="margin">6</property>
                                     <child>
                                       <object class="GtkPathBar" id="browse_path_bar">
+                                        <property name="hexpand">1</property>
                                         <signal name="path-clicked" handler="path_bar_clicked" after="yes" swapped="no"/>
                                       </object>
-                                      <packing>
-                                        <property name="expand">1</property>
-                                      </packing>
                                     </child>
                                     <child>
                                       <object class="GtkMenuButton" id="browse_new_folder_button">
@@ -125,9 +125,11 @@
                     <child>
                       <object class="GtkBox" id="list_and_preview_box">
                         <property name="spacing">12</property>
+                        <property name="vexpand">1</property>
                         <child>
                           <object class="GtkStack" id="browse_files_stack">
                             <property name="transition-type">crossfade</property>
+                            <property name="expand">1</property>
                             <style>
                               <class name="view"/>
                             </style>
@@ -137,6 +139,7 @@
                                 <child>
                                   <object class="GtkScrolledWindow" id="browse_files_swin">
                                     <property name="hscrollbar-policy">never</property>
+                                    <property name="vexpand">1</property>
                                     <child>
                                       <object class="GtkTreeView" id="browse_files_tree_view">
                                         <property name="has-tooltip">1</property>
@@ -227,9 +230,6 @@
                                       </object>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">1</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkActionBar" id="remote_warning_bar">
@@ -311,9 +311,6 @@
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="preview_box">
@@ -328,7 +325,6 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -339,14 +335,10 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">1</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkActionBar" id="extra_and_filters">

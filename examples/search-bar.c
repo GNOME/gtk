@@ -27,15 +27,13 @@ activate_cb (GtkApplication *app,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_container_add (GTK_CONTAINER (search_bar), box);
-  gtk_widget_show (box);
 
   entry = gtk_search_entry_new ();
-  gtk_box_pack_start (GTK_BOX (box), entry, TRUE, TRUE);
-  gtk_widget_show (entry);
+  gtk_widget_set_hexpand (entry, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), entry, TRUE);
 
   menu_button = gtk_menu_button_new ();
-  gtk_box_pack_start (GTK_BOX (box), menu_button, FALSE, FALSE);
-  gtk_widget_show (menu_button);
+  gtk_box_pack_start (GTK_BOX (box), menu_button, FALSE);
 
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (search_bar), GTK_ENTRY (entry));
 

@@ -39,6 +39,7 @@
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
             <property name="margin">5</property>
+            <property name="vexpand">1</property>
             <child>
               <object class="GtkLabel" id="printer_combo_label">
                 <property name="visible">1</property>
@@ -271,9 +272,6 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">1</property>
-          </packing>
         </child>
       </object>
     </child>

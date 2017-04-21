@@ -473,7 +473,7 @@ do_toolpalette (GtkWidget *do_widget)
                                       "text", 0,
                                       NULL);
       gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_orientation), &iter);
-      gtk_box_pack_start (GTK_BOX (box), combo_orientation, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (box), combo_orientation, FALSE);
 
       /* Style combo box: */
       style_model = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
@@ -512,11 +512,11 @@ do_toolpalette (GtkWidget *do_widget)
                                       "text", 0,
                                       NULL);
       gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_style), &iter);
-      gtk_box_pack_start (GTK_BOX (box), combo_style, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (box), combo_style, FALSE);
 
       /* Add hbox */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-      gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (box), hbox, TRUE);
 
       /* Add and fill the ToolPalette: */
       palette = gtk_tool_palette_new ();
@@ -526,6 +526,7 @@ do_toolpalette (GtkWidget *do_widget)
       load_special_items (GTK_TOOL_PALETTE (palette));
 
       palette_scroller = gtk_scrolled_window_new (NULL, NULL);
+      gtk_widget_set_vexpand (palette_scroller, TRUE);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (palette_scroller),
                                       GTK_POLICY_NEVER,
                                       GTK_POLICY_AUTOMATIC);
@@ -548,7 +549,7 @@ do_toolpalette (GtkWidget *do_widget)
 
       notebook = gtk_notebook_new ();
       g_object_set (notebook, "margin", 6, NULL);
-      gtk_box_pack_end (GTK_BOX(hbox), notebook, FALSE, FALSE);
+      gtk_box_pack_end (GTK_BOX(hbox), notebook, FALSE);
 
       /* ===== DnD for tool items ===== */
 

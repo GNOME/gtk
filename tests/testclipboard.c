@@ -120,9 +120,9 @@ main (int argc, char **argv)
                                         NULL);
 
   image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (window))), image, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (window))), image, FALSE);
   label = gtk_label_new ("No data found");
-  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (window))), label, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (window))), label, FALSE);
 
   g_signal_connect (window, "response", G_CALLBACK (on_response), NULL);
 

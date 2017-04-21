@@ -225,7 +225,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
   g_object_set (label, "margin", 10, NULL);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_box_pack_start (GTK_BOX (box2), label, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box2), label, TRUE);
 
   combo = gtk_combo_box_text_new ();
   g_object_set (combo, "margin", 10, NULL);
@@ -238,7 +238,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
   g_object_bind_property (group, "mode",
                           combo, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-  gtk_box_pack_start (GTK_BOX (box2), combo, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (box2), combo, FALSE);
 
   listbox = gtk_list_box_new ();
   gtk_container_add (GTK_CONTAINER (box), listbox);

@@ -64,13 +64,13 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), box, 0, 1, 1, 1);
   gtk_box_pack_start (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 1"),
-                  TRUE, TRUE);
+                  TRUE);
   gtk_box_pack_start (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 2"),
-                  TRUE, TRUE);
+                  TRUE);
   gtk_box_pack_start (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkBox 3"),
-                  TRUE, TRUE);
+                  TRUE);
 
   /* GtkButtonBox */
   box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
@@ -78,13 +78,13 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), box, 1, 1, 1, 1);
   gtk_box_pack_start (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkButtonBox 1"),
-                  TRUE, TRUE);
+                  TRUE);
   gtk_box_pack_start (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkButtonBox 2"),
-                  TRUE, TRUE);
+                  TRUE);
   gtk_box_pack_start (GTK_BOX (box),
                   gtk_button_new_with_label ("GtkButtonBox 3"),
-                  TRUE, TRUE);
+                  TRUE);
 
   /* GtkSeparator */
   box = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);

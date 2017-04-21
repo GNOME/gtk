@@ -59,8 +59,9 @@ show_dialog (void)
   gtk_window_set_default_size (GTK_WINDOW (dialog), default_width, default_height);
   gtk_window_set_resizable (GTK_WINDOW (dialog), resizable);
 
+
   gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
-                      label, TRUE, TRUE);
+                      label, TRUE);
   gtk_widget_show (label);
 
   label = gtk_label_new ("? x ?");

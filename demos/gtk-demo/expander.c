@@ -29,7 +29,7 @@ static void
 do_not_expand (GtkWidget *child, gpointer data)
 {
   gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (child)), child,
-                           "expand", FALSE, "fill", FALSE, NULL);
+                           "fill", FALSE, NULL);
 }
 
 GtkWidget *
@@ -59,7 +59,7 @@ do_expander (GtkWidget *do_widget)
       area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (window));
       box = gtk_widget_get_parent (area);
       gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (box)), box,
-                               "expand", TRUE, "fill", TRUE, NULL);
+                               "fill", TRUE, NULL);
       gtk_container_foreach (GTK_CONTAINER (area), do_not_expand, NULL);
 
       expander = gtk_expander_new ("Details:");
@@ -85,7 +85,7 @@ do_expander (GtkWidget *do_widget)
                                 "resize the window. Do it already !", -1);
       gtk_container_add (GTK_CONTAINER (sw), tv);
       gtk_container_add (GTK_CONTAINER (expander), sw);
-      gtk_box_pack_end (GTK_BOX (area), expander, TRUE, TRUE);
+      gtk_box_pack_end (GTK_BOX (area), expander, TRUE);
       g_signal_connect (expander, "notify::expanded",
                         G_CALLBACK (expander_cb), window);
 

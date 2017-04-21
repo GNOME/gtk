@@ -41,14 +41,11 @@
                 <property name="valign">center</property>
                 <property name="label">label</property>
                 <property name="wrap">1</property>
+                <property name="vexpand">1</property>
               </object>
-              <packing>
-                <property name="expand">1</property>
-              </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">1</property>
             <property name="position">2</property>
           </packing>
         </child>

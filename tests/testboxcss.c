@@ -172,15 +172,16 @@ main (gint argc, gchar **argv)
 
   toolbar = gtk_toolbar_new ();
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
-  gtk_box_pack_start (GTK_BOX (main_box), toolbar, FALSE, TRUE);
+  gtk_box_pack_start (GTK_BOX (main_box), toolbar, TRUE);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (main_box), box, FALSE, TRUE);
+  gtk_box_pack_start (GTK_BOX (main_box), box, TRUE);
 
   container = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (container), 200);
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (container), 200);
-  gtk_box_pack_start (GTK_BOX (main_box), container, TRUE, TRUE);
+  gtk_widget_set_vexpand (container, TRUE);
+  gtk_container_add (GTK_CONTAINER (main_box), container);
   child = gtk_text_view_new_with_buffer (css);
   gtk_container_add (GTK_CONTAINER (container), child);
   g_signal_connect (css,
@@ -196,28 +197,28 @@ main (gint argc, gchar **argv)
                     gtk_text_view_get_buffer (GTK_TEXT_VIEW (child)));
 
   container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (main_box), container, FALSE, TRUE);
+  gtk_box_pack_start (GTK_BOX (main_box), container, TRUE);
   child = gtk_switch_new ();
   gtk_switch_set_active (GTK_SWITCH (child), gtk_widget_get_default_direction () == GTK_TEXT_DIR_LTR);
   g_signal_connect (child,
                     "notify::active",
                     G_CALLBACK (set_orientation),
                     NULL);
-  gtk_box_pack_start (GTK_BOX (container), child, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (container), child, FALSE);
   child = gtk_label_new ("left-to-right");
-  gtk_box_pack_start (GTK_BOX (container), child, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (container), child, FALSE);
   child = gtk_button_new_with_label ("Add button");
   g_signal_connect_swapped (child,
                             "clicked",
                             G_CALLBACK (add_button),
                             box);
-  gtk_box_pack_end (GTK_BOX (container), child, FALSE, FALSE);
+  gtk_box_pack_end (GTK_BOX (container), child, FALSE);
   child = gtk_button_new_with_label ("Add toolbutton");
   g_signal_connect_swapped (child,
                             "clicked",
                             G_CALLBACK (add_toolbutton),
                             toolbar);
-  gtk_box_pack_end (GTK_BOX (container), child, FALSE, FALSE);
+  gtk_box_pack_end (GTK_BOX (container), child, FALSE);
 
   add_toolbutton (GTK_TOOLBAR (toolbar));
   add_toolbutton (GTK_TOOLBAR (toolbar));

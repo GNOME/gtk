@@ -190,14 +190,15 @@ main (int argc, char **argv)
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), BORDER_EXPAND);
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), ALL_EXPAND);
 
-  gtk_box_pack_start (GTK_BOX (vbox), combo_box, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), combo_box, FALSE);
 
   /* Scrolled window and tree view */
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
-  gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE);
+  gtk_widget_set_vexpand (sw, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE);
 
   tree_view = gtk_tree_view_new_with_model (create_model ());
   gtk_container_add (GTK_CONTAINER (sw), tree_view);
@@ -220,7 +221,7 @@ main (int argc, char **argv)
   button = gtk_toggle_button_new_with_label ("Toggle long content row");
   g_signal_connect (button, "toggled",
                     G_CALLBACK (toggle_long_content_row), tree_view);
-  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), button, FALSE);
 
   /* Set up option menu callback and default item */
   g_signal_connect (combo_box, "changed",

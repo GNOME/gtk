@@ -65,7 +65,7 @@ main (int argc, char *argv[])
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
 
-  gtk_box_pack_start (GTK_BOX (box), sw, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), sw, TRUE);
 
   content = get_content ();
 

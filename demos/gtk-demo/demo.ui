@@ -159,9 +159,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar1">
@@ -227,7 +224,6 @@
             </child>
           </object>
           <packing>
-            <property name="expand">0</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -235,6 +231,7 @@
           <object class="GtkScrolledWindow" id="scrolledwindow1">
             <property name="shadow_type">in</property>
             <property name="visible">1</property>
+            <property name="expand">1</property>
             <child>
               <object class="GtkTreeView" id="treeview1">
                 <property name="visible">1</property>
@@ -286,7 +283,6 @@
           </object>
           <packing>
             <property name="position">2</property>
-            <property name="expand">1</property>
           </packing>
         </child>
         <child>
@@ -295,7 +291,6 @@
           </object>
           <packing>
             <property name="position">3</property>
-            <property name="expand">0</property>
           </packing>
         </child>
       </object>

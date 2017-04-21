@@ -15,9 +15,6 @@
                 <property name="hexpand">1</property>
                 <property name="orientation">vertical</property>
               </object>
-              <packing>
-                <property name="expand">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="box_center">
@@ -49,9 +46,6 @@
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">1</property>
-                  </packing>
                 </child>
               </object>
               <packing>

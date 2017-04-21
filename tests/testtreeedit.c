@@ -210,7 +210,7 @@ create_control (GtkWidget *box, gint number, gint cntl, CallbackData *data)
   checkbutton = gtk_check_button_new_with_label (name);
   gtk_widget_show (checkbutton);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), cntl == CNTL_FIXED);
-  gtk_box_pack_start (GTK_BOX (box), checkbutton, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (box), checkbutton, FALSE);
 
   g_signal_connect (G_OBJECT (checkbutton), "toggled", callback, data);
   g_free (name);
@@ -246,7 +246,8 @@ main (gint argc, gchar **argv)
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_ETCHED_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE);
+  gtk_widget_set_vexpand (scrolled_window, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE);
 
   tree_model = create_model ();
   tree_view = gtk_tree_view_new_with_model (tree_model);
@@ -350,12 +351,12 @@ main (gint argc, gchar **argv)
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_widget_show (hbox);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
 
   /* Alignment controls */
   cntl_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (cntl_vbox);
-  gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE);
 
   create_control (cntl_vbox, 1, CNTL_ALIGN, &callback[0]);
   create_control (cntl_vbox, 2, CNTL_ALIGN, &callback[1]);
@@ -365,7 +366,7 @@ main (gint argc, gchar **argv)
   /* Expand controls */
   cntl_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (cntl_vbox);
-  gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE);
 
   create_control (cntl_vbox, 1, CNTL_EXPAND, &callback[0]);
   create_control (cntl_vbox, 2, CNTL_EXPAND, &callback[1]);
@@ -375,7 +376,7 @@ main (gint argc, gchar **argv)
   /* Fixed controls */
   cntl_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
   gtk_widget_show (cntl_vbox);
-  gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE);
 
   create_control (cntl_vbox, 1, CNTL_FIXED, &callback[0]);
   create_control (cntl_vbox, 2, CNTL_FIXED, &callback[1]);

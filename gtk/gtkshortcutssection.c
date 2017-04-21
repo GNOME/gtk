@@ -458,7 +458,7 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   gtk_widget_set_hexpand (GTK_WIDGET (self->switcher), TRUE);
   gtk_widget_set_halign (GTK_WIDGET (self->switcher), GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (self->footer), GTK_WIDGET (self->switcher));
-  gtk_box_pack_end (GTK_BOX (self->footer), self->show_all, TRUE, TRUE);
+  gtk_box_pack_end (GTK_BOX (self->footer), self->show_all, TRUE);
   gtk_widget_set_halign (self->show_all, GTK_ALIGN_END);
 
   self->pan_gesture = gtk_gesture_pan_new (GTK_WIDGET (self->stack), GTK_ORIENTATION_HORIZONTAL);

@@ -115,7 +115,7 @@ do_menus (GtkWidget *do_widget)
 
       menubar = gtk_menu_bar_new ();
       gtk_widget_set_hexpand (menubar, TRUE);
-      gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE);
+      gtk_box_pack_start (GTK_BOX (box1), menubar, TRUE);
       gtk_widget_show (menubar);
 
       menu = create_menu (2);
@@ -136,19 +136,19 @@ do_menus (GtkWidget *do_widget)
       gtk_widget_show (menuitem);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE);
+      gtk_box_pack_start (GTK_BOX (box1), box2, TRUE);
       gtk_widget_show (box2);
 
       button = gtk_button_new_with_label ("Flip");
       g_signal_connect (button, "clicked",
                         G_CALLBACK (change_orientation), menubar);
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
                                 G_CALLBACK(gtk_widget_destroy), window);
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE);
       gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);

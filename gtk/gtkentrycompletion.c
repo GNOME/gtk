@@ -629,8 +629,9 @@ gtk_entry_completion_constructed (GObject *object)
   gtk_container_add (GTK_CONTAINER (popup_frame), priv->vbox);
 
   gtk_container_add (GTK_CONTAINER (priv->scrolled_window), priv->tree_view);
-  gtk_box_pack_start (GTK_BOX (priv->vbox), priv->scrolled_window,
-                      TRUE, TRUE);
+  gtk_widget_set_hexpand (priv->scrolled_window, TRUE);
+  gtk_widget_set_vexpand (priv->scrolled_window, TRUE);
+  gtk_container_add (GTK_CONTAINER (priv->vbox), priv->scrolled_window);
 
   /* we don't want to see the action treeview when no actions have
    * been inserted, so we pack the action treeview after the first
@@ -1323,7 +1324,7 @@ gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
       gtk_tree_path_free (path);
 
       gtk_box_pack_start (GTK_BOX (completion->priv->vbox),
-                          completion->priv->action_view, FALSE, FALSE);
+                          completion->priv->action_view, FALSE);
       gtk_widget_show (completion->priv->action_view);
     }
 }

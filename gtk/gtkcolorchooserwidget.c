@@ -535,12 +535,12 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   cc->priv->custom = box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   g_object_set (box, "margin-top", 12, NULL);
-  gtk_box_pack_end (GTK_BOX (cc->priv->palette), box, FALSE, TRUE);
+  gtk_box_pack_end (GTK_BOX (cc->priv->palette), box, FALSE);
 
   /* translators: label for the custom section in the color chooser */
   cc->priv->custom_label = label = gtk_label_new (_("Custom"));
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_box_pack_end (GTK_BOX (cc->priv->palette), label, FALSE, TRUE);
+  gtk_box_pack_end (GTK_BOX (cc->priv->palette), label, FALSE);
 
   cc->priv->button = button = gtk_color_swatch_new ();
   gtk_widget_set_name (button, "add-color-button");

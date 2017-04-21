@@ -28,6 +28,7 @@
   <template class="GtkInspectorVisual" parent="GtkScrolledWindow">
     <property name="hscrollbar-policy">never</property>
     <property name="vscrollbar-policy">automatic</property>
+    <property name="expand">0</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -69,10 +70,8 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -102,10 +101,8 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -135,10 +132,8 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -172,10 +167,8 @@
                             <property name="width-chars">2</property>
                             <property name="adjustment">cursor_size_adjustment</property>
                             <property name="snap-to-ticks">True</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -205,10 +198,8 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -238,10 +229,8 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -272,13 +261,11 @@
                             <property name="valign">baseline</property>
                             <property name="adjustment">font_scale_adjustment</property>
                             <property name="draw_value">0</property>
+                            <property name="hexpand">1</property>
                             <marks>
                               <mark value="1.0" position="top"/>
                             </marks>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="font_scale_entry">
@@ -317,15 +304,13 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="changed" handler="direction_changed"/>
                             <items>
                               <item translatable="yes" id="ltr">Left-to-Right</item>
                               <item translatable="yes" id="rtl">Right-to-Left</item>
                             </items>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -357,10 +342,8 @@
                             <property name="valign">baseline</property>
                             <property name="adjustment">scale_adjustment</property>
                             <property name="snap-to-ticks">True</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -390,10 +373,8 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -425,13 +406,11 @@
                             <property name="adjustment">slowdown_adjustment</property>
                             <property name="valign">baseline</property>
                             <property name="draw_value">0</property>
+                            <property name="hexpand">1</property>
                             <marks>
                               <mark value="0.0" position="top"/>
                             </marks>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry" id="slowdown_entry">
@@ -482,6 +461,7 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="changed" handler="rendering_mode_changed"/>
                             <items>
                               <item translatable="yes" id="similar">Similar</item>
@@ -489,9 +469,6 @@
                               <item translatable="yes" id="recording">Recording</item>
                             </items>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -521,11 +498,9 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="notify::active" handler="updates_activate"/>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -555,11 +530,9 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="notify::active" handler="baselines_activate"/>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -589,11 +562,9 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="notify::active" handler="layout_activate"/>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -623,11 +594,9 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="notify::active" handler="snapshot_activate"/>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -657,11 +626,9 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="notify::active" handler="widget_resize_activate"/>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -691,10 +658,8 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -736,15 +701,13 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <items>
                               <item translatable="yes" id="maybe">When Needed</item>
                               <item translatable="yes" id="always">Always</item>
                               <item translatable="yes" id="disable">Disabled</item>
                             </items>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -774,11 +737,9 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="notify::active" handler="software_gl_activate"/>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -808,11 +769,9 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="notify::active" handler="software_surface_activate"/>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -842,11 +801,9 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                             <signal name="notify::active" handler="texture_rectangle_activate"/>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>

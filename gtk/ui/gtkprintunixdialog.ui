@@ -63,6 +63,7 @@
           <object class="GtkBox" id="box1">
             <property name="visible">1</property>
             <property name="orientation">vertical</property>
+            <property name="vexpand">1</property>
             <child>
               <object class="GtkNotebook" id="notebook">
                 <property name="visible">1</property>
@@ -84,6 +85,7 @@
                             <property name="visible">1</property>
                             <property name="can-focus">1</property>
                             <property name="shadow-type">in</property>
+                            <property name="vexpand">1</property>
                             <child>
                               <object class="GtkTreeView" id="printer_treeview">
                                 <property name="visible">1</property>
@@ -144,9 +146,6 @@
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="extension_point">
@@ -159,9 +158,6 @@
                           </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box3">
@@ -172,6 +168,7 @@
                             <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
+                            <property name="hexpand">1</property>
                             <child>
                               <object class="GtkLabel" id="label_widget1">
                                 <property name="visible">1</property>
@@ -292,15 +289,13 @@
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="frame_template2">
                             <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
+                            <property name="hexpand">1</property>
                             <child>
                               <object class="GtkLabel" id="label_widget2">
                                 <property name="visible">1</property>
@@ -404,7 +399,6 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">1</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -440,6 +434,7 @@
                             <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
+                            <property name="hexpand">1</property>
                             <child>
                               <object class="GtkLabel" id="label_widget3">
                                 <property name="visible">1</property>
@@ -627,15 +622,13 @@
                               </packing>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="frame_template4">
                             <property name="visible">1</property>
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
+                            <property name="hexpand">1</property>
                             <child>
                               <object class="GtkLabel" id="label_widget4">
                                 <property name="visible">1</property>
@@ -808,7 +801,6 @@
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">1</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -825,14 +817,11 @@
                             <property name="content-width">320</property>
                             <property name="content-height">160</property>
                             <property name="visible">1</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">1</property>
-                          </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -1180,6 +1169,7 @@
                   <object class="GtkScrolledWindow" id="image_quality_page">
                     <property name="can-focus">1</property>
                     <property name="hscrollbar-policy">never</property>
+                    <property name="hexpand">1</property>
                     <child>
                       <object class="GtkViewport" id="viewport1">
                         <property name="visible">1</property>
@@ -1309,9 +1299,6 @@
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkActionBar" id="conflicts_widget">
@@ -1336,9 +1323,6 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">1</property>
-          </packing>
         </child>
       </object>
     </child>

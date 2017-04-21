@@ -2,6 +2,7 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkComboBox" parent="GtkBin">
+    <property name="expand">0</property>
     <child>
       <object class="GtkBox" id="box">
         <style>

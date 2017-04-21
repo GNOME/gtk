@@ -112,7 +112,6 @@ enum {
 
 enum {
   CHILD_PROP_0,
-  CHILD_PROP_EXPAND,
   CHILD_PROP_FILL,
   CHILD_PROP_PACK_TYPE,
   CHILD_PROP_POSITION,
@@ -141,9 +140,6 @@ static GParamSpec *child_props[LAST_CHILD_PROP] = { NULL, };
  * GtkBoxChild:
  * @widget: the child widget, packed into the GtkBox.
  *  neighbors, set when packed, zero by default.
- * @expand: flag indicates whether extra space should be given to this child.
- *  Any extra space given to the parent GtkBox is divided up among all children
- *  with this attribute set to %TRUE; set when packed, %TRUE by default.
  * @fill: flag indicates whether any extra space given to this child due to its
  *  @expand attribute being set is actually allocated to the child, rather than
  *  being used as padding around the widget; set when packed, %TRUE by default.
@@ -154,7 +150,6 @@ struct _GtkBoxChild
 {
   GtkWidget *widget;
 
-  guint      expand : 1;
   guint      fill   : 1;
   guint      pack   : 1;
 };
@@ -274,25 +269,6 @@ gtk_box_class_init (GtkBoxClass *class)
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
-
-  /**
-   * GtkBox:expand:
-   *
-   * Whether the child should receive extra space when the parent grows.
-   *
-   * Note that the #GtkWidget:halign, #GtkWidget:valign, #GtkWidget:hexpand
-   * and #GtkWidget:vexpand properties are the preferred way to influence
-   * child size allocation in containers.
-   *
-   * In contrast to #GtkWidget:hexpand, the expand child property does
-   * not cause the box to expand itself.
-   */
-  child_props[CHILD_PROP_EXPAND] =
-      g_param_spec_boolean ("expand",
-                            P_("Expand"),
-                            P_("Whether the child should receive extra space when the parent grows"),
-                            FALSE,
-                            GTK_PARAM_READWRITE);
 
   /**
    * GtkBox:fill:
@@ -437,7 +413,7 @@ count_expand_children (GtkBox *box,
       if (_gtk_widget_get_visible (child->widget))
 	{
 	  *visible_children += 1;
-	  if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
+          if (gtk_widget_compute_expand (child->widget, private->orientation))
 	    *expand_children += 1;
 	}
     }
@@ -616,7 +592,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	    {
               child_size = sizes[i].minimum_size;
 
-	      if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
+              if (gtk_widget_compute_expand (child->widget, private->orientation))
 		{
                   child_size += size_given_to_child;
 
@@ -832,7 +808,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
           _gtk_widget_get_visible (child->widget))
         {
           nvis[child->pack] += 1;
-          if (child->expand || gtk_widget_compute_expand (child->widget, priv->orientation))
+          if (gtk_widget_compute_expand (child->widget, priv->orientation))
             nexp[child->pack] += 1;
         }
     }
@@ -889,7 +865,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
     }
 
   /* Determine size of center */
-  if (priv->center->expand)
+  if (gtk_widget_compute_expand (priv->center->widget, priv->orientation))
     center_size = MAX (box_size - 2 * MAX (nat_size[0], nat_size[1]), center_req.minimum_size);
   else
     center_size = MAX (MIN (center_req.natural_size, box_size - min_size[0] - min_size[1]), center_req.minimum_size);
@@ -961,7 +937,7 @@ gtk_box_size_allocate_with_center (GtkWidget           *widget,
             {
               child_size = sizes[packing][i].minimum_size;
 
-              if (child->expand || gtk_widget_compute_expand (child->widget, priv->orientation))
+              if (gtk_widget_compute_expand (child->widget, priv->orientation))
                 {
                   child_size += size_given_to_child[packing];
 
@@ -1211,36 +1187,25 @@ gtk_box_set_child_property (GtkContainer *container,
                             const GValue *value,
                             GParamSpec   *pspec)
 {
-  gboolean expand = 0;
   gboolean fill = 0;
   GtkPackType pack_type = 0;
 
   if (property_id != CHILD_PROP_POSITION)
     gtk_box_query_child_packing (GTK_BOX (container),
 				 child,
-				 &expand,
 				 &fill,
 				 &pack_type);
   switch (property_id)
     {
-    case CHILD_PROP_EXPAND:
-      gtk_box_set_child_packing (GTK_BOX (container),
-				 child,
-				 g_value_get_boolean (value),
-				 fill,
-				 pack_type);
-      break;
     case CHILD_PROP_FILL:
       gtk_box_set_child_packing (GTK_BOX (container),
 				 child,
-				 expand,
 				 g_value_get_boolean (value),
 				 pack_type);
       break;
     case CHILD_PROP_PACK_TYPE:
       gtk_box_set_child_packing (GTK_BOX (container),
 				 child,
-				 expand,
 				 fill,
 				 g_value_get_enum (value));
       break;
@@ -1262,7 +1227,6 @@ gtk_box_get_child_property (GtkContainer *container,
 			    GValue       *value,
 			    GParamSpec   *pspec)
 {
-  gboolean expand = FALSE;
   gboolean fill = FALSE;
   GtkPackType pack_type = 0;
   GList *list;
@@ -1270,15 +1234,11 @@ gtk_box_get_child_property (GtkContainer *container,
   if (property_id != CHILD_PROP_POSITION)
     gtk_box_query_child_packing (GTK_BOX (container),
 				 child,
-				 &expand,
 				 &fill,
 				 &pack_type);
   switch (property_id)
     {
       guint i;
-    case CHILD_PROP_EXPAND:
-      g_value_set_boolean (value, expand);
-      break;
     case CHILD_PROP_FILL:
       g_value_set_boolean (value, fill);
       break;
@@ -1471,7 +1431,6 @@ gtk_box_direction_changed (GtkWidget        *widget,
 static GtkBoxChild *
 gtk_box_pack (GtkBox      *box,
               GtkWidget   *child,
-              gboolean     expand,
               gboolean     fill,
               GtkPackType  pack_type)
 {
@@ -1485,7 +1444,6 @@ gtk_box_pack (GtkBox      *box,
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
-  child_info->expand = expand ? TRUE : FALSE;
   child_info->fill = fill ? TRUE : FALSE;
   child_info->pack = pack_type;
 
@@ -1496,8 +1454,6 @@ gtk_box_pack (GtkBox      *box,
 
   gtk_widget_set_parent (child, GTK_WIDGET (box));
 
-  if (expand)
-    gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_EXPAND]);
   if (!fill)
     gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_FILL]);
   if (pack_type != GTK_PACK_START)
@@ -1817,7 +1773,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 		{
 		  child_size = sizes[i].minimum_size;
 
-		  if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
+                  if (gtk_widget_compute_expand (child->widget, private->orientation))
 		    {
                       child_size += size_given_to_child;
 
@@ -2043,9 +1999,6 @@ gtk_box_new (GtkOrientation orientation,
  * gtk_box_pack_start:
  * @box: a #GtkBox
  * @child: the #GtkWidget to be added to @box
- * @expand: %TRUE if the new child is to be given extra space allocated
- *     to @box. The extra space will be divided evenly between all children
- *     that use this option
  * @fill: %TRUE if space given to @child by the @expand option is
  *     actually allocated to @child, rather than just padding it.  This
  *     parameter has no effect if @expand is set to %FALSE.  A child is
@@ -2059,19 +2012,15 @@ gtk_box_new (GtkOrientation orientation,
 void
 gtk_box_pack_start (GtkBox    *box,
 		    GtkWidget *child,
-		    gboolean   expand,
 		    gboolean   fill)
 {
-  gtk_box_pack (box, child, expand, fill, GTK_PACK_START);
+  gtk_box_pack (box, child, fill, GTK_PACK_START);
 }
 
 /**
  * gtk_box_pack_end:
  * @box: a #GtkBox
  * @child: the #GtkWidget to be added to @box
- * @expand: %TRUE if the new child is to be given extra space allocated
- *   to @box. The extra space will be divided evenly between all children
- *   of @box that use this option
  * @fill: %TRUE if space given to @child by the @expand option is
  *   actually allocated to @child, rather than just padding it.  This
  *   parameter has no effect if @expand is set to %FALSE.  A child is
@@ -2085,10 +2034,9 @@ gtk_box_pack_start (GtkBox    *box,
 void
 gtk_box_pack_end (GtkBox    *box,
 		  GtkWidget *child,
-		  gboolean   expand,
 		  gboolean   fill)
 {
-  gtk_box_pack (box, child, expand, fill, GTK_PACK_END);
+  gtk_box_pack (box, child, fill, GTK_PACK_END);
 }
 
 /**
@@ -2307,8 +2255,6 @@ gtk_box_reorder_child (GtkBox    *box,
  * gtk_box_query_child_packing:
  * @box: a #GtkBox
  * @child: the #GtkWidget of the child to query
- * @expand: (out) (optional): pointer to return location for expand child
- *     property
  * @fill: (out) (optional): pointer to return location for fill child
  *     property
  * @pack_type: (out) (optional): pointer to return location for pack-type
@@ -2319,7 +2265,6 @@ gtk_box_reorder_child (GtkBox    *box,
 void
 gtk_box_query_child_packing (GtkBox      *box,
 			     GtkWidget   *child,
-			     gboolean    *expand,
 			     gboolean    *fill,
 			     GtkPackType *pack_type)
 {
@@ -2344,8 +2289,6 @@ gtk_box_query_child_packing (GtkBox      *box,
 
   if (list)
     {
-      if (expand)
-	*expand = child_info->expand;
       if (fill)
 	*fill = child_info->fill;
       if (pack_type)
@@ -2357,7 +2300,6 @@ gtk_box_query_child_packing (GtkBox      *box,
  * gtk_box_set_child_packing:
  * @box: a #GtkBox
  * @child: the #GtkWidget of the child to set
- * @expand: the new value of the expand child property
  * @fill: the new value of the fill child property
  * @pack_type: the new value of the pack-type child property
  *
@@ -2366,7 +2308,6 @@ gtk_box_query_child_packing (GtkBox      *box,
 void
 gtk_box_set_child_packing (GtkBox      *box,
 			   GtkWidget   *child,
-			   gboolean     expand,
 			   gboolean     fill,
 			   GtkPackType  pack_type)
 {
@@ -2392,14 +2333,6 @@ gtk_box_set_child_packing (GtkBox      *box,
   gtk_widget_freeze_child_notify (child);
   if (list)
     {
-      expand = expand != FALSE;
-
-      if (child_info->expand != expand)
-        {
-          child_info->expand = expand;
-          gtk_container_child_notify_by_pspec (GTK_CONTAINER (box), child, child_props[CHILD_PROP_EXPAND]);
-        }
-
       fill = fill != FALSE;
 
       if (child_info->fill != fill)
@@ -2429,7 +2362,6 @@ gtk_box_add (GtkContainer *container,
 	     GtkWidget    *widget)
 {
   gtk_box_pack_start (GTK_BOX (container), widget,
-                      FALSE,
                       TRUE);
 }
 
@@ -2570,7 +2502,7 @@ gtk_box_set_center_widget (GtkBox    *box,
     }
 
   if (widget)
-    priv->center = gtk_box_pack (box, widget, FALSE, TRUE, GTK_PACK_START);
+    priv->center = gtk_box_pack (box, widget, TRUE, GTK_PACK_START);
 
   if (old_center)
     g_object_unref (old_center);

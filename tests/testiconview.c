@@ -433,7 +433,8 @@ main (gint argc, gchar **argv)
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   paned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_box_pack_start (GTK_BOX (vbox), paned, TRUE, TRUE);
+  gtk_widget_set_vexpand (paned, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), paned, TRUE);
 
   icon_list = gtk_icon_view_new ();
   gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_list), GTK_SELECTION_MULTIPLE);
@@ -553,43 +554,43 @@ main (gint argc, gchar **argv)
 
   bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
-  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE);
 
   button = gtk_button_new_with_label ("Add some");
   g_signal_connect (button, "clicked", G_CALLBACK (add_some), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (bbox), button,  TRUE);
 
   button = gtk_button_new_with_label ("Add many");
   g_signal_connect (button, "clicked", G_CALLBACK (add_many), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE);
 
   button = gtk_button_new_with_label ("Add large");
   g_signal_connect (button, "clicked", G_CALLBACK (add_large), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (bbox), button,  TRUE);
 
   button = gtk_button_new_with_label ("Remove selected");
   g_signal_connect (button, "clicked", G_CALLBACK (foreach_selected_remove), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (bbox), button,  TRUE);
 
   button = gtk_button_new_with_label ("Swap");
   g_signal_connect (button, "clicked", G_CALLBACK (swap_rows), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE);
 
   bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
-  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE);
 
   button = gtk_button_new_with_label ("Select all");
   g_signal_connect (button, "clicked", G_CALLBACK (select_all), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE);
 
   button = gtk_button_new_with_label ("Unselect all");
   g_signal_connect (button, "clicked", G_CALLBACK (unselect_all), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE);
 
   button = gtk_button_new_with_label ("Select nonexisting");
   g_signal_connect (button, "clicked", G_CALLBACK (select_nonexisting), icon_list);
-  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (bbox), button, TRUE);
 
   icon_list = gtk_icon_view_new ();
 

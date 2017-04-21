@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkInspectorMiscInfo" parent="GtkScrolledWindow">
+    <property name="expand">0</property>
     <child>
       <object class="GtkBox">
         <property name="visible">true</property>
@@ -35,10 +36,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="address">
@@ -69,10 +68,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="refcount">
@@ -103,10 +100,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="state">
@@ -137,10 +132,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="buildable_id">
@@ -171,10 +164,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="default_widget">
@@ -215,10 +206,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="focus_widget">
@@ -260,10 +249,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkBox" id="mnemonic_label">
@@ -295,10 +282,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="request_mode">
@@ -329,10 +314,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="allocated_size">
@@ -363,10 +346,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="baseline">
@@ -397,10 +378,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="clip_area">
@@ -431,10 +410,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="frame_clock">
@@ -476,10 +453,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkImage" id="tick_callback">
@@ -512,10 +487,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="framecount">
@@ -546,10 +519,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="framerate">
@@ -580,10 +551,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="accessible_role">
@@ -614,10 +583,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="accessible_name">
@@ -650,10 +617,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkLabel" id="accessible_description">
@@ -686,10 +651,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkImage" id="mapped">
@@ -722,10 +685,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkImage" id="realized">
@@ -758,10 +719,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkImage" id="is_toplevel">
@@ -794,10 +753,8 @@
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">true</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkImage" id="child_visible">

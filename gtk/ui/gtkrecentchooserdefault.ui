@@ -15,6 +15,7 @@
     <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
+    <property name="expand">0</property>
     <child>
       <object class="GtkScrolledWindow" id="scrolledwindow">
         <property name="visible">1</property>
@@ -28,6 +29,7 @@
             <property name="can-focus">1</property>
             <property name="has-tooltip">1</property>
             <property name="headers-visible">0</property>
+            <property name="expand">1</property>
             <signal name="button-press-event" handler="recent_view_button_press_cb" swapped="no"/>
             <signal name="drag-begin" handler="recent_view_drag_begin_cb" swapped="no"/>
             <signal name="drag-data-get" handler="recent_view_drag_data_get_cb" swapped="no"/>
@@ -64,7 +66,6 @@
         </child>
       </object>
       <packing>
-        <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
@@ -88,7 +89,6 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>

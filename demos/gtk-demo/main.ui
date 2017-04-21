@@ -97,6 +97,7 @@
             <property name="scrollable">1</property>
             <property name="enable_popup">1</property>
             <property name="show_border">0</property>
+            <property name="expand">1</property>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">1</property>
@@ -166,7 +167,6 @@
             </child>
           </object>
           <packing>
-            <property name="expand">1</property>
             <property name="position">1</property>
           </packing>
         </child>

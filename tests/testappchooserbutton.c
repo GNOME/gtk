@@ -76,22 +76,22 @@ main (int argc,
   gtk_container_add (GTK_CONTAINER (toplevel), box);
 
   combobox = gtk_app_chooser_button_new ("image/jpeg");
-  gtk_box_pack_start (GTK_BOX (box), combobox, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), combobox, TRUE);
 
   g_signal_connect (combobox, "changed",
                     G_CALLBACK (combo_changed_cb), NULL);
 
   w = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (w), "<b>Selected app info</b>");
-  gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), w, TRUE);
 
   w = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), w, TRUE);
 
   sel_image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (w), sel_image, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (w), sel_image, TRUE);
   sel_name = gtk_label_new (NULL);
-  gtk_box_pack_start (GTK_BOX (w), sel_name, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (w), sel_name, TRUE);
 
   gtk_app_chooser_button_set_heading (GTK_APP_CHOOSER_BUTTON (combobox), "Choose one, <i>not</i> two");
   gtk_app_chooser_button_append_separator (GTK_APP_CHOOSER_BUTTON (combobox));
