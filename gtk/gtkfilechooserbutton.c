@@ -974,10 +974,14 @@ gtk_file_chooser_button_set_property (GObject      *object,
       switch (g_value_get_enum (value))
 	{
 	case GTK_FILE_CHOOSER_ACTION_OPEN:
+          gtk_widget_hide (priv->combo_box);
+          gtk_widget_show (priv->button);
           priv->child = priv->button;
           gtk_widget_queue_resize (GTK_WIDGET (button));
 	  break;
 	case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+          gtk_widget_show (priv->combo_box);
+          gtk_widget_hide (priv->button);
           priv->child = priv->combo_box;
           gtk_widget_queue_resize (GTK_WIDGET (button));
 	  break;
