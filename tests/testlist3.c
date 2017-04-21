@@ -1,15 +1,94 @@
 #include <gtk/gtk.h>
 
+static GtkTargetEntry entries[] = {
+  { "GTK_LIST_BOX_ROW", GTK_TARGET_SAME_APP, 0 }
+};
+
+static void
+drag_begin (GtkWidget      *widget,
+            GdkDragContext *context,
+            gpointer        data)
+{
+  GtkAllocation alloc;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  gtk_widget_get_allocation (widget, &alloc);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, alloc.width, alloc.height);
+  cr = cairo_create (surface);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "during-dnd");
+  gtk_widget_draw (widget, cr);
+  gtk_style_context_remove_class (gtk_widget_get_style_context (widget), "during-dnd");
+  gtk_drag_set_icon_surface (context, surface);
+
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+}
+
+
+void
+drag_data_get (GtkWidget        *widget,
+               GdkDragContext   *context,
+               GtkSelectionData *selection_data,
+               guint             info,
+               guint             time,
+               gpointer          data)
+{
+  gtk_selection_data_set (selection_data,
+                          gdk_atom_intern_static_string ("GTK_LIST_BOX_ROW"),
+                          32,
+                          (const guchar *)&widget,
+                          sizeof (gpointer));
+}
+
+
+static void
+drag_data_received (GtkWidget        *widget,
+                    GdkDragContext   *context,
+                    gint              x,
+                    gint              y,
+                    GtkSelectionData *selection_data,
+                    guint             info,
+                    guint32           time,
+                    gpointer          data)
+{
+  GtkWidget *target;
+  GtkWidget *row;
+  GtkWidget *source;
+  int pos;
+
+  target = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
+
+  pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (target));
+  row = (gpointer)* (gpointer*)gtk_selection_data_get_data (selection_data);
+  source = gtk_widget_get_ancestor (row, GTK_TYPE_LIST_BOX_ROW);
+
+  g_object_ref (source);
+  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (source)), source);
+  gtk_list_box_insert (GTK_LIST_BOX (gtk_widget_get_parent (target)), source, pos);
+  g_object_unref (source);
+}
+
 static GtkWidget *
 create_row (const gchar *text)
 {
-  GtkWidget *row, *box, *label;
+  GtkWidget *row, *ebox, *box, *label;
 
   row = gtk_list_box_row_new (); 
+  ebox = gtk_event_box_new ();
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_container_add (GTK_CONTAINER (row), ebox);
+  gtk_container_add (GTK_CONTAINER (ebox), box);
   gtk_container_add (GTK_CONTAINER (box), label);
+
+  gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
+  g_signal_connect (ebox, "drag-begin", G_CALLBACK (drag_begin), NULL);
+  g_signal_connect (ebox, "drag-data-get", G_CALLBACK (drag_data_get), NULL);
+
+  gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL, entries, 1, GDK_ACTION_MOVE);
+  g_signal_connect (ebox, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
 
   return row;
 }
@@ -43,6 +122,12 @@ selection_mode_changed (GtkComboBox *combo, gpointer data)
   gtk_list_box_set_selection_mode (list, gtk_combo_box_get_active (combo));
 }
 
+static const char *css =
+  ".during-dnd { "
+  "  background: white; "
+  "  border: 1px solid black; "
+  "}";
+
 int
 main (int argc, char *argv[])
 {
@@ -50,9 +135,13 @@ main (int argc, char *argv[])
   GtkWidget *hbox, *vbox, *combo, *button;
   gint i;
   gchar *text;
+  GtkCssProvider *provider;
 
   gtk_init ();
 
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, css, -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (), GTK_STYLE_PROVIDER (provider), 800);
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 300);
 
