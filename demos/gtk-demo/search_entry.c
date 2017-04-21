@@ -241,20 +241,20 @@ do_search_entry (GtkWidget *do_widget)
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label), "Search entry demo");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), label);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
       /* Create our entry */
       entry = gtk_search_entry_new ();
-      gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE);
+      gtk_box_pack_start (GTK_BOX (hbox), entry);
 
       /* Create the find and cancel buttons */
       notebook = gtk_notebook_new ();
       gtk_notebook_set_show_tabs (GTK_NOTEBOOK (notebook), FALSE);
       gtk_notebook_set_show_border (GTK_NOTEBOOK (notebook), FALSE);
-      gtk_box_pack_start (GTK_BOX (hbox), notebook, FALSE);
+      gtk_box_pack_start (GTK_BOX (hbox), notebook);
 
       find_button = gtk_button_new_with_label ("Find");
       g_signal_connect (find_button, "clicked",

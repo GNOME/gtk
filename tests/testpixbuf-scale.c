@@ -108,13 +108,13 @@ main(int argc, char **argv)
                           NULL);
 
         gtk_widget_set_halign (combo_box, GTK_ALIGN_START);
-	gtk_box_pack_start (GTK_BOX (vbox), combo_box, FALSE);
+	gtk_box_pack_start (GTK_BOX (vbox), combo_box);
 
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
+	gtk_box_pack_start (GTK_BOX (vbox), hbox);
 
 	label = gtk_label_new ("Overall Alpha:");
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE);
+	gtk_box_pack_start (GTK_BOX (hbox), label);
 
 	adjustment = gtk_adjustment_new (overall_alpha, 0, 255, 1, 10, 0);
 	g_signal_connect (adjustment, "value_changed",
@@ -123,7 +123,7 @@ main(int argc, char **argv)
 	hscale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
 	gtk_scale_set_digits (GTK_SCALE (hscale), 0);
         gtk_widget_set_hexpand (hscale, TRUE);
-	gtk_box_pack_start (GTK_BOX (hbox), hscale, TRUE);
+	gtk_box_pack_start (GTK_BOX (hbox), hscale);
 
 	/* Compute the size without the drawing area, so we know how big to make the default size */
         gtk_widget_get_preferred_size ( (vbox),
@@ -131,7 +131,7 @@ main(int argc, char **argv)
 
 	darea = gtk_drawing_area_new ();
         gtk_widget_set_hexpand (darea, TRUE);
-	gtk_box_pack_start (GTK_BOX (vbox), darea, TRUE);
+	gtk_box_pack_start (GTK_BOX (vbox), darea);
 
         gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (darea), draw_func, NULL, NULL);
 

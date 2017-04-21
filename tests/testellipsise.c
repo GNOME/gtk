@@ -158,9 +158,9 @@ main (int argc, char *argv[])
   gtk_widget_set_vexpand (overlay, TRUE);
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
 
-  gtk_box_pack_start (GTK_BOX (vbox), combo, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), scale, TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), overlay, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), combo);
+  gtk_box_pack_start (GTK_BOX (vbox), scale);
+  gtk_box_pack_start (GTK_BOX (vbox), overlay);
 
   g_object_set_data (G_OBJECT (label), "combo", combo);
 

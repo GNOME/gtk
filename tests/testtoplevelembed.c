@@ -22,8 +22,8 @@ create_tab_label (GtkWidget *toplevel)
 
   gtk_container_add (GTK_CONTAINER (button), image);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE);
-  gtk_box_pack_start (GTK_BOX (box), button, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), label);
+  gtk_box_pack_start (GTK_BOX (box), button);
 
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (remove_notebook_page), toplevel);

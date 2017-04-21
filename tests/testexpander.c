@@ -74,7 +74,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (expander), sw);
   gtk_widget_set_hexpand (expander, TRUE);
   gtk_widget_set_vexpand (expander, TRUE);
-  gtk_box_pack_end (GTK_BOX (area), expander, TRUE);
+  gtk_box_pack_end (GTK_BOX (area), expander);
   g_signal_connect (expander, "notify::expanded",
                     G_CALLBACK (expander_cb), dialog);
 

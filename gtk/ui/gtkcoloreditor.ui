@@ -120,7 +120,6 @@
         </child>
       </object>
       <packing>
-        <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
     </child>

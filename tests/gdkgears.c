@@ -175,26 +175,26 @@ main (int argc, char *argv[])
   gtk_gears_set_fps_label (GTK_GEARS (gears), GTK_LABEL (fps_label));
 
   spinner = gtk_spinner_new ();
-  gtk_box_pack_end (GTK_BOX (hbox), spinner, FALSE);
+  gtk_box_pack_end (GTK_BOX (hbox), spinner);
   gtk_widget_show (spinner);
   gtk_spinner_start (GTK_SPINNER (spinner));
 
   check = gtk_check_button_new_with_label ("Animate spinner");
-  gtk_box_pack_end (GTK_BOX (hbox), check, FALSE);
+  gtk_box_pack_end (GTK_BOX (hbox), check);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
   gtk_widget_show (check);
   g_signal_connect (check, "toggled",
                     G_CALLBACK (toggle_spin), spinner);
 
   check = gtk_check_button_new_with_label ("Alpha");
-  gtk_box_pack_end (GTK_BOX (hbox), check, FALSE);
+  gtk_box_pack_end (GTK_BOX (hbox), check);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
   gtk_widget_show (check);
   g_signal_connect (check, "toggled",
                     G_CALLBACK (toggle_alpha), gears);
 
   check = gtk_check_button_new_with_label ("Overlay");
-  gtk_box_pack_end (GTK_BOX (hbox), check, FALSE);
+  gtk_box_pack_end (GTK_BOX (hbox), check);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
   gtk_widget_show (check);
   g_signal_connect (check, "toggled",
@@ -207,7 +207,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (popover), label);
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
   gtk_widget_show (button);
-  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE);
+  gtk_box_pack_end (GTK_BOX (hbox), button);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),

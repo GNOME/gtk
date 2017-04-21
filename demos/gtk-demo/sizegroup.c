@@ -116,7 +116,7 @@ do_sizegroup (GtkWidget *do_widget)
 
       /* Create one frame holding color options */
       frame = gtk_frame_new ("Color Options");
-      gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE);
+      gtk_box_pack_start (GTK_BOX (vbox), frame);
 
       table = gtk_grid_new ();
       g_object_set (table, "margin", 5, NULL);
@@ -129,7 +129,7 @@ do_sizegroup (GtkWidget *do_widget)
 
       /* And another frame holding line style options */
       frame = gtk_frame_new ("Line Options");
-      gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), frame);
 
       table = gtk_grid_new ();
       g_object_set (table, "margin", 5, NULL);
@@ -142,7 +142,7 @@ do_sizegroup (GtkWidget *do_widget)
 
       /* And a check button to turn grouping on and off */
       check_button = gtk_check_button_new_with_mnemonic ("_Enable grouping");
-      gtk_box_pack_start (GTK_BOX (vbox), check_button, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), check_button);
 
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
       g_signal_connect (check_button, "toggled",

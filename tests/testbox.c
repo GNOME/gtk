@@ -1,19 +1,6 @@
 #include <gtk/gtk.h>
 
 static void
-fill_toggled (GtkToggleButton *b, GtkWidget *w)
-{
-  gboolean active;
-  GtkWidget *parent;
-
-  active = gtk_toggle_button_get_active (b);
-  parent = gtk_widget_get_parent (w);
-  gtk_container_child_set (GTK_CONTAINER (parent), w,
-                           "fill", active,
-                           NULL);
-}
-
-static void
 edit_widget (GtkWidget *button)
 {
   GtkWidget *dialog;
@@ -21,7 +8,6 @@ edit_widget (GtkWidget *button)
   GtkWidget *label;
   GtkWidget *entry;
   GtkWidget *check;
-  gboolean fill;
 
   dialog = GTK_WIDGET (g_object_get_data (G_OBJECT (button), "dialog"));
 
@@ -57,17 +43,6 @@ edit_widget (GtkWidget *button)
                               G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
       gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
       gtk_grid_attach (GTK_GRID (grid), check, 1, 1, 1, 1);
-
-      label = gtk_label_new ("Fill:");
-      gtk_widget_set_halign (label, GTK_ALIGN_END);
-      check = gtk_check_button_new ();
-      gtk_box_query_child_packing (GTK_BOX (gtk_widget_get_parent (button)),
-                                   button, &fill, NULL);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), fill);
-      g_signal_connect (check, "toggled",
-                        G_CALLBACK (fill_toggled), button);
-      gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
-      gtk_grid_attach (GTK_GRID (grid), check, 1, 3, 1, 1);
 
       g_object_set_data (G_OBJECT (button), "dialog", dialog);
     }
@@ -114,12 +89,12 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (box), test_widget ("1"), TRUE);
-  gtk_box_pack_start (GTK_BOX (box), test_widget ("2"), TRUE);
-  gtk_box_pack_start (GTK_BOX (box), test_widget ("3"), TRUE);
-  gtk_box_pack_start (GTK_BOX (box), test_widget ("4"), TRUE);
-  gtk_box_pack_end (GTK_BOX (box), test_widget ("5"), TRUE);
-  gtk_box_pack_end (GTK_BOX (box), test_widget ("6"), TRUE);
+  gtk_box_pack_start (GTK_BOX (box), test_widget ("1"));
+  gtk_box_pack_start (GTK_BOX (box), test_widget ("2"));
+  gtk_box_pack_start (GTK_BOX (box), test_widget ("3"));
+  gtk_box_pack_start (GTK_BOX (box), test_widget ("4"));
+  gtk_box_pack_end (GTK_BOX (box), test_widget ("5"));
+  gtk_box_pack_end (GTK_BOX (box), test_widget ("6"));
 
   gtk_box_set_center_widget (GTK_BOX (box), test_widget ("center"));
   gtk_container_add (GTK_CONTAINER (vbox), box);
@@ -138,14 +113,14 @@ main (int argc, char *argv[])
   gtk_widget_set_halign (b, GTK_ALIGN_CENTER);
   label = gtk_label_new ("Spacing:");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
-  gtk_box_pack_start (GTK_BOX (b), label, TRUE);
+  gtk_box_pack_start (GTK_BOX (b), label);
 
   spin = gtk_spin_button_new_with_range (0, 10, 1);
   gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (spin), TRUE);
   gtk_widget_set_halign (spin, GTK_ALIGN_START);
   g_signal_connect (spin, "value-changed",
                     G_CALLBACK (spacing_changed), box);
-  gtk_box_pack_start (GTK_BOX (b), spin, TRUE);
+  gtk_box_pack_start (GTK_BOX (b), spin);
   gtk_container_add (GTK_CONTAINER (vbox), b);
 
   gtk_widget_show (window);

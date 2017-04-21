@@ -804,7 +804,7 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
                 "margin", 6,
                 "xalign", 0.0,
                 NULL);
-  gtk_box_pack_start (GTK_BOX (row), label, TRUE);
+  gtk_box_pack_start (GTK_BOX (row), label);
   gdk_rgba_parse (&rgba, color);
   swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                          "rgba", &rgba,
@@ -816,7 +816,7 @@ overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
                          NULL);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (box), swatch);
-  gtk_box_pack_start (GTK_BOX (row), box, FALSE);
+  gtk_box_pack_start (GTK_BOX (row), box);
   gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
   row = gtk_widget_get_parent (row);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
@@ -915,7 +915,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
                     "hexpand", TRUE,
                     "xalign", 0.0,
                     NULL);
-      gtk_box_pack_start (GTK_BOX (row), label, TRUE);
+      gtk_box_pack_start (GTK_BOX (row), label);
       gdk_rgba_parse (&rgba, colors[i].color);
       swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
                              "rgba", &rgba,
@@ -927,7 +927,7 @@ populate_colors (GtkWidget *widget, GtkWidget *chooser)
                              NULL);
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (box), swatch);
-      gtk_box_pack_start (GTK_BOX (row), box, FALSE);
+      gtk_box_pack_start (GTK_BOX (row), box);
       gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
       row = gtk_widget_get_parent (row);
       gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);

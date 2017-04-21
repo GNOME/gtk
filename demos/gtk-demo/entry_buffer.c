@@ -34,19 +34,19 @@ do_entry_buffer (GtkWidget *do_widget)
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
                             "Entries share a buffer. Typing in one is reflected in the other.");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), label);
 
       /* Create a buffer */
       buffer = gtk_entry_buffer_new (NULL, 0);
 
       /* Create our first entry */
       entry = gtk_entry_new_with_buffer (buffer);
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), entry);
 
       /* Create the second entry */
       entry = gtk_entry_new_with_buffer (buffer);
       gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), entry);
 
       g_object_unref (buffer);
     }

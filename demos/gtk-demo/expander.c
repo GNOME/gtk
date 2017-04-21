@@ -25,19 +25,11 @@ expander_cb (GtkExpander *expander, GParamSpec *pspec, GtkWindow *dialog)
   gtk_window_set_resizable (dialog, gtk_expander_get_expanded (expander));
 }
 
-static void
-do_not_expand (GtkWidget *child, gpointer data)
-{
-  gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (child)), child,
-                           "fill", FALSE, NULL);
-}
-
 GtkWidget *
 do_expander (GtkWidget *do_widget)
 {
   GtkWidget *toplevel;
   GtkWidget *area;
-  GtkWidget *box;
   GtkWidget *expander;
   GtkWidget *sw;
   GtkWidget *tv;
@@ -57,10 +49,6 @@ do_expander (GtkWidget *do_widget)
                                                 "but not the full story.");
 
       area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (window));
-      box = gtk_widget_get_parent (area);
-      gtk_container_child_set (GTK_CONTAINER (gtk_widget_get_parent (box)), box,
-                               "fill", TRUE, NULL);
-      gtk_container_foreach (GTK_CONTAINER (area), do_not_expand, NULL);
 
       expander = gtk_expander_new ("Details:");
       sw = gtk_scrolled_window_new (NULL, NULL);
@@ -85,7 +73,7 @@ do_expander (GtkWidget *do_widget)
                                 "resize the window. Do it already !", -1);
       gtk_container_add (GTK_CONTAINER (sw), tv);
       gtk_container_add (GTK_CONTAINER (expander), sw);
-      gtk_box_pack_end (GTK_BOX (area), expander, TRUE);
+      gtk_box_pack_end (GTK_BOX (area), expander);
       g_signal_connect (expander, "notify::expanded",
                         G_CALLBACK (expander_cb), window);
 

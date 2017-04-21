@@ -1324,7 +1324,7 @@ gtk_entry_completion_insert_action (GtkEntryCompletion *completion,
       gtk_tree_path_free (path);
 
       gtk_box_pack_start (GTK_BOX (completion->priv->vbox),
-                          completion->priv->action_view, FALSE);
+                          completion->priv->action_view);
       gtk_widget_show (completion->priv->action_view);
     }
 }

@@ -247,30 +247,30 @@ main (int argc, char **argv)
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE);
+  gtk_box_pack_start (GTK_BOX (content_area), hbox);
 
   combo_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_box_pack_start (GTK_BOX (hbox), combo_vbox, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), combo_vbox);
 
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), "<b>Menu mode</b>");
-  gtk_box_pack_start (GTK_BOX (combo_vbox), label, FALSE);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), label);
 
   menu_combo = create_combo ("menu-combo", FALSE);
   gtk_widget_set_margin_start (menu_combo, 12);
-  gtk_box_pack_start (GTK_BOX (combo_vbox), menu_combo, FALSE);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), menu_combo);
 
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), "<b>List mode</b>");
-  gtk_box_pack_start (GTK_BOX (combo_vbox), label, FALSE);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), label);
 
   list_combo = create_combo ("list-combo", TRUE);
   gtk_widget_set_margin_start (list_combo, 12);
-  gtk_box_pack_start (GTK_BOX (combo_vbox), list_combo, FALSE);
+  gtk_box_pack_start (GTK_BOX (combo_vbox), list_combo);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled_window, TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), scrolled_window, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), scrolled_window);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
@@ -281,24 +281,24 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (scrolled_window), text_view);
 
   button_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_box_pack_start (GTK_BOX (hbox), button_vbox, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), button_vbox);
 
   gtk_window_set_default_size (GTK_WINDOW (dialog), 500, 300);
 
   button = gtk_button_new_with_label ("Insert");
-  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE);
+  gtk_box_pack_start (GTK_BOX (button_vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (on_insert), NULL);
 
   button = gtk_button_new_with_label ("Delete");
-  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE);
+  gtk_box_pack_start (GTK_BOX (button_vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (on_delete), NULL);
 
   button = gtk_button_new_with_label ("Reorder");
-  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE);
+  gtk_box_pack_start (GTK_BOX (button_vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (on_reorder), NULL);
 
   button = gtk_button_new_with_label ("Animate");
-  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE);
+  gtk_box_pack_start (GTK_BOX (button_vbox), button);
   g_signal_connect (button, "clicked", G_CALLBACK (on_animate), NULL);
 
   gtk_widget_show (dialog);

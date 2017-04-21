@@ -977,7 +977,7 @@ create_window (void)
       g_signal_connect (button, "clicked",
                         G_CALLBACK (test_clicked), &interfaces[i]);
 
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), button);
     }
 
   return window;

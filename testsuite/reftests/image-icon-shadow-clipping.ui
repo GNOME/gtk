@@ -21,8 +21,6 @@
             <property name="icon_name">edit-delete</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>

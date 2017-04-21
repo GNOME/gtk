@@ -555,7 +555,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
   else
     gtk_spin_button_set_digits (GTK_SPIN_BUTTON (button), 1);
 
-  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), button);
   gtk_widget_show (button);
 
   data->spin_button = button;
@@ -569,7 +569,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
     label = gtk_label_new (_("mm"));
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), label);
   gtk_widget_show (label);
   gtk_label_set_mnemonic_widget (GTK_LABEL (mnemonic_label), button);
 
@@ -979,13 +979,13 @@ wrap_in_frame (const gchar *label,
   g_free (bold_text);
 
   frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (frame), label_widget, FALSE);
+  gtk_box_pack_start (GTK_BOX (frame), label_widget);
 
   gtk_widget_set_margin_start (child, 12);
   gtk_widget_set_halign (child, GTK_ALIGN_FILL);
   gtk_widget_set_valign (child, GTK_ALIGN_FILL);
 
-  gtk_box_pack_start (GTK_BOX (frame), child, FALSE);
+  gtk_box_pack_start (GTK_BOX (frame), child);
 
   gtk_widget_show (frame);
 
@@ -1036,11 +1036,11 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 18);
-  gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE);
+  gtk_box_pack_start (GTK_BOX (content_area), hbox);
   gtk_widget_show (hbox);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox);
   gtk_widget_show (vbox);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
@@ -1048,7 +1048,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled),
                                        GTK_SHADOW_IN);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled);
   gtk_widget_show (scrolled);
 
   treeview = gtk_tree_view_new_with_model (GTK_TREE_MODEL (priv->custom_paper_list));
@@ -1079,7 +1079,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   context = gtk_widget_get_style_context (toolbar);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_INLINE_TOOLBAR);
 
-  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), toolbar);
   gtk_widget_show (toolbar);
 
   icon = g_themed_icon_new_with_default_fallbacks ("list-add-symbolic");
@@ -1098,7 +1098,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   priv->values_box = vbox;
-  gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox);
   gtk_widget_show (vbox);
 
   grid = gtk_grid_new ();
@@ -1130,7 +1130,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   frame = wrap_in_frame (_("Paper Size"), grid);
   gtk_widget_show (grid);
-  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), frame);
   gtk_widget_show (frame);
 
   grid = gtk_grid_new ();
@@ -1203,7 +1203,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 				      NULL, NULL);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
-  gtk_box_pack_start (GTK_BOX (hbox), combo, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), combo);
   gtk_widget_show (combo);
 
   g_signal_connect_swapped (combo, "changed",
@@ -1211,7 +1211,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   frame = wrap_in_frame (_("Paper Margins"), grid);
   gtk_widget_show (grid);
-  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), frame);
   gtk_widget_show (frame);
 
   update_custom_widgets_from_list (dialog);

@@ -140,8 +140,7 @@ gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
       g_object_ref (priv->arrow_button);
       gtk_container_remove (GTK_CONTAINER (parent),
                             priv->arrow_button);
-      gtk_box_pack_end (GTK_BOX (box), priv->arrow_button,
-                        FALSE);
+      gtk_box_pack_end (GTK_BOX (box), priv->arrow_button);
       g_object_unref (priv->arrow_button);
     }
 
@@ -285,8 +284,7 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
   g_object_unref (real_button);
 
   arrow_button = gtk_menu_button_new ();
-  gtk_box_pack_end (GTK_BOX (box), arrow_button,
-                    FALSE);
+  gtk_box_pack_end (GTK_BOX (box), arrow_button);
 
   /* the arrow button is insentive until we set a menu */
   gtk_widget_set_sensitive (arrow_button, FALSE);

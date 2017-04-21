@@ -127,7 +127,7 @@ main (gint argc,
   gtk_container_add (GTK_CONTAINER (window), box);
 
   switcher = gtk_stack_switcher_new ();
-  gtk_box_pack_start (GTK_BOX (box), switcher, FALSE);
+  gtk_box_pack_start (GTK_BOX (box), switcher);
 
   stack = gtk_stack_new ();
 
@@ -141,9 +141,9 @@ main (gint argc,
   sidebar = gtk_stack_sidebar_new ();
   gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR (sidebar), GTK_STACK (stack));
   layout = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (layout), sidebar, FALSE);
+  gtk_box_pack_start (GTK_BOX (layout), sidebar);
   gtk_widget_set_hexpand (stack, TRUE);
-  gtk_box_pack_start (GTK_BOX (layout), stack, TRUE);
+  gtk_box_pack_start (GTK_BOX (layout), stack);
 
   gtk_container_add (GTK_CONTAINER (box), layout);
 

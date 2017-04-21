@@ -153,7 +153,6 @@
                             <property name="spacing">18</property>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -182,9 +181,6 @@
                                   <relation type="label-for" target="range_table"/>
                                 </accessibility>
                               </object>
-                              <packing>
-                                <property name="fill">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkGrid" id="range_table">
@@ -284,7 +280,6 @@
                                 </accessibility>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -309,9 +304,6 @@
                                   <relation type="label-for" target="grid1"/>
                                 </accessibility>
                               </object>
-                              <packing>
-                                <property name="fill">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkGrid" id="grid1">
@@ -393,7 +385,6 @@
                                 </accessibility>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -404,7 +395,6 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="fill">0</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -415,9 +405,6 @@
                     <property name="visible">1</property>
                     <property name="label" translatable="yes">General</property>
                   </object>
-                  <packing>
-                    <property name="tab-fill">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="page_setup_main_box">
@@ -448,9 +435,6 @@
                                   <relation type="label-for" target="grid2"/>
                                 </accessibility>
                               </object>
-                              <packing>
-                                <property name="fill">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkGrid" id="grid2">
@@ -617,7 +601,6 @@
                                 </accessibility>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -642,9 +625,6 @@
                                   <relation type="label-for" target="grid3"/>
                                 </accessibility>
                               </object>
-                              <packing>
-                                <property name="fill">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkGrid" id="grid3">
@@ -795,7 +775,6 @@
                                 </accessibility>
                               </object>
                               <packing>
-                                <property name="fill">0</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -805,9 +784,6 @@
                           </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="fill">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="box6">
@@ -863,9 +839,6 @@
                               <relation type="label-for" target="grid5"/>
                             </accessibility>
                           </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkGrid" id="grid5">
@@ -926,7 +899,6 @@
                             </accessibility>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -954,9 +926,6 @@
                               <relation type="label-for" target="grid6"/>
                             </accessibility>
                           </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkGrid" id="grid6">
@@ -1049,7 +1018,6 @@
                             </accessibility>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -1077,9 +1045,6 @@
                               <relation type="label-for" target="grid7"/>
                             </accessibility>
                           </object>
-                          <packing>
-                            <property name="fill">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkGrid" id="grid7">
@@ -1140,7 +1105,6 @@
                             </accessibility>
                           </object>
                           <packing>
-                            <property name="fill">0</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -1317,7 +1281,6 @@
                 </child>
               </object>
               <packing>
-                <property name="fill">0</property>
                 <property name="pack-type">end</property>
                 <property name="position">1</property>
               </packing>

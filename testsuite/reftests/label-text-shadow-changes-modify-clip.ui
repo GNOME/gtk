@@ -23,8 +23,6 @@
             <signal name="map" handler="reftest:add_reference_class_if_no_animation" swapped="no"/>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>

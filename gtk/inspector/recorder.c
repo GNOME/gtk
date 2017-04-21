@@ -348,7 +348,7 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-      gtk_box_pack_start (GTK_BOX (widget), hbox, TRUE);
+      gtk_box_pack_start (GTK_BOX (widget), hbox);
 
       for (i = 0; i < g_list_model_get_n_items (priv->recordings); i++)
         {
@@ -387,17 +387,17 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
       label = gtk_label_new (str);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       g_free (str);
-      gtk_box_pack_start (GTK_BOX (hbox), label, TRUE);
+      gtk_box_pack_start (GTK_BOX (hbox), label);
 
       button = gtk_toggle_button_new ();
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
       gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
 
-      gtk_box_pack_end (GTK_BOX (hbox), button, TRUE);
+      gtk_box_pack_end (GTK_BOX (hbox), button);
 
       label = gtk_label_new (gtk_inspector_render_recording_get_profiler_info (GTK_INSPECTOR_RENDER_RECORDING (recording)));
       gtk_widget_hide (label);
-      gtk_box_pack_end (GTK_BOX (widget), label, FALSE);
+      gtk_box_pack_end (GTK_BOX (widget), label);
       g_object_bind_property (button, "active", label, "visible", 0);
     }
   else

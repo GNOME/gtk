@@ -35,9 +35,6 @@
                     <property name="wrap">1</property>
                     <property name="max-width-chars">60</property>
                   </object>
-                  <packing>
-                    <property name="fill">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="secondary_label">
@@ -59,9 +56,6 @@
               </packing>
             </child>
           </object>
-          <packing>
-            <property name="fill">0</property>
-          </packing>
         </child>
       </object>
     </child>

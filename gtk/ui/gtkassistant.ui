@@ -18,9 +18,6 @@
               <class name="sidebar"/>
             </style>
           </object>
-          <packing>
-            <property name="fill">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="content_box">
@@ -58,7 +55,6 @@
                     <signal name="clicked" handler="on_assistant_apply" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="fill">0</property>
                     <property name="pack-type">end</property>
                   </packing>
                 </child>
@@ -76,7 +72,6 @@
                     <signal name="clicked" handler="on_assistant_forward" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="fill">0</property>
                     <property name="pack-type">end</property>
                     <property name="position">1</property>
                   </packing>
@@ -94,7 +89,6 @@
                     <signal name="clicked" handler="on_assistant_back" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="fill">0</property>
                     <property name="pack-type">end</property>
                     <property name="position">2</property>
                   </packing>
@@ -112,7 +106,6 @@
                     <signal name="clicked" handler="on_assistant_last" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="fill">0</property>
                     <property name="pack-type">end</property>
                     <property name="position">3</property>
                   </packing>
@@ -131,7 +124,6 @@
                     <signal name="clicked" handler="on_assistant_cancel" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="fill">0</property>
                     <property name="pack-type">end</property>
                     <property name="position">4</property>
                   </packing>
@@ -150,7 +142,6 @@
                     <signal name="clicked" handler="on_assistant_close" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="fill">0</property>
                     <property name="pack-type">end</property>
                     <property name="position">5</property>
                   </packing>
