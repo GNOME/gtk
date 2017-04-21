@@ -268,7 +268,7 @@ do_list_store (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       label = gtk_label_new ("This is the bug list (note: not based on real data, it would be nice to have a nice ODBC interface to bugzilla or so, though).");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
@@ -276,7 +276,7 @@ do_list_store (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_NEVER,
                                       GTK_POLICY_AUTOMATIC);
-      gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE);
 
       /* create tree model */
       model = create_model ();

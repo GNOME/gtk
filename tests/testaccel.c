@@ -71,10 +71,11 @@ key_test (void)
         gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
 	sw = gtk_scrolled_window_new (NULL, NULL);
+        gtk_widget_set_hexpand (sw, TRUE);
         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
         gtk_widget_show (box);
 	gtk_container_add (GTK_CONTAINER (window), box);
-        gtk_box_pack_start (GTK_BOX (box), sw, TRUE, TRUE);
+        gtk_box_pack_start (GTK_BOX (box), sw, TRUE);
 
 	store = gtk_list_store_new (3, G_TYPE_INT, G_TYPE_UINT, G_TYPE_UINT);
 	tv = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));

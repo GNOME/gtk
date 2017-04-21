@@ -497,6 +497,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox" id="box223">
+                            <property name="hexpand">0</property>
                             <style>
                               <class name="linked"/>
                             </style>
@@ -505,10 +506,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="can_focus">1</property>
                                 <property name="invisible_char">•</property>
                                 <property name="text" translatable="yes">entry</property>
+                                <property name="hexpand">1</property>
                               </object>
-                              <packing>
-                                <property name="expand">1</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkButton" id="button224">
@@ -527,6 +526,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </child>
                         <child>
                           <object class="GtkBox">
+                            <property name="hexpand">0</property>
                             <style>
                               <class name="linked"/>
                             </style>
@@ -534,6 +534,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkComboBox">
                                 <property name="model">lrmodel</property>
                                 <property name="active">0</property>
+                                <property name="hexpand">1</property>
                                 <child>
                                   <object class="GtkCellRendererText"/>
                                   <attributes>
@@ -541,14 +542,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </attributes>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">1</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkComboBox">
                                 <property name="model">lrmodel</property>
                                 <property name="active">1</property>
+                                <property name="hexpand">1</property>
                                 <child>
                                   <object class="GtkCellRendererText"/>
                                   <attributes>
@@ -556,14 +555,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </attributes>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">1</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkComboBox">
                                 <property name="model">lrmodel</property>
                                 <property name="active">2</property>
+                                <property name="hexpand">1</property>
                                 <child>
                                   <object class="GtkCellRendererText"/>
                                   <attributes>
@@ -571,9 +568,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </attributes>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">1</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -986,8 +980,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                       <object class="GtkBox" id="box20">
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
+                        <property name="hexpand">1</property>
                         <child>
-                          <object class="GtkBox" id="box21">
+                            <object class="GtkBox" id="box21">
                             <property name="orientation">vertical</property>
                             <property name="spacing">6</property>
                             <child>
@@ -1076,9 +1071,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </packing>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">1</property>
-                              </packing>
                             </child>
                           </object>
                           <packing>
@@ -1176,7 +1168,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">1</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
@@ -1198,6 +1189,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <property name="orientation">vertical</property>
                         <property name="homogeneous">1</property>
                         <property name="spacing">6</property>
+                        <property name="hexpand">1</property>
                         <child>
                           <object class="GtkFrame" id="frame1">
                             <property name="shadow_type">in</property>
@@ -1208,9 +1200,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkFrame" id="frame2">
@@ -1223,7 +1212,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">1</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -1237,7 +1225,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">1</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
@@ -1252,13 +1239,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">1</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
                         <property name="position">6</property>
                       </packing>
                     </child>
@@ -1274,12 +1259,14 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                       <object class="GtkBox" id="box4">
                         <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
+                        <property name="hexpand">1</property>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow1">
                             <property name="width_request">150</property>
                             <property name="can_focus">1</property>
                             <property name="vscrollbar_policy">always</property>
                             <property name="shadow_type">in</property>
+                            <property name="vexpand">1</property>
                             <child>
                               <object class="GtkTreeView" id="treeview1">
                                 <property name="can_focus">1</property>
@@ -1350,14 +1337,12 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">1</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow2">
                             <property name="can_focus">1</property>
                             <property name="shadow_type">in</property>
+                            <property name="vexpand">1</property>
                             <child>
                               <object class="GtkTextView" id="textview1">
                                 <property name="can_focus">1</property>
@@ -1370,13 +1355,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">1</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">1</property>
                         <property name="position">8</property>
                       </packing>
                     </child>
@@ -1618,7 +1601,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">1</property>
                     <property name="position">4</property>
                   </packing>
                 </child>
@@ -1831,9 +1813,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
                                           </object>
-                                          <packing>
-                                            <property name="expand">1</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkSwitch" id="listboxrow1switch">
@@ -1861,9 +1840,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
                                           </object>
-                                          <packing>
-                                            <property name="expand">1</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkScale">
@@ -1893,9 +1869,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
                                           </object>
-                                          <packing>
-                                            <property name="expand">1</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkImage" id="listboxrow3image">
@@ -1925,9 +1898,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
                                           </object>
-                                          <packing>
-                                            <property name="expand">1</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkImage">
@@ -1958,9 +1928,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
                                           </object>
-                                          <packing>
-                                            <property name="expand">1</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkButton" id="listboxrow5button">
@@ -1989,9 +1956,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
                                           </object>
-                                          <packing>
-                                            <property name="expand">1</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkCheckButton">
@@ -2416,9 +2380,6 @@ microphone-sensitivity-medium-symbolic</property>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="expand">1</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -2632,6 +2593,7 @@ microphone-sensitivity-medium-symbolic</property>
                           <object class="GtkListBox" id="munsell">
                             <property name="selection-mode">multiple</property>
                             <property name="activate-on-single-click">0</property>
+                            <property name="hexpand">0</property>
                           </object>
                         </child>
                       </object>
@@ -2951,6 +2913,7 @@ microphone-sensitivity-medium-symbolic</property>
                       <object class="GtkFrame">
                         <child>
                           <object class="GtkBox">
+                            <property name="hexpand">0</property>
                             <child>
                               <object class="GtkToolbar">
                                 <property name="orientation">vertical</property>
@@ -2980,14 +2943,12 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkScrolledWindow">
+                                <property name="hexpand">1</property>
                                 <child>
                                   <object class="GtkTextView" id="tooltextview">
                                   </object>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">1</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkBox">
@@ -3025,9 +2986,6 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="valign">end</property>
                                     <property name="icon-name">edit-delete-symbolic</property>
                                   </object>
-                                  <packing>
-                                    <property name="expand">1</property>
-                                  </packing>
                                 </child>
                               </object>
                             </child>

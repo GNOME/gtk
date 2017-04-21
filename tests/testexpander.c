@@ -72,7 +72,9 @@ main (int argc, char *argv[])
                             "resize the window. Do it already !", -1);
   gtk_container_add (GTK_CONTAINER (sw), tv);
   gtk_container_add (GTK_CONTAINER (expander), sw);
-  gtk_box_pack_end (GTK_BOX (area), expander, TRUE, TRUE);
+  gtk_widget_set_hexpand (expander, TRUE);
+  gtk_widget_set_vexpand (expander, TRUE);
+  gtk_box_pack_end (GTK_BOX (area), expander, TRUE);
   g_signal_connect (expander, "notify::expanded",
                     G_CALLBACK (expander_cb), dialog);
 

@@ -4,7 +4,7 @@
     <child>
       <object class="GtkLabel" id="widget1"/>
       <packing>
-        <property name="expand" translatable="yes" comments="foo" context="bar">True</property>
+        <property name="fill" translatable="yes" comments="foo" context="bar">True</property>
       </packing>
     </child>
     <focus-chain>

@@ -31,6 +31,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <property name="margin">5</property>
+            <property name="vexpand">1</property>
             <child>
               <object class="GtkImage" id="logo_image">
                 <property name="visible">1</property>
@@ -59,6 +60,7 @@
                 <property name="visible">1</property>
                 <property name="transition-type">over-up-down</property>
                 <property name="transition-duration">600</property>
+                <property name="vexpand">1</property>
                 <signal name="notify::visible-child" handler="stack_visible_child_notify" swapped="no"/>
                 <child>
                   <object class="GtkBox" id="page_vbox">
@@ -143,6 +145,7 @@
                         <property name="visible">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <property name="shadow-type">in</property>
+                        <property name="vexpand">1</property>
                         <child>
                           <object class="GtkViewport" id="viewport1">
                             <property name="visible">1</property>
@@ -163,9 +166,6 @@
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">1</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -183,6 +183,7 @@
                         <property name="visible">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <property name="shadow-type">in</property>
+                        <property name="vexpand">1</property>
                         <child>
                           <object class="GtkTextView" id="license_view">
                             <property name="visible">1</property>
@@ -196,9 +197,6 @@
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">1</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -216,6 +214,7 @@
                         <property name="visible">1</property>
                         <property name="hscrollbar-policy">never</property>
                         <property name="shadow-type">in</property>
+                        <property name="vexpand">1</property>
                         <child>
                           <object class="GtkTextView" id="system_view">
                             <property name="visible">1</property>
@@ -229,9 +228,6 @@
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">1</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -241,13 +237,11 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">1</property>
                 <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">1</property>
             <property name="position">1</property>
           </packing>
         </child>

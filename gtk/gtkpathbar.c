@@ -1486,8 +1486,8 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->image = gtk_image_new ();
       button_data->label = gtk_label_new (NULL);
       child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_box_pack_start (GTK_BOX (child), button_data->image, FALSE, FALSE);
-      gtk_box_pack_start (GTK_BOX (child), button_data->label, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (child), button_data->image, FALSE);
+      gtk_box_pack_start (GTK_BOX (child), button_data->label, FALSE);
       break;
     case NORMAL_BUTTON:
     default:

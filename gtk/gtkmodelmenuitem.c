@@ -180,7 +180,7 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
       /* Reparent the child without destroying it */
       g_object_ref (child);
       gtk_container_remove (GTK_CONTAINER (item), child);
-      gtk_box_pack_end (GTK_BOX (box), child, TRUE, TRUE);
+      gtk_box_pack_end (GTK_BOX (box), child, TRUE);
       g_object_unref (child);
 
       gtk_container_add (GTK_CONTAINER (item), box);
@@ -200,7 +200,7 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
 
       image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
-      gtk_box_pack_start (GTK_BOX (child), image, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (child), image, FALSE);
     }
 
   g_object_notify (G_OBJECT (item), "icon");

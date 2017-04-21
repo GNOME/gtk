@@ -518,8 +518,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       else
         box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,0);
       if (icon)
-          gtk_box_pack_start (GTK_BOX (box), icon, TRUE, TRUE);
-      gtk_box_pack_end (GTK_BOX (box), label, FALSE, TRUE);
+          gtk_box_pack_start (GTK_BOX (box), icon, TRUE);
+      gtk_box_pack_end (GTK_BOX (box), label, TRUE);
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
       gtk_style_context_add_class (gtk_widget_get_style_context (button->priv->button), "image-button");
       gtk_style_context_add_class (gtk_widget_get_style_context (button->priv->button), "text-button");
@@ -530,17 +530,17 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	{
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	  if (icon)
-            gtk_box_pack_start (GTK_BOX (box), icon, label? FALSE : TRUE, TRUE);
+            gtk_box_pack_start (GTK_BOX (box), icon, TRUE);
 	  if (label)
-            gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE);
+            gtk_box_pack_end (GTK_BOX (box), label, TRUE);
 	}
       else
 	{
           box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	  if (icon)
-            gtk_box_pack_end (GTK_BOX (box), icon, label ? FALSE : TRUE, TRUE);
+            gtk_box_pack_end (GTK_BOX (box), icon, TRUE);
 	  if (label)
-            gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE);
+            gtk_box_pack_start (GTK_BOX (box), label, TRUE);
 	}
       gtk_container_add (GTK_CONTAINER (button->priv->button), box);
       gtk_style_context_add_class (gtk_widget_get_style_context (button->priv->button), "image-button");

@@ -60,11 +60,11 @@ do_entry_completion (GtkWidget *do_widget)
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label), "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE);
 
       /* Create our entry */
       entry = gtk_entry_new ();
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE);
 
       /* Create the completion object */
       completion = gtk_entry_completion_new ();

@@ -26,13 +26,12 @@ make_switch (gboolean is_on,
 
   sw = gtk_switch_new ();
   gtk_switch_set_active (GTK_SWITCH (sw), is_on);
-  gtk_box_pack_start (GTK_BOX (hbox), sw, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), sw, FALSE);
   gtk_widget_set_sensitive (sw, is_sensitive);
-  gtk_widget_show (sw);
 
   label = gtk_label_new (is_on ? "Enabled" : "Disabled");
-  gtk_box_pack_end (GTK_BOX (hbox), label, TRUE, TRUE);
-  gtk_widget_show (label);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_box_pack_end (GTK_BOX (hbox), label, TRUE);
 
   g_object_bind_property_full (sw, "active",
                                label, "label",
@@ -117,27 +116,24 @@ make_delayed_switch (gboolean is_on,
 
   sw = gtk_switch_new ();
   gtk_switch_set_active (GTK_SWITCH (sw), is_on);
-  gtk_box_pack_start (GTK_BOX (hbox), sw, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), sw, FALSE);
   gtk_widget_set_sensitive (sw, is_sensitive);
-  gtk_widget_show (sw);
 
   g_signal_connect (sw, "state-set", G_CALLBACK (set_state), NULL);
 
   spinner = gtk_spinner_new ();
-  gtk_box_pack_start (GTK_BOX (hbox), spinner, FALSE, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), spinner, TRUE);
   gtk_widget_set_opacity (spinner, 0.0);
-  gtk_widget_show (spinner);
 
   check = gtk_check_button_new ();
-  gtk_box_pack_end (GTK_BOX (hbox), check, FALSE, TRUE);
-  gtk_widget_show (check);
+  gtk_box_pack_end (GTK_BOX (hbox), check, TRUE);
   g_object_bind_property (sw, "state",
                           check, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
   label = gtk_label_new (is_on ? "Enabled" : "Disabled");
-  gtk_box_pack_end (GTK_BOX (hbox), label, TRUE, TRUE);
-  gtk_widget_show (label);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_box_pack_end (GTK_BOX (hbox), label, TRUE);
 
   g_object_bind_property_full (sw, "active",
                                label, "label",

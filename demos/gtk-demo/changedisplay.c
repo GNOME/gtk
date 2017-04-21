@@ -312,7 +312,7 @@ create_frame (ChangeDisplayInfo *info,
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrollwin),
                                        GTK_SHADOW_IN);
-  gtk_box_pack_start (GTK_BOX (hbox), scrollwin, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox), scrollwin, TRUE);
 
   *tree_view = gtk_tree_view_new ();
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (*tree_view), FALSE);
@@ -322,7 +322,7 @@ create_frame (ChangeDisplayInfo *info,
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
   *button_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_box_pack_start (GTK_BOX (hbox), *button_vbox, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), *button_vbox, FALSE);
 
   if (!info->size_group)
     info->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
@@ -362,11 +362,11 @@ create_display_frame (ChangeDisplayInfo *info)
 
   button = left_align_button_new ("_Open...");
   g_signal_connect (button, "clicked",  G_CALLBACK (open_display_cb), info);
-  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE);
 
   button = left_align_button_new ("_Close");
   g_signal_connect (button, "clicked",  G_CALLBACK (close_display_cb), info);
-  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (button_vbox), button, FALSE);
 
   info->display_model = (GtkTreeModel *)gtk_list_store_new (DISPLAY_NUM_COLUMNS,
                                                             G_TYPE_STRING,
@@ -539,10 +539,10 @@ do_changedisplay (GtkWidget *do_widget)
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
       g_object_set (vbox, "margin", 8, NULL);
-      gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE);
 
       frame = create_display_frame (info);
-      gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE);
 
       initialize_displays (info);
 

@@ -134,13 +134,14 @@ main (int argc, char *argv[])
   gtk_window_set_title (GTK_WINDOW (window), "Reflow test");
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Incremental Reflow Test"), FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Incremental Reflow Test"), FALSE);
   gtk_container_add (GTK_CONTAINER (window), vbox);
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_AUTOMATIC,
 				  GTK_POLICY_AUTOMATIC);
-  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE);
+  gtk_widget_set_vexpand (scrolled_window, TRUE);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE);
 
   initialize_model ();
   tree_view = gtk_tree_view_new_with_model (model);
@@ -156,9 +157,9 @@ main (int argc, char *argv[])
 					       NULL);
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE);
   button = gtk_button_new_with_mnemonic ("<b>_Futz!!</b>");
-  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE);
   gtk_label_set_use_markup (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), TRUE);
   g_signal_connect (button, "clicked", G_CALLBACK (futz), NULL);
   g_signal_connect (button, "realize", G_CALLBACK (gtk_widget_grab_focus), NULL);

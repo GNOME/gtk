@@ -3,6 +3,7 @@
   <template class="GtkInspectorGeneral" parent="GtkScrolledWindow">
     <property name="hscrollbar-policy">never</property>
     <property name="vscrollbar-policy">automatic</property>
+    <property name="expand">0</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -43,10 +44,8 @@
                             <property name="selectable">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -77,10 +76,8 @@
                             <property name="selectable">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -125,10 +122,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -160,10 +155,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -195,10 +188,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -230,10 +221,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -265,10 +254,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -300,10 +287,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -335,10 +320,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -383,10 +366,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -417,10 +398,8 @@
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
                             <property name="icon-size">1</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -451,10 +430,8 @@
                             <property name="valign">baseline</property>
                             <property name="icon-name">object-select-symbolic</property>
                             <property name="icon-size">1</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -499,10 +476,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
@@ -534,10 +509,8 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                          </packing>
                         </child>
                       </object>
                     </child>

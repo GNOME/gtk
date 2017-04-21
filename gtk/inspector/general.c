@@ -138,13 +138,13 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE);
 
   check = gtk_image_new_from_icon_name ("object-select-symbolic", GTK_ICON_SIZE_MENU);
   gtk_widget_set_halign (check, GTK_ALIGN_END);
   gtk_widget_set_valign (check, GTK_ALIGN_BASELINE);
   gtk_widget_set_opacity (check, value ? 1.0 : 0.0);
-  gtk_box_pack_start (GTK_BOX (box), check, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), check, TRUE);
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);
@@ -176,14 +176,14 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (box), label, FALSE);
 
   label = gtk_label_new (value);
   gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 1.0);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE);
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), box);

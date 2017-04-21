@@ -55,30 +55,30 @@ create_box_window (void)
 
   gtk_box_pack_start (GTK_BOX (box1),
                       gtk_label_new ("VBox 1 Top"),
-                      FALSE, FALSE);
+                      FALSE);
   gtk_box_pack_start (GTK_BOX (box1),
                       box2,
-                      FALSE, TRUE);
+                       TRUE);
   gtk_box_pack_end (GTK_BOX (box1),
                     gtk_label_new ("VBox 1 Bottom"),
-                    FALSE, FALSE);
+                    FALSE);
 
   gtk_box_pack_start (GTK_BOX (box2),
                       gtk_label_new ("HBox 2 Left"),
-                      FALSE, FALSE);
+                      FALSE);
   gtk_box_pack_start (GTK_BOX (box2),
                       box3,
-                      FALSE, TRUE);
+                      TRUE);
   gtk_box_pack_end (GTK_BOX (box2),
                     gtk_label_new ("HBox 2 Right"),
-                    FALSE, FALSE);
+                    FALSE);
 
   gtk_box_pack_start (GTK_BOX (box3),
                       gtk_label_new ("VBox 3 Top"),
-                      FALSE, FALSE);
+                      FALSE);
   gtk_box_pack_end (GTK_BOX (box3),
                     gtk_label_new ("VBox 3 Bottom"),
-                    FALSE, FALSE);
+                    FALSE);
 
   colorbox = gtk_frame_new (NULL);
 
@@ -90,7 +90,7 @@ create_box_window (void)
                     G_CALLBACK (on_toggle_hexpand), NULL);
   gtk_container_add (GTK_CONTAINER (colorbox), toggle);
 
-  gtk_box_pack_start (GTK_BOX (box3), colorbox, FALSE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box3), colorbox, TRUE);
 
   colorbox = gtk_frame_new (NULL);
 
@@ -101,7 +101,7 @@ create_box_window (void)
   g_signal_connect (G_OBJECT (toggle), "toggled",
                     G_CALLBACK (on_toggle_vexpand), NULL);
   gtk_container_add (GTK_CONTAINER (colorbox), toggle);
-  gtk_box_pack_start (GTK_BOX (box3), colorbox, FALSE, TRUE);
+  gtk_box_pack_start (GTK_BOX (box3), colorbox, TRUE);
 
   gtk_container_add (GTK_CONTAINER (window), box1);
   gtk_widget_show (window);

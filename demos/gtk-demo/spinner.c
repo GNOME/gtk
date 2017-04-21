@@ -53,7 +53,7 @@ do_spinner (GtkWidget *do_widget)
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
     g_object_set (vbox, "margin", 5, NULL);
-    gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE);
+    gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE);
 
     /* Sensitive */
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);

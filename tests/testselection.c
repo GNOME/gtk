@@ -418,7 +418,7 @@ main (int argc, char *argv[])
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
 
-  gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE);
   gtk_widget_show (vbox);
 
   selection_button = gtk_toggle_button_new_with_label ("Claim Selection");
@@ -449,11 +449,12 @@ main (int argc, char *argv[])
   gtk_widget_show (hbox);
 
   label = gtk_label_new ("Target:");
-  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX(hbox), label, FALSE);
   gtk_widget_show (label);
 
   entry = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX(hbox), entry, TRUE, TRUE);
+  gtk_widget_set_hexpand (entry, TRUE);
+  gtk_box_pack_start (GTK_BOX(hbox), entry, TRUE);
   gtk_widget_show (entry);
 
   /* .. And create some buttons */

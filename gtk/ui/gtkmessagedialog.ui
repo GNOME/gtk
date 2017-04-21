@@ -26,6 +26,7 @@
                 <property name="visible">1</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
+                <property name="hexpand">1</property>
                 <child>
                   <object class="GtkLabel" id="label">
                     <property name="visible">1</property>
@@ -44,17 +45,16 @@
                     <property name="margin-bottom">2</property>
                     <property name="halign">center</property>
                     <property name="valign">start</property>
+                    <property name="vexpand">1</property>
                     <property name="wrap">1</property>
                     <property name="max-width-chars">60</property>
                   </object>
                   <packing>
-                    <property name="expand">1</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">1</property>
                 <property name="position">1</property>
               </packing>
             </child>

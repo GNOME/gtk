@@ -75,12 +75,12 @@ create_flicker (void)
   spinbutton7_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton7 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton7_adj), 1, 0);
   gtk_widget_show (spinbutton7);
-  gtk_box_pack_start (GTK_BOX (hbox2), spinbutton7, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox2), spinbutton7, TRUE);
 
   spinbutton8_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton8 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton8_adj), 1, 0);
   gtk_widget_show (spinbutton8);
-  gtk_box_pack_start (GTK_BOX (hbox2), spinbutton8, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox2), spinbutton8, TRUE);
 
   vbox1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_show (vbox1);
@@ -89,42 +89,42 @@ create_flicker (void)
   spinbutton9_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton9 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton9_adj), 1, 0);
   gtk_widget_show (spinbutton9);
-  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton9, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton9, FALSE);
 
   spinbutton10_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton10 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton10_adj), 1, 0);
   gtk_widget_show (spinbutton10);
-  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton10, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton10, FALSE);
 
   spinbutton11_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton11 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton11_adj), 1, 0);
   gtk_widget_show (spinbutton11);
-  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton11, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton11, FALSE);
 
   spinbutton12_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton12 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton12_adj), 1, 0);
   gtk_widget_show (spinbutton12);
-  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton12, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton12, FALSE);
 
   spinbutton13_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton13 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton13_adj), 1, 0);
   gtk_widget_show (spinbutton13);
-  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton13, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton13, FALSE);
 
   spinbutton14_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton14 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton14_adj), 1, 0);
   gtk_widget_show (spinbutton14);
-  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton14, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton14, FALSE);
 
   spinbutton15_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton15 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton15_adj), 1, 0);
   gtk_widget_show (spinbutton15);
-  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton15, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton15, FALSE);
 
   spinbutton16_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton16 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton16_adj), 1, 0);
   gtk_widget_show (spinbutton16);
-  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton16, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox1), spinbutton16, FALSE);
 
   vpaned1 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_widget_show (vpaned1);
@@ -138,17 +138,17 @@ create_flicker (void)
   spinbutton17_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton17 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton17_adj), 1, 0);
   gtk_widget_show (spinbutton17);
-  gtk_box_pack_start (GTK_BOX (hbox1), spinbutton17, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox1), spinbutton17, TRUE);
 
   spinbutton18_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton18 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton18_adj), 1, 0);
   gtk_widget_show (spinbutton18);
-  gtk_box_pack_start (GTK_BOX (hbox1), spinbutton18, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox1), spinbutton18, TRUE);
 
   spinbutton19_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton19 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton19_adj), 1, 0);
   gtk_widget_show (spinbutton19);
-  gtk_box_pack_start (GTK_BOX (hbox1), spinbutton19, TRUE, TRUE);
+  gtk_box_pack_start (GTK_BOX (hbox1), spinbutton19, TRUE);
 
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_show (vbox2);
@@ -157,42 +157,42 @@ create_flicker (void)
   spinbutton20_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton20 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton20_adj), 1, 0);
   gtk_widget_show (spinbutton20);
-  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton20, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton20, FALSE);
 
   spinbutton21_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton21 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton21_adj), 1, 0);
   gtk_widget_show (spinbutton21);
-  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton21, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton21, FALSE);
 
   spinbutton22_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton22 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton22_adj), 1, 0);
   gtk_widget_show (spinbutton22);
-  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton22, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton22, FALSE);
 
   spinbutton23_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton23 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton23_adj), 1, 0);
   gtk_widget_show (spinbutton23);
-  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton23, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton23, FALSE);
 
   spinbutton24_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton24 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton24_adj), 1, 0);
   gtk_widget_show (spinbutton24);
-  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton24, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton24, FALSE);
 
   spinbutton25_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton25 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton25_adj), 1, 0);
   gtk_widget_show (spinbutton25);
-  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton25, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton25, FALSE);
 
   spinbutton26_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton26 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton26_adj), 1, 0);
   gtk_widget_show (spinbutton26);
-  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton26, TRUE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox2), spinbutton26, FALSE);
 
   spinbutton27_adj = gtk_adjustment_new (1, 0, 100, 1, 10, 10);
   spinbutton27 = gtk_spin_button_new (GTK_ADJUSTMENT (spinbutton27_adj), 1, 0);
   gtk_widget_show (spinbutton27);
-  gtk_box_pack_end (GTK_BOX (vbox2), spinbutton27, FALSE, FALSE);
+  gtk_box_pack_end (GTK_BOX (vbox2), spinbutton27, FALSE);
 
   return window1;
 }

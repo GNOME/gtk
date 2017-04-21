@@ -26,18 +26,17 @@
           <object class="GtkBox" id="content_box">
             <property name="visible">1</property>
             <property name="orientation">vertical</property>
+            <property name="hexpand">1</property>
             <child>
               <object class="GtkNotebook" id="content">
                 <property name="visible">1</property>
                 <property name="can-focus">1</property>
                 <property name="show-tabs">0</property>
                 <property name="show-border">0</property>
+                <property name="vexpand">1</property>
                 <signal name="remove" handler="assistant_remove_page_cb" swapped="no"/>
                 <child type="tab"/>
               </object>
-              <packing>
-                <property name="expand">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkBox" id="action_area">
@@ -163,7 +162,6 @@
             </child>
           </object>
           <packing>
-            <property name="expand">1</property>
             <property name="position">1</property>
           </packing>
         </child>

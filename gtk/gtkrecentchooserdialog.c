@@ -206,7 +206,7 @@ gtk_recent_chooser_dialog_constructed (GObject *object)
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (object));
 
   gtk_box_pack_start (GTK_BOX (content_area),
-                      priv->chooser, TRUE, TRUE);
+                      priv->chooser, TRUE);
 
   _gtk_recent_chooser_set_delegate (GTK_RECENT_CHOOSER (object),
   				    GTK_RECENT_CHOOSER (priv->chooser));

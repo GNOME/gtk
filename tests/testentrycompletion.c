@@ -307,7 +307,7 @@ main (int argc, char *argv[])
   label = gtk_label_new (NULL);
 
   gtk_label_set_markup (GTK_LABEL (label), "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE);
 
   /* Create our first entry */
   entry = gtk_entry_new ();
@@ -392,7 +392,7 @@ main (int argc, char *argv[])
   gdk_threads_add_timeout (1000, (GSourceFunc) animation_timer, completion);
 
   /* Fourth entry */
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Model-less entry completion"), FALSE, FALSE);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Model-less entry completion"), FALSE);
 
   entry = gtk_entry_new ();
 

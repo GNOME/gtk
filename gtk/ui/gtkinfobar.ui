@@ -16,9 +16,6 @@
                 <property name="margin">8</property>
                 <property name="hexpand">1</property>
               </object>
-              <packing>
-                <property name="expand">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkButtonBox" id="action_area">

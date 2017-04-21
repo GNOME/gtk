@@ -92,7 +92,8 @@ create_row (const gchar *text)
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
   label = gtk_label_new (text);
   gtk_container_add (GTK_CONTAINER (row), box);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, FALSE);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_container_add (GTK_CONTAINER (box), label);
   gtk_container_add (GTK_CONTAINER (box), ebox);
 
   gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);

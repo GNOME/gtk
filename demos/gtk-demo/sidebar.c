@@ -49,7 +49,7 @@ do_sidebar (GtkWidget *do_widget)
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       sidebar = gtk_stack_sidebar_new ();
-      gtk_box_pack_start (GTK_BOX (box), sidebar, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX (box), sidebar, FALSE);
 
       stack = gtk_stack_new ();
       gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
@@ -57,9 +57,9 @@ do_sidebar (GtkWidget *do_widget)
 
       /* Separator between sidebar and stack */
       widget = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-      gtk_box_pack_start (GTK_BOX(box), widget, FALSE, FALSE);
+      gtk_box_pack_start (GTK_BOX(box), widget, FALSE);
 
-      gtk_box_pack_start (GTK_BOX (box), stack, TRUE, TRUE);
+      gtk_box_pack_start (GTK_BOX (box), stack, TRUE);
 
       for (i=0; (c = *(pages+i)) != NULL; i++ )
         {
