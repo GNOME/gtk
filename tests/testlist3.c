@@ -89,7 +89,7 @@ create_row (const gchar *text)
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
   label = gtk_label_new (text);
   gtk_container_add (GTK_CONTAINER (row), box);
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, FALSE);
   gtk_container_add (GTK_CONTAINER (box), ebox);
 
   gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
@@ -149,7 +149,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, css, -1, NULL);
+  gtk_css_provider_load_from_data (provider, css, -1);
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (), GTK_STYLE_PROVIDER (provider), 800);
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 300);
