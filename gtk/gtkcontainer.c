@@ -1910,15 +1910,12 @@ gtk_container_forall (GtkContainer *container,
                       GtkCallback   callback,
                       gpointer      callback_data)
 {
-  GtkContainerClass *class;
-
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (callback != NULL);
 
-  class = GTK_CONTAINER_GET_CLASS (container);
-
-  if (class->forall)
-    class->forall (container, TRUE, callback, callback_data);
+  gtk_widget_forall (GTK_WIDGET (container),
+                     callback,
+                     callback_data);
 }
 
 /**
@@ -1950,7 +1947,7 @@ gtk_container_foreach (GtkContainer *container,
   class = GTK_CONTAINER_GET_CLASS (container);
 
   if (class->forall)
-    class->forall (container, FALSE, callback, callback_data);
+    class->forall (container, callback, callback_data);
 }
 
 /**

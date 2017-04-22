@@ -692,7 +692,6 @@ gtk_application_window_real_unmap (GtkWidget *widget)
 
 static void
 gtk_application_window_real_forall_internal (GtkContainer *container,
-                                             gboolean      include_internal,
                                              GtkCallback   callback,
                                              gpointer      user_data)
 {
@@ -702,7 +701,7 @@ gtk_application_window_real_forall_internal (GtkContainer *container,
     callback (window->priv->menubar, user_data);
 
   GTK_CONTAINER_CLASS (gtk_application_window_parent_class)
-    ->forall (container, include_internal, callback, user_data);
+    ->forall (container, callback, user_data);
 }
 
 static void

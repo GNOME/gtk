@@ -136,7 +136,6 @@ static void gtk_menu_shell_add               (GtkContainer      *container,
 static void gtk_menu_shell_remove            (GtkContainer      *container,
                                               GtkWidget         *widget);
 static void gtk_menu_shell_forall            (GtkContainer      *container,
-                                              gboolean           include_internals,
                                               GtkCallback        callback,
                                               gpointer           callback_data);
 static void gtk_menu_shell_real_insert       (GtkMenuShell *menu_shell,
@@ -1092,7 +1091,6 @@ gtk_menu_shell_remove (GtkContainer *container,
 
 static void
 gtk_menu_shell_forall (GtkContainer *container,
-                       gboolean      include_internals,
                        GtkCallback   callback,
                        gpointer      callback_data)
 {

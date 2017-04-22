@@ -526,7 +526,6 @@ gtk_grid_remove (GtkContainer *container,
 
 static void
 gtk_grid_forall (GtkContainer *container,
-                 gboolean      include_internals,
                  GtkCallback   callback,
                  gpointer      callback_data)
 {

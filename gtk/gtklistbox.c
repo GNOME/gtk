@@ -221,7 +221,6 @@ static void                 gtk_list_box_add                          (GtkContai
 static void                 gtk_list_box_remove                       (GtkContainer        *container,
                                                                        GtkWidget           *widget);
 static void                 gtk_list_box_forall                       (GtkContainer        *container,
-                                                                       gboolean             include_internals,
                                                                        GtkCallback          callback,
                                                                        gpointer             callback_target);
 static void                 gtk_list_box_compute_expand               (GtkWidget           *widget,
@@ -2166,10 +2165,7 @@ gtk_list_box_realize (GtkWidget *widget)
                                             &allocation);
   gdk_window_set_user_data (priv->view_window, (GObject*) widget);
 
-  gtk_list_box_forall (GTK_CONTAINER (widget),
-                       TRUE,
-                       (GtkCallback) gtk_widget_set_parent_window,
-                       priv->view_window);
+  gtk_widget_forall (widget, (GtkCallback)gtk_widget_set_parent_window, priv->view_window);
 
   GTK_WIDGET_CLASS (gtk_list_box_parent_class)->realize (widget);
 }
@@ -2567,7 +2563,6 @@ gtk_list_box_remove (GtkContainer *container,
 
 static void
 gtk_list_box_forall (GtkContainer *container,
-                     gboolean      include_internals,
                      GtkCallback   callback,
                      gpointer      callback_target)
 {
@@ -2583,8 +2578,6 @@ gtk_list_box_forall (GtkContainer *container,
     {
       row = g_sequence_get (iter);
       iter = g_sequence_iter_next (iter);
-      if (ROW_PRIV (row)->header != NULL && include_internals)
-        callback (ROW_PRIV (row)->header, callback_target);
       callback (GTK_WIDGET (row), callback_target);
     }
 }
@@ -3929,7 +3922,7 @@ gtk_list_box_bind_model (GtkListBox                 *box,
       g_clear_object (&priv->bound_model);
     }
 
-  gtk_list_box_forall (GTK_CONTAINER (box), FALSE, (GtkCallback) gtk_widget_destroy, NULL);
+  gtk_list_box_forall (GTK_CONTAINER (box), (GtkCallback) gtk_widget_destroy, NULL);
 
   if (model == NULL)
     return;

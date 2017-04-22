@@ -254,7 +254,6 @@ static void     gtk_combo_box_menu_hide            (GtkWidget        *menu,
 static void     gtk_combo_box_unset_model          (GtkComboBox      *combo_box);
 
 static void     gtk_combo_box_forall               (GtkContainer     *container,
-                                                    gboolean          include_internals,
                                                     GtkCallback       callback,
                                                     gpointer          callback_data);
 static gboolean gtk_combo_box_scroll_event         (GtkWidget        *widget,
@@ -1739,19 +1738,12 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
 
 static void
 gtk_combo_box_forall (GtkContainer *container,
-                      gboolean      include_internals,
                       GtkCallback   callback,
                       gpointer      callback_data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (container);
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkWidget *child;
-
-  if (include_internals)
-    {
-      if (priv->box)
-        (* callback) (priv->box, callback_data);
-    }
 
   child = gtk_bin_get_child (GTK_BIN (container));
   if (child && child != priv->cell_view)

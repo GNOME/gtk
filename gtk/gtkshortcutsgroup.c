@@ -157,7 +157,6 @@ gtk_shortcuts_group_add (GtkContainer *container,
 typedef struct {
   GtkCallback callback;
   gpointer data;
-  gboolean include_internal;
 } CallbackData;
 
 static void
@@ -167,23 +166,21 @@ forall_cb (GtkWidget *widget, gpointer data)
   CallbackData *cbdata = data;
 
   self = GTK_SHORTCUTS_GROUP (gtk_widget_get_parent (widget));
-  if (cbdata->include_internal || widget != (GtkWidget*)self->title)
+  if (widget != (GtkWidget*)self->title)
     cbdata->callback (widget, cbdata->data);
 }
 
 static void
 gtk_shortcuts_group_forall (GtkContainer *container,
-                            gboolean      include_internal,
                             GtkCallback   callback,
                             gpointer      callback_data)
 {
   CallbackData cbdata;
 
-  cbdata.include_internal = include_internal;
   cbdata.callback = callback;
   cbdata.data = callback_data;
 
-  GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->forall (container, include_internal, forall_cb, &cbdata);
+  GTK_CONTAINER_CLASS (gtk_shortcuts_group_parent_class)->forall (container, forall_cb, &cbdata);
 }
 
 static void

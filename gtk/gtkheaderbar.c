@@ -1656,7 +1656,6 @@ gtk_header_bar_remove (GtkContainer *container,
 
 static void
 gtk_header_bar_forall (GtkContainer *container,
-                       gboolean      include_internals,
                        GtkCallback   callback,
                        gpointer      callback_data)
 {
@@ -1664,9 +1663,6 @@ gtk_header_bar_forall (GtkContainer *container,
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   Child *child;
   GList *children;
-
-  if (include_internals && priv->titlebar_start_box != NULL)
-    (* callback) (priv->titlebar_start_box, callback_data);
 
   children = priv->children;
   while (children)
@@ -1680,9 +1676,6 @@ gtk_header_bar_forall (GtkContainer *container,
   if (priv->custom_title != NULL)
     (* callback) (priv->custom_title, callback_data);
 
-  if (include_internals && priv->label_box != NULL)
-    (* callback) (priv->label_box, callback_data);
-
   children = priv->children;
   while (children)
     {
@@ -1691,9 +1684,6 @@ gtk_header_bar_forall (GtkContainer *container,
       if (child->pack_type == GTK_PACK_END)
         (* callback) (child->widget, callback_data);
     }
-
-  if (include_internals && priv->titlebar_end_box != NULL)
-    (* callback) (priv->titlebar_end_box, callback_data);
 }
 
 static void

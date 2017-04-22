@@ -592,7 +592,6 @@ static void gtk_text_view_add    (GtkContainer *container,
 static void gtk_text_view_remove (GtkContainer *container,
                                   GtkWidget    *child);
 static void gtk_text_view_forall (GtkContainer *container,
-                                  gboolean      include_internals,
                                   GtkCallback   callback,
                                   gpointer      callback_data);
 
@@ -6039,7 +6038,6 @@ gtk_text_view_remove (GtkContainer *container,
 
 static void
 gtk_text_view_forall (GtkContainer *container,
-                      gboolean      include_internals,
                       GtkCallback   callback,
                       gpointer      callback_data)
 {

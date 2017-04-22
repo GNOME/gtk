@@ -169,7 +169,6 @@ static void     gtk_stack_add                            (GtkContainer  *widget,
 static void     gtk_stack_remove                         (GtkContainer  *widget,
                                                           GtkWidget     *child);
 static void     gtk_stack_forall                         (GtkContainer  *container,
-                                                          gboolean       include_internals,
                                                           GtkCallback    callback,
                                                           gpointer       callback_data);
 static void     gtk_stack_compute_expand                 (GtkWidget     *widget,
@@ -1852,7 +1851,6 @@ gtk_stack_set_visible_child_full (GtkStack               *stack,
 
 static void
 gtk_stack_forall (GtkContainer *container,
-                  gboolean      include_internals,
                   GtkCallback   callback,
                   gpointer      callback_data)
 {

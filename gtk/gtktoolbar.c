@@ -234,7 +234,6 @@ static void       gtk_toolbar_add                  (GtkContainer        *contain
 static void       gtk_toolbar_remove               (GtkContainer        *container,
 						    GtkWidget           *widget);
 static void       gtk_toolbar_forall               (GtkContainer        *container,
-						    gboolean             include_internals,
 						    GtkCallback          callback,
 						    gpointer             callback_data);
 static GType      gtk_toolbar_child_type           (GtkContainer        *container);
@@ -2366,7 +2365,6 @@ gtk_toolbar_remove (GtkContainer *container,
 
 static void
 gtk_toolbar_forall (GtkContainer *container,
-                    gboolean      include_internals,
                     GtkCallback   callback,
                     gpointer      callback_data)
 {
@@ -2382,7 +2380,7 @@ gtk_toolbar_forall (GtkContainer *container,
       ToolbarContent *content = list->data;
       GList *next = list->next;
 
-      if (include_internals || !toolbar_content_is_placeholder (content))
+      if (!toolbar_content_is_placeholder (content))
         {
           GtkWidget *child = toolbar_content_get_widget (content);
 
@@ -2392,9 +2390,6 @@ gtk_toolbar_forall (GtkContainer *container,
 
       list = next;
     }
-
-  if (include_internals && priv->arrow_button)
-    callback (priv->arrow_button, callback_data);
 }
 
 static GType
