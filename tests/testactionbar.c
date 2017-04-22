@@ -46,6 +46,10 @@ create_widgets (GtkActionBar  *bar,
       GtkPackType type;
 
       child = l->data;
+
+      if (child == gtk_action_bar_get_center_widget (bar))
+        continue;
+
       gtk_container_child_get (GTK_CONTAINER (bar), child, "pack-type", &type, NULL);
       if (type == pack_type)
         gtk_container_remove (GTK_CONTAINER (bar), child);

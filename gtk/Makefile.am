@@ -576,7 +576,8 @@ gtk_private_h_sources =		\
 	gtkwindowprivate.h	\
 	gtktreemenu.h		\
 	gdkpixbufutilsprivate.h \
-	gtkgizmoprivate.h
+	gtkgizmoprivate.h \
+	gtkcenterboxprivate.h
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources = 		\
@@ -939,7 +940,8 @@ gtk_base_c_sources = 		\
 	gtkwin32draw.c		\
 	gtkwin32theme.c		\
 	gdkpixbufutils.c 	\
-	gtkgizmo.c
+	gtkgizmo.c 		\
+	gtkcenterbox.c
 
 if USE_QUARTZ
 gtk_base_c_sources += 		\
