@@ -75,8 +75,8 @@
  *
  * |[<!-- language="plain" -->
  * progressbar[.osd]
+ * ├── [text]
  * ╰── trough[.empty][.full]
- *     ├── [text]
  *     ╰── progress[.pulse]
  * ]|
  *
