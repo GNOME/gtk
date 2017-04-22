@@ -9,17 +9,23 @@ drag_begin (GtkWidget      *widget,
             GdkDragContext *context,
             gpointer        data)
 {
+  GtkWidget *row;
   GtkAllocation alloc;
   cairo_surface_t *surface;
   cairo_t *cr;
+  int x, y;
 
-  gtk_widget_get_allocation (widget, &alloc);
+  row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
+  gtk_widget_get_allocation (row, &alloc);
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, alloc.width, alloc.height);
   cr = cairo_create (surface);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "during-dnd");
-  gtk_widget_draw (widget, cr);
-  gtk_style_context_remove_class (gtk_widget_get_style_context (widget), "during-dnd");
+  gtk_style_context_add_class (gtk_widget_get_style_context (row), "during-dnd");
+  gtk_widget_draw (row, cr);
+  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "during-dnd");
+
+  gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
+  cairo_surface_set_device_offset (surface, -x, -y);
   gtk_drag_set_icon_surface (context, surface);
 
   cairo_destroy (cr);
@@ -58,7 +64,7 @@ drag_data_received (GtkWidget        *widget,
   GtkWidget *source;
   int pos;
 
-  target = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
+  target = widget;
 
   pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (target));
   row = (gpointer)* (gpointer*)gtk_selection_data_get_data (selection_data);
@@ -73,22 +79,25 @@ drag_data_received (GtkWidget        *widget,
 static GtkWidget *
 create_row (const gchar *text)
 {
-  GtkWidget *row, *ebox, *box, *label;
+  GtkWidget *row, *ebox, *box, *label, *image;
 
   row = gtk_list_box_row_new (); 
   ebox = gtk_event_box_new ();
+  image = gtk_image_new_from_icon_name ("open-menu-symbolic", 1);
+  gtk_container_add (GTK_CONTAINER (ebox), image);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
   label = gtk_label_new (text);
-  gtk_container_add (GTK_CONTAINER (row), ebox);
-  gtk_container_add (GTK_CONTAINER (ebox), box);
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_box_pack_start (GTK_BOX (box), label, TRUE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (box), ebox);
 
   gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
   g_signal_connect (ebox, "drag-begin", G_CALLBACK (drag_begin), NULL);
   g_signal_connect (ebox, "drag-data-get", G_CALLBACK (drag_data_get), NULL);
 
-  gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL, entries, 1, GDK_ACTION_MOVE);
-  g_signal_connect (ebox, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
+  gtk_drag_dest_set (row, GTK_DEST_DEFAULT_ALL, entries, 1, GDK_ACTION_MOVE);
+  g_signal_connect (row, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
 
   return row;
 }
