@@ -23,11 +23,10 @@
 
 #define DEFAULT_CSS \
   ".play {\n" \
-  "  engine: none;\n" \
   "  background-image: none;\n" \
   "  background-color: red;\n" \
   "  border-color: black;\n" \
-  "  border-radius: 0;\n" \
+  "  border-radius: 0px;\n" \
   "}\n" \
   "\n" \
   ".play:nth-child(even) {\n" \
@@ -36,11 +35,11 @@
   "}\n" \
   "\n" \
   ".play:nth-child(first) {\n" \
-  "  border-radius: 5 0 0 5;\n" \
+  "  border-radius: 5px 0px 0px 5px;\n" \
   "}\n" \
   "\n" \
   ".play:nth-child(last) {\n" \
-  "  border-radius: 0 5 5 0;\n" \
+  "  border-radius: 0px 5px 5px 0px;\n" \
   "}\n" \
   "\n"
 
