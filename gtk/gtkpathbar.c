@@ -133,7 +133,6 @@ static void gtk_path_bar_add                      (GtkContainer     *container,
 static void gtk_path_bar_remove                   (GtkContainer     *container,
 						   GtkWidget        *widget);
 static void gtk_path_bar_forall                   (GtkContainer     *container,
-						   gboolean          include_internals,
 						   GtkCallback       callback,
 						   gpointer          callback_data);
 static gboolean gtk_path_bar_scroll               (GtkWidget        *widget,
@@ -839,7 +838,6 @@ gtk_path_bar_remove (GtkContainer *container,
 
 static void
 gtk_path_bar_forall (GtkContainer *container,
-		     gboolean      include_internals,
 		     GtkCallback   callback,
 		     gpointer      callback_data)
 {

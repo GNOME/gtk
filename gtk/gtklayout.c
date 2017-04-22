@@ -137,7 +137,6 @@ static void gtk_layout_add                (GtkContainer   *container,
 static void gtk_layout_remove             (GtkContainer   *container,
                                            GtkWidget      *widget);
 static void gtk_layout_forall             (GtkContainer   *container,
-                                           gboolean        include_internals,
                                            GtkCallback     callback,
                                            gpointer        callback_data);
 static void gtk_layout_set_child_property (GtkContainer   *container,
@@ -935,7 +934,6 @@ gtk_layout_remove (GtkContainer *container,
 
 static void
 gtk_layout_forall (GtkContainer *container,
-		   gboolean      include_internals,
 		   GtkCallback   callback,
 		   gpointer      callback_data)
 {

@@ -51,7 +51,6 @@ static void gtk_bin_add         (GtkContainer   *container,
 static void gtk_bin_remove      (GtkContainer   *container,
 			         GtkWidget      *widget);
 static void gtk_bin_forall      (GtkContainer   *container,
-				 gboolean	include_internals,
 				 GtkCallback     callback,
 				 gpointer        callback_data);
 static GType gtk_bin_child_type (GtkContainer   *container);
@@ -150,7 +149,6 @@ gtk_bin_remove (GtkContainer *container,
 
 static void
 gtk_bin_forall (GtkContainer *container,
-		gboolean      include_internals,
 		GtkCallback   callback,
 		gpointer      callback_data)
 {

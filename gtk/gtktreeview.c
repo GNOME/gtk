@@ -624,7 +624,6 @@ static void     gtk_tree_view_style_updated        (GtkWidget        *widget);
 static void     gtk_tree_view_remove               (GtkContainer     *container,
 						    GtkWidget        *widget);
 static void     gtk_tree_view_forall               (GtkContainer     *container,
-						    gboolean          include_internals,
 						    GtkCallback       callback,
 						    gpointer          callback_data);
 
@@ -8141,14 +8140,11 @@ gtk_tree_view_remove (GtkContainer *container,
 
 static void
 gtk_tree_view_forall (GtkContainer *container,
-		      gboolean      include_internals,
 		      GtkCallback   callback,
 		      gpointer      callback_data)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (container);
   GtkTreeViewChild *child = NULL;
-  GtkTreeViewColumn *column;
-  GtkWidget *button;
   GList *tmp_list;
 
   tmp_list = tree_view->priv->children;
@@ -8158,17 +8154,6 @@ gtk_tree_view_forall (GtkContainer *container,
       tmp_list = tmp_list->next;
 
       (* callback) (child->widget, callback_data);
-    }
-  if (include_internals == FALSE)
-    return;
-
-  for (tmp_list = tree_view->priv->columns; tmp_list; tmp_list = tmp_list->next)
-    {
-      column = tmp_list->data;
-      button = gtk_tree_view_column_get_button (column);
-
-      if (button)
-	(* callback) (button, callback_data);
     }
 }
 

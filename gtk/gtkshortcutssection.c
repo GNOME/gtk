@@ -154,24 +154,16 @@ gtk_shortcuts_section_remove (GtkContainer *container,
 
 static void
 gtk_shortcuts_section_forall (GtkContainer *container,
-                              gboolean      include_internal,
                               GtkCallback   callback,
                               gpointer      callback_data)
 {
   GtkShortcutsSection *self = (GtkShortcutsSection *)container;
   GList *l;
 
-  if (include_internal)
+  for (l = self->groups; l; l = l->next)
     {
-      GTK_CONTAINER_CLASS (gtk_shortcuts_section_parent_class)->forall (container, include_internal, callback, callback_data);
-    }
-  else
-    {
-      for (l = self->groups; l; l = l->next)
-        {
-          GtkWidget *group = l->data;
-          callback (group, callback_data);
-        }
+      GtkWidget *group = l->data;
+      callback (group, callback_data);
     }
 }
 

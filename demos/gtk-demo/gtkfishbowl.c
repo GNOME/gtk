@@ -200,7 +200,6 @@ gtk_fishbowl_remove (GtkContainer *container,
 
 static void
 gtk_fishbowl_forall (GtkContainer *container,
-                     gboolean      include_internals,
                      GtkCallback   callback,
                      gpointer      callback_data)
 {
@@ -208,9 +207,6 @@ gtk_fishbowl_forall (GtkContainer *container,
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
   GtkFishbowlChild *child;
   GList *children;
-
-  if (!include_internals)
-    return;
 
   children = priv->children;
   while (children)

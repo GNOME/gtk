@@ -791,7 +791,6 @@ gtk_tool_palette_remove (GtkContainer *container,
 
 static void
 gtk_tool_palette_forall (GtkContainer *container,
-                         gboolean      internals,
                          GtkCallback   callback,
                          gpointer      callback_data)
 {

@@ -448,7 +448,6 @@ static void gtk_notebook_set_focus_child     (GtkContainer     *container,
                                               GtkWidget        *child);
 static GType gtk_notebook_child_type       (GtkContainer     *container);
 static void gtk_notebook_forall              (GtkContainer     *container,
-                                              gboolean          include_internals,
                                               GtkCallback       callback,
                                               gpointer          callback_data);
 
@@ -4408,14 +4407,12 @@ gtk_notebook_set_focus_child (GtkContainer *container,
 
 static void
 gtk_notebook_forall (GtkContainer *container,
-                     gboolean      include_internals,
                      GtkCallback   callback,
                      gpointer      callback_data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (container);
   GtkNotebookPrivate *priv = notebook->priv;
   GList *children;
-  gint i;
 
   children = priv->children;
   while (children)
@@ -4425,21 +4422,6 @@ gtk_notebook_forall (GtkContainer *container,
       page = children->data;
       children = children->next;
       (* callback) (page->child, callback_data);
-
-      if (include_internals)
-        {
-          if (page->tab_label)
-            (* callback) (page->tab_label, callback_data);
-        }
-    }
-
-  if (include_internals)
-    {
-      for (i = 0; i < N_ACTION_WIDGETS; i++)
-        {
-          if (priv->action_widget[i])
-            (* callback) (priv->action_widget[i], callback_data);
-        }
     }
 }
 

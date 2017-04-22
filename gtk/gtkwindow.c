@@ -430,7 +430,6 @@ static void gtk_window_remove             (GtkContainer      *container,
                                            GtkWidget         *widget);
 static void gtk_window_check_resize       (GtkContainer      *container);
 static void gtk_window_forall             (GtkContainer   *container,
-					   gboolean	include_internals,
 					   GtkCallback     callback,
 					   gpointer        callback_data);
 static gint gtk_window_focus              (GtkWidget        *widget,
@@ -7921,7 +7920,6 @@ gtk_window_check_resize (GtkContainer *container)
 
 static void
 gtk_window_forall (GtkContainer *container,
-                   gboolean	 include_internals,
                    GtkCallback   callback,
                    gpointer      callback_data)
 {
@@ -7929,23 +7927,12 @@ gtk_window_forall (GtkContainer *container,
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *child;
 
-  if (include_internals)
-    {
-      GList *l;
-
-      for (l = priv->popovers; l; l = l->next)
-        {
-          GtkWindowPopover *data = l->data;
-          (* callback) (data->widget, callback_data);
-        }
-    }
-
   child = gtk_bin_get_child (GTK_BIN (container));
   if (child != NULL)
     (* callback) (child, callback_data);
 
   if (priv->title_box != NULL &&
-      (priv->titlebar == NULL || include_internals))
+      priv->titlebar == NULL)
     (* callback) (priv->title_box, callback_data);
 }
 

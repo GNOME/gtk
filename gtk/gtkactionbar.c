@@ -112,27 +112,19 @@ gtk_action_bar_remove (GtkContainer *container,
 
 static void
 gtk_action_bar_forall (GtkContainer *container,
-                       gboolean      include_internals,
                        GtkCallback   callback,
                        gpointer      callback_data)
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (container));
 
-  if (include_internals)
-    {
-      (*callback) (priv->revealer, callback_data);
-    }
-  else
-    {
-      if (priv->start_box != NULL)
-        gtk_container_forall (GTK_CONTAINER (priv->start_box), callback, callback_data);
+  if (priv->start_box != NULL)
+    gtk_container_forall (GTK_CONTAINER (priv->start_box), callback, callback_data);
 
-      if (gtk_center_box_get_center_widget (GTK_CENTER_BOX (priv->center_box)) != NULL)
-        (*callback) (gtk_center_box_get_center_widget (GTK_CENTER_BOX (priv->center_box)), callback_data);
+  if (gtk_center_box_get_center_widget (GTK_CENTER_BOX (priv->center_box)) != NULL)
+    (*callback) (gtk_center_box_get_center_widget (GTK_CENTER_BOX (priv->center_box)), callback_data);
 
-      if (priv->end_box != NULL)
-        gtk_container_forall (GTK_CONTAINER (priv->end_box), callback, callback_data);
-    }
+  if (priv->end_box != NULL)
+    gtk_container_forall (GTK_CONTAINER (priv->end_box), callback, callback_data);
 }
 
 static void

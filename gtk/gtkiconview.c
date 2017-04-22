@@ -176,7 +176,6 @@ static gboolean         gtk_icon_view_key_release               (GtkWidget      
 static void             gtk_icon_view_remove                    (GtkContainer       *container,
 								 GtkWidget          *widget);
 static void             gtk_icon_view_forall                    (GtkContainer       *container,
-								 gboolean            include_internals,
 								 GtkCallback         callback,
 								 gpointer            callback_data);
 
@@ -1987,7 +1986,6 @@ gtk_icon_view_remove (GtkContainer *container,
 
 static void
 gtk_icon_view_forall (GtkContainer *container,
-		      gboolean      include_internals,
 		      GtkCallback   callback,
 		      gpointer      callback_data)
 {

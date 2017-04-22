@@ -1312,16 +1312,12 @@ gtk_tool_item_group_remove (GtkContainer *container,
 
 static void
 gtk_tool_item_group_forall (GtkContainer *container,
-                            gboolean      internals,
                             GtkCallback   callback,
                             gpointer      callback_data)
 {
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (container);
   GtkToolItemGroupPrivate* priv = group->priv;
   GList *children;
-
-  if (internals && priv->header)
-    callback (priv->header, callback_data);
 
   children = priv->children;
   while (children)

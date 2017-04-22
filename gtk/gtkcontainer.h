@@ -82,7 +82,6 @@ struct _GtkContainerClass
 				 GtkWidget	 *widget);
   void    (*check_resize)	(GtkContainer	 *container);
   void    (*forall)    		(GtkContainer	 *container,
-				 gboolean	  include_internals,
 				 GtkCallback	  callback,
 				 gpointer	  callback_data);
   void    (*set_focus_child)	(GtkContainer	 *container,

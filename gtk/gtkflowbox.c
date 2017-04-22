@@ -3154,7 +3154,6 @@ gtk_flow_box_remove (GtkContainer *container,
 
 static void
 gtk_flow_box_forall (GtkContainer *container,
-                     gboolean      include_internals,
                      GtkCallback   callback,
                      gpointer      callback_target)
 {
@@ -4374,7 +4373,7 @@ gtk_flow_box_bind_model (GtkFlowBox                 *box,
       g_clear_object (&priv->bound_model);
     }
 
-  gtk_flow_box_forall (GTK_CONTAINER (box), FALSE, (GtkCallback) gtk_widget_destroy, NULL);
+  gtk_flow_box_forall (GTK_CONTAINER (box), (GtkCallback) gtk_widget_destroy, NULL);
 
   if (model == NULL)
     return;

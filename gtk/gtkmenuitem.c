@@ -166,7 +166,6 @@ static void gtk_menu_item_ensure_label   (GtkMenuItem      *menu_item);
 static gint gtk_menu_item_popup_timeout  (gpointer          data);
 
 static void gtk_menu_item_forall         (GtkContainer    *container,
-                                          gboolean         include_internals,
                                           GtkCallback      callback,
                                           gpointer         callback_data);
 
@@ -1926,7 +1925,6 @@ gtk_menu_item_get_accel_path (GtkMenuItem *menu_item)
 
 static void
 gtk_menu_item_forall (GtkContainer *container,
-                      gboolean      include_internals,
                       GtkCallback   callback,
                       gpointer      callback_data)
 {

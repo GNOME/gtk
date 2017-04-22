@@ -596,7 +596,6 @@ gtk_overlay_reorder_overlay (GtkOverlay *overlay,
 
 static void
 gtk_overlay_forall (GtkContainer *overlay,
-                    gboolean      include_internals,
                     GtkCallback   callback,
                     gpointer      callback_data)
 {

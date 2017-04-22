@@ -128,7 +128,6 @@ static void gtk_frame_size_allocate (GtkWidget      *widget,
 static void gtk_frame_remove        (GtkContainer   *container,
 				     GtkWidget      *child);
 static void gtk_frame_forall        (GtkContainer   *container,
-				     gboolean	     include_internals,
 			             GtkCallback     callback,
 			             gpointer        callback_data);
 
@@ -399,7 +398,6 @@ gtk_frame_remove (GtkContainer *container,
 
 static void
 gtk_frame_forall (GtkContainer *container,
-		  gboolean      include_internals,
 		  GtkCallback   callback,
 		  gpointer      callback_data)
 {

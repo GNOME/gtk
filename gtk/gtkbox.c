@@ -163,7 +163,6 @@ static void gtk_box_add                (GtkContainer   *container,
 static void gtk_box_remove             (GtkContainer   *container,
                                         GtkWidget      *widget);
 static void gtk_box_forall             (GtkContainer   *container,
-                                        gboolean        include_internals,
                                         GtkCallback     callback,
                                         gpointer        callback_data);
 static void gtk_box_set_child_property (GtkContainer   *container,
@@ -2290,7 +2289,6 @@ gtk_box_remove (GtkContainer *container,
 
 static void
 gtk_box_forall (GtkContainer *container,
-		gboolean      include_internals,
 		GtkCallback   callback,
 		gpointer      callback_data)
 {

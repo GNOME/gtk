@@ -329,10 +329,6 @@ static void     gtk_scrolled_window_add                (GtkContainer      *conta
                                                         GtkWidget         *widget);
 static void     gtk_scrolled_window_remove             (GtkContainer      *container,
                                                         GtkWidget         *widget);
-static void     gtk_scrolled_window_forall             (GtkContainer      *container,
-                                                        gboolean           include_internals,
-                                                        GtkCallback        callback,
-                                                        gpointer           callback_data);
 static gboolean gtk_scrolled_window_scroll_child       (GtkScrolledWindow *scrolled_window,
                                                         GtkScrollType      scroll,
                                                         gboolean           horizontal);
@@ -532,7 +528,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
-  container_class->forall = gtk_scrolled_window_forall;
 
   class->scroll_child = gtk_scrolled_window_scroll_child;
   class->move_focus_out = gtk_scrolled_window_move_focus_out;
@@ -2855,31 +2850,6 @@ gtk_scrolled_window_snapshot (GtkWidget   *widget,
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
   gtk_css_gadget_snapshot (priv->gadget, snapshot);
-}
-
-static void
-gtk_scrolled_window_forall (GtkContainer *container,
-			    gboolean	  include_internals,
-			    GtkCallback   callback,
-			    gpointer      callback_data)
-{
-  GtkScrolledWindowPrivate *priv;
-  GtkScrolledWindow *scrolled_window;
-
-  GTK_CONTAINER_CLASS (gtk_scrolled_window_parent_class)->forall (container,
-                                                                  include_internals,
-                                                                  callback,
-                                                                  callback_data);
-  if (include_internals)
-    {
-      scrolled_window = GTK_SCROLLED_WINDOW (container);
-      priv = scrolled_window->priv;
-
-      if (priv->vscrollbar)
-        callback (priv->vscrollbar, callback_data);
-      if (priv->hscrollbar)
-        callback (priv->hscrollbar, callback_data);
-    }
 }
 
 static gboolean
