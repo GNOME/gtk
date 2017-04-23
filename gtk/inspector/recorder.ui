@@ -27,10 +27,12 @@
                 <signal name="clicked" handler="recordings_clear_all"/>
               </object>
             </child>
-            <child type="center">
+            <child>
               <object class="GtkStackSwitcher">
                 <property name="visible">1</property>
                 <property name="stack">render_stack</property>
+                <property name="hexpand">1</property>
+                <property name="halign">center</property>
               </object>
             </child>
             <child>

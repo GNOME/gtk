@@ -96,7 +96,6 @@ main (int argc, char *argv[])
   gtk_box_pack_end (GTK_BOX (box), test_widget ("5"));
   gtk_box_pack_end (GTK_BOX (box), test_widget ("6"));
 
-  gtk_box_set_center_widget (GTK_BOX (box), test_widget ("center"));
   gtk_container_add (GTK_CONTAINER (vbox), box);
 
   check = gtk_check_button_new_with_label ("Homogeneous");

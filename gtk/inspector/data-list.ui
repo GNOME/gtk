@@ -20,9 +20,11 @@
             <property name="pack-type">start</property>
           </packing>
         </child>
-        <child type="center">
+        <child>
           <object class="GtkLabel" id="object_title">
             <property name="visible">True</property>
+            <property name="hexpand">1</property>
+            <property name="halign">center</property>
           </object>
         </child>
       </object>
