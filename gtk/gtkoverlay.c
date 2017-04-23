@@ -587,9 +587,10 @@ gtk_overlay_reorder_overlay (GtkOverlay *overlay,
       gtk_widget_child_notify (info->widget, "index");
     }
 
-  if (gtk_widget_get_visible (child) &&
-      gtk_widget_get_visible (GTK_WIDGET (overlay)))
-    gtk_widget_queue_resize (GTK_WIDGET (overlay));
+  if (new_link)
+    gtk_widget_insert_before (child, GTK_WIDGET (overlay), ((GtkOverlayChild *)new_link->data)->widget);
+  else
+    gtk_widget_insert_before (child, GTK_WIDGET (overlay), NULL);
 }
 
 
@@ -832,7 +833,11 @@ gtk_overlay_buildable_add_child (GtkBuildable *buildable,
   if (type && strcmp (type, "overlay") == 0)
     gtk_overlay_add_overlay (GTK_OVERLAY (buildable), GTK_WIDGET (child));
   else if (!type)
-    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+    {
+      /* Make sure the main-child node is the first one */
+      gtk_widget_insert_after (GTK_WIDGET (child), GTK_WIDGET (buildable), NULL);
+      _gtk_bin_set_child (GTK_BIN (buildable), GTK_WIDGET (child));
+    }
   else
     GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
 }
@@ -890,12 +895,9 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
   priv->children = g_slist_append (priv->children, child);
 
   if (gtk_widget_get_realized (GTK_WIDGET (overlay)))
-    {
-      child->window = gtk_overlay_create_child_window (overlay, child);
-      gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
-    }
-  else
-    gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
+    child->window = gtk_overlay_create_child_window (overlay, child);
+
+  gtk_widget_insert_before (widget, GTK_WIDGET (overlay), NULL);
 
   gtk_widget_child_notify (widget, "index");
 }
