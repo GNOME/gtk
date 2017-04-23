@@ -406,7 +406,8 @@ get_spacing (GtkBox *box)
 
 static void
 gtk_box_size_allocate_no_center (GtkWidget           *widget,
-                                 const GtkAllocation *allocation)
+                                 const GtkAllocation *allocation,
+                                 GdkRectangle        *out_clip)
 {
   GtkBox *box = GTK_BOX (widget);
   GtkBoxPrivate *private = box->priv;
@@ -433,6 +434,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
   gint x = 0, y = 0, i;
   gint child_size;
   gint spacing;
+  GdkRectangle clip;
 
 
   count_expand_children (box, &nvis_children, &nexpand_children);
@@ -707,12 +709,12 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 		}
 	    }
 	  gtk_widget_size_allocate_with_baseline (child->widget, &child_allocation, baseline);
+          gtk_widget_get_clip (child->widget, &clip);
+          gdk_rectangle_union (out_clip, out_clip, &clip);
 
 	  i++;
 	}
     }
-
-  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 static void
@@ -723,11 +725,9 @@ gtk_box_allocate_contents (GtkCssGadget        *gadget,
                            gpointer             unused)
 {
   GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkBox *box = GTK_BOX (widget);
 
-  gtk_box_size_allocate_no_center (widget, allocation);
-
-  gtk_container_get_children_clip (GTK_CONTAINER (box), out_clip);
+  *out_clip = *allocation;
+  gtk_box_size_allocate_no_center (widget, allocation, out_clip);
 }
 
 static void
@@ -743,7 +743,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
                            allocation,
                            gtk_widget_get_allocated_baseline (widget),
                            &clip);
-  
+
   gtk_widget_set_clip (widget, &clip);
 }
 
