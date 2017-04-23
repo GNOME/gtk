@@ -26,12 +26,6 @@
             <property name="pack-type">start</property>
           </packing>
         </child>
-        <child type="center">
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="name">center</property>
-          </object>
-        </child>
       </object>
     </child>
   </object>

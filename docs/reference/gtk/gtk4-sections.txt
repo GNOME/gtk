@@ -329,8 +329,6 @@ gtk_box_query_child_packing
 gtk_box_set_child_packing
 gtk_box_get_baseline_position
 gtk_box_set_baseline_position
-gtk_box_get_center_widget
-gtk_box_set_center_widget
 <SUBSECTION Standard>
 GTK_BOX
 GTK_IS_BOX

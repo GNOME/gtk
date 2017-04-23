@@ -3038,9 +3038,11 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child type="tab">
                                       <object class="GtkBox">
-                                        <child type="center">
+                                        <child>
                                           <object class="GtkLabel">
                                             <property name="label" translatable="yes">Page 1</property>
+                                            <property name="halign">center</property>
+                                            <property name="hexpand">1</property>
                                           </object>
                                         </child>
                                         <child>
@@ -3069,9 +3071,11 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child type="tab">
                                       <object class="GtkBox">
-                                        <child type="center">
+                                        <child>
                                           <object class="GtkLabel">
                                             <property name="label" translatable="yes">Page 2</property>
+                                            <property name="halign">center</property>
+                                            <property name="hexpand">1</property>
                                           </object>
                                         </child>
                                         <child>

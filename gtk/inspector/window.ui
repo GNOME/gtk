@@ -256,10 +256,12 @@
                         </child>
                       </object>
                     </child>
-                    <child type="center">
+                    <child>
                       <object class="GtkStack" id="object_center_stack">
                         <property name="visible">1</property>
                         <property name="transition-type">crossfade</property>
+                        <property name="hexpand">1</property>
+                        <property name="halign">center</property>
                         <child>
                           <object class="GtkLabel" id="object_title">
                             <property name="visible">1</property>

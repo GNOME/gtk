@@ -88,9 +88,11 @@
                                   <object class="GtkBox" id="search_entry_box">
                                     <property name="spacing">6</property>
                                     <property name="margin">6</property>
-                                    <child type="center">
+                                    <child>
                                       <object class="GtkSearchEntry" id="search_entry">
                                         <property name="width-chars">45</property>
+                                        <property name="hexpand">1</property>
+                                        <property name="halign">center</property>
                                         <signal name="search-changed" handler="search_entry_activate_cb" swapped="yes"/>
                                         <signal name="stop-search" handler="search_entry_stop_cb" swapped="yes"/>
                                       </object>

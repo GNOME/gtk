@@ -2,5 +2,4 @@
   decoration:dir(ltr)
   box.horizontal:dir(ltr)
     label#start:dir(ltr)
-    label#center:dir(ltr)
     label#end:dir(ltr)
