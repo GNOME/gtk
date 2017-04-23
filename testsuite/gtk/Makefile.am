@@ -77,6 +77,7 @@ TEST_PROGS += 			\
 	window			\
 	displayclose		\
 	revealer-size \
+	widgetorder \
 	$(NULL)
 
 if OS_UNIX
