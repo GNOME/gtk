@@ -70,6 +70,9 @@ drag_data_received (GtkWidget        *widget,
   row = (gpointer)* (gpointer*)gtk_selection_data_get_data (selection_data);
   source = gtk_widget_get_ancestor (row, GTK_TYPE_LIST_BOX_ROW);
 
+  if (source == target)
+    return;
+
   g_object_ref (source);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (source)), source);
   gtk_list_box_insert (GTK_LIST_BOX (gtk_widget_get_parent (target)), source, pos);
