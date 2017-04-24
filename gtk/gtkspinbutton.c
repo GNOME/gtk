@@ -90,6 +90,8 @@
  *
  * |[<!-- language="plain" -->
  * spinbutton.horizontal
+ * ├── undershoot.left
+ * ├── undershoot.right
  * ├── entry
  * │   ╰── ...
  * ├── button.down
@@ -98,6 +100,8 @@
  *
  * |[<!-- language="plain" -->
  * spinbutton.vertical
+ * ├── undershoot.left
+ * ├── undershoot.right
  * ├── button.up
  * ├── entry
  * │   ╰── ...
