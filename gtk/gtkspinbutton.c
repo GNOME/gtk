@@ -61,7 +61,6 @@
 #define MAX_TIMER_CALLS       5
 #define EPSILON               1e-10
 #define MAX_DIGITS            20
-#define MIN_ARROW_WIDTH       6
 #define TIMEOUT_INITIAL       500
 #define TIMEOUT_REPEAT        50
 
