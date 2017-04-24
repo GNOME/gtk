@@ -11722,9 +11722,9 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
 					    column, position);
   tree_view->priv->n_columns++;
 
-  _gtk_tree_view_column_set_tree_view (column, tree_view);
-
   gtk_tree_view_update_button_position (tree_view, column);
+
+  _gtk_tree_view_column_set_tree_view (column, tree_view);
 
   if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     {
