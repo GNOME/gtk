@@ -91,7 +91,7 @@
  * ]|
  *
  * GtkPaned has a main CSS node with name paned, and a subnode for
- * the separator with name separator. The subnodes gets a .wide style
+ * the separator with name separator. The subnode gets a .wide style
  * class when the paned is supposed to be wide.
  *
  * In horizontal orientation, the nodes of the children are always arranged
