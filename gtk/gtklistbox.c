@@ -2737,7 +2737,7 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (widget);
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -2767,6 +2767,7 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
   GtkAllocation child_allocation;
   GtkAllocation header_allocation;
   GtkAllocation widget_allocation;
+  GtkAllocation clip;
   GtkListBoxRow *row;
   GSequenceIter *iter;
   int child_min;
@@ -2791,6 +2792,8 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
       header_allocation.height = allocation->height;
       header_allocation.y = child_allocation.y;
       gtk_widget_size_allocate (priv->placeholder, &header_allocation);
+      gtk_widget_get_clip (priv->placeholder, &clip);
+      gdk_rectangle_union (out_clip, out_clip, &clip);
       child_allocation.y += child_min;
     }
 
@@ -2814,6 +2817,8 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
           header_allocation.height = child_min;
           header_allocation.y = child_allocation.y;
           gtk_widget_size_allocate (ROW_PRIV (row)->header, &header_allocation);
+          gtk_widget_get_clip (ROW_PRIV (row)->header, &clip);
+          gdk_rectangle_union (out_clip, out_clip, &clip);
           child_allocation.y += child_min;
         }
 
@@ -2826,10 +2831,10 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
 
       ROW_PRIV (row)->height = child_allocation.height;
       gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation);
+      gtk_widget_get_clip (GTK_WIDGET (row), &clip);
+      gdk_rectangle_union (out_clip, out_clip, &clip);
       child_allocation.y += child_min;
     }
-
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
 }
 
 /**
@@ -3355,7 +3360,7 @@ static void
 gtk_list_box_row_size_allocate (GtkWidget     *widget,
                                 GtkAllocation *allocation)
 {
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -3381,9 +3386,10 @@ gtk_list_box_row_allocate (GtkCssGadget        *gadget,
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, (GtkAllocation *)allocation);
-
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
+    {
+      gtk_widget_size_allocate (child, (GtkAllocation *)allocation);
+      gtk_widget_get_clip (child, out_clip);
+    }
 }
 
 /**
