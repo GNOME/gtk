@@ -3014,23 +3014,15 @@ gtk_container_draw (GtkWidget *widget,
 }
 
 static void
-gtk_container_snapshot_forall (GtkWidget *child,
-                               gpointer   snapshot)
-{
-  gtk_widget_snapshot_child (_gtk_widget_get_parent (child),
-                             child,
-                             snapshot);
-}
-
-static void
 gtk_container_snapshot (GtkWidget   *widget,
                         GtkSnapshot *snapshot)
 {
-  GtkContainer *container = GTK_CONTAINER (widget);
+  GtkWidget *child;
 
-  gtk_container_forall (container,
-                        gtk_container_snapshot_forall,
-                        snapshot);
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    gtk_widget_snapshot_child (widget, child, snapshot);
 }
 
 static gboolean
@@ -3045,10 +3037,9 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
 }
 
 static void
-union_with_clip (GtkWidget *widget,
-                 gpointer   data)
+union_with_clip (GtkWidget     *widget,
+                 GtkAllocation *clip)
 {
-  GdkRectangle *clip = data;
   GtkAllocation widget_clip;
 
   if (!gtk_widget_is_visible (widget) ||
@@ -3067,9 +3058,14 @@ void
 gtk_container_get_children_clip (GtkContainer  *container,
                                  GtkAllocation *out_clip)
 {
+  GtkWidget *child;
+
   memset (out_clip, 0, sizeof (GtkAllocation));
 
-  gtk_container_forall (container, union_with_clip, out_clip);
+  for (child = _gtk_widget_get_first_child (GTK_WIDGET (container));
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    union_with_clip (child, out_clip);
 }
 
 static void
