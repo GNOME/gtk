@@ -4021,6 +4021,9 @@ gtk_widget_unparent (GtkWidget *widget)
 				priv->clip.width,
 				priv->clip.height);
 
+  if (priv->visible && _gtk_widget_get_visible (priv->parent))
+    gtk_widget_queue_resize (priv->parent);
+
   /* Reset the width and height here, to force reallocation if we
    * get added back to a new parent. This won't work if our new
    * allocation is smaller than 1x1 and we actually want a size of 1x1...
