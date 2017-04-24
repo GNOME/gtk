@@ -130,8 +130,9 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * window
+ * window.background
  * ├── decoration
+ * ├── <titlebar child>.titlebar [.default-decoration]
  * ╰── <child>
  * ]|
  *
