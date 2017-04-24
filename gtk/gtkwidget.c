@@ -3982,8 +3982,8 @@ gtk_widget_new (GType        type,
  * @widget: a #GtkWidget
  *
  * This function is only for use in widget implementations.
- * Should be called by implementations of the remove method
- * on #GtkContainer, to dissociate a child from the container.
+ * Should be called by parent widgets to dissociate @widget
+ * from the parent.
  **/
 void
 gtk_widget_unparent (GtkWidget *widget)
@@ -8525,14 +8525,14 @@ gtk_widget_reposition_after (GtkWidget *widget,
 /**
  * gtk_widget_set_parent:
  * @widget: a #GtkWidget
- * @parent: parent container
+ * @parent: parent widget
  *
  * This function is useful only when implementing subclasses of
- * #GtkContainer.
- * Sets the container as the parent of @widget, and takes care of
+ * #GtkWidget.
+ * Sets @parent as the parent widget of @widget, and takes care of
  * some details such as updating the state and style of the child
- * to reflect its new location. The opposite function is
- * gtk_widget_unparent().
+ * to reflect its new location and resizing the parent. The opposite
+ * function is gtk_widget_unparent().
  **/
 void
 gtk_widget_set_parent (GtkWidget *widget,
