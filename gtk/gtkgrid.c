@@ -1572,12 +1572,14 @@ allocate_child (GtkGridRequest *request,
 
 static void
 gtk_grid_request_allocate_children (GtkGridRequest      *request,
-                                    const GtkAllocation *allocation)
+                                    const GtkAllocation *allocation,
+                                    GtkAllocation       *out_clip)
 {
   GtkGridPrivate *priv = request->grid->priv;
   GList *list;
   GtkGridChild *child;
   GtkAllocation child_allocation;
+  GtkAllocation child_clip;
   gint x, y, width, height, baseline, ignore;
 
   for (list = priv->children; list; list = list->next)
@@ -1600,6 +1602,8 @@ gtk_grid_request_allocate_children (GtkGridRequest      *request,
                              - (child_allocation.x - allocation->x) - child_allocation.width;
 
       gtk_widget_size_allocate_with_baseline (child->widget, &child_allocation, baseline);
+      gtk_widget_get_clip (child->widget, &child_clip);
+      gdk_rectangle_union (out_clip, out_clip, &child_clip);
     }
 }
 
@@ -1662,9 +1666,8 @@ gtk_grid_allocate (GtkCssGadget        *gadget,
   gtk_grid_request_position (&request, 0);
   gtk_grid_request_position (&request, 1);
 
-  gtk_grid_request_allocate_children (&request, allocation);
-
-  gtk_container_get_children_clip (GTK_CONTAINER (grid), out_clip);
+  *out_clip = *allocation;
+  gtk_grid_request_allocate_children (&request, allocation, out_clip);
 }
 
 static gboolean
