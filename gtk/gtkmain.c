@@ -64,7 +64,7 @@
  *   ...
  *
  *   // Initialize the widget set
- *   gtk_init (&argc, &argv);
+ *   gtk_init ();
  *
  *   // Create the main window
  *   mainwin = gtk_window_new (GTK_WINDOW_TOPLEVEL);
