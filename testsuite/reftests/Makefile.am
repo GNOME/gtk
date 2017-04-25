@@ -161,8 +161,6 @@ testdata = \
 	border-style.css \
 	border-style.ref.ui \
 	border-style.ui \
-	box-child-expand.ref.ui \
-	box-child-expand.ui \
 	box-order.css \
 	box-order.ref.ui \
 	box-order.ui \
