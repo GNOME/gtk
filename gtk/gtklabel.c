@@ -3619,11 +3619,8 @@ get_size_for_allocation (GtkLabel *label,
   if (minimum_baseline || natural_baseline)
     {
       baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
-      if (minimum_baseline)
-	*minimum_baseline = baseline;
-
-      if (natural_baseline)
-	*natural_baseline = baseline;
+      *minimum_baseline = baseline;
+      *natural_baseline = baseline;
     }
 
   g_object_unref (layout);
