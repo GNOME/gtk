@@ -20,18 +20,6 @@ vertical_policy_changed (GtkComboBox *combo_box,
 }
 
 static void
-label_flip_changed (GtkComboBox *combo_box,
-		    GtkLabel    *label)
-{
-  gint active = gtk_combo_box_get_active (combo_box);
-
-  if (active == 0)
-    gtk_label_set_angle (label, 0.0);
-  else 
-    gtk_label_set_angle (label, 90.0);
-}
-
-static void
 content_width_changed (GtkSpinButton *spin_button,
                        gpointer       data)
 {
@@ -214,26 +202,6 @@ scrollable_policy (void)
 
   g_signal_connect (G_OBJECT (widget), "value-changed",
                     G_CALLBACK (content_height_changed), swindow);
-
-  /* Add Label orientation control here */
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
-  gtk_widget_show (hbox);
-
-  widget = gtk_label_new ("label-flip");
-  gtk_widget_set_hexpand (widget, TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), widget);
-
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_set_hexpand (widget, TRUE);
-
-  gtk_box_pack_start (GTK_BOX (hbox), widget);
-  gtk_box_pack_start (GTK_BOX (cntl), hbox);
-
-  g_signal_connect (G_OBJECT (widget), "changed",
-                    G_CALLBACK (label_flip_changed), label);
 
   /* Add Kinetic scrolling control here */
   widget = gtk_check_button_new_with_label ("Kinetic scrolling");

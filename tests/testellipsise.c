@@ -55,10 +55,8 @@ static void
 scale_changed_cb (GtkRange *range,
 		  gpointer   data)
 {
-  double angle = gtk_range_get_value (range);
   GtkWidget *label = GTK_WIDGET (data);
   
-  gtk_label_set_angle (GTK_LABEL (label), angle);
   redraw_event_box (label);
 }
 

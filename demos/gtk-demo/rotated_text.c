@@ -204,8 +204,6 @@ do_rotated_text (GtkWidget *do_widget)
       label = gtk_label_new (text);
       gtk_container_add (GTK_CONTAINER (box), label);
 
-      gtk_label_set_angle (GTK_LABEL (label), 45);
-
       /* Set up fancy stuff on the label */
       layout = gtk_label_get_layout (GTK_LABEL (label));
       pango_cairo_context_set_shape_renderer (pango_layout_get_context (layout),

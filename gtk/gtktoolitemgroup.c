@@ -335,10 +335,8 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
 {
   GtkWidget *frame = gtk_bin_get_child (GTK_BIN (group->priv->header));
   GtkWidget *label_widget = gtk_bin_get_child (GTK_BIN (frame));
-  GtkWidget *widget = GTK_WIDGET (group);
   GtkToolItemGroupPrivate* priv = group->priv;
   gint dx = 0, dy = 0;
-  GtkTextDirection direction = gtk_widget_get_direction (widget);
 
   switch (gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group)))
     {
@@ -348,10 +346,6 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
         if (GTK_IS_LABEL (label_widget))
           {
             gtk_label_set_ellipsize (GTK_LABEL (label_widget), PANGO_ELLIPSIZE_NONE);
-            if (GTK_TEXT_DIR_RTL == direction)
-              gtk_label_set_angle (GTK_LABEL (label_widget), -90);
-            else
-              gtk_label_set_angle (GTK_LABEL (label_widget), 90);
           }
        break;
 
@@ -361,7 +355,6 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
         if (GTK_IS_LABEL (label_widget))
           {
             gtk_label_set_ellipsize (GTK_LABEL (label_widget), priv->ellipsize);
-            gtk_label_set_angle (GTK_LABEL (label_widget), 0);
           }
         break;
     }
