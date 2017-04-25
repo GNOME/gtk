@@ -688,7 +688,7 @@ static void
 gtk_frame_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -712,6 +712,7 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
   GtkFramePrivate *priv;
   GtkWidget *child;
   GtkAllocation new_allocation;
+  GtkAllocation clip;
 
   widget = gtk_css_gadget_get_owner (gadget);
   frame = GTK_FRAME (widget);
@@ -743,13 +744,17 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
       priv->label_allocation.width = width;
 
       gtk_widget_size_allocate (priv->label_widget, &priv->label_allocation);
+      gtk_widget_get_clip (priv->label_widget, &clip);
+      gdk_rectangle_union (out_clip, out_clip, &clip);
     }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, &priv->child_allocation);
-
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
+    {
+      gtk_widget_size_allocate (child, &priv->child_allocation);
+      gtk_widget_get_clip (child, &clip);
+      gdk_rectangle_union (out_clip, out_clip, &clip);
+    }
 }
 
 static void
