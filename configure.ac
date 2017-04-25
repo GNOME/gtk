@@ -9,7 +9,7 @@
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 
 m4_define([gtk_major_version], [3])
-m4_define([gtk_minor_version], [90])
+m4_define([gtk_minor_version], [91])
 m4_define([gtk_micro_version], [0])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
