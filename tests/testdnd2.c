@@ -71,13 +71,13 @@ image_drag_begin (GtkWidget      *widget,
 }
 
 static void
-window_destroyed (GtkWidget *window, gpointer data)
+drag_widget_destroyed (GtkWidget *image, gpointer data)
 {
   GtkWidget *widget = data;
 
   g_print ("drag widget destroyed\n");
-  g_object_unref (window);
-  g_object_set_data (G_OBJECT (widget), "drag window", NULL);
+  g_object_unref (image);
+  g_object_set_data (G_OBJECT (widget), "drag widget", NULL);
 }
 
 static void
@@ -95,33 +95,29 @@ window_drag_begin (GtkWidget      *widget,
                    gpointer        data)
 {
   GdkPixbuf *pixbuf;
-  GtkWidget *window;
   GtkWidget *image;
   int hotspot;
 
   hotspot = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (data), "hotspot"));
 
-  window = g_object_get_data (G_OBJECT (widget), "drag window");
-  if (window == NULL)
+  image = g_object_get_data (G_OBJECT (widget), "drag widget");
+  if (image == NULL)
     {
-      window = gtk_window_new (GTK_WINDOW_POPUP);
       g_print ("creating new drag widget\n");
       pixbuf = get_image_pixbuf (GTK_IMAGE (data));
       image = gtk_image_new_from_pixbuf (pixbuf);
       g_object_unref (pixbuf);
-      gtk_widget_show (image);
-      gtk_container_add (GTK_CONTAINER (window), image);
-      g_object_ref (window);
-      g_object_set_data (G_OBJECT (widget), "drag window", window);
-      g_signal_connect (window, "destroy", G_CALLBACK (window_destroyed), widget);
+      g_object_ref (image);
+      g_object_set_data (G_OBJECT (widget), "drag widget", image);
+      g_signal_connect (image, "destroy", G_CALLBACK (drag_widget_destroyed), widget);
     }
   else
     g_print ("reusing drag widget\n");
 
-  gtk_drag_set_icon_widget (context, window, 0, 0);
+  gtk_drag_set_icon_widget (context, image, 0, 0);
 
   if (hotspot == CENTER)
-    g_signal_connect (widget, "drag-end", G_CALLBACK (window_drag_end), window);
+    g_signal_connect (widget, "drag-end", G_CALLBACK (window_drag_end), image);
 }
 
 static void
