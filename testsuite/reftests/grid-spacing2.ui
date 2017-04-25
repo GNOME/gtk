@@ -18,7 +18,6 @@
               <object class="GtkLabel" id="one">
                 <property name="visible">True</property>
                 <property name="label">One</property>
-                <property name="angle">90</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -29,7 +28,6 @@
               <object class="GtkLabel" id="two">
                 <property name="visible">True</property>
                 <property name="label">Two</property>
-                <property name="angle">90</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -40,7 +38,6 @@
               <object class="GtkLabel" id="three">
                 <property name="visible">True</property>
                 <property name="label">Three</property>
-                <property name="angle">90</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -63,7 +60,6 @@
               <object class="GtkLabel" id="long">
                 <property name="visible">True</property>
                 <property name="label">Verylongtext</property>
-                <property name="angle">90</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -74,7 +70,6 @@
               <object class="GtkLabel" id="short">
                 <property name="visible">True</property>
                 <property name="label">Short</property>
-                <property name="angle">90</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -96,7 +91,6 @@
               <object class="GtkLabel" id="a">
                 <property name="visible">True</property>
                 <property name="label">A</property>
-                <property name="angle">90</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -108,7 +102,6 @@
                 <property name="visible">True</property>
                 <property name="label">B</property>
                 <property name="vexpand">True</property>
-                <property name="angle">90</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -119,7 +112,6 @@
               <object class="GtkLabel" id="c">
                 <property name="visible">True</property>
                 <property name="label">C</property>
-                <property name="angle">90</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

@@ -422,7 +422,6 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	    {
               gfloat align;
 
-              gtk_label_set_angle (GTK_LABEL (label), 0);
               align = gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button));
               if (align < 0.4)
                 gtk_widget_set_halign (label, GTK_ALIGN_START);
@@ -436,10 +435,6 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
               gfloat align;
 
               gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_NONE);
-	      if (gtk_widget_get_direction (GTK_WIDGET (tool_item)) == GTK_TEXT_DIR_RTL)
-	        gtk_label_set_angle (GTK_LABEL (label), -90);
-	      else
-	        gtk_label_set_angle (GTK_LABEL (label), 90);
               align = gtk_tool_item_get_text_alignment (GTK_TOOL_ITEM (button));
               if (align < 0.4)
                 gtk_widget_set_valign (label, GTK_ALIGN_END);

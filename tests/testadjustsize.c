@@ -24,7 +24,6 @@ static GtkWidget *test_window;
 
 enum {
   TEST_WIDGET_LABEL,
-  TEST_WIDGET_VERTICAL_LABEL,
   TEST_WIDGET_WRAP_LABEL,
   TEST_WIDGET_IMAGE,
   TEST_WIDGET_BUTTON,
@@ -41,15 +40,11 @@ create_image (void)
 }
 
 static GtkWidget*
-create_label (gboolean vertical,
-              gboolean wrap)
+create_label (gboolean wrap)
 {
   GtkWidget *widget;
 
   widget = gtk_label_new ("This is a label, label label label");
-
-  if (vertical)
-    gtk_label_set_angle (GTK_LABEL (widget), 90);
 
   if (wrap)
     gtk_label_set_line_wrap (GTK_LABEL (widget), TRUE);
@@ -78,9 +73,8 @@ open_test_window (void)
   gtk_window_set_resizable (GTK_WINDOW (test_window), FALSE);
 
   test_widgets[TEST_WIDGET_IMAGE] = create_image ();
-  test_widgets[TEST_WIDGET_LABEL] = create_label (FALSE, FALSE);
-  test_widgets[TEST_WIDGET_VERTICAL_LABEL] = create_label (TRUE, FALSE);
-  test_widgets[TEST_WIDGET_WRAP_LABEL] = create_label (FALSE, TRUE);
+  test_widgets[TEST_WIDGET_LABEL] = create_label (FALSE);
+  test_widgets[TEST_WIDGET_WRAP_LABEL] = create_label (TRUE);
   test_widgets[TEST_WIDGET_BUTTON] = create_button ();
 
   grid = gtk_grid_new ();

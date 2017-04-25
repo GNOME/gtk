@@ -262,7 +262,6 @@ struct _GtkLabelPrivate
   gchar   *label;
   gchar   *text;
 
-  gdouble  angle;
   gfloat   xalign;
   gfloat   yalign;
 
@@ -273,7 +272,6 @@ struct _GtkLabelPrivate
   guint    use_markup         : 1;
   guint    ellipsize          : 3;
   guint    single_line_mode   : 1;
-  guint    have_transform     : 1;
   guint    in_click           : 1;
   guint    wrap_mode          : 3;
   guint    pattern_set        : 1;
@@ -376,7 +374,6 @@ enum {
   PROP_ELLIPSIZE,
   PROP_WIDTH_CHARS,
   PROP_SINGLE_LINE_MODE,
-  PROP_ANGLE,
   PROP_MAX_WIDTH_CHARS,
   PROP_TRACK_VISITED_LINKS,
   PROP_LINES,
@@ -386,11 +383,6 @@ enum {
 };
 
 static GParamSpec *label_props[NUM_PROPERTIES] = { NULL, };
-
-/* When rotating ellipsizable text we want the natural size to request 
- * more to ensure the label wont ever ellipsize in an allocation of full natural size.
- * */
-#define ROTATION_ELLIPSIZE_PADDING 2
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -983,24 +975,6 @@ gtk_label_class_init (GtkLabelClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkLabel:angle:
-   * 
-   * The angle that the baseline of the label makes with the horizontal,
-   * in degrees, measured counterclockwise. An angle of 90 reads from
-   * from bottom to top, an angle of 270, from top to bottom. Ignored
-   * if the label is selectable.
-   *
-   * Since: 2.6
-   **/
-  label_props[PROP_ANGLE] =
-      g_param_spec_double ("angle",
-                           P_("Angle"),
-                           P_("Angle at which the label is rotated"),
-                           0.0, 360.0,
-                           0.0,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkLabel:max-width-chars:
    *
    * The desired maximum width of the label, in characters. If this property
@@ -1231,9 +1205,6 @@ gtk_label_set_property (GObject      *object,
     case PROP_SINGLE_LINE_MODE:
       gtk_label_set_single_line_mode (label, g_value_get_boolean (value));
       break;	  
-    case PROP_ANGLE:
-      gtk_label_set_angle (label, g_value_get_double (value));
-      break;
     case PROP_MAX_WIDTH_CHARS:
       gtk_label_set_max_width_chars (label, g_value_get_int (value));
       break;
@@ -1310,9 +1281,6 @@ gtk_label_get_property (GObject     *object,
       break;
     case PROP_SINGLE_LINE_MODE:
       g_value_set_boolean (value, gtk_label_get_single_line_mode (label));
-      break;
-    case PROP_ANGLE:
-      g_value_set_double (value, gtk_label_get_angle (label));
       break;
     case PROP_MAX_WIDTH_CHARS:
       g_value_set_int (value, gtk_label_get_max_width_chars (label));
@@ -3363,83 +3331,16 @@ static void
 gtk_label_update_layout_width (GtkLabel *label)
 {
   GtkLabelPrivate *priv = label->priv;
-  GtkWidget *widget = GTK_WIDGET (label);
 
   g_assert (priv->layout);
 
   if (priv->ellipsize || priv->wrap)
     {
       GtkAllocation allocation;
-      PangoRectangle logical;
-      gint width, height;
 
       gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
 
-      width = allocation.width;
-      height = allocation.height;
-
-      if (priv->have_transform)
-        {
-          PangoContext *context = gtk_widget_get_pango_context (widget);
-          const PangoMatrix *matrix = pango_context_get_matrix (context);
-          const gdouble dx = matrix->xx; /* cos (M_PI * angle / 180) */
-          const gdouble dy = matrix->xy; /* sin (M_PI * angle / 180) */
-
-          pango_layout_set_width (priv->layout, -1);
-          pango_layout_get_pixel_extents (priv->layout, NULL, &logical);
-
-          if (fabs (dy) < 0.01)
-            {
-              if (logical.width > width)
-                pango_layout_set_width (priv->layout, width * PANGO_SCALE);
-            }
-          else if (fabs (dx) < 0.01)
-            {
-              if (logical.width > height)
-                pango_layout_set_width (priv->layout, height * PANGO_SCALE);
-            }
-          else
-            {
-              gdouble x0, y0, x1, y1, length;
-              gboolean vertical;
-              gint cy;
-
-              x0 = width / 2;
-              y0 = dx ? x0 * dy / dx : G_MAXDOUBLE;
-              vertical = fabs (y0) > height / 2.0;
-
-              if (vertical)
-                {
-                  y0 = height/2;
-                  x0 = dy ? y0 * dx / dy : G_MAXDOUBLE;
-                }
-
-              length = 2 * sqrt (x0 * x0 + y0 * y0);
-              pango_layout_set_width (priv->layout, rint (length * PANGO_SCALE));
-              pango_layout_get_pixel_size (priv->layout, NULL, &cy);
-
-              x1 = +dy * cy/2;
-              y1 = -dx * cy/2;
-
-              if (vertical)
-                {
-                  y0 = height/2 + y1 - y0;
-                  x0 = -y0 * dx/dy;
-                }
-              else
-                {
-                  x0 = width/2 + x1 - x0;
-                  y0 = -x0 * dy/dx;
-                }
-
-              length = length - sqrt (x0 * x0 + y0 * y0) * 2;
-              pango_layout_set_width (priv->layout, rint (length * PANGO_SCALE));
-            }
-        }
-      else
-        {
-          pango_layout_set_width (priv->layout, width * PANGO_SCALE);
-        }
+      pango_layout_set_width (priv->layout, allocation.width * PANGO_SCALE);
     }
   else
     {
@@ -3523,29 +3424,6 @@ gtk_label_ensure_layout (GtkLabel *label)
   if (!priv->layout)
     {
       PangoAlignment align = PANGO_ALIGN_LEFT; /* Quiet gcc */
-      gdouble angle = gtk_label_get_angle (label);
-
-      if (angle != 0.0 && !priv->select_info)
-	{
-          PangoMatrix matrix = PANGO_MATRIX_INIT;
-
-	  /* We rotate the standard singleton PangoContext for the widget,
-	   * depending on the fact that it's meant pretty much exclusively
-	   * for our use.
-	   */
-	  pango_matrix_rotate (&matrix, angle);
-
-	  pango_context_set_matrix (gtk_widget_get_pango_context (widget), &matrix);
-
-	  priv->have_transform = TRUE;
-	}
-      else
-	{
-	  if (priv->have_transform)
-	    pango_context_set_matrix (gtk_widget_get_pango_context (widget), NULL);
-
-	  priv->have_transform = FALSE;
-	}
 
       priv->layout = gtk_widget_create_pango_layout (widget, priv->text);
 
@@ -3585,43 +3463,35 @@ static GtkSizeRequestMode
 gtk_label_get_request_mode (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
-  gdouble angle;
-
-  angle = gtk_label_get_angle (label);
 
   if (label->priv->wrap)
-    return (angle == 90 || angle == 270)
-           ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT
-           : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+    return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 
   return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
 
 static void
-get_size_for_allocation (GtkLabel *label,
-                         gint      allocation,
-                         gint     *minimum_size,
-                         gint     *natural_size,
-			 gint     *minimum_baseline,
-                         gint     *natural_baseline)
+get_height_for_width (GtkLabel *label,
+                      gint      width,
+                      gint     *minimum_height,
+                      gint     *natural_height,
+                      gint     *minimum_baseline,
+                      gint     *natural_baseline)
 {
   PangoLayout *layout;
   gint text_height, baseline;
 
-  layout = gtk_label_get_measuring_layout (label, NULL, allocation * PANGO_SCALE);
+  layout = gtk_label_get_measuring_layout (label, NULL, width * PANGO_SCALE);
 
   pango_layout_get_pixel_size (layout, NULL, &text_height);
 
-  *minimum_size = text_height;
-  *natural_size = text_height;
+  *minimum_height = text_height;
+  *natural_height = text_height;
 
-  if (minimum_baseline || natural_baseline)
-    {
-      baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
-      *minimum_baseline = baseline;
-      *natural_baseline = baseline;
-    }
+  baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
+  *minimum_baseline = baseline;
+  *natural_baseline = baseline;
 
   g_object_unref (layout);
 }
@@ -3724,41 +3594,10 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
 			      gint           *natural_baseline)
 {
   GtkLabel      *label = GTK_LABEL (widget);
-  GtkLabelPrivate  *priv = label->priv;
   PangoRectangle widest_rect;
   PangoRectangle smallest_rect;
 
   gtk_label_get_preferred_layout_size (label, &smallest_rect, &widest_rect);
-
-  /* Now that we have minimum and natural sizes in pango extents, apply a possible transform */
-  if (priv->have_transform)
-    {
-      PangoContext *context;
-      const PangoMatrix *matrix;
-
-      context = pango_layout_get_context (priv->layout);
-      matrix = pango_context_get_matrix (context);
-
-      pango_matrix_transform_rectangle (matrix, &widest_rect);
-      pango_matrix_transform_rectangle (matrix, &smallest_rect);
-
-      /* Bump the size in case of ellipsize to ensure pango has
-       * enough space in the angles (note, we could alternatively set the
-       * layout to not ellipsize when we know we have been allocated our
-       * full size, or it may be that pango needs a fix here).
-       */
-      if (priv->ellipsize && priv->angle != 0 && priv->angle != 90 && 
-          priv->angle != 180 && priv->angle != 270 && priv->angle != 360)
-        {
-          /* For some reason we only need this at about 110 degrees, and only
-           * when gaining in height
-           */
-          widest_rect.height += ROTATION_ELLIPSIZE_PADDING * 2 * PANGO_SCALE;
-          widest_rect.width  += ROTATION_ELLIPSIZE_PADDING * 2 * PANGO_SCALE;
-          smallest_rect.height += ROTATION_ELLIPSIZE_PADDING * 2 * PANGO_SCALE;
-          smallest_rect.width  += ROTATION_ELLIPSIZE_PADDING * 2 * PANGO_SCALE;
-        }
-    }
 
   widest_rect.width  = PANGO_PIXELS_CEIL (widest_rect.width);
   widest_rect.height = PANGO_PIXELS_CEIL (widest_rect.height);
@@ -3768,27 +3607,9 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      /* Note, we cant use get_size_for_allocation() when rotating
-       * ellipsized labels.
-       */
-      if (!(priv->ellipsize && priv->have_transform) &&
-          (priv->angle == 90 || priv->angle == 270))
-        {
-          /* Doing a h4w request on a rotated label here, return the
-           * required width for the minimum height.
-           */
-          get_size_for_allocation (label,
-                                   smallest_rect.height,
-                                   minimum_size, natural_size,
-				   NULL, NULL);
-
-        }
-      else
-        {
-          /* Normal desired width */
-          *minimum_size = smallest_rect.width;
-          *natural_size = widest_rect.width;
-        }
+      /* Normal desired width */
+      *minimum_size = smallest_rect.width;
+      *natural_size = widest_rect.width;
 
       if (minimum_baseline)
         *minimum_baseline = -1;
@@ -3798,36 +3619,8 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
-      /* Note, we cant use get_size_for_allocation() when rotating
-       * ellipsized labels.
-       */
-      if (!(priv->ellipsize && priv->have_transform) &&
-          (priv->angle == 0 || priv->angle == 180 || priv->angle == 360))
-        {
-          /* Doing a w4h request on a label here, return the required
-           * height for the minimum width.
-           */
-          get_size_for_allocation (label,
-                                   widest_rect.width,
-                                   minimum_size, natural_size,
-				   minimum_baseline, natural_baseline);
-
-	  if (priv->angle == 180)
-	    {
-	      if (minimum_baseline)
-		*minimum_baseline = *minimum_size - *minimum_baseline;
-	      if (natural_baseline)
-		*natural_baseline = *natural_size - *natural_baseline;
-	    }
-        }
-      else
-        {
-          /* A vertically rotated label does w4h, so return the base
-           * desired height (text length)
-           */
-          *minimum_size = MIN (smallest_rect.height, widest_rect.height);
-          *natural_size = MAX (smallest_rect.height, widest_rect.height);
-        }
+      *minimum_size = MIN (smallest_rect.height, widest_rect.height);
+      *natural_size = MAX (smallest_rect.height, widest_rect.height);
     }
 }
 
@@ -3849,12 +3642,11 @@ gtk_label_measure (GtkCssGadget   *gadget,
   label = GTK_LABEL (widget);
   priv = label->priv;
 
-  if ((orientation == GTK_ORIENTATION_VERTICAL && for_size != -1 && priv->wrap && (priv->angle == 0 || priv->angle == 180 || priv->angle == 360)) ||
-      (orientation == GTK_ORIENTATION_HORIZONTAL && priv->wrap && (priv->angle == 90 || priv->angle == 270)))
+  if (orientation == GTK_ORIENTATION_VERTICAL && for_size != -1 && priv->wrap)
     {
       gtk_label_clear_layout (label);
 
-      get_size_for_allocation (label, for_size, minimum, natural, minimum_baseline, natural_baseline);
+      get_height_for_width (label, for_size, minimum, natural, minimum_baseline, natural_baseline);
     }
   else
     gtk_label_get_preferred_size (widget, orientation, minimum, natural, minimum_baseline, natural_baseline);
@@ -3901,13 +3693,6 @@ get_layout_location (GtkLabel  *label,
 
   pango_layout_get_extents (priv->layout, NULL, &logical);
 
-  if (priv->have_transform)
-    {
-      PangoContext *context = gtk_widget_get_pango_context (widget);
-      const PangoMatrix *matrix = pango_context_get_matrix (context);
-      pango_matrix_transform_rectangle (matrix, &logical);
-    }
-
   pango_extents_to_pixels (&logical, NULL);
 
   req_width  = logical.width;
@@ -3920,7 +3705,7 @@ get_layout_location (GtkLabel  *label,
   x = floor (allocation.x + xalign * (allocation.width - req_width) - logical.x);
 
   baseline_offset = 0;
-  if (baseline != -1 && !priv->have_transform)
+  if (baseline != -1)
     {
       layout_baseline = pango_layout_get_baseline (priv->layout) / PANGO_SCALE;
       baseline_offset = baseline - layout_baseline;
@@ -5463,66 +5248,6 @@ gtk_label_get_selectable (GtkLabel *label)
   priv = label->priv;
 
   return priv->select_info && priv->select_info->selectable;
-}
-
-/**
- * gtk_label_set_angle:
- * @label: a #GtkLabel
- * @angle: the angle that the baseline of the label makes with
- *   the horizontal, in degrees, measured counterclockwise
- * 
- * Sets the angle of rotation for the label. An angle of 90 reads from
- * from bottom to top, an angle of 270, from top to bottom. The angle
- * setting for the label is ignored if the label is selectable,
- * wrapped, or ellipsized.
- *
- * Since: 2.6
- **/
-void
-gtk_label_set_angle (GtkLabel *label,
-		     gdouble   angle)
-{
-  GtkLabelPrivate *priv;
-
-  g_return_if_fail (GTK_IS_LABEL (label));
-
-  priv = label->priv;
-
-  /* Canonicalize to [0,360]. We don't canonicalize 360 to 0, because
-   * double property ranges are inclusive, and changing 360 to 0 would
-   * make a property editor behave strangely.
-   */
-  if (angle < 0 || angle > 360.0)
-    angle = angle - 360. * floor (angle / 360.);
-
-  if (priv->angle != angle)
-    {
-      priv->angle = angle;
-      
-      gtk_label_clear_layout (label);
-      gtk_widget_queue_resize (GTK_WIDGET (label));
-
-      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_ANGLE]);
-    }
-}
-
-/**
- * gtk_label_get_angle:
- * @label: a #GtkLabel
- * 
- * Gets the angle of rotation for the label. See
- * gtk_label_set_angle().
- * 
- * Returns: the angle of rotation for the label
- *
- * Since: 2.6
- **/
-gdouble
-gtk_label_get_angle  (GtkLabel *label)
-{
-  g_return_val_if_fail (GTK_IS_LABEL (label), 0.0);
-  
-  return label->priv->angle;
 }
 
 static void

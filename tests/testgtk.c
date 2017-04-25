@@ -1371,73 +1371,6 @@ void create_labels (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-static void
-on_angle_scale_changed (GtkRange *range,
-			GtkLabel *label)
-{
-  gtk_label_set_angle (GTK_LABEL (label), gtk_range_get_value (range));
-}
-
-static void
-create_rotated_label (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *content_area;
-  GtkWidget *vbox;
-  GtkWidget *hscale;
-  GtkWidget *label;  
-  GtkWidget *scale_label;  
-  GtkWidget *scale_hbox;  
-
-  if (!window)
-    {
-      window = gtk_dialog_new_with_buttons ("Rotated Label",
-					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
-					    "_Close", GTK_RESPONSE_CLOSE,
-					    NULL);
-
-      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
-
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));
-
-      g_signal_connect (window, "response",
-			G_CALLBACK (gtk_widget_destroy), NULL);
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed), &window);
-
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_box_pack_start (GTK_BOX (content_area), vbox);
-
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), "Hello World\n<i>Rotate</i> <span underline='single' foreground='blue'>me</span>");
-      gtk_box_pack_start (GTK_BOX (vbox), label);
-
-      scale_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), scale_hbox);
-
-      scale_label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (scale_label), "<i>Angle: </i>");
-      gtk_box_pack_start (GTK_BOX (scale_hbox), scale_label);
-
-      hscale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
-                                         0, 360, 5);
-      g_signal_connect (hscale, "value-changed",
-			G_CALLBACK (on_angle_scale_changed), label);
-
-      gtk_range_set_value (GTK_RANGE (hscale), 45);
-      gtk_widget_set_size_request (hscale, 200, -1);
-      gtk_box_pack_start (GTK_BOX (scale_hbox), hscale);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
-
 #define DEFAULT_TEXT_RADIUS 200
 
 static void
@@ -8637,7 +8570,6 @@ struct {
   { "radio buttons", create_radio_buttons },
   { "range controls", create_range_controls },
   { "reparent", create_reparent },
-  { "rotated label", create_rotated_label },
   { "rotated text", create_rotated_text },
   { "saved position", create_saved_position },
   { "scrolled windows", create_scrolled_windows },

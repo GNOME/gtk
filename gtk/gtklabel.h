@@ -177,11 +177,6 @@ void     gtk_label_set_selectable                 (GtkLabel         *label,
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_label_get_selectable                 (GtkLabel         *label);
 GDK_AVAILABLE_IN_ALL
-void     gtk_label_set_angle                      (GtkLabel         *label,
-						   gdouble           angle);
-GDK_AVAILABLE_IN_ALL
-gdouble  gtk_label_get_angle                      (GtkLabel         *label);
-GDK_AVAILABLE_IN_ALL
 void     gtk_label_select_region                  (GtkLabel         *label,
 						   gint              start_offset,
 						   gint              end_offset);

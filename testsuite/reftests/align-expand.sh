@@ -50,7 +50,6 @@ cat << EOF
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label">$hexpand</property>
-            <property name="angle">90</property>
           </object>
           <packing>
             <property name="left_attach">$y</property>
@@ -64,7 +63,6 @@ cat << EOF
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label">$halign</property>
-            <property name="angle">90</property>
           </object>
           <packing>
             <property name="left_attach">$y</property>

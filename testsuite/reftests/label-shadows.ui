@@ -30,7 +30,6 @@
             <property name="halign">start</property>
             <property name="valign">start</property>
             <property name="label" translatable="yes">ABC</property>
-            <property name="angle">90</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -46,7 +45,6 @@
             <property name="halign">start</property>
             <property name="valign">start</property>
             <property name="label" translatable="yes">ABC</property>
-            <property name="angle">180</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -62,7 +60,6 @@
             <property name="halign">start</property>
             <property name="valign">start</property>
             <property name="label" translatable="yes">ABC</property>
-            <property name="angle">270</property>
           </object>
           <packing>
             <property name="left_attach">0</property>

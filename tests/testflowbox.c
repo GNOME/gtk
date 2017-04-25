@@ -35,7 +35,6 @@ enum {
 
 static GtkFlowBox    *the_flowbox       = NULL;
 static gint           items_type       = SIMPLE_ITEMS;
-static GtkOrientation text_orientation = GTK_ORIENTATION_HORIZONTAL;
 
 static void
 populate_flowbox_simple (GtkFlowBox *flowbox)
@@ -54,8 +53,6 @@ populate_flowbox_simple (GtkFlowBox *flowbox)
 
       gtk_container_add (GTK_CONTAINER (frame), widget);
 
-      if (text_orientation == GTK_ORIENTATION_VERTICAL)
-        gtk_label_set_angle (GTK_LABEL (widget), 90);
       g_object_set_data_full (G_OBJECT (frame), "id", (gpointer)g_strdup (text), g_free);
       gtk_container_add (GTK_CONTAINER (flowbox), frame);
 
@@ -148,9 +145,6 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
       gtk_widget_show (widget);
       gtk_widget_show (frame);
 
-      if (text_orientation == GTK_ORIENTATION_VERTICAL)
-        gtk_label_set_angle (GTK_LABEL (widget), 90);
-
       gtk_container_add (GTK_CONTAINER (frame), widget);
 
       gtk_label_set_line_wrap (GTK_LABEL (widget), TRUE);
@@ -183,9 +177,6 @@ populate_flowbox_images (GtkFlowBox *flowbox)
 
       gtk_container_add (GTK_CONTAINER (widget), image);
       gtk_container_add (GTK_CONTAINER (widget), label);
-
-      if (text_orientation == GTK_ORIENTATION_VERTICAL)
-        gtk_label_set_angle (GTK_LABEL (widget), 90);
 
       g_object_set_data_full (G_OBJECT (widget), "id", (gpointer)g_strdup (text), g_free);
       gtk_container_add (GTK_CONTAINER (flowbox), widget);
@@ -293,15 +284,6 @@ items_changed (GtkComboBox   *box,
                GtkFlowBox *flowbox)
 {
   items_type = gtk_combo_box_get_active (box);
-
-  populate_items (flowbox);
-}
-
-static void
-text_orientation_changed (GtkComboBox   *box,
-                          GtkFlowBox *flowbox)
-{
-  text_orientation = gtk_combo_box_get_active (box);
 
   populate_items (flowbox);
 }
@@ -633,20 +615,6 @@ create_window (void)
 
   g_signal_connect (G_OBJECT (widget), "changed",
                     G_CALLBACK (items_changed), flowbox);
-
-
-  /* Add Text Orientation control */
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
-  gtk_widget_show (widget);
-
-  gtk_widget_set_tooltip_text (widget, "Set the item's text orientation");
-  gtk_box_pack_start (GTK_BOX (items_cntl), widget);
-
-  g_signal_connect (G_OBJECT (widget), "changed",
-                    G_CALLBACK (text_orientation_changed), flowbox);
 
   populate_items (GTK_FLOW_BOX (flowbox));
 

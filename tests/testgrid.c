@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 static GtkWidget *
-oriented_test_widget (const gchar *label, const gchar *color, gdouble angle)
+oriented_test_widget (const gchar *label, const gchar *color)
 {
   GtkWidget *box;
   GtkWidget *widget;
@@ -9,7 +9,6 @@ oriented_test_widget (const gchar *label, const gchar *color, gdouble angle)
   gchar *data;
 
   widget = gtk_label_new (label);
-  gtk_label_set_angle (GTK_LABEL (widget), angle);
   box = gtk_event_box_new ();
   provider = gtk_css_provider_new ();
   data = g_strdup_printf ("GtkEventBox { background-color: %s; }", color);
@@ -27,7 +26,7 @@ oriented_test_widget (const gchar *label, const gchar *color, gdouble angle)
 static GtkWidget *
 test_widget (const gchar *label, const gchar *color)
 {
-  return oriented_test_widget (label, color, 0.0);
+  return oriented_test_widget (label, color);
 }
 
 static GtkOrientation o;
@@ -262,7 +261,7 @@ scrolling (void)
   gtk_container_add (GTK_CONTAINER (sw), viewport);
   gtk_container_add (GTK_CONTAINER (viewport), grid);
 
-  child = oriented_test_widget ("#800080", "#800080", -45.0);
+  child = oriented_test_widget ("#800080", "#800080");
   gtk_grid_attach (GTK_GRID (grid), child, 0, 0, 1, 1);
   gtk_widget_set_hexpand (child, TRUE);
   gtk_widget_set_vexpand (child, TRUE);
@@ -281,7 +280,7 @@ scrolling (void)
     {
       gchar *color;
       color = g_strdup_printf ("#%02x00%02x", 128 - 8*i, 128 + 8*i);
-      child = oriented_test_widget (color, color, -90.0);
+      child = oriented_test_widget (color, color);
       gtk_grid_attach (GTK_GRID (grid), child, i, 0, 1, i);
       gtk_widget_set_vexpand (child, TRUE);
       g_free (color);
