@@ -3855,8 +3855,7 @@ gtk_label_measure (GtkCssGadget   *gadget,
   if ((orientation == GTK_ORIENTATION_VERTICAL && for_size != -1 && priv->wrap && (priv->angle == 0 || priv->angle == 180 || priv->angle == 360)) ||
       (orientation == GTK_ORIENTATION_HORIZONTAL && priv->wrap && (priv->angle == 90 || priv->angle == 270)))
     {
-      if (priv->wrap)
-        gtk_label_clear_layout (label);
+      gtk_label_clear_layout (label);
 
       get_size_for_allocation (label, for_size, minimum, natural, minimum_baseline, natural_baseline);
     }
