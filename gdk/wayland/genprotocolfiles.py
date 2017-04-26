@@ -12,9 +12,7 @@ out_file = sys.argv[3]
 #TODO: We can infer this optinon from the name of the output file!
 option   = sys.argv[4]
 
-
-
-pc = subprocess.Popen([scanner, option , in_file , out_file], stdout=subprocess.PIPE)
+pc = subprocess.Popen([scanner, option, in_file, out_file], stdout=subprocess.PIPE)
 (stdo, _) = pc.communicate()
 if pc.returncode != 0:
     sys.exit(pc.returncode)
@@ -24,7 +22,7 @@ content = ""
 with open(out_file, 'r') as content_file:
     content = content_file.read()
 
-content = content.replace("WL_EXPORT", "")
+content = content.replace('WL_EXPORT ', '')
 ofile = open(out_file, 'w')
 ofile.write(content)
 ofile.close()
