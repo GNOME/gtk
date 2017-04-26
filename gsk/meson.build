@@ -40,7 +40,7 @@ gsk_public_headers = files([
   'gsktypes.h',
 ])
 
-install_headers(gsk_public_headers, 'gsk.h', subdir : 'gtk-4.0/gsk')
+install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
 
 gsk_private_vulkan_shaders = []
 gsk_private_vulkan_compiled_shaders = []
@@ -97,53 +97,61 @@ if have_vulkan
   gsk_private_vulkan_shaders += gsk_private_vulkan_fragment_shaders
   gsk_private_vulkan_shaders += gsk_private_vulkan_vertex_shaders
 
-  foreach shader : gsk_private_vulkan_shaders
+  glslc = find_program('glslc', required: false)
+  foreach shader: gsk_private_vulkan_shaders
     basefn = shader.split('.').get(0)
     suffix = shader.split('.').get(1)
 
-    # FIXME: the compiled shaders seem to exist in the srcdir already, do we
-    # want to or need to add a target to create them with glslc? Do we need to
-    # check for glslc at all then?
-    #
-    # stage_arg = suffix == 'frag' ? '-fshader-stage=fragment' : '-fshader-stage=vertex'
-    # compiled_shader = custom_target('xyz', input : shader,
-    #   output : '@0@.@1@.spv'.format(basefn, suffix),
-    #   command: [glslc, stage_arg, '-DCLIP_NONE', '-o', '@OUTPUT@'])
+    stage_arg = suffix == 'frag' ? '-fshader-stage=fragment' : '-fshader-stage=vertex'
+    spv_shader = '@0@.@1@.spv'.format(basefn, suffix)
 
-    gsk_private_vulkan_compiled_shaders += '@0@.@1@.spv'.format(basefn, suffix)
+    if glslc.found()
+      compiled_shader = custom_target(spv_shader,
+                                      input: shader,
+                                      output: spv_shader,
+                                      command: [
+                                        glslc,
+                                        stage_arg,
+                                        '-DCLIP_NONE',
+                                        '-o', '@OUTPUT@'
+                                      ])
+    endif
+    gsk_private_vulkan_compiled_shaders += spv_shader
     gsk_private_vulkan_compiled_shaders += '@0@-clip.@1@.spv'.format(basefn, suffix)
     gsk_private_vulkan_compiled_shaders += '@0@-clip-rounded.@1@.spv'.format(basefn, suffix)
   endforeach
 
 endif # have_vulkan
 
-gsk_resources_xml = configure_file(output : 'gsk.resources.xml',
-  input : 'gen-gsk-gresources-xml.py',
-  command : [find_program('gen-gsk-gresources-xml.py'),
-             '@OUTPUT@',
-             gsk_private_source_shaders,
-             gsk_private_vulkan_compiled_shaders,
-             gsk_private_vulkan_shaders])
+gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
+                                   input: 'gen-gsk-gresources-xml.py',
+                                   command: [
+                                     find_program('gen-gsk-gresources-xml.py'),
+                                     '@OUTPUT@',
+                                     gsk_private_source_shaders,
+                                     gsk_private_vulkan_compiled_shaders,
+                                     gsk_private_vulkan_shaders
+                                   ])
 
 # FIXME: do we need this variable?
 gsk_sources = gsk_public_sources + gsk_private_sources
 
 gsk_enums = gnome.mkenums('gskenumtypes',
-  sources: gsk_public_headers,
-  c_template : 'gskenumtypes.c.template',
-  h_template : 'gskenumtypes.h.template',
-  install_dir : 'include/gtk-4.0/gsk',
-  install_header : true)
+                          sources: gsk_public_headers,
+                          c_template: 'gskenumtypes.c.template',
+                          h_template: 'gskenumtypes.h.template',
+                          install_dir: join_paths(gtk_includedir, 'gtk-4.0/gsk'),
+                          install_header: true)
 
 gskenum_h = gsk_enums[1]
 
 gskresources = gnome.compile_resources('gskresources',
-  gsk_resources_xml,
-  source_dir: '.',
-  c_name: '_gsk',
-  extra_args: '--manual-register')
+                                       gsk_resources_xml,
+                                       source_dir: '.',
+                                       c_name: '_gsk',
+                                       extra_args: [ '--manual-register', ])
 
-gsk_gen_headers = [gskenum_h]
+gsk_gen_headers = [ gskenum_h, ]
 
 gsk_deps = [
   graphene_dep,
@@ -154,18 +162,21 @@ gsk_deps = [
 ]
 
 libgsk = static_library('gsk',
-  sources: [gsk_sources, gsk_enums, gskresources],
-  dependencies: gsk_deps,
-  include_directories: [confinc],
-  c_args: ['-DGSK_COMPILATION', '-DG_LOG_DOMAIN="Gsk"'] + common_cflags,
-  link_with: libgdk,
-  link_args: common_ldflags)
+                        sources: [ gsk_sources, gsk_enums, gskresources, ],
+                        dependencies: gsk_deps,
+                        include_directories: [ confinc, ],
+                        c_args: [
+                          '-DGSK_COMPILATION',
+                          '-DG_LOG_DOMAIN="Gsk"',
+                          '-DG_LOG_STRUCTURED=1',
+                        ] + common_cflags,
+                        link_with: libgdk,
+                        link_args: common_ldflags)
 
 # We don't have link_with: to internal static libs here on purpose, just
 # list the dependencies and generated headers and such, for use in the
 # "public" libgtk_dep used by internal executables.
-libgsk_dep = declare_dependency(
-  depends: gsk_sources,
-  include_directories: [confinc],
-  sources: [gskenum_h, gskresources],
-  dependencies: libgdk_dep)
+libgsk_dep = declare_dependency(depends: gsk_sources,
+                                include_directories: [ confinc, ],
+                                sources: [ gskenum_h, gskresources, ],
+                                dependencies: libgdk_dep)
