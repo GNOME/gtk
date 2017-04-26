@@ -98,7 +98,7 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   goto fallback; \
 }G_STMT_END
 
-void
+static void
 gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
                                  GskVulkanRender               *render,
                                  const GskVulkanPushConstants  *constants,
