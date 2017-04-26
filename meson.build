@@ -95,10 +95,13 @@ endif
 os_unix = not os_win32
 
 gtk_prefix = get_option('prefix')
+gtk_includedir = join_paths(gtk_prefix, get_option('includedir'))
 gtk_libdir = join_paths(gtk_prefix, get_option('libdir'))
 gtk_datadir = join_paths(gtk_prefix, get_option('datadir'))
 gtk_localedir = join_paths(gtk_prefix, get_option('localedir'))
 gtk_sysconfdir = join_paths(gtk_prefix, get_option('sysconfdir'))
+gtk_applicationsdir = join_paths(gtk_datadir, 'applications')
+gtk_schemasdir = join_paths(gtk_datadir, 'glib-2.0/schemas')
 
 cc = meson.get_compiler('c')
 
@@ -584,3 +587,10 @@ if get_option('enable-documentation')
   subdir('docs/tools')
   subdir('docs/reference')
 endif
+
+# Keep this in sync with post-install.sh expected arguments
+meson.add_install_script('build-aux/meson/post-install.sh',
+                         gtk_version,
+                         gtk_binary_version,
+                         gtk_libdir,
+                         gtk_datadir)
