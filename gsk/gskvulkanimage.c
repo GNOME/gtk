@@ -647,7 +647,7 @@ gsk_vulkan_image_download (GskVulkanImage    *self,
   return texture;
 }
 
-void
+static void
 gsk_vulkan_image_finalize (GObject *object)
 {
   GskVulkanImage *self = GSK_VULKAN_IMAGE (object);
