@@ -7211,19 +7211,6 @@ search_engine_finished_cb (GtkSearchEngine *engine,
     }
 }
 
-/* Displays a generic error when we cannot create a GtkSearchEngine.
- * It would be better if _gtk_search_engine_new() gave us a GError
- * with a better message, but it doesn’t do that right now.
- */
-static void
-search_error_could_not_create_client (GtkFileChooserWidget *impl)
-{
-  error_message (impl,
-                 _("Could not start the search process"),
-                 _("The program was not able to create a connection to the indexer "
-                   "daemon. Please make sure it is running."));
-}
-
 static void
 search_engine_error_cb (GtkSearchEngine *engine,
                         const gchar     *message,
@@ -7349,14 +7336,6 @@ search_start_query (GtkFileChooserWidget *impl,
 
   if (priv->search_engine == NULL)
     priv->search_engine = _gtk_search_engine_new ();
-
-  if (!priv->search_engine)
-    {
-      set_busy_cursor (impl, FALSE);
-      gtk_widget_hide (priv->search_spinner);
-      search_error_could_not_create_client (impl); /* lame; we don't get an error code or anything */
-      return;
-    }
 
   if (!priv->search_query)
     {
