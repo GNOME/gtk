@@ -895,7 +895,7 @@ libgtk_dep = declare_dependency(
   link_args: common_ldflags)
 
 # Introspection
-if not meson.is_cross_build()
+if false
   gir_args = [
     '--c-include=gtk/gtk.h',
   ]
