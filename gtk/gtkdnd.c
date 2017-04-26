@@ -1233,6 +1233,20 @@ gtk_drag_dest_drop (GtkWidget      *widget,
  * Source side *
  ***************/
 
+
+static gboolean
+gtk_drag_is_managed (GtkWidget *source_widget)
+{
+  return
+#ifdef GDK_WINDOWING_X11
+    GDK_IS_X11_DISPLAY (gtk_widget_get_display (source_widget)) ||
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+    GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (source_widget)) ||
+#endif
+    FALSE;
+}
+
 /* Like gtk_drag_begin(), but also takes a GtkIconHelper
  * so that we can set the icon from the source site information
  */
@@ -1258,16 +1272,9 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkWindow *ipc_window;
   gint start_x, start_y;
   GdkAtom selection;
-  gboolean managed = FALSE;
+  gboolean managed;
 
-  managed =
-#ifdef GDK_WINDOWING_X11
-    GDK_IS_X11_DISPLAY (gtk_widget_get_display (widget)) ||
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-    GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)) ||
-#endif
-    FALSE;
+  managed = gtk_drag_is_managed (widget);
 
   pointer = keyboard = NULL;
   ipc_widget = gtk_drag_get_ipc_widget (widget);
@@ -1545,6 +1552,22 @@ icon_widget_destroyed (GtkWidget         *widget,
 }
 
 static void
+gtk_drag_update_icon_window (GtkDragSourceInfo *info)
+{
+  if (!gtk_drag_is_managed (info->widget) && info->icon_window)
+    {
+      gtk_window_move (GTK_WINDOW (info->icon_window),
+                       info->cur_x - info->hot_x,
+                       info->cur_y - info->hot_y);
+
+      if (gtk_widget_get_visible (info->icon_window))
+        gdk_window_raise (gtk_widget_get_window (info->icon_window));
+      else
+        gtk_widget_show (info->icon_window);
+    }
+}
+
+static void
 gtk_drag_set_icon_widget_internal (GdkDragContext *context,
                                    GtkWidget      *widget,
                                    gint            hot_x,
@@ -1604,6 +1627,7 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
 
 out:
   gtk_drag_update_cursor (info);
+  gtk_drag_update_icon_window (info);
 }
 
 /**
@@ -2145,6 +2169,7 @@ gtk_drag_update_idle (gpointer data)
                                   info->possible_actions,
                                   &action, &possible_actions);
 
+      gtk_drag_update_icon_window (info);
       gdk_drag_find_window_for_screen (info->context,
                                        info->icon_window ? gtk_widget_get_window (info->icon_window) : NULL,
                                        info->cur_screen, info->cur_x, info->cur_y,
