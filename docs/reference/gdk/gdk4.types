@@ -1,5 +1,3 @@
-#include <gdk/gdk.h>
-
 gdk_app_launch_context_get_type
 gdk_cursor_get_type
 gdk_device_get_type

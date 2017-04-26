@@ -156,10 +156,9 @@ gnome.gtkdoc('gdk4',
 	       join_paths(meson.build_root(), 'gdk'),
 	     ],
              dependencies: libgtk_dep,
-             gobject_typesfile: 'gdk4.types',
+             gobject_typesfile: join_paths(meson.source_root(), 'docs/reference/gdk/gdk4.types'),
              scan_args: [
-               '--ignore-decorators=_GDK_EXTERN',
-	       '--ignore-decorators=G_GNUC_WARN_UNUSED_RESULT',
+               '--ignore-decorators=_GDK_EXTERN|G_GNUC_WARN_UNUSED_RESULT',
                '--ignore-headers=' + ' '.join(private_headers),
              ],
              fixxref_args: [
