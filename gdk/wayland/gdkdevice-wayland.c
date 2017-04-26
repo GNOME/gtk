@@ -2125,10 +2125,13 @@ deliver_key_event (GdkWaylandSeat *seat,
   _gdk_wayland_display_deliver_event (seat->display, event);
 
   GDK_NOTE (EVENTS,
-            g_message ("keyboard event, code %d, sym %d, "
-                       "string %s, mods 0x%x",
+            g_message ("keyboard %s event%s, code %d, sym %d, "
+                       "string %s, mods 0x%x, with %i key%s pressed",
+                       (state ? "press" : "release"),
+                       (from_key_repeat ? " (repeat)" : ""),
                        event->key.hardware_keycode, event->key.keyval,
-                       event->key.string, event->key.state));
+                       event->key.string, event->key.state,
+                       seat->nkeys, (seat->nkeys > 1 ? "s" : "")));
 
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
     return;
