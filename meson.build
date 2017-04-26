@@ -36,6 +36,7 @@ mirclient_req     = '>= 0.22.0'
 mircookie_req     = '>= 0.17.0'
 graphene_req      = '>= 1.5.1'
 epoxy_req         = '>= 1.0'
+xkbcommon_req     = '>= 0.2.0'
 
 gnome = import('gnome')
 
@@ -298,6 +299,7 @@ gskinc = include_directories('gsk')
 gtkinc = include_directories('gtk')
 testinc = include_directories('tests')
 
+# Dependencies
 glib_dep       = dependency('glib-2.0', version: glib_req)
 giounix_dep    = dependency('gio-unix-2.0', version: glib_req, required: false)
 pango_dep      = dependency('pango', version: pango_req)
@@ -310,7 +312,7 @@ epoxy_dep      = dependency('epoxy', version: epoxy_req)
 atk_dep        = dependency('atk', version: atk_req)
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req)
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
-xkbdep         = dependency('xkbcommon', version: '>= 0.2.0')
+xkbdep         = dependency('xkbcommon', version: xkbcommon_req)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback : ['graphene', 'graphene_dep'])
 
@@ -344,7 +346,7 @@ if wayland_enabled
   wayland_pkgs = [
     'wayland-client', wayland_req,
     'wayland-protocols', wayland_proto_req,
-    'xkbcommon', '>= 0.2.0',
+    'xkbcommon', xkbcommon_req,
     'wayland-cursor', wayland_req,
     'wayland-egl',
   ]
