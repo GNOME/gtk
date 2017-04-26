@@ -42,22 +42,22 @@ else
   included_immodules = included_immodules.split(',')
 endif
 
-foreach im : included_immodules
+foreach im: included_immodules
   if not all_immodules.contains(im)
     error('The specified input method "@0@" is not available (available methods: @1@)'.format(im, ', '.join(all_immodules)))
   endif
 endforeach
 
 immodules_subdir = 'gtk-4.0/@0@/immodules'.format(gtk_binary_version)
-immodules_install_dir = join_paths(get_option('libdir'), immodules_subdir)
+immodules_install_dir = join_paths(gtk_libdir, immodules_subdir)
 
-sysconfdir = join_paths(get_option('prefix'),get_option('sysconfdir'))
-mp_confdir = join_paths(sysconfdir, 'gtk-4.0')
+mp_confdir = join_paths(gtk_sysconfdir, 'gtk-4.0')
 mp_cargs = [
  '-DMULTIPRESS_LOCALEDIR=""', # FIXME: where is $(mplocaledir) ever set?
  '-DMULTIPRESS_CONFDIR="@0@"'.format(mp_confdir),
  '-DGDK_DISABLE_DEPRECATION_WARNINGS',
 ]
+
 install_data('im-multipress.conf', install_dir : mp_confdir)
 
 method_defs = [
@@ -81,7 +81,7 @@ method_defs = [
 inc_im_method_defs = []
 dyn_im_method_defs = []
 
-foreach m : method_defs
+foreach m: method_defs
   im = m.get(0)
   srcs = m.get(1)
   cargs = m.get(3, [])
@@ -90,7 +90,7 @@ foreach m : method_defs
   # only use backend-specific input methods for backends that are enabled
   if all_immodules.contains(im)
     # check for extra libs lazily
-    foreach libname : m.get(2, [])
+    foreach libname: m.get(2, [])
       libs += [cc.find_library(libname)]
     endforeach
 

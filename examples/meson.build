@@ -13,10 +13,12 @@ foreach ex : examples
   # TODO: name clash with testsuite/gtk/builder, rename one of the two
   example_name = ex == 'builder' ? 'builder_example' : ex
   executable(example_name, '@0@.c'.format(ex),
-    c_args : ['-DGDK_DISABLE_DEPRECATED',
-              '-DGTK_DISABLE_DEPRECATED',
-              '-DGTK_SRCDIR="@0@"'.format(meson.current_source_dir())],
-    dependencies: libgtk_dep)
+             c_args: [
+               '-DGDK_DISABLE_DEPRECATED',
+               '-DGTK_DISABLE_DEPRECATED',
+               '-DGTK_SRCDIR="@0@"'.format(meson.current_source_dir()),
+             ],
+             dependencies: libgtk_dep)
 endforeach
 
 subdir('bp')
