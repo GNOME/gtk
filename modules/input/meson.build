@@ -8,21 +8,26 @@
 build_dynamic_modules = false
 disable_modules = get_option('disable-modules')
 if not disable_modules
-  runcmd = run_command('pkg-config', '--variable=gmodule_supported', 'gmodule-no-export-2.0')
-  if runcmd.returncode() == 0
-    gmodule_supported = runcmd.stdout().strip()
-    if gmodule_supported == 'true'
-      build_dynamic_modules = true
-    else
-      message('Modules are not supported according to gmodule-no-export-2.0.pc')
-    endif
+  gmodule_supported = dependency('gmodule-no-export-2.0').get_pkgconfig_variable('gmodule_supported')
+  if gmodule_supported == 'true'
+    build_dynamic_modules = true
   else
-    message('WARNING: failed to query if modules are supported!')
+    message('Modules are not supported according to gmodule-no-export-2.0.pc')
   endif
 endif
 
-all_immodules = ['am-et', 'cedilla', 'cyrillic-translit', 'inuktitut',
-                 'ipa', 'multipress', 'thai', 'ti-er', 'ti-et', 'viqr']
+all_immodules = [
+  'am-et',
+  'cedilla',
+  'cyrillic-translit',
+  'inuktitut',
+  'ipa',
+  'multipress',
+  'thai',
+  'ti-er',
+  'ti-et',
+  'viqr',
+]
 
 all_immodules += backend_immodules
 
