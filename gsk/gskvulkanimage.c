@@ -259,7 +259,7 @@ gsk_vulkan_image_ensure_view (GskVulkanImage *self,
                                    &self->vk_image_view);
 }
 
-GskVulkanImage *
+static GskVulkanImage *
 gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
                                                    guchar            *data,
                                                    gsize              width,
@@ -364,7 +364,7 @@ gsk_vulkan_image_new_from_data_via_staging_buffer (GskVulkanUploader *uploader,
   return self;
 }
 
-GskVulkanImage *
+static GskVulkanImage *
 gsk_vulkan_image_new_from_data_via_staging_image (GskVulkanUploader *uploader,
                                                   guchar            *data,
                                                   gsize              width,
@@ -483,7 +483,7 @@ gsk_vulkan_image_new_from_data_via_staging_image (GskVulkanUploader *uploader,
   return self;
 }
 
-GskVulkanImage *
+static GskVulkanImage *
 gsk_vulkan_image_new_from_data_directly (GskVulkanUploader *uploader,
                                          guchar            *data,
                                          gsize              width,
