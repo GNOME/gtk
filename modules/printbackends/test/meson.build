@@ -1,5 +1,5 @@
-shared_module('printbackend-file',
-              'gtkprintbackendfile.c',
+shared_module('printbackend-test',
+              'gtkprintbackendtest.c',
               c_args: [
                 '-DGTK_COMPILATION',
                 '-DGTK_DISABLE_DEPRECATION_WARNINGS',
