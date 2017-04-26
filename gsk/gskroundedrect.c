@@ -318,7 +318,7 @@ gsk_rounded_rect_is_rectilinear (const GskRoundedRect *self)
   return TRUE;
 }
 
-gboolean
+static gboolean
 ellipsis_contains_point (const graphene_size_t *ellipsis,
                          const graphene_point_t *point)
 {
