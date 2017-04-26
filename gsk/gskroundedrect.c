@@ -33,6 +33,7 @@
 #include "config.h"
 
 #include "gskroundedrect.h"
+#include "gskroundedrectprivate.h"
 
 #include "gskdebugprivate.h"
 
