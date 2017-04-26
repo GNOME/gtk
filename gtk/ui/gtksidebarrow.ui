@@ -66,13 +66,4 @@
       </object>
     </child>
   </template>
-  <!-- We need it to not make the row smaller when the eject button is hidden -->
-  <object class="GtkSizeGroup">
-    <property name="mode">vertical</property>
-    <widgets>
-      <widget name="eject_button"/>
-      <widget name="label_widget"/>
-      <widget name="icon_widget"/>
-    </widgets>
-  </object>
 </interface>
