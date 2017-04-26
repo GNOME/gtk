@@ -175,7 +175,7 @@ GskRenderNode *         gsk_cross_fade_node_new                 (GskRenderNode  
                                                                  double                    progress);
 
 GDK_AVAILABLE_IN_3_90
-void                    gsk_render_node_set_scaling_filter      (GskRenderNode *node,
+void                    gsk_render_node_set_scaling_filters     (GskRenderNode *node,
                                                                  GskScalingFilter min_filter,
                                                                  GskScalingFilter mag_filter);
 
