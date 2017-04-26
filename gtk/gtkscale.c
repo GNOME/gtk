@@ -1115,7 +1115,8 @@ gtk_scale_set_digits (GtkScale *scale,
   if (priv->digits != digits)
     {
       priv->digits = digits;
-      gtk_range_set_round_digits (range, digits);
+      if (priv->draw_value)
+        gtk_range_set_round_digits (range, digits);
 
       gtk_scale_clear_value_layout (scale);
       gtk_widget_queue_resize (GTK_WIDGET (scale));
@@ -1307,6 +1308,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
           else
             gtk_css_node_insert_before (widget_node, gtk_css_gadget_get_node (priv->value_gadget), NULL);
 
+          gtk_range_set_round_digits (GTK_RANGE (scale), priv->digits);
           update_value_position (scale);
         }
       else
@@ -1314,6 +1316,8 @@ gtk_scale_set_draw_value (GtkScale *scale,
           if (priv->value_gadget)
             gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->value_gadget), NULL);
           g_clear_object (&priv->value_gadget);
+
+          gtk_range_set_round_digits (GTK_RANGE (scale), -1);
         }
 
       gtk_scale_clear_value_layout (scale);
