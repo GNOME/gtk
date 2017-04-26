@@ -811,22 +811,15 @@ gtk_deps = [
   atk_dep,
   epoxy_dep,
   libm,
-  graphene_dep
+  graphene_dep,
 ]
 
 if x11_enabled
-  runcmd = run_command('pkg-config', '--variable=prefix', 'x11')
-  if runcmd.returncode() == 0
-      gtk_cargs += '-DX11_DATA_PREFIX="' + runcmd.stdout().strip() + '"'
-  else
-    error('Could not get x11 data prefix via pkg-config.')
-  endif
+  x11_data_prefix = dependency('x11').get_pkgconfig_variable('prefix')
 
+  gtk_cargs += [ '-DX11_DATA_PREFIX="@0@"'.format(x11_data_prefix), ]
   gtk_sources += gtk_x11_sources
-  gtk_deps += [
-    xi_dep,
-    x11_dep,
-  ]
+  gtk_deps += [ xi_dep, x11_dep, ]
 endif
 
 if wayland_enabled
