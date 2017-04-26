@@ -8,6 +8,10 @@ option('enable-broadway-backend', type: 'boolean', value: 'false',
   description : 'Enable the broadway (HTML5) gdk backend')
 option('enable-mir-backend', type: 'boolean', value: 'false',
   description : 'Enable the Mir gdk backend (UNTESTED, NEEDS WORK)')
+option('enable-win32-backend', type: 'boolean', value: 'false',
+  description : 'Enable the Windows gdk backend')
+option('enable-quartz-backend', type: 'boolean', value: 'false',
+  description : 'Enable the macOS gdk backend')
 option('enable-vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Enable support for the Vulkan graphics API')
 option('enable-test-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'no',
