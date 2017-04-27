@@ -4546,7 +4546,7 @@ gtk_label_set_text_with_mnemonic (GtkLabel    *label,
 
   g_object_freeze_notify (G_OBJECT (label));
 
-  gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
+  gtk_label_set_label_internal (label, g_strdup (str));
   gtk_label_set_use_markup_internal (label, FALSE);
   gtk_label_set_use_underline_internal (label, TRUE);
   
