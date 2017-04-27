@@ -2793,7 +2793,7 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
       header_allocation.y = child_allocation.y;
       gtk_widget_size_allocate (priv->placeholder, &header_allocation);
       gtk_widget_get_clip (priv->placeholder, &clip);
-      gdk_rectangle_union (out_clip, out_clip, &clip);
+      gdk_rectangle_union (&clip, out_clip, out_clip);
       child_allocation.y += child_min;
     }
 
@@ -2818,7 +2818,7 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
           header_allocation.y = child_allocation.y;
           gtk_widget_size_allocate (ROW_PRIV (row)->header, &header_allocation);
           gtk_widget_get_clip (ROW_PRIV (row)->header, &clip);
-          gdk_rectangle_union (out_clip, out_clip, &clip);
+          gdk_rectangle_union (&clip, out_clip, out_clip);
           child_allocation.y += child_min;
         }
 
@@ -2832,7 +2832,7 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
       ROW_PRIV (row)->height = child_allocation.height;
       gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation);
       gtk_widget_get_clip (GTK_WIDGET (row), &clip);
-      gdk_rectangle_union (out_clip, out_clip, &clip);
+      gdk_rectangle_union (&clip, out_clip, out_clip);
       child_allocation.y += child_min;
     }
 }

@@ -745,7 +745,7 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
 
       gtk_widget_size_allocate (priv->label_widget, &priv->label_allocation);
       gtk_widget_get_clip (priv->label_widget, &clip);
-      gdk_rectangle_union (out_clip, out_clip, &clip);
+      gdk_rectangle_union (&clip, out_clip, out_clip);
     }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
@@ -753,7 +753,7 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
     {
       gtk_widget_size_allocate (child, &priv->child_allocation);
       gtk_widget_get_clip (child, &clip);
-      gdk_rectangle_union (out_clip, out_clip, &clip);
+      gdk_rectangle_union (&clip, out_clip, out_clip);
     }
 }
 

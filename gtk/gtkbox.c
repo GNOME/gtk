@@ -710,7 +710,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	    }
 	  gtk_widget_size_allocate_with_baseline (child->widget, &child_allocation, baseline);
           gtk_widget_get_clip (child->widget, &clip);
-          gdk_rectangle_union (out_clip, out_clip, &clip);
+          gdk_rectangle_union (&clip, out_clip, out_clip);
 
 	  i++;
 	}

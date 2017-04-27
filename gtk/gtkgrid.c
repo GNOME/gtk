@@ -1603,7 +1603,7 @@ gtk_grid_request_allocate_children (GtkGridRequest      *request,
 
       gtk_widget_size_allocate_with_baseline (child->widget, &child_allocation, baseline);
       gtk_widget_get_clip (child->widget, &child_clip);
-      gdk_rectangle_union (out_clip, out_clip, &child_clip);
+      gdk_rectangle_union (&child_clip, out_clip, out_clip);
     }
 }
 
