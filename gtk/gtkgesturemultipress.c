@@ -403,7 +403,7 @@ gtk_gesture_multi_press_new (GtkWidget *widget)
 
 /**
  * gtk_gesture_multi_press_set_area:
- * @gesture: a #GtkGesture
+ * @gesture: a #GtkGestureMultiPress
  * @rect: (allow-none): rectangle to receive coordinates on
  *
  * If @rect is non-%NULL, the press area will be checked to be
@@ -425,7 +425,6 @@ gtk_gesture_multi_press_set_area (GtkGestureMultiPress *gesture,
   GtkGestureMultiPressPrivate *priv;
 
   g_return_if_fail (GTK_IS_GESTURE_MULTI_PRESS (gesture));
-  g_return_if_fail (rect != NULL);
 
   priv = gtk_gesture_multi_press_get_instance_private (gesture);
 
