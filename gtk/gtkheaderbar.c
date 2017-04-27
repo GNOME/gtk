@@ -959,6 +959,7 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
   gint x;
   gint child_size;
   GtkTextDirection direction;
+  GtkAllocation child_clip;
 
   direction = gtk_widget_get_direction (widget);
   nvis_children = count_visible_children (bar);
@@ -1136,6 +1137,8 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
             child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
           gtk_widget_size_allocate (child->widget, &child_allocation);
+          gtk_widget_get_clip (child->widget, &child_clip);
+          gdk_rectangle_union (&child_clip, out_clip, out_clip);
 
         next:
           i++;
@@ -1171,7 +1174,11 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
     child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
 
   if (title_widget != NULL)
-    gtk_widget_size_allocate (title_widget, &child_allocation);
+    {
+      gtk_widget_size_allocate (title_widget, &child_allocation);
+      gtk_widget_get_clip (title_widget, &child_clip);
+      gdk_rectangle_union (&child_clip, out_clip, out_clip);
+    }
 
   child_allocation.y = allocation->y;
   child_allocation.height = height;
@@ -1185,6 +1192,8 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
         child_allocation.x = allocation->x + allocation->width - start_width + priv->spacing;
       child_allocation.width = start_width - priv->spacing;
       gtk_widget_size_allocate (priv->titlebar_start_box, &child_allocation);
+      gtk_widget_get_clip (priv->titlebar_start_box, &child_clip);
+      gdk_rectangle_union (&child_clip, out_clip, out_clip);
     }
 
   if (priv->titlebar_end_box)
@@ -1196,9 +1205,9 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
         child_allocation.x = allocation->x + allocation->width - end_width + priv->spacing;
       child_allocation.width = end_width - priv->spacing;
       gtk_widget_size_allocate (priv->titlebar_end_box, &child_allocation);
+      gtk_widget_get_clip (priv->titlebar_end_box, &child_clip);
+      gdk_rectangle_union (&child_clip, out_clip, out_clip);
     }
-
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
 }
 
 /**
