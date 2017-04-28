@@ -63,6 +63,6 @@ executable('gtk4-broadwayd',
   clienthtml_h, broadwayjs_h,
   'broadwayd.c', 'broadway-server.c', 'broadway-buffer.c', 'broadway-output.c',
   include_directories: [confinc, gdkinc],
-  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'],
+  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-DG_LOG_USE_STRUCTURED=1', ],
   dependencies : [broadwayd_syslib, gdk_deps],
   install : true)
