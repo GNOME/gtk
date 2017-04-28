@@ -5,7 +5,7 @@ project('gtk+-4.0', 'c',
           'warning_level=1',
           'c_std=c99',
         ],
-        meson_version : '>= 0.39.1',
+        meson_version : '>= 0.40.0',
         license: 'LGPLv2.1+')
 
 glib_major_req = 2
