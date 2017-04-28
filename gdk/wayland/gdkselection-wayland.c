@@ -479,7 +479,7 @@ static const struct gtk_primary_selection_offer_listener primary_offer_listener 
   primary_offer_offer,
 };
 
-SelectionData *
+static SelectionData *
 selection_lookup_offer_by_atom (GdkWaylandSelection *selection,
                                 GdkAtom              selection_atom)
 {
