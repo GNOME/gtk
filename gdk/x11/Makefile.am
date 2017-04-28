@@ -31,7 +31,6 @@ libgdk_x11_la_SOURCES = 	\
 	gdkdevicemanager-x11.c	\
 	gdkdevicemanager-xi2.c	\
 	gdkdevicemanagerprivate-core.h \
-	gdkdisplaymanager-x11.c	\
 	gdkdisplay-x11.c	\
 	gdkdisplay-x11.h	\
 	gdkdnd-x11.c		\
@@ -76,7 +75,6 @@ libgdkx11include_HEADERS = 	\
 	gdkx11devicemanager-core.h \
 	gdkx11devicemanager-xi2.h \
 	gdkx11display.h		\
-	gdkx11displaymanager.h	\
 	gdkx11dnd.h		\
 	gdkx11glcontext.h	\
 	gdkx11keys.h		\

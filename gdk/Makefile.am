@@ -252,7 +252,6 @@ x11_introspection_files = 		\
 	x11/gdkdevicemanager-xi2.c	\
 	x11/gdkdevice-xi2.c		\
 	x11/gdkdisplay-x11.c		\
-	x11/gdkdisplaymanager-x11.c	\
 	x11/gdkdnd-x11.c		\
 	x11/gdkeventsource.c		\
 	x11/gdkeventtranslator.c	\
@@ -278,7 +277,6 @@ x11_introspection_files = 		\
 	x11/gdkx11devicemanager-core.h	\
 	x11/gdkx11devicemanager-xi2.h	\
 	x11/gdkx11display.h		\
-	x11/gdkx11displaymanager.h	\
 	x11/gdkx11dnd.h			\
 	x11/gdkx11keys.h		\
 	x11/gdkx11property.h		\
