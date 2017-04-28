@@ -1663,7 +1663,7 @@ pointer_handle_button (void              *data,
 
 #ifdef G_ENABLE_DEBUG
 
-const char *
+static const char *
 get_axis_name (uint32_t axis)
 {
   switch (axis)
