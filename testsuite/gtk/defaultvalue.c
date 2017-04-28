@@ -85,7 +85,6 @@ test_type (gconstpointer data)
       g_str_equal (g_type_name (type), "GdkX11DeviceManagerXI2") ||
       g_str_equal (g_type_name (type), "GdkX11DeviceManagerCore") ||
       g_str_equal (g_type_name (type), "GdkX11Display") ||
-      g_str_equal (g_type_name (type), "GdkX11DisplayManager") ||
       g_str_equal (g_type_name (type), "GdkX11Screen") ||
       g_str_equal (g_type_name (type), "GdkX11GLContext"))
     return;
