@@ -1455,11 +1455,8 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
   GtkGridLines *lines;
   gint min_size, nat_size;
 
-  if (minimum)
-    *minimum = 0;
-
-  if (natural)
-    *natural = 0;
+  *minimum = 0;
+  *natural = 0;
 
   if (minimum_baseline)
     *minimum_baseline = -1;
