@@ -481,6 +481,7 @@ static const struct wl_registry_listener registry_listener = {
     gdk_registry_handle_global_remove
 };
 
+G_GNUC_PRINTF (1, 0)
 static void
 log_handler (const char *format, va_list args)
 {
