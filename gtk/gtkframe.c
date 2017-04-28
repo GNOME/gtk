@@ -688,7 +688,7 @@ static void
 gtk_frame_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
-  GtkAllocation clip = *allocation;
+  GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -720,6 +720,8 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
 
   gtk_frame_compute_child_allocation (frame, &new_allocation);
   priv->child_allocation = new_allocation;
+
+  *out_clip = *allocation;
 
   if (priv->label_widget &&
       gtk_widget_get_visible (priv->label_widget))
