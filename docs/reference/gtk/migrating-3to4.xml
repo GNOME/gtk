@@ -88,10 +88,32 @@
     </section>
 
     <section>
-      <title>Stop using GtkBox::padding</title>
+      <title>Stop using GtkBox:padding, GtkBox:fill and GtkBox:expand</title>
       <para>
-        GTK+ 4 removes the #GtkBox::padding child property, so you should
-        use other ways to influence the layout of your boxes.
+        GTK+4 removes these #GtkBox child properties, so you should not use them.
+        You can replace GtkBox:padding using the #GtkWidget:margin properties
+        on your #GtkBox child widgets.
+      </para>
+     <para>
+        The fill child property can be replaced by setting appropriate values
+        for the #GtkWidget:halign and #GtkWidget:valign properties of the child
+        widgets. If you previously set the fill child property to %TRUE, you can
+        achieve the same effect by setting the halign or valign properties to
+        %GTK_ALIGN_FILL, depending on the parent box -- halign for a horizontal
+        box, valign for a vertial one.
+      </para>
+      <para>
+        #GtkBox also uses the expand child property. It can be replaced by setting
+        #GtkWidget:hexpand or #GtkWidget:vexpand on the child widgets. To match the
+        old behavior of the #GtkBox's expand child property, you need to set
+        #GtkWidget:hexpand on the child widgets of a horizontal #GtkBox and
+        #GtkWidget:vexpand on the child widgets of a vertical #GtkBox.
+
+        Note that there's a subtle but important difference between #GtkBox's
+        expand and fill child properties and the ones in #GtkWidget: setting
+        #GtkWidget:hexpand or #GtkWidget:vexpand to %TRUE will propagate up
+        the widget hierarchy, so a pixel-perfect port migth require a reset
+        of the expansion flags to %FALSE in a parent widget higher up the hierarchy.
       </para>
     </section>
 
