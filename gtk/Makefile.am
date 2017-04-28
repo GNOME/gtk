@@ -1227,14 +1227,20 @@ BUILT_SOURCES = \
 gtkmarshalers.h: stamp-gtkmarshalers.h
 	@true
 stamp-gtkmarshalers.h: gtkmarshalers.list
-	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --header --valist-marshallers >> xgen-gmlh \
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) \
+		--prefix=_gtk_marshal \
+		--header \
+		--valist-marshallers \
+		$(srcdir)/gtkmarshalers.list >> xgen-gmlh \
 	&& (cmp -s xgen-gmlh gtkmarshalers.h || cp xgen-gmlh gtkmarshalers.h) \
 	&& rm -f xgen-gmlh \
 	&& echo timestamp > $(@F)
 gtkmarshalers.c: gtkmarshalers.list
-	$(AM_V_GEN) (echo "#include \"gtkmarshalers.h\""; \
-	 echo "#undef G_ENABLE_DEBUG"; \
-	 $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body  --valist-marshallers) >> xgen-gmlc \
+	$(AM_V_GEN) (echo "#undef G_ENABLE_DEBUG"; \
+	 $(GLIB_GENMARSHAL) \
+	 	--prefix=_gtk_marshal \
+		--body \
+		--valist-marshallers $(srcdir)/gtkmarshalers.list) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
 

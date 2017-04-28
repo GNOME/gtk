@@ -440,12 +440,17 @@ gdkenumtypes.c: $(gdk_h_sources) gdkenumtypes.c.template
 # Marshaller generation
 #
 gdkmarshalers.h: gdkmarshalers.list
-	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) \
+		--prefix=_gdk_marshal \
+		--header \
+		$(srcdir)/gdkmarshalers.list > gdkmarshalers-h.tmp \
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
 gdkmarshalers.c: gdkmarshalers.list
-	$(AM_V_GEN) (echo "#include \"gdkmarshalers.h\""; \
-	 $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) \
+		--prefix=_gdk_marshal \
+		--body \
+		$(srcdir)/gdkmarshalers.list > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 
