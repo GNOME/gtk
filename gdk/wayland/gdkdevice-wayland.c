@@ -274,12 +274,13 @@ struct _GdkWaylandDevicePadClass
 
 static void gdk_wayland_device_pad_iface_init (GdkDevicePadInterface *iface);
 
+#define GDK_TYPE_WAYLAND_DEVICE_PAD (gdk_wayland_device_pad_get_type ())
+GType gdk_wayland_device_pad_get_type (void);
+
 G_DEFINE_TYPE_WITH_CODE (GdkWaylandDevicePad, gdk_wayland_device_pad,
                          GDK_TYPE_WAYLAND_DEVICE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_DEVICE_PAD,
                                                 gdk_wayland_device_pad_iface_init))
-
-#define GDK_TYPE_WAYLAND_DEVICE_PAD (gdk_wayland_device_pad_get_type ())
 
 #define GDK_TYPE_WAYLAND_DEVICE_MANAGER        (gdk_wayland_device_manager_get_type ())
 #define GDK_WAYLAND_DEVICE_MANAGER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_WAYLAND_DEVICE_MANAGER, GdkWaylandDeviceManager))
