@@ -6,6 +6,20 @@ SUBDIRS = po po-properties $(SRC_SUBDIRS) docs win32
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
+meson_build_files = $(shell find . -type f -name '*meson.*' -print 2>/dev/null)
+meson_files = \
+	$(meson_build_files) \
+	meson_options.txt \
+	subprojects/graphene.wrap \
+	gdk/gen-gdk-gresources-xml.py \
+	gsk/gen-gsk-gresources-xml.py \
+	gtk/gen-gtk-gresources-xml.py \
+	gtk/gentypefuncs.py \
+	demos/gtk-demo/geninclude.py \
+	gdk/wayland/genprotocolfiles.py \
+	build-aux/meson/post-install.sh \
+	$()
+
 EXTRA_DIST +=			\
 	autogen.sh		\
 	HACKING			\
@@ -22,7 +36,8 @@ EXTRA_DIST +=			\
 	sanitize-la.sh		\
 	po/README.translators	\
 	po/po2tbl.sed.in	\
-	make-pot
+	make-pot		\
+	$(meson_files)
 
 MAINTAINERCLEANFILES = \
 	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \
