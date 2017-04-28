@@ -741,14 +741,14 @@ gtkprivatetypebuiltins_h = gtkprivatetypebuiltins[1]
 
 # Generate gtktypefuncs.inc
 typefuncs = custom_target('gtktypefuncs.inc',
-                          depends: gdkenum_h,
+                          depends: [ gdkenum_h, gskenum_h, ],
                           output: 'gtktypefuncs.inc',
                           input: gdk_headers +
                             gtk_public_headers +
                             gtk_deprecated_headers +
                             gtk_private_headers +
                             [ gtktypebuiltins_h, ] +
-                            [ gdkenum_h, ],
+                            [ gdkenum_h, gskenum_h, ],
                           command: [
                             find_program('gentypefuncs.py'),
                             '@OUTPUT@',
@@ -890,7 +890,8 @@ libgtk = shared_library('gtk-4',
                         c_args: gtk_cargs + common_cflags,
                         include_directories: [confinc, gdkinc, gskinc, gtkinc],
                         dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
-                        link_with: [libgdk, libgsk, included_input_modules],
+                        link_with: [libgdk, libgsk, ],
+                        link_whole: included_input_modules,
                         link_args: common_ldflags,
                         install: true)
 
@@ -901,7 +902,7 @@ libgtk_dep = declare_dependency(sources: [gtkversion, gtktypebuiltins_h],
                                 link_args: common_ldflags)
 
 # Introspection
-if false
+if not meson.is_cross_build()
   gir_args = [
     '--c-include=gtk/gtk.h',
   ]
@@ -933,12 +934,13 @@ if false
                        dependencies: gdk_gir_dep,
                        extra_args: [
                          '--c-include=gdk/gdkx.h',
+                         '--include-uninstalled=./gtk/Gdk-4.0.gir',
                          '-DGDK_COMPILATION',
                        ])
   endif
 
   gsk_gir = gnome.generate_gir(libgtk,
-                               sources: gsk_public_headers + gsk_gen_headers + gsk_public_sources,
+                               sources: gsk_public_headers + gsk_public_sources + [ gskenum_h ],
                                namespace: 'Gsk',
                                nsversion: gtk_api_version,
                                identifier_prefix: 'Gsk',
@@ -955,6 +957,7 @@ if false
   gsk_gir_dep = declare_dependency(link_with: libgtk,
                                    dependencies: gdk_gir_dep,
                                    sources: gsk_gir)
+
 
   gnome.generate_gir(libgtk,
                      sources: gtk_public_headers + gtk_public_sources + dnd_sources + a11y_headers + a11y_sources + [

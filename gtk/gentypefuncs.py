@@ -23,7 +23,7 @@ for filename in in_files:
     for line in f:
       line = line.rstrip('\n').rstrip('\r')
       # print line
-      match = re.search(r'\bg[td]k_[a-zA-Z0-9_]*_get_type\b', line)
+      match = re.search(r'\bg[tds]k_[a-zA-Z0-9_]*_get_type\b', line)
       if match:
         func = match.group(0)
         if not func in funcs:
