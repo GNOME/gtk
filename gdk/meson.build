@@ -202,7 +202,11 @@ libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
   dependencies: gdk_deps,
   include_directories: [confinc, xinc, wlinc],
-  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"'] + common_cflags,
+  c_args: [
+    '-DGDK_COMPILATION',
+    '-DG_LOG_DOMAIN="Gdk"',
+    '-DG_LOG_USE_STRUCTURED=1',
+  ] + common_cflags,
   link_with: gdk_backends,
   link_args: common_ldflags)
 
