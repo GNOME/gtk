@@ -1098,7 +1098,7 @@ find_frame_timings (GdkFrameClock *clock,
  * a time representation with high accuracy. If there is not a common
  * time source, then the time synchronization will be less accurate.
  */
-gint64
+static gint64
 server_time_to_monotonic_time (GdkX11Display *display_x11,
                                gint64         server_time)
 {

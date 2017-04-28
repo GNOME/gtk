@@ -3079,7 +3079,7 @@ gdk_dnd_handle_button_event (GdkDragContext       *context,
   return TRUE;
 }
 
-gboolean
+static gboolean
 gdk_dnd_handle_drag_status (GdkDragContext    *context,
                             const GdkEventDND *event)
 {

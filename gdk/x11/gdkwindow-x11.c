@@ -196,7 +196,7 @@ _gdk_x11_window_update_size (GdkWindowImplX11 *impl)
     }
 }
 
-void
+static void
 gdk_x11_window_get_unscaled_size (GdkWindow *window,
                                   int *unscaled_width,
                                   int *unscaled_height)
