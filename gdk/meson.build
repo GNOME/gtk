@@ -207,7 +207,7 @@ libgdk = static_library('gdk',
     '-DG_LOG_DOMAIN="Gdk"',
     '-DG_LOG_USE_STRUCTURED=1',
   ] + common_cflags,
-  link_with: gdk_backends,
+  link_whole: gdk_backends,
   link_args: common_ldflags)
 
 # We don't have link_with: to internal static libs here on purpose, just
