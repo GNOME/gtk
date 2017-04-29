@@ -54,7 +54,8 @@ proto_sources = [
   ['xdg-shell', 'unstable', 'v6', ],
   ['xdg-foreign', 'unstable', 'v1', ],
   ['tablet', 'unstable', 'v2', ],
-  [ 'keyboard-shortcuts-inhibit', 'unstable', 'v1', ],
+  ['keyboard-shortcuts-inhibit', 'unstable', 'v1', ],
+  ['server-decoration', 'stable' ],
 ]
 
 gdk_wayland_gen_headers = []
