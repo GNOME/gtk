@@ -294,7 +294,7 @@ gtk_text_mark_get_visible (GtkTextMark *mark)
  * 
  * Returns the mark name; returns NULL for anonymous marks.
  * 
- * Returns: mark name
+ * Returns: (nullable): mark name
  **/
 const char *
 gtk_text_mark_get_name (GtkTextMark *mark)
