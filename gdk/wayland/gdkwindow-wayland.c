@@ -126,6 +126,7 @@ struct _GdkWindowImplWayland
     struct wl_egl_window *egl_window;
     struct wl_egl_window *dummy_egl_window;
     struct zxdg_exported_v1 *xdg_exported;
+    struct org_kde_kwin_server_decoration *server_decoration;
   } display_server;
 
   EGLSurface egl_surface;
@@ -1679,6 +1680,21 @@ window_anchor_to_gravity (GdkGravity rect_anchor)
     default:
       g_assert_not_reached ();
     }
+}
+
+void
+gdk_wayland_window_announce_csd (GdkWindow *window)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  if (!display_wayland->server_decoration_manager)
+    return;
+  impl->display_server.server_decoration =
+    org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
+                                                  impl->display_server.wl_surface);
+  if (impl->display_server.server_decoration)
+    org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
+                                                ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
 }
 
 static GdkWindow *

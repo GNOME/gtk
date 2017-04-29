@@ -6100,7 +6100,10 @@ gtk_window_should_use_csd (GtkWindow *window)
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return TRUE;
+    {
+      GdkDisplay *gdk_display = gtk_widget_get_display (GTK_WIDGET (window));
+      return !gdk_wayland_display_prefers_ssd (gdk_display);
+    }
 #endif
 
 #ifdef GDK_WINDOWING_MIR
@@ -7476,6 +7479,11 @@ gtk_window_realize (GtkWidget *widget)
 
   if (!priv->decorated || priv->client_decorated)
     gdk_window_set_decorations (gdk_window, 0);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (priv->client_decorated && GDK_IS_WAYLAND_WINDOW (gdk_window))
+    gdk_wayland_window_announce_csd (gdk_window);
+#endif
 
   if (!priv->deletable)
     gdk_window_set_functions (gdk_window, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
