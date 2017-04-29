@@ -6916,7 +6916,7 @@ gtk_notebook_popup_disable (GtkNotebook *notebook)
  * %NULL is returned if @child is not in @notebook or
  * if no tab label has specifically been set for @child.
  *
- * Returns: (transfer none): the tab label
+ * Returns: (transfer none) (nullable): the tab label
  */
 GtkWidget *
 gtk_notebook_get_tab_label (GtkNotebook *notebook,
