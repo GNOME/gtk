@@ -1758,6 +1758,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="shadow-type">in</property>
                             <property name="hscrollbar-policy">never</property>
                             <property name="min-content-height">200</property>
+                            <property name="hexpand">0</property>
                             <child>
                               <object class="GtkListBox" id="listbox">
                                 <property name="selection-mode">none</property>
@@ -1778,6 +1779,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
+                                            <property name="hexpand">1</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1805,6 +1807,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
+                                            <property name="hexpand">1</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1834,6 +1837,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
+                                            <property name="hexpand">1</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1863,6 +1867,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
+                                            <property name="hexpand">1</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1893,6 +1898,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
+                                            <property name="hexpand">1</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1921,6 +1927,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="halign">start</property>
                                             <property name="valign">center</property>
                                             <property name="margin">6</property>
+                                            <property name="hexpand">1</property>
                                           </object>
                                         </child>
                                         <child>
