@@ -24,6 +24,10 @@ LDADD = \
 	$(top_builddir)/gdk/libgdk-3.la	\
 	$(GTK_DEP_LIBS)
 
+BUILT_SOURCES =
+
+CLEANFILES =
+
 noinst_PROGRAMS = $(TEST_PROGS)
 
 TESTS_ENVIRONMENT = \
@@ -115,18 +119,25 @@ rbtree_CFLAGS  = -DGTK_COMPILATION -UG_ENABLE_DEBUG
 rbtree_LDADD = $(GTK_DEP_LIBS)
 rbtree_SOURCES = 			\
 	rbtree.c 			\
-	$(top_srcdir)/gtk/gtkrbtree.h 	\
-	$(top_srcdir)/gtk/gtkrbtree.c	\
+	gtkrbtree.c			\
 	$(NULL)
+
+gtkrbtree.c: $(top_srcdir)/gtk/gtkrbtree.c
+	$(AM_V_GEN) $(LN_S) $^ $@
+
+CLEANFILES += gtkrbtree.c
 
 bitmask_CFLAGS  = -DGTK_COMPILATION -UG_ENABLE_DEBUG
 bitmask_LDADD = $(GTK_DEP_LIBS)
-bitmask_SOURCES = 					\
-	bitmask.c 					\
-	$(top_srcdir)/gtk/gtkbitmaskprivate.h 		\
-	$(top_srcdir)/gtk/gtkallocatedbitmaskprivate.h 	\
-	$(top_srcdir)/gtk/gtkallocatedbitmask.c		\
+bitmask_SOURCES = 			\
+	bitmask.c 			\
+	gtkallocatedbitmask.c		\
 	$(NULL)
+
+gtkallocatedbitmask.c: $(top_srcdir)/gtk/gtkallocatedbitmask.c
+	$(AM_V_GEN) $(LN_S) $^ $@
+
+CLEANFILES += gtkallocatedbitmask.c
 
 keyhash_CFLAGS =					\
 	-DGTK_COMPILATION 				\
@@ -136,16 +147,23 @@ keyhash_CFLAGS =					\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
 	$(NULL)
 
-keyhash_SOURCES	=					\
-	keyhash.c 					\
-	$(top_srcdir)/gtk/gtkkeyhash.c 			\
-	$(top_srcdir)/gtk/gtkkeyhash.h 			\
-	$(top_builddir)/gtk/gtkresources.c 		\
-	$(top_builddir)/gtk/gtkresources.h 		\
-	$(top_srcdir)/gtk/gtkprivate.c 			\
-	$(top_srcdir)/gtk/gtkprivate.h			\
+keyhash_SOURCES	=		\
+	keyhash.c 		\
+	gtkkeyhash.c 		\
+	gtkresources.c 		\
+	gtkprivate.c 		\
 	$(NULL)
 
+gtkkeyhash.c: $(top_srcdir)/gtk/gtkkeyhash.c
+	$(AM_V_GEN) $(LN_S) $^ $@
+
+gtkresources.c: $(top_builddir)/gtk/gtkresources.c
+	$(AM_V_GEN) $(LN_S) $^ $@
+
+gtkprivate.c: $(top_srcdir)/gtk/gtkprivate.c
+	$(AM_V_GEN) $(LN_S) $^ $@
+
+CLEANFILES += gtkkeyhash.c gtkresources.c gtkprivate.c
 
 test_icontheme =					\
 	icons/index.theme				\
@@ -254,9 +272,9 @@ GTK_GSETTINGS_SCHEMAS = \
 	$(top_srcdir)/gtk/org.gtk.Settings.FileChooser.gschema.xml \
 	$(NULL)
 
-BUILT_SOURCES = gschemas.compiled
+BUILT_SOURCES += gschemas.compiled
 
-CLEANFILES = gschemas.compiled
+CLEANFILES += gschemas.compiled
 
 gschemas.compiled: $(GTK_GSETTINGS_SCHEMAS)
 	$(AM_V_GEN) $(GLIB_COMPILE_SCHEMAS) \
