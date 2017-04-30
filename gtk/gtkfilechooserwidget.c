@@ -8082,6 +8082,8 @@ gtk_file_chooser_widget_size_allocate (GtkWidget     *widget,
   GtkFileChooserWidget *self = GTK_FILE_CHOOSER_WIDGET (widget);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
 
+  GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->size_allocate (widget, allocation);
+
   gtk_widget_size_allocate (priv->box, allocation);
 }
 

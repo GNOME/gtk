@@ -479,6 +479,8 @@ gtk_font_button_size_allocate (GtkWidget     *widget,
   GtkFontButton *button = GTK_FONT_BUTTON (widget);
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
 
+  GTK_WIDGET_CLASS (gtk_font_button_parent_class)->size_allocate (widget, allocation);
+
   gtk_widget_size_allocate (priv->button, allocation);
 }
 

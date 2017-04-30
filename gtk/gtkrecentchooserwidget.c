@@ -160,6 +160,8 @@ gtk_recent_chooser_widget_size_allocate (GtkWidget     *widget,
   GtkRecentChooserWidget *self = GTK_RECENT_CHOOSER_WIDGET (widget);
   GtkRecentChooserWidgetPrivate *priv = gtk_recent_chooser_widget_get_instance_private (self);
 
+  GTK_WIDGET_CLASS (gtk_recent_chooser_widget_parent_class)->size_allocate (widget, allocation);
+
   gtk_widget_size_allocate (priv->chooser, allocation);
 }
 

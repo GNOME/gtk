@@ -397,6 +397,8 @@ gtk_file_chooser_button_size_allocate (GtkWidget     *widget,
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
 
+  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->size_allocate (widget, allocation);
+
   gtk_widget_size_allocate (priv->child, allocation);
 }
 
