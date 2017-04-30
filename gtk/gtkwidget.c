@@ -16000,8 +16000,6 @@ gtk_widget_update_alpha (GtkWidget *widget)
 
   priv = widget->priv;
 
-  alpha = priv->user_alpha;
-
   context = _gtk_widget_get_style_context (widget);
   opacity =
     _gtk_css_number_value_get (_gtk_style_context_peek_property (context,
