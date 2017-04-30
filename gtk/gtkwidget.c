@@ -5132,7 +5132,8 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
   if (gtk_widget_get_resize_needed (widget))
     return;
 
-  gtk_widget_queue_resize_on_widget (widget);
+  widget->priv->resize_needed = TRUE;
+  gtk_widget_set_alloc_needed (widget);
 
   groups = _gtk_widget_get_sizegroups (widget);
 
@@ -14328,15 +14329,6 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
           gtk_widget_ensure_allocate (child);
         }
     }
-}
-
-void
-gtk_widget_queue_resize_on_widget (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-
-  priv->resize_needed = TRUE;
-  gtk_widget_set_alloc_needed (widget);
 }
 
 void
