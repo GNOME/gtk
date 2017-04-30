@@ -1,20 +1,11 @@
-## Process this file with automake to produce Makefile.in
+DOC_MODULE = gtk4
 
-AUTOMAKE_OPTIONS = 1.6
+DOC_MAIN_SGML_FILE = gtk4-docs.xml
 
-# The name of the module.
-DOC_MODULE=gtk4
+SCAN_OPTIONS = --deprecated-guards="GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED"
 
-# The top-level SGML file.
-DOC_MAIN_SGML_FILE=gtk4-docs.xml
+DOC_SOURCE_DIR = $(top_srcdir)/gtk $(top_builddir)/gtk
 
-# Extra options to supply to gtkdoc-scan
-SCAN_OPTIONS=--deprecated-guards="GTK_ENABLE_BROKEN|GTK_DISABLE_DEPRECATED"
-
-# The directory containing the source code. Relative to $(srcdir)
-DOC_SOURCE_DIR=$(top_srcdir)/gtk
-
-# Used for dependencies
 HFILE_GLOB=$(top_srcdir)/gtk/*.h
 CFILE_GLOB=$(top_srcdir)/gtk/*.c
 
@@ -281,10 +272,9 @@ IGNORE_HFILES = \
 	gtkwin32drawprivate.h		\
 	gtkwin32themeprivate.h		\
 	xdgmime				\
-	xembed.h
+	xembed.h			\
+	$()
 
-# CFLAGS and LDFLAGS for compiling scan program. Only needed
-# if $(DOC_MODULE).types is non-empty.
 AM_CPPFLAGS = \
 	-I$(top_srcdir) 	\
 	-I$(top_builddir) 	\
@@ -303,12 +293,12 @@ GTKDOC_LIBS = \
 
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=--output-format=xml --name-space=gtk
+MKDB_OPTIONS = --output-format=xml --name-space=gtk
 
-MKHTML_OPTIONS="--path=\"$(abs_srcdir):$(top_srcdir)/examples\""
+MKHTML_OPTIONS = "--path=\"$(abs_srcdir):$(top_srcdir)/examples\""
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
-content_files =					\
+content_files = \
 	broadway.xml				\
 	building.sgml				\
 	compiling.sgml				\
@@ -343,9 +333,10 @@ content_files =					\
 	visual_index.xml			\
 	wayland.xml				\
 	windows.sgml				\
-	x11.sgml
+	x11.sgml				\
+	$()
 
-expand_content_files = 				\
+expand_content_files = \
 	compiling.sgml				\
 	drawing-model.xml			\
 	getting_started.xml			\
@@ -355,7 +346,8 @@ expand_content_files = 				\
 	migrating-3to4.xml			\
 	question_index.sgml			\
 	text_widget.sgml			\
-	tree_widget.sgml
+	tree_widget.sgml			\
+	$()
 
 # Images to copy into HTML directory
 HTML_IMAGES = \

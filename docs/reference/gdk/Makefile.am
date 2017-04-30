@@ -1,26 +1,22 @@
-## Process this file with automake to produce Makefile.in
+DOC_MODULE = gdk4
+DOC_MAIN_SGML_FILE = gdk4-docs.xml
+SCAN_OPTIONS = \
+	--deprecated-guards=GDK_DISABLE_DEPRECATED \
+        --ignore-decorators=G_GNUC_WARN_UNUSED_RESULT
 
-AUTOMAKE_OPTIONS = 1.6
+DOC_SOURCE_DIR = \
+	$(top_srcdir)/gdk \
+	$(top_srcdir)/gdk/x11 \
+	$(top_builddir)/gdk
 
-# The name of the module.
-DOC_MODULE=gdk4
+HFILE_GLOB = \
+	$(top_srcdir)/gdk/*.h \
+	$(top_srcdir)/gdk/x11/gdkx.h \
+	$(top_builddir)/gdk/*.h
+CFILE_GLOB = \
+	$(top_srcdir)/gdk/*.c
 
-# The top-level SGML file.
-DOC_MAIN_SGML_FILE=gdk4-docs.xml
-
-# Extra options to supply to gtkdoc-scan
-SCAN_OPTIONS=--deprecated-guards=GDK_DISABLE_DEPRECATED \
-             --ignore-decorators=G_GNUC_WARN_UNUSED_RESULT
-
-# The directory containing the source code. Relative to $(srcdir)
-DOC_SOURCE_DIR=$(top_srcdir)/gdk $(top_srcdir)/gdk/x11
-
-# Used for dependencies
-HFILE_GLOB=$(top_srcdir)/gdk/*.h $(top_srcdir)/gdk/x11/gdkx.h
-CFILE_GLOB=$(top_srcdir)/gdk/*.c
-
-# Header files to ignore when scanning
-IGNORE_HFILES= 			\
+IGNORE_HFILES =			\
 	gdkintl.h		\
 	gdkmarshalers.h		\
 	gdkkeysyms.h		\
@@ -49,15 +45,14 @@ IGNORE_HFILES= 			\
 	x11			\
 	quartz			\
 	broadway		\
-	wayland
+	wayland			\
+	$()
 
-# Extra files to add when scanning
-EXTRA_HFILES=			\
-	$(top_srcdir)/gdk/x11/gdkx.h
+EXTRA_HFILES = \
+	$(top_srcdir)/gdk/x11/gdkx.h \
+	$()
 
-# CFLAGS and LDFLAGS for compiling scan program. Only needed
-# if $(DOC_MODULE).types is non-empty.
-AM_CPPFLAGS = 			\
+AM_CPPFLAGS = \
 	-I$(top_srcdir)		\
 	-I$(top_builddir)	\
 	-I$(top_builddir)/gdk	\
@@ -66,15 +61,13 @@ AM_CPPFLAGS = 			\
 
 GTKDOC_LIBS = $(top_builddir)/gtk/libgtk-4.la $(GDK_DEP_LIBS)
 
-# Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=--output-format=xml --name-space=gdk
+MKDB_OPTIONS = --output-format=xml --name-space=gdk
 
-# Extra SGML files that are included by DOC_MAIN_SGML_FILE
-content_files = 		\
-	version.xml
+content_files = \
+	version.xml \
+	$()
 
-# Images to copy into HTML directory
-HTML_IMAGES = 				\
+HTML_IMAGES = \
 	images/rotated-text.png		\
 	images/X_cursor.png		\
 	images/arrow.png		\
@@ -188,11 +181,12 @@ HTML_IMAGES = 				\
 	images/w_resize_cursor.png	\
 	images/X_cursor.png		\
 	images/zoom_in_cursor.png	\
-	images/zoom_out_cursor.png
+	images/zoom_out_cursor.png	\
+	$()
 
 if ENABLE_DOC_CROSS_REFERENCES
 # Extra options to supply to gtkdoc-fixref
-FIXXREF_OPTIONS= \
+FIXXREF_OPTIONS = \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gobject \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/glib \
 	--extra-dir=$(CAIRO_PREFIX)/share/gtk-doc/html/cairo
