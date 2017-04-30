@@ -1,8 +1,125 @@
+a11y_tests = [
+  'accessibility-dump',
+  'tree-performance',
+  'text',
+  'children',
+  'derive',
+  'value',
+  'misc',
+  'tree-relationships',
+  'util',
+]
 
+foreach t: a11y_tests
+  test_prefix = 'a11y'
 
-test_text = executable(
-  'a11y_test_text',
-  'text.c',
-  dependencies: libgtk_dep
-)
-test('a11y/text', test_text)
+  test ('@0@/@1@'.format(test_prefix, t),
+        executable ('@0@_@1@'.format(test_prefix, t.underscorify()),
+                    '@0@.c'.format(t),
+                    dependencies: libgtk_dep),
+        args: [ '--tap', '-k', ],
+        env: installed_test_env,
+        install: true,
+        install_dir: installed_test_bindir)
+endforeach
+
+a11y_installed_tests = [
+  'a11ytests.test',
+  'a11ychildren.test',
+  'a11ytree.test',
+  'a11yvalue.test',
+  'a11yderive.test',
+  'a11ytext.test',
+  'a11yutil.test',
+  'a11ymisc.test',
+]
+
+test_cdata = configuration_data()
+test_cdata.set('libexecdir', get_option('libexecdir'))
+
+foreach t: a11y_installed_tests
+  configure_file(input: '@0@.in'.format(t),
+                 output: t,
+                 configuration: test_cdata,
+                 install: true,
+                 install_dir: installed_test_datadir)
+endforeach
+
+installed_test_data = [
+  'hello-world.ui',
+  'hello-world.txt',
+  'mnemonic.ui',
+  'mnemonic.txt',
+  'accessible-name.ui',
+  'accessible-name.txt',
+  'notebook.ui',
+  'notebook.txt',
+  'range.ui',
+  'range.txt',
+  'link.ui',
+  'link.txt',
+  'text.ui',
+  'text.txt',
+  'buttons.ui',
+  'buttons.txt',
+  'colorchooser.ui',
+  'colorchooser.txt',
+  'about.ui',
+  'about.txt',
+  'messagedialog.ui',
+  'messagedialog.txt',
+  'expander.ui',
+  'expander.txt',
+  'assistant.ui',
+  'assistant.txt',
+  'pickers.ui',
+  'pickers.txt',
+  'label.ui',
+  'label.txt',
+  'lockbutton.ui',
+  'lockbutton.txt',
+  'spinner.ui',
+  'spinner.txt',
+  'progress.ui',
+  'progress.txt',
+  'infobar.ui',
+  'infobar.txt',
+  'calendar.ui',
+  'calendar.txt',
+  'statusbar.ui',
+  'statusbar.txt',
+  'paned.ui',
+  'paned.txt',
+  'iconview.ui',
+  'iconview.txt',
+  'entries.ui',
+  'entries.txt',
+  'scale-drawvalue.ui',
+  'scale-drawvalue.txt',
+  'placeholder-text.ui',
+  'placeholder-text.txt',
+  'menu.ui',
+  'menu.txt',
+  'menubutton.ui',
+  'menubutton.txt',
+  'menubutton2.ui',
+  'menubutton2.txt',
+  'menubutton3.ui',
+  'menubutton3.txt',
+  'combos.ui',
+  'combos.txt',
+  'listbox.ui',
+  'listbox.txt',
+  'stack.ui',
+  'stack.txt',
+  'headerbar.ui',
+  'headerbar.txt',
+  'tree.ui',
+  'tree.txt',
+  'actionbar.ui',
+  'actionbar.txt',
+  'tooltips.ui',
+  'tooltips.txt',
+]
+
+install_data(installed_test_data, install_dir: join_paths(installed_test_bindir, 'a11ytests'))
