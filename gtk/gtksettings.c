@@ -1714,8 +1714,6 @@ gtk_rc_scanner_new (void)
   return g_scanner_new (&gtk_rc_scanner_config);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 /**
  * gtk_rc_property_parse_enum:
  * @pspec: a #GParamSpec
@@ -2007,8 +2005,6 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
 
   return success;
 }
-
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 void
 _gtk_settings_handle_event (GdkEventSetting *event)
