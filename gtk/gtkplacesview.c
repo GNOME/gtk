@@ -1418,7 +1418,6 @@ unmount_mount (GtkPlacesView *view,
 
   priv = gtk_places_view_get_instance_private (view);
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
-  operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
   g_cancellable_cancel (priv->cancellable);
   g_clear_object (&priv->cancellable);
