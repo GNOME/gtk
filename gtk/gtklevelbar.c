@@ -508,6 +508,9 @@ gtk_level_bar_allocate_trough_discrete (GtkLevelBar *self,
   gtk_level_bar_get_min_block_size (self, &block_width, &block_height);
   num_blocks = gtk_level_bar_get_num_blocks (self);
 
+  if (num_blocks == 0)
+    return;
+
   if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       block_width = MAX (block_width, (gint) floor (allocation->width / num_blocks));
