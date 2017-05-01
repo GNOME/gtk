@@ -292,19 +292,6 @@ change_theme_state (GSimpleAction *action,
 }
 
 static void
-change_titlebar_state (GSimpleAction *action,
-                       GVariant      *state,
-                       gpointer       user_data)
-{
-  GtkWindow *window = user_data;
-
-  gtk_window_set_hide_titlebar_when_maximized (GTK_WINDOW (window),
-                                               g_variant_get_boolean (state));
-
-  g_simple_action_set_state (action, state);
-}
-
-static void
 change_radio_state (GSimpleAction *action,
                     GVariant      *state,
                     gpointer       user_data)
@@ -322,7 +309,6 @@ static GActionEntry app_entries[] = {
 };
 
 static GActionEntry win_entries[] = {
-  { "titlebar", activate_toggle, NULL, "false", change_titlebar_state },
   { "shape", activate_radio, "s", "'oval'", change_radio_state },
   { "bold", activate_toggle, NULL, "false", NULL },
   { "about", activate_about, NULL, NULL, NULL },

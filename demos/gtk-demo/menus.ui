@@ -38,10 +38,6 @@
           <attribute name="label" translatable="yes">_Prefer Dark Theme</attribute>
           <attribute name="action">app.dark</attribute>
         </item>
-        <item>
-          <attribute name="label" translatable="yes">_Hide Titlebar when maximized</attribute>
-          <attribute name="action">win.titlebar</attribute>
-        </item>
         <submenu>
           <attribute name="label" translatable="yes">_Color</attribute>
           <section>

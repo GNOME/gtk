@@ -238,7 +238,6 @@ struct _GtkWindowPrivate
   guint    focus_on_map              : 1;
   guint    fullscreen_initially      : 1;
   guint    has_user_ref_count        : 1;
-  guint    hide_titlebar_when_maximized : 1;
   guint    iconify_initially         : 1; /* gtk_window_iconify() called before realization */
   guint    is_active                 : 1;
   guint    maximize_initially        : 1;
@@ -1787,9 +1786,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_DESTROY_WITH_PARENT:
       gtk_window_set_destroy_with_parent (window, g_value_get_boolean (value));
       break;
-    case PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED:
-      gtk_window_set_hide_titlebar_when_maximized (window, g_value_get_boolean (value));
-      break;
     case PROP_ICON:
       gtk_window_set_icon (window,
                            g_value_get_object (value));
@@ -1900,9 +1896,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_DESTROY_WITH_PARENT:
       g_value_set_boolean (value, priv->destroy_with_parent);
-      break;
-    case PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED:
-      g_value_set_boolean (value, priv->hide_titlebar_when_maximized);
       break;
     case PROP_ICON:
       g_value_set_object (value, gtk_window_get_icon (window));
@@ -3800,74 +3793,6 @@ gtk_window_get_destroy_with_parent (GtkWindow *window)
   return window->priv->destroy_with_parent;
 }
 
-static void
-gtk_window_apply_hide_titlebar_when_maximized (GtkWindow *window)
-{
-#ifdef GDK_WINDOWING_X11
-  GdkWindow *gdk_window;
-  gboolean setting;
-
-  setting = window->priv->hide_titlebar_when_maximized;
-  gdk_window = _gtk_widget_get_window (GTK_WIDGET (window));
-
-  if (GDK_IS_X11_WINDOW (gdk_window))
-    gdk_x11_window_set_hide_titlebar_when_maximized (gdk_window, setting);
-#endif
-}
-
-/**
- * gtk_window_set_hide_titlebar_when_maximized:
- * @window: a #GtkWindow
- * @setting: whether to hide the titlebar when @window is maximized
- *
- * If @setting is %TRUE, then @window will request that it’s titlebar
- * should be hidden when maximized.
- * This is useful for windows that don’t convey any information other
- * than the application name in the titlebar, to put the available
- * screen space to better use. If the underlying window system does not
- * support the request, the setting will not have any effect.
- *
- * Note that custom titlebars set with gtk_window_set_titlebar() are
- * not affected by this. The application is in full control of their
- * content and visibility anyway.
- * 
- * Since: 3.4
- **/
-void
-gtk_window_set_hide_titlebar_when_maximized (GtkWindow *window,
-                                             gboolean   setting)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  if (window->priv->hide_titlebar_when_maximized == setting)
-    return;
-
-  window->priv->hide_titlebar_when_maximized = setting;
-  gtk_window_apply_hide_titlebar_when_maximized (window);
-
-  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED]);
-}
-
-/**
- * gtk_window_get_hide_titlebar_when_maximized:
- * @window: a #GtkWindow
- *
- * Returns whether the window has requested to have its titlebar hidden
- * when maximized. See gtk_window_set_hide_titlebar_when_maximized ().
- *
- * Returns: %TRUE if the window has requested to have its titlebar
- *               hidden when maximized
- *
- * Since: 3.4
- **/
-gboolean
-gtk_window_get_hide_titlebar_when_maximized (GtkWindow *window)
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return window->priv->hide_titlebar_when_maximized;
-}
-
 static GtkWindowGeometryInfo*
 gtk_window_get_geometry_info (GtkWindow *window,
 			      gboolean   create)
@@ -5753,10 +5678,8 @@ update_csd_visibility (GtkWindow *window)
   if (priv->title_box == NULL)
     return FALSE;
 
-  visible = !priv->fullscreen &&
-            !(priv->titlebar == priv->title_box &&
-              priv->maximized &&
-              priv->hide_titlebar_when_maximized);
+  visible = !priv->fullscreen;
+
   gtk_widget_set_child_visible (priv->title_box, visible);
 
   return visible;
@@ -6016,10 +5939,7 @@ gtk_window_map (GtkWidget *widget)
   gdk_window_set_keep_below (gdk_window, priv->below_initially);
 
   if (priv->type == GTK_WINDOW_TOPLEVEL)
-    {
-      gtk_window_set_theme_variant (window);
-      gtk_window_apply_hide_titlebar_when_maximized (window);
-    }
+    gtk_window_set_theme_variant (window);
 
   /* No longer use the default settings */
   priv->need_default_size = FALSE;

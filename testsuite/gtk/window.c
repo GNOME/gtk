@@ -348,66 +348,6 @@ on_map_event (GtkWidget *window)
   return FALSE;
 }
 
-static void
-test_hide_titlebar_when_maximized (void)
-{
-  GtkWidget *window;
-
-  g_test_bug ("740287");
-
-  /* test that hide-titlebar-when-maximized gets set appropriately
-   * on the window, if it's set before the window is realized.
-   */
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-  g_signal_connect (window,
-                    "map-event",
-                    G_CALLBACK (on_map_event),
-                    NULL);
-
-  gtk_window_set_hide_titlebar_when_maximized (GTK_WINDOW (window), TRUE);
-
-  gtk_widget_show (window);
-
-  g_timeout_add (100, stop_main, NULL);
-  gtk_main ();
-
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_SCREEN (gtk_widget_get_screen (window)))
-    {
-      Atom type;
-      gint format;
-      gulong nitems;
-      gulong bytes_after;
-      gulong *hide = NULL;
-
-      XGetWindowProperty (gdk_x11_get_default_xdisplay (),
-                          GDK_WINDOW_XID (gtk_widget_get_window (window)),
-                          gdk_x11_get_xatom_by_name ("_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED"),
-                          0,
-                          G_MAXLONG,
-                          False,
-                          XA_CARDINAL,
-                          &type,
-                          &format,
-                          &nitems,
-                          &bytes_after,
-                          (guchar **) &hide);
-
-      g_assert_cmpint (type, !=, None);
-      g_assert_cmpint (type, ==, XA_CARDINAL);
-      g_assert_cmpint (format, ==, 32);
-      g_assert_cmpint (nitems, ==, 1);
-      g_assert_cmpint (hide[0], ==, 1);
-
-      XFree (hide);
-    }
-#endif
-
-  gtk_widget_destroy (window);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -428,7 +368,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/window/show-hide", test_show_hide);
   g_test_add_func ("/window/show-hide2", test_show_hide2);
   g_test_add_func ("/window/show-hide3", test_show_hide3);
-  g_test_add_func ("/window/hide-titlebar-when-maximized", test_hide_titlebar_when_maximized);
 
   return g_test_run ();
 }
