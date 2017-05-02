@@ -3050,49 +3050,6 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
     }
 }
 
-/**
- * gdk_x11_window_set_hide_titlebar_when_maximized:
- * @window: (type GdkX11Window): a #GdkWindow
- * @hide_titlebar_when_maximized: whether to hide the titlebar when
- *                                maximized
- *
- * Set a hint for the window manager, requesting that the titlebar
- * should be hidden when the window is maximized.
- *
- * Note that this property is automatically updated by GTK+, so this
- * function should only be used by applications which do not use GTK+
- * to create toplevel windows.
- *
- * Since: 3.4
- */
-void
-gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
-                                                 gboolean   hide_titlebar_when_maximized)
-{
-  GdkDisplay *display;
-
-  if (!WINDOW_IS_TOPLEVEL (window))
-    return;
-
-  display = gdk_window_get_display (window);
-
-  if (hide_titlebar_when_maximized)
-    {
-      gulong hide = 1;
-      XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_WINDOW_XID (window),
-                       gdk_x11_get_xatom_by_name_for_display (display, "_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED"),
-                       XA_CARDINAL, 32,
-                       PropModeReplace, (guchar *)&hide, 1);
-    }
-  else
-    {
-      XDeleteProperty (GDK_DISPLAY_XDISPLAY (display),
-                       GDK_WINDOW_XID (window),
-                       gdk_x11_get_xatom_by_name_for_display (display, "_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED"));
-    }
-}
-
 static void
 gdk_x11_window_set_shadow_width (GdkWindow *window,
                                  int        left,
