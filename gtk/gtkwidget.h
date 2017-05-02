@@ -551,24 +551,6 @@ void	   gtk_widget_size_allocate_with_baseline	  (GtkWidget	       *widget,
 
 GDK_AVAILABLE_IN_ALL
 GtkSizeRequestMode  gtk_widget_get_request_mode               (GtkWidget      *widget);
-GDK_AVAILABLE_IN_ALL
-void                gtk_widget_get_preferred_width            (GtkWidget      *widget,
-                                                               gint           *minimum_width,
-                                                               gint           *natural_width);
-GDK_AVAILABLE_IN_ALL
-void                gtk_widget_get_preferred_height_for_width (GtkWidget      *widget,
-                                                               gint            width,
-                                                               gint           *minimum_height,
-                                                               gint           *natural_height);
-GDK_AVAILABLE_IN_ALL
-void                gtk_widget_get_preferred_height           (GtkWidget      *widget,
-                                                               gint           *minimum_height,
-                                                               gint           *natural_height);
-GDK_AVAILABLE_IN_ALL
-void                gtk_widget_get_preferred_width_for_height (GtkWidget      *widget,
-                                                               gint            height,
-                                                               gint           *minimum_width,
-                                                               gint           *natural_width);
 GDK_AVAILABLE_IN_3_90
 void gtk_widget_measure (GtkWidget      *widget,
                          GtkOrientation  orientation,

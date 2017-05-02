@@ -445,149 +445,6 @@ gtk_widget_get_request_mode (GtkWidget *widget)
   return cache->request_mode;
 }
 
-/**
- * gtk_widget_get_preferred_width:
- * @widget: a #GtkWidget instance
- * @minimum_width: (out) (allow-none): location to store the minimum width, or %NULL
- * @natural_width: (out) (allow-none): location to store the natural width, or %NULL
- *
- * Retrieves a widget’s initial minimum and natural width.
- *
- * This call is specific to height-for-width requests.
- *
- * The returned request will be modified by the
- * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroups that have been applied. That is, the returned request
- * is the one that should be used for layout, not necessarily the one
- * returned by the widget itself.
- *
- * Since: 3.0
- */
-void
-gtk_widget_get_preferred_width (GtkWidget *widget,
-                                gint      *minimum_width,
-                                gint      *natural_width)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (minimum_width != NULL || natural_width != NULL);
-
-  gtk_widget_measure (widget,
-                      GTK_ORIENTATION_HORIZONTAL,
-                      -1,
-                      minimum_width,
-                      natural_width,
-                      NULL, NULL);
-}
-
-
-/**
- * gtk_widget_get_preferred_height:
- * @widget: a #GtkWidget instance
- * @minimum_height: (out) (allow-none): location to store the minimum height, or %NULL
- * @natural_height: (out) (allow-none): location to store the natural height, or %NULL
- *
- * Retrieves a widget’s initial minimum and natural height.
- *
- * This call is specific to width-for-height requests.
- *
- * The returned request will be modified by the
- * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroups that have been applied. That is, the returned request
- * is the one that should be used for layout, not necessarily the one
- * returned by the widget itself.
- *
- * Since: 3.0
- */
-void
-gtk_widget_get_preferred_height (GtkWidget *widget,
-                                 gint      *minimum_height,
-                                 gint      *natural_height)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (minimum_height != NULL || natural_height != NULL);
-
-  gtk_widget_measure (widget,
-                      GTK_ORIENTATION_VERTICAL,
-                      -1,
-                      minimum_height,
-                      natural_height,
-                      NULL, NULL);
-}
-
-
-
-/**
- * gtk_widget_get_preferred_width_for_height:
- * @widget: a #GtkWidget instance
- * @height: the height which is available for allocation
- * @minimum_width: (out) (allow-none): location for storing the minimum width, or %NULL
- * @natural_width: (out) (allow-none): location for storing the natural width, or %NULL
- *
- * Retrieves a widget’s minimum and natural width if it would be given
- * the specified @height.
- *
- * The returned request will be modified by the
- * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroups that have been applied. That is, the returned request
- * is the one that should be used for layout, not necessarily the one
- * returned by the widget itself.
- *
- * Since: 3.0
- */
-void
-gtk_widget_get_preferred_width_for_height (GtkWidget *widget,
-                                           gint       height,
-                                           gint      *minimum_width,
-                                           gint      *natural_width)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (minimum_width != NULL || natural_width != NULL);
-  g_return_if_fail (height >= 0);
-
-  gtk_widget_measure (widget,
-                      GTK_ORIENTATION_HORIZONTAL,
-                      height,
-                      minimum_width,
-                      natural_width,
-                      NULL, NULL);
-}
-
-/**
- * gtk_widget_get_preferred_height_for_width:
- * @widget: a #GtkWidget instance
- * @width: the width which is available for allocation
- * @minimum_height: (out) (allow-none): location for storing the minimum height, or %NULL
- * @natural_height: (out) (allow-none): location for storing the natural height, or %NULL
- *
- * Retrieves a widget’s minimum and natural height if it would be given
- * the specified @width.
- *
- * The returned request will be modified by the
- * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroups that have been applied. That is, the returned request
- * is the one that should be used for layout, not necessarily the one
- * returned by the widget itself.
- *
- * Since: 3.0
- */
-void
-gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
-                                           gint       width,
-                                           gint      *minimum_height,
-                                           gint      *natural_height)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (minimum_height != NULL || natural_height != NULL);
-  g_return_if_fail (width >= 0);
-
-  gtk_widget_measure (widget,
-                      GTK_ORIENTATION_VERTICAL,
-                      width,
-                      minimum_height,
-                      natural_height,
-                      NULL, NULL);
-}
-
 /*
  * _gtk_widget_get_preferred_size_and_baseline:
  * @widget: a #GtkWidget instance
@@ -622,7 +479,8 @@ _gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
     {
-      gtk_widget_get_preferred_width (widget, &min_width, &nat_width);
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &min_width, &nat_width, NULL, NULL);
 
       if (minimum_size)
 	{
@@ -648,15 +506,15 @@ _gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
       if (minimum_size)
 	{
 	  minimum_size->height = min_height;
-	  gtk_widget_get_preferred_width_for_height (widget, min_height,
-                                                     &minimum_size->width, NULL);
+          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, min_height,
+                              &minimum_size->width, NULL, NULL, NULL);
 	}
 
       if (natural_size)
 	{
 	  natural_size->height = nat_height;
-	  gtk_widget_get_preferred_width_for_height (widget, nat_height,
-                                                     NULL, &natural_size->width);
+          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, nat_height,
+                              NULL, &natural_size->width, NULL, NULL);
 	}
     }
 }

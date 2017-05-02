@@ -33,7 +33,8 @@ test_size (GtkOrientation orientation,
         {
           gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (scrolledwindow), MIN_SIZE);
 
-          gtk_widget_get_preferred_width (scrolledwindow, &size, NULL);
+          gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_HORIZONTAL, -1,
+                              &size, NULL, NULL, NULL);
 
           g_assert_cmpint (size, ==, MIN_SIZE);
         }
@@ -47,8 +48,10 @@ test_size (GtkOrientation orientation,
            * Here, the content is purposely bigger than the scrolled window,
            * so it should grow up to max-content-width.
            */
-          gtk_widget_get_preferred_width (scrolledwindow, NULL, &size);
-          gtk_widget_get_preferred_width (box, &child_size, NULL);
+          gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_HORIZONTAL, -1,
+                              NULL, &size, NULL, NULL);
+          gtk_widget_measure (box, GTK_ORIENTATION_HORIZONTAL, -1,
+                              &child_size, NULL, NULL, NULL);
 
           g_assert_cmpint (child_size, ==, BOX_SIZE);
           g_assert_cmpint (size, ==, MAX_SIZE);
@@ -61,7 +64,8 @@ test_size (GtkOrientation orientation,
         {
           gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (scrolledwindow), MIN_SIZE);
 
-          gtk_widget_get_preferred_height (scrolledwindow, &size, NULL);
+          gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_HORIZONTAL, -1,
+                              &size, NULL, NULL, NULL);
 
           g_assert_cmpint (size, ==, MIN_SIZE);
         }
@@ -75,8 +79,10 @@ test_size (GtkOrientation orientation,
            * Here, the content is purposely bigger than the scrolled window,
            * so it should grow up to max-content-height.
            */
-          gtk_widget_get_preferred_height (scrolledwindow, NULL, &size);
-          gtk_widget_get_preferred_height (box, &child_size, NULL);
+          gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_VERTICAL, -1,
+                              NULL, &size, NULL, NULL);
+          gtk_widget_measure (box, GTK_ORIENTATION_VERTICAL, -1,
+                              &child_size, NULL, NULL, NULL);
 
           g_assert_cmpint (child_size, ==, BOX_SIZE);
           g_assert_cmpint (size, ==, MAX_SIZE);
