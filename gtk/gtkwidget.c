@@ -6083,7 +6083,6 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
                  G_OBJECT_TYPE_NAME (widget), widget,
                  real_allocation.x, real_allocation.y, real_allocation.width, real_allocation.height,
                  adjusted_allocation.x, adjusted_allocation.y, adjusted_allocation.width, adjusted_allocation.height);
-      adjusted_allocation = real_allocation; /* veto it */
     }
   else
     {
