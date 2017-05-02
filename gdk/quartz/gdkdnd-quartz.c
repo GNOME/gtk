@@ -59,7 +59,7 @@ gdk_drag_context_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkDragContextClass),
         (GBaseInitFunc) NULL,
@@ -101,6 +101,12 @@ gdk_drag_context_unref (GdkDragContext *context)
 
 GdkDragContext *_gdk_quartz_drag_source_context = NULL;
 
+GdkDragContext *
+gdk_quartz_drag_source_context ()
+{
+  return _gdk_quartz_drag_source_context;
+}
+
 GdkDragContext * 
 gdk_drag_begin (GdkWindow     *window,
 		GList         *targets)
@@ -128,9 +134,9 @@ gdk_drag_motion (GdkDragContext *context,
   return FALSE;
 }
 
-guint32
+GdkNativeWindow
 gdk_drag_get_protocol_for_display (GdkDisplay      *display,
-				   guint32          xid,
+				   GdkNativeWindow  xid,
 				   GdkDragProtocol *protocol)
 {
   /* FIXME: Implement */

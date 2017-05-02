@@ -7,8 +7,15 @@
 <!--ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml"-->
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
-    <title>GTK+ Reference Manual</title>
-    <releaseinfo>for GTK+ &version;</releaseinfo>
+    <title>GTK+ 2 Reference Manual</title>
+    <releaseinfo>
+      This document is for the GTK+ 2 library; the latest versions can be found online at
+      <ulink role="online-location"
+      url="http://library.gnome.org/devel/gtk2/">http://library.gnome.org/devel/gtk2</ulink>.
+      If you're looking for the newer GTK+ 3 series of libraries,
+      see <ulink role="online-location"
+      url="http://library.gnome.org/devel/gtk3/">http://library.gnome.org/devel/gtk3/</ulink>.
+    </releaseinfo>
   </bookinfo>
 
   <part id="gtk">
@@ -96,6 +103,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="directfb.sgml" />
     <xi:include href="resources.sgml" />
     <xi:include href="xml/question_index.sgml" />
+    <xi:include href="drawing-model.xml" />
   </part>
 
 
@@ -145,6 +153,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkwindowgroup.xml" />
       <xi:include href="xml/gtkaboutdialog.xml" />
       <xi:include href="xml/gtkassistant.xml" />
+      <xi:include href="xml/gtkoffscreenwindow.xml" />
     </chapter>
 
     <chapter id="DisplayWidgets">
@@ -154,7 +163,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtklabel.xml" />
       <xi:include href="xml/gtkprogressbar.xml" />
       <xi:include href="xml/gtkstatusbar.xml" />
+      <xi:include href="xml/gtkinfobar.xml" />
       <xi:include href="xml/gtkstatusicon.xml" />
+      <xi:include href="xml/gtkspinner.xml" />
     </chapter>
 
     <chapter id="ButtonWidgets">
@@ -171,6 +182,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <chapter id="NumericEntry">
       <title>Numeric/Text Data Entry</title>
       <xi:include href="xml/gtkentry.xml" />
+      <xi:include href="xml/gtkentrybuffer.xml" />
       <xi:include href="xml/gtkentrycompletion.xml" />
       <xi:include href="xml/gtkhscale.xml" />
       <xi:include href="xml/gtkvscale.xml" />
@@ -212,6 +224,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtkcellrendererspin.xml" />
       <xi:include href="xml/gtkcellrenderertext.xml" />
       <xi:include href="xml/gtkcellrenderertoggle.xml" />
+      <xi:include href="xml/gtkcellrendererspinner.xml" />
       <xi:include href="xml/gtkliststore.xml" />
       <xi:include href="xml/gtktreestore.xml" />
     </chapter>
@@ -219,6 +232,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <chapter id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>
       <xi:include href="xml/gtkcombobox.xml" />
+      <xi:include href="xml/gtkcomboboxtext.xml" />
       <xi:include href="xml/gtkcomboboxentry.xml" />
       <xi:include href="xml/gtkmenu.xml" />
       <xi:include href="xml/gtkmenubar.xml" />
@@ -231,6 +245,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtktoolshell.xml" />
       <xi:include href="xml/gtktoolbar.xml" />
       <xi:include href="xml/gtktoolitem.xml" />
+      <xi:include href="xml/gtktoolpalette.xml" />
+      <xi:include href="xml/gtktoolitemgroup.xml" />
       <xi:include href="xml/gtkseparatortoolitem.xml" />
       <xi:include href="xml/gtktoolbutton.xml" />
       <xi:include href="xml/gtkmenutoolbutton.xml" />
@@ -246,13 +262,15 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtktoggleaction.xml" />
       <xi:include href="xml/gtkradioaction.xml" />
       <xi:include href="xml/gtkrecentaction.xml" />
+      <xi:include href="xml/gtkactivatable.xml" />
     </chapter>
 
     <chapter id="SelectorWidgets">
       <title>Selectors (File/Font/Color/Input Devices)</title>
       <xi:include href="xml/gtkcolorbutton.xml" />
-      <xi:include href="xml/gtkcolorsel.xml" />
       <xi:include href="xml/gtkcolorseldlg.xml" />
+      <xi:include href="xml/gtkcolorsel.xml" />
+      <xi:include href="xml/gtkhsv.xml" />
       <xi:include href="xml/gtkfilechooser.xml" />
       <xi:include href="xml/gtkfilechooserbutton.xml" />
       <xi:include href="xml/gtkfilechooserdialog.xml" />
@@ -279,6 +297,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
       <xi:include href="xml/gtknotebook.xml" />
       <xi:include href="xml/gtktable.xml" />
       <xi:include href="xml/gtkexpander.xml" />
+      <xi:include href="xml/gtkorientable.xml" />
     </chapter>
 
     <chapter id="Ornaments">
@@ -423,6 +442,9 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <xi:include href="xml/migrating-GtkLinkButton.sgml" />
     <xi:include href="xml/migrating-GtkBuilder.sgml" />
     <xi:include href="xml/migrating-GtkTooltip.sgml" />
+    <xi:include href="xml/migrating-GtkEntry-icons.sgml" />
+    <xi:include href="xml/migrating-GtkLabel-links.sgml" />
+    <xi:include href="xml/migrating-ClientSideWindows.sgml" />
   </part>
 
   <part>
@@ -470,4 +492,27 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <title>Index of new symbols in 2.14</title>
     <xi:include href="xml/api-index-2.14.xml"><xi:fallback /></xi:include>
   </index>
+  <index id="api-index-2-16" role="2.16">
+    <title>Index of new symbols in 2.16</title>
+    <xi:include href="xml/api-index-2.16.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-2-18" role="2.18">
+    <title>Index of new symbols in 2.18</title>
+    <xi:include href="xml/api-index-2.18.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-2-20" role="2.20">
+    <title>Index of new symbols in 2.20</title>
+    <xi:include href="xml/api-index-2.20.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-2-22" role="2.22">
+    <title>Index of new symbols in 2.22</title>
+    <xi:include href="xml/api-index-2.22.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-2-24" role="2.24">
+    <title>Index of new symbols in 2.24</title>
+    <xi:include href="xml/api-index-2.24.xml"><xi:fallback /></xi:include>
+  </index>
+
+  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+
 </book>

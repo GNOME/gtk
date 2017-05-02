@@ -829,6 +829,7 @@ gdk_rgb_gc_set_background (GdkGC *gc, guint32 rgb)
  * do not expect %pixel to be initialized in advance. If you use those
  * functions, there's no need for gdk_rgb_find_color().
  * 
+ * Deprecated: 2.22: Cairo handles colors automatically.
  **/
 void
 gdk_rgb_find_color (GdkColormap *colormap, GdkColor *color)
@@ -3465,6 +3466,7 @@ gdk_draw_rgb_32_image (GdkDrawable  *drawable,
  * Like gdk_draw_rgb_32_image(), but allows you to specify the dither
  * offsets. See gdk_draw_rgb_image_dithalign() for more details.
  * 
+ * Deprecated: 2.22: Cairo handles colors automatically.
  **/
 void
 gdk_draw_rgb_32_image_dithalign (GdkDrawable  *drawable,
@@ -3671,7 +3673,9 @@ gdk_rgb_ditherable (void)
  * render to any colormap and visual. So there's no need to call this
  * function.
  * 
- * Return value: the preferred colormap
+ * Return value: (transfer none): the preferred colormap
+ *
+ * Deprecated: 2.22: Use gdk_screen_get_system_colormap (gdk_screen_get_default ()) instead.
  **/
 GdkColormap *
 gdk_rgb_get_colormap (void)
@@ -3696,9 +3700,11 @@ gdk_rgb_get_colormap (void)
  * it can render to any colormap and visual. So there's no need to
  * call this function.
  * 
- * Return value: the preferred colormap
+ * Return value: (transfer none): the preferred colormap
  *
  * Since: 2.2
+ *
+ * Deprecated: 2.22: Use gdk_screen_get_system_colormap()
  **/
 GdkColormap *
 gdk_screen_get_rgb_colormap (GdkScreen *screen)
@@ -3727,9 +3733,11 @@ gdk_screen_get_rgb_colormap (GdkScreen *screen)
  * the optimal one in those previous versions. GdkRGB can now render to 
  * drawables with any visual.
  * 
- * Return value: The #GdkVisual chosen by GdkRGB.
+ * Return value: (transfer none): The #GdkVisual chosen by GdkRGB.
  *
  * Since: 2.2
+ *
+ * Deprecated: 2.22: Use gdk_screen_get_system_visual()
  **/
 GdkVisual *
 gdk_screen_get_rgb_visual (GdkScreen *screen)
@@ -3748,7 +3756,9 @@ gdk_screen_get_rgb_visual (GdkScreen *screen)
  * in those previous versions. GdkRGB can now render to drawables with
  * any visual.
  * 
- * Return value: The #GdkVisual chosen by GdkRGB.
+ * Return value: (transfer none): The #GdkVisual chosen by GdkRGB.
+ *
+ * Deprecated: 2.22: Use gdk_visual_get_system_visual (gdk_screen_get_default ()) instead.
  **/
 GdkVisual *
 gdk_rgb_get_visual (void)

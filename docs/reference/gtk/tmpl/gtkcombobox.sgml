@@ -42,6 +42,9 @@ gtk_combo_box_get_active_text().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkComboBox ##### -->
 <para>
 
@@ -98,7 +101,17 @@ gtk_combo_box_get_active_text().
 
 </para>
 
+<!-- ##### ARG GtkComboBox:entry-text-column ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkComboBox:focus-on-click ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkComboBox:has-entry ##### -->
 <para>
 
 </para>
@@ -153,10 +166,29 @@ gtk_combo_box_get_active_text().
 
 </para>
 
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_new_with_entry ##### -->
+<para>
+
+</para>
+
+@void: 
 @Returns: 
 
 
 <!-- ##### FUNCTION gtk_combo_box_new_with_model ##### -->
+<para>
+
+</para>
+
+@model: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_new_with_model_and_entry ##### -->
 <para>
 
 </para>
@@ -279,6 +311,7 @@ gtk_combo_box_get_active_text().
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -437,6 +470,33 @@ gtk_combo_box_get_active_text().
 
 
 <!-- ##### FUNCTION gtk_combo_box_get_button_sensitivity ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_has_entry ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_set_entry_text_column ##### -->
+<para>
+
+</para>
+
+@combo_box: 
+@text_column: 
+
+
+<!-- ##### FUNCTION gtk_combo_box_get_entry_text_column ##### -->
 <para>
 
 </para>

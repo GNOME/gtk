@@ -19,17 +19,22 @@ expose_event_callback (GtkWidget      *widget,
                        GdkEventExpose *event, 
                        gpointer        data)
 {
-  if (widget->window)
+  GdkWindow *window = gtk_widget_get_window (widget);
+  
+  if (window)
     {
       GtkStyle *style;
+      cairo_t *cr;
 
       style = gtk_widget_get_style (widget);
 
-      gdk_draw_rectangle (widget->window,
-                          style->bg_gc[GTK_STATE_NORMAL],
-                          TRUE,
-                          event->area.x, event->area.y,
-                          event->area.width, event->area.height);
+      cr = gdk_cairo_create (window);
+
+      gdk_cairo_set_source_color (cr, &style->bg[GTK_STATE_NORMAL]);
+      gdk_cairo_rectangle (cr, &event->area);
+      cairo_fill (cr);
+
+      cairo_destroy (cr);
     }
 
   return TRUE;
@@ -47,7 +52,8 @@ change_color_callback (GtkWidget *button,
 
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
   
-  colorsel = GTK_COLOR_SELECTION (GTK_COLOR_SELECTION_DIALOG (dialog)->colorsel);
+  colorsel = 
+    GTK_COLOR_SELECTION (gtk_color_selection_dialog_get_color_selection (GTK_COLOR_SELECTION_DIALOG (dialog)));
 
   gtk_color_selection_set_previous_color (colorsel, &color);
   gtk_color_selection_set_current_color (colorsel, &color);
@@ -125,7 +131,7 @@ do_colorsel (GtkWidget *do_widget)
 			G_CALLBACK (change_color_callback), NULL);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

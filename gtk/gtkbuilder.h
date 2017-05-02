@@ -18,12 +18,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_BUILDER_H__
+#define __GTK_BUILDER_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_BUILDER_H__
-#define __GTK_BUILDER_H__
 
 #include <gdkconfig.h>
 #include <glib-object.h>
@@ -52,7 +52,8 @@ typedef enum
   GTK_BUILDER_ERROR_INVALID_TAG,
   GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE,
   GTK_BUILDER_ERROR_INVALID_VALUE,
-  GTK_BUILDER_ERROR_VERSION_MISMATCH
+  GTK_BUILDER_ERROR_VERSION_MISMATCH,
+  GTK_BUILDER_ERROR_DUPLICATE_ID
 } GtkBuilderError;
 
 GQuark gtk_builder_error_quark (void);
@@ -135,7 +136,7 @@ gboolean     gtk_builder_value_from_string_type  (GtkBuilder    *builder,
 						  GError       **error);
 
 #define GTK_BUILDER_WARN_INVALID_CHILD_TYPE(object, type) \
-  g_warning ("'%s' is not a valid child type of '%s'", type, g_type_name (G_OBJECT_TYPE (type)))
+  g_warning ("'%s' is not a valid child type of '%s'", type, g_type_name (G_OBJECT_TYPE (object)))
 
 G_END_DECLS
 

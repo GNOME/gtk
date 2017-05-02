@@ -55,6 +55,7 @@ libgdk_win32_la_SOURCES = \
 	gdktestutils-win32.c \
 	gdkvisual-win32.c \
 	gdkwin32.h \
+	gdkwin32keys.h \
 	gdkwin32id.c \
 	gdkwindow-win32.c \
 	gdkwindow-win32.h \
@@ -63,3 +64,19 @@ libgdk_win32_la_SOURCES = \
 
 libgdkinclude_HEADERS =		\
 	gdkwin32.h
+
+# -------- MSVC Project Items -----
+MSVCPROJS = gdk-win32
+
+gdk_win32_FILES = $(libgdk_win32_la_SOURCES)
+gdk_win32_EXCLUDES = gdkwin32dummy
+
+gdk_win32_HEADERS_DIR = $(libgdkincludedir)
+gdk_win32_HEADERS_INST = $(libgdkinclude_HEADERS)
+gdk_win32_HEADERS_EXCLUDES = gdkwin32dummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: $(top_builddir)/build/win32/vs9/gdk-win32.vcproj $(top_builddir)/build/win32/vs9/gdk-win32.headers
+
+-include $(top_srcdir)/git.mk

@@ -48,6 +48,9 @@ gtk_button_box_set_layout().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkHButtonBox ##### -->
 <para>
 GtkHButtonBox does not contain any public fields.
@@ -59,6 +62,7 @@ GtkHButtonBox does not contain any public fields.
 Creates a new horizontal button box.
 </para>
 
+@void: 
 @Returns: a new button box #GtkWidget.
 
 
@@ -68,6 +72,7 @@ Retrieves the current default spacing for horizontal button boxes. This is the n
 to be placed between the buttons when they are arranged.
 </para>
 
+@void: 
 @Returns: the default number of pixels between buttons.
 
 
@@ -76,6 +81,7 @@ to be placed between the buttons when they are arranged.
 Retrieves the current layout used to arrange buttons in button box widgets.
 </para>
 
+@void: 
 @Returns: the current #GtkButtonBoxStyle.
 
 

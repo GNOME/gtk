@@ -78,8 +78,8 @@ the class name of the widget, while for the class path, the class name is
 always used.
 </para>
 <para>
-Since GTK+ 2.10,<literal>widget_class</literal> paths can also contain
-<literal>&lt;classname&gt;</literal> substrings, which are matching 
+Since GTK+ 2.10, <literal>widget_class</literal> paths can also contain
+<literal>&lt;classname&gt;</literal> substrings, which are matching
 the class with the given name and any derived classes. For instance,
 <informalexample><programlisting>
 widget_class "*&lt;GtkMenuItem&gt;.GtkLabel" style "my-style"
@@ -737,6 +737,9 @@ same as for styles.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRcStyle ##### -->
 <para>
 The #GtkRcStyle structure is used to represent a set
@@ -822,6 +825,7 @@ specific portions of a RC file.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -849,49 +853,47 @@ specific portions of a RC file.
 <para>
 Adds a #GtkRcStyle that will be looked up by a match against
 the widget's pathname. This is equivalent to a:
-<literal>
-widget PATTERN style STYLE
-</literal>
+ <literal>widget PATTERN style STYLE</literal>
 statement in a RC file.
 </para>
 
 @rc_style: the #GtkRcStyle to use for widgets matching @pattern
 @pattern: the pattern
+@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
 
 
 <!-- ##### FUNCTION gtk_rc_add_widget_class_style ##### -->
 <para>
 Adds a #GtkRcStyle that will be looked up by a match against
 the widget's class pathname. This is equivalent to a:
-<literal>
-widget_class PATTERN style STYLE
-</literal>
+<literal>widget_class PATTERN style STYLE</literal>
 statement in a RC file.
 </para>
 
 @rc_style: the #GtkRcStyle to use for widgets matching @pattern
 @pattern: the pattern
+@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
 
 
 <!-- ##### FUNCTION gtk_rc_add_class_style ##### -->
 <para>
 Adds a #GtkRcStyle that will be looked up by a matching against
 the class hierarchy of the widget. This is equivalent to a:
-<literal>
-class PATTERN style STYLE
-</literal>
+<literal>class PATTERN style STYLE</literal>
 statement in a RC file.
 </para>
 
 @rc_style: the #GtkRcStyle to use for widgets deriving from @pattern
 @pattern: the pattern
+@Deprecated: Use gtk_rc_parse_string() with a suitable string instead.
 
 
-<!-- ##### FUNCTION gtk_rc_parse ##### -->
+<!-- ##### MACRO gtk_rc_parse ##### -->
 <para>
 Parses a given resource file.
 </para>
 
+<!-- # Unused Parameters # -->
 @filename: the filename of a file to parse. If @filename is not absolute, it
   is searched in the current directory.
 
@@ -908,6 +910,7 @@ Parses resource information directly from a string.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -929,25 +932,24 @@ Parses resource information directly from a string.
 @settings: 
 
 
-<!-- ##### FUNCTION gtk_rc_add_default_file ##### -->
+<!-- ##### MACRO gtk_rc_add_default_file ##### -->
 <para>
 </para>
 
-@filename: 
 
 
 <!-- ##### FUNCTION gtk_rc_get_default_files ##### -->
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_rc_set_default_files ##### -->
+<!-- ##### MACRO gtk_rc_set_default_files ##### -->
 <para>
 </para>
 
-@filenames: 
 
 
 <!-- ##### FUNCTION gtk_rc_parse_color ##### -->
@@ -1021,6 +1023,7 @@ otherwise %NULL.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1029,6 +1032,7 @@ otherwise %NULL.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1037,6 +1041,7 @@ otherwise %NULL.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1047,6 +1052,7 @@ be installed. (GTK+ does not actually use this directory
 itself.)
 </para>
 
+@void: 
 @Returns: The directory (must be freed with g_free()).
 
 
@@ -1056,6 +1062,7 @@ Creates a new #GtkRcStyle with no fields set and
 a reference count of 1.
 </para>
 
+@void: 
 @Returns: the newly-created #GtkRcStyle
 
 

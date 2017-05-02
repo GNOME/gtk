@@ -131,7 +131,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                                                       P_("Deprecated property, use shadow_type instead"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_ETCHED_IN,
-                                                      GTK_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow-type",
@@ -306,8 +306,8 @@ gtk_frame_forall (GtkContainer *container,
 /**
  * gtk_frame_set_label:
  * @frame: a #GtkFrame
- * @label: the text to use as the label of the frame
- * 
+ * @label: (allow-none): the text to use as the label of the frame
+ *
  * Sets the text of the label. If @label is %NULL,
  * the current label is removed.
  **/
@@ -344,7 +344,7 @@ gtk_frame_set_label (GtkFrame *frame,
  *               a #GtkLabel. This string is owned by GTK+ and
  *               must not be modified or freed.
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_frame_get_label (GtkFrame *frame)
 {
   g_return_val_if_fail (GTK_IS_FRAME (frame), NULL);
@@ -379,7 +379,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
   
   if (frame->label_widget)
     {
-      need_resize = GTK_WIDGET_VISIBLE (frame->label_widget);
+      need_resize = gtk_widget_get_visible (frame->label_widget);
       gtk_widget_unparent (frame->label_widget);
     }
 
@@ -389,10 +389,10 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
     {
       frame->label_widget = label_widget;
       gtk_widget_set_parent (label_widget, GTK_WIDGET (frame));
-      need_resize |= GTK_WIDGET_VISIBLE (label_widget);
+      need_resize |= gtk_widget_get_visible (label_widget);
     }
   
-  if (GTK_WIDGET_VISIBLE (frame) && need_resize)
+  if (gtk_widget_get_visible (GTK_WIDGET (frame)) && need_resize)
     gtk_widget_queue_resize (GTK_WIDGET (frame));
 
   g_object_freeze_notify (G_OBJECT (frame));
@@ -408,7 +408,7 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
  * Retrieves the label widget for the frame. See
  * gtk_frame_set_label_widget().
  *
- * Return value: the label widget, or %NULL if there is none.
+ * Return value: (transfer none): the label widget, or %NULL if there is none.
  **/
 GtkWidget *
 gtk_frame_get_label_widget (GtkFrame *frame)
@@ -462,8 +462,10 @@ gtk_frame_set_label_align (GtkFrame *frame,
 /**
  * gtk_frame_get_label_align:
  * @frame: a #GtkFrame
- * @xalign: location to store X alignment of frame's label, or %NULL
- * @yalign: location to store X alignment of frame's label, or %NULL
+ * @xalign: (out) (allow-none): location to store X alignment of
+ *     frame's label, or %NULL
+ * @yalign: (out) (allow-none): location to store X alignment of
+ *     frame's label, or %NULL
  * 
  * Retrieves the X and Y alignment of the frame's label. See
  * gtk_frame_set_label_align().
@@ -492,19 +494,22 @@ void
 gtk_frame_set_shadow_type (GtkFrame      *frame,
 			   GtkShadowType  type)
 {
+  GtkWidget *widget;
+
   g_return_if_fail (GTK_IS_FRAME (frame));
 
   if ((GtkShadowType) frame->shadow_type != type)
     {
+      widget = GTK_WIDGET (frame);
       frame->shadow_type = type;
       g_object_notify (G_OBJECT (frame), "shadow-type");
 
-      if (GTK_WIDGET_DRAWABLE (frame))
+      if (gtk_widget_is_drawable (widget))
 	{
-	  gtk_widget_queue_draw (GTK_WIDGET (frame));
+	  gtk_widget_queue_draw (widget);
 	}
       
-      gtk_widget_queue_resize (GTK_WIDGET (frame));
+      gtk_widget_queue_resize (widget);
     }
 }
 
@@ -532,7 +537,7 @@ gtk_frame_paint (GtkWidget    *widget,
   GtkFrame *frame;
   gint x, y, width, height;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       frame = GTK_FRAME (widget);
 
@@ -588,7 +593,7 @@ static gboolean
 gtk_frame_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_frame_paint (widget, &event->area);
 
@@ -606,7 +611,7 @@ gtk_frame_size_request (GtkWidget      *widget,
   GtkBin *bin = GTK_BIN (widget);
   GtkRequisition child_requisition;
   
-  if (frame->label_widget && GTK_WIDGET_VISIBLE (frame->label_widget))
+  if (frame->label_widget && gtk_widget_get_visible (frame->label_widget))
     {
       gtk_widget_size_request (frame->label_widget, &child_requisition);
 
@@ -620,7 +625,7 @@ gtk_frame_size_request (GtkWidget      *widget,
       requisition->height = 0;
     }
   
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gtk_widget_size_request (bin->child, &child_requisition);
 
@@ -649,19 +654,19 @@ gtk_frame_size_allocate (GtkWidget     *widget,
   /* If the child allocation changed, that means that the frame is drawn
    * in a new place, so we must redraw the entire widget.
    */
-  if (GTK_WIDGET_MAPPED (widget) &&
+  if (gtk_widget_get_mapped (widget) &&
       (new_allocation.x != frame->child_allocation.x ||
        new_allocation.y != frame->child_allocation.y ||
        new_allocation.width != frame->child_allocation.width ||
        new_allocation.height != frame->child_allocation.height))
     gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
   
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     gtk_widget_size_allocate (bin->child, &new_allocation);
   
   frame->child_allocation = new_allocation;
   
-  if (frame->label_widget && GTK_WIDGET_VISIBLE (frame->label_widget))
+  if (frame->label_widget && gtk_widget_get_visible (frame->label_widget))
     {
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;

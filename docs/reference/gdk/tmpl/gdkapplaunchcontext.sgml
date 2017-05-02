@@ -2,7 +2,7 @@
 Application launching
 
 <!-- ##### SECTION Short_Description ##### -->
-startup notification for applications
+Startup notification for applications
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -36,9 +36,12 @@ g_object_unref (context);
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### TYPEDEF GdkAppLaunchContext ##### -->
 <para>
-
+An opaque structure representing an application launch context.
 </para>
 
 
@@ -47,6 +50,7 @@ g_object_unref (context);
 
 </para>
 
+@void: 
 @Returns: 
 
 

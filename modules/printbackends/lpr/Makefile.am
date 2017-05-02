@@ -30,3 +30,5 @@ noinst_HEADERS =			\
 
 libprintbackend_lpr_la_LDFLAGS =  -avoid-version -module $(no_undefined)
 libprintbackend_lpr_la_LIBADD = $(LDADDS)
+
+-include $(top_srcdir)/git.mk

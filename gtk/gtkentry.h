@@ -1,6 +1,10 @@
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
+ * Copyright (C) 2004-2006 Christian Hammond
+ * Copyright (C) 2008 Cody Russell
+ * Copyright (C) 2008 Red Hat, Inc.
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -24,20 +28,22 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_ENTRY_H__
 #define __GTK_ENTRY_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtkmenu.h>
+#include <gtk/gtkentrybuffer.h>
 #include <gtk/gtkentrycompletion.h>
-#include <pango/pango.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkselection.h>
+
 
 G_BEGIN_DECLS
 
@@ -48,6 +54,11 @@ G_BEGIN_DECLS
 #define GTK_IS_ENTRY_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ENTRY))
 #define GTK_ENTRY_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ENTRY, GtkEntryClass))
 
+typedef enum
+{
+  GTK_ENTRY_ICON_PRIMARY,
+  GTK_ENTRY_ICON_SECONDARY
+} GtkEntryIconPosition;
 
 typedef struct _GtkEntry       GtkEntry;
 typedef struct _GtkEntryClass  GtkEntryClass;
@@ -56,7 +67,7 @@ struct _GtkEntry
 {
   GtkWidget  widget;
 
-  gchar       *GSEAL (text);
+  gchar       *GSEAL (text);                        /* COMPAT: Deprecated, not used. Remove in GTK+ 3.x */
 
   guint        GSEAL (editable) : 1;
   guint        GSEAL (visible)  : 1;
@@ -64,8 +75,8 @@ struct _GtkEntry
   guint        GSEAL (in_drag) : 1;	            /* FIXME: Should be private?
                                                        Dragging within the selection */
 
-  guint16      GSEAL (text_length);	            /* length in use, in chars */
-  guint16      GSEAL (text_max_length);
+  guint16      GSEAL (text_length);                 /* COMPAT: Deprecated, not used. Remove in GTK+ 3.x */
+  guint16      GSEAL (text_max_length);             /* COMPAT: Deprecated, not used. Remove in GTK+ 3.x */
 
   /*< private >*/
   GdkWindow    *GSEAL (text_area);
@@ -98,8 +109,8 @@ struct _GtkEntry
   gint          GSEAL (ascent);	                    /* font ascent in pango units  */
   gint          GSEAL (descent);	            /* font descent in pango units */
 
-  guint16       GSEAL (text_size);	            /* allocated size, in bytes */
-  guint16       GSEAL (n_bytes);	            /* length in use, in bytes */
+  guint16       GSEAL (x_text_size);	            /* allocated size, in bytes */
+  guint16       GSEAL (x_n_bytes);	            /* length in use, in bytes */
 
   guint16       GSEAL (preedit_length);	            /* length of preedit string, in bytes */
   guint16       GSEAL (preedit_cursor);	            /* offset of cursor within preedit string, in chars */
@@ -124,21 +135,21 @@ struct _GtkEntryClass
 
   /* Action signals
    */
-  void (* activate)           (GtkEntry       *entry);
-  void (* move_cursor)        (GtkEntry       *entry,
-			       GtkMovementStep step,
-			       gint            count,
-			       gboolean        extend_selection);
-  void (* insert_at_cursor)   (GtkEntry       *entry,
-			       const gchar    *str);
-  void (* delete_from_cursor) (GtkEntry       *entry,
-			       GtkDeleteType   type,
-			       gint            count);
-  void (* backspace)          (GtkEntry       *entry);
-  void (* cut_clipboard)      (GtkEntry       *entry);
-  void (* copy_clipboard)     (GtkEntry       *entry);
-  void (* paste_clipboard)    (GtkEntry       *entry);
-  void (* toggle_overwrite)   (GtkEntry       *entry);
+  void (* activate)           (GtkEntry             *entry);
+  void (* move_cursor)        (GtkEntry             *entry,
+			       GtkMovementStep       step,
+			       gint                  count,
+			       gboolean              extend_selection);
+  void (* insert_at_cursor)   (GtkEntry             *entry,
+			       const gchar          *str);
+  void (* delete_from_cursor) (GtkEntry             *entry,
+			       GtkDeleteType         type,
+			       gint                  count);
+  void (* backspace)          (GtkEntry             *entry);
+  void (* cut_clipboard)      (GtkEntry             *entry);
+  void (* copy_clipboard)     (GtkEntry             *entry);
+  void (* paste_clipboard)    (GtkEntry             *entry);
+  void (* toggle_overwrite)   (GtkEntry             *entry);
 
   /* hook to add other objects beside the entry (like in GtkSpinButton) */
   void (* get_text_area_size) (GtkEntry       *entry,
@@ -148,32 +159,47 @@ struct _GtkEntryClass
 			       gint           *height);
 
   /* Padding for future expansion */
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved1)      (void);
+  void (*_gtk_reserved2)      (void);
 };
 
 GType      gtk_entry_get_type       		(void) G_GNUC_CONST;
 GtkWidget* gtk_entry_new            		(void);
+GtkWidget* gtk_entry_new_with_buffer            (GtkEntryBuffer *buffer);
+
+GtkEntryBuffer* gtk_entry_get_buffer            (GtkEntry       *entry);
+void       gtk_entry_set_buffer                 (GtkEntry       *entry,
+                                                 GtkEntryBuffer *buffer);
+
+GdkWindow *gtk_entry_get_text_window            (GtkEntry      *entry);
+
 void       gtk_entry_set_visibility 		(GtkEntry      *entry,
 						 gboolean       visible);
 gboolean   gtk_entry_get_visibility             (GtkEntry      *entry);
+
 void       gtk_entry_set_invisible_char         (GtkEntry      *entry,
                                                  gunichar       ch);
 gunichar   gtk_entry_get_invisible_char         (GtkEntry      *entry);
+void       gtk_entry_unset_invisible_char       (GtkEntry      *entry);
+
 void       gtk_entry_set_has_frame              (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_has_frame              (GtkEntry      *entry);
+
 void       gtk_entry_set_inner_border                (GtkEntry        *entry,
                                                       const GtkBorder *border);
-G_CONST_RETURN GtkBorder* gtk_entry_get_inner_border (GtkEntry        *entry);
+const GtkBorder* gtk_entry_get_inner_border          (GtkEntry        *entry);
+
 void       gtk_entry_set_overwrite_mode         (GtkEntry      *entry,
                                                  gboolean       overwrite);
 gboolean   gtk_entry_get_overwrite_mode         (GtkEntry      *entry);
+
 /* text is truncated if needed */
 void       gtk_entry_set_max_length 		(GtkEntry      *entry,
 						 gint           max);
 gint       gtk_entry_get_max_length             (GtkEntry      *entry);
 guint16    gtk_entry_get_text_length            (GtkEntry      *entry);
+
 void       gtk_entry_set_activates_default      (GtkEntry      *entry,
                                                  gboolean       setting);
 gboolean   gtk_entry_get_activates_default      (GtkEntry      *entry);
@@ -187,7 +213,7 @@ gint       gtk_entry_get_width_chars            (GtkEntry      *entry);
 void       gtk_entry_set_text                   (GtkEntry      *entry,
                                                  const gchar   *text);
 /* returns a reference to the text */
-G_CONST_RETURN gchar* gtk_entry_get_text        (GtkEntry      *entry);
+const gchar* gtk_entry_get_text                 (GtkEntry      *entry);
 
 PangoLayout* gtk_entry_get_layout               (GtkEntry      *entry);
 void         gtk_entry_get_layout_offsets       (GtkEntry      *entry,
@@ -211,6 +237,79 @@ gint       gtk_entry_text_index_to_layout_index (GtkEntry      *entry,
 void           gtk_entry_set_cursor_hadjustment (GtkEntry      *entry,
                                                  GtkAdjustment *adjustment);
 GtkAdjustment* gtk_entry_get_cursor_hadjustment (GtkEntry      *entry);
+
+/* Progress API
+ */
+void           gtk_entry_set_progress_fraction   (GtkEntry     *entry,
+                                                  gdouble       fraction);
+gdouble        gtk_entry_get_progress_fraction   (GtkEntry     *entry);
+
+void           gtk_entry_set_progress_pulse_step (GtkEntry     *entry,
+                                                  gdouble       fraction);
+gdouble        gtk_entry_get_progress_pulse_step (GtkEntry     *entry);
+
+void           gtk_entry_progress_pulse          (GtkEntry     *entry);
+
+/* Setting and managing icons
+ */
+void           gtk_entry_set_icon_from_pixbuf            (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos,
+							  GdkPixbuf            *pixbuf);
+void           gtk_entry_set_icon_from_stock             (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos,
+							  const gchar          *stock_id);
+void           gtk_entry_set_icon_from_icon_name         (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos,
+							  const gchar          *icon_name);
+void           gtk_entry_set_icon_from_gicon             (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos,
+							  GIcon                *icon);
+GtkImageType gtk_entry_get_icon_storage_type             (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos);
+GdkPixbuf*   gtk_entry_get_icon_pixbuf                   (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos);
+const gchar* gtk_entry_get_icon_stock                    (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos);
+const gchar* gtk_entry_get_icon_name                     (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos);
+GIcon*       gtk_entry_get_icon_gicon                    (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos);
+void         gtk_entry_set_icon_activatable              (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos,
+							  gboolean              activatable);
+gboolean     gtk_entry_get_icon_activatable              (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos);
+void         gtk_entry_set_icon_sensitive                (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos,
+							  gboolean              sensitive);
+gboolean     gtk_entry_get_icon_sensitive                (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos);
+gint         gtk_entry_get_icon_at_pos                   (GtkEntry             *entry,
+							  gint                  x,
+							  gint                  y);
+void         gtk_entry_set_icon_tooltip_text             (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos,
+							  const gchar          *tooltip);
+gchar *      gtk_entry_get_icon_tooltip_text             (GtkEntry             *entry,
+                                                          GtkEntryIconPosition  icon_pos);
+void         gtk_entry_set_icon_tooltip_markup           (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos,
+							  const gchar          *tooltip);
+gchar *      gtk_entry_get_icon_tooltip_markup           (GtkEntry             *entry,
+                                                          GtkEntryIconPosition  icon_pos);
+void         gtk_entry_set_icon_drag_source              (GtkEntry             *entry,
+							  GtkEntryIconPosition  icon_pos,
+							  GtkTargetList        *target_list,
+							  GdkDragAction         actions);
+gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
+
+GdkWindow  * gtk_entry_get_icon_window                   (GtkEntry             *entry,
+                                                          GtkEntryIconPosition  icon_pos);
+
+gboolean    gtk_entry_im_context_filter_keypress         (GtkEntry             *entry,
+                                                          GdkEventKey          *event);
+void        gtk_entry_reset_im_context                   (GtkEntry             *entry);
+
 
 /* Deprecated compatibility functions
  */

@@ -25,6 +25,14 @@
 
 G_BEGIN_DECLS
 
+/* Page drawing states */
+typedef enum
+{
+  GTK_PAGE_DRAWING_STATE_READY,
+  GTK_PAGE_DRAWING_STATE_DRAWING,
+  GTK_PAGE_DRAWING_STATE_DEFERRED_DRAWING
+} GtkPageDrawingState;
+
 struct _GtkPrintOperationPrivate
 {
   GtkPrintOperationAction action;
@@ -35,6 +43,8 @@ struct _GtkPrintOperationPrivate
   GtkPrintSettings *print_settings;
   gchar *job_name;
   gint nr_of_pages;
+  gint nr_of_pages_to_print;
+  gint page_position;
   gint current_page;
   GtkUnit unit;
   gchar *export_filename;
@@ -44,6 +54,11 @@ struct _GtkPrintOperationPrivate
   guint cancelled          : 1;
   guint allow_async        : 1;
   guint is_sync            : 1;
+  guint support_selection  : 1;
+  guint has_selection      : 1;
+  guint embed_page_setup   : 1;
+
+  GtkPageDrawingState      page_drawing_state;
 
   guint print_pages_idle_id;
   guint show_progress_timeout_id;
@@ -60,6 +75,9 @@ struct _GtkPrintOperationPrivate
   guint manual_orientation : 1;
   double manual_scale;
   GtkPageSet manual_page_set;
+  guint manual_number_up;
+  GtkNumberUpLayout manual_number_up_layout;
+
   GtkWidget *custom_widget;
   gchar *custom_tab_label;
   
@@ -122,6 +140,11 @@ void             _gtk_print_context_set_page_setup                  (GtkPrintCon
 								     GtkPageSetup      *page_setup);
 void             _gtk_print_context_translate_into_margin           (GtkPrintContext   *context);
 void             _gtk_print_context_rotate_according_to_orientation (GtkPrintContext   *context);
+void             _gtk_print_context_set_hard_margins                (GtkPrintContext   *context,
+								     gdouble            top,
+								     gdouble            bottom,
+								     gdouble            left,
+								     gdouble            right);
 
 G_END_DECLS
 

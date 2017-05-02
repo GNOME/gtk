@@ -58,23 +58,15 @@ displays.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkImage ##### -->
 <para>
 The #GdkImage struct contains information on the image and the pixel data.
 </para>
 
 @parent_instance: the parent instance
-@type: the type of the image.
-@visual: the visual.
-@byte_order: the byte order.
-@width: the width of the image in pixels.
-@height: the height of the image in pixels.
-@depth: the depth of the image, i.e. the number of bits per pixel.
-@bpp: the number of bytes per pixel.
-@bpl: the number of bytes per line of the image.
-@bits_per_pixel: the number of bits per pixel.
-@mem: the pixel data.
-@colormap: the #GdkColormap associated with the image
 
 <!-- ##### FUNCTION gdk_image_new ##### -->
 <para>
@@ -170,6 +162,96 @@ Destroys a #GdkImage, freeing any resources allocated for it.
 
 @image: 
 @colormap: 
+
+
+<!-- ##### FUNCTION gdk_image_get_bits_per_pixel ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_bytes_per_pixel ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_bytes_per_line ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_byte_order ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_depth ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_height ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_image_type ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_visual ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_width ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_get_pixels ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_image_put_pixel ##### -->

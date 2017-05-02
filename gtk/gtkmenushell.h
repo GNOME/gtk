@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_MENU_SHELL_H__
 #define __GTK_MENU_SHELL_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkcontainer.h>
 
 
@@ -66,6 +65,7 @@ struct _GtkMenuShell
   guint GSEAL (ignore_leave) : 1; /* unused */
   guint GSEAL (menu_flag) : 1;    /* unused */
   guint GSEAL (ignore_enter) : 1;
+  guint GSEAL (keyboard_mode) : 1;
 };
 
 struct _GtkMenuShellClass
@@ -116,7 +116,6 @@ void  gtk_menu_shell_select_first      (GtkMenuShell *menu_shell,
 					gboolean      search_sensitive);
 void _gtk_menu_shell_select_last       (GtkMenuShell *menu_shell,
 					gboolean      search_sensitive);
-void  _gtk_menu_shell_activate         (GtkMenuShell *menu_shell);
 gint  _gtk_menu_shell_get_popup_delay  (GtkMenuShell *menu_shell);
 void  gtk_menu_shell_cancel            (GtkMenuShell *menu_shell);
 
@@ -130,6 +129,11 @@ void  _gtk_menu_shell_remove_mnemonic  (GtkMenuShell *menu_shell,
 gboolean gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell);
 void     gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
                                         gboolean      take_focus);
+
+void     _gtk_menu_shell_update_mnemonics  (GtkMenuShell *menu_shell);
+void     _gtk_menu_shell_set_keyboard_mode (GtkMenuShell *menu_shell,
+                                            gboolean      keyboard_mode);
+gboolean _gtk_menu_shell_get_keyboard_mode (GtkMenuShell *menu_shell);
 
 G_END_DECLS
 

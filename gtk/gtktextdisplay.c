@@ -75,6 +75,8 @@
  */
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+#undef GDK_DISABLE_DEPRECATED
+
 #include "config.h"
 #include "gtktextdisplay.h"
 #include "gtkintl.h"
@@ -202,12 +204,12 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
 
   if (text_renderer->state == SELECTED)
     {
-      if (GTK_WIDGET_HAS_FOCUS (text_renderer->widget))
+      if (gtk_widget_has_focus (text_renderer->widget))
 	fg_color = &text_renderer->widget->style->text[GTK_STATE_SELECTED];
       else
 	fg_color = &text_renderer->widget->style->text[GTK_STATE_ACTIVE];
     }
-  else if (text_renderer->state == CURSOR && GTK_WIDGET_HAS_FOCUS (text_renderer->widget))
+  else if (text_renderer->state == CURSOR && gtk_widget_has_focus (text_renderer->widget))
     fg_color = &text_renderer->widget->style->base[GTK_STATE_NORMAL];
   else
     fg_color = &appearance->fg_color;
@@ -259,12 +261,12 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
 
   if (text_renderer->state == SELECTED)
     {
-      if (GTK_WIDGET_HAS_FOCUS (text_renderer->widget))
+      if (gtk_widget_has_focus (text_renderer->widget))
 	fg_gc = text_renderer->widget->style->text_gc[GTK_STATE_SELECTED];
       else
 	fg_gc = text_renderer->widget->style->text_gc[GTK_STATE_SELECTED];
     }
-  else if (text_renderer->state == CURSOR && GTK_WIDGET_HAS_FOCUS (text_renderer->widget))
+  else if (text_renderer->state == CURSOR && gtk_widget_has_focus (text_renderer->widget))
     fg_gc = text_renderer->widget->style->base_gc[GTK_STATE_NORMAL];
   else
     fg_gc = text_renderer->widget->style->text_gc[GTK_STATE_NORMAL];
@@ -481,7 +483,7 @@ render_para (GtkTextRenderer    *text_renderer,
 
   screen_width = line_display->total_width;
   
-  if (GTK_WIDGET_HAS_FOCUS (text_renderer->widget))
+  if (gtk_widget_has_focus (text_renderer->widget))
     state = GTK_STATE_SELECTED;
   else
     state = GTK_STATE_ACTIVE;
@@ -649,7 +651,7 @@ render_para (GtkTextRenderer    *text_renderer,
                 }
             }
 	  else if (line_display->has_block_cursor &&
-		   GTK_WIDGET_HAS_FOCUS (text_renderer->widget) &&
+		   gtk_widget_has_focus (text_renderer->widget) &&
 		   byte_offset <= line_display->insert_index &&
 		   (line_display->insert_index < byte_offset + line->length ||
 		    (at_last_line && line_display->insert_index == byte_offset + line->length)))

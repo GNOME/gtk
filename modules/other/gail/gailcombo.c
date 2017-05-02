@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include "gailcombo.h"
 
@@ -41,9 +43,9 @@ static gboolean     gail_combo_do_action               (AtkAction      *action,
 static gboolean     idle_do_action                     (gpointer       data);
 static gint         gail_combo_get_n_actions           (AtkAction      *action)
 ;
-static G_CONST_RETURN gchar* gail_combo_get_description(AtkAction      *action,
+static const gchar* gail_combo_get_description         (AtkAction      *action,
                                                         gint           i);
-static G_CONST_RETURN gchar* gail_combo_get_name       (AtkAction      *action,
+static const gchar* gail_combo_get_name                (AtkAction      *action,
                                                         gint           i);
 static gboolean              gail_combo_set_description(AtkAction      *action,
                                                         gint           i,
@@ -265,7 +267,7 @@ gail_combo_do_action (AtkAction *action,
      */
     return FALSE;
 
-  if (!GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+  if (!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
   combo = GAIL_COMBO (action);
@@ -303,12 +305,12 @@ idle_do_action (gpointer data)
   gail_combo->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (gail_combo)->widget;
   if (widget == NULL /* State is defunct */ ||
-      !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+      !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
   combo = GTK_COMBO (widget);
 
-  do_popup = !GTK_WIDGET_MAPPED (combo->popwin);
+  do_popup = !gtk_widget_get_mapped (combo->popwin);
 
   tmp_event.button.type = GDK_BUTTON_PRESS; 
   tmp_event.button.window = widget->window;
@@ -351,7 +353,7 @@ gail_combo_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_get_description (AtkAction *action,
                            gint      i)
 {
@@ -366,7 +368,7 @@ gail_combo_get_description (AtkAction *action,
     return NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_get_name (AtkAction *action,
                      gint      i)
 {

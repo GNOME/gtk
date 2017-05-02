@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.decl
 
 democodedir=$(datadir)/gtk-2.0/demo
 
-## These should be in the order you want them to appear in the 
+## These should be in the order you want them to appear in the
 ## demo app, which means alphabetized by demo title, not filename
 demos =						\
 	appwindow.c				\
@@ -17,23 +17,31 @@ demos =						\
 	dialog.c				\
 	drawingarea.c				\
 	editable_cells.c			\
+	entry_buffer.c				\
 	entry_completion.c			\
 	expander.c  				\
 	hypertext.c				\
 	iconview.c				\
 	iconview_edit.c				\
 	images.c				\
+	infobar.c				\
+	links.c					\
 	list_store.c				\
 	menus.c					\
+	offscreen_window.c			\
+	offscreen_window2.c			\
 	panes.c					\
 	pickers.c				\
 	pixbufs.c				\
 	printing.c				\
 	rotated_text.c				\
+	search_entry.c				\
 	sizegroup.c				\
+	spinner.c				\
 	stock_browser.c				\
 	textview.c				\
 	textscroll.c				\
+	toolpalette.c				\
 	tree_store.c				\
 	ui_manager.c
 
@@ -47,14 +55,14 @@ INCLUDES = \
 	$(GTK_DEP_CFLAGS)
 
 DEPS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib) 				\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
 LDADDS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)        			\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gtk/$(gtktargetlib)				\
+	$(GTK_DEP_LIBS) 						\
+	-lm
 
 bin_PROGRAMS = gtk-demo
 
@@ -94,4 +102,16 @@ IMAGEFILES=	alphatest.png		\
 
 democode_DATA = $(demos) $(IMAGEFILES) demo.ui
 
+# ------------------- MSVC Projects --------------------
+MSVCPROJS = gtk-demo
+
+gtk_demo_FILES = $(gtk_demo_SOURCES)
+gtk_demo_EXCLUDES = gtkdemodummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: $(top_builddir)/build/win32/vs9/gtk-demo.vcproj
+
 DISTCLEANFILES = demos.h
+
+-include $(top_srcdir)/git.mk

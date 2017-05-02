@@ -35,7 +35,9 @@
 
 #include "config.h"
 
+#ifndef _WIN32
 #define _GNU_SOURCE
+#endif
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,20 +45,19 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "gtkmain.h"
-#include "gtkintl.h"
 #include "gtkbindings.h"
-#include "gtkhscale.h"
-#include "gtkvscale.h"
 #include "gtkframe.h"
-#include "gtkhbox.h"
+#include "gtkmain.h"
+#include "gtkmarshalers.h"
+#include "gtkorientable.h"
+#include "gtkprivate.h"
+#include "gtkscale.h"
+#include "gtkscalebutton.h"
+#include "gtkstock.h"
 #include "gtkvbox.h"
 #include "gtkwindow.h"
-#include "gtkmarshalers.h"
-#include "gtkstock.h"
-#include "gtkprivate.h"
-#include "gtkscalebutton.h"
 
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #define SCALE_SIZE 100
@@ -87,6 +88,7 @@ enum
 struct _GtkScaleButtonPrivate
 {
   GtkWidget *dock;
+  GtkWidget *box;
   GtkWidget *scale;
   GtkWidget *image;
 
@@ -117,6 +119,8 @@ static void	gtk_scale_button_get_property	(GObject             *object,
 						 guint                prop_id,
 						 GValue              *value,
 						 GParamSpec          *pspec);
+static void gtk_scale_button_set_orientation_private (GtkScaleButton *button,
+                                                      GtkOrientation  orientation);
 static gboolean	gtk_scale_button_scroll		(GtkWidget           *widget,
 						 GdkEventScroll      *event);
 static void gtk_scale_button_screen_changed	(GtkWidget           *widget,
@@ -152,11 +156,13 @@ static void gtk_scale_button_update_icon	(GtkScaleButton      *button);
 static void gtk_scale_button_scale_value_changed(GtkRange            *range);
 
 /* see below for scale definitions */
-static GtkWidget *gtk_scale_button_scale_box_new(GtkScaleButton      *button);
+static GtkWidget *gtk_scale_button_scale_new    (GtkScaleButton      *button);
+
+G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                NULL))
 
 static guint signals[LAST_SIGNAL] = { 0, };
-
-G_DEFINE_TYPE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON)
 
 static void
 gtk_scale_button_class_init (GtkScaleButtonClass *klass)
@@ -183,16 +189,16 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    *
    * The orientation of the #GtkScaleButton's popup window.
    *
+   * Note that since GTK+ 2.16, #GtkScaleButton implements the
+   * #GtkOrientable interface which has its own @orientation
+   * property. However we redefine the property here in order to
+   * override its default horizontal orientation.
+   *
    * Since: 2.14
    **/
-  g_object_class_install_property (gobject_class,
-				   PROP_ORIENTATION,
-				   g_param_spec_enum ("orientation",
-                                                      P_("Orientation"),
-                                                      P_("The orientation of the scale"),
-                                                      GTK_TYPE_ORIENTATION,
-                                                      GTK_ORIENTATION_VERTICAL,
-                                                      GTK_PARAM_READWRITE));
+  g_object_class_override_property (gobject_class,
+				    PROP_ORIENTATION,
+				    "orientation");
 
   g_object_class_install_property (gobject_class,
 				   PROP_VALUE,
@@ -332,6 +338,7 @@ static void
 gtk_scale_button_init (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv;
+  GtkWidget *frame;
 
   button->priv = priv = GET_PRIVATE (button);
 
@@ -361,6 +368,15 @@ gtk_scale_button_init (GtkScaleButton *button)
 		    G_CALLBACK (cb_dock_grab_broken_event), button);
   gtk_window_set_decorated (GTK_WINDOW (priv->dock), FALSE);
 
+  /* frame */
+  frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
+  gtk_container_add (GTK_CONTAINER (priv->dock), frame);
+
+  /* box for scale and +/- buttons */
+  priv->box = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (frame), priv->box);
+
   /* + */
   button->plus_button = gtk_button_new_with_label ("+");
   gtk_button_set_relief (GTK_BUTTON (button->plus_button), GTK_RELIEF_NONE);
@@ -368,6 +384,7 @@ gtk_scale_button_init (GtkScaleButton *button)
 		    G_CALLBACK (cb_button_press), button);
   g_signal_connect (button->plus_button, "button-release-event",
 		    G_CALLBACK (cb_button_release), button);
+  gtk_box_pack_start (GTK_BOX (priv->box), button->plus_button, FALSE, FALSE, 0);
 
   /* - */
   button->minus_button = gtk_button_new_with_label ("-");
@@ -376,9 +393,14 @@ gtk_scale_button_init (GtkScaleButton *button)
 		   G_CALLBACK (cb_button_press), button);
   g_signal_connect (button->minus_button, "button-release-event",
 		    G_CALLBACK (cb_button_release), button);
+  gtk_box_pack_end (GTK_BOX (priv->box), button->minus_button, FALSE, FALSE, 0);
 
   priv->adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 100.0, 2, 20, 0));
   g_object_ref_sink (priv->adjustment);
+
+  /* the scale */
+  priv->scale = gtk_scale_button_scale_new (button);
+  gtk_container_add (GTK_CONTAINER (priv->box), priv->scale);
 }
 
 static GObject *
@@ -388,7 +410,6 @@ gtk_scale_button_constructor (GType                  type,
 {
   GObject *object;
   GtkScaleButton *button;
-  GtkWidget *frame, *box;
   GtkScaleButtonPrivate *priv;
 
   object = G_OBJECT_CLASS (gtk_scale_button_parent_class)->constructor (type, n_construct_properties, construct_params);
@@ -396,15 +417,6 @@ gtk_scale_button_constructor (GType                  type,
   button = GTK_SCALE_BUTTON (object);
 
   priv = button->priv;
-
-  /* frame */
-  frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
-  gtk_container_add (GTK_CONTAINER (priv->dock), frame);
-
-  /* box with scale and +/- buttons */
-  box = gtk_scale_button_scale_box_new (button);
-  gtk_container_add (GTK_CONTAINER (frame), box);
 
   /* set button text and size */
   priv->size = GTK_ICON_SIZE_SMALL_TOOLBAR;
@@ -424,7 +436,7 @@ gtk_scale_button_set_property (GObject       *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      gtk_scale_button_set_orientation (button, g_value_get_enum (value));
+      gtk_scale_button_set_orientation_private (button, g_value_get_enum (value));
       break;
     case PROP_VALUE:
       gtk_scale_button_set_value (button, g_value_get_double (value));
@@ -529,13 +541,14 @@ gtk_scale_button_dispose (GObject *object)
 
 /**
  * gtk_scale_button_new:
- * @size: a stock icon size
+ * @size: (int): a stock icon size
  * @min: the minimum value of the scale (usually 0)
  * @max: the maximum value of the scale (usually 100)
  * @step: the stepping of value when a scroll-wheel event,
  *        or up/down arrow event occurs (usually 2)
- * @icons: a %NULL-terminated array of icon names, or %NULL if
- *         you want to set the list later with gtk_scale_button_set_icons()
+ * @icons: (allow-none) (array zero-terminated=1): a %NULL-terminated
+ *         array of icon names, or %NULL if you want to set the list
+ *         later with gtk_scale_button_set_icons()
  *
  * Creates a #GtkScaleButton, with a range between @min and @max, with
  * a stepping of @step.
@@ -615,7 +628,7 @@ gtk_scale_button_set_value (GtkScaleButton *button,
 /**
  * gtk_scale_button_set_icons:
  * @button: a #GtkScaleButton
- * @icons: a %NULL-terminated array of icon names
+ * @icons: (array zero-terminated=1): a %NULL-terminated array of icon names
  *
  * Sets the icons to be used by the scale button.
  * For details, see the #GtkScaleButton:icons property.
@@ -648,7 +661,7 @@ gtk_scale_button_set_icons (GtkScaleButton  *button,
  * Gets the #GtkAdjustment associated with the #GtkScaleButton's scale.
  * See gtk_range_get_adjustment() for details.
  *
- * Returns: the adjustment associated with the scale
+ * Returns: (transfer none): the adjustment associated with the scale
  *
  * Since: 2.12
  */
@@ -676,16 +689,22 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
 				 GtkAdjustment  *adjustment)
 {
   g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
-  g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  if (!adjustment)
+    adjustment = (GtkAdjustment*) gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  else
+    g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (button->priv->adjustment)
-    g_object_unref (button->priv->adjustment);
-  button->priv->adjustment = g_object_ref_sink (adjustment);
+  if (button->priv->adjustment != adjustment)
+    {
+      if (button->priv->adjustment)
+        g_object_unref (button->priv->adjustment);
+      button->priv->adjustment = g_object_ref_sink (adjustment);
 
-  if (button->priv->scale)
-    gtk_range_set_adjustment (GTK_RANGE (button->priv->scale), adjustment);
+      if (button->priv->scale)
+        gtk_range_set_adjustment (GTK_RANGE (button->priv->scale), adjustment);
 
-  g_object_notify (G_OBJECT (button), "adjustment");
+      g_object_notify (G_OBJECT (button), "adjustment");
+    }
 }
 
 /**
@@ -697,6 +716,8 @@ gtk_scale_button_set_adjustment	(GtkScaleButton *button,
  * Returns: the #GtkScaleButton's orientation.
  *
  * Since: 2.14
+ *
+ * Deprecated: 2.16: Use gtk_orientable_get_orientation() instead.
  **/
 GtkOrientation
 gtk_scale_button_get_orientation (GtkScaleButton *button)
@@ -714,48 +735,16 @@ gtk_scale_button_get_orientation (GtkScaleButton *button)
  * Sets the orientation of the #GtkScaleButton's popup window.
  *
  * Since: 2.14
+ *
+ * Deprecated: 2.16: Use gtk_orientable_set_orientation() instead.
  **/
 void
 gtk_scale_button_set_orientation (GtkScaleButton *button,
                                   GtkOrientation  orientation)
 {
-  GtkScaleButtonPrivate *priv;
-
   g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
 
-  priv = button->priv;
-
-  if (orientation != priv->orientation)
-    {
-      priv->orientation = orientation;
-
-      if (priv->scale)
-        {
-          GtkWidget *box = priv->scale->parent;
-          GtkWidget *frame = box->parent;
-
-          g_object_ref (button->plus_button);
-          g_object_ref (button->minus_button);
-
-          gtk_container_remove (GTK_CONTAINER (box), button->plus_button);
-          gtk_container_remove (GTK_CONTAINER (box), button->minus_button);
-          gtk_container_remove (GTK_CONTAINER (box), priv->scale);
-          gtk_container_remove (GTK_CONTAINER (frame), box);
-
-          box = gtk_scale_button_scale_box_new (button);
-          gtk_container_add (GTK_CONTAINER (frame), box);
-
-          /* FIXME: without this, the popup window appears as a square
-           * after changing the orientation
-           */
-          gtk_window_resize (GTK_WINDOW (priv->dock), 1, 1);
-
-          g_object_unref (button->plus_button);
-          g_object_unref (button->minus_button);
-        }
-
-      g_object_notify (G_OBJECT (button), "orientation");
-    }
+  gtk_scale_button_set_orientation_private (button, orientation);
 }
 
 /**
@@ -764,7 +753,7 @@ gtk_scale_button_set_orientation (GtkScaleButton *button,
  *
  * Retrieves the plus button of the #GtkScaleButton.
  *
- * Returns: the plus button of the #GtkScaleButton.
+ * Returns: (transfer none): the plus button of the #GtkScaleButton
  *
  * Since: 2.14
  */
@@ -782,7 +771,7 @@ gtk_scale_button_get_plus_button (GtkScaleButton *button)
  *
  * Retrieves the minus button of the #GtkScaleButton.
  *
- * Returns: the minus button of the #GtkScaleButton.
+ * Returns: (transfer none): the minus button of the #GtkScaleButton
  *
  * Since: 2.14
  */
@@ -800,7 +789,7 @@ gtk_scale_button_get_minus_button (GtkScaleButton *button)
  *
  * Retrieves the popup of the #GtkScaleButton.
  *
- * Returns: the popup of the #GtkScaleButton
+ * Returns: (transfer none): the popup of the #GtkScaleButton
  *
  * Since: 2.14
  */
@@ -810,6 +799,56 @@ gtk_scale_button_get_popup (GtkScaleButton *button)
   g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), NULL);
 
   return button->priv->dock;
+}
+
+static void
+gtk_scale_button_set_orientation_private (GtkScaleButton *button,
+                                          GtkOrientation  orientation)
+{
+  GtkScaleButtonPrivate *priv = button->priv;
+
+  if (orientation != priv->orientation)
+    {
+      priv->orientation = orientation;
+
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box),
+                                      orientation);
+      gtk_container_child_set (GTK_CONTAINER (priv->box),
+                               button->plus_button,
+                               "pack-type",
+                               orientation == GTK_ORIENTATION_VERTICAL ?
+                               GTK_PACK_START : GTK_PACK_END,
+                               NULL);
+      gtk_container_child_set (GTK_CONTAINER (priv->box),
+                               button->minus_button,
+                               "pack-type",
+                               orientation == GTK_ORIENTATION_VERTICAL ?
+                               GTK_PACK_END : GTK_PACK_START,
+                               NULL);
+
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->scale),
+                                      orientation);
+
+      if (orientation == GTK_ORIENTATION_VERTICAL)
+        {
+          gtk_widget_set_size_request (GTK_WIDGET (priv->scale),
+                                       -1, SCALE_SIZE);
+          gtk_range_set_inverted (GTK_RANGE (priv->scale), TRUE);
+        }
+      else
+        {
+          gtk_widget_set_size_request (GTK_WIDGET (priv->scale),
+                                       SCALE_SIZE, -1);
+          gtk_range_set_inverted (GTK_RANGE (priv->scale), FALSE);
+        }
+
+      /* FIXME: without this, the popup window appears as a square
+       * after changing the orientation
+       */
+      gtk_window_resize (GTK_WINDOW (priv->dock), 1, 1);
+
+      g_object_notify (G_OBJECT (button), "orientation");
+    }
 }
 
 /*
@@ -889,7 +928,9 @@ gtk_scale_popup (GtkWidget *widget,
   gdouble v;
   GdkDisplay *display;
   GdkScreen *screen;
+  gboolean is_moved;
 
+  is_moved = FALSE;
   button = GTK_SCALE_BUTTON (widget);
   priv = button->priv;
   adj = priv->adjustment;
@@ -966,15 +1007,24 @@ gtk_scale_popup (GtkWidget *widget,
       else
         x += button_event->x;
 
-      if (y < rect.y)
+      /* Move the dock, but set is_moved so we
+       * don't forward the first click later on,
+       * as it could make the scale go to the bottom */
+      if (y < rect.y) {
 	y = rect.y;
-      else if (y + d->allocation.height > rect.height + rect.y)
+	is_moved = TRUE;
+      } else if (y + d->allocation.height > rect.height + rect.y) {
 	y = rect.y + rect.height - d->allocation.height;
+	is_moved = TRUE;
+      }
 
-      if (x < rect.x)
+      if (x < rect.x) {
 	x = rect.x;
-      else if (x + d->allocation.width > rect.width + rect.x)
+	is_moved = TRUE;
+      } else if (x + d->allocation.width > rect.width + rect.x) {
 	x = rect.x + rect.width - d->allocation.width;
+	is_moved = TRUE;
+      }
     }
 
   gtk_window_move (GTK_WINDOW (priv->dock), x, y);
@@ -1005,7 +1055,7 @@ gtk_scale_popup (GtkWidget *widget,
 
   gtk_widget_grab_focus (priv->dock);
 
-  if (event->type == GDK_BUTTON_PRESS)
+  if (event->type == GDK_BUTTON_PRESS && !is_moved)
     {
       GdkEventButton *e;
       GdkEventButton *button_event = (GdkEventButton *) event;
@@ -1084,7 +1134,7 @@ gtk_scale_button_grab_notify (GtkScaleButton *button,
 
   priv = button->priv;
 
-  if (!GTK_WIDGET_HAS_GRAB (priv->dock))
+  if (!gtk_widget_has_grab (priv->dock))
     return;
 
   if (gtk_widget_is_ancestor (gtk_grab_get_current (), priv->dock))
@@ -1318,43 +1368,30 @@ cb_scale_grab_notify (GtkWidget *widget,
  * Scale stuff.
  */
 
-#define GTK_TYPE_SCALE_BUTTON_VSCALE    (_gtk_scale_button_vscale_get_type ())
-#define GTK_SCALE_BUTTON_VSCALE(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCALE_BUTTON_VSCALE, GtkScaleButtonVScale))
-#define GTK_IS_SCALE_BUTTON_VSCALE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCALE_BUTTON_VSCALE))
+#define GTK_TYPE_SCALE_BUTTON_SCALE    (_gtk_scale_button_scale_get_type ())
+#define GTK_SCALE_BUTTON_SCALE(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCALE_BUTTON_SCALE, GtkScaleButtonScale))
+#define GTK_IS_SCALE_BUTTON_SCALE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCALE_BUTTON_SCALE))
 
-typedef struct _GtkScaleButtonVScale {
-  GtkVScale parent;
+typedef struct _GtkScaleButtonScale
+{
+  GtkScale parent_instance;
   GtkScaleButton *button;
-} GtkScaleButtonVScale;
+} GtkScaleButtonScale;
 
-typedef struct _GtkScaleButtonVScaleClass {
-  GtkVScaleClass parent_class;
-} GtkScaleButtonVScaleClass;
-
-#define GTK_TYPE_SCALE_BUTTON_HSCALE    (_gtk_scale_button_hscale_get_type ())
-#define GTK_SCALE_BUTTON_HSCALE(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCALE_BUTTON_HSCALE, GtkScaleButtonHScale))
-#define GTK_IS_SCALE_BUTTON_HSCALE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCALE_BUTTON_HSCALE))
-
-typedef struct _GtkScaleButtonHScale {
-  GtkVScale parent;
-  GtkScaleButton *button;
-} GtkScaleButtonHScale;
-
-typedef struct _GtkScaleButtonHScaleClass {
-  GtkVScaleClass parent_class;
-} GtkScaleButtonHScaleClass;
+typedef struct _GtkScaleButtonScaleClass
+{
+  GtkScaleClass parent_class;
+} GtkScaleButtonScaleClass;
 
 static gboolean	gtk_scale_button_scale_press   (GtkWidget      *widget,
                                                 GdkEventButton *event);
 static gboolean gtk_scale_button_scale_release (GtkWidget      *widget,
                                                 GdkEventButton *event);
 
-G_DEFINE_TYPE (GtkScaleButtonVScale, _gtk_scale_button_vscale, GTK_TYPE_VSCALE)
-
-G_DEFINE_TYPE (GtkScaleButtonHScale, _gtk_scale_button_hscale, GTK_TYPE_HSCALE)
+G_DEFINE_TYPE (GtkScaleButtonScale, _gtk_scale_button_scale, GTK_TYPE_SCALE)
 
 static void
-_gtk_scale_button_vscale_class_init (GtkScaleButtonVScaleClass *klass)
+_gtk_scale_button_scale_class_init (GtkScaleButtonScaleClass *klass)
 {
   GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS (klass);
   GtkRangeClass *gtkrange_class = GTK_RANGE_CLASS (klass);
@@ -1365,120 +1402,61 @@ _gtk_scale_button_vscale_class_init (GtkScaleButtonVScaleClass *klass)
 }
 
 static void
-_gtk_scale_button_hscale_class_init (GtkScaleButtonHScaleClass *klass)
-{
-  GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS (klass);
-  GtkRangeClass *gtkrange_class = GTK_RANGE_CLASS (klass);
-
-  gtkwidget_class->button_press_event = gtk_scale_button_scale_press;
-  gtkwidget_class->button_release_event = gtk_scale_button_scale_release;
-  gtkrange_class->value_changed = gtk_scale_button_scale_value_changed;
-}
-
-static void
-_gtk_scale_button_vscale_init (GtkScaleButtonVScale *scale)
-{
-}
-
-static void
-_gtk_scale_button_hscale_init (GtkScaleButtonHScale *scale)
+_gtk_scale_button_scale_init (GtkScaleButtonScale *scale)
 {
 }
 
 static GtkWidget *
-gtk_scale_button_scale_box_new (GtkScaleButton *button)
+gtk_scale_button_scale_new (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv = button->priv;
-  GtkScaleButtonVScale *scale;
-  GtkWidget *box;
+  GtkScaleButtonScale *scale;
+
+  scale = g_object_new (GTK_TYPE_SCALE_BUTTON_SCALE,
+                        "orientation", priv->orientation,
+                        "adjustment",  priv->adjustment,
+                        "draw-value",  FALSE,
+                        NULL);
+
+  scale->button = button;
+
+  g_signal_connect (scale, "grab-notify",
+                    G_CALLBACK (cb_scale_grab_notify), button);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
-      box = gtk_vbox_new (FALSE, 0);
-
-      scale = g_object_new (GTK_TYPE_SCALE_BUTTON_VSCALE, NULL);
-      priv->scale = GTK_WIDGET (scale);
-
-      gtk_widget_set_size_request (priv->scale, -1, SCALE_SIZE);
-      gtk_range_set_inverted (GTK_RANGE (priv->scale), TRUE);
-
-      gtk_box_pack_start (GTK_BOX (box), button->plus_button, TRUE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (box), priv->scale, TRUE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (box), button->minus_button, TRUE, FALSE, 0);
+      gtk_widget_set_size_request (GTK_WIDGET (scale), -1, SCALE_SIZE);
+      gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
     }
   else
     {
-      box = gtk_hbox_new (FALSE, 0);
-
-      scale = g_object_new (GTK_TYPE_SCALE_BUTTON_HSCALE, NULL);
-      priv->scale = GTK_WIDGET (scale);
-
-      gtk_widget_set_size_request (priv->scale, SCALE_SIZE, -1);
-
-      gtk_box_pack_start (GTK_BOX (box), button->minus_button, TRUE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (box), priv->scale, TRUE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (box), button->plus_button, TRUE, FALSE, 0);
+      gtk_widget_set_size_request (GTK_WIDGET (scale), SCALE_SIZE, -1);
+      gtk_range_set_inverted (GTK_RANGE (scale), FALSE);
     }
 
-  gtk_scale_set_draw_value (GTK_SCALE (priv->scale), FALSE);
-  gtk_range_set_adjustment (GTK_RANGE (scale),
-                            GTK_ADJUSTMENT (priv->adjustment));
-  scale->button = button;
-
-  g_signal_connect (priv->scale, "grab-notify",
-                    G_CALLBACK (cb_scale_grab_notify), button);
-
-  /* FIXME: without this, the popup window appears as a square
-   * after changing the orientation
-   */
-  gtk_window_resize (GTK_WINDOW (priv->dock), 1, 1);
-
-  return box;
+  return GTK_WIDGET (scale);
 }
 
 static gboolean
 gtk_scale_button_scale_press (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
-  GtkScaleButtonPrivate *priv;
-  GtkWidgetClass *widget_class;
-
-  if (GTK_IS_SCALE_BUTTON_VSCALE (widget))
-    {
-      priv = GTK_SCALE_BUTTON_VSCALE (widget)->button->priv;
-      widget_class = GTK_WIDGET_CLASS (_gtk_scale_button_vscale_parent_class);
-    }
-  else
-    {
-      priv = GTK_SCALE_BUTTON_HSCALE (widget)->button->priv;
-      widget_class = GTK_WIDGET_CLASS (_gtk_scale_button_hscale_parent_class);
-    }
+  GtkScaleButtonPrivate *priv = GTK_SCALE_BUTTON_SCALE (widget)->button->priv;
 
   /* the scale will grab input; if we have input grabbed, all goes
-   * horribly wrong, so let's not do that. */
+   * horribly wrong, so let's not do that.
+   */
   gtk_grab_remove (priv->dock);
 
-  return widget_class->button_press_event (widget, event);
+  return GTK_WIDGET_CLASS (_gtk_scale_button_scale_parent_class)->button_press_event (widget, event);
 }
 
 static gboolean
 gtk_scale_button_scale_release (GtkWidget      *widget,
 				GdkEventButton *event)
 {
-  GtkScaleButton *button;
-  GtkWidgetClass *widget_class;
+  GtkScaleButton *button = GTK_SCALE_BUTTON_SCALE (widget)->button;
   gboolean res;
-
-  if (GTK_IS_SCALE_BUTTON_VSCALE (widget))
-    {
-      button = GTK_SCALE_BUTTON_VSCALE (widget)->button;
-      widget_class = GTK_WIDGET_CLASS (_gtk_scale_button_vscale_parent_class);
-    }
-  else
-    {
-      button = GTK_SCALE_BUTTON_HSCALE (widget)->button;
-      widget_class = GTK_WIDGET_CLASS (_gtk_scale_button_hscale_parent_class);
-    }
 
   if (button->priv->timeout)
     {
@@ -1487,7 +1465,7 @@ gtk_scale_button_scale_release (GtkWidget      *widget,
         {
 
 	  gtk_scale_button_release_grab (button, event);
-	  widget_class->button_release_event (widget, event);
+	  GTK_WIDGET_CLASS (_gtk_scale_button_scale_parent_class)->button_release_event (widget, event);
 
 	  return TRUE;
 	}
@@ -1495,7 +1473,7 @@ gtk_scale_button_scale_release (GtkWidget      *widget,
       button->priv->timeout = FALSE;
     }
 
-  res = widget_class->button_release_event (widget, event);
+  res = GTK_WIDGET_CLASS (_gtk_scale_button_scale_parent_class)->button_release_event (widget, event);
 
   /* the scale will release input; right after that, we *have to* grab
    * it back so we can catch out-of-scale clicks and hide the popup,
@@ -1587,13 +1565,8 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 static void
 gtk_scale_button_scale_value_changed (GtkRange *range)
 {
-  GtkScaleButton *button;
+  GtkScaleButton *button = GTK_SCALE_BUTTON_SCALE (range)->button;
   gdouble value;
-
-  if (GTK_IS_SCALE_BUTTON_VSCALE (range))
-    button = GTK_SCALE_BUTTON_VSCALE (range)->button;
-  else
-    button = GTK_SCALE_BUTTON_HSCALE (range)->button;
 
   value = gtk_range_get_value (range);
 

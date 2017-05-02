@@ -27,6 +27,9 @@ in the #GtkWidget class.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GtkDestDefaults ##### -->
 <para>
 The #GtkDestDefaults enumeration specifies the various
@@ -348,17 +351,14 @@ a widget.
 
 <!-- ##### FUNCTION gtk_drag_source_set ##### -->
 <para>
-Sets up a widget so that GTK+ will start a drag
-operation when the user clicks and drags on the
-widget. The widget must have a window.
+
 </para>
 
-@widget: a #GtkWidget
-@start_button_mask: the bitmask of buttons that can start the drag
-@targets: the table of targets that the drag will support
-@n_targets: the number of items in @targets
-@actions: the bitmask of possible actions for a drag from this
- widget.
+@widget: 
+@start_button_mask: 
+@targets: 
+@n_targets: 
+@actions: 
 
 
 <!-- ##### FUNCTION gtk_drag_source_set_icon ##### -->

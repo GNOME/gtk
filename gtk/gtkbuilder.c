@@ -280,29 +280,29 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
       if (G_IS_PARAM_SPEC_OBJECT (pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (pspec) != GDK_TYPE_PIXBUF))
         {
-          if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+          GObject *object = gtk_builder_get_object (builder, prop->data);
+
+          if (object)
             {
-              GObject *object;
-              object = gtk_builder_get_object (builder, prop->data);
-              if (!object)
+              g_value_init (&parameter.value, G_OBJECT_TYPE (object));
+              g_value_set_object (&parameter.value, object);
+            }
+          else 
+            {
+              if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
                 {
                   g_warning ("Failed to get constuct only property "
                              "%s of %s with value `%s'",
                              prop->name, object_name, prop->data);
                   continue;
                 }
-              g_value_init (&parameter.value, G_OBJECT_TYPE (object));
-              g_value_set_object (&parameter.value, object);
-            }
-          else
-            {
+              /* Delay setting property */
               property = g_slice_new (DelayedProperty);
               property->object = g_strdup (object_name);
               property->name = g_strdup (prop->name);
               property->value = g_strdup (prop->data);
               builder->priv->delayed_properties =
                 g_slist_prepend (builder->priv->delayed_properties, property);
-
               continue;
             }
         }
@@ -317,7 +317,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
           continue;
         }
 
-      if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+      if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
         g_array_append_val (*construct_parameters, parameter);
       else
         g_array_append_val (*parameters, parameter);
@@ -638,11 +638,15 @@ gtk_builder_new (void)
  * gtk_builder_add_from_file:
  * @builder: a #GtkBuilder
  * @filename: the name of the file to parse
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> and merges it with the current contents of @builder. 
  * 
+ * Upon errors 0 will be returned and @error will be assigned a
+ * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR 
+ * domain.
+ *
  * Returns: A positive value on success, 0 if an error occurred
  *
  * Since: 2.12
@@ -692,11 +696,15 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * @builder: a #GtkBuilder
  * @filename: the name of the file to parse
  * @object_ids: nul-terminated array of objects to build
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> building only the requested objects and merges
  * them with the current contents of @builder. 
+ *
+ * Upon errors 0 will be returned and @error will be assigned a
+ * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR 
+ * domain.
  *
  * <note><para>
  * If you are adding an object that depends on an object that is not 
@@ -755,10 +763,13 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  * @builder: a #GtkBuilder
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> and merges it with the current contents of @builder. 
+ *
+ * Upon errors 0 will be returned and @error will be assigned a
+ * #GError from the #GTK_BUILDER_ERROR or #G_MARKUP_ERROR domain.
  *
  * Returns: A positive value on success, 0 if an error occurred
  *
@@ -800,11 +811,14 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * @buffer: the string to parse
  * @length: the length of @buffer (may be -1 if @buffer is nul-terminated)
  * @object_ids: nul-terminated array of objects to build
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> building only the requested objects and merges
  * them with the current contents of @builder. 
+ *
+ * Upon errors 0 will be returned and @error will be assigned a
+ * #GError from the #GTK_BUILDER_ERROR or #G_MARKUP_ERROR domain.
  * 
  * <note><para>
  * If you are adding an object that depends on an object that is not 
@@ -857,8 +871,8 @@ gtk_builder_add_objects_from_string (GtkBuilder   *builder,
  * Gets the object named @name. Note that this function does not
  * increment the reference count of the returned object. 
  *
- * Return value: the object named @name or %NULL if it could not be 
- *    found in the object tree. 
+ * Return value: (transfer none): the object named @name or %NULL if
+ *    it could not be found in the object tree.
  *
  * Since: 2.12
  **/
@@ -888,7 +902,7 @@ object_add_to_list (gchar    *object_id,
  * this function does not increment the reference counts of the returned
  * objects.
  *
- * Return value: a newly-allocated #GSList containing all the objects
+ * Return value: (element-type GObject) (transfer container): a newly-allocated #GSList containing all the objects
  *   constructed by the #GtkBuilder instance. It should be freed by
  *   g_slist_free()
  *
@@ -909,7 +923,7 @@ gtk_builder_get_objects (GtkBuilder *builder)
 /**
  * gtk_builder_set_translation_domain:
  * @builder: a #GtkBuilder
- * @domain: the translation domain or %NULL
+ * @domain: (allow-none): the translation domain or %NULL
  *
  * Sets the translation domain of @builder. 
  * See #GtkBuilder:translation-domain.
@@ -1047,7 +1061,7 @@ gtk_builder_connect_signals (GtkBuilder *builder,
 /**
  * gtk_builder_connect_signals_full:
  * @builder: a #GtkBuilder
- * @func: the function used to connect the signals
+ * @func: (scope call): the function used to connect the signals
  * @user_data: arbitrary data that will be passed to the connection function
  *
  * This function can be thought of the interpreted language binding
@@ -1109,8 +1123,8 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
  * @builder: a #GtkBuilder
  * @pspec: the #GParamSpec for the property
  * @string: the string representation of the value
- * @value: the #GValue to store the result in
- * @error: return location for an error, or %NULL
+ * @value: (out): the #GValue to store the result in
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * This function demarshals a value from a string. This function
  * calls g_value_init() on the @value argument, so it need not be
@@ -1120,6 +1134,9 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
  * ulong, enum, flags, float, double, string, #GdkColor and
  * #GtkAdjustment type values. Support for #GtkWidget type values is
  * still to come.
+ *
+ * Upon errors %FALSE will be returned and @error will be assigned a
+ * #GError from the #GTK_BUILDER_ERROR domain.
  *
  * Returns: %TRUE on success
  *
@@ -1162,13 +1179,16 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
  * @builder: a #GtkBuilder
  * @type: the #GType of the value
  * @string: the string representation of the value
- * @value: the #GValue to store the result in
- * @error: return location for an error, or %NULL
+ * @value: (out): the #GValue to store the result in
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Like gtk_builder_value_from_string(), this function demarshals 
  * a value from a string, but takes a #GType instead of #GParamSpec.
  * This function calls g_value_init() on the @value argument, so it 
  * need not be initialised beforehand.
+ *
+ * Upon errors %FALSE will be returned and @error will be assigned a
+ * #GError from the #GTK_BUILDER_ERROR domain.
  *
  * Returns: %TRUE on success
  *
@@ -1329,7 +1349,14 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           g_value_take_boxed (value, vector);
         }
       else
-        ret = FALSE;
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Could not parse '%s' as a %s",
+                       string, G_VALUE_TYPE_NAME (value));
+          ret = FALSE;
+        }
       break;
     case G_TYPE_OBJECT:
       if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
@@ -1383,14 +1410,19 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         ret = FALSE;
       break;
     default:
-      g_set_error (error,
-		   GTK_BUILDER_ERROR,
-		   GTK_BUILDER_ERROR_INVALID_VALUE,
-		   "Unsupported GType `%s'",
-		   g_type_name (type));
       ret = FALSE;
       break;
     }
+ 
+  /* Catch unassigned error for object types as well as any unsupported types.
+   * While parsing GtkBuilder; object types are deserialized
+   * without calling gtk_builder_value_from_string_type().
+   */
+  if (!ret && error && *error == NULL) 
+    g_set_error (error,
+		 GTK_BUILDER_ERROR,
+		 GTK_BUILDER_ERROR_INVALID_VALUE,
+		 "Unsupported GType `%s'", g_type_name (type));
 
   return ret;
 }

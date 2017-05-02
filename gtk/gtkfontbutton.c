@@ -427,7 +427,7 @@ gtk_font_button_set_title (GtkFontButton *font_button,
  *
  * Since: 2.4
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_font_button_get_title (GtkFontButton *font_button)
 {
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), NULL);
@@ -628,13 +628,18 @@ gtk_font_button_set_show_size (GtkFontButton *font_button,
  * gtk_font_button_get_font_name:
  * @font_button: a #GtkFontButton
  *
- * Retrieves the name of the currently selected font.
+ * Retrieves the name of the currently selected font. This name includes
+ * style and size information as well. If you want to render something
+ * with the font, use this string with pango_font_description_from_string() .
+ * If you're interested in peeking certain values (family name,
+ * style, size, weight) just query these properties from the
+ * #PangoFontDescription object.
  *
  * Returns: an internal copy of the font name which must not be freed.
  *
  * Since: 2.4
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_font_button_get_font_name (GtkFontButton *font_button)
 {
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), NULL);
@@ -700,7 +705,7 @@ gtk_font_button_clicked (GtkButton *button)
       
       font_dialog = GTK_FONT_SELECTION_DIALOG (font_button->priv->font_dialog);
       
-      if (GTK_WIDGET_TOPLEVEL (parent) && GTK_IS_WINDOW (parent))
+      if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
         {
           if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (font_dialog)))
  	    gtk_window_set_transient_for (GTK_WINDOW (font_dialog), GTK_WINDOW (parent));
@@ -717,7 +722,7 @@ gtk_font_button_clicked (GtkButton *button)
                         G_CALLBACK (dialog_destroy), font_button);
     }
   
-  if (!GTK_WIDGET_VISIBLE (font_button->priv->font_dialog)) 
+  if (!gtk_widget_get_visible (font_button->priv->font_dialog))
     {
       font_dialog = GTK_FONT_SELECTION_DIALOG (font_button->priv->font_dialog);
       

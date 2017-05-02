@@ -61,26 +61,27 @@ typedef struct {
 #endif
 
 static HCURSOR
-_gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
+hcursor_from_type (GdkCursorType cursor_type)
 {
   gint i, j, x, y, ofs;
-  HCURSOR rv = NULL;
+  HCURSOR rv;
   gint w, h;
   guchar *and_plane, *xor_plane;
 
-  for (i = 0; i < G_N_ELEMENTS (cursors); i++)
-    if (cursors[i].type == cursor_type)
-      break;
-
-  if (i >= G_N_ELEMENTS (cursors) || !cursors[i].name)
-    return NULL;
-
-  /* use real win32 cursor if possible */
-  if (cursors[i].builtin)
+  if (cursor_type != GDK_BLANK_CURSOR)
     {
-      return LoadCursor (NULL, cursors[i].builtin);
-    }
+      for (i = 0; i < G_N_ELEMENTS (cursors); i++)
+	if (cursors[i].type == cursor_type)
+	  break;
 
+      if (i >= G_N_ELEMENTS (cursors) || !cursors[i].name)
+	return NULL;
+
+      /* Use real Win32 cursor if possible */
+      if (cursors[i].builtin)
+	return LoadCursor (NULL, cursors[i].builtin);
+    }
+  
   w = GetSystemMetrics (SM_CXCURSOR);
   h = GetSystemMetrics (SM_CYCURSOR);
 
@@ -89,34 +90,43 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
   xor_plane = g_malloc ((w/8) * h);
   memset (xor_plane, 0, (w/8) * h);
 
+  if (cursor_type != GDK_BLANK_CURSOR)
+    {
+
 #define SET_BIT(v,b)  (v |= (1 << b))
 #define RESET_BIT(v,b)  (v &= ~(1 << b))
 
-  for (j = 0, y = 0; y < cursors[i].height && y < h ; y++)
-    {
-      ofs = (y * w) / 8;
-      j = y * cursors[i].width;
-
-      for (x = 0; x < cursors[i].width && x < w ; x++, j++)
-      {
-        gint pofs = ofs + x / 8;
-        guchar data = (cursors[i].data[j/4] & (0xc0 >> (2 * (j%4)))) >> (2 * (3 - (j%4)));
-        gint bit = 7 - (j % cursors[i].width) % 8;
-
-        if (data)
-          {
-            RESET_BIT (and_plane[pofs], bit);
-            if (data == 1)
-              SET_BIT (xor_plane[pofs], bit);
-          }
-      }
-    }
+      for (j = 0, y = 0; y < cursors[i].height && y < h ; y++)
+	{
+	  ofs = (y * w) / 8;
+	  j = y * cursors[i].width;
+	  
+	  for (x = 0; x < cursors[i].width && x < w ; x++, j++)
+	    {
+	      gint pofs = ofs + x / 8;
+	      guchar data = (cursors[i].data[j/4] & (0xc0 >> (2 * (j%4)))) >> (2 * (3 - (j%4)));
+	      gint bit = 7 - (j % cursors[i].width) % 8;
+	      
+	      if (data)
+		{
+		  RESET_BIT (and_plane[pofs], bit);
+		  if (data == 1)
+		    SET_BIT (xor_plane[pofs], bit);
+		}
+	    }
+	}
 
 #undef SET_BIT
 #undef RESET_BIT
 
-  rv = CreateCursor (_gdk_app_hmodule, cursors[i].hotx, cursors[i].hoty,
-		     w, h, and_plane, xor_plane);
+      rv = CreateCursor (_gdk_app_hmodule, cursors[i].hotx, cursors[i].hoty,
+			 w, h, and_plane, xor_plane);
+    }
+  else
+    {
+      rv = CreateCursor (_gdk_app_hmodule, 0, 0,
+			 w, h, and_plane, xor_plane);
+    }
   if (rv == NULL)
     WIN32_API_FAILED ("CreateCursor");
   g_free (and_plane);
@@ -126,7 +136,8 @@ _gdk_win32_data_to_wcursor (GdkCursorType cursor_type)
 }
 
 static GdkCursor*
-_gdk_win32_cursor_new_from_hcursor (HCURSOR hcursor, GdkCursorType cursor_type)
+cursor_new_from_hcursor (HCURSOR       hcursor,
+			 GdkCursorType cursor_type)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
@@ -148,15 +159,15 @@ gdk_cursor_new_for_display (GdkDisplay   *display,
 
   g_return_val_if_fail (display == _gdk_display, NULL);
 
-  hcursor = _gdk_win32_data_to_wcursor (cursor_type);
+  hcursor = hcursor_from_type (cursor_type);
 
   if (hcursor == NULL)
     g_warning ("gdk_cursor_new_for_display: no cursor %d found", cursor_type);
   else
-    GDK_NOTE (MISC, g_print ("gdk_cursor_new_for_display: %d: %p\n",
-			     cursor_type, hcursor));
+    GDK_NOTE (CURSOR, g_print ("gdk_cursor_new_for_display: %d: %p\n",
+			       cursor_type, hcursor));
 
-  return _gdk_win32_cursor_new_from_hcursor (hcursor, cursor_type);
+  return cursor_new_from_hcursor (hcursor, cursor_type);
 }
 
 static gboolean
@@ -190,6 +201,9 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
 
+  /* Flush outstanding GDI ops before accessing pixmap->bits */
+  GdiFlush ();
+
   source_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (source)->impl);
   mask_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (mask)->impl);
 
@@ -216,9 +230,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   source_bpl = ((width - 1)/32 + 1)*4;
   mask_bpl = ((mask_impl->width - 1)/32 + 1)*4;
 
-#ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_CURSOR)
-    {
+  GDK_NOTE (CURSOR, {
       g_print ("gdk_cursor_new_from_pixmap: source=%p:\n",
 	       source_impl->parent_instance.handle);
       for (iy = 0; iy < height; iy++)
@@ -254,8 +266,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
 	    }
 	  g_print ("\n");
 	}
-    }
-#endif
+    });
 
   /* Such complex bit manipulation for this simple task, sigh.
    * The X cursor and Windows cursor concepts are quite different.
@@ -319,22 +330,22 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   hcursor = CreateCursor (_gdk_app_hmodule, x, y, cursor_width, cursor_height,
 			  and_mask, xor_mask);
 
-  GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "
-			   "%p (%dx%d) %p (%dx%d) = %p (%dx%d)\n",
-			   GDK_PIXMAP_HBITMAP (source),
-			   source_impl->width, source_impl->height,
-			   GDK_PIXMAP_HBITMAP (mask),
-			   mask_impl->width, mask_impl->height,
-			   hcursor, cursor_width, cursor_height));
+  GDK_NOTE (CURSOR, g_print ("gdk_cursor_new_from_pixmap: "
+			     "%p (%dx%d) %p (%dx%d) = %p (%dx%d)\n",
+			     GDK_PIXMAP_HBITMAP (source),
+			     source_impl->width, source_impl->height,
+			     GDK_PIXMAP_HBITMAP (mask),
+			     mask_impl->width, mask_impl->height,
+			     hcursor, cursor_width, cursor_height));
 
   g_free (xor_mask);
   g_free (and_mask);
 
-  return _gdk_win32_cursor_new_from_hcursor (hcursor, GDK_CURSOR_IS_PIXMAP);
+  return cursor_new_from_hcursor (hcursor, GDK_CURSOR_IS_PIXMAP);
 }
 
-/* The named cursors below are presumably not really useful, as the
- * names are Win32-specific. No GTK+ application developed on Unix
+/* FIXME: The named cursors below are presumably not really useful, as
+ * the names are Win32-specific. No GTK+ application developed on Unix
  * (and most cross-platform GTK+ apps are developed on Unix) is going
  * to look for cursors under these Win32 names anyway.
  *
@@ -350,7 +361,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
 static struct {
   char *name;
   char *id;
-} _default_cursors[] = {
+} default_cursors[] = {
   { "appstarting", IDC_APPSTARTING },
   { "arrow", IDC_ARROW },
   { "cross", IDC_CROSS },
@@ -377,17 +388,17 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
 
   g_return_val_if_fail (display == _gdk_display, NULL);
 
-  for (i = 0; i < G_N_ELEMENTS(_default_cursors); i++)
+  for (i = 0; i < G_N_ELEMENTS(default_cursors); i++)
     {
-      if (0 == strcmp(_default_cursors[i].name, name))
-        hcursor = LoadCursor (NULL, _default_cursors[i].id);
+      if (0 == strcmp(default_cursors[i].name, name))
+        hcursor = LoadCursor (NULL, default_cursors[i].id);
     }
   /* allow to load named cursor resources linked into the executable */
   if (!hcursor)
     hcursor = LoadCursor (_gdk_app_hmodule, name);
 
   if (hcursor)
-    return _gdk_win32_cursor_new_from_hcursor (hcursor, GDK_X_CURSOR);
+    return cursor_new_from_hcursor (hcursor, GDK_X_CURSOR);
 
   return NULL;
 }
@@ -400,8 +411,8 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_return_if_fail (cursor != NULL);
   private = (GdkCursorPrivate *) cursor;
 
-  GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %p\n",
-			   (cursor->type == GDK_CURSOR_IS_PIXMAP) ? private->hcursor : 0));
+  GDK_NOTE (CURSOR, g_print ("_gdk_cursor_destroy: %p\n",
+			     (cursor->type == GDK_CURSOR_IS_PIXMAP) ? private->hcursor : 0));
 
   if (GetCursor () == private->hcursor)
     SetCursor (NULL);
@@ -618,7 +629,7 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   hcursor = _gdk_win32_pixbuf_to_hcursor (pixbuf, x, y);
   if (!hcursor)
     return NULL;
-  return _gdk_win32_cursor_new_from_hcursor (hcursor, GDK_CURSOR_IS_PIXMAP);
+  return cursor_new_from_hcursor (hcursor, GDK_CURSOR_IS_PIXMAP);
 }
 
 gboolean 

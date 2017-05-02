@@ -90,6 +90,7 @@ _gdk_windowing_init (void)
   _gdk_app_hmodule = GetModuleHandle (NULL);
   _gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   _gdk_input_locale = GetKeyboardLayout (0);
+  _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (gdk_keymap_get_default ()), _gdk_input_locale);
   _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		 LOCALE_IDEFAULTANSICODEPAGE,
@@ -100,42 +101,55 @@ _gdk_windowing_init (void)
 
   CoInitialize (NULL);
 
-  _cf_utf8_string = RegisterClipboardFormat ("UTF8_STRING");
-  _cf_image_bmp = RegisterClipboardFormat ("image/bmp");
+  _gdk_selection = gdk_atom_intern_static_string ("GDK_SELECTION");
+  _wm_transient_for = gdk_atom_intern_static_string ("WM_TRANSIENT_FOR");
+  _targets = gdk_atom_intern_static_string ("TARGETS");
+  _delete = gdk_atom_intern_static_string ("DELETE");
+  _save_targets = gdk_atom_intern_static_string ("SAVE_TARGETS");
+  _utf8_string = gdk_atom_intern_static_string ("UTF8_STRING");
+  _text = gdk_atom_intern_static_string ("TEXT");
+  _compound_text = gdk_atom_intern_static_string ("COMPOUND_TEXT");
+  _text_uri_list = gdk_atom_intern_static_string ("text/uri-list");
+  _text_html = gdk_atom_intern_static_string ("text/html");
+  _image_png = gdk_atom_intern_static_string ("image/png");
+  _image_jpeg = gdk_atom_intern_static_string ("image/jpeg");
+  _image_bmp = gdk_atom_intern_static_string ("image/bmp");
+  _image_gif = gdk_atom_intern_static_string ("image/gif");
 
-  _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
-  _wm_transient_for = gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE);
-  _targets = gdk_atom_intern ("TARGETS", FALSE);
-  _save_targets = gdk_atom_intern ("SAVE_TARGETS", FALSE);
-  _utf8_string = gdk_atom_intern ("UTF8_STRING", FALSE);
-  _text = gdk_atom_intern ("TEXT", FALSE);
-  _compound_text = gdk_atom_intern ("COMPOUND_TEXT", FALSE);
-  _text_uri_list = gdk_atom_intern ("text/uri-list", FALSE);
-  _image_bmp = gdk_atom_intern ("image/bmp", FALSE);
+  _local_dnd = gdk_atom_intern_static_string ("LocalDndSelection");
+  _gdk_win32_dropfiles = gdk_atom_intern_static_string ("DROPFILES_DND");
+  _gdk_ole2_dnd = gdk_atom_intern_static_string ("OLE2_DND");
 
-  _local_dnd = gdk_atom_intern ("LocalDndSelection", FALSE);
-  _gdk_win32_dropfiles = gdk_atom_intern ("DROPFILES_DND", FALSE);
-  _gdk_ole2_dnd = gdk_atom_intern ("OLE2_DND", FALSE);
+  /* MS Office 2007, at least, offers images in common file formats
+   * using clipboard format names like "PNG" and "JFIF". So we follow
+   * the lead and map the GDK target name "image/png" to the clipboard
+   * format name "PNG" etc.
+   */
+  _cf_png = RegisterClipboardFormat ("PNG");
+  _cf_jfif = RegisterClipboardFormat ("JFIF");
+  _cf_gif = RegisterClipboardFormat ("GIF");
+
+  _cf_url = RegisterClipboardFormat ("UniformResourceLocatorW");
+  _cf_html_format = RegisterClipboardFormat ("HTML Format");
+  _cf_text_html = RegisterClipboardFormat ("text/html");
 
   _gdk_win32_selection_init ();
 }
 
 void
 _gdk_win32_api_failed (const gchar *where,
-		      gint         line,
 		      const gchar *api)
 {
   gchar *msg = g_win32_error_message (GetLastError ());
-  g_warning ("%s:%d: %s failed: %s", where, line, api, msg);
+  g_warning ("%s: %s failed: %s", where, api, msg);
   g_free (msg);
 }
 
 void
 _gdk_other_api_failed (const gchar *where,
-		      gint         line,
 		      const gchar *api)
 {
-  g_warning ("%s:%d: %s failed", where, line, api);
+  g_warning ("%s: %s failed", where, api);
 }
 
 void
@@ -153,13 +167,13 @@ gdk_get_use_xshm (void)
 gint
 gdk_screen_get_width (GdkScreen *screen)
 {
-  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->width;
+  return GDK_WINDOW_OBJECT (_gdk_root)->width;
 }
 
 gint
 gdk_screen_get_height (GdkScreen *screen)
 {
-  return GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_root)->impl)->height;
+  return GDK_WINDOW_OBJECT (_gdk_root)->height;
 }
 gint
 gdk_screen_get_width_mm (GdkScreen *screen)
@@ -184,7 +198,8 @@ void
 gdk_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (display == gdk_display_get_default());
-  Beep(1000, 50);
+  if (!MessageBeep (-1))
+    Beep (1000, 50);
 }
 
 void
@@ -482,6 +497,26 @@ _gdk_win32_line_style_to_string (GdkLineStyle line_style)
 }
 
 gchar *
+_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol)
+{
+  switch (protocol)
+    {
+#define CASE(x) case GDK_DRAG_PROTO_##x: return #x
+      CASE (MOTIF);
+      CASE (XDND);
+      CASE (ROOTWIN);
+      CASE (NONE);
+      CASE (WIN32_DROPFILES);
+      CASE (OLE2);
+      CASE (LOCAL);
+#undef CASE
+    default: return static_printf ("illegal_%d", protocol);
+    }
+  /* NOTREACHED */
+  return NULL; 
+}
+
+gchar *
 _gdk_win32_gcvalues_mask_to_string (GdkGCValuesMask mask)
 {
   gchar buf[400];
@@ -553,7 +588,7 @@ _gdk_win32_window_style_to_string (LONG style)
   buf[0] = '\0';
 
 #define BIT(x)						\
-  if (style & WS_ ## x)			\
+  if (style & WS_ ## x)					\
     (bufp += sprintf (bufp, "%s" #x, s), s = "|")
 
   /* Note that many of the WS_* macros are in face several bits.
@@ -580,6 +615,108 @@ _gdk_win32_window_style_to_string (LONG style)
   BIT (THICKFRAME);
   BIT (VISIBLE);
   BIT (VSCROLL);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+_gdk_win32_window_exstyle_to_string (LONG style)
+{
+  gchar buf[1000];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (style & WS_EX_ ## x)				\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  /* Note that many of the WS_EX_* macros are in face several bits.
+   * Handle just the individual bits here. Sort as in w32api's
+   * winuser.h.
+   */
+  BIT (ACCEPTFILES);
+  BIT (APPWINDOW);
+  BIT (CLIENTEDGE);
+#ifndef WS_EX_COMPOSITED
+#  define WS_EX_COMPOSITED 0x02000000L
+#endif
+  BIT (COMPOSITED);
+  BIT (CONTEXTHELP);
+  BIT (CONTROLPARENT);
+  BIT (DLGMODALFRAME);
+  BIT (LAYERED);
+  BIT (LAYOUTRTL);
+  BIT (LEFTSCROLLBAR);
+  BIT (MDICHILD);
+  BIT (NOACTIVATE);
+  BIT (NOINHERITLAYOUT);
+  BIT (NOPARENTNOTIFY);
+  BIT (RIGHT);
+  BIT (RTLREADING);
+  BIT (STATICEDGE);
+  BIT (TOOLWINDOW);
+  BIT (TOPMOST);
+  BIT (TRANSPARENT);
+  BIT (WINDOWEDGE);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+_gdk_win32_window_pos_bits_to_string (UINT flags)
+{
+  gchar buf[1000];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (flags & SWP_ ## x)				\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  BIT (DRAWFRAME);
+  BIT (FRAMECHANGED);
+  BIT (HIDEWINDOW);
+  BIT (NOACTIVATE);
+  BIT (NOCOPYBITS);
+  BIT (NOMOVE);
+  BIT (NOSIZE);
+  BIT (NOREDRAW);
+  BIT (NOZORDER);
+  BIT (SHOWWINDOW);
+  BIT (NOOWNERZORDER);
+  BIT (NOSENDCHANGING);
+  BIT (DEFERERASE);
+  BIT (ASYNCWINDOWPOS);
+#undef BIT
+
+  return static_printf ("%s", buf);  
+}
+
+gchar *
+_gdk_win32_drag_action_to_string (GdkDragAction actions)
+{
+  gchar buf[100];
+  gchar *bufp = buf;
+  gchar *s = "";
+
+  buf[0] = '\0';
+
+#define BIT(x)						\
+  if (actions & GDK_ACTION_ ## x)				\
+    (bufp += sprintf (bufp, "%s" #x, s), s = "|")
+
+  BIT (DEFAULT);
+  BIT (COPY);
+  BIT (MOVE);
+  BIT (LINK);
+  BIT (PRIVATE);
+  BIT (ASK);
 #undef BIT
 
   return static_printf ("%s", buf);  
@@ -844,6 +981,7 @@ _gdk_win32_message_to_string (UINT msg)
       CASE (WM_MBUTTONUP);
       CASE (WM_MBUTTONDBLCLK);
       CASE (WM_MOUSEWHEEL);
+      CASE (WM_MOUSEHWHEEL);
       CASE (WM_XBUTTONDOWN);
       CASE (WM_XBUTTONUP);
       CASE (WM_XBUTTONDBLCLK);
@@ -964,9 +1102,7 @@ _gdk_win32_cf_to_string (UINT format)
 #define CASE(x) case CF_##x: return "CF_" #x
       CASE (BITMAP);
       CASE (DIB);
-#ifdef CF_DIBV5
       CASE (DIBV5);
-#endif
       CASE (DIF);
       CASE (DSPBITMAP);
       CASE (DSPENHMETAFILE);
@@ -1049,6 +1185,8 @@ gchar *
 _gdk_win32_drawable_description (GdkDrawable *d)
 {
   gint width, height, depth;
+
+  g_return_val_if_fail (GDK_IS_DRAWABLE (d), NULL);
 
   gdk_drawable_get_size (d, &width, &height);
   depth = gdk_drawable_get_depth (d);

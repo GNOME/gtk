@@ -17,12 +17,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_ACCESSIBLE_H__
+#define __GTK_ACCESSIBLE_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_ACCESSIBLE_H__
-#define __GTK_ACCESSIBLE_H__
 
 #include <atk/atk.h>
 #include <gtk/gtkwidget.h>
@@ -39,10 +39,9 @@ G_BEGIN_DECLS
 typedef struct _GtkAccessible                GtkAccessible;
 typedef struct _GtkAccessibleClass           GtkAccessibleClass;
 
-  /**
+  /*
    * This object is a thin wrapper, in the GTK+ namespace, for AtkObject
    */
-
 struct _GtkAccessible
 {
   AtkObject parent;
@@ -51,7 +50,7 @@ struct _GtkAccessible
    * The GtkWidget whose properties and features are exported via this 
    * accessible instance.
    */
-  GtkWidget *widget;
+  GtkWidget *GSEAL (widget);
 };
 
 struct _GtkAccessibleClass
@@ -69,7 +68,10 @@ struct _GtkAccessibleClass
 
 GType gtk_accessible_get_type (void) G_GNUC_CONST;
 
-void gtk_accessible_connect_widget_destroyed    (GtkAccessible     *accessible);
+void        gtk_accessible_set_widget                  (GtkAccessible     *accessible,
+                                                        GtkWidget         *widget);
+GtkWidget*  gtk_accessible_get_widget                  (GtkAccessible     *accessible);
+void        gtk_accessible_connect_widget_destroyed    (GtkAccessible     *accessible);
 
 G_END_DECLS
 

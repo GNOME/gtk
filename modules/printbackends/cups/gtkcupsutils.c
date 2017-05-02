@@ -39,10 +39,12 @@ static void _post_send          (GtkCupsRequest *request);
 static void _post_write_request (GtkCupsRequest *request);
 static void _post_write_data    (GtkCupsRequest *request);
 static void _post_check         (GtkCupsRequest *request);
+static void _post_auth          (GtkCupsRequest *request);
 static void _post_read_response (GtkCupsRequest *request);
 
 static void _get_send           (GtkCupsRequest *request);
 static void _get_check          (GtkCupsRequest *request);
+static void _get_auth           (GtkCupsRequest *request);
 static void _get_read_data      (GtkCupsRequest *request);
 
 struct _GtkCupsResult
@@ -69,6 +71,7 @@ static GtkCupsRequestStateFunc post_states[] = {
   _post_write_request,
   _post_write_data,
   _post_check,
+  _post_auth,
   _post_read_response
 };
 
@@ -76,8 +79,31 @@ static GtkCupsRequestStateFunc get_states[] = {
   _connect,
   _get_send,
   _get_check,
+  _get_auth,
   _get_read_data
 };
+
+#ifndef HAVE_CUPS_API_1_6
+#define ippSetOperation(ipp_request, ipp_op_id) ipp_request->request.op.operation_id = ipp_op_id
+#define ippSetRequestId(ipp_request, ipp_rq_id) ipp_request->request.op.request_id = ipp_rq_id
+#define ippSetState(ipp_request, ipp_state) ipp_request->state = ipp_state
+#define ippGetString(attr, index, foo) attr->values[index].string.text
+#define ippGetCount(attr) attr->num_values
+
+int
+ippSetVersion (ipp_t *ipp,
+               int    major,
+               int    minor)
+{
+  if (!ipp || major < 0 || minor < 0)
+    return 0;
+
+  ipp->request.any.version[0] = major;
+  ipp->request.any.version[1] = minor;
+
+  return 1;
+}
+#endif
 
 static void
 gtk_cups_result_set_error (GtkCupsResult    *result,
@@ -101,12 +127,13 @@ gtk_cups_result_set_error (GtkCupsResult    *result,
 }
 
 GtkCupsRequest *
-gtk_cups_request_new (http_t             *connection,
-                      GtkCupsRequestType  req_type, 
-                      gint                operation_id,
-                      GIOChannel         *data_io,
-                      const char         *server,
-                      const char         *resource)
+gtk_cups_request_new_with_username (http_t             *connection,
+                                    GtkCupsRequestType  req_type, 
+                                    gint                operation_id,
+                                    GIOChannel         *data_io,
+                                    const char         *server,
+                                    const char         *resource,
+                                    const char         *username)
 {
   GtkCupsRequest *request;
   cups_lang_t *language;
@@ -122,6 +149,8 @@ gtk_cups_request_new (http_t             *connection,
 
   request->type = req_type;
   request->state = GTK_CUPS_REQUEST_START;
+
+  request->password_state = GTK_CUPS_PASSWORD_NONE;
 
    if (server)
     request->server = g_strdup (server);
@@ -158,8 +187,8 @@ gtk_cups_request_new (http_t             *connection,
   request->data_io = data_io;
 
   request->ipp_request = ippNew ();
-  request->ipp_request->request.op.operation_id = operation_id;
-  request->ipp_request->request.op.request_id = 1;
+  ippSetOperation (request->ipp_request, operation_id);
+  ippSetRequestId (request->ipp_request, 1);
 
   language = cupsLangDefault ();
 
@@ -171,13 +200,39 @@ gtk_cups_request_new (http_t             *connection,
                                    "attributes-natural-language", 
                                    NULL, language->language);
 
-  gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_NAME,
-                                   "requesting-user-name",
-                                   NULL, cupsUser ());
-  
+  if (username != NULL)
+    gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_NAME,
+                                     "requesting-user-name",
+                                     NULL, username);
+  else
+    gtk_cups_request_ipp_add_string (request, IPP_TAG_OPERATION, IPP_TAG_NAME,
+                                     "requesting-user-name",
+                                     NULL, cupsUser ());
+
+  request->auth_info_required = NULL;
+  request->auth_info = NULL;
+  request->need_auth_info = FALSE;
+
   cupsLangFree (language);
 
   return request;
+}
+
+GtkCupsRequest *
+gtk_cups_request_new (http_t             *connection,
+                      GtkCupsRequestType  req_type, 
+                      gint                operation_id,
+                      GIOChannel         *data_io,
+                      const char         *server,
+                      const char         *resource)
+{
+  return gtk_cups_request_new_with_username (connection,
+                                             req_type,
+                                             operation_id,
+                                             data_io,
+                                             server,
+                                             resource,
+                                             NULL);
 }
 
 static void
@@ -205,6 +260,14 @@ gtk_cups_request_free (GtkCupsRequest *request)
 
   g_free (request->server);
   g_free (request->resource);
+  if (request->password != NULL)
+    {
+      memset (request->password, 0, strlen (request->password));
+      g_free (request->password);
+    }
+
+  g_free (request->username);
+  g_strfreev (request->auth_info_required);
 
   gtk_cups_result_free (request->result);
 
@@ -212,34 +275,46 @@ gtk_cups_request_free (GtkCupsRequest *request)
 }
 
 gboolean 
-gtk_cups_request_read_write (GtkCupsRequest *request)
+gtk_cups_request_read_write (GtkCupsRequest *request, gboolean connect_only)
 {
-  if (request->type == GTK_CUPS_POST)
-    post_states[request->state] (request);
-  else if (request->type == GTK_CUPS_GET)
-    get_states[request->state] (request);
-
-  if (request->attempts > _GTK_CUPS_MAX_ATTEMPTS && 
-      request->state != GTK_CUPS_REQUEST_DONE)
-    {
-      /* TODO: should add a status or error code for too many failed attempts */
-      gtk_cups_result_set_error (request->result, 
-                                 GTK_CUPS_ERROR_GENERAL,
-                                 0,
-                                 0, 
-                                 "Too many failed attempts");
-
-      request->state = GTK_CUPS_REQUEST_DONE;
-      request->poll_state = GTK_CUPS_HTTP_IDLE;
-    }
-    
-  if (request->state == GTK_CUPS_REQUEST_DONE)
-    {
-      request->poll_state = GTK_CUPS_HTTP_IDLE;
-      return TRUE;
-    }
-  else
+  if (connect_only && request->state != GTK_CUPS_REQUEST_START)
     return FALSE;
+
+  do
+    {
+      if (request->type == GTK_CUPS_POST)
+        post_states[request->state] (request);
+      else if (request->type == GTK_CUPS_GET)
+        get_states[request->state] (request);
+
+      if (gtk_cups_result_is_error (request->result))
+        request->state = GTK_CUPS_REQUEST_DONE;
+
+      if (request->attempts > _GTK_CUPS_MAX_ATTEMPTS &&
+          request->state != GTK_CUPS_REQUEST_DONE)
+        {
+          /* TODO: should add a status or error code for too many failed attempts */
+          gtk_cups_result_set_error (request->result,
+                                     GTK_CUPS_ERROR_GENERAL,
+                                     0,
+                                     0,
+                                     "Too many failed attempts");
+
+          request->state = GTK_CUPS_REQUEST_DONE;
+        }
+
+      if (request->state == GTK_CUPS_REQUEST_DONE)
+        {
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
+          return TRUE;
+        }
+    }
+  /* We need to recheck using httpCheck if the poll_state is read, because
+   * Cups has an internal read buffer. And if this buffer is filled, we may
+   * never get a poll event again. */
+  while (request->poll_state == GTK_CUPS_HTTP_READ && request->http && httpCheck(request->http));
+
+  return FALSE;
 }
 
 GtkCupsPollState 
@@ -290,6 +365,23 @@ gtk_cups_request_ipp_add_strings (GtkCupsRequest    *request,
 		 values);
 }
 
+const char *
+gtk_cups_request_ipp_get_string (GtkCupsRequest *request,
+                                 ipp_tag_t       tag,
+                                 const char     *name)
+{
+  ipp_attribute_t *attribute = NULL;
+
+  if (request != NULL && request->ipp_request != NULL)
+    attribute = ippFindAttribute (request->ipp_request,
+                                  name,
+                                  tag);
+
+  if (attribute != NULL && ippGetCount (attribute) > 0)
+      return ippGetString (attribute, 0, NULL);
+  else
+    return NULL;
+}
 
 
 typedef struct
@@ -330,7 +422,8 @@ static const ipp_option_t ipp_options[] = {
   { "saturation",		IPP_TAG_INTEGER },
   { "scaling",			IPP_TAG_INTEGER },
   { "sides",			IPP_TAG_KEYWORD },
-  { "wrap",			IPP_TAG_BOOLEAN }
+  { "wrap",			IPP_TAG_BOOLEAN },
+  { "number-up-layout",		IPP_TAG_INTEGER }
 };
 
 
@@ -580,10 +673,19 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
 }
 				
 
+void
+gtk_cups_request_set_ipp_version (GtkCupsRequest     *request,
+				  gint                major,
+				  gint                minor)
+{
+  ippSetVersion (request->ipp_request, major, minor);
+}
+
 static void
 _connect (GtkCupsRequest *request)
 {
   request->poll_state = GTK_CUPS_HTTP_IDLE;
+  request->bytes_received = 0;
 
   if (request->http == NULL)
     {
@@ -662,7 +764,7 @@ _post_send (GtkCupsRequest *request)
     request->attempts = 0;
 
     request->state = GTK_CUPS_POST_WRITE_REQUEST;
-    request->ipp_request->state = IPP_IDLE;
+    ippSetState (request->ipp_request, IPP_IDLE);
 }
 
 static void 
@@ -786,10 +888,81 @@ _post_write_data (GtkCupsRequest *request)
           return;
         }
     }
-   else
+  else if (http_status == HTTP_UNAUTHORIZED)
+    {
+      request->state = GTK_CUPS_POST_CHECK;
+      request->poll_state = GTK_CUPS_HTTP_READ;
+
+      request->attempts = 0;
+      return;
+    }
+  else
     {
       request->attempts++;
     }
+}
+
+static void
+_post_auth (GtkCupsRequest *request)
+{
+  if (request->password_state == GTK_CUPS_PASSWORD_HAS)
+    {
+      if (request->password == NULL)
+        {
+          request->state = GTK_CUPS_POST_DONE;
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
+
+          gtk_cups_result_set_error (request->result, 
+                                     GTK_CUPS_ERROR_AUTH,
+                                     0,
+                                     1,
+                                     "Canceled by user");
+        }
+      else
+        request->state = GTK_CUPS_POST_CHECK;
+    }
+}
+
+static void
+_get_auth (GtkCupsRequest *request)
+{
+  if (request->password_state == GTK_CUPS_PASSWORD_HAS)
+    {
+      if (request->password == NULL)
+        {
+          request->state = GTK_CUPS_GET_DONE;
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
+
+          gtk_cups_result_set_error (request->result, 
+                                     GTK_CUPS_ERROR_AUTH,
+                                     0,
+                                     1,
+                                     "Canceled by user");
+        }
+      else
+        request->state = GTK_CUPS_GET_CHECK;
+    }
+}
+
+/* Very ugly hack: cups has a stupid synchronous password callback 
+ * that doesn't even take the request or user data parameters, so 
+ * we have to use a static variable to pass the password to it.
+ * Not threadsafe !
+ * The callback sets cups_password to NULL to signal that the 
+ * password has been used.
+ */
+static char *cups_password = NULL;
+static char *cups_username = NULL;
+
+static const char *
+passwordCB (const char *prompt)
+{
+  char *pwd = cups_password;
+  cups_password = NULL;
+
+  cupsSetUser (cups_username);
+
+  return pwd;
 }
 
 static void 
@@ -810,18 +983,92 @@ _post_check (GtkCupsRequest *request)
     }
   else if (http_status == HTTP_UNAUTHORIZED)
     {
-      /* TODO: callout for auth */
-      g_warning ("NOT IMPLEMENTED: We need to prompt for authorization");
-      request->state = GTK_CUPS_POST_DONE;
-      request->poll_state = GTK_CUPS_HTTP_IDLE;
+      int auth_result = -1;
+      httpFlush (request->http);
+
+      if (request->password_state == GTK_CUPS_PASSWORD_APPLIED)
+        {
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
+          request->password_state = GTK_CUPS_PASSWORD_NOT_VALID;
+          request->state = GTK_CUPS_POST_AUTH;
+          request->need_password = TRUE;
+
+          return;
+        }
+
+      /* Negotiate */
+      if (strncmp (httpGetField (request->http, HTTP_FIELD_WWW_AUTHENTICATE), "Negotiate", 9) == 0)
+        {
+          auth_result = cupsDoAuthentication (request->http, "POST", request->resource);
+        }
+      /* Basic, BasicDigest, Digest and PeerCred */
+      else
+        {
+          if (request->password_state == GTK_CUPS_PASSWORD_NONE)
+            {
+              cups_username = request->username;
+              cupsSetPasswordCB (passwordCB);
+
+              /* This call success for PeerCred authentication */
+              auth_result = cupsDoAuthentication (request->http, "POST", request->resource);
+
+              if (auth_result != 0)
+                {
+                  /* move to AUTH state to let the backend 
+                   * ask for a password
+                   */ 
+                  request->poll_state = GTK_CUPS_HTTP_IDLE;
+                  request->state = GTK_CUPS_POST_AUTH;
+                  request->need_password = TRUE;
+
+                  return;
+                }
+            }
+          else
+            {
+              cups_password = request->password;
+              cups_username = request->username;
+
+              auth_result = cupsDoAuthentication (request->http, "POST", request->resource);
+
+              if (cups_password != NULL)
+                return;
+
+              if (request->password != NULL)
+                {
+                  memset (request->password, 0, strlen (request->password));
+                  g_free (request->password);
+                  request->password = NULL;
+                }
+
+              request->password_state = GTK_CUPS_PASSWORD_APPLIED;
+            }
+        }
+
+      if (auth_result ||
+          httpReconnect (request->http))
+        {
+          /* if the password has been used, reset password_state
+           * so that we ask for a new one next time around
+           */ 
+          if (cups_password == NULL)
+            request->password_state = GTK_CUPS_PASSWORD_NONE;
+
+          request->state = GTK_CUPS_POST_DONE;
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
+          gtk_cups_result_set_error (request->result, 
+                                     GTK_CUPS_ERROR_AUTH,
+                                     0,
+                                     0,
+                                     "Not authorized");
+          return;
+        }
       
-      /* TODO: create a not implemented error code */
-      gtk_cups_result_set_error (request->result, 
-                                 GTK_CUPS_ERROR_GENERAL,
-                                 0,
-                                 0,
-                                 "Can't prompt for authorization");
-      return;
+      if (request->data_io != NULL)
+        g_io_channel_seek_position (request->data_io, 0, G_SEEK_SET, NULL);
+
+      request->state = GTK_CUPS_POST_CONNECT;
+      request->poll_state = GTK_CUPS_HTTP_WRITE;
     }
   else if (http_status == HTTP_ERROR)
     {
@@ -883,7 +1130,7 @@ _post_check (GtkCupsRequest *request)
                                      http_errno, 
                                      "HTTP Error in POST %s", 
                                      g_strerror (http_errno));
-         request->poll_state = GTK_CUPS_HTTP_IDLE;
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
  
           httpFlush (request->http); 
           return;
@@ -975,8 +1222,12 @@ _get_send (GtkCupsRequest *request)
     }
 
   httpClearFields (request->http);
+#ifdef HAVE_HTTPGETAUTHSTRING
+  httpSetField (request->http, HTTP_FIELD_AUTHORIZATION, httpGetAuthString (request->http));
+#else
 #ifdef HAVE_HTTP_AUTHSTRING
   httpSetField (request->http, HTTP_FIELD_AUTHORIZATION, request->http->authstring);
+#endif
 #endif
 
   if (httpGet (request->http, request->resource))
@@ -997,13 +1248,16 @@ _get_send (GtkCupsRequest *request)
       request->attempts++;
       return;    
     }
+
+  if (httpCheck (request->http))
+    request->last_status = httpUpdate (request->http);
         
   request->attempts = 0;
 
   request->state = GTK_CUPS_GET_CHECK;
   request->poll_state = GTK_CUPS_HTTP_READ;
   
-  request->ipp_request->state = IPP_IDLE;
+  ippSetState (request->ipp_request, IPP_IDLE);
 }
 
 static void 
@@ -1024,18 +1278,91 @@ _get_check (GtkCupsRequest *request)
     }
   else if (http_status == HTTP_UNAUTHORIZED)
     {
-      /* TODO: callout for auth */
-      g_warning ("NOT IMPLEMENTED: We need to prompt for authorization in a non blocking manner");
-      request->state = GTK_CUPS_GET_DONE;
-      request->poll_state = GTK_CUPS_HTTP_IDLE;
+      int auth_result = -1;
+      httpFlush (request->http);
 
-      /* TODO: should add a status or error code for not implemented */ 
-      gtk_cups_result_set_error (request->result, 
-                                 GTK_CUPS_ERROR_GENERAL,
-                                 0,
-                                 0,
-                                 "Can't prompt for authorization");
-      return;
+      if (request->password_state == GTK_CUPS_PASSWORD_APPLIED)
+        {
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
+          request->password_state = GTK_CUPS_PASSWORD_NOT_VALID;
+          request->state = GTK_CUPS_GET_AUTH;
+          request->need_password = TRUE;
+
+          return;
+        }
+
+      /* Negotiate */
+      if (strncmp (httpGetField (request->http, HTTP_FIELD_WWW_AUTHENTICATE), "Negotiate", 9) == 0)
+        {
+          auth_result = cupsDoAuthentication (request->http, "GET", request->resource);
+        }
+      /* Basic, BasicDigest, Digest and PeerCred */
+      else
+        {
+          if (request->password_state == GTK_CUPS_PASSWORD_NONE)
+            {
+              cups_username = request->username;
+              cupsSetPasswordCB (passwordCB);
+
+              /* This call success for PeerCred authentication */
+              auth_result = cupsDoAuthentication (request->http, "GET", request->resource);
+
+              if (auth_result != 0)
+                {
+                  /* move to AUTH state to let the backend
+                   * ask for a password
+                   */
+                  request->poll_state = GTK_CUPS_HTTP_IDLE;
+                  request->state = GTK_CUPS_GET_AUTH;
+                  request->need_password = TRUE;
+
+                  return;
+                }
+            }
+          else
+            {
+              cups_password = request->password;
+              cups_username = request->username;
+
+              auth_result = cupsDoAuthentication (request->http, "GET", request->resource);
+
+              if (cups_password != NULL)
+                return;
+
+              if (request->password != NULL)
+                {
+                  memset (request->password, 0, strlen (request->password));
+                  g_free (request->password);
+                  request->password = NULL;
+                }
+
+              request->password_state = GTK_CUPS_PASSWORD_APPLIED;
+            }
+        }
+
+      if (auth_result ||
+          httpReconnect (request->http))
+        {
+          /* if the password has been used, reset password_state
+           * so that we ask for a new one next time around
+           */
+          if (cups_password == NULL)
+            request->password_state = GTK_CUPS_PASSWORD_NONE;
+
+          request->state = GTK_CUPS_GET_DONE;
+          request->poll_state = GTK_CUPS_HTTP_IDLE;
+          gtk_cups_result_set_error (request->result, 
+                                     GTK_CUPS_ERROR_AUTH,
+                                     0,
+                                     0,
+                                     "Not authorized");
+          return;
+        }
+
+      request->state = GTK_CUPS_GET_CONNECT;
+      request->last_status = HTTP_CONTINUE;
+
+     return;
     }
   else if (http_status == HTTP_UPGRADE_REQUIRED)
     {
@@ -1043,7 +1370,7 @@ _get_check (GtkCupsRequest *request)
       httpFlush (request->http);
 
       cupsSetEncryption (HTTP_ENCRYPT_REQUIRED);
-      request->state = GTK_CUPS_POST_CONNECT;
+      request->state = GTK_CUPS_GET_CONNECT;
 
       /* Reconnect... */
       httpReconnect (request->http);
@@ -1122,17 +1449,10 @@ _get_read_data (GtkCupsRequest *request)
 #else
   bytes = httpRead (request->http, buffer, sizeof (buffer));
 #endif /* HAVE_CUPS_API_1_2 */
+  request->bytes_received += bytes;
 
   GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %i bytes read\n", bytes));
-  
-  if (bytes == 0)
-    {
-      request->state = GTK_CUPS_GET_DONE;
-      request->poll_state = GTK_CUPS_HTTP_IDLE;
-
-      return;
-    }
+            g_print ("CUPS Backend: %" G_GSIZE_FORMAT " bytes read\n", bytes));
   
   io_status =
     g_io_channel_write_chars (request->data_io, 
@@ -1143,7 +1463,7 @@ _get_read_data (GtkCupsRequest *request)
 
   if (io_status == G_IO_STATUS_ERROR)
     {
-      request->state = GTK_CUPS_POST_DONE;
+      request->state = GTK_CUPS_GET_DONE;
       request->poll_state = GTK_CUPS_HTTP_IDLE;
     
       gtk_cups_result_set_error (request->result,
@@ -1152,6 +1472,19 @@ _get_read_data (GtkCupsRequest *request)
                                  error->code, 
                                  error->message);
       g_error_free (error);
+    }
+
+  /* Stop if we do not expect any more data or EOF was received. */
+#if HAVE_CUPS_API_1_2
+  if (httpGetLength2 (request->http) <= request->bytes_received || bytes == 0)
+#else
+  if (httpGetLength (request->http) <= request->bytes_received || bytes == 0)
+#endif /* HAVE_CUPS_API_1_2 */
+    {
+      request->state = GTK_CUPS_GET_DONE;
+      request->poll_state = GTK_CUPS_HTTP_IDLE;
+
+      return;
     }
 }
 
@@ -1201,7 +1534,8 @@ gtk_cups_result_get_error_string (GtkCupsResult *result)
  * a socket for communication with a CUPS server 'server'.
  */
 GtkCupsConnectionTest *
-gtk_cups_connection_test_new (const char *server)
+gtk_cups_connection_test_new (const char *server,
+                              const int   port)
 {
   GtkCupsConnectionTest *result = NULL;
 #ifdef HAVE_CUPS_API_1_2
@@ -1209,7 +1543,10 @@ gtk_cups_connection_test_new (const char *server)
 
   result = g_new (GtkCupsConnectionTest, 1);
 
-  port_str = g_strdup_printf ("%d", ippPort ());
+  if (port >= 0)
+    port_str = g_strdup_printf ("%d", port);
+  else
+    port_str = g_strdup_printf ("%d", ippPort ());
 
   if (server != NULL)
     result->addrlist = httpAddrGetList (server, AF_UNSPEC, port_str);
@@ -1220,9 +1557,10 @@ gtk_cups_connection_test_new (const char *server)
 
   result->socket = -1;
   result->current_addr = NULL;
-  result->success_at_init = FALSE;
+  result->last_wrong_addr = NULL;
+  result->at_init = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
 
-  result->success_at_init = gtk_cups_connection_test_is_server_available (result);
+  result->at_init = gtk_cups_connection_test_get_state (result);
 #else
   result = g_new (GtkCupsConnectionTest, 1);
 #endif
@@ -1236,28 +1574,36 @@ gtk_cups_connection_test_new (const char *server)
  *  - you need to check it more then once.
  * The connection is closed after a successful connection.
  */
-gboolean 
-gtk_cups_connection_test_is_server_available (GtkCupsConnectionTest *test)
+GtkCupsConnectionState 
+gtk_cups_connection_test_get_state (GtkCupsConnectionTest *test)
 {
 #ifdef HAVE_CUPS_API_1_2
-  http_addrlist_t *iter;
-  gboolean         result = FALSE;
-  gint             flags;
-  gint             code;
+  GtkCupsConnectionState result = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
+  http_addrlist_t       *iter;
+  gint                   error_code;
+  gint                   flags;
+  gint                   code;
 
   if (test == NULL)
-    return FALSE;
+    return GTK_CUPS_CONNECTION_NOT_AVAILABLE;
 
-  if (test->success_at_init)
+  if (test->at_init == GTK_CUPS_CONNECTION_AVAILABLE)
     {
-      test->success_at_init = FALSE;
-      return TRUE;
+      test->at_init = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
+      return GTK_CUPS_CONNECTION_AVAILABLE;
     }
   else
     {
       if (test->socket == -1)
         {
-          iter = test->addrlist;
+          if (test->last_wrong_addr != NULL && test->last_wrong_addr->next != NULL)
+            iter = test->last_wrong_addr->next;
+          else
+            {
+              test->last_wrong_addr = NULL;
+              iter = test->addrlist;
+            }
+
           while (iter)
             {
               test->socket = socket (iter->addr.addr.sa_family,
@@ -1287,21 +1633,33 @@ gtk_cups_connection_test_is_server_available (GtkCupsConnectionTest *test)
                           &test->current_addr->addr.addr,
                           httpAddrLength (&test->current_addr->addr));
 
-          if (code == 0)
+          error_code = errno;
+
+          if (code == 0 || error_code == EISCONN)
             {
               close (test->socket);
               test->socket = -1;
               test->current_addr = NULL;
-              result = TRUE;
+              result = GTK_CUPS_CONNECTION_AVAILABLE;
             }
           else
-            result = FALSE;
+            {
+              if (error_code == EALREADY || error_code == EINPROGRESS)
+                result = GTK_CUPS_CONNECTION_IN_PROGRESS;
+              else
+                {
+                  close (test->socket);
+                  test->socket = -1;
+                  test->last_wrong_addr = test->current_addr;
+                  result = GTK_CUPS_CONNECTION_NOT_AVAILABLE;
+                }
+            }
          }
 
       return result;
     }
 #else
-  return TRUE;
+  return GTK_CUPS_CONNECTION_AVAILABLE;
 #endif
 }
 
@@ -1315,6 +1673,7 @@ gtk_cups_connection_test_free (GtkCupsConnectionTest *test)
 
 #ifdef HAVE_CUPS_API_1_2
   test->current_addr = NULL;
+  test->last_wrong_addr = NULL;
   httpAddrFreeList (test->addrlist);
   if (test->socket != -1)
     {

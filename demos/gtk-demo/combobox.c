@@ -238,12 +238,12 @@ is_capital_sensitive (GtkCellLayout   *cell_layout,
 }
 
 static void
-fill_combo_entry (GtkWidget *entry)
+fill_combo_entry (GtkWidget *combo)
 {
-  gtk_combo_box_append_text (GTK_COMBO_BOX (entry), "One");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (entry), "Two");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (entry), "2\302\275");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (entry), "Three");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "One");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Two");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "2\302\275");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "Three");
 }
 
 
@@ -428,19 +428,19 @@ do_combobox (GtkWidget *do_widget)
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
     
-    combo = gtk_combo_box_entry_new_text ();
+    combo = gtk_combo_box_text_new_with_entry ();
     fill_combo_entry (combo);
     gtk_container_add (GTK_CONTAINER (box), combo);
     
     entry = g_object_new (TYPE_MASK_ENTRY, NULL);
     MASK_ENTRY (entry)->mask = "^([0-9]*|One|Two|2\302\275|Three)$";
      
-    gtk_container_remove (GTK_CONTAINER (combo), GTK_BIN (combo)->child);
+    gtk_container_remove (GTK_CONTAINER (combo), gtk_bin_get_child (GTK_BIN (combo)));
     gtk_container_add (GTK_CONTAINER (combo), entry);
   
   }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

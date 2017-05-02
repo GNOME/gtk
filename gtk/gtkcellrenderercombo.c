@@ -27,7 +27,6 @@
 #include "gtkcellrenderercombo.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
-#include "gtkcomboboxentry.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
@@ -268,30 +267,16 @@ gtk_cell_renderer_combo_set_property (GObject      *object,
     {
     case PROP_MODEL:
       {
-	GObject *object;
         GtkCellRendererComboPrivate *priv;
 
         priv = GTK_CELL_RENDERER_COMBO_GET_PRIVATE (cell);
 
-	if (cell->model)
-	  {
-            if (priv->combo)
-              gtk_combo_box_set_model (GTK_COMBO_BOX (priv->combo), NULL);
-	    g_object_unref (cell->model);
-	    cell->model = NULL;
-	  }
-
-	object = g_value_get_object (value);
-        if (object)
-          {
-            g_return_if_fail (GTK_IS_TREE_MODEL (object));
-            g_object_ref (object);
-
-            cell->model = GTK_TREE_MODEL (object);
-            if (priv->combo)
-              gtk_combo_box_set_model (GTK_COMBO_BOX (priv->combo), cell->model);
-          }
-	break;
+        if (cell->model)
+          g_object_unref (cell->model);
+        cell->model = GTK_TREE_MODEL (g_value_get_object (value));
+        if (cell->model)
+          g_object_ref (cell->model);
+        break;
       }
     case PROP_TEXT_COLUMN:
       cell->text_column = g_value_get_int (value);
@@ -345,8 +330,10 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
       g_signal_handler_disconnect (combo, cell->focus_out_id);
       cell->focus_out_id = 0;
     }
-  
-  canceled = _gtk_combo_box_editing_canceled (GTK_COMBO_BOX (combo));
+
+  g_object_get (combo,
+                "editing-canceled", &canceled,
+                NULL);
   gtk_cell_renderer_stop_editing (GTK_CELL_RENDERER (data), canceled);
   if (canceled)
     {
@@ -354,7 +341,7 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
       return;
     }
 
-  if (GTK_IS_COMBO_BOX_ENTRY (combo))
+  if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
     {
       entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
       new_text = g_strdup (gtk_entry_get_text (entry));
@@ -443,11 +430,11 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 
   if (cell_combo->has_entry) 
     {
-      combo = gtk_combo_box_entry_new ();
+      combo = g_object_new (GTK_TYPE_COMBO_BOX, "has-entry", TRUE, NULL);
 
       if (cell_combo->model)
         gtk_combo_box_set_model (GTK_COMBO_BOX (combo), cell_combo->model);
-      gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo),
+      gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (combo),
                                            cell_combo->text_column);
 
       if (cell_text->text)

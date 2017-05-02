@@ -17,6 +17,8 @@ pdf:
 	  (cd $(srcdir); db2pdf gtk-faq.sgml); \
 	fi
 
+all-local: html
+
 dist-hook: html
 	cp -Rp $(srcdir)/html $(distdir)
 else
@@ -38,3 +40,5 @@ dist-hook:
 endif
 
 .PHONY: html
+
+-include $(top_srcdir)/git.mk

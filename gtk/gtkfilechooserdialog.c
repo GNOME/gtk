@@ -25,6 +25,7 @@
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserembed.h"
+#include "gtkfilechoosersettings.h"
 #include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
@@ -49,7 +50,6 @@ static void     gtk_file_chooser_dialog_get_property (GObject               *obj
 						      GParamSpec            *pspec);
 
 static void     gtk_file_chooser_dialog_map          (GtkWidget             *widget);
-static void     gtk_file_chooser_dialog_unmap        (GtkWidget             *widget);
 
 static void response_cb (GtkDialog *dialog,
 			 gint       response_id);
@@ -70,7 +70,6 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gobject_class->finalize = gtk_file_chooser_dialog_finalize;
 
   widget_class->map       = gtk_file_chooser_dialog_map;
-  widget_class->unmap     = gtk_file_chooser_dialog_unmap;
 
   _gtk_file_chooser_install_properties (gobject_class);
 
@@ -92,6 +91,8 @@ gtk_file_chooser_dialog_init (GtkFileChooserDialog *dialog)
   gtk_container_set_border_width (GTK_CONTAINER (fc_dialog), 5);
   gtk_box_set_spacing (GTK_BOX (fc_dialog->vbox), 2); /* 2 * 5 + 2 = 12 */
   gtk_container_set_border_width (GTK_CONTAINER (fc_dialog->action_area), 5);
+
+  gtk_window_set_role (GTK_WINDOW (dialog), "GtkFileChooserDialog");
 
   /* We do a signal connection here rather than overriding the method in
    * class_init because GtkDialog::response is a RUN_LAST signal.  We want *our*
@@ -154,35 +155,30 @@ file_chooser_widget_file_activated (GtkFileChooser       *chooser,
   g_list_free (children);
 }
 
+#if 0
+/* FIXME: to see why this function is ifdef-ed out, see the comment below in
+ * file_chooser_widget_default_size_changed().
+ */
 static void
-clamp_to_screen (GtkWidget *widget,
-		 gint      *width,
-		 gint      *height)
+load_position (int *out_xpos, int *out_ypos)
 {
-  GdkScreen *screen;
-  int monitor_num;
-  GdkRectangle monitor;
+  GtkFileChooserSettings *settings;
+  int x, y, width, height;
 
-  g_return_if_fail (GTK_WIDGET_REALIZED (widget));
-  
-  screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+  settings = _gtk_file_chooser_settings_new ();
+  _gtk_file_chooser_settings_get_geometry (settings, &x, &y, &width, &height);
+  g_object_unref (settings);
 
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-
-  if (width)
-    *width = MIN (*width, (monitor.width * 3) / 4);
-
-  if (height)
-    *height = MIN (*height, (monitor.height * 3) / 4);
+  *out_xpos = x;
+  *out_ypos = y;
 }
+#endif
 
 static void
 file_chooser_widget_default_size_changed (GtkWidget            *widget,
 					  GtkFileChooserDialog *dialog)
 {
   GtkFileChooserDialogPrivate *priv;
-  gint width, height;
   gint default_width, default_height;
   GtkRequisition req, widget_req;
 
@@ -191,33 +187,35 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
   /* Unset any previously set size */
   gtk_widget_set_size_request (GTK_WIDGET (dialog), -1, -1);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       /* Force a size request of everything before we start.  This will make sure
        * that widget->requisition is meaningful. */
       gtk_widget_size_request (GTK_WIDGET (dialog), &req);
       gtk_widget_size_request (widget, &widget_req);
-
-      width = req.width - widget_req.width;
-      height = req.height - widget_req.height;
-    }
-  else
-    {
-      width = GTK_WIDGET (dialog)->allocation.width - widget->allocation.width;
-      height = GTK_WIDGET (dialog)->allocation.height - widget->allocation.height;
     }
 
   _gtk_file_chooser_embed_get_default_size (GTK_FILE_CHOOSER_EMBED (priv->widget),
 					    &default_width, &default_height);
 
-  /* Ideal target size plus any extra size */
-  width = default_width + width + (2 * GTK_CONTAINER (dialog)->border_width);
-  height = default_height + height + (2 * GTK_CONTAINER (dialog)->border_width);
+  gtk_window_resize (GTK_WINDOW (dialog), default_width, default_height);
 
-  if (GTK_WIDGET_REALIZED (dialog))
-    clamp_to_screen (GTK_WIDGET (dialog), &width, &height);
-
-  gtk_window_resize (GTK_WINDOW (dialog), width, height);
+  if (!gtk_widget_get_mapped (GTK_WIDGET (dialog)))
+    {
+#if 0
+      /* FIXME: the code to restore the position does not work yet.  It is not
+       * clear whether it is actually desirable --- if enabled, applications
+       * would not be able to say "center the file chooser on top of my toplevel
+       * window".  So, we don't use this code at all.
+       */
+      load_position (&xpos, &ypos);
+      if (xpos >= 0 && ypos >= 0)
+	{
+	  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_NONE);
+	  gtk_window_move (GTK_WINDOW (dialog), xpos, ypos);
+	}
+#endif
+    }
 }
 
 static void
@@ -225,6 +223,11 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
 					GtkFileChooserDialog *dialog)
 {
   GList *children, *l;
+
+  dialog->priv->response_requested = TRUE;
+
+  if (gtk_window_activate_default (GTK_WINDOW (dialog)))
+    return;
 
   /* There probably isn't a default widget, so make things easier for the
    * programmer by looking for a reasonable button on our own.
@@ -241,11 +244,13 @@ file_chooser_widget_response_requested (GtkWidget            *widget,
       response_id = gtk_dialog_get_response_for_widget (GTK_DIALOG (dialog), widget);
       if (is_stock_accept_response_id (response_id))
 	{
-	  dialog->priv->response_requested = TRUE;
 	  gtk_widget_activate (widget); /* Should we gtk_dialog_response (dialog, response_id) instead? */
 	  break;
 	}
     }
+
+  if (l == NULL)
+    dialog->priv->response_requested = FALSE;
 
   g_list_free (children);
 }
@@ -324,57 +329,6 @@ gtk_file_chooser_dialog_get_property (GObject         *object,
   g_object_get_property (G_OBJECT (priv->widget), pspec->name, value);
 }
 
-#if 0
-static void
-set_default_size (GtkFileChooserDialog *dialog)
-{
-  GtkWidget *widget;
-  GtkWindow *window;
-  int default_width, default_height;
-  int width, height;
-  int font_size;
-  GdkScreen *screen;
-  int monitor_num;
-  GtkRequisition req;
-  GdkRectangle monitor;
-
-  widget = GTK_WIDGET (dialog);
-  window = GTK_WINDOW (dialog);
-
-  /* Size based on characters */
-
-  font_size = pango_font_description_get_size (widget->style->font_desc);
-  font_size = PANGO_PIXELS (font_size);
-
-  width = font_size * NUM_CHARS;
-  height = font_size * NUM_LINES;
-
-  /* Use at least the requisition size... */
-
-  gtk_widget_size_request (widget, &req);
-  width = MAX (width, req.width);
-  height = MAX (height, req.height);
-
-  /* ... but no larger than the monitor */
-
-  screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
-
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
-
-  width = MIN (width, monitor.width * 3 / 4);
-  height = MIN (height, monitor.height * 3 / 4);
-
-  /* Set size */
-
-  gtk_window_get_default_size (window, &default_width, &default_height);
-
-  gtk_window_set_default_size (window,
-			       (default_width == -1) ? width : default_width,
-			       (default_height == -1) ? height : default_height);
-}
-#endif
-
 static void
 foreach_ensure_default_response_cb (GtkWidget *widget,
 				    gpointer   data)
@@ -404,31 +358,9 @@ gtk_file_chooser_dialog_map (GtkWidget *widget)
 
   ensure_default_response (dialog);
 
-  if (!GTK_WIDGET_MAPPED (priv->widget))
-    gtk_widget_map (priv->widget);
-
-  file_chooser_widget_default_size_changed (priv->widget, dialog);
   _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
 
   GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->map (widget);
-}
-
-/* GtkWidget::unmap handler */
-static void
-gtk_file_chooser_dialog_unmap (GtkWidget *widget)
-{
-  GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (widget);
-  GtkFileChooserDialogPrivate *priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
-
-  GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->unmap (widget);
-
-  /* See bug #145470.  We unmap the GtkFileChooserWidget so that if the dialog
-   * is remapped, the widget will be remapped as well.  Implementations should
-   * refresh their contents when this happens, as some applications keep a
-   * single file chooser alive and map/unmap it as needed, rather than creating
-   * a new file chooser every time they need one.
-   */
-  gtk_widget_unmap (priv->widget);
 }
 
 /* GtkDialog::response handler */
@@ -483,10 +415,10 @@ gtk_file_chooser_dialog_new_valist (const gchar          *title,
 
 /**
  * gtk_file_chooser_dialog_new:
- * @title: Title of the dialog, or %NULL
- * @parent: Transient parent of the dialog, or %NULL
+ * @title: (allow-none): Title of the dialog, or %NULL
+ * @parent: (allow-none): Transient parent of the dialog, or %NULL
  * @action: Open or save mode for the dialog
- * @first_button_text: stock ID or text to go in the first button, or %NULL
+ * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
  * @Varargs: response ID for the first button, then additional (button, id) pairs, ending with %NULL
  *
  * Creates a new #GtkFileChooserDialog.  This function is analogous to
@@ -517,11 +449,11 @@ gtk_file_chooser_dialog_new (const gchar         *title,
 
 /**
  * gtk_file_chooser_dialog_new_with_backend:
- * @title: Title of the dialog, or %NULL
- * @parent: Transient parent of the dialog, or %NULL
+ * @title: (allow-none): Title of the dialog, or %NULL
+ * @parent: (allow-none): Transient parent of the dialog, or %NULL
  * @action: Open or save mode for the dialog
  * @backend: The name of the specific filesystem backend to use.
- * @first_button_text: stock ID or text to go in the first button, or %NULL
+ * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
  * @Varargs: response ID for the first button, then additional (button, id) pairs, ending with %NULL
  *
  * Creates a new #GtkFileChooserDialog with a specified backend. This is
@@ -532,7 +464,7 @@ gtk_file_chooser_dialog_new (const gchar         *title,
  * Return value: a new #GtkFileChooserDialog
  *
  * Since: 2.4
- * Deprecated: 2.14
+ * Deprecated: 2.14: Use gtk_file_chooser_dialog_new() instead.
  **/
 GtkWidget *
 gtk_file_chooser_dialog_new_with_backend (const gchar          *title,

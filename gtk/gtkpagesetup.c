@@ -99,10 +99,10 @@ gtk_page_setup_new (void)
 /**
  * gtk_page_setup_copy:
  * @other: the #GtkPageSetup to copy
- * 
+ *
  * Copies a #GtkPageSetup.
- * 
- * Return value: a copy of @other
+ *
+ * Return value: (transfer full): a copy of @other
  *
  * Since: 2.10
  */
@@ -476,7 +476,7 @@ gtk_page_setup_get_page_height (GtkPageSetup *setup,
  * gtk_page_setup_load_file:
  * @setup: a #GtkPageSetup
  * @file_name: the filename to read the page setup from
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Reads the page setup from the file @file_name.
  * See gtk_page_setup_to_file().
@@ -510,7 +510,7 @@ gtk_page_setup_load_file (GtkPageSetup *setup,
 /**
  * gtk_page_setup_new_from_file:
  * @file_name: the filename to read the page setup from
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  * 
  * Reads the page setup from the file @file_name. Returns a 
  * new #GtkPageSetup object with the restored page setup, 
@@ -560,9 +560,9 @@ string_to_enum (GType type,
  * gtk_page_setup_load_key_file:
  * @setup: a #GtkPageSetup
  * @key_file: the #GKeyFile to retrieve the page_setup from
- * @group_name: the name of the group in the key_file to read, or %NULL
+ * @group_name: (allow-none): the name of the group in the key_file to read, or %NULL
  *              to use the default name "Page Setup"
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  * 
  * Reads the page setup from the group @group_name in the key file
  * @key_file.
@@ -648,9 +648,9 @@ out:
 /**
  * gtk_page_setup_new_from_key_file:
  * @key_file: the #GKeyFile to retrieve the page_setup from
- * @group_name: the name of the group in the key_file to read, or %NULL
+ * @group_name: (allow-none): the name of the group in the key_file to read, or %NULL
  *              to use the default name "Page Setup"
- * @error: return location for an error, or %NULL
+ * @error: (allow-none): return location for an error, or %NULL
  *
  * Reads the page setup from the group @group_name in the key file
  * @key_file. Returns a new #GtkPageSetup object with the restored
@@ -680,7 +680,7 @@ gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
  * gtk_page_setup_to_file:
  * @setup: a #GtkPageSetup
  * @file_name: the file to save to
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  * 
  * This function saves the information from @setup to @file_name.
  * 

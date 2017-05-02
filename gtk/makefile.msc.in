@@ -16,7 +16,6 @@ GDK_PIXBUF_VER = 2.0
 
 GDK_LIBS = ../gdk/gdk-win32-$(GTK_VER).lib
 GTK_LIBS = gtk-win32-$(GTK_VER).lib
-GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
 GTK_BINARY_VERSION = @GTK_BINARY_VERSION@
 
 # Perl and awk are needed to generate some source files.
@@ -25,7 +24,7 @@ GTK_BINARY_VERSION = @GTK_BINARY_VERSION@
 PERL = perl
 AWK = gawk
 
-INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk -I ../gdk-pixbuf
+INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk $(GDK_PIXBUF_CFLAGS)
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
 		$(INTL_CFLAGS) $(ATK_CFLAGS) $(CAIRO_CFLAGS)
 LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
@@ -45,27 +44,6 @@ DEFINES = \
 TOUCH = copy makefile.msc+nul
 
 gtkbuiltincache.h: gtk-update-icon-cache.exe
-	cd stock-icons\16
-	copy gtk-go-forward-ltr.png gtk-go-back-rtl.png
-	copy gtk-go-back-ltr.png gtk-go-forward-rtl.png
-	copy gtk-goto-last-ltr.png gtk-goto-first-rtl.png
-	copy gtk-goto-first-ltr.png gtk-goto-last-rtl.png
-	copy gtk-media-rewind-ltr.png gtk-media-forward-rtl.png
-	copy gtk-media-previous-ltr.png gtk-media-next-rtl.png
-	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
-	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
-	copy gtk-floppy.png gtk-save.png
-	cd ..\24
-	copy gtk-go-forward-ltr.png gtk-go-back-rtl.png
-	copy gtk-go-back-ltr.png gtk-go-forward-rtl.png
-	copy gtk-goto-last-ltr.png gtk-goto-first-rtl.png
-	copy gtk-goto-first-ltr.png gtk-goto-last-rtl.png
-	copy gtk-media-rewind-ltr.png gtk-media-forward-rtl.png
-	copy gtk-media-previous-ltr.png gtk-media-next-rtl.png
-	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
-	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
-	copy gtk-floppy.png gtk-save.png
-	cd ..\..
 	del gtkicontheme.obj
 	gtk-update-icon-cache --force --ignore-theme-index 	\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h
@@ -101,6 +79,7 @@ gtk_OBJECTS_deprecated = \
 	gtklistitem.obj \
 	gtkprogress.obj \
 	gtktipsquery.obj \
+	gtkshow.obj \
 	gtksignal.obj \
 	gtkpixmap.obj \
 	gtkpreview.obj \
@@ -114,11 +93,12 @@ gtk_OBJECTS_cell = \
 	gtkcellrenderer.obj \
 	gtkcellrendereraccel.obj \
 	gtkcellrenderercombo.obj \
+	gtkcellrendererspin.obj	\
+	gtkcellrendererspinner.obj \
 	gtkcellrenderertext.obj \
 	gtkcellrenderertoggle.obj \
 	gtkcellrendererpixbuf.obj \
 	gtkcellrendererprogress.obj \
-	gtkcellrendererspin.obj	\
 	gtkcellview.obj \
 	gtkliststore.obj \
 	gtktreednd.obj \
@@ -144,7 +124,6 @@ gtk_OBJECTS_file = \
 	gtkfilefilter.obj \
 	gtkfilesystem.obj \
 	gtkfilesystemmodel.obj \
-	gtkfilesystemwin32.obj \
 
 gtk_OBJECTS_print = \
 	gtkprint-win32.obj \
@@ -193,6 +172,7 @@ gtk_OBJECTS = \
 	gtkaccessible.obj \
 	gtkaction.obj \
 	gtkactiongroup.obj \
+	gtkactivatable.obj \
 	gtkadjustment.obj \
 	gtkalignment.obj \
 	gtkarrow.obj \
@@ -215,6 +195,7 @@ gtk_OBJECTS = \
 	gtkcolorseldialog.obj \
 	gtkcombobox.obj	\
 	gtkcomboboxentry.obj \
+	gtkcomboboxtext.obj \
 	gtkcontainer.obj \
 	gtkcurve.obj \
 	gtkdialog.obj \
@@ -222,6 +203,7 @@ gtk_OBJECTS = \
 	gtkdrawingarea.obj \
 	gtkeditable.obj \
 	gtkentry.obj \
+	gtkentrybuffer.obj \
 	gtkentrycompletion.obj \
 	gtkeventbox.obj \
 	gtkexpander.obj \
@@ -251,6 +233,7 @@ gtk_OBJECTS = \
 	gtkimcontextsimple.obj \
 	gtkimmodule.obj	\
 	gtkimmulticontext.obj \
+	gtkinfobar.obj \
 	gtkinputdialog.obj \
 	gtkinvisible.obj \
 	gtkitem.obj \
@@ -271,10 +254,14 @@ gtk_OBJECTS = \
 	gtkmnemonichash.obj \
 	gtkmodules.obj \
 	gtkmountoperation.obj \
+	gtkmountoperation-stub.obj \
 	gtknotebook.obj \
 	gtkobject.obj \
+	gtkoffscreenwindow.obj \
+	gtkorientable.obj \
 	gtkpagesetup.obj \
 	gtkpaned.obj \
+	gtkpango.obj \
 	gtkpapersize.obj \
 	gtkpathbar.obj \
 	gtkplug.obj \
@@ -305,6 +292,7 @@ gtk_OBJECTS = \
 	gtksocket.obj \
 	gtksocket-win32.obj \
 	gtkspinbutton.obj \
+	gtkspinner.obj \
 	gtkstatusicon.obj \
 	gtkstyle.obj \
 	gtkstatusbar.obj \
@@ -317,6 +305,8 @@ gtk_OBJECTS = \
 	gtktoggletoolbutton.obj \
 	gtktoolbutton.obj \
 	gtktoolitem.obj \
+	gtktoolitemgroup.obj \
+	gtktoolpalette.obj \
 	gtktoolshell.obj \
 	gtktooltip.obj \
 	gtktreedatalist.obj \
@@ -347,6 +337,7 @@ gtk_public_h_sources =		\
 	gtkaccessible.h		\
 	gtkaction.h		\
 	gtkactiongroup.h	\
+	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkarrow.h		\
@@ -368,6 +359,7 @@ gtk_public_h_sources =		\
 	gtkcellrendererpixbuf.h	\
 	gtkcellrendererprogress.h \
 	gtkcellrendererspin.h   \
+	gtkcellrendererspinner.h \
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h		\
@@ -381,6 +373,7 @@ gtk_public_h_sources =		\
 	gtkcombo.h		\
 	gtkcombobox.h		\
 	gtkcomboboxentry.h	\
+	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
@@ -390,6 +383,7 @@ gtk_public_h_sources =		\
 	gtkdrawingarea.h	\
 	gtkeditable.h           \
 	gtkentry.h		\
+	gtkentrybuffer.h	\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
@@ -445,10 +439,12 @@ gtk_public_h_sources =		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
 	gtkobject.h		\
+	gtkoffscreenwindow.h	\
 	gtkoldeditable.h	\
 	gtkoptionmenu.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
+	gtkpango.h		\
 	gtkpapersize.h		\
 	gtkpixmap.h		\
 	gtkplug.h		\
@@ -487,6 +483,7 @@ gtk_public_h_sources =		\
 	gtksizegroup.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
+	gtkspinner.h		\
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
@@ -510,6 +507,8 @@ gtk_public_h_sources =		\
 	gtktoolbar.h		\
 	gtktoolbutton.h		\
 	gtktoolitem.h		\
+	gtktoolitemgroup.h	\
+	gtktoolpalette.h	\
 	gtktooltip.h		\
 	gtktooltips.h		\
 	gtktree.h		\
@@ -553,10 +552,10 @@ gtk.def: gtk.symbols makefile.msc
 		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gtk.symbols >> gtk.def
 
 gtkalias.h: gtk.symbols
-	cl /EP -DG_OS_WIN32 -DGTK_WINDOWING_WIN32 -DINCLUDE_INTERNAL_SYMBOLS gtk.symbols | $(PERL) makegtkalias.pl > gtkalias.h
+	$(PERL) makegtkalias.pl < gtk.symbols > gtkalias.h
 
 gtkaliasdef.c: gtk.symbols
-	 perl makegtkalias.pl -def < gtk.symbols > gtkaliasdef.c
+	 $(PERL) makegtkalias.pl -def < gtk.symbols > gtkaliasdef.c
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
 # use 'echo' to work around 'command line too long'

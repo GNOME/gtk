@@ -10,17 +10,17 @@ INCLUDES = \
 	$(GTK_DEP_CFLAGS)
 
 DEPS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
 progs_ldadd = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gtk/$(gtktargetlib)				\
+	$(GTK_DEP_LIBS)
 
 noinst_PROGRAMS = $(TEST_PROGS)
 
+TESTS_ENVIRONMENT = G_ENABLE_DIAGNOSTIC=0
 
 TEST_PROGS			+= testing
 testing_SOURCES			 = testing.c
@@ -33,6 +33,10 @@ liststore_LDADD			 = $(progs_ldadd)
 TEST_PROGS			+= treestore
 treestore_SOURCES		 = treestore.c
 treestore_LDADD			 = $(progs_ldadd)
+
+TEST_PROGS			+= treeview
+treeview_SOURCES		 = treeview.c
+treeview_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= treeview-scrolling
 treeview_scrolling_SOURCES	 = treeview-scrolling.c
@@ -59,9 +63,9 @@ crossingevents_LDADD		 = $(progs_ldadd)
 
 # this doesn't work in make distcheck, since it doesn't
 # find file-chooser-test-dir 
-# TEST_PROGS			+= filechooser
-filechooser_SOURCES		 = filechooser.c pixbuf-init.c
-filechooser_LDADD		 = $(progs_ldadd)
+#TEST_PROGS			+= filechooser
+#filechooser_SOURCES		 = filechooser.c pixbuf-init.c
+#filechooser_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= builder
 builder_SOURCES			 = builder.c
@@ -77,3 +81,17 @@ defaultvalue_LDADD 		 = $(progs_ldadd)
 TEST_PROGS			+= textbuffer
 textbuffer_SOURCES		 = textbuffer.c pixbuf-init.c
 textbuffer_LDADD		 = $(progs_ldadd)
+
+TEST_PROGS			+= filtermodel
+filtermodel_SOURCES		 = filtermodel.c
+filtermodel_LDADD		 = $(progs_ldadd)
+
+TEST_PROGS			+= expander
+expander_SOURCES		 = expander.c
+expander_LDADD		 = $(progs_ldadd)
+
+TEST_PROGS			+= action
+action_SOURCES			 = action.c
+action_LDADD			 = $(progs_ldadd)
+
+-include $(top_srcdir)/git.mk

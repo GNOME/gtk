@@ -17,12 +17,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_TREE_VIEW_COLUMN_H__
+#define __GTK_TREE_VIEW_COLUMN_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TREE_VIEW_COLUMN_H__
-#define __GTK_TREE_VIEW_COLUMN_H__
 
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtktreemodel.h>
@@ -135,7 +135,9 @@ void                    gtk_tree_view_column_pack_end            (GtkTreeViewCol
 								  GtkCellRenderer         *cell,
 								  gboolean                 expand);
 void                    gtk_tree_view_column_clear               (GtkTreeViewColumn       *tree_column);
+#ifndef GTK_DISABLE_DEPRECATED
 GList                  *gtk_tree_view_column_get_cell_renderers  (GtkTreeViewColumn       *tree_column);
+#endif
 void                    gtk_tree_view_column_add_attribute       (GtkTreeViewColumn       *tree_column,
 								  GtkCellRenderer         *cell_renderer,
 								  const gchar             *attribute,
@@ -180,7 +182,7 @@ void                    gtk_tree_view_column_clicked             (GtkTreeViewCol
  */
 void                    gtk_tree_view_column_set_title           (GtkTreeViewColumn       *tree_column,
 								  const gchar             *title);
-G_CONST_RETURN gchar   *gtk_tree_view_column_get_title           (GtkTreeViewColumn       *tree_column);
+const gchar *           gtk_tree_view_column_get_title           (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_set_expand          (GtkTreeViewColumn       *tree_column,
 								  gboolean                 expand);
 gboolean                gtk_tree_view_column_get_expand          (GtkTreeViewColumn       *tree_column);

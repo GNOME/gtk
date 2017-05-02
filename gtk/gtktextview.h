@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_TEXT_VIEW_H__
+#define __GTK_TEXT_VIEW_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TEXT_VIEW_H__
-#define __GTK_TEXT_VIEW_H__
 
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkimcontext.h>
@@ -279,6 +279,9 @@ void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
                                             gint              *buffer_x,
                                             gint              *buffer_y);
 
+GtkAdjustment* gtk_text_view_get_hadjustment (GtkTextView *text_view);
+GtkAdjustment* gtk_text_view_get_vadjustment (GtkTextView *text_view);
+
 GdkWindow*        gtk_text_view_get_window      (GtkTextView       *text_view,
                                                  GtkTextWindowType  win);
 GtkTextWindowType gtk_text_view_get_window_type (GtkTextView       *text_view,
@@ -303,6 +306,10 @@ gboolean gtk_text_view_starts_display_line            (GtkTextView       *text_v
 gboolean gtk_text_view_move_visually                  (GtkTextView       *text_view,
                                                        GtkTextIter       *iter,
                                                        gint               count);
+
+gboolean        gtk_text_view_im_context_filter_keypress        (GtkTextView       *text_view,
+                                                                 GdkEventKey       *event);
+void            gtk_text_view_reset_im_context                  (GtkTextView       *text_view);
 
 /* Adding child widgets */
 void gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,

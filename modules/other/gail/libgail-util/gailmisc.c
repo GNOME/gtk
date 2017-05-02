@@ -28,6 +28,18 @@
  */
 
 /**
+ * SECTION:gailmisc
+ * @Short_description: GailMisc is a set of utility functions which may be
+ *   useful to implementors of Atk interfaces for custom widgets.
+ * @Title: GailMisc
+ *
+ * GailMisc is a set of utility function which are used in the implemementation
+ * of Atk interfaces for GTK+ widgets. They may be useful to implementors of
+ * Atk interfaces for custom widgets.
+ */
+
+
+/**
  * gail_misc_get_extents_from_pango_rectangle:
  * @widget: The widget that contains the PangoLayout, that contains
  *   the PangoRectangle

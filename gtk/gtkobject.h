@@ -24,18 +24,19 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_OBJECT_H__
 #define __GTK_OBJECT_H__
 
+
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
 #include <gdkconfig.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypeutils.h>
 #include <gtk/gtkdebug.h>
+
 
 G_BEGIN_DECLS
 
@@ -52,9 +53,28 @@ G_BEGIN_DECLS
 
 /* Macros for extracting various fields from GtkObject and GtkObjectClass.
  */
-#define GTK_OBJECT_TYPE(object)		  (G_TYPE_FROM_INSTANCE (object))
-#define GTK_OBJECT_TYPE_NAME(object)	  (g_type_name (GTK_OBJECT_TYPE (object)))
+#ifndef GTK_DISABLE_DEPRECATED
+/**
+ * GTK_OBJECT_TYPE:
+ * @object: a #GtkObject.
+ *
+ * Gets the type of an object.
+ *
+ * Deprecated: 2.20: Use G_OBJECT_TYPE() instead.
+ */
+#define GTK_OBJECT_TYPE                   G_OBJECT_TYPE
+/**
+ * GTK_OBJECT_TYPE_NAME:
+ * @object: a #GtkObject.
+ *
+ * Gets the name of an object's type.
+ *
+ * Deprecated: 2.20: Use G_OBJECT_TYPE_NAME() instead.
+ */
+#define GTK_OBJECT_TYPE_NAME              G_OBJECT_TYPE_NAME
+#endif
 
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 /* GtkObject only uses the first 4 bits of the flags field.
  * Derived objects may use the remaining bits. Though this
  * is a kinda nasty break up, it does make the size of
@@ -63,9 +83,7 @@ G_BEGIN_DECLS
 typedef enum
 {
   GTK_IN_DESTRUCTION	= 1 << 0, /* Used internally during dispose */
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
   GTK_FLOATING		= 1 << 1,
-#endif
   GTK_RESERVED_1	= 1 << 2,
   GTK_RESERVED_2	= 1 << 3
 } GtkObjectFlags;
@@ -81,6 +99,7 @@ typedef enum
  */
 #define GTK_OBJECT_SET_FLAGS(obj,flag)	  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) |= (flag)); }G_STMT_END
 #define GTK_OBJECT_UNSET_FLAGS(obj,flag)  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) &= ~(flag)); }G_STMT_END
+#endif
 
 typedef struct _GtkObjectClass	GtkObjectClass;
 
@@ -135,7 +154,7 @@ void gtk_object_destroy	  (GtkObject *object);
 
 #ifndef GTK_DISABLE_DEPRECATED
 
-GtkObject*	gtk_object_new		  (GtkType	       type,
+GtkObject*	gtk_object_new		  (GType	       type,
 					   const gchar	      *first_property_name,
 					   ...);
 GtkObject*	gtk_object_ref		  (GtkObject	      *object);
@@ -219,10 +238,10 @@ void	gtk_object_get		(GtkObject	*object,
 void	gtk_object_set		(GtkObject	*object,
 				 const gchar	*first_property_name,
 				 ...) G_GNUC_NULL_TERMINATED;
-void	gtk_object_add_arg_type		(const gchar	*arg_name,
-					 GtkType	 arg_type,
-					 guint		 arg_flags,
-					 guint		 arg_id);
+void	gtk_object_add_arg_type		(const gchar    *arg_name,
+					 GType           arg_type,
+					 guint           arg_flags,
+					 guint           arg_id);
 
 #endif /* GTK_DISABLE_DEPRECATED */
 

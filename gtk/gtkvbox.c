@@ -21,278 +21,62 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
+
+#include "gtkorientable.h"
 #include "gtkvbox.h"
-#include "gtkintl.h"
 #include "gtkalias.h"
 
-
-static void gtk_vbox_size_request  (GtkWidget      *widget,
-				    GtkRequisition *requisition);
-static void gtk_vbox_size_allocate (GtkWidget      *widget,
-				    GtkAllocation  *allocation);
+/**
+ * SECTION:gtkvbox
+ * @Short_description: A vertical container box
+ * @Title: GtkVBox
+ * @See_also: #GtkHBox
+ *
+ * A #GtkVBox is a container that organizes child widgets into a single column.
+ *
+ * Use the #GtkBox packing interface to determine the arrangement,
+ * spacing, height, and alignment of #GtkVBox children.
+ *
+ * All children are allocated the same width.
+ */
 
 G_DEFINE_TYPE (GtkVBox, gtk_vbox, GTK_TYPE_BOX)
 
 static void
 gtk_vbox_class_init (GtkVBoxClass *class)
 {
-  GtkWidgetClass *widget_class;
-
-  widget_class = (GtkWidgetClass*) class;
-
-  widget_class->size_request = gtk_vbox_size_request;
-  widget_class->size_allocate = gtk_vbox_size_allocate;
 }
 
 static void
 gtk_vbox_init (GtkVBox *vbox)
 {
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (vbox),
+                                  GTK_ORIENTATION_VERTICAL);
+
+  _gtk_box_set_old_defaults (GTK_BOX (vbox));
 }
 
-GtkWidget*
+/**
+ * gtk_vbox_new:
+ * @homogeneous: %TRUE if all children are to be given equal space allotments.
+ * @spacing: the number of pixels to place by default between children.
+ *
+ * Creates a new #GtkVBox.
+ *
+ * Returns: a new #GtkVBox.
+ */
+GtkWidget *
 gtk_vbox_new (gboolean homogeneous,
-	      gint spacing)
+	      gint     spacing)
 {
-  GtkVBox *vbox;
-
-  vbox = g_object_new (GTK_TYPE_VBOX, NULL);
-
-  GTK_BOX (vbox)->spacing = spacing;
-  GTK_BOX (vbox)->homogeneous = homogeneous ? TRUE : FALSE;
-
-  return GTK_WIDGET (vbox);
-}
-
-
-static void
-gtk_vbox_size_request (GtkWidget      *widget,
-		       GtkRequisition *requisition)
-{
-  GtkBox *box;
-  GtkBoxChild *child;
-  GtkRequisition child_requisition;
-  GList *children;
-  gint nvis_children;
-  gint height;
-
-  box = GTK_BOX (widget);
-  requisition->width = 0;
-  requisition->height = 0;
-  nvis_children = 0;
-
-  children = box->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child->widget))
-	{
-	  gtk_widget_size_request (child->widget, &child_requisition);
-
-	  if (box->homogeneous)
-	    {
-	      height = child_requisition.height + child->padding * 2;
-	      requisition->height = MAX (requisition->height, height);
-	    }
-	  else
-	    {
-	      requisition->height += child_requisition.height + child->padding * 2;
-	    }
-
-	  requisition->width = MAX (requisition->width, child_requisition.width);
-
-	  nvis_children += 1;
-	}
-    }
-
-  if (nvis_children > 0)
-    {
-      if (box->homogeneous)
-	requisition->height *= nvis_children;
-      requisition->height += (nvis_children - 1) * box->spacing;
-    }
-
-  requisition->width += GTK_CONTAINER (box)->border_width * 2;
-  requisition->height += GTK_CONTAINER (box)->border_width * 2;
-}
-
-static void
-gtk_vbox_size_allocate (GtkWidget     *widget,
-			GtkAllocation *allocation)
-{
-  GtkBox *box;
-  GtkBoxChild *child;
-  GList *children;
-  GtkAllocation child_allocation;
-  gint nvis_children;
-  gint nexpand_children;
-  gint child_height;
-  gint height;
-  gint extra;
-  gint y;
-
-  box = GTK_BOX (widget);
-  widget->allocation = *allocation;
-
-  nvis_children = 0;
-  nexpand_children = 0;
-  children = box->children;
-
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child->widget))
-	{
-	  nvis_children += 1;
-	  if (child->expand)
-	    nexpand_children += 1;
-	}
-    }
-
-  if (nvis_children > 0)
-    {
-      if (box->homogeneous)
-	{
-	  height = (allocation->height -
-		   GTK_CONTAINER (box)->border_width * 2 -
-		   (nvis_children - 1) * box->spacing);
-	  extra = height / nvis_children;
-	}
-      else if (nexpand_children > 0)
-	{
-	  height = (gint) allocation->height - (gint) widget->requisition.height;
-	  extra = height / nexpand_children;
-	}
-      else
-	{
-	  height = 0;
-	  extra = 0;
-	}
-
-      y = allocation->y + GTK_CONTAINER (box)->border_width;
-      child_allocation.x = allocation->x + GTK_CONTAINER (box)->border_width;
-      child_allocation.width = MAX (1, (gint) allocation->width - (gint) GTK_CONTAINER (box)->border_width * 2);
-
-      children = box->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-
-	  if ((child->pack == GTK_PACK_START) && GTK_WIDGET_VISIBLE (child->widget))
-	    {
-	      if (box->homogeneous)
-		{
-		  if (nvis_children == 1)
-		    child_height = height;
-		  else
-		    child_height = extra;
-
-		  nvis_children -= 1;
-		  height -= extra;
-		}
-	      else
-		{
-		  GtkRequisition child_requisition;
-
-		  gtk_widget_get_child_requisition (child->widget, &child_requisition);
-		  child_height = child_requisition.height + child->padding * 2;
-
-		  if (child->expand)
-		    {
-		      if (nexpand_children == 1)
-			child_height += height;
-		      else
-			child_height += extra;
-
-		      nexpand_children -= 1;
-		      height -= extra;
-		    }
-		}
-
-	      if (child->fill)
-		{
-		  child_allocation.height = MAX (1, child_height - (gint)child->padding * 2);
-		  child_allocation.y = y + child->padding;
-		}
-	      else
-		{
-		  GtkRequisition child_requisition;
-
-		  gtk_widget_get_child_requisition (child->widget, &child_requisition);
-		  child_allocation.height = child_requisition.height;
-		  child_allocation.y = y + (child_height - child_allocation.height) / 2;
-		}
-
-	      gtk_widget_size_allocate (child->widget, &child_allocation);
-
-	      y += child_height + box->spacing;
-	    }
-	}
-
-      y = allocation->y + allocation->height - GTK_CONTAINER (box)->border_width;
-
-      children = box->children;
-      while (children)
-	{
-	  child = children->data;
-	  children = children->next;
-
-	  if ((child->pack == GTK_PACK_END) && GTK_WIDGET_VISIBLE (child->widget))
-	    {
-	      GtkRequisition child_requisition;
-	      gtk_widget_get_child_requisition (child->widget, &child_requisition);
-
-              if (box->homogeneous)
-                {
-                  if (nvis_children == 1)
-                    child_height = height;
-                  else
-                    child_height = extra;
-
-                  nvis_children -= 1;
-                  height -= extra;
-                }
-              else
-                {
-		  child_height = child_requisition.height + child->padding * 2;
-
-                  if (child->expand)
-                    {
-                      if (nexpand_children == 1)
-                        child_height += height;
-                      else
-                        child_height += extra;
-
-                      nexpand_children -= 1;
-                      height -= extra;
-                    }
-                }
-
-              if (child->fill)
-                {
-                  child_allocation.height = MAX (1, child_height - (gint)child->padding * 2);
-                  child_allocation.y = y + child->padding - child_height;
-                }
-              else
-                {
-		  child_allocation.height = child_requisition.height;
-                  child_allocation.y = y + (child_height - child_allocation.height) / 2 - child_height;
-                }
-
-              gtk_widget_size_allocate (child->widget, &child_allocation);
-
-              y -= (child_height + box->spacing);
-	    }
-	}
-    }
+  return g_object_new (GTK_TYPE_VBOX,
+                       "spacing",     spacing,
+                       "homogeneous", homogeneous ? TRUE : FALSE,
+                       NULL);
 }
 
 #define __GTK_VBOX_C__

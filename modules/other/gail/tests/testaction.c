@@ -14,15 +14,15 @@ static void _check_object (AtkObject *obj);
 static void 
 _check_object (AtkObject *obj)
 {
-  G_CONST_RETURN char *accessible_name;
-  G_CONST_RETURN gchar * typename = NULL;
+  const char *accessible_name;
+  const gchar * typename = NULL;
 
   if (GTK_IS_ACCESSIBLE (obj))
   {
     GtkWidget* widget = NULL;
 
     widget = GTK_ACCESSIBLE (obj)->widget;
-    typename = g_type_name (GTK_OBJECT_TYPE (widget));
+    typename = g_type_name (G_OBJECT_TYPE (widget));
     g_print ("Widget type name: %s\n", typename ? typename : "NULL");
   }
   typename = g_type_name (G_OBJECT_TYPE (obj));
@@ -35,9 +35,9 @@ _check_object (AtkObject *obj)
   {
     AtkAction *action = ATK_ACTION (obj);
     gint n_actions, i;
-    G_CONST_RETURN gchar *action_name;
-    G_CONST_RETURN gchar *action_desc;
-    G_CONST_RETURN gchar *action_binding;
+    const gchar *action_name;
+    const gchar *action_desc;
+    const gchar *action_binding;
     const gchar *desc = "Test description";
  
     n_actions = atk_action_get_n_actions (action);

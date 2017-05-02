@@ -55,6 +55,13 @@ GQuark     gtk_print_backend_error_quark      (void);
 #define GTK_IS_PRINT_BACKEND_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINT_BACKEND))
 #define GTK_PRINT_BACKEND_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINT_BACKEND, GtkPrintBackendClass))
 
+typedef enum 
+{
+  GTK_PRINT_BACKEND_STATUS_UNKNOWN,
+  GTK_PRINT_BACKEND_STATUS_OK,
+  GTK_PRINT_BACKEND_STATUS_UNAVAILABLE
+} GtkPrintBackendStatus;
+
 struct _GtkPrintBackend
 {
   GObject parent_instance;
@@ -97,11 +104,11 @@ struct _GtkPrintBackendClass
 							      GtkPageSetup        *page_setup);
   GList  *              (*printer_list_papers)               (GtkPrinter          *printer);
   GtkPageSetup *        (*printer_get_default_page_size)     (GtkPrinter          *printer);
-  void                  (*printer_get_hard_margins)          (GtkPrinter          *printer,
-							      double              *top,
-							      double              *bottom,
-							      double              *left,
-							      double              *right);
+  gboolean              (*printer_get_hard_margins)          (GtkPrinter          *printer,
+							      gdouble             *top,
+							      gdouble             *bottom,
+							      gdouble             *left,
+							      gdouble             *right);
   GtkPrintCapabilities  (*printer_get_capabilities)          (GtkPrinter          *printer);
 
   /* Signals */
@@ -113,14 +120,23 @@ struct _GtkPrintBackendClass
 							      GtkPrinter          *printer);
   void                  (*printer_status_changed)            (GtkPrintBackend     *backend,
 							      GtkPrinter          *printer);
+  void                  (*request_password)                  (GtkPrintBackend     *backend,
+                                                              gpointer             auth_info_required,
+                                                              gpointer             auth_info_default,
+                                                              gpointer             auth_info_display,
+                                                              gpointer             auth_info_visible,
+                                                              const gchar         *prompt);
+
+  /* not a signal */
+  void                  (*set_password)                      (GtkPrintBackend     *backend,
+                                                              gchar              **auth_info_required,
+                                                              gchar              **auth_info);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
 };
 
 GType   gtk_print_backend_get_type       (void) G_GNUC_CONST;
@@ -137,6 +153,9 @@ void        gtk_print_backend_print_stream         (GtkPrintBackend         *pri
 						    GDestroyNotify           dnotify);
 GList *     gtk_print_backend_load_modules         (void);
 void        gtk_print_backend_destroy              (GtkPrintBackend         *print_backend);
+void        gtk_print_backend_set_password         (GtkPrintBackend         *backend, 
+                                                    gchar                  **auth_info_required,
+                                                    gchar                  **auth_info);
 
 /* Backend-only functions for GtkPrintBackend */
 
@@ -148,11 +167,11 @@ void        gtk_print_backend_set_list_done        (GtkPrintBackend         *bac
 
 
 /* Backend-only functions for GtkPrinter */
-
-GtkPrinter *gtk_printer_new                   (const char      *name,
-					       GtkPrintBackend *backend,
-					       gboolean         is_virtual);
 gboolean    gtk_printer_is_new                (GtkPrinter      *printer);
+void        gtk_printer_set_accepts_pdf       (GtkPrinter      *printer,
+					       gboolean         val);
+void        gtk_printer_set_accepts_ps        (GtkPrinter      *printer,
+					       gboolean         val);
 void        gtk_printer_set_is_new            (GtkPrinter      *printer,
 					       gboolean         val);
 void        gtk_printer_set_is_active         (GtkPrinter      *printer,

@@ -87,6 +87,9 @@ Storing data on clipboards
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkClipboard ##### -->
 <para>
 
@@ -161,6 +164,16 @@ Storing data on clipboards
 @format: 
 @text: 
 @length: 
+@data: 
+
+
+<!-- ##### USER_FUNCTION GtkClipboardURIReceivedFunc ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@uris: 
 @data: 
 
 

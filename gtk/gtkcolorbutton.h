@@ -29,13 +29,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_COLOR_BUTTON_H__
 #define __GTK_COLOR_BUTTON_H__
 
+
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
 #include <gtk/gtkbutton.h>
 
@@ -95,7 +95,7 @@ void       gtk_color_button_set_use_alpha  (GtkColorButton *color_button,
 gboolean   gtk_color_button_get_use_alpha  (GtkColorButton *color_button);
 void       gtk_color_button_set_title      (GtkColorButton *color_button,
 					    const gchar    *title);
-G_CONST_RETURN gchar *gtk_color_button_get_title (GtkColorButton *color_button);
+const gchar *gtk_color_button_get_title (GtkColorButton *color_button);
 
 
 G_END_DECLS

@@ -29,7 +29,6 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
-#include "gtkcomboboxentry.h"
 #include "gtkfilechooserbutton.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
@@ -288,11 +287,11 @@ static GtkWidget *
 combo_box_entry_new (void)
 {
   GtkWidget *combo_box;
-  combo_box = gtk_combo_box_entry_new ();
+  combo_box = g_object_new (GTK_TYPE_COMBO_BOX, "has-entry", TRUE, NULL);
 
   combo_box_set_model (combo_box);
 
-  gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo_box), NAME_COLUMN);
+  gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (combo_box), NAME_COLUMN);
 
   return combo_box;
 }
@@ -367,25 +366,52 @@ combo_box_set (GtkWidget   *combo,
   gtk_tree_model_foreach (model, set_cb, &set_data);
 }
 
-static char *
-combo_box_get (GtkWidget *combo)
+static gchar *
+combo_box_get (GtkWidget *combo, gboolean *custom)
 {
   GtkTreeModel *model;
   gchar *value;
   GtkTreeIter iter;
 
-  if (GTK_IS_COMBO_BOX_ENTRY (combo))
+  model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+
+  value = NULL;
+  if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
     {
-      value = gtk_combo_box_get_active_text(GTK_COMBO_BOX (combo));
+      gtk_tree_model_get (model, &iter, VALUE_COLUMN, &value, -1);
+      *custom = FALSE;
     }
   else
     {
-      model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+      if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
+        {
+          value = g_strdup (gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)))));
+          *custom = TRUE;
+        }
 
-      value = NULL;
-      if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
-         gtk_tree_model_get (model, &iter, VALUE_COLUMN, &value, -1);
-     }
+      if (!value || !gtk_tree_model_get_iter_first (model, &iter))
+        return value;
+
+      /* If the user entered an item from the dropdown list manually, return
+       * the non-custom option instead. */
+      do
+        {
+          gchar *val, *name;
+          gtk_tree_model_get (model, &iter, VALUE_COLUMN, &val,
+                                            NAME_COLUMN, &name, -1);
+          if (g_str_equal (value, name))
+            {
+              *custom = FALSE;
+              g_free (name);
+              g_free (value);
+              return val;
+            }
+
+          g_free (val);
+          g_free (name);
+        }
+      while (gtk_tree_model_iter_next (model, &iter));
+    }
 
   return value;
 }
@@ -454,8 +480,8 @@ filesave_changed_cb (GtkWidget              *button,
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   gchar *uri, *file;
+  gchar *directory;
 
-  /* TODO: how do we support nonlocal file systems? */
   file = g_filename_from_utf8 (gtk_entry_get_text (GTK_ENTRY (priv->entry)),
 			       -1, NULL, NULL, NULL);
   if (file == NULL)
@@ -464,31 +490,47 @@ filesave_changed_cb (GtkWidget              *button,
   /* combine the value of the chooser with the value of the entry */
   g_signal_handler_block (priv->source, priv->source_changed_handler);  
 
-  if (g_path_is_absolute (file))
-    uri = g_filename_to_uri (file, NULL, NULL);
-  else
+  directory = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (priv->combo));
+
+  if ((g_uri_parse_scheme (file) == NULL) && (directory != NULL))
     {
-      gchar *path;
+      if (g_path_is_absolute (file))
+        uri = g_filename_to_uri (file, NULL, NULL);
+      else
+        {
+          gchar *path;
 
 #ifdef G_OS_UNIX
-      if (file[0] == '~' && file[1] == '/')
-        {
-          path = g_build_filename (g_get_home_dir (), file + 2, NULL);
-	}
-      else
+          if (file[0] == '~' && file[1] == '/')
+            {
+              path = g_build_filename (g_get_home_dir (), file + 2, NULL);
+            }
+          else
 #endif
-        {
-          gchar *directory;
+            {
+              path = g_build_filename (directory, file, NULL);
+            }
 
-          directory = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (priv->combo));
-          path = g_build_filename (directory, file, NULL);
+          uri = g_filename_to_uri (path, NULL, NULL);
 
-          g_free (directory);
+          g_free (path);
         }
-
-      uri = g_filename_to_uri (path, NULL, NULL);
-
-      g_free (path);
+    }
+  else
+    {
+      if (g_uri_parse_scheme (file) != NULL)
+        uri = g_strdup (file);
+      else
+        {
+          gchar *chooser_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (priv->combo));
+          if (chooser_uri)
+            {
+              uri = g_build_path ("/", chooser_uri, file, NULL);
+              g_free (chooser_uri);
+            }
+          else
+            uri = g_filename_to_uri (file, NULL, NULL);
+        }
     }
  
   if (uri)
@@ -496,6 +538,7 @@ filesave_changed_cb (GtkWidget              *button,
 
   g_free (uri);
   g_free (file);
+  g_free (directory);
 
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
   emit_changed (widget);
@@ -553,25 +596,29 @@ combo_changed_cb (GtkWidget              *combo,
   gchar *value;
   gchar *filtered_val = NULL;
   gboolean changed;
+  gboolean custom = TRUE;
 
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   
-  value = combo_box_get (combo);
+  value = combo_box_get (combo, &custom);
 
-  /* handle some constraints */
-  switch (priv->source->type)
+  /* Handle constraints if the user entered a custom value. */
+  if (custom)
     {
-    case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE:
-      filtered_val = filter_numeric (value, FALSE, FALSE, &changed);
-      break;   
-    case GTK_PRINTER_OPTION_TYPE_PICKONE_INT:
-      filtered_val = filter_numeric (value, TRUE, FALSE, &changed);
-      break;
-    case GTK_PRINTER_OPTION_TYPE_PICKONE_REAL:
-      filtered_val = filter_numeric (value, TRUE, TRUE, &changed);
-      break;
-    default:
-      break;
+      switch (priv->source->type)
+        {
+        case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE:
+          filtered_val = filter_numeric (value, FALSE, FALSE, &changed);
+          break;
+        case GTK_PRINTER_OPTION_TYPE_PICKONE_INT:
+          filtered_val = filter_numeric (value, TRUE, FALSE, &changed);
+          break;
+        case GTK_PRINTER_OPTION_TYPE_PICKONE_REAL:
+          filtered_val = filter_numeric (value, TRUE, TRUE, &changed);
+          break;
+        default:
+          break;
+        }
     }
 
   if (filtered_val)
@@ -679,12 +726,14 @@ construct_widgets (GtkPrinterOptionWidget *widget)
   
   deconstruct_widgets (widget);
   
+  gtk_widget_set_sensitive (GTK_WIDGET (widget), TRUE);
+
   if (source == NULL)
     {
       priv->combo = combo_box_new ();
       combo_box_append (priv->combo,_("Not available"), "None");
       gtk_combo_box_set_active (GTK_COMBO_BOX (priv->combo), 0);
-      gtk_widget_set_sensitive (priv->combo, FALSE);
+      gtk_widget_set_sensitive (GTK_WIDGET (widget), FALSE);
       gtk_widget_show (priv->combo);
       gtk_box_pack_start (GTK_BOX (widget), priv->combo, TRUE, TRUE, 0);
     }
@@ -759,6 +808,8 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 
     case GTK_PRINTER_OPTION_TYPE_STRING:
       priv->entry = gtk_entry_new ();
+      gtk_entry_set_activates_default (GTK_ENTRY (priv->entry),
+                                       gtk_printer_option_get_activates_default (source));
       gtk_widget_show (priv->entry);
       gtk_box_pack_start (GTK_BOX (widget), priv->entry, TRUE, TRUE, 0);
       g_signal_connect (priv->entry, "changed", G_CALLBACK (entry_changed_cb), widget);
@@ -782,6 +833,10 @@ construct_widgets (GtkPrinterOptionWidget *widget)
         priv->entry = gtk_entry_new ();
         priv->combo = gtk_file_chooser_button_new (source->display_text,
                                                    GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
+        g_object_set (priv->combo, "local-only", FALSE, NULL);
+        gtk_entry_set_activates_default (GTK_ENTRY (priv->entry),
+                                         gtk_printer_option_get_activates_default (source));
 
         label = gtk_label_new_with_mnemonic (_("_Name:"));
         gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -840,7 +895,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
   switch (source->type)
     {
     case GTK_PRINTER_OPTION_TYPE_BOOLEAN:
-      if (strcmp (source->value, "True") == 0)
+      if (g_ascii_strcasecmp (source->value, "True") == 0)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check), TRUE);
       else
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check), FALSE);
@@ -854,6 +909,22 @@ update_widgets (GtkPrinterOptionWidget *widget)
     case GTK_PRINTER_OPTION_TYPE_STRING:
       gtk_entry_set_text (GTK_ENTRY (priv->entry), source->value);
       break;
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSCODE:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_REAL:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_INT:
+    case GTK_PRINTER_OPTION_TYPE_PICKONE_STRING:
+      {
+        GtkEntry *entry;
+
+        entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (priv->combo)));
+        if (gtk_printer_option_has_choice (source, source->value))
+          combo_box_set (priv->combo, source->value);
+        else
+          gtk_entry_set_text (entry, source->value);
+
+        break;
+      }
     case GTK_PRINTER_OPTION_TYPE_FILESAVE:
       {
         gchar *filename = g_filename_from_uri (source->value, NULL, NULL);

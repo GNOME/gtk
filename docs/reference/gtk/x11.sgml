@@ -75,60 +75,6 @@ debugging, but it will slow down the performance considerably.
 </para>
 </formalpara>
 
-<formalpara>
-<title><systemitem>--gxid-host <replaceable>host</replaceable></systemitem></title>
-
-<para>
-The host to contact the <application>gxid</application> daemon on; overrides 
-the <link linkend="GXID"><envar>GXID_HOST</envar></link> environment variable.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--gxid-port <replaceable>port</replaceable></systemitem></title>
-
-<para>
-The port for the connection to <application>gxid</application>; overrides 
-the <link linkend="GXID"><envar>GXID_PORT</envar></link> environment variable.
-This option is only available if GTK+ has been configured with
-<option>--gdk-target=x11</option>.
-</para>
-</formalpara>
-
-</refsect2>
-
-<refsect2 id="x11-envar">
-<title>X11-specific environment variables</title>
-
-<para>
-The X backend can be influenced with some
-additional environment variables.
-</para>
-
-<formalpara id="GXID">
-  <title><envar>GXID_HOST</envar>, <envar>GXID_PORT</envar></title>
-
-  <para>
-    The host and port to contact the <application>gxid</application> daemon 
-    on. <application>gxid</application> is only necessary on X servers which 
-    don't support using the pointer and extension devices at once, and is
-    only built if GTK+ is configured with <option>--with-xinput=gxi</option>. 
-    The <application>XFree86</application> and <application>Xorg</application>
-    X servers don't have this 
-    restriction.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><envar>GDK_USE_XFT</envar></title>
-
-  <para>
-    If this variable is set to 1, GTK+ will use the Pango Xft backend instead
-    of the X backend when possible (i.e. when the X server supports the XRender
-    extension and Pango has been built with Xft support). 
-  </para>
-</formalpara>
-
 </refsect2>
 
 </refsect1>

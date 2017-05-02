@@ -70,9 +70,17 @@ _gtk_socket_windowing_realize_window (GtkSocket *socket)
 			GDK_WINDOW_XWINDOW (window),
 			&xattrs);
 
+  /* Sooooo, it turns out that mozilla, as per the gtk2xt code selects
+     for input on the socket with a mask of 0x0fffff (for god knows why)
+     which includes ButtonPressMask causing a BadAccess if someone else
+     also selects for this. As per the client-side windows merge we always
+     normally selects for button press so we can emulate it on client
+     side children that selects for button press. However, we don't need
+     this for GtkSocket, so we unselect it here, fixing the crashes in
+     firefox. */
   XSelectInput (GDK_WINDOW_XDISPLAY (window),
 		GDK_WINDOW_XWINDOW (window), 
-		xattrs.your_event_mask | 
+		(xattrs.your_event_mask & ~ButtonPressMask) |
 		SubstructureNotifyMask | SubstructureRedirectMask);
 }
 
@@ -120,7 +128,7 @@ _gtk_socket_windowing_send_key_event (GtkSocket *socket,
 				      gboolean   mask_key_presses)
 {
   XKeyEvent xkey;
-  GdkScreen *screen = gdk_drawable_get_screen (socket->plug_window);
+  GdkScreen *screen = gdk_window_get_screen (socket->plug_window);
 
   memset (&xkey, 0, sizeof (xkey));
   xkey.type = (gdk_event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
@@ -286,7 +294,7 @@ xembed_get_info (GdkWindow     *window,
 		 unsigned long *version,
 		 unsigned long *flags)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   Atom xembed_info_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO");
   Atom type;
   int format;
@@ -600,7 +608,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
       {
 	XReparentEvent *xre = &xevent->xreparent;
 
-	GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: ReparentNotify received\n"));
+	GTK_NOTE (PLUGSOCKET, g_message ("GtkSocket - ReparentNotify received"));
 	if (!socket->plug_window && xre->parent == GDK_WINDOW_XWINDOW (widget->window))
 	  {
 	    _gtk_socket_add_window (socket, xre->window, FALSE);
@@ -612,7 +620,24 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 	    
 	    return_val = GDK_FILTER_REMOVE;
 	  }
-	
+        else
+          {
+            if (socket->plug_window && xre->window == GDK_WINDOW_XWINDOW (socket->plug_window) && xre->parent != GDK_WINDOW_XWINDOW (widget->window))
+              {
+                gboolean result;
+
+                _gtk_socket_end_embedding (socket);
+
+                g_object_ref (widget);
+                g_signal_emit_by_name (widget, "plug-removed", &result);
+                if (!result)
+                  gtk_widget_destroy (widget);
+                g_object_unref (widget);
+
+                return_val = GDK_FILTER_REMOVE;
+              }
+          }
+
 	break;
       }
     case UnmapNotify:

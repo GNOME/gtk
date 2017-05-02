@@ -72,6 +72,10 @@ match_theme_image (GtkStyle       *style,
 	  match_data->orientation != image->match_data.orientation)
 	continue;
 
+      if ((flags & THEME_MATCH_DIRECTION) &&
+	  match_data->direction != image->match_data.direction)
+	continue;
+
       if ((flags & THEME_MATCH_GAP_SIDE) &&
 	  match_data->gap_side != image->match_data.gap_side)
 	continue;
@@ -126,7 +130,13 @@ draw_simple_image(GtkStyle       *style,
       else
 	match_data->orientation = GTK_ORIENTATION_HORIZONTAL;
     }
-    
+
+  if (widget && !(match_data->flags & THEME_MATCH_DIRECTION))
+    {
+      match_data->flags |= THEME_MATCH_DIRECTION;
+      match_data->direction = gtk_widget_get_direction (widget);
+    }
+
   image = match_theme_image (style, match_data);
   if (image)
     {
@@ -1058,7 +1068,7 @@ GType pixbuf_type_style = 0;
 void 
 pixbuf_style_register_type (GTypeModule *module) 
 {
-  static const GTypeInfo object_info =
+  const GTypeInfo object_info =
     {
     sizeof (PixbufStyleClass),
     (GBaseInitFunc) NULL,

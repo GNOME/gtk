@@ -39,6 +39,9 @@ on it: see gtk_link_button_set_uri_hook().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkLinkButton ##### -->
 <para>
 The #GtkLinkButton struct contains private data only, and should be
@@ -100,11 +103,9 @@ clicked.
 </para>
 
 @button: the #GtkLinkButton which was clicked
-@link_: 
+@link_: the URI to which the clicked #GtkLinkButton points
 @user_data: user data that was passed when the function was registered
   with gtk_link_button_set_uri_hook()
-<!-- # Unused Parameters # -->
-@link: the URI to which the clicked #GtkLinkButton points
 
 
 <!-- ##### FUNCTION gtk_link_button_set_uri_hook ##### -->
@@ -116,5 +117,23 @@ clicked.
 @data: 
 @destroy: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_link_button_get_visited ##### -->
+<para>
+
+</para>
+
+@link_button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_link_button_set_visited ##### -->
+<para>
+
+</para>
+
+@link_button: 
+@visited: 
 
 

@@ -157,7 +157,7 @@ real_queue_resize (GtkWidget *widget)
   
   if (widget->parent)
     _gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
-  else if (GTK_WIDGET_TOPLEVEL (widget) && GTK_IS_CONTAINER (widget))
+  else if (gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
     _gtk_container_queue_resize (GTK_CONTAINER (widget));
 }
 
@@ -223,6 +223,10 @@ queue_resize_on_widget (GtkWidget *widget,
 	      if (widget == parent)
 		real_queue_resize (parent);
 	    }
+	  else if (tmp_list->data == widget)
+            {
+              g_warning ("A container and its child are part of this SizeGroup");
+            }
 	  else
 	    queue_resize_on_widget (tmp_list->data, FALSE);
 
@@ -249,6 +253,10 @@ queue_resize_on_widget (GtkWidget *widget,
 	      if (widget == parent)
 		real_queue_resize (parent);
 	    }
+	  else if (tmp_list->data == widget)
+            {
+              g_warning ("A container and its child are part of this SizeGroup");
+            }
 	  else
 	    queue_resize_on_widget (tmp_list->data, FALSE);
 
@@ -577,8 +585,8 @@ gtk_size_group_remove_widget (GtkSizeGroup *size_group,
  * 
  * Returns the list of widgets associated with @size_group.
  *
- * Return value: a #GSList of widgets. The list is owned by GTK+ 
- *   and should not be modified.
+ * Return value:  (element-type GtkWidget) (transfer none): a #GSList of
+ *   widgets. The list is owned by GTK+ and should not be modified.
  *
  * Since: 2.10
  **/
@@ -669,7 +677,7 @@ compute_dimension (GtkWidget        *widget,
 
 	      gint dimension = compute_base_dimension (tmp_widget, mode);
 
-	      if (GTK_WIDGET_MAPPED (tmp_widget) || !group->ignore_hidden)
+	      if (gtk_widget_get_mapped (tmp_widget) || !group->ignore_hidden)
 		{
 		  if (dimension > result)
 		    result = dimension;

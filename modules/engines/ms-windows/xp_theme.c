@@ -31,8 +31,11 @@
 #include <string.h>
 #include <stdio.h>
 
-/* #include "gdk/gdkwin32.h" */
+#ifdef BUILDING_STANDALONE
+#include "gdk/gdkwin32.h"
+#else
 #include "gdk/win32/gdkwin32.h"
+#endif
 
 #include "xp_theme_defs.h"
 
@@ -76,6 +79,17 @@
 
 #define TRS_NORMAL        1
 
+#define MBI_NORMAL         1
+#define MBI_HOT            2
+#define MBI_PUSHED         3
+#define MBI_DISABLED       4
+#define MBI_DISABLEDHOT    5
+#define MBI_DISABLEDPUSHED 6
+
+#define MENU_POPUPGUTTER    13
+#define MENU_POPUPITEM      14
+#define MENU_POPUPSEPARATOR 15
+
 static const LPCWSTR class_descriptors[] = {
   L"Scrollbar",			/* XP_THEME_CLASS_SCROLLBAR */
   L"Button",			/* XP_THEME_CLASS_BUTTON */
@@ -107,6 +121,7 @@ static const short element_part_map[XP_THEME_ELEMENT__SIZEOF] = {
   TABP_TABITEM,
   TABP_TABITEMLEFTEDGE,
   TABP_TABITEMRIGHTEDGE,
+  TABP_TABITEMBOTHEDGE,
   TABP_PANE,
   SBP_THUMBBTNHORZ,
   SBP_THUMBBTNVERT,
@@ -136,8 +151,8 @@ static const short element_part_map[XP_THEME_ELEMENT__SIZEOF] = {
   RP_GRIPPERVERT,
   RP_CHEVRON,
   TP_BUTTON,
-  MP_MENUITEM,
-  MP_SEPARATOR,
+  MENU_POPUPITEM, /*MP_MENUITEM,*/
+  MENU_POPUPSEPARATOR,  /*MP_SEPARATOR,*/
   SP_GRIPPER,
   SP_PANE,
   GP_LINEHORZ,
@@ -152,11 +167,13 @@ static const short element_part_map[XP_THEME_ELEMENT__SIZEOF] = {
   TKP_TICSVERT
 };
 
+#define UXTHEME_DLL "uxtheme.dll"
+
 static HINSTANCE uxtheme_dll = NULL;
 static HTHEME open_themes[XP_THEME_CLASS__SIZEOF];
 static gboolean use_xp_theme = FALSE;
 
-typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)           (HTHEME hTheme, int iFontID, OUT LOGFONT *plf);
+typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)           (HTHEME hTheme, int iFontID, OUT LOGFONTW *plf);
 typedef int (FAR PASCAL *GetThemeSysSizeFunc)               (HTHEME hTheme, int iSizeId);
 typedef COLORREF (FAR PASCAL *GetThemeSysColorFunc)         (HTHEME hTheme,
 							     int iColorID);
@@ -175,6 +192,13 @@ typedef BOOL (FAR PASCAL *IsThemeBackgroundPartiallyTransparentFunc) (HTHEME hTh
 typedef HRESULT (FAR PASCAL *DrawThemeParentBackgroundFunc) (HWND hwnd,
 							     HDC hdc,
 							     RECT *prc);
+typedef HRESULT (FAR PASCAL *GetThemePartSizeFunc)          (HTHEME hTheme,
+							     HDC hdc,
+							     int iPartId,
+							     int iStateId,
+							     RECT *prc,
+							     int eSize,
+							     SIZE *psz);
 
 static GetThemeSysFontFunc get_theme_sys_font_func = NULL;
 static GetThemeSysColorFunc get_theme_sys_color_func = NULL;
@@ -187,6 +211,7 @@ static IsThemeActiveFunc is_theme_active_func = NULL;
 static IsAppThemedFunc is_app_themed_func = NULL;
 static IsThemeBackgroundPartiallyTransparentFunc is_theme_partially_transparent_func = NULL;
 static DrawThemeParentBackgroundFunc draw_theme_parent_background_func = NULL;
+static GetThemePartSizeFunc get_theme_part_size_func = NULL;
 
 static void
 xp_theme_close_open_handles (void)
@@ -206,12 +231,36 @@ xp_theme_close_open_handles (void)
 void
 xp_theme_init (void)
 {
+  char *buf;
+  char dummy;
+  int n, k;
+
   if (uxtheme_dll)
     return;
 
   memset (open_themes, 0, sizeof (open_themes));
 
-  uxtheme_dll = LoadLibrary ("uxtheme.dll");
+  n = GetSystemDirectory (&dummy, 0);
+
+  if (n <= 0)
+    return;
+
+  buf = g_malloc (n + 1 + strlen (UXTHEME_DLL));
+  k = GetSystemDirectory (buf, n);
+  
+  if (k == 0 || k > n)
+    {
+      g_free (buf);
+      return;
+    }
+
+  if (!G_IS_DIR_SEPARATOR (buf[strlen (buf) -1]))
+    strcat (buf, G_DIR_SEPARATOR_S);
+  strcat (buf, UXTHEME_DLL);
+
+  uxtheme_dll = LoadLibrary (buf);
+  g_free (buf);
+
   if (!uxtheme_dll)
     return;
 
@@ -229,6 +278,7 @@ xp_theme_init (void)
       get_theme_sys_metric_func = (GetThemeSysSizeFunc) GetProcAddress (uxtheme_dll, "GetThemeSysSize");
       is_theme_partially_transparent_func = (IsThemeBackgroundPartiallyTransparentFunc) GetProcAddress (uxtheme_dll, "IsThemeBackgroundPartiallyTransparent");
       draw_theme_parent_background_func = (DrawThemeParentBackgroundFunc) GetProcAddress (uxtheme_dll, "DrawThemeParentBackground");
+      get_theme_part_size_func = (GetThemePartSizeFunc) GetProcAddress (uxtheme_dll, "GetThemePartSize");
     }
 
   if (is_app_themed_func && is_theme_active_func)
@@ -279,6 +329,7 @@ xp_theme_exit (void)
   get_theme_sys_metric_func = NULL;
   is_theme_partially_transparent_func = NULL;
   draw_theme_parent_background_func = NULL;
+  get_theme_part_size_func = NULL;
 }
 
 static HTHEME
@@ -358,6 +409,7 @@ xp_theme_get_handle_by_element (XpThemeElement element)
     case XP_THEME_ELEMENT_TAB_ITEM:
     case XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE:
     case XP_THEME_ELEMENT_TAB_ITEM_RIGHT_EDGE:
+    case XP_THEME_ELEMENT_TAB_ITEM_BOTH_EDGE:
     case XP_THEME_ELEMENT_TAB_PANE:
       klazz = XP_THEME_CLASS_TAB;
       break;
@@ -486,6 +538,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 
     case XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE:
     case XP_THEME_ELEMENT_TAB_ITEM_RIGHT_EDGE:
+    case XP_THEME_ELEMENT_TAB_ITEM_BOTH_EDGE:
     case XP_THEME_ELEMENT_TAB_ITEM:
       switch (state)
 	{
@@ -769,20 +822,27 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
       ret = 1;
       break;
 
-    case XP_THEME_ELEMENT_MENU_ITEM:
     case XP_THEME_ELEMENT_MENU_SEPARATOR:
+      ret = TS_NORMAL;
+      break;
+
+    case XP_THEME_ELEMENT_MENU_ITEM:
       switch (state)
 	{
 	case GTK_STATE_SELECTED:
 	  ret = MS_SELECTED;
 	  break;
 
+	case GTK_STATE_PRELIGHT:
+	  ret = MBI_HOT;
+	  break;
+
 	case GTK_STATE_INSENSITIVE:
-	  ret = MS_DEMOTED;
+	  ret = MBI_DISABLED;
 	  break;
 
 	default:
-	  ret = MS_NORMAL;
+	  ret = MBI_NORMAL;
 	}
       break;
 
@@ -832,6 +892,47 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
   return ret;
 }
 
+HDC
+get_window_dc (GtkStyle *style,
+	       GdkWindow *window,
+	       GtkStateType state_type,
+	       XpDCInfo *dc_info_out,
+	       gint x, gint y, gint width, gint height,
+	       RECT *rect_out)
+{
+  GdkDrawable *drawable = NULL;
+  GdkGC *gc = style->dark_gc[state_type];
+  gint x_offset, y_offset;
+  
+  dc_info_out->data = NULL;
+  
+  drawable = gdk_win32_begin_direct_draw_libgtk_only (window,
+						      gc, &dc_info_out->data,
+						      &x_offset, &y_offset);
+  if (!drawable)
+    return NULL;
+
+  rect_out->left = x - x_offset;
+  rect_out->top = y - y_offset;
+  rect_out->right = rect_out->left + width;
+  rect_out->bottom = rect_out->top + height;
+  
+  dc_info_out->drawable = drawable;
+  dc_info_out->gc = gc;
+  dc_info_out->x_offset = x_offset;
+  dc_info_out->y_offset = y_offset;
+  
+  return gdk_win32_hdc_get (drawable, gc, 0);
+}
+
+void
+release_window_dc (XpDCInfo *dc_info)
+{
+  gdk_win32_hdc_release (dc_info->drawable, dc_info->gc, 0);
+
+  gdk_win32_end_direct_draw_libgtk_only (dc_info->data);
+}
+
 gboolean
 xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 	       int x, int y, int width, int height,
@@ -839,10 +940,10 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 {
   HTHEME theme;
   RECT rect, clip, *pClip;
-  int xoff, yoff;
   HDC dc;
-  GdkDrawable *drawable;
+  XpDCInfo dc_info;
   int part_state;
+  HWND hwnd;
 
   if (!xp_theme_is_drawable (element))
     return FALSE;
@@ -852,28 +953,20 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
     return FALSE;
 
   /* FIXME: Recheck its function */
-  enable_theme_dialog_texture_func (GDK_WINDOW_HWND (win), ETDT_ENABLETAB);
+  hwnd = gdk_win32_window_get_impl_hwnd (win);
+  if (hwnd != NULL)
+    enable_theme_dialog_texture_func (hwnd, ETDT_ENABLETAB);
 
-  if (!GDK_IS_WINDOW (win))
-    {
-      xoff = 0;
-      yoff = 0;
-      drawable = win;
-    }
-  else
-    {
-      gdk_window_get_internal_paint_info (win, &drawable, &xoff, &yoff);
-    }
-
-  rect.left = x - xoff;
-  rect.top = y - yoff;
-  rect.right = rect.left + width;
-  rect.bottom = rect.top + height;
+  dc = get_window_dc (style, win, state_type, &dc_info,
+		      x, y, width, height,
+		      &rect);
+  if (!dc)
+    return FALSE;
 
   if (area)
     {
-      clip.left = area->x - xoff;
-      clip.top = area->y - yoff;
+      clip.left = area->x - dc_info.x_offset;
+      clip.top = area->y - dc_info.y_offset;
       clip.right = clip.left + area->width;
       clip.bottom = clip.top + area->height;
 
@@ -884,17 +977,16 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
       pClip = NULL;
     }
 
-  gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
-  dc = gdk_win32_hdc_get (drawable, style->dark_gc[state_type], 0);
-  if (!dc)
-    return FALSE;
-
   part_state = xp_theme_map_gtk_state (element, state_type);
+
+  /* Support transparency */
+  if (is_theme_partially_transparent_func (theme, element_part_map[element], part_state))
+    draw_theme_parent_background_func (hwnd, dc, pClip);
 
   draw_theme_background_func (theme, dc, element_part_map[element],
 			      part_state, &rect, pClip);
 
-  gdk_win32_hdc_release (drawable, style->dark_gc[state_type], 0);
+  release_window_dc (&dc_info);
 
   return TRUE;
 }
@@ -915,8 +1007,57 @@ xp_theme_is_drawable (XpThemeElement element)
 }
 
 gboolean
+xp_theme_get_element_dimensions (XpThemeElement element,
+				 GtkStateType state_type,
+				 gint *cx, gint *cy)
+{
+  HTHEME theme;
+  SIZE part_size;
+  int part_state;
+
+  if (!xp_theme_is_active ())
+    return FALSE;
+
+  theme = xp_theme_get_handle_by_element (element);
+  if (!theme)
+    return FALSE;
+
+  part_state = xp_theme_map_gtk_state (element, state_type);
+
+  get_theme_part_size_func (theme,
+			    NULL,
+			    element_part_map[element],
+			    part_state,
+			    NULL,
+			    TS_MIN,
+			    &part_size);
+
+  *cx = part_size.cx;
+  *cy = part_size.cy;
+
+  if (element == XP_THEME_ELEMENT_MENU_ITEM ||
+      element == XP_THEME_ELEMENT_MENU_SEPARATOR)
+  {
+    SIZE gutter_size;
+
+    get_theme_part_size_func (theme,
+			      NULL,
+			      MENU_POPUPGUTTER,
+			      0,
+			      NULL,
+			      TS_MIN,
+			      &gutter_size);
+
+	*cx += gutter_size.cx * 2;
+	*cy += gutter_size.cy * 2;
+  }
+
+  return TRUE;
+}
+
+gboolean
 xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId,
-			  OUT LOGFONT *lf)
+			  OUT LOGFONTW *lf)
 {
   if (xp_theme_is_active () && get_theme_sys_font_func != NULL)
     {

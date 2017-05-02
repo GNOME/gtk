@@ -35,7 +35,7 @@ state_change_watch (GSignalInvocationHint *ihint,
 {
   GObject *object;
   gboolean state_set;
-  G_CONST_RETURN gchar *state_name;
+  const gchar *state_name;
   AtkStateType state_type;
 
   object = g_value_get_object (param_values + 0);
@@ -247,7 +247,7 @@ _check_cell_actions (AtkObject *in_obj)
 
   for (i = 0; i < n_actions; i++)
     {
-      G_CONST_RETURN gchar* name;
+      const gchar* name;
 
       name = atk_action_get_name (action, i);
       g_print ("Action %d is %s\n", i, name);

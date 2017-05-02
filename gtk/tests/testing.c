@@ -22,6 +22,12 @@
 #include <string.h>
 #include <math.h>
 
+/* Use a keyval that requires Shift to be active (in typical layouts)
+ * like GDK_KEY_ampersand, which is '<shift>6'
+ */
+#define KEYVAL_THAT_REQUIRES_SHIFT GDK_KEY_ampersand
+
+
 /* --- test functions --- */
 static void
 test_button_clicks (void)
@@ -38,9 +44,13 @@ test_button_clicks (void)
   g_assert (button != NULL);
   simsuccess = gtk_test_widget_click (button, 1, 0);
   g_assert (simsuccess == TRUE);
-  while (gtk_events_pending ())
+  while (gtk_events_pending ()) {
+    g_print ("iterate main loop\n");
     gtk_main_iteration ();
-  g_assert (a == 0 && b > 0 && c == 0);
+  }
+  g_assert (a == 0);
+  g_assert (b > 0);
+  g_assert (c == 0);
 }
 
 static void
@@ -57,12 +67,48 @@ test_button_keys (void)
   gboolean simsuccess;
   g_assert (button != NULL);
   gtk_widget_grab_focus (button);
-  g_assert (GTK_WIDGET_HAS_FOCUS (button));
+  g_assert (gtk_widget_has_focus (button));
   simsuccess = gtk_test_widget_send_key (button, GDK_Return, 0);
   g_assert (simsuccess == TRUE);
   while (gtk_events_pending ())
     gtk_main_iteration ();
-  g_assert (a == 0 && b > 0 && c == 0);
+  g_assert (a == 0);
+  g_assert (b > 0);
+  g_assert (c == 0);
+}
+
+static gboolean
+store_last_key_release (GtkWidget   *widget,
+                        GdkEventKey *event,
+                        gpointer     user_data)
+{
+  *((gint *)user_data) = event->keyval;
+  return FALSE;
+}
+
+static void
+test_send_shift_key (void)
+{
+  GtkWidget *window = gtk_test_display_button_window ("Test Window",
+                                                      "Test: test_send_shift_key()",
+                                                      "IgnoreMe1", NULL,
+                                                      "SendMeKeys", NULL,
+                                                      "IgnoreMe2", NULL,
+                                                      NULL);
+  GtkWidget *button = gtk_test_find_widget (window, "SendMeKeys", GTK_TYPE_BUTTON);
+  gint last_key_release = 0;
+  gboolean simsuccess;
+  g_assert (button != NULL);
+  g_signal_connect (button, "key-release-event",
+                    G_CALLBACK (store_last_key_release),
+                    &last_key_release);
+  gtk_widget_grab_focus (button);
+  g_assert (gtk_widget_has_focus (button));
+  simsuccess = gtk_test_widget_send_key (button, KEYVAL_THAT_REQUIRES_SHIFT, 0 /*modifiers*/);
+  g_assert (simsuccess == TRUE);
+  while (gtk_events_pending ())
+    gtk_main_iteration ();
+  g_assert_cmpint (KEYVAL_THAT_REQUIRES_SHIFT, ==, last_key_release);
 }
 
 static void
@@ -131,16 +177,19 @@ test_xserver_sync (void)
   gtk_widget_show_now (window);
   while (repeat--)
     {
-      gint i, many = 100;
+      gint i, many = 200;
       double nosync_time, sync_time;
+      cairo_t *cr;
+
       while (gtk_events_pending ())
         gtk_main_iteration ();
+      cr = gdk_cairo_create (darea->window);
+      cairo_set_source_rgba (cr, 0, 1, 0, 0.1);
       /* run a number of consecutive drawing requests, just using drawing queue */
       g_timer_start (gtimer);
       for (i = 0; i < many; i++)
         {
-          gdk_draw_line (darea->window, darea->style->black_gc, 0, 0, 320, 200);
-          gdk_draw_line (darea->window, darea->style->black_gc, 320, 0, 0, 200);
+          cairo_paint (cr);
         }
       g_timer_stop (gtimer);
       nosync_time = g_timer_elapsed (gtimer, NULL);
@@ -151,8 +200,7 @@ test_xserver_sync (void)
       /* run a number of consecutive drawing requests with intermediate drawing syncs */
       for (i = 0; i < many; i++)
         {
-          gdk_draw_line (darea->window, darea->style->black_gc, 0, 0, 320, 200);
-          gdk_draw_line (darea->window, darea->style->black_gc, 320, 0, 0, 200);
+          cairo_paint (cr);
           gdk_test_render_sync (darea->window);
         }
       g_timer_stop (gtimer);
@@ -208,17 +256,39 @@ test_spin_button_arrows (void)
   g_assert (oldval == 0);
 }
 
+static void
+test_statusbar_remove_all (void)
+{
+  GtkWidget *statusbar;
+
+  g_test_bug ("640487");
+
+  statusbar = gtk_statusbar_new ();
+  g_object_ref_sink (statusbar);
+
+  gtk_statusbar_push (GTK_STATUSBAR (statusbar), 1, "bla");
+  gtk_statusbar_push (GTK_STATUSBAR (statusbar), 1, "bla");
+  gtk_statusbar_remove_all (GTK_STATUSBAR (statusbar), 1);
+
+  g_object_unref (statusbar);
+}
+
 int
 main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv);
+  g_test_bug_base ("http://bugzilla.gnome.org/");
   gtk_test_register_all_types();
+
+  g_test_add_func ("/tests/statusbar-remove-all", test_statusbar_remove_all);
   g_test_add_func ("/ui-tests/text-access", test_text_access);
   g_test_add_func ("/ui-tests/button-clicks", test_button_clicks);
   g_test_add_func ("/ui-tests/keys-events", test_button_keys);
+  g_test_add_func ("/ui-tests/send-shift-key", test_send_shift_key);
   g_test_add_func ("/ui-tests/slider-ranges", test_slider_ranges);
   g_test_add_func ("/ui-tests/xserver-sync", test_xserver_sync);
   g_test_add_func ("/ui-tests/spin-button-arrows", test_spin_button_arrows);
+
   return g_test_run();
 }

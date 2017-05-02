@@ -24,6 +24,9 @@ types related to the text widget and how they work together.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTextBuffer ##### -->
 <para>
 
@@ -121,6 +124,14 @@ types related to the text widget and how they work together.
 </para>
 
 @textbuffer: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTextBuffer::paste-done ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
 
 <!-- ##### SIGNAL GtkTextBuffer::remove-tag ##### -->
 <para>
@@ -278,7 +289,7 @@ types related to the text widget and how they work together.
 @text: 
 @len: 
 @first_tag: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_insert_with_tags_by_name ##### -->
@@ -291,7 +302,7 @@ types related to the text widget and how they work together.
 @text: 
 @len: 
 @first_tag_name: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_delete ##### -->
@@ -570,7 +581,7 @@ types related to the text widget and how they work together.
 @buffer: 
 @tag_name: 
 @first_property_name: 
-@Varargs: 
+@...: 
 @Returns: 
 
 

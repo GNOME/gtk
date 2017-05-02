@@ -92,18 +92,6 @@ static void gtk_printer_get_property (GObject      *object,
 
 G_DEFINE_TYPE (GtkPrinter, gtk_printer, G_TYPE_OBJECT)
 
-static int
-safe_strcmp (const char *a, const char *b)
-{
-  if (a == b)
-    return 0;
-  if (a == NULL)
-    return -1;
-  if (b == NULL)
-    return 1;
-  return strcmp (a, b);
-}
-
 static void
 gtk_printer_class_init (GtkPrinterClass *class)
 {
@@ -143,7 +131,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    g_param_spec_boolean ("accepts-pdf",
 							 P_("Accepts PDF"),
 							 P_("TRUE if this printer can accept PDF"),
-							 TRUE,
+							 FALSE,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_ACCEPTS_PS,
@@ -252,7 +240,7 @@ gtk_printer_init (GtkPrinter *printer)
   priv->is_accepting_jobs = TRUE;
   priv->is_new = TRUE;
   priv->has_details = FALSE;
-  priv->accepts_pdf = TRUE;
+  priv->accepts_pdf = FALSE;
   priv->accepts_ps = TRUE;
 
   priv->state_message = NULL;  
@@ -410,7 +398,7 @@ gtk_printer_new (const gchar     *name,
  * 
  * Returns the backend of the printer.
  * 
- * Return value: the backend of @printer
+ * Return value: (transfer none): the backend of @printer
  * 
  * Since: 2.10
  */
@@ -432,7 +420,7 @@ gtk_printer_get_backend (GtkPrinter *printer)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_printer_get_name (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -450,7 +438,7 @@ gtk_printer_get_name (GtkPrinter *printer)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_printer_get_description (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -468,7 +456,7 @@ gtk_printer_set_description (GtkPrinter  *printer,
 
   priv = printer->priv;
 
-  if (safe_strcmp (priv->description, description) == 0)
+  if (g_strcmp0 (priv->description, description) == 0)
     return FALSE;
 
   g_free (priv->description);
@@ -488,7 +476,7 @@ gtk_printer_set_description (GtkPrinter  *printer,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_printer_get_state_message (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -506,7 +494,7 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
 
   priv = printer->priv;
 
-  if (safe_strcmp (priv->state_message, message) == 0)
+  if (g_strcmp0 (priv->state_message, message) == 0)
     return FALSE;
 
   g_free (priv->state_message);
@@ -526,7 +514,7 @@ gtk_printer_set_state_message (GtkPrinter  *printer,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_printer_get_location (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -544,7 +532,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
 
   priv = printer->priv;
 
-  if (safe_strcmp (priv->location, location) == 0)
+  if (g_strcmp0 (priv->location, location) == 0)
     return FALSE;
 
   g_free (priv->location);
@@ -564,7 +552,7 @@ gtk_printer_set_location (GtkPrinter  *printer,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar * 
+const gchar *
 gtk_printer_get_icon_name (GtkPrinter *printer)
 {
   g_return_val_if_fail (GTK_IS_PRINTER (printer), NULL);
@@ -791,6 +779,15 @@ gtk_printer_accepts_pdf (GtkPrinter *printer)
   return printer->priv->accepts_pdf;
 }
 
+void
+gtk_printer_set_accepts_pdf (GtkPrinter *printer,
+			     gboolean val)
+{
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+
+  printer->priv->accepts_pdf = val;
+}
+
 /**
  * gtk_printer_accepts_ps:
  * @printer: a #GtkPrinter
@@ -808,6 +805,15 @@ gtk_printer_accepts_ps (GtkPrinter *printer)
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
   return printer->priv->accepts_ps;
+}
+
+void
+gtk_printer_set_accepts_ps (GtkPrinter *printer,
+			    gboolean val)
+{
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+
+  printer->priv->accepts_ps = val;
 }
 
 gboolean
@@ -852,7 +858,7 @@ gtk_printer_set_is_default (GtkPrinter *printer,
 {
   g_return_if_fail (GTK_IS_PRINTER (printer));
 
-  printer->priv->is_default = TRUE;
+  printer->priv->is_default = val;
 }
 
 /**
@@ -932,8 +938,8 @@ _gtk_printer_create_cairo_surface (GtkPrinter       *printer,
  * Lists all the paper sizes @printer supports.
  * This will return and empty list unless the printer's details are 
  * available, see gtk_printer_has_details() and gtk_printer_request_details().
- * 
- * Return value: a newly allocated list of newly allocated #GtkPageSetup s.
+ *
+ * Return value: (element-type GtkPageSetup) (transfer full): a newly allocated list of newly allocated #GtkPageSetup s.
  *
  * Since: 2.12
  */
@@ -951,12 +957,12 @@ gtk_printer_list_papers (GtkPrinter *printer)
 /**
  * gtk_printer_get_default_page_size:
  * @printer: a #GtkPrinter
- * 
+ *
  * Returns default page size of @printer.
  * 
  * Return value: a newly allocated #GtkPageSetup with default page size of the printer.
  *
- * Since: 2.13
+ * Since: 2.14
  */
 GtkPageSetup  *
 gtk_printer_get_default_page_size (GtkPrinter *printer)
@@ -969,16 +975,34 @@ gtk_printer_get_default_page_size (GtkPrinter *printer)
   return backend_class->printer_get_default_page_size (printer);
 }
 
-void
-_gtk_printer_get_hard_margins (GtkPrinter *printer,
-			       gdouble    *top,
-			       gdouble    *bottom,
-			       gdouble    *left,
-			       gdouble    *right)
+/**
+ * gtk_printer_get_hard_margins:
+ * @printer: a #GtkPrinter
+ * @top: (out): a location to store the top margin in
+ * @bottom: (out): a location to store the bottom margin in
+ * @left: (out): a location to store the left margin in
+ * @right: (out): a location to store the right margin in
+ *
+ * Retrieve the hard margins of @printer, i.e. the margins that define
+ * the area at the borders of the paper that the printer cannot print to.
+ *
+ * Note: This will not succeed unless the printer's details are available,
+ * see gtk_printer_has_details() and gtk_printer_request_details().
+ *
+ * Return value: %TRUE iff the hard margins were retrieved
+ *
+ * Since: 2.20
+ */
+gboolean
+gtk_printer_get_hard_margins (GtkPrinter *printer,
+			      gdouble    *top,
+			      gdouble    *bottom,
+			      gdouble    *left,
+			      gdouble    *right)
 {
   GtkPrintBackendClass *backend_class = GTK_PRINT_BACKEND_GET_CLASS (printer->priv->backend);
 
-  backend_class->printer_get_hard_margins (printer, top, bottom, left, right);
+  return backend_class->printer_get_hard_margins (printer, top, bottom, left, right);
 }
 
 /**
@@ -993,7 +1017,7 @@ _gtk_printer_get_hard_margins (GtkPrinter *printer,
  *
  * This will return 0 unless the printer's details are available, see
  * gtk_printer_has_details() and gtk_printer_request_details().
- *  *
+ *
  * Return value: the printer's capabilities
  *
  * Since: 2.12
@@ -1098,14 +1122,25 @@ list_added_cb (GtkPrintBackend *backend,
 }
 
 static void
-list_done_cb (GtkPrintBackend *backend, 
-	      PrinterList     *printer_list)
+backend_status_changed (GObject    *object,
+                        GParamSpec *pspec,
+                        gpointer    data)
+{
+  GtkPrintBackend *backend = GTK_PRINT_BACKEND (object);
+  PrinterList *printer_list = data;
+  GtkPrintBackendStatus status;
+
+  g_object_get (backend, "status", &status, NULL);
+ 
+  if (status == GTK_PRINT_BACKEND_STATUS_UNAVAILABLE)
+    list_done_cb (backend, printer_list);  
+}
+
+static void
+list_printers_remove_backend (PrinterList     *printer_list,
+                              GtkPrintBackend *backend)
 {
   printer_list->backends = g_list_remove (printer_list->backends, backend);
-  
-  g_signal_handlers_disconnect_by_func (backend, list_added_cb, printer_list);
-  g_signal_handlers_disconnect_by_func (backend, list_done_cb, printer_list);
-  
   gtk_print_backend_destroy (backend);
   g_object_unref (backend);
 
@@ -1113,11 +1148,23 @@ list_done_cb (GtkPrintBackend *backend,
     free_printer_list (printer_list);
 }
 
+static void
+list_done_cb (GtkPrintBackend *backend,
+	      PrinterList     *printer_list)
+{
+  g_signal_handlers_disconnect_by_func (backend, list_added_cb, printer_list);
+  g_signal_handlers_disconnect_by_func (backend, list_done_cb, printer_list);
+  g_signal_handlers_disconnect_by_func (backend, backend_status_changed, printer_list);
+
+  list_printers_remove_backend(printer_list, backend);
+}
+
 static gboolean
 list_printers_init (PrinterList     *printer_list,
 		    GtkPrintBackend *backend)
 {
   GList *list, *node;
+  GtkPrintBackendStatus status;
 
   list = gtk_print_backend_get_printer_list (backend);
 
@@ -1132,12 +1179,11 @@ list_printers_init (PrinterList     *printer_list,
 
   g_list_free (list);
 
-  if (gtk_print_backend_printer_list_is_done (backend))
-    {
-      printer_list->backends = g_list_remove (printer_list->backends, backend);
-      gtk_print_backend_destroy (backend);
-      g_object_unref (backend);
-    }
+  g_object_get (backend, "status", &status, NULL);
+  
+  if (status == GTK_PRINT_BACKEND_STATUS_UNAVAILABLE || 
+      gtk_print_backend_printer_list_is_done (backend))
+    list_printers_remove_backend(printer_list, backend);
   else
     {
       g_signal_connect (backend, "printer-added", 
@@ -1146,6 +1192,9 @@ list_printers_init (PrinterList     *printer_list,
       g_signal_connect (backend, "printer-list-done", 
 			(GCallback) list_done_cb, 
 			printer_list);
+      g_signal_connect (backend, "notify::status", 
+                        (GCallback) backend_status_changed,
+                        printer_list);     
     }
 
   return FALSE;
@@ -1224,6 +1273,7 @@ gtk_print_capabilities_get_type (void)
         { GTK_PRINT_CAPABILITY_GENERATE_PS, "GTK_PRINT_CAPABILITY_GENERATE_PS", "generate-ps" },
         { GTK_PRINT_CAPABILITY_PREVIEW, "GTK_PRINT_CAPABILITY_PREVIEW", "preview" },
 	{ GTK_PRINT_CAPABILITY_NUMBER_UP, "GTK_PRINT_CAPABILITY_NUMBER_UP", "number-up"},
+        { GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT, "GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT", "number-up-layout" },
         { 0, NULL, NULL }
       };
 

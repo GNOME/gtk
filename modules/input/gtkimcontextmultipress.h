@@ -24,32 +24,31 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_IM_CONTEXT_MULTIPRESS            (gtk_im_context_multipress_get_type ())
-#define gtk_im_context_multipress(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipress))
-#define gtk_im_context_multipress_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
+#define GTK_IM_CONTEXT_MULTIPRESS(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipress))
+#define GTK_IM_CONTEXT_MULTIPRESS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
 #define GTK_IS_IM_CONTEXT_MULTIPRESS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS))
 #define GTK_IS_IM_CONTEXT_MULTIPRESS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_IM_CONTEXT_MULTIPRESS))
-#define gtk_im_context_multipress_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
-
-
-typedef struct _KeySequence KeySequence;
+#define GTK_IM_CONTEXT_MULTIPRESS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_IM_CONTEXT_MULTIPRESS, GtkImContextMultipressClass))
 
 typedef struct _GtkImContextMultipress GtkImContextMultipress;
 
-/** This input method allows multi-press character input, like that found on mobile phones.
+/* This input method allows multi-press character input, like that found on
+ * mobile phones.
  *
- * This is based on GtkImContextSimple, which allows "compose" based on sequences of characters.
- * But instead the character sequences are defined by lists of characters for a key,
- * so that repeated pressing of the same key can cycle through the possible output characters,
- * with automatic choosing of the character after a time delay.
- */   
+ * This is based on GtkImContextSimple, which allows "compose" based on
+ * sequences of characters.  But instead the character sequences are defined
+ * by lists of characters for a key, so that repeated pressing of the same key
+ * can cycle through the possible output characters, with automatic choosing
+ * of the character after a time delay.
+ */
 struct _GtkImContextMultipress
 {
+  /*< private >*/
   GtkIMContext parent;
 
-  /* Sequence information, loading from the configuration file: */
-  KeySequence** key_sequences; /* Built when we read the config file. Not null-terminated. */
-  gsize key_sequences_count; /* Number of KeySequence struct instances. */
-
+  /* Sequence information, loaded from the configuration file: */
+  GHashTable* key_sequences;
+  gsize dummy; /* ABI-preserving placeholder */
 
   /* The last character entered so far during a compose.
    * If this is NULL then we are not composing yet.
@@ -59,12 +58,11 @@ struct _GtkImContextMultipress
   /* The position of the compose in the possible sequence.
    *  For instance, this is 2 if aa has been pressed to show b (from abc0).
    */
-  
   guint compose_count; 
   guint timeout_id;
 
   /* The character(s) that will be used if it the current character(s) is accepted: */
-  const gchar* tentative_match;
+  const gchar *tentative_match;
 };
 
 
@@ -76,7 +74,7 @@ struct _GtkImContextMultipressClass
 };
 
 void gtk_im_context_multipress_register_type (GTypeModule* type_module);
-GType gtk_im_context_multipress_get_type (void) G_GNUC_CONST;
+GType gtk_im_context_multipress_get_type (void);
 GtkIMContext *gtk_im_context_multipress_new (void);
 
 G_END_DECLS

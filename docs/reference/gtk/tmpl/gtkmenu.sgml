@@ -79,6 +79,9 @@ my_popup_handler (GtkWidget *widget, GdkEvent *event)
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkMenu ##### -->
 <para>
 The #GtkMenu struct contains private data only, and
@@ -119,6 +122,11 @@ should be accessed using the functions below.
 
 </para>
 
+<!-- ##### ARG GtkMenu:reserve-toggle-size ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenu:tearoff-state ##### -->
 <para>
 
@@ -145,6 +153,16 @@ should be accessed using the functions below.
 </para>
 
 <!-- ##### ARG GtkMenu:top-attach ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:arrow-placement ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenu:arrow-scaling ##### -->
 <para>
 
 </para>
@@ -179,6 +197,7 @@ should be accessed using the functions below.
 Creates a new #GtkMenu.
 </para>
 
+@void: 
 @Returns: a new #GtkMenu.
 
 
@@ -308,15 +327,6 @@ See gtk_menu_set_accel_group().
 @title: 
 
 
-<!-- ##### FUNCTION gtk_menu_get_tearoff_state ##### -->
-<para>
-
-</para>
-
-@menu: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_menu_get_title ##### -->
 <para>
 
@@ -326,7 +336,43 @@ See gtk_menu_set_accel_group().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_menu_set_monitor ##### -->
+<para>
+
+</para>
+
+@menu: 
+@monitor_num: 
+
+
 <!-- ##### FUNCTION gtk_menu_get_monitor ##### -->
+<para>
+
+</para>
+
+@menu: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_get_tearoff_state ##### -->
+<para>
+
+</para>
+
+@menu: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_set_reserve_toggle_size ##### -->
+<para>
+
+</para>
+
+@menu: 
+@reserve_toggle_size: 
+
+
+<!-- ##### FUNCTION gtk_menu_get_reserve_toggle_size ##### -->
 <para>
 
 </para>
@@ -430,6 +476,8 @@ Returns the #GtkWidget that the menu is attached to.
 A user function supplied when calling gtk_menu_popup() which controls the
 positioning of the menu when it is displayed.  The function sets the @x
 and @y parameters to the coordinates where the menu is to be drawn.
+To make the menu appear on a different monitor than the mouse pointer,
+gtk_menu_set_monitor() must be called.
 </para>
 
 @menu: a #GtkMenu.
@@ -438,7 +486,7 @@ menu shall be drawn.  This is an output parameter.
 @y: address of the #gint representing the vertical position where the
 menu shall be drawn.  This is an output parameter.
 @push_in: This parameter controls how menus placed outside the monitor are handled.
-        If this is set to TRUE and part of the menu is outside the monitor then
+        If this is set to %TRUE and part of the menu is outside the monitor then
         GTK+ pushes the window into the visible area, effectively modifying the
         popup position.
         Note that moving and possibly resizing the menu around will alter the
@@ -447,9 +495,6 @@ menu shall be drawn.  This is an output parameter.
         In practice, this behavior is only useful for combobox popups or option
         menus and cannot be used to simply confine a menu to monitor boundaries.
         In that case, changing the scroll offset is not desirable.
-        To simply constrain the menu within the monitor, get its size with
-        gtk_widget_size_request() before showing it, and alter the coordinates
-        passed to gtk_menu_popup() accordingly.
 @user_data: the data supplied by the user in the gtk_menu_popup() @data
 parameter.
 
@@ -462,14 +507,5 @@ will be called when the menu is later detached from the widget.
 
 @attach_widget: the #GtkWidget that the menu is being detached from.
 @menu: the #GtkMenu being detached.
-
-
-<!-- ##### FUNCTION gtk_menu_set_monitor ##### -->
-<para>
-
-</para>
-
-@menu: 
-@monitor_num: 
 
 

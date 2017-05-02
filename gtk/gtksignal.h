@@ -29,7 +29,9 @@
 #ifndef __GTK_SIGNAL_H__
 #define __GTK_SIGNAL_H__
 
-#include <gtk/gtk.h>
+#include <gtk/gtkenums.h>
+#include <gtk/gtktypeutils.h>
+#include <gtk/gtkobject.h>
 #include <gtk/gtkmarshal.h>
 
 G_BEGIN_DECLS
@@ -38,7 +40,7 @@ G_BEGIN_DECLS
 
 
 /* --- compat defines --- */
-#define GTK_SIGNAL_OFFSET	                      GTK_STRUCT_OFFSET
+#define GTK_SIGNAL_OFFSET	                      G_STRUCT_OFFSET
 #define	gtk_signal_lookup(name,object_type)	                                       \
    g_signal_lookup ((name), (object_type))
 #define	gtk_signal_name(signal_id)                                                     \
@@ -91,34 +93,34 @@ G_BEGIN_DECLS
 /* --- compat functions --- */
 guint	gtk_signal_newv				(const gchar	    *name,
 						 GtkSignalRunType    signal_flags,
-						 GtkType	     object_type,
+						 GType               object_type,
 						 guint		     function_offset,
-						 GtkSignalMarshaller marshaller,
-						 GtkType	     return_val,
+						 GSignalCMarshaller  marshaller,
+						 GType               return_val,
 						 guint		     n_args,
-						 GtkType	    *args);
+						 GType              *args);
 guint	gtk_signal_new				(const gchar	    *name,
 						 GtkSignalRunType    signal_flags,
-						 GtkType	     object_type,
+						 GType               object_type,
 						 guint		     function_offset,
-						 GtkSignalMarshaller marshaller,
-						 GtkType	     return_val,
+						 GSignalCMarshaller  marshaller,
+						 GType               return_val,
 						 guint		     n_args,
 						 ...);
 void	gtk_signal_emit_stop_by_name		(GtkObject	    *object,
 						 const gchar	    *name);
 void	gtk_signal_connect_object_while_alive	(GtkObject	    *object,
 						 const gchar        *name,
-						 GtkSignalFunc	     func,
+						 GCallback	     func,
 						 GtkObject	    *alive_object);
 void	gtk_signal_connect_while_alive		(GtkObject	    *object,
 						 const gchar        *name,
-						 GtkSignalFunc	     func,
+						 GCallback	     func,
 						 gpointer	     func_data,
 						 GtkObject	    *alive_object);
 gulong	gtk_signal_connect_full			(GtkObject	    *object,
 						 const gchar	    *name,
-						 GtkSignalFunc	     func,
+						 GCallback	     func,
 						 GtkCallbackMarshal  unsupported,
 						 gpointer	     data,
 						 GDestroyNotify      destroy_func,
@@ -137,7 +139,7 @@ void	gtk_signal_emitv_by_name		(GtkObject	    *object,
 						 const gchar	    *name,
 						 GtkArg		    *args);
 void	gtk_signal_compat_matched		(GtkObject	    *object,
-						 GtkSignalFunc 	     func,
+						 GCallback 	     func,
 						 gpointer      	     data,
 						 GSignalMatchType    match,
 						 guint               action);

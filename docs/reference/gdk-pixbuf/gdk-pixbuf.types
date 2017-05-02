@@ -1,6 +1,0 @@
-#include <gdk-pixbuf/gdk-pixbuf.h>
-
-gdk_pixbuf_get_type
-gdk_pixbuf_loader_get_type
-gdk_pixbuf_animation_get_type
-gdk_pixbuf_animation_iter_get_type

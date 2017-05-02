@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "gtkquartz.h"
+#include <gdk/quartz/gdkquartz.h>
 #include "gtkalias.h"
 
 NSImage *
@@ -34,9 +35,11 @@ _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
   int rowstride, pixbuf_width, pixbuf_height;
   gboolean has_alpha;
   NSImage *nsimage;
+  NSSize nsimage_size;
 
   pixbuf_width = gdk_pixbuf_get_width (pixbuf);
   pixbuf_height = gdk_pixbuf_get_height (pixbuf);
+  g_return_val_if_fail (pixbuf_width != 0 && pixbuf_height != 0, NULL);
   rowstride = gdk_pixbuf_get_rowstride (pixbuf);
   has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
 
@@ -56,6 +59,12 @@ _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
   CGColorSpaceRelease (colorspace);
 
   nsimage = [[NSImage alloc] initWithSize:NSMakeSize (pixbuf_width, pixbuf_height)];
+  nsimage_size = [nsimage size];
+  if (nsimage_size.width == 0.0 && nsimage_size.height == 0.0)
+    {
+      [nsimage release];
+      g_return_val_if_fail (FALSE, NULL);
+    }
   [nsimage lockFocus];
 
   context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
@@ -68,22 +77,7 @@ _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
   return nsimage;
 }
 
-static NSString *
-target_to_pasteboard_type (const char *target)
-{
-  if (strcmp (target, "UTF8_STRING") == 0)
-    return NSStringPboardType;
-  else if (strcmp (target, "image/tiff") == 0)
-    return NSTIFFPboardType;
-  else if (strcmp (target, "application/x-color") == 0)
-    return NSColorPboardType;
-  else if (strcmp (target, "text/uri-list") == 0)
-    return NSURLPboardType;
-  else
-    return [NSString stringWithUTF8String:target];
-}
-
-NSArray *
+NSSet *
 _gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
 {
   NSMutableSet *set = [[NSMutableSet alloc] init];
@@ -92,15 +86,13 @@ _gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
   for (list = target_list->list; list; list = list->next)
     {
       GtkTargetPair *pair = list->data;
-      gchar *target = gdk_atom_name (pair->target);
-      [set addObject:target_to_pasteboard_type (target)];
-      g_free (target);
+      [set addObject:gdk_quartz_atom_to_pasteboard_type_libgtk_only (pair->target)];
     }
 
-  return [set allObjects];
+  return set;
 }
 
-NSArray *
+NSSet *
 _gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
 						guint                 n_targets)
 {
@@ -109,25 +101,10 @@ _gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
 
   for (i = 0; i < n_targets; i++)
     {
-      [set addObject:target_to_pasteboard_type (targets[i].target)];
+      [set addObject:gdk_quartz_target_to_pasteboard_type_libgtk_only (targets[i].target)];
     }
 
-  return [set allObjects];
-}
-
-GdkAtom 
-_gtk_quartz_pasteboard_type_to_atom (NSString *type)
-{
-  if ([type isEqualToString:NSStringPboardType])
-    return gdk_atom_intern_static_string ("UTF8_STRING");
-  else if ([type isEqualToString:NSTIFFPboardType])
-    return gdk_atom_intern_static_string ("image/tiff");
-  else if ([type isEqualToString:NSColorPboardType])
-    return gdk_atom_intern_static_string ("application/x-color");
-  else if ([type isEqualToString:NSURLPboardType])
-    return gdk_atom_intern_static_string ("text/uri-list");
-  else
-    return gdk_atom_intern ([type UTF8String], FALSE);  
+  return set;
 }
 
 GList *
@@ -141,7 +118,7 @@ _gtk_quartz_pasteboard_types_to_atom_list (NSArray *array)
 
   for (i = 0; i < count; i++) 
     {
-      GdkAtom atom = _gtk_quartz_pasteboard_type_to_atom ([array objectAtIndex:i]);
+      GdkAtom atom = gdk_quartz_pasteboard_type_to_atom_libgtk_only ([array objectAtIndex:i]);
 
       result = g_list_prepend (result, GDK_ATOM_TO_POINTER (atom));
     }
@@ -159,7 +136,8 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
   selection_data = g_slice_new0 (GtkSelectionData);
   selection_data->selection = selection;
   selection_data->target = target;
-
+  if (!selection_data->display)
+    selection_data->display = gdk_display_get_default ();
   if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
     {
       NSString *s = [pasteboard stringForType:NSStringPboardType];
@@ -256,19 +234,17 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
 					       GtkSelectionData *selection_data)
 {
   NSString *type;
-  gchar *target;
   GdkDisplay *display;
   gint format;
   const guchar *data;
-  guint length;
+  NSUInteger length;
 
-  target = gdk_atom_name (gtk_selection_data_get_target (selection_data));
   display = gtk_selection_data_get_display (selection_data);
   format = gtk_selection_data_get_format (selection_data);
-  data = gtk_selection_data_get_data (selection_data, &length);
+  data = gtk_selection_data_get_data (selection_data);
+  length = gtk_selection_data_get_length (selection_data);
 
-  type = target_to_pasteboard_type (target);
-  g_free (target);
+  type = gdk_quartz_atom_to_pasteboard_type_libgtk_only (gtk_selection_data_get_target (selection_data));
 
   if ([type isEqualTo:NSStringPboardType]) 
     [pasteboard setString:[NSString stringWithUTF8String:(const char *)data]
@@ -315,8 +291,90 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
       g_strfreev (list);
     }
   else
-    [pasteboard setData:[NSData dataWithBytesNoCopy:data
-	    	                             length:length
-			               freeWhenDone:NO]
-                forType:type];
+    [pasteboard setData:[NSData dataWithBytesNoCopy:(void *)data
+                                             length:length
+                                       freeWhenDone:NO]
+                                            forType:type];
+}
+
+/*
+ * Bundle-based functions for various directories. These almost work
+ * even when the application isn't in a bundle, becuase mainBundle
+ * paths point to the bin directory in that case. It's a simple matter
+ * to test for that and remove the last element.
+ */
+
+static const gchar *
+get_bundle_path (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    {
+      NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+      gchar *resource_path = g_strdup ([[[NSBundle mainBundle] resourcePath] UTF8String]);
+      gchar *base;
+      [pool drain];
+
+      base = g_path_get_basename (resource_path);
+      if (strcmp (base, "bin") == 0)
+	path = g_path_get_dirname (resource_path);
+      else
+	path = strdup (resource_path);
+
+      g_free (resource_path);
+      g_free (base);
+    }
+
+  return path;
+}
+
+const gchar *
+_gtk_get_datadir (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    path = g_build_filename (get_bundle_path (), "share", NULL);
+
+  return path;
+}
+
+const gchar *
+_gtk_get_libdir (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    path = g_build_filename (get_bundle_path (), "lib", NULL);
+
+  return path;
+}
+
+const gchar *
+_gtk_get_localedir (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    path = g_build_filename (get_bundle_path (), "share", "locale", NULL);
+
+  return path;
+}
+
+const gchar *
+_gtk_get_sysconfdir (void)
+{
+  static gchar *path = NULL;
+
+  if (path == NULL)
+    path = g_build_filename (get_bundle_path (), "etc", NULL);
+
+  return path;
+}
+
+const gchar *
+_gtk_get_data_prefix (void)
+{
+  return get_bundle_path ();
 }

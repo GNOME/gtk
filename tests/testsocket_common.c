@@ -145,25 +145,25 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
 static GtkWidget *
 create_combo (void)
 {
-  GList *cbitems;
-  GtkCombo *combo;
+  GtkComboBoxText *combo;
+  GtkWidget *entry;
 
-  cbitems = NULL;
-  cbitems = g_list_append (cbitems, "item0");
-  cbitems = g_list_append (cbitems, "item1 item1");
-  cbitems = g_list_append (cbitems, "item2 item2 item2");
-  cbitems = g_list_append (cbitems, "item3 item3 item3 item3");
-  cbitems = g_list_append (cbitems, "item4 item4 item4 item4 item4");
-  cbitems = g_list_append (cbitems, "item5 item5 item5 item5 item5 item5");
-  cbitems = g_list_append (cbitems, "item6 item6 item6 item6 item6");
-  cbitems = g_list_append (cbitems, "item7 item7 item7 item7");
-  cbitems = g_list_append (cbitems, "item8 item8 item8");
-  cbitems = g_list_append (cbitems, "item9 item9");
+  combo = GTK_COMBO_BOX_TEXT (gtk_combo_box_text_new_with_entry ());
 
-  combo = GTK_COMBO (gtk_combo_new ());
-  gtk_combo_set_popdown_strings (combo, cbitems);
-  gtk_entry_set_text (GTK_ENTRY (combo->entry), "hello world");
-  gtk_editable_select_region (GTK_EDITABLE (combo->entry), 0, -1);
+  gtk_combo_box_text_append_text (combo, "item0");
+  gtk_combo_box_text_append_text (combo, "item1 item1");
+  gtk_combo_box_text_append_text (combo, "item2 item2 item2");
+  gtk_combo_box_text_append_text (combo, "item3 item3 item3 item3");
+  gtk_combo_box_text_append_text (combo, "item4 item4 item4 item4 item4");
+  gtk_combo_box_text_append_text (combo, "item5 item5 item5 item5 item5 item5");
+  gtk_combo_box_text_append_text (combo, "item6 item6 item6 item6 item6");
+  gtk_combo_box_text_append_text (combo, "item7 item7 item7 item7");
+  gtk_combo_box_text_append_text (combo, "item8 item8 item8");
+  gtk_combo_box_text_append_text (combo, "item9 item9");
+
+  entry = gtk_bin_get_child (GTK_BIN (combo));
+  gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
+  gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
 
   return GTK_WIDGET (combo);
 }
@@ -191,12 +191,12 @@ create_menubar (GtkWindow *window)
 static GtkWidget *
 create_combo_box (void)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (gtk_combo_box_new_text ());
+  GtkComboBoxText *combo_box = GTK_COMBO_BOX_TEXT (gtk_combo_box_text_new ());
 
-  gtk_combo_box_append_text (combo_box, "This");
-  gtk_combo_box_append_text (combo_box, "Is");
-  gtk_combo_box_append_text (combo_box, "A");
-  gtk_combo_box_append_text (combo_box, "ComboBox");
+  gtk_combo_box_text_append_text (combo_box, "This");
+  gtk_combo_box_text_append_text (combo_box, "Is");
+  gtk_combo_box_text_append_text (combo_box, "A");
+  gtk_combo_box_text_append_text (combo_box, "ComboBox");
   
   return GTK_WIDGET (combo_box);
 }
@@ -267,7 +267,7 @@ create_child_plug (guint32  xid,
 
   gtk_widget_show_all (window);
 
-  if (GTK_WIDGET_REALIZED (window))
+  if (gtk_widget_get_realized (window))
 #if defined (GDK_WINDOWING_X11)
     return GDK_WINDOW_XID (window->window);
 #elif defined (GDK_WINDOWING_WIN32)

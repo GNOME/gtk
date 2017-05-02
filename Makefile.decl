@@ -10,7 +10,7 @@ TEST_PROGS =
 ### testing rules
 
 # Xvfb based test rules
-XVFB = Xvfb -screen 0 800x600x16
+XVFB = Xvfb -ac -noreset -screen 0 800x600x16
 XIDS = 101 102 103 104 105 106 107 197 199 211 223 227 293 307 308 309 310 311 \
    491 492 493 494 495 496 497 498 499 500 501 502 503 504 505 506 507 508 509 \
    991 992 993 994 995 996 997 998 999 1000 1001 1002 1003 1004 1005 1006 1007 \
@@ -30,13 +30,17 @@ XVFB_START = \
 # call as: $(XVFB_START) && someprogram
 
 # test: run all tests in cwd and subdirs
-test:	${TEST_PROGS}
+test: test-cwd test-recurse
+# test-cwd: run tests in cwd
+test-cwd: ${TEST_PROGS}
 	@$(SKIP_GDKTARGET) || test -z "${TEST_PROGS}" || { \
-	  $(XVFB_START) && { set -e; ${GTESTER} --verbose ${TEST_PROGS}; }; \
+	  $(XVFB_START) && { set -e; $(TESTS_ENVIRONMENT) ${GTESTER} --verbose ${TEST_PROGS}; }; \
 	}
+# test-recurse: run tests in subdirs
+test-recurse:
 	@ for subdir in $(SUBDIRS) ; do \
 	    test "$$subdir" = "." -o "$$subdir" = "po" -o "$$subdir" = "po-properties" || \
-	    ( cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $@ ) || exit $? ; \
+	    ( cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) test ) || exit $? ; \
 	  done
 # test-report: run tests in subdirs and generate report
 # perf-report: run tests in subdirs with -m perf and generate report
@@ -77,6 +81,6 @@ test-report perf-report full-report:	${TEST_PROGS}
 	    rm -rf "$$GTESTER_LOGDIR"/ ; \
 	    ${GTESTER_REPORT} --version 2>/dev/null 1>&2 ; test "$$?" != 0 || ${GTESTER_REPORT} $@.xml >$@.html ; \
 	  }
-.PHONY: test test-report perf-report full-report
-# run make test as part of make check
-check-local: test
+.PHONY: test test-cwd test-recurse test-report perf-report full-report
+# run make test-cwd as part of make check
+check-local: test-cwd

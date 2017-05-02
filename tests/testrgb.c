@@ -38,6 +38,8 @@
 #endif
 #include <string.h>
 
+#undef GDK_DISABLE_DEPRECATED
+
 #include "gtk/gtk.h"
 
 static void
@@ -147,15 +149,17 @@ testrgb_rgb_test (GtkWidget *drawing_area)
       start_time = g_timer_elapsed (timer, NULL);
       for (i = 0; i < NUM_ITERS; i++)
 	{
+          cairo_t *cr;
+
 	  offset = (rand () % (WIDTH * HEIGHT * 4)) & -4;
 	  pixbuf = gdk_pixbuf_new_from_data (buf + offset, GDK_COLORSPACE_RGB, TRUE,
 					     8, WIDTH, HEIGHT, WIDTH * 4,
 					     NULL, NULL);
-	  gdk_draw_pixbuf (drawing_area->window, drawing_area->style->black_gc,
-			   pixbuf,
-			   0, 0, 0, 0, WIDTH, HEIGHT,
-			   GDK_RGB_DITHER_NORMAL,
-			   0, 0);
+          cr = gdk_cairo_create (drawing_area->window);
+          gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+          cairo_rectangle (cr, 0, 0, WIDTH, HEIGHT);
+          cairo_fill (cr);
+          cairo_destroy (cr);
 	  g_object_unref (pixbuf);
 	}
       gdk_flush ();

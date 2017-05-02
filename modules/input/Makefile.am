@@ -17,12 +17,10 @@ INCLUDES = \
 	$(INCLUDED_IMMODULE_DEFINE)
 
 DEPS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib) 				\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
 LDADDS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)        			\
 	$(top_builddir)/gtk/$(gtktargetlib) 				\
 	$(GTK_DEP_LIBS)
@@ -156,6 +154,19 @@ IME_MODULE=im-ime.la
 endif
 endif
 
+im_quartz_la_CPPFLAGS = -xobjective-c
+im_quartz_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_quartz_la_SOURCES = imquartz.c
+libstatic_im_quartz_la_SOURCES = $(im_quartz_la_SOURCES)
+im_quartz_la_LIBADD = $(LDADDS)
+if INCLUDE_IM_QUARTZ
+STATIC_QUARTZ_MODULE = libstatic-im-quartz.la
+else
+if USE_QUARTZ
+QUARTZ_MODULE = im-quartz.la
+endif
+endif
+
 multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(sysconfdir)/gtk-2.0"\"
 im_multipress_la_CPPFLAGS = $(multipress_defs)
 libstatic_im_multipress_la_CPPFLAGS = $(im_multipress_la_CPPFLAGS)
@@ -191,11 +202,11 @@ install-data-hook:
 	@if $(RUN_QUERY_IMMODULES_TEST) ; then \
 	  echo $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
 	  $(mkinstalldirs) $(DESTDIR)$(sysconfdir)/gtk-2.0 ; \
-	  echo "$(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules" ; \
-	  $(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules ; \
+	  echo "$(DESTDOR)$(bindir)/gtk-query-immodules-2.0 > $(DESTDIR)$(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules.cache" ; \
+	  $(DESTDIR)$(bindir)/gtk-query-immodules-2.0 > $(DESTDIR)$(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/immodules.cache ; \
 	else \
 	  echo "***" ; \
-	  echo "*** Warning: gtk.immodules not built" ; \
+	  echo "*** Warning: immodules.cache not built" ; \
 	  echo "***" ; \
 	  echo "*** Generate this file manually on host" ; \
 	  echo "*** system using gtk-query-immodules-2.0" ; \
@@ -203,7 +214,7 @@ install-data-hook:
         fi
 
 uninstall-local:
-	rm -f $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules
+	rm -f $(DESTDIR)$(libdir)/gtk-2.0/2.10.0/immodules.cache
 
 if BUILD_DYNAMIC_MODULES
 
@@ -215,6 +226,7 @@ module_LTLIBRARIES =			\
 	$(INUKTITUT_MODULE)		\
 	$(IPA_MODULE)			\
 	$(MULTIPRESS_MODULE)		\
+	$(QUARTZ_MODULE)		\
 	$(THAI_MODULE)			\
 	$(TI_ER_MODULE)			\
 	$(TI_ET_MODULE)			\
@@ -231,6 +243,7 @@ noinst_LTLIBRARIES =				\
 	$(STATIC_INUKTITUT_MODULE)		\
 	$(STATIC_IPA_MODULE)			\
 	$(STATIC_MULTIPRESS_MODULE)		\
+	$(STATIC_QUARTZ_MODULE)			\
 	$(STATIC_THAI_MODULE)			\
 	$(STATIC_TI_ER_MODULE)			\
 	$(STATIC_TI_ET_MODULE)			\
@@ -239,12 +252,14 @@ noinst_LTLIBRARIES =				\
 
 included-modules: $(noinst_LTLIBRARIES)
 
-gtk.immodules: Makefile.am $(module_LTLIBRARIES)
-	$(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > gtk.immodules
+immodules.cache: Makefile.am $(module_LTLIBRARIES)
+	$(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > immodules.cache
 
-CLEANFILES = gtk.immodules
+CLEANFILES = immodules.cache
 
 if CROSS_COMPILING
 else
-all-local: gtk.immodules
+all-local: immodules.cache
 endif
+
+-include $(top_srcdir)/git.mk

@@ -19,6 +19,9 @@ widget for selecting a color in a preference dialog.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkColorButton ##### -->
 <para>
 The GtkColorButton struct has only private fields and 
@@ -58,6 +61,7 @@ should not be used directly.
 
 </para>
 
+@void: 
 @Returns: 
 
 

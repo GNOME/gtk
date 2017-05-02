@@ -114,6 +114,9 @@ This attribute is optional.</para>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkIconSource ##### -->
 <para>
 
@@ -204,6 +207,7 @@ This attribute is optional.</para>
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -238,6 +242,7 @@ This attribute is optional.</para>
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -371,12 +376,11 @@ This attribute is optional.</para>
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_icon_source_get_filename ##### -->
+<!-- ##### MACRO gtk_icon_source_get_filename ##### -->
 <para>
 
 </para>
 
-@source: 
 @Returns: 
 
 
@@ -439,6 +443,7 @@ This attribute is optional.</para>
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -460,13 +465,11 @@ This attribute is optional.</para>
 @setting: 
 
 
-<!-- ##### FUNCTION gtk_icon_source_set_filename ##### -->
+<!-- ##### MACRO gtk_icon_source_set_filename ##### -->
 <para>
 
 </para>
 
-@source: 
-@filename: 
 
 
 <!-- ##### FUNCTION gtk_icon_source_set_pixbuf ##### -->

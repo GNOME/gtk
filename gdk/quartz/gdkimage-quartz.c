@@ -131,43 +131,118 @@ _gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
     {
       GdkQuartzView *view;
       NSBitmapImageRep *rep;
-      NSRect rect;
       guchar *data;
       int x, y;
       NSSize size;
+      NSBitmapFormat format;
+      gboolean has_alpha;
+      gint bpp;
+      gint r_byte = 0;
+      gint g_byte = 1;
+      gint b_byte = 2;
+      gint a_byte = 3;
+      gboolean le_image_data = FALSE;
 
-      view = GDK_WINDOW_IMPL_QUARTZ (drawable)->view;
+      if (GDK_WINDOW_IMPL_QUARTZ (drawable) == GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (_gdk_root)->impl))
+        {
+          /* Special case for the root window. */
+	  CGRect rect = CGRectMake (src_x, src_y, width, height);
+          CGImageRef root_image_ref = CGWindowListCreateImage (rect,
+                                                               kCGWindowListOptionOnScreenOnly,
+                                                               kCGNullWindowID,
+                                                               kCGWindowImageDefault);
 
-      /* We return the image even if we can't copy to it. */
-      if (![view lockFocusIfCanDraw])
-        return image;
+          /* HACK: the NSBitmapImageRep does not copy and convert
+           * CGImageRef's data so it matches what NSBitmapImageRep can
+           * express in its API (which is RGBA and ARGB, premultiplied
+           * and unpremultiplied), it only references the CGImageRef.
+           * Therefore we need to do the host byte swapping ourselves.
+           */
+          if (CGImageGetBitmapInfo (root_image_ref) & kCGBitmapByteOrder32Little)
+            {
+              r_byte = 3;
+              g_byte = 2;
+              b_byte = 1;
+              a_byte = 0;
 
-      rect = NSMakeRect (src_x, src_y, width, height);
+              le_image_data = TRUE;
+            }
 
-      rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect: rect];
-      [view unlockFocus];
-	  
+          rep = [[NSBitmapImageRep alloc] initWithCGImage: root_image_ref];
+          CGImageRelease (root_image_ref);
+        }
+      else
+        {
+	  NSRect rect = NSMakeRect (src_x, src_y, width, height);
+          view = GDK_WINDOW_IMPL_QUARTZ (drawable)->view;
+
+          /* We return the image even if we can't copy to it. */
+          if (![view lockFocusIfCanDraw])
+            return image;
+
+          rep = [[NSBitmapImageRep alloc] initWithFocusedViewRect: rect];
+          [view unlockFocus];
+        }
+
       data = [rep bitmapData];
       size = [rep size];
+      format = [rep bitmapFormat];
+      has_alpha = [rep hasAlpha];
+      bpp = [rep bitsPerPixel] / 8;
+
+      /* MORE HACK: AlphaFirst seems set for le_image_data, which is
+       * technically correct, but really apple, are you kidding, it's
+       * in fact ABGR, not ARGB as promised in NSBitmapImageRep's API.
+       */
+      if (!le_image_data && (format & NSAlphaFirstBitmapFormat))
+        {
+          r_byte = 1;
+          g_byte = 2;
+          b_byte = 3;
+          a_byte = 0;
+        }
 
       for (y = 0; y < size.height; y++)
-	{
-	  guchar *src = data + y * [rep bytesPerRow];
+        {
+          guchar *src = data + y * [rep bytesPerRow];
 
-	  for (x = 0; x < size.width; x++)
-	    {
-	      gint32 pixel;
+          for (x = 0; x < size.width; x++)
+            {
+              guchar r = src[r_byte];
+              guchar g = src[g_byte];
+              guchar b = src[b_byte];
+              gint32 pixel;
 
-	      if (image->byte_order == GDK_LSB_FIRST)
-		pixel = src[0] << 8 | src[1] << 16 |src[2] << 24;
-	      else
-		pixel = src[0] << 16 | src[1] << 8 |src[2];
+              if (has_alpha)
+                {
+                  guchar alpha = src[a_byte];
 
-	      src += 3;
+                  /* unpremultiply if alpha > 0 */
+                  if (! (format & NSAlphaNonpremultipliedBitmapFormat) && alpha)
+                    {
+                      r = r * 255 / alpha;
+                      g = g * 255 / alpha;
+                      b = b * 255 / alpha;
+                    }
 
-	      gdk_image_put_pixel (image, dest_x + x, dest_y + y, pixel);
-	    }
-	}
+                  if (image->byte_order == GDK_MSB_FIRST)
+                    pixel = alpha | b << 8 | g << 16 | r << 24;
+                  else
+                    pixel = alpha << 24 | b << 16 | g << 8 | r;
+                }
+              else
+                {
+                  if (image->byte_order == GDK_MSB_FIRST)
+                    pixel = b | g << 8 | r << 16;
+                  else
+                    pixel = b << 16 | g << 8 | r;
+                }
+
+              src += bpp;
+
+              gdk_image_put_pixel (image, dest_x + x, dest_y + y, pixel);
+            }
+        }
 
       [rep release];
     }
@@ -202,7 +277,7 @@ gdk_image_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkImageClass),
         (GBaseInitFunc) NULL,

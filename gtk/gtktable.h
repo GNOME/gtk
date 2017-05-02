@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_TABLE_H__
 #define __GTK_TABLE_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkcontainer.h>
 
 
@@ -142,6 +141,9 @@ guint      gtk_table_get_default_col_spacing (GtkTable        *table);
 void	   gtk_table_set_homogeneous  (GtkTable	       *table,
 				       gboolean		homogeneous);
 gboolean   gtk_table_get_homogeneous  (GtkTable        *table);
+void       gtk_table_get_size         (GtkTable        *table,
+                                       guint           *rows,
+                                       guint           *columns);
 
 
 G_END_DECLS

@@ -13,14 +13,64 @@
   </para>
 
   <para>
-    A good way to start a migration from libglade to GtkBuilder is
-    to run the <link linkend="gtk-builder-convert">gtk-builder-convert</link>
-    utility on your glade file, and inspect the resulting output.
-    If your code uses the @root parameter of glade_xml_new(), you 
-    may want to split your glade file into multiple GtkBuilder files
-    by using the <option>--root</option> option of 
-    <application>gtk-builder-convert</application>.
+    A good way to start a migration from libglade to GtkBuilder is using
+    <application>glade3</application> to convert your .glade file.
+    If your code uses the @root parameter of glade_xml_new(),
+    you can use gtk_builder_add_objects_from_file() to construct only certain
+    objects from a GtkBuilder file.
   </para>
+
+  <para>
+    Alternatively, GTK+ also offers the
+    <link linkend="gtk-builder-convert">gtk-builder-convert</link> script you can use
+    to do the conversion; in which case you should be careful to inspect the output
+    and make sure you didn't lose any data.
+  </para>
+
+  <table pgwide="1" frame="topbot">
+    <title>Step-by-step instructions for porting code from libglade to GtkBuilder</title>
+    <tgroup cols="2" colsep="0" rowsep="0">
+      <thead>
+        <row><entry>libglade</entry><entry>GtkBuilder</entry></row>
+      </thead>
+      <tbody>
+        <row>
+          <entry><![CDATA[#include <glade/glade.h>]]></entry>
+          <entry>not needed</entry>
+        </row>
+        <row>
+          <entry><screen>GladeXML*</screen></entry>
+          <entry><screen>GtkBuilder*</screen></entry>
+        </row>
+        <row>
+          <entry><screen>glade_xml_new (FILE, "first_widget", NULL)</screen></entry>
+          <entry>
+<screen>
+GError* error = NULL;
+GtkBuilder* builder = gtk_builder_new (<!-- -->);
+if (!gtk_builder_add_from_file (builder, FILE, &amp;error))
+  {
+    g_warning ("Couldn't load builder file: &percnt;s", error->message);
+    g_error_free (error);
+  }
+</screen>
+          </entry>
+        </row>
+        <row>
+          <entry><screen>glade_xml_get_widget (gxml, “widget_name”)</screen></entry>
+          <entry><screen>GTK_WIDGET (gtk_builder_get_object (builder, “widget_name”))</screen></entry>
+        </row>
+        <row>
+          <entry><screen>glade_get_widget_name (widget)</screen></entry>
+          <entry><screen>gtk_widget_get_name (widget)</screen></entry>
+        </row>
+        <row>
+          <entry><screen>glade_xml_get_widget_prefix (gxml, “prefix”)</screen></entry>
+          <entry>can be emulated by <literal>gtk_builder_get_objects (builder)</literal> together with manual filtering. It returns a GSList* instead of a GList* though.</entry>
+        </row>
+      </tbody>
+    </tgroup>
+  </table>
 
   <para>
     While GtkBuilder strives to be a complete replacement for
@@ -29,42 +79,19 @@
     <itemizedlist>
 
       <listitem><para>
-        GtkBuilder can not construct partial trees, it lacks
-        the equivalent of the @root parameter of glade_xml_new().
-        Due to the way GtkBuilder parses its input, this is difficult 
-        to implement, see 
-        <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=447998">bug 
-        447998</ulink>. As a workaround, you can split your glade file 
-        into multiple GtkBuilder input files using the <option>--root</option>
-        that was mentioned above.
-      </para></listitem>
-
-      <listitem><para>
-        GtkBuilder does not yet implement support for accessibility 
-        properties. It parses the same &lt;accessibility&gt; elements 
-        as libglade, but ignores them. See 
-        <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=454653">bug 
-        454983</ulink> for the current status of accessibility support 
-        in GtkBuilder.
-      </para></listitem>
- 
-      <listitem><para>
         GtkBuilder supports context information in translatable
-        properties in a slightly different way than libglade. 
-        Intltool does not yet support this; see 
-        <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=454894">bug 
-        454894</ulink> for the current status of intltool support for 
-        GtkBuilder files. Thankfully, context in translations is a 
-        rarely used feature, and if you are not using it, intltools 
-        glade format support works just fine for GtkBuilder files.
+        properties in a slightly different way than libglade.
+        Intltool does support this since version 0.41.1.
       </para></listitem>
 
+      <listitem><para>
+        While libglade can often tolerate multiple widgets having the
+        same id in a glade file, GtkBuilder will not accept duplicate
+        object ids. Both <application>gtk-builder-convert</application>
+        and the GtkBuilder parser emit warnings when they see
+        duplicate ids.
+      </para></listitem>
   </itemizedlist>
-  </para>
-
-  <para>
-    More details about migrating from libglade to GtkBuilder will 
-    appear here over time...
   </para>
 
 </chapter>

@@ -17,6 +17,9 @@ An input method context supporting multiple, loadable input methods
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkIMMulticontext ##### -->
 <para>
 
@@ -28,6 +31,7 @@ An input method context supporting multiple, loadable input methods
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -38,5 +42,23 @@ An input method context supporting multiple, loadable input methods
 
 @context: 
 @menushell: 
+
+
+<!-- ##### FUNCTION gtk_im_multicontext_get_context_id ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_im_multicontext_set_context_id ##### -->
+<para>
+
+</para>
+
+@context: 
+@context_id: 
 
 

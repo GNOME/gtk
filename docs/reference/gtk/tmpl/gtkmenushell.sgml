@@ -25,6 +25,9 @@ allowing for nested hierarchical menus.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkMenuShell ##### -->
 <para>
 The #GtkMenuShell-struct struct contains the following fields.
@@ -75,6 +78,15 @@ This signal is emitted when a menu shell is deactivated.
 </para>
 
 @menushell: the object which received the signal.
+
+<!-- ##### SIGNAL GtkMenuShell::insert ##### -->
+<para>
+
+</para>
+
+@menushell: the object which received the signal.
+@widget: 
+@arg1: 
 
 <!-- ##### SIGNAL GtkMenuShell::move-current ##### -->
 <para>
@@ -212,36 +224,10 @@ after the menu item is activated.
 <!-- ##### ENUM GtkMenuDirectionType ##### -->
 <para>
 An enumeration representing directional movements within a menu.
-
-<informaltable pgwide="1" frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"/><colspec colwidth="8*"/>
-<tbody>
-
-<row>
-<entry>GTK_MENU_DIR_PARENT</entry>
-<entry>To the parent menu shell.</entry>
-</row>
-
-<row>
-<entry>GTK_MENU_DIR_CHILD</entry>
-<entry>To the submenu, if any, associated with the item.</entry>
-</row>
-
-<row>
-<entry>GTK_MENU_DIR_NEXT</entry>
-<entry>To the next menu item.</entry>
-</row>
-
-<row>
-<entry>GTK_MENU_DIR_PREV</entry>
-<entry>To the previous menu item.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
 
-@GTK_MENU_DIR_PARENT: 
-@GTK_MENU_DIR_CHILD: 
-@GTK_MENU_DIR_NEXT: 
-@GTK_MENU_DIR_PREV: 
+@GTK_MENU_DIR_PARENT: To the parent menu shell.
+@GTK_MENU_DIR_CHILD: To the submenu, if any, associated with the item.
+@GTK_MENU_DIR_NEXT: To the next menu item.
+@GTK_MENU_DIR_PREV: To the previous menu item.
 

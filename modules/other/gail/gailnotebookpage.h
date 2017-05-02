@@ -40,7 +40,11 @@ struct _GailNotebookPage
   AtkObject parent;
 
   GtkNotebook *notebook;
+#ifndef GTK_DISABLE_DEPRECATED
   GtkNotebookPage *page;
+#else
+  gpointer page;
+#endif
   
   gint index;
   guint notify_child_added_id;

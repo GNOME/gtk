@@ -18,12 +18,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_FILE_CHOOSER_H__
+#define __GTK_FILE_CHOOSER_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_FILE_CHOOSER_H__
-#define __GTK_FILE_CHOOSER_H__
 
 #include <gtk/gtkfilefilter.h>
 #include <gtk/gtkwidget.h>
@@ -36,6 +36,23 @@ G_BEGIN_DECLS
 
 typedef struct _GtkFileChooser      GtkFileChooser;
 
+/**
+ * GtkFileChooserAction:
+ * @GTK_FILE_CHOOSER_ACTION_OPEN: Indicates open mode.  The file chooser
+ *  will only let the user pick an existing file.
+ * @GTK_FILE_CHOOSER_ACTION_SAVE: Indicates save mode.  The file chooser
+ *  will let the user pick an existing file, or type in a new
+ *  filename.
+ * @GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER: Indicates an Open mode for
+ *  selecting folders.  The file chooser will let the user pick an
+ *  existing folder.
+ * @GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER: Indicates a mode for creating a
+ *  new folder.  The file chooser will let the user name an existing or
+ *  new folder.
+ *
+ * Describes whether a #GtkFileChooser is being used to open existing files
+ * or to save to a possibly new file.
+ */
 typedef enum
 {
   GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -44,6 +61,23 @@ typedef enum
   GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
 } GtkFileChooserAction;
 
+/**
+ * GtkFileChooserConfirmation:
+ * @GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM: The file chooser will present
+ *  its stock dialog to confirm about overwriting an existing file.
+ * @GTK_FILE_CHOOSER_CONFIRMATION_ACCEPT_FILENAME: The file chooser will
+ *  terminate and accept the user's choice of a file name.
+ * @GTK_FILE_CHOOSER_CONFIRMATION_SELECT_AGAIN: The file chooser will
+ *  continue running, so as to let the user select another file name.
+ *
+ * Used as a return value of handlers for the
+ * #GtkFileChooser::confirm-overwrite signal of a #GtkFileChooser. This
+ * value determines whether the file chooser will present the stock
+ * confirmation dialog, accept the user's choice of a filename, or
+ * let the user choose another filename.
+ *
+ * Since: 2.8
+ */
 typedef enum
 {
   GTK_FILE_CHOOSER_CONFIRMATION_CONFIRM,
@@ -54,13 +88,29 @@ typedef enum
 GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
 
 /* GError enumeration for GtkFileChooser */
-
+/**
+ * GTK_FILE_CHOOSER_ERROR:
+ *
+ * Used to get the #GError quark for #GtkFileChooser errors.
+ */
 #define GTK_FILE_CHOOSER_ERROR (gtk_file_chooser_error_quark ())
 
+/**
+ * GtkFileChooserError:
+ * @GTK_FILE_CHOOSER_ERROR_NONEXISTENT: Indicates that a file does not exist.
+ * @GTK_FILE_CHOOSER_ERROR_BAD_FILENAME: Indicates a malformed filename.
+ * @GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS: Indicates a duplicate path (e.g. when
+ *  adding a bookmark).
+ * @GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME: Indicates an incomplete hostname (e.g. "http://foo" without a slash after that).
+ *
+ * These identify the various errors that can occur while calling
+ * #GtkFileChooser functions.
+ */
 typedef enum {
   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
   GTK_FILE_CHOOSER_ERROR_BAD_FILENAME,
-  GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS
+  GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
+  GTK_FILE_CHOOSER_ERROR_INCOMPLETE_HOSTNAME
 } GtkFileChooserError;
 
 GQuark gtk_file_chooser_error_quark (void);
@@ -83,6 +133,10 @@ gboolean             gtk_file_chooser_get_show_hidden     (GtkFileChooser       
 void                 gtk_file_chooser_set_do_overwrite_confirmation (GtkFileChooser *chooser,
 								     gboolean        do_overwrite_confirmation);
 gboolean             gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser);
+
+void                 gtk_file_chooser_set_create_folders  (GtkFileChooser       *chooser,
+							  gboolean               create_folders);
+gboolean             gtk_file_chooser_get_create_folders (GtkFileChooser *chooser);
 
 /* Suggested name for the Save-type actions
  */

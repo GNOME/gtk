@@ -120,9 +120,9 @@ is the id of widget (which should be a child of the dialogs @action_area).
 <programlisting><![CDATA[
 <object class="GtkDialog" id="dialog1">
   <child internal-child="vbox">"
-    <object class="GtkVBox">
+    <object class="GtkVBox" id="vbox">
       <child internal-child="action_area">
-        <object class="GtkHButtonBox">
+        <object class="GtkHButtonBox" id="button_box">
           <child>
             <object class="GtkButton" id="button_cancel"/>
           </child>
@@ -163,6 +163,9 @@ response from the user.</para></listitem>
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkDialog ##### -->
@@ -213,6 +216,11 @@ as any other #GtkHButtonBox.
 
 </para>
 
+<!-- ##### ARG GtkDialog:content-area-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkDialogFlags ##### -->
 <para>
 Flags used to influence dialog construction.
@@ -223,7 +231,7 @@ Flags used to influence dialog construction.
 @GTK_DIALOG_DESTROY_WITH_PARENT: Destroy the dialog when its
   parent is destroyed, see gtk_window_set_destroy_with_parent().
 @GTK_DIALOG_NO_SEPARATOR: Don't put a separator between the
-  action area and the dialog content.
+  action area and the dialog content. This option has been deprecated in GTK+ 2.22. It will be removed in GTK+ 3
 
 <!-- ##### ENUM GtkResponseType ##### -->
 <para>
@@ -251,6 +259,7 @@ Creates a new dialog box. Widgets should not be packed into this #GtkWindow
 directly, but into the @vbox and @action_area, as described above. 
 </para>
 
+@void: 
 @Returns: a new #GtkDialog.
 
 
@@ -263,7 +272,7 @@ directly, but into the @vbox and @action_area, as described above.
 @parent: 
 @flags: 
 @first_button_text: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -303,7 +312,7 @@ directly, but into the @vbox and @action_area, as described above.
 
 @dialog: 
 @first_button_text: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_dialog_add_action_widget ##### -->
@@ -363,6 +372,16 @@ directly, but into the @vbox and @action_area, as described above.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_dialog_get_widget_for_response ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@response_id: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_dialog_get_action_area ##### -->
 <para>
 
@@ -397,7 +416,7 @@ directly, but into the @vbox and @action_area, as described above.
 
 @dialog: 
 @first_response_id: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_dialog_set_alternative_button_order_from_array ##### -->

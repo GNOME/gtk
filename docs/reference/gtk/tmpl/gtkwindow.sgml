@@ -8,6 +8,29 @@ Toplevel which can contain other widgets
 <para>
 
 </para>
+<refsect2 id="GtkWindow-BUILDER-UI">
+<title>GtkWindow as GtkBuildable</title>
+<para>
+The GtkWindow implementation of the GtkBuildable interface supports a 
+custom &lt;accel-groups&gt; element, which supports any number of &lt;group&gt;
+elements representing the GtkAccelGroup objects you want to add to your
+window (synonymous with gtk_window_add_accel_group().
+</para>
+<example>
+<title>A UI definition fragment with accel groups</title>
+<programlisting><![CDATA[
+<object class="GtkWindow">
+  <accel-groups>
+    <group name="accelgroup1"/>
+  </accel-groups>
+</object>
+
+...
+
+<object class="GtkAccelGroup" id="accelgroup1"/>
+]]></programlisting>
+</example>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -15,6 +38,9 @@ Toplevel which can contain other widgets
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkWindow ##### -->
@@ -127,6 +153,11 @@ Toplevel which can contain other widgets
 </para>
 
 <!-- ##### ARG GtkWindow:is-active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:mnemonics-visible ##### -->
 <para>
 
 </para>
@@ -350,6 +381,7 @@ the child gets a larger allocation than it requests.
 Deprecated alias for gtk_window_set_position().
 </para>
 
+@Deprecated: Use gtk_window_set_position() instead.
 
 
 <!-- ##### FUNCTION gtk_window_activate_focus ##### -->
@@ -486,6 +518,7 @@ Deprecated alias for gtk_window_set_position().
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -748,15 +781,6 @@ Deprecated alias for gtk_window_set_position().
 @modifier: 
 
 
-<!-- ##### FUNCTION gtk_window_set_role ##### -->
-<para>
-
-</para>
-
-@window: 
-@role: 
-
-
 <!-- ##### FUNCTION gtk_window_set_type_hint ##### -->
 <para>
 
@@ -852,6 +876,16 @@ Deprecated alias for gtk_window_set_position().
 
 </para>
 
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_default_icon_name ##### -->
+<para>
+
+</para>
+
+@void: 
 @Returns: 
 
 
@@ -1050,6 +1084,24 @@ Deprecated alias for gtk_window_set_position().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_window_has_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_window_type ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_window_move ##### -->
 <para>
 
@@ -1104,13 +1156,11 @@ Deprecated alias for gtk_window_set_position().
 @icon: 
 
 
-<!-- ##### FUNCTION gtk_window_set_default_icon_from_file ##### -->
+<!-- ##### MACRO gtk_window_set_default_icon_from_file ##### -->
 <para>
 
 </para>
 
-@filename: 
-@err: 
 @Returns: 
 
 
@@ -1140,14 +1190,11 @@ Deprecated alias for gtk_window_set_position().
 @list: 
 
 
-<!-- ##### FUNCTION gtk_window_set_icon_from_file ##### -->
+<!-- ##### MACRO gtk_window_set_icon_from_file ##### -->
 <para>
 
 </para>
 
-@window: 
-@filename: 
-@err: 
 @Returns: 
 
 
@@ -1184,5 +1231,23 @@ Deprecated alias for gtk_window_set_position().
 
 @window: 
 @opacity: 
+
+
+<!-- ##### FUNCTION gtk_window_get_mnemonics_visible ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_set_mnemonics_visible ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
 
 

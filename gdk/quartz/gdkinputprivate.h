@@ -35,7 +35,6 @@
 typedef struct _GdkAxisInfo    GdkAxisInfo;
 typedef struct _GdkInputVTable GdkInputVTable;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
-typedef struct _GdkInputWindow GdkInputWindow;
 
 struct _GdkInputVTable {
   gint (*set_mode) (guint32 deviceid, GdkInputMode mode);
@@ -96,6 +95,9 @@ struct _GdkAxisInfo
 
 struct _GdkDevicePrivate {
   GdkDevice  info;
+
+  gint last_state;
+  gdouble *last_axes_state;
 };
 
 struct _GdkDeviceClass
@@ -126,9 +128,6 @@ struct _GdkInputWindow
 /* Global data */
 
 extern const GdkDevice gdk_input_core_info;
-extern GdkDevice *_gdk_core_pointer;
-extern GList *_gdk_input_devices;
-extern GList *_gdk_input_windows;
 
 extern GdkInputVTable gdk_input_vtable;
 /* information about network port and host for gxid daemon */
@@ -147,6 +146,14 @@ gint               _gdk_input_enable_window  (GdkWindow        *window,
 gint               _gdk_input_disable_window (GdkWindow        *window,
 					      GdkDevicePrivate *gdkdev);
 void               _gdk_init_input_core      (void);
+
+void               _gdk_input_window_crossing (GdkWindow       *window,
+                                               gboolean         enter);
+
+void               _gdk_input_quartz_tablet_proximity (NSPointingDeviceType deviceType);
+gboolean           _gdk_input_fill_quartz_input_event (GdkEvent  *event,
+                                                       NSEvent   *nsevent,
+                                                       GdkEvent  *input_event);
 
 void _gdk_input_exit           (void);
 

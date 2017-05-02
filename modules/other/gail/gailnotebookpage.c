@@ -31,7 +31,7 @@ static void                  gail_notebook_page_finalize       (GObject   *objec
 static void                  gail_notebook_page_label_map_gtk  (GtkWidget *widget,
                                                                 gpointer  data);
 
-static G_CONST_RETURN gchar* gail_notebook_page_get_name       (AtkObject *accessible);
+static const gchar*          gail_notebook_page_get_name       (AtkObject *accessible);
 static AtkObject*            gail_notebook_page_get_parent     (AtkObject *accessible);
 static gint                  gail_notebook_page_get_n_children (AtkObject *accessible);
 static AtkObject*            gail_notebook_page_ref_child      (AtkObject *accessible,
@@ -203,7 +203,7 @@ gail_notebook_page_new (GtkNotebook *notebook,
   label = get_label_from_notebook_page (page);
   if (GTK_IS_LABEL (label))
     {
-      if (GTK_WIDGET_MAPPED (label))
+      if (gtk_widget_get_mapped (label))
         gail_notebook_page_init_textutil (page, label);
       else
         g_signal_connect (label,
@@ -295,7 +295,7 @@ gail_notebook_page_finalize (GObject *object)
   G_OBJECT_CLASS (gail_notebook_page_parent_class)->finalize (object);
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_notebook_page_get_name (AtkObject *accessible)
 {
   g_return_val_if_fail (GAIL_IS_NOTEBOOK_PAGE (accessible), NULL);

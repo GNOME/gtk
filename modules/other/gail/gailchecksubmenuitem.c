@@ -119,7 +119,10 @@ gail_check_sub_menu_item_ref_state_set (AtkObject *accessible)
     atk_state_set_add_state (state_set, ATK_STATE_CHECKED);
 
   if (gtk_check_menu_item_get_inconsistent (check_menu_item))
-    atk_state_set_remove_state (state_set, ATK_STATE_ENABLED);
+    {
+      atk_state_set_remove_state (state_set, ATK_STATE_ENABLED);
+      atk_state_set_add_state (state_set, ATK_STATE_INDETERMINATE);
+    }
  
   return state_set;
 }
@@ -130,12 +133,24 @@ gail_check_sub_menu_item_real_notify_gtk (GObject           *obj,
 {
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (obj);
   AtkObject *atk_obj;
+  gboolean sensitive;
+  gboolean inconsistent;
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (check_menu_item));
+  sensitive = gtk_widget_get_sensitive (GTK_WIDGET (check_menu_item));
+  inconsistent = gtk_check_menu_item_get_inconsistent (check_menu_item);
 
   if (strcmp (pspec->name, "inconsistent") == 0)
-    atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED,
-                       !gtk_check_menu_item_get_inconsistent (check_menu_item));
+    {
+      atk_object_notify_state_change (atk_obj, ATK_STATE_INDETERMINATE, inconsistent);
+      atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, (sensitive && !inconsistent));
+    }
+  else if (strcmp (pspec->name, "sensitive") == 0)
+    {
+      /* Need to override gailwidget behavior of notifying for ENABLED */
+      atk_object_notify_state_change (atk_obj, ATK_STATE_SENSITIVE, sensitive);
+      atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, (sensitive && !inconsistent));
+    }
   else
     GAIL_WIDGET_CLASS (gail_check_sub_menu_item_parent_class)->notify_gtk (obj, pspec);
 }

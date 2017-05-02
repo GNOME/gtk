@@ -121,6 +121,63 @@ _gdk_event_queue_append (GdkDisplay *display,
 }
 
 /**
+ * _gdk_event_queue_insert_after:
+ * @display: a #GdkDisplay
+ * @sibling: Append after this event.
+ * @event: Event to append.
+ *
+ * Appends an event after the specified event, or if it isn't in
+ * the queue, onto the tail of the event queue.
+ *
+ * Returns: the newly appended list node.
+ *
+ * Since: 2.16
+ */
+GList*
+_gdk_event_queue_insert_after (GdkDisplay *display,
+                               GdkEvent   *sibling,
+                               GdkEvent   *event)
+{
+  GList *prev = g_list_find (display->queued_events, sibling);
+  if (prev && prev->next)
+    {
+      display->queued_events = g_list_insert_before (display->queued_events, prev->next, event);
+      return prev->next;
+    }
+  else
+    return _gdk_event_queue_append (display, event);
+}
+
+/**
+ * _gdk_event_queue_insert_after:
+ * @display: a #GdkDisplay
+ * @sibling: Append after this event.
+ * @event: Event to append.
+ *
+ * Appends an event before the specified event, or if it isn't in
+ * the queue, onto the tail of the event queue.
+ *
+ * Returns: the newly appended list node.
+ *
+ * Since: 2.16
+ */
+GList*
+_gdk_event_queue_insert_before (GdkDisplay *display,
+				GdkEvent   *sibling,
+				GdkEvent   *event)
+{
+  GList *next = g_list_find (display->queued_events, sibling);
+  if (next)
+    {
+      display->queued_events = g_list_insert_before (display->queued_events, next, event);
+      return next->prev;
+    }
+  else
+    return _gdk_event_queue_append (display, event);
+}
+
+
+/**
  * _gdk_event_queue_remove_link:
  * @display: a #GdkDisplay
  * @node: node to remove
@@ -414,6 +471,7 @@ gdk_event_copy (const GdkEvent *event)
       break;
       
     case GDK_EXPOSE:
+    case GDK_DAMAGE:
       if (event->expose.region)
 	new_event->expose.region = gdk_region_copy (event->expose.region);
       break;
@@ -453,7 +511,7 @@ gdk_event_copy (const GdkEvent *event)
  * Frees a #GdkEvent, freeing or decrementing any resources associated with it.
  * Note that this function should only be called with events returned from
  * functions such as gdk_event_peek(), gdk_event_get(),
- * gdk_event_get_graphics_expose() and gdk_event_copy().
+ * gdk_event_get_graphics_expose() and gdk_event_copy() and gdk_event_new().
  **/
 void
 gdk_event_free (GdkEvent *event)
@@ -491,6 +549,7 @@ gdk_event_free (GdkEvent *event)
       break;
       
     case GDK_EXPOSE:
+    case GDK_DAMAGE:
       if (event->expose.region)
 	gdk_region_destroy (event->expose.region);
       break;
@@ -575,6 +634,7 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_SETTING:
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
+      case GDK_EVENT_LAST:
         /* return current time */
         break;
       }
@@ -585,7 +645,7 @@ gdk_event_get_time (const GdkEvent *event)
 /**
  * gdk_event_get_state:
  * @event: a #GdkEvent or NULL
- * @state: return location for state
+ * @state: (out): return location for state
  * 
  * If the event contains a "state" field, puts that field in @state. Otherwise
  * stores an empty state (0). Returns %TRUE if there was a state field
@@ -653,6 +713,7 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_SETTING:
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
+      case GDK_EVENT_LAST:
         /* no state field */
         break;
       }
@@ -664,8 +725,8 @@ gdk_event_get_state (const GdkEvent        *event,
 /**
  * gdk_event_get_coords:
  * @event: a #GdkEvent
- * @x_win: location to put event window x coordinate
- * @y_win: location to put event window y coordinate
+ * @x_win: (out): location to put event window x coordinate
+ * @y_win: (out): location to put event window y coordinate
  * 
  * Extract the event window relative x/y coordinates from an event.
  * 
@@ -723,8 +784,8 @@ gdk_event_get_coords (const GdkEvent *event,
 /**
  * gdk_event_get_root_coords:
  * @event: a #GdkEvent
- * @x_root: location to put root window x coordinate
- * @y_root: location to put root window y coordinate
+ * @x_root: (out): location to put root window x coordinate
+ * @y_root: (out): location to put root window y coordinate
  * 
  * Extract the root window relative x/y coordinates from an event.
  * 
@@ -788,7 +849,7 @@ gdk_event_get_root_coords (const GdkEvent *event,
  * gdk_event_get_axis:
  * @event: a #GdkEvent
  * @axis_use: the axis use to look for
- * @value: location to store the value found
+ * @value: (out): location to store the value found
  * 
  * Extract the axis value for a particular axis use from
  * an event structure.
@@ -884,9 +945,17 @@ gdk_event_get_axis (const GdkEvent *event,
 void
 gdk_event_request_motions (const GdkEventMotion *event)
 {
+  GdkDisplay *display;
+  
   g_return_if_fail (event != NULL);
+  
   if (event->type == GDK_MOTION_NOTIFY && event->is_hint)
-    gdk_device_get_state (event->device, event->window, NULL, NULL);
+    {
+      gdk_device_get_state (event->device, event->window, NULL, NULL);
+      
+      display = gdk_drawable_get_display (event->window);
+      _gdk_display_enable_motion_hints (display);
+    }
 }
 
 /**
@@ -1015,6 +1084,23 @@ gdk_io_invoke (GIOChannel   *source,
   return TRUE;
 }
 
+/**
+ * gdk_input_add_full:
+ * @source: a file descriptor.
+ * @condition: the condition.
+ * @function: the callback function.
+ * @data: callback data passed to @function.
+ * @destroy: callback function to call with @data when the input
+ * handler is removed.
+ *
+ * Establish a callback when a condition becomes true on
+ * a file descriptor.
+ *
+ * Returns: a tag that can later be used as an argument to
+ * gdk_input_remove().
+ *
+ * Deprecated: 2.14: Use g_io_add_watch_full() on a #GIOChannel
+ */
 gint
 gdk_input_add_full (gint	      source,
 		    GdkInputCondition condition,
@@ -1048,6 +1134,21 @@ gdk_input_add_full (gint	      source,
   return result;
 }
 
+/**
+ * gdk_input_add:
+ * @source: a file descriptor.
+ * @condition: the condition.
+ * @function: the callback function.
+ * @data: callback data passed to @function.
+ *
+ * Establish a callback when a condition becomes true on
+ * a file descriptor.
+ *
+ * Returns: a tag that can later be used as an argument to
+ * gdk_input_remove().
+ *
+ * Deprecated: 2.14: Use g_io_add_watch() on a #GIOChannel
+ */
 gint
 gdk_input_add (gint		 source,
 	       GdkInputCondition condition,
@@ -1069,13 +1170,16 @@ gdk_synthesize_click (GdkDisplay *display,
 		      gint	  nclicks)
 {
   GdkEvent temp_event;
+  GdkEvent *event_copy;
+  GList *link;
   
   g_return_if_fail (event != NULL);
   
   temp_event = *event;
   temp_event.type = (nclicks == 2) ? GDK_2BUTTON_PRESS : GDK_3BUTTON_PRESS;
-  
-  gdk_display_put_event (display, &temp_event);
+
+  event_copy = gdk_event_copy (&temp_event);
+  link = _gdk_event_queue_append (display, event_copy);
 }
 
 void
@@ -1163,6 +1267,9 @@ gdk_synthesize_window_state (GdkWindow     *window,
    */
   
   ((GdkWindowObject*) window)->state = temp_event.window_state.new_window_state;
+
+  if (temp_event.window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
+    _gdk_window_update_viewable (window);
 
   /* We only really send the event to toplevels, since
    * all the window states don't apply to non-toplevels.

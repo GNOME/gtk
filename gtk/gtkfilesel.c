@@ -1147,7 +1147,7 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
  * 
  * Return value: currently-selected filename in the on-disk encoding.
  **/
-G_CONST_RETURN gchar*
+const gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
   static const gchar nothing[2] = "";
@@ -1355,8 +1355,10 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
 
   if (g_mkdir (sys_full_path, 0777) < 0)
     {
+      int errsv = errno;
+
       buf = g_strdup_printf (_("Error creating folder '%s': %s"), 
-			     dirname, g_strerror (errno));
+			     dirname, g_strerror (errsv));
       gtk_file_selection_fileop_error (fs, buf);
     }
 
@@ -1414,7 +1416,7 @@ gtk_file_selection_create_dir (GtkWidget *widget,
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), fs->fileop_entry);
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
 		      TRUE, TRUE, 5);
-  GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (fs->fileop_entry, TRUE);
   gtk_entry_set_activates_default (GTK_ENTRY (fs->fileop_entry), TRUE); 
   gtk_widget_show (fs->fileop_entry);
   
@@ -1484,8 +1486,10 @@ gtk_file_selection_delete_file_response (GtkDialog *dialog,
 
   if (g_unlink (sys_full_path) < 0) 
     {
+      int errsv = errno;
+
       buf = g_strdup_printf (_("Error deleting file '%s': %s"),
-			     fs->fileop_file, g_strerror (errno));
+			     fs->fileop_file, g_strerror (errsv));
       gtk_file_selection_fileop_error (fs, buf);
     }
   
@@ -1602,9 +1606,11 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
   
   if (g_rename (sys_old_filename, sys_new_filename) < 0) 
     {
+      int errsv = errno;
+
       buf = g_strdup_printf (_("Error renaming file \"%s\" to \"%s\": %s"),
 			     sys_old_filename, sys_new_filename,
-			     g_strerror (errno));
+			     g_strerror (errsv));
       gtk_file_selection_fileop_error (fs, buf);
       goto out2;
     }
@@ -1675,7 +1681,7 @@ gtk_file_selection_rename_file (GtkWidget *widget,
   fs->fileop_entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), fs->fileop_entry, 
 		      TRUE, TRUE, 5);
-  GTK_WIDGET_SET_FLAGS (fs->fileop_entry, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (fs->fileop_entry, TRUE);
   gtk_entry_set_activates_default (GTK_ENTRY (fs->fileop_entry), TRUE); 
   gtk_widget_show (fs->fileop_entry);
   
@@ -3005,14 +3011,16 @@ open_new_dir (gchar       *dir_name,
   if (!sys_dir_name)
     {
       cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+      g_free (sent);
       return NULL;
     }
-  
+
   directory = g_dir_open (sys_dir_name, 0, &error);
   if (!directory)
     {
       cmpl_errno = error->code; /* ??? */
       g_free (sys_dir_name);
+      g_free (sent);
       return NULL;
     }
 
@@ -3423,8 +3431,10 @@ find_parent_dir_fullname (gchar* dirname)
   
   if (chdir (sys_dirname) != 0 || chdir ("..") != 0)
     {
+      int ignored;
+
       cmpl_errno = errno;
-      chdir (sys_orig_dir);
+      ignored = g_chdir (sys_orig_dir);
       g_free (sys_dirname);
       g_free (sys_orig_dir);
       return NULL;
@@ -3935,7 +3945,7 @@ cmpl_strerror (gint err)
 
 #undef gtk_file_selection_get_filename
 
-G_CONST_RETURN gchar*
+const gchar*
 gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
   static gchar retval[MAXPATHLEN*2+1];

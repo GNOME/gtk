@@ -37,12 +37,12 @@ typedef struct _GdkDisplayDFBClass GdkDisplayDFBClass;
 
 struct _GdkDisplayDFB
 {
-  GdkDisplay parent;
-  IDirectFB              *directfb;
-  IDirectFBDisplayLayer  *layer;
-  IDirectFBEventBuffer   *buffer;
-  IDirectFBInputDevice   *keyboard;
-  GdkKeymap *keymap;
+  GdkDisplay             parent;
+  IDirectFB             *directfb;
+  IDirectFBDisplayLayer *layer;
+  IDirectFBEventBuffer  *buffer;
+  IDirectFBInputDevice  *keyboard;
+  GdkKeymap             *keymap;
 };
 
 struct _GdkDisplayDFBClass
@@ -52,7 +52,9 @@ struct _GdkDisplayDFBClass
 
 GType      gdk_display_dfb_get_type            (void);
 
-IDirectFBSurface * gdk_display_dfb_create_surface (GdkDisplayDFB *display,int format,int width, int height);
+IDirectFBSurface *gdk_display_dfb_create_surface (GdkDisplayDFB *display,
+                                                  int format,
+                                                  int width, int height);
 
 G_END_DECLS
 

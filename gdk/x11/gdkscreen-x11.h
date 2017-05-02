@@ -57,6 +57,7 @@ struct _GdkScreenX11
   GdkWindow *root_window;
 
   /* Window manager */
+  long last_wmspec_check_time;
   Window wmspec_check_window;
   char *window_manager_name;
   /* TRUE if wmspec_check_window has changed since last
@@ -92,6 +93,7 @@ struct _GdkScreenX11
   /* Xinerama/RandR 1.2 */
   gint		 n_monitors;
   GdkX11Monitor	*monitors;
+  gint           primary_monitor;
 
   /* Pango renderer object singleton */
   PangoRenderer *renderer;
@@ -121,12 +123,12 @@ GType       _gdk_screen_x11_get_type (void);
 GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
 				      gint	  screen_number);
 
+void _gdk_x11_screen_setup                  (GdkScreen *screen);
 void _gdk_x11_screen_window_manager_changed (GdkScreen *screen);
 void _gdk_x11_screen_size_changed           (GdkScreen *screen,
 					     XEvent    *event);
-void _gdk_x11_screen_process_owner_change (GdkScreen *screen,
-					   XEvent    *event);
-void _gdk_x11_screen_process_monitors_change (GdkScreen *screen);
+void _gdk_x11_screen_process_owner_change   (GdkScreen *screen,
+					     XEvent    *event);
 
 G_END_DECLS
 

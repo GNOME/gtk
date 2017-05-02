@@ -31,12 +31,14 @@ gdk_window_set_cursor() or by setting the cursor member of the
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkCursor ##### -->
 <para>
 A <type>GdkCursor</type> structure represents a cursor.
 </para>
 
-@type: the #GdkCursorType of the cursor
 
 <!-- ##### ENUM GdkCursorType ##### -->
 <para>
@@ -121,8 +123,9 @@ The standard cursors available.
 @GDK_WATCH: <inlinegraphic format="PNG" fileref="watch.png"></inlinegraphic>
 @GDK_XTERM: <inlinegraphic format="PNG" fileref="xterm.png"></inlinegraphic>
 @GDK_LAST_CURSOR: last cursor type
+@GDK_BLANK_CURSOR: Blank cursor. Since 2.16
 @GDK_CURSOR_IS_PIXMAP: type of cursors constructed with 
-gdk_cursor_new_from_pixmap() or gdk_cursor_new_from_pixbuf()
+  gdk_cursor_new_from_pixmap() or gdk_cursor_new_from_pixbuf()
 
 <!-- ##### FUNCTION gdk_cursor_new ##### -->
 <para>
@@ -188,6 +191,15 @@ gdk_cursor_new_from_pixmap() or gdk_cursor_new_from_pixbuf()
 
 
 <!-- ##### FUNCTION gdk_cursor_get_image ##### -->
+<para>
+
+</para>
+
+@cursor: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_cursor_get_cursor_type ##### -->
 <para>
 
 </para>

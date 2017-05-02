@@ -41,7 +41,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkclipboard.h"
-#include "gtkcombobox.h"
+#include "gtkcomboboxtext.h"
 #include "gtkentry.h"
 #include "gtkeventbox.h"
 #include "gtkexpander.h"
@@ -65,6 +65,7 @@
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtkvbox.h"
+#include "gtkactivatable.h"
 
 #include "gtkrecentmanager.h"
 #include "gtkrecentfilter.h"
@@ -76,7 +77,15 @@
 #include "gtkprivate.h"
 #include "gtkalias.h"
 
-
+enum 
+{
+  PROP_0,
+
+  /* activatable properties */
+  PROP_ACTIVATABLE_RELATED_ACTION,
+  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
+};
+
 
 struct _GtkRecentChooserDefault
 {
@@ -274,13 +283,20 @@ static gboolean recent_view_query_tooltip_cb      (GtkWidget        *widget,
                                                    GtkTooltip       *tooltip,
                                                    gpointer          user_data);
 
-
+static void gtk_recent_chooser_activatable_iface_init (GtkActivatableIface  *iface);
+static void gtk_recent_chooser_update                 (GtkActivatable       *activatable,
+						       GtkAction            *action,
+						       const gchar          *property_name);
+static void gtk_recent_chooser_sync_action_properties (GtkActivatable       *activatable,
+						       GtkAction            *action);
 
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDefault,
 			 _gtk_recent_chooser_default,
 			 GTK_TYPE_VBOX,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
-				 		gtk_recent_chooser_iface_init))
+				 		gtk_recent_chooser_iface_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
+				 		gtk_recent_chooser_activatable_iface_init))
 
 
 
@@ -303,6 +319,14 @@ gtk_recent_chooser_iface_init (GtkRecentChooserIface *iface)
 }
 
 static void
+gtk_recent_chooser_activatable_iface_init (GtkActivatableIface *iface)
+
+{
+  iface->update = gtk_recent_chooser_update;
+  iface->sync_action_properties = gtk_recent_chooser_sync_action_properties;
+}
+
+static void
 _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -318,6 +342,9 @@ _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
   widget_class->show_all = gtk_recent_chooser_default_show_all;
   
   _gtk_recent_chooser_install_properties (gobject_class);
+
+  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
+  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
 }
 
 static void
@@ -446,7 +473,7 @@ gtk_recent_chooser_default_constructor (GType                  type,
 
   impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
   
-  impl->filter_combo = gtk_combo_box_new_text ();
+  impl->filter_combo = gtk_combo_box_text_new ();
   gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);
   g_signal_connect (impl->filter_combo, "changed",
                     G_CALLBACK (filter_combo_changed_cb), impl);
@@ -528,6 +555,12 @@ gtk_recent_chooser_default_set_property (GObject      *object,
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       set_current_filter (impl, g_value_get_object (value));
       break;
+    case PROP_ACTIVATABLE_RELATED_ACTION:
+      _gtk_recent_chooser_set_related_action (GTK_RECENT_CHOOSER (impl), g_value_get_object (value));
+      break;
+    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE: 
+      _gtk_recent_chooser_set_use_action_appearance (GTK_RECENT_CHOOSER (impl), g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -570,6 +603,12 @@ gtk_recent_chooser_default_get_property (GObject    *object,
       break;
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       g_value_set_object (value, impl->current_filter);
+      break;
+    case PROP_ACTIVATABLE_RELATED_ACTION:
+      g_value_set_object (value, _gtk_recent_chooser_get_related_action (GTK_RECENT_CHOOSER (impl)));
+      break;
+    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE: 
+      g_value_set_boolean (value, _gtk_recent_chooser_get_use_action_appearance (GTK_RECENT_CHOOSER (impl)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -685,7 +724,7 @@ get_toplevel (GtkWidget *widget)
   GtkWidget *toplevel;
 
   toplevel = gtk_widget_get_toplevel (widget);
-  if (!GTK_WIDGET_TOPLEVEL (toplevel))
+  if (!gtk_widget_is_toplevel (toplevel))
     return NULL;
   else
     return GTK_WINDOW (toplevel);
@@ -709,7 +748,7 @@ set_busy_cursor (GtkRecentChooserDefault *impl,
   GdkCursor *cursor;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
-  if (!toplevel || !GTK_WIDGET_REALIZED (toplevel))
+  if (!toplevel || !gtk_widget_get_realized (GTK_WIDGET (toplevel)))
     return;
   
   display = gtk_widget_get_display (GTK_WIDGET (toplevel));
@@ -1257,9 +1296,9 @@ gtk_recent_chooser_default_add_filter (GtkRecentChooser *chooser,
   name = gtk_recent_filter_get_name (filter);
   if (!name)
     name = _("Untitled filter");
-    
-  gtk_combo_box_append_text (GTK_COMBO_BOX (impl->filter_combo), name);
-  
+
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (impl->filter_combo), name);
+
   if (!g_slist_find (impl->filters, impl->current_filter))
     set_current_filter (impl, filter);
   
@@ -1609,7 +1648,7 @@ remove_selected_from_list (GtkRecentChooserDefault *impl)
     {
       gchar *msg;
    
-      msg = strdup (_("Could not remove item"));
+      msg = g_strdup (_("Could not remove item"));
       error_message (impl, msg, err->message);
       
       g_free (msg);
@@ -1637,6 +1676,7 @@ copy_activated_cb (GtkMenuItem *menu_item,
 			  			    GDK_SELECTION_CLIPBOARD),
                           utf8_uri, -1);
 
+  gtk_recent_info_unref (info);
   g_free (utf8_uri);
 }
 
@@ -1797,7 +1837,7 @@ popup_position_func (GtkMenu   *menu,
   gint monitor_num;
   GdkRectangle monitor;
 
-  if (G_UNLIKELY (!GTK_WIDGET_REALIZED (widget)))
+  if (G_UNLIKELY (!gtk_widget_get_realized (widget)))
     return;
 
   gdk_window_get_origin (widget->window, x, y);
@@ -1853,8 +1893,8 @@ recent_view_button_press_cb (GtkWidget      *widget,
 			     gpointer        user_data)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
-  
-  if (event->button == 3)
+
+  if (_gtk_button_event_triggers_context_menu (event))
     {
       GtkTreePath *path;
       gboolean res;
@@ -1908,6 +1948,44 @@ set_recent_manager (GtkRecentChooserDefault *impl,
                                                    impl);
     }
 }
+
+static void
+gtk_recent_chooser_update (GtkActivatable *activatable,
+			   GtkAction      *action,
+			   const gchar    *property_name)
+{
+  if (strcmp (property_name, "visible") == 0)
+    {
+      if (gtk_action_is_visible (action))
+	gtk_widget_show (GTK_WIDGET (activatable));
+      else
+	gtk_widget_hide (GTK_WIDGET (activatable));
+    }
+
+  if (strcmp (property_name, "sensitive") == 0)
+    gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+
+  _gtk_recent_chooser_update (activatable, action, property_name);
+}
+
+
+static void 
+gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
+				           GtkAction      *action)
+{
+  if (action)
+    {
+      if (gtk_action_is_visible (action))
+	gtk_widget_show (GTK_WIDGET (activatable));
+      else
+	gtk_widget_hide (GTK_WIDGET (activatable));
+      
+      gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+    }
+
+  _gtk_recent_chooser_sync_action_properties (activatable, action);
+}
+
 
 GtkWidget *
 _gtk_recent_chooser_default_new (GtkRecentManager *manager)

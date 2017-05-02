@@ -28,7 +28,8 @@
 
 /**
  * SECTION:gtktoolshell
- * @short_description: Interface for containers containing #GtkToolItem widgets.
+ * @Short_description: Interface for containers containing GtkToolItem widgets
+ * @Title: GtkToolShell
  *
  * The #GtkToolShell interface allows container widgets to provide additional
  * information when embedding #GtkToolItem widgets.
@@ -65,7 +66,7 @@ gtk_tool_shell_get_type (void)
  * Retrieves the icon size for the tool shell. Tool items must not call this
  * function directly, but rely on gtk_tool_item_get_icon_size() instead.
  *
- * Return value: the current size for icons of @shell
+ * Return value: (type int): the current size for icons of @shell
  *
  * Since: 2.14
  **/
@@ -128,7 +129,7 @@ gtk_tool_shell_get_relief_style (GtkToolShell *shell)
   GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
 
   if (iface->get_relief_style)
-    iface->get_relief_style (shell);
+    return iface->get_relief_style (shell);
 
   return GTK_RELIEF_NONE;
 }
@@ -153,6 +154,98 @@ gtk_tool_shell_rebuild_menu (GtkToolShell *shell)
 
   if (iface->rebuild_menu)
     iface->rebuild_menu (shell);
+}
+
+/**
+ * gtk_tool_shell_get_text_orientation:
+ * @shell: a #GtkToolShell
+ *
+ * Retrieves the current text orientation for the tool shell. Tool items must not
+ * call this function directly, but rely on gtk_tool_item_get_text_orientation()
+ * instead.
+ *
+ * Return value: the current text orientation of @shell
+ *
+ * Since: 2.20
+ **/
+GtkOrientation
+gtk_tool_shell_get_text_orientation (GtkToolShell *shell)
+{
+  GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
+
+  if (iface->get_text_orientation)
+    return GTK_TOOL_SHELL_GET_IFACE (shell)->get_text_orientation (shell);
+
+  return GTK_ORIENTATION_HORIZONTAL;
+}
+
+/**
+ * gtk_tool_shell_get_text_alignment:
+ * @shell: a #GtkToolShell
+ *
+ * Retrieves the current text alignment for the tool shell. Tool items must not
+ * call this function directly, but rely on gtk_tool_item_get_text_alignment()
+ * instead.
+ *
+ * Return value: the current text alignment of @shell
+ *
+ * Since: 2.20
+ **/
+gfloat
+gtk_tool_shell_get_text_alignment (GtkToolShell *shell)
+{
+  GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
+
+  if (iface->get_text_alignment)
+    return GTK_TOOL_SHELL_GET_IFACE (shell)->get_text_alignment (shell);
+
+  return 0.5f;
+}
+
+/**
+ * gtk_tool_shell_get_ellipsize_mode
+ * @shell: a #GtkToolShell
+ *
+ * Retrieves the current ellipsize mode for the tool shell. Tool items must not
+ * call this function directly, but rely on gtk_tool_item_get_ellipsize_mode()
+ * instead.
+ *
+ * Return value: the current ellipsize mode of @shell
+ *
+ * Since: 2.20
+ **/
+PangoEllipsizeMode
+gtk_tool_shell_get_ellipsize_mode (GtkToolShell *shell)
+{
+  GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
+
+  if (iface->get_ellipsize_mode)
+    return GTK_TOOL_SHELL_GET_IFACE (shell)->get_ellipsize_mode (shell);
+
+  return PANGO_ELLIPSIZE_NONE;
+}
+
+/**
+ * gtk_tool_shell_get_text_size_group:
+ * @shell: a #GtkToolShell
+ *
+ * Retrieves the current text size group for the tool shell. Tool items must not
+ * call this function directly, but rely on gtk_tool_item_get_text_size_group()
+ * instead.
+ *
+ * Return value: (transfer none): the current text size group of @shell
+ *
+ * Since: 2.20
+ **/
+GtkSizeGroup *
+gtk_tool_shell_get_text_size_group (GtkToolShell *shell)
+{
+  GtkToolShellIface *iface = GTK_TOOL_SHELL_GET_IFACE (shell);
+
+  if (iface->get_text_size_group)
+    return GTK_TOOL_SHELL_GET_IFACE (shell)->get_text_size_group (shell);
+
+  return NULL;
 }
 
 #define __GTK_TOOL_SHELL_C__

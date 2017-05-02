@@ -20,6 +20,8 @@
 #include "gtkiconcachevalidator.h"
 
 #include <glib.h>
+
+#undef GDK_PIXBUF_DISABLE_DEPRECATED
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 

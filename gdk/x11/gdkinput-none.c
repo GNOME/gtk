@@ -37,7 +37,7 @@ _gdk_input_init (GdkDisplay *display)
   _gdk_init_input_core (display);
   
   display_x11->input_devices = g_list_append (NULL, display->core_pointer);
-  display_x11->input_ignore_core = FALSE;
+  display->ignore_core_events = FALSE;
 }
 
 void 
@@ -72,16 +72,10 @@ _gdk_device_get_history (GdkDevice         *device,
   return FALSE;
 }
 
-gboolean
-_gdk_input_enable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
+void
+_gdk_input_select_events (GdkWindow        *impl_window,
+			  GdkDevicePrivate *gdkdev)
 {
-  return TRUE;
-}
-
-gboolean
-_gdk_input_disable_window(GdkWindow *window, GdkDevicePrivate *gdkdev)
-{
-  return TRUE;
 }
 
 gboolean
@@ -99,13 +93,14 @@ _gdk_input_configure_event (XConfigureEvent *xevent,
 }
 
 void 
-_gdk_input_enter_event (XCrossingEvent *xevent, 
-			GdkWindow      *window)
+_gdk_input_crossing_event (GdkWindow *window,
+			   gboolean enter)
 {
 }
 
 gint 
 _gdk_input_grab_pointer (GdkWindow *     window,
+			 GdkWindow      *native_window,
 			 gint            owner_events,
 			 GdkEventMask    event_mask,
 			 GdkWindow *     confine_to,

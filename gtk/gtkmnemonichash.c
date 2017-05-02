@@ -127,8 +127,8 @@ _gtk_mnemonic_hash_activate (GtkMnemonicHash *mnemonic_hash,
     {
       widget = GTK_WIDGET (list->data);
       
-      if (GTK_WIDGET_IS_SENSITIVE (widget) &&
-	  GTK_WIDGET_MAPPED (widget) &&
+      if (gtk_widget_is_sensitive (widget) &&
+	  gtk_widget_get_mapped (widget) &&
           widget->window &&
 	  gdk_window_is_viewable (widget->window))
 	{

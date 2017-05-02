@@ -7,6 +7,6 @@ target=@gdktarget@
 Name: GDK
 Description: GTK+ Drawing Kit (${target} target)
 Version: @VERSION@
-Requires: gdk-pixbuf-2.0 @GDK_PACKAGES@
+Requires: @GDK_PACKAGES@
 Libs: -L${libdir} -lgdk-${target}-@GTK_API_VERSION@ @GDK_EXTRA_LIBS@
 Cflags: -I${includedir}/gtk-2.0 -I${libdir}/gtk-2.0/include @GDK_EXTRA_CFLAGS@

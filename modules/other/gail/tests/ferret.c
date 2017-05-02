@@ -1,7 +1,10 @@
 #define MAX_BUFFER 256
+#undef GTK_DISABLE_DEPRECATED
 #define GTK_ENABLE_BROKEN
 #define MAX_GROUPS 20
 #define MAX_NAME_VALUE 20
+
+#include "config.h"
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -11,8 +14,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <strings.h>
+
 #include "testlib.h"
-#include "config.h"
 
 typedef enum
 {
@@ -426,11 +429,14 @@ static void _send_to_festival (const gchar *role_name,
 
 static void _festival_write (const gchar *command_string, int fd)
 {
+  gssize n_bytes;
+
   if (fd < 0) {
     perror("socket");
     return;
   }
-  write(fd, command_string, strlen(command_string));
+  n_bytes = write(fd, command_string, strlen(command_string));
+  g_assert (n_bytes == strlen(command_string));
 }
 
 static void _speak_caret_event (AtkObject *aobject)
@@ -611,14 +617,14 @@ ferret_get_name_from_container (AtkObject *aobject)
 static gint
 _print_object (AtkObject *aobject)
 {
-    G_CONST_RETURN gchar * parent_name = NULL;
-    G_CONST_RETURN gchar * name = NULL;
-    G_CONST_RETURN gchar * description = NULL;
-    G_CONST_RETURN gchar * typename = NULL;
-    G_CONST_RETURN gchar * parent_typename = NULL;
-    G_CONST_RETURN gchar * role_name = NULL;
-    G_CONST_RETURN gchar * accel_name = NULL;
-    G_CONST_RETURN gchar * text = NULL;
+    const gchar * parent_name = NULL;
+    const gchar * name = NULL;
+    const gchar * description = NULL;
+    const gchar * typename = NULL;
+    const gchar * parent_typename = NULL;
+    const gchar * role_name = NULL;
+    const gchar * accel_name = NULL;
+    const gchar * text = NULL;
     AtkRole role;
     AtkObject *parent = NULL;
     static AtkObject *prev_aobject = NULL;
@@ -808,8 +814,8 @@ _print_relation (AtkObject *aobject)
     if (relation_set)
       {
         AtkRelation * relation;
-        G_CONST_RETURN gchar * relation_name = NULL;
-        G_CONST_RETURN gchar * relation_obj_name = NULL;
+        const gchar * relation_name = NULL;
+        const gchar * relation_obj_name = NULL;
         AtkRelationType relation_type;
         AtkObject *relation_obj;
         GPtrArray * relation_arry;
@@ -898,7 +904,7 @@ _print_state (AtkObject *aobject)
       {
         gboolean boolean_value;
         AtkStateType one_state;
-        G_CONST_RETURN gchar *name;
+        const gchar *name;
         gint i;
 
         for (i=0; i < sizeof(states_to_track)/sizeof(AtkStateType); i++)
@@ -923,9 +929,9 @@ _print_state (AtkObject *aobject)
 static gint
 _print_action (AtkAction *aobject)
 {
-    G_CONST_RETURN gchar *action_name;
-    G_CONST_RETURN gchar *action_description;
-    G_CONST_RETURN gchar *action_keybinding;
+    const gchar *action_name;
+    const gchar *action_description;
+    const gchar *action_keybinding;
     gchar *label_str, *output_str;
     gint group_num;
     gint num_actions, j;
@@ -959,7 +965,7 @@ _print_action (AtkAction *aobject)
         nv->atkobj = ATK_OBJECT(aobject);
         nv->action_num = j;
         nv->signal_id = g_signal_connect (GTK_OBJECT (nv->button),
-          "clicked", GTK_SIGNAL_FUNC (_action_cb), nv);
+          "clicked", G_CALLBACK (_action_cb), nv);
 
         g_free(label_str);
 
@@ -1022,7 +1028,7 @@ _print_component (AtkComponent *aobject)
 static gint
 _print_image (AtkImage *aobject)
 {
-    G_CONST_RETURN gchar *image_desc;
+    const gchar *image_desc;
     gchar *output_str;
     gint x = 0;
     gint y = 0;
@@ -1100,7 +1106,7 @@ _print_selection (AtkSelection *aobject)
 
     for (j = 0; j < n_selected; j++)
     {
-      G_CONST_RETURN gchar *selected_name;
+      const gchar *selected_name;
       AtkObject *selected_object;
 
       selected_object = atk_selection_ref_selection (aobject, j);
@@ -1122,7 +1128,7 @@ static gint
 _print_table (AtkTable *aobject)
 {
     gchar *label_str, *output_str;
-    G_CONST_RETURN gchar *col_desc;
+    const gchar *col_desc;
     AtkObject *caption;
     gint n_cols, n_rows;
     gint i;
@@ -1147,7 +1153,7 @@ _print_table (AtkTable *aobject)
     caption = atk_table_get_caption(aobject);
     if (caption)
       {
-        G_CONST_RETURN gchar* caption_name;
+        const gchar* caption_name;
 
         caption_name = atk_object_get_name (caption);
         if (caption_name)
@@ -1593,7 +1599,7 @@ _create_notebook (void)
 
   g_signal_connect (GTK_OBJECT (notebook),
                       "switch-page",
-                      GTK_SIGNAL_FUNC (_update_current_page),
+                      G_CALLBACK (_update_current_page),
                       NULL);
 }
 
@@ -1663,7 +1669,7 @@ _create_window (void)
         gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, FALSE);
 
         g_signal_connect (GTK_OBJECT (window), "destroy",
-                           GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+                           G_CALLBACK (gtk_widget_destroyed),
                            &window);
 
         gtk_window_set_title (GTK_WINDOW (window), "GTK+ Ferret Output");
@@ -1685,26 +1691,26 @@ _create_window (void)
         gtk_widget_show (menu);
 
         _add_menu(&menu, &menuitem_trackmouse, "Track Mouse", track_mouse,
-           GTK_SIGNAL_FUNC(_toggle_trackmouse));
+           G_CALLBACK(_toggle_trackmouse));
         _add_menu(&menu, &menuitem_trackfocus, "Track Focus", track_focus,
-           GTK_SIGNAL_FUNC(_toggle_trackfocus));
+           G_CALLBACK(_toggle_trackfocus));
         _add_menu(&menu, &menuitem_magnifier, "Magnifier", use_magnifier,
-           GTK_SIGNAL_FUNC(_toggle_magnifier));
+           G_CALLBACK(_toggle_magnifier));
         _add_menu(&menu, &menuitem_festival, "Festival", use_festival,
-           GTK_SIGNAL_FUNC(_toggle_festival));
+           G_CALLBACK(_toggle_festival));
         _add_menu(&menu, &menuitem_festival_terse, "Festival Terse",
           (!say_role && !say_accel),
-          GTK_SIGNAL_FUNC(_toggle_festival_terse));
+          G_CALLBACK(_toggle_festival_terse));
         _add_menu(&menu, &menuitem_terminal, "Terminal Output", display_ascii,
-           GTK_SIGNAL_FUNC(_toggle_terminal));
+           G_CALLBACK(_toggle_terminal));
         _add_menu(&menu, &menuitem_no_signals, "No ATK Signals", no_signals,
-           GTK_SIGNAL_FUNC(_toggle_no_signals));
+           G_CALLBACK(_toggle_no_signals));
 
         _create_notebook ();
         gtk_container_add (GTK_CONTAINER (vbox1), GTK_WIDGET (notebook));
         gtk_widget_show (GTK_WIDGET (notebook));
     }
-    if (!GTK_WIDGET_VISIBLE (window))
+    if (!gtk_widget_get_visible (window))
         gtk_widget_show (window);
 
     mainWindow = GTK_WIDGET (window);
@@ -1856,7 +1862,7 @@ _get_group(TabInfo *tab, GroupId group_id, const gchar *groupname)
        if (group->is_scrolled)
          {
            group->frame = gtk_scrolled_window_new (NULL, NULL);
-           gtk_widget_set_usize(GTK_WIDGET(group->frame), -2,
+           gtk_widget_set_size_request (GTK_WIDGET (group->frame), -2,
              group->default_height);
            group->scroll_outer_frame = GTK_FRAME(gtk_frame_new(groupname));
            gtk_container_add(GTK_CONTAINER(group->scroll_outer_frame),

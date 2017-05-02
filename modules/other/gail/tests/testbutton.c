@@ -42,7 +42,7 @@ _check_object (AtkObject *obj)
    */
   {
     AtkRole valid_roles[NUM_VALID_ROLES];
-    G_CONST_RETURN char *name;
+    const char *name;
     AtkObject *atk_button;
     GtkWidget *widget;
 
@@ -148,7 +148,7 @@ _print_states (AtkObject *obj)
   for (i = 0; i < 64; i++)
   {
      AtkStateType one_state;
-     G_CONST_RETURN gchar *name;
+     const gchar *name;
 
      if (atk_state_set_contains_state (state_set, i))
      {
@@ -168,7 +168,7 @@ static void
 _print_button_image_info(AtkObject *obj) {
 
   gint height, width;
-  G_CONST_RETURN gchar *desc;
+  const gchar *desc;
 
   height = width = 0;
 

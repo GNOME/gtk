@@ -26,6 +26,7 @@
 #include <unistd.h>
 
 #include <glib.h>
+#include <gio/gdesktopappinfo.h>
 
 #include "gdkx.h"
 #include "gdkapplaunchcontext.h"
@@ -36,54 +37,43 @@
 
 
 static char *
-get_display_name (GFile *file)
+get_display_name (GFile     *file,
+                  GFileInfo *info)
 {
-  GFileInfo *info;
   char *name, *tmp;
 
-  /* This does sync I/O, which isn't ideal.
-   * It should probably use the NautilusFile machinery
-   */
-
   name = NULL;
-  info = g_file_query_info (file,
-			    G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
   if (info)
-    {
-      name = g_strdup (g_file_info_get_display_name (info));
-      g_object_unref (info);
-    }
+    name = g_strdup (g_file_info_get_display_name (info));
 
   if (name == NULL)
     {
       name = g_file_get_basename (file);
       if (!g_utf8_validate (name, -1, NULL))
-	{
-	  tmp = name;
-	  name =
-	    g_uri_escape_string (name, G_URI_RESERVED_CHARS_ALLOWED_IN_PATH,
-				 TRUE);
-	  g_free (tmp);
-	}
+        {
+          tmp = name;
+          name =
+            g_uri_escape_string (name, G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, TRUE);
+          g_free (tmp);
+        }
     }
 
   return name;
 }
 
 static GIcon *
-get_icon (GFile *file)
+get_icon (GFile     *file,
+          GFileInfo *info)
 {
-  GFileInfo *info;
   GIcon *icon;
 
   icon = NULL;
-  info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_ICON, 0, NULL, NULL);
+
   if (info)
     {
       icon = g_file_info_get_icon (info);
       if (icon)
-	g_object_ref (icon);
-      g_object_unref (info);
+        g_object_ref (icon);
     }
 
   return icon;
@@ -99,13 +89,13 @@ gicon_to_string (GIcon *icon)
     {
       file = g_file_icon_get_file (G_FILE_ICON (icon));
       if (file)
-	return g_file_get_path (file);
+        return g_file_get_path (file);
     }
   else if (G_IS_THEMED_ICON (icon))
     {
       names = g_themed_icon_get_names (G_THEMED_ICON (icon));
       if (names)
-	return g_strdup (names[0]);
+        return g_strdup (names[0]);
     }
   else if (G_IS_EMBLEMED_ICON (icon))
     {
@@ -121,11 +111,11 @@ gicon_to_string (GIcon *icon)
 
 static void
 end_startup_notification (GdkDisplay *display,
-			  const char *startup_id)
+                          const char *startup_id)
 {
   gdk_x11_display_broadcast_startup_message (display, "remove",
-					     "ID", startup_id,
-					     NULL);
+                                             "ID", startup_id,
+                                             NULL);
 }
 
 
@@ -210,19 +200,19 @@ startup_timeout (void *data)
       next = tmp->next;
 
       elapsed =
-	((((double) now.tv_sec - sn_data->time.tv_sec) * G_USEC_PER_SEC +
-	  (now.tv_usec - sn_data->time.tv_usec))) / 1000.0;
+        ((((double) now.tv_sec - sn_data->time.tv_sec) * G_USEC_PER_SEC +
+          (now.tv_usec - sn_data->time.tv_usec))) / 1000.0;
 
       if (elapsed >= STARTUP_TIMEOUT_LENGTH)
-	{
-	  std->contexts = g_slist_remove (std->contexts, sn_data);
-	  end_startup_notification (sn_data->display, sn_data->startup_id);
-	  free_startup_notification_data (sn_data);
-	}
+        {
+          std->contexts = g_slist_remove (std->contexts, sn_data);
+          end_startup_notification (sn_data->display, sn_data->startup_id);
+          free_startup_notification_data (sn_data);
+        }
       else
-	{
-	  min_timeout = MIN (min_timeout, (STARTUP_TIMEOUT_LENGTH - elapsed));
-	}
+        {
+          min_timeout = MIN (min_timeout, (STARTUP_TIMEOUT_LENGTH - elapsed));
+        }
 
       tmp = next;
     }
@@ -239,7 +229,7 @@ startup_timeout (void *data)
 
 static void
 add_startup_timeout (GdkScreen  *screen,
-		     const char *startup_id)
+                     const char *startup_id)
 {
   StartupTimeoutData *data;
   StartupNotificationData *sn_data;
@@ -253,7 +243,7 @@ add_startup_timeout (GdkScreen  *screen,
       data->timeout_id = 0;
 
       g_object_set_data_full (G_OBJECT (screen), "appinfo-startup-data",
-			      data, free_startup_timeout);
+                              data, free_startup_timeout);
     }
 
   sn_data = g_new (StartupNotificationData, 1);
@@ -265,14 +255,14 @@ add_startup_timeout (GdkScreen  *screen,
 
   if (data->timeout_id == 0)
     data->timeout_id = g_timeout_add_seconds (STARTUP_TIMEOUT_LENGTH_SECONDS,
-					      startup_timeout, data);
+                                              startup_timeout, data);
 }
 
 
 char *
 _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
-				      GAppInfo          *info, 
-				      GList             *files)
+                                      GAppInfo          *info,
+                                      GList             *files)
 {
   static int sequence = 0;
   GdkAppLaunchContextPrivate *priv;
@@ -282,11 +272,13 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
   char *description;
   char *icon_name;
   const char *binary_name;
+  const char *application_id;
   char *screen_str;
   char *workspace_str;
   GIcon *icon;
   guint32 timestamp;
   char *startup_id;
+  GFileInfo *fileinfo;
 
   priv = GDK_APP_LAUNCH_CONTEXT (context)->priv;
 
@@ -306,16 +298,32 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
       screen = gdk_display_get_default_screen (display);
     }
 
+  fileinfo = NULL;
+
   files_count = g_list_length (files);
   if (files_count == 0)
-    description = g_strdup_printf (_("Starting %s"), g_app_info_get_name (info));
+    {
+      description = g_strdup_printf (_("Starting %s"), g_app_info_get_name (info));
+    }
   else if (files_count == 1)
-    description = g_strdup_printf (_("Opening %s"), get_display_name (files->data));
+    {
+      gchar *display_name;
+
+      if (g_file_is_native (files->data))
+        fileinfo = g_file_query_info (files->data,
+                                      G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
+                                      G_FILE_ATTRIBUTE_STANDARD_ICON,
+                                      0, NULL, NULL);
+
+      display_name = get_display_name (files->data, fileinfo);
+      description = g_strdup_printf (_("Opening %s"), display_name);
+      g_free (display_name);
+    }
   else
-    description = g_strdup_printf (dngettext (GETTEXT_PACKAGE,
-					      "Opening %d Item",
-					      "Opening %d Items",
-					      files_count), files_count);
+    description = g_strdup_printf (g_dngettext (GETTEXT_PACKAGE,
+                                                "Opening %d Item",
+                                                "Opening %d Items",
+                                                files_count), files_count);
 
   icon_name = NULL;
   if (priv->icon_name)
@@ -325,20 +333,22 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
       icon = NULL;
 
       if (priv->icon != NULL)
-	icon = g_object_ref (priv->icon);
+        icon = g_object_ref (priv->icon);
       else if (files_count == 1)
-	icon = get_icon (files->data);
+        icon = get_icon (files->data, fileinfo);
 
       if (icon == NULL)
-	{
-	  icon = g_app_info_get_icon (info);
-	  g_object_ref (icon);
-	}
+        {
+          icon = g_app_info_get_icon (info);
+          if (icon != NULL)
+            g_object_ref (icon);
+        }
 
-      if (icon)
-	icon_name = gicon_to_string (icon);
-
-      g_object_unref (icon);
+      if (icon != NULL)
+        {
+          icon_name = gicon_to_string (icon);
+          g_object_unref (icon);
+        }
     }
 
   binary_name = g_app_info_get_executable (info);
@@ -348,36 +358,42 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
     timestamp = gdk_x11_display_get_user_time (display);
 
   screen_str = g_strdup_printf ("%d", gdk_screen_get_number (screen));
-  if (priv->workspace > -1) 
+  if (priv->workspace > -1)
     workspace_str = g_strdup_printf ("%d", priv->workspace);
   else
     workspace_str = NULL;
 
+  if (G_IS_DESKTOP_APP_INFO (info))
+    application_id = g_desktop_app_info_get_filename (G_DESKTOP_APP_INFO (info));
+  else
+    application_id = NULL;
 
   startup_id = g_strdup_printf ("%s-%lu-%s-%s-%d_TIME%lu",
-				g_get_prgname (),
-				(unsigned long)getpid (),
-				g_get_host_name (),
-				binary_name,
-				sequence++,
-				(unsigned long)timestamp);
+                                g_get_prgname (),
+                                (unsigned long)getpid (),
+                                g_get_host_name (),
+                                binary_name,
+                                sequence++,
+                                (unsigned long)timestamp);
 
-  
   gdk_x11_display_broadcast_startup_message (display, "new",
-					     "ID", startup_id,
-					     "NAME", g_app_info_get_name (info),
-					     "SCREEN", screen_str,
-					     "BIN", binary_name,
-					     "ICON", icon_name,
-					     "DESKTOP", workspace_str,
-					     "DESCRIPTION", description,
-					     "WMCLASS", NULL, /* FIXME */
-					     NULL);
+                                             "ID", startup_id,
+                                             "NAME", g_app_info_get_name (info),
+                                             "SCREEN", screen_str,
+                                             "BIN", binary_name,
+                                             "ICON", icon_name,
+                                             "DESKTOP", workspace_str,
+                                             "DESCRIPTION", description,
+                                             "WMCLASS", NULL, /* FIXME */
+                                             "APPLICATION_ID", application_id,
+                                             NULL);
 
   g_free (description);
   g_free (screen_str);
   g_free (workspace_str);
   g_free (icon_name);
+  if (fileinfo)
+    g_object_unref (fileinfo);
 
   add_startup_timeout (screen, startup_id);
 
@@ -386,8 +402,8 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
 
 
 void
-_gdk_windowing_launch_failed (GAppLaunchContext *context, 
-			      const char        *startup_notify_id)
+_gdk_windowing_launch_failed (GAppLaunchContext *context,
+                              const char        *startup_notify_id)
 {
   GdkAppLaunchContextPrivate *priv;
   GdkScreen *screen;
@@ -409,22 +425,22 @@ _gdk_windowing_launch_failed (GAppLaunchContext *context,
   if (data)
     {
       for (l = data->contexts; l != NULL; l = l->next)
-	{
-	  sn_data = l->data;
-	  if (strcmp (startup_notify_id, sn_data->startup_id) == 0)
-	    {
-	      data->contexts = g_slist_remove (data->contexts, sn_data);
-	      end_startup_notification (sn_data->display, sn_data->startup_id);
-	      free_startup_notification_data (sn_data);
-					      
-	      break;
-	    }
-	}
+        {
+          sn_data = l->data;
+          if (strcmp (startup_notify_id, sn_data->startup_id) == 0)
+            {
+              data->contexts = g_slist_remove (data->contexts, sn_data);
+              end_startup_notification (sn_data->display, sn_data->startup_id);
+              free_startup_notification_data (sn_data);
+
+              break;
+            }
+        }
 
       if (data->contexts == NULL)
-	{
-	  g_source_remove (data->timeout_id);
-	  data->timeout_id = 0;
-	}
+        {
+          g_source_remove (data->timeout_id);
+          data->timeout_id = 0;
+        }
     }
 }

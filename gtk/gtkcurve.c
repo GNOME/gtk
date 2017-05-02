@@ -24,6 +24,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GDK_DISABLE_DEPRECATED
+#undef GTK_DISABLE_DEPRECATED
+
 #include "config.h"
 #include <stdlib.h>
 #include <string.h>
@@ -378,7 +381,7 @@ gtk_curve_draw (GtkCurve *c, gint width, gint height)
     gtk_curve_interpolate (c, width, height);
 
   state = GTK_STATE_NORMAL;
-  if (!GTK_WIDGET_IS_SENSITIVE (GTK_WIDGET (c)))
+  if (!gtk_widget_is_sensitive (GTK_WIDGET (c)))
     state = GTK_STATE_INSENSITIVE;
 
   style = GTK_WIDGET (c)->style;

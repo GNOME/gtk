@@ -19,6 +19,9 @@ one time.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRadioAction ##### -->
 <para>
 The <structname>GtkRadioAction</structname> struct contains 

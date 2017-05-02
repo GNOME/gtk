@@ -88,7 +88,7 @@ static void                 gtk_print_backend_lpr_print_stream    (GtkPrintBacke
 static void
 gtk_print_backend_lpr_register_type (GTypeModule *module)
 {
-  static const GTypeInfo print_backend_lpr_info =
+  const GTypeInfo print_backend_lpr_info =
   {
     sizeof (GtkPrintBackendLprClass),
     NULL,		/* base_init */
@@ -179,7 +179,7 @@ _cairo_write (void                *closure,
 
   while (length > 0) 
     {
-      g_io_channel_write_chars (io, data, length, &written, &error);
+      g_io_channel_write_chars (io, (const gchar*)data, length, &written, &error);
 
       if (error != NULL)
 	{
@@ -191,7 +191,7 @@ _cairo_write (void                *closure,
 	}    
 
       GTK_NOTE (PRINTING,
-                g_print ("LPR Backend: Wrote %i bytes to temp file\n", written));
+                g_print ("LPR Backend: Wrote %" G_GSIZE_FORMAT " bytes to temp file\n", written));
 
       data += written;
       length -= written;
@@ -211,8 +211,9 @@ lpr_printer_create_cairo_surface (GtkPrinter       *printer,
   
   surface = cairo_ps_surface_create_for_stream (_cairo_write, cache_io, width, height);
 
-  /* TODO: DPI from settings object? */
-  cairo_surface_set_fallback_resolution (surface, 300, 300);
+  cairo_surface_set_fallback_resolution (surface,
+                                         2.0 * gtk_print_settings_get_printer_lpi (settings),
+                                         2.0 * gtk_print_settings_get_printer_lpi (settings));
 
   return surface;
 }
@@ -277,7 +278,7 @@ lpr_write (GIOChannel   *source,
     {
       gsize bytes_written;
 
-      g_io_channel_write_chars (ps->in, 
+      g_io_channel_write_chars (ps->in,
                                 buf, 
 				bytes_read, 
 				&bytes_written, 
@@ -289,8 +290,6 @@ lpr_write (GIOChannel   *source,
       lpr_print_cb (GTK_PRINT_BACKEND_LPR (ps->backend), 
 		    error, user_data);
 
-      if (error)
-	g_error_free (error);
 
       if (error != NULL)
         {
@@ -304,7 +303,7 @@ lpr_write (GIOChannel   *source,
     }
 
   GTK_NOTE (PRINTING,
-            g_print ("LPR Backend: Writting %i byte chunk to lpr pipe\n", bytes_read));
+            g_print ("LPR Backend: Writting %" G_GSIZE_FORMAT " byte chunk to lpr pipe\n", bytes_read));
 
 
   return TRUE;
@@ -321,21 +320,19 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
 				    GDestroyNotify          dnotify)
 {
   GError *print_error = NULL;
-  GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  gint argc;  
+  gint argc;
   gint in_fd;
   gchar **argv = NULL;
   const char *cmd_line;
-  
-  printer = gtk_print_job_get_printer (job);
+
   settings = gtk_print_job_get_settings (job);
 
   cmd_line = gtk_print_settings_get (settings, "lpr-commandline");
   if (cmd_line == NULL)
     cmd_line = LPR_COMMAND;
-  
+
   ps = g_new0 (_PrintStreamData, 1);
   ps->callback = callback;
   ps->user_data = user_data;
@@ -345,7 +342,7 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
 
  /* spawn lpr with pipes and pipe ps file to lpr */
   if (!g_shell_parse_argv (cmd_line, &argc, &argv, &print_error))
-    goto out; 
+    goto out;
 
   if (!g_spawn_async_with_pipes (NULL,
                                  argv,
@@ -367,13 +364,13 @@ gtk_print_backend_lpr_print_stream (GtkPrintBackend        *print_backend,
     {
       if (ps->in != NULL)
         g_io_channel_unref (ps->in);
-      
+
       goto out;
     }
 
   g_io_channel_set_close_on_unref (ps->in, TRUE);
 
-  g_io_add_watch (data_io, 
+  g_io_add_watch (data_io,
                   G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP,
                   (GIOFunc) lpr_write,
                   ps);
@@ -429,6 +426,7 @@ lpr_printer_get_options (GtkPrinter           *printer,
   g_object_unref (option);
 
   option = gtk_printer_option_new ("gtk-main-page-custom-input", _("Command Line"), GTK_PRINTER_OPTION_TYPE_STRING);
+  gtk_printer_option_set_activates_default (option, TRUE);
   option->group = g_strdup ("GtkPrintDialogExtension");
   if (settings != NULL &&
       (command = gtk_print_settings_get (settings, "lpr-commandline"))!= NULL)
@@ -448,7 +446,16 @@ lpr_printer_get_settings_from_options (GtkPrinter          *printer,
   GtkPrinterOption *option;
 
   option = gtk_printer_option_set_lookup (options, "gtk-main-page-custom-input");
-  gtk_print_settings_set (settings, "lpr-commandline", option->value);
+  if (option)
+    gtk_print_settings_set (settings, "lpr-commandline", option->value);
+
+  option = gtk_printer_option_set_lookup (options, "gtk-n-up");
+  if (option)
+    gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_NUMBER_UP, option->value);
+
+  option = gtk_printer_option_set_lookup (options, "gtk-n-up-layout");
+  if (option)
+    gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT, option->value);
 }
 
 static void
@@ -471,6 +478,8 @@ lpr_printer_prepare_for_print (GtkPrinter       *printer,
   print_job->collate = gtk_print_settings_get_collate (settings);
   print_job->reverse = gtk_print_settings_get_reverse (settings);
   print_job->num_copies = gtk_print_settings_get_n_copies (settings);
+  print_job->number_up = gtk_print_settings_get_number_up (settings);
+  print_job->number_up_layout = gtk_print_settings_get_number_up_layout (settings);
 
   scale = gtk_print_settings_get_scale (settings);
   if (scale != 100.0)

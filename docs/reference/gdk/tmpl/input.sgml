@@ -34,20 +34,18 @@ callbacks.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
-<!-- ##### FUNCTION gdk_input_add_full ##### -->
-<para>
-Establish a callback when a condition becomes true on
-a file descriptor.
-</para>
+<!-- ##### SECTION Image ##### -->
 
-@source: a file descriptor.
-@condition: the condition.
-@function: the callback function.
-@data: callback data passed to @function.
-@destroy: callback function to call with @data when the input
-  handler is removed.
-@Returns: a tag that can later be used as an argument to
- gdk_input_remove().
+
+<!-- ##### FUNCTION gdk_input_add_full ##### -->
+
+
+@source: 
+@condition: 
+@function: 
+@data: 
+@destroy: 
+@Returns: 
 
 
 <!-- ##### ENUM GdkInputCondition ##### -->
@@ -88,17 +86,13 @@ structure or object that @data points to.
 
 
 <!-- ##### FUNCTION gdk_input_add ##### -->
-<para>
-Establish a callback when a condition becomes true on
-a file descriptor.
-</para>
 
-@source: a file descriptor.
-@condition: the condition.
-@function: the callback function.
-@data: callback data passed to @function.
-@Returns: a tag that can later be used as an argument to
- gdk_input_remove().
+
+@source: 
+@condition: 
+@function: 
+@data: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_input_remove ##### -->

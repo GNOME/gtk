@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_SELECTION_H__
+#define __GDK_SELECTION_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_SELECTION_H__
-#define __GDK_SELECTION_H__
 
 #include <gdk/gdktypes.h>
 
@@ -86,7 +86,7 @@ void	   gdk_selection_convert   (GdkWindow	 *requestor,
 				    GdkAtom	  selection,
 				    GdkAtom	  target,
 				    guint32	  time_);
-gboolean   gdk_selection_property_get (GdkWindow  *requestor,
+gint       gdk_selection_property_get (GdkWindow  *requestor,
 				       guchar	 **data,
 				       GdkAtom	  *prop_type,
 				       gint	  *prop_format);

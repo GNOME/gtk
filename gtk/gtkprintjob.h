@@ -17,12 +17,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_PRINT_JOB_H__
+#define __GTK_PRINT_JOB_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_UNIX_PRINT_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtkunixprint.h> can be included directly."
 #endif
-
-#ifndef __GTK_PRINT_JOB_H__
-#define __GTK_PRINT_JOB_H__
 
 #include <cairo.h>
 
@@ -66,6 +66,8 @@ struct _GtkPrintJob
   guint GSEAL (rotate_to_orientation) : 1;
   guint GSEAL (collate)               : 1;
   guint GSEAL (reverse)               : 1;
+  guint GSEAL (number_up);
+  GtkNumberUpLayout GSEAL (number_up_layout);
 };
 
 struct _GtkPrintJobClass
@@ -91,7 +93,7 @@ GtkPrintJob             *gtk_print_job_new                    (const gchar      
 							       GtkPageSetup             *page_setup);
 GtkPrintSettings        *gtk_print_job_get_settings           (GtkPrintJob              *job);
 GtkPrinter              *gtk_print_job_get_printer            (GtkPrintJob              *job);
-G_CONST_RETURN gchar    *gtk_print_job_get_title              (GtkPrintJob              *job);
+const gchar *            gtk_print_job_get_title              (GtkPrintJob              *job);
 GtkPrintStatus           gtk_print_job_get_status             (GtkPrintJob              *job);
 gboolean                 gtk_print_job_set_source_file        (GtkPrintJob              *job,
 							       const gchar              *filename,

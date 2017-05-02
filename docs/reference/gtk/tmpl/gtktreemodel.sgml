@@ -196,6 +196,9 @@ enum
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTreeModel ##### -->
 <para>
 
@@ -255,10 +258,6 @@ the <structfield>stamp</structfield> member, and put model-specific
 data in the three <structfield>user_data</structfield> members.
 </para>
 
-@stamp: A unique stamp to catch invalid iterators
-@user_data: Model specific data
-@user_data2: Model specific data
-@user_data3: Model specific data
 
 <!-- ##### STRUCT GtkTreePath ##### -->
 <para>
@@ -327,6 +326,7 @@ section.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -345,7 +345,7 @@ section.
 </para>
 
 @first_index: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -363,6 +363,7 @@ section.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -409,6 +410,16 @@ compatibility reasons.
 </para>
 
 @path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_path_get_indices_with_depth ##### -->
+<para>
+
+</para>
+
+@path: 
+@depth: 
 @Returns: 
 
 
@@ -796,7 +807,7 @@ versions of GTK+.
 
 @tree_model: 
 @iter: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_tree_model_get_valist ##### -->

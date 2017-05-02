@@ -345,11 +345,12 @@ command line option.</simpara>
 <title>Is there a Windows version of GTK+? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>The Win32 port of GTK+ is maintained concurrently with the Xwindows
-version in CVS. As such it is a supported architecture.</para>
+version in Git. As such it is a supported architecture.</para>
 
 <para>The Win32 port has been predominately done by Tor Lillqvist. Tor
-maintains some information on <ulink url="http://www.gimp.org/~tml/gimp/win32/">
-GTK+ and GIMP for Windows</ulink>.</para>
+maintains some information on the
+  Windows <ulink url="http://www.gtk.org/download.html">download
+    page</ulink> (32bit and 64bit).</para>
 
 <para>There is a pre-compiled, easy-to-install version of GTK+ for
 windows on the <ulink url="http://www.dropline.net/gtk/">
@@ -670,70 +671,56 @@ successful, try executing it.</para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>Whats this CVS thing that everyone keeps talking about,
+<title>What's this Git thing that everyone keeps talking about,
 and how do I access it? <emphasis>[GTK 2.x]</emphasis></title>
 
-<para>CVS is the Concurrent Version System and is a very
+<para>Git is a version control system and it is a very
 popular means of version control for software projects. It is
 designed to allow multiple authors to simultanously operate on the same
 source tree.  This source tree is centrally maintained, but each
 developer has a local mirror of this repository that they make
 their changes to.</para>
 
-<para>The GTK+ developers use a CVS repository to store the
+<para>The GTK+ developers use a Git repository to store the
 master copy of the current development version of GTK+. As
 such, people wishing to contribute patches to GTK+ should
-generate them against the CVS version. Normal people should
+generate them against the Git version. Normal people should
 use the packaged releases.</para>
 
-<para>The CVS toolset is available as RPM packages from the
-usual RedHat sites. The latest version is available at <ulink
-url="http://download.cyclic.com/pub/">http://download.cyclic.com/pub/
-</ulink></para>
+<para>The Git toolset is available as a package on most distributions
+  and the released tarballs are available
+  from <ulink url="http://git-scm.com/">http://git-scm.com/</ulink>.</para>
 
-<para>Anyone can download the latest CVS version of GTK+ by
+<para>Anyone can download the latest Git version of GTK+ by
 using anonymous access using the following steps:</para>
 
 <itemizedlist>
-<listitem><simpara> In a bourne shell descendant (e.g. bash) type:</simpara>
+<listitem><simpara>In a bourne shell descendant (e.g. bash) type:</simpara>
 <para><literallayout>
-<literal>CVSROOT=':pserver:anonymous@anoncvs.gnome.org:/cvs/gnome'</literal>
-<literal>export CVSROOT</literal>
-</literallayout></para>
-</listitem>
-
-<listitem><simpara>Next, the first time the source tree is
-checked out, a cvs login is needed. </simpara>
-<para><literallayout>
-<literal>cvs login</literal>
-</literallayout></para>
-<para>This will ask you for a password. There is no
-password for cvs.gimp.org, so just enter a carriage return.</para>
-</listitem>
-
-<listitem><simpara>To get the tree and place it in a subdir of your
-current working directory, issue the command:</simpara>
-<para><literallayout>
-<literal>cvs -z3 get gtk+</literal>
+<literal>git clone git://git.gnome.org/gtk+</literal>
 </literallayout></para>
 <para>Note that with the GTK+ 1.1 tree, glib has been moved to
-a separate CVS module, so if you don't have glib installed you will
-need to get that as well:</para>
-<para><literallayout>
-<literal>cvs -z3 get glib</literal>
+a separate Git module, so if you don't have glib installed you will
+need to get that as well:<literallayout>
+<literal>git clone git://git.gnome.org/glib</literal>
 </literallayout></para>
 </listitem>
 </itemizedlist>
 
-<para>The CVS archive stores both the current development version of
-GTK+ (the CVS HEAD branch) and all current and past stable versions.
+<para>The Git archive stores both the current development version of
+GTK+ (the Git master branch) and all current and past stable versions.
 If you want to retrieve a specific version of GTK+ you have to specify
-the CVS tag corresponding to the version you want to checkout. If you
+the Git tag corresponding to the version you want to checkout. If you
 want to checkout the current GTK+ 2.2 stable source code, you would need
 to use the following command:</para>
 
 <para><literallayout>
-<literal>cvs -z3 get -r gtk-2-2 gtk+</literal>
+<literal>git checkout --track -b gtk-2-24 origin/gtk-2-24</literal>
+</literallayout></para>
+
+<para>You can switch between branches once set up more easily using:</para>
+<para><literallayout>
+<literal>git checkout master</literal>
 </literallayout></para>
 </sect1>
 
@@ -789,7 +776,7 @@ disgrace to the widget set will gladly be included.</para>
 <para>The new widgets that get added to GTK+ are generally either
 replacements for existing widgets that are no longer
 deemed to be adequate, or have been developed externally to GTK+ but
-have been widely tested. 
+have been widely tested.</para>
 
 <para>Before you spend months of your valuable time implementing your
 revolutionary widget, it is highly recommended that you get some
@@ -824,8 +811,8 @@ However, bindings for many other languages are available.</para>
 <para>So, after you have installed GTK+ there are a couple of
 things that can ease you into developing applications with
 it. There is the GTK+ Tutorial <ulink
-url="http://www.gtk.org/tutorial/">
-http://www.gtk.org/tutorial/</ulink>, which is undergoing
+url="http://library.gnome.org/devel/gtk-tutorial/stable/">
+http://library.gnome.org/devel/gtk-tutorial/stable/</ulink>, which is undergoing
 development. This will introduce you to writing applications
 using C.</para>
 
@@ -2108,10 +2095,10 @@ not.</para>
 snippet:</para>
 
 <programlisting role="C">
-     gtk_widget_ref(widget);
+     g_object_ref(widget);
      gtk_container_remove(GTK_CONTAINER(old_parent), widget);
      gtk_container_add(GTK_CONTAINER(new_parent), widget);
-     gtk_widget_unref(widget);
+     g_object_unref(widget);
 </programlisting>
 
 </sect1>
@@ -2307,8 +2294,8 @@ used, as in:</para>
                NULL, gtk_widget_get_colormap(top),
                &amp;pixmap_mask, NULL, pixfile);
   pixw = gtk_pixmap_new (pixmap, pixmap_mask);
-  gdk_pixmap_unref (pixmap);
-  gdk_pixmap_unref (pixmap_mask);
+  g_object_unref (pixmap);
+  g_object_unref (pixmap_mask);
 </programlisting>
 
 </sect1>

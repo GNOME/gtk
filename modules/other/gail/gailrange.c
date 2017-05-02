@@ -48,6 +48,8 @@ static void	    gail_range_get_maximum_value (AtkValue       *obj,
                                                   GValue         *value);
 static void	    gail_range_get_minimum_value (AtkValue       *obj,
                                                   GValue         *value);
+static void         gail_range_get_minimum_increment (AtkValue       *obj,
+                                                      GValue         *value);
 static gboolean	    gail_range_set_current_value (AtkValue       *obj,
                                                   const GValue   *value);
 static void         gail_range_value_changed     (GtkAdjustment  *adjustment,
@@ -58,11 +60,11 @@ static gboolean     gail_range_do_action        (AtkAction       *action,
                                                 gint            i);
 static gboolean     idle_do_action              (gpointer        data);
 static gint         gail_range_get_n_actions    (AtkAction       *action);
-static G_CONST_RETURN gchar* gail_range_get_description  (AtkAction    *action, 
+static const gchar* gail_range_get_description  (AtkAction    *action,
                                                          gint          i);
-static G_CONST_RETURN gchar* gail_range_get_keybinding   (AtkAction     *action,
+static const gchar* gail_range_get_keybinding   (AtkAction     *action,
                                                          gint            i);
-static G_CONST_RETURN gchar* gail_range_action_get_name  (AtkAction    *action,
+static const gchar* gail_range_action_get_name  (AtkAction    *action,
                                                         gint            i);
 static gboolean   gail_range_set_description  (AtkAction       *action,
                                               gint            i,
@@ -159,6 +161,7 @@ atk_value_interface_init (AtkValueIface *iface)
   iface->get_current_value = gail_range_get_current_value;
   iface->get_maximum_value = gail_range_get_maximum_value;
   iface->get_minimum_value = gail_range_get_minimum_value;
+  iface->get_minimum_increment = gail_range_get_minimum_increment;
   iface->set_current_value = gail_range_set_current_value;
 }
 
@@ -185,6 +188,9 @@ gail_range_get_maximum_value (AtkValue		*obj,
                               GValue		*value)
 {
   GailRange *range;
+  GtkRange *gtk_range;
+  GtkAdjustment *gtk_adjustment;
+  gdouble max = 0;
 
   g_return_if_fail (GAIL_IS_RANGE (obj));
 
@@ -194,8 +200,20 @@ gail_range_get_maximum_value (AtkValue		*obj,
      * Adjustment has not been specified
      */
     return;
-
+ 
   atk_value_get_maximum_value (ATK_VALUE (range->adjustment), value);
+
+  gtk_range = GTK_RANGE (gtk_accessible_get_widget (GTK_ACCESSIBLE (range)));
+  g_return_if_fail (gtk_range);
+
+  gtk_adjustment = gtk_range_get_adjustment (gtk_range);
+  max = g_value_get_double (value);
+  max -=  gtk_adjustment_get_page_size (gtk_adjustment);
+
+  if (gtk_range_get_restrict_to_fill_level (gtk_range))
+    max = MIN (max, gtk_range_get_fill_level (gtk_range));
+
+  g_value_set_double (value, max);
 }
 
 static void	 
@@ -214,6 +232,23 @@ gail_range_get_minimum_value (AtkValue		*obj,
     return;
 
   atk_value_get_minimum_value (ATK_VALUE (range->adjustment), value);
+}
+
+static void
+gail_range_get_minimum_increment (AtkValue *obj, GValue *value)
+{
+ GailRange *range;
+
+  g_return_if_fail (GAIL_IS_RANGE (obj));
+
+  range = GAIL_RANGE (obj);
+  if (range->adjustment == NULL)
+    /*
+     * Adjustment has not been specified
+     */
+    return;
+
+  atk_value_get_minimum_increment (ATK_VALUE (range->adjustment), value);
 }
 
 static gboolean	 gail_range_set_current_value (AtkValue		*obj,
@@ -346,7 +381,7 @@ gail_range_do_action (AtkAction *action,
      * State is defunct
      */
     return FALSE;
-  if (!GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+  if (!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
   if(i==0)
    {
@@ -370,7 +405,7 @@ idle_do_action (gpointer data)
   range->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (range)->widget;
   if (widget == NULL /* State is defunct */ ||
-     !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+     !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
    gtk_widget_activate (widget);
@@ -384,12 +419,12 @@ gail_range_get_n_actions (AtkAction *action)
     return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_range_get_description (AtkAction *action,
                               gint      i)
 {
   GailRange *range;
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   range = GAIL_RANGE (action);
   if (i==0)
@@ -399,7 +434,7 @@ gail_range_get_description (AtkAction *action,
   return return_value;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_range_get_keybinding (AtkAction *action,
                               gint      i)
 {
@@ -446,11 +481,11 @@ gail_range_get_keybinding (AtkAction *action,
   return return_value;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_range_action_get_name (AtkAction *action,
                            gint      i)
 {
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
   
   if (i==0)
    return_value = "activate";

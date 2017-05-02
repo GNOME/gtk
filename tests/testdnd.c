@@ -24,7 +24,7 @@
 /* Target side drag signals */
 
 /* XPM */
-static char * drag_icon_xpm[] = {
+static const char * drag_icon_xpm[] = {
 "36 48 9 1",
 " 	c None",
 ".	c #020204",
@@ -85,7 +85,7 @@ static char * drag_icon_xpm[] = {
 "...................................."};
 
 /* XPM */
-static char * trashcan_closed_xpm[] = {
+static const char * trashcan_closed_xpm[] = {
 "64 80 17 1",
 " 	c None",
 ".	c #030304",
@@ -186,7 +186,7 @@ static char * trashcan_closed_xpm[] = {
 "                                                                "};
 
 /* XPM */
-static char * trashcan_open_xpm[] = {
+static const char * trashcan_open_xpm[] = {
 "64 80 17 1",
 " 	c None",
 ".	c #030304",
@@ -286,10 +286,8 @@ static char * trashcan_open_xpm[] = {
 "                                                                ",
 "                                                                "};
 
-GdkPixmap *trashcan_open;
-GdkPixmap *trashcan_open_mask;
-GdkPixmap *trashcan_closed;
-GdkPixmap *trashcan_closed_mask;
+GdkPixbuf *trashcan_open;
+GdkPixbuf *trashcan_closed;
 
 gboolean have_drag;
 
@@ -313,8 +311,7 @@ target_drag_leave	   (GtkWidget	       *widget,
 {
   g_print("leave\n");
   have_drag = FALSE;
-  gtk_image_set_from_pixmap (GTK_IMAGE (widget),
-			     trashcan_closed, trashcan_closed_mask);
+  gtk_image_set_from_pixbuf (GTK_IMAGE (widget), trashcan_closed);
 }
 
 gboolean
@@ -330,13 +327,12 @@ target_drag_motion	   (GtkWidget	       *widget,
   if (!have_drag)
     {
       have_drag = TRUE;
-      gtk_image_set_from_pixmap (GTK_IMAGE (widget),
-				 trashcan_open, trashcan_open_mask);
+      gtk_image_set_from_pixbuf (GTK_IMAGE (widget), trashcan_open);
     }
 
   source_widget = gtk_drag_get_source_widget (context);
   g_print ("motion, source %s\n", source_widget ?
-	   GTK_OBJECT_TYPE_NAME (source_widget) :
+	   G_OBJECT_TYPE_NAME (source_widget) :
 	   "NULL");
 
   tmp_list = context->targets;
@@ -363,8 +359,7 @@ target_drag_drop	   (GtkWidget	       *widget,
   g_print("drop\n");
   have_drag = FALSE;
 
-  gtk_image_set_from_pixmap (GTK_IMAGE (widget),
-			     trashcan_closed, trashcan_closed_mask);
+  gtk_image_set_from_pixbuf (GTK_IMAGE (widget), trashcan_closed);
 
   if (context->targets)
     {
@@ -432,7 +427,7 @@ source_drag_data_get  (GtkWidget          *widget,
 }
   
 /* The following is a rather elaborate example demonstrating/testing
- * changing of the window heirarchy during a drag - in this case,
+ * changing of the window hierarchy during a drag - in this case,
  * via a "spring-loaded" popup window.
  */
 static GtkWidget *popup_window = NULL;
@@ -582,7 +577,7 @@ test_init (void)
 		   G_FILE_TEST_EXISTS))
     {
       g_setenv ("GDK_PIXBUF_MODULE_FILE", "../gdk-pixbuf/gdk-pixbuf.loaders", TRUE);
-      g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/gtk.immodules", TRUE);
+      g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/immodules.cache", TRUE);
     }
 }
 
@@ -594,8 +589,7 @@ main (int argc, char **argv)
   GtkWidget *label;
   GtkWidget *pixmap;
   GtkWidget *button;
-  GdkPixmap *drag_icon;
-  GdkPixmap *drag_mask;
+  GdkPixbuf *drag_icon;
 
   test_init ();
   
@@ -609,19 +603,9 @@ main (int argc, char **argv)
   table = gtk_table_new (2, 2, FALSE);
   gtk_container_add (GTK_CONTAINER (window), table);
 
-  drag_icon = gdk_pixmap_colormap_create_from_xpm_d (NULL,
-						     gtk_widget_get_colormap (window),
-						     &drag_mask,
-						     NULL, drag_icon_xpm);
-
-  trashcan_open = gdk_pixmap_colormap_create_from_xpm_d (NULL,
-							 gtk_widget_get_colormap (window),
-							 &trashcan_open_mask,
-							 NULL, trashcan_open_xpm);
-  trashcan_closed = gdk_pixmap_colormap_create_from_xpm_d (NULL,
-							   gtk_widget_get_colormap (window),
-							   &trashcan_closed_mask,
-							   NULL, trashcan_closed_xpm);
+  drag_icon = gdk_pixbuf_new_from_xpm_data (drag_icon_xpm);
+  trashcan_open = gdk_pixbuf_new_from_xpm_data (trashcan_open_xpm);
+  trashcan_closed = gdk_pixbuf_new_from_xpm_data (trashcan_closed_xpm);
   
   label = gtk_label_new ("Drop Here\n");
 
@@ -653,7 +637,7 @@ main (int argc, char **argv)
   g_signal_connect (label, "drag_leave",
 		    G_CALLBACK (popsite_leave), NULL);
   
-  pixmap = gtk_image_new_from_pixmap (trashcan_closed, trashcan_closed_mask);
+  pixmap = gtk_image_new_from_pixbuf (trashcan_closed);
   gtk_drag_dest_set (pixmap, 0, NULL, 0, 0);
   gtk_table_attach (GTK_TABLE (table), pixmap, 1, 2, 0, 1,
 		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
@@ -678,12 +662,9 @@ main (int argc, char **argv)
   gtk_drag_source_set (button, GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
 		       target_table, n_targets, 
 		       GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_drag_source_set_icon (button, 
-			    gtk_widget_get_colormap (window),
-			    drag_icon, drag_mask);
+  gtk_drag_source_set_icon_pixbuf (button, drag_icon);
 
   g_object_unref (drag_icon);
-  g_object_unref (drag_mask);
 
   gtk_table_attach (GTK_TABLE (table), button, 0, 1, 1, 2,
 		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,

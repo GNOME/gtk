@@ -20,6 +20,9 @@ property. When activated, it emits the toggled signal.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCellRendererToggle ##### -->
 <para>
 
@@ -64,6 +67,7 @@ property. When activated, it emits the toggled signal.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -95,6 +99,24 @@ property. When activated, it emits the toggled signal.
 
 
 <!-- ##### FUNCTION gtk_cell_renderer_toggle_set_active ##### -->
+<para>
+
+</para>
+
+@toggle: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_toggle_get_activatable ##### -->
+<para>
+
+</para>
+
+@toggle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_toggle_set_activatable ##### -->
 <para>
 
 </para>

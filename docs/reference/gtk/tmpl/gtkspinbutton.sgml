@@ -99,6 +99,9 @@ void create_floating_spin_button (void) {
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkSpinButton ##### -->
 <para>
 <structfield>entry</structfield> is the #GtkEntry part of the #GtkSpinButton 
@@ -246,13 +249,13 @@ GTK_SPIN_END</entry>
 
 <!-- ##### FUNCTION gtk_spin_button_configure ##### -->
 <para>
-Changes the properties of an existing spin button. The adjustment, climb rate, and number of decimal places are all changed accordingly, after this function call.
+
 </para>
 
-@spin_button: a #GtkSpinButton.
-@adjustment: a #GtkAdjustment.
-@climb_rate: the new climb rate.
-@digits: the number of decimal places to display in the spin button.
+@spin_button: 
+@adjustment: 
+@climb_rate: 
+@digits: 
 
 
 <!-- ##### FUNCTION gtk_spin_button_new ##### -->
@@ -326,13 +329,13 @@ Creates a new #GtkSpinButton.
 
 <!-- ##### MACRO gtk_spin_button_get_value_as_float ##### -->
 <para>
-Gets the value in the @spin_button. This function is deprecated,
-use gtk_spin_button_get_value() instead.
+Gets the value in the @spin_button. 
 </para>
 
-@Returns: the value of @spin_button.
+@Returns: the value of @spin_button
+@Deprecated: Use gtk_spin_button_get_value() instead.
 <!-- # Unused Parameters # -->
-@spin_button: a #GtkSpinButton.
+@spin_button: a #GtkSpinButton
 
 
 <!-- ##### FUNCTION gtk_spin_button_get_value_as_int ##### -->

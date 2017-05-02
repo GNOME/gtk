@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_PROGRESS_BAR_H__
 #define __GTK_PROGRESS_BAR_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkprogress.h>
 
 
@@ -137,7 +136,7 @@ void       gtk_progress_bar_set_pulse_step       (GtkProgressBar *pbar,
 void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
 						  GtkProgressBarOrientation orientation);
 
-G_CONST_RETURN gchar* gtk_progress_bar_get_text       (GtkProgressBar *pbar);
+const gchar*          gtk_progress_bar_get_text       (GtkProgressBar *pbar);
 gdouble               gtk_progress_bar_get_fraction   (GtkProgressBar *pbar);
 gdouble               gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
 

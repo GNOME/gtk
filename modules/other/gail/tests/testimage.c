@@ -76,9 +76,9 @@ static void
 _print_image_info(AtkObject *obj) {
 
   gint height, width;
-  G_CONST_RETURN gchar *desc;
-  G_CONST_RETURN gchar *name = atk_object_get_name (obj);
-  G_CONST_RETURN gchar *type_name = g_type_name(G_TYPE_FROM_INSTANCE (obj));
+  const gchar *desc;
+  const gchar *name = atk_object_get_name (obj);
+  const gchar *type_name = g_type_name(G_TYPE_FROM_INSTANCE (obj));
 
   height = width = 0;
 

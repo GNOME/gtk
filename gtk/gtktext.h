@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifdef GTK_ENABLE_BROKEN
@@ -30,18 +30,17 @@
 #define __GTK_TEXT_H__
 
 
-#include <gdk/gdk.h>
-#include <gtk/gtkadjustment.h>
 #include <gtk/gtkoldeditable.h>
+
 
 G_BEGIN_DECLS
 
 #define GTK_TYPE_TEXT                  (gtk_text_get_type ())
-#define GTK_TEXT(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT, GtkText))
-#define GTK_TEXT_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT, GtkTextClass))
-#define GTK_IS_TEXT(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT))
-#define GTK_IS_TEXT_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT))
-#define GTK_TEXT_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TEXT, GtkTextClass))
+#define GTK_TEXT(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT, GtkText))
+#define GTK_TEXT_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT, GtkTextClass))
+#define GTK_IS_TEXT(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT))
+#define GTK_IS_TEXT_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT))
+#define GTK_TEXT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT, GtkTextClass))
 
 
 typedef struct _GtkTextFont       GtkTextFont;
@@ -176,7 +175,7 @@ struct _GtkTextClass
 };
 
 
-GtkType    gtk_text_get_type        (void) G_GNUC_CONST;
+GType      gtk_text_get_type        (void) G_GNUC_CONST;
 GtkWidget* gtk_text_new             (GtkAdjustment *hadj,
 				     GtkAdjustment *vadj);
 void       gtk_text_set_editable    (GtkText       *text,

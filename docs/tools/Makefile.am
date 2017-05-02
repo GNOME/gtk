@@ -9,15 +9,15 @@ INCLUDES = 						\
 	$(GTK_DEP_CFLAGS)
 
 DEPS = 									\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib) 				\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
 LDADDS = 								\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
-	$(top_builddir)/gdk/$(gdktargetlib)        			\
+	$(top_builddir)/gdk/$(gdktargetlib)				\
 	$(top_builddir)/gtk/$(gtktargetlib)				\
-	$(GTK_DEP_LIBS)
+	$(GTK_DEP_LIBS)							\
+	$(GDK_DEP_LIBS)							\
+	-lm
 
 if USE_X11
 noinst_PROGRAMS = 		\
@@ -40,3 +40,5 @@ clean-local:
 	    *) rm -f $$file ;; \
 	  esac ; \
 	done
+
+-include $(top_srcdir)/git.mk

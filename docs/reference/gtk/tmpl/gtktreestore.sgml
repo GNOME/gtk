@@ -44,6 +44,9 @@ column. The "type" attribute specifies the data type for the column.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTreeStore ##### -->
 <para>
 
@@ -56,7 +59,7 @@ column. The "type" attribute specifies the data type for the column.
 </para>
 
 @n_columns: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -98,7 +101,7 @@ column. The "type" attribute specifies the data type for the column.
 
 @tree_store: 
 @iter: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_tree_store_set_valist ##### -->
@@ -175,7 +178,7 @@ column. The "type" attribute specifies the data type for the column.
 @iter: 
 @parent: 
 @position: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_tree_store_insert_with_valuesv ##### -->

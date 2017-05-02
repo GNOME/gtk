@@ -147,12 +147,12 @@ gtk_item_factory_init (GtkItemFactory	    *ifactory)
  * gtk_item_factory_new:
  * @container_type: the kind of menu to create; can be
  *    #GTK_TYPE_MENU_BAR, #GTK_TYPE_MENU or #GTK_TYPE_OPTION_MENU
- * @path: the factory path of the new item factory, a string of the form 
+ * @path: the factory path of the new item factory, a string of the form
  *    <literal>"&lt;name&gt;"</literal>
- * @accel_group: a #GtkAccelGroup to which the accelerators for the
+ * @accel_group: (allow-none): a #GtkAccelGroup to which the accelerators for the
  *    menu items will be added, or %NULL to create a new one
  * @returns: a new #GtkItemFactory
- * 
+ *
  * Creates a new #GtkItemFactory.
  *
  * Beware that the returned object does not have a floating reference.
@@ -423,7 +423,7 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
  * gtk_item_factory_from_path:
  * @path: a string starting with a factory path of the form 
  *   <literal>"&lt;name&gt;"</literal>
- * @returns: the #GtkItemFactory created for the given factory path, or %NULL 
+ * @returns: (allow-none): the #GtkItemFactory created for the given factory path, or %NULL 
  *
  * Finds an item factory which has been constructed using the 
  * <literal>"&lt;name&gt;"</literal> prefix of @path as the @path argument 
@@ -521,7 +521,7 @@ gtk_item_factory_finalize (GObject *object)
 /**
  * gtk_item_factory_from_widget:
  * @widget: a widget
- * @returns: the item factory from which @widget was created, or %NULL
+ * @returns: (allow-none): the item factory from which @widget was created, or %NULL
  *
  * Obtains the item factory from which a widget was created.
  *
@@ -560,7 +560,7 @@ gtk_item_factory_from_widget (GtkWidget	       *widget)
  *
  * Deprecated: 2.4: Use #GtkUIManager instead.
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_item_factory_path_from_widget (GtkWidget	    *widget)
 {
   gchar* path;
@@ -638,7 +638,7 @@ gtk_item_factory_create_items_ac (GtkItemFactory      *ifactory,
  * gtk_item_factory_get_widget:
  * @ifactory: a #GtkItemFactory
  * @path: the path to the widget
- * @returns: the widget for the given path, or %NULL if @path doesn't lead
+ * @returns: (allow-none): the widget for the given path, or %NULL if @path doesn't lead
  *   to a widget
  *
  * Obtains the widget which corresponds to @path. 
@@ -691,7 +691,7 @@ gtk_item_factory_get_widget (GtkItemFactory *ifactory,
  * @ifactory: a #GtkItemFactory
  * @action: an action as specified in the @callback_action field
  *   of #GtkItemFactoryEntry
- * @returns: the widget which corresponds to the given action, or %NULL
+ * @returns: (allow-none): the widget which corresponds to the given action, or %NULL
  *   if no widget was found
  *
  * Obtains the widget which was constructed from the #GtkItemFactoryEntry
@@ -728,7 +728,7 @@ gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,
  * gtk_item_factory_get_item:
  * @ifactory: a #GtkItemFactory
  * @path: the path to the menu item
- * @returns: the menu item for the given path, or %NULL if @path doesn't
+ * @returns: (allow-none): the menu item for the given path, or %NULL if @path doesn't
  *   lead to a menu item
  *
  * Obtains the menu item which corresponds to @path. 
@@ -762,7 +762,7 @@ gtk_item_factory_get_item (GtkItemFactory *ifactory,
  * @ifactory: a #GtkItemFactory
  * @action: an action as specified in the @callback_action field
  *   of #GtkItemFactoryEntry
- * @returns: the menu item which corresponds to the given action, or %NULL
+ * @returns: (allow-none): the menu item which corresponds to the given action, or %NULL
  *   if no menu item was found
  *
  * Obtains the menu item which was constructed from the first 
@@ -964,7 +964,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   else if (type_id == quark_type_toggle_item)
     type = GTK_TYPE_CHECK_MENU_ITEM;
   else if (type_id == quark_type_separator_item)
-    type = GTK_TYPE_MENU_ITEM;
+    type = GTK_TYPE_SEPARATOR_MENU_ITEM;
   else if (type_id == quark_type_branch)
     type = GTK_TYPE_MENU_ITEM;
   else if (type_id == quark_type_last_branch)

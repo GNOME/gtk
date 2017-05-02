@@ -77,7 +77,7 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
  * @format:   the format of the property
  * @text:     the text to convert
  * @length:   the length of @text, in bytes
- * @list:     location to store the list of strings or %NULL. The
+ * @list: (allow-none):     location to store the list of strings or %NULL. The
  *            list should be freed with g_strfreev().
  * 
  * Convert a text property in the giving encoding to

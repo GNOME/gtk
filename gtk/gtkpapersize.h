@@ -18,14 +18,16 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_PAPER_SIZE_H__
+#define __GTK_PAPER_SIZE_H__
+
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_PAPER_SIZE_H__
-#define __GTK_PAPER_SIZE_H__
-
 #include <gtk/gtkenums.h>
+
 
 G_BEGIN_DECLS
 
@@ -62,9 +64,9 @@ gboolean      gtk_paper_size_is_equal     (GtkPaperSize *size1,
 GList        *gtk_paper_size_get_paper_sizes (gboolean include_custom);
 
 /* The width is always the shortest side, measure in mm */
-G_CONST_RETURN gchar *gtk_paper_size_get_name         (GtkPaperSize *size);
-G_CONST_RETURN gchar *gtk_paper_size_get_display_name (GtkPaperSize *size);
-G_CONST_RETURN gchar *gtk_paper_size_get_ppd_name     (GtkPaperSize *size);
+const gchar *gtk_paper_size_get_name         (GtkPaperSize *size);
+const gchar *gtk_paper_size_get_display_name (GtkPaperSize *size);
+const gchar *gtk_paper_size_get_ppd_name     (GtkPaperSize *size);
 
 gdouble  gtk_paper_size_get_width        (GtkPaperSize *size, GtkUnit unit);
 gdouble  gtk_paper_size_get_height       (GtkPaperSize *size, GtkUnit unit);
@@ -85,7 +87,7 @@ gdouble gtk_paper_size_get_default_left_margin   (GtkPaperSize *size,
 gdouble gtk_paper_size_get_default_right_margin  (GtkPaperSize *size,
 						  GtkUnit       unit);
 
-G_CONST_RETURN gchar *gtk_paper_size_get_default (void);
+const gchar *gtk_paper_size_get_default (void);
 
 GtkPaperSize *gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
 					        const gchar *group_name,

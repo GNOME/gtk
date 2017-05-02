@@ -24,16 +24,17 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_SELECTION_H__
+#define __GTK_SELECTION_H__
+
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_SELECTION_H__
-#define __GTK_SELECTION_H__
-
-#include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtktextiter.h>
+
 
 G_BEGIN_DECLS
 
@@ -147,11 +148,12 @@ gboolean gtk_selection_convert       (GtkWidget            *widget,
 				      GdkAtom               target,
 				      guint32               time_);
 
+GdkAtom       gtk_selection_data_get_selection (GtkSelectionData *selection_data);
 GdkAtom       gtk_selection_data_get_target    (GtkSelectionData *selection_data);
 GdkAtom       gtk_selection_data_get_data_type (GtkSelectionData *selection_data);
 gint          gtk_selection_data_get_format    (GtkSelectionData *selection_data);
-const guchar *gtk_selection_data_get_data      (GtkSelectionData *selection_data,
-                                                guint	         *length);
+const guchar *gtk_selection_data_get_data      (GtkSelectionData *selection_data);
+gint          gtk_selection_data_get_length    (GtkSelectionData *selection_data);
 GdkDisplay   *gtk_selection_data_get_display   (GtkSelectionData *selection_data);
 
 void     gtk_selection_data_set      (GtkSelectionData     *selection_data,

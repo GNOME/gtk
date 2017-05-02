@@ -37,6 +37,9 @@ to the ends of the toolbar.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkSeparatorToolItem ##### -->
 <para>
 The #GtkSeparatorToolItem struct contains only private data and
@@ -54,6 +57,7 @@ should only be accessed through the functions described below.
 
 </para>
 
+@void: 
 @Returns: 
 
 

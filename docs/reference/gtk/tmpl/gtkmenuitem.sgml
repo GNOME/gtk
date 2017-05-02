@@ -14,6 +14,24 @@ alignment, events and submenus.
 As it derives from #GtkBin it can hold any valid child widget, altough
 only a few are really useful.
 </para>
+<refsect2 id="GtkMenuItem-BUILDER-UI">
+<title>GtkMenuItem as GtkBuildable</title>
+<para>
+The GtkMenuItem implementation of the GtkBuildable interface
+supports adding a submenu by specifying "submenu" as the "type" 
+attribute of a &lt;child&gt; element.
+</para>
+<example>
+<title>A UI definition fragment with submenus</title>
+<programlisting><![CDATA[
+<object class="GtkMenuItem">
+  <child type="submenu">
+    <object class="GtkMenu"/>
+  </child>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -34,6 +52,9 @@ only a few are really useful.
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkMenuItem ##### -->
@@ -78,12 +99,22 @@ submenu. For normal applications, the relevant signal is "activate".
 
 </para>
 
+<!-- ##### ARG GtkMenuItem:label ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkMenuItem:right-justified ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkMenuItem:submenu ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkMenuItem:use-underline ##### -->
 <para>
 
 </para>
@@ -123,6 +154,7 @@ submenu. For normal applications, the relevant signal is "activate".
 Creates a new #GtkMenuItem.
 </para>
 
+@void: 
 @Returns: the newly created #GtkMenuItem
 
 
@@ -162,6 +194,42 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_menu_item_get_label ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_set_label ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@label: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_get_use_underline ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_menu_item_set_use_underline ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+@setting: 
+
+
 <!-- ##### FUNCTION gtk_menu_item_set_submenu ##### -->
 <para>
 
@@ -180,6 +248,14 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_menu_item_remove_submenu ##### -->
+<para>
+
+</para>
+
+@menu_item: 
+
+
 <!-- ##### FUNCTION gtk_menu_item_set_accel_path ##### -->
 <para>
 
@@ -196,14 +272,6 @@ Creates a new #GtkMenuItem whose child is a #GtkLabel.
 
 @menu_item: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_menu_item_remove_submenu ##### -->
-<para>
-
-</para>
-
-@menu_item: 
 
 
 <!-- ##### FUNCTION gtk_menu_item_select ##### -->

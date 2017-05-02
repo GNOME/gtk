@@ -188,7 +188,7 @@ gtk_text_mark_get_property (GObject    *object,
 
 /**
  * gtk_text_mark_new:
- * @name: mark name or %NULL
+ * @name: (allow-none): mark name or %NULL
  * @left_gravity: whether the mark should have left gravity
  *
  * Creates a text mark. Add it to a buffer using gtk_text_buffer_add_mark().
@@ -283,8 +283,8 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
  * 
  * Gets the buffer this mark is located inside,
  * or %NULL if the mark is deleted.
- * 
- * Return value: the mark's #GtkTextBuffer
+ *
+ * Return value: (transfer none): the mark's #GtkTextBuffer
  **/
 GtkTextBuffer*
 gtk_text_mark_get_buffer (GtkTextMark *mark)

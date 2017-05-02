@@ -513,7 +513,7 @@ gtk_tree_map (GtkWidget *widget)
   GtkWidget *child;
   GList *children;
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
   
   children = tree->children;
   while (children)
@@ -521,15 +521,15 @@ gtk_tree_map (GtkWidget *widget)
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child) &&
-	  !GTK_WIDGET_MAPPED (child))
+      if (gtk_widget_get_visible (child) &&
+	  !gtk_widget_get_mapped (child))
 	gtk_widget_map (child);
       
       if (GTK_TREE_ITEM (child)->subtree)
 	{
 	  child = GTK_WIDGET (GTK_TREE_ITEM (child)->subtree);
 	  
-	  if (GTK_WIDGET_VISIBLE (child) && !GTK_WIDGET_MAPPED (child))
+	  if (gtk_widget_get_visible (child) && !gtk_widget_get_mapped (child))
 	    gtk_widget_map (child);
 	}
     }
@@ -560,7 +560,7 @@ gtk_tree_realize (GtkWidget *widget)
   
   g_return_if_fail (GTK_IS_TREE (widget));
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;
@@ -725,7 +725,7 @@ gtk_tree_remove_items (GtkTree *tree,
 	  g_message("* remove subtree associate at this item [%#x]\n",
 		    (int) GTK_TREE_ITEM(widget)->subtree);
 #endif /* TREE_DEBUG */
-	  if (GTK_WIDGET_MAPPED (GTK_TREE_ITEM(widget)->subtree))
+	  if (gtk_widget_get_mapped (GTK_TREE_ITEM(widget)->subtree))
 	    gtk_widget_unmap (GTK_TREE_ITEM(widget)->subtree);
 	  
 	  gtk_widget_unparent (GTK_TREE_ITEM(widget)->subtree);
@@ -736,7 +736,7 @@ gtk_tree_remove_items (GtkTree *tree,
 #ifdef TREE_DEBUG
       g_message("* unmap and unparent widget [%#x]\n", (int)widget);
 #endif /* TREE_DEBUG */
-      if (GTK_WIDGET_MAPPED (widget))
+      if (gtk_widget_get_mapped (widget))
 	gtk_widget_unmap (widget);
       
       gtk_widget_unparent (widget);
@@ -800,7 +800,7 @@ gtk_tree_remove_items (GtkTree *tree,
       gtk_tree_select_child (root_tree, widget);
     }
   
-  if (GTK_WIDGET_VISIBLE (root_tree))
+  if (gtk_widget_get_visible (GTK_WIDGET (root_tree)))
     {
 #ifdef TREE_DEBUG
       g_message("* query queue resizing for root_tree\n");
@@ -849,7 +849,7 @@ gtk_tree_size_allocate (GtkWidget     *widget,
   tree = GTK_TREE (widget);
   
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
@@ -867,7 +867,7 @@ gtk_tree_size_allocate (GtkWidget     *widget,
 	  child = children->data;
 	  children = children->next;
 	  
-	  if (GTK_WIDGET_VISIBLE (child))
+	  if (gtk_widget_get_visible (child))
 	    {
 	      GtkRequisition child_requisition;
 	      gtk_widget_get_child_requisition (child, &child_requisition);
@@ -879,7 +879,7 @@ gtk_tree_size_allocate (GtkWidget     *widget,
 	      child_allocation.y += child_allocation.height;
 	      
 	      if((subtree = GTK_TREE_ITEM(child)->subtree))
-		if(GTK_WIDGET_VISIBLE (subtree))
+		if(gtk_widget_get_visible (subtree))
 		  {
 		    child_allocation.height = subtree->requisition.height;
 		    gtk_widget_size_allocate (subtree, &child_allocation);
@@ -914,7 +914,7 @@ gtk_tree_size_request (GtkWidget      *widget,
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child))
+      if (gtk_widget_get_visible (child))
 	{
 	  gtk_widget_size_request (child, &child_requisition);
 	  
@@ -922,7 +922,7 @@ gtk_tree_size_request (GtkWidget      *widget,
 	  requisition->height += child_requisition.height;
 	  
 	  if((subtree = GTK_TREE_ITEM(child)->subtree) &&
-	     GTK_WIDGET_VISIBLE (subtree))
+	     gtk_widget_get_visible (subtree))
 	    {
 	      gtk_widget_size_request (subtree, &child_requisition);
 	      
@@ -948,7 +948,7 @@ gtk_tree_unmap (GtkWidget *widget)
   
   g_return_if_fail (GTK_IS_TREE (widget));
   
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
   gdk_window_hide (widget->window);
   
 }

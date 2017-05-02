@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include "gtkmodules.h"
+#include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h" /* GTK_LIBDIR */
@@ -237,7 +238,16 @@ find_module (const gchar *name)
     }
 
   module = g_module_open (module_name, G_MODULE_BIND_LOCAL | G_MODULE_BIND_LAZY);
-  g_free(module_name);
+
+  if (_gtk_module_has_mixed_deps (module))
+    {
+      g_warning ("GTK+ module %s cannot be loaded.\n"
+                 "GTK+ 2.x symbols detected. Using GTK+ 2.x and GTK+ 3 in the same process is not supported.", module_name);
+      g_module_close (module);
+      module = NULL;
+    }
+
+  g_free (module_name);
 
   return module;
 }
@@ -271,6 +281,7 @@ load_module (GSList      *module_list,
 	      info->ref_count++;
 	      
 	      success = TRUE;
+              break;
 	    }
 	}
 
@@ -289,9 +300,16 @@ load_module (GSList      *module_list,
 		g_module_close (module);
 	      else
 		{
+		  GSList *temp;
+
 		  success = TRUE;
-		  info = (GtkModuleInfo *) g_slist_find_custom (gtk_modules, module,
-								(GCompareFunc)cmp_module);
+		  info = NULL;
+
+		  temp = g_slist_find_custom (gtk_modules, module,
+			(GCompareFunc)cmp_module);
+		  if (temp != NULL)
+			info = temp->data;
+
 		  if (!info)
 		    {
 		      info = g_new0 (GtkModuleInfo, 1);
@@ -345,10 +363,17 @@ load_module (GSList      *module_list,
 	{
 	  module_list = g_slist_prepend (module_list, info);
 	}
+      else
+        info->ref_count--;
     }
   else
-    g_message ("Failed to load module \"%s\": %s", name, g_module_error ());
-  
+   {
+      const gchar *error = g_module_error ();
+
+      g_message ("Failed to load module \"%s\"%s%s",
+                 name, error ? ": " : "", error ? error : "");
+    }
+
   return module_list;
 }
 
@@ -511,11 +536,13 @@ _gtk_modules_init (gint        *argc,
 		    G_CALLBACK (display_opened_cb), 
 		    NULL);
 
-  /* Modules specified in the GTK_MODULES environment variable
-   * or on the command line are always loaded, so we'll just leak 
-   * the refcounts.
-   */
-  g_slist_free (load_modules (gtk_modules_args));
+  if (gtk_modules_args) {
+    /* Modules specified in the GTK_MODULES environment variable
+     * or on the command line are always loaded, so we'll just leak 
+     * the refcounts.
+     */
+    g_slist_free (load_modules (gtk_modules_args));
+  }
 }
 
 static void
@@ -536,6 +563,8 @@ _gtk_modules_settings_changed (GtkSettings *settings,
 			       const gchar *modules)
 {
   GSList *new_modules = NULL;
+
+  GTK_NOTE (MODULES, g_print ("gtk-modules setting changed to: %s\n", modules));
 
   /* load/ref before unreffing existing */
   if (modules && modules[0])

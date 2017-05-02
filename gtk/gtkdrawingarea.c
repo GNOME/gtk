@@ -79,13 +79,13 @@ gtk_drawing_area_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
+  if (!gtk_widget_get_has_window (widget))
     {
       GTK_WIDGET_CLASS (gtk_drawing_area_parent_class)->realize (widget);
     }
   else
     {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+      gtk_widget_set_realized (widget, TRUE);
 
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.x = widget->allocation.x;
@@ -119,9 +119,9 @@ gtk_drawing_area_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
-      if (!GTK_WIDGET_NO_WINDOW (widget))
+      if (gtk_widget_get_has_window (widget))
         gdk_window_move_resize (widget->window,
                                 allocation->x, allocation->y,
                                 allocation->width, allocation->height);

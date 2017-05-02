@@ -32,7 +32,9 @@ style "global-style-properties"
   GtkButtonBox::child_min_width = 0
   GtkButtonBox::child_min_height = 0
   GtkArrow::arrow-scaling = 1.0
+  GtkEntry::invisible-char = 10046
 }
+
 class "GtkWidget" style "global-style-properties"
 
 style "defaultfont"
@@ -75,6 +77,14 @@ style "button" = "default"
 #  bg[PRELIGHT] = { 0, 0, 0.75 }
 #  bg[PRELIGHT] = { 0.75, 0, 0x00 }
 }
+
+style "label" = "default"
+{
+ base[PRELIGHT] = "gray"
+ base[ACTIVE] = mix (0.9, "gray", "purple")
+}
+
+class "GtkLabel" style "label"
 
 style "toggle_button" = "button"
 {

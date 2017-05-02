@@ -62,8 +62,6 @@ used by anything other than the DND code in GTK+.
 /* Drag and Drop */
 
 GdkDragContext * gdk_drag_context_new        (void);
-void             gdk_drag_context_ref        (GdkDragContext *context);
-void             gdk_drag_context_unref      (GdkDragContext *context);
 
 These create and refcount GdkDragContexts in a
 straightforward manner.

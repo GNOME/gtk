@@ -33,6 +33,9 @@ and auto-scroll, but your models have to implement the
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTreeDragSource ##### -->
 <para>
 

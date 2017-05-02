@@ -17,16 +17,17 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_IM_CONTEXT_H__
+#define __GTK_IM_CONTEXT_H__
+
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_IM_CONTEXT_H__
-#define __GTK_IM_CONTEXT_H__
-
 #include <gdk/gdk.h>
 #include <gtk/gtkobject.h>
-#include <pango/pango.h>
+
 
 G_BEGIN_DECLS
 
@@ -48,11 +49,13 @@ struct _GtkIMContext
 
 struct _GtkIMContextClass
 {
+  /*< private >*/
   /* Yes, this should be GObjectClass, be we can't fix it without breaking
    * binary compatibility - see bug #90935
    */
   GtkObjectClass parent_class;
 
+  /*< public >*/
   /* Signals */
   void     (*preedit_start)        (GtkIMContext *context);
   void     (*preedit_end)          (GtkIMContext *context);
@@ -86,7 +89,7 @@ struct _GtkIMContextClass
   gboolean (*get_surrounding)     (GtkIMContext   *context,
 				   gchar         **text,
 				   gint           *cursor_index);
-
+  /*< private >*/
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);

@@ -30,6 +30,7 @@
 #include "config.h"
 #include <math.h>
 
+#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 #define __GTK_PIXMAP_C__
 
@@ -63,12 +64,16 @@ gtk_pixmap_class_init (GtkPixmapClass *class)
 static void
 gtk_pixmap_init (GtkPixmap *pixmap)
 {
-  GTK_WIDGET_SET_FLAGS (pixmap, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (pixmap), FALSE);
 
   pixmap->pixmap = NULL;
   pixmap->mask = NULL;
 }
 
+/**
+ * gtk_pixmap_new:
+ * @mask: (allow-none):
+ */
 GtkWidget*
 gtk_pixmap_new (GdkPixmap *val,
 		GdkBitmap *mask)
@@ -131,7 +136,7 @@ gtk_pixmap_set (GtkPixmap *pixmap,
 	  GTK_WIDGET (pixmap)->requisition.width = 0;
 	  GTK_WIDGET (pixmap)->requisition.height = 0;
 	}
-      if (GTK_WIDGET_VISIBLE (pixmap))
+      if (gtk_widget_get_visible (GTK_WIDGET (pixmap)))
 	{
 	  if ((GTK_WIDGET (pixmap)->requisition.width != oldwidth) ||
 	      (GTK_WIDGET (pixmap)->requisition.height != oldheight))
@@ -197,7 +202,7 @@ gtk_pixmap_expose (GtkWidget      *widget,
 	  gdk_gc_set_clip_origin (widget->style->black_gc, x, y);
 	}
 
-      if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE
+      if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE
           && pixmap->build_insensitive)
         {
 	  if (!pixmap->pixmap_insensitive)
@@ -231,7 +236,7 @@ gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap, gboolean build)
 
   pixmap->build_insensitive = build;
 
-  if (GTK_WIDGET_VISIBLE (pixmap))
+  if (gtk_widget_get_visible (GTK_WIDGET (pixmap)))
     {
       gtk_widget_queue_draw (GTK_WIDGET (pixmap));
     }

@@ -2,7 +2,7 @@
 GtkIMContext
 
 <!-- ##### SECTION Short_Description ##### -->
-Base class for input method contexts
+
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -15,6 +15,9 @@ Base class for input method contexts
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkIMContext ##### -->
@@ -69,6 +72,39 @@ Base class for input method contexts
 
 @imcontext: the object which received the signal.
 @Returns: 
+
+<!-- ##### STRUCT GtkIMContextClass ##### -->
+<para>
+
+</para>
+
+@preedit_start: 
+@preedit_end: 
+@preedit_changed: 
+@commit: 
+@retrieve_surrounding: 
+@delete_surrounding: 
+@set_client_window: 
+@get_preedit_string: 
+@filter_keypress: 
+@focus_in: 
+@focus_out: 
+@reset: 
+@set_cursor_location: 
+@set_use_preedit: 
+@set_surrounding: 
+@get_surrounding: 
+
+<!-- ##### STRUCT GtkIMContextInfo ##### -->
+<para>
+
+</para>
+
+@context_id: 
+@context_name: 
+@domain: 
+@domain_dirname: 
+@default_locales: 
 
 <!-- ##### FUNCTION gtk_im_context_set_client_window ##### -->
 <para>

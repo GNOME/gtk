@@ -5,6 +5,9 @@
 /* always defined to indicate that i18n is enabled */
 #define ENABLE_NLS 1
 
+/* Define if gio can sniff image data */
+/* #undef GDK_PIXBUF_USE_GIO_MIME */
+
 /* The prefix for our gettext translation domains. */
 #define GETTEXT_PACKAGE "@GETTEXT_PACKAGE@"
 
@@ -12,7 +15,7 @@
 #define GTK_COMPILED_WITH_DEBUGGING "yes"
 
 /* Define the location where the catalogs will be installed */
-#define GTK_LOCALEDIR "c:/devel/target/HEAD/share/locale"
+#define GTK_LOCALEDIR "NONE/share/locale"
 
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #define HAVE_BIND_TEXTDOMAIN_CODESET 1
@@ -97,6 +100,9 @@
 /* Define to 1 if you have a working `mmap' system call. */
 /* #undef HAVE_MMAP */
 
+/* Define to 1 if libpapi available */
+/* #undef HAVE_PAPI */
+
 /* Define to 1 is libjpeg supports progressive JPEG */
 /* #undef HAVE_PROGRESSIVE_JPEG */
 
@@ -105,9 +111,6 @@
 
 /* Have the Xrandr extension library */
 /* #undef HAVE_RANDR */
-
-/* Define to 1 if the XShape extension is available */
-/* #undef HAVE_SHAPE_EXT */
 
 /* Define to 1 if shm.h is available */
 /* #undef HAVE_SHM_H */
@@ -125,7 +128,11 @@
 #ifndef _MSC_VER
 #define HAVE_STDINT_H 1
 #else
+#if (_MSC_VER >= 1600) /* VS 2010 ships with stdint.h */
+#define HAVE_STDINT_H 1
+#else
 /* #undef HAVE_STDINT_H */
+#endif
 #endif
 
 /* Define to 1 if you have the <stdlib.h> header file. */
@@ -199,7 +206,7 @@
 /* Define to 1 if XFree Xinerama is available */
 /* #undef HAVE_XFREE_XINERAMA */
 
-/* Define to 1 is Xinerama is available */
+/* Define to 1 if xinerama is available */
 /* #undef HAVE_XINERAMA */
 
 /* Define to 1 if you have the `XInternAtoms' function. */
@@ -229,11 +236,22 @@
 /* Define to 1 if you have the `_NSGetEnviron' function. */
 /* #undef HAVE__NSGETENVIRON */
 
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#define LT_OBJDIR ".libs/"
+
 /* Define if <X11/extensions/XIproto.h> needed for xReply */
 /* #undef NEED_XIPROTO_H_FOR_XREPLY */
 
 /* Define to 1 if fd_set is not available */
 #define NO_FD_SET 1
+
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+#ifndef _MSC_VER
+/* #undef NO_MINUS_C_MINUS_O */
+#else 
+#define NO_MINUS_C_MINUS_O 1
+#endif
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B"
@@ -269,7 +287,11 @@
 /* #undef USE_MEDIALIB25 */
 
 /* Define to 1 if XXM is available and should be used */
-#define USE_MMX 1
+#ifndef _MSC_VER
+#  define USE_MMX 1
+#else
+#  undef USE_MMX
+#endif
 
 /* Define to 1 if no XInput should be used */
 /* #undef XINPUT_NONE */

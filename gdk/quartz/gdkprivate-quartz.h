@@ -27,6 +27,7 @@
 #include <gdk/gdkprivate.h>
 #include <gdk/quartz/gdkpixmap-quartz.h>
 #include <gdk/quartz/gdkwindow-quartz.h>
+#include <gdk/quartz/gdkquartz.h>
 
 #include <gdk/gdk.h>
 
@@ -66,11 +67,12 @@ struct _GdkGCQuartz
   GdkCapStyle       cap_style;
   GdkJoinStyle      join_style;
 
-  gfloat           *dash_lengths;
+  CGFloat          *dash_lengths;
   gint              dash_count;
-  gfloat            dash_phase;
+  CGFloat           dash_phase;
 
   CGPatternRef      ts_pattern;
+  void             *ts_pattern_info;
 
   guint             is_window : 1;
 };
@@ -102,12 +104,15 @@ extern GdkWindow *_gdk_root;
 
 extern GdkDragContext *_gdk_quartz_drag_source_context;
 
+#define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)win)->impl))
+
 /* Initialization */
-void _gdk_windowing_window_init  (void);
-void _gdk_events_init            (void);
-void _gdk_visual_init            (void);
-void _gdk_input_init             (void);
-void _gdk_quartz_event_loop_init (void);
+void _gdk_windowing_update_window_sizes     (GdkScreen *screen);
+void _gdk_windowing_window_init             (void);
+void _gdk_events_init                       (void);
+void _gdk_visual_init                       (void);
+void _gdk_input_init                        (void);
+void _gdk_quartz_event_loop_init            (void);
 
 /* GC */
 typedef enum {
@@ -120,23 +125,29 @@ GType  _gdk_gc_quartz_get_type          (void);
 GdkGC *_gdk_quartz_gc_new               (GdkDrawable                *drawable,
 					 GdkGCValues                *values,
 					 GdkGCValuesMask             values_mask);
-void   _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
-					 GdkDrawable                *drawable,
-					 CGContextRef                context,
-					 GdkQuartzContextValuesMask  mask);
+gboolean _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
+					   GdkDrawable                *drawable,
+					   CGContextRef                context,
+					   GdkQuartzContextValuesMask  mask);
 
 /* Colormap */
-void _gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
-					       guint32      pixel,
-					       gfloat      *red,
-					       gfloat      *green,
-					       gfloat      *blue,
-					       gfloat      *alpha);
+CGColorRef _gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,
+                                                        guint32      pixel);
 
 /* Window */
 gboolean    _gdk_quartz_window_is_ancestor          (GdkWindow *ancestor,
                                                      GdkWindow *window);
-gint       _gdk_quartz_window_get_inverted_screen_y (gint       y);
+void       _gdk_quartz_window_gdk_xy_to_xy          (gint       gdk_x,
+                                                     gint       gdk_y,
+                                                     gint      *ns_x,
+                                                     gint      *ns_y);
+void       _gdk_quartz_window_xy_to_gdk_xy          (gint       ns_x,
+                                                     gint       ns_y,
+                                                     gint      *gdk_x,
+                                                     gint      *gdk_y);
+void       _gdk_quartz_window_nspoint_to_gdk_xy     (NSPoint    point,
+                                                     gint      *x,
+                                                     gint      *y);
 GdkWindow *_gdk_quartz_window_find_child            (GdkWindow *window,
 						     gint       x,
 						     gint       y);
@@ -147,23 +158,27 @@ void       _gdk_quartz_window_did_resign_main       (GdkWindow *window);
 void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
                                                      gint       number);
 
+void       _gdk_quartz_window_set_needs_display_in_rect (GdkWindow    *window,
+                                                         GdkRectangle *rect);
+void       _gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
+                                                           GdkRegion    *region);
+
+void       _gdk_quartz_window_update_position           (GdkWindow    *window);
+
 /* Events */
 typedef enum {
-  GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP,
-  GDK_QUARTZ_EVENT_SUBTYPE_FAKE_CROSSING
+  GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP
 } GdkQuartzEventSubType;
 
 void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
                                                         gboolean   got_focus);
-GdkWindow *  _gdk_quartz_events_get_mouse_window       (gboolean   consider_grabs);
-void         _gdk_quartz_events_update_mouse_window    (GdkWindow *window);
-void         _gdk_quartz_events_update_cursor          (GdkWindow *window);
-void         _gdk_quartz_events_send_map_events        (GdkWindow *window);
+void         _gdk_quartz_events_send_map_event         (GdkWindow *window);
 GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
-void         _gdk_quartz_events_trigger_crossing_events(gboolean   defer_to_mainloop);
 
-extern GdkWindow *_gdk_quartz_keyboard_grab_window;
-extern GdkWindow *_gdk_quartz_pointer_grab_window;
+GdkModifierType _gdk_quartz_events_get_current_keyboard_modifiers (void);
+GdkModifierType _gdk_quartz_events_get_current_mouse_modifiers    (void);
+
+void         _gdk_quartz_events_break_all_grabs         (guint32    time);
 
 /* Event loop */
 gboolean   _gdk_quartz_event_loop_check_pending (void);
@@ -183,17 +198,25 @@ GdkImage *_gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
 /* Keys */
 GdkEventType _gdk_quartz_keys_event_type  (NSEvent   *event);
 gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
+void         _gdk_quartz_synthesize_null_key_event (GdkWindow *window);
 
 /* Drawable */
 void        _gdk_quartz_drawable_finish (GdkDrawable *drawable);
+void        _gdk_quartz_drawable_flush  (GdkDrawable *drawable);
 
 /* Geometry */
 void        _gdk_quartz_window_scroll      (GdkWindow       *window,
                                             gint             dx,
                                             gint             dy);
-void        _gdk_quartz_window_move_region (GdkWindow       *window,
-                                            const GdkRegion *region,
-                                            gint             dx,
-                                            gint             dy);
+void        _gdk_quartz_window_queue_translation (GdkWindow *window,
+						  GdkGC     *gc,
+                                                  GdkRegion *area,
+                                                  gint       dx,
+                                                  gint       dy);
+gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
+                                                  GdkRegion *area);
+
+/* Pixmap */
+CGImageRef _gdk_pixmap_get_cgimage (GdkPixmap *pixmap);
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

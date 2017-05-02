@@ -5,7 +5,7 @@
       <menuitem name="New" action="NewAction" position="top" />
       <separator name="Sep1" />
       <separator name="Sep2" />
-      <menuitem name="Quit" action="QuitAction" />
+      <menuitem name="Quit" action="QuitAction" always-show-image="true" />
       <separator name="Sep3" />
     </menu>
     <menu name="EditMenu" action="EditMenuAction">

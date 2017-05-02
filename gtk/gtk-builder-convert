@@ -29,7 +29,7 @@ The [INPUT] file is
   -r, --root             Convert only widget named root and its children
   -h, --help             display this help and exit
 
-When OUTPUT is -, write to standard input.
+When OUTPUT is -, write to standard output.
 
 Examples:
   gtk-builder-convert preference.glade preferences.ui
@@ -42,10 +42,10 @@ import sys
 
 from xml.dom import minidom, Node
 
-WINDOWS = ['GtkWindow',
-           'GtkDialog',
+DIALOGS = ['GtkDialog',
            'GtkFileChooserDialog',
            'GtkMessageDialog']
+WINDOWS = ['GtkWindow'] + DIALOGS
 
 # The subprocess is only available in Python 2.4+
 try:
@@ -146,8 +146,9 @@ def copy_properties(node, props, prop_dict):
 
 class GtkBuilderConverter(object):
 
-    def __init__(self, skip_windows, root):
+    def __init__(self, skip_windows, target_version, root):
         self.skip_windows = skip_windows
+        self.target_version = target_version
         self.root = root
         self.root_objects = []
         self.objects = {}
@@ -243,7 +244,7 @@ class GtkBuilderConverter(object):
                     self._dom.removeChild(node)
 
         # Strip unsupported tags
-        for tag in ['requires']:
+        for tag in ['requires', 'requires-version']:
             for child in self._dom.getElementsByTagName(tag):
                 child.parentNode.removeChild(child)
 
@@ -257,6 +258,8 @@ class GtkBuilderConverter(object):
 
         for node in objects:
             self._convert(node.getAttribute("class"), node)
+            if self._get_object(node.getAttribute('id')) is not None:
+		print "WARNING: duplicate id \"" + node.getAttribute('id') + "\""
             self.objects[node.getAttribute('id')] = node
 
         # Convert Gazpachos UI tag
@@ -269,9 +272,14 @@ class GtkBuilderConverter(object):
 
         # Output the newly created root objects and sort them
         # by attribute id
-        for obj in sorted(self.root_objects,
-                          key=lambda n: n.getAttribute('id'),
-                          reverse=True):
+        # FIXME: Use sorted(self.root_objects,
+        #                   key=lambda n: n.getAttribute('id'),
+        #                   reverse=True):
+        # when we can depend on python 2.4 or higher
+        root_objects = self.root_objects[:]
+        root_objects.sort(lambda a, b: cmp(b.getAttribute('id'),
+                                           a.getAttribute('id')))
+        for obj in root_objects:
             self._interface.childNodes.insert(0, obj)
 
     def _convert(self, klass, node):
@@ -288,6 +296,25 @@ class GtkBuilderConverter(object):
                 self._convert_menu(node, popup=True)
         elif klass in WINDOWS and self.skip_windows:
             self._remove_window(node)
+
+        if self.target_version == "3.0":
+            if klass == "GtkComboBoxEntry":
+                node.setAttribute("class","GtkComboBox")
+                prop = self._dom.createElement("property")
+                prop.setAttribute("name", "has-entry")
+                prop.appendChild(self._dom.createTextNode("True"))
+                node.appendChild(prop)
+            elif klass == "GtkDialog":
+                for child in node.childNodes:
+                    if child.nodeType != Node.ELEMENT_NODE:
+                        continue
+                    if child.tagName != 'property':
+                        continue
+                    if (child.getAttribute("name") not in ("has-separator", "has_separator")):
+                        continue;
+                    node.removeChild(child)
+                    break
+
         self._default_widget_converter(node)
 
     def _default_widget_converter(self, node):
@@ -492,7 +519,7 @@ class GtkBuilderConverter(object):
                 return
 
             if (node.tagName == 'object' and
-                node.getAttribute('class') == 'GtkDialog'):
+                node.getAttribute('class') in DIALOGS):
                 dialog = node
                 break
             node = node.parentNode
@@ -539,6 +566,14 @@ class GtkBuilderConverter(object):
         if not prop.childNodes:
             parent.removeChild(prop)
             return
+
+        translatable_attr = prop.attributes.get('translatable')
+        translatable = translatable_attr is not None and translatable_attr.value == 'yes'
+        has_context_attr = prop.attributes.get('context')
+        has_context = has_context_attr is not None and has_context_attr.value == 'yes'
+        comments_attr = prop.attributes.get('comments')
+        comments = comments_attr is not None and comments_attr.value or None
+
         value = prop.childNodes[0].data
         model = self._create_root_object("GtkListStore",
                                          template="model")
@@ -553,12 +588,23 @@ class GtkBuilderConverter(object):
         data = self._dom.createElement('data')
         model.appendChild(data)
 
+        if value.endswith('\n'):
+            value = value[:-1]
         for item in value.split('\n'):
             row = self._dom.createElement('row')
             data.appendChild(row)
 
             col = self._dom.createElement('col')
             col.setAttribute('id', '0')
+            if translatable:
+                col.setAttribute('translatable', 'yes')
+            if has_context:
+                splitting = item.split('|', 1)
+                if len(splitting) == 2:
+                    context, item = splitting
+                    col.setAttribute('context', context)
+            if comments is not None:
+                col.setAttribute('comments', comments)
             col.appendChild(self._dom.createTextNode(item))
             row.appendChild(col)
 
@@ -706,7 +752,10 @@ def usage():
 def main(args):
     try:
         opts, args = getopt.getopt(args[1:], "hwr:",
-                                   ["help", "skip-windows", "root="])
+                                   ["help",
+                                    "skip-windows",
+                                    "target-version=",
+                                    "root="])
     except getopt.GetoptError:
         usage()
         return 2
@@ -720,6 +769,7 @@ def main(args):
     skip_windows = False
     split = False
     root = None
+    target_version = "2.0"
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -728,8 +778,11 @@ def main(args):
             root = a
         elif o in ("-w", "--skip-windows"):
             skip_windows = True
+        elif o in ("-t", "--target-version"):
+            target_version = a
 
     conv = GtkBuilderConverter(skip_windows=skip_windows,
+                               target_version=target_version,
                                root=root)
     conv.parse_file(input_filename)
 

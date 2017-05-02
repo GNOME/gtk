@@ -7,46 +7,46 @@ Build an interface from an XML UI definition
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 A GtkBuilder is an auxiliary object that reads textual descriptions
-of a user interface and instantiates the described objects. To pass a 
-description to a GtkBuilder, call gtk_builder_add_from_file() or 
+of a user interface and instantiates the described objects. To pass a
+description to a GtkBuilder, call gtk_builder_add_from_file() or
 gtk_builder_add_from_string(). These functions can be called multiple
-times; the builder merges the content of all descriptions. 
+times; the builder merges the content of all descriptions.
 </para>
 <para>
 A GtkBuilder holds a reference to all objects that it has constructed
-and drops these references when it is finalized. This finalization can 
-cause the destruction of non-widget objects or widgets which are not 
-contained in a toplevel window. For toplevel windows constructed by a 
-builder, it is the responsibility of the user to call gtk_widget_destroy() 
+and drops these references when it is finalized. This finalization can
+cause the destruction of non-widget objects or widgets which are not
+contained in a toplevel window. For toplevel windows constructed by a
+builder, it is the responsibility of the user to call gtk_widget_destroy()
 to get rid of them and all the widgets they contain.
 </para>
 <para>
 The functions gtk_builder_get_object() and gtk_builder_get_objects()
-can be used to access the widgets in the interface by the names assigned 
+can be used to access the widgets in the interface by the names assigned
 to them inside the UI description. Toplevel windows returned by these
 functions will stay around until the user explicitly destroys them
-with gtk_widget_destroy(). Other widgets will either be part of a 
+with gtk_widget_destroy(). Other widgets will either be part of a
 larger hierarchy constructed by the builder (in which case you should
-not have to worry about their lifecycle), or without a parent, in which 
-case they have to be added to some container to make use of them.  
+not have to worry about their lifecycle), or without a parent, in which
+case they have to be added to some container to make use of them.
 Non-widget objects need to be reffed with g_object_ref() to keep them
 beyond the lifespan of the builder.
 </para>
 <para>
-The function gtk_builder_connect_signals() and variants thereof can be 
-used to connect handlers to the named signals in the description. 
+The function gtk_builder_connect_signals() and variants thereof can be
+used to connect handlers to the named signals in the description.
 </para>
 
 <refsect2 id="BUILDER-UI"><title>GtkBuilder UI Definitions</title>
 <para>
-GtkBuilder parses textual descriptions of user interfaces which 
-are specified in an XML format which can be roughly described 
-by the DTD below. We refer to these descriptions as 
+GtkBuilder parses textual descriptions of user interfaces which
+are specified in an XML format which can be roughly described
+by the DTD below. We refer to these descriptions as
 <firstterm>GtkBuilder UI definitions</firstterm> or just
 <firstterm>UI definitions</firstterm> if the context is clear.
-Do not confuse GtkBuilder UI Definitions with 
-<link linkend="XML-UI">GtkUIManager UI Definitions</link>, 
-which are more limited in scope. 
+Do not confuse GtkBuilder UI Definitions with
+<link linkend="XML-UI">GtkUIManager UI Definitions</link>,
+which are more limited in scope.
 </para>
 <para>
 <programlisting><![CDATA[
@@ -65,7 +65,7 @@ which are more limited in scope.
 <!ATTLIST requires   lib             	    #REQUIRED
                      version          	    #REQUIRED >
 <!ATTLIST property   name           	    #REQUIRED
-                     translatable   	    #IMPLIED 
+                     translatable   	    #IMPLIED
                      comments               #IMPLIED
                      context                #IMPLIED >
 <!ATTLIST signal     name           	    #REQUIRED
@@ -93,7 +93,7 @@ or columns in a tree model). A &lt;child&gt; element contains
 an &lt;object&gt; element which describes the child object.
 The target toolkit version(s) are described by &lt;requires&gt;
 elements, the "lib" attribute specifies the widget library in
-question (currently the only supported value is "gtk+") and the "version" 
+question (currently the only supported value is "gtk+") and the "version"
 attribute specifies the target version in the form "&lt;major&gt;.&lt;minor&gt;".
 The builder will error out if the version requirements are not met.
 </para>
@@ -101,28 +101,34 @@ The builder will error out if the version requirements are not met.
 Typically, the specific kind of object represented by an
 &lt;object&gt; element is specified by the "class" attribute.
 If the type has not been loaded yet, GTK+ tries to find the
-<function>_get_type()</function> from the class name by applying 
+<function>_get_type()</function> from the class name by applying
 heuristics. This works in most cases, but if necessary, it is
-possible to specify the name of the <function>_get_type()</function> 
-explictly with the "type-func" attribute. As a special case, 
+possible to specify the name of the <function>_get_type()</function>
+explictly with the "type-func" attribute. As a special case,
 GtkBuilder allows to use an object that has been constructed
 by a #GtkUIManager in another part of the UI definition by
 specifying the id of the #GtkUIManager in the "constructor"
 attribute and the name of the object in the "id" attribute.
 </para>
 <para>
-Objects must be given a name with the "id" attribute, which 
-allows the application to retrieve them from the builder with 
-gtk_builder_get_object(). An id is also necessary to use the 
+Objects must be given a name with the "id" attribute, which
+allows the application to retrieve them from the builder with
+gtk_builder_get_object(). An id is also necessary to use the
 object as property value in other parts of the UI definition.
 </para>
+<note><para>Prior to 2.20, GtkBuilder was setting the "name"
+property of constructed widgets to the "id" attribute. In GTK+
+2.20 or newer, you have to use gtk_buildable_get_name() instead
+of gtk_widget_get_name() to obtain the "id", or set the "name"
+property in your UI definition.
+</para></note>
 <para>
 Setting properties of objects is pretty straightforward with
 the &lt;property&gt; element: the "name" attribute specifies
-the name of the property, and the content of the element 
-specifies the value. If the "translatable" attribute is 
+the name of the property, and the content of the element
+specifies the value. If the "translatable" attribute is
 set to a true value, GTK+ uses gettext() (or dgettext() if
-the builder has a translation domain set) to find a translation 
+the builder has a translation domain set) to find a translation
 for the value. This happens before the value is parsed, so
 it can be used for properties of any type, but it is probably
 most useful for string properties. It is also possible to
@@ -134,16 +140,16 @@ GtkBuilder can parse textual representations for the most
 common property types: characters, strings, integers, floating-point
 numbers, booleans (strings like "TRUE", "t", "yes", "y", "1" are
 interpreted as %TRUE, strings like "FALSE, "f", "no", "n", "0" are
-interpreted as %FALSE), enumerations (can be specified by their 
-name, nick or integer value), flags (can be specified by their name, 
-nick, integer value, optionally combined with "|", e.g. 
-"GTK_VISIBLE|GTK_REALIZED")  and colors (in a format understood by 
-gdk_color_parse()). Objects can be referred to by their name. 
+interpreted as %FALSE), enumerations (can be specified by their
+name, nick or integer value), flags (can be specified by their name,
+nick, integer value, optionally combined with "|", e.g.
+"GTK_VISIBLE|GTK_REALIZED")  and colors (in a format understood by
+gdk_color_parse()). Objects can be referred to by their name.
 Pixbufs can be specified as a filename of an image file to load.
-In general, GtkBuilder allows forward references to objects &mdash; 
+In general, GtkBuilder allows forward references to objects &mdash;
 an object doesn't have to constructed before it can be referred to.
 The exception to this rule is that an object has to be constructed
-before it can be used as the value of a construct-only property. 
+before it can be used as the value of a construct-only property.
 </para>
 <para>
 Signal handlers are set up with the &lt;signal&gt; element.
@@ -152,25 +158,25 @@ The "name" attribute specifies the name of the signal, and the
 By default, GTK+ tries to find the handler using g_module_symbol(),
 but this can be changed by passing a custom #GtkBuilderConnectFunc
 to gtk_builder_connect_signals_full(). The remaining attributes,
-"after", "swapped" and "object", have the same meaning as the 
+"after", "swapped" and "object", have the same meaning as the
 corresponding parameters of the g_signal_connect_object() or
 g_signal_connect_data() functions. A "last_modification_time" attribute
 is also allowed, but it does not have a meaning to the builder.
 </para>
 <para>
 Sometimes it is necessary to refer to widgets which have implicitly
-been constructed by GTK+ as part of a composite widget, to set 
-properties on them or to add further children (e.g. the @vbox 
+been constructed by GTK+ as part of a composite widget, to set
+properties on them or to add further children (e.g. the @vbox
 of a #GtkDialog). This can be achieved by setting the "internal-child"
 propery of the &lt;child&gt; element to a true value. Note that
 GtkBuilder still requires an &lt;object&gt; element for the internal
 child, even if it has already been constructed.
 </para>
 <para>
-A number of widgets have different places where a child can be 
+A number of widgets have different places where a child can be
 added (e.g. tabs vs. page content in notebooks). This can be reflected
 in a UI definition by specifying the "type" attribute on a &lt;child&gt;
-The possible values for the "type" attribute are described in 
+The possible values for the "type" attribute are described in
 the sections describing the widget-specific portions of UI definitions.
 </para>
 <example>
@@ -205,13 +211,14 @@ their own XML DTD fragments for filling in the ANY placeholders
 in the DTD above. Note that a custom element in a &lt;child&gt;
 element gets parsed by the custom tag handler of the parent
 object, while a custom element in an &lt;object&gt; element
-gets parsed by the custom tag handler of the object. 
+gets parsed by the custom tag handler of the object.
 </para>
 <para>
 These XML fragments are explained in the documentation of the
-respective objects, see 
+respective objects, see
 <link linkend="GtkWidget-BUILDER-UI">GtkWidget</link>,
 <link linkend="GtkLabel-BUILDER-UI">GtkLabel</link>,
+<link linkend="GtkWindow-BUILDER-UI">GtkWindow</link>,
 <link linkend="GtkContainer-BUILDER-UI">GtkContainer</link>,
 <link linkend="GtkDialog-BUILDER-UI">GtkDialog</link>,
 <link linkend="GtkCellLayout-BUILDER-UI">GtkCellLayout</link>,
@@ -227,6 +234,9 @@ respective objects, see
 <link linkend="GtkTreeView-BUILDER-UI">GtkTreeView</link>,
 <link linkend="GtkUIManager-BUILDER-UI">GtkUIManager</link>,
 <link linkend="GtkActionGroup-BUILDER-UI">GtkActionGroup</link>.
+<link linkend="GtkMenuItem-BUILDER-UI">GtkMenuItem</link>,
+<link linkend="GtkAssistant-BUILDER-UI">GtkAssistant</link>,
+<link linkend="GtkScale-BUILDER-UI">GtkScale</link>.
 </para>
 </refsect2>
 
@@ -234,6 +244,9 @@ respective objects, see
 
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkBuilder ##### -->
@@ -263,23 +276,34 @@ respective objects, see
 
 <!-- ##### ENUM GtkBuilderError ##### -->
 <para>
-
+Error codes that identify various errors that can occur while
+using #GtkBuilder.
 </para>
 
-@GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION: 
-@GTK_BUILDER_ERROR_UNHANDLED_TAG: 
-@GTK_BUILDER_ERROR_MISSING_ATTRIBUTE: 
-@GTK_BUILDER_ERROR_INVALID_ATTRIBUTE: 
-@GTK_BUILDER_ERROR_INVALID_TAG: 
-@GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE: 
-@GTK_BUILDER_ERROR_INVALID_VALUE: 
-@GTK_BUILDER_ERROR_VERSION_MISMATCH: 
+@GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION: A type-func attribute didn't name
+    a function that returns a #GType.
+@GTK_BUILDER_ERROR_UNHANDLED_TAG: The input contained a tag that #GtkBuilder
+    can't handle.
+@GTK_BUILDER_ERROR_MISSING_ATTRIBUTE: An attribute that is required by
+    #GtkBuilder was missing.
+@GTK_BUILDER_ERROR_INVALID_ATTRIBUTE: #GtkBuilder found an attribute that 
+    it doesn't understand.
+@GTK_BUILDER_ERROR_INVALID_TAG: #GtkBuilder found a tag that
+    it doesn't understand.
+@GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE: A required property value was 
+    missing.
+@GTK_BUILDER_ERROR_INVALID_VALUE: #GtkBuilder couldn't parse
+    some attribute value.
+@GTK_BUILDER_ERROR_VERSION_MISMATCH: The input file requires a newer version
+    of GTK+.
+@GTK_BUILDER_ERROR_DUPLICATE_ID: An object id occurred twice.
 
 <!-- ##### FUNCTION gtk_builder_new ##### -->
 <para>
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -425,16 +449,17 @@ respective objects, see
 
 <!-- ##### MACRO GTK_BUILDER_WARN_INVALID_CHILD_TYPE ##### -->
 <para>
-
+This macro should be used to emit a warning about and unexpected 
+@type value in a #GtkBuildable add_child implementation.
 </para>
 
-@object: 
-@type: 
+@object: the #GtkBuildable on which the warning ocurred
+@type: the unexpected type value
 
 
 <!-- ##### MACRO GTK_BUILDER_ERROR ##### -->
 <para>
-
+The #GError quark for #GtkBuilder errors
 </para>
 
 

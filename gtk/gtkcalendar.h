@@ -26,14 +26,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_CALENDAR_H__
+#define __GTK_CALENDAR_H__
+
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_CALENDAR_H__
-#define __GTK_CALENDAR_H__
-
-#include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
 
 /* Not needed, retained for compatibility -Yosh */
@@ -159,7 +159,7 @@ struct _GtkCalendarClass
 GType	   gtk_calendar_get_type	(void) G_GNUC_CONST;
 GtkWidget* gtk_calendar_new		(void);
 
-gboolean   gtk_calendar_select_month	(GtkCalendar *calendar, 
+gboolean   gtk_calendar_select_month	(GtkCalendar *calendar,
 					 guint	      month,
 					 guint	      year);
 void	   gtk_calendar_select_day	(GtkCalendar *calendar,

@@ -84,11 +84,15 @@ functions such as g_signal_connect().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gtk_set_locale ##### -->
 
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -97,6 +101,7 @@ functions such as g_signal_connect().
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gtk_get_default_language ##### -->
@@ -104,6 +109,7 @@ functions such as g_signal_connect().
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -192,6 +198,7 @@ and invoke timeouts etc. while doing some time intensive computation.
 </programlisting>
 </example>
 
+@void: 
 @Returns: %TRUE if any events are pending, %FALSE otherwise.
 
 
@@ -202,6 +209,7 @@ gtk_main(). In that case gtk_main_quit() will make the innermost invocation
 of the main loop return.
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gtk_main_level ##### -->
@@ -210,6 +218,7 @@ Asks for the current nesting level of the main loop. This can be useful
 when calling gtk_quit_add().
 </para>
 
+@void: 
 @Returns: the nesting level of the current invocation of the main loop.
 
 
@@ -219,6 +228,7 @@ Makes the innermost invocation of the main loop return when it regains
 control.
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gtk_main_iteration ##### -->
@@ -229,6 +239,7 @@ want to block look at gtk_main_iteration_do() or check if any events are
 pending with gtk_events_pending() first.
 </para>
 
+@void: 
 @Returns: %TRUE if gtk_main_quit() has been called for the innermost mainloop.
 
 
@@ -363,6 +374,7 @@ main (int argc, char **argv)
 </programlisting>
 </example>
 
+@void: 
 @Returns: %TRUE
 
 
@@ -372,6 +384,7 @@ Analogical to gtk_true() this function does nothing
 but always returns %FALSE.
 </para>
 
+@void: 
 @Returns: %FALSE
 
 
@@ -394,6 +407,7 @@ widget and this function does nothing.
 Queries the current grab of the default window group. 
 </para>
 
+@void: 
 @Returns: The widget which currently has the grab or %NULL if no grab is active.
 
 
@@ -416,6 +430,7 @@ Registers a function to be called when the mainloop is started.
 
 @function: Function to invoke when gtk_main() is called next.
 @data: Data to pass to that function.
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_quit_add_destroy ##### -->
@@ -426,6 +441,7 @@ is quit.
 
 @main_level: Level of the mainloop which shall trigger the destruction.
 @object: Object to be destroyed.
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_quit_add ##### -->
@@ -441,6 +457,7 @@ Registers a function to be called when an instance of the mainloop is left.
 @data: Pointer to pass when calling @function.
 @Returns: A handle for this quit handler (you need this for gtk_quit_remove())
   or 0 if you passed a %NULL pointer in @function.
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_quit_add_full ##### -->
@@ -467,6 +484,7 @@ used by GTK+ wrappers for languages other than C.
 @destroy: Function to call to destruct @data. Gets @data as argument.
 @Returns: A handle for this quit handler (you need this for gtk_quit_remove())
   or 0 if you passed a %NULL pointer in @function.
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_quit_remove ##### -->
@@ -475,6 +493,7 @@ Removes a quit handler by its identifier.
 </para>
 
 @quit_handler_id: Identifier for the handler returned when installing it.
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_quit_remove_by_data ##### -->
@@ -483,6 +502,7 @@ Removes a quit handler identified by its @data field.
 </para>
 
 @data: The pointer passed as @data to gtk_quit_add() or gtk_quit_add_full().
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_timeout_add_full ##### -->
@@ -706,6 +726,7 @@ Removes the key snooper function with the given id.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -714,6 +735,7 @@ Removes the key snooper function with the given id.
 
 </para>
 
+@void: 
 @Returns: 
 
 

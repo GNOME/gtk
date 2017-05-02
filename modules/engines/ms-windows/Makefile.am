@@ -9,14 +9,15 @@ INCLUDES = \
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\
 	-DGDK_DISABLE_DEPRECATED	\
-	$(GTK_DEP_CFLAGS)
+	$(GTK_DEP_CFLAGS)	\
+	$(GMODULE_CFLAGS)
 
 
 LDADDS = \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-2.0.la	\
 	$(top_builddir)/gdk/$(gdktargetlib)		\
 	$(top_builddir)/gtk/$(gtktargetlib)		\
-	$(GTK_DEP_LIBS)
+	$(GTK_DEP_LIBS)		\
+	$(GMODULE_LIBS)
 
 enginedir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/engines
 
@@ -36,3 +37,15 @@ libwimp_la_LDFLAGS = \
 	-avoid-version -module -no-undefined -export-dynamic
 
 libwimp_la_LIBADD = $(LDADDS) -lgdi32
+
+# ---------------- MSVC Projects ---------------
+MSVCPROJS = libwimp
+
+libwimp_FILES = $(libwimp_la_SOURCES)
+libwimp_EXCLUDES = libwimpdummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: $(top_builddir)/build/win32/vs9/libwimp.vcproj
+
+-include $(top_srcdir)/git.mk

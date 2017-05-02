@@ -42,7 +42,6 @@
 struct _GtkRecentActionPrivate
 {
   GtkRecentManager *manager;
-  guint manager_changed_id;
 
   guint show_numbers   : 1;
 
@@ -57,8 +56,8 @@ struct _GtkRecentActionPrivate
 
   GtkRecentSortType sort_type;
   GtkRecentSortFunc sort_func;
-  gpointer sort_data;
-  GDestroyNotify data_destroy;
+  gpointer          sort_data;
+  GDestroyNotify    data_destroy;
 
   GtkRecentFilter *current_filter;
 
@@ -213,7 +212,7 @@ gtk_recent_action_set_sort_func (GtkRecentChooser  *chooser,
   for (l = priv->choosers; l; l = l->next)
     {
       GtkRecentChooser *chooser_menu = l->data;
-
+      
       gtk_recent_chooser_set_sort_func (chooser_menu, priv->sort_func,
                                         priv->sort_data,
                                         priv->data_destroy);
@@ -225,7 +224,6 @@ set_current_filter (GtkRecentAction *action,
                     GtkRecentFilter *filter)
 {
   GtkRecentActionPrivate *priv = action->priv;
-  GSList *l;
 
   g_object_ref (action);
 
@@ -236,13 +234,6 @@ set_current_filter (GtkRecentAction *action,
 
   if (priv->current_filter)
     g_object_ref_sink (priv->current_filter);
-
-  for (l = priv->choosers; l; l = l->next)
-    {
-      GtkRecentChooser *chooser = l->data;
-
-      gtk_recent_chooser_set_filter (chooser, priv->current_filter);
-    }
 
   g_object_notify (G_OBJECT (action), "filter");
 
@@ -338,21 +329,10 @@ gtk_recent_action_connect_proxy (GtkAction *action,
   GtkRecentAction *recent_action = GTK_RECENT_ACTION (action);
   GtkRecentActionPrivate *priv = recent_action->priv;
 
+  /* it can only be a recent chooser implementor anyway... */
   if (GTK_IS_RECENT_CHOOSER (widget) &&
       !g_slist_find (priv->choosers, widget))
     {
-      g_object_set (G_OBJECT (widget),
-                    "show-private", priv->show_private,
-                    "show-not-found", priv->show_not_found,
-                    "show-tips", priv->show_tips,
-                    "show-icons", priv->show_icons,
-                    "show-numbers", priv->show_numbers,
-                    "limit", priv->limit,
-                    "sort-type", priv->sort_type,
-                    "filter", priv->current_filter,
-                    "local-only", priv->local_only,
-                    NULL);
-  
       if (priv->sort_func)
         {
           gtk_recent_chooser_set_sort_func (GTK_RECENT_CHOOSER (widget),
@@ -369,7 +349,8 @@ gtk_recent_action_connect_proxy (GtkAction *action,
                                 action);
     }
 
-  GTK_ACTION_CLASS (gtk_recent_action_parent_class)->connect_proxy (action, widget);
+  if (GTK_ACTION_CLASS (gtk_recent_action_parent_class)->connect_proxy)
+    GTK_ACTION_CLASS (gtk_recent_action_parent_class)->connect_proxy (action, widget);
 }
 
 static void
@@ -385,7 +366,8 @@ gtk_recent_action_disconnect_proxy (GtkAction *action,
   if (g_slist_find (priv->choosers, widget))
     priv->choosers = g_slist_remove (priv->choosers, widget);
 
-  GTK_ACTION_CLASS (gtk_recent_action_parent_class)->disconnect_proxy (action, widget);
+  if (GTK_ACTION_CLASS (gtk_recent_action_parent_class)->disconnect_proxy)
+    GTK_ACTION_CLASS (gtk_recent_action_parent_class)->disconnect_proxy (action, widget);
 }
 
 static GtkWidget *
@@ -458,38 +440,15 @@ gtk_recent_action_create_tool_item (GtkAction *action)
 }
 
 static void
-manager_changed_cb (GtkRecentManager *manager,
-                    gpointer          user_data)
-{
-  /* do we need to propagate the signal to all the proxies? guess not */
-}
-
-static void
 set_recent_manager (GtkRecentAction  *action,
                     GtkRecentManager *manager)
 {
   GtkRecentActionPrivate *priv = action->priv;
 
-  if (priv->manager)
-    {
-      if (priv->manager_changed_id)
-        {
-          g_signal_handler_disconnect (priv->manager, priv->manager_changed_id);
-          priv->manager_changed_id = 0;
-        }
-
-      priv->manager = NULL;
-    }
-
   if (manager)
     priv->manager = NULL;
   else
     priv->manager = gtk_recent_manager_get_default ();
-
-  if (priv->manager)
-    priv->manager_changed_id = g_signal_connect (priv->manager, "changed",
-                                                 G_CALLBACK (manager_changed_cb),
-                                                 action);
 }
 
 static void
@@ -520,14 +479,6 @@ gtk_recent_action_dispose (GObject *gobject)
   GtkRecentAction *action = GTK_RECENT_ACTION (gobject);
   GtkRecentActionPrivate *priv = action->priv;
 
-  if (priv->manager_changed_id)
-    {
-      if (priv->manager)
-        g_signal_handler_disconnect (priv->manager, priv->manager_changed_id);
-
-      priv->manager_changed_id = 0;
-    }
-
   if (priv->current_filter)
     {
       g_object_unref (priv->current_filter);
@@ -545,7 +496,6 @@ gtk_recent_action_set_property (GObject      *gobject,
 {
   GtkRecentAction *action = GTK_RECENT_ACTION (gobject);
   GtkRecentActionPrivate *priv = action->priv;
-  GSList *l;
 
   switch (prop_id)
     {
@@ -574,32 +524,19 @@ gtk_recent_action_set_property (GObject      *gobject,
       priv->sort_type = g_value_get_enum (value);
       break;
     case GTK_RECENT_CHOOSER_PROP_FILTER:
-      /* this already iterates over the choosers list */
       set_current_filter (action, g_value_get_object (value));
-      return;
+      break;
     case GTK_RECENT_CHOOSER_PROP_SELECT_MULTIPLE:
       g_warning ("%s: Choosers of type `%s' do not support selecting multiple items.",
                  G_STRFUNC,
                  G_OBJECT_TYPE_NAME (gobject));
       return;
     case GTK_RECENT_CHOOSER_PROP_RECENT_MANAGER:
-      /* this is a construct-only property; we set the recent-manager
-       * of the choosers with this value when we create them, so there's
-       * no need to iterate later.
-       */
       set_recent_manager (action, g_value_get_object (value));
-      return;
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       return;
-    }
-
-  /* propagate the properties to the proxies we have created */
-  for (l = priv->choosers; l != NULL; l = l->next)
-    {
-      GObject *proxy = l->data;
-
-      g_object_set_property (proxy, pspec->name, value);
     }
 }
 
@@ -707,14 +644,13 @@ gtk_recent_action_init (GtkRecentAction *action)
   priv->current_filter = NULL;
 
   priv->manager = NULL;
-  priv->manager_changed_id = 0;
 }
 
 /**
  * gtk_recent_action_new:
  * @name: a unique name for the action
- * @label: the label displayed in menu items and on buttons, or %NULL
- * @tooltip: a tooltip for the action, or %NULL
+ * @label: (allow-none): the label displayed in menu items and on buttons, or %NULL
+ * @tooltip: (allow-none): a tooltip for the action, or %NULL
  * @stock_id: the stock icon to display in widgets representing the
  *   action, or %NULL
  *
@@ -745,11 +681,11 @@ gtk_recent_action_new (const gchar *name,
 /**
  * gtk_recent_action_new_for_manager:
  * @name: a unique name for the action
- * @label: the label displayed in menu items and on buttons, or %NULL
- * @tooltip: a tooltip for the action, or %NULL
+ * @label: (allow-none): the label displayed in menu items and on buttons, or %NULL
+ * @tooltip: (allow-none): a tooltip for the action, or %NULL
  * @stock_id: the stock icon to display in widgets representing the
  *   action, or %NULL
- * @manager: a #GtkRecentManager, or %NULL for using the default
+ * @manager: (allow-none): a #GtkRecentManager, or %NULL for using the default
  *   #GtkRecentManager
  *
  * Creates a new #GtkRecentAction object. To add the action to

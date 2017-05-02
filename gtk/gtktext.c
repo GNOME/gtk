@@ -471,7 +471,7 @@ gtk_text_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      static const GInterfaceInfo editable_info =
+      const GInterfaceInfo editable_info =
       {
 	(GInterfaceInitFunc) gtk_text_editable_init, /* interface_init */
 	NULL, /* interface_finalize */
@@ -654,7 +654,7 @@ gtk_text_editable_init (GtkEditableClass *iface)
 static void
 gtk_text_init (GtkText *text)
 {
-  GTK_WIDGET_SET_FLAGS (text, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (text), TRUE);
 
   text->text_area = NULL;
   text->hadj = NULL;
@@ -725,7 +725,7 @@ gtk_text_set_word_wrap (GtkText *text,
   
   text->word_wrap = (word_wrap != FALSE);
   
-  if (GTK_WIDGET_REALIZED (text))
+  if (gtk_widget_get_realized (GTK_WIDGET (text)))
     {
       recompute_geometry (text);
       gtk_widget_queue_draw (GTK_WIDGET (text));
@@ -742,7 +742,7 @@ gtk_text_set_line_wrap (GtkText *text,
   
   text->line_wrap = (line_wrap != FALSE);
   
-  if (GTK_WIDGET_REALIZED (text))
+  if (gtk_widget_get_realized (GTK_WIDGET (text)))
     {
       recompute_geometry (text);
       gtk_widget_queue_draw (GTK_WIDGET (text));
@@ -812,13 +812,13 @@ gtk_text_set_adjustments (GtkText       *text,
       g_object_ref_sink (text->hadj);
       
       gtk_signal_connect (GTK_OBJECT (text->hadj), "changed",
-			  (GtkSignalFunc) gtk_text_adjustment,
+			  G_CALLBACK (gtk_text_adjustment),
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->hadj), "value-changed",
-			  (GtkSignalFunc) gtk_text_adjustment,
+			  G_CALLBACK (gtk_text_adjustment),
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->hadj), "destroy",
-			  (GtkSignalFunc) gtk_text_adjustment_destroyed,
+			  G_CALLBACK (gtk_text_adjustment_destroyed),
 			  text);
       gtk_text_adjustment (hadj, text);
 
@@ -831,13 +831,13 @@ gtk_text_set_adjustments (GtkText       *text,
       g_object_ref_sink (text->vadj);
       
       gtk_signal_connect (GTK_OBJECT (text->vadj), "changed",
-			  (GtkSignalFunc) gtk_text_adjustment,
+			  G_CALLBACK (gtk_text_adjustment),
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->vadj), "value-changed",
-			  (GtkSignalFunc) gtk_text_adjustment,
+			  G_CALLBACK (gtk_text_adjustment),
 			  text);
       gtk_signal_connect (GTK_OBJECT (text->vadj), "destroy",
-			  (GtkSignalFunc) gtk_text_adjustment_destroyed,
+			  G_CALLBACK (gtk_text_adjustment_destroyed),
 			  text);
       gtk_text_adjustment (vadj, text);
 
@@ -886,7 +886,7 @@ gtk_text_thaw (GtkText *text)
   g_return_if_fail (GTK_IS_TEXT (text));
   
   if (text->freeze_count)
-    if (!(--text->freeze_count) && GTK_WIDGET_REALIZED (text))
+    if (!(--text->freeze_count) && gtk_widget_get_realized (GTK_WIDGET (text)))
       {
 	recompute_geometry (text);
 	gtk_widget_queue_draw (GTK_WIDGET (text));
@@ -1158,7 +1158,7 @@ gtk_text_get_chars (GtkOldEditable *old_editable,
       guchar ch;
       ch = text->text.ch[end_pos];
       text->text.ch[end_pos] = 0;
-      retval = g_strdup (text->text.ch + start_pos);
+      retval = g_strdup ((gchar *)(text->text.ch + start_pos));
       text->text.ch[end_pos] = ch;
     }
 
@@ -1239,7 +1239,7 @@ gtk_text_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (text, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;
@@ -1278,8 +1278,8 @@ gtk_text_realize (GtkWidget *widget)
   widget->style = gtk_style_attach (widget->style, widget->window);
   
   /* Can't call gtk_style_set_background here because it's handled specially */
-  gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-  gdk_window_set_background (text->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+  gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
+  gdk_window_set_background (text->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
 
   if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
     text->bg_gc = create_bg_gc (text);
@@ -1314,10 +1314,10 @@ gtk_text_style_set (GtkWidget *widget,
 {
   GtkText *text = GTK_TEXT (widget);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
-      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-      gdk_window_set_background (text->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
+      gdk_window_set_background (text->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
       
       if (text->bg_gc)
 	{
@@ -1342,10 +1342,10 @@ gtk_text_state_changed (GtkWidget   *widget,
 {
   GtkText *text = GTK_TEXT (widget);
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
-      gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
-      gdk_window_set_background (text->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+      gdk_window_set_background (widget->window, &widget->style->base[gtk_widget_get_state (widget)]);
+      gdk_window_set_background (text->text_area, &widget->style->base[gtk_widget_get_state (widget)]);
     }
 }
 
@@ -1433,7 +1433,7 @@ gtk_text_draw_focus (GtkWidget *widget)
       width = widget->allocation.width;
       height = widget->allocation.height;
       
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (gtk_widget_has_focus (widget))
 	{
 	  x += 1;
 	  y += 1;
@@ -1442,7 +1442,7 @@ gtk_text_draw_focus (GtkWidget *widget)
 	  xextra -= 1;
 	  yextra -= 1;
 
-	  gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+	  gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
 			   NULL, widget, "text",
 			   0, 0,
 			   widget->allocation.width,
@@ -1510,7 +1510,7 @@ gtk_text_size_allocate (GtkWidget     *widget,
   GtkText *text = GTK_TEXT (widget);
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (widget->window,
 			      allocation->x, allocation->y,
@@ -1587,7 +1587,7 @@ gtk_text_button_press (GtkWidget      *widget,
   
   text->button = event->button;
   
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
   
   if (event->button == 1)
@@ -2930,7 +2930,7 @@ new_text_property (GtkText *text, GdkFont *font, const GdkColor* fore,
 
   prop->length = length;
 
-  if (GTK_WIDGET_REALIZED (text))
+  if (gtk_widget_get_realized (GTK_WIDGET (text)))
     realize_property (text, prop);
 
   return prop;
@@ -3061,7 +3061,7 @@ insert_text_property (GtkText* text, GdkFont* font,
 	{
 	  /* Next property just has last position, take it over */
 
-	  if (GTK_WIDGET_REALIZED (text))
+	  if (gtk_widget_get_realized (GTK_WIDGET (text)))
 	    unrealize_property (text, forward_prop);
 
 	  forward_prop->flags = 0;
@@ -3085,7 +3085,7 @@ insert_text_property (GtkText* text, GdkFont* font,
 	    }
 	  forward_prop->length += len;
 
-	  if (GTK_WIDGET_REALIZED (text))
+	  if (gtk_widget_get_realized (GTK_WIDGET (text)))
 	    realize_property (text, forward_prop);
 	}
       else
@@ -3222,7 +3222,7 @@ delete_text_property (GtkText* text, guint nchars)
 	  MARK_LIST_PTR (&text->point) = g_list_remove_link (tmp, tmp);
 	  text->point.offset = 0;
 
-	  if (GTK_WIDGET_REALIZED (text))
+	  if (gtk_widget_get_realized (GTK_WIDGET (text)))
 	    unrealize_property (text, prop);
 
 	  destroy_text_property (prop);
@@ -3258,7 +3258,7 @@ delete_text_property (GtkText* text, guint nchars)
       
       text->point.offset = MARK_CURRENT_PROPERTY(&text->point)->length - 1;
       
-      if (GTK_WIDGET_REALIZED (text))
+      if (gtk_widget_get_realized (GTK_WIDGET (text)))
 	unrealize_property (text, prop);
 
       destroy_text_property (prop);
@@ -3599,7 +3599,7 @@ find_cursor_at_line (GtkText* text, const LineParams* start_line, gint pixel_hei
 static void
 find_cursor (GtkText* text, gboolean scroll)
 {
-  if (GTK_WIDGET_REALIZED (text))
+  if (gtk_widget_get_realized (GTK_WIDGET (text)))
     {
       find_line_containing_point (text, text->cursor_mark.index, scroll);
       
@@ -4695,7 +4695,7 @@ draw_bg_rect (GtkText* text, GtkPropertyMark *mark,
 			 x, y, width, height);
     }
   else if (!gdk_color_equal(MARK_CURRENT_BACK (text, mark),
-			    &GTK_WIDGET(text)->style->base[GTK_WIDGET_STATE (text)]))
+			    &GTK_WIDGET(text)->style->base[gtk_widget_get_state (GTK_WIDGET (text))]))
     {
       gdk_gc_set_foreground (text->gc, MARK_CURRENT_BACK (text, mark));
 
@@ -4837,14 +4837,14 @@ draw_line (GtkText* text,
 						 buffer.wc, len);
 	      else
 	      pixel_width = gdk_text_width (gc_values.font,
-					      buffer.ch, len);
+					    (gchar *)buffer.ch, len);
 	    }
 	  else
 	    {
 	      if (text->use_wchar)
 		pixel_width = gdk_text_width_wc (font, buffer.wc, len);
 	      else
-		pixel_width = gdk_text_width (font, buffer.ch, len);
+		pixel_width = gdk_text_width (font, (gchar *)buffer.ch, len);
 	    }
 	  
 	  draw_bg_rect (text, &mark, running_offset, pixel_start_height,
@@ -4876,7 +4876,7 @@ draw_line (GtkText* text,
 			   fg_gc,
 			   running_offset,
 			   pixel_height,
-			   buffer.ch,
+			   (gchar *)buffer.ch,
 			   len);
 	  
 	  running_offset += pixel_width;
@@ -5117,7 +5117,7 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 	    draw_line_wrap (text, pixels + CACHE_DATA(cache).font_ascent);
 	}
       
-      if (cursor && GTK_WIDGET_HAS_FOCUS (text))
+      if (cursor && gtk_widget_has_focus (GTK_WIDGET (text)))
 	{
 	  if (CACHE_DATA(cache).start.index <= text->cursor_mark.index &&
 	      CACHE_DATA(cache).end.index >= text->cursor_mark.index)

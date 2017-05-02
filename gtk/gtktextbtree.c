@@ -281,7 +281,9 @@ static NodeData         *node_data_find         (NodeData *nd,
                                                  gpointer  view_id);
 
 static GtkTextBTreeNode     *gtk_text_btree_node_new                  (void);
+#if 0
 static void                  gtk_text_btree_node_invalidate_downward  (GtkTextBTreeNode *node);
+#endif
 static void                  gtk_text_btree_node_invalidate_upward    (GtkTextBTreeNode *node,
                                                                        gpointer          view_id);
 static NodeData *            gtk_text_btree_node_check_valid          (GtkTextBTreeNode *node,
@@ -2660,6 +2662,7 @@ redisplay_mark (GtkTextLineSegment *mark)
 {
   GtkTextIter iter;
   GtkTextIter end;
+  gboolean cursor_only;
 
   _gtk_text_btree_get_iter_at_mark (mark->body.mark.tree,
                                    &iter,
@@ -2669,7 +2672,8 @@ redisplay_mark (GtkTextLineSegment *mark)
   gtk_text_iter_forward_char (&end);
 
   DV (g_print ("invalidating due to moving visible mark (%s)\n", G_STRLOC));
-  _gtk_text_btree_invalidate_region (mark->body.mark.tree, &iter, &end, TRUE);
+  cursor_only = mark == mark->body.mark.tree->insert_mark->segment;
+  _gtk_text_btree_invalidate_region (mark->body.mark.tree, &iter, &end, cursor_only);
 }
 
 static void
@@ -4918,6 +4922,7 @@ gtk_text_btree_node_has_tag (GtkTextBTreeNode *node, GtkTextTag *tag)
 }
 
 /* Add node and all children to the damage region. */
+#if 0
 static void
 gtk_text_btree_node_invalidate_downward (GtkTextBTreeNode *node)
 {
@@ -4963,6 +4968,7 @@ gtk_text_btree_node_invalidate_downward (GtkTextBTreeNode *node)
         }
     }
 }
+#endif
 
 static void
 gtk_text_btree_node_invalidate_upward (GtkTextBTreeNode *node, gpointer view_id)

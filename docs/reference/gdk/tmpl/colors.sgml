@@ -46,6 +46,9 @@ gdk_color_change() will probably become aliases.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkColor ##### -->
 <para>
 The #GdkColor structure is used to describe an 
@@ -57,20 +60,14 @@ allocated or unallocated color.
 @red: The red component of the color. This is
   a value between 0 and 65535, with 65535 indicating
   full intensitiy.
-@green: The blue component of the color.
-@blue: The green component of the color.
+@green: The green component of the color.
+@blue: The blue component of the color.
 
 <!-- ##### STRUCT GdkColormap ##### -->
 <para>
 The colormap structure contains the following public fields.
 </para>
 
-@size: For pseudo-color colormaps, the number of colors
-  in the colormap.
-@colors: An array containing the current values in the
-  colormap. This can be used to map from pixel values
-  back to RGB values. This is only meaningful for
-  pseudo-color colormaps.
 
 <!-- ##### FUNCTION gdk_colormap_new ##### -->
 <para>
@@ -102,6 +99,7 @@ The colormap structure contains the following public fields.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -109,6 +107,7 @@ The colormap structure contains the following public fields.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 

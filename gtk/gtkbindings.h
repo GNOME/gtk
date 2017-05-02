@@ -27,17 +27,16 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_BINDINGS_H__
 #define __GTK_BINDINGS_H__
 
 
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gdk/gdk.h>
 #include <gtk/gtkobject.h>
-#include <gtk/gtkenums.h>
 
 
 G_BEGIN_DECLS
@@ -117,11 +116,6 @@ gboolean gtk_binding_set_activate	(GtkBindingSet	*binding_set,
 void	 gtk_binding_entry_clear	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
 					 GdkModifierType modifiers);
-void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
-					 guint		 keyval,
-					 GdkModifierType modifiers,
-					 const gchar	*signal_name,
-					 GSList		*binding_args);
 guint	 gtk_binding_parse_binding      (GScanner       *scanner);
 #endif /* GTK_DISABLE_DEPRECATED */
 
@@ -134,6 +128,11 @@ void	 gtk_binding_entry_add_signal   (GtkBindingSet  *binding_set,
                                          const gchar    *signal_name,
                                          guint           n_args,
                                          ...);
+void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
+					 guint		 keyval,
+					 GdkModifierType modifiers,
+					 const gchar	*signal_name,
+					 GSList		*binding_args);
 void	 gtk_binding_entry_remove	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
 					 GdkModifierType modifiers);

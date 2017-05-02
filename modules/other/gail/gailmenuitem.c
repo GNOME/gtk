@@ -33,6 +33,7 @@ static void                  gail_menu_item_real_initialize
 static gint                  gail_menu_item_get_n_children (AtkObject      *obj);
 static AtkObject*            gail_menu_item_ref_child      (AtkObject      *obj,
                                                             gint           i);
+static AtkStateSet*          gail_menu_item_ref_state_set  (AtkObject      *obj);
 static void                  gail_menu_item_finalize       (GObject        *object);
 
 static void                  atk_action_interface_init     (AtkActionIface *iface);
@@ -40,11 +41,11 @@ static gboolean              gail_menu_item_do_action      (AtkAction      *acti
                                                             gint           i);
 static gboolean              idle_do_action                (gpointer       data);
 static gint                  gail_menu_item_get_n_actions  (AtkAction      *action);
-static G_CONST_RETURN gchar* gail_menu_item_get_description(AtkAction      *action,
+static const gchar*          gail_menu_item_get_description(AtkAction      *action,
                                                             gint           i);
-static G_CONST_RETURN gchar* gail_menu_item_get_name       (AtkAction      *action,
+static const gchar*          gail_menu_item_get_name       (AtkAction      *action,
                                                             gint           i);
-static G_CONST_RETURN gchar* gail_menu_item_get_keybinding (AtkAction      *action,
+static const gchar*          gail_menu_item_get_keybinding (AtkAction      *action,
                                                             gint           i);
 static gboolean              gail_menu_item_set_description(AtkAction      *action,
                                                             gint           i,
@@ -73,6 +74,7 @@ gail_menu_item_class_init (GailMenuItemClass *klass)
 
   class->get_n_children = gail_menu_item_get_n_children;
   class->ref_child = gail_menu_item_ref_child;
+  class->ref_state_set = gail_menu_item_ref_state_set;
   class->initialize = gail_menu_item_real_initialize;
 }
 
@@ -160,11 +162,11 @@ get_children (GtkWidget *submenu)
        *
        * The following hack forces the menu items to be created.
        */
-      if (!GTK_WIDGET_VISIBLE (submenu))
+      if (!gtk_widget_get_visible (submenu))
         {
-          GTK_WIDGET_SET_FLAGS (submenu, GTK_VISIBLE);
+          /* FIXME GTK_WIDGET_SET_FLAGS (submenu, GTK_VISIBLE); */
           g_signal_emit_by_name (submenu, "show");
-          GTK_WIDGET_UNSET_FLAGS (submenu, GTK_VISIBLE);
+          /* FIXME GTK_WIDGET_UNSET_FLAGS (submenu, GTK_VISIBLE); */
         }
       g_list_free (children);
       children = gtk_container_get_children (GTK_CONTAINER (submenu));
@@ -239,6 +241,31 @@ gail_menu_item_ref_child (AtkObject *obj,
   return accessible;
 }
 
+static AtkStateSet*
+gail_menu_item_ref_state_set (AtkObject *obj)
+{
+  AtkObject *menu_item;
+  AtkStateSet *state_set, *parent_state_set;
+
+  state_set = ATK_OBJECT_CLASS (gail_menu_item_parent_class)->ref_state_set (obj);
+
+  menu_item = atk_object_get_parent (obj);
+
+  if (menu_item)
+    {
+      if (!GTK_IS_MENU_ITEM (GTK_ACCESSIBLE (menu_item)->widget))
+        return state_set;
+
+      parent_state_set = atk_object_ref_state_set (menu_item);
+      if (!atk_state_set_contains_state (parent_state_set, ATK_STATE_SELECTED))
+        {
+          atk_state_set_remove_state (state_set, ATK_STATE_FOCUSED);
+          atk_state_set_remove_state (state_set, ATK_STATE_SHOWING);
+        }
+    }
+  return state_set;
+}
+
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
@@ -264,7 +291,7 @@ gail_menu_item_do_action (AtkAction *action,
         /* State is defunct */
         return FALSE;
 
-      if (!GTK_WIDGET_SENSITIVE (item) || !GTK_WIDGET_VISIBLE (item))
+      if (!gtk_widget_get_sensitive (item) || !gtk_widget_get_visible (item))
         return FALSE;
 
       gail_menu_item = GAIL_MENU_ITEM (action);
@@ -298,7 +325,7 @@ ensure_menus_unposted (GailMenuItem *menu_item)
           widget = GTK_ACCESSIBLE (parent)->widget;
           if (GTK_IS_MENU (widget))
             {
-              if (GTK_WIDGET_MAPPED (widget))
+              if (gtk_widget_get_mapped (widget))
                 gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
 
               return;
@@ -320,12 +347,12 @@ idle_do_action (gpointer data)
   menu_item->action_idle_handler = 0;
   item = GTK_ACCESSIBLE (menu_item)->widget;
   if (item == NULL /* State is defunct */ ||
-      !GTK_WIDGET_SENSITIVE (item) || !GTK_WIDGET_VISIBLE (item))
+      !gtk_widget_get_sensitive (item) || !gtk_widget_get_visible (item))
     return FALSE;
 
   item_parent = gtk_widget_get_parent (item);
   gtk_menu_shell_select_item (GTK_MENU_SHELL (item_parent), item);
-  item_mapped = GTK_WIDGET_MAPPED (item);
+  item_mapped = gtk_widget_get_mapped (item);
   /*
    * This is what is called when <Return> is pressed for a menu item
    */
@@ -346,7 +373,7 @@ gail_menu_item_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_menu_item_get_description (AtkAction *action,
                                 gint      i)
 {
@@ -361,7 +388,7 @@ gail_menu_item_get_description (AtkAction *action,
     return NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_menu_item_get_name (AtkAction *action,
                          gint      i)
 {
@@ -371,7 +398,7 @@ gail_menu_item_get_name (AtkAction *action,
     return NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_menu_item_get_keybinding (AtkAction *action,
                                gint      i)
 {
@@ -608,10 +635,18 @@ menu_item_selection (GtkItem  *item,
                      gboolean selected)
 {
   AtkObject *obj, *parent;
+  gint i;
 
   obj = gtk_widget_get_accessible (GTK_WIDGET (item));
   atk_object_notify_state_change (obj, ATK_STATE_SELECTED, selected);
- 
+
+  for (i = 0; i < atk_object_get_n_accessible_children (obj); i++)
+    {
+      AtkObject *child;
+      child = atk_object_ref_accessible_child (obj, i);
+      atk_object_notify_state_change (child, ATK_STATE_SHOWING, selected);
+      g_object_unref (child);
+    }
   parent = atk_object_get_parent (obj);
   g_signal_emit_by_name (parent, "selection_changed"); 
 }

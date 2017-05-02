@@ -24,7 +24,7 @@
 
 #include <string.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #include "gtkfilechooser.h"
 #include "gtkfilesystem.h"
@@ -92,6 +92,7 @@ struct GtkFileSystemPrivate
 
   /* This list contains GtkFileSystemBookmark structs */
   GSList *bookmarks;
+  GFile *bookmarks_file;
 
   GFileMonitor *bookmarks_monitor;
 };
@@ -112,7 +113,6 @@ struct AsyncFuncData
 {
   GtkFileSystem *file_system;
   GFile *file;
-  GtkFolder *folder;
   GCancellable *cancellable;
   gchar *attributes;
 
@@ -206,6 +206,9 @@ gtk_file_system_finalize (GObject *object)
       g_slist_free (priv->bookmarks);
     }
 
+  if (priv->bookmarks_file)
+    g_object_unref (priv->bookmarks_file);
+
   G_OBJECT_CLASS (_gtk_file_system_parent_class)->finalize (object);
 }
 
@@ -239,12 +242,25 @@ _gtk_file_system_class_init (GtkFileSystemClass *class)
 }
 
 static GFile *
-get_bookmarks_file (void)
+get_legacy_bookmarks_file (void)
 {
   GFile *file;
   gchar *filename;
 
   filename = g_build_filename (g_get_home_dir (), ".gtk-bookmarks", NULL);
+  file = g_file_new_for_path (filename);
+  g_free (filename);
+
+  return file;
+}
+
+static GFile *
+get_bookmarks_file (void)
+{
+  GFile *file;
+  gchar *filename;
+
+  filename = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "bookmarks", NULL);
   file = g_file_new_for_path (filename);
   g_free (filename);
 
@@ -272,6 +288,9 @@ read_bookmarks (GFile *file)
       if (!*lines[i])
 	continue;
 
+      if (!g_utf8_validate (lines[i], -1, NULL))
+	continue;
+
       bookmark = g_slice_new0 (GtkFileSystemBookmark);
 
       if ((space = strchr (lines[i], ' ')) != NULL)
@@ -297,36 +316,46 @@ save_bookmarks (GFile  *bookmarks_file,
 {
   GError *error = NULL;
   GString *contents;
+  GSList *l;
+  GFile *parent_file;
+  gchar *path;
 
   contents = g_string_new ("");
 
-  while (bookmarks)
+  for (l = bookmarks; l; l = l->next)
     {
-      GtkFileSystemBookmark *bookmark;
+      GtkFileSystemBookmark *bookmark = l->data;
       gchar *uri;
 
-      bookmark = bookmarks->data;
       uri = g_file_get_uri (bookmark->file);
+      if (!uri)
+	continue;
+
       g_string_append (contents, uri);
 
       if (bookmark->label)
 	g_string_append_printf (contents, " %s", bookmark->label);
 
       g_string_append_c (contents, '\n');
-      bookmarks = bookmarks->next;
       g_free (uri);
     }
 
-  if (!g_file_replace_contents (bookmarks_file,
-				contents->str,
-				strlen (contents->str),
-				NULL, FALSE, 0, NULL,
-				NULL, &error))
+  parent_file = g_file_get_parent (bookmarks_file);
+  path = g_file_get_path (parent_file);
+  if (g_mkdir_with_parents (path, 0700) == 0)
     {
-      g_critical (error->message);
-      g_error_free (error);
+      if (!g_file_replace_contents (bookmarks_file,
+                                    contents->str,
+                                    strlen (contents->str),
+                                    NULL, FALSE, 0, NULL,
+                                    NULL, &error))
+        {
+          g_critical ("%s", error->message);
+          g_error_free (error);
+        }
     }
-
+  g_free (path);
+  g_object_unref (parent_file);
   g_string_free (contents, TRUE);
 }
 
@@ -360,6 +389,39 @@ bookmarks_file_changed (GFileMonitor      *monitor,
       /* ignore at the moment */
       break;
     }
+}
+
+static gboolean
+mount_referenced_by_volume_activation_root (GList *volumes, GMount *mount)
+{
+  GList *l;
+  GFile *mount_root;
+  gboolean ret;
+
+  ret = FALSE;
+
+  mount_root = g_mount_get_root (mount);
+
+  for (l = volumes; l != NULL; l = l->next)
+    {
+      GVolume *volume = G_VOLUME (l->data);
+      GFile *volume_activation_root;
+
+      volume_activation_root = g_volume_get_activation_root (volume);
+      if (volume_activation_root != NULL)
+        {
+          if (g_file_has_prefix (volume_activation_root, mount_root))
+            {
+              ret = TRUE;
+              g_object_unref (volume_activation_root);
+              break;
+            }
+          g_object_unref (volume_activation_root);
+        }
+    }
+
+  g_object_unref (mount_root);
+  return ret;
 }
 
 static void
@@ -435,6 +497,8 @@ get_volumes_list (GtkFileSystem *file_system)
 
 	  priv->volumes = g_slist_prepend (priv->volumes, g_object_ref (drive));
 	}
+
+      g_object_unref (drive);
     }
 
   g_list_free (drives);
@@ -466,9 +530,9 @@ get_volumes_list (GtkFileSystem *file_system)
           /* see comment above in why we add an icon for a volume */
           priv->volumes = g_slist_prepend (priv->volumes, g_object_ref (volume));
         }
-    }
 
-  g_list_free (volumes);
+      g_object_unref (volume);
+    }
 
   /* add mounts that has no volume (/etc/mtab mounts, ftp, sftp,...) */
   mounts = g_volume_monitor_get_mounts (priv->volume_monitor);
@@ -484,9 +548,21 @@ get_volumes_list (GtkFileSystem *file_system)
           continue;
         }
 
+      /* if there's exists one or more volumes with an activation root inside the mount,
+       * don't display the mount
+       */
+      if (mount_referenced_by_volume_activation_root (volumes, mount))
+        {
+          g_object_unref (mount);
+          continue;
+        }
+
       /* show this mount */
       priv->volumes = g_slist_prepend (priv->volumes, g_object_ref (mount));
+      g_object_unref (mount);
     }
+
+  g_list_free (volumes);
 
   g_list_free (mounts);
 }
@@ -527,16 +603,27 @@ _gtk_file_system_init (GtkFileSystem *file_system)
   /* Bookmarks */
   bookmarks_file = get_bookmarks_file ();
   priv->bookmarks = read_bookmarks (bookmarks_file);
+  if (!priv->bookmarks)
+    {
+      /* Use the legacy file instead */
+      g_object_unref (bookmarks_file);
+      bookmarks_file = get_legacy_bookmarks_file ();
+      priv->bookmarks = read_bookmarks (bookmarks_file);
+    }
+
   priv->bookmarks_monitor = g_file_monitor_file (bookmarks_file,
 						 G_FILE_MONITOR_NONE,
 						 NULL, &error);
   if (error)
-    g_warning (error->message);
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+    }
   else
     g_signal_connect (priv->bookmarks_monitor, "changed",
 		      G_CALLBACK (bookmarks_file_changed), file_system);
 
-  g_object_unref (bookmarks_file);
+  priv->bookmarks_file = g_object_ref (bookmarks_file);
 }
 
 /* GtkFileSystem public methods */
@@ -593,79 +680,6 @@ _gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
   return g_slist_reverse (files);
 }
 
-gboolean
-_gtk_file_system_parse (GtkFileSystem     *file_system,
-		        GFile             *base_file,
-		        const gchar       *str,
-		        GFile            **folder,
-		        gchar            **file_part,
-		        GError           **error)
-{
-  GFile *file;
-  gboolean result = FALSE;
-  gboolean is_dir = FALSE;
-  gchar *last_slash = NULL;
-
-  DEBUG ("parse");
-
-  if (str && *str)
-    is_dir = (str [strlen (str) - 1] == G_DIR_SEPARATOR);
-
-  last_slash = strrchr (str, G_DIR_SEPARATOR);
-
-  if (str[0] == '~')
-    file = g_file_parse_name (str);
-  else
-    file = g_file_resolve_relative_path (base_file, str);
-
-  if (g_file_equal (base_file, file))
-    {
-      /* this is when user types '.', could be the
-       * beginning of a hidden file, ./ or ../
-       */
-      *folder = g_object_ref (file);
-      *file_part = g_strdup (str);
-      result = TRUE;
-    }
-  else if (is_dir)
-    {
-      /* it's a dir, or at least it ends with the dir separator */
-      *folder = g_object_ref (file);
-      *file_part = g_strdup ("");
-      result = TRUE;
-    }
-  else
-    {
-      GFile *parent_file;
-
-      parent_file = g_file_get_parent (file);
-
-      if (!parent_file)
-	{
-	  g_set_error (error,
-		       GTK_FILE_CHOOSER_ERROR,
-		       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-		       "Could not get parent file");
-	  *folder = NULL;
-	  *file_part = NULL;
-	}
-      else
-	{
-	  *folder = parent_file;
-	  result = TRUE;
-
-	  if (last_slash)
-	    *file_part = g_strdup (last_slash + 1);
-	  else
-	    *file_part = g_strdup (str);
-	}
-    }
-
-  g_object_unref (file);
-
-  return result;
-}
-
 static void
 free_async_data (AsyncFuncData *async_data)
 {
@@ -673,81 +687,8 @@ free_async_data (AsyncFuncData *async_data)
   g_object_unref (async_data->file);
   g_object_unref (async_data->cancellable);
 
-  if (async_data->folder)
-    g_object_unref (async_data->folder);
-
   g_free (async_data->attributes);
   g_free (async_data);
-}
-
-static void
-enumerate_children_callback (GObject      *source_object,
-			     GAsyncResult *result,
-			     gpointer      user_data)
-{
-  GFileEnumerator *enumerator;
-  AsyncFuncData *async_data;
-  GtkFolder *folder = NULL;
-  GFile *file;
-  GError *error = NULL;
-
-  file = G_FILE (source_object);
-  async_data = (AsyncFuncData *) user_data;
-  enumerator = g_file_enumerate_children_finish (file, result, &error);
-
-  if (enumerator)
-    {
-      folder = g_object_new (GTK_TYPE_FOLDER,
-			     "file", source_object,
-			     "enumerator", enumerator,
-			     "attributes", async_data->attributes,
-			     NULL);
-      g_object_unref (enumerator);
-    }
-
-  gdk_threads_enter ();
-  ((GtkFileSystemGetFolderCallback) async_data->callback) (async_data->cancellable,
-							   folder, error, async_data->data);
-  gdk_threads_leave ();
-
-  free_async_data (async_data);
-
-  if (error)
-    g_error_free (error);
-}
-
-GCancellable *
-_gtk_file_system_get_folder (GtkFileSystem                  *file_system,
-			     GFile                          *file,
-			     const gchar                    *attributes,
-			     GtkFileSystemGetFolderCallback  callback,
-			     gpointer                        data)
-{
-  GCancellable *cancellable;
-  AsyncFuncData *async_data;
-
-  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
-  g_return_val_if_fail (G_IS_FILE (file), NULL);
-
-  cancellable = g_cancellable_new ();
-
-  async_data = g_new0 (AsyncFuncData, 1);
-  async_data->file_system = g_object_ref (file_system);
-  async_data->file = g_object_ref (file);
-  async_data->cancellable = g_object_ref (cancellable);
-  async_data->attributes = g_strdup (attributes);
-
-  async_data->callback = callback;
-  async_data->data = data;
-
-  g_file_enumerate_children_async (file,
-				   attributes,
-				   G_FILE_QUERY_INFO_NONE,
-				   G_PRIORITY_DEFAULT,
-				   cancellable,
-				   enumerate_children_callback,
-				   async_data);
-  return cancellable;
 }
 
 static void
@@ -915,6 +856,11 @@ enclosing_volume_mount_cb (GObject      *source_object,
   g_file_mount_enclosing_volume_finish (G_FILE (source_object), result, &error);
   volume = _gtk_file_system_get_volume_for_file (async_data->file_system, G_FILE (source_object));
 
+  /* Silently drop G_IO_ERROR_ALREADY_MOUNTED error for gvfs backends without visible mounts. */
+  /* Better than doing query_info with additional I/O every time. */
+  if (error && g_error_matches (error, G_IO_ERROR, G_IO_ERROR_ALREADY_MOUNTED))
+    g_clear_error (&error);
+
   gdk_threads_enter ();
   ((GtkFileSystemVolumeMountCallback) async_data->callback) (async_data->cancellable, volume,
 							     error, async_data->data);
@@ -922,6 +868,8 @@ enclosing_volume_mount_cb (GObject      *source_object,
 
   if (error)
     g_error_free (error);
+
+  _gtk_file_system_volume_unref (volume);
 }
 
 GCancellable *
@@ -968,7 +916,6 @@ _gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
   GSList *bookmarks;
   GtkFileSystemBookmark *bookmark;
   gboolean result = TRUE;
-  GFile *bookmarks_file;
 
   priv = GTK_FILE_SYSTEM_GET_PRIVATE (file_system);
   bookmarks = priv->bookmarks;
@@ -1005,10 +952,7 @@ _gtk_file_system_insert_bookmark (GtkFileSystem  *file_system,
   bookmark->file = g_object_ref (file);
 
   priv->bookmarks = g_slist_insert (priv->bookmarks, bookmark, position);
-
-  bookmarks_file = get_bookmarks_file ();
-  save_bookmarks (bookmarks_file, priv->bookmarks);
-  g_object_unref (bookmarks_file);
+  save_bookmarks (priv->bookmarks_file, priv->bookmarks);
 
   g_signal_emit (file_system, fs_signals[BOOKMARKS_CHANGED], 0);
 
@@ -1024,7 +968,6 @@ _gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
   GtkFileSystemBookmark *bookmark;
   GSList *bookmarks;
   gboolean result = FALSE;
-  GFile *bookmarks_file;
 
   priv = GTK_FILE_SYSTEM_GET_PRIVATE (file_system);
 
@@ -1064,9 +1007,7 @@ _gtk_file_system_remove_bookmark (GtkFileSystem  *file_system,
       return FALSE;
     }
 
-  bookmarks_file = get_bookmarks_file ();
-  save_bookmarks (bookmarks_file, priv->bookmarks);
-  g_object_unref (bookmarks_file);
+  save_bookmarks (priv->bookmarks_file, priv->bookmarks);
 
   g_signal_emit (file_system, fs_signals[BOOKMARKS_CHANGED], 0);
 
@@ -1110,7 +1051,6 @@ _gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
 {
   GtkFileSystemPrivate *priv;
   gboolean changed = FALSE;
-  GFile *bookmarks_file;
   GSList *bookmarks;
 
   DEBUG ("set_bookmark_label");
@@ -1134,9 +1074,7 @@ _gtk_file_system_set_bookmark_label (GtkFileSystem *file_system,
 	}
     }
 
-  bookmarks_file = get_bookmarks_file ();
-  save_bookmarks (bookmarks_file, priv->bookmarks);
-  g_object_unref (bookmarks_file);
+  save_bookmarks (priv->bookmarks_file, priv->bookmarks);
 
   if (changed)
     g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
@@ -1146,12 +1084,10 @@ GtkFileSystemVolume *
 _gtk_file_system_get_volume_for_file (GtkFileSystem *file_system,
 				      GFile         *file)
 {
-  GtkFileSystemPrivate *priv;
   GMount *mount;
 
   DEBUG ("get_volume_for_file");
 
-  priv = GTK_FILE_SYSTEM_GET_PRIVATE (file_system);
   mount = g_file_find_enclosing_mount (file, NULL, NULL);
 
   if (!mount && g_file_is_native (file))
@@ -1234,6 +1170,8 @@ query_created_file_info_callback (GObject      *source_object,
       return;
     }
 
+  gdk_threads_enter ();
+
   folder = GTK_FOLDER (user_data);
   gtk_folder_add_file (folder, file, info);
 
@@ -1242,6 +1180,7 @@ query_created_file_info_callback (GObject      *source_object,
   g_slist_free (files);
 
   g_object_unref (info);
+  gdk_threads_leave ();
 }
 
 static void
@@ -1304,7 +1243,9 @@ enumerator_files_callback (GObject      *source_object,
 
   if (error)
     {
-      g_warning (error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("%s", error->message);
+
       g_error_free (error);
       return;
     }
@@ -1360,7 +1301,10 @@ gtk_folder_constructed (GObject *object)
   priv->directory_monitor = g_file_monitor_directory (priv->folder_file, G_FILE_MONITOR_NONE, NULL, &error);
 
   if (error)
-    g_warning (error->message);
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+    }
   else
     g_signal_connect (priv->directory_monitor, "changed",
 		      G_CALLBACK (directory_monitor_changed), object);
@@ -1694,8 +1638,22 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
   return pixbuf;
 }
 
+GtkFileSystemVolume *
+_gtk_file_system_volume_ref (GtkFileSystemVolume *volume)
+{
+  if (IS_ROOT_VOLUME (volume))
+    return volume;
+
+  if (G_IS_MOUNT (volume)  ||
+      G_IS_VOLUME (volume) ||
+      G_IS_DRIVE (volume))
+    g_object_ref (volume);
+
+  return volume;
+}
+
 void
-_gtk_file_system_volume_free (GtkFileSystemVolume *volume)
+_gtk_file_system_volume_unref (GtkFileSystemVolume *volume)
 {
   /* Root volume doesn't need to be freed */
   if (IS_ROOT_VOLUME (volume))
@@ -1730,7 +1688,39 @@ _gtk_file_info_render_icon (GFileInfo *info,
 
       if (icon)
 	pixbuf = get_pixbuf_from_gicon (icon, widget, icon_size, NULL);
+
+      if (!pixbuf)
+	{
+	   /* Use general fallback for all files without icon */
+	  icon = g_themed_icon_new ("text-x-generic");
+	  pixbuf = get_pixbuf_from_gicon (icon, widget, icon_size, NULL);
+	  g_object_unref (icon);
+	}
     }
 
   return pixbuf;
+}
+
+gboolean
+_gtk_file_info_consider_as_directory (GFileInfo *info)
+{
+  GFileType type = g_file_info_get_file_type (info);
+  
+  return (type == G_FILE_TYPE_DIRECTORY ||
+          type == G_FILE_TYPE_MOUNTABLE ||
+          type == G_FILE_TYPE_SHORTCUT);
+}
+
+gboolean
+_gtk_file_has_native_path (GFile *file)
+{
+  char *local_file_path;
+  gboolean has_native_path;
+
+  /* Don't use g_file_is_native(), as we want to support FUSE paths if available */
+  local_file_path = g_file_get_path (file);
+  has_native_path = (local_file_path != NULL);
+  g_free (local_file_path);
+
+  return has_native_path;
 }

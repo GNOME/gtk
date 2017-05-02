@@ -17,17 +17,19 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_COMBO_BOX_ENTRY_H__
+#define __GTK_COMBO_BOX_ENTRY_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_COMBO_BOX_ENTRY_H__
-#define __GTK_COMBO_BOX_ENTRY_H__
 
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtktreemodel.h>
 
 G_BEGIN_DECLS
+
+#ifndef GTK_DISABLE_DEPRECATED
 
 #define GTK_TYPE_COMBO_BOX_ENTRY             (gtk_combo_box_entry_get_type ())
 #define GTK_COMBO_BOX_ENTRY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COMBO_BOX_ENTRY, GtkComboBoxEntry))
@@ -72,6 +74,7 @@ gint        gtk_combo_box_entry_get_text_column (GtkComboBoxEntry *entry_box);
 /* convenience -- text */
 GtkWidget  *gtk_combo_box_entry_new_text        (void);
 
+#endif
 
 G_END_DECLS
 

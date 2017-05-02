@@ -17,12 +17,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_TREE_MODEL_H__
+#define __GTK_TREE_MODEL_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TREE_MODEL_H__
-#define __GTK_TREE_MODEL_H__
 
 #include <glib-object.h>
 
@@ -134,6 +134,8 @@ void         gtk_tree_path_prepend_index    (GtkTreePath       *path,
 					     gint               index_);
 gint         gtk_tree_path_get_depth        (GtkTreePath       *path);
 gint        *gtk_tree_path_get_indices      (GtkTreePath       *path);
+gint        *gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
+                                                   gint        *depth);
 void         gtk_tree_path_free             (GtkTreePath       *path);
 GtkTreePath *gtk_tree_path_copy             (const GtkTreePath *path);
 GType        gtk_tree_path_get_type         (void) G_GNUC_CONST;

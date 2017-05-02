@@ -41,10 +41,6 @@
 
 #include <directfb_version.h>
 
-#if DIRECTFB_MAJOR_VERSION < 1
-#define u32 __u32
-#define u8 __u8
-#endif
 
 static struct {
   const guchar *bits;
@@ -208,26 +204,28 @@ static struct {
 };
 
 GdkCursor *
-gdk_cursor_new_for_display (GdkDisplay *display,GdkCursorType cursor_type)
+gdk_cursor_new_for_display (GdkDisplay *display, GdkCursorType cursor_type)
 {
   GdkCursor *cursor;
-  GdkDisplayDFB *dfb_display  = GDK_DISPLAY_DFB(display);
+  GdkDisplayDFB *dfb_display = GDK_DISPLAY_DFB (display);
 
-  if (cursor_type >= sizeof(stock_cursors)/sizeof(stock_cursors[0]))
+  if (cursor_type >= sizeof (stock_cursors) / sizeof (stock_cursors[0]))
     return NULL;
 
   cursor = stock_cursors[cursor_type].cursor;
   if (!cursor)
     {
-      GdkCursorDirectFB     *private;
-      DFBResult              ret;
-      IDirectFBSurface      *temp;
-      IDirectFBSurface      *shape;
+      GdkCursorDirectFB *private;
+      DFBResult          ret;
+      IDirectFBSurface  *temp;
+      IDirectFBSurface  *shape;
 
-      int width       = stock_cursors[cursor_type+1].width;
-      int height      = stock_cursors[cursor_type+1].height;
+      int width  = stock_cursors[cursor_type+1].width;
+      int height = stock_cursors[cursor_type+1].height;
 
-      temp =gdk_display_dfb_create_surface(dfb_display,DSPF_ARGB,width,height);
+      temp = gdk_display_dfb_create_surface (dfb_display,
+                                             DSPF_ARGB,
+                                             width, height);
 
       if (!temp)
         {
@@ -253,7 +251,7 @@ gdk_cursor_new_for_display (GdkDisplay *display,GdkCursorType cursor_type)
               gint x, y;
               gint mx, my;
               gint  p = ((stock_cursors[cursor_type].width + 7) / 8) * 8;
-              gint mp = ((stock_cursors[cursor_type+1].width + 7) / 8) * 8;
+              gint mp = ((stock_cursors[cursor_type + 1].width + 7) / 8) * 8;
 
               const guchar *src;
               const guchar *mask;
@@ -273,9 +271,9 @@ gdk_cursor_new_for_display (GdkDisplay *display,GdkCursorType cursor_type)
                       gint  bit = x-mx + (y-my) * p;
                       gint mbit =    x +     y  * mp;
 
-                      u32 color = (x-mx < 0  ||  y-my < 0  ||
-                                     x-mx >= stock_cursors[cursor_type].width  ||
-                                     y-my >= stock_cursors[cursor_type].height)
+                      u32 color = ((x - mx) < 0  || (y - my) < 0  ||
+                                   (x - mx) >= stock_cursors[cursor_type].width  ||
+                                   (y - my) >= stock_cursors[cursor_type].height)
                         ? 0x00FFFFFF : (src[bit/8] & (1 << bit%8) ? 0 : 0x00FFFFFF);
 
 		      u8  a     = color ? 0xE0 : 0xFF;
@@ -293,10 +291,12 @@ gdk_cursor_new_for_display (GdkDisplay *display,GdkCursorType cursor_type)
       width  += 2;
       height += 2;
 
-      shape=gdk_display_dfb_create_surface(dfb_display,DSPF_ARGB,width,height);
+      shape = gdk_display_dfb_create_surface (dfb_display,
+                                              DSPF_ARGB,
+                                              width, height);
 
-      if( !shape ) {
-	temp->Release(temp);
+      if (!shape) {
+	temp->Release (temp);
 	return NULL;
       }
 
@@ -357,11 +357,13 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   impl = GDK_DRAWABLE_IMPL_DIRECTFB (GDK_PIXMAP_OBJECT (source)->impl);
   mask_impl = GDK_DRAWABLE_IMPL_DIRECTFB (GDK_PIXMAP_OBJECT (mask)->impl);
 
-  int width       = impl->width;
-  int height      = impl->height;
+  int width  = impl->width;
+  int height = impl->height;
 
-  shape=gdk_display_dfb_create_surface(_gdk_display,DSPF_ARGB,width,height);
-            
+  shape = gdk_display_dfb_create_surface (_gdk_display,
+                                          DSPF_ARGB,
+                                          width, height);
+
   if (!shape)
     {
       return NULL;
@@ -405,40 +407,40 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
                             gint        x,
                             gint        y)
 {
-GdkPixmap *pixmap, *mask;
- GdkCursor  *cursor;
- gint width, height, depth = 8;
- GdkVisual* visual;
+  GdkPixmap  *pixmap, *mask;
+  GdkCursor  *cursor;
+  gint        width, height, depth = 8;
+  GdkVisual*  visual;
 
- /* FIXME: this is not the right way to set colours */
- GdkColor fg = { 0, 65535, 65535, 65535 };
- GdkColor bg = { 0, 65535, 65535, 65535 };
+  /* FIXME: this is not the right way to set colours */
+  GdkColor fg = { 0, 65535, 65535, 65535 };
+  GdkColor bg = { 0, 65535, 65535, 65535 };
 
- g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
- g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
- g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
- g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+  g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
+  g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
 
- width = gdk_pixbuf_get_width(pixbuf);
- height = gdk_pixbuf_get_height(pixbuf);
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
 
- pixmap = gdk_pixmap_new ( NULL, width, height, depth);
- mask = gdk_pixmap_new ( NULL, width, height, 1);
- visual = gdk_rgb_get_visual ();
- depth = visual->depth;
+  pixmap = gdk_pixmap_new (NULL, width, height, depth);
+  mask = gdk_pixmap_new (NULL, width, height, 1);
+  visual = gdk_rgb_get_visual ();
+  depth = visual->depth;
 
- gdk_pixbuf_render_pixmap_and_mask (pixbuf, &pixmap, &mask, 0);
+  gdk_pixbuf_render_pixmap_and_mask (pixbuf, &pixmap, &mask, 0);
 
- g_return_val_if_fail (GDK_IS_PIXMAP (pixmap), NULL);
- g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
+  g_return_val_if_fail (GDK_IS_PIXMAP (pixmap), NULL);
+  g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
 
- cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, x, y) ;
+  cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, x, y) ;
 
- g_object_unref (pixmap);
- g_object_unref (mask);
+  g_object_unref (pixmap);
+  g_object_unref (mask);
 
- /* a cursor of type GDK_CURSOR_IS_PIXMAP is returned */
- return cursor;
+  /* a cursor of type GDK_CURSOR_IS_PIXMAP is returned */
+  return cursor;
 
 }
 
@@ -446,19 +448,20 @@ GdkCursor*
 gdk_cursor_new_from_name (GdkDisplay  *display,
                           const gchar *name)
 {
- GdkCursor *cursor;
- GdkPixbuf *pixbuf;
+  GdkCursor *cursor;
+  GdkPixbuf *pixbuf;
 
- g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
- pixbuf = gdk_pixbuf_new_from_file(name, NULL);
- /* Prevents attempts to load stock X cursors from generating error messages */
- if (pixbuf == NULL)
-   return NULL;
- g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
- cursor = gdk_cursor_new_from_pixbuf (display, pixbuf, 1, 1);
- g_object_unref (pixbuf);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
- return cursor;
+  pixbuf = gdk_pixbuf_new_from_file (name, NULL);
+  /* Prevents attempts to load stock X cursors from generating error messages */
+  if (pixbuf == NULL)
+    return NULL;
+  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+  cursor = gdk_cursor_new_from_pixbuf (display, pixbuf, 1, 1);
+  g_object_unref (pixbuf);
+
+  return cursor;
 }
 
 
@@ -494,8 +497,10 @@ gdk_cursor_get_display (GdkCursor *cursor)
 }
 
 guint
-gdk_display_get_default_cursor_size (GdkDisplay    *display)
+gdk_display_get_default_cursor_size (GdkDisplay *display)
 {
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+
   return 16;
 }
 
@@ -514,8 +519,12 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
                                      guint       *width,
                                      guint       *height)
 {
-  *width=gdk_display_get_default_cursor_size(display);
-  *height=*width;
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  /* Cursor sizes in DirectFB can be large (4095x4095), but we limit this to
+     128x128 for max compatibility with the x11 backend. */
+  *width  = 128;
+  *height = 128;
 }
 
 /**

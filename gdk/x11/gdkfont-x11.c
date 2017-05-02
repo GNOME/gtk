@@ -832,7 +832,7 @@ gdk_x11_font_get_xfont (GdkFont *font)
  * Return value: the name of the font. This string is owned
  *   by GDK and must not be modified or freed.
  **/
-G_CONST_RETURN char *
+const char *
 gdk_x11_font_get_name (GdkFont *font)
 {
   GdkFontPrivateX *private = (GdkFontPrivateX *)font;

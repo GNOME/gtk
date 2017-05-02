@@ -18,12 +18,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_FILE_CHOOSER_BUTTON_H__
+#define __GTK_FILE_CHOOSER_BUTTON_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_FILE_CHOOSER_BUTTON_H__
-#define __GTK_FILE_CHOOSER_BUTTON_H__
 
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkfilechooser.h>
@@ -77,7 +77,7 @@ GtkWidget *           gtk_file_chooser_button_new_with_backend (const gchar     
 #endif /* GTK_DISABLE_DEPRECATED */
 
 GtkWidget *           gtk_file_chooser_button_new_with_dialog  (GtkWidget            *dialog);
-G_CONST_RETURN gchar *gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
+const gchar *         gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
 void                  gtk_file_chooser_button_set_title        (GtkFileChooserButton *button,
 								const gchar          *title);
 gint                  gtk_file_chooser_button_get_width_chars  (GtkFileChooserButton *button);

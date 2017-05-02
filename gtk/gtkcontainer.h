@@ -24,16 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_CONTAINER_H__
 #define __GTK_CONTAINER_H__
 
 
-#include <gdk/gdk.h>
-#include <gtk/gtkenums.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkadjustment.h>
 
@@ -130,7 +128,8 @@ void     gtk_container_foreach_full (GtkContainer       *container,
 				     GtkCallbackMarshal  marshal,
 				     gpointer            callback_data,
 				     GDestroyNotify      notify);
-#endif /*  GTK_DISABLE_DEPRECATED */
+#endif
+
 GList*   gtk_container_get_children     (GtkContainer       *container);
 
 #ifndef GTK_DISABLE_DEPRECATED

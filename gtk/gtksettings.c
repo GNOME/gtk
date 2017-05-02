@@ -35,6 +35,12 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 
+#ifdef GDK_WINDOWING_QUARTZ
+#define DEFAULT_KEY_THEME "Mac"
+#else
+#define DEFAULT_KEY_THEME NULL
+#endif
+
 #define DEFAULT_TIMEOUT_INITIAL 200
 #define DEFAULT_TIMEOUT_REPEAT   20
 #define DEFAULT_TIMEOUT_EXPAND  500
@@ -116,9 +122,25 @@ enum {
   PROP_SOUND_THEME_NAME,
   PROP_ENABLE_INPUT_FEEDBACK_SOUNDS,
   PROP_ENABLE_EVENT_SOUNDS,
-  PROP_ENABLE_TOOLTIPS
+  PROP_ENABLE_TOOLTIPS,
+  PROP_TOOLBAR_STYLE,
+  PROP_TOOLBAR_ICON_SIZE,
+  PROP_AUTO_MNEMONICS,
+  PROP_PRIMARY_BUTTON_WARPS_SLIDER,
+  PROP_BUTTON_IMAGES,
+  PROP_ENTRY_SELECT_ON_FOCUS,
+  PROP_ENTRY_PASSWORD_HINT_TIMEOUT,
+  PROP_MENU_IMAGES,
+  PROP_MENU_BAR_POPUP_DELAY,
+  PROP_SCROLLED_WINDOW_PLACEMENT,
+  PROP_CAN_CHANGE_ACCELS,
+  PROP_MENU_POPUP_DELAY,
+  PROP_MENU_POPDOWN_DELAY,
+  PROP_LABEL_SELECT_ON_FOCUS,
+  PROP_COLOR_PALETTE,
+  PROP_IM_PREEDIT_STYLE,
+  PROP_IM_STATUS_STYLE
 };
-
 
 /* --- prototypes --- */
 static void	gtk_settings_finalize		 (GObject		*object);
@@ -152,6 +174,10 @@ static void    merge_color_scheme                (GtkSettings           *setting
 static gchar  *get_color_scheme                  (GtkSettings           *settings);
 static GHashTable *get_color_hash                (GtkSettings           *settings);
 
+/* the default palette for GtkColorSelelection */
+static const gchar default_color_palette[] =
+  "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:"
+  "lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90";
 
 /* --- variables --- */
 static GQuark		 quark_property_parser = 0;
@@ -283,7 +309,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_string ("gtk-theme-name",
 								   P_("Theme Name"),
 								   P_("Name of theme RC file to load"),
+#ifdef G_OS_WIN32
+								  "MS-Windows",
+#else
 								  "Raleigh",
+#endif
 								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_THEME_NAME);
@@ -310,7 +340,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_string ("gtk-key-theme-name",
 								  P_("Key Theme Name"),
 								  P_("Name of key theme RC file to load"),
-								  NULL,
+								  DEFAULT_KEY_THEME,
 								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_KEY_THEME_NAME);    
@@ -741,7 +771,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * A comma-separated list of print backends to use in the print
    * dialog. Available print backends depend on the GTK+ installation,
-   * and may include "pdf", "cups" or "lpr".
+   * and may include "file", "cups", "lpr" or "papi".
    *
    * Since: 2.10
    */
@@ -834,7 +864,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-im-module:
    *
-   * Which IM module should be used by default.
+   * Which IM (input method) module should be used by default. This is the 
+   * input method that will be used if the user has not explicitly chosen 
+   * another input method from the IM context menu.  
+   * This also can be a colon-separated list of input methods, which GTK+
+   * will try in turn until it finds one available on the system.
+   *
+   * See #GtkIMContext and see the #GtkSettings:gtk-show-input-method-menu property.
    */
   result = settings_install_property_parser (class,
 					     g_param_spec_string ("gtk-im-module",
@@ -866,11 +902,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_RECENT_FILES_MAX_AGE);
 
   result = settings_install_property_parser (class,
-					     g_param_spec_int ("gtk-fontconfig-timestamp",
- 							       P_("Fontconfig configuration timestamp"),
- 							       P_("Timestamp of current fontconfig configuration"),
- 							       G_MININT, G_MAXINT, 0,
- 							       GTK_PARAM_READWRITE),
+					     g_param_spec_uint ("gtk-fontconfig-timestamp",
+								P_("Fontconfig configuration timestamp"),
+								P_("Timestamp of current fontconfig configuration"),
+								0, G_MAXUINT, 0,
+								GTK_PARAM_READWRITE),
 					     NULL);
   
   g_assert (result == PROP_FONTCONFIG_TIMESTAMP);
@@ -957,6 +993,218 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ENABLE_TOOLTIPS);
+
+  /**
+   * GtkSettings:toolbar-style:
+   *
+   * The size of icons in default toolbars.
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-toolbar-style",
+                                                                   P_("Toolbar style"),
+                                                                   P_("Whether default toolbars have text only, text and icons, icons only, etc."),
+                                                                   GTK_TYPE_TOOLBAR_STYLE,
+                                                                   GTK_TOOLBAR_BOTH,
+                                                                   GTK_PARAM_READWRITE),
+                                             gtk_rc_property_parse_enum);
+  g_assert (result == PROP_TOOLBAR_STYLE);
+
+  /**
+   * GtkSettings:toolbar-icon-size:
+   *
+   * The size of icons in default toolbars.
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-toolbar-icon-size",
+                                                                   P_("Toolbar Icon Size"),
+                                                                   P_("The size of icons in default toolbars."),
+                                                                   GTK_TYPE_ICON_SIZE,
+                                                                   GTK_ICON_SIZE_LARGE_TOOLBAR,
+                                                                   GTK_PARAM_READWRITE),
+                                             gtk_rc_property_parse_enum);
+  g_assert (result == PROP_TOOLBAR_ICON_SIZE);
+
+  /**
+   * GtkSettings:gtk-auto-mnemonics:
+   *
+   * Whether mnemonics should be automatically shown and hidden when the user
+   * presses the mnemonic activator.
+   *
+   * Since: 2.20
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-auto-mnemonics",
+                                                                   P_("Auto Mnemonics"),
+                                                                   P_("Whether mnemonics should be automatically shown and hidden when the user presses the mnemonic activator."),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_AUTO_MNEMONICS);
+
+  /**
+   * GtkSettings:gtk-primary-button-warps-slider
+   *
+   * Whether a click in a #GtkRange trough should scroll to the click position or
+   * scroll by a single page in the respective direction.
+   *
+   * Since: 2.24
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-primary-button-warps-slider",
+                                                                   P_("Primary button warps slider"),
+                                                                   P_("Whether a primary click on the trough should warp the slider into position"),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_PRIMARY_BUTTON_WARPS_SLIDER);
+
+  /**
+   * GtkSettings::gtk-button-images:
+   *
+   * Whether images should be shown on buttons
+   *
+   * Since: 2.4
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-button-images",
+                                                                   P_("Show button images"),
+                                                                   P_("Whether images should be shown on buttons"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_BUTTON_IMAGES);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-entry-select-on-focus",
+                                                                   P_("Select on focus"),
+                                                                   P_("Whether to select the contents of an entry when it is focused"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENTRY_SELECT_ON_FOCUS);
+
+  /**
+   * GtkSettings:gtk-entry-password-hint-timeout:
+   *
+   * How long to show the last input character in hidden
+   * entries. This value is in milliseconds. 0 disables showing the
+   * last char. 600 is a good value for enabling it.
+   *
+   * Since: 2.10
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_uint ("gtk-entry-password-hint-timeout",
+                                                                P_("Password Hint Timeout"),
+                                                                P_("How long to show the last input character in hidden entries"),
+                                                                0, G_MAXUINT,
+                                                                0,
+                                                                GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENTRY_PASSWORD_HINT_TIMEOUT);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-menu-images",
+                                                                   P_("Show menu images"),
+                                                                   P_("Whether images should be shown in menus"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_MENU_IMAGES);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-menu-bar-popup-delay",
+                                                               P_("Delay before drop down menus appear"),
+                                                               P_("Delay before the submenus of a menu bar appear"),
+                                                               0, G_MAXINT,
+                                                               0,
+                                                               GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_MENU_BAR_POPUP_DELAY);
+
+  /**
+   * GtkSettings:gtk-scrolled-window-placement:
+   *
+   * Where the contents of scrolled windows are located with respect to the 
+   * scrollbars, if not overridden by the scrolled window's own placement.
+   *
+   * Since: 2.10
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-scrolled-window-placement",
+                                                                P_("Scrolled Window Placement"),
+                                                                P_("Where the contents of scrolled windows are located with respect to the scrollbars, if not overridden by the scrolled window's own placement."),
+                                                                GTK_TYPE_CORNER_TYPE,
+                                                                GTK_CORNER_TOP_LEFT,
+                                                                GTK_PARAM_READWRITE),
+                                             gtk_rc_property_parse_enum);
+  g_assert (result == PROP_SCROLLED_WINDOW_PLACEMENT);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-can-change-accels",
+                                                                   P_("Can change accelerators"),
+                                                                   P_("Whether menu accelerators can be changed by pressing a key over the menu item"),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_CAN_CHANGE_ACCELS);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-menu-popup-delay",
+                                                               P_("Delay before submenus appear"),
+                                                               P_("Minimum time the pointer must stay over a menu item before the submenu appear"),
+                                                               0, G_MAXINT,
+                                                               225,
+                                                               GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_MENU_POPUP_DELAY);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-menu-popdown-delay",
+                                                               P_("Delay before hiding a submenu"),
+                                                               P_("The time before hiding a submenu when the pointer is moving towards the submenu"),
+                                                               0, G_MAXINT,
+                                                               1000,
+                                                               GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_MENU_POPDOWN_DELAY);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-label-select-on-focus",
+                                                                   P_("Select on focus"),
+                                                                   P_("Whether to select the contents of a selectable label when it is focused"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_LABEL_SELECT_ON_FOCUS);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-color-palette",
+                                                                  P_("Custom palette"),
+                                                                  P_("Palette to use in the color selector"),
+                                                                  default_color_palette,
+                                                                  GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_COLOR_PALETTE);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-im-preedit-style",
+                                                                P_("IM Preedit style"),
+                                                                P_("How to draw the input method preedit string"),
+                                                                GTK_TYPE_IM_PREEDIT_STYLE,
+                                                                GTK_IM_PREEDIT_CALLBACK,
+                                                                GTK_PARAM_READWRITE),
+                                             gtk_rc_property_parse_enum);
+  g_assert (result == PROP_IM_PREEDIT_STYLE);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-im-status-style",
+                                                                P_("IM Status style"),
+                                                                P_("How to draw the input method statusbar"),
+                                                                GTK_TYPE_IM_STATUS_STYLE,
+                                                                GTK_IM_STATUS_CALLBACK,
+                                                                GTK_PARAM_READWRITE),
+                                             gtk_rc_property_parse_enum);
+  g_assert (result == PROP_IM_STATUS_STYLE);
 }
 
 static void
@@ -980,11 +1228,11 @@ gtk_settings_finalize (GObject *object)
 
 /**
  * gtk_settings_get_for_screen:
- * @screen : a #GdkScreen.
- * 
+ * @screen: a #GdkScreen.
+ *
  * Gets the #GtkSettings object for @screen, creating it if necessary.
  *
- * Return value: a #GtkSettings object.
+ * Return value: (transfer none): a #GtkSettings object.
  *
  * Since: 2.2
  */
@@ -992,9 +1240,9 @@ GtkSettings*
 gtk_settings_get_for_screen (GdkScreen *screen)
 {
   GtkSettings *settings;
-  
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  
+
   settings = g_object_get_data (G_OBJECT (screen), "gtk-settings");
   if (!settings)
     {
@@ -1021,8 +1269,8 @@ gtk_settings_get_for_screen (GdkScreen *screen)
  * 
  * Gets the #GtkSettings object for the default GDK screen, creating
  * it if necessary. See gtk_settings_get_for_screen().
- * 
- * Return value: a #GtkSettings object. If there is no default
+ *
+ * Return value: (transfer none): a #GtkSettings object. If there is no default
  *  screen, then returns %NULL.
  **/
 GtkSettings*
@@ -1306,6 +1554,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
     case G_TYPE_FLOAT:
     case G_TYPE_DOUBLE:
     case G_TYPE_STRING:
+    case G_TYPE_ENUM:
       break;
     case G_TYPE_BOXED:
       if (strcmp (g_param_spec_get_name (pspec), "color-hash") == 0)
@@ -1882,7 +2131,7 @@ _gtk_settings_handle_event (GdkEventSetting *event)
   GParamSpec *pspec;
   guint property_id;
 
-  settings = gtk_settings_get_for_screen (gdk_drawable_get_screen (event->window));
+  settings = gtk_settings_get_for_screen (gdk_window_get_screen (event->window));
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name);
  
   if (pspec) 
@@ -1892,14 +2141,13 @@ _gtk_settings_handle_event (GdkEventSetting *event)
       if (property_id == PROP_COLOR_SCHEME)
         {
           GValue value = { 0, };
-
+ 
           g_value_init (&value, G_TYPE_STRING);
           if (!gdk_screen_get_setting (settings->screen, pspec->name, &value))
             g_value_set_static_string (&value, "");
           merge_color_scheme (settings, &value, GTK_SETTINGS_SOURCE_XSETTING);
           g_value_unset (&value);
         }
-
       g_object_notify (G_OBJECT (settings), pspec->name);
    }
 }
@@ -2187,8 +2435,8 @@ settings_update_color_scheme (GtkSettings *settings)
 }
 
 static gboolean
-add_color_to_hash (gchar      *name, 
-		   GdkColor   *color, 
+add_color_to_hash (gchar      *name,
+		   GdkColor   *color,
 		   GHashTable *target)
 {
   GdkColor *old;
@@ -2197,7 +2445,7 @@ add_color_to_hash (gchar      *name,
   if (!old || !gdk_color_equal (old, color))
     {
       g_hash_table_insert (target, g_strdup (name), gdk_color_copy (color));
-      
+
       return TRUE;
     }
 
@@ -2205,7 +2453,7 @@ add_color_to_hash (gchar      *name,
 }
 
 static gboolean
-add_colors_to_hash_from_string (GHashTable  *hash, 
+add_colors_to_hash_from_string (GHashTable  *hash,
 				const gchar *colors)
 {
   gchar *s, *p, *name;
@@ -2253,23 +2501,27 @@ add_colors_to_hash_from_string (GHashTable  *hash,
 
 static gboolean
 update_color_hash (ColorSchemeData   *data,
-		   const gchar       *str, 
+		   const gchar       *str,
 		   GtkSettingsSource  source)
 {
   gboolean changed = FALSE;
   gint i;
+  GHashTable *old_hash;
+  GHashTableIter iter;
+  gpointer name;
+  gpointer color;
 
-  if ((str == NULL || *str == '\0') && 
+  if ((str == NULL || *str == '\0') &&
       (data->lastentry[source] == NULL || data->lastentry[source][0] == '\0'))
     return FALSE;
 
   if (str && data->lastentry[source] && strcmp (str, data->lastentry[source]) == 0)
     return FALSE;
 
-  /* For the RC_FILE source we merge the values rather than over-writing 
+  /* For the RC_FILE source we merge the values rather than over-writing
    * them, since multiple rc files might define independent sets of colors
    */
-  if ((source != GTK_SETTINGS_SOURCE_RC_FILE) && 
+  if ((source != GTK_SETTINGS_SOURCE_RC_FILE) &&
       data->tables[source] && g_hash_table_size (data->tables[source]) > 0)
     {
       g_hash_table_unref (data->tables[source]);
@@ -2278,23 +2530,36 @@ update_color_hash (ColorSchemeData   *data,
     }
 
   if (data->tables[source] == NULL)
-    data->tables[source] = g_hash_table_new_full (g_str_hash, g_str_equal, 
+    data->tables[source] = g_hash_table_new_full (g_str_hash, g_str_equal,
 						  g_free,
 						  (GDestroyNotify) gdk_color_free);
 
   g_free (data->lastentry[source]);
   data->lastentry[source] = g_strdup (str);
-  
+
   changed |= add_colors_to_hash_from_string (data->tables[source], str);
 
   if (!changed)
     return FALSE;
-    
+
   /* Rebuild the merged hash table. */
   if (data->color_hash)
-    g_hash_table_unref (data->color_hash);
-  data->color_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
-					    (GDestroyNotify) gdk_color_free);
+    {
+      old_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
+                                        (GDestroyNotify) gdk_color_free);
+
+      g_hash_table_iter_init (&iter, data->color_hash);
+      while (g_hash_table_iter_next (&iter, &name, &color))
+        {
+          g_hash_table_insert (old_hash, name, color);
+          g_hash_table_iter_steal (&iter);
+        }
+    }
+  else
+    {
+      old_hash = NULL;
+    }
+
   for (i = 0; i <= GTK_SETTINGS_SOURCE_APPLICATION; i++)
     {
       if (data->tables[i])
@@ -2302,7 +2567,35 @@ update_color_hash (ColorSchemeData   *data,
 			      data->color_hash);
     }
 
-  return TRUE;
+  if (old_hash)
+    {
+      /* now check if the merged hash has changed */
+      changed = FALSE;
+      if (g_hash_table_size (old_hash) != g_hash_table_size (data->color_hash))
+        changed = TRUE;
+      else
+        {
+          GHashTableIter iter;
+          gpointer key, value, new_value;
+
+          g_hash_table_iter_init (&iter, old_hash);
+          while (g_hash_table_iter_next (&iter, &key, &value))
+            {
+              new_value = g_hash_table_lookup (data->color_hash, key);
+              if (!new_value || !gdk_color_equal (value, new_value))
+                {
+                  changed = TRUE;
+                  break;
+                }
+            }
+        }
+
+      g_hash_table_unref (old_hash);
+    }
+  else
+    changed = TRUE;
+
+  return changed;
 }
 
 static void

@@ -36,12 +36,18 @@
 
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkvolumebutton
+ * @Short_description: A button which pops up a volume control
+ * @Title: GtkVolumeButton
+ *
+ * #GtkVolumeButton is a subclass of #GtkScaleButton that has
+ * been tailored for use as a volume control widget with suitable
+ * icons, tooltips and accessible labels.
+ */
+
 #define EPSILON (1e-10)
 
-struct _GtkVolumeButton
-{
-  GtkScaleButton  parent;
-};
 
 static gboolean	cb_query_tooltip (GtkWidget       *button,
                                   gint             x,
@@ -164,10 +170,8 @@ cb_query_tooltip (GtkWidget  *button,
        * as used in the tooltip, eg. "49 %".
        * Translate the "%d" to "%Id" if you want to use localised digits,
        * or otherwise translate the "%d" to "%d".
-       * Do not translate and do not include the "volume percentage|"
-       * part in the translation!
        */
-      str = g_strdup_printf (Q_("volume percentage|%d %%"), percent);
+      str = g_strdup_printf (C_("volume percentage", "%d %%"), percent);
     }
 
   gtk_tooltip_set_text (tooltip, str);

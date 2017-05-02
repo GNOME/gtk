@@ -94,6 +94,9 @@ void create_file_selection (void) {
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkFileSelection ##### -->
 <para>
 The #GtkFileSelection struct contains the following #GtkWidget fields:
@@ -153,19 +156,16 @@ Creates a new file selection dialog box. By default it will contain a #GtkTreeVi
 @Deprecated: Use gtk_file_chooser_dialog_new() instead
 
 
-<!-- ##### FUNCTION gtk_file_selection_set_filename ##### -->
+<!-- ##### MACRO gtk_file_selection_set_filename ##### -->
 <para>
 </para>
 
-@filesel: 
-@filename: 
 
 
-<!-- ##### FUNCTION gtk_file_selection_get_filename ##### -->
+<!-- ##### MACRO gtk_file_selection_get_filename ##### -->
 <para>
 </para>
 
-@filesel: 
 @Returns: 
 
 
@@ -197,12 +197,11 @@ Hides the file operation buttons that normally appear at the top of the dialog. 
 @filesel: a #GtkFileSelection.
 
 
-<!-- ##### FUNCTION gtk_file_selection_get_selections ##### -->
+<!-- ##### MACRO gtk_file_selection_get_selections ##### -->
 <para>
 
 </para>
 
-@filesel: 
 @Returns: 
 
 

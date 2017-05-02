@@ -183,7 +183,7 @@ int main( int   argc,
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
     /* This makes it so the button is the default. */
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
 
     /* This grabs this button to be the default button. Simply hitting
      * the "Enter" key will cause this button to activate. */

@@ -28,16 +28,17 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_LAYOUT_H__
+#define __GTK_LAYOUT_H__
+
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_LAYOUT_H__
-#define __GTK_LAYOUT_H__
-
-#include <gdk/gdk.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkadjustment.h>
+
 
 G_BEGIN_DECLS
 

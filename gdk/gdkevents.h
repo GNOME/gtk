@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_EVENTS_H__
+#define __GDK_EVENTS_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_EVENTS_H__
-#define __GDK_EVENTS_H__
 
 #include <gdk/gdkcolor.h>
 #include <gdk/gdktypes.h>
@@ -151,7 +151,8 @@ typedef enum
   GDK_SETTING           = 33,
   GDK_OWNER_CHANGE      = 34,
   GDK_GRAB_BROKEN       = 35,
-  GDK_DAMAGE            = 36
+  GDK_DAMAGE            = 36,
+  GDK_EVENT_LAST        /* helper variable for decls */
 } GdkEventType;
 
 /* Event masks. (Used to select what types of events a window
@@ -518,7 +519,9 @@ gboolean  gdk_events_pending	 	(void);
 GdkEvent* gdk_event_get			(void);
 
 GdkEvent* gdk_event_peek                (void);
+#ifndef GDK_DISABLE_DEPRECATED
 GdkEvent* gdk_event_get_graphics_expose (GdkWindow 	*window);
+#endif
 void      gdk_event_put	 		(const GdkEvent *event);
 
 GdkEvent* gdk_event_new                 (GdkEventType    type);

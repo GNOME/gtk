@@ -26,6 +26,8 @@
 
 #include "config.h"
 
+#include "gtkmain.h"
+
 #include <glib.h>
 #include "gdkconfig.h"
 
@@ -52,7 +54,6 @@
 #include "gtkclipboard.h"
 #include "gtkdnd.h"
 #include "gtkversion.h"
-#include "gtkmain.h"
 #include "gtkmodules.h"
 #include "gtkrc.h"
 #include "gtkrecentmanager.h"
@@ -63,16 +64,53 @@
 #include "gtktooltip.h"
 #include "gtkdebug.h"
 #include "gtkalias.h"
+#include "gtkmenu.h"
+#include "gdk/gdkkeysyms.h"
 
 #include "gdk/gdkprivate.h" /* for GDK_WINDOW_DESTROYED */
 
 #ifdef G_OS_WIN32
 
-G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
+static HMODULE gtk_dll;
 
-/* This here before inclusion of gtkprivate.h so that it sees the
- * original GTK_LOCALEDIR definition. Yeah, this is a bit sucky.
+BOOL WINAPI
+DllMain (HINSTANCE hinstDLL,
+	 DWORD     fdwReason,
+	 LPVOID    lpvReserved)
+{
+  switch (fdwReason)
+    {
+    case DLL_PROCESS_ATTACH:
+      gtk_dll = (HMODULE) hinstDLL;
+      break;
+    }
+
+  return TRUE;
+}
+
+/* These here before inclusion of gtkprivate.h so that the original
+ * GTK_LIBDIR and GTK_LOCALEDIR definitions are seen. Yeah, this is a
+ * bit sucky.
  */
+const gchar *
+_gtk_get_libdir (void)
+{
+  static char *gtk_libdir = NULL;
+  if (gtk_libdir == NULL)
+    {
+      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      gchar *slash = root ? strrchr (root, '\\') : NULL;
+      if (slash != NULL &&
+          g_ascii_strcasecmp (slash + 1, ".libs") == 0)
+	gtk_libdir = GTK_LIBDIR;
+      else
+	gtk_libdir = g_build_filename (root, "lib", NULL);
+      g_free (root);
+    }
+
+  return gtk_libdir;
+}
+
 const gchar *
 _gtk_get_localedir (void)
 {
@@ -80,7 +118,7 @@ _gtk_get_localedir (void)
   if (gtk_localedir == NULL)
     {
       const gchar *p;
-      gchar *temp;
+      gchar *root, *temp;
       
       /* GTK_LOCALEDIR ends in either /lib/locale or
        * /share/locale. Scan for that slash.
@@ -91,8 +129,9 @@ _gtk_get_localedir (void)
       while (*--p != '/')
 	;
 
-      temp = g_win32_get_package_installation_subdirectory
-        (GETTEXT_PACKAGE, dll_name, p);
+      root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      temp = g_build_filename (root, p, NULL);
+      g_free (root);
 
       /* gtk_localedir is passed to bindtextdomain() which isn't
        * UTF-8-aware.
@@ -307,21 +346,13 @@ _gtk_get_datadir (void)
 {
   static char *gtk_datadir = NULL;
   if (gtk_datadir == NULL)
-    gtk_datadir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "share");
+    {
+      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      gtk_datadir = g_build_filename (root, "share", NULL);
+      g_free (root);
+    }
 
   return gtk_datadir;
-}
-
-const gchar *
-_gtk_get_libdir (void)
-{
-  static char *gtk_libdir = NULL;
-  if (gtk_libdir == NULL)
-    gtk_libdir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "lib");
-
-  return gtk_libdir;
 }
 
 const gchar *
@@ -329,8 +360,11 @@ _gtk_get_sysconfdir (void)
 {
   static char *gtk_sysconfdir = NULL;
   if (gtk_sysconfdir == NULL)
-    gtk_sysconfdir = g_win32_get_package_installation_subdirectory
-      (GETTEXT_PACKAGE, dll_name, "etc");
+    {
+      gchar *root = g_win32_get_package_installation_directory_of_module (gtk_dll);
+      gtk_sysconfdir = g_build_filename (root, "etc", NULL);
+      g_free (root);
+    }
 
   return gtk_sysconfdir;
 }
@@ -340,8 +374,7 @@ _gtk_get_data_prefix (void)
 {
   static char *gtk_data_prefix = NULL;
   if (gtk_data_prefix == NULL)
-    gtk_data_prefix = g_win32_get_package_installation_directory
-      (GETTEXT_PACKAGE, dll_name);
+    gtk_data_prefix = g_win32_get_package_installation_directory_of_module (gtk_dll);
 
   return gtk_data_prefix;
 }
@@ -355,9 +388,9 @@ static gboolean do_setlocale = TRUE;
  * 
  * Prevents gtk_init(), gtk_init_check(), gtk_init_with_args() and
  * gtk_parse_args() from automatically
- * calling <literal>setlocale (LC_ALL, "")</literal>. You would 
- * want to use this function if you wanted to set the locale for 
- * your program to something other than the user's locale, or if 
+ * calling <literal>setlocale (LC_ALL, "")</literal>. You would
+ * want to use this function if you wanted to set the locale for
+ * your program to something other than the user's locale, or if
  * you wanted to set different values for different locale categories.
  *
  * Most programs should not need to call this function.
@@ -596,6 +629,32 @@ setlocale_initialization (void)
     }
 }
 
+/* Return TRUE if module_to_check causes version conflicts.
+ * If module_to_check is NULL, check the main module.
+ */
+gboolean
+_gtk_module_has_mixed_deps (GModule *module_to_check)
+{
+  GModule *module;
+  gpointer func;
+  gboolean result;
+
+  if (!module_to_check)
+    module = g_module_open (NULL, 0);
+  else
+    module = module_to_check;
+
+  if (g_module_symbol (module, "gtk_widget_device_is_shadowed", &func))
+    result = TRUE;
+  else
+    result = FALSE;
+
+  if (!module_to_check)
+    g_module_close (module);
+
+  return result;
+}
+
 static void
 do_pre_parse_initialization (int    *argc,
 			     char ***argv)
@@ -614,6 +673,9 @@ do_pre_parse_initialization (int    *argc,
 
   pre_initialized = TRUE;
 
+  if (_gtk_module_has_mixed_deps (NULL))
+    g_error ("GTK+ 2.x symbols detected. Using GTK+ 2.x and GTK+ 3 in the same process is not supported");
+
   gdk_pre_parse_libgtk_only ();
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
@@ -628,9 +690,20 @@ do_pre_parse_initialization (int    *argc,
     }
 #endif	/* G_ENABLE_DEBUG */
 
-  env_string = g_getenv ("GTK_MODULES");
+  env_string = g_getenv ("GTK2_MODULES");
   if (env_string)
     gtk_modules_string = g_string_new (env_string);
+
+  env_string = g_getenv ("GTK_MODULES");
+  if (env_string)
+    {
+      if (gtk_modules_string)
+        g_string_append_c (gtk_modules_string, G_SEARCHPATH_SEPARATOR);
+      else
+        gtk_modules_string = g_string_new (NULL);
+
+      g_string_append (gtk_modules_string, env_string);
+    }
 }
 
 static void
@@ -656,6 +729,10 @@ do_post_parse_initialization (int    *argc,
     return;
 
   gettext_initialization ();
+
+#ifdef SIGPIPE
+  signal (SIGPIPE, SIG_IGN);
+#endif
 
   if (g_fatal_warnings)
     {
@@ -684,7 +761,6 @@ do_post_parse_initialization (int    *argc,
 
   /* do what the call to gtk_type_init() used to do */
   g_type_init ();
-  gtk_object_get_type ();
 
   _gtk_accel_map_init ();
   _gtk_rc_init ();
@@ -698,6 +774,10 @@ do_post_parse_initialization (int    *argc,
     {
       _gtk_modules_init (argc, argv, gtk_modules_string->str);
       g_string_free (gtk_modules_string, TRUE);
+    }
+  else
+    {
+      _gtk_modules_init (argc, argv, NULL);
     }
 }
 
@@ -787,12 +867,13 @@ gtk_get_option_group (gboolean open_default_display)
 /**
  * gtk_init_with_args:
  * @argc: a pointer to the number of command line arguments.
- * @argv: a pointer to the array of command line arguments.
+ * @argv: (inout) (array length=argc): a pointer to the array of
+ *    command line arguments.
  * @parameter_string: a string which is displayed in
  *    the first line of <option>--help</option> output, after 
  *    <literal><replaceable>programname</replaceable> [OPTION...]</literal>
- * @entries: a %NULL-terminated array of #GOptionEntry<!-- -->s
- *    describing the options of your program
+ * @entries: (array zero-terminated=1):  a %NULL-terminated array
+ *    of #GOptionEntry<!-- -->s describing the options of your program
  * @translation_domain: a translation domain to use for translating
  *    the <option>--help</option> output for the options in @entries
  *    with gettext(), or %NULL
@@ -812,9 +893,9 @@ gtk_get_option_group (gboolean open_default_display)
 gboolean
 gtk_init_with_args (int            *argc,
 		    char         ***argv,
-		    char           *parameter_string,  
+		    const char     *parameter_string,
 		    GOptionEntry   *entries,
-		    char           *translation_domain,
+		    const char     *translation_domain,
 		    GError        **error)
 {
   GOptionContext *context;
@@ -846,9 +927,10 @@ gtk_init_with_args (int            *argc,
 
 /**
  * gtk_parse_args:
- * @argc: a pointer to the number of command line arguments.
- * @argv: a pointer to the array of command line arguments.
- * 
+ * @argc: (inout): a pointer to the number of command line arguments
+ * @argv: (array length=argc) (inout): a pointer to the array of
+ *     command line arguments
+ *
  * Parses command line arguments, and initializes global
  * attributes of GTK+, but does not actually open a connection
  * to a display. (See gdk_display_open(), gdk_get_display_arg_name())
@@ -856,7 +938,7 @@ gtk_init_with_args (int            *argc,
  * Any arguments used by GTK+ or GDK are removed from the array and
  * @argc and @argv are updated accordingly.
  *
- * You shouldn't call this function explicitely if you are using
+ * There is no need to call this function explicitely if you are using
  * gtk_init(), or gtk_init_check().
  *
  * Return value: %TRUE if initialization succeeded, otherwise %FALSE.
@@ -899,13 +981,13 @@ gtk_parse_args (int    *argc,
 
 /**
  * gtk_init_check:
- * @argc: Address of the <parameter>argc</parameter> parameter of your 
+ * @argc: (inout): Address of the <parameter>argc</parameter> parameter of your
  *   main() function. Changed if any arguments were handled.
- * @argv: Address of the <parameter>argv</parameter> parameter of main(). 
+ * @argv: (array length=argc) (inout) (allow-none): Address of the <parameter>argv</parameter> parameter of main().
  *   Any parameters understood by gtk_init() are stripped before return.
- * 
- * This function does the same work as gtk_init() with only 
- * a single change: It does not terminate the program if the GUI can't be 
+ *
+ * This function does the same work as gtk_init() with only
+ * a single change: It does not terminate the program if the GUI can't be
  * initialized. Instead it returns %FALSE on failure.
  *
  * This way the application can fall back to some other means of communication 
@@ -930,29 +1012,41 @@ gtk_init_check (int	 *argc,
 
 /**
  * gtk_init:
- * @argc: Address of the <parameter>argc</parameter> parameter of your 
- *   main() function. Changed if any arguments were handled.
- * @argv: Address of the <parameter>argv</parameter> parameter of main(). 
- *   Any parameters understood by gtk_init() are stripped before return.
- * 
- * Call this function before using any other GTK+ functions in your GUI
- * applications.  It will initialize everything needed to operate the 
- * toolkit and parses some standard command line options. @argc and 
- * @argv are adjusted accordingly so your own code will 
- * never see those standard arguments. 
+ * @argc: (inout): Address of the <parameter>argc</parameter> parameter of
+ *     your main() function. Changed if any arguments were handled
+ * @argv: (array length=argc) (inout) (allow-none): Address of the
+ *     <parameter>argv</parameter> parameter of main(). Any options
+ *     understood by GTK+ are stripped before return.
  *
- * Note that there are some alternative ways to initialize GTK+: 
- * if you are calling gtk_parse_args(), gtk_init_check(), 
- * gtk_init_with_args() or g_option_context_parse() with 
- * the option group returned by gtk_get_option_group(), you 
- * <emphasis>don't</emphasis> have to call gtk_init().
+ * Call this function before using any other GTK+ functions in your GUI
+ * applications.  It will initialize everything needed to operate the
+ * toolkit and parses some standard command line options.
+ *
+ * @argc and @argv are adjusted accordingly so your own code will
+ * never see those standard arguments.
+ *
+ * Note that there are some alternative ways to initialize GTK+:
+ * if you are calling gtk_parse_args(), gtk_init_check(),
+ * gtk_init_with_args() or g_option_context_parse() with
+ * the option group returned by gtk_get_option_group(),
+ * you <emphasis>don't</emphasis> have to call gtk_init().
  *
  * <note><para>
- * This function will terminate your program if it was unable to initialize 
- * the GUI for some reason. If you want your program to fall back to a 
- * textual interface you want to call gtk_init_check() instead.
+ * This function will terminate your program if it was unable to
+ * initialize the windowing system for some reason. If you want
+ * your program to fall back to a textual interface you want to
+ * call gtk_init_check() instead.
  * </para></note>
- **/
+ *
+ * <note><para>
+ * Since 2.18, GTK+ calls <literal>signal (SIGPIPE, SIG_IGN)</literal>
+ * during initialization, to ignore SIGPIPE signals, since these are
+ * almost never wanted in graphical applications. If you do need to
+ * handle SIGPIPE for some reason, reset the handler after gtk_init(),
+ * but notice that other libraries (e.g. libdbus or gvfs) might do
+ * similar things.
+ * </para></note>
+ */
 void
 gtk_init (int *argc, char ***argv)
 {
@@ -1052,6 +1146,8 @@ gtk_exit (gint errorcode)
  * result of the setlocale(); it is also used on other machines, such as 
  * Windows, where the C library returns a different result. The string is 
  * owned by GTK+ and should not be modified or freed.
+ *
+ * Deprecated: 2.24: Use setlocale() directly
  **/
 gchar *
 gtk_set_locale (void)
@@ -1372,7 +1468,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_MOTION_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
-      display = gdk_drawable_get_display (event->proximity.window);
+      display = gdk_window_get_display (event->proximity.window);
       if (!gdk_pointer_grab_info_libgtk_only (display, &grab_window, &owner_events) ||
 	  !owner_events)
 	return NULL;
@@ -1380,7 +1476,7 @@ rewrite_event_for_grabs (GdkEvent *event)
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      display = gdk_drawable_get_display (event->key.window);
+      display = gdk_window_get_display (event->key.window);
       if (!gdk_keyboard_grab_info_libgtk_only (display, &grab_window, &owner_events) ||
 	  !owner_events)
 	return NULL;
@@ -1472,7 +1568,7 @@ gtk_main_do_event (GdkEvent *event)
        *  then we send the event to the original event widget.
        *  This is the key to implementing modality.
        */
-      if (GTK_WIDGET_IS_SENSITIVE (event_widget) &&
+      if ((gtk_widget_is_sensitive (event_widget) || event->type == GDK_SCROLL) &&
 	  gtk_widget_is_ancestor (event_widget, grab_widget))
 	grab_widget = event_widget;
     }
@@ -1512,21 +1608,29 @@ gtk_main_do_event (GdkEvent *event)
 	{
 	  g_object_ref (event_widget);
 	  if (!gtk_widget_event (event_widget, event) &&
-	      GTK_WIDGET_REALIZED (event_widget))
+	      gtk_widget_get_realized (event_widget))
 	    gtk_widget_destroy (event_widget);
 	  g_object_unref (event_widget);
 	}
       break;
       
     case GDK_EXPOSE:
-      if (event->any.window && GTK_WIDGET_DOUBLE_BUFFERED (event_widget))
+      if (event->any.window && gtk_widget_get_double_buffered (event_widget))
 	{
 	  gdk_window_begin_paint_region (event->any.window, event->expose.region);
 	  gtk_widget_send_expose (event_widget, event);
 	  gdk_window_end_paint (event->any.window);
 	}
       else
-	gtk_widget_send_expose (event_widget, event);
+	{
+	  /* The app may paint with a previously allocated cairo_t,
+	     which will draw directly to the window. We can't catch cairo
+	     drap operatoins to automatically flush the window, thus we
+	     need to explicitly flush any outstanding moves or double
+	     buffering */
+	  gdk_window_flush (event->any.window);
+	  gtk_widget_send_expose (event_widget, event);
+	}
       break;
 
     case GDK_PROPERTY_NOTIFY:
@@ -1560,6 +1664,30 @@ gtk_main_do_event (GdkEvent *event)
 	  if (gtk_invoke_key_snoopers (grab_widget, event))
 	    break;
 	}
+      /* Catch alt press to enable auto-mnemonics;
+       * menus are handled elsewhere
+       */
+      if ((event->key.keyval == GDK_Alt_L || event->key.keyval == GDK_Alt_R) &&
+          !GTK_IS_MENU_SHELL (grab_widget))
+        {
+          gboolean auto_mnemonics;
+
+          g_object_get (gtk_widget_get_settings (grab_widget),
+                        "gtk-auto-mnemonics", &auto_mnemonics, NULL);
+
+          if (auto_mnemonics)
+            {
+              gboolean mnemonics_visible;
+              GtkWidget *window;
+
+              mnemonics_visible = (event->type == GDK_KEY_PRESS);
+
+              window = gtk_widget_get_toplevel (grab_widget);
+
+              if (GTK_IS_WINDOW (window))
+                gtk_window_set_mnemonics_visible (GTK_WINDOW (window), mnemonics_visible);
+            }
+        }
       /* else fall through */
     case GDK_MOTION_NOTIFY:
     case GDK_BUTTON_RELEASE:
@@ -1571,13 +1699,13 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
       GTK_PRIVATE_SET_FLAG (event_widget, GTK_HAS_POINTER);
       _gtk_widget_set_pointer_window (event_widget, event->any.window);
-      if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
+      if (gtk_widget_is_sensitive (grab_widget))
 	gtk_widget_event (grab_widget, event);
       break;
       
     case GDK_LEAVE_NOTIFY:
       GTK_PRIVATE_UNSET_FLAG (event_widget, GTK_HAS_POINTER);
-      if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
+      if (gtk_widget_is_sensitive (grab_widget))
 	gtk_widget_event (grab_widget, event);
       break;
       
@@ -1680,7 +1808,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
     {
       GTK_PRIVATE_SET_FLAG (child, GTK_SHADOWED);
       if (!was_shadowed && GTK_WIDGET_HAS_POINTER (child)
-	  && GTK_WIDGET_IS_SENSITIVE (child))
+	  && gtk_widget_is_sensitive (child))
 	_gtk_widget_synthesize_crossing (child, info->new_grab_widget,
 					 GDK_CROSSING_GTK_GRAB);
     }
@@ -1688,7 +1816,7 @@ gtk_grab_notify_foreach (GtkWidget *child,
     {
       GTK_PRIVATE_UNSET_FLAG (child, GTK_SHADOWED);
       if (was_shadowed && GTK_WIDGET_HAS_POINTER (child)
-	  && GTK_WIDGET_IS_SENSITIVE (child))
+	  && gtk_widget_is_sensitive (child))
 	_gtk_widget_synthesize_crossing (info->old_grab_widget, child,
 					 info->from_grab ? GDK_CROSSING_GTK_GRAB
 					 : GDK_CROSSING_GTK_UNGRAB);
@@ -1748,9 +1876,9 @@ gtk_grab_add (GtkWidget *widget)
   
   g_return_if_fail (widget != NULL);
   
-  if (!GTK_WIDGET_HAS_GRAB (widget) && GTK_WIDGET_IS_SENSITIVE (widget))
+  if (!gtk_widget_has_grab (widget) && gtk_widget_is_sensitive (widget))
     {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_GRAB);
+      _gtk_widget_set_has_grab (widget, TRUE);
       
       group = gtk_main_get_window_group (widget);
 
@@ -1766,6 +1894,14 @@ gtk_grab_add (GtkWidget *widget)
     }
 }
 
+/**
+ * gtk_grab_get_current:
+ *
+ * Queries the current grab of the default window group.
+ *
+ * Return value: (transfer none): The widget which currently
+ *     has the grab or %NULL if no grab is active
+ */
 GtkWidget*
 gtk_grab_get_current (void)
 {
@@ -1786,9 +1922,9 @@ gtk_grab_remove (GtkWidget *widget)
   
   g_return_if_fail (widget != NULL);
   
-  if (GTK_WIDGET_HAS_GRAB (widget))
+  if (gtk_widget_has_grab (widget))
     {
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_GRAB);
+      _gtk_widget_set_has_grab (widget, FALSE);
 
       group = gtk_main_get_window_group (widget);
       group->grabs = g_slist_remove (group->grabs, widget);
@@ -2174,7 +2310,8 @@ gtk_invoke_input (gpointer	    data,
  * signal. The returned event must be freed with gdk_event_free().
  * If there is no current event, the function returns %NULL.
  * 
- * Return value: a copy of the current event, or %NULL if no current event.
+ * Return value: (transfer full): a copy of the current event, or %NULL if no
+ *     current event.
  **/
 GdkEvent*
 gtk_get_current_event (void)
@@ -2204,7 +2341,7 @@ gtk_get_current_event_time (void)
 
 /**
  * gtk_get_current_event_state:
- * @state: a location to store the state of the current event
+ * @state: (out): a location to store the state of the current event
  * 
  * If there is a current event and it has a state field, place
  * that state field in @state and return %TRUE, otherwise return
@@ -2234,7 +2371,8 @@ gtk_get_current_event_state (GdkModifierType *state)
  * returns %NULL, otherwise returns the widget that received the event
  * originally.
  * 
- * Return value: the widget that originally received @event, or %NULL
+ * Return value: (transfer none): the widget that originally
+ *     received @event, or %NULL
  **/
 GtkWidget*
 gtk_get_event_widget (GdkEvent *event)
@@ -2325,7 +2463,7 @@ gtk_propagate_event (GtkWidget *widget,
 	  /* If there is a grab within the window, give the grab widget
 	   * a first crack at the key event
 	   */
-	  if (widget != window && GTK_WIDGET_HAS_GRAB (widget))
+	  if (widget != window && gtk_widget_has_grab (widget))
 	    handled_event = gtk_widget_event (widget, event);
 	  
 	  if (!handled_event)
@@ -2333,7 +2471,7 @@ gtk_propagate_event (GtkWidget *widget,
 	      window = gtk_widget_get_toplevel (widget);
 	      if (GTK_IS_WINDOW (window))
 		{
-		  if (GTK_WIDGET_IS_SENSITIVE (window))
+		  if (gtk_widget_is_sensitive (window))
 		    gtk_widget_event (window, event);
 		}
 	    }
@@ -2357,7 +2495,7 @@ gtk_propagate_event (GtkWidget *widget,
 	   * to have children of the viewport eat the scroll
 	   * event
 	   */
-	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	  if (!gtk_widget_is_sensitive (widget))
 	    handled_event = event->type != GDK_SCROLL;
 	  else
 	    handled_event = gtk_widget_event (widget, event);
@@ -2422,7 +2560,7 @@ gtk_print (gchar *str)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  (GtkSignalFunc) gtk_widget_destroyed,
+			  G_CALLBACK (gtk_widget_destroyed),
 			  &window);
       
       gtk_window_set_title (GTK_WINDOW (window), "Messages");
@@ -2473,10 +2611,10 @@ gtk_print (gchar *str)
       
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 (GtkSignalFunc) gtk_widget_hide,
+				 G_CALLBACK (gtk_widget_hide),
 				 GTK_OBJECT (window));
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
       gtk_widget_show (button);
     }
@@ -2485,7 +2623,7 @@ gtk_print (gchar *str)
   gtk_text_insert (GTK_TEXT (text), NULL, NULL, NULL, str, -1);
   level -= 1;
   
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
 }
 #endif
@@ -2504,6 +2642,71 @@ _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
   continue_emission = !signal_handled;
   
   return continue_emission;
+}
+
+gboolean
+_gtk_button_event_triggers_context_menu (GdkEventButton *event)
+{
+  if (event->type == GDK_BUTTON_PRESS)
+    {
+      if (event->button == 3 &&
+          ! (event->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
+        return TRUE;
+
+#ifdef GDK_WINDOWING_QUARTZ
+      if (event->button == 1 &&
+          ! (event->state & (GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) &&
+          (event->state & GDK_CONTROL_MASK))
+        return TRUE;
+#endif
+    }
+
+  return FALSE;
+}
+
+gboolean
+_gtk_translate_keyboard_accel_state (GdkKeymap       *keymap,
+                                     guint            hardware_keycode,
+                                     GdkModifierType  state,
+                                     GdkModifierType  accel_mask,
+                                     gint             group,
+                                     guint           *keyval,
+                                     gint            *effective_group,
+                                     gint            *level,
+                                     GdkModifierType *consumed_modifiers)
+{
+  gboolean group_mask_disabled = FALSE;
+  gboolean retval;
+
+  /* if the group-toggling modifier is part of the accel mod mask, and
+   * it is active, disable it for matching
+   */
+  if (accel_mask & state & GTK_TOGGLE_GROUP_MOD_MASK)
+    {
+      state &= ~GTK_TOGGLE_GROUP_MOD_MASK;
+      group = 0;
+      group_mask_disabled = TRUE;
+    }
+
+  retval = gdk_keymap_translate_keyboard_state (keymap,
+                                                hardware_keycode, state, group,
+                                                keyval,
+                                                effective_group, level,
+                                                consumed_modifiers);
+
+  /* add back the group mask, we want to match against the modifier,
+   * but not against the keyval from its group
+   */
+  if (group_mask_disabled)
+    {
+      if (effective_group)
+        *effective_group = 1;
+
+      if (consumed_modifiers)
+        *consumed_modifiers &= ~GTK_TOGGLE_GROUP_MOD_MASK;
+    }
+
+  return retval;
 }
 
 #define __GTK_MAIN_C__

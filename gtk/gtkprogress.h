@@ -21,14 +21,13 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef __GTK_PROGRESS_H__
 #define __GTK_PROGRESS_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkadjustment.h>
 
@@ -98,7 +97,7 @@ void       gtk_progress_set_adjustment      (GtkProgress   *progress,
 					     GtkAdjustment *adjustment);
 void       gtk_progress_configure           (GtkProgress   *progress,
 					     gdouble        value,
-					     gdouble        hmin,
+					     gdouble        min,
 					     gdouble        max);
 void       gtk_progress_set_percentage      (GtkProgress   *progress,
 					     gdouble        percentage);

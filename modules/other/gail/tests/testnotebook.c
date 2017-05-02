@@ -14,9 +14,9 @@ static gint _remove_page (gpointer data);
 
 static void _print_type (AtkObject *obj)
 {
-  G_CONST_RETURN gchar *typename = NULL;
-  G_CONST_RETURN gchar *name = NULL;
-  G_CONST_RETURN gchar *description = NULL;
+  const gchar *typename = NULL;
+  const gchar *name = NULL;
+  const gchar *description = NULL;
   AtkRole role;
 
   if (GTK_IS_ACCESSIBLE (obj))
@@ -24,7 +24,7 @@ static void _print_type (AtkObject *obj)
     GtkWidget* widget = NULL;
 
     widget = GTK_ACCESSIBLE (obj)->widget;
-    typename = g_type_name (GTK_OBJECT_TYPE (widget));
+    typename = g_type_name (G_OBJECT_TYPE (widget));
     g_print ("\tWidget type name: %s\n", typename ? typename : "NULL");
   }
 

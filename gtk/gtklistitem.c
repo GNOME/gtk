@@ -382,7 +382,7 @@ gtk_list_item_class_init (GtkListItemClass *class)
 static void
 gtk_list_item_init (GtkListItem *list_item)
 {
-  GTK_WIDGET_SET_FLAGS (list_item, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (list_item), TRUE);
 }
 
 GtkWidget*
@@ -431,7 +431,7 @@ gtk_list_item_realize (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
@@ -484,7 +484,7 @@ gtk_list_item_size_request (GtkWidget      *widget,
   requisition->height = 2 * (GTK_CONTAINER (widget)->border_width +
 			     focus_width + focus_pad - 1);
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gtk_widget_size_request (bin->child, &child_requisition);
 
@@ -504,7 +504,7 @@ gtk_list_item_size_allocate (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
@@ -527,17 +527,23 @@ static void
 gtk_list_item_style_set	(GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
+  GtkStyle *style;
+
   g_return_if_fail (widget != NULL);
 
-  if (previous_style && GTK_WIDGET_REALIZED (widget))
-    gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+  if (previous_style && gtk_widget_get_realized (widget))
+    {
+      style = gtk_widget_get_style (widget);
+      gdk_window_set_background (gtk_widget_get_window (widget),
+                                 &style->base[gtk_widget_get_state (widget)]);
+    }
 }
 
 static gint
 gtk_list_item_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
 {
-  if (event->type == GDK_BUTTON_PRESS && !GTK_WIDGET_HAS_FOCUS (widget))
+  if (event->type == GDK_BUTTON_PRESS && !gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   return FALSE;
@@ -549,7 +555,7 @@ gtk_list_item_expose (GtkWidget      *widget,
 {
   g_return_val_if_fail (widget != NULL, FALSE);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       if (widget->state == GTK_STATE_NORMAL)
         {
@@ -567,14 +573,14 @@ gtk_list_item_expose (GtkWidget      *widget,
 
       GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
 
-      if (GTK_WIDGET_HAS_FOCUS (widget))
+      if (gtk_widget_has_focus (widget))
         {
           if (GTK_IS_LIST (widget->parent) && GTK_LIST (widget->parent)->add_mode)
-            gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+            gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
                              NULL, widget, "add-mode",
                              0, 0, widget->allocation.width, widget->allocation.height);
           else
-            gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+            gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
                              NULL, widget, NULL,
                              0, 0, widget->allocation.width, widget->allocation.height);
         }

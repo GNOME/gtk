@@ -32,28 +32,30 @@ Definitions</link>.
 <!ELEMENT toolitem     (menu?) >
 <!ELEMENT separator    EMPTY >
 <!ELEMENT accelerator  EMPTY >
-<!ATTLIST menubar      name                  &num;IMPLIED 
-                       action                &num;IMPLIED >
-<!ATTLIST toolbar      name                  &num;IMPLIED 
-                       action                &num;IMPLIED >
-<!ATTLIST popup        name                  &num;IMPLIED 
-                       action                &num;IMPLIED >
-<!ATTLIST placeholder  name                  &num;IMPLIED
-                       action                &num;IMPLIED >
-<!ATTLIST separator    name                  &num;IMPLIED
-                       action                &num;IMPLIED
-                       expand   (true|false) &num;IMPLIED >
-<!ATTLIST menu         name                  &num;IMPLIED
-                       action                &num;REQUIRED
-                       position (top|bot)    &num;IMPLIED >
-<!ATTLIST menuitem     name                  &num;IMPLIED
-                       action                &num;REQUIRED
-                       position (top|bot)    &num;IMPLIED >
-<!ATTLIST toolitem     name                  &num;IMPLIED
-                       action                &num;REQUIRED
-                       position (top|bot)    &num;IMPLIED >
-<!ATTLIST accelerator  name                  &num;IMPLIED
-                       action                &num;REQUIRED >
+<!ATTLIST menubar      name                      &num;IMPLIED 
+                       action                    &num;IMPLIED >
+<!ATTLIST toolbar      name                      &num;IMPLIED 
+                       action                    &num;IMPLIED >
+<!ATTLIST popup        name                      &num;IMPLIED 
+                       action                    &num;IMPLIED 
+                       accelerators (true|false) &num;IMPLIED >
+<!ATTLIST placeholder  name                      &num;IMPLIED
+                       action                    &num;IMPLIED >
+<!ATTLIST separator    name                      &num;IMPLIED
+                       action                    &num;IMPLIED
+                       expand       (true|false) &num;IMPLIED >
+<!ATTLIST menu         name                      &num;IMPLIED
+                       action                    &num;REQUIRED
+                       position     (top|bot)    &num;IMPLIED >
+<!ATTLIST menuitem     name                      &num;IMPLIED
+                       action                    &num;REQUIRED
+                       position     (top|bot)    &num;IMPLIED
+                       always-show-image (true|false) &num;IMPLIED >
+<!ATTLIST toolitem     name                      &num;IMPLIED
+                       action                    &num;REQUIRED
+                       position     (top|bot)    &num;IMPLIED >
+<!ATTLIST accelerator  name                      &num;IMPLIED
+                       action                    &num;REQUIRED >
 ]]></programlisting>
 There are some additional restrictions beyond those specified in the
 DTD, e.g. every toolitem must have a toolbar in its anchestry and
@@ -251,6 +253,9 @@ other parts of the constructed user interface with the help of the
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkUIManager ##### -->
 <para>
 The <structname>GtkUIManager</structname> struct contains only private
@@ -322,6 +327,7 @@ members and should not be accessed directly.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -422,14 +428,11 @@ members and should not be accessed directly.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_ui_manager_add_ui_from_file ##### -->
+<!-- ##### MACRO gtk_ui_manager_add_ui_from_file ##### -->
 <para>
 
 </para>
 
-@self: 
-@filename: 
-@error: 
 @Returns: 
 
 
@@ -458,6 +461,7 @@ what UI element to create.
 @GTK_UI_MANAGER_TOOLITEM: Create a toolitem.
 @GTK_UI_MANAGER_SEPARATOR: Create a separator.
 @GTK_UI_MANAGER_ACCELERATOR: Install an accelerator.
+@GTK_UI_MANAGER_POPUP_WITH_ACCELS: Same as %GTK_UI_MANAGER_POPUP, but the actions' accelerators are shown.
 
 <!-- ##### FUNCTION gtk_ui_manager_add_ui ##### -->
 <para>

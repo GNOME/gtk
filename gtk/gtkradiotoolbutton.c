@@ -109,7 +109,7 @@ gtk_radio_tool_button_set_property (GObject         *object,
 
 /**
  * gtk_radio_tool_button_new:
- * @group: An existing radio button group, or %NULL if you are creating a new group
+ * @group: (allow-none): An existing radio button group, or %NULL if you are creating a new group
  * 
  * Creates a new #GtkRadioToolButton, adding it to @group.
  * 
@@ -132,7 +132,7 @@ gtk_radio_tool_button_new (GSList *group)
 
 /**
  * gtk_radio_tool_button_new_from_stock:
- * @group: an existing radio button group, or %NULL if you are creating a new group
+ * @group: (allow-none): an existing radio button group, or %NULL if you are creating a new group
  * @stock_id: the name of a stock item
  * 
  * Creates a new #GtkRadioToolButton, adding it to @group. 
@@ -164,11 +164,11 @@ gtk_radio_tool_button_new_from_stock (GSList      *group,
 /**
  * gtk_radio_tool_button_new_from_widget:
  * @group: An existing #GtkRadioToolButton
- * 
+ *
  * Creates a new #GtkRadioToolButton adding it to the same group as @gruup
- * 
- * Return value: The new #GtkRadioToolButton
- * 
+ *
+ * Return value: (transfer none): The new #GtkRadioToolButton
+ *
  * Since: 2.4
  **/
 GtkToolItem *
@@ -187,14 +187,14 @@ gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
 /**
  * gtk_radio_tool_button_new_with_stock_from_widget:
  * @group: An existing #GtkRadioToolButton.
- * @stock_id: the name of a stock item 
- * 
+ * @stock_id: the name of a stock item
+ *
  * Creates a new #GtkRadioToolButton adding it to the same group as @group.
  * The new #GtkRadioToolButton will contain an icon and label from the
  * stock item indicated by @stock_id.
- * 
- * Return value: A new #GtkRadioToolButton
- * 
+ *
+ * Return value: (transfer none): A new #GtkRadioToolButton
+ *
  * Since: 2.4
  **/
 GtkToolItem *
@@ -222,11 +222,11 @@ get_radio_button (GtkRadioToolButton *button)
  * @button: a #GtkRadioToolButton
  *
  * Returns the radio button group @button belongs to.
- * 
- * Return value: The group @button belongs to.
- * 
+ *
+ * Return value: (transfer none): The group @button belongs to.
+ *
  * Since: 2.4
- **/
+ */
 GSList *
 gtk_radio_tool_button_get_group (GtkRadioToolButton *button)
 {

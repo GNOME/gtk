@@ -49,6 +49,9 @@ recorded at the time it was added. This is done using gtk_statusbar_remove().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkStatusbar ##### -->
 <para>
 Contains private data that should be modified with the functions described 
@@ -89,6 +92,7 @@ below.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -132,6 +136,15 @@ below.
 @message_id: 
 
 
+<!-- ##### FUNCTION gtk_statusbar_remove_all ##### -->
+<para>
+
+</para>
+
+@statusbar: 
+@context_id: 
+
+
 <!-- ##### FUNCTION gtk_statusbar_set_has_resize_grip ##### -->
 <para>
 
@@ -142,6 +155,15 @@ below.
 
 
 <!-- ##### FUNCTION gtk_statusbar_get_has_resize_grip ##### -->
+<para>
+
+</para>
+
+@statusbar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_statusbar_get_message_area ##### -->
 <para>
 
 </para>

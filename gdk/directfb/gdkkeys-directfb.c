@@ -52,7 +52,7 @@ static gint       directfb_min_keycode   = 0;
 static gint       directfb_max_keycode   = 0;
 
 
-/* 
+/*
  *  This array needs to be sorted by key values. It can be generated
  *  from gdkkeysyms.h using a few lines of Perl. This is a bit more
  *  complex as one would expect since GDK defines multiple names for a
@@ -1452,18 +1452,18 @@ gdk_keyval_from_name (const gchar *keyval_name)
   if (gdk_keys_by_name == NULL)
     {
       gdk_keys_by_name = g_new (struct gdk_key, GDK_NUM_KEYS);
-      
+
       memcpy (gdk_keys_by_name, gdk_keys_by_keyval,
               GDK_NUM_KEYS * sizeof (struct gdk_key));
-      
+
       qsort (gdk_keys_by_name, GDK_NUM_KEYS, sizeof (struct gdk_key),
              gdk_key_compare_by_name);
     }
-  
+
   found = bsearch (keyval_name, gdk_keys_by_name,
                    GDK_NUM_KEYS, sizeof (struct gdk_key),
                    gdk_keys_name_compare);
-  
+
   if (found)
     return found->keyval;
   else
@@ -1472,285 +1472,290 @@ gdk_keyval_from_name (const gchar *keyval_name)
 
 static void
 gdk_directfb_convert_modifiers (DFBInputDeviceModifierMask dfbmod,
-		DFBInputDeviceLockState    dfblock)
+                                DFBInputDeviceLockState    dfblock)
 {
-	if (dfbmod & DIMM_ALT)
-		_gdk_directfb_modifiers |= GDK_MOD1_MASK;
-	else
-		_gdk_directfb_modifiers &= ~GDK_MOD1_MASK;
+  if (dfbmod & DIMM_ALT)
+    _gdk_directfb_modifiers |= GDK_MOD1_MASK;
+  else
+    _gdk_directfb_modifiers &= ~GDK_MOD1_MASK;
 
-	if (dfbmod & DIMM_ALTGR)
-		_gdk_directfb_modifiers |= GDK_MOD2_MASK;
-	else
-		_gdk_directfb_modifiers &= ~GDK_MOD2_MASK;
+  if (dfbmod & DIMM_ALTGR)
+    _gdk_directfb_modifiers |= GDK_MOD2_MASK;
+  else
+    _gdk_directfb_modifiers &= ~GDK_MOD2_MASK;
 
-	if (dfbmod & DIMM_CONTROL)
-		_gdk_directfb_modifiers |= GDK_CONTROL_MASK;
-	else
-		_gdk_directfb_modifiers &= ~GDK_CONTROL_MASK;
+  if (dfbmod & DIMM_CONTROL)
+    _gdk_directfb_modifiers |= GDK_CONTROL_MASK;
+  else
+    _gdk_directfb_modifiers &= ~GDK_CONTROL_MASK;
 
-	if (dfbmod & DIMM_SHIFT)
-		_gdk_directfb_modifiers |= GDK_SHIFT_MASK;
-	else
-		_gdk_directfb_modifiers &= ~GDK_SHIFT_MASK;
+  if (dfbmod & DIMM_SHIFT)
+    _gdk_directfb_modifiers |= GDK_SHIFT_MASK;
+  else
+    _gdk_directfb_modifiers &= ~GDK_SHIFT_MASK;
 
-	if (dfblock & DILS_CAPS)
-		_gdk_directfb_modifiers |= GDK_LOCK_MASK;
-	else
-		_gdk_directfb_modifiers &= ~GDK_LOCK_MASK;
+  if (dfblock & DILS_CAPS)
+    _gdk_directfb_modifiers |= GDK_LOCK_MASK;
+  else
+    _gdk_directfb_modifiers &= ~GDK_LOCK_MASK;
 }
 
 static guint
 gdk_directfb_translate_key (DFBInputDeviceKeyIdentifier key_id,
-		DFBInputDeviceKeySymbol     key_symbol)
+                            DFBInputDeviceKeySymbol     key_symbol)
 {
-	guint keyval = GDK_VoidSymbol;
+  guint keyval = GDK_VoidSymbol;
 
-	/* special case numpad */
-	if (key_id >= DIKI_KP_DIV && key_id <= DIKI_KP_9)
-	{
-		switch (key_symbol)
-		{
-			case DIKS_SLASH:         keyval = GDK_KP_Divide;    break;
-			case DIKS_ASTERISK:      keyval = GDK_KP_Multiply;  break;
-			case DIKS_PLUS_SIGN:     keyval = GDK_KP_Add;       break;
-			case DIKS_MINUS_SIGN:    keyval = GDK_KP_Subtract;  break;
-			case DIKS_ENTER:         keyval = GDK_KP_Enter;     break;
-			case DIKS_SPACE:         keyval = GDK_KP_Space;     break;
-			case DIKS_TAB:           keyval = GDK_KP_Tab;       break;
-			case DIKS_EQUALS_SIGN:   keyval = GDK_KP_Equal;     break;
-			case DIKS_COMMA:
-			case DIKS_PERIOD:        keyval = GDK_KP_Decimal;   break;
-			case DIKS_HOME:          keyval = GDK_KP_Home;      break;
-			case DIKS_END:           keyval = GDK_KP_End;       break;
-			case DIKS_PAGE_UP:       keyval = GDK_KP_Page_Up;   break;
-			case DIKS_PAGE_DOWN:     keyval = GDK_KP_Page_Down; break;
-			case DIKS_CURSOR_LEFT:   keyval = GDK_KP_Left;      break;
-			case DIKS_CURSOR_RIGHT:  keyval = GDK_KP_Right;     break;
-			case DIKS_CURSOR_UP:     keyval = GDK_KP_Up;        break;
-			case DIKS_CURSOR_DOWN:   keyval = GDK_KP_Down;      break;
-			case DIKS_BEGIN:         keyval = GDK_KP_Begin;     break;
+  /* special case numpad */
+  if (key_id >= DIKI_KP_DIV && key_id <= DIKI_KP_9)
+    {
+      switch (key_symbol)
+        {
+        case DIKS_SLASH:         keyval = GDK_KP_Divide;    break;
+        case DIKS_ASTERISK:      keyval = GDK_KP_Multiply;  break;
+        case DIKS_PLUS_SIGN:     keyval = GDK_KP_Add;       break;
+        case DIKS_MINUS_SIGN:    keyval = GDK_KP_Subtract;  break;
+        case DIKS_ENTER:         keyval = GDK_KP_Enter;     break;
+        case DIKS_SPACE:         keyval = GDK_KP_Space;     break;
+        case DIKS_TAB:           keyval = GDK_KP_Tab;       break;
+        case DIKS_EQUALS_SIGN:   keyval = GDK_KP_Equal;     break;
+        case DIKS_COMMA:
+        case DIKS_PERIOD:        keyval = GDK_KP_Decimal;   break;
+        case DIKS_HOME:          keyval = GDK_KP_Home;      break;
+        case DIKS_END:           keyval = GDK_KP_End;       break;
+        case DIKS_PAGE_UP:       keyval = GDK_KP_Page_Up;   break;
+        case DIKS_PAGE_DOWN:     keyval = GDK_KP_Page_Down; break;
+        case DIKS_CURSOR_LEFT:   keyval = GDK_KP_Left;      break;
+        case DIKS_CURSOR_RIGHT:  keyval = GDK_KP_Right;     break;
+        case DIKS_CURSOR_UP:     keyval = GDK_KP_Up;        break;
+        case DIKS_CURSOR_DOWN:   keyval = GDK_KP_Down;      break;
+        case DIKS_BEGIN:         keyval = GDK_KP_Begin;     break;
 
-			case DIKS_0 ... DIKS_9:
-						 keyval = GDK_KP_0 + key_symbol - DIKS_0;
-						 break;
-			case DIKS_F1 ... DIKS_F4:
-						 keyval = GDK_KP_F1 + key_symbol - DIKS_F1;
-						 break;
+        case DIKS_0 ... DIKS_9:
+          keyval = GDK_KP_0 + key_symbol - DIKS_0;
+          break;
+        case DIKS_F1 ... DIKS_F4:
+          keyval = GDK_KP_F1 + key_symbol - DIKS_F1;
+          break;
 
-			default:
-						 break;
-		}
-	}
-	else
-	{
-		switch (DFB_KEY_TYPE (key_symbol))
-		{
-			case DIKT_UNICODE:
-				switch (key_symbol)
-				{
-					case DIKS_NULL:       keyval = GDK_VoidSymbol; break;
-					case DIKS_BACKSPACE:  keyval = GDK_BackSpace;  break;
-					case DIKS_TAB:        keyval = GDK_Tab;        break;
-					case DIKS_RETURN:     keyval = GDK_Return;     break;
-					case DIKS_CANCEL:     keyval = GDK_Cancel;     break;
-					case DIKS_ESCAPE:     keyval = GDK_Escape;     break;
-					case DIKS_SPACE:      keyval = GDK_space;      break;
-					case DIKS_DELETE:     keyval = GDK_Delete;     break;
+        default:
+          break;
+        }
+    }
+  else
+    {
+      switch (DFB_KEY_TYPE (key_symbol))
+        {
+        case DIKT_UNICODE:
+          switch (key_symbol)
+            {
+            case DIKS_NULL:       keyval = GDK_VoidSymbol; break;
+            case DIKS_BACKSPACE:  keyval = GDK_BackSpace;  break;
+            case DIKS_TAB:        keyval = GDK_Tab;        break;
+            case DIKS_RETURN:     keyval = GDK_Return;     break;
+            case DIKS_CANCEL:     keyval = GDK_Cancel;     break;
+            case DIKS_ESCAPE:     keyval = GDK_Escape;     break;
+            case DIKS_SPACE:      keyval = GDK_space;      break;
+            case DIKS_DELETE:     keyval = GDK_Delete;     break;
 
-					default:
-							      keyval = gdk_unicode_to_keyval (key_symbol);
-							      if (keyval & 0x01000000)
-								      keyval = GDK_VoidSymbol;
-				}
-				break;
+            default:
+              keyval = gdk_unicode_to_keyval (key_symbol);
+              if (keyval & 0x01000000)
+                keyval = GDK_VoidSymbol;
+            }
+          break;
 
-			case DIKT_SPECIAL:
-				switch (key_symbol)
-				{
-					case DIKS_CURSOR_LEFT:   keyval = GDK_Left;      break;
-					case DIKS_CURSOR_RIGHT:  keyval = GDK_Right;     break;
-					case DIKS_CURSOR_UP:     keyval = GDK_Up;        break;
-					case DIKS_CURSOR_DOWN:   keyval = GDK_Down;      break;
-					case DIKS_INSERT:        keyval = GDK_Insert;    break;
-					case DIKS_HOME:          keyval = GDK_Home;      break;
-					case DIKS_END:           keyval = GDK_End;       break;
-					case DIKS_PAGE_UP:       keyval = GDK_Page_Up;   break;
-					case DIKS_PAGE_DOWN:     keyval = GDK_Page_Down; break;
-					case DIKS_PRINT:         keyval = GDK_Print;     break;
-					case DIKS_PAUSE:         keyval = GDK_Pause;     break;
-					case DIKS_SELECT:        keyval = GDK_Select;    break;
-					case DIKS_CLEAR:         keyval = GDK_Clear;     break;
-					case DIKS_MENU:          keyval = GDK_Menu;      break;
-					case DIKS_HELP:          keyval = GDK_Help;      break;
-					case DIKS_NEXT:          keyval = GDK_Next;      break;
-					case DIKS_BEGIN:         keyval = GDK_Begin;     break;
-					case DIKS_BREAK:         keyval = GDK_Break;     break;
-					default:
-								 break;
-				}
-				break;
+        case DIKT_SPECIAL:
+          switch (key_symbol)
+            {
+            case DIKS_CURSOR_LEFT:   keyval = GDK_Left;      break;
+            case DIKS_CURSOR_RIGHT:  keyval = GDK_Right;     break;
+            case DIKS_CURSOR_UP:     keyval = GDK_Up;        break;
+            case DIKS_CURSOR_DOWN:   keyval = GDK_Down;      break;
+            case DIKS_INSERT:        keyval = GDK_Insert;    break;
+            case DIKS_HOME:          keyval = GDK_Home;      break;
+            case DIKS_END:           keyval = GDK_End;       break;
+            case DIKS_PAGE_UP:       keyval = GDK_Page_Up;   break;
+            case DIKS_PAGE_DOWN:     keyval = GDK_Page_Down; break;
+            case DIKS_PRINT:         keyval = GDK_Print;     break;
+            case DIKS_PAUSE:         keyval = GDK_Pause;     break;
+            case DIKS_SELECT:        keyval = GDK_Select;    break;
+            case DIKS_CLEAR:         keyval = GDK_Clear;     break;
+            case DIKS_MENU:          keyval = GDK_Menu;      break;
+            case DIKS_HELP:          keyval = GDK_Help;      break;
+            case DIKS_NEXT:          keyval = GDK_Next;      break;
+            case DIKS_BEGIN:         keyval = GDK_Begin;     break;
+            case DIKS_BREAK:         keyval = GDK_Break;     break;
+            default:
+              break;
+            }
+          break;
 
-			case DIKT_FUNCTION:
-				keyval = GDK_F1 + key_symbol - DIKS_F1;
-				if (keyval > GDK_F35)
-					keyval = GDK_VoidSymbol;
-				break;
+        case DIKT_FUNCTION:
+          keyval = GDK_F1 + key_symbol - DIKS_F1;
+          if (keyval > GDK_F35)
+            keyval = GDK_VoidSymbol;
+          break;
 
-			case DIKT_MODIFIER:
-				switch (key_id)
-				{
-					case DIKI_SHIFT_L:    keyval = GDK_Shift_L;     break;
-					case DIKI_SHIFT_R:    keyval = GDK_Shift_R;     break;
-					case DIKI_CONTROL_L:  keyval = GDK_Control_L;   break;
-					case DIKI_CONTROL_R:  keyval = GDK_Control_R;   break;
-					case DIKI_ALT_L:      keyval = GDK_Alt_L;       break;
-					case DIKI_ALT_R:      keyval = GDK_Alt_R;       break;
-					case DIKI_META_L:     keyval = GDK_Meta_L;      break;
-					case DIKI_META_R:     keyval = GDK_Meta_R;      break;
-					case DIKI_SUPER_L:    keyval = GDK_Super_L;     break;
-					case DIKI_SUPER_R:    keyval = GDK_Super_R;     break;
-					case DIKI_HYPER_L:    keyval = GDK_Hyper_L;     break;
-					case DIKI_HYPER_R:    keyval = GDK_Hyper_R;     break;
-					default:
-							      break;
-				}
-				break;
+        case DIKT_MODIFIER:
+          switch (key_id)
+            {
+            case DIKI_SHIFT_L:    keyval = GDK_Shift_L;     break;
+            case DIKI_SHIFT_R:    keyval = GDK_Shift_R;     break;
+            case DIKI_CONTROL_L:  keyval = GDK_Control_L;   break;
+            case DIKI_CONTROL_R:  keyval = GDK_Control_R;   break;
+            case DIKI_ALT_L:      keyval = GDK_Alt_L;       break;
+            case DIKI_ALT_R:      keyval = GDK_Alt_R;       break;
+            case DIKI_META_L:     keyval = GDK_Meta_L;      break;
+            case DIKI_META_R:     keyval = GDK_Meta_R;      break;
+            case DIKI_SUPER_L:    keyval = GDK_Super_L;     break;
+            case DIKI_SUPER_R:    keyval = GDK_Super_R;     break;
+            case DIKI_HYPER_L:    keyval = GDK_Hyper_L;     break;
+            case DIKI_HYPER_R:    keyval = GDK_Hyper_R;     break;
+            default:
+              break;
+            }
+          break;
 
-			case DIKT_LOCK:
-				switch (key_symbol)
-				{
-					case DIKS_CAPS_LOCK:    keyval = GDK_Caps_Lock;   break;
-					case DIKS_NUM_LOCK:     keyval = GDK_Num_Lock;    break;
-					case DIKS_SCROLL_LOCK:  keyval = GDK_Scroll_Lock; break;
-					default:
-								break;
-				}
-				break;
+        case DIKT_LOCK:
+          switch (key_symbol)
+            {
+            case DIKS_CAPS_LOCK:    keyval = GDK_Caps_Lock;   break;
+            case DIKS_NUM_LOCK:     keyval = GDK_Num_Lock;    break;
+            case DIKS_SCROLL_LOCK:  keyval = GDK_Scroll_Lock; break;
+            default:
+              break;
+            }
+          break;
 
-			case DIKT_DEAD:
-				switch (key_symbol)
-				{
-					case DIKS_DEAD_ABOVEDOT:     keyval = GDK_dead_abovedot;     break;
-					case DIKS_DEAD_ABOVERING:    keyval = GDK_dead_abovering;    break;
-					case DIKS_DEAD_ACUTE:        keyval = GDK_dead_acute;        break;
-					case DIKS_DEAD_BREVE:        keyval = GDK_dead_breve;        break;
-					case DIKS_DEAD_CARON:        keyval = GDK_dead_caron;        break;
-					case DIKS_DEAD_CEDILLA:      keyval = GDK_dead_cedilla;      break;
-					case DIKS_DEAD_CIRCUMFLEX:   keyval = GDK_dead_circumflex;   break;
-					case DIKS_DEAD_DIAERESIS:    keyval = GDK_dead_diaeresis;    break;
-					case DIKS_DEAD_DOUBLEACUTE:  keyval = GDK_dead_doubleacute;  break;
-					case DIKS_DEAD_GRAVE:        keyval = GDK_dead_grave;        break;
-					case DIKS_DEAD_IOTA:         keyval = GDK_dead_iota;         break;
-					case DIKS_DEAD_MACRON:       keyval = GDK_dead_macron;       break;
-					case DIKS_DEAD_OGONEK:       keyval = GDK_dead_ogonek;       break;
-					case DIKS_DEAD_SEMIVOICED_SOUND:
-								     keyval = GDK_dead_semivoiced_sound;                        break;
-					case DIKS_DEAD_TILDE:        keyval = GDK_dead_tilde;        break;
-					case DIKS_DEAD_VOICED_SOUND: keyval = GDK_dead_voiced_sound; break;
-					default:
-								     break;
-				}
-				break;
+        case DIKT_DEAD:
+          /* dead keys are handled directly by directfb */
+          break;
 
-			case DIKT_CUSTOM:
-				break;
-		}
-	}
+        case DIKT_CUSTOM:
+          break;
+        }
+    }
 
-	return keyval;
+  return keyval;
 }
 
-	void
+void
 _gdk_directfb_keyboard_init (void)
 {
-	DFBInputDeviceDescription desc;
-	gint i, n, length;
-	IDirectFBInputDevice   *keyboard=_gdk_display->keyboard;
+  DFBInputDeviceDescription  desc;
+  gint                       i, n, length;
+  IDirectFBInputDevice      *keyboard = _gdk_display->keyboard;
 
-	if (!keyboard)
-		return;
-    if( directfb_keymap )    
-            return;
+  if (!keyboard)
+    return;
+  if (directfb_keymap)
+    return;
 
-	keyboard->GetDescription (keyboard, &desc);
-	_gdk_display->keymap=g_object_new (gdk_keymap_get_type (), NULL);
+  keyboard->GetDescription (keyboard, &desc);
+  _gdk_display->keymap = g_object_new (gdk_keymap_get_type (), NULL);
 
-	if (desc.min_keycode < 0 || desc.max_keycode < desc.min_keycode)
-		return;
+  if (desc.min_keycode < 0 || desc.max_keycode < desc.min_keycode)
+    return;
 
-	directfb_min_keycode = desc.min_keycode;
-	directfb_max_keycode = desc.max_keycode;
+  directfb_min_keycode = desc.min_keycode;
+  directfb_max_keycode = desc.max_keycode;
 
-	length = directfb_max_keycode - desc.min_keycode + 1;
+  length = directfb_max_keycode - desc.min_keycode + 1;
 
 
-	directfb_keymap = g_new0 (guint, 4 * length);
+  directfb_keymap = g_new0 (guint, 4 * length);
 
-	for (i = 0; i < length; i++)
-	{
-		DFBInputDeviceKeymapEntry  entry;
+  for (i = 0; i < length; i++)
+    {
+      DFBInputDeviceKeymapEntry  entry;
 
-		if (keyboard->GetKeymapEntry (keyboard,
-					i + desc.min_keycode, &entry) != DFB_OK)
-			continue;
-		for (n = 0; n < 4; n++) {
-			directfb_keymap[i * 4 + n] = 
-				gdk_directfb_translate_key (entry.identifier, entry.symbols[n]);
-		}
-	}
+      if (keyboard->GetKeymapEntry (keyboard,
+                                    i + desc.min_keycode, &entry) != DFB_OK)
+        continue;
+      for (n = 0; n < 4; n++) {
+        directfb_keymap[i * 4 + n] =
+          gdk_directfb_translate_key (entry.identifier, entry.symbols[n]);
+      }
+    }
 }
 
-	void
+void
 _gdk_directfb_keyboard_exit (void)
 {
-	if (!directfb_keymap)
-		return;
+  if (!directfb_keymap)
+    return;
 
-	g_free (directfb_keymap);
-	g_free(_gdk_display->keymap);
-	_gdk_display->keymap = NULL;
-	directfb_keymap = NULL;
+  g_free (directfb_keymap);
+  g_free (_gdk_display->keymap);
+  _gdk_display->keymap = NULL;
+  directfb_keymap = NULL;
 }
 
 void
 gdk_directfb_translate_key_event (DFBWindowEvent *dfb_event,
-		GdkEventKey    *event)
+                                  GdkEventKey    *event)
 {
-	gint  len;
-	gchar buf[6];
+  gint  len;
+  gchar buf[6];
 
-	g_return_if_fail (dfb_event != NULL);
-	g_return_if_fail (event != NULL);
+  g_return_if_fail (dfb_event != NULL);
+  g_return_if_fail (event != NULL);
 
-	gdk_directfb_convert_modifiers (dfb_event->modifiers, dfb_event->locks);
+  gdk_directfb_convert_modifiers (dfb_event->modifiers, dfb_event->locks);
 
-	event->state            = _gdk_directfb_modifiers;
-	event->group            = (dfb_event->modifiers & DIMM_ALTGR) ? 1 : 0;
-	event->hardware_keycode = dfb_event->key_code;
-	event->keyval           = gdk_directfb_translate_key (dfb_event->key_id,
-			dfb_event->key_symbol);
-	/* If the device driver didn't send a key_code (happens with remote
-	   controls), we try to find a suitable key_code by looking at the
-	   default keymap. */
-	if (dfb_event->key_code == -1 && directfb_keymap)
-	{
-		gint i;
+  event->state            = _gdk_directfb_modifiers;
+  event->group            = (dfb_event->modifiers & DIMM_ALTGR) ? 1 : 0;
+  event->hardware_keycode = dfb_event->key_code;
+  event->keyval           = gdk_directfb_translate_key (dfb_event->key_id,
+                                                        dfb_event->key_symbol);
+  /* If the device driver didn't send a key_code (happens with remote
+     controls), we try to find a suitable key_code by looking at the
+     default keymap. */
+  if (dfb_event->key_code == -1 && directfb_keymap)
+    {
+      gint i;
 
-		for (i = directfb_min_keycode; i <= directfb_max_keycode; i++)
-		{
-			if (directfb_keymap[(i - directfb_min_keycode) * 4] == event->keyval)
-			{
-				event->hardware_keycode = i;
-				break;
-			}
-		}
-	} 
+      for (i = directfb_min_keycode; i <= directfb_max_keycode; i++)
+        {
+          if (directfb_keymap[(i - directfb_min_keycode) * 4] == event->keyval)
+            {
+              event->hardware_keycode = i;
+              break;
+            }
+        }
+    }
 
-	len = g_unichar_to_utf8 (dfb_event->key_symbol, buf);
+  len = g_unichar_to_utf8 (dfb_event->key_symbol, buf);
 
-	event->string = g_strndup (buf, len);
-	event->length = len;
+  event->string = g_strndup (buf, len);
+  event->length = len;
+}
+
+/**
+ * gdk_keymap_get_caps_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns whether the Caps Lock modifer is locked.
+ *
+ * Returns: %TRUE if Caps Lock is on
+ *
+ * Since: 2.16
+ */
+gboolean
+gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
+{
+  IDirectFBInputDevice *keyboard = _gdk_display->keyboard;
+
+  if (keyboard)
+    {
+      DFBInputDeviceLockState  state;
+
+      if (keyboard->GetLockState (keyboard, &state) == DFB_OK)
+        return ((state & DILS_CAPS) != 0);
+    }
+
+  return FALSE;
 }
 
 /**
@@ -1772,65 +1777,65 @@ gdk_directfb_translate_key_event (DFBWindowEvent *dfb_event,
  **/
 gboolean
 gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
-		guint          hardware_keycode,
-		GdkKeymapKey **keys,
-		guint        **keyvals,
-		gint          *n_entries)
+                                    guint          hardware_keycode,
+                                    GdkKeymapKey **keys,
+                                    guint        **keyvals,
+                                    gint          *n_entries)
 {
-	gint num = 0;
-	gint i, j;
-	gint index;
+  gint num = 0;
+  gint i, j;
+  gint index;
 
-	index = (hardware_keycode - directfb_min_keycode) * 4;
+  index = (hardware_keycode - directfb_min_keycode) * 4;
 
-	if (directfb_keymap && (hardware_keycode >= directfb_min_keycode && 
-				hardware_keycode <= directfb_max_keycode))
-	{
-		for (i = 0; i < 4; i++)
-			if (directfb_keymap[index + i] != GDK_VoidSymbol)
-				num++;
-	}
+  if (directfb_keymap && (hardware_keycode >= directfb_min_keycode &&
+                          hardware_keycode <= directfb_max_keycode))
+    {
+      for (i = 0; i < 4; i++)
+        if (directfb_keymap[index + i] != GDK_VoidSymbol)
+          num++;
+    }
 
-	if (keys)
-	{
-		*keys = g_new (GdkKeymapKey, num);
+  if (keys)
+    {
+      *keys = g_new (GdkKeymapKey, num);
 
-		for (i = 0, j = 0; num > 0 && i < 4; i++)
-			if (directfb_keymap[index + i] != GDK_VoidSymbol)
-			{
-				(*keys)[j].keycode = hardware_keycode;
-				(*keys)[j].level   = j % 2;
-				(*keys)[j].group   = j > DIKSI_BASE_SHIFT ? 1 : 0;
-				j++;
-			}
-	}
-	if (keyvals)
-	{
-		*keyvals = g_new (guint, num);
+      for (i = 0, j = 0; num > 0 && i < 4; i++)
+        if (directfb_keymap[index + i] != GDK_VoidSymbol)
+          {
+            (*keys)[j].keycode = hardware_keycode;
+            (*keys)[j].level   = j % 2;
+            (*keys)[j].group   = j > DIKSI_BASE_SHIFT ? 1 : 0;
+            j++;
+          }
+    }
+  if (keyvals)
+    {
+      *keyvals = g_new (guint, num);
 
-		for (i = 0, j = 0; num > 0 && i < 4; i++)
-			if (directfb_keymap[index + i] != GDK_VoidSymbol)
-			{
-				(*keyvals)[j] = directfb_keymap[index + i];
-				j++;
-			}
-	}
+      for (i = 0, j = 0; num > 0 && i < 4; i++)
+        if (directfb_keymap[index + i] != GDK_VoidSymbol)
+          {
+            (*keyvals)[j] = directfb_keymap[index + i];
+            j++;
+          }
+    }
 
-	if (n_entries)
-		*n_entries = num;
+  if (n_entries)
+    *n_entries = num;
 
-	return (num > 0);
+  return (num > 0);
 }
 
 static inline void
 append_keymap_key (GArray *array,
-		guint   keycode,
-		gint    group,
-		gint    level)
+                   guint   keycode,
+                   gint    group,
+                   gint    level)
 {
-	GdkKeymapKey key = { keycode, group, level };
+  GdkKeymapKey key = { keycode, group, level };
 
-	g_array_append_val (array, key);
+  g_array_append_val (array, key);
 }
 
 /**
@@ -1839,7 +1844,7 @@ append_keymap_key (GArray *array,
  * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
  * @keys: return location for an array of #GdkKeymapKey
  * @n_keys: return location for number of elements in returned array
- * 
+ *
  * Obtains a list of keycode/group/level combinations that will
  * generate @keyval. Groups and levels are two kinds of keyboard mode;
  * in general, the level determines whether the top or bottom symbol
@@ -1856,120 +1861,125 @@ append_keymap_key (GArray *array,
  **/
 gboolean
 gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
-		guint          keyval,
-		GdkKeymapKey **keys,
-		gint          *n_keys)
+                                   guint          keyval,
+                                   GdkKeymapKey **keys,
+                                   gint          *n_keys)
 {
-	GArray *retval;
-	gint    i, j;
+  GArray *retval;
+  gint    i, j;
 
-	g_return_val_if_fail (keys != NULL, FALSE);
-	g_return_val_if_fail (n_keys != NULL, FALSE);
-	g_return_val_if_fail (keyval != GDK_VoidSymbol, FALSE);
+  g_return_val_if_fail (keys != NULL, FALSE);
+  g_return_val_if_fail (n_keys != NULL, FALSE);
+  g_return_val_if_fail (keyval != GDK_VoidSymbol, FALSE);
 
-	retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+  retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
-	for (i = directfb_min_keycode;
-			directfb_keymap && i <= directfb_max_keycode;
-			i++)
-	{
-		gint index = i - directfb_min_keycode;
+  for (i = directfb_min_keycode;
+       directfb_keymap && i <= directfb_max_keycode;
+       i++)
+    {
+      gint index = i - directfb_min_keycode;
 
-		for (j = 0; j < 4; j++)
-		{
-			if (directfb_keymap[index * 4 + j] == keyval)
-				append_keymap_key (retval, i, j % 2, j > DIKSI_BASE_SHIFT ? 1 : 0);
-		}
-	}
+      for (j = 0; j < 4; j++)
+        {
+          if (directfb_keymap[index * 4 + j] == keyval)
+            append_keymap_key (retval, i, j % 2, j > DIKSI_BASE_SHIFT ? 1 : 0);
+        }
+    }
 
-	if (retval->len > 0)
-	{
-		*keys = (GdkKeymapKey *) retval->data;
-		*n_keys = retval->len;
-	}
-	else
-	{
-		*keys = NULL;
-		*n_keys = 0;
-	}
+  if (retval->len > 0)
+    {
+      *keys = (GdkKeymapKey *) retval->data;
+      *n_keys = retval->len;
+    }
+  else
+    {
+      *keys = NULL;
+      *n_keys = 0;
+    }
 
-	g_array_free (retval, retval->len > 0 ? FALSE : TRUE);
+  g_array_free (retval, retval->len > 0 ? FALSE : TRUE);
 
-	return (*n_keys > 0);
+  return (*n_keys > 0);
 }
 
 gboolean
 gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
-		guint            keycode,
-		GdkModifierType  state,
-		gint             group,
-		guint           *keyval,
-		gint            *effective_group,
-		gint            *level,
-		GdkModifierType *consumed_modifiers)
+                                     guint            keycode,
+                                     GdkModifierType  state,
+                                     gint             group,
+                                     guint           *keyval,
+                                     gint            *effective_group,
+                                     gint            *level,
+                                     GdkModifierType *consumed_modifiers)
 {
-	if (directfb_keymap &&
-			(keycode >= directfb_min_keycode && keycode <= directfb_max_keycode) &&
-			(group == 0 || group == 1))
-	{
-		gint index = (keycode - directfb_min_keycode) * 4;
-		gint i =     (state & GDK_SHIFT_MASK) ? 1 : 0;
+  if (directfb_keymap &&
+      (keycode >= directfb_min_keycode && keycode <= directfb_max_keycode) &&
+      (group == 0 || group == 1))
+    {
+      gint index = (keycode - directfb_min_keycode) * 4;
+      gint i     = (state & GDK_SHIFT_MASK) ? 1 : 0;
 
-		if (directfb_keymap[index + i + 2 * group] != GDK_VoidSymbol)
-		{
-			if (keyval)
-				*keyval = directfb_keymap[index + i + 2 * group];
+      if (directfb_keymap[index + i + 2 * group] != GDK_VoidSymbol)
+        {
+          if (keyval)
+            *keyval = directfb_keymap[index + i + 2 * group];
 
-			if (group && directfb_keymap[index + i] == *keyval)
-			{
-				if (effective_group)
-					*effective_group = 0;
-                if(consumed_modifiers)
-				    *consumed_modifiers = 0;
-			}
-			else
-			{
-				if (effective_group)
-					*effective_group = group;
-                if(consumed_modifiers)
-				    *consumed_modifiers = GDK_MOD2_MASK;
-			}
-			if (level)
-				*level = i;
+          if (group && directfb_keymap[index + i] == *keyval)
+            {
+              if (effective_group)
+                *effective_group = 0;
+              if (consumed_modifiers)
+                *consumed_modifiers = 0;
+            }
+          else
+            {
+              if (effective_group)
+                *effective_group = group;
+              if (consumed_modifiers)
+                *consumed_modifiers = GDK_MOD2_MASK;
+            }
+          if (level)
+            *level = i;
 
-			if (i && directfb_keymap[index + 2 * *effective_group] != *keyval)
-                if(consumed_modifiers)
-				    *consumed_modifiers |= GDK_SHIFT_MASK;
+          if (i && directfb_keymap[index + 2 * *effective_group] != *keyval)
+            if (consumed_modifiers)
+              *consumed_modifiers |= GDK_SHIFT_MASK;
 
-			return TRUE;
-		}
-	}
-	if (keyval)
-		*keyval             = 0;
-	if (effective_group)
-		*effective_group    = 0;
-	if (level)
-		*level              = 0;
-    if(consumed_modifiers)
-	    *consumed_modifiers = 0;
+          return TRUE;
+        }
+    }
+  if (keyval)
+    *keyval             = 0;
+  if (effective_group)
+    *effective_group    = 0;
+  if (level)
+    *level              = 0;
+  if (consumed_modifiers)
+    *consumed_modifiers = 0;
 
-	return FALSE;
+  return FALSE;
 }
 
-	GdkKeymap*
+GdkKeymap *
 gdk_keymap_get_for_display (GdkDisplay *display)
 {
-	if( display == NULL ) return NULL;
-	g_assert(GDK_IS_DISPLAY_DFB(display));
-	GdkDisplayDFB *gdisplay = GDK_DISPLAY_DFB(display);
-	g_assert( gdisplay->keymap != NULL);
-	return gdisplay->keymap;
+  if (display == NULL)
+    return NULL;
+
+  g_assert (GDK_IS_DISPLAY_DFB (display));
+
+  GdkDisplayDFB *gdisplay = GDK_DISPLAY_DFB (display);
+
+  g_assert (gdisplay->keymap != NULL);
+
+  return gdisplay->keymap;
 }
 
-	PangoDirection
+PangoDirection
 gdk_keymap_get_direction (GdkKeymap *keymap)
 {
-	return PANGO_DIRECTION_NEUTRAL;
+  return PANGO_DIRECTION_NEUTRAL;
 }
 
 /**
@@ -1987,12 +1997,27 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
  **/
 guint
 gdk_keymap_lookup_key (GdkKeymap          *keymap,
-		const GdkKeymapKey *key)
+                       const GdkKeymapKey *key)
 {
-	g_warning("gdk_keymap_lookup_key unimplemented \n");	
-	return 0;
+  g_warning ("gdk_keymap_lookup_key unimplemented \n");
+  return 0;
 }
 
+void
+gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
+                                  GdkModifierType *state)
+{
+  g_warning ("gdk_keymap_add_virtual_modifiers unimplemented \n");
+}
+
+gboolean
+gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+                                  GdkModifierType *state)
+{
+  g_warning ("gdk_keymap_map_virtual_modifiers unimplemented \n");
+
+  return TRUE;
+}
 
 #define __GDK_KEYS_DIRECTFB_C__
 #include "gdkaliasdef.c"

@@ -34,9 +34,10 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkstock.h"
+#include "gtkshow.h"
 #include "gtktooltip.h"
-
 #include "gtklinkbutton.h"
+#include "gtkprivate.h"
 
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -362,7 +363,7 @@ popup_position_func (GtkMenu  *menu,
   gint monitor_num;
   GdkRectangle monitor;
   
-  g_return_if_fail (GTK_WIDGET_REALIZED (link_button));
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
   gdk_window_get_origin (widget->window, x, y);
 
@@ -411,7 +412,7 @@ gtk_link_button_do_popup (GtkLinkButton  *link_button,
       time = gtk_get_current_event_time ();
     }
 
-  if (GTK_WIDGET_REALIZED (link_button))
+  if (gtk_widget_get_realized (GTK_WIDGET (link_button)))
     {
       GtkWidget *menu_item;
       
@@ -451,10 +452,10 @@ static gboolean
 gtk_link_button_button_press (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
-  if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if ((event->button == 3) && (event->type == GDK_BUTTON_PRESS))
+  if (_gtk_button_event_triggers_context_menu (event))
     {
       gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), event);
       
@@ -474,6 +475,26 @@ gtk_link_button_clicked (GtkButton *button)
 
   if (uri_func)
     (* uri_func) (link_button, link_button->priv->uri, uri_func_data);
+  else
+    {
+      GdkScreen *screen;
+      GError *error;
+
+      if (gtk_widget_has_screen (GTK_WIDGET (button)))
+        screen = gtk_widget_get_screen (GTK_WIDGET (button));
+      else
+        screen = NULL;
+
+      error = NULL;
+      gtk_show_uri (screen, link_button->priv->uri, GDK_CURRENT_TIME, &error);
+      if (error)
+        {
+          g_warning ("Unable to show '%s': %s",
+                     link_button->priv->uri,
+                     error->message);
+          g_error_free (error);
+        }
+    }
 
   gtk_link_button_set_visited (link_button, TRUE);
 }
@@ -579,11 +600,11 @@ gtk_link_button_new (const gchar *uri)
 /**
  * gtk_link_button_new_with_label:
  * @uri: a valid URI
- * @label: the text of the button
+ * @label: (allow-none): the text of the button
  *
  * Creates a new #GtkLinkButton containing a label.
  *
- * Return value: a new link button widget.
+ * Return value: (transfer none): a new link button widget.
  *
  * Since: 2.10
  */
@@ -620,7 +641,9 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
   label = gtk_button_get_label (GTK_BUTTON (link_button));
   uri = link_button->priv->uri;
 
-  if (label && *label != '\0' && uri && strcmp (label, uri) != 0)
+  if (!gtk_widget_get_tooltip_text (widget)
+    && !gtk_widget_get_tooltip_markup (widget)
+    && label && *label != '\0' && uri && strcmp (label, uri) != 0)
     {
       gtk_tooltip_set_text (tooltip, uri);
       return TRUE;
@@ -670,7 +693,7 @@ gtk_link_button_set_uri (GtkLinkButton *link_button,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_link_button_get_uri (GtkLinkButton *link_button)
 {
   g_return_val_if_fail (GTK_IS_LINK_BUTTON (link_button), NULL);
@@ -680,17 +703,21 @@ gtk_link_button_get_uri (GtkLinkButton *link_button)
 
 /**
  * gtk_link_button_set_uri_hook:
- * @func: a function called each time a #GtkLinkButton is clicked, or %NULL
- * @data: user data to be passed to @func, or %NULL
- * @destroy: a #GDestroyNotify that gets called when @data is no longer needed, or %NULL
+ * @func: (allow-none): a function called each time a #GtkLinkButton is clicked, or %NULL
+ * @data: (allow-none): user data to be passed to @func, or %NULL
+ * @destroy: (allow-none): a #GDestroyNotify that gets called when @data is no longer needed, or %NULL
  *
  * Sets @func as the function that should be invoked every time a user clicks
  * a #GtkLinkButton. This function is called before every callback registered
  * for the "clicked" signal.
  *
+ * If no uri hook has been set, GTK+ defaults to calling gtk_show_uri().
+ *
  * Return value: the previously set hook function.
  *
  * Since: 2.10
+ *
+ * Deprecated: 2.24: Use the #GtkButton::clicked signal instead
  */
 GtkLinkButtonUriFunc
 gtk_link_button_set_uri_hook (GtkLinkButtonUriFunc func,

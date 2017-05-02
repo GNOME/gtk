@@ -133,7 +133,7 @@ static void       gail_text_view_paste_received        (GtkClipboard     *clipbo
 /* AtkStreamableContent */
 static void       atk_streamable_content_interface_init    (AtkStreamableContentIface *iface);
 static gint       gail_streamable_content_get_n_mime_types (AtkStreamableContent *streamable);
-static G_CONST_RETURN gchar* gail_streamable_content_get_mime_type (AtkStreamableContent *streamable,
+static const gchar* gail_streamable_content_get_mime_type (AtkStreamableContent *streamable,
 								    gint i);
 static GIOChannel* gail_streamable_content_get_stream       (AtkStreamableContent *streamable,
 							     const gchar *mime_type);
@@ -220,18 +220,25 @@ setup_buffer (GtkTextView  *view,
   if (buffer == NULL)
     return;
 
+  if (gail_view->textutil)
+    g_object_unref (gail_view->textutil);
+
   gail_view->textutil = gail_text_util_new ();
   gail_text_util_buffer_setup (gail_view->textutil, buffer);
 
   /* Set up signal callbacks */
-  g_signal_connect_data (buffer, "insert-text",
-     (GCallback) _gail_text_view_insert_text_cb, view, NULL, 0);
-  g_signal_connect_data (buffer, "delete-range",
-     (GCallback) _gail_text_view_delete_range_cb, view, NULL, 0);
-  g_signal_connect_data (buffer, "mark-set",
-     (GCallback) _gail_text_view_mark_set_cb, view, NULL, 0);
-  g_signal_connect_data (buffer, "changed",
-     (GCallback) _gail_text_view_changed_cb, view, NULL, 0);
+  g_signal_connect_object (buffer, "insert-text",
+                           (GCallback) _gail_text_view_insert_text_cb,
+                           view, 0);
+  g_signal_connect_object (buffer, "delete-range",
+                           (GCallback) _gail_text_view_delete_range_cb,
+                           view, 0);
+  g_signal_connect_object (buffer, "mark-set",
+                           (GCallback) _gail_text_view_mark_set_cb,
+                           view, 0);
+  g_signal_connect_object (buffer, "changed",
+                           (GCallback) _gail_text_view_changed_cb,
+                           view, 0);
 
 }
 
@@ -1671,7 +1678,7 @@ static gint       gail_streamable_content_get_n_mime_types (AtkStreamableContent
     return n_mime_types;
 }
 
-static G_CONST_RETURN gchar*       
+static const gchar*
 gail_streamable_content_get_mime_type (AtkStreamableContent *streamable, gint i)
 {
     if (GAIL_IS_TEXT_VIEW (streamable) && GAIL_TEXT_VIEW (streamable)->textutil)
@@ -1730,11 +1737,11 @@ static GIOChannel*       gail_streamable_content_get_stream       (AtkStreamable
 	    gio = g_io_channel_unix_new (fd);
 	    g_io_channel_set_encoding (gio, NULL, &err);
 	    if (!err) g_io_channel_write_chars (gio, (const char *) cbuf, (gssize) len, &written, &err);
-	    else g_message (err->message);
+	    else g_message ("%s", err->message);
 	    if (!err) g_io_channel_seek_position (gio, 0, G_SEEK_SET, &err);
-	    else g_message (err->message);
+	    else g_message ("%s", err->message);
 	    if (!err) g_io_channel_flush (gio, &err);
-	    else g_message (err->message);
+	    else g_message ("%s", err->message);
 	    if (err) {
 		g_message ("<error writing to stream [%s]>", tname);
 		g_error_free (err);

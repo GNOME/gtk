@@ -195,9 +195,10 @@
       <para>
 	A widget that does not have a GdkWindow of its own on which to
 	draw its contents, but rather shares its <glossterm
-	linkend="parent">parent's</glossterm>.  Such a widget has the
-	%GTK_NO_WINDOW <link linkend="GtkWidgetFlags">flag</link> set, and 
-        can be tested with the GTK_WIDGET_NO_WINDOW() macro.
+	linkend="parent">parent's</glossterm>.  This can be tested with
+	the gtk_widget_get_has_window() function.  See
+	<xref linkend="window-no-window-widgets"/> for a detailed
+	description of this flag.
       </para>
     </glossdef>
   </glossentry>

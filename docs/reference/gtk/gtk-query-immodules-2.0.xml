@@ -17,14 +17,16 @@
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gtk-query-immodules-2.0</command>
+<arg choice="opt">--update-cache</arg>
 <arg choice="opt" rep="repeat">module</arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
 <refsect1><title>Description</title>
 <para>
-<command>gtk-query-immodules-2.0</command> collects information about loadable 
-input method modules for GTK+ and writes it to <filename>stdout</filename>. 
+<command>gtk-query-immodules-2.0</command> collects information about loadable
+input method modules for GTK+ and writes it to the default cache file
+location, or to <filename>stdout</filename>.
 </para>
 <para>
 If called without arguments, it looks for modules in the GTK+ input method 
@@ -34,6 +36,22 @@ module path.
 If called with arguments, it looks for the specified modules. The arguments
 may be absolute or relative paths.
 </para>
+<para>
+Normally, the output of <command>gtk-query-immodules-2.0</command> is written
+to <filename><replaceable>libdir</replaceable>/gtk-2.0/2.10.0/immodules.cache</filename>, where GTK+ looks for it by default. If it is written to some other
+location, the environment variable <link linkend="GTK_IM_MODULE_FILE"><envar>GTK_IM_MODULE_FILE</envar></link>
+can be set to point GTK+ at the file.
+</para>
+</refsect1>
+
+<refsect1><title>Options</title>
+<variablelist>
+  <varlistentry>
+    <term>--update-cache</term>
+    <listitem><para>Write the output to the default cache location instead of
+                    <filename>stdout</filename></para></listitem>
+  </varlistentry>
+</variablelist>
 </refsect1>
 
 <refsect1><title>Environment</title>

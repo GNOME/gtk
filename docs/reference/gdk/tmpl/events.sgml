@@ -30,6 +30,9 @@ The structs used for each type of event.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GdkEventType ##### -->
 <para>
 Specifies the type of the event.
@@ -94,6 +97,7 @@ for the possible window states
   was added in 2.8.
 @GDK_DAMAGE: the content of the window has been changed. This event type
   was added in 2.14.
+@GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
 
 <!-- ##### ENUM GdkEventMask ##### -->
 <para>
@@ -164,6 +168,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -171,6 +176,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -178,6 +184,7 @@ is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -339,6 +346,7 @@ gdk_event_handler_set().
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 

@@ -53,6 +53,7 @@ struct _GdkPixmapImplWin32
   gint height;
   guchar *bits;
   guint is_foreign : 1;
+  guint is_allocated : 1;
 };
  
 struct _GdkPixmapImplWin32Class 

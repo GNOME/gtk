@@ -9,6 +9,9 @@ Abstract base class for GtkMenuItem, GtkListItem and GtkTreeItem
 The #GtkItem widget is an abstract base class for #GtkMenuItem, #GtkListItem
 and #GtkTreeItem.
 </para>
+<para>
+#GtkItem is deprecated and will be removed in GTK+ 3.
+</para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -16,6 +19,9 @@ and #GtkTreeItem.
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkItem ##### -->
@@ -52,6 +58,7 @@ Emits the "select" signal on the given item.
 </para>
 
 @item: a #GtkItem.
+@Deprecated: 2.22: Use gtk_menu_item_select() instead
 
 
 <!-- ##### FUNCTION gtk_item_deselect ##### -->
@@ -60,6 +67,7 @@ Emits the "deselect" signal on the given item.
 </para>
 
 @item: a #GtkItem.
+@Deprecated: 2.22: Use gtk_menu_item_deselect() instead
 
 
 <!-- ##### FUNCTION gtk_item_toggle ##### -->
@@ -68,5 +76,6 @@ Emits the "toggle" signal on the given item.
 </para>
 
 @item: a #GtkItem.
+@Deprecated: 2.22: This function will be removed in GTK+ 3
 
 

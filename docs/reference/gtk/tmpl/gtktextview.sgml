@@ -23,6 +23,9 @@ types related to the text widget and how they work together.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTextView ##### -->
 <para>
 
@@ -110,6 +113,14 @@ types related to the text widget and how they work together.
 @textview: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL GtkTextView::preedit-changed ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkTextView::select-all ##### -->
 <para>
 
@@ -164,6 +175,11 @@ types related to the text widget and how they work together.
 </para>
 
 <!-- ##### ARG GtkTextView:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:im-module ##### -->
 <para>
 
 </para>
@@ -241,6 +257,7 @@ types related to the text widget and how they work together.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -541,6 +558,7 @@ multiple views.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -820,6 +838,42 @@ multiple views.
 
 
 <!-- ##### FUNCTION gtk_text_view_get_default_attributes ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_im_context_filter_keypress ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@event: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_reset_im_context ##### -->
+<para>
+
+</para>
+
+@text_view: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_hadjustment ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_vadjustment ##### -->
 <para>
 
 </para>

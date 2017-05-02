@@ -19,6 +19,9 @@ the progress of a long running operation.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkProgress ##### -->
 <para>
 The #GtkProgress-struct struct contains private data only.
@@ -206,9 +209,7 @@ the #GtkProgress.
 
 @progress: a #GtkProgress.
 @value: the current progress value.
-@hmin: 
-@max: the maximum progress value.
-<!-- # Unused Parameters # -->
 @min: the minimum progress value.
+@max: the maximum progress value.
 
 

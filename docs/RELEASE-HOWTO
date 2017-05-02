@@ -7,19 +7,22 @@ dependencies:
 * gtk-doc
 * docbook-utils
 Without those packages make distcheck will *not* pass.
+Make sure that gtk-doc is the latest released version.
 
 
- 0) Blow away your gtk+ directory, check a new version out
+ 0) Go back to a pristine working directory. With git, this works:
 
- 1) autogen and build it, make sure to enable docs by specifying 
+    git clean -f -x
+
+ 1) autogen and build it, make sure to enable docs by specifying
     --enable-gtk-doc --enable-man
 
- 2) Update NEWS based on the various ChangeLog files; follow the format
+ 2) Update NEWS based on the content of git log; follow the format
     of prior entries. This includes finding noteworthy new features,
     collecting summaries for all the fixed bugs that are referenced
-    and collecting all updated translations. 
-    Also collect the names of all contributors that are mentioned. 
-    We don't discriminate between bug reporters, patch writers, 
+    and collecting all updated translations.
+    Also collect the names of all contributors that are mentioned.
+    We don't discriminate between bug reporters, patch writers,
     committers, etc. Anybody who is mentioned in ChangeLog gets
     credits, but only real names, not email addresses or nicknames.
 
@@ -29,14 +32,14 @@ Without those packages make distcheck will *not* pass.
     with configure.in.
 
  4) Verify that the version in configure.in has been bumped after the last
-    release. (Note that this is critical, a slip-up here will cause the 
+    release. (Note that this is critical, a slip-up here will cause the
     soname to change).
 
  5) Make sure that make check is happy (If you don't do it here, make distcheck
-    will also catch it, but it is kind of disheartening to see make distcheck 
-    fail due to an extraneous symbol after watching it build the docs for an 
-    hour...). 
-    Typical problems to expect here (depending on whether this is a devel 
+    will also catch it, but it is kind of disheartening to see make distcheck
+    fail due to an extraneous symbol after watching it build the docs for an
+    hour...).
+    Typical problems to expect here (depending on whether this is a devel
     snapshot or a stable release):
     * forgotten source files
     * new symbols missing from .symbols files
@@ -48,57 +51,58 @@ Without those packages make distcheck will *not* pass.
 
  6) If this is a devel release, make sure that the docs for new symbols
     are in good shape. Look at the -unused.txt files and add stuff found
-    there to the corresponding -sections.txt file. Look at the 
+    there to the corresponding -sections.txt file. Look at the
     -undocumented.txt files and see if there is anything in there that
     should be documented. If it is, this may be due to typos in the doc
-    comments in the source. Make sure that all new symbols have proper 
-    Since: tags, and that there is an index in the main -docs.sgml for 
-    the next stable version. 
+    comments in the source. Make sure that all new symbols have proper
+    Since: tags, and that there is an index in the main -docs.sgml for
+    the next stable version.
 
- 7) Add === Released 2.x.y === at the top of all ChangeLog files
+ 7) make distcheck
 
- 8) make distcheck
+ 8) Fix broken stuff found by 7), repeat
 
- 9) Fix broken stuff found by 8), repeat
+ 9) Commit all changes: git commit -a. You will have a bunch of po file
+    changes, NEWS and maybe some doc changes too
 
-10) svn commit; you'll have a bunch of po file changes, ChangeLog updates,
-     and maybe some doc changes too
- 
-11) If 10) fails because someone else committed inbetween, curse, svn up,
-    fix conflicts and go to 8)
-
-12) Now you've got the tarball. Check that the tarball size looks
+10) Now you've got the tarball. Check that the tarball size looks
     reasonable compared to previous releases. If the size goes down
     a lot, likely the docs went missing for some reason. Or the translations.
     If the size goes up by a lot, something else may be wrong.
 
-13) Tag the release. The command for doing that looks like
+11) Tag the release. The git command for doing that looks like
 
-      svn cp svn+ssh://matthiasc@svn.gnome.org/svn/gtk+/branches/gtk-2-12 \
-             svn+ssh://matthiasc@svn.gnome.org/svn/gtk+/tags/GTK_2_12_10
+    git tag -m "GTK+ 2.12.10" 2.12.10
 
-14) Bump the version number in configure.in and commit this change 
-    with a ChangeLog entry
+12) Push the tagged commit upstream. The git command for doing that is
 
-15) Upload the tarball to master.gnome.org and run install-module to transfer
+    git push origin refs/tags/2.12.10
+
+13) Bump the version number in configure.in and commit and push this change
+
+14) Upload the tarball to master.gnome.org and run install-module to transfer
     it to download.gnome.org. If you don't have an account on master.gnome.org,
     find someone who can do it for you. The command for this looks like
-  
+
       scp gtk+-2.12.10.tar.gz matthiasc@master.gnome.org:
       ssh matthiasc@master.gnome.org
       install-module gtk+-2.12.10.tar.gz
 
-16) Get the bz2 tarball and the .md5sum files back from master.gnome.org 
-    You can probably also create it locally, but I've experienced md5 
-    mismatches when doing so
+15) Get the .bz2 tarball and the .md5sum files back from master.gnome.org
+    You can probably also create it locally, but I've experienced md5
+    mismatches when doing so.
+
+16) Upload the .gz and .bz2 tarballs and checksums to ftp.gtk.org and put
+    them in the right directory below /ftp/pub. Pay attention to correct
+    ownership, and don't forget to update the LATEST file in the directory.
 
 17) Go to the gnome-announce list archives, find the last announce message,
-    create a new message in the same form, replacing version numbers, 
-    commentary at the top about "what this release is about" and the 
-    Summary of changes.
+    create a new message in the same form, replacing version numbers,
+    commentary at the top about "what this release is about" and the
+    summary of changes.
 
 18) Send it to gnome-announce-list, gtk-list, gtk-app-devel-list and
-    gtk-devel-list. Set reply-to to gnome-hackers.
+    gtk-devel-list. Set reply-to to desktop-devel-list.
 
-19) Add a link to the release announcement to www.gtk.org which lives 
-    in the gtk-web cvs module.
+19) Add a link to the release announcement to www.gtk.org which lives
+    in the gtk-web git module.

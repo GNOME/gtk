@@ -22,6 +22,21 @@
 #include <stdlib.h>
 #include "gailtextutil.h"
 
+/**
+ * SECTION:gailtextutil
+ * @Short_description: GailTextUtil is a utility class which can be used to
+ *   implement some of the #AtkText functions for accessible objects
+ *   which implement #AtkText.
+ * @Title: GailTextUtil
+ *
+ * GailTextUtil is a utility class which can be used to implement the
+ * #AtkText functions which get text for accessible objects which implement
+ * #AtkText.
+ *
+ * In GAIL it is used by the accsesible objects for #GnomeCanvasText, #GtkEntry,
+ * #GtkLabel, #GtkCellRendererText and #GtkTextView.
+ */
+
 static void gail_text_util_class_init      (GailTextUtilClass *klass);
 
 static void gail_text_util_init            (GailTextUtil      *textutil);
@@ -46,7 +61,7 @@ gail_text_util_get_type(void)
 
   if (!type)
     {
-      static const GTypeInfo tinfo =
+      const GTypeInfo tinfo =
       {
         sizeof (GailTextUtilClass),
         (GBaseInitFunc) NULL, /* base init */

@@ -23,10 +23,9 @@
 #include "gdkvisual.h"
 #include "gdkprivate-quartz.h"
 
-/* FIXME: We might want to include the rgba visual in the query functions */
-
 static GdkVisual *system_visual;
 static GdkVisual *rgba_visual;
+static GdkVisual *gray_visual;
 
 static void
 gdk_visual_finalize (GObject *object)
@@ -47,7 +46,7 @@ gdk_visual_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkVisualClass),
         (GBaseInitFunc) NULL,
@@ -117,13 +116,29 @@ create_standard_visual (gint depth)
   return visual;
 }
 
+static GdkVisual *
+create_gray_visual (void)
+{
+  GdkVisual *visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+
+  visual->depth = 1;
+  visual->byte_order = GDK_MSB_FIRST;
+  visual->colormap_size = 0;
+
+  visual->type = GDK_VISUAL_STATIC_GRAY;
+
+  return visual;
+}
+
 void
 _gdk_visual_init (void)
 {
   system_visual = create_standard_visual (24);
   rgba_visual = create_standard_visual (32);
+  gray_visual = create_gray_visual ();
 }
 
+/* We prefer the system visual for now ... */
 gint
 gdk_visual_get_best_depth (void)
 {
@@ -159,34 +174,58 @@ gdk_visual_get_best (void)
 GdkVisual*
 gdk_visual_get_best_with_depth (gint depth)
 {
-  if (system_visual->depth != depth)
-    return NULL;
+  GdkVisual *visual = NULL;
 
-  return system_visual;
+  switch (depth)
+    {
+      case 32:
+        visual = rgba_visual;
+        break;
+
+      case 24:
+        visual = system_visual;
+        break;
+
+      case 1:
+        visual = gray_visual;
+        break;
+
+      default:
+        visual = NULL;
+    }
+
+  return visual;
 }
 
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
 {
-  if (system_visual->type != visual_type)
-    return NULL;
+  if (system_visual->type == visual_type)
+    return system_visual;
+  else if (gray_visual->type == visual_type)
+    return gray_visual;
 
-  return system_visual;
+  return NULL;
 }
 
 GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,
 			       GdkVisualType visual_type)
 {
-  if (system_visual->depth != depth)
-    return NULL;
+  if (system_visual->depth == depth
+      && system_visual->type == visual_type)
+    return system_visual;
+  else if (rgba_visual->depth == depth
+           && rgba_visual->type == visual_type)
+    return rgba_visual;
+  else if (gray_visual->depth == depth
+           && gray_visual->type == visual_type)
+    return gray_visual;
 
-  if (system_visual->type != visual_type)
-    return NULL;
-
-  return system_visual;
+  return NULL;
 }
 
+/* For these, we also prefer the system visual */
 void
 gdk_query_depths  (gint **depths,
 		   gint  *count)
@@ -206,7 +245,13 @@ gdk_query_visual_types (GdkVisualType **visual_types,
 GList*
 gdk_screen_list_visuals (GdkScreen *screen)
 {
-  return g_list_append (NULL, gdk_visual_get_system ());
+  GList *visuals = NULL;
+
+  visuals = g_list_append (visuals, system_visual);
+  visuals = g_list_append (visuals, rgba_visual);
+  visuals = g_list_append (visuals, gray_visual);
+
+  return visuals;
 }
 
 GdkScreen *

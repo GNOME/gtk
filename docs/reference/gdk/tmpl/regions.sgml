@@ -36,6 +36,9 @@ It can be intersected to regions by using gdk_region_spans_intersect_foreach().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkPoint ##### -->
 <para>
 Defines the x and y coordinates of a point.
@@ -79,6 +82,11 @@ Defines the position and size of a rectangle.
 <para>
 A GdkRegion represents a set of pixels on the screen.
 </para>
+<para>
+In GTK3, #GdkRegion will be replaced by #cairo_region_t. All the functions
+listed in this section will go away and you will have to use the relevant
+Cairo functions. The conversion can be done using simple serch and replace.
+</para>
 
 
 <!-- ##### FUNCTION gdk_region_new ##### -->
@@ -86,6 +94,7 @@ A GdkRegion represents a set of pixels on the screen.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -172,6 +181,16 @@ included in the region, while areas overlapped an even number of times are not.
 
 @region1: 
 @region2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_region_rect_equal ##### -->
+<para>
+
+</para>
+
+@region: 
+@rectangle: 
 @Returns: 
 
 

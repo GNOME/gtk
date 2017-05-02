@@ -32,3 +32,5 @@ content_files =
 HTML_IMAGES =
 
 include $(top_srcdir)/gtk-doc.make
+
+-include $(top_srcdir)/git.mk

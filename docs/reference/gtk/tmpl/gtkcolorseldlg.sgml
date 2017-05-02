@@ -29,6 +29,9 @@ name "color_selection". It also exposes the buttons with the names
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkColorSelectionDialog ##### -->
 <para>
 The #GtkColorSelectionDialog-struct struct contains the following fields.

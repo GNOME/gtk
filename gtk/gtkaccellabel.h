@@ -27,13 +27,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_ACCEL_LABEL_H__
 #define __GTK_ACCEL_LABEL_H__
 
+
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
 #include <gtk/gtklabel.h>
 
@@ -51,6 +51,12 @@ G_BEGIN_DECLS
 typedef struct _GtkAccelLabel	    GtkAccelLabel;
 typedef struct _GtkAccelLabelClass  GtkAccelLabelClass;
 
+/**
+ * GtkAccelLabel:
+ *
+ * The #GtkAccelLabel-struct struct contains private data only, and
+ * should be accessed using the functions below.
+ */
 struct _GtkAccelLabel
 {
   GtkLabel label;

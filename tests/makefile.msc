@@ -15,10 +15,10 @@ GDK_PIXBUF_VER = 2.0
 
 GDK_LIBS = ../gdk/gdk-win32-$(GTK_VER).lib
 GTK_LIBS = ../gtk/gtk-win32-$(GTK_VER).lib
-GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
 
-INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf -I ../gtk
-DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS) $(ATK_CFLAGS) $(CAIRO_CFLAGS)
+INCLUDES = -I . -I .. -I ../gdk -I ../gtk
+DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(GDK_PIXBUF_CFLAGS) \
+	$(LIBICONV_CFLAGS) $(INTL_CFLAGS) $(ATK_CFLAGS) $(CAIRO_CFLAGS)
 LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
 DEFINES = -DG_LOG_DOMAIN=\"GtkTest\" -DGTK_VERSION=\"$(GTK_VER)\"
 
@@ -42,25 +42,27 @@ all :	\
 TESTAPPS = \
 #	autotestfilechooser autotestfilesystem \
 #	buildertest floatingtest \
+	flicker \
 	objecttests \
 	testaccel testactions testassistant \
-	testbbox \
-	testcairo testcalendar testcellrenderertext testcombo testcombochange \
+	testbbox testbuttons \
+	testcairo testcalendar testcellrenderertext testclientmessage testcombo testcombochange \
 	testdnd \
-	testellipsise testentrycompletion \
+	testellipsise testentrycompletion testentryicons \
 	testfilechooser testfilechooserbutton testframe \
 	testgrouping testgtk \
 	testicontheme testiconview testimage testinput \
 	testmenus testmountoperation testmenubars testmerge testmultidisplay testmultiscreen \
 	testnouiprint testnotebookdnd \
+	testoffscreen testoffscreenwindow testorientable \
 	testprint \
 	testrecentchooser testrecentchoosermenu testrgb testrichtext \
-	testselection testspinbutton \
+	testscale testselection testspinbutton \
 	testtext testtoolbar testtooltips \
 	testtreecolumns testtreecolumnsizing testtreeedit testtreeflow testtreefocus \
 	testtreemodel testtreesort testtreeview treestoretest \
 	testsocket testsocket_child teststatusicon \
-	testthreads testvolumebutton testxinerama \
+	testthreads testvolumebutton testwindows testxinerama \
 	simple
 
 # syntax error : illegal character '-' in macro
@@ -79,6 +81,10 @@ EXTRA_OBJETCS = prop-editor.obj
 
 !IFDEF EXTRA_buildertest
 EXTRA_LIBS = $(ATK_LIBS)
+!ENDIF
+
+!IFDEF EXTRA_testoffscreen
+EXTRA_OBJETCS = gtkoffscreenbox.obj
 !ENDIF
 
 !IFDEF EXTRA_testprint
@@ -104,7 +110,7 @@ EXTRA_OBJETCS = testsocket_common.obj
 
 $(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).lib $(TESTAPP).obj $(EXTRA_OBJETCS)
 	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) \
-	$(PANGO_LIBS) $(GLIB_LIBS) $(CAIRO_LIBS) $(EXTRA_LIBS) $(LDFLAGS)
+	$(PANGO_LIBS) $(PANGOCAIRO_LIBS) $(GLIB_LIBS) $(CAIRO_LIBS) $(EXTRA_LIBS) $(LDFLAGS)
 
 $(TESTAPP).obj : $(TESTAPP).c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"$(TESTAPP)\" $(TESTAPP).c

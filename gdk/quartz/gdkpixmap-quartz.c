@@ -41,27 +41,105 @@ gdk_pixmap_impl_quartz_get_size (GdkDrawable *drawable,
     *height = GDK_PIXMAP_IMPL_QUARTZ (drawable)->height;
 }
 
+static void
+gdk_pixmap_impl_quartz_get_image_parameters (GdkPixmap           *pixmap,
+                                             gint                *bits_per_component,
+                                             gint                *bits_per_pixel,
+                                             gint                *bytes_per_row,
+                                             CGColorSpaceRef     *colorspace,
+                                             CGImageAlphaInfo    *alpha_info)
+{
+  GdkPixmapImplQuartz *impl = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (pixmap)->impl);
+  gint depth = GDK_PIXMAP_OBJECT (pixmap)->depth;
+
+  switch (depth)
+    {
+      case 24:
+        if (bits_per_component)
+          *bits_per_component = 8;
+
+        if (bits_per_pixel)
+          *bits_per_pixel = 32;
+
+        if (bytes_per_row)
+          *bytes_per_row = impl->width * 4;
+
+        if (colorspace)
+          *colorspace = CGColorSpaceCreateDeviceRGB ();
+
+        if (alpha_info)
+          *alpha_info = kCGImageAlphaNoneSkipLast;
+        break;
+
+      case 32:
+        if (bits_per_component)
+          *bits_per_component = 8;
+
+        if (bits_per_pixel)
+          *bits_per_pixel = 32;
+
+        if (bytes_per_row)
+          *bytes_per_row = impl->width * 4;
+
+        if (colorspace)
+          *colorspace = CGColorSpaceCreateDeviceRGB ();
+
+        if (alpha_info)
+          *alpha_info = kCGImageAlphaPremultipliedFirst;
+        break;
+
+      case 1:
+        if (bits_per_component)
+          *bits_per_component = 8;
+
+        if (bits_per_pixel)
+          *bits_per_pixel = 8;
+
+        if (bytes_per_row)
+          *bytes_per_row = impl->width;
+
+        if (colorspace)
+          *colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericGray);
+
+        if (alpha_info)
+          *alpha_info = kCGImageAlphaNone;
+        break;
+
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+}
+
 static CGContextRef
 gdk_pixmap_impl_quartz_get_context (GdkDrawable *drawable,
 				    gboolean     antialias)
 {
   GdkPixmapImplQuartz *impl = GDK_PIXMAP_IMPL_QUARTZ (drawable);
   CGContextRef cg_context;
-  size_t height;
+  gint bits_per_component, bytes_per_row;
+  CGColorSpaceRef colorspace;
+  CGImageAlphaInfo alpha_info;
+
+  gdk_pixmap_impl_quartz_get_image_parameters (GDK_DRAWABLE_IMPL_QUARTZ (drawable)->wrapper,
+                                               &bits_per_component,
+                                               NULL,
+                                               &bytes_per_row,
+                                               &colorspace,
+                                               &alpha_info);
 
   cg_context = CGBitmapContextCreate (impl->data,
-                                      CGImageGetWidth (impl->image),
-                                      CGImageGetHeight (impl->image),
-                                      CGImageGetBitsPerComponent (impl->image),
-                                      CGImageGetBytesPerRow (impl->image),
-                                      CGImageGetColorSpace (impl->image),
-                                      CGImageGetBitmapInfo (impl->image));
+                                      impl->width, impl->height,
+                                      bits_per_component,
+                                      bytes_per_row,
+                                      colorspace,
+                                      alpha_info);
   CGContextSetAllowsAntialiasing (cg_context, antialias);
 
-  /* convert coordinates from core graphics to gtk+ */
-  height = CGImageGetHeight (impl->image);
+  CGColorSpaceRelease (colorspace);
 
-  CGContextTranslateCTM (cg_context, 0, height);
+  /* convert coordinates from core graphics to gtk+ */
+  CGContextTranslateCTM (cg_context, 0, impl->height);
   CGContextScaleCTM (cg_context, 1.0, -1.0);
 
   return cg_context;
@@ -72,7 +150,7 @@ gdk_pixmap_impl_quartz_finalize (GObject *object)
 {
   GdkPixmapImplQuartz *impl = GDK_PIXMAP_IMPL_QUARTZ (object);
 
-  CGImageRelease (impl->image);
+  CGDataProviderRelease (impl->data_provider);
 
   _gdk_quartz_drawable_finish (GDK_DRAWABLE (impl));
 
@@ -102,7 +180,7 @@ _gdk_pixmap_impl_quartz_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkPixmapImplQuartzClass),
         (GBaseInitFunc) NULL,
@@ -130,6 +208,45 @@ _gdk_pixmap_impl_get_type (void)
   return _gdk_pixmap_impl_quartz_get_type ();
 }
 
+static inline gboolean
+depth_supported (int depth)
+{
+  if (depth != 24 && depth != 32 && depth != 1)
+    {
+      g_warning ("Unsupported bit depth %d\n", depth);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+CGImageRef
+_gdk_pixmap_get_cgimage (GdkPixmap *pixmap)
+{
+  GdkPixmapImplQuartz *impl = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (pixmap)->impl);
+  gint bits_per_component, bits_per_pixel, bytes_per_row;
+  CGColorSpaceRef colorspace;
+  CGImageAlphaInfo alpha_info;
+  CGImageRef image;
+
+  gdk_pixmap_impl_quartz_get_image_parameters (pixmap,
+                                               &bits_per_component,
+                                               &bits_per_pixel,
+                                               &bytes_per_row,
+                                               &colorspace,
+                                               &alpha_info);
+
+  image = CGImageCreate (impl->width, impl->height,
+                         bits_per_component, bits_per_pixel,
+                         bytes_per_row, colorspace,
+                         alpha_info,
+                         impl->data_provider, NULL, FALSE, 
+                         kCGRenderingIntentDefault);
+  CGColorSpaceRelease (colorspace);
+
+  return image;
+}
+
 static void
 data_provider_release (void *info, const void *data, size_t size)
 {
@@ -137,19 +254,16 @@ data_provider_release (void *info, const void *data, size_t size)
 }
 
 GdkPixmap*
-gdk_pixmap_new (GdkDrawable *drawable,
-		gint         width,
-		gint         height,
-		gint         depth)
+_gdk_pixmap_new (GdkDrawable *drawable,
+                 gint         width,
+                 gint         height,
+                 gint         depth)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplQuartz *draw_impl;
   GdkPixmapImplQuartz *pix_impl;
   gint window_depth;
-  CGColorSpaceRef colorspace;
-  CGDataProviderRef data_provider;
-  CGImageAlphaInfo alpha_info;
-  gint bytes_per_row, bits_per_pixel;
+  gint bytes_per_row;
 
   g_return_val_if_fail (drawable == NULL || GDK_IS_DRAWABLE (drawable), NULL);
   g_return_val_if_fail ((drawable != NULL) || (depth != -1), NULL);
@@ -166,30 +280,8 @@ gdk_pixmap_new (GdkDrawable *drawable,
   if (depth == -1)
     depth = window_depth;
 
-  switch (depth)
-    {
-    case 24:
-      alpha_info = kCGImageAlphaNoneSkipLast;
-      bytes_per_row = width * 4;
-      bits_per_pixel = 32;
-      colorspace = CGColorSpaceCreateDeviceRGB ();
-      break;
-    case 32:
-      alpha_info = kCGImageAlphaPremultipliedFirst;
-      bytes_per_row = width * 4;
-      bits_per_pixel = 32;
-      colorspace = CGColorSpaceCreateDeviceRGB ();
-      break;
-    case 1:
-      alpha_info = kCGImageAlphaNone;
-      bytes_per_row = width;
-      bits_per_pixel = 8;
-      colorspace = CGColorSpaceCreateDeviceGray ();
-      break;
-    default:
-      g_warning ("Unsupported bit depth %d\n", depth);
-      return NULL;
-    }
+  if (!depth_supported (depth))
+    return NULL;
 
   pixmap = g_object_new (gdk_pixmap_get_type (), NULL);
   draw_impl = GDK_DRAWABLE_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (pixmap)->impl);
@@ -198,20 +290,20 @@ gdk_pixmap_new (GdkDrawable *drawable,
 
   g_assert (depth == 24 || depth == 32 || depth == 1);
 
-  pix_impl->data = g_malloc (height * bytes_per_row);
-  data_provider = CGDataProviderCreateWithData (pix_impl->data, pix_impl->data, 
-						height * bytes_per_row, data_provider_release);
-  pix_impl->image = CGImageCreate (width, height, 8, bits_per_pixel, 
-				   bytes_per_row, colorspace,
-				   alpha_info,
-				   data_provider, NULL, FALSE, 
-				   kCGRenderingIntentDefault);
-  CGDataProviderRelease (data_provider);
-  CGColorSpaceRelease (colorspace);
-
   pix_impl->width = width;
   pix_impl->height = height;
   GDK_PIXMAP_OBJECT (pixmap)->depth = depth;
+
+  gdk_pixmap_impl_quartz_get_image_parameters (pixmap,
+                                               NULL, NULL,
+                                               &bytes_per_row,
+                                               NULL, NULL);
+
+  pix_impl->data = g_malloc (height * bytes_per_row);
+  pix_impl->data_provider = CGDataProviderCreateWithData (pix_impl->data,
+                                                          pix_impl->data,
+                                                          height * bytes_per_row,
+                                                          data_provider_release);
 
   if (depth == window_depth) {
     GdkColormap *colormap = gdk_drawable_get_colormap (drawable);
@@ -224,10 +316,10 @@ gdk_pixmap_new (GdkDrawable *drawable,
 }
 
 GdkPixmap *
-gdk_bitmap_create_from_data (GdkDrawable *window,
-			     const gchar *data,
-			     gint         width,
-			     gint         height)
+_gdk_bitmap_create_from_data (GdkDrawable *window,
+                              const gchar *data,
+                              gint         width,
+                              gint         height)
 {
   GdkPixmap *pixmap;
   GdkPixmapImplQuartz *impl;
@@ -239,8 +331,6 @@ gdk_bitmap_create_from_data (GdkDrawable *window,
 
   pixmap = gdk_pixmap_new (window, width, height, 1);
   impl = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (pixmap)->impl);
-
-  g_assert (CGImageGetBytesPerRow (impl->image) == width);
 
   /* Bytes per line: Each line consumes an integer number of bytes, possibly
    * ignoring any excess bits. */
@@ -264,13 +354,13 @@ gdk_bitmap_create_from_data (GdkDrawable *window,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkDrawable    *drawable,
-			     const gchar    *data,
-			     gint            width,
-			     gint            height,
-			     gint            depth,
-			     const GdkColor *fg,
-			     const GdkColor *bg)
+_gdk_pixmap_create_from_data (GdkDrawable    *drawable,
+                              const gchar    *data,
+                              gint            width,
+                              gint            height,
+                              gint            depth,
+                              const GdkColor *fg,
+                              const GdkColor *bg)
 {	
   /* FIXME: Implement */
   return NULL;

@@ -51,6 +51,18 @@
 
 #define SIMPLE_ID "gtk-im-context-simple"
 
+/**
+ * GtkIMContextInfo:
+ * @context_id: The unique identification string of the input method.
+ * @context_name: The human-readable name of the input method.
+ * @domain: Translation domain to be used with dgettext()
+ * @domain_dirname: Name of locale directory for use with bindtextdomain()
+ * @default_locales: A colon-separated list of locales where this input method
+ *   should be the default. The asterisk "*" sets the default for all locales.
+ *
+ * Bookkeeping information about a loadable input method.
+ */
+
 typedef struct _GtkIMModule      GtkIMModule;
 typedef struct _GtkIMModuleClass GtkIMModuleClass;
 
@@ -101,7 +113,7 @@ gtk_im_module_load (GTypeModule *module)
       im_module->library = g_module_open (im_module->path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
       if (!im_module->library)
 	{
-	  g_warning (g_module_error());
+	  g_warning ("%s", g_module_error());
 	  return FALSE;
 	}
   
@@ -115,7 +127,7 @@ gtk_im_module_load (GTypeModule *module)
 	  !g_module_symbol (im_module->library, "im_module_create", 
 			    (gpointer *)&im_module->create))
 	{
-	  g_warning (g_module_error());
+	  g_warning ("%s", g_module_error());
 	  g_module_close (im_module->library);
 	  
 	  return FALSE;
@@ -238,7 +250,7 @@ correct_libdir_prefix (gchar **path)
       /* This is an entry put there by make install on the
        * packager's system. On Windows a prebuilt GTK+
        * package can be installed in a random
-       * location. The gtk.immodules file distributed in
+       * location. The immodules.cache file distributed in
        * such a package contains paths from the package
        * builder's machine. Replace the path with the real
        * one on this machine.
@@ -267,7 +279,7 @@ correct_localedir_prefix (gchar **path)
 #endif
 
 
-static GtkIMModule *
+G_GNUC_UNUSED static GtkIMModule *
 add_builtin_module (const gchar             *module_name,
 		    const GtkIMContextInfo **contexts,
 		    int                      n_contexts)
@@ -499,7 +511,7 @@ compare_gtkimcontextinfo_name(const GtkIMContextInfo **a,
  * @n_contexts: the length of the array stored in @contexts
  * 
  * List all available types of input method context
- **/
+ */
 void
 _gtk_im_module_list (const GtkIMContextInfo ***contexts,
 		     guint                    *n_contexts)
@@ -577,8 +589,8 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
  * ID @context_id.
  * 
  * Return value: a newly created input context of or @context_id, or
- * if that could not be created, a newly created GtkIMContextSimple.
- **/
+ *     if that could not be created, a newly created GtkIMContextSimple.
+ */
 GtkIMContext *
 _gtk_im_module_create (const gchar *context_id)
 {
@@ -638,6 +650,28 @@ match_locale (const gchar *locale,
   return 0;
 }
 
+static const gchar *
+lookup_immodule (gchar **immodules_list)
+{
+  while (immodules_list && *immodules_list)
+    {
+      if (g_strcmp0 (*immodules_list, SIMPLE_ID) == 0)
+        return SIMPLE_ID;
+      else
+	{
+	  gboolean found;
+	  gchar *context_id;
+	  found = g_hash_table_lookup_extended (contexts_hash, *immodules_list,
+						&context_id, NULL);
+	  if (found)
+	    return context_id;
+	}
+      immodules_list++;
+    }
+
+  return NULL;
+}
+
 /**
  * _gtk_im_module_get_default_context_id:
  * @client_window: a window
@@ -646,7 +680,7 @@ match_locale (const gchar *locale,
  * for the given window.
  * 
  * Return value: the context ID (will never be %NULL)
- **/
+ */
 const gchar *
 _gtk_im_module_get_default_context_id (GdkWindow *client_window)
 {
@@ -654,7 +688,7 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
   const gchar *context_id = NULL;
   gint best_goodness = 0;
   gint i;
-  gchar *tmp_locale, *tmp;
+  gchar *tmp_locale, *tmp, **immodules;
   const gchar *envvar;
   GdkScreen *screen;
   GtkSettings *settings;
@@ -662,37 +696,32 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
   if (!contexts_hash)
     gtk_im_module_initialize ();
 
-  envvar = g_getenv ("GTK_IM_MODULE");
-  if (envvar &&
-      (strcmp (envvar, SIMPLE_ID) == 0 ||
-       g_hash_table_lookup (contexts_hash, envvar))) 
-    return envvar;
+  envvar = g_getenv("GTK_IM_MODULE");
+  if (envvar)
+    {
+        immodules = g_strsplit(envvar, ":", 0);
+        context_id = lookup_immodule(immodules);
+        g_strfreev(immodules);
+
+        if (context_id)
+          return context_id;
+    }
 
   /* Check if the certain immodule is set in XSETTINGS.
    */
-  if (client_window != NULL && GDK_IS_DRAWABLE (client_window))
+  if (GDK_IS_DRAWABLE (client_window))
     {
-      screen = gdk_drawable_get_screen (GDK_DRAWABLE (client_window));
-      if (screen)
-        settings = gtk_settings_get_for_screen (screen);
-      else
-        settings = gtk_settings_get_default ();
-
+      screen = gdk_window_get_screen (client_window);
+      settings = gtk_settings_get_for_screen (screen);
       g_object_get (G_OBJECT (settings), "gtk-im-module", &tmp, NULL);
       if (tmp)
         {
-          if (strcmp (tmp, SIMPLE_ID) == 0)
-            context_id = SIMPLE_ID;
-          else 
-            {
-              GtkIMModule *module;
-              module = g_hash_table_lookup (contexts_hash, tmp);
-              if (module)
-                context_id = module->contexts[0]->context_id;
-            }
+          immodules = g_strsplit(tmp, ":", 0);
+          context_id = lookup_immodule(immodules);
+          g_strfreev(immodules);
           g_free (tmp);
 
-       	  if (context_id) 
+       	  if (context_id)
             return context_id;
         }
     }

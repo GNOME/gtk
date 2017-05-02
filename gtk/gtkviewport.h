@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_VIEWPORT_H__
 #define __GTK_VIEWPORT_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkbin.h>
 
@@ -84,6 +83,8 @@ void           gtk_viewport_set_vadjustment (GtkViewport   *viewport,
 void           gtk_viewport_set_shadow_type (GtkViewport   *viewport,
 					     GtkShadowType  type);
 GtkShadowType  gtk_viewport_get_shadow_type (GtkViewport   *viewport);
+GdkWindow*     gtk_viewport_get_bin_window  (GtkViewport   *viewport);
+GdkWindow*     gtk_viewport_get_view_window (GtkViewport   *viewport);
 
 
 G_END_DECLS

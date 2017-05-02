@@ -113,8 +113,8 @@ static void choicecb (GtkWidget *widget, gpointer data)
 static void _check_table (AtkObject *in_obj)
 {
   AtkObject *obj = NULL;
-  G_CONST_RETURN char *no_properties;
-  G_CONST_RETURN char *no_gui;
+  const char *no_properties;
+  const char *no_gui;
 
   no_properties = g_getenv ("TEST_ACCESSIBLE_NO_PROPERTIES");
   no_gui = g_getenv ("TEST_ACCESSIBLE_NO_GUI");
@@ -214,7 +214,7 @@ void other_runtest(AtkObject *obj)
 {
   AtkObject *header_obj;
   AtkObject *out_obj;
-  G_CONST_RETURN gchar *out_string;
+  const gchar *out_string;
   GString *out_desc;
   gint n_cols, n_rows;
   gint rows_to_loop = NUM_ROWS_TO_LOOP;
@@ -917,7 +917,7 @@ nogui_process_child (AtkObject *obj)
     {
       AtkAction *action = ATK_ACTION(obj);
       gint n_actions, i;
-      G_CONST_RETURN gchar *name, *description;
+      const gchar *name, *description;
       
       n_actions = atk_action_get_n_actions (action);
       g_print ("Child supports %d actions.\n", n_actions);

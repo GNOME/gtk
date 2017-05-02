@@ -46,7 +46,8 @@ former you can use gtk_tree_view_convert_widget_to_bin_window_coords()
 <title>GtkTreeView as GtkBuildable</title>
 <para>
 The GtkTreeView implementation of the GtkBuildable interface accepts
-GtkTreeViewColumn objects as &lt;child&gt; elements in UI definitions.
+GtkTreeViewColumn objects as &lt;child&gt; elements and exposes the
+internal GtkTreeSelection in UI definitions.
 </para>
 <example>
 <title>A UI definition fragment with GtkTreeView</title>
@@ -64,6 +65,11 @@ GtkTreeViewColumn objects as &lt;child&gt; elements in UI definitions.
       </child>
     </object>
   </child>
+  <child internal-child="selection">
+    <object class="GtkTreeSelection" id="selection">
+      <signal name="changed" handler="on_treeview_selection_changed"/>
+    </object>
+  </child>
 </object>
 ]]></programlisting>
 </example>
@@ -75,6 +81,9 @@ GtkTreeViewColumn objects as &lt;child&gt; elements in UI definitions.
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkTreeView ##### -->
@@ -447,6 +456,7 @@ has some similarity to strcmp() returning 0 for equal strings.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -660,7 +670,7 @@ has some similarity to strcmp() returning 0 for equal strings.
 @position: 
 @title: 
 @cell: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -1392,13 +1402,13 @@ returns.
 
 <!-- ##### ENUM GtkTreeViewGridLines ##### -->
 <para>
-
+Used to indicate which grid lines to draw in a tree view.
 </para>
 
-@GTK_TREE_VIEW_GRID_LINES_NONE: 
-@GTK_TREE_VIEW_GRID_LINES_HORIZONTAL: 
-@GTK_TREE_VIEW_GRID_LINES_VERTICAL: 
-@GTK_TREE_VIEW_GRID_LINES_BOTH: 
+@GTK_TREE_VIEW_GRID_LINES_NONE: No grid lines.
+@GTK_TREE_VIEW_GRID_LINES_HORIZONTAL: Horizontal grid lines.
+@GTK_TREE_VIEW_GRID_LINES_VERTICAL: Vertical grid lines.
+@GTK_TREE_VIEW_GRID_LINES_BOTH: Horizontal and vertical grid lines.
 
 <!-- ##### FUNCTION gtk_tree_view_get_grid_lines ##### -->
 <para>

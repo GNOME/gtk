@@ -80,6 +80,9 @@ void make_toggles (void) {
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkToggleButton ##### -->
 <para>
 The #GtkToggleButton struct contains private data only, and should be manipulated using the functions below.
@@ -114,6 +117,7 @@ Should be connected if you wish to perform an action whenever the
 Creates a new toggle button. A widget should be packed into the button, as in gtk_button_new().
 </para>
 
+@void: 
 @Returns: a new toggle button.
 
 
@@ -157,6 +161,7 @@ Creates a new toggle button with a text label.
 This is a deprecated macro, and is only maintained for compatibility reasons.
 </para>
 
+@Deprecated: Use gtk_toggle_button_set_active() instead.
 
 
 <!-- ##### FUNCTION gtk_toggle_button_toggled ##### -->

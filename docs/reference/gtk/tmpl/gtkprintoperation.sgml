@@ -86,6 +86,9 @@ Printing support was added in GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPrintOperation ##### -->
 <para>
 
@@ -178,6 +181,16 @@ Printing support was added in GTK+ 2.10.
 
 @printoperation: the object which received the signal.
 
+<!-- ##### SIGNAL GtkPrintOperation::update-custom-widget ##### -->
+<para>
+
+</para>
+
+@printoperation: the object which received the signal.
+@widget: 
+@arg1: 
+@arg2: 
+
 <!-- ##### ARG GtkPrintOperation:allow-async ##### -->
 <para>
 
@@ -198,7 +211,17 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
+<!-- ##### ARG GtkPrintOperation:embed-page-setup ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPrintOperation:export-filename ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:has-selection ##### -->
 <para>
 
 </para>
@@ -209,6 +232,11 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 <!-- ##### ARG GtkPrintOperation:n-pages ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:n-pages-to-print ##### -->
 <para>
 
 </para>
@@ -229,6 +257,11 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 <!-- ##### ARG GtkPrintOperation:status-string ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintOperation:support-selection ##### -->
 <para>
 
 </para>
@@ -292,18 +325,20 @@ A value of this type is returned by gtk_print_operation_run().
 @GTK_PRINT_OPERATION_RESULT_APPLY: The print settings should be stored.
 @GTK_PRINT_OPERATION_RESULT_CANCEL: The print operation has been canceled,
   the print settings should not be stored.
-@GTK_PRINT_OPERATION_RESULT_IN_PROGRESS: The print operation is complete
+@GTK_PRINT_OPERATION_RESULT_IN_PROGRESS: The print operation is not complete
   yet. This value will only be returned when running asynchronously.
 
 <!-- ##### ENUM GtkPrintError ##### -->
 <para>
-
+Error codes that identify various errors that can occur while
+using the GTK+ printing support.
 </para>
 
-@GTK_PRINT_ERROR_GENERAL: 
-@GTK_PRINT_ERROR_INTERNAL_ERROR: 
-@GTK_PRINT_ERROR_NOMEM: 
-@GTK_PRINT_ERROR_INVALID_FILE: 
+@GTK_PRINT_ERROR_GENERAL: An unspecified error occurred.
+@GTK_PRINT_ERROR_INTERNAL_ERROR: An internal error occurred.
+@GTK_PRINT_ERROR_NOMEM: A memory allocation failed.
+@GTK_PRINT_ERROR_INVALID_FILE: An error occurred while loading a page setup
+    or paper size from a key file.
 
 <!-- ##### MACRO GTK_PRINT_ERROR ##### -->
 <para>
@@ -317,6 +352,7 @@ The #GQuark used for #GtkPrintError errors.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -390,6 +426,15 @@ The #GQuark used for #GtkPrintError errors.
 
 @op: 
 @n_pages: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_n_pages_to_print ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_print_operation_set_current_page ##### -->
@@ -475,6 +520,22 @@ The #GQuark used for #GtkPrintError errors.
 @op: 
 
 
+<!-- ##### FUNCTION gtk_print_operation_draw_page_finish ##### -->
+<para>
+
+</para>
+
+@op: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_defer_drawing ##### -->
+<para>
+
+</para>
+
+@op: 
+
+
 <!-- ##### FUNCTION gtk_print_operation_get_status ##### -->
 <para>
 
@@ -494,6 +555,60 @@ The #GQuark used for #GtkPrintError errors.
 
 
 <!-- ##### FUNCTION gtk_print_operation_is_finished ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_support_selection ##### -->
+<para>
+
+</para>
+
+@op: 
+@support_selection: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_support_selection ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_has_selection ##### -->
+<para>
+
+</para>
+
+@op: 
+@has_selection: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_has_selection ##### -->
+<para>
+
+</para>
+
+@op: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_set_embed_page_setup ##### -->
+<para>
+
+</para>
+
+@op: 
+@embed: 
+
+
+<!-- ##### FUNCTION gtk_print_operation_get_embed_page_setup ##### -->
 <para>
 
 </para>

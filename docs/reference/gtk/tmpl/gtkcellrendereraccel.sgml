@@ -23,6 +23,9 @@ The #GtkCellRendererAccel cell renderer was added in GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCellRendererAccel ##### -->
 <para>
 
@@ -81,6 +84,7 @@ The #GtkCellRendererAccel cell renderer was added in GTK+ 2.10.
 
 </para>
 
+@void: 
 @Returns: 
 
 

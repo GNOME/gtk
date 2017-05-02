@@ -41,6 +41,9 @@ the #GtkToolbar::popup-context-menu signal.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkToolbar ##### -->
 <para>
 The #GtkToolbar struct only contains private data and should only be
@@ -90,11 +93,6 @@ accessed through the function described below.
 </para>
 
 <!-- ##### ARG GtkToolbar:icon-size-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkToolbar:orientation ##### -->
 <para>
 
 </para>
@@ -189,6 +187,7 @@ to a #GtkToolbar.
 
 </para>
 
+@void: 
 @Returns: the newly-created toolbar.
 
 

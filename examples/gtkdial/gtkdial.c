@@ -65,7 +65,7 @@ gtk_dial_get_type ()
 
   if (!dial_type)
     {
-      static const GTypeInfo dial_info =
+      const GTypeInfo dial_info =
       {
 	sizeof (GtkDialClass),
 	NULL,
@@ -190,11 +190,11 @@ gtk_dial_set_adjustment (GtkDial      *dial,
   dial->adjustment = adjustment;
   g_object_ref (GTK_OBJECT (dial->adjustment));
 
-  g_signal_connect (GTK_OBJECT (adjustment), "changed",
-		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_changed),
+  g_signal_connect (G_OBJECT (adjustment), "changed",
+		    G_CALLBACK (gtk_dial_adjustment_changed),
 		    (gpointer) dial);
-  g_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-		    GTK_SIGNAL_FUNC (gtk_dial_adjustment_value_changed),
+  g_signal_connect (G_OBJECT (adjustment), "value_changed",
+		    G_CALLBACK (gtk_dial_adjustment_value_changed),
 		    (gpointer) dial);
 
   dial->old_value = adjustment->value;
@@ -214,7 +214,7 @@ gtk_dial_realize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_DIAL (widget));
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   dial = GTK_DIAL (widget);
 
   attributes.x = widget->allocation.x;
@@ -261,7 +261,7 @@ gtk_dial_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   dial = GTK_DIAL (widget);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
 
       gdk_window_move_resize (widget->window,
@@ -333,6 +333,8 @@ gtk_dial_expose( GtkWidget      *widget,
                 widget->style->bg_gc[GTK_STATE_NORMAL];
   blankstyle->black_gc =
                 widget->style->bg_gc[GTK_STATE_NORMAL];
+  blankstyle->depth =
+                gdk_drawable_get_depth( GDK_DRAWABLE (widget->window));
 
   gtk_paint_polygon (blankstyle,
                     widget->window,

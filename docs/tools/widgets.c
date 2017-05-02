@@ -1,9 +1,10 @@
+#include "config.h"
+
 #include <gtk/gtkunixprint.h>
 #include <gdk/gdkkeysyms.h>
 #include <X11/Xatom.h>
 #include <gdkx.h>
 #include "widgets.h"
-
 
 #define SMALL_WIDTH  240
 #define SMALL_HEIGHT 75
@@ -20,7 +21,7 @@ find_toplevel_window (Window xid)
 
   do
     {
-      if (XQueryTree (GDK_DISPLAY (), xid, &root,
+      if (XQueryTree (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), xid, &root,
 		      &parent, &children, &nchildren) == 0)
 	{
 	  g_warning ("Couldn't find window manager window");
@@ -278,13 +279,24 @@ create_combo_box_entry (void)
 {
   GtkWidget *widget;
   GtkWidget *align;
+  GtkWidget *child;
+  GtkTreeModel *model;
   
   gtk_rc_parse_string ("style \"combo-box-entry-style\" {\n"
 		       "  GtkComboBox::appears-as-list = 1\n"
 		       "}\n"
 		       "widget_class \"GtkComboBoxEntry\" style \"combo-box-entry-style\"\n" );
-  widget = gtk_combo_box_entry_new_text ();
-  gtk_entry_set_text (GTK_ENTRY (GTK_BIN (widget)->child), "Combo Box Entry");
+
+  model = (GtkTreeModel *)gtk_list_store_new (1, G_TYPE_STRING);
+  widget = g_object_new (GTK_TYPE_COMBO_BOX,
+			 "has-entry", TRUE,
+			 "model", model,
+			 "entry-text-column", 0,
+			 NULL);
+  g_object_unref (model);
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  gtk_entry_set_text (GTK_ENTRY (child), "Combo Box Entry");
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
 
@@ -302,8 +314,8 @@ create_combo_box (void)
 		       "}\n"
 		       "widget_class \"GtkComboBox\" style \"combo-box-style\"\n" );
 
-  widget = gtk_combo_box_new_text ();
-  gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Combo Box");
+  widget = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Combo Box");
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
@@ -729,6 +741,34 @@ create_toolbar (void)
 }
 
 static WidgetInfo *
+create_toolpalette (void)
+{
+  GtkWidget *widget, *group;
+  GtkToolItem *item;
+
+  widget = gtk_tool_palette_new ();
+  group = gtk_tool_item_group_new ("Tools");
+  gtk_container_add (GTK_CONTAINER (widget), group);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_ABOUT);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_FILE);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_CONNECT);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+
+  group = gtk_tool_item_group_new ("More tools");
+  gtk_container_add (GTK_CONTAINER (widget), group);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_CUT);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_EXECUTE);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_CANCEL);
+  gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+
+  return new_widget_info ("toolpalette", widget, MEDIUM);
+}
+
+static WidgetInfo *
 create_menubar (void)
 {
   GtkWidget *widget, *vbox, *align, *item;
@@ -765,9 +805,37 @@ create_message_dialog (void)
 				   GTK_MESSAGE_INFO,
 				   GTK_BUTTONS_OK,
 				   NULL);
+  gtk_window_set_icon_name (GTK_WINDOW (widget), "gtk-copy");
   gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (widget),
 				 "<b>Message Dialog</b>\n\nWith secondary text");
-  return new_widget_info ("messagedialog", widget, MEDIUM);
+  return new_widget_info ("messagedialog", widget, ASIS);
+}
+
+static WidgetInfo *
+create_about_dialog (void)
+{
+  GtkWidget *widget;
+  const gchar *authors[] = {
+    "Peter Mattis",
+    "Spencer Kimball",
+    "Josh MacDonald",
+    "and many more...",
+    NULL
+  };
+
+  widget = gtk_about_dialog_new ();
+  g_object_set (widget,
+                "program-name", "GTK+ Code Demos",
+                "version", PACKAGE_VERSION,
+                "copyright", "(C) 1997-2009 The GTK+ Team",
+                "website", "http://www.gtk.org",
+                "comments", "Program to demonstrate GTK+ functions.",
+                "logo-icon-name", "gtk-about",
+                "title", "About GTK+ Code Demos",
+                "authors", authors,
+		NULL);
+  gtk_window_set_icon_name (GTK_WINDOW (widget), "gtk-about");
+  return new_widget_info ("aboutdialog", widget, ASIS);
 }
 
 static WidgetInfo *
@@ -911,6 +979,26 @@ create_image (void)
 }
 
 static WidgetInfo *
+create_spinner (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align, *vbox;
+
+  widget = gtk_spinner_new ();
+  gtk_widget_set_size_request (widget, 24, 24);
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Spinner"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("spinner", vbox, SMALL);
+}
+
+static WidgetInfo *
 create_volume_button (void)
 {
   GtkWidget *button, *widget;
@@ -956,6 +1044,9 @@ get_all_widgets (void)
 {
   GList *retval = NULL;
 
+  retval = g_list_prepend (retval, create_toolpalette ());
+  retval = g_list_prepend (retval, create_spinner ());
+  retval = g_list_prepend (retval, create_about_dialog ());
   retval = g_list_prepend (retval, create_accel_label ());
   retval = g_list_prepend (retval, create_button ());
   retval = g_list_prepend (retval, create_check_button ());

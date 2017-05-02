@@ -100,18 +100,6 @@ GtkFileSystem * _gtk_file_system_new          (void);
 GSList *        _gtk_file_system_list_volumes   (GtkFileSystem *file_system);
 GSList *        _gtk_file_system_list_bookmarks (GtkFileSystem *file_system);
 
-gboolean        _gtk_file_system_parse          (GtkFileSystem     *file_system,
-						 GFile             *base_file,
-						 const gchar       *str,
-						 GFile            **folder,
-						 gchar            **file_part,
-						 GError           **error);
-
-GCancellable *  _gtk_file_system_get_folder             (GtkFileSystem                     *file_system,
-						 	 GFile                             *file,
-							 const gchar                       *attributes,
-							 GtkFileSystemGetFolderCallback     callback,
-							 gpointer                           data);
 GCancellable *  _gtk_file_system_get_info               (GtkFileSystem                     *file_system,
 							 GFile                             *file,
 							 const gchar                       *attributes,
@@ -162,7 +150,8 @@ GdkPixbuf *           _gtk_file_system_volume_render_icon      (GtkFileSystemVol
 							        gint                  icon_size,
 							        GError              **error);
 
-void                  _gtk_file_system_volume_free             (GtkFileSystemVolume *volume);
+GtkFileSystemVolume  *_gtk_file_system_volume_ref              (GtkFileSystemVolume *volume);
+void                  _gtk_file_system_volume_unref            (GtkFileSystemVolume *volume);
 
 /* GtkFileSystemBookmark methods */
 void                   _gtk_file_system_bookmark_free          (GtkFileSystemBookmark *bookmark);
@@ -171,6 +160,11 @@ void                   _gtk_file_system_bookmark_free          (GtkFileSystemBoo
 GdkPixbuf *     _gtk_file_info_render_icon (GFileInfo *info,
 					    GtkWidget *widget,
 					    gint       icon_size);
+
+gboolean	_gtk_file_info_consider_as_directory (GFileInfo *info);
+
+/* GFile helper functions */
+gboolean	_gtk_file_has_native_path (GFile *file);
 
 G_END_DECLS
 

@@ -21,6 +21,8 @@
 /* need to get the prototypes of all get_type functions */
 #define GTK_ENABLE_BROKEN
 #undef GTK_DISABLE_DEPRECATED
+/* Need to get GDK_WINDOW_OBJECT */
+#undef GDK_DISABLE_DEPRECATED
 
 #include "config.h"
 
@@ -32,12 +34,18 @@
 #include <math.h>
 
 
-/* --- test utilities --- */
+/**
+ * SECTION:gtktesting
+ * @Short_description: Utilities for testing GTK+ applications
+ * @Title: Testing
+ */
+
 /**
  * gtk_test_init:
  * @argcp: Address of the <parameter>argc</parameter> parameter of the
  *        main() function. Changed if any arguments were handled.
- * @argvp: Address of the <parameter>argv</parameter> parameter of main().
+ * @argvp: (inout) (array length=argcp): Address of the 
+ *        <parameter>argv</parameter> parameter of main().
  *        Any parameters understood by g_test_init() or gtk_init() are
  *        stripped before return.
  * @Varargs: currently unused
@@ -213,7 +221,7 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
  * so this function is genrally only useful in test programs with
  * predetermined locales, see gtk_test_init() for more details.
  *
- * Returns: a GtkLabel widget if any is found.
+ * Returns: (transfer none): a GtkLabel widget if any is found.
  *
  * Since: 2.14
  **/
@@ -309,7 +317,7 @@ widget_geo_cmp (gconstpointer a,
  * widget, relative to another labeling widget. Such as finding a
  * button or text entry widget, given it's corresponding label widget.
  *
- * Returns: a widget of type @widget_type if any is found.
+ * Returns: (transfer none): a widget of type @widget_type if any is found.
  *
  * Since: 2.14
  **/
@@ -351,7 +359,7 @@ gtk_test_find_sibling (GtkWidget *base_widget,
  * gtk_test_widget_click() for possible caveats involving the search of
  * such widgets and synthesizing widget events.
  *
- * Returns: a valid widget if any is found or %NULL.
+ * Returns: (transfer none): a valid widget if any is found or %NULL.
  *
  * Since: 2.14
  **/
@@ -373,9 +381,9 @@ gtk_test_find_widget (GtkWidget    *widget,
  * @widget:     valid widget pointer.
  * @percentage: value between 0 and 100.
  *
- * This function will adjust theslider position of all GtkRange
+ * This function will adjust the slider position of all GtkRange
  * based widgets, such as scrollbars or scales, it'll also adjust
- * spin buttons. The adjustment value of tehse widgets is set to
+ * spin buttons. The adjustment value of these widgets is set to
  * a value between the lower and upper limits, according to the
  * @percentage argument.
  *
@@ -455,7 +463,7 @@ gtk_test_text_set (GtkWidget   *widget,
  * Retrive the text string of @widget if it is a GtkLabel,
  * GtkEditable (entry and text widgets) or GtkTextView.
  *
- * Returns: new 0-terminated C string, needs to be releaed with g_free().
+ * Returns: new 0-terminated C string, needs to be released with g_free().
  *
  * Since: 2.14
  **/
@@ -482,8 +490,8 @@ gtk_test_text_get (GtkWidget *widget)
 /**
  * gtk_test_create_widget
  * @widget_type: a valid widget type.
- * @first_property_name: Name of first property to set or %NULL
- * @Varags: value to set the first property to, followed by more
+ * @first_property_name: (allow-none): Name of first property to set or %NULL
+ * @Varargs: value to set the first property to, followed by more
  *    name-value pairs, terminated by %NULL
  *
  * This function wraps g_object_new() for widget types.
@@ -527,7 +535,8 @@ try_main_quit (void)
 static int
 test_increment_intp (int *intp)
 {
-  *intp += 1;
+  if (intp != NULL)
+    *intp += 1;
   return 1; /* TRUE in case we're connected to event signals */
 }
 
@@ -590,7 +599,7 @@ gtk_test_display_button_window (const gchar *window_title,
  * The window will quit any running gtk_main()-loop when destroyed, and it
  * will automatically be destroyed upon test function teardown.
  *
- * Returns: a widget pointer to the newly created GtkWindow.
+ * Returns: (transfer none): a widget pointer to the newly created GtkWindow.
  *
  * Since: 2.14
  **/
@@ -612,7 +621,8 @@ static guint  n_all_registered_types = 0;
 /**
  * gtk_test_list_all_types
  * @n_types: location to store number of types
- * @returns: 0-terminated array of type ids
+ * @returns: (array length=n_types zero-terminated=1) (transfer none):
+ *    0-terminated array of type ids
  *
  * Return the type ids that have been registered after
  * calling gtk_test_register_all_types().

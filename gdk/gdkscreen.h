@@ -21,12 +21,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GDK_SCREEN_H__
+#define __GDK_SCREEN_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_SCREEN_H__
-#define __GDK_SCREEN_H__
 
 #include <cairo.h>
 #include "gdk/gdktypes.h"
@@ -47,13 +47,14 @@ struct _GdkScreen
 {
   GObject parent_instance;
 
-  guint closed : 1;
+  guint GSEAL (closed) : 1;
 
-  GdkGC *normal_gcs[32];
-  GdkGC *exposure_gcs[32];
+  GdkGC *GSEAL (normal_gcs[32]);
+  GdkGC *GSEAL (exposure_gcs[32]);
+  GdkGC *GSEAL (subwindow_gcs[32]);
 
-  cairo_font_options_t *font_options;
-  double resolution;		/* pixels/points scale factor for fonts */
+  cairo_font_options_t *GSEAL (font_options);
+  double GSEAL (resolution);	/* pixels/points scale factor for fonts */
 };
 
 struct _GdkScreenClass
@@ -90,6 +91,7 @@ GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
 gchar *      gdk_screen_make_display_name     (GdkScreen   *screen);
 
 gint          gdk_screen_get_n_monitors        (GdkScreen *screen);
+gint          gdk_screen_get_primary_monitor   (GdkScreen *screen);
 void          gdk_screen_get_monitor_geometry  (GdkScreen *screen,
 						gint       monitor_num,
 						GdkRectangle *dest);

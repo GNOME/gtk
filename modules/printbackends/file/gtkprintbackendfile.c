@@ -32,6 +32,7 @@
 #include <cairo.h>
 #include <cairo-pdf.h>
 #include <cairo-ps.h>
+#include <cairo-svg.h>
 
 #include <glib/gi18n-lib.h>
 
@@ -64,13 +65,15 @@ typedef enum
 {
   FORMAT_PDF,
   FORMAT_PS,
+  FORMAT_SVG,
   N_FORMATS
 } OutputFormat;
 
 static const gchar* formats[N_FORMATS] =
 {
   "pdf",
-  "ps"
+  "ps",
+  "svg"
 };
 
 static GObjectClass *backend_parent_class;
@@ -106,7 +109,7 @@ static GtkPageSetup *       file_printer_get_default_page_size     (GtkPrinter  
 static void
 gtk_print_backend_file_register_type (GTypeModule *module)
 {
-  static const GTypeInfo print_backend_file_info =
+  const GTypeInfo print_backend_file_info =
   {
     sizeof (GtkPrintBackendFileClass),
     NULL,		/* base_init */
@@ -228,7 +231,19 @@ output_file_from_settings (GtkPrintSettings *settings,
           OutputFormat format;
 
           format = format_from_settings (settings);
-          extension = format == FORMAT_PS ? "ps" : "pdf";
+          switch (format)
+            {
+              default:
+              case FORMAT_PDF:
+                extension = "pdf";
+                break;
+              case FORMAT_PS:
+                extension = "ps";
+                break;
+              case FORMAT_SVG:
+                extension = "svg";
+                break;
+            }
         }
  
       /* default filename used for print-to-file */ 
@@ -238,11 +253,13 @@ output_file_from_settings (GtkPrintSettings *settings,
 
       if (locale_name != NULL)
         {
-          path = g_build_filename (g_get_current_dir (), locale_name, NULL);
+	  gchar *current_dir = g_get_current_dir ();
+          path = g_build_filename (current_dir, locale_name, NULL);
           g_free (locale_name);
 
           uri = g_filename_to_uri (path, NULL, NULL);
           g_free (path);
+	  g_free (current_dir);
 	}
     }
 
@@ -296,16 +313,31 @@ file_printer_create_cairo_surface (GtkPrinter       *printer,
 {
   cairo_surface_t *surface;
   OutputFormat format;
+  const cairo_svg_version_t *versions;
+  int num_versions = 0;
 
   format = format_from_settings (settings);
 
-  if (format == FORMAT_PS)
-    surface = cairo_ps_surface_create_for_stream (_cairo_write, cache_io, width, height);
-  else
-    surface = cairo_pdf_surface_create_for_stream (_cairo_write, cache_io, width, height);
+  switch (format)
+    {
+      default:
+      case FORMAT_PDF:
+        surface = cairo_pdf_surface_create_for_stream (_cairo_write, cache_io, width, height);
+        break;
+      case FORMAT_PS:
+        surface = cairo_ps_surface_create_for_stream (_cairo_write, cache_io, width, height);
+        break;
+      case FORMAT_SVG:
+        surface = cairo_svg_surface_create_for_stream (_cairo_write, cache_io, width, height);
+        cairo_svg_get_versions (&versions, &num_versions);
+        if (num_versions > 0)
+          cairo_svg_surface_restrict_to_version (surface, versions[num_versions - 1]);
+        break;
+    }
 
-  /* TODO: DPI from settings object? */
-  cairo_surface_set_fallback_resolution (surface, 300, 300);
+  cairo_surface_set_fallback_resolution (surface,
+                                         2.0 * gtk_print_settings_get_printer_lpi (settings),
+                                         2.0 * gtk_print_settings_get_printer_lpi (settings));
 
   return surface;
 }
@@ -314,7 +346,7 @@ typedef struct {
   GtkPrintBackend *backend;
   GtkPrintJobCompleteFunc callback;
   GtkPrintJob *job;
-  GIOChannel *target_io;
+  GFileOutputStream *target_io_stream;
   gpointer user_data;
   GDestroyNotify dnotify;
 } _PrintStreamData;
@@ -328,8 +360,8 @@ file_print_cb (GtkPrintBackendFile *print_backend,
 
   GDK_THREADS_ENTER ();
 
-  if (ps->target_io != NULL)
-    g_io_channel_unref (ps->target_io);
+  if (ps->target_io_stream != NULL)
+    g_output_stream_close (G_OUTPUT_STREAM (ps->target_io_stream), NULL, NULL);
 
   if (ps->callback)
     ps->callback (ps->job, ps->user_data, error);
@@ -372,11 +404,12 @@ file_write (GIOChannel   *source,
     {
       gsize bytes_written;
 
-      g_io_channel_write_chars (ps->target_io, 
-                                buf, 
-				bytes_read, 
-				&bytes_written, 
-				&error);
+      g_output_stream_write_all (G_OUTPUT_STREAM (ps->target_io_stream),
+                                 buf,
+                                 bytes_read,
+                                 &bytes_written,
+                                 NULL,
+                                 &error);
     }
 
   if (error != NULL || read_status == G_IO_STATUS_EOF)
@@ -409,12 +442,11 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
 				     GDestroyNotify          dnotify)
 {
   GError *internal_error = NULL;
-  GtkPrinter *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  gchar *uri, *filename;
+  gchar *uri;
+  GFile *file = NULL;
 
-  printer = gtk_print_job_get_printer (job);
   settings = gtk_print_job_get_settings (job);
 
   ps = g_new0 (_PrintStreamData, 1);
@@ -426,18 +458,15 @@ gtk_print_backend_file_print_stream (GtkPrintBackend        *print_backend,
 
   internal_error = NULL;
   uri = output_file_from_settings (settings, NULL);
-  filename = g_filename_from_uri (uri, NULL, &internal_error);
-  g_free (uri);
 
-  if (filename == NULL)
+  if (uri == NULL)
     goto error;
 
-  ps->target_io = g_io_channel_new_file (filename, "w", &internal_error);
+  file = g_file_new_for_uri (uri);
+  ps->target_io_stream = g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &internal_error);
 
-  g_free (filename);
-
-  if (internal_error == NULL)
-    g_io_channel_set_encoding (ps->target_io, NULL, &internal_error);
+  g_object_unref (file);
+  g_free (uri);
 
 error:
   if (internal_error != NULL)
@@ -464,10 +493,11 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
 			  "name", _("Print to File"),
 			  "backend", backend,
 			  "is-virtual", TRUE,
+			  "accepts-pdf", TRUE,
 			  NULL); 
 
   gtk_printer_set_has_details (printer, TRUE);
-  gtk_printer_set_icon_name (printer, "gtk-floppy");
+  gtk_printer_set_icon_name (printer, "gtk-save");
   gtk_printer_set_is_active (printer, TRUE);
 
   gtk_print_backend_add_printer (GTK_PRINT_BACKEND (backend), printer);
@@ -476,17 +506,63 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
   gtk_print_backend_set_list_done (GTK_PRINT_BACKEND (backend));
 }
 
+typedef struct {
+  GtkPrinter          *printer;
+  GtkPrinterOptionSet *set;
+} _OutputFormatChangedData;
+
+static void
+set_printer_format_from_option_set (GtkPrinter          *printer,
+				    GtkPrinterOptionSet *set)
+{
+  GtkPrinterOption *format_option;
+  const gchar *value;
+  gint i;
+
+  format_option = gtk_printer_option_set_lookup (set, "output-file-format");
+  if (format_option && format_option->value)
+    {
+      value = format_option->value;
+      if (value)
+        {
+	  for (i = 0; i < N_FORMATS; ++i)
+	    if (strcmp (value, formats[i]) == 0)
+	      break;
+
+	  g_assert (i < N_FORMATS);
+
+	  switch (i)
+	    {
+	      case FORMAT_PDF:
+		gtk_printer_set_accepts_pdf (printer, TRUE);
+		gtk_printer_set_accepts_ps (printer, FALSE);
+		break;
+	      case FORMAT_PS:
+		gtk_printer_set_accepts_pdf (printer, FALSE);
+		gtk_printer_set_accepts_ps (printer, TRUE);
+		break;
+	      case FORMAT_SVG:
+	      default:
+		gtk_printer_set_accepts_pdf (printer, FALSE);
+		gtk_printer_set_accepts_ps (printer, FALSE);
+		break;
+	    }
+	}
+    }
+}
+
 static void
 file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
-                                         GtkPrinterOptionSet *set)
+					 gpointer             user_data)
 {
   GtkPrinterOption *uri_option;
   gchar            *base = NULL;
+  _OutputFormatChangedData *data = (_OutputFormatChangedData *) user_data;
 
   if (! format_option->value)
     return;
 
-  uri_option = gtk_printer_option_set_lookup (set,
+  uri_option = gtk_printer_option_set_lookup (data->set,
                                               "gtk-main-page-custom-input");
 
   if (uri_option && uri_option->value)
@@ -526,6 +602,8 @@ file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
       g_free (tmp);
       g_free (base);
     }
+
+  set_printer_format_from_option_set (data->printer, data->set);
 }
 
 static GtkPrinterOptionSet *
@@ -538,13 +616,14 @@ file_printer_get_options (GtkPrinter           *printer,
   GtkPrinterOption *option;
   const gchar *n_up[] = {"1", "2", "4", "6", "9", "16" };
   const gchar *pages_per_sheet = NULL;
-  const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("Postscript") };
+  const gchar *format_names[N_FORMATS] = { N_("PDF"), N_("Postscript"), N_("SVG") };
   const gchar *supported_formats[N_FORMATS];
   gchar *display_format_names[N_FORMATS];
   gint n_formats = 0;
   OutputFormat format;
   gchar *uri;
   gint current_format = 0;
+  _OutputFormatChangedData *format_changed_data;
 
   format = format_from_settings (settings);
 
@@ -586,7 +665,20 @@ file_printer_get_options (GtkPrinter           *printer,
     }
   else
     {
-      current_format = format == FORMAT_PS ? FORMAT_PS : FORMAT_PDF;
+      switch (format)
+        {
+          default:
+          case FORMAT_PDF:
+            current_format = FORMAT_PDF;
+            break;
+          case FORMAT_PS:
+            current_format = FORMAT_PS;
+            break;
+          case FORMAT_SVG:
+            current_format = FORMAT_SVG;            
+            break;
+        }
+
       for (n_formats = 0; n_formats < N_FORMATS; ++n_formats)
         {
 	  supported_formats[n_formats] = formats[n_formats];
@@ -598,6 +690,7 @@ file_printer_get_options (GtkPrinter           *printer,
 
   option = gtk_printer_option_new ("gtk-main-page-custom-input", _("File"), 
 				   GTK_PRINTER_OPTION_TYPE_FILESAVE);
+  gtk_printer_option_set_activates_default (option, TRUE);
   gtk_printer_option_set (option, uri);
   g_free (uri);
   option->group = g_strdup ("GtkPrintDialogExtension");
@@ -615,9 +708,13 @@ file_printer_get_options (GtkPrinter           *printer,
       gtk_printer_option_set (option, supported_formats[current_format]);
       gtk_printer_option_set_add (set, option);
 
-      g_signal_connect (option, "changed",
-                        G_CALLBACK (file_printer_output_file_format_changed),
-                        set);
+      set_printer_format_from_option_set (printer, set);
+      format_changed_data = g_new (_OutputFormatChangedData, 1);
+      format_changed_data->printer = printer;
+      format_changed_data->set = set;
+      g_signal_connect_data (option, "changed",
+			     G_CALLBACK (file_printer_output_file_format_changed),
+			     format_changed_data, (GClosureNotify)g_free, 0);
 
       g_object_unref (option);
     }
@@ -642,6 +739,10 @@ file_printer_get_settings_from_options (GtkPrinter          *printer,
   option = gtk_printer_option_set_lookup (options, "gtk-n-up");
   if (option)
     gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_NUMBER_UP, option->value);
+
+  option = gtk_printer_option_set_lookup (options, "gtk-n-up-layout");
+  if (option)
+    gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT, option->value);
 }
 
 static void
@@ -664,6 +765,8 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
   print_job->collate = gtk_print_settings_get_collate (settings);
   print_job->reverse = gtk_print_settings_get_reverse (settings);
   print_job->num_copies = gtk_print_settings_get_n_copies (settings);
+  print_job->number_up = gtk_print_settings_get_number_up (settings);
+  print_job->number_up_layout = gtk_print_settings_get_number_up_layout (settings);
 
   scale = gtk_print_settings_get_scale (settings);
   if (scale != 100.0)

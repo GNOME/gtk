@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_FRAME_H__
 #define __GTK_FRAME_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkbin.h>
 
 
@@ -75,7 +74,7 @@ GtkWidget* gtk_frame_new              (const gchar   *label);
 
 void                  gtk_frame_set_label (GtkFrame    *frame,
 					   const gchar *label);
-G_CONST_RETURN gchar *gtk_frame_get_label (GtkFrame    *frame);
+const gchar *gtk_frame_get_label      (GtkFrame    *frame);
 
 void       gtk_frame_set_label_widget (GtkFrame      *frame,
 				       GtkWidget     *label_widget);

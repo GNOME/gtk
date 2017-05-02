@@ -82,9 +82,10 @@ struct _GdkKeymapX11
   GdkModifierType group_switch_mask;
   GdkModifierType num_lock_mask;
   GdkModifierType modmap[8];
-  gboolean sun_keypad;
   PangoDirection current_direction;
-  gboolean have_direction;
+  guint sun_keypad      : 1;
+  guint have_direction  : 1;
+  guint caps_lock_state : 1;
   guint current_serial;
 
 #ifdef HAVE_XKB
@@ -118,7 +119,7 @@ gdk_keymap_x11_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
 	{
 	  sizeof (GdkKeymapClass),
 	  (GBaseInitFunc) NULL,
@@ -656,12 +657,17 @@ get_num_groups (GdkKeymap *keymap,
       return xkb->ctrls->num_groups;
 }
 
-static void
+static gboolean
 update_direction (GdkKeymapX11 *keymap_x11,
 		  gint          group)
 {
   XkbDescPtr xkb = get_xkb (keymap_x11);
   Atom group_atom;
+  gboolean had_direction;
+  PangoDirection old_direction;
+      
+  had_direction = keymap_x11->have_direction;
+  old_direction = keymap_x11->current_direction;
 
   group_atom = xkb->names->groups[group];
 
@@ -672,6 +678,21 @@ update_direction (GdkKeymapX11 *keymap_x11,
       keymap_x11->current_group_atom = group_atom;
       keymap_x11->have_direction = TRUE;
     }
+
+  return !had_direction || old_direction != keymap_x11->current_direction;
+}
+
+static gboolean
+update_lock_state (GdkKeymapX11 *keymap_x11,
+                   gint          locked_mods)
+{
+  gboolean caps_lock_state;
+  
+  caps_lock_state = keymap_x11->caps_lock_state;
+
+  keymap_x11->caps_lock_state = (locked_mods & GDK_LOCK_MASK) != 0;
+  
+  return caps_lock_state != keymap_x11->caps_lock_state;
 }
 
 /* keep this in sync with the XkbSelectEventDetails() call 
@@ -687,16 +708,12 @@ _gdk_keymap_state_changed (GdkDisplay *display,
   if (display_x11->keymap)
     {
       GdkKeymapX11 *keymap_x11 = GDK_KEYMAP_X11 (display_x11->keymap);
-      gboolean had_direction;
-      PangoDirection direction;
       
-      had_direction = keymap_x11->have_direction;
-      direction = keymap_x11->current_direction;
-      
-      update_direction (keymap_x11, XkbStateGroup (&xkb_event->state));
-      
-      if (!had_direction || direction != keymap_x11->current_direction)
-	g_signal_emit_by_name (keymap_x11, "direction_changed");      
+      if (update_direction (keymap_x11, XkbStateGroup (&xkb_event->state)))
+	g_signal_emit_by_name (keymap_x11, "direction-changed");      
+
+      if (update_lock_state (keymap_x11, xkb_event->state.locked_mods))
+	g_signal_emit_by_name (keymap_x11, "state-changed");      
     }
 }
 
@@ -719,8 +736,11 @@ _gdk_keymap_keys_changed (GdkDisplay *display)
  *
  * Returns the direction of effective layout of the keymap.
  *
- * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL 
- *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL 
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
+ *
+ * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL
+ *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL
  *   otherwise.
  **/
 PangoDirection
@@ -756,6 +776,9 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
  *
  * Determines if keyboard layouts for both right-to-left and left-to-right
  * languages are in use.
+ *
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
  *
  * Returns: %TRUE if there are layouts in both directions, %FALSE otherwise
  *
@@ -793,12 +816,35 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
 }
 
 /**
+ * gdk_keymap_get_caps_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns whether the Caps Lock modifer is locked. 
+ *
+ * Returns: %TRUE if Caps Lock is on
+ *
+ * Since: 2.16
+ */
+gboolean
+gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
+{
+  GdkKeymapX11 *keymap_x11;
+  
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+  
+  keymap_x11 = GDK_KEYMAP_X11 (keymap);
+  
+  return keymap_x11->caps_lock_state;
+}
+
+
+/**
  * gdk_keymap_get_entries_for_keyval:
- * @keymap: a #GdkKeymap, or %NULL to use the default keymap
+ * @keymap: (allow-none): a #GdkKeymap, or %NULL to use the default keymap
  * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
- * @keys: return location for an array of #GdkKeymapKey
- * @n_keys: return location for number of elements in returned array
- * 
+ * @keys: (out): return location for an array of #GdkKeymapKey
+ * @n_keys: (out): return location for number of elements in returned array
+ *
  * Obtains a list of keycode/group/level combinations that will
  * generate @keyval. Groups and levels are two kinds of keyboard mode;
  * in general, the level determines whether the top or bottom symbol
@@ -810,6 +856,9 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
  * keyboard group. The level is computed from the modifier mask.
  * The returned array should be freed
  * with g_free().
+ *
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
  *
  * Return value: %TRUE if keys were found and returned
  **/
@@ -944,10 +993,10 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 
 /**
  * gdk_keymap_get_entries_for_keycode:
- * @keymap: a #GdkKeymap or %NULL to use the default keymap
+ * @keymap: (allow-none): a #GdkKeymap or %NULL to use the default keymap
  * @hardware_keycode: a keycode
- * @keys: return location for array of #GdkKeymapKey, or %NULL
- * @keyvals: return location for array of keyvals, or %NULL
+ * @keys: (out): return location for array of #GdkKeymapKey, or %NULL
+ * @keyvals: (out): return location for array of keyvals, or %NULL
  * @n_entries: length of @keys and @keyvals
  *
  * Returns the keyvals bound to @hardware_keycode.
@@ -956,6 +1005,9 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
  * When a keycode is pressed by the user, the keyval from
  * this list of entries is selected by considering the effective
  * keyboard group and level. See gdk_keymap_translate_keyboard_state().
+ *
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
  *
  * Returns: %TRUE if there were any entries
  **/
@@ -1113,6 +1165,9 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
  * this function, since the effective group/level may not be
  * the same as the current keyboard state.
  * 
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
+ *
  * Return value: a keyval, or 0 if none was mapped to the given @key
  **/
 guint
@@ -1158,8 +1213,8 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
                               register unsigned int   mods,
                               unsigned int *          mods_rtrn,
                               KeySym *                keysym_rtrn,
-                              unsigned int *          group_rtrn,
-                              unsigned int *          level_rtrn)
+                              int *                   group_rtrn,
+                              int *                   level_rtrn)
 {
     XkbKeyTypeRec *type;
     int col,nKeyGroups;
@@ -1208,6 +1263,8 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
 	int found = 0;
 	
         for (i=0,entry=type->map;i<type->map_count;i++,entry++) {
+            if (!entry->active || syms[col+entry->level] == syms[col])
+              continue;
 	    if (mods_rtrn) {
 		int bits = 0;
 		unsigned long tmp = entry->mods.mask;
@@ -1216,23 +1273,30 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
 			bits++;
 		    tmp >>= 1;
 		}
-		/* We always add one-modifiers levels to mods_rtrn since
-		 * they can't wipe out bits in the state unless the
-		 * level would be triggered. But return other modifiers
-		 * 
-		 */
+                /* We always add one-modifiers levels to mods_rtrn since
+                 * they can't wipe out bits in the state unless the
+                 * level would be triggered. But not if they don't change
+                 * the symbol (otherwise we can't discriminate Shift-F10
+                 * and F10 anymore). And don't add modifiers that are
+                 * explicitly marked as preserved, either.
+                 */
 		if (bits == 1 || (mods&type->mods.mask)==entry->mods.mask)
-		    *mods_rtrn |= entry->mods.mask;
+                  {
+                    if (type->preserve)
+                      *mods_rtrn |= (entry->mods.mask & ~type->preserve[i].mask);
+                    else
+                      *mods_rtrn |= entry->mods.mask;
+                  }
 	    }
-	    
-            if (!found&&entry->active&&((mods&type->mods.mask)==entry->mods.mask)) {
+
+            if (!found && ((mods&type->mods.mask) == entry->mods.mask)) {
                 col+= entry->level;
                 if (type->preserve)
                     preserve= type->preserve[i].mask;
 
                 if (level_rtrn)
                   *level_rtrn = entry->level;
-                
+
                 found = 1;
             }
         }
@@ -1284,8 +1348,8 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
 		  guint           hardware_keycode,
 		  gint            group,
 		  GdkModifierType state,
-		  guint          *effective_group,
-		  guint          *effective_level)
+		  gint           *effective_group,
+		  gint           *effective_level)
 {
   const KeySym *map = get_keymap (keymap_x11);
   const KeySym *syms = map + (hardware_keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
@@ -1369,20 +1433,20 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
 
 /**
  * gdk_keymap_translate_keyboard_state:
- * @keymap: a #GdkKeymap, or %NULL to use the default
+ * @keymap: (allow-none): a #GdkKeymap, or %NULL to use the default
  * @hardware_keycode: a keycode
- * @state: a modifier state 
+ * @state: a modifier state
  * @group: active keyboard group
- * @keyval: return location for keyval, or %NULL
- * @effective_group: return location for effective group, or %NULL
- * @level: return location for level, or %NULL
- * @consumed_modifiers: return location for modifiers that were used to
+ * @keyval: (out) (allow-none): return location for keyval, or %NULL
+ * @effective_group: (out) (allow-none): return location for effective group, or %NULL
+ * @level: (out) (allow-none):  return location for level, or %NULL
+ * @consumed_modifiers: (out) (allow-none):  return location for modifiers that were used to
  *     determine the group or level, or %NULL
  *
  * Translates the contents of a #GdkEventKey into a keyval, effective
  * group, and level. Modifiers that affected the translation and
  * are thus unavailable for application use are returned in
- * @consumed_modifiers.  See gdk_keyval_get_keys() for an explanation of
+ * @consumed_modifiers.  See <xref linkend="key-group-explanation"/> for an explanation of
  * groups and levels.  The @effective_group is the group that was
  * actually used for the translation; some keys such as Enter are not
  * affected by the active keyboard group. The @level is derived from
@@ -1432,6 +1496,9 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
  * not <literal>&lt;Control&gt;&lt;Shift&gt;plus</literal>,
  * </para></note>
  * 
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
+ *
  * Return value: %TRUE if there was a keyval bound to the keycode/state/group
  **/
 gboolean
@@ -1617,8 +1684,8 @@ _gdk_x11_get_group_for_state (GdkDisplay      *display,
 }
 
 void
-_gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-				   GdkModifierType *modifiers)
+_gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
+				          GdkModifierType *modifiers)
 {
   GdkKeymapX11 *keymap_x11;
   int i;
@@ -1626,18 +1693,66 @@ _gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
   keymap = GET_EFFECTIVE_KEYMAP (keymap);
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
 
-  for (i = 3; i < 8; i++)
+  /* See comment in add_virtual_modifiers() */
+  for (i = 4; i < 8; i++)
     {
       if ((1 << i) & *modifiers)
         {
-	  if (keymap_x11->modmap[i] & GDK_MOD1_MASK)
-	    *modifiers |= GDK_MOD1_MASK;
-	  else if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
+	  if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
 	    *modifiers |= GDK_SUPER_MASK;
 	  else if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
 	    *modifiers |= GDK_HYPER_MASK;
 	  else if (keymap_x11->modmap[i] & GDK_META_MASK)
 	    *modifiers |= GDK_META_MASK;
+        }
+    }
+}
+
+/**
+ * gdk_keymap_add_virtual_modifiers:
+ * @keymap: a #GdkKeymap
+ * @state: pointer to the modifier mask to change
+ *
+ * Adds virtual modifiers (i.e. Super, Hyper and Meta) which correspond
+ * to the real modifiers (i.e Mod2, Mod3, ...) in @modifiers.
+ * are set in @state to their non-virtual counterparts (i.e. Mod2,
+ * Mod3,...) and set the corresponding bits in @state.
+ *
+ * GDK already does this before delivering key events, but for
+ * compatibility reasons, it only sets the first virtual modifier
+ * it finds, whereas this function sets all matching virtual modifiers.
+ *
+ * This function is useful when matching key events against
+ * accelerators.
+ *
+ * Since: 2.20
+ */
+void
+gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
+			          GdkModifierType *state)
+{
+  GdkKeymapX11 *keymap_x11;
+  int i;
+
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+  keymap_x11 = GDK_KEYMAP_X11 (keymap);
+
+  /*  This loop used to start at 3, which included MOD1 in the
+   *  virtual mapping. However, all of GTK+ treats MOD1 as a
+   *  synonym for Alt, and does not expect it to be mapped around,
+   *  therefore it's more sane to simply treat MOD1 like SHIFT and
+   *  CONTROL, which are not mappable either.
+   */
+  for (i = 4; i < 8; i++)
+    {
+      if ((1 << i) & *state)
+        {
+	  if (keymap_x11->modmap[i] & GDK_SUPER_MASK)
+	    *state |= GDK_SUPER_MASK;
+	  if (keymap_x11->modmap[i] & GDK_HYPER_MASK)
+	    *state |= GDK_HYPER_MASK;
+	  if (keymap_x11->modmap[i] & GDK_META_MASK)
+	    *state |= GDK_META_MASK;
         }
     }
 }
@@ -1652,6 +1767,7 @@ _gdk_keymap_key_is_modifier (GdkKeymap *keymap,
   keymap = GET_EFFECTIVE_KEYMAP (keymap);  
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
 
+  update_keyrange (keymap_x11);
   if (keycode < keymap_x11->min_keycode ||
       keycode > keymap_x11->max_keycode)
     return FALSE;
@@ -1675,6 +1791,65 @@ _gdk_keymap_key_is_modifier (GdkKeymap *keymap,
     }
 
   return FALSE;
+}
+
+/**
+ * gdk_keymap_map_virtual_modifiers:
+ * @keymap: a #GdkKeymap
+ * @state: pointer to the modifier state to map
+ *
+ * Maps the virtual modifiers (i.e. Super, Hyper and Meta) which
+ * are set in @state to their non-virtual counterparts (i.e. Mod2,
+ * Mod3,...) and set the corresponding bits in @state.
+ *
+ * This function is useful when matching key events against
+ * accelerators.
+ *
+ * Returns: %TRUE if no virtual modifiers were mapped to the
+ *     same non-virtual modifier. Note that %FALSE is also returned
+ *     if a virtual modifier is mapped to a non-virtual modifier that
+ *     was already set in @state.
+ *
+ * Since: 2.20
+ */
+gboolean
+gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+                                  GdkModifierType *state)
+{
+  GdkKeymapX11 *keymap_x11;
+  const guint vmods[] = {
+    GDK_SUPER_MASK, GDK_HYPER_MASK, GDK_META_MASK
+  };
+  int i, j;
+  gboolean retval;
+
+  keymap = GET_EFFECTIVE_KEYMAP (keymap);
+  keymap_x11 = GDK_KEYMAP_X11 (keymap);
+
+  if (KEYMAP_USE_XKB (keymap))
+    get_xkb (keymap_x11);
+
+  retval = TRUE;
+
+  for (j = 0; j < 3; j++)
+    {
+      if (*state & vmods[j])
+        {
+          /* See comment in add_virtual_modifiers() */
+          for (i = 4; i < 8; i++)
+            {
+              if (keymap_x11->modmap[i] & vmods[j])
+                {
+                  if (*state & (1 << i))
+                    retval = FALSE;
+                  else
+                    *state |= 1 << i;
+                }
+            }
+        }
+    }
+
+  return retval;
 }
 
 

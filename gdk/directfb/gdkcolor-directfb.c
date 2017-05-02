@@ -51,9 +51,7 @@ typedef struct {
 } GdkColormapPrivateDirectFB;
 
 
-static void  gdk_colormap_init          (GdkColormap      *colormap);
-static void  gdk_colormap_class_init    (GdkColormapClass *klass);
-static void  gdk_colormap_finalize      (GObject          *object);
+static void  gdk_colormap_finalize (GObject *object);
 
 static gint  gdk_colormap_alloc_pseudocolors (GdkColormap *colormap,
                                               GdkColor    *colors,
@@ -64,35 +62,7 @@ static gint  gdk_colormap_alloc_pseudocolors (GdkColormap *colormap,
 static void  gdk_directfb_allocate_color_key (GdkColormap *colormap);
 
 
-static GObjectClass *parent_class = NULL;
-
-
-GType
-gdk_colormap_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type) {
-    static const GTypeInfo object_info =
-      {
-        sizeof (GdkColormapClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_colormap_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkColormap),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_colormap_init,
-      };
-
-    object_type = g_type_register_static (G_TYPE_OBJECT,
-                                          "GdkColormap",
-                                          &object_info, 0);
-  }
-
-  return object_type;
-}
+G_DEFINE_TYPE (GdkColormap, gdk_colormap, G_TYPE_OBJECT)
 
 static void
 gdk_colormap_init (GdkColormap *colormap)
@@ -107,8 +77,6 @@ gdk_colormap_class_init (GdkColormapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-
   object_class->finalize = gdk_colormap_finalize;
 }
 
@@ -119,7 +87,6 @@ gdk_colormap_finalize (GObject *object)
   GdkColormapPrivateDirectFB *private  = colormap->windowing_data;
 
   g_free (colormap->colors);
-  colormap->colors = NULL;
 
   if (private)
     {
@@ -132,7 +99,7 @@ gdk_colormap_finalize (GObject *object)
       colormap->windowing_data = NULL;
     }
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_colormap_parent_class)->finalize (object);
 }
 
 GdkColormap*
@@ -152,24 +119,28 @@ gdk_colormap_new (GdkVisual *visual,
     {
     case GDK_VISUAL_PSEUDO_COLOR:
       {
+        IDirectFB                  *dfb = _gdk_display->directfb;
+        IDirectFBPalette           *palette;
         GdkColormapPrivateDirectFB *private;
         DFBPaletteDescription       dsc;
+
+        dsc.flags = DPDESC_SIZE;
+        dsc.size  = colormap->size;
+        if (!dfb->CreatePalette (dfb, &dsc, &palette))
+          return NULL;
 
         colormap->colors = g_new0 (GdkColor, colormap->size);
 
         private = g_new0 (GdkColormapPrivateDirectFB, 1);
         private->info = g_new0 (GdkColorInfo, colormap->size);
 
-	if (visual == gdk_visual_get_system())
+	if (visual == gdk_visual_get_system ())
 	  {
             /* save the first (transparent) palette entry */
             private->info[0].ref_count++;
           }
 
-        dsc.flags = DPDESC_SIZE;
-        dsc.size  = colormap->size;
-        _gdk_display->directfb->CreatePalette (
-		_gdk_display->directfb, &dsc, &private->palette);
+        private->palette = palette;
 
         colormap->windowing_data = private;
 
@@ -210,7 +181,7 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
 
   if (!colormap)
     {
-      GdkVisual *visual = gdk_visual_get_system();
+      GdkVisual *visual = gdk_visual_get_system ();
 
       /* special case PSEUDO_COLOR to use the system palette */
       if (visual->type == GDK_VISUAL_PSEUDO_COLOR)
@@ -226,9 +197,9 @@ gdk_screen_get_system_colormap (GdkScreen *screen)
 
           private = g_new0 (GdkColormapPrivateDirectFB, 1);
           private->info = g_new0 (GdkColorInfo, colormap->size);
-	
-          surface=GDK_WINDOW_IMPL_DIRECTFB (
-				GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->drawable.surface;
+
+          surface = GDK_WINDOW_IMPL_DIRECTFB (
+                        GDK_WINDOW_OBJECT (_gdk_parent_root)->impl)->drawable.surface;
           surface->GetPalette (surface, &private->palette);
 
           colormap->windowing_data = private;

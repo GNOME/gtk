@@ -137,10 +137,10 @@ gdk_pixmap_impl_x11_get_size   (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_new (GdkDrawable *drawable,
-		gint         width,
-		gint         height,
-		gint         depth)
+_gdk_pixmap_new (GdkDrawable *drawable,
+                 gint         width,
+                 gint         height,
+                 gint         depth)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
@@ -194,10 +194,10 @@ gdk_pixmap_new (GdkDrawable *drawable,
 }
 
 GdkPixmap *
-gdk_bitmap_create_from_data (GdkDrawable *drawable,
-			     const gchar *data,
-			     gint         width,
-			     gint         height)
+_gdk_bitmap_create_from_data (GdkDrawable *drawable,
+                              const gchar *data,
+                              gint         width,
+                              gint         height)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
@@ -238,13 +238,13 @@ gdk_bitmap_create_from_data (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkDrawable    *drawable,
-			     const gchar    *data,
-			     gint            width,
-			     gint            height,
-			     gint            depth,
-			     const GdkColor *fg,
-			     const GdkColor *bg)
+_gdk_pixmap_create_from_data (GdkDrawable    *drawable,
+			      const gchar    *data,
+			      gint            width,
+			      gint            height,
+			      gint            depth,
+			      const GdkColor *fg,
+			      const GdkColor *bg)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
@@ -427,7 +427,7 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
  * For example in the X backend, a native pixmap handle is an Xlib
  * <type>XID</type>.
  *
- * Return value: the #GdkWindow wrapper for the native window,
+ * Return value: the #GdkPixmap wrapper for the native pixmap,
  *    or %NULL if there is none.
  **/
 GdkPixmap*

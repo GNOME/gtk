@@ -24,18 +24,27 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_RGB_H__
+#define __GDK_RGB_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_RGB_H__
-#define __GDK_RGB_H__
 
 #include <gdk/gdktypes.h>
 
 G_BEGIN_DECLS
 
 typedef struct _GdkRgbCmap GdkRgbCmap;
+
+typedef enum
+{
+  GDK_RGB_DITHER_NONE,
+  GDK_RGB_DITHER_NORMAL,
+  GDK_RGB_DITHER_MAX
+} GdkRgbDither;
+
+#ifndef GDK_DISABLE_DEPRECATED
 
 struct _GdkRgbCmap {
   guint32 colors[256];
@@ -45,7 +54,6 @@ struct _GdkRgbCmap {
   GSList *info_list;
 };
 
-#ifndef GDK_DISABLE_DEPRECATED
 void gdk_rgb_init (void);
 
 gulong gdk_rgb_xpixel_from_rgb   (guint32      rgb) G_GNUC_CONST;
@@ -54,17 +62,9 @@ void   gdk_rgb_gc_set_foreground (GdkGC       *gc,
 void   gdk_rgb_gc_set_background (GdkGC       *gc,
 				  guint32      rgb);
 #define gdk_rgb_get_cmap               gdk_rgb_get_colormap
-#endif /* GDK_DISABLE_DEPRECATED */
 
 void   gdk_rgb_find_color        (GdkColormap *colormap,
 				  GdkColor    *color);
-
-typedef enum
-{
-  GDK_RGB_DITHER_NONE,
-  GDK_RGB_DITHER_NORMAL,
-  GDK_RGB_DITHER_MAX
-} GdkRgbDither;
 
 void        gdk_draw_rgb_image              (GdkDrawable  *drawable,
 					     GdkGC        *gc,
@@ -141,6 +141,7 @@ GdkVisual *  gdk_rgb_get_visual   (void);
 gboolean     gdk_rgb_ditherable   (void);
 gboolean     gdk_rgb_colormap_ditherable (GdkColormap *cmap);
 #endif
+#endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS
 

@@ -174,9 +174,10 @@ static const PaperInfo standard_names[] = {
   {"prc_32k", "97x151mm", N_("prc 32k"), "PRC32K"},
   {"prc_4", "110x208mm", N_("prc4 Envelope"), "EnvPRC4"},
   {"prc_5", "110x220mm", N_("prc5 Envelope"), "EnvPRC5"},
-  {"prc_6", "120x320mm", N_("prc6 Envelope"), "EnvPRC6"},
+  {"prc_6", "120x230mm", N_("prc6 Envelope"), "EnvPRC6"},
   {"prc_7", "160x230mm", N_("prc7 Envelope"), "EnvPRC7"},
   {"prc_8", "120x309mm", N_("prc8 Envelope"), "EnvPRC8"},
+  {"prc_9", "229x324mm", N_("prc9 Envelope"), "EnvPRC9"},
   {"roc_16k", "7.75x10.75in", N_("ROC 16k")},
   {"roc_8k", "10.75x15.5in", N_("ROC 8k")},
 };

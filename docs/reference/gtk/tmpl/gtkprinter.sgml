@@ -29,6 +29,9 @@ Printing support was added in GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPrinter ##### -->
 <para>
 
@@ -292,6 +295,19 @@ Printing support was added in GTK+ 2.10.
 </para>
 
 @printer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_printer_get_hard_margins ##### -->
+<para>
+
+</para>
+
+@printer: 
+@top: 
+@bottom: 
+@left: 
+@right: 
 @Returns: 
 
 

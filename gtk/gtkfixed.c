@@ -114,8 +114,8 @@ gtk_fixed_child_type (GtkContainer     *container)
 static void
 gtk_fixed_init (GtkFixed *fixed)
 {
-  GTK_WIDGET_SET_FLAGS (fixed, GTK_NO_WINDOW);
- 
+  gtk_widget_set_has_window (GTK_WIDGET (fixed), FALSE);
+
   fixed->children = NULL;
 }
 
@@ -201,7 +201,8 @@ gtk_fixed_move_internal (GtkFixed       *fixed,
 
   gtk_widget_thaw_child_notify (widget);
   
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (fixed))
+  if (gtk_widget_get_visible (widget) &&
+      gtk_widget_get_visible (GTK_WIDGET (fixed)))
     gtk_widget_queue_resize (GTK_WIDGET (fixed));
 }
 
@@ -272,11 +273,11 @@ gtk_fixed_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
+  if (!gtk_widget_get_has_window (widget))
     GTK_WIDGET_CLASS (gtk_fixed_parent_class)->realize (widget);
   else
     {
-      GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+      gtk_widget_set_realized (widget, TRUE);
 
       attributes.window_type = GDK_WINDOW_CHILD;
       attributes.x = widget->allocation.x;
@@ -319,7 +320,7 @@ gtk_fixed_size_request (GtkWidget      *widget,
       child = children->data;
       children = children->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
           gtk_widget_size_request (child->widget, &child_requisition);
 
@@ -351,9 +352,9 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
 
-  if (!GTK_WIDGET_NO_WINDOW (widget))
+  if (gtk_widget_get_has_window (widget))
     {
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	gdk_window_move_resize (widget->window,
 				allocation->x, 
 				allocation->y,
@@ -369,13 +370,13 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
       child = children->data;
       children = children->next;
       
-      if (GTK_WIDGET_VISIBLE (child->widget))
+      if (gtk_widget_get_visible (child->widget))
 	{
 	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
 	  child_allocation.x = child->x + border_width;
 	  child_allocation.y = child->y + border_width;
 
-	  if (GTK_WIDGET_NO_WINDOW (widget))
+	  if (!gtk_widget_get_has_window (widget))
 	    {
 	      child_allocation.x += widget->allocation.x;
 	      child_allocation.y += widget->allocation.y;
@@ -401,9 +402,11 @@ gtk_fixed_remove (GtkContainer *container,
 {
   GtkFixed *fixed;
   GtkFixedChild *child;
+  GtkWidget *widget_container;
   GList *children;
 
   fixed = GTK_FIXED (container);
+  widget_container = GTK_WIDGET (container);
 
   children = fixed->children;
   while (children)
@@ -412,7 +415,7 @@ gtk_fixed_remove (GtkContainer *container,
 
       if (child->widget == widget)
 	{
-	  gboolean was_visible = GTK_WIDGET_VISIBLE (widget);
+	  gboolean was_visible = gtk_widget_get_visible (widget);
 	  
 	  gtk_widget_unparent (widget);
 
@@ -420,8 +423,8 @@ gtk_fixed_remove (GtkContainer *container,
 	  g_list_free (children);
 	  g_free (child);
 
-	  if (was_visible && GTK_WIDGET_VISIBLE (container))
-	    gtk_widget_queue_resize (GTK_WIDGET (container));
+	  if (was_visible && gtk_widget_get_visible (widget_container))
+	    gtk_widget_queue_resize (widget_container);
 
 	  break;
 	}
@@ -463,20 +466,19 @@ gtk_fixed_forall (GtkContainer *container,
  * 
  * This function was added to provide an easy migration path for
  * older applications which may expect #GtkFixed to have a separate window.
+ *
+ * Deprecated: 2.20: Use gtk_widget_set_has_window() instead.
  **/
 void
 gtk_fixed_set_has_window (GtkFixed *fixed,
 			  gboolean  has_window)
 {
   g_return_if_fail (GTK_IS_FIXED (fixed));
-  g_return_if_fail (!GTK_WIDGET_REALIZED (fixed));
+  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (fixed)));
 
-  if (!has_window != GTK_WIDGET_NO_WINDOW (fixed))
+  if (has_window != gtk_widget_get_has_window (GTK_WIDGET (fixed)))
     {
-      if (has_window)
-	GTK_WIDGET_UNSET_FLAGS (fixed, GTK_NO_WINDOW);
-      else
-	GTK_WIDGET_SET_FLAGS (fixed, GTK_NO_WINDOW);
+      gtk_widget_set_has_window (GTK_WIDGET (fixed), has_window);
     }
 }
 
@@ -488,13 +490,15 @@ gtk_fixed_set_has_window (GtkFixed *fixed,
  * See gtk_fixed_set_has_window().
  * 
  * Return value: %TRUE if @fixed has its own window.
+ *
+ * Deprecated: 2.20: Use gtk_widget_get_has_window() instead.
  **/
 gboolean
 gtk_fixed_get_has_window (GtkFixed *fixed)
 {
   g_return_val_if_fail (GTK_IS_FIXED (fixed), FALSE);
 
-  return !GTK_WIDGET_NO_WINDOW (fixed);
+  return gtk_widget_get_has_window (GTK_WIDGET (fixed));
 }
 
 #define __GTK_FIXED_C__

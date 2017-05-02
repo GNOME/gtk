@@ -49,7 +49,7 @@ static gboolean
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
   gdk_draw_drawable (widget->window,
-                     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                     widget->style->fg_gc[gtk_widget_get_state (widget)],
                      pixmap,
                      event->area.x, event->area.y,
                      event->area.x, event->area.y,
@@ -70,7 +70,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      gc = widget->style->dark_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget->style->dark_gc[gtk_widget_get_state (widget)];
       break;
     case GDK_SOURCE_PEN:
       gc = widget->style->black_gc;
@@ -79,7 +79,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
       gc = widget->style->white_gc;
       break;
     default:
-      gc = widget->style->light_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget->style->light_gc[gtk_widget_get_state (widget)];
     }
 
   update_rect.x = x - 10 * pressure;
@@ -169,7 +169,7 @@ create_input_dialog ()
     }
   else
     {
-      if (!GTK_WIDGET_MAPPED (inputd))
+      if (!gtk_widget_get_mapped (inputd))
         gtk_widget_show (inputd);
       else
         gdk_window_raise (inputd->window);

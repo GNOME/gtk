@@ -11,8 +11,7 @@ of #GtkHButtonBox and #GtkVButtonBox widgets.
 </para>
 <para>
 gtk_button_box_get_child_size() retrieves the minimum width and height 
-for widgets in a given button box. gtk_button_box_set_child_size() 
-allows those properties to be changed.
+for widgets in a given button box.
 </para>
 <para>
 The internal padding of buttons can be retrieved and changed per button box using
@@ -49,6 +48,9 @@ behaves as if homogeneous was %TRUE.
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkButtonBox ##### -->
@@ -100,7 +102,8 @@ Retrieves how much space a button box is placing between each child button.
 </para>
 
 @b: a #GtkButtonBox
-@Returns: the current spacing applied to the buttons in @widget.
+@Returns: the current spacing applied to the buttons in @widget
+@Deprecated: Use gtk_box_get_spacing() instead.
 
 
 <!-- ##### FUNCTION gtk_button_box_get_layout ##### -->
@@ -133,8 +136,11 @@ Gets the default number of pixels that pad the buttons in a given button box.
 @widget: a #GtkButtonBox.
 @ipad_x: the horizontal padding used by buttons in @widget.
 @ipad_y: the vertical padding used by buttons in @widget.
-@Deprecated: Use the style properties
-<literal>"child-internal-pad-x/-y"</literal> instead.
+@Deprecated: Use the style properties 
+  "<link linkend="GtkButtonBox--s-child-internal-pad-x">child-internal-pad-x</link>"
+  and
+  "<link linkend="GtkButtonBox--s-child-internal-pad-y">child-internal-pad-y</link>"
+  instead.
 
 
 <!-- ##### FUNCTION gtk_button_box_get_child_secondary ##### -->
@@ -152,8 +158,9 @@ Gets the default number of pixels that pad the buttons in a given button box.
 Sets the amount of spacing between buttons in a given button box.
 </para>
 
-@b: a #GtkButtonBox.
-@s: the number of pixels of spacing.
+@b: a #GtkButtonBox
+@s: the number of pixels of spacing
+@Deprecated: Use gtk_box_set_spacing() instead.
 
 
 <!-- ##### FUNCTION gtk_button_box_set_layout ##### -->
@@ -170,11 +177,15 @@ Changes the way buttons are arranged in their container.
 Sets a new default size for the children of a given button box.
 </para>
 
-@widget: a #GtkButtonBox.
-@min_width: a default width for buttons in @widget.
-@min_height: a default height for buttons in @widget.
-@Deprecated: Use the style properties
-<literal>"child-min-width/-height"</literal> instead.
+@widget: a #GtkButtonBox
+@min_width: a default width for buttons in @widget
+@min_height: a default height for buttons in @widget
+@Deprecated: This is not supported anymore and can only be set through the theme
+  changing the style properties:
+  "<link linkend="GtkButtonBox--s-child-min-width">child-min-width</link>"
+  and
+  "<link linkend="GtkButtonBox--s-child-min-height">child-min-height</link>"
+  instead.
 
 
 <!-- ##### FUNCTION gtk_button_box_set_child_ipadding ##### -->

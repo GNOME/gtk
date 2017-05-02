@@ -23,6 +23,13 @@
 #include "gdkregion-generic.h"
 #include "gdkalias.h"
 
+static void
+gdk_ensure_surface_flush (gpointer surface)
+{
+  cairo_surface_flush (surface);
+  cairo_surface_destroy (surface);
+}
+
 /**
  * gdk_cairo_create:
  * @drawable: a #GdkDrawable
@@ -43,6 +50,7 @@
 cairo_t *
 gdk_cairo_create (GdkDrawable *drawable)
 {
+  static const cairo_user_data_key_t key;
   cairo_surface_t *surface;
   cairo_t *cr;
     
@@ -50,9 +58,46 @@ gdk_cairo_create (GdkDrawable *drawable)
 
   surface = _gdk_drawable_ref_cairo_surface (drawable);
   cr = cairo_create (surface);
-  cairo_surface_destroy (surface);
+
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip)
+    GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip (drawable, cr);
+    
+  /* Ugly workaround for GTK not ensuring to flush surfaces before
+   * directly accessing the drawable backed by the surface. Not visible
+   * on X11 (where flushing is a no-op). For details, see
+   * https://bugzilla.gnome.org/show_bug.cgi?id=628291
+   */
+  cairo_set_user_data (cr, &key, surface, gdk_ensure_surface_flush);
 
   return cr;
+}
+
+/**
+ * gdk_cairo_reset_clip:
+ * @cr: a #cairo_t
+ * @drawable: a #GdkDrawable
+ *
+ * Resets the clip region for a Cairo context created by gdk_cairo_create().
+ *
+ * This resets the clip region to the "empty" state for the given drawable.
+ * This is required for non-native windows since a direct call to
+ * cairo_reset_clip() would unset the clip region inherited from the
+ * drawable (i.e. the window clip region), and thus let you e.g.
+ * draw outside your window.
+ *
+ * This is rarely needed though, since most code just create a new cairo_t
+ * using gdk_cairo_create() each time they want to draw something.
+ *
+ * Since: 2.18
+ **/
+void
+gdk_cairo_reset_clip (cairo_t            *cr,
+		      GdkDrawable        *drawable)
+{
+  cairo_reset_clip (cr);
+
+  if (GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip)
+    GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip (drawable, cr);
 }
 
 /**
@@ -157,6 +202,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
   cairo_format_t format;
   cairo_surface_t *surface;
   static const cairo_user_data_key_t key;
+  cairo_status_t status;
   int j;
 
   if (n_channels == 3)
@@ -165,13 +211,18 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
     format = CAIRO_FORMAT_ARGB32;
 
   cairo_stride = cairo_format_stride_for_width (format, width);
-  cairo_pixels = g_malloc (height * cairo_stride);
+  cairo_pixels = g_malloc_n (height, cairo_stride);
   surface = cairo_image_surface_create_for_data ((unsigned char *)cairo_pixels,
                                                  format,
                                                  width, height, cairo_stride);
 
-  cairo_surface_set_user_data (surface, &key,
-			       cairo_pixels, (cairo_destroy_func_t)g_free);
+  status = cairo_surface_set_user_data (surface, &key,
+                                        cairo_pixels, (cairo_destroy_func_t)g_free);
+  if (status != CAIRO_STATUS_SUCCESS)
+    {
+      g_free (cairo_pixels);
+      goto out;
+    }
 
   for (j = height; j; j--)
     {
@@ -202,7 +253,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
 	  guchar *end = p + 4 * width;
 	  guint t1,t2,t3;
 	    
-#define MULT(d,c,a,t) G_STMT_START { t = c * a + 0x7f; d = ((t >> 8) + t) >> 8; } G_STMT_END
+#define MULT(d,c,a,t) G_STMT_START { t = c * a + 0x80; d = ((t >> 8) + t) >> 8; } G_STMT_END
 
 	  while (p < end)
 	    {
@@ -229,6 +280,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
       cairo_pixels += cairo_stride;
     }
 
+out:
   cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
   cairo_surface_destroy (surface);
 }
@@ -245,6 +297,10 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
  * so that the origin of @pixmap is @pixmap_x, @pixmap_y
  *
  * Since: 2.10
+ *
+ * Deprecated: 2.24: This function is being removed in GTK+ 3 (together
+ *     with #GdkPixmap). Instead, use gdk_cairo_set_source_window() where
+ *     appropriate.
  **/
 void
 gdk_cairo_set_source_pixmap (cairo_t   *cr,
@@ -256,6 +312,39 @@ gdk_cairo_set_source_pixmap (cairo_t   *cr,
   
   surface = _gdk_drawable_ref_cairo_surface (GDK_DRAWABLE (pixmap));
   cairo_set_source_surface (cr, surface, pixmap_x, pixmap_y);
+  cairo_surface_destroy (surface);
+}
+
+/**
+ * gdk_cairo_set_source_window:
+ * @cr: a #Cairo context
+ * @window: a #GdkWindow
+ * @x: X coordinate of location to place upper left corner of @window
+ * @y: Y coordinate of location to place upper left corner of @window
+ *
+ * Sets the given window as the source pattern for the Cairo context.
+ * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
+ * so that the origin of @window is @x, @y. The window contains all its
+ * subwindows when rendering.
+ *
+ * Note that the contents of @window are undefined outside of the
+ * visible part of @window, so use this function with care.
+ *
+ * Since: 2.24
+ **/
+void
+gdk_cairo_set_source_window (cairo_t   *cr,
+                             GdkWindow *window,
+                             double     x,
+                             double     y)
+{
+  cairo_surface_t *surface;
+
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  surface = _gdk_drawable_ref_cairo_surface (GDK_DRAWABLE (window));
+  cairo_set_source_surface (cr, surface, x, y);
   cairo_surface_destroy (surface);
 }
 

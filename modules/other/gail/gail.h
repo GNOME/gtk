@@ -34,6 +34,7 @@
 #include <gail/gailrenderercell.h>
 #include <gail/gailrange.h>
 #include <gail/gailscale.h>
+#include <gail/gailscalebutton.h>
 #include <gail/gailscrollbar.h>
 #include <gail/gailscrolledwindow.h>
 #include <gail/gailseparator.h>

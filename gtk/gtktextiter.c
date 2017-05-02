@@ -371,7 +371,7 @@ check_invariants (const GtkTextIter *iter)
  *
  * Returns the #GtkTextBuffer this iterator is associated with.
  *
- * Return value: the buffer
+ * Return value: (transfer none): the buffer
  **/
 GtkTextBuffer*
 gtk_text_iter_get_buffer (const GtkTextIter *iter)
@@ -972,7 +972,7 @@ gtk_text_iter_get_visible_text (const GtkTextIter  *start,
  * (with no new reference count added). Otherwise,
  * %NULL is returned.
  *
- * Return value: the pixbuf at @iter
+ * Return value: (transfer none): the pixbuf at @iter
  **/
 GdkPixbuf*
 gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
@@ -1002,7 +1002,7 @@ gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
  * anchor is returned (with no new reference count added). Otherwise,
  * %NULL is returned.
  *
- * Return value: the anchor at @iter
+ * Return value: (transfer none): the anchor at @iter
  **/
 GtkTextChildAnchor*
 gtk_text_iter_get_child_anchor (const GtkTextIter *iter)
@@ -1034,7 +1034,7 @@ gtk_text_iter_get_child_anchor (const GtkTextIter *iter)
  * can exist in the same place. The returned list is not in any
  * meaningful order.
  *
- * Return value: list of #GtkTextMark
+ * Return value: (element-type GtkTextMark) (transfer container): list of #GtkTextMark
  **/
 GSList*
 gtk_text_iter_get_marks (const GtkTextIter *iter)
@@ -1080,7 +1080,7 @@ gtk_text_iter_get_marks (const GtkTextIter *iter)
  * a tag is toggled off, then some non-empty range following @iter
  * does <emphasis>not</emphasis> have the tag applied to it.
  *
- * Return value: tags toggled at this point
+ * Return value: (element-type GtkTextTag) (transfer container): tags toggled at this point
  **/
 GSList*
 gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
@@ -1129,7 +1129,7 @@ gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
 /**
  * gtk_text_iter_begins_tag:
  * @iter: an iterator
- * @tag: a #GtkTextTag, or %NULL
+ * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
  * Returns %TRUE if @tag is toggled on at exactly this point. If @tag
  * is %NULL, returns %TRUE if any tag is toggled on at this point. Note
@@ -1175,7 +1175,7 @@ gtk_text_iter_begins_tag    (const GtkTextIter  *iter,
 /**
  * gtk_text_iter_ends_tag:
  * @iter: an iterator
- * @tag: a #GtkTextTag, or %NULL
+ * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
  * Returns %TRUE if @tag is toggled off at exactly this point. If @tag
  * is %NULL, returns %TRUE if any tag is toggled off at this point. Note
@@ -1222,7 +1222,7 @@ gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
 /**
  * gtk_text_iter_toggles_tag:
  * @iter: an iterator
- * @tag: a #GtkTextTag, or %NULL
+ * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
  * This is equivalent to (gtk_text_iter_begins_tag () ||
  * gtk_text_iter_ends_tag ()), i.e. it tells you whether a range with
@@ -1307,8 +1307,8 @@ gtk_text_iter_has_tag (const GtkTextIter   *iter,
  * priority (highest-priority tags are last). The #GtkTextTag in the
  * list don't have a reference added, but you have to free the list
  * itself.
- * 
- * Return value: list of #GtkTextTag
+ *
+ * Return value: (element-type GtkTextTag) (transfer container): list of #GtkTextTag
  **/
 GSList*
 gtk_text_iter_get_tags (const GtkTextIter *iter)
@@ -1714,7 +1714,7 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
 /**
  * gtk_text_iter_get_attributes:
  * @iter: an iterator
- * @values: a #GtkTextAttributes to be filled in
+ * @values: (out): a #GtkTextAttributes to be filled in
  *
  * Computes the effect of any tags applied to this spot in the
  * text. The @values parameter should be initialized to the default
@@ -2547,6 +2547,8 @@ gtk_text_iter_backward_line (GtkTextIter *iter)
   if (real == NULL)
     return FALSE;
 
+  ensure_char_offsets (real);
+
   check_invariants (iter);
 
   new_line = _gtk_text_line_previous (real->line);
@@ -3239,7 +3241,7 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
 }
 
 /**
- * gtk_text_iter_backward_word_starts
+ * gtk_text_iter_backward_word_starts:
  * @iter: a #GtkTextIter
  * @count: number of times to move
  * 
@@ -3317,7 +3319,7 @@ gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
 }
 
 /**
- * gtk_text_iter_backward_visible_word_starts
+ * gtk_text_iter_backward_visible_word_starts:
  * @iter: a #GtkTextIter
  * @count: number of times to move
  * 
@@ -4111,7 +4113,7 @@ gtk_text_iter_forward_to_line_end (GtkTextIter *iter)
 /**
  * gtk_text_iter_forward_to_tag_toggle:
  * @iter: a #GtkTextIter
- * @tag: a #GtkTextTag, or %NULL
+ * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
  * Moves forward to the next toggle (on or off) of the
  * #GtkTextTag @tag, or to the next toggle of any tag if
@@ -4193,7 +4195,7 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
 /**
  * gtk_text_iter_backward_to_tag_toggle:
  * @iter: a #GtkTextIter
- * @tag: a #GtkTextTag, or %NULL
+ * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
  * Moves backward to the next toggle (on or off) of the
  * #GtkTextTag @tag, or to the next toggle of any tag if
@@ -4306,9 +4308,9 @@ matches_pred (GtkTextIter *iter,
 /**
  * gtk_text_iter_forward_find_char:
  * @iter: a #GtkTextIter
- * @pred: a function to be called on each character
+ * @pred: (scope call): a function to be called on each character
  * @user_data: user data for @pred
- * @limit: search limit, or %NULL for none 
+ * @limit: (allow-none): search limit, or %NULL for none 
  * 
  * Advances @iter, calling @pred on each character. If
  * @pred returns %TRUE, returns %TRUE and stops scanning.
@@ -4344,9 +4346,9 @@ gtk_text_iter_forward_find_char (GtkTextIter         *iter,
 /**
  * gtk_text_iter_backward_find_char:
  * @iter: a #GtkTextIter
- * @pred: function to be called on each character
+ * @pred: (scope call): function to be called on each character
  * @user_data: user data for @pred
- * @limit: search limit, or %NULL for none
+ * @limit: (allow-none): search limit, or %NULL for none
  * 
  * Same as gtk_text_iter_forward_find_char(), but goes backward from @iter.
  * 
@@ -4571,12 +4573,12 @@ strbreakup (const char *string,
  * @iter: start of search
  * @str: a search string
  * @flags: flags affecting how the search is done
- * @match_start: return location for start of match, or %NULL
- * @match_end: return location for end of match, or %NULL
- * @limit: bound for the search, or %NULL for the end of the buffer
- * 
- * Searches forward for @str. Any match is returned by setting 
- * @match_start to the first character of the match and @match_end to the 
+ * @match_start: (out caller-allocates) (allow-none): return location for start of match, or %NULL
+ * @match_end: (out caller-allocates) (allow-none): return location for end of match, or %NULL
+ * @limit: (allow-none): bound for the search, or %NULL for the end of the buffer
+ *
+ * Searches forward for @str. Any match is returned by setting
+ * @match_start to the first character of the match and @match_end to the
  * first character after the match. The search will not continue past
  * @limit. Note that a search is a linear or O(n) operation, so you
  * may wish to use @limit to avoid locking up your UI on large
@@ -4868,12 +4870,12 @@ lines_window_free (LinesWindow *win)
  * @iter: a #GtkTextIter where the search begins
  * @str: search string
  * @flags: bitmask of flags affecting the search
- * @match_start: return location for start of match, or %NULL
- * @match_end: return location for end of match, or %NULL
- * @limit: location of last possible @match_start, or %NULL for start of buffer
- * 
+ * @match_start: (out caller-allocates) (allow-none): return location for start of match, or %NULL
+ * @match_end: (out caller-allocates) (allow-none): return location for end of match, or %NULL
+ * @limit: (allow-none): location of last possible @match_start, or %NULL for start of buffer
+ *
  * Same as gtk_text_iter_forward_search(), but moves backward.
- * 
+ *
  * Return value: whether a match was found
  **/
 gboolean

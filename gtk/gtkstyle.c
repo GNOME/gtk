@@ -28,6 +28,8 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <gobject/gvaluecollector.h>
+#undef GDK_DISABLE_DEPRECATED
 #include "gtkgc.h"
 #include "gtkmarshalers.h"
 #undef GTK_DISABLE_DEPRECATED
@@ -312,6 +314,17 @@ static void gtk_default_draw_resize_grip (GtkStyle       *style,
                                           gint            y,
                                           gint            width,
                                           gint            height);
+static void gtk_default_draw_spinner     (GtkStyle       *style,
+					  GdkWindow      *window,
+					  GtkStateType    state_type,
+                                          GdkRectangle   *area,
+                                          GtkWidget      *widget,
+                                          const gchar    *detail,
+					  guint           step,
+					  gint            x,
+					  gint            y,
+					  gint            width,
+					  gint            height);
 
 static void rgb_to_hls			(gdouble	 *r,
 					 gdouble	 *g,
@@ -510,6 +523,7 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_expander = gtk_default_draw_expander;
   klass->draw_layout = gtk_default_draw_layout;
   klass->draw_resize_grip = gtk_default_draw_resize_grip;
+  klass->draw_spinner = gtk_default_draw_spinner;
 
   g_type_class_add_private (object_class, sizeof (GtkStylePrivate));
 
@@ -631,7 +645,7 @@ gtk_style_finalize (GObject *object)
  *
  * Creates a copy of the passed in #GtkStyle object.
  *
- * Returns: a copy of @style
+ * Returns: (transfer full): a copy of @style
  */
 GtkStyle*
 gtk_style_copy (GtkStyle *style)
@@ -689,12 +703,12 @@ gtk_style_new (void)
  *
  * Attaches a style to a window; this process allocates the
  * colors and creates the GC's for the style - it specializes
- * it to a particular visual and colormap. The process may 
- * involve the creation of a new style if the style has already 
+ * it to a particular visual and colormap. The process may
+ * involve the creation of a new style if the style has already
  * been attached to a window with a different style and colormap.
  *
- * Since this function may return a new object, you have to use it 
- * in the following way: 
+ * Since this function may return a new object, you have to use it
+ * in the following way:
  * <literal>style = gtk_style_attach (style, window)</literal>
  *
  * Returns: Either @style, or a newly-created #GtkStyle.
@@ -820,8 +834,10 @@ gtk_style_detach (GtkStyle *style)
  * @style: a #GtkStyle.
  * @returns: @style.
  *
+ * Increase the reference count of @style.
+ * 
  * Deprecated: 2.0: use g_object_ref() instead.
- **/
+ */
 GtkStyle*
 gtk_style_ref (GtkStyle *style)
 {
@@ -832,8 +848,10 @@ gtk_style_ref (GtkStyle *style)
  * gtk_style_unref:
  * @style: a #GtkStyle.
  *
+ * Decrease the reference count of @style.
+ * 
  * Deprecated: 2.0: use g_object_unref() instead.
- **/
+ */
 void
 gtk_style_unref (GtkStyle *style)
 {
@@ -850,6 +868,17 @@ gtk_style_realize (GtkStyle    *style,
   g_signal_emit (style, realize_signal, 0);
 }
 
+/**
+ * gtk_style_lookup_icon_set:
+ * @style: a #GtkStyle
+ * @stock_id: an icon name
+ *
+ * Looks up @stock_id in the icon factories associated with @style
+ * and the default icon factory, returning an icon set if found,
+ * otherwise %NULL.
+ *
+ * Return value: (transfer none): icon set of @stock_id
+ */
 GtkIconSet*
 gtk_style_lookup_icon_set (GtkStyle   *style,
                            const char *stock_id)
@@ -877,7 +906,7 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
  * gtk_style_lookup_color:
  * @style: a #GtkStyle
  * @color_name: the name of the logical color to look up
- * @color: the #GdkColor to fill in
+ * @color: (out): the #GdkColor to fill in
  *
  * Looks up @color_name in the style's logical color mappings,
  * filling in @color and returning %TRUE if found, otherwise
@@ -1429,6 +1458,21 @@ gtk_draw_focus (GtkStyle      *style,
   GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, GTK_STATE_NORMAL, NULL, NULL, NULL, x, y, width, height);
 }
 
+/**
+ * gtk_draw_slider:
+ * @style: a #GtkStyle
+  @window: a #GdkWindow
+ * @state_type: a state
+ * @shadow_type: a shadow
+ * @x: the x origin of the rectangle in which to draw a slider
+ * @y: the y origin of the rectangle in which to draw a slider
+ * @width: the width of the rectangle in which to draw a slider
+ * @height: the height of the rectangle in which to draw a slider
+ * @orientation: the orientation to be used
+ *
+ * Draws a slider in the given rectangle on @window using the
+ * given style and orientation.
+ */
 void 
 gtk_draw_slider (GtkStyle      *style,
 		 GdkWindow     *window,
@@ -1508,6 +1552,19 @@ gtk_draw_expander (GtkStyle        *style,
                                               x, y, expander_style);
 }
 
+/**
+ * gtk_draw_layout:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @use_text: whether to use the text or foreground
+ *            graphics context of @style
+ * @x: x origin
+ * @y: y origin
+ * @layout: the layout to draw
+ * 
+ * Draws a layout on @window using the given parameters.
+ */
 void
 gtk_draw_layout (GtkStyle        *style,
                  GdkWindow       *window,
@@ -1694,6 +1751,150 @@ style_property_values_cmp (gconstpointer bsearch_node1,
     return val1->pspec < val2->pspec ? -1 : val1->pspec == val2->pspec ? 0 : 1;
   else
     return val1->widget_type < val2->widget_type ? -1 : 1;
+}
+
+/**
+ * gtk_style_get_style_property:
+ * @style: a #GtkStyle
+ * @widget_type: the #GType of a descendant of #GtkWidget
+ * @property_name: the name of the style property to get
+ * @value: a #GValue where the value of the property being
+ *     queried will be stored
+ *
+ * Queries the value of a style property corresponding to a
+ * widget class is in the given style.
+ *
+ * Since: 2.16
+ */
+void 
+gtk_style_get_style_property (GtkStyle     *style,
+                              GType        widget_type,
+                              const gchar *property_name,
+                              GValue      *value)
+{
+  GtkWidgetClass *klass;
+  GParamSpec *pspec;
+  GtkRcPropertyParser parser;
+  const GValue *peek_value;
+
+  klass = g_type_class_ref (widget_type);
+  pspec = gtk_widget_class_find_style_property (klass, property_name);
+  g_type_class_unref (klass);
+
+  if (!pspec)
+    {
+      g_warning ("%s: widget class `%s' has no property named `%s'",
+                 G_STRLOC,
+                 g_type_name (widget_type),
+                 property_name);
+      return;
+    }
+
+  parser = g_param_spec_get_qdata (pspec,
+                                   g_quark_from_static_string ("gtk-rc-property-parser"));
+
+  peek_value = _gtk_style_peek_property_value (style, widget_type, pspec, parser);
+
+  if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
+    g_value_copy (peek_value, value);
+  else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
+    g_value_transform (peek_value, value);
+  else
+    g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
+               pspec->name,
+               g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+               G_VALUE_TYPE_NAME (value));
+}
+
+/**
+ * gtk_style_get_valist:
+ * @style: a #GtkStyle
+ * @widget_type: the #GType of a descendant of #GtkWidget
+ * @first_property_name: the name of the first style property to get
+ * @var_args: a <type>va_list</type> of pairs of property names and
+ *     locations to return the property values, starting with the
+ *     location for @first_property_name.
+ *
+ * Non-vararg variant of gtk_style_get().
+ * Used primarily by language bindings.
+ *
+ * Since: 2.16
+ */
+void 
+gtk_style_get_valist (GtkStyle    *style,
+                      GType        widget_type,
+                      const gchar *first_property_name,
+                      va_list      var_args)
+{
+  const char *property_name;
+  GtkWidgetClass *klass;
+
+  g_return_if_fail (GTK_IS_STYLE (style));
+
+  klass = g_type_class_ref (widget_type);
+
+  property_name = first_property_name;
+  while (property_name)
+    {
+      GParamSpec *pspec;
+      GtkRcPropertyParser parser;
+      const GValue *peek_value;
+      gchar *error;
+
+      pspec = gtk_widget_class_find_style_property (klass, property_name);
+
+      if (!pspec)
+        {
+          g_warning ("%s: widget class `%s' has no property named `%s'",
+                     G_STRLOC,
+                     g_type_name (widget_type),
+                     property_name);
+          break;
+        }
+
+      parser = g_param_spec_get_qdata (pspec,
+                                       g_quark_from_static_string ("gtk-rc-property-parser"));
+
+      peek_value = _gtk_style_peek_property_value (style, widget_type, pspec, parser);
+      G_VALUE_LCOPY (peek_value, var_args, 0, &error);
+      if (error)
+        {
+          g_warning ("%s: %s", G_STRLOC, error);
+          g_free (error);
+          break;
+        }
+
+      property_name = va_arg (var_args, gchar*);
+    }
+
+  g_type_class_unref (klass);
+}
+
+/**
+ * gtk_style_get:
+ * @style: a #GtkStyle
+ * @widget_type: the #GType of a descendant of #GtkWidget
+ * @first_property_name: the name of the first style property to get
+ * @Varargs: pairs of property names and locations to
+ *   return the property values, starting with the location for
+ *   @first_property_name, terminated by %NULL.
+ *
+ * Gets the values of a multiple style properties for @widget_type
+ * from @style.
+ *
+ * Since: 2.16
+ */
+void
+gtk_style_get (GtkStyle    *style,
+               GType        widget_type,
+               const gchar *first_property_name,
+               ...)
+{
+  va_list var_args;
+
+  va_start (var_args, first_property_name);
+  gtk_style_get_valist (style, widget_type, first_property_name, var_args);
+  va_end (var_args);
 }
 
 const GValue*
@@ -1967,15 +2168,18 @@ gtk_style_real_set_background (GtkStyle    *style,
  * @source: the #GtkIconSource specifying the icon to render
  * @direction: a text direction
  * @state: a state
- * @size: the size to render the icon at. A size of (GtkIconSize)-1
- *        means render at the size of the source and don't scale.
- * @widget: the widget 
- * @detail: a style detail
- * @returns: a newly-created #GdkPixbuf containing the rendered icon
+ * @size: (type int) the size to render the icon at. A size of
+ *     (GtkIconSize)-1 means render at the size of the source and
+ *     don't scale.
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  *
- * Renders the icon specified by @source at the given @size 
- * according to the given parameters and returns the result in a 
+ * Renders the icon specified by @source at the given @size
+ * according to the given parameters and returns the result in a
  * pixbuf.
+ *
+ * Return value: (transfer full): a newly-created #GdkPixbuf
+ *     containing the rendered icon
  */
 GdkPixbuf *
 gtk_style_render_icon (GtkStyle            *style,
@@ -2000,6 +2204,19 @@ gtk_style_render_icon (GtkStyle            *style,
 }
 
 /* Default functions */
+
+/**
+ * gtk_style_apply_default_background:
+ * @style:
+ * @window:
+ * @set_bg:
+ * @state_type:
+ * @area: (allow-none):
+ * @x:
+ * @y:
+ * @width:
+ * @height:
+ */
 void
 gtk_style_apply_default_background (GtkStyle          *style,
                                     GdkWindow         *window,
@@ -2082,31 +2299,15 @@ scale_or_ref (GdkPixbuf *src,
     }
 }
 
-static GdkPixbuf *
-gtk_default_render_icon (GtkStyle            *style,
-                         const GtkIconSource *source,
-                         GtkTextDirection     direction,
-                         GtkStateType         state,
-                         GtkIconSize          size,
-                         GtkWidget           *widget,
-                         const gchar         *detail)
+static gboolean
+lookup_icon_size (GtkStyle    *style,
+		  GtkWidget   *widget,
+		  GtkIconSize  size,
+		  gint        *width,
+		  gint        *height)
 {
-  gint width = 1;
-  gint height = 1;
-  GdkPixbuf *scaled;
-  GdkPixbuf *stated;
-  GdkPixbuf *base_pixbuf;
   GdkScreen *screen;
   GtkSettings *settings;
-
-  /* Oddly, style can be NULL in this function, because
-   * GtkIconSet can be used without a style and if so
-   * it uses this function.
-   */
-
-  base_pixbuf = gtk_icon_source_get_pixbuf (source);
-
-  g_return_val_if_fail (base_pixbuf != NULL, NULL);
 
   if (widget && gtk_widget_has_screen (widget))
     {
@@ -2125,8 +2326,34 @@ gtk_default_render_icon (GtkStyle            *style,
 		g_warning ("Using the default screen for gtk_default_render_icon()"));
     }
 
-  
-  if (size != (GtkIconSize) -1 && !gtk_icon_size_lookup_for_settings (settings, size, &width, &height))
+  return gtk_icon_size_lookup_for_settings (settings, size, width, height);
+}
+
+static GdkPixbuf *
+gtk_default_render_icon (GtkStyle            *style,
+                         const GtkIconSource *source,
+                         GtkTextDirection     direction,
+                         GtkStateType         state,
+                         GtkIconSize          size,
+                         GtkWidget           *widget,
+                         const gchar         *detail)
+{
+  gint width = 1;
+  gint height = 1;
+  GdkPixbuf *scaled;
+  GdkPixbuf *stated;
+  GdkPixbuf *base_pixbuf;
+
+  /* Oddly, style can be NULL in this function, because
+   * GtkIconSet can be used without a style and if so
+   * it uses this function.
+   */
+
+  base_pixbuf = gtk_icon_source_get_pixbuf (source);
+
+  g_return_val_if_fail (base_pixbuf != NULL, NULL);
+
+  if (size != (GtkIconSize) -1 && !lookup_icon_size(style, widget, size, &width, &height))
     {
       g_warning (G_STRLOC ": invalid icon size '%d'", size);
       return NULL;
@@ -3320,7 +3547,7 @@ gtk_default_draw_box (GtkStyle      *style,
       
       if (state_type == GTK_STATE_SELECTED && detail && strcmp (detail, "paned") == 0)
 	{
-	  if (widget && !GTK_WIDGET_HAS_FOCUS (widget))
+	  if (widget && !gtk_widget_has_focus (widget))
 	    gc = style->base_gc[GTK_STATE_ACTIVE];
 	}
 
@@ -3334,7 +3561,7 @@ gtk_default_draw_box (GtkStyle      *style,
     }
   else
     gtk_style_apply_default_background (style, window,
-                                        widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                        widget && gtk_widget_get_has_window (widget),
                                         state_type, area, x, y, width, height);
 
   if (is_spinbutton_box)
@@ -3444,7 +3671,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 		   !strcmp ("cell_even_ruled_sorted", detail))
             {
 	      /* This has to be really broken; alex made me do it. -jrb */
-	      if (widget && GTK_WIDGET_HAS_FOCUS (widget))
+	      if (widget && gtk_widget_has_focus (widget))
 		gc1 = style->base_gc[state_type];
 	      else
 	        gc1 = style->base_gc[GTK_STATE_ACTIVE];
@@ -3452,7 +3679,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
 	  else if (!strcmp ("cell_odd_ruled", detail) ||
 		   !strcmp ("cell_odd_ruled_sorted", detail))
 	    {
-	      if (widget && GTK_WIDGET_HAS_FOCUS (widget))
+	      if (widget && gtk_widget_has_focus (widget))
 	        freeme = get_darkened_gc (window, &style->base[state_type], 1);
 	      else
 	        freeme = get_darkened_gc (window, &style->base[GTK_STATE_ACTIVE], 1);
@@ -3610,7 +3837,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
     }
   else
     gtk_style_apply_default_background (style, window,
-                                        widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                        widget && gtk_widget_get_has_window (widget),
                                         state_type, area, x, y, width, height);
 
 
@@ -4146,7 +4373,7 @@ gtk_default_draw_box_gap (GtkStyle       *style,
   GdkGC *gc4 = NULL;
   
   gtk_style_apply_default_background (style, window,
-                                      widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                      widget && gtk_widget_get_has_window (widget),
                                       state_type, area, x, y, width, height);
   
   sanitize_size (window, &width, &height);
@@ -4362,7 +4589,7 @@ gtk_default_draw_extension (GtkStyle       *style,
   GdkGC *gc4 = NULL;
   
   gtk_style_apply_default_background (style, window,
-                                      widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                      widget && gtk_widget_get_has_window (widget),
                                       GTK_STATE_NORMAL, area, x, y, width, height);
   
   sanitize_size (window, &width, &height);
@@ -4416,7 +4643,7 @@ gtk_default_draw_extension (GtkStyle       *style,
         {
         case GTK_POS_TOP:
           gtk_style_apply_default_background (style, window,
-                                              widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                              widget && gtk_widget_get_has_window (widget),
                                               state_type, area,
                                               x + style->xthickness, 
                                               y, 
@@ -4438,7 +4665,7 @@ gtk_default_draw_extension (GtkStyle       *style,
           break;
         case GTK_POS_BOTTOM:
           gtk_style_apply_default_background (style, window,
-                                              widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                              widget && gtk_widget_get_has_window (widget),
                                               state_type, area,
                                               x + style->xthickness, 
                                               y + style->ythickness, 
@@ -4460,7 +4687,7 @@ gtk_default_draw_extension (GtkStyle       *style,
           break;
         case GTK_POS_LEFT:
           gtk_style_apply_default_background (style, window,
-                                              widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                              widget && gtk_widget_get_has_window (widget),
                                               state_type, area,
                                               x, 
                                               y + style->ythickness, 
@@ -4482,7 +4709,7 @@ gtk_default_draw_extension (GtkStyle       *style,
           break;
         case GTK_POS_RIGHT:
           gtk_style_apply_default_background (style, window,
-                                              widget && !GTK_WIDGET_NO_WINDOW (widget),
+                                              widget && gtk_widget_get_has_window (widget),
                                               state_type, area,
                                               x + style->xthickness, 
                                               y + style->ythickness, 
@@ -4702,7 +4929,7 @@ gtk_default_draw_handle (GtkStyle      *style,
       xthick = 0;
       ythick = 0;
 
-      if (state_type == GTK_STATE_SELECTED && widget && !GTK_WIDGET_HAS_FOCUS (widget))
+      if (state_type == GTK_STATE_SELECTED && widget && !gtk_widget_has_focus (widget))
 	{
 	  GdkColor unfocused_light;
 
@@ -5411,6 +5638,83 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
     }
 }
 
+static void
+gtk_default_draw_spinner (GtkStyle     *style,
+                          GdkWindow    *window,
+                          GtkStateType  state_type,
+                          GdkRectangle *area,
+                          GtkWidget    *widget,
+                          const gchar  *detail,
+                          guint         step,
+                          gint          x,
+                          gint          y,
+                          gint          width,
+                          gint          height)
+{
+  GdkColor *color;
+  cairo_t *cr;
+  guint num_steps;
+  gdouble dx, dy;
+  gdouble radius;
+  gdouble half;
+  gint i;
+  guint real_step;
+
+  gtk_style_get (style, GTK_TYPE_SPINNER,
+                 "num-steps", &num_steps,
+                 NULL);
+  real_step = step % num_steps;
+
+  /* get cairo context */
+  cr = gdk_cairo_create (window);
+
+  /* set a clip region for the expose event */
+  cairo_rectangle (cr, x, y, width, height);
+  cairo_clip (cr);
+
+  cairo_translate (cr, x, y);
+
+  /* draw clip region */
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+  color = &style->fg[state_type];
+  dx = width / 2;
+  dy = height / 2;
+  radius = MIN (width / 2, height / 2);
+  half = num_steps / 2;
+
+  for (i = 0; i < num_steps; i++)
+    {
+      gint inset = 0.7 * radius;
+
+      /* transparency is a function of time and intial value */
+      gdouble t = (gdouble) ((i + num_steps - real_step)
+                             % num_steps) / num_steps;
+
+      cairo_save (cr);
+
+      cairo_set_source_rgba (cr,
+                             color->red / 65535.,
+                             color->green / 65535.,
+                             color->blue / 65535.,
+                             t);
+
+      cairo_set_line_width (cr, 2.0);
+      cairo_move_to (cr,
+                     dx + (radius - inset) * cos (i * G_PI / half),
+                     dy + (radius - inset) * sin (i * G_PI / half));
+      cairo_line_to (cr,
+                     dx + radius * cos (i * G_PI / half),
+                     dy + radius * sin (i * G_PI / half));
+      cairo_stroke (cr);
+
+      cairo_restore (cr);
+    }
+
+  /* free memory */
+  cairo_destroy (cr);
+}
+
 void
 _gtk_style_shade (const GdkColor *a,
                   GdkColor       *b,
@@ -5601,14 +5905,14 @@ hls_to_rgb (gdouble *h,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: rectangle to which the output is clipped, or %NULL if the
+ * @area: (allow-none): rectangle to which the output is clipped, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x1: the starting x coordinate
  * @x2: the ending x coordinate
  * @y: the y coordinate
- * 
+ *
  * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @window
  * using the given style and state.
  **/ 
@@ -5637,14 +5941,14 @@ gtk_paint_hline (GtkStyle           *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: rectangle to which the output is clipped, or %NULL if the
+ * @area: (allow-none): rectangle to which the output is clipped, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @y1_: the starting y coordinate
  * @y2_: the ending y coordinate
  * @x: the x coordinate
- * 
+ *
  * Draws a vertical line from (@x, @y1_) to (@x, @y2_) in @window
  * using the given style and state.
  */
@@ -5674,14 +5978,14 @@ gtk_paint_vline (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle or %NULL if the
+ * @area: (allow-none): clip rectangle or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the rectangle
  * @y: y origin of the rectangle
- * @width: width of the rectangle 
- * @height: width of the rectangle 
+ * @width: width of the rectangle
+ * @height: width of the rectangle
  *
  * Draws a shadow around the given rectangle in @window 
  * using the given style and state and shadow type.
@@ -5714,14 +6018,14 @@ gtk_paint_shadow (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @points: an array of #GdkPoint<!-- -->s
  * @n_points: length of @points
  * @fill: %TRUE if the polygon should be filled
- * 
+ *
  * Draws a polygon on @window with the given parameters.
  */ 
 void
@@ -5751,10 +6055,10 @@ gtk_paint_polygon (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @arrow_type: the type of arrow to draw
  * @fill: %TRUE if the arrow tip should be filled
  * @x: x origin of the rectangle to draw the arrow in
@@ -5795,10 +6099,10 @@ gtk_paint_arrow (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the rectangle to draw the diamond in
  * @y: y origin of the rectangle to draw the diamond in
  * @width: width of the rectangle to draw the diamond in
@@ -5834,14 +6138,14 @@ gtk_paint_diamond (GtkStyle           *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin
  * @y: y origin
  * @string: the string to draw
- * 
+ *
  * Draws a text string on @window with the given parameters.
  *
  * Deprecated: 2.0: Use gtk_paint_layout() instead.
@@ -5872,10 +6176,10 @@ gtk_paint_string (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the box
  * @y: y origin of the box
  * @width: the width of the box
@@ -5911,10 +6215,10 @@ gtk_paint_box (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the box
  * @y: y origin of the box
  * @width: the width of the box
@@ -5950,10 +6254,10 @@ gtk_paint_flat_box (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the rectangle to draw the check in
  * @y: y origin of the rectangle to draw the check in
  * @width: the width of the rectangle to draw the check in
@@ -5990,10 +6294,10 @@ gtk_paint_check (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the rectangle to draw the option in
  * @y: y origin of the rectangle to draw the option in
  * @width: the width of the rectangle to draw the option in
@@ -6030,10 +6334,10 @@ gtk_paint_option (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the rectangle to draw the tab in
  * @y: y origin of the rectangle to draw the tab in
  * @width: the width of the rectangle to draw the tab in
@@ -6070,14 +6374,14 @@ gtk_paint_tab (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the rectangle
  * @y: y origin of the rectangle
- * @width: width of the rectangle 
- * @height: width of the rectangle 
+ * @width: width of the rectangle
+ * @height: width of the rectangle
  * @gap_side: side in which to leave the gap
  * @gap_x: starting position of the gap
  * @gap_width: width of the gap
@@ -6118,14 +6422,14 @@ gtk_paint_shadow_gap (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the rectangle
  * @y: y origin of the rectangle
- * @width: width of the rectangle 
- * @height: width of the rectangle 
+ * @width: width of the rectangle
+ * @height: width of the rectangle
  * @gap_side: side in which to leave the gap
  * @gap_x: starting position of the gap
  * @gap_width: width of the gap
@@ -6164,14 +6468,14 @@ gtk_paint_box_gap (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the extension
  * @y: y origin of the extension
- * @width: width of the extension 
- * @height: width of the extension 
+ * @width: width of the extension
+ * @height: width of the extension
  * @gap_side: the side on to which the extension is attached
  * 
  * Draws an extension, i.e. a notebook tab.
@@ -6204,10 +6508,10 @@ gtk_paint_extension (GtkStyle           *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none):  clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: the x origin of the rectangle around which to draw a focus indicator
  * @y: the y origin of the rectangle around which to draw a focus indicator
  * @width: the width of the rectangle around which to draw a focus indicator
@@ -6243,10 +6547,10 @@ gtk_paint_focus (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: a shadow
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: the x origin of the rectangle in which to draw a slider
  * @y: the y origin of the rectangle in which to draw a slider
  * @width: the width of the rectangle in which to draw a slider
@@ -6285,10 +6589,10 @@ gtk_paint_slider (GtkStyle           *style,
  * @window: a #GdkWindow
  * @state_type: a state
  * @shadow_type: type of shadow to draw
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin of the handle
  * @y: y origin of the handle
  * @width: with of the handle
@@ -6325,10 +6629,10 @@ gtk_paint_handle (GtkStyle           *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: the x position to draw the expander at
  * @y: the y position to draw the expander at
  * @expander_style: the style to draw the expander in; determines
@@ -6372,14 +6676,14 @@ gtk_paint_expander (GtkStyle           *style,
  * @state_type: a state
  * @use_text: whether to use the text or foreground
  *            graphics context of @style
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @x: x origin
  * @y: y origin
  * @layout: the layout to draw
- * 
+ *
  * Draws a layout on @window using the given parameters.
  **/
 void
@@ -6408,10 +6712,10 @@ gtk_paint_layout (GtkStyle           *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @area: clip rectangle, or %NULL if the
+ * @area: (allow-none): clip rectangle, or %NULL if the
  *        output should not be clipped
- * @widget: the widget (may be %NULL)
- * @detail: a style detail (may be %NULL)
+ * @widget: (allow-none): the widget
+ * @detail: (allow-none): a style detail
  * @edge: the edge in which to draw the resize grip
  * @x: the x origin of the rectangle in which to draw the resize grip
  * @y: the y origin of the rectangle in which to draw the resize grip
@@ -6442,6 +6746,47 @@ gtk_paint_resize_grip (GtkStyle           *style,
   GTK_STYLE_GET_CLASS (style)->draw_resize_grip (style, window, state_type,
                                                  (GdkRectangle *) area, widget, detail,
                                                  edge, x, y, width, height);
+}
+
+/**
+ * gtk_paint_spinner:
+ * @style: a #GtkStyle
+ * @window: a #GdkWindow
+ * @state_type: a state
+ * @area: (allow-none): clip rectangle, or %NULL if the
+ *        output should not be clipped
+ * @widget: (allow-none): the widget (may be %NULL)
+ * @detail: (allow-none): a style detail (may be %NULL)
+ * @step: the nth step, a value between 0 and #GtkSpinner:num-steps
+ * @x: the x origin of the rectangle in which to draw the spinner
+ * @y: the y origin of the rectangle in which to draw the spinner
+ * @width: the width of the rectangle in which to draw the spinner
+ * @height: the height of the rectangle in which to draw the spinner
+ *
+ * Draws a spinner on @window using the given parameters.
+ *
+ * Since: 2.20
+ */
+void
+gtk_paint_spinner (GtkStyle           *style,
+		   GdkWindow          *window,
+		   GtkStateType        state_type,
+                   const GdkRectangle *area,
+                   GtkWidget          *widget,
+                   const gchar        *detail,
+		   guint               step,
+		   gint                x,
+		   gint                y,
+		   gint                width,
+		   gint                height)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_spinner != NULL);
+  g_return_if_fail (style->depth == gdk_drawable_get_depth (window));
+
+  GTK_STYLE_GET_CLASS (style)->draw_spinner (style, window, state_type,
+                                             (GdkRectangle *)area, widget, detail,
+					     step, x, y, width, height);
 }
 
 /**
@@ -6576,7 +6921,7 @@ gtk_style_get_font (GtkStyle *style)
 /**
  * gtk_style_set_font:
  * @style: a #GtkStyle.
- * @font: a #GdkFont, or %NULL to use the #GdkFont corresponding
+ * @font: (allow-none): a #GdkFont, or %NULL to use the #GdkFont corresponding
  *   to style->font_desc.
  * 
  * Sets the #GdkFont to use for a given style. This is
@@ -6725,7 +7070,7 @@ GdkGC *
 _gtk_widget_get_cursor_gc (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
+  g_return_val_if_fail (gtk_widget_get_realized (widget), NULL);
   return get_insertion_cursor_gc (widget, TRUE);
 }
 
@@ -6818,8 +7163,8 @@ draw_insertion_cursor (GtkWidget          *widget,
 /**
  * gtk_draw_insertion_cursor:
  * @widget:  a #GtkWidget
- * @drawable: a #GdkDrawable 
- * @area: rectangle to which the output is clipped, or %NULL if the
+ * @drawable: a #GdkDrawable
+ * @area: (allow-none): rectangle to which the output is clipped, or %NULL if the
  *        output should not be clipped
  * @location: location where to draw the cursor (@location->width is ignored)
  * @is_primary: if the cursor should be the primary cursor color.

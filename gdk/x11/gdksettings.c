@@ -29,6 +29,11 @@
 #define GDK_SETTINGS_X_NAME(nth)        (gdk_settings_names + gdk_settings_map[nth].xsettings_offset)
 #define GDK_SETTINGS_GDK_NAME(nth)      (gdk_settings_names + gdk_settings_map[nth].gdk_offset)
 
+/* WARNING:
+ * You will need to update gdk_settings_map when adding a
+ * new setting, and make sure that checksettings does not
+ * fail before committing
+ */
 static const char gdk_settings_names[] =
   "Net/DoubleClickTime\0"     "gtk-double-click-time\0"
   "Net/DoubleClickDistance\0" "gtk-double-click-distance\0"
@@ -73,7 +78,9 @@ static const char gdk_settings_names[] =
   "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0"
   "Net/SoundThemeName\0"      "gtk-sound-theme-name\0"
   "Net/EnableInputFeedbackSounds\0" "gtk-enable-input-feedback-sounds\0"
-  "Net/EnableEventSounds\0"  "gtk-enable-event-sounds\0";
+  "Net/EnableEventSounds\0"   "gtk-enable-event-sounds\0"
+  "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0"
+  "Gtk/AutoMnemonics\0"       "gtk-auto-mnemonics\0";
 
 
 static const struct
@@ -124,5 +131,7 @@ static const struct
   { 1487, 1508 },
   { 1533, 1552 },
   { 1573, 1603 },
-  { 1636, 1658 }
+  { 1636, 1658 },
+  { 1682, 1705 },
+  { 1730, 1748 }
 };

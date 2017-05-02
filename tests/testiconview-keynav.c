@@ -1,0 +1,280 @@
+/* testiconview-keynav.c
+ * Copyright (C) 2010  Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ *
+ * Author: Matthias Clasen
+ */
+
+/*
+ * This example demonstrates how to use the keynav-failed signal to
+ * extend arrow keynav over adjacent icon views. This can be used when
+ * grouping items.
+ */
+
+#include <gtk/gtk.h>
+
+static GtkTreeModel *
+get_model (void)
+{
+  static GtkListStore *store;
+  GtkTreeIter iter;
+
+  if (store)
+    return (GtkTreeModel *) g_object_ref (store);
+
+  store = gtk_list_store_new (1, G_TYPE_STRING);
+
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "One", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "Two", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "Three", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "Four", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "Five", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "Six", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "Seven", -1);
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 0, "Eight", -1);
+
+  return (GtkTreeModel *) store;
+}
+
+static gboolean
+visible_func (GtkTreeModel *model,
+              GtkTreeIter  *iter,
+              gpointer      data)
+{
+  gboolean first = GPOINTER_TO_INT (data);
+  gboolean visible;
+  GtkTreePath *path;
+
+  path = gtk_tree_model_get_path (model, iter);
+
+  if (gtk_tree_path_get_indices (path)[0] < 4)
+    visible = first;
+  else
+    visible = !first;
+
+  gtk_tree_path_free (path);
+
+  return visible;
+}
+
+GtkTreeModel *
+get_filter_model (gboolean first)
+{
+  GtkTreeModelFilter *model;
+
+  model = (GtkTreeModelFilter *)gtk_tree_model_filter_new (get_model (), NULL);
+
+  gtk_tree_model_filter_set_visible_func (model, visible_func, GINT_TO_POINTER (first), NULL);
+
+  return (GtkTreeModel *) model;
+}
+
+static GtkWidget *
+get_view (gboolean first)
+{
+  GtkWidget *view;
+
+  view = gtk_icon_view_new_with_model (get_filter_model (first));
+  gtk_icon_view_set_text_column (GTK_ICON_VIEW (view), 0);
+  gtk_widget_set_size_request (view, 0, -1);
+
+  return view;
+}
+
+typedef struct
+{
+  GtkWidget *header1;
+  GtkWidget *view1;
+  GtkWidget *header2;
+  GtkWidget *view2;
+} Views;
+
+static gboolean
+keynav_failed (GtkWidget        *view,
+               GtkDirectionType  direction,
+               Views            *views)
+{
+  GtkTreePath *path;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint col;
+  GtkTreePath *sel;
+
+  if (view == views->view1 && direction == GTK_DIR_DOWN)
+    {
+      if (gtk_icon_view_get_cursor (GTK_ICON_VIEW (views->view1), &path, NULL))
+        {
+          col = gtk_icon_view_get_item_column (GTK_ICON_VIEW (views->view1), path);
+          gtk_tree_path_free (path);
+
+          sel = NULL;
+          model = gtk_icon_view_get_model (GTK_ICON_VIEW (views->view2));
+          gtk_tree_model_get_iter_first (model, &iter);
+          do {
+            path = gtk_tree_model_get_path (model, &iter);
+            if (gtk_icon_view_get_item_column (GTK_ICON_VIEW (views->view2), path) == col)
+              {
+                sel = path;
+                break;
+              }
+          } while (gtk_tree_model_iter_next (model, &iter));
+
+          gtk_icon_view_set_cursor (GTK_ICON_VIEW (views->view2), sel, NULL, FALSE);
+          gtk_tree_path_free (sel);
+        }
+      gtk_widget_grab_focus (views->view2);
+      return TRUE;
+    }
+
+  if (view == views->view2 && direction == GTK_DIR_UP)
+    {
+      if (gtk_icon_view_get_cursor (GTK_ICON_VIEW (views->view2), &path, NULL))
+        {
+          col = gtk_icon_view_get_item_column (GTK_ICON_VIEW (views->view2), path);
+          gtk_tree_path_free (path);
+
+          sel = NULL;
+          model = gtk_icon_view_get_model (GTK_ICON_VIEW (views->view1));
+          gtk_tree_model_get_iter_first (model, &iter);
+          do {
+            path = gtk_tree_model_get_path (model, &iter);
+            if (gtk_icon_view_get_item_column (GTK_ICON_VIEW (views->view1), path) == col)
+              {
+                if (sel)
+                  gtk_tree_path_free (sel);
+                sel = path;
+              }
+            else
+              gtk_tree_path_free (path);
+          } while (gtk_tree_model_iter_next (model, &iter));
+
+          gtk_icon_view_set_cursor (GTK_ICON_VIEW (views->view1), sel, NULL, FALSE);
+          gtk_tree_path_free (sel);
+        }
+      gtk_widget_grab_focus (views->view1);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+focus_out (GtkWidget     *view,
+           GdkEventFocus *event,
+           gpointer       data)
+{
+  gtk_icon_view_unselect_all (GTK_ICON_VIEW (view));
+
+  return FALSE;
+}
+
+static gboolean
+focus_in (GtkWidget     *view,
+          GdkEventFocus *event,
+          gpointer       data)
+{
+  GtkTreePath *path;
+
+  if (!gtk_icon_view_get_cursor (GTK_ICON_VIEW (view), &path, NULL))
+    {
+      path = gtk_tree_path_new_from_indices (0, -1);
+      gtk_icon_view_set_cursor (GTK_ICON_VIEW (view), path, NULL, FALSE);
+    }
+
+  gtk_icon_view_select_path (GTK_ICON_VIEW (view), path);
+  gtk_tree_path_free (path);
+
+  return FALSE;
+}
+
+static void
+header_style_set (GtkWidget *widget,
+                  GtkStyle  *old_style)
+{
+  g_signal_handlers_block_by_func (widget, header_style_set, NULL);
+  gtk_widget_modify_bg (widget, GTK_STATE_NORMAL,
+                        &widget->style->base[GTK_STATE_NORMAL]);
+  gtk_widget_modify_fg (widget, GTK_STATE_NORMAL,
+                        &widget->style->text[GTK_STATE_NORMAL]);
+  g_signal_handlers_unblock_by_func (widget, header_style_set, NULL);
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkWidget *window;
+  GtkWidget *vbox;
+  Views views;
+
+  gtk_init (&argc, &argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), vbox);
+
+  views.header1 = g_object_new (GTK_TYPE_LABEL,
+                                "label", "<b>Group 1</b>",
+                                "use-markup", TRUE,
+                                "xalign", 0.0,
+                                NULL);
+  views.view1 = get_view (TRUE);
+  views.header2 = g_object_new (GTK_TYPE_LABEL,
+                                "label", "<b>Group 2</b>",
+                                "use-markup", TRUE,
+                                "xalign", 0.0,
+                                NULL);
+  views.view2 = get_view (FALSE);
+
+  g_signal_connect (views.view1, "keynav-failed",
+                    G_CALLBACK (keynav_failed), &views);
+  g_signal_connect (views.view2, "keynav-failed",
+                    G_CALLBACK (keynav_failed), &views);
+  g_signal_connect (views.view1, "focus-in-event",
+                    G_CALLBACK (focus_in), NULL);
+  g_signal_connect (views.view1, "focus-out-event",
+                    G_CALLBACK (focus_out), NULL);
+  g_signal_connect (views.view2, "focus-in-event",
+                    G_CALLBACK (focus_in), NULL);
+  g_signal_connect (views.view2, "focus-out-event",
+                    G_CALLBACK (focus_out), NULL);
+  g_signal_connect (views.header1, "style-set",
+                    G_CALLBACK (header_style_set), NULL);
+  g_signal_connect (views.header2, "style-set",
+                    G_CALLBACK (header_style_set), NULL);
+  g_signal_connect (window, "style-set",
+                    G_CALLBACK (header_style_set), NULL);
+
+  gtk_container_add (GTK_CONTAINER (vbox), views.header1);
+  gtk_container_add (GTK_CONTAINER (vbox), views.view1);
+  gtk_container_add (GTK_CONTAINER (vbox), views.header2);
+  gtk_container_add (GTK_CONTAINER (vbox), views.view2);
+
+  gtk_widget_show_all (window);
+
+  gtk_main ();
+
+  return 0;
+}
+

@@ -111,7 +111,10 @@ enum
   TOKEN_EAST,
   TOKEN_SOUTH_WEST,
   TOKEN_SOUTH,
-  TOKEN_SOUTH_EAST
+  TOKEN_SOUTH_EAST,
+  TOKEN_DIRECTION,
+  TOKEN_LTR,
+  TOKEN_RTL
 };
 
 typedef enum
@@ -135,7 +138,8 @@ typedef enum {
   THEME_MATCH_SHADOW          = 1 << 3,
   THEME_MATCH_ARROW_DIRECTION = 1 << 4,
   THEME_MATCH_EXPANDER_STYLE  = 1 << 5,
-  THEME_MATCH_WINDOW_EDGE     = 1 << 6
+  THEME_MATCH_WINDOW_EDGE     = 1 << 6,
+  THEME_MATCH_DIRECTION       = 1 << 7
 } ThemeMatchFlags;
 
 typedef enum {
@@ -170,6 +174,7 @@ struct _ThemeMatchData
   GtkArrowType     arrow_direction;
   GtkExpanderStyle expander_style;
   GdkWindowEdge    window_edge;
+  GtkTextDirection direction;
 };
 
 struct _ThemeImage
@@ -190,6 +195,7 @@ struct _ThemeImage
 
 G_GNUC_INTERNAL ThemePixbuf *theme_pixbuf_new          (void);
 G_GNUC_INTERNAL void         theme_pixbuf_destroy      (ThemePixbuf  *theme_pb);
+G_GNUC_INTERNAL void         theme_clear_pixbuf        (ThemePixbuf **theme_pb);
 G_GNUC_INTERNAL void         theme_pixbuf_set_filename (ThemePixbuf  *theme_pb,
 					const char   *filename);
 G_GNUC_INTERNAL GdkPixbuf *  theme_pixbuf_get_pixbuf   (ThemePixbuf  *theme_pb);

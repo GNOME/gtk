@@ -45,7 +45,7 @@ bilinear_gradient (GdkPixbuf    *src,
 
   if (src_x == 0 || src_y == 0)
     {
-      g_warning ("invalid source position for bilinear gradient\n");
+      g_warning ("invalid source position for bilinear gradient");
       return NULL;
     }
 
@@ -56,6 +56,13 @@ bilinear_gradient (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
@@ -104,12 +111,19 @@ horizontal_gradient (GdkPixbuf    *src,
 
   if (src_x == 0)
     {
-      g_warning ("invalid source position for horizontal gradient\n");
+      g_warning ("invalid source position for horizontal gradient");
       return NULL;
     }
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
@@ -159,7 +173,7 @@ vertical_gradient (GdkPixbuf    *src,
 
   if (src_y == 0)
     {
-      g_warning ("invalid source position for vertical gradient\n");
+      g_warning ("invalid source position for vertical gradient");
       return NULL;
     }
 
@@ -168,6 +182,13 @@ vertical_gradient (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
@@ -209,6 +230,13 @@ replicate_single (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
   
@@ -247,6 +275,13 @@ replicate_rows (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
@@ -273,6 +308,13 @@ replicate_cols (GdkPixbuf    *src,
 
   result = gdk_pixbuf_new (GDK_COLORSPACE_RGB, n_channels == 4, 8,
 			   width, height);
+
+  if (result == NULL)
+    {
+      g_warning ("failed to create a %dx%d pixbuf", width, height);
+      return NULL;
+    }
+
   dest_rowstride = gdk_pixbuf_get_rowstride (result);
   dest_pixels = gdk_pixbuf_get_pixels (result);
 
@@ -435,21 +477,30 @@ pixbuf_render (GdkPixbuf    *src,
 
   if (tmp_pixbuf)
     {
+      cairo_t *cr;
+      
       if (mask)
 	{
-	  gdk_pixbuf_render_threshold_alpha (tmp_pixbuf, mask,
-					     x_offset, y_offset,
-					     rect.x, rect.y,
-					     rect.width, rect.height,
-					     128);
+          cr = gdk_cairo_create (mask);
+
+          gdk_cairo_set_source_pixbuf (cr, tmp_pixbuf,
+                                       -x_offset + rect.x, 
+                                       -y_offset + rect.y);
+          gdk_cairo_rectangle (cr, &rect);
+          cairo_fill (cr);
+
+          cairo_destroy (cr);
 	}
-      
-      gdk_draw_pixbuf (window, NULL, tmp_pixbuf,
-		       x_offset, y_offset,
-		       rect.x, rect.y,
-		       rect.width, rect.height,
-		       GDK_RGB_DITHER_NORMAL,
-		       0, 0);
+
+      cr = gdk_cairo_create (window);
+      gdk_cairo_set_source_pixbuf (cr, 
+                                   tmp_pixbuf,
+                                   -x_offset + rect.x, 
+                                   -y_offset + rect.y);
+      gdk_cairo_rectangle (cr, &rect);
+      cairo_fill (cr);
+
+      cairo_destroy (cr);
       g_object_unref (tmp_pixbuf);
     }
 }
@@ -473,8 +524,25 @@ theme_pixbuf_new (void)
 void
 theme_pixbuf_destroy (ThemePixbuf *theme_pb)
 {
-  theme_pixbuf_set_filename (theme_pb, NULL);
-  g_free (theme_pb);
+  if (G_LIKELY (theme_pb))
+    {
+      theme_pixbuf_set_filename (theme_pb, NULL);
+      g_free (theme_pb);
+    }
+}
+
+void
+theme_clear_pixbuf (ThemePixbuf **theme_pb)
+{
+#if GLIB_CHECK_VERSION (2, 34, 0)
+  g_clear_pointer (theme_pb, theme_pixbuf_destroy);
+#else
+  if (*theme_pb)
+    {
+      theme_pixbuf_destroy (*theme_pb);
+      *theme_pb = NULL;
+    }
+#endif
 }
 
 void         
@@ -802,35 +870,19 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 	}
       else
 	{
-	  GdkPixmap *tmp_pixmap;
-	  GdkGC *tmp_gc;
-	  GdkGCValues gc_values;
+          cairo_t *cr = gdk_cairo_create (window);
 
-	  tmp_pixmap = gdk_pixmap_new (window,
-				       pixbuf_width,
-				       pixbuf_height,
-				       -1);
-	  tmp_gc = gdk_gc_new (tmp_pixmap);
-	  gdk_draw_pixbuf (tmp_pixmap, tmp_gc, pixbuf,
-			   0, 0, 
-			   0, 0,
-			   pixbuf_width, pixbuf_height,
-			   GDK_RGB_DITHER_NORMAL,
-			   0, 0);
-	  g_object_unref (tmp_gc);
+          gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+          cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
 
-	  gc_values.fill = GDK_TILED;
-	  gc_values.tile = tmp_pixmap;
-	  tmp_gc = gdk_gc_new_with_values (window,
-					   &gc_values, GDK_GC_FILL | GDK_GC_TILE);
 	  if (clip_rect)
-	    gdk_draw_rectangle (window, tmp_gc, TRUE,
-				clip_rect->x, clip_rect->y, clip_rect->width, clip_rect->height);
+	    gdk_cairo_rectangle (cr, clip_rect);
 	  else
-	    gdk_draw_rectangle (window, tmp_gc, TRUE, x, y, width, height);
+	    cairo_rectangle (cr, x, y, width, height);
 	  
-	  g_object_unref (tmp_gc);
-	  g_object_unref (tmp_pixmap);
+          cairo_fill (cr);
+
+          cairo_destroy (cr);
 	}
     }
 }

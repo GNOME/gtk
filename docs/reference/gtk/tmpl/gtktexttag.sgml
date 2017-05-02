@@ -22,8 +22,8 @@ See <application>gtk-demo</application> for numerous examples.
 </para>
 
 <para>
-The "invisible" property was not implemented for GTK+ 2.0; it's
-planned to be implemented in future releases.
+The "invisible" property was not implemented for GTK+ 2.0.
+It is working (with minor issues) since 2.8.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -32,6 +32,9 @@ planned to be implemented in future releases.
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkTextTag ##### -->
@@ -477,6 +480,7 @@ modified directly.
 
 </para>
 
+@void: 
 @Returns: 
 
 

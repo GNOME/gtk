@@ -288,7 +288,7 @@ gtk_cell_view_set_property (GObject      *object,
 static void
 gtk_cell_view_init (GtkCellView *cellview)
 {
-  GTK_WIDGET_SET_FLAGS (cellview, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
 
   cellview->priv = GTK_CELL_VIEW_GET_PRIVATE (cellview);
 }
@@ -381,32 +381,15 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
   else if (extra_space > 0 && expand_cell_count > 0)
     extra_space /= expand_cell_count;
 
-  /* iterate list for PACK_START cells */
   for (i = cellview->priv->cell_list; i; i = i->next)
     {
       GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
 
-      if (info->pack == GTK_PACK_END)
-        continue;
-
       if (!info->cell->visible)
         continue;
 
-      info->real_width = info->requested_width + (info->expand?extra_space:0);
-    }
-
-  /* iterate list for PACK_END cells */
-  for (i = cellview->priv->cell_list; i; i = i->next)
-    {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
-
-      if (info->pack == GTK_PACK_START)
-        continue;
-
-      if (!info->cell->visible)
-        continue;
-
-      info->real_width = info->requested_width + (info->expand?extra_space:0);
+      info->real_width = info->requested_width +
+        (info->expand ? extra_space : 0);
     }
 }
 
@@ -422,7 +405,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
 
   cellview = GTK_CELL_VIEW (widget);
 
-  if (! GTK_WIDGET_DRAWABLE (widget))
+  if (!gtk_widget_is_drawable (widget))
     return FALSE;
 
   /* "blank" background */
@@ -453,8 +436,10 @@ gtk_cell_view_expose (GtkWidget      *widget,
   area.x = widget->allocation.x + (rtl ? widget->allocation.width : 0); 
   area.y = widget->allocation.y;
 
-  if (GTK_WIDGET_STATE (widget) == GTK_STATE_PRELIGHT)
+  if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
     state = GTK_CELL_RENDERER_PRELIT;
+  else if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE)
+    state = GTK_CELL_RENDERER_INSENSITIVE;
   else
     state = 0;
       
@@ -595,6 +580,8 @@ gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
   info->pack = GTK_PACK_START;
 
   cellview->priv->cell_list = g_list_append (cellview->priv->cell_list, info);
+
+  gtk_widget_queue_resize (GTK_WIDGET (cellview));
 }
 
 static void
@@ -615,6 +602,8 @@ gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
   info->pack = GTK_PACK_END;
 
   cellview->priv->cell_list = g_list_append (cellview->priv->cell_list, info);
+
+  gtk_widget_queue_resize (GTK_WIDGET (cellview));
 }
 
 static void
@@ -650,6 +639,8 @@ gtk_cell_view_cell_layout_clear (GtkCellLayout *layout)
       cellview->priv->cell_list = g_list_delete_link (cellview->priv->cell_list, 
 						      cellview->priv->cell_list);
     }
+
+  gtk_widget_queue_resize (GTK_WIDGET (cellview));
 }
 
 static void
@@ -783,7 +774,7 @@ gtk_cell_view_new_with_text (const gchar *text)
  * @markup: the text to display in the cell view
  *
  * Creates a new #GtkCellView widget, adds a #GtkCellRendererText 
- * to it, and makes its show @markup. The text can text can be
+ * to it, and makes it show @markup. The text can be
  * marked up with the <link linkend="PangoMarkupFormat">Pango text 
  * markup language</link>.
  *
@@ -866,16 +857,15 @@ gtk_cell_view_set_value (GtkCellView     *cell_view,
 
   /* force resize and redraw */
   gtk_widget_queue_resize (GTK_WIDGET (cell_view));
-  gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
 /**
  * gtk_cell_view_set_model:
  * @cell_view: a #GtkCellView
- * @model: a #GtkTreeModel
+ * @model: (allow-none): a #GtkTreeModel
  *
  * Sets the model for @cell_view.  If @cell_view already has a model
- * set, it will remove it before setting the new model.  If @model is 
+ * set, it will remove it before setting the new model.  If @model is
  * %NULL, then it will unset the old model.
  *
  * Since: 2.6
@@ -901,13 +891,34 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
 
   if (cell_view->priv->model)
     g_object_ref (cell_view->priv->model);
+
+  gtk_widget_queue_resize (GTK_WIDGET (cell_view));
+}
+
+/**
+ * gtk_cell_view_get_model:
+ * @cell_view: a #GtkCellView
+ *
+ * Returns the model for @cell_view. If no model is used %NULL is
+ * returned.
+ *
+ * Returns: (transfer none): a #GtkTreeModel used or %NULL
+ *
+ * Since: 2.16
+ **/
+GtkTreeModel *
+gtk_cell_view_get_model (GtkCellView *cell_view)
+{
+  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), NULL);
+
+  return cell_view->priv->model;
 }
 
 /**
  * gtk_cell_view_set_displayed_row:
  * @cell_view: a #GtkCellView
- * @path: a #GtkTreePath or %NULL to unset.
- * 
+ * @path: (allow-none): a #GtkTreePath or %NULL to unset.
+ *
  * Sets the row of the model that is currently displayed
  * by the #GtkCellView. If the path is unset, then the
  * contents of the cellview "stick" at their last value;
@@ -937,7 +948,6 @@ gtk_cell_view_set_displayed_row (GtkCellView *cell_view,
 
   /* force resize and redraw */
   gtk_widget_queue_resize (GTK_WIDGET (cell_view));
-  gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
 /**
@@ -967,7 +977,7 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
  * gtk_cell_view_get_size_of_row:
  * @cell_view: a #GtkCellView
  * @path: a #GtkTreePath 
- * @requisition: return location for the size 
+ * @requisition: (out): return location for the size 
  *
  * Sets @requisition to the size needed by @cell_view to display 
  * the model row pointed to by @path.
@@ -1040,21 +1050,10 @@ gtk_cell_view_set_background_color (GtkCellView    *cell_view,
   gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
-/**
- * gtk_cell_view_get_cell_renderers:
- * @cell_view: a #GtkCellView
- * 
- * Returns the cell renderers which have been added to @cell_view.
- *
- * Return value: a list of cell renderers. The list, but not the
- *   renderers has been newly allocated and should be freed with
- *   g_list_free() when no longer needed.
- * 
- * Since: 2.6
- */
-GList *
-gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
+static GList *
+gtk_cell_view_cell_layout_get_cells (GtkCellLayout *layout)
 {
+  GtkCellView *cell_view = GTK_CELL_VIEW (layout);
   GList *retval = NULL, *list;
 
   g_return_val_if_fail (cell_view != NULL, NULL);
@@ -1071,12 +1070,25 @@ gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
   return g_list_reverse (retval);
 }
 
-static GList *
-gtk_cell_view_cell_layout_get_cells (GtkCellLayout *layout)
+/**
+ * gtk_cell_view_get_cell_renderers:
+ * @cell_view: a #GtkCellView
+ *
+ * Returns the cell renderers which have been added to @cell_view.
+ *
+ * Return value: a list of cell renderers. The list, but not the
+ *   renderers has been newly allocated and should be freed with
+ *   g_list_free() when no longer needed.
+ *
+ * Since: 2.6
+ *
+ * Deprecated: 2.18: use gtk_cell_layout_get_cells() instead.
+ **/
+GList *
+gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
 {
-  return gtk_cell_view_get_cell_renderers (GTK_CELL_VIEW (layout));
+  return gtk_cell_view_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_view));
 }
-
 
 static gboolean
 gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,

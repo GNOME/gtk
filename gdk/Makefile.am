@@ -1,8 +1,18 @@
 ## Makefile.am for gtk+/gdk
 include $(top_srcdir)/Makefile.decl
+-include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_GIRS =
+INTROSPECTION_SCANNER_ARGS = \
+   --warn-all \
+   --add-include-path=../gdk
+INTROSPECTION_COMPILER_ARGS = \
+   --includedir=$(srcdir) \
+   --includedir=.
 
 SUBDIRS = $(gdktarget) . tests
 DIST_SUBDIRS = win32 x11 quartz directfb tests
+
+CLEANFILES =
 
 EXTRA_DIST +=			\
 	keynames.txt		\
@@ -13,6 +23,7 @@ EXTRA_DIST +=			\
 	gdk.def 		\
 	gdkmarshalers.list	\
 	gdkmedialib.h		\
+	gdkwindowimpl.h		\
 	makeenums.pl		\
 	makefile.msc		\
 	gdk.symbols		\
@@ -26,8 +37,8 @@ INCLUDES =                              \
 	-DG_LOG_DOMAIN=\"Gdk\"		\
 	-DGDK_COMPILATION		\
 	-I$(top_srcdir)			\
+	-I$(top_builddir)		\
 	-I$(top_builddir)/gdk		\
-	-I$(top_srcdir)/gdk-pixbuf 	\
 	$(GTK_DEBUG_FLAGS) 		\
 	$(GDK_DEP_CFLAGS)
 
@@ -41,6 +52,7 @@ endif
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
 LDADD = \
+	$(GTK_LINK_FLAGS)						\
 	-version-info $(LT_VERSION_INFO)		 		\
 	-export-dynamic 						\
 	-rpath $(libdir) 						\
@@ -78,6 +90,7 @@ gdk_public_h_sources =				\
 	gdkinput.h				\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
+	gdkkeysyms-compat.h			\
 	gdkpango.h				\
 	gdkpixbuf.h				\
 	gdkpixmap.h				\
@@ -97,9 +110,13 @@ gdk_built_public_sources =			\
 	gdkenumtypes.h
 
 gdk_built_private_headers =			\
-	gdkprivate.h				\
-	gdkwindowimpl.h				\
 	gdkalias.h
+
+gdk_private_headers =   \
+	gdkinternals.h \
+	gdkintl.h \
+    gdkpoly-generic.h	\
+	gdkregion-generic.h
 
 gdk_c_sources =                 \
 	$(medialib_sources)     \
@@ -117,19 +134,16 @@ gdk_c_sources =                 \
 	gdkgc.c			\
 	gdkglobals.c		\
 	gdkimage.c		\
-	gdkinternals.h  	\
-	gdkintl.h		\
 	gdkkeys.c		\
 	gdkkeyuni.c		\
+	gdkoffscreenwindow.c	\
 	gdkpango.c		\
 	gdkpixbuf-drawable.c	\
 	gdkpixbuf-render.c	\
 	gdkpixmap.c		\
-	gdkpoly-generic.h	\
 	gdkpolyreg-generic.c	\
 	gdkrectangle.c		\
 	gdkregion-generic.c	\
-	gdkregion-generic.h	\
 	gdkrgb.c		\
 	gdkscreen.c		\
 	gdkselection.c		\
@@ -152,35 +166,110 @@ gdk_built_sources =				\
 gdkincludedir = $(includedir)/gtk-2.0/gdk
 gdkinclude_HEADERS = $(gdk_public_h_sources) $(gdk_built_public_sources)
 
-# gdkmarshalers.c is not here because it is currently an empty file
 common_sources =                \
-	$(gdk_c_sources)	\
+	$(gdk_private_headers)      \
+    $(gdk_c_sources)	\
 	gdkenumtypes.c		\
+	gdkmarshalers.c		\
 	gdkmarshalers.h
 
-libgdk_directfb_2_0_la_SOURCES = $(common_sources) 
-libgdk_directfb_2_0_la_LIBADD = directfb/libgdk-directfb.la $(GDK_DEP_LIBS) \
-  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_directfb_2_0_la_SOURCES = $(common_sources)
+libgdk_directfb_2_0_la_LIBADD = directfb/libgdk-directfb.la $(GDK_DEP_LIBS)
 libgdk_directfb_2_0_la_LDFLAGS = $(LDADD)
 
 libgdk_x11_2_0_la_SOURCES = $(common_sources)
-libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS) \
-  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
 libgdk_x11_2_0_la_LDFLAGS = $(LDADD)
 
 libgdk_quartz_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
-libgdk_quartz_2_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS) \
-  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_quartz_2_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS)
 libgdk_quartz_2_0_la_LDFLAGS = $(LDADD)
 
 libgdk_win32_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
-libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS) \
-  $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
+libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS)
 libgdk_win32_2_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
 libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def $(LDADD)
 
+if HAVE_INTROSPECTION
+
+base_introspection_files = 		\
+	$(filter-out gdkkeysyms-compat.h, $(gdk_public_h_sources))	\
+	$(gdk_c_sources)	\
+	gdkkeynames.c		\
+        gdkenumtypes.c		\
+        gdkenumtypes.h
+
+introspection_files = $(base_introspection_files)
+
+Gdk-2.0.gir: $(gdktargetlib) Makefile
+Gdk_2_0_gir_SCANNERFLAGS = --c-include="gdk/gdk.h"
+Gdk_2_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
+Gdk_2_0_gir_LIBS = $(gdktargetlib)
+Gdk_2_0_gir_FILES = $(introspection_files)
+Gdk_2_0_gir_EXPORT_PACKAGES = gdk-2.0
+Gdk_2_0_gir_CFLAGS = $(INCLUDES)
+INTROSPECTION_GIRS += Gdk-2.0.gir
+
+if USE_X11
+x11_introspection_files = 		\
+	x11/checksettings.c		\
+	x11/gdkapplaunchcontext-x11.c	\
+	x11/gdkasync.c			\
+	x11/gdkcolor-x11.c		\
+	x11/gdkcursor-x11.c		\
+	x11/gdkdisplay-x11.c		\
+	x11/gdkdnd-x11.c		\
+	x11/gdkdrawable-x11.c		\
+	x11/gdkgc-x11.c			\
+	x11/gdkgeometry-x11.c		\
+	x11/gdkglobals-x11.c		\
+	x11/gdkimage-x11.c		\
+	x11/gdkim-x11.c			\
+	x11/gdkinput.c			\
+	x11/gdkkeys-x11.c		\
+	x11/gdkmain-x11.c		\
+	x11/gdkpixmap-x11.c		\
+	x11/gdkproperty-x11.c		\
+	x11/gdkscreen-x11.c		\
+	x11/gdkselection-x11.c		\
+	x11/gdksettings.c		\
+	x11/gdkspawn-x11.c		\
+	x11/gdktestutils-x11.c		\
+	x11/gdkvisual-x11.c		\
+	x11/gdkwindow-x11.c		\
+	x11/gdkxftdefaults.c		\
+	x11/gdkxid.c			\
+	x11/xsettings-client.c		\
+	x11/xsettings-common.c		\
+        x11/gdkx.h
+
+GdkX11-2.0.gir: $(gdktargetlib) Gdk-2.0.gir Makefile
+GdkX11_2_0_gir_SCANNERFLAGS = --identifier-prefix=Gdk --include-uninstalled=Gdk-2.0.gir
+GdkX11_2_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
+
+GdkX11_2_0_gir_LIBS = $(gdktargetlib)
+GdkX11_2_0_gir_FILES = $(x11_introspection_files)
+GdkX11_2_0_gir_EXPORT_PACKAGES = gdk-x11-2.0
+GdkX11_2_0_gir_CFLAGS = $(INCLUDES) -L$(top_builddir)/gdk
+INTROSPECTION_GIRS += GdkX11-2.0.gir
+
+introspection_files += $(filter-out x11/gdkx.h, $(x11_introspection_files))
+
+endif # USE_X11
+
+girdir = $(datadir)/gir-1.0
+gir_DATA = $(INTROSPECTION_GIRS)
+
+typelibsdir = $(libdir)/girepository-1.0
+typelibs_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+CLEANFILES += $(gir_DATA) $(typelibs_DATA)
+
+endif # HAVE_INTROSPECTION
+
 if OS_WIN32
 install-def-file: gdk.def
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
 	$(INSTALL) $(srcdir)/gdk.def $(DESTDIR)$(libdir)/gdk-win32-2.0.def
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gdk-win32-2.0.def
@@ -196,6 +285,7 @@ gdk-win32-$(GTK_API_VERSION).lib: libgdk-win32-$(GTK_API_VERSION).la gdk.def
 	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
 
 install-ms-lib:
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
 	$(INSTALL) gdk-win32-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
 
 uninstall-ms-lib:
@@ -269,11 +359,11 @@ gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.c.template
 # Marshaller generation
 #
 gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
-	$(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
+	$(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
 gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
-	(echo "#include \"gdkalias.h\""; $(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
+	(echo "#include \"gdkalias.h\""; $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 
@@ -283,6 +373,49 @@ gdkconfig.h: stamp-gc-h
 stamp-gc-h: $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status gdk/gdkconfig.h
 	echo timestamp > stamp-gc-h
+
+# ---------------- MSVC Projects ----------------
+MSVCPROJS = gdk
+
+gdk_FILES = $(libgdk_win32_2_0_la_SOURCES)
+gdk_EXCLUDES = gdkdummy
+
+gdk_HEADERS_DIR = $(gdkincludedir)
+gdk_HEADERS_INST = $(gdkinclude_HEADERS)
+gdk_HEADERS_EXCLUDES = gdkdummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+if HAVE_INTROSPECTION
+# Introspection Items for MSVC
+MSVC_INTROSPECT_GIRS = Gdk-2.0.gir
+
+BASE_MSVC_GIR_CFLAGS =			\
+	-DG_LOG_DOMAIN=\"Gdk\"		\
+	-DGDK_COMPILATION		\
+	-I../.. -I../../gdk -I.../../gdk/win32
+
+INTROSPECTION_INTERMEDIATE_ITEMS = \
+	$(top_builddir)/build/win32/Gdk-2.0.gir.msvc.introspect	\
+	$(top_builddir)/build/win32/Gdk_2_0_gir_list
+
+Gdk_2_0_gir_MSVC_FILES = $(filter-out gdkmedialib.c, $(base_introspection_files))
+Gdk_2_0_gir_MSVC_EXPORT_PACKAGES = $(Gdk_2_0_gir_EXPORT_PACKAGES)
+Gdk_2_0_gir_MSVC_INCLUDE_GIRS = $(Gdk_2_0_gir_INCLUDES)
+Gdk_2_0_gir_MSVC_LIBS = gdk-win32-2.0
+Gdk_2_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
+Gdk_2_0_gir_MSVC_SCANNERFLAGS = $(Gdk_2_0_gir_SCANNERFLAGS)
+
+include $(top_srcdir)/build/Makefile.msvc-introspection
+
+else
+INTROSPECTION_INTERMEDIATE_ITEMS =
+endif
+
+dist-hook:	\
+	$(top_builddir)/build/win32/vs9/gdk.vcproj	\
+	$(top_builddir)/build/win32/vs9/gdk.headers	\
+	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h
 
@@ -304,3 +437,5 @@ files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
 	  echo $$p; \
 	done
+
+-include $(top_srcdir)/git.mk

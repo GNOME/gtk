@@ -6,8 +6,8 @@ Add tips to your widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-<link linkend="GtkToolTips"><type>GtkTooltips</type></link> has been deprecated in GTK+ 2.12, in favor of the new
-<link linkend="GtkToolTip"><type>GtkTooltip</type></link> API.
+#GtkTooltips has been deprecated in GTK+ 2.12, in favor of the new
+#GtkTooltip API.
 </para>
 <para>
 Tooltips are the messages that appear next to a widget when the mouse pointer is held over it for a short amount of time. They are especially helpful for adding more verbose descriptions of things such as buttons in a toolbar.
@@ -90,6 +90,9 @@ Information about the tooltip (if any) associated with an arbitrary widget can b
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTooltips ##### -->
 <para>Holds information about a group of tooltips. Fields should be changed using the functions provided, rather than directly accessing the struct's members.
 </para>
@@ -113,6 +116,7 @@ Information about the tooltip (if any) associated with an arbitrary widget can b
 Creates an empty group of tooltips. This function initialises a #GtkTooltips structure. Without at least one such structure, you can not add tips to your application.
 </para>
 
+@void: 
 @Returns: a new #GtkTooltips group for you to use.
 @Deprecated: 2.12:
 
@@ -146,15 +150,12 @@ Sets the time between the user moving the mouse over a widget and the widget's t
 
 
 <!-- ##### FUNCTION gtk_tooltips_set_tip ##### -->
-<para>
-Adds a tooltip containing the message @tip_text to the specified #GtkWidget. 
-</para>
 
-@tooltips: a #GtkTooltips.
-@widget: the #GtkWidget you wish to associate the tip with.
-@tip_text: a string containing the tip itself.
-@tip_private: a string of any further information that may be useful if the user gets stuck.
-@Deprecated: 2.12:
+
+@tooltips: 
+@widget: 
+@tip_text: 
+@tip_private: 
 
 
 <!-- ##### FUNCTION gtk_tooltips_data_get ##### -->

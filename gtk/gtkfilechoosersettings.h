@@ -29,6 +29,14 @@ G_BEGIN_DECLS
 
 #define GTK_FILE_CHOOSER_SETTINGS_TYPE (_gtk_file_chooser_settings_get_type ())
 
+/* Column numbers for the file list */
+enum {
+  FILE_LIST_COL_NAME,
+  FILE_LIST_COL_SIZE,
+  FILE_LIST_COL_MTIME,
+  FILE_LIST_COL_NUM_COLUMNS
+};
+
 typedef struct _GtkFileChooserSettings GtkFileChooserSettings;
 typedef struct _GtkFileChooserSettingsClass GtkFileChooserSettingsClass;
 
@@ -38,11 +46,18 @@ struct _GtkFileChooserSettings
 
   LocationMode location_mode;
 
-  guint settings_read : 1;
+  GtkSortType sort_order;
+  gint sort_column;
+  StartupMode startup_mode;
 
-  guint show_hidden : 1;
+  int geometry_x;
+  int geometry_y;
+  int geometry_width;
+  int geometry_height;
 
-  guint expand_folders : 1;
+  guint settings_read    : 1;
+  guint show_hidden      : 1;
+  guint show_size_column : 1;
 };
 
 struct _GtkFileChooserSettingsClass
@@ -62,9 +77,32 @@ gboolean _gtk_file_chooser_settings_get_show_hidden (GtkFileChooserSettings *set
 void     _gtk_file_chooser_settings_set_show_hidden (GtkFileChooserSettings *settings,
 						     gboolean                show_hidden);
 
-gboolean _gtk_file_chooser_settings_get_expand_folders (GtkFileChooserSettings *settings);
-void     _gtk_file_chooser_settings_set_expand_folders (GtkFileChooserSettings *settings,
-							gboolean                expand_folders);
+gboolean _gtk_file_chooser_settings_get_show_size_column (GtkFileChooserSettings *settings);
+void     _gtk_file_chooser_settings_set_show_size_column (GtkFileChooserSettings *settings,
+                                                          gboolean                show_column);
+
+gint _gtk_file_chooser_settings_get_sort_column (GtkFileChooserSettings *settings);
+void _gtk_file_chooser_settings_set_sort_column (GtkFileChooserSettings *settings,
+						 gint sort_column);
+
+GtkSortType _gtk_file_chooser_settings_get_sort_order (GtkFileChooserSettings *settings);
+void        _gtk_file_chooser_settings_set_sort_order (GtkFileChooserSettings *settings,
+						       GtkSortType sort_order);
+
+void _gtk_file_chooser_settings_get_geometry (GtkFileChooserSettings *settings,
+					      int                    *out_x,
+					      int                    *out_y,
+					      int                    *out_width,
+					      int                    *out_heigth);
+void _gtk_file_chooser_settings_set_geometry (GtkFileChooserSettings *settings,
+					      int                     x,
+					      int                     y,
+					      int                     width,
+					      int                     heigth);
+
+void _gtk_file_chooser_settings_set_startup_mode (GtkFileChooserSettings *settings,
+						  StartupMode             startup_mode);
+StartupMode _gtk_file_chooser_settings_get_startup_mode (GtkFileChooserSettings *settings);
 
 gboolean _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 					  GError                **error);

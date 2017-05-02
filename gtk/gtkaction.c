@@ -28,6 +28,45 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkaction
+ * @Short_description: An action which can be triggered by a menu or toolbar item
+ * @Title: GtkAction
+ * @See_also: #GtkActionGroup, #GtkUIManager
+ *
+ * Actions represent operations that the user can be perform, along with
+ * some information how it should be presented in the interface. Each action
+ * provides methods to create icons, menu items and toolbar items
+ * representing itself.
+ *
+ * As well as the callback that is called when the action gets activated,
+ * the following also gets associated with the action:
+ * <itemizedlist>
+ *   <listitem><para>a name (not translated, for path lookup)</para></listitem>
+ *   <listitem><para>a label (translated, for display)</para></listitem>
+ *   <listitem><para>an accelerator</para></listitem>
+ *   <listitem><para>whether label indicates a stock id</para></listitem>
+ *   <listitem><para>a tooltip (optional, translated)</para></listitem>
+ *   <listitem><para>a toolbar label (optional, shorter than label)</para></listitem>
+ * </itemizedlist>
+ * The action will also have some state information:
+ * <itemizedlist>
+ *   <listitem><para>visible (shown/hidden)</para></listitem>
+ *   <listitem><para>sensitive (enabled/disabled)</para></listitem>
+ * </itemizedlist>
+ * Apart from regular actions, there are <link linkend="GtkToggleAction">toggle
+ * actions</link>, which can be toggled between two states and <link
+ * linkend="GtkRadioAction">radio actions</link>, of which only one in a group
+ * can be in the "active" state. Other actions can be implemented as #GtkAction
+ * subclasses.
+ *
+ * Each action can have one or more proxy menu item, toolbar button or
+ * other proxy widgets.  Proxies mirror the state of the action (text
+ * label, tooltip, icon, visible, sensitive, etc), and should change when
+ * the action's state changes. When the proxy is activated, it should
+ * activate its action.
+ */
+
 #include "config.h"
 
 #include "gtkaction.h"
@@ -47,6 +86,7 @@
 #include "gtktoolbar.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
+#include "gtkactivatable.h"
 #include "gtkalias.h"
 
 
@@ -60,6 +100,7 @@ struct _GtkActionPrivate
   gchar *tooltip;
   gchar *stock_id; /* stock icon */
   gchar *icon_name; /* themed icon */
+  GIcon *gicon;
 
   guint sensitive          : 1;
   guint visible            : 1;
@@ -70,6 +111,9 @@ struct _GtkActionPrivate
   guint is_important       : 1;
   guint hide_if_empty      : 1;
   guint visible_overflown  : 1;
+  guint always_show_image  : 1;
+  guint recursion_guard    : 1;
+  guint activate_blocked   : 1;
 
   /* accelerator */
   guint          accel_count;
@@ -98,6 +142,7 @@ enum
   PROP_TOOLTIP,
   PROP_STOCK_ID,
   PROP_ICON_NAME,
+  PROP_GICON,
   PROP_VISIBLE_HORIZONTAL,
   PROP_VISIBLE_VERTICAL,
   PROP_VISIBLE_OVERFLOWN,
@@ -105,7 +150,8 @@ enum
   PROP_HIDE_IF_EMPTY,
   PROP_SENSITIVE,
   PROP_VISIBLE,
-  PROP_ACTION_GROUP
+  PROP_ACTION_GROUP,
+  PROP_ALWAYS_SHOW_IMAGE
 };
 
 /* GtkBuildable */
@@ -118,10 +164,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkAction, gtk_action, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_action_buildable_init))
 
-
-static GQuark      quark_gtk_action_proxy  = 0;
-static const gchar gtk_action_proxy_key[] = "gtk-action";
-
 static void gtk_action_finalize     (GObject *object);
 static void gtk_action_set_property (GObject         *object,
 				     guint            prop_id,
@@ -133,24 +175,6 @@ static void gtk_action_get_property (GObject         *object,
 				     GParamSpec      *pspec);
 static void gtk_action_set_action_group (GtkAction	*action,
 					 GtkActionGroup *action_group);
-static void gtk_action_set_is_important (GtkAction	*action,
-					 gboolean        is_important);
-static void gtk_action_set_label        (GtkAction	*action,
-					 const gchar    *label);
-static void gtk_action_set_short_label  (GtkAction	*action,
-					 const gchar    *label);
-static void gtk_action_set_visible_horizontal (GtkAction *action,
-					       gboolean   visible_horizontal);
-static void gtk_action_set_visible_vertical   (GtkAction *action,
-					       gboolean   visible_vertical);
-static void gtk_action_set_tooltip      (GtkAction	*action,
-					 const gchar    *tooltip);
-static void gtk_action_set_stock_id     (GtkAction	*action,
-					 const gchar    *stock_id);
-static void gtk_action_set_icon_name     (GtkAction	*action,
-					 const gchar    *icon_name);
-static void gtk_action_sync_tooltip     (GtkAction      *action,
-					 GtkWidget      *proxy);
 
 static GtkWidget *create_menu_item    (GtkAction *action);
 static GtkWidget *create_tool_item    (GtkAction *action);
@@ -158,7 +182,7 @@ static void       connect_proxy       (GtkAction *action,
 				       GtkWidget *proxy);
 static void       disconnect_proxy    (GtkAction *action,
 				       GtkWidget *proxy);
-
+ 
 static void       closure_accel_activate (GClosure     *closure,
 					  GValue       *return_value,
 					  guint         n_param_values,
@@ -174,8 +198,6 @@ gtk_action_class_init (GtkActionClass *klass)
 {
   GObjectClass *gobject_class;
 
-  quark_gtk_action_proxy = g_quark_from_static_string (gtk_action_proxy_key);
-
   gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->finalize     = gtk_action_finalize;
@@ -184,14 +206,13 @@ gtk_action_class_init (GtkActionClass *klass)
 
   klass->activate = NULL;
 
-  klass->create_menu_item = create_menu_item;
-  klass->create_tool_item = create_tool_item;
-  klass->create_menu = NULL;
-  klass->connect_proxy = connect_proxy;
-  klass->disconnect_proxy = disconnect_proxy;
-
-  klass->menu_item_type = GTK_TYPE_IMAGE_MENU_ITEM;
+  klass->create_menu_item  = create_menu_item;
+  klass->create_tool_item  = create_tool_item;
+  klass->create_menu       = NULL;
+  klass->menu_item_type    = GTK_TYPE_IMAGE_MENU_ITEM;
   klass->toolbar_item_type = GTK_TYPE_TOOL_BUTTON;
+  klass->connect_proxy    = connect_proxy;
+  klass->disconnect_proxy = disconnect_proxy;
 
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
@@ -208,6 +229,9 @@ gtk_action_class_init (GtkActionClass *klass)
    * The label used for menu items and buttons that activate
    * this action. If the label is %NULL, GTK+ uses the stock 
    * label specified via the stock-id property.
+   *
+   * This is an appearance property and thus only applies if 
+   * #GtkActivatable:use-action-appearance is %TRUE.
    */
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL,
@@ -217,6 +241,15 @@ gtk_action_class_init (GtkActionClass *klass)
 							   "that activate this action."),
 							NULL,
 							GTK_PARAM_READWRITE));
+
+  /**
+   * GtkAction:short-label:
+   *
+   * A shorter label that may be used on toolbar buttons.
+   *
+   * This is an appearance property and thus only applies if 
+   * #GtkActivatable:use-action-appearance is %TRUE.
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_SHORT_LABEL,
 				   g_param_spec_string ("short-label",
@@ -224,6 +257,8 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("A shorter label that may be used on toolbar buttons."),
 							NULL,
 							GTK_PARAM_READWRITE));
+
+
   g_object_class_install_property (gobject_class,
 				   PROP_TOOLTIP,
 				   g_param_spec_string ("tooltip",
@@ -231,6 +266,15 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("A tooltip for this action."),
 							NULL,
 							GTK_PARAM_READWRITE));
+
+  /**
+   * GtkAction:stock-id:
+   *
+   * The stock icon displayed in widgets representing this action.
+   *
+   * This is an appearance property and thus only applies if 
+   * #GtkActivatable:use-action-appearance is %TRUE.
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_STOCK_ID,
 				   g_param_spec_string ("stock-id",
@@ -240,12 +284,36 @@ gtk_action_class_init (GtkActionClass *klass)
 							NULL,
 							GTK_PARAM_READWRITE));
   /**
+   * GtkAction:gicon:
+   *
+   * The #GIcon displayed in the #GtkAction.
+   *
+   * Note that the stock icon is preferred, if the #GtkAction:stock-id 
+   * property holds the id of an existing stock icon.
+   *
+   * This is an appearance property and thus only applies if 
+   * #GtkActivatable:use-action-appearance is %TRUE.
+   *
+   * Since: 2.16
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_GICON,
+				   g_param_spec_object ("gicon",
+							P_("GIcon"),
+							P_("The GIcon being displayed"),
+							G_TYPE_ICON,
+ 							GTK_PARAM_READWRITE));							
+  /**
    * GtkAction:icon-name:
    *
    * The name of the icon from the icon theme. 
-   * Note that the stock icon is preferred, if
-   * the ::stock-id property holds the id of an
-   * existing stock icon.
+   * 
+   * Note that the stock icon is preferred, if the #GtkAction:stock-id 
+   * property holds the id of an existing stock icon, and the #GIcon is
+   * preferred if the #GtkAction:gicon property is set. 
+   *
+   * This is an appearance property and thus only applies if 
+   * #GtkActivatable:use-action-appearance is %TRUE.
    *
    * Since: 2.10
    */
@@ -256,6 +324,7 @@ gtk_action_class_init (GtkActionClass *klass)
 							P_("The name of the icon from the icon theme"),
 							NULL,
  							GTK_PARAM_READWRITE));
+
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_HORIZONTAL,
 				   g_param_spec_boolean ("visible-horizontal",
@@ -327,6 +396,25 @@ gtk_action_class_init (GtkActionClass *klass)
 							 GTK_PARAM_READWRITE));
 
   /**
+   * GtkAction:always-show-image:
+   *
+   * If %TRUE, the action's menu item proxies will ignore the #GtkSettings:gtk-menu-images 
+   * setting and always show their image, if available.
+   *
+   * Use this property if the menu item would be useless or hard to use
+   * without their image. 
+   *
+   * Since: 2.20
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ALWAYS_SHOW_IMAGE,
+                                   g_param_spec_boolean ("always-show-image",
+                                                         P_("Always show image"),
+                                                         P_("Whether the image will always be shown"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+
+  /**
    * GtkAction::activate:
    * @action: the #GtkAction
    *
@@ -362,6 +450,8 @@ gtk_action_init (GtkAction *action)
   action->private_data->visible_overflown  = TRUE;
   action->private_data->is_important = FALSE;
   action->private_data->hide_if_empty = TRUE;
+  action->private_data->always_show_image = FALSE;
+  action->private_data->activate_blocked = FALSE;
 
   action->private_data->sensitive = TRUE;
   action->private_data->visible = TRUE;
@@ -382,6 +472,7 @@ gtk_action_init (GtkAction *action)
   action->private_data->action_group = NULL;
 
   action->private_data->proxies = NULL;
+  action->private_data->gicon = NULL;  
 }
 
 static void
@@ -411,8 +502,8 @@ gtk_action_buildable_get_name (GtkBuildable *buildable)
 /**
  * gtk_action_new:
  * @name: A unique name for the action
- * @label: the label displayed in menu items and on buttons, or %NULL
- * @tooltip: a tooltip for the action, or %NULL
+ * @label: (allow-none): the label displayed in menu items and on buttons, or %NULL
+ * @tooltip: (allow-none): a tooltip for the action, or %NULL
  * @stock_id: the stock icon to display in widgets representing the
  *   action, or %NULL
  *
@@ -453,6 +544,9 @@ gtk_action_finalize (GObject *object)
   g_free (action->private_data->tooltip);
   g_free (action->private_data->stock_id);
   g_free (action->private_data->icon_name);
+  
+  if (action->private_data->gicon)
+    g_object_unref (action->private_data->gicon);
 
   g_closure_unref (action->private_data->accel_closure);
   if (action->private_data->accel_group)
@@ -488,6 +582,9 @@ gtk_action_set_property (GObject         *object,
     case PROP_STOCK_ID:
       gtk_action_set_stock_id (action, g_value_get_string (value));
       break;
+    case PROP_GICON:
+      gtk_action_set_gicon (action, g_value_get_object (value));
+      break;
     case PROP_ICON_NAME:
       gtk_action_set_icon_name (action, g_value_get_string (value));
       break;
@@ -514,6 +611,9 @@ gtk_action_set_property (GObject         *object,
       break;
     case PROP_ACTION_GROUP:
       gtk_action_set_action_group (action, g_value_get_object (value));
+      break;
+    case PROP_ALWAYS_SHOW_IMAGE:
+      gtk_action_set_always_show_image (action, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -551,6 +651,9 @@ gtk_action_get_property (GObject    *object,
     case PROP_ICON_NAME:
       g_value_set_string (value, action->private_data->icon_name);
       break;
+    case PROP_GICON:
+      g_value_set_object (value, action->private_data->gicon);
+      break;
     case PROP_VISIBLE_HORIZONTAL:
       g_value_set_boolean (value, action->private_data->visible_horizontal);
       break;
@@ -574,6 +677,9 @@ gtk_action_get_property (GObject    *object,
       break;
     case PROP_ACTION_GROUP:
       g_value_set_object (value, action->private_data->action_group);
+      break;
+    case PROP_ALWAYS_SHOW_IMAGE:
+      g_value_set_boolean (value, action->private_data->always_show_image);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -605,15 +711,33 @@ static void
 remove_proxy (GtkAction *action,
 	      GtkWidget *proxy)
 {
-  if (GTK_IS_MENU_ITEM (proxy))
-    gtk_action_disconnect_accelerator (action);
-  
   action->private_data->proxies = g_slist_remove (action->private_data->proxies, proxy);
+}
+
+static void
+connect_proxy (GtkAction *action,
+	       GtkWidget *proxy)
+{
+  action->private_data->proxies = g_slist_prepend (action->private_data->proxies, proxy);
+
+  if (action->private_data->action_group)
+    _gtk_action_group_emit_connect_proxy (action->private_data->action_group, action, proxy);
+
+}
+
+static void
+disconnect_proxy (GtkAction *action,
+		  GtkWidget *proxy)
+{
+  remove_proxy (action, proxy);
+
+  if (action->private_data->action_group)
+    _gtk_action_group_emit_disconnect_proxy (action->private_data->action_group, action, proxy);
 }
 
 /**
  * _gtk_action_sync_menu_visible:
- * @action: a #GtkAction, or %NULL to determine the action from @proxy
+ * @action: (allow-none): a #GtkAction, or %NULL to determine the action from @proxy
  * @proxy: a proxy menu item
  * @empty: whether the submenu attached to @proxy is empty
  * 
@@ -641,7 +765,7 @@ _gtk_action_sync_menu_visible (GtkAction *action,
   g_return_if_fail (action == NULL || GTK_IS_ACTION (action));
 
   if (action == NULL)
-    action = g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy);
+    action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (proxy));
 
   if (action)
     {
@@ -656,238 +780,25 @@ _gtk_action_sync_menu_visible (GtkAction *action,
     gtk_widget_hide (proxy);
 }
 
-gboolean _gtk_menu_is_empty (GtkWidget *menu);
-
-static gboolean
-gtk_action_create_menu_proxy (GtkToolItem *tool_item, 
-			      GtkAction   *action)
-{
-  GtkWidget *menu_item;
-  
-  if (action->private_data->visible_overflown)
-    {
-      menu_item = gtk_action_create_menu_item (action);
-
-      g_object_ref_sink (menu_item);
-      
-      gtk_tool_item_set_proxy_menu_item (tool_item, 
-					 "gtk-action-menu-item", menu_item);
-      g_object_unref (menu_item);
-    }
-  else
-    gtk_tool_item_set_proxy_menu_item (tool_item, 
-				       "gtk-action-menu-item", NULL);
-
-  return TRUE;
-}
-
-static void
-connect_proxy (GtkAction     *action, 
-	       GtkWidget     *proxy)
-{
-  g_object_ref (action);
-  g_object_set_qdata_full (G_OBJECT (proxy), quark_gtk_action_proxy, action,
-			   g_object_unref);
-
-  /* add this widget to the list of proxies */
-  action->private_data->proxies = g_slist_prepend (action->private_data->proxies, proxy);
-  g_object_weak_ref (G_OBJECT (proxy), (GWeakNotify)remove_proxy, action);
-  
-  gtk_widget_set_sensitive (proxy, gtk_action_is_sensitive (action));
-  if (gtk_action_is_visible (action))
-    gtk_widget_show (proxy);
-  else
-    gtk_widget_hide (proxy);
-  gtk_widget_set_no_show_all (proxy, TRUE);
-
-  if (GTK_IS_MENU_ITEM (proxy))
-    {
-      GtkWidget *label;
-      /* menu item specific synchronisers ... */
-      
-      if (action->private_data->accel_quark)
- 	{
-	  gtk_action_connect_accelerator (action);
- 	  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (proxy),
- 					g_quark_to_string (action->private_data->accel_quark));
- 	}
-      
-      label = GTK_BIN (proxy)->child;
-
-      /* make sure label is a label */
-      if (label && !GTK_IS_LABEL (label))
-	{
-	  gtk_container_remove (GTK_CONTAINER (proxy), label);
-	  label = NULL;
-	}
-
-      if (!label)
-	label = g_object_new (GTK_TYPE_ACCEL_LABEL,
-			      "use-underline", TRUE,
-			      "xalign", 0.0,
-			      "visible", TRUE,
-			      "parent", proxy,
-			      NULL);
-      
-      if (GTK_IS_ACCEL_LABEL (label) && action->private_data->accel_quark)
-	g_object_set (label,
-		      "accel-closure", action->private_data->accel_closure,
-		      NULL);
-
-      gtk_label_set_label (GTK_LABEL (label), action->private_data->label);
-
-      if (GTK_IS_IMAGE_MENU_ITEM (proxy))
-	{
-	  GtkWidget *image;
-
-	  image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (proxy));
-	  if (image && !GTK_IS_IMAGE (image))
-	    {
-	      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (proxy), NULL);
-	      image = NULL;
-	    }
-	  if (!image)
-	    {
-	      image = gtk_image_new ();
-	      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (proxy),
-					     image);
-	      gtk_widget_show (image);
-	    }
-	  
-	  if (action->private_data->stock_id &&
-	      gtk_icon_factory_lookup_default (action->private_data->stock_id))
-	    gtk_image_set_from_stock (GTK_IMAGE (image),
-				      action->private_data->stock_id, GTK_ICON_SIZE_MENU);
-	  else if (action->private_data->icon_name)
-	    gtk_image_set_from_icon_name (GTK_IMAGE (image),
-					  action->private_data->icon_name, GTK_ICON_SIZE_MENU);
-	}
-      
-      if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy)) == NULL)
-	g_signal_connect_object (proxy, "activate",
-				 G_CALLBACK (gtk_action_activate), action,
-				 G_CONNECT_SWAPPED);
-
-    }
-  else if (GTK_IS_TOOL_ITEM (proxy))
-    {
-      /* toolbar button specific synchronisers ... */
-      if (GTK_IS_TOOL_BUTTON (proxy))
-	{
-	  g_object_set (proxy,
-		        "visible-horizontal", action->private_data->visible_horizontal,
-		        "visible-vertical", action->private_data->visible_vertical,
-		        "is-important", action->private_data->is_important,
-			"label", action->private_data->short_label,
-			"use-underline", TRUE,
-			"stock-id", action->private_data->stock_id,
-			"icon-name", action->private_data->icon_name,
-			NULL);
-
-	  g_signal_connect_object (proxy, "clicked",
-				   G_CALLBACK (gtk_action_activate), action,
-				   G_CONNECT_SWAPPED);
-        }
-      else 
-        {
-           g_object_set (proxy,
-	 	         "visible-horizontal", action->private_data->visible_horizontal,
-		         "visible-vertical", action->private_data->visible_vertical,
-		         "is-important", action->private_data->is_important,
-		         NULL);
-       }
-
-      gtk_action_sync_tooltip (action, proxy);
-
-      g_signal_connect_object (proxy, "create-menu-proxy",
-			       G_CALLBACK (gtk_action_create_menu_proxy),
-			       action, 0);
-
-      gtk_tool_item_rebuild_menu (GTK_TOOL_ITEM (proxy));
-    }
-  else if (GTK_IS_BUTTON (proxy))
-    {
-      /* button specific synchronisers ... */
-      if (gtk_button_get_use_stock (GTK_BUTTON (proxy)))
-	{
-	  /* synchronise stock-id */
-	  g_object_set (proxy,
-			"label", action->private_data->stock_id,
-			NULL);
-	}
-      else 
-	{
-	  GtkWidget *image;
-
-	  image = gtk_button_get_image (GTK_BUTTON (proxy));
-
-	  if (GTK_IS_IMAGE (image) ||
-	      GTK_BIN (proxy)->child == NULL || 
-	      GTK_IS_LABEL (GTK_BIN (proxy)->child))
-	    {
-	      /* synchronise the label */
-	      g_object_set (proxy,
-			    "label", action->private_data->short_label,
-			    "use-underline", TRUE,
-			    NULL);
-	    }
-
-	  if (GTK_IS_IMAGE (image) &&
-	      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
-	       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
-	    gtk_image_set_from_icon_name (GTK_IMAGE (image),
-					  action->private_data->icon_name, GTK_ICON_SIZE_MENU);
-	}
-      /* we leave the button alone if there is a custom child */
-      g_signal_connect_object (proxy, "clicked",
-			       G_CALLBACK (gtk_action_activate), action,
-			       G_CONNECT_SWAPPED);
-    }
-
-  if (action->private_data->action_group)
-    _gtk_action_group_emit_connect_proxy (action->private_data->action_group, action, proxy);
-}
-
-static void
-disconnect_proxy (GtkAction *action, 
-		  GtkWidget *proxy)
-{
-  g_object_set_qdata (G_OBJECT (proxy), quark_gtk_action_proxy, NULL);
-
-  g_object_weak_unref (G_OBJECT (proxy), (GWeakNotify)remove_proxy, action);
-  remove_proxy (action, proxy);
-
-  /* disconnect the activate handler */
-  g_signal_handlers_disconnect_by_func (proxy,
-					G_CALLBACK (gtk_action_activate),
-					action);
-
-  /* toolbar button specific synchronisers ... */
-  g_signal_handlers_disconnect_by_func (proxy,
-					G_CALLBACK (gtk_action_create_menu_proxy),
-					action);
-
-  if (action->private_data->action_group)
-    _gtk_action_group_emit_disconnect_proxy (action->private_data->action_group, action, proxy);
-}
-
 void
 _gtk_action_emit_activate (GtkAction *action)
 {
   GtkActionGroup *group = action->private_data->action_group;
 
-  if (group != NULL) 
+  if (group != NULL)
     {
+      g_object_ref (action);
       g_object_ref (group);
       _gtk_action_group_emit_pre_activate (group, action);
     }
 
-    g_signal_emit (action, action_signals[ACTIVATE], 0);
+  g_signal_emit (action, action_signals[ACTIVATE], 0);
 
-  if (group != NULL) 
+  if (group != NULL)
     {
       _gtk_action_group_emit_post_activate (group, action);
       g_object_unref (group);
+      g_object_unref (action);
     }
 }
 
@@ -908,19 +819,59 @@ gtk_action_activate (GtkAction *action)
 {
   g_return_if_fail (GTK_IS_ACTION (action));
   
+  if (action->private_data->activate_blocked)
+    return;
+
   if (gtk_action_is_sensitive (action))
     _gtk_action_emit_activate (action);
 }
 
 /**
+ * gtk_action_block_activate:
+ * @action: a #GtkAction
+ *
+ * Disable activation signals from the action 
+ *
+ * This is needed when updating the state of your proxy
+ * #GtkActivatable widget could result in calling gtk_action_activate(),
+ * this is a convenience function to avoid recursing in those
+ * cases (updating toggle state for instance).
+ *
+ * Since: 2.16
+ */
+void
+gtk_action_block_activate (GtkAction *action)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  action->private_data->activate_blocked = TRUE;
+}
+
+/**
+ * gtk_action_unblock_activate:
+ * @action: a #GtkAction
+ *
+ * Reenable activation signals from the action 
+ *
+ * Since: 2.16
+ */
+void
+gtk_action_unblock_activate (GtkAction *action)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  action->private_data->activate_blocked = FALSE;
+}
+
+/**
  * gtk_action_create_icon:
  * @action: the action object
- * @icon_size: the size of the icon that should be created.
+ * @icon_size: (type int): the size of the icon that should be created.
  *
  * This function is intended for use by action implementations to
  * create icons displayed in the proxy widgets.
  *
- * Returns: a widget that displays the icon for this action.
+ * Returns: (transfer none): a widget that displays the icon for this action.
  *
  * Since: 2.4
  */
@@ -932,6 +883,8 @@ gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
   if (action->private_data->stock_id &&
       gtk_icon_factory_lookup_default (action->private_data->stock_id))
     return gtk_image_new_from_stock (action->private_data->stock_id, icon_size);
+  else if (action->private_data->gicon)
+    return gtk_image_new_from_gicon (action->private_data->gicon, icon_size);
   else if (action->private_data->icon_name)
     return gtk_image_new_from_icon_name (action->private_data->icon_name, icon_size);
   else
@@ -944,7 +897,7 @@ gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
  *
  * Creates a menu item widget that proxies for the given action.
  *
- * Returns: a menu item connected to the action.
+ * Returns: (transfer none): a menu item connected to the action.
  *
  * Since: 2.4
  */
@@ -957,7 +910,8 @@ gtk_action_create_menu_item (GtkAction *action)
 
   menu_item = GTK_ACTION_GET_CLASS (action)->create_menu_item (action);
 
-  GTK_ACTION_GET_CLASS (action)->connect_proxy (action, menu_item);
+  gtk_activatable_set_use_action_appearance (GTK_ACTIVATABLE (menu_item), TRUE);
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (menu_item), action);
 
   return menu_item;
 }
@@ -968,7 +922,7 @@ gtk_action_create_menu_item (GtkAction *action)
  *
  * Creates a toolbar item widget that proxies for the given action.
  *
- * Returns: a toolbar item connected to the action.
+ * Returns: (transfer none): a toolbar item connected to the action.
  *
  * Since: 2.4
  */
@@ -981,9 +935,30 @@ gtk_action_create_tool_item (GtkAction *action)
 
   button = GTK_ACTION_GET_CLASS (action)->create_tool_item (action);
 
-  GTK_ACTION_GET_CLASS (action)->connect_proxy (action, button);
+  gtk_activatable_set_use_action_appearance (GTK_ACTIVATABLE (button), TRUE);
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button), action);
 
   return button;
+}
+
+void
+_gtk_action_add_to_proxy_list (GtkAction     *action,
+			       GtkWidget     *proxy)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+  g_return_if_fail (GTK_IS_WIDGET (proxy));
+ 
+  GTK_ACTION_GET_CLASS (action)->connect_proxy (action, proxy);
+}
+
+void
+_gtk_action_remove_from_proxy_list (GtkAction     *action,
+				    GtkWidget     *proxy)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+  g_return_if_fail (GTK_IS_WIDGET (proxy));
+
+  GTK_ACTION_GET_CLASS (action)->disconnect_proxy (action, proxy);
 }
 
 /**
@@ -1000,22 +975,20 @@ gtk_action_create_tool_item (GtkAction *action)
  * first.
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.16: Use gtk_activatable_set_related_action() instead.
  */
 void
 gtk_action_connect_proxy (GtkAction *action,
 			  GtkWidget *proxy)
 {
-  GtkAction *prev_action;
-
   g_return_if_fail (GTK_IS_ACTION (action));
   g_return_if_fail (GTK_IS_WIDGET (proxy));
+  g_return_if_fail (GTK_IS_ACTIVATABLE (proxy));
 
-  prev_action = g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy);
+  gtk_activatable_set_use_action_appearance (GTK_ACTIVATABLE (proxy), TRUE);
 
-  if (prev_action)
-    GTK_ACTION_GET_CLASS (action)->disconnect_proxy (prev_action, proxy);
-
-  GTK_ACTION_GET_CLASS (action)->connect_proxy (action, proxy);
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (proxy), action);
 }
 
 /**
@@ -1027,6 +1000,8 @@ gtk_action_connect_proxy (GtkAction *action,
  * Does <emphasis>not</emphasis> destroy the widget, however.
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.16: Use gtk_activatable_set_related_action() instead.
  */
 void
 gtk_action_disconnect_proxy (GtkAction *action,
@@ -1035,9 +1010,7 @@ gtk_action_disconnect_proxy (GtkAction *action,
   g_return_if_fail (GTK_IS_ACTION (action));
   g_return_if_fail (GTK_IS_WIDGET (proxy));
 
-  g_return_if_fail (g_object_get_qdata (G_OBJECT (proxy), quark_gtk_action_proxy) == action);
-
-  GTK_ACTION_GET_CLASS (action)->disconnect_proxy (action, proxy);
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (proxy), NULL);
 }
 
 /**
@@ -1046,8 +1019,8 @@ gtk_action_disconnect_proxy (GtkAction *action,
  * 
  * Returns the proxy widgets for an action.
  * See also gtk_widget_get_action().
- * 
- * Return value: a #GSList of proxy widgets. The list is owned by GTK+
+ *
+ * Return value: (element-type GtkWidget) (transfer none): a #GSList of proxy widgets. The list is owned by GTK+
  * and must not be modified.
  *
  * Since: 2.4
@@ -1072,15 +1045,19 @@ gtk_action_get_proxies (GtkAction *action)
  *  %NULL, if it is not attached to an action.
  *
  * Since: 2.10
+ *
+ * Deprecated: 2.16: Use gtk_activatable_get_related_action() instead.
  */
 GtkAction*
 gtk_widget_get_action (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  
-  return g_object_get_qdata (G_OBJECT (widget), quark_gtk_action_proxy);
-}
 
+  if (GTK_IS_ACTIVATABLE (widget))
+    return gtk_activatable_get_related_action (GTK_ACTIVATABLE (widget));
+
+  return NULL;
+}
 
 /**
  * gtk_action_get_name:
@@ -1093,7 +1070,7 @@ gtk_widget_get_action (GtkWidget *widget)
  *
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_action_get_name (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
@@ -1144,22 +1121,6 @@ gtk_action_get_sensitive (GtkAction *action)
   return action->private_data->sensitive;
 }
 
-void
-_gtk_action_sync_sensitive (GtkAction *action)
-{
-  GSList *p;
-  GtkWidget *proxy;
-  gboolean sensitive;
-
-  sensitive = gtk_action_is_sensitive (action);
-
-  for (p = action->private_data->proxies; p; p = p->next)
-    {
-      proxy = (GtkWidget *)p->data;
-      gtk_widget_set_sensitive (proxy, sensitive);
-    }      
-}
-
 /**
  * gtk_action_set_sensitive:
  * @action: the action object
@@ -1183,8 +1144,6 @@ gtk_action_set_sensitive (GtkAction *action,
   if (action->private_data->sensitive != sensitive)
     {
       action->private_data->sensitive = sensitive;
-
-      _gtk_action_sync_sensitive (action);
 
       g_object_notify (G_OBJECT (action), "sensitive");
     }
@@ -1233,36 +1192,6 @@ gtk_action_get_visible (GtkAction *action)
   return action->private_data->visible;
 }
 
-void
-_gtk_action_sync_visible (GtkAction *action)
-{
-  GSList *p;
-  GtkWidget *proxy;
-  GtkWidget *menu;
-  gboolean visible;
-
-  visible = gtk_action_is_visible (action);
-    
-  for (p = action->private_data->proxies; p; p = p->next)
-    {
-      proxy = (GtkWidget *)p->data;
-
-      if (GTK_IS_MENU_ITEM (proxy))
-	{
-	  menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy));
-	  
-	  _gtk_action_sync_menu_visible (action, proxy, _gtk_menu_is_empty (menu));
-	}
-      else
-	{
-	  if (visible)
-	    gtk_widget_show (proxy);
-	  else
-	    gtk_widget_hide (proxy);
-	}
-    } 
-}
-
 /**
  * gtk_action_set_visible:
  * @action: the action object
@@ -1287,45 +1216,123 @@ gtk_action_set_visible (GtkAction *action,
     {
       action->private_data->visible = visible;
 
-      _gtk_action_sync_visible (action);
-
       g_object_notify (G_OBJECT (action), "visible");
     }
 }
-
-static void 
+/**
+ * gtk_action_set_is_important:
+ * @action: the action object
+ * @is_important: %TRUE to make the action important
+ *
+ * Sets whether the action is important, this attribute is used
+ * primarily by toolbar items to decide whether to show a label
+ * or not.
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_is_important (GtkAction *action,
 			     gboolean   is_important)
 {
-  GSList *p;
-  GtkWidget *proxy;
+  g_return_if_fail (GTK_IS_ACTION (action));
 
   is_important = is_important != FALSE;
   
   if (action->private_data->is_important != is_important)
     {
       action->private_data->is_important = is_important;
-
-      for (p = action->private_data->proxies; p; p = p->next)
-	{
-	  proxy = (GtkWidget *)p->data;
-
-	  if (GTK_IS_TOOL_ITEM (proxy))
-	    gtk_tool_item_set_is_important (GTK_TOOL_ITEM (proxy),
-					    is_important);
-	}
       
       g_object_notify (G_OBJECT (action), "is-important");
     }  
 }
 
-static void 
+/**
+ * gtk_action_get_is_important:
+ * @action: a #GtkAction
+ *
+ * Checks whether @action is important or not
+ * 
+ * Returns: whether @action is important
+ *
+ * Since: 2.16
+ */
+gboolean 
+gtk_action_get_is_important (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->is_important;
+}
+
+/**
+ * gtk_action_set_always_show_image:
+ * @action: a #GtkAction
+ * @always_show: %TRUE if menuitem proxies should always show their image
+ *
+ * Sets whether @action<!-- -->'s menu item proxies will ignore the
+ * #GtkSettings:gtk-menu-images setting and always show their image, if available.
+ *
+ * Use this if the menu item would be useless or hard to use
+ * without their image.
+ *
+ * Since: 2.20
+ */
+void
+gtk_action_set_always_show_image (GtkAction *action,
+                                  gboolean   always_show)
+{
+  GtkActionPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  priv = action->private_data;
+
+  always_show = always_show != FALSE;
+  
+  if (priv->always_show_image != always_show)
+    {
+      priv->always_show_image = always_show;
+
+      g_object_notify (G_OBJECT (action), "always-show-image");
+    }
+}
+
+/**
+ * gtk_action_get_always_show_image:
+ * @action: a #GtkAction
+ *
+ * Returns whether @action<!-- -->'s menu item proxies will ignore the
+ * #GtkSettings:gtk-menu-images setting and always show their image,
+ * if available.
+ *
+ * Returns: %TRUE if the menu item proxies will always show their image
+ *
+ * Since: 2.20
+ */
+gboolean
+gtk_action_get_always_show_image  (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->always_show_image;
+}
+
+/**
+ * gtk_action_set_label:
+ * @action: a #GtkAction
+ * @label: the label text to set
+ *
+ * Sets the label of @action.
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_label (GtkAction	  *action,
 		      const gchar *label)
 {
-  GSList *p;
-  GtkWidget *proxy, *child;
   gchar *tmp;
+  
+  g_return_if_fail (GTK_IS_ACTION (action));
   
   tmp = action->private_data->label;
   action->private_data->label = g_strdup (label);
@@ -1339,21 +1346,7 @@ gtk_action_set_label (GtkAction	  *action,
       if (gtk_stock_lookup (action->private_data->stock_id, &stock_item))
 	action->private_data->label = g_strdup (stock_item.label);
     }
-  
-  for (p = action->private_data->proxies; p; p = p->next)
-    {
-      proxy = (GtkWidget *)p->data;
-      
-      if (GTK_IS_MENU_ITEM (proxy))
-	{
-	  child = GTK_BIN (proxy)->child;
-	  
-	  if (GTK_IS_LABEL (child))
-	    gtk_label_set_label (GTK_LABEL (child), 
-				 action->private_data->label);
-	}
-    }
-  
+
   g_object_notify (G_OBJECT (action), "label");
   
   /* if short_label is unset, set short_label=label */
@@ -1364,167 +1357,224 @@ gtk_action_set_label (GtkAction	  *action,
     }
 }
 
-static void 
-gtk_action_set_short_label (GtkAction	*action,
-			    const gchar *label)
+/**
+ * gtk_action_get_label:
+ * @action: a #GtkAction
+ *
+ * Gets the label text of @action.
+ *
+ * Returns: the label text
+ *
+ * Since: 2.16
+ */
+const gchar *
+gtk_action_get_label (GtkAction *action)
 {
-  GSList *p;
-  GtkWidget *proxy, *child;
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->label;
+}
+
+/**
+ * gtk_action_set_short_label:
+ * @action: a #GtkAction
+ * @short_label: the label text to set
+ *
+ * Sets a shorter label text on @action.
+ *
+ * Since: 2.16
+ */
+void 
+gtk_action_set_short_label (GtkAction   *action,
+			    const gchar *short_label)
+{
   gchar *tmp;
 
+  g_return_if_fail (GTK_IS_ACTION (action));
+
   tmp = action->private_data->short_label;
-  action->private_data->short_label = g_strdup (label);
+  action->private_data->short_label = g_strdup (short_label);
   g_free (tmp);
   action->private_data->short_label_set = (action->private_data->short_label != NULL);
   /* if short_label is unset, then use the value of label */
   if (!action->private_data->short_label_set)
     action->private_data->short_label = g_strdup (action->private_data->label);
 
-  for (p = action->private_data->proxies; p; p = p->next)
-    {
-      proxy = (GtkWidget *)p->data;
-
-      if (GTK_IS_TOOL_BUTTON (proxy))
-	gtk_tool_button_set_label (GTK_TOOL_BUTTON (proxy),
-				   action->private_data->short_label);
-      else if (GTK_IS_BUTTON (proxy) &&
-	       !gtk_button_get_use_stock (GTK_BUTTON (proxy)))
-	{
-	  GtkWidget *image;
-
-	  child = GTK_BIN (proxy)->child;
-
-	  image = gtk_button_get_image (GTK_BUTTON (proxy));
-
-	  if (GTK_IS_IMAGE (image) ||
-	      child == NULL || GTK_IS_LABEL (child))
-	    gtk_button_set_label (GTK_BUTTON (proxy),
-				  action->private_data->short_label);
-	}
-    }
-
   g_object_notify (G_OBJECT (action), "short-label");
 }
 
-static void 
+/**
+ * gtk_action_get_short_label:
+ * @action: a #GtkAction
+ *
+ * Gets the short label text of @action.
+ *
+ * Returns: the short label text.
+ *
+ * Since: 2.16
+ */
+const gchar *
+gtk_action_get_short_label (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->short_label;
+}
+
+/**
+ * gtk_action_set_visible_horizontal:
+ * @action: a #GtkAction
+ * @visible_horizontal: whether the action is visible horizontally
+ *
+ * Sets whether @action is visible when horizontal
+ *
+ * Since: 2.16
+ */
+void
 gtk_action_set_visible_horizontal (GtkAction *action,
 				   gboolean   visible_horizontal)
 {
-  GSList *p;
-  GtkWidget *proxy;
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  g_return_if_fail (GTK_IS_ACTION (action));
 
   visible_horizontal = visible_horizontal != FALSE;
   
   if (action->private_data->visible_horizontal != visible_horizontal)
     {
       action->private_data->visible_horizontal = visible_horizontal;
-
-      for (p = action->private_data->proxies; p; p = p->next)
-	{
-	  proxy = (GtkWidget *)p->data;
-
-	  if (GTK_IS_TOOL_ITEM (proxy))
-	    gtk_tool_item_set_visible_horizontal (GTK_TOOL_ITEM (proxy),
-						  visible_horizontal);
-	}
       
       g_object_notify (G_OBJECT (action), "visible-horizontal");
     }  
 }
 
-static void 
+/**
+ * gtk_action_get_visible_horizontal:
+ * @action: a #GtkAction
+ *
+ * Checks whether @action is visible when horizontal
+ * 
+ * Returns: whether @action is visible when horizontal
+ *
+ * Since: 2.16
+ */
+gboolean 
+gtk_action_get_visible_horizontal (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->visible_horizontal;
+}
+
+/**
+ * gtk_action_set_visible_vertical:
+ * @action: a #GtkAction
+ * @visible_vertical: whether the action is visible vertically
+ *
+ * Sets whether @action is visible when vertical 
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_visible_vertical (GtkAction *action,
 				 gboolean   visible_vertical)
 {
-  GSList *p;
-  GtkWidget *proxy;
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  g_return_if_fail (GTK_IS_ACTION (action));
 
   visible_vertical = visible_vertical != FALSE;
   
   if (action->private_data->visible_vertical != visible_vertical)
     {
       action->private_data->visible_vertical = visible_vertical;
-
-      for (p = action->private_data->proxies; p; p = p->next)
-	{
-	  proxy = (GtkWidget *)p->data;
-
-	  if (GTK_IS_TOOL_ITEM (proxy))
-	    gtk_tool_item_set_visible_vertical (GTK_TOOL_ITEM (proxy),
-						visible_vertical);
-	}
       
       g_object_notify (G_OBJECT (action), "visible-vertical");
     }  
 }
 
-static void 
-gtk_action_sync_tooltip (GtkAction *action,
-			 GtkWidget *proxy)
+/**
+ * gtk_action_get_visible_vertical:
+ * @action: a #GtkAction
+ *
+ * Checks whether @action is visible when horizontal
+ * 
+ * Returns: whether @action is visible when horizontal
+ *
+ * Since: 2.16
+ */
+gboolean 
+gtk_action_get_visible_vertical (GtkAction *action)
 {
-  gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (proxy),
-				  action->private_data->tooltip);
+  g_return_val_if_fail (GTK_IS_ACTION (action), FALSE);
+
+  return action->private_data->visible_vertical;
 }
 
-static void 
+/**
+ * gtk_action_set_tooltip:
+ * @action: a #GtkAction
+ * @tooltip: the tooltip text
+ *
+ * Sets the tooltip text on @action
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_tooltip (GtkAction   *action,
 			const gchar *tooltip)
 {
-  GSList *p;
-  GtkWidget *proxy;
   gchar *tmp;
+
+  g_return_if_fail (GTK_IS_ACTION (action));
 
   tmp = action->private_data->tooltip;
   action->private_data->tooltip = g_strdup (tooltip);
   g_free (tmp);
 
-  for (p = action->private_data->proxies; p; p = p->next)
-    {
-      proxy = (GtkWidget *)p->data;
-
-      if (GTK_IS_TOOL_ITEM (proxy))
-        gtk_action_sync_tooltip (action, proxy);
-    }
-
   g_object_notify (G_OBJECT (action), "tooltip");
 }
 
-static void 
+/**
+ * gtk_action_get_tooltip:
+ * @action: a #GtkAction
+ *
+ * Gets the tooltip text of @action.
+ *
+ * Returns: the tooltip text
+ *
+ * Since: 2.16
+ */
+const gchar *
+gtk_action_get_tooltip (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->tooltip;
+}
+
+/**
+ * gtk_action_set_stock_id:
+ * @action: a #GtkAction
+ * @stock_id: the stock id
+ *
+ * Sets the stock id on @action
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_stock_id (GtkAction   *action,
 			 const gchar *stock_id)
 {
-  GSList *p;
-  GtkWidget *proxy, *image;
   gchar *tmp;
-  
+
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  g_return_if_fail (GTK_IS_ACTION (action));
+
   tmp = action->private_data->stock_id;
   action->private_data->stock_id = g_strdup (stock_id);
   g_free (tmp);
-
-  for (p = action->private_data->proxies; p; p = p->next)
-    {
-      proxy = (GtkWidget *)p->data;
-      
-      if (GTK_IS_IMAGE_MENU_ITEM (proxy))
-	{
-	  image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (proxy));
-	  
-	  if (GTK_IS_IMAGE (image))
-	    gtk_image_set_from_stock (GTK_IMAGE (image),
-				      action->private_data->stock_id, GTK_ICON_SIZE_MENU);
-	} 
-      else if (GTK_IS_TOOL_BUTTON (proxy))
-	{
-	  gtk_tool_button_set_stock_id (GTK_TOOL_BUTTON (proxy),
-					action->private_data->stock_id);
-	}
-      else if (GTK_IS_BUTTON (proxy) &&
-	       gtk_button_get_use_stock (GTK_BUTTON (proxy)))
-	{
-	  gtk_button_set_label (GTK_BUTTON (proxy),
-				action->private_data->stock_id);
-	}
-    }
 
   g_object_notify (G_OBJECT (action), "stock-id");
   
@@ -1543,53 +1593,109 @@ gtk_action_set_stock_id (GtkAction   *action,
     }
 }
 
-static void 
+/**
+ * gtk_action_get_stock_id:
+ * @action: a #GtkAction
+ *
+ * Gets the stock id of @action.
+ *
+ * Returns: the stock id
+ *
+ * Since: 2.16
+ */
+const gchar *
+gtk_action_get_stock_id (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->stock_id;
+}
+
+/**
+ * gtk_action_set_icon_name:
+ * @action: a #GtkAction
+ * @icon_name: the icon name to set
+ *
+ * Sets the icon name on @action
+ *
+ * Since: 2.16
+ */
+void 
 gtk_action_set_icon_name (GtkAction   *action,
 			  const gchar *icon_name)
 {
-  GSList *p;
-  GtkWidget *proxy, *image;
   gchar *tmp;
-  
+
+  g_return_if_fail (GTK_IS_ACTION (action));
+
   tmp = action->private_data->icon_name;
   action->private_data->icon_name = g_strdup (icon_name);
   g_free (tmp);
 
-  for (p = action->private_data->proxies; p; p = p->next)
-    {
-      proxy = (GtkWidget *)p->data;
-      
-      if (GTK_IS_IMAGE_MENU_ITEM (proxy))
-	{
-	  image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (proxy));
-	  
-	  if (GTK_IS_IMAGE (image) &&
-	      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
-	       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
-	    gtk_image_set_from_icon_name (GTK_IMAGE (image),
-					  action->private_data->icon_name, GTK_ICON_SIZE_MENU);
-	} 
-      else if (GTK_IS_TOOL_BUTTON (proxy))
-	{
-	  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (proxy),
-					 action->private_data->icon_name);
-	}
-      else if (GTK_IS_BUTTON (proxy) &&
-	       !gtk_button_get_use_stock (GTK_BUTTON (proxy)))
-	{
-	  image = gtk_button_get_image (GTK_BUTTON (proxy));
-	  
-	  if (GTK_IS_IMAGE (image) &&
-	      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
-	       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
-	    gtk_image_set_from_icon_name (GTK_IMAGE (image),
-					  action->private_data->icon_name, GTK_ICON_SIZE_MENU);
-	}
-    }
-  
   g_object_notify (G_OBJECT (action), "icon-name");
 }
 
+/**
+ * gtk_action_get_icon_name:
+ * @action: a #GtkAction
+ *
+ * Gets the icon name of @action.
+ *
+ * Returns: the icon name
+ *
+ * Since: 2.16
+ */
+const gchar *
+gtk_action_get_icon_name (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->icon_name;
+}
+
+/**
+ * gtk_action_set_gicon:
+ * @action: a #GtkAction
+ * @icon: the #GIcon to set
+ *
+ * Sets the icon of @action.
+ *
+ * Since: 2.16
+ */
+void
+gtk_action_set_gicon (GtkAction *action,
+                      GIcon     *icon)
+{
+  g_return_if_fail (GTK_IS_ACTION (action));
+
+  if (action->private_data->gicon)
+    g_object_unref (action->private_data->gicon);
+
+  action->private_data->gicon = icon;
+
+  if (action->private_data->gicon)
+    g_object_ref (action->private_data->gicon);
+
+  g_object_notify (G_OBJECT (action), "gicon");
+}
+
+/**
+ * gtk_action_get_gicon:
+ * @action: a #GtkAction
+ *
+ * Gets the gicon of @action.
+ *
+ * Returns: (transfer none): The action's #GIcon if one is set.
+ *
+ * Since: 2.16
+ */
+GIcon *
+gtk_action_get_gicon (GtkAction *action)
+{
+  g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  return action->private_data->gicon;
+}
 
 /**
  * gtk_action_block_activate_from:
@@ -1603,6 +1709,9 @@ gtk_action_set_icon_name (GtkAction   *action,
  * This function is intended for use by action implementations.
  * 
  * Since: 2.4
+ *
+ * Deprecated: 2.16: activatables are now responsible for activating the
+ * action directly so this doesnt apply anymore.
  */
 void
 gtk_action_block_activate_from (GtkAction *action, 
@@ -1612,6 +1721,8 @@ gtk_action_block_activate_from (GtkAction *action,
   
   g_signal_handlers_block_by_func (proxy, G_CALLBACK (gtk_action_activate),
 				   action);
+
+  gtk_action_block_activate (action);
 }
 
 /**
@@ -1626,6 +1737,9 @@ gtk_action_block_activate_from (GtkAction *action,
  * This function is intended for use by action implementations.
  * 
  * Since: 2.4
+ *
+ * Deprecated: 2.16: activatables are now responsible for activating the
+ * action directly so this doesnt apply anymore.
  */
 void
 gtk_action_unblock_activate_from (GtkAction *action, 
@@ -1635,6 +1749,8 @@ gtk_action_unblock_activate_from (GtkAction *action,
 
   g_signal_handlers_unblock_by_func (proxy, G_CALLBACK (gtk_action_activate),
 				     action);
+
+  gtk_action_unblock_activate (action);
 }
 
 static void
@@ -1702,7 +1818,7 @@ gtk_action_set_accel_path (GtkAction   *action,
  *   if none is set. The returned string is owned by GTK+ 
  *   and must not be freed or modified.
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_action_get_accel_path (GtkAction *action)
 {
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
@@ -1721,8 +1837,9 @@ gtk_action_get_accel_path (GtkAction *action)
  *
  * Since: 2.8
  *
- * Returns: the accel closure for this action. The returned closure is
- *          owned by GTK+ and must not be unreffed or modified.
+ * Returns: (transfer none): the accel closure for this action. The
+ *          returned closure is owned by GTK+ and must not be unreffed
+ *          or modified.
  */
 GClosure *
 gtk_action_get_accel_closure (GtkAction *action)
@@ -1736,8 +1853,8 @@ gtk_action_get_accel_closure (GtkAction *action)
 /**
  * gtk_action_set_accel_group:
  * @action: the action object
- * @accel_group: a #GtkAccelGroup or %NULL
- * 
+ * @accel_group: (allow-none): a #GtkAccelGroup or %NULL
+ *
  * Sets the #GtkAccelGroup in which the accelerator for this action
  * will be installed.
  *
@@ -1827,7 +1944,8 @@ gtk_action_disconnect_accelerator (GtkAction *action)
  * item or the toolbar item it creates, this function returns an
  * instance of that menu.
  *
- * Return value: the menu item provided by the action, or %NULL.
+ * Return value: (transfer none): the menu item provided by the
+ *               action, or %NULL.
  *
  * Since: 2.12
  */

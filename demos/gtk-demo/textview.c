@@ -14,17 +14,9 @@
 
 static void easter_egg_callback (GtkWidget *button, gpointer data);
 
-#define gray50_width 2
-#define gray50_height 2
-static char gray50_bits[] = {
-  0x02, 0x01
-};
-
 static void
 create_tags (GtkTextBuffer *buffer)
 {
-  GdkBitmap *stipple;
-
   /* Create a bunch of tags. Note that it's also possible to
    * create tags with gtk_text_tag_new() then add them to the
    * tag table for the buffer, gtk_text_buffer_create_tag() is
@@ -73,18 +65,6 @@ create_tags (GtkTextBuffer *buffer)
 
   gtk_text_buffer_create_tag (buffer, "red_background",
 			      "background", "red", NULL);
-
-  stipple = gdk_bitmap_create_from_data (NULL,
-					 gray50_bits, gray50_width,
-					 gray50_height);
-  
-  gtk_text_buffer_create_tag (buffer, "background_stipple",
-			      "background_stipple", stipple, NULL);
-
-  gtk_text_buffer_create_tag (buffer, "foreground_stipple",
-			      "foreground_stipple", stipple, NULL);
-
-  g_object_unref (stipple);
 
   gtk_text_buffer_create_tag (buffer, "big_gap_before_line",
 			      "pixels_above_lines", 30, NULL);
@@ -227,17 +207,9 @@ insert_text (GtkTextBuffer *buffer)
 					    "red_background", NULL);
   gtk_text_buffer_insert (buffer, &iter, " or even ", -1);  
   gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-					    "a stippled red background", -1,
-					    "red_background",
-					    "background_stipple",
-					    NULL);
-
-  gtk_text_buffer_insert (buffer, &iter, " or ", -1);  
-  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter,
-					    "a stippled blue foreground on solid red background", -1,
+					    "a blue foreground on red background", -1,
 					    "blue_foreground",
 					    "red_background",
-					    "foreground_stipple",
 					    NULL);
   gtk_text_buffer_insert (buffer, &iter, " (select that to read it) can be used.\n\n", -1);  
 
@@ -399,11 +371,11 @@ attach_widgets (GtkTextView *text_view)
         }
       else if (i == 1)
         {
-          widget = gtk_combo_box_new_text ();
+          widget = gtk_combo_box_text_new ();
 
-          gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Option 1");
-          gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Option 2");
-          gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "Option 3");
+          gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Option 1");
+          gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Option 2");
+          gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Option 3");
         }
       else if (i == 2)
         {
@@ -500,7 +472,7 @@ do_textview (GtkWidget *do_widget)
       gtk_widget_show_all (vpaned);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show (window);
     }

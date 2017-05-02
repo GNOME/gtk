@@ -44,26 +44,27 @@
 
 
 static GdkDeviceAxis gdk_input_core_axes[] =
-{
-  { GDK_AXIS_X, 0, 0 },
-  { GDK_AXIS_Y, 0, 0 }
-};
+  {
+    { GDK_AXIS_X, 0, 0 },
+    { GDK_AXIS_Y, 0, 0 }
+  };
 
 
-GdkDevice     * _gdk_core_pointer       = NULL;
-GList         * _gdk_input_devices      = NULL;
-gboolean        _gdk_input_ignore_core  = FALSE;
+GdkDevice *_gdk_core_pointer      = NULL;
+GList     *_gdk_input_devices     = NULL;
+gboolean   _gdk_input_ignore_core = FALSE;
 
-int             _gdk_directfb_mouse_x   = 0;
-int             _gdk_directfb_mouse_y   = 0;
+int _gdk_directfb_mouse_x = 0;
+int _gdk_directfb_mouse_y = 0;
 
 
 void
 _gdk_init_input_core (void)
 {
- GdkDisplay *display = GDK_DISPLAY_OBJECT(_gdk_display);
+  GdkDisplay *display = GDK_DISPLAY_OBJECT (_gdk_display);
+  
   _gdk_core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
-
+  
   _gdk_core_pointer->name       = "Core Pointer";
   _gdk_core_pointer->source     = GDK_SOURCE_MOUSE;
   _gdk_core_pointer->mode       = GDK_MODE_SCREEN;
@@ -94,18 +95,18 @@ gdk_device_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDeviceClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_device_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDevice),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
+      const GTypeInfo object_info =
+        {
+          sizeof (GdkDeviceClass),
+          (GBaseInitFunc) NULL,
+          (GBaseFinalizeFunc) NULL,
+          (GClassInitFunc) gdk_device_class_init,
+          NULL,           /* class_finalize */
+          NULL,           /* class_data */
+          sizeof (GdkDevice),
+          0,              /* n_preallocs */
+          (GInstanceInitFunc) NULL,
+        };
 
       object_type = g_type_register_static (G_TYPE_OBJECT,
                                             "GdkDevice",
@@ -115,84 +116,195 @@ gdk_device_get_type (void)
   return object_type;
 }
 
-
-void
-_gdk_input_init (void)
+/**
+ * gdk_devices_list:
+ *
+ * Returns the list of available input devices for the default display.
+ * The list is statically allocated and should not be freed.
+ *
+ * Return value: a list of #GdkDevice
+ **/
+GList *
+gdk_devices_list (void)
 {
-  _gdk_init_input_core ();
-  _gdk_input_devices = g_list_append (NULL, _gdk_core_pointer);
-  _gdk_input_ignore_core = FALSE;
+  return _gdk_input_devices;
 }
 
-void
-_gdk_input_exit (void)
+
+/**
+ * gdk_display_list_devices:
+ * @display: a #GdkDisplay
+ *
+ * Returns the list of available input devices attached to @display.
+ * The list is statically allocated and should not be freed.
+ *
+ * Return value: a list of #GdkDevice
+ *
+ * Since: 2.2
+ **/
+GList *
+gdk_display_list_devices (GdkDisplay *dpy)
 {
-  GList     *tmp_list;
-  GdkDevice *gdkdev;
-
-  for (tmp_list = _gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
-    {
-      gdkdev = (GdkDevice *)(tmp_list->data);
-      if (!GDK_IS_CORE (gdkdev))
-	{
-	  gdk_device_set_mode ((GdkDevice *)gdkdev, GDK_MODE_DISABLED);
-
-	  g_free (gdkdev->name);
-	  g_free (gdkdev->axes);
-	  g_free (gdkdev->keys);
-	  g_free (gdkdev);
-	}
-    }
-
-  g_list_free (_gdk_input_devices);
+  return _gdk_input_devices;
 }
 
 /**
- * gdk_device_get_axis:
+ * gdk_device_get_name:
  * @device: a #GdkDevice
- * @axes: pointer to an array of axes
- * @use: the use to look for
- * @value: location to store the found value.
  *
- * Interprets an array of double as axis values for a given device,
- * and locates the value in the array for a given axis use.
+ * Determines the name of the device.
  *
- * Return value: %TRUE if the given axis use was found, otherwise %FALSE
+ * Return value: a name
+ *
+ * Since: 2.22
+ **/
+const gchar *
+gdk_device_get_name (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+
+  return device->name;
+}
+
+/**
+ * gdk_device_get_source:
+ * @device: a #GdkDevice
+ *
+ * Determines the type of the device.
+ *
+ * Return value: a #GdkInputSource
+ *
+ * Since: 2.22
+ **/
+GdkInputSource
+gdk_device_get_source (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->source;
+}
+
+/**
+ * gdk_device_get_mode:
+ * @device: a #GdkDevice
+ *
+ * Determines the mode of the device.
+ *
+ * Return value: a #GdkInputSource
+ *
+ * Since: 2.22
+ **/
+GdkInputMode
+gdk_device_get_mode (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->mode;
+}
+
+/**
+ * gdk_device_get_has_cursor:
+ * @device: a #GdkDevice
+ *
+ * Determines whether the pointer follows device motion.
+ *
+ * Return value: %TRUE if the pointer follows device motion
+ *
+ * Since: 2.22
  **/
 gboolean
-gdk_device_get_axis (GdkDevice  *device,
-                     gdouble    *axes,
-                     GdkAxisUse  use,
-                     gdouble    *value)
+gdk_device_get_has_cursor (GdkDevice *device)
 {
-  gint i;
-  g_return_val_if_fail (device != NULL, FALSE);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
 
-  if (axes == NULL)
-    return FALSE;
-
-  for (i = 0; i < device->num_axes; i++)
-    if (device->axes[i].use == use)
-      {
-	if (value)
-	  *value = axes[i];
-	return TRUE;
-      }
-
-  return FALSE;
+  return device->has_cursor;
 }
 
 void
-gdk_device_set_key (GdkDevice       *device,
-                    guint            index,
-                    guint            keyval,
-                    GdkModifierType  modifiers)
+gdk_device_set_source (GdkDevice      *device,
+                       GdkInputSource  source)
 {
   g_return_if_fail (device != NULL);
+  device->source = source;
+}
+
+/**
+ * gdk_device_get_key:
+ * @device: a #GdkDevice.
+ * @index: the index of the macro button to get.
+ * @keyval: return value for the keyval.
+ * @modifiers: return value for modifiers.
+ *
+ * If @index has a valid keyval, this function will
+ * fill in @keyval and @modifiers with the keyval settings.
+ *
+ * Since: 2.22
+ **/
+void
+gdk_device_get_key (GdkDevice       *device,
+                    guint            index,
+                    guint           *keyval,
+                    GdkModifierType *modifiers)
+{
+  g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (index < device->num_keys);
 
-  device->keys[index].keyval    = keyval;
-  device->keys[index].modifiers = modifiers;
+  if (!device->keys[index].keyval &&
+      !device->keys[index].modifiers)
+    return;
+
+  if (keyval)
+    *keyval = device->keys[index].keyval;
+
+  if (modifiers)
+    *modifiers = device->keys[index].modifiers;
+}
+
+/**
+ * gdk_device_get_axis_use:
+ * @device: a #GdkDevice.
+ * @index: the index of the axis.
+ *
+ * Returns the axis use for @index.
+ *
+ * Returns: a #GdkAxisUse specifying how the axis is used.
+ *
+ * Since: 2.22
+ **/
+GdkAxisUse
+gdk_device_get_axis_use (GdkDevice *device,
+                         guint      index)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_AXIS_IGNORE);
+  g_return_val_if_fail (index < device->num_axes, GDK_AXIS_IGNORE);
+
+  return device->axes[index].use;
+}
+
+gint
+gdk_device_get_n_keys (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->num_keys;
+}
+
+/**
+ * gdk_device_get_n_axes:
+ * @device: a #GdkDevice.
+ *
+ * Gets the number of axes of a device.
+ *
+ * Returns: the number of axes of @device
+ *
+ * Since: 2.22
+ **/
+gint
+gdk_device_get_n_axes (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->num_axes;
 }
 
 void
@@ -228,7 +340,7 @@ gboolean
 gdk_device_set_mode (GdkDevice    *device,
                      GdkInputMode  mode)
 {
-  g_message ("unimplemented %s", __FUNCTION__);
+  g_message ("unimplemented %s", G_STRFUNC);
 
   return FALSE;
 }
@@ -303,28 +415,86 @@ gdk_input_set_extension_events (GdkWindow        *window,
                                 gint              mask,
                                 GdkExtensionMode  mode)
 {
-  g_message ("unimplemented %s", __FUNCTION__);
-}
-
-GList *
-gdk_devices_list (void)
-{
-  return _gdk_input_devices;
-}
-
-
-GList *
-gdk_display_list_devices (GdkDisplay *dpy)
-{
-  return _gdk_input_devices;
+  g_message ("unimplemented %s", G_STRFUNC);
 }
 
 void
-gdk_device_set_source (GdkDevice      *device,
-                       GdkInputSource  source)
+gdk_device_set_key (GdkDevice       *device,
+                    guint            index,
+                    guint            keyval,
+                    GdkModifierType  modifiers)
 {
   g_return_if_fail (device != NULL);
-  device->source = source;
+  g_return_if_fail (index < device->num_keys);
+
+  device->keys[index].keyval    = keyval;
+  device->keys[index].modifiers = modifiers;
+}
+
+/**
+ * gdk_device_get_axis:
+ * @device: a #GdkDevice
+ * @axes: pointer to an array of axes
+ * @use: the use to look for
+ * @value: location to store the found value.
+ *
+ * Interprets an array of double as axis values for a given device,
+ * and locates the value in the array for a given axis use.
+ *
+ * Return value: %TRUE if the given axis use was found, otherwise %FALSE
+ **/
+gboolean
+gdk_device_get_axis (GdkDevice  *device,
+                     gdouble    *axes,
+                     GdkAxisUse  use,
+                     gdouble    *value)
+{
+  gint i;
+  g_return_val_if_fail (device != NULL, FALSE);
+
+  if (axes == NULL)
+    return FALSE;
+
+  for (i = 0; i < device->num_axes; i++)
+    if (device->axes[i].use == use)
+      {
+	if (value)
+	  *value = axes[i];
+	return TRUE;
+      }
+
+  return FALSE;
+}
+
+void
+_gdk_input_init (void)
+{
+  _gdk_init_input_core ();
+  _gdk_input_devices = g_list_append (NULL, _gdk_core_pointer);
+  _gdk_input_ignore_core = FALSE;
+}
+
+void
+_gdk_input_exit (void)
+{
+  GList     *tmp_list;
+  GdkDevice *gdkdev;
+
+  for (tmp_list = _gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
+    {
+      gdkdev = (GdkDevice *)(tmp_list->data);
+      if (!GDK_IS_CORE (gdkdev))
+	{
+	  gdk_device_set_mode ((GdkDevice *)gdkdev, GDK_MODE_DISABLED);
+
+	  g_free (gdkdev->name);
+	  g_free (gdkdev->axes);
+	  g_free (gdkdev->keys);
+	  g_free (gdkdev);
+	}
+    }
+
+  g_list_free (_gdk_input_devices);
 }
 
 #define __GDK_INPUT_NONE_C__

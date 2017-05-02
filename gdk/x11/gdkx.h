@@ -34,12 +34,14 @@
 
 G_BEGIN_DECLS
 
-#ifndef GDK_MULTIHEAD_SAFE
+#if (!defined (GDK_DISABLE_DEPRECATED) && !defined (GDK_MULTIHEAD_SAFE)) || defined (GDK_COMPILATION)
 extern Display          *gdk_display;
 #endif
 
 Display *gdk_x11_drawable_get_xdisplay    (GdkDrawable *drawable);
 XID      gdk_x11_drawable_get_xid         (GdkDrawable *drawable);
+GdkDrawable *gdk_x11_window_get_drawable_impl (GdkWindow *window);
+GdkDrawable *gdk_x11_pixmap_get_drawable_impl (GdkPixmap *pixmap);
 Display *gdk_x11_image_get_xdisplay       (GdkImage    *image);
 XImage  *gdk_x11_image_get_ximage         (GdkImage    *image);
 Display *gdk_x11_colormap_get_xdisplay    (GdkColormap *colormap);
@@ -48,8 +50,10 @@ Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
 Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
+#if !defined(GDK_DISABLE_DEPRECATED) || defined(GDK_COMPILATION)
 Display *gdk_x11_gc_get_xdisplay          (GdkGC       *gc);
 GC       gdk_x11_gc_get_xgc               (GdkGC       *gc);
+#endif
 Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
 int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
 void     gdk_x11_window_set_user_time     (GdkWindow   *window,
@@ -71,7 +75,7 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_IMAGE_XDISPLAY(image)     (gdk_x11_image_get_xdisplay (image))
 #define GDK_IMAGE_XIMAGE(image)       (gdk_x11_image_get_ximage (image))
 
-#ifndef GDK_MULTIHEAD_SAFE
+#if (!defined (GDK_DISABLE_DEPRECATED) && !defined (GDK_MULTIHEAD_SAFE)) || defined (GDK_COMPILATION)
 #define GDK_DISPLAY()                 gdk_display
 #endif
 
@@ -105,10 +109,10 @@ gint     gdk_x11_get_default_screen       (void);
 
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
-#define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (((GdkWindowObject *)win)->impl))
+#define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (gdk_x11_window_get_drawable_impl (win)))
 #define GDK_WINDOW_XID(win)           (gdk_x11_drawable_get_xid (win))
 #define GDK_WINDOW_XWINDOW(win)       (gdk_x11_drawable_get_xid (win))
-#define GDK_PIXMAP_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (((GdkPixmapObject *)win)->impl))
+#define GDK_PIXMAP_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (gdk_x11_pixmap_get_drawable_impl (win)))
 #define GDK_PIXMAP_XID(win)           (gdk_x11_drawable_get_xid (win))
 #define GDK_DRAWABLE_XDISPLAY(win)    (gdk_x11_drawable_get_xdisplay (win))
 #define GDK_DRAWABLE_XID(win)         (gdk_x11_drawable_get_xid (win))
@@ -123,8 +127,10 @@ gint     gdk_x11_get_default_screen       (void);
 
 GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
 					 VisualID   xvisualid);
+#ifndef GDK_DISABLE_DEPRECATED
 #ifndef GDK_MULTIHEAD_SAFE
 GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
+#endif
 #endif
 
 #ifdef GDK_ENABLE_BROKEN
@@ -135,13 +141,14 @@ GdkColormap* gdkx_colormap_get (Colormap xcolormap);
 GdkColormap *gdk_x11_colormap_foreign_new (GdkVisual *visual,
 					   Colormap   xcolormap);
 
-     /* Return the Gdk* for a particular XID */
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
 gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
 						XID         xid);
+#endif
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
-G_CONST_RETURN gchar *gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
+const gchar * gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
 
 void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 						const gchar *theme,
@@ -159,8 +166,10 @@ XID      gdk_x11_screen_get_monitor_output   (GdkScreen *screen,
                                               gint       monitor_num);
 
 #ifndef GDK_MULTIHEAD_SAFE
+#ifndef GDK_DISABLE_DEPRECATED
 gpointer      gdk_xid_table_lookup   (XID              xid);
 gboolean      gdk_net_wm_supports    (GdkAtom    property);
+#endif
 void          gdk_x11_grab_server    (void);
 void          gdk_x11_ungrab_server  (void);
 #endif
@@ -175,13 +184,13 @@ GdkAtom		      gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
 							 Atom	      xatom);
 Atom		      gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
 							     const gchar *atom_name);
-G_CONST_RETURN gchar *gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
+const gchar *         gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
 							  Atom         xatom);
 #ifndef GDK_MULTIHEAD_SAFE
 Atom                  gdk_x11_atom_to_xatom     (GdkAtom      atom);
 GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
 Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
-G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
+const gchar *         gdk_x11_get_xatom_name    (Atom         xatom);
 #endif
 
 void	    gdk_x11_display_grab	      (GdkDisplay *display);
@@ -202,7 +211,7 @@ gpointer             gdk_x11_font_get_xfont    (GdkFont *font);
 #ifndef GDK_DISABLE_DEPRECATED
 
 Display *            gdk_x11_font_get_xdisplay (GdkFont *font);
-G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
+const char *         gdk_x11_font_get_name     (GdkFont *font);
 
 #define GDK_FONT_XDISPLAY(font)       (gdk_x11_font_get_xdisplay (font))
 
@@ -212,6 +221,35 @@ G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
 
 #endif /* GDK_MULTIHEAD_SAFE */
 #endif /* GDK_DISABLE_DEPRECATED */
+
+void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
+
+GdkWindow  *gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
+                                                    Window      window);
+GdkWindow  *gdk_x11_window_lookup_for_display      (GdkDisplay *display,
+                                                    Window      window);
+
+gint     gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
+                                                     GdkAtom       encoding,
+                                                     gint          format,
+                                                     const guchar *text,
+                                                     gint          length,
+                                                     gchar      ***list);
+void     gdk_x11_free_text_list                     (gchar       **list);
+gint     gdk_x11_display_string_to_compound_text    (GdkDisplay   *display,
+                                                     const gchar  *str,
+                                                     GdkAtom      *encoding,
+                                                     gint         *format,
+                                                     guchar      **ctext,
+                                                     gint         *length);
+gboolean gdk_x11_display_utf8_to_compound_text      (GdkDisplay   *display,
+                                                     const gchar  *str,
+                                                     GdkAtom      *encoding,
+                                                     gint         *format,
+                                                     guchar      **ctext,
+                                                     gint         *length);
+void     gdk_x11_free_compound_text                 (guchar       *ctext);
+
 
 G_END_DECLS
 

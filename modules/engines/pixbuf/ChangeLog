@@ -1,3 +1,37 @@
+=== ChangeLog discontinued ===
+
+	With the move to git, GTK+ is switching from a ChangeLog file
+	to relying on commit messages to provide change history. Please
+	see README.commits for guidance on the expected message format.
+
+2009-03-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.16.0 ===
+
+2009-03-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.15.5 ===
+
+2009-02-17  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.15.4 ===
+
+2009-02-02  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.15.3 ===
+
+2009-01-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.15.2 ===
+
+2009-01-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.15.1 ===
+
+2009-01-01  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.15.0 ===
+
 2007-06-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.11.1 ===

@@ -71,7 +71,7 @@ gdk_test_render_sync (GdkWindow *window)
  * right function to call which will generate a key press event
  * followed by its accompanying key release event.
  *
- * Returns: wether all actions neccessary for a key event simulation 
+ * Returns: whether all actions neccessary for a key event simulation 
  *     were carried out successfully.
  *
  * Since: 2.14
@@ -86,6 +86,7 @@ gdk_test_simulate_key (GdkWindow      *window,
 {
   GdkScreen *screen;
   GdkKeymapKey *keys = NULL;
+  GdkWindowObject *priv;
   gboolean success;
   gint n_keys = 0;
   XKeyEvent xev = {
@@ -104,6 +105,12 @@ gdk_test_simulate_key (GdkWindow      *window,
       x /= 2;
       y /= 2;
     }
+
+  priv = (GdkWindowObject *)window;
+  /* Convert to impl coordinates */
+  x = x + priv->abs_x;
+  y = y + priv->abs_y;
+
   xev.type = key_pressrelease == GDK_KEY_PRESS ? KeyPress : KeyRelease;
   xev.display = GDK_DRAWABLE_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
@@ -122,12 +129,17 @@ gdk_test_simulate_key (GdkWindow      *window,
     {
       gint i;
       for (i = 0; i < n_keys; i++)
-        if (keys[i].group == 0 && keys[i].level == 0)
+        if (keys[i].group == 0 && (keys[i].level == 0 || keys[i].level == 1))
           {
             xev.keycode = keys[i].keycode;
+            if (keys[i].level == 1)
+              {
+                /* Assume shift takes us to level 1 */
+                xev.state |= GDK_SHIFT_MASK;
+              }
             break;
           }
-      if (i >= n_keys) /* no match for group==0 and level==0 */
+      if (i >= n_keys) /* no match for group==0 and level==0 or 1 */
         xev.keycode = keys[0].keycode;
     }
   g_free (keys);
@@ -170,7 +182,7 @@ gdk_test_simulate_key (GdkWindow      *window,
  * function to call which will generate a button press event followed
  * by its accompanying button release event.
  *
- * Returns: wether all actions neccessary for a button event simulation 
+ * Returns: whether all actions neccessary for a button event simulation 
  *     were carried out successfully.
  *
  * Since: 2.14
@@ -189,8 +201,12 @@ gdk_test_simulate_button (GdkWindow      *window,
     0,  /* serial */
     1,  /* send_event */
   };
+  gboolean success;
+  GdkWindowObject *priv;
+
   g_return_val_if_fail (button_pressrelease == GDK_BUTTON_PRESS || button_pressrelease == GDK_BUTTON_RELEASE, FALSE);
   g_return_val_if_fail (window != NULL, FALSE);
+
   if (!GDK_WINDOW_IS_MAPPED (window))
     return FALSE;
   screen = gdk_colormap_get_screen (gdk_drawable_get_colormap (window));
@@ -200,6 +216,12 @@ gdk_test_simulate_button (GdkWindow      *window,
       x /= 2;
       y /= 2;
     }
+
+  priv = (GdkWindowObject *)window;
+  /* Convert to impl coordinates */
+  x = x + priv->abs_x;
+  y = y + priv->abs_y;
+
   xev.type = button_pressrelease == GDK_BUTTON_PRESS ? ButtonPress : ButtonRelease;
   xev.display = GDK_DRAWABLE_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
@@ -218,7 +240,7 @@ gdk_test_simulate_button (GdkWindow      *window,
                                            &xev.subwindow);
   if (!xev.subwindow)
     xev.subwindow = xev.window;
-  gboolean success = xev.same_screen;
+  success = xev.same_screen;
   success &= 0 != XWarpPointer (xev.display, None, xev.window, 0, 0, 0, 0, xev.x, xev.y);
   success &= 0 != XSendEvent (xev.display, xev.window, True, button_pressrelease == GDK_BUTTON_PRESS ? ButtonPressMask : ButtonReleaseMask, (XEvent*) &xev);
   XSync (xev.display, False);

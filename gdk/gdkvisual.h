@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_VISUAL_H__
+#define __GDK_VISUAL_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_VISUAL_H__
-#define __GDK_VISUAL_H__
 
 #include <gdk/gdktypes.h>
 
@@ -78,23 +78,23 @@ struct _GdkVisual
 {
   GObject parent_instance;
   
-  GdkVisualType type;
-  gint depth;
-  GdkByteOrder byte_order;
-  gint colormap_size;
-  gint bits_per_rgb;
+  GdkVisualType GSEAL (type);
+  gint GSEAL (depth);
+  GdkByteOrder GSEAL (byte_order);
+  gint GSEAL (colormap_size);
+  gint GSEAL (bits_per_rgb);
 
-  guint32 red_mask;
-  gint red_shift;
-  gint red_prec;
+  guint32 GSEAL (red_mask);
+  gint GSEAL (red_shift);
+  gint GSEAL (red_prec);
 
-  guint32 green_mask;
-  gint green_shift;
-  gint green_prec;
+  guint32 GSEAL (green_mask);
+  gint GSEAL (green_shift);
+  gint GSEAL (green_prec);
 
-  guint32 blue_mask;
-  gint blue_shift;
-  gint blue_prec;
+  guint32 GSEAL (blue_mask);
+  gint GSEAL (blue_shift);
+  gint GSEAL (blue_prec);
 };
 
 GType         gdk_visual_get_type            (void) G_GNUC_CONST;
@@ -118,6 +118,24 @@ GList* gdk_list_visuals (void);
 #endif
 
 GdkScreen *gdk_visual_get_screen (GdkVisual *visual);
+
+GdkVisualType gdk_visual_get_visual_type         (GdkVisual *visual);
+gint          gdk_visual_get_depth               (GdkVisual *visual);
+GdkByteOrder  gdk_visual_get_byte_order          (GdkVisual *visual);
+gint          gdk_visual_get_colormap_size       (GdkVisual *visual);
+gint          gdk_visual_get_bits_per_rgb        (GdkVisual *visual);
+void          gdk_visual_get_red_pixel_details   (GdkVisual *visual,
+                                                  guint32   *mask,
+                                                  gint      *shift,
+                                                  gint      *precision);
+void          gdk_visual_get_green_pixel_details (GdkVisual *visual,
+                                                  guint32   *mask,
+                                                  gint      *shift,
+                                                  gint      *precision);
+void          gdk_visual_get_blue_pixel_details  (GdkVisual *visual,
+                                                  guint32   *mask,
+                                                  gint      *shift,
+                                                  gint      *precision);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_visual_ref(v) g_object_ref(v)

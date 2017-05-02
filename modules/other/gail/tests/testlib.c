@@ -176,7 +176,7 @@ find_object_by_accessible_name_and_role (AtkObject   *obj,
   AtkObject *child;
   gint i, j;
   gint n_children;
-  G_CONST_RETURN gchar *accessible_name;
+  const gchar *accessible_name;
 
   if (obj == NULL)
     return NULL;
@@ -244,7 +244,7 @@ find_object_by_type (AtkObject *obj,
   gint i;
   gint n_children;
   AtkObject *child;
-  G_CONST_RETURN gchar * typename = NULL;
+  const gchar * typename = NULL;
 
   if (obj == NULL)
     return NULL;
@@ -774,7 +774,7 @@ _get_position_in_parameters(gint  window,
                             gint  position)
 {
   gint                    i;
-  G_CONST_RETURN gchar    *label_string;
+  const gchar    *label_string;
   
   for (i = 0; i < MAX_PARAMS; i++)
     {
@@ -833,7 +833,7 @@ get_arg_of_func (gint  window,
                  gchar *function_name,
                  gchar *arg_label)
 {
-  G_CONST_RETURN gchar       *argString;
+  const gchar       *argString;
   gchar                      *retString;
   gint                       position, paramPosition;
 

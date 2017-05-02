@@ -141,9 +141,10 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
 
   if (owner) 
     {
-      if (GDK_WINDOW_DESTROYED (owner))
+      if (GDK_WINDOW_DESTROYED (owner) || !GDK_WINDOW_IS_X11 (owner))
 	return FALSE;
       
+      gdk_window_ensure_native (owner);
       xdisplay = GDK_WINDOW_XDISPLAY (owner);
       xwindow = GDK_WINDOW_XID (owner);
     }
@@ -230,10 +231,11 @@ gdk_selection_convert (GdkWindow *requestor,
   GdkDisplay *display;
 
   g_return_if_fail (selection != GDK_NONE);
-  
-  if (GDK_WINDOW_DESTROYED (requestor))
+
+  if (GDK_WINDOW_DESTROYED (requestor) || !GDK_WINDOW_IS_X11 (requestor))
     return;
 
+  gdk_window_ensure_native (requestor);
   display = GDK_WINDOW_DISPLAY (requestor);
 
   XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),
@@ -279,10 +281,11 @@ gdk_selection_property_get (GdkWindow  *requestor,
 
   g_return_val_if_fail (requestor != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
+  g_return_val_if_fail (GDK_WINDOW_IS_X11 (requestor), 0);
   
   display = GDK_WINDOW_DISPLAY (requestor);
 
-  if (GDK_WINDOW_DESTROYED (requestor))
+  if (GDK_WINDOW_DESTROYED (requestor) || !GDK_WINDOW_IS_X11 (requestor))
     goto err;
 
   t = NULL;
@@ -404,7 +407,10 @@ gdk_selection_send_notify_for_display (GdkDisplay       *display,
   xevent.requestor = requestor;
   xevent.selection = gdk_x11_atom_to_xatom_for_display (display, selection);
   xevent.target = gdk_x11_atom_to_xatom_for_display (display, target);
-  xevent.property = gdk_x11_atom_to_xatom_for_display (display, property);
+  if (property == GDK_NONE)
+    xevent.property = None;
+  else
+    xevent.property = gdk_x11_atom_to_xatom_for_display (display, property);
   xevent.time = time;
 
   _gdk_send_xevent (display, requestor, False, NoEventMask, (XEvent*) & xevent);
@@ -432,9 +438,27 @@ gdk_selection_send_notify_for_display (GdkDisplay       *display,
  * if the conversion failed. 
  *
  * Since: 2.2
+ *
+ * Deprecated:2.24: Use gdk_x11_display_text_property_to_text_list()
  */
 gint
 gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
+					    GdkAtom       encoding,
+					    gint          format,
+					    const guchar *text,
+					    gint          length,
+					    gchar      ***list)
+{
+  return gdk_x11_display_text_property_to_text_list (display,
+                                                     encoding,
+                                                     format,
+                                                     text,
+                                                     length,
+                                                     list);
+}
+
+gint
+gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
 					    GdkAtom       encoding,
 					    gint          format, 
 					    const guchar *text,
@@ -474,6 +498,12 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
 
 void
 gdk_free_text_list (gchar **list)
+{
+  gdk_x11_free_text_list (list);
+}
+
+void
+gdk_x11_free_text_list (gchar **list)
 {
   g_return_if_fail (list != NULL);
 
@@ -676,12 +706,25 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
  * Convert a string from the encoding of the current 
  * locale into a form suitable for storing in a window property.
  * 
- * Returns: 0 upon sucess, non-zero upon failure. 
+ * Returns: 0 upon success, non-zero upon failure. 
  *
  * Since: 2.2
+ *
+ * Deprecated:2.24: Use gdk_x11_display_string_to_compound_text()
  **/
 gint
 gdk_string_to_compound_text_for_display (GdkDisplay  *display,
+					 const gchar *str,
+					 GdkAtom     *encoding,
+					 gint        *format,
+					 guchar     **ctext,
+					 gint        *length)
+{
+  return gdk_x11_display_string_to_compound_text (display, str, encoding, format, ctext, length);
+}
+
+gint
+gdk_x11_display_string_to_compound_text (GdkDisplay  *display,
 					 const gchar *str,
 					 GdkAtom     *encoding,
 					 gint        *format,
@@ -812,9 +855,22 @@ gdk_utf8_to_string_target (const gchar *str)
  *               %FALSE.
  *
  * Since: 2.2
+ *
+ * Deprecated:2.24: Use gdk_x11_display_utf8_to_compound_text()
  **/
 gboolean
 gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
+				       const gchar *str,
+				       GdkAtom     *encoding,
+				       gint        *format,
+				       guchar     **ctext,
+				       gint        *length)
+{
+  return gdk_x11_display_utf8_to_compound_text (display, str, encoding, format, ctext, length);
+}
+
+gboolean
+gdk_x11_display_utf8_to_compound_text (GdkDisplay  *display,
 				       const gchar *str,
 				       GdkAtom     *encoding,
 				       gint        *format,
@@ -877,6 +933,11 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
 }
 
 void gdk_free_compound_text (guchar *ctext)
+{
+  gdk_x11_free_compound_text (ctext);
+}
+
+void gdk_x11_free_compound_text (guchar *ctext)
 {
   if (ctext)
     XFree (ctext);

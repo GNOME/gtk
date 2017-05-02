@@ -24,6 +24,14 @@
 
 @implementation GdkQuartzWindow
 
+- (void)windowWillClose:(NSNotification*)notification
+{
+  // Clears the delegate when window is going to be closed; since EL
+  // Capitan it is possible that the methods of delegate would get
+  // called after the window has been closed.
+  [self setDelegate:nil];
+}
+
 -(BOOL)windowShouldClose:(id)sender
 {
   GdkWindow *window = [[self contentView] gdkWindow];
@@ -115,10 +123,15 @@
   switch ([event type])
     {
     case NSLeftMouseUp:
+    {
+      double time = ((double)[event timestamp]) * 1000.0;
+
+      _gdk_quartz_events_break_all_grabs (time);
       inManualMove = NO;
       inManualResize = NO;
       inMove = NO;
       break;
+    }
 
     case NSLeftMouseDragged:
       if ([self trackManualMove] || [self trackManualResize])
@@ -137,66 +150,91 @@
   return inMove;
 }
 
--(void)windowDidMove:(NSNotification *)aNotification
+-(void)checkSendEnterNotify
+{
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+
+  /* When a new window has been created, and the mouse
+   * is in the window area, we will not receive an NSMouseEntered
+   * event.  Therefore, we synthesize an enter notify event manually.
+   */
+  if (!initialPositionKnown)
+    {
+      initialPositionKnown = YES;
+
+      if (NSPointInRect ([NSEvent mouseLocation], [self frame]))
+        {
+          NSEvent *event;
+
+          event = [NSEvent enterExitEventWithType: NSMouseEntered
+                                         location: [self mouseLocationOutsideOfEventStream]
+                                    modifierFlags: 0
+                                        timestamp: [[NSApp currentEvent] timestamp]
+                                     windowNumber: [impl->toplevel windowNumber]
+                                          context: NULL
+                                      eventNumber: 0
+                                   trackingNumber: [impl->view trackingRect]
+                                         userData: nil];
+
+          [NSApp postEvent:event atStart:NO];
+        }
+    }
+}
+
+/* Always update both the position and size. Certain resize operations
+ * (e.g. going fullscreen) also move the origin of the window. Move
+ * notifications sometimes also indicate a different window size (for
+ * example if the window size requested in the configure request was not
+ * fully granted).
+ */
+-(void)handleDidMoveResize
 {
   NSRect content_rect = [self contentRectForFrameRect:[self frame]];
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   GdkEvent *event;
 
-  /* Ignore new position during showing/hiding the window, otherwise we
-   * would get the off-screen position that is used for hidden windows to
-   * get reliable MouseEntered events when showing them again. See comments
-   * in show() and hide().
-   */
-  if (inShowOrHide)
-    return;
+  private->width = content_rect.size.width;
+  private->height = content_rect.size.height;
 
-  private->x = content_rect.origin.x;
-  private->y = _gdk_quartz_window_get_inverted_screen_y (content_rect.origin.y + content_rect.size.height);
+  _gdk_quartz_window_update_position (window);
+
+  [[self contentView] setFrame:NSMakeRect (0, 0, private->width, private->height)];
+
+  _gdk_window_update_size (window);
 
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = g_object_ref (window);
   event->configure.x = private->x;
   event->configure.y = private->y;
-  event->configure.width = impl->width;
-  event->configure.height = impl->height;
+  event->configure.width = private->width;
+  event->configure.height = private->height;
 
   _gdk_event_queue_append (gdk_display_get_default (), event);
+
+  [self checkSendEnterNotify];
+}
+
+-(void)windowDidMove:(NSNotification *)aNotification
+{
+  [self handleDidMoveResize];
 }
 
 -(void)windowDidResize:(NSNotification *)aNotification
 {
-  NSRect content_rect = [self contentRectForFrameRect:[self frame]];
-  GdkWindow *window = [[self contentView] gdkWindow];
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-  GdkEvent *event;
-
-  impl->width = content_rect.size.width;
-  impl->height = content_rect.size.height;
-
-  [[self contentView] setFrame:NSMakeRect (0, 0, impl->width, impl->height)];
-
-  /* Synthesize a configure event */
-  event = gdk_event_new (GDK_CONFIGURE);
-  event->configure.window = g_object_ref (window);
-  event->configure.x = private->x;
-  event->configure.y = private->y;
-  event->configure.width = impl->width;
-  event->configure.height = impl->height;
-
-  _gdk_event_queue_append (gdk_display_get_default (), event);
+  [self handleDidMoveResize];
 }
 
--(id)initWithContentRect:(NSRect)contentRect styleMask:(unsigned int)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag
+-(id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)styleMask backing:(NSBackingStoreType)backingType defer:(BOOL)flag screen:(NSScreen *)screen
 {
   self = [super initWithContentRect:contentRect
 	                  styleMask:styleMask
 	                    backing:backingType
-	                      defer:flag];
+	                      defer:flag
+                             screen:screen];
 
   [self setAcceptsMouseMovedEvents:YES];
   [self setDelegate:self];
@@ -279,32 +317,8 @@
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-  gboolean was_hidden;
-  int requested_x = 0, requested_y = 0;
 
   inShowOrHide = YES;
-  was_hidden = FALSE;
-
-  if (!GDK_WINDOW_IS_MAPPED (window))
-    {
-      NSRect content_rect;
-      NSRect frame_rect;
-
-      was_hidden = TRUE;
-
-      /* We move the window in place if it's not mapped. See comment in
-       * hide().
-       */
-      content_rect =
-        NSMakeRect (private->x,
-                    _gdk_quartz_window_get_inverted_screen_y (private->y) - impl->height,
-                    impl->width, impl->height);
-      frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
-      [impl->toplevel setFrame:frame_rect display:NO];
-
-      requested_x = frame_rect.origin.x;
-      requested_y = frame_rect.origin.y;
-    }
 
   if (makeKey)
     [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
@@ -313,19 +327,7 @@
 
   inShowOrHide = NO;
 
-  /* When the window manager didn't allow our request, update the position
-   * to what it really ended up as.
-   */
-  if (was_hidden)
-    {
-      NSRect frame_rect;
-
-      frame_rect = [impl->toplevel frame];
-      if (requested_x != frame_rect.origin.x || requested_y != frame_rect.origin.y)
-        {
-          [self windowDidMove:nil];
-        }
-    }
+  [self checkSendEnterNotify];
 }
 
 - (void)hide
@@ -333,24 +335,12 @@
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
-  NSRect content_rect;
-  NSRect frame_rect;
 
   inShowOrHide = YES;
-
-  /* We move the window away when hiding, to make it possible to move it in
-   * place when showing to get reliable tracking rect events (which are used
-   * to generate crossing events). We have to do this, probably a bug in
-   * quartz.
-   */
-  content_rect = NSMakeRect (-500 - impl->width, -500 - impl->height,
-                             impl->width, impl->height);
-  frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
-  [impl->toplevel setFrame:frame_rect display:NO];
-
   [impl->toplevel orderOut:nil];
-
   inShowOrHide = NO;
+
+  initialPositionKnown = NO;
 }
 
 - (BOOL)trackManualMove
@@ -439,6 +429,11 @@
   return YES;
 }
 
+-(BOOL)isInManualResize
+{
+  return inManualResize;
+}
+
 -(void)beginManualResize
 {
   if (inMove || inManualMove || inManualResize)
@@ -461,8 +456,29 @@ drag_operation_to_drag_action (NSDragOperation operation)
 {
   GdkDragAction result = 0;
 
+  /* GDK and Quartz drag operations do not map 1:1.
+   * This mapping represents about the best that we
+   * can come up.
+   *
+   * Note that NSDragOperationPrivate and GDK_ACTION_PRIVATE
+   * have almost opposite meanings: the GDK one means that the
+   * destination is solely responsible for the action; the Quartz
+   * one means that the source and destination will agree
+   * privately on the action. NSOperationGeneric is close in meaning
+   * to GDK_ACTION_PRIVATE but there is a problem: it will be
+   * sent for any ordinary drag, and likely not understood
+   * by any intra-widget drag (since the source & dest are the
+   * same).
+   */
+
   if (operation & NSDragOperationGeneric)
+    result |= GDK_ACTION_MOVE;
+  if (operation & NSDragOperationCopy)
     result |= GDK_ACTION_COPY;
+  if (operation & NSDragOperationMove)
+    result |= GDK_ACTION_MOVE;
+  if (operation & NSDragOperationLink)
+    result |= GDK_ACTION_LINK;
 
   return result;
 }
@@ -474,6 +490,10 @@ drag_action_to_drag_operation (GdkDragAction action)
 
   if (action & GDK_ACTION_COPY)
     result |= NSDragOperationCopy;
+  if (action & GDK_ACTION_LINK)
+    result |= NSDragOperationLink;
+  if (action & GDK_ACTION_MOVE)
+    result |= NSDragOperationMove;
 
   return result;
 }
@@ -485,6 +505,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   GDK_DRAG_CONTEXT_PRIVATE (current_context)->dragging_info = sender;
   current_context->suggested_action = drag_operation_to_drag_action ([sender draggingSourceOperationMask]);
+  current_context->actions = current_context->suggested_action;
 }
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
@@ -510,6 +531,10 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 - (void)draggingEnded:(id <NSDraggingInfo>)sender
 {
+  /* leave a note for the source about what action was taken */
+  if (_gdk_quartz_drag_source_context && current_context)
+   _gdk_quartz_drag_source_context->action = current_context->action;
+
   if (current_context)
     g_object_unref (current_context);
   current_context = NULL;
@@ -536,16 +561,18 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   NSPoint point = [sender draggingLocation];
   NSPoint screen_point = [self convertBaseToScreen:point];
   GdkEvent event;
+  int gx, gy;
 
   update_context_from_dragging_info (sender);
+  _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &gx, &gy);
 
   event.dnd.type = GDK_DRAG_MOTION;
   event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
   event.dnd.send_event = FALSE;
   event.dnd.context = current_context;
   event.dnd.time = GDK_CURRENT_TIME;
-  event.dnd.x_root = screen_point.x;
-  event.dnd.y_root = _gdk_quartz_window_get_inverted_screen_y (screen_point.y);
+  event.dnd.x_root = gx;
+  event.dnd.y_root = gy;
 
   (*_gdk_event_func) (&event, _gdk_event_data);
 
@@ -559,16 +586,18 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   NSPoint point = [sender draggingLocation];
   NSPoint screen_point = [self convertBaseToScreen:point];
   GdkEvent event;
+  int gy, gx;
 
   update_context_from_dragging_info (sender);
+  _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &gx, &gy);
 
   event.dnd.type = GDK_DROP_START;
   event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
   event.dnd.send_event = FALSE;
   event.dnd.context = current_context;
   event.dnd.time = GDK_CURRENT_TIME;
-  event.dnd.x_root = screen_point.x;
-  event.dnd.y_root = _gdk_quartz_window_get_inverted_screen_y (screen_point.y);
+  event.dnd.x_root = gx;
+  event.dnd.y_root = gy;
 
   (*_gdk_event_func) (&event, _gdk_event_data);
 
@@ -588,6 +617,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
   GdkEvent event;
+  GdkScreen *screen;
 
   g_assert (_gdk_quartz_drag_source_context != NULL);
 
@@ -595,6 +625,33 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event.dnd.window = g_object_ref ([[self contentView] gdkWindow]);
   event.dnd.send_event = FALSE;
   event.dnd.context = _gdk_quartz_drag_source_context;
+
+  screen = gdk_window_get_screen (event.dnd.window);
+
+  if (screen)
+    {
+      GList* windows, *list;
+      gint gx, gy;
+
+      event.dnd.context->dest_window = NULL;
+
+      windows = gdk_screen_get_toplevel_windows (screen);
+      _gdk_quartz_window_nspoint_to_gdk_xy (aPoint, &gx, &gy);
+
+      for (list = windows; list; list = list->next) 
+        {
+          GdkWindow* win = (GdkWindow*) list->data;
+          gint wx, wy;
+          gint ww, wh;
+
+          gdk_window_get_root_origin (win, &wx, &wy);
+          ww = gdk_window_get_width (win);
+          wh = gdk_window_get_height (win);
+
+          if (gx > wx && gy > wy && gx <= wx + ww && gy <= wy + wh)
+            event.dnd.context->dest_window = win;
+        }
+    }
 
   (*_gdk_event_func) (&event, _gdk_event_data);
 

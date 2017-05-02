@@ -11,3 +11,5 @@ endif
 
 gdk-win32-res.o : gdk.rc gtk.ico
 	$(WINDRES) gdk.rc $@
+
+-include $(top_srcdir)/git.mk

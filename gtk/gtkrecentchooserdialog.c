@@ -230,7 +230,7 @@ gtk_recent_chooser_dialog_map (GtkWidget *widget)
   GtkRecentChooserDialog *dialog = GTK_RECENT_CHOOSER_DIALOG (widget);
   GtkRecentChooserDialogPrivate *priv = dialog->priv;
   
-  if (!GTK_WIDGET_MAPPED (priv->chooser))
+  if (!gtk_widget_get_mapped (priv->chooser))
     gtk_widget_map (priv->chooser);
 
   GTK_WIDGET_CLASS (gtk_recent_chooser_dialog_parent_class)->map (widget);
@@ -278,9 +278,9 @@ gtk_recent_chooser_dialog_new_valist (const gchar      *title,
 
 /**
  * gtk_recent_chooser_dialog_new:
- * @title: Title of the dialog, or %NULL
- * @parent: Transient parent of the dialog, or %NULL,
- * @first_button_text: stock ID or text to go in the first button, or %NULL
+ * @title: (allow-none): Title of the dialog, or %NULL
+ * @parent: (allow-none): Transient parent of the dialog, or %NULL,
+ * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
  * @Varargs: response ID for the first button, then additional (button, id)
  *   pairs, ending with %NULL
  *
@@ -313,10 +313,10 @@ gtk_recent_chooser_dialog_new (const gchar *title,
 
 /**
  * gtk_recent_chooser_dialog_new_for_manager:
- * @title: Title of the dialog, or %NULL
- * @parent: Transient parent of the dialog, or %NULL,
+ * @title: (allow-none): Title of the dialog, or %NULL
+ * @parent: (allow-none): Transient parent of the dialog, or %NULL,
  * @manager: a #GtkRecentManager
- * @first_button_text: stock ID or text to go in the first button, or %NULL
+ * @first_button_text: (allow-none): stock ID or text to go in the first button, or %NULL
  * @Varargs: response ID for the first button, then additional (button, id)
  *   pairs, ending with %NULL
  *

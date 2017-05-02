@@ -131,7 +131,7 @@ gtk_action_group_get_type (void)
         (GInstanceInitFunc) gtk_action_group_init,
       };
 
-      static const GInterfaceInfo buildable_info =
+      const GInterfaceInfo buildable_info =
       {
 	(GInterfaceInitFunc) gtk_action_group_buildable_init,
 	NULL,
@@ -583,7 +583,7 @@ gtk_action_group_real_get_action (GtkActionGroup *self,
  * 
  * Since: 2.4
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_action_group_get_name (GtkActionGroup *action_group)
 {
   GtkActionGroupPrivate *private;
@@ -626,8 +626,8 @@ cb_set_action_sensitivity (const gchar *name,
 {
   /* Minor optimization, the action_groups state only affects actions 
    * that are themselves sensitive */
-  if (gtk_action_get_sensitive (action))
-    _gtk_action_sync_sensitive (action);
+  g_object_notify (G_OBJECT (action), "sensitive");
+
 }
 
 /**
@@ -691,8 +691,7 @@ cb_set_action_visiblity (const gchar *name,
 {
   /* Minor optimization, the action_groups state only affects actions 
    * that are themselves visible */
-  if (gtk_action_get_visible (action))
-    _gtk_action_sync_visible (action);
+  g_object_notify (G_OBJECT (action), "visible");
 }
 
 /**
@@ -732,7 +731,7 @@ gtk_action_group_set_visible (GtkActionGroup *action_group,
  *
  * Looks up an action in the action group by name.
  *
- * Returns: the action, or %NULL if no action by that name exists
+ * Returns: (transfer none): the action, or %NULL if no action by that name exists
  *
  * Since: 2.4
  */
@@ -806,11 +805,11 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
 
 /**
  * gtk_action_group_add_action_with_accel:
- * @action_group: the action group 
- * @action: the action to add 
- * @accelerator: the accelerator for the action, in
- *   the format understood by gtk_accelerator_parse(), or "" for no accelerator, or 
- *   %NULL to use the stock accelerator 
+ * @action_group: the action group
+ * @action: the action to add
+ * @accelerator: (allow-none): the accelerator for the action, in
+ *   the format understood by gtk_accelerator_parse(), or "" for no accelerator, or
+ *   %NULL to use the stock accelerator
  *
  * Adds an action object to the action group and sets up the accelerator.
  *
@@ -921,8 +920,8 @@ add_single_action (gpointer key,
  *
  * Lists the actions in the action group.
  *
- * Returns: an allocated list of the action objects in the action group
- * 
+ * Returns: (element-type GtkAction) (transfer container): an allocated list of the action objects in the action group
+ *
  * Since: 2.4
  */
 GList *
@@ -1381,7 +1380,7 @@ gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
  *
  * Since: 2.6
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_action_group_translate_string (GtkActionGroup *action_group,
 				   const gchar    *string)
 {

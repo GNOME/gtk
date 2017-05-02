@@ -18,21 +18,22 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_PRINT_OPERATION_H__
+#define __GTK_PRINT_OPERATION_H__
+
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_PRINT_OPERATION_H__
-#define __GTK_PRINT_OPERATION_H__
-
 #include <cairo.h>
 #include <gtk/gtkmain.h>
-#include <gtk/gtkenums.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkprintsettings.h>
 #include <gtk/gtkprintcontext.h>
 #include <gtk/gtkprintoperationpreview.h>
+
 
 G_BEGIN_DECLS
 
@@ -104,12 +105,17 @@ struct _GtkPrintOperationClass
 
   GtkWidget *(*create_custom_widget) (GtkPrintOperation *operation);
   void       (*custom_widget_apply)  (GtkPrintOperation *operation,
-				      GtkWidget *widget);
+				      GtkWidget         *widget);
 
   gboolean (*preview)	     (GtkPrintOperation        *operation,
 			      GtkPrintOperationPreview *preview,
 			      GtkPrintContext          *context,
 			      GtkWindow                *parent);
+
+  void     (*update_custom_widget) (GtkPrintOperation *operation,
+                                    GtkWidget         *widget,
+                                    GtkPageSetup      *setup,
+                                    GtkPrintSettings  *settings);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -118,7 +124,6 @@ struct _GtkPrintOperationClass
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
 };
 
 #define GTK_PRINT_ERROR gtk_print_error_quark ()
@@ -168,9 +173,21 @@ GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOper
 void                    gtk_print_operation_get_error              (GtkPrintOperation  *op,
 								    GError            **error);
 GtkPrintStatus          gtk_print_operation_get_status             (GtkPrintOperation  *op);
-G_CONST_RETURN gchar *  gtk_print_operation_get_status_string      (GtkPrintOperation  *op);
+const gchar *           gtk_print_operation_get_status_string      (GtkPrintOperation  *op);
 gboolean                gtk_print_operation_is_finished            (GtkPrintOperation  *op);
 void                    gtk_print_operation_cancel                 (GtkPrintOperation  *op);
+void                    gtk_print_operation_draw_page_finish       (GtkPrintOperation  *op);
+void                    gtk_print_operation_set_defer_drawing      (GtkPrintOperation  *op);
+void                    gtk_print_operation_set_support_selection  (GtkPrintOperation  *op,
+                                                                    gboolean            support_selection);
+gboolean                gtk_print_operation_get_support_selection  (GtkPrintOperation  *op);
+void                    gtk_print_operation_set_has_selection      (GtkPrintOperation  *op,
+                                                                    gboolean            has_selection);
+gboolean                gtk_print_operation_get_has_selection      (GtkPrintOperation  *op);
+void                    gtk_print_operation_set_embed_page_setup   (GtkPrintOperation  *op,
+ 								    gboolean            embed);
+gboolean                gtk_print_operation_get_embed_page_setup   (GtkPrintOperation  *op);
+gint                    gtk_print_operation_get_n_pages_to_print   (GtkPrintOperation  *op);
 
 GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow          *parent,
 								    GtkPageSetup       *page_setup,

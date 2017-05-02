@@ -35,13 +35,12 @@
 
 #include <glib/gi18n-lib.h>
 
-#include "gtkprintoperation.h"
+#include <gtk/gtkprintbackend.h>
+#include <gtk/gtkunixprint.h>
+#include <gtk/gtkprinter-private.h>
 
-#include "gtkprintbackend.h"
 #include "gtkprintbackendtest.h"
 
-#include "gtkprinter.h"
-#include "gtkprinter-private.h"
 
 typedef struct _GtkPrintBackendTestClass GtkPrintBackendTestClass;
 
@@ -108,7 +107,7 @@ static void                 test_printer_request_details           (GtkPrinter  
 static void
 gtk_print_backend_test_register_type (GTypeModule *module)
 {
-  static const GTypeInfo print_backend_test_info =
+  const GTypeInfo print_backend_test_info =
   {
     sizeof (GtkPrintBackendTestClass),
     NULL,		/* base_init */
@@ -238,11 +237,13 @@ output_test_from_settings (GtkPrintSettings *settings,
 
       if (locale_name != NULL)
         {
-          path = g_build_filename (g_get_current_dir (), locale_name, NULL);
+	  gchar *current_dir = g_get_current_dir ();
+          path = g_build_filename (current_dir, locale_name, NULL);
           g_free (locale_name);
 
           uri = g_filename_to_uri (path, NULL, NULL);
           g_free (path);
+	  g_free (current_dir);
 	}
     }
 
@@ -304,8 +305,9 @@ test_printer_create_cairo_surface (GtkPrinter       *printer,
   else
     surface = cairo_pdf_surface_create_for_stream (_cairo_write, cache_io, width, height);
 
-  /* TODO: DPI from settings object? */
-  cairo_surface_set_fallback_resolution (surface, 300, 300);
+  cairo_surface_set_fallback_resolution (surface,
+                                         2.0 * gtk_print_settings_get_printer_lpi (settings),
+                                         2.0 * gtk_print_settings_get_printer_lpi (settings));
 
   return surface;
 }

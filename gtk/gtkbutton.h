@@ -24,17 +24,15 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_BUTTON_H__
 #define __GTK_BUTTON_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkbin.h>
-#include <gtk/gtkenums.h>
 #include <gtk/gtkimage.h>
 
 
@@ -95,18 +93,22 @@ GtkWidget*     gtk_button_new               (void);
 GtkWidget*     gtk_button_new_with_label    (const gchar    *label);
 GtkWidget*     gtk_button_new_from_stock    (const gchar    *stock_id);
 GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
+#ifndef GTK_DISABLE_DEPRECATED
 void           gtk_button_pressed           (GtkButton      *button);
 void           gtk_button_released          (GtkButton      *button);
+#endif
 void           gtk_button_clicked           (GtkButton      *button);
+#ifndef GTK_DISABLE_DEPRECATED
 void           gtk_button_enter             (GtkButton      *button);
 void           gtk_button_leave             (GtkButton      *button);
+#endif
 
 void                  gtk_button_set_relief         (GtkButton      *button,
 						     GtkReliefStyle  newstyle);
 GtkReliefStyle        gtk_button_get_relief         (GtkButton      *button);
 void                  gtk_button_set_label          (GtkButton      *button,
 						     const gchar    *label);
-G_CONST_RETURN gchar *gtk_button_get_label          (GtkButton      *button);
+const gchar *         gtk_button_get_label          (GtkButton      *button);
 void                  gtk_button_set_use_underline  (GtkButton      *button,
 						     gboolean        use_underline);
 gboolean              gtk_button_get_use_underline  (GtkButton      *button);
@@ -128,6 +130,8 @@ GtkWidget*            gtk_button_get_image          (GtkButton      *button);
 void                  gtk_button_set_image_position (GtkButton      *button,
 						     GtkPositionType position);
 GtkPositionType       gtk_button_get_image_position (GtkButton      *button);
+
+GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
 
 void _gtk_button_set_depressed             (GtkButton          *button,
 					    gboolean            depressed);

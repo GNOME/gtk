@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_FIXED_H__
 #define __GTK_FIXED_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkcontainer.h>
 
 
@@ -80,9 +79,11 @@ void       gtk_fixed_move              (GtkFixed       *fixed,
                                         GtkWidget      *widget,
                                         gint            x,
                                         gint            y);
+#ifndef GTK_DISABLE_DEPRECATED
 void       gtk_fixed_set_has_window    (GtkFixed       *fixed,
 					gboolean        has_window);
 gboolean   gtk_fixed_get_has_window    (GtkFixed       *fixed);
+#endif
 
 G_END_DECLS
 

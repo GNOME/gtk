@@ -221,7 +221,7 @@ gtk_separator_tool_item_expose (GtkWidget      *widget,
  * Return value: the new #GtkSeparatorToolItem
  * 
  * Since: 2.4
- **/
+ */
 GtkToolItem *
 gtk_separator_tool_item_new (void)
 {
@@ -237,13 +237,13 @@ gtk_separator_tool_item_new (void)
  * gtk_separator_tool_item_get_draw:
  * @item: a #GtkSeparatorToolItem 
  * 
- * Returns whether @separator_tool_item is drawn as a
- * line, or just blank. See gtk_separator_tool_item_set_draw().
+ * Returns whether @item is drawn as a line, or just blank. 
+ * See gtk_separator_tool_item_set_draw().
  * 
- * Return value: #TRUE if @separator_tool_item is drawn as a line, or just blank.
+ * Return value: %TRUE if @item is drawn as a line, or just blank.
  * 
  * Since: 2.4
- **/
+ */
 gboolean
 gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item)
 {
@@ -255,14 +255,14 @@ gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item)
 /**
  * gtk_separator_tool_item_set_draw:
  * @item: a #GtkSeparatorToolItem
- * @draw: whether @separator_tool_item is drawn as a vertical line
+ * @draw: whether @item is drawn as a vertical line
  * 
- * When @separator_tool_items is drawn as a vertical line, or just blank.
- * Setting this #FALSE along with gtk_tool_item_set_expand() is useful
+ * Whether @item is drawn as a vertical line, or just blank.
+ * Setting this to %FALSE along with gtk_tool_item_set_expand() is useful
  * to create an item that forces following items to the end of the toolbar.
  * 
  * Since: 2.4
- **/
+ */
 void
 gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *item,
 				  gboolean              draw)

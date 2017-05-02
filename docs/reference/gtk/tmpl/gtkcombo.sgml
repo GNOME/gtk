@@ -24,7 +24,7 @@ arrow (cursor) keys, though this behaviour can be turned off with
 gtk_combo_set_use_arrows().
 </para>
 <para>
-As of GTK+ 2.4, #GtkCombo has been deprecated in favor of #GtkComboBox.
+As of GTK+ 2.4, #GtkCombo has been deprecated in favor of #GtkComboBoxEntry.
 </para>
 
 <example id="gtkcombo-simple-example">
@@ -86,6 +86,9 @@ items.</title>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCombo ##### -->
 <para>
 The #GtkCombo-struct struct contains the following fields.
@@ -127,6 +130,7 @@ an application.)
 Creates a new #GtkCombo.
 </para>
 
+@void: 
 @Returns: a new #GtkCombo.
 @Deprecated: 2.4: Use #GtkComboBox instead.
 

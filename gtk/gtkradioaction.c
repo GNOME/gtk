@@ -176,13 +176,15 @@ gtk_radio_action_init (GtkRadioAction *action)
   action->private_data = GTK_RADIO_ACTION_GET_PRIVATE (action);
   action->private_data->group = g_slist_prepend (NULL, action);
   action->private_data->value = 0;
+
+  gtk_toggle_action_set_draw_as_radio (GTK_TOGGLE_ACTION (action), TRUE);
 }
 
 /**
  * gtk_radio_action_new:
  * @name: A unique name for the action
- * @label: The label displayed in menu items and on buttons, or %NULL
- * @tooltip: A tooltip for this action, or %NULL
+ * @label: (allow-none): The label displayed in menu items and on buttons, or %NULL
+ * @tooltip: (allow-none): A tooltip for this action, or %NULL
  * @stock_id: The stock icon to display in widgets representing this
  *   action, or %NULL
  * @value: The value which gtk_radio_action_get_current_value() should
@@ -206,12 +208,12 @@ gtk_radio_action_new (const gchar *name,
   g_return_val_if_fail (name != NULL, NULL);
 
   return g_object_new (GTK_TYPE_RADIO_ACTION,
-		       "name", name,
-		       "label", label,
-		       "tooltip", tooltip,
-		       "stock-id", stock_id,
-		       "value", value,
-		       NULL);
+                       "name", name,
+                       "label", label,
+                       "tooltip", tooltip,
+                       "stock-id", stock_id,
+                       "value", value,
+                       NULL);
 }
 
 static void
@@ -324,13 +326,16 @@ gtk_radio_action_activate (GtkAction *action)
 	  if (tmp_action->private_data->active && (tmp_action != toggle_action)) 
 	    {
 	      toggle_action->private_data->active = !toggle_action->private_data->active;
+
 	      break;
 	    }
 	}
+      g_object_notify (G_OBJECT (action), "active");
     }
   else
     {
       toggle_action->private_data->active = !toggle_action->private_data->active;
+      g_object_notify (G_OBJECT (action), "active");
 
       tmp_list = radio_action->private_data->group;
       while (tmp_list)
@@ -390,7 +395,7 @@ create_menu_item (GtkAction *action)
  *     }
  * ]|
  *
- * Returns: the list representing the radio group for this object
+ * Returns:  (element-type GtkAction) (transfer none): the list representing the radio group for this object
  *
  * Since: 2.4
  */

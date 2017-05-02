@@ -37,6 +37,9 @@ The important signal ('toggled') is also inherited from #GtkToggleButton.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCheckButton ##### -->
 <para>
 <structfield>toggle_button</structfield> is a #GtkToggleButton representing the actual toggle button that composes the check button.
@@ -58,6 +61,7 @@ The important signal ('toggled') is also inherited from #GtkToggleButton.
 Creates a new #GtkCheckButton.
 </para>
 
+@void: 
 @Returns: a #GtkWidget.
 
 

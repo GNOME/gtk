@@ -151,7 +151,7 @@ void		gtk_item_factory_add_foreign        (GtkWidget	    *accel_widget,
 						     GdkModifierType modifiers);
      
 GtkItemFactory*       gtk_item_factory_from_widget      (GtkWidget *widget);
-G_CONST_RETURN gchar* gtk_item_factory_path_from_widget (GtkWidget *widget);
+const gchar *         gtk_item_factory_path_from_widget (GtkWidget *widget);
 
 GtkWidget*	gtk_item_factory_get_item	      (GtkItemFactory *ifactory,
 						       const gchar    *path);
@@ -228,10 +228,9 @@ void	gtk_item_factory_create_menu_entries (guint		 n_entries,
 void	gtk_item_factories_path_delete	   (const gchar		*ifactory_path,
 					    const gchar		*path);
 
-#endif /* !GTK_DISABLE_DEPRECATED */
-
-
 G_END_DECLS
+
+#endif /* !GTK_DISABLE_DEPRECATED */
 
 #endif	/* __GTK_ITEM_FACTORY_H__ */
 

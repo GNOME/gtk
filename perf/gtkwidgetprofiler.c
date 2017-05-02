@@ -168,7 +168,7 @@ create_widget_via_emission (GtkWidgetProfiler *profiler)
   if (!widget)
     g_error ("The profiler emitted the \"create-widget\" signal but the signal handler returned no widget!");
 
-  if (GTK_WIDGET_VISIBLE (widget) || GTK_WIDGET_MAPPED (widget))
+  if (gtk_widget_get_visible (widget) || gtk_widget_get_mapped (widget))
     g_error ("The handler for \"create-widget\" must return an unmapped and unshown widget");
 
   return widget;
@@ -250,7 +250,7 @@ ensure_and_get_toplevel (GtkWidget *widget)
 	GtkWidget *window;
 
 	toplevel = gtk_widget_get_toplevel (widget);
-	if (GTK_WIDGET_TOPLEVEL (toplevel))
+	if (gtk_widget_is_toplevel (toplevel))
 		return toplevel;
 
 	g_assert (toplevel == widget); /* we don't want extraneous ancestors */

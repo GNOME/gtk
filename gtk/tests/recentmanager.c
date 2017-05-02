@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
 const gchar *uri = "file:///tmp/testrecentchooser.txt";
@@ -93,6 +94,69 @@ recent_manager_add (void)
   g_assert (res == TRUE);
 
   g_slice_free (GtkRecentData, recent_data);
+}
+
+typedef struct {
+  GMainLoop *main_loop;
+  gint counter;
+} AddManyClosure;
+
+static void
+check_bulk (GtkRecentManager *manager,
+            gpointer          data)
+{
+  AddManyClosure *closure = data;
+
+  if (g_test_verbose ())
+    g_print (G_STRLOC ": counter = %d\n", closure->counter);
+
+  g_assert_cmpint (closure->counter, ==, 100);
+
+  if (g_main_loop_is_running (closure->main_loop))
+    g_main_loop_quit (closure->main_loop);
+}
+
+static void
+recent_manager_add_many (void)
+{
+  GtkRecentManager *manager = g_object_new (GTK_TYPE_RECENT_MANAGER,
+                                            "filename", "recently-used.xbel",
+                                            NULL);
+  AddManyClosure *closure = g_new (AddManyClosure, 1);
+  GtkRecentData *data = g_slice_new0 (GtkRecentData);
+  gint i;
+
+  closure->main_loop = g_main_loop_new (NULL, FALSE);
+  closure->counter = 0;
+
+  g_signal_connect (manager, "changed", G_CALLBACK (check_bulk), closure);
+
+  for (i = 0; i < 100; i++)
+    {
+      gchar *new_uri;
+
+      data->mime_type = "text/plain";
+      data->app_name = "testrecentchooser";
+      data->app_exec = "testrecentchooser %u";
+
+      if (g_test_verbose ())
+        g_print (G_STRLOC ": adding item %d\n", i);
+
+      new_uri = g_strdup_printf ("file:///doesnotexist-%d.txt", i);
+      gtk_recent_manager_add_full (manager, new_uri, data);
+      g_free (new_uri);
+
+      closure->counter += 1;
+    }
+
+  g_main_loop_run (closure->main_loop);
+
+  g_main_loop_unref (closure->main_loop);
+  g_slice_free (GtkRecentData, data);
+  g_free (closure);
+  g_object_unref (manager);
+
+  g_assert_cmpint (g_unlink ("recently-used.xbel"), ==, 0);
 }
 
 static void
@@ -234,20 +298,14 @@ main (int    argc,
 {
   gtk_test_init (&argc, &argv, NULL);
 
-  g_test_add_func ("/recent-manager/get-default",
-                   recent_manager_get_default);
-  g_test_add_func ("/recent-manager/add",
-                   recent_manager_add);
-  g_test_add_func ("/recent-manager/has-item",
-                   recent_manager_has_item);
-  g_test_add_func ("/recent-manager/move-item",
-                   recent_manager_move_item);
-  g_test_add_func ("/recent-manager/lookup-item",
-                   recent_manager_lookup_item);
-  g_test_add_func ("/recent-manager/remove-item",
-                   recent_manager_remove_item);
-  g_test_add_func ("/recent-manager/purge",
-                   recent_manager_purge);
+  g_test_add_func ("/recent-manager/get-default", recent_manager_get_default);
+  g_test_add_func ("/recent-manager/add", recent_manager_add);
+  g_test_add_func ("/recent-manager/add-many", recent_manager_add_many);
+  g_test_add_func ("/recent-manager/has-item", recent_manager_has_item);
+  g_test_add_func ("/recent-manager/move-item", recent_manager_move_item);
+  g_test_add_func ("/recent-manager/lookup-item", recent_manager_lookup_item);
+  g_test_add_func ("/recent-manager/remove-item", recent_manager_remove_item);
+  g_test_add_func ("/recent-manager/purge", recent_manager_purge);
 
   return g_test_run ();
 }

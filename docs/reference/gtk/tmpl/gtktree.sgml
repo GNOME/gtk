@@ -27,6 +27,9 @@ The #GtkTree widget is a container that shows users a list of items, in a tree f
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTree ##### -->
 <para>
 <programlisting>
@@ -111,6 +114,7 @@ If @obj is already a root tree, @obj is cast to #GtkTree and returned.
 Creates a new #GtkTree.
 </para>
 
+@void: 
 @Returns: A pointer to the newly allocated widget.
 
 

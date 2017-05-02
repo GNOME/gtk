@@ -162,6 +162,24 @@ aligns in its available space, see gtk_misc_set_alignment().
 
 </refsect2>
 
+<refsect2>
+<title>Links</title>
+
+<para>
+Since 2.18, GTK+ supports markup for clickable hyperlinks in addition
+to regular Pango markup. The markup for links is borrowed from HTML, using the
+<tag>a</tag> with href and title attributes. GTK+ renders links similar to the
+way they appear in web browsers, with colored, underlined text. The title
+attribute is displayed as a tooltip on the link. An example looks like this:
+<informalexample><programlisting>
+gtk_label_set_markup (label, "Go to the &lt;a href=\"http://www.gtk.org\" title=\"&amp;lt;i&amp;gt;Our&amp;lt;/i&amp;gt; website\"&gt;GTK+ website&lt;/a&gt; for more...");
+</programlisting></informalexample>
+It is possible to implement custom handling for links and their tooltips with
+the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function.
+</para>
+
+</refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
@@ -170,12 +188,31 @@ aligns in its available space, see gtk_misc_set_alignment().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkLabel ##### -->
 <para>
 This should not be accessed directly.  Use the accessor functions as
 described below.
 </para>
 
+
+<!-- ##### SIGNAL GtkLabel::activate-current-link ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+
+<!-- ##### SIGNAL GtkLabel::activate-link ##### -->
+<para>
+
+</para>
+
+@label: the object which received the signal.
+@arg1: 
+@Returns: 
 
 <!-- ##### SIGNAL GtkLabel::copy-clipboard ##### -->
 <para>
@@ -263,6 +300,11 @@ described below.
 </para>
 
 <!-- ##### ARG GtkLabel:single-line-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:track-visited-links ##### -->
 <para>
 
 </para>
@@ -394,6 +436,7 @@ must not write to it.
 
 @label: The #GtkLabel widget you want to get the text from.
 @str: The reference to the pointer you want to point to the text.
+@Deprecated: Use gtk_label_get_text() instead.
 
 
 <!-- ##### FUNCTION gtk_label_parse_uline ##### -->
@@ -408,6 +451,7 @@ probably only used within the GTK+ library itself for menu items and such.
 @label: The #GtkLabel you want to affect.
 @string: The string you want to parse for underlines.
 @Returns: The lowercase keyval of the last character underlined.
+@Deprecated: Use gtk_label_set_use_underline() instead.
 
 
 <!-- ##### FUNCTION gtk_label_set_line_wrap ##### -->
@@ -430,10 +474,10 @@ probably only used within the GTK+ library itself for menu items and such.
 
 <!-- ##### MACRO gtk_label_set ##### -->
 <para>
-Aliases gtk_label_set_text().  Probably used for backward compatibility with
-GTK+ 1.0.x.
+Sets the text within the GtkLabel widget.
 </para>
 
+@Deprecated: Use gtk_label_set_text() instead.
 
 
 <!-- ##### FUNCTION gtk_label_get_layout_offsets ##### -->
@@ -699,5 +743,32 @@ GTK+ 1.0.x.
 
 @label: 
 @angle: 
+
+
+<!-- ##### FUNCTION gtk_label_get_current_uri ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_label_set_track_visited_links ##### -->
+<para>
+
+</para>
+
+@label: 
+@track_links: 
+
+
+<!-- ##### FUNCTION gtk_label_get_track_visited_links ##### -->
+<para>
+
+</para>
+
+@label: 
+@Returns: 
 
 

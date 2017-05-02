@@ -28,12 +28,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_ACTION_H__
+#define __GTK_ACTION_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_ACTION_H__
-#define __GTK_ACTION_H__
 
 #include <gtk/gtkwidget.h>
 
@@ -90,7 +90,7 @@ GtkAction   *gtk_action_new                    (const gchar *name,
 						const gchar *label,
 						const gchar *tooltip,
 						const gchar *stock_id);
-G_CONST_RETURN gchar* gtk_action_get_name      (GtkAction     *action);
+const gchar* gtk_action_get_name               (GtkAction     *action);
 gboolean     gtk_action_is_sensitive           (GtkAction     *action);
 gboolean     gtk_action_get_sensitive          (GtkAction     *action);
 void         gtk_action_set_sensitive          (GtkAction     *action,
@@ -105,22 +105,33 @@ GtkWidget *  gtk_action_create_icon            (GtkAction     *action,
 GtkWidget *  gtk_action_create_menu_item       (GtkAction     *action);
 GtkWidget *  gtk_action_create_tool_item       (GtkAction     *action);
 GtkWidget *  gtk_action_create_menu            (GtkAction     *action);
+GSList *     gtk_action_get_proxies            (GtkAction     *action);
+void         gtk_action_connect_accelerator    (GtkAction     *action);
+void         gtk_action_disconnect_accelerator (GtkAction     *action);
+const gchar *gtk_action_get_accel_path         (GtkAction     *action);
+GClosure    *gtk_action_get_accel_closure      (GtkAction     *action);
+
+#ifndef GTK_DISABLE_DEPRECATED
+GtkAction   *gtk_widget_get_action             (GtkWidget     *widget);
 void         gtk_action_connect_proxy          (GtkAction     *action,
 						GtkWidget     *proxy);
 void         gtk_action_disconnect_proxy       (GtkAction     *action,
 						GtkWidget     *proxy);
-GSList *     gtk_action_get_proxies            (GtkAction     *action);
-GtkAction *  gtk_widget_get_action             (GtkWidget     *widget);
-void         gtk_action_connect_accelerator    (GtkAction     *action);
-void         gtk_action_disconnect_accelerator (GtkAction     *action);
-G_CONST_RETURN gchar *gtk_action_get_accel_path (GtkAction     *action);
-GClosure    *gtk_action_get_accel_closure      (GtkAction     *action);
-
-/* protected ... for use by child actions */
 void         gtk_action_block_activate_from    (GtkAction     *action,
 						GtkWidget     *proxy);
 void         gtk_action_unblock_activate_from  (GtkAction     *action,
 						GtkWidget     *proxy);
+#endif /* GTK_DISABLE_DEPRECATED */
+void         gtk_action_block_activate         (GtkAction     *action);
+void         gtk_action_unblock_activate       (GtkAction     *action);
+
+
+void         _gtk_action_add_to_proxy_list     (GtkAction     *action,
+						GtkWidget     *proxy);
+void         _gtk_action_remove_from_proxy_list(GtkAction     *action,
+						GtkWidget     *proxy);
+
+/* protected ... for use by child actions */
 void         _gtk_action_emit_activate         (GtkAction     *action);
 
 /* protected ... for use by action groups */
@@ -128,11 +139,41 @@ void         gtk_action_set_accel_path         (GtkAction     *action,
 						const gchar   *accel_path);
 void         gtk_action_set_accel_group        (GtkAction     *action,
 						GtkAccelGroup *accel_group);
-void         _gtk_action_sync_sensitive        (GtkAction     *action);
-void         _gtk_action_sync_visible          (GtkAction     *action);
 void         _gtk_action_sync_menu_visible     (GtkAction     *action,
 						GtkWidget     *proxy,
 						gboolean       empty);
+
+void                  gtk_action_set_label              (GtkAction   *action,
+                                                         const gchar *label);
+const gchar *         gtk_action_get_label              (GtkAction   *action);
+void                  gtk_action_set_short_label        (GtkAction   *action,
+                                                         const gchar *short_label);
+const gchar *         gtk_action_get_short_label        (GtkAction   *action);
+void                  gtk_action_set_tooltip            (GtkAction   *action,
+                                                         const gchar *tooltip);
+const gchar *         gtk_action_get_tooltip            (GtkAction   *action);
+void                  gtk_action_set_stock_id           (GtkAction   *action,
+                                                         const gchar *stock_id);
+const gchar *         gtk_action_get_stock_id           (GtkAction   *action);
+void                  gtk_action_set_gicon              (GtkAction   *action,
+                                                         GIcon       *icon);
+GIcon                *gtk_action_get_gicon              (GtkAction   *action);
+void                  gtk_action_set_icon_name          (GtkAction   *action,
+                                                         const gchar *icon_name);
+const gchar *         gtk_action_get_icon_name          (GtkAction   *action);
+void                  gtk_action_set_visible_horizontal (GtkAction   *action,
+                                                         gboolean     visible_horizontal);
+gboolean              gtk_action_get_visible_horizontal (GtkAction   *action);
+void                  gtk_action_set_visible_vertical   (GtkAction   *action,
+                                                         gboolean     visible_vertical);
+gboolean              gtk_action_get_visible_vertical   (GtkAction   *action);
+void                  gtk_action_set_is_important       (GtkAction   *action,
+                                                         gboolean     is_important);
+gboolean              gtk_action_get_is_important       (GtkAction   *action);
+void                  gtk_action_set_always_show_image  (GtkAction   *action,
+                                                         gboolean     always_show);
+gboolean              gtk_action_get_always_show_image  (GtkAction   *action);
+
 
 G_END_DECLS
 

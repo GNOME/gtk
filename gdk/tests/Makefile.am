@@ -2,7 +2,8 @@ include $(top_srcdir)/Makefile.decl
 
 NULL=
 
-check_PROGRAMS=check-gdk-cairo
+# check_PROGRAMS=check-gdk-cairo
+check_PROGRAMS=
 TESTS=$(check_PROGRAMS)
 TESTS_ENVIRONMENT=GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders
 
@@ -24,3 +25,5 @@ check_gdk_cairo_LDADD=\
 CLEANFILES = \
 	cairosurface.png	\
 	gdksurface.png
+
+-include $(top_srcdir)/git.mk

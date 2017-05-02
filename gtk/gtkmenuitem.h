@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_MENU_ITEM_H__
 #define __GTK_MENU_ITEM_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkitem.h>
 
 
@@ -87,12 +86,13 @@ struct _GtkMenuItemClass
 				 gint        *requisition);
   void (* toggle_size_allocate) (GtkMenuItem *menu_item,
 				 gint         allocation);
+  void (* set_label)            (GtkMenuItem *menu_item,
+				 const gchar *label);
+  const gchar *(* get_label) (GtkMenuItem *menu_item);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 
@@ -115,7 +115,15 @@ void       gtk_menu_item_set_right_justified  (GtkMenuItem         *menu_item,
 gboolean   gtk_menu_item_get_right_justified  (GtkMenuItem         *menu_item);
 void	   gtk_menu_item_set_accel_path	      (GtkMenuItem	   *menu_item,
 					       const gchar	   *accel_path);
-G_CONST_RETURN gchar* gtk_menu_item_get_accel_path (GtkMenuItem    *menu_item);
+const gchar* gtk_menu_item_get_accel_path     (GtkMenuItem    *menu_item);
+
+void       gtk_menu_item_set_label            (GtkMenuItem         *menu_item,
+ 					       const gchar         *label);
+const gchar *gtk_menu_item_get_label          (GtkMenuItem         *menu_item);
+
+void       gtk_menu_item_set_use_underline    (GtkMenuItem         *menu_item,
+ 					       gboolean             setting);
+gboolean   gtk_menu_item_get_use_underline    (GtkMenuItem         *menu_item);
 
 /* private */
 void	  _gtk_menu_item_refresh_accel_path   (GtkMenuItem	   *menu_item,

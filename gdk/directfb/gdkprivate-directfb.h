@@ -47,16 +47,25 @@
 
 
 #define GDK_TYPE_DRAWABLE_IMPL_DIRECTFB       (gdk_drawable_impl_directfb_get_type ())
-#define GDK_DRAWABLE_IMPL_DIRECTFB(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAWABLE_IMPL_DIRECTFB, GdkDrawableImplDirectFB))
-#define GDK_IS_DRAWABLE_IMPL_DIRECTFB(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAWABLE_IMPL_DIRECTFB))
+#define GDK_DRAWABLE_IMPL_DIRECTFB(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), \
+                                                                           GDK_TYPE_DRAWABLE_IMPL_DIRECTFB, \
+                                                                           GdkDrawableImplDirectFB))
+#define GDK_IS_DRAWABLE_IMPL_DIRECTFB(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), \
+                                                                           GDK_TYPE_DRAWABLE_IMPL_DIRECTFB))
 
 #define GDK_TYPE_WINDOW_IMPL_DIRECTFB         (gdk_window_impl_directfb_get_type ())
-#define GDK_WINDOW_IMPL_DIRECTFB(object)      (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_DIRECTFB, GdkWindowImplDirectFB))
-#define GDK_IS_WINDOW_IMPL_DIRECTFB(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_DIRECTFB))
+#define GDK_WINDOW_IMPL_DIRECTFB(object)      (G_TYPE_CHECK_INSTANCE_CAST ((object), \
+                                                                           GDK_TYPE_WINDOW_IMPL_DIRECTFB, \
+                                                                           GdkWindowImplDirectFB))
+#define GDK_IS_WINDOW_IMPL_DIRECTFB(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), \
+                                                                           GDK_TYPE_WINDOW_IMPL_DIRECTFB))
 
 #define GDK_TYPE_PIXMAP_IMPL_DIRECTFB         (gdk_pixmap_impl_directfb_get_type ())
-#define GDK_PIXMAP_IMPL_DIRECTFB(object)      (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXMAP_IMPL_DIRECTFB, GdkPixmapImplDirectFB))
-#define GDK_IS_PIXMAP_IMPL_DIRECTFB(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXMAP_IMPL_DIRECTFB))
+#define GDK_PIXMAP_IMPL_DIRECTFB(object)      (G_TYPE_CHECK_INSTANCE_CAST ((object), \
+                                                                           GDK_TYPE_PIXMAP_IMPL_DIRECTFB, \
+                                                                           GdkPixmapImplDirectFB))
+#define GDK_IS_PIXMAP_IMPL_DIRECTFB(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), \
+                                                                           GDK_TYPE_PIXMAP_IMPL_DIRECTFB))
 
 
 typedef struct _GdkDrawableImplDirectFB GdkDrawableImplDirectFB;
@@ -66,38 +75,40 @@ typedef struct _GdkPixmapImplDirectFB   GdkPixmapImplDirectFB;
 
 struct _GdkDrawableImplDirectFB
 {
-  GdkDrawable             parent_object;
+  GdkDrawable parent_object;
 
-  GdkDrawable            *wrapper;
+  GdkDrawable *wrapper;
 
-  gboolean                buffered;
+  gboolean buffered;
 
-  GdkRegion               paint_region;
-  gint                    paint_depth;
-  gint                    width;
-  gint                    height;
-  gint                    abs_x;
-  gint                    abs_y;
+  GdkRegion paint_region;
+  gint      paint_depth;
+  gint      width;
+  gint      height;
+  gint      abs_x;
+  gint      abs_y;
 
-  GdkRegion               clip_region;
+  GdkRegion clip_region;
 
-  GdkColormap            *colormap;
+  GdkColormap *colormap;
 
-  IDirectFBSurface       *surface;
-  DFBSurfacePixelFormat   format;
-  cairo_surface_t *  cairo_surface;
-
+  IDirectFBSurface      *surface;
+  DFBSurfacePixelFormat  format;
+  cairo_surface_t       *cairo_surface;
 };
 
 typedef struct
 {
-  GdkDrawableClass  parent_class;
+  GdkDrawableClass parent_class;
 } GdkDrawableImplDirectFBClass;
 
 GType      gdk_drawable_impl_directfb_get_type (void);
 
-GdkEvent *  gdk_directfb_event_make     (GdkWindow               *window,
-                                         GdkEventType             type);
+void gdk_directfb_event_fill (GdkEvent     *event,
+                              GdkWindow    *window,
+                              GdkEventType  type);
+GdkEvent *gdk_directfb_event_make (GdkWindow    *window,
+                                   GdkEventType  type);
 
 
 /*
@@ -134,7 +145,6 @@ typedef struct
 struct _GdkWindowImplDirectFB
 {
   GdkDrawableImplDirectFB drawable;
-  GdkWindow             *gdkWindow;
 
   IDirectFBWindow        *window;
 
@@ -162,8 +172,6 @@ void  gdk_directfb_window_send_crossing_events (GdkWindow       *src,
                                                 GdkWindow       *dest,
                                                 GdkCrossingMode  mode);
 
-void  _gdk_directfb_calc_abs                   (GdkWindow       *window);
-
 GdkWindow * gdk_directfb_window_find_toplevel  (GdkWindow       *window);
 
 
@@ -171,6 +179,17 @@ void        gdk_directfb_window_id_table_insert (DFBWindowID  dfb_id,
                                                  GdkWindow   *window);
 void        gdk_directfb_window_id_table_remove (DFBWindowID  dfb_id);
 GdkWindow * gdk_directfb_window_id_table_lookup (DFBWindowID  dfb_id);
+
+void        _gdk_directfb_window_get_offsets    (GdkWindow       *window,
+                                                 gint            *x_offset,
+                                                 gint            *y_offset);
+void        _gdk_directfb_window_scroll         (GdkWindow       *window,
+                                                 gint             dx,
+                                                 gint             dy);
+void        _gdk_directfb_window_move_region    (GdkWindow       *window,
+                                                 const GdkRegion *region,
+                                                 gint             dx,
+                                                 gint             dy);
 
 
 typedef struct
@@ -194,7 +213,7 @@ typedef struct
 } GdkImageDirectFB;
 
 
-#define GDK_TYPE_GC_DIRECTFB       (gdk_gc_directfb_get_type ())
+#define GDK_TYPE_GC_DIRECTFB       (_gdk_gc_directfb_get_type ())
 #define GDK_GC_DIRECTFB(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_DIRECTFB, GdkGCDirectFB))
 #define GDK_IS_GC_DIRECTFB(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_DIRECTFB))
 
@@ -213,11 +232,11 @@ typedef struct
   GdkGCClass        parent_class;
 } GdkGCDirectFBClass;
 
-GType     gdk_gc_directfb_get_type (void);
+GType     _gdk_gc_directfb_get_type (void);
 
-GdkGC *  _gdk_directfb_gc_new      (GdkDrawable     *drawable,
-                                    GdkGCValues     *values,
-                                    GdkGCValuesMask  values_mask);
+GdkGC    *_gdk_directfb_gc_new      (GdkDrawable     *drawable,
+                                     GdkGCValues     *values,
+                                     GdkGCValuesMask  values_mask);
 
 GdkImage* _gdk_directfb_copy_to_image (GdkDrawable  *drawable,
                                        GdkImage     *image,
@@ -228,10 +247,8 @@ GdkImage* _gdk_directfb_copy_to_image (GdkDrawable  *drawable,
                                        gint          width,
                                        gint          height);
 
-void       gdk_directfb_event_windows_add (GdkWindow *window);
-#if (DIRECTFB_MAJOR_VERSION >= 1)
+void       gdk_directfb_event_windows_add    (GdkWindow *window);
 void       gdk_directfb_event_windows_remove (GdkWindow *window);
-#endif
 
 GdkGrabStatus gdk_directfb_keyboard_grab  (GdkDisplay          *display,
                                            GdkWindow           *window,
@@ -253,11 +270,11 @@ void          gdk_directfb_pointer_ungrab (guint32              time,
 
 guint32       gdk_directfb_get_time       (void);
 
-GdkWindow * gdk_directfb_pointer_event_window  (GdkWindow    *window,
+GdkWindow  *gdk_directfb_pointer_event_window  (GdkWindow    *window,
                                                 GdkEventType  type);
-GdkWindow * gdk_directfb_keyboard_event_window (GdkWindow    *window,
+GdkWindow  *gdk_directfb_keyboard_event_window (GdkWindow    *window,
                                                 GdkEventType  type);
-GdkWindow * gdk_directfb_other_event_window    (GdkWindow    *window,
+GdkWindow  *gdk_directfb_other_event_window    (GdkWindow    *window,
                                                 GdkEventType  type);
 void       _gdk_selection_window_destroyed    (GdkWindow       *window);
 
@@ -267,11 +284,11 @@ void       _gdk_directfb_move_resize_child (GdkWindow *window,
                                             gint       width,
                                             gint       height);
 
-GdkWindow * gdk_directfb_child_at          (GdkWindow *window,
+GdkWindow  *gdk_directfb_child_at          (GdkWindow *window,
                                             gint      *x,
                                             gint      *y);
 
-GdkWindow * gdk_directfb_window_find_focus (void);
+GdkWindow  *gdk_directfb_window_find_focus (void);
 
 void        gdk_directfb_change_focus      (GdkWindow *new_focus_window);
 
@@ -332,15 +349,15 @@ void gdk_directfb_clip_region (GdkDrawable  *drawable,
 /* Utilities for avoiding mallocs */
 
 static inline void
-temp_region_init_copy( GdkRegion       *region, 
+temp_region_init_copy (GdkRegion       *region,
                        const GdkRegion *source)
 {
   if (region != source) /*  don't want to copy to itself */
-    {  
+    {
       if (region->size < source->numRects)
         {
           if (region->rects && region->rects != &region->extents)
-            g_free( region->rects );
+            g_free (region->rects);
 
           region->rects = g_new (GdkRegionBox, source->numRects);
           region->size  = source->numRects;
@@ -349,61 +366,61 @@ temp_region_init_copy( GdkRegion       *region,
       region->numRects = source->numRects;
       region->extents  = source->extents;
 
-      memcpy( region->rects, source->rects, source->numRects * sizeof (GdkRegionBox) );
+      memcpy (region->rects, source->rects, source->numRects * sizeof (GdkRegionBox));
     }
 }
 
 static inline void
-temp_region_init_rectangle( GdkRegion          *region,
-                            const GdkRectangle *rect )
+temp_region_init_rectangle (GdkRegion          *region,
+                            const GdkRectangle *rect)
 {
-     region->numRects = 1;
-     region->rects = &region->extents;
-     region->extents.x1 = rect->x;
-     region->extents.y1 = rect->y;
-     region->extents.x2 = rect->x + rect->width;
-     region->extents.y2 = rect->y + rect->height;
-     region->size = 1;
+  region->numRects   = 1;
+  region->rects      = &region->extents;
+  region->extents.x1 = rect->x;
+  region->extents.y1 = rect->y;
+  region->extents.x2 = rect->x + rect->width;
+  region->extents.y2 = rect->y + rect->height;
+  region->size       = 1;
 }
 
 static inline void
-temp_region_init_rectangle_vals( GdkRegion *region,
+temp_region_init_rectangle_vals (GdkRegion *region,
                                  int        x,
                                  int        y,
                                  int        w,
-                                 int        h )
+                                 int        h)
 {
-     region->numRects = 1;
-     region->rects = &region->extents;
-     region->extents.x1 = x;
-     region->extents.y1 = y;
-     region->extents.x2 = x + w;
-     region->extents.y2 = y + h;
-     region->size = 1;
+  region->numRects   = 1;
+  region->rects      = &region->extents;
+  region->extents.x1 = x;
+  region->extents.y1 = y;
+  region->extents.x2 = x + w;
+  region->extents.y2 = y + h;
+  region->size       = 1;
 }
 
 static inline void
-temp_region_reset( GdkRegion *region )
+temp_region_reset (GdkRegion *region)
 {
-     if (region->size > 32 && region->rects && region->rects != &region->extents) {
-          g_free( region->rects );
+  if (region->size > 32 && region->rects && region->rects != &region->extents) {
+    g_free (region->rects);
 
-          region->size  = 1;
-          region->rects = &region->extents;
-     }
+    region->size  = 1;
+    region->rects = &region->extents;
+  }
 
-     region->numRects = 0;
+  region->numRects = 0;
 }
 
 static inline void
-temp_region_deinit( GdkRegion *region )
+temp_region_deinit (GdkRegion *region)
 {
-     if (region->rects && region->rects != &region->extents) {
-          g_free( region->rects );
-          region->rects = NULL;
-     }
+  if (region->rects && region->rects != &region->extents) {
+    g_free (region->rects);
+    region->rects = NULL;
+  }
 
-     region->numRects = 0;
+  region->numRects = 0;
 }
 
 

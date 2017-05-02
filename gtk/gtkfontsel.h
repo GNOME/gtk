@@ -28,17 +28,17 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_FONTSEL_H__
 #define __GTK_FONTSEL_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkvbox.h>
+
 
 G_BEGIN_DECLS
 
@@ -176,8 +176,11 @@ GType	   gtk_font_selection_dialog_get_type	       (void) G_GNUC_CONST;
 GtkWidget *gtk_font_selection_dialog_new	       (const gchar            *title);
 
 GtkWidget *gtk_font_selection_dialog_get_ok_button     (GtkFontSelectionDialog *fsd);
+#ifndef GTK_DISABLE_DEPRECATED
 GtkWidget *gtk_font_selection_dialog_get_apply_button  (GtkFontSelectionDialog *fsd);
+#endif
 GtkWidget *gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd);
+GtkWidget *gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd);
 
 /* This returns the X Logical Font Description fontname, or NULL if no font
    is selected. Note that there is a slight possibility that the font might not
@@ -202,7 +205,7 @@ gboolean   gtk_font_selection_dialog_set_font_name     (GtkFontSelectionDialog *
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */
-G_CONST_RETURN gchar* 
+const gchar*
           gtk_font_selection_dialog_get_preview_text   (GtkFontSelectionDialog *fsd);
 
 /* This sets the text in the preview entry. It will be copied by the entry,

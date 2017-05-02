@@ -35,6 +35,7 @@
 #include "gdkscreen.h"
 
 #include "gdkprivate-win32.h"
+#include <cairo-win32.h>
 
 static void gdk_pixmap_impl_win32_get_size   (GdkDrawable        *drawable,
 					      gint               *width,
@@ -53,7 +54,7 @@ _gdk_pixmap_impl_win32_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkPixmapImplWin32Class),
         (GBaseInitFunc) NULL,
@@ -104,14 +105,35 @@ static void
 gdk_pixmap_impl_win32_finalize (GObject *object)
 {
   GdkPixmapImplWin32 *impl = GDK_PIXMAP_IMPL_WIN32 (object);
-  GdkPixmap *wrapper = GDK_PIXMAP (GDK_DRAWABLE_IMPL_WIN32 (impl)->wrapper);
+  GdkDrawableImplWin32 *drawable_impl = GDK_DRAWABLE_IMPL_WIN32 (impl);
+  GdkPixmap *wrapper = GDK_PIXMAP (drawable_impl->wrapper);
 
   GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_impl_win32_finalize: %p\n",
 			     GDK_PIXMAP_HBITMAP (wrapper)));
 
-  _gdk_win32_drawable_finish (GDK_DRAWABLE (object));  
+  if (!impl->is_foreign)
+    {
+      /* Only decrement count if we did set the hdc */
+      if (drawable_impl->hdc)
+	drawable_impl->hdc_count--;
 
-  GDI_CALL (DeleteObject, (GDK_PIXMAP_HBITMAP (wrapper)));
+      if (drawable_impl->cairo_surface)
+	{
+	  /* Tell outstanding owners that the surface is useless */
+	  cairo_surface_finish (drawable_impl->cairo_surface);
+
+	  /* Drop our reference */
+	  cairo_surface_destroy (drawable_impl->cairo_surface);
+	  drawable_impl->cairo_surface = NULL;
+	  if (impl->is_allocated)
+	    {
+	      GDI_CALL (DeleteDC, (drawable_impl->hdc));
+	      GDI_CALL (DeleteObject, (GDK_PIXMAP_HBITMAP (wrapper)));
+	    }
+	}
+    }
+
+  _gdk_win32_drawable_finish (GDK_DRAWABLE (object));
 
   gdk_win32_handle_table_remove (GDK_PIXMAP_HBITMAP (wrapper));
 
@@ -130,31 +152,21 @@ gdk_pixmap_impl_win32_get_size (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_new (GdkDrawable *drawable,
+_gdk_pixmap_new (GdkDrawable *drawable,
 		gint         width,
 		gint         height,
 		gint         depth)
 {
-  struct {
-    BITMAPINFOHEADER bmiHeader;
-    union {
-      WORD bmiIndices[256];
-      DWORD bmiMasks[3];
-      RGBQUAD bmiColors[256];
-    } u;
-  } bmi;
-  UINT iUsage;
   HDC hdc;
-  HWND hwnd;
-  HPALETTE holdpal = NULL;
   HBITMAP hbitmap;
   GdkPixmap *pixmap;
   GdkDrawableImplWin32 *drawable_impl;
   GdkPixmapImplWin32 *pixmap_impl;
   GdkColormap *cmap;
-  guchar *bits;
-  gint i;
   gint window_depth;
+  cairo_surface_t *dib_surface, *image_surface;
+  cairo_format_t format;
+  guchar *bits;
 
   g_return_val_if_fail (drawable == NULL || GDK_IS_DRAWABLE (drawable), NULL);
   g_return_val_if_fail ((drawable != NULL) || (depth != -1), NULL);
@@ -173,6 +185,32 @@ gdk_pixmap_new (GdkDrawable *drawable,
   GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_new: %dx%dx%d drawable=%p\n",
 			     width, height, depth, drawable));
 
+  switch (depth)
+    {
+    case 1:
+      format = CAIRO_FORMAT_A1;
+      break;
+
+    case 8:
+      format = CAIRO_FORMAT_A8;
+      break;
+
+    case 15:
+    case 16:
+      format = CAIRO_FORMAT_RGB16_565;
+      break;
+
+    case 24:
+    case 32:
+      format = CAIRO_FORMAT_RGB24;
+      break;
+
+    default:
+      g_warning ("gdk_win32_pixmap_new: depth = %d not supported", depth);
+      return NULL;
+      break;
+    }
+
   pixmap = g_object_new (gdk_pixmap_get_type (), NULL);
   drawable_impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
   pixmap_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
@@ -189,121 +227,115 @@ gdk_pixmap_new (GdkDrawable *drawable,
       if (cmap)
         gdk_drawable_set_colormap (pixmap, cmap);
     }
-  
-  if (GDK_IS_WINDOW (drawable))
-    hwnd = GDK_WINDOW_HWND (drawable);
-  else
-    hwnd = GetDesktopWindow ();
-  if ((hdc = GetDC (hwnd)) == NULL)
+
+  if (depth != 15 && depth != 16)
     {
-      WIN32_GDI_FAILED ("GetDC");
-      g_object_unref ((GObject *) pixmap);
-      return NULL;
+      dib_surface = cairo_win32_surface_create_with_dib (format, width, height);
+      if (dib_surface == NULL ||
+	  cairo_surface_status (dib_surface) != CAIRO_STATUS_SUCCESS)
+	{
+	  g_object_unref ((GObject *) pixmap);
+	  return NULL;
+	}
+
+      /* We need to have cairo create the dibsection for us, because
+	 creating a cairo surface from a hdc only works for rgb24 format */
+      hdc = cairo_win32_surface_get_dc (dib_surface);
+
+      /* Get the bitmap from the cairo hdc */
+      hbitmap = GetCurrentObject (hdc, OBJ_BITMAP);
+
+      /* Cairo_win32_surface_get_image() returns NULL on failure, but
+	 this is likely an oversight and future versions will return a
+	 "nil" surface.
+       */
+      image_surface = cairo_win32_surface_get_image (dib_surface);
+      if (image_surface == NULL ||
+	  cairo_surface_status (image_surface) != CAIRO_STATUS_SUCCESS)
+      {
+	cairo_surface_destroy (dib_surface);
+	g_object_unref ((GObject*) pixmap);
+	return NULL;
+      }
+      bits = cairo_image_surface_get_data (image_surface);
     }
-
-  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = width;
-  bmi.bmiHeader.biHeight = -height;
-  bmi.bmiHeader.biPlanes = 1;
-  switch (depth)
+  else
     {
-    case 1:
-    case 24:
-    case 32:
-      bmi.bmiHeader.biBitCount = _gdk_windowing_get_bits_for_depth (gdk_display_get_default (), depth);
-      break;
+      /* 16 bpp not supported by win32 cairo surface */
+      struct {
+	BITMAPINFOHEADER bmiHeader;
+	union {
+	  WORD bmiIndices[256];
+	  DWORD bmiMasks[3];
+	  RGBQUAD bmiColors[256];
+	} u;
+      } bmi;
+      UINT iUsage;
+      HWND hwnd;
+      GdkVisual *visual;
 
-    case 4:
-      bmi.bmiHeader.biBitCount = 4;
-      break;
-      
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-      bmi.bmiHeader.biBitCount = 8;
-      break;
-      
-    case 15:
-    case 16:
+      if (GDK_IS_WINDOW (drawable))
+	hwnd = GDK_WINDOW_HWND (drawable);
+      else
+	hwnd = GetDesktopWindow ();
+      if ((hdc = GetDC (hwnd)) == NULL)
+	{
+	  WIN32_GDI_FAILED ("GetDC");
+	  g_object_unref ((GObject *) pixmap);
+	  return NULL;
+	}
+
+      bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
+      bmi.bmiHeader.biWidth = width;
+      bmi.bmiHeader.biHeight = -height;
+      bmi.bmiHeader.biPlanes = 1;
       bmi.bmiHeader.biBitCount = 16;
-      break;
+      bmi.bmiHeader.biCompression = BI_BITFIELDS;
+      bmi.bmiHeader.biSizeImage = 0;
+      bmi.bmiHeader.biXPelsPerMeter =
+	bmi.bmiHeader.biYPelsPerMeter = 0;
+      bmi.bmiHeader.biClrUsed = 0;
+      bmi.bmiHeader.biClrImportant = 0;
 
-    default:
-      g_warning ("gdk_win32_pixmap_new: depth = %d", depth);
-      g_assert_not_reached ();
-    }
+      iUsage = DIB_RGB_COLORS;
+      visual = gdk_visual_get_system ();
+      bmi.u.bmiMasks[0] = visual->red_mask;
+      bmi.u.bmiMasks[1] = visual->green_mask;
+      bmi.u.bmiMasks[2] = visual->blue_mask;
 
-  if (bmi.bmiHeader.biBitCount == 16)
-    bmi.bmiHeader.biCompression = BI_BITFIELDS;
-  else
-    bmi.bmiHeader.biCompression = BI_RGB;
-
-  bmi.bmiHeader.biSizeImage = 0;
-  bmi.bmiHeader.biXPelsPerMeter =
-    bmi.bmiHeader.biYPelsPerMeter = 0;
-  bmi.bmiHeader.biClrUsed = 0;
-  bmi.bmiHeader.biClrImportant = 0;
-
-  iUsage = DIB_RGB_COLORS;
-  if (depth == 1)
-    {
-      bmi.u.bmiColors[0].rgbBlue =
-	bmi.u.bmiColors[0].rgbGreen =
-	bmi.u.bmiColors[0].rgbRed = 0x00;
-      bmi.u.bmiColors[0].rgbReserved = 0x00;
-
-      bmi.u.bmiColors[1].rgbBlue =
-	bmi.u.bmiColors[1].rgbGreen =
-	bmi.u.bmiColors[1].rgbRed = 0xFF;
-      bmi.u.bmiColors[1].rgbReserved = 0x00;
-    }
-  else
-    {
-      if (depth <= 8 && drawable_impl->colormap != NULL)
+      if ((hbitmap = CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
+				       iUsage, (PVOID *) &bits, NULL, 0)) == NULL)
 	{
-	  GdkColormapPrivateWin32 *cmapp =
-	    GDK_WIN32_COLORMAP_DATA (drawable_impl->colormap);
-	  gint k;
-
-	  if ((holdpal = SelectPalette (hdc, cmapp->hpal, FALSE)) == NULL)
-	    WIN32_GDI_FAILED ("SelectPalette");
-	  else if ((k = RealizePalette (hdc)) == GDI_ERROR)
-	    WIN32_GDI_FAILED ("RealizePalette");
-	  else if (k > 0)
-	    GDK_NOTE (PIXMAP_OR_COLORMAP, g_print ("_gdk_win32_pixmap_new: realized %p: %d colors\n",
-						   cmapp->hpal, k));
-
-	  iUsage = DIB_PAL_COLORS;
-	  for (i = 0; i < 256; i++)
-	    bmi.u.bmiIndices[i] = i;
+	  WIN32_GDI_FAILED ("CreateDIBSection");
+	  GDI_CALL (ReleaseDC, (hwnd, hdc));
+	  g_object_unref ((GObject *) pixmap);
+	  return NULL;
 	}
-      else if (bmi.bmiHeader.biBitCount == 16)
+      GDI_CALL (ReleaseDC, (hwnd, hdc));
+
+      dib_surface = cairo_image_surface_create_for_data (bits,
+							 format, width, height,
+							 (width * 2 + 3) & ~3);
+
+      hdc = CreateCompatibleDC (NULL);
+      if (!hdc)
 	{
-	  GdkVisual *visual = gdk_visual_get_system ();
-
-	  bmi.u.bmiMasks[0] = visual->red_mask;
-	  bmi.u.bmiMasks[1] = visual->green_mask;
-	  bmi.u.bmiMasks[2] = visual->blue_mask;
+	  WIN32_GDI_FAILED ("CreateCompatibleDC");
+	  g_object_unref ((GObject *) pixmap);
+	  return NULL;
 	}
+
+      SelectObject (hdc, hbitmap);
+      pixmap_impl->is_allocated = TRUE;
     }
 
-  hbitmap = CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
-			      iUsage, (PVOID *) &bits, NULL, 0);
-  if (holdpal != NULL)
-    SelectPalette (hdc, holdpal, FALSE);
+  /* We need to use the same hdc, because only one hdc
+     can render to the same bitmap */
+  drawable_impl->hdc = hdc;
+  drawable_impl->hdc_count = 1; /* Ensure we never free the cairo surface HDC */
 
-  GDI_CALL (ReleaseDC, (hwnd, hdc));
-
-  GDK_NOTE (PIXMAP, g_print ("... =%p bits=%p pixmap=%p\n", hbitmap, bits, pixmap));
-
-  if (hbitmap == NULL)
-    {
-      WIN32_GDI_FAILED ("CreateDIBSection");
-      g_object_unref ((GObject *) pixmap);
-      return NULL;
-    }
-
+  /* No need to create a new surface when needed, as we have one already */
+  drawable_impl->cairo_surface = dib_surface;
   drawable_impl->handle = hbitmap;
   pixmap_impl->bits = bits;
 
@@ -348,7 +380,7 @@ static const unsigned char mirror[256] = {
 };
 
 GdkPixmap *
-gdk_bitmap_create_from_data (GdkDrawable *drawable,
+_gdk_bitmap_create_from_data (GdkDrawable *drawable,
 			     const gchar *data,
 			     gint         width,
 			     gint         height)
@@ -388,7 +420,7 @@ gdk_bitmap_create_from_data (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkDrawable    *drawable,
+_gdk_pixmap_create_from_data (GdkDrawable    *drawable,
 			     const gchar    *data,
 			     gint            width,
 			     gint            height,
@@ -428,7 +460,7 @@ gdk_pixmap_create_from_data (GdkDrawable    *drawable,
      GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (result)->impl),
      gc, source, 0, 0, 0, 0, width, height);
   g_object_unref (source);
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 
   GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_create_from_data: %dx%dx%d=%p\n",
 			     width, height, depth,
@@ -486,6 +518,7 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   
   draw_impl->handle = hbitmap;
   draw_impl->colormap = NULL;
+  pix_impl->is_foreign = TRUE;
   pix_impl->width = size.cx;
   pix_impl->height = size.cy;
   pix_impl->bits = NULL;

@@ -47,12 +47,12 @@
  *
  */
 
+#ifndef __GTK_TEXT_MARK_H__
+#define __GTK_TEXT_MARK_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TEXT_MARK_H__
-#define __GTK_TEXT_MARK_H__
 
 G_BEGIN_DECLS
 
@@ -94,7 +94,7 @@ gboolean       gtk_text_mark_get_visible (GtkTextMark *mark);
 
 GtkTextMark          *gtk_text_mark_new              (const gchar *name,
 						      gboolean     left_gravity);
-G_CONST_RETURN gchar* gtk_text_mark_get_name         (GtkTextMark *mark);
+const gchar *         gtk_text_mark_get_name         (GtkTextMark *mark);
 gboolean              gtk_text_mark_get_deleted      (GtkTextMark *mark);
 GtkTextBuffer*        gtk_text_mark_get_buffer       (GtkTextMark *mark);
 gboolean              gtk_text_mark_get_left_gravity (GtkTextMark *mark);

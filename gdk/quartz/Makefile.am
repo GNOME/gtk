@@ -46,6 +46,7 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkproperty-quartz.c	\
 	gdkquartz.h		\
 	gdkscreen-quartz.c	\
+	gdkscreen-quartz.h	\
 	gdkselection-quartz.c	\
 	gdkspawn-quartz.c	\
 	gdktestutils-quartz.c	\
@@ -57,3 +58,5 @@ libgdk_quartz_la_SOURCES =    	\
 libgdkinclude_HEADERS = 	\
 	gdkquartz.h
 
+
+-include $(top_srcdir)/git.mk

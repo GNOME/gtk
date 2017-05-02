@@ -17,6 +17,9 @@ Functions for drawing widget parts
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### MACRO GTK_STYLE_ATTACHED ##### -->
 <para>
 Returns whether the style is attached to a window.
@@ -74,6 +77,7 @@ Returns whether the style is attached to a window.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -149,7 +153,7 @@ Returns whether the style is attached to a window.
 
 <!-- ##### MACRO gtk_style_apply_default_pixmap ##### -->
 <para>
-Deprecated alias for gtk_style_apply_default_background().
+Does the same as gtk_style_apply_default_background().
 </para>
 
 @s: 
@@ -160,6 +164,7 @@ Deprecated alias for gtk_style_apply_default_background().
 @y: 
 @w: 
 @h: 
+@Deprecated: Use gtk_style_apply_default_background() instead.
 
 
 <!-- ##### FUNCTION gtk_style_lookup_color ##### -->
@@ -214,6 +219,39 @@ Deprecated alias for gtk_style_apply_default_background().
 
 @style: 
 @font: 
+
+
+<!-- ##### FUNCTION gtk_style_get_style_property ##### -->
+<para>
+
+</para>
+
+@style: 
+@widget_type: 
+@property_name: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_style_get_valist ##### -->
+<para>
+
+</para>
+
+@style: 
+@widget_type: 
+@first_property_name: 
+@var_args: 
+
+
+<!-- ##### FUNCTION gtk_style_get ##### -->
+<para>
+
+</para>
+
+@style: 
+@widget_type: 
+@first_property_name: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_draw_hline ##### -->
@@ -807,6 +845,24 @@ Deprecated alias for gtk_style_apply_default_background().
 @orientation: 
 
 
+<!-- ##### FUNCTION gtk_paint_spinner ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@area: 
+@widget: 
+@detail: 
+@step: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+
 <!-- ##### FUNCTION gtk_paint_string ##### -->
 <para>
 
@@ -924,19 +980,17 @@ Deprecated alias for gtk_style_apply_default_background().
 
 <!-- ##### STRUCT GtkBorder ##### -->
 <para>
-
+A struct that specifies a border around a rectangular area that can
+be of different width on each side.
 </para>
 
-@left: 
-@right: 
-@top: 
-@bottom: 
 
 <!-- ##### FUNCTION gtk_border_new ##### -->
 <para>
 
 </para>
 
+@void: 
 @Returns: 
 
 

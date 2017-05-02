@@ -182,6 +182,8 @@ gtk_misc_set_alignment (GtkMisc *misc,
 			gfloat   xalign,
 			gfloat   yalign)
 {
+  GtkWidget *widget;
+
   g_return_if_fail (GTK_IS_MISC (misc));
 
   if (xalign < 0.0)
@@ -208,13 +210,9 @@ gtk_misc_set_alignment (GtkMisc *misc,
       
       /* clear the area that was allocated before the change
        */
-      if (GTK_WIDGET_DRAWABLE (misc))
-        {
-          GtkWidget *widget;
-	  
-          widget = GTK_WIDGET (misc);
-          gtk_widget_queue_draw (widget);
-        }
+      widget = GTK_WIDGET (misc);
+      if (gtk_widget_is_drawable (widget))
+        gtk_widget_queue_draw (widget);
 
       g_object_thaw_notify (G_OBJECT (misc));
     }
@@ -223,8 +221,8 @@ gtk_misc_set_alignment (GtkMisc *misc,
 /**
  * gtk_misc_get_alignment:
  * @misc: a #GtkMisc
- * @xalign: location to store X alignment of @misc, or %NULL
- * @yalign: location to store Y alignment of @misc, or %NULL
+ * @xalign: (out) (allow-none): location to store X alignment of @misc, or %NULL
+ * @yalign: (out) (allow-none): location to store Y alignment of @misc, or %NULL
  *
  * Gets the X and Y alignment of the widget within its allocation. 
  * See gtk_misc_set_alignment().
@@ -275,7 +273,7 @@ gtk_misc_set_padding (GtkMisc *misc,
       requisition->width += misc->xpad * 2;
       requisition->height += misc->ypad * 2;
       
-      if (GTK_WIDGET_DRAWABLE (misc))
+      if (gtk_widget_is_drawable (GTK_WIDGET (misc)))
 	gtk_widget_queue_resize (GTK_WIDGET (misc));
 
       g_object_thaw_notify (G_OBJECT (misc));
@@ -285,8 +283,10 @@ gtk_misc_set_padding (GtkMisc *misc,
 /**
  * gtk_misc_get_padding:
  * @misc: a #GtkMisc
- * @xpad: location to store padding in the X direction, or %NULL
- * @ypad: location to store padding in the Y direction, or %NULL
+ * @xpad: (out) (allow-none): location to store padding in the X
+ *        direction, or %NULL
+ * @ypad: (out) (allow-none): location to store padding in the Y
+ *        direction, or %NULL
  *
  * Gets the padding in the X and Y directions of the widget. 
  * See gtk_misc_set_padding().
@@ -310,9 +310,9 @@ gtk_misc_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
+  if (!gtk_widget_get_has_window (widget))
     {
       widget->window = gtk_widget_get_parent_window (widget);
       g_object_ref (widget->window);

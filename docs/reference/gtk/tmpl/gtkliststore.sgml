@@ -166,6 +166,9 @@ and common wisdom is to separate the two, as far as possible.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkListStore ##### -->
 <para>
 
@@ -178,7 +181,7 @@ and common wisdom is to separate the two, as far as possible.
 </para>
 
 @n_columns: 
-@Varargs: 
+@...: 
 @Returns: 
 
 
@@ -209,7 +212,7 @@ and common wisdom is to separate the two, as far as possible.
 
 @list_store: 
 @iter: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_list_store_set_valist ##### -->
@@ -293,7 +296,7 @@ and common wisdom is to separate the two, as far as possible.
 @list_store: 
 @iter: 
 @position: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_list_store_insert_with_valuesv ##### -->

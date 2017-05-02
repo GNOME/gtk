@@ -21,17 +21,20 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
+
 #include "gtkbox.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
 enum {
   PROP_0,
+  PROP_ORIENTATION,
   PROP_SPACING,
   PROP_HOMOGENEOUS
 };
@@ -45,46 +48,71 @@ enum {
   CHILD_PROP_POSITION
 };
 
-static void gtk_box_set_property (GObject         *object,
-				  guint            prop_id,
-				  const GValue    *value,
-				  GParamSpec      *pspec);
-static void gtk_box_get_property (GObject         *object,
-				  guint            prop_id,
-				  GValue          *value,
-				  GParamSpec      *pspec);
-static void gtk_box_add        (GtkContainer   *container,
-			        GtkWidget      *widget);
-static void gtk_box_remove     (GtkContainer   *container,
-			        GtkWidget      *widget);
-static void gtk_box_forall     (GtkContainer   *container,
-				gboolean	include_internals,
-			        GtkCallback     callback,
-			        gpointer        callback_data);
-static void gtk_box_set_child_property (GtkContainer    *container,
-					GtkWidget       *child,
-					guint            property_id,
-					const GValue    *value,
-					GParamSpec      *pspec);
-static void gtk_box_get_child_property (GtkContainer    *container,
-					GtkWidget       *child,
-					guint            property_id,
-					GValue          *value,
-					GParamSpec      *pspec);
-static GType gtk_box_child_type (GtkContainer   *container);
-     
 
-G_DEFINE_ABSTRACT_TYPE (GtkBox, gtk_box, GTK_TYPE_CONTAINER)
+typedef struct _GtkBoxPrivate GtkBoxPrivate;
+
+struct _GtkBoxPrivate
+{
+  GtkOrientation orientation;
+  guint          default_expand : 1;
+  guint          spacing_set    : 1;
+};
+
+#define GTK_BOX_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_BOX, GtkBoxPrivate))
+
+
+static void gtk_box_set_property       (GObject        *object,
+                                        guint           prop_id,
+                                        const GValue   *value,
+                                        GParamSpec     *pspec);
+static void gtk_box_get_property       (GObject        *object,
+                                        guint           prop_id,
+                                        GValue         *value,
+                                        GParamSpec     *pspec);
+
+static void gtk_box_size_request       (GtkWidget      *widget,
+                                        GtkRequisition *requisition);
+static void gtk_box_size_allocate      (GtkWidget      *widget,
+                                        GtkAllocation  *allocation);
+
+static void gtk_box_add                (GtkContainer   *container,
+                                        GtkWidget      *widget);
+static void gtk_box_remove             (GtkContainer   *container,
+                                        GtkWidget      *widget);
+static void gtk_box_forall             (GtkContainer   *container,
+                                        gboolean        include_internals,
+                                        GtkCallback     callback,
+                                        gpointer        callback_data);
+static void gtk_box_set_child_property (GtkContainer   *container,
+                                        GtkWidget      *child,
+                                        guint           property_id,
+                                        const GValue   *value,
+                                        GParamSpec     *pspec);
+static void gtk_box_get_child_property (GtkContainer   *container,
+                                        GtkWidget      *child,
+                                        guint           property_id,
+                                        GValue         *value,
+                                        GParamSpec     *pspec);
+static GType gtk_box_child_type        (GtkContainer   *container);
+
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                         NULL));
 
 static void
 gtk_box_class_init (GtkBoxClass *class)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
-  gobject_class->set_property = gtk_box_set_property;
-  gobject_class->get_property = gtk_box_get_property;
-   
+  object_class->set_property = gtk_box_set_property;
+  object_class->get_property = gtk_box_get_property;
+
+  widget_class->size_request = gtk_box_size_request;
+  widget_class->size_allocate = gtk_box_size_allocate;
+
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
   container_class->forall = gtk_box_forall;
@@ -92,7 +120,11 @@ gtk_box_class_init (GtkBoxClass *class)
   container_class->set_child_property = gtk_box_set_child_property;
   container_class->get_child_property = gtk_box_get_child_property;
 
-  g_object_class_install_property (gobject_class,
+  g_object_class_override_property (object_class,
+                                    PROP_ORIENTATION,
+                                    "orientation");
+
+  g_object_class_install_property (object_class,
                                    PROP_SPACING,
                                    g_param_spec_int ("spacing",
                                                      P_("Spacing"),
@@ -101,8 +133,8 @@ gtk_box_class_init (GtkBoxClass *class)
                                                      G_MAXINT,
                                                      0,
                                                      GTK_PARAM_READWRITE));
-  
-  g_object_class_install_property (gobject_class,
+
+  g_object_class_install_property (object_class,
                                    PROP_HOMOGENEOUS,
                                    g_param_spec_boolean ("homogeneous",
 							 P_("Homogeneous"),
@@ -145,31 +177,42 @@ gtk_box_class_init (GtkBoxClass *class)
 								P_("The index of the child in the parent"),
 								-1, G_MAXINT, 0,
 								GTK_PARAM_READWRITE));
+
+  g_type_class_add_private (object_class, sizeof (GtkBoxPrivate));
 }
 
 static void
 gtk_box_init (GtkBox *box)
 {
-  GTK_WIDGET_SET_FLAGS (box, GTK_NO_WINDOW);
+  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (box);
+
+  gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), FALSE);
-  
+
   box->children = NULL;
   box->spacing = 0;
   box->homogeneous = FALSE;
+
+  private->orientation = GTK_ORIENTATION_HORIZONTAL;
+  private->default_expand = FALSE;
+  private->spacing_set = FALSE;
 }
 
-static void 
-gtk_box_set_property (GObject         *object,
-		      guint            prop_id,
-		      const GValue    *value,
-		      GParamSpec      *pspec)
+static void
+gtk_box_set_property (GObject      *object,
+                      guint         prop_id,
+                      const GValue *value,
+                      GParamSpec   *pspec)
 {
-  GtkBox *box;
-
-  box = GTK_BOX (object);
+  GtkBox *box = GTK_BOX (object);
+  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (box);
 
   switch (prop_id)
     {
+    case PROP_ORIENTATION:
+      private->orientation = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (box));
+      break;
     case PROP_SPACING:
       gtk_box_set_spacing (box, g_value_get_int (value));
       break;
@@ -182,17 +225,20 @@ gtk_box_set_property (GObject         *object,
     }
 }
 
-static void gtk_box_get_property (GObject         *object,
-				  guint            prop_id,
-				  GValue          *value,
-				  GParamSpec      *pspec)
+static void
+gtk_box_get_property (GObject    *object,
+                      guint       prop_id,
+                      GValue     *value,
+                      GParamSpec *pspec)
 {
-  GtkBox *box;
-
-  box = GTK_BOX (object);
+  GtkBox *box = GTK_BOX (object);
+  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (box);
 
   switch (prop_id)
     {
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, private->orientation);
+      break;
     case PROP_SPACING:
       g_value_set_int (value, box->spacing);
       break;
@@ -205,6 +251,357 @@ static void gtk_box_get_property (GObject         *object,
     }
 }
 
+static void
+gtk_box_size_request (GtkWidget      *widget,
+                      GtkRequisition *requisition)
+{
+  GtkBox *box = GTK_BOX (widget);
+  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (box);
+  GtkBoxChild *child;
+  GList *children;
+  gint nvis_children;
+  gint width;
+  gint height;
+
+  requisition->width = 0;
+  requisition->height = 0;
+  nvis_children = 0;
+
+  children = box->children;
+  while (children)
+    {
+      child = children->data;
+      children = children->next;
+
+      if (gtk_widget_get_visible (child->widget))
+	{
+	  GtkRequisition child_requisition;
+
+	  gtk_widget_size_request (child->widget, &child_requisition);
+
+	  if (box->homogeneous)
+	    {
+	      width = child_requisition.width + child->padding * 2;
+	      height = child_requisition.height + child->padding * 2;
+
+              if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+                requisition->width = MAX (requisition->width, width);
+              else
+                requisition->height = MAX (requisition->height, height);
+	    }
+	  else
+	    {
+              if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+                requisition->width += child_requisition.width + child->padding * 2;
+              else
+                requisition->height += child_requisition.height + child->padding * 2;
+	    }
+
+          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+            requisition->height = MAX (requisition->height, child_requisition.height);
+          else
+            requisition->width = MAX (requisition->width, child_requisition.width);
+
+	  nvis_children += 1;
+	}
+    }
+
+  if (nvis_children > 0)
+    {
+      if (box->homogeneous)
+        {
+          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+            requisition->width *= nvis_children;
+          else
+            requisition->height *= nvis_children;
+        }
+
+      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+        requisition->width += (nvis_children - 1) * box->spacing;
+      else
+        requisition->height += (nvis_children - 1) * box->spacing;
+    }
+
+  requisition->width += GTK_CONTAINER (box)->border_width * 2;
+  requisition->height += GTK_CONTAINER (box)->border_width * 2;
+}
+
+static void
+gtk_box_size_allocate (GtkWidget     *widget,
+                       GtkAllocation *allocation)
+{
+  GtkBox *box = GTK_BOX (widget);
+  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (box);
+  GtkBoxChild *child;
+  GList *children;
+  GtkAllocation child_allocation;
+  gint nvis_children = 0;
+  gint nexpand_children = 0;
+  gint child_width = 0;
+  gint child_height = 0;
+  gint width = 0;
+  gint height = 0;
+  gint extra = 0;
+  gint x = 0;
+  gint y = 0;
+  GtkTextDirection direction;
+
+  widget->allocation = *allocation;
+
+  direction = gtk_widget_get_direction (widget);
+
+  for (children = box->children; children; children = children->next)
+    {
+      child = children->data;
+
+      if (gtk_widget_get_visible (child->widget))
+	{
+	  nvis_children += 1;
+	  if (child->expand)
+	    nexpand_children += 1;
+	}
+    }
+
+  if (nvis_children > 0)
+    {
+      if (box->homogeneous)
+	{
+          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              width = (allocation->width -
+                       GTK_CONTAINER (box)->border_width * 2 -
+                       (nvis_children - 1) * box->spacing);
+              extra = width / nvis_children;
+            }
+          else
+            {
+              height = (allocation->height -
+                        GTK_CONTAINER (box)->border_width * 2 -
+                        (nvis_children - 1) * box->spacing);
+              extra = height / nvis_children;
+            }
+	}
+      else if (nexpand_children > 0)
+	{
+          if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              width = (gint) allocation->width - (gint) widget->requisition.width;
+              extra = width / nexpand_children;
+            }
+          else
+            {
+              height = (gint) allocation->height - (gint) widget->requisition.height;
+              extra = height / nexpand_children;
+            }
+	}
+
+      if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          x = allocation->x + GTK_CONTAINER (box)->border_width;
+          child_allocation.y = allocation->y + GTK_CONTAINER (box)->border_width;
+          child_allocation.height = MAX (1, (gint) allocation->height - (gint) GTK_CONTAINER (box)->border_width * 2);
+        }
+      else
+        {
+          y = allocation->y + GTK_CONTAINER (box)->border_width;
+          child_allocation.x = allocation->x + GTK_CONTAINER (box)->border_width;
+          child_allocation.width = MAX (1, (gint) allocation->width - (gint) GTK_CONTAINER (box)->border_width * 2);
+        }
+
+      children = box->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+
+	  if ((child->pack == GTK_PACK_START) && gtk_widget_get_visible (child->widget))
+	    {
+	      if (box->homogeneous)
+		{
+		  if (nvis_children == 1)
+                    {
+                      child_width = width;
+                      child_height = height;
+                    }
+		  else
+                    {
+                      child_width = extra;
+                      child_height = extra;
+                    }
+
+		  nvis_children -= 1;
+		  width -= extra;
+                  height -= extra;
+		}
+	      else
+		{
+		  GtkRequisition child_requisition;
+
+		  gtk_widget_get_child_requisition (child->widget, &child_requisition);
+
+		  child_width = child_requisition.width + child->padding * 2;
+		  child_height = child_requisition.height + child->padding * 2;
+
+		  if (child->expand)
+		    {
+		      if (nexpand_children == 1)
+                        {
+                          child_width += width;
+                          child_height += height;
+                        }
+		      else
+                        {
+                          child_width += extra;
+                          child_height += extra;
+                        }
+
+		      nexpand_children -= 1;
+		      width -= extra;
+                      height -= extra;
+		    }
+		}
+
+	      if (child->fill)
+		{
+                  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+                    {
+                      child_allocation.width = MAX (1, (gint) child_width - (gint) child->padding * 2);
+                      child_allocation.x = x + child->padding;
+                    }
+                  else
+                    {
+                      child_allocation.height = MAX (1, child_height - (gint)child->padding * 2);
+                      child_allocation.y = y + child->padding;
+                    }
+		}
+	      else
+		{
+		  GtkRequisition child_requisition;
+
+		  gtk_widget_get_child_requisition (child->widget, &child_requisition);
+                  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+                    {
+                      child_allocation.width = child_requisition.width;
+                      child_allocation.x = x + (child_width - child_allocation.width) / 2;
+                    }
+                  else
+                    {
+                      child_allocation.height = child_requisition.height;
+                      child_allocation.y = y + (child_height - child_allocation.height) / 2;
+                    }
+		}
+
+	      if (direction == GTK_TEXT_DIR_RTL &&
+                  private->orientation == GTK_ORIENTATION_HORIZONTAL)
+                {
+                  child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
+                }
+
+	      gtk_widget_size_allocate (child->widget, &child_allocation);
+
+	      x += child_width + box->spacing;
+	      y += child_height + box->spacing;
+	    }
+	}
+
+      x = allocation->x + allocation->width - GTK_CONTAINER (box)->border_width;
+      y = allocation->y + allocation->height - GTK_CONTAINER (box)->border_width;
+
+      children = box->children;
+      while (children)
+	{
+	  child = children->data;
+	  children = children->next;
+
+	  if ((child->pack == GTK_PACK_END) && gtk_widget_get_visible (child->widget))
+	    {
+	      GtkRequisition child_requisition;
+
+	      gtk_widget_get_child_requisition (child->widget, &child_requisition);
+
+              if (box->homogeneous)
+                {
+                  if (nvis_children == 1)
+                    {
+                      child_width = width;
+                      child_height = height;
+                    }
+                  else
+                    {
+                      child_width = extra;
+                      child_height = extra;
+                   }
+
+                  nvis_children -= 1;
+                  width -= extra;
+                  height -= extra;
+                }
+              else
+                {
+		  child_width = child_requisition.width + child->padding * 2;
+		  child_height = child_requisition.height + child->padding * 2;
+
+                  if (child->expand)
+                    {
+                      if (nexpand_children == 1)
+                        {
+                          child_width += width;
+                          child_height += height;
+                         }
+                      else
+                        {
+                          child_width += extra;
+                          child_height += extra;
+                        }
+
+                      nexpand_children -= 1;
+                      width -= extra;
+                      height -= extra;
+                    }
+                }
+
+              if (child->fill)
+                {
+                  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+                    {
+                      child_allocation.width = MAX (1, (gint)child_width - (gint)child->padding * 2);
+                      child_allocation.x = x + child->padding - child_width;
+                    }
+                  else
+                    {
+                      child_allocation.height = MAX (1, child_height - (gint)child->padding * 2);
+                      child_allocation.y = y + child->padding - child_height;
+                     }
+                }
+              else
+                {
+                  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+                    {
+                      child_allocation.width = child_requisition.width;
+                      child_allocation.x = x + (child_width - child_allocation.width) / 2 - child_width;
+                    }
+                  else
+                    {
+                      child_allocation.height = child_requisition.height;
+                      child_allocation.y = y + (child_height - child_allocation.height) / 2 - child_height;
+                    }
+                }
+
+	      if (direction == GTK_TEXT_DIR_RTL &&
+                  private->orientation == GTK_ORIENTATION_HORIZONTAL)
+                {
+                  child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
+                }
+
+              gtk_widget_size_allocate (child->widget, &child_allocation);
+
+              x -= (child_width + box->spacing);
+              y -= (child_height + box->spacing);
+	    }
+	}
+    }
+}
+
 static GType
 gtk_box_child_type (GtkContainer   *container)
 {
@@ -212,11 +609,11 @@ gtk_box_child_type (GtkContainer   *container)
 }
 
 static void
-gtk_box_set_child_property (GtkContainer    *container,
-			    GtkWidget       *child,
-			    guint            property_id,
-			    const GValue    *value,
-			    GParamSpec      *pspec)
+gtk_box_set_child_property (GtkContainer *container,
+                            GtkWidget    *child,
+                            guint         property_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
 {
   gboolean expand = 0;
   gboolean fill = 0;
@@ -363,6 +760,30 @@ gtk_box_pack (GtkBox      *box,
   gtk_widget_child_notify (child, "pack-type");
   gtk_widget_child_notify (child, "position");
   gtk_widget_thaw_child_notify (child);
+}
+
+/**
+ * gtk_box_new:
+ * @orientation: the box' orientation.
+ * @homogeneous: %TRUE if all children are to be given equal space allocations.
+ * @spacing: the number of pixels to place by default between children.
+ *
+ * Creates a new #GtkHBox.
+ *
+ * Return value: a new #GtkHBox.
+ *
+ * Since: 2.16
+ **/
+GtkWidget*
+_gtk_box_new (GtkOrientation orientation,
+              gboolean       homogeneous,
+              gint           spacing)
+{
+  return g_object_new (GTK_TYPE_BOX,
+                       "orientation", orientation,
+                       "spacing",     spacing,
+                       "homogeneous", homogeneous ? TRUE : FALSE,
+                       NULL);
 }
 
 /**
@@ -531,7 +952,10 @@ gtk_box_set_spacing (GtkBox *box,
   if (spacing != box->spacing)
     {
       box->spacing = spacing;
+      _gtk_box_set_spacing_set (box, TRUE);
+
       g_object_notify (G_OBJECT (box), "spacing");
+
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
 }
@@ -550,6 +974,31 @@ gtk_box_get_spacing (GtkBox *box)
   g_return_val_if_fail (GTK_IS_BOX (box), 0);
 
   return box->spacing;
+}
+
+void
+_gtk_box_set_spacing_set (GtkBox  *box,
+                          gboolean spacing_set)
+{
+  GtkBoxPrivate *private;
+
+  g_return_if_fail (GTK_IS_BOX (box));
+
+  private = GTK_BOX_GET_PRIVATE (box);
+
+  private->spacing_set = spacing_set ? TRUE : FALSE;
+}
+
+gboolean
+_gtk_box_get_spacing_set (GtkBox *box)
+{
+  GtkBoxPrivate *private;
+
+  g_return_val_if_fail (GTK_IS_BOX (box), FALSE);
+
+  private = GTK_BOX_GET_PRIVATE (box);
+
+  return private->spacing_set;
 }
 
 /**
@@ -611,7 +1060,8 @@ gtk_box_reorder_child (GtkBox    *box,
   box->children = g_list_insert_before (box->children, new_link, child_info);
 
   gtk_widget_child_notify (child, "position");
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
+  if (gtk_widget_get_visible (child)
+      && gtk_widget_get_visible (GTK_WIDGET (box)))
     gtk_widget_queue_resize (child);
 }
 
@@ -713,17 +1163,35 @@ gtk_box_set_child_packing (GtkBox      *box,
 	child_info->pack = GTK_PACK_START;
       gtk_widget_child_notify (child, "pack-type");
 
-      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
+      if (gtk_widget_get_visible (child)
+          && gtk_widget_get_visible (GTK_WIDGET (box)))
 	gtk_widget_queue_resize (child);
     }
   gtk_widget_thaw_child_notify (child);
+}
+
+void
+_gtk_box_set_old_defaults (GtkBox *box)
+{
+  GtkBoxPrivate *private;
+
+  g_return_if_fail (GTK_IS_BOX (box));
+
+  private = GTK_BOX_GET_PRIVATE (box);
+
+  private->default_expand = TRUE;
 }
 
 static void
 gtk_box_add (GtkContainer *container,
 	     GtkWidget    *widget)
 {
-  gtk_box_pack_start (GTK_BOX (container), widget, TRUE, TRUE, 0);
+  GtkBoxPrivate *private = GTK_BOX_GET_PRIVATE (container);
+
+  gtk_box_pack_start (GTK_BOX (container), widget,
+                      private->default_expand,
+                      private->default_expand,
+                      0);
 }
 
 static void
@@ -743,14 +1211,14 @@ gtk_box_remove (GtkContainer *container,
 	{
 	  gboolean was_visible;
 
-	  was_visible = GTK_WIDGET_VISIBLE (widget);
+	  was_visible = gtk_widget_get_visible (widget);
 	  gtk_widget_unparent (widget);
 
 	  box->children = g_list_remove_link (box->children, children);
 	  g_list_free (children);
 	  g_free (child);
 
-	  /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
+	  /* queue resize regardless of gtk_widget_get_visible (container),
 	   * since that's what is needed by toplevels.
 	   */
 	  if (was_visible)

@@ -18,6 +18,23 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SECTION:gtkbuildable
+ * @Short_description: Interface for objects that can be built by GtkBuilder
+ * @Title: GtkBuildable
+ *
+ * In order to allow construction from a <link linkend="BUILDER-UI">GtkBuilder
+ * UI description</link>, an object class must implement the
+ * GtkBuildable interface. The interface includes methods for setting
+ * names and properties of objects, parsing custom tags, constructing
+ * child objects.
+ *
+ * The GtkBuildable interface is implemented by all widgets and
+ * many of the non-widget objects that are provided by GTK+. The
+ * main user of this interface is #GtkBuilder, there should be
+ * very little need for applications to call any
+ * <function>gtk_buildable_...</function> functions.
+ */
 
 #include "config.h"
 #include "gtkbuildable.h"
@@ -25,18 +42,13 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
-GType
-gtk_buildable_get_type (void)
+
+typedef GtkBuildableIface GtkBuildableInterface;
+G_DEFINE_INTERFACE (GtkBuildable, gtk_buildable, G_TYPE_OBJECT)
+
+static void
+gtk_buildable_default_init (GtkBuildableInterface *iface)
 {
-  static GType buildable_type = 0;
-
-  if (!buildable_type)
-    buildable_type =
-      g_type_register_static_simple (G_TYPE_INTERFACE, I_("GtkBuildable"),
-				     sizeof (GtkBuildableIface),
-				     NULL, 0, NULL, 0);
-
-  return buildable_type;
 }
 
 /**
@@ -103,7 +115,7 @@ gtk_buildable_get_name (GtkBuildable *buildable)
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder
  * @child: child to add
- * @type: kind of child or %NULL
+ * @type: (allow-none): kind of child or %NULL
  *
  * Adds a child to @buildable. @type is an optional string
  * describing how the child should be added.
@@ -191,12 +203,12 @@ gtk_buildable_parser_finished (GtkBuildable *buildable,
  * @builder: #GtkBuilder used to construct this object
  * @name: name of child to construct
  *
- * Constructs a child of @buildable with the name @name. 
+ * Constructs a child of @buildable with the name @name.
  *
  * #GtkBuilder calls this function if a "constructor" has been
  * specified in the UI definition.
  *
- * Returns: the constructed child
+ * Returns: (transfer full): the constructed child
  *
  * Since: 2.12
  **/
@@ -221,10 +233,10 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
  * gtk_buildable_custom_tag_start:
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder used to construct this object
- * @child: child object or %NULL for non-child tags
+ * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: name of tag
- * @parser: a #GMarkupParser structure to fill in
- * @data: return location for user data that will be passed in 
+ * @parser: (out): a #GMarkupParser structure to fill in
+ * @data: (out): return location for user data that will be passed in 
  *   to parser functions
  *
  * This is called for each unknown element under &lt;child&gt;.
@@ -259,9 +271,9 @@ gtk_buildable_custom_tag_start (GtkBuildable  *buildable,
  * gtk_buildable_custom_tag_end:
  * @buildable: A #GtkBuildable
  * @builder: #GtkBuilder used to construct this object
- * @child: child object or %NULL for non-child tags
+ * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: name of tag
- * @data: user data that will be passed in to parser functions
+ * @data: (type gpointer): user data that will be passed in to parser functions
  *
  * This is called at the end of each custom element handled by 
  * the buildable.
@@ -290,7 +302,7 @@ gtk_buildable_custom_tag_end (GtkBuildable  *buildable,
  * gtk_buildable_custom_finished:
  * @buildable: a #GtkBuildable
  * @builder: a #GtkBuilder
- * @child: child object or %NULL for non-child tags
+ * @child: (allow-none): child object or %NULL for non-child tags
  * @tagname: the name of the tag
  * @data: user data created in custom_tag_start
  *
@@ -324,7 +336,7 @@ gtk_buildable_custom_finished (GtkBuildable  *buildable,
  *
  * Get the internal child called @childname of the @buildable object.
  *
- * Returns: the internal child of the buildable object 
+ * Returns: (transfer none): the internal child of the buildable object
  *
  * Since: 2.12
  **/

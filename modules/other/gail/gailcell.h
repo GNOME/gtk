@@ -80,8 +80,10 @@ gboolean gail_cell_remove_state          (GailCell        *cell,
                                           AtkStateType    state_type,
                                           gboolean        emit_signal);
 
+#ifndef GTK_DISABLE_DEPRECATED
 void     gail_cell_type_add_action_interface 
                                          (GType           type);
+#endif
 
 gboolean gail_cell_add_action            (GailCell        *cell,
 		                          const gchar     *action_name,

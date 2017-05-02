@@ -96,6 +96,7 @@ gdk_font_hash_lookup (GdkFontType  type,
     }
 }
 
+#ifdef G_ENABLE_DEBUG
 static const char *
 charset_name (DWORD charset)
 {
@@ -122,6 +123,7 @@ charset_name (DWORD charset)
     }
   return "unknown";
 }
+#endif
 
 /* This table classifies Unicode characters according to the Microsoft
  * Unicode subset numbering. This is based on the table in "Developing
@@ -366,6 +368,7 @@ static struct {
     U_SPECIALS, "Specials" }
 };
 
+#ifdef G_ENABLE_DEBUG
 static void
 print_unicode_subranges (FONTSIGNATURE *fsp)
 {
@@ -387,6 +390,7 @@ print_unicode_subranges (FONTSIGNATURE *fsp)
     g_print (" none!");
   g_print ("\n");
 }
+#endif
 
 static gboolean
 check_unicode_subranges (UINT           charset,

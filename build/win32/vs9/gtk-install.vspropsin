@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="gtkinstallprops"
+	InheritedPropertySheets=".\gtk-build-defines.vsprops"
+	>
+	<UserMacro
+		Name="GtkDoInstall"
+		Value="
+mkdir $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk-win32$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk-win32$(GtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gtk-win32$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gtk-win32$(GtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-demo.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-demo.pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-update-icon-cache.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-update-icon-cache.pdb $(CopyDir)\bin&#x0D;&#x0A;
+
+mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gdk-win32-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-win32-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk&#x0D;&#x0A;
+#include "gdk.headers"
+#include "gdk-win32.headers"
+
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+#include "gtk.headers"
+
+mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\include&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkconfig.h $(CopyDir)\lib\gtk-$(ApiVersion)\include&#x0D;&#x0A;
+
+mkdir $(CopyDir)\include\gail-1.0\libgail-util&#x0D;&#x0A;
+#include "gailutil.headers"
+
+copy $(ConfigurationName)\$(PlatformName)\bin\libwimp.dll $(Outdir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines&#x0D;&#x0A;
+
+mkdir $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
+
+mkdir $(CopyDir)\share\themes\Default\gtk-$(ApiVersion)-key&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkrc.key.default $(CopyDir)\share\themes\Default\gtk-$(ApiVersion)-key\gtkrc&#x0D;&#x0A;
+
+mkdir $(CopyDir)\share\themes\Emacs\gtk-$(ApiVersion)-key&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkrc.key.emacs $(CopyDir)\share\themes\Emacs\gtk-$(ApiVersion)-key\gtkrc&#x0D;&#x0A;
+
+mkdir $(CopyDir)\share\themes\MS-Windows\gtk-$(ApiVersion)&#x0D;&#x0A;
+copy ..\..\..\modules\engines\ms-windows\Theme\gtk-$(ApiVersion)\gtkrc $(CopyDir)\share\themes\MS-Windows\gtk-$(ApiVersion)&#x0D;&#x0A;
+
+mkdir $(CopyDir)\share\themes\Raleigh\gtk-$(ApiVersion)&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkrc.default $(CopyDir)\share\themes\Raleigh\gtk-$(ApiVersion)\gtkrc&#x0D;&#x0A;
+
+if exist $(CopyDir)\share\icons\hicolor $(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force &quot;$(CopyDir)\share\icons\hicolor&quot;&#x0D;&#x0A;
+
+if exist ..\gtk+-2.0.pc mkdir $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
+if exist ..\gdk-2.0.pc copy ..\gdk-2.0.pc $(CopyDir)\lib\pkgconfig&#x0D;&#x0A;
+if exist ..\gdk-2.0.pc copy ..\gdk-2.0.pc $(CopyDir)\lib\pkgconfig\gdk-win32-2.0.pc&#x0D;&#x0A;
+if exist ..\gtk+-2.0.pc copy &quot;..\gtk+-2.0.pc&quot; &quot;$(CopyDir)\lib\pkgconfig&quot;&#x0D;&#x0A;
+if exist ..\gtk+-2.0.pc copy &quot;..\gtk+-2.0.pc&quot; &quot;$(CopyDir)\lib\pkgconfig\gtk+-win32-2.0.pc&quot;&#x0D;&#x0A;
+		      "
+	/>
+	<UserMacro
+		Name="GenerateGtkPC"
+		Value="if exist $(PythonPath)\python.exe $(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)"
+	/>
+	<UserMacro
+		Name="GenerateGtkPCX64"
+		Value="if exist $(PythonPathX64)\python.exe $(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)"
+	/>
+</VisualStudioPropertySheet>

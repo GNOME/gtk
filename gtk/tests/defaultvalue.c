@@ -102,6 +102,9 @@ test_type (gconstpointer data)
     {
       GdkWindowAttr attributes;
       attributes.window_type = GDK_WINDOW_TEMP;
+      attributes.event_mask = 0;
+      attributes.width = 100;
+      attributes.height = 100;
       instance = g_object_ref (gdk_window_new (NULL, &attributes, 0));
     }
   else
@@ -168,6 +171,12 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "cancel-button") == 0))
 	continue;
 
+      /* Default invisible char is determined at runtime */
+      if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
+	  (strcmp (pspec->name, "invisible-char") == 0 ||
+           strcmp (pspec->name, "buffer") == 0))
+	continue;
+
       /* Gets set to the cwd */
       if (g_type_is_a (type, GTK_TYPE_FILE_SELECTION) &&
 	  strcmp (pspec->name, "filename") == 0)
@@ -183,7 +192,9 @@ test_type (gconstpointer data)
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_MESSAGE_DIALOG) &&
-	  strcmp (pspec->name, "image") == 0)
+          (strcmp (pspec->name, "image") == 0 ||
+           strcmp (pspec->name, "message-area") == 0))
+
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_PRINT_OPERATION) &&
@@ -230,7 +241,10 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "gtk-icon-theme-name") == 0 ||
 	   strcmp (pspec->name, "gtk-im-module") == 0 ||
 	   strcmp (pspec->name, "gtk-key-theme-name") == 0 ||
-	   strcmp (pspec->name, "gtk-theme-name") == 0))
+	   strcmp (pspec->name, "gtk-theme-name") == 0 ||
+           strcmp (pspec->name, "gtk-sound-theme-name") == 0 ||
+           strcmp (pspec->name, "gtk-enable-input-feedback-sounds") == 0 ||
+           strcmp (pspec->name, "gtk-enable-event-sounds") == 0))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&
@@ -264,6 +278,10 @@ test_type (gconstpointer data)
 
       if (g_type_is_a (type, GTK_TYPE_TEXT_VIEW) &&
           strcmp (pspec->name, "buffer") == 0)
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_TOOL_ITEM_GROUP) &&
+          strcmp (pspec->name, "label-widget") == 0)
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_TREE_VIEW) &&

@@ -24,13 +24,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_HBUTTON_BOX_H__
 #define __GTK_HBUTTON_BOX_H__
 
+
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
 #include <gtk/gtkbbox.h>
 
@@ -71,6 +71,9 @@ GtkButtonBoxStyle gtk_hbutton_box_get_layout_default (void);
 void gtk_hbutton_box_set_spacing_default (gint spacing);
 void gtk_hbutton_box_set_layout_default (GtkButtonBoxStyle layout);
 #endif
+
+/* private API */
+GtkButtonBoxStyle _gtk_hbutton_box_get_layout_default (void);
 
 G_END_DECLS
 

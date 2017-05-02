@@ -570,7 +570,7 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
  * a unique name which needs to be specified upon creation.
  *
  * Return value: new binding set
- **/
+ */
 GtkBindingSet*
 gtk_binding_set_new (const gchar *set_name)
 {
@@ -601,7 +601,7 @@ gtk_binding_set_new (const gchar *set_name)
  * demand by this function.
  *
  * Return value: the binding set corresponding to @object_class
- **/
+ */
 GtkBindingSet*
 gtk_binding_set_by_class (gpointer object_class)
 {
@@ -636,8 +636,8 @@ gtk_binding_set_by_class (gpointer object_class)
  * either be a name used for gtk_binding_set_new() or the type name of
  * a class used in gtk_binding_set_by_class().
  *
- * Return value: %NULL or the specified binding set
- **/
+ * Return value: (transfer none): %NULL or the specified binding set
+ */
 GtkBindingSet*
 gtk_binding_set_find (const gchar *set_name)
 {
@@ -658,7 +658,7 @@ gtk_binding_set_find (const gchar *set_name)
 
 /**
  * gtk_binding_set_activate:
- * @binding_set: @binding_set to activate
+ * @binding_set: a #GtkBindingSet set to activate
  * @keyval:      key value of the binding
  * @modifiers:   key modifier of the binding
  * @object:      object to activate when binding found
@@ -667,7 +667,7 @@ gtk_binding_set_find (const gchar *set_name)
  * @binding_set and activate the binding on @object.
  *
  * Return value: %TRUE if a binding was found and activated
- **/
+ */
 gboolean
 gtk_binding_set_activate (GtkBindingSet	 *binding_set,
 			  guint		  keyval,
@@ -707,13 +707,26 @@ gtk_binding_entry_clear_internal (GtkBindingSet  *binding_set,
 }
 
 /**
- * gtk_binding_entry_clear:
- * @binding_set:
- * @keyval:
- * @modifiers:
+ * gtk_binding_entry_add:
+ * @binding_set: #a GtkBindingSet to clear an entry of
+ * @keyval:      key value of binding to clear
+ * @modifiers:   key modifier of binding to clear
  *
- * Use of this function is deprecated.
- **/
+ * Adds a binding entry.
+ *
+ * Deprecated: 2.12: Use gtk_binding_entry_add_signal() instead.
+ */
+
+/**
+ * gtk_binding_entry_clear:
+ * @binding_set: binding set to clear an entry of
+ * @keyval:      key value of binding to clear
+ * @modifiers:   key modifier of binding to clear
+ *
+ * Clears a binding entry.
+ *
+ * Deprecated: 2.12: Use gtk_binding_entry_remove() instead.
+ */
 void
 gtk_binding_entry_clear (GtkBindingSet	*binding_set,
 			 guint		 keyval,
@@ -726,16 +739,16 @@ gtk_binding_entry_clear (GtkBindingSet	*binding_set,
 
 /**
  * gtk_binding_entry_skip:
- * @binding_set: @binding_set to skip an entry of
+ * @binding_set: a #GtkBindingSet to skip an entry of
  * @keyval:      key value of binding to skip
  * @modifiers:   key modifier of binding to skip
- *
- * Since: 2.12
  *
  * Install a binding on @binding_set which causes key lookups
  * to be aborted, to prevent bindings from lower priority sets
  * to be activated.
- **/
+ *
+ * Since: 2.12
+ */
 void
 gtk_binding_entry_skip (GtkBindingSet  *binding_set,
                         guint           keyval,
@@ -758,13 +771,13 @@ gtk_binding_entry_skip (GtkBindingSet  *binding_set,
 
 /**
  * gtk_binding_entry_remove:
- * @binding_set: @binding_set to remove an entry of
+ * @binding_set: a #GtkBindingSet to remove an entry of
  * @keyval:      key value of binding to remove
  * @modifiers:   key modifier of binding to remove
  *
  * Remove a binding previously installed via
  * gtk_binding_entry_add_signal() on @binding_set.
- **/
+ */
 void
 gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
 			  guint		  keyval,
@@ -784,14 +797,16 @@ gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
 
 /**
  * gtk_binding_entry_add_signall:
- * @binding_set:  binding set to add a signal to
+ * @binding_set:  a #GtkBindingSet to add a signal to
  * @keyval:       key value
  * @modifiers:    key modifier
  * @signal_name:  signal name to be bound
- * @binding_args: list of #GtkBindingArg signal arguments
+ * @binding_args: (transfer none) (element-type GtkBindingArg):
+ *     list of #GtkBindingArg signal arguments
  *
- * Deprecated.
- **/
+ * Override or install a new key binding for @keyval with @modifiers on
+ * @binding_set.
+ */
 void
 gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
                                guint	       keyval,
@@ -884,18 +899,18 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
 
 /**
  * gtk_binding_entry_add_signal:
- * @binding_set: @binding_set to install an entry for
+ * @binding_set: a #GtkBindingSet to install an entry for
  * @keyval:      key value of binding to install
  * @modifiers:   key modifier of binding to install
  * @signal_name: signal to execute upon activation
  * @n_args:      number of arguments to @signal_name
- * @:            arguments to @signal_name
+ * @Varargs:     arguments to @signal_name
  *
  * Override or install a new key binding for @keyval with @modifiers on
- * @binding_set.  When the binding is activated, @signal_name will be
+ * @binding_set. When the binding is activated, @signal_name will be
  * emitted on the target widget, with @n_args @Varargs used as
  * arguments.
- **/
+ */
 void
 gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
 			      guint           keyval,
@@ -981,14 +996,14 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
 
 /**
  * gtk_binding_set_add_path:
- * @binding_set:  binding set to add a path to
+ * @binding_set:  a #GtkBindingSet to add a path to
  * @path_type:    path type the pattern applies to
  * @path_pattern: the actual match pattern
  * @priority:     binding priority
  *
  * This function is used internally by the GtkRC parsing mechanism to
  * assign match patterns to #GtkBindingSet structures.
- **/
+ */
 void
 gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
 			  GtkPathType	      path_type,
@@ -1279,11 +1294,11 @@ gtk_bindings_activate_list (GtkObject *object,
  * binding on @object.
  *
  * Return value: %TRUE if a binding was found and activated
- **/
+ */
 gboolean
-gtk_bindings_activate (GtkObject      *object,
-		       guint	       keyval,
-		       GdkModifierType modifiers)
+gtk_bindings_activate (GtkObject       *object,
+		       guint	        keyval,
+		       GdkModifierType  modifiers)
 {
   GSList *entries = NULL;
   GdkDisplay *display;
@@ -1320,10 +1335,12 @@ gtk_bindings_activate (GtkObject      *object,
  * @event, and if one was found, activate it.
  * 
  * Return value: %TRUE if a matching key binding was found
- **/
+ *
+ * Since: 2.4
+ */
 gboolean
-gtk_bindings_activate_event (GtkObject      *object,
-                             GdkEventKey    *event)
+gtk_bindings_activate_event (GtkObject   *object,
+                             GdkEventKey *event)
 {
   GSList *entries = NULL;
   GdkDisplay *display;
@@ -1394,7 +1411,7 @@ gtk_binding_parse_signal (GScanner       *scanner,
       else
 	expected_token = ')';
       g_scanner_get_next_token (scanner);
-      switch (scanner->token)
+      switch ((guint) scanner->token)
 	{
 	  GtkBindingArg *arg;
 
@@ -1521,12 +1538,12 @@ gtk_binding_parse_bind (GScanner       *scanner,
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
   
   g_scanner_get_next_token (scanner);
-  if (scanner->token != GTK_RC_TOKEN_BIND &&
-      scanner->token != GTK_RC_TOKEN_UNBIND)
+  if (scanner->token != (guint) GTK_RC_TOKEN_BIND &&
+      scanner->token != (guint) GTK_RC_TOKEN_UNBIND)
     return GTK_RC_TOKEN_BIND;
-  unbind = scanner->token == GTK_RC_TOKEN_UNBIND;
+  unbind = scanner->token == (guint) GTK_RC_TOKEN_UNBIND;
   g_scanner_get_next_token (scanner);
-  if (scanner->token != G_TOKEN_STRING)
+  if (scanner->token != (guint) G_TOKEN_STRING)
     return G_TOKEN_STRING;
   gtk_accelerator_parse (scanner->value.v_string, &keyval, &modifiers);
   modifiers &= BINDING_MOD_MASK ();
@@ -1576,10 +1593,12 @@ gtk_binding_parse_bind (GScanner       *scanner,
  * gtk_binding_parse_binding:
  * @scanner: GtkRC scanner
  *
- * Deprecated as public API, used only internally.
+ * Parse a binding entry from a gtkrc file.
  *
  * Return value: expected token upon errors, %G_TOKEN_NONE on success.
- **/
+ *
+ * Deprecated: 2.12: There should be no need to call this function outside GTK+.
+ */
 guint
 gtk_binding_parse_binding (GScanner *scanner)
 {
@@ -1595,10 +1614,10 @@ _gtk_binding_parse_binding (GScanner *scanner)
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
 
   g_scanner_get_next_token (scanner);
-  if (scanner->token != GTK_RC_TOKEN_BINDING)
+  if (scanner->token != (guint) GTK_RC_TOKEN_BINDING)
     return GTK_RC_TOKEN_BINDING;
   g_scanner_get_next_token (scanner);
-  if (scanner->token != G_TOKEN_STRING)
+  if (scanner->token != (guint) G_TOKEN_STRING)
     return G_TOKEN_STRING;
   name = g_strdup (scanner->value.v_string);
 
@@ -1620,7 +1639,7 @@ _gtk_binding_parse_binding (GScanner *scanner)
   g_scanner_peek_next_token (scanner);
   while (scanner->next_token != '}')
     {
-      switch (scanner->next_token)
+      switch ((guint) scanner->next_token)
 	{
 	  guint expected_token;
 
@@ -1681,9 +1700,8 @@ binding_set_delete (GtkBindingSet *binding_set)
 /**
  * _gtk_binding_reset_parsed:
  * 
- * Removing all binding sets that were added by
- * gtk_binding_parse_binding()
- **/
+ * Remove all binding sets that were added by gtk_binding_parse_binding().
+ */
 void
 _gtk_binding_reset_parsed (void)
 {

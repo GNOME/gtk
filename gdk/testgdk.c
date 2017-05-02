@@ -53,8 +53,8 @@
 
 #define CQTESTF(quiet, expr, failfmt) \
   (tmpb = (expr), \
-   (tmpb ? (quiet ? 0 : printf ("PASS: %d %s\n", __LINE__, #expr)) \
-         : (printf ("FAIL: %d %s", __LINE__, #expr), \
+   (tmpb ? (quiet ? 0 : printf ("PASS: %s %s\n", G_STRLOC, #expr)) \
+         : (printf ("FAIL: %s %s", G_STRLOC, #expr), \
          printf failfmt, \
          printf ("\n"), \
          retval = FALSE, \
@@ -303,7 +303,7 @@ test_gcs (void)
   gdk_gc_copy (black_gc, gc);
   gdk_gc_get_values (black_gc, &gcvalues);
   TEST (test_default_gc (&gcvalues, TRUE));
-  gdk_gc_unref (gc);
+  g_object_unref (gc);
 
   gdk_gc_set_foreground (black_gc, &black);
   gdk_gc_get_values (black_gc, &gcvalues);
@@ -340,7 +340,7 @@ test_gcs (void)
 
   pixmap = gdk_pixmap_new (NULL, 1, 1, 1);
   black_bitmap_gc = gdk_gc_new (pixmap);
-  gdk_pixmap_unref (pixmap);
+  g_object_unref (pixmap);
 }
 
 /* Create pixmaps, check that properties are as expected.
@@ -370,7 +370,7 @@ test_pixmaps (gint depth)
 	QTEST (image->height == height);
 	QTEST (image->depth == depth);
 	gdk_image_destroy (image);
-	gdk_pixmap_unref (pixmap);
+	g_object_unref (pixmap);
       }
   TEST (retval);
 }
@@ -569,7 +569,7 @@ test_points (void)
 	  gdk_gc_set_function (gcs[j], GDK_COPY);
 	}
   
-  gdk_pixmap_unref (pixmap);
+  g_object_unref (pixmap);
   
   pixmap = gdk_pixmap_new (w, width, height, 1);
   test_one_point_on_drawable (pixmap, black_bitmap_gc, 1);
@@ -579,7 +579,7 @@ test_points (void)
       test_one_point_on_drawable (pixmap, black_bitmap_gc, 1);
     }
 
-  gdk_pixmap_unref (pixmap);
+  g_object_unref (pixmap);
 }
 
 static void
@@ -684,7 +684,7 @@ test_lines (void)
 	    gdk_gc_set_function (gcs[j], GDK_COPY);
 	  }
 
-  gdk_pixmap_unref (pixmap);
+  g_object_unref (pixmap);
 }
 
 static void
@@ -789,7 +789,7 @@ test_rectangles (void)
 	    gdk_gc_set_function (gcs[j], GDK_COPY);
 	  }
   
-  gdk_pixmap_unref (pixmap);
+  g_object_unref (pixmap);
 }
 
 static void
@@ -880,7 +880,7 @@ test_arcs (void)
 	    gdk_gc_set_function (gcs[j], GDK_COPY);
 	  }
 
-  gdk_pixmap_unref (pixmap);
+  g_object_unref (pixmap);
 }
 
 /* Test region operations.

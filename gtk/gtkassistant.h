@@ -23,12 +23,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_ASSISTANT_H__
+#define __GTK_ASSISTANT_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_ASSISTANT_H__
-#define __GTK_ASSISTANT_H__
 
 #include <gtk/gtkwindow.h>
 
@@ -41,6 +41,25 @@ G_BEGIN_DECLS
 #define GTK_IS_ASSISTANT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_ASSISTANT))
 #define GTK_ASSISTANT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_ASSISTANT, GtkAssistantClass))
 
+/**
+ * GtkAssistantPageType:
+ * @GTK_ASSISTANT_PAGE_CONTENT: The page has regular contents.
+ * @GTK_ASSISTANT_PAGE_INTRO: The page contains an introduction to the
+ *  assistant task.
+ * @GTK_ASSISTANT_PAGE_CONFIRM: The page lets the user confirm or deny the
+ *  changes.
+ * @GTK_ASSISTANT_PAGE_SUMMARY: The page informs the user of the changes
+ *  done.
+ * @GTK_ASSISTANT_PAGE_PROGRESS: Used for tasks that take a long time to
+ *  complete, blocks the assistant until the page is marked as complete.
+ *
+ * An enum for determining the page role inside the #GtkAssistant. It's
+ * used to handle buttons sensitivity and visibility.
+ *
+ * Note that an assistant needs to end its page flow with a page of type
+ * %GTK_ASSISTANT_PAGE_CONFIRM, %GTK_ASSISTANT_PAGE_SUMMARY or
+ * %GTK_ASSISTANT_PAGE_PROGRESS to be correct.
+ */
 typedef enum
 {
   GTK_ASSISTANT_PAGE_CONTENT,
@@ -86,6 +105,18 @@ struct _GtkAssistantClass
   void (*_gtk_reserved5) (void);
 };
 
+/**
+ * GtkAssistantPageFunc:
+ * @current_page: The page number used to calculate the next page.
+ * @data: user data.
+ *
+ * A function used by gtk_assistant_set_forward_page_func() to know which
+ * is the next page given a current one. It's called both for computing the
+ * next page when the user presses the "forward" button and for handling
+ * the behavior of the "last" button.
+ *
+ * Returns: The next page number.
+ */
 typedef gint (*GtkAssistantPageFunc) (gint current_page, gpointer data);
 
 GType                 gtk_assistant_get_type              (void) G_GNUC_CONST;
@@ -115,7 +146,7 @@ GtkAssistantPageType  gtk_assistant_get_page_type         (GtkAssistant         
 void                  gtk_assistant_set_page_title        (GtkAssistant         *assistant,
 							   GtkWidget            *page,
 							   const gchar          *title);
-G_CONST_RETURN gchar *gtk_assistant_get_page_title        (GtkAssistant         *assistant,
+const gchar *         gtk_assistant_get_page_title        (GtkAssistant         *assistant,
 							   GtkWidget            *page);
 void                  gtk_assistant_set_page_header_image (GtkAssistant         *assistant,
 							   GtkWidget            *page,
@@ -138,6 +169,7 @@ void                  gtk_assistant_remove_action_widget  (GtkAssistant         
 							   GtkWidget            *child);
 
 void                  gtk_assistant_update_buttons_state  (GtkAssistant *assistant);
+void                  gtk_assistant_commit                (GtkAssistant *assistant);
 
 G_END_DECLS
 

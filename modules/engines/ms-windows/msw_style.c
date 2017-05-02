@@ -30,6 +30,9 @@
  *  http://msdn.microsoft.com/library/default.asp?url=/library/en-us/gdi/pantdraw_4b3g.asp
  */
 
+/* Include first, else we get redefinition warnings about STRICT */
+#include "pango/pangowin32.h"
+
 #include "msw_style.h"
 #include "xp_theme.h"
 
@@ -38,17 +41,17 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "gdk/gdk.h"
 #include "gtk/gtk.h"
-#include "gtk/gtk.h"
-/* #include <gdk/gdkwin32.h> */
 
+#ifdef BUILDING_STANDALONE
+#include "gdk/gdkwin32.h"
+#else
 #include "gdk/win32/gdkwin32.h"
+#endif
 
-static HDC get_window_dc (GtkStyle *style, GdkWindow *window,
-			  GtkStateType state_type, gint x, gint y, gint width,
-			  gint height, RECT *rect);
-static void release_window_dc (GtkStyle *style, GdkWindow *window,
-			       GtkStateType state_type);
+
+#define DETAIL(xx)   ((detail) && (!strcmp(xx, detail)))
 
 
 /* Default values, not normally used
@@ -82,81 +85,137 @@ typedef enum
 
 #define PART_SIZE 13
 
-static const guint8 check_aa_bits[] = {
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00,
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+static const unsigned char check_aa_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const guint8 check_base_bits[] = {
-  0x00, 0x00, 0x00, 0x00, 0xfc, 0x07, 0xfc, 0x07, 0xfc, 0x07, 0xfc, 0x07,
-  0xfc, 0x07, 0xfc,
-  0x07, 0xfc, 0x07, 0xfc, 0x07, 0xfc, 0x07, 0x00, 0x00, 0x00, 0x00
+static const unsigned char check_base_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0xfc, 0x07, 0x00, 0x00, 0xfc, 0x07, 0x00, 0x00,
+  0xfc, 0x07, 0x00, 0x00, 0xfc, 0x07, 0x00, 0x00,
+  0xfc, 0x07, 0x00, 0x00, 0xfc, 0x07, 0x00, 0x00,
+  0xfc, 0x07, 0x00, 0x00, 0xfc, 0x07, 0x00, 0x00,
+  0xfc, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const guint8 check_black_bits[] = {
-  0x00, 0x00, 0xfe, 0x0f, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00,
-  0x02, 0x00, 0x02,
-  0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00
+static const unsigned char check_black_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0xfe, 0x0f, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const guint8 check_dark_bits[] = {
-  0xff, 0x1f, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
-  0x01, 0x00, 0x01,
-  0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
+static const unsigned char check_dark_bits[] = {
+  0xff, 0x1f, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+  0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+  0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+  0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+  0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+  0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+  0x01, 0x00, 0x00, 0x00
 };
-static const guint8 check_light_bits[] = {
-  0x00, 0x00, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10,
-  0x00, 0x10, 0x00,
-  0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0x00, 0x10, 0xfe, 0x1f
+static const unsigned char check_light_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+  0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+  0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+  0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+  0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+  0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+  0xfe, 0x1f, 0x00, 0x00
 };
-static const guint8 check_mid_bits[] = {
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08,
-  0x00, 0x08, 0x00,
-  0x08, 0x00, 0x08, 0x00, 0x08, 0x00, 0x08, 0xfc, 0x0f, 0x00, 0x00
+static const unsigned char check_mid_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0xfc, 0x0f, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const guint8 check_text_bits[] = {
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x03, 0x88, 0x03,
-  0xd8, 0x01, 0xf8,
-  0x00, 0x70, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+static const unsigned char check_text_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00,
+  0x00, 0x03, 0x00, 0x00, 0x88, 0x03, 0x00, 0x00,
+  0xd8, 0x01, 0x00, 0x00, 0xf8, 0x00, 0x00, 0x00,
+  0x70, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const char check_inconsistent_bits[] = {
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0xf0, 0x03, 0xf0,
-  0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+static const unsigned char check_inconsistent_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0xf0, 0x03, 0x00, 0x00, 0xf0, 0x03, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const guint8 radio_base_bits[] = {
-  0x00, 0x00, 0x00, 0x00, 0xf0, 0x01, 0xf8, 0x03, 0xfc, 0x07, 0xfc, 0x07,
-  0xfc, 0x07, 0xfc,
-  0x07, 0xfc, 0x07, 0xf8, 0x03, 0xf0, 0x01, 0x00, 0x00, 0x00, 0x00
+static const unsigned char radio_base_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0xf0, 0x01, 0x00, 0x00, 0xf8, 0x03, 0x00, 0x00,
+  0xfc, 0x07, 0x00, 0x00, 0xfc, 0x07, 0x00, 0x00,
+  0xfc, 0x07, 0x00, 0x00, 0xfc, 0x07, 0x00, 0x00,
+  0xfc, 0x07, 0x00, 0x00, 0xf8, 0x03, 0x00, 0x00,
+  0xf0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const guint8 radio_black_bits[] = {
-  0x00, 0x00, 0xf0, 0x01, 0x0c, 0x02, 0x04, 0x00, 0x02, 0x00, 0x02, 0x00,
-  0x02, 0x00, 0x02,
-  0x00, 0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+static const unsigned char radio_black_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0xf0, 0x01, 0x00, 0x00,
+  0x0c, 0x02, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const guint8 radio_dark_bits[] = {
-  0xf0, 0x01, 0x0c, 0x06, 0x02, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00,
-  0x01, 0x00, 0x01,
-  0x00, 0x01, 0x00, 0x02, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00
+static const unsigned char radio_dark_bits[] = {
+  0xf0, 0x01, 0x00, 0x00, 0x0c, 0x06, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+  0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+  0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
+  0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00,
+  0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const guint8 radio_light_bits[] = {
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x08, 0x00, 0x10, 0x00, 0x10,
-  0x00, 0x10, 0x00,
-  0x10, 0x00, 0x10, 0x00, 0x08, 0x00, 0x08, 0x0c, 0x06, 0xf0, 0x01
+static const unsigned char radio_light_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+  0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+  0x00, 0x10, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00,
+  0x00, 0x10, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0x0c, 0x06, 0x00, 0x00,
+  0xf0, 0x01, 0x00, 0x00
 };
-static const guint8 radio_mid_bits[] = {
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00, 0x04, 0x00, 0x08, 0x00, 0x08,
-  0x00, 0x08, 0x00,
-  0x08, 0x00, 0x08, 0x00, 0x04, 0x0c, 0x06, 0xf0, 0x01, 0x00, 0x00
+static const unsigned char radio_mid_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x04, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00,
+  0x00, 0x08, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00,
+  0x0c, 0x06, 0x00, 0x00, 0xf0, 0x01, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
-static const guint8 radio_text_bits[] = {
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x00, 0xf0, 0x01,
-  0xf0, 0x01, 0xf0,
-  0x01, 0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+static const unsigned char radio_text_bits[] = {
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0xe0, 0x00, 0x00, 0x00, 0xf0, 0x01, 0x00, 0x00,
+  0xf0, 0x01, 0x00, 0x00, 0xf0, 0x01, 0x00, 0x00,
+  0xe0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00
 };
 
 static struct
 {
-  const guint8 *bits;
-  GdkBitmap *bmap;
+  const unsigned char *bits;
+  cairo_surface_t *bmap;
 } parts[] = {
   { check_aa_bits, NULL           },
   { check_base_bits, NULL         },
@@ -174,25 +233,67 @@ static struct
   { radio_text_bits, NULL         }
 };
 
-static gboolean
-get_system_font (XpThemeClass klazz, XpThemeFont type, LOGFONT *out_lf)
+static void
+_cairo_draw_line (cairo_t  *cr,
+                  GdkColor *color,
+                  gint      x1,
+                  gint      y1,
+                  gint      x2,
+                  gint      y2)
 {
-#if 0
-  /* TODO: this causes crashes later because the font name is in UCS2, and
-     the pango fns don't deal with that gracefully */
+  cairo_save (cr);
+
+  gdk_cairo_set_source_color (cr, color);
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+  cairo_set_line_width (cr, 1.0);
+
+  cairo_move_to (cr, x1 + 0.5, y1 + 0.5);
+  cairo_line_to (cr, x2 + 0.5, y2 + 0.5);
+  cairo_stroke (cr);
+
+  cairo_restore (cr);
+}
+
+static void
+_cairo_draw_rectangle (cairo_t *cr,
+                       GdkColor *color,
+                       gboolean filled,
+                       gint x,
+                       gint y,
+                       gint width,
+                       gint height)
+{
+  gdk_cairo_set_source_color (cr, color);
+
+  if (filled)
+    {
+      cairo_rectangle (cr, x, y, width, height);
+      cairo_fill (cr);
+    }
+  else
+    {
+      cairo_rectangle (cr, x + 0.5, y + 0.5, width, height);
+      cairo_stroke (cr);
+    }
+}
+
+static gboolean
+get_system_font (XpThemeClass klazz, XpThemeFont type, LOGFONTW *out_lf)
+{
   if (xp_theme_get_system_font (klazz, type, out_lf))
     {
       return TRUE;
     }
   else
-#endif
     {
-      NONCLIENTMETRICS ncm;
+      /* Use wide char versions here, as the theming functions only support
+       * wide chars versions of the structures. */
+      NONCLIENTMETRICSW ncm;
 
-      ncm.cbSize = sizeof (NONCLIENTMETRICS);
+      ncm.cbSize = sizeof (NONCLIENTMETRICSW);
 
-      if (SystemParametersInfo (SPI_GETNONCLIENTMETRICS,
-				sizeof (NONCLIENTMETRICS), &ncm, 0))
+      if (SystemParametersInfoW (SPI_GETNONCLIENTMETRICS,
+				sizeof (NONCLIENTMETRICSW), &ncm, 0))
 	{
 	  if (type == XP_THEME_FONT_CAPTION)
 	    *out_lf = ncm.lfCaptionFont;
@@ -210,312 +311,56 @@ get_system_font (XpThemeClass klazz, XpThemeFont type, LOGFONT *out_lf)
   return FALSE;
 }
 
-/***************************** BEGIN STOLEN FROM PANGO *****************************/
-
-/*
-	This code is stolen from Pango 1.4. It attempts to address the following problems:
-
-	http://bugzilla.gnome.org/show_bug.cgi?id=135098
-	http://sourceforge.net/tracker/index.php?func=detail&aid=895762&group_id=76416&atid=547655
-
-	As Owen suggested in bug 135098, once Pango 1.6 is released, we need to get rid of this code.
-*/
-
-#define PING(printlist)
-
-/* TrueType defines: */
-
-#define MAKE_TT_TABLE_NAME(c1, c2, c3, c4) \
-   (((guint32)c4) << 24 | ((guint32)c3) << 16 | ((guint32)c2) << 8 | ((guint32)c1))
-
-#define CMAP (MAKE_TT_TABLE_NAME('c','m','a','p'))
-#define CMAP_HEADER_SIZE 4
-
-#define NAME (MAKE_TT_TABLE_NAME('n','a','m','e'))
-#define NAME_HEADER_SIZE 6
-
-#define ENCODING_TABLE_SIZE 8
-
-#define APPLE_UNICODE_PLATFORM_ID 0
-#define MACINTOSH_PLATFORM_ID 1
-#define ISO_PLATFORM_ID 2
-#define MICROSOFT_PLATFORM_ID 3
-
-#define SYMBOL_ENCODING_ID 0
-#define UNICODE_ENCODING_ID 1
-#define UCS4_ENCODING_ID 10
-
-struct name_header
-{
-  guint16 format_selector;
-  guint16 num_records;
-  guint16 string_storage_offset;
-};
-
-struct name_record
-{
-  guint16 platform_id;
-  guint16 encoding_id;
-  guint16 language_id;
-  guint16 name_id;
-  guint16 string_length;
-  guint16 string_offset;
-};
-
-static gboolean
-pango_win32_get_name_header (HDC hdc, struct name_header *header)
-{
-  if (GetFontData (hdc, NAME, 0, header, sizeof (*header)) != sizeof (*header))
-    return FALSE;
-
-  header->num_records = GUINT16_FROM_BE (header->num_records);
-  header->string_storage_offset = GUINT16_FROM_BE (header->string_storage_offset);
-
-  return TRUE;
-}
-
-static gboolean
-pango_win32_get_name_record (HDC hdc, gint i, struct name_record *record)
-{
-  if (GetFontData (hdc, NAME, 6 + i * sizeof (*record),
-		   record, sizeof (*record)) != sizeof (*record))
-    {
-      return FALSE;
-    }
-
-  record->platform_id = GUINT16_FROM_BE (record->platform_id);
-  record->encoding_id = GUINT16_FROM_BE (record->encoding_id);
-  record->language_id = GUINT16_FROM_BE (record->language_id);
-  record->name_id = GUINT16_FROM_BE (record->name_id);
-  record->string_length = GUINT16_FROM_BE (record->string_length);
-  record->string_offset = GUINT16_FROM_BE (record->string_offset);
-
-  return TRUE;
-}
-
-static gchar *
-get_family_name (LOGFONT *lfp, HDC pango_win32_hdc)
-{
-  HFONT hfont;
-  HFONT oldhfont;
-
-  struct name_header header;
-  struct name_record record;
-
-  gint unicode_ix = -1, mac_ix = -1, microsoft_ix = -1;
-  gint name_ix;
-  gchar *codeset;
-
-  gchar *string = NULL;
-  gchar *name;
-
-  size_t i, l, nbytes;
-
-  /* If lfFaceName is ASCII, assume it is the common (English) name for the
-     font. Is this valid? Do some TrueType fonts have different names in
-     French, German, etc, and does the system return these if the locale is
-     set to use French, German, etc? */
-  l = strlen (lfp->lfFaceName);
-  for (i = 0; i < l; i++)
-    {
-      if (lfp->lfFaceName[i] < ' ' || lfp->lfFaceName[i] > '~')
-	{
-	  break;
-	}
-    }
-
-  if (i == l)
-    return g_strdup (lfp->lfFaceName);
-
-  if ((hfont = CreateFontIndirect (lfp)) == NULL)
-    goto fail0;
-
-  if ((oldhfont = (HFONT) SelectObject (pango_win32_hdc, hfont)) == NULL)
-    goto fail1;
-
-  if (!pango_win32_get_name_header (pango_win32_hdc, &header))
-    goto fail2;
-
-  PING (("%d name records", header.num_records));
-
-  for (i = 0; i < header.num_records; i++)
-    {
-      if (!pango_win32_get_name_record (pango_win32_hdc, i, &record))
-	goto fail2;
-
-      if ((record.name_id != 1 && record.name_id != 16) || record.string_length <= 0)
-	continue;
-
-      PING (("platform:%d encoding:%d language:%04x name_id:%d",
-	     record.platform_id, record.encoding_id, record.language_id,
-	     record.name_id));
-
-      if (record.platform_id == APPLE_UNICODE_PLATFORM_ID ||
-	  record.platform_id == ISO_PLATFORM_ID)
-	{
-	  unicode_ix = i;
-	}
-      else if (record.platform_id == MACINTOSH_PLATFORM_ID && record.encoding_id == 0 &&	/* Roman
-												 */
-	       record.language_id == 0)	/* English */
-	{
-	  mac_ix = i;
-	}
-      else if (record.platform_id == MICROSOFT_PLATFORM_ID)
-	{
-	  if ((microsoft_ix == -1 ||
-	       PRIMARYLANGID (record.language_id) == LANG_ENGLISH) &&
-	      (record.encoding_id == SYMBOL_ENCODING_ID ||
-	       record.encoding_id == UNICODE_ENCODING_ID ||
-	       record.encoding_id == UCS4_ENCODING_ID))
-	    {
-	      microsoft_ix = i;
-	    }
-	}
-    }
-
-  if (microsoft_ix >= 0)
-    name_ix = microsoft_ix;
-  else if (mac_ix >= 0)
-    name_ix = mac_ix;
-  else if (unicode_ix >= 0)
-    name_ix = unicode_ix;
-  else
-    goto fail2;
-
-  if (!pango_win32_get_name_record (pango_win32_hdc, name_ix, &record))
-    goto fail2;
-
-  string = g_malloc (record.string_length + 1);
-  if (GetFontData (pango_win32_hdc, NAME,
-		   header.string_storage_offset + record.string_offset,
-		   string, record.string_length) != record.string_length)
-    goto fail2;
-
-  string[record.string_length] = '\0';
-
-  if (name_ix == microsoft_ix)
-    {
-      if (record.encoding_id == SYMBOL_ENCODING_ID ||
-	  record.encoding_id == UNICODE_ENCODING_ID)
-	{
-	  codeset = "UTF-16BE";
-	}
-      else
-	{
-	  codeset = "UCS-4BE";
-	}
-    }
-  else if (name_ix == mac_ix)
-    {
-      codeset = "MacRoman";
-    }
-  else				/* name_ix == unicode_ix */
-    {
-      codeset = "UCS-4BE";
-    }
-
-
-  name = g_convert (string, record.string_length, "UTF-8", codeset, NULL,
-		    &nbytes, NULL);
-  if (name == NULL)
-    goto fail2;
-
-  g_free (string);
-
-  PING (("%s", name));
-
-  SelectObject (pango_win32_hdc, oldhfont);
-  DeleteObject (hfont);
-
-  return name;
-
-fail2:
-  g_free (string);
-  SelectObject (pango_win32_hdc, oldhfont);
-
-fail1:
-  DeleteObject (hfont);
-
-fail0:
-  return g_locale_to_utf8 (lfp->lfFaceName, -1, NULL, NULL, NULL);
-}
-
-/***************************** END STOLEN FROM PANGO *****************************/
-
 static char *
 sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char *buf,
 			size_t bufsiz)
 {
-  HDC hDC;
-  HWND hwnd;
-  LOGFONT lf;
-  int pt_size;
-  const char *weight;
-  const char *style;
-  char *font;
+  LOGFONTW lf;
 
   if (get_system_font (klazz, type, &lf))
     {
-      switch (lf.lfWeight)
-	{
-	case FW_THIN:
-	case FW_EXTRALIGHT:
-	  weight = "Ultra-Light";
-	  break;
+      PangoFontDescription *desc = NULL;
+      int pt_size;
+      const char *font;
 
-	case FW_LIGHT:
-	  weight = "Light";
-	  break;
-
-	case FW_BOLD:
-	  weight = "Bold";
-	  break;
-
-	case FW_SEMIBOLD:
-	  weight = "Semi-Bold";
-	  break;
-
-	case FW_ULTRABOLD:
-	  weight = "Ultra-Bold";
-	  break;
-
-	case FW_HEAVY:
-	  weight = "Heavy";
-	  break;
-
-	default:
-	  weight = "";
-	  break;
-	}
-
-      if (lf.lfItalic)
-	style = "Italic";
-      else
-	style = "";
-
-      hwnd = GetDesktopWindow ();
-      hDC = GetDC (hwnd);
-      if (hDC)
-	{
-	  pt_size = -MulDiv (lf.lfHeight, 72,
-			     GetDeviceCaps (hDC, LOGPIXELSY));
-	}
-      else
-	{
-	  pt_size = 10;
-	}
-
-      font = get_family_name (&lf, hDC);
-
-      if (hDC)
-	ReleaseDC (hwnd, hDC);
-
-      if (!(font && *font))
+      desc = pango_win32_font_description_from_logfontw (&lf);
+      if (!desc)
 	return NULL;
 
-      g_snprintf (buf, bufsiz, "%s %s %s %d", font, style, weight, pt_size);
-      g_free (font);
+      font = pango_font_description_to_string (desc);
+      pt_size = pango_font_description_get_size (desc);
+
+      if (!(font && *font))
+	{
+	  pango_font_description_free (desc);
+	  return NULL;
+	}
+
+      if (pt_size == 0)
+	{
+	  HDC hDC;
+	  HWND hwnd;
+
+	  hwnd = GetDesktopWindow ();
+	  hDC = GetDC (hwnd);
+
+	  if (hDC)
+	    pt_size = -MulDiv (lf.lfHeight, 72, GetDeviceCaps (hDC, LOGPIXELSY));
+	  else
+	    pt_size = 10;
+
+	  if (hDC)
+	    ReleaseDC (hwnd, hDC);
+
+	  g_snprintf (buf, bufsiz, "%s %d", font, pt_size);
+	}
+      else
+	{
+	  g_snprintf (buf, bufsiz, "%s", font);
+	}
+
+      if (desc)
+	pango_font_description_free (desc);
 
       return buf;
     }
@@ -533,29 +378,41 @@ sys_font_to_pango_font (XpThemeClass klazz, XpThemeFont type, char *buf,
    for now */
 #define XP_THEME_CLASS_TEXT XP_THEME_CLASS_BUTTON
 
+#define WIN95_VERSION   0x400
+#define WIN2K_VERSION   0x500
+#define WINXP_VERSION   0x501
+#define WIN2K3_VERSION  0x502
+#define VISTA_VERSION   0x600
+
+static gint32
+get_windows_version ()
+{
+  static gint32 version = 0;
+  static gboolean have_version = FALSE;
+
+  if (!have_version)
+    {
+      OSVERSIONINFOEX osvi;
+      have_version = TRUE;
+
+      ZeroMemory (&osvi, sizeof (OSVERSIONINFOEX));
+      osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFOEX);
+
+      GetVersionEx((OSVERSIONINFO*) &osvi);
+
+      version = (osvi.dwMajorVersion & 0xff) << 8 | (osvi.dwMinorVersion & 0xff);
+    }
+
+  return version;
+}
+
 static void
 setup_menu_settings (GtkSettings *settings)
 {
   int menu_delay;
-  gboolean win95 = FALSE;
-  OSVERSIONINFOEX osvi;
   GObjectClass *klazz = G_OBJECT_GET_CLASS (G_OBJECT (settings));
 
-  ZeroMemory (&osvi, sizeof (OSVERSIONINFOEX));
-  osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFOEX);
-
-  if (!GetVersionEx ((OSVERSIONINFO *) & osvi))
-    win95 = TRUE;		/* assume the worst */
-
-  if (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
-    {
-      if (osvi.dwMajorVersion == 4 && osvi.dwMinorVersion == 0)
-	{
-	  win95 = TRUE;
-	}
-    }
-
-  if (!win95)
+  if (get_windows_version () > WIN95_VERSION)
     {
       if (SystemParametersInfo (SPI_GETMENUSHOWDELAY, 0, &menu_delay, 0))
 	{
@@ -682,7 +539,8 @@ setup_msw_rc_style (void)
   GdkColor text_prelight;
 
   /* Prelight */
-  sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHTTEXT,
+  sys_color_to_gtk_color (get_windows_version () >= VISTA_VERSION ? XP_THEME_CLASS_MENU : XP_THEME_CLASS_TEXT,
+			  get_windows_version () >= VISTA_VERSION ? COLOR_MENUTEXT : COLOR_HIGHLIGHTTEXT,
 			  &fg_prelight);
   sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHT, &bg_prelight);
   sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHT,
@@ -778,7 +636,8 @@ setup_msw_rc_style (void)
   g_snprintf (buf, sizeof (buf),
 	      "style \"msw-tooltips-caption\" = \"msw-default\"\n"
 	      "{fg[NORMAL] = { %d, %d, %d }\n" "%s = \"%s\"\n"
-	      "}widget \"gtk-tooltips.GtkLabel\" style \"msw-tooltips-caption\"\n",
+	      "}widget \"gtk-tooltips.GtkLabel\" style \"msw-tooltips-caption\"\n"
+	      "widget \"gtk-tooltip.GtkLabel\" style \"msw-tooltips-caption\"\n",
 	      tooltip_fore.red, tooltip_fore.green, tooltip_fore.blue,
 	      (font_ptr ? "font_name" : "#"),
 	      (font_ptr ? font_ptr : " font name should go here"));
@@ -787,7 +646,8 @@ setup_msw_rc_style (void)
   g_snprintf (buf, sizeof (buf),
 	      "style \"msw-tooltips\" = \"msw-default\"\n"
 	      "{bg[NORMAL] = { %d, %d, %d }\n"
-	      "}widget \"gtk-tooltips*\" style \"msw-tooltips\"\n",
+	      "}widget \"gtk-tooltips*\" style \"msw-tooltips\"\n"
+	      "widget \"gtk-tooltip*\" style \"msw-tooltips\"\n",
 	      tooltip_back.red, tooltip_back.green, tooltip_back.blue);
   gtk_rc_parse_string (buf);
 
@@ -803,26 +663,28 @@ setup_msw_rc_style (void)
 	      btn_face.red, btn_face.green, btn_face.blue);
   gtk_rc_parse_string (buf);
 
-  /* enable coloring for text on buttons TODO: use GetThemeMetric for the
-     border and outside border */
+  /* enable coloring for text on buttons
+   * TODO: use GetThemeMetric for the border and outside border */
   g_snprintf (buf, sizeof (buf),
-	      "style \"msw-button\" = \"msw-default\"\n"
-	      "{\n"
-	      "bg[NORMAL] = { %d, %d, %d }\n"
-	      "bg[PRELIGHT] = { %d, %d, %d }\n"
-	      "bg[INSENSITIVE] = { %d, %d, %d }\n"
-	      "fg[PRELIGHT] = { %d, %d, %d }\n"
-	      "GtkButton::default-border = { 0, 0, 0, 0 }\n"
-	      "GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
-	      "GtkButton::child-displacement-x = 1\n"
-	      "GtkButton::child-displacement-y = 1\n"
-	      "GtkButton::focus-padding = %d\n"
-	      "}widget_class \"*Button*\" style \"msw-button\"\n",
-	      btn_face.red, btn_face.green, btn_face.blue,
-	      btn_face.red, btn_face.green, btn_face.blue,
-	      btn_face.red, btn_face.green, btn_face.blue,
-	      btn_fore.red, btn_fore.green, btn_fore.blue,
-	      xp_theme_is_active ()? 1 : 2);
+              "style \"msw-button\" = \"msw-default\"\n"
+              "{\n"
+              "bg[NORMAL] = { %d, %d, %d }\n"
+              "bg[PRELIGHT] = { %d, %d, %d }\n"
+              "bg[INSENSITIVE] = { %d, %d, %d }\n"
+              "fg[PRELIGHT] = { %d, %d, %d }\n"
+              "GtkButton::default-border = { 0, 0, 0, 0 }\n"
+              "GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
+              "GtkButton::child-displacement-x = %d\n"
+              "GtkButton::child-displacement-y = %d\n"
+              "GtkWidget::focus-padding = %d\n"
+              "}widget_class \"*Button*\" style \"msw-button\"\n",
+              btn_face.red, btn_face.green, btn_face.blue,
+              btn_face.red, btn_face.green, btn_face.blue,
+              btn_face.red, btn_face.green, btn_face.blue,
+              btn_fore.red, btn_fore.green, btn_fore.blue,
+              xp_theme_is_active ()? 0 : 1,
+              xp_theme_is_active ()? 0 : 1,
+              xp_theme_is_active ()? 1 : 2);
   gtk_rc_parse_string (buf);
 
   /* enable coloring for progress bars */
@@ -992,7 +854,7 @@ setup_system_styles (GtkStyle *style)
   sys_color_to_gtk_color (XP_THEME_CLASS_TEXT, COLOR_GRAYTEXT,
 			  &style->fg[GTK_STATE_INSENSITIVE]);
   sys_color_to_gtk_color (XP_THEME_CLASS_BUTTON, COLOR_BTNTEXT,
-			  &style->fg[GTK_STATE_ACTIVE]);
+                          &style->fg[GTK_STATE_ACTIVE]);
   sys_color_to_gtk_color (XP_THEME_CLASS_WINDOW, COLOR_WINDOWTEXT,
 			  &style->fg[GTK_STATE_PRELIGHT]);
 
@@ -1043,7 +905,7 @@ map_gtk_progress_bar_to_xp (GtkProgressBar *progress_bar, gboolean trough)
 {
   XpThemeElement ret;
 
-  switch (progress_bar->orientation)
+  switch (gtk_progress_bar_get_orientation (progress_bar))
     {
     case GTK_PROGRESS_LEFT_TO_RIGHT:
     case GTK_PROGRESS_RIGHT_TO_LEFT:
@@ -1079,62 +941,29 @@ is_combo_box_child (GtkWidget *w)
   return FALSE;
 }
 
-/* This function is not needed anymore */
-/* static gboolean
-combo_box_draw_arrow (GtkStyle *style,
-		      GdkWindow *window,
-		      GtkStateType state,
-		      GdkRectangle *area, GtkWidget *widget)
-{
-  if (xp_theme_is_active ())
-    return TRUE;
-
-  if (widget && GTK_IS_TOGGLE_BUTTON (widget->parent))
-    {
-      DWORD border;
-      RECT rect;
-      HDC dc;
-
-      dc = get_window_dc (style, window, state, area->x, area->y, area->width,
-			  area->height, &rect);
-      border = (GTK_TOGGLE_BUTTON (widget->parent)->
-		active ? DFCS_PUSHED | DFCS_FLAT : 0);
-
-      InflateRect (&rect, 1, 1);
-      DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
-
-      release_window_dc (style, window, state);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}*/
-
 static void
 draw_part (GdkDrawable *drawable,
-	   GdkGC *gc, GdkRectangle *area, gint x, gint y, Part part)
+           GdkColor *gc, GdkRectangle *area, gint x, gint y, Part part)
 {
+  cairo_t *cr = gdk_cairo_create (drawable);
+
   if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
+    {
+      gdk_cairo_rectangle (cr, area);
+      cairo_clip (cr);
+    }
 
   if (!parts[part].bmap)
     {
-      parts[part].bmap = gdk_bitmap_create_from_data (drawable,
-						      parts[part].bits,
-						      PART_SIZE, PART_SIZE);
+      parts[part].bmap = cairo_image_surface_create_for_data ((unsigned char *)parts[part].bits,
+        					              CAIRO_FORMAT_A1,
+        					              PART_SIZE, PART_SIZE, 4);
     }
 
-  gdk_gc_set_ts_origin (gc, x, y);
-  gdk_gc_set_stipple (gc, parts[part].bmap);
-  gdk_gc_set_fill (gc, GDK_STIPPLED);
+  gdk_cairo_set_source_color (cr, gc);
+  cairo_mask_surface (cr, parts[part].bmap, x, y);
 
-  gdk_draw_rectangle (drawable, gc, TRUE, x, y, PART_SIZE, PART_SIZE);
-
-  gdk_gc_set_fill (gc, GDK_SOLID);
-
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, NULL);
+  cairo_destroy(cr);
 }
 
 static void
@@ -1149,12 +978,12 @@ draw_check (GtkStyle *style,
   x -= (1 + PART_SIZE - width) / 2;
   y -= (1 + PART_SIZE - height) / 2;
 
-  if (detail && strcmp (detail, "check") == 0)	/* Menu item */
+  if (DETAIL("check"))	/* Menu item */
     {
       if (shadow == GTK_SHADOW_IN)
 	{
-	  draw_part (window, style->black_gc, area, x, y, CHECK_TEXT);
-	  draw_part (window, style->dark_gc[state], area, x, y, CHECK_AA);
+          draw_part (window, &style->black, area, x, y, CHECK_TEXT);
+          draw_part (window, &style->dark[state], area, x, y, CHECK_AA);
 	}
     }
   else
@@ -1177,27 +1006,27 @@ draw_check (GtkStyle *style,
       if (!xp_theme_draw (window, theme_elt,
 			  style, x, y, width, height, state, area))
 	{
-	  if (detail && !strcmp (detail, "cellcheck"))
+	  if (DETAIL("cellcheck"))
 	    state = GTK_STATE_NORMAL;
 
-	  draw_part (window, style->black_gc, area, x, y, CHECK_BLACK);
-	  draw_part (window, style->dark_gc[state], area, x, y, CHECK_DARK);
-	  draw_part (window, style->mid_gc[state], area, x, y, CHECK_MID);
-	  draw_part (window, style->light_gc[state], area, x, y, CHECK_LIGHT);
-	  draw_part (window, style->base_gc[state], area, x, y, CHECK_BASE);
+          draw_part (window, &style->black, area, x, y, CHECK_BLACK);
+          draw_part (window, &style->dark[state], area, x, y, CHECK_DARK);
+          draw_part (window, &style->mid[state], area, x, y, CHECK_MID);
+          draw_part (window, &style->light[state], area, x, y, CHECK_LIGHT);
+          draw_part (window, &style->base[state], area, x, y, CHECK_BASE);
 
 	  if (shadow == GTK_SHADOW_IN)
 	    {
-	      draw_part (window, style->text_gc[state], area, x,
+              draw_part (window, &style->text[state], area, x,
 			 y, CHECK_TEXT);
-	      draw_part (window, style->text_aa_gc[state], area,
+              draw_part (window, &style->text_aa[state], area,
 			 x, y, CHECK_AA);
 	    }
 	  else if (shadow == GTK_SHADOW_ETCHED_IN)
 	    {
-	      draw_part (window, style->text_gc[state], area, x, y,
+              draw_part (window, &style->text[state], area, x, y,
 			 CHECK_INCONSISTENT);
-	      draw_part (window, style->text_aa_gc[state], area, x, y,
+              draw_part (window, &style->text_aa[state], area, x, y,
 			 CHECK_AA);
 	    }
 	}
@@ -1205,19 +1034,41 @@ draw_check (GtkStyle *style,
 }
 
 static void
-draw_expander (GtkStyle *style,
-	       GdkWindow *window,
-	       GtkStateType state,
-	       GdkRectangle *area,
-	       GtkWidget *widget,
-	       const gchar *detail,
-	       gint x, gint y, GtkExpanderStyle expander_style)
+draw_expander (GtkStyle        *style,
+               GdkWindow       *window,
+               GtkStateType     state,
+               GdkRectangle    *area,
+               GtkWidget       *widget,
+               const gchar     *detail,
+               gint             x,
+               gint             y,
+               GtkExpanderStyle expander_style)
 {
+  cairo_t *cr = gdk_cairo_create (window);
+
   gint expander_size;
   gint expander_semi_size;
   XpThemeElement xp_expander;
+  GtkOrientation orientation;
 
   gtk_widget_style_get (widget, "expander_size", &expander_size, NULL);
+
+  if (DETAIL("tool-palette-header"))
+    {
+      /* Expanders are usually drawn as little triangles and unfortunately
+       * do not support rotated drawing modes. So a hack is applied (see
+       * gtk_tool_item_group_header_expose_event_cb for details) when
+       * drawing a GtkToolItemGroup's header for horizontal GtkToolShells,
+       * forcing the triangle to point in the right direction. Except we
+       * don't draw expanders as triangles on Windows. Usually, expanders
+       * are represented as "+" and "-". It sucks for "+" to become "-" and
+       * the inverse when we don't want to, so reverse the hack here. */
+
+      orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (widget));
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+          expander_style = GTK_EXPANDER_EXPANDED - expander_style;
+    }
 
   switch (expander_style)
     {
@@ -1226,9 +1077,13 @@ draw_expander (GtkStyle *style,
       xp_expander = XP_THEME_ELEMENT_TREEVIEW_EXPANDER_CLOSED;
       break;
 
-    default:
+    case GTK_EXPANDER_EXPANDED:
+    case GTK_EXPANDER_SEMI_EXPANDED:
       xp_expander = XP_THEME_ELEMENT_TREEVIEW_EXPANDER_OPENED;
       break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   if ((expander_size % 2) == 0)
@@ -1238,7 +1093,11 @@ draw_expander (GtkStyle *style,
     expander_size -= 2;
 
   if (area)
-    gdk_gc_set_clip_rectangle (style->fg_gc[state], area);
+    {
+      gdk_cairo_rectangle (cr, area);
+      cairo_clip (cr);
+      gdk_cairo_set_source_color (cr, &style->fg[state]);
+    }
 
   expander_semi_size = expander_size / 2;
   x -= expander_semi_size;
@@ -1251,8 +1110,9 @@ draw_expander (GtkStyle *style,
       RECT rect;
       HPEN pen;
       HGDIOBJ old_pen;
+      XpDCInfo dc_info;
 
-      dc = get_window_dc (style, window, state, x, y, expander_size,
+      dc = get_window_dc (style, window, state, &dc_info, x, y, expander_size,
 			  expander_size, &rect);
       FrameRect (dc, &rect, GetSysColorBrush (COLOR_GRAYTEXT));
       InflateRect (&rect, -1, -1);
@@ -1278,11 +1138,10 @@ draw_expander (GtkStyle *style,
 
       SelectObject (dc, old_pen);
       DeleteObject (pen);
-      release_window_dc (style, window, state);
+      release_window_dc (&dc_info);
     }
 
-  if (area)
-    gdk_gc_set_clip_rectangle (style->fg_gc[state], NULL);
+  cairo_destroy(cr);
 }
 
 static void
@@ -1297,11 +1156,11 @@ draw_option (GtkStyle *style,
   x -= (1 + PART_SIZE - width) / 2;
   y -= (1 + PART_SIZE - height) / 2;
 
-  if (detail && strcmp (detail, "option") == 0)	/* Menu item */
+  if (DETAIL("option"))	/* Menu item */
     {
       if (shadow == GTK_SHADOW_IN)
 	{
-	  draw_part (window, style->fg_gc[state], area, x, y, RADIO_TEXT);
+          draw_part (window, &style->fg[state], area, x, y, RADIO_TEXT);
 	}
     }
   else
@@ -1314,24 +1173,24 @@ draw_option (GtkStyle *style,
 	}
       else
 	{
-	  if (detail && !strcmp (detail, "cellradio"))
+	  if (DETAIL("cellradio"))
 	    state = GTK_STATE_NORMAL;
 
-	  draw_part (window, style->black_gc, area, x, y, RADIO_BLACK);
-	  draw_part (window, style->dark_gc[state], area, x, y, RADIO_DARK);
-	  draw_part (window, style->mid_gc[state], area, x, y, RADIO_MID);
-	  draw_part (window, style->light_gc[state], area, x, y, RADIO_LIGHT);
-	  draw_part (window, style->base_gc[state], area, x, y, RADIO_BASE);
+          draw_part (window, &style->black, area, x, y, RADIO_BLACK);
+          draw_part (window, &style->dark[state], area, x, y, RADIO_DARK);
+          draw_part (window, &style->mid[state], area, x, y, RADIO_MID);
+          draw_part (window, &style->light[state], area, x, y, RADIO_LIGHT);
+          draw_part (window, &style->base[state], area, x, y, RADIO_BASE);
 
 	  if (shadow == GTK_SHADOW_IN)
-	    draw_part (window, style->text_gc[state], area, x, y, RADIO_TEXT);
+            draw_part (window, &style->text[state], area, x, y, RADIO_TEXT);
 	}
     }
 }
 
 static void
 draw_varrow (GdkWindow *window,
-	     GdkGC *gc,
+             GdkColor *gc,
 	     GtkShadowType shadow_type,
 	     GdkRectangle *area,
 	     GtkArrowType arrow_type, gint x, gint y, gint width, gint height)
@@ -1339,9 +1198,15 @@ draw_varrow (GdkWindow *window,
   gint steps, extra;
   gint y_start, y_increment;
   gint i;
+  cairo_t *cr;
+  
+  cr = gdk_cairo_create (window);
 
   if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
+    {
+       gdk_cairo_rectangle (cr, area);
+       cairo_clip (cr);
+    }
 
   width = width + width % 2 - 1;	/* Force odd */
   steps = 1 + width / 2;
@@ -1358,20 +1223,24 @@ draw_varrow (GdkWindow *window,
       y_increment = -1;
     }
 
-  for (i = extra; i < height; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x + (i - extra), y_start + i * y_increment,
-		     x + width - (i - extra) - 1, y_start + i * y_increment);
-    }
+  gdk_cairo_set_source_color (cr, gc);
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+  cairo_set_line_width (cr, 1.0);
+  cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
 
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, NULL);
+  cairo_move_to (cr, x + 0.5, y_start + extra * y_increment + 0.5);
+  cairo_line_to (cr, x + width - 1 + 0.5, y_start + extra * y_increment + 0.5);
+  cairo_line_to (cr, x + (height - 1 - extra) + 0.5, y_start + (height - 1) * y_increment + 0.5);
+  cairo_close_path (cr);
+  cairo_stroke_preserve (cr);
+  cairo_fill (cr);
+
+  cairo_destroy(cr);
 }
 
 static void
 draw_harrow (GdkWindow *window,
-	     GdkGC *gc,
+             GdkColor *gc,
 	     GtkShadowType shadow_type,
 	     GdkRectangle *area,
 	     GtkArrowType arrow_type, gint x, gint y, gint width, gint height)
@@ -1379,9 +1248,15 @@ draw_harrow (GdkWindow *window,
   gint steps, extra;
   gint x_start, x_increment;
   gint i;
+  cairo_t *cr;
+  
+  cr = gdk_cairo_create (window);
 
   if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
+    {
+       gdk_cairo_rectangle (cr, area);
+       cairo_clip (cr);
+    }
 
   height = height + height % 2 - 1;	/* Force odd */
   steps = 1 + height / 2;
@@ -1398,16 +1273,19 @@ draw_harrow (GdkWindow *window,
       x_increment = -1;
     }
 
-  for (i = extra; i < width; i++)
-    {
-      gdk_draw_line (window, gc,
-		     x_start + i * x_increment, y + (i - extra),
-		     x_start + i * x_increment, y + height - (i - extra) - 1);
-    }
+  gdk_cairo_set_source_color (cr, gc);
+  cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+  cairo_set_line_width (cr, 1.0);
+  cairo_set_antialias (cr, CAIRO_ANTIALIAS_NONE);
 
+  cairo_move_to (cr, x_start + extra * x_increment + 0.5, y + 0.5);
+  cairo_line_to (cr, x_start + extra * x_increment + 0.5, y + height - 1 + 0.5);
+  cairo_line_to (cr, x_start + (width - 1) * x_increment + 0.5, y + height - (width - 1 - extra) - 1 + 0.5);
+  cairo_close_path (cr);
+  cairo_stroke_preserve (cr);
+  cairo_fill (cr);
 
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, NULL);
+  cairo_destroy(cr);
 }
 
 /* This function makes up for some brokeness in gtkrange.c
@@ -1491,6 +1369,7 @@ draw_arrow (GtkStyle *style,
   const gchar *name;
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
 
   name = gtk_widget_get_name (widget);
 
@@ -1499,7 +1378,7 @@ draw_arrow (GtkStyle *style,
   if (GTK_IS_ARROW (widget) && is_combo_box_child (widget) && xp_theme_is_active ())
     return;
 
-  if (detail && strcmp (detail, "spinbutton") == 0)
+  if (DETAIL("spinbutton"))
     {
       if (xp_theme_is_drawable (XP_THEME_ELEMENT_SPIN_BUTTON_UP))
 	{
@@ -1518,13 +1397,12 @@ draw_arrow (GtkStyle *style,
 	  ++y;
 	}
 
-      draw_varrow (window, style->fg_gc[state], shadow, area,
+      draw_varrow (window, &style->fg[state], shadow, area,
 		   arrow_type, x, y, width, height);
 
       return;
     }
-  else if (detail && (!strcmp (detail, "vscrollbar")
-		      || !strcmp (detail, "hscrollbar")))
+  else if (DETAIL("vscrollbar") || DETAIL("hscrollbar"))
     {
       gboolean is_disabled = FALSE;
       UINT btn_type = 0;
@@ -1538,9 +1416,9 @@ draw_arrow (GtkStyle *style,
       reverse_engineer_stepper_box (widget, arrow_type,
 				    &box_x, &box_y, &box_width, &box_height);
 
-      if (scrollbar->range.adjustment->page_size >=
-	  (scrollbar->range.adjustment->upper -
-	   scrollbar->range.adjustment->lower))
+      if (gtk_range_get_adjustment(&scrollbar->range)->page_size >=
+          (gtk_range_get_adjustment(&scrollbar->range)->upper -
+           gtk_range_get_adjustment(&scrollbar->range)->lower))
 	{
 	  is_disabled = TRUE;
 	}
@@ -1582,13 +1460,13 @@ draw_arrow (GtkStyle *style,
 	    {
 	      sanitize_size (window, &width, &height);
 
-	      dc = get_window_dc (style, window, state,
+	      dc = get_window_dc (style, window, state, &dc_info,
 				  box_x, box_y, box_width, box_height, &rect);
 	      DrawFrameControl (dc, &rect, DFC_SCROLL,
 				btn_type | (shadow ==
 					    GTK_SHADOW_IN ? (DFCS_PUSHED |
 							     DFCS_FLAT) : 0));
-	      release_window_dc (style, window, state);
+	      release_window_dc (&dc_info);
 	    }
 	}
     }
@@ -1622,7 +1500,7 @@ draw_arrow (GtkStyle *style,
 	  x += (width - 7) / 2;
 	  y += (height - 5) / 2;
 
-	  draw_varrow (window, style->fg_gc[state], shadow, area,
+          draw_varrow (window, &style->fg[state], shadow, area,
 		       arrow_type, x, y, 7, 5);
 	}
       else
@@ -1630,7 +1508,7 @@ draw_arrow (GtkStyle *style,
 	  x += (width - 5) / 2;
 	  y += (height - 7) / 2;
 
-	  draw_harrow (window, style->fg_gc[state], shadow, area,
+          draw_harrow (window, &style->fg[state], shadow, area,
 		       arrow_type, x, y, 5, 7);
 	}
     }
@@ -1697,50 +1575,6 @@ is_menu_tool_button_child (GtkWidget *wid)
   return FALSE;
 }
 
-HDC
-get_window_dc (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
-	       gint x, gint y, gint width, gint height, RECT *rect)
-{
-  int xoff, yoff;
-  GdkDrawable *drawable;
-
-  if (!GDK_IS_WINDOW (window))
-    {
-      xoff = 0;
-      yoff = 0;
-      drawable = window;
-    }
-  else
-    {
-      gdk_window_get_internal_paint_info (window, &drawable, &xoff, &yoff);
-    }
-
-  rect->left = x - xoff;
-  rect->top = y - yoff;
-  rect->right = rect->left + width;
-  rect->bottom = rect->top + height;
-
-  return gdk_win32_hdc_get (drawable, style->dark_gc[state_type], 0);
-}
-
-void
-release_window_dc (GtkStyle *style, GdkWindow *window,
-		   GtkStateType state_type)
-{
-  GdkDrawable *drawable;
-
-  if (!GDK_IS_WINDOW (window))
-    {
-      drawable = window;
-    }
-  else
-    {
-      gdk_window_get_internal_paint_info (window, &drawable, NULL, NULL);
-    }
-
-  gdk_win32_hdc_release (drawable, style->dark_gc[state_type], 0);
-}
-
 static HPEN
 get_light_pen ()
 {
@@ -1804,20 +1638,27 @@ draw_menu_item (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
   GtkMenuShell *bar;
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
+
+  if (xp_theme_is_active ())
+    {
+      return (xp_theme_draw (window, XP_THEME_ELEMENT_MENU_ITEM, style,
+                             x, y, width, height, state_type, area));
+    }
 
   if ((parent = gtk_widget_get_parent (widget))
       && GTK_IS_MENU_BAR (parent) && !xp_theme_is_active ())
     {
       bar = GTK_MENU_SHELL (parent);
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
       if (state_type == GTK_STATE_PRELIGHT)
 	{
 	  draw_3d_border (dc, &rect, bar->active);
 	}
 
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
 
       return TRUE;
     }
@@ -1858,6 +1699,7 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
 {
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
   gboolean is_toggled = FALSE;
 
   if (xp_theme_is_active ())
@@ -1880,7 +1722,7 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
       return FALSE;
     }
 
-  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
   if (state_type == GTK_STATE_PRELIGHT)
     {
       if (is_toggled)
@@ -1902,7 +1744,7 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
       draw_3d_border (dc, &rect, TRUE);
     }
 
-  release_window_dc (style, window, state_type);
+  release_window_dc (&dc_info);
 
   return TRUE;
 }
@@ -1914,8 +1756,9 @@ draw_push_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
 {
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
 
-  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
   if (GTK_IS_TOGGLE_BUTTON (widget))
     {
@@ -1946,7 +1789,7 @@ draw_push_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
     }
   else
     {
-      if (is_default || GTK_WIDGET_HAS_FOCUS (widget))
+      if (is_default || gtk_widget_has_focus (widget))
 	{
 	  FrameRect (dc, &rect, GetSysColorBrush (COLOR_WINDOWFRAME));
 	  InflateRect (&rect, -1, -1);
@@ -1955,7 +1798,7 @@ draw_push_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
       DrawFrameControl (dc, &rect, DFC_BUTTON, DFCS_BUTTONPUSH);
     }
 
-  release_window_dc (style, window, state_type);
+  release_window_dc (&dc_info);
 }
 
 static void
@@ -1967,18 +1810,19 @@ draw_box (GtkStyle *style,
 	  GtkWidget *widget,
 	  const gchar *detail, gint x, gint y, gint width, gint height)
 {
-  if (is_combo_box_child (widget) && detail && !strcmp (detail, "button"))
+  if (is_combo_box_child (widget) && DETAIL("button"))
     {
       RECT rect;
+      XpDCInfo dc_info;
       DWORD border;
       HDC dc;
       int cx;
 
       border = (GTK_TOGGLE_BUTTON (widget)->active ? DFCS_PUSHED | DFCS_FLAT : 0);
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
       DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
 
       if (xp_theme_is_active ()
 	  && xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON, style, x, y,
@@ -1989,15 +1833,14 @@ draw_box (GtkStyle *style,
       width = cx;
 
 
-      dc = get_window_dc (style, window, state_type, x, y, width - cx, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width - cx, height, &rect);
       FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
       return;
 	}
     }
 
-  if (detail &&
-      (!strcmp (detail, "button") || !strcmp (detail, "buttondefault")))
+  if (DETAIL("button") || DETAIL("buttondefault"))
     {
       if (GTK_IS_TREE_VIEW (widget->parent) || GTK_IS_CLIST (widget->parent))
       {
@@ -2011,13 +1854,14 @@ draw_box (GtkStyle *style,
 	    {
 	      HDC dc;
 	      RECT rect;
-	      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	      XpDCInfo dc_info;
+	      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	      DrawFrameControl (dc, &rect, DFC_BUTTON, DFCS_BUTTONPUSH |
 				(state_type ==
 				 GTK_STATE_ACTIVE ? (DFCS_PUSHED | DFCS_FLAT)
 				 : 0));
-	      release_window_dc (style, window, state_type);
+	      release_window_dc (&dc_info);
 	    }
 	}
       else if (is_toolbar_child (widget->parent)
@@ -2032,7 +1876,7 @@ draw_box (GtkStyle *style,
 	}
       else
 	{
-	  gboolean is_default = GTK_WIDGET_HAS_DEFAULT (widget);
+	  gboolean is_default = gtk_widget_has_default (widget);
 	  if (xp_theme_draw
 	      (window,
 	       is_default ? XP_THEME_ELEMENT_DEFAULT_BUTTON :
@@ -2050,49 +1894,57 @@ draw_box (GtkStyle *style,
 
       return;
     }
-  else if (detail && !strcmp (detail, "spinbutton"))
+  else if (DETAIL("spinbutton"))
     {
       if (xp_theme_is_drawable (XP_THEME_ELEMENT_SPIN_BUTTON_UP))
 	{
 	  return;
 	}
     }
-  else if (detail && (!strcmp (detail, "spinbutton_up")
-		      || !strcmp (detail, "spinbutton_down")))
+  else if (DETAIL("spinbutton_up") || DETAIL("spinbutton_down"))
     {
       if (!xp_theme_draw (window,
-			  (!strcmp (detail, "spinbutton_up"))
+			  DETAIL("spinbutton_up")
 			  ? XP_THEME_ELEMENT_SPIN_BUTTON_UP
 			  : XP_THEME_ELEMENT_SPIN_BUTTON_DOWN,
 			  style, x, y, width, height, state_type, area))
 	{
 	  RECT rect;
+	  XpDCInfo dc_info;
 	  HDC dc;
 
-	  dc = get_window_dc (style, window, state_type,
+	  dc = get_window_dc (style, window, state_type, &dc_info,
 			      x, y, width, height, &rect);
 	  DrawEdge (dc, &rect,
 		    state_type ==
 		    GTK_STATE_ACTIVE ? EDGE_SUNKEN : EDGE_RAISED, BF_RECT);
-	  release_window_dc (style, window, state_type);
+	  release_window_dc (&dc_info);
 	}
       return;
     }
-  else if (detail && !strcmp (detail, "slider"))
+  else if (DETAIL("slider"))
     {
       if (GTK_IS_SCROLLBAR (widget))
 	{
 	  GtkScrollbar *scrollbar = GTK_SCROLLBAR (widget);
-	  gboolean is_v = GTK_IS_VSCROLLBAR (widget);
+	  GtkOrientation orientation;
+	  gboolean is_vertical;
+
+          orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+
+          if (orientation == GTK_ORIENTATION_VERTICAL)
+            is_vertical = TRUE;
+          else
+            is_vertical = FALSE;
 
 	  if (xp_theme_draw (window,
-			     is_v
+			     is_vertical
 			     ? XP_THEME_ELEMENT_SCROLLBAR_V
 			     : XP_THEME_ELEMENT_SCROLLBAR_H,
 			     style, x, y, width, height, state_type, area))
 	    {
 	      XpThemeElement gripper =
-		(is_v ? XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V :
+		(is_vertical ? XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V :
 		 XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_H);
 
 	      /* Do not display grippers on tiny scroll bars,
@@ -2114,16 +1966,16 @@ draw_box (GtkStyle *style,
 	    }
 	  else
 	    {
-	      if (scrollbar->range.adjustment->page_size >=
-		  (scrollbar->range.adjustment->upper -
-		   scrollbar->range.adjustment->lower))
+              if (gtk_range_get_adjustment(&scrollbar->range)->page_size >=
+        	  (gtk_range_get_adjustment(&scrollbar->range)->upper -
+        	   gtk_range_get_adjustment(&scrollbar->range)->lower))
 		{
 		  return;
 		}
 	    }
 	}
     }
-  else if (detail && !strcmp (detail, "bar"))
+  else if (DETAIL("bar"))
     {
       if (widget && GTK_IS_PROGRESS_BAR (widget))
 	{
@@ -2140,7 +1992,7 @@ draw_box (GtkStyle *style,
 	  shadow_type = GTK_SHADOW_NONE;
 	}
     }
-  else if (detail && strcmp (detail, "menuitem") == 0)
+  else if (DETAIL("menuitem"))
     {
       shadow_type = GTK_SHADOW_NONE;
       if (draw_menu_item (window, widget, style,
@@ -2149,7 +2001,7 @@ draw_box (GtkStyle *style,
 	  return;
 	}
     }
-  else if (detail && !strcmp (detail, "trough"))
+  else if (DETAIL("trough"))
     {
       if (widget && GTK_IS_PROGRESS_BAR (widget))
 	{
@@ -2169,7 +2021,15 @@ draw_box (GtkStyle *style,
 	}
       else if (widget && GTK_IS_SCROLLBAR (widget))
 	{
-	  gboolean is_vertical = GTK_IS_VSCROLLBAR (widget);
+          GtkOrientation orientation;
+	  gboolean is_vertical;
+
+          orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+
+          if (orientation == GTK_ORIENTATION_VERTICAL)
+            is_vertical = TRUE;
+          else
+            is_vertical = FALSE;
 
 	  if (xp_theme_draw (window,
 			     is_vertical
@@ -2183,22 +2043,25 @@ draw_box (GtkStyle *style,
 	    {
 	      HDC dc;
 	      RECT rect;
+	      XpDCInfo dc_info;
 
 	      sanitize_size (window, &width, &height);
-	      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	      SetTextColor (dc, GetSysColor (COLOR_3DHILIGHT));
 	      SetBkColor (dc, GetSysColor (COLOR_BTNFACE));
 	      FillRect (dc, &rect, get_dither_brush ());
 
-	      release_window_dc (style, window, state_type);
+	      release_window_dc (&dc_info);
 
 	      return;
 	    }
 	}
       else if (widget && GTK_IS_SCALE (widget))
 	{
-	  gboolean is_vertical = GTK_IS_VSCALE (widget);
+          GtkOrientation orientation;
+
+          orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
 
 	  if (!xp_theme_is_active ())
 	    {
@@ -2207,7 +2070,7 @@ draw_box (GtkStyle *style,
 				      widget, detail, x, y, width, height);
 	    }
 
-	  if (is_vertical)
+	  if (orientation == GTK_ORIENTATION_VERTICAL)
 	    {
 	      if (xp_theme_draw
 		  (window, XP_THEME_ELEMENT_SCALE_TROUGH_V,
@@ -2241,7 +2104,7 @@ draw_box (GtkStyle *style,
 	  return;
 	}
     }
-  else if (detail && strcmp (detail, "optionmenu") == 0)
+  else if (DETAIL("optionmenu"))
     {
       if (xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT,
 			 style, x, y, width, height, state_type, area))
@@ -2249,16 +2112,11 @@ draw_box (GtkStyle *style,
 	  return;
 	}
     }
-  else if (detail
-	   && (strcmp (detail, "vscrollbar") == 0
-	       || strcmp (detail, "hscrollbar") == 0))
+  else if (DETAIL("vscrollbar") || DETAIL("hscrollbar"))
     {
       return;
     }
-  else if (detail
-	   && (strcmp (detail, "handlebox_bin") == 0
-	       || strcmp (detail, "toolbar") == 0
-	       || strcmp (detail, "menubar") == 0))
+  else if (DETAIL("handlebox_bin") || DETAIL("toolbar") || DETAIL("menubar"))
     {
       sanitize_size (window, &width, &height);
       if (xp_theme_draw (window, XP_THEME_ELEMENT_REBAR,
@@ -2267,17 +2125,15 @@ draw_box (GtkStyle *style,
 	  return;
 	}
     }
-  else if (detail && (!strcmp (detail, "handlebox")))	/* grip */
+  else if (DETAIL("handlebox"))	/* grip */
     {
       if (!xp_theme_is_active ())
 	{
 	  return;
 	}
     }
-  else if (detail && !strcmp (detail, "notebook") && GTK_IS_NOTEBOOK (widget))
+  else if (DETAIL("notebook") && GTK_IS_NOTEBOOK (widget))
     {
-      GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-
       if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style,
 			 x, y, width, height, state_type, area))
 	{
@@ -2301,9 +2157,10 @@ draw_box (GtkStyle *style,
 	    {
 	      HBRUSH brush;
 	      RECT rect;
+	      XpDCInfo dc_info;
 	      HDC hdc;
 
-	      hdc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	      hdc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	      brush = GetSysColorBrush (COLOR_3DDKSHADOW);
 
@@ -2315,7 +2172,7 @@ draw_box (GtkStyle *style,
 	      InflateRect (&rect, -1, -1);
 	      FillRect (hdc, &rect, (HBRUSH) (COLOR_INFOBK + 1));
 
-	      release_window_dc (style, window, state_type);
+	      release_window_dc (&dc_info);
 
 	      return;
 	    }
@@ -2325,7 +2182,7 @@ draw_box (GtkStyle *style,
   parent_class->draw_box (style, window, state_type, shadow_type, area,
 			  widget, detail, x, y, width, height);
 
-  if (detail && strcmp (detail, "optionmenu") == 0)
+  if (DETAIL("optionmenu"))
     {
       GtkRequisition indicator_size;
       GtkBorder indicator_spacing;
@@ -2372,7 +2229,7 @@ draw_tab (GtkStyle *style,
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
 
-  if (detail && !strcmp (detail, "optionmenutab"))
+  if (DETAIL("optionmenutab"))
     {
       if (xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON,
 			 style, x - 5, widget->allocation.y + 1,
@@ -2390,7 +2247,7 @@ draw_tab (GtkStyle *style,
 
   y += (height - arrow_height) / 2;
 
-  draw_varrow (window, style->black_gc, shadow, area, GTK_ARROW_DOWN,
+  draw_varrow (window, &style->black, shadow, area, GTK_ARROW_DOWN,
 	       x, y, indicator_size.width, arrow_height);
 }
 
@@ -2506,228 +2363,291 @@ DrawTab (HDC hdc, const RECT R, gint32 aPosition, gboolean aSelected,
     DrawEdge (hdc, &shadeRect, EDGE_RAISED, BF_SOFT | shadeFlag);
 }
 
+static void
+get_notebook_tab_position (GtkNotebook *notebook,
+                           gboolean *start,
+                           gboolean *end)
+{
+  gboolean found_start = FALSE, found_end = FALSE;
+  gint i, n_pages;
+
+  /* default value */
+  *start = TRUE;
+  *end = FALSE;
+
+  n_pages = gtk_notebook_get_n_pages (notebook);
+  for (i = 0; i < n_pages; i++)
+    {
+      GtkWidget *tab_child;
+      GtkWidget *tab_label;
+      gboolean expand;
+      GtkPackType pack_type;
+      gboolean is_selected;
+
+      tab_child = gtk_notebook_get_nth_page (notebook, i);
+      is_selected = gtk_notebook_get_current_page (notebook) == i;
+
+      /* Skip invisible tabs */
+      tab_label = gtk_notebook_get_tab_label (notebook, tab_child);
+      if (!tab_label || !GTK_WIDGET_VISIBLE (tab_label))
+        continue;
+
+      /* Mimics what the notebook does internally. */
+      if (tab_label && !gtk_widget_get_child_visible (tab_label))
+        {
+          /* One child is hidden because scroll arrows are present.
+           * So both corners are rounded. */
+          *start = FALSE;
+          *end = FALSE;
+          return;
+        }
+
+      gtk_notebook_query_tab_label_packing (notebook, tab_child, &expand,
+                                            NULL, /* don't need fill */
+                                            &pack_type);
+
+      if (pack_type == GTK_PACK_START)
+        {
+          if (!found_start)
+            {
+              /* This is the first tab with PACK_START pack type */
+              found_start = TRUE;
+
+              if (is_selected)
+                {
+                  /* first PACK_START item is selected: set start to TRUE */
+                  *start = TRUE;
+
+                  if (expand && !found_end)
+                    {
+                      /* tentatively set end to TRUE: will be invalidated if we
+                       * find other items */
+                      *end = TRUE;
+                    }
+                }
+              else
+                {
+                  *start = FALSE;
+                }
+            }
+          else if (!found_end && !is_selected)
+            {
+              /* an unselected item exists, and no item with PACK_END pack type */
+              *end = FALSE;
+            }
+        }
+
+      if (pack_type == GTK_PACK_END)
+        {
+          if (!found_end)
+            {
+              /* This is the first tab with PACK_END pack type */
+              found_end = TRUE;
+
+              if (is_selected)
+                {
+                  /* first PACK_END item is selected: set end to TRUE */
+                  *end = TRUE;
+
+                  if (expand && !found_start)
+                    {
+                      /* tentatively set start to TRUE: will be invalidated if
+                       * we find other items */
+                      *start = TRUE;
+                    }
+                }
+              else
+                {
+                *end = FALSE;
+                }
+            }
+          else if (!found_start && !is_selected)
+            {
+              *start = FALSE;
+            }
+        }
+    }
+}
+
 static gboolean
 draw_themed_tab_button (GtkStyle *style,
 			GdkWindow *window,
 			GtkStateType state_type,
 			GtkNotebook *notebook,
-			gint x, gint y,
-			gint width, gint height, gint gap_side)
+			gint x,
+			gint y,
+			gint width,
+			gint height,
+			gint gap_side)
 {
   GdkPixmap *pixmap = NULL;
-  gint border_width =
-    gtk_container_get_border_width (GTK_CONTAINER (notebook));
-  GtkWidget *widget = GTK_WIDGET (notebook);
   GdkRectangle draw_rect, clip_rect;
-  GdkPixbufRotation rotation = GDK_PIXBUF_ROTATE_NONE;
+  cairo_t *cr;
+  gboolean start, stop;
+  XpThemeElement element;
+  gint d_w, d_h;
 
-  if (gap_side == GTK_POS_TOP)
+  get_notebook_tab_position (notebook, &start, &stop);
+
+  if (state_type == GTK_STATE_NORMAL)
     {
-      int widget_right;
-
-      if (state_type == GTK_STATE_NORMAL)
-	{
-	  draw_rect.x = x;
-	  draw_rect.y = y;
-	  draw_rect.width = width + 2;
-	  draw_rect.height = height;
-
-	  clip_rect = draw_rect;
-	  clip_rect.height--;
-	}
+      if (start && stop)
+        {
+          /* Both edges of the notebook are covered by the item */
+          element = XP_THEME_ELEMENT_TAB_ITEM_BOTH_EDGE;
+        }
+      else if (start)
+        {
+          /* The start edge is covered by the item */
+          element = XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE;
+        }
+      else if (stop)
+        {
+          /* the stop edge is reached by the item */
+          element = XP_THEME_ELEMENT_TAB_ITEM_RIGHT_EDGE;
+        }
       else
-	{
-	  draw_rect.x = x + 2;
-	  draw_rect.y = y;
-	  draw_rect.width = width - 2;
-	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
-	}
-
-      /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
-      widget_right = widget->allocation.x + widget->allocation.width - border_width - 2;
-
-      if (draw_rect.x + draw_rect.width >= widget_right)
-	{
-	  draw_rect.width = clip_rect.width = widget_right - draw_rect.x;
-	}
-    }
-  if (gap_side == GTK_POS_BOTTOM)
-    {
-      int widget_right;
-
-      if (state_type == GTK_STATE_NORMAL)
-	{
-	  draw_rect.x = x;
-	  draw_rect.y = y;
-	  draw_rect.width = width + 2;
-	  draw_rect.height = height;
-
-	  clip_rect = draw_rect;
-	}
-      else
-	{
-	  draw_rect.x = x + 2;
-	  draw_rect.y = y + 2;
-	  draw_rect.width = width - 2;
-	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
-	}
-
-      /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
-      widget_right = widget->allocation.x + widget->allocation.width - border_width - 2;
-
-      if (draw_rect.x + draw_rect.width >= widget_right)
-	{
-	  draw_rect.width = clip_rect.width = widget_right - draw_rect.x;
-	}
-
-      rotation = GDK_PIXBUF_ROTATE_UPSIDEDOWN;
-    }
-  else if (gap_side == GTK_POS_LEFT)
-    {
-      int widget_bottom;
-
-      if (state_type == GTK_STATE_NORMAL)
-	{
-	  draw_rect.x = x;
-	  draw_rect.y = y;
-	  draw_rect.width = width;
-	  draw_rect.height = height + 2;
-
-	  clip_rect = draw_rect;
-	  clip_rect.width--;
-	}
-      else
-	{
-	  draw_rect.x = x;
-	  draw_rect.y = y + 2;
-	  draw_rect.width = width - 2;
-	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
-	}
-
-      /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
-      widget_bottom = widget->allocation.x + widget->allocation.height - border_width - 2;
-
-      if (draw_rect.y + draw_rect.height >= widget_bottom)
-	{
-	  draw_rect.height = clip_rect.height = widget_bottom - draw_rect.y;
-	}
-
-      rotation = GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE;
-    }
-  else if (gap_side == GTK_POS_RIGHT)
-    {
-      int widget_bottom;
-
-      if (state_type == GTK_STATE_NORMAL)
-	{
-	  draw_rect.x = x + 1;
-	  draw_rect.y = y;
-	  draw_rect.width = width;
-	  draw_rect.height = height + 2;
-
-	  clip_rect = draw_rect;
-	  clip_rect.width--;
-	}
-      else
-	{
-	  draw_rect.x = x + 2;
-	  draw_rect.y = y + 2;
-	  draw_rect.width = width - 2;
-	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
-	}
-
-      /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
-      widget_bottom = widget->allocation.x + widget->allocation.height - border_width - 2;
-
-      if (draw_rect.y + draw_rect.height >= widget_bottom)
-	{
-	  draw_rect.height = clip_rect.height = widget_bottom - draw_rect.y;
-	}
-
-      rotation = GDK_PIXBUF_ROTATE_CLOCKWISE;
-    }
-
-  if (gap_side == GTK_POS_TOP)
-    {
-      if (!xp_theme_draw (window, XP_THEME_ELEMENT_TAB_ITEM, style,
-			  draw_rect.x, draw_rect.y,
-			  draw_rect.width, draw_rect.height,
-			  state_type, &clip_rect))
-	{
-	  return FALSE;
-	}
+        {
+          /* no edge should be aligned with the tab */
+          element = XP_THEME_ELEMENT_TAB_ITEM;
+        }
     }
   else
     {
-      GdkPixbuf *pixbuf;
-      GdkPixbuf *rotated;
-
-      if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT)
-	{
-	  pixmap = gdk_pixmap_new (window, clip_rect.height, clip_rect.width, -1);
-
-	  if (!xp_theme_draw (pixmap, XP_THEME_ELEMENT_TAB_ITEM, style,
-			      draw_rect.y - clip_rect.y, draw_rect.x - clip_rect.x,
-			      draw_rect.height, draw_rect.width, state_type, 0))
-	    {
-	      g_object_unref (pixmap);
-	      return FALSE;
-	    }
-
-	  pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0,
-						 clip_rect.height, clip_rect.width);
-	  g_object_unref (pixmap);
-	}
-      else
-	{
-	  pixmap = gdk_pixmap_new (window, clip_rect.width, clip_rect.height, -1);
-
-	  if (!xp_theme_draw (pixmap, XP_THEME_ELEMENT_TAB_ITEM, style,
-			      draw_rect.x - clip_rect.x, draw_rect.y - clip_rect.y,
-			      draw_rect.width, draw_rect.height, state_type, 0))
-	    {
-	      g_object_unref (pixmap);
-	      return FALSE;
-	    }
-
-	  pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0,
-						 clip_rect.width, clip_rect.height);
-	  g_object_unref (pixmap);
-	}
-
-      rotated = gdk_pixbuf_rotate_simple (pixbuf, rotation);
-      g_object_unref (pixbuf);
-      pixbuf = rotated;
-
-      // XXX - This is really hacky and evil.  When we're drawing the left-most tab
-      //       while it is active on a bottom-oriented notebook, there is one white
-      //       pixel at the top.  There may be a better solution than this if someone
-      //       has time to discover it.
-      if (gap_side == GTK_POS_BOTTOM && state_type == GTK_STATE_NORMAL
-	  && x == widget->allocation.x)
-	{
-	  int rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-	  int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-	  int psub = 0;
-
-	  guchar *pixels = gdk_pixbuf_get_pixels (pixbuf);
-	  guchar *p = pixels + rowstride;
-
-	  for (psub = 0; psub < n_channels; psub++)
-	    {
-	      pixels[psub] = p[psub];
-	    }
-	}
-
-      gdk_draw_pixbuf (window, NULL, pixbuf, 0, 0, clip_rect.x, clip_rect.y,
-		       clip_rect.width, clip_rect.height, GDK_RGB_DITHER_NONE,
-		       0, 0);
-      g_object_unref (pixbuf);
+      /* Ideally, we should do the same here. Unfortunately, we don't have ways
+       * to determine what tab widget is actually being drawn here, so we can't
+       * determine its position relative to the borders */
+      element = XP_THEME_ELEMENT_TAB_ITEM;
     }
+
+  draw_rect.x = x;
+  draw_rect.y = y;
+  draw_rect.width = width;
+  draw_rect.height = height;
+
+  /* Perform adjustments required to have the theme perfectly aligned */
+  if (state_type == GTK_STATE_ACTIVE)
+    {
+      switch (gap_side)
+        {
+        case GTK_POS_TOP:
+          draw_rect.x += 2;
+          draw_rect.width -= 2;
+          draw_rect.height -= 1;
+          break;
+        case GTK_POS_BOTTOM:
+          draw_rect.x += 2;
+          draw_rect.width -= 2;
+          draw_rect.y += 1;
+          draw_rect.height -= 1;
+          break;
+        case GTK_POS_LEFT:
+          draw_rect.y += 2;
+          draw_rect.height -= 2;
+          draw_rect.width -= 1;
+          break;
+        case GTK_POS_RIGHT:
+          draw_rect.y += 2;
+          draw_rect.height -= 2;
+          draw_rect.x += 1;
+          draw_rect.width -= 1;
+          break;
+        }
+    }
+  else
+    {
+      switch (gap_side)
+        {
+        case GTK_POS_TOP:
+          draw_rect.height += 1;
+          draw_rect.width += 2;
+          break;
+        case GTK_POS_BOTTOM:
+          draw_rect.y -= 1;
+          draw_rect.height += 1;
+          draw_rect.width += 2;
+          break;
+        case GTK_POS_LEFT:
+          draw_rect.width += 1;
+          draw_rect.height += 2;
+          break;
+        case GTK_POS_RIGHT:
+          draw_rect.x -= 1;
+          draw_rect.width += 1;
+          draw_rect.height += 2;
+          break;
+        }
+    }
+
+  clip_rect = draw_rect;
+
+  /* Take care of obvious case where the clipping is an empty region */
+  if (clip_rect.width <= 0 || clip_rect.height <= 0)
+    return TRUE;
+
+  /* Simple case: tabs on top are just drawn as is */
+  if (gap_side == GTK_POS_TOP)
+    {
+       return xp_theme_draw (window, element, style,
+	                     draw_rect.x, draw_rect.y,
+	                     draw_rect.width, draw_rect.height,
+	                     state_type, &clip_rect);
+    }
+
+  /* For other cases, we need to print the tab on a pixmap, and then rotate
+   * it according to the gap side */
+  if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT)
+    {
+      /* pixmap will have width/height inverted as we'll rotate +- PI / 2 */
+      d_w = draw_rect.height;
+      d_h = draw_rect.width;
+    }
+  else
+    {
+      d_w = draw_rect.width;
+      d_h = draw_rect.height;
+    }
+
+  pixmap = gdk_pixmap_new (window, d_w, d_h, -1);
+
+  /* First copy the previously saved window background */
+  cr = gdk_cairo_create (pixmap);
+
+  /* pixmaps unfortunately don't handle the alpha channel. We then
+   * paint it first in white, hoping the actual background is clear */
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  if (!xp_theme_draw (pixmap, element, style, 0, 0, d_w, d_h, state_type, 0))
+    {
+      g_object_unref (pixmap);
+      return FALSE;
+    }
+
+  /* Now we have the pixmap, we need to flip/rotate it according to its
+   * final position. We'll do it using cairo on the dest window */
+  cr = gdk_cairo_create (window);
+  cairo_rectangle (cr, clip_rect.x, clip_rect.y,
+                   clip_rect.width, clip_rect.height);
+  cairo_clip (cr);
+  cairo_translate(cr, draw_rect.x + draw_rect.width * 0.5,
+                  draw_rect.y + draw_rect.height * 0.5);
+
+  if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT) {
+    cairo_rotate (cr, G_PI/2.0);
+  }
+
+  if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_BOTTOM) {
+    cairo_scale (cr, 1, -1);
+  }
+
+  cairo_translate(cr, -d_w * 0.5, -d_h * 0.5);
+  gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  g_object_unref (pixmap);
 
   return TRUE;
 }
@@ -2746,10 +2666,13 @@ draw_tab_button (GtkStyle *style,
     {
       /* experimental tab-drawing code from mozilla */
       RECT rect;
+      XpDCInfo dc_info;
       HDC dc;
       gint32 aPosition;
+	  cairo_t *cr;
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+	  cr = gdk_cairo_create (window);
 
       if (gap_side == GTK_POS_TOP)
 	aPosition = BF_TOP;
@@ -2763,16 +2686,19 @@ draw_tab_button (GtkStyle *style,
       if (state_type == GTK_STATE_PRELIGHT)
 	state_type = GTK_STATE_NORMAL;
       if (area)
-	gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+        {
+           gdk_cairo_rectangle (cr, area);
+           cairo_clip (cr);
+           gdk_cairo_set_source_color (cr, &style->dark[state_type]);
+        }
 
       DrawTab (dc, rect, aPosition,
 	       state_type != GTK_STATE_PRELIGHT,
 	       (gap_side != GTK_POS_LEFT), (gap_side != GTK_POS_RIGHT));
 
-      if (area)
-	gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
+      cairo_destroy (cr);
 
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
       return TRUE;
     }
 
@@ -2790,71 +2716,72 @@ draw_extension (GtkStyle *style,
 		gint x, gint y,
 		gint width, gint height, GtkPositionType gap_side)
 {
-  if (widget && GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "tab"))
+  if (widget && GTK_IS_NOTEBOOK (widget) && DETAIL("tab"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
 
-      /* Why this differs from gap_side, I have no idea.. */
-      int real_gap_side = gtk_notebook_get_tab_pos (notebook);
+      /* draw_themed_tab_button and draw_tab_button expect to work with tab
+       * position, instead of simply taking the "side of the gap" (gap_side).
+       * The gap side, simply said, is the side of the tab that touches the notebook
+       * frame and is always the exact opposite of the tab position... */
+      int tab_pos = gtk_notebook_get_tab_pos (notebook);
 
       if (!draw_themed_tab_button (style, window, state_type,
-				   GTK_NOTEBOOK (widget), x, y,
-				   width, height, real_gap_side))
+				   notebook, x, y,
+				   width, height, tab_pos))
 	{
 	  if (!draw_tab_button (style, window, state_type,
 				shadow_type, area, widget,
-				detail, x, y, width, height, real_gap_side))
+				detail, x, y, width, height, tab_pos))
 	    {
+	      /* GtkStyle expects the usual gap_side */
 	      parent_class->draw_extension (style, window, state_type,
 					    shadow_type, area, widget, detail,
 					    x, y, width, height,
-					    real_gap_side);
+					    gap_side);
 	    }
 	}
     }
 }
 
 static void
-draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
-	      GtkShadowType shadow_type, GdkRectangle *area,
-	      GtkWidget *widget, const gchar *detail, gint x,
-	      gint y, gint width, gint height, GtkPositionType gap_side,
-	      gint gap_x, gint gap_width)
+draw_box_gap (GtkStyle *style,
+              GdkWindow *window,
+              GtkStateType state_type,
+	      GtkShadowType shadow_type,
+	      GdkRectangle *area,
+	      GtkWidget *widget,
+	      const gchar *detail,
+	      gint x,
+	      gint y,
+	      gint width,
+	      gint height,
+	      GtkPositionType gap_side,
+	      gint gap_x,
+	      gint gap_width)
 {
-  if (GTK_IS_NOTEBOOK (widget) && detail && !strcmp (detail, "notebook"))
+  if (GTK_IS_NOTEBOOK (widget) && DETAIL("notebook"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-      int side = gtk_notebook_get_tab_pos (notebook);
-      int x2 = x, y2 = y, w2 = width, h2 = height;
 
-      if (side == GTK_POS_TOP)
-	{
-	  x2 = x;
-	  y2 = y - notebook->tab_vborder;
-	  w2 = width;
-	  h2 = height + notebook->tab_vborder * 2;
-	}
-      else if (side == GTK_POS_BOTTOM)
-	{
-	  x2 = x;
-	  y2 = y;
-	  w2 = width;
-	  h2 = height + notebook->tab_vborder * 2;
-	}
-      else if (side == GTK_POS_LEFT)
-	{
-	  x2 = x - notebook->tab_hborder;
-	  y2 = y;
-	  w2 = width + notebook->tab_hborder;
-	  h2 = height;
-	}
-      else if (side == GTK_POS_RIGHT)
-	{
-	  x2 = x;
-	  y2 = y;
-	  w2 = width + notebook->tab_hborder * 2;
-	  h2 = height;
-	}
+      int side = gtk_notebook_get_tab_pos (notebook);
+      int x2 = x, y2 = y;
+      int w2 = width + style->xthickness, h2 = height + style->ythickness;
+
+      switch (side)
+        {
+        case GTK_POS_TOP:
+          y2 -= 1;
+          break;
+        case GTK_POS_BOTTOM:
+          break;
+        case GTK_POS_LEFT:
+          x2 -= 1;
+          break;
+        case GTK_POS_RIGHT:
+          w2 += 1;
+          break;
+        }
 
       if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style,
 			 x2, y2, w2, h2, state_type, area))
@@ -2897,7 +2824,19 @@ draw_flat_box (GtkStyle *style, GdkWindow *window,
 {
   if (detail)
     {
-      if (!strcmp (detail, "checkbutton"))
+      if (state_type == GTK_STATE_SELECTED &&
+	  (!strncmp ("cell_even", detail, 9) || !strncmp ("cell_odd", detail, 8)))
+	{
+          GdkColor *gc = gtk_widget_has_focus (widget) ? &style->base[state_type] : &style->base[GTK_STATE_ACTIVE];
+          cairo_t *cr = gdk_cairo_create (window);
+
+          _cairo_draw_rectangle (cr, gc, TRUE, x, y, width, height);
+
+		  cairo_destroy (cr);
+
+	  return;
+	}
+      else if (DETAIL("checkbutton"))
 	{
 	  if (state_type == GTK_STATE_PRELIGHT)
 	    {
@@ -2915,9 +2854,10 @@ draw_menu_border (GdkWindow *win, GtkStyle *style,
 		  gint x, gint y, gint width, gint height)
 {
   RECT rect;
+  XpDCInfo dc_info;
   HDC dc;
 
-  dc = get_window_dc (style, win, GTK_STATE_NORMAL, x, y, width, height, &rect);
+  dc = get_window_dc (style, win, GTK_STATE_NORMAL, &dc_info, x, y, width, height, &rect);
 
   if (!dc)
     return FALSE;
@@ -2931,7 +2871,7 @@ draw_menu_border (GdkWindow *win, GtkStyle *style,
       DrawEdge (dc, &rect, EDGE_RAISED, BF_RECT);
     }
 
-  release_window_dc (style, win, GTK_STATE_NORMAL);
+  release_window_dc (&dc_info);
 
   return TRUE;
 }
@@ -2948,15 +2888,16 @@ draw_shadow (GtkStyle *style,
   gboolean is_handlebox;
   gboolean is_toolbar;
 
-  if (detail && !strcmp (detail, "frame"))
+  if (DETAIL("frame"))
     {
- 
+
       HDC dc;
       RECT rect;
+      XpDCInfo dc_info;
 
 
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
       if (is_combo_box_child (widget))
         {
           FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
@@ -2994,11 +2935,11 @@ draw_shadow (GtkStyle *style,
 	    }
 	}
 
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
 
       return;
     }
-  if (detail && (!strcmp (detail, "entry") || !strcmp (detail, "combobox")))
+  if (DETAIL("entry") || DETAIL("combobox"))
     {
       if (shadow_type != GTK_SHADOW_IN)
 	return;
@@ -3008,28 +2949,29 @@ draw_shadow (GtkStyle *style,
 	{
 	  HDC dc;
 	  RECT rect;
+	  XpDCInfo dc_info;
 
-	  dc = get_window_dc (style, window, state_type,
+	  dc = get_window_dc (style, window, state_type, &dc_info,
 			      x, y, width, height, &rect);
 
 	  DrawEdge (dc, &rect, EDGE_SUNKEN, BF_RECT);
-	  release_window_dc (style, window, state_type);
+	  release_window_dc (&dc_info);
 	}
 
       return;
     }
 
-  if (detail && !strcmp (detail, "scrolled_window") &&
+  if (DETAIL("scrolled_window") &&
       xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
 		     x, y, width, height, state_type, area))
     {
       return;
     }
 
-  if (detail && !strcmp (detail, "spinbutton"))
+  if (DETAIL("spinbutton"))
     return;
 
-  if (detail && !strcmp (detail, "menu"))
+  if (DETAIL("menu"))
     {
       if (draw_menu_border (window, style, x, y, width, height))
 	{
@@ -3037,13 +2979,11 @@ draw_shadow (GtkStyle *style,
 	}
     }
 
-  if (detail && !strcmp (detail, "handlebox"))
+  if (DETAIL("handlebox"))
     return;
 
-  is_handlebox = (detail && !strcmp (detail, "handlebox_bin"));
-  is_toolbar = (detail
-		&& (!strcmp (detail, "toolbar")
-		    || !strcmp (detail, "menubar")));
+  is_handlebox = (DETAIL("handlebox_bin"));
+  is_toolbar = (DETAIL("toolbar") || DETAIL("menubar"));
 
   if (is_toolbar || is_handlebox)
     {
@@ -3056,6 +2996,7 @@ draw_shadow (GtkStyle *style,
 	{
 	  HDC dc;
 	  RECT rect;
+	  XpDCInfo dc_info;
 	  HGDIOBJ old_pen = NULL;
 	  GtkPositionType pos;
 
@@ -3065,7 +3006,7 @@ draw_shadow (GtkStyle *style,
 	    {
 	      pos = gtk_handle_box_get_handle_position (GTK_HANDLE_BOX (widget));
 	      /*
-	         If the handle box is at left side, 
+	         If the handle box is at left side,
 	         we shouldn't draw its right border.
 	         The same holds true for top, right, and bottom.
 	       */
@@ -3108,7 +3049,7 @@ draw_shadow (GtkStyle *style,
 		}
 	    }
 
-	  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	  if (pos != GTK_POS_LEFT)
 	    {
@@ -3136,13 +3077,13 @@ draw_shadow (GtkStyle *style,
 	    }
 	  if (old_pen)
 	    SelectObject (dc, old_pen);
-	  release_window_dc (style, window, state_type);
+	  release_window_dc (&dc_info);
 	}
 
       return;
     }
 
-  if (detail && !strcmp (detail, "statusbar"))
+  if (DETAIL("statusbar"))
     {
       return;
     }
@@ -3159,10 +3100,27 @@ draw_hline (GtkStyle *style,
 	    GtkWidget *widget,
 	    const gchar *detail, gint x1, gint x2, gint y)
 {
-  if (xp_theme_is_active () && detail && !strcmp (detail, "menuitem"))
+  cairo_t *cr;
+  
+  cr = gdk_cairo_create (window);
+
+  if (xp_theme_is_active () && DETAIL("menuitem"))
     {
+      gint cx, cy;
+      gint new_y, new_height;
+      gint y_offset;
+
+      xp_theme_get_element_dimensions (XP_THEME_ELEMENT_MENU_SEPARATOR,
+				       state_type,
+				       &cx, &cy);
+
+      /* Center the separator */
+      y_offset = (area->height / 2) - (cy / 2);
+      new_y = y_offset >= 0 ? area->y + y_offset : area->y;
+      new_height = cy;
+
       if (xp_theme_draw
-	  (window, XP_THEME_ELEMENT_MENU_SEPARATOR, style, x1, y, x2, 1,
+	  (window, XP_THEME_ELEMENT_MENU_SEPARATOR, style, x1, new_y, x2, new_height,
 	   state_type, area))
 	{
 	  return;
@@ -3171,15 +3129,12 @@ draw_hline (GtkStyle *style,
 	{
 	  if (area)
 	    {
-	      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+              gdk_cairo_rectangle (cr, area);
+              cairo_clip (cr);
 	    }
 
-	  gdk_draw_line (window, style->dark_gc[state_type], x1, y, x2, y);
+          _cairo_draw_line (cr, &style->dark[state_type], x1, y, x2, y);
 
-	  if (area)
-	    {
-	      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
-	    }
 	}
     }
   else
@@ -3188,19 +3143,14 @@ draw_hline (GtkStyle *style,
 	{
 	  if (area)
 	    {
-	      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
-	      gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
+              gdk_cairo_rectangle (cr, area);
+              cairo_clip (cr);
 	    }
 
-	  gdk_draw_line (window, style->dark_gc[state_type], x1, y, x2, y);
+          _cairo_draw_line (cr, &style->dark[state_type], x1, y, x2, y);
 	  ++y;
-	  gdk_draw_line (window, style->light_gc[state_type], x1, y, x2, y);
+          _cairo_draw_line (cr, &style->light[state_type], x1, y, x2, y);
 
-	  if (area)
-	    {
-	      gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
-	      gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
-	    }
 	}
       else
 	{
@@ -3208,6 +3158,7 @@ draw_hline (GtkStyle *style,
 				    detail, x1, x2, y);
 	}
     }
+  cairo_destroy (cr);
 }
 
 static void
@@ -3218,29 +3169,30 @@ draw_vline (GtkStyle *style,
 	    GtkWidget *widget,
 	    const gchar *detail, gint y1, gint y2, gint x)
 {
+  cairo_t *cr;
+  
+  cr = gdk_cairo_create (window);
+
   if (style->xthickness == 2)
     {
       if (area)
 	{
-	  gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
-	  gdk_gc_set_clip_rectangle (style->light_gc[state_type], area);
+              gdk_cairo_rectangle (cr, area);
+              cairo_clip (cr);
 	}
 
-      gdk_draw_line (window, style->dark_gc[state_type], x, y1, x, y2);
+      _cairo_draw_line (cr, &style->dark[state_type], x, y1, x, y2);
       ++x;
-      gdk_draw_line (window, style->light_gc[state_type], x, y1, x, y2);
+      _cairo_draw_line (cr, &style->light[state_type], x, y1, x, y2);
 
-      if (area)
-	{
-	  gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
-	  gdk_gc_set_clip_rectangle (style->light_gc[state_type], NULL);
-	}
     }
   else
     {
       parent_class->draw_vline (style, window, state_type, area, widget,
 				detail, y1, y2, x);
     }
+
+  cairo_destroy (cr);
 }
 
 static void
@@ -3277,28 +3229,36 @@ draw_resize_grip (GtkStyle *style,
 		  const gchar *detail,
 		  GdkWindowEdge edge, gint x, gint y, gint width, gint height)
 {
-  if (detail && !strcmp (detail, "statusbar"))
+  cairo_t *cr;
+  
+  cr = gdk_cairo_create (window);
+  
+  if (DETAIL("statusbar"))
     {
       if (xp_theme_draw
 	  (window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width,
 	   height, state_type, area))
 	{
+          cairo_destroy (cr);
 	  return;
 	}
       else
 	{
 	  RECT rect;
-	  HDC dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+	  XpDCInfo dc_info;
+	  HDC dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
 	  if (area)
-	    gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
+            {
+              gdk_cairo_rectangle (cr, area);
+              cairo_clip (cr);
+              gdk_cairo_set_source_color (cr, &style->dark[state_type]);
+            }
 
 	  DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLSIZEGRIP);
-	  release_window_dc (style, window, state_type);
+	  release_window_dc (&dc_info);
 
-	  if (area)
-	    gdk_gc_set_clip_rectangle (style->dark_gc[state_type], NULL);
-
+          cairo_destroy (cr);
 	  return;
 	}
     }
@@ -3308,21 +3268,24 @@ draw_resize_grip (GtkStyle *style,
 }
 
 static void
-draw_handle (GtkStyle *style,
-	     GdkWindow *window,
-	     GtkStateType state_type,
-	     GtkShadowType shadow_type,
-	     GdkRectangle *area,
-	     GtkWidget *widget,
-	     const gchar *detail,
-	     gint x,
-	     gint y, gint width, gint height, GtkOrientation orientation)
+draw_handle (GtkStyle      *style,
+             GdkWindow     *window,
+             GtkStateType   state_type,
+             GtkShadowType  shadow_type,
+             GdkRectangle  *area,
+             GtkWidget     *widget,
+             const gchar   *detail,
+             gint           x,
+             gint           y,
+             gint           width,
+             gint           height,
+             GtkOrientation orientation)
 {
-  HDC dc;
-  RECT rect;
-
   if (is_toolbar_child (widget))
     {
+      HDC dc;
+      RECT rect;
+      XpDCInfo dc_info;
       XpThemeElement hndl;
 
       sanitize_size (window, &width, &height);
@@ -3333,13 +3296,9 @@ draw_handle (GtkStyle *style,
 	  pos = gtk_handle_box_get_handle_position (GTK_HANDLE_BOX (widget));
 
 	  if (pos == GTK_POS_TOP || pos == GTK_POS_BOTTOM)
-	    {
 	      orientation = GTK_ORIENTATION_HORIZONTAL;
-	    }
 	  else
-	    {
 	      orientation = GTK_ORIENTATION_VERTICAL;
-	    }
 	}
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
@@ -3347,13 +3306,10 @@ draw_handle (GtkStyle *style,
       else
 	hndl = XP_THEME_ELEMENT_REBAR_GRIPPER_H;
 
-      if (xp_theme_draw (window, hndl, style, x, y, width, height,
-			 state_type, area))
-	{
-	  return;
-	}
+      if (xp_theme_draw (window, hndl, style, x, y, width, height, state_type, area))
+	return;
 
-      dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
 	{
@@ -3371,66 +3327,8 @@ draw_handle (GtkStyle *style,
 	}
 
       draw_3d_border (dc, &rect, FALSE);
-      release_window_dc (style, window, state_type);
+      release_window_dc (&dc_info);
       return;
-    }
-
-  if (!GTK_IS_PANED (widget))
-    {
-      gint xthick, ythick;
-      GdkGC *light_gc, *dark_gc, *shadow_gc;
-      GdkRectangle dest;
-
-      sanitize_size (window, &width, &height);
-
-      gtk_paint_box (style, window, state_type, shadow_type, area,
-		     widget, detail, x, y, width, height);
-
-      light_gc = style->light_gc[state_type];
-      dark_gc = style->dark_gc[state_type];
-      shadow_gc = style->mid_gc[state_type];
-
-      xthick = style->xthickness;
-      ythick = style->ythickness;
-
-      dest.x = x + xthick;
-      dest.y = y + ythick;
-      dest.width = width - (xthick * 2);
-      dest.height = height - (ythick * 2);
-
-      if (dest.width < dest.height)
-	dest.x += 2;
-      else
-	dest.y += 2;
-
-      gdk_gc_set_clip_rectangle (light_gc, &dest);
-      gdk_gc_set_clip_rectangle (dark_gc, &dest);
-      gdk_gc_set_clip_rectangle (shadow_gc, &dest);
-
-      if (dest.width < dest.height)
-	{
-	  gdk_draw_line (window, light_gc, dest.x, dest.y, dest.x,
-			 dest.height);
-	  gdk_draw_line (window, dark_gc, dest.x + (dest.width / 2),
-			 dest.y, dest.x + (dest.width / 2), dest.height);
-	  gdk_draw_line (window, shadow_gc, dest.x + dest.width,
-			 dest.y, dest.x + dest.width, dest.height);
-	}
-      else
-	{
-	  gdk_draw_line (window, light_gc, dest.x, dest.y,
-			 dest.x + dest.width, dest.y);
-	  gdk_draw_line (window, dark_gc, dest.x,
-			 dest.y + (dest.height / 2),
-			 dest.x + dest.width, dest.y + (dest.height / 2));
-	  gdk_draw_line (window, shadow_gc, dest.x,
-			 dest.y + dest.height, dest.x + dest.width,
-			 dest.y + dest.height);
-	}
-
-      gdk_gc_set_clip_rectangle (shadow_gc, NULL);
-      gdk_gc_set_clip_rectangle (light_gc, NULL);
-      gdk_gc_set_clip_rectangle (dark_gc, NULL);
     }
 }
 
@@ -3444,8 +3342,9 @@ draw_focus (GtkStyle *style,
 {
   HDC dc;
   RECT rect;
+  XpDCInfo dc_info;
 
-  if (!GTK_WIDGET_CAN_FOCUS (widget))
+  if (!gtk_widget_get_can_focus (widget))
     {
       return;
     }
@@ -3461,9 +3360,9 @@ draw_focus (GtkStyle *style,
       return;
     }
 
-  dc = get_window_dc (style, window, state_type, x, y, width, height, &rect);
+  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
   DrawFocusRect (dc, &rect);
-  release_window_dc (style, window, state_type);
+  release_window_dc (&dc_info);
 /*
     parent_class->draw_focus (style, window, state_type,
 						     area, widget, detail, x, y, width, height);
@@ -3488,14 +3387,15 @@ draw_layout (GtkStyle *style,
    * notebook tabs, so we give them a gentle nudge two pixels to the
    * right.  A little hackish, but what are 'ya gonna do?  -- Cody
    */
-  if (xp_theme_is_active () && detail && !strcmp (detail, "label"))
+  if (xp_theme_is_active () && DETAIL("label"))
     {
       if (widget->parent != NULL)
 	{
 	  if (GTK_IS_NOTEBOOK (widget->parent))
 	    {
+	      int side;
 	      notebook = GTK_NOTEBOOK (widget->parent);
-	      int side = gtk_notebook_get_tab_pos (notebook);
+	      side = gtk_notebook_get_tab_pos (notebook);
 
 	      if (side == GTK_POS_TOP || side == GTK_POS_BOTTOM)
 		{
@@ -3516,163 +3416,6 @@ msw_style_init_from_rc (GtkStyle *style, GtkRcStyle *rc_style)
   setup_menu_settings (gtk_settings_get_default ());
   setup_system_styles (style);
   parent_class->init_from_rc (style, rc_style);
-}
-
-static GdkPixmap *
-load_bg_image (GdkColormap *colormap,
-	       GdkColor *bg_color, const gchar *filename)
-{
-  if (strcmp (filename, "<parent>") == 0)
-    {
-      return (GdkPixmap *) GDK_PARENT_RELATIVE;
-    }
-  else
-    {
-      return gdk_pixmap_colormap_create_from_xpm (NULL, colormap, NULL,
-						  bg_color, filename);
-    }
-}
-
-static void
-msw_style_realize (GtkStyle *style)
-{
-  GdkGCValues gc_values;
-  GdkGCValuesMask gc_values_mask;
-
-  gint i;
-
-  for (i = 0; i < 5; i++)
-    {
-      style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
-      style->mid[i].green =
-	(style->light[i].green + style->dark[i].green) / 2;
-      style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
-
-      style->text_aa[i].red = (style->text[i].red + style->base[i].red) / 2;
-      style->text_aa[i].green =
-	(style->text[i].green + style->base[i].green) / 2;
-      style->text_aa[i].blue =
-	(style->text[i].blue + style->base[i].blue) / 2;
-    }
-
-  style->black.red = 0x0000;
-  style->black.green = 0x0000;
-  style->black.blue = 0x0000;
-  gdk_colormap_alloc_color (style->colormap, &style->black, FALSE, TRUE);
-
-  style->white.red = 0xffff;
-  style->white.green = 0xffff;
-  style->white.blue = 0xffff;
-  gdk_colormap_alloc_color (style->colormap, &style->white, FALSE, TRUE);
-
-  gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_BACKGROUND;
-
-  gc_values.foreground = style->black;
-  gc_values.background = style->white;
-  style->black_gc =
-    gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-  gc_values.foreground = style->white;
-  gc_values.background = style->black;
-  style->white_gc =
-    gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-  gc_values_mask = GDK_GC_FOREGROUND;
-
-  for (i = 0; i < 5; i++)
-    {
-      if (style->rc_style && style->rc_style->bg_pixmap_name[i])
-	{
-	  style->bg_pixmap[i] = load_bg_image (style->colormap,
-					       &style->bg[i],
-					       style->rc_style->
-					       bg_pixmap_name[i]);
-	}
-
-      if (!gdk_colormap_alloc_color (style->colormap, &style->fg[i], FALSE, TRUE))
-	{
-	  g_warning ("unable to allocate color: ( %d %d %d )", style->fg[i].red,
-		     style->fg[i].green, style->fg[i].blue);
-	}
-
-      if (!gdk_colormap_alloc_color (style->colormap, &style->bg[i], FALSE, TRUE))
-	{
-	  g_warning ("unable to allocate color: ( %d %d %d )", style->bg[i].red,
-		     style->bg[i].green, style->bg[i].blue);
-	}
-
-      if (!gdk_colormap_alloc_color (style->colormap, &style->light[i], FALSE, TRUE))
-	{
-	  g_warning ("unable to allocate color: ( %d %d %d )",
-		     style->light[i].red, style->light[i].green,
-		     style->light[i].blue);
-	}
-
-      if (!gdk_colormap_alloc_color (style->colormap, &style->dark[i], FALSE, TRUE))
-	{
-	  g_warning ("unable to allocate color: ( %d %d %d )",
-		     style->dark[i].red, style->dark[i].green,
-		     style->dark[i].blue);
-	}
-
-      if (!gdk_colormap_alloc_color (style->colormap, &style->mid[i], FALSE, TRUE))
-	{
-	  g_warning ("unable to allocate color: ( %d %d %d )",
-		     style->mid[i].red, style->mid[i].green,
-		     style->mid[i].blue);
-	}
-
-      if (!gdk_colormap_alloc_color (style->colormap, &style->text[i], FALSE, TRUE))
-	{
-	  g_warning ("unable to allocate color: ( %d %d %d )",
-		     style->text[i].red, style->text[i].green,
-		     style->text[i].blue);
-	}
-
-      if (!gdk_colormap_alloc_color (style->colormap, &style->base[i], FALSE, TRUE))
-	{
-	  g_warning ("unable to allocate color: ( %d %d %d )",
-		     style->base[i].red, style->base[i].green,
-		     style->base[i].blue);
-	}
-
-      if (!gdk_colormap_alloc_color (style->colormap, &style->text_aa[i], FALSE, TRUE))
-	{
-	  g_warning ("unable to allocate color: ( %d %d %d )",
-		     style->text_aa[i].red, style->text_aa[i].green,
-		     style->text_aa[i].blue);
-	}
-
-      gc_values.foreground = style->fg[i];
-      style->fg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-      gc_values.foreground = style->bg[i];
-      style->bg_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-      gc_values.foreground = style->light[i];
-      style->light_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-      gc_values.foreground = style->dark[i];
-      style->dark_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-      gc_values.foreground = style->mid[i];
-      style->mid_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-      gc_values.foreground = style->text[i];
-      style->text_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-      gc_values.foreground = style->base[i];
-      style->base_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-
-      gc_values.foreground = style->text_aa[i];
-      style->text_aa_gc[i] = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
-    }
-}
-
-static void
-msw_style_unrealize (GtkStyle *style)
-{
-  parent_class->unrealize (style);
 }
 
 static void
@@ -3700,9 +3443,6 @@ msw_style_class_init (MswStyleClass *klass)
   style_class->draw_slider = draw_slider;
   style_class->draw_focus = draw_focus;
   style_class->draw_layout = draw_layout;
-
-  style_class->realize = msw_style_realize;
-  style_class->unrealize = msw_style_unrealize;
 }
 
 GType msw_type_style = 0;
@@ -3710,7 +3450,7 @@ GType msw_type_style = 0;
 void
 msw_style_register_type (GTypeModule *module)
 {
-  static const GTypeInfo object_info = {
+  const GTypeInfo object_info = {
     sizeof (MswStyleClass),
     (GBaseInitFunc) NULL,
     (GBaseFinalizeFunc) NULL,

@@ -125,12 +125,16 @@ colors.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_rgb_init ##### -->
 <para>
 This function no longer does anything at all. It's completely useless
 (and harmless).
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_draw_rgb_image ##### -->
@@ -399,6 +403,7 @@ private colormap.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -407,6 +412,7 @@ private colormap.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -427,6 +433,7 @@ dither mode is desired; if the display is not ditherable, it may make
 sense to gray out or hide the corresponding UI widget.
 </para>
 
+@void: 
 @Returns: %TRUE if the preferred visual is ditherable.
 
 

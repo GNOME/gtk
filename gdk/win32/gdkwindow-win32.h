@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 
 typedef struct _GdkWin32PositionInfo    GdkWin32PositionInfo;
 
+#if 0
 struct _GdkWin32PositionInfo
 {
   gint x;
@@ -49,6 +50,7 @@ struct _GdkWin32PositionInfo
 				 */
   GdkRectangle clip_rect;	/* visible rectangle of window */
 };
+#endif
 
 
 /* Window implementation for Win32
@@ -68,29 +70,41 @@ struct _GdkWindowImplWin32
 {
   GdkDrawableImplWin32 parent_instance;
 
-  gint width;
-  gint height;
-  
-  GdkWin32PositionInfo position_info;
-
   gint8 toplevel_window_type;
 
   HCURSOR hcursor;
   HICON   hicon_big;
   HICON   hicon_small;
 
+  /* When VK_PACKET sends us a leading surrogate, it's stashed here.
+   * Later, when another VK_PACKET sends a tailing surrogate, we make up
+   * a full unicode character from them, or discard the leading surrogate,
+   * if the next key is not a tailing surrogate.
+   */
+  wchar_t leading_surrogate_keydown;
+  wchar_t leading_surrogate_keyup;
+
   /* Window size hints */
   gint hint_flags;
   GdkGeometry hints;
 
+  GdkEventMask native_event_mask;
+
   GdkWindowTypeHint type_hint;
 
-  gboolean extension_events_selected;
+  GdkEventMask extension_events_mask;
 
   GdkWindow *transient_owner;
   GSList    *transient_children;
   gint       num_transients;
   gboolean   changing_state;
+
+  gint initial_x;
+  gint initial_y;
+
+  guint no_bg : 1;
+  guint inhibit_configure : 1;
+  guint override_redirect : 1;
 };
  
 struct _GdkWindowImplWin32Class 
@@ -99,6 +113,14 @@ struct _GdkWindowImplWin32Class
 };
 
 GType _gdk_window_impl_win32_get_type (void);
+
+void  _gdk_win32_window_tmp_unset_bg  (GdkWindow *window,
+				       gboolean   recurse);
+void  _gdk_win32_window_tmp_reset_bg  (GdkWindow *window,
+				       gboolean   recurse);
+
+void  _gdk_win32_window_tmp_unset_parent_bg (GdkWindow *window);
+void  _gdk_win32_window_tmp_reset_parent_bg (GdkWindow *window);
 
 G_END_DECLS
 

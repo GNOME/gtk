@@ -24,13 +24,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_ACCEL_GROUP_H__
 #define __GTK_ACCEL_GROUP_H__
 
+
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
@@ -66,10 +66,23 @@ typedef gboolean (*GtkAccelGroupActivate) (GtkAccelGroup  *accel_group,
 					   guint           keyval,
 					   GdkModifierType modifier);
 
+/**
+ * GtkAccelGroupFindFunc:
+ * @key: 
+ * @closure: 
+ * @data: 
+ * 
+ * Since: 2.2
+ */
 typedef gboolean (*GtkAccelGroupFindFunc) (GtkAccelKey    *key,
 					   GClosure       *closure,
 					   gpointer        data);
 
+/**
+ * GtkAccelGroup:
+ * 
+ * An object representing and maintaining a group of accelerators.
+ */
 struct _GtkAccelGroup
 {
   GObject             parent;
@@ -180,7 +193,20 @@ struct _GtkAccelGroupEntry
 
 
 #ifndef GTK_DISABLE_DEPRECATED
+/**
+ * gtk_accel_group_ref:
+ * 
+ * Deprecated equivalent of g_object_ref().
+ * 
+ * Returns: the accel group that was passed in
+ */
 #define	gtk_accel_group_ref	g_object_ref
+
+/**
+ * gtk_accel_group_unref:
+ * 
+ * Deprecated equivalent of g_object_unref().
+ */
 #define	gtk_accel_group_unref	g_object_unref
 #endif /* GTK_DISABLE_DEPRECATED */
 

@@ -59,6 +59,9 @@ a large chunk of deprecated 1.2 compatibility functions.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkProgressBar ##### -->
 <para>
 The #GtkProgressBar-struct struct contains private data only, 
@@ -151,6 +154,7 @@ and should be accessed using the functions below.
 Creates a new #GtkProgressBar.
 </para>
 
+@void: 
 @Returns: a #GtkProgressBar.
 
 
@@ -264,12 +268,10 @@ directions for the visible progress bar.
 
 
 <!-- ##### FUNCTION gtk_progress_bar_new_with_adjustment ##### -->
-<para>
-Creates a new #GtkProgressBar with an associated #GtkAdjustment.
-</para>
 
-@adjustment: a #GtkAdjustment.
-@Returns: a #GtkProgressBar.
+
+@adjustment: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_progress_bar_set_bar_style ##### -->

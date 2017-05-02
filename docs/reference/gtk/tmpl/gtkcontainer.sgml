@@ -125,6 +125,11 @@ child properties for the child.
 </object>
 ]]></programlisting>
 </example>
+<para>
+Since 2.16, child properties can also be marked as translatable using
+the same "translatable", "comments" and "context" attributes that are used
+for regular properties.
+</para>
 </refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -133,6 +138,9 @@ child properties for the child.
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkContainer ##### -->
@@ -241,7 +249,7 @@ Does the same as gtk_container_set_border_width().
 @container: 
 @widget: 
 @first_prop_name: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_container_get_resize_mode ##### -->
@@ -398,7 +406,7 @@ Does the same as gtk_container_get_children().
 @container: 
 @child: 
 @first_prop_name: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_container_child_set ##### -->
@@ -409,7 +417,7 @@ Does the same as gtk_container_get_children().
 @container: 
 @child: 
 @first_prop_name: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_container_child_get_property ##### -->

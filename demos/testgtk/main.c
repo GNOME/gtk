@@ -189,6 +189,7 @@ load_file (const gchar *filename)
 
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   gtk_text_buffer_apply_tag_by_name (info_buffer, "source", &start, &end);
+  fclose (file);
 }
 
 gboolean

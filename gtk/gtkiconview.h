@@ -17,12 +17,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_ICON_VIEW_H__
+#define __GTK_ICON_VIEW_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_ICON_VIEW_H__
-#define __GTK_ICON_VIEW_H__
 
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtktreemodel.h>
@@ -107,6 +107,9 @@ gint           gtk_icon_view_get_pixbuf_column (GtkIconView    *icon_view);
 void           gtk_icon_view_set_orientation   (GtkIconView    *icon_view,
 	   			                GtkOrientation  orientation);
 GtkOrientation gtk_icon_view_get_orientation   (GtkIconView    *icon_view);
+void           gtk_icon_view_set_item_orientation (GtkIconView    *icon_view,
+	   			                   GtkOrientation  orientation);
+GtkOrientation gtk_icon_view_get_item_orientation (GtkIconView    *icon_view);
 void           gtk_icon_view_set_columns       (GtkIconView    *icon_view,
 		 			        gint            columns);
 gint           gtk_icon_view_get_columns       (GtkIconView    *icon_view);
@@ -125,6 +128,9 @@ gint           gtk_icon_view_get_column_spacing (GtkIconView    *icon_view);
 void           gtk_icon_view_set_margin        (GtkIconView    *icon_view, 
 					        gint            margin);
 gint           gtk_icon_view_get_margin        (GtkIconView    *icon_view);
+void           gtk_icon_view_set_item_padding  (GtkIconView    *icon_view, 
+					        gint            item_padding);
+gint           gtk_icon_view_get_item_padding  (GtkIconView    *icon_view);
 
 
 GtkTreePath *  gtk_icon_view_get_path_at_pos   (GtkIconView     *icon_view,
@@ -151,6 +157,10 @@ void             gtk_icon_view_unselect_path      (GtkIconView            *icon_
 						   GtkTreePath            *path);
 gboolean         gtk_icon_view_path_is_selected   (GtkIconView            *icon_view,
 						   GtkTreePath            *path);
+gint             gtk_icon_view_get_item_row       (GtkIconView            *icon_view,
+                                                   GtkTreePath            *path);
+gint             gtk_icon_view_get_item_column    (GtkIconView            *icon_view,
+                                                   GtkTreePath            *path);
 GList           *gtk_icon_view_get_selected_items (GtkIconView            *icon_view);
 void             gtk_icon_view_select_all         (GtkIconView            *icon_view);
 void             gtk_icon_view_unselect_all       (GtkIconView            *icon_view);

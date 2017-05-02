@@ -27,6 +27,69 @@ Installation
 See the file 'INSTALL'
 
 
+Release notes for 2.20
+======================
+
+* GtkStatusbar now has a message area (see gtk_status_bar_get_message_area)
+  which makes it easy to place additional widgets inside the statusbar
+  frame or to replace the label widgets. Previously, this was only possible
+  by accessing the innards of the statusbar widget directly. Applications
+  which are doing so may need some adjustments, since the addition of the
+  message area changed the internal widget hierarchy.
+
+* GtkBuilder no longer sets the "name" property of widgets to the ID
+  attribute of the <object>. Use gtk_buildable_get_name() instead of
+  gtk_widget_get_name() to obtain the ID.
+
+* GTK+ now includes introspection data, as a consequence, it gained a
+  dependency on gobject-introspection. It is possible to build without
+  introspection by passing --disable-introspection to configure.
+
+
+Release notes for 2.18
+======================
+
+* gtk_tooltip_set_custom now accept a NULL custom_widget to unset the
+  old custom_widget. Custom_widget does not get destroyed when the
+  tooltip goes away.
+
+* JPEG2000 support is no longer enabled by default. It must be
+  explicitly turned on, by passing --with-libjasper to configure.
+
+* GDK has been reworked to implement 'client-side windows'. This offers
+  exciting new possibilities, such as transformed, offscreen rendering,
+  but it breaks some long-standing assumptions that applications may
+  have about GDK windows. Setting the environment variable
+  GDK_NATIVE_WINDOWS makes GDK create a native X11 window for each
+  GDK window, which might make problematic applications work better.
+
+* GTK+ calls signal (SIGPIPE, SIG_IGN) during initialization, to ignore
+  SIGPIPE signals, since these are almost never wanted in graphical
+  applications. If you do need to handle SIGPIPE for some reason, reset
+  the handler after gtk_init(), but notice that other libraries (e.g.
+  libdbus or gvfs) might do similar things.
+
+Release notes for 2.16
+======================
+
+* Password entries now display a caps-lock warning. This can be turned off
+  with the caps-lock-warning property.
+
+* Various orientation-related functions have been deprecated in favour
+  of the new GtkOrientable interface: gtk_scale_button_get_orientation,
+  gtk_scale_button_set_orientation, gtk_toolbar_set_orientation.
+
+* The action-proxy interaction has been changed. Widgets that operate as
+  proxies have to implement the GtkActivatable interface now. GtkActivatable
+  implementation are responsible for syncing their appearance with the
+  action and for activating the action. All GTK+ widgets that are commonly
+  used as proxies implement the GtkActivatable interface.
+
+* The handling of keyboard shortcuts has been changed, to help with a
+  longstanding complaint about the way GTK+ handles multiple layouts. GTK+
+  now only uses keys from groups other than the current group if they are
+  not present in the current group.
+
 Release notes for 2.14
 ======================
 
@@ -47,6 +110,16 @@ Release notes for 2.14
   only before displaying it can set gtk_combo_box_set_button_sensitivity
   to GTK_SENSITIVITY_ON, so that the button is always sensitive or
   GTK_SENSITIVITY_OFF to make it insensitive respectively.
+
+* In the early 2.14.x releases, GtkAdjustment was changed to enforce
+  that values are restricted to the range [lower, upper - page_size].
+  This has always been the documented behaviour, and the recommended
+  practice is to set page_size to 0 when using adjustments for simple
+  scalar values, like in a slider or spin button.
+  Due to the large number of applications that are affected by this
+  change, the behaviour has been reverted to the old behaviour in
+  2.14.3, with an explicit warning that this change will be
+  reintroduced in 2.90.
 
 * gdk-pixbuf will use GIO for mime type detection if possible. For
   this to work, shared-mime-info needs to be installed and XDG_DATA_DIRS
@@ -388,8 +461,4 @@ report.
 Otherwise, enter a new bug report that describes the patch, and attach
 the patch to that bug report.
 
-Bug reports containing patches should include the PATCH keyword in their
-keyword fields. If the patch adds to or changes the GTK+ programming
-interface, the API keyword should also be included.
-  
-Patches should be in unified diff form. (The -u option to GNU diff.)
+Patches should be in unified diff form. (The -up option to GNU diff.)

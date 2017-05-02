@@ -298,11 +298,12 @@ is_requested_object (const gchar *object,
 }
 
 static void
-parse_object (ParserData   *data,
-              const gchar  *element_name,
-              const gchar **names,
-              const gchar **values,
-              GError      **error)
+parse_object (GMarkupParseContext  *context,
+              ParserData           *data,
+              const gchar          *element_name,
+              const gchar         **names,
+              const gchar         **values,
+              GError              **error)
 {
   ObjectInfo *object_info;
   ChildInfo* child_info;
@@ -310,6 +311,7 @@ parse_object (ParserData   *data,
   gchar *object_class = NULL;
   gchar *object_id = NULL;
   gchar *constructor = NULL;
+  gint line, line2;
 
   child_info = state_peek_info (data, ChildInfo);
   if (child_info && strcmp (child_info->tag.name, "object") == 0)
@@ -335,10 +337,11 @@ parse_object (ParserData   *data,
           object_class = _get_type_by_symbol (values[i]);
           if (!object_class)
             {
-              g_set_error (error, GTK_BUILDER_ERROR, 
+              g_markup_parse_context_get_position (context, &line, NULL);
+              g_set_error (error, GTK_BUILDER_ERROR,
                            GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION,
-                           _("Invalid type function: `%s'"),
-                           values[i]);
+                           _("Invalid type function on line %d: '%s'"),
+                           line, values[i]);
               return;
             }
         }
@@ -377,7 +380,12 @@ parse_object (ParserData   *data,
           data->inside_requested_object = TRUE;
         }
       else
-        return;
+        {
+          g_free (object_class);
+          g_free (object_id);
+          g_free (constructor);
+          return;
+        }
     }
 
   object_info = g_slice_new0 (ObjectInfo);
@@ -389,6 +397,20 @@ parse_object (ParserData   *data,
 
   if (child_info)
     object_info->parent = (CommonInfo*)child_info;
+
+  g_markup_parse_context_get_position (context, &line, NULL);
+  line2 = GPOINTER_TO_INT (g_hash_table_lookup (data->object_ids, object_id));
+  if (line2 != 0)
+    {
+      g_set_error (error, GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_DUPLICATE_ID,
+                   _("Duplicate object ID '%s' on line %d (previously on line %d)"),
+                   object_id, line, line2);
+      return;
+    }
+
+
+  g_hash_table_insert (data->object_ids, g_strdup (object_id), GINT_TO_POINTER (line));
 }
 
 static void
@@ -634,9 +656,23 @@ parse_interface (ParserData   *data,
     {
       if (strcmp (names[i], "domain") == 0)
 	{
-	  g_free (data->domain);
-	  data->domain = g_strdup (values[i]);
-	  break;
+	  if (data->domain)
+	    {
+	      if (strcmp (data->domain, values[i]) == 0)
+		continue;
+	      else
+		g_warning ("%s: interface domain '%s' overrides "
+			   "programically set domain '%s'",
+			   data->filename,
+			   values[i],
+			   data->domain
+			   );
+	      
+	      g_free (data->domain);
+	    }
+	  
+ 	  data->domain = g_strdup (values[i]);
+	  gtk_builder_set_translation_domain (data->builder, data->domain);
 	}
       else
 	error_invalid_attribute (data, "interface", names[i], error);
@@ -834,7 +870,7 @@ start_element (GMarkupParseContext *context,
   if (strcmp (element_name, "requires") == 0)
     parse_requires (data, element_name, names, values, error);
   else if (strcmp (element_name, "object") == 0)
-    parse_object (data, element_name, names, values, error);
+    parse_object (context, data, element_name, names, values, error);
   else if (data->requested_objects && !data->inside_requested_object)
     {
       /* If outside a requested object, simply ignore this tag */
@@ -863,40 +899,6 @@ start_element (GMarkupParseContext *context,
 		   element_name);
 }
 
-/* This function is taken from gettext.h 
- * GNU gettext uses '\004' to separate context and msgid in .mo files.
- */
-static const char *
-_dpgettext (const char *domain,
-            const char *msgctxt,
-            const char *msgid)
-{
-  size_t msgctxt_len = strlen (msgctxt) + 1;
-  size_t msgid_len = strlen (msgid) + 1;
-  const char *translation;
-  char* msg_ctxt_id;
-
-  msg_ctxt_id = g_alloca (msgctxt_len + msgid_len);
-  
-  memcpy (msg_ctxt_id, msgctxt, msgctxt_len - 1);
-  msg_ctxt_id[msgctxt_len - 1] = '\004';
-  memcpy (msg_ctxt_id + msgctxt_len, msgid, msgid_len);
-
-  translation = g_dgettext (domain, msg_ctxt_id);
-
-  if (translation == msg_ctxt_id) 
-    {
-      /* try the old way of doing message contexts, too */
-      msg_ctxt_id[msgctxt_len - 1] = '|';
-      translation = g_dgettext (domain, msg_ctxt_id);
-  
-      if (translation == msg_ctxt_id)
-        return msgid;
-    }
- 
-  return translation;
-}
-
 gchar *
 _gtk_builder_parser_translate (const gchar *domain,
 			       const gchar *context,
@@ -905,7 +907,7 @@ _gtk_builder_parser_translate (const gchar *domain,
   const char *s;
 
   if (context)
-    s = _dpgettext (domain, context, text);
+    s = g_dpgettext2 (domain, context, text);
   else
     s = g_dgettext (domain, text);
 
@@ -944,10 +946,11 @@ end_element (GMarkupParseContext *context,
 			 GTK_BUILDER_ERROR,
 			 GTK_BUILDER_ERROR_VERSION_MISMATCH,
 			 "%s: required %s version %d.%d, current version is %d.%d",
-			 data->filename, req_info->library, 
+			 data->filename, req_info->library,
 			 req_info->major, req_info->minor,
 			 GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
 	}
+      _free_requires_info (req_info, NULL);
     }
   else if (strcmp (element_name, "interface") == 0)
     {
@@ -1116,13 +1119,23 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
                                   gchar       **requested_objs,
                                   GError      **error)
 {
+  const gchar* domain;
   ParserData *data;
   GSList *l;
   
+  /* Store the original domain so that interface domain attribute can be
+   * applied for the builder and the original domain can be restored after
+   * parsing has finished. This allows subparsers to translate elements with
+   * gtk_builder_get_translation_domain() without breaking the ABI or API
+   */
+  domain = gtk_builder_get_translation_domain (builder);
+
   data = g_new0 (ParserData, 1);
   data->builder = builder;
   data->filename = filename;
-  data->domain = g_strdup (gtk_builder_get_translation_domain (builder));
+  data->domain = g_strdup (domain);
+  data->object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
+					    (GDestroyNotify)g_free, NULL);
 
   data->requested_objects = NULL;
   if (requested_objs)
@@ -1182,6 +1195,10 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   g_slist_foreach (data->requested_objects, (GFunc) g_free, NULL);
   g_slist_free (data->requested_objects);
   g_free (data->domain);
+  g_hash_table_destroy (data->object_ids);
   g_markup_parse_context_free (data->ctx);
   g_free (data);
+
+  /* restore the original domain */
+  gtk_builder_set_translation_domain (builder, domain);
 }

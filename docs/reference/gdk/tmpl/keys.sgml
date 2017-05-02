@@ -11,8 +11,13 @@ They appear in the <structfield>keyval</structfield> field of the
 #GdkEventKey structure, which is passed to signal handlers for the
 "key-press-event" and "key-release-event" signals.
 The complete list of key values can be found in the <filename>&lt;gdk/gdkkeysyms.h&gt;</filename>
-header file. <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> is not included in <filename>&lt;gtk/gtk.h&gt;</filename>, 
+header file. <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> is not included in <filename>&lt;gdk/gdk.h&gt;</filename>, 
 it must be included independently, because the file is quite large.
+</para>
+<para>
+Key values are regularly updated from the upstream X.org X11 implementation,
+so new values are added regularly. They will be prefixed with GDK_ rather than
+XF86XK_ or XK_ (for older symbols).
 </para>
 <para>
 Key values can be converted into a string representation using
@@ -29,7 +34,7 @@ When it makes sense, key values can be converted to and from
 Unicode characters with gdk_keyval_to_unicode() and gdk_unicode_to_keyval().
 </para>
 
-<para>
+<para id="key-group-explanation">
 One #GdkKeymap object exists for each user display. gdk_keymap_get_default() 
 returns the #GdkKeymap for the default display; to obtain keymaps for other 
 displays, use gdk_keymap_get_for_display(). A keymap
@@ -83,6 +88,9 @@ gdk_keymap_translate_keyboard_state() just to get the keyval.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkKeymap ##### -->
 <para>
 A <structname>GdkKeymap</structname> defines the translation from keyboard state
@@ -108,6 +116,13 @@ in the keymap and see what keyval it corresponds to.
 
 @keymap: the object which received the signal.
 
+<!-- ##### SIGNAL GdkKeymap::state-changed ##### -->
+<para>
+
+</para>
+
+@gdkkeymap: the object which received the signal.
+
 <!-- ##### STRUCT GdkKeymapKey ##### -->
 <para>
 A <structname>GdkKeymapKey</structname> is a hardware key that can 
@@ -131,6 +146,7 @@ be mapped to a keyval.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -210,6 +226,34 @@ Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
 </para>
 
 @keymap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_get_caps_lock_state ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_keymap_add_virtual_modifiers ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@state: 
+
+
+<!-- ##### FUNCTION gdk_keymap_map_virtual_modifiers ##### -->
+<para>
+
+</para>
+
+@keymap: 
+@state: 
 @Returns: 
 
 

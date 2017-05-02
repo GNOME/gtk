@@ -205,6 +205,8 @@ gtk_print_job_init (GtkPrintJob *job)
   job->scale = 1.0;
   job->page_set = GTK_PAGE_SET_ALL;
   job->rotate_to_orientation = FALSE;
+  job->number_up = 1;
+  job->number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
 }
 
 
@@ -309,7 +311,7 @@ gtk_print_job_new (const gchar      *title,
  * 
  * Gets the #GtkPrintSettings of the print job.
  * 
- * Return value: the settings of @job
+ * Return value: (transfer none): the settings of @job
  *
  * Since: 2.10
  */
@@ -327,7 +329,7 @@ gtk_print_job_get_settings (GtkPrintJob *job)
  * 
  * Gets the #GtkPrinter of the print job.
  * 
- * Return value: the printer of @job
+ * Return value: (transfer none): the printer of @job
  *
  * Since: 2.10
  */
@@ -349,7 +351,7 @@ gtk_print_job_get_printer (GtkPrintJob *job)
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_job_get_title (GtkPrintJob *job)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
@@ -439,12 +441,12 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
 /**
  * gtk_print_job_get_surface:
  * @job: a #GtkPrintJob
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  * 
  * Gets a cairo surface onto which the pages of
  * the print job should be rendered.
  * 
- * Return value: the cairo surface of @job
+ * Return value: (transfer none): the cairo surface of @job
  *
  * Since: 2.10
  **/
@@ -453,7 +455,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
 			   GError      **error)
 {
   GtkPrintJobPrivate *priv;
-  gchar *filename;
+  gchar *filename = NULL;
   gdouble width, height;
   GtkPaperSize *paper_size;
   int fd;
@@ -585,6 +587,7 @@ gtk_print_job_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_TITLE:
+      g_free (priv->title);
       priv->title = g_value_dup_string (value);
       break;
     

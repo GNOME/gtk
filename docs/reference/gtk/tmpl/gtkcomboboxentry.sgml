@@ -61,6 +61,9 @@ child with name "entry".
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkComboBoxEntry ##### -->
 <para>
 
@@ -77,6 +80,7 @@ child with name "entry".
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -95,6 +99,7 @@ child with name "entry".
 
 </para>
 
+@void: 
 @Returns: 
 
 

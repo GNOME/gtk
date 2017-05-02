@@ -158,7 +158,7 @@ static GSList *status_windows = NULL;
 void
 gtk_im_context_xim_register_type (GTypeModule *type_module)
 {
-  static const GTypeInfo im_context_xim_info =
+  const GTypeInfo im_context_xim_info =
   {
     sizeof (GtkIMContextXIMClass),
     (GBaseInitFunc) NULL,
@@ -327,25 +327,6 @@ setup_im (GtkXIMInfo *info)
 		NULL);
 
   info->settings = gtk_settings_get_for_screen (info->screen);
-
-  if (!g_object_class_find_property (G_OBJECT_GET_CLASS (info->settings),
-				     "gtk-im-preedit-style"))
-    gtk_settings_install_property (g_param_spec_enum ("gtk-im-preedit-style",
-						      P_("IM Preedit style"),
-						      P_("How to draw the input method preedit string"),
-						      GTK_TYPE_IM_PREEDIT_STYLE,
-						      GTK_IM_PREEDIT_CALLBACK,
-						      G_PARAM_READWRITE));
-
-  if (!g_object_class_find_property (G_OBJECT_GET_CLASS (info->settings),
-				     "gtk-im-status-style"))
-    gtk_settings_install_property (g_param_spec_enum ("gtk-im-status-style",
-						      P_("IM Status style"),
-						      P_("How to draw the input method statusbar"),
-						      GTK_TYPE_IM_STATUS_STYLE,
-						      GTK_IM_STATUS_CALLBACK,
-						      G_PARAM_READWRITE));
-
   info->status_set = g_signal_connect_swapped (info->settings,
 					       "notify::gtk-im-status-style",
 					       G_CALLBACK (status_style_change),
@@ -495,7 +476,7 @@ get_im (GdkWindow *client_window,
 {
   GSList *tmp_list;
   GtkXIMInfo *info;
-  GdkScreen *screen = gdk_drawable_get_screen (client_window);
+  GdkScreen *screen = gdk_window_get_screen (client_window);
 
   info = NULL;
   tmp_list = open_ims;
@@ -716,7 +697,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   KeySym keysym;
   Status status;
   gboolean result = FALSE;
-  GdkWindow *root_window = gdk_screen_get_root_window (gdk_drawable_get_screen (event->window));
+  GdkWindow *root_window = gdk_screen_get_root_window (gdk_window_get_screen (event->window));
 
   XKeyPressedEvent xevent;
 
@@ -846,7 +827,7 @@ gtk_im_context_xim_set_cursor_location (GtkIMContext *context,
     return;
 
   spot.x = area->x;
-  spot.y = area->y;
+  spot.y = area->y + area->height;
 
   preedit_attr = XVaCreateNestedList (0,
 				      XNSpotLocation, &spot,
@@ -1547,7 +1528,7 @@ claim_status_window (GtkIMContextXIM *context_xim)
   if (!context_xim->status_window && context_xim->client_widget)
     {
       GtkWidget *toplevel = gtk_widget_get_toplevel (context_xim->client_widget);
-      if (toplevel && GTK_WIDGET_TOPLEVEL (toplevel))
+      if (toplevel && gtk_widget_is_toplevel (toplevel))
 	{
 	  StatusWindow *status_window = status_window_get (toplevel);
 
@@ -1581,7 +1562,7 @@ update_in_toplevel (GtkIMContextXIM *context_xim)
     {
       GtkWidget *toplevel = gtk_widget_get_toplevel (context_xim->client_widget);
       
-      context_xim->in_toplevel = (toplevel && GTK_WIDGET_TOPLEVEL (toplevel));
+      context_xim->in_toplevel = (toplevel && gtk_widget_is_toplevel (toplevel));
     }
   else
     context_xim->in_toplevel = FALSE;
@@ -1772,16 +1753,21 @@ static gboolean
 on_status_window_expose_event (GtkWidget      *widget,
 			       GdkEventExpose *event)
 {
-  gdk_draw_rectangle (widget->window,
-		      widget->style->base_gc [GTK_STATE_NORMAL],
-		      TRUE,
-		      0, 0,
-		      widget->allocation.width, widget->allocation.height);
-  gdk_draw_rectangle (widget->window,
-		      widget->style->text_gc [GTK_STATE_NORMAL],
-		      FALSE,
-		      0, 0,
-		      widget->allocation.width - 1, widget->allocation.height - 1);
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (widget->window);
+
+  gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_NORMAL]);
+  cairo_rectangle (cr,
+                   0, 0,
+                   widget->allocation.width, widget->allocation.height);
+  cairo_fill (cr);
+
+  gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_NORMAL]);
+  cairo_rectangle (cr, 
+                   0, 0,
+                   widget->allocation.width - 1, widget->allocation.height - 1);
+  cairo_fill (cr);
 
   return FALSE;
 }

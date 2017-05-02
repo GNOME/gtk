@@ -23,8 +23,9 @@ import getopt
 # We grab files off the web, left and right.
 URL_COMPOSE = 'http://gitweb.freedesktop.org/?p=xorg/lib/libX11.git;a=blob_plain;f=nls/en_US.UTF-8/Compose.pre'
 URL_KEYSYMSTXT = "http://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt"
-URL_GDKKEYSYMSH = "http://svn.gnome.org/svn/gtk%2B/trunk/gdk/gdkkeysyms.h"
-URL_UNICODEDATATXT = 'http://www.unicode.org/Public/5.0.0/ucd/UnicodeData.txt'
+URL_GDKKEYSYMSH = "http://git.gnome.org/browse/gtk%2B/plain/gdk/gdkkeysyms.h"
+URL_UNICODEDATATXT = 'http://www.unicode.org/Public/5.2.0/ucd/UnicodeData.txt'
+FILENAME_COMPOSE_SUPPLEMENTARY = 'gtk-compose-lookaside.txt'
 
 # We currently support keysyms of size 2; once upstream xorg gets sorted, 
 # we might produce some tables with size 2 and some with size 4.
@@ -265,8 +266,8 @@ def process_gdkkeysymsh():
 			% {'linenum': linenum_gdkkeysymsh, 'filename': filename_gdkkeysymsh, 'line': line}
 			print "Was expecting a keysym starting with GDK_"
 			sys.exit(-1)
-		if components[2][:2] == '0x' and match('[0-9a-fA-F]+$', components[2][2:]):
-			unival = atoi(components[2][2:], 16)
+		if match('^0x[0-9a-fA-F]+$', components[2]):
+			unival = long(components[2][2:], 16)
 			if unival == 0:
 				continue
 			keysymdb[components[1][4:]] = unival
@@ -279,8 +280,16 @@ def process_gdkkeysymsh():
 
 	""" Patch up the keysymdb with some of our own stuff """
 
-	""" This is for a missing keysym from the currently upstread file """
+	""" This is for a missing keysym from the currently upstream file """
 	keysymdb['dead_stroke'] = 0x338
+
+	""" This is for a missing keysym from the currently upstream file """
+	###keysymdb['dead_belowring'] = 0x323
+	###keysymdb['dead_belowmacron'] = 0x331
+	###keysymdb['dead_belowcircumflex'] = 0x32d
+	###keysymdb['dead_belowtilde'] = 0x330
+	###keysymdb['dead_belowbreve'] = 0x32e
+	###keysymdb['dead_belowdiaeresis'] = 0x324
 
 	""" This is^Wwas preferential treatment for Greek """
 	# keysymdb['dead_tilde'] = 0x342  		
@@ -319,14 +328,21 @@ def process_keysymstxt():
 			% {'linenum': linenum_keysymstxt, 'filename': filename_keysymstxt, 'line': line}
 			print "Was expecting 5 items in the line"
 			sys.exit(-1)
-		if components[1][0] == 'U' and match('[0-9a-fA-F]+$', components[1][1:]):
-			unival = atoi(components[1][1:], 16)
+		if match('^U[0-9a-fA-F]+$', components[1]):
+			unival = long(components[1][1:], 16)
 		if unival == 0:
 			continue
 		keysymdb[components[4]] = unival
 	keysymstxt.close()
 
 	""" Patch up the keysymdb with some of our own stuff """
+	""" This is for a missing keysym from the currently upstream file """
+	###keysymdb['dead_belowring'] = 0x323
+	###keysymdb['dead_belowmacron'] = 0x331
+	###keysymdb['dead_belowcircumflex'] = 0x32d
+	###keysymdb['dead_belowtilde'] = 0x330
+	###keysymdb['dead_belowbreve'] = 0x32e
+	###keysymdb['dead_belowdiaeresis'] = 0x324
 
 	""" This is preferential treatment for Greek """
 	""" => we get more savings if used for Greek """
@@ -337,7 +353,7 @@ def process_keysymstxt():
 	""" This is for a missing keysym from Markus Kuhn's db """
 	keysymdb['dead_stroke'] = 0x338
 	""" This is for a missing keysym from Markus Kuhn's db """
-	# keysymdb['Oslash'] = 0x0d8		
+	keysymdb['Oslash'] = 0x0d8		
 
 	""" This is for a missing (recently added) keysym """
 	keysymdb['dead_psili'] = 0x313		
@@ -346,6 +362,19 @@ def process_keysymstxt():
 
 	""" Allows to import Multi_key sequences """
 	keysymdb['Multi_key'] = 0xff20
+
+        keysymdb['zerosubscript'] = 0x2080
+        keysymdb['onesubscript'] = 0x2081
+        keysymdb['twosubscript'] = 0x2082
+        keysymdb['threesubscript'] = 0x2083
+        keysymdb['foursubscript'] = 0x2084
+        keysymdb['fivesubscript'] = 0x2085
+        keysymdb['sixsubscript'] = 0x2086
+        keysymdb['sevensubscript'] = 0x2087
+        keysymdb['eightsubscript'] = 0x2088
+        keysymdb['ninesubscript'] = 0x2089
+        keysymdb['dead_doublegrave'] = 0x030F
+        keysymdb['dead_invertedbreve'] = 0x0311
 
 	return keysymdb
 
@@ -362,8 +391,9 @@ def keysymvalue(keysym, file = "n/a", linenum = 0):
        	elif keysym[:2] == '0x' and match('[0-9a-fA-F]+$', keysym[2:]):
 		return atoi(keysym[2:], 16)
 	else:
-        	print 'UNKNOWN{%(keysym)s}' % { "keysym": keysym }
-               	sys.exit(-1)
+        	print 'keysymvalue: UNKNOWN{%(keysym)s}' % { "keysym": keysym }
+               	#return -1
+		sys.exit(-1)
 
 def keysymunicodevalue(keysym, file = "n/a", linenum = 0):
 	""" Extracts a value from the keysym """
@@ -378,16 +408,19 @@ def keysymunicodevalue(keysym, file = "n/a", linenum = 0):
        	elif keysym[:2] == '0x' and match('[0-9a-fA-F]+$', keysym[2:]):
 		return atoi(keysym[2:], 16)
 	else:
-        	print 'UNKNOWN{%(keysym)s}' % { "keysym": keysym }
+        	print 'keysymunicodevalue: UNKNOWN{%(keysym)s}' % { "keysym": keysym }
                	sys.exit(-1)
 
 def rename_combining(seq):
 	filtered_sequence = []
 	for ks in seq:
 		if findall('^combining_', ks):
-			filtered_sequence.append(sub('^combining_', 'dead_', ks))
-		else:
-			filtered_sequence.append(ks)
+			ks = sub('^combining_', 'dead_', ks)
+                if ks == 'dead_double_grave':
+                        ks = 'dead_doublegrave'
+                if ks == 'dead_inverted_breve':
+                        ks = 'dead_invertedbreve'
+		filtered_sequence.append(ks)
 	return filtered_sequence
 
 
@@ -405,17 +438,67 @@ except:
 	print "Unexpected error: ", sys.exc_info()[0]
 	sys.exit(-1)
 
+""" Look if there is a lookaside (supplementary) compose file in the current
+    directory, and if so, open, then merge with upstream Compose file.
+"""
+xorg_compose_sequences_raw = []
+for seq in composefile.readlines():
+        xorg_compose_sequences_raw.append(seq)
+
+try:
+        composefile_lookaside = open(FILENAME_COMPOSE_SUPPLEMENTARY, 'r')
+        for seq in composefile_lookaside.readlines():
+                xorg_compose_sequences_raw.append(seq)
+except IOError, (errno, strerror):
+        if opt_verbose:
+                print "I/O error(%s): %s" % (errno, strerror)
+                print "Did not find lookaside compose file. Continuing..."
+except:
+        print "Unexpected error: ", sys.exc_info()[0]
+        sys.exit(-1)
+
 """ Parse the compose file in  xorg_compose_sequences"""
 xorg_compose_sequences = []
 xorg_compose_sequences_algorithmic = []
 linenum_compose = 0
-for line in composefile.readlines():
+comment_nest_depth = 0
+for line in xorg_compose_sequences_raw:
 	linenum_compose += 1
 	line = line.strip()
-	if line is "" or match("^XCOMM", line) or match("^#", line):
+	if match("^XCOMM", line) or match("^#", line):
 		continue
 
-	line = line[:-1]
+	line = sub(r"\/\*([^\*]*|[\*][^/])\*\/", "", line)
+
+	comment_start = line.find("/*")
+
+	if comment_start >= 0:
+		if comment_nest_depth == 0:
+			line = line[:comment_start]
+		else:
+			line = ""
+
+		comment_nest_depth += 1
+	else:
+		comment_end = line.find("*/")
+
+		if comment_end >= 0:
+			comment_nest_depth -= 1
+
+		if comment_nest_depth < 0:
+			print "Invalid comment %(linenum_compose)d in %(filename)s: \
+			Closing '*/' without opening '/*'" % { "linenum_compose": linenum_compose, "filename": filename_compose }
+			exit(-1)
+
+		if comment_nest_depth > 0:
+			line = ""
+		else:
+			line = line[comment_end + 2:]
+
+	if line is "":
+		continue
+
+	#line = line[:-1]
 	components = split(':', line)
 	if len(components) != 2:
 		print "Invalid line %(linenum_compose)d in %(filename)s: No sequence\
@@ -428,13 +511,21 @@ for line in composefile.readlines():
 	values = split('\s+', val)
 	unichar_temp = split('"', values[0])
 	unichar = unichar_temp[1]
+	if len(values) == 1:
+		continue
 	codepointstr = values[1]
+	if values[1] == '#':
+		# No codepoints that are >1 characters yet.
+		continue
 	if raw_sequence[0][0] == 'U' and match('[0-9a-fA-F]+$', raw_sequence[0][1:]):
 		raw_sequence[0] = '0x' + raw_sequence[0][1:]
-	if codepointstr[0] == 'U' and match('[0-9a-fA-F]+$', codepointstr[1:]):
-		codepoint = atoi(codepointstr[1:], 16)
-	elif keysymdatabase.has_key(codepointstr):
-		codepoint = keysymdatabase[codepointstr]
+	if  match('^U[0-9a-fA-F]+$', codepointstr):
+		codepoint = long(codepointstr[1:], 16)
+	elif keysymunicodedatabase.has_key(codepointstr):
+		#if keysymdatabase[codepointstr] != keysymunicodedatabase[codepointstr]:
+			#print "DIFFERENCE: 0x%(a)X 0x%(b)X" % { "a": keysymdatabase[codepointstr], "b": keysymunicodedatabase[codepointstr]},
+			#print raw_sequence, codepointstr
+		codepoint = keysymunicodedatabase[codepointstr]
 	else:
 		print
 		print "Invalid codepoint at line %(linenum_compose)d in %(filename)s:\
@@ -448,13 +539,30 @@ for line in composefile.readlines():
 			if opt_plane1:
 				print sequence
 			break
+		if keysymvalue(i) < 0:
+			reject_this = True
+			break
 	if reject_this:
 		continue
-	if "U0313" in sequence or "U0314" in sequence or "0x0313" in sequence or "0x0314" in sequence:
+	if "U0342" in sequence or \
+		"U0313" in sequence or \
+		"U0314" in sequence or \
+		"0x0313" in sequence or \
+		"0x0342" in sequence or \
+		"0x0314" in sequence:
 		continue
-	for i in range(len(sequence)):
-		if sequence[i] == "0x0342":
-			sequence[i] = "dead_tilde"
+	if "dead_belowring" in sequence or\
+                "dead_currency" in sequence or\
+		"dead_belowcomma" in sequence or\
+		"dead_belowmacron" in sequence or\
+		"dead_belowtilde" in sequence or\
+		"dead_belowbreve" in sequence or\
+		"dead_belowdiaeresis" in sequence or\
+		"dead_belowcircumflex" in sequence:
+		continue
+	#for i in range(len(sequence)):
+	#	if sequence[i] == "0x0342":
+	#		sequence[i] = "dead_tilde"
 	if "Multi_key" not in sequence:
 		""" Ignore for now >0xFFFF keysyms """
 		if codepoint < 0xFFFF:
@@ -473,7 +581,7 @@ for line in composefile.readlines():
 					    because of lack of dead_perispomeni (i.e. conflict)
 					"""
 					bc = basechar
-					if sequence[-1] == "dead_tilde" and (bc >= 0x370 and bc <= 0x3ff) or (bc >= 0x1f00 and bc <= 0x1fff):
+					"""if sequence[-1] == "dead_tilde" and (bc >= 0x370 and bc <= 0x3ff) or (bc >= 0x1f00 and bc <= 0x1fff):
 						skipping_this = True
 						break
 					if sequence[-1] == "dead_horn" and (bc >= 0x370 and bc <= 0x3ff) or (bc >= 0x1f00 and bc <= 0x1fff):
@@ -486,6 +594,7 @@ for line in composefile.readlines():
 						sequence[i] = "dead_horn"
 					if sequence[-1] == "dead_dasia":
 						sequence[-1] = "dead_ogonek"
+					"""
 					unisequence.append(unichr(keysymunicodevalue(sequence.pop(), filename_compose, linenum_compose)))
 					
 				if skipping_this:

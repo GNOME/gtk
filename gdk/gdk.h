@@ -77,10 +77,10 @@ void gdk_pre_parse_libgtk_only          (void);
 
 #ifndef GDK_DISABLE_DEPRECATED
 void  	  gdk_exit		   	(gint	    	 error_code);
-#endif /* GDK_DISABLE_DEPRECATED */
 gchar*	  gdk_set_locale	   	(void);
+#endif /* GDK_DISABLE_DEPRECATED */
 
-G_CONST_RETURN char *gdk_get_program_class (void);
+const char *         gdk_get_program_class (void);
 void                 gdk_set_program_class (const char *program_class);
 
 /* Push and pop error handlers for X errors
@@ -94,17 +94,14 @@ gboolean  gdk_get_use_xshm		(void);
 #endif /* GDK_DISABLE_DEPRECATED */
 
 gchar*	                  gdk_get_display		(void);
-G_CONST_RETURN gchar*	  gdk_get_display_arg_name	(void);
+const gchar*	          gdk_get_display_arg_name	(void);
 
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-/* Used by gtk_input_add_full () */
+#ifndef GDK_DISABLE_DEPRECATED
 gint gdk_input_add_full	  (gint		     source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,
 			   gpointer	     data,
 			   GDestroyNotify    destroy);
-#endif /* !GDK_DISABLE_DEPRECATED || GTK_COMPILATION */
-#ifndef GDK_DISABLE_DEPRECATED
 gint gdk_input_add	  (gint		     source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,

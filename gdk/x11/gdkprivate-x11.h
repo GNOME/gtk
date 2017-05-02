@@ -36,10 +36,7 @@
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkpixmap-x11.h>
 #include <gdk/x11/gdkdisplay-x11.h>
-
-#include "gdkinternals.h"
-
-#include "config.h"
+#include <gdk/gdkinternals.h>
 
 #define GDK_TYPE_GC_X11              (_gdk_gc_x11_get_type ())
 #define GDK_GC_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_X11, GdkGCX11))
@@ -118,7 +115,6 @@ GdkImage *_gdk_x11_copy_to_image       (GdkDrawable *drawable,
 Pixmap   _gdk_x11_image_get_shm_pixmap (GdkImage    *image);
 
 /* Routines from gdkgeometry-x11.c */
-void _gdk_window_init_position     (GdkWindow     *window);
 void _gdk_window_move_resize_child (GdkWindow     *window,
                                     gint           x,
                                     gint           y,
@@ -128,16 +124,20 @@ void _gdk_window_process_expose    (GdkWindow     *window,
                                     gulong         serial,
                                     GdkRectangle  *area);
 
-void _gdk_x11_window_scroll        (GdkWindow       *window,
-                                    gint             dx,
-                                    gint             dy);
-void _gdk_x11_window_move_region   (GdkWindow       *window,
-                                    const GdkRegion *region,
-                                    gint             dx,
-                                    gint             dy);
+gboolean _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
+					    GdkRegion *area);
+void     _gdk_x11_window_queue_translation (GdkWindow *window,
+					    GdkGC     *gc,
+					    GdkRegion *area,
+					    gint       dx,
+					    gint       dy);
 
 void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
+
+GdkRegion* _xwindow_get_shape              (Display *xdisplay,
+                                            Window window,
+                                            gint shape_type);
 
 void     _gdk_region_get_xrectangles       (const GdkRegion      *region,
                                             gint                  x_offset,
@@ -154,8 +154,8 @@ void _gdk_keymap_state_changed    (GdkDisplay      *display,
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
 gint _gdk_x11_get_group_for_state (GdkDisplay      *display,
 				   GdkModifierType  state);
-void _gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-					GdkModifierType *modifiers);
+void _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
+                                               GdkModifierType *modifiers);
 gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
 					guint            keycode);
 
@@ -166,8 +166,6 @@ void _gdk_x11_initialize_locale (void);
 void _gdk_xgrab_check_unmap        (GdkWindow *window,
 				    gulong     serial);
 void _gdk_xgrab_check_destroy      (GdkWindow *window);
-void _gdk_xgrab_check_button_event (GdkWindow *window,
-				    XEvent    *xevent);
 
 gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
 					  Window      xroot_window);
@@ -191,6 +189,7 @@ PangoRenderer *_gdk_x11_renderer_get (GdkDrawable *drawable,
 				      GdkGC       *gc);
 
 void _gdk_x11_cursor_update_theme (GdkCursor *cursor);
+void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 
 gboolean _gdk_x11_get_xft_setting (GdkScreen   *screen,
 				   const gchar *name,
@@ -215,5 +214,6 @@ extern gboolean          _gdk_synchronize;
 #define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->display)
 #define GDK_WINDOW_XROOTWIN(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xroot_window)
 #define GDK_GC_DISPLAY(gc)            (GDK_SCREEN_DISPLAY (GDK_GC_X11(gc)->screen))
+#define GDK_WINDOW_IS_X11(win)        (GDK_IS_WINDOW_IMPL_X11 (((GdkWindowObject *)win)->impl))
 
 #endif /* __GDK_PRIVATE_X11_H__ */

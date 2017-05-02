@@ -28,6 +28,7 @@
 #include "gtkrecentmanager.h"
 #include "gtksearchengine.h"
 #include "gtkquery.h"
+#include "gtksizegroup.h"
 #include "gtktreemodelsort.h"
 #include "gtktreestore.h"
 #include "gtktreeview.h"
@@ -84,23 +85,13 @@ struct _GtkFileChooserIface
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
-gboolean       _gtk_file_chooser_set_current_folder_file (GtkFileChooser    *chooser,
-							  GFile             *file,
-							  GError           **error);
-GFile *        _gtk_file_chooser_get_current_folder_file (GtkFileChooser    *chooser);
-gboolean       _gtk_file_chooser_select_file             (GtkFileChooser    *chooser,
-							  GFile             *file,
-							  GError           **error);
-void           _gtk_file_chooser_unselect_file           (GtkFileChooser    *chooser,
-							  GFile             *file);
-GSList *       _gtk_file_chooser_get_files               (GtkFileChooser    *chooser);
-GFile *        _gtk_file_chooser_get_preview_file        (GtkFileChooser    *chooser);
 gboolean       _gtk_file_chooser_add_shortcut_folder     (GtkFileChooser    *chooser,
 							  GFile             *folder,
 							  GError           **error);
 gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *chooser,
 							  GFile             *folder,
 							  GError           **error);
+GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
 
 /* GtkFileChooserDialog private */
 
@@ -136,8 +127,7 @@ typedef enum {
 
 typedef enum {
   RELOAD_EMPTY,			/* No folder has been set */
-  RELOAD_HAS_FOLDER,		/* We have a folder, although it may not be completely loaded yet; no need to reload */
-  RELOAD_WAS_UNMAPPED		/* We had a folder but got unmapped; reload is needed */
+  RELOAD_HAS_FOLDER		/* We have a folder, although it may not be completely loaded yet; no need to reload */
 } ReloadState;
 
 typedef enum {
@@ -151,6 +141,11 @@ typedef enum {
   OPERATION_MODE_RECENT
 } OperationMode;
 
+typedef enum {
+  STARTUP_MODE_RECENT,
+  STARTUP_MODE_CWD
+} StartupMode;
+
 struct _GtkFileChooserDefault
 {
   GtkVBox parent_instance;
@@ -161,13 +156,13 @@ struct _GtkFileChooserDefault
 
   /* Save mode widgets */
   GtkWidget *save_widgets;
+  GtkWidget *save_widgets_table;
 
   GtkWidget *save_folder_label;
-  GtkWidget *save_folder_combo;
-  GtkWidget *save_expander;
 
   /* The file browsing widgets */
-  GtkWidget *browse_widgets;
+  GtkWidget *browse_widgets_box;
+  GtkWidget *browse_header_box;
   GtkWidget *browse_shortcuts_tree_view;
   GtkWidget *browse_shortcuts_add_button;
   GtkWidget *browse_shortcuts_remove_button;
@@ -178,28 +173,35 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_files_popup_menu;
   GtkWidget *browse_files_popup_menu_add_shortcut_item;
   GtkWidget *browse_files_popup_menu_hidden_files_item;
+  GtkWidget *browse_files_popup_menu_size_column_item;
   GtkWidget *browse_new_folder_button;
   GtkWidget *browse_path_bar_hbox;
+  GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
+  GtkWidget *browse_special_mode_icon;
+  GtkWidget *browse_special_mode_label;
+  GtkWidget *browse_select_a_folder_info_bar;
+  GtkWidget *browse_select_a_folder_label;
+  GtkWidget *browse_select_a_folder_icon;
+
+  gulong toplevel_unmapped_id;
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
+
+  StartupMode startup_mode;
 
   /* OPERATION_MODE_SEARCH */
   GtkWidget *search_hbox;
   GtkWidget *search_entry;
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
-  GtkListStore *search_model;
-  GtkTreeModelFilter *search_model_filter;
-  GtkTreeModelSort *search_model_sort;
+  GtkFileSystemModel *search_model;
 
   /* OPERATION_MODE_RECENT */
   GtkRecentManager *recent_manager;
-  GtkListStore *recent_model;
+  GtkFileSystemModel *recent_model;
   guint load_recent_id;
-  GtkTreeModelFilter *recent_model_filter;
-  GtkTreeModelSort *recent_model_sort;
 
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
@@ -222,24 +224,15 @@ struct _GtkFileChooserDefault
    */
   GtkTreeModel *shortcuts_pane_filter_model;
   
-  /* Filter for the "Save in folder" combo.  We filter out the Search row and
-   * its separator.
-   */
-  GtkTreeModel *shortcuts_combo_filter_model;
-
-  GtkTreeModelSort *sort_model;
-
   /* Handles */
   GSList *loading_shortcuts;
   GSList *reload_icon_cancellables;
   GCancellable *file_list_drag_data_received_cancellable;
   GCancellable *update_current_folder_cancellable;
-  GCancellable *show_and_select_files_cancellable;
   GCancellable *should_respond_get_info_cancellable;
   GCancellable *file_exists_get_info_cancellable;
   GCancellable *update_from_entry_cancellable;
   GCancellable *shortcuts_activate_iter_cancellable;
-  GSList *pending_cancellables;
 
   LoadState load_state;
   ReloadState reload_state;
@@ -267,6 +260,7 @@ struct _GtkFileChooserDefault
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
   GtkTreeViewColumn *list_mtime_column;
+  GtkTreeViewColumn *list_size_column;
 
   GSource *edited_idle;
   char *edited_new_text;
@@ -274,16 +268,18 @@ struct _GtkFileChooserDefault
   gulong settings_signal_id;
   int icon_size;
 
+  GSource *focus_entry_idle;
+
   gulong toplevel_set_focus_id;
   GtkWidget *toplevel_last_focus_widget;
+
+  gint sort_column;
+  GtkSortType sort_order;
 
 #if 0
   GdkDragContext *shortcuts_drag_context;
   GSource *shortcuts_drag_outside_idle;
 #endif
-
-  gint default_width;
-  gint default_height;
 
   /* Flags */
 
@@ -296,72 +292,16 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
-  guint expand_folders : 1;
+  guint has_cwd : 1;
   guint has_home : 1;
   guint has_desktop : 1;
   guint has_search : 1;
-  guint has_recent : 1;
+  guint show_size_column : 1;
+  guint create_folders : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;
 #endif
-};
-
-
-/* GtkFileSystemModel private */
-
-typedef struct _FileModelNode           FileModelNode;
-
-struct _GtkFileSystemModel
-{
-  GObject parent_instance;
-
-  GtkFileSystem  *file_system;
-  gchar          *attributes;
-  FileModelNode  *roots;
-  GtkFolder      *root_folder;
-  GFile          *root_file;
-
-  GtkFileSystemModelFilter filter_func;
-  gpointer filter_data;
-
-  GSList *idle_clears;
-  GSource *idle_clear_source;
-
-  gushort max_depth;
-
-  GSList *pending_cancellables;
-
-  guint show_hidden : 1;
-  guint show_folders : 1;
-  guint show_files : 1;
-  guint folders_only : 1;
-  guint has_editable : 1;
-};
-
-struct _FileModelNode
-{
-  GFile *file;
-  FileModelNode *next;
-
-  GFileInfo *info;
-  GtkFolder *folder;
-
-  FileModelNode *children;
-  FileModelNode *parent;
-  GtkFileSystemModel *model;
-
-  guint ref_count;
-  guint n_referenced_children;
-
-  gushort depth;
-
-  guint has_dummy : 1;
-  guint is_dummy : 1;
-  guint is_visible : 1;
-  guint loaded : 1;
-  guint idle_clear : 1;
-  guint load_pending : 1;
 };
 
 

@@ -27,12 +27,12 @@ static void      gail_image_class_init         (GailImageClass *klass);
 static void      gail_image_init               (GailImage      *image);
 static void      gail_image_initialize         (AtkObject       *accessible,
                                                 gpointer        data);
-static G_CONST_RETURN gchar* gail_image_get_name  (AtkObject     *accessible);
+static const gchar* gail_image_get_name  (AtkObject     *accessible);
 
 
 static void      atk_image_interface_init      (AtkImageIface  *iface);
 
-static G_CONST_RETURN gchar *
+static const gchar *
                  gail_image_get_image_description (AtkImage     *image);
 static void	 gail_image_get_image_position    (AtkImage     *image,
                                                    gint         *x,
@@ -118,7 +118,7 @@ elide_underscores (const gchar *original)
   return result;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_image_get_name (AtkObject *accessible)
 {
   GtkWidget* widget;
@@ -165,7 +165,7 @@ atk_image_interface_init (AtkImageIface *iface)
   iface->set_image_description = gail_image_set_image_description;
 }
 
-static G_CONST_RETURN gchar * 
+static const gchar *
 gail_image_get_image_description (AtkImage     *image)
 {
   GailImage* aimage = GAIL_IMAGE (image);
@@ -209,7 +209,7 @@ gail_image_get_image_size (AtkImage *image,
     {	
       GdkPixmap *pixmap;
       gtk_image_get_pixmap(gtk_image, &pixmap, NULL);
-      gdk_drawable_get_size (pixmap, width, height);
+      gdk_pixmap_get_size (pixmap, width, height);
       break;
     }
     case GTK_IMAGE_PIXBUF:
@@ -229,20 +229,16 @@ gail_image_get_image_size (AtkImage *image,
       break;
     }
     case GTK_IMAGE_STOCK:
-    {
-      GtkIconSize size;
-      GtkSettings *settings;
-      settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
-      gtk_image_get_stock(gtk_image, NULL, &size);
-      gtk_icon_size_lookup_for_settings (settings, size, width, height);
-      break;
-    }
     case GTK_IMAGE_ICON_SET:
+    case GTK_IMAGE_ICON_NAME:
+    case GTK_IMAGE_GICON:
     {
       GtkIconSize size;
       GtkSettings *settings;
+
       settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
-      gtk_image_get_icon_set(gtk_image, NULL, &size);
+
+      g_object_get (gtk_image, "icon-size", &size, NULL);
       gtk_icon_size_lookup_for_settings (settings, size, width, height);
       break;
     }

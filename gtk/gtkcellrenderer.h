@@ -17,12 +17,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_CELL_RENDERER_H__
+#define __GTK_CELL_RENDERER_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_CELL_RENDERER_H__
-#define __GTK_CELL_RENDERER_H__
 
 #include <gtk/gtkcelleditable.h>
 
@@ -152,12 +152,35 @@ GtkCellEditable *gtk_cell_renderer_start_editing  (GtkCellRenderer      *cell,
 						   const GdkRectangle   *background_area,
 						   const GdkRectangle   *cell_area,
 						   GtkCellRendererState  flags);
+
 void             gtk_cell_renderer_set_fixed_size (GtkCellRenderer      *cell,
 						   gint                  width,
 						   gint                  height);
 void             gtk_cell_renderer_get_fixed_size (GtkCellRenderer      *cell,
 						   gint                 *width,
 						   gint                 *height);
+
+void             gtk_cell_renderer_set_alignment  (GtkCellRenderer      *cell,
+                                                   gfloat                xalign,
+                                                   gfloat                yalign);
+void             gtk_cell_renderer_get_alignment  (GtkCellRenderer      *cell,
+                                                   gfloat               *xalign,
+                                                   gfloat               *yalign);
+
+void             gtk_cell_renderer_set_padding    (GtkCellRenderer      *cell,
+                                                   gint                  xpad,
+                                                   gint                  ypad);
+void             gtk_cell_renderer_get_padding    (GtkCellRenderer      *cell,
+                                                   gint                 *xpad,
+                                                   gint                 *ypad);
+
+void             gtk_cell_renderer_set_visible    (GtkCellRenderer      *cell,
+                                                   gboolean              visible);
+gboolean         gtk_cell_renderer_get_visible    (GtkCellRenderer      *cell);
+
+void             gtk_cell_renderer_set_sensitive  (GtkCellRenderer      *cell,
+                                                   gboolean              sensitive);
+gboolean         gtk_cell_renderer_get_sensitive  (GtkCellRenderer      *cell);
 
 /* For use by cell renderer implementations only */
 #ifndef GTK_DISABLE_DEPRECATED

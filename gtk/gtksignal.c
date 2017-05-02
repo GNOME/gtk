@@ -34,12 +34,12 @@
 guint
 gtk_signal_newv (const gchar         *name,
 		 GtkSignalRunType     signal_flags,
-		 GtkType              object_type,
+		 GType                object_type,
 		 guint                function_offset,
-		 GtkSignalMarshaller  marshaller,
-		 GtkType              return_val,
+		 GSignalCMarshaller   marshaller,
+		 GType                return_val,
 		 guint                n_params,
-		 GtkType             *params)
+		 GType               *params)
 {
   GClosure *closure;
   
@@ -54,14 +54,14 @@ gtk_signal_newv (const gchar         *name,
 guint
 gtk_signal_new (const gchar         *name,
 		GtkSignalRunType     signal_flags,
-		GtkType              object_type,
+		GType                object_type,
 		guint                function_offset,
-		GtkSignalMarshaller  marshaller,
-		GtkType              return_val,
+		GSignalCMarshaller   marshaller,
+		GType                return_val,
 		guint                n_params,
 		...)
 {
-  GtkType *params;
+  GType *params;
   guint signal_id;
   
   if (n_params)
@@ -69,10 +69,10 @@ gtk_signal_new (const gchar         *name,
       va_list args;
       guint i;
       
-      params = g_new (GtkType, n_params);
+      params = g_new (GType, n_params);
       va_start (args, n_params);
       for (i = 0; i < n_params; i++)
-	params[i] = va_arg (args, GtkType);
+	params[i] = va_arg (args, GType);
       va_end (args);
     }
   else
@@ -102,7 +102,7 @@ gtk_signal_emit_stop_by_name (GtkObject   *object,
 void
 gtk_signal_connect_object_while_alive (GtkObject    *object,
 				       const gchar  *name,
-				       GtkSignalFunc func,
+				       GCallback     func,
 				       GtkObject    *alive_object)
 {
   g_return_if_fail (GTK_IS_OBJECT (object));
@@ -116,7 +116,7 @@ gtk_signal_connect_object_while_alive (GtkObject    *object,
 void
 gtk_signal_connect_while_alive (GtkObject    *object,
 				const gchar  *name,
-				GtkSignalFunc func,
+				GCallback     func,
 				gpointer      func_data,
 				GtkObject    *alive_object)
 {
@@ -135,7 +135,7 @@ gtk_signal_connect_while_alive (GtkObject    *object,
 gulong
 gtk_signal_connect_full (GtkObject           *object,
 			 const gchar         *name,
-			 GtkSignalFunc        func,
+			 GCallback            func,
 			 GtkCallbackMarshal   unsupported,
 			 gpointer             data,
 			 GDestroyNotify       destroy_func,
@@ -157,7 +157,7 @@ gtk_signal_connect_full (GtkObject           *object,
 
 void
 gtk_signal_compat_matched (GtkObject       *object,
-			   GtkSignalFunc    func,
+			   GCallback        func,
 			   gpointer         data,
 			   GSignalMatchType match,
 			   guint            action)

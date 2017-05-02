@@ -20,8 +20,12 @@
 #include "config.h"
 
 #include <string.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+
 #include "gailoptionmenu.h"
 
 static void                  gail_option_menu_class_init       (GailOptionMenuClass *klass);
@@ -46,9 +50,9 @@ static gboolean              gail_option_menu_do_action        (AtkAction       
                                                                 gint            i);
 static gboolean              idle_do_action                    (gpointer        data);
 static gint                  gail_option_menu_get_n_actions    (AtkAction       *action);
-static G_CONST_RETURN gchar* gail_option_menu_get_description  (AtkAction       *action,
+static const gchar*          gail_option_menu_get_description  (AtkAction       *action,
                                                                 gint            i);
-static G_CONST_RETURN gchar* gail_option_menu_action_get_name  (AtkAction       *action,
+static const gchar*          gail_option_menu_action_get_name  (AtkAction       *action,
                                                                 gint            i);
 static gboolean              gail_option_menu_set_description  (AtkAction       *action,
                                                                 gint            i,
@@ -208,7 +212,7 @@ gail_option_menu_do_action (AtkAction *action,
      */
     return FALSE;
 
-  if (!GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+  if (!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
   switch (i)
@@ -239,13 +243,13 @@ idle_do_action (gpointer data)
 
   widget = GTK_ACCESSIBLE (gail_button)->widget;
   if (widget == NULL /* State is defunct */ ||
-      !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+      !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
   button = GTK_BUTTON (widget); 
 
   button->in_button = TRUE;
-  gtk_button_enter (button);
+  g_signal_emit_by_name (button, "enter");
   /*
    * Simulate a button press event. calling gtk_button_pressed() does
    * not get the job done for a GtkOptionMenu.  
@@ -268,12 +272,12 @@ gail_option_menu_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_option_menu_get_description (AtkAction *action,
                                   gint      i)
 {
   GailButton *button;
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   button = GAIL_BUTTON (action);
 
@@ -289,11 +293,11 @@ gail_option_menu_get_description (AtkAction *action,
   return return_value; 
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_option_menu_action_get_name (AtkAction *action,
                                   gint      i)
 {
-  G_CONST_RETURN gchar *return_value;
+  const gchar *return_value;
 
   switch (i)
     {

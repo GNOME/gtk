@@ -20,7 +20,11 @@
 #include "config.h"
 
 #include <string.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
+
 #include "gailprogressbar.h"
 #include "gailadjustment.h"
 

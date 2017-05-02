@@ -33,6 +33,7 @@
 #include <sys/param.h>
 #endif
 
+#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 
 #include "gtkpreview.h"
@@ -420,7 +421,7 @@ gtk_preview_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.window_type = GDK_WINDOW_CHILD;
 
@@ -458,7 +459,7 @@ gtk_preview_size_allocate (GtkWidget        *widget,
 
   widget->allocation = *allocation;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       if (preview->expand)
 	{

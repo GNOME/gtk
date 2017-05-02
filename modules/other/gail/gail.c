@@ -21,12 +21,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <atk/atk.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include "gail.h"
 #include "gailfactory.h"
 
 #define GNOME_ACCESSIBILITY_ENV "GNOME_ACCESSIBILITY"
+#define NO_GAIL_ENV "NO_GAIL"
 
 static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
                                          guint                  n_param_values,
@@ -87,6 +90,7 @@ GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_MENU, GailMenu, gail_menu, GTK_TYPE_MENU)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_WINDOW, GailWindow, gail_window, GTK_TYPE_BIN)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_RANGE, GailRange, gail_range, GTK_TYPE_RANGE)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SCALE, GailScale, gail_scale, GTK_TYPE_SCALE)
+GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_SCALE_BUTTON, GailScaleButton, gail_scale_button, GTK_TYPE_SCALE_BUTTON)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_CLIST, GailCList, gail_clist, GTK_TYPE_CLIST)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_LABEL, GailLabel, gail_label, GTK_TYPE_LABEL)
 GAIL_IMPLEMENT_FACTORY (GAIL_TYPE_STATUSBAR, GailStatusbar, gail_statusbar, GTK_TYPE_STATUSBAR)
@@ -259,7 +263,7 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
 		    {
 		      GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
 
-		      if (GTK_IS_WIDGET (child) && GTK_WIDGET_HAS_GRAB (child))
+		      if (GTK_IS_WIDGET (child) && gtk_widget_has_grab (child))
 			{
 			  if (GTK_IS_MENU_SHELL (child))
 			    {
@@ -303,7 +307,7 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
     }
   else
     {
-      if (event->type == GDK_MOTION_NOTIFY && GTK_WIDGET_HAS_FOCUS (widget))
+      if (event->type == GDK_MOTION_NOTIFY && gtk_widget_has_focus (widget))
         {
           if (widget == focus_widget)
             {
@@ -344,7 +348,7 @@ gail_select_watcher (GSignalInvocationHint *ihint,
 
   widget = GTK_WIDGET (object);
 
-  if (!GTK_WIDGET_MAPPED (widget))
+  if (!gtk_widget_get_mapped (widget))
     {
       g_signal_connect (widget, "map",
                         G_CALLBACK (gail_map_cb),
@@ -365,7 +369,7 @@ gail_finish_select (GtkWidget *widget)
 
       menu_item = GTK_MENU_ITEM (widget);
       if (menu_item->submenu &&
-          !GTK_WIDGET_MAPPED (menu_item->submenu))
+          !gtk_widget_get_mapped (menu_item->submenu))
         {
           /*
            * If the submenu is not visble, wait until it is before
@@ -900,6 +904,7 @@ gail_accessibility_module_init (void)
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_WINDOW, gail_window);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_RANGE, gail_range);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SCALE, gail_scale);
+  GAIL_WIDGET_SET_FACTORY (GTK_TYPE_SCALE_BUTTON, gail_scale_button);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_CLIST, gail_clist);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_LABEL, gail_label);
   GAIL_WIDGET_SET_FACTORY (GTK_TYPE_STATUSBAR, gail_statusbar);
@@ -976,7 +981,26 @@ gnome_accessibility_module_shutdown (void)
 int
 gtk_module_init (gint *argc, char** argv[])
 {
+  const char* env_no_gail;
+  gboolean no_gail = FALSE;
+
+  env_no_gail = g_getenv (NO_GAIL_ENV);
+  if (env_no_gail)
+      no_gail = atoi (env_no_gail);
+
+  if (no_gail)
+      return 0;
+
   gail_accessibility_module_init ();
 
   return 0;
 }
+
+const char *
+g_module_check_init (GModule *module)
+{
+  g_module_make_resident (module);
+
+  return NULL;
+}
+ 

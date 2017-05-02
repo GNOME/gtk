@@ -658,12 +658,12 @@ create_tree_model (void)
 }
 
 static void
-model_selected (GtkOptionMenu *om, gpointer data)
+model_selected (GtkComboBox *combo_box, gpointer data)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (data);
   gint hist;
 
-  hist = gtk_option_menu_get_history (om);
+  hist = gtk_combo_box_get_active (combo_box);
 
   if (models[hist] != gtk_tree_view_get_model (tree_view))
     {
@@ -672,12 +672,12 @@ model_selected (GtkOptionMenu *om, gpointer data)
 }
 
 static void
-columns_selected (GtkOptionMenu *om, gpointer data)
+columns_selected (GtkComboBox *combo_box, gpointer data)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (data);
   gint hist;
 
-  hist = gtk_option_menu_get_history (om);
+  hist = gtk_combo_box_get_active (combo_box);
 
   if (hist != get_columns_type ())
     {
@@ -704,8 +704,7 @@ main (int    argc,
   GtkWidget *sw;
   GtkWidget *tv;
   GtkWidget *table;
-  GtkWidget *om;
-  GtkWidget *menu;
+  GtkWidget *combo_box;
   GtkTreeModel *model;
   gint i;
   
@@ -756,77 +755,34 @@ main (int    argc,
 					GDK_ACTION_MOVE | GDK_ACTION_COPY);
   
   /* Model menu */
+  combo_box = gtk_combo_box_text_new ();
+  for (i = 0; i < MODEL_LAST; i++)
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), model_names[i]);
 
-  menu = gtk_menu_new ();
-  
-  i = 0;
-  while (i < MODEL_LAST)
-    {
-      GtkWidget *mi;
-      const char *name;
-
-      name = model_names[i];
-      
-      mi = gtk_menu_item_new_with_label (name);
-
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
-
-#if 0
-      window = create_prop_editor (G_OBJECT (models[i]));
-
-      gtk_window_set_title (GTK_WINDOW (window),                            
-                            name);
-#endif
-
-      ++i;
-    }
-  gtk_widget_show_all (menu);
-  
-  om = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
-  
-  gtk_table_attach (GTK_TABLE (table), om,
+  gtk_table_attach (GTK_TABLE (table), combo_box,
                     0, 1, 0, 1,
                     0, 0, 
                     0, 0);
 
-  g_signal_connect (om,
+  g_signal_connect (combo_box,
                     "changed",
                     G_CALLBACK (model_selected),
 		    tv);
   
   /* Columns menu */
+  combo_box = gtk_combo_box_text_new ();
+  for (i = 0; i < COLUMNS_LAST; i++)
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), column_type_names[i]);
 
-  menu = gtk_menu_new ();
-  
-  i = 0;
-  while (i < COLUMNS_LAST)
-    {
-      GtkWidget *mi;
-      const char *name;
-
-      name = column_type_names[i];
-      
-      mi = gtk_menu_item_new_with_label (name);
-
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
-
-      ++i;
-    }
-  gtk_widget_show_all (menu);
-  
-  om = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
-  
-  gtk_table_attach (GTK_TABLE (table), om,
+  gtk_table_attach (GTK_TABLE (table), combo_box,
                     0, 1, 1, 2,
                     0, 0, 
                     0, 0);
 
   set_columns_type (GTK_TREE_VIEW (tv), COLUMNS_LOTS);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (om), COLUMNS_LOTS);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), COLUMNS_LOTS);
   
-  g_signal_connect (om,
+  g_signal_connect (combo_box,
                     "changed",
                     G_CALLBACK (columns_selected),
                     tv);
@@ -891,7 +847,7 @@ gtk_tree_model_types_get_type (void)
 
   if (!model_types_type)
     {
-      static const GTypeInfo model_types_info =
+      const GTypeInfo model_types_info =
       {
         sizeof (GtkTreeModelTypesClass),
 	NULL,		/* base_init */
@@ -904,7 +860,7 @@ gtk_tree_model_types_get_type (void)
         (GInstanceInitFunc) gtk_tree_model_types_init
       };
 
-      static const GInterfaceInfo tree_model_info =
+      const GInterfaceInfo tree_model_info =
       {
 	(GInterfaceInitFunc) gtk_tree_model_types_tree_model_init,
 	NULL,
@@ -1266,6 +1222,8 @@ gtk_real_model_types_iter_parent (GtkTreeModel *tree_model,
  * Automated testing
  */
 
+#if 0
+
 static void
 treestore_torture_recurse (GtkTreeStore *store,
                            GtkTreeIter  *root,
@@ -1354,6 +1312,8 @@ treestore_torture_recurse (GtkTreeStore *store,
       gtk_tree_store_remove (store, &iter);
     }
 }
+
+#endif
 
 static void
 run_automated_tests (void)

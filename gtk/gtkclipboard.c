@@ -236,6 +236,7 @@ gtk_clipboard_finalize (GObject *object)
     g_signal_handler_disconnect (clipboard_widget, clipboard->notify_signal_id);
   
   g_free (clipboard->storable_targets);
+  g_free (clipboard->cached_targets);
 
   G_OBJECT_CLASS (gtk_clipboard_parent_class)->finalize (object);
 }
@@ -286,7 +287,7 @@ clipboard_display_closed (GdkDisplay   *display,
  * if your application called "Foo" has a special-purpose
  * clipboard, you might call it "_FOO_SPECIAL_CLIPBOARD".
  * 
- * Return value: the appropriate clipboard object. If no
+ * Return value: (transfer none): the appropriate clipboard object. If no
  *             clipboard already exists, a new one will
  *             be created. Once a clipboard object has
  *             been created, it is persistent and, since
@@ -299,6 +300,7 @@ GtkClipboard *
 gtk_clipboard_get_for_display (GdkDisplay *display, 
 			       GdkAtom     selection)
 {
+  g_return_val_if_fail (display != NULL, NULL); /* See bgo#463773; this is needed because Flash Player sucks */
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (!display->closed, NULL);
 
@@ -307,20 +309,17 @@ gtk_clipboard_get_for_display (GdkDisplay *display,
 
 
 /**
- * gtk_clipboard_get():
- * @selection: a #GdkAtom which identifies the clipboard
- *             to use.
- * 
+ * gtk_clipboard_get:
+ * @selection: a #GdkAtom which identifies the clipboard to use
+ *
  * Returns the clipboard object for the given selection.
  * See gtk_clipboard_get_for_display() for complete details.
- * 
- * Return value: the appropriate clipboard object. If no
- *             clipboard already exists, a new one will
- *             be created. Once a clipboard object has
- *             been created, it is persistent and, since
- *             it is owned by GTK+, must not be freed or
- *             unrefd.
- **/
+ *
+ * Return value: (transfer none): the appropriate clipboard object. If no clipboard
+ *     already exists, a new one will be created. Once a clipboard
+ *     object has been created, it is persistent and, since it is
+ *     owned by GTK+, must not be freed or unreffed.
+ */
 GtkClipboard *
 gtk_clipboard_get (GdkAtom selection)
 {
@@ -514,6 +513,13 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
     {
       clipboard->have_selection = TRUE;
 
+      if (clipboard->n_cached_targets != -1)
+        {
+          g_free (clipboard->cached_targets);
+	  clipboard->cached_targets = NULL;
+          clipboard->n_cached_targets = -1;
+        }
+
       if (!(clipboard->have_owner && have_owner) ||
 	  clipboard->user_data != user_data)
 	{
@@ -643,7 +649,7 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
  * gtk_clipboard_clear() has not subsequently called, returns the owner set 
  * by gtk_clipboard_set_with_owner().
  * 
- * Return value: the owner of the clipboard, if any; otherwise %NULL.
+ * Return value: (transfer none): the owner of the clipboard, if any; otherwise %NULL.
  **/
 GObject *
 gtk_clipboard_get_owner (GtkClipboard *clipboard)
@@ -1401,7 +1407,8 @@ clipboard_rich_text_received_func (GtkClipboard *clipboard,
  * waits for the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  *
- * Return value: a newly-allocated binary block of data which must
+ * Return value: (array length=length) (transfer full): a
+ *               newly-allocated binary block of data which must
  *               be freed with g_free(), or %NULL if retrieving
  *               the selection data failed. (This could happen
  *               for various reasons, in particular if the
@@ -1467,7 +1474,7 @@ clipboard_image_received_func (GtkClipboard *clipboard,
  * the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  * 
- * Return value: a newly-allocated #GdkPixbuf object which must
+ * Return value: (transfer full): a newly-allocated #GdkPixbuf object which must
  *               be disposed with g_object_unref(), or %NULL if 
  *               retrieving the selection data failed. (This 
  *               could happen for various reasons, in particular 
@@ -1520,12 +1527,13 @@ clipboard_uris_received_func (GtkClipboard *clipboard,
  * Requests the contents of the clipboard as URIs. This function waits
  * for the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
- * 
- * Return value: a newly-allocated %NULL-terminated array of strings which must
+ *
+ * Return value: (array zero-terminated=1) (element-type utf8) (transfer full): a newly-allocated
+ * 		 %NULL-terminated array of strings which must
  *               be freed with g_strfreev(), or %NULL if
- *               retrieving the selection data failed. (This 
- *               could happen for various reasons, in particular 
- *               if the clipboard was empty or if the contents of 
+ *               retrieving the selection data failed. (This
+ *               could happen for various reasons, in particular
+ *               if the clipboard was empty or if the contents of
  *               the clipboard could not be converted into URI form.)
  *
  * Since: 2.14
@@ -1562,7 +1570,7 @@ gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
  *
  * Gets the #GdkDisplay associated with @clipboard
  *
- * Return value: the #GdkDisplay associated with @clipboard
+ * Return value: (transfer none): the #GdkDisplay associated with @clipboard
  *
  * Since: 2.2
  **/
@@ -1718,7 +1726,8 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
 /**
  * gtk_clipboard_wait_for_targets
  * @clipboard: a #GtkClipboard
- * @targets: location to store an array of targets. The result
+ * @targets: (out) (array length=n_targets) (transfer container):  
+ *           location to store an array of targets. The result
  *           stored here must be freed with g_free().
  * @n_targets: location to store number of items in @targets.
  *
@@ -1840,8 +1849,9 @@ gtk_clipboard_owner_change (GtkClipboard        *clipboard,
 {
   if (clipboard->n_cached_targets != -1)
     {
-      clipboard->n_cached_targets = -1;
       g_free (clipboard->cached_targets);
+      clipboard->cached_targets = NULL;
+      clipboard->n_cached_targets = -1;
     }
 }
 
@@ -1900,7 +1910,7 @@ _gtk_clipboard_handle_event (GdkEventOwnerChange *event)
   GdkDisplay *display;
   GtkClipboard *clipboard;
   
-  display = gdk_drawable_get_display (event->window);
+  display = gdk_window_get_display (event->window);
   clipboard = clipboard_peek (display, event->selection, TRUE);
       
   if (clipboard)
@@ -1919,8 +1929,9 @@ gtk_clipboard_store_timeout (GtkClipboard *clipboard)
 /**
  * gtk_clipboard_set_can_store:
  * @clipboard: a #GtkClipboard
- * @targets: array containing information about which forms should be stored
- *           or %NULL to indicate that all forms should be stored.
+ * @targets: (allow-none) (array length=n_targets): array containing
+ *           information about which forms should be stored or %NULL
+ *           to indicate that all forms should be stored.
  * @n_targets: number of elements in @targets
  *
  * Hints that the clipboard data should be stored somewhere when the

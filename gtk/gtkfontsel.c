@@ -90,7 +90,7 @@
 /* These are what we use as the standard font sizes, for the size list.
  */
 static const guint16 font_sizes[] = {
-  6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 26, 28,
+  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28,
   32, 36, 40, 48, 56, 64, 72
 };
 
@@ -124,9 +124,11 @@ static void    gtk_font_selection_get_property       (GObject         *object,
 						      guint            prop_id,
 						      GValue          *value,
 						      GParamSpec      *pspec);
-static void    gtk_font_selection_finalize	     (GObject               *object);
-static void    gtk_font_selection_screen_changed     (GtkWidget		    *widget,
-						      GdkScreen             *previous_screen);
+static void    gtk_font_selection_finalize	     (GObject         *object);
+static void    gtk_font_selection_screen_changed     (GtkWidget	      *widget,
+						      GdkScreen       *previous_screen);
+static void    gtk_font_selection_style_set          (GtkWidget      *widget,
+						      GtkStyle       *prev_style);
 
 /* These are the callbacks & related functions. */
 static void     gtk_font_selection_select_font           (GtkTreeSelection *selection,
@@ -155,12 +157,24 @@ static void     gtk_font_selection_scroll_on_map         (GtkWidget        *w,
 
 static void     gtk_font_selection_preview_changed       (GtkWidget        *entry,
 							  GtkFontSelection *fontsel);
+static void     gtk_font_selection_scroll_to_selection   (GtkFontSelection *fontsel);
+
 
 /* Misc. utility functions. */
 static void    gtk_font_selection_load_font          (GtkFontSelection *fs);
 static void    gtk_font_selection_update_preview     (GtkFontSelection *fs);
 
 static GdkFont* gtk_font_selection_get_font_internal (GtkFontSelection *fontsel);
+static PangoFontDescription *gtk_font_selection_get_font_description (GtkFontSelection *fontsel);
+static gboolean gtk_font_selection_select_font_desc  (GtkFontSelection      *fontsel,
+						      PangoFontDescription  *new_desc,
+						      PangoFontFamily      **pfamily,
+						      PangoFontFace        **pface);
+static void     gtk_font_selection_reload_fonts          (GtkFontSelection *fontsel);
+static void     gtk_font_selection_ref_family            (GtkFontSelection *fontsel,
+							  PangoFontFamily  *family);
+static void     gtk_font_selection_ref_face              (GtkFontSelection *fontsel,
+							  PangoFontFace    *face);
 
 G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_VBOX)
 
@@ -174,6 +188,7 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
   gobject_class->get_property = gtk_font_selection_get_property;
 
   widget_class->screen_changed = gtk_font_selection_screen_changed;
+  widget_class->style_set = gtk_font_selection_style_set;
    
   g_object_class_install_property (gobject_class,
                                    PROP_FONT_NAME,
@@ -258,13 +273,13 @@ list_row_activated (GtkWidget *widget)
   GtkWindow *window;
   
   window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
-  if (!GTK_WIDGET_TOPLEVEL (window))
+  if (!gtk_widget_is_toplevel (GTK_WIDGET (window)))
     window = NULL;
   
   if (window
       && widget != window->default_widget
       && !(widget == window->focus_widget &&
-	   (!window->default_widget || !GTK_WIDGET_SENSITIVE (window->default_widget))))
+	   (!window->default_widget || !gtk_widget_get_sensitive (window->default_widget))))
     {
       gtk_window_activate_default (window);
     }
@@ -534,10 +549,16 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
 			       -1, INITIAL_PREVIEW_HEIGHT);
   gtk_box_pack_start (GTK_BOX (text_box), fontsel->preview_entry,
 		      TRUE, TRUE, 0);
-
   gtk_widget_pop_composite_child();
 }
 
+/**
+ * gtk_font_selection_new:
+ *
+ * Creates a new #GtkFontSelection.
+ *
+ * Return value: a n ew #GtkFontSelection
+ */
 GtkWidget *
 gtk_font_selection_new (void)
 {
@@ -560,21 +581,65 @@ gtk_font_selection_finalize (GObject *object)
   if (fontsel->font)
     gdk_font_unref (fontsel->font);
 
+  gtk_font_selection_ref_family (fontsel, NULL);
+  gtk_font_selection_ref_face (fontsel, NULL);
+
   G_OBJECT_CLASS (gtk_font_selection_parent_class)->finalize (object);
+}
+
+static void
+gtk_font_selection_ref_family (GtkFontSelection *fontsel,
+			       PangoFontFamily  *family)
+{
+  if (family)
+    family = g_object_ref (family);
+  if (fontsel->family)
+    g_object_unref (fontsel->family);
+  fontsel->family = family;
+}
+
+static void gtk_font_selection_ref_face (GtkFontSelection *fontsel,
+					 PangoFontFace    *face)
+{
+  if (face)
+    face = g_object_ref (face);
+  if (fontsel->face)
+    g_object_unref (fontsel->face);
+  fontsel->face = face;
+}
+
+static void
+gtk_font_selection_reload_fonts (GtkFontSelection *fontsel)
+{
+  if (gtk_widget_has_screen (GTK_WIDGET (fontsel)))
+    {
+      PangoFontDescription *desc;
+      desc = gtk_font_selection_get_font_description (fontsel);
+
+      gtk_font_selection_show_available_fonts (fontsel);
+      gtk_font_selection_show_available_sizes (fontsel, TRUE);
+      gtk_font_selection_show_available_styles (fontsel);
+
+      gtk_font_selection_select_font_desc (fontsel, desc, NULL, NULL);
+      gtk_font_selection_scroll_to_selection (fontsel);
+
+      pango_font_description_free (desc);
+    }
 }
 
 static void
 gtk_font_selection_screen_changed (GtkWidget *widget,
 				   GdkScreen *previous_screen)
 {
-  GtkFontSelection *fontsel = GTK_FONT_SELECTION (widget);
+  gtk_font_selection_reload_fonts (GTK_FONT_SELECTION (widget));
+}
 
-  if (gtk_widget_has_screen (GTK_WIDGET (fontsel)))
-    {
-      gtk_font_selection_show_available_fonts (fontsel);
-      gtk_font_selection_show_available_sizes (fontsel, TRUE);
-      gtk_font_selection_show_available_styles (fontsel);
-    }
+static void
+gtk_font_selection_style_set (GtkWidget *widget,
+			      GtkStyle  *prev_style)
+{
+  /* Maybe fonts where installed or removed... */
+  gtk_font_selection_reload_fonts (GTK_FONT_SELECTION (widget));
 }
 
 static void
@@ -611,19 +676,9 @@ set_cursor_to_iter (GtkTreeView *view,
   gtk_tree_path_free (path);
 }
 
-/* This is called when the list is mapped. Here we scroll to the current
-   font if necessary. */
 static void
-gtk_font_selection_scroll_on_map (GtkWidget		*widget,
-                                  gpointer		 data)
+gtk_font_selection_scroll_to_selection (GtkFontSelection *fontsel)
 {
-  GtkFontSelection *fontsel;
-  
-#ifdef FONTSEL_DEBUG
-  g_message ("In expose_list\n");
-#endif
-  fontsel = GTK_FONT_SELECTION (data);
-  
   /* Try to scroll the font family list to the selected item */
   scroll_to_selection (GTK_TREE_VIEW (fontsel->family_list));
       
@@ -632,6 +687,15 @@ gtk_font_selection_scroll_on_map (GtkWidget		*widget,
       
   /* Try to scroll the font family list to the selected item */
   scroll_to_selection (GTK_TREE_VIEW (fontsel->size_list));
+/* This is called when the list is mapped. Here we scroll to the current
+   font if necessary. */
+}
+
+static void
+gtk_font_selection_scroll_on_map (GtkWidget		*widget,
+                                  gpointer		 data)
+{
+  gtk_font_selection_scroll_to_selection (GTK_FONT_SELECTION (data));
 }
 
 /* This is called when a family is selected in the list. */
@@ -655,7 +719,7 @@ gtk_font_selection_select_font (GtkTreeSelection *selection,
       gtk_tree_model_get (model, &iter, FAMILY_COLUMN, &family, -1);
       if (fontsel->family != family)
 	{
-	  fontsel->family = family;
+	  gtk_font_selection_ref_family (fontsel, family);
 	  
 #ifdef INCLUDE_FONT_ENTRIES
 	  family_name = pango_font_family_get_name (fontsel->family);
@@ -714,7 +778,7 @@ gtk_font_selection_show_available_fonts (GtkFontSelection *fontsel)
 	}
     }
 
-  fontsel->family = match_family;
+  gtk_font_selection_ref_family (fontsel, match_family);
   if (match_family)
     {
       set_cursor_to_iter (GTK_TREE_VIEW (fontsel->family_list), &match_row);
@@ -830,7 +894,7 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
   if (old_desc)
     pango_font_description_free (old_desc);
 
-  fontsel->face = match_face;
+  gtk_font_selection_ref_face (fontsel, match_face);
   if (match_face)
     {
 #ifdef INCLUDE_FONT_ENTRIES
@@ -883,8 +947,7 @@ gtk_font_selection_select_style (GtkTreeSelection *selection,
       PangoFontFace *face;
       
       gtk_tree_model_get (model, &iter, FACE_COLUMN, &face, -1);
-      fontsel->face = face;
-
+      gtk_font_selection_ref_face (fontsel, face);
       g_object_unref (face);
     }
 
@@ -1128,11 +1191,11 @@ gtk_font_selection_get_font_internal (GtkFontSelection *fontsel)
  *
  * This returns the #GtkTreeView that lists font families, for
  * example, 'Sans', 'Serif', etc.
- * 
- * Return value: A #GtkWidget. 
+ *
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
  *
  * Since: 2.14
- **/
+ */
 GtkWidget *
 gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
 {
@@ -1148,10 +1211,10 @@ gtk_font_selection_get_family_list (GtkFontSelection *fontsel)
  * This returns the #GtkTreeView which lists all styles available for
  * the selected font. For example, 'Regular', 'Bold', etc.
  * 
- * Return value: A #GtkWidget. 
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
  *
  * Since: 2.14
- **/
+ */
 GtkWidget *
 gtk_font_selection_get_face_list (GtkFontSelection *fontsel)
 {
@@ -1165,12 +1228,12 @@ gtk_font_selection_get_face_list (GtkFontSelection *fontsel)
  * @fontsel: a #GtkFontSelection
  *
  * This returns the #GtkEntry used to allow the user to edit the font
- * number manually instead of selecting it from the list of font sizes. 
- * 
- * Return value: A #GtkWidget. 
+ * number manually instead of selecting it from the list of font sizes.
+ *
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
  *
  * Since: 2.14
- **/
+ */
 GtkWidget *
 gtk_font_selection_get_size_entry (GtkFontSelection *fontsel)
 {
@@ -1183,12 +1246,12 @@ gtk_font_selection_get_size_entry (GtkFontSelection *fontsel)
  * gtk_font_selection_get_size_list:
  * @fontsel: a #GtkFontSelection
  *
- * This returns the #GtkTreeeView used to list font sizes. 
- * 
- * Return value: A #GtkWidget. 
+ * This returns the #GtkTreeeView used to list font sizes.
+ *
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
  *
  * Since: 2.14
- **/
+ */
 GtkWidget *
 gtk_font_selection_get_size_list (GtkFontSelection *fontsel)
 {
@@ -1200,13 +1263,13 @@ gtk_font_selection_get_size_list (GtkFontSelection *fontsel)
 /**
  * gtk_font_selection_get_preview_entry:
  * @fontsel: a #GtkFontSelection
- * 
+ *
  * This returns the #GtkEntry used to display the font as a preview.
  *
- * Return value: A #GtkWidget. 
+ * Return value: (transfer none): A #GtkWidget that is part of @fontsel
  *
  * Since: 2.14
- **/
+ */
 GtkWidget *
 gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
 {
@@ -1218,14 +1281,16 @@ gtk_font_selection_get_preview_entry (GtkFontSelection *fontsel)
 /**
  * gtk_font_selection_get_family:
  * @fontsel: a #GtkFontSelection
- * 
+ *
  * Gets the #PangoFontFamily representing the selected font family.
  *
- * Return value: A #PangoFontFamily representing the selected font
- * family. Font families are a collection of font faces.
+ * Return value: (transfer none): A #PangoFontFamily representing the
+ *     selected font family. Font families are a collection of font
+ *     faces. The returned object is owned by @fontsel and must not
+ *     be modified or freed.
  *
  * Since: 2.14
- **/
+ */
 PangoFontFamily *
 gtk_font_selection_get_family (GtkFontSelection *fontsel)
 {
@@ -1237,15 +1302,16 @@ gtk_font_selection_get_family (GtkFontSelection *fontsel)
 /**
  * gtk_font_selection_get_face:
  * @fontsel: a #GtkFontSelection
- * 
- * Gets the #PangoFontFace representing the selected font group
- * details (i.e. family, slant, weight, width, etc).   
  *
- * Return value: A #PangoFontFace representing the selected font group
- *     details 
+ * Gets the #PangoFontFace representing the selected font group
+ * details (i.e. family, slant, weight, width, etc).
+ *
+ * Return value: (transfer none): A #PangoFontFace representing the
+ *     selected font group details. The returned object is owned by
+ *     @fontsel and must not be modified or freed.
  *
  * Since: 2.14
- **/
+ */
 PangoFontFace *
 gtk_font_selection_get_face (GtkFontSelection *fontsel)
 {
@@ -1257,11 +1323,11 @@ gtk_font_selection_get_face (GtkFontSelection *fontsel)
 /**
  * gtk_font_selection_get_size:
  * @fontsel: a #GtkFontSelection
- * 
+ *
  * The selected font size.
  *
- * Return value: A #gint representing the font size selected, or -1
- * if not.
+ * Return value: A n integer representing the selected font size,
+ *     or -1 if no font size is selected.
  *
  * Since: 2.14
  **/
@@ -1277,10 +1343,12 @@ gtk_font_selection_get_size (GtkFontSelection *fontsel)
  * gtk_font_selection_get_font:
  * @fontsel: a #GtkFontSelection
  *
+ * Gets the currently-selected font.
+ * 
  * Return value: A #GdkFont.
  *
  * Deprecated: 2.0: Use gtk_font_selection_get_font_name() instead.
- **/
+ */
 GdkFont *
 gtk_font_selection_get_font (GtkFontSelection *fontsel)
 {
@@ -1293,16 +1361,18 @@ gtk_font_selection_get_font (GtkFontSelection *fontsel)
  * gtk_font_selection_get_font_name:
  * @fontsel: a #GtkFontSelection
  * 
- * Gets the currently-selected font name.  Note that this can be a different
- * string than what you set with gtk_font_selection_set_font_name(), as
- * the font selection widget may normalize font names and thus return a string
- * with a different structure.  For example, "Helvetica Italic Bold 12" could be
- * normalized to "Helvetica Bold Italic 12".  Use pango_font_description_equal()
+ * Gets the currently-selected font name. 
+ *
+ * Note that this can be a different string than what you set with 
+ * gtk_font_selection_set_font_name(), as the font selection widget may 
+ * normalize font names and thus return a string with a different structure. 
+ * For example, "Helvetica Italic Bold 12" could be normalized to 
+ * "Helvetica Bold Italic 12". Use pango_font_description_equal()
  * if you want to compare two font descriptions.
  * 
- * Return value: A string with the name of the current font, or #NULL if no font
- * is selected.  You must free this string with g_free().
- **/
+ * Return value: A string with the name of the current font, or %NULL if 
+ *     no font is selected. You must free this string with g_free().
+ */
 gchar *
 gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
 {
@@ -1315,44 +1385,26 @@ gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
   return result;
 }
 
-
-/* This sets the current font, selecting the appropriate list rows.
+/* This selects the appropriate list rows.
    First we check the fontname is valid and try to find the font family
    - i.e. the name in the main list. If we can't find that, then just return.
    Next we try to set each of the properties according to the fontname.
    Finally we select the font family & style in the lists. */
-
-/**
- * gtk_font_selection_set_font_name:
- * @fontsel: a #GtkFontSelection
- * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
- * 
- * Sets the currently-selected font.  Note that the @fontsel needs to know the
- * screen in which it will appear for this to work; this can be guaranteed by
- * simply making sure that the @fontsel is inserted in a toplevel window before
- * you call this function.
- * 
- * Return value: #TRUE if the font could be set successfully; #FALSE if no such
- * font exists or if the @fontsel doesn't belong to a particular screen yet.
- **/
-gboolean
-gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
-				  const gchar      *fontname)
+static gboolean
+gtk_font_selection_select_font_desc (GtkFontSelection      *fontsel,
+				     PangoFontDescription  *new_desc,
+				     PangoFontFamily      **pfamily,
+				     PangoFontFace        **pface)
 {
   PangoFontFamily *new_family = NULL;
   PangoFontFace *new_face = NULL;
   PangoFontFace *fallback_face = NULL;
-  PangoFontDescription *new_desc;
   GtkTreeModel *model;
   GtkTreeIter iter;
   GtkTreeIter match_iter;
   gboolean valid;
   const gchar *new_family_name;
-  
-  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
-  g_return_val_if_fail (gtk_widget_has_screen (GTK_WIDGET (fontsel)), FALSE);
-  
-  new_desc = pango_font_description_from_string (fontname);
+
   new_family_name = pango_font_description_get_family (new_desc);
 
   if (!new_family_name)
@@ -1371,8 +1423,8 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
       
       if (g_ascii_strcasecmp (pango_font_family_get_name (family),
 			      new_family_name) == 0)
-	new_family = family;
-      
+	new_family = g_object_ref (family);
+
       g_object_unref (family);
       
       if (new_family)
@@ -1382,7 +1434,10 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   if (!new_family)
     return FALSE;
 
-  fontsel->family = new_family;
+  if (pfamily)
+    *pfamily = new_family;
+  else
+    g_object_unref (new_family);
   set_cursor_to_iter (GTK_TREE_VIEW (fontsel->family_list), &iter);
   gtk_font_selection_show_available_styles (fontsel);
 
@@ -1398,11 +1453,11 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
       tmp_desc = pango_font_face_describe (face);
       
       if (font_description_style_equal (tmp_desc, new_desc))
-	new_face = face;
+	new_face = g_object_ref (face);
       
       if (!fallback_face)
 	{
-	  fallback_face = face;
+	  fallback_face = g_object_ref (face);
 	  match_iter = iter;
 	}
       
@@ -1418,18 +1473,70 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 
   if (!new_face)
     new_face = fallback_face;
+  else if (fallback_face)
+    g_object_unref (fallback_face);
 
-  fontsel->face = new_face;
+  if (pface)
+    *pface = new_face;
+  else if (new_face)
+    g_object_unref (new_face);
   set_cursor_to_iter (GTK_TREE_VIEW (fontsel->face_list), &match_iter);  
 
   gtk_font_selection_set_size (fontsel, pango_font_description_get_size (new_desc));
+
+  return TRUE;
+}
+
+
+/* This sets the current font, then selecting the appropriate list rows. */
+
+/**
+ * gtk_font_selection_set_font_name:
+ * @fontsel: a #GtkFontSelection
+ * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
+ * 
+ * Sets the currently-selected font. 
+ *
+ * Note that the @fontsel needs to know the screen in which it will appear 
+ * for this to work; this can be guaranteed by simply making sure that the 
+ * @fontsel is inserted in a toplevel window before you call this function.
+ * 
+ * Return value: %TRUE if the font could be set successfully; %FALSE if no 
+ *     such font exists or if the @fontsel doesn't belong to a particular 
+ *     screen yet.
+ */
+gboolean
+gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
+				  const gchar      *fontname)
+{
+  PangoFontFamily *family = NULL;
+  PangoFontFace *face = NULL;
+  PangoFontDescription *new_desc;
+  
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
+
+  if (!gtk_widget_has_screen (GTK_WIDGET (fontsel)))
+    return FALSE;
+
+  new_desc = pango_font_description_from_string (fontname);
+
+  if (gtk_font_selection_select_font_desc (fontsel, new_desc, &family, &face))
+    {
+      gtk_font_selection_ref_family (fontsel, family);
+      if (family)
+        g_object_unref (family);
+
+      gtk_font_selection_ref_face (fontsel, face);
+      if (face)
+        g_object_unref (face);
+    }
+
+  pango_font_description_free (new_desc);
   
   g_object_freeze_notify (G_OBJECT (fontsel));
   g_object_notify (G_OBJECT (fontsel), "font-name");
   g_object_notify (G_OBJECT (fontsel), "font");
   g_object_thaw_notify (G_OBJECT (fontsel));
-
-  pango_font_description_free (new_desc);
 
   return TRUE;
 }
@@ -1438,14 +1545,13 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
  * gtk_font_selection_get_preview_text:
  * @fontsel: a #GtkFontSelection
  *
- * The text returned is the preview text used to show how the selected
- * font looks.  
+ * Gets the text displayed in the preview area.
  * 
- * Return value: pointer to the preview text string. This string
- * points to internally allocated storage in the widget and must not
- * be freed, modified or stored. 
- **/
-G_CONST_RETURN gchar*
+ * Return value: the text displayed in the preview area. 
+ *     This string is owned by the widget and should not be 
+ *     modified or freed 
+ */
+const gchar*
 gtk_font_selection_get_preview_text (GtkFontSelection *fontsel)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
@@ -1457,10 +1563,11 @@ gtk_font_selection_get_preview_text (GtkFontSelection *fontsel)
 /**
  * gtk_font_selection_set_preview_text:
  * @fontsel: a #GtkFontSelection
- * @text: a pointer to a string
+ * @text: the text to display in the preview area 
  *
+ * Sets the text displayed in the preview area.
  * The @text is used to show how the selected font looks.
- **/
+ */
 void
 gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
 				      const gchar      *text)
@@ -1548,13 +1655,11 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 
 /**
  * gtk_font_selection_dialog_new:
- * @title: a pointer to a string
+ * @title: the title of the dialog window 
  *
- * The @title is used to set the title of the #GtkFontSelectionDialog
- * returned. This #GtkDialog is specifically catered with widgets for
- * selecting a font from those installed. 
+ * Creates a new #GtkFontSelectionDialog.
  *
- * Return value: a new #GtkFontSelectionDialog.
+ * Return value: a new #GtkFontSelectionDialog
  */
 GtkWidget*
 gtk_font_selection_dialog_new (const gchar *title)
@@ -1570,12 +1675,31 @@ gtk_font_selection_dialog_new (const gchar *title)
 }
 
 /**
+ * gtk_font_selection_dialog_get_font_selection:
+ * @fsd: a #GtkFontSelectionDialog
+ *
+ * Retrieves the #GtkFontSelection widget embedded in the dialog.
+ *
+ * Returns: (transfer none): the embedded #GtkFontSelection
+ *
+ * Since: 2.22
+ **/
+GtkWidget*
+gtk_font_selection_dialog_get_font_selection (GtkFontSelectionDialog *fsd)
+{
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
+
+  return fsd->fontsel;
+}
+
+/**
  * gtk_font_selection_dialog_get_ok_button:
  * @fsd: a #GtkFontSelectionDialog
  *
  * Gets the 'OK' button.
  *
- * Return value: the #GtkWidget used in the dialog for the 'OK' button.
+ * Return value: (transfer none): the #GtkWidget used in the dialog
+ *     for the 'OK' button.
  *
  * Since: 2.14
  */
@@ -1591,11 +1715,13 @@ gtk_font_selection_dialog_get_ok_button (GtkFontSelectionDialog *fsd)
  * gtk_font_selection_dialog_get_apply_button:
  * @fsd: a #GtkFontSelectionDialog
  *
- * Gets the 'Apply' button.
+ * Obtains a button. The button doesn't have any function.
  *
- * Return value: the #GtkWidget used in the dialog for the 'Apply' button.
+ * Return value: a #GtkWidget
  *
  * Since: 2.14
+ *
+ * Deprecated: 2.16: Don't use this function.
  */
 GtkWidget *
 gtk_font_selection_dialog_get_apply_button (GtkFontSelectionDialog *fsd)
@@ -1611,7 +1737,10 @@ gtk_font_selection_dialog_get_apply_button (GtkFontSelectionDialog *fsd)
  *
  * Gets the 'Cancel' button.
  *
- * Return value: the #GtkWidget used in the dialog for the 'Cancel' button.
+ * Return value: (transfer none): the #GtkWidget used in the dialog
+ *     for the 'Cancel' button.
+ *
+ * Since: 2.14
  */
 GtkWidget *
 gtk_font_selection_dialog_get_cancel_button (GtkFontSelectionDialog *fsd)
@@ -1649,16 +1778,18 @@ gtk_font_selection_dialog_buildable_get_internal_child (GtkBuildable *buildable,
  * gtk_font_selection_dialog_get_font_name:
  * @fsd: a #GtkFontSelectionDialog
  * 
- * Gets the currently-selected font name.  Note that this can be a different
- * string than what you set with gtk_font_selection_dialog_set_font_name(), as
- * the font selection widget may normalize font names and thus return a string
- * with a different structure.  For example, "Helvetica Italic Bold 12" could be
- * normalized to "Helvetica Bold Italic 12".  Use pango_font_description_equal()
+ * Gets the currently-selected font name.
+ *
+ * Note that this can be a different string than what you set with 
+ * gtk_font_selection_dialog_set_font_name(), as the font selection widget
+ * may normalize font names and thus return a string with a different 
+ * structure. For example, "Helvetica Italic Bold 12" could be normalized 
+ * to "Helvetica Bold Italic 12".  Use pango_font_description_equal()
  * if you want to compare two font descriptions.
  * 
- * Return value: A string with the name of the current font, or #NULL if no font
- * is selected.  You must free this string with g_free().
- **/
+ * Return value: A string with the name of the current font, or %NULL if no 
+ *     font is selected. You must free this string with g_free().
+ */
 gchar*
 gtk_font_selection_dialog_get_font_name (GtkFontSelectionDialog *fsd)
 {
@@ -1671,8 +1802,10 @@ gtk_font_selection_dialog_get_font_name (GtkFontSelectionDialog *fsd)
  * gtk_font_selection_dialog_get_font:
  * @fsd: a #GtkFontSelectionDialog
  *
+ * Gets the currently-selected font.
+ *
  * Return value: the #GdkFont from the #GtkFontSelection for the
- * currently selected font in the dialog.
+ *     currently selected font in the dialog, or %NULL if no font is selected
  *
  * Deprecated: 2.0: Use gtk_font_selection_dialog_get_font_name() instead.
  */
@@ -1687,12 +1820,12 @@ gtk_font_selection_dialog_get_font (GtkFontSelectionDialog *fsd)
 /**
  * gtk_font_selection_dialog_set_font_name:
  * @fsd: a #GtkFontSelectionDialog
- * @fontname: a pointer to a string
+ * @fontname: a font name like "Helvetica 12" or "Times Bold 18"
  *
  * Sets the currently selected font. 
  * 
  * Return value: %TRUE if the font selected in @fsd is now the
- * @fontname specified. %FALSE otherwise. 
+ *     @fontname specified, %FALSE otherwise. 
  */
 gboolean
 gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
@@ -1708,14 +1841,13 @@ gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
  * gtk_font_selection_dialog_get_preview_text:
  * @fsd: a #GtkFontSelectionDialog
  *
- * The text returned is the preview text used to show how the selected
- * font looks.  
- *
- * Return value: pointer to the preview text string. This string
- * points to internally allocated storage in the widget and must not
- * be freed, modified or stored. 
+ * Gets the text displayed in the preview area.
+ * 
+ * Return value: the text displayed in the preview area. 
+ *     This string is owned by the widget and should not be 
+ *     modified or freed 
  */
-G_CONST_RETURN gchar*
+const gchar*
 gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
 {
   g_return_val_if_fail (GTK_IS_FONT_SELECTION_DIALOG (fsd), NULL);
@@ -1726,9 +1858,9 @@ gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
 /**
  * gtk_font_selection_dialog_set_preview_text:
  * @fsd: a #GtkFontSelectionDialog
- * @text: a pointer to a string
-
- * The @text is used to show how the selected font looks.
+ * @text: the text to display in the preview area
+ *
+ * Sets the text displayed in the preview area. 
  */
 void
 gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,

@@ -44,6 +44,9 @@ associated information.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTargetEntry ##### -->
 <para>
 A #GtkTargetEntry structure represents a single type of
@@ -70,8 +73,6 @@ an efficient form. This structure should be treated as
 opaque.
 </para>
 
-@list: 
-@ref_count: 
 
 <!-- ##### STRUCT GtkTargetPair ##### -->
 <para>
@@ -382,13 +383,30 @@ selection handling code.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_selection_data_get_selection ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_selection_data_get_data ##### -->
 <para>
 
 </para>
 
 @selection_data: 
-@length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_selection_data_get_length ##### -->
+<para>
+
+</para>
+
+@selection_data: 
 @Returns: 
 
 

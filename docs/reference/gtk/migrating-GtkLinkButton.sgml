@@ -65,7 +65,12 @@
     </programlisting></informalexample>
 
   </para>
-     
+
+  <para>
+    Starting with GTK+ 2.16, it is no longer necessary to set up a uri hook
+    manually, since GTK+ now defaults to calling gtk_show_uri() if no uri
+    hook has been set.
+  </para>
 </chapter>
 
 <!--

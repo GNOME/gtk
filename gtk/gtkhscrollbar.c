@@ -22,12 +22,13 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
+
 #include "gtkhscrollbar.h"
-#include "gdk/gdkkeysyms.h"
+#include "gtkorientable.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -42,23 +43,27 @@ gtk_hscrollbar_class_init (GtkHScrollbarClass *class)
 static void
 gtk_hscrollbar_init (GtkHScrollbar *hscrollbar)
 {
-  GtkRange *range;
-
-  range = GTK_RANGE (hscrollbar);
-
-  range->orientation = GTK_ORIENTATION_HORIZONTAL;
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (hscrollbar),
+                                  GTK_ORIENTATION_HORIZONTAL);
 }
 
-GtkWidget*
+/**
+ * gtk_hscrollbar_new:
+ * @adjustment: (allow-none): the #GtkAdjustment to use, or %NULL to create a new adjustment
+ *
+ * Creates a new horizontal scrollbar.
+ *
+ * Returns: the new #GtkHScrollbar
+ */
+GtkWidget *
 gtk_hscrollbar_new (GtkAdjustment *adjustment)
 {
-  GtkWidget *hscrollbar;
-  
-  hscrollbar = g_object_new (GTK_TYPE_HSCROLLBAR,
-			     "adjustment", adjustment,
-			     NULL);
+  g_return_val_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment),
+                        NULL);
 
-  return hscrollbar;
+  return g_object_new (GTK_TYPE_HSCROLLBAR,
+                       "adjustment", adjustment,
+                       NULL);
 }
 
 #define __GTK_HSCROLLBAR_C__

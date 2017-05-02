@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_DND_H__
+#define __GDK_DND_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_DND_H__
-#define __GDK_DND_H__
 
 #include <gdk/gdktypes.h>
 
@@ -77,35 +77,46 @@ struct _GdkDragContext {
 
   /*< public >*/
   
-  GdkDragProtocol protocol;
-  
-  gboolean is_source;
-  
-  GdkWindow *source_window;
-  GdkWindow *dest_window;
+  GdkDragProtocol GSEAL (protocol);
 
-  GList *targets;
-  GdkDragAction actions;
-  GdkDragAction suggested_action;
-  GdkDragAction action; 
+  gboolean GSEAL (is_source);
+  
+  GdkWindow *GSEAL (source_window);
+  GdkWindow *GSEAL (dest_window);
 
-  guint32 start_time;
+  GList *GSEAL (targets);
+  GdkDragAction GSEAL (actions);
+  GdkDragAction GSEAL (suggested_action);
+  GdkDragAction GSEAL (action);
+
+  guint32 GSEAL (start_time);
 
   /*< private >*/
   
-  gpointer windowing_data;
+  gpointer GSEAL (windowing_data);
 };
 
 struct _GdkDragContextClass {
   GObjectClass parent_class;
 
-  
 };
 
 /* Drag and Drop */
 
 GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
 GdkDragContext * gdk_drag_context_new        (void);
+#endif
+
+GList           *gdk_drag_context_list_targets         (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_suggested_action (GdkDragContext *context);
+GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
+
+GdkWindow       *gdk_drag_context_get_source_window    (GdkDragContext *context);
+GdkWindow       *gdk_drag_context_get_dest_window      (GdkDragContext *context);
+GdkDragProtocol  gdk_drag_context_get_protocol         (GdkDragContext *context);
+
 
 #ifndef GDK_DISABLE_DEPRECATED
 void             gdk_drag_context_ref        (GdkDragContext *context);
@@ -143,6 +154,7 @@ void    gdk_drag_find_window_for_screen   (GdkDragContext   *context,
 					   GdkDragProtocol  *protocol);
 
 #ifndef GDK_MULTIHEAD_SAFE
+#ifndef GDK_DISABLE_DEPRECATED
 GdkNativeWindow gdk_drag_get_protocol (GdkNativeWindow   xid,
 				       GdkDragProtocol  *protocol);
 
@@ -152,6 +164,7 @@ void    gdk_drag_find_window  (GdkDragContext   *context,
 			       gint              y_root,
 			       GdkWindow       **dest_window,
 			       GdkDragProtocol  *protocol);
+#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIHEAD_SAFE */
 
 gboolean        gdk_drag_motion      (GdkDragContext *context,

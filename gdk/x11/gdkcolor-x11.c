@@ -351,7 +351,7 @@ gdk_colormap_sync (GdkColormap *colormap,
  *
  * Gets the system's default colormap for @screen
  *
- * Returns: the default colormap for @screen.
+ * Returns: (transfer none): the default colormap for @screen.
  *
  * Since: 2.2
  */

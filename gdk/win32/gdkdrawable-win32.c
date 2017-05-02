@@ -92,7 +92,8 @@ static void gdk_win32_draw_drawable  (GdkDrawable    *drawable,
 				      gint            xdest,
 				      gint            ydest,
 				      gint            width,
-				      gint            height);
+				      gint            height,
+				      GdkDrawable    *original_src);
 static void gdk_win32_draw_points    (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      GdkPoint       *points,
@@ -114,6 +115,18 @@ static void gdk_win32_draw_image     (GdkDrawable     *drawable,
 				      gint             ydest,
 				      gint             width,
 				      gint             height);
+static void gdk_win32_draw_pixbuf     (GdkDrawable     *drawable,
+				      GdkGC           *gc,
+				      GdkPixbuf       *pixbuf,
+				      gint             src_x,
+				      gint             src_y,
+				      gint             dest_x,
+				      gint             dest_y,
+				      gint             width,
+				      gint             height,
+				      GdkRgbDither     dither,
+				      gint             x_dither,
+				      gint             y_dither);
 
 static cairo_surface_t *gdk_win32_ref_cairo_surface (GdkDrawable *drawable);
      
@@ -128,48 +141,19 @@ static GdkScreen *  gdk_win32_get_screen     (GdkDrawable    *drawable);
 
 static GdkVisual*   gdk_win32_get_visual     (GdkDrawable    *drawable);
 
-static void gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass);
-
 static void gdk_drawable_impl_win32_finalize   (GObject *object);
 
-static gpointer parent_class = NULL;
 static const cairo_user_data_key_t gdk_win32_cairo_key;
+static const cairo_user_data_key_t gdk_win32_cairo_hdc_key;
 
-GType
-gdk_drawable_impl_win32_get_type (void)
-{
-  static GType object_type = 0;
+G_DEFINE_TYPE (GdkDrawableImplWin32,  _gdk_drawable_impl_win32, GDK_TYPE_DRAWABLE)
 
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDrawableImplWin32Class),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drawable_impl_win32_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDrawableImplWin32),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
-                                            "GdkDrawableImplWin32",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
 
 static void
-gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
+_gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_drawable_impl_win32_finalize;
 
@@ -179,11 +163,12 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->draw_polygon = gdk_win32_draw_polygon;
   drawable_class->draw_text = gdk_win32_draw_text;
   drawable_class->draw_text_wc = gdk_win32_draw_text_wc;
-  drawable_class->draw_drawable = gdk_win32_draw_drawable;
+  drawable_class->draw_drawable_with_src = gdk_win32_draw_drawable;
   drawable_class->draw_points = gdk_win32_draw_points;
   drawable_class->draw_segments = gdk_win32_draw_segments;
   drawable_class->draw_lines = gdk_win32_draw_lines;
   drawable_class->draw_image = gdk_win32_draw_image;
+  drawable_class->draw_pixbuf = gdk_win32_draw_pixbuf;
   
   drawable_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
   
@@ -198,11 +183,16 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
 }
 
 static void
+_gdk_drawable_impl_win32_init (GdkDrawableImplWin32 *impl)
+{
+}
+
+static void
 gdk_drawable_impl_win32_finalize (GObject *object)
 {
   gdk_drawable_set_colormap (GDK_DRAWABLE (object), NULL);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_drawable_impl_win32_parent_class)->finalize (object);
 }
 
 /*****************************************************
@@ -225,10 +215,10 @@ gdk_win32_set_colormap (GdkDrawable *drawable,
     return;
   
   if (impl->colormap)
-    gdk_colormap_unref (impl->colormap);
+    g_object_unref (impl->colormap);
   impl->colormap = colormap;
   if (impl->colormap)
-    gdk_colormap_ref (impl->colormap);
+    g_object_ref (impl->colormap);
 }
 
 /* Drawing
@@ -505,7 +495,7 @@ draw_tiles (GdkDrawable *drawable,
 
   gdk_win32_hdc_release (drawable, gc, mask);
   gdk_win32_hdc_release (tile, gc_copy, mask);
-  gdk_gc_unref (gc_copy);
+  g_object_unref (gc_copy);
 }
 
 static void
@@ -557,13 +547,10 @@ generic_draw (GdkDrawable    *drawable,
       HDC mask_hdc;
       HDC tile_hdc;
 
-      HGDIOBJ old_mask_hbm;
-      HGDIOBJ old_tile_hbm;
-
       GdkGCValues gcvalues;
 
       hdc = gdk_win32_hdc_get (drawable, gc, blitting_mask);
-      tile_hdc = CreateCompatibleDC (hdc);
+      tile_hdc = gdk_win32_hdc_get (tile_pixmap, tile_gc, blitting_mask);
 
       if (gcwin32->values_mask & GDK_GC_TS_X_ORIGIN)
 	ts_x_origin = gc->ts_x_origin;
@@ -640,35 +627,21 @@ generic_draw (GdkDrawable    *drawable,
 	      gdk_draw_rectangle (tile_pixmap, tile_gc, TRUE,
 				  0, 0, width, height);
 	    }
-	  gdk_gc_unref (stipple_gc);
+	  g_object_unref (stipple_gc);
 	}
 
-      gdk_gc_unref (mask_gc);
-      gdk_gc_unref (tile_gc);
-
-      mask_hdc = CreateCompatibleDC (hdc);
-
-      if ((old_mask_hbm = SelectObject (mask_hdc, GDK_PIXMAP_HBITMAP (mask_pixmap))) == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
-
-      if ((old_tile_hbm = SelectObject (tile_hdc, GDK_PIXMAP_HBITMAP (tile_pixmap))) == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
+      mask_hdc = gdk_win32_hdc_get (mask_pixmap, mask_gc, blitting_mask);
 
       if (fill_style == GDK_STIPPLED ||
 	  fill_style == GDK_OPAQUE_STIPPLED)
 	{
 	  HDC stipple_hdc;
-	  HGDIOBJ old_stipple_hbm;
 	  HBRUSH fg_brush;
 	  HGDIOBJ old_tile_brush;
+	  GdkGC *stipple_gc;
 
-	  if ((stipple_hdc = CreateCompatibleDC (hdc)) == NULL)
-	    WIN32_GDI_FAILED ("CreateCompatibleDC");
-
-	  if ((old_stipple_hbm =
-	       SelectObject (stipple_hdc,
-			     GDK_PIXMAP_HBITMAP (stipple_bitmap))) == NULL)
-	    WIN32_GDI_FAILED ("SelectObject");
+	  stipple_gc = gdk_gc_new (stipple_bitmap);
+	  stipple_hdc = gdk_win32_hdc_get (stipple_bitmap, stipple_gc, blitting_mask);
 
 	  if ((fg_brush = CreateSolidBrush
 	       (_gdk_win32_colormap_color (impl->colormap,
@@ -706,8 +679,8 @@ generic_draw (GdkDrawable    *drawable,
 
 	  GDI_CALL (SelectObject, (tile_hdc, old_tile_brush));
 	  GDI_CALL (DeleteObject, (fg_brush));
-	  GDI_CALL (SelectObject, (stipple_hdc, old_stipple_hbm));
-	  GDI_CALL (DeleteDC, (stipple_hdc));
+	  gdk_win32_hdc_release (stipple_bitmap, stipple_gc, blitting_mask);
+	  g_object_unref (stipple_gc);
 	  g_object_unref (stipple_bitmap);
 	}
 
@@ -722,11 +695,11 @@ generic_draw (GdkDrawable    *drawable,
 			  MAKEROP4 (rop2_to_rop3 (gcwin32->rop2), ROP3_D)));
 
       /* Cleanup */
-      GDI_CALL (SelectObject, (mask_hdc, old_mask_hbm));
-      GDI_CALL (SelectObject, (tile_hdc, old_tile_hbm));
-      GDI_CALL (DeleteDC, (mask_hdc));
-      GDI_CALL (DeleteDC, (tile_hdc));
+      gdk_win32_hdc_release (mask_pixmap, mask_gc, blitting_mask);
+      g_object_unref (mask_gc);
       g_object_unref (mask_pixmap);
+      gdk_win32_hdc_release (tile_pixmap, tile_gc, blitting_mask);
+      g_object_unref (tile_gc);
       g_object_unref (tile_pixmap);
 
       gdk_win32_hdc_release (drawable, gc, blitting_mask);
@@ -1148,7 +1121,8 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 			 gint         xdest,
 			 gint         ydest,
 			 gint         width,
-			 gint         height)
+			 gint         height,
+			 GdkDrawable *original_src)
 {
   g_assert (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable));
 
@@ -1550,20 +1524,57 @@ blit_from_pixmap (gboolean              use_fg_bg,
 }
 
 static void
-blit_inside_drawable (HDC      	hdc,
-		      GdkGCWin32 *gcwin32,
-		      gint     	xsrc,
-		      gint     	ysrc,
-		      gint     	xdest,
-		      gint     	ydest,
-		      gint     	width,
-		      gint     	height)
+blit_inside_drawable (HDC                   hdc,
+                      GdkGCWin32           *gcwin32,
+                      GdkDrawableImplWin32 *src,
+                      gint                  xsrc,
+                      gint                  ysrc,
+                      gint                  xdest,
+                      gint                  ydest,
+                      gint                  width,
+                      gint                  height)
 
 {
   GDK_NOTE (DRAW, g_print ("blit_inside_drawable\n"));
 
-  GDI_CALL (BitBlt, (hdc, xdest, ydest, width, height,
-		     hdc, xsrc, ysrc, rop2_to_rop3 (gcwin32->rop2)));
+  if GDK_IS_WINDOW_IMPL_WIN32 (src)
+    {
+      /* Simply calling BitBlt() instead of these ScrollDC() gymnastics might
+       * seem tempting, but we need to do this to prevent blitting garbage when
+       * scrolling a window that is partially obscured by another window. For
+       * example, GIMP's toolbox being over the editor window. */
+
+      RECT emptyRect, clipRect;
+      HRGN updateRgn;
+      GdkRegion *update_region;
+
+      clipRect.left = xdest;
+      clipRect.top = ydest;
+      clipRect.right = xdest + width;
+      clipRect.bottom = ydest + height;
+
+      SetRectEmpty (&emptyRect);
+      updateRgn = CreateRectRgnIndirect (&emptyRect);
+
+      if (!ScrollDC (hdc, xdest - xsrc, ydest - ysrc, NULL, &clipRect, updateRgn, NULL))
+        WIN32_GDI_FAILED ("ScrollDC");
+      else
+	{
+	  GdkDrawable *wrapper = src->wrapper;
+	  update_region = _gdk_win32_hrgn_to_region (updateRgn);
+	  if (!gdk_region_empty (update_region))
+	    _gdk_window_invalidate_for_expose (GDK_WINDOW (wrapper), update_region);
+	  gdk_region_destroy (update_region);
+	}
+
+      if (!DeleteObject (updateRgn))
+        WIN32_GDI_FAILED ("DeleteObject");
+    }
+  else
+    {
+      GDI_CALL (BitBlt, (hdc, xdest, ydest, width, height,
+                         hdc, xsrc, ysrc, rop2_to_rop3 (gcwin32->rop2)));
+    }
 }
 
 static void
@@ -1657,16 +1668,45 @@ _gdk_win32_blit (gboolean              use_fg_bg,
   else
     g_assert_not_reached ();
 
+  if (GDK_IS_WINDOW_IMPL_WIN32 (draw_impl) &&
+      GDK_IS_PIXMAP_IMPL_WIN32 (src_impl))
+    {
+      GdkPixmapImplWin32 *src_pixmap = GDK_PIXMAP_IMPL_WIN32 (src_impl);
+
+      if (xsrc < 0)
+	{
+	  width += xsrc;
+	  xdest -= xsrc;
+	  xsrc = 0;
+	}
+
+      if (ysrc < 0)
+	{
+	  height += ysrc;
+	  ydest -= ysrc;
+	  ysrc = 0;
+	}
+
+      if (xsrc + width > src_pixmap->width)
+	width = src_pixmap->width - xsrc;
+      if (ysrc + height > src_pixmap->height)
+	height = src_pixmap->height - ysrc;
+    }
+
   hdc = gdk_win32_hdc_get (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
 
-  gdk_drawable_get_size (src, &src_width, &src_height);
+  gdk_drawable_get_size (src_impl->wrapper, &src_width, &src_height);
 
   if ((src_rgn = CreateRectRgn (0, 0, src_width + 1, src_height + 1)) == NULL)
-    WIN32_GDI_FAILED ("CreateRectRgn");
+    {
+      WIN32_GDI_FAILED ("CreateRectRgn");
+    }
   else if ((draw_rgn = CreateRectRgn (xsrc, ysrc,
 				      xsrc + width + 1,
 				      ysrc + height + 1)) == NULL)
-    WIN32_GDI_FAILED ("CreateRectRgn");
+    {
+      WIN32_GDI_FAILED ("CreateRectRgn");
+    }
   else
     {
       if (GDK_IS_WINDOW_IMPL_WIN32 (draw_impl))
@@ -1724,13 +1764,16 @@ _gdk_win32_blit (gboolean              use_fg_bg,
     }
 
   if (draw_impl->handle == src_impl->handle)
-    blit_inside_drawable (hdc, GDK_GC_WIN32 (gc), xsrc, ysrc, xdest, ydest, width, height);
+    blit_inside_drawable (hdc, GDK_GC_WIN32 (gc), src_impl,
+                          xsrc, ysrc, xdest, ydest, width, height);
   else if (GDK_IS_PIXMAP_IMPL_WIN32 (src_impl))
     blit_from_pixmap (use_fg_bg, draw_impl, hdc,
 		      (GdkPixmapImplWin32 *) src_impl, gc,
 		      xsrc, ysrc, xdest, ydest, width, height);
   else
-    blit_from_window (hdc, GDK_GC_WIN32 (gc), src_impl, xsrc, ysrc, xdest, ydest, width, height);
+    blit_from_window (hdc, GDK_GC_WIN32 (gc), src_impl,
+                      xsrc, ysrc, xdest, ydest, width, height);
+
   gdk_win32_hdc_release (&draw_impl->parent_instance, gc, GDK_GC_FOREGROUND);
 }
 
@@ -1750,6 +1793,27 @@ gdk_win32_draw_image (GdkDrawable     *drawable,
   _gdk_win32_blit (TRUE, (GdkDrawableImplWin32 *) drawable,
 		   gc, (GdkPixmap *) image->windowing_data,
 		   xsrc, ysrc, xdest, ydest, width, height);
+}
+
+static void
+gdk_win32_draw_pixbuf (GdkDrawable     *drawable,
+			GdkGC           *gc,
+			GdkPixbuf       *pixbuf,
+			gint             src_x,
+			gint             src_y,
+			gint             dest_x,
+			gint             dest_y,
+			gint             width,
+			gint             height,
+			GdkRgbDither     dither,
+			gint             x_dither,
+			gint             y_dither)
+{
+  GdkDrawable *wrapper = GDK_DRAWABLE_IMPL_WIN32 (drawable)->wrapper;
+  GDK_DRAWABLE_CLASS (_gdk_drawable_impl_win32_parent_class)->draw_pixbuf (wrapper, gc, pixbuf,
+									     src_x, src_y, dest_x, dest_y,
+									     width, height,
+									     dither, x_dither, y_dither);
 }
 
 /**
@@ -1787,7 +1851,7 @@ _gdk_win32_drawable_acquire_dc (GdkDrawable *drawable)
 						    impl->handle);
 	      if (!impl->saved_dc_bitmap)
 		{
-		  WIN32_GDI_FAILED ("CreateCompatibleDC");
+		  WIN32_GDI_FAILED ("SelectObject");
 		  DeleteDC (impl->hdc);
 		  impl->hdc = NULL;
 		}
@@ -1807,7 +1871,9 @@ _gdk_win32_drawable_acquire_dc (GdkDrawable *drawable)
       return impl->hdc;
     }
   else
-    return NULL;
+    {
+      return NULL;
+    }
 }
 
 /**
@@ -1845,11 +1911,39 @@ _gdk_win32_drawable_release_dc (GdkDrawable *drawable)
 }
 
 static void
+gdk_win32_cairo_surface_release_hdc (void *data)
+{
+  _gdk_win32_drawable_release_dc (GDK_DRAWABLE (data));
+}
+
+cairo_surface_t *
+_gdk_windowing_create_cairo_surface (GdkDrawable *drawable,
+				     gint width,
+				     gint height)
+{
+  cairo_surface_t *surface;
+  HDC hdc;
+
+  hdc = _gdk_win32_drawable_acquire_dc (drawable);
+  if (!hdc)
+    return NULL;
+
+  surface = cairo_win32_surface_create (hdc);
+
+  /* Whenever the cairo surface is destroyed, we need to release the
+   * HDC that was acquired */
+  cairo_surface_set_user_data (surface, &gdk_win32_cairo_hdc_key,
+			       drawable,
+			       gdk_win32_cairo_surface_release_hdc);
+
+  return surface;
+}
+
+static void
 gdk_win32_cairo_surface_destroy (void *data)
 {
   GdkDrawableImplWin32 *impl = data;
 
-  _gdk_win32_drawable_release_dc (GDK_DRAWABLE (impl));
   impl->cairo_surface = NULL;
 }
 
@@ -1864,19 +1958,27 @@ gdk_win32_ref_cairo_surface (GdkDrawable *drawable)
 
   if (!impl->cairo_surface)
     {
-      HDC hdc = _gdk_win32_drawable_acquire_dc (drawable);
-      if (!hdc)
-	return NULL;
+      /* width and height are determined from the DC */
+      impl->cairo_surface = _gdk_windowing_create_cairo_surface (drawable, 0, 0);
 
-      impl->cairo_surface = cairo_win32_surface_create (hdc);
-
+      /* Whenever the cairo surface is destroyed, we need to clear the
+       * pointer that we had stored here */
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key,
-				   drawable, gdk_win32_cairo_surface_destroy);
+				   drawable,
+				   gdk_win32_cairo_surface_destroy);
     }
   else
     cairo_surface_reference (impl->cairo_surface);
 
   return impl->cairo_surface;
+}
+
+void
+_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
+				       gint width,
+				       gint height)
+{
+  // Do nothing.  The surface size is determined by the DC
 }
 
 static gint
@@ -1902,6 +2004,26 @@ gdk_win32_get_visual (GdkDrawable *drawable)
 HGDIOBJ
 gdk_win32_drawable_get_handle (GdkDrawable *drawable)
 {
+  if (GDK_IS_WINDOW (drawable))
+    {
+      GdkWindow *window = (GdkWindow *)drawable;
+
+      /* Try to ensure the window has a native window */
+      if (!_gdk_window_has_impl (window))
+	gdk_window_ensure_native (window);
+
+      if (!GDK_WINDOW_IS_WIN32 (window))
+	{
+	  g_warning (G_STRLOC " drawable is not a native Win32 window");
+	  return NULL;
+	}
+    }
+  else if (!GDK_IS_PIXMAP (drawable))
+    {
+      g_warning (G_STRLOC " drawable is not a pixmap or window");
+      return NULL;
+    }
+
   return GDK_DRAWABLE_HANDLE (drawable);
 }
 
@@ -1922,10 +2044,11 @@ _gdk_win32_drawable_finish (GdkDrawable *drawable)
   if (impl->cairo_surface)
     {
       cairo_surface_finish (impl->cairo_surface);
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key,
-				   NULL, NULL);
+      cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_hdc_key, NULL, NULL);
+      cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key, NULL, NULL);
     }
-  
-  g_assert (impl->hdc_count == 0);
-}
 
+  /* impl->hdc_count doesn't have to be 0 here; as there may still be surfaces
+   * created with gdk_windowing_create_cairo_surface() out there, which are not
+   * managed internally by the drawable */
+}

@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_MISC_H__
 #define __GTK_MISC_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkwidget.h>
 
 
@@ -52,10 +51,10 @@ typedef struct _GtkMiscClass  GtkMiscClass;
 struct _GtkMisc
 {
   GtkWidget widget;
-  
+
   gfloat GSEAL (xalign);
   gfloat GSEAL (yalign);
-  
+
   guint16 GSEAL (xpad);
   guint16 GSEAL (ypad);
 };

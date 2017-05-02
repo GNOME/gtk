@@ -51,6 +51,9 @@ or page down (using for example the PageDown key).
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkScrollbar ##### -->
 <para>
 The #GtkScrollbar struct does not contain any public data.

@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_RANGE_H__
 #define __GTK_RANGE_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkwidget.h>
 
@@ -136,9 +135,11 @@ struct _GtkRangeClass
 
 GType              gtk_range_get_type                      (void) G_GNUC_CONST;
 
+#ifndef GTK_DISABLE_DEPRECATED
 void               gtk_range_set_update_policy             (GtkRange      *range,
                                                             GtkUpdateType  policy);
 GtkUpdateType      gtk_range_get_update_policy             (GtkRange      *range);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 void               gtk_range_set_adjustment                (GtkRange      *range,
                                                             GtkAdjustment *adjustment);
@@ -147,6 +148,24 @@ GtkAdjustment*     gtk_range_get_adjustment                (GtkRange      *range
 void               gtk_range_set_inverted                  (GtkRange      *range,
                                                             gboolean       setting);
 gboolean           gtk_range_get_inverted                  (GtkRange      *range);
+
+void               gtk_range_set_flippable                 (GtkRange      *range,
+                                                            gboolean       flippable);
+gboolean           gtk_range_get_flippable                 (GtkRange      *range);
+
+void               gtk_range_set_slider_size_fixed         (GtkRange      *range,
+                                                            gboolean       size_fixed);
+gboolean           gtk_range_get_slider_size_fixed         (GtkRange      *range);
+
+void               gtk_range_set_min_slider_size           (GtkRange      *range,
+                                                            gboolean       min_size);
+gint               gtk_range_get_min_slider_size           (GtkRange      *range);
+
+void               gtk_range_get_range_rect                (GtkRange      *range,
+                                                            GdkRectangle  *range_rect);
+void               gtk_range_get_slider_range              (GtkRange      *range,
+                                                            gint          *slider_start,
+                                                            gint          *slider_end);
 
 void               gtk_range_set_lower_stepper_sensitivity (GtkRange      *range,
                                                             GtkSensitivityType sensitivity);
@@ -174,9 +193,20 @@ gboolean           gtk_range_get_restrict_to_fill_level    (GtkRange      *range
 void               gtk_range_set_fill_level                (GtkRange      *range,
                                                             gdouble        fill_level);
 gdouble            gtk_range_get_fill_level                (GtkRange      *range);
+void               gtk_range_set_round_digits              (GtkRange      *range,
+                                                            gint           round_digits);
+gint                gtk_range_get_round_digits             (GtkRange      *range);
 
+
+/* internal API */
 gdouble            _gtk_range_get_wheel_delta              (GtkRange      *range,
                                                             GdkScrollDirection direction);
+
+void               _gtk_range_set_stop_values              (GtkRange      *range,
+                                                            gdouble       *values,
+                                                            gint           n_values);
+gint               _gtk_range_get_stop_positions           (GtkRange      *range,
+                                                            gint         **values);          
 
 
 G_END_DECLS

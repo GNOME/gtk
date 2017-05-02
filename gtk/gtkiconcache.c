@@ -25,6 +25,8 @@
 #include "gtkalias.h"
 
 #include <glib/gstdio.h>
+
+#undef GDK_PIXBUF_DISABLE_DEPRECATED
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 #ifdef HAVE_UNISTD_H
@@ -77,7 +79,7 @@ _gtk_icon_cache_unref (GtkIconCache *cache)
 		g_print ("unmapping icon cache\n"));
 
       if (cache->map)
-	g_mapped_file_free (cache->map);
+	g_mapped_file_unref (cache->map);
       g_free (cache);
     }
 }
@@ -135,7 +137,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
     {
       if (!_gtk_icon_cache_validate (&info))
         {
-          g_mapped_file_free (map);
+          g_mapped_file_unref (map);
           g_warning ("Icon cache '%s' is invalid\n", cache_filename);
 
           goto done;

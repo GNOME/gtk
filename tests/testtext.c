@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 
 #include <gtk/gtk.h>
@@ -285,7 +286,7 @@ msgbox_run (GtkWindow  *parent,
   if (yes_button)
     {
       button = gtk_button_new_with_label (yes_button);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (button_box), button);
 
       if (default_index == 0)
@@ -301,7 +302,7 @@ msgbox_run (GtkWindow  *parent,
   if (no_button)
     {
       button = gtk_button_new_with_label (no_button);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (button_box), button);
 
       if (default_index == 0)
@@ -316,7 +317,7 @@ msgbox_run (GtkWindow  *parent,
   if (cancel_button)
     {
       button = gtk_button_new_with_label (cancel_button);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (button_box), button);
       
       if (default_index == 1)
@@ -2595,7 +2596,7 @@ cursor_set_callback (GtkTextBuffer     *buffer,
   
   text_view = GTK_TEXT_VIEW (user_data);
   
-  if (GTK_WIDGET_MAPPED (text_view) &&
+  if (gtk_widget_get_mapped (GTK_WIDGET (text_view)) &&
       mark == gtk_text_buffer_get_insert (buffer))
     {
       GdkWindow *tab_window;
@@ -2864,7 +2865,7 @@ line_numbers_expose (GtkWidget      *widget,
 
       gtk_paint_layout (widget->style,
                         target,
-                        GTK_WIDGET_STATE (widget),
+                        gtk_widget_get_state (widget),
                         FALSE,
                         NULL,
                         widget,
@@ -3030,12 +3031,7 @@ view_add_example_widgets (View *view)
 void
 test_init (void)
 {
-  if (g_file_test ("../gdk-pixbuf/libpixbufloader-pnm.la",
-		   G_FILE_TEST_EXISTS))
-    {
-      g_setenv ("GDK_PIXBUF_MODULE_FILE", "../gdk-pixbuf/gdk-pixbuf.loaders", TRUE);
-      g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/gtk.immodules", TRUE);
-    }
+  g_setenv ("GTK_IM_MODULE_FILE", "../modules/input/immodules.cache", TRUE);
 }
 
 int

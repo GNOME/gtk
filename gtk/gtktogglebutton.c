@@ -29,6 +29,8 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtktogglebutton.h"
+#include "gtktoggleaction.h"
+#include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -67,9 +69,20 @@ static void gtk_toggle_button_get_property  (GObject              *object,
 					     GParamSpec           *pspec);
 static void gtk_toggle_button_update_state  (GtkButton            *button);
 
-static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkToggleButton, gtk_toggle_button, GTK_TYPE_BUTTON)
+static void gtk_toggle_button_activatable_interface_init (GtkActivatableIface  *iface);
+static void gtk_toggle_button_update         	     (GtkActivatable       *activatable,
+					 	      GtkAction            *action,
+						      const gchar          *property_name);
+static void gtk_toggle_button_sync_action_properties (GtkActivatable       *activatable,
+						      GtkAction            *action);
+
+static GtkActivatableIface *parent_activatable_iface;
+static guint                toggle_button_signals[LAST_SIGNAL] = { 0 };
+
+G_DEFINE_TYPE_WITH_CODE (GtkToggleButton, gtk_toggle_button, GTK_TYPE_BUTTON,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
+						gtk_toggle_button_activatable_interface_init))
 
 static void
 gtk_toggle_button_class_init (GtkToggleButtonClass *class)
@@ -136,6 +149,52 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
   toggle_button->active = FALSE;
   toggle_button->draw_indicator = FALSE;
   GTK_BUTTON (toggle_button)->depress_on_activate = TRUE;
+}
+
+static void
+gtk_toggle_button_activatable_interface_init (GtkActivatableIface *iface)
+{
+  parent_activatable_iface = g_type_interface_peek_parent (iface);
+  iface->update = gtk_toggle_button_update;
+  iface->sync_action_properties = gtk_toggle_button_sync_action_properties;
+}
+
+static void
+gtk_toggle_button_update (GtkActivatable *activatable,
+			  GtkAction      *action,
+			  const gchar    *property_name)
+{
+  GtkToggleButton *button;
+
+  parent_activatable_iface->update (activatable, action, property_name);
+
+  button = GTK_TOGGLE_BUTTON (activatable);
+
+  if (strcmp (property_name, "active") == 0)
+    {
+      gtk_action_block_activate (action);
+      gtk_toggle_button_set_active (button, gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
+      gtk_action_unblock_activate (action);
+    }
+
+}
+
+static void
+gtk_toggle_button_sync_action_properties (GtkActivatable *activatable,
+				          GtkAction      *action)
+{
+  GtkToggleButton *button;
+
+  parent_activatable_iface->sync_action_properties (activatable, action);
+
+  if (!GTK_IS_TOGGLE_ACTION (action))
+    return;
+
+  button = GTK_TOGGLE_BUTTON (activatable);
+
+  gtk_action_block_activate (action);
+  gtk_toggle_button_set_active (button, gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
+  gtk_action_unblock_activate (action);
 }
 
 
@@ -251,7 +310,7 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
       toggle_button->draw_indicator = draw_indicator;
       GTK_BUTTON (toggle_button)->depress_on_activate = !draw_indicator;
       
-      if (GTK_WIDGET_VISIBLE (toggle_button))
+      if (gtk_widget_get_visible (GTK_WIDGET (toggle_button)))
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
 
       g_object_notify (G_OBJECT (toggle_button), "draw-indicator");
@@ -360,14 +419,14 @@ static gint
 gtk_toggle_button_expose (GtkWidget      *widget,
 			  GdkEventExpose *event)
 {
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       GtkWidget *child = GTK_BIN (widget)->child;
       GtkButton *button = GTK_BUTTON (widget);
       GtkStateType state_type;
       GtkShadowType shadow_type;
 
-      state_type = GTK_WIDGET_STATE (widget);
+      state_type = gtk_widget_get_state (widget);
       
       if (GTK_TOGGLE_BUTTON (widget)->inconsistent)
         {
@@ -397,7 +456,7 @@ gtk_toggle_button_mnemonic_activate (GtkWidget *widget,
    * gtk_widget_real_mnemonic_activate() in order to focus the widget even
    * if there is no mnemonic conflict.
    */
-  if (GTK_WIDGET_CAN_FOCUS (widget))
+  if (gtk_widget_get_can_focus (widget))
     gtk_widget_grab_focus (widget);
 
   if (!group_cycling)
@@ -441,6 +500,9 @@ gtk_toggle_button_clicked (GtkButton *button)
   gtk_toggle_button_update_state (button);
 
   g_object_notify (G_OBJECT (toggle_button), "active");
+
+  if (GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked)
+    GTK_BUTTON_CLASS (gtk_toggle_button_parent_class)->clicked (button);
 }
 
 static void

@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_DRAWABLE_H__
+#define __GDK_DRAWABLE_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_DRAWABLE_H__
-#define __GDK_DRAWABLE_H__
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkgc.h>
@@ -200,10 +200,27 @@ struct _GdkDrawableClass
 
   cairo_surface_t *(*ref_cairo_surface) (GdkDrawable *drawable);
 
+  GdkDrawable *(*get_source_drawable) (GdkDrawable *drawable);
+
+  void         (*set_cairo_clip)      (GdkDrawable *drawable,
+				       cairo_t *cr);
+
+  cairo_surface_t * (*create_cairo_surface) (GdkDrawable *drawable,
+					     int width,
+					     int height);
+
+  void (*draw_drawable_with_src)  (GdkDrawable  *drawable,
+				   GdkGC	       *gc,
+				   GdkDrawable  *src,
+				   gint		xsrc,
+				   gint		ysrc,
+				   gint		xdest,
+				   gint		ydest,
+				   gint		width,
+				   gint		height,
+				   GdkDrawable  *original_src);
+
   /* Padding for future expansion */
-  void         (*_gdk_reserved4)  (void);
-  void         (*_gdk_reserved5)  (void);
-  void         (*_gdk_reserved6)  (void);
   void         (*_gdk_reserved7)  (void);
   void         (*_gdk_reserved9)  (void);
   void         (*_gdk_reserved10) (void);
@@ -212,7 +229,6 @@ struct _GdkDrawableClass
   void         (*_gdk_reserved13) (void);
   void         (*_gdk_reserved14) (void);
   void         (*_gdk_reserved15) (void);
-  void         (*_gdk_reserved16) (void);
 };
 
 struct _GdkTrapezoid
@@ -234,16 +250,19 @@ gpointer        gdk_drawable_get_data     (GdkDrawable    *drawable,
 					   const gchar    *key);
 #endif /* GDK_DISABLE_DEPRECATED */
 
-void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
-					   gint	          *width,
-					   gint  	  *height);
 void	        gdk_drawable_set_colormap (GdkDrawable	  *drawable,
 					   GdkColormap	  *colormap);
 GdkColormap*    gdk_drawable_get_colormap (GdkDrawable	  *drawable);
-GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
 gint            gdk_drawable_get_depth    (GdkDrawable	  *drawable);
+
+#if !defined (GDK_DISABLE_DEPRECATED)
+void            gdk_drawable_get_size     (GdkDrawable	  *drawable,
+					   gint	          *width,
+					   gint  	  *height);
+GdkVisual*      gdk_drawable_get_visual   (GdkDrawable	  *drawable);
 GdkScreen*	gdk_drawable_get_screen   (GdkDrawable    *drawable);
 GdkDisplay*	gdk_drawable_get_display  (GdkDrawable    *drawable);
+#endif /* GDK_DISABLE_DEPRECATED */
 
 #ifndef GDK_DISABLE_DEPRECATED
 GdkDrawable*    gdk_drawable_ref          (GdkDrawable    *drawable);
@@ -252,6 +271,7 @@ void            gdk_drawable_unref        (GdkDrawable    *drawable);
 
 /* Drawing
  */
+#ifndef GDK_DISABLE_DEPRECATED
 void gdk_draw_point     (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 gint              x,
@@ -283,17 +303,12 @@ void gdk_draw_polygon   (GdkDrawable      *drawable,
 			 gboolean          filled,
 			 const GdkPoint   *points,
 			 gint              n_points);
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-/* Used by gtk_default_draw_string () */
 void gdk_draw_string    (GdkDrawable      *drawable,
 			 GdkFont          *font,
 			 GdkGC            *gc,
 			 gint              x,
 			 gint              y,
 			 const gchar      *string);
-#endif /* !GDK_DISABLE_DEPRECATED || GTK_COMPILATION */
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
-/* Used by gdk_pixmap_draw_text (), gdk_window_draw_text() */
 void gdk_draw_text      (GdkDrawable      *drawable,
 			 GdkFont          *font,
 			 GdkGC            *gc,
@@ -301,7 +316,6 @@ void gdk_draw_text      (GdkDrawable      *drawable,
 			 gint              y,
 			 const gchar      *text,
 			 gint              text_length);
-/* Used by gdk_pixmap_draw_text_wc (), gdk_window_draw_text_wc () */
 void gdk_draw_text_wc   (GdkDrawable      *drawable,
 			 GdkFont          *font,
 			 GdkGC            *gc,
@@ -309,7 +323,6 @@ void gdk_draw_text_wc   (GdkDrawable      *drawable,
 			 gint              y,
 			 const GdkWChar   *text,
 			 gint              text_length);
-#endif /* !GDK_DISABLE_DEPRECATED || GDK_COMPILATION */
 void gdk_draw_drawable  (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 GdkDrawable      *src,
@@ -397,10 +410,8 @@ void gdk_draw_trapezoids         (GdkDrawable        *drawable,
 				  const GdkTrapezoid *trapezoids,
 				  gint                n_trapezoids);
 
-#ifndef GDK_DISABLE_DEPRECATED
 #define gdk_draw_pixmap                gdk_draw_drawable
 #define gdk_draw_bitmap                gdk_draw_drawable
-#endif /* GDK_DISABLE_DEPRECATED */
 
 GdkImage* gdk_drawable_get_image      (GdkDrawable *drawable,
                                        gint         x,
@@ -415,6 +426,7 @@ GdkImage *gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 				      gint          dest_y,
 				      gint          width,
 				      gint          height);
+#endif /* GDK_DISABLE_DEPRECATED */
 
 GdkRegion *gdk_drawable_get_clip_region    (GdkDrawable *drawable);
 GdkRegion *gdk_drawable_get_visible_region (GdkDrawable *drawable);

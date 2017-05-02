@@ -85,7 +85,7 @@ gtk_win32_embed_widget_init (GtkWin32EmbedWidget *embed_widget)
 
   window->type = GTK_WINDOW_TOPLEVEL;
 
-  GTK_WIDGET_SET_FLAGS (embed_widget, GTK_TOPLEVEL);
+  _gtk_widget_set_is_toplevel (GTK_WIDGET (embed_widget), TRUE);
   gtk_container_set_resize_mode (GTK_CONTAINER (embed_widget), GTK_RESIZE_QUEUE);
 }
 
@@ -197,10 +197,10 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
       
       _gtk_container_queue_resize (GTK_CONTAINER (widget));
 
-      g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
+      g_return_if_fail (!gtk_widget_get_realized (widget));
     }
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.title = window->title;
@@ -265,14 +265,16 @@ gtk_win32_embed_widget_hide (GtkWidget *widget)
 static void
 gtk_win32_embed_widget_map (GtkWidget *widget)
 {
-  GtkBin *bin = GTK_BIN (widget);
-  
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  
-  if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
-    gtk_widget_map (bin->child);
+  GtkBin    *bin = GTK_BIN (widget);
+  GtkWidget *child;
+
+  gtk_widget_set_mapped (widget, TRUE);
+
+  child = gtk_bin_get_child (bin);
+  if (child &&
+      gtk_widget_get_visible (child) &&
+      !gtk_widget_get_mapped (child))
+    gtk_widget_map (child);
 
   gdk_window_show (widget->window);
 }
@@ -280,7 +282,7 @@ gtk_win32_embed_widget_map (GtkWidget *widget)
 static void
 gtk_win32_embed_widget_unmap (GtkWidget *widget)
 {
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
   gdk_window_hide (widget->window);
 }
 
@@ -288,26 +290,29 @@ static void
 gtk_win32_embed_widget_size_allocate (GtkWidget     *widget,
 				      GtkAllocation *allocation)
 {
-  GtkBin *bin = GTK_BIN (widget);
+  GtkBin    *bin = GTK_BIN (widget);
+  GtkWidget *child;
   
   widget->allocation = *allocation;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
-  
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+
+  child = gtk_bin_get_child (bin);
+  if (child && gtk_widget_get_visible (child))
     {
       GtkAllocation child_allocation;
       
-      child_allocation.x = child_allocation.y = GTK_CONTAINER (widget)->border_width;
+      child_allocation.x = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      child_allocation.y = child_allocation.x;
       child_allocation.width =
 	MAX (1, (gint)allocation->width - child_allocation.x * 2);
       child_allocation.height =
 	MAX (1, (gint)allocation->height - child_allocation.y * 2);
       
-      gtk_widget_size_allocate (bin->child, &child_allocation);
+      gtk_widget_size_allocate (child, &child_allocation);
     }
 }
 
@@ -325,8 +330,9 @@ gtk_win32_embed_widget_focus (GtkWidget        *widget,
   GtkWin32EmbedWidget *embed_widget = GTK_WIN32_EMBED_WIDGET (widget);
   GtkWindow *window = GTK_WINDOW (widget);
   GtkContainer *container = GTK_CONTAINER (widget);
-  GtkWidget *old_focus_child = container->focus_child;
+  GtkWidget *old_focus_child = gtk_container_get_focus_child (container);
   GtkWidget *parent;
+  GtkWidget *child;
 
   /* We override GtkWindow's behavior, since we don't want wrapping here.
    */
@@ -351,11 +357,12 @@ gtk_win32_embed_widget_focus (GtkWidget        *widget,
   else
     {
       /* Try to focus the first widget in the window */
-      if (bin->child && gtk_widget_child_focus (bin->child, direction))
+      child = gtk_bin_get_child (bin);
+      if (child && gtk_widget_child_focus (child, direction))
         return TRUE;
     }
 
-  if (!GTK_CONTAINER (window)->focus_child)
+  if (!gtk_container_get_focus_child (GTK_CONTAINER (window)))
     {
       int backwards = FALSE;
 

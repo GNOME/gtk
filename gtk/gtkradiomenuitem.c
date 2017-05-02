@@ -28,6 +28,7 @@
 #include "gtkaccellabel.h"
 #include "gtkmarshalers.h"
 #include "gtkradiomenuitem.h"
+#include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -179,6 +180,16 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
   g_object_unref (radio_menu_item);
 }
 
+
+/**
+ * gtk_radio_menu_item_new_with_label:
+ * @group: (element-type GtkRadioMenuItem) (transfer full):
+ * @label: the text for the label
+ *
+ * Creates a new #GtkRadioMenuItem whose child is a simple #GtkLabel.
+ *
+ * Returns: (transfer none): A new #GtkRadioMenuItem
+ */
 GtkWidget*
 gtk_radio_menu_item_new_with_label (GSList *group,
 				    const gchar *label)
@@ -230,11 +241,11 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
 /**
  * gtk_radio_menu_item_new_from_widget:
  * @group: An existing #GtkRadioMenuItem
- * 
+ *
  * Creates a new #GtkRadioMenuItem adding it to the same group as @group.
- * 
- * Return value: The new #GtkRadioMenuItem
- * 
+ *
+ * Return value: (transfer none): The new #GtkRadioMenuItem
+ *
  * Since: 2.4
  **/
 GtkWidget *
@@ -262,8 +273,8 @@ gtk_radio_menu_item_new_from_widget (GtkRadioMenuItem *group)
  *
  * The new #GtkRadioMenuItem is added to the same group as @group.
  *
- * Return value: The new #GtkRadioMenuItem
- * 
+ * Return value: (transfer none): The new #GtkRadioMenuItem
+ *
  * Since: 2.4
  **/
 GtkWidget *
@@ -282,14 +293,14 @@ gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
 
 /**
  * gtk_radio_menu_item_new_with_label_from_widget:
- * @group: an existing #GtkRadioMenuItem 
+ * @group: an existing #GtkRadioMenuItem
  * @label: the text for the label
  *
  * Creates a new GtkRadioMenuItem whose child is a simple GtkLabel.
  * The new #GtkRadioMenuItem is added to the same group as @group.
  *
- * Return value: The new #GtkRadioMenuItem
- * 
+ * Return value: (transfer none): The new #GtkRadioMenuItem
+ *
  * Since: 2.4
  **/
 GtkWidget *
@@ -306,6 +317,15 @@ gtk_radio_menu_item_new_with_label_from_widget (GtkRadioMenuItem *group,
   return gtk_radio_menu_item_new_with_label (list, label);
 }
 
+/**
+ * gtk_radio_menu_item_get_group:
+ * @radio_menu_item: a #GtkRadioMenuItem
+ *
+ * Returns the group to which the radio menu item belongs, as a #GList of
+ * #GtkRadioMenuItem. The list belongs to GTK+ and should not be freed.
+ *
+ * Returns: (transfer none): the group of @radio_menu_item
+ */
 GSList*
 gtk_radio_menu_item_get_group (GtkRadioMenuItem *radio_menu_item)
 {
@@ -420,8 +440,13 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
   GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (menu_item);
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
   GtkCheckMenuItem *tmp_menu_item;
+  GtkAction        *action;
   GSList *tmp_list;
   gint toggled;
+
+  action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (menu_item));
+  if (action && gtk_menu_item_get_submenu (menu_item) == NULL)
+    gtk_action_activate (action);
 
   toggled = FALSE;
 
@@ -467,7 +492,9 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
     }
 
   if (toggled)
-    gtk_check_menu_item_toggled (check_menu_item);
+    {
+      gtk_check_menu_item_toggled (check_menu_item);
+    }
 
   gtk_widget_queue_draw (GTK_WIDGET (radio_menu_item));
 }

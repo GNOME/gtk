@@ -60,7 +60,7 @@ _gdk_gc_win32_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkGCWin32Class),
         (GBaseInitFunc) NULL,
@@ -205,7 +205,9 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 				    GdkGCValuesMask mask,
 				    GdkGCWin32     *win32_gc)
 {				    
+#ifdef G_ENABLE_DEBUG
   char *s = "";
+#endif
 
   GDK_NOTE (GC, g_print ("{"));
 
@@ -572,7 +574,8 @@ gdk_win32_gc_set_dashes (GdkGC *gc,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-                                   const GdkRegion *region)
+                                   const GdkRegion *region,
+				   gboolean         reset_origin)
 {
   GdkGCWin32 *win32_gc = GDK_GC_WIN32 (gc);
 
@@ -596,10 +599,12 @@ _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
       win32_gc->values_mask &= ~GDK_GC_CLIP_MASK;
     }
 
-  gc->clip_x_origin = 0;
-  gc->clip_y_origin = 0;
-  
-  win32_gc->values_mask &= ~(GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
+  if (reset_origin)
+    {
+      gc->clip_x_origin = 0;
+      gc->clip_y_origin = 0;
+      win32_gc->values_mask &= ~(GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
+    }
 }
 
 void
@@ -738,6 +743,8 @@ predraw (GdkGC       *gc,
 static GdkDrawableImplWin32 *
 get_impl_drawable (GdkDrawable *drawable)
 {
+  if (GDK_IS_OFFSCREEN_WINDOW (drawable))
+    return _gdk_offscreen_window_get_real_drawable (GDK_OFFSCREEN_WINDOW (drawable));
   if (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable))
     return GDK_DRAWABLE_IMPL_WIN32(drawable);
   else if (GDK_IS_WINDOW (drawable))

@@ -25,6 +25,9 @@ Recently used files are supported since GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRecentChooser ##### -->
 <para>
 

@@ -374,7 +374,7 @@ view_column_model_get_type (void)
 
   if (!view_column_model_type)
     {
-      static const GTypeInfo view_column_model_info =
+      const GTypeInfo view_column_model_info =
       {
 	sizeof (GtkListStoreClass),
 	NULL,		/* base_init */
@@ -387,21 +387,21 @@ view_column_model_get_type (void)
         (GInstanceInitFunc) view_column_model_init,
       };
 
-      static const GInterfaceInfo tree_model_info =
+      const GInterfaceInfo tree_model_info =
       {
 	(GInterfaceInitFunc) view_column_model_tree_model_init,
 	NULL,
 	NULL
       };
 
-      static const GInterfaceInfo drag_source_info =
+      const GInterfaceInfo drag_source_info =
       {
 	(GInterfaceInitFunc) view_column_model_drag_source_init,
 	NULL,
 	NULL
       };
 
-      static const GInterfaceInfo drag_dest_info =
+      const GInterfaceInfo drag_dest_info =
       {
 	(GInterfaceInitFunc) view_column_model_drag_dest_init,
 	NULL,

@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_CURSOR_H__
+#define __GDK_CURSOR_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_CURSOR_H__
-#define __GDK_CURSOR_H__
 
 #include <gdk/gdktypes.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -120,14 +120,15 @@ typedef enum
   GDK_WATCH 		  = 150,
   GDK_XTERM 		  = 152,
   GDK_LAST_CURSOR,
-  GDK_CURSOR_IS_PIXMAP 	= -1
+  GDK_BLANK_CURSOR        = -2,
+  GDK_CURSOR_IS_PIXMAP 	  = -1
 } GdkCursorType;
 
 struct _GdkCursor
 {
-  GdkCursorType type;
+  GdkCursorType GSEAL (type);
   /*< private >*/
-  guint ref_count;
+  guint GSEAL (ref_count);
 };
 
 /* Cursors
@@ -156,6 +157,7 @@ void        gdk_cursor_unref             (GdkCursor       *cursor);
 GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 					  const gchar     *name);
 GdkPixbuf*  gdk_cursor_get_image         (GdkCursor       *cursor);
+GdkCursorType gdk_cursor_get_cursor_type (GdkCursor       *cursor);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_cursor_destroy             gdk_cursor_unref

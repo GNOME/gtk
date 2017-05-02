@@ -19,7 +19,6 @@
 
 #include <string.h>
 
-#undef GTK_DISABLE_DEPRECATED
 #include <gtk/gtk.h>
 
 #include "prop-editor.h"
@@ -396,16 +395,16 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
 
 static void
-enum_modified (GtkOptionMenu *om, gpointer data)
+enum_modified (GtkComboBox *cb, gpointer data)
 {
   ObjectProperty *p = data;
   gint i;
   GEnumClass *eclass;
   
   eclass = G_ENUM_CLASS (g_type_class_peek (p->spec->value_type));
-  
-  i = gtk_option_menu_get_history (om);
-  
+
+  i = gtk_combo_box_get_active (cb);
+
   if (is_child_property (p->spec))
     {
       GtkWidget *widget = GTK_WIDGET (p->obj);
@@ -421,7 +420,7 @@ enum_modified (GtkOptionMenu *om, gpointer data)
 static void
 enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkOptionMenu *om = GTK_OPTION_MENU (data);
+  GtkComboBox *cb = GTK_COMBO_BOX (data);
   GValue val = { 0, };  
   GEnumClass *eclass;
   gint i;
@@ -439,11 +438,11 @@ enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
       ++i;
     }
   
-  if (gtk_option_menu_get_history (om) != i)
+  if (gtk_combo_box_get_active (cb) != i)
     {
-      block_controller (G_OBJECT (om));
-      gtk_option_menu_set_history (om, i);
-      unblock_controller (G_OBJECT (om));
+      block_controller (G_OBJECT (cb));
+      gtk_combo_box_set_active (cb, i);
+      unblock_controller (G_OBJECT (cb));
     }
   
   g_value_unset (&val);
@@ -593,13 +592,15 @@ pointer_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_free (str);
 }
 
-gchar *
-object_label (GObject *obj)
+static gchar *
+object_label (GObject *obj, GParamSpec *pspec)
 {
   const gchar *name;
 
   if (obj)
     name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
+  else if (pspec)
+    name = g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec));
   else
     name = "unknown";
   return g_strdup_printf ("Object: %p (%s)", obj, name);
@@ -618,7 +619,7 @@ object_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_object_get (object, pspec->name, &obj, NULL);
   g_list_free (children);
 
-  str = object_label (obj);
+  str = object_label (obj, pspec);
   
   gtk_label_set_text (GTK_LABEL (label), str);
   gtk_widget_set_sensitive (button, G_IS_OBJECT (obj));
@@ -655,6 +656,50 @@ object_properties (GtkWidget *button,
     create_prop_editor (obj, 0);
 }
  
+static void
+color_modified (GtkColorButton *cb, gpointer data)
+{
+  ObjectProperty *p = data;
+  GdkColor color;
+
+  gtk_color_button_get_color (cb, &color);
+
+  if (is_child_property (p->spec))
+    {
+      GtkWidget *widget = GTK_WIDGET (p->obj);
+      GtkWidget *parent = gtk_widget_get_parent (widget);
+
+      gtk_container_child_set (GTK_CONTAINER (parent),
+			       widget, p->spec->name, &color, NULL);
+    }
+  else
+    g_object_set (p->obj, p->spec->name, &color, NULL);
+}
+
+static void
+color_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkColorButton *cb = GTK_COLOR_BUTTON (data);
+  GValue val = { 0, };
+  GdkColor *color;
+  GdkColor cb_color;
+
+  g_value_init (&val, GDK_TYPE_COLOR);
+  get_property_value (object, pspec, &val);
+
+  color = g_value_get_boxed (&val);
+  gtk_color_button_get_color (cb, &cb_color);
+
+  if (color != NULL && !gdk_color_equal (color, &cb_color))
+    {
+      block_controller (G_OBJECT (cb));
+      gtk_color_button_set_color (cb, color);
+      unblock_controller (G_OBJECT (cb));
+    }
+
+  g_value_unset (&val);
+}
+
 static GtkWidget *
 property_widget (GObject    *object, 
 		 GParamSpec *spec, 
@@ -774,33 +819,22 @@ property_widget (GObject    *object,
   else if (type == G_TYPE_PARAM_ENUM)
     {
       {
-	GtkWidget *menu;
 	GEnumClass *eclass;
 	gint j;
 	
-	prop_edit = gtk_option_menu_new ();
-	
-	menu = gtk_menu_new ();
+	prop_edit = gtk_combo_box_text_new ();
 	
 	eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 	
 	j = 0;
 	while (j < eclass->n_values)
 	  {
-	    GtkWidget *mi;
-	    
-	    mi = gtk_menu_item_new_with_label (eclass->values[j].value_name);
-	    
-	    gtk_widget_show (mi);
-	    
-	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
-	    
+	    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (prop_edit),
+	                                    eclass->values[j].value_name);
 	    ++j;
 	  }
 	
 	g_type_class_unref (eclass);
-	
-	gtk_option_menu_set_menu (GTK_OPTION_MENU (prop_edit), menu);
 	
 	g_object_connect_property (object, spec,
 				   G_CALLBACK (enum_changed),
@@ -881,6 +915,19 @@ property_widget (GObject    *object,
       g_object_connect_property (object, spec,
 				 G_CALLBACK (object_changed),
 				 prop_edit, G_OBJECT (label));
+    }
+  else if (type == G_TYPE_PARAM_BOXED &&
+           G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_COLOR)
+    {
+      prop_edit = gtk_color_button_new ();
+
+      g_object_connect_property (object, spec,
+				 G_CALLBACK (color_changed),
+				 prop_edit, G_OBJECT (prop_edit));
+
+      if (can_modify)
+	connect_controller (G_OBJECT (prop_edit), "color-set",
+			    object, spec, G_CALLBACK (color_modified));
     }
   else
     {  
@@ -1105,7 +1152,7 @@ children_from_object (GObject *object)
 
       prop_edit = gtk_hbox_new (FALSE, 5);
 
-      str = object_label (object);
+      str = object_label (object, NULL);
       label = gtk_label_new (str);
       g_free (str);
       button = gtk_button_new_with_label ("Properties");
@@ -1160,7 +1207,7 @@ cells_from_object (GObject *object)
 
       prop_edit = gtk_hbox_new (FALSE, 5);
 
-      str = object_label (object);
+      str = object_label (object, NULL);
       label = gtk_label_new (str);
       g_free (str);
       button = gtk_button_new_with_label ("Properties");

@@ -74,7 +74,7 @@ static void _check_text (AtkObject *in_obj)
    */
   else 
   {
-    G_CONST_RETURN gchar *test_accessible_name = g_getenv ("TEST_ACCESSIBLE_NAME");
+    const gchar *test_accessible_name = g_getenv ("TEST_ACCESSIBLE_NAME");
 
     if (test_accessible_name != NULL)
     {

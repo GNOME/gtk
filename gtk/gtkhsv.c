@@ -70,9 +70,6 @@ typedef struct {
   /* Window for capturing events */
   GdkWindow *window;
   
-  /* GC for drawing */
-  GdkGC *gc;
-  
   /* Dragging mode */
   DragMode mode;
 
@@ -213,8 +210,8 @@ gtk_hsv_init (GtkHSV *hsv)
   
   hsv->priv = priv;
 
-  GTK_WIDGET_SET_FLAGS (hsv, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (hsv, GTK_CAN_FOCUS);
+  gtk_widget_set_has_window (GTK_WIDGET (hsv), FALSE);
+  gtk_widget_set_can_focus (GTK_WIDGET (hsv), TRUE);
   
   priv->h = 0.0;
   priv->s = 0.0;
@@ -279,7 +276,7 @@ gtk_hsv_realize (GtkWidget *widget)
   hsv = GTK_HSV (widget);
   priv = hsv->priv;
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   
   /* Create window */
   
@@ -308,10 +305,6 @@ gtk_hsv_realize (GtkWidget *widget)
   gdk_window_set_user_data (priv->window, hsv);
   
   widget->style = gtk_style_attach (widget->style, widget->window);
-  
-  /* Create GC */
-  
-  priv->gc = gdk_gc_new (parent_window);
 }
 
 /* Unrealize handler for the HSV color selector */
@@ -328,9 +321,6 @@ gtk_hsv_unrealize (GtkWidget *widget)
   gdk_window_destroy (priv->window);
   priv->window = NULL;
   
-  g_object_unref (priv->gc);
-  priv->gc = NULL;
-
   GTK_WIDGET_CLASS (gtk_hsv_parent_class)->unrealize (widget);
 }
 
@@ -366,7 +356,7 @@ gtk_hsv_size_allocate (GtkWidget     *widget,
   
   widget->allocation = *allocation;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (priv->window,
 			    allocation->x,
 			    allocation->y,
@@ -839,7 +829,7 @@ gtk_hsv_button_release (GtkWidget      *widget,
   } else
     g_assert_not_reached ();
   
-  gdk_display_pointer_ungrab (gdk_drawable_get_display (event->window),
+  gdk_display_pointer_ungrab (gdk_window_get_display (event->window),
 			      event->time);
   return TRUE;
 }
@@ -1223,7 +1213,7 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Draw focus outline */
 
-  if (GTK_WIDGET_HAS_FOCUS (hsv) &&
+  if (gtk_widget_has_focus (widget) &&
       !priv->focus_on_ring)
     {
       gint focus_width;
@@ -1235,7 +1225,7 @@ paint_triangle (GtkHSV      *hsv,
 			    NULL);
   
       gtk_paint_focus (widget->style, widget->window,
-		       GTK_WIDGET_STATE (widget),
+		       gtk_widget_get_state (widget),
 		       NULL, widget, detail,
 		       widget->allocation.x + xx - FOCUS_RADIUS - focus_width - focus_pad, 
 		       widget->allocation.y + yy - FOCUS_RADIUS - focus_width - focus_pad, 
@@ -1271,7 +1261,7 @@ gtk_hsv_expose (GtkWidget      *widget,
   hsv = GTK_HSV (widget);
   priv = hsv->priv;
   
-  if (!(GTK_WIDGET_DRAWABLE (widget) && event->window == widget->window))
+  if (!(event->window == widget->window && gtk_widget_is_drawable (widget)))
     return FALSE;
 
   rect.x = widget->allocation.x;
@@ -1291,9 +1281,9 @@ gtk_hsv_expose (GtkWidget      *widget,
 	 dest.width, dest.height);
   cairo_destroy (cr);
 
-  if (GTK_WIDGET_HAS_FOCUS (hsv) && priv->focus_on_ring)
+  if (gtk_widget_has_focus (widget) && priv->focus_on_ring)
     gtk_paint_focus (widget->style, widget->window,
-		     GTK_WIDGET_STATE (widget),
+		     gtk_widget_get_state (widget),
 		     &event->area, widget, NULL,
 		     widget->allocation.x,
 		     widget->allocation.y, 
@@ -1313,7 +1303,7 @@ gtk_hsv_focus (GtkWidget       *widget,
   hsv = GTK_HSV (widget);
   priv = hsv->priv;
 
-  if (!GTK_WIDGET_HAS_FOCUS (hsv))
+  if (!gtk_widget_has_focus (widget))
     {
       if (dir == GTK_DIR_TAB_BACKWARD)
         priv->focus_on_ring = FALSE;
@@ -1364,14 +1354,13 @@ gtk_hsv_focus (GtkWidget       *widget,
 
 /**
  * gtk_hsv_new:
- * @void:
  *
  * Creates a new HSV color selector.
  *
  * Return value: A newly-created HSV color selector.
  *
  * Since: 2.14
- **/
+ */
 GtkWidget*
 gtk_hsv_new (void)
 {
@@ -1380,16 +1369,16 @@ gtk_hsv_new (void)
 
 /**
  * gtk_hsv_set_color:
- * @hsv: An HSV color selector.
- * @h: Hue.
- * @s: Saturation.
- * @v: Value.
+ * @hsv: An HSV color selector
+ * @h: Hue
+ * @s: Saturation
+ * @v: Value
  *
- * Sets the current color in an HSV color selector.  Color component values must
- * be in the [0.0, 1.0] range.
+ * Sets the current color in an HSV color selector.
+ * Color component values must be in the [0.0, 1.0] range.
  *
  * Since: 2.14
- **/
+ */
 void
 gtk_hsv_set_color (GtkHSV *hsv,
 		   gdouble h,
@@ -1416,16 +1405,16 @@ gtk_hsv_set_color (GtkHSV *hsv,
 
 /**
  * gtk_hsv_get_color:
- * @hsv: An HSV color selector.
- * @h: Return value for the hue.
- * @s: Return value for the saturation.
- * @v: Return value for the value.
+ * @hsv: An HSV color selector
+ * @h: (out): Return value for the hue
+ * @s: (out): Return value for the saturation
+ * @v: (out): Return value for the value
  *
- * Queries the current color in an HSV color selector.  Returned values will be
- * in the [0.0, 1.0] range.
+ * Queries the current color in an HSV color selector.
+ * Returned values will be in the [0.0, 1.0] range.
  *
  * Since: 2.14
- **/
+ */
 void
 gtk_hsv_get_color (GtkHSV *hsv,
                    double *h,
@@ -1450,14 +1439,14 @@ gtk_hsv_get_color (GtkHSV *hsv,
 
 /**
  * gtk_hsv_set_metrics:
- * @hsv: An HSV color selector.
- * @size: Diameter for the hue ring.
- * @ring_width: Width of the hue ring.
+ * @hsv: An HSV color selector
+ * @size: Diameter for the hue ring
+ * @ring_width: Width of the hue ring
  *
  * Sets the size and ring width of an HSV color selector.
  *
  * Since: 2.14
- **/
+ */
 void
 gtk_hsv_set_metrics (GtkHSV *hsv,
 		     gint    size,
@@ -1486,14 +1475,14 @@ gtk_hsv_set_metrics (GtkHSV *hsv,
 
 /**
  * gtk_hsv_get_metrics:
- * @hsv: An HSV color selector.
- * @size: Return value for the diameter of the hue ring.
- * @ring_width: Return value for the width of the hue ring.
+ * @hsv: An HSV color selector
+ * @size: (out): Return value for the diameter of the hue ring
+ * @ring_width: (out): Return value for the width of the hue ring
  *
  * Queries the size and ring width of an HSV color selector.
  *
  * Since: 2.14
- **/
+ */
 void
 gtk_hsv_get_metrics (GtkHSV *hsv,
 		     gint   *size,
@@ -1514,19 +1503,19 @@ gtk_hsv_get_metrics (GtkHSV *hsv,
 
 /**
  * gtk_hsv_is_adjusting:
- * @hsv:
+ * @hsv: A #GtkHSV 
  *
- * An HSV color selector can be said to be adjusting if multiple rapid changes
- * are being made to its value, for example, when the user is adjusting the
- * value with the mouse.  This function queries whether the HSV color selector
- * is being adjusted or not.
+ * An HSV color selector can be said to be adjusting if multiple rapid
+ * changes are being made to its value, for example, when the user is 
+ * adjusting the value with the mouse. This function queries whether 
+ * the HSV color selector is being adjusted or not.
  *
- * Return value: TRUE if clients can ignore changes to the color value, since
- * they may be transitory, or FALSE if they should consider the color value
- * status to be final.
+ * Return value: %TRUE if clients can ignore changes to the color value,
+ *     since they may be transitory, or %FALSE if they should consider
+ *     the color value status to be final.
  *
  * Since: 2.14
- **/
+ */
 gboolean
 gtk_hsv_is_adjusting (GtkHSV *hsv)
 {
@@ -1541,18 +1530,19 @@ gtk_hsv_is_adjusting (GtkHSV *hsv)
 
 /**
  * gtk_hsv_to_rgb:
- * @h: Hue.
- * @s: Saturation.
- * @v: Value.
- * @r: Return value for the red component.
- * @g: Return value for the green component.
- * @b: Return value for the blue component.
+ * @h: Hue
+ * @s: Saturation
+ * @v: Value
+ * @r: (out): Return value for the red component
+ * @g: (out): Return value for the green component
+ * @b: (out): Return value for the blue component
  *
- * Converts a color from HSV space to RGB.  Input values must be in the
- * [0.0, 1.0] range; output values will be in the same range.
+ * Converts a color from HSV space to RGB.
+ * Input values must be in the [0.0, 1.0] range; 
+ * output values will be in the same range.
  *
  * Since: 2.14
- **/
+ */
 void
 gtk_hsv_to_rgb (gdouble  h,
 		gdouble  s,
@@ -1578,19 +1568,20 @@ gtk_hsv_to_rgb (gdouble  h,
 }
 
 /**
- * gtk_hsv_to_rgb:
- * @r: Red.
- * @g: Green.
- * @b: Blue.
- * @h: Return value for the hue component.
- * @s: Return value for the saturation component.
- * @v: Return value for the value component.
+ * gtk_rgb_to_hsv:
+ * @r: Red
+ * @g: Green
+ * @b: Blue
+ * @h: (out): Return value for the hue component
+ * @s: (out): Return value for the saturation component
+ * @v: (out): Return value for the value component
  *
- * Converts a color from RGB space to HSV.  Input values must be in the
- * [0.0, 1.0] range; output values will be in the same range.
+ * Converts a color from RGB space to HSV.
+ * Input values must be in the [0.0, 1.0] range;
+ * output values will be in the same range.
  *
  * Since: 2.14
- **/
+ */
 void
 gtk_rgb_to_hsv (gdouble  r,
 		gdouble  g,

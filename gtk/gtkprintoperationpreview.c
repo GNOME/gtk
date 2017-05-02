@@ -65,6 +65,16 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
 
   if (!initialized)
     {
+      /**
+       * GtkPrintOperationPreview::ready:
+       * @preview: the object on which the signal is emitted
+       * @context: the current #GtkPrintContext
+       *
+       * The ::ready signal gets emitted once per preview operation,
+       * before the first page is rendered.
+       * 
+       * A handler for this signal can be used for setup tasks.
+       */
       g_signal_new (I_("ready"),
 		    GTK_TYPE_PRINT_OPERATION_PREVIEW,
 		    G_SIGNAL_RUN_LAST,
@@ -74,6 +84,19 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
 		    G_TYPE_NONE, 1,
 		    GTK_TYPE_PRINT_CONTEXT);
 
+      /**
+       * GtkPrintOperationPreview::got-page-size:
+       * @preview: the object on which the signal is emitted
+       * @context: the current #GtkPrintContext
+       * @page_setup: the #GtkPageSetup for the current page
+       *
+       * The ::got-page-size signal is emitted once for each page
+       * that gets rendered to the preview. 
+       *
+       * A handler for this signal should update the @context
+       * according to @page_setup and set up a suitable cairo
+       * context, using gtk_print_context_set_cairo_context().
+       */
       g_signal_new (I_("got-page-size"),
 		    GTK_TYPE_PRINT_OPERATION_PREVIEW,
 		    G_SIGNAL_RUN_LAST,
@@ -97,6 +120,9 @@ gtk_print_operation_preview_base_init (gpointer g_iface)
  * was passed to the #GtkPrintOperation::preview handler together
  * with @preview.
  *
+ * A custom iprint preview should use this function in its ::expose
+ * handler to render the currently selected page.
+ * 
  * Note that this function requires a suitable cairo context to 
  * be associated with the print context. 
  *

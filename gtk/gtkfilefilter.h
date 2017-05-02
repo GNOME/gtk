@@ -18,12 +18,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_FILE_FILTER_H__
+#define __GTK_FILE_FILTER_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_FILE_FILTER_H__
-#define __GTK_FILE_FILTER_H__
 
 #include <glib-object.h>
 
@@ -61,7 +61,7 @@ GType gtk_file_filter_get_type (void) G_GNUC_CONST;
 GtkFileFilter *       gtk_file_filter_new      (void);
 void                  gtk_file_filter_set_name (GtkFileFilter *filter,
 						const gchar   *name);
-G_CONST_RETURN gchar *gtk_file_filter_get_name (GtkFileFilter *filter);
+const gchar *         gtk_file_filter_get_name (GtkFileFilter *filter);
 
 void gtk_file_filter_add_mime_type      (GtkFileFilter      *filter,
 					 const gchar        *mime_type);

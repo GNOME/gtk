@@ -40,7 +40,7 @@ foreach $href (@demos) {
 	my $do_next = 0;
 
 	# parent detected
-	if (defined @parents) {
+	if (@parents) {
 	    foreach $foo (@parents) {
 		if ($foo eq $parent_name) {
 		    $do_next = 1;
@@ -54,7 +54,7 @@ foreach $href (@demos) {
 
 	push @parents, $parent_name;
 
-	$tmp = (defined @child_arrays)?($#child_arrays + 1):0;
+	$tmp = (@child_arrays)?($#child_arrays + 1):0;
 	push @child_arrays, "child$tmp";
 
 	push @demos, {"title" => $parent_name, "file" => "NULL",
@@ -62,7 +62,7 @@ foreach $href (@demos) {
     }
 }
 
-if (defined @parents) {
+if (@parents) {
     $i = 0;
     for ($i = 0; $i <= $#parents; $i++) {
 	$first = 1;
@@ -73,7 +73,7 @@ if (defined @parents) {
 	for ($j = 0; $j <= $#demos; $j++) {
 	    $href = $demos[$j];
 	    
-	    if (!defined $demos[$j]) {
+	    if (!$demos[$j]) {
 		next;
 	    }
 	    
@@ -105,7 +105,7 @@ if (defined @parents) {
 } @demos_old;
 
 # sort the child arrays
-if (defined @child_arrays) {
+if (@child_arrays) {
     for ($i = 0; $i <= $#child_arrays; $i++) {
 	@foo_old = @{$child_arrays[$i]};
 
@@ -133,7 +133,7 @@ foreach $href (@demos) {
 	print ", \n";
     }
 
-    if (defined @parents) {
+    if (@parents) {
 	for ($i = 0; $i <= $#parents; $i++) {
 	    if ($parents[$i] eq $href->{title}) {
 

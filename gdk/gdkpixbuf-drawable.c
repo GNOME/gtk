@@ -25,13 +25,14 @@
 #include "config.h"
 #include <stdio.h>
 #include <string.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include "gdkcolor.h"
 #include "gdkimage.h"
 #include "gdkvisual.h"
 #include "gdkwindow.h"
 #include "gdkpixbuf.h"
 #include "gdkpixmap.h"
-#include "gdk-pixbuf-private.h"
 #include "gdkinternals.h"
 #include "gdkalias.h"
 
@@ -1135,7 +1136,7 @@ rgbconvert (GdkImage    *image,
 
 /**
  * gdk_pixbuf_get_from_drawable:
- * @dest: Destination pixbuf, or %NULL if a new pixbuf should be created.
+ * @dest: (allow-none): Destination pixbuf, or %NULL if a new pixbuf should be created.
  * @src: Source drawable.
  * @cmap: A colormap if @src doesn't have one set.
  * @src_x: Source X coordinate within drawable.
@@ -1230,9 +1231,10 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
     g_return_val_if_fail (dest_x == 0 && dest_y == 0, NULL);
   else
     {
-      g_return_val_if_fail (dest->colorspace == GDK_COLORSPACE_RGB, NULL);
-      g_return_val_if_fail (dest->n_channels == 3 || dest->n_channels == 4, NULL);
-      g_return_val_if_fail (dest->bits_per_sample == 8, NULL);
+      g_return_val_if_fail (gdk_pixbuf_get_colorspace (dest) == GDK_COLORSPACE_RGB, NULL);
+      g_return_val_if_fail (gdk_pixbuf_get_n_channels (dest) == 3 ||
+                            gdk_pixbuf_get_n_channels (dest) == 4, NULL);
+      g_return_val_if_fail (gdk_pixbuf_get_bits_per_sample (dest) == 8, NULL);
     }
 
   if (cmap == NULL)
@@ -1281,8 +1283,8 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
   if (dest)
     {
       g_return_val_if_fail (dest_x >= 0 && dest_y >= 0, NULL);
-      g_return_val_if_fail (dest_x + width <= dest->width, NULL);
-      g_return_val_if_fail (dest_y + height <= dest->height, NULL);
+      g_return_val_if_fail (dest_x + width <= gdk_pixbuf_get_width (dest), NULL);
+      g_return_val_if_fail (dest_y + height <= gdk_pixbuf_get_height (dest), NULL);
     }
 
   for (y0 = 0; y0 < height; y0 += GDK_SCRATCH_IMAGE_HEIGHT)
@@ -1312,9 +1314,9 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
         
 /**
  * gdk_pixbuf_get_from_image:
- * @dest: Destination pixbuf, or %NULL if a new pixbuf should be created.
+ * @dest: (allow-none): Destination pixbuf, or %NULL if a new pixbuf should be created.
  * @src: Source #GdkImage.
- * @cmap: A colormap, or %NULL to use the one for @src
+ * @cmap: (allow-none): A colormap, or %NULL to use the one for @src
  * @src_x: Source X coordinate within drawable.
  * @src_y: Source Y coordinate within drawable.
  * @dest_x: Destination X coordinate in pixbuf, or 0 if @dest is NULL.
@@ -1348,9 +1350,10 @@ gdk_pixbuf_get_from_image (GdkPixbuf   *dest,
     g_return_val_if_fail (dest_x == 0 && dest_y == 0, NULL);
   else
     {
-      g_return_val_if_fail (dest->colorspace == GDK_COLORSPACE_RGB, NULL);
-      g_return_val_if_fail (dest->n_channels == 3 || dest->n_channels == 4, NULL);
-      g_return_val_if_fail (dest->bits_per_sample == 8, NULL);
+      g_return_val_if_fail (gdk_pixbuf_get_colorspace (dest) == GDK_COLORSPACE_RGB, NULL);
+      g_return_val_if_fail (gdk_pixbuf_get_n_channels (dest) == 3 ||
+                            gdk_pixbuf_get_n_channels (dest) == 4, NULL);
+      g_return_val_if_fail (gdk_pixbuf_get_bits_per_sample (dest) == 8, NULL);
     }
 
   if (cmap == NULL)
@@ -1380,8 +1383,8 @@ gdk_pixbuf_get_from_image (GdkPixbuf   *dest,
   if (dest)
     {
       g_return_val_if_fail (dest_x >= 0 && dest_y >= 0, NULL);
-      g_return_val_if_fail (dest_x + width <= dest->width, NULL);
-      g_return_val_if_fail (dest_y + height <= dest->height, NULL);
+      g_return_val_if_fail (dest_x + width <= gdk_pixbuf_get_width (dest), NULL);
+      g_return_val_if_fail (dest_y + height <= gdk_pixbuf_get_height (dest), NULL);
     }
 
   /* Create the pixbuf if needed */
@@ -1392,14 +1395,14 @@ gdk_pixbuf_get_from_image (GdkPixbuf   *dest,
         return NULL;
     }
 
-  alpha = dest->has_alpha;
-  rowstride = dest->rowstride;
+  alpha = gdk_pixbuf_get_has_alpha (dest);
+  rowstride = gdk_pixbuf_get_rowstride (dest);
   bpp = alpha ? 4 : 3;
 
   /* we offset into the image data based on the position we are
    * retrieving from
    */
-  rgbconvert (src, dest->pixels +
+  rgbconvert (src, gdk_pixbuf_get_pixels (dest) +
 	      (dest_y * rowstride) + (dest_x * bpp),
 	      rowstride,
 	      alpha,

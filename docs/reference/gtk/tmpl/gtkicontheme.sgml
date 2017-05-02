@@ -9,7 +9,7 @@ Looking up icons by name
 #GtkIconTheme provides a facility for looking up icons by name
 and size. The main reason for using a name rather than simply
 providing a filename is to allow different icons to be used
-depending on what <firstterm>icon theme</firstterm> is selecetd
+depending on what <firstterm>icon theme</firstterm> is selected
 by the user. The operation of icon themes on Linux and Unix
 follows the <ulink
 url="http://www.freedesktop.org/Standards/icon-theme-spec">Icon
@@ -103,6 +103,9 @@ else
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkIconInfo ##### -->
 <para>
 Contains information found when looking up an icon in
@@ -160,6 +163,7 @@ The #GQuark used for #GtkIconThemeError errors.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -168,6 +172,7 @@ The #GQuark used for #GtkIconThemeError errors.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -189,42 +194,32 @@ The #GQuark used for #GtkIconThemeError errors.
 @screen: 
 
 
-<!-- ##### FUNCTION gtk_icon_theme_set_search_path ##### -->
+<!-- ##### MACRO gtk_icon_theme_set_search_path ##### -->
 <para>
 
 </para>
 
-@icon_theme: 
-@path: 
-@n_elements: 
 
 
-<!-- ##### FUNCTION gtk_icon_theme_get_search_path ##### -->
+<!-- ##### MACRO gtk_icon_theme_get_search_path ##### -->
 <para>
 
 </para>
 
-@icon_theme: 
-@path: 
-@n_elements: 
 
 
-<!-- ##### FUNCTION gtk_icon_theme_append_search_path ##### -->
+<!-- ##### MACRO gtk_icon_theme_append_search_path ##### -->
 <para>
 
 </para>
 
-@icon_theme: 
-@path: 
 
 
-<!-- ##### FUNCTION gtk_icon_theme_prepend_search_path ##### -->
+<!-- ##### MACRO gtk_icon_theme_prepend_search_path ##### -->
 <para>
 
 </para>
 
-@icon_theme: 
-@path: 
 
 
 <!-- ##### FUNCTION gtk_icon_theme_set_custom_theme ##### -->
@@ -388,12 +383,11 @@ The #GQuark used for #GtkIconThemeError errors.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_icon_info_get_filename ##### -->
+<!-- ##### MACRO gtk_icon_info_get_filename ##### -->
 <para>
 
 </para>
 
-@icon_info: 
 @Returns: 
 
 

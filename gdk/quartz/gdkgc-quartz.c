@@ -60,6 +60,69 @@ gdk_quartz_gc_get_values (GdkGC       *gc,
   values->join_style = private->join_style;
 }
 
+
+static void
+data_provider_release (void *info, const void *data, size_t size)
+{
+  g_free (info);
+}
+
+static CGImageRef
+create_clip_mask (GdkPixmap *source_pixmap)
+{
+  int width, height, bytes_per_row, bits_per_pixel;
+  void *data;
+  CGImageRef source;
+  CGImageRef clip_mask;
+  CGContextRef cg_context;
+  CGDataProviderRef data_provider;
+
+  /* We need to flip the clip mask here, because this cannot be done during
+   * the drawing process when this mask will be used to do clipping.  We
+   * quickly create a new CGImage, set up a CGContext, draw the source
+   * image while flipping, and done.  If this appears too slow in the
+   * future, we would look into doing this by hand on the actual raw
+   * data.
+   */
+  source = _gdk_pixmap_get_cgimage (source_pixmap);
+
+  width = CGImageGetWidth (source);
+  height = CGImageGetHeight (source);
+  bytes_per_row = CGImageGetBytesPerRow (source);
+  bits_per_pixel = CGImageGetBitsPerPixel (source);
+
+  data = g_malloc (height * bytes_per_row);
+  data_provider = CGDataProviderCreateWithData (data, data,
+                                                height * bytes_per_row,
+                                                data_provider_release);
+
+  clip_mask = CGImageCreate (width, height, 8,
+                             bits_per_pixel,
+                             bytes_per_row,
+                             CGImageGetColorSpace (source),
+                             CGImageGetAlphaInfo (source),
+                             data_provider, NULL, FALSE,
+                             kCGRenderingIntentDefault);
+  CGDataProviderRelease (data_provider);
+
+  cg_context = CGBitmapContextCreate (data,
+                                      width, height,
+                                      CGImageGetBitsPerComponent (source),
+                                      bytes_per_row,
+                                      CGImageGetColorSpace (source),
+                                      CGImageGetBitmapInfo (source));
+
+  CGContextTranslateCTM (cg_context, 0, height);
+  CGContextScaleCTM (cg_context, 1.0, -1.0);
+
+  CGContextDrawImage (cg_context,
+                      CGRectMake (0, 0, width, height), source);
+
+  CGContextRelease (cg_context);
+
+  return clip_mask;
+}
+
 static void
 gdk_quartz_gc_set_values (GdkGC           *gc,
 			  GdkGCValues     *values,
@@ -89,7 +152,7 @@ gdk_quartz_gc_set_values (GdkGC           *gc,
 	CGImageRelease (private->clip_mask);
 
       if (values->clip_mask)
-	private->clip_mask = CGImageCreateCopy (GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (values->clip_mask)->impl)->image);
+        private->clip_mask = create_clip_mask (values->clip_mask);
       else
 	private->clip_mask = NULL;
     }
@@ -118,10 +181,10 @@ gdk_quartz_gc_set_dashes (GdkGC *gc,
 
   private->dash_count = n;
   g_free (private->dash_lengths);
-  private->dash_lengths = g_new (gfloat, n);
+  private->dash_lengths = g_new (CGFloat, n);
   for (i = 0; i < n; i++)
-    private->dash_lengths[i] = (gfloat) dash_list[i];
-  private->dash_phase = (gfloat) dash_offset;
+    private->dash_lengths[i] = (CGFloat) dash_list[i];
+  private->dash_phase = (CGFloat) dash_offset;
 }
 
 static void
@@ -131,6 +194,9 @@ gdk_gc_quartz_finalize (GObject *object)
 
   if (private->clip_mask)
     CGImageRelease (private->clip_mask);
+
+  if (private->ts_pattern)
+    CGPatternRelease (private->ts_pattern);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -169,7 +235,7 @@ _gdk_gc_quartz_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkGCQuartzClass),
         (GBaseInitFunc) NULL,
@@ -208,7 +274,8 @@ _gdk_quartz_gc_new (GdkDrawable      *drawable,
 
 void
 _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
-				   const GdkRegion *region)
+				   const GdkRegion *region,
+				   gboolean         reset_origin)
 {
   GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
 
@@ -224,8 +291,11 @@ _gdk_windowing_gc_set_clip_region (GdkGC           *gc,
 
   private->have_clip_region = region != NULL;
 
-  gc->clip_x_origin = 0;
-  gc->clip_y_origin = 0;
+  if (reset_origin)
+    {
+      gc->clip_x_origin = 0;
+      gc->clip_y_origin = 0;
+    }
 }
 
 void
@@ -255,8 +325,7 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
     }
   
   if (src_quartz_gc->clip_mask)
-    dst_quartz_gc->clip_mask =
-      CGImageCreateCopy (GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (src_quartz_gc->clip_mask)->impl)->image);
+    dst_quartz_gc->clip_mask = _gdk_pixmap_get_cgimage (GDK_PIXMAP (src_quartz_gc->clip_mask));
 
   dst_quartz_gc->line_width = src_quartz_gc->line_width;
   dst_quartz_gc->line_style = src_quartz_gc->line_style;
@@ -265,7 +334,7 @@ _gdk_windowing_gc_copy (GdkGC *dst_gc,
 
   g_free (dst_quartz_gc->dash_lengths);
   dst_quartz_gc->dash_lengths = g_memdup (src_quartz_gc->dash_lengths,
-					  sizeof (float) * src_quartz_gc->dash_count);
+					  sizeof (CGFloat) * src_quartz_gc->dash_count);
   dst_quartz_gc->dash_count = src_quartz_gc->dash_count;
   dst_quartz_gc->dash_phase = src_quartz_gc->dash_phase;
 }
@@ -276,16 +345,28 @@ gdk_gc_get_screen (GdkGC *gc)
   return _gdk_screen;
 }
 
+struct PatternCallbackInfo
+{
+  GdkGCQuartz *private_gc;
+  GdkDrawable *drawable;
+};
+
+static void
+pattern_callback_info_release (void *info)
+{
+  g_free (info);
+}
+
 static void
 gdk_quartz_draw_tiled_pattern (void         *info,
 			       CGContextRef  context)
 {
-  GdkGC       *gc = GDK_GC (info);
-  GdkGCQuartz *private = GDK_GC_QUARTZ (gc);
+  struct PatternCallbackInfo *pinfo = info;
+  GdkGC       *gc = GDK_GC (pinfo->private_gc);
   CGImageRef   pattern_image;
   size_t       width, height;
 
-  pattern_image = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_tile (gc))->impl)->image;
+  pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP (_gdk_gc_get_tile (gc)));
 
   width = CGImageGetWidth (pattern_image);
   height = CGImageGetHeight (pattern_image);
@@ -293,59 +374,69 @@ gdk_quartz_draw_tiled_pattern (void         *info,
   CGContextDrawImage (context, 
 		      CGRectMake (0, 0, width, height),
 		      pattern_image);
+  CGImageRelease (pattern_image);
 }
 
 static void
 gdk_quartz_draw_stippled_pattern (void         *info,
 				  CGContextRef  context)
 {
-  GdkGC      *gc = GDK_GC (info);
+  struct PatternCallbackInfo *pinfo = info;
+  GdkGC      *gc = GDK_GC (pinfo->private_gc);
   CGImageRef  pattern_image;
   CGRect      rect;
-  gfloat      r, g, b, a;
+  CGColorRef  color;
 
-  pattern_image = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl)->image;
+  pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP (_gdk_gc_get_stipple (gc)));
   rect = CGRectMake (0, 0,
 		     CGImageGetWidth (pattern_image),
 		     CGImageGetHeight (pattern_image));
 
   CGContextClipToMask (context, rect, pattern_image);
-  _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
-					    _gdk_gc_get_fg_pixel (gc),
-					    &r, &g, &b, &a);
-  CGContextSetRGBFillColor (context, r, g, b, a);
+  color = _gdk_quartz_colormap_get_cgcolor_from_pixel (pinfo->drawable,
+                                                       _gdk_gc_get_fg_pixel (gc));
+  CGContextSetFillColorWithColor (context, color);
+  CGColorRelease (color);
+
   CGContextFillRect (context, rect);
+
+  CGImageRelease (pattern_image);
 }
 
 static void
 gdk_quartz_draw_opaque_stippled_pattern (void         *info,
 					 CGContextRef  context)
 {
-  GdkGC      *gc = GDK_GC (info);
+  struct PatternCallbackInfo *pinfo = info;
+  GdkGC      *gc = GDK_GC (pinfo->private_gc);
   CGImageRef  pattern_image;
   CGRect      rect;
-  gfloat      r, g, b, a;
+  CGColorRef  color;
 
-  pattern_image = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl)->image;
+  pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP (_gdk_gc_get_stipple (gc)));
   rect = CGRectMake (0, 0,
 		     CGImageGetWidth (pattern_image),
 		     CGImageGetHeight (pattern_image));
 
-  _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
-					    _gdk_gc_get_bg_pixel (gc),
-					    &r, &g, &b, &a);
-  CGContextSetRGBFillColor (context, r, g, b, a);
+  color = _gdk_quartz_colormap_get_cgcolor_from_pixel (pinfo->drawable,
+                                                       _gdk_gc_get_bg_pixel (gc));
+  CGContextSetFillColorWithColor (context, color);
+  CGColorRelease (color);
+
   CGContextFillRect (context, rect);
 
   CGContextClipToMask (context, rect, pattern_image);
-  _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
-					    _gdk_gc_get_fg_pixel (gc),
-					    &r, &g, &b, &a);
-  CGContextSetRGBFillColor (context, r, g, b, a);
+  color = _gdk_quartz_colormap_get_cgcolor_from_pixel (pinfo->drawable,
+                                                       _gdk_gc_get_fg_pixel (gc));
+  CGContextSetFillColorWithColor (context, color);
+  CGColorRelease (color);
+
   CGContextFillRect (context, rect);
+
+  CGImageRelease (pattern_image);
 }
 
-void
+gboolean
 _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 				  GdkDrawable                *drawable,
 				  CGContextRef                context,
@@ -355,10 +446,10 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
   guint32      fg_pixel;
   guint32      bg_pixel;
 
-  g_return_if_fail (gc == NULL || GDK_IS_GC (gc));
+  g_return_val_if_fail (gc == NULL || GDK_IS_GC (gc), FALSE);
 
   if (!gc)
-    return;
+    return FALSE;
 
   private = GDK_GC_QUARTZ (gc);
 
@@ -371,6 +462,9 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 
       gdk_region_get_rectangles (_gdk_gc_get_clip_region (gc),
 				 &rects, &n_rects);
+
+      if (!n_rects)
+	  return FALSE;
 
       if (n_rects == 1)
 	cg_rects = &rect;
@@ -450,14 +544,14 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
     {
       CGLineCap  line_cap  = kCGLineCapButt;
       CGLineJoin line_join = kCGLineJoinMiter;
-      gfloat     r, g, b, a;
+      CGColorRef color;
 
-      _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
-						fg_pixel,
-						&r, &g, &b, &a);
-      CGContextSetRGBStrokeColor (context, r, g, b, a);
+      color = _gdk_quartz_colormap_get_cgcolor_from_pixel (drawable,
+                                                           fg_pixel);
+      CGContextSetStrokeColorWithColor (context, color);
+      CGColorRelease (color);
 
-      CGContextSetLineWidth (context, MAX (G_MINFLOAT, private->line_width));
+      CGContextSetLineWidth (context, MAX (1.0, private->line_width));
 
       switch (private->line_style)
 	{
@@ -512,41 +606,58 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
       GdkFill         fill = _gdk_gc_get_fill (gc);
       CGColorSpaceRef baseSpace;
       CGColorSpaceRef patternSpace;
-      gfloat          alpha     = 1.0;
-      gfloat          colors[4] = { 0.0, 0.0, 0.0, 0.0 };
-      gfloat          r, g, b, a;
+      CGFloat         alpha     = 1.0;
 
       if (fill == GDK_SOLID)
 	{
-	  _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, 
-						    fg_pixel,
-						    &r, &g, &b, &a);
-	  CGContextSetRGBFillColor (context, r, g, b, a);
+          CGColorRef color;
+
+	  color = _gdk_quartz_colormap_get_cgcolor_from_pixel (drawable,
+                                                               fg_pixel);
+	  CGContextSetFillColorWithColor (context, color);
+          CGColorRelease (color);
 	}
       else
 	{
+          struct PatternCallbackInfo *info;
+
 	  if (!private->ts_pattern)
 	    {
-	      CGImageRef pattern_image = NULL;
 	      gfloat     width, height;
 	      gboolean   is_colored = FALSE;
 	      CGPatternCallbacks callbacks =  { 0, NULL, NULL };
 	      CGPoint    phase;
+              GdkPixmapImplQuartz *pix_impl = NULL;
+
+              info = g_new (struct PatternCallbackInfo, 1);
+              private->ts_pattern_info = info;
+
+              /* Won't ref to avoid circular dependencies */
+              info->drawable = drawable;
+              info->private_gc = private;
+
+              callbacks.releaseInfo = pattern_callback_info_release;
 
 	      switch (fill)
 		{
 		case GDK_TILED:
-		  pattern_image = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_tile (gc))->impl)->image;
+		  pix_impl = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_tile (gc))->impl);
+		  width = pix_impl->width;
+		  height = pix_impl->height;
 		  is_colored = TRUE;
 		  callbacks.drawPattern = gdk_quartz_draw_tiled_pattern;
 		  break;
 		case GDK_STIPPLED:
-		  pattern_image = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl)->image;
+		  pix_impl = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl);
+		  width = pix_impl->width;
+		  height = pix_impl->height;
 		  is_colored = FALSE;
 		  callbacks.drawPattern = gdk_quartz_draw_stippled_pattern;
 		  break;
 		case GDK_OPAQUE_STIPPLED:
-		  pattern_image = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl)->image;
+		  pix_impl = GDK_PIXMAP_IMPL_QUARTZ (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl);
+		  width = pix_impl->width;
+		  height = pix_impl->height;
 		  is_colored = TRUE;
 		  callbacks.drawPattern = gdk_quartz_draw_opaque_stippled_pattern;
 		  break;
@@ -554,13 +665,10 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 		  break;
 		}
 
-	      width  = CGImageGetWidth (pattern_image);
-	      height = CGImageGetHeight (pattern_image);
-
 	      phase = CGPointApplyAffineTransform (CGPointMake (gc->ts_x_origin, gc->ts_y_origin), CGContextGetCTM (context));
 	      CGContextSetPatternPhase (context, CGSizeMake (phase.x, phase.y));
 
-	      private->ts_pattern = CGPatternCreate (private,
+	      private->ts_pattern = CGPatternCreate (info,
 						     CGRectMake (0, 0, width, height),
 						     CGAffineTransformIdentity,
 						     width, height,
@@ -568,8 +676,15 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 						     is_colored,
 						     &callbacks);
 	    }
+          else
+            info = (struct PatternCallbackInfo *)private->ts_pattern_info;
 
-	  baseSpace = (fill == GDK_STIPPLED) ? CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB) : NULL;
+          /* Update drawable in the pattern callback info.  Again, we
+           * won't ref to avoid circular dependencies.
+           */
+          info->drawable = drawable;
+
+	  baseSpace = (fill == GDK_STIPPLED) ? CGColorSpaceCreateDeviceRGB () : NULL;
 	  patternSpace = CGColorSpaceCreatePattern (baseSpace);
 
 	  CGContextSetFillColorSpace (context, patternSpace);
@@ -577,12 +692,20 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 	  CGColorSpaceRelease (baseSpace);
 
 	  if (fill == GDK_STIPPLED)
-	    _gdk_quartz_colormap_get_rgba_from_pixel (gc->colormap, fg_pixel,
-						      &colors[0], &colors[1],
-						      &colors[2], &colors[3]);
+            {
+              CGColorRef color;
+              const CGFloat *components;
 
-	  CGContextSetFillPattern (context, private->ts_pattern,
-				   (fill == GDK_STIPPLED) ? colors : &alpha);
+              color = _gdk_quartz_colormap_get_cgcolor_from_pixel (drawable,
+                                                                   fg_pixel);
+              components = CGColorGetComponents (color);
+
+              CGContextSetFillPattern (context, private->ts_pattern,
+                                       components);
+              CGColorRelease (color);
+            }
+          else
+            CGContextSetFillPattern (context, private->ts_pattern, &alpha);
        }
     }
 
@@ -595,4 +718,6 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
       private->is_window = TRUE;
   else
       private->is_window = FALSE;
+
+  return TRUE;
 }

@@ -24,17 +24,18 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_REGION_H__
+#define __GDK_REGION_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_REGION_H__
-#define __GDK_REGION_H__
 
 #include <gdk/gdktypes.h>
 
 G_BEGIN_DECLS
 
+#ifndef GDK_DISABLE_DEPRECATED
 /* GC fill rule for polygons
  *  EvenOddRule
  *  WindingRule
@@ -44,6 +45,7 @@ typedef enum
   GDK_EVEN_ODD_RULE,
   GDK_WINDING_RULE
 } GdkFillRule;
+#endif
 
 /* Types of overlapping between a rectangle and a region
  * GDK_OVERLAP_RECTANGLE_IN: rectangle is in region
@@ -57,13 +59,17 @@ typedef enum
   GDK_OVERLAP_RECTANGLE_PART
 } GdkOverlapType;
 
+#ifndef GDK_DISABLE_DEPRECATED
 typedef void (* GdkSpanFunc) (GdkSpan *span,
                               gpointer data);
+#endif
 
 GdkRegion    * gdk_region_new             (void);
+#ifndef GDK_DISABLE_DEPRECATED
 GdkRegion    * gdk_region_polygon         (const GdkPoint     *points,
                                            gint                n_points,
                                            GdkFillRule         fill_rule);
+#endif
 GdkRegion    * gdk_region_copy            (const GdkRegion    *region);
 GdkRegion    * gdk_region_rectangle       (const GdkRectangle *rectangle);
 void           gdk_region_destroy         (GdkRegion          *region);
@@ -77,6 +83,10 @@ void           gdk_region_get_rectangles  (const GdkRegion    *region,
 gboolean       gdk_region_empty           (const GdkRegion    *region);
 gboolean       gdk_region_equal           (const GdkRegion    *region1,
                                            const GdkRegion    *region2);
+#ifndef GDK_DISABLE_DEPRECATED
+gboolean       gdk_region_rect_equal      (const GdkRegion    *region,
+                                           const GdkRectangle *rectangle);
+#endif
 gboolean       gdk_region_point_in        (const GdkRegion    *region,
                                            int                 x,
                                            int                 y);
@@ -86,9 +96,11 @@ GdkOverlapType gdk_region_rect_in         (const GdkRegion    *region,
 void           gdk_region_offset          (GdkRegion          *region,
                                            gint                dx,
                                            gint                dy);
+#ifndef GDK_DISABLE_DEPRECATED
 void           gdk_region_shrink          (GdkRegion          *region,
                                            gint                dx,
                                            gint                dy);
+#endif
 void           gdk_region_union_with_rect (GdkRegion          *region,
                                            const GdkRectangle *rect);
 void           gdk_region_intersect       (GdkRegion          *source1,
@@ -100,12 +112,14 @@ void           gdk_region_subtract        (GdkRegion          *source1,
 void           gdk_region_xor             (GdkRegion          *source1,
                                            const GdkRegion    *source2);
 
+#ifndef GDK_DISABLE_DEPRECATED
 void   gdk_region_spans_intersect_foreach (GdkRegion          *region,
                                            const GdkSpan      *spans,
                                            int                 n_spans,
                                            gboolean            sorted,
                                            GdkSpanFunc         function,
                                            gpointer            data);
+#endif
 
 G_END_DECLS
 

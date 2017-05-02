@@ -2,7 +2,7 @@ include $(top_srcdir)/Makefile.decl
 
 SUBDIRS = libgail-util tests
 
-if OS_WIN32
+if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
@@ -52,6 +52,7 @@ gail_c_sources =			\
 	gailrange.c			\
 	gailrenderercell.c		\
 	gailscale.c			\
+	gailscalebutton.c		\
 	gailscrollbar.c			\
 	gailscrolledwindow.c		\
 	gailseparator.c			\
@@ -112,6 +113,7 @@ gail_private_h_sources =		\
 	gailrange.h			\
 	gailrenderercell.h		\
 	gailscale.h			\
+	gailscalebutton.h		\
 	gailscrollbar.h			\
 	gailscrolledwindow.h		\
 	gailseparator.h			\
@@ -146,22 +148,31 @@ libgail_la_CPPFLAGS = \
 	-I$(top_builddir)/gtk		\
 	-DGTK_VERSION=\"$(GTK_VERSION)\"\
 	-DGDK_DISABLE_DEPRECATED	\
+	-DGTK_DISABLE_DEPRECATED	\
 	$(AM_CPPFLAGS)
+
+if PLATFORM_WIN32
+WIN32_ADDITIONAL_CFLAGS = $(GMODULE_CFLAGS)
+WIN32_ADDITIONAL_LIBS = $(GMODULE_LIBS)
+endif
 
 libgail_la_CFLAGS = \
 	$(GTK_DEP_CFLAGS)	\
 	$(GTK_DEBUG_FLAGS)	\
+	$(WIN32_ADDITIONAL_CFLAGS)		\
 	$(AM_CFLAGS)
 
 libgail_la_LIBADD =  \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la 	\
 	$(top_builddir)/gdk/$(gdktargetlib) 				\
 	$(top_builddir)/gtk/$(gtktargetlib)				\
 	$(top_builddir)/modules/other/gail/libgail-util/libgailutil.la	\
 	$(GTK_DEP_LIBS)							\
+	$(WIN32_ADDITIONAL_LIBS)		\
 	$(INTLLIBS)
 
 libgail_la_LDFLAGS =    \
 	-rpath $(moduledir) -module -avoid-version \
 	$(no_undefined) \
         $(LDFLAGS)
+
+-include $(top_srcdir)/git.mk

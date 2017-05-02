@@ -26,11 +26,43 @@
 
 G_BEGIN_DECLS
 
+/* NSInteger only exists in Leopard and newer.  This check has to be
+ * done after inclusion of the system headers.  If NSInteger has not
+ * been defined, we know for sure that we are on 32-bit.
+ */
+#ifndef NSINTEGER_DEFINED
+typedef int NSInteger;
+typedef unsigned int NSUInteger;
+#endif
+
+#ifndef CGFLOAT_DEFINED
+typedef float CGFloat;
+#endif
+
+typedef enum
+{
+  GDK_OSX_UNSUPPORTED = 0,
+  GDK_OSX_MIN = 4,
+  GDK_OSX_TIGER = 4,
+  GDK_OSX_LEOPARD = 5,
+  GDK_OSX_SNOW_LEOPARD = 6,
+  GDK_OSX_LION = 7,
+  GDK_OSX_MOUNTAIN_LION = 8,
+  GDK_OSX_CURRENT = 8,
+  GDK_OSX_NEW = 99
+} GdkOSXVersion;
+
+gboolean  gdk_quartz_window_is_quartz                           (GdkWindow      *window);
 NSWindow *gdk_quartz_window_get_nswindow                        (GdkWindow      *window);
 NSView   *gdk_quartz_window_get_nsview                          (GdkWindow      *window);
 NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);
 id        gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context);
 NSEvent  *gdk_quartz_event_get_nsevent                          (GdkEvent       *event);
+GdkOSXVersion gdk_quartz_osx_version                            (void);
+
+GdkAtom   gdk_quartz_pasteboard_type_to_atom_libgtk_only        (NSString       *type);
+NSString *gdk_quartz_target_to_pasteboard_type_libgtk_only      (const gchar    *target);
+NSString *gdk_quartz_atom_to_pasteboard_type_libgtk_only        (GdkAtom         atom);
 
 G_END_DECLS
 

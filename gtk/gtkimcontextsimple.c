@@ -18,16 +18,22 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
+#include "gtkprivate.h"
 #include "gtkaccelgroup.h"
 #include "gtkimcontextsimple.h"
 #include "gtksettings.h"
 #include "gtkwidget.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
+
+#ifdef GDK_WINDOWING_WIN32
+#include <win32/gdkwin32keys.h>
+#endif
 
 typedef struct _GtkComposeTable GtkComposeTable;
 typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
@@ -53,7 +59,7 @@ struct _GtkComposeTableCompact
  */
 #include "gtkimcontextsimpleseqs.h"
 
-/* From the values below, the value 22 means the number of different first keysyms 
+/* From the values below, the value 23 means the number of different first keysyms 
  * that exist in the Compose file (from Xorg). When running compose-parse.py without 
  * parameters, you get the count that you can put here. Needed when updating the
  * gtkimcontextsimpleseqs.h header file (contains the compose sequences).
@@ -61,7 +67,7 @@ struct _GtkComposeTableCompact
 static const GtkComposeTableCompact gtk_compose_table_compact = {
   gtk_compose_seqs_compact,
   5,
-  21,
+  24,
   6
 };
 
@@ -270,6 +276,131 @@ check_table (GtkIMContextSimple    *context_simple,
   return FALSE;
 }
 
+/* Checks if a keysym is a dead key. Dead key keysym values are defined in
+ * ../gdk/gdkkeysyms.h and the first is GDK_dead_grave. As X.Org is updated,
+ * more dead keys are added and we need to update the upper limit.
+ * Currently, the upper limit is GDK_dead_dasia+1. The +1 has to do with 
+ * a temporary issue in the X.Org header files. 
+ * In future versions it will be just the keysym (no +1).
+ */
+#define IS_DEAD_KEY(k) \
+    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
+
+#ifdef GDK_WINDOWING_WIN32
+
+/* On Windows, user expectation is that typing a dead accent followed
+ * by space will input the corresponding spacing character. The X
+ * compose tables are different for dead acute and diaeresis, which
+ * when followed by space produce a plain ASCII apostrophe and double
+ * quote respectively. So special-case those.
+ */
+
+static gboolean
+check_win32_special_cases (GtkIMContextSimple    *context_simple,
+			   gint                   n_compose)
+{
+  if (n_compose == 2 &&
+      context_simple->compose_buffer[1] == GDK_space)
+    {
+      gunichar value = 0;
+
+      switch (context_simple->compose_buffer[0])
+	{
+	case GDK_dead_acute:
+	  value = 0x00B4; break;
+	case GDK_dead_diaeresis:
+	  value = 0x00A8; break;
+	}
+      if (value > 0)
+	{
+	  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+	  context_simple->compose_buffer[0] = 0;
+
+	  GTK_NOTE (MISC, g_print ("win32: U+%04X\n", value));
+	  return TRUE;
+	}
+    }
+  return FALSE;
+}
+
+static void
+check_win32_special_case_after_compact_match (GtkIMContextSimple    *context_simple,
+					      gint                   n_compose,
+					      guint                  value)
+{
+  /* On Windows user expectation is that typing two dead accents will input
+   * two corresponding spacing accents.
+   */
+  if (n_compose == 2 &&
+      context_simple->compose_buffer[0] == context_simple->compose_buffer[1] &&
+      IS_DEAD_KEY (context_simple->compose_buffer[0]))
+    {
+      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+      GTK_NOTE (MISC, g_print ("win32: U+%04X ", value));
+    }
+}
+
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+
+static gboolean
+check_quartz_special_cases (GtkIMContextSimple *context_simple,
+                            gint                n_compose)
+{
+  guint value = 0;
+
+  if (n_compose == 2)
+    {
+      switch (context_simple->compose_buffer[0])
+        {
+        case GDK_KEY_dead_doubleacute:
+          switch (context_simple->compose_buffer[1])
+            {
+            case GDK_KEY_dead_doubleacute:
+            case GDK_KEY_space:
+              value = GDK_KEY_quotedbl; break;
+
+            case 'a': value = GDK_KEY_adiaeresis; break;
+            case 'A': value = GDK_KEY_Adiaeresis; break;
+            case 'e': value = GDK_KEY_ediaeresis; break;
+            case 'E': value = GDK_KEY_Ediaeresis; break;
+            case 'i': value = GDK_KEY_idiaeresis; break;
+            case 'I': value = GDK_KEY_Idiaeresis; break;
+            case 'o': value = GDK_KEY_odiaeresis; break;
+            case 'O': value = GDK_KEY_Odiaeresis; break;
+            case 'u': value = GDK_KEY_udiaeresis; break;
+            case 'U': value = GDK_KEY_Udiaeresis; break;
+            case 'y': value = GDK_KEY_ydiaeresis; break;
+            case 'Y': value = GDK_KEY_Ydiaeresis; break;
+            }
+          break;
+
+        case GDK_KEY_dead_acute:
+          switch (context_simple->compose_buffer[1])
+            {
+            case 'c': value = GDK_KEY_ccedilla; break;
+            case 'C': value = GDK_KEY_Ccedilla; break;
+            }
+          break;
+        }
+    }
+
+  if (value > 0)
+    {
+      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
+                                         gdk_keyval_to_unicode (value));
+      context_simple->compose_buffer[0] = 0;
+
+      GTK_NOTE (MISC, g_print ("quartz: U+%04X\n", value));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+#endif
+
 static gboolean
 check_compact_table (GtkIMContextSimple    *context_simple,
 	     const GtkComposeTableCompact *table,
@@ -292,11 +423,18 @@ check_compact_table (GtkIMContextSimple    *context_simple,
 		 compare_seq_index);
 
   if (!seq_index)
-    return FALSE;
+    {
+      GTK_NOTE (MISC, g_print ("compact: no\n"));
+      return FALSE;
+    }
 
   if (seq_index && n_compose == 1)
-    return TRUE;
+    {
+      GTK_NOTE (MISC, g_print ("compact: yes\n"));
+      return TRUE;
+    }
 
+  GTK_NOTE (MISC, g_print ("compact: %d ", *seq_index));
   seq = NULL;
 
   for (i = n_compose-1; i < table->max_seq_len; i++)
@@ -317,6 +455,8 @@ check_compact_table (GtkIMContextSimple    *context_simple,
               else
                 {
                   g_signal_emit_by_name (context_simple, "preedit-changed");
+
+		  GTK_NOTE (MISC, g_print ("yes\n"));
       		  return TRUE;
                 }
              }
@@ -324,39 +464,105 @@ check_compact_table (GtkIMContextSimple    *context_simple,
     }
 
   if (!seq)
-    return FALSE;
+    {
+      GTK_NOTE (MISC, g_print ("no\n"));
+      return FALSE;
+    }
   else
     {
       gunichar value;
 
       value = seq[row_stride - 1];
-	  
+
       gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+#ifdef G_OS_WIN32
+      check_win32_special_case_after_compact_match (context_simple, n_compose, value);
+#endif
       context_simple->compose_buffer[0] = 0;
 
+      GTK_NOTE (MISC, g_print ("U+%04X\n", value));
       return TRUE;
+    }
+
+  GTK_NOTE (MISC, g_print ("no\n"));
+  return FALSE;
+}
+
+/* This function receives a sequence of Unicode characters and tries to
+ * normalize it (NFC). We check for the case the the resulting string
+ * has length 1 (single character).
+ * NFC normalisation normally rearranges diacritic marks, unless these
+ * belong to the same Canonical Combining Class.
+ * If they belong to the same canonical combining class, we produce all
+ * permutations of the diacritic marks, then attempt to normalize.
+ */
+static gboolean
+check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
+{
+  gunichar combination_buffer_temp[GTK_MAX_COMPOSE_LEN];
+  gchar *combination_utf8_temp = NULL;
+  gchar *nfc_temp = NULL;
+  gint n_combinations;
+  gunichar temp_swap;
+  gint i;
+
+  n_combinations = 1;
+
+  for (i = 1; i < n_compose; i++ )
+     n_combinations *= i;
+
+  /* Xorg reuses dead_tilde for the perispomeni diacritic mark.
+   * We check if base character belongs to Greek Unicode block,
+   * and if so, we replace tilde with perispomeni. */
+  if (combination_buffer[0] >= 0x390 && combination_buffer[0] <= 0x3FF)
+    {
+      for (i = 1; i < n_compose; i++ )
+        if (combination_buffer[i] == 0x303)
+          combination_buffer[i] = 0x342;
+    }
+
+  memcpy (combination_buffer_temp, combination_buffer, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
+
+  for (i = 0; i < n_combinations; i++ )
+    {
+      g_unicode_canonical_ordering (combination_buffer_temp, n_compose);
+      combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, -1, NULL, NULL, NULL);
+      nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);	       	
+
+      if (g_utf8_strlen (nfc_temp, -1) == 1)
+        {
+          memcpy (combination_buffer, combination_buffer_temp, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
+
+          g_free (combination_utf8_temp);
+          g_free (nfc_temp);
+
+          return TRUE;
+        }
+
+      g_free (combination_utf8_temp);
+      g_free (nfc_temp);
+
+      if (n_compose > 2)
+        {
+          temp_swap = combination_buffer_temp[i % (n_compose - 1) + 1];
+          combination_buffer_temp[i % (n_compose - 1) + 1] = combination_buffer_temp[(i+1) % (n_compose - 1) + 1];
+          combination_buffer_temp[(i+1) % (n_compose - 1) + 1] = temp_swap;
+        }
+      else
+        break;
     }
 
   return FALSE;
 }
-
-/* When updating the table of the compose sequences, also update here.
- */
-#define IS_DEAD_KEY(k) \
-    (((k) >= GDK_dead_grave && (k) <= GDK_dead_stroke) || \
-     g_unichar_type (gdk_keyval_to_unicode (k)) == G_UNICODE_NON_SPACING_MARK)
 
 static gboolean
 check_algorithmically (GtkIMContextSimple    *context_simple,
 		       gint                   n_compose)
 
 {
-  int i;
-  int k;
+  gint i;
   gunichar combination_buffer[GTK_MAX_COMPOSE_LEN];
-  gunichar combination_buffer_temp[GTK_MAX_COMPOSE_LEN];
   gchar *combination_utf8, *nfc;
-  gchar *combination_utf8_temp = NULL, *nfc_temp = NULL;
 
   if (n_compose >= GTK_MAX_COMPOSE_LEN)
     return FALSE;
@@ -381,39 +587,33 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
 	    CASE (grave, 0x0300);
 	    CASE (acute, 0x0301);
 	    CASE (circumflex, 0x0302);
-	    CASE (tilde, 0x0303);	/* Normally is 0x303; Greek Polytonic needs 0x342.
-					 * We modified the compose sequences for now
-					 * so that for Greek we don't apply algorithmic
-					 * when perispomeni (0x342) is required
-					 * Filed report; pending, bug 14013 (Freedesktop).
-					 */
+	    CASE (tilde, 0x0303);	/* Also used with perispomeni, 0x342. */
 	    CASE (macron, 0x0304);
 	    CASE (breve, 0x0306);
 	    CASE (abovedot, 0x0307);
 	    CASE (diaeresis, 0x0308);
+	    CASE (hook, 0x0309);
 	    CASE (abovering, 0x030A);
 	    CASE (doubleacute, 0x030B);
 	    CASE (caron, 0x030C);
-	    CASE (cedilla, 0x0327);
-	    CASE (ogonek, 0x0328);	/* Normally is 0x328; Greek Polytonic needs 0x314.
-					 * We modified the compose sequences for now to 
-					 * so that for Greek we don't apply algorithmic
-					 * when dasia (0x314) is required
-					 * Patch accepted in Xorg/GIT, may take a bit to propagate.
-					 */
-	    CASE (dasia, 0x314);
-	    CASE (iota, 0x0345); /* Used by Greek Polytonic layout only; "ypogegrammeni" */
-	    CASE (voiced_sound, 0x3099);	/* Per Markus Kuhn keysyms.txt file. */
-	    CASE (semivoiced_sound, 0x309a);	/* Per Markus Kuhn keysyms.txt file. */
+	    CASE (abovecomma, 0x0313);         /* Equivalent to psili */
+	    CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
+	    CASE (horn, 0x031B);	/* Legacy use for psili, 0x313 (or 0x343). */
 	    CASE (belowdot, 0x0323);
-	    CASE (hook, 0x0309);
-	    CASE (horn, 0x031b);	/* Normally is 0x31b; Greek Polytonic needs 0x313 (or 0x343).
-					 * We modified the compose sequences for now to 
-					 * so that for Greek we don't apply algorithmic
-					 * when psili (0x343) is required
-					 * Patch accepted in Xorg/GIT, may take a bit to propagate.
-					 */
-	    CASE (psili, 0x343);
+	    CASE (cedilla, 0x0327);
+	    CASE (ogonek, 0x0328);	/* Legacy use for dasia, 0x314.*/
+	    CASE (iota, 0x0345);
+	    CASE (voiced_sound, 0x3099);	/* Per Markus Kuhn keysyms.txt file. */
+	    CASE (semivoiced_sound, 0x309A);	/* Per Markus Kuhn keysyms.txt file. */
+
+	    /* The following cases are to be removed once xkeyboard-config,
+ 	     * xorg are fully updated.
+ 	     */
+            /* Workaround for typo in 1.4.x xserver-xorg */
+	    case 0xfe66: combination_buffer[i+1] = 0x314; break;
+	    /* CASE (dasia, 0x314); */
+	    /* CASE (perispomeni, 0x342); */
+	    /* CASE (psili, 0x343); */
 #undef CASE
 	    default:
 	      combination_buffer[i+1] = gdk_keyval_to_unicode (context_simple->compose_buffer[i]);
@@ -421,56 +621,25 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
 	  i--;
 	}
       
-      if (n_compose > 2)
-	{
-	  gint n_combinations;
-	  gunichar temp_swap;
+      /* If the buffer normalizes to a single character, 
+       * then modify the order of combination_buffer accordingly, if necessary,
+       * and return TRUE. 
+       */
+      if (check_normalize_nfc (combination_buffer, n_compose))
+        {
+          gunichar value;
+      	  combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
+          nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
 
-	  /* We calculate the number of permutations of the diacritic marks, factorial(n_compose-1).
- 	   * When diacritic marks belong to the same Canonical Combining Class, 
- 	   * a normalisation does not attempt reorder them, thus we do this ourselves.
-   	   */
-	  n_combinations = 1;
-	  for (k = 1; k < n_compose; k++ )
-	     n_combinations *= k;
+          value = g_utf8_get_char (nfc);
+          gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+          context_simple->compose_buffer[0] = 0;
 
-	  memcpy (combination_buffer_temp, combination_buffer, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
+          g_free (combination_utf8);
+          g_free (nfc);
 
-	  for (k = 0; k < n_combinations; k++ )
-	     {
-	       g_unicode_canonical_ordering (combination_buffer_temp, n_compose);
-      	       combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, -1, NULL, NULL, NULL);
-               nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);	       	
-
-	       if (g_utf8_strlen (nfc_temp, -1) == 1)
-	         {
-	  	   memcpy (combination_buffer, combination_buffer_temp, GTK_MAX_COMPOSE_LEN * sizeof (gunichar) );
-		   break;
-		 }
-
-	       temp_swap = combination_buffer_temp[k % (n_compose - 1) + 1];
-	       combination_buffer_temp[k % (n_compose - 1) + 1] = combination_buffer_temp[(k+1) % (n_compose - 1) + 1];
-	       combination_buffer_temp[(k+1) % (n_compose - 1) + 1] = temp_swap;
-	     }
-
-	  g_free (combination_utf8_temp);
-	  g_free (nfc_temp);
-	}
-
-      combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
-      nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
-      if (g_utf8_strlen (nfc, -1) == 1)
-	{
-	  gunichar value = g_utf8_get_char (nfc);
-	  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-	  context_simple->compose_buffer[0] = 0;
-
-	  g_free (combination_utf8);
-	  g_free (nfc);
-	  return TRUE;
-	}
-      g_free (combination_utf8);
-      g_free (nfc);
+          return TRUE;
+        }
     }
 
   return FALSE;
@@ -491,7 +660,7 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
  * with Ctrl-Shift-U, then release the modifiers before typing any
  * digits, and enter the digits without modifiers.
  */
-#define HEX_MOD_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK)
+#define HEX_MOD_MASK (GTK_DEFAULT_ACCEL_MOD_MASK | GDK_SHIFT_MASK)
 
 static gboolean
 check_hex (GtkIMContextSimple *context_simple,
@@ -564,7 +733,7 @@ beep_window (GdkWindow *window)
     }
   else
     {
-      GdkScreen *screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
+      GdkScreen *screen = gdk_window_get_screen (window);
       gboolean   beep;
 
       g_object_get (gtk_settings_get_for_screen (screen),
@@ -639,7 +808,7 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_drawable_get_display (event->window));
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_window_get_display (event->window));
   guint keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
@@ -754,8 +923,11 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   hex_keyval = canonical_hex_keyval (event);
 
   /* If we are already in a non-hex sequence, or
-   * this keystroke is not hex modifiers + hex digit, don't filter 
-   * key events with accelerator modifiers held down.
+   * this keystroke is not hex modifiers + hex digit, don't filter
+   * key events with accelerator modifiers held down. We only treat
+   * Control and Alt as accel modifiers here, since Super, Hyper and
+   * Meta are often co-located with Mode_Switch, Multi_Key or
+   * ISO_Level3_Switch.
    */
   if (!have_hex_mods ||
       (n_compose > 0 && !context_simple->in_hex_sequence) || 
@@ -763,7 +935,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       (context_simple->in_hex_sequence && !hex_keyval && 
        !is_hex_start && !is_hex_end && !is_escape && !is_backspace))
     {
-      if (event->state & (gtk_accelerator_get_default_mod_mask () & ~GDK_SHIFT_MASK) ||
+      if (event->state & GTK_NO_TEXT_INPUT_MOD_MASK ||
 	  (context_simple->in_hex_sequence && context_simple->modifiers_dropped &&
 	   (event->keyval == GDK_Return || 
 	    event->keyval == GDK_ISO_Enter ||
@@ -891,6 +1063,33 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
   else
     {
+#ifdef GDK_WINDOWING_WIN32
+      guint16  output[2];
+      gsize    output_size = 2;
+
+      switch (gdk_win32_keymap_check_compose (GDK_WIN32_KEYMAP (gdk_keymap_get_default ()),
+                                              context_simple->compose_buffer,
+                                              n_compose,
+                                              output, &output_size))
+        {
+        case GDK_WIN32_KEYMAP_MATCH_NONE:
+          break;
+        case GDK_WIN32_KEYMAP_MATCH_EXACT:
+        case GDK_WIN32_KEYMAP_MATCH_PARTIAL:
+          for (i = 0; i < output_size; i++)
+            {
+              guint32 output_char = gdk_keyval_to_unicode (output[i]);
+              gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
+                                                 output_char);
+            }
+          context_simple->compose_buffer[0] = 0;
+          return TRUE;
+        case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
+          return TRUE;
+        }
+#endif
+
+
       tmp_list = context_simple->tables;
       while (tmp_list)
         {
@@ -898,10 +1097,34 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
             return TRUE;
           tmp_list = tmp_list->next;
         }
-  
+
+      GTK_NOTE (MISC, {
+	  g_print ("[ ");
+	  for (i = 0; i < n_compose; i++)
+	    {
+	      const gchar *keyval_name = gdk_keyval_name (context_simple->compose_buffer[i]);
+	      
+	      if (keyval_name != NULL)
+		g_print ("%s ", keyval_name);
+	      else
+		g_print ("%04x ", context_simple->compose_buffer[i]);
+	    }
+	  g_print ("] ");
+	});
+
+#ifdef GDK_WINDOWING_WIN32
+      if (check_win32_special_cases (context_simple, n_compose))
+	return TRUE;
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+      if (check_quartz_special_cases (context_simple, n_compose))
+        return TRUE;
+#endif
+
       if (check_compact_table (context_simple, &gtk_compose_table_compact, n_compose))
         return TRUE;
-
+  
       if (check_algorithmically (context_simple, n_compose))
 	return TRUE;
     }

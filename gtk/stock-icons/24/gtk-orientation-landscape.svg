@@ -263,22 +263,22 @@
        sodipodi:nodetypes="ccccccccc" />
     <g
        id="g6116"
-       transform="matrix(0,-1.0962567,-1.0872215,0,24.656849,25.303722)">
+       transform="matrix(-1.0962567,0,0,1.0872215,25.012576,-0.6507115)">
       <path
          transform="matrix(0.9037057,0,0,0.9156483,0.9402993,-0.6929702)"
-         d="M 15.55783 10.027681 A 3.3196642 3.3196642 0 1 1  8.9185016,10.027681 A 3.3196642 3.3196642 0 1 1  15.55783 10.027681 z"
+         d="m 15.55783,10.027681 c 0,1.8334 -1.486264,3.319665 -3.319664,3.319665 -1.8334,0 -3.3196644,-1.486265 -3.3196644,-3.319665 0,-1.8333996 1.4862644,-3.3196639 3.3196644,-3.3196639 1.8334,0 3.319664,1.4862643 3.319664,3.3196639 z"
          sodipodi:ry="3.3196642"
          sodipodi:rx="3.3196642"
          sodipodi:cy="10.027681"
          sodipodi:cx="12.238166"
          id="path6068"
-         style="opacity:1;color:#000000;fill:#555753;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.99999982px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         style="color:#000000;fill:#555753;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.99999982px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
          sodipodi:type="arc" />
       <path
          sodipodi:nodetypes="csssc"
          id="path6070"
-         d="M 17,16 C 17,18.760001 14.760001,18.000002 12,18.000002 C 9.2399993,18.000002 6.9999993,18.760001 6.9999993,16 C 6.9999993,13.24 9.2399993,11 12,11 C 14.760001,11 17,13.24 17,16 z "
-         style="color:#000000;fill:#555753;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.99999982px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+         d="m 17,16 c 0,2.760001 -2.239999,2.000002 -5,2.000002 -2.7600007,0 -5.0000007,0.759999 -5.0000007,-2.000002 0,-2.76 2.24,-5 5.0000007,-5 2.760001,0 5,2.24 5,5 z"
+         style="color:#000000;fill:#555753;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.99999982px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     </g>
     <path
        sodipodi:nodetypes="cccccccccc"

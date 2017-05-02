@@ -56,6 +56,9 @@ Marks are typically created using the gtk_text_buffer_create_mark() function.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkTextMark ##### -->
 <para>
 

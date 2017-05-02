@@ -1,17 +1,21 @@
 <?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
-<!ENTITY gail-libgail-util-gailtextutil SYSTEM "xml/gailtextutil.xml">
-<!ENTITY gail-libgail-util-gailmisc SYSTEM "xml/gailmisc.xml">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+<!ENTITY version "2.24.9">
 ]>
-
-<book>
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
     <title>GAIL Reference Manual</title>
+    <releaseinfo>
+      Version &version;
+      The latest version of this documentation can be found on-line at
+      <ulink role="online-location" url="http://library.gnome.org/devel/gail-libgail-util/unstable/">http://library.gnome.org/devel/gail-libgail-util/unstable/</ulink>.
+    </releaseinfo>
   </bookinfo>
   <chapter id="libgail-util-main">
     <title>GAIL libgail-util Library</title>
-    &gail-libgail-util-gailtextutil;
-    &gail-libgail-util-gailmisc;
+    <xi:include href="xml/gailtextutil.xml" />
+    <xi:include href="xml/gailmisc.xml" />
   </chapter>
 </book>

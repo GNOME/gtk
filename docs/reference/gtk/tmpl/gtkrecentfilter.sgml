@@ -40,6 +40,9 @@ Recently used files are supported since GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRecentFilter ##### -->
 <para>
 The <structname>GtkRecentFilter</structname> struct contains
@@ -96,6 +99,7 @@ see gtk_recent_filter_add_custom().
 
 </para>
 
+@void: 
 @Returns: 
 
 

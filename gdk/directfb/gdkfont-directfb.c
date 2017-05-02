@@ -63,18 +63,19 @@ gdk_directfb_bogus_font (gint height)
   GdkFontDirectFB *private;
 
   private = g_new0 (GdkFontDirectFB, 1);
-  font = (GdkFont *)private;
+  font = (GdkFont *) private;
 
-  font->type = GDK_FONT_FONT;
-  font->ascent = height*3/4;
-  font->descent = height/4;
-  private->size = height;
+  font->type              = GDK_FONT_FONT;
+  font->ascent            = height * 3 / 4;
+  font->descent           = height / 4;
+  private->size           = height;
   private->base.ref_count = 1;
   return font;
 }
 
-GdkFont*
-gdk_font_from_description_for_display (GdkDisplay * display,PangoFontDescription *font_desc)
+GdkFont *
+gdk_font_from_description_for_display (GdkDisplay *display,
+                                       PangoFontDescription *font_desc)
 {
   gint size;
 
@@ -87,19 +88,20 @@ gdk_font_from_description_for_display (GdkDisplay * display,PangoFontDescription
 
 /* ********************* */
 
-GdkFont*
+GdkFont *
 gdk_fontset_load (const gchar *fontset_name)
 {
   return gdk_directfb_bogus_font (10);
 }
 
 GdkFont *
-gdk_fontset_load_for_display (GdkDisplay *display,const gchar *font_name) {
+gdk_fontset_load_for_display (GdkDisplay *display,const gchar *font_name)
+{
   return gdk_directfb_bogus_font (10);
 }
 
 GdkFont *
-gdk_font_load_for_display (GdkDisplay *display,const gchar *font_name)
+gdk_font_load_for_display (GdkDisplay *display, const gchar *font_name)
 {
   return gdk_directfb_bogus_font (10);
 }
@@ -126,7 +128,7 @@ _gdk_font_strlen (GdkFont     *font,
                   const gchar *str)
 {
   GdkFontDirectFB *font_private;
-  gint length = 0;
+  gint             length = 0;
 
   g_return_val_if_fail (font != NULL, -1);
   g_return_val_if_fail (str != NULL, -1);
@@ -182,7 +184,7 @@ gdk_font_equal (const GdkFont *fonta,
   privatea = (const GdkFontDirectFB*) fonta;
   privateb = (const GdkFontDirectFB*) fontb;
 
-  if(fonta == fontb)
+  if (fonta == fontb)
     return TRUE;
 
   return FALSE;
@@ -218,15 +220,15 @@ gdk_text_extents (GdkFont     *font,
                   gint        *ascent,
                   gint        *descent)
 {
-  if(ascent)
+  if (ascent)
     *ascent = font->ascent;
-  if(descent)
+  if (descent)
     *descent = font->descent;
-  if(width)
-    *width = gdk_text_width(font, text, text_length);
-  if(lbearing)
+  if (width)
+    *width = gdk_text_width (font, text, text_length);
+  if (lbearing)
     *lbearing = 0;
-  if(rbearing)
+  if (rbearing)
     *rbearing = 0;
 }
 
@@ -263,14 +265,14 @@ gdk_text_extents_wc (GdkFont        *font,
 GdkFont *
 gdk_font_lookup (GdkNativeWindow xid)
 {
-	g_warning(" gdk_font_lookup unimplemented \n");
+  g_warning(" gdk_font_lookup unimplemented \n");
   return NULL;
 }
 
-GdkDisplay*
+GdkDisplay *
 gdk_font_get_display (GdkFont* font)
 {
-	g_warning(" gdk_font_get_display unimplemented \n");
+  g_warning(" gdk_font_get_display unimplemented \n");
   return NULL;
 }
 

@@ -17,12 +17,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_PRINT_UNIX_DIALOG_H__
+#define __GTK_PRINT_UNIX_DIALOG_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_UNIX_PRINT_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtkunixprint.h> can be included directly."
 #endif
-
-#ifndef __GTK_PRINT_UNIX_DIALOG_H__
-#define __GTK_PRINT_UNIX_DIALOG_H__
 
 #include <gtk/gtk.h>
 #include <gtk/gtkprinter.h>
@@ -64,25 +64,36 @@ struct _GtkPrintUnixDialogClass
   void (*_gtk_reserved7) (void);
 };
 
-GType		  gtk_print_unix_dialog_get_type	     (void) G_GNUC_CONST;
-GtkWidget *       gtk_print_unix_dialog_new                  (const gchar *title,
-                                                              GtkWindow   *parent);
+GType                gtk_print_unix_dialog_get_type                (void) G_GNUC_CONST;
+GtkWidget *          gtk_print_unix_dialog_new                     (const gchar *title,
+                                                                    GtkWindow   *parent);
 
-void              gtk_print_unix_dialog_set_page_setup       (GtkPrintUnixDialog *dialog,
-							      GtkPageSetup       *page_setup);
-GtkPageSetup *    gtk_print_unix_dialog_get_page_setup       (GtkPrintUnixDialog *dialog);
-void              gtk_print_unix_dialog_set_current_page     (GtkPrintUnixDialog *dialog,
-							      gint                current_page);
-gint              gtk_print_unix_dialog_get_current_page     (GtkPrintUnixDialog *dialog);
-void              gtk_print_unix_dialog_set_settings         (GtkPrintUnixDialog *dialog,
-							      GtkPrintSettings   *settings);
-GtkPrintSettings *gtk_print_unix_dialog_get_settings         (GtkPrintUnixDialog *dialog);
-GtkPrinter *      gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog);
-void              gtk_print_unix_dialog_add_custom_tab       (GtkPrintUnixDialog *dialog,
-							      GtkWidget          *child,
-							      GtkWidget          *tab_label);
-void              gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog *dialog,
-								 GtkPrintCapabilities capabilities);
+void                 gtk_print_unix_dialog_set_page_setup          (GtkPrintUnixDialog *dialog,
+								    GtkPageSetup       *page_setup);
+GtkPageSetup *       gtk_print_unix_dialog_get_page_setup          (GtkPrintUnixDialog *dialog);
+void                 gtk_print_unix_dialog_set_current_page        (GtkPrintUnixDialog *dialog,
+								    gint                current_page);
+gint                 gtk_print_unix_dialog_get_current_page        (GtkPrintUnixDialog *dialog);
+void                 gtk_print_unix_dialog_set_settings            (GtkPrintUnixDialog *dialog,
+								    GtkPrintSettings   *settings);
+GtkPrintSettings *   gtk_print_unix_dialog_get_settings            (GtkPrintUnixDialog *dialog);
+GtkPrinter *         gtk_print_unix_dialog_get_selected_printer    (GtkPrintUnixDialog *dialog);
+void                 gtk_print_unix_dialog_add_custom_tab          (GtkPrintUnixDialog *dialog,
+								    GtkWidget          *child,
+								    GtkWidget          *tab_label);
+void                 gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog *dialog,
+								    GtkPrintCapabilities capabilities);
+GtkPrintCapabilities gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog  *dialog);
+void                 gtk_print_unix_dialog_set_support_selection   (GtkPrintUnixDialog  *dialog,
+								    gboolean             support_selection);
+gboolean             gtk_print_unix_dialog_get_support_selection   (GtkPrintUnixDialog  *dialog);
+void                 gtk_print_unix_dialog_set_has_selection       (GtkPrintUnixDialog  *dialog,
+								    gboolean             has_selection);
+gboolean             gtk_print_unix_dialog_get_has_selection       (GtkPrintUnixDialog  *dialog);
+void                 gtk_print_unix_dialog_set_embed_page_setup    (GtkPrintUnixDialog *dialog,
+								    gboolean            embed);
+gboolean             gtk_print_unix_dialog_get_embed_page_setup    (GtkPrintUnixDialog *dialog);
+gboolean             gtk_print_unix_dialog_get_page_setup_set      (GtkPrintUnixDialog *dialog);
 
 G_END_DECLS
 

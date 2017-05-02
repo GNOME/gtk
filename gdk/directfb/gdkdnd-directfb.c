@@ -66,25 +66,41 @@ struct _GdkDragContextPrivate
 static GList          *contexts          = NULL;
 static GdkDragContext *current_dest_drag = NULL;
 
+
 #define GDK_DRAG_CONTEXT_PRIVATE_DATA(ctx) ((GdkDragContextPrivate *) GDK_DRAG_CONTEXT (ctx)->windowing_data)
 
+static void gdk_drag_context_finalize (GObject *object);
 
-static gpointer  parent_class = NULL;
-
+G_DEFINE_TYPE (GdkDragContext, gdk_drag_context, G_TYPE_OBJECT)
 
 static void
 gdk_drag_context_init (GdkDragContext *dragcontext)
 {
-  dragcontext->windowing_data = g_new (GdkDragContextPrivate, 1);
+  GdkDragContextPrivate *private;
+
+  private = G_TYPE_INSTANCE_GET_PRIVATE (dragcontext,
+                                         GDK_TYPE_DRAG_CONTEXT,
+                                         GdkDragContextPrivate);
+
+  dragcontext->windowing_data = private;
 
   contexts = g_list_prepend (contexts, dragcontext);
 }
 
 static void
+gdk_drag_context_class_init (GdkDragContextClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gdk_drag_context_finalize;
+
+  g_type_class_add_private (object_class, sizeof (GdkDragContextPrivate));
+}
+
+static void
 gdk_drag_context_finalize (GObject *object)
 {
-  GdkDragContext        *context = GDK_DRAG_CONTEXT (object);
-  GdkDragContextPrivate *private = GDK_DRAG_CONTEXT_PRIVATE_DATA (object);
+  GdkDragContext *context = GDK_DRAG_CONTEXT (object);
 
   g_list_free (context->targets);
 
@@ -94,60 +110,15 @@ gdk_drag_context_finalize (GObject *object)
   if (context->dest_window)
     g_object_unref (context->dest_window);
 
-
-  if (private)
-    {
-      g_free (private);
-      context->windowing_data = NULL;
-    }
-
   contexts = g_list_remove (contexts, context);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
-
-static void
-gdk_drag_context_class_init (GdkDragContextClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gdk_drag_context_finalize;
-}
-
-GType
-gdk_drag_context_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (GdkDragContextClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drag_context_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDragContext),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_drag_context_init,
-      };
-
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkDragContext",
-                                            &object_info, 0);
-    }
-
-  return object_type;
+  G_OBJECT_CLASS (gdk_drag_context_parent_class)->finalize (object);
 }
 
 GdkDragContext *
 gdk_drag_context_new (void)
 {
-  return (GdkDragContext *) g_object_new (gdk_drag_context_get_type (), NULL);
+  return g_object_new (gdk_drag_context_get_type (), NULL);
 }
 
 void
@@ -235,7 +206,7 @@ local_send_enter (GdkDragContext *context,
 
   if (current_dest_drag != NULL)
     {
-      gdk_drag_context_unref (current_dest_drag);
+      g_object_unref (current_dest_drag);
       current_dest_drag = NULL;
     }
 
@@ -243,11 +214,9 @@ local_send_enter (GdkDragContext *context,
   new_context->protocol  = GDK_DRAG_PROTO_LOCAL;
   new_context->is_source = FALSE;
 
-  new_context->source_window = context->source_window;
-  g_object_ref (new_context->source_window);
+  new_context->source_window = g_object_ref (context->source_window);
 
-  new_context->dest_window   = context->dest_window;
-  g_object_ref (new_context->dest_window);
+  new_context->dest_window   = g_object_ref (context->dest_window);
 
   new_context->targets = g_list_copy (context->targets);
 
@@ -429,7 +398,6 @@ gdk_drag_find_window_for_screen (GdkDragContext   *context,
 
       *protocol = context->protocol;
     }
-
 }
 
 gboolean
@@ -459,8 +427,7 @@ gdk_drag_motion (GdkDragContext  *context,
       /* Check if new destination accepts drags, and which protocol */
       if (dest_window)
 	{
-	  context->dest_window = dest_window;
-	  g_object_ref (context->dest_window);
+	  context->dest_window = g_object_ref (dest_window);
 	  context->protocol = protocol;
 
 	  switch (protocol)
@@ -627,7 +594,7 @@ gdk_drop_finish (GdkDragContext   *context,
 				       context->dest_window);
   if (src_context)
     {
-      gdk_drag_context_ref (src_context);
+      g_object_ref (src_context);
 
       event.dnd.type       = GDK_DROP_FINISHED;
       event.dnd.window     = src_context->source_window;

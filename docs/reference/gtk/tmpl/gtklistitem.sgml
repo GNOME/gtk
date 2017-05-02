@@ -29,6 +29,9 @@ in newly written code. Use #GtkTreeView instead.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkListItem ##### -->
 <para>
 The #GtkListItem struct contains private data only, and should
@@ -118,6 +121,7 @@ only be accessed using the functions below.
 Creates a new #GtkListitem.
 </para>
 
+@void: 
 @Returns: a new #GtkListItem.
 
 

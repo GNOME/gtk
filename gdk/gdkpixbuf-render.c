@@ -22,7 +22,7 @@
 
 #include "config.h"
 #include <gdk/gdk.h>
-#include "gdk-pixbuf-private.h"
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkpixbuf.h"
 #include "gdkscreen.h"
 #include "gdkinternals.h"
@@ -50,11 +50,14 @@
  **/
 void
 gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
-				   GdkBitmap *bitmap,
-				   int src_x,  int src_y,
-				   int dest_x, int dest_y,
-				   int width,  int height,
-				   int alpha_threshold)
+                                   GdkBitmap *bitmap,
+                                   int        src_x,
+                                   int        src_y,
+                                   int        dest_x,
+                                   int        dest_y,
+                                   int        width,
+                                   int        height,
+                                   int        alpha_threshold)
 {
   GdkGC *gc;
   GdkColor color;
@@ -63,20 +66,20 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
   int start, start_status;
   int status;
 
-  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
-  g_return_if_fail (pixbuf->colorspace == GDK_COLORSPACE_RGB);
-  g_return_if_fail (pixbuf->n_channels == 3 || pixbuf->n_channels == 4);
-  g_return_if_fail (pixbuf->bits_per_sample == 8);
+  g_return_if_fail (gdk_pixbuf_get_colorspace (pixbuf) == GDK_COLORSPACE_RGB);
+  g_return_if_fail (gdk_pixbuf_get_n_channels (pixbuf) == 3 ||
+                        gdk_pixbuf_get_n_channels (pixbuf) == 4);
+  g_return_if_fail (gdk_pixbuf_get_bits_per_sample (pixbuf) == 8);
 
   if (width == -1) 
-    width = pixbuf->width;
+    width = gdk_pixbuf_get_width (pixbuf);
   if (height == -1)
-    height = pixbuf->height;
+    height = gdk_pixbuf_get_height (pixbuf);
 
   g_return_if_fail (bitmap != NULL);
   g_return_if_fail (width >= 0 && height >= 0);
-  g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
-  g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
+  g_return_if_fail (src_x >= 0 && src_x + width <= gdk_pixbuf_get_width (pixbuf));
+  g_return_if_fail (src_y >= 0 && src_y + height <= gdk_pixbuf_get_height (pixbuf));
 
   g_return_if_fail (alpha_threshold >= 0 && alpha_threshold <= 255);
 
@@ -85,7 +88,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 
   gc = _gdk_drawable_get_scratch_gc (bitmap, FALSE);
 
-  if (!pixbuf->has_alpha)
+  if (!gdk_pixbuf_get_has_alpha (pixbuf))
     {
       color.pixel = (alpha_threshold == 255) ? 0 : 1;
       gdk_gc_set_foreground (gc, &color);
@@ -102,8 +105,8 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 
   for (y = 0; y < height; y++)
     {
-      p = (pixbuf->pixels + (y + src_y) * pixbuf->rowstride + src_x * pixbuf->n_channels
-	   + pixbuf->n_channels - 1);
+      p = (gdk_pixbuf_get_pixels (pixbuf) + (y + src_y) * gdk_pixbuf_get_rowstride (pixbuf) + src_x * gdk_pixbuf_get_n_channels (pixbuf)
+	   + gdk_pixbuf_get_n_channels (pixbuf) - 1);
 	    
       start = 0;
       start_status = *p < alpha_threshold;
@@ -123,7 +126,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 	      start_status = status;
 	    }
 	  
-	  p += pixbuf->n_channels;
+	  p += gdk_pixbuf_get_n_channels (pixbuf);
 	}
       
       if (!start_status)

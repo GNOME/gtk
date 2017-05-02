@@ -165,8 +165,8 @@ How to compile GTK+ itself
     </itemizedlist>
     <para>
       Three of the libraries that GTK+ depends on are maintained by
-      by the GTK+ team: GLib, Pango, and ATK. Other libraries are
-      maintained separately.
+      by the GTK+ team: GLib, GdkPixbuf, Pango, and ATK. Other libraries
+      are maintained separately.
     </para>
     <itemizedlist>
       <listitem>
@@ -244,15 +244,22 @@ How to compile GTK+ itself
 	<para>
 	  The <ulink url="http://www.fontconfig.org">fontconfig</ulink>
 	  library provides Pango with a standard way of locating
-	  fonts and matching them against font names. 
+	  fonts and matching them against font names.
 	</para>
       </listitem>
       <listitem>
 	<para>
 	  <ulink url="http://www.cairographics.org">Cairo</ulink>
-          is a graphics library that supports vector graphics and image 
+          is a graphics library that supports vector graphics and image
           compositing. Both Pango and GTK+ use cairo for much of their
           drawing.
+        </para>
+      </listitem>
+      <listitem>
+	<para>
+	  <ulink url="http://live.gnome.org/GObjectIntrospection">gobject-introspection</ulink>
+          is a framework for making introspection data available to
+          language bindings.
         </para>
       </listitem>
       <listitem>
@@ -262,7 +269,7 @@ How to compile GTK+ itself
           for mime types that are used by GIO and, indirectly, by GTK+. 
           gdk-pixbuf will use GIO for mime type detection if possible. For this 
           to work, shared-mime-info needs to be installed and 
-          <envvar>XDG_DATA_DIRS</envvar> set accordingly at configure time. 
+          <envar>XDG_DATA_DIRS</envar> set accordingly at configure time. 
           Otherwise, gdk-pixbuf falls back to its built-in mime type detection.
         </para>
       </listitem>
@@ -322,52 +329,48 @@ How to compile GTK+ itself
 	    <arg>--enable-modules</arg>
 	  </group>
 	  <group>
-	    <arg>--with-included-loaders==LOADER1,LOADER2,...</arg>
-	  </group>
-	  <group>
 	    <arg>--with-included-immodules=MODULE1,MODULE2,...</arg>
 	  </group>
 	  <group>
 	    <arg>--enable-debug=[no|minimum|yes]</arg>
 	  </group>
           <group>
-	    <arg>--disable-visibility</arg>
-	    <arg>--enable-visibility</arg>
-	  </group>
+            <arg>--disable-visibility</arg>
+            <arg>--enable-visibility</arg>
+          </group>
           <group>
-	    <arg>--disable-shm</arg>
-	    <arg>--enable-shm</arg>
-	  </group>
+            <arg>--disable-shm</arg>
+            <arg>--enable-shm</arg>
+          </group>
           <group>
-	    <arg>--disable-xim</arg>
-	    <arg>--enable-xim</arg>
-	  </group>
+            <arg>--disable-xkb</arg>
+            <arg>--enable-xkb</arg>
+          </group>
           <group>
-	    <arg>--disable-xim-inst</arg>
-	    <arg>--enable-xim-inst</arg>
-	  </group>
+            <arg>--disable-xinerama</arg>
+            <arg>--enable-xinerama</arg>
+          </group>
           <group>
-	    <arg>--disable-xkb</arg>
-	    <arg>--enable-xkb</arg>
-	  </group>
+            <arg>--disable-gtk-doc</arg>
+            <arg>--enable-gtk-doc</arg>
+          </group>
           <group>
-	    <arg>--disable-xinerama</arg>
-	    <arg>--enable-xinerama</arg>
-	  </group>
-	  <group>
-	    <arg>--disable-gtk-doc</arg>
-	    <arg>--enable-gtk-doc</arg>
-	  </group>
-	  <group>
-	    <arg>--disable-cups</arg>
-	    <arg>--enable-cups</arg>
-	  </group>
+            <arg>--disable-cups</arg>
+            <arg>--enable-cups</arg>
+          </group>
+          <group>
+            <arg>--disable-papi</arg>
+            <arg>--enable-papi</arg>
+          </group>
           <group>
             <arg>--with-xinput=[no|yes]</arg>
           </group>
 	  <group>
 	    <arg>--with-gdktarget=[x11|win32|quartz|directfb]</arg>
 	  </group>
+          <group>
+	    <arg>--disable-introspection</arg>
+          </group>
 	</cmdsynopsis>
       </para>
 
@@ -376,8 +379,8 @@ How to compile GTK+ itself
 	  <systemitem>--enable-modules</systemitem></title>
 
 	<para>
-	  Normally GTK+ will try to build the GdkPixbuf image file
-	  format loaders as little shared libraries that are loaded on
+	  Normally GTK+ will try to build the input method modules
+	  as little shared libraries that are loaded on
 	  demand.  The <systemitem>--disable-modules</systemitem>
 	  argument indicates that they should all be built statically
 	  into the GTK+ library instead.  This is useful for
@@ -386,16 +389,6 @@ How to compile GTK+ itself
 	  <systemitem>--enable-modules</systemitem> is specified, then
 	  the <command>configure</command> script will try to
 	  auto-detect whether shared modules work on your system.
-	</para>
-      </formalpara>
-
-      <formalpara>
-	<title><systemitem>--with-included-loaders</systemitem></title>
-
-	<para>
-         This option allows you to specify which image loaders you
-         want to include; for example, you might include only the PNG
-         loader to create a smaller GdkPixbuf binary.
 	</para>
       </formalpara>
 
@@ -472,30 +465,6 @@ How to compile GTK+ itself
           These options can be used to control whether GTK+ will use shared 
           memory to communicate with the X server when possible.
           The default is 'yes'.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-xim</systemitem> and
-          <systemitem>--enable-xim</systemitem></title>
- 
-        <para>
-          These options can be used to control whether GTK+ will 
-          be compiled with support for XIM. (The X Input Method
-	  extension, used for Japanese input.) The default is yes.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-xim-inst</systemitem> and
-          <systemitem>--enable-xim-inst</systemitem></title>
- 
-        <para>
-          These options determine whether GTK+ will use the 
-	  XIM instantiate callback. 
-          The default is 'yes', unless the host system is Solaris,
-	  where <function>XRegisterIMInstantiateCallback()</function>
-	  seems to cause a segfault.
         </para>
       </formalpara>
 
@@ -580,7 +549,13 @@ How to compile GTK+ itself
           for the Linux framebuffer.
 	</para>
       </formalpara>
+      <formalpara>
+        <title><systemitem>--disable-introspection</systemitem></title>
 
+        <para>
+          Build without introspection support.
+        </para>
+      </formalpara>
     </refsect1>
 
 </refentry>

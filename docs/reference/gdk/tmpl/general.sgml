@@ -18,6 +18,9 @@ utility functions.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_init ##### -->
 <para>
 Initializes the GDK library and connects to the X server.
@@ -70,6 +73,7 @@ by GTK+ applications.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -94,7 +98,9 @@ If the locale is not supported by X then it is reset to the standard "C"
 locale.
 </para>
 
+@void: 
 @Returns: the resulting locale.
+@Deprecated: 2.24: Use setlocale() directly
 
 
 <!-- ##### FUNCTION gdk_set_sm_client_id ##### -->
@@ -123,6 +129,7 @@ of g_atexit()).
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_notify_startup_complete_with_id ##### -->
@@ -141,6 +148,7 @@ commandline option, the default value is the program name (determined
 with g_get_prgname()) with the first character converted to uppercase. 
 </para>
 
+@void: 
 @Returns: the program class.
 
 
@@ -160,6 +168,7 @@ Gets the name of the display, which usually comes from the <envar>DISPLAY</envar
 environment variable or the <option>--display</option> command line option.
 </para>
 
+@void: 
 @Returns: the name of the display.
 
 
@@ -170,12 +179,14 @@ by the server. This is rarely needed by applications. It's main use is for
 trapping X errors with gdk_error_trap_push() and gdk_error_trap_pop().
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_screen_width ##### -->
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -183,6 +194,7 @@ trapping X errors with gdk_error_trap_push() and gdk_error_trap_pop().
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -190,6 +202,7 @@ trapping X errors with gdk_error_trap_push() and gdk_error_trap_pop().
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -197,6 +210,7 @@ trapping X errors with gdk_error_trap_push() and gdk_error_trap_pop().
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -279,6 +293,7 @@ success or the reason for the failure of the grab attempt.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -324,6 +339,7 @@ available.
 <para>
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_get_use_xshm ##### -->
@@ -338,6 +354,7 @@ SYSV shared memory calls. However, it can only be used if the X client and
 server are on the same machine and the server supports it.
 </para>
 
+@void: 
 @Returns: %TRUE if use of the MIT shared memory extension will be attempted.
 
 
@@ -375,6 +392,7 @@ avoid the X error in any other way.
 </programlisting>
 </example>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_error_trap_pop ##### -->
@@ -382,19 +400,13 @@ avoid the X error in any other way.
 Removes the X error trap installed with gdk_error_trap_push().
 </para>
 
+@void: 
 @Returns: the X error code, or 0 if no error occurred.
 
 
 <!-- ##### MACRO GDK_WINDOWING_X11 ##### -->
 <para>
-This macro is defined if GDK is configured to use the X backend.
-</para>
-
-
-
-<!-- ##### MACRO GDK_WINDOWING_WIN32 ##### -->
-<para>
-This macro is defined if GDK is configured to use the Win32 backend.
+This macro is defined if GDK is configured to use the X11 backend.
 </para>
 
 

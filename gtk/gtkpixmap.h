@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #if !defined (GTK_DISABLE_DEPRECATED) || defined (__GTK_PIXMAP_C__)
@@ -35,11 +35,11 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_PIXMAP			 (gtk_pixmap_get_type ())
-#define GTK_PIXMAP(obj)			 (GTK_CHECK_CAST ((obj), GTK_TYPE_PIXMAP, GtkPixmap))
-#define GTK_PIXMAP_CLASS(klass)		 (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PIXMAP, GtkPixmapClass))
-#define GTK_IS_PIXMAP(obj)		 (GTK_CHECK_TYPE ((obj), GTK_TYPE_PIXMAP))
-#define GTK_IS_PIXMAP_CLASS(klass)	 (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PIXMAP))
-#define GTK_PIXMAP_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PIXMAP, GtkPixmapClass))
+#define GTK_PIXMAP(obj)			 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PIXMAP, GtkPixmap))
+#define GTK_PIXMAP_CLASS(klass)		 (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PIXMAP, GtkPixmapClass))
+#define GTK_IS_PIXMAP(obj)		 (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PIXMAP))
+#define GTK_IS_PIXMAP_CLASS(klass)	 (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PIXMAP))
+#define GTK_PIXMAP_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PIXMAP, GtkPixmapClass))
 
 
 typedef struct _GtkPixmap	GtkPixmap;
@@ -48,7 +48,7 @@ typedef struct _GtkPixmapClass	GtkPixmapClass;
 struct _GtkPixmap
 {
   GtkMisc misc;
-  
+
   GdkPixmap *pixmap;
   GdkBitmap *mask;
 
@@ -62,7 +62,7 @@ struct _GtkPixmapClass
 };
 
 
-GtkType	   gtk_pixmap_get_type	 (void) G_GNUC_CONST;
+GType	   gtk_pixmap_get_type	 (void) G_GNUC_CONST;
 GtkWidget* gtk_pixmap_new	 (GdkPixmap  *pixmap,
 				  GdkBitmap  *mask);
 void	   gtk_pixmap_set	 (GtkPixmap  *pixmap,

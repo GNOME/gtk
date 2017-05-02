@@ -31,14 +31,16 @@
 
 /**
  * gtk_show_uri:
- * @screen: screen to show the uri on or %NULL for the default screen
+ * @screen: (allow-none): screen to show the uri on or %NULL for the default screen
  * @uri: the uri to show
  * @timestamp: a timestamp to prevent focus stealing.
  * @error: a #GError that is returned in case of errors
  *
  * This is a convenience function for launching the default application
- * to show the uri. The uri must be of a form understood by GIO. Typical
- * examples are
+ * to show the uri. The uri must be of a form understood by GIO (i.e. you
+ * need to install gvfs to get support for uri schemes such as http://
+ * or ftp://, as only local files are handled by GIO itself).
+ * Typical examples are
  * <simplelist>
  *   <member><filename>file:///home/gnome/pict.jpg</filename></member>
  *   <member><filename>http://www.gnome.org</filename></member>

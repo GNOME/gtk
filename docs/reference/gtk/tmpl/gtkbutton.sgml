@@ -24,6 +24,9 @@ the #GtkLabel.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkButton ##### -->
 <para>
 This should not be accessed directly.  Use the accessor functions below.
@@ -158,6 +161,7 @@ Creates a new #GtkButton widget. To add a child widget to the button,
 use gtk_container_add().
 </para>
 
+@void: 
 @Returns: The newly created #GtkButton widget.
 
 
@@ -195,6 +199,7 @@ Emits a #GtkButton::pressed signal to the given #GtkButton.
 </para>
 
 @button: The #GtkButton you want to send the signal to.
+@Deprecated: 2.20: Use the #GtkWidget::button-press-event signal.
 
 
 <!-- ##### FUNCTION gtk_button_released ##### -->
@@ -203,6 +208,7 @@ Emits a #GtkButton::released signal to the given #GtkButton.
 </para>
 
 @button: The #GtkButton you want to send the signal to.
+@Deprecated: 2.20: Use the #GtkWidget::button-release-event signal.
 
 
 <!-- ##### FUNCTION gtk_button_clicked ##### -->
@@ -219,6 +225,7 @@ Emits a #GtkButton::enter signal to the given #GtkButton.
 </para>
 
 @button: The #GtkButton you want to send the signal to.
+@Deprecated: 2.20: Use the #GtkWidget::enter-notify-event signal.
 
 
 <!-- ##### FUNCTION gtk_button_leave ##### -->
@@ -227,6 +234,7 @@ Emits a #GtkButton::leave signal to the given #GtkButton.
 </para>
 
 @button: The #GtkButton you want to send the signal to.
+@Deprecated: 2.20: Use the #GtkWidget::leave-notify-event signal.
 
 
 <!-- ##### FUNCTION gtk_button_set_relief ##### -->
@@ -371,6 +379,15 @@ Returns the current relief style of the given #GtkButton.
 
 
 <!-- ##### FUNCTION gtk_button_get_image_position ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_button_get_event_window ##### -->
 <para>
 
 </para>

@@ -22,6 +22,9 @@ for drag-and-drop.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkInvisible ##### -->
 <para>
 The #GtkInvisible-struct struct contains no public fields.
@@ -37,6 +40,7 @@ The #GtkInvisible-struct struct contains no public fields.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 

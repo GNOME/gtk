@@ -123,7 +123,7 @@ gtk_xembed_get_time (void)
 
 /**
  * _gtk_xembed_send_message:
- * @recipient: window to which to send the window, or %NULL
+ * @recipient: (allow-none): window to which to send the window, or %NULL
  *             in which case nothing will be sent
  * @message:   type of message
  * @detail:    detail field of message
@@ -147,7 +147,7 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
 	  
   g_return_if_fail (GDK_IS_WINDOW (recipient));
 
-  display = gdk_drawable_get_display (recipient);
+  display = gdk_window_get_display (recipient);
   GTK_NOTE (PLUGSOCKET,
 	    g_message ("Sending %s", _gtk_xembed_message_name (message)));
 
@@ -172,7 +172,7 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
 
 /**
  * _gtk_xembed_send_focus_message:
- * @recipient: window to which to send the window, or %NULL
+ * @recipient: (allow-none): window to which to send the window, or %NULL
  *             in which case nothing will be sent
  * @message:   type of message
  * @detail:    detail field of message

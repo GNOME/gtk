@@ -125,7 +125,7 @@ drag_data_received (GtkWidget        *widget,
 {
   GdkPixbuf *pixbuf;
 
-  if (selection_data->length > 0)
+  if (gtk_selection_data_get_length (selection_data) > 0)
     {
       pixbuf = gtk_selection_data_get_pixbuf (selection_data);
       gtk_image_set_from_pixbuf (GTK_IMAGE (data), pixbuf);
@@ -203,6 +203,10 @@ do_clipboard (GtkWidget *do_widget)
       GtkClipboard *clipboard;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+                             gtk_widget_get_screen (do_widget));
+      gtk_window_set_title (GTK_WINDOW (window), "Clipboard demo");
+
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
@@ -310,7 +314,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_clipboard_set_can_store (clipboard, NULL, 0);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     {

@@ -74,6 +74,8 @@ struct _GtkEntryCompletionPrivate
 gboolean _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion);
 void     _gtk_entry_completion_popup        (GtkEntryCompletion *completion);
 void     _gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
+gchar *  _gtk_entry_completion_compute_prefix (GtkEntryCompletion *completion,
+					       const char         *key);
 
 void      _gtk_entry_get_borders            (GtkEntry  *entry,
 					     gint      *xborder,

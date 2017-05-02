@@ -40,7 +40,7 @@ tictactoe_get_type (void)
 
   if (!ttt_type)
     {
-      static const GTypeInfo ttt_info =
+      const GTypeInfo ttt_info =
       {
 	sizeof (TictactoeClass),
 	NULL, /* base_init */

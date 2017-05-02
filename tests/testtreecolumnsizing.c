@@ -98,7 +98,7 @@ combo_box_changed (GtkComboBox *combo_box,
   GList *list;
   GList *columns;
 
-  str = gtk_combo_box_get_active_text (GTK_COMBO_BOX (combo_box));
+  str = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (combo_box));
   if (!str)
     return;
 
@@ -182,14 +182,14 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   /* Option menu contents */
-  combo_box = gtk_combo_box_new_text ();
+  combo_box = gtk_combo_box_text_new ();
 
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), NO_EXPAND);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), SINGLE_EXPAND);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), MULTI_EXPAND);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), LAST_EXPAND);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), BORDER_EXPAND);
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), ALL_EXPAND);
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), NO_EXPAND);
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), SINGLE_EXPAND);
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), MULTI_EXPAND);
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), LAST_EXPAND);
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), BORDER_EXPAND);
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), ALL_EXPAND);
 
   gtk_box_pack_start (GTK_BOX (vbox), combo_box, FALSE, FALSE, 0);
 

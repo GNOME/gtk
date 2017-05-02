@@ -100,20 +100,15 @@ expose_cb (GtkWidget      *widget,
            GdkEventExpose *event,
            gpointer        data)
 {
-  guchar *pixels;
-  int rowstride;
+  cairo_t *cr;
 
-  rowstride = gdk_pixbuf_get_rowstride (frame);
+  cr = gdk_cairo_create (event->window);
 
-  pixels = gdk_pixbuf_get_pixels (frame) + rowstride * event->area.y + event->area.x * 3;
+  gdk_cairo_set_source_pixbuf (cr, frame, 0, 0);
+  gdk_cairo_rectangle (cr, &event->area);
+  cairo_fill (cr);
 
-  gdk_draw_rgb_image_dithalign (widget->window,
-                                widget->style->black_gc,
-                                event->area.x, event->area.y,
-                                event->area.width, event->area.height,
-                                GDK_RGB_DITHER_NORMAL,
-                                pixels, rowstride,
-                                event->area.x, event->area.y);
+  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -260,7 +255,7 @@ do_pixbufs (GtkWidget *do_widget)
         }
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     {
       gtk_widget_show_all (window);
     }

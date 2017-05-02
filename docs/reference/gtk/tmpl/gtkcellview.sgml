@@ -20,6 +20,9 @@ and drag and drop.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCellView ##### -->
 <para>
 
@@ -51,6 +54,7 @@ and drag and drop.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -88,6 +92,15 @@ and drag and drop.
 
 @cell_view: 
 @model: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_get_model ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_cell_view_set_displayed_row ##### -->

@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_MOUNT_OPERATION_H__
+#define __GTK_MOUNT_OPERATION_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_MOUNT_OPERATION_H__
-#define __GTK_MOUNT_OPERATION_H__
 
 G_BEGIN_DECLS
 
@@ -40,18 +40,23 @@ G_BEGIN_DECLS
 #define GTK_IS_MOUNT_OPERATION_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_MOUNT_OPERATION))
 #define GTK_MOUNT_OPERATION_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_MOUNT_OPERATION, GtkMountOperationClass))
 
-typedef struct GtkMountOperation         GtkMountOperation;
-typedef struct GtkMountOperationClass    GtkMountOperationClass;
-typedef struct GtkMountOperationPrivate  GtkMountOperationPrivate;
+typedef struct _GtkMountOperation         GtkMountOperation;
+typedef struct _GtkMountOperationClass    GtkMountOperationClass;
+typedef struct _GtkMountOperationPrivate  GtkMountOperationPrivate;
 
-struct GtkMountOperation
+/**
+ * GtkMountOperation:
+ *
+ * This should not be accessed directly. Use the accessor functions below.
+ */
+struct _GtkMountOperation
 {
   GMountOperation parent_instance;
 
   GtkMountOperationPrivate *priv;
 };
 
-struct GtkMountOperationClass
+struct _GtkMountOperationClass
 {
   GMountOperationClass parent_class;
 

@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GDK_DISABLE_DEPRECATED
 #undef GTK_DISABLE_DEPRECATED
 
 #include "config.h"
@@ -187,7 +188,7 @@ gtk_tree_item_subtree_button_click (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_EVENT_BOX (widget), FALSE);
   
   item = (GtkTreeItem*) gtk_object_get_user_data (GTK_OBJECT (widget));
-  if (!GTK_WIDGET_IS_SENSITIVE (item))
+  if (!gtk_widget_is_sensitive (GTK_WIDGET (item)))
     return FALSE;
   
   if (item->expanded)
@@ -204,7 +205,7 @@ gtk_tree_item_subtree_button_changed_state (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_EVENT_BOX (widget));
   
-  if (GTK_WIDGET_VISIBLE (widget))
+  if (gtk_widget_get_visible (widget))
     {
       
       if (widget->state == GTK_STATE_NORMAL)
@@ -212,7 +213,7 @@ gtk_tree_item_subtree_button_changed_state (GtkWidget *widget)
       else
 	gdk_window_set_background (widget->window, &widget->style->bg[widget->state]);
       
-      if (GTK_WIDGET_DRAWABLE (widget))
+      if (gtk_widget_is_drawable (widget))
 	gdk_window_clear_area (widget->window, 0, 0, 
 			       widget->allocation.width, widget->allocation.height);
     }
@@ -225,19 +226,19 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
 
   tree_item->expanded = FALSE;
   tree_item->subtree = NULL;
-  GTK_WIDGET_SET_FLAGS (tree_item, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (tree_item), TRUE);
   
   /* create an event box containing one pixmaps */
   eventbox = gtk_event_box_new();
   gtk_widget_set_events (eventbox, GDK_BUTTON_PRESS_MASK);
   gtk_signal_connect(GTK_OBJECT(eventbox), "state-changed",
-		     (GtkSignalFunc)gtk_tree_item_subtree_button_changed_state, 
+		     G_CALLBACK (gtk_tree_item_subtree_button_changed_state),
 		     (gpointer)NULL);
   gtk_signal_connect(GTK_OBJECT(eventbox), "realize",
-		     (GtkSignalFunc)gtk_tree_item_subtree_button_changed_state, 
+		     G_CALLBACK (gtk_tree_item_subtree_button_changed_state),
 		     (gpointer)NULL);
   gtk_signal_connect(GTK_OBJECT(eventbox), "button-press-event",
-		     (GtkSignalFunc)gtk_tree_item_subtree_button_click,
+		     G_CALLBACK (gtk_tree_item_subtree_button_click),
 		     (gpointer)NULL);
   gtk_object_set_user_data(GTK_OBJECT(eventbox), tree_item);
   tree_item->pixmaps_box = eventbox;
@@ -462,7 +463,7 @@ gtk_tree_item_size_request (GtkWidget      *widget,
 			widget->style->xthickness) * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition pix_requisition;
       
@@ -491,7 +492,7 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
   int temp;
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (widget->window,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
@@ -603,7 +604,7 @@ gtk_tree_item_paint (GtkWidget    *widget,
    * line. (Like the way that the tree in Windows Explorer
    * works).
    */
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       tree_item = GTK_TREE_ITEM(widget);
 
@@ -614,7 +615,7 @@ gtk_tree_item_paint (GtkWidget    *widget,
 	}
       else 
 	{
-	  if (!GTK_WIDGET_IS_SENSITIVE (widget)) 
+	  if (!gtk_widget_is_sensitive (widget))
 	    gtk_paint_flat_box(widget->style, widget->window,
 			       widget->state, GTK_SHADOW_NONE,
 			       area, widget, "treeitem",
@@ -640,7 +641,7 @@ gtk_tree_item_paint (GtkWidget    *widget,
 	  gtk_tree_item_draw_lines(widget);
 
 	  if (tree_item->pixmaps_box && 
-	      GTK_WIDGET_VISIBLE(tree_item->pixmaps_box) &&
+	      gtk_widget_get_visible(tree_item->pixmaps_box) &&
 	      gtk_widget_intersect (tree_item->pixmaps_box, area, &child_area))
             {
               gtk_widget_queue_draw_area (tree_item->pixmaps_box,
@@ -650,8 +651,8 @@ gtk_tree_item_paint (GtkWidget    *widget,
             }
 	}
 
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
+      if (gtk_widget_has_focus (widget))
+	gtk_paint_focus (widget->style, widget->window, gtk_widget_get_state (widget),
 			 NULL, widget, "treeitem",
 			 0, 0,
 			 widget->allocation.width,
@@ -665,11 +666,11 @@ gtk_tree_item_button_press (GtkWidget      *widget,
 			    GdkEventButton *event)
 {
   if (event->type == GDK_BUTTON_PRESS
-	&& GTK_WIDGET_IS_SENSITIVE(widget)
-     	&& !GTK_WIDGET_HAS_FOCUS (widget))
-      gtk_widget_grab_focus (widget);
+      && gtk_widget_is_sensitive(widget)
+      && !gtk_widget_has_focus (widget))
+    gtk_widget_grab_focus (widget);
 
-  return (event->type == GDK_BUTTON_PRESS && GTK_WIDGET_IS_SENSITIVE(widget));
+  return (event->type == GDK_BUTTON_PRESS && gtk_widget_is_sensitive(widget));
 }
 
 static void
@@ -681,8 +682,8 @@ gtk_tree_item_expose_child (GtkWidget *child,
     GdkEventExpose *event;
   } *data = client_data;
 
-  if (GTK_WIDGET_DRAWABLE (child) &&
-      GTK_WIDGET_NO_WINDOW (child) &&
+  if (gtk_widget_is_drawable (child) &&
+      !gtk_widget_get_has_window (child) &&
       (child->window == data->event->window))
     {
       GdkEvent *child_event = gdk_event_new (GDK_EXPOSE);
@@ -709,7 +710,7 @@ gtk_tree_item_expose (GtkWidget      *widget,
     GdkEventExpose *event;
   } data;
 
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_tree_item_paint (widget, &event->area);
 
@@ -761,7 +762,7 @@ gtk_real_tree_item_toggle (GtkItem *item)
 {
   g_return_if_fail (GTK_IS_TREE_ITEM (item));
 
-  if(!GTK_WIDGET_IS_SENSITIVE(item))
+  if(!gtk_widget_is_sensitive(GTK_WIDGET (item)))
     return;
 
   if (GTK_IS_TREE (GTK_WIDGET (item)->parent))
@@ -914,7 +915,7 @@ gtk_tree_item_remove_subtree (GtkTreeItem* item)
       return;
     }
 
-  if (GTK_WIDGET_MAPPED (item->subtree))
+  if (gtk_widget_get_mapped (item->subtree))
     gtk_widget_unmap (item->subtree);
       
   gtk_widget_unparent (item->subtree);
@@ -943,16 +944,16 @@ gtk_tree_item_map (GtkWidget *widget)
   GtkBin *bin = GTK_BIN (widget);
   GtkTreeItem* item = GTK_TREE_ITEM(widget);
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, TRUE);
 
   if(item->pixmaps_box &&
-     GTK_WIDGET_VISIBLE (item->pixmaps_box) &&
-     !GTK_WIDGET_MAPPED (item->pixmaps_box))
+     gtk_widget_get_visible (item->pixmaps_box) &&
+     !gtk_widget_get_mapped (item->pixmaps_box))
     gtk_widget_map (item->pixmaps_box);
 
   if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
+      gtk_widget_get_visible (bin->child) &&
+      !gtk_widget_get_mapped (bin->child))
     gtk_widget_map (bin->child);
 
   gdk_window_show (widget->window);
@@ -964,18 +965,18 @@ gtk_tree_item_unmap (GtkWidget *widget)
   GtkBin *bin = GTK_BIN (widget);
   GtkTreeItem* item = GTK_TREE_ITEM(widget);
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+  gtk_widget_set_mapped (widget, FALSE);
 
   gdk_window_hide (widget->window);
 
   if(item->pixmaps_box &&
-     GTK_WIDGET_VISIBLE (item->pixmaps_box) &&
-     GTK_WIDGET_MAPPED (item->pixmaps_box))
+     gtk_widget_get_visible (item->pixmaps_box) &&
+     gtk_widget_get_mapped (item->pixmaps_box))
     gtk_widget_unmap (bin->child);
 
   if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
-      GTK_WIDGET_MAPPED (bin->child))
+      gtk_widget_get_visible (bin->child) &&
+      gtk_widget_get_mapped (bin->child))
     gtk_widget_unmap (bin->child);
 }
 

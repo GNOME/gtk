@@ -35,6 +35,9 @@ to manually use a filter on a file with gtk_file_filter_filter().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkFileFilter ##### -->
 <para>
 The <structname>GtkFileFilter</structname> struct contains
@@ -86,6 +89,7 @@ see gtk_file_filter_add_custom().
 
 </para>
 
+@void: 
 @Returns: 
 
 

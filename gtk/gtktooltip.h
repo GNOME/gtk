@@ -19,12 +19,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_TOOLTIP_H__
+#define __GTK_TOOLTIP_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TOOLTIP_H__
-#define __GTK_TOOLTIP_H__
 
 #include <gtk/gtkwindow.h>
 
@@ -48,6 +48,9 @@ void gtk_tooltip_set_icon_from_stock     (GtkTooltip         *tooltip,
 void gtk_tooltip_set_icon_from_icon_name (GtkTooltip         *tooltip,
 				          const gchar        *icon_name,
 				          GtkIconSize         size);
+void gtk_tooltip_set_icon_from_gicon     (GtkTooltip         *tooltip,
+					  GIcon              *gicon,
+					  GtkIconSize         size);
 void gtk_tooltip_set_custom	         (GtkTooltip         *tooltip,
                                           GtkWidget          *custom_widget);
 
@@ -62,6 +65,12 @@ void _gtk_tooltip_focus_out              (GtkWidget          *widget);
 void _gtk_tooltip_toggle_keyboard_mode   (GtkWidget          *widget);
 void _gtk_tooltip_handle_event           (GdkEvent           *event);
 void _gtk_tooltip_hide                   (GtkWidget          *widget);
+
+GtkWidget * _gtk_widget_find_at_coords   (GdkWindow          *window,
+                                          gint                window_x,
+                                          gint                window_y,
+                                          gint               *widget_x,
+                                          gint               *widget_y);
 
 G_END_DECLS
 

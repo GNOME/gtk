@@ -29,7 +29,7 @@ static void      gail_image_cell_finalize            (GObject            *object
 
 /* AtkImage */
 static void      atk_image_interface_init              (AtkImageIface  *iface);
-static G_CONST_RETURN gchar *
+static const gchar *
                  gail_image_cell_get_image_description (AtkImage       *image);
 static gboolean  gail_image_cell_set_image_description (AtkImage       *image,
                                                         const gchar    *description);
@@ -120,7 +120,7 @@ atk_image_interface_init (AtkImageIface  *iface)
   iface->get_image_size = gail_image_cell_get_image_size;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_image_cell_get_image_description (AtkImage     *image)
 {
   GailImageCell *image_cell;

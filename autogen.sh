@@ -14,9 +14,12 @@ DIE=0
 
 have_libtool=false
 if libtoolize --version < /dev/null > /dev/null 2>&1 ; then
-	libtool_version=`libtoolize --version | sed 's/^[^0-9]*\([0-9.][0-9.]*\).*/\1/'`
+	libtool_version=`libtoolize --version |
+			 head -1 |
+			 sed -e 's/^\(.*\)([^)]*)\(.*\)$/\1\2/g' \
+			     -e 's/^[^0-9]*\([0-9.][0-9.]*\).*/\1/'`
 	case $libtool_version in
-	    1.4*|1.5*)
+	    1.4*|1.5*|2.2*|2.4*)
 		have_libtool=true
 		;;
 	esac
@@ -45,15 +48,40 @@ fi
 	DIE=1
 }
 
-if automake-1.7 --version < /dev/null > /dev/null 2>&1 ; then
+if automake-1.15 --version < /dev/null > /dev/null 2>&1 ; then
+    AUTOMAKE=automake-1.15
+    ACLOCAL=aclocal-1.15
+else if automake-1.14 --version < /dev/null > /dev/null 2>&1 ; then
+    AUTOMAKE=automake-1.14
+    ACLOCAL=aclocal-1.14
+else if automake-1.13 --version < /dev/null > /dev/null 2>&1 ; then
+    AUTOMAKE=automake-1.13
+    ACLOCAL=aclocal-1.13
+else if automake-1.12 --version < /dev/null > /dev/null 2>&1 ; then
+    AUTOMAKE=automake-1.12
+    ACLOCAL=aclocal-1.12
+else if automake-1.11 --version < /dev/null > /dev/null 2>&1 ; then
+    AUTOMAKE=automake-1.11
+    ACLOCAL=aclocal-1.11
+else if automake-1.10 --version < /dev/null > /dev/null 2>&1 ; then
+    AUTOMAKE=automake-1.10
+    ACLOCAL=aclocal-1.10
+else if automake-1.7 --version < /dev/null > /dev/null 2>&1 ; then
     AUTOMAKE=automake-1.7
     ACLOCAL=aclocal-1.7
 else
 	echo
-	echo "You must have automake 1.7.x installed to compile $PROJECT."
+	echo "You must have automake 1.7.x, 1,10.x, 1.11.x, 1.12.x, 1.13.x, 1.14.x"
+	echo "or 1.15.x installed to compile $PROJECT."
 	echo "Install the appropriate package for your distribution,"
 	echo "or get the source tarball at http://ftp.gnu.org/gnu/automake/"
 	DIE=1
+fi
+fi
+fi
+fi
+fi
+fi
 fi
 
 if test "$DIE" -eq 1; then
@@ -65,7 +93,12 @@ test $TEST_TYPE $FILE || {
 	exit 1
 }
 
-if test -z "$AUTOGEN_SUBDIR_MODE"; then
+# NOCONFIGURE is used by gnome-common; support both
+if ! test -z "$AUTOGEN_SUBDIR_MODE"; then
+    NOCONFIGURE=1
+fi
+
+if test -z "$NOCONFIGURE"; then
         if test -z "$*"; then
                 echo "I am going to run ./configure with no arguments - if you wish "
                 echo "to pass any to it, please specify them on the $0 command line."
@@ -98,7 +131,7 @@ rm -rf autom4te.cache
 # regenerated from their corresponding *.in files by ./configure anyway.
 touch README INSTALL
 
-$ACLOCAL $ACLOCAL_FLAGS || exit $?
+$ACLOCAL -I m4 $ACLOCAL_FLAGS || exit $?
 
 libtoolize --force || exit $?
 gtkdocize || exit $?
@@ -109,7 +142,7 @@ $AUTOMAKE --add-missing || exit $?
 autoconf || exit $?
 cd $ORIGDIR || exit $?
 
-if test -z "$AUTOGEN_SUBDIR_MODE"; then
+if test -z "$NOCONFIGURE"; then
         $srcdir/configure --enable-maintainer-mode $AUTOGEN_CONFIGURE_ARGS "$@" || exit $?
 
         echo 

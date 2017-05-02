@@ -28,6 +28,9 @@ allocated area, the alignment settings will not alter the widgets position.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkMisc ##### -->
 <para>
 The #GtkMisc-struct struct contains the following fields.

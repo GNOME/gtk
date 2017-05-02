@@ -24,6 +24,9 @@ of the "steppers". It also provides properties and methods for setting a
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRange ##### -->
 <para>
 
@@ -88,6 +91,11 @@ of the "steppers". It also provides properties and methods for setting a
 
 </para>
 
+<!-- ##### ARG GtkRange:round-digits ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkRange:show-fill-level ##### -->
 <para>
 
@@ -124,6 +132,11 @@ of the "steppers". It also provides properties and methods for setting a
 </para>
 
 <!-- ##### ARG GtkRange:slider-width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkRange:stepper-position-details ##### -->
 <para>
 
 </para>
@@ -261,15 +274,6 @@ of the "steppers". It also provides properties and methods for setting a
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_range_get_value ##### -->
-<para>
-
-</para>
-
-@range: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_range_set_increments ##### -->
 <para>
 
@@ -290,6 +294,15 @@ of the "steppers". It also provides properties and methods for setting a
 @max: 
 
 
+<!-- ##### FUNCTION gtk_range_get_value ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_range_set_value ##### -->
 <para>
 
@@ -297,6 +310,24 @@ of the "steppers". It also provides properties and methods for setting a
 
 @range: 
 @value: 
+
+
+<!-- ##### FUNCTION gtk_range_get_round_digits ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_round_digits ##### -->
+<para>
+
+</para>
+
+@range: 
+@round_digits: 
 
 
 <!-- ##### ENUM GtkSensitivityType ##### -->
@@ -344,5 +375,78 @@ at the end of range widgets.
 
 @range: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_get_flippable ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_flippable ##### -->
+<para>
+
+</para>
+
+@range: 
+@flippable: 
+
+
+<!-- ##### FUNCTION gtk_range_get_min_slider_size ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_get_range_rect ##### -->
+<para>
+
+</para>
+
+@range: 
+@range_rect: 
+
+
+<!-- ##### FUNCTION gtk_range_get_slider_range ##### -->
+<para>
+
+</para>
+
+@range: 
+@slider_start: 
+@slider_end: 
+
+
+<!-- ##### FUNCTION gtk_range_get_slider_size_fixed ##### -->
+<para>
+
+</para>
+
+@range: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_range_set_min_slider_size ##### -->
+<para>
+
+</para>
+
+@range: 
+@min_size: 
+
+
+<!-- ##### FUNCTION gtk_range_set_slider_size_fixed ##### -->
+<para>
+
+</para>
+
+@range: 
+@size_fixed: 
 
 

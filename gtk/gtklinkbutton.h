@@ -22,12 +22,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Cambridge, MA 02139, USA.
  */
 
+#ifndef __GTK_LINK_BUTTON_H__
+#define __GTK_LINK_BUTTON_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_LINK_BUTTON_H__
-#define __GTK_LINK_BUTTON_H__
 
 #include <gtk/gtkbutton.h>
 
@@ -71,13 +71,15 @@ GtkWidget *           gtk_link_button_new               (const gchar   *uri);
 GtkWidget *           gtk_link_button_new_with_label    (const gchar   *uri,
 						         const gchar   *label);
 
-G_CONST_RETURN gchar *gtk_link_button_get_uri           (GtkLinkButton *link_button);
+const gchar *         gtk_link_button_get_uri           (GtkLinkButton *link_button);
 void                  gtk_link_button_set_uri           (GtkLinkButton *link_button,
 						         const gchar   *uri);
 
+#ifndef GTK_DISABLE_DEPRECATED
 GtkLinkButtonUriFunc  gtk_link_button_set_uri_hook      (GtkLinkButtonUriFunc func,
 							 gpointer             data,
 							 GDestroyNotify       destroy);
+#endif
 
 gboolean              gtk_link_button_get_visited       (GtkLinkButton *link_button);
 void                  gtk_link_button_set_visited       (GtkLinkButton *link_button,

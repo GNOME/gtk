@@ -18,12 +18,12 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  */
 
+#ifndef __GTK_RECENT_MANAGER_H__
+#define __GTK_RECENT_MANAGER_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_RECENT_MANAGER_H__
-#define __GTK_RECENT_MANAGER_H__
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
@@ -176,17 +176,17 @@ GType	              gtk_recent_info_get_type             (void) G_GNUC_CONST;
 GtkRecentInfo *       gtk_recent_info_ref                  (GtkRecentInfo  *info);
 void                  gtk_recent_info_unref                (GtkRecentInfo  *info);
 
-G_CONST_RETURN gchar *gtk_recent_info_get_uri              (GtkRecentInfo  *info);
-G_CONST_RETURN gchar *gtk_recent_info_get_display_name     (GtkRecentInfo  *info);
-G_CONST_RETURN gchar *gtk_recent_info_get_description      (GtkRecentInfo  *info);
-G_CONST_RETURN gchar *gtk_recent_info_get_mime_type        (GtkRecentInfo  *info);
+const gchar *         gtk_recent_info_get_uri              (GtkRecentInfo  *info);
+const gchar *         gtk_recent_info_get_display_name     (GtkRecentInfo  *info);
+const gchar *         gtk_recent_info_get_description      (GtkRecentInfo  *info);
+const gchar *         gtk_recent_info_get_mime_type        (GtkRecentInfo  *info);
 time_t                gtk_recent_info_get_added            (GtkRecentInfo  *info);
 time_t                gtk_recent_info_get_modified         (GtkRecentInfo  *info);
 time_t                gtk_recent_info_get_visited          (GtkRecentInfo  *info);
 gboolean              gtk_recent_info_get_private_hint     (GtkRecentInfo  *info);
 gboolean              gtk_recent_info_get_application_info (GtkRecentInfo  *info,
 							    const gchar    *app_name,
-							    gchar         **app_exec,
+							    const gchar   **app_exec,
 							    guint          *count,
 							    time_t         *time_);
 gchar **              gtk_recent_info_get_applications     (GtkRecentInfo  *info,

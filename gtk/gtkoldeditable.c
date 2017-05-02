@@ -362,7 +362,7 @@ gtk_old_editable_init (GtkOldEditable *old_editable)
     { "COMPOUND_TEXT", 0, 0 }
   };
 
-  GTK_WIDGET_SET_FLAGS (old_editable, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (GTK_WIDGET (old_editable), TRUE);
 
   old_editable->selection_start_pos = 0;
   old_editable->selection_end_pos = 0;
@@ -704,12 +704,14 @@ gtk_old_editable_claim_selection (GtkOldEditable *old_editable,
 				  gboolean        claim, 
 				  guint32         time)
 {
-  GtkWidget *widget = GTK_WIDGET (old_editable);
-  GdkDisplay *display = gtk_widget_get_display (widget);
+  GtkWidget  *widget;
+  GdkDisplay *display;
   
   g_return_if_fail (GTK_IS_OLD_EDITABLE (old_editable));
-  g_return_if_fail (GTK_WIDGET_REALIZED (old_editable));
+  widget = GTK_WIDGET (old_editable);
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
+  display = gtk_widget_get_display (widget);
   old_editable->has_selection = FALSE;
   
   if (claim)
@@ -734,7 +736,7 @@ gtk_old_editable_set_selection_bounds (GtkEditable *editable,
 {
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (editable);
   
-  if (GTK_WIDGET_REALIZED (editable))
+  if (gtk_widget_get_realized (GTK_WIDGET (editable)))
     gtk_old_editable_claim_selection (old_editable, start != end, GDK_CURRENT_TIME);
   
   gtk_old_editable_set_selection (old_editable, start, end);

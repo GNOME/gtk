@@ -30,6 +30,9 @@ in newly written code. Use #GtkImage instead.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPixmap ##### -->
 <para>
 The #GtkPixmap-struct struct contains private data only, and

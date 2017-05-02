@@ -39,6 +39,7 @@ struct _GailBooleanCell
 {
   GailRendererCell parent;
   gboolean cell_value;
+  gboolean cell_sensitive;
 };
 
  GType gail_boolean_cell_get_type (void);

@@ -18,6 +18,9 @@ managed at runtime.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### TYPEDEF GtkType ##### -->
 <para>
 #GtkType is unique integer identifying the type.  The guts of the
@@ -166,6 +169,7 @@ Defines a function pointer.
 Defines a function pointer.
 </para>
 
+@void: 
 
 
 <!-- ##### USER_FUNCTION GtkFunction ##### -->
@@ -175,6 +179,7 @@ Defines a function pointer.
 
 @data: #gpointer
 @Returns: #gint
+@Deprecated: 2.24: Use GSourceFunc() instead.
 
 
 <!-- ##### USER_FUNCTION GtkDestroyNotify ##### -->
@@ -194,6 +199,7 @@ Defines a function pointer.
 @data: #gpointer
 @n_args: #guint
 @args: #GtkArg*
+@Deprecated: 2.24:
 
 
 <!-- ##### TYPEDEF GtkSignalMarshaller ##### -->
@@ -510,7 +516,7 @@ nickname.
 Initializes the data structures associated with GTK+ types.
 </para>
 
-@debug_flags: 
+@debug_flags: debug flags
 
 
 <!-- ##### FUNCTION gtk_type_unique ##### -->
@@ -518,11 +524,9 @@ Initializes the data structures associated with GTK+ types.
 Creates a new, unique type.
 </para>
 
-@parent_type: if zero, a fundamental type is created.
-@gtkinfo: 
-@Returns: the new #GtkType.
-<!-- # Unused Parameters # -->
-@type_info: must not be %NULL, and @type_info->type_name must also not be %NULL.
+@parent_type: if zero, a fundamental type is created
+@gtkinfo: must not be %NULL, and @type_info->type_name must also not be %NULL
+@Returns: the new #GtkType
 
 
 <!-- ##### MACRO gtk_type_name ##### -->

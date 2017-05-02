@@ -80,7 +80,8 @@ static const GDebugKey gdk_debug_keys[] = {
   {"cursor",	    GDK_DEBUG_CURSOR},
   {"multihead",	    GDK_DEBUG_MULTIHEAD},
   {"xinerama",	    GDK_DEBUG_XINERAMA},
-  {"draw",	    GDK_DEBUG_DRAW}
+  {"draw",	    GDK_DEBUG_DRAW},
+  {"eventloop",	    GDK_DEBUG_EVENTLOOP}
 };
 
 static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);
@@ -88,20 +89,44 @@ static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);
 #endif /* G_ENABLE_DEBUG */
 
 #ifdef G_ENABLE_DEBUG
-static void
-gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data)
+static gboolean
+gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
-  _gdk_debug_flags |= g_parse_debug_string (value,
+  guint debug_value = g_parse_debug_string (value,
 					    (GDebugKey *) gdk_debug_keys,
 					    gdk_ndebug_keys);
+
+  if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
+    {
+      g_set_error (error, 
+		   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+		   _("Error parsing option --gdk-debug"));
+      return FALSE;
+    }
+
+  _gdk_debug_flags |= debug_value;
+
+  return TRUE;
 }
 
-static void
-gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
+static gboolean
+gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
-  _gdk_debug_flags &= ~g_parse_debug_string (value,
-					     (GDebugKey *) gdk_debug_keys,
-					     gdk_ndebug_keys);
+  guint debug_value = g_parse_debug_string (value,
+					    (GDebugKey *) gdk_debug_keys,
+					    gdk_ndebug_keys);
+
+  if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
+    {
+      g_set_error (error, 
+		   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+		   _("Error parsing option --gdk-no-debug"));
+      return FALSE;
+    }
+
+  _gdk_debug_flags &= ~debug_value;
+
+  return TRUE;
 }
 #endif /* G_ENABLE_DEBUG */
 
@@ -136,10 +161,10 @@ static const GOptionEntry gdk_args[] = {
     /* Placeholder in --screen=SCREEN in --help output */      N_("SCREEN") },
 #ifdef G_ENABLE_DEBUG
   { "gdk-debug",    0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_debug_cb,  
-    /* Description of --gdk-debug=FLAGS in --help output */    N_("Gdk debugging flags to set"),
+    /* Description of --gdk-debug=FLAGS in --help output */    N_("GDK debugging flags to set"),
     /* Placeholder in --gdk-debug=FLAGS in --help output */    N_("FLAGS") },
   { "gdk-no-debug", 0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_no_debug_cb, 
-    /* Description of --gdk-no-debug=FLAGS in --help output */ N_("Gdk debugging flags to unset"), 
+    /* Description of --gdk-no-debug=FLAGS in --help output */ N_("GDK debugging flags to unset"),
     /* Placeholder in --gdk-no-debug=FLAGS in --help output */ N_("FLAGS") },
 #endif 
   { NULL }
@@ -181,6 +206,14 @@ gdk_pre_parse_libgtk_only (void)
   }
 #endif	/* G_ENABLE_DEBUG */
 
+  if (getenv ("GDK_NATIVE_WINDOWS"))
+    {
+      _gdk_native_windows = TRUE;
+      /* Ensure that this is not propagated
+	 to spawned applications */
+      g_unsetenv ("GDK_NATIVE_WINDOWS");
+    }
+
   g_type_init ();
 
   /* Do any setup particular to the windowing system
@@ -192,7 +225,7 @@ gdk_pre_parse_libgtk_only (void)
 /**
  * gdk_parse_args:
  * @argc: the number of command line arguments.
- * @argv: the array of command line arguments.
+ * @argv: (inout) (array length=argc): the array of command line arguments.
  * 
  * Parse command line arguments, and store for future
  * use by calls to gdk_display_open().
@@ -251,7 +284,7 @@ gdk_parse_args (int    *argc,
  *
  * Since: 2.2
  */
-G_CONST_RETURN gchar *
+const gchar *
 gdk_get_display_arg_name (void)
 {
   if (!_gdk_display_arg_name)
@@ -305,9 +338,10 @@ gdk_display_open_default_libgtk_only (void)
   return display;
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_init_check
+/**
+ * gdk_init_check:
+ * @argc: (inout):
+ * @argv: (array length=argc) (inout):
  *
  *   Initialize the library for use.
  *
@@ -326,7 +360,6 @@ gdk_display_open_default_libgtk_only (void)
  *
  *--------------------------------------------------------------
  */
-
 gboolean
 gdk_init_check (int    *argc,
 		char ***argv)
@@ -336,6 +369,12 @@ gdk_init_check (int    *argc,
   return gdk_display_open_default_libgtk_only () != NULL;
 }
 
+
+/**
+ * gdk_init:
+ * @argc: (inout):
+ * @argv: (array length=argc) (inout):
+ */
 void
 gdk_init (int *argc, char ***argv)
 {
@@ -395,7 +434,29 @@ static void
 gdk_threads_impl_unlock (void)
 {
   if (gdk_threads_mutex)
-    g_mutex_unlock (gdk_threads_mutex);
+    {
+      /* we need a trylock() here because trying to unlock a mutex
+       * that hasn't been locked yet is:
+       *
+       *  a) not portable
+       *  b) fail on GLib ≥ 2.41
+       *
+       * trylock() will either succeed because nothing is holding the
+       * GDK mutex, and will be unlocked right afterwards; or it's
+       * going to fail because the mutex is locked already, in which
+       * case we unlock it as expected.
+       *
+       * this is needed in the case somebody called gdk_threads_init()
+       * without calling gdk_threads_enter() before calling gtk_main().
+       * in theory, we could just say that this is undefined behaviour,
+       * but our documentation has always been *less* than explicit as
+       * to what the behaviour should actually be.
+       *
+       * see bug: https://bugzilla.gnome.org/show_bug.cgi?id=735428
+       */
+      g_mutex_trylock (gdk_threads_mutex);
+      g_mutex_unlock (gdk_threads_mutex);
+    }
 }
 
 /**
@@ -495,7 +556,7 @@ gdk_threads_dispatch_free (gpointer data)
  *            range btweeen #G_PRIORITY_DEFAULT_IDLE and #G_PRIORITY_HIGH_IDLE
  * @function: function to call
  * @data:     data to pass to @function
- * @notify:   function to call when the idle is removed, or %NULL
+ * @notify: (allow-none):   function to call when the idle is removed, or %NULL
  *
  * Adds a function to be called whenever there are no higher priority
  * events pending.  If the function returns %FALSE it is automatically
@@ -595,7 +656,7 @@ gdk_threads_add_idle (GSourceFunc    function,
  *             (1/1000ths of a second)
  * @function: function to call
  * @data:     data to pass to @function
- * @notify:   function to call when the timeout is removed, or %NULL
+ * @notify: (allow-none):   function to call when the timeout is removed, or %NULL
  *
  * Sets a function to be called at regular intervals holding the GDK lock,
  * with the given priority.  The function is called repeatedly until it 
@@ -701,7 +762,7 @@ gdk_threads_add_timeout (guint       interval,
  * @interval: the time between calls to the function, in seconds
  * @function: function to call
  * @data:     data to pass to @function
- * @notify:   function to call when the timeout is removed, or %NULL
+ * @notify: (allow-none):   function to call when the timeout is removed, or %NULL
  *
  * A variant of gdk_threads_add_timout_full() with second-granularity.
  * See g_timeout_add_seconds_full() for a discussion of why it is
@@ -759,7 +820,7 @@ gdk_threads_add_timeout_seconds (guint       interval,
 }
 
 
-G_CONST_RETURN char *
+const char *
 gdk_get_program_class (void)
 {
   return gdk_progclass;

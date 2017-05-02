@@ -25,6 +25,9 @@ the GTK+ documentation for more information.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### FUNCTION gdk_drag_get_selection ##### -->
 <para>
 </para>
@@ -54,6 +57,7 @@ the GTK+ documentation for more information.
 <para>
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -96,6 +100,51 @@ the GTK+ documentation for more information.
 </para>
 
 @context: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_actions ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_selected_action ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_suggested_action ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_list_targets ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_drag_context_get_source_window ##### -->
+<para>
+
+</para>
+
+@context: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_drag_begin ##### -->
@@ -180,16 +229,6 @@ drag in progress. It is used on both source and destination sides.
 </para>
 
 @parent_instance: the parent instance
-@protocol: the DND protocol which governs this drag.
-@is_source: %TRUE if the context is used on the source side.
-@source_window: the source of this drag.
-@dest_window: the destination window of this drag.
-@targets: a list of targets offered by the source.
-@actions: a bitmask of actions proposed by the source when 
-   @suggested_action is %GDK_ACTION_ASK.
-@suggested_action: the action suggested by the source.
-@action: the action chosen by the destination.
-@start_time: a timestamp recording the start time of this drag.
 
 <!-- ##### ENUM GdkDragAction ##### -->
 <para>

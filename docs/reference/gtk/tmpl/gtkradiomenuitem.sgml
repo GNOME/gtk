@@ -51,6 +51,9 @@ for (i = 0; i &lt; 5; i++)
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRadioMenuItem ##### -->
 <para>
 The structure contains only private data that must be accessed through
@@ -80,13 +83,11 @@ Creates a new #GtkRadioMenuItem.
 
 
 <!-- ##### FUNCTION gtk_radio_menu_item_new_with_label ##### -->
-<para>
-Creates a new #GtkRadioMenuItem whose child is a simple #GtkLabel.
-</para>
 
-@group: the group to which the radio menu item is to be attached
-@label: the text for the label
-@Returns: a new #GtkRadioMenuItem
+
+@group: 
+@label: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_radio_menu_item_new_with_mnemonic ##### -->

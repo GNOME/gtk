@@ -79,6 +79,9 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPrintUnixDialog ##### -->
 <para>
 
@@ -86,6 +89,21 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 
 
 <!-- ##### ARG GtkPrintUnixDialog:current-page ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintUnixDialog:embed-page-setup ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintUnixDialog:has-selection ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintUnixDialog:manual-capabilities ##### -->
 <para>
 
 </para>
@@ -101,6 +119,11 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 </para>
 
 <!-- ##### ARG GtkPrintUnixDialog:selected-printer ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPrintUnixDialog:support-selection ##### -->
 <para>
 
 </para>
@@ -188,22 +211,91 @@ The GtkPrintUnixDialog implementation of the GtkBuildable interface exposes its
 @tab_label: 
 
 
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_support_selection ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@support_selection: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_support_selection ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_has_selection ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@has_selection: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_has_selection ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_set_embed_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@embed: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_embed_page_setup ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_page_setup_set ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
+
+
 <!-- ##### ENUM GtkPrintCapabilities ##### -->
 <para>
 An enum for specifying which features the print dialog should offer.
-If neither %GTK_PRINT_CAPABILITY_GENERATE_PDF nor %GTK_PRINT_CAPABILITY_GENERATE_PS is
-specified, GTK+ assumes that all formats are supported.
+If neither %GTK_PRINT_CAPABILITY_GENERATE_PDF nor 
+%GTK_PRINT_CAPABILITY_GENERATE_PS is specified, GTK+ assumes that all 
+formats are supported.
 </para>
 
-@GTK_PRINT_CAPABILITY_PAGE_SET: 
-@GTK_PRINT_CAPABILITY_COPIES: 
-@GTK_PRINT_CAPABILITY_COLLATE: 
-@GTK_PRINT_CAPABILITY_REVERSE: 
-@GTK_PRINT_CAPABILITY_SCALE: 
-@GTK_PRINT_CAPABILITY_GENERATE_PDF: The program will send the document to the printer in PDF format
-@GTK_PRINT_CAPABILITY_GENERATE_PS: The program will send the document to the printer in Postscript format
-@GTK_PRINT_CAPABILITY_PREVIEW: 
-@GTK_PRINT_CAPABILITY_NUMBER_UP: Print dialog will offer printing multiple pages per sheet. Since 2.12
+@GTK_PRINT_CAPABILITY_PAGE_SET: Print dialog will offer printing even/odd pages.
+@GTK_PRINT_CAPABILITY_COPIES: Print dialog will allow to print multiple copies.
+@GTK_PRINT_CAPABILITY_COLLATE: Print dialog will allow to collate multiple copies.
+@GTK_PRINT_CAPABILITY_REVERSE: Print dialog will allow to print pages in reverse order.
+@GTK_PRINT_CAPABILITY_SCALE: Print dialog will allow to scale the output.
+@GTK_PRINT_CAPABILITY_GENERATE_PDF: The program will send the document to 
+    the printer in PDF format
+@GTK_PRINT_CAPABILITY_GENERATE_PS: The program will send the document to 
+    the printer in Postscript format
+@GTK_PRINT_CAPABILITY_PREVIEW: Print dialog will offer a preview
+@GTK_PRINT_CAPABILITY_NUMBER_UP: Print dialog will offer printing multiple 
+    pages per sheet. Since 2.12
+@GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT: Print dialog will allow to rearrange 
+    pages when printing multiple pages per sheet. Since 2.14
 
 <!-- ##### FUNCTION gtk_print_unix_dialog_set_manual_capabilities ##### -->
 <para>
@@ -212,5 +304,14 @@ specified, GTK+ assumes that all formats are supported.
 
 @dialog: 
 @capabilities: 
+
+
+<!-- ##### FUNCTION gtk_print_unix_dialog_get_manual_capabilities ##### -->
+<para>
+
+</para>
+
+@dialog: 
+@Returns: 
 
 

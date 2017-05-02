@@ -56,7 +56,7 @@ gboolean
 expose_event_callback (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   gdk_draw_arc (widget->window,
-                widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+                widget->style->fg_gc[gtk_widget_get_state (widget)],
                 TRUE,
                 0, 0, widget->allocation.width, widget->allocation.height,
                 0, 64 * 360);
@@ -107,6 +107,9 @@ refresh to the screen.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkDrawingArea ##### -->
 <para>
 The #GtkDrawingArea struct contains private data only, and
@@ -119,12 +122,12 @@ should be accessed using the functions below.
 Creates a new drawing area.
 </para>
 
+@void: 
 @Returns: a new #GtkDrawingArea
 
 
 <!-- ##### FUNCTION gtk_drawing_area_size ##### -->
 <para>
-(Use gtk_widget_set_size_request() instead.)
 Sets the size that the drawing area will request
 in response to a "size_request" signal. The 
 drawing area may actually be allocated a size
@@ -132,8 +135,9 @@ larger than this depending on how it is packed
 within the enclosing containers.
 </para>
 
-@darea: a #GtkDrawingArea.
-@width: the width to request.
-@height: the height to request.
+@darea: a #GtkDrawingArea
+@width: the width to request
+@height: the height to request
+@Deprecated: Use gtk_widget_set_size_request() instead.
 
 

@@ -40,7 +40,7 @@ static void inuktitut_init (GtkIMContextSimple *im_context);
 static void
 inuktitut_register_type (GTypeModule *module)
 {
-  static const GTypeInfo object_info =
+  const GTypeInfo object_info =
   {
     sizeof (GtkIMContextSimpleClass),
     (GBaseInitFunc) NULL,

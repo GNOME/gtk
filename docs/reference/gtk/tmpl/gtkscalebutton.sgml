@@ -20,6 +20,9 @@ is tailored for this use case.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkScaleButton ##### -->
 <para>
 
@@ -54,11 +57,6 @@ is tailored for this use case.
 </para>
 
 <!-- ##### ARG GtkScaleButton:icons ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScaleButton:orientation ##### -->
 <para>
 
 </para>

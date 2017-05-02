@@ -35,7 +35,33 @@
 #include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
 #include "gdk/gdkkeysyms.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
+
+/**
+ * SECTION:gtkaccelgroup
+ * @Short_description: Groups of global keyboard accelerators for an entire GtkWindow
+ * @Title: Accelerator Groups
+ * @See_also:gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
+ * gtk_item_factory_new(), gtk_label_new_with_mnemonic()
+ * 
+ * A #GtkAccelGroup represents a group of keyboard accelerators,
+ * typically attached to a toplevel #GtkWindow (with
+ * gtk_window_add_accel_group()). Usually you won't need to create a
+ * #GtkAccelGroup directly; instead, when using #GtkItemFactory, GTK+
+ * automatically sets up the accelerators for your menus in the item
+ * factory's #GtkAccelGroup.
+ * 
+ * 
+ * Note that <firstterm>accelerators</firstterm> are different from
+ * <firstterm>mnemonics</firstterm>. Accelerators are shortcuts for
+ * activating a menu item; they appear alongside the menu item they're a
+ * shortcut for. For example "Ctrl+Q" might appear alongside the "Quit"
+ * menu item. Mnemonics are shortcuts for GUI elements such as text
+ * entries or buttons; they appear as underlined characters. See
+ * gtk_label_new_with_mnemonic(). Menu items can have both accelerators
+ * and mnemonics, of course.
+ */
 
 
 /* --- prototypes --- */
@@ -165,6 +191,9 @@ gtk_accel_group_finalize (GObject *object)
 	  _gtk_accel_map_remove_group (accel_path, accel_group);
 	}
       g_closure_remove_invalidate_notifier (entry->closure, accel_group, accel_closure_invalidate);
+
+      /* remove quick_accel_add() refcount */
+      g_closure_unref (entry->closure);
     }
 
   g_free (accel_group->priv_accels);
@@ -323,10 +352,11 @@ _gtk_accel_group_detach (GtkAccelGroup *accel_group,
 
 /**
  * gtk_accel_groups_from_object:
- * @object:        a #GObject, usually a #GtkWindow 
- * @returns: a list of all accel groups which are attached to @object
+ * @object:        a #GObject, usually a #GtkWindow
  *
  * Gets a list of all accel groups which are attached to @object.
+ *
+ * Returns: (element-type GtkAccelGroup) (transfer none): a list of all accel groups which are attached to @object
  */
 GSList*
 gtk_accel_groups_from_object (GObject *object)
@@ -341,8 +371,8 @@ gtk_accel_groups_from_object (GObject *object)
  * @accel_group: a #GtkAccelGroup
  * @find_func: a function to filter the entries of @accel_group with
  * @data: data to pass to @find_func
- * @returns: the key of the first entry passing @find_func. The key is 
- * owned by GTK+ and must not be freed.
+ * @returns: (transfer none): the key of the first entry passing
+ *    @find_func. The key is owned by GTK+ and must not be freed.
  *
  * Finds the first entry in an accelerator group for which 
  * @find_func returns %TRUE and returns its #GtkAccelKey.
@@ -662,11 +692,14 @@ gtk_accel_group_connect_by_path (GtkAccelGroup	*accel_group,
 /**
  * gtk_accel_group_disconnect:
  * @accel_group: the accelerator group to remove an accelerator from
- * @closure:     the closure to remove from this accelerator group
+ * @closure: (allow-none):     the closure to remove from this accelerator group, or %NULL
+ *               to remove all closures
  * @returns:     %TRUE if the closure was found and got disconnected
  *
  * Removes an accelerator previously installed through
  * gtk_accel_group_connect().
+ *
+ * Since 2.20 @closure can be %NULL.
  */
 gboolean
 gtk_accel_group_disconnect (GtkAccelGroup *accel_group,
@@ -677,7 +710,7 @@ gtk_accel_group_disconnect (GtkAccelGroup *accel_group,
   g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
 
   for (i = 0; i < accel_group->n_accels; i++)
-    if (accel_group->priv_accels[i].closure == closure)
+    if (accel_group->priv_accels[i].closure == closure || !closure)
       {
 	g_object_ref (accel_group);
 	quick_accel_remove (accel_group, i);
@@ -772,8 +805,8 @@ _gtk_accel_group_reconnect (GtkAccelGroup *accel_group,
  * @accel_group:      the accelerator group to query
  * @accel_key:        key value of the accelerator
  * @accel_mods:       modifier combination of the accelerator
- * @n_entries:        location to return the number of entries found, or %NULL
- * @returns:          an array of @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is owned by GTK+ and must not be freed. 
+ * @n_entries: (allow-none):        location to return the number of entries found, or %NULL
+ * @returns: (allow-none):          an array of @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is owned by GTK+ and must not be freed. 
  *
  * Queries an accelerator group for all entries matching @accel_key and 
  * @accel_mods.
@@ -800,7 +833,8 @@ gtk_accel_group_query (GtkAccelGroup  *accel_group,
 /**
  * gtk_accel_group_from_accel_closure:
  * @closure: a #GClosure
- * @returns: the #GtkAccelGroup to which @closure is connected, or %NULL.
+ * @returns: (transfer none): the #GtkAccelGroup to which @closure
+ *     is connected, or %NULL.
  *
  * Finds the #GtkAccelGroup to which @closure is connected; 
  * see gtk_accel_group_connect().
@@ -834,7 +868,6 @@ gtk_accel_group_from_accel_closure (GClosure *closure)
  *                 to activate the accelerator.
  * @accel_key:     accelerator keyval from a key event
  * @accel_mods:    keyboard state mask from a key event
- * @returns:       %TRUE if the accelerator was handled, %FALSE otherwise
  * 
  * Finds the first accelerator in @accel_group 
  * that matches @accel_key and @accel_mods, and
@@ -867,7 +900,6 @@ gtk_accel_group_activate (GtkAccelGroup   *accel_group,
  *                 to activate the accelerator.
  * @accel_key:     accelerator keyval from a key event
  * @accel_mods:    keyboard state mask from a key event
- * @returns:       %TRUE if the accelerator was handled, %FALSE otherwise
  * 
  * Finds the first accelerator in any #GtkAccelGroup attached
  * to @object that matches @accel_key and @accel_mods, and
@@ -1090,17 +1122,34 @@ is_hyper (const gchar *string)
 	  (string[6] == '>'));
 }
 
+static inline gboolean
+is_primary (const gchar *string)
+{
+  return ((string[0] == '<') &&
+	  (string[1] == 'p' || string[1] == 'P') &&
+	  (string[2] == 'r' || string[2] == 'R') &&
+	  (string[3] == 'i' || string[3] == 'I') &&
+	  (string[4] == 'm' || string[4] == 'M') &&
+	  (string[5] == 'a' || string[5] == 'A') &&
+	  (string[6] == 'r' || string[6] == 'R') &&
+	  (string[7] == 'y' || string[7] == 'Y') &&
+	  (string[8] == '>'));
+}
+
 /**
  * gtk_accelerator_parse:
  * @accelerator:      string representing an accelerator
- * @accelerator_key:  return location for accelerator keyval
- * @accelerator_mods: return location for accelerator modifier mask
+ * @accelerator_key: (out) (allow-none): return location for accelerator keyval
+ * @accelerator_mods: (out) (allow-none): return location for accelerator modifier mask
  *
  * Parses a string representing an accelerator. The
  * format looks like "&lt;Control&gt;a" or "&lt;Shift&gt;&lt;Alt&gt;F1" or
  * "&lt;Release&gt;z" (the last one is for key release).
  * The parser is fairly liberal and allows lower or upper case,
  * and also abbreviations such as "&lt;Ctl&gt;" and "&lt;Ctrl&gt;".
+ * Key names are parsed using gdk_keyval_from_name(). For character keys the
+ * name is not the symbol, but the lowercase name, e.g. one would use
+ * "&lt;Ctrl&gt;minus" instead of "&lt;Ctrl&gt;-".
  *
  * If the parse fails, @accelerator_key and @accelerator_mods will
  * be set to 0 (zero).
@@ -1132,6 +1181,12 @@ gtk_accelerator_parse (const gchar     *accelerator,
 	      accelerator += 9;
 	      len -= 9;
 	      mods |= GDK_RELEASE_MASK;
+	    }
+	  else if (len >= 9 && is_primary (accelerator))
+	    {
+	      accelerator += 9;
+	      len -= 9;
+	      mods |= GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL;
 	    }
 	  else if (len >= 9 && is_control (accelerator))
 	    {
@@ -1246,6 +1301,7 @@ gtk_accelerator_name (guint           accelerator_key,
 		      GdkModifierType accelerator_mods)
 {
   static const gchar text_release[] = "<Release>";
+  static const gchar text_primary[] = "<Primary>";
   static const gchar text_shift[] = "<Shift>";
   static const gchar text_control[] = "<Control>";
   static const gchar text_mod1[] = "<Alt>";
@@ -1256,6 +1312,7 @@ gtk_accelerator_name (guint           accelerator_key,
   static const gchar text_meta[] = "<Meta>";
   static const gchar text_super[] = "<Super>";
   static const gchar text_hyper[] = "<Hyper>";
+  GdkModifierType saved_mods;
   guint l;
   gchar *keyval_name;
   gchar *accelerator;
@@ -1266,9 +1323,15 @@ gtk_accelerator_name (guint           accelerator_key,
   if (!keyval_name)
     keyval_name = "";
 
+  saved_mods = accelerator_mods;
   l = 0;
   if (accelerator_mods & GDK_RELEASE_MASK)
     l += sizeof (text_release) - 1;
+  if (accelerator_mods & GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL)
+    {
+      l += sizeof (text_primary) - 1;
+      accelerator_mods &= ~GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL; /* consume the default accel */
+    }
   if (accelerator_mods & GDK_SHIFT_MASK)
     l += sizeof (text_shift) - 1;
   if (accelerator_mods & GDK_CONTROL_MASK)
@@ -1293,12 +1356,19 @@ gtk_accelerator_name (guint           accelerator_key,
 
   accelerator = g_new (gchar, l + 1);
 
+  accelerator_mods = saved_mods;
   l = 0;
   accelerator[l] = 0;
   if (accelerator_mods & GDK_RELEASE_MASK)
     {
       strcpy (accelerator + l, text_release);
       l += sizeof (text_release) - 1;
+    }
+  if (accelerator_mods & GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL)
+    {
+      strcpy (accelerator + l, text_primary);
+      l += sizeof (text_primary) - 1;
+      accelerator_mods &= ~GTK_DEFAULT_ACCEL_MOD_MASK_VIRTUAL; /* consume the default accel */
     }
   if (accelerator_mods & GDK_SHIFT_MASK)
     {

@@ -46,7 +46,7 @@ extern GdkWindow * _gdk_parent_root;
 
 G_BEGIN_DECLS
 
-#define GDK_ROOT_WINDOW()      _gdk_parent_root 
+#define GDK_ROOT_WINDOW()      _gdk_parent_root
 
 #define GDK_WINDOW_DFB_ID(win) (GDK_WINDOW_IMPL_DIRECTFB (GDK_WINDOW_OBJECT (win)->impl)->dfb_id)
 
@@ -65,25 +65,25 @@ extern gboolean            gdk_directfb_monochrome_fonts;
 
 /* GTK+-DirectFB specific functions */
 
-void        gdk_directfb_window_set_opacity (GdkWindow             *window,
-                                             guchar                 opacity);
+void        gdk_directfb_window_set_opacity (GdkWindow *window,
+                                             guchar     opacity);
 
+#ifndef GDK_DISABLE_DEPRECATED
 GdkWindow * gdk_directfb_window_new         (GdkWindow             *parent,
                                              GdkWindowAttr         *attributes,
                                              gint                   attributes_mask,
                                              DFBWindowCapabilities  window_caps,
                                              DFBWindowOptions       window_options,
                                              DFBSurfaceCapabilities surface_caps);
+#endif /* GDK_DISABLE_DEPRECATED */
 
 GdkVisual * gdk_directfb_visual_by_format   (DFBSurfacePixelFormat  pixel_format);
 
-IDirectFBWindow *gdk_directfb_window_lookup(GdkWindow *window);
-IDirectFBSurface *gdk_directfb_surface_lookup(GdkWindow *window);
+IDirectFBWindow  *gdk_directfb_window_lookup (GdkWindow *window);
+IDirectFBSurface *gdk_directfb_surface_lookup (GdkWindow *window);
 
-#if (DIRECTFB_MAJOR_VERSION >= 1)
-GdkWindow *gdk_directfb_create_child_window(GdkWindow *parent,
-                IDirectFBSurface *subsurface);
-#endif
+GdkWindow *gdk_directfb_create_child_window (GdkWindow        *parent,
+                                             IDirectFBSurface *subsurface);
 
 
 G_END_DECLS

@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/tests
 include $(top_srcdir)/Makefile.decl
 
-if OS_WIN32
+if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
 
@@ -38,7 +38,8 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/gdk	\
 	-I$(top_srcdir)/gtk	\
 	-I$(top_builddir)/gtk	\
-	-DGDK_DISABLE_DEPRECATED
+	-DGDK_DISABLE_DEPRECATED\
+	-DGTK_DISABLE_DEPRECATED
 
 AM_CFLAGS = \
 	$(GTK_DEP_CFLAGS)	\
@@ -52,10 +53,12 @@ libferret_la_SOURCES = 		\
 
 libferret_la_LDFLAGS =		\
 	-rpath $(moduledir) -module -avoid-version \
-	$(GTK_DEP_LIBS)	\
+	$(no_undefined)	\
 	$(LDFLAGS)
 
-libferret_la_LIBADD =		\
+libferret_la_LIBADD =			    \
+	$(top_builddir)/gtk/$(gtktargetlib) \
+        $(GTK_DEP_LIBS)  		    \
 	$(GAIL_INET_LIBS)
 endif
 
@@ -266,3 +269,5 @@ libtestvalues_la_LDFLAGS =	\
 	$(top_builddir)/gdk/$(gdktargetlib) \
 	$(GTK_DEP_LIBS)	\
 	$(LDFLAGS)
+
+-include $(top_srcdir)/git.mk

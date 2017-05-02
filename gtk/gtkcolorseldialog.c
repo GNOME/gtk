@@ -193,14 +193,14 @@ gtk_color_selection_dialog_new (const gchar *title)
  *
  * Retrieves the #GtkColorSelection widget embedded in the dialog.
  *
- * Returns: the embedded #GtkColorSelection
+ * Returns: (transfer none): the embedded #GtkColorSelection
  *
  * Since: 2.14
  **/
 GtkWidget*
 gtk_color_selection_dialog_get_color_selection (GtkColorSelectionDialog *colorsel)
 {
-  g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), NULL);
+  g_return_val_if_fail (GTK_IS_COLOR_SELECTION_DIALOG (colorsel), NULL);
 
   return colorsel->colorsel;
 }

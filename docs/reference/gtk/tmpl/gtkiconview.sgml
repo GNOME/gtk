@@ -22,6 +22,9 @@ rubberband selection, which is controlled by dragging the pointer.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkIconView ##### -->
 <para>
 The <structname>GtkIconView</structname> struct contains only
@@ -105,6 +108,16 @@ private fields and should not be directly accessed.
 </para>
 
 <!-- ##### ARG GtkIconView:columns ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:item-orientation ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkIconView:item-padding ##### -->
 <para>
 
 </para>
@@ -195,6 +208,7 @@ selected rows.  It will be called on every selected row in the view.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -383,6 +397,24 @@ selected rows.  It will be called on every selected row in the view.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_icon_view_set_item_orientation ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@orientation: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_orientation ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_icon_view_set_columns ##### -->
 <para>
 
@@ -483,6 +515,24 @@ selected rows.  It will be called on every selected row in the view.
 
 
 <!-- ##### FUNCTION gtk_icon_view_get_margin ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_set_item_padding ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@item_padding: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_padding ##### -->
 <para>
 
 </para>
@@ -627,6 +677,26 @@ selected rows.  It will be called on every selected row in the view.
 </para>
 
 @icon_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_row ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_view_get_item_column ##### -->
+<para>
+
+</para>
+
+@icon_view: 
+@path: 
 @Returns: 
 
 

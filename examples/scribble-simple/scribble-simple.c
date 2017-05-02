@@ -50,7 +50,7 @@ static gboolean expose_event( GtkWidget      *widget,
                               GdkEventExpose *event )
 {
   gdk_draw_drawable (widget->window,
-		     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+		     widget->style->fg_gc[gtk_widget_get_state (widget)],
 		     pixmap,
 		     event->area.x, event->area.y,
 		     event->area.x, event->area.y,

@@ -4,7 +4,7 @@ include $(top_srcdir)/Makefile.decl
 AUTOMAKE_OPTIONS = 1.6
 
 # The name of the module.
-DOC_MODULE=gdk
+DOC_MODULE=gdk2
 
 # The top-level SGML file.
 DOC_MAIN_SGML_FILE=gdk-docs.sgml
@@ -52,7 +52,7 @@ GTKDOC_LIBS = $(top_builddir)/gdk/$(gdktargetlib)
 
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=--sgml-mode --output-format=xml
+MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=gdk
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files = 		\
@@ -142,7 +142,7 @@ HTML_IMAGES =				\
 	images/xterm.png 
 
 # Extra options to supply to gtkdoc-fixref
-FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html \
+FIXXREF_OPTIONS= \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gobject \
 	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/glib \
 	--extra-dir=$(CAIRO_PREFIX)/share/gtk-doc/html/cairo
@@ -152,3 +152,5 @@ include $(top_srcdir)/gtk-doc.make
 
 # Other files to distribute
 EXTRA_DIST += version.xml.in
+
+-include $(top_srcdir)/git.mk

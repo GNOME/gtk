@@ -59,6 +59,7 @@ typedef enum
   XP_THEME_ELEMENT_TAB_ITEM,
   XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE,
   XP_THEME_ELEMENT_TAB_ITEM_RIGHT_EDGE,
+  XP_THEME_ELEMENT_TAB_ITEM_BOTH_EDGE,
   XP_THEME_ELEMENT_TAB_PANE,
   XP_THEME_ELEMENT_SCROLLBAR_H,
   XP_THEME_ELEMENT_SCROLLBAR_V,
@@ -113,6 +114,26 @@ typedef enum
   XP_THEME_FONT_MESSAGE
 } XpThemeFont;
 
+typedef struct
+{
+  GdkDrawable *drawable;
+  GdkGC *gc;
+  
+  gint x_offset;
+  gint y_offset;
+  
+  /*< private >*/
+  gpointer data;
+} XpDCInfo;
+
+HDC get_window_dc (GtkStyle *style,
+		   GdkWindow *window,
+		   GtkStateType state_type,
+		   XpDCInfo *dc_info_out,
+		   gint x, gint y, gint width, gint height,
+		   RECT *rect_out);
+void release_window_dc (XpDCInfo *dc_info);
+
 void xp_theme_init (void);
 void xp_theme_reset (void);
 void xp_theme_exit (void);
@@ -121,7 +142,10 @@ gboolean xp_theme_draw (GdkWindow *win, XpThemeElement element,
                         int height, GtkStateType state_type,
                         GdkRectangle *area);
 gboolean xp_theme_is_drawable (XpThemeElement element);
-gboolean xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, OUT LOGFONT *lf);
+gboolean xp_theme_get_element_dimensions (XpThemeElement element,
+                                          GtkStateType state_type,
+                                          gint *cx, gint *cy);
+gboolean xp_theme_get_system_font (XpThemeClass klazz, XpThemeFont fontId, OUT LOGFONTW *lf);
 gboolean xp_theme_get_system_color (XpThemeClass klazz, int colorId, OUT DWORD *pColor);
 gboolean xp_theme_get_system_metric (XpThemeClass klazz, int metricId, OUT int *pVal);
 

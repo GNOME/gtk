@@ -43,7 +43,7 @@ GType gtk_type_im_context_thai = 0;
 void
 gtk_im_context_thai_register_type (GTypeModule *type_module)
 {
-  static const GTypeInfo im_context_thai_info =
+  const GTypeInfo im_context_thai_info =
   {
     sizeof (GtkIMContextThaiClass),
     (GBaseInitFunc) NULL,
@@ -122,7 +122,7 @@ is_context_lost_key(guint keyval)
           keyval == GDK_Escape ||
           keyval == GDK_Delete ||
           (GDK_Home <= keyval && keyval <= GDK_Begin) || /* IsCursorkey */
-          (GDK_KP_Space <= keyval && keyval <= GDK_KP_Equal) || /* IsKeypadKey */
+          (GDK_KP_Space <= keyval && keyval <= GDK_KP_Delete) || /* IsKeypadKey, non-chars only */
           (GDK_Select <= keyval && keyval <= GDK_Break) || /* IsMiscFunctionKey */
           (GDK_F1 <= keyval && keyval <= GDK_F35)); /* IsFunctionKey */
 }

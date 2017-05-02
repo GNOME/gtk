@@ -146,7 +146,7 @@ do_iconview_edit (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), icon_view);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     {

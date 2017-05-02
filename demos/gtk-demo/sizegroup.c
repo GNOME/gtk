@@ -25,10 +25,10 @@ create_combo_box (const char **strings)
   GtkWidget *combo_box;
   const char **str;
 
-  combo_box = gtk_combo_box_new_text ();
+  combo_box = gtk_combo_box_text_new ();
   
   for (str = strings; *str; str++)
-    gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), *str);
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), *str);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 
@@ -116,7 +116,7 @@ do_sizegroup (GtkWidget *do_widget)
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_vbox_new (FALSE, 5);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (window))), vbox, TRUE, TRUE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
@@ -158,7 +158,7 @@ do_sizegroup (GtkWidget *do_widget)
 			G_CALLBACK (toggle_grouping), size_group);
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     gtk_widget_destroy (window);

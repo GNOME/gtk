@@ -33,6 +33,7 @@
 enum {
   DIRECTION_CHANGED,
   KEYS_CHANGED,
+  STATE_CHANGED,
   LAST_SIGNAL
 };
 
@@ -81,6 +82,26 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE,
 		  0);
+
+  /**
+   * GdkKeymap::state-changed:
+   * @keymap: the object on which the signal is emitted
+   *
+   * The ::state-changed signal is emitted when the state of the
+   * keyboard changes, e.g when Caps Lock is turned on or off.
+   * See gdk_keymap_get_caps_lock_state().
+   *
+   * Since: 2.16
+   */
+  signals[STATE_CHANGED] =
+    g_signal_new ("state_changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkKeymapClass, state_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 
+                  0);
 }
 
 static void
@@ -100,12 +121,12 @@ gdk_keymap_init (GdkKeymap *keymap)
 /**
  * gdk_keyval_convert_case:
  * @symbol: a keyval
- * @lower: return location for lowercase version of @symbol
- * @upper: return location for uppercase version of @symbol
+ * @lower: (out): return location for lowercase version of @symbol
+ * @upper: (out): return location for uppercase version of @symbol
  *
  * Obtains the upper- and lower-case versions of the keyval @symbol.
  * Examples of keyvals are #GDK_a, #GDK_Enter, #GDK_F1, etc.
- * 
+ *
  **/
 void
 gdk_keyval_convert_case (guint symbol,

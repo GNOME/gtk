@@ -136,7 +136,8 @@ gtk_tree_drag_source_drag_data_delete (GtkTreeDragSource *drag_source,
  * gtk_tree_drag_source_drag_data_get:
  * @drag_source: a #GtkTreeDragSource
  * @path: row that was dragged
- * @selection_data: a #GtkSelectionData to fill with data from the dragged row
+ * @selection_data: (out): a #GtkSelectionData to fill with data
+ *                  from the dragged row
  * 
  * Asks the #GtkTreeDragSource to fill in @selection_data with a
  * representation of the row at @path. @selection_data->target gives
@@ -283,8 +284,8 @@ gtk_tree_set_row_drag_data (GtkSelectionData *selection_data,
 /**
  * gtk_tree_get_row_drag_data:
  * @selection_data: a #GtkSelectionData
- * @tree_model: a #GtkTreeModel
- * @path: row in @tree_model
+ * @tree_model: (out): a #GtkTreeModel
+ * @path: (out): row in @tree_model
  * 
  * Obtains a @tree_model and @path from selection data of target type
  * %GTK_TREE_MODEL_ROW. Normally called from a drag_data_received handler.

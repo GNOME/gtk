@@ -19,16 +19,33 @@
  */
 
 #import <AppKit/AppKit.h>
-#include "gdkwindow.h"
+#include "gdk/gdk.h"
 
-@interface GdkQuartzView : NSView {
+/* Text Input Client */
+#define TIC_MARKED_TEXT "tic-marked-text"
+#define TIC_SELECTED_POS  "tic-selected-pos"
+#define TIC_SELECTED_LEN  "tic-selected-len"
+#define TIC_INSERT_TEXT "tic-insert-text"
+#define TIC_IN_KEY_DOWN "tic-in-key-down"
+
+/* GtkIMContext */
+#define GIC_CURSOR_RECT  "gic-cursor-rect"
+#define GIC_FILTER_KEY   "gic-filter-key"
+#define GIC_FILTER_PASSTHRU	0
+#define GIC_FILTER_FILTERED	1
+
+@interface GdkQuartzView : NSView <NSTextInputClient>
+{
   GdkWindow *gdk_window;
   NSTrackingRectTag trackingRect;
   BOOL needsInvalidateShadow;
+  NSRange markedRange;
+  NSRange selectedRange;
 }
 
--(void)setGdkWindow:(GdkWindow *)window;
--(GdkWindow *)gdkWindow;
--(void)setNeedsInvalidateShadow:(BOOL)invalidate;
+- (void)setGdkWindow: (GdkWindow *)window;
+- (GdkWindow *)gdkWindow;
+- (NSTrackingRectTag)trackingRect;
+- (void)setNeedsInvalidateShadow: (BOOL)invalidate;
 
 @end

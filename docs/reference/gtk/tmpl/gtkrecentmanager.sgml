@@ -70,6 +70,9 @@ Recently used files are supported since GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkRecentManager ##### -->
 <para>
 Acts as a database of information about the list of recently
@@ -146,6 +149,7 @@ The #GQuark used for #GtkRecentManagerError errors.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -154,6 +158,7 @@ The #GQuark used for #GtkRecentManagerError errors.
 
 </para>
 
+@void: 
 @Returns: 
 
 

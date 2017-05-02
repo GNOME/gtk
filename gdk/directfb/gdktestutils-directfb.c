@@ -21,7 +21,7 @@
 /*
  * GTK+ DirectFB backend
  * Copyright (C) 2001-2002  convergence integrated media GmbH
- * Copyright (C) 2002-2004  convergence GmbH 
+ * Copyright (C) 2002-2004  convergence GmbH
  * Written by Denis Oliver Kropp <dok@convergence.de> and
  *            Sven Neumann <sven@convergence.de>
  */
@@ -42,49 +42,49 @@ static DFBInputDeviceKeySymbol
 _gdk_keyval_to_directfb (guint keyval)
 {
   switch (keyval) {
-    case 0 ... 127:
-      return DFB_KEY( UNICODE, keyval );
-    case GDK_F1 ... GDK_F12:
-      return keyval - GDK_F1 + DIKS_F1;
-    case GDK_BackSpace:
-      return DIKS_BACKSPACE;
-    case GDK_Tab:
-      return DIKS_TAB;
-    case GDK_Return:
-      return DIKS_RETURN;
-    case GDK_Escape:
-      return DIKS_ESCAPE;
-    case GDK_Delete:
-      return DIKS_DELETE; 
-    case GDK_Left:
-      return DIKS_CURSOR_LEFT;
-    case GDK_Up:
-      return DIKS_CURSOR_UP;
-    case GDK_Right:
-      return DIKS_CURSOR_RIGHT;
-    case GDK_Down:
-      return DIKS_CURSOR_DOWN;
-    case GDK_Insert:
-      return DIKS_INSERT;
-    case GDK_Home:
-      return DIKS_HOME;
-    case GDK_End:
-      return DIKS_END;
-    case GDK_Page_Up:
-      return DIKS_PAGE_UP;
-    case GDK_Page_Down:
-      return DIKS_PAGE_DOWN;
-    case GDK_Print:
-      return DIKS_PRINT;
-    case GDK_Pause:
-      return DIKS_PAUSE;
-    case GDK_Clear:
-      return DIKS_CLEAR;
-    case GDK_Cancel:
-      return DIKS_CANCEL;
-      /* TODO: handle them all */
-    default:
-      break;
+  case 0 ... 127:
+    return DFB_KEY (UNICODE, keyval);
+  case GDK_F1 ... GDK_F12:
+    return keyval - GDK_F1 + DIKS_F1;
+  case GDK_BackSpace:
+    return DIKS_BACKSPACE;
+  case GDK_Tab:
+    return DIKS_TAB;
+  case GDK_Return:
+    return DIKS_RETURN;
+  case GDK_Escape:
+    return DIKS_ESCAPE;
+  case GDK_Delete:
+    return DIKS_DELETE;
+  case GDK_Left:
+    return DIKS_CURSOR_LEFT;
+  case GDK_Up:
+    return DIKS_CURSOR_UP;
+  case GDK_Right:
+    return DIKS_CURSOR_RIGHT;
+  case GDK_Down:
+    return DIKS_CURSOR_DOWN;
+  case GDK_Insert:
+    return DIKS_INSERT;
+  case GDK_Home:
+    return DIKS_HOME;
+  case GDK_End:
+    return DIKS_END;
+  case GDK_Page_Up:
+    return DIKS_PAGE_UP;
+  case GDK_Page_Down:
+    return DIKS_PAGE_DOWN;
+  case GDK_Print:
+    return DIKS_PRINT;
+  case GDK_Pause:
+    return DIKS_PAUSE;
+  case GDK_Clear:
+    return DIKS_CLEAR;
+  case GDK_Cancel:
+    return DIKS_CANCEL;
+    /* TODO: handle them all */
+  default:
+    break;
   }
 
   return DIKS_NULL;
@@ -94,7 +94,7 @@ static DFBInputDeviceModifierMask
 _gdk_modifiers_to_directfb (GdkModifierType modifiers)
 {
   DFBInputDeviceModifierMask dfb_modifiers = 0;
-  
+
   if (modifiers & GDK_MOD1_MASK)
     dfb_modifiers |= DIMM_ALT;
   if (modifiers & GDK_MOD2_MASK)
@@ -119,7 +119,7 @@ _gdk_modifiers_to_directfb (GdkModifierType modifiers)
 void
 gdk_test_render_sync (GdkWindow *window)
 {
-  _gdk_display->directfb->WaitIdle (_gdk_display->directfb);    
+  _gdk_display->directfb->WaitIdle (_gdk_display->directfb);
 }
 
 /**
@@ -158,11 +158,12 @@ gdk_test_simulate_key (GdkWindow      *window,
 {
   GdkWindowObject       *private;
   GdkWindowImplDirectFB *impl;
-  DFBWindowEvent         evt; 
+  DFBWindowEvent         evt;
 
   g_return_val_if_fail (GDK_IS_WINDOW(window), FALSE);
-  g_return_val_if_fail (key_pressrelease == GDK_KEY_PRESS || key_pressrelease == GDK_KEY_RELEASE, FALSE);
-  
+  g_return_val_if_fail (key_pressrelease == GDK_KEY_PRESS ||
+                        key_pressrelease == GDK_KEY_RELEASE, FALSE);
+
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
 
@@ -172,10 +173,12 @@ gdk_test_simulate_key (GdkWindow      *window,
     if (_gdk_display->layer->WarpCursor (_gdk_display->layer, win_x+x, win_y+y))
       return FALSE;
   }
- 
+
   evt.clazz      = DFEC_WINDOW;
   evt.type       = (key_pressrelease == GDK_KEY_PRESS) ? DWET_KEYDOWN : DWET_KEYUP;
+#if ((DIRECTFB_MAJOR_VERSION > 1) || (DIRECTFB_MINOR_VERSION >= 2))
   evt.flags      = DWEF_NONE;
+#endif
   evt.window_id  = impl->dfb_id;
   evt.x          = MAX(x, 0);
   evt.y          = MAX(y, 0);
@@ -224,11 +227,12 @@ gdk_test_simulate_button (GdkWindow      *window,
 {
   GdkWindowObject       *private;
   GdkWindowImplDirectFB *impl;
-  DFBWindowEvent         evt;  
-  
-  g_return_val_if_fail (GDK_IS_WINDOW(window), FALSE);
-  g_return_val_if_fail (button_pressrelease == GDK_BUTTON_PRESS || button_pressrelease == GDK_BUTTON_RELEASE, FALSE);
-  
+  DFBWindowEvent         evt;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (button_pressrelease == GDK_BUTTON_PRESS ||
+                        button_pressrelease == GDK_BUTTON_RELEASE, FALSE);
+
   private = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_DIRECTFB (private->impl);
 
@@ -241,13 +245,17 @@ gdk_test_simulate_button (GdkWindow      *window,
 
   evt.clazz      = DFEC_WINDOW;
   evt.type       = (button_pressrelease == GDK_BUTTON_PRESS) ? DWET_BUTTONDOWN : DWET_BUTTONUP;
+#if ((DIRECTFB_MAJOR_VERSION > 1) || (DIRECTFB_MINOR_VERSION >= 2))
   evt.flags      = DWEF_NONE;
+#endif
   evt.window_id  = impl->dfb_id;
-  evt.x          = MAX(x, 0);
-  evt.y          = MAX(y, 0); 
+  evt.x          = MAX (x, 0);
+  evt.y          = MAX (y, 0);
   _gdk_display->layer->GetCursorPosition (_gdk_display->layer, &evt.cx, &evt.cy);
   evt.modifiers  = _gdk_modifiers_to_directfb (modifiers);
   evt.locks      = (modifiers & GDK_LOCK_MASK) ? DILS_CAPS : 0;
+  evt.button     = button;
+  evt.buttons    = 0;
   gettimeofday (&evt.timestamp, NULL);
 
   _gdk_display->buffer->PostEvent (_gdk_display->buffer, DFB_EVENT(&evt));

@@ -22,6 +22,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+
+#undef GDK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -322,6 +325,7 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 
 	if (gdk_pixbuf_get_has_alpha (pixbuf)) {
 		GdkPixbuf *dest;
+                cairo_t *cr;
 	  
 		gdk_window_set_back_pixmap (drawing_area->window, NULL, FALSE);
 	  
@@ -335,11 +339,13 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 					    GDK_INTERP_BILINEAR, 255,
 					    event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
 		
-		gdk_draw_pixbuf (drawing_area->window, drawing_area->style->fg_gc[GTK_STATE_NORMAL], dest,
-				 0, 0, event->area.x, event->area.y,
-				 event->area.width, event->area.height,
-				 GDK_RGB_DITHER_NORMAL, event->area.x, event->area.y);
-		
+                cr = gdk_cairo_create (drawing_area->window);
+
+                gdk_cairo_set_source_pixbuf (cr, dest, 0, 0);
+                gdk_cairo_rectangle (cr, &event->area);
+                cairo_fill (cr);
+
+                cairo_destroy (cr);
 		g_object_unref (dest);
 	} else {
 		gdk_draw_rgb_image (drawing_area->window,

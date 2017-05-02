@@ -1,4 +1,7 @@
 #include "config.h"
+
+#undef GDK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 
 int

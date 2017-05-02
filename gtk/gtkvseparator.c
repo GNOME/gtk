@@ -21,99 +21,51 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
+
+#include "gtkorientable.h"
 #include "gtkvseparator.h"
-#include "gtkintl.h"
 #include "gtkalias.h"
 
-
-static void gtk_vseparator_size_request (GtkWidget          *widget,
-                                         GtkRequisition     *requisition);
-static gint gtk_vseparator_expose       (GtkWidget          *widget,
-                                         GdkEventExpose     *event);
-
+/**
+ * SECTION:gtkvseparator
+ * @Short_description: A vertical separator
+ * @Title: GtkVSeparator
+ * @See_also: #GtkHSeparator
+ *
+ * The #GtkVSeparator widget is a vertical separator, used to group the
+ * widgets within a window. It displays a vertical line with a shadow to
+ * make it appear sunken into the interface.
+ */
 
 G_DEFINE_TYPE (GtkVSeparator, gtk_vseparator, GTK_TYPE_SEPARATOR)
 
 static void
 gtk_vseparator_class_init (GtkVSeparatorClass *klass)
 {
-  GtkWidgetClass *widget_class;
-
-  widget_class = (GtkWidgetClass*) klass;
-
-  widget_class->size_request = gtk_vseparator_size_request;
-  widget_class->expose_event = gtk_vseparator_expose;
 }
 
 static void
 gtk_vseparator_init (GtkVSeparator *vseparator)
 {
-  GTK_WIDGET (vseparator)->requisition.width = GTK_WIDGET (vseparator)->style->xthickness;
-  GTK_WIDGET (vseparator)->requisition.height = 1;
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (vseparator),
+                                  GTK_ORIENTATION_VERTICAL);
 }
 
-GtkWidget*
+/**
+ * gtk_vseparator_new:
+ *
+ * Creates a new #GtkVSeparator.
+ *
+ * Returns: a new #GtkVSeparator.
+ */
+GtkWidget *
 gtk_vseparator_new (void)
 {
   return g_object_new (GTK_TYPE_VSEPARATOR, NULL);
-}
-
-static void
-gtk_vseparator_size_request (GtkWidget      *widget,
-                             GtkRequisition *requisition)
-{
-  gboolean wide_separators;
-  gint     separator_width;
-
-  gtk_widget_style_get (widget,
-                        "wide-separators", &wide_separators,
-                        "separator-width", &separator_width,
-                        NULL);
-
-  if (wide_separators)
-    requisition->width = separator_width;
-  else
-    requisition->width = widget->style->xthickness;
-}
-
-static gint
-gtk_vseparator_expose (GtkWidget      *widget,
-		       GdkEventExpose *event)
-{
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      gboolean wide_separators;
-      gint     separator_width;
-
-      gtk_widget_style_get (widget,
-                            "wide-separators", &wide_separators,
-                            "separator-width", &separator_width,
-                            NULL);
-
-      if (wide_separators)
-        gtk_paint_box (widget->style, widget->window,
-                       GTK_WIDGET_STATE (widget), GTK_SHADOW_ETCHED_OUT,
-                       &event->area, widget, "vseparator",
-                       widget->allocation.x + (widget->allocation.width -
-                                               separator_width) / 2,
-                       widget->allocation.y,
-                       separator_width,
-                       widget->allocation.height);
-      else
-        gtk_paint_vline (widget->style, widget->window,
-                         GTK_WIDGET_STATE (widget),
-                         &event->area, widget, "vseparator",
-                         widget->allocation.y,
-                         widget->allocation.y + widget->allocation.height - 1,
-                         widget->allocation.x + (widget->allocation.width -
-                                                 widget->style->xthickness) / 2);
-    }
-
-  return FALSE;
 }
 
 #define __GTK_VSEPARATOR_C__

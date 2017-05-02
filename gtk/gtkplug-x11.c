@@ -115,7 +115,7 @@ static void
 xembed_set_info (GdkWindow     *window,
 		 unsigned long  flags)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   unsigned long buffer[2];
 
   Atom xembed_info_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO");
@@ -202,7 +202,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 				 GdkEvent  *event,
 				 gpointer   data)
 {
-  GdkScreen *screen = gdk_drawable_get_screen (event->any.window);
+  GdkScreen *screen = gdk_window_get_screen (event->any.window);
   GdkDisplay *display = gdk_screen_get_display (screen);
   GtkPlug *plug = GTK_PLUG (data);
   XEvent *xevent = (XEvent *)gdk_xevent;
@@ -241,7 +241,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	XReparentEvent *xre = &xevent->xreparent;
 	gboolean was_embedded = plug->socket_window != NULL;
 
-	GTK_NOTE (PLUGSOCKET, g_message("GtkPlug: ReparentNotify received\n"));
+	GTK_NOTE (PLUGSOCKET, g_message("GtkPlug: ReparentNotify received"));
 
 	return_val = GDK_FILTER_REMOVE;
 	
@@ -251,7 +251,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	  {
 	    /* End of embedding protocol for previous socket */
 	    
-	    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: end of embedding\n"));
+	    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: end of embedding"));
 	    /* FIXME: race if we remove from another socket and
 	     * then add to a local window before we get notification
 	     * Probably need check in _gtk_plug_add_to_socket
@@ -276,7 +276,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 
 		if (xre->parent == GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen)))
 		  {
-		    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: calling gtk_plug_send_delete_event()\n"));
+		    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: calling gtk_plug_send_delete_event()"));
 		    _gtk_plug_send_delete_event (widget);
 
 		    g_object_notify (G_OBJECT (plug), "embedded");
@@ -290,7 +290,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	  {
 	    /* Start of embedding protocol */
 
-	    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: start of embedding\n"));
+	    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: start of embedding"));
 	    plug->socket_window = gdk_window_lookup_for_display (display, xre->parent);
 	    if (plug->socket_window)
 	      {

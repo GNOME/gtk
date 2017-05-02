@@ -679,7 +679,7 @@ create_calendar(void)
 
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (button, TRUE);
   gtk_widget_grab_default (button);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 0);

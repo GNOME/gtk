@@ -120,6 +120,9 @@ The "unbind" functionality has been introduced in GTK+ 2.12.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkBindingSet ##### -->
 <para>
 A binding set maintains a list of activatable key bindings.
@@ -156,6 +159,7 @@ a #GtkBindingEntry.
 @signals: 	action signals of this entry
 
 <!-- ##### STRUCT GtkBindingSignal ##### -->
+<anchor id="keybinding-signals"/>
 <para>
 A #GtkBindingSignal stores the necessary information to activate a widget
 in response to a key press via a signal emission.
@@ -176,7 +180,7 @@ key binding signal emission as stored in #GtkBindingSignal.
 
 <!-- ##### MACRO gtk_binding_entry_add ##### -->
 <para>
-Deprecated.
+
 </para>
 
 
@@ -282,7 +286,7 @@ Deprecated.
 @modifiers: 
 @signal_name: 
 @n_args: 
-@Varargs: 
+@...: 
 
 
 <!-- ##### FUNCTION gtk_binding_entry_skip ##### -->

@@ -147,6 +147,16 @@ static void gtk_text_layout_buffer_delete_range (GtkTextBuffer     *textbuffer,
 
 static void gtk_text_layout_update_cursor_line (GtkTextLayout *layout);
 
+static void line_display_index_to_iter (GtkTextLayout      *layout,
+	                                GtkTextLineDisplay *display,
+			                GtkTextIter        *iter,
+                                        gint                index,
+                                        gint                trailing);
+
+static gint line_display_iter_to_index (GtkTextLayout      *layout,
+                                        GtkTextLineDisplay *display,
+                                        const GtkTextIter  *iter);
+
 enum {
   INVALIDATED,
   CHANGED,
@@ -289,6 +299,10 @@ gtk_text_layout_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_text_layout_parent_class)->finalize (object);
 }
 
+/**
+ * gtk_text_layout_set_buffer:
+ * @buffer: (allow-none):
+ */
 void
 gtk_text_layout_set_buffer (GtkTextLayout *layout,
                             GtkTextBuffer *buffer)
@@ -404,7 +418,7 @@ gtk_text_layout_set_contexts (GtkTextLayout *layout,
  * @overwrite: overwrite mode
  *
  * Sets overwrite mode
- **/
+ */
 void
 gtk_text_layout_set_overwrite_mode (GtkTextLayout *layout,
 				    gboolean       overwrite)
@@ -429,7 +443,7 @@ gtk_text_layout_set_overwrite_mode (GtkTextLayout *layout,
  * point at which new text is inserted depends on whether the new
  * text is right-to-left or left-to-right, so it may be desired to
  * make the drawn position of the cursor depend on the keyboard state.
- **/
+ */
 void
 gtk_text_layout_set_cursor_direction (GtkTextLayout   *layout,
 				      GtkTextDirection direction)
@@ -448,7 +462,7 @@ gtk_text_layout_set_cursor_direction (GtkTextLayout   *layout,
  * Sets the keyboard direction; this is used as for the bidirectional
  * base direction for the line with the cursor if the line contains
  * only neutral characters.
- **/
+ */
 void
 gtk_text_layout_set_keyboard_direction (GtkTextLayout   *layout,
 					GtkTextDirection keyboard_dir)
@@ -468,7 +482,7 @@ gtk_text_layout_set_keyboard_direction (GtkTextLayout   *layout,
  * gtk_text_layout_set_buffer().
  *
  * Return value: the text buffer used by the layout.
- **/
+ */
 GtkTextBuffer *
 gtk_text_layout_get_buffer (GtkTextLayout *layout)
 {
@@ -502,7 +516,7 @@ gtk_text_layout_set_screen_width (GtkTextLayout *layout, gint width)
  * Sets whether the insertion cursor should be shown. Generally,
  * widgets using #GtkTextLayout will hide the cursor when the
  * widget does not have the input focus.
- **/
+ */
 void
 gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
                                     gboolean       cursor_visible)
@@ -535,8 +549,8 @@ gtk_text_layout_set_cursor_visible (GtkTextLayout *layout,
  * Returns whether the insertion cursor will be shown.
  *
  * Return value: if %FALSE, the insertion cursor will not be
-    shown, even if the text is editable.
- **/
+ *     shown, even if the text is editable.
+ */
 gboolean
 gtk_text_layout_get_cursor_visible (GtkTextLayout *layout)
 {
@@ -553,7 +567,7 @@ gtk_text_layout_get_cursor_visible (GtkTextLayout *layout)
  * Set the preedit string and attributes. The preedit string is a
  * string showing text that is currently being edited and not
  * yet committed into the buffer.
- **/
+ */
 void
 gtk_text_layout_set_preedit_string (GtkTextLayout *layout,
 				    const gchar   *preedit_string,
@@ -693,6 +707,12 @@ gtk_text_layout_wrap (GtkTextLayout *layout,
   return GTK_TEXT_LAYOUT_GET_CLASS (layout)->wrap (layout, line, line_data);
 }
 
+
+/**
+ * gtk_text_layout_get_lines:
+ *
+ * Return value: (element-type GtkTextLine) (transfer container):
+ */
 GSList*
 gtk_text_layout_get_lines (GtkTextLayout *layout,
                            /* [top_y, bottom_y) */
@@ -958,7 +978,7 @@ gtk_text_layout_real_free_line_data (GtkTextLayout     *layout,
  * Check if there are any invalid regions in a #GtkTextLayout's buffer
  *
  * Return value: %TRUE if any invalid regions were found
- **/
+ */
 gboolean
 gtk_text_layout_is_valid (GtkTextLayout *layout)
 {
@@ -990,7 +1010,7 @@ update_layout_size (GtkTextLayout *layout)
  *
  * Ensure that a region of a #GtkTextLayout is valid. The ::changed
  * signal will be emitted if any lines are validated.
- **/
+ */
 void
 gtk_text_layout_validate_yrange (GtkTextLayout *layout,
                                  GtkTextIter   *anchor,
@@ -1429,7 +1449,7 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
           appearance1->draw_bg == appearance2->draw_bg);
 }
 
-/**
+/*
  * gtk_text_attr_appearance_new:
  * @desc:
  *
@@ -1438,7 +1458,7 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
  * and size simultaneously.)
  *
  * Return value:
- **/
+ */
 static PangoAttribute *
 gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
 {
@@ -1650,7 +1670,7 @@ add_child_attrs (GtkTextLayout      *layout,
   pango_attr_list_insert (attrs, attr);
 }
 
-/**
+/*
  * get_block_cursor:
  * @layout: a #GtkTextLayout
  * @display: a #GtkTextLineDisplay
@@ -1664,7 +1684,7 @@ add_child_attrs (GtkTextLayout      *layout,
  * Checks whether layout should display block cursor at given position.
  * For this layout must be in overwrite mode and text at @insert_iter 
  * must be editable.
- **/
+ */
 static gboolean
 get_block_cursor (GtkTextLayout      *layout,
 		  GtkTextLineDisplay *display,
@@ -1800,49 +1820,62 @@ static void
 allocate_child_widgets (GtkTextLayout      *text_layout,
                         GtkTextLineDisplay *display)
 {
-  GSList *shaped = display->shaped_objects;
   PangoLayout *layout = display->layout;
-  PangoLayoutIter *iter;
-  
-  iter = pango_layout_get_iter (layout);
-  
+  PangoLayoutIter *run_iter;
+
+  run_iter = pango_layout_get_iter (layout);
   do
     {
-      PangoLayoutRun *run = pango_layout_iter_get_run_readonly (iter);
+      PangoLayoutRun *run = pango_layout_iter_get_run_readonly (run_iter);
 
       if (run && is_shape (run))
         {
-          GObject *shaped_object = shaped->data;
-          shaped = shaped->next;
+          gint byte_index;
+          GtkTextIter text_iter;
+          GtkTextChildAnchor *anchor = NULL;
+          GList *widgets = NULL;
+          GList *l;
 
-          /* shaped_object is NULL for child anchors with no
-           * widgets stored at them
+          /* The pango iterator iterates in visual order.
+           * We use the byte index to find the child widget.
            */
-          if (GTK_IS_WIDGET (shaped_object))
+          byte_index = pango_layout_iter_get_index (run_iter);
+          line_display_index_to_iter (text_layout, display, &text_iter, byte_index, 0);
+          anchor = gtk_text_iter_get_child_anchor (&text_iter);
+	  if (anchor)
+            widgets = gtk_text_child_anchor_get_widgets (anchor);
+
+          for (l = widgets; l; l = l->next)
             {
               PangoRectangle extents;
+              GtkWidget *child = l->data;
 
-              /* We emit "allocate_child" with the x,y of
-               * the widget with respect to the top of the line
-               * and the left side of the buffer
-               */
-              
-              pango_layout_iter_get_run_extents (iter,
-                                                 NULL,
-                                                 &extents);
-              
-              g_signal_emit (text_layout,
-                             signals[ALLOCATE_CHILD],
-                             0,
-                             shaped_object,
-                             PANGO_PIXELS (extents.x) + display->x_offset,
-                             PANGO_PIXELS (extents.y) + display->top_margin);
+              if (_gtk_anchored_child_get_layout (child) == text_layout)
+                {
+
+                  /* We emit "allocate_child" with the x,y of
+                   * the widget with respect to the top of the line
+                   * and the left side of the buffer
+                   */
+                  pango_layout_iter_get_run_extents (run_iter,
+                                                     NULL,
+                                                     &extents);
+
+                  g_signal_emit (text_layout,
+                                 signals[ALLOCATE_CHILD],
+                                 0,
+                                 child,
+                                 PANGO_PIXELS (extents.x) + display->x_offset,
+                                 PANGO_PIXELS (extents.y) + display->top_margin);
+                }
             }
+
+          g_list_free (widgets);
         }
     }
-  while (pango_layout_iter_next_run (iter));
-  
-  pango_layout_iter_free (iter);
+  while (pango_layout_iter_next_run (run_iter));
+
+  pango_layout_iter_free (run_iter);
 }
 
 static void
@@ -2593,11 +2626,11 @@ get_line_at_y (GtkTextLayout *layout,
  * @target_iter: the iterator in which the result is stored
  * @y: the y positition
  * @line_top: location to store the y coordinate of the
- *            top of the line. (Can by %NULL.)
+ *            top of the line. (Can by %NULL)
  *
  * Get the iter at the beginning of the line which is displayed
  * at the given y.
- **/
+ */
 void
 gtk_text_layout_get_line_at_y (GtkTextLayout *layout,
                                GtkTextIter   *target_iter,
@@ -2654,7 +2687,8 @@ void gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
   if (y > display->height - display->top_margin - display->bottom_margin)
     {
       byte_index = _gtk_text_line_byte_count (line);
-      *trailing = 0;
+      if (trailing)
+        *trailing = 0;
     }
   else
     {
@@ -2676,8 +2710,8 @@ void gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
  * gtk_text_layout_get_cursor_locations:
  * @layout: a #GtkTextLayout
  * @iter: a #GtkTextIter
- * @strong_pos: location to store the strong cursor position (may be %NULL)
- * @weak_pos: location to store the weak cursor position (may be %NULL)
+ * @strong_pos: (allow-none): location to store the strong cursor position (may be %NULL)
+ * @weak_pos: (allow-none): location to store the weak cursor position (may be %NULL)
  *
  * Given an iterator within a text layout, determine the positions of the
  * strong and weak cursors if the insertion point is at that

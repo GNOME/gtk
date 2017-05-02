@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#undef GDK_PIXBUF_DISABLE_DEPRECATED
 #include "gdk-pixbuf/gdk-pixdata.h"
 #include "gtktextbufferserialize.h"
 #include "gtkintl.h"
@@ -843,7 +844,7 @@ check_id_or_name (GMarkupParseContext  *context,
 	    {
 	      set_error (error, context,
 			 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
-			 _("<%s> element has invalid id \"%s\""), attribute_values[i]);
+			 _("<%s> element has invalid ID \"%s\""), attribute_values[i]);
 	      return FALSE;
 	    }
 	}

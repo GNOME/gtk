@@ -436,6 +436,7 @@ typedef struct
   GtkWidget         *spin;
   GtkWidget         *area;
   gint               page;
+  GtkPrintContext   *context;
   PrintData *data;
   gdouble dpi_x, dpi_y;
 } PreviewOp;
@@ -446,6 +447,11 @@ preview_expose (GtkWidget      *widget,
 		gpointer        data)
 {
   PreviewOp *pop = data;
+  cairo_t *cr;
+
+  cr = gdk_cairo_create (pop->area->window);
+  gtk_print_context_set_cairo_context (pop->context, cr, pop->dpi_x, pop->dpi_y);
+  cairo_destroy (cr);
 
   gdk_window_clear (pop->area->window);
   gtk_print_operation_preview_render_page (pop->preview,
@@ -567,8 +573,6 @@ preview_cb (GtkPrintOperation        *op,
   gtk_widget_set_size_request (GTK_WIDGET (da), width, height);
   gtk_box_pack_start (GTK_BOX (vbox), da, TRUE, TRUE, 0);
 
-  gtk_widget_set_double_buffered (da, FALSE);
-
   gtk_widget_realize (da);
   
   cr = gdk_cairo_create (da->window);
@@ -582,6 +586,7 @@ preview_cb (GtkPrintOperation        *op,
   pop->spin = page;
   pop->area = da;
   pop->page = 1;
+  pop->context = context;
 
   g_signal_connect (page, "value-changed", 
 		    G_CALLBACK (update_page), pop);

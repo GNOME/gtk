@@ -17,6 +17,9 @@ Loadable keyboard accelerator specifications
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkAccelMap ##### -->
 <para>
 
@@ -77,20 +80,18 @@ Loadable keyboard accelerator specifications
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_accel_map_load ##### -->
+<!-- ##### MACRO gtk_accel_map_load ##### -->
 <para>
 
 </para>
 
-@file_name: 
 
 
-<!-- ##### FUNCTION gtk_accel_map_save ##### -->
+<!-- ##### MACRO gtk_accel_map_save ##### -->
 <para>
 
 </para>
 
-@file_name: 
 
 
 <!-- ##### FUNCTION gtk_accel_map_foreach ##### -->
@@ -148,6 +149,7 @@ Loadable keyboard accelerator specifications
 
 </para>
 
+@void: 
 @Returns: 
 
 

@@ -8,9 +8,17 @@ Onscreen display areas in the target window system
 <para>
 A #GdkWindow is a rectangular region on the screen. It's a low-level object,
 used to implement high-level objects such as #GtkWidget and #GtkWindow on the
-GTK+ level. A #GtkWindow is a toplevel window, the thing a user might think of 
-as a "window" with a titlebar and so on; a #GtkWindow may contain many #GdkWindow. 
+GTK+ level. A #GtkWindow is a toplevel window, the thing a user might think of
+as a "window" with a titlebar and so on; a #GtkWindow may contain many #GdkWindow.
 For example, each #GtkButton has a #GdkWindow associated with it.
+</para>
+<refsect2 id="COMPOSITED-WINDOWS"><title>Composited Windows</title>
+<para>
+Normally, the windowing system takes care of rendering the contents of a child
+window onto its parent window. This mechanism can be intercepted by calling
+gdk_window_set_composited() on the child window. For a
+<firstterm>composited</firstterm> window it is the responsibility of the
+application to render the window contents at the right spot.
 </para>
 <example id="composited-window-example"><title>Composited windows</title>
 <programlisting><![CDATA[
@@ -54,7 +62,7 @@ transparent_expose (GtkWidget      *widget,
  * this handler is called after the red has been drawn. If it was
  * called before then GTK would just blindly paint over our work.
  *
- * Note: if the child window has children, then you need a cairo 1.16
+ * Note: if the child window has children, then you need a cairo 1.6
  * feature to make this work correctly.
  */
 static gboolean
@@ -153,10 +161,10 @@ main (int argc, char **argv)
 ]]>
 </programlisting></example>
 <para>
-In the example <xref linkend="composited-window-example"/>, a button is 
-placed inside of an event box inside of a window. The event box is 
-set as composited and therefore is no longer automatically drawn to 
-the screen. 
+In the example <xref linkend="composited-window-example"/>, a button is
+placed inside of an event box inside of a window. The event box is
+set as composited and therefore is no longer automatically drawn to
+the screen.
 </para>
 <para>
 When the contents of the event box change, an expose event is
@@ -168,8 +176,30 @@ that it wishes.
 <para>
 In our case, we merge the contents with a 50% transparency. We
 also set the background colour of the window to red. The effect is
-that the background shows through the button. 
+that the background shows through the button.
 </para>
+</refsect2>
+<refsect2 id="OFFSCREEN-WINDOWS"><title>Offscreen Windows</title>
+<para>
+Offscreen windows are more general than composited windows, since they
+allow not only to modify the rendering of the child window onto its parent,
+but also to apply coordinate transformations.
+</para>
+<para>
+To integrate an offscreen window into a window hierarchy, one has to call
+gdk_offscreen_window_set_embedder() and handle a number of signals. The
+#GdkWindow::pick-embedded-child signal on the embedder window is used to
+select an offscreen child at given coordinates, and the #GdkWindow::to-embedder
+and #GdkWindow::from-embedder signals on the offscreen window are used to
+translate coordinates between the embedder and the offscreen window.
+</para>
+
+<para>
+For rendering an offscreen window onto its embedder, the contents of the
+offscreen window are available as a pixmap, via
+gdk_offscreen_window_get_pixmap().
+</para>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
@@ -179,7 +209,10 @@ that the background shows through the button.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
-<!-- ##### STRUCT GdkWindow ##### -->
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### TYPEDEF GdkWindow ##### -->
 <para>
 An opaque structure representing an onscreen drawable.
 Pointers to structures of type #GdkPixmap, #GdkBitmap,
@@ -188,6 +221,43 @@ The type #GdkDrawable refers generically to any of
 these types.
 </para>
 
+
+<!-- ##### SIGNAL GdkWindow::from-embedder ##### -->
+<para>
+
+</para>
+
+@gdkwindow: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
+<!-- ##### SIGNAL GdkWindow::pick-embedded-child ##### -->
+<para>
+
+</para>
+
+@gdkwindow: the object which received the signal.
+@arg1: 
+@arg2: 
+@Returns: 
+
+<!-- ##### SIGNAL GdkWindow::to-embedder ##### -->
+<para>
+
+</para>
+
+@gdkwindow: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
+<!-- ##### ARG GdkWindow:cursor ##### -->
+<para>
+
+</para>
 
 <!-- ##### ENUM GdkWindowType ##### -->
 <para>
@@ -200,6 +270,7 @@ Describes the kind of window.
 @GDK_WINDOW_DIALOG: useless/deprecated compatibility type
 @GDK_WINDOW_TEMP: override redirect temporary window (used to implement #GtkMenu)
 @GDK_WINDOW_FOREIGN: foreign window (see gdk_window_foreign_new())
+@GDK_WINDOW_OFFSCREEN: offscreen window (see <xref linkend="OFFSCREEN-WINDOWS"/>). Since 2.18
 
 <!-- ##### ENUM GdkWindowClass ##### -->
 <para>
@@ -454,6 +525,51 @@ Deprecated equivalent of g_object_unref()
 
 
 
+<!-- ##### FUNCTION gdk_window_get_display ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_screen ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_visual ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_width ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_height ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_get_window_type ##### -->
 <para>
 
@@ -497,6 +613,15 @@ Deprecated equivalent of g_object_unref()
 @window: 
 
 
+<!-- ##### FUNCTION gdk_window_is_destroyed ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_is_visible ##### -->
 <para>
 
@@ -507,6 +632,24 @@ Deprecated equivalent of g_object_unref()
 
 
 <!-- ##### FUNCTION gdk_window_is_viewable ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_is_shaped ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_is_input_only ##### -->
 <para>
 
 </para>
@@ -632,6 +775,15 @@ Deprecated equivalent of g_object_unref()
 @composited: 
 
 
+<!-- ##### FUNCTION gdk_window_get_composited ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_move ##### -->
 <para>
 
@@ -683,6 +835,32 @@ Deprecated equivalent of g_object_unref()
 @region: 
 @dx: 
 @dy: 
+
+
+<!-- ##### FUNCTION gdk_window_flush ##### -->
+<para>
+
+</para>
+
+@window: 
+
+
+<!-- ##### FUNCTION gdk_window_has_native ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_ensure_native ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_reparent ##### -->
@@ -762,6 +940,16 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 </para>
 
 @window: 
+
+
+<!-- ##### FUNCTION gdk_window_restack ##### -->
+<para>
+
+</para>
+
+@window: 
+@sibling: 
+@above: 
 
 
 <!-- ##### FUNCTION gdk_window_focus ##### -->
@@ -880,6 +1068,10 @@ Registers a window as a potential drop destination.
 
 @window: 
 @region: 
+@GdkWindow *, gpointer:
+@GdkWindow *, gpointer:
+@GdkWindow *, gpointer:
+@GdkWindow *, gpointer:
 @child_func: 
 @user_data: 
 
@@ -914,6 +1106,7 @@ Registers a window as a potential drop destination.
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_window_process_updates ##### -->
@@ -987,6 +1180,15 @@ Registers a window as a potential drop destination.
 @accept_focus: 
 
 
+<!-- ##### FUNCTION gdk_window_get_accept_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_set_focus_on_map ##### -->
 <para>
 
@@ -994,6 +1196,15 @@ Registers a window as a potential drop destination.
 
 @window: 
 @focus_on_map: 
+
+
+<!-- ##### FUNCTION gdk_window_get_focus_on_map ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_add_filter ##### -->
@@ -1182,6 +1393,15 @@ backend, <type>MSG</type>s for Win32).
 @parent_relative: 
 
 
+<!-- ##### FUNCTION gdk_window_get_background_pattern ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### MACRO GDK_PARENT_RELATIVE ##### -->
 <para>
 A special value for <literal>GdkPixmap*</literal> variables, indicating
@@ -1198,6 +1418,15 @@ window.
 
 @window: 
 @cursor: 
+
+
+<!-- ##### FUNCTION gdk_window_get_cursor ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### MACRO gdk_window_set_colormap ##### -->
@@ -1255,6 +1484,15 @@ Deprecated equivalent to gdk_drawable_set_colormap()
 
 @window: 
 @modal: 
+
+
+<!-- ##### FUNCTION gdk_window_get_modal_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_set_type_hint ##### -->
@@ -1338,12 +1576,13 @@ Deprecated equivalent of gdk_drawable_get_size().
 
 
 
-<!-- ##### MACRO gdk_window_get_visual ##### -->
+<!-- ##### FUNCTION gdk_window_get_visual ##### -->
 <para>
-Deprecated equivalent of gdk_drawable_get_visual().
+
 </para>
 
-@Returns: the #GdkVisual of the window
+@window: 
+@Returns: 
 
 
 <!-- ##### MACRO gdk_window_get_colormap ##### -->
@@ -1382,6 +1621,42 @@ Deprecated equivalent of gdk_drawable_get_type().
 @x: 
 @y: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_root_coords ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@root_x: 
+@root_y: 
+
+
+<!-- ##### FUNCTION gdk_window_coords_from_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@parent_x: 
+@parent_y: 
+@x: 
+@y: 
+
+
+<!-- ##### FUNCTION gdk_window_coords_to_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@x: 
+@y: 
+@parent_x: 
+@parent_y: 
 
 
 <!-- ##### FUNCTION gdk_window_get_pointer ##### -->
@@ -1447,7 +1722,25 @@ or %GDK_META_MASK in the state field of key events.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_window_get_effective_parent ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_window_get_toplevel ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_get_effective_toplevel ##### -->
 <para>
 
 </para>
@@ -1620,6 +1913,7 @@ The hint must be set before mapping the window.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1628,6 +1922,7 @@ The hint must be set before mapping the window.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -1659,12 +1954,39 @@ Applications should never have any reason to use this facility
 @Returns: 
 
 
-<!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-docs.sgml" "book" "refsect2" "")
-End:
--->
+<!-- ##### FUNCTION gdk_offscreen_window_get_pixmap ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_offscreen_window_set_embedder ##### -->
+<para>
+
+</para>
+
+@window: 
+@embedder: 
+
+
+<!-- ##### FUNCTION gdk_offscreen_window_get_embedder ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_window_geometry_changed ##### -->
+<para>
+
+</para>
+
+@window: 
 
 
 <!-- ##### FUNCTION gdk_window_redirect_to_drawable ##### -->
@@ -1688,5 +2010,13 @@ End:
 </para>
 
 @window: 
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-docs.sgml" "book" "refsect2" "")
+End:
+-->
 
 

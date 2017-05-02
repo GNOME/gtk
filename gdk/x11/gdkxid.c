@@ -47,15 +47,18 @@ _gdk_xid_table_insert (GdkDisplay *display,
 		       gpointer    data)
 {
   GdkDisplayX11 *display_x11;
-  
+
   g_return_if_fail (xid != NULL);
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
+
   display_x11 = GDK_DISPLAY_X11 (display);
 
   if (!display_x11->xid_ht)
     display_x11->xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
 					    (GEqualFunc) gdk_xid_equal);
+
+  if (g_hash_table_lookup (display_x11->xid_ht, xid))
+    g_warning ("XID collision, trouble ahead");
 
   g_hash_table_insert (display_x11->xid_ht, xid, data);
 }
@@ -65,25 +68,31 @@ _gdk_xid_table_remove (GdkDisplay *display,
 		       XID	   xid)
 {
   GdkDisplayX11 *display_x11;
-  
+
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
+
   display_x11 = GDK_DISPLAY_X11 (display);
-  
+
   if (display_x11->xid_ht)
     g_hash_table_remove (display_x11->xid_ht, &xid);
 }
 
-/** 
+/**
  * gdk_xid_table_lookup_for_display:
  * @display: the #GdkDisplay.
  * @xid: an X id.
  *
  * Returns the GDK object associated with the given X id.
  *
- * Returns: a GDK object associated with the given X id.
+ * Return value: the associated Gdk object, which may be a #GdkPixmap,
+ *     a #GdkWindow or a #GdkFont or %NULL if no object is associated
+ *     with the X id.
  *
  * Since: 2.2
+ *
+ * Deprecated:2.24: This function will be removed in GTK+ 3.0. GTK+
+ *     only stores windows in its X id table nowadays, so use
+ *     gdk_x11_window_lookup_for_display() instead.
  */
 gpointer
 gdk_xid_table_lookup_for_display (GdkDisplay  *display,
@@ -106,12 +115,18 @@ gdk_xid_table_lookup_for_display (GdkDisplay  *display,
 /**
  * gdk_xid_table_lookup:
  * @xid: an X id.
- * 
- * Returns the Gdk object associated with the given X id.
- * 
+ *
+ * Returns the Gdk object associated with the given X id for the default
+ * display.
+ *
  * Return value: the associated Gdk object, which may be a #GdkPixmap,
- * a #GdkWindow or a #GdkFont.
- **/
+ *     a #GdkWindow or a #GdkFont or %NULL if no object is associated
+ *     with the X id.
+ *
+ * Deprecated:2.24: This function will be removed in GTK+ 3.0. GTK+
+ *     only stores windows in its X id table nowadays, so use
+ *     gdk_x11_window_lookup_for_display() instead.
+ */
 gpointer
 gdk_xid_table_lookup (XID xid)
 {

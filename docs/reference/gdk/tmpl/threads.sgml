@@ -212,8 +212,7 @@ int main (int argc, char *argv[])
   /* create a window */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (destroy), NULL);
+  g_signal_connect (window, "destroy", G_CALLBACK (destroy), NULL);
 
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -251,6 +250,9 @@ int main (int argc, char *argv[])
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### MACRO GDK_THREADS_ENTER ##### -->
 <para>
 This macro marks the beginning of a critical section in which GDK and
@@ -276,6 +278,7 @@ begun with #GDK_THREADS_ENTER.
 
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_threads_enter ##### -->
@@ -286,6 +289,7 @@ conditions.  Only one thread at a time can be in such a critial
 section.
 </para>
 
+@void: 
 
 
 <!-- ##### FUNCTION gdk_threads_leave ##### -->
@@ -293,6 +297,7 @@ section.
 Leaves a critical region begun with gdk_threads_enter(). 
 </para>
 
+@void: 
 
 
 <!-- ##### VARIABLE gdk_threads_mutex ##### -->

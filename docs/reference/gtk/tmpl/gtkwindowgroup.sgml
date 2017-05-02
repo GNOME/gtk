@@ -17,6 +17,9 @@ Limit the effect of grabs
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkWindowGroup ##### -->
 <para>
 
@@ -28,6 +31,7 @@ Limit the effect of grabs
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -50,6 +54,15 @@ Limit the effect of grabs
 
 
 <!-- ##### FUNCTION gtk_window_group_list_windows ##### -->
+<para>
+
+</para>
+
+@window_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_group_get_current_grab ##### -->
 <para>
 
 </para>

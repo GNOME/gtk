@@ -48,7 +48,7 @@ gdk_cursor_get_type (void)
  * 
  * Adds a reference to @cursor.
  * 
- * Return value: Same @cursor that was passed in
+ * Return value: (transfer full): Same @cursor that was passed in
  **/
 GdkCursor*
 gdk_cursor_ref (GdkCursor *cursor)
@@ -88,8 +88,7 @@ gdk_cursor_unref (GdkCursor *cursor)
  * Creates a new cursor from the set of builtin cursors for the default display.
  * See gdk_cursor_new_for_display().
  *
- * To make the cursor invisible, use gdk_cursor_new_from_pixmap() to create
- * a cursor with no pixels in it.
+ * To make the cursor invisible, use %GDK_BLANK_CURSOR.
  * 
  * Return value: a new #GdkCursor
  **/
@@ -97,6 +96,23 @@ GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
   return gdk_cursor_new_for_display (gdk_display_get_default(), cursor_type);
+}
+
+/**
+ * gdk_cursor_get_cursor_type:
+ * @cursor:  a #GdkCursor
+ *
+ * Returns the cursor type for this cursor.
+ *
+ * Return value: a #GdkCursorType
+ *
+ * Since: 2.22
+ **/
+GdkCursorType
+gdk_cursor_get_cursor_type (GdkCursor *cursor)
+{
+  g_return_val_if_fail (cursor != NULL, GDK_BLANK_CURSOR);
+  return cursor->type;
 }
 
 #define __GDK_CURSOR_C__

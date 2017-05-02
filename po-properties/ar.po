@@ -7,20 +7,32 @@
 # Arafat Medini <lumina@silverpen.de>, 2003, 2004.
 # Djihed Afifi <djihed@gmail.com>, 2006.
 # Khaled Hosny <khaledhosny@eglug.org>, 2006, 2008.
+# Anas Afif Emad <anas.e87@gmail.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-18 18:27-0400\n"
-"PO-Revision-Date: 2008-01-26 17:46+0200\n"
-"Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
+"POT-Creation-Date: 2010-06-10 11:56-0400\n"
+"PO-Revision-Date: 2008-09-18 02:19+0300\n"
+"Last-Translator: Anas Afif Emad <anas.e87@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: gdk-pixbuf/gdk-pixbuf-simple-anim.c:165
+#, fuzzy
+msgid "Loop"
+msgstr "الشعار"
+
+#: gdk-pixbuf/gdk-pixbuf-simple-anim.c:166
+#, fuzzy
+msgid "Whether the animation should loop when it reaches the end"
+msgstr "فيما اذا كان المنتقى يتبع المؤشر"
 
 #: gdk-pixbuf/gdk-pixbuf.c:89
 msgid "Number of Channels"
@@ -54,7 +66,7 @@ msgstr "بيتات لكل نموذج"
 msgid "The number of bits per sample"
 msgstr "عدد البيتات لكل نموذج"
 
-#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:632 gtk/gtktreeviewcolumn.c:207
+#: gdk-pixbuf/gdk-pixbuf.c:132 gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:208
 msgid "Width"
 msgstr "العرض"
 
@@ -62,7 +74,7 @@ msgstr "العرض"
 msgid "The number of columns of the pixbuf"
 msgstr "عدد أعمدة البكسبف"
 
-#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:641
+#: gdk-pixbuf/gdk-pixbuf.c:142 gtk/gtklayout.c:642
 msgid "Height"
 msgstr "الارتفاع"
 
@@ -95,12 +107,12 @@ msgstr "الشاشة الافتراضية"
 msgid "The default display for GDK"
 msgstr "شاشة GDK الافتراضية"
 
-#: gdk/gdkpango.c:490 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
-#: gtk/gtkstatusicon.c:253 gtk/gtkwindow.c:600
+#: gdk/gdkpango.c:538 gtk/gtkinvisible.c:86 gtk/gtkmountoperation.c:176
+#: gtk/gtkstatusicon.c:280 gtk/gtkwindow.c:626
 msgid "Screen"
 msgstr "شاشة"
 
-#: gdk/gdkpango.c:491
+#: gdk/gdkpango.c:539
 msgid "the GdkScreen for the renderer"
 msgstr "الـ GdkScreen للرّاسم"
 
@@ -114,102 +126,107 @@ msgstr "خيارات الخط الافتراضية للشاشة"
 
 #: gdk/gdkscreen.c:83
 msgid "Font resolution"
-msgstr "استبانة الخط"
+msgstr "ميز الخط"
 
 #: gdk/gdkscreen.c:84
 msgid "The resolution for fonts on the screen"
-msgstr "استبانة الخطوط على الشاشة"
+msgstr "ميز الخطوط على الشاشة"
 
-#: gtk/gtkaboutdialog.c:197
+#: gdk/gdkwindow.c:496 gdk/gdkwindow.c:497
+#, fuzzy
+msgid "Cursor"
+msgstr "وميض المؤشر"
+
+#: gtk/gtkaboutdialog.c:298
 msgid "Program name"
 msgstr "اسم البرنامج"
 
-#: gtk/gtkaboutdialog.c:198
+#: gtk/gtkaboutdialog.c:299
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr "اسم البرنامج. اذا لم يحدد ، الإفتراضي هو g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:212
+#: gtk/gtkaboutdialog.c:313
 msgid "Program version"
 msgstr "نسخة البرنامج"
 
-#: gtk/gtkaboutdialog.c:213
+#: gtk/gtkaboutdialog.c:314
 msgid "The version of the program"
 msgstr "نسخة البرنامج"
 
-#: gtk/gtkaboutdialog.c:227
+#: gtk/gtkaboutdialog.c:328
 msgid "Copyright string"
 msgstr "نصّ حقوق النسخ"
 
-#: gtk/gtkaboutdialog.c:228
+#: gtk/gtkaboutdialog.c:329
 msgid "Copyright information for the program"
 msgstr "معلومات حقوق نسخ للبرنامج"
 
-#: gtk/gtkaboutdialog.c:245
+#: gtk/gtkaboutdialog.c:346
 msgid "Comments string"
 msgstr "نصّ التعليقات"
 
-#: gtk/gtkaboutdialog.c:246
+#: gtk/gtkaboutdialog.c:347
 msgid "Comments about the program"
 msgstr "تعليقات عن البرنامج"
 
-#: gtk/gtkaboutdialog.c:280
+#: gtk/gtkaboutdialog.c:381
 msgid "Website URL"
 msgstr "موقع الانترنت"
 
-#: gtk/gtkaboutdialog.c:281
+#: gtk/gtkaboutdialog.c:382
 msgid "The URL for the link to the website of the program"
 msgstr "وصلة موقع البرنامج."
 
-#: gtk/gtkaboutdialog.c:297
+#: gtk/gtkaboutdialog.c:397
 msgid "Website label"
 msgstr "عنوان موقع الويب"
 
-#: gtk/gtkaboutdialog.c:298
+#: gtk/gtkaboutdialog.c:398
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr "تسمية الوصلة الى موقع البرنامج. إذا لم تكن محدّدة، الإفتراضي هو العنوان"
 
-#: gtk/gtkaboutdialog.c:314
+#: gtk/gtkaboutdialog.c:414
 msgid "Authors"
 msgstr "المؤلفين"
 
-#: gtk/gtkaboutdialog.c:315
+#: gtk/gtkaboutdialog.c:415
 msgid "List of authors of the program"
 msgstr "قائمة بمؤلفي البرنامج"
 
-#: gtk/gtkaboutdialog.c:331
+#: gtk/gtkaboutdialog.c:431
 msgid "Documenters"
 msgstr "الموثّقون"
 
-#: gtk/gtkaboutdialog.c:332
+#: gtk/gtkaboutdialog.c:432
 msgid "List of people documenting the program"
 msgstr "قائمة بموثّقي البرنامج"
 
-#: gtk/gtkaboutdialog.c:348
+#: gtk/gtkaboutdialog.c:448
 msgid "Artists"
 msgstr "الفنانين"
 
-#: gtk/gtkaboutdialog.c:349
+#: gtk/gtkaboutdialog.c:449
 msgid "List of people who have contributed artwork to the program"
 msgstr "قائمة بالأشخاص الذي شاركوا بأعمال فنية للبرنامج"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:466
 msgid "Translator credits"
 msgstr "شكر للمترجمين"
 
-#: gtk/gtkaboutdialog.c:367
+#: gtk/gtkaboutdialog.c:467
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "شكر للمترجمين. يجب تعليم هذا النصّ على انه قابل للترجمة"
 
-#: gtk/gtkaboutdialog.c:382
+#: gtk/gtkaboutdialog.c:482
 msgid "Logo"
 msgstr "الشعار"
 
-#: gtk/gtkaboutdialog.c:383
+#: gtk/gtkaboutdialog.c:483
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -217,106 +234,116 @@ msgstr ""
 "شعار لصندوق حوْل. لو لم يحدد سيستخدم الإفتراضي "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:398
+#: gtk/gtkaboutdialog.c:498
 msgid "Logo Icon Name"
 msgstr "اسم أيقونة الشعار"
 
-#: gtk/gtkaboutdialog.c:399
+#: gtk/gtkaboutdialog.c:499
 msgid "A named icon to use as the logo for the about box."
 msgstr "أيقونة مسماة لتستخدم كشعار في صندوق حوْل."
 
-#: gtk/gtkaboutdialog.c:412
+#: gtk/gtkaboutdialog.c:512
 msgid "Wrap license"
 msgstr "لف الرخصة"
 
-#: gtk/gtkaboutdialog.c:413
+#: gtk/gtkaboutdialog.c:513
 msgid "Whether to wrap the license text."
 msgstr "اذا كان يتم لف الرخصة"
 
-#: gtk/gtkaccellabel.c:129
+#: gtk/gtkaccellabel.c:178
 msgid "Accelerator Closure"
 msgstr "غلق المُسرّع"
 
-#: gtk/gtkaccellabel.c:130
+#: gtk/gtkaccellabel.c:179
 msgid "The closure to be monitored for accelerator changes"
 msgstr "المنهي الذي سيعرض لتغييرات مفتاح الإختصار"
 
-#: gtk/gtkaccellabel.c:136
+#: gtk/gtkaccellabel.c:185
 msgid "Accelerator Widget"
 msgstr "ودجة المُسرّع"
 
-#: gtk/gtkaccellabel.c:137
+#: gtk/gtkaccellabel.c:186
 msgid "The widget to be monitored for accelerator changes"
 msgstr "الودجة التي ستراقب لتغييرات مفاتيح الاختصار"
 
-#: gtk/gtkaction.c:199 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:123
+#: gtk/gtkaction.c:220 gtk/gtkactiongroup.c:170 gtk/gtkprinter.c:111
 #: gtk/gtktextmark.c:89
 msgid "Name"
 msgstr "الاسم"
 
-#: gtk/gtkaction.c:200
+#: gtk/gtkaction.c:221
 msgid "A unique name for the action."
 msgstr "اسم متفرّد للعملية."
 
-#: gtk/gtkaction.c:215 gtk/gtkbutton.c:199 gtk/gtkexpander.c:195
-#: gtk/gtkframe.c:105 gtk/gtklabel.c:316 gtk/gtktoolbutton.c:180
+#: gtk/gtkaction.c:239 gtk/gtkbutton.c:219 gtk/gtkexpander.c:195
+#: gtk/gtkframe.c:105 gtk/gtklabel.c:506 gtk/gtkmenuitem.c:305
+#: gtk/gtktoolbutton.c:204 gtk/gtktoolitemgroup.c:1543
 msgid "Label"
 msgstr "عنوان"
 
-#: gtk/gtkaction.c:216
+#: gtk/gtkaction.c:240
 msgid "The label used for menu items and buttons that activate this action."
 msgstr "العنوان المستخدم لعناصر القوائم و الأزرار المشغلة لهذه العملية."
 
-#: gtk/gtkaction.c:223
+#: gtk/gtkaction.c:256
 msgid "Short label"
 msgstr "عنوان قصير"
 
-#: gtk/gtkaction.c:224
+#: gtk/gtkaction.c:257
 msgid "A shorter label that may be used on toolbar buttons."
 msgstr "عنوان اقصر يمكن استخدامه على أزرار أعمدة الأدوات."
 
-#: gtk/gtkaction.c:230
+#: gtk/gtkaction.c:265
 msgid "Tooltip"
 msgstr "تلميحة"
 
-#: gtk/gtkaction.c:231
+#: gtk/gtkaction.c:266
 msgid "A tooltip for this action."
 msgstr "تلميحة لهذه العملية."
 
-#: gtk/gtkaction.c:237
+#: gtk/gtkaction.c:281
 msgid "Stock Icon"
 msgstr "أيقونة من المخزون"
 
-#: gtk/gtkaction.c:238
+#: gtk/gtkaction.c:282
 msgid "The stock icon displayed in widgets representing this action."
-msgstr "أيقونة المخزون المعروضة في قطع تمثل هذه العملية."
+msgstr "أيقونة المخزون المعروضة في ودجات  تمثل هذه العملية."
 
-#: gtk/gtkaction.c:255 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:230
-#: gtk/gtkprinter.c:172 gtk/gtkstatusicon.c:210 gtk/gtkwindow.c:592
+#: gtk/gtkaction.c:302 gtk/gtkstatusicon.c:253
+msgid "GIcon"
+msgstr "أيقونة ج"
+
+#: gtk/gtkaction.c:303 gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:339
+#: gtk/gtkstatusicon.c:254
+msgid "The GIcon being displayed"
+msgstr "تم عرض GIcon"
+
+#: gtk/gtkaction.c:323 gtk/gtkcellrendererpixbuf.c:171 gtk/gtkimage.c:321
+#: gtk/gtkprinter.c:160 gtk/gtkstatusicon.c:237 gtk/gtkwindow.c:618
 msgid "Icon Name"
 msgstr "اسم الأيقونة"
 
-#: gtk/gtkaction.c:256 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:231
-#: gtk/gtkstatusicon.c:211
+#: gtk/gtkaction.c:324 gtk/gtkcellrendererpixbuf.c:172 gtk/gtkimage.c:322
+#: gtk/gtkstatusicon.c:238
 msgid "The name of the icon from the icon theme"
 msgstr "اسم الايقونه من ايقونات النسق"
 
-#: gtk/gtkaction.c:262 gtk/gtktoolitem.c:156
+#: gtk/gtkaction.c:331 gtk/gtktoolitem.c:192
 msgid "Visible when horizontal"
 msgstr "مرئي عندما يكون افقي"
 
-#: gtk/gtkaction.c:263 gtk/gtktoolitem.c:157
+#: gtk/gtkaction.c:332 gtk/gtktoolitem.c:193
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr ""
 "فيما إذا سيكون عنصر عمود الأدوات مرئيا عندما يكون عمود الأدوات في اتجاه افقي."
 
-#: gtk/gtkaction.c:278
+#: gtk/gtkaction.c:347
 msgid "Visible when overflown"
 msgstr "مرئي عندما يكون فوقيا"
 
-#: gtk/gtkaction.c:279
+#: gtk/gtkaction.c:348
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
@@ -324,11 +351,11 @@ msgstr ""
 "عندما يكون TRUE، قوائم أدوات الوكيل لهذه العملية توضع في قائمة الأدوات "
 "الفائضة."
 
-#: gtk/gtkaction.c:286 gtk/gtktoolitem.c:163
+#: gtk/gtkaction.c:355 gtk/gtktoolitem.c:199
 msgid "Visible when vertical"
 msgstr "مرئي عندما يكون عمودي"
 
-#: gtk/gtkaction.c:287 gtk/gtktoolitem.c:164
+#: gtk/gtkaction.c:356 gtk/gtktoolitem.c:200
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -336,11 +363,11 @@ msgstr ""
 "فيما إذا سيكون عنصر عمود الأدوات مرئيا عندما يكون عمود الأدوات في اتجاه "
 "عمودي."
 
-#: gtk/gtkaction.c:294 gtk/gtktoolitem.c:170
+#: gtk/gtkaction.c:363 gtk/gtktoolitem.c:206
 msgid "Is important"
 msgstr "مهم"
 
-#: gtk/gtkaction.c:295
+#: gtk/gtkaction.c:364
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
@@ -348,41 +375,50 @@ msgstr ""
 "فيما إذا سيعتبر العمل مهما. عند صبطه لـ TRUE، ستعرض بروكسيات عنصر الأدات "
 "لهذا العمل النص في نسق GTK_TOOLBAR_BOTH_HORIZ."
 
-#: gtk/gtkaction.c:303
+#: gtk/gtkaction.c:372
 msgid "Hide if empty"
 msgstr "اخفاء اذا كان فارغا"
 
-#: gtk/gtkaction.c:304
+#: gtk/gtkaction.c:373
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "عندما يكون TRUE، تخفى قوائم البروكسي الفارغة لهذه العملية."
 
-#: gtk/gtkaction.c:310 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
-#: gtk/gtkwidget.c:523
+#: gtk/gtkaction.c:379 gtk/gtkactiongroup.c:177 gtk/gtkcellrenderer.c:193
+#: gtk/gtkwidget.c:594
 msgid "Sensitive"
 msgstr "حساس"
 
-#: gtk/gtkaction.c:311
+#: gtk/gtkaction.c:380
 msgid "Whether the action is enabled."
 msgstr "فيما إذا كانت العملية مفعلة."
 
-#: gtk/gtkaction.c:317 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:269
-#: gtk/gtktreeviewcolumn.c:191 gtk/gtkwidget.c:516
+#: gtk/gtkaction.c:386 gtk/gtkactiongroup.c:184 gtk/gtkstatusicon.c:296
+#: gtk/gtktreeviewcolumn.c:192 gtk/gtkwidget.c:587
 msgid "Visible"
 msgstr "مرئي"
 
-#: gtk/gtkaction.c:318
+#: gtk/gtkaction.c:387
 msgid "Whether the action is visible."
 msgstr "فيما إذا كانت العملية مرئية."
 
-#: gtk/gtkaction.c:324
+#: gtk/gtkaction.c:393
 msgid "Action Group"
 msgstr "مجموعة العمليات"
 
-#: gtk/gtkaction.c:325
+#: gtk/gtkaction.c:394
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr "GtkActionGroup المربوط به GtkAction هذا أو NULL (للاستخدام الداخلي)"
+
+#: gtk/gtkaction.c:412 gtk/gtkimagemenuitem.c:169
+msgid "Always show image"
+msgstr ""
+
+#: gtk/gtkaction.c:413 gtk/gtkimagemenuitem.c:170
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "ما إذا كان الكائن ظاهرا"
 
 #: gtk/gtkactiongroup.c:171
 msgid "A name for the action group."
@@ -396,8 +432,26 @@ msgstr "فيما إذا كانت مجموعة العمليات مفعلة."
 msgid "Whether the action group is visible."
 msgstr "فيما إذا كانت مجموعة العمليات مرئية."
 
+#: gtk/gtkactivatable.c:308
+#, fuzzy
+msgid "Related Action"
+msgstr "عملية"
+
+#: gtk/gtkactivatable.c:309
+msgid "The action this activatable will activate and receive updates from"
+msgstr ""
+
+#: gtk/gtkactivatable.c:331
+msgid "Use Action Appearance"
+msgstr ""
+
+#: gtk/gtkactivatable.c:332
+#, fuzzy
+msgid "Whether to use the related actions appearance properties"
+msgstr "فيما اذا كان من الممكن انتقاء نص الشارة بالفأرة"
+
 #: gtk/gtkadjustment.c:93 gtk/gtkcellrendererprogress.c:128
-#: gtk/gtkscalebutton.c:200 gtk/gtkspinbutton.c:269
+#: gtk/gtkscalebutton.c:206 gtk/gtkspinbutton.c:269
 msgid "Value"
 msgstr "القيمة"
 
@@ -445,11 +499,11 @@ msgstr "حجم الصفحة"
 msgid "The page size of the adjustment"
 msgstr "حجم الصفحة عند التسوية"
 
-#: gtk/gtkalignment.c:90
+#: gtk/gtkalignment.c:109
 msgid "Horizontal alignment"
 msgstr "ترصيف أفقي"
 
-#: gtk/gtkalignment.c:91 gtk/gtkbutton.c:250
+#: gtk/gtkalignment.c:110 gtk/gtkbutton.c:270
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -457,11 +511,11 @@ msgstr ""
 "الموقع الأفقي للابن في المساحة المتاحة، ترصيف أيسر عندما يكون 0.0 و ترصيف "
 "أيمن عندما يكون 1.0"
 
-#: gtk/gtkalignment.c:100
+#: gtk/gtkalignment.c:119
 msgid "Vertical alignment"
 msgstr "ترصيف عمودي"
 
-#: gtk/gtkalignment.c:101 gtk/gtkbutton.c:269
+#: gtk/gtkalignment.c:120 gtk/gtkbutton.c:289
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -469,11 +523,11 @@ msgstr ""
 "الموقع العمودي للابن في المساحة المتاحة، ترصيف للأعلى عندما يكون 0.0 و ترصيف "
 "للأسفل عندما يكون 1.0"
 
-#: gtk/gtkalignment.c:109
+#: gtk/gtkalignment.c:128
 msgid "Horizontal scale"
 msgstr "قياس أفقي"
 
-#: gtk/gtkalignment.c:110
+#: gtk/gtkalignment.c:129
 msgid ""
 "If available horizontal space is bigger than needed for the child, how much "
 "of it to use for the child. 0.0 means none, 1.0 means all"
@@ -481,11 +535,11 @@ msgstr ""
 "إذا كان الفراغ الأفقي المتوفر  أكبر من الذي يطلبه الإبن، فكم سيستخدم منه "
 "للإبن. 0.0·يعني لا شيء و 1.0 الكل"
 
-#: gtk/gtkalignment.c:118
+#: gtk/gtkalignment.c:137
 msgid "Vertical scale"
 msgstr "قياس عمودي"
 
-#: gtk/gtkalignment.c:119
+#: gtk/gtkalignment.c:138
 msgid ""
 "If available vertical space is bigger than needed for the child, how much of "
 "it to use for the child. 0.0 means none, 1.0 means all"
@@ -493,187 +547,187 @@ msgstr ""
 "إذا·كان·الفراغ·العمودي·المتوفر··أكبر·من·الذي·يطلبه·الإبن،·فكم·سيستخدم·منه·للإبن."
 "·0.0 يعني·لا·شيء·و·1.0·الكل"
 
-#: gtk/gtkalignment.c:136
+#: gtk/gtkalignment.c:155
 msgid "Top Padding"
 msgstr "الحشو الأعلى"
 
-#: gtk/gtkalignment.c:137
+#: gtk/gtkalignment.c:156
 msgid "The padding to insert at the top of the widget."
 msgstr "الحشو الذي سيدخل في أعلى الودجة."
 
-#: gtk/gtkalignment.c:153
+#: gtk/gtkalignment.c:172
 msgid "Bottom Padding"
 msgstr "الحشو الأسفل"
 
-#: gtk/gtkalignment.c:154
+#: gtk/gtkalignment.c:173
 msgid "The padding to insert at the bottom of the widget."
 msgstr "الحشو الذي سيدخل في أسفل الودجة."
 
-#: gtk/gtkalignment.c:170
+#: gtk/gtkalignment.c:189
 msgid "Left Padding"
 msgstr "الحشو الأيسر"
 
-#: gtk/gtkalignment.c:171
+#: gtk/gtkalignment.c:190
 msgid "The padding to insert at the left of the widget."
 msgstr "الحشو الذي سيدخل عند يسار الودجة"
 
-#: gtk/gtkalignment.c:187
+#: gtk/gtkalignment.c:206
 msgid "Right Padding"
 msgstr "الحشو الأيمن"
 
-#: gtk/gtkalignment.c:188
+#: gtk/gtkalignment.c:207
 msgid "The padding to insert at the right of the widget."
 msgstr "الحشو·الذي·سيدخل·على·يمين·الودجة"
 
-#: gtk/gtkarrow.c:73
+#: gtk/gtkarrow.c:95
 msgid "Arrow direction"
 msgstr "اتجاه السهم"
 
-#: gtk/gtkarrow.c:74
+#: gtk/gtkarrow.c:96
 msgid "The direction the arrow should point"
 msgstr "اتجاه تأشير السهم"
 
-#: gtk/gtkarrow.c:81
+#: gtk/gtkarrow.c:104
 msgid "Arrow shadow"
 msgstr "ظل السهم"
 
-#: gtk/gtkarrow.c:82
+#: gtk/gtkarrow.c:105
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "مظهر الظل المحيط بالسهم"
 
-#: gtk/gtkarrow.c:88 gtk/gtkmenuitem.c:279
+#: gtk/gtkarrow.c:112 gtk/gtkmenu.c:717 gtk/gtkmenuitem.c:368
 msgid "Arrow Scaling"
 msgstr "مباعدة الأسهم"
 
-#: gtk/gtkarrow.c:89
+#: gtk/gtkarrow.c:113
 msgid "Amount of space used up by arrow"
 msgstr "كمية الفضاء المستخدم من طرف السهم"
 
-#: gtk/gtkaspectframe.c:79
+#: gtk/gtkaspectframe.c:93
 msgid "Horizontal Alignment"
 msgstr "الترصيف الأفقي"
 
-#: gtk/gtkaspectframe.c:80
+#: gtk/gtkaspectframe.c:94
 msgid "X alignment of the child"
 msgstr "ترصيف س للابن"
 
-#: gtk/gtkaspectframe.c:86
+#: gtk/gtkaspectframe.c:100
 msgid "Vertical Alignment"
 msgstr "الترصيف العمودي"
 
-#: gtk/gtkaspectframe.c:87
+#: gtk/gtkaspectframe.c:101
 msgid "Y alignment of the child"
 msgstr "ترصيف ص للابن"
 
-#: gtk/gtkaspectframe.c:93
+#: gtk/gtkaspectframe.c:107
 msgid "Ratio"
 msgstr "النسبة"
 
-#: gtk/gtkaspectframe.c:94
+#: gtk/gtkaspectframe.c:108
 msgid "Aspect ratio if obey_child is FALSE"
 msgstr "نسبة الإشعاع إذا كان obey_child مضبوطا لـ FALSE"
 
-#: gtk/gtkaspectframe.c:100
+#: gtk/gtkaspectframe.c:114
 msgid "Obey child"
 msgstr "ابن مطيع"
 
-#: gtk/gtkaspectframe.c:101
+#: gtk/gtkaspectframe.c:115
 msgid "Force aspect ratio to match that of the frame's child"
 msgstr "فرض نسبة الإشعاع حتى تناسب نسبة إطار الإبن"
 
-#: gtk/gtkassistant.c:261
+#: gtk/gtkassistant.c:308
 msgid "Header Padding"
 msgstr "حشو الرأس"
 
-#: gtk/gtkassistant.c:262
+#: gtk/gtkassistant.c:309
 msgid "Number of pixels around the header."
 msgstr "عدد البكسلات حول العنوان."
 
-#: gtk/gtkassistant.c:269
+#: gtk/gtkassistant.c:316
 msgid "Content Padding"
 msgstr "حشو المحتوى"
 
-#: gtk/gtkassistant.c:270
+#: gtk/gtkassistant.c:317
 msgid "Number of pixels around the content pages."
 msgstr "عدد البكسلات حول محتويات الصفحات"
 
-#: gtk/gtkassistant.c:286
+#: gtk/gtkassistant.c:333
 msgid "Page type"
 msgstr "نوع الصفحة"
 
-#: gtk/gtkassistant.c:287
+#: gtk/gtkassistant.c:334
 msgid "The type of the assistant page"
 msgstr "نوع الصفحة المساعدة"
 
-#: gtk/gtkassistant.c:304
+#: gtk/gtkassistant.c:351
 msgid "Page title"
 msgstr "عنوان الصفحة"
 
-#: gtk/gtkassistant.c:305
+#: gtk/gtkassistant.c:352
 msgid "The title of the assistant page"
 msgstr "عنوان الصورة المعاونة"
 
-#: gtk/gtkassistant.c:321
+#: gtk/gtkassistant.c:368
 msgid "Header image"
 msgstr "صورة الرأس"
 
-#: gtk/gtkassistant.c:322
+#: gtk/gtkassistant.c:369
 msgid "Header image for the assistant page"
 msgstr "الصورة الرأسية للصفحة المساعدة"
 
-#: gtk/gtkassistant.c:338
+#: gtk/gtkassistant.c:385
 msgid "Sidebar image"
 msgstr "الصورة الجانبية"
 
-#: gtk/gtkassistant.c:339
+#: gtk/gtkassistant.c:386
 msgid "Sidebar image for the assistant page"
 msgstr "الصورة الجانبية للصفحة المساعدة"
 
-#: gtk/gtkassistant.c:354
+#: gtk/gtkassistant.c:401
 msgid "Page complete"
 msgstr "صفحة كاملة"
 
-#: gtk/gtkassistant.c:355
+#: gtk/gtkassistant.c:402
 msgid "Whether all required fields on the page have been filled out"
 msgstr "إذا تم ملأ كل المجالات المطلوبة على الصفحة"
 
-#: gtk/gtkbbox.c:91
+#: gtk/gtkbbox.c:101
 msgid "Minimum child width"
 msgstr "عرض الابن الادنى"
 
-#: gtk/gtkbbox.c:92
+#: gtk/gtkbbox.c:102
 msgid "Minimum width of buttons inside the box"
 msgstr "عرض الأزرار الأدنى داخل الصندوق"
 
-#: gtk/gtkbbox.c:100
+#: gtk/gtkbbox.c:110
 msgid "Minimum child height"
 msgstr "ارتفاع الابن الادنى"
 
-#: gtk/gtkbbox.c:101
+#: gtk/gtkbbox.c:111
 msgid "Minimum height of buttons inside the box"
 msgstr "ارتفاع الأزرار الأدنى داخل الصندوق"
 
-#: gtk/gtkbbox.c:109
+#: gtk/gtkbbox.c:119
 msgid "Child internal width padding"
 msgstr "حشو العرض الداخلي للابن"
 
-#: gtk/gtkbbox.c:110
+#: gtk/gtkbbox.c:120
 msgid "Amount to increase child's size on either side"
 msgstr "مقدار زيادة حجم الابن في كلا الجانبين"
 
-#: gtk/gtkbbox.c:118
+#: gtk/gtkbbox.c:128
 msgid "Child internal height padding"
 msgstr "حشو الارتفاع الداخلي للابن"
 
-#: gtk/gtkbbox.c:119
+#: gtk/gtkbbox.c:129
 msgid "Amount to increase child's size on the top and bottom"
 msgstr "مقدار زيادة حجم الابن في الأعلى والأسفل"
 
-#: gtk/gtkbbox.c:127
+#: gtk/gtkbbox.c:137
 msgid "Layout style"
 msgstr "نمط التخطيط"
 
-#: gtk/gtkbbox.c:128
+#: gtk/gtkbbox.c:138
 msgid ""
 "How to layout the buttons in the box. Possible values are default, spread, "
 "edge, start and end"
@@ -681,11 +735,11 @@ msgstr ""
 "كيفية تخطيط الأزرار في الصندوق. القيم الممكنة هي افتراضا، انتشرا، حافة، بدء "
 "و، نهاية"
 
-#: gtk/gtkbbox.c:136
+#: gtk/gtkbbox.c:146
 msgid "Secondary"
 msgstr "ثانوي"
 
-#: gtk/gtkbbox.c:137
+#: gtk/gtkbbox.c:147
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
 "g., help buttons"
@@ -693,67 +747,68 @@ msgstr ""
 "إذا كان TRUE، فسيبدو الابن في مجموعة ثانوية للأبناء، مناسبة لأزرار المساعدة "
 "مثلا."
 
-#: gtk/gtkbox.c:98 gtk/gtkexpander.c:219 gtk/gtkiconview.c:666
-#: gtk/gtktreeviewcolumn.c:216
+#: gtk/gtkbox.c:130 gtk/gtkexpander.c:219 gtk/gtkiconview.c:665
+#: gtk/gtktreeviewcolumn.c:217
 msgid "Spacing"
 msgstr "فراغات"
 
-#: gtk/gtkbox.c:99
+#: gtk/gtkbox.c:131
 msgid "The amount of space between children"
 msgstr "مقدار الفراغ بين الأبناء."
 
-#: gtk/gtkbox.c:108 gtk/gtknotebook.c:644 gtk/gtktable.c:165
-#: gtk/gtktoolbar.c:580
+#: gtk/gtkbox.c:140 gtk/gtknotebook.c:657 gtk/gtktable.c:165
+#: gtk/gtktoolbar.c:573 gtk/gtktoolitemgroup.c:1596
 msgid "Homogeneous"
 msgstr "متناسق"
 
-#: gtk/gtkbox.c:109
+#: gtk/gtkbox.c:141
 msgid "Whether the children should all be the same size"
 msgstr "ما إذا سيكون كل الأبناء بنفس الحجم"
 
-#: gtk/gtkbox.c:116 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:572
-#: gtk/gtktreeviewcolumn.c:272
+#: gtk/gtkbox.c:148 gtk/gtkpreview.c:101 gtk/gtktoolbar.c:565
+#: gtk/gtktoolitemgroup.c:1603 gtk/gtktoolpalette.c:1053
+#: gtk/gtktreeviewcolumn.c:273
 msgid "Expand"
 msgstr "تمديد"
 
-#: gtk/gtkbox.c:117
+#: gtk/gtkbox.c:149
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "فيما إذا وجب أن يتلقى الإبن فضاءا أكبر عند نمو أبيه"
 
-#: gtk/gtkbox.c:123
+#: gtk/gtkbox.c:155 gtk/gtktoolitemgroup.c:1610
 msgid "Fill"
 msgstr "ملأ"
 
-#: gtk/gtkbox.c:124
+#: gtk/gtkbox.c:156
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr "فيما إذا يجب تخصيص الفضاء الإضافي للإبن للإبن نفسه أو كحشو"
 
-#: gtk/gtkbox.c:130
+#: gtk/gtkbox.c:162
 msgid "Padding"
 msgstr "حشو"
 
-#: gtk/gtkbox.c:131
+#: gtk/gtkbox.c:163
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr "الفضاء الإضافي لوضعه بين الإبن و جيرانه، بالبكسلات"
 
-#: gtk/gtkbox.c:137
+#: gtk/gtkbox.c:169
 msgid "Pack type"
 msgstr "نوع التحزيم"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:711
+#: gtk/gtkbox.c:170 gtk/gtknotebook.c:724
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "GtkPackType مؤشر لما إذا سيحزم الإبن بمرجع لبداية أو نهاية الأب"
 
-#: gtk/gtkbox.c:144 gtk/gtknotebook.c:689 gtk/gtkpaned.c:218
-#: gtk/gtkruler.c:110
+#: gtk/gtkbox.c:176 gtk/gtknotebook.c:702 gtk/gtkpaned.c:241
+#: gtk/gtkruler.c:148 gtk/gtktoolitemgroup.c:1624
 msgid "Position"
 msgstr "الموقع"
 
-#: gtk/gtkbox.c:145 gtk/gtknotebook.c:690
+#: gtk/gtkbox.c:177 gtk/gtknotebook.c:703
 msgid "The index of the child in the parent"
 msgstr "فهرس الإبن عند الأب"
 
@@ -765,18 +820,19 @@ msgstr "نطاق الترجمة"
 msgid "The translation domain used by gettext"
 msgstr "مجال الترجمة المستعمل من طرف gettext"
 
-#: gtk/gtkbutton.c:200
+#: gtk/gtkbutton.c:220
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "نص ودجة الشارة داخل الزر، إذا كان الزر يحوي كائن شارة"
 
-#: gtk/gtkbutton.c:207 gtk/gtkexpander.c:203 gtk/gtklabel.c:337
-#: gtk/gtktoolbutton.c:187
+#: gtk/gtkbutton.c:227 gtk/gtkexpander.c:203 gtk/gtklabel.c:527
+#: gtk/gtkmenuitem.c:320 gtk/gtktoolbutton.c:211
 msgid "Use underline"
 msgstr "استخدام التسطير"
 
-#: gtk/gtkbutton.c:208 gtk/gtkexpander.c:204 gtk/gtklabel.c:338
+#: gtk/gtkbutton.c:228 gtk/gtkexpander.c:204 gtk/gtklabel.c:528
+#: gtk/gtkmenuitem.c:321
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -784,125 +840,126 @@ msgstr ""
 "إذا ضبط، فسيكون هناك تسطير في النص يشير إلى الرمز التالي الذي يجب استخدامه "
 "كرمز مسطر لمفتاح الاختصار"
 
-#: gtk/gtkbutton.c:215
+#: gtk/gtkbutton.c:235 gtk/gtkimagemenuitem.c:150
 msgid "Use stock"
 msgstr "مخزن المستخدم"
 
-#: gtk/gtkbutton.c:216
+#: gtk/gtkbutton.c:236
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "إذا ضبط، فستستخدم العلامة لاختيار عنصر مخزن بدل عرضها"
 
-#: gtk/gtkbutton.c:223 gtk/gtkcombobox.c:788 gtk/gtkfilechooserbutton.c:393
+#: gtk/gtkbutton.c:243 gtk/gtkcombobox.c:796 gtk/gtkfilechooserbutton.c:393
 msgid "Focus on click"
 msgstr "تركيز عند النقر"
 
-#: gtk/gtkbutton.c:224 gtk/gtkfilechooserbutton.c:394
+#: gtk/gtkbutton.c:244 gtk/gtkfilechooserbutton.c:394
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "فيما إذا سيقبض الزر التركيز عند نقره بالفأرة"
 
-#: gtk/gtkbutton.c:231
+#: gtk/gtkbutton.c:251
 msgid "Border relief"
 msgstr "نحت الحد"
 
-#: gtk/gtkbutton.c:232
+#: gtk/gtkbutton.c:252
 msgid "The border relief style"
 msgstr "أسلوب نحت الحد"
 
-#: gtk/gtkbutton.c:249
+#: gtk/gtkbutton.c:269
 msgid "Horizontal alignment for child"
 msgstr "الترصيف الأفقي للإبن"
 
-#: gtk/gtkbutton.c:268
+#: gtk/gtkbutton.c:288
 msgid "Vertical alignment for child"
 msgstr "الترصيف العمودي للإبن"
 
-#: gtk/gtkbutton.c:285 gtk/gtkimagemenuitem.c:100
+#: gtk/gtkbutton.c:305 gtk/gtkimagemenuitem.c:135
 msgid "Image widget"
 msgstr "ودجة صورة"
 
-#: gtk/gtkbutton.c:286
+#: gtk/gtkbutton.c:306
 msgid "Child widget to appear next to the button text"
 msgstr "الودجة الابن التي ستظهر إلى جانب نص الزر"
 
-#: gtk/gtkbutton.c:300
+#: gtk/gtkbutton.c:320
 msgid "Image position"
 msgstr "موقع الصورة"
 
-#: gtk/gtkbutton.c:301
+#: gtk/gtkbutton.c:321
 msgid "The position of the image relative to the text"
 msgstr "موقع الصورة بالنسبة للنص"
 
-#: gtk/gtkbutton.c:410
+#: gtk/gtkbutton.c:441
 msgid "Default Spacing"
 msgstr "المباعدة الافتراضية"
 
-#: gtk/gtkbutton.c:411
-msgid "Extra space to add for CAN_DEFAULT buttons"
+#: gtk/gtkbutton.c:442
+#, fuzzy
+msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
 msgstr "الفراغ الإضافي للإضافة لأزرار CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:417
+#: gtk/gtkbutton.c:456
 msgid "Default Outside Spacing"
 msgstr "الفراغات الخارجية الافتراضية"
 
-#: gtk/gtkbutton.c:418
+#: gtk/gtkbutton.c:457
+#, fuzzy
 msgid ""
-"Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
-"border"
+"Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside "
+"the border"
 msgstr "الفراغ الإضافي للإضافة لأزرار CAN_DEFAULT الذي يرسم دائمًا خارج الحد"
 
-#: gtk/gtkbutton.c:423
+#: gtk/gtkbutton.c:462
 msgid "Child X Displacement"
 msgstr "إزاحة الابن في س"
 
-#: gtk/gtkbutton.c:424
+#: gtk/gtkbutton.c:463
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "مقدار نقل الابن في اتجاه س اثر تحرير الزر"
 
-#: gtk/gtkbutton.c:431
+#: gtk/gtkbutton.c:470
 msgid "Child Y Displacement"
 msgstr "إزاحة الابن في ص"
 
-#: gtk/gtkbutton.c:432
+#: gtk/gtkbutton.c:471
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "مقدار نقل الابن في اتجاه ص اثر تحرير الزر"
 
-#: gtk/gtkbutton.c:448
+#: gtk/gtkbutton.c:487
 msgid "Displace focus"
 msgstr "إزاحة التركيز"
 
-#: gtk/gtkbutton.c:449
+#: gtk/gtkbutton.c:488
 msgid ""
 "Whether the child_displacement_x/_y properties should also affect the focus "
 "rectangle"
 msgstr "إذا كانت خصائص child_displacement_x/_y تؤثر أيضا عل مستطيل التركيز"
 
-#: gtk/gtkbutton.c:462 gtk/gtkentry.c:539 gtk/gtkentry.c:932
+#: gtk/gtkbutton.c:501 gtk/gtkentry.c:695 gtk/gtkentry.c:1740
 msgid "Inner Border"
 msgstr "الحد الداخلي"
 
-#: gtk/gtkbutton.c:463
+#: gtk/gtkbutton.c:502
 msgid "Border between button edges and child."
 msgstr "الحد بين اطراف الزر والطفل."
 
-#: gtk/gtkbutton.c:476
+#: gtk/gtkbutton.c:515
 msgid "Image spacing"
 msgstr "تَبَاعُد الصور"
 
-#: gtk/gtkbutton.c:477
+#: gtk/gtkbutton.c:516
 msgid "Spacing in pixels between the image and label"
 msgstr "الفضاء بين الصورة و العنوان بالبكسل."
 
-#: gtk/gtkbutton.c:491
+#: gtk/gtkbutton.c:530
 msgid "Show button images"
 msgstr "إظهار صور الأزرار"
 
-#: gtk/gtkbutton.c:492
-#, fuzzy
+#: gtk/gtkbutton.c:531
 msgid "Whether images should be shown on buttons"
-msgstr "فيما إذا سيتم إظهار صور في القوائم"
+msgstr "فيما إذا كان سيتم إظهار صور على الأزرار"
 
 #: gtk/gtkcalendar.c:440
 msgid "Year"
@@ -910,7 +967,7 @@ msgstr "السنة"
 
 #: gtk/gtkcalendar.c:441
 msgid "The selected year"
-msgstr "أالسنة المنتقات"
+msgstr "السنة المنتقاة"
 
 #: gtk/gtkcalendar.c:454
 msgid "Month"
@@ -985,6 +1042,15 @@ msgstr "اظهر التفاصيل"
 #: gtk/gtkcalendar.c:578
 msgid "If TRUE, details are shown"
 msgstr "إذا كان \"صحيح\"، ستعرض التفاصيل"
+
+#: gtk/gtkcelleditable.c:43
+#, fuzzy
+msgid "Editing Canceled"
+msgstr "أُلغيت"
+
+#: gtk/gtkcelleditable.c:44
+msgid "Indicates that editing has been canceled"
+msgstr ""
 
 #: gtk/gtkcellrenderer.c:177
 msgid "mode"
@@ -1087,14 +1153,12 @@ msgid "Cell background color as a GdkColor"
 msgstr "لون خلفية الخلية كـ GdkColor"
 
 #: gtk/gtkcellrenderer.c:294
-#, fuzzy
 msgid "Editing"
-msgstr "تحجيم"
+msgstr "تحرير"
 
 #: gtk/gtkcellrenderer.c:295
-#, fuzzy
 msgid "Whether the cell renderer is currently in editing mode"
-msgstr "فيما إذا كانت العلامة في نمط السطر الوحيد"
+msgstr "فيما إذا كان إخراج الخلايا في وضع التحرير حالياً"
 
 #: gtk/gtkcellrenderer.c:303
 msgid "Cell background set"
@@ -1104,35 +1168,35 @@ msgstr "ضبط خلفية الخلية"
 msgid "Whether this tag affects the cell background color"
 msgstr "فيما إذا كانت هذه الشارة تؤثر في لون خلفية الخلية"
 
-#: gtk/gtkcellrendereraccel.c:104
+#: gtk/gtkcellrendereraccel.c:114
 msgid "Accelerator key"
 msgstr "مفتاح التسريع"
 
-#: gtk/gtkcellrendereraccel.c:105
+#: gtk/gtkcellrendereraccel.c:115
 msgid "The keyval of the accelerator"
 msgstr "زر المسرّع"
 
-#: gtk/gtkcellrendereraccel.c:121
+#: gtk/gtkcellrendereraccel.c:131
 msgid "Accelerator modifiers"
 msgstr "مغيرات المُسرّع"
 
-#: gtk/gtkcellrendereraccel.c:122
+#: gtk/gtkcellrendereraccel.c:132
 msgid "The modifier mask of the accelerator"
 msgstr "قناع التغير للمسرّع"
 
-#: gtk/gtkcellrendereraccel.c:139
+#: gtk/gtkcellrendereraccel.c:149
 msgid "Accelerator keycode"
 msgstr "رمز مفتاح المُسرّع"
 
-#: gtk/gtkcellrendereraccel.c:140
+#: gtk/gtkcellrendereraccel.c:150
 msgid "The hardware keycode of the accelerator"
 msgstr "شفرة المسرّع"
 
-#: gtk/gtkcellrendereraccel.c:159
+#: gtk/gtkcellrendereraccel.c:169
 msgid "Accelerator Mode"
 msgstr "نمط المُسرّع"
 
-#: gtk/gtkcellrendereraccel.c:160
+#: gtk/gtkcellrendereraccel.c:170
 msgid "The type of accelerators"
 msgstr "نوع المسرّعات"
 
@@ -1184,7 +1248,7 @@ msgstr "موسع·مغلق·للبيكسبف"
 msgid "Pixbuf for closed expander"
 msgstr "بيكسبف الموسع المغلق."
 
-#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:172 gtk/gtkstatusicon.c:202
+#: gtk/gtkcellrendererpixbuf.c:135 gtk/gtkimage.c:263 gtk/gtkstatusicon.c:229
 msgid "Stock ID"
 msgstr "هوية المخزون"
 
@@ -1192,8 +1256,8 @@ msgstr "هوية المخزون"
 msgid "The stock ID of the stock icon to render"
 msgstr "هوية المخزون لأيقونة المخزون التي ستترجم"
 
-#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkrecentmanager.c:245
-#: gtk/gtkstatusicon.c:243
+#: gtk/gtkcellrendererpixbuf.c:143 gtk/gtkcellrendererspinner.c:158
+#: gtk/gtkrecentmanager.c:245 gtk/gtkstatusicon.c:270
 msgid "Size"
 msgstr "الحجم"
 
@@ -1217,22 +1281,17 @@ msgstr "اتبع الحالة"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "فيما إذا كان يتم تلوين pixbuf المرسوم حسب الحالة"
 
-#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:247 gtk/gtkwindow.c:576
+#: gtk/gtkcellrendererpixbuf.c:205 gtk/gtkimage.c:338 gtk/gtkwindow.c:595
 msgid "Icon"
 msgstr "أيقونة"
-
-#: gtk/gtkcellrendererpixbuf.c:206 gtk/gtkimage.c:248 gtk/gtkstatusicon.c:227
-#, fuzzy
-msgid "The GIcon being displayed"
-msgstr "مجموعة الأيقونات للعرض"
 
 #: gtk/gtkcellrendererprogress.c:129
 msgid "Value of the progress bar"
 msgstr "قيمة شريط التَّقدم"
 
 #: gtk/gtkcellrendererprogress.c:146 gtk/gtkcellrenderertext.c:195
-#: gtk/gtkentry.c:582 gtk/gtkmessagedialog.c:153 gtk/gtkprogressbar.c:184
-#: gtk/gtktextbuffer.c:197
+#: gtk/gtkentry.c:738 gtk/gtkentrybuffer.c:353 gtk/gtkmessagedialog.c:200
+#: gtk/gtkprogressbar.c:184 gtk/gtktextbuffer.c:198
 msgid "Text"
 msgstr "النص"
 
@@ -1240,7 +1299,7 @@ msgstr "النص"
 msgid "Text on the progress bar"
 msgstr "النص على عمود التقدم"
 
-#: gtk/gtkcellrendererprogress.c:170
+#: gtk/gtkcellrendererprogress.c:170 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "نبض"
 
@@ -1268,9 +1327,9 @@ msgstr "ترصيف ص للنص"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "التنسيق العمودي، من 0 (فوق) إلى 1 (تحت)"
 
-#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:731
-#: gtk/gtkprogressbar.c:126 gtk/gtkscalebutton.c:191 gtk/gtkstatusicon.c:301
-#: gtk/gtktoolbar.c:492 gtk/gtktrayicon-x11.c:95
+#: gtk/gtkcellrendererprogress.c:221 gtk/gtkiconview.c:729
+#: gtk/gtkorientable.c:47 gtk/gtkprogressbar.c:126 gtk/gtkstatusicon.c:328
+#: gtk/gtktrayicon-x11.c:110
 msgid "Orientation"
 msgstr "الاتجاه"
 
@@ -1278,8 +1337,8 @@ msgstr "الاتجاه"
 msgid "Orientation and growth direction of the progress bar"
 msgstr "إتجاه و وجهة نموّ همود التطوّر"
 
-#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:346
-#: gtk/gtkscalebutton.c:219 gtk/gtkspinbutton.c:208
+#: gtk/gtkcellrendererspin.c:93 gtk/gtkprogressbar.c:118 gtk/gtkrange.c:368
+#: gtk/gtkscalebutton.c:225 gtk/gtkspinbutton.c:208
 msgid "Adjustment"
 msgstr "الملائمة"
 
@@ -1295,13 +1354,34 @@ msgstr "نسبة الزيادة"
 msgid "The acceleration rate when you hold down a button"
 msgstr "نسبة التسارع أثناء ضغطك للزر"
 
-#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:142 gtk/gtkspinbutton.c:226
+#: gtk/gtkcellrendererspin.c:123 gtk/gtkscale.c:218 gtk/gtkspinbutton.c:226
 msgid "Digits"
 msgstr "خانات رقمية"
 
 #: gtk/gtkcellrendererspin.c:124 gtk/gtkspinbutton.c:227
 msgid "The number of decimal places to display"
 msgstr "عدد الخانات العشرية لعرضها"
+
+#: gtk/gtkcellrendererspinner.c:124 gtk/gtkcheckmenuitem.c:98
+#: gtk/gtkmenu.c:507 gtk/gtkspinner.c:128 gtk/gtktoggleaction.c:119
+#: gtk/gtktogglebutton.c:115 gtk/gtktoggletoolbutton.c:114
+msgid "Active"
+msgstr "نشط"
+
+#: gtk/gtkcellrendererspinner.c:125
+#, fuzzy
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "فيما إذا سيعرض أسلوب الخط المنتقى في العلامة"
+
+#: gtk/gtkcellrendererspinner.c:145
+#, fuzzy
+msgid "Pulse of the spinner"
+msgstr "اسم الطابعة"
+
+#: gtk/gtkcellrendererspinner.c:159
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr "قيمة GtkIconSize التي تحدد حجم الأيقونة المرسومة"
 
 #: gtk/gtkcellrenderertext.c:196
 msgid "Text to render"
@@ -1315,7 +1395,7 @@ msgstr "تعليم"
 msgid "Marked up text to render"
 msgstr "نص معلّم للترجمة"
 
-#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:323
+#: gtk/gtkcellrenderertext.c:211 gtk/gtklabel.c:513
 msgid "Attributes"
 msgstr "الصفات"
 
@@ -1363,17 +1443,17 @@ msgstr "لون الواجهة الأمامية"
 msgid "Foreground color as a GdkColor"
 msgstr "لون الواجهة الأمامية كـ GdkColor"
 
-#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:506 gtk/gtktexttag.c:251
-#: gtk/gtktextview.c:568
+#: gtk/gtkcellrenderertext.c:261 gtk/gtkentry.c:662 gtk/gtktexttag.c:251
+#: gtk/gtktextview.c:576
 msgid "Editable"
 msgstr "قابل للتحرير"
 
-#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:569
+#: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:252 gtk/gtktextview.c:577
 msgid "Whether the text can be modified by the user"
 msgstr "فيما إذا يمكن تعديل النص عن طريق المستخدم"
 
 #: gtk/gtkcellrenderertext.c:269 gtk/gtkcellrenderertext.c:277
-#: gtk/gtkfontsel.c:188 gtk/gtktexttag.c:267 gtk/gtktexttag.c:275
+#: gtk/gtkfontsel.c:203 gtk/gtktexttag.c:267 gtk/gtktexttag.c:275
 msgid "Font"
 msgstr "الخط"
 
@@ -1473,7 +1553,7 @@ msgstr ""
 "اللغة التي فيها هذا النص، كشفرة ISO. يمكن لبانكو إستعمال هذا كتلميحة عند رسم "
 "النص. إذا كنت لا تفهم هذا المتغيّر فأنك ربما لا تستحقّه"
 
-#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:448 gtk/gtkprogressbar.c:206
+#: gtk/gtkcellrenderertext.c:411 gtk/gtklabel.c:638 gtk/gtkprogressbar.c:206
 msgid "Ellipsize"
 msgstr "قص"
 
@@ -1484,11 +1564,11 @@ msgid ""
 msgstr "المكان المفضل لقطع النص."
 
 #: gtk/gtkcellrenderertext.c:431 gtk/gtkfilechooserbutton.c:421
-#: gtk/gtklabel.c:468
+#: gtk/gtklabel.c:658
 msgid "Width In Characters"
 msgstr "العرض بالحروف"
 
-#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:469
+#: gtk/gtkcellrenderertext.c:432 gtk/gtklabel.c:659
 msgid "The desired width of the label, in characters"
 msgstr "العرض المطلوب للعنوان بالمحارف"
 
@@ -1503,7 +1583,7 @@ msgid ""
 msgstr ""
 "كيفية كسر النص الى سطور متعددة، إذا كان لا يوجد هناك فراغ كافٍ لكامل النص."
 
-#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:677
+#: gtk/gtkcellrenderertext.c:470 gtk/gtkcombobox.c:685
 msgid "Wrap width"
 msgstr "عرض اللف"
 
@@ -1511,7 +1591,7 @@ msgstr "عرض اللف"
 msgid "The width at which the text is wrapped"
 msgstr "عرض لف النص"
 
-#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:297
+#: gtk/gtkcellrenderertext.c:491 gtk/gtktreeviewcolumn.c:298
 msgid "Alignment"
 msgstr "تنسيق"
 
@@ -1684,7 +1764,7 @@ msgid "Indicator size"
 msgstr "حجم المؤشر"
 
 #: gtk/gtkcellrenderertoggle.c:159 gtk/gtkcheckbutton.c:70
-#: gtk/gtkcheckmenuitem.c:112
+#: gtk/gtkcheckmenuitem.c:122
 msgid "Size of check or radio indicator"
 msgstr "حجم مؤشر الفحص أو الإشعاع"
 
@@ -1696,7 +1776,7 @@ msgstr "طراز CellView"
 msgid "The model for cell view"
 msgstr "نمط عرض الخلية"
 
-#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:110 gtk/gtkoptionmenu.c:168
+#: gtk/gtkcheckbutton.c:69 gtk/gtkcheckmenuitem.c:121 gtk/gtkoptionmenu.c:168
 msgid "Indicator Size"
 msgstr "حجم المؤشر"
 
@@ -1708,28 +1788,23 @@ msgstr "فراغات المؤشر"
 msgid "Spacing around check or radio indicator"
 msgstr "الفراغات حول مؤشر الفحص أو الإشعاع"
 
-#: gtk/gtkcheckmenuitem.c:87 gtk/gtkmenu.c:502 gtk/gtktoggleaction.c:118
-#: gtk/gtktogglebutton.c:102 gtk/gtktoggletoolbutton.c:101
-msgid "Active"
-msgstr "نشط"
-
-#: gtk/gtkcheckmenuitem.c:88
+#: gtk/gtkcheckmenuitem.c:99
 msgid "Whether the menu item is checked"
 msgstr "فيما إذا كان عنصر القائمة مضبوط"
 
-#: gtk/gtkcheckmenuitem.c:95 gtk/gtktogglebutton.c:110
+#: gtk/gtkcheckmenuitem.c:106 gtk/gtktogglebutton.c:123
 msgid "Inconsistent"
 msgstr "تناقض"
 
-#: gtk/gtkcheckmenuitem.c:96
+#: gtk/gtkcheckmenuitem.c:107
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "فيما إذا يجب عرض حالة \"تناقض\""
 
-#: gtk/gtkcheckmenuitem.c:103
+#: gtk/gtkcheckmenuitem.c:114
 msgid "Draw as radio menu item"
 msgstr "رسم كعنصر قائمة مشع"
 
-#: gtk/gtkcheckmenuitem.c:104
+#: gtk/gtkcheckmenuitem.c:115
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "فيما اذا كان عنصر القائمة يشبه عنصر قائمة مشع"
 
@@ -1742,7 +1817,8 @@ msgid "Whether or not to give the color an alpha value"
 msgstr "فيما إذا سيمنح للون شفافية أم لا"
 
 #: gtk/gtkcolorbutton.c:186 gtk/gtkfilechooserbutton.c:407
-#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtktreeviewcolumn.c:264
+#: gtk/gtkfontbutton.c:142 gtk/gtkprintjob.c:116 gtk/gtkstatusicon.c:424
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Title"
 msgstr "العنوان"
 
@@ -1799,43 +1875,36 @@ msgid "Palette to use in the color selector"
 msgstr "لوحة الألوان التي ستستخدم في منتقي الألوان"
 
 #: gtk/gtkcolorseldialog.c:102
-#, fuzzy
 msgid "Color Selection"
-msgstr "اختيار الحوم"
+msgstr "اختيار اللون"
 
 #: gtk/gtkcolorseldialog.c:103
-#, fuzzy
 msgid "The color selection embedded in the dialog."
-msgstr "عنوان حوار انتقاء الألوان"
+msgstr "اختيار الألوان مضمن في مربع الحوار."
 
 #: gtk/gtkcolorseldialog.c:109
 msgid "OK Button"
-msgstr ""
+msgstr "زر حسناً"
 
 #: gtk/gtkcolorseldialog.c:110
-#, fuzzy
 msgid "The OK button of the dialog."
-msgstr "الأزرار المعروضة في حوار الرسالة"
+msgstr "زر حسناً في مربع الحوار"
 
 #: gtk/gtkcolorseldialog.c:116
-#, fuzzy
 msgid "Cancel Button"
-msgstr "أزرار الرسالة"
+msgstr "زر إلغاء"
 
 #: gtk/gtkcolorseldialog.c:117
-#, fuzzy
 msgid "The cancel button of the dialog."
-msgstr "العابر الوالد للنافذة"
+msgstr "زر الإلغاء في مربع الحوار"
 
 #: gtk/gtkcolorseldialog.c:123
-#, fuzzy
 msgid "Help Button"
-msgstr "أزرار الرسالة"
+msgstr "زر مساعدة"
 
 #: gtk/gtkcolorseldialog.c:124
-#, fuzzy
 msgid "The help button of the dialog."
-msgstr "الأزرار المعروضة في حوار الرسالة"
+msgstr "زر المساعدة في مربع الحوار"
 
 #: gtk/gtkcombo.c:145
 msgid "Enable arrow keys"
@@ -1877,274 +1946,292 @@ msgstr "القيمة في القائمة"
 msgid "Whether entered values must already be present in the list"
 msgstr "فيما إذا وجب على القيم المدخلة أن تكون موجودةً في القائمة"
 
-#: gtk/gtkcombobox.c:660
+#: gtk/gtkcombobox.c:668
 msgid "ComboBox model"
 msgstr "نموذج ComboBox"
 
-#: gtk/gtkcombobox.c:661
+#: gtk/gtkcombobox.c:669
 msgid "The model for the combo box"
 msgstr "نموذج لصندوق المجموعات"
 
-#: gtk/gtkcombobox.c:678
+#: gtk/gtkcombobox.c:686
 msgid "Wrap width for laying out the items in a grid"
 msgstr "عرض اللف عند تصميم العناصر في الشبكة"
 
-#: gtk/gtkcombobox.c:700
+#: gtk/gtkcombobox.c:708
 msgid "Row span column"
 msgstr "عمود إمتداد السطر"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:709
 msgid "TreeModel column containing the row span values"
 msgstr "عمود نموذج الشجرة المحتوي على قيم إمتداد السطر"
 
-#: gtk/gtkcombobox.c:722
+#: gtk/gtkcombobox.c:730
 msgid "Column span column"
 msgstr "عمود إمتداد العمود"
 
-#: gtk/gtkcombobox.c:723
+#: gtk/gtkcombobox.c:731
 msgid "TreeModel column containing the column span values"
 msgstr "عمود TreeModel الحاوي لقيم مدى العمود"
 
-#: gtk/gtkcombobox.c:744
+#: gtk/gtkcombobox.c:752
 msgid "Active item"
 msgstr "العنصر النشط"
 
-#: gtk/gtkcombobox.c:745
+#: gtk/gtkcombobox.c:753
 msgid "The item which is currently active"
 msgstr "العنصر النشط حاليا"
 
-#: gtk/gtkcombobox.c:764 gtk/gtkuimanager.c:220
+#: gtk/gtkcombobox.c:772 gtk/gtkuimanager.c:226
 msgid "Add tearoffs to menus"
 msgstr "إضافة قاطفات للقوائم"
 
-#: gtk/gtkcombobox.c:765
+#: gtk/gtkcombobox.c:773
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "فيما إذا وجب أن يكون للقوائم النازلة عنصر قطع"
 
-#: gtk/gtkcombobox.c:780 gtk/gtkentry.c:531
+#: gtk/gtkcombobox.c:788 gtk/gtkentry.c:687
 msgid "Has Frame"
 msgstr "له إطار"
 
-#: gtk/gtkcombobox.c:781
+#: gtk/gtkcombobox.c:789
 msgid "Whether the combo box draws a frame around the child"
 msgstr "إذا ما كان صندوق الإختيار يرسم إطارا حول الإبن"
 
-#: gtk/gtkcombobox.c:789
+#: gtk/gtkcombobox.c:797
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "فيما إذا سيأخذ الزر التركيز عند نقره بالفأرة"
 
-#: gtk/gtkcombobox.c:804 gtk/gtkmenu.c:557
+#: gtk/gtkcombobox.c:812 gtk/gtkmenu.c:562
 msgid "Tearoff Title"
 msgstr "قطف العنوان"
 
-#: gtk/gtkcombobox.c:805
+#: gtk/gtkcombobox.c:813
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "عنوان قد يعرض من قبل مدير النوافذ عند إلغاء القوائم المنبثقة"
 
-#: gtk/gtkcombobox.c:822
+#: gtk/gtkcombobox.c:830
 msgid "Popup shown"
 msgstr "نافذة قافزة معروضة"
 
-#: gtk/gtkcombobox.c:823
+#: gtk/gtkcombobox.c:831
 msgid "Whether the combo's dropdown is shown"
 msgstr "فيما إذا يتم عرض قائمة الصندوق"
 
-#: gtk/gtkcombobox.c:839
-msgid "Button Sensitivity"
-msgstr ""
-
-#: gtk/gtkcombobox.c:840
-#, fuzzy
-msgid "Whether the dropdown button is sensitive when the model is empty"
-msgstr "فيما إذا سيقبض الزر التركيز عند نقره بالفأرة"
-
 #: gtk/gtkcombobox.c:847
+msgid "Button Sensitivity"
+msgstr "حساسية الزر"
+
+#: gtk/gtkcombobox.c:848
+msgid "Whether the dropdown button is sensitive when the model is empty"
+msgstr "فيما إذا كان زر القائمة المنسدلة حساساً عندما يكون النموذج فارغاً"
+
+#: gtk/gtkcombobox.c:855
 msgid "Appears as list"
 msgstr "يظهر كقائمة"
 
-#: gtk/gtkcombobox.c:848
+#: gtk/gtkcombobox.c:856
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "فما إذا القوائم النازلة لصناديق المجموعات يجب أن تكون قوائم بسيطة عوض قوائم "
 "حاسوب"
 
-#: gtk/gtkcombobox.c:864
+#: gtk/gtkcombobox.c:872
 msgid "Arrow Size"
 msgstr "حجم السهم"
 
-#: gtk/gtkcombobox.c:865
+#: gtk/gtkcombobox.c:873
 msgid "The minimum size of the arrow in the combo box"
 msgstr "الحجم الأدنى للسهم في صندوق الإختيار"
 
-#: gtk/gtkcombobox.c:880 gtk/gtkentry.c:631 gtk/gtkhandlebox.c:174
-#: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:186 gtk/gtktoolbar.c:630
-#: gtk/gtkviewport.c:122
+#: gtk/gtkcombobox.c:888 gtk/gtkentry.c:787 gtk/gtkhandlebox.c:174
+#: gtk/gtkmenubar.c:194 gtk/gtkstatusbar.c:193 gtk/gtktoolbar.c:623
+#: gtk/gtkviewport.c:141
 msgid "Shadow type"
 msgstr "نوع الظل"
 
-#: gtk/gtkcombobox.c:881
+#: gtk/gtkcombobox.c:889
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "نوع الظل حول صندوق الإختيار"
 
-#: gtk/gtkcontainer.c:237
+#: gtk/gtkcontainer.c:238
 msgid "Resize mode"
 msgstr "نمط التحجيم"
 
-#: gtk/gtkcontainer.c:238
+#: gtk/gtkcontainer.c:239
 msgid "Specify how resize events are handled"
 msgstr "تحديد كيفية معالجة أحداث التحجيم"
 
-#: gtk/gtkcontainer.c:245
+#: gtk/gtkcontainer.c:246
 msgid "Border width"
 msgstr "عرض الحد"
 
-#: gtk/gtkcontainer.c:246
+#: gtk/gtkcontainer.c:247
 msgid "The width of the empty border outside the containers children"
 msgstr "عرض الحد الفارغ خارج أبناء الحاويات"
 
-#: gtk/gtkcontainer.c:254
+#: gtk/gtkcontainer.c:255
 msgid "Child"
 msgstr "ابن"
 
-#: gtk/gtkcontainer.c:255
+#: gtk/gtkcontainer.c:256
 msgid "Can be used to add a new child to the container"
 msgstr "يمكن استخدامه لإضافة ابن جديد للحاوي"
 
-#: gtk/gtkcurve.c:124
+#: gtk/gtkcurve.c:126
 msgid "Curve type"
 msgstr "نوع المنحنى"
 
-#: gtk/gtkcurve.c:125
+#: gtk/gtkcurve.c:127
 msgid "Is this curve linear, spline interpolated, or free-form"
 msgstr "هل هذا المنحنى خطي أو نقاط توجيه مستفات أو ذي شكل حر"
 
-#: gtk/gtkcurve.c:132
+#: gtk/gtkcurve.c:134
 msgid "Minimum X"
 msgstr "س الدنيا"
 
-#: gtk/gtkcurve.c:133
+#: gtk/gtkcurve.c:135
 msgid "Minimum possible value for X"
 msgstr "القيمة الممكنة الدنيا لـ س"
 
-#: gtk/gtkcurve.c:141
+#: gtk/gtkcurve.c:143
 msgid "Maximum X"
 msgstr "س الأقصى"
 
-#: gtk/gtkcurve.c:142
+#: gtk/gtkcurve.c:144
 msgid "Maximum possible X value"
 msgstr "القيمة القصوى الممكنة لـ س"
 
-#: gtk/gtkcurve.c:150
+#: gtk/gtkcurve.c:152
 msgid "Minimum Y"
 msgstr "ص الأدنى"
 
-#: gtk/gtkcurve.c:151
+#: gtk/gtkcurve.c:153
 msgid "Minimum possible value for Y"
 msgstr "القيمة الممكنة الدنيا لـ ص"
 
-#: gtk/gtkcurve.c:159
+#: gtk/gtkcurve.c:161
 msgid "Maximum Y"
 msgstr "ص الأقصى"
 
-#: gtk/gtkcurve.c:160
+#: gtk/gtkcurve.c:162
 msgid "Maximum possible value for Y"
 msgstr "القيمة الممكنة القصوى لـ ص"
 
-#: gtk/gtkdialog.c:144
+#: gtk/gtkdialog.c:145
 msgid "Has separator"
 msgstr "له فاصل"
 
-#: gtk/gtkdialog.c:145
+#: gtk/gtkdialog.c:146
 msgid "The dialog has a separator bar above its buttons"
 msgstr "للحوار عمود فاصل فوق أزراره"
 
-#: gtk/gtkdialog.c:190
+#: gtk/gtkdialog.c:191 gtk/gtkinfobar.c:439
 msgid "Content area border"
 msgstr "حد منطقة المحتوى"
 
-#: gtk/gtkdialog.c:191
+#: gtk/gtkdialog.c:192
 msgid "Width of border around the main dialog area"
 msgstr "عرض حد منطقة الحوار الرئيسية"
 
-#: gtk/gtkdialog.c:198
+#: gtk/gtkdialog.c:209 gtk/gtkinfobar.c:456
+#, fuzzy
+msgid "Content area spacing"
+msgstr "حشو المحتوى"
+
+#: gtk/gtkdialog.c:210
+#, fuzzy
+msgid "Spacing between elements of the main dialog area"
+msgstr "الفراغ بين نص القيمة ومنطقة المتزحلق/المنخفض"
+
+#: gtk/gtkdialog.c:217 gtk/gtkinfobar.c:472
 msgid "Button spacing"
 msgstr "فراغات الأزار"
 
-#: gtk/gtkdialog.c:199
+#: gtk/gtkdialog.c:218 gtk/gtkinfobar.c:473
 msgid "Spacing between buttons"
 msgstr "الفراغات بين الأزرار"
 
-#: gtk/gtkdialog.c:207
+#: gtk/gtkdialog.c:226 gtk/gtkinfobar.c:488
 msgid "Action area border"
 msgstr "حد منطقة العمل"
 
-#: gtk/gtkdialog.c:208
+#: gtk/gtkdialog.c:227
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "عرض حد منطقة الزر أسفل الصندوق"
 
-#: gtk/gtkentry.c:486 gtk/gtklabel.c:411
+#: gtk/gtkentry.c:634
+#, fuzzy
+msgid "Text Buffer"
+msgstr "ذاكرة وسيطة"
+
+#: gtk/gtkentry.c:635
+msgid "Text buffer object which actually stores entry text"
+msgstr ""
+
+#: gtk/gtkentry.c:642 gtk/gtklabel.c:601
 msgid "Cursor Position"
 msgstr "موقع المؤشر"
 
-#: gtk/gtkentry.c:487 gtk/gtklabel.c:412
+#: gtk/gtkentry.c:643 gtk/gtklabel.c:602
 msgid "The current position of the insertion cursor in chars"
 msgstr "الموقع الحالي لمؤشر الإدخال في الرموز"
 
-#: gtk/gtkentry.c:496 gtk/gtklabel.c:421
+#: gtk/gtkentry.c:652 gtk/gtklabel.c:611
 msgid "Selection Bound"
 msgstr "قيد المنتقى"
 
-#: gtk/gtkentry.c:497 gtk/gtklabel.c:422
+#: gtk/gtkentry.c:653 gtk/gtklabel.c:612
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "موقع النهاية المعكوسة للمنتقى من المؤشر في الرموز"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:663
 msgid "Whether the entry contents can be edited"
 msgstr "فيما إذا كانت محتويات الخانة قابلة للتحرير"
 
-#: gtk/gtkentry.c:514
+#: gtk/gtkentry.c:670 gtk/gtkentrybuffer.c:383
 msgid "Maximum length"
 msgstr "الارتفاع الأقصى"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:671 gtk/gtkentrybuffer.c:384
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "العدد الأقصى للرموز لهذا المدخل. صفر إذا لم يكن أقصى"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:679
 msgid "Visibility"
 msgstr "الرؤية"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:680
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "FALSE سيعرض \"الرمز المخفي\" بدلًا من النص الحالي (نمط كلمة السر)"
 
-#: gtk/gtkentry.c:532
+#: gtk/gtkentry.c:688
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE يحذف الحافة الخارجية من الخانة"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:696
 msgid ""
 "Border between text and frame. Overrides the inner-border style property"
 msgstr "الحد بين النص والاطار. تتجاوز خاصية أسلوب الحد-الداخلي"
 
-#: gtk/gtkentry.c:547
+#: gtk/gtkentry.c:703 gtk/gtkentry.c:1269
 msgid "Invisible character"
 msgstr "رمز مخفي"
 
-#: gtk/gtkentry.c:548
+#: gtk/gtkentry.c:704 gtk/gtkentry.c:1270
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "الرمز الذي سيستخدم لاخفاء محتويات الخانة (في \"نمط كلمة السر\")"
 
-#: gtk/gtkentry.c:555
+#: gtk/gtkentry.c:711
 msgid "Activates default"
 msgstr "تنشيط الافتراضات"
 
-#: gtk/gtkentry.c:556
+#: gtk/gtkentry.c:712
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2152,85 +2239,335 @@ msgstr ""
 "فيما اذا وجب تنشيط الودجة الافتراضية (مثل الزر الافتراضي في حوار ما)عند نقر "
 "زر الادخال"
 
-#: gtk/gtkentry.c:562
+#: gtk/gtkentry.c:718
 msgid "Width in chars"
 msgstr "العرض بالرموز"
 
-#: gtk/gtkentry.c:563
+#: gtk/gtkentry.c:719
 msgid "Number of characters to leave space for in the entry"
 msgstr "عدد الرموز التي ستترك لها فراغات في الخانة"
 
-#: gtk/gtkentry.c:572
+#: gtk/gtkentry.c:728
 msgid "Scroll offset"
 msgstr "تكافؤ اللف"
 
-#: gtk/gtkentry.c:573
+#: gtk/gtkentry.c:729
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "عدد بكسلات الخانة الملفوفة خارج الشاشة إلى اليسار"
 
-#: gtk/gtkentry.c:583
+#: gtk/gtkentry.c:739
 msgid "The contents of the entry"
 msgstr "محتويات الخانة"
 
-#: gtk/gtkentry.c:598 gtk/gtkmisc.c:73
+#: gtk/gtkentry.c:754 gtk/gtkmisc.c:73
 msgid "X align"
 msgstr "تنسيق س"
 
-#: gtk/gtkentry.c:599 gtk/gtkmisc.c:74
+#: gtk/gtkentry.c:755 gtk/gtkmisc.c:74
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr "الترصيف الأفقي، من 0 (يسار) إلى 1 (يمين). مقلوب لتصاميم RTL"
 
-#: gtk/gtkentry.c:615
+#: gtk/gtkentry.c:771
 msgid "Truncate multiline"
 msgstr "قطع السطور المتعددة"
 
-#: gtk/gtkentry.c:616
+#: gtk/gtkentry.c:772
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "ما إذا سيتم قطع نص ملصوق متعدد السطور إلى سطر واحد"
 
-#: gtk/gtkentry.c:632
+#: gtk/gtkentry.c:788
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "أي نوع من الظل المرسوم حول المدخل عند تحديد has-frame"
 
-#: gtk/gtkentry.c:647 gtk/gtktextview.c:648
+#: gtk/gtkentry.c:803 gtk/gtktextview.c:656
 msgid "Overwrite mode"
 msgstr "نسق التنميق"
 
-#: gtk/gtkentry.c:648
-#, fuzzy
+#: gtk/gtkentry.c:804
 msgid "Whether new text overwrites existing text"
-msgstr "فيما إذا سينمّق النص المدخل المحتويات الموجودة"
+msgstr "فيما إذا كان النص الجديد يكتب فوق النص الموجود"
 
-#: gtk/gtkentry.c:661
-#, fuzzy
+#: gtk/gtkentry.c:818 gtk/gtkentrybuffer.c:368
 msgid "Text length"
-msgstr "ترصيف س للنص"
+msgstr "طول النص"
 
-#: gtk/gtkentry.c:662
+#: gtk/gtkentry.c:819
 msgid "Length of the text currently in the entry"
+msgstr "طول النص الموجود حالياً في المُدخل"
+
+#: gtk/gtkentry.c:834
+#, fuzzy
+msgid "Invisible char set"
+msgstr "تعيين غير المرئية"
+
+#: gtk/gtkentry.c:835
+#, fuzzy
+msgid "Whether the invisible char has been set"
+msgstr "فيما إذا كتم تحديد  icon-size"
+
+#: gtk/gtkentry.c:853
+msgid "Caps Lock warning"
 msgstr ""
 
+#: gtk/gtkentry.c:854
+msgid "Whether password entries will show a warning when Caps Lock is on"
+msgstr ""
+
+#: gtk/gtkentry.c:868
+#, fuzzy
+msgid "Progress Fraction"
+msgstr "جزء"
+
+#: gtk/gtkentry.c:869
+#, fuzzy
+msgid "The current fraction of the task that's been completed"
+msgstr "جزء من العمل الذي تم"
+
+#: gtk/gtkentry.c:886
+#, fuzzy
+msgid "Progress Pulse Step"
+msgstr "خطوة النبض"
+
+#: gtk/gtkentry.c:887
+#, fuzzy
+msgid ""
+"The fraction of total entry width to move the progress bouncing block for "
+"each call to gtk_entry_progress_pulse()"
+msgstr "جزء التقدم الكلي لتحريك الكتلة القافزة عند النبض"
+
+#: gtk/gtkentry.c:903
+#, fuzzy
+msgid "Primary pixbuf"
+msgstr "بكسبف"
+
+#: gtk/gtkentry.c:904
+#, fuzzy
+msgid "Primary pixbuf for the entry"
+msgstr "بيكسبف للموسع المفتوح"
+
+#: gtk/gtkentry.c:918
+#, fuzzy
+msgid "Secondary pixbuf"
+msgstr "النص الثانوي"
+
+#: gtk/gtkentry.c:919
+#, fuzzy
+msgid "Secondary pixbuf for the entry"
+msgstr "متخطي التقدم الثانوي"
+
 #: gtk/gtkentry.c:933
+msgid "Primary stock ID"
+msgstr ""
+
+#: gtk/gtkentry.c:934
+msgid "Stock ID for primary icon"
+msgstr ""
+
+#: gtk/gtkentry.c:948
+#, fuzzy
+msgid "Secondary stock ID"
+msgstr "النص الثانوي"
+
+#: gtk/gtkentry.c:949
+msgid "Stock ID for secondary icon"
+msgstr ""
+
+#: gtk/gtkentry.c:963
+#, fuzzy
+msgid "Primary icon name"
+msgstr "قائمة أسماء الإيقونات"
+
+#: gtk/gtkentry.c:964
+msgid "Icon name for primary icon"
+msgstr ""
+
+#: gtk/gtkentry.c:978
+#, fuzzy
+msgid "Secondary icon name"
+msgstr "النص الثانوي"
+
+#: gtk/gtkentry.c:979
+msgid "Icon name for secondary icon"
+msgstr ""
+
+#: gtk/gtkentry.c:993
+msgid "Primary GIcon"
+msgstr ""
+
+#: gtk/gtkentry.c:994
+#, fuzzy
+msgid "GIcon for primary icon"
+msgstr "أيقونة لهذه النافذة"
+
+#: gtk/gtkentry.c:1008
+#, fuzzy
+msgid "Secondary GIcon"
+msgstr "ثانوي"
+
+#: gtk/gtkentry.c:1009
+msgid "GIcon for secondary icon"
+msgstr ""
+
+#: gtk/gtkentry.c:1023
+#, fuzzy
+msgid "Primary storage type"
+msgstr "نوع التخزين"
+
+#: gtk/gtkentry.c:1024
+#, fuzzy
+msgid "The representation being used for primary icon"
+msgstr "التقديم المستعمل لبيانات الرسوم"
+
+#: gtk/gtkentry.c:1039
+#, fuzzy
+msgid "Secondary storage type"
+msgstr "متخطي التقدم الثانوي"
+
+#: gtk/gtkentry.c:1040
+#, fuzzy
+msgid "The representation being used for secondary icon"
+msgstr "التقديم المستعمل لبيانات الرسوم"
+
+#: gtk/gtkentry.c:1061
+msgid "Primary icon activatable"
+msgstr ""
+
+#: gtk/gtkentry.c:1062
+#, fuzzy
+msgid "Whether the primary icon is activatable"
+msgstr "فيما إذا كانت العملية مفعلة."
+
+#: gtk/gtkentry.c:1082
+#, fuzzy
+msgid "Secondary icon activatable"
+msgstr "مؤشر ا?دخال الثانوي"
+
+#: gtk/gtkentry.c:1083
+#, fuzzy
+msgid "Whether the secondary icon is activatable"
+msgstr "فيما إذا كانت العملية مفعلة."
+
+#: gtk/gtkentry.c:1105
+#, fuzzy
+msgid "Primary icon sensitive"
+msgstr "عرض حساسية الخلية"
+
+#: gtk/gtkentry.c:1106
+#, fuzzy
+msgid "Whether the primary icon is sensitive"
+msgstr "فيما إذا كان تطابق عناصر القائمة حساس للحالة"
+
+#: gtk/gtkentry.c:1127
+#, fuzzy
+msgid "Secondary icon sensitive"
+msgstr "النص الثانوي"
+
+#: gtk/gtkentry.c:1128
+#, fuzzy
+msgid "Whether the secondary icon is sensitive"
+msgstr "فيما إذا كانت العملية مفعلة."
+
+#: gtk/gtkentry.c:1144
+#, fuzzy
+msgid "Primary icon tooltip text"
+msgstr "عرض حساسية الخلية"
+
+#: gtk/gtkentry.c:1145 gtk/gtkentry.c:1181
+#, fuzzy
+msgid "The contents of the tooltip on the primary icon"
+msgstr "نص تلميحة لهذه الودجة"
+
+#: gtk/gtkentry.c:1161
+#, fuzzy
+msgid "Secondary icon tooltip text"
+msgstr "مؤشر ا?دخال الثانوي"
+
+#: gtk/gtkentry.c:1162 gtk/gtkentry.c:1200
+#, fuzzy
+msgid "The contents of the tooltip on the secondary icon"
+msgstr "نص تلميحة لهذه الودجة"
+
+#: gtk/gtkentry.c:1180
+#, fuzzy
+msgid "Primary icon tooltip markup"
+msgstr "قائمة أسماء الإيقونات"
+
+#: gtk/gtkentry.c:1199
+#, fuzzy
+msgid "Secondary icon tooltip markup"
+msgstr "النص الثانوي"
+
+#: gtk/gtkentry.c:1219 gtk/gtktextview.c:684
+#, fuzzy
+msgid "IM module"
+msgstr "وحدة IM الإفتراضية"
+
+#: gtk/gtkentry.c:1220 gtk/gtktextview.c:685
+#, fuzzy
+msgid "Which IM module should be used"
+msgstr "وحدة IM الإفتراضية"
+
+#: gtk/gtkentry.c:1234
+#, fuzzy
+msgid "Icon Prelight"
+msgstr "الارتفاع"
+
+#: gtk/gtkentry.c:1235
+#, fuzzy
+msgid "Whether activatable icons should prelight when hovered"
+msgstr "فيما إذا كان سيتم عرض الألسنة أم لا"
+
+#: gtk/gtkentry.c:1248
+#, fuzzy
+msgid "Progress Border"
+msgstr "حد منخفض"
+
+#: gtk/gtkentry.c:1249
+#, fuzzy
+msgid "Border around the progress bar"
+msgstr "النص على عمود التقدم"
+
+#: gtk/gtkentry.c:1741
 msgid "Border between text and frame."
 msgstr "الحد بين النص والاطار."
 
-#: gtk/gtkentry.c:938 gtk/gtklabel.c:644
+#: gtk/gtkentry.c:1755
+#, fuzzy
+msgid "State Hint"
+msgstr "نص الحالة"
+
+#: gtk/gtkentry.c:1756
+#, fuzzy
+msgid "Whether to pass a proper state when drawing shadow or background"
+msgstr "صورة بيتماب المستخدمة كغلاف أثناء رسم الواجهة الخلفية للنص"
+
+#: gtk/gtkentry.c:1761 gtk/gtklabel.c:858
 msgid "Select on focus"
 msgstr "اختيار عند التركيز"
 
-#: gtk/gtkentry.c:939
+#: gtk/gtkentry.c:1762
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "فيما اذا سيقع انتقاء محتويات خانة عند تركيزها"
 
-#: gtk/gtkentry.c:953
+#: gtk/gtkentry.c:1776
 msgid "Password Hint Timeout"
 msgstr "مدة عرض تلميحة كلمة السر"
 
-#: gtk/gtkentry.c:954
+#: gtk/gtkentry.c:1777
 msgid "How long to show the last input character in hidden entries"
 msgstr "مدة ظهور الحرف المدخل الأخير في المداخل المخفية"
+
+#: gtk/gtkentrybuffer.c:354
+#, fuzzy
+msgid "The contents of the buffer"
+msgstr "محتويات الخانة"
+
+#: gtk/gtkentrybuffer.c:369
+#, fuzzy
+msgid "Length of the text currently in the buffer"
+msgstr "طول النص الموجود حالياً في المُدخل"
 
 #: gtk/gtkentrycompletion.c:279
 msgid "Completion Model"
@@ -2248,7 +2585,7 @@ msgstr "الطول الأدنى للمفتاح"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "الطول الأدنى لمفتاح البحث حتى يمكن البحث عن المتطابقات"
 
-#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:587
+#: gtk/gtkentrycompletion.c:303 gtk/gtkiconview.c:586
 msgid "Text column"
 msgstr "عمود النص"
 
@@ -2332,11 +2669,11 @@ msgstr "فيما إذا وقع فتح الموسع للكشف عن الودجة 
 msgid "Text of the expander's label"
 msgstr "نص شارة الموسع"
 
-#: gtk/gtkexpander.c:211 gtk/gtklabel.c:330
+#: gtk/gtkexpander.c:211 gtk/gtklabel.c:520
 msgid "Use markup"
 msgstr "استخدام التعليم"
 
-#: gtk/gtkexpander.c:212 gtk/gtklabel.c:331
+#: gtk/gtkexpander.c:212 gtk/gtklabel.c:521
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "نص الشارة يحوي تعليم XML. راجع pango_parse_markup()"
 
@@ -2344,7 +2681,8 @@ msgstr "نص الشارة يحوي تعليم XML. راجع pango_parse_markup()
 msgid "Space to put between the label and the child"
 msgstr "الفضاء الذي سيوضع بين الشارة و الإبن"
 
-#: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:194
+#: gtk/gtkexpander.c:229 gtk/gtkframe.c:147 gtk/gtktoolbutton.c:218
+#: gtk/gtktoolitemgroup.c:1550
 msgid "Label widget"
 msgstr "ودجة الشارة"
 
@@ -2352,11 +2690,11 @@ msgstr "ودجة الشارة"
 msgid "A widget to display in place of the usual expander label"
 msgstr "الودجة التي ستعرض عوض شارة الموسع الاعتادية"
 
-#: gtk/gtkexpander.c:236 gtk/gtktreeview.c:783
+#: gtk/gtkexpander.c:236 gtk/gtktoolitemgroup.c:1578 gtk/gtktreeview.c:777
 msgid "Expander Size"
 msgstr "حجم الموسع"
 
-#: gtk/gtkexpander.c:237 gtk/gtktreeview.c:784
+#: gtk/gtkexpander.c:237 gtk/gtktoolitemgroup.c:1579 gtk/gtktreeview.c:778
 msgid "Size of the expander arrow"
 msgstr "حجم سهم الموسع"
 
@@ -2364,95 +2702,109 @@ msgstr "حجم سهم الموسع"
 msgid "Spacing around expander arrow"
 msgstr "الفراغات حول سهم الموسع"
 
-#: gtk/gtkfilechooser.c:194
+#: gtk/gtkfilechooser.c:759
 msgid "Action"
 msgstr "عملية"
 
-#: gtk/gtkfilechooser.c:195
+#: gtk/gtkfilechooser.c:760
 msgid "The type of operation that the file selector is performing"
 msgstr "نوع العملية التي يقوم بها منتقي الملفات"
 
-#: gtk/gtkfilechooser.c:201
+#: gtk/gtkfilechooser.c:766
 msgid "File System Backend"
 msgstr "خلفية نظام الملفات"
 
-#: gtk/gtkfilechooser.c:202
+#: gtk/gtkfilechooser.c:767
 msgid "Name of file system backend to use"
 msgstr "اسم خلفية نظام الملفات التي ستستخدم"
 
-#: gtk/gtkfilechooser.c:207 gtk/gtkrecentchooser.c:252
+#: gtk/gtkfilechooser.c:772 gtk/gtkrecentchooser.c:264
 msgid "Filter"
 msgstr "مرشح"
 
-#: gtk/gtkfilechooser.c:208
+#: gtk/gtkfilechooser.c:773
 msgid "The current filter for selecting which files are displayed"
 msgstr "المرشح الحالي لانتقاء الملفات للعرض"
 
-#: gtk/gtkfilechooser.c:213
+#: gtk/gtkfilechooser.c:778
 msgid "Local Only"
 msgstr "المحلي فقط"
 
-#: gtk/gtkfilechooser.c:214
+#: gtk/gtkfilechooser.c:779
 msgid "Whether the selected file(s) should be limited to local file: URLs"
 msgstr "فيما إذا سيقع حد الملفات المنتقات للملف المحلي: العناوين"
 
-#: gtk/gtkfilechooser.c:219
+#: gtk/gtkfilechooser.c:784
 msgid "Preview widget"
 msgstr "ودجة التلميح"
 
-#: gtk/gtkfilechooser.c:220
+#: gtk/gtkfilechooser.c:785
 msgid "Application supplied widget for custom previews."
 msgstr "ودجة ممدّدة بتطبيق للتلميحات الخاصّة."
 
-#: gtk/gtkfilechooser.c:225
+#: gtk/gtkfilechooser.c:790
 msgid "Preview Widget Active"
 msgstr "ودجة التلميح نشطة"
 
-#: gtk/gtkfilechooser.c:226
+#: gtk/gtkfilechooser.c:791
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr "فيما إذا ستعرض الودجة الممدّدة بتطبيق للتلميحات الخاصّة."
 
-#: gtk/gtkfilechooser.c:231
+#: gtk/gtkfilechooser.c:796
 msgid "Use Preview Label"
 msgstr "استخدام علامة المعاينة"
 
-#: gtk/gtkfilechooser.c:232
+#: gtk/gtkfilechooser.c:797
 msgid "Whether to display a stock label with the name of the previewed file."
 msgstr "فيما إذا ستعرض علامة مخزونة مع أسم الملف المعاين."
 
-#: gtk/gtkfilechooser.c:237
+#: gtk/gtkfilechooser.c:802
 msgid "Extra widget"
 msgstr "ودجة اضافية"
 
-#: gtk/gtkfilechooser.c:238
+#: gtk/gtkfilechooser.c:803
 msgid "Application supplied widget for extra options."
 msgstr "ودجة ممدّدة بتطبيق للخيارات الإضافيّة."
 
-#: gtk/gtkfilechooser.c:243 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:191
+#: gtk/gtkfilechooser.c:808 gtk/gtkfilesel.c:540 gtk/gtkrecentchooser.c:203
 msgid "Select Multiple"
 msgstr "إنتقاء متعدّد"
 
-#: gtk/gtkfilechooser.c:244 gtk/gtkfilesel.c:541
+#: gtk/gtkfilechooser.c:809 gtk/gtkfilesel.c:541
 msgid "Whether to allow multiple files to be selected"
 msgstr "ما إذا سيتم السماح بانتقاء ملفات متعددة"
 
-#: gtk/gtkfilechooser.c:250
+#: gtk/gtkfilechooser.c:815
 msgid "Show Hidden"
 msgstr "اظهار المخفي"
 
-#: gtk/gtkfilechooser.c:251
+#: gtk/gtkfilechooser.c:816
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "فيما اذا وجب عرض الملفات و الدلائل المخفية"
 
-#: gtk/gtkfilechooser.c:266
+#: gtk/gtkfilechooser.c:831
 msgid "Do overwrite confirmation"
 msgstr "تأكيد الكتابة الفوقية"
 
-#: gtk/gtkfilechooser.c:267
+#: gtk/gtkfilechooser.c:832
 msgid ""
 "Whether a file chooser in save mode will present an overwrite confirmation "
 "dialog if necessary."
+msgstr ""
+"اذا كان حوار اختيار الملف في حالة الحفظ سيعرض سؤال لتأكيد الكتابة الفوقية ان "
+"كان ذلك مطلوبا."
+
+#: gtk/gtkfilechooser.c:848
+#, fuzzy
+msgid "Allow folders creation"
+msgstr "إظهار عمليات الملفات"
+
+#: gtk/gtkfilechooser.c:849
+#, fuzzy
+msgid ""
+"Whether a file chooser not in open mode will offer the user to create new "
+"folders."
 msgstr ""
 "اذا كان حوار اختيار الملف في حالة الحفظ سيعرض سؤال لتأكيد الكتابة الفوقية ان "
 "كان ذلك مطلوبا."
@@ -2473,8 +2825,8 @@ msgstr "عنوان لحوار تصفّح الملفات."
 msgid "The desired width of the button widget, in characters."
 msgstr "العرض المطلوب لودجة الزر، بالمحارف"
 
-#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:163 gtk/gtkrecentmanager.c:214
-#: gtk/gtkstatusicon.c:194
+#: gtk/gtkfilesel.c:526 gtk/gtkimage.c:254 gtk/gtkrecentmanager.c:214
+#: gtk/gtkstatusicon.c:221
 msgid "Filename"
 msgstr "اسم الملف"
 
@@ -2490,19 +2842,19 @@ msgstr "إظهار عمليات الملفات"
 msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "فيم اذا وجب عرض أزرار لإنشاء أو معالجة الملفات"
 
-#: gtk/gtkfixed.c:90 gtk/gtklayout.c:596
+#: gtk/gtkfixed.c:90 gtk/gtklayout.c:597
 msgid "X position"
 msgstr "موقع س"
 
-#: gtk/gtkfixed.c:91 gtk/gtklayout.c:597
+#: gtk/gtkfixed.c:91 gtk/gtklayout.c:598
 msgid "X position of child widget"
 msgstr "موقع س للودجة الابنة"
 
-#: gtk/gtkfixed.c:100 gtk/gtklayout.c:606
+#: gtk/gtkfixed.c:100 gtk/gtklayout.c:607
 msgid "Y position"
 msgstr "موقع ص"
 
-#: gtk/gtkfixed.c:101 gtk/gtklayout.c:607
+#: gtk/gtkfixed.c:101 gtk/gtklayout.c:608
 msgid "Y position of child widget"
 msgstr "موقع ص للودجة الابنة"
 
@@ -2510,7 +2862,7 @@ msgstr "موقع ص للودجة الابنة"
 msgid "The title of the font selection dialog"
 msgstr "عنوان حوار انتقاء الخطوط"
 
-#: gtk/gtkfontbutton.c:158 gtk/gtkfontsel.c:181
+#: gtk/gtkfontbutton.c:158 gtk/gtkfontsel.c:196
 msgid "Font name"
 msgstr "اسم الخط"
 
@@ -2554,19 +2906,19 @@ msgstr "اظهار الحجم"
 msgid "Whether selected font size is shown in the label"
 msgstr "فيما إذا سيعرض حجم الخط المنتقى في العلامة"
 
-#: gtk/gtkfontsel.c:182
+#: gtk/gtkfontsel.c:197
 msgid "The string that represents this font"
 msgstr "المقطع الذي يمثِّل هذا الخط"
 
-#: gtk/gtkfontsel.c:189
+#: gtk/gtkfontsel.c:204
 msgid "The GdkFont that is currently selected"
 msgstr "خط Gdk المنتقى حاليًا"
 
-#: gtk/gtkfontsel.c:195
+#: gtk/gtkfontsel.c:210
 msgid "Preview text"
 msgstr "نص اللمحة"
 
-#: gtk/gtkfontsel.c:196
+#: gtk/gtkfontsel.c:211
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "النص الذي سيعرض لتقديم الخط المنتقى"
 
@@ -2640,240 +2992,287 @@ msgstr "فيما إذا ستستخدم القيمة من خاصيّة snap_edge 
 
 #: gtk/gtkhandlebox.c:209
 msgid "Child Detached"
-msgstr ""
+msgstr "الابن منفصل"
 
 #: gtk/gtkhandlebox.c:210
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
-msgstr ""
+msgstr "قيمة منطقية تحدد فيما إذا كان صندوق المداولة للابن متصل أو منفصل."
 
-#: gtk/gtkiconview.c:550
+#: gtk/gtkiconview.c:549
 msgid "Selection mode"
 msgstr "نمط الانتقاء"
 
-#: gtk/gtkiconview.c:551
+#: gtk/gtkiconview.c:550
 msgid "The selection mode"
 msgstr "نمط الانتقاء"
 
-#: gtk/gtkiconview.c:569
+#: gtk/gtkiconview.c:568
 msgid "Pixbuf column"
 msgstr "عمود Pixbuf"
 
-#: gtk/gtkiconview.c:570
+#: gtk/gtkiconview.c:569
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "نموذج العمود المستخدم لاستعادة ايقونة pixbuf"
 
-#: gtk/gtkiconview.c:588
+#: gtk/gtkiconview.c:587
 msgid "Model column used to retrieve the text from"
 msgstr "نموذج العمود المستخدم لاستعادة النص"
 
-#: gtk/gtkiconview.c:607
+#: gtk/gtkiconview.c:606
 msgid "Markup column"
 msgstr "عمود الترميز"
 
-#: gtk/gtkiconview.c:608
+#: gtk/gtkiconview.c:607
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "نموذج العمود المستخدم لاستعادة النص اذا تم استخدام ترميز بانغو"
 
-#: gtk/gtkiconview.c:615
+#: gtk/gtkiconview.c:614
 msgid "Icon View Model"
 msgstr "نمط عرض الأيقونات"
 
-#: gtk/gtkiconview.c:616
+#: gtk/gtkiconview.c:615
 msgid "The model for the icon view"
 msgstr "نمط عرض الأيقونات"
 
-#: gtk/gtkiconview.c:632
+#: gtk/gtkiconview.c:631
 msgid "Number of columns"
 msgstr "عدد الأعمدة"
 
-#: gtk/gtkiconview.c:633
+#: gtk/gtkiconview.c:632
 msgid "Number of columns to display"
 msgstr "عدد الأعمدة المعروضة"
 
-#: gtk/gtkiconview.c:650
+#: gtk/gtkiconview.c:649
 msgid "Width for each item"
 msgstr "عرض كل عنصر"
 
-#: gtk/gtkiconview.c:651
+#: gtk/gtkiconview.c:650
 msgid "The width used for each item"
 msgstr "عرض كل عنصر"
 
-#: gtk/gtkiconview.c:667
+#: gtk/gtkiconview.c:666
 msgid "Space which is inserted between cells of an item"
 msgstr "الفراغ بين خلايا العنصر"
 
-#: gtk/gtkiconview.c:682
+#: gtk/gtkiconview.c:681
 msgid "Row Spacing"
 msgstr "فراغات السطور"
 
-#: gtk/gtkiconview.c:683
+#: gtk/gtkiconview.c:682
 msgid "Space which is inserted between grid rows"
 msgstr "الفراغ المدرج بين صفوف الشبكة"
 
-#: gtk/gtkiconview.c:698
+#: gtk/gtkiconview.c:697
 msgid "Column Spacing"
 msgstr "فراغات العمود"
 
-#: gtk/gtkiconview.c:699
+#: gtk/gtkiconview.c:698
 msgid "Space which is inserted between grid columns"
 msgstr "الفراغ المدرج بين أعمدة الشبكة"
 
-#: gtk/gtkiconview.c:714
+#: gtk/gtkiconview.c:713
 msgid "Margin"
 msgstr "الحاشية"
 
-#: gtk/gtkiconview.c:715
+#: gtk/gtkiconview.c:714
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "الفراغ الملحق عند حدود الأيقونات"
 
-#: gtk/gtkiconview.c:732
+#: gtk/gtkiconview.c:730
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "كيفية وضع نص و أيقون كل عنصر بالنسبة لبعضهما"
 
-#: gtk/gtkiconview.c:748 gtk/gtktreeview.c:618 gtk/gtktreeviewcolumn.c:307
+#: gtk/gtkiconview.c:746 gtk/gtktreeview.c:612 gtk/gtktreeviewcolumn.c:308
 msgid "Reorderable"
 msgstr "قابل لإعادة الترتيب"
 
-#: gtk/gtkiconview.c:749 gtk/gtktreeview.c:619
+#: gtk/gtkiconview.c:747 gtk/gtktreeview.c:613
 msgid "View is reorderable"
 msgstr "العرض قابل لإعادة الترتيب"
 
-#: gtk/gtkiconview.c:756 gtk/gtktreeview.c:769
+#: gtk/gtkiconview.c:754 gtk/gtktreeview.c:763
 msgid "Tooltip Column"
 msgstr "عمود التلميحات"
 
-#: gtk/gtkiconview.c:757
+#: gtk/gtkiconview.c:755
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "عمود النموذج المحتوي على التلميحات للعناصر."
 
-#: gtk/gtkiconview.c:768
+#: gtk/gtkiconview.c:772
+#, fuzzy
+msgid "Item Padding"
+msgstr "الحشو الأسفل"
+
+#: gtk/gtkiconview.c:773
+msgid "Padding around icon view items"
+msgstr ""
+
+#: gtk/gtkiconview.c:782
 msgid "Selection Box Color"
 msgstr "لون علبة الإختيار"
 
-#: gtk/gtkiconview.c:769
+#: gtk/gtkiconview.c:783
 msgid "Color of the selection box"
 msgstr "لون صندوق الإختيار"
 
-#: gtk/gtkiconview.c:775
+#: gtk/gtkiconview.c:789
 msgid "Selection Box Alpha"
 msgstr "ألفا علبة الإختيار"
 
-#: gtk/gtkiconview.c:776
+#: gtk/gtkiconview.c:790
 msgid "Opacity of the selection box"
 msgstr "شفافية علبة الإختيار"
 
-#: gtk/gtkimage.c:131 gtk/gtkstatusicon.c:186
+#: gtk/gtkimage.c:222 gtk/gtkstatusicon.c:213
 msgid "Pixbuf"
 msgstr "بكسبف"
 
-#: gtk/gtkimage.c:132 gtk/gtkstatusicon.c:187
+#: gtk/gtkimage.c:223 gtk/gtkstatusicon.c:214
 msgid "A GdkPixbuf to display"
 msgstr "GdkPixbuf لعرضه"
 
-#: gtk/gtkimage.c:139
+#: gtk/gtkimage.c:230
 msgid "Pixmap"
 msgstr "بكسماب"
 
-#: gtk/gtkimage.c:140
+#: gtk/gtkimage.c:231
 msgid "A GdkPixmap to display"
 msgstr "GdkPixmap لعرضها"
 
-#: gtk/gtkimage.c:147 gtk/gtkmessagedialog.c:215
+#: gtk/gtkimage.c:238 gtk/gtkmessagedialog.c:262
 msgid "Image"
 msgstr "صورة"
 
-#: gtk/gtkimage.c:148
+#: gtk/gtkimage.c:239
 msgid "A GdkImage to display"
 msgstr "GdkImage لعرضها"
 
-#: gtk/gtkimage.c:155
+#: gtk/gtkimage.c:246
 msgid "Mask"
 msgstr "غلاف"
 
-#: gtk/gtkimage.c:156
+#: gtk/gtkimage.c:247
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "بيتماب الغلاف لاستخدامه مع GdkImage أو GdkPixmap"
 
-#: gtk/gtkimage.c:164 gtk/gtkstatusicon.c:195
+#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:222
 msgid "Filename to load and display"
 msgstr "اسم الملف للتحميل و العرض"
 
-#: gtk/gtkimage.c:173 gtk/gtkstatusicon.c:203
+#: gtk/gtkimage.c:264 gtk/gtkstatusicon.c:230
 msgid "Stock ID for a stock image to display"
 msgstr "هوية المخزون لصورة مخزون للعرض"
 
-#: gtk/gtkimage.c:180
+#: gtk/gtkimage.c:271
 msgid "Icon set"
 msgstr "مجموعة الأيقونات"
 
-#: gtk/gtkimage.c:181
+#: gtk/gtkimage.c:272
 msgid "Icon set to display"
 msgstr "مجموعة الأيقونات للعرض"
 
-#: gtk/gtkimage.c:188 gtk/gtkscalebutton.c:210 gtk/gtktoolbar.c:547
+#: gtk/gtkimage.c:279 gtk/gtkscalebutton.c:216 gtk/gtktoolbar.c:540
+#: gtk/gtktoolpalette.c:991
 msgid "Icon size"
 msgstr "حجم الأيقونة"
 
-#: gtk/gtkimage.c:189
+#: gtk/gtkimage.c:280
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr "الحجم الرمزي للأيقونة, مجموعة الأيقونات أو الأيقون المسمى"
 
-#: gtk/gtkimage.c:205
+#: gtk/gtkimage.c:296
 msgid "Pixel size"
 msgstr "حجم البكسل"
 
-#: gtk/gtkimage.c:206
+#: gtk/gtkimage.c:297
 msgid "Pixel size to use for named icon"
 msgstr "حجم البكسل المستعمل للأيقونة المسماة"
 
-#: gtk/gtkimage.c:214
+#: gtk/gtkimage.c:305
 msgid "Animation"
 msgstr "رسوم متحركة"
 
-#: gtk/gtkimage.c:215
+#: gtk/gtkimage.c:306
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation لعرضها"
 
-#: gtk/gtkimage.c:255 gtk/gtkstatusicon.c:234
+#: gtk/gtkimage.c:346 gtk/gtkstatusicon.c:261
 msgid "Storage type"
 msgstr "نوع التخزين"
 
-#: gtk/gtkimage.c:256 gtk/gtkstatusicon.c:235
+#: gtk/gtkimage.c:347 gtk/gtkstatusicon.c:262
 msgid "The representation being used for image data"
 msgstr "التقديم المستعمل لبيانات الرسوم"
 
-#: gtk/gtkimagemenuitem.c:101
+#: gtk/gtkimagemenuitem.c:136
 msgid "Child widget to appear next to the menu text"
 msgstr "الودجة الابن التي ستظهر إلى جانب نص القائمة"
 
-#: gtk/gtkimagemenuitem.c:106
+#: gtk/gtkimagemenuitem.c:151
+#, fuzzy
+msgid "Whether to use the label text to create a stock menu item"
+msgstr "فيما اذا كان من الممكن انتقاء نص الشارة بالفأرة"
+
+#: gtk/gtkimagemenuitem.c:184 gtk/gtkmenu.c:522
+msgid "Accel Group"
+msgstr "مجموعة Accel"
+
+#: gtk/gtkimagemenuitem.c:185
+#, fuzzy
+msgid "The Accel Group to use for stock accelerator keys"
+msgstr "المنهي الذي سيعرض لتغييرات مفتاح الإختصار"
+
+#: gtk/gtkimagemenuitem.c:190
 msgid "Show menu images"
 msgstr "اظهار صور القوائم"
 
-#: gtk/gtkimagemenuitem.c:107
+#: gtk/gtkimagemenuitem.c:191
 msgid "Whether images should be shown in menus"
 msgstr "فيما إذا سيتم إظهار صور في القوائم"
 
-#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:601
+#: gtk/gtkinfobar.c:384 gtk/gtkmessagedialog.c:175
+msgid "Message Type"
+msgstr "نوع الرسالة"
+
+#: gtk/gtkinfobar.c:385 gtk/gtkmessagedialog.c:176
+msgid "The type of message"
+msgstr "نوع الرسالة"
+
+#: gtk/gtkinfobar.c:440
+#, fuzzy
+msgid "Width of border around the content area"
+msgstr "عرض حد منطقة الحوار الرئيسية"
+
+#: gtk/gtkinfobar.c:457
+#, fuzzy
+msgid "Spacing between elements of the area"
+msgstr "الفراغ بين نص القيمة ومنطقة المتزحلق/المنخفض"
+
+#: gtk/gtkinfobar.c:489
+#, fuzzy
+msgid "Width of border around the action area"
+msgstr "عرض حد منطقة الحوار الرئيسية"
+
+#: gtk/gtkinvisible.c:87 gtk/gtkwindow.c:627
 msgid "The screen where this window will be displayed"
 msgstr "الشاشة التي ستعرض فيها هذه النافذة"
 
-#: gtk/gtklabel.c:317
+#: gtk/gtklabel.c:507
 msgid "The text of the label"
 msgstr "نص الشارة"
 
-#: gtk/gtklabel.c:324
+#: gtk/gtklabel.c:514
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "قائمة لصفات الأساليب لتطبيقها على نص العلامة"
 
-#: gtk/gtklabel.c:345 gtk/gtktexttag.c:359 gtk/gtktextview.c:585
+#: gtk/gtklabel.c:535 gtk/gtktexttag.c:359 gtk/gtktextview.c:593
 msgid "Justification"
 msgstr "ضبط"
 
-#: gtk/gtklabel.c:346
+#: gtk/gtklabel.c:536
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2882,57 +3281,57 @@ msgstr ""
 "ترصيف السطور في نص العلامة بالنسبة لبعضها البعض. لا يؤثّر هذا في ترصيف "
 "العلامة نفسها في مكانها المخصص لها. راجع GtkMisc::xalign للمزيد من العملومات"
 
-#: gtk/gtklabel.c:354
+#: gtk/gtklabel.c:544
 msgid "Pattern"
 msgstr "نمط"
 
-#: gtk/gtklabel.c:355
+#: gtk/gtklabel.c:545
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
 msgstr "سلسلة برموز _ في مواقع معينة يرمز لرموز ستسطّر في النص"
 
-#: gtk/gtklabel.c:362
+#: gtk/gtklabel.c:552
 msgid "Line wrap"
 msgstr "لف السطور"
 
-#: gtk/gtklabel.c:363
+#: gtk/gtklabel.c:553
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "اذا ضبط، فستلف السطور عندما يصبح النص واسعا جدا"
 
-#: gtk/gtklabel.c:378
+#: gtk/gtklabel.c:568
 msgid "Line wrap mode"
 msgstr "نسق نظام الالتواء"
 
-#: gtk/gtklabel.c:379
+#: gtk/gtklabel.c:569
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "اذا كان اللف مفعّلا، التحكم في كيفية لف السطر."
 
-#: gtk/gtklabel.c:386
+#: gtk/gtklabel.c:576
 msgid "Selectable"
 msgstr "قابل للاختيار"
 
-#: gtk/gtklabel.c:387
+#: gtk/gtklabel.c:577
 msgid "Whether the label text can be selected with the mouse"
 msgstr "فيما اذا كان من الممكن انتقاء نص الشارة بالفأرة"
 
-#: gtk/gtklabel.c:393
+#: gtk/gtklabel.c:583
 msgid "Mnemonic key"
 msgstr "مفتاح الإختصار المسطّر"
 
-#: gtk/gtklabel.c:394
+#: gtk/gtklabel.c:584
 msgid "The mnemonic accelerator key for this label"
 msgstr "مفتاح الإختصار المسطر لهذه العلامة"
 
-#: gtk/gtklabel.c:402
+#: gtk/gtklabel.c:592
 msgid "Mnemonic widget"
 msgstr "ودجة مفتاح الإختصار المسطر"
 
-#: gtk/gtklabel.c:403
+#: gtk/gtklabel.c:593
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "الودجة التي ستفعل عند نقر مفتاح الإختصار المسطر"
 
-#: gtk/gtklabel.c:449
+#: gtk/gtklabel.c:639
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -2940,236 +3339,257 @@ msgstr ""
 "المكان المفضل لوضع القطع في النص، إذا كانت التسمية لا تملك المكان الكافي "
 "لعرض كل النص"
 
-#: gtk/gtklabel.c:489
+#: gtk/gtklabel.c:679
 msgid "Single Line Mode"
 msgstr "نمط سطر وحيد"
 
-#: gtk/gtklabel.c:490
+#: gtk/gtklabel.c:680
 msgid "Whether the label is in single line mode"
 msgstr "فيما إذا كانت العلامة في نمط السطر الوحيد"
 
-#: gtk/gtklabel.c:507
+#: gtk/gtklabel.c:697
 msgid "Angle"
 msgstr "الزاويه"
 
-#: gtk/gtklabel.c:508
+#: gtk/gtklabel.c:698
 msgid "Angle at which the label is rotated"
 msgstr "الزاوية التي سيدوّرها العنوان"
 
-#: gtk/gtklabel.c:528
+#: gtk/gtklabel.c:718
 msgid "Maximum Width In Characters"
 msgstr "العرض الأكبر بالحروف"
 
-#: gtk/gtklabel.c:529
+#: gtk/gtklabel.c:719
 msgid "The desired maximum width of the label, in characters"
 msgstr "العرض الأقصى المطلوب للتسمية، بالمحارف"
 
-#: gtk/gtklabel.c:645
+#: gtk/gtklabel.c:737
+#, fuzzy
+msgid "Track visited links"
+msgstr "لون الوصلات المزارة"
+
+#: gtk/gtklabel.c:738
+#, fuzzy
+msgid "Whether visited links should be tracked"
+msgstr "فيما إذا يفترض اظهار العناصر الخاصة"
+
+#: gtk/gtklabel.c:859
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "فيما اذا سيتم اختيار محتويات التسمية عند التركيز عليها"
 
-#: gtk/gtklayout.c:616 gtk/gtkviewport.c:106
+#: gtk/gtklayout.c:617 gtk/gtkviewport.c:125
 msgid "Horizontal adjustment"
 msgstr "ضبط أفقي"
 
-#: gtk/gtklayout.c:617 gtk/gtkscrolledwindow.c:221
+#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:219
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "GtkAdjustment للموقع الأفقي"
 
-#: gtk/gtklayout.c:624 gtk/gtkviewport.c:114
+#: gtk/gtklayout.c:625 gtk/gtkviewport.c:133
 msgid "Vertical adjustment"
 msgstr "ضبط عمودي"
 
-#: gtk/gtklayout.c:625 gtk/gtkscrolledwindow.c:228
+#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:226
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment للموقع العمودي"
 
-#: gtk/gtklayout.c:633
+#: gtk/gtklayout.c:634
 msgid "The width of the layout"
 msgstr "عرض التصميم"
 
-#: gtk/gtklayout.c:642
+#: gtk/gtklayout.c:643
 msgid "The height of the layout"
 msgstr "ارتفاع التصميم"
 
-#: gtk/gtklinkbutton.c:144
-msgid "URI"
-msgstr ""
-
 #: gtk/gtklinkbutton.c:145
-#, fuzzy
-msgid "The URI bound to this button"
-msgstr "حالة التحول للزر"
+msgid "URI"
+msgstr "URI"
 
-#: gtk/gtklinkbutton.c:159
-#, fuzzy
-msgid "Visited"
-msgstr "مرئي"
+#: gtk/gtklinkbutton.c:146
+msgid "The URI bound to this button"
+msgstr "الـ URI المرتبط مع هذا الزر"
 
 #: gtk/gtklinkbutton.c:160
-#, fuzzy
+msgid "Visited"
+msgstr "تمت زيارته"
+
+#: gtk/gtklinkbutton.c:161
 msgid "Whether this link has been visited."
-msgstr "فيما إذا كانت العملية مرئية."
+msgstr "فيما إذا تمت زيارة هذا الرابط"
 
-#: gtk/gtkmenu.c:503
-#, fuzzy
+#: gtk/gtkmenu.c:508
 msgid "The currently selected menu item"
-msgstr "اسم الملف المنتقى حاليا"
+msgstr "اسم عنصر القائمة المحدد حالياً"
 
-#: gtk/gtkmenu.c:517
-#, fuzzy
-msgid "Accel Group"
-msgstr "مجموعة العمليات"
-
-#: gtk/gtkmenu.c:518
-#, fuzzy
+#: gtk/gtkmenu.c:523
 msgid "The accel group holding accelerators for the menu"
-msgstr "مفتاح الإختصار المسطر لهذه العلامة"
+msgstr "المسرّع مجموعة accel للقائمة"
 
-#: gtk/gtkmenu.c:532 gtk/gtkmenuitem.c:236
+#: gtk/gtkmenu.c:537 gtk/gtkmenuitem.c:290
 msgid "Accel Path"
-msgstr ""
+msgstr "مسار Accel"
 
-#: gtk/gtkmenu.c:533
+#: gtk/gtkmenu.c:538
 msgid "An accel path used to conveniently construct accel paths of child items"
-msgstr ""
+msgstr "مسار الـ accel المستخدم لتسهيل بناء مسارات الـ accel للعناصر الأبناء"
 
-#: gtk/gtkmenu.c:549
-#, fuzzy
+#: gtk/gtkmenu.c:554
 msgid "Attach Widget"
-msgstr "ودجة اضافية"
+msgstr "ربط ودجة"
 
-#: gtk/gtkmenu.c:550
-#, fuzzy
+#: gtk/gtkmenu.c:555
 msgid "The widget the menu is attached to"
-msgstr "فيما إذا كان عنصر القائمة مضبوط"
+msgstr "الودجة التي ترتبط بها القائمة"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:563
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "عنوان قد يعرض من قبل مدير النوافذ عند قطف هذه القائمة"
 
-#: gtk/gtkmenu.c:572
+#: gtk/gtkmenu.c:577
 msgid "Tearoff State"
 msgstr "حالة القطع"
 
-#: gtk/gtkmenu.c:573
+#: gtk/gtkmenu.c:578
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "عدد منطقي يحدد ما إذا كانت القائمة مغلقة أم لا"
 
-#: gtk/gtkmenu.c:587
-#, fuzzy
+#: gtk/gtkmenu.c:592
 msgid "Monitor"
-msgstr "الشهر"
+msgstr "الشاشة"
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:593
 msgid "The monitor the menu will be popped up on"
-msgstr ""
+msgstr "الشاشة التي ستنبثق عليها القائمة"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:599
 msgid "Vertical Padding"
 msgstr "الحشو العمودي"
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:600
 msgid "Extra space at the top and bottom of the menu"
 msgstr "مساحة اضافية لأعلى وأسفل القائمة"
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:622
+msgid "Reserve Toggle Size"
+msgstr ""
+
+#: gtk/gtkmenu.c:623
+#, fuzzy
+msgid ""
+"A boolean that indicates whether the menu reserves space for toggles and "
+"icons"
+msgstr "عدد منطقي يحدد ما إذا كانت القائمة مغلقة أم لا"
+
+#: gtk/gtkmenu.c:629
 msgid "Horizontal Padding"
 msgstr "الحشو الأفقي"
 
-#: gtk/gtkmenu.c:604
+#: gtk/gtkmenu.c:630
 msgid "Extra space at the left and right edges of the menu"
 msgstr "فراغ اضافي عند حواف القائمة يمينا ويسارا"
 
-#: gtk/gtkmenu.c:612
+#: gtk/gtkmenu.c:638
 msgid "Vertical Offset"
 msgstr "التكافؤ العمودي"
 
-#: gtk/gtkmenu.c:613
+#: gtk/gtkmenu.c:639
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 "عندما تكون القائمة قائمة فرعيّة تموقع هذا العدد من البكسلات عموديّا كتعويض"
 
-#: gtk/gtkmenu.c:621
+#: gtk/gtkmenu.c:647
 msgid "Horizontal Offset"
 msgstr "التكافؤ العمودي"
 
-#: gtk/gtkmenu.c:622
+#: gtk/gtkmenu.c:648
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "عندما·تكون·القائمة·قائمة·فرعيّة·تموقع·هذا·العدد·من·البكسلات·أفقيّا·كتعويض"
 
-#: gtk/gtkmenu.c:630
+#: gtk/gtkmenu.c:656
 msgid "Double Arrows"
 msgstr "أسهم مزدوجة"
 
-#: gtk/gtkmenu.c:631
+#: gtk/gtkmenu.c:657
 msgid "When scrolling, always show both arrows."
 msgstr "عند التحريك اظهر كل الأسهم"
 
-#: gtk/gtkmenu.c:639
+#: gtk/gtkmenu.c:670
+#, fuzzy
+msgid "Arrow Placement"
+msgstr "إزاحة السهم في س"
+
+#: gtk/gtkmenu.c:671
+msgid "Indicates where scroll arrows should be placed"
+msgstr ""
+
+#: gtk/gtkmenu.c:679
 msgid "Left Attach"
 msgstr "ربط على اليسار"
 
-#: gtk/gtkmenu.c:640 gtk/gtktable.c:174
+#: gtk/gtkmenu.c:680 gtk/gtktable.c:174
 msgid "The column number to attach the left side of the child to"
 msgstr "رقم العمود الذي إليه ستربط الجهة اليسرى للإبن"
 
-#: gtk/gtkmenu.c:647
+#: gtk/gtkmenu.c:687
 msgid "Right Attach"
 msgstr "ربط على اليمين"
 
-#: gtk/gtkmenu.c:648
+#: gtk/gtkmenu.c:688
 msgid "The column number to attach the right side of the child to"
 msgstr "رقم·العمود·الذي·إليه·ستربط·الجهة·اليمنى·للإبن"
 
-#: gtk/gtkmenu.c:655
+#: gtk/gtkmenu.c:695
 msgid "Top Attach"
 msgstr "ربط بالأعلى"
 
-#: gtk/gtkmenu.c:656
+#: gtk/gtkmenu.c:696
 msgid "The row number to attach the top of the child to"
 msgstr "رقم·السطر·الذي·إليه·ستربط·الجهة·العليا·للإبن"
 
-#: gtk/gtkmenu.c:663
+#: gtk/gtkmenu.c:703
 msgid "Bottom Attach"
 msgstr "ربط بالأسفل"
 
-#: gtk/gtkmenu.c:664 gtk/gtktable.c:195
+#: gtk/gtkmenu.c:704 gtk/gtktable.c:195
 msgid "The row number to attach the bottom of the child to"
 msgstr "رقم·السطر·الذي·إليه·ستربط·الجهة·السفلى·للإبن"
 
-#: gtk/gtkmenu.c:751
+#: gtk/gtkmenu.c:718
+msgid "Arbitrary constant to scale down the size of the scroll arrow"
+msgstr ""
+
+#: gtk/gtkmenu.c:805
 msgid "Can change accelerators"
 msgstr "من الممكن تغيير مفاتيح الاختصار"
 
-#: gtk/gtkmenu.c:752
+#: gtk/gtkmenu.c:806
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "فيما اذا كان من الممكن تغيير مفاتيح اختصار القوائم بضغط مفتاح فوق عنصر "
 "القائمة"
 
-#: gtk/gtkmenu.c:757
+#: gtk/gtkmenu.c:811
 msgid "Delay before submenus appear"
 msgstr "التأخير قبل ظهور القوائم المحوية"
 
-#: gtk/gtkmenu.c:758
+#: gtk/gtkmenu.c:812
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "الوقت الأدنى الذي يجب أن يبقى فيه المؤشر فوق عنصر قائمة لتظهر القائمة المحوية"
 
-#: gtk/gtkmenu.c:765
+#: gtk/gtkmenu.c:819
 msgid "Delay before hiding a submenu"
 msgstr "التأخير قبل اخفاء قائمة محوية"
 
-#: gtk/gtkmenu.c:766
+#: gtk/gtkmenu.c:820
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3195,7 +3615,7 @@ msgstr "اتجاه حزمة الإبن  لشريط القائمة"
 msgid "Style of bevel around the menubar"
 msgstr "أسلوب الحافة حول عمود القوائم"
 
-#: gtk/gtkmenubar.c:202 gtk/gtktoolbar.c:597
+#: gtk/gtkmenubar.c:202 gtk/gtktoolbar.c:590
 msgid "Internal padding"
 msgstr "الحشو الداخلي"
 
@@ -3211,119 +3631,115 @@ msgstr "التأخير قبل ظهور القائم المنحدرة"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "التأخير قبل أن تظهر القوائم المحوية لعمود قائمة"
 
-#: gtk/gtkmenuitem.c:204
+#: gtk/gtkmenuitem.c:257
 msgid "Right Justified"
-msgstr ""
+msgstr "مُحاذَى لليمين"
 
-#: gtk/gtkmenuitem.c:205
+#: gtk/gtkmenuitem.c:258
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
+"يضبط فيما إذا كان عنصر القائمة سيظهر محاذياً للجزء الأيمن من شريط القائمة"
 
-#: gtk/gtkmenuitem.c:219
+#: gtk/gtkmenuitem.c:272
 msgid "Submenu"
 msgstr "قائمة سفلية"
 
-#: gtk/gtkmenuitem.c:220
+#: gtk/gtkmenuitem.c:273
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr "القائمة السفلية الملصقة بعنصر القائمة، أو NULL إذا لم يكن لها شيء"
 
-#: gtk/gtkmenuitem.c:237
+#: gtk/gtkmenuitem.c:291
 msgid "Sets the accelerator path of the menu item"
-msgstr ""
+msgstr "يضبط مسار معجّل عناصر القائمة"
 
-#: gtk/gtkmenuitem.c:280
+#: gtk/gtkmenuitem.c:306
+#, fuzzy
+msgid "The text for the child label"
+msgstr "نص الشارة"
+
+#: gtk/gtkmenuitem.c:369
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr "كمية الفضاء المستخدم من طرف السهم، نسبة إلى حجم خط عنصر القائمة"
 
-#: gtk/gtkmenuitem.c:293
-#, fuzzy
+#: gtk/gtkmenuitem.c:382
 msgid "Width in Characters"
 msgstr "العرض بالحروف"
 
-#: gtk/gtkmenuitem.c:294
-#, fuzzy
+#: gtk/gtkmenuitem.c:383
 msgid "The minimum desired width of the menu item in characters"
-msgstr "العرض المطلوب للعنوان بالمحارف"
+msgstr "الحد الأدنى للعرض المطلوب لعنصر القائمة بالحروف"
 
-#: gtk/gtkmenushell.c:374
+#: gtk/gtkmenushell.c:379
 msgid "Take Focus"
 msgstr "أخذ تركيز"
 
-#: gtk/gtkmenushell.c:375
+#: gtk/gtkmenushell.c:380
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr "عدد منطقي يحدد ما إذا كانت القائمة تأخذ تركيز لوحة المفاتيح أم لا"
 
-#: gtk/gtkmenutoolbutton.c:232 gtk/gtkoptionmenu.c:161
+#: gtk/gtkmenutoolbutton.c:245 gtk/gtkoptionmenu.c:161
 msgid "Menu"
 msgstr "القائمة"
 
-#: gtk/gtkmenutoolbutton.c:233
+#: gtk/gtkmenutoolbutton.c:246
 msgid "The dropdown menu"
 msgstr "القائمة النازلة"
 
-#: gtk/gtkmessagedialog.c:98
+#: gtk/gtkmessagedialog.c:145
 msgid "Image/label border"
 msgstr "حد الصورة/الشارة"
 
-#: gtk/gtkmessagedialog.c:99
+#: gtk/gtkmessagedialog.c:146
 msgid "Width of border around the label and image in the message dialog"
 msgstr "عرض الحد حول الشارة والصورة في حوار الرسالة"
 
-#: gtk/gtkmessagedialog.c:114
+#: gtk/gtkmessagedialog.c:161
 msgid "Use separator"
 msgstr "استخدم فاصل"
 
-#: gtk/gtkmessagedialog.c:115
+#: gtk/gtkmessagedialog.c:162
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr "فيما إذا سيوضع فاصل بين نص حوار الرسالة و الأزرار"
 
-#: gtk/gtkmessagedialog.c:128
-msgid "Message Type"
-msgstr "نوع الرسالة"
-
-#: gtk/gtkmessagedialog.c:129
-msgid "The type of message"
-msgstr "نوع الرسالة"
-
-#: gtk/gtkmessagedialog.c:136
+#: gtk/gtkmessagedialog.c:183
 msgid "Message Buttons"
 msgstr "أزرار الرسالة"
 
-#: gtk/gtkmessagedialog.c:137
+#: gtk/gtkmessagedialog.c:184
 msgid "The buttons shown in the message dialog"
 msgstr "الأزرار المعروضة في حوار الرسالة"
 
-#: gtk/gtkmessagedialog.c:154
+#: gtk/gtkmessagedialog.c:201
 msgid "The primary text of the message dialog"
 msgstr "النص الأولي لرسالة الحوار"
 
-#: gtk/gtkmessagedialog.c:169
+#: gtk/gtkmessagedialog.c:216
 msgid "Use Markup"
 msgstr "استمل التشكيل"
 
-#: gtk/gtkmessagedialog.c:170
+#: gtk/gtkmessagedialog.c:217
 msgid "The primary text of the title includes Pango markup."
 msgstr "النص الأولي للعنوان يحتوي على تشكيل بانغو Pango."
 
-#: gtk/gtkmessagedialog.c:184
+#: gtk/gtkmessagedialog.c:231
 msgid "Secondary Text"
 msgstr "النص الثانوي"
 
-#: gtk/gtkmessagedialog.c:185
+#: gtk/gtkmessagedialog.c:232
 msgid "The secondary text of the message dialog"
 msgstr "النص الثانوي لرسالة الحوار"
 
-#: gtk/gtkmessagedialog.c:200
+#: gtk/gtkmessagedialog.c:247
 msgid "Use Markup in secondary"
 msgstr "استخدم تشكيل في الثانوي"
 
-#: gtk/gtkmessagedialog.c:201
+#: gtk/gtkmessagedialog.c:248
 msgid "The secondary text includes Pango markup."
 msgstr "النص الثانوي يحتوي على تشكيل بانغو Pango."
 
-#: gtk/gtkmessagedialog.c:216
+#: gtk/gtkmessagedialog.c:263
 msgid "The image"
 msgstr "الصورة"
 
@@ -3354,98 +3770,94 @@ msgid ""
 msgstr "المساحة التي تضاف لأعلى وأسفل الودجة، بالبكسل"
 
 #: gtk/gtkmountoperation.c:160
-#, fuzzy
 msgid "Parent"
-msgstr "إستعجالي"
+msgstr "أب"
 
 #: gtk/gtkmountoperation.c:161
-#, fuzzy
 msgid "The parent window"
-msgstr "نوع النافذة"
+msgstr "نافذة الأب"
 
 #: gtk/gtkmountoperation.c:168
-#, fuzzy
 msgid "Is Showing"
-msgstr "اظهار الترويسة"
+msgstr "إظهار"
 
 #: gtk/gtkmountoperation.c:169
 msgid "Are we showing a dialog"
-msgstr ""
+msgstr "هل سنُظهر مربع حوار"
 
 #: gtk/gtkmountoperation.c:177
-#, fuzzy
 msgid "The screen where this window will be displayed."
 msgstr "الشاشة التي ستعرض فيها هذه النافذة"
 
-#: gtk/gtknotebook.c:572
+#: gtk/gtknotebook.c:585
 msgid "Page"
 msgstr "صفحة"
 
-#: gtk/gtknotebook.c:573
+#: gtk/gtknotebook.c:586
 msgid "The index of the current page"
 msgstr "دليل الصفحة الحالية"
 
-#: gtk/gtknotebook.c:581
+#: gtk/gtknotebook.c:594
 msgid "Tab Position"
 msgstr "موقع اللسان"
 
-#: gtk/gtknotebook.c:582
+#: gtk/gtknotebook.c:595
 msgid "Which side of the notebook holds the tabs"
 msgstr "أي جهة من الدفتر تحوي الألسنة"
 
-#: gtk/gtknotebook.c:589
+#: gtk/gtknotebook.c:602
 msgid "Tab Border"
 msgstr "حد اللسان"
 
-#: gtk/gtknotebook.c:590
+#: gtk/gtknotebook.c:603
 msgid "Width of the border around the tab labels"
 msgstr "عرض الحد حول شارات الألسنة"
 
-#: gtk/gtknotebook.c:598
+#: gtk/gtknotebook.c:611
 msgid "Horizontal Tab Border"
 msgstr "حد اللسان الأفقي"
 
-#: gtk/gtknotebook.c:599
+#: gtk/gtknotebook.c:612
 msgid "Width of the horizontal border of tab labels"
 msgstr "عرض الحد الأفقي لشارات الألسنة"
 
-#: gtk/gtknotebook.c:607
+#: gtk/gtknotebook.c:620
 msgid "Vertical Tab Border"
 msgstr "الحد العمودي للسان"
 
-#: gtk/gtknotebook.c:608
+#: gtk/gtknotebook.c:621
 msgid "Width of the vertical border of tab labels"
 msgstr "عرض الحد العمودي لشارات اللسان"
 
-#: gtk/gtknotebook.c:616
+#: gtk/gtknotebook.c:629
 msgid "Show Tabs"
 msgstr "عرض الألسنة"
 
-#: gtk/gtknotebook.c:617
+#: gtk/gtknotebook.c:630
 msgid "Whether tabs should be shown or not"
 msgstr "فيما إذا كان سيتم عرض الألسنة أم لا"
 
-#: gtk/gtknotebook.c:623
+#: gtk/gtknotebook.c:636
 msgid "Show Border"
 msgstr "عرض الحد"
 
-#: gtk/gtknotebook.c:624
+#: gtk/gtknotebook.c:637
 msgid "Whether the border should be shown or not"
 msgstr "فيما إذا كان سيتم عرض الحد أم لا"
 
-#: gtk/gtknotebook.c:630
+#: gtk/gtknotebook.c:643
 msgid "Scrollable"
 msgstr "قابل للف"
 
-#: gtk/gtknotebook.c:631
+#: gtk/gtknotebook.c:644
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "إذا كان TRUE، فستضاف أسهم لف إذا كانت هناك ألسنة كثيرة للملائمة"
 
-#: gtk/gtknotebook.c:637
+#: gtk/gtknotebook.c:650
 msgid "Enable Popup"
 msgstr "تفعيل النوافذ البارزة"
 
-#: gtk/gtknotebook.c:638
+#: gtk/gtknotebook.c:651
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -3453,136 +3865,134 @@ msgstr ""
 "إذا كان TRUE، فإن كبس زر الفأرة الأيمن على الدفتر يبرز لك قائمة تمكنك من "
 "الذهاب لصفحة"
 
-#: gtk/gtknotebook.c:645
+#: gtk/gtknotebook.c:658
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "فيما إذا وجب أن يكون للألسنة أحجام متناسقة"
 
-#: gtk/gtknotebook.c:651
+#: gtk/gtknotebook.c:664
 msgid "Group ID"
 msgstr "هويّة المجموعة"
 
-#: gtk/gtknotebook.c:652
+#: gtk/gtknotebook.c:665
 msgid "Group ID for tabs drag and drop"
 msgstr "هويّة المجموعة لسحب و إلقاء الألسنة"
 
-#: gtk/gtknotebook.c:668 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
-#: gtk/gtkradiomenuitem.c:342 gtk/gtkradiotoolbutton.c:65
+#: gtk/gtknotebook.c:681 gtk/gtkradioaction.c:128 gtk/gtkradiobutton.c:82
+#: gtk/gtkradiomenuitem.c:353 gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "مجموعة"
 
-#: gtk/gtknotebook.c:669
+#: gtk/gtknotebook.c:682
 msgid "Group for tabs drag and drop"
 msgstr "جمع الألسنة للأخذ و السحب"
 
-#: gtk/gtknotebook.c:675
+#: gtk/gtknotebook.c:688
 msgid "Tab label"
 msgstr "شارة اللسان"
 
-#: gtk/gtknotebook.c:676
+#: gtk/gtknotebook.c:689
 msgid "The string displayed on the child's tab label"
 msgstr "السلسلة المعروضة على شارة ابن اللسان"
 
-#: gtk/gtknotebook.c:682
+#: gtk/gtknotebook.c:695
 msgid "Menu label"
 msgstr "شارة القائمة"
 
-#: gtk/gtknotebook.c:683
+#: gtk/gtknotebook.c:696
 msgid "The string displayed in the child's menu entry"
 msgstr "السلسلة المعروضة في خانة قائمة الابن"
 
-#: gtk/gtknotebook.c:696
+#: gtk/gtknotebook.c:709
 msgid "Tab expand"
 msgstr "تمديد اللسان"
 
-#: gtk/gtknotebook.c:697
+#: gtk/gtknotebook.c:710
 msgid "Whether to expand the child's tab or not"
 msgstr "فيما إذا وجب تمديد لسان الأبن أم لا"
 
-#: gtk/gtknotebook.c:703
+#: gtk/gtknotebook.c:716
 msgid "Tab fill"
 msgstr "ملأ اللسان"
 
-#: gtk/gtknotebook.c:704
+#: gtk/gtknotebook.c:717
 msgid "Whether the child's tab should fill the allocated area or not"
 msgstr "فيما إذا وجب للسان الإبن ملأ المساحة المخصصة"
 
-#: gtk/gtknotebook.c:710
+#: gtk/gtknotebook.c:723
 msgid "Tab pack type"
 msgstr "نوع حزم الألسنة"
 
-#: gtk/gtknotebook.c:717
+#: gtk/gtknotebook.c:730
 msgid "Tab reorderable"
 msgstr "لسان قابل لمراجعة التصفيف"
 
-#: gtk/gtknotebook.c:718
+#: gtk/gtknotebook.c:731
 msgid "Whether the tab is reorderable by user action or not"
 msgstr "فيما إذا كان فيما إذا كان اللسان قابلا لمراجعة التصفيف"
 
-#: gtk/gtknotebook.c:724
+#: gtk/gtknotebook.c:737
 msgid "Tab detachable"
 msgstr "لسان قابل للقطع"
 
-#: gtk/gtknotebook.c:725
+#: gtk/gtknotebook.c:738
 msgid "Whether the tab is detachable"
 msgstr "فيما إذا كان اللسان قابلا للقطع"
 
-#: gtk/gtknotebook.c:740 gtk/gtkscrollbar.c:83
+#: gtk/gtknotebook.c:753 gtk/gtkscrollbar.c:81
 msgid "Secondary backward stepper"
 msgstr "متخطي التراجع الثانوي"
 
-#: gtk/gtknotebook.c:741
+#: gtk/gtknotebook.c:754
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "اعرض زر سهم التراجع الثانوي على النهاية المقابلة لمساحة اللسان"
 
-#: gtk/gtknotebook.c:756 gtk/gtkscrollbar.c:91
+#: gtk/gtknotebook.c:769 gtk/gtkscrollbar.c:88
 msgid "Secondary forward stepper"
 msgstr "متخطي التقدم الثانوي"
 
-#: gtk/gtknotebook.c:757
+#: gtk/gtknotebook.c:770
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "اعرض زر سهم التقدم الثانوي على النهاية المقابلة لمساحة اللسان"
 
-#: gtk/gtknotebook.c:771 gtk/gtkscrollbar.c:67
+#: gtk/gtknotebook.c:784 gtk/gtkscrollbar.c:67
 msgid "Backward stepper"
 msgstr "متخطي التراجع"
 
-#: gtk/gtknotebook.c:772 gtk/gtkscrollbar.c:68
+#: gtk/gtknotebook.c:785 gtk/gtkscrollbar.c:68
 msgid "Display the standard backward arrow button"
 msgstr "عرض زر سهم التراجع القياسي"
 
-#: gtk/gtknotebook.c:786 gtk/gtkscrollbar.c:75
+#: gtk/gtknotebook.c:799 gtk/gtkscrollbar.c:74
 msgid "Forward stepper"
 msgstr "متخطي التقدم"
 
-#: gtk/gtknotebook.c:787 gtk/gtkscrollbar.c:76
+#: gtk/gtknotebook.c:800 gtk/gtkscrollbar.c:75
 msgid "Display the standard forward arrow button"
 msgstr "عرض زر سهم التقدم القياسي"
 
-#: gtk/gtknotebook.c:801
+#: gtk/gtknotebook.c:814
 msgid "Tab overlap"
 msgstr "تداخل اللسان"
 
-#: gtk/gtknotebook.c:802
+#: gtk/gtknotebook.c:815
 msgid "Size of tab overlap area"
 msgstr "حجم منطقة تداخل اللسان"
 
-#: gtk/gtknotebook.c:817
+#: gtk/gtknotebook.c:830
 msgid "Tab curvature"
 msgstr "تقوس اللسان"
 
-#: gtk/gtknotebook.c:818
+#: gtk/gtknotebook.c:831
 msgid "Size of tab curvature"
 msgstr "حجم تقوس اللسان"
 
-#: gtk/gtknotebook.c:834
-#, fuzzy
+#: gtk/gtknotebook.c:847
 msgid "Arrow spacing"
 msgstr "مباعدة الأسهم"
 
-#: gtk/gtknotebook.c:835
-#, fuzzy
+#: gtk/gtknotebook.c:848
 msgid "Scroll arrow spacing"
 msgstr "فراغات عمود اللف"
 
@@ -3606,165 +4016,165 @@ msgstr "حجم مؤشر الإسقاط السفلي"
 msgid "Spacing around indicator"
 msgstr "الفراغات حول المؤشر"
 
-#: gtk/gtkpaned.c:219
+#: gtk/gtkorientable.c:48
+#, fuzzy
+msgid "The orientation of the orientable"
+msgstr "اتجاه التحجيم"
+
+#: gtk/gtkpaned.c:242
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "موقع الفاصل المحاط بلوحة بالبكسلات (0 يعني كامل المسافة إلى اليسار/الأعلى)"
 
-#: gtk/gtkpaned.c:227
+#: gtk/gtkpaned.c:251
 msgid "Position Set"
 msgstr "ضبط الموقع"
 
-#: gtk/gtkpaned.c:228
+#: gtk/gtkpaned.c:252
 msgid "TRUE if the Position property should be used"
 msgstr " TRUE إذا ما وجب استخدام خاصية الموقع"
 
-#: gtk/gtkpaned.c:234
+#: gtk/gtkpaned.c:258
 msgid "Handle Size"
 msgstr "حجم المقبض"
 
-#: gtk/gtkpaned.c:235
+#: gtk/gtkpaned.c:259
 msgid "Width of handle"
 msgstr "عرض المقبض"
 
-#: gtk/gtkpaned.c:251
+#: gtk/gtkpaned.c:275
 msgid "Minimal Position"
 msgstr "الموقع الأدنى"
 
-#: gtk/gtkpaned.c:252
+#: gtk/gtkpaned.c:276
 msgid "Smallest possible value for the \"position\" property"
 msgstr "أصغر قيمة ممكنة لخاصية \"الموقع\""
 
-#: gtk/gtkpaned.c:269
+#: gtk/gtkpaned.c:293
 msgid "Maximal Position"
 msgstr "الموقع الأقصى"
 
-#: gtk/gtkpaned.c:270
+#: gtk/gtkpaned.c:294
 msgid "Largest possible value for the \"position\" property"
 msgstr "أكبر قيمة ممكنة لخاصية \"الموقع\""
 
-#: gtk/gtkpaned.c:287
+#: gtk/gtkpaned.c:311
 msgid "Resize"
 msgstr "تحجيم"
 
-#: gtk/gtkpaned.c:288
+#: gtk/gtkpaned.c:312
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr "إذا ضبط لـ ·TRUE، فيتمدّد و يتقلصّ الأبن مع الودجة المحاطة بلوح"
 
-#: gtk/gtkpaned.c:303
+#: gtk/gtkpaned.c:327
 msgid "Shrink"
 msgstr "تقليص"
 
-#: gtk/gtkpaned.c:304
+#: gtk/gtkpaned.c:328
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "إذا ضبط لـ TRUE، فيمكن جعل الإبن أصغر من إستدعائه"
 
-#: gtk/gtkplug.c:150 gtk/gtkstatusicon.c:285
+#: gtk/gtkplug.c:171 gtk/gtkstatusicon.c:312
 msgid "Embedded"
 msgstr "مدمج"
 
-#: gtk/gtkplug.c:151
+#: gtk/gtkplug.c:172
 msgid "Whether or not the plug is embedded"
 msgstr "اذا كان الملحق داخليا"
 
-#: gtk/gtkplug.c:165
+#: gtk/gtkplug.c:186
 msgid "Socket Window"
-msgstr ""
+msgstr "نافذة المقبس"
 
-#: gtk/gtkplug.c:166
-#, fuzzy
+#: gtk/gtkplug.c:187
 msgid "The window of the socket the plug is embedded in"
-msgstr "اذا كان الملحق داخليا"
+msgstr "نافذة المقبس الذي يتضمن الملحق"
 
 #: gtk/gtkpreview.c:102
 msgid ""
 "Whether the preview widget should take up the entire space it is allocated"
 msgstr "فيما إذا وجب أن تملأ ودجة·التلميح كامل المساحة التي خصصة لها"
 
-#: gtk/gtkprinter.c:124
+#: gtk/gtkprinter.c:112
 msgid "Name of the printer"
 msgstr "اسم الطابعة"
 
-#: gtk/gtkprinter.c:130
+#: gtk/gtkprinter.c:118
 msgid "Backend"
 msgstr "نهاية خلفية"
 
-#: gtk/gtkprinter.c:131
+#: gtk/gtkprinter.c:119
 msgid "Backend for the printer"
 msgstr "النهاية الخلفية للطابعة"
 
-#: gtk/gtkprinter.c:137
+#: gtk/gtkprinter.c:125
 msgid "Is Virtual"
 msgstr "خيالي"
 
-#: gtk/gtkprinter.c:138
+#: gtk/gtkprinter.c:126
 msgid "FALSE if this represents a real hardware printer"
 msgstr "خطأ إذا كانت هذه تمثل طابعة حقيقية"
 
-#: gtk/gtkprinter.c:144
+#: gtk/gtkprinter.c:132
 msgid "Accepts PDF"
 msgstr "تقبل PDF"
 
-#: gtk/gtkprinter.c:145
+#: gtk/gtkprinter.c:133
 msgid "TRUE if this printer can accept PDF"
 msgstr "صحيح اذا كانت الطابعة تقبل PDF"
 
-#: gtk/gtkprinter.c:151
+#: gtk/gtkprinter.c:139
 msgid "Accepts PostScript"
 msgstr "تقبل PostScript"
 
-#: gtk/gtkprinter.c:152
+#: gtk/gtkprinter.c:140
 msgid "TRUE if this printer can accept PostScript"
 msgstr "صحيح اذا كانت الطابعة تقبل PostScript"
 
-#: gtk/gtkprinter.c:158
+#: gtk/gtkprinter.c:146
 msgid "State Message"
 msgstr "رسالة الحالة"
 
-#: gtk/gtkprinter.c:159
+#: gtk/gtkprinter.c:147
 msgid "String giving the current state of the printer"
 msgstr "النص الشارح للحالة الحالية للطابعة"
 
-#: gtk/gtkprinter.c:165
+#: gtk/gtkprinter.c:153
 msgid "Location"
 msgstr "الموقع"
 
-#: gtk/gtkprinter.c:166
+#: gtk/gtkprinter.c:154
 msgid "The location of the printer"
 msgstr "مكان الطابعة"
 
-#: gtk/gtkprinter.c:173
+#: gtk/gtkprinter.c:161
 msgid "The icon name to use for the printer"
 msgstr "اسم الإيقونة المستعملة للطابعة"
 
-#: gtk/gtkprinter.c:179
+#: gtk/gtkprinter.c:167
 msgid "Job Count"
 msgstr "عدد الأعمال"
 
-#: gtk/gtkprinter.c:180
+#: gtk/gtkprinter.c:168
 msgid "Number of jobs queued in the printer"
 msgstr "عدد الأشغال المنتظرة للطبع"
 
-#: gtk/gtkprinter.c:198
-#, fuzzy
+#: gtk/gtkprinter.c:186
 msgid "Paused Printer"
-msgstr "طابعة"
+msgstr "طابعة متوقفة مؤقتاً"
 
-#: gtk/gtkprinter.c:199
-#, fuzzy
+#: gtk/gtkprinter.c:187
 msgid "TRUE if this printer is paused"
-msgstr "صحيح اذا كانت الطابعة تقبل PDF"
+msgstr "صحيح إذا كانت الطابعة متوقفة مؤقتاً"
 
-#: gtk/gtkprinter.c:212
-#, fuzzy
+#: gtk/gtkprinter.c:200
 msgid "Accepting Jobs"
-msgstr "تقبل التركيز"
+msgstr "تقبل المهام"
 
-#: gtk/gtkprinter.c:213
-#, fuzzy
+#: gtk/gtkprinter.c:201
 msgid "TRUE if this printer is accepting new jobs"
-msgstr "صحيح اذا كانت الطابعة تقبل PDF"
+msgstr "صحيح إذا كانت الطابعة تقبل المهام الجديدة"
 
 #: gtk/gtkprinteroptionwidget.c:123
 msgid "Source option"
@@ -3794,11 +4204,11 @@ msgstr "إعدادات"
 msgid "Printer settings"
 msgstr "إعدادات الطابعة"
 
-#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:252
+#: gtk/gtkprintjob.c:143 gtk/gtkprintjob.c:144 gtk/gtkprintunixdialog.c:302
 msgid "Page Setup"
 msgstr "إعداد الصفحة"
 
-#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1012
+#: gtk/gtkprintjob.c:152 gtk/gtkprintoperation.c:1125
 msgid "Track Print Status"
 msgstr "متابعة حالة الطبع"
 
@@ -3810,51 +4220,51 @@ msgstr ""
 "صحيح اذا شغل الطبع سيظل يبعث إشارات تغيير الحالة بعد ارسال بيانات الطبع "
 "لخادوم الطباعة."
 
-#: gtk/gtkprintoperation.c:884
+#: gtk/gtkprintoperation.c:997
 msgid "Default Page Setup"
 msgstr "إعداد الصفحة الإفتراضي"
 
-#: gtk/gtkprintoperation.c:885
+#: gtk/gtkprintoperation.c:998
 msgid "The GtkPageSetup used by default"
 msgstr "الـ GtkPageSetup المستعمل افتراضيا"
 
-#: gtk/gtkprintoperation.c:903 gtk/gtkprintunixdialog.c:270
+#: gtk/gtkprintoperation.c:1016 gtk/gtkprintunixdialog.c:320
 msgid "Print Settings"
 msgstr "إعدادات الطبع"
 
-#: gtk/gtkprintoperation.c:904 gtk/gtkprintunixdialog.c:271
+#: gtk/gtkprintoperation.c:1017 gtk/gtkprintunixdialog.c:321
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "الـ GtkPrintSettings المستعمل لبدأ الحوار"
 
-#: gtk/gtkprintoperation.c:922
+#: gtk/gtkprintoperation.c:1035
 msgid "Job Name"
 msgstr "اسم العمل"
 
-#: gtk/gtkprintoperation.c:923
+#: gtk/gtkprintoperation.c:1036
 msgid "A string used for identifying the print job."
 msgstr "سلسلة تستخدم لتعريف وظيفة الطبع."
 
-#: gtk/gtkprintoperation.c:947
+#: gtk/gtkprintoperation.c:1060
 msgid "Number of Pages"
 msgstr "عدد الصفحات"
 
-#: gtk/gtkprintoperation.c:948
+#: gtk/gtkprintoperation.c:1061
 msgid "The number of pages in the document."
 msgstr "عدد الصفحات في المستند"
 
-#: gtk/gtkprintoperation.c:969 gtk/gtkprintunixdialog.c:260
+#: gtk/gtkprintoperation.c:1082 gtk/gtkprintunixdialog.c:310
 msgid "Current Page"
 msgstr "الصفحة الحالية"
 
-#: gtk/gtkprintoperation.c:970 gtk/gtkprintunixdialog.c:261
+#: gtk/gtkprintoperation.c:1083 gtk/gtkprintunixdialog.c:311
 msgid "The current page in the document"
 msgstr "الصفحة الحالية في المستند"
 
-#: gtk/gtkprintoperation.c:991
+#: gtk/gtkprintoperation.c:1104
 msgid "Use full page"
 msgstr "استعمل صفحة كاملة"
 
-#: gtk/gtkprintoperation.c:992
+#: gtk/gtkprintoperation.c:1105
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -3862,7 +4272,7 @@ msgstr ""
 "صحيح إذا كان أصل السياق يجب أن يكون في زاوية الصفحة وليس عند زاوية المنطقة "
 "الصورية"
 
-#: gtk/gtkprintoperation.c:1013
+#: gtk/gtkprintoperation.c:1126
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -3870,69 +4280,128 @@ msgstr ""
 "صحيح اذا كانت عملية الطبع ستظل تبعث إشارات تغيير الحالة بعد ارسال بيانات "
 "الطبع لخادوم الطباعة."
 
-#: gtk/gtkprintoperation.c:1030
+#: gtk/gtkprintoperation.c:1143
 msgid "Unit"
 msgstr "الوحدة"
 
-#: gtk/gtkprintoperation.c:1031
+#: gtk/gtkprintoperation.c:1144
 msgid "The unit in which distances can be measured in the context"
 msgstr "الوحدة في المسافات التي يمكن قياسها"
 
-#: gtk/gtkprintoperation.c:1048
+#: gtk/gtkprintoperation.c:1161
 msgid "Show Dialog"
 msgstr "اظهر الحوار"
 
-#: gtk/gtkprintoperation.c:1049
+#: gtk/gtkprintoperation.c:1162
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "صحيح إذا كان حوار التقدم معروضا عند الطبع"
 
-#: gtk/gtkprintoperation.c:1072
+#: gtk/gtkprintoperation.c:1185
 msgid "Allow Async"
 msgstr "اسمح بـ Async"
 
-#: gtk/gtkprintoperation.c:1073
+#: gtk/gtkprintoperation.c:1186
 msgid "TRUE if print process may run asynchronous."
 msgstr "صحيح اذا يتم تشغيل تطبيق الطباعة لا تزامنيا"
 
-#: gtk/gtkprintoperation.c:1096 gtk/gtkprintoperation.c:1097
+#: gtk/gtkprintoperation.c:1208 gtk/gtkprintoperation.c:1209
 msgid "Export filename"
 msgstr "صدّر اسم الملف"
 
-#: gtk/gtkprintoperation.c:1111
+#: gtk/gtkprintoperation.c:1223
 msgid "Status"
 msgstr "الحالة"
 
-#: gtk/gtkprintoperation.c:1112
+#: gtk/gtkprintoperation.c:1224
 msgid "The status of the print operation"
 msgstr "حالة عملية الطباعة"
 
-#: gtk/gtkprintoperation.c:1132
+#: gtk/gtkprintoperation.c:1244
 msgid "Status String"
 msgstr "نص الحالة"
 
-#: gtk/gtkprintoperation.c:1133
+#: gtk/gtkprintoperation.c:1245
 msgid "A human-readable description of the status"
 msgstr "وصف للحالة بصورة مفهومة للبشر"
 
-#: gtk/gtkprintoperation.c:1151
+#: gtk/gtkprintoperation.c:1263
 msgid "Custom tab label"
 msgstr "عنوان لسان مخصص"
 
-#: gtk/gtkprintoperation.c:1152
+#: gtk/gtkprintoperation.c:1264
 msgid "Label for the tab containing custom widgets."
 msgstr "تسمية اللسان المحتوي على القطع المخصصة"
 
-#: gtk/gtkprintunixdialog.c:253
+#: gtk/gtkprintoperation.c:1279 gtk/gtkprintunixdialog.c:345
+#, fuzzy
+msgid "Support Selection"
+msgstr "اختيار اللون"
+
+#: gtk/gtkprintoperation.c:1280
+msgid "TRUE if the print operation will support print of selection."
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1296 gtk/gtkprintunixdialog.c:353
+#, fuzzy
+msgid "Has Selection"
+msgstr "له اختيار"
+
+#: gtk/gtkprintoperation.c:1297
+msgid "TRUE if a selection exists."
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1312 gtk/gtkprintunixdialog.c:361
+#, fuzzy
+msgid "Embed Page Setup"
+msgstr "إعداد الصفحة"
+
+#: gtk/gtkprintoperation.c:1313
+msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
+msgstr ""
+
+#: gtk/gtkprintoperation.c:1334
+#, fuzzy
+msgid "Number of Pages To Print"
+msgstr "عدد الصفحات"
+
+#: gtk/gtkprintoperation.c:1335
+#, fuzzy
+msgid "The number of pages that will be printed."
+msgstr "عدد الصفحات في المستند"
+
+#: gtk/gtkprintunixdialog.c:303
 msgid "The GtkPageSetup to use"
 msgstr "الـ GtkPageSetup المستخدم"
 
-#: gtk/gtkprintunixdialog.c:278
+#: gtk/gtkprintunixdialog.c:328
 msgid "Selected Printer"
 msgstr "الطابعة المنتقاة"
 
-#: gtk/gtkprintunixdialog.c:279
+#: gtk/gtkprintunixdialog.c:329
 msgid "The GtkPrinter which is selected"
 msgstr "الـ GtkPrinter المختار"
+
+#: gtk/gtkprintunixdialog.c:336
+msgid "Manual Capabilites"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:337
+msgid "Capabilities the application can handle"
+msgstr ""
+
+#: gtk/gtkprintunixdialog.c:346
+#, fuzzy
+msgid "Whether the dialog supports selection"
+msgstr "فيما إذا سترسم العلامة في الخط المنتقى"
+
+#: gtk/gtkprintunixdialog.c:354
+#, fuzzy
+msgid "Whether the application has a selection"
+msgstr "فيما إذا كانت العملية مفعلة."
+
+#: gtk/gtkprintunixdialog.c:362
+msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
+msgstr ""
 
 #: gtk/gtkprogress.c:102
 msgid "Activity mode"
@@ -4033,54 +4502,44 @@ msgid "Extra spacing applied to the width of a progress bar."
 msgstr "فضاء اضافي مطبق لعرض شريط التقدم."
 
 #: gtk/gtkprogressbar.c:220
-#, fuzzy
 msgid "YSpacing"
-msgstr "فراغات"
+msgstr "فراغات ع"
 
 #: gtk/gtkprogressbar.c:221
-#, fuzzy
 msgid "Extra spacing applied to the height of a progress bar."
-msgstr "فضاء اضافي مطبق لعرض شريط التقدم."
+msgstr "فضاء اضافي مطبق لطول شريط التقدم."
 
 #: gtk/gtkprogressbar.c:234
-#, fuzzy
 msgid "Min horizontal bar width"
-msgstr "العرض الأفقي للفاصل"
+msgstr "العرض الأفقي الأدنى للشريط"
 
 #: gtk/gtkprogressbar.c:235
-#, fuzzy
 msgid "The minimum horizontal width of the progress bar"
-msgstr "الترصيف الأفقي للشارة"
+msgstr "الحد الأدنى للعرض الأفقي لشريط التقدم"
 
 #: gtk/gtkprogressbar.c:247
-#, fuzzy
 msgid "Min horizontal bar height"
-msgstr "ترصيف أفقي"
+msgstr "الارتفاع الأفقي الأدنى للشريط"
 
 #: gtk/gtkprogressbar.c:248
-#, fuzzy
 msgid "Minimum horizontal height of the progress bar"
-msgstr "قيمة شريط التَّقدم"
+msgstr "الحد الأدنى للارتفاع الأفقي لشريط التقدم"
 
 #: gtk/gtkprogressbar.c:260
-#, fuzzy
 msgid "Min vertical bar width"
-msgstr "العرض العمودي للفاصل"
+msgstr "العرض العمودي الأدنى للشريط"
 
 #: gtk/gtkprogressbar.c:261
-#, fuzzy
 msgid "The minimum vertical width of the progress bar"
-msgstr "النص على عمود التقدم"
+msgstr "الحد الأدنى للعرض العمودي لشريط التقدم"
 
 #: gtk/gtkprogressbar.c:273
-#, fuzzy
 msgid "Min vertical bar height"
-msgstr "ارتفاع الابن الادنى"
+msgstr "الارتفاع العمودي الأدنى للشريط"
 
 #: gtk/gtkprogressbar.c:274
-#, fuzzy
 msgid "The minimum vertical height of the progress bar"
-msgstr "قيمة شريط التَّقدم"
+msgstr "الحد الأدنى للارتفاع العمودي لشريط التقدم"
 
 #: gtk/gtkradioaction.c:111
 msgid "The value"
@@ -4112,144 +4571,143 @@ msgstr "خاصية القيمة للعضو الفعال حاليا المحتو�
 msgid "The radio button whose group this widget belongs to."
 msgstr "زر الراديو صاحب المجموعة المحتوية على هذه الودجة"
 
-#: gtk/gtkradiomenuitem.c:343
+#: gtk/gtkradiomenuitem.c:354
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "عنصر قائمة الراديو صاحب المجموعة المحتوية على هذه الودجة"
 
 #: gtk/gtkradiotoolbutton.c:66
-#, fuzzy
 msgid "The radio tool button whose group this button belongs to."
-msgstr "زر الراديو صاحب المجموعة المحتوية على هذه الودجة"
+msgstr "زر الراديو صاحب المجموعة المحتوية على هذا الزر"
 
-#: gtk/gtkrange.c:337
+#: gtk/gtkrange.c:359
 msgid "Update policy"
 msgstr "سياسة التحديث"
 
-#: gtk/gtkrange.c:338
+#: gtk/gtkrange.c:360
 msgid "How the range should be updated on the screen"
 msgstr "كيفية تحديث المدى على الشاشة"
 
-#: gtk/gtkrange.c:347
+#: gtk/gtkrange.c:369
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment المحتوي على القيمة الحالية لجسم المدى هذا"
 
-#: gtk/gtkrange.c:354
+#: gtk/gtkrange.c:376
 msgid "Inverted"
 msgstr "معكوس"
 
-#: gtk/gtkrange.c:355
+#: gtk/gtkrange.c:377
 msgid "Invert direction slider moves to increase range value"
 msgstr "عكس الاتجاه الذي إليه ينتقل المتزحلق لزيادة قيمة المدى"
 
-#: gtk/gtkrange.c:362
+#: gtk/gtkrange.c:384
 msgid "Lower stepper sensitivity"
 msgstr "تخفيض حساسية المدرج"
 
-#: gtk/gtkrange.c:363
+#: gtk/gtkrange.c:385
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "سياسة الحساسية للدرج الموجه لتعديل الجانب السّفلي "
 
-#: gtk/gtkrange.c:371
+#: gtk/gtkrange.c:393
 msgid "Upper stepper sensitivity"
 msgstr "زيادة حساسية المدرج"
 
-#: gtk/gtkrange.c:372
+#: gtk/gtkrange.c:394
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "سياسة الحساسية للدرج الموجه لتعديل الجانب العلوي "
 
-#: gtk/gtkrange.c:389
+#: gtk/gtkrange.c:411
 msgid "Show Fill Level"
 msgstr "اعرض مستوى الملأ"
 
-#: gtk/gtkrange.c:390
+#: gtk/gtkrange.c:412
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "فيما إذا يتم عرض منبه صوري للملأ على المحتوى."
 
-#: gtk/gtkrange.c:406
+#: gtk/gtkrange.c:428
 msgid "Restrict to Fill Level"
 msgstr "حدد بمستوى الملأ"
 
-#: gtk/gtkrange.c:407
+#: gtk/gtkrange.c:429
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "فيما إذا يتم تحديد الحد العلوي لمستوى الملأ"
 
-#: gtk/gtkrange.c:422
+#: gtk/gtkrange.c:444
 msgid "Fill Level"
 msgstr "مستوى الملأ"
 
-#: gtk/gtkrange.c:423
+#: gtk/gtkrange.c:445
 msgid "The fill level."
 msgstr "مستوى الملأ"
 
-#: gtk/gtkrange.c:431
+#: gtk/gtkrange.c:453
 msgid "Slider Width"
 msgstr "عرض المتزحلق"
 
-#: gtk/gtkrange.c:432
+#: gtk/gtkrange.c:454
 msgid "Width of scrollbar or scale thumb"
 msgstr "عرض عمود اللف أو مربع القياس"
 
-#: gtk/gtkrange.c:439
+#: gtk/gtkrange.c:461
 msgid "Trough Border"
 msgstr "حد منخفض"
 
-#: gtk/gtkrange.c:440
+#: gtk/gtkrange.c:462
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "الفراغات بين المربع/المتخطي والحافة المنحدرة الخارجية"
 
-#: gtk/gtkrange.c:447
+#: gtk/gtkrange.c:469
 msgid "Stepper Size"
 msgstr "حجم المتخطي"
 
-#: gtk/gtkrange.c:448
+#: gtk/gtkrange.c:470
 msgid "Length of step buttons at ends"
 msgstr "طول أزرار الخطوات عند النهايات"
 
-#: gtk/gtkrange.c:463
+#: gtk/gtkrange.c:485
 msgid "Stepper Spacing"
 msgstr "فراغات المتخطي"
 
-#: gtk/gtkrange.c:464
+#: gtk/gtkrange.c:486
 msgid "Spacing between step buttons and thumb"
 msgstr "الفراغات بين أزرار الخطوات والإبهام"
 
-#: gtk/gtkrange.c:471
+#: gtk/gtkrange.c:493
 msgid "Arrow X Displacement"
 msgstr "إزاحة السهم في س"
 
-#: gtk/gtkrange.c:472
+#: gtk/gtkrange.c:494
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "مقدار تحريك السهم باتجاه س عند تحرير الزر"
 
-#: gtk/gtkrange.c:479
+#: gtk/gtkrange.c:501
 msgid "Arrow Y Displacement"
 msgstr "إزاحة السهم في ص"
 
-#: gtk/gtkrange.c:480
+#: gtk/gtkrange.c:502
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "مقدار·تحريك·السهم·باتجاه·ص·عند·تحرير·الزر"
 
-#: gtk/gtkrange.c:488
+#: gtk/gtkrange.c:510
 msgid "Draw slider ACTIVE during drag"
 msgstr "رسم المتزلّج نشطا عند السّحب"
 
-#: gtk/gtkrange.c:489
+#: gtk/gtkrange.c:511
 msgid ""
 "With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
 "IN while they are dragged"
 msgstr "إذا كان صحيحا، يتم الرسم المزلجات كـ ACTIVE بظل IN عند سحبها"
 
-#: gtk/gtkrange.c:503
+#: gtk/gtkrange.c:525
 msgid "Trough Side Details"
 msgstr "انخفاض التفاصيل الجانبية"
 
-#: gtk/gtkrange.c:504
+#: gtk/gtkrange.c:526
 msgid ""
 "When TRUE, the parts of the trough on the two sides of the slider are drawn "
 "with different details"
@@ -4257,102 +4715,101 @@ msgstr ""
 "إذا كان صحيحا، يتم رسم أجزاء المنخفض على الجانبين الإثنين للمتزلج بتفاصيل "
 "مختلفة"
 
-#: gtk/gtkrange.c:520
+#: gtk/gtkrange.c:542
 msgid "Trough Under Steppers"
 msgstr "انخفاض تحت المدرج"
 
-#: gtk/gtkrange.c:521
+#: gtk/gtkrange.c:543
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr "فيما اذا يتم رسم الطول الكامل للمدى أو استثناء المباعدة و الدرجات"
 
-#: gtk/gtkrange.c:534
-#, fuzzy
+#: gtk/gtkrange.c:556
 msgid "Arrow scaling"
-msgstr "مباعدة الأسهم"
+msgstr "تحجيم الأسهم"
 
-#: gtk/gtkrange.c:535
+#: gtk/gtkrange.c:557
 msgid "Arrow scaling with regard to scroll button size"
-msgstr ""
+msgstr "تغيير حجم السهم وفقاً لحجم زر التمرير"
 
-#: gtk/gtkrecentaction.c:679 gtk/gtkrecentchoosermenu.c:206
+#: gtk/gtkrecentaction.c:616 gtk/gtkrecentchoosermenu.c:227
 msgid "Show Numbers"
 msgstr "اعرض الأرقام"
 
-#: gtk/gtkrecentaction.c:680 gtk/gtkrecentchoosermenu.c:207
+#: gtk/gtkrecentaction.c:617 gtk/gtkrecentchoosermenu.c:228
 msgid "Whether the items should be displayed with a number"
 msgstr "فيما إذا يتم عرض العناصر بعدد"
 
-#: gtk/gtkrecentchooser.c:120
+#: gtk/gtkrecentchooser.c:132
 msgid "Recent Manager"
 msgstr "المدير الأخير"
 
-#: gtk/gtkrecentchooser.c:121
+#: gtk/gtkrecentchooser.c:133
 msgid "The RecentManager object to use"
 msgstr "جسم المدير الأخير المستخدم"
 
-#: gtk/gtkrecentchooser.c:135
+#: gtk/gtkrecentchooser.c:147
 msgid "Show Private"
 msgstr "اظهر الخاص"
 
-#: gtk/gtkrecentchooser.c:136
+#: gtk/gtkrecentchooser.c:148
 msgid "Whether the private items should be displayed"
 msgstr "فيما إذا يفترض اظهار العناصر الخاصة"
 
-#: gtk/gtkrecentchooser.c:149
+#: gtk/gtkrecentchooser.c:161
 msgid "Show Tooltips"
 msgstr "اظهر التلميحات"
 
-#: gtk/gtkrecentchooser.c:150
+#: gtk/gtkrecentchooser.c:162
 msgid "Whether there should be a tooltip on the item"
 msgstr "فيما إذا يفترض عرض تلميحة العنصر"
 
-#: gtk/gtkrecentchooser.c:162
+#: gtk/gtkrecentchooser.c:174
 msgid "Show Icons"
 msgstr "اظهر الأيقونات"
 
-#: gtk/gtkrecentchooser.c:163
+#: gtk/gtkrecentchooser.c:175
 msgid "Whether there should be an icon near the item"
 msgstr "فيما إذا يفترض عرض أيقونة أمام العنصر"
 
-#: gtk/gtkrecentchooser.c:178
+#: gtk/gtkrecentchooser.c:190
 msgid "Show Not Found"
 msgstr "اظهر غير الموجودة"
 
-#: gtk/gtkrecentchooser.c:179
+#: gtk/gtkrecentchooser.c:191
 msgid "Whether the items pointing to unavailable resources should be displayed"
 msgstr "فيما اذا وجب عرض العناصر المشيرة إلى مصادر غير متوفرة"
 
-#: gtk/gtkrecentchooser.c:192
+#: gtk/gtkrecentchooser.c:204
 msgid "Whether to allow multiple items to be selected"
 msgstr "ما إذا سيتم السماح بانتقاء عناصر متعددة"
 
-#: gtk/gtkrecentchooser.c:205
+#: gtk/gtkrecentchooser.c:217
 msgid "Local only"
 msgstr "المحلي فقط"
 
-#: gtk/gtkrecentchooser.c:206
+#: gtk/gtkrecentchooser.c:218
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr "فيما إذا يجب تحديد المصادر بالملفات المحلية: URI"
 
-#: gtk/gtkrecentchooser.c:222 gtk/gtkrecentmanager.c:229
+#: gtk/gtkrecentchooser.c:234 gtk/gtkrecentmanager.c:229
 msgid "Limit"
 msgstr "الحدّ"
 
-#: gtk/gtkrecentchooser.c:223
+#: gtk/gtkrecentchooser.c:235
 msgid "The maximum number of items to be displayed"
 msgstr "العدد العلوي للعناصر المعروضة"
 
-#: gtk/gtkrecentchooser.c:237
+#: gtk/gtkrecentchooser.c:249
 msgid "Sort Type"
 msgstr "نوع التّرتيب"
 
-#: gtk/gtkrecentchooser.c:238
+#: gtk/gtkrecentchooser.c:250
 msgid "The sorting order of the items displayed"
 msgstr "كيفية تصنيف العناصر المعروضة"
 
-#: gtk/gtkrecentchooser.c:253
+#: gtk/gtkrecentchooser.c:265
 msgid "The current filter for selecting which resources are displayed"
 msgstr "المرشّح الحالي لانتقاء الموارد المعروضة"
 
@@ -4369,159 +4826,154 @@ msgstr "أكبر عدد من العناصر المرجعة من gtk_recent_manag
 msgid "The size of the recently used resources list"
 msgstr "حجم قائمة الموارد المستخدمة مؤخرا"
 
-#: gtk/gtkruler.c:90
+#: gtk/gtkruler.c:128
 msgid "Lower"
 msgstr "الأسفل"
 
-#: gtk/gtkruler.c:91
+#: gtk/gtkruler.c:129
 msgid "Lower limit of ruler"
 msgstr "الحد الأسفل للمسطرة"
 
-#: gtk/gtkruler.c:100
+#: gtk/gtkruler.c:138
 msgid "Upper"
 msgstr "الأعلى"
 
-#: gtk/gtkruler.c:101
+#: gtk/gtkruler.c:139
 msgid "Upper limit of ruler"
 msgstr "الحد الأعلى للمسطرة"
 
-#: gtk/gtkruler.c:111
+#: gtk/gtkruler.c:149
 msgid "Position of mark on the ruler"
 msgstr "موقع العلامة على المسطرة"
 
-#: gtk/gtkruler.c:120
+#: gtk/gtkruler.c:158
 msgid "Max Size"
 msgstr "الحجم الأقصى"
 
-#: gtk/gtkruler.c:121
+#: gtk/gtkruler.c:159
 msgid "Maximum size of the ruler"
 msgstr "الحجم الأقصى للمسطرة"
 
-#: gtk/gtkruler.c:136
+#: gtk/gtkruler.c:174
 msgid "Metric"
 msgstr "القياس"
 
-#: gtk/gtkruler.c:137
+#: gtk/gtkruler.c:175
 msgid "The metric used for the ruler"
 msgstr "القياس المستعمل للمسطرة"
 
-#: gtk/gtkscale.c:143
+#: gtk/gtkscale.c:219
 msgid "The number of decimal places that are displayed in the value"
 msgstr "عدد الخانات العشرية التي يتم عرضها في القيمة"
 
-#: gtk/gtkscale.c:152
+#: gtk/gtkscale.c:228
 msgid "Draw Value"
 msgstr "رسم القيمة"
 
-#: gtk/gtkscale.c:153
+#: gtk/gtkscale.c:229
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "ما إذا سيتم عرض القيمة الحالية كسلسلة بجانب المتزحلق"
 
-#: gtk/gtkscale.c:160
+#: gtk/gtkscale.c:236
 msgid "Value Position"
 msgstr "موقع القيمة"
 
-#: gtk/gtkscale.c:161
+#: gtk/gtkscale.c:237
 msgid "The position in which the current value is displayed"
 msgstr "موقع عرض القيمة الحالية"
 
-#: gtk/gtkscale.c:168
+#: gtk/gtkscale.c:244
 msgid "Slider Length"
 msgstr "طول المتزحلق"
 
-#: gtk/gtkscale.c:169
+#: gtk/gtkscale.c:245
 msgid "Length of scale's slider"
 msgstr "طول متزحلق القياس"
 
-#: gtk/gtkscale.c:177
+#: gtk/gtkscale.c:253
 msgid "Value spacing"
 msgstr "فراغات القيمة"
 
-#: gtk/gtkscale.c:178
+#: gtk/gtkscale.c:254
 msgid "Space between value text and the slider/trough area"
 msgstr "الفراغ بين نص القيمة ومنطقة المتزحلق/المنخفض"
 
-#: gtk/gtkscalebutton.c:192
-#, fuzzy
-msgid "The orientation of the scale"
-msgstr "إتجاه الطبق."
-
-#: gtk/gtkscalebutton.c:201
+#: gtk/gtkscalebutton.c:207
 msgid "The value of the scale"
 msgstr "قيمة المقياس"
 
-#: gtk/gtkscalebutton.c:211
+#: gtk/gtkscalebutton.c:217
 msgid "The icon size"
 msgstr "حجم الأيقونة"
 
-#: gtk/gtkscalebutton.c:220
+#: gtk/gtkscalebutton.c:226
 msgid ""
 "The GtkAdjustment that contains the current value of this scale button object"
 msgstr "GtkAdjustment المحتوي على القيمة الحالية لجسم التحجيم هذا"
 
-#: gtk/gtkscalebutton.c:248
+#: gtk/gtkscalebutton.c:254
 msgid "Icons"
 msgstr "أيقونات"
 
-#: gtk/gtkscalebutton.c:249
+#: gtk/gtkscalebutton.c:255
 msgid "List of icon names"
 msgstr "قائمة أسماء الإيقونات"
 
-#: gtk/gtkscrollbar.c:50
+#: gtk/gtkscrollbar.c:51
 msgid "Minimum Slider Length"
 msgstr "الطول الأدنى للمتزحلق"
 
-#: gtk/gtkscrollbar.c:51
+#: gtk/gtkscrollbar.c:52
 msgid "Minimum length of scrollbar slider"
 msgstr "الطول الأدنى لمتزحلق عمود اللف"
 
-#: gtk/gtkscrollbar.c:59
+#: gtk/gtkscrollbar.c:60
 msgid "Fixed slider size"
 msgstr "متزحلق ذي حجم ثابت"
 
-#: gtk/gtkscrollbar.c:60
+#: gtk/gtkscrollbar.c:61
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "لا تغير حجم المتزحلق،بل قم بقفله عند الطول الأدنى"
 
-#: gtk/gtkscrollbar.c:84
+#: gtk/gtkscrollbar.c:82
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "اعرض زر سهم تراجع ثان عند النهاية المعاكسة لعمود التدرج"
 
-#: gtk/gtkscrollbar.c:92
+#: gtk/gtkscrollbar.c:89
 msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "اعرض زر سهم تقدّم ثان عند النهاية المعاكسة لعمود التدرج"
 
-#: gtk/gtkscrolledwindow.c:220 gtk/gtktext.c:545 gtk/gtktreeview.c:578
+#: gtk/gtkscrolledwindow.c:218 gtk/gtktext.c:545 gtk/gtktreeview.c:572
 msgid "Horizontal Adjustment"
 msgstr "ضبط أفقي"
 
-#: gtk/gtkscrolledwindow.c:227 gtk/gtktext.c:553 gtk/gtktreeview.c:586
+#: gtk/gtkscrolledwindow.c:225 gtk/gtktext.c:553 gtk/gtktreeview.c:580
 msgid "Vertical Adjustment"
 msgstr "ضبط عمودي"
 
-#: gtk/gtkscrolledwindow.c:234
+#: gtk/gtkscrolledwindow.c:232
 msgid "Horizontal Scrollbar Policy"
 msgstr "سياسة عمود اللف الأفقي"
 
-#: gtk/gtkscrolledwindow.c:235
+#: gtk/gtkscrolledwindow.c:233
 msgid "When the horizontal scrollbar is displayed"
 msgstr "آن عرض عمود اللف الأفقي"
 
-#: gtk/gtkscrolledwindow.c:242
+#: gtk/gtkscrolledwindow.c:240
 msgid "Vertical Scrollbar Policy"
 msgstr "سياسة عمود التدرج العمودي"
 
-#: gtk/gtkscrolledwindow.c:243
+#: gtk/gtkscrolledwindow.c:241
 msgid "When the vertical scrollbar is displayed"
 msgstr "آن عرض شريط التدرج العمودي"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:249
 msgid "Window Placement"
 msgstr "موضع النافذة"
 
-#: gtk/gtkscrolledwindow.c:252
+#: gtk/gtkscrolledwindow.c:250
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
@@ -4529,46 +4981,46 @@ msgstr ""
 "موقع المحتويات باعتبار أعمدة اللف. الخاصية صحيحة فقط إذا كانت \"window-"
 "placement-set\" صحيحة TRUE."
 
-#: gtk/gtkscrolledwindow.c:269
+#: gtk/gtkscrolledwindow.c:267
 msgid "Window Placement Set"
 msgstr "تم تحديد مكان النافذة"
 
-#: gtk/gtkscrolledwindow.c:270
+#: gtk/gtkscrolledwindow.c:268
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
 msgstr ""
 "إذا كان \"window-placement\" يستخدم لتحديد موقع المحتويات حسب أشرطة اللّف."
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:274
 msgid "Shadow Type"
 msgstr "نوع الظل"
 
-#: gtk/gtkscrolledwindow.c:277
+#: gtk/gtkscrolledwindow.c:275
 msgid "Style of bevel around the contents"
 msgstr "أسلوب الحافة حول المحتويات"
 
-#: gtk/gtkscrolledwindow.c:291
+#: gtk/gtkscrolledwindow.c:289
 msgid "Scrollbars within bevel"
 msgstr "أعمدة تصفح داخلية"
 
-#: gtk/gtkscrolledwindow.c:292
+#: gtk/gtkscrolledwindow.c:290
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "ضع أعمدة تصفح داخل النافذة"
 
-#: gtk/gtkscrolledwindow.c:298
+#: gtk/gtkscrolledwindow.c:296
 msgid "Scrollbar spacing"
 msgstr "فراغات عمود اللف"
 
-#: gtk/gtkscrolledwindow.c:299
+#: gtk/gtkscrolledwindow.c:297
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "عدد البكسلات بين أعمدة اللف و النافذة الملفوفة"
 
-#: gtk/gtkscrolledwindow.c:314
+#: gtk/gtkscrolledwindow.c:312
 msgid "Scrolled Window Placement"
 msgstr "وضع النافذة الملفوفة"
 
-#: gtk/gtkscrolledwindow.c:315
+#: gtk/gtkscrolledwindow.c:313
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
@@ -4584,213 +5036,213 @@ msgstr "رسم"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "فيما إذا كان الفاصل رسما أو فراغا"
 
-#: gtk/gtksettings.c:215
+#: gtk/gtksettings.c:224
 msgid "Double Click Time"
 msgstr "وقت النقر الثنائي"
 
-#: gtk/gtksettings.c:216
+#: gtk/gtksettings.c:225
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr "الوقت الأقصى المسموح بين نقرتين لاحتسابهما كنقرة ثنائية (بالمليثانية)"
 
-#: gtk/gtksettings.c:223
+#: gtk/gtksettings.c:232
 msgid "Double Click Distance"
 msgstr "مسافة النقر الثنائي"
 
-#: gtk/gtksettings.c:224
+#: gtk/gtksettings.c:233
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr "المسافة القصوى المسموح بها بين نقرتين لاعتبارهما نقرة ثنائية (بالبكسل)"
 
-#: gtk/gtksettings.c:240
+#: gtk/gtksettings.c:249
 msgid "Cursor Blink"
 msgstr "وميض المؤشر"
 
-#: gtk/gtksettings.c:241
+#: gtk/gtksettings.c:250
 msgid "Whether the cursor should blink"
 msgstr "فيما إذا كان المؤشر سيومض"
 
-#: gtk/gtksettings.c:248
+#: gtk/gtksettings.c:257
 msgid "Cursor Blink Time"
 msgstr "وقت وميض المؤشر"
 
-#: gtk/gtksettings.c:249
+#: gtk/gtksettings.c:258
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "مدة دورة وميض المؤشر، بالملي ثانية"
 
-#: gtk/gtksettings.c:268
+#: gtk/gtksettings.c:277
 msgid "Cursor Blink Timeout"
 msgstr "وقت وميض المؤشر"
 
-#: gtk/gtksettings.c:269
+#: gtk/gtksettings.c:278
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "مدة دورة وميض المؤشر، بالمليثانية"
 
-#: gtk/gtksettings.c:276
+#: gtk/gtksettings.c:285
 msgid "Split Cursor"
 msgstr "قسم المؤشر"
 
-#: gtk/gtksettings.c:277
+#: gtk/gtksettings.c:286
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr "فيما إذا يجب عرض مؤشرين للنصوص المخلوطة من يسار-لليمين ويمين-لليسار"
 
-#: gtk/gtksettings.c:284
+#: gtk/gtksettings.c:293
 msgid "Theme Name"
 msgstr "اسم التيمة"
 
-#: gtk/gtksettings.c:285
+#: gtk/gtksettings.c:294
 msgid "Name of theme RC file to load"
 msgstr "اسم ملف RC للتيمة لتحميله"
 
-#: gtk/gtksettings.c:293
+#: gtk/gtksettings.c:302
 msgid "Icon Theme Name"
 msgstr "اسم تيمة الأيقونات"
 
-#: gtk/gtksettings.c:294
+#: gtk/gtksettings.c:303
 msgid "Name of icon theme to use"
 msgstr "اسم تيمة الأيقونات لاستخدامها"
 
-#: gtk/gtksettings.c:302
+#: gtk/gtksettings.c:311
 msgid "Fallback Icon Theme Name"
 msgstr "اسم تيمة الأيقونات الإحتياطية"
 
-#: gtk/gtksettings.c:303
+#: gtk/gtksettings.c:312
 msgid "Name of a icon theme to fall back to"
 msgstr "اسم تيمة الأيقونات الإحتياطية"
 
-#: gtk/gtksettings.c:311
+#: gtk/gtksettings.c:320
 msgid "Key Theme Name"
 msgstr "اسم تيمة المفتاح"
 
-#: gtk/gtksettings.c:312
+#: gtk/gtksettings.c:321
 msgid "Name of key theme RC file to load"
 msgstr "اسم ملف RC لتيمة المفتاح لتحميله"
 
-#: gtk/gtksettings.c:320
+#: gtk/gtksettings.c:329
 msgid "Menu bar accelerator"
 msgstr "مفتاح الاختصار لعمود القائمة"
 
-#: gtk/gtksettings.c:321
+#: gtk/gtksettings.c:330
 msgid "Keybinding to activate the menu bar"
 msgstr "المفتاح الرابط لتنشيط عمود القوائم"
 
-#: gtk/gtksettings.c:329
+#: gtk/gtksettings.c:338
 msgid "Drag threshold"
 msgstr "سحب العتبة"
 
-#: gtk/gtksettings.c:330
+#: gtk/gtksettings.c:339
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "عدد البكسلات التي يمكن للمؤشر تحريكها قبل السحب"
 
-#: gtk/gtksettings.c:338
+#: gtk/gtksettings.c:347
 msgid "Font Name"
 msgstr "اسم الخط"
 
-#: gtk/gtksettings.c:339
+#: gtk/gtksettings.c:348
 msgid "Name of default font to use"
 msgstr "اسم الخط الافتراضي لاستخدامه"
 
-#: gtk/gtksettings.c:361
+#: gtk/gtksettings.c:370
 msgid "Icon Sizes"
 msgstr "أحجام الأيقونات"
 
-#: gtk/gtksettings.c:362
+#: gtk/gtksettings.c:371
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "قائمة أحجام الأيقونات (gtk-menu=16,16:gtk-button=20,20..."
 
-#: gtk/gtksettings.c:370
+#: gtk/gtksettings.c:379
 msgid "GTK Modules"
 msgstr "وحدات ج.ت.ك GTK"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:380
 msgid "List of currently active GTK modules"
 msgstr "وحدات ج.ت.ك GTK النشطة حاليا"
 
-#: gtk/gtksettings.c:380
+#: gtk/gtksettings.c:389
 msgid "Xft Antialias"
 msgstr "تحسين الحواف لـ Xft·"
 
-#: gtk/gtksettings.c:381
+#: gtk/gtksettings.c:390
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "فيما إذا ستحسّن حواف خطوط Xft، 0=لا، 1=نعم، -1=الإفتراض"
 
-#: gtk/gtksettings.c:390
+#: gtk/gtksettings.c:399
 msgid "Xft Hinting"
 msgstr "تركيز Xft"
 
-#: gtk/gtksettings.c:391
+#: gtk/gtksettings.c:400
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "فيما إذا يقع تركيز خطوط Xft، 0=لا، 1=نعم، -1=الإفتراض"
 
-#: gtk/gtksettings.c:400
+#: gtk/gtksettings.c:409
 msgid "Xft Hint Style"
 msgstr "أسلوب تركيز Xft"
 
-#: gtk/gtksettings.c:401
+#: gtk/gtksettings.c:410
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr "درجة التركيز مستعمل; hintnone, hintslight, hintmedium, أو hintfull"
 
-#: gtk/gtksettings.c:410
+#: gtk/gtksettings.c:419
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: gtk/gtksettings.c:411
+#: gtk/gtksettings.c:420
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "نوع تحسين الحواف التحت بكسلي، لا تحسين أو rgb أو bgr أو vrgb أو·vbgr"
 
-#: gtk/gtksettings.c:420
+#: gtk/gtksettings.c:429
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: gtk/gtksettings.c:421
+#: gtk/gtksettings.c:430
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "الإستبانة لـ Xft، بالـ 1024·*·نقطة للإنش. -1·لإستخدام القيمة الإفتراضيّة"
 
-#: gtk/gtksettings.c:430
+#: gtk/gtksettings.c:439
 msgid "Cursor theme name"
 msgstr "اسم ملف سِمة المؤشّر"
 
-#: gtk/gtksettings.c:431
+#: gtk/gtksettings.c:440
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr "اسم نسق المؤشر المستخدم، أو NULL لاستعمال النسق الإفتراضي"
 
-#: gtk/gtksettings.c:439
+#: gtk/gtksettings.c:448
 msgid "Cursor theme size"
 msgstr "حجم سِمة المؤشر"
 
-#: gtk/gtksettings.c:440
+#: gtk/gtksettings.c:449
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "الحجم المستعمل للمؤشرات، أو 0 لاستعمال الحجم الإفتراضي"
 
-#: gtk/gtksettings.c:450
+#: gtk/gtksettings.c:459
 msgid "Alternative button order"
 msgstr "ترتيب الأزرار البديل"
 
-#: gtk/gtksettings.c:451
+#: gtk/gtksettings.c:460
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "فيما إذا تستعمل الأزرار في الحوارات الترتيب البديل"
 
-#: gtk/gtksettings.c:468
+#: gtk/gtksettings.c:477
 msgid "Alternative sort indicator direction"
 msgstr "اتجاه الفرز الذي يتوجب على مؤشر الفرز أن يشير إليه"
 
-#: gtk/gtksettings.c:469
+#: gtk/gtksettings.c:478
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
 msgstr "إذا كان اتجاه موضحات الترتيب في مظهر القائمة و الشجرة مقلوبا للإفتراضي"
 
-#: gtk/gtksettings.c:477
+#: gtk/gtksettings.c:486
 msgid "Show the 'Input Methods' menu"
 msgstr "عرض قائمة 'انماط الإدخال'"
 
-#: gtk/gtksettings.c:478
+#: gtk/gtksettings.c:487
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
@@ -4798,11 +5250,11 @@ msgstr ""
 "فيما اذا كانت القوائم السياقية للمداخل و مظاهر النص تعطي امكانية تغيير كيفية "
 "الإدخال"
 
-#: gtk/gtksettings.c:486
+#: gtk/gtksettings.c:495
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "عرض قائمة 'Y]ohg "
 
-#: gtk/gtksettings.c:487
+#: gtk/gtksettings.c:496
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -4810,242 +5262,266 @@ msgstr ""
 "فيما اذا كانت القوائم السياقية للمداخل و مظاهر النص تعطي امكانية ادخال محارف "
 "التغيير"
 
-#: gtk/gtksettings.c:495
+#: gtk/gtksettings.c:504
 msgid "Start timeout"
 msgstr "انقضاء مدة البدأ"
 
-#: gtk/gtksettings.c:496
+#: gtk/gtksettings.c:505
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "القيمة البدئية لمهلة الإنتهاء، عند ضغط الزر"
 
-#: gtk/gtksettings.c:505
+#: gtk/gtksettings.c:514
 msgid "Repeat timeout"
 msgstr "انقضاء مدة الإعادة"
 
-#: gtk/gtksettings.c:506
+#: gtk/gtksettings.c:515
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "القيمة الإعادية لمهلة الإنتهاء، عند ضغط الزر"
 
-#: gtk/gtksettings.c:515
+#: gtk/gtksettings.c:524
 msgid "Expand timeout"
 msgstr "مدة انقضاء التوسيع"
 
-#: gtk/gtksettings.c:516
+#: gtk/gtksettings.c:525
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "قيمة تمديد المهلة, عند امتداد الودجة إلى منطقة جديدة"
 
-#: gtk/gtksettings.c:551
+#: gtk/gtksettings.c:560
 msgid "Color scheme"
 msgstr "مخطط اللون"
 
-#: gtk/gtksettings.c:552
+#: gtk/gtksettings.c:561
 msgid "A palette of named colors for use in themes"
 msgstr "لوح ألوان لألوان مسماه لكي تستخد في السِّمات"
 
-#: gtk/gtksettings.c:561
+#: gtk/gtksettings.c:570
 msgid "Enable Animations"
 msgstr "مكّن الرسوم المتحركة"
 
-#: gtk/gtksettings.c:562
+#: gtk/gtksettings.c:571
 msgid "Whether to enable toolkit-wide animations."
 msgstr "فيما أذا يتم تفعيل الحرَاكة "
 
-#: gtk/gtksettings.c:580
+#: gtk/gtksettings.c:589
 msgid "Enable Touchscreen Mode"
 msgstr "مكّن نمط شاشة اللمسض"
 
-#: gtk/gtksettings.c:581
+#: gtk/gtksettings.c:590
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "عندما يكون صحيحا ، لا يوجد طلب تسليم اخطار هذه الاحداث على الشاشة"
 
-#: gtk/gtksettings.c:598
+#: gtk/gtksettings.c:607
 msgid "Tooltip timeout"
 msgstr "مدة ظهور التلميحة"
 
-#: gtk/gtksettings.c:599
+#: gtk/gtksettings.c:608
 msgid "Timeout before tooltip is shown"
 msgstr "مدة إظهار التلميحات"
 
-#: gtk/gtksettings.c:624
+#: gtk/gtksettings.c:633
 msgid "Tooltip browse timeout"
 msgstr "مدة اظهار التلميحة في وضع التصفح"
 
-#: gtk/gtksettings.c:625
+#: gtk/gtksettings.c:634
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr "مدة إظهار التلميحات عند تفعيل نسق التصفح"
 
-#: gtk/gtksettings.c:646
+#: gtk/gtksettings.c:655
 msgid "Tooltip browse mode timeout"
 msgstr "مدة تلميحة نسق التصفح"
 
-#: gtk/gtksettings.c:647
+#: gtk/gtksettings.c:656
 msgid "Timeout after which browse mode is disabled"
 msgstr "مدة اظهار التلميحة بعد تعطيل نسق التصفح"
 
-#: gtk/gtksettings.c:666
+#: gtk/gtksettings.c:675
 msgid "Keynav Cursor Only"
 msgstr "مؤشر Keynav فقط"
 
-#: gtk/gtksettings.c:667
+#: gtk/gtksettings.c:676
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
-msgstr "اذا كان TRUE، لا يوجد إلا مفاتيح مؤشر لتصفح القطع"
+msgstr "اذا كان TRUE، لا يوجد إلا مفاتيح مؤشر لتصفح الودجات "
 
-#: gtk/gtksettings.c:684
+#: gtk/gtksettings.c:693
 msgid "Keynav Wrap Around"
 msgstr "تدوير Keynav "
 
-#: gtk/gtksettings.c:685
+#: gtk/gtksettings.c:694
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "ما إذا يجب التدوير عند التصفح بالمؤشر"
 
-#: gtk/gtksettings.c:705
+#: gtk/gtksettings.c:714
 msgid "Error Bell"
 msgstr "جرس الخطأ"
 
-#: gtk/gtksettings.c:706
+#: gtk/gtksettings.c:715
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr "اذا كان TRUE، الأخطاء و التصفح بلوحة المفاتيح تحدث أصواتا"
 
-#: gtk/gtksettings.c:723
+#: gtk/gtksettings.c:732
 msgid "Color Hash"
 msgstr "هاش اللون"
 
-#: gtk/gtksettings.c:724
+#: gtk/gtksettings.c:733
 msgid "A hash table representation of the color scheme."
 msgstr "تمثيل جدول هاش لنظام الألوان"
 
-#: gtk/gtksettings.c:732
+#: gtk/gtksettings.c:741
 msgid "Default file chooser backend"
 msgstr "خلفيّة منتقي الملفات الإفتراضيّة"
 
-#: gtk/gtksettings.c:733
+#: gtk/gtksettings.c:742
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "اسم خلفية GtkFileChooser التي ستستخدم إفتراضيّا"
 
-#: gtk/gtksettings.c:750
+#: gtk/gtksettings.c:759
 msgid "Default print backend"
 msgstr "خلفيّة الطابعة الإفتراضيّة"
 
-#: gtk/gtksettings.c:751
+#: gtk/gtksettings.c:760
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "اسم النّهايات الخلفيّة لـ GtkPrintBackend التي ستستخدم إفتراضيّا"
 
-#: gtk/gtksettings.c:774
+#: gtk/gtksettings.c:783
 msgid "Default command to run when displaying a print preview"
 msgstr "الأمر الإفتراضي المشغل عند عرض الطبع"
 
-#: gtk/gtksettings.c:775
+#: gtk/gtksettings.c:784
 msgid "Command to run when displaying a print preview"
 msgstr "الأمر المشغل عند عرض الطبع"
 
-#: gtk/gtksettings.c:791
+#: gtk/gtksettings.c:800
 msgid "Enable Mnemonics"
 msgstr "مكّن التزيينات"
 
-#: gtk/gtksettings.c:792
+#: gtk/gtksettings.c:801
 msgid "Whether labels should have mnemonics"
 msgstr "اذا يجب أن يكون للتسميات تزيينات"
 
-#: gtk/gtksettings.c:808
+#: gtk/gtksettings.c:817
 msgid "Enable Accelerators"
 msgstr "فعّل المسرّعات"
 
-#: gtk/gtksettings.c:809
+#: gtk/gtksettings.c:818
 msgid "Whether menu items should have accelerators"
 msgstr "فيما إذا يجب أن تحتوي عناصر القوائم مسرعات"
 
-#: gtk/gtksettings.c:826
+#: gtk/gtksettings.c:835
 msgid "Recent Files Limit"
 msgstr "العدد الأقصى للملفّات الحديثة"
 
-#: gtk/gtksettings.c:827
+#: gtk/gtksettings.c:836
 msgid "Number of recently used files"
 msgstr "عدد الملفّات المستخدمة حديثا"
 
-#: gtk/gtksettings.c:841
+#: gtk/gtksettings.c:854
 msgid "Default IM module"
 msgstr "وحدة IM الإفتراضية"
 
-#: gtk/gtksettings.c:842
+#: gtk/gtksettings.c:855
 msgid "Which IM module should be used by default"
 msgstr "وحدة IM الإفتراضية"
 
-#: gtk/gtksettings.c:860
-#, fuzzy
+#: gtk/gtksettings.c:873
 msgid "Recent Files Max Age"
-msgstr "العدد الأقصى للملفّات الحديثة"
+msgstr "العمر الأقصى للملفّات الحديثة"
 
-#: gtk/gtksettings.c:861
-#, fuzzy
+#: gtk/gtksettings.c:874
 msgid "Maximum age of recently used files, in days"
-msgstr "عدد الملفّات المستخدمة حديثا"
+msgstr "العمر الأقصى للملفات المستخدمة حديثاً، بالأيام"
 
-#: gtk/gtksettings.c:870
+#: gtk/gtksettings.c:883
 msgid "Fontconfig configuration timestamp"
-msgstr ""
+msgstr "الطابع الزمني لإعدادت fontconfig"
 
-#: gtk/gtksettings.c:871
+#: gtk/gtksettings.c:884
 msgid "Timestamp of current fontconfig configuration"
-msgstr ""
+msgstr "الطابع الزمني لإعدادت fontconfig الحالية"
 
-#: gtk/gtksettings.c:893
-#, fuzzy
+#: gtk/gtksettings.c:906
 msgid "Sound Theme Name"
-msgstr "اسم تيمة الأيقونات"
+msgstr "اسم سمة الصوت"
 
-#: gtk/gtksettings.c:894
-#, fuzzy
+#: gtk/gtksettings.c:907
 msgid "XDG sound theme name"
-msgstr "اسم ملف سِمة المؤشّر"
+msgstr "اسم سمة صوت XDG"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: gtk/gtksettings.c:916
+#: gtk/gtksettings.c:929
 msgid "Audible Input Feedback"
+msgstr "دخل تغذية راجعة سمعية"
+
+#: gtk/gtksettings.c:930
+msgid "Whether to play event sounds as feedback to user input"
+msgstr "فيما إذا كان تشغيل أصوات الأحداث كرد فعل على إدخال المستخدم"
+
+#: gtk/gtksettings.c:951
+msgid "Enable Event Sounds"
+msgstr "مكّن أصوات الأحدات"
+
+#: gtk/gtksettings.c:952
+msgid "Whether to play any event sounds at all"
+msgstr "فيما إذا كان سيشغّل أي من أصوات الأحداث على الإطلاق"
+
+#: gtk/gtksettings.c:967
+msgid "Enable Tooltips"
+msgstr "مكّن التلميحات"
+
+#: gtk/gtksettings.c:968
+msgid "Whether tooltips should be shown on widgets"
+msgstr "فيما إذا كانت التلميحات ستعرض على الودجات"
+
+#: gtk/gtksettings.c:981
+msgid "Toolbar style"
+msgstr "نمط شريط الأدوات"
+
+#: gtk/gtksettings.c:982
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
+msgstr ""
+"ما إذا كانت أشرطة ا?دوات الافتراضية لها نص فقط، نص مع أيقونات، أيقونات فقط، "
+"إلخ."
+
+#: gtk/gtksettings.c:996
+#, fuzzy
+msgid "Toolbar Icon Size"
+msgstr "حجم أيقونة شريط الأدوات"
+
+#: gtk/gtksettings.c:997
+#, fuzzy
+msgid "The size of icons in default toolbars."
+msgstr "حجم ا?يقونات في أشرطة ا?دوات الافتراضية"
+
+#: gtk/gtksettings.c:1014
+#, fuzzy
+msgid "Auto Mnemonics"
+msgstr "مكّن التزيينات"
+
+#: gtk/gtksettings.c:1015
+msgid ""
+"Whether mnemonics should be automatically shown and hidden when the user "
+"presses the mnemonic activator."
 msgstr ""
 
-#: gtk/gtksettings.c:917
-#, fuzzy
-msgid "Whether to play event sounds as feedback to user input"
-msgstr "ما إذا كان الكائن يرد على ا?دخال"
-
-#: gtk/gtksettings.c:938
-#, fuzzy
-msgid "Enable Event Sounds"
-msgstr "مكّن الرسوم المتحركة"
-
-#: gtk/gtksettings.c:939
-#, fuzzy
-msgid "Whether to play any event sounds at all"
-msgstr "فيما إذا يجب عرض حالة \"تناقض\""
-
-#: gtk/gtksettings.c:954
-#, fuzzy
-msgid "Enable Tooltips"
-msgstr "تلميحات"
-
-#: gtk/gtksettings.c:955
-#, fuzzy
-msgid "Whether tooltips should be shown on widgets"
-msgstr "فيما إذا كان سيتم عرض الألسنة أم لا"
-
-#: gtk/gtksizegroup.c:293
+#: gtk/gtksizegroup.c:301
 msgid "Mode"
 msgstr "النسق"
 
-#: gtk/gtksizegroup.c:294
+#: gtk/gtksizegroup.c:302
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
-msgstr "الإتجاه الذي تؤثر فيه مجموعة الحجم على الحجوم المطلوبة لقطعها "
+msgstr ""
+"الاتجاه الذي تؤثر فيه مجموعة الحجم على الحجوم المطلوبة للودجات المكونة لها"
 
-#: gtk/gtksizegroup.c:310
+#: gtk/gtksizegroup.c:318
 msgid "Ignore hidden"
 msgstr "أهمل المخفي"
 
-#: gtk/gtksizegroup.c:311
+#: gtk/gtksizegroup.c:319
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr "اذا كان صحيحا ، يتم تجاهل القطع غير المرسومة عند تحديد حجم المجموعة"
+msgstr "اذا كان صحيحاً ، يتم تجاهل القطع غير المرسومة عند تحديد حجم المجموعة"
 
 #: gtk/gtkspinbutton.c:209
 msgid "The adjustment that holds the value of the spinbutton"
@@ -5098,50 +5574,103 @@ msgstr "يقرأ القيمة الحالية، أو يعين قيمة جديدة
 msgid "Style of bevel around the spin button"
 msgstr "أسلوب الميل حول الزر النابض"
 
-#: gtk/gtkstatusbar.c:141
+#: gtk/gtkspinner.c:129
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "فيما إذا كانت العملية مفعلة."
+
+#: gtk/gtkspinner.c:143
+#, fuzzy
+msgid "Number of steps"
+msgstr "عدد الصفحات"
+
+#: gtk/gtkspinner.c:144
+msgid ""
+"The number of steps for the spinner to complete a full loop. The animation "
+"will complete a full cycle in one second by default (see #GtkSpinner:cycle-"
+"duration)."
+msgstr ""
+
+#: gtk/gtkspinner.c:159
+#, fuzzy
+msgid "Animation duration"
+msgstr "رسوم متحركة"
+
+#: gtk/gtkspinner.c:160
+msgid ""
+"The length of time in milliseconds for the spinner to complete a full loop"
+msgstr ""
+
+#: gtk/gtkstatusbar.c:148
 msgid "Has Resize Grip"
 msgstr "له مقبض تحجيم"
 
-#: gtk/gtkstatusbar.c:142
+#: gtk/gtkstatusbar.c:149
 msgid "Whether the statusbar has a grip for resizing the toplevel"
 msgstr "فيما إذا كان لعمود الحالة "
 
-#: gtk/gtkstatusbar.c:187
+#: gtk/gtkstatusbar.c:194
 msgid "Style of bevel around the statusbar text"
 msgstr "أسلوب الحافة حول نص عمود الحالة"
 
-#: gtk/gtkstatusicon.c:226
-#, fuzzy
-msgid "GIcon"
-msgstr "أيقونة"
-
-#: gtk/gtkstatusicon.c:244
+#: gtk/gtkstatusicon.c:271
 msgid "The size of the icon"
 msgstr "حجم الأيقونة"
 
-#: gtk/gtkstatusicon.c:254
+#: gtk/gtkstatusicon.c:281
 msgid "The screen where this status icon will be displayed"
 msgstr "الشاشة التي ستعرض فيها ايقونة الحالة"
 
-#: gtk/gtkstatusicon.c:261
+#: gtk/gtkstatusicon.c:288
 msgid "Blinking"
 msgstr "ومّاض"
 
-#: gtk/gtkstatusicon.c:262
+#: gtk/gtkstatusicon.c:289
 msgid "Whether or not the status icon is blinking"
 msgstr "فيما إذا كانت أيقونة الحالة وامضة"
 
-#: gtk/gtkstatusicon.c:270
+#: gtk/gtkstatusicon.c:297
 msgid "Whether or not the status icon is visible"
 msgstr "فيما إذا كانت أيقونة الحالة مرئية."
 
-#: gtk/gtkstatusicon.c:286
+#: gtk/gtkstatusicon.c:313
 msgid "Whether or not the status icon is embedded"
 msgstr "فيما إذا كانت أيقونة الحالة داخلية"
 
-#: gtk/gtkstatusicon.c:302 gtk/gtktrayicon-x11.c:96
+#: gtk/gtkstatusicon.c:329 gtk/gtktrayicon-x11.c:111
 msgid "The orientation of the tray"
 msgstr "إتجاه الطبق."
+
+#: gtk/gtkstatusicon.c:356 gtk/gtkwidget.c:703
+msgid "Has tooltip"
+msgstr "له تلميحة"
+
+#: gtk/gtkstatusicon.c:357
+#, fuzzy
+msgid "Whether this tray icon has a tooltip"
+msgstr "إذا كان لهذه الودجة تلميحة"
+
+#: gtk/gtkstatusicon.c:382 gtk/gtkwidget.c:724
+msgid "Tooltip Text"
+msgstr "نص التلميحة"
+
+#: gtk/gtkstatusicon.c:383 gtk/gtkwidget.c:725 gtk/gtkwidget.c:746
+msgid "The contents of the tooltip for this widget"
+msgstr "نص تلميحة لهذه الودجة"
+
+#: gtk/gtkstatusicon.c:406 gtk/gtkwidget.c:745
+msgid "Tooltip markup"
+msgstr "خصائص التلميحة "
+
+#: gtk/gtkstatusicon.c:407
+#, fuzzy
+msgid "The contents of the tooltip for this tray icon"
+msgstr "نص تلميحة لهذه الودجة"
+
+#: gtk/gtkstatusicon.c:425
+#, fuzzy
+msgid "The title of this tray icon"
+msgstr "حجم الأيقونة"
 
 #: gtk/gtktable.c:129
 msgid "Rows"
@@ -5189,7 +5718,7 @@ msgstr "ربط إلى اليمين"
 
 #: gtk/gtktable.c:181
 msgid "The column number to attach the right side of a child widget to"
-msgstr "رقم العمود الضي إليه ستربط الجهة اليمنى للودجة الإبنة"
+msgstr "رقم العمود الذي  إليه ستربط الجهة اليمنى للودجة الإبنة"
 
 #: gtk/gtktable.c:187
 msgid "Top attachment"
@@ -5254,7 +5783,7 @@ msgstr "قسم السطر"
 
 #: gtk/gtktext.c:562
 msgid "Whether lines are wrapped at widget edges"
-msgstr "ما إذا تقسم السطور عند حواف القطع"
+msgstr "فيما إذا كانت السطور ستقسم عند حواف الودجات"
 
 #: gtk/gtktext.c:569
 msgid "Word Wrap"
@@ -5262,51 +5791,51 @@ msgstr "قسم الكلمات"
 
 #: gtk/gtktext.c:570
 msgid "Whether words are wrapped at widget edges"
-msgstr "ما إذا تقسم الكلمات عند حواف القطع"
+msgstr "فيما إذا كانت الكلمات ستقسم عند حواف الودجات"
 
-#: gtk/gtktextbuffer.c:179
+#: gtk/gtktextbuffer.c:180
 msgid "Tag Table"
 msgstr "جدول الشارات"
 
-#: gtk/gtktextbuffer.c:180
+#: gtk/gtktextbuffer.c:181
 msgid "Text Tag Table"
 msgstr "جدول الشارات النصية"
 
-#: gtk/gtktextbuffer.c:198
+#: gtk/gtktextbuffer.c:199
 msgid "Current text of the buffer"
 msgstr "النص الحالي للحاجز"
 
-#: gtk/gtktextbuffer.c:212
+#: gtk/gtktextbuffer.c:213
 msgid "Has selection"
 msgstr "له اختيار"
 
-#: gtk/gtktextbuffer.c:213
+#: gtk/gtktextbuffer.c:214
 msgid "Whether the buffer has some text currently selected"
 msgstr "إذا كان الحاجز فيه نص مخزن"
 
-#: gtk/gtktextbuffer.c:229
+#: gtk/gtktextbuffer.c:230
 msgid "Cursor position"
 msgstr "موقع المؤشّر"
 
-#: gtk/gtktextbuffer.c:230
+#: gtk/gtktextbuffer.c:231
 msgid ""
 "The position of the insert mark (as offset from the beginning of the buffer)"
 msgstr "موقع علامة الإدخال (تعديل من بداية المخزن)"
 
-#: gtk/gtktextbuffer.c:245
+#: gtk/gtktextbuffer.c:246
 msgid "Copy target list"
 msgstr "انسخ القائمة الوجهة"
 
-#: gtk/gtktextbuffer.c:246
+#: gtk/gtktextbuffer.c:247
 msgid ""
 "The list of targets this buffer supports for clipboard copying and DND source"
 msgstr "قائمة الأهداف الممكنة لهذا المخزن لِنسخ الحافضة و مصدر د.ن.د DND"
 
-#: gtk/gtktextbuffer.c:261
+#: gtk/gtktextbuffer.c:262
 msgid "Paste target list"
 msgstr "قائمة أهداف اللصق"
 
-#: gtk/gtktextbuffer.c:262
+#: gtk/gtktextbuffer.c:263
 msgid ""
 "The list of targets this buffer supports for clipboard pasting and DND "
 "destination"
@@ -5408,7 +5937,7 @@ msgstr ""
 "التيمات الخ مما يجعله موصى به. يحدّد بانكو بعض المقاييس مثل "
 "PANGO_SCALE_X_LARGE"
 
-#: gtk/gtktexttag.c:360 gtk/gtktextview.c:586
+#: gtk/gtktexttag.c:360 gtk/gtktextview.c:594
 msgid "Left, right, or center justification"
 msgstr "ضبط لليسار أو لليمين أو للوسط"
 
@@ -5424,7 +5953,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "الهامش ا?يسر"
 
-#: gtk/gtktexttag.c:387 gtk/gtktextview.c:595
+#: gtk/gtktexttag.c:387 gtk/gtktextview.c:603
 msgid "Width of the left margin in pixels"
 msgstr "عرض الهامش ا?يسر بالبكسل"
 
@@ -5432,15 +5961,15 @@ msgstr "عرض الهامش ا?يسر بالبكسل"
 msgid "Right margin"
 msgstr "الهامش ا?يمن"
 
-#: gtk/gtktexttag.c:397 gtk/gtktextview.c:605
+#: gtk/gtktexttag.c:397 gtk/gtktextview.c:613
 msgid "Width of the right margin in pixels"
 msgstr "عرض الهامش ا?يمن بالبكسل"
 
-#: gtk/gtktexttag.c:407 gtk/gtktextview.c:614
+#: gtk/gtktexttag.c:407 gtk/gtktextview.c:622
 msgid "Indent"
 msgstr "إزاحة"
 
-#: gtk/gtktexttag.c:408 gtk/gtktextview.c:615
+#: gtk/gtktexttag.c:408 gtk/gtktextview.c:623
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "مقدار إزاحة الفقرات، بالبكسل"
 
@@ -5456,7 +5985,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "بكسلات أعلى ا?سطر"
 
-#: gtk/gtktexttag.c:429 gtk/gtktextview.c:539
+#: gtk/gtktexttag.c:429 gtk/gtktextview.c:547
 msgid "Pixels of blank space above paragraphs"
 msgstr "بكسلات من المسافات الفارغة أعلى الفقرات"
 
@@ -5464,7 +5993,7 @@ msgstr "بكسلات من المسافات الفارغة أعلى الفقرا�
 msgid "Pixels below lines"
 msgstr "بكسلات أسفل ا?سطر"
 
-#: gtk/gtktexttag.c:439 gtk/gtktextview.c:549
+#: gtk/gtktexttag.c:439 gtk/gtktextview.c:557
 msgid "Pixels of blank space below paragraphs"
 msgstr "بكسلات من المسافات الفارغة أسفل الفقرات"
 
@@ -5472,20 +6001,20 @@ msgstr "بكسلات من المسافات الفارغة أسفل الفقرا�
 msgid "Pixels inside wrap"
 msgstr "بكسلات داخل الالتواء"
 
-#: gtk/gtktexttag.c:449 gtk/gtktextview.c:559
+#: gtk/gtktexttag.c:449 gtk/gtktextview.c:567
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "بكسلات من المسافات الفارغة بين ا?سطر الملتوية في فقرة"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:577
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:585
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "ما إذا لن يتم التواء الأسطر عند حدود الكلمات أو الرموز"
 
-#: gtk/gtktexttag.c:485 gtk/gtktextview.c:624
+#: gtk/gtktexttag.c:485 gtk/gtktextview.c:632
 msgid "Tabs"
 msgstr "الأشرطة"
 
-#: gtk/gtktexttag.c:486 gtk/gtktextview.c:625
+#: gtk/gtktexttag.c:486 gtk/gtktextview.c:633
 msgid "Custom tabs for this text"
 msgstr "أشرطة مخصصة لهذا النص"
 
@@ -5629,206 +6158,183 @@ msgstr "لون خلفية محدّد"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "فيما إذا كانت هذه الشارة تؤثر في لون خلفية الفقرة"
 
-#: gtk/gtktextview.c:538
+#: gtk/gtktextview.c:546
 msgid "Pixels Above Lines"
 msgstr "بكسلات فوق ا?سطر"
 
-#: gtk/gtktextview.c:548
+#: gtk/gtktextview.c:556
 msgid "Pixels Below Lines"
 msgstr "بكسلات تحت ا?سطر"
 
-#: gtk/gtktextview.c:558
+#: gtk/gtktextview.c:566
 msgid "Pixels Inside Wrap"
 msgstr "بكسلات داخل الالتواء"
 
-#: gtk/gtktextview.c:576
+#: gtk/gtktextview.c:584
 msgid "Wrap Mode"
 msgstr "نظام الالتواء"
 
-#: gtk/gtktextview.c:594
+#: gtk/gtktextview.c:602
 msgid "Left Margin"
 msgstr "الهامش الأيسر"
 
-#: gtk/gtktextview.c:604
+#: gtk/gtktextview.c:612
 msgid "Right Margin"
 msgstr "الهامش الأيمن"
 
-#: gtk/gtktextview.c:632
+#: gtk/gtktextview.c:640
 msgid "Cursor Visible"
 msgstr "المؤشر مرئي"
 
-#: gtk/gtktextview.c:633
+#: gtk/gtktextview.c:641
 msgid "If the insertion cursor is shown"
 msgstr "ما إذا كان مؤشر ا?دخال سيتم عرضه"
 
-#: gtk/gtktextview.c:640
+#: gtk/gtktextview.c:648
 msgid "Buffer"
 msgstr "ذاكرة وسيطة"
 
-#: gtk/gtktextview.c:641
+#: gtk/gtktextview.c:649
 msgid "The buffer which is displayed"
 msgstr "الذاكرة الوسيطة المعروضة"
 
-#: gtk/gtktextview.c:649
+#: gtk/gtktextview.c:657
 msgid "Whether entered text overwrites existing contents"
 msgstr "فيما إذا سينمّق النص المدخل المحتويات الموجودة"
 
-#: gtk/gtktextview.c:656
+#: gtk/gtktextview.c:664
 msgid "Accepts tab"
 msgstr "تقبل الألسنة"
 
-#: gtk/gtktextview.c:657
+#: gtk/gtktextview.c:665
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "فيما سينتج عن اللسان إدخال رمز لسان"
 
-#: gtk/gtktextview.c:666
+#: gtk/gtktextview.c:694
 msgid "Error underline color"
 msgstr "خطأ في لون التسطير"
 
-#: gtk/gtktextview.c:667
+#: gtk/gtktextview.c:695
 msgid "Color with which to draw error-indication underlines"
 msgstr "اللون الذي يتم به رسم التسطيرات المؤشرة للأخطاء"
 
-#: gtk/gtktoggleaction.c:103
+#: gtk/gtktoggleaction.c:104
 msgid "Create the same proxies as a radio action"
 msgstr "إنشاء البروكسيات المتوافقة كفعل مشع"
 
-#: gtk/gtktoggleaction.c:104
+#: gtk/gtktoggleaction.c:105
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr "فيما إذا ستبدو بروكسيّات هذا الحدث كبروكسيّات حدث مشعّة"
 
-#: gtk/gtktoggleaction.c:119
+#: gtk/gtktoggleaction.c:120
 msgid "If the toggle action should be active in or not"
 msgstr "ما إذا توجب أن يكون زر التغيير نشطا أم لا"
 
-#: gtk/gtktogglebutton.c:103 gtk/gtktoggletoolbutton.c:102
+#: gtk/gtktogglebutton.c:116 gtk/gtktoggletoolbutton.c:115
 msgid "If the toggle button should be pressed in or not"
 msgstr "ما إذا توجب أن يكون زر القفل مكبوسا أم لا"
 
-#: gtk/gtktogglebutton.c:111
+#: gtk/gtktogglebutton.c:124
 msgid "If the toggle button is in an \"in between\" state"
 msgstr "فيما إذا كان زر التحوّل في حالة \"بين\""
 
-#: gtk/gtktogglebutton.c:118
+#: gtk/gtktogglebutton.c:131
 msgid "Draw Indicator"
 msgstr "رسم المؤشر"
 
-#: gtk/gtktogglebutton.c:119
+#: gtk/gtktogglebutton.c:132
 msgid "If the toggle part of the button is displayed"
 msgstr "ما إذا كان جزء القفل من الرز سيتم عرضه"
 
-#: gtk/gtktoolbar.c:493
-msgid "The orientation of the toolbar"
-msgstr "اتجاه شريط ا?دوات"
-
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:494 gtk/gtktoolpalette.c:1021
 msgid "Toolbar Style"
 msgstr "منط شريط الأدوات"
 
-#: gtk/gtktoolbar.c:502
+#: gtk/gtktoolbar.c:495
 msgid "How to draw the toolbar"
 msgstr "كيفية رسم شريط ا?دوات"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:502
 msgid "Show Arrow"
 msgstr "عرض السهم"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:503
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "فيما إذا سيعرض سهم إذا لم يتلائم عمود الأدوات"
 
-#: gtk/gtktoolbar.c:525
+#: gtk/gtktoolbar.c:518
 msgid "Tooltips"
 msgstr "تلميحات"
 
-#: gtk/gtktoolbar.c:526
+#: gtk/gtktoolbar.c:519
 msgid "If the tooltips of the toolbar should be active or not"
 msgstr "فيما إذا وجب تنشيط تلميحات شريط الأدوات "
 
-#: gtk/gtktoolbar.c:548
+#: gtk/gtktoolbar.c:541
 msgid "Size of icons in this toolbar"
 msgstr "حجم الأيقونات في عمود الأدوات"
 
-#: gtk/gtktoolbar.c:563
+#: gtk/gtktoolbar.c:556 gtk/gtktoolpalette.c:1007
 msgid "Icon size set"
 msgstr "حجم الأيقونات محدّد"
 
-#: gtk/gtktoolbar.c:564
+#: gtk/gtktoolbar.c:557 gtk/gtktoolpalette.c:1008
 msgid "Whether the icon-size property has been set"
 msgstr "فيما إذا كتم تحديد  icon-size"
 
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:566
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "فيما إذا سيتلقى العنصر فضاء اضافيّا عند نموّ عمود الأدوات"
 
-#: gtk/gtktoolbar.c:581
+#: gtk/gtktoolbar.c:574 gtk/gtktoolitemgroup.c:1597
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "ما إذا يجب أن يكون العنصر بنفس الحجم كالعناصر المتجانسة الأخرى"
 
-#: gtk/gtktoolbar.c:588
+#: gtk/gtktoolbar.c:581
 msgid "Spacer size"
 msgstr "حجم الفاصل"
 
-#: gtk/gtktoolbar.c:589
+#: gtk/gtktoolbar.c:582
 msgid "Size of spacers"
 msgstr "حجم الفواصل"
 
-#: gtk/gtktoolbar.c:598
+#: gtk/gtktoolbar.c:591
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "كمية مسافة الحد بين ظل شريط ا?دوات وا?زرار"
 
-#: gtk/gtktoolbar.c:606
+#: gtk/gtktoolbar.c:599
 msgid "Maximum child expand"
 msgstr "التوسيع العلوي للابن "
 
-#: gtk/gtktoolbar.c:607
+#: gtk/gtktoolbar.c:600
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "أكبر حجم للفراغ المعطى للعنصر القابل للتوسيع"
 
-#: gtk/gtktoolbar.c:615
+#: gtk/gtktoolbar.c:608
 msgid "Space style"
 msgstr "نمط الفاصل"
 
-#: gtk/gtktoolbar.c:616
+#: gtk/gtktoolbar.c:609
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "ما إذا كانت الفواصل خطوط عمودية أو فقط فراغات"
 
-#: gtk/gtktoolbar.c:623
+#: gtk/gtktoolbar.c:616
 msgid "Button relief"
 msgstr "تحرير الزر"
 
-#: gtk/gtktoolbar.c:624
+#: gtk/gtktoolbar.c:617
 msgid "Type of bevel around toolbar buttons"
 msgstr "نوع الانحدار حول أزرار شريط الأدوات"
 
-#: gtk/gtktoolbar.c:631
+#: gtk/gtktoolbar.c:624
 msgid "Style of bevel around the toolbar"
 msgstr "نمط الانحدار حول شريط الأدوات"
 
-#: gtk/gtktoolbar.c:637
-msgid "Toolbar style"
-msgstr "نمط شريط الأدوات"
-
-#: gtk/gtktoolbar.c:638
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr ""
-"ما إذا كانت أشرطة ا?دوات الافتراضية لها نص فقط، نص مع أيقونات، أيقونات فقط، "
-"إلخ."
-
-#: gtk/gtktoolbar.c:644
-msgid "Toolbar icon size"
-msgstr "حجم أيقونة شريط الأدوات"
-
-#: gtk/gtktoolbar.c:645
-msgid "Size of icons in default toolbars"
-msgstr "حجم ا?يقونات في أشرطة ا?دوات الافتراضية"
-
-#: gtk/gtktoolbutton.c:181
+#: gtk/gtktoolbutton.c:205
 msgid "Text to show in the item."
 msgstr "النص الذي سيعرض في العنصر."
 
-#: gtk/gtktoolbutton.c:188
+#: gtk/gtktoolbutton.c:212
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
@@ -5836,43 +6342,43 @@ msgstr ""
 "إذا ، فسيكون هناك تسطير في النص يشير إلى الرمز التالي الذي يجب استخدامه "
 "لمفتاح التذكير المسرع"
 
-#: gtk/gtktoolbutton.c:195
+#: gtk/gtktoolbutton.c:219
 msgid "Widget to use as the item label"
 msgstr "الودجة التي ستستخدم كشارة العنصر"
 
-#: gtk/gtktoolbutton.c:201
+#: gtk/gtktoolbutton.c:225
 msgid "Stock Id"
 msgstr "هوية المخزون"
 
-#: gtk/gtktoolbutton.c:202
+#: gtk/gtktoolbutton.c:226
 msgid "The stock icon displayed on the item"
 msgstr "سهم المخزون المعروض على العنصر"
 
-#: gtk/gtktoolbutton.c:218
+#: gtk/gtktoolbutton.c:242
 msgid "Icon name"
 msgstr "اسم الأيقونة"
 
-#: gtk/gtktoolbutton.c:219
+#: gtk/gtktoolbutton.c:243
 msgid "The name of the themed icon displayed on the item"
 msgstr "اسم الأيقونة الظاهرة على العنصر"
 
-#: gtk/gtktoolbutton.c:225
+#: gtk/gtktoolbutton.c:249
 msgid "Icon widget"
 msgstr "ودجة الأيقونة"
 
-#: gtk/gtktoolbutton.c:226
+#: gtk/gtktoolbutton.c:250
 msgid "Icon widget to display in the item"
 msgstr "ودجة الأيقونة التس ستعرض في العنصر"
 
-#: gtk/gtktoolbutton.c:239
+#: gtk/gtktoolbutton.c:263
 msgid "Icon spacing"
 msgstr "تَبَاعُد الأيقونة"
 
-#: gtk/gtktoolbutton.c:240
+#: gtk/gtktoolbutton.c:264
 msgid "Spacing in pixels between the icon and label"
 msgstr "الفراغ بالبكسل بين الأيقونة و الشارة"
 
-#: gtk/gtktoolitem.c:171
+#: gtk/gtktoolitem.c:207
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -5880,581 +6386,681 @@ msgstr ""
 "فيما إذا يعتبر عنصر عمود الأدوات مهمّ. إذا ضبط لـ TRUE فستعرض أورار عمود "
 "الأدوات النص بنسق GTK_TOOLBAR_BOTH_HORIZ"
 
-#: gtk/gtktreemodelsort.c:274
+#: gtk/gtktoolitemgroup.c:1544
+#, fuzzy
+msgid "The human-readable title of this item group"
+msgstr "وصف للحالة بصورة مفهومة للبشر"
+
+#: gtk/gtktoolitemgroup.c:1551
+#, fuzzy
+msgid "A widget to display in place of the usual label"
+msgstr "ودجة للعرض عوض شارة الاظار المعتادة"
+
+#: gtk/gtktoolitemgroup.c:1557
+msgid "Collapsed"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1558
+#, fuzzy
+msgid "Wether the group has been collapsed and items are hidden"
+msgstr "فيما إذا وقع فتح الموسع للكشف عن الودجة الإبنة"
+
+#: gtk/gtktoolitemgroup.c:1564
+#, fuzzy
+msgid "ellipsize"
+msgstr "قص"
+
+#: gtk/gtktoolitemgroup.c:1565
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1571
+#, fuzzy
+msgid "Header Relief"
+msgstr "صورة الرأس"
+
+#: gtk/gtktoolitemgroup.c:1572
+#, fuzzy
+msgid "Relief of the group header button"
+msgstr "أظهر أزرار رؤوس العمود"
+
+#: gtk/gtktoolitemgroup.c:1587
+#, fuzzy
+msgid "Header Spacing"
+msgstr "حشو الرأس"
+
+#: gtk/gtktoolitemgroup.c:1588
+#, fuzzy
+msgid "Spacing between expander arrow and caption"
+msgstr "الفراغات حول سهم الموسع"
+
+#: gtk/gtktoolitemgroup.c:1604
+#, fuzzy
+msgid "Whether the item should receive extra space when the group grows"
+msgstr "فيما إذا سيتلقى العنصر فضاء اضافيّا عند نموّ عمود الأدوات"
+
+#: gtk/gtktoolitemgroup.c:1611
+#, fuzzy
+msgid "Whether the item should fill the available space"
+msgstr "ما إذا سيكون كل الأبناء بنفس الحجم"
+
+#: gtk/gtktoolitemgroup.c:1617
+msgid "New Row"
+msgstr ""
+
+#: gtk/gtktoolitemgroup.c:1618
+#, fuzzy
+msgid "Whether the item should start a new row"
+msgstr "فيما إذا يتم عرض العناصر بعدد"
+
+#: gtk/gtktoolitemgroup.c:1625
+#, fuzzy
+msgid "Position of the item within this group"
+msgstr "موقع العلامة على المسطرة"
+
+#: gtk/gtktoolpalette.c:992
+#, fuzzy
+msgid "Size of icons in this tool palette"
+msgstr "حجم الأيقونات في عمود الأدوات"
+
+#: gtk/gtktoolpalette.c:1022
+#, fuzzy
+msgid "Style of items in the tool palette"
+msgstr "نمط الانحدار حول شريط الأدوات"
+
+#: gtk/gtktoolpalette.c:1038
+msgid "Exclusive"
+msgstr ""
+
+#: gtk/gtktoolpalette.c:1039
+#, fuzzy
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "فيما إذا يتم عرض العناصر بعدد"
+
+#: gtk/gtktoolpalette.c:1054
+#, fuzzy
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "فيما إذا وجب أن يتلقى الإبن فضاءا أكبر عند نمو أبيه"
+
+#: gtk/gtktreemodelsort.c:278
 msgid "TreeModelSort Model"
 msgstr "نمط ترتيب العرض الشجري"
 
-#: gtk/gtktreemodelsort.c:275
+#: gtk/gtktreemodelsort.c:279
 msgid "The model for the TreeModelSort to sort"
 msgstr "نمط فرز العرض الشجري المستخدم للفرز"
 
-#: gtk/gtktreeview.c:570
+#: gtk/gtktreeview.c:564
 msgid "TreeView Model"
 msgstr "نمط العرض الشجري"
 
-#: gtk/gtktreeview.c:571
+#: gtk/gtktreeview.c:565
 msgid "The model for the tree view"
 msgstr "نمط عرض الشجرة"
 
-#: gtk/gtktreeview.c:579
+#: gtk/gtktreeview.c:573
 msgid "Horizontal Adjustment for the widget"
-msgstr "الضبط الأفقي للكائن"
+msgstr "الضبط الأفقي للودجة"
 
-#: gtk/gtktreeview.c:587
+#: gtk/gtktreeview.c:581
 msgid "Vertical Adjustment for the widget"
-msgstr "الضبط العمودي للكائن"
+msgstr "الضبط العمودي للودجة"
 
-#: gtk/gtktreeview.c:594
+#: gtk/gtktreeview.c:588
 msgid "Headers Visible"
 msgstr "العناوين مرئية"
 
-#: gtk/gtktreeview.c:595
+#: gtk/gtktreeview.c:589
 msgid "Show the column header buttons"
 msgstr "أظهر أزرار رؤوس العمود"
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:596
 msgid "Headers Clickable"
 msgstr "الرؤوس قابلة للنقر"
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:597
 msgid "Column headers respond to click events"
 msgstr "رؤوس العمود تستجيب لأحداث النقر"
 
-#: gtk/gtktreeview.c:610
+#: gtk/gtktreeview.c:604
 msgid "Expander Column"
 msgstr "عمود موسع"
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:605
 msgid "Set the column for the expander column"
 msgstr "تعين العمود للعمود الموسع"
 
-#: gtk/gtktreeview.c:626
+#: gtk/gtktreeview.c:620
 msgid "Rules Hint"
 msgstr "تلميحة القواعد"
 
-#: gtk/gtktreeview.c:627
+#: gtk/gtktreeview.c:621
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "تعين تلميحة لآلة التيمة حتى ترسم صفوفا بألوان متغايرة"
 
-#: gtk/gtktreeview.c:634
+#: gtk/gtktreeview.c:628
 msgid "Enable Search"
 msgstr "تفعيل البحث"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:629
 msgid "View allows user to search through columns interactively"
 msgstr "عرض يسمح للمستخدم بالبحث خلال الأعمدة بتفاعل"
 
-#: gtk/gtktreeview.c:642
+#: gtk/gtktreeview.c:636
 msgid "Search Column"
 msgstr "عمود بحث"
 
-#: gtk/gtktreeview.c:643
-msgid "Model column to search through when searching through code"
+#: gtk/gtktreeview.c:637
+#, fuzzy
+msgid "Model column to search through during interactive search"
 msgstr "عمود النمط الذي يتم البحث خلاله أثناء البحث خلال الكود"
 
-#: gtk/gtktreeview.c:663
+#: gtk/gtktreeview.c:657
 msgid "Fixed Height Mode"
 msgstr "نسق الارتفاع الثابت"
 
-#: gtk/gtktreeview.c:664
+#: gtk/gtktreeview.c:658
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "يسرع GtkTreeView باعتبار جميع الأعمدة ذات إرتفاع موحد"
 
-#: gtk/gtktreeview.c:684
+#: gtk/gtktreeview.c:678
 msgid "Hover Selection"
 msgstr "اختيار الحوم"
 
-#: gtk/gtktreeview.c:685
+#: gtk/gtktreeview.c:679
 msgid "Whether the selection should follow the pointer"
 msgstr "فيما اذا كان المنتقى يتبع المؤشر"
 
-#: gtk/gtktreeview.c:704
+#: gtk/gtktreeview.c:698
 msgid "Hover Expand"
 msgstr "تمديد الحوم"
 
-#: gtk/gtktreeview.c:705
+#: gtk/gtktreeview.c:699
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "ما إذا وجب توسيع وانهيار الصفوف عندما يقوم المؤشر بتحريكها"
 
-#: gtk/gtktreeview.c:719
+#: gtk/gtktreeview.c:713
 msgid "Show Expanders"
 msgstr "اظهار الموسعات"
 
-#: gtk/gtktreeview.c:720
+#: gtk/gtktreeview.c:714
 msgid "View has expanders"
 msgstr "المظهر له موسعات"
 
-#: gtk/gtktreeview.c:734
+#: gtk/gtktreeview.c:728
 msgid "Level Indentation"
 msgstr "مستوى التثليم"
 
-#: gtk/gtktreeview.c:735
+#: gtk/gtktreeview.c:729
 msgid "Extra indentation for each level"
 msgstr "إزاحة اضافية لكل مستوى"
 
 # In french = etirement
-#: gtk/gtktreeview.c:744
+#: gtk/gtktreeview.c:738
 msgid "Rubber Banding"
 msgstr "التمديد"
 
-#: gtk/gtktreeview.c:745
+#: gtk/gtktreeview.c:739
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "ما إذا سيتم السماح بانتقاء عناصر متعددة باستعمال الفأرة"
 
-#: gtk/gtktreeview.c:752
+#: gtk/gtktreeview.c:746
 msgid "Enable Grid Lines"
 msgstr "مكّن خطوط الشبكة"
 
-#: gtk/gtktreeview.c:753
+#: gtk/gtktreeview.c:747
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "فيما إذا كان سيتم عرض خطوط الشبكة في مظهر الشجرة"
 
-#: gtk/gtktreeview.c:761
+#: gtk/gtktreeview.c:755
 msgid "Enable Tree Lines"
 msgstr "مكّن خطوط الشجرة"
 
-#: gtk/gtktreeview.c:762
+#: gtk/gtktreeview.c:756
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "فيما إذا كان سيتم عرض خطوط الشجرة في مظهر الشجرة"
 
-#: gtk/gtktreeview.c:770
+#: gtk/gtktreeview.c:764
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "عمود النموذج المحتوي على نصوص التلميحات للصفوف"
 
-#: gtk/gtktreeview.c:792
+#: gtk/gtktreeview.c:786
 msgid "Vertical Separator Width"
 msgstr "العرض العمودي للفاصل"
 
-#: gtk/gtktreeview.c:793
+#: gtk/gtktreeview.c:787
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "الفراغ العمودي بين الخلايا. يجب أن يكون رقما زوجيا"
 
-#: gtk/gtktreeview.c:801
+#: gtk/gtktreeview.c:795
 msgid "Horizontal Separator Width"
 msgstr "العرض الأفقي للفاصل"
 
-#: gtk/gtktreeview.c:802
+#: gtk/gtktreeview.c:796
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "الفراغ الأفقي بين الخلايا. يجب أن يكون رقما زوجيا"
 
-#: gtk/gtktreeview.c:810
+#: gtk/gtktreeview.c:804
 msgid "Allow Rules"
 msgstr "اسمح بالقواعد"
 
-#: gtk/gtktreeview.c:811
+#: gtk/gtktreeview.c:805
 msgid "Allow drawing of alternating color rows"
 msgstr "السماح برسم أعمدة ملونة متوالية"
 
-#: gtk/gtktreeview.c:817
+#: gtk/gtktreeview.c:811
 msgid "Indent Expanders"
 msgstr "إزاحة الموسعات"
 
-#: gtk/gtktreeview.c:818
+#: gtk/gtktreeview.c:812
 msgid "Make the expanders indented"
 msgstr "جعل الموسعات مجوفة"
 
-#: gtk/gtktreeview.c:824
+#: gtk/gtktreeview.c:818
 msgid "Even Row Color"
 msgstr "لون السطر الزوجي"
 
-#: gtk/gtktreeview.c:825
+#: gtk/gtktreeview.c:819
 msgid "Color to use for even rows"
 msgstr "اللون للاستخدام للسطور الزوجية"
 
-#: gtk/gtktreeview.c:831
+#: gtk/gtktreeview.c:825
 msgid "Odd Row Color"
 msgstr "لون السطر الغريب"
 
-#: gtk/gtktreeview.c:832
+#: gtk/gtktreeview.c:826
 msgid "Color to use for odd rows"
 msgstr "اللون للاستخدام للسطور الغريبة"
 
-#: gtk/gtktreeview.c:838
+#: gtk/gtktreeview.c:832
 msgid "Row Ending details"
 msgstr "تفاصيل نهاية الصف"
 
-#: gtk/gtktreeview.c:839
+#: gtk/gtktreeview.c:833
 msgid "Enable extended row background theming"
 msgstr "تفعيل التنسيق الممدّد لخلفية الأعمدة"
 
-#: gtk/gtktreeview.c:845
+#: gtk/gtktreeview.c:839
 msgid "Grid line width"
 msgstr "عرض خط الشبكة"
 
-#: gtk/gtktreeview.c:846
+#: gtk/gtktreeview.c:840
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "العرض بالبكسلات لأسطر الشبكة لمظهر الشجرة"
 
-#: gtk/gtktreeview.c:852
+#: gtk/gtktreeview.c:846
 msgid "Tree line width"
 msgstr "عرض سطر الشجرة"
 
-#: gtk/gtktreeview.c:853
+#: gtk/gtktreeview.c:847
 msgid "Width, in pixels, of the tree view lines"
 msgstr "العرض بالبكسلات لأسطر مظهر الشجرة"
 
-#: gtk/gtktreeview.c:859
+#: gtk/gtktreeview.c:853
 msgid "Grid line pattern"
 msgstr "نمط خط الشبكة"
 
-#: gtk/gtktreeview.c:860
+#: gtk/gtktreeview.c:854
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "نمط الخط الفاصل لرسم أسطر شبكة مظهر الشجرة"
 
-#: gtk/gtktreeview.c:866
+#: gtk/gtktreeview.c:860
 msgid "Tree line pattern"
 msgstr "نمط سطر الشجرة"
 
-#: gtk/gtktreeview.c:867
+#: gtk/gtktreeview.c:861
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "نمط الخط الفاصل لرسم أسطر مظهر الشجرة"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Whether to display the column"
 msgstr "ما إذا يعرض العمود"
 
-#: gtk/gtktreeviewcolumn.c:199 gtk/gtkwindow.c:523
+#: gtk/gtktreeviewcolumn.c:200 gtk/gtkwindow.c:542
 msgid "Resizable"
 msgstr "قابل للتحجيم"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Column is user-resizable"
 msgstr "العمود قابل للتحجيم من قبل المستخدم"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Current width of the column"
 msgstr "العرض الحالي للعمود"
 
-#: gtk/gtktreeviewcolumn.c:217
+#: gtk/gtktreeviewcolumn.c:218
 msgid "Space which is inserted between cells"
 msgstr "الفراغ الملحق بين الخلايا"
 
-#: gtk/gtktreeviewcolumn.c:225
+#: gtk/gtktreeviewcolumn.c:226
 msgid "Sizing"
 msgstr "تحجيم"
 
-#: gtk/gtktreeviewcolumn.c:226
+#: gtk/gtktreeviewcolumn.c:227
 msgid "Resize mode of the column"
 msgstr "نظام التحجيم للعمود"
 
-#: gtk/gtktreeviewcolumn.c:234
+#: gtk/gtktreeviewcolumn.c:235
 msgid "Fixed Width"
 msgstr "العرض الثابت"
 
-#: gtk/gtktreeviewcolumn.c:235
+#: gtk/gtktreeviewcolumn.c:236
 msgid "Current fixed width of the column"
 msgstr "العرض الحالي الثابت للعمود"
 
-#: gtk/gtktreeviewcolumn.c:244
+#: gtk/gtktreeviewcolumn.c:245
 msgid "Minimum Width"
 msgstr "العرض الأصغر"
 
-#: gtk/gtktreeviewcolumn.c:245
+#: gtk/gtktreeviewcolumn.c:246
 msgid "Minimum allowed width of the column"
 msgstr "العرض الأصغر المسموح به للعمود"
 
-#: gtk/gtktreeviewcolumn.c:254
+#: gtk/gtktreeviewcolumn.c:255
 msgid "Maximum Width"
 msgstr "العرض الأكبر"
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Maximum allowed width of the column"
 msgstr "العرض الأكبر المسموح به للعمود"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "Title to appear in column header"
 msgstr "العنوان الذي يتم عرضه في ترويسة العمود"
 
-#: gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeviewcolumn.c:274
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "يتلقى العمود قسمته من العرض الإضافي المخصّص للودجة"
 
-#: gtk/gtktreeviewcolumn.c:280
+#: gtk/gtktreeviewcolumn.c:281
 msgid "Clickable"
 msgstr "قابل للنقر"
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Whether the header can be clicked"
 msgstr "ما إذا كانت الترويسة قابلة للنقر أم لا"
 
-#: gtk/gtktreeviewcolumn.c:289
-msgid "Widget"
-msgstr "كائن"
-
 #: gtk/gtktreeviewcolumn.c:290
+msgid "Widget"
+msgstr "ودجة"
+
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Widget to put in column header button instead of column title"
-msgstr "الكائن الذي يتم وضعه في زر ترويسة العمود بدل عنوان العمود"
+msgstr "الودجة التي يتم وضعها في زر ترويسة العمود بدل عنوان العمود"
 
-#: gtk/gtktreeviewcolumn.c:298
+#: gtk/gtktreeviewcolumn.c:299
 msgid "X Alignment of the column header text or widget"
-msgstr "ضبط س لكائن أو نص ترويسة العمود"
+msgstr "ضبط س لودجة أو نص ترويسة العمود"
 
-#: gtk/gtktreeviewcolumn.c:308
+#: gtk/gtktreeviewcolumn.c:309
 msgid "Whether the column can be reordered around the headers"
 msgstr "إذا ما كان من الممكن أن يعاد ترتيب العمود حول الترويسات"
 
-#: gtk/gtktreeviewcolumn.c:315
+#: gtk/gtktreeviewcolumn.c:316
 msgid "Sort indicator"
 msgstr "مؤشر الفرز"
 
-#: gtk/gtktreeviewcolumn.c:316
+#: gtk/gtktreeviewcolumn.c:317
 msgid "Whether to show a sort indicator"
 msgstr "ما إذا كان سيتم عرض مؤشر الفرز أم لا."
 
-#: gtk/gtktreeviewcolumn.c:323
+#: gtk/gtktreeviewcolumn.c:324
 msgid "Sort order"
 msgstr "ترتيب الفرز"
 
-#: gtk/gtktreeviewcolumn.c:324
+#: gtk/gtktreeviewcolumn.c:325
 msgid "Sort direction the sort indicator should indicate"
 msgstr "اتجاه الفرز الذي يتوجب على مؤشر الفرز أن يشير إليه"
 
-#: gtk/gtkuimanager.c:221
+#: gtk/gtktreeviewcolumn.c:341
+#, fuzzy
+msgid "Sort column ID"
+msgstr "عمود النص"
+
+#: gtk/gtktreeviewcolumn.c:342
+msgid "Logical sort column ID this column sorts on when selected for sorting"
+msgstr ""
+
+#: gtk/gtkuimanager.c:227
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "فيما إذا ستضاف عناصر القوائم القابلة للقطف للقوائم"
 
-#: gtk/gtkuimanager.c:228
+#: gtk/gtkuimanager.c:234
 msgid "Merged UI definition"
 msgstr "تعريف واجهة مستخدم مدمجة"
 
-#: gtk/gtkuimanager.c:229
+#: gtk/gtkuimanager.c:235
 msgid "An XML string describing the merged UI"
 msgstr "سلسلة XML تصف واجهة المستخدم المدمجة"
 
-#: gtk/gtkviewport.c:107
+#: gtk/gtkviewport.c:126
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport"
 msgstr "GtkAdjustment·المحدّد·لقيم·الموقع·الأفقي·لمنفذ·المشهد"
 
-#: gtk/gtkviewport.c:115
+#: gtk/gtkviewport.c:134
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport"
 msgstr "GtkAdjustment المحدّد لقيم الموقع العمودي لمنفذ المشهد"
 
-#: gtk/gtkviewport.c:123
+#: gtk/gtkviewport.c:142
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "يحدّد كيفيّة رسم الصندوق المضلّل حول منفذ المشهد"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:554
 msgid "Widget name"
-msgstr "اسم الكائن"
+msgstr "اسم الودجة"
 
-#: gtk/gtkwidget.c:484
+#: gtk/gtkwidget.c:555
 msgid "The name of the widget"
-msgstr "اسم الكائن"
+msgstr "اسم الودجة"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:561
 msgid "Parent widget"
-msgstr "الكائن ا?ب"
+msgstr "الودجة الأب"
 
-#: gtk/gtkwidget.c:491
+#: gtk/gtkwidget.c:562
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "الودجة الأب لهذه الودجة. يجب أن يكون ودجة حاوية"
 
-#: gtk/gtkwidget.c:498
+#: gtk/gtkwidget.c:569
 msgid "Width request"
 msgstr "طلب عرض"
 
-#: gtk/gtkwidget.c:499
+#: gtk/gtkwidget.c:570
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
-msgstr "طلب·تنميق·لعرض·الودجة·أو·-1·إذا·وجب·استخدام·طلب·اعتيادي"
+msgstr "طلب تنميق لعرض الودجة، أو -1 إذا وجب استخدام طلب اعتيادي"
 
-#: gtk/gtkwidget.c:507
+#: gtk/gtkwidget.c:578
 msgid "Height request"
 msgstr "طلب ارتفاع"
 
-#: gtk/gtkwidget.c:508
+#: gtk/gtkwidget.c:579
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
-msgstr "طلب تنميق لإرتفاع الودجة أو -1 إذا وجب استخدام طلب اعتيادي"
+msgstr "طلب تنميق لإرتفاع الودجة، أو -1 إذا وجب استخدام طلب اعتيادي"
 
-#: gtk/gtkwidget.c:517
+#: gtk/gtkwidget.c:588
 msgid "Whether the widget is visible"
 msgstr "ما إذا كان الكائن ظاهرا"
 
-#: gtk/gtkwidget.c:524
+#: gtk/gtkwidget.c:595
 msgid "Whether the widget responds to input"
-msgstr "ما إذا كان الكائن يرد على ا?دخال"
+msgstr "ما إذا كان الكائن يرد على الإدخال"
 
-#: gtk/gtkwidget.c:530
+#: gtk/gtkwidget.c:601
 msgid "Application paintable"
 msgstr "التطبيق قابل للرسم"
 
-#: gtk/gtkwidget.c:531
+#: gtk/gtkwidget.c:602
 msgid "Whether the application will paint directly on the widget"
-msgstr "ما إذا كان التطبيق سيرسم مباشرة على الكائن"
+msgstr "ما إذا كان التطبيق سيرسم مباشرة على الودجة"
 
-#: gtk/gtkwidget.c:537
+#: gtk/gtkwidget.c:608
 msgid "Can focus"
 msgstr "ممكن تلقي البؤرة"
 
-#: gtk/gtkwidget.c:538
+#: gtk/gtkwidget.c:609
 msgid "Whether the widget can accept the input focus"
-msgstr "ما إذا كان بقدرة الكائن قبول بؤرة ا?دخال"
+msgstr "ما إذا كان بقدرة الكائن قبول بؤرة الإدخال"
 
-#: gtk/gtkwidget.c:544
+#: gtk/gtkwidget.c:615
 msgid "Has focus"
 msgstr "له بؤرة"
 
-#: gtk/gtkwidget.c:545
+#: gtk/gtkwidget.c:616
 msgid "Whether the widget has the input focus"
-msgstr "ما إذا كان الكائن له بؤرة ا?دخال"
+msgstr "ما إذا كان الكائن له بؤرة الإدخال"
 
-#: gtk/gtkwidget.c:551
+#: gtk/gtkwidget.c:622
 msgid "Is focus"
 msgstr "هو تركيز"
 
-#: gtk/gtkwidget.c:552
+#: gtk/gtkwidget.c:623
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "ما إذا كانت الودجة هي ودجة التركيز ضمن المستوى الأعلى"
 
-#: gtk/gtkwidget.c:558
+#: gtk/gtkwidget.c:629
 msgid "Can default"
 msgstr "ممكن الافتراض"
 
-#: gtk/gtkwidget.c:559
+#: gtk/gtkwidget.c:630
 msgid "Whether the widget can be the default widget"
-msgstr "ما إذا أمكن أن يصبح الكائن هو الكائن الافتراضي"
+msgstr "ما إذا كانت الودجة ستصبح الودجة الافتراضية"
 
-#: gtk/gtkwidget.c:565
+#: gtk/gtkwidget.c:636
 msgid "Has default"
 msgstr "له افتراض"
 
-#: gtk/gtkwidget.c:566
+#: gtk/gtkwidget.c:637
 msgid "Whether the widget is the default widget"
-msgstr "ما إذا كان الكائن هو الكائن الافتراضي"
+msgstr "ما إذا كانت الودجة هي الودجة الافتراضية"
 
-#: gtk/gtkwidget.c:572
+#: gtk/gtkwidget.c:643
 msgid "Receives default"
 msgstr "استقبال الافتراض"
 
-#: gtk/gtkwidget.c:573
+#: gtk/gtkwidget.c:644
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "إذا كان TRUE، فستتلقى الودجة الحدث الافتراضي عند تركيزها"
 
-#: gtk/gtkwidget.c:579
+#: gtk/gtkwidget.c:650
 msgid "Composite child"
 msgstr "ابن مركب"
 
-#: gtk/gtkwidget.c:580
+#: gtk/gtkwidget.c:651
 msgid "Whether the widget is part of a composite widget"
-msgstr "ما إذا كان الكائن مركبا من كائن آخر"
+msgstr "ما إذا كانت الودجة جزء من ودجة مركبة"
 
-#: gtk/gtkwidget.c:586
+#: gtk/gtkwidget.c:657
 msgid "Style"
 msgstr "نمط"
 
-#: gtk/gtkwidget.c:587
+#: gtk/gtkwidget.c:658
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "أسلوب الودجة، المحتوية على معلومات حول مظهرها (الألوان الخ)"
 
-#: gtk/gtkwidget.c:593
+#: gtk/gtkwidget.c:664
 msgid "Events"
 msgstr "أحداث"
 
-#: gtk/gtkwidget.c:594
+#: gtk/gtkwidget.c:665
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "غلاف الأحداث الدي يحدّد أي نوع من GdkEvents ستتلقى هذه الودجة"
 
-#: gtk/gtkwidget.c:601
+#: gtk/gtkwidget.c:672
 msgid "Extension events"
 msgstr "أحداث امتداد"
 
-#: gtk/gtkwidget.c:602
+#: gtk/gtkwidget.c:673
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr "الغلاف الذي يحدّد أي إمتدادات الأحداث ستتلقّى هذه الودجة"
 
-#: gtk/gtkwidget.c:609
+#: gtk/gtkwidget.c:680
 msgid "No show all"
 msgstr "لا عرض للكل"
 
-#: gtk/gtkwidget.c:610
+#: gtk/gtkwidget.c:681
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "فيما إذا لن يؤثّر gtk_widget_show_all() هذه الودجة"
 
-#: gtk/gtkwidget.c:632
-msgid "Has tooltip"
-msgstr "له تلميحة"
-
-#: gtk/gtkwidget.c:633
+#: gtk/gtkwidget.c:704
 msgid "Whether this widget has a tooltip"
 msgstr "إذا كان لهذه الودجة تلميحة"
 
-#: gtk/gtkwidget.c:653
-msgid "Tooltip Text"
-msgstr "نص التلميحة"
-
-#: gtk/gtkwidget.c:654 gtk/gtkwidget.c:675
-msgid "The contents of the tooltip for this widget"
-msgstr "نص تلميحة لهذه الودجة"
-
-#: gtk/gtkwidget.c:674
-msgid "Tooltip markup"
-msgstr "خصائص التلميحة "
-
-#: gtk/gtkwidget.c:689
-#, fuzzy
+#: gtk/gtkwidget.c:760
 msgid "Window"
-msgstr "نوع النافذة"
+msgstr "نافذة"
 
-#: gtk/gtkwidget.c:690
+#: gtk/gtkwidget.c:761
 msgid "The widget's window if it is realized"
-msgstr ""
+msgstr "نافذة الودجة عند تحقيقها"
 
-#: gtk/gtkwidget.c:2208
+#: gtk/gtkwidget.c:775
+#, fuzzy
+msgid "Double Buffered"
+msgstr "ذاكرة وسيطة"
+
+#: gtk/gtkwidget.c:776
+#, fuzzy
+msgid "Whether or not the widget is double buffered"
+msgstr "اذا كان الملحق داخليا"
+
+#: gtk/gtkwidget.c:2423
 msgid "Interior Focus"
 msgstr "بؤرة داخلية"
 
-#: gtk/gtkwidget.c:2209
+#: gtk/gtkwidget.c:2424
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr "ما إذا يرسم مؤشر التركيز داخل القطع"
+msgstr "ما إذا يرسم مؤشر التركيز داخل الودجات"
 
-#: gtk/gtkwidget.c:2215
+#: gtk/gtkwidget.c:2430
 msgid "Focus linewidth"
 msgstr "عرض خط البؤرة"
 
-#: gtk/gtkwidget.c:2216
+#: gtk/gtkwidget.c:2431
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "العرض بالبكسلات لسطر مؤشر التركيز"
 
-#: gtk/gtkwidget.c:2222
+#: gtk/gtkwidget.c:2437
 msgid "Focus line dash pattern"
 msgstr "خط البؤرة بالنقش المتقطع"
 
-#: gtk/gtkwidget.c:2223
+#: gtk/gtkwidget.c:2438
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "نمط الخط الفاصل المستعمل لرسم مؤشر التكيز"
 
-#: gtk/gtkwidget.c:2228
+#: gtk/gtkwidget.c:2443
 msgid "Focus padding"
 msgstr "حشو البؤرة"
 
-#: gtk/gtkwidget.c:2229
+#: gtk/gtkwidget.c:2444
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "العرض بالبكسلات بين مؤشر التركيز و ودجة 'صندوق'"
 
-#: gtk/gtkwidget.c:2234
+#: gtk/gtkwidget.c:2449
 msgid "Cursor color"
 msgstr "لون المؤشر"
 
-#: gtk/gtkwidget.c:2235
+#: gtk/gtkwidget.c:2450
 msgid "Color with which to draw insertion cursor"
 msgstr "اللون الذي يتم به رسم مؤشر ا?دخال"
 
-#: gtk/gtkwidget.c:2240
+#: gtk/gtkwidget.c:2455
 msgid "Secondary cursor color"
 msgstr "مؤشر ا?دخال الثانوي"
 
-#: gtk/gtkwidget.c:2241
+#: gtk/gtkwidget.c:2456
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -6462,117 +7068,117 @@ msgstr ""
 "اللون الذي سيرسم يه مؤشر الإدخال الثانوي عند تحرير نص مختلط من اليمين إلى "
 "اليسار و من اليسار إلى اليمين"
 
-#: gtk/gtkwidget.c:2246
+#: gtk/gtkwidget.c:2461
 msgid "Cursor line aspect ratio"
 msgstr "نسبة الطول للعرض لمؤشر السطر"
 
-#: gtk/gtkwidget.c:2247
+#: gtk/gtkwidget.c:2462
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "نسبة الطول للعرض التي سيرسم بها مؤشر إدخال."
 
-#: gtk/gtkwidget.c:2261
+#: gtk/gtkwidget.c:2476
 msgid "Draw Border"
 msgstr "ارسم الحدّ"
 
-#: gtk/gtkwidget.c:2262
+#: gtk/gtkwidget.c:2477
 msgid "Size of areas outside the widget's allocation to draw"
 msgstr "حجم المساحات المرسومة خارج مكان الودجة "
 
-#: gtk/gtkwidget.c:2275
+#: gtk/gtkwidget.c:2490
 msgid "Unvisited Link Color"
 msgstr "لون الوصلة غير المزارة"
 
-#: gtk/gtkwidget.c:2276
+#: gtk/gtkwidget.c:2491
 msgid "Color of unvisited links"
 msgstr "لون الوصلات غير المزارة"
 
-#: gtk/gtkwidget.c:2289
+#: gtk/gtkwidget.c:2504
 msgid "Visited Link Color"
 msgstr "لون الوصلة المزارة"
 
-#: gtk/gtkwidget.c:2290
+#: gtk/gtkwidget.c:2505
 msgid "Color of visited links"
 msgstr "لون الوصلات المزارة"
 
-#: gtk/gtkwidget.c:2304
+#: gtk/gtkwidget.c:2519
 msgid "Wide Separators"
 msgstr "فواصل عريضة"
 
-#: gtk/gtkwidget.c:2305
+#: gtk/gtkwidget.c:2520
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr "إذا كان للفواصل عرض متغير مرسوم باستعمال علبة عوضا عن خط"
 
-#: gtk/gtkwidget.c:2319
+#: gtk/gtkwidget.c:2534
 msgid "Separator Width"
 msgstr "عرض الفاصل"
 
-#: gtk/gtkwidget.c:2320
+#: gtk/gtkwidget.c:2535
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "عرض الفواصل إذا كان wide-separators محددا بـ TRUE"
 
-#: gtk/gtkwidget.c:2334
+#: gtk/gtkwidget.c:2549
 msgid "Separator Height"
 msgstr "ارتفاع الفاصل"
 
-#: gtk/gtkwidget.c:2335
+#: gtk/gtkwidget.c:2550
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "ارتفاع الفواصل إذا كان \"wide-separators\" محددا بـ TRUE"
 
-#: gtk/gtkwidget.c:2349
+#: gtk/gtkwidget.c:2564
 msgid "Horizontal Scroll Arrow Length"
 msgstr "طول أسهم شريط التدرج الأفقي"
 
-#: gtk/gtkwidget.c:2350
+#: gtk/gtkwidget.c:2565
 msgid "The length of horizontal scroll arrows"
 msgstr "طول أسهم شريط التدرج الأفقي"
 
-#: gtk/gtkwidget.c:2364
+#: gtk/gtkwidget.c:2579
 msgid "Vertical Scroll Arrow Length"
 msgstr "طول أسهم شريط التدرج العمودي"
 
-#: gtk/gtkwidget.c:2365
+#: gtk/gtkwidget.c:2580
 msgid "The length of vertical scroll arrows"
 msgstr "عرض أسهم شريط التدرج العمودي"
 
-#: gtk/gtkwindow.c:464
+#: gtk/gtkwindow.c:483
 msgid "Window Type"
 msgstr "نوع النافذة"
 
-#: gtk/gtkwindow.c:465
+#: gtk/gtkwindow.c:484
 msgid "The type of the window"
 msgstr "نوع النافذة"
 
-#: gtk/gtkwindow.c:473
+#: gtk/gtkwindow.c:492
 msgid "Window Title"
 msgstr "عنوان النافذة"
 
-#: gtk/gtkwindow.c:474
+#: gtk/gtkwindow.c:493
 msgid "The title of the window"
 msgstr "عنوان النافذة"
 
-#: gtk/gtkwindow.c:481
+#: gtk/gtkwindow.c:500
 msgid "Window Role"
 msgstr "دور النافذة"
 
-#: gtk/gtkwindow.c:482
+#: gtk/gtkwindow.c:501
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "معرف وحيد للنافذة يستخدم عند استرجاع جلسة"
 
-#: gtk/gtkwindow.c:498
+#: gtk/gtkwindow.c:517
 msgid "Startup ID"
 msgstr "هوية البدأ"
 
-#: gtk/gtkwindow.c:499
+#: gtk/gtkwindow.c:518
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "معرف وحيد لعملية البدأ للنافذة المستعملة من طرف startup-notification"
 
-#: gtk/gtkwindow.c:506
+#: gtk/gtkwindow.c:525
 msgid "Allow Shrink"
 msgstr "اسمح بالانكماش"
 
-#: gtk/gtkwindow.c:508
+#: gtk/gtkwindow.c:527
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -6581,23 +7187,23 @@ msgstr ""
 "إذا ضبط لـ TRUE فلن يكون للنافذة حجم أدنى. ضبط هذا لـ TRUE فكرة سيّئة  في 99% "
 "من الحالات."
 
-#: gtk/gtkwindow.c:515
+#: gtk/gtkwindow.c:534
 msgid "Allow Grow"
 msgstr "اسمح بالنمو"
 
-#: gtk/gtkwindow.c:516
+#: gtk/gtkwindow.c:535
 msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr "اذا كان TRUE، فسيتمكن المستخدمون من تمديد النافذة فوق حجمها الأدنى"
 
-#: gtk/gtkwindow.c:524
+#: gtk/gtkwindow.c:543
 msgid "If TRUE, users can resize the window"
 msgstr "إذا كان TRUE، باستطاعة المستخدمين تحجيم النافذة."
 
-#: gtk/gtkwindow.c:531
+#: gtk/gtkwindow.c:550
 msgid "Modal"
 msgstr "سائدة"
 
-#: gtk/gtkwindow.c:532
+#: gtk/gtkwindow.c:551
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -6605,150 +7211,160 @@ msgstr ""
 "إذا ضبط لـ TRUE فستكون النافذة سائدة (لن يمكن استخدام نوافذ أخرى عند تكيز "
 "هذه النافذة)"
 
-#: gtk/gtkwindow.c:539
+#: gtk/gtkwindow.c:558
 msgid "Window Position"
 msgstr "موقع النافذة"
 
-#: gtk/gtkwindow.c:540
+#: gtk/gtkwindow.c:559
 msgid "The initial position of the window"
 msgstr "موقع النافذة الأولي"
 
-#: gtk/gtkwindow.c:548
+#: gtk/gtkwindow.c:567
 msgid "Default Width"
 msgstr "العرض الافتراضي"
 
-#: gtk/gtkwindow.c:549
+#: gtk/gtkwindow.c:568
 msgid "The default width of the window, used when initially showing the window"
 msgstr "عرض النافذة الإفتراضي، مستخدم عند عرض النافذة في المرة الأولى"
 
-#: gtk/gtkwindow.c:558
+#: gtk/gtkwindow.c:577
 msgid "Default Height"
 msgstr "الإرتفاع الإفتراضي"
 
-#: gtk/gtkwindow.c:559
+#: gtk/gtkwindow.c:578
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "ارتفاع النافذة الإفتراضي، مستخدم عند عرض النافذة في المرة الأولى"
 
-#: gtk/gtkwindow.c:568
+#: gtk/gtkwindow.c:587
 msgid "Destroy with Parent"
 msgstr "تدمير مع الأم"
 
-#: gtk/gtkwindow.c:569
+#: gtk/gtkwindow.c:588
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "فيما إذا وجب تدمير هذه النافذة عند تدمير النافذة الأم"
 
-#: gtk/gtkwindow.c:577
+#: gtk/gtkwindow.c:596
 msgid "Icon for this window"
 msgstr "أيقونة لهذه النافذة"
 
-#: gtk/gtkwindow.c:593
+#: gtk/gtkwindow.c:602
+#, fuzzy
+msgid "Mnemonics Visible"
+msgstr "مفتاح الإختصار المسطّر"
+
+#: gtk/gtkwindow.c:603
+#, fuzzy
+msgid "Whether mnemonics are currently visible in this window"
+msgstr "فيما إذا كان المستوى الأعلى هو النافذة النشطة"
+
+#: gtk/gtkwindow.c:619
 msgid "Name of the themed icon for this window"
 msgstr "اسم أيقونة هذه النافذة"
 
-#: gtk/gtkwindow.c:608
+#: gtk/gtkwindow.c:634
 msgid "Is Active"
 msgstr "نشط"
 
-#: gtk/gtkwindow.c:609
+#: gtk/gtkwindow.c:635
 msgid "Whether the toplevel is the current active window"
 msgstr "فيما إذا كان المستوى الأعلى هو النافذة النشطة"
 
-#: gtk/gtkwindow.c:616
+#: gtk/gtkwindow.c:642
 msgid "Focus in Toplevel"
 msgstr "تركيز في المستوى الأعلى"
 
-#: gtk/gtkwindow.c:617
+#: gtk/gtkwindow.c:643
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "ما اذا يكون تركيز الإدخال ضمن GtkWindow الحالي"
 
-#: gtk/gtkwindow.c:624
+#: gtk/gtkwindow.c:650
 msgid "Type hint"
 msgstr "أكتب التلميحة"
 
-#: gtk/gtkwindow.c:625
+#: gtk/gtkwindow.c:651
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr "تلميحة لمساعدة بيئة سطح المكتب في فهم نوع النافذة و طريقة التعاكل معها"
 
-#: gtk/gtkwindow.c:633
+#: gtk/gtkwindow.c:659
 msgid "Skip taskbar"
 msgstr "تخطي عمود المهام"
 
-#: gtk/gtkwindow.c:634
+#: gtk/gtkwindow.c:660
 msgid "TRUE if the window should not be in the task bar."
 msgstr "TRUE إذا وجب أن لا تكون النافذة في عمود المهام."
 
-#: gtk/gtkwindow.c:641
+#: gtk/gtkwindow.c:667
 msgid "Skip pager"
 msgstr "تخطي المتصفح"
 
-#: gtk/gtkwindow.c:642
+#: gtk/gtkwindow.c:668
 msgid "TRUE if the window should not be in the pager."
 msgstr "يضبط لـ TRUE إذا وجب أن لا تكون النافذة في المتصفح."
 
-#: gtk/gtkwindow.c:649
+#: gtk/gtkwindow.c:675
 msgid "Urgent"
 msgstr "إستعجالي"
 
-#: gtk/gtkwindow.c:650
+#: gtk/gtkwindow.c:676
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "يضبط لـ TRUE إذا وجب تنبيه المستخدم بالنافذة"
 
-#: gtk/gtkwindow.c:664
+#: gtk/gtkwindow.c:690
 msgid "Accept focus"
 msgstr "تقبل التركيز"
 
-#: gtk/gtkwindow.c:665
+#: gtk/gtkwindow.c:691
 msgid "TRUE if the window should receive the input focus."
 msgstr "يضبط لـ TRUE إذا وجب للنافذة أن تتلقى تركيز الإدخال."
 
-#: gtk/gtkwindow.c:679
+#: gtk/gtkwindow.c:705
 msgid "Focus on map"
 msgstr "تركيز على الخارطة"
 
-#: gtk/gtkwindow.c:680
+#: gtk/gtkwindow.c:706
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "يضبط لـ TRUE إذا وجب للنافذة أن تتلقى تركيز الإدخال."
 
-#: gtk/gtkwindow.c:694
+#: gtk/gtkwindow.c:720
 msgid "Decorated"
 msgstr "مزوق"
 
-#: gtk/gtkwindow.c:695
+#: gtk/gtkwindow.c:721
 msgid "Whether the window should be decorated by the window manager"
 msgstr "ما إذا وجب تزويق النافذة بمدير النوافذ"
 
-#: gtk/gtkwindow.c:709
+#: gtk/gtkwindow.c:735
 msgid "Deletable"
 msgstr "قابل للحذف"
 
-#: gtk/gtkwindow.c:710
+#: gtk/gtkwindow.c:736
 msgid "Whether the window frame should have a close button"
 msgstr "ما إذا يكون لإطار النافذة زر إغلاق"
 
-#: gtk/gtkwindow.c:726
+#: gtk/gtkwindow.c:752
 msgid "Gravity"
 msgstr "الجاذبية"
 
-#: gtk/gtkwindow.c:727
+#: gtk/gtkwindow.c:753
 msgid "The window gravity of the window"
 msgstr "جاذيبة الشباك للشباك"
 
-#: gtk/gtkwindow.c:744
+#: gtk/gtkwindow.c:770
 msgid "Transient for Window"
 msgstr "عابر النافذة"
 
-#: gtk/gtkwindow.c:745
+#: gtk/gtkwindow.c:771
 msgid "The transient parent of the dialog"
 msgstr "العابر الوالد للنافذة"
 
-#: gtk/gtkwindow.c:759
+#: gtk/gtkwindow.c:786
 msgid "Opacity for Window"
 msgstr "شفافية النافذة"
 
-#: gtk/gtkwindow.c:760
+#: gtk/gtkwindow.c:787
 msgid "The opacity of the window, from 0 to 1"
 msgstr "شفافية النافذة، من 0 إلى 1"
 
@@ -6768,11 +7384,11 @@ msgstr "أسلوب حالة طريقة الإدخال"
 msgid "How to draw the input method statusbar"
 msgstr "كيفية رسم عمود الحالة لطريقة الإدخال"
 
+#~ msgid "The orientation of the toolbar"
+#~ msgstr "اتجاه شريط ا?دوات"
+
 #~ msgid "Whether stock icons should be shown in buttons"
 #~ msgstr "فيما إذا سيتم عرض أيقونات المخزون في الأزرار"
-
-#~ msgid "Cancelled"
-#~ msgstr "أُلغيت"
 
 #~ msgid "Whether or not the operation has been successfully cancelled"
 #~ msgstr "اذا تم إلغاء العملية بنجاح "

@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_ENUMS_H__
+#define __GTK_ENUMS_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_ENUMS_H__
-#define __GTK_ENUMS_H__
 
 #include <glib-object.h>
 
@@ -56,6 +56,14 @@ typedef enum
   GTK_ANCHOR_W		= GTK_ANCHOR_WEST,
   GTK_ANCHOR_E		= GTK_ANCHOR_EAST
 } GtkAnchorType;
+
+/* Arrow placement */
+typedef enum
+{
+  GTK_ARROWS_BOTH,
+  GTK_ARROWS_START,
+  GTK_ARROWS_END
+} GtkArrowPlacement;
 
 /* Arrow types */
 typedef enum
@@ -86,6 +94,7 @@ typedef enum
   GTK_BUTTONBOX_CENTER
 } GtkButtonBoxStyle;
 
+#ifndef GTK_DISABLE_DEPRECATED
 /* Curve types */
 typedef enum
 {
@@ -93,6 +102,7 @@ typedef enum
   GTK_CURVE_TYPE_SPLINE,       /* spline interpolation */
   GTK_CURVE_TYPE_FREE          /* free form curve */
 } GtkCurveType;
+#endif
 
 typedef enum
 {
@@ -198,6 +208,25 @@ typedef enum
   GTK_MENU_DIR_PREV
 } GtkMenuDirectionType;
 
+/**
+ * GtkMessageType:
+ * @GTK_MESSAGE_INFO: Informational message
+ * @GTK_MESSAGE_WARNING: Nonfatal warning message
+ * @GTK_MESSAGE_QUESTION: Question requiring a choice
+ * @GTK_MESSAGE_ERROR: Fatal error message
+ * @GTK_MESSAGE_OTHER: None of the above, doesn't get an icon
+ *
+ * The type of message being displayed in the dialog.
+ */
+typedef enum
+{
+  GTK_MESSAGE_INFO,
+  GTK_MESSAGE_WARNING,
+  GTK_MESSAGE_QUESTION,
+  GTK_MESSAGE_ERROR,
+  GTK_MESSAGE_OTHER
+} GtkMessageType;
+
 typedef enum
 {
   GTK_PIXELS,
@@ -211,7 +240,7 @@ typedef enum
   GTK_MOVEMENT_VISUAL_POSITIONS,  /* move by left/right graphemes */
   GTK_MOVEMENT_WORDS,             /* move by forward/back words */
   GTK_MOVEMENT_DISPLAY_LINES,     /* move up/down lines (wrapped lines) */
-  GTK_MOVEMENT_DISPLAY_LINE_ENDS, /* move up/down lines (wrapped lines) */
+  GTK_MOVEMENT_DISPLAY_LINE_ENDS, /* move to either end of a line */
   GTK_MOVEMENT_PARAGRAPHS,        /* move up/down paragraphs (newline-ended lines) */
   GTK_MOVEMENT_PARAGRAPH_ENDS,    /* move to either end of a paragraph */
   GTK_MOVEMENT_PAGES,	          /* move by pages */
@@ -477,7 +506,8 @@ typedef enum
 {
   GTK_PRINT_PAGES_ALL,
   GTK_PRINT_PAGES_CURRENT,
-  GTK_PRINT_PAGES_RANGES
+  GTK_PRINT_PAGES_RANGES,
+  GTK_PRINT_PAGES_SELECTION
 } GtkPrintPages;
 
 typedef enum
@@ -486,6 +516,18 @@ typedef enum
   GTK_PAGE_SET_EVEN,
   GTK_PAGE_SET_ODD
 } GtkPageSet;
+
+typedef enum
+{
+  GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM, /*< nick=lrtb >*/
+  GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP, /*< nick=lrbt >*/
+  GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM, /*< nick=rltb >*/
+  GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP, /*< nick=rlbt >*/
+  GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT, /*< nick=tblr >*/
+  GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT, /*< nick=tbrl >*/
+  GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT, /*< nick=btlr >*/
+  GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT  /*< nick=btrl >*/
+} GtkNumberUpLayout;
 
 typedef enum
 {

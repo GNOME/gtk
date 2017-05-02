@@ -22,12 +22,12 @@
    Author: Anders Carlsson <andersca@codefactory.se>
 */
 
+#ifndef __GTK_ABOUT_DIALOG_H__
+#define __GTK_ABOUT_DIALOG_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_ABOUT_DIALOG_H__
-#define __GTK_ABOUT_DIALOG_H__
 
 #include <gtk/gtkdialog.h>
 
@@ -43,6 +43,12 @@ G_BEGIN_DECLS
 typedef struct _GtkAboutDialog        GtkAboutDialog;
 typedef struct _GtkAboutDialogClass   GtkAboutDialogClass;
 
+/**
+ * GtkAboutDialog:
+ *
+ * The <structname>GtkAboutDialog</structname> struct contains
+ * only private fields and should not be directly accessed.
+ */
 struct _GtkAboutDialog 
 {
   GtkDialog parent_instance;
@@ -55,11 +61,13 @@ struct _GtkAboutDialogClass
 {
   GtkDialogClass parent_class;
 
+  gboolean (*activate_link) (GtkAboutDialog *dialog,
+                             const gchar    *uri);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 GType                  gtk_about_dialog_get_type               (void) G_GNUC_CONST;
@@ -69,23 +77,23 @@ void                   gtk_show_about_dialog                   (GtkWindow       
 								...) G_GNUC_NULL_TERMINATED;
 
 #ifndef GTK_DISABLE_DEPRECATED
-G_CONST_RETURN gchar  *gtk_about_dialog_get_name               (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_name               (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_name               (GtkAboutDialog  *about,
 								const gchar     *name);
 #endif /* GTK_DISABLE_DEPRECATED */
-G_CONST_RETURN gchar  *gtk_about_dialog_get_program_name       (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_program_name       (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_program_name       (GtkAboutDialog  *about,
 								const gchar     *name);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_version            (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_version            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_version            (GtkAboutDialog  *about,
 								const gchar     *version);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_copyright          (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_copyright          (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_copyright          (GtkAboutDialog  *about,
 								const gchar     *copyright);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_comments           (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_comments           (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_comments           (GtkAboutDialog  *about,
 								const gchar     *comments);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_license            (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_license            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_license            (GtkAboutDialog  *about,
 								const gchar     *license);
 
@@ -93,41 +101,54 @@ gboolean               gtk_about_dialog_get_wrap_license       (GtkAboutDialog  
 void                   gtk_about_dialog_set_wrap_license       (GtkAboutDialog  *about,
                                                                 gboolean         wrap_license);
 
-G_CONST_RETURN gchar  *gtk_about_dialog_get_website            (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_website            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_website            (GtkAboutDialog  *about,
 								const gchar     *website);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_website_label      (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_website_label      (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_website_label      (GtkAboutDialog  *about,
 								const gchar     *website_label);
-G_CONST_RETURN gchar* G_CONST_RETURN * gtk_about_dialog_get_authors            (GtkAboutDialog  *about);
+const gchar* const *   gtk_about_dialog_get_authors            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_authors            (GtkAboutDialog  *about,
 								const gchar    **authors);
-G_CONST_RETURN gchar* G_CONST_RETURN * gtk_about_dialog_get_documenters        (GtkAboutDialog  *about);
+const gchar* const *   gtk_about_dialog_get_documenters        (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_documenters        (GtkAboutDialog  *about,
 								const gchar    **documenters);
-G_CONST_RETURN gchar* G_CONST_RETURN * gtk_about_dialog_get_artists            (GtkAboutDialog  *about);
+const gchar* const *   gtk_about_dialog_get_artists            (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_artists            (GtkAboutDialog  *about,
 								const gchar    **artists);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_translator_credits (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_translator_credits (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_translator_credits (GtkAboutDialog  *about,
 								const gchar     *translator_credits);
 GdkPixbuf             *gtk_about_dialog_get_logo               (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_logo               (GtkAboutDialog  *about,
 								GdkPixbuf       *logo);
-G_CONST_RETURN gchar  *gtk_about_dialog_get_logo_icon_name     (GtkAboutDialog  *about);
+const gchar *          gtk_about_dialog_get_logo_icon_name     (GtkAboutDialog  *about);
 void                   gtk_about_dialog_set_logo_icon_name     (GtkAboutDialog  *about,
 								const gchar     *icon_name);
 
+/**
+ * GtkAboutDialogActivateLinkFunc:
+ * @about: the #GtkAboutDialog in which the link was activated
+ * @link_: the URL or email address to which the activated link points
+ * @data: user data that was passed when the function was registered
+ *  with gtk_about_dialog_set_email_hook() or
+ *  gtk_about_dialog_set_url_hook()
+ *
+ * The type of a function which is called when a URL or email
+ * link is activated.
+ */
 typedef void (* GtkAboutDialogActivateLinkFunc) (GtkAboutDialog *about,
 						 const gchar    *link_,
 						 gpointer        data);
 
+#ifndef GTK_DISABLE_DEPRECATED
 GtkAboutDialogActivateLinkFunc gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
 								gpointer                       data,
 								GDestroyNotify                 destroy);
 GtkAboutDialogActivateLinkFunc gtk_about_dialog_set_url_hook   (GtkAboutDialogActivateLinkFunc func,
 								gpointer                       data,
 								GDestroyNotify                 destroy);
+#endif
 
 G_END_DECLS
 

@@ -37,7 +37,7 @@ EXTRA_DIST += \
 	images/tictactoe.png
 
 if HAVE_DOCBOOK
-html:
+html: gtk-tut.sgml
 	if test -w $(srcdir); then \
 	  (cd $(srcdir); \
 	   db2html gtk-tut.sgml; \
@@ -47,10 +47,12 @@ html:
 	   cp images/*.png html/images); \
 	fi
 
-pdf:
+pdf: gtk-tut.sgml
 	if test -w $(srcdir); then \
 	  (cd $(srcdir); db2pdf gtk-tut.sgml); \
 	fi
+
+all-local: html
 
 dist-hook: html
 	cp -Rp $(srcdir)/html $(distdir)
@@ -72,3 +74,5 @@ dist-hook:
 	echo "***"
 endif
 
+
+-include $(top_srcdir)/git.mk

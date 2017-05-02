@@ -32,6 +32,9 @@ Printing support was added in GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPrintJob ##### -->
 <para>
 The GtkPrintJob struct contains only private members

@@ -33,6 +33,9 @@ Printing support was added in GTK+ 2.10.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkPrintSettings ##### -->
 <para>
 
@@ -54,6 +57,7 @@ Printing support was added in GTK+ 2.10.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -552,6 +556,46 @@ Printing support was added in GTK+ 2.10.
 @number_up: 
 
 
+<!-- ##### ENUM GtkNumberUpLayout ##### -->
+<para>
+Used to determine the layout of pages on a sheet when printing
+multiple pages per sheet.
+</para>
+
+@GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM: <inlinegraphic valign="middle" fileref="layout-lrtb.png" format="PNG"></inlinegraphic>
+@GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_BOTTOM_TO_TOP: <inlinegraphic valign="middle" fileref="layout-lrbt.png" format="PNG"></inlinegraphic>
+@GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM: <inlinegraphic valign="middle" fileref="layout-rltb.png" format="PNG"></inlinegraphic>
+@GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_BOTTOM_TO_TOP: <inlinegraphic valign="middle" fileref="layout-rlbt.png" format="PNG"></inlinegraphic>
+@GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_LEFT_TO_RIGHT: <inlinegraphic valign="middle" fileref="layout-tblr.png" format="PNG"></inlinegraphic>
+@GTK_NUMBER_UP_LAYOUT_TOP_TO_BOTTOM_RIGHT_TO_LEFT: <inlinegraphic valign="middle" fileref="layout-tbrl.png" format="PNG"></inlinegraphic>
+@GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_LEFT_TO_RIGHT: <inlinegraphic valign="middle" fileref="layout-btlr.png" format="PNG"></inlinegraphic>
+@GTK_NUMBER_UP_LAYOUT_BOTTOM_TO_TOP_RIGHT_TO_LEFT: <inlinegraphic valign="middle" fileref="layout-btrl.png" format="PNG"></inlinegraphic>
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_print_settings_get_number_up_layout ##### -->
+<para>
+
+</para>
+
+@settings: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_settings_set_number_up_layout ##### -->
+<para>
+
+</para>
+
+@settings: 
+@number_up_layout: 
+
+
 <!-- ##### MACRO GTK_PRINT_SETTINGS_RESOLUTION ##### -->
 <para>
 
@@ -575,6 +619,73 @@ Printing support was added in GTK+ 2.10.
 
 @settings: 
 @resolution: 
+
+
+<!-- ##### FUNCTION gtk_print_settings_set_resolution_xy ##### -->
+<para>
+
+</para>
+
+@settings: 
+@resolution_x: 
+@resolution_y: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_RESOLUTION_X ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_print_settings_get_resolution_x ##### -->
+<para>
+
+</para>
+
+@settings: 
+@Returns: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_RESOLUTION_Y ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_print_settings_get_resolution_y ##### -->
+<para>
+
+</para>
+
+@settings: 
+@Returns: 
+
+
+<!-- ##### MACRO GTK_PRINT_SETTINGS_PRINTER_LPI ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION gtk_print_settings_get_printer_lpi ##### -->
+<para>
+
+</para>
+
+@settings: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_print_settings_set_printer_lpi ##### -->
+<para>
+
+</para>
+
+@settings: 
+@lpi: 
 
 
 <!-- ##### MACRO GTK_PRINT_SETTINGS_SCALE ##### -->
@@ -610,6 +721,7 @@ Printing support was added in GTK+ 2.10.
 @GTK_PRINT_PAGES_ALL: 
 @GTK_PRINT_PAGES_CURRENT: 
 @GTK_PRINT_PAGES_RANGES: 
+@GTK_PRINT_PAGES_SELECTION: 
 
 <!-- ##### MACRO GTK_PRINT_SETTINGS_PRINT_PAGES ##### -->
 <para>

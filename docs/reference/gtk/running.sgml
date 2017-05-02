@@ -36,7 +36,7 @@ some additional commandline options.
 
 <para>
 A list of modules to load in addition to those specified in the 
-<envar>GTK_MODULES</envar> environment variable and the 
+<envar>GTK2_MODULES</envar> environment variable and the 
 <literal>gtk-modules</literal> setting.
 </para>
 </formalpara>
@@ -184,6 +184,10 @@ additional environment variables.
       <term>printing</term>
       <listitem><para>Printing support</para></listitem>
     </varlistentry>
+    <varlistentry>
+      <term>builder</term>
+      <listitem><para>GtkBuilder support</para></listitem>
+    </varlistentry>
 
   </variablelist>
   The special value <literal>all</literal> can be used to turn on all 
@@ -192,11 +196,25 @@ additional environment variables.
 </formalpara>
 
 <formalpara>
+  <title><envar>GTK2_MODULES</envar></title>
+
+  <para>
+    A list of modules to load. Note that GTK+ also allows to specify modules to load via a commandline option (<option>--gtk-module</option>) and with the <literal>gtk-modules</literal> setting.
+  </para>
+</formalpara>
+
+<formalpara>
   <title><envar>GTK_MODULES</envar></title>
 
   <para>
-    A list of modules to load.
+      A list of modules to load in addition to the ones in the <envar>GTK_MODULES</envar> variable.
   </para>
+  <warning>
+    Note that this environment variable is read by GTK+ 3 too,
+    which may not have the same set of modules available for loading.
+    Use <envar>GTK2_MODULES</envar> for modules that are only compatible
+    with GTK+ 2.
+  </warning>
 </formalpara>
 
 <formalpara>
@@ -239,6 +257,12 @@ additional environment variables.
     The components of GTK_PATH are separated by the ':' character on
     Linux and Unix, and the ';' character on Windows.
   </para>
+  <warning>
+    Note that this environment variable is read by GTK+ 3 too, which
+    makes it unsuitable for setting it system-wide (or session-wide),
+    since doing so will cause either GTK+ 2.x applications or GTK+ 3
+    applications to see incompatible modules.
+  </warning>
 </formalpara>
 
 <formalpara>
@@ -250,6 +274,8 @@ additional environment variables.
     that enables <literal>XSETTINGS</literal> and has a value in
     <literal>Gtk/IMModule</literal>, that will be used for the default
     IM module.
+    This also can be a colon-separated list of input-methods, which
+    GTK+ will try in turn until it finds one available on the system.
   </para>
 </formalpara>
 
@@ -258,11 +284,10 @@ additional environment variables.
 
   <para>
     Specifies the file listing the IM modules to load. This environment
-    variable overrides the <literal>im_module_file</literal> specified in 
-    the RC files, which in turn overrides the default value 
-    <filename><replaceable>sysconfdir</replaceable>/gtk-2.0/gtk.immodules</filename>
-    (<replaceable>sysconfdir</replaceable> is the sysconfdir specified when GTK+ was configured, 
-     usually <filename>/usr/local/etc</filename>.)
+    variable overrides the <literal>im_module_file</literal> specified in
+    the RC files, which in turn overrides the default value
+    <filename><replaceable>libdir</replaceable>/gtk-2.0/2.10.0/immodules.cache</filename>
+    (<replaceable>libdir</replaceable> has the same meaning here as explained for <envar>GTK_PATH</envar>).
   </para>
 </formalpara>
 
@@ -273,6 +298,12 @@ additional environment variables.
     Specifies a list of RC files to parse instead of the default ones;
     see <link linkend="gtk-Resource-Files">Resource Files</link>.
   </para>
+  <warning>
+    Note that this environment variable is read by GTK+ 3 too, which
+    makes it unsuitable for setting it system-wide (or session-wide),
+    since doing so will cause either GTK+ 2.x applications or GTK+ 3
+    applications to see the wrong list of IM modules.
+  </warning>
 </formalpara>
 
 <formalpara>
@@ -335,9 +366,44 @@ nevertheless.
       <term>xim</term>
       <listitem><para>Information about XIM support</para></listitem>
     </varlistentry>
+    <varlistentry>
+      <term>nograbs</term>
+      <listitem><para>Turn off all pointer and keyboard grabs</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>multihead</term>
+      <listitem><para>Information related to multiple screens</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>xinerama</term>
+      <listitem><para>Simulate a multi-monitor setup</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>cursor</term>
+      <listitem><para>Information about cursor objects (only win32)</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>draw</term>
+      <listitem><para>Information about drawing operations (only win32)</para></listitem>
+    </varlistentry>
+    <varlistentry>
+      <term>eventloop</term>
+      <listitem><para>Information about event loop operation (mostly Quartz)</para></listitem>
+    </varlistentry>
+
   </variablelist>
-  The special value <literal>all</literal> can be used to turn on all 
+  The special value <literal>all</literal> can be used to turn on all
   debug options.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GDK_NATIVE_WINDOWS</envar></title>
+
+  <para>
+    If set, GDK creates all windows as native windows. This can help
+    applications that make assumptions about 1-1 correspondence between
+    GDK windows and X11 windows.
   </para>
 </formalpara>
 
@@ -350,6 +416,19 @@ nevertheless.
     <ulink url="http://freedesktop.org/Standards/icon-theme-spec">Icon Theme Specification</ulink>,
     the <ulink url="http://freedesktop.org/Standards/shared-mime-info-spec">Shared MIME-info Database</ulink> 
     and the <ulink url="http://freedesktop.org/Standards/basedir-spec">Base Directory Specification</ulink>.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>DESKTOP_STARTUP_ID</envar></title>
+
+  <para>
+    GTK+ uses this environment variable to provide startup notification
+    according to the <ulink url="http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt">Startup Notification Spec</ulink>.
+    Following the specification, GTK+ unsets this variable after reading
+    it (to keep it from leaking to child processes). So, if you need its
+    value for your own purposes, you have to read it before calling
+    gtk_init().
   </para>
 </formalpara>
 

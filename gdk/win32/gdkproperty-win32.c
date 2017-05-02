@@ -99,7 +99,8 @@ gdk_atom_name (GdkAtom atom)
   ATOM win32_atom;
   gchar name[256];
 
-  if (GDK_SELECTION_PRIMARY == atom) return g_strdup ("PRIMARY");
+  if (GDK_NONE == atom) return g_strdup ("<none>");
+  else if (GDK_SELECTION_PRIMARY == atom) return g_strdup ("PRIMARY");
   else if (GDK_SELECTION_SECONDARY == atom) return g_strdup ("SECONDARY");
   else if (GDK_SELECTION_CLIPBOARD == atom) return g_strdup ("CLIPBOARD");
   else if (GDK_SELECTION_TYPE_ATOM == atom) return g_strdup ("ATOM");
@@ -153,14 +154,11 @@ gdk_property_change (GdkWindow    *window,
 		     gint          nelements)
 {
   HGLOBAL hdata;
-  UINT cf = 0;
-  gint i, size, nchars;
-  gchar *prop_name, *type_name;
-  guchar *ucptr, *buf = NULL;
-  wchar_t *wcptr;
+  gint i, size;
+  guchar *ucptr;
+  wchar_t *wcptr, *p;
   glong wclen;
-  enum { SYSTEM_CODEPAGE, UNICODE_TEXT } method;
-  gboolean ok = TRUE;
+  GError *err = NULL;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -168,21 +166,23 @@ gdk_property_change (GdkWindow    *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  GDK_NOTE (DND,
-	    (prop_name = gdk_atom_name (property),
-	     type_name = gdk_atom_name (type),
-	     g_print ("gdk_property_change: %p %p (%s) %p (%s) %s %d*%d bytes: %s\n",
-		      GDK_WINDOW_HWND (window),
-		      property, prop_name,
-		      type, type_name,
-		      (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
-		       (mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
-			(mode == GDK_PROP_MODE_APPEND ? "APPEND" :
-			 "???"))),
-		      format, nelements,
-		      _gdk_win32_data_to_string (data, MIN (10, format*nelements/8))),
-	     g_free (prop_name),
-	     g_free (type_name)));
+  GDK_NOTE (DND, {
+      gchar *prop_name = gdk_atom_name (property);
+      gchar *type_name = gdk_atom_name (type);
+      
+      g_print ("gdk_property_change: %p %s %s %s %d*%d bits: %s\n",
+	       GDK_WINDOW_HWND (window),
+	       prop_name,
+	       type_name,
+	       (mode == GDK_PROP_MODE_REPLACE ? "REPLACE" :
+		(mode == GDK_PROP_MODE_PREPEND ? "PREPEND" :
+		 (mode == GDK_PROP_MODE_APPEND ? "APPEND" :
+		  "???"))),
+	       format, nelements,
+	       _gdk_win32_data_to_string (data, MIN (10, format*nelements/8)));
+      g_free (prop_name);
+      g_free (type_name);
+    });
 
   /* We should never come here for these types */
   g_return_if_fail (type != GDK_TARGET_STRING);
@@ -190,10 +190,16 @@ gdk_property_change (GdkWindow    *window,
   g_return_if_fail (type != _compound_text);
   g_return_if_fail (type != _save_targets);
 
-  if (property == _gdk_selection_property
-      && format == 8
-      && mode == GDK_PROP_MODE_REPLACE)
+  if (property == _gdk_selection &&
+      format == 8 &&
+      mode == GDK_PROP_MODE_REPLACE)
     {
+      if (type == _image_bmp && nelements < sizeof (BITMAPFILEHEADER))
+        {
+           g_warning ("Clipboard contains invalid bitmap data");
+           return;
+        }
+
       if (type == _utf8_string)
 	{
 	  if (!OpenClipboard (GDK_WINDOW_HWND (window)))
@@ -202,97 +208,57 @@ gdk_property_change (GdkWindow    *window,
 	      return;
 	    }
 
-	  nchars = g_utf8_strlen ((char*) data, nelements);
+	  wcptr = g_utf8_to_utf16 ((char *) data, nelements, NULL, &wclen, &err);
+          if (err != NULL)
+            {
+              g_warning ("Failed to convert utf8: %s", err->message);
+              g_clear_error (&err);
+              return;
+            }
 
-	  /* Check if only ASCII */
-	  for (i = 0; i < nelements; i++)
-	    if (data[i] >= 0200)
-	      break;
-
-	  if (i == nelements)
-	    {
-	      /* If only ASCII, use CF_TEXT and the data as such */
-	      method = SYSTEM_CODEPAGE;
-	      size = nelements;
-	      for (i = 0; i < nelements; i++)
-		if (data[i] == '\n')
-		  size++;
-	      size++;
-	      GDK_NOTE (DND, g_print ("... as text: %.40s\n", data));
-	    }
-	  else
-	    {
-	      /* Use CF_UNICODETEXT */
-	      method = UNICODE_TEXT;
-
-	      wcptr = g_utf8_to_utf16 ((char *) data, nelements, NULL, &wclen, NULL);
-
-	      wclen++;		/* Terminating 0 */
-	      size = wclen * 2;
-	      for (i = 0; i < wclen; i++)
-		if (wcptr[i] == '\n')
-		  size += 2;
-	      GDK_NOTE (DND, g_print ("... as Unicode\n"));
-	    }
+	  wclen++;		/* Terminating 0 */
+	  size = wclen * 2;
+	  for (i = 0; i < wclen; i++)
+	    if (wcptr[i] == '\n' && (i == 0 || wcptr[i - 1] != '\r'))
+	      size += 2;
 	  
 	  if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, size)))
 	    {
 	      WIN32_API_FAILED ("GlobalAlloc");
 	      if (!CloseClipboard ())
 		WIN32_API_FAILED ("CloseClipboard");
-	      g_free (buf);
+	      g_free (wcptr);
 	      return;
 	    }
 
 	  ucptr = GlobalLock (hdata);
 
-	  switch (method)
+	  p = (wchar_t *) ucptr;
+	  for (i = 0; i < wclen; i++)
 	    {
-	    case SYSTEM_CODEPAGE:
-	      cf = CF_TEXT;
-	      for (i = 0; i < nelements; i++)
-		{
-		  if (data[i] == '\n')
-		    *ucptr++ = '\r';
-		  *ucptr++ = data[i];
-		}
-	      *ucptr++ = '\0';
-	      break;
-
-	    case UNICODE_TEXT:
-	      {
-		wchar_t *p = (wchar_t *) ucptr;
-		cf = CF_UNICODETEXT;
-		for (i = 0; i < wclen; i++)
-		  {
-		    if (wcptr[i] == '\n')
-		      *p++ = '\r';
-		    *p++ = wcptr[i];
-		  }
-		g_free (wcptr);
-	      }
-	      break;
-
-	    default:
-	      g_assert_not_reached ();
+	      if (wcptr[i] == '\n' && (i == 0 || wcptr[i - 1] != '\r'))
+		*p++ = '\r';
+	      *p++ = wcptr[i];
 	    }
+	  g_free (wcptr);
 
 	  GlobalUnlock (hdata);
-	  GDK_NOTE (DND, g_print ("... SetClipboardData(%s,%p)\n",
-				  _gdk_win32_cf_to_string (cf), hdata));
-	  if (ok && !SetClipboardData (cf, hdata))
-	    WIN32_API_FAILED ("SetClipboardData"), ok = FALSE;
+	  GDK_NOTE (DND, g_print ("... SetClipboardData(CF_UNICODETEXT,%p)\n",
+				  hdata));
+	  if (!SetClipboardData (CF_UNICODETEXT, hdata))
+	    WIN32_API_FAILED ("SetClipboardData");
       
 	  if (!CloseClipboard ())
 	    WIN32_API_FAILED ("CloseClipboard");
 	}
       else
         {
-	  GDK_NOTE (DND, g_print ("... delayed rendering\n"));
-	  /* Delayed Rendering. We can't assign hdata to the clipboard
-	   * here as type may be "image/png", "image/jpg", etc.  In
-	   * this case there's a further conversion afterwards.
+	  /* We use delayed rendering for everything else than
+	   * text. We can't assign hdata to the clipboard here as type
+	   * may be "image/png", "image/jpg", etc. In this case
+	   * there's a further conversion afterwards.
 	   */
+	  GDK_NOTE (DND, g_print ("... delayed rendering\n"));
 	  _delayed_rendering_data = NULL;
 	  if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, nelements > 0 ? nelements : 1)))
 	    {
@@ -304,6 +270,11 @@ gdk_property_change (GdkWindow    *window,
 	  GlobalUnlock (hdata);
 	  _delayed_rendering_data = hdata;
 	}
+    }
+  else if (property == _gdk_ole2_dnd)
+    {
+      /* Will happen only if gdkdnd-win32.c has OLE2 dnd support compiled in */
+      _gdk_win32_ole2_dnd_property_change (type, format, data, nelements);
     }
   else
     g_warning ("gdk_property_change: General case not implemented");
@@ -318,14 +289,16 @@ gdk_property_delete (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  GDK_NOTE (DND,
-	    (prop_name = gdk_atom_name (property),
-	     g_print ("gdk_property_delete: %p %p (%s)\n",
-		      GDK_WINDOW_HWND (window),
-		      property, prop_name),
-	     g_free (prop_name)));
+  GDK_NOTE (DND, {
+      prop_name = gdk_atom_name (property);
 
-  if (property == _gdk_selection_property)
+      g_print ("gdk_property_delete: %p %s\n",
+	       GDK_WINDOW_HWND (window),
+	       prop_name);
+      g_free (prop_name);
+    });
+
+  if (property == _gdk_selection)
     _gdk_selection_property_delete (window);
   else if (property == _wm_transient_for)
     gdk_window_set_transient_for (window, _gdk_root);
@@ -339,37 +312,57 @@ gdk_property_delete (GdkWindow *window,
 }
 
 /*
-  for reference copied from gdk/x11/gdkevents-x11.c
+  For reference, from gdk/x11/gdksettings.c:
 
-  { "Net/DoubleClickTime", "gtk-double-click-time" },
-  { "Net/DoubleClickDistance", "gtk-double-click-distance" },
-  { "Net/DndDragThreshold", "gtk-dnd-drag-threshold" },
-  { "Gtk/CanChangeAccels", "gtk-can-change-accels" },
-  { "Gtk/ColorPalette", "gtk-color-palette" },
-  { "Gtk/FontName", "gtk-font-name" },
-  { "Gtk/IconSizes", "gtk-icon-sizes" },
-  { "Gtk/KeyThemeName", "gtk-key-theme-name" },
-  { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
-  { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
-  { "Gtk/IMPreeditStyle", "gtk-im-preedit-style" },
-  { "Gtk/IMStatusStyle", "gtk-im-status-style" },
-  { "Gtk/IMModule", "gtk-im-module" },
-  { "Net/CursorBlink", "gtk-cursor-blink" },
-  { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
-  { "Net/ThemeName", "gtk-theme-name" },
-  { "Net/IconThemeName", "gtk-icon-theme-name" },
-  { "Gtk/ButtonImages", "gtk-button-images" },
-  { "Gtk/MenuImages", "gtk-menu-images" },
-  { "Xft/Antialias", "gtk-xft-antialias" },
-  { "Xft/Hinting", "gtk-xft-hinting" },
-  { "Xft/HintStyle", "gtk-xft-hintstyle" },
-  { "Xft/RGBA", "gtk-xft-rgba" },
-  { "Xft/DPI", "gtk-xft-dpi" },
+  "Net/DoubleClickTime\0"     "gtk-double-click-time\0"
+  "Net/DoubleClickDistance\0" "gtk-double-click-distance\0"
+  "Net/DndDragThreshold\0"    "gtk-dnd-drag-threshold\0"
+  "Net/CursorBlink\0"         "gtk-cursor-blink\0"
+  "Net/CursorBlinkTime\0"     "gtk-cursor-blink-time\0"
+  "Net/ThemeName\0"           "gtk-theme-name\0"
+  "Net/IconThemeName\0"       "gtk-icon-theme-name\0"
+  "Gtk/CanChangeAccels\0"     "gtk-can-change-accels\0"
+  "Gtk/ColorPalette\0"        "gtk-color-palette\0"
+  "Gtk/FontName\0"            "gtk-font-name\0"
+  "Gtk/IconSizes\0"           "gtk-icon-sizes\0"
+  "Gtk/KeyThemeName\0"        "gtk-key-theme-name\0"
+  "Gtk/ToolbarStyle\0"        "gtk-toolbar-style\0"
+  "Gtk/ToolbarIconSize\0"     "gtk-toolbar-icon-size\0"
+  "Gtk/IMPreeditStyle\0"      "gtk-im-preedit-style\0"
+  "Gtk/IMStatusStyle\0"       "gtk-im-status-style\0"
+  "Gtk/Modules\0"             "gtk-modules\0"
+  "Gtk/FileChooserBackend\0"  "gtk-file-chooser-backend\0"
+  "Gtk/ButtonImages\0"        "gtk-button-images\0"
+  "Gtk/MenuImages\0"          "gtk-menu-images\0"
+  "Gtk/MenuBarAccel\0"        "gtk-menu-bar-accel\0"
+  "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0"
+  "Gtk/CursorThemeName\0"     "gtk-cursor-theme-name\0"
+  "Gtk/CursorThemeSize\0"     "gtk-cursor-theme-size\0"
+  "Gtk/ShowInputMethodMenu\0" "gtk-show-input-method-menu\0"
+  "Gtk/ShowUnicodeMenu\0"     "gtk-show-unicode-menu\0"
+  "Gtk/TimeoutInitial\0"      "gtk-timeout-initial\0"
+  "Gtk/TimeoutRepeat\0"       "gtk-timeout-repeat\0"
+  "Gtk/ColorScheme\0"         "gtk-color-scheme\0"
+  "Gtk/EnableAnimations\0"    "gtk-enable-animations\0"
+  "Xft/Antialias\0"           "gtk-xft-antialias\0"
+  "Xft/Hinting\0"             "gtk-xft-hinting\0"
+  "Xft/HintStyle\0"           "gtk-xft-hintstyle\0"
+  "Xft/RGBA\0"                "gtk-xft-rgba\0"
+  "Xft/DPI\0"                 "gtk-xft-dpi\0"
+  "Net/FallbackIconTheme\0"   "gtk-fallback-icon-theme\0"
+  "Gtk/TouchscreenMode\0"     "gtk-touchscreen-mode\0"
+  "Gtk/EnableAccels\0"        "gtk-enable-accels\0"
+  "Gtk/EnableMnemonics\0"     "gtk-enable-mnemonics\0"
+  "Gtk/ScrolledWindowPlacement\0" "gtk-scrolled-window-placement\0"
+  "Gtk/IMModule\0"            "gtk-im-module\0"
+  "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0"
+  "Net/SoundThemeName\0"      "gtk-sound-theme-name\0"
+  "Net/EnableInputFeedbackSounds\0" "gtk-enable-input-feedback-sounds\0"
+  "Net/EnableEventSounds\0"  "gtk-enable-event-sounds\0";
 
-  // more spread in gtk sources
+  More, from various places in gtk sources:
+
   gtk-entry-select-on-focus
-  gtk-cursor-blink
-  gtk-cursor-blink-time
   gtk-split-cursor
 
 */
@@ -463,6 +456,5 @@ gdk_screen_get_setting (GdkScreen   *screen,
     }
 #endif
 
-  GDK_NOTE(MISC, g_print("gdk_screen_get_setting(%s) not handled\n", name));
   return FALSE;
 }

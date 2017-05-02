@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_COLOR_H__
+#define __GDK_COLOR_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_COLOR_H__
-#define __GDK_COLOR_H__
 
 #include <cairo.h>
 #include <gdk/gdktypes.h>
@@ -71,13 +71,13 @@ struct _GdkColormap
   GObject parent_instance;
 
   /*< public >*/
-  gint      size;
-  GdkColor *colors;
+  gint      GSEAL (size);
+  GdkColor *GSEAL (colors);
 
   /*< private >*/
-  GdkVisual *visual;
+  GdkVisual *GSEAL (visual);
   
-  gpointer windowing_data;
+  gpointer GSEAL (windowing_data);
 };
 
 struct _GdkColormapClass

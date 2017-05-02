@@ -214,7 +214,8 @@ get_cairo_context (GdkPangoRenderer *gdk_renderer,
 				  priv->cr,
 				  color,
 				  priv->stipple[part],
-				  priv->gc_changed);
+				  priv->gc_changed,
+				  priv->drawable);
 	}
 
       priv->last_part = part;
@@ -309,6 +310,52 @@ gdk_pango_renderer_draw_error_underline (PangoRenderer    *renderer,
   pango_cairo_show_error_underline (cr,
 	(double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
 	(double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
+}
+
+static void
+gdk_pango_renderer_draw_shape (PangoRenderer  *renderer,
+			       PangoAttrShape *attr,
+			       int             x,
+			       int             y)
+{
+  GdkPangoRenderer *gdk_renderer = GDK_PANGO_RENDERER (renderer);
+  GdkPangoRendererPrivate *priv = gdk_renderer->priv;
+  PangoLayout *layout;
+  PangoCairoShapeRendererFunc shape_renderer;
+  gpointer                    shape_renderer_data;
+  cairo_t *cr;
+  double dx = (double)x / PANGO_SCALE, dy = (double)y / PANGO_SCALE;
+
+  layout = pango_renderer_get_layout (renderer);
+
+  if (!layout)
+  	return;
+
+  shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
+							   &shape_renderer_data);
+
+  if (!shape_renderer)
+    return;
+
+  cr = get_cairo_context (gdk_renderer, PANGO_RENDER_PART_FOREGROUND);
+  
+  cairo_save (cr);
+
+  if (priv->embossed)
+    {
+      cairo_save (cr);
+      emboss_context (gdk_renderer, cr);
+
+      cairo_move_to (cr, dx, dy);
+      shape_renderer (cr, attr, FALSE, shape_renderer_data);
+
+      cairo_restore (cr);
+    }
+
+  cairo_move_to (cr, dx, dy);
+  shape_renderer (cr, attr, FALSE, shape_renderer_data);
+
+  cairo_restore (cr);
 }
 
 static void
@@ -474,6 +521,7 @@ gdk_pango_renderer_class_init (GdkPangoRendererClass *klass)
   renderer_class->draw_glyphs = gdk_pango_renderer_draw_glyphs;
   renderer_class->draw_rectangle = gdk_pango_renderer_draw_rectangle;
   renderer_class->draw_error_underline = gdk_pango_renderer_draw_error_underline;
+  renderer_class->draw_shape = gdk_pango_renderer_draw_shape;
   renderer_class->part_changed = gdk_pango_renderer_part_changed;
   renderer_class->begin = gdk_pango_renderer_begin;
   renderer_class->end = gdk_pango_renderer_end;
@@ -575,7 +623,7 @@ gdk_pango_renderer_get_default (GdkScreen *screen)
 /**
  * gdk_pango_renderer_set_drawable:
  * @gdk_renderer: a #GdkPangoRenderer
- * @drawable: the new target drawable, or %NULL
+ * @drawable: (allow-none): the new target drawable, or %NULL
  * 
  * Sets the drawable the renderer draws to.
  *
@@ -605,7 +653,7 @@ gdk_pango_renderer_set_drawable (GdkPangoRenderer *gdk_renderer,
 /**
  * gdk_pango_renderer_set_gc:
  * @gdk_renderer: a #GdkPangoRenderer
- * @gc: the new GC to use for drawing, or %NULL
+ * @gc: (allow-none): the new GC to use for drawing, or %NULL
  * 
  * Sets the GC the renderer draws with. Note that the GC must not be
  * modified until it is unset by calling the function again with
@@ -682,7 +730,7 @@ gdk_pango_renderer_set_stipple (GdkPangoRenderer *gdk_renderer,
  * gdk_pango_renderer_set_override_color:
  * @gdk_renderer: a #GdkPangoRenderer
  * @part: the part to render to set the color of
- * @color: the color to use, or %NULL to unset a previously
+ * @color: (allow-none): the color to use, or %NULL to unset a previously
  *         set override color.
  * 
  * Sets the color for a particular render part (foreground,
@@ -803,8 +851,8 @@ release_renderer (PangoRenderer *renderer)
  * @x:         the x position of start of string (in pixels)
  * @y:         the y position of baseline (in pixels)
  * @line:      a #PangoLayoutLine
- * @foreground: foreground override color, or %NULL for none
- * @background: background override color, or %NULL for none
+ * @foreground: (allow-none): foreground override color, or %NULL for none
+ * @background: (allow-none): background override color, or %NULL for none
  *
  * Render a #PangoLayoutLine onto a #GdkDrawable, overriding the
  * layout's normal colors with @foreground and/or @background.
@@ -880,8 +928,8 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
  * @x:         the X position of the left of the layout (in pixels)
  * @y:         the Y position of the top of the layout (in pixels)
  * @layout:    a #PangoLayout
- * @foreground: foreground override color, or %NULL for none
- * @background: background override color, or %NULL for none
+ * @foreground: (allow-none): foreground override color, or %NULL for none
+ * @background: (allow-none): background override color, or %NULL for none
  *
  * Render a #PangoLayout onto a #GdkDrawable, overriding the
  * layout's normal colors with @foreground and/or @background.
@@ -1433,12 +1481,11 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
   PangoContext *context;
   const cairo_font_options_t *options;
   double dpi;
-  
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   fontmap = pango_cairo_font_map_get_default ();
-  
-  context = pango_cairo_font_map_create_context (PANGO_CAIRO_FONT_MAP (fontmap));
+  context = pango_font_map_create_context (fontmap);
 
   options = gdk_screen_get_font_options (screen);
   pango_cairo_context_set_font_options (context, options);

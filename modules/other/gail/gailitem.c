@@ -20,13 +20,16 @@
 #include "config.h"
 
 #include <string.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include "gailitem.h"
 #include <libgail-util/gailmisc.h>
 
 static void                  gail_item_class_init      (GailItemClass *klass);
 static void                  gail_item_init            (GailItem      *item);
-static G_CONST_RETURN gchar* gail_item_get_name        (AtkObject     *obj);
+static const gchar*          gail_item_get_name        (AtkObject     *obj);
 static gint                  gail_item_get_n_children  (AtkObject     *obj);
 static AtkObject*            gail_item_ref_child       (AtkObject     *obj,
                                                         gint          i);
@@ -131,7 +134,7 @@ gail_item_real_initialize (AtkObject *obj,
   label = get_label_from_container (GTK_WIDGET (data));
   if (GTK_IS_LABEL (label))
     {
-      if (GTK_WIDGET_MAPPED (label))
+      if (gtk_widget_get_mapped (label))
         gail_item_init_textutil (item, label);
       else
         g_signal_connect (label,
@@ -188,10 +191,10 @@ gail_item_finalize (GObject *object)
   G_OBJECT_CLASS (gail_item_parent_class)->finalize (object);
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_item_get_name (AtkObject *obj)
 {
-  G_CONST_RETURN gchar* name;
+  const gchar* name;
 
   g_return_val_if_fail (GAIL_IS_ITEM (obj), NULL);
 

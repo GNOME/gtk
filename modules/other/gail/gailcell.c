@@ -37,7 +37,7 @@ static gint         gail_cell_get_index_in_parent (AtkObject           *obj);
 
 /* AtkAction */
 
-static void         gail_cell_atk_action_interface_init 
+static void         atk_action_interface_init 
                                                   (AtkActionIface      *iface);
 static ActionInfo * _gail_cell_get_action_info    (GailCell            *cell,
 			                           gint                index);
@@ -47,10 +47,10 @@ static void         _gail_cell_destroy_action_info
 
 static gint         gail_cell_action_get_n_actions 
                                                   (AtkAction           *action);
-static G_CONST_RETURN gchar*
+static const gchar *
                     gail_cell_action_get_name     (AtkAction           *action,
 			                           gint                index);
-static G_CONST_RETURN gchar *
+static const gchar *
                     gail_cell_action_get_description 
                                                   (AtkAction           *action,
 				                   gint                index);
@@ -58,7 +58,7 @@ static gboolean     gail_cell_action_set_description
                                                   (AtkAction           *action,
 				                   gint                index,
 				                   const gchar         *desc);
-static G_CONST_RETURN gchar *
+static const gchar *
                     gail_cell_action_get_keybinding 
                                                   (AtkAction           *action,
 				                   gint                index);
@@ -76,6 +76,7 @@ static void         gail_cell_get_extents         (AtkComponent        *componen
 static gboolean     gail_cell_grab_focus         (AtkComponent        *component);
 
 G_DEFINE_TYPE_WITH_CODE (GailCell, gail_cell, ATK_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 static void	 
@@ -285,7 +286,7 @@ gail_cell_get_index_in_parent (AtkObject *obj)
 }
 
 static void
-gail_cell_atk_action_interface_init (AtkActionIface *iface)
+atk_action_interface_init (AtkActionIface *iface)
 {
   iface->get_n_actions = gail_cell_action_get_n_actions;
   iface->do_action = gail_cell_action_do_action;
@@ -295,17 +296,12 @@ gail_cell_atk_action_interface_init (AtkActionIface *iface)
   iface->get_keybinding = gail_cell_action_get_keybinding;
 }
 
+/*
+ * Deprecated: 2.22: The action interface is added for all cells now.
+ */
 void
 gail_cell_type_add_action_interface (GType type)
 {
-  const GInterfaceInfo atk_action_info =
-  {
-    (GInterfaceInitFunc) gail_cell_atk_action_interface_init,
-    (GInterfaceFinalizeFunc) NULL,
-    NULL
-  };
-  g_type_add_interface_static (type, ATK_TYPE_ACTION,
-                                 &atk_action_info);
 }
 
 gboolean
@@ -414,7 +410,7 @@ gail_cell_action_get_n_actions (AtkAction *action)
     return 0;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_cell_action_get_name (AtkAction *action,
 			   gint      index)
 {
@@ -426,7 +422,7 @@ gail_cell_action_get_name (AtkAction *action,
   return info->name;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_cell_action_get_description (AtkAction *action,
 				  gint      index)
 {
@@ -453,7 +449,7 @@ gail_cell_action_set_description (AtkAction   *action,
   return TRUE;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_cell_action_get_keybinding (AtkAction *action,
 				 gint      index)
 {

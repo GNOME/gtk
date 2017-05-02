@@ -29,6 +29,20 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkaspectframe
+ * @Short_description: A frame that constrains its child to a particular aspect ratio
+ * @Title: GtkAspectFrame
+ *
+ * The #GtkAspectFrame is useful when you want
+ * pack a widget so that it can resize but always retains
+ * the same aspect ratio. For instance, one might be
+ * drawing a small preview of a larger image. #GtkAspectFrame
+ * derives from #GtkFrame, so it can draw a label and
+ * a frame around the child. The frame will be
+ * "shrink-wrapped" to the size of the child.
+ */
+
 #include "config.h"
 #include "gtkaspectframe.h"
 #include "gtkprivate.h"
@@ -185,6 +199,23 @@ gtk_aspect_frame_get_property (GObject         *object,
     }
 }
 
+/**
+ * gtk_aspect_frame_new:
+ * @label: Label text.
+ * @xalign: Horizontal alignment of the child within the allocation of
+ *  the #GtkAspectFrame. This ranges from 0.0 (left aligned)
+ *  to 1.0 (right aligned)
+ * @yalign: Vertical alignment of the child within the allocation of
+ *  the #GtkAspectFrame. This ranges from 0.0 (left aligned)
+ *  to 1.0 (right aligned)
+ * @ratio: The desired aspect ratio.
+ * @obey_child: If %TRUE, @ratio is ignored, and the aspect
+ *  ratio is taken from the requistion of the child.
+ *
+ * Create a new #GtkAspectFrame.
+ *
+ * Returns: the new #GtkAspectFrame.
+ */
 GtkWidget*
 gtk_aspect_frame_new (const gchar *label,
 		      gfloat       xalign,
@@ -206,6 +237,21 @@ gtk_aspect_frame_new (const gchar *label,
   return GTK_WIDGET (aspect_frame);
 }
 
+/**
+ * gtk_aspect_frame_set:
+ * @aspect_frame: a #GtkAspectFrame
+ * @xalign: Horizontal alignment of the child within the allocation of
+ *  the #GtkAspectFrame. This ranges from 0.0 (left aligned)
+ *  to 1.0 (right aligned)
+ * @yalign: Vertical alignment of the child within the allocation of
+ *  the #GtkAspectFrame. This ranges from 0.0 (left aligned)
+ *  to 1.0 (right aligned)
+ * @ratio: The desired aspect ratio.
+ * @obey_child: If %TRUE, @ratio is ignored, and the aspect
+ *  ratio is taken from the requistion of the child.
+ *
+ * Set parameters for an existing #GtkAspectFrame.
+ */
 void
 gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
 		      gfloat          xalign,
@@ -261,7 +307,7 @@ gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
   GtkBin *bin = GTK_BIN (frame);
   gdouble ratio;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkAllocation full_allocation;
       

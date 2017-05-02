@@ -2,7 +2,7 @@
 Testing
 
 <!-- ##### SECTION Short_Description ##### -->
-test utilities
+Test utilities
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -16,6 +16,9 @@ They allow to simulate some user input.
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### FUNCTION gdk_test_render_sync ##### -->

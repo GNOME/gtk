@@ -17,6 +17,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include "config.h"
 
 #include <gtk/gtk.h>
@@ -30,7 +32,7 @@ static void         gail_combo_box_real_initialize         (AtkObject      *obj,
 
 static void         gail_combo_box_changed_gtk             (GtkWidget      *widget);
 
-static G_CONST_RETURN gchar* gail_combo_box_get_name       (AtkObject      *obj);
+static const gchar* gail_combo_box_get_name                (AtkObject      *obj);
 static gint         gail_combo_box_get_n_children          (AtkObject      *obj);
 static AtkObject*   gail_combo_box_ref_child               (AtkObject      *obj,
                                                             gint           i);
@@ -41,11 +43,11 @@ static gboolean     gail_combo_box_do_action               (AtkAction      *acti
                                                             gint           i);
 static gboolean     idle_do_action                         (gpointer       data);
 static gint         gail_combo_box_get_n_actions           (AtkAction      *action);
-static G_CONST_RETURN gchar* gail_combo_box_get_description(AtkAction      *action,
+static const gchar* gail_combo_box_get_description         (AtkAction      *action,
                                                             gint           i);
-static G_CONST_RETURN gchar* gail_combo_box_get_keybinding   (AtkAction       *action,
+static const gchar* gail_combo_box_get_keybinding          (AtkAction       *action,
 		                                             gint            i);
-static G_CONST_RETURN gchar* gail_combo_box_action_get_name(AtkAction      *action,
+static const gchar* gail_combo_box_action_get_name         (AtkAction      *action,
                                                             gint           i);
 static gboolean              gail_combo_box_set_description(AtkAction      *action,
                                                             gint           i,
@@ -116,7 +118,7 @@ gail_combo_box_real_initialize (AtkObject *obj,
       atk_object_set_parent (popup, obj);
       gail_combo_box->popup_set = TRUE;
     }
-  if (GTK_IS_COMBO_BOX_ENTRY (combo_box))
+  if (gtk_combo_box_get_has_entry (combo_box))
     atk_object_set_parent (gtk_widget_get_accessible (gtk_bin_get_child (GTK_BIN (combo_box))), obj);
 
   obj->role = ATK_ROLE_COMBO_BOX;
@@ -138,18 +140,19 @@ gail_combo_box_changed_gtk (GtkWidget *widget)
   if (gail_combo_box->old_selection != index)
     {
       gail_combo_box->old_selection = index;
+      g_object_notify (G_OBJECT (obj), "accessible-name");
       g_signal_emit_by_name (obj, "selection_changed");
     }
 }
 
-static G_CONST_RETURN gchar* 
+static const gchar*
 gail_combo_box_get_name (AtkObject *obj)
 {
   GtkWidget *widget;
   GtkComboBox *combo_box;
   GailComboBox *gail_combo_box;
   GtkTreeIter iter;
-  G_CONST_RETURN gchar *name;
+  const gchar *name;
   GtkTreeModel *model;
   gint n_columns;
   gint i;
@@ -213,7 +216,8 @@ gail_combo_box_get_n_children (AtkObject* obj)
     return 0;
 
   n_children++;
-  if (GTK_IS_COMBO_BOX_ENTRY (widget))
+  if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (widget)) ||
+      GTK_IS_COMBO_BOX_ENTRY (widget))
     n_children ++;
 
   return n_children;
@@ -247,7 +251,8 @@ gail_combo_box_ref_child (AtkObject *obj,
           box->popup_set = TRUE;
         }
     }
-  else if (i == 1 && GTK_IS_COMBO_BOX_ENTRY (widget))
+  else if (i == 1 && (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (widget)) ||
+                      GTK_IS_COMBO_BOX_ENTRY (widget)))
     {
       child = gtk_widget_get_accessible (gtk_bin_get_child (GTK_BIN (widget)));
     }
@@ -283,7 +288,7 @@ gail_combo_box_do_action (AtkAction *action,
      */
     return FALSE;
 
-  if (!GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+  if (!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
   combo_box = GAIL_COMBO_BOX (action);
@@ -312,13 +317,13 @@ idle_do_action (gpointer data)
   gail_combo_box->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (gail_combo_box)->widget;
   if (widget == NULL || /* State is defunct */
-      !GTK_WIDGET_SENSITIVE (widget) || !GTK_WIDGET_VISIBLE (widget))
+      !gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
   combo_box = GTK_COMBO_BOX (widget);
 
   popup = gtk_combo_box_get_popup_accessible (combo_box);
-  do_popup = !GTK_WIDGET_MAPPED (GTK_ACCESSIBLE (popup)->widget);
+  do_popup = !gtk_widget_get_mapped (GTK_ACCESSIBLE (popup)->widget);
   if (do_popup)
       gtk_combo_box_popup (combo_box);
   else
@@ -336,7 +341,7 @@ gail_combo_box_get_n_actions (AtkAction *action)
   return 1;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_box_get_description (AtkAction *action,
                            gint      i)
 {
@@ -351,21 +356,20 @@ gail_combo_box_get_description (AtkAction *action,
     return NULL;
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_box_get_keybinding (AtkAction *action,
 		                    gint      i)
 {
   GailComboBox *combo_box;
   gchar *return_value = NULL;
-  combo_box = GAIL_COMBO_BOX (action);
   switch (i)
   {
      case 0:
       {
-	  GtkWidget *widget;							    
+	  GtkWidget *widget;
 	  GtkWidget *label;
 	  AtkRelationSet *set;
-	  AtkRelation *relation;							     
+	  AtkRelation *relation;
 	  GPtrArray *target;
 	  gpointer target_object;
 	  guint key_val;
@@ -374,7 +378,7 @@ gail_combo_box_get_keybinding (AtkAction *action,
 	  widget = GTK_ACCESSIBLE (combo_box)->widget;
 	  if (widget == NULL)
              return NULL;
-	  set = atk_object_ref_relation_set (ATK_OBJECT (action));							
+	  set = atk_object_ref_relation_set (ATK_OBJECT (action));
 	  if (!set)
              return NULL;
 	  label = NULL;
@@ -387,7 +391,7 @@ gail_combo_box_get_keybinding (AtkAction *action,
 	     {
 	        label = GTK_ACCESSIBLE (target_object)->widget;
 	     }
-	  }  
+	  }
 	  g_object_unref (set);
 	  if (GTK_IS_LABEL (label))
 	  {
@@ -397,7 +401,8 @@ gail_combo_box_get_keybinding (AtkAction *action,
 	  }
 	   g_free (combo_box->press_keybinding);
 	   combo_box->press_keybinding = return_value;
-	   break;                                                                                    }                             
+	   break;
+       }
     default:
 	   break;
   }
@@ -405,7 +410,7 @@ gail_combo_box_get_keybinding (AtkAction *action,
 }
 
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_combo_box_action_get_name (AtkAction *action,
                                 gint      i)
 {

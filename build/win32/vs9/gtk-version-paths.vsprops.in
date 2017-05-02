@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="gtkversionpathsprops"
+	>
+	<UserMacro
+		Name="VSVer"
+		Value="9"
+	/>
+	<UserMacro
+		Name="GlibEtcInstallRoot"
+		Value="..\..\..\..\vs$(VSVer)\$(PlatformName)"
+	/>
+	<UserMacro
+		Name="CopyDir"
+		Value="$(GlibEtcInstallRoot)"
+	/>
+	<UserMacro
+		Name="DefDir"
+		Value="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\obj\$(ProjectName)"
+	/>
+	<UserMacro
+		Name="ApiVersion"
+		Value="2.0"
+	/>
+	<UserMacro
+		Name="GtkVersion"
+		Value="@GTK_VERSION@"
+	/>
+	<UserMacro
+		Name="GtkLibtoolCompatibleDllPrefix"
+		Value="lib"
+	/>
+	<UserMacro
+		Name="GtkLibtoolCompatibleDllSuffix"
+		Value="-$(ApiVersion)-0"
+	/>
+	<UserMacro
+		Name="GtkSeparateVSDllPrefix"
+		Value=""
+	/>
+	<UserMacro
+		Name="GtkSeparateVSDllSuffix"
+		Value="-2-vs$(VSVer)"
+	/>
+	<!-- Change these two to GtkLibtoolCompatibleDllPrefix and
+	GtkLibtoolCompatibleDllSuffix if that is what you want -->
+	<UserMacro
+		Name="GtkDllPrefix"
+		Value="$(GtkSeparateVSDllPrefix)"
+	/>
+	<UserMacro
+		Name="GtkDllSuffix"
+		Value="$(GtkSeparateVSDllSuffix)"
+	/>
+	<!-- Update the following to reflect the actual Python 2.x/3.x installation path on your system -->
+	<UserMacro
+		Name="PythonPath"
+		Value="c:\python27"
+	/>
+	<UserMacro
+		Name="PythonPathX64"
+		Value="$(PythonPath).x64"
+	/>
+</VisualStudioPropertySheet>

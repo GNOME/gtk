@@ -23,18 +23,18 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_LABEL_H__
 #define __GTK_LABEL_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkmisc.h>
 #include <gtk/gtkwindow.h>
 #include <gtk/gtkmenu.h>
+
 
 G_BEGIN_DECLS
 
@@ -67,6 +67,7 @@ struct _GtkLabel
   guint   GSEAL (in_click)         : 1;
   guint   GSEAL (wrap_mode)        : 3;
   guint   GSEAL (pattern_set)      : 1;
+  guint   GSEAL (track_links)      : 1;
 
   guint   GSEAL (mnemonic_keyval);
 
@@ -96,11 +97,13 @@ struct _GtkLabelClass
   void (* populate_popup)   (GtkLabel       *label,
                              GtkMenu        *menu);
 
+  gboolean (*activate_link) (GtkLabel       *label,
+                             const gchar    *uri);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 GType                 gtk_label_get_type          (void) G_GNUC_CONST;
@@ -108,13 +111,13 @@ GtkWidget*            gtk_label_new               (const gchar   *str);
 GtkWidget*            gtk_label_new_with_mnemonic (const gchar   *str);
 void                  gtk_label_set_text          (GtkLabel      *label,
 						   const gchar   *str);
-G_CONST_RETURN gchar* gtk_label_get_text          (GtkLabel      *label);
+const gchar *         gtk_label_get_text          (GtkLabel      *label);
 void                  gtk_label_set_attributes    (GtkLabel      *label,
 						   PangoAttrList *attrs);
 PangoAttrList        *gtk_label_get_attributes    (GtkLabel      *label);
 void                  gtk_label_set_label         (GtkLabel      *label,
 						   const gchar   *str);
-G_CONST_RETURN gchar *gtk_label_get_label         (GtkLabel      *label);
+const gchar *         gtk_label_get_label         (GtkLabel      *label);
 void                  gtk_label_set_markup        (GtkLabel      *label,
 						   const gchar   *str);
 void                  gtk_label_set_use_markup    (GtkLabel      *label,
@@ -174,6 +177,11 @@ void         gtk_label_set_single_line_mode  (GtkLabel *label,
                                               gboolean single_line_mode);
 gboolean     gtk_label_get_single_line_mode  (GtkLabel *label);
 
+const gchar *gtk_label_get_current_uri          (GtkLabel *label);
+void         gtk_label_set_track_visited_links  (GtkLabel *label,
+                                                 gboolean  track_links);
+gboolean     gtk_label_get_track_visited_links  (GtkLabel *label);
+
 #ifndef GTK_DISABLE_DEPRECATED
 
 #define  gtk_label_set           gtk_label_set_text
@@ -188,6 +196,11 @@ guint gtk_label_parse_uline            (GtkLabel    *label,
 					const gchar *string);
 
 #endif /* GTK_DISABLE_DEPRECATED */
+
+/* private */
+
+void _gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
+                                                     gboolean   mnemonics_visible);
 
 G_END_DECLS
 

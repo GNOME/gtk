@@ -143,6 +143,7 @@ struct _GtkIconInfo
   GdkPixbuf *pixbuf;
   GError *load_error;
   gdouble scale;
+  gboolean emblems_applied;
 
   guint ref_count;
 };
@@ -194,6 +195,7 @@ typedef struct
 {
   char *dir;
   time_t mtime; /* 0 == not existing or not a dir */
+  gboolean exists;
 
   GtkIconCache *cache;
 } IconThemeDirMtime;
@@ -275,8 +277,8 @@ gtk_icon_theme_new (void)
  * 
  * Gets the icon theme for the default screen. See
  * gtk_icon_theme_get_for_screen().
- * 
- * Return value: A unique #GtkIconTheme associated with
+ *
+ * Return value: (transfer none): A unique #GtkIconTheme associated with
  *  the default screen. This icon theme is associated with
  *  the screen and can be used as long as the screen
  *  is open. Do not ref or unref it.
@@ -301,8 +303,8 @@ gtk_icon_theme_get_default (void)
  * is usually a better choice than calling than gtk_icon_theme_new()
  * and setting the screen yourself; by using this function
  * a single icon theme object will be shared between users.
- * 
- * Return value: A unique #GtkIconTheme associated with
+ *
+ * Return value: (transfer none): A unique #GtkIconTheme associated with
  *  the given screen. This icon theme is associated with
  *  the screen and can be used as long as the screen
  *  is open. Do not ref or unref it.
@@ -695,7 +697,8 @@ gtk_icon_theme_finalize (GObject *object)
 /**
  * gtk_icon_theme_set_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: array of directories that are searched for icon themes
+ * @path: (array length=n_elements) (element-type filename): array of
+ *     directories that are searched for icon themes
  * @n_elements: number of elements in @path.
  * 
  * Sets the search path for the icon theme object. When looking
@@ -744,7 +747,7 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_get_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: location to store a list of icon theme path directories or %NULL
+ * @path: (allow-none): (array length=n_elements) (out): location to store a list of icon theme path directories or %NULL
  *        The stored value should be freed with g_strfreev().
  * @n_elements: location to store number of elements
  *              in @path, or %NULL
@@ -919,9 +922,15 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
       dir_mtime->cache = NULL;
       dir_mtime->dir = path;
       if (g_stat (path, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode))
-	dir_mtime->mtime = stat_buf.st_mtime;
+	{
+	  dir_mtime->mtime = stat_buf.st_mtime;
+	  dir_mtime->exists = TRUE;
+	}
       else
-	dir_mtime->mtime = 0;
+	{
+	  dir_mtime->mtime = 0;
+	  dir_mtime->exists = FALSE;
+	}
 
       priv->dir_mtimes = g_list_prepend (priv->dir_mtimes, dir_mtime);
     }
@@ -1071,11 +1080,13 @@ load_themes (GtkIconTheme *icon_theme)
       
       dir_mtime->dir = g_strdup (dir);
       dir_mtime->mtime = 0;
+      dir_mtime->exists = FALSE;
       dir_mtime->cache = NULL;
 
       if (g_stat (dir, &stat_buf) != 0 || !S_ISDIR (stat_buf.st_mode))
 	continue;
       dir_mtime->mtime = stat_buf.st_mtime;
+      dir_mtime->exists = TRUE;
 
       dir_mtime->cache = _gtk_icon_cache_new_for_path (dir);
       if (dir_mtime->cache != NULL)
@@ -1449,7 +1460,8 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
 /**
  * gtk_icon_theme_choose_icon:
  * @icon_theme: a #GtkIconTheme
- * @icon_names: %NULL-terminated array of icon names to lookup
+ * @icon_names: (array zero-terminated=1): %NULL-terminated array of
+ *     icon names to lookup
  * @size: desired icon size
  * @flags: flags modifying the behavior of the icon lookup
  * 
@@ -1497,7 +1509,7 @@ gtk_icon_theme_error_quark (void)
  * @size: the desired icon size. The resulting icon may not be
  *        exactly this size; see gtk_icon_info_load_icon().
  * @flags: flags modifying the behavior of the icon lookup
- * @error: Location to store error information on failure, or %NULL.
+ * @error: (allow-none): Location to store error information on failure, or %NULL.
  * 
  * Looks up an icon in an icon theme, scales it to the given size
  * and renders it into a pixbuf. This is a convenience function;
@@ -1512,8 +1524,8 @@ gtk_icon_theme_error_quark (void)
  * returned by this function. Otherwise GTK+ may need to keep the old 
  * icon theme loaded, which would be a waste of memory.
  * 
- * Return value: the rendered icon; this may be a newly created icon
- *  or a new reference to an internal icon, so you must not modify
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *  created icon or a new reference to an internal icon, so you must not modify
  *  the icon. Use g_object_unref() to release your reference to the
  *  icon. %NULL if the icon isn't found.
  *
@@ -1571,7 +1583,8 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
   GList *l;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), FALSE);
-  
+  g_return_val_if_fail (icon_name != NULL, FALSE);
+
   priv = icon_theme->priv;
   
   ensure_valid_themes (icon_theme);
@@ -1623,9 +1636,9 @@ add_size (gpointer  key,
  * that the icon is available in a scalable format. The array 
  * is zero-terminated.
  * 
- * Return value: An newly allocated array describing the sizes at
- * which the icon is available. The array should be freed with g_free()
- * when it is no longer needed.
+ * Return value: (array zero-terminated=1): An newly allocated array
+ * describing the sizes at which the icon is available. The array
+ * should be freed with g_free() when it is no longer needed.
  *
  * Since: 2.6
  **/
@@ -1737,11 +1750,11 @@ add_key_to_list (gpointer  key,
  * The set of values for the context string is system dependent,
  * but will typically include such values as "Applications" and
  * "MimeTypes".
- * 
- * Return value: a #GList list holding the names of all the
- *  icons in the theme. You must first free each element
- *  in the list with g_free(), then free the list itself
- *  with g_list_free().
+ *
+ * Return value: (element-type utf8) (transfer full): a #GList list
+ *  holding the names of all the icons in the theme. You must first
+ *  free each element in the list with g_free(), then free the list
+ *  itself with g_list_free().
  *
  * Since: 2.4
  **/
@@ -1800,7 +1813,7 @@ gtk_icon_theme_list_icons (GtkIconTheme *icon_theme,
  * Gets the list of contexts available within the current
  * hierarchy of icon themes
  *
- * Return value: a #GList list holding the names of all the
+ * Return value: (element-type utf8) (transfer full): a #GList list holding the names of all the
  *  contexts in the theme. You must first free each element
  *  in the list with g_free(), then free the list itself
  *  with g_list_free().
@@ -1897,12 +1910,12 @@ rescan_themes (GtkIconTheme *icon_theme)
       stat_res = g_stat (dir_mtime->dir, &stat_buf);
 
       /* dir mtime didn't change */
-      if (stat_res == 0 &&
+      if (stat_res == 0 && dir_mtime->exists &&
 	  S_ISDIR (stat_buf.st_mode) &&
 	  dir_mtime->mtime == stat_buf.st_mtime)
 	continue;
       /* didn't exist before, and still doesn't */
-      if (dir_mtime->mtime == 0 &&
+      if (!dir_mtime->exists &&
 	  (stat_res != 0 || !S_ISDIR (stat_buf.st_mode)))
 	continue;
 
@@ -2543,7 +2556,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
     {
       dir_mtime = (IconThemeDirMtime *)d->data;
 
-      if (dir_mtime->mtime == 0)
+      if (!dir_mtime->exists)
 	continue; /* directory doesn't exist */
 
        full_dir = g_build_filename (dir_mtime->dir, subdir, NULL);
@@ -2732,7 +2745,7 @@ gtk_icon_info_get_base_size (GtkIconInfo *icon_info)
  *
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_icon_info_get_filename (GtkIconInfo *icon_info)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);
@@ -2748,8 +2761,8 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
  * GTK+ to use built in icon images, you must pass the
  * %GTK_ICON_LOOKUP_USE_BUILTIN to
  * gtk_icon_theme_lookup_icon().
- * 
- * Return value: the built-in image pixbuf, or %NULL. No
+ *
+ * Return value: (transfer none): the built-in image pixbuf, or %NULL. No
  *  extra reference is added to the returned pixbuf, so if
  *  you want to keep it around, you must use g_object_ref().
  *  The returned image must not be modified.
@@ -2776,13 +2789,18 @@ static gboolean icon_info_ensure_scale_and_pixbuf (GtkIconInfo*, gboolean);
 static void 
 apply_emblems (GtkIconInfo *info)
 {
-  GdkPixbuf *icon;
+  GdkPixbuf *icon = NULL;
   gint w, h, pos;
   GSList *l;
 
-  icon = info->pixbuf;
-  w = gdk_pixbuf_get_width (icon);
-  h = gdk_pixbuf_get_height (icon);
+  if (info->emblem_infos == NULL)
+    return;
+
+  if (info->emblems_applied)
+    return;
+
+  w = gdk_pixbuf_get_width (info->pixbuf);
+  h = gdk_pixbuf_get_height (info->pixbuf);
 
   for (l = info->emblem_infos, pos = 0; l; l = l->next, pos++)
     {
@@ -2826,10 +2844,25 @@ apply_emblems (GtkIconInfo *info)
               break;
             }
 
+          if (icon == NULL)
+            {
+              icon = gdk_pixbuf_copy (info->pixbuf);
+              if (icon == NULL)
+                break;
+            }
+
           gdk_pixbuf_composite (emblem, icon, x, y, ew, eh, x, y,
                                 scale, scale, GDK_INTERP_BILINEAR, 255);
        }
    }
+
+  if (icon)
+    {
+      g_object_unref (info->pixbuf);
+      info->pixbuf = icon;
+    }
+
+  info->emblems_applied = TRUE;
 }
 
 /* This function contains the complicated logic for deciding
@@ -2851,7 +2884,10 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
     return TRUE;
 
   if (icon_info->pixbuf)
-    return TRUE;
+    {
+      apply_emblems (icon_info);
+      return TRUE;
+    }
 
   if (icon_info->load_error)
     return FALSE;
@@ -2874,6 +2910,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
       GFile *file;
       GFileInfo *file_info;
       const gchar *content_type;
+      const gchar *mime_type;
 
       file = g_file_icon_get_file (G_FILE_ICON (icon_info->loadable));
       file_info = g_file_query_info (file, 
@@ -2884,11 +2921,16 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
         {
           content_type = g_file_info_get_content_type (file_info);
 
-          if (content_type && strcmp (content_type, "image/svg+xml") == 0)
-            is_svg = TRUE;
+          if (content_type)
+            {
+              mime_type = g_content_type_get_mime_type (content_type);
+
+              if (mime_type && strcmp (mime_type, "image/svg+xml") == 0)
+                is_svg = TRUE;
+            }
 
           g_object_unref (file_info);
-       }
+        }
     }
 
   if (is_svg)
@@ -3019,8 +3061,9 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_load_icon:
  * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
- * @error: location to store error information on failure, or %NULL.
- * 
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
  * Renders an icon previously looked up in an icon theme using
  * gtk_icon_theme_lookup_icon(); the size will be based on the size
  * passed to gtk_icon_theme_lookup_icon(). Note that the resulting
@@ -3031,12 +3074,12 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
  * up too far. (This maintains sharpness.). This behaviour can be changed
  * by passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag when obtaining
  * the #GtkIconInfo. If this flag has been specified, the pixbuf
- * returned by this function will be scaled to the exact size. 
- * 
- * Return value: the rendered icon; this may be a newly created icon
- *  or a new reference to an internal icon, so you must not modify
- *  the icon. Use g_object_unref() to release your reference to the
- *  icon.
+ * returned by this function will be scaled to the exact size.
+ *
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *     created icon or a new reference to an internal icon, so you must
+ *     not modify the icon. Use g_object_unref() to release your reference
+ *     to the icon.
  *
  * Since: 2.4
  **/
@@ -3126,7 +3169,7 @@ icon_info_scale_point (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_get_embedded_rect:
  * @icon_info: a #GtkIconInfo
- * @rectangle: #GdkRectangle in which to store embedded
+ * @rectangle: (out): #GdkRectangle in which to store embedded
  *   rectangle coordinates; coordinates are only stored
  *   when this function returns %TRUE.
  *
@@ -3176,9 +3219,9 @@ gtk_icon_info_get_embedded_rect (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_get_attach_points:
  * @icon_info: a #GtkIconInfo
- * @points: location to store pointer to an array of points, or %NULL
+ * @points: (allow-none): (array length=n_points) (out): location to store pointer to an array of points, or %NULL
  *          free the array of points with g_free().
- * @n_points: location to store the number of points in @points, or %NULL
+ * @n_points: (allow-none): location to store the number of points in @points, or %NULL
  * 
  * Fetches the set of attach points for an icon. An attach point
  * is a location in the icon that can be used as anchor points for attaching
@@ -3241,7 +3284,7 @@ gtk_icon_info_get_attach_points (GtkIconInfo *icon_info,
  *
  * Since: 2.4
  **/
-G_CONST_RETURN gchar *
+const gchar *
 gtk_icon_info_get_display_name (GtkIconInfo *icon_info)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);
@@ -3475,11 +3518,45 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
           for (l = list; l; l = l->next)
             {
               emblem = g_emblem_get_icon (G_EMBLEM (l->data));
-              emblem_info = gtk_icon_theme_lookup_by_gicon (icon_theme, emblem, size / 2, flags);
+	      /* always force size for emblems */
+              emblem_info = gtk_icon_theme_lookup_by_gicon (icon_theme, emblem, size / 2, flags | GTK_ICON_LOOKUP_FORCE_SIZE);
               if (emblem_info)
                 info->emblem_infos = g_slist_prepend (info->emblem_infos, emblem_info);
             }
         }
+
+      return info;
+    }
+  else if (GDK_IS_PIXBUF (icon))
+    {
+      GdkPixbuf *pixbuf;
+
+      pixbuf = GDK_PIXBUF (icon);
+
+      if ((flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0)
+	{
+	  gint width, height, max;
+	  gdouble scale;
+	  GdkPixbuf *scaled;
+
+	  width = gdk_pixbuf_get_width (pixbuf);
+	  height = gdk_pixbuf_get_height (pixbuf);
+	  max = MAX (width, height);
+	  scale = (gdouble) size / (gdouble) max;
+
+	  scaled = gdk_pixbuf_scale_simple (pixbuf,
+					    0.5 + width * scale,
+					    0.5 + height * scale,
+					    GDK_INTERP_BILINEAR);
+
+	  info = gtk_icon_info_new_for_pixbuf (icon_theme, scaled);
+
+	  g_object_unref (scaled);
+	}
+      else
+	{
+	  info = gtk_icon_info_new_for_pixbuf (icon_theme, pixbuf);
+	}
 
       return info;
     }
@@ -3492,7 +3569,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
  * @icon_theme: a #GtkIconTheme
  * @pixbuf: the pixbuf to wrap in a #GtkIconInfo
  *
- * Creates a #GtkIconInfo for a #GtkPixbuf. 
+ * Creates a #GtkIconInfo for a #GdkPixbuf.
  *
  * Returns: a #GtkIconInfo
  *
@@ -3596,7 +3673,7 @@ gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
 
 #undef gtk_icon_info_get_filename
 
-G_CONST_RETURN gchar *
+const gchar *
 gtk_icon_info_get_filename (GtkIconInfo *icon_info)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);

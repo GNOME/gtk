@@ -31,6 +31,9 @@ Controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkDisplay ##### -->
 <para>
 The <structname>GdkDisplay</structname> struct is the GDK representation
@@ -61,6 +64,7 @@ of an X display. All its fields are private and should not be accessed directly.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -158,6 +162,15 @@ of an X display. All its fields are private and should not be accessed directly.
 </para>
 
 @display: 
+
+
+<!-- ##### FUNCTION gdk_display_is_closed ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_display_list_devices ##### -->

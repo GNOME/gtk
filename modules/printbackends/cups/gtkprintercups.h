@@ -23,6 +23,7 @@
 #include <glib-object.h>
 #include <cups/cups.h>
 #include <cups/ppd.h>
+#include "gtkcupsutils.h"
 
 #include <gtk/gtkunixprint.h>
 
@@ -47,11 +48,31 @@ struct _GtkPrinterCups
   gchar *printer_uri;
   gchar *hostname;
   gint port;
+  gchar **auth_info_required;
 
   ipp_pstate_t state;
   gboolean reading_ppd;
   gchar      *ppd_name;
   ppd_file_t *ppd_file;
+
+  gchar  *default_cover_before;
+  gchar  *default_cover_after;
+
+  gboolean remote;
+  guint get_remote_ppd_poll;
+  gint  get_remote_ppd_attempts;
+  GtkCupsConnectionTest *remote_cups_connection_test;
+#ifdef HAVE_CUPS_API_1_6
+  gboolean  avahi_browsed;
+  gchar    *avahi_name;
+  gchar    *avahi_type;
+  gchar    *avahi_domain;
+#endif
+  guchar ipp_version_major;
+  guchar ipp_version_minor;
+  gboolean supports_copies;
+  gboolean supports_collate;
+  gboolean supports_number_up;
 };
 
 struct _GtkPrinterCupsClass

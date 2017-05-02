@@ -42,6 +42,8 @@ static void      gail_spin_button_get_maximum_value (AtkValue       *obj,
                                                      GValue         *value);
 static void      gail_spin_button_get_minimum_value (AtkValue       *obj,
                                                      GValue         *value);
+static void      gail_spin_button_get_minimum_increment (AtkValue       *obj,
+                                                         GValue         *value);
 static gboolean  gail_spin_button_set_current_value (AtkValue       *obj,
                                                      const GValue   *value);
 static void      gail_spin_button_value_changed     (GtkAdjustment  *adjustment,
@@ -106,6 +108,7 @@ atk_value_interface_init (AtkValueIface *iface)
   iface->get_current_value = gail_spin_button_get_current_value;
   iface->get_maximum_value = gail_spin_button_get_maximum_value;
   iface->get_minimum_value = gail_spin_button_get_minimum_value;
+  iface->get_minimum_increment = gail_spin_button_get_minimum_increment;
   iface->set_current_value = gail_spin_button_set_current_value;
 }
 
@@ -161,6 +164,23 @@ gail_spin_button_get_minimum_value (AtkValue       *obj,
     return;
 
   atk_value_get_minimum_value (ATK_VALUE (spin_button->adjustment), value);
+}
+
+static void
+gail_spin_button_get_minimum_increment (AtkValue *obj, GValue *value)
+{
+ GailSpinButton *spin_button;
+
+  g_return_if_fail (GAIL_IS_SPIN_BUTTON (obj));
+
+  spin_button = GAIL_SPIN_BUTTON (obj);
+  if (spin_button->adjustment == NULL)
+    /*
+     * Adjustment has not been specified
+     */
+    return;
+
+  atk_value_get_minimum_increment (ATK_VALUE (spin_button->adjustment), value);
 }
 
 static gboolean  

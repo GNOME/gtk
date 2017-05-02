@@ -41,7 +41,8 @@ typedef enum {
   GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE,
   GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN,
   GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION,
-  GTK_FILE_CHOOSER_PROP_LAST                   = GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION
+  GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS,
+  GTK_FILE_CHOOSER_PROP_LAST                   = GTK_FILE_CHOOSER_PROP_CREATE_FOLDERS
 } GtkFileChooserProp;
 
 void _gtk_file_chooser_install_properties (GObjectClass *klass);
@@ -51,6 +52,8 @@ void _gtk_file_chooser_set_delegate        (GtkFileChooser *receiver,
 					    GtkFileChooser *delegate);
 
 GQuark _gtk_file_chooser_delegate_get_quark (void) G_GNUC_CONST;
+
+GList *_gtk_file_chooser_extract_recent_folders (GList *infos);
 
 G_END_DECLS
 

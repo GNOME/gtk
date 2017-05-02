@@ -13,9 +13,8 @@ INCLUDES = \
 
 LDADDS = \
 	$(GTK_DEP_LIBS)					\
-        $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-2.0.la \
 	$(top_builddir)/gdk/$(gdktargetlib)		\
-	$(top_builddir)/gtk/$(gtktargetlib)		
+	$(top_builddir)/gtk/$(gtktargetlib)
 
 enginedir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/engines
 
@@ -33,3 +32,5 @@ libpixmap_la_SOURCES = 		\
 libpixmap_la_LDFLAGS =  -avoid-version -module $(no_undefined)
 libpixmap_la_LIBADD = $(LDADDS)
 
+
+-include $(top_srcdir)/git.mk

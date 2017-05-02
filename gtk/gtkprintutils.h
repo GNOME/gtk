@@ -20,7 +20,9 @@
 #ifndef __GTK_PRINT_UTILS_H__
 #define __GTK_PRINT_UTILS_H__
 
+
 #include "gtkenums.h"
+
 
 G_BEGIN_DECLS
 

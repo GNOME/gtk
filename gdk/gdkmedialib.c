@@ -104,10 +104,7 @@ _gdk_use_medialib (void)
             * For x86 processors use of libumem conflicts with
             * mediaLib, so avoid using it.
             */
-           if ((dlsym (RTLD_DEFAULT, "umem_alloc") != NULL) ||
-               (dlsym (RTLD_PROBE,   "umem_alloc") != NULL) ||
-               (dlsym (RTLD_NEXT,    "umem_alloc") != NULL) ||
-               (dlsym (RTLD_SELF,    "umem_alloc") != NULL))
+           if (dlsym (RTLD_PROBE,   "umem_alloc") != NULL)
              {
                return FALSE;
              }

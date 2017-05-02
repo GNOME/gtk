@@ -24,6 +24,25 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkalignment
+ * @Short_description: A widget which controls the alignment and size of its child
+ * @Title: GtkAlignment
+ *
+ * The #GtkAlignment widget controls the alignment and size of its child widget.
+ * It has four settings: xscale, yscale, xalign, and yalign.
+ *
+ * The scale settings are used to specify how much the child widget should
+ * expand to fill the space allocated to the #GtkAlignment.
+ * The values can range from 0 (meaning the child doesn't expand at all) to
+ * 1 (meaning the child expands to fill all of the available space).
+ *
+ * The align settings are used to place the child widget within the available
+ * area. The values range from 0 (top or left) to 1 (bottom or right).
+ * Of course, if the scale settings are both set to 1, the alignment settings
+ * have no effect.
+ */
+
 #include "config.h"
 #include "gtkalignment.h"
 #include "gtkprivate.h"
@@ -199,7 +218,7 @@ gtk_alignment_init (GtkAlignment *alignment)
 {
   GtkAlignmentPrivate *priv;
   
-  GTK_WIDGET_SET_FLAGS (alignment, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (alignment), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (alignment), FALSE);
 
   alignment->xalign = 0.5;
@@ -215,6 +234,24 @@ gtk_alignment_init (GtkAlignment *alignment)
   priv->padding_right = 0;
 }
 
+/**
+ * gtk_alignment_new:
+ * @xalign: the horizontal alignment of the child widget, from 0 (left) to 1
+ *  (right).
+ * @yalign: the vertical alignment of the child widget, from 0 (top) to 1
+ *  (bottom).
+ * @xscale: the amount that the child widget expands horizontally to fill up
+ *  unused space, from 0 to 1.
+ *  A value of 0 indicates that the child widget should never expand.
+ *  A value of 1 indicates that the child widget will expand to fill all of the
+ *  space allocated for the #GtkAlignment.
+ * @yscale: the amount that the child widget expands vertically to fill up
+ *  unused space, from 0 to 1. The values are similar to @xscale.
+ *
+ * Creates a new #GtkAlignment.
+ *
+ * Returns: the new #GtkAlignment.
+ */
 GtkWidget*
 gtk_alignment_new (gfloat xalign,
 		   gfloat yalign,
@@ -359,6 +396,23 @@ gtk_alignment_get_property (GObject         *object,
     }
 }
 
+/**
+ * gtk_alignment_set:
+ * @alignment: a #GtkAlignment.
+ * @xalign: the horizontal alignment of the child widget, from 0 (left) to 1
+ *  (right).
+ * @yalign: the vertical alignment of the child widget, from 0 (top) to 1
+ *  (bottom).
+ * @xscale: the amount that the child widget expands horizontally to fill up
+ *  unused space, from 0 to 1.
+ *  A value of 0 indicates that the child widget should never expand.
+ *  A value of 1 indicates that the child widget will expand to fill all of the
+ *  space allocated for the #GtkAlignment.
+ * @yscale: the amount that the child widget expands vertically to fill up
+ *  unused space, from 0 to 1. The values are similar to @xscale.
+ *
+ * Sets the #GtkAlignment values.
+ */
 void
 gtk_alignment_set (GtkAlignment *alignment,
 		   gfloat        xalign,
@@ -421,7 +475,7 @@ gtk_alignment_size_request (GtkWidget      *widget,
   requisition->width = GTK_CONTAINER (widget)->border_width * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       GtkRequisition child_requisition;
       
@@ -456,7 +510,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   alignment = GTK_ALIGNMENT (widget);
   bin = GTK_BIN (widget);
   
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+  if (bin->child && gtk_widget_get_visible (bin->child))
     {
       gtk_widget_get_child_requisition (bin->child, &child_requisition);
 
@@ -466,8 +520,8 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
       padding_horizontal = priv->padding_left + priv->padding_right;
       padding_vertical = priv->padding_top + priv->padding_bottom;
 
-      width = allocation->width - padding_horizontal - 2 * border_width;
-      height = allocation->height - padding_vertical - 2 * border_width;
+      width  = MAX (1, allocation->width - padding_horizontal - 2 * border_width);
+      height = MAX (1, allocation->height - padding_vertical - 2 * border_width);
     
       if (width > child_requisition.width)
 	child_allocation.width = (child_requisition.width *
@@ -557,10 +611,14 @@ gtk_alignment_set_padding (GtkAlignment    *alignment,
 /**
  * gtk_alignment_get_padding:
  * @alignment: a #GtkAlignment
- * @padding_top: location to store the padding for the top of the widget, or %NULL
- * @padding_bottom: location to store the padding for the bottom of the widget, or %NULL
- * @padding_left: location to store the padding for the left of the widget, or %NULL
- * @padding_right: location to store the padding for the right of the widget, or %NULL
+ * @padding_top: (out) (allow-none): location to store the padding for
+ *     the top of the widget, or %NULL
+ * @padding_bottom: (out) (allow-none): location to store the padding
+ *     for the bottom of the widget, or %NULL
+ * @padding_left: (out) (allow-none): location to store the padding
+ *     for the left of the widget, or %NULL
+ * @padding_right: (out) (allow-none): location to store the padding
+ *     for the right of the widget, or %NULL
  *
  * Gets the padding on the different sides of the widget.
  * See gtk_alignment_set_padding ().

@@ -8,12 +8,10 @@ A horizontal ruler
 <note>
 <para>
  This widget is considered too specialized/little-used for
- GTK+, and will in the future be moved to some other package.  If
- your application needs this widget, feel free to use it, as the
- widget does work and is useful in some applications; it's just not
- of general interest. However, we are not accepting new features for
- the widget, and it will eventually move out of the GTK+
- distribution.
+ GTK+, and will be removed in GTK 3.  If your application needs this widget,
+ feel free to use it, as the widget is useful in some applications; it's just
+ not of general interest. However, we are not accepting new features for the
+ widget, and it will move out of the GTK+ distribution.
 </para>
 </note>
 <para>
@@ -33,6 +31,9 @@ rulers.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkHRuler ##### -->
 <para>
 The #GtkHRuler struct contains private data and should be accessed
@@ -45,6 +46,9 @@ with the functions below.
 Creates a new horizontal ruler.
 </para>
 
+@void: 
 @Returns: a new #GtkHRuler.
+@Deprecated: 2.24: #GtkRuler has been removed from GTK 3 for being
+    unmaintained and too specialized. There is no replacement.
 
 

@@ -43,7 +43,7 @@ dump_tree (GtkWidget    *button,
   gchar *dump;
 
   dump = gtk_ui_manager_get_ui (merge);
-  g_message (dump);
+  g_message ("%s", dump);
   g_free (dump);
 }
 
@@ -209,11 +209,11 @@ enum {
 static GtkRadioActionEntry radio_entries[] = {
   { "justify-left", GTK_STOCK_JUSTIFY_LEFT, NULL, "<control>L", 
     "Left justify the text", JUSTIFY_LEFT },
-  { "justify-center", GTK_STOCK_JUSTIFY_CENTER, NULL, "<control>E",
+  { "justify-center", GTK_STOCK_JUSTIFY_CENTER, NULL, "<super>E",
     "Center justify the text", JUSTIFY_CENTER },
-  { "justify-right", GTK_STOCK_JUSTIFY_RIGHT, NULL, "<control>R",
+  { "justify-right", GTK_STOCK_JUSTIFY_RIGHT, NULL, "<hyper>R",
     "Right justify the text", JUSTIFY_RIGHT },
-  { "justify-fill", GTK_STOCK_JUSTIFY_FILL, NULL, "<control>J",
+  { "justify-fill", GTK_STOCK_JUSTIFY_FILL, NULL, "<super><hyper>J",
     "Fill justify the text", JUSTIFY_FILL },
 };
 static guint n_radio_entries = G_N_ELEMENTS (radio_entries);
@@ -641,14 +641,15 @@ main (int argc, char **argv)
 
   button = gtk_button_new ();
   gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE, 0);
-  gtk_action_connect_proxy (gtk_action_group_get_action (action_group, "AboutAction"), 
-			    button);
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
+			    gtk_action_group_get_action (action_group, "AboutAction"));
+
   gtk_widget_show (button);
 
   button = gtk_check_button_new ();
   gtk_box_pack_end (GTK_BOX (menu_box), button, FALSE, FALSE, 0);
-  gtk_action_connect_proxy (gtk_action_group_get_action (action_group, "BoldAction"), 
-			    button);
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
+			    gtk_action_group_get_action (action_group, "BoldAction"));
   gtk_widget_show (button);
 
   merge = gtk_ui_manager_new ();

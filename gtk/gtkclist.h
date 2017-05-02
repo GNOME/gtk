@@ -30,14 +30,14 @@
 #ifndef __GTK_CLIST_H__
 #define __GTK_CLIST_H__
 
-#include <gdk/gdk.h>
+
 #include <gtk/gtksignal.h>
 #include <gtk/gtkalignment.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkvscrollbar.h>
-#include <gtk/gtkenums.h>
+
 
 G_BEGIN_DECLS
 
@@ -84,11 +84,11 @@ typedef enum
 } GtkButtonAction;
 
 #define GTK_TYPE_CLIST            (gtk_clist_get_type ())
-#define GTK_CLIST(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_CLIST, GtkCList))
-#define GTK_CLIST_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CLIST, GtkCListClass))
-#define GTK_IS_CLIST(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_CLIST))
-#define GTK_IS_CLIST_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CLIST))
-#define GTK_CLIST_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CLIST, GtkCListClass))
+#define GTK_CLIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CLIST, GtkCList))
+#define GTK_CLIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CLIST, GtkCListClass))
+#define GTK_IS_CLIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CLIST))
+#define GTK_IS_CLIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CLIST))
+#define GTK_CLIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CLIST, GtkCListClass))
 
 
 #define GTK_CLIST_FLAGS(clist)             (GTK_CLIST (clist)->flags)
@@ -440,7 +440,7 @@ struct _GtkCell
   } u;
 };
 
-GtkType gtk_clist_get_type (void) G_GNUC_CONST;
+GType gtk_clist_get_type (void) G_GNUC_CONST;
 
 /* create a new GtkCList */
 GtkWidget* gtk_clist_new             (gint   columns);

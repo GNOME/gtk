@@ -384,9 +384,9 @@ gtk_text_child_anchor_finalize (GObject *obj)
  * 
  * Gets a list of all widgets anchored at this child anchor.
  * The returned list should be freed with g_list_free().
- * 
- * 
- * Return value: list of widgets anchored at @anchor
+ *
+ *
+ * Return value: (element-type GtkWidget) (transfer container): list of widgets anchored at @anchor
  **/
 GList*
 gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor)

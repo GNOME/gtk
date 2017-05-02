@@ -37,14 +37,14 @@ source code release of GTK+. For binary distributions, please check with
 your vendor.</para>
 
 <para>A copy is available online for reference at <ulink 
-url="http://www.gtk.org/tutorial/">http://www.gtk.org/tutorial</ulink>.</para>
+url="http://www.gtk.org/documentation.html#Tutorials">http://www.gtk.org/documentation.html#Tutorials</ulink>. You can also find other GTK+ tutorials there.</para>
 
-<para>A packaged verion of this tutorial is available from
+<para>A packaged version of this tutorial is available from
 <ulink url="ftp://ftp.gtk.org/pub/gtk/tutorial/">
 ftp://ftp.gtk.org/pub/gtk/tutorial</ulink> which contains the tutorial in
-various different formats. This
-package is primary for those people wanting to have the tutorial
-available for offline reference and for printing.</para>
+various different formats. This package is primary for those people wanting
+to have the tutorial available for offline reference and for printing. Note
+that the packaged version may be older than the online version.</para>
 
 </chapter>
 
@@ -294,7 +294,7 @@ static gboolean delete_event( GtkWidget *widget,
                               GdkEvent  *event,
                               gpointer   data )
 {
-    /* If you return FALSE in the "delete_event" signal handler,
+    /* If you return FALSE in the "delete-event" signal handler,
      * GTK will emit the "destroy" signal. Returning TRUE means
      * you don't want the window to be destroyed.
      * This is useful for popping up 'are you sure you want to quit?'
@@ -303,7 +303,7 @@ static gboolean delete_event( GtkWidget *widget,
     g_print ("delete event occurred\n");
 
     /* Change TRUE to FALSE and the main window will be destroyed with
-     * a "delete_event". */
+     * a "delete-event". */
 
     return TRUE;
 }
@@ -329,18 +329,18 @@ int main( int   argc,
     /* create a new window */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
-    /* When the window is given the "delete_event" signal (this is given
+    /* When the window is given the "delete-event" signal (this is given
      * by the window manager, usually by the "close" option, or on the
      * titlebar), we ask it to call the delete_event () function
      * as defined above. The data passed to the callback
      * function is NULL and is ignored in the callback function. */
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
 		      G_CALLBACK (delete_event), NULL);
     
     /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
-     * or if we return FALSE in the "delete_event" callback. */
-    g_signal_connect (G_OBJECT (window), "destroy",
+     * or if we return FALSE in the "delete-event" callback. */
+    g_signal_connect (window, "destroy",
 		      G_CALLBACK (destroy), NULL);
     
     /* Sets the border width of the window. */
@@ -352,15 +352,15 @@ int main( int   argc,
     /* When the button receives the "clicked" signal, it will call the
      * function hello() passing it NULL as its argument.  The hello()
      * function is defined above. */
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
 		      G_CALLBACK (hello), NULL);
     
     /* This will cause the window to be destroyed by calling
      * gtk_widget_destroy(window) when "clicked".  Again, the destroy
      * signal could come from here, or the window manager. */
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
 			      G_CALLBACK (gtk_widget_destroy),
-                              G_OBJECT (window));
+                              window);
     
     /* This packs the button into the window (a gtk container). */
     gtk_container_add (GTK_CONTAINER (window), button);
@@ -672,7 +672,7 @@ event. Possible values for the type are:</para>
 something like:</para>
 
 <programlisting role="C">
-g_signal_connect (G_OBJECT (button), "button_press_event",
+g_signal_connect (button, "button_press_event",
                   G_CALLBACK (button_press_callback), NULL);
 </programlisting>
 
@@ -750,7 +750,7 @@ static void hello( GtkWidget *widget,
 }
 </programlisting>
 
-<para>The next callback is a bit special. The "delete_event" occurs when the
+<para>The next callback is a bit special. The "delete-event" occurs when the
 window manager sends this event to the application. We have a choice
 here as to what to do about these events. We can ignore them, make
 some sort of response, or simply quit the application.</para>
@@ -822,20 +822,20 @@ until we call gtk_widget_show(window) near the end of our program.</para>
 </programlisting>
 
 <para>Here are two examples of connecting a signal handler to an object, in
-this case, the window. Here, the "delete_event" and "destroy" signals
+this case, the window. Here, the "delete-event" and "destroy" signals
 are caught. The first is emitted when we use the window manager to
-kill the window, or when we use the gtk_widget_destroy() call passing
-in the window widget as the object to destroy. The second is emitted
-when, in the "delete_event" handler, we return FALSE.
+kill the window. The second is emitted when we use the gtk_widget_destroy() call
+passing in the window widget as the object to destroy, or when, in the
+"delete-event" handler, we return FALSE.
  
-The <literal>G_OBJECT</literal> and <literal>G_CALLBACK</literal> are macros 
-that perform type casting and checking for us, as well as aid the readability of
+The <literal>G_CALLBACK</literal> is a macro
+that performs type casting and checking for us, as well as aid the readability of
 the code.</para>
 
 <programlisting role="C">
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
                       G_CALLBACK (delete_event), NULL);
-    g_signal_connect (G_OBJECT (window), "destroy",
+    g_signal_connect (window, "destroy",
                       G_CALLBACK (destroy), NULL);
 </programlisting>
 
@@ -867,7 +867,7 @@ NULL to the hello() callback function. Obviously, the "clicked" signal
 is emitted when we click the button with our mouse pointer.</para>
 
 <programlisting role="C">
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
                       G_CALLBACK (hello), NULL);
 </programlisting>
 
@@ -882,9 +882,9 @@ GtkWidget *widget as an argument, we use the g_signal_connect_swapped()
 function here instead of straight g_signal_connect().</para>
 
 <programlisting role="C">
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
                               G_CALLBACK (gtk_widget_destroy),
-                              G_OBJECT (window));
+                              window);
 </programlisting>
 
 <para>This is a packing call, which will be explained in depth later on in
@@ -939,8 +939,8 @@ to emit the "destroy" signal, which is caught, and calls our destroy()
 callback function, which simply exits GTK.</para>
 
 <para>Another course of events is to use the window manager to kill the
-window, which will cause the "delete_event" to be emitted. This will
-call our "delete_event" handler. If we return TRUE here, the window
+window, which will cause the "delete-event" to be emitted. This will
+call our "delete-event" handler. If we return TRUE here, the window
 will be left as is and nothing will happen. Returning FALSE will cause
 GTK to emit the "destroy" signal which of course calls the "destroy"
 callback, exiting GTK.</para>
@@ -1084,7 +1084,7 @@ int main( int   argc,
 
     /* Here we just set a handler for delete_event that immediately
      * exits GTK. */
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
 		      G_CALLBACK (delete_event), NULL);
 
     /* Sets the border width of the window. */
@@ -1103,7 +1103,7 @@ int main( int   argc,
     
     /* Now when the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
 		      G_CALLBACK (callback), (gpointer) "button 1");
 
     /* Instead of gtk_container_add, we pack this button into the invisible
@@ -1119,7 +1119,7 @@ int main( int   argc,
 
     /* Call the same callback function with a different argument,
      * passing a pointer to "button 2" instead. */
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
 		      G_CALLBACK (callback), (gpointer) "button 2");
 
     gtk_box_pack_start(GTK_BOX (box1), button, TRUE, TRUE, 0);
@@ -1381,7 +1381,7 @@ int main( int   argc,
     /* You should always remember to connect the delete_event signal
      * to the main window. This is very important for proper intuitive
      * behavior */
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
 		      G_CALLBACK (delete_event), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
@@ -1545,9 +1545,9 @@ int main( int   argc,
     button = gtk_button_new_with_label ("Quit");
     
     /* Setup the signal to terminate the program when the button is clicked */
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
 			      G_CALLBACK (gtk_main_quit),
-			      G_OBJECT (window));
+			      window);
     /* Pack the button into the quitbox.
      * The last 3 arguments to gtk_box_pack_start are:
      * expand, fill, padding. */
@@ -1798,7 +1798,7 @@ int main( int   argc,
 
     /* Set a handler for delete_event that immediately
      * exits GTK. */
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
                       G_CALLBACK (delete_event), NULL);
 
     /* Sets the border width of the window. */
@@ -1815,7 +1815,7 @@ int main( int   argc,
 
     /* When the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
 	              G_CALLBACK (callback), (gpointer) "button 1");
 
 
@@ -1830,7 +1830,7 @@ int main( int   argc,
 
     /* When the button is clicked, we call the "callback" function
      * with a pointer to "button 2" as its argument */
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
                       G_CALLBACK (callback), (gpointer) "button 2");
     /* Insert button 2 into the upper right quadrant of the table */
     gtk_table_attach_defaults (GTK_TABLE (table), button, 1, 2, 0, 1);
@@ -1840,9 +1840,9 @@ int main( int   argc,
     /* Create "Quit" button */
     button = gtk_button_new_with_label ("Quit");
 
-    /* When the button is clicked, we call the "delete_event" function
+    /* When the button is clicked, we call the "delete-event" function
      * and the program exits */
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
                       G_CALLBACK (delete_event), NULL);
 
     /* Insert the quit button into the both 
@@ -1922,13 +1922,13 @@ function's declaration.</para>
 
 <para>As you can see below in the class hierarchy, all GtkWidgets are
 derived from the GObject base class. This means you can use a widget
-in any place the function asks for an object - simply use the
-<literal>G_OBJECT()</literal> macro.</para>
+in any place the function asks for an object. Note that many functions
+accept a gpointer so there is no need to cast the type.</para>
 
 <para>For example:</para>
 
 <programlisting role="C">
-g_signal_connect( G_OBJECT (button), "clicked",
+g_signal_connect( button, "clicked",
                   G_CALLBACK (callback_function), callback_data);
 </programlisting>
 
@@ -2187,10 +2187,10 @@ int main( int   argc,
     gtk_window_set_title (GTK_WINDOW (window), "Pixmap'd Buttons!");
 
     /* It's a good idea to do this for all windows. */
-    g_signal_connect (G_OBJECT (window), "destroy",
+    g_signal_connect (window, "destroy",
 	              G_CALLBACK (gtk_main_quit), NULL);
 
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
 	 	      G_CALLBACK (gtk_main_quit), NULL);
 
     /* Sets the border width of the window. */
@@ -2200,7 +2200,7 @@ int main( int   argc,
     button = gtk_button_new ();
 
     /* Connect the "clicked" signal of the button to our callback */
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
 		      G_CALLBACK (callback), (gpointer) "cool button");
 
     /* This calls our box creating function */
@@ -2475,7 +2475,7 @@ int main( int   argc,
       
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
 		      G_CALLBACK (close_application),
                       NULL);
 
@@ -2516,11 +2516,11 @@ int main( int   argc,
     gtk_widget_show (box2);
 
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
                               G_CALLBACK (close_application),
-                              G_OBJECT (window));
+                              window);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
     gtk_widget_grab_default (button);
     gtk_widget_show (button);
     gtk_widget_show (window);
@@ -2723,8 +2723,8 @@ void cb_rotate_picture (GtkAdjustment *adj, GtkWidget *picture)
 <para>and connect it to the scale widget's adjustment like this:</para>
 
 <programlisting role="C">
-g_signal_connect (G_OBJECT (adj), "value_changed",
-	          G_CALLBACK (cb_rotate_picture), (gpointer) picture);
+g_signal_connect (adj, "value_changed",
+	          G_CALLBACK (cb_rotate_picture), picture);
 </programlisting>
 
 <para>What about when a widget reconfigures the <literal>upper</literal> or <literal>lower</literal>
@@ -2749,7 +2749,7 @@ this signal on it to reconfigure whatever widgets are using it, like
 this:</para>
 
 <programlisting role="C">
-g_signal_emit_by_name (G_OBJECT (adjustment), "changed");
+g_signal_emit_by_name (adjustment, "changed");
 </programlisting>
 
 <para>Now go forth and adjust!</para>
@@ -3007,7 +3007,7 @@ when you modify its values directly, you should emit the "changed"
 signal on it, like this:</para>
 
 <programlisting role="C">
-g_signal_emit_by_name (G_OBJECT (adjustment), "changed");
+g_signal_emit_by_name (adjustment, "changed");
 </programlisting>
 
 </sect2>
@@ -3105,7 +3105,7 @@ static void cb_page_size( GtkAdjustment *get,
     gtk_adjustment_set_value (set, CLAMP (set->value,
 					  set->lower,
 					  (set->upper - set->page_size)));
-    g_signal_emit_by_name(G_OBJECT(set), "changed");
+    g_signal_emit_by_name(set, "changed");
 }
 
 static void cb_draw_value( GtkToggleButton *button )
@@ -3125,7 +3125,7 @@ static GtkWidget *make_menu_item ( gchar     *name,
     GtkWidget *item;
   
     item = gtk_menu_item_new_with_label (name);
-    g_signal_connect (G_OBJECT (item), "activate",
+    g_signal_connect (item, "activate",
 	              callback, (gpointer) data);
     gtk_widget_show (item);
 
@@ -3157,7 +3157,7 @@ static void create_range_controls( void )
 
     /* Standard window-creating stuff */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (G_OBJECT (window), "destroy",
+    g_signal_connect (window, "destroy",
                       G_CALLBACK (gtk_main_quit),
                       NULL);
     gtk_window_set_title (GTK_WINDOW (window), "range controls");
@@ -3210,7 +3210,7 @@ static void create_range_controls( void )
     /* A checkbutton to control whether the value is displayed or not */
     button = gtk_check_button_new_with_label("Display value on scale widgets");
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    g_signal_connect (G_OBJECT (button), "toggled",
+    g_signal_connect (button, "toggled",
                       G_CALLBACK (cb_draw_value), NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
@@ -3294,7 +3294,7 @@ static void create_range_controls( void )
     gtk_widget_show (label);
 
     adj2 = gtk_adjustment_new (1.0, 0.0, 5.0, 1.0, 1.0, 0.0);
-    g_signal_connect (G_OBJECT (adj2), "value_changed",
+    g_signal_connect (adj2, "value_changed",
                       G_CALLBACK (cb_digits_scale), NULL);
     scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
@@ -3314,7 +3314,7 @@ static void create_range_controls( void )
     gtk_widget_show (label);
 
     adj2 = gtk_adjustment_new (1.0, 1.0, 101.0, 1.0, 1.0, 0.0);
-    g_signal_connect (G_OBJECT (adj2), "value_changed",
+    g_signal_connect (adj2, "value_changed",
                       G_CALLBACK (cb_page_size), (gpointer) adj1);
     scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
@@ -3334,11 +3334,11 @@ static void create_range_controls( void )
     gtk_widget_show (box2);
 
     button = gtk_button_new_with_label ("Quit");
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
                               G_CALLBACK (gtk_main_quit),
                               NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
     gtk_widget_grab_default (button);
     gtk_widget_show (button);
 
@@ -3361,9 +3361,9 @@ int main( int   argc,
 </programlisting>
 
 <para>You will notice that the program does not call g_signal_connect()
-for the "delete_event", but only for the "destroy" signal. This will
+for the "delete-event", but only for the "destroy" signal. This will
 still perform the desired function, because an unhandled
-"delete_event" will result in a "destroy" signal being given to the
+"delete-event" will result in a "destroy" signal being given to the
 window.</para>
 
 </sect1>
@@ -3493,7 +3493,7 @@ int main( int   argc,
   gtk_init (&amp;argc, &amp;argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit),
 		    NULL);
 
@@ -3675,7 +3675,7 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Arrow Buttons");
 
   /* It's a good idea to do this for all windows. */
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
   /* Sets the border width of the window. */
@@ -4005,7 +4005,7 @@ int main( int   argc,
     pdata-&gt;window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_resizable (GTK_WINDOW (pdata-&gt;window), TRUE);
 
-    g_signal_connect (G_OBJECT (pdata-&gt;window), "destroy",
+    g_signal_connect (pdata-&gt;window, "destroy",
 	              G_CALLBACK (destroy_progress),
                       (gpointer) pdata);
     gtk_window_set_title (GTK_WINDOW (pdata-&gt;window), "GtkProgressBar");
@@ -4045,9 +4045,9 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 0, 1,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 		      5, 5);
-    g_signal_connect (G_OBJECT (check), "clicked",
+    g_signal_connect (check, "clicked",
                       G_CALLBACK (toggle_show_text),
-                      (gpointer) pdata);
+                      pdata);
     gtk_widget_show (check);
 
     /* Add a check button to toggle activity mode */
@@ -4055,9 +4055,9 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 1, 2,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    g_signal_connect (G_OBJECT (check), "clicked",
+    g_signal_connect (check, "clicked",
                       G_CALLBACK (toggle_activity_mode),
-                      (gpointer) pdata);
+                      pdata);
     gtk_widget_show (check);
 
     /* Add a check button to toggle orientation */
@@ -4065,20 +4065,20 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 2, 3,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    g_signal_connect (G_OBJECT (check), "clicked",
+    g_signal_connect (check, "clicked",
                       G_CALLBACK (toggle_orientation),
-                      (gpointer) pdata);
+                      pdata);
     gtk_widget_show (check);
 
     /* Add a button to exit the program */
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
                               G_CALLBACK (gtk_widget_destroy),
-                              G_OBJECT (pdata-&gt;window));
+                              pdata-&gt;window);
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
     /* This makes it so the button is the default. */
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
 
     /* This grabs this button to be the default button. Simply hitting
      * the "Enter" key will cause this button to activate. */
@@ -4258,9 +4258,9 @@ To follow all mouse movements within a window area, we would use</para>
 <programlisting role="C">
 #define EVENT_METHOD(i, x) GTK_WIDGET_GET_CLASS(i)->x
 
-    g_signal_connect_swapped (G_OBJECT (area), "motion_notify_event",
+    g_signal_connect_swapped (area, "motion_notify_event",
            G_CALLBACK (EVENT_METHOD (ruler, motion_notify_event)),
-           G_OBJECT (ruler));
+           ruler);
 </programlisting>
 
 <para>The following example creates a drawing area with a horizontal ruler
@@ -4306,7 +4306,7 @@ int main( int   argc,
     gtk_init (&amp;argc, &amp;argv);
 
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
                       G_CALLBACK (close_application), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -4327,9 +4327,9 @@ int main( int   argc,
     hrule = gtk_hruler_new ();
     gtk_ruler_set_metric (GTK_RULER (hrule), GTK_PIXELS);
     gtk_ruler_set_range (GTK_RULER (hrule), 7, 13, 0, 20);
-    g_signal_connect_swapped (G_OBJECT (area), "motion_notify_event",
+    g_signal_connect_swapped (area, "motion_notify_event",
                               G_CALLBACK (EVENT_METHOD (hrule, motion_notify_event)),
-                              G_OBJECT (hrule));
+                              hrule);
     gtk_table_attach (GTK_TABLE (table), hrule, 1, 2, 0, 1,
                       GTK_EXPAND|GTK_SHRINK|GTK_FILL, GTK_FILL, 0, 0);
     
@@ -4339,9 +4339,9 @@ int main( int   argc,
     vrule = gtk_vruler_new ();
     gtk_ruler_set_metric (GTK_RULER (vrule), GTK_PIXELS);
     gtk_ruler_set_range (GTK_RULER (vrule), 0, YSIZE, 10, YSIZE );
-    g_signal_connect_swapped (G_OBJECT (area), "motion_notify_event",
+    g_signal_connect_swapped (area, "motion_notify_event",
                               G_CALLBACK (EVENT_METHOD (vrule, motion_notify_event)),
-                              G_OBJECT (vrule));
+                              vrule);
     gtk_table_attach (GTK_TABLE (table), vrule, 0, 1, 1, 2,
                       GTK_FILL, GTK_EXPAND|GTK_SHRINK|GTK_FILL, 0, 0);
 
@@ -4478,7 +4478,7 @@ int main( int   argc,
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_size_request (GTK_WIDGET (window), 200, 100);
     gtk_window_set_title (GTK_WINDOW (window), "GTK Statusbar Example");
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
                       G_CALLBACK (exit), NULL);
  
     vbox = gtk_vbox_new (FALSE, 1);
@@ -4493,13 +4493,13 @@ int main( int   argc,
                           GTK_STATUSBAR (status_bar), "Statusbar example");
 
     button = gtk_button_new_with_label ("push item");
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
                       G_CALLBACK (push_item), GINT_TO_POINTER (context_id));
     gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);              
 
     button = gtk_button_new_with_label ("pop last item");
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
                       G_CALLBACK (pop_item), GINT_TO_POINTER (context_id));
     gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);
@@ -4648,11 +4648,11 @@ int main( int   argc,
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_size_request (GTK_WIDGET (window), 200, 100);
     gtk_window_set_title (GTK_WINDOW (window), "GTK Entry");
-    g_signal_connect (G_OBJECT (window), "destroy",
+    g_signal_connect (window, "destroy",
                       G_CALLBACK (gtk_main_quit), NULL);
-    g_signal_connect_swapped (G_OBJECT (window), "delete_event",
+    g_signal_connect_swapped (window, "delete-event",
                               G_CALLBACK (gtk_widget_destroy), 
-                              G_OBJECT (window));
+                              window);
 
     vbox = gtk_vbox_new (FALSE, 0);
     gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -4660,9 +4660,9 @@ int main( int   argc,
 
     entry = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (entry), 50);
-    g_signal_connect (G_OBJECT (entry), "activate",
+    g_signal_connect (entry, "activate",
 		      G_CALLBACK (enter_callback),
-		      (gpointer) entry);
+		      entry);
     gtk_entry_set_text (GTK_ENTRY (entry), "hello");
     tmp_pos = GTK_ENTRY (entry)-&gt;text_length;
     gtk_editable_insert_text (GTK_EDITABLE (entry), " world", -1, &amp;tmp_pos);
@@ -4677,24 +4677,24 @@ int main( int   argc,
                                   
     check = gtk_check_button_new_with_label ("Editable");
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
-    g_signal_connect (G_OBJECT (check), "toggled",
-	              G_CALLBACK (entry_toggle_editable), (gpointer) entry);
+    g_signal_connect (check, "toggled",
+	              G_CALLBACK (entry_toggle_editable), entry);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
     gtk_widget_show (check);
     
     check = gtk_check_button_new_with_label ("Visible");
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
-    g_signal_connect (G_OBJECT (check), "toggled",
-	              G_CALLBACK (entry_toggle_visibility), (gpointer) entry);
+    g_signal_connect (check, "toggled",
+	              G_CALLBACK (entry_toggle_visibility), entry);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
     gtk_widget_show (check);
                                    
     button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
 			      G_CALLBACK (gtk_widget_destroy),
-			      G_OBJECT (window));
+			      window);
     gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
     gtk_widget_grab_default (button);
     gtk_widget_show (button);
     
@@ -5004,7 +5004,7 @@ int main( int   argc,
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit),
 		    NULL);
 
@@ -5100,25 +5100,25 @@ int main( int   argc,
   adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
   spinner2 = gtk_spin_button_new (adj, 0.0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
-  g_signal_connect (G_OBJECT (adj), "value_changed",
+  g_signal_connect (adj, "value_changed",
 		    G_CALLBACK (change_digits),
-		    (gpointer) spinner2);
+		    spinner2);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
   
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   
   button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
-  g_signal_connect (G_OBJECT (button), "clicked",
+  g_signal_connect (button, "clicked",
 		    G_CALLBACK (toggle_snap),
-		    (gpointer) spinner1);
+		    spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   
   button = gtk_check_button_new_with_label ("Numeric only input mode");
-  g_signal_connect (G_OBJECT (button), "clicked",
+  g_signal_connect (button, "clicked",
 		    G_CALLBACK (toggle_numeric),
-		    (gpointer) spinner1);
+		    spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   
@@ -5128,14 +5128,14 @@ int main( int   argc,
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   button = gtk_button_new_with_label ("Value as Int");
   g_object_set_data (G_OBJECT (button), "user_data", val_label);
-  g_signal_connect (G_OBJECT (button), "clicked",
+  g_signal_connect (button, "clicked",
 		    G_CALLBACK (get_value),
 		    GINT_TO_POINTER (1));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
   
   button = gtk_button_new_with_label ("Value as Float");
   g_object_set_data (G_OBJECT (button), "user_data", val_label);
-  g_signal_connect (G_OBJECT (button), "clicked",
+  g_signal_connect (button, "clicked",
 		    G_CALLBACK (get_value),
 		    GINT_TO_POINTER (2));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
@@ -5147,9 +5147,9 @@ int main( int   argc,
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
   
   button = gtk_button_new_with_label ("Close");
-  g_signal_connect_swapped (G_OBJECT (button), "clicked",
+  g_signal_connect_swapped (button, "clicked",
                             G_CALLBACK (gtk_widget_destroy),
-			    G_OBJECT (window));
+			    window);
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
 
   gtk_widget_show_all (window);
@@ -5302,8 +5302,8 @@ pressed the Return or Enter key, and read the text. The first is
 accomplished using something like:</para>
 
 <programlisting role="C">
-    g_signal_connect (G_OBJECT (GTK_COMBO (combo)->entry), "activate",
-                      G_CALLBACK (my_callback_function), (gpointer) my_data);
+    g_signal_connect (GTK_COMBO (combo)->entry, "activate",
+                      G_CALLBACK (my_callback_function), my_data);
 </programlisting>
 
 <para>Getting the text at any arbitrary time is accomplished by simply using
@@ -5913,7 +5913,7 @@ static void create_calendar( void )
 		    G_CALLBACK (gtk_main_quit), 
 		    NULL);
   gtk_container_add (GTK_CONTAINER (bbox), button);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_set_can_default (button, TRUE);
   gtk_widget_grab_default (button);
 
   gtk_widget_show_all (window);
@@ -6092,7 +6092,7 @@ static gboolean area_event( GtkWidget *widget,
 
       /* Connect to the "color_changed" signal, set the client-data
        * to the colorsel widget */
-      g_signal_connect (G_OBJECT (colorsel), "color_changed",
+      g_signal_connect (colorsel, "color_changed",
                         G_CALLBACK (color_changed_cb), (gpointer) colorsel);
 
       /* Show the dialog */
@@ -6138,8 +6138,8 @@ gint main( gint   argc,
 
   /* Attach to the "delete" and "destroy" events so we can exit */
 
-  g_signal_connect (GTK_OBJECT (window), "delete_event",
-                    GTK_SIGNAL_FUNC (destroy_window), (gpointer) window);
+  g_signal_connect (window, "delete-event",
+                    G_CALLBACK (destroy_window), (gpointer) window);
   
   /* Create drawingarea, set size and catch button events */
 
@@ -6258,16 +6258,16 @@ int main( int   argc,
     /* Create a new file selection widget */
     filew = gtk_file_selection_new ("File selection");
     
-    g_signal_connect (G_OBJECT (filew), "destroy",
+    g_signal_connect (filew, "destroy",
 	              G_CALLBACK (gtk_main_quit), NULL);
     /* Connect the ok_button to file_ok_sel function */
-    g_signal_connect (G_OBJECT (GTK_FILE_SELECTION (filew)-&gt;ok_button),
+    g_signal_connect (GTK_FILE_SELECTION (filew)-&gt;ok_button,
 		      "clicked", G_CALLBACK (file_ok_sel), (gpointer) filew);
     
     /* Connect the cancel_button to destroy the widget */
-    g_signal_connect_swapped (G_OBJECT (GTK_FILE_SELECTION (filew)-&gt;cancel_button),
+    g_signal_connect_swapped (GTK_FILE_SELECTION (filew)-&gt;cancel_button,
 	                      "clicked", G_CALLBACK (gtk_widget_destroy),
-			      G_OBJECT (filew));
+			      filew);
     
     /* Lets set the filename, as if this were a save dialog, and we are giving
      a default filename */
@@ -6353,7 +6353,7 @@ int main( int argc,
     
     gtk_window_set_title (GTK_WINDOW (window), "Event Box");
     
-    g_signal_connect (G_OBJECT (window), "destroy",
+    g_signal_connect (window, "destroy",
 	              G_CALLBACK (exit), NULL);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -6375,7 +6375,7 @@ int main( int argc,
     
     /* And bind an action to it */
     gtk_widget_set_events (event_box, GDK_BUTTON_PRESS_MASK);
-    g_signal_connect (G_OBJECT (event_box), "button_press_event",
+    g_signal_connect (event_box, "button_press_event",
 	              G_CALLBACK (exit), NULL);
     
     /* Yet one more thing you need an X window for ... */
@@ -6533,7 +6533,7 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Fixed Container");
 
   /* Here we connect the "destroy" event to a signal handler */ 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit), NULL);
  
   /* Sets the border width of the window. */
@@ -6551,7 +6551,7 @@ int main( int   argc,
     /* When the button receives the "clicked" signal, it will call the
      * function move_button() passing it the Fixed Container as its
      * argument. */
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
 		      G_CALLBACK (move_button), (gpointer) fixed);
   
     /* This packs the button into the fixed containers window. */
@@ -6720,7 +6720,7 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Frame Example");
 
   /* Here we connect the "destroy" event to a signal handler */ 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_widget_set_size_request (window, 300, 300);
@@ -6818,7 +6818,7 @@ int main( int argc,
    
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
-    g_signal_connect (G_OBJECT (window), "destroy",
+    g_signal_connect (window, "destroy",
 	              G_CALLBACK (gtk_main_quit), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
    
@@ -6932,8 +6932,7 @@ static GtkWidget *create_list( void )
    
     model = gtk_list_store_new (1, G_TYPE_STRING);
     tree_view = gtk_tree_view_new ();
-    gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window), 
-                                           tree_view);
+    gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
     gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (model));
     gtk_widget_show (tree_view);
    
@@ -7018,7 +7017,7 @@ int main( int   argc,
    
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "Paned Windows");
-    g_signal_connect (G_OBJECT (window), "destroy",
+    g_signal_connect (window, "destroy",
 	              G_CALLBACK (gtk_main_quit), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_set_size_request (GTK_WIDGET (window), 450, 400);
@@ -7190,7 +7189,7 @@ int main( int   argc,
     /* Create a new dialog window for the scrolled window to be
      * packed into.  */
     window = gtk_dialog_new ();
-    g_signal_connect (G_OBJECT (window), "destroy",
+    g_signal_connect (window, "destroy",
 		      G_CALLBACK (destroy), NULL);
     gtk_window_set_title (GTK_WINDOW (window), "GtkScrolledWindow example");
     gtk_container_set_border_width (GTK_CONTAINER (window), 0);
@@ -7238,13 +7237,13 @@ int main( int   argc,
     
     /* Add a "close" button to the bottom of the dialog */
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
 			      G_CALLBACK (gtk_widget_destroy),
-			      G_OBJECT (window));
+			      window);
     
     /* this makes it so the button is the default. */
     
-    GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+    gtk_widget_set_can_default (button, TRUE);
     gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)-&gt;action_area), button, TRUE, TRUE, 0);
     
     /* This grabs this button to be the default button. Simply hitting
@@ -7359,7 +7358,7 @@ int main( int   argc,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (gtk_main_quit),
 		    NULL);
 
@@ -7606,7 +7605,7 @@ int main (int argc, char *argv[])
   GTK_WINDOW (dialog)->allow_shrink = TRUE;
 
   /* typically we quit if someone tries to close us */
-  g_signal_connect (G_OBJECT (dialog), "delete_event",
+  g_signal_connect (dialog, "delete-event",
                     G_CALLBACK (delete_event), NULL);
 
   /* we need to realize the window because we use pixmaps for 
@@ -8057,7 +8056,7 @@ int main( int argc,
     
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
 	              G_CALLBACK (delete), NULL);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -8120,43 +8119,43 @@ int main( int argc,
 
     /* Create a bunch of buttons */
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
 			      G_CALLBACK (delete), NULL);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 0, 1, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("next page");
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
 			      G_CALLBACK (gtk_notebook_next_page),
-			      G_OBJECT (notebook));
+			      notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 1, 2, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("prev page");
-    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+    g_signal_connect_swapped (button, "clicked",
 			      G_CALLBACK (gtk_notebook_prev_page),
-			      G_OBJECT (notebook));
+			      notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 2, 3, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("tab position");
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
                       G_CALLBACK (rotate_book),
-	              (gpointer) notebook);
+	              notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 3, 4, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("tabs/border on/off");
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
                       G_CALLBACK (tabsborder_book),
-                      (gpointer) notebook);
+                      notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 4, 5, 1, 2);
     gtk_widget_show (button);
     
     button = gtk_button_new_with_label ("remove page");
-    g_signal_connect (G_OBJECT (button), "clicked",
+    g_signal_connect (button, "clicked",
                       G_CALLBACK (remove_book),
-                      (gpointer) notebook);
+                      notebook);
     gtk_table_attach_defaults (GTK_TABLE (table), button, 5, 6, 1, 2);
     gtk_widget_show (button);
     
@@ -8246,7 +8245,7 @@ GtkWidget *gtk_menu_item_new( void );
 
 GtkWidget *gtk_menu_item_new_with_label( const char *label );
 
-GtkWidget *gtk_menu_item_new_with_mnemnonic( const char *label );
+GtkWidget *gtk_menu_item_new_with_mnemonic( const char *label );
 </programlisting>
 
 <para>These calls are used to create the menu items that are to be
@@ -8281,15 +8280,15 @@ standard <literal>File</literal> menu, with the options <literal>Open</literal>,
     gtk_menu_shell_append (GTK_MENU_SHELL (file_menu), quit_item);
 
     /* Attach the callback functions to the activate signal */
-    g_signal_connect_swapped (G_OBJECT (open_item), "activate",
+    g_signal_connect_swapped (open_item, "activate",
                               G_CALLBACK (menuitem_response),
                               (gpointer) "file.open");
-    g_signal_connect_swapped (G_OBJECT (save_item), "activate",
+    g_signal_connect_swapped (save_item, "activate",
                               G_CALLBACK (menuitem_response),
                               (gpointer) "file.save");
 
     /* We can attach the Quit menu item to our exit function */
-    g_signal_connect_swapped (G_OBJECT (quit_item), "activate",
+    g_signal_connect_swapped (quit_item, "activate",
                               G_CALLBACK (destroy),
                               (gpointer) "file.quit");
 
@@ -8400,9 +8399,9 @@ shown in the sample code to pass information to gtk_menu_popup().</simpara>
 
 <listitem><simpara>Bind that event handler to a widget with</simpara>
 <programlisting role="C">
-    g_signal_connect_swapped (G_OBJECT (widget), "event",
+    g_signal_connect_swapped (widget, "event",
                               G_CALLBACK (handler),
-                              G_OBJECT (menu));
+                              menu);
 </programlisting>
 <simpara>where <literal>widget</literal> is the widget you are binding to,
 <literal>handler</literal> is the handling function, and <literal>menu</literal> is a menu
@@ -8456,7 +8455,7 @@ int main( int   argc,
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_widget_set_size_request (GTK_WIDGET (window), 200, 100);
     gtk_window_set_title (GTK_WINDOW (window), "GTK Menu Test");
-    g_signal_connect (G_OBJECT (window), "delete_event",
+    g_signal_connect (window, "delete-event",
                       G_CALLBACK (gtk_main_quit), NULL);
 
     /* Init the menu-widget, and remember -- never
@@ -8483,7 +8482,7 @@ int main( int   argc,
             gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_items);
 
 	    /* Do something interesting when the menuitem is selected */
-	    g_signal_connect_swapped (G_OBJECT (menu_items), "activate",
+	    g_signal_connect_swapped (menu_items, "activate",
 		                      G_CALLBACK (menuitem_response), 
                                       (gpointer) g_strdup (buf));
 
@@ -8514,9 +8513,9 @@ int main( int   argc,
 
     /* Create a button to which to attach menu as a popup */
     button = gtk_button_new_with_label ("press me");
-    g_signal_connect_swapped (G_OBJECT (button), "event",
+    g_signal_connect_swapped (button, "event",
 	                      G_CALLBACK (button_press), 
-                              G_OBJECT (menu));
+                              menu);
     gtk_box_pack_end (GTK_BOX (vbox), button, TRUE, TRUE, 2);
     gtk_widget_show (button);
 
@@ -9020,7 +9019,7 @@ GtkWidget *get_popup_menu( void )
    /* Make a button to activate the popup menu */
    button = gtk_button_new_with_label ("Popup");
    /* Make the menu popup when clicked */
-   g_signal_connect (G_OBJECT(button),
+   g_signal_connect (button,
                      "event",
                      G_CALLBACK(popup_cb),
                      (gpointer) menu);
@@ -9056,7 +9055,7 @@ int main( int argc,
  
   /* Make a window */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit),
                     NULL);
   gtk_window_set_title (GTK_WINDOW(window), "Item Factory");
@@ -9719,7 +9718,7 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 	            G_CALLBACK (exit), NULL);
 
   /* Create a button the user can click to get targets */
@@ -9727,9 +9726,9 @@ int main( int   argc,
   button = gtk_button_new_with_label ("Get Targets");
   gtk_container_add (GTK_CONTAINER (window), button);
 
-  g_signal_connect (G_OBJECT (button), "clicked",
+  g_signal_connect (button, "clicked",
 		    G_CALLBACK (get_targets), (gpointer) window);
-  g_signal_connect (G_OBJECT (window), "selection_received",
+  g_signal_connect (window, "selection_received",
 		    G_CALLBACK (selection_received), NULL);
 
   gtk_widget_show (button);
@@ -9895,7 +9894,7 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (exit), NULL);
 
   /* Create a toggle button to act as the selection */
@@ -9905,16 +9904,16 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), selection_button);
   gtk_widget_show (selection_button);
 
-  g_signal_connect (G_OBJECT (selection_button), "toggled",
+  g_signal_connect (selection_button, "toggled",
 		    G_CALLBACK (selection_toggled), (gpointer) &amp;have_selection);
-  g_signal_connect (G_OBJECT (selection_widget), "selection_clear_event",
+  g_signal_connect (selection_widget, "selection_clear_event",
 		    G_CALLBACK (selection_clear), (gpointer) &amp;have_selection);
 
   gtk_selection_add_target (selection_widget,
 			    GDK_SELECTION_PRIMARY,
 			    GDK_SELECTION_TYPE_STRING,
 		            1);
-  g_signal_connect (G_OBJECT (selection_widget), "selection_get",
+  g_signal_connect (selection_widget, "selection_get",
 		    G_CALLBACK (selection_handle), (gpointer) &amp;have_selection);
 
   gtk_widget_show (selection_button);
@@ -11155,7 +11154,7 @@ tictactoe_get_type (void)
 
   if (!ttt_type)
     {
-      static const GTypeInfo ttt_info =
+      const GTypeInfo ttt_info =
       {
 	sizeof (TictactoeClass),
 	NULL, /* base_init */
@@ -11368,7 +11367,7 @@ tictactoe_init (Tictactoe *ttt)
 	ttt->buttons[i][j] = gtk_toggle_button_new ();
 	gtk_table_attach_defaults (GTK_TABLE (ttt), ttt->buttons[i][j], 
 				   i, i+1, j, j+1);
-	g_signal_connect (G_OBJECT (ttt->buttons[i][j]), "toggled",
+	g_signal_connect (ttt->buttons[i][j], "toggled",
 			  G_CALLBACK (tictactoe_toggle), ttt);
 	gtk_widget_set_size_request (ttt->buttons[i][j], 20, 20);
 	gtk_widget_show (ttt->buttons[i][j]);
@@ -11455,7 +11454,7 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
       
       if (success &amp;&amp; found)
 	{
-	  g_signal_emit (G_OBJECT (ttt), 
+	  g_signal_emit (ttt, 
 			 tictactoe_signals[TICTACTOE_SIGNAL], 0);
 	  break;
 	}
@@ -11489,7 +11488,7 @@ main (int argc, char *argv[])
   
   gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
   
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
                     G_CALLBACK (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -11500,7 +11499,7 @@ main (int argc, char *argv[])
   gtk_widget_show (ttt);
 
   /* And attach to its "tictactoe" signal */
-  g_signal_connect (G_OBJECT (ttt), "tictactoe",
+  g_signal_connect (ttt, "tictactoe",
                     G_CALLBACK (win), NULL);
 
   gtk_widget_show (window);
@@ -11926,7 +11925,7 @@ gtk_dial_realize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_DIAL (widget));
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   dial = GTK_DIAL (widget);
 
   attributes.x = widget->allocation.x;
@@ -11998,7 +11997,7 @@ gtk_dial_size_allocate (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       dial = GTK_DIAL (widget);
 
@@ -12722,18 +12721,20 @@ relevant portions onto the screen.</para>
 <para>To create an offscreen pixmap, we call the function:</para>
 
 <programlisting role="C">
-GdkPixmap* gdk_pixmap_new               (GdkWindow  *window,
-					 gint        width,
-					 gint        height,
-					 gint        depth);
+GdkPixmap* gdk_pixmap_new               (GdkDrawable *drawable,
+					 gint         width,
+					 gint         height,
+					 gint         depth);
 </programlisting>
 
-<para>The <literal>window</literal> parameter specifies a GDK window that this pixmap
-takes some of its properties from. <literal>width</literal> and <literal>height</literal>
-specify the size of the pixmap. <literal>depth</literal> specifies the <emphasis>color
-depth</emphasis>, that is the number of bits per pixel, for the new window.
-If the depth is specified as <literal>-1</literal>, it will match the depth
-of <literal>window</literal>.</para>
+<para>The <literal>drawable</literal> parameter specifies a GDK
+drawable (such as a GdkWindow) that this pixmap takes some of its
+properties from. <literal>width</literal>
+and <literal>height</literal> specify the size of the
+pixmap. <literal>depth</literal> specifies the <emphasis>color
+depth</emphasis>, that is the number of bits per pixel, for the new
+window.  If the depth is specified as <literal>-1</literal>, it will
+match the depth of <literal>drawable</literal>.</para>
 
 <para>We create the pixmap in our "configure_event" handler. This event
 is generated whenever the window changes size, including when it
@@ -12778,7 +12779,7 @@ static gboolean
 expose_event( GtkWidget *widget, GdkEventExpose *event )
 {
   gdk_draw_drawable(widget->window,
-		    widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+		    widget->style->fg_gc[gtk_widget_get_state (widget)],
 		    pixmap,
 		    event->area.x, event->area.y,
 		    event->area.x, event->area.y,
@@ -12838,7 +12839,7 @@ contexts are:</para>
 widget->style->white_gc
 widget->style->black_gc
 widget->style->fg_gc[GTK_STATE_NORMAL]
-widget->style->bg_gc[GTK_WIDGET_STATE(widget)]
+widget->style->bg_gc[gtk_widget_get_state(widget)]
 </programlisting>
 
 <para>The fields <literal>fg_gc</literal>, <literal>bg_gc</literal>, <literal>dark_gc</literal>, and
@@ -13027,7 +13028,7 @@ create_input_dialog ()
     }
   else
     {
-      if (!GTK_WIDGET_MAPPED(inputd))
+      if (!gtk_widget_get_mapped(inputd))
 	gtk_widget_show(inputd);
       else
 	gdk_window_raise(inputd->window);
@@ -13140,7 +13141,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      gc = widget->style->dark_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget->style->dark_gc[gtk_widget_get_state (widget)];
       break;
     case GDK_SOURCE_PEN:
       gc = widget->style->black_gc;
@@ -13149,7 +13150,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
       gc = widget->style->white_gc;
       break;
     default:
-      gc = widget->style->light_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget->style->light_gc[gtk_widget_get_state (widget)];
     }
 
   update_rect.x = x - 10 * pressure;
@@ -14607,7 +14608,7 @@ tictactoe_get_type (void)
 
   if (!ttt_type)
     {
-      static const GTypeInfo ttt_info =
+      const GTypeInfo ttt_info =
       {
 	sizeof (TictactoeClass),
 	NULL, /* base_init */
@@ -14655,7 +14656,7 @@ tictactoe_init (Tictactoe *ttt)
 	ttt-&gt;buttons[i][j] = gtk_toggle_button_new ();
 	gtk_table_attach_defaults (GTK_TABLE (ttt), ttt-&gt;buttons[i][j], 
 				   i, i+1, j, j+1);
-	g_signal_connect (G_OBJECT (ttt-&gt;buttons[i][j]), "toggled",
+	g_signal_connect (ttt-&gt;buttons[i][j], "toggled",
 			  G_CALLBACK (tictactoe_toggle), (gpointer) ttt);
 	gtk_widget_set_size_request (ttt-&gt;buttons[i][j], 20, 20);
 	gtk_widget_show (ttt-&gt;buttons[i][j]);
@@ -14716,7 +14717,7 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
       
       if (success &amp;&amp; found)
 	{
-	  g_signal_emit (G_OBJECT (ttt), 
+	  g_signal_emit (ttt, 
 	                 tictactoe_signals[TICTACTOE_SIGNAL], 0);
 	  break;
 	}
@@ -14758,7 +14759,7 @@ int main( int   argc,
   
   gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
   
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -14769,7 +14770,7 @@ int main( int   argc,
   gtk_widget_show (ttt);
 
   /* And attach to its "tictactoe" signal */
-  g_signal_connect (G_OBJECT (ttt), "tictactoe",
+  g_signal_connect (ttt, "tictactoe",
 		    G_CALLBACK (win), NULL);
 
   gtk_widget_show (window);
@@ -14964,7 +14965,7 @@ gtk_dial_get_type ()
 
   if (!dial_type)
     {
-      static const GTypeInfo dial_info =
+      const GTypeInfo dial_info =
       {
 	sizeof (GtkDialClass),
 	NULL,
@@ -15114,7 +15115,7 @@ gtk_dial_realize (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_DIAL (widget));
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   dial = GTK_DIAL (widget);
 
   attributes.x = widget-&gt;allocation.x;
@@ -15161,7 +15162,7 @@ gtk_dial_size_allocate (GtkWidget     *widget,
   widget-&gt;allocation = *allocation;
   dial = GTK_DIAL (widget);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
 
       gdk_window_move_resize (widget-&gt;window,
@@ -15603,7 +15604,7 @@ int main( int   argc,
   
   gtk_window_set_title (GTK_WINDOW (window), "Dial");
   
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
 		    G_CALLBACK (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -15630,7 +15631,7 @@ int main( int   argc,
   gtk_box_pack_end (GTK_BOX (vbox), label, 0, 0, 0);
   gtk_widget_show (label);
 
-  g_signal_connect (G_OBJECT (adjustment), "value_changed",
+  g_signal_connect (adjustment, "value_changed",
 		    G_CALLBACK (value_changed), (gpointer) label);
   
   gtk_widget_show (window);
@@ -15707,7 +15708,7 @@ static gboolean expose_event( GtkWidget      *widget,
                               GdkEventExpose *event )
 {
   gdk_draw_drawable (widget-&gt;window,
-		     widget-&gt;style-&gt;fg_gc[GTK_WIDGET_STATE (widget)],
+		     widget-&gt;style-&gt;fg_gc[gtk_widget_get_state (widget)],
 		     pixmap,
 		     event-&gt;area.x, event-&gt;area.y,
 		     event-&gt;area.x, event-&gt;area.y,
@@ -15790,7 +15791,7 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_widget_show (vbox);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
                     G_CALLBACK (quit), NULL);
 
   /* Create the drawing area */
@@ -15803,16 +15804,16 @@ int main( int   argc,
 
   /* Signals used to handle backing pixmap */
 
-  g_signal_connect (G_OBJECT (drawing_area), "expose_event",
+  g_signal_connect (drawing_area, "expose_event",
 		    G_CALLBACK (expose_event), NULL);
-  g_signal_connect (G_OBJECT (drawing_area),"configure_event",
+  g_signal_connect (drawing_area, "configure_event",
 		    G_CALLBACK (configure_event), NULL);
 
   /* Event signals */
 
-  g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
+  g_signal_connect (drawing_area, "motion_notify_event",
 		    G_CALLBACK (motion_notify_event), NULL);
-  g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
+  g_signal_connect (drawing_area, "button_press_event",
 		    G_CALLBACK (button_press_event), NULL);
 
   gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
@@ -15825,9 +15826,9 @@ int main( int   argc,
   button = gtk_button_new_with_label ("Quit");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  g_signal_connect_swapped (G_OBJECT (button), "clicked",
+  g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_widget_destroy),
-			    G_OBJECT (window));
+			    window);
   gtk_widget_show (button);
 
   gtk_widget_show (window);
@@ -15898,7 +15899,7 @@ static gboolean
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
   gdk_draw_drawable (widget-&gt;window,
-                     widget-&gt;style-&gt;fg_gc[GTK_WIDGET_STATE (widget)],
+                     widget-&gt;style-&gt;fg_gc[gtk_widget_get_state (widget)],
                      pixmap,
                      event-&gt;area.x, event-&gt;area.y,
                      event-&gt;area.x, event-&gt;area.y,
@@ -15919,7 +15920,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      gc = widget-&gt;style-&gt;dark_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget-&gt;style-&gt;dark_gc[gtk_widget_get_state (widget)];
       break;
     case GDK_SOURCE_PEN:
       gc = widget-&gt;style-&gt;black_gc;
@@ -15928,7 +15929,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
       gc = widget-&gt;style-&gt;white_gc;
       break;
     default:
-      gc = widget-&gt;style-&gt;light_gc[GTK_WIDGET_STATE (widget)];
+      gc = widget-&gt;style-&gt;light_gc[gtk_widget_get_state (widget)];
     }
 
   update_rect.x = x - 10 * pressure;
@@ -16006,19 +16007,19 @@ create_input_dialog ()
     {
       inputd = gtk_input_dialog_new();
 
-      g_signal_connect (G_OBJECT (inputd), "destroy",
+      g_signal_connect (inputd, "destroy",
                         G_CALLBACK (input_dialog_destroy), (gpointer) &amp;inputd);
-      g_signal_connect_swapped (G_OBJECT (GTK_INPUT_DIALOG (inputd)-&gt;close_button),
+      g_signal_connect_swapped (GTK_INPUT_DIALOG (inputd)-&gt;close_button,
                                 "clicked",
                                 G_CALLBACK (gtk_widget_hide),
-                                G_OBJECT (inputd));
+                                inputd);
       gtk_widget_hide (GTK_INPUT_DIALOG (inputd)-&gt;save_button);
 
       gtk_widget_show (inputd);
     }
   else
     {
-      if (!GTK_WIDGET_MAPPED (inputd))
+      if (!gtk_widget_get_mapped (inputd))
         gtk_widget_show (inputd);
       else
         gdk_window_raise (inputd-&gt;window);
@@ -16044,7 +16045,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), vbox);
   gtk_widget_show (vbox);
 
-  g_signal_connect (G_OBJECT (window), "destroy",
+  g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
   /* Create the drawing area */
@@ -16057,16 +16058,16 @@ main (int argc, char *argv[])
 
   /* Signals used to handle backing pixmap */
 
-  g_signal_connect (G_OBJECT (drawing_area), "expose_event",
+  g_signal_connect (drawing_area, "expose_event",
                     G_CALLBACK (expose_event), NULL);
-  g_signal_connect (G_OBJECT(drawing_area),"configure_event",
+  g_signal_connect (drawing_area, "configure_event",
                     G_CALLBACK (configure_event), NULL);
 
   /* Event signals */
 
-  g_signal_connect (G_OBJECT (drawing_area), "motion_notify_event",
+  g_signal_connect (drawing_area, "motion_notify_event",
                     G_CALLBACK (motion_notify_event), NULL);
-  g_signal_connect (G_OBJECT (drawing_area), "button_press_event",
+  g_signal_connect (drawing_area, "button_press_event",
                     G_CALLBACK (button_press_event), NULL);
 
   gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK
@@ -16083,16 +16084,16 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Input Dialog");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  g_signal_connect (G_OBJECT (button), "clicked",
+  g_signal_connect (button, "clicked",
                     G_CALLBACK (create_input_dialog), NULL);
   gtk_widget_show (button);
 
   button = gtk_button_new_with_label ("Quit");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  g_signal_connect_swapped (G_OBJECT (button), "clicked",
+  g_signal_connect_swapped (button, "clicked",
                             G_CALLBACK (gtk_widget_destroy),
-                            G_OBJECT (window));
+                            window);
   gtk_widget_show (button);
 
   gtk_widget_show (window);

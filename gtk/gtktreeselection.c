@@ -275,7 +275,7 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 }
 
 /**
- * gtk_tree_selection_get_select_function:
+ * gtk_tree_selection_get_select_function: (skip)
  * @selection: A #GtkTreeSelection.
  *
  * Returns the current selection function.
@@ -293,7 +293,7 @@ gtk_tree_selection_get_select_function (GtkTreeSelection *selection)
 }
 
 /**
- * gtk_tree_selection_get_user_data:
+ * gtk_tree_selection_get_user_data: (skip)
  * @selection: A #GtkTreeSelection.
  *
  * Returns the user data for the selection function.
@@ -314,7 +314,7 @@ gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
  * 
  * Returns the tree view associated with @selection.
  * 
- * Return value: A #GtkTreeView
+ * Return value: (transfer none): A #GtkTreeView
  **/
 GtkTreeView *
 gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
@@ -327,8 +327,8 @@ gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_get_selected:
  * @selection: A #GtkTreeSelection.
- * @model: A pointer to set to the #GtkTreeModel, or NULL.
- * @iter: The #GtkTreeIter, or NULL.
+ * @model: (out) (allow-none) (transfer none): A pointer to set to the #GtkTreeModel, or NULL.
+ * @iter: (out) (allow-none): The #GtkTreeIter, or NULL.
  *
  * Sets @iter to the currently selected node if @selection is set to
  * #GTK_SELECTION_SINGLE or #GTK_SELECTION_BROWSE.  @iter may be NULL if you
@@ -402,7 +402,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
 /**
  * gtk_tree_selection_get_selected_rows:
  * @selection: A #GtkTreeSelection.
- * @model: A pointer to set to the #GtkTreeModel, or NULL.
+ * @model: (out) (allow-none) (transfer none): A pointer to set to the #GtkTreeModel, or %NULL.
  *
  * Creates a list of path of all selected rows. Additionally, if you are
  * planning on modifying the model after calling this function, you may
@@ -411,11 +411,11 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  *
  * To free the return value, use:
  * |[
- * g_list_foreach (list, gtk_tree_path_free, NULL);
+ * g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
  * g_list_free (list);
  * ]|
  *
- * Return value: A #GList containing a #GtkTreePath for each selected row.
+ * Return value: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.
  *
  * Since: 2.2
  **/
@@ -585,7 +585,7 @@ model_changed (gpointer data)
 /**
  * gtk_tree_selection_selected_foreach:
  * @selection: A #GtkTreeSelection.
- * @func: The function to call for each selected node.
+ * @func: (scope call): The function to call for each selected node.
  * @data: user data to pass to the function.
  *
  * Calls a function for each selected node. Note that you cannot modify
@@ -1024,7 +1024,7 @@ unselect_all_helper (GtkRBTree  *tree,
     }
 }
 
-static gint
+static gboolean
 gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
 {
   struct _TempTuple *tuple;

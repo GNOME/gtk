@@ -133,8 +133,8 @@ gdk_screen_class_init (GdkScreenClass *klass)
    * The ::monitors-changed signal is emitted when the number, size
    * or position of the monitors attached to the screen change. 
    *
-   * Only for X for now. Future implementations for Win32 and
-   * OS X may be a possibility.
+   * Only for X11 and OS X for now. A future implementation for Win32
+   * may be a possibility.
    *
    * Since: 2.14
    */
@@ -152,7 +152,7 @@ gdk_screen_class_init (GdkScreenClass *klass)
 static void
 gdk_screen_init (GdkScreen *screen)
 {
-    screen->resolution = -1.;
+  screen->resolution = -1.;
 }
 
 static void
@@ -213,7 +213,7 @@ get_nearest_monitor (GdkScreen *screen,
   gint num_monitors, i;
   gint nearest_dist = G_MAXINT;
   gint nearest_monitor = 0;
-  
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
 
   num_monitors = gdk_screen_get_n_monitors (screen);
@@ -221,7 +221,7 @@ get_nearest_monitor (GdkScreen *screen,
   for (i = 0; i < num_monitors; i++)
     {
       GdkRectangle monitor;
-      gint dist_x, dist_y;
+      gint dist_x, dist_y, dist;
       
       gdk_screen_get_monitor_geometry (screen, i, &monitor);
 
@@ -239,9 +239,10 @@ get_nearest_monitor (GdkScreen *screen,
       else
 	dist_y = 0;
 
-      if (MIN (dist_x, dist_y) < nearest_dist)
+      dist = dist_x + dist_y;
+      if (dist < nearest_dist)
 	{
-	  nearest_dist = MIN (dist_x, dist_y);
+	  nearest_dist = dist;
 	  nearest_monitor = i;
 	}
     }
@@ -308,8 +309,9 @@ gdk_screen_get_monitor_at_window (GdkScreen      *screen,
 {
   gint num_monitors, i, area = 0, screen_num = -1;
   GdkRectangle win_rect;
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
-  
+
   gdk_window_get_geometry (window, &win_rect.x, &win_rect.y, &win_rect.width,
 			   &win_rect.height, NULL);
   gdk_window_get_origin (window, &win_rect.x, &win_rect.y);
@@ -346,7 +348,7 @@ gdk_screen_get_monitor_at_window (GdkScreen      *screen,
 gint
 gdk_screen_width (void)
 {
-  return gdk_screen_get_width (gdk_screen_get_default());
+  return gdk_screen_get_width (gdk_screen_get_default ());
 }
 
 /**
@@ -359,7 +361,7 @@ gdk_screen_width (void)
 gint
 gdk_screen_height (void)
 {
-  return gdk_screen_get_height (gdk_screen_get_default());
+  return gdk_screen_get_height (gdk_screen_get_default ());
 }
 
 /**
@@ -374,7 +376,7 @@ gdk_screen_height (void)
 gint
 gdk_screen_width_mm (void)
 {
-  return gdk_screen_get_width_mm (gdk_screen_get_default());
+  return gdk_screen_get_width_mm (gdk_screen_get_default ());
 }
 
 /**
@@ -395,7 +397,7 @@ gdk_screen_height_mm (void)
 /**
  * gdk_screen_set_font_options:
  * @screen: a #GdkScreen
- * @options: a #cairo_font_options_t, or %NULL to unset any
+ * @options: (allow-none): a #cairo_font_options_t, or %NULL to unset any
  *   previously set default font options.
  *
  * Sets the default font options for the screen. These
@@ -410,20 +412,20 @@ void
 gdk_screen_set_font_options (GdkScreen                  *screen,
 			     const cairo_font_options_t *options)
 {
-    g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
 
-    if (screen->font_options != options)
-      {
-	if (screen->font_options)
-	  cairo_font_options_destroy (screen->font_options);
-	
-	if (options)
-	  screen->font_options = cairo_font_options_copy (options);
-	else
-	  screen->font_options = NULL;
-	
-	g_object_notify (G_OBJECT (screen), "font-options");
-      }
+  if (screen->font_options != options)
+    {
+      if (screen->font_options)
+        cairo_font_options_destroy (screen->font_options);
+
+      if (options)
+        screen->font_options = cairo_font_options_copy (options);
+      else
+        screen->font_options = NULL;
+
+      g_object_notify (G_OBJECT (screen), "font-options");
+    }
 }
 
 /**
@@ -440,9 +442,9 @@ gdk_screen_set_font_options (GdkScreen                  *screen,
 const cairo_font_options_t *
 gdk_screen_get_font_options (GdkScreen *screen)
 {
-    g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-    return screen->font_options;
+  return screen->font_options;
 }
 
 /**
@@ -462,17 +464,17 @@ void
 gdk_screen_set_resolution (GdkScreen *screen,
 			   gdouble    dpi)
 {
-    g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
 
-    if (dpi < 0)
-      dpi = -1.0;
+  if (dpi < 0)
+    dpi = -1.0;
 
-    if (screen->resolution != dpi)
-      {
-	screen->resolution = dpi;
+  if (screen->resolution != dpi)
+    {
+      screen->resolution = dpi;
 
-	g_object_notify (G_OBJECT (screen), "resolution");
-      }
+      g_object_notify (G_OBJECT (screen), "resolution");
+    }
 }
 
 /**
@@ -490,9 +492,9 @@ gdk_screen_set_resolution (GdkScreen *screen,
 gdouble
 gdk_screen_get_resolution (GdkScreen *screen)
 {
-    g_return_val_if_fail (GDK_IS_SCREEN (screen), -1.);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1.0);
 
-    return screen->resolution;
+  return screen->resolution;
 }
 
 static void

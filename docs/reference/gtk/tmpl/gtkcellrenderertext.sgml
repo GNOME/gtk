@@ -25,6 +25,9 @@ the #GtkCellRendererText allows to edit its text using an entry.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCellRendererText ##### -->
 <para>
 
@@ -265,6 +268,7 @@ the #GtkCellRendererText allows to edit its text using an entry.
 
 </para>
 
+@void: 
 @Returns: 
 
 

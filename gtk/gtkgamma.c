@@ -24,11 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include "config.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
+#undef GDK_PIXBUF_DISABLE_DEPRECATED
 #include <gdk-pixbuf/gdk-pixdata.h>
 
 #include "gtkgamma.h"
@@ -436,7 +439,7 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 	  gtk_widget_show (button);
 	  
           button = gtk_button_new_from_stock (GTK_STOCK_OK);
-	  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+	  gtk_widget_set_can_default (button, TRUE);
 	  g_signal_connect (button, "clicked",
 			    G_CALLBACK (gamma_ok_callback), c);
 	  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);

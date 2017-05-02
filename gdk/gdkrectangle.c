@@ -32,7 +32,7 @@
  * gdk_rectangle_union:
  * @src1: a #GdkRectangle
  * @src2: a #GdkRectangle
- * @dest: return location for the union of @src1 and @src2
+ * @dest: (out): return location for the union of @src1 and @src2
  *
  * Calculates the union of two rectangles.
  * The union of rectangles @src1 and @src2 is the smallest rectangle which
@@ -62,7 +62,8 @@ gdk_rectangle_union (const GdkRectangle *src1,
  * gdk_rectangle_intersect:
  * @src1: a #GdkRectangle
  * @src2: a #GdkRectangle
- * @dest: return location for the intersection of @src1 and @src2, or %NULL
+ * @dest: (out caller-allocates) (allow-none): return location for the
+ * intersection of @src1 and @src2, or %NULL
  *
  * Calculates the intersection of two rectangles. It is allowed for
  * @dest to be the same as either @src1 or @src2. If the rectangles 
@@ -79,7 +80,7 @@ gdk_rectangle_intersect (const GdkRectangle *src1,
 			 GdkRectangle       *dest)
 {
   gint dest_x, dest_y;
-  gint dest_w, dest_h;
+  gint dest_x2, dest_y2;
   gint return_val;
 
   g_return_val_if_fail (src1 != NULL, FALSE);
@@ -89,17 +90,17 @@ gdk_rectangle_intersect (const GdkRectangle *src1,
 
   dest_x = MAX (src1->x, src2->x);
   dest_y = MAX (src1->y, src2->y);
-  dest_w = MIN (src1->x + src1->width, src2->x + src2->width) - dest_x;
-  dest_h = MIN (src1->y + src1->height, src2->y + src2->height) - dest_y;
+  dest_x2 = MIN (src1->x + src1->width, src2->x + src2->width);
+  dest_y2 = MIN (src1->y + src1->height, src2->y + src2->height);
 
-  if (dest_w > 0 && dest_h > 0)
+  if (dest_x2 > dest_x && dest_y2 > dest_y)
     {
       if (dest)
         {
           dest->x = dest_x;
           dest->y = dest_y;
-          dest->width = dest_w;
-          dest->height = dest_h;
+          dest->width = dest_x2 - dest_x;
+          dest->height = dest_y2 - dest_y;
         }
       return_val = TRUE;
     }

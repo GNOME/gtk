@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_PROPERTY_H__
+#define __GDK_PROPERTY_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_PROPERTY_H__
-#define __GDK_PROPERTY_H__
 
 #include <gdk/gdktypes.h>
 
@@ -67,12 +67,8 @@ void     gdk_property_change (GdkWindow     *window,
 void     gdk_property_delete (GdkWindow     *window,
 			      GdkAtom        property);
 #ifndef GDK_MULTIHEAD_SAFE
+#ifndef GDK_DISABLE_DEPRECATED
 gint gdk_text_property_to_text_list (GdkAtom        encoding,
-				     gint           format,
-				     const guchar  *text,
-				     gint           length,
-				     gchar       ***list);
-gint gdk_text_property_to_utf8_list (GdkAtom        encoding,
 				     gint           format,
 				     const guchar  *text,
 				     gint           length,
@@ -87,22 +83,29 @@ gint gdk_string_to_compound_text    (const gchar   *str,
 				     gint          *format,
 				     guchar       **ctext,
 				     gint          *length);
+gint gdk_text_property_to_utf8_list (GdkAtom        encoding,
+				     gint           format,
+				     const guchar  *text,
+				     gint           length,
+				     gchar       ***list);
+#endif
 #endif
 
-gint gdk_text_property_to_text_list_for_display (GdkDisplay     *display,
-						 GdkAtom         encoding,
-						 gint            format,
-						 const guchar   *text,
-						 gint            length,
-						 gchar        ***list);
 gint gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
 						 GdkAtom         encoding,
 						 gint            format,
 						 const guchar   *text,
 						 gint            length,
 						 gchar        ***list);
-  
+
 gchar   *gdk_utf8_to_string_target   (const gchar *str);
+#ifndef GDK_DISABLE_DEPRECATED
+gint gdk_text_property_to_text_list_for_display (GdkDisplay     *display,
+						 GdkAtom         encoding,
+						 gint            format,
+						 const guchar   *text,
+						 gint            length,
+						 gchar        ***list);
 gint     gdk_string_to_compound_text_for_display (GdkDisplay   *display,
 						  const gchar  *str,
 						  GdkAtom      *encoding,
@@ -118,6 +121,7 @@ gboolean gdk_utf8_to_compound_text_for_display   (GdkDisplay   *display,
 
 void gdk_free_text_list             (gchar        **list);
 void gdk_free_compound_text         (guchar        *ctext);
+#endif
 
 G_END_DECLS
 

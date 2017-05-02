@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#if !defined(GDK_DISABLE_DEPRECATED) || defined(GDK_COMPILATION) || defined(GTK_COMPILATION)
+#if !defined(GDK_DISABLE_DEPRECATED) || defined(GDK_COMPILATION)
 
 #ifndef __GDK_FONT_H__
 #define __GDK_FONT_H__

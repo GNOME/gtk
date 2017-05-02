@@ -24,15 +24,14 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_VSCROLLBAR_H__
 #define __GTK_VSCROLLBAR_H__
 
 
-#include <gdk/gdk.h>
+#if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkscrollbar.h>
 
 
@@ -50,6 +49,12 @@ G_BEGIN_DECLS
 typedef struct _GtkVScrollbar       GtkVScrollbar;
 typedef struct _GtkVScrollbarClass  GtkVScrollbarClass;
 
+/**
+ * GtkVScrollbar:
+ *
+ * The #GtkVScrollbar struct contains private data and should be accessed
+ * using the functions below.
+ */
 struct _GtkVScrollbar
 {
   GtkScrollbar scrollbar;

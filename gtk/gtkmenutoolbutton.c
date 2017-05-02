@@ -30,6 +30,7 @@
 #include "gtkvbox.h"
 #include "gtkmenu.h"
 #include "gtkmain.h"
+#include "gtkbuildable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -51,6 +52,12 @@ static void gtk_menu_tool_button_destroy    (GtkObject              *object);
 static int  menu_deactivate_cb              (GtkMenuShell           *menu_shell,
 					     GtkMenuToolButton      *button);
 
+static void gtk_menu_tool_button_buildable_interface_init (GtkBuildableIface   *iface);
+static void gtk_menu_tool_button_buildable_add_child      (GtkBuildable        *buildable,
+							   GtkBuilder          *builder,
+							   GObject             *child,
+							   const gchar         *type);
+
 enum
 {
   SHOW_MENU,
@@ -65,7 +72,11 @@ enum
 
 static gint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkMenuToolButton, gtk_menu_tool_button, GTK_TYPE_TOOL_BUTTON)
+static GtkBuildableIface *parent_buildable_iface;
+
+G_DEFINE_TYPE_WITH_CODE (GtkMenuToolButton, gtk_menu_tool_button, GTK_TYPE_TOOL_BUTTON,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_menu_tool_button_buildable_interface_init))
 
 static void
 gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
@@ -152,7 +163,7 @@ gtk_menu_tool_button_state_changed (GtkWidget    *widget,
   GtkMenuToolButton *button = GTK_MENU_TOOL_BUTTON (widget);
   GtkMenuToolButtonPrivate *priv = button->priv;
 
-  if (!GTK_WIDGET_IS_SENSITIVE (widget) && priv->menu)
+  if (!gtk_widget_is_sensitive (widget) && priv->menu)
     {
       gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
     }
@@ -217,6 +228,19 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
   widget_class->state_changed = gtk_menu_tool_button_state_changed;
   toolitem_class->toolbar_reconfigured = gtk_menu_tool_button_toolbar_reconfigured;
 
+  /**
+   * GtkMenuToolButton::show-menu:
+   * @button: the object on which the signal is emitted
+   *
+   * The ::show-menu signal is emitted before the menu is shown.
+   *
+   * It can be used to populate the menu on demand, using 
+   * gtk_menu_tool_button_get_menu(). 
+
+   * Note that even if you populate the menu dynamically in this way, 
+   * you must set an empty menu on the #GtkMenuToolButton beforehand,
+   * since the arrow is made insensitive if the menu is not set.
+   */
   signals[SHOW_MENU] =
     g_signal_new (I_("show-menu"),
                   G_OBJECT_CLASS_TYPE (klass),
@@ -331,7 +355,7 @@ arrow_button_toggled_cb (GtkToggleButton   *togglebutton,
     return;
 
   if (gtk_toggle_button_get_active (togglebutton) &&
-      !GTK_WIDGET_VISIBLE (priv->menu))
+      !gtk_widget_get_visible (GTK_WIDGET (priv->menu)))
     {
       /* we get here only when the menu is activated by a key
        * press, so that we can select the first menu item */
@@ -427,10 +451,30 @@ gtk_menu_tool_button_destroy (GtkObject *object)
   GTK_OBJECT_CLASS (gtk_menu_tool_button_parent_class)->destroy (object);
 }
 
+static void
+gtk_menu_tool_button_buildable_add_child (GtkBuildable *buildable,
+					  GtkBuilder   *builder,
+					  GObject      *child,
+					  const gchar  *type)
+{
+  if (type && strcmp (type, "menu") == 0)
+    gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (buildable),
+                                   GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_menu_tool_button_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = gtk_menu_tool_button_buildable_add_child;
+}
+
 /**
  * gtk_menu_tool_button_new:
- * @icon_widget: a widget that will be used as icon widget, or %NULL
- * @label: a string that will be used as label, or %NULL
+ * @icon_widget: (allow-none): a widget that will be used as icon widget, or %NULL
+ * @label: (allow-none): a string that will be used as label, or %NULL
  *
  * Creates a new #GtkMenuToolButton using @icon_widget as icon and
  * @label as label.
@@ -531,7 +575,7 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
 
   if (priv->menu != GTK_MENU (menu))
     {
-      if (priv->menu && GTK_WIDGET_VISIBLE (priv->menu))
+      if (priv->menu && gtk_widget_get_visible (GTK_WIDGET (priv->menu)))
         gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
 
       if (priv->menu)
@@ -567,7 +611,8 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
  *
  * Gets the #GtkMenu associated with #GtkMenuToolButton.
  *
- * Return value: the #GtkMenu associated with #GtkMenuToolButton
+ * Return value: (transfer none): the #GtkMenu associated
+ *     with #GtkMenuToolButton
  *
  * Since: 2.6
  **/
@@ -583,8 +628,8 @@ gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
  * gtk_menu_tool_button_set_arrow_tooltip:
  * @button: a #GtkMenuToolButton
  * @tooltips: the #GtkTooltips object to be used
- * @tip_text: text to be used as tooltip text for tool_item
- * @tip_private: text to be used as private tooltip text
+ * @tip_text: (allow-none): text to be used as tooltip text for tool_item
+ * @tip_private: (allow-none): text to be used as private tooltip text
  *
  * Sets the #GtkTooltips object to be used for arrow button which
  * pops up the menu. See gtk_tool_item_set_tooltip() for setting

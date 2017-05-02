@@ -32,7 +32,6 @@
 
 typedef struct _GdkAxisInfo    GdkAxisInfo;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
-typedef struct _GdkInputWindow GdkInputWindow;
 
 /* information about a device axis */
 struct _GdkAxisInfo
@@ -71,24 +70,19 @@ struct _GdkDevicePrivate
   AXIS orientation_axes[2];
 };
 
+/* Addition used for extension_events mask */
+#define GDK_ALL_DEVICES_MASK (1<<30)
+
 struct _GdkInputWindow
 {
   /* gdk window */
-  GdkWindow *window;
+  GList *windows; /* GdkWindow:s with extension_events set */
 
-  /* Extension mode (GDK_EXTENSION_EVENTS_ALL/CURSOR) */
-  GdkExtensionMode mode;
+  GdkWindow *impl_window; /* an impl window */
 
   /* position relative to root window */
   gint root_x;
   gint root_y;
-
-  /* rectangles relative to window of windows obscuring this one */
-  GdkRectangle *obscuring;
-  gint num_obscuring;
-
-  /* Is there a pointer grab for this window ? */
-  gint grabbed;
 };
 
 /* Global data */
@@ -98,7 +92,7 @@ struct _GdkInputWindow
 extern GList *_gdk_input_devices;
 extern GList *_gdk_input_windows;
 
-extern gint   _gdk_input_ignore_core;
+extern gboolean _gdk_input_in_proximity;
 
 /* Function declarations */
 void             _gdk_init_input_core (GdkDisplay *display);
@@ -109,11 +103,14 @@ GdkTimeCoord ** _gdk_device_allocate_history (GdkDevice *device,
 /* The following functions are provided by each implementation
  * (just wintab for now)
  */
-void             _gdk_input_configure_event  (GdkWindow         *window);
-void             _gdk_input_enter_event      (GdkWindow         *window);
+void             _gdk_input_configure_event  (GdkWindow        *window);
 gboolean         _gdk_input_other_event      (GdkEvent         *event,
 					      MSG              *msg,
 					      GdkWindow        *window);
+
+void             _gdk_input_crossing_event   (GdkWindow        *window,
+					      gboolean          enter);
+
 
 /* These should be in gdkinternals.h */
 
@@ -121,10 +118,7 @@ GdkInputWindow  *_gdk_input_window_find      (GdkWindow        *window);
 
 void             _gdk_input_window_destroy   (GdkWindow *window);
 
-gint             _gdk_input_enable_window    (GdkWindow        *window,
-					      GdkDevicePrivate *gdkdev);
-gint             _gdk_input_disable_window   (GdkWindow        *window,
-					      GdkDevicePrivate *gdkdev);
+void             _gdk_input_select_events    (GdkWindow        *impl_window);
 gint             _gdk_input_grab_pointer     (GdkWindow        *window,
 					      gint              owner_events,
 					      GdkEventMask      event_mask,
@@ -140,5 +134,7 @@ gboolean         _gdk_device_get_history     (GdkDevice         *device,
 
 void		_gdk_input_wintab_init_check (void);
 void		_gdk_input_set_tablet_active (void);
+void            _gdk_input_update_for_device_mode (GdkDevicePrivate *gdkdev);
+void            _gdk_input_check_proximity (void);
 
 #endif /* __GDK_INPUT_WIN32_H__ */

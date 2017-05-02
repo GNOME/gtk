@@ -17,6 +17,9 @@ Public enumerated types used throughout GTK+
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GtkAccelFlags ##### -->
 <para>
 
@@ -48,6 +51,15 @@ Public enumerated types used throughout GTK+
 @GTK_ANCHOR_SE: 
 @GTK_ANCHOR_W: 
 @GTK_ANCHOR_E: 
+
+<!-- ##### ENUM GtkArrowPlacement ##### -->
+<para>
+Used to specify the placement of scroll arrows in scrolling menus.
+</para>
+
+@GTK_ARROWS_BOTH: Place one arrow on each end of the menu.
+@GTK_ARROWS_START: Place both arrows at the top of the menu.
+@GTK_ARROWS_END: Place both arrows at the bottom of the menu.
 
 <!-- ##### ENUM GtkArrowType ##### -->
 <para>
@@ -396,8 +408,8 @@ unresponsive to user actions.
 Indicates the direction a sub-menu will appear.
 </para>
 
-@GTK_DIRECTION_LEFT: A sub-menu will appear
-@GTK_DIRECTION_RIGHT: 
+@GTK_DIRECTION_LEFT: A sub-menu will appear to the left of the current menu.
+@GTK_DIRECTION_RIGHT: A sub-menu will appear to the right of the current menu.
 
 <!-- ##### ENUM GtkSubmenuPlacement ##### -->
 <para>
@@ -424,12 +436,12 @@ other, rather than vertically stacked
 
 <!-- ##### ENUM GtkUpdateType ##### -->
 <para>
-
+Used by #GtkRange to control the policy for notifying value changes.
 </para>
 
-@GTK_UPDATE_CONTINUOUS: 
-@GTK_UPDATE_DISCONTINUOUS: 
-@GTK_UPDATE_DELAYED: 
+@GTK_UPDATE_CONTINUOUS: Notify updates whenever the value changed
+@GTK_UPDATE_DISCONTINUOUS: Notify updates when the mouse button has been released
+@GTK_UPDATE_DELAYED: Space out updates with a small timeout
 
 <!-- ##### ENUM GtkVisibility ##### -->
 <para>

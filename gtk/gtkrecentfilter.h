@@ -18,12 +18,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_RECENT_FILTER_H__
+#define __GTK_RECENT_FILTER_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_RECENT_FILTER_H__
-#define __GTK_RECENT_FILTER_H__
 
 #include <glib-object.h>
 
@@ -66,7 +66,7 @@ GType                 gtk_recent_filter_get_type (void) G_GNUC_CONST;
 GtkRecentFilter *     gtk_recent_filter_new      (void);
 void                  gtk_recent_filter_set_name (GtkRecentFilter *filter,
 						  const gchar     *name);
-G_CONST_RETURN gchar *gtk_recent_filter_get_name (GtkRecentFilter *filter);
+const gchar *         gtk_recent_filter_get_name (GtkRecentFilter *filter);
 
 void gtk_recent_filter_add_mime_type      (GtkRecentFilter      *filter,
 					   const gchar          *mime_type);

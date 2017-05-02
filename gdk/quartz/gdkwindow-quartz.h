@@ -25,7 +25,6 @@
 #import <gdk/quartz/GdkQuartzView.h>
 #import <gdk/quartz/GdkQuartzWindow.h>
 
-
 G_BEGIN_DECLS
 
 /* Window implementation for Quartz
@@ -45,16 +44,11 @@ struct _GdkWindowImplQuartz
 {
   GdkDrawableImplQuartz parent_instance;
 
-  gint width;
-  gint height;
-
   NSWindow *toplevel;
   NSTrackingRectTag tracking_rect;
   GdkQuartzView *view;
 
   GdkWindowTypeHint type_hint;
-
-  NSCursor *nscursor;
 
   GdkRegion *paint_clip_region;
   gint begin_paint_count;
@@ -64,6 +58,8 @@ struct _GdkWindowImplQuartz
 
   /* Sorted by z-order */
   GList *sorted_children;
+
+  GdkRegion *needs_display_region;
 };
  
 struct _GdkWindowImplQuartzClass 

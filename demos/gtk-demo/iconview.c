@@ -105,6 +105,7 @@ fill_store (GtkListStore *store)
 
       name = g_dir_read_name (dir);
     }
+  g_dir_close (dir);
 }
 
 static gint
@@ -358,7 +359,7 @@ do_iconview (GtkWidget *do_widget)
 	}
     }
 
-  if (!GTK_WIDGET_VISIBLE (window))
+  if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
     {

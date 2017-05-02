@@ -41,7 +41,6 @@
 #include "gtkpagesetupunixdialog.h"
 #include "gtkprintbackend.h"
 #include "gtkprinter.h"
-#include "gtkprinter-private.h"
 #include "gtkprintjob.h"
 #include "gtklabel.h"
 #include "gtkintl.h"
@@ -87,10 +86,31 @@ unix_start_page (GtkPrintOperation *op,
   
   type = cairo_surface_get_type (op_unix->surface);
 
-  if (type == CAIRO_SURFACE_TYPE_PS)
-    cairo_ps_surface_set_size (op_unix->surface, w, h);
-  else if (type == CAIRO_SURFACE_TYPE_PDF)
-    cairo_pdf_surface_set_size (op_unix->surface, w, h);
+  if ((op->priv->manual_number_up < 2) ||
+      (op->priv->page_position % op->priv->manual_number_up == 0))
+    {
+      if (type == CAIRO_SURFACE_TYPE_PS)
+        {
+          cairo_ps_surface_set_size (op_unix->surface, w, h);
+          cairo_ps_surface_dsc_begin_page_setup (op_unix->surface);
+          switch (gtk_page_setup_get_orientation (page_setup))
+            {
+              case GTK_PAGE_ORIENTATION_PORTRAIT:
+              case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
+                cairo_ps_surface_dsc_comment (op_unix->surface, "%%PageOrientation: Portrait");
+                break;
+
+              case GTK_PAGE_ORIENTATION_LANDSCAPE:
+              case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
+                cairo_ps_surface_dsc_comment (op_unix->surface, "%%PageOrientation: Landscape");
+                break;
+            }
+         }
+      else if (type == CAIRO_SURFACE_TYPE_PDF)
+        {
+          cairo_pdf_surface_set_size (op_unix->surface, w, h);
+        }
+    }
 }
 
 static void
@@ -100,7 +120,11 @@ unix_end_page (GtkPrintOperation *op,
   cairo_t *cr;
 
   cr = gtk_print_context_get_cairo_context (print_context);
-  cairo_show_page (cr);
+
+  if ((op->priv->manual_number_up < 2) ||
+      ((op->priv->page_position + 1) % op->priv->manual_number_up == 0) ||
+      (op->priv->page_position == op->priv->nr_of_pages_to_print - 1))
+    cairo_show_page (cr);
 }
 
 static void
@@ -108,8 +132,9 @@ op_unix_free (GtkPrintOperationUnix *op_unix)
 {
   if (op_unix->job)
     {
-      g_signal_handler_disconnect (op_unix->job,
-				   op_unix->job_status_changed_tag);
+      if (op_unix->job_status_changed_tag > 0)
+        g_signal_handler_disconnect (op_unix->job,
+				     op_unix->job_status_changed_tag);
       g_object_unref (op_unix->job);
     }
 
@@ -182,7 +207,11 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   gchar *cmd;
   gchar *preview_cmd;
   GtkSettings *settings;
-  GtkPrintSettings *print_settings;
+  GtkPrintSettings *print_settings = NULL;
+  GtkPageSetup *page_setup;
+  GKeyFile *key_file = NULL;
+  gchar *data = NULL;
+  gsize data_len;
   gchar *settings_filename = NULL;
   gchar *quoted_filename;
   gchar *quoted_settings_filename;
@@ -204,10 +233,41 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   if (fd < 0) 
     goto out;
 
-  print_settings = gtk_print_operation_get_print_settings (op);
-  retval = gtk_print_settings_to_file (print_settings, settings_filename, &error);
-  close (fd);
+  key_file = g_key_file_new ();
+  
+  print_settings = gtk_print_settings_copy (gtk_print_operation_get_print_settings (op));
 
+  if (print_settings != NULL)
+    {
+      gtk_print_settings_set_reverse (print_settings, FALSE);
+      gtk_print_settings_set_page_set (print_settings, GTK_PAGE_SET_ALL);
+      gtk_print_settings_set_scale (print_settings, 1.0);
+      gtk_print_settings_set_number_up (print_settings, 1);
+      gtk_print_settings_set_number_up_layout (print_settings, GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM);
+
+      /*  These removals are neccessary because cups-* settings have higher priority
+       *  than normal settings.
+       */
+      gtk_print_settings_unset (print_settings, "cups-reverse");
+      gtk_print_settings_unset (print_settings, "cups-page-set");
+      gtk_print_settings_unset (print_settings, "cups-scale");
+      gtk_print_settings_unset (print_settings, "cups-number-up");
+      gtk_print_settings_unset (print_settings, "cups-number-up-layout");
+
+      gtk_print_settings_to_key_file (print_settings, key_file, NULL);
+      g_object_unref (print_settings);
+    }
+
+  page_setup = gtk_print_context_get_page_setup (op->priv->print_context);
+  gtk_page_setup_to_key_file (page_setup, key_file, NULL);
+
+  g_key_file_set_string (key_file, "Print Job", "title", op->priv->job_name);
+
+  data = g_key_file_to_data (key_file, &data_len, &error);
+  if (!data)
+    goto out;
+
+  retval = g_file_set_contents (settings_filename, data, data_len, &error);
   if (!retval)
     goto out;
 
@@ -230,6 +290,19 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   gdk_spawn_on_screen (screen, NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error);
 
   g_strfreev (argv);
+
+  if (error != NULL)
+    {
+      gchar* uri;
+
+      g_warning ("%s %s", _("Error launching preview"), error->message);
+
+      g_error_free (error);
+      error = NULL;
+      uri = g_filename_to_uri (filename, NULL, NULL);
+      gtk_show_uri (screen, uri, GDK_CURRENT_TIME, &error);
+      g_free (uri);
+    }
 
  out:
   if (error != NULL)
@@ -259,6 +332,12 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   if (!settings_used)
     g_unlink (settings_filename);
 
+  if (fd > 0)
+    close (fd);
+  
+  if (key_file)
+    g_key_file_free (key_file);
+  g_free (data);
   g_free (settings_filename);
 }
 
@@ -342,6 +421,26 @@ job_status_changed_cb (GtkPrintJob       *job,
 }
 
 
+static void
+print_setup_changed_cb (GtkPrintUnixDialog *print_dialog, 
+                        GParamSpec         *pspec,
+                        gpointer            user_data)
+{
+  GtkPageSetup             *page_setup;
+  GtkPrintSettings         *print_settings;
+  GtkPrintOperation        *op = user_data;
+  GtkPrintOperationPrivate *priv = op->priv;
+
+  page_setup = gtk_print_unix_dialog_get_page_setup (print_dialog);
+  print_settings = gtk_print_unix_dialog_get_settings (print_dialog);
+
+  g_signal_emit_by_name (op,
+                         "update-custom-widget",
+                         priv->custom_widget,
+                         page_setup,
+                         print_settings);
+}
+
 static GtkWidget *
 get_print_dialog (GtkPrintOperation *op,
                   GtkWindow         *parent)
@@ -358,14 +457,29 @@ get_print_dialog (GtkPrintOperation *op,
 						 GTK_PRINT_CAPABILITY_COLLATE |
 						 GTK_PRINT_CAPABILITY_REVERSE |
 						 GTK_PRINT_CAPABILITY_SCALE |
-						 GTK_PRINT_CAPABILITY_PREVIEW);
+						 GTK_PRINT_CAPABILITY_PREVIEW |
+						 GTK_PRINT_CAPABILITY_NUMBER_UP |
+						 GTK_PRINT_CAPABILITY_NUMBER_UP_LAYOUT);
 
   if (priv->print_settings)
     gtk_print_unix_dialog_set_settings (GTK_PRINT_UNIX_DIALOG (pd),
 					priv->print_settings);
+
   if (priv->default_page_setup)
     gtk_print_unix_dialog_set_page_setup (GTK_PRINT_UNIX_DIALOG (pd), 
                                           priv->default_page_setup);
+
+  gtk_print_unix_dialog_set_embed_page_setup (GTK_PRINT_UNIX_DIALOG (pd),
+                                              priv->embed_page_setup);
+
+  gtk_print_unix_dialog_set_current_page (GTK_PRINT_UNIX_DIALOG (pd), 
+                                          priv->current_page);
+
+  gtk_print_unix_dialog_set_support_selection (GTK_PRINT_UNIX_DIALOG (pd),
+                                               priv->support_selection);
+
+  gtk_print_unix_dialog_set_has_selection (GTK_PRINT_UNIX_DIALOG (pd),
+                                           priv->has_selection);
 
   g_signal_emit_by_name (op, "create-custom-widget",
 			 &priv->custom_widget);
@@ -385,6 +499,9 @@ get_print_dialog (GtkPrintOperation *op,
       
       gtk_print_unix_dialog_add_custom_tab (GTK_PRINT_UNIX_DIALOG (pd),
 					    priv->custom_widget, label);
+
+      g_signal_connect (pd, "notify::selected-printer", (GCallback) print_setup_changed_cb, op);
+      g_signal_connect (pd, "notify::page-setup", (GCallback) print_setup_changed_cb, op);
     }
   
   return pd;
@@ -415,18 +532,36 @@ static void
 finish_print (PrintResponseData *rdata,
 	      GtkPrinter        *printer,
 	      GtkPageSetup      *page_setup,
-	      GtkPrintSettings  *settings)
+	      GtkPrintSettings  *settings,
+	      gboolean           page_setup_set)
 {
   GtkPrintOperation *op = rdata->op;
   GtkPrintOperationPrivate *priv = op->priv;
   GtkPrintJob *job;
+  gdouble top, bottom, left, right;
   
   if (rdata->do_print)
     {
       gtk_print_operation_set_print_settings (op, settings);
       priv->print_context = _gtk_print_context_new (op);
 
-      if ( (page_setup != NULL) && (gtk_print_operation_get_default_page_setup (op) == NULL))
+      if (gtk_print_settings_get_number_up (settings) < 2)
+        {
+	  if (printer && gtk_printer_get_hard_margins (printer, &top, &bottom, &left, &right))
+	    _gtk_print_context_set_hard_margins (priv->print_context, top, bottom, left, right);
+	}
+      else
+        {
+	  /* Pages do not have any unprintable area when printing n-up as each page on the
+	   * sheet has been scaled down and translated to a position within the printable
+	   * area of the sheet.
+	   */
+	  _gtk_print_context_set_hard_margins (priv->print_context, 0, 0, 0, 0);
+	}
+
+      if (page_setup != NULL &&
+          (gtk_print_operation_get_default_page_setup (op) == NULL ||
+           page_setup_set))
         gtk_print_operation_set_default_page_setup (op, page_setup);
 
       _gtk_print_context_set_page_setup (priv->print_context, page_setup);
@@ -477,6 +612,8 @@ finish_print (PrintResponseData *rdata,
           priv->manual_page_set = job->page_set;
           priv->manual_scale = job->scale;
           priv->manual_orientation = job->rotate_to_orientation;
+          priv->manual_number_up = job->number_up;
+          priv->manual_number_up_layout = job->number_up_layout;
         }
     } 
  out:
@@ -497,6 +634,7 @@ handle_print_response (GtkWidget *dialog,
   GtkPrintSettings *settings = NULL;
   GtkPageSetup *page_setup = NULL;
   GtkPrinter *printer = NULL;
+  gboolean page_setup_set = FALSE;
 
   if (response == GTK_RESPONSE_OK)
     {
@@ -521,11 +659,16 @@ handle_print_response (GtkWidget *dialog,
     {
       settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
       page_setup = gtk_print_unix_dialog_get_page_setup (GTK_PRINT_UNIX_DIALOG (pd));
-      
+      page_setup_set = gtk_print_unix_dialog_get_page_setup_set (GTK_PRINT_UNIX_DIALOG (pd));
+
+      /* Set new print settings now so that custom-widget options
+       * can be added to the settings in the callback
+       */
+      gtk_print_operation_set_print_settings (rdata->op, settings);
       g_signal_emit_by_name (rdata->op, "custom-widget-apply", rdata->op->priv->custom_widget);
     }
   
-  finish_print (rdata, printer, page_setup, settings);
+  finish_print (rdata, printer, page_setup, settings, page_setup_set);
 
   if (settings)
     g_object_unref (settings);
@@ -567,7 +710,7 @@ found_printer (GtkPrinter        *printer,
 	page_setup = gtk_page_setup_new ();
   }
   
-  finish_print (rdata, printer, page_setup, settings);
+  finish_print (rdata, printer, page_setup, settings, FALSE);
 
   if (settings)
     g_object_unref (settings);
@@ -828,12 +971,12 @@ get_page_setup_dialog (GtkWindow        *parent,
 
 /**
  * gtk_print_run_page_setup_dialog:
- * @parent: transient parent, or %NULL
- * @page_setup: an existing #GtkPageSetup, or %NULL
+ * @parent: (allow-none): transient parent
+ * @page_setup: (allow-none): an existing #GtkPageSetup
  * @settings: a #GtkPrintSettings
- * 
- * Runs a page setup dialog, letting the user modify the values from 
- * @page_setup. If the user cancels the dialog, the returned #GtkPageSetup 
+ *
+ * Runs a page setup dialog, letting the user modify the values from
+ * @page_setup. If the user cancels the dialog, the returned #GtkPageSetup
  * is identical to the passed in @page_setup, otherwise it contains the 
  * modifications done in the dialog.
  *
@@ -841,7 +984,7 @@ get_page_setup_dialog (GtkWindow        *parent,
  * setup dialog. See gtk_print_run_page_setup_dialog_async() if this is 
  * a problem.
  * 
- * Return value: a new #GtkPageSetup
+ * Return value: (transfer full): a new #GtkPageSetup
  *
  * Since: 2.10
  */
@@ -873,8 +1016,8 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 
 /**
  * gtk_print_run_page_setup_dialog_async:
- * @parent: transient parent, or %NULL
- * @page_setup: an existing #GtkPageSetup, or %NULL
+ * @parent: (allow-none): transient parent, or %NULL
+ * @page_setup: (allow-none): an existing #GtkPageSetup, or %NULL
  * @settings: a #GtkPrintSettings
  * @done_cb: a function to call when the user saves the modified page setup
  * @data: user data to pass to @done_cb

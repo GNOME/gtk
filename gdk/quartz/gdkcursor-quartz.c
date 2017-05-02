@@ -45,6 +45,21 @@ gdk_quartz_cursor_new_from_nscursor (NSCursor      *nscursor,
   return cursor;
 }
 
+static GdkCursor *
+create_blank_cursor (void)
+{
+  NSCursor *nscursor;
+  NSImage *nsimage;
+  NSSize size = { 1.0, 1.0 };
+
+  nsimage = [[NSImage alloc] initWithSize:size];
+  nscursor = [[NSCursor alloc] initWithImage:nsimage
+                               hotSpot:NSMakePoint(0.0, 0.0)];
+  [nsimage release];
+
+  return gdk_quartz_cursor_new_from_nscursor (nscursor, GDK_BLANK_CURSOR);
+}
+
 static gboolean
 get_bit (const guchar *data,
          gint          width,
@@ -69,7 +84,7 @@ create_builtin_cursor (GdkCursorType cursor_type)
 {
   GdkCursor *cursor;
   NSBitmapImageRep *bitmap_rep;
-  gint mask_width, mask_height;
+  NSInteger mask_width, mask_height;
   gint src_width, src_height;
   gint dst_stride;
   const guchar *mask_start, *src_start;
@@ -79,7 +94,7 @@ create_builtin_cursor (GdkCursorType cursor_type)
   NSImage *image;
   NSCursor *nscursor;
 
-  if (cursor_type >= G_N_ELEMENTS (xcursors))
+  if (cursor_type >= G_N_ELEMENTS (xcursors) || cursor_type < 0)
     return NULL;
 
   cursor = cached_xcursors[cursor_type];
@@ -210,6 +225,10 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
     case GDK_HAND2:
       nscursor = [NSCursor pointingHandCursor];
       break;
+    case GDK_CURSOR_IS_PIXMAP:
+      return NULL;
+    case GDK_BLANK_CURSOR:
+      return create_blank_cursor ();
     default:
       return gdk_cursor_ref (create_builtin_cursor (cursor_type));
     }
@@ -230,7 +249,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   NSImage *image;
   NSCursor *nscursor;
   GdkCursor *cursor;
-  gint width, height;
+  int width, height;
   gint tmp_x, tmp_y;
   guchar *dst_data, *mask_data, *src_data;
   guchar *mask_start, *src_start;
@@ -246,7 +265,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap      *source,
   gdk_drawable_get_size (source, &width, &height);
 
   bitmap_rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-		pixelsWide:width pixelsHigh:height
+		pixelsWide:(NSInteger)width pixelsHigh:(NSInteger)height
 		bitsPerSample:8 samplesPerPixel:4
 		hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace
 		bytesPerRow:0 bitsPerPixel:0];

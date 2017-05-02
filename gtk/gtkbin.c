@@ -24,6 +24,19 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkbin
+ * @Short_description: A container with just one child
+ * @Title: GtkBin
+ *
+ * The #GtkBin widget is a container with just one child.
+ * It is not very useful itself, but it is useful for deriving subclasses,
+ * since it provides common code needed for handling a single child widget.
+ *
+ * Many GTK+ widgets are subclasses of #GtkBin, including #GtkWindow,
+ * #GtkButton, #GtkFrame, #GtkHandleBox or #GtkScrolledWindow.
+ */
+
 #include "config.h"
 #include "gtkbin.h"
 #include "gtkintl.h"
@@ -58,7 +71,7 @@ gtk_bin_class_init (GtkBinClass *class)
 static void
 gtk_bin_init (GtkBin *bin)
 {
-  GTK_WIDGET_SET_FLAGS (bin, GTK_NO_WINDOW);
+  gtk_widget_set_has_window (GTK_WIDGET (bin), FALSE);
 
   bin->child = NULL;
 }
@@ -104,12 +117,12 @@ gtk_bin_remove (GtkContainer *container,
 
   g_return_if_fail (bin->child == child);
 
-  widget_was_visible = GTK_WIDGET_VISIBLE (child);
+  widget_was_visible = gtk_widget_get_visible (child);
   
   gtk_widget_unparent (child);
   bin->child = NULL;
   
-  /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
+  /* queue resize regardless of gtk_widget_get_visible (container),
    * since that's what is needed by toplevels, which derive from GtkBin.
    */
   if (widget_was_visible)
@@ -135,8 +148,8 @@ gtk_bin_forall (GtkContainer *container,
  * Gets the child of the #GtkBin, or %NULL if the bin contains
  * no child widget. The returned widget does not have a reference
  * added, so you do not need to unref it.
- * 
- * Return value: pointer to child of the #GtkBin
+ *
+ * Return value: (transfer none): pointer to child of the #GtkBin
  **/
 GtkWidget*
 gtk_bin_get_child (GtkBin *bin)

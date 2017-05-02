@@ -22,6 +22,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <glib/gprintf.h>
+#include <gtk/gtk.h>
 #include "gtkprintsettings.h"
 #include "gtkprintutils.h"
 #include "gtkalias.h"
@@ -106,10 +107,10 @@ copy_hash_entry  (gpointer  key,
 /**
  * gtk_print_settings_copy:
  * @other: a #GtkPrintSettings
- * 
+ *
  * Copies a #GtkPrintSettings object.
- * 
- * Return value: a newly allocated copy of @other
+ *
+ * Return value: (transfer full): a newly allocated copy of @other
  *
  * Since: 2.10
  */
@@ -143,7 +144,7 @@ gtk_print_settings_copy (GtkPrintSettings *other)
  * 
  * Since: 2.10
  */
-G_CONST_RETURN gchar *        
+const gchar *
 gtk_print_settings_get (GtkPrintSettings *settings,
 			const gchar      *key)
 {
@@ -154,11 +155,11 @@ gtk_print_settings_get (GtkPrintSettings *settings,
  * gtk_print_settings_set:
  * @settings: a #GtkPrintSettings
  * @key: a key
- * @value: a string value, or %NULL
- * 
+ * @value: (allow-none): a string value, or %NULL
+ *
  * Associates @value with @key.
  *
- * Since: 2.10 
+ * Since: 2.10
  */
 void
 gtk_print_settings_set (GtkPrintSettings *settings,
@@ -231,7 +232,7 @@ gtk_print_settings_get_bool (GtkPrintSettings *settings,
   const gchar *val;
 
   val = gtk_print_settings_get (settings, key);
-  if (val != NULL && strcmp (val, "true") == 0)
+  if (g_strcmp0 (val, "true") == 0)
     return TRUE;
   
   return FALSE;
@@ -262,10 +263,10 @@ gtk_print_settings_get_bool_with_default (GtkPrintSettings *settings,
   const gchar *val;
 
   val = gtk_print_settings_get (settings, key);
-  if (val != NULL && strcmp (val, "true") == 0)
+  if (g_strcmp0 (val, "true") == 0)
     return TRUE;
 
-  if (val != NULL && strcmp (val, "false") == 0)
+  if (g_strcmp0 (val, "false") == 0)
     return FALSE;
   
   return default_val;
@@ -472,9 +473,9 @@ gtk_print_settings_set_int (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_foreach:
  * @settings: a #GtkPrintSettings
- * @func: the function to call
+ * @func: (scope call): the function to call
  * @user_data: user data for @func
- * 
+ *
  * Calls @func for each key-value pair of @settings.
  *
  * Since: 2.10
@@ -498,7 +499,7 @@ gtk_print_settings_foreach (GtkPrintSettings    *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *       
+const gchar *
 gtk_print_settings_get_printer (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_PRINTER);
@@ -1039,6 +1040,73 @@ gtk_print_settings_set_page_set (GtkPrintSettings *settings,
 }
 
 /**
+ * gtk_print_settings_get_number_up_layout:
+ * @settings: a #GtkPrintSettings
+ * 
+ * Gets the value of %GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT.
+ * 
+ * Return value: layout of page in number-up mode
+ *
+ * Since: 2.14
+ */
+GtkNumberUpLayout
+gtk_print_settings_get_number_up_layout (GtkPrintSettings *settings)
+{
+  GtkNumberUpLayout layout;
+  GtkTextDirection  text_direction;
+  GEnumClass       *enum_class;
+  GEnumValue       *enum_value;
+  const gchar      *val;
+
+  g_return_val_if_fail (GTK_IS_PRINT_SETTINGS (settings), GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM);
+
+  val = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT);
+  text_direction = gtk_widget_get_default_direction ();
+
+  if (text_direction == GTK_TEXT_DIR_LTR)
+    layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
+  else
+    layout = GTK_NUMBER_UP_LAYOUT_RIGHT_TO_LEFT_TOP_TO_BOTTOM;
+
+  if (val == NULL)
+    return layout;
+
+  enum_class = g_type_class_ref (GTK_TYPE_NUMBER_UP_LAYOUT);
+  enum_value = g_enum_get_value_by_nick (enum_class, val);
+  if (enum_value)
+    layout = enum_value->value;
+  g_type_class_unref (enum_class);
+
+  return layout;
+}
+
+/**
+ * gtk_print_settings_set_number_up_layout:
+ * @settings: a #GtkPrintSettings
+ * @number_up_layout: a #GtkNumberUpLayout value
+ * 
+ * Sets the value of %GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT.
+ * 
+ * Since: 2.14
+ */
+void
+gtk_print_settings_set_number_up_layout (GtkPrintSettings  *settings,
+					 GtkNumberUpLayout  number_up_layout)
+{
+  GEnumClass *enum_class;
+  GEnumValue *enum_value;
+
+  g_return_if_fail (GTK_IS_PRINT_SETTINGS (settings));
+
+  enum_class = g_type_class_ref (GTK_TYPE_NUMBER_UP_LAYOUT);
+  enum_value = g_enum_get_value (enum_class, number_up_layout);
+  g_return_if_fail (enum_value != NULL);
+
+  gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT, enum_value->value_nick);
+  g_type_class_unref (enum_class);
+}
+
+/**
  * gtk_print_settings_get_n_copies:
  * @settings: a #GtkPrintSettings
  * 
@@ -1084,7 +1152,7 @@ gtk_print_settings_set_n_copies (GtkPrintSettings *settings,
 gint
 gtk_print_settings_get_number_up (GtkPrintSettings *settings)
 {
-  return gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_NUMBER_UP);
+  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_NUMBER_UP, 1);
 }
 
 /**
@@ -1117,7 +1185,7 @@ gtk_print_settings_set_number_up (GtkPrintSettings *settings,
 gint
 gtk_print_settings_get_resolution (GtkPrintSettings *settings)
 {
-  return gtk_print_settings_get_int (settings, GTK_PRINT_SETTINGS_RESOLUTION);
+  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION, 300);
 }
 
 /**
@@ -1125,7 +1193,9 @@ gtk_print_settings_get_resolution (GtkPrintSettings *settings)
  * @settings: a #GtkPrintSettings
  * @resolution: the resolution in dpi
  * 
- * Sets the value of %GTK_PRINT_SETTINGS_RESOLUTION.
+ * Sets the values of %GTK_PRINT_SETTINGS_RESOLUTION,
+ * %GTK_PRINT_SETTINGS_RESOLUTION_X and 
+ * %GTK_PRINT_SETTINGS_RESOLUTION_Y.
  * 
  * Since: 2.10
  */
@@ -1135,6 +1205,100 @@ gtk_print_settings_set_resolution (GtkPrintSettings *settings,
 {
   gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION,
 			      resolution);
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_X,
+			      resolution);
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y,
+			      resolution);
+}
+
+/**
+ * gtk_print_settings_get_resolution_x:
+ * @settings: a #GtkPrintSettings
+ * 
+ * Gets the value of %GTK_PRINT_SETTINGS_RESOLUTION_X.
+ * 
+ * Return value: the horizontal resolution in dpi
+ *
+ * Since: 2.16
+ */
+gint
+gtk_print_settings_get_resolution_x (GtkPrintSettings *settings)
+{
+  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION_X, 300);
+}
+
+/**
+ * gtk_print_settings_get_resolution_y:
+ * @settings: a #GtkPrintSettings
+ * 
+ * Gets the value of %GTK_PRINT_SETTINGS_RESOLUTION_Y.
+ * 
+ * Return value: the vertical resolution in dpi
+ *
+ * Since: 2.16
+ */
+gint
+gtk_print_settings_get_resolution_y (GtkPrintSettings *settings)
+{
+  return gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y, 300);
+}
+
+/**
+ * gtk_print_settings_set_resolution_xy:
+ * @settings: a #GtkPrintSettings
+ * @resolution_x: the horizontal resolution in dpi
+ * @resolution_y: the vertical resolution in dpi
+ * 
+ * Sets the values of %GTK_PRINT_SETTINGS_RESOLUTION,
+ * %GTK_PRINT_SETTINGS_RESOLUTION_X and
+ * %GTK_PRINT_SETTINGS_RESOLUTION_Y.
+ * 
+ * Since: 2.16
+ */
+void
+gtk_print_settings_set_resolution_xy (GtkPrintSettings *settings,
+				      gint              resolution_x,
+				      gint              resolution_y)
+{
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_X,
+			      resolution_x);
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y,
+			      resolution_y);
+  gtk_print_settings_set_int (settings, GTK_PRINT_SETTINGS_RESOLUTION,
+			      resolution_x);
+}
+
+/**
+ * gtk_print_settings_get_printer_lpi:
+ * @settings: a #GtkPrintSettings
+ * 
+ * Gets the value of %GTK_PRINT_SETTINGS_PRINTER_LPI.
+ * 
+ * Return value: the resolution in lpi (lines per inch)
+ *
+ * Since: 2.16
+ */
+gdouble
+gtk_print_settings_get_printer_lpi (GtkPrintSettings *settings)
+{
+  return gtk_print_settings_get_double_with_default (settings, GTK_PRINT_SETTINGS_PRINTER_LPI, 150.0);
+}
+
+/**
+ * gtk_print_settings_set_printer_lpi:
+ * @settings: a #GtkPrintSettings
+ * @lpi: the resolution in lpi (lines per inch)
+ * 
+ * Sets the value of %GTK_PRINT_SETTINGS_PRINTER_LPI.
+ * 
+ * Since: 2.16
+ */
+void
+gtk_print_settings_set_printer_lpi (GtkPrintSettings *settings,
+				    gdouble           lpi)
+{
+  gtk_print_settings_set_double (settings, GTK_PRINT_SETTINGS_PRINTER_LPI,
+			         lpi);
 }
 
 /**
@@ -1192,6 +1356,9 @@ gtk_print_settings_get_print_pages (GtkPrintSettings *settings)
   if (val == NULL || (strcmp (val, "all") == 0))
     return GTK_PRINT_PAGES_ALL;
 
+  if (strcmp (val, "selection") == 0)
+    return GTK_PRINT_PAGES_SELECTION;
+
   if (strcmp (val, "current") == 0)
     return GTK_PRINT_PAGES_CURRENT;
   
@@ -1225,6 +1392,9 @@ gtk_print_settings_set_print_pages (GtkPrintSettings *settings,
     case GTK_PRINT_PAGES_CURRENT:
       str = "current";
       break;
+    case GTK_PRINT_PAGES_SELECTION:
+      str = "selection";
+      break;
     case GTK_PRINT_PAGES_RANGES:
       str = "ranges";
       break;
@@ -1232,16 +1402,17 @@ gtk_print_settings_set_print_pages (GtkPrintSettings *settings,
   
   gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_PRINT_PAGES, str);
 }
-     
+
 /**
  * gtk_print_settings_get_page_ranges:
  * @settings: a #GtkPrintSettings
- * @num_ranges: return location for the length of the returned array
- * 
+ * @num_ranges: (out): return location for the length of the returned array
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_PAGE_RANGES.
- * 
- * Return value: an array of #GtkPageRange<!-- -->s. Use g_free()
- *   to free the array when it is no longer needed. 
+ *
+ * Return value: (array length=num_ranges) (transfer full): an array
+ *     of #GtkPageRange<!-- -->s.  Use g_free() to free the array when
+ *     it is no longer needed.
  *
  * Since: 2.10
  */
@@ -1298,7 +1469,7 @@ gtk_print_settings_get_page_ranges (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_set_page_ranges:
  * @settings: a #GtkPrintSettings
- * @page_ranges: an array of #GtkPageRange<!-- -->s
+ * @page_ranges: (array length=num_ranges): an array of #GtkPageRange<!-- -->s
  * @num_ranges: the length of @page_ranges
  * 
  * Sets the value of %GTK_PRINT_SETTINGS_PAGE_RANGES.
@@ -1344,7 +1515,7 @@ gtk_print_settings_set_page_ranges  (GtkPrintSettings *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_settings_get_default_source (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_DEFAULT_SOURCE);
@@ -1379,7 +1550,7 @@ gtk_print_settings_set_default_source (GtkPrintSettings *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_settings_get_media_type (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_MEDIA_TYPE);
@@ -1414,7 +1585,7 @@ gtk_print_settings_set_media_type (GtkPrintSettings *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_settings_get_dither (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_DITHER);
@@ -1478,7 +1649,7 @@ gtk_print_settings_set_finishings (GtkPrintSettings *settings,
  *
  * Since: 2.10
  */
-G_CONST_RETURN gchar *
+const gchar *
 gtk_print_settings_get_output_bin (GtkPrintSettings *settings)
 {
   return gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_BIN);
@@ -1504,9 +1675,10 @@ gtk_print_settings_set_output_bin (GtkPrintSettings *settings,
  * gtk_print_settings_load_file:
  * @settings: a #GtkPrintSettings
  * @file_name: the filename to read the settings from
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  *
- * Reads the print settings from @file_name.
+ * Reads the print settings from @file_name. If the file could not be loaded
+ * then error is set to either a #GFileError or #GKeyFileError.
  * See gtk_print_settings_to_file().
  *
  * Return value: %TRUE on success
@@ -1538,11 +1710,12 @@ gtk_print_settings_load_file (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_new_from_file:
  * @file_name: the filename to read the settings from
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  * 
  * Reads the print settings from @file_name. Returns a new #GtkPrintSettings
- * object with the restored settings, or %NULL if an error occurred.
- * See gtk_print_settings_to_file().
+ * object with the restored settings, or %NULL if an error occurred. If the
+ * file could not be loaded then error is set to either a #GFileError or
+ * #GKeyFileError.  See gtk_print_settings_to_file().
  *
  * Return value: the restored #GtkPrintSettings
  * 
@@ -1567,10 +1740,13 @@ gtk_print_settings_new_from_file (const gchar  *file_name,
  * gtk_print_settings_load_key_file:
  * @settings: a #GtkPrintSettings
  * @key_file: the #GKeyFile to retrieve the settings from
- * @group_name: the name of the group to use
- * @error: return location for errors, or %NULL
+ * @group_name: (allow-none): the name of the group to use, or %NULL to use the default
+ *     "Print Settings"
+ * @error: (allow-none): return location for errors, or %NULL
  * 
- * Reads the print settings from the group @group_name in @key_file. 
+ * Reads the print settings from the group @group_name in @key_file. If the
+ * file could not be loaded then error is set to either a #GFileError or
+ * #GKeyFileError.
  *
  * Return value: %TRUE on success
  * 
@@ -1607,7 +1783,7 @@ gtk_print_settings_load_key_file (GtkPrintSettings *settings,
       gchar *value;
 
       value = g_key_file_get_string (key_file,
-				     KEYFILE_GROUP_NAME,
+				     group_name,
 				     keys[i],
 				     NULL);
       if (!value)
@@ -1625,12 +1801,14 @@ gtk_print_settings_load_key_file (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_new_from_key_file:
  * @key_file: the #GKeyFile to retrieve the settings from
- * @group_name: the name of the group to use
- * @error: return location for errors, or %NULL
+ * @group_name: (allow-none): the name of the group to use, or %NULL to use
+ *     the default "Print Settings"
+ * @error: (allow-none): return location for errors, or %NULL
  *
- * Reads the print settings from the group @group_name in @key_file.
- * Returns a new #GtkPrintSettings object with the restored settings,
- * or %NULL if an error occurred.
+ * Reads the print settings from the group @group_name in @key_file.  Returns a
+ * new #GtkPrintSettings object with the restored settings, or %NULL if an
+ * error occurred. If the file could not be loaded then error is set to either
+ * a #GFileError or #GKeyFileError.
  *
  * Return value: the restored #GtkPrintSettings
  *
@@ -1657,9 +1835,11 @@ gtk_print_settings_new_from_key_file (GKeyFile     *key_file,
  * gtk_print_settings_to_file:
  * @settings: a #GtkPrintSettings
  * @file_name: the file to save to
- * @error: return location for errors, or %NULL
+ * @error: (allow-none): return location for errors, or %NULL
  * 
- * This function saves the print settings from @settings to @file_name.
+ * This function saves the print settings from @settings to @file_name. If the
+ * file could not be loaded then error is set to either a #GFileError or
+ * #GKeyFileError.
  * 
  * Return value: %TRUE on success
  *

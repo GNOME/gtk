@@ -5,7 +5,7 @@
  * Copyright (C) 2002 Anders Carlsson <andersca@gnome.org>
  * Copyright (C) 2002 James Henstridge <james@daa.com.au>
  * Copyright (C) 2003, 2004 Soeren Sandmann <sandmann@daimi.au.dk>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -26,35 +26,38 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #undef GTK_DISABLE_DEPRECATED
 
 #include "config.h"
+
+#include <math.h>
+#include <string.h>
+
+#include <gdk/gdkkeysyms.h>
+
 #include "gtkarrow.h"
+#include "gtkbindings.h"
+#include "gtkhbox.h"
+#include "gtkimage.h"
+#include "gtklabel.h"
+#include "gtkmain.h"
+#include "gtkmarshalers.h"
+#include "gtkmenu.h"
+#include "gtkorientable.h"
+#include "gtkradiobutton.h"
+#include "gtkradiotoolbutton.h"
+#include "gtkseparatormenuitem.h"
+#include "gtkseparatortoolitem.h"
+#include "gtkstock.h"
 #include "gtktoolbar.h"
 #include "gtktoolshell.h"
-#include "gtkradiotoolbutton.h"
-#include "gtkseparatortoolitem.h"
-#include "gtkmenu.h"
-#include "gtkradiobutton.h"
-#include "gtktoolbar.h"
-#include "gtkbindings.h"
-#include <gdk/gdkkeysyms.h>
-#include "gtkmarshalers.h"
-#include "gtkmain.h"
-#include "gtkstock.h"
-#include "gtklabel.h"
+#include "gtkvbox.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include <string.h>
-#include "gtkhbox.h"
-#include "gtkvbox.h"
-#include "gtkimage.h"
-#include "gtkseparatormenuitem.h"
 #include "gtkalias.h"
-#include <math.h>
 
 typedef struct _ToolbarContent ToolbarContent;
 
@@ -189,6 +192,7 @@ static void       gtk_toolbar_get_child_property   (GtkContainer        *contain
 						    guint                property_id,
 						    GValue              *value,
 						    GParamSpec          *pspec);
+static void       gtk_toolbar_dispose              (GObject             *object);
 static void       gtk_toolbar_finalize             (GObject             *object);
 static void       gtk_toolbar_show_all             (GtkWidget           *widget);
 static void       gtk_toolbar_hide_all             (GtkWidget           *widget);
@@ -223,7 +227,7 @@ static GtkWidget *internal_insert_element          (GtkToolbar          *toolbar
 						    const char          *tooltip_text,
 						    const char          *tooltip_private_text,
 						    GtkWidget           *icon,
-						    GtkSignalFunc        callback,
+						    GCallback            callback,
 						    gpointer             user_data,
 						    gint                 position,
 						    gboolean             use_stock);
@@ -310,10 +314,15 @@ static void            toolbar_rebuild_menu                 (GtkToolShell       
 #define GTK_TOOLBAR_GET_PRIVATE(o)  \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TOOLBAR, GtkToolbarPrivate))
 
-static guint			toolbar_signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkToolbar, gtk_toolbar, GTK_TYPE_CONTAINER,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TOOL_SHELL, toolbar_tool_shell_iface_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TOOL_SHELL,
+                                                toolbar_tool_shell_iface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                NULL))
+
+static guint toolbar_signals[LAST_SIGNAL] = { 0 };
+
 
 static void
 add_arrow_bindings (GtkBindingSet   *binding_set,
@@ -346,16 +355,6 @@ add_ctrl_tab_bindings (GtkBindingSet    *binding_set,
 }
 
 static void
-toolbar_tool_shell_iface_init (GtkToolShellIface *iface)
-{
-  iface->get_icon_size    = toolbar_get_icon_size;
-  iface->get_orientation  = toolbar_get_orientation;
-  iface->get_style        = toolbar_get_style;
-  iface->get_relief_style = toolbar_get_relief_style;
-  iface->rebuild_menu     = toolbar_rebuild_menu;
-}
-
-static void
 gtk_toolbar_class_init (GtkToolbarClass *klass)
 {
   GObjectClass *gobject_class;
@@ -369,8 +368,9 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   
   gobject_class->set_property = gtk_toolbar_set_property;
   gobject_class->get_property = gtk_toolbar_get_property;
+  gobject_class->dispose = gtk_toolbar_dispose;
   gobject_class->finalize = gtk_toolbar_finalize;
-  
+
   widget_class->button_press_event = gtk_toolbar_button_press;
   widget_class->expose_event = gtk_toolbar_expose;
   widget_class->size_request = gtk_toolbar_size_request;
@@ -486,15 +486,10 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                 G_TYPE_BOOLEAN);
 
   /* properties */
-  g_object_class_install_property (gobject_class,
-				   PROP_ORIENTATION,
-				   g_param_spec_enum ("orientation",
- 						      P_("Orientation"),
- 						      P_("The orientation of the toolbar"),
- 						      GTK_TYPE_ORIENTATION,
- 						      GTK_ORIENTATION_HORIZONTAL,
- 						      GTK_PARAM_READWRITE));
-  
+  g_object_class_override_property (gobject_class,
+                                    PROP_ORIENTATION,
+                                    "orientation");
+
   g_object_class_install_property (gobject_class,
 				   PROP_TOOLBAR_STYLE,
 				   g_param_spec_enum ("toolbar-style",
@@ -543,12 +538,12 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ICON_SIZE,
-				   g_param_spec_enum ("icon-size",
-						      P_("Icon size"),
-						      P_("Size of icons in this toolbar"),
-						      GTK_TYPE_ICON_SIZE,
-						      DEFAULT_ICON_SIZE,
-						      GTK_PARAM_READWRITE));  
+				   g_param_spec_int ("icon-size",
+						     P_("Icon size"),
+						     P_("Size of icons in this toolbar"),
+						     0, G_MAXINT,
+						     DEFAULT_ICON_SIZE,
+						     GTK_PARAM_READWRITE));  
 
   /**
    * GtkToolbar:icon-size-set:
@@ -632,20 +627,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_OUT,
                                                               GTK_PARAM_READABLE));
-  
-  gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-style",
-                                                    P_("Toolbar style"),
-                                                    P_("Whether default toolbars have text only, text and icons, icons only, etc."),
-                                                    GTK_TYPE_TOOLBAR_STYLE,
-                                                    DEFAULT_TOOLBAR_STYLE,
-                                                    GTK_PARAM_READWRITE));
-  
-  gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-icon-size",
-                                                    P_("Toolbar icon size"),
-                                                    P_("Size of icons in default toolbars"),
-                                                    GTK_TYPE_ICON_SIZE,
-                                                    DEFAULT_ICON_SIZE,
-                                                    GTK_PARAM_READWRITE));  
 
   binding_set = gtk_binding_set_by_class (klass);
   
@@ -674,12 +655,22 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 }
 
 static void
+toolbar_tool_shell_iface_init (GtkToolShellIface *iface)
+{
+  iface->get_icon_size    = toolbar_get_icon_size;
+  iface->get_orientation  = toolbar_get_orientation;
+  iface->get_style        = toolbar_get_style;
+  iface->get_relief_style = toolbar_get_relief_style;
+  iface->rebuild_menu     = toolbar_rebuild_menu;
+}
+
+static void
 gtk_toolbar_init (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv;
   
-  GTK_WIDGET_UNSET_FLAGS (toolbar, GTK_CAN_FOCUS);
-  GTK_WIDGET_SET_FLAGS (toolbar, GTK_NO_WINDOW);
+  gtk_widget_set_can_focus (GTK_WIDGET (toolbar), FALSE);
+  gtk_widget_set_has_window (GTK_WIDGET (toolbar), FALSE);
   
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
   
@@ -730,7 +721,8 @@ gtk_toolbar_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ORIENTATION:
-      gtk_toolbar_set_orientation (toolbar, g_value_get_enum (value));
+      g_signal_emit (toolbar, toolbar_signals[ORIENTATION_CHANGED], 0,
+                     g_value_get_enum (value));
       break;
     case PROP_TOOLBAR_STYLE:
       gtk_toolbar_set_style (toolbar, g_value_get_enum (value));
@@ -742,7 +734,7 @@ gtk_toolbar_set_property (GObject      *object,
       gtk_toolbar_set_tooltips (toolbar, g_value_get_boolean (value));
       break;
     case PROP_ICON_SIZE:
-      gtk_toolbar_set_icon_size (toolbar, g_value_get_enum (value));
+      gtk_toolbar_set_icon_size (toolbar, g_value_get_int (value));
       break;
     case PROP_ICON_SIZE_SET:
       if (g_value_get_boolean (value))
@@ -780,7 +772,7 @@ gtk_toolbar_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_toolbar_get_tooltips (toolbar));
       break;
     case PROP_ICON_SIZE:
-      g_value_set_enum (value, gtk_toolbar_get_icon_size (toolbar));
+      g_value_set_int (value, gtk_toolbar_get_icon_size (toolbar));
       break;
     case PROP_ICON_SIZE_SET:
       g_value_set_boolean (value, toolbar->icon_size_set);
@@ -823,7 +815,7 @@ gtk_toolbar_realize (GtkWidget *widget)
   gint attributes_mask;
   gint border_width;
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
   
   border_width = GTK_CONTAINER (widget)->border_width;
   
@@ -877,11 +869,11 @@ gtk_toolbar_expose (GtkWidget      *widget,
   
   border_width = GTK_CONTAINER (widget)->border_width;
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       gtk_paint_box (widget->style,
 		     widget->window,
-                     GTK_WIDGET_STATE (widget),
+                     gtk_widget_get_state (widget),
                      get_shadow_type (toolbar),
 		     &event->area, widget, "toolbar",
 		     border_width + widget->allocation.x,
@@ -1201,6 +1193,8 @@ slide_idle_handler (gpointer data)
 	}
     }
   
+  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
+
   priv->is_sliding = FALSE;
   priv->idle_id = 0;
 
@@ -1478,7 +1472,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   
   border_width = GTK_CONTAINER (toolbar)->border_width;
   
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (priv->event_window,
                               allocation->x + border_width,
@@ -1810,7 +1804,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_hide (GTK_WIDGET (priv->arrow_button));
 
-      if (priv->menu && GTK_WIDGET_VISIBLE (priv->menu))
+      if (priv->menu && gtk_widget_get_visible (GTK_WIDGET (priv->menu)))
 	gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
     }
 
@@ -1842,7 +1836,7 @@ gtk_toolbar_style_set (GtkWidget *widget,
   
   priv->max_homogeneous_pixels = -1;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     gtk_style_set_background (widget->style, widget->window, widget->state);
   
   if (prev_style)
@@ -1916,7 +1910,7 @@ gtk_toolbar_focus_home_or_end (GtkToolbar *toolbar,
       if (GTK_CONTAINER (toolbar)->focus_child == child)
 	break;
       
-      if (GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, dir))
+      if (gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
 	break;
     }
   
@@ -1950,7 +1944,7 @@ gtk_toolbar_move_focus (GtkWidget        *widget,
     {
       GtkWidget *child = list->data;
       
-      if (try_focus && GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, dir))
+      if (try_focus && gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
 	break;
       
       if (child == GTK_CONTAINER (toolbar)->focus_child)
@@ -1985,7 +1979,7 @@ gtk_toolbar_focus (GtkWidget        *widget,
     {
       GtkWidget *child = list->data;
       
-      if (GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, dir))
+      if (gtk_widget_get_mapped (child) && gtk_widget_child_focus (child, dir))
 	{
 	  result = TRUE;
 	  break;
@@ -2261,11 +2255,11 @@ logical_to_physical (GtkToolbar *toolbar,
 /**
  * gtk_toolbar_set_drop_highlight_item:
  * @toolbar: a #GtkToolbar
- * @tool_item: a #GtkToolItem, or %NULL to turn of highlighting
+ * @tool_item: (allow-none): a #GtkToolItem, or %NULL to turn of highlighting
  * @index_: a position on @toolbar
- * 
+ *
  * Highlights @toolbar to give an idea of what it would look like
- * if @item was added to @toolbar at the position indicated by @index_. 
+ * if @item was added to @toolbar at the position indicated by @index_.
  * If @item is %NULL, highlighting is turned off. In that case @index_ 
  * is ignored.
  *
@@ -2538,7 +2532,7 @@ gtk_toolbar_forall (GtkContainer *container,
       list = next;
     }
   
-  if (include_internals)
+  if (include_internals && priv->arrow_button)
     callback (priv->arrow_button, callback_data);
 }
 
@@ -2681,7 +2675,7 @@ gtk_toolbar_arrow_button_clicked (GtkWidget  *button,
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);  
   
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->arrow_button)) &&
-      (!priv->menu || !GTK_WIDGET_VISIBLE (priv->menu)))
+      (!priv->menu || !gtk_widget_get_visible (GTK_WIDGET (priv->menu))))
     {
       /* We only get here when the button is clicked with the keyboard,
        * because mouse button presses result in the menu being shown so
@@ -2707,7 +2701,7 @@ static gboolean
 gtk_toolbar_button_press (GtkWidget      *toolbar,
     			  GdkEventButton *event)
 {
-  if (event->button == 3)
+  if (_gtk_button_event_triggers_context_menu (event))
     {
       gboolean return_value;
       
@@ -2830,8 +2824,10 @@ gtk_toolbar_get_item_index (GtkToolbar  *toolbar,
  * gtk_toolbar_set_orientation:
  * @toolbar: a #GtkToolbar.
  * @orientation: a new #GtkOrientation.
- * 
+ *
  * Sets whether a toolbar should appear horizontally or vertically.
+ *
+ * Deprecated: 2.16: Use gtk_orientable_set_orientation() instead.
  **/
 void
 gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
@@ -2845,11 +2841,13 @@ gtk_toolbar_set_orientation (GtkToolbar     *toolbar,
 /**
  * gtk_toolbar_get_orientation:
  * @toolbar: a #GtkToolbar
- * 
+ *
  * Retrieves the current orientation of the toolbar. See
  * gtk_toolbar_set_orientation().
  *
  * Return value: the orientation
+ *
+ * Deprecated: 2.16: Use gtk_orientable_get_orientation() instead.
  **/
 GtkOrientation
 gtk_toolbar_get_orientation (GtkToolbar *toolbar)
@@ -3001,10 +2999,10 @@ gtk_toolbar_get_n_items (GtkToolbar *toolbar)
  *
  * Returns the @n<!-- -->'th item on @toolbar, or %NULL if the
  * toolbar does not contain an @n<!-- -->'th item.
- * 
- * Return value: The @n<!-- -->'th #GtkToolItem on @toolbar, or %NULL if there
- * isn't an @n<!-- -->'th item.
- * 
+ *
+ * Return value: (transfer none): The @n<!-- -->'th #GtkToolItem on @toolbar,
+ *     or %NULL if there isn't an @n<!-- -->'th item.
+ *
  * Since: 2.4
  **/
 GtkToolItem *
@@ -3041,7 +3039,8 @@ gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
  *
  * Retrieves the icon size for the toolbar. See gtk_toolbar_set_icon_size().
  *
- * Return value: the current icon size for the icons on the toolbar.
+ * Return value: (type int): the current icon size for the icons on
+ * the toolbar.
  **/
 GtkIconSize
 gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
@@ -3162,6 +3161,24 @@ gtk_toolbar_get_drop_index (GtkToolbar *toolbar,
 }
 
 static void
+gtk_toolbar_dispose (GObject *object)
+{
+  GtkToolbar *toolbar = GTK_TOOLBAR (object);
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+
+  if (priv->arrow_button)
+    {
+      gtk_widget_unparent (priv->arrow_button);
+      priv->arrow_button = NULL;
+    }
+
+  if (priv->menu)
+    gtk_widget_destroy (GTK_WIDGET (priv->menu));
+
+  G_OBJECT_CLASS (gtk_toolbar_parent_class)->dispose (object);
+}
+
+static void
 gtk_toolbar_finalize (GObject *object)
 {
   GList *list;
@@ -3170,9 +3187,6 @@ gtk_toolbar_finalize (GObject *object)
   
   if (toolbar->tooltips)
     g_object_unref (toolbar->tooltips);
-  
-  if (priv->arrow_button)
-    gtk_widget_unparent (priv->arrow_button);
 
   for (list = priv->content; list != NULL; list = list->next)
     {
@@ -3185,10 +3199,7 @@ gtk_toolbar_finalize (GObject *object)
   g_list_free (toolbar->children);
   
   g_timer_destroy (priv->timer);
-  
-  if (priv->menu)
-    gtk_widget_destroy (GTK_WIDGET (priv->menu));
-  
+
   if (priv->idle_id)
     g_source_remove (priv->idle_id);
 
@@ -3198,7 +3209,8 @@ gtk_toolbar_finalize (GObject *object)
 /**
  * gtk_toolbar_set_icon_size:
  * @toolbar: A #GtkToolbar
- * @icon_size: The #GtkIconSize that stock icons in the toolbar shall have.
+ * @icon_size: (type int): The #GtkIconSize that stock icons in the
+ *     toolbar shall have.
  *
  * This function sets the size of stock icons in the toolbar. You
  * can call it both before you add the icons and after they've been
@@ -3284,14 +3296,16 @@ gtk_toolbar_unset_icon_size (GtkToolbar *toolbar)
  * @icon: a #GtkWidget that should be used as the button's icon.
  * @callback: the function to be executed when the button is pressed.
  * @user_data: a pointer to any data you wish to be passed to the callback.
- * 
+ *
  * Inserts a new item into the toolbar. You must specify the position
  * in the toolbar where it will be inserted.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar item as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_append_item (GtkToolbar    *toolbar,
@@ -3299,7 +3313,7 @@ gtk_toolbar_append_item (GtkToolbar    *toolbar,
 			 const char    *tooltip_text,
 			 const char    *tooltip_private_text,
 			 GtkWidget     *icon,
-			 GtkSignalFunc  callback,
+			 GCallback      callback,
 			 gpointer       user_data)
 {
   return gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
@@ -3318,13 +3332,15 @@ gtk_toolbar_append_item (GtkToolbar    *toolbar,
  * @icon: a #GtkWidget that should be used as the button's icon.
  * @callback: the function to be executed when the button is pressed.
  * @user_data: a pointer to any data you wish to be passed to the callback.
- * 
+ *
  * Adds a new button to the beginning (top or left edges) of the given toolbar.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar item as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
@@ -3332,7 +3348,7 @@ gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
 			  const char    *tooltip_text,
 			  const char    *tooltip_private_text,
 			  GtkWidget     *icon,
-			  GtkSignalFunc  callback,
+			  GCallback      callback,
 			  gpointer       user_data)
 {
   return gtk_toolbar_insert_element (toolbar, GTK_TOOLBAR_CHILD_BUTTON,
@@ -3352,14 +3368,16 @@ gtk_toolbar_prepend_item (GtkToolbar    *toolbar,
  * @callback: the function to be executed when the button is pressed.
  * @user_data: a pointer to any data you wish to be passed to the callback.
  * @position: the number of widgets to insert this item after.
- * 
+ *
  * Inserts a new item into the toolbar. You must specify the position in the
  * toolbar where it will be inserted.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar item as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_insert_item (GtkToolbar    *toolbar,
@@ -3367,7 +3385,7 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 			 const char    *tooltip_text,
 			 const char    *tooltip_private_text,
 			 GtkWidget     *icon,
-			 GtkSignalFunc  callback,
+			 GCallback      callback,
 			 gpointer       user_data,
 			 gint           position)
 {
@@ -3394,16 +3412,18 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
  * except that underscores used to mark mnemonics are removed.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Returns: the inserted widget
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  */
 GtkWidget*
 gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
 			  const gchar     *stock_id,
 			  const char      *tooltip_text,
 			  const char      *tooltip_private_text,
-			  GtkSignalFunc    callback,
+			  GCallback        callback,
 			  gpointer         user_data,
 			  gint             position)
 {
@@ -3417,8 +3437,10 @@ gtk_toolbar_insert_stock (GtkToolbar      *toolbar,
 /**
  * gtk_toolbar_append_space:
  * @toolbar: a #GtkToolbar.
- * 
+ *
  * Adds a new space to the end of the toolbar.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 void
 gtk_toolbar_append_space (GtkToolbar *toolbar)
@@ -3433,8 +3455,10 @@ gtk_toolbar_append_space (GtkToolbar *toolbar)
 /**
  * gtk_toolbar_prepend_space:
  * @toolbar: a #GtkToolbar.
- * 
+ *
  * Adds a new space to the beginning of the toolbar.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 void
 gtk_toolbar_prepend_space (GtkToolbar *toolbar)
@@ -3450,8 +3474,10 @@ gtk_toolbar_prepend_space (GtkToolbar *toolbar)
  * gtk_toolbar_insert_space:
  * @toolbar: a #GtkToolbar
  * @position: the number of widgets after which a space should be inserted.
- * 
+ *
  * Inserts a new space in the toolbar at the specified position.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 void
 gtk_toolbar_insert_space (GtkToolbar *toolbar,
@@ -3468,8 +3494,10 @@ gtk_toolbar_insert_space (GtkToolbar *toolbar,
  * gtk_toolbar_remove_space:
  * @toolbar: a #GtkToolbar.
  * @position: the index of the space to remove.
- * 
+ *
  * Removes a space from the specified position.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 void
 gtk_toolbar_remove_space (GtkToolbar *toolbar,
@@ -3506,12 +3534,14 @@ gtk_toolbar_remove_space (GtkToolbar *toolbar,
 /**
  * gtk_toolbar_append_widget:
  * @toolbar: a #GtkToolbar.
- * @widget: a #GtkWidget to add to the toolbar. 
- * @tooltip_text: the element's tooltip.
- * @tooltip_private_text: used for context-sensitive help about this toolbar element.
- * 
+ * @widget: a #GtkWidget to add to the toolbar.
+ * @tooltip_text: (allow-none): the element's tooltip.
+ * @tooltip_private_text: (allow-none): used for context-sensitive help about this toolbar element.
+ *
  * Adds a widget to the end of the given toolbar.
- **/ 
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
+ **/
 void
 gtk_toolbar_append_widget (GtkToolbar  *toolbar,
 			   GtkWidget   *widget,
@@ -3528,12 +3558,14 @@ gtk_toolbar_append_widget (GtkToolbar  *toolbar,
 /**
  * gtk_toolbar_prepend_widget:
  * @toolbar: a #GtkToolbar.
- * @widget: a #GtkWidget to add to the toolbar. 
- * @tooltip_text: the element's tooltip.
- * @tooltip_private_text: used for context-sensitive help about this toolbar element.
- * 
+ * @widget: a #GtkWidget to add to the toolbar.
+ * @tooltip_text: (allow-none): the element's tooltip.
+ * @tooltip_private_text: (allow-none): used for context-sensitive help about this toolbar element.
+ *
  * Adds a widget to the beginning of the given toolbar.
- **/ 
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
+ **/
 void
 gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 			    GtkWidget   *widget,
@@ -3550,12 +3582,14 @@ gtk_toolbar_prepend_widget (GtkToolbar  *toolbar,
 /**
  * gtk_toolbar_insert_widget:
  * @toolbar: a #GtkToolbar.
- * @widget: a #GtkWidget to add to the toolbar. 
- * @tooltip_text: the element's tooltip.
- * @tooltip_private_text: used for context-sensitive help about this toolbar element.
+ * @widget: a #GtkWidget to add to the toolbar.
+ * @tooltip_text: (allow-none): the element's tooltip.
+ * @tooltip_private_text: (allow-none): used for context-sensitive help about this toolbar element.
  * @position: the number of widgets to insert this widget after.
- * 
+ *
  * Inserts a widget in the toolbar at the given position.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/ 
 void
 gtk_toolbar_insert_widget (GtkToolbar *toolbar,
@@ -3575,7 +3609,7 @@ gtk_toolbar_insert_widget (GtkToolbar *toolbar,
  * gtk_toolbar_append_element:
  * @toolbar: a #GtkToolbar.
  * @type: a value of type #GtkToolbarChildType that determines what @widget will be.
- * @widget: a #GtkWidget, or %NULL.
+ * @widget: (allow-none): a #GtkWidget, or %NULL.
  * @text: the element's label.
  * @tooltip_text: the element's tooltip.
  * @tooltip_private_text: used for context-sensitive help about this toolbar element.
@@ -3591,9 +3625,11 @@ gtk_toolbar_insert_widget (GtkToolbar *toolbar,
  * be %NULL.
  * 
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar element as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget*
 gtk_toolbar_append_element (GtkToolbar          *toolbar,
@@ -3603,7 +3639,7 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
 			    const char          *tooltip_text,
 			    const char          *tooltip_private_text,
 			    GtkWidget           *icon,
-			    GtkSignalFunc        callback,
+			    GCallback            callback,
 			    gpointer             user_data)
 {
   return gtk_toolbar_insert_element (toolbar, type, widget, text,
@@ -3616,7 +3652,7 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
  * gtk_toolbar_prepend_element:
  * @toolbar: a #GtkToolbar.
  * @type: a value of type #GtkToolbarChildType that determines what @widget will be.
- * @widget: a #GtkWidget, or %NULL
+ * @widget: (allow-none): a #GtkWidget, or %NULL
  * @text: the element's label.
  * @tooltip_text: the element's tooltip.
  * @tooltip_private_text: used for context-sensitive help about this toolbar element.
@@ -3632,9 +3668,11 @@ gtk_toolbar_append_element (GtkToolbar          *toolbar,
  * be %NULL.
  * 
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar element as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
@@ -3644,7 +3682,7 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
 			     const char          *tooltip_text,
 			     const char          *tooltip_private_text,
 			     GtkWidget           *icon,
-			     GtkSignalFunc        callback,
+			     GCallback            callback,
 			     gpointer             user_data)
 {
   return gtk_toolbar_insert_element (toolbar, type, widget, text,
@@ -3657,7 +3695,7 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
  * @toolbar: a #GtkToolbar.
  * @type: a value of type #GtkToolbarChildType that determines what @widget
  *   will be.
- * @widget: a #GtkWidget, or %NULL. 
+ * @widget: (allow-none): a #GtkWidget, or %NULL. 
  * @text: the element's label.
  * @tooltip_text: the element's tooltip.
  * @tooltip_private_text: used for context-sensitive help about this toolbar element.
@@ -3674,9 +3712,11 @@ gtk_toolbar_prepend_element (GtkToolbar          *toolbar,
  * be %NULL.
  *
  * @callback must be a pointer to a function taking a #GtkWidget and a gpointer as
- * arguments. Use the GTK_SIGNAL_FUNC() to cast the function to #GtkSignalFunc.
+ * arguments. Use G_CALLBACK() to cast the function to #GCallback.
  *
  * Return value: the new toolbar element as a #GtkWidget.
+ *
+ * Deprecated: 2.4: Use gtk_toolbar_insert() instead.
  **/
 GtkWidget *
 gtk_toolbar_insert_element (GtkToolbar          *toolbar,
@@ -3686,7 +3726,7 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 			    const char          *tooltip_text,
 			    const char          *tooltip_private_text,
 			    GtkWidget           *icon,
-			    GtkSignalFunc        callback,
+			    GCallback            callback,
 			    gpointer             user_data,
 			    gint                 position)
 {
@@ -3741,7 +3781,7 @@ internal_insert_element (GtkToolbar          *toolbar,
 			 const char          *tooltip_text,
 			 const char          *tooltip_private_text,
 			 GtkWidget           *icon,
-			 GtkSignalFunc        callback,
+			 GCallback            callback,
 			 gpointer             user_data,
 			 gint                 position,
 			 gboolean             use_stock)
@@ -4091,7 +4131,7 @@ toolbar_content_visible (ToolbarContent *content,
     case TOOL_ITEM:
       item = content->u.tool_item.item;
       
-      if (!GTK_WIDGET_VISIBLE (item))
+      if (!gtk_widget_get_visible (GTK_WIDGET (item)))
 	return FALSE;
       
       if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL &&
@@ -4107,7 +4147,7 @@ toolbar_content_visible (ToolbarContent *content,
       
     case COMPATIBILITY:
       if (content->u.compatibility.child.type != GTK_TOOLBAR_CHILD_SPACE)
-	return GTK_WIDGET_VISIBLE (content->u.compatibility.child.widget);
+	return gtk_widget_get_visible (content->u.compatibility.child.widget);
       else
 	return TRUE;
       break;
@@ -4277,6 +4317,10 @@ toolbar_content_get_goal_allocation (ToolbarContent *content,
        */
       g_assert_not_reached ();
       break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 
@@ -4285,7 +4329,7 @@ toolbar_content_get_allocation (ToolbarContent *content,
 				GtkAllocation  *allocation)
 {
   GtkToolbarChild *child;
-  
+
   switch (content->type)
     {
     case TOOL_ITEM:
@@ -4299,6 +4343,10 @@ toolbar_content_get_allocation (ToolbarContent *content,
 	*allocation = content->u.compatibility.space_allocation;
       else
 	*allocation = child->widget->allocation;
+      break;
+
+    default:
+      g_assert_not_reached ();
       break;
     }
 }
@@ -4858,7 +4906,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
 
       if (wide_separators)
         gtk_paint_box (widget->style, widget->window,
-                       GTK_WIDGET_STATE (widget), GTK_SHADOW_ETCHED_OUT,
+                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
                        area, widget, "vseparator",
                        allocation->x + (allocation->width - separator_width) / 2,
                        allocation->y + allocation->height * start_fraction,
@@ -4866,7 +4914,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                        allocation->height * (end_fraction - start_fraction));
       else
         gtk_paint_vline (widget->style, widget->window,
-                         GTK_WIDGET_STATE (widget), area, widget,
+                         gtk_widget_get_state (widget), area, widget,
                          "toolbar",
                          allocation->y + allocation->height * start_fraction,
                          allocation->y + allocation->height * end_fraction,
@@ -4884,7 +4932,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
 
       if (wide_separators)
         gtk_paint_box (widget->style, widget->window,
-                       GTK_WIDGET_STATE (widget), GTK_SHADOW_ETCHED_OUT,
+                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
                        area, widget, "hseparator",
                        allocation->x + allocation->width * start_fraction,
                        allocation->y + (allocation->height - separator_height) / 2,
@@ -4892,7 +4940,7 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
                        separator_height);
       else
         gtk_paint_hline (widget->style, widget->window,
-                         GTK_WIDGET_STATE (widget), area, widget,
+                         gtk_widget_get_state (widget), area, widget,
                          "toolbar",
                          allocation->x + allocation->width * start_fraction,
                          allocation->x + allocation->width * end_fraction,

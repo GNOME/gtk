@@ -35,6 +35,7 @@ gboolean
 expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
   GdkPixbuf *dest;
+  cairo_t *cr;
 
   gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
   
@@ -48,11 +49,13 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 			      interp_type, overall_alpha,
 			      event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
 
-  gdk_draw_pixbuf (widget->window, widget->style->fg_gc[GTK_STATE_NORMAL], dest,
-		   0, 0, event->area.x, event->area.y,
-		   event->area.width, event->area.height,
-		   GDK_RGB_DITHER_NORMAL, event->area.x, event->area.y);
-  
+  cr = gdk_cairo_create (event->window);
+
+  gdk_cairo_set_source_pixbuf (cr, dest, 0, 0);
+  gdk_cairo_rectangle (cr, &event->area);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
   g_object_unref (dest);
   
   return TRUE;
@@ -101,12 +104,12 @@ main(int argc, char **argv)
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 
-        combo_box = gtk_combo_box_new_text ();
+        combo_box = gtk_combo_box_text_new ();
 
-        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "NEAREST");
-        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "BILINEAR");
-        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "TILES");
-        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "HYPER");
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "NEAREST");
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "BILINEAR");
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "TILES");
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "HYPER");
 
         gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 1);
 

@@ -25,6 +25,9 @@ form a large screen area.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GdkScreen ##### -->
 <para>
 This is a currently just a placeholder typedef for the first argument of 
@@ -70,6 +73,7 @@ when GDK gets multihead support.
 
 </para>
 
+@void: 
 @Returns: 
 
 
@@ -245,6 +249,15 @@ when GDK gets multihead support.
 
 
 <!-- ##### FUNCTION gdk_screen_get_n_monitors ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_screen_get_primary_monitor ##### -->
 <para>
 
 </para>

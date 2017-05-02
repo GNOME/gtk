@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="gtk-build-defines.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <BinDir>$(SolutionDir)$(Configuration)\$(Platform)\bin</BinDir>
+    <InstalledDlls>$(BinDir)\$(GtkDllPrefix)gdk-win32(GtkDllSuffix).dll;$(BinDir)\$(GtkDllPrefix)gtk-win32(GtkDllSuffix).dll;$(BinDir)\libwimp.dll</InstalledDlls>
+    <InstalledBins>$(BinDir)\gtk-demo.exe</InstalledBins>
+    <GtkDoInstall>
+mkdir $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gdk-win32$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gdk-win32$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gtk-win32$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gtk-win32$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gailutil$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-demo.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-demo.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-update-icon-cache.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-update-icon-cache.pdb" $(CopyDir)\bin
+
+mkdir $(CopyDir)\lib
+copy "$(BinDir)\gdk-win32-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gtk-win32-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gailutil-$(ApiVersion).lib" $(CopyDir)\lib
+
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk
+#include "gdk.vs10.headers"
+#include "gdk-win32.vs10.headers"
+
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+#include "gtk.vs10.headers"
+
+mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\include
+copy ..\..\..\gdk\gdkconfig.h $(CopyDir)\lib\gtk-$(ApiVersion)\include
+
+mkdir $(CopyDir)\include\gail-1.0\libgail-util
+#include "gailutil.vs10.headers"
+
+mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
+copy "$(BinDir)\libwimp.dll" $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
+
+mkdir $(CopyDir)\share\gtk-$(ApiVersion)\demo
+copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(ApiVersion)\demo
+copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\share\gtk-$(ApiVersion)\demo
+copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\share\gtk-$(ApiVersion)\demo
+copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\share\gtk-$(ApiVersion)\demo
+copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\share\gtk-$(ApiVersion)\demo
+copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\share\gtk-$(ApiVersion)\demo
+
+mkdir $(CopyDir)\share\themes\Default\gtk-2.0-key
+copy ..\..\..\gtk\gtkrc.key.default $(CopyDir)\share\themes\Default\gtk-2.0-key\gtkrc
+
+mkdir $(CopyDir)\share\themes\Emacs\gtk-2.0-key
+copy ..\..\..\gtk\gtkrc.key.emacs $(CopyDir)\share\themes\Emacs\gtk-2.0-key\gtkrc
+
+mkdir $(CopyDir)\share\themes\MS-Windows\gtk-2.0
+copy ..\..\..\modules\engines\ms-windows\Theme\gtk-2.0\gtkrc $(CopyDir)\share\themes\MS-Windows\gtk-2.0
+
+mkdir $(CopyDir)\share\themes\Raleigh\gtk-2.0
+copy ..\..\..\gtk\gtkrc.default $(CopyDir)\share\themes\Raleigh\gtk-2.0\gtkrc
+
+if exist $(CopyDir)\share\icons\hicolor $(CopyDir)\bin\gtk-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
+
+if exist ..\gtk+-2.0.pc mkdir $(CopyDir)\lib\pkgconfig
+if exist ..\gdk-2.0.pc copy ..\gdk-2.0.pc $(CopyDir)\lib\pkgconfig
+if exist ..\gdk-2.0.pc copy ..\gdk-2.0.pc $(CopyDir)\lib\pkgconfig\gdk-win32-2.0.pc
+if exist ..\gtk+-2.0.pc copy "..\gtk+-2.0.pc" "$(CopyDir)\lib\pkgconfig"
+if exist ..\gtk+-2.0.pc copy "..\gtk+-2.0.pc" "$(CopyDir)\lib\pkgconfig\gtk+-win32-2.0.pc"
+</GtkDoInstall>
+    <GenerateGtkPC>if exist $(PythonPath)\python.exe $(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)</GenerateGtkPC>
+    <GenerateGtkPCX64>if exist $(PythonPathX64)\python.exe $(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)</GenerateGtkPCX64>
+    <GtkPCFiles>$(SolutionDir)\..\gdk-2.0.pc;$(SolutionDir)\..\gtk+-2.0.pc;$(SolutionDir)\..\gail.pc</GtkPCFiles>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtkinstallprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="BinDir">
+      <Value>$(BinDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledDlls">
+      <Value>$(InstalledDlls)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstalledBins">
+      <Value>$(InstalledBins)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDoInstall">
+      <Value>$(GtkDoInstall)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPC">
+      <Value>$(GenerateGtkPC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkPCX64">
+      <Value>$(GenerateGtkPCX64)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkPCFiles">
+      <Value>$(GtkPCFiles)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

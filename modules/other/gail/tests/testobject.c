@@ -26,7 +26,7 @@ static void _print_states (AtkObject *obj)
   for (i = 0; i < 64; i++)
     {
        AtkStateType one_state;
-       G_CONST_RETURN gchar *name;
+       const gchar *name;
 
        if (atk_state_set_contains_state (state_set, i))
          {
@@ -44,8 +44,8 @@ static void _print_states (AtkObject *obj)
 
 static void _print_type (AtkObject *obj)
 {
-  G_CONST_RETURN gchar * typename = NULL;
-  G_CONST_RETURN gchar * name = NULL;
+  const gchar * typename = NULL;
+  const gchar * name = NULL;
   AtkRole role;
   static gboolean in_print_type = FALSE;
    
@@ -54,7 +54,7 @@ static void _print_type (AtkObject *obj)
       GtkWidget* widget = NULL;
 
       widget = GTK_ACCESSIBLE (obj)->widget;
-      typename = g_type_name (GTK_OBJECT_TYPE (widget));
+      typename = g_type_name (G_OBJECT_TYPE (widget));
       g_print ("Widget type name: %s\n", typename ? typename : "NULL");
     }
   typename = g_type_name (G_OBJECT_TYPE (obj));
@@ -276,7 +276,7 @@ _children_changed (GSignalInvocationHint *ihint,
   GObject *object;
   guint index;
   gpointer target;
-  G_CONST_RETURN gchar *target_name = "NotAtkObject";
+  const gchar *target_name = "NotAtkObject";
 
   object = g_value_get_object (param_values + 0);
   index = g_value_get_uint (param_values + 1);

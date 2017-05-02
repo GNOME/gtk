@@ -23,6 +23,9 @@ required events are received. See gtk_widget_set_events().
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### UNION GdkEvent ##### -->
 <para>
 The #GdkEvent struct contains a union of all of the event structs,
@@ -221,7 +224,7 @@ Generated when all or part of a window becomes visible and needs to be
 redrawn.
 </para>
 
-@type: the type of the event (%GDK_EXPOSE).
+@type: the type of the event (%GDK_EXPOSE or %GDK_DAMAGE).
 @window: the window which received the event.
 @send_event: %TRUE if the event was sent explicitly (e.g. using 
 <function>XSendEvent</function>).

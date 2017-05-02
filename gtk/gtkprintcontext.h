@@ -18,16 +18,17 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifndef __GTK_PRINT_CONTEXT_H__
+#define __GTK_PRINT_CONTEXT_H__
+
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_PRINT_CONTEXT_H__
-#define __GTK_PRINT_CONTEXT_H__
-
 #include <pango/pango.h>
-#include <gtk/gtkenums.h>
 #include <gtk/gtkpagesetup.h>
+
 
 G_BEGIN_DECLS
 
@@ -48,6 +49,11 @@ gdouble       gtk_print_context_get_width            (GtkPrintContext *context);
 gdouble       gtk_print_context_get_height           (GtkPrintContext *context);
 gdouble       gtk_print_context_get_dpi_x            (GtkPrintContext *context);
 gdouble       gtk_print_context_get_dpi_y            (GtkPrintContext *context);
+gboolean      gtk_print_context_get_hard_margins     (GtkPrintContext *context,
+						      gdouble         *top,
+						      gdouble         *bottom,
+						      gdouble         *left,
+						      gdouble         *right);
 
 /* Fonts */
 PangoFontMap *gtk_print_context_get_pango_fontmap    (GtkPrintContext *context);

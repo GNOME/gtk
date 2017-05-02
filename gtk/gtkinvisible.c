@@ -94,8 +94,8 @@ gtk_invisible_init (GtkInvisible *invisible)
 {
   GdkColormap *colormap;
   
-  GTK_WIDGET_UNSET_FLAGS (invisible, GTK_NO_WINDOW);
-  GTK_WIDGET_SET_FLAGS (invisible, GTK_TOPLEVEL);
+  gtk_widget_set_has_window (GTK_WIDGET (invisible), TRUE);
+  _gtk_widget_set_is_toplevel (GTK_WIDGET (invisible), TRUE);
 
   g_object_ref_sink (invisible);
 
@@ -179,7 +179,7 @@ gtk_invisible_set_screen (GtkInvisible *invisible,
   widget = GTK_WIDGET (invisible);
 
   previous_screen = invisible->screen;
-  was_realized = GTK_WIDGET_REALIZED (invisible);
+  was_realized = gtk_widget_get_realized (widget);
 
   if (was_realized)
     gtk_widget_unrealize (widget);
@@ -199,7 +199,7 @@ gtk_invisible_set_screen (GtkInvisible *invisible,
  *
  * Returns the #GdkScreen object associated with @invisible
  *
- * Return value: the associated #GdkScreen.
+ * Return value: (transfer none): the associated #GdkScreen.
  *
  * Since: 2.2
  **/
@@ -218,7 +218,7 @@ gtk_invisible_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   parent = gtk_widget_get_parent_window (widget);
   if (parent == NULL)

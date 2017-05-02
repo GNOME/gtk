@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include "config.h"
 #include <stdio.h>
 #include "gtk/gtk.h"
@@ -50,15 +52,14 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 
   if (pixmap != NULL)
     {
+      cairo_t *cr = gdk_cairo_create (widget->window);
+
       if (cursor_present && (cursor_present != state ||
 			     x != cursor_x || y != cursor_y))
 	{
-	  gdk_draw_drawable (widget->window,
-			     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			     pixmap,
-			     cursor_x - 5, cursor_y - 5,
-			     cursor_x - 5, cursor_y - 5,
-			     10, 10);
+          gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+          cairo_rectangle (cr, cursor_x - 5, cursor_y - 5, 10, 10);
+          cairo_fill (cr);
 	}
 
       cursor_present = state;
@@ -67,12 +68,14 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 
       if (cursor_present)
 	{
-	  gdk_draw_rectangle (widget->window,
-			      widget->style->black_gc,
-			      TRUE,
-			      cursor_x - 5, cursor_y -5,
-			      10, 10);
+          cairo_set_source_rgb (cr, 0, 0, 0);
+          cairo_rectangle (cr, 
+                           cursor_x - 5, cursor_y -5,
+			   10, 10);
+          cairo_fill (cr);
 	}
+
+      cairo_destroy (cr);
     }
 }
 
@@ -80,18 +83,20 @@ update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 static gint
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
+  cairo_t *cr;
+
   if (pixmap)
     g_object_unref (pixmap);
   pixmap = gdk_pixmap_new(widget->window,
 			  widget->allocation.width,
 			  widget->allocation.height,
 			  -1);
-  gdk_draw_rectangle (pixmap,
-		      widget->style->white_gc,
-		      TRUE,
-		      0, 0,
-		      widget->allocation.width,
-		      widget->allocation.height);
+  cr = gdk_cairo_create (pixmap);
+
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
 
   return TRUE;
 }
@@ -100,12 +105,13 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 static gint
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
-  gdk_draw_drawable (widget->window,
-		     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-		     pixmap,
-		     event->area.x, event->area.y,
-		     event->area.x, event->area.y,
-		     event->area.width, event->area.height);
+  cairo_t *cr = gdk_cairo_create (widget->window);
+
+  gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
+  gdk_cairo_rectangle (cr, &event->area);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
 
   return FALSE;
 }
@@ -116,31 +122,36 @@ static void
 draw_brush (GtkWidget *widget, GdkInputSource source,
 	    gdouble x, gdouble y, gdouble pressure)
 {
-  GdkGC *gc;
+  GdkColor color;
   GdkRectangle update_rect;
+  cairo_t *cr;
 
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      gc = widget->style->dark_gc[GTK_WIDGET_STATE (widget)];
+      color = widget->style->dark[gtk_widget_get_state (widget)];
       break;
     case GDK_SOURCE_PEN:
-      gc = widget->style->black_gc;
+      color.red = color.green = color.blue = 0;
       break;
     case GDK_SOURCE_ERASER:
-      gc = widget->style->white_gc;
+      color.red = color.green = color.blue = 65535;
       break;
     default:
-      gc = widget->style->light_gc[GTK_WIDGET_STATE (widget)];
+      color = widget->style->light[gtk_widget_get_state (widget)];
     }
 
   update_rect.x = x - 10 * pressure;
   update_rect.y = y - 10 * pressure;
   update_rect.width = 20 * pressure;
   update_rect.height = 20 * pressure;
-  gdk_draw_rectangle (pixmap, gc, TRUE,
-		      update_rect.x, update_rect.y,
-		      update_rect.width, update_rect.height);
+
+  cr = gdk_cairo_create (pixmap);
+  gdk_cairo_set_source_color (cr, &color);
+  gdk_cairo_rectangle (cr, &update_rect);
+  cairo_fill (cr);
+  cairo_destroy (cr);
+
   gtk_widget_queue_draw_area (widget,
 			      update_rect.x, update_rect.y,
 			      update_rect.width, update_rect.height);
@@ -293,7 +304,7 @@ create_input_dialog (void)
     }
   else
     {
-      if (!GTK_WIDGET_MAPPED(inputd))
+      if (!gtk_widget_get_mapped(inputd))
 	gtk_widget_show(inputd);
       else
 	gdk_window_raise(inputd->window);
@@ -370,7 +381,7 @@ main (int argc, char *argv[])
      events for the drawing area */
   gtk_widget_set_extension_events (drawing_area, GDK_EXTENSION_EVENTS_ALL);
 
-  GTK_WIDGET_SET_FLAGS (drawing_area, GTK_CAN_FOCUS);
+  gtk_widget_set_can_focus (drawing_area, TRUE);
   gtk_widget_grab_focus (drawing_area);
 
   /* .. And create some buttons */

@@ -1,4 +1,7 @@
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
+
 #include "testlib.h"
 
 /*
@@ -19,7 +22,7 @@ static void
 _check_object (AtkObject *obj)
 {
   AtkRole role;
-  static G_CONST_RETURN char *name = NULL;
+  static const char *name = NULL;
   static gboolean first_time = TRUE;
 
   role = atk_object_get_role (obj);
@@ -93,7 +96,7 @@ _check_object (AtkObject *obj)
     }
   else
     {
-      G_CONST_RETURN char *accessible_name;
+      const char *accessible_name;
 
       accessible_name = atk_object_get_name (obj);
       if (accessible_name)

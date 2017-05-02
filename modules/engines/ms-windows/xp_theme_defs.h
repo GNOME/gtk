@@ -756,4 +756,10 @@ enum {
   VTS_DISABLED = 4
 };
 
+enum {
+  TS_MIN,
+  TS_TRUE,
+  TS_DRAW
+};
+
 #endif /* XP_THEME_DFNS_H */

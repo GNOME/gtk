@@ -20,6 +20,9 @@
 #include "config.h"
 
 #include <string.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
@@ -36,7 +39,7 @@ static void gail_widget_connect_widget_destroyed (GtkAccessible    *accessible);
 static void gail_widget_destroyed                (GtkWidget        *widget,
                                                   GtkAccessible    *accessible);
 
-static G_CONST_RETURN gchar* gail_widget_get_description (AtkObject *accessible);
+static const gchar* gail_widget_get_description (AtkObject *accessible);
 static AtkObject* gail_widget_get_parent (AtkObject *accessible);
 static AtkStateSet* gail_widget_ref_state_set (AtkObject *accessible);
 static AtkRelationSet* gail_widget_ref_relation_set (AtkObject *accessible);
@@ -103,6 +106,7 @@ static void       gail_widget_real_initialize    (AtkObject     *obj,
                                                   gpointer      data);
 static GtkWidget* gail_widget_find_viewport      (GtkWidget     *widget);
 static gboolean   gail_widget_on_screen          (GtkWidget     *widget);
+static gboolean   gail_widget_all_parents_visible(GtkWidget     *widget);
 
 G_DEFINE_TYPE_WITH_CODE (GailWidget, gail_widget, GTK_TYPE_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
@@ -230,7 +234,7 @@ gail_widget_destroyed (GtkWidget     *widget,
                                   TRUE);
 }
 
-static G_CONST_RETURN gchar*
+static const gchar*
 gail_widget_get_description (AtkObject *accessible)
 {
   if (accessible->description)
@@ -239,7 +243,6 @@ gail_widget_get_description (AtkObject *accessible)
     {
       /* Get the tooltip from the widget */
       GtkAccessible *obj = GTK_ACCESSIBLE (accessible);
-      GtkTooltipsData *data;
 
       gail_return_val_if_fail (obj, NULL);
 
@@ -250,12 +253,8 @@ gail_widget_get_description (AtkObject *accessible)
         return NULL;
  
       gail_return_val_if_fail (GTK_WIDGET (obj->widget), NULL);
-    
-      data = gtk_tooltips_data_get (obj->widget);
-      if (data == NULL)
-        return NULL;
 
-      return data->tip_text;
+      return gtk_widget_get_tooltip_text (obj->widget);
     }
 }
 
@@ -483,13 +482,13 @@ gail_widget_ref_state_set (AtkObject *accessible)
     }
   else
     {
-      if (GTK_WIDGET_IS_SENSITIVE (widget))
+      if (gtk_widget_is_sensitive (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_SENSITIVE);
           atk_state_set_add_state (state_set, ATK_STATE_ENABLED);
         }
   
-      if (GTK_WIDGET_CAN_FOCUS (widget))
+      if (gtk_widget_get_can_focus (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_FOCUSABLE);
         }
@@ -512,17 +511,17 @@ gail_widget_ref_state_set (AtkObject *accessible)
        * GailWidget data structure so we can determine whether the value has 
        * changed.
        */
-      if (GTK_WIDGET_VISIBLE (widget))
+      if (gtk_widget_get_visible (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_VISIBLE);
-          if (gail_widget_on_screen (widget) &&
-              GTK_WIDGET_MAPPED (widget))
+          if (gail_widget_on_screen (widget) && gtk_widget_get_mapped (widget) &&
+              gail_widget_all_parents_visible (widget))
             {
               atk_state_set_add_state (state_set, ATK_STATE_SHOWING);
             }
         }
   
-      if (GTK_WIDGET_HAS_FOCUS (widget) && (widget == focus_widget))
+      if (gtk_widget_has_focus (widget) && (widget == focus_widget))
         {
           AtkObject *focus_obj;
 
@@ -530,7 +529,7 @@ gail_widget_ref_state_set (AtkObject *accessible)
           if (focus_obj == NULL)
             atk_state_set_add_state (state_set, ATK_STATE_FOCUSED);
         }
-      if (GTK_WIDGET_HAS_DEFAULT(widget))
+      if (gtk_widget_has_default (widget))
         {
           atk_state_set_add_state (state_set, ATK_STATE_DEFAULT);
         }
@@ -667,7 +666,7 @@ gail_widget_get_extents (AtkComponent   *component,
 
   *width = widget->allocation.width;
   *height = widget->allocation.height;
-  if (!gail_widget_on_screen (widget) || (!GTK_WIDGET_DRAWABLE (widget)))
+  if (!gail_widget_on_screen (widget) || (!gtk_widget_is_drawable (widget)))
     {
       *x = G_MININT;
       *y = G_MININT;
@@ -736,11 +735,11 @@ gail_widget_grab_focus (AtkComponent   *component)
   GtkWidget *toplevel;
 
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  if (GTK_WIDGET_CAN_FOCUS (widget))
+  if (gtk_widget_get_can_focus (widget))
     {
       gtk_widget_grab_focus (widget);
       toplevel = gtk_widget_get_toplevel (widget);
-      if (GTK_WIDGET_TOPLEVEL (toplevel))
+      if (gtk_widget_is_toplevel (toplevel))
 	{
 #ifdef GDK_WINDOWING_X11
 	  gtk_window_present_with_time (GTK_WINDOW (toplevel), gdk_x11_get_server_time (widget->window));
@@ -778,7 +777,7 @@ gail_widget_set_extents (AtkComponent   *component,
     return FALSE;
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       if (coord_type == ATK_XY_WINDOW)
         {
@@ -822,7 +821,7 @@ gail_widget_set_position (AtkComponent   *component,
     return FALSE;
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       if (coord_type == ATK_XY_WINDOW)
         {
@@ -863,7 +862,7 @@ gail_widget_set_size (AtkComponent   *component,
     return FALSE;
   gail_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       gtk_widget_set_size_request (widget, width, height);
       return TRUE;
@@ -938,7 +937,7 @@ gail_widget_map_gtk (GtkWidget     *widget)
 
   accessible = gtk_widget_get_accessible (widget);
   atk_object_notify_state_change (accessible, ATK_STATE_SHOWING,
-                                  GTK_WIDGET_MAPPED (widget));
+                                  gtk_widget_get_mapped (widget));
   return 1;
 }
 
@@ -987,17 +986,20 @@ gail_widget_real_notify_gtk (GObject     *obj,
   else if (strcmp (pspec->name, "visible") == 0)
     {
       state = ATK_STATE_VISIBLE;
-      value = GTK_WIDGET_VISIBLE (widget);
+      value = gtk_widget_get_visible (widget);
     }
   else if (strcmp (pspec->name, "sensitive") == 0)
     {
       state = ATK_STATE_SENSITIVE;
-      value = GTK_WIDGET_SENSITIVE (widget);
+      value = gtk_widget_get_sensitive (widget);
     }
   else
     return;
 
   atk_object_notify_state_change (atk_obj, state, value);
+  if (state == ATK_STATE_SENSITIVE)
+    atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, value);
+
 }
 
 static void 
@@ -1075,4 +1077,31 @@ static gboolean gail_widget_on_screen (GtkWidget *widget)
     }
 
   return return_value;
+}
+
+/**
+ * gail_widget_all_parents_visible:
+ * @widget: a #GtkWidget
+ *
+ * Checks if all the predecesors (the parent widget, his parent, etc) are visible
+ * Used to check properly the SHOWING state.
+ *
+ * Return value: TRUE if all the parent hierarchy is visible, FALSE otherwise
+ **/
+static gboolean gail_widget_all_parents_visible (GtkWidget *widget)
+{
+  GtkWidget *iter_parent = NULL;
+  gboolean result = TRUE;
+
+  for (iter_parent = gtk_widget_get_parent (widget); iter_parent;
+       iter_parent = gtk_widget_get_parent (iter_parent))
+    {
+      if (!gtk_widget_get_visible (iter_parent))
+        {
+          result = FALSE;
+          break;
+        }
+    }
+
+  return result;
 }

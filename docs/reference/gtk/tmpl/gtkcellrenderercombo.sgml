@@ -34,6 +34,9 @@ The #GtkCellRendererCombo cell renderer was added in GTK+ 2.6.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkCellRendererCombo ##### -->
 <para>
 
@@ -69,6 +72,7 @@ The #GtkCellRendererCombo cell renderer was added in GTK+ 2.6.
 
 </para>
 
+@void: 
 @Returns: 
 
 

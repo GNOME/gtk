@@ -51,6 +51,9 @@ respectively.
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### ENUM GtkCellRendererState ##### -->
 <para>
 Tells how a cell is to be rendererd.
@@ -280,5 +283,81 @@ it cannot be individually modified.
 @cell: 
 @width: 
 @height: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_visible ##### -->
+<para>
+
+</para>
+
+@cell: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_set_visible ##### -->
+<para>
+
+</para>
+
+@cell: 
+@visible: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_sensitive ##### -->
+<para>
+
+</para>
+
+@cell: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_set_sensitive ##### -->
+<para>
+
+</para>
+
+@cell: 
+@sensitive: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_alignment ##### -->
+<para>
+
+</para>
+
+@cell: 
+@xalign: 
+@yalign: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_set_alignment ##### -->
+<para>
+
+</para>
+
+@cell: 
+@xalign: 
+@yalign: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_padding ##### -->
+<para>
+
+</para>
+
+@cell: 
+@xpad: 
+@ypad: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_set_padding ##### -->
+<para>
+
+</para>
+
+@cell: 
+@xpad: 
+@ypad: 
 
 

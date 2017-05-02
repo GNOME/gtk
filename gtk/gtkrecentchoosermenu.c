@@ -42,6 +42,7 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtktooltip.h"
+#include "gtkactivatable.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkalias.h"
@@ -86,9 +87,13 @@ struct _GtkRecentChooserMenuPrivate
 
 enum {
   PROP_0,
+  PROP_SHOW_NUMBERS,
 
-  PROP_SHOW_NUMBERS
+  /* activatable properties */
+  PROP_ACTIVATABLE_RELATED_ACTION,
+  PROP_ACTIVATABLE_USE_ACTION_APPEARANCE
 };
+
 
 #define FALLBACK_ICON_SIZE 	32
 #define FALLBACK_ITEM_LIMIT 	10
@@ -155,11 +160,20 @@ static void     item_activate_cb   (GtkWidget        *widget,
 static void     manager_changed_cb (GtkRecentManager *manager,
 				    gpointer          user_data);
 
+static void gtk_recent_chooser_activatable_iface_init (GtkActivatableIface  *iface);
+static void gtk_recent_chooser_update                 (GtkActivatable       *activatable,
+						       GtkAction            *action,
+						       const gchar          *property_name);
+static void gtk_recent_chooser_sync_action_properties (GtkActivatable       *activatable,
+						       GtkAction            *action);
+
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserMenu,
 			 gtk_recent_chooser_menu,
 			 GTK_TYPE_MENU,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
-				 		gtk_recent_chooser_iface_init))
+				 		gtk_recent_chooser_iface_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
+				 		gtk_recent_chooser_activatable_iface_init))
 
 
 static void
@@ -177,6 +191,13 @@ gtk_recent_chooser_iface_init (GtkRecentChooserIface *iface)
   iface->add_filter = gtk_recent_chooser_menu_add_filter;
   iface->remove_filter = gtk_recent_chooser_menu_remove_filter;
   iface->list_filters = gtk_recent_chooser_menu_list_filters;
+}
+
+static void
+gtk_recent_chooser_activatable_iface_init (GtkActivatableIface *iface)
+{
+  iface->update = gtk_recent_chooser_update;
+  iface->sync_action_properties = gtk_recent_chooser_sync_action_properties;
 }
 
 static void
@@ -208,6 +229,10 @@ gtk_recent_chooser_menu_class_init (GtkRecentChooserMenuClass *klass)
 							 FALSE,
 							 GTK_PARAM_READWRITE));
   
+
+  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
+  g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
+
   g_type_class_add_private (klass, sizeof (GtkRecentChooserMenuPrivate));
 }
 
@@ -376,6 +401,12 @@ gtk_recent_chooser_menu_set_property (GObject      *object,
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       gtk_recent_chooser_menu_set_current_filter (menu, g_value_get_object (value));
       break;
+    case PROP_ACTIVATABLE_RELATED_ACTION:
+      _gtk_recent_chooser_set_related_action (GTK_RECENT_CHOOSER (menu), g_value_get_object (value));
+      break;
+    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE: 
+      _gtk_recent_chooser_set_use_action_appearance (GTK_RECENT_CHOOSER (menu), g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -422,6 +453,12 @@ gtk_recent_chooser_menu_get_property (GObject    *object,
       break;
     case GTK_RECENT_CHOOSER_PROP_FILTER:
       g_value_set_object (value, priv->current_filter);
+      break;
+    case PROP_ACTIVATABLE_RELATED_ACTION:
+      g_value_set_object (value, _gtk_recent_chooser_get_related_action (GTK_RECENT_CHOOSER (menu)));
+      break;
+    case PROP_ACTIVATABLE_USE_ACTION_APPEARANCE: 
+      g_value_set_boolean (value, _gtk_recent_chooser_get_use_action_appearance (GTK_RECENT_CHOOSER (menu)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -674,11 +711,10 @@ gtk_recent_chooser_menu_set_current_filter (GtkRecentChooserMenu *menu,
   if (priv->current_filter)
     g_object_unref (G_OBJECT (priv->current_filter));
   
-  if (filter)
-    {
-      priv->current_filter = filter;
-      g_object_ref_sink (priv->current_filter);
-    }
+  priv->current_filter = filter;
+
+  if (priv->current_filter)
+    g_object_ref_sink (priv->current_filter);
 
   gtk_recent_chooser_menu_populate (menu);
   
@@ -771,21 +807,17 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
       
       /* avoid clashing mnemonics */
       if (count <= 10)
-        /* This is the label format that is used for the first 10 items 
+        /* This is the label format that is used for the first 10 items
          * in a recent files menu. The %d is the number of the item,
          * the %s is the name of the item. Please keep the _ in front
          * of the number to give these menu items a mnemonic.
-         *
-         * Don't include the prefix "recent menu label|" in the translation.
          */
-        text = g_strdup_printf (Q_("recent menu label|_%d. %s"), count, escaped);
+        text = g_strdup_printf (C_("recent menu label", "_%d. %s"), count, escaped);
       else
-        /* This is the format that is used for items in a recent files menu. 
-         * The %d is the number of the item, the %s is the name of the item. 
-         *
-         * Don't include the prefix "recent menu label|" in the translation.
+        /* This is the format that is used for items in a recent files menu.
+         * The %d is the number of the item, the %s is the name of the item.
          */
-        text = g_strdup_printf (Q_("recent menu label|%d. %s"), count, escaped);
+        text = g_strdup_printf (C_("recent menu label", "%d. %s"), count, escaped);
       
       item = gtk_image_menu_item_new_with_mnemonic (text);
       
@@ -799,6 +831,9 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
     }
 
   g_free (text);
+
+  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item),
+                                             TRUE);
 
   /* ellipsize the menu item label, in case the recent document
    * display name is huge.
@@ -936,6 +971,8 @@ idle_populate_func (gpointer data)
 
 	  return FALSE;
 	}
+      else
+        gtk_widget_hide (pdata->placeholder);
       
       pdata->n_items = g_list_length (pdata->items);
       pdata->loaded_items = 0;
@@ -1022,9 +1059,8 @@ gtk_recent_chooser_menu_populate (GtkRecentChooserMenu *menu)
 
   priv->icon_size = get_icon_size_for_widget (GTK_WIDGET (menu));
   
-  /* remove our menu items first and hide the placeholder */
+  /* remove our menu items first */
   gtk_recent_chooser_menu_dispose_items (menu);
-  gtk_widget_hide (priv->placeholder);
   
   priv->populate_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
   					         idle_populate_func,
@@ -1134,6 +1170,27 @@ gtk_recent_chooser_menu_set_show_tips (GtkRecentChooserMenu *menu,
   priv->show_tips = show_tips;
   gtk_container_foreach (GTK_CONTAINER (menu), foreach_set_shot_tips, menu);
 }
+
+static void
+gtk_recent_chooser_update (GtkActivatable *activatable,
+			   GtkAction      *action,
+			   const gchar    *property_name)
+{
+  if (strcmp (property_name, "sensitive") == 0)
+    gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+
+  _gtk_recent_chooser_update (activatable, action, property_name);
+}
+
+static void
+gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
+				           GtkAction      *action)
+{
+  gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+
+  _gtk_recent_chooser_sync_action_properties (activatable, action);
+}
+
 
 /*
  * Public API

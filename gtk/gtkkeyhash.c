@@ -18,9 +18,12 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
 #include "config.h"
+
 #include "gtkdebug.h"
 #include "gtkkeyhash.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 typedef struct _GtkKeyHashEntry GtkKeyHashEntry;
@@ -304,6 +307,54 @@ sort_lookup_results (GSList *slist)
   return g_slist_sort (slist, lookup_result_compare);
 }
 
+static gint
+lookup_result_compare_by_keyval (gconstpointer a,
+		                 gconstpointer b)
+{
+  const GtkKeyHashEntry *entry_a = a;
+  const GtkKeyHashEntry *entry_b = b;
+
+  if (entry_a->keyval < entry_b->keyval)
+	return -1;
+  else if (entry_a->keyval > entry_b->keyval)
+	return 1;
+  else
+	return 0;
+}
+
+static GSList *
+sort_lookup_results_by_keyval (GSList *slist)
+{
+  return g_slist_sort (slist, lookup_result_compare_by_keyval);
+}
+
+/* Return true if keyval is defined in keyboard group
+ */
+static gboolean 
+keyval_in_group (GdkKeymap  *keymap,
+                 guint      keyval,
+                 gint       group)
+{                 
+  GtkKeyHashEntry entry;
+  gint i;
+
+  gdk_keymap_get_entries_for_keyval (keymap,
+				     keyval,
+				     &entry.keys, &entry.n_keys);
+
+  for (i = 0; i < entry.n_keys; i++)
+    {
+      if (entry.keys[i].group == group)
+        {
+          g_free (entry.keys);
+          return TRUE;
+        }
+    }
+
+  g_free (entry.keys);
+  return FALSE;
+}
+
 /**
  * _gtk_key_hash_lookup:
  * @key_hash: a #GtkKeyHash
@@ -317,10 +368,15 @@ sort_lookup_results (GSList *slist)
  * a given event. The results are sorted so that entries with less
  * modifiers come before entries with more modifiers.
  * 
- * Return value: A #GSList of all matching entries. If there were exact
- *  matches, they are returned, otherwise all fuzzy matches are
- *  returned. (A fuzzy match is a match in keycode and level, but not
- *  in group.)
+ * The matches returned by this function can be exact (i.e. keycode, level
+ * and group all match) or fuzzy (i.e. keycode and level match, but group
+ * does not). As long there are any exact matches, only exact matches
+ * are returned. If there are no exact matches, fuzzy matches will be
+ * returned, as long as they are not shadowing a possible exact match.
+ * This means that fuzzy matches won't be considered if their keyval is 
+ * present in the current group.
+ * 
+ * Return value: A #GSList of matching entries.
  **/
 GSList *
 _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
@@ -337,15 +393,29 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
   guint keyval;
   gint effective_group;
   gint level;
+  GdkModifierType modifiers;
   GdkModifierType consumed_modifiers;
+  gboolean group_mod_is_accel_mod = FALSE;
+  const GdkModifierType xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
+  const GdkModifierType vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
 
   /* We don't want Caps_Lock to affect keybinding lookups.
    */
   state &= ~GDK_LOCK_MASK;
-  
-  gdk_keymap_translate_keyboard_state (key_hash->keymap,
-				       hardware_keycode, state, group,
-				       &keyval, &effective_group, &level, &consumed_modifiers);
+
+  _gtk_translate_keyboard_accel_state (key_hash->keymap,
+                                       hardware_keycode, state, mask, group,
+                                       &keyval,
+                                       &effective_group, &level, &consumed_modifiers);
+
+  /* if the group-toggling modifier is part of the default accel mod
+   * mask, and it is active, disable it for matching
+   */
+  if (mask & GTK_TOGGLE_GROUP_MOD_MASK)
+    group_mod_is_accel_mod = TRUE;
+
+  gdk_keymap_map_virtual_modifiers (key_hash->keymap, &mask);
+  gdk_keymap_add_virtual_modifiers (key_hash->keymap, &state);
 
   GTK_NOTE (KEYBINDINGS,
 	    g_message ("Looking up keycode = %u, modifiers = 0x%04x,\n"
@@ -358,26 +428,35 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
       while (tmp_list)
 	{
 	  GtkKeyHashEntry *entry = tmp_list->data;
-	  GdkModifierType xmods, vmods;
-	  
-	  /* If the virtual super, hyper or meta modifiers are present, 
-	   * they will also be mapped to some of the mod2 - mod5 modifiers, 
-	   * so we compare them twice, ignoring either set.
-	   */
-	  xmods = GDK_MOD2_MASK|GDK_MOD3_MASK|GDK_MOD4_MASK|GDK_MOD5_MASK;
-	  vmods = GDK_SUPER_MASK|GDK_HYPER_MASK|GDK_META_MASK;
 
-	  if ((entry->modifiers & ~consumed_modifiers & mask & ~vmods) == (state & ~consumed_modifiers & mask & ~vmods) ||
-	      (entry->modifiers & ~consumed_modifiers & mask & ~xmods) == (state & ~consumed_modifiers & mask & ~xmods))
+	  /* If the virtual Super, Hyper or Meta modifiers are present,
+	   * they will also be mapped to some of the Mod2 - Mod5 modifiers,
+	   * so we compare them twice, ignoring either set.
+	   * We accept combinations involving virtual modifiers only if they
+	   * are mapped to separate modifiers; i.e. if Super and Hyper are
+	   * both mapped to Mod4, then pressing a key that is mapped to Mod4
+	   * will not match a Super+Hyper entry.
+	   */
+          modifiers = entry->modifiers;
+          if (gdk_keymap_map_virtual_modifiers (key_hash->keymap, &modifiers) &&
+	      ((modifiers & ~consumed_modifiers & mask & ~vmods) == (state & ~consumed_modifiers & mask & ~vmods) ||
+	       (modifiers & ~consumed_modifiers & mask & ~xmods) == (state & ~consumed_modifiers & mask & ~xmods)))
 	    {
 	      gint i;
 
-	      if (keyval == entry->keyval) /* Exact match */
+	      if (keyval == entry->keyval && /* Exact match */
+                  /* but also match for group if it is an accel mod, because
+                   * otherwise we can get multiple exact matches, some being
+                   * bogus */
+                  (!group_mod_is_accel_mod ||
+                   (state & GTK_TOGGLE_GROUP_MOD_MASK) ==
+                   (entry->modifiers & GTK_TOGGLE_GROUP_MOD_MASK)))
+
 		{
 		  GTK_NOTE (KEYBINDINGS,
 			    g_message ("  found exact match, keyval = %u, modifiers = 0x%04x",
 				       entry->keyval, entry->modifiers));
-		  
+
 		  if (!have_exact)
 		    {
 		      g_slist_free (results);
@@ -392,8 +471,11 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 		{
 		  for (i = 0; i < entry->n_keys; i++)
 		    {
-		      if (entry->keys[i].keycode == hardware_keycode &&
-			  entry->keys[i].level == level) /* Match for all but group */
+                      if (entry->keys[i].keycode == hardware_keycode &&
+                          entry->keys[i].level == level &&
+                           /* Only match for group if it's an accel mod */
+                          (!group_mod_is_accel_mod ||
+                           entry->keys[i].group == effective_group))
 			{
 			  GTK_NOTE (KEYBINDINGS,
 				    g_message ("  found group = %d, level = %d",
@@ -409,6 +491,31 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 	}
     }
 
+  if (!have_exact && results) 
+    {
+      /* If there are fuzzy matches, check that the current group doesn't also 
+       * define these keyvals; if yes, discard results because a widget up in 
+       * the stack may have an exact match and we don't want to 'steal' it.
+       */
+      guint oldkeyval = 0;
+      GtkKeyHashEntry *keyhashentry;
+
+      results = sort_lookup_results_by_keyval (results);
+      for (l = results; l; l = l->next)
+        {
+          keyhashentry = l->data;
+          if (l == results || oldkeyval != keyhashentry->keyval)
+            {
+              oldkeyval = keyhashentry->keyval;
+              if (keyval_in_group (key_hash->keymap, oldkeyval, group))
+                {
+       	          g_slist_free (results);
+       	          return NULL;
+                }
+            }
+        }
+    }
+    
   results = sort_lookup_results (results);
   for (l = results; l; l = l->next)
     l->data = ((GtkKeyHashEntry *)l->data)->value;
@@ -442,7 +549,7 @@ _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,
   if (!keyval)			/* Key without symbol */
     return NULL;
 
-  /* Find some random keycode for this keycode
+  /* Find some random keycode for this keyval
    */
   gdk_keymap_get_entries_for_keyval (key_hash->keymap, keyval,
 				     &keys, &n_keys);

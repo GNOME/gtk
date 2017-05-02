@@ -38,8 +38,8 @@ static guint		gail_util_add_key_event_listener	(AtkKeySnoopFunc	listener,
 								 gpointer               data);
 static void 		gail_util_remove_key_event_listener	(guint			remove_listener);
 static AtkObject*	gail_util_get_root			(void);
-static G_CONST_RETURN gchar *gail_util_get_toolkit_name		(void);
-static G_CONST_RETURN gchar *gail_util_get_toolkit_version      (void);
+static const gchar *    gail_util_get_toolkit_name		(void);
+static const gchar *    gail_util_get_toolkit_version      (void);
 
 /* gailmisc/AtkMisc */
 static void		gail_misc_class_init			(GailMiscClass		*klass);
@@ -77,7 +77,7 @@ static gboolean         configure_event_watcher                 (GSignalInvocati
 static AtkObject* root = NULL;
 static GHashTable *listener_list = NULL;
 static gint listener_idx = 1;
-static GHashTable *key_listener_list = NULL;
+static GSList *key_listener_list = NULL;
 static guint key_snooper_id = 0;
 
 typedef struct _GailUtilListenerInfo GailUtilListenerInfo;
@@ -246,62 +246,78 @@ atk_key_event_from_gdk_event_key (GdkEventKey *key)
   return event;
 }
 
-static gboolean
-notify_hf (gpointer key, gpointer value, gpointer data)
-{
-  GailKeyEventInfo *info = (GailKeyEventInfo *) data;
-  return (*(AtkKeySnoopFunc) value) (info->key_event, info->func_data) ? TRUE : FALSE;
-}
-
-static void
-insert_hf (gpointer key, gpointer value, gpointer data)
-{
-  GHashTable *new_table = (GHashTable *) data;
-  g_hash_table_insert (new_table, key, value);
-}
+typedef struct {
+  AtkKeySnoopFunc func;
+  gpointer        data;
+  guint           key;
+} KeyEventListener;
 
 static gint
-gail_key_snooper (GtkWidget *the_widget, GdkEventKey *event, gpointer func_data)
+gail_key_snooper (GtkWidget *the_widget, GdkEventKey *event, gpointer data)
 {
-  /* notify each AtkKeySnoopFunc in turn... */
-  GailKeyEventInfo *info = g_new0 (GailKeyEventInfo, 1);
-  gint consumed = 0;
-  if (key_listener_list)
+  GSList *l;
+  AtkKeyEventStruct *atk_event;
+  gboolean result;
+
+  atk_event = atk_key_event_from_gdk_event_key (event);
+
+  result = FALSE;
+
+  for (l = key_listener_list; l; l = l->next)
     {
-      GHashTable *new_hash = g_hash_table_new (NULL, NULL);	    
-      g_hash_table_foreach (key_listener_list, insert_hf, new_hash);	    
-      info->key_event = atk_key_event_from_gdk_event_key (event);
-      info->func_data = func_data;
-      consumed = g_hash_table_foreach_steal (new_hash, notify_hf, info);
-      g_hash_table_destroy (new_hash);
+      KeyEventListener *listener = l->data;
+
+      result |= listener->func (atk_event, listener->data);
     }
-  g_free (info->key_event);
-  g_free (info);
-  return (consumed ? 1 : 0);
+  g_free (atk_event);
+
+  return result;
 }
 
 static guint
-gail_util_add_key_event_listener (AtkKeySnoopFunc  listener,
-				  gpointer         data)
+gail_util_add_key_event_listener (AtkKeySnoopFunc  listener_func,
+                                  gpointer         listener_data)
 {
-  static guint key=0;
-  if (!key_listener_list)
-  {
-    key_listener_list = g_hash_table_new (NULL, NULL);	  
-    key_snooper_id = gtk_key_snooper_install (gail_key_snooper, data);
-  }
-  g_hash_table_insert (key_listener_list, GUINT_TO_POINTER (key++), (gpointer) listener);
-  /* XXX: we don't check to see if n_listeners > MAXUINT */
+  static guint key = 0;
+  KeyEventListener *listener;
+
+  if (key_snooper_id == 0)
+    key_snooper_id = gtk_key_snooper_install (gail_key_snooper, NULL);
+
+  key++;
+
+  listener = g_slice_new0 (KeyEventListener);
+  listener->func = listener_func;
+  listener->data = listener_data;
+  listener->key = key;
+
+  key_listener_list = g_slist_append (key_listener_list, listener);
+
   return key;
 }
 
 static void
-gail_util_remove_key_event_listener (guint remove_listener)
+gail_util_remove_key_event_listener (guint listener_key)
 {
-  g_hash_table_remove (key_listener_list, GUINT_TO_POINTER (remove_listener));
-  if (g_hash_table_size (key_listener_list) == 0)
+  GSList *l;
+
+  for (l = key_listener_list; l; l = l->next)
+    {
+      KeyEventListener *listener = l->data;
+
+      if (listener->key == listener_key)
+        {
+          g_slice_free (KeyEventListener, listener);
+          key_listener_list = g_slist_delete_link (key_listener_list, l);
+
+          break;
+        }
+    }
+
+  if (key_listener_list == NULL)
     {
       gtk_key_snooper_remove (key_snooper_id);
+      key_snooper_id = 0;
     }
 }
 
@@ -317,13 +333,13 @@ gail_util_get_root (void)
   return root;
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_util_get_toolkit_name (void)
 {
   return "GAIL";
 }
 
-static G_CONST_RETURN gchar *
+static const gchar *
 gail_util_get_toolkit_version (void)
 {
  /*

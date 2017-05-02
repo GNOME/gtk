@@ -7,7 +7,7 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
-#include <demos.h>
+#include "demos.h"
 
 static GtkTextBuffer *info_buffer;
 static GtkTextBuffer *source_buffer;
@@ -41,7 +41,7 @@ get_democodedir (void)
 
   if (result == NULL)
     {
-      result = g_win32_get_package_installation_directory (NULL, NULL);
+      result = g_win32_get_package_installation_directory_of_module (NULL);
       if (result == NULL)
 	result = "unknown-location";
 
@@ -942,7 +942,7 @@ main (int argc, char **argv)
                    G_FILE_TEST_EXISTS))
     {
       g_setenv ("GDK_PIXBUF_MODULE_FILE", "../../gdk-pixbuf/gdk-pixbuf.loaders", TRUE);
-      g_setenv ("GTK_IM_MODULE_FILE", "../../modules/input/gtk.immodules", TRUE);
+      g_setenv ("GTK_IM_MODULE_FILE", "../../modules/input/immodules.cache", TRUE);
     }
   /* -- End of hack -- */
   

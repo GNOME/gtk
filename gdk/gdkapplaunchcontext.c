@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <glib.h>
-
 #include "gdkapplaunchcontext.h"
 #include "gdkinternals.h"
 #include "gdkscreen.h"
@@ -31,8 +29,38 @@
 #include "gdkalias.h"
 
 
+static void    gdk_app_launch_context_finalize    (GObject           *object);
+static gchar * gdk_app_launch_context_get_display (GAppLaunchContext *context,
+                                                   GAppInfo          *info,
+                                                   GList             *files);
+
+
 G_DEFINE_TYPE (GdkAppLaunchContext, gdk_app_launch_context,
-	       G_TYPE_APP_LAUNCH_CONTEXT);
+	       G_TYPE_APP_LAUNCH_CONTEXT)
+
+static void
+gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GAppLaunchContextClass *context_class = G_APP_LAUNCH_CONTEXT_CLASS (klass);
+
+  gobject_class->finalize = gdk_app_launch_context_finalize;
+
+  context_class->get_display = gdk_app_launch_context_get_display;
+  context_class->get_startup_notify_id = _gdk_windowing_get_startup_notify_id;
+  context_class->launch_failed = _gdk_windowing_launch_failed;
+
+  g_type_class_add_private (klass, sizeof (GdkAppLaunchContextPrivate));
+}
+
+static void
+gdk_app_launch_context_init (GdkAppLaunchContext *context)
+{
+  context->priv = G_TYPE_INSTANCE_GET_PRIVATE (context,
+					       GDK_TYPE_APP_LAUNCH_CONTEXT,
+					       GdkAppLaunchContextPrivate);
+  context->priv->workspace = -1;
+}
 
 static void
 gdk_app_launch_context_finalize (GObject *object)
@@ -58,10 +86,10 @@ gdk_app_launch_context_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_app_launch_context_parent_class)->finalize (object);
 }
 
-static char *
-get_display (GAppLaunchContext *context, 
-             GAppInfo          *info, 
-             GList             *files)
+static gchar *
+gdk_app_launch_context_get_display (GAppLaunchContext *context,
+                                    GAppInfo          *info,
+                                    GList             *files)
 {
   GdkDisplay *display;
   GdkAppLaunchContextPrivate *priv;
@@ -79,30 +107,6 @@ get_display (GAppLaunchContext *context,
   return g_strdup (gdk_display_get_name (display));
 }
 
-static void
-gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GAppLaunchContextClass *context_class = G_APP_LAUNCH_CONTEXT_CLASS (klass);
-
-  gobject_class->finalize = gdk_app_launch_context_finalize;
-
-  context_class->get_display = get_display;
-  context_class->get_startup_notify_id = _gdk_windowing_get_startup_notify_id;
-  context_class->launch_failed = _gdk_windowing_launch_failed;
-
-  g_type_class_add_private (klass, sizeof (GdkAppLaunchContextPrivate));
-}
-
-static void
-gdk_app_launch_context_init (GdkAppLaunchContext *context)
-{
-  context->priv = G_TYPE_INSTANCE_GET_PRIVATE (context,
-					       GDK_TYPE_APP_LAUNCH_CONTEXT,
-					       GdkAppLaunchContextPrivate);
-  context->priv->workspace = -1;
-}
-
 /**
  * gdk_app_launch_context_set_display:
  * @context: a #GdkAppLaunchContext
@@ -117,6 +121,9 @@ void
 gdk_app_launch_context_set_display (GdkAppLaunchContext *context,
 				    GdkDisplay          *display)
 {
+  g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
+  g_return_if_fail (display == NULL || GDK_IS_DISPLAY (display));
+
   if (context->priv->display)
     {
       g_object_unref (context->priv->display);
@@ -145,6 +152,9 @@ void
 gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
 				   GdkScreen           *screen)
 {
+  g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
+  g_return_if_fail (screen == NULL || GDK_IS_SCREEN (screen));
+
   if (context->priv->screen)
     {
       g_object_unref (context->priv->screen);
@@ -176,6 +186,8 @@ void
 gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
 				    gint                 desktop)
 {
+  g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
+
   context->priv->workspace = desktop;
 }
 
@@ -198,23 +210,33 @@ void
 gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
 				      guint32              timestamp)
 {
+  g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
+
   context->priv->timestamp = timestamp;
 }
 
 /**
  * gdk_app_launch_context_set_icon:
  * @context: a #GdkAppLaunchContext
- * @icon: a #GIcon, or %NULL
+ * @icon: (allow-none): a #GIcon, or %NULL
  *
  * Sets the icon for applications that are launched with this
- * context. See also gdk_app_launch_context_set_icon_name().
+ * context.
+ *
+ * Window Managers can use this information when displaying startup
+ * notification.
+ *
+ * See also gdk_app_launch_context_set_icon_name().
  *
  * Since: 2.14
  */
 void
-gdk_app_launch_context_set_icon (GdkAppLaunchContext *context, 
+gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
                                  GIcon               *icon)
 {
+  g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
+  g_return_if_fail (icon == NULL || G_IS_ICON (icon));
+
   if (context->priv->icon)
     {
       g_object_unref (context->priv->icon);
@@ -228,7 +250,7 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
 /**
  * gdk_app_launch_context_set_icon_name:
  * @context: a #GdkAppLaunchContext
- * @icon_name: an icon name, or %NULL
+ * @icon_name: (allow-none): an icon name, or %NULL
  *
  * Sets the icon for applications that are launched with this context. 
  * The @icon_name will be interpreted in the same way as the Icon field 
@@ -245,6 +267,8 @@ void
 gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
 				      const char          *icon_name)
 {
+  g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
+
   g_free (context->priv->icon_name);
   context->priv->icon_name = g_strdup (icon_name);
 }
@@ -261,13 +285,8 @@ gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
 GdkAppLaunchContext *
 gdk_app_launch_context_new (void)
 {
-  GdkAppLaunchContext *context;
-
-  context = g_object_new (gdk_app_launch_context_get_type (), NULL);
-
-  return context;
+  return g_object_new (GDK_TYPE_APP_LAUNCH_CONTEXT, NULL);
 }
-
 
 #define __GDK_APP_LAUNCH_CONTEXT_C__
 #include "gdkaliasdef.c"

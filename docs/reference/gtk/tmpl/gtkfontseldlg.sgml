@@ -48,26 +48,29 @@ fonts.</para></listitem>
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkFontSelectionDialog ##### -->
 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_new ##### -->
 <para>
-Creates a new #GtkFontSelectionDialog.
+
 </para>
 
-@title: the title of the dialog box.
-@Returns: a new #GtkFontSelectionDialog.
+@title: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_font ##### -->
 <para>
-Gets the currently-selected font.
+
 </para>
 
-@fsd: a #GtkFontSelectionDialog.
-@Returns: the currently-selected font, or %NULL if no font is selected.
+@fsd: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_font_name ##### -->
@@ -80,31 +83,30 @@ Gets the currently-selected font.
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_set_font_name ##### -->
 <para>
-Sets the currently-selected font.
+
 </para>
 
-@fsd: a #GtkFontSelectionDialog.
-@fontname: a fontname.
-@Returns: %TRUE if the font was found.
+@fsd: 
+@fontname: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_preview_text ##### -->
 <para>
-Gets the text displayed in the preview area.
+
 </para>
 
-@fsd: a #GtkFontSelectionDialog.
-@Returns: the text displayed in the preview area. This string is owned
-   by the widget and should not be modified or freed.
+@fsd: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_set_preview_text ##### -->
 <para>
-Sets the text displayed in the preview area.
+
 </para>
 
-@fsd: a #GtkFontSelectionDialog.
-@text: the text to display in the preview area.
+@fsd: 
+@text: 
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_apply_button ##### -->
@@ -126,6 +128,15 @@ Sets the text displayed in the preview area.
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_get_ok_button ##### -->
+<para>
+
+</para>
+
+@fsd: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_font_selection_dialog_get_font_selection ##### -->
 <para>
 
 </para>

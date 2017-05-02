@@ -16,25 +16,48 @@ A GtkToolItem containing a button with an additional dropdown menu
   #GtkMenuToolButton. Use gtk_menu_tool_button_new_from_stock() to
   create a new #GtkMenuToolButton containing a stock item.
 </para>
+<refsect2 id="GtkMenuToolButton-BUILDER-UI">
+<title>GtkMenuToolButton as GtkBuildable</title>
+<para>
+The GtkMenuToolButton implementation of the GtkBuildable interface
+supports adding a menu by specifying "menu" as the "type" 
+attribute of a &lt;child&gt; element.
+</para>
+<example>
+<title>A UI definition fragment with menus</title>
+<programlisting><![CDATA[
+<object class="GtkMenuToolButton">
+  <child type="menu">
+    <object class="GtkMenu"/>
+  </child>
+</object>
+]]></programlisting>
+</example>
+</refsect2>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-  <varlistentry>
-    <term>#GtkToolbar</term>
-    <listitem><para>The toolbar widget</para></listitem>
-    <term>#GtkToolButton</term>
-    <listitem>
-      <para>
-	The parent class of #GtkMenuToolButton. The properties
-	"label_widget", "label", "icon_widget", and "stock_id" on
-	#GtkToolButton determine the label and icon used on
-	#GtkMenuToolButton<!-- -->s.
-      </para>
-    </listitem>
-  </varlistentry>
+  <variablelist>
+    <varlistentry>
+      <term>#GtkToolbar</term>
+      <listitem><para>The toolbar widget</para></listitem>
+      <term>#GtkToolButton</term>
+      <listitem>
+        <para>
+          The parent class of #GtkMenuToolButton. The properties
+          "label_widget", "label", "icon_widget", and "stock_id" on
+          #GtkToolButton determine the label and icon used on
+          #GtkMenuToolButton<!-- -->s.
+        </para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
 </para>
 
 <!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
 
 
 <!-- ##### STRUCT GtkMenuToolButton ##### -->

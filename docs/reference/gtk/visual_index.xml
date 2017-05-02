@@ -39,6 +39,9 @@
   <link linkend="GtkImage">
     <inlinegraphic fileref="image.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkSpinner">
+    <inlinegraphic fileref="spinner.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkLabel">
     <inlinegraphic fileref="label.png" format="PNG"></inlinegraphic>
   </link>
@@ -95,6 +98,9 @@
   </link>
   <link linkend="GtkToolbar">
     <inlinegraphic fileref="toolbar.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkToolPalette">
+    <inlinegraphic fileref="toolpalette.png" format="PNG"></inlinegraphic>
   </link> 
   <link linkend="GtkTreeView">
     <inlinegraphic fileref="list-and-tree.png" format="PNG"></inlinegraphic>

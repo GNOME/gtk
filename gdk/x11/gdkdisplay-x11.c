@@ -31,6 +31,7 @@
 
 #include <glib.h>
 #include "gdkx.h"
+#include "gdkasync.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
 #include "gdkscreen.h"
@@ -50,9 +51,7 @@
 #include <X11/extensions/Xfixes.h>
 #endif
 
-#ifdef HAVE_SHAPE_EXT
 #include <X11/extensions/shape.h>
-#endif
 
 #ifdef HAVE_XCOMPOSITE
 #include <X11/extensions/Xcomposite.h>
@@ -86,9 +85,16 @@ static const char *const precache_atoms[] = {
   "UTF8_STRING",
   "WM_CLIENT_LEADER",
   "WM_DELETE_WINDOW",
+  "WM_ICON_NAME",
   "WM_LOCALE_NAME",
+  "WM_NAME",
   "WM_PROTOCOLS",
   "WM_TAKE_FOCUS",
+  "WM_WINDOW_ROLE",
+  "_NET_ACTIVE_WINDOW",
+  "_NET_CURRENT_DESKTOP",
+  "_NET_FRAME_EXTENTS",
+  "_NET_STARTUP_ID",
   "_NET_WM_CM_S0",
   "_NET_WM_DESKTOP",
   "_NET_WM_ICON",
@@ -97,10 +103,15 @@ static const char *const precache_atoms[] = {
   "_NET_WM_PID",
   "_NET_WM_PING",
   "_NET_WM_STATE",
-  "_NET_WM_STATE_STICKY",
+  "_NET_WM_STATE_ABOVE",
+  "_NET_WM_STATE_BELOW",
+  "_NET_WM_STATE_FULLSCREEN",
+  "_NET_WM_STATE_MODAL",
   "_NET_WM_STATE_MAXIMIZED_VERT",
   "_NET_WM_STATE_MAXIMIZED_HORZ",
-  "_NET_WM_STATE_FULLSCREEN",
+  "_NET_WM_STATE_SKIP_TASKBAR",
+  "_NET_WM_STATE_SKIP_PAGER",
+  "_NET_WM_STATE_STICKY",
   "_NET_WM_SYNC_REQUEST",
   "_NET_WM_SYNC_REQUEST_COUNTER",
   "_NET_WM_WINDOW_TYPE",
@@ -149,10 +160,8 @@ gdk_display_open (const gchar *display_name)
   XClassHint *class_hint;
   gulong pid;
   gint i;
-#if defined(HAVE_XFIXES) || defined(HAVE_SHAPE_EXT)
   gint ignore;
   gint maj, min;
-#endif
 
   xdisplay = XOpenDisplay (display_name);
   if (!xdisplay)
@@ -169,8 +178,11 @@ gdk_display_open (const gchar *display_name)
   XAddConnectionWatch (xdisplay, gdk_internal_connection_watch, NULL);
 #endif /* HAVE_X11R6 */
   
+  _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
+
   /* RandR must be initialized before we initialize the screens */
-  display_x11->have_randr12 = FALSE;
+  display_x11->have_randr13 = FALSE;
+  display_x11->have_randr15 = FALSE;
 #ifdef HAVE_RANDR
   if (XRRQueryExtension (display_x11->xdisplay,
 			 &display_x11->xrandr_event_base, &ignore))
@@ -179,8 +191,15 @@ gdk_display_open (const gchar *display_name)
       
       XRRQueryVersion (display_x11->xdisplay, &major, &minor);
 
-      if ((major == 1 && minor >= 2) || major > 1)
-	  display_x11->have_randr12 = TRUE;
+      if ((major == 1 && minor >= 3) || major > 1)
+	  display_x11->have_randr13 = TRUE;
+
+#ifdef HAVE_RANDR15
+      if (minor >= 5 || major > 1)
+	display_x11->have_randr15 = TRUE;
+#endif
+
+       gdk_x11_register_standard_event_type (display, display_x11->xrandr_event_base, RRNumberEvents);
   }
 #endif
   
@@ -205,8 +224,6 @@ gdk_display_open (const gchar *display_name)
   attr.width = 10;
   attr.height = 10;
   attr.event_mask = 0;
-
-  _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
 
   display_x11->leader_gdk_window = gdk_window_new (GDK_SCREEN_X11 (display_x11->default_screen)->root_window, 
 						   &attr, GDK_WA_X | GDK_WA_Y);
@@ -236,7 +253,17 @@ gdk_display_open (const gchar *display_name)
 #ifdef HAVE_XCOMPOSITE
   if (XCompositeQueryExtension (display_x11->xdisplay,
 				&ignore, &ignore))
-      display_x11->have_xcomposite = TRUE;
+    {
+      int major, minor;
+
+      XCompositeQueryVersion (display_x11->xdisplay, &major, &minor);
+
+      /* Prior to Composite version 0.4, composited windows clipped their
+       * parents, so you had to use IncludeInferiors to draw to the parent
+       * This isn't useful for our purposes, so require 0.4
+       */
+      display_x11->have_xcomposite = major > 0 || (major == 0 && minor >= 4);
+    }
   else
 #endif
     display_x11->have_xcomposite = FALSE;
@@ -258,16 +285,15 @@ gdk_display_open (const gchar *display_name)
 
   display_x11->have_shapes = FALSE;
   display_x11->have_input_shapes = FALSE;
-#ifdef HAVE_SHAPE_EXT
-  if (XShapeQueryExtension (GDK_DISPLAY_XDISPLAY (display), &ignore, &ignore))
+
+  if (XShapeQueryExtension (GDK_DISPLAY_XDISPLAY (display), &display_x11->shape_event_base, &ignore))
     {
       display_x11->have_shapes = TRUE;
-#ifdef ShapeInput	      
+#ifdef ShapeInput
       if (XShapeQueryVersion (GDK_DISPLAY_XDISPLAY (display), &maj, &min))
 	display_x11->have_input_shapes = (maj == 1 && min >= 1);
 #endif
     }
-#endif
 
   display_x11->trusted_client = TRUE;
   {
@@ -346,7 +372,7 @@ gdk_display_open (const gchar *display_name)
 	    XkbSelectEventDetails (display_x11->xdisplay,
 				   XkbUseCoreKbd, XkbStateNotify,
 				   XkbAllStateComponentsMask,
-                                   XkbGroupLockMask);
+                                   XkbGroupLockMask|XkbModifierLockMask);
 
 	    XkbSetDetectableAutoRepeat (display_x11->xdisplay,
 					True,
@@ -382,8 +408,7 @@ gdk_display_open (const gchar *display_name)
   _gdk_dnd_init (display);
 
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    gdk_display_request_selection_notification (display, 
-						GDK_SCREEN_X11 (display_x11->screens[i])->cm_selection_atom);
+    _gdk_x11_screen_setup (display_x11->screens[i]);
 
   g_signal_emit_by_name (gdk_display_manager_get(),
 			 "display_opened", display);
@@ -419,6 +444,13 @@ process_internal_connection (GIOChannel  *gioc,
 
   return TRUE;
 }
+
+gulong
+_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+{
+  return NextRequest (GDK_DISPLAY_XDISPLAY (display));
+}
+
 
 static GdkInternalConnection *
 gdk_add_connection_handler (Display *display,
@@ -476,7 +508,7 @@ gdk_internal_connection_watch (Display  *display,
  * 
  * Since: 2.2
  */
-G_CONST_RETURN gchar *
+const gchar *
 gdk_display_get_name (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
@@ -560,6 +592,20 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
   return FALSE;
 }
 
+struct XPointerUngrabInfo {
+  GdkDisplay *display;
+  guint32 time;
+};
+
+static void
+pointer_ungrab_callback (GdkDisplay *display,
+			 gpointer data,
+			 gulong serial)
+{
+  _gdk_display_pointer_grab_update (display, serial);
+}
+
+
 #define XSERVER_TIME_IS_LATER(time1, time2)                        \
   ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
     (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
@@ -576,43 +622,35 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
  */
 void
 gdk_display_pointer_ungrab (GdkDisplay *display,
-			    guint32     time)
+			    guint32     time_)
 {
   Display *xdisplay;
   GdkDisplayX11 *display_x11;
+  GdkPointerGrabInfo *grab;
+  unsigned long serial;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   display_x11 = GDK_DISPLAY_X11 (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
+
+  serial = NextRequest (xdisplay);
   
-  _gdk_input_ungrab_pointer (display, time);
-  XUngrabPointer (xdisplay, time);
+  _gdk_input_ungrab_pointer (display, time_);
+  XUngrabPointer (xdisplay, time_);
   XFlush (xdisplay);
 
-  if (time == GDK_CURRENT_TIME || 
-      display_x11->pointer_xgrab_time == GDK_CURRENT_TIME ||
-      !XSERVER_TIME_IS_LATER (display_x11->pointer_xgrab_time, time))
-    display_x11->pointer_xgrab_window = NULL;
-}
-
-/**
- * gdk_display_pointer_is_grabbed:
- * @display: a #GdkDisplay
- *
- * Test if the pointer is grabbed.
- *
- * Returns: %TRUE if an active X pointer grab is in effect
- *
- * Since: 2.2
- */
-gboolean
-gdk_display_pointer_is_grabbed (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
-  
-  return (GDK_DISPLAY_X11 (display)->pointer_xgrab_window != NULL &&
-	  !GDK_DISPLAY_X11 (display)->pointer_xgrab_implicit);
+  grab = _gdk_display_get_last_pointer_grab (display);
+  if (grab &&
+      (time_ == GDK_CURRENT_TIME ||
+       grab->time == GDK_CURRENT_TIME ||
+       !XSERVER_TIME_IS_LATER (grab->time, time_)))
+    {
+      grab->serial_end = serial;
+      _gdk_x11_roundtrip_async (display, 
+				pointer_ungrab_callback,
+				NULL);
+    }
 }
 
 /**
@@ -640,9 +678,9 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
   XFlush (xdisplay);
   
   if (time == GDK_CURRENT_TIME || 
-      display_x11->keyboard_xgrab_time == GDK_CURRENT_TIME ||
-      !XSERVER_TIME_IS_LATER (display_x11->keyboard_xgrab_time, time))
-    display_x11->keyboard_xgrab_window = NULL;
+      display->keyboard_grab.time == GDK_CURRENT_TIME ||
+      !XSERVER_TIME_IS_LATER (display->keyboard_grab.time, time))
+    _gdk_display_unset_has_keyboard_grab (display, FALSE);
 }
 
 /**
@@ -657,8 +695,12 @@ void
 gdk_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
+
+#ifdef HAVE_XKB
+  XkbBell (GDK_DISPLAY_XDISPLAY (display), None, 0, None);
+#else
   XBell (GDK_DISPLAY_XDISPLAY (display), 0);
+#endif
 }
 
 /**
@@ -788,6 +830,8 @@ gdk_display_x11_dispose (GObject *object)
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
   gint           i;
 
+  g_list_foreach (display_x11->input_devices, (GFunc) g_object_run_dispose, NULL);
+
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     _gdk_screen_close (display_x11->screens[i]);
 
@@ -814,6 +858,8 @@ gdk_display_x11_finalize (GObject *object)
       g_free (display_x11->motif_target_lists);
     }
 
+  _gdk_x11_cursor_display_finalize (GDK_DISPLAY_OBJECT(display_x11));
+
   /* Atom Hashtable */
   g_hash_table_destroy (display_x11->atom_from_virtual);
   g_hash_table_destroy (display_x11->atom_to_virtual);
@@ -830,7 +876,6 @@ gdk_display_x11_finalize (GObject *object)
   g_slist_free (display_x11->event_types);
 
   /* input GdkDevice list */
-  /* FIXME need to write finalize fct */
   g_list_foreach (display_x11->input_devices, (GFunc) g_object_unref, NULL);
   g_list_free (display_x11->input_devices);
 
@@ -885,7 +930,8 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
  * Given the root window ID of one of the screen's of a #GdkDisplay,
  * finds the screen.
  * 
- * Return value: the #GdkScreen corresponding to @xrootwin, or %NULL.
+ * Return value: (transfer none): the #GdkScreen corresponding to
+ *     @xrootwin, or %NULL.
  **/
 GdkScreen *
 _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
@@ -1308,7 +1354,9 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   Atom clipboard_manager, save_targets;
-  
+
+  g_return_if_fail (GDK_WINDOW_IS_X11 (clipboard_window));
+
   clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
   save_targets = gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS");
 
@@ -1408,7 +1456,7 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
  *
  * Since: 2.12
  */
-G_CONST_RETURN gchar *
+const gchar *
 gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
 {
   return GDK_DISPLAY_X11 (display)->startup_notification_id;

@@ -47,18 +47,20 @@
  *
  */
 
+#ifndef __GTK_TEXT_TAG_H__
+#define __GTK_TEXT_TAG_H__
+
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TEXT_TAG_H__
-#define __GTK_TEXT_TAG_H__
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 
 /* Not needed, retained for compatibility -Yosh */
 #include <gtk/gtkobject.h>
+
 
 G_BEGIN_DECLS
 
@@ -83,13 +85,13 @@ struct _GtkTextTag
 {
   GObject parent_instance;
 
-  GtkTextTagTable *table;
+  GtkTextTagTable *GSEAL (table);
 
-  char *name;                   /* Name of this tag.  This field is actually
+  char *GSEAL (name);           /* Name of this tag.  This field is actually
                                  * a pointer to the key from the entry in
                                  * tkxt->tagTable, so it needn't be freed
                                  * explicitly. */
-  int priority;         /* Priority of this tag within widget.  0
+  int GSEAL (priority);  /* Priority of this tag within widget.  0
                          * means lowest priority.  Exactly one tag
                          * has each integer value between 0 and
                          * numTags-1. */
@@ -101,38 +103,38 @@ struct _GtkTextTag
    * defaults if no tag specifies an override.
    */
 
-  GtkTextAttributes *values;
+  GtkTextAttributes *GSEAL (values);
   
   /* Flags for whether a given value is set; if a value is unset, then
    * this tag does not affect it.
    */
-  guint bg_color_set : 1;
-  guint bg_stipple_set : 1;
-  guint fg_color_set : 1;
-  guint scale_set : 1;
-  guint fg_stipple_set : 1;
-  guint justification_set : 1;
-  guint left_margin_set : 1;
-  guint indent_set : 1;
-  guint rise_set : 1;
-  guint strikethrough_set : 1;
-  guint right_margin_set : 1;
-  guint pixels_above_lines_set : 1;
-  guint pixels_below_lines_set : 1;
-  guint pixels_inside_wrap_set : 1;
-  guint tabs_set : 1;
-  guint underline_set : 1;
-  guint wrap_mode_set : 1;
-  guint bg_full_height_set : 1;
-  guint invisible_set : 1;
-  guint editable_set : 1;
-  guint language_set : 1;
-  guint pg_bg_color_set : 1;
+  guint GSEAL (bg_color_set) : 1;
+  guint GSEAL (bg_stipple_set) : 1;
+  guint GSEAL (fg_color_set) : 1;
+  guint GSEAL (scale_set) : 1;
+  guint GSEAL (fg_stipple_set) : 1;
+  guint GSEAL (justification_set) : 1;
+  guint GSEAL (left_margin_set) : 1;
+  guint GSEAL (indent_set) : 1;
+  guint GSEAL (rise_set) : 1;
+  guint GSEAL (strikethrough_set) : 1;
+  guint GSEAL (right_margin_set) : 1;
+  guint GSEAL (pixels_above_lines_set) : 1;
+  guint GSEAL (pixels_below_lines_set) : 1;
+  guint GSEAL (pixels_inside_wrap_set) : 1;
+  guint GSEAL (tabs_set) : 1;
+  guint GSEAL (underline_set) : 1;
+  guint GSEAL (wrap_mode_set) : 1;
+  guint GSEAL (bg_full_height_set) : 1;
+  guint GSEAL (invisible_set) : 1;
+  guint GSEAL (editable_set) : 1;
+  guint GSEAL (language_set) : 1;
+  guint GSEAL (pg_bg_color_set) : 1;
 
   /* Whether these margins accumulate or override */
-  guint accumulative_margin : 1;
+  guint GSEAL (accumulative_margin) : 1;
 
-  guint pad1 : 1;
+  guint GSEAL (pad1) : 1;
 };
 
 struct _GtkTextTagClass

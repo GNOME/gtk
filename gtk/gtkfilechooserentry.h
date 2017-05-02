@@ -33,21 +33,20 @@ G_BEGIN_DECLS
 typedef struct _GtkFileChooserEntry      GtkFileChooserEntry;
 
 GType              _gtk_file_chooser_entry_get_type           (void) G_GNUC_CONST;
-GtkWidget *        _gtk_file_chooser_entry_new                (gboolean eat_tab);
+GtkWidget *        _gtk_file_chooser_entry_new                (gboolean             eat_tab);
 void               _gtk_file_chooser_entry_set_action         (GtkFileChooserEntry *chooser_entry,
 							       GtkFileChooserAction action);
 GtkFileChooserAction _gtk_file_chooser_entry_get_action       (GtkFileChooserEntry *chooser_entry);
-void               _gtk_file_chooser_entry_set_file_system    (GtkFileChooserEntry *chooser_entry,
-							       GtkFileSystem       *file_system);
 void               _gtk_file_chooser_entry_set_base_folder    (GtkFileChooserEntry *chooser_entry,
 							       GFile               *folder);
-void               _gtk_file_chooser_entry_set_file_part      (GtkFileChooserEntry *chooser_entry,
-							       const gchar         *file_part);
 GFile *            _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry);
 const gchar *      _gtk_file_chooser_entry_get_file_part      (GtkFileChooserEntry *chooser_entry);
 gboolean           _gtk_file_chooser_entry_get_is_folder      (GtkFileChooserEntry *chooser_entry,
 							       GFile               *file);
 void               _gtk_file_chooser_entry_select_filename    (GtkFileChooserEntry *chooser_entry);
+void               _gtk_file_chooser_entry_set_local_only     (GtkFileChooserEntry *chooser_entry,
+                                                               gboolean             local_only);
+gboolean           _gtk_file_chooser_entry_get_local_only     (GtkFileChooserEntry *chooser_entry);
 
 G_END_DECLS
 

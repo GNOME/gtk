@@ -30,7 +30,7 @@ gdk_colormap_get_type (void)
 
   if (!object_type)
     {
-      static const GTypeInfo object_info =
+      const GTypeInfo object_info =
       {
         sizeof (GdkColormapClass),
         (GBaseInitFunc) NULL,
@@ -196,22 +196,54 @@ gdk_colormap_get_screen (GdkColormap *cmap)
   return gdk_screen_get_default ();
 }
 
-void
-_gdk_quartz_colormap_get_rgba_from_pixel (GdkColormap *colormap,
-					  guint32      pixel,
-					  float       *red,
-					  float       *green,
-					  float       *blue,
-					  float       *alpha)
+CGColorRef
+_gdk_quartz_colormap_get_cgcolor_from_pixel (GdkDrawable *drawable,
+                                             guint32      pixel)
 {
-  *red   = (pixel >> 16 & 0xff) / 255.0;
-  *green = (pixel >> 8  & 0xff) / 255.0;
-  *blue  = (pixel       & 0xff) / 255.0;
- 
-  if (colormap && gdk_colormap_get_visual (colormap)->depth == 32)
-    *alpha = (pixel >> 24 & 0xff) / 255.0;
+  CGFloat components[4] = { 0.0f, };
+  CGColorRef color;
+  CGColorSpaceRef colorspace;
+  const GdkVisual *visual;
+  GdkColormap *colormap;
+
+  colormap = gdk_drawable_get_colormap (drawable);
+  if (colormap)
+    visual = gdk_colormap_get_visual (colormap);
   else
-    *alpha = 1.0;
+    visual = gdk_visual_get_best_with_depth (gdk_drawable_get_depth (drawable));
+
+  switch (visual->type)
+    {
+      case GDK_VISUAL_STATIC_GRAY:
+      case GDK_VISUAL_GRAYSCALE:
+        components[0] = (pixel & 0xff) / 255.0f;
+
+        if (visual->depth == 1)
+          components[0] = components[0] == 0.0f ? 0.0f : 1.0f;
+        components[1] = 1.0f;
+
+        colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericGray);
+        color = CGColorCreate (colorspace, components);
+        CGColorSpaceRelease (colorspace);
+        break;
+
+      default:
+        components[0] = (pixel >> 16 & 0xff) / 255.0;
+        components[1] = (pixel >> 8  & 0xff) / 255.0;
+        components[2] = (pixel       & 0xff) / 255.0;
+
+        if (visual->depth == 32)
+          components[3] = (pixel >> 24 & 0xff) / 255.0;
+        else
+          components[3] = 1.0;
+
+        colorspace = CGColorSpaceCreateDeviceRGB ();
+        color = CGColorCreate (colorspace, components);
+        CGColorSpaceRelease (colorspace);
+        break;
+    }
+
+  return color;
 }
 
 gboolean

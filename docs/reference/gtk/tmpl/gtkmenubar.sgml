@@ -17,6 +17,9 @@ The #GtkMenuBar is a subclass of #GtkMenuShell which contains one to many #GtkMe
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### SECTION Image ##### -->
+
+
 <!-- ##### STRUCT GtkMenuBar ##### -->
 <para>
 The #GtkMenuBar struct contains the following fields. (These fields should be considered read-only.  They should never be set by an application.)
@@ -48,6 +51,7 @@ The #GtkMenuBar struct contains the following fields. (These fields should be co
 Creates the new #GtkMenuBar
 </para>
 
+@void: 
 @Returns: the #GtkMenuBar
 
 
@@ -84,13 +88,14 @@ Adds a new #GtkMenuItem to the GtkMenuBar at the position defined by @position
 
 <!-- ##### ENUM GtkPackDirection ##### -->
 <para>
-
+Determines how widgets should be packed insided menubars and 
+menuitems contained in menubars.
 </para>
 
-@GTK_PACK_DIRECTION_LTR: 
-@GTK_PACK_DIRECTION_RTL: 
-@GTK_PACK_DIRECTION_TTB: 
-@GTK_PACK_DIRECTION_BTT: 
+@GTK_PACK_DIRECTION_LTR: Widgets are packed left-to-right.
+@GTK_PACK_DIRECTION_RTL: Widgets are packed right-to-left.
+@GTK_PACK_DIRECTION_TTB: Widgets are packed top-to-bottom.
+@GTK_PACK_DIRECTION_BTT: Widgets are packed bottom-to-top.
 
 <!-- ##### FUNCTION gtk_menu_bar_set_pack_direction ##### -->
 <para>

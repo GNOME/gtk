@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_PIXMAP_H__
+#define __GDK_PIXMAP_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_PIXMAP_H__
-#define __GDK_PIXMAP_H__
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdrawable.h>
@@ -51,9 +51,9 @@ struct _GdkPixmapObject
 {
   GdkDrawable parent_instance;
   
-  GdkDrawable *impl;  /* window-system-specific delegate object */
+  GdkDrawable *GSEAL (impl);  /* window-system-specific delegate object */
 
-  gint depth;
+  gint GSEAL (depth);
 };
 
 struct _GdkPixmapObjectClass
@@ -70,6 +70,7 @@ GdkPixmap* gdk_pixmap_new		(GdkDrawable *drawable,
 					 gint	      width,
 					 gint	      height,
 					 gint	      depth);
+#ifndef GDK_DISABLE_DEPRECATED
 GdkBitmap* gdk_bitmap_create_from_data	(GdkDrawable *drawable,
 					 const gchar *data,
 					 gint	      width,
@@ -100,6 +101,11 @@ GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable    *drawable,
 						  GdkBitmap     **mask,
 						  const GdkColor *transparent_color,
 						  gchar         **data);
+#endif
+
+void          gdk_pixmap_get_size                (GdkPixmap      *pixmap,
+                                                  gint	         *width,
+                                                  gint  	 *height);
 
 /* Functions to create/lookup pixmaps from their native equivalents
  */
@@ -119,10 +125,10 @@ GdkPixmap*    gdk_pixmap_foreign_new_for_screen  (GdkScreen       *screen,
                                                   gint             depth);
 
 #ifndef GDK_DISABLE_DEPRECATED
-#define gdk_bitmap_ref                 gdk_drawable_ref
-#define gdk_bitmap_unref               gdk_drawable_unref
-#define gdk_pixmap_ref                 gdk_drawable_ref
-#define gdk_pixmap_unref               gdk_drawable_unref
+#define gdk_bitmap_ref                 g_object_ref
+#define gdk_bitmap_unref               g_object_unref
+#define gdk_pixmap_ref                 g_object_ref
+#define gdk_pixmap_unref               g_object_unref
 #endif /* GDK_DISABLE_DEPRECATED */
 
 G_END_DECLS

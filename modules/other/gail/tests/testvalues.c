@@ -13,7 +13,7 @@ static guint id;
 static void _value_change_handler (AtkObject   *obj,
                                    AtkPropertyValues   *values)
 {
-  G_CONST_RETURN gchar *type_name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
+  const gchar *type_name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
    GValue *value_back, val;
 
   value_back = &val;

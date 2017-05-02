@@ -63,6 +63,11 @@ static GtkDragDestInfo *gtk_drag_get_dest_info  (GdkDragContext   *context,
 						 gboolean          create);
 static void gtk_drag_source_site_destroy        (gpointer           data);
 
+static GtkDragSourceInfo *gtk_drag_get_source_info (GdkDragContext *context,
+						    gboolean        create);
+
+extern GdkDragContext *gdk_quartz_drag_source_context (); /* gdk/quartz/gdkdnd-quartz.c */
+
 struct _GtkDragSourceSite 
 {
   GdkModifierType    start_button_mask;
@@ -89,13 +94,16 @@ struct _GtkDragSourceSite
 
 struct _GtkDragSourceInfo 
 {
+  GtkWidget         *source_widget;
   GtkWidget         *widget;
   GtkTargetList     *target_list; /* Targets for drag data */
   GdkDragAction      possible_actions; /* Actions allowed by source */
   GdkDragContext    *context;	  /* drag context */
-
+  NSEvent           *nsevent;     /* what started it */
   gint hot_x, hot_y;		  /* Hot spot for drag */
   GdkPixbuf         *icon_pixbuf;
+  gboolean           success;
+  gboolean           delete;
 };
 
 struct _GtkDragDestSite 
@@ -144,7 +152,8 @@ struct _GtkDragFindData
   selection_data.selection = GDK_NONE;
   selection_data.data = NULL;
   selection_data.length = -1;
-  selection_data.target = _gtk_quartz_pasteboard_type_to_atom (type);
+  selection_data.target = gdk_quartz_pasteboard_type_to_atom_libgtk_only (type);
+  selection_data.display = gdk_display_get_default ();
 
   if (gtk_target_list_find (info->target_list, 
 			    selection_data.target, 
@@ -233,19 +242,24 @@ gtk_drag_get_data (GtkWidget      *widget,
     }      
 }
 
-
-GtkWidget *
-gtk_drag_get_source_widget (GdkDragContext *context)
-{
-  return NULL;
-}
-
 void 
 gtk_drag_finish (GdkDragContext *context,
 		 gboolean        success,
 		 gboolean        del,
 		 guint32         time)
 {
+  GtkDragSourceInfo *info;
+  GdkDragContext* source_context = gdk_quartz_drag_source_context ();
+
+  if (source_context)
+    {
+      info = gtk_drag_get_source_info (source_context, FALSE);
+      if (info)
+        {
+          info->success = success;
+          info->delete = del;
+        }
+    }
 }
 
 static void
@@ -307,6 +321,22 @@ gtk_drag_clear_source_info (GdkDragContext *context)
   g_object_set_qdata (G_OBJECT (context), dest_info_quark, NULL);
 }
 
+GtkWidget *
+gtk_drag_get_source_widget (GdkDragContext *context)
+{
+  GtkDragSourceInfo *info;
+  GdkDragContext* real_source_context = gdk_quartz_drag_source_context();
+
+  if (!real_source_context)
+    return NULL;
+
+  info = gtk_drag_get_source_info (real_source_context, FALSE);
+  if (!info)
+     return NULL;
+
+  return info->source_widget;
+}
+
 /*************************************************************
  * gtk_drag_highlight_expose:
  *     Callback for expose_event for highlighted widgets.
@@ -324,11 +354,11 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 {
   gint x, y, width, height;
   
-  if (GTK_WIDGET_DRAWABLE (widget))
+  if (gtk_widget_is_drawable (widget))
     {
       cairo_t *cr;
       
-      if (GTK_WIDGET_NO_WINDOW (widget))
+      if (!gtk_widget_get_has_window (widget))
 	{
 	  x = widget->allocation.x;
 	  y = widget->allocation.y;
@@ -339,7 +369,8 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 	{
 	  x = 0;
 	  y = 0;
-	  gdk_drawable_get_size (widget->window, &width, &height);
+	  width = gdk_window_get_width (widget->window);
+	  height = gdk_window_get_height (widget->window);
 	}
       
       gtk_paint_shadow (widget->style, widget->window,
@@ -405,7 +436,7 @@ get_toplevel_nswindow (GtkWidget *widget)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
   
-  if (GTK_WIDGET_TOPLEVEL (toplevel) && toplevel->window)
+  if (gtk_widget_is_toplevel (toplevel) && toplevel->window)
     return [gdk_quartz_window_get_nsview (toplevel->window) window];
   else
     return NULL;
@@ -417,7 +448,7 @@ register_types (GtkWidget *widget, GtkDragDestSite *site)
   if (site->target_list)
     {
       NSWindow *nswindow = get_toplevel_nswindow (widget);
-      NSArray *types;
+      NSSet *types;
       NSAutoreleasePool *pool;
 
       if (!nswindow)
@@ -426,7 +457,9 @@ register_types (GtkWidget *widget, GtkDragDestSite *site)
       pool = [[NSAutoreleasePool alloc] init];
       types = _gtk_quartz_target_list_to_pasteboard_types (site->target_list);
 
-      [nswindow registerForDraggedTypes:types];
+      [nswindow registerForDraggedTypes:[types allObjects]];
+
+      [types release];
       [pool release];
     }
 }
@@ -474,8 +507,6 @@ gtk_drag_dest_set (GtkWidget            *widget,
 
   old_site = g_object_get_data (G_OBJECT (widget), "gtk-drag-dest");
 
-  gtk_drag_dest_unset (widget);
-
   site = g_new (GtkDragDestSite, 1);
   site->flags = flags;
   site->have_drag = FALSE;
@@ -490,7 +521,9 @@ gtk_drag_dest_set (GtkWidget            *widget,
   else
     site->track_motion = FALSE;
 
-  if (GTK_WIDGET_REALIZED (widget))
+  gtk_drag_dest_unset (widget);
+
+  if (gtk_widget_get_realized (widget))
     gtk_drag_dest_realized (widget, site);
 
   g_signal_connect (widget, "realize",
@@ -636,7 +669,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
   gint x_offset = 0;
   gint y_offset = 0;
 
-  if (data->found || !GTK_WIDGET_MAPPED (widget) || !GTK_WIDGET_SENSITIVE (widget))
+  if (data->found || !gtk_widget_get_mapped (widget) || !gtk_widget_get_sensitive (widget))
     return;
 
   /* Note that in the following code, we only count the
@@ -666,7 +699,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
       allocation_to_window_x = widget->allocation.x;
       allocation_to_window_y = widget->allocation.y;
 
-      if (!GTK_WIDGET_NO_WINDOW (widget))
+      if (gtk_widget_get_has_window (widget))
 	{
 	  /* The allocation is relative to the parent window for
 	   * window widgets, not to widget->window.
@@ -684,7 +717,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  GdkRectangle window_rect = { 0, 0, 0, 0 };
 	  
-	  gdk_drawable_get_size (window, &window_rect.width, &window_rect.height);
+	  window_rect.width = gdk_window_get_width (window);
+	  window_rect.height = gdk_window_get_height (window);
 
 	  gdk_rectangle_intersect (&new_allocation, &window_rect, &new_allocation);
 
@@ -726,7 +760,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	  gtk_container_forall (GTK_CONTAINER (widget), prepend_and_ref_widget, &children);
 	  for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
 	    {
-	      if (!new_data.found && GTK_WIDGET_DRAWABLE (tmp_list->data))
+	      if (!new_data.found && gtk_widget_is_drawable (tmp_list->data))
 		gtk_drag_find_widget (tmp_list->data, &new_data);
 	      g_object_unref (tmp_list->data);
 	    }
@@ -1031,6 +1065,69 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
   return GDK_NONE;
 }
 
+static gboolean
+gtk_drag_begin_idle (gpointer arg)
+{
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  GdkDragContext* context = (GdkDragContext*) arg;
+  GtkDragSourceInfo* info = gtk_drag_get_source_info (context, FALSE);
+  NSWindow *nswindow;
+  NSPasteboard *pasteboard;
+  GtkDragSourceOwner *owner;
+  NSPoint point;
+  NSSet *types;
+  NSImage *drag_image;
+
+  g_assert (info != NULL);
+
+  pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+  owner = [[GtkDragSourceOwner alloc] initWithInfo:info];
+
+  types = _gtk_quartz_target_list_to_pasteboard_types (info->target_list);
+
+  [pasteboard declareTypes:[types allObjects] owner:owner];
+
+  [owner release];
+  [types release];
+
+  if ((nswindow = get_toplevel_nswindow (info->source_widget)) == NULL)
+     return FALSE;
+  
+  /* Ref the context. It's unreffed when the drag has been aborted */
+  g_object_ref (info->context);
+
+  /* FIXME: If the event isn't a mouse event, use the global cursor position instead */
+  point = [info->nsevent locationInWindow];
+
+  /* Account for the given hotspot position. The y position must be
+   * corrected to the NSWindow coordinate system.
+   */
+  point.x -= info->hot_x;
+  point.y += -(gdk_pixbuf_get_height (info->icon_pixbuf) - info->hot_y);
+
+  drag_image = _gtk_quartz_create_image_from_pixbuf (info->icon_pixbuf);
+  if (drag_image == NULL)
+    {
+      g_object_unref (info->context);
+      return FALSE;
+    }
+
+  [nswindow dragImage:drag_image
+                   at:point
+               offset:NSZeroSize
+                event:info->nsevent
+           pasteboard:pasteboard
+               source:nswindow
+            slideBack:YES];
+
+  [info->nsevent release];
+  [drag_image release];
+
+  [pool release];
+
+  return FALSE;
+}
+
 static GdkDragContext *
 gtk_drag_begin_internal (GtkWidget         *widget,
 			 GtkDragSourceSite *site,
@@ -1041,17 +1138,62 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 {
   GtkDragSourceInfo *info;
   GdkDragContext *context;
-  NSWindow *nswindow;
-  NSPasteboard *pasteboard;
-  GtkDragSourceOwner *owner;
+  NSWindow *nswindow = get_toplevel_nswindow (widget);
+  NSPoint point = {0, 0};
+  gdouble x, y;
+  double time = (double)g_get_real_time ();
   NSEvent *nsevent;
-  NSPoint point;
+  NSTimeInterval nstime;
 
-  context = gdk_drag_begin (NULL, NULL);
+  if (event)
+    {
+      if (gdk_event_get_coords (event, &x, &y))
+        {
+          /* We need to translate (x, y) to coordinates relative to the
+           * toplevel GdkWindow, which should be the GdkWindow backing
+           * nswindow. Then, we convert to the NSWindow coordinate system.
+           */
+          GdkWindow *window = event->any.window;
+          GdkWindow *toplevel = gdk_window_get_effective_toplevel (window);
+
+          while (window != toplevel)
+            {
+              double old_x = x;
+              double old_y = y;
+
+              gdk_window_coords_to_parent (window, old_x, old_y,
+                                           &x, &y);
+              window = gdk_window_get_effective_parent (window);
+            }
+
+          point.x = x;
+          point.y = gdk_window_get_height (window) - y;
+        }
+      time = (double)gdk_event_get_time (event);
+    }
+  nstime = [[NSDate dateWithTimeIntervalSince1970: time / 1000] timeIntervalSinceReferenceDate];
+  nsevent = [NSEvent mouseEventWithType: NSLeftMouseDown
+        	      location: point
+		      modifierFlags: 0
+	              timestamp: nstime
+		      windowNumber: [nswindow windowNumber]
+		      context: [nswindow graphicsContext]
+		      eventNumber: 0
+		      clickCount: 1
+	              pressure: 0.0 ];
+
+  GdkWindow *window = [[nswindow contentView] gdkWindow];
+  g_return_val_if_fail(nsevent != NULL, NULL);
+
+  context = gdk_drag_begin (window, NULL);
+  g_return_val_if_fail( context != NULL, NULL);
   context->is_source = TRUE;
 
   info = gtk_drag_get_source_info (context, TRUE);
-  
+  info->nsevent = nsevent;
+  [info->nsevent retain];
+
+  info->source_widget = g_object_ref (widget);
   info->widget = g_object_ref (widget);
   info->target_list = target_list;
   gtk_target_list_ref (target_list);
@@ -1086,13 +1228,13 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 		GdkPixbuf *pixbuf;
 
 		pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, 1, 1);
-		gdk_pixbuf_fill (pixbuf, 0xffffff);
-	    
-		gtk_drag_set_icon_pixbuf (context,
-					  pixbuf,
+ 		gdk_pixbuf_fill (pixbuf, 0xffffff);
+
+ 		gtk_drag_set_icon_pixbuf (context,
+ 					  pixbuf,
 					  0, 0);
 
-		g_object_unref (pixbuf);
+ 		g_object_unref (pixbuf);
 	      }
 	    break;
 	  case GTK_IMAGE_PIXBUF:
@@ -1117,31 +1259,13 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 	  }
     }
 
+  /* drag will begin in an idle handler to avoid nested run loops */
+
+  g_idle_add_full (G_PRIORITY_HIGH_IDLE, gtk_drag_begin_idle, context, NULL);
+
   gdk_pointer_ungrab (0);
-  
-  pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-  owner = [[GtkDragSourceOwner alloc] initWithInfo:info];
 
-  [pasteboard declareTypes:_gtk_quartz_target_list_to_pasteboard_types (target_list) owner:owner];
-
-  /* Ref the context. It's unreffed when the drag has been aborted */
-  g_object_ref (info->context);
-
-  nswindow = get_toplevel_nswindow (widget);
-
-  /* FIXME: If the event isn't a mouse event, use the global cursor position instead */
-  nsevent = [nswindow currentEvent];
-  point = [nsevent locationInWindow];
-
-  [nswindow dragImage:_gtk_quartz_create_image_from_pixbuf (info->icon_pixbuf)
-                   at:point
-               offset:NSMakeSize(0, 0)
-                event:nsevent
-           pasteboard:pasteboard
-               source:nswindow
-            slideBack:YES];
-
-  return info->context;
+  return context;
 }
 
 GdkDragContext *
@@ -1152,7 +1276,7 @@ gtk_drag_begin (GtkWidget         *widget,
 		GdkEvent          *event)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
+  g_return_val_if_fail (gtk_widget_get_realized (widget), NULL);
   g_return_val_if_fail (targets != NULL, NULL);
 
   return gtk_drag_begin_internal (widget, NULL, targets,
@@ -1668,7 +1792,20 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
 			  gint               hot_x,
 			  gint               hot_y)
 {
-  g_warning ("gtk_drag_set_icon_pixmap is not supported on Mac OS X");
+  GdkPixbuf *pixbuf;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+  g_return_if_fail (GDK_IS_PIXMAP (pixmap));
+
+  pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, colormap,
+                                         0, 0, /* src */
+                                         0, 0, /* dst */
+                                         -1, -1);
+
+  gtk_drag_set_icon_pixbuf (context, pixbuf, hot_x, hot_y);
+  g_object_unref (pixbuf);
 }
 
 /**
@@ -1703,7 +1840,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   g_return_if_fail (context->is_source);
   g_return_if_fail (icon_name != NULL);
 
-  screen = gdk_drawable_get_screen (context->source_window);
+  screen = gdk_window_get_screen (context->source_window);
   g_return_if_fail (screen != NULL);
 
   settings = gtk_settings_get_for_screen (screen);
@@ -1754,33 +1891,65 @@ gtk_drag_set_default_icon (GdkColormap   *colormap,
 static void
 gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 {
+  NSPasteboard *pasteboard;
+  NSAutoreleasePool *pool;
+
   if (info->icon_pixbuf)
     g_object_unref (info->icon_pixbuf);
 
   g_signal_emit_by_name (info->widget, "drag-end", 
 			 info->context);
 
+  if (info->source_widget)
+    g_object_unref (info->source_widget);
+
   if (info->widget)
     g_object_unref (info->widget);
 
   gtk_target_list_unref (info->target_list);
 
+  pool = [[NSAutoreleasePool alloc] init];
+
+  /* Empty the pasteboard, so that it will not accidentally access
+   * info->context after it has been destroyed.
+   */
+  pasteboard = [NSPasteboard pasteboardWithName: NSDragPboard];
+  [pasteboard declareTypes: nil owner: nil];
+
+  [pool release];
+
   gtk_drag_clear_source_info (info->context);
   g_object_unref (info->context);
 
   g_free (info);
+  info = NULL;
 }
 
 static gboolean
 drag_drop_finished_idle_cb (gpointer data)
 {
-  gtk_drag_source_info_destroy (data);
+  GtkDragSourceInfo* info = (GtkDragSourceInfo*) data;
+
+  if (info->success)
+    gtk_drag_source_info_destroy (data);
+
   return FALSE;
 }
 
 static void
-gtk_drag_drop_finished (GtkDragSourceInfo *info)
+gtk_drag_drop_finished (GtkDragSourceInfo *info,
+                        GtkDragResult      result)
 {
+  gboolean success = (result == GTK_DRAG_RESULT_SUCCESS);
+
+  if (!success)
+    g_signal_emit_by_name (info->source_widget, "drag-failed",
+                           info->context, GTK_DRAG_RESULT_NO_TARGET, &success);
+
+  if (success && info->delete)
+    g_signal_emit_by_name (info->source_widget, "drag-data-delete",
+                           info->context);
+
   /* Workaround for the fact that the NS API blocks until the drag is
    * over. This way the context is still valid when returning from
    * drag_begin, even if it will still be quite useless. See bug #501588.
@@ -1805,6 +1974,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 {
   GtkDragSourceInfo *info;
   GdkDragContext *context;
+  GtkDragResult result;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (event != NULL);
@@ -1817,7 +1987,8 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
   switch (event->type)
     {
     case GDK_DROP_FINISHED:
-      gtk_drag_drop_finished (info);
+      result = (gdk_drag_context_get_dest_window (context) != NULL) ? GTK_DRAG_RESULT_SUCCESS : GTK_DRAG_RESULT_NO_TARGET;
+      gtk_drag_drop_finished (info, result);
       break;
     default:
       g_assert_not_reached ();

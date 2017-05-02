@@ -36,6 +36,27 @@
 
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkplug
+ * @Short_description: Toplevel for embedding into other processes
+ * @Title: GtkPlug
+ * @See_also: #GtkSocket
+ *
+ * Together with #GtkSocket, #GtkPlug provides the ability
+ * to embed widgets from one process into another process
+ * in a fashion that is transparent to the user. One
+ * process creates a #GtkSocket widget and passes the
+ * ID of that widget's window to the other process,
+ * which then creates a #GtkPlug with that window ID.
+ * Any widgets contained in the #GtkPlug then will appear
+ * inside the first application's window.
+ *
+ * <note>
+ * The #GtkPlug and #GtkSocket widgets are currently not available
+ * on all platforms supported by GTK+.
+ * </note>
+ */
+
 static void            gtk_plug_get_property          (GObject     *object,
 						       guint        prop_id,
 						       GValue      *value,
@@ -171,8 +192,7 @@ gtk_plug_class_init (GtkPlugClass *class)
    * GtkPlug::embedded:
    * @plug: the object on which the signal was emitted
    *
-   * Gets emitted when the plug becomes embedded in a socket
-   * and when the embedding ends.
+   * Gets emitted when the plug becomes embedded in a socket.
    */ 
   plug_signals[EMBEDDED] =
     g_signal_new (I_("embedded"),
@@ -217,10 +237,10 @@ gtk_plug_set_is_child (GtkPlug  *plug,
        * here, but don't bother remapping -- we will get mapped
        * by gtk_widget_set_parent ().
        */
-      if (GTK_WIDGET_MAPPED (plug))
+      if (gtk_widget_get_mapped (GTK_WIDGET (plug)))
 	gtk_widget_unmap (GTK_WIDGET (plug));
       
-      GTK_WIDGET_UNSET_FLAGS (plug, GTK_TOPLEVEL);
+      _gtk_window_set_is_toplevel (GTK_WINDOW (plug), FALSE);
       gtk_container_set_resize_mode (GTK_CONTAINER (plug), GTK_RESIZE_PARENT);
 
       _gtk_widget_propagate_hierarchy_changed (GTK_WIDGET (plug), GTK_WIDGET (plug));
@@ -235,7 +255,7 @@ gtk_plug_set_is_child (GtkPlug  *plug,
       plug->modality_group = gtk_window_group_new ();
       gtk_window_group_add_window (plug->modality_group, GTK_WINDOW (plug));
       
-      GTK_WIDGET_SET_FLAGS (plug, GTK_TOPLEVEL);
+      _gtk_window_set_is_toplevel (GTK_WINDOW (plug), TRUE);
       gtk_container_set_resize_mode (GTK_CONTAINER (plug), GTK_RESIZE_QUEUE);
 
       _gtk_widget_propagate_hierarchy_changed (GTK_WIDGET (plug), NULL);
@@ -257,7 +277,7 @@ gtk_plug_get_id (GtkPlug *plug)
 {
   g_return_val_if_fail (GTK_IS_PLUG (plug), 0);
 
-  if (!GTK_WIDGET_REALIZED (plug))
+  if (!gtk_widget_get_realized (GTK_WIDGET (plug)))
     gtk_widget_realize (GTK_WIDGET (plug));
 
   return _gtk_plug_windowing_get_id (plug);
@@ -287,7 +307,7 @@ gtk_plug_get_embedded (GtkPlug *plug)
  *
  * Retrieves the socket the plug is embedded in.
  *
- * Return value: the window of the socket, or %NULL
+ * Return value: (transfer none): the window of the socket, or %NULL
  *
  * Since: 2.14
  **/
@@ -315,7 +335,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   
   g_return_if_fail (GTK_IS_PLUG (plug));
   g_return_if_fail (GTK_IS_SOCKET (socket_));
-  g_return_if_fail (GTK_WIDGET_REALIZED (socket_));
+  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (socket_)));
 
   widget = GTK_WIDGET (plug);
 
@@ -325,10 +345,14 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
   socket_->plug_widget = widget;
 
   plug->socket_window = GTK_WIDGET (socket_)->window;
+  g_object_ref (plug->socket_window);
+  g_signal_emit (plug, plug_signals[EMBEDDED], 0);
+  g_object_notify (G_OBJECT (plug), "embedded");
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     {
-      gdk_drawable_get_size (GDK_DRAWABLE (widget->window), &w, &h);
+      w = gdk_window_get_width (widget->window);
+      h = gdk_window_get_height (widget->window);
       gdk_window_reparent (widget->window, plug->socket_window, -w, -h);
     }
 
@@ -380,7 +404,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 
   g_return_if_fail (GTK_IS_PLUG (plug));
   g_return_if_fail (GTK_IS_SOCKET (socket_));
-  g_return_if_fail (GTK_WIDGET_REALIZED (plug));
+  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (plug)));
 
   widget = GTK_WIDGET (plug);
 
@@ -390,7 +414,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   g_object_ref (plug);
   g_object_ref (socket_);
 
-  widget_was_visible = GTK_WIDGET_VISIBLE (plug);
+  widget_was_visible = gtk_widget_get_visible (widget);
   
   gdk_window_hide (widget->window);
   GTK_PRIVATE_SET_FLAG (plug, GTK_IN_REPARENT);
@@ -410,10 +434,13 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   socket_->same_app = FALSE;
 
   plug->same_app = FALSE;
-  plug->socket_window = NULL;
-
+  if (plug->socket_window != NULL)
+    {
+      g_object_unref (plug->socket_window);
+      plug->socket_window = NULL;
+    }
   gtk_plug_set_is_child (plug, FALSE);
-		    
+
   g_signal_emit_by_name (socket_, "plug-removed", &result);
   if (!result)
     gtk_widget_destroy (GTK_WIDGET (socket_));
@@ -423,7 +450,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
 
   g_object_unref (plug);
 
-  if (widget_was_visible && GTK_WIDGET_VISIBLE (socket_))
+  if (widget_was_visible && gtk_widget_get_visible (GTK_WIDGET (socket_)))
     gtk_widget_queue_resize (GTK_WIDGET (socket_));
 
   g_object_unref (socket_);
@@ -467,22 +494,25 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
       gpointer user_data = NULL;
 
       plug->socket_window = gdk_window_lookup_for_display (display, socket_id);
-      
       if (plug->socket_window)
-	gdk_window_get_user_data (plug->socket_window, &user_data);
+	{
+	  gdk_window_get_user_data (plug->socket_window, &user_data);
+
+	  if (user_data)
+	    {
+	      if (GTK_IS_SOCKET (user_data))
+		_gtk_plug_add_to_socket (plug, user_data);
+	      else
+		{
+		  g_warning (G_STRLOC "Can't create GtkPlug as child of non-GtkSocket");
+		  plug->socket_window = NULL;
+		}
+	    }
+	  else
+	    g_object_ref (plug->socket_window);
+	}
       else
 	plug->socket_window = gdk_window_foreign_new_for_display (display, socket_id);
-	  
-      if (user_data)
-	{
-	  if (GTK_IS_SOCKET (user_data))
-	    _gtk_plug_add_to_socket (plug, user_data);
-	  else
-	    {
-	      g_warning (G_STRLOC "Can't create GtkPlug as child of non-GtkSocket");
-	      plug->socket_window = NULL;
-	    }
-	}
 
       if (plug->socket_window) {
 	g_signal_emit (plug, plug_signals[EMBEDDED], 0);
@@ -510,7 +540,7 @@ gtk_plug_new (GdkNativeWindow socket_id)
 
 /**
  * gtk_plug_new_for_display:
- * @display : the #GdkDisplay on which @socket_id is displayed
+ * @display: the #GdkDisplay on which @socket_id is displayed
  * @socket_id: the XID of the socket's window.
  * 
  * Create a new plug widget inside the #GtkSocket identified by socket_id.
@@ -578,7 +608,7 @@ gtk_plug_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  gtk_widget_set_realized (widget, TRUE);
 
   attributes.window_type = GDK_WINDOW_CHILD;	/* XXX GDK_WINDOW_PLUG ? */
   attributes.title = window->title;
@@ -604,7 +634,7 @@ gtk_plug_realize (GtkWidget *widget)
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
 
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       attributes.window_type = GDK_WINDOW_TOPLEVEL;
 
@@ -651,7 +681,7 @@ gtk_plug_realize (GtkWidget *widget)
 static void
 gtk_plug_show (GtkWidget *widget)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     GTK_WIDGET_CLASS (gtk_plug_parent_class)->show (widget);
   else
     GTK_WIDGET_CLASS (bin_class)->show (widget);
@@ -660,7 +690,7 @@ gtk_plug_show (GtkWidget *widget)
 static void
 gtk_plug_hide (GtkWidget *widget)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     GTK_WIDGET_CLASS (gtk_plug_parent_class)->hide (widget);
   else
     GTK_WIDGET_CLASS (bin_class)->hide (widget);
@@ -674,16 +704,16 @@ void gdk_synthesize_window_state (GdkWindow     *window,
 static void
 gtk_plug_map (GtkWidget *widget)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       GtkBin *bin = GTK_BIN (widget);
       GtkPlug *plug = GTK_PLUG (widget);
       
-      GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+      gtk_widget_set_mapped (widget, TRUE);
 
       if (bin->child &&
-	  GTK_WIDGET_VISIBLE (bin->child) &&
-	  !GTK_WIDGET_MAPPED (bin->child))
+	  gtk_widget_get_visible (bin->child) &&
+	  !gtk_widget_get_mapped (bin->child))
 	gtk_widget_map (bin->child);
 
       _gtk_plug_windowing_map_toplevel (plug);
@@ -699,11 +729,11 @@ gtk_plug_map (GtkWidget *widget)
 static void
 gtk_plug_unmap (GtkWidget *widget)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     {
       GtkPlug *plug = GTK_PLUG (widget);
 
-      GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+      gtk_widget_set_mapped (widget, FALSE);
 
       gdk_window_hide (widget->window);
 
@@ -721,7 +751,7 @@ static void
 gtk_plug_size_allocate (GtkWidget     *widget,
 			GtkAllocation *allocation)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     GTK_WIDGET_CLASS (gtk_plug_parent_class)->size_allocate (widget, allocation);
   else
     {
@@ -729,12 +759,12 @@ gtk_plug_size_allocate (GtkWidget     *widget,
 
       widget->allocation = *allocation;
 
-      if (GTK_WIDGET_REALIZED (widget))
+      if (gtk_widget_get_realized (widget))
 	gdk_window_move_resize (widget->window,
 				allocation->x, allocation->y,
 				allocation->width, allocation->height);
 
-      if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+      if (bin->child && gtk_widget_get_visible (bin->child))
 	{
 	  GtkAllocation child_allocation;
 	  
@@ -754,7 +784,7 @@ static gboolean
 gtk_plug_key_press_event (GtkWidget   *widget,
 			  GdkEventKey *event)
 {
-  if (GTK_WIDGET_TOPLEVEL (widget))
+  if (gtk_widget_is_toplevel (widget))
     return GTK_WIDGET_CLASS (gtk_plug_parent_class)->key_press_event (widget, event);
   else
     return FALSE;
@@ -959,7 +989,7 @@ gtk_plug_focus (GtkWidget        *widget,
 static void
 gtk_plug_check_resize (GtkContainer *container)
 {
-  if (GTK_WIDGET_TOPLEVEL (container))
+  if (gtk_widget_is_toplevel (GTK_WIDGET (container)))
     GTK_CONTAINER_CLASS (gtk_plug_parent_class)->check_resize (container);
   else
     GTK_CONTAINER_CLASS (bin_class)->check_resize (container);

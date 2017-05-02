@@ -38,11 +38,12 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_RULER_H__
 #define __GTK_RULER_H__
 
 
-#include <gdk/gdk.h>
 #include <gtk/gtkwidget.h>
 
 
@@ -110,24 +111,26 @@ struct _GtkRulerMetric
 };
 
 
-GType   gtk_ruler_get_type   (void) G_GNUC_CONST;
-void    gtk_ruler_set_metric (GtkRuler      *ruler,
-			      GtkMetricType  metric);
-void    gtk_ruler_set_range  (GtkRuler      *ruler,
-			      gdouble        lower,
-			      gdouble        upper,
-			      gdouble        position,
-			      gdouble        max_size);
-void    gtk_ruler_draw_ticks (GtkRuler      *ruler);
-void    gtk_ruler_draw_pos   (GtkRuler      *ruler);
+GType           gtk_ruler_get_type   (void) G_GNUC_CONST;
+void            gtk_ruler_set_metric (GtkRuler       *ruler,
+                                      GtkMetricType   metric);
+GtkMetricType   gtk_ruler_get_metric (GtkRuler       *ruler);
+void            gtk_ruler_set_range  (GtkRuler       *ruler,
+                                      gdouble         lower,
+                                      gdouble         upper,
+                                      gdouble         position,
+                                      gdouble         max_size);
+void            gtk_ruler_get_range  (GtkRuler       *ruler,
+                                      gdouble        *lower,
+                                      gdouble        *upper,
+                                      gdouble        *position,
+                                      gdouble        *max_size);
 
-GtkMetricType gtk_ruler_get_metric (GtkRuler *ruler);
-void          gtk_ruler_get_range  (GtkRuler *ruler,
-				    gdouble  *lower,
-				    gdouble  *upper,
-				    gdouble  *position,
-				    gdouble  *max_size);
+void            gtk_ruler_draw_ticks (GtkRuler       *ruler);
+void            gtk_ruler_draw_pos   (GtkRuler       *ruler);
 
 G_END_DECLS
 
 #endif /* __GTK_RULER_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

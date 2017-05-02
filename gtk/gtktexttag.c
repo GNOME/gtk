@@ -707,7 +707,7 @@ gtk_text_tag_init (GtkTextTag *text_tag)
 
 /**
  * gtk_text_tag_new:
- * @name: tag name, or %NULL
+ * @name: (allow-none): tag name, or %NULL
  * 
  * Creates a #GtkTextTag. Configure the tag using object arguments,
  * i.e. using g_object_set().
@@ -995,7 +995,7 @@ gtk_text_tag_set_property (GObject      *object,
     {
     case PROP_NAME:
       g_return_if_fail (text_tag->name == NULL);
-      text_tag->name = g_strdup (g_value_get_string (value));
+      text_tag->name = g_value_dup_string (value);
       break;
 
     case PROP_BACKGROUND:

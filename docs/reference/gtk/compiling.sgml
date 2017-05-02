@@ -69,12 +69,26 @@ toplevel headers <filename>gtk.h</filename>, <filename>gdk.h</filename>,
 If you want to make sure that your program follows this recommended
 practise, you can define the preprocessor symbols GTK_DISABLE_SINGLE_INCLUDES
 and GDK_PIXBUF_DISABLE_SINGLE_INCLUDES to make GTK+ generate an error
-when individual headers are directly included. 
+when individual headers are directly included.
+There are some exceptions: <filename>gdkkeysyms.h</filename> is not included in
+<filename>gdk.h</filename> because the file is quite large; see
+<link linkend="gdk-Keyboard-Handling">Key Values documentation</link>.
+<filename>gdkx.h</filename> must be included independently because It's
+platform-specific; see
+<link linkend="gdk-X-Window-System-Interaction">X Window System Interaction</link>
+documentation.
+The same for <filename>gtkunixprint.h</filename> if you use the non-portable
+<link linkend="GtkPrintUnixDialog">GtkPrintUnixDialog</link> API.
+</para>
+
+<para>
+The next major version, GTK+ 3,  will remove many implementation details and
+struct members from its public headers. To ensure that your application will
+not have problems with this, you can define the preprocessor symbol
+GSEAL_ENABLE. This will make the compiler catch all uses of direct access to
+struct fields so that you can go through them one by one and replace them with
+a call to an accessor function instead.
 </para>
 
 </refsect1>
 </refentry>
-
-
-
-
