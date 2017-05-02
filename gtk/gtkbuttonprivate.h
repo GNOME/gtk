@@ -36,9 +36,6 @@ struct _GtkButtonPrivate
 
   GtkGesture            *gesture;
 
-  /* This is only used by checkbox and subclasses */
-  gfloat                 baseline_align;
-
   guint                  activate_timeout;
 
   guint          button_down           : 1;

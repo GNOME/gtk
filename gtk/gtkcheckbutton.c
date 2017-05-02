@@ -415,8 +415,6 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
   GtkButton *button = GTK_BUTTON (widget);
   GtkCssGadget *gadget;
   GdkRectangle clip;
-  PangoContext *pango_context;
-  PangoFontMetrics *metrics;
 
   if (priv->draw_indicator)
     gadget = priv->gadget;
@@ -430,15 +428,6 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
                            &clip);
 
   gtk_widget_set_clip (widget, &clip);
-
-  pango_context = gtk_widget_get_pango_context (widget);
-  metrics = pango_context_get_metrics (pango_context,
-                                       pango_context_get_font_description (pango_context),
-                                       pango_context_get_language (pango_context));
-  button->priv->baseline_align =
-      (double)pango_font_metrics_get_ascent (metrics) /
-      (pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics));
-  pango_font_metrics_unref (metrics);
 
   if (gtk_widget_get_realized (widget))
     {

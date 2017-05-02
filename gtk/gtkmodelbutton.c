@@ -807,8 +807,6 @@ gtk_model_button_allocate (GtkCssGadget        *gadget,
 {
   GtkWidget *widget;
   GtkModelButton *button;
-  PangoContext *pango_context;
-  PangoFontMetrics *metrics;
   GtkAllocation child_allocation;
   GtkWidget *child;
   gint check_min_width, check_nat_width;
@@ -873,16 +871,6 @@ gtk_model_button_allocate (GtkCssGadget        *gadget,
 
       gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
     }
-
-  pango_context = gtk_widget_get_pango_context (widget);
-  metrics = pango_context_get_metrics (pango_context,
-                                       pango_context_get_font_description (pango_context),
-                                       pango_context_get_language (pango_context));
-  GTK_BUTTON (button)->priv->baseline_align =
-    (double)pango_font_metrics_get_ascent (metrics) /
-    (pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics));
-  pango_font_metrics_unref (metrics);
-
 
   if (gtk_widget_get_realized (widget))
     {
