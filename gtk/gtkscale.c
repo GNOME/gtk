@@ -1345,9 +1345,8 @@ gtk_scale_get_draw_value (GtkScale *scale)
  * @scale: a #GtkScale
  * @has_origin: %TRUE if the scale has an origin
  * 
- * If @has_origin is set to %TRUE (the default),
- * the scale will highlight the part of the scale
- * between the origin (bottom or left side) of the scale
+ * If #GtkScale:has-origin is set to %TRUE (the default), the scale will
+ * highlight the part of the trough between the origin (bottom or left side)
  * and the current value.
  *
  * Since: 3.4
