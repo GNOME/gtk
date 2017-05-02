@@ -597,9 +597,11 @@ gtk_scale_new_with_range (GtkOrientation orientation,
  *     e.g. use 1 to display 1.0, 2 to display 1.00, etc
  * 
  * Sets the number of decimal places that are displayed in the value. Also
- * causes the value of the adjustment to be rounded to this number of digits
- * whenever it is changed, so the retrieved value matches the displayed one, if
- * #GtkScale:draw-value is TRUE at the time of the change.
+ * causes the value of the adjustment to be rounded to this number of digits,
+ * so the retrieved value matches the displayed one, if #GtkScale:draw-value is
+ * %TRUE when the value changes. If you want to enforce rounding the value when
+ * #GtkScale:draw-value is %FALSE, you can set #GtkRange:round-digits instead.
+ *
  */
 void
 gtk_scale_set_digits (GtkScale *scale,
