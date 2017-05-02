@@ -2246,11 +2246,6 @@ should_map_as_popup (GdkWindow *window)
     case GDK_WINDOW_TYPE_HINT_COMBO:
       return TRUE;
 
-    case GDK_WINDOW_TYPE_HINT_UTILITY:
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TEMP)
-        return TRUE;
-      break;
-
     default:
       break;
     }
