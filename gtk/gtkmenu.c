@@ -279,14 +279,10 @@ static void     gtk_menu_real_move_scroll  (GtkMenu          *menu,
                                             GtkScrollType     type);
 
 static void     gtk_menu_stop_navigating_submenu       (GtkMenu          *menu);
-static gboolean gtk_menu_stop_navigating_submenu_cb    (gpointer          user_data);
 static gboolean gtk_menu_navigating_submenu            (GtkMenu          *menu,
                                                         gint              event_x,
                                                         gint              event_y);
-static void     gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
-                                                        GtkMenuItem      *menu_item,
-                                                        GdkEventCrossing *event);
- 
+
 static void gtk_menu_deactivate     (GtkMenuShell      *menu_shell);
 static void gtk_menu_position       (GtkMenu           *menu,
                                      gboolean           set_scroll_offset);
@@ -1131,10 +1127,6 @@ gtk_menu_window_event (GtkWidget *window,
 
   switch (event->type)
     {
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-      handled = gtk_widget_event (menu, event);
-      break;
     case GDK_WINDOW_STATE:
       /* Window for the menu has been closed by the display server or by GDK.
        * Update the internal state as if the user had clicked outside the
@@ -3342,8 +3334,6 @@ gtk_menu_motion_notify (GtkWidget      *widget,
   GtkWidget *parent;
   GdkDevice *source_device;
 
-  gboolean need_enter;
-
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
   if (GTK_IS_MENU (widget) &&
@@ -3379,8 +3369,6 @@ gtk_menu_motion_notify (GtkWidget      *widget,
   if (definitely_within_item (menu_item, event->x, event->y))
     menu_shell->priv->activate_time = 0;
 
-  need_enter = (gtk_menu_has_navigation_triangle (menu) || menu_shell->priv->ignore_enter);
-
   /* Check to see if we are within an active submenu's navigation region
    */
   if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
@@ -3396,42 +3384,6 @@ gtk_menu_motion_notify (GtkWidget      *widget,
        */
       gtk_menu_shell_select_item (menu_shell, menu_item);
       return FALSE;
-    }
-
-  if (need_enter)
-    {
-      /* The menu is now sensitive to enter events on its items, but
-       * was previously sensitive.  So we fake an enter event.
-       */
-      menu_shell->priv->ignore_enter = FALSE;
-
-      if (event->x >= 0 && event->x < gdk_window_get_width (event->window) &&
-          event->y >= 0 && event->y < gdk_window_get_height (event->window))
-        {
-          GdkEvent *send_event = gdk_event_new (GDK_ENTER_NOTIFY);
-          gboolean result;
-
-          send_event->crossing.window = g_object_ref (event->window);
-          send_event->crossing.time = event->time;
-          send_event->crossing.send_event = TRUE;
-          send_event->crossing.x_root = event->x_root;
-          send_event->crossing.y_root = event->y_root;
-          send_event->crossing.x = event->x;
-          send_event->crossing.y = event->y;
-          send_event->crossing.state = event->state;
-          gdk_event_set_device (send_event, gdk_event_get_device ((GdkEvent *) event));
-
-          /* We send the event to 'widget', the currently active menu,
-           * instead of 'menu', the menu that the pointer is in. This
-           * will ensure that the event will be ignored unless the
-           * menuitem is a child of the active menu or some parent
-           * menu of the active menu.
-           */
-          result = gtk_widget_event (widget, send_event);
-          gdk_event_free (send_event);
-
-          return result;
-        }
     }
 
   return FALSE;
@@ -3733,8 +3685,6 @@ static gboolean
 gtk_menu_enter_notify (GtkWidget        *widget,
                        GdkEventCrossing *event)
 {
-  GtkWidget *menu_item;
-  GtkWidget *parent;
   GdkDevice *source_device;
 
   if (event->mode == GDK_CROSSING_GTK_GRAB ||
@@ -3743,10 +3693,8 @@ gtk_menu_enter_notify (GtkWidget        *widget,
     return TRUE;
 
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
-  menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
-  if (GTK_IS_MENU (widget) &&
-      gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
+  if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     {
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
@@ -3755,64 +3703,14 @@ gtk_menu_enter_notify (GtkWidget        *widget,
                                    event->x_root, event->y_root, TRUE, TRUE);
     }
 
-  if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN &&
-      GTK_IS_MENU_ITEM (menu_item))
-    {
-      GtkWidget *menu = gtk_widget_get_parent (menu_item);
-
-      if (GTK_IS_MENU (menu))
-        {
-          GtkMenuPrivate *priv = (GTK_MENU (menu))->priv;
-          GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
-
-          if (priv->seen_item_enter)
-            {
-              /* This is the second enter we see for an item
-               * on this menu. This means a release should always
-               * mean activate.
-               */
-              menu_shell->priv->activate_time = 0;
-            }
-          else if ((event->detail != GDK_NOTIFY_NONLINEAR &&
-                    event->detail != GDK_NOTIFY_NONLINEAR_VIRTUAL))
-            {
-              if (definitely_within_item (menu_item, event->x, event->y))
-                {
-                  /* This is an actual user-enter (ie. not a pop-under)
-                   * In this case, the user must either have entered
-                   * sufficiently far enough into the item, or he must move
-                   * far enough away from the enter point. (see
-                   * gtk_menu_motion_notify())
-                   */
-                  menu_shell->priv->activate_time = 0;
-                }
-            }
-
-          priv->seen_item_enter = TRUE;
-        }
-    }
-
-  /* If this is a faked enter (see gtk_menu_motion_notify), 'widget'
-   * will not correspond to the event widget's parent.  Check to see
-   * if we are in the parent's navigation region.
-   */
-  parent = gtk_widget_get_parent (menu_item);
-  if (GTK_IS_MENU_ITEM (menu_item) && GTK_IS_MENU (parent) &&
-      gtk_menu_navigating_submenu (GTK_MENU (parent),
-                                   event->x_root, event->y_root))
-    return TRUE;
-
-  return GTK_WIDGET_CLASS (gtk_menu_parent_class)->enter_notify_event (widget, event);
+  return GDK_EVENT_STOP;
 }
 
 static gboolean
 gtk_menu_leave_notify (GtkWidget        *widget,
                        GdkEventCrossing *event)
 {
-  GtkMenuShell *menu_shell;
   GtkMenu *menu;
-  GtkMenuItem *menu_item;
-  GtkWidget *event_widget;
   GdkDevice *source_device;
 
   if (event->mode == GDK_CROSSING_GTK_GRAB ||
@@ -3821,7 +3719,6 @@ gtk_menu_leave_notify (GtkWidget        *widget,
     return TRUE;
 
   menu = GTK_MENU (widget);
-  menu_shell = GTK_MENU_SHELL (widget);
 
   if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
     return TRUE;
@@ -3831,37 +3728,7 @@ gtk_menu_leave_notify (GtkWidget        *widget,
   if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
     gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE, TRUE);
 
-  event_widget = gtk_get_event_widget ((GdkEvent*) event);
-
-  if (!GTK_IS_MENU_ITEM (event_widget))
-    return TRUE;
-
-  menu_item = GTK_MENU_ITEM (event_widget);
-
-  /* Here we check to see if we're leaving an active menu item
-   * with a submenu, in which case we enter submenu navigation mode.
-   */
-  if (menu_shell->priv->active_menu_item != NULL
-      && menu_item->priv->submenu != NULL
-      && menu_item->priv->submenu_placement == GTK_LEFT_RIGHT)
-    {
-      if (GTK_MENU_SHELL (menu_item->priv->submenu)->priv->active)
-        {
-          gtk_menu_set_submenu_navigation_region (menu, menu_item, event);
-          return TRUE;
-        }
-      else if (menu_item == GTK_MENU_ITEM (menu_shell->priv->active_menu_item))
-        {
-          /* We are leaving an active menu item with nonactive submenu.
-           * Deselect it so we don't surprise the user with by popping
-           * up a submenu _after_ he left the item.
-           */
-          gtk_menu_shell_deselect (menu_shell);
-          return TRUE;
-        }
-    }
-
-  return GTK_WIDGET_CLASS (gtk_menu_parent_class)->leave_notify_event (widget, event);
+  return GDK_EVENT_STOP;
 }
 
 static gboolean
@@ -4019,43 +3886,6 @@ gtk_menu_stop_navigating_submenu (GtkMenu *menu)
     }
 }
 
-/* When the timeout is elapsed, the navigation region is destroyed
- * and the menuitem under the pointer (if any) is selected.
- */
-static gboolean
-gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
-{
-  GtkMenuPopdownData *popdown_data = user_data;
-  GtkMenu *menu = popdown_data->menu;
-  GtkMenuPrivate *priv = menu->priv;
-  GdkWindow *child_window;
-
-  gtk_menu_stop_navigating_submenu (menu);
-
-  if (gtk_widget_get_realized (GTK_WIDGET (menu)))
-    {
-      child_window = gdk_window_get_device_position (priv->bin_window,
-                                                     popdown_data->device,
-                                                     NULL, NULL, NULL);
-
-      if (child_window)
-        {
-          GdkEvent *send_event = gdk_event_new (GDK_ENTER_NOTIFY);
-
-          send_event->crossing.window = g_object_ref (child_window);
-          send_event->crossing.time = GDK_CURRENT_TIME; /* Bogus */
-          send_event->crossing.send_event = TRUE;
-          gdk_event_set_device (send_event, popdown_data->device);
-
-          GTK_WIDGET_CLASS (gtk_menu_parent_class)->enter_notify_event (GTK_WIDGET (menu), (GdkEventCrossing *)send_event);
-
-          gdk_event_free (send_event);
-        }
-    }
-
-  return FALSE;
-}
-
 static gboolean
 gtk_menu_navigating_submenu (GtkMenu *menu,
                              gint     event_x,
@@ -4100,87 +3930,6 @@ gtk_menu_navigating_submenu (GtkMenu *menu,
     {
       gtk_menu_stop_navigating_submenu (menu);
       return FALSE;
-    }
-}
-
-static void
-gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
-                                        GtkMenuItem      *menu_item,
-                                        GdkEventCrossing *event)
-{
-  GtkMenuPrivate *priv = menu->priv;
-  gint submenu_left = 0;
-  gint submenu_right = 0;
-  gint submenu_top = 0;
-  gint submenu_bottom = 0;
-  gint width = 0;
-  GtkWidget *event_widget;
-  GtkMenuPopdownData *popdown_data;
-  GdkWindow *window;
-
-  g_return_if_fail (menu_item->priv->submenu != NULL);
-  g_return_if_fail (event != NULL);
-
-  event_widget = gtk_get_event_widget ((GdkEvent*) event);
-
-  window = gtk_widget_get_window (menu_item->priv->submenu);
-  gdk_window_get_origin (window, &submenu_left, &submenu_top);
-
-  submenu_right = submenu_left + gdk_window_get_width (window);
-  submenu_bottom = submenu_top + gdk_window_get_height (window);
-
-  width = gdk_window_get_width (gtk_widget_get_window (event_widget));
-
-  if (event->x >= 0 && event->x < width)
-    {
-      gtk_menu_stop_navigating_submenu (menu);
-
-      /* The navigation region is the triangle closest to the x/y
-       * location of the rectangle. This is why the width or height
-       * can be negative.
-       */
-      if (menu_item->priv->submenu_direction == GTK_DIRECTION_RIGHT)
-        {
-          /* right */
-          priv->navigation_x = submenu_left;
-          priv->navigation_width = event->x_root - submenu_left;
-        }
-      else
-        {
-          /* left */
-          priv->navigation_x = submenu_right;
-          priv->navigation_width = event->x_root - submenu_right;
-        }
-
-      if (event->y < 0)
-        {
-          /* top */
-          priv->navigation_y = event->y_root;
-          priv->navigation_height = submenu_top - event->y_root - NAVIGATION_REGION_OVERSHOOT;
-
-          if (priv->navigation_height >= 0)
-            return;
-        }
-      else
-        {
-          /* bottom */
-          priv->navigation_y = event->y_root;
-          priv->navigation_height = submenu_bottom - event->y_root + NAVIGATION_REGION_OVERSHOOT;
-
-          if (priv->navigation_height <= 0)
-            return;
-        }
-
-      popdown_data = g_new (GtkMenuPopdownData, 1);
-      popdown_data->menu = menu;
-      popdown_data->device = gdk_event_get_device ((GdkEvent *) event);
-
-      priv->navigation_timeout = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT,
-                                                               MENU_POPDOWN_DELAY,
-                                                               gtk_menu_stop_navigating_submenu_cb,
-                                                               popdown_data,
-                                                               (GDestroyNotify) g_free);
-      g_source_set_name_by_id (priv->navigation_timeout, "[gtk+] gtk_menu_stop_navigating_submenu_cb");
     }
 }
 

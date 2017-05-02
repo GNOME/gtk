@@ -1213,18 +1213,37 @@ static gboolean
 gtk_menu_item_enter (GtkWidget        *widget,
                      GdkEventCrossing *event)
 {
-  g_return_val_if_fail (event != NULL, FALSE);
+  GtkWidget *menu_shell;
 
-  return gtk_widget_event (gtk_widget_get_parent (widget), (GdkEvent *) event);
+  if (event->mode == GDK_CROSSING_GTK_GRAB ||
+      event->mode == GDK_CROSSING_GTK_UNGRAB ||
+      event->mode == GDK_CROSSING_STATE_CHANGED)
+    return GDK_EVENT_STOP;
+
+  if (gdk_event_get_device ((GdkEvent*) event) ==
+      gdk_event_get_source_device ((GdkEvent*) event))
+    return GDK_EVENT_STOP;
+
+  menu_shell = gtk_widget_get_parent (widget);
+
+  if (GTK_IS_MENU_SHELL (menu_shell) && GTK_IS_MENU_ITEM (widget) &&
+      GTK_MENU_SHELL (menu_shell)->priv->active)
+    gtk_menu_shell_select_item (GTK_MENU_SHELL (menu_shell), widget);
+
+  return GDK_EVENT_STOP;
 }
 
 static gboolean
 gtk_menu_item_leave (GtkWidget        *widget,
                      GdkEventCrossing *event)
 {
-  g_return_val_if_fail (event != NULL, FALSE);
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
+  GtkWidget *menu_shell = gtk_widget_get_parent (widget);
 
-  return gtk_widget_event (gtk_widget_get_parent (widget), (GdkEvent*) event);
+  if (GTK_IS_MENU_SHELL (menu_shell) && !menu_item->priv->submenu)
+    gtk_menu_shell_deselect (GTK_MENU_SHELL (menu_shell));
+
+  return GDK_EVENT_STOP;
 }
 
 static void
@@ -1567,14 +1586,7 @@ gtk_menu_item_popup_timeout (gpointer data)
   parent = gtk_widget_get_parent (GTK_WIDGET (menu_item));
 
   if (GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->priv->active)
-    {
-      gtk_menu_item_real_popup_submenu (GTK_WIDGET (menu_item), info->trigger_event, TRUE);
-      if (info->trigger_event &&
-          info->trigger_event->type != GDK_BUTTON_PRESS &&
-          info->trigger_event->type != GDK_ENTER_NOTIFY &&
-          priv->submenu)
-        GTK_MENU_SHELL (priv->submenu)->priv->ignore_enter = TRUE;
-    }
+    gtk_menu_item_real_popup_submenu (GTK_WIDGET (menu_item), info->trigger_event, TRUE);
 
   priv->timer = 0;
 
