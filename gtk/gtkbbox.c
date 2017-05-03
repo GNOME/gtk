@@ -92,8 +92,6 @@ static void gtk_button_box_get_property       (GObject           *object,
                                                guint              prop_id,
                                                GValue            *value,
                                                GParamSpec        *pspec);
-static void gtk_button_box_snapshot           (GtkWidget         *widget,
-                                               GtkSnapshot       *snapshot);
 static void gtk_button_box_measure_           (GtkWidget         *widget,
                                                GtkOrientation     orientation,
                                                int                for_size,
@@ -129,13 +127,6 @@ static void     gtk_button_box_allocate        (GtkCssGadget        *gadget,
                                                 int                  baseline,
                                                 GtkAllocation       *out_clip,
                                                 gpointer             unused);
-static gboolean gtk_button_box_render          (GtkCssGadget        *gadget,
-                                                GtkSnapshot         *snapshot,
-                                                int                  x,
-                                                int                  y,
-                                                int                  width,
-                                                int                  height,
-                                                gpointer             data);
 
 #define DEFAULT_LAYOUT_STYLE GTK_BUTTONBOX_EDGE
 
@@ -175,7 +166,6 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 
   widget_class->measure = gtk_button_box_measure_;
   widget_class->size_allocate = gtk_button_box_size_allocate;
-  widget_class->snapshot= gtk_button_box_snapshot;
 
   container_class->remove = gtk_button_box_remove;
   container_class->add = gtk_button_box_add;
@@ -211,47 +201,6 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 }
 
 static void
-gtk_button_box_snapshot_forall (GtkWidget *child,
-                                gpointer   snapshot)
-{
-  gtk_widget_snapshot_child (gtk_widget_get_parent (child),
-                             child,
-                             snapshot);
-}
-
-static gboolean
-gtk_button_box_render (GtkCssGadget *gadget,
-                       GtkSnapshot  *snapshot,
-                       int           x,
-                       int           y,
-                       int           width,
-                       int           height,
-                       gpointer      unused)
-{
-  gtk_container_forall (GTK_CONTAINER (gtk_css_gadget_get_owner (gadget)),
-                        gtk_button_box_snapshot_forall,
-                        snapshot);
-
-  return FALSE;
-}
-
-
-static void
-gtk_button_box_snapshot (GtkWidget   *widget,
-                         GtkSnapshot *snapshot)
-{
-  GtkButtonBoxPrivate *priv = GTK_BUTTON_BOX (widget)->priv;
-  GtkCssGadget *gadget;
-
-  if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
-    gadget = gtk_box_get_gadget (GTK_BOX (widget));
-  else
-    gadget = priv->gadget;
-
-  gtk_css_gadget_snapshot (gadget, snapshot);
-}
-
-static void
 gtk_button_box_init (GtkButtonBox *button_box)
 {
   button_box->priv = gtk_button_box_get_instance_private (button_box);
@@ -263,7 +212,7 @@ gtk_button_box_init (GtkButtonBox *button_box)
                                                          GTK_WIDGET (button_box),
                                                          gtk_button_box_measure,
                                                          gtk_button_box_allocate,
-                                                         gtk_button_box_render,
+                                                         NULL,
                                                          NULL,
                                                          NULL);
 }
