@@ -71,9 +71,6 @@ void     gdk_x11_window_set_frame_extents (GdkWindow *window,
                                            int        right,
                                            int        top,
                                            int        bottom);
-GDK_AVAILABLE_IN_3_4
-void     gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
-                                                          gboolean   hide_titlebar_when_maximized);
 GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
 
