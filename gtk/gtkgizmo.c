@@ -47,7 +47,8 @@ gtk_gizmo_snapshot (GtkWidget   *widget,
 {
   GtkGizmo *self = GTK_GIZMO (widget);
 
-  gtk_css_gadget_snapshot (self->gadget, snapshot);
+  if (self->snapshot_func)
+    self->snapshot_func (self, snapshot);
 }
 
 static void
@@ -85,23 +86,6 @@ gtk_gizmo_allocate_contents (GtkCssGadget        *gadget,
                          out_clip);
 }
 
-static gboolean
-gtk_gizmo_snapshot_contents (GtkCssGadget *gadget,
-                             GtkSnapshot  *snapshot,
-                             int           x,
-                             int           y,
-                             int           width,
-                             int           height,
-                             gpointer      user_data)
-{
-  GtkGizmo *self = GTK_GIZMO (gtk_css_gadget_get_owner (gadget));
-
-  if (self->snapshot_func)
-    return self->snapshot_func (self, snapshot);
-
-  return FALSE;
-}
-
 static void
 gtk_gizmo_finalize (GObject *obj)
 {
@@ -134,7 +118,7 @@ gtk_gizmo_init (GtkGizmo *self)
                                                      GTK_WIDGET (self),
                                                      gtk_gizmo_measure_contents,
                                                      gtk_gizmo_allocate_contents,
-                                                     gtk_gizmo_snapshot_contents,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 }
