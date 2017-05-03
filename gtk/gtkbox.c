@@ -185,8 +185,6 @@ static void gtk_box_measure (GtkWidget      *widget,
                              int            *natural,
                              int            *minimum_baseline,
                              int            *natural_baseline);
-static void gtk_box_snapshot (GtkWidget   *widget,
-                              GtkSnapshot *snapshot);
 
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkBox)
@@ -214,7 +212,6 @@ gtk_box_class_init (GtkBoxClass *class)
   object_class->get_property = gtk_box_get_property;
   object_class->dispose = gtk_box_dispose;
 
-  widget_class->snapshot = gtk_box_snapshot;
   widget_class->size_allocate = gtk_box_size_allocate;
   widget_class->measure = gtk_box_measure;
   widget_class->direction_changed = gtk_box_direction_changed;
@@ -341,27 +338,6 @@ gtk_box_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static gboolean
-gtk_box_snapshot_contents (GtkCssGadget *gadget,
-                           GtkSnapshot  *snapshot,
-                           int           x,
-                           int           y,
-                           int           width,
-                           int           height,
-                           gpointer      data)
-{
-  GTK_WIDGET_CLASS (gtk_box_parent_class)->snapshot (gtk_css_gadget_get_owner (gadget), snapshot);
-
-  return FALSE;
-}
-
-static void
-gtk_box_snapshot (GtkWidget   *widget,
-                  GtkSnapshot *snapshot)
-{
-  gtk_css_gadget_snapshot (GTK_BOX (widget)->priv->gadget, snapshot);
 }
 
 static void
@@ -1467,7 +1443,7 @@ gtk_box_init (GtkBox *box)
                                                         GTK_WIDGET (box),
                                                         gtk_box_get_content_size,
                                                         gtk_box_allocate_contents,
-                                                        gtk_box_snapshot_contents,
+                                                        NULL,
                                                         NULL,
                                                         NULL);
 
