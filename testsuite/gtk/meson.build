@@ -3,7 +3,7 @@ tests = [
   ['accessible'],
   ['adjustment'],
   ['bitmask', ['../../gtk/gtkallocatedbitmask.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
-  ['builder', [], [], ['-export-dynamic']],
+  ['builder', [], [], ['-Wl,--export-dynamic']],
   ['builderparser'],
   ['cellarea'],
   ['check-icon-names'],
