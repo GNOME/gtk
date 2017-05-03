@@ -1042,7 +1042,14 @@ request_text_received_func (GtkClipboard     *clipboard,
        */
       GdkAtom target = gtk_selection_data_get_target (selection_data);
 
-      if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
+      if (target == gdk_atom_intern_static_string ("text/plain;charset=utf-8"))
+        {
+          gtk_clipboard_request_contents (clipboard,
+                                          gdk_atom_intern_static_string ("UTF8_TEXT"),
+                                          request_text_received_func, info);
+          return;
+        }
+      else if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  gdk_atom_intern_static_string ("COMPOUND_TEXT"), 
@@ -1093,7 +1100,7 @@ gtk_clipboard_request_text (GtkClipboard                *clipboard,
   info->callback = callback;
   info->user_data = user_data;
 
-  gtk_clipboard_request_contents (clipboard, gdk_atom_intern_static_string ("UTF8_STRING"),
+  gtk_clipboard_request_contents (clipboard, gdk_atom_intern_static_string ("text/plain;charset=utf-8"),
 				  request_text_received_func,
 				  info);
 }
