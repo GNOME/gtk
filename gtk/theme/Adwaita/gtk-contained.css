@@ -2945,6 +2945,14 @@ radio {
   check:only-child,
   radio:only-child {
     margin: 0; }
+  popover check.left:dir(rtl), popover
+  radio.left:dir(rtl) {
+    margin-left: 0;
+    margin-right: 12px; }
+  popover check.right:dir(ltr), popover
+  radio.right:dir(ltr) {
+    margin-left: 12px;
+    margin-right: 0; }
   check:hover,
   radio:hover {
     color: #2e3436;
