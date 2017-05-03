@@ -163,13 +163,6 @@ static void gtk_image_get_content_size (GtkCssGadget   *gadget,
                                         gint           *minimum_baseline,
                                         gint           *natural_baseline,
                                         gpointer        unused);
-static gboolean gtk_image_render_contents (GtkCssGadget *gadget,
-                                           GtkSnapshot  *snapshot,
-                                           int           x,
-                                           int           y,
-                                           int           width,
-                                           int           height,
-                                           gpointer      data);
 
 static void gtk_image_style_updated        (GtkWidget    *widget);
 static void gtk_image_finalize             (GObject      *object);
@@ -373,7 +366,7 @@ gtk_image_init (GtkImage *image)
                                                      GTK_WIDGET (image),
                                                      gtk_image_get_content_size,
                                                      NULL,
-                                                     gtk_image_render_contents,
+                                                     NULL,
                                                      NULL, NULL);
 
 }
@@ -1457,27 +1450,17 @@ static void
 gtk_image_snapshot (GtkWidget   *widget,
                     GtkSnapshot *snapshot)
 {
-  gtk_css_gadget_snapshot (GTK_IMAGE (widget)->priv->gadget,
-                           snapshot);
-}
-
-static gboolean
-gtk_image_render_contents (GtkCssGadget *gadget,
-                           GtkSnapshot  *snapshot,
-                           int           x,
-                           int           y,
-                           int           width,
-                           int           height,
-                           gpointer      data)
-{
-  GtkWidget *widget;
-  GtkImage *image;
-  GtkImagePrivate *priv;
+  GtkImage *image = GTK_IMAGE (widget);
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+  GtkAllocation allocation;
+  int x, y, width, height;
   gint w, h, baseline;
 
-  widget = gtk_css_gadget_get_owner (gadget);
-  image = GTK_IMAGE (widget);
-  priv = image->priv;
+  gtk_widget_get_allocation (widget, &allocation);
+  x = 0;
+  y = 0;
+  width = allocation.width;
+  height = allocation.height;
 
   _gtk_icon_helper_get_size (priv->icon_helper, &w, &h);
 
@@ -1496,7 +1479,7 @@ gtk_image_render_contents (GtkCssGadget *gadget,
       GdkPixbuf *pixbuf = get_animation_frame (image);
 
       gtk_snapshot_render_icon (snapshot, context, pixbuf, x, y);
-      
+
       g_object_unref (pixbuf);
     }
   else
@@ -1505,8 +1488,6 @@ gtk_image_render_contents (GtkCssGadget *gadget,
       gtk_icon_helper_snapshot (priv->icon_helper, snapshot);
       gtk_snapshot_offset (snapshot, -x, -y);
     }
-
-  return FALSE;
 }
 
 static void
