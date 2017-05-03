@@ -340,14 +340,6 @@ test_show_hide3 (void)
   gtk_widget_destroy (window);
 }
 
-static gboolean
-on_map_event (GtkWidget *window)
-{
-  gtk_main_quit ();
-
-  return FALSE;
-}
-
 int
 main (int argc, char *argv[])
 {
