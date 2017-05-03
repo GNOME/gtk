@@ -29,6 +29,9 @@
 #include "gtksizegroup-private.h"
 #include "gtksizerequestcacheprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssnumbervalueprivate.h"
+#include "gtkbutton.h"
 
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
@@ -80,6 +83,48 @@ pop_recursion_check (GtkWidget       *widget,
 #define push_recursion_check(widget, orientation, for_size)
 #define pop_recursion_check(widget, orientation)
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
+
+static gint
+get_number (GtkCssStyle *style,
+            guint        property)
+{
+  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100);
+
+  if (d < 1)
+    return ceil (d);
+  else
+    return floor (d);
+}
+
+static void
+get_box_margin (GtkCssStyle *style,
+                GtkBorder   *margin)
+{
+  margin->top = get_number (style, GTK_CSS_PROPERTY_MARGIN_TOP);
+  margin->left = get_number (style, GTK_CSS_PROPERTY_MARGIN_LEFT);
+  margin->bottom = get_number (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM);
+  margin->right = get_number (style, GTK_CSS_PROPERTY_MARGIN_RIGHT);
+}
+
+static void
+get_box_border (GtkCssStyle *style,
+                GtkBorder   *border)
+{
+  border->top = get_number (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH);
+  border->left = get_number (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH);
+  border->bottom = get_number (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH);
+  border->right = get_number (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH);
+}
+
+static void
+get_box_padding (GtkCssStyle *style,
+                 GtkBorder   *border)
+{
+  border->top = get_number (style, GTK_CSS_PROPERTY_PADDING_TOP);
+  border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
+  border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
+  border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
+}
 
 static void
 gtk_widget_query_size_for_orientation (GtkWidget        *widget,
@@ -279,6 +324,39 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 				      min_baseline,
 				      nat_baseline);
     }
+
+
+  /* We commit the requested size *without css values applied* into the cache! */
+  {
+    GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+    GtkBorder margin, border, padding;
+    int css_min_size;
+    int extra_size;
+
+    get_box_margin (style, &margin);
+    get_box_border (style, &border);
+    get_box_padding (style, &padding);
+
+    if (orientation == GTK_ORIENTATION_HORIZONTAL)
+      {
+        extra_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
+        css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+      }
+    else
+      {
+        extra_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
+        css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+      }
+    min_size = MAX (min_size, css_min_size);
+    nat_size = MAX (nat_size, css_min_size);
+
+    min_size += extra_size;
+    nat_size += extra_size;
+
+    /* TODO: Baselines */
+    /* TODO: The GtkCssGadget code has a warning for for_size < min_for_size
+     *       where min_for_size depends on the css values */
+  }
 
   if (minimum_size)
     *minimum_size = min_size;
