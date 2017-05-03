@@ -1314,17 +1314,19 @@ scss_verbose = $(scss_verbose_@AM_V@)
 scss_verbose_ = $(scss_verbose_@AM_DEFAULT_V@)
 scss_verbose_0 = @echo "  SCSS     $@";
 
+SASSC_OPTS = -a
+
 theme/Adwaita/gtk-contained.css: $(top_srcdir)/gtk/theme/Adwaita/gtk-contained.scss $(adwaita_theme_scss)
-	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
+	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) $(SASSC_OPTS) $< $@ || rm -f $@
 
 theme/Adwaita/gtk-contained-dark.css: $(top_srcdir)/gtk/theme/Adwaita/gtk-contained-dark.scss $(adwaita_theme_scss)
-	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
+	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) $(SASSC_OPTS) $< $@ || rm -f $@
 
 theme/HighContrast/gtk-contained.css: $(top_srcdir)/gtk/theme/HighContrast/gtk-contained.scss $(highcontrast_theme_scss)
-	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
+	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) $(SASSC_OPTS) $< $@ || rm -f $@
 
 theme/HighContrast/gtk-contained-inverse.css: $(top_srcdir)/gtk/theme/HighContrast/gtk-contained-inverse.scss $(highcontrast_theme_scss)
-	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) -a $< $@ || rm -f $@
+	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) $(SASSC_OPTS) $< $@ || rm -f $@
 
 endif # REBUILD_SCSS
 
