@@ -5340,6 +5340,48 @@ gtk_widget_invalidate_widget_windows (GtkWidget      *widget,
 				       invalidate_predicate, widget);
 }
 
+static gint
+get_number (GtkCssStyle *style,
+            guint        property)
+{
+  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100);
+
+  if (d < 1)
+    return ceil (d);
+  else
+    return floor (d);
+}
+
+static void
+get_box_margin (GtkCssStyle *style,
+                GtkBorder   *margin)
+{
+  margin->top = get_number (style, GTK_CSS_PROPERTY_MARGIN_TOP);
+  margin->left = get_number (style, GTK_CSS_PROPERTY_MARGIN_LEFT);
+  margin->bottom = get_number (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM);
+  margin->right = get_number (style, GTK_CSS_PROPERTY_MARGIN_RIGHT);
+}
+
+static void
+get_box_border (GtkCssStyle *style,
+                GtkBorder   *border)
+{
+  border->top = get_number (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH);
+  border->left = get_number (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH);
+  border->bottom = get_number (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH);
+  border->right = get_number (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH);
+}
+
+static void
+get_box_padding (GtkCssStyle *style,
+                 GtkBorder   *border)
+{
+  border->top = get_number (style, GTK_CSS_PROPERTY_PADDING_TOP);
+  border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
+  border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
+  border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
+}
+
 /**
  * gtk_widget_size_allocate_with_baseline:
  * @widget: a #GtkWidget
@@ -5378,6 +5420,8 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   gint natural_width, natural_height, dummy;
   gint min_width, min_height;
   gint old_baseline;
+  GtkCssStyle *style;
+  GtkBorder margin, border, padding;
 
   priv = widget->priv;
 
@@ -5514,8 +5558,8 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   if (real_allocation.width < 0 || real_allocation.height < 0)
     {
       g_warning ("gtk_widget_size_allocate(): attempt to allocate widget with width %d and height %d",
-		 real_allocation.width,
-		 real_allocation.height);
+                 real_allocation.width,
+                 real_allocation.height);
     }
 
   real_allocation.width = MAX (real_allocation.width, 1);
@@ -5529,6 +5573,25 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
   if (!alloc_needed && !size_changed && !position_changed && !baseline_changed)
     goto out;
+
+
+  /* Set the widget allocation to real_allocation now, pass the smaller allocation to the vfunc */
+  gtk_widget_set_allocation (widget, &real_allocation);
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  /* Since gtk_widget_measure does it for us, we can be sure here that
+   * the given alloaction is large enough for the css margin/bordder/padding */
+  real_allocation.x += margin.left + border.left + padding.left;
+  real_allocation.y += margin.top + border.top + padding.top;
+  real_allocation.width -= margin.left + border.left + padding.left +
+                           margin.right + border.right + padding.right;
+  real_allocation.height -= margin.top + border.top + padding.top +
+                            margin.bottom + border.bottom + padding.bottom;
+  /* TODO: Baseline! */
 
   priv->allocated_baseline = baseline;
   if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
@@ -15263,48 +15326,6 @@ gtk_widget_reset_controllers (GtkWidget *widget)
       controller_data = l->data;
       gtk_event_controller_reset (controller_data->controller);
     }
-}
-
-static gint
-get_number (GtkCssStyle *style,
-            guint        property)
-{
-  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100);
-
-  if (d < 1)
-    return ceil (d);
-  else
-    return floor (d);
-}
-
-static void
-get_box_margin (GtkCssStyle *style,
-                GtkBorder   *margin)
-{
-  margin->top = get_number (style, GTK_CSS_PROPERTY_MARGIN_TOP);
-  margin->left = get_number (style, GTK_CSS_PROPERTY_MARGIN_LEFT);
-  margin->bottom = get_number (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM);
-  margin->right = get_number (style, GTK_CSS_PROPERTY_MARGIN_RIGHT);
-}
-
-static void
-get_box_border (GtkCssStyle *style,
-                GtkBorder   *border)
-{
-  border->top = get_number (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH);
-  border->left = get_number (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH);
-  border->bottom = get_number (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH);
-  border->right = get_number (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH);
-}
-
-static void
-get_box_padding (GtkCssStyle *style,
-                 GtkBorder   *border)
-{
-  border->top = get_number (style, GTK_CSS_PROPERTY_PADDING_TOP);
-  border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
-  border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
-  border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
 }
 
 void
