@@ -382,31 +382,6 @@ gtk_flow_box_child_activate (GtkFlowBoxChild *child)
     gtk_flow_box_select_and_activate (box, child);
 }
 
-static void
-gtk_flow_box_child_snapshot (GtkWidget   *widget,
-                             GtkSnapshot *snapshot)
-{
-  gtk_css_gadget_snapshot (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget, snapshot);
-}
-
-static gboolean
-gtk_flow_box_child_render (GtkCssGadget *gadget,
-                           GtkSnapshot  *snapshot,
-                           int           x,
-                           int           y,
-                           int           width,
-                           int           height,
-                           gpointer      data)
-{
-  GtkWidget *widget;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-
-  GTK_WIDGET_CLASS (gtk_flow_box_child_parent_class)->snapshot (widget, snapshot);
-
-  return gtk_widget_has_visible_focus (widget);
-}
-
 /* Size allocation {{{3 */
 
 static GtkSizeRequestMode
@@ -515,7 +490,6 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
 
   object_class->finalize = gtk_flow_box_child_finalize;
 
-  widget_class->snapshot = gtk_flow_box_child_snapshot;
   widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
   widget_class->measure = gtk_flow_box_child_measure_;
   widget_class->size_allocate = gtk_flow_box_child_size_allocate;
@@ -559,7 +533,7 @@ gtk_flow_box_child_init (GtkFlowBoxChild *child)
                                                      GTK_WIDGET (child),
                                                      gtk_flow_box_child_measure,
                                                      gtk_flow_box_child_allocate,
-                                                     gtk_flow_box_child_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 }
@@ -2462,23 +2436,17 @@ static void
 gtk_flow_box_snapshot (GtkWidget   *widget,
                        GtkSnapshot *snapshot)
 {
-  gtk_css_gadget_snapshot (BOX_PRIV (widget)->gadget, snapshot);
-}
-
-static gboolean
-gtk_flow_box_render (GtkCssGadget *gadget,
-                     GtkSnapshot  *snapshot,
-                     int           x,
-                     int           y,
-                     int           width,
-                     int           height,
-                     gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  GtkAllocation allocation;
+  int x, y, width, height;
 
-  GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->snapshot (widget, snapshot);
+  gtk_widget_get_allocation (widget, &allocation);
+
+  x = allocation.x;
+  y = allocation.y;
+  width = allocation.width;
+  height = allocation.height;
 
   if (priv->rubberband_first && priv->rubberband_last)
     {
@@ -2578,8 +2546,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_style_context_restore (context);
       cairo_destroy (cr);
     }
-
-  return gtk_widget_has_visible_focus (widget);
 }
 
 /* Autoscrolling {{{3 */
@@ -3933,7 +3899,7 @@ gtk_flow_box_init (GtkFlowBox *box)
                                                      GTK_WIDGET (box),
                                                      gtk_flow_box_measure,
                                                      gtk_flow_box_allocate,
-                                                     gtk_flow_box_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 }
