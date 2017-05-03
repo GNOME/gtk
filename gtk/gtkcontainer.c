@@ -42,7 +42,6 @@
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
 #include "gtksizerequestcacheprivate.h"
-#include "gtksnapshotprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkassistant.h"
@@ -320,10 +319,6 @@ static gboolean gtk_container_focus_move           (GtkContainer      *container
                                                     GtkDirectionType   direction);
 static void     gtk_container_children_callback    (GtkWidget         *widget,
                                                     gpointer           client_data);
-static gint     gtk_container_draw                 (GtkWidget         *widget,
-                                                    cairo_t           *cr);
-static void     gtk_container_snapshot             (GtkWidget         *widget,
-                                                    GtkSnapshot       *snapshot);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
 
 static GtkWidgetPath * gtk_container_real_get_path_for_child (GtkContainer *container,
@@ -351,10 +346,6 @@ static void    gtk_container_buildable_custom_finished (GtkBuildable *buildable,
                                                         GObject      *child,
                                                         const gchar  *tagname,
                                                         gpointer      data);
-
-static gboolean gtk_container_should_propagate_draw (GtkContainer   *container,
-                                                     GtkWidget      *child,
-                                                     cairo_t        *cr);
 
 /* --- variables --- */
 static GQuark                vadjustment_key_id;
@@ -458,8 +449,6 @@ gtk_container_class_init (GtkContainerClass *class)
 
   widget_class->destroy = gtk_container_destroy;
   widget_class->compute_expand = gtk_container_compute_expand;
-  widget_class->snapshot = gtk_container_snapshot;
-  widget_class->draw = gtk_container_draw;
   widget_class->focus = gtk_container_focus;
   widget_class->get_request_mode = gtk_container_get_request_mode;
 
@@ -2939,91 +2928,6 @@ typedef struct {
   GtkWidget *child;
   int window_depth;
 } ChildOrderInfo;
-
-static void
-gtk_container_draw_forall (GtkWidget *widget,
-                           gpointer   client_data)
-{
-  struct {
-    GtkContainer *container;
-    GArray *child_infos;
-    cairo_t *cr;
-  } *data = client_data;
-  ChildOrderInfo info;
-  GList *siblings;
-  GdkWindow *window;
-
-  if (gtk_container_should_propagate_draw (data->container, widget, data->cr))
-    {
-      info.child = widget;
-      info.window_depth = G_MAXINT;
-      window = _gtk_widget_get_window (widget);
-      if (window != gtk_widget_get_window (GTK_WIDGET (data->container)))
-        {
-          siblings = gdk_window_peek_children (gdk_window_get_parent (window));
-          info.window_depth = g_list_index (siblings, window);
-        }
-      g_array_append_val (data->child_infos, info);
-    }
-}
-
-static gint
-compare_children_for_draw (gconstpointer  _a,
-                           gconstpointer  _b)
-{
-  const ChildOrderInfo *a = _a;
-  const ChildOrderInfo *b = _b;
-
-  return b->window_depth - a->window_depth;
-}
-
-static gint
-gtk_container_draw (GtkWidget *widget,
-                    cairo_t   *cr)
-{
-  GtkContainer *container = GTK_CONTAINER (widget);
-  GArray *child_infos;
-  int i;
-  ChildOrderInfo *child_info;
-  struct {
-    GtkContainer *container;
-    GArray *child_infos;
-    cairo_t *cr;
-  } data;
-
-  child_infos = g_array_new (FALSE, TRUE, sizeof (ChildOrderInfo));
-
-  data.container = container;
-  data.cr = cr;
-  data.child_infos = child_infos;
-  gtk_container_forall (container,
-                        gtk_container_draw_forall,
-                        &data);
-
-  g_array_sort (child_infos, compare_children_for_draw);
-
-  for (i = 0; i < child_infos->len; i++)
-    {
-      child_info = &g_array_index (child_infos, ChildOrderInfo, i);
-      gtk_container_propagate_draw (container, child_info->child, cr);
-    }
-
-  g_array_free (child_infos, TRUE);
-
-  return FALSE;
-}
-
-static void
-gtk_container_snapshot (GtkWidget   *widget,
-                        GtkSnapshot *snapshot)
-{
-  GtkWidget *child;
-
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    gtk_widget_snapshot_child (widget, child, snapshot);
-}
 
 static gboolean
 gtk_container_should_propagate_draw (GtkContainer   *container,
