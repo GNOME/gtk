@@ -6015,7 +6015,8 @@ update_csd_visibility (GtkWindow *window)
   if (priv->title_box == NULL)
     return FALSE;
 
-  visible = !priv->fullscreen &&
+  visible = priv->decorated &&
+            !priv->fullscreen &&
             !(priv->titlebar == priv->title_box &&
               priv->maximized &&
               priv->hide_titlebar_when_maximized);
