@@ -61,8 +61,6 @@
 #include "gtkactionable.h"
 #include "a11y/gtkswitchaccessible.h"
 #include "gtkactionhelper.h"
-#include "gtkcsscustomgadgetprivate.h"
-#include "gtkcssgadgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
@@ -79,8 +77,6 @@ struct _GtkSwitchPrivate
 
   GtkGesture *pan_gesture;
   GtkGesture *multipress_gesture;
-
-  GtkCssGadget *gadget;
 
   double handle_pos;
   guint tick_id;
@@ -310,22 +306,19 @@ gtk_switch_activate (GtkSwitch *sw)
 }
 
 static void
-gtk_switch_get_content_size (GtkCssGadget   *gadget,
-                             GtkOrientation  orientation,
-                             gint            for_size,
-                             gint           *minimum,
-                             gint           *natural,
-                             gint           *minimum_baseline,
-                             gint           *natural_baseline,
-                             gpointer        unused)
+gtk_switch_measure (GtkWidget      *widget,
+                    GtkOrientation  orientation,
+                    int             for_size,
+                    int            *minimum,
+                    int            *natural,
+                    int            *minimum_baseline,
+                    int            *natural_baseline)
 {
-  GtkWidget *widget;
   GtkSwitch *self;
   GtkSwitchPrivate *priv;
   gint slider_minimum, slider_natural;
   int on_nat, off_nat;
 
-  widget = gtk_css_gadget_get_owner (gadget);
   self = GTK_SWITCH (widget);
   priv = self->priv;
 
@@ -351,30 +344,13 @@ gtk_switch_get_content_size (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_switch_measure (GtkWidget      *widget,
-                    GtkOrientation  orientation,
-                    int             for_size,
-                    int            *minimum,
-                    int            *natural,
-                    int            *minimum_baseline,
-                    int            *natural_baseline)
+gtk_switch_size_allocate (GtkWidget     *widget,
+                          GtkAllocation *allocation)
 {
-  gtk_css_gadget_get_preferred_size (GTK_SWITCH (widget)->priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_switch_allocate_contents (GtkCssGadget        *gadget,
-                              const GtkAllocation *allocation,
-                              int                  baseline,
-                              GtkAllocation       *out_clip,
-                              gpointer             unused)
-{
-  GtkSwitch *self = GTK_SWITCH (gtk_css_gadget_get_owner (gadget));
-  GtkSwitchPrivate *priv = self->priv;
+  GtkSwitch *self = GTK_SWITCH (widget);
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
+  GtkAllocation clip = *allocation;
+  GtkAllocation child_clip;
   GtkAllocation child_alloc;
   GtkAllocation slider_alloc;
   int min;
@@ -385,6 +361,9 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
   slider_alloc.height = allocation->height;
 
   gtk_widget_size_allocate (priv->slider, &slider_alloc);
+  gtk_widget_get_clip (priv->slider, &child_clip);
+  gdk_rectangle_union (&child_clip, &clip, &clip);
+
 
   /* Center ON label in left half */
   gtk_widget_measure (priv->on_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
@@ -394,7 +373,8 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
   child_alloc.y = allocation->y + (allocation->height - min) / 2;
   child_alloc.height = min;
   gtk_widget_size_allocate (priv->on_label, &child_alloc);
-
+  gtk_widget_get_clip (priv->on_label, &child_clip);
+  gdk_rectangle_union (&child_clip, &clip, &clip);
 
   /* Center OFF label in right half */
   gtk_widget_measure (priv->off_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
@@ -404,20 +384,8 @@ gtk_switch_allocate_contents (GtkCssGadget        *gadget,
   child_alloc.y = allocation->y + (allocation->height - min) / 2;
   child_alloc.height = min;
   gtk_widget_size_allocate (priv->off_label, &child_alloc);
-}
-
-static void
-gtk_switch_size_allocate (GtkWidget     *widget,
-                          GtkAllocation *allocation)
-{
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-  gtk_css_gadget_allocate (priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
+  gtk_widget_get_clip (priv->off_label, &child_clip);
+  gdk_rectangle_union (&child_clip, &clip, &clip);
 
   gtk_widget_set_clip (widget, &clip);
 }
@@ -550,7 +518,6 @@ gtk_switch_dispose (GObject *object)
   GtkSwitchPrivate *priv = GTK_SWITCH (object)->priv;
 
   g_clear_object (&priv->action_helper);
-  g_clear_object (&priv->gadget);
 
   g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->multipress_gesture);
@@ -698,21 +665,11 @@ gtk_switch_init (GtkSwitch *self)
 {
   GtkSwitchPrivate *priv;
   GtkGesture *gesture;
-  GtkCssNode *widget_node;
 
   priv = self->priv = gtk_switch_get_instance_private (self);
 
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     GTK_WIDGET (self),
-                                                     gtk_switch_get_content_size,
-                                                     gtk_switch_allocate_contents,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
 
   priv->slider = g_object_new (GTK_TYPE_BUTTON, "css-name", "slider", NULL);
   gtk_widget_set_parent (priv->slider, GTK_WIDGET (self));
