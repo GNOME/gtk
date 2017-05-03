@@ -553,13 +553,6 @@ static void     gtk_label_measure (GtkCssGadget   *gadget,
                                    int            *minimum_baseline,
                                    int            *natural_baseline,
                                    gpointer        unused);
-static gboolean gtk_label_render  (GtkCssGadget   *gadget,
-                                   GtkSnapshot    *snapshot,
-                                   int             x,
-                                   int             y,
-                                   int             width,
-                                   int             height,
-                                   gpointer        data);
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
@@ -1339,7 +1332,7 @@ gtk_label_init (GtkLabel *label)
                                                      GTK_WIDGET (label),
                                                      gtk_label_measure,
                                                      NULL,
-                                                     gtk_label_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 }
@@ -3954,35 +3947,24 @@ gtk_label_get_focus_link (GtkLabel *label)
   return NULL;
 }
 
-static void
-gtk_label_snapshot (GtkWidget   *widget,
-                    GtkSnapshot *snapshot)
-{
-  gtk_css_gadget_snapshot (GTK_LABEL (widget)->priv->gadget, snapshot);
-}
-
 static void layout_to_window_coords (GtkLabel *label,
                                      gint     *x,
                                      gint     *y);
 #define GRAPHENE_RECT_FROM_RECT(_r) (GRAPHENE_RECT_INIT ((_r)->x, (_r)->y, (_r)->width, (_r)->height))
 
-static gboolean
-gtk_label_render (GtkCssGadget *gadget,
-                  GtkSnapshot  *snapshot,
-                  int           x,
-                  int           y,
-                  int           width,
-                  int           height,
-                  gpointer      data)
+
+static void
+gtk_label_snapshot (GtkWidget   *widget,
+                    GtkSnapshot *snapshot)
 {
-  GtkWidget *widget;
   GtkLabel *label;
   GtkLabelPrivate *priv;
   GtkLabelSelectionInfo *info;
   GtkStyleContext *context;
   gint lx, ly;
+  GtkAllocation allocation;
+  int width, height, x;
 
-  widget = gtk_css_gadget_get_owner (gadget);
   label = GTK_LABEL (widget);
   priv = label->priv;
   info = priv->select_info;
@@ -3990,6 +3972,11 @@ gtk_label_render (GtkCssGadget *gadget,
   gtk_label_ensure_layout (label);
 
   context = _gtk_widget_get_style_context (widget);
+
+  gtk_widget_get_allocation (widget, &allocation);
+  x = 0;
+  width = allocation.width;
+  height = allocation.height;
 
   if (GTK_IS_ACCEL_LABEL (widget))
     {
@@ -4033,7 +4020,7 @@ gtk_label_render (GtkCssGadget *gadget,
           gdk_cairo_region (cr, range_clip);
           cairo_clip (cr);
 
-          gtk_render_background (context, cr, x, y, width, height);
+          gtk_render_background (context, cr, x, 0, width, height);
           gtk_render_layout (context, cr, lx, ly, priv->layout);
 
           gtk_style_context_restore (context);
@@ -4082,7 +4069,7 @@ gtk_label_render (GtkCssGadget *gadget,
               cairo_clip (cr);
               cairo_region_destroy (range_clip);
 
-              gtk_render_background (context, cr, x, y, width, height);
+              gtk_render_background (context, cr, x, 0, width, height);
               gtk_render_layout (context, cr, lx, ly, priv->layout);
 
               gtk_style_context_restore (context);
@@ -4103,8 +4090,6 @@ gtk_label_render (GtkCssGadget *gadget,
             }
         }
     }
-
-  return FALSE;
 }
 
 static gboolean
