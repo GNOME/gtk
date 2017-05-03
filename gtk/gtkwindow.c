@@ -304,7 +304,6 @@ enum {
   PROP_DEFAULT_WIDTH,
   PROP_DEFAULT_HEIGHT,
   PROP_DESTROY_WITH_PARENT,
-  PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED,
   PROP_ICON,
   PROP_ICON_NAME,
   PROP_SCREEN,
@@ -875,20 +874,6 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_boolean ("destroy-with-parent",
                             P_("Destroy with Parent"),
                             P_("If this window should be destroyed when the parent is destroyed"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
-   * GtkWindow:hide-titlebar-when-maximized:
-   *
-   * Whether the titlebar should be hidden during maximization.
-   *
-   * Since: 3.4
-   */
-  window_props[PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED] =
-      g_param_spec_boolean ("hide-titlebar-when-maximized",
-                            P_("Hide the titlebar during maximization"),
-                            P_("If this window’s titlebar should be hidden when the window is maximized"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
