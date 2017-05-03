@@ -1806,31 +1806,6 @@ gtk_header_bar_set_child_property (GtkContainer *container,
 }
 
 static void
-gtk_header_bar_snapshot (GtkWidget   *widget,
-                         GtkSnapshot *snapshot)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
-
-  gtk_css_gadget_snapshot (priv->gadget, snapshot);
-}
-
-static gboolean
-gtk_header_bar_render_contents (GtkCssGadget *gadget,
-                                GtkSnapshot  *snapshot,
-                                int           x,
-                                int           y,
-                                int           width,
-                                int           height,
-                                gpointer      unused)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-
-  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->snapshot (widget, snapshot);
-
-  return FALSE;
-}
-
-static void
 gtk_header_bar_realize (GtkWidget *widget)
 {
   GtkSettings *settings;
@@ -1913,7 +1888,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   widget_class->destroy = gtk_header_bar_destroy;
   widget_class->size_allocate = gtk_header_bar_size_allocate;
   widget_class->measure = gtk_header_bar_measure;
-  widget_class->snapshot = gtk_header_bar_snapshot;
   widget_class->realize = gtk_header_bar_realize;
   widget_class->unrealize = gtk_header_bar_unrealize;
   widget_class->hierarchy_changed = gtk_header_bar_hierarchy_changed;
@@ -2070,10 +2044,9 @@ gtk_header_bar_init (GtkHeaderBar *bar)
                                                      GTK_WIDGET (bar),
                                                      gtk_header_bar_get_content_size,
                                                      gtk_header_bar_allocate_contents,
-                                                     gtk_header_bar_render_contents,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
-
 }
 
 static void
