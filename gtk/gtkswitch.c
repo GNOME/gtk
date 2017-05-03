@@ -422,30 +422,15 @@ gtk_switch_size_allocate (GtkWidget     *widget,
   gtk_widget_set_clip (widget, &clip);
 }
 
-static gboolean
-gtk_switch_snapshot_trough (GtkCssGadget *gadget,
-                            GtkSnapshot  *snapshot,
-                            int           x,
-                            int           y,
-                            int           width,
-                            int           height,
-                            gpointer      data)
+static void
+gtk_switch_snapshot (GtkWidget   *widget,
+                     GtkSnapshot *snapshot)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
 
   gtk_widget_snapshot_child (widget, priv->on_label, snapshot);
   gtk_widget_snapshot_child (widget, priv->off_label, snapshot);
   gtk_widget_snapshot_child (widget, priv->slider, snapshot);
-
-  return FALSE;
-}
-
-static void
-gtk_switch_snapshot (GtkWidget   *widget,
-                     GtkSnapshot *snapshot)
-{
-  gtk_css_gadget_snapshot (GTK_SWITCH (widget)->priv->gadget, snapshot);
 }
 
 static void
@@ -725,7 +710,7 @@ gtk_switch_init (GtkSwitch *self)
                                                      GTK_WIDGET (self),
                                                      gtk_switch_get_content_size,
                                                      gtk_switch_allocate_contents,
-                                                     gtk_switch_snapshot_trough,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 
