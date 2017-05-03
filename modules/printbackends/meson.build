@@ -9,53 +9,27 @@ if enable_cups != 'no'
   # FIXME: eek, see configure.ac (we're just not going to support non-standar prefix for now)
   #endif
   if cc.has_header('cups/cups.h')
-    # No cc.compute_int() yet: https://github.com/mesonbuild/meson/issues/435
-    cups_major_version = 0
-    cups_minor_version = -1
-    foreach check_ver : [1,2,3]
-      if cups_major_version == 0
-        if cc.compiles('''#include <cups/cups.h>
-                          #if CUPS_VERSION_MAJOR != @0@
-                          #error "Not this version"
-                          #endif'''.format(check_ver),
-                          name : 'Check CUPS major version @0@'.format(check_ver))
-          cups_major_version = check_ver
-        endif
+    # TODO: include_directories from cups-config
+    cups_major_version = cc.compute_int('CUPS_VERSION_MAJOR', prefix : '#include <cups/cups.h>')
+    cups_minor_version = cc.compute_int('CUPS_VERSION_MINOR', prefix : '#include <cups/cups.h>')
+    message('Found CUPS version: @0@.@1@'.format(cups_major_version, cups_minor_version))
+    if cups_major_version > 1 or cups_minor_version >= 2
+      if cups_major_version > 1 or cups_minor_version >= 6
+        cdata.set('HAVE_CUPS_API_1_6', 1)
       endif
-    endforeach
-    foreach check_ver : [0,1,2,3,4,5,6,7,8,9]
-      if cups_major_version > 0 and cups_minor_version == -1
-        if cc.compiles('''#include <cups/cups.h>
-                          #if CUPS_VERSION_MINOR != @0@
-                          #error "Not this version"
-                          #endif'''.format(check_ver),
-                          name : 'Check CUPS minor version @0@'.format(check_ver))
-          cups_minor_version = check_ver
-        endif
-      endif
-    endforeach
-    if cups_major_version > 0 and cups_minor_version >= 0
-      message('Found CUPS version: @0@.@1@'.format(cups_major_version, cups_minor_version))
-      if cups_major_version > 1 or cups_minor_version >= 2
-        if cups_major_version > 1 or cups_minor_version >= 6
-          cdata.set('HAVE_CUPS_API_1_6', 1)
-        endif
 
-        if cc.compiles('#include <cups/http.h> \n http_t http; char *s = http.authstring;')
-          cdata.set('HAVE_HTTP_AUTHSTRING', 1,
-            description :'Define if cups http_t authstring field is accessible')
-        endif
-        libcups = cc.find_library('cups', required : want_cups)
-        if libcups.found() and cc.has_function('httpGetAuthString', dependencies : libcups)
-          cdata.set('HAVE_HTTPGETAUTHSTRING', 1)
-        endif
-
-        print_backends += ['cups']
-      elif want_cups
-        error('Need CUPS version >= 1.2')
+      if cc.compiles('#include <cups/http.h> \n http_t http; char *s = http.authstring;')
+        cdata.set('HAVE_HTTP_AUTHSTRING', 1,
+          description :'Define if cups http_t authstring field is accessible')
       endif
-    else
-      error('Could not determine CUPS version from header files.')
+      libcups = cc.find_library('cups', required : want_cups)
+      if libcups.found() and cc.has_function('httpGetAuthString', dependencies : libcups)
+        cdata.set('HAVE_HTTPGETAUTHSTRING', 1)
+      endif
+
+      print_backends += ['cups']
+    elif want_cups
+      error('Need CUPS version >= 1.2')
     endif
   elif want_cups
     error('Cannot find CUPS headers in default prefix.')
