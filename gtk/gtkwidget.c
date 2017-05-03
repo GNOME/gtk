@@ -69,6 +69,8 @@
 #include "gtkgestureprivate.h"
 #include "gtkwidgetpathprivate.h"
 #include "gtksnapshotprivate.h"
+#include "gtkrenderborderprivate.h"
+#include "gtkrenderbackgroundprivate.h"
 
 #include "inspector/window.h"
 
@@ -15258,6 +15260,48 @@ gtk_widget_reset_controllers (GtkWidget *widget)
     }
 }
 
+static gint
+get_number (GtkCssStyle *style,
+            guint        property)
+{
+  double d = _gtk_css_number_value_get (gtk_css_style_get_value (style, property), 100);
+
+  if (d < 1)
+    return ceil (d);
+  else
+    return floor (d);
+}
+
+static void
+get_box_margin (GtkCssStyle *style,
+                GtkBorder   *margin)
+{
+  margin->top = get_number (style, GTK_CSS_PROPERTY_MARGIN_TOP);
+  margin->left = get_number (style, GTK_CSS_PROPERTY_MARGIN_LEFT);
+  margin->bottom = get_number (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM);
+  margin->right = get_number (style, GTK_CSS_PROPERTY_MARGIN_RIGHT);
+}
+
+static void
+get_box_border (GtkCssStyle *style,
+                GtkBorder   *border)
+{
+  border->top = get_number (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH);
+  border->left = get_number (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH);
+  border->bottom = get_number (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH);
+  border->right = get_number (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH);
+}
+
+static void
+get_box_padding (GtkCssStyle *style,
+                 GtkBorder   *border)
+{
+  border->top = get_number (style, GTK_CSS_PROPERTY_PADDING_TOP);
+  border->left = get_number (style, GTK_CSS_PROPERTY_PADDING_LEFT);
+  border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
+  border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
+}
+
 void
 gtk_widget_snapshot (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
@@ -15269,6 +15313,9 @@ gtk_widget_snapshot (GtkWidget   *widget,
   RenderMode mode;
   double opacity;
   cairo_rectangle_int_t offset_clip;
+  GtkCssStyle *style;
+  GtkAllocation allocation;
+  GtkBorder margin, border, padding;
 
   if (!_gtk_widget_is_drawable (widget))
     return;
@@ -15310,6 +15357,25 @@ gtk_widget_snapshot (GtkWidget   *widget,
                       offset_clip.y,
                       offset_clip.width,
                       offset_clip.height);
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  _gtk_widget_get_allocation (widget, &allocation);
+
+  gtk_snapshot_offset (snapshot, margin.left, margin.top);
+  gtk_css_style_snapshot_background (style,
+                                     snapshot,
+                                     allocation.width - margin.left - margin.right,
+                                     allocation.height - margin.top - margin.bottom);
+  gtk_css_style_snapshot_border (style,
+                                 snapshot,
+                                 allocation.width - margin.left - margin.right,
+                                 allocation.height - margin.top - margin.bottom);
+  gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
+
 
   if (mode == RENDER_DRAW)
     {
