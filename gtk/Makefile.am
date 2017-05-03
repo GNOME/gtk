@@ -1314,7 +1314,7 @@ scss_verbose = $(scss_verbose_@AM_V@)
 scss_verbose_ = $(scss_verbose_@AM_DEFAULT_V@)
 scss_verbose_0 = @echo "  SCSS     $@";
 
-SASSC_OPTS = -a
+SASSC_OPTS = -a -M -t compact
 
 theme/Adwaita/gtk-contained.css: $(top_srcdir)/gtk/theme/Adwaita/gtk-contained.scss $(adwaita_theme_scss)
 	$(scss_verbose) $(MKDIR_P) $(dir $@) && $(SASSC) $(SASSC_OPTS) $< $@ || rm -f $@
