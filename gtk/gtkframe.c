@@ -121,8 +121,6 @@ static void gtk_frame_get_property (GObject     *object,
 				    guint        param_id,
 				    GValue      *value,
 				    GParamSpec  *pspec);
-static void gtk_frame_snapshot      (GtkWidget      *widget,
-				     GtkSnapshot    *snapshot);
 static void gtk_frame_size_allocate (GtkWidget      *widget,
 				     GtkAllocation  *allocation);
 static void gtk_frame_remove        (GtkContainer   *container,
@@ -162,13 +160,6 @@ static void     gtk_frame_allocate       (GtkCssGadget        *gadget,
                                           const GtkAllocation *allocation,
                                           int                  baseline,
                                           GtkAllocation       *out_clip,
-                                          gpointer             data);
-static gboolean gtk_frame_render         (GtkCssGadget        *gadget,
-                                          GtkSnapshot         *snapshot,
-                                          int                  x,
-                                          int                  y,
-                                          int                  width,
-                                          int                  height,
                                           gpointer             data);
 
 
@@ -232,7 +223,6 @@ gtk_frame_class_init (GtkFrameClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, frame_props);
 
-  widget_class->snapshot = gtk_frame_snapshot;
   widget_class->size_allocate = gtk_frame_size_allocate;
   widget_class->measure = gtk_frame_measure_;
 
@@ -284,7 +274,7 @@ gtk_frame_init (GtkFrame *frame)
                                                      GTK_WIDGET (frame),
                                                      gtk_frame_measure,
                                                      gtk_frame_allocate,
-                                                     gtk_frame_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 }
@@ -657,31 +647,6 @@ gtk_frame_get_shadow_type (GtkFrame *frame)
   g_return_val_if_fail (GTK_IS_FRAME (frame), GTK_SHADOW_ETCHED_IN);
 
   return frame->priv->shadow_type;
-}
-
-static void
-gtk_frame_snapshot (GtkWidget   *widget,
-		    GtkSnapshot *snapshot)
-{
-  gtk_css_gadget_snapshot (GTK_FRAME (widget)->priv->gadget, snapshot);
-}
-
-static gboolean
-gtk_frame_render (GtkCssGadget *gadget,
-		  GtkSnapshot  *snapshot,
-                  int           x,
-                  int           y,
-                  int           width,
-                  int           height,
-                  gpointer      data)
-{
-  GtkWidget *widget;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-
-  GTK_WIDGET_CLASS (gtk_frame_parent_class)->snapshot (widget, snapshot);
-
-  return FALSE;
 }
 
 static void
