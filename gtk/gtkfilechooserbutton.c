@@ -381,16 +381,6 @@ gtk_file_chooser_button_measure (GtkWidget       *widget,
 }
 
 static void
-gtk_file_chooser_button_snapshot (GtkWidget   *widget,
-                                  GtkSnapshot *snapshot)
-{
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
-  GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
-
-  gtk_widget_snapshot_child (widget, priv->child, snapshot);
-}
-
-static void
 gtk_file_chooser_button_size_allocate (GtkWidget     *widget,
                                        GtkAllocation *allocation)
 {
@@ -427,7 +417,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->state_flags_changed = gtk_file_chooser_button_state_flags_changed;
   widget_class->measure = gtk_file_chooser_button_measure;
   widget_class->size_allocate = gtk_file_chooser_button_size_allocate;
-  widget_class->snapshot = gtk_file_chooser_button_snapshot;
 
   /**
    * GtkFileChooserButton::file-set:

@@ -463,16 +463,6 @@ gtk_font_button_measure (GtkWidget       *widget,
 }
 
 static void
-gtk_font_button_snapshot (GtkWidget   *widget,
-                          GtkSnapshot *snapshot)
-{
-  GtkFontButton *button = GTK_FONT_BUTTON (widget);
-  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
-
-  gtk_widget_snapshot_child (widget, priv->button, snapshot);
-}
-
-static void
 gtk_font_button_size_allocate (GtkWidget     *widget,
                                GtkAllocation *allocation)
 {
@@ -499,7 +489,6 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
 
   widget_class->measure = gtk_font_button_measure;
   widget_class->size_allocate = gtk_font_button_size_allocate;
-  widget_class->snapshot = gtk_font_button_snapshot;
 
   klass->font_set = NULL;
 
