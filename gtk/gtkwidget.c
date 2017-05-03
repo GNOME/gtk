@@ -15365,17 +15365,19 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
   _gtk_widget_get_allocation (widget, &allocation);
 
-  gtk_snapshot_offset (snapshot, margin.left, margin.top);
-  gtk_css_style_snapshot_background (style,
+  if (!GTK_IS_WINDOW (widget))
+    {
+      gtk_snapshot_offset (snapshot, margin.left, margin.top);
+      gtk_css_style_snapshot_background (style,
+                                         snapshot,
+                                         allocation.width - margin.left - margin.right,
+                                         allocation.height - margin.top - margin.bottom);
+      gtk_css_style_snapshot_border (style,
                                      snapshot,
                                      allocation.width - margin.left - margin.right,
                                      allocation.height - margin.top - margin.bottom);
-  gtk_css_style_snapshot_border (style,
-                                 snapshot,
-                                 allocation.width - margin.left - margin.right,
-                                 allocation.height - margin.top - margin.bottom);
-  gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
-
+      gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
+    }
 
   if (mode == RENDER_DRAW)
     {
