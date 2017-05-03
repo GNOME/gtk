@@ -2052,22 +2052,6 @@ gtk_stack_snapshot (GtkWidget   *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
-  gtk_css_gadget_snapshot (priv->gadget, snapshot);
-}
-
-static gboolean
-gtk_stack_render (GtkCssGadget *gadget,
-                  GtkSnapshot  *snapshot,
-                  int           x,
-                  int           y,
-                  int           width,
-                  int           height,
-                  gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-
   if (priv->visible_child)
     {
       if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
@@ -2128,8 +2112,6 @@ gtk_stack_render (GtkCssGadget *gadget,
                                    priv->visible_child->widget,
                                    snapshot);
     }
-
-  return FALSE;
 }
 
 static void
@@ -2331,7 +2313,7 @@ gtk_stack_init (GtkStack *stack)
                                                      GTK_WIDGET (stack),
                                                      gtk_stack_measure,
                                                      gtk_stack_allocate,
-                                                     gtk_stack_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 
