@@ -26,7 +26,6 @@
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 
 #include <float.h>
 #include <math.h>
@@ -83,7 +82,6 @@ typedef struct
   GtkWidget *placeholder;
 
   GdkWindow *view_window;
-  GtkCssGadget *gadget;
 
   GtkListBoxSortFunc sort_func;
   gpointer sort_func_target;
@@ -126,7 +124,6 @@ typedef struct
 {
   GSequenceIter *iter;
   GtkWidget *header;
-  GtkCssGadget *gadget;
   gint y;
   gint height;
   guint visible     :1;
@@ -272,26 +269,13 @@ static void                 gtk_list_box_bound_model_changed            (GListMo
 
 static void                 gtk_list_box_check_model_compat             (GtkListBox          *box);
 
-static void     gtk_list_box_measure    (GtkCssGadget        *gadget,
-                                          GtkOrientation       orientation,
-                                          gint                 for_size,
-                                          gint                *minimum_size,
-                                          gint                *natural_size,
-                                          gint                *minimum_baseline,
-                                          gint                *natural_baseline,
-                                          gpointer             data);
-static void     gtk_list_box_allocate    (GtkCssGadget        *gadget,
-                                          const GtkAllocation *allocation,
-                                          int                  baseline,
-                                          GtkAllocation       *out_clip,
-                                          gpointer             data);
-static void gtk_list_box_measure_ (GtkWidget     *widget,
-                                   GtkOrientation  orientation,
-                                   int             for_size,
-                                   int            *minimum,
-                                   int            *natural,
-                                   int            *minimum_baseline,
-                                   int            *natural_baseline);
+static void gtk_list_box_measure (GtkWidget     *widget,
+                                  GtkOrientation  orientation,
+                                  int             for_size,
+                                  int            *minimum,
+                                  int            *natural,
+                                  int            *minimum_baseline,
+                                  int            *natural_baseline);
 
 
 
@@ -387,8 +371,6 @@ gtk_list_box_finalize (GObject *obj)
       g_clear_object (&priv->bound_model);
     }
 
-  g_clear_object (&priv->gadget);
-
   G_OBJECT_CLASS (gtk_list_box_parent_class)->finalize (obj);
 }
 
@@ -416,7 +398,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->unmap = gtk_list_box_unmap;
   widget_class->compute_expand = gtk_list_box_compute_expand;
   widget_class->get_request_mode = gtk_list_box_get_request_mode;
-  widget_class->measure = gtk_list_box_measure_;
+  widget_class->measure = gtk_list_box_measure;
   widget_class->size_allocate = gtk_list_box_size_allocate;
   widget_class->drag_leave = gtk_list_box_drag_leave;
   widget_class->parent_set = gtk_list_box_parent_set;
@@ -619,7 +601,6 @@ gtk_list_box_init (GtkListBox *box)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkWidget *widget = GTK_WIDGET (box);
-  GtkCssNode *widget_node;
 
   gtk_widget_set_has_window (widget, FALSE);
   gtk_widget_set_redraw_on_allocate (widget, TRUE);
@@ -640,16 +621,6 @@ gtk_list_box_init (GtkListBox *box)
                     G_CALLBACK (gtk_list_box_multipress_gesture_pressed), box);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (box));
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     GTK_WIDGET (box),
-                                                     gtk_list_box_measure,
-                                                     gtk_list_box_allocate,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
-
 }
 
 /**
@@ -2540,32 +2511,14 @@ gtk_list_box_get_request_mode (GtkWidget *widget)
 }
 
 static void
-gtk_list_box_measure_ (GtkWidget     *widget,
-                       GtkOrientation  orientation,
-                       int             for_size,
-                       int            *minimum,
-                       int            *natural,
-                       int            *minimum_baseline,
-                       int            *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_list_box_measure (GtkCssGadget   *gadget,
+gtk_list_box_measure (GtkWidget     *widget,
                       GtkOrientation  orientation,
-                      gint            for_size,
-                      gint           *minimum,
-                      gint           *natural,
-                      gint           *minimum_baseline,
-                      gint           *natural_baseline,
-                      gpointer        unused)
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkListBoxPrivate *priv = BOX_PRIV (widget);
   GSequenceIter *iter;
 
@@ -2615,11 +2568,11 @@ gtk_list_box_measure (GtkCssGadget   *gadget,
   else
     {
       if (for_size < 0)
-        gtk_css_gadget_get_preferred_size (priv->gadget,
-                                           GTK_ORIENTATION_HORIZONTAL,
-                                           -1,
-                                           NULL, &for_size,
-                                           NULL, NULL);
+        {
+          int f;
+          gtk_list_box_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                                &f, &for_size, NULL, NULL);
+        }
 
       *minimum = 0;
 
@@ -2666,49 +2619,26 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
 {
   GtkListBoxPrivate *priv = BOX_PRIV (widget);
   GtkAllocation clip = *allocation;
+  GtkAllocation child_clip;
+  GtkAllocation child_allocation;
+  GtkAllocation header_allocation;
+  GtkListBoxRow *row;
+  GSequenceIter *iter;
+  int child_min;
 
-  gtk_widget_set_allocation (widget, allocation);
 
   if (priv->view_window != NULL)
     gdk_window_move_resize (priv->view_window,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
 
-  gtk_css_gadget_allocate (BOX_PRIV (widget)->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
-
-static void
-gtk_list_box_allocate (GtkCssGadget        *gadget,
-                       const GtkAllocation *allocation,
-                       int                  baseline,
-                       GtkAllocation       *out_clip,
-                       gpointer             unused)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkListBoxPrivate *priv = BOX_PRIV (widget);
-  GtkAllocation child_allocation;
-  GtkAllocation header_allocation;
-  GtkAllocation widget_allocation;
-  GtkAllocation clip;
-  GtkListBoxRow *row;
-  GSequenceIter *iter;
-  int child_min;
-
-  gtk_widget_get_allocation (widget, &widget_allocation);
-
-  child_allocation.x = allocation->x - widget_allocation.x;
-  child_allocation.y = allocation->y - widget_allocation.y;
+  child_allocation.x = allocation->x - allocation->x;
+  child_allocation.y = allocation->y - allocation->y;
   child_allocation.width = allocation->width;
   child_allocation.height = 0;
 
-  header_allocation.x = allocation->x - widget_allocation.x;
-  header_allocation.y = allocation->y - widget_allocation.y;
+  header_allocation.x = allocation->x - allocation->x;
+  header_allocation.y = allocation->y - allocation->y;
   header_allocation.width = allocation->width;
   header_allocation.height = 0;
 
@@ -2720,8 +2650,8 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
       header_allocation.height = allocation->height;
       header_allocation.y = child_allocation.y;
       gtk_widget_size_allocate (priv->placeholder, &header_allocation);
-      gtk_widget_get_clip (priv->placeholder, &clip);
-      gdk_rectangle_union (&clip, out_clip, out_clip);
+      gtk_widget_get_clip (priv->placeholder, &child_clip);
+      gdk_rectangle_union (&child_clip, &clip, &clip);
       child_allocation.y += child_min;
     }
 
@@ -2745,8 +2675,8 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
           header_allocation.height = child_min;
           header_allocation.y = child_allocation.y;
           gtk_widget_size_allocate (ROW_PRIV (row)->header, &header_allocation);
-          gtk_widget_get_clip (ROW_PRIV (row)->header, &clip);
-          gdk_rectangle_union (&clip, out_clip, out_clip);
+          gtk_widget_get_clip (ROW_PRIV (row)->header, &child_clip);
+          gdk_rectangle_union (&child_clip, &clip, &clip);
           child_allocation.y += child_min;
         }
 
@@ -2759,10 +2689,12 @@ gtk_list_box_allocate (GtkCssGadget        *gadget,
 
       ROW_PRIV (row)->height = child_allocation.height;
       gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation);
-      gtk_widget_get_clip (GTK_WIDGET (row), &clip);
-      gdk_rectangle_union (&clip, out_clip, out_clip);
+      gtk_widget_get_clip (GTK_WIDGET (row), &child_clip);
+      gdk_rectangle_union (&child_clip, &clip, &clip);
       child_allocation.y += child_min;
     }
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 /**
@@ -3210,19 +3142,16 @@ gtk_list_box_row_hide (GtkWidget *widget)
 }
 
 static void
-gtk_list_box_row_measure (GtkCssGadget   *gadget,
+gtk_list_box_row_measure (GtkWidget     *widget,
                           GtkOrientation  orientation,
                           int             for_size,
                           int            *minimum,
                           int            *natural,
                           int            *minimum_baseline,
-                          int            *natural_baseline,
-                          gpointer        data)
+                          int            *natural_baseline)
 {
-  GtkWidget *widget;
   GtkWidget *child;
 
-  widget = gtk_css_gadget_get_owner (gadget);
   child = gtk_bin_get_child (GTK_BIN (widget));
 
   if (orientation == GTK_ORIENTATION_VERTICAL)
@@ -3244,55 +3173,20 @@ gtk_list_box_row_measure (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_list_box_row_measure_ (GtkWidget     *widget,
-                          GtkOrientation  orientation,
-                          int             for_size,
-                          int            *minimum,
-                          int            *natural,
-                          int            *minimum_baseline,
-                          int            *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
 gtk_list_box_row_size_allocate (GtkWidget     *widget,
                                 GtkAllocation *allocation)
 {
-  GtkAllocation clip = *allocation;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (ROW_PRIV (GTK_LIST_BOX_ROW (widget))->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
-static void
-gtk_list_box_row_allocate (GtkCssGadget        *gadget,
-                           const GtkAllocation *allocation,
-                           int                  baseline,
-                           GtkAllocation       *out_clip,
-                           gpointer             data)
-{
-  GtkWidget *widget;
   GtkWidget *child;
-
-  widget = gtk_css_gadget_get_owner (gadget);
+  GtkAllocation clip = *allocation;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
-      gtk_widget_size_allocate (child, (GtkAllocation *)allocation);
-      gtk_widget_get_clip (child, out_clip);
+      gtk_widget_size_allocate (child, allocation);
+      gtk_widget_get_clip (child, &clip);
     }
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 /**
@@ -3601,7 +3495,6 @@ static void
 gtk_list_box_row_finalize (GObject *obj)
 {
   g_clear_object (&ROW_PRIV (GTK_LIST_BOX_ROW (obj))->header);
-  g_clear_object (&ROW_PRIV (GTK_LIST_BOX_ROW (obj))->gadget);
 
   G_OBJECT_CLASS (gtk_list_box_row_parent_class)->finalize (obj);
 }
@@ -3634,7 +3527,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   widget_class->show = gtk_list_box_row_show;
   widget_class->hide = gtk_list_box_row_hide;
-  widget_class->measure = gtk_list_box_row_measure_;
+  widget_class->measure = gtk_list_box_row_measure;
   widget_class->size_allocate = gtk_list_box_row_size_allocate;
   widget_class->focus = gtk_list_box_row_focus;
   widget_class->grab_focus = gtk_list_box_row_grab_focus;
@@ -3695,14 +3588,8 @@ gtk_list_box_row_init (GtkListBoxRow *row)
   ROW_PRIV (row)->activatable = TRUE;
   ROW_PRIV (row)->selectable = TRUE;
 
-  ROW_PRIV (row)->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (row)),
-                                                     GTK_WIDGET (row),
-                                                     gtk_list_box_row_measure,
-                                                     gtk_list_box_row_allocate,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
-  gtk_css_gadget_add_class (ROW_PRIV (row)->gadget, "activatable");
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (row)),
+                               "activatable");
 }
 
 static void
