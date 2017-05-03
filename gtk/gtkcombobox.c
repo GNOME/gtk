@@ -410,25 +410,6 @@ gtk_combo_box_allocate (GtkCssGadget        *gadget,
     }
 }
 
-static gboolean
-gtk_combo_box_render (GtkCssGadget *gadget,
-                      GtkSnapshot  *snapshot,
-                      int           x,
-                      int           y,
-                      int           width,
-                      int           height,
-                      gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
-  GtkComboBoxPrivate *priv = combo_box->priv;
-
-  gtk_widget_snapshot_child (widget,
-                             priv->box, snapshot);
-
-  return FALSE;
-}
-
 static void
 gtk_combo_box_measure_ (GtkWidget      *widget,
                        GtkOrientation  orientation,
@@ -468,13 +449,6 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_combo_box_snapshot (GtkWidget   *widget,
-                        GtkSnapshot *snapshot)
-{
-  gtk_css_gadget_snapshot (GTK_COMBO_BOX (widget)->priv->gadget, snapshot);
-}
-
-static void
 gtk_combo_box_compute_expand (GtkWidget *widget,
                               gboolean  *hexpand,
                               gboolean  *vexpand)
@@ -511,7 +485,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 
   widget_class = (GtkWidgetClass *)klass;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
-  widget_class->snapshot = gtk_combo_box_snapshot;
   widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
@@ -1055,7 +1028,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                                                      GTK_WIDGET (combo_box),
                                                      gtk_combo_box_measure,
                                                      gtk_combo_box_allocate,
-                                                     gtk_combo_box_render,
+                                                     NULL,
                                                      NULL, NULL);
 
   menu = GTK_TREE_MENU (priv->popup_widget);
