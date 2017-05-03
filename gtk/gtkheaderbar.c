@@ -26,7 +26,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
@@ -83,7 +82,6 @@ struct _GtkHeaderBarPrivate
 
   GtkWidget *titlebar_icon;
 
-  GtkCssGadget *gadget;
   guint shows_app_menu : 1;
 };
 
@@ -878,17 +876,14 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
 }
 
 static void
-gtk_header_bar_get_content_size (GtkCssGadget   *gadget,
-                                 GtkOrientation  orientation,
-                                 gint            for_size,
-                                 gint           *minimum,
-                                 gint           *natural,
-                                 gint           *minimum_baseline,
-                                 gint           *natural_baseline,
-                                 gpointer        unused)
+gtk_header_bar_measure (GtkWidget      *widget,
+                        GtkOrientation  orientation,
+                        int             for_size,
+                        int            *minimum,
+                        int            *natural,
+                        int            *minimum_baseline,
+                        int            *natural_baseline)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-
   if (for_size < 0)
     gtk_header_bar_get_size (widget, orientation, minimum, natural);
   else if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -898,48 +893,13 @@ gtk_header_bar_get_content_size (GtkCssGadget   *gadget,
 }
 
 static void
-gtk_header_bar_measure (GtkWidget      *widget,
-                        GtkOrientation  orientation,
-                        int             for_size,
-                        int            *minimum,
-                        int            *natural,
-                        int            *minimum_baseline,
-                        int            *natural_baseline)
-{
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
 gtk_header_bar_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
   GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (priv->gadget, allocation, gtk_widget_get_allocated_baseline (widget), &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
-static void
-gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
-                                  const GtkAllocation *allocation,
-                                  int                  baseline,
-                                  GtkAllocation       *out_clip,
-                                  gpointer             unused)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkWidget *title_widget;
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
-  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkRequestedSize *sizes;
   gint width, height;
   gint nvis_children;
@@ -1138,7 +1098,7 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
 
           gtk_widget_size_allocate (child->widget, &child_allocation);
           gtk_widget_get_clip (child->widget, &child_clip);
-          gdk_rectangle_union (&child_clip, out_clip, out_clip);
+          gdk_rectangle_union (&child_clip, &clip, &clip);
 
         next:
           i++;
@@ -1177,7 +1137,7 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
     {
       gtk_widget_size_allocate (title_widget, &child_allocation);
       gtk_widget_get_clip (title_widget, &child_clip);
-      gdk_rectangle_union (&child_clip, out_clip, out_clip);
+      gdk_rectangle_union (&child_clip, &clip, &clip);
     }
 
   child_allocation.y = allocation->y;
@@ -1193,7 +1153,7 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
       child_allocation.width = start_width - priv->spacing;
       gtk_widget_size_allocate (priv->titlebar_start_box, &child_allocation);
       gtk_widget_get_clip (priv->titlebar_start_box, &child_clip);
-      gdk_rectangle_union (&child_clip, out_clip, out_clip);
+      gdk_rectangle_union (&child_clip, &clip, &clip);
     }
 
   if (priv->titlebar_end_box)
@@ -1206,8 +1166,10 @@ gtk_header_bar_allocate_contents (GtkCssGadget        *gadget,
       child_allocation.width = end_width - priv->spacing;
       gtk_widget_size_allocate (priv->titlebar_end_box, &child_allocation);
       gtk_widget_get_clip (priv->titlebar_end_box, &child_clip);
-      gdk_rectangle_union (&child_clip, out_clip, out_clip);
+      gdk_rectangle_union (&child_clip, &clip, &clip);
     }
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 /**
@@ -1466,8 +1428,6 @@ gtk_header_bar_finalize (GObject *object)
   g_free (priv->title);
   g_free (priv->subtitle);
   g_free (priv->decoration_layout);
-
-  g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_header_bar_parent_class)->finalize (object);
 }
@@ -2019,7 +1979,6 @@ static void
 gtk_header_bar_init (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv;
-  GtkCssNode *widget_node;
 
   priv = gtk_header_bar_get_instance_private (bar);
 
@@ -2038,15 +1997,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
 
   init_sizing_box (bar);
   construct_label_box (bar);
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (bar));
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     GTK_WIDGET (bar),
-                                                     gtk_header_bar_get_content_size,
-                                                     gtk_header_bar_allocate_contents,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
 }
 
 static void
