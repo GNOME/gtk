@@ -263,30 +263,14 @@ gtk_action_bar_set_child_property (GtkContainer *container,
     }
 }
 
-static gboolean
-gtk_action_bar_render (GtkCssGadget *gadget,
-                       GtkSnapshot  *snapshot,
-                       int           x,
-                       int           y,
-                       int           width,
-                       int           height,
-                       gpointer      data)
-{
-  GtkActionBar *self = GTK_ACTION_BAR (gtk_css_gadget_get_owner (gadget));
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (self));
-
-  gtk_widget_snapshot_child (GTK_WIDGET (self), priv->revealer, snapshot);
-
-  return FALSE;
-}
-
 static void
 gtk_action_bar_snapshot (GtkWidget   *widget,
                          GtkSnapshot *snapshot)
 {
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
+  GtkActionBar *self = GTK_ACTION_BAR (widget);
+  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (self);
 
-  gtk_css_gadget_snapshot (priv->gadget, snapshot);
+  gtk_widget_snapshot_child (GTK_WIDGET (self), priv->revealer, snapshot);
 }
 
 static void
@@ -491,7 +475,7 @@ gtk_action_bar_init (GtkActionBar *action_bar)
                                                      GTK_WIDGET (action_bar),
                                                      gtk_action_bar_measure,
                                                      gtk_action_bar_allocate,
-                                                     gtk_action_bar_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 }
