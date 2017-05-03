@@ -771,7 +771,6 @@ gtkversion = configure_file(input: 'gtkversion.h.in',
 gtk_cargs = [
   '-DGTK_COMPILATION',
   '-DG_LOG_DOMAIN="Gtk"',
-  '-DG_LOG_USE_STRUCTURED=1',
   '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
   '-DGTK_BINARY_VERSION="@0@"'.format(gtk_binary_version),
   '-DGTK_HOST="@0@"'.format(host_machine.system()),
