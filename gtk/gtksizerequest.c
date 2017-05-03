@@ -268,7 +268,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 	      nat_baseline = -1;
 	    }
 	  else
-      gtk_widget_adjust_baseline_request (widget, &min_baseline, &nat_baseline);
+            gtk_widget_adjust_baseline_request (widget, &min_baseline, &nat_baseline);
 	}
 
       _gtk_size_request_cache_commit (cache,
