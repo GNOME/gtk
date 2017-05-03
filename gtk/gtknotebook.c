@@ -2786,6 +2786,9 @@ gtk_notebook_gesture_released (GtkGestureMultiPress *gesture,
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
+  if (!event)
+    return;
+
   if (event->type != GDK_BUTTON_RELEASE)
     return;
 
