@@ -1502,22 +1502,9 @@ static void
 gtk_paned_snapshot (GtkWidget   *widget,
                     GtkSnapshot *snapshot)
 {
-  gtk_css_gadget_snapshot (GTK_PANED (widget)->priv->gadget, snapshot);
-}
-
-static gboolean
-gtk_paned_render (GtkCssGadget *gadget,
-                  GtkSnapshot  *snapshot,
-                  int           x,
-                  int           y,
-                  int           width,
-                  int           height,
-                  gpointer      data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkPaned *paned = GTK_PANED (widget);
-  GtkPanedPrivate *priv = paned->priv;
-  GtkAllocation widget_allocation, child_allocation;
+  GtkPanedPrivate *priv = gtk_paned_get_instance_private (GTK_PANED (widget));
+  GtkAllocation widget_allocation;
+  GtkAllocation child_allocation;
 
   gtk_widget_get_allocation (widget, &widget_allocation);
   gtk_snapshot_push_clip (snapshot,
@@ -1563,8 +1550,6 @@ gtk_paned_render (GtkCssGadget *gadget,
     }
 
   gtk_snapshot_pop (snapshot);
-
-  return FALSE;
 }
 
 static gboolean
@@ -1684,7 +1669,7 @@ gtk_paned_init (GtkPaned *paned)
                                                      GTK_WIDGET (paned),
                                                      gtk_paned_measure,
                                                      gtk_paned_allocate,
-                                                     gtk_paned_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
   priv->handle_gadget = gtk_css_custom_gadget_new ("separator",
