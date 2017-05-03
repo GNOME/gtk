@@ -8927,7 +8927,7 @@ gtk_window_move_resize (GtkWindow *window)
   if (priv->configure_notify_received)
     {
       GtkAllocation allocation;
-      int min, nat;
+      int min;
 
       /* If we have received a configure event since
        * the last time in this function, we need to
@@ -8946,9 +8946,11 @@ gtk_window_move_resize (GtkWindow *window)
       allocation.y = 0;
       /*allocation.width = current_width;*/
 
-      gtk_widget_get_preferred_width (widget, &min, &nat);
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &min, NULL, NULL, NULL);
       allocation.width = MAX (min, current_width);
-      gtk_widget_get_preferred_height_for_width (widget, allocation.width, &min, &nat);
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, allocation.width,
+                          &min, NULL, NULL, NULL);
       allocation.height = MAX (min, current_height);
 
       gtk_widget_size_allocate (widget, &allocation);
