@@ -1667,27 +1667,6 @@ gtk_grid_allocate (GtkCssGadget        *gadget,
   gtk_grid_request_allocate_children (&request, allocation, out_clip);
 }
 
-static gboolean
-gtk_grid_render (GtkCssGadget *gadget,
-                 GtkSnapshot  *snapshot,
-                 int           x,
-                 int           y,
-                 int           width,
-                 int           height,
-                 gpointer      data)
-{
-  GTK_WIDGET_CLASS (gtk_grid_parent_class)->snapshot (gtk_css_gadget_get_owner (gadget), snapshot);
-
-  return FALSE;
-}
-
-static void
-gtk_grid_snapshot (GtkWidget   *widget,
-                   GtkSnapshot *snapshot)
-{
-  gtk_css_gadget_snapshot (GTK_GRID (widget)->priv->gadget, snapshot);
-}
-
 static void
 gtk_grid_class_init (GtkGridClass *class)
 {
@@ -1701,7 +1680,6 @@ gtk_grid_class_init (GtkGridClass *class)
 
   widget_class->size_allocate = gtk_grid_size_allocate;
   widget_class->measure = gtk_grid_measure_;
-  widget_class->snapshot = gtk_grid_snapshot;
 
   container_class->add = gtk_grid_add;
   container_class->remove = gtk_grid_remove;
@@ -1808,7 +1786,7 @@ gtk_grid_init (GtkGrid *grid)
                                                      GTK_WIDGET (grid),
                                                      gtk_grid_measure,
                                                      gtk_grid_allocate,
-                                                     gtk_grid_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 
