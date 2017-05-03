@@ -178,13 +178,6 @@ static void     gtk_progress_bar_allocate          (GtkCssGadget        *gadget,
                                                     gint                 baseline,
                                                     GtkAllocation       *out_clip,
                                                     gpointer             data);
-static gboolean gtk_progress_bar_render            (GtkCssGadget        *gadget,
-                                                    GtkSnapshot         *snapshot,
-                                                    gint                 x,
-                                                    gint                 y,
-                                                    gint                 width,
-                                                    gint                 height,
-                                                    gpointer             data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkProgressBar, gtk_progress_bar, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkProgressBar)
@@ -529,7 +522,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
                                                      GTK_WIDGET (pbar),
                                                      gtk_progress_bar_measure,
                                                      gtk_progress_bar_allocate,
-                                                     gtk_progress_bar_render,
+                                                     NULL,
                                                      NULL,
                                                      NULL);
 
@@ -948,28 +941,6 @@ gtk_progress_bar_act_mode_leave (GtkProgressBar *pbar)
   update_node_classes (pbar);
 }
 
-static gboolean
-gtk_progress_bar_render (GtkCssGadget *gadget,
-                         GtkSnapshot  *snapshot,
-                         int           x,
-                         int           y,
-                         int           width,
-                         int           height,
-                         gpointer      data)
-{
-  GtkWidget *widget;
-  GtkProgressBarPrivate *priv;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  priv = GTK_PROGRESS_BAR (widget)->priv;
-
-  gtk_widget_snapshot_child (widget, priv->trough_widget, snapshot);
-  if (priv->show_text)
-    gtk_widget_snapshot_child (widget, priv->label, snapshot);
-
-  return FALSE;
-}
-
 static void
 gtk_progress_bar_snapshot (GtkWidget   *widget,
                            GtkSnapshot *snapshot)
@@ -977,7 +948,9 @@ gtk_progress_bar_snapshot (GtkWidget   *widget,
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
   GtkProgressBarPrivate *priv = pbar->priv;
 
-  gtk_css_gadget_snapshot (priv->gadget, snapshot);
+  gtk_widget_snapshot_child (widget, priv->trough_widget, snapshot);
+  if (priv->show_text)
+    gtk_widget_snapshot_child (widget, priv->label, snapshot);
 }
 
 static void
