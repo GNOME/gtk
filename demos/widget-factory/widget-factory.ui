@@ -584,7 +584,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkSpinButton" id="spinbutton1">
                                 <property name="can_focus">1</property>
-                                <property name="invisible_char">•</property>
                                 <property name="width-chars">2</property>
                                 <property name="max-width-chars">2</property>
                                 <property name="adjustment">adjustment2</property>
@@ -594,9 +593,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="spinbutton2">
+                                <object class="GtkSpinButton" id="spinbutton2">
                                 <property name="can_focus">1</property>
-                                <property name="invisible_char">•</property>
                                 <property name="sensitive">0</property>
                                 <property name="width-chars">2</property>
                                 <property name="max-width-chars">2</property>
