@@ -27,7 +27,6 @@
 #include "gtksizerequest.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
@@ -109,8 +108,6 @@ struct _GtkGridPrivate
 {
   GList *children;
   GList *row_properties;
-
-  GtkCssGadget *gadget;
 
   GtkOrientation orientation;
   gint baseline_row;
@@ -398,8 +395,6 @@ gtk_grid_finalize (GObject *object)
   GtkGridPrivate *priv = grid->priv;
 
   g_list_free_full (priv->row_properties, (GDestroyNotify)gtk_grid_row_properties_free);
-
-  g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_grid_parent_class)->finalize (object);
 }
@@ -1500,7 +1495,7 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
 }
 
 static void
-gtk_grid_measure_ (GtkWidget     *widget,
+gtk_grid_measure (GtkWidget     *widget,
                   GtkOrientation  orientation,
                   int             for_size,
                   int            *minimum,
@@ -1508,24 +1503,6 @@ gtk_grid_measure_ (GtkWidget     *widget,
                   int            *minimum_baseline,
                   int            *natural_baseline)
 {
-  gtk_css_gadget_get_preferred_size (GTK_GRID (widget)->priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_grid_measure (GtkCssGadget   *gadget,
-                  GtkOrientation  orientation,
-                  int             for_size,
-                  int            *minimum,
-                  int            *natural,
-                  int            *minimum_baseline,
-                  int            *natural_baseline,
-                  gpointer        data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkGrid *grid = GTK_GRID (widget);
 
   if ((orientation == GTK_ORIENTATION_HORIZONTAL &&
@@ -1610,26 +1587,8 @@ static void
 gtk_grid_size_allocate (GtkWidget     *widget,
                         GtkAllocation *allocation)
 {
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (GTK_GRID (widget)->priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
-static void
-gtk_grid_allocate (GtkCssGadget        *gadget,
-                   const GtkAllocation *allocation,
-                   int                  baseline,
-                   GtkAllocation       *out_clip,
-                   gpointer             data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
+  GtkAllocation clip = *allocation;
+  GtkAllocation children_clip;
   GtkGrid *grid = GTK_GRID (widget);
   GtkGridPrivate *priv = grid->priv;
   GtkGridRequest request;
@@ -1637,7 +1596,10 @@ gtk_grid_allocate (GtkCssGadget        *gadget,
   GtkOrientation orientation;
 
   if (priv->children == NULL)
-    return;
+    {
+      gtk_widget_set_clip (widget, &clip);
+      return;
+    }
 
   request.grid = grid;
 
@@ -1663,8 +1625,10 @@ gtk_grid_allocate (GtkCssGadget        *gadget,
   gtk_grid_request_position (&request, 0);
   gtk_grid_request_position (&request, 1);
 
-  *out_clip = *allocation;
-  gtk_grid_request_allocate_children (&request, allocation, out_clip);
+  gtk_grid_request_allocate_children (&request, allocation, &children_clip);
+  gdk_rectangle_union (&children_clip, &clip, &clip);
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
@@ -1679,7 +1643,7 @@ gtk_grid_class_init (GtkGridClass *class)
   object_class->finalize = gtk_grid_finalize;
 
   widget_class->size_allocate = gtk_grid_size_allocate;
-  widget_class->measure = gtk_grid_measure_;
+  widget_class->measure = gtk_grid_measure;
 
   container_class->add = gtk_grid_add;
   container_class->remove = gtk_grid_remove;
@@ -1781,15 +1745,6 @@ gtk_grid_init (GtkGrid *grid)
 
   priv->linedata[0].homogeneous = FALSE;
   priv->linedata[1].homogeneous = FALSE;
-
-  priv->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (grid)),
-                                                     GTK_WIDGET (grid),
-                                                     gtk_grid_measure,
-                                                     gtk_grid_allocate,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
-
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (grid));
 }
