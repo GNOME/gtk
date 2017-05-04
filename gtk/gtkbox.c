@@ -694,31 +694,12 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 }
 
 static void
-gtk_box_allocate_contents (GtkCssGadget        *gadget,
-                           const GtkAllocation *allocation,
-                           int                  baseline,
-                           GtkAllocation       *out_clip,
-                           gpointer             unused)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-
-  *out_clip = *allocation;
-  gtk_box_size_allocate_no_center (widget, allocation, out_clip);
-}
-
-static void
 gtk_box_size_allocate (GtkWidget     *widget,
                        GtkAllocation *allocation)
 {
-  GtkBoxPrivate *priv = GTK_BOX (widget)->priv;
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
 
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
+  gtk_box_size_allocate_no_center (widget, allocation, &clip);
 
   gtk_widget_set_clip (widget, &clip);
 }
@@ -1102,22 +1083,6 @@ gtk_box_get_size (GtkWidget      *widget,
 }
 
 static void
-gtk_box_measure (GtkWidget      *widget,
-                 GtkOrientation  orientation,
-                 int             for_size,
-                 int            *minimum,
-                 int            *natural,
-                 int            *minimum_baseline,
-                 int            *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_BOX (widget)->priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
 gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 					       gint    avail_size,
 					       gint   *minimum_size,
@@ -1390,17 +1355,16 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
     *natural_size = required_natural;
 }
 
+
 static void
-gtk_box_get_content_size (GtkCssGadget   *gadget,
-                          GtkOrientation  orientation,
-                          gint            for_size,
-                          gint           *minimum,
-                          gint           *natural,
-                          gint           *minimum_baseline,
-                          gint           *natural_baseline,
-                          gpointer        unused)
+gtk_box_measure (GtkWidget      *widget,
+                 GtkOrientation  orientation,
+                 int             for_size,
+                 int            *minimum,
+                 int            *natural,
+                 int            *minimum_baseline,
+                 int            *natural_baseline)
 {
-  GtkWidget     *widget  = gtk_css_gadget_get_owner (gadget);
   GtkBox        *box     = GTK_BOX (widget);
   GtkBoxPrivate *private = box->priv;
 
@@ -1409,15 +1373,15 @@ gtk_box_get_content_size (GtkCssGadget   *gadget,
   else
     {
       if (private->orientation != orientation)
-	gtk_box_compute_size_for_opposing_orientation (box, for_size, minimum, natural, minimum_baseline, natural_baseline);
+        gtk_box_compute_size_for_opposing_orientation (box, for_size, minimum, natural, minimum_baseline, natural_baseline);
       else
-	{
-	  if (minimum_baseline)
-	    *minimum_baseline = -1;
-	  if (natural_baseline)
-	    *natural_baseline = -1;
-	  gtk_box_compute_size_for_orientation (box, for_size, minimum, natural);
-	}
+        {
+          if (minimum_baseline)
+            *minimum_baseline = -1;
+          if (natural_baseline)
+            *natural_baseline = -1;
+          gtk_box_compute_size_for_orientation (box, for_size, minimum, natural);
+        }
     }
 }
 
@@ -1441,8 +1405,8 @@ gtk_box_init (GtkBox *box)
 
   private->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (box)),
                                                         GTK_WIDGET (box),
-                                                        gtk_box_get_content_size,
-                                                        gtk_box_allocate_contents,
+                                                        NULL,
+                                                        NULL,
                                                         NULL,
                                                         NULL,
                                                         NULL);
