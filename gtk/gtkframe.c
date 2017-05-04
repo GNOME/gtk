@@ -32,7 +32,6 @@
 #include "gtkbuildable.h"
 #include "gtkwidgetpath.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -89,8 +88,6 @@ struct _GtkFramePrivate
   /* Properties */
   GtkWidget *label_widget;
 
-  GtkCssGadget *gadget;
-
   gint16 shadow_type;
   gfloat label_xalign;
   gfloat label_yalign;
@@ -140,28 +137,13 @@ static void gtk_frame_buildable_add_child           (GtkBuildable *buildable,
 						     GtkBuilder   *builder,
 						     GObject      *child,
 						     const gchar  *type);
-static void     gtk_frame_measure_ (GtkWidget           *widget,
-                                    GtkOrientation       orientation,
-                                    gint                 for_size,
-                                    gint                *minimum_size,
-                                    gint                *natural_size,
-                                    gint                *minimum_baseline,
-                                    gint                *natural_baseline);
-
-static void     gtk_frame_measure        (GtkCssGadget        *gadget,
-                                          GtkOrientation       orientation,
-                                          gint                 for_size,
-                                          gint                *minimum_size,
-                                          gint                *natural_size,
-                                          gint                *minimum_baseline,
-                                          gint                *natural_baseline,
-                                          gpointer             data);
-static void     gtk_frame_allocate       (GtkCssGadget        *gadget,
-                                          const GtkAllocation *allocation,
-                                          int                  baseline,
-                                          GtkAllocation       *out_clip,
-                                          gpointer             data);
-
+static void     gtk_frame_measure (GtkWidget           *widget,
+                                   GtkOrientation       orientation,
+                                   gint                 for_size,
+                                   gint                *minimum_size,
+                                   gint                *natural_size,
+                                   gint                *minimum_baseline,
+                                   gint                *natural_baseline);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFrame, gtk_frame, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkFrame)
@@ -224,7 +206,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   g_object_class_install_properties (gobject_class, LAST_PROP, frame_props);
 
   widget_class->size_allocate = gtk_frame_size_allocate;
-  widget_class->measure = gtk_frame_measure_;
+  widget_class->measure = gtk_frame_measure;
 
   container_class->remove = gtk_frame_remove;
   container_class->forall = gtk_frame_forall;
@@ -259,7 +241,6 @@ static void
 gtk_frame_init (GtkFrame *frame)
 {
   GtkFramePrivate *priv;
-  GtkCssNode *widget_node;
 
   frame->priv = gtk_frame_get_instance_private (frame); 
   priv = frame->priv;
@@ -268,15 +249,6 @@ gtk_frame_init (GtkFrame *frame)
   priv->shadow_type = GTK_SHADOW_ETCHED_IN;
   priv->label_xalign = 0.0;
   priv->label_yalign = 0.5;
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (frame));
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     GTK_WIDGET (frame),
-                                                     gtk_frame_measure,
-                                                     gtk_frame_allocate,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
 }
 
 static void
@@ -284,8 +256,6 @@ gtk_frame_finalize (GObject *object)
 {
   GtkFrame *frame = GTK_FRAME (object);
   GtkFramePrivate *priv = frame->priv;
-
-  g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_frame_parent_class)->finalize (object);
 }
@@ -624,9 +594,11 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
       priv->shadow_type = type;
 
       if (type == GTK_SHADOW_NONE)
-        gtk_css_gadget_add_class (priv->gadget, GTK_STYLE_CLASS_FLAT);
+        gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (frame)),
+                                     GTK_STYLE_CLASS_FLAT);
       else
-        gtk_css_gadget_remove_class (priv->gadget, GTK_STYLE_CLASS_FLAT);
+        gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (frame)),
+                                     GTK_STYLE_CLASS_FLAT);
 
       g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_SHADOW_TYPE]);
     }
@@ -651,42 +623,17 @@ gtk_frame_get_shadow_type (GtkFrame *frame)
 
 static void
 gtk_frame_size_allocate (GtkWidget     *widget,
-			 GtkAllocation *allocation)
+                         GtkAllocation *allocation)
 {
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (GTK_FRAME (widget)->priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
-static void
-gtk_frame_allocate (GtkCssGadget        *gadget,
-                    const GtkAllocation *allocation,
-                    int                  baseline,
-                    GtkAllocation       *out_clip,
-                    gpointer             data)
-{
-  GtkWidget *widget;
-  GtkFrame *frame;
-  GtkFramePrivate *priv;
+  GtkFrame *frame = GTK_FRAME (widget);
+  GtkFramePrivate *priv = frame->priv;
   GtkWidget *child;
   GtkAllocation new_allocation;
-  GtkAllocation clip;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  frame = GTK_FRAME (widget);
-  priv = frame->priv;
+  GtkAllocation clip = *allocation;
+  GtkAllocation child_clip = *allocation;
 
   gtk_frame_compute_child_allocation (frame, &new_allocation);
   priv->child_allocation = new_allocation;
-
-  *out_clip = *allocation;
 
   if (priv->label_widget &&
       gtk_widget_get_visible (priv->label_widget))
@@ -695,9 +642,9 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
       gfloat xalign;
 
       if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-	xalign = priv->label_xalign;
+        xalign = priv->label_xalign;
       else
-	xalign = 1 - priv->label_xalign;
+        xalign = 1 - priv->label_xalign;
 
       gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_HORIZONTAL, -1,
                           NULL, &nat_width, NULL, NULL);
@@ -711,17 +658,19 @@ gtk_frame_allocate (GtkCssGadget        *gadget,
       priv->label_allocation.width = width;
 
       gtk_widget_size_allocate (priv->label_widget, &priv->label_allocation);
-      gtk_widget_get_clip (priv->label_widget, &clip);
-      gdk_rectangle_union (&clip, out_clip, out_clip);
+      gtk_widget_get_clip (priv->label_widget, &child_clip);
+      gdk_rectangle_union (&child_clip, &clip, &clip);
     }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
       gtk_widget_size_allocate (child, &priv->child_allocation);
-      gtk_widget_get_clip (child, &clip);
-      gdk_rectangle_union (&clip, out_clip, out_clip);
+      gtk_widget_get_clip (child, &child_clip);
+      gdk_rectangle_union (&child_clip, &clip, &clip);
     }
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
@@ -742,7 +691,7 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
   GtkAllocation allocation;
   gint height;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
+  gtk_widget_get_content_allocation (GTK_WIDGET (frame), &allocation);
 
   if (priv->label_widget)
     {
@@ -764,22 +713,19 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 }
 
 static void
-gtk_frame_measure (GtkCssGadget   *gadget,
+gtk_frame_measure (GtkWidget      *widget,
                    GtkOrientation  orientation,
-                   int             for_size,
-                   int            *minimum,
-                   int            *natural,
-                   int            *minimum_baseline,
-                   int            *natural_baseline,
-                   gpointer        data)
+                   gint            for_size,
+                   gint            *minimum,
+                   gint            *natural,
+                   gint            *minimum_baseline,
+                   gint            *natural_baseline)
 {
-  GtkWidget *widget;
   GtkWidget *child;
   GtkFrame *frame;
   GtkFramePrivate *priv;
   gint child_min, child_nat;
 
-  widget = gtk_css_gadget_get_owner (gadget);
   frame = GTK_FRAME (widget);
   priv = frame->priv;
 
@@ -813,21 +759,5 @@ gtk_frame_measure (GtkCssGadget   *gadget,
           *natural += child_nat;
         }
     }
-}
-
-static void
-gtk_frame_measure_ (GtkWidget           *widget,
-                    GtkOrientation       orientation,
-                    gint                 for_size,
-                    gint                *minimum,
-                    gint                *natural,
-                    gint                *minimum_baseline,
-                    gint                *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_FRAME (widget)->priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
 }
 
