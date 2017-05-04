@@ -246,16 +246,10 @@ gtk_menu_item_actionable_interface_init (GtkActionableInterface *iface)
   iface->get_action_target_value = gtk_menu_item_get_action_target_value;
 }
 
-static gboolean
-gtk_menu_item_render (GtkCssGadget *gadget,
-                      GtkSnapshot  *snapshot,
-                      int           x,
-                      int           y,
-                      int           width,
-                      int           height,
-                      gpointer      data)
+static void
+gtk_menu_item_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
   GtkWidget *parent;
@@ -266,29 +260,18 @@ gtk_menu_item_render (GtkCssGadget *gadget,
     gtk_css_gadget_snapshot (priv->arrow_gadget, snapshot);
 
   GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->snapshot (widget, snapshot);
-
-  return FALSE;
 }
 
 static void
-gtk_menu_item_snapshot (GtkWidget   *widget,
-                        GtkSnapshot *snapshot)
+gtk_menu_item_size_allocate (GtkWidget     *widget,
+                             GtkAllocation *allocation)
 {
-  gtk_css_gadget_snapshot (GTK_MENU_ITEM (widget)->priv->gadget, snapshot);
-}
-
-static void
-gtk_menu_item_allocate (GtkCssGadget        *gadget,
-                        const GtkAllocation *allocation,
-                        int                  baseline,
-                        GtkAllocation       *out_clip,
-                        gpointer             data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
+  GtkAllocation clip = *allocation;
   GtkAllocation child_allocation;
   GtkAllocation arrow_clip = { 0 };
+  GtkAllocation child_clip = *allocation;
   GtkTextDirection direction;
   GtkPackDirection child_pack_dir;
   GtkWidget *child;
@@ -360,36 +343,19 @@ gtk_menu_item_allocate (GtkCssGadget        *gadget,
 
           gtk_css_gadget_allocate (priv->arrow_gadget,
                                    &arrow_alloc,
-                                   baseline,
+                                   -1,
                                    &arrow_clip);
 	}
 
       child_allocation.width = MAX (1, child_allocation.width);
 
       gtk_widget_size_allocate (child, &child_allocation);
-
-      gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
-      gdk_rectangle_union (out_clip, &arrow_clip, out_clip);
+      gtk_widget_get_clip (child, &child_clip);
+      gdk_rectangle_union (&child_clip, &clip, &clip);
     }
 
   if (priv->submenu)
     gtk_menu_reposition (GTK_MENU (priv->submenu));
-}
-
-static void
-gtk_menu_item_size_allocate (GtkWidget     *widget,
-                             GtkAllocation *allocation)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkAllocation clip;
-  
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
 
   gtk_widget_set_clip (widget, &clip);
 }
@@ -533,37 +499,18 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
 }
 
 static void
-gtk_menu_item_measure (GtkCssGadget   *gadget,
+gtk_menu_item_measure (GtkWidget      *widget,
                        GtkOrientation  orientation,
-                       int             size,
+                       int             for_size,
                        int            *minimum,
                        int            *natural,
                        int            *minimum_baseline,
-                       int            *natural_baseline,
-                       gpointer        data)
+                       int            *natural_baseline)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_menu_item_real_get_width (widget, minimum, natural);
   else
-    gtk_menu_item_real_get_height (widget, size, minimum, natural);
-}
-
-static void
-gtk_menu_item_measure_ (GtkWidget      *widget,
-                        GtkOrientation  orientation,
-                        int             for_size,
-                        int            *minimum,
-                        int            *natural,
-                        int            *minimum_baseline,
-                        int            *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_MENU_ITEM (widget)->priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
+    gtk_menu_item_real_get_height (widget, for_size, minimum, natural);
 }
 
 
@@ -587,7 +534,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
   widget_class->parent_set = gtk_menu_item_parent_set;
   widget_class->can_activate_accel = gtk_menu_item_can_activate_accel;
-  widget_class->measure = gtk_menu_item_measure_;
+  widget_class->measure = gtk_menu_item_measure;
   widget_class->direction_changed = gtk_menu_item_direction_changed;
 
   container_class->forall = gtk_menu_item_forall;
@@ -767,9 +714,9 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (menu_item));
   priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
                                                      GTK_WIDGET (menu_item),
-                                                     gtk_menu_item_measure,
-                                                     gtk_menu_item_allocate,
-                                                     gtk_menu_item_render,
+                                                     NULL,
+                                                     NULL,
+                                                     NULL,
                                                      NULL, NULL);
 }
 
