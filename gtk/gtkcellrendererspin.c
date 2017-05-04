@@ -26,6 +26,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkspinbutton.h"
+#include "gtkentry.h"
 
 
 /**
