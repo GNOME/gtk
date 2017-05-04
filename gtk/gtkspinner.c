@@ -103,9 +103,7 @@ static void
 gtk_spinner_size_allocate (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
+  GtkAllocation clip = *allocation;
 
   gtk_css_gadget_allocate (GTK_SPINNER (widget)->priv->gadget,
                            allocation,
