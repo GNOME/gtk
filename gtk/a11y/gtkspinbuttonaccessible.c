@@ -28,7 +28,7 @@ struct _GtkSpinButtonAccessiblePrivate
 
 static void atk_value_interface_init (AtkValueIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkSpinButtonAccessible, gtk_spin_button_accessible, GTK_TYPE_ENTRY_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkSpinButtonAccessible, gtk_spin_button_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_ADD_PRIVATE (GtkSpinButtonAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
