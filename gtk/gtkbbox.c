@@ -775,18 +775,21 @@ gtk_button_box_measure_ (GtkWidget      *widget,
                         int            *natural_baseline)
 {
   GtkButtonBoxPrivate *priv = gtk_button_box_get_instance_private (GTK_BUTTON_BOX (widget));
-  GtkCssGadget *gadget;
 
   if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
-    gadget = gtk_box_get_gadget (GTK_BOX (widget));
+    {
+      GTK_WIDGET_CLASS (gtk_button_box_parent_class)->measure (widget, orientation, for_size,
+                                                               minimum, natural,
+                                                               minimum_baseline, natural_baseline);
+    }
   else
-    gadget = priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
+    {
+      gtk_css_gadget_get_preferred_size (priv->gadget,
+                                         orientation,
+                                         for_size,
+                                         minimum, natural,
+                                         minimum_baseline, natural_baseline);
+    }
 }
 
 static void
@@ -794,22 +797,22 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
   GtkButtonBoxPrivate *priv = GTK_BUTTON_BOX (widget)->priv;
-  GtkCssGadget *gadget;
-  GdkRectangle clip;
 
   if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
-    gadget = gtk_box_get_gadget (GTK_BOX (widget));
+    {
+      GTK_WIDGET_CLASS (gtk_button_box_parent_class)->size_allocate (widget, allocation);
+    }
   else
-    gadget = priv->gadget;
+    {
+      GdkRectangle clip;
+      gtk_css_gadget_allocate (priv->gadget,
+                               allocation,
+                               gtk_widget_get_allocated_baseline (widget),
+                               &clip);
 
-  gtk_widget_set_allocation (widget, allocation);
+      gtk_widget_set_clip (widget, &clip);
+    }
 
-  gtk_css_gadget_allocate (gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
