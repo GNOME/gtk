@@ -220,6 +220,7 @@ enum {
   PROP_VALUE,
   PROP_WIDTH_CHARS,
   PROP_MAX_WIDTH_CHARS,
+  PROP_TEXT,
   PROP_ORIENTATION,
 };
 
@@ -413,6 +414,14 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                                                      -1, G_MAXINT,
                                                      -1,
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEXT,
+                                   g_param_spec_string ("text",
+                                   P_("Text"),
+                                   P_("The contents of the entry"),
+                                   "",
+                                   GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_override_property (gobject_class,
                                     PROP_ORIENTATION,
@@ -615,6 +624,9 @@ gtk_spin_button_set_property (GObject      *object,
     case PROP_MAX_WIDTH_CHARS:
       gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), g_value_get_int (value));
       break;
+    case PROP_TEXT:
+      gtk_entry_set_text (GTK_ENTRY (priv->entry), g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -665,6 +677,8 @@ gtk_spin_button_get_property (GObject      *object,
     case PROP_MAX_WIDTH_CHARS:
       g_value_set_int (value, gtk_entry_get_max_width_chars (GTK_ENTRY (priv->entry)));
       break;
+    case PROP_TEXT:
+      g_value_set_string (value, gtk_entry_get_text (GTK_ENTRY (priv->entry)));
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2252,4 +2266,39 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
     gtk_spin_button_snap (spin_button, val);
   else
     gtk_spin_button_set_value (spin_button, val);
+}
+
+/**
+ * gtk_spin_button_get_text:
+ * @spin_button:
+ *
+ * Returns: (transfer none): The text
+ */
+const char *
+gtk_spin_button_get_text (GtkSpinButton *spin_button)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), NULL);
+
+  return gtk_entry_get_text (GTK_ENTRY (priv->entry));
+}
+
+/**
+ * gtk_spin_button_set_text:
+ * @spin_button
+ *
+ *
+ */
+void
+gtk_spin_button_set_text (GtkSpinButton *spin_button,
+                          const char    *text)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+
+  gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
+
+  g_object_notify (G_OBJECT (spin_button), "text");
 }

@@ -227,6 +227,11 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_spin_button_get_snap_to_ticks  (GtkSpinButton  *spin_button);
 GDK_AVAILABLE_IN_ALL
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
+GDK_AVAILABLE_IN_3_92
+const char *    gtk_spin_button_get_text           (GtkSpinButton *spin_button);
+GDK_AVAILABLE_IN_3_92
+void            gtk_spin_button_set_text           (GtkSpinButton *spin_button,
+                                                    const char    *text);
 
 G_END_DECLS
 
