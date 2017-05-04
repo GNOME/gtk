@@ -197,18 +197,21 @@ gtk_check_button_measure (GtkWidget      *widget,
                           int            *natural_baseline)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkCssGadget *gadget;
 
   if (priv->draw_indicator)
-    gadget = priv->gadget;
+    {
+      gtk_css_gadget_get_preferred_size (priv->gadget,
+                                         orientation,
+                                         for_size,
+                                         minimum, natural,
+                                         minimum_baseline, natural_baseline);
+    }
   else
-    gadget = GTK_BUTTON (widget)->priv->gadget;
-
-  gtk_css_gadget_get_preferred_size (gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
+    {
+      GTK_WIDGET_CLASS (gtk_check_button_parent_class)->measure (widget, orientation, for_size,
+                                                                 minimum, natural,
+                                                                 minimum_baseline, natural_baseline);
+    }
 }
 
 static void
@@ -412,27 +415,19 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 				GtkAllocation *allocation)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkCssGadget *gadget;
   GdkRectangle clip;
 
   if (priv->draw_indicator)
-    gadget = priv->gadget;
-  else
-    gadget = button->priv->gadget;
-
-  gtk_widget_set_allocation (widget, allocation);
-  gtk_css_gadget_allocate (gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-
-  if (gtk_widget_get_realized (widget))
     {
-      GtkAllocation border_allocation;
-      gtk_css_gadget_get_border_allocation (gadget, &border_allocation, NULL);
+      gtk_css_gadget_allocate (priv->gadget,
+                               allocation,
+                               gtk_widget_get_allocated_baseline (widget),
+                               &clip);
+      gtk_widget_set_clip (widget, &clip);
+    }
+  else
+    {
+      GTK_WIDGET_CLASS (gtk_check_button_parent_class)->size_allocate (widget, allocation);
     }
 }
 
