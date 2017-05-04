@@ -3201,10 +3201,7 @@ gtk_entry_measure (GtkCssGadget   *gadget,
 
       if (priv->width_chars < 0)
         {
-          if (GTK_IS_SPIN_BUTTON (entry))
-            min = gtk_spin_button_get_text_width (GTK_SPIN_BUTTON (entry));
-          else
-            min = MIN_ENTRY_WIDTH;
+          min = MIN_ENTRY_WIDTH;
         }
       else
         {
