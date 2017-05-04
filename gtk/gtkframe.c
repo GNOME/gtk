@@ -109,7 +109,6 @@ enum {
 
 static GParamSpec *frame_props[LAST_PROP];
 
-static void gtk_frame_finalize     (GObject      *object);
 static void gtk_frame_set_property (GObject      *object,
 				    guint         param_id,
 				    const GValue *value,
@@ -161,7 +160,6 @@ gtk_frame_class_init (GtkFrameClass *class)
   widget_class = GTK_WIDGET_CLASS (class);
   container_class = GTK_CONTAINER_CLASS (class);
 
-  gobject_class->finalize = gtk_frame_finalize;
   gobject_class->set_property = gtk_frame_set_property;
   gobject_class->get_property = gtk_frame_get_property;
 
@@ -249,15 +247,6 @@ gtk_frame_init (GtkFrame *frame)
   priv->shadow_type = GTK_SHADOW_ETCHED_IN;
   priv->label_xalign = 0.0;
   priv->label_yalign = 0.5;
-}
-
-static void
-gtk_frame_finalize (GObject *object)
-{
-  GtkFrame *frame = GTK_FRAME (object);
-  GtkFramePrivate *priv = frame->priv;
-
-  G_OBJECT_CLASS (gtk_frame_parent_class)->finalize (object);
 }
 
 static void 
