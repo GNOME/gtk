@@ -253,10 +253,12 @@ gtk_stack_combo_size_allocate (GtkWidget     *widget,
                                GtkAllocation *allocation)
 {
   GtkStackCombo *self = GTK_STACK_COMBO (widget);
-
-  GTK_WIDGET_CLASS (gtk_stack_combo_parent_class)->size_allocate (widget, allocation);
+  GtkAllocation clip = *allocation;
 
   gtk_widget_size_allocate (GTK_WIDGET (self->combo), allocation);
+  gtk_widget_get_clip (GTK_WIDGET (self->combo), &clip);
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
