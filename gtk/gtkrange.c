@@ -175,7 +175,7 @@ static void gtk_range_get_property   (GObject          *object,
                                       GParamSpec       *pspec);
 static void gtk_range_finalize       (GObject          *object);
 static void gtk_range_destroy        (GtkWidget        *widget);
-static void gtk_range_measure_       (GtkWidget      *widget,
+static void gtk_range_measure        (GtkWidget      *widget,
                                       GtkOrientation  orientation,
                                       int             for_size,
                                       int            *minimum,
@@ -274,26 +274,6 @@ static gboolean      gtk_range_render_trough            (GtkCssGadget *gadget,
                                                          int           width,
                                                          int           height,
                                                          gpointer      user_data);
-static void          gtk_range_measure                  (GtkCssGadget   *gadget,
-                                                         GtkOrientation  orientation,
-                                                         gint            for_size,
-                                                         gint           *minimum,
-                                                         gint           *natural,
-                                                         gint           *minimum_baseline,
-                                                         gint           *natural_baseline,
-                                                         gpointer        user_data);
-static void          gtk_range_allocate                 (GtkCssGadget        *gadget,
-                                                         const GtkAllocation *allocation,
-                                                         int                  baseline,
-                                                         GtkAllocation       *out_clip,
-                                                         gpointer             data);
-static gboolean      gtk_range_render                   (GtkCssGadget *gadget,
-                                                         GtkSnapshot  *snapshot,
-                                                         int           x,
-                                                         int           y,
-                                                         int           width,
-                                                         int           height,
-                                                         gpointer      user_data);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
                                   G_ADD_PRIVATE (GtkRange)
@@ -317,7 +297,7 @@ gtk_range_class_init (GtkRangeClass *class)
   gobject_class->finalize = gtk_range_finalize;
 
   widget_class->destroy = gtk_range_destroy;
-  widget_class->measure = gtk_range_measure_;
+  widget_class->measure = gtk_range_measure;
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->unmap = gtk_range_unmap;
   widget_class->snapshot = gtk_range_snapshot;
@@ -654,9 +634,9 @@ gtk_range_init (GtkRange *range)
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (range));
   priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
                                                      GTK_WIDGET (range),
-                                                     gtk_range_measure,
-                                                     gtk_range_allocate,
-                                                     gtk_range_render,
+                                                     NULL,
+                                                     NULL,
+                                                     NULL,
                                                      NULL, NULL);
   priv->contents_gadget = gtk_box_gadget_new ("contents",
                                               GTK_WIDGET (range),
@@ -1626,17 +1606,14 @@ gtk_range_measure_trough (GtkCssGadget   *gadget,
     }
 }
 
-static void
-gtk_range_measure (GtkCssGadget   *gadget,
-                   GtkOrientation  orientation,
-                   gint            for_size,
-                   gint           *minimum,
-                   gint           *natural,
-                   gint           *minimum_baseline,
-                   gint           *natural_baseline,
-                   gpointer        user_data)
+static void gtk_range_measure (GtkWidget     *widget,
+                               GtkOrientation  orientation,
+                               int             for_size,
+                               int            *minimum,
+                               int            *natural,
+                               int            *minimum_baseline,
+                               int            *natural_baseline)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
   GtkBorder border = { 0 };
@@ -1662,22 +1639,6 @@ gtk_range_measure (GtkCssGadget   *gadget,
       *minimum += border.top + border.bottom;
       *natural += border.top + border.bottom;
     }
-}
-
-static void gtk_range_measure_ (GtkWidget     *widget,
-                               GtkOrientation  orientation,
-                               int             for_size,
-                               int            *minimum,
-                               int            *natural,
-                               int            *minimum_baseline,
-                               int            *natural_baseline)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-
-  gtk_css_gadget_get_preferred_size (priv->gadget, orientation, -1,
-                                     minimum, natural,
-                                     NULL, NULL);
 
   if (GTK_RANGE_GET_CLASS (range)->get_range_size_request)
     {
@@ -1899,15 +1860,13 @@ clamp_dimensions (const GtkAllocation *allocation,
 }
 
 static void
-gtk_range_allocate (GtkCssGadget        *gadget,
-                    const GtkAllocation *allocation,
-                    int                  baseline,
-                    GtkAllocation       *out_clip,
-                    gpointer             data)
+gtk_range_size_allocate (GtkWidget     *widget,
+                         GtkAllocation *allocation)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
+  GtkAllocation clip = *allocation;
+  GtkAllocation child_clip;
   GtkBorder border = { 0 };
   GtkAllocation box_alloc;
   int box_min_width, box_min_height;
@@ -1929,29 +1888,13 @@ gtk_range_allocate (GtkCssGadget        *gadget,
 
   gtk_css_gadget_allocate (priv->contents_gadget,
                            &box_alloc,
-                           baseline,
-                           out_clip);
+                           gtk_widget_get_allocated_baseline (widget),
+                           &child_clip);
 
   /* TODO: we should compute a proper clip from get_range_border(),
    * but this will at least give us outset shadows.
    */
-  gdk_rectangle_union (out_clip, allocation, out_clip);
-}
-
-static void
-gtk_range_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
+  gdk_rectangle_union (&child_clip, &clip, &clip);
   gtk_widget_set_clip (widget, &clip);
 }
 
@@ -2066,27 +2009,6 @@ gtk_range_render_trough (GtkCssGadget *gadget,
   return gtk_widget_has_visible_focus (widget);
 }
 
-static gboolean
-gtk_range_render (GtkCssGadget *gadget,
-                  GtkSnapshot  *snapshot,
-                  int           x,
-                  int           y,
-                  int           width,
-                  int           height,
-                  gpointer      user_data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-
-  gtk_css_gadget_snapshot (priv->contents_gadget, snapshot);
-
-  /* Draw the slider last, so that e.g. the focus ring stays below it */
-  gtk_css_gadget_snapshot (priv->slider_gadget, snapshot);
-
-  return FALSE;
-}
-
 static void
 gtk_range_snapshot (GtkWidget   *widget,
                     GtkSnapshot *snapshot)
@@ -2094,7 +2016,10 @@ gtk_range_snapshot (GtkWidget   *widget,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
 
-  gtk_css_gadget_snapshot (priv->gadget, snapshot);
+  gtk_css_gadget_snapshot (priv->contents_gadget, snapshot);
+
+  /* Draw the slider last, so that e.g. the focus ring stays below it */
+  gtk_css_gadget_snapshot (priv->slider_gadget, snapshot);
 }
 
 static void
