@@ -71,6 +71,7 @@
 #include "gtksnapshotprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrenderbackgroundprivate.h"
+#include "gtkcssshadowsvalueprivate.h"
 
 #include "inspector/window.h"
 
@@ -13446,6 +13447,9 @@ gtk_widget_set_clip (GtkWidget           *widget,
                      const GtkAllocation *clip)
 {
   GtkWidgetPrivate *priv;
+  GtkBorder shadow;
+  GtkAllocation allocation;
+  GtkCssStyle *style;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (_gtk_widget_get_visible (widget) || _gtk_widget_is_toplevel (widget));
@@ -13476,7 +13480,17 @@ gtk_widget_set_clip (GtkWidget           *widget,
     }
 #endif /* G_ENABLE_DEBUG */
 
-  priv->clip = *clip;
+  /* Always untion the given clip with the widget allocation */
+  /* ... and with the box shadow size */
+  allocation = priv->allocation;
+  style = gtk_css_node_get_style (priv->cssnode);
+  _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
+  allocation.x -= shadow.left;
+  allocation.y -= shadow.top;
+  allocation.width += shadow.left + shadow.right;
+  allocation.height += shadow.top + shadow.bottom;
+  gdk_rectangle_union (&allocation, clip, &priv->clip);
+
 
   while (priv->parent &&
          _gtk_widget_get_window (widget) == _gtk_widget_get_window (priv->parent))
