@@ -51,7 +51,6 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
-#include "gtkspinbutton.h"
 #include "gtktextutil.h"
 #include "gtkwindow.h"
 #include "gtktreeview.h"
@@ -3200,13 +3199,9 @@ gtk_entry_measure (GtkCssGadget   *gadget,
       char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
 
       if (priv->width_chars < 0)
-        {
-          min = MIN_ENTRY_WIDTH;
-        }
+        min = MIN_ENTRY_WIDTH;
       else
-        {
-          min = char_pixels * priv->width_chars;
-        }
+        min = char_pixels * priv->width_chars;
 
       if (priv->max_width_chars < 0)
         nat = min;
