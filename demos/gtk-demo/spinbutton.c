@@ -19,7 +19,7 @@ hex_spin_input (GtkSpinButton *spin_button,
   gchar *err;
   gdouble res;
 
-  buf = gtk_entry_get_text (GTK_ENTRY (spin_button));
+  buf = gtk_spin_button_get_text (spin_button);
   res = strtol (buf, &err, 16);
   *new_val = res;
   if (*err)
@@ -41,8 +41,8 @@ hex_spin_output (GtkSpinButton *spin_button)
     buf = g_strdup ("0x00");
   else
     buf = g_strdup_printf ("0x%.2X", val);
-  if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
-    gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+  if (strcmp (buf, gtk_spin_button_get_text (spin_button)))
+    gtk_spin_button_set_text (spin_button, buf);
   g_free (buf);
 
   return TRUE;
@@ -60,7 +60,7 @@ time_spin_input (GtkSpinButton *spin_button,
   gchar *endh;
   gchar *endm;
 
-  text = gtk_entry_get_text (GTK_ENTRY (spin_button));
+  text = gtk_spin_button_get_text (spin_button);
   str = g_strsplit (text, ":", 2);
 
   if (g_strv_length (str) == 2)
@@ -99,8 +99,8 @@ time_spin_output (GtkSpinButton *spin_button)
   hours = gtk_adjustment_get_value (adjustment) / 60.0;
   minutes = (hours - floor (hours)) * 60.0;
   buf = g_strdup_printf ("%02.0f:%02.0f", floor (hours), floor (minutes + 0.5));
-  if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
-    gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+  if (strcmp (buf, gtk_spin_button_get_text (spin_button)))
+    gtk_spin_button_set_text (spin_button, buf);
   g_free (buf);
 
   return TRUE;
@@ -132,7 +132,7 @@ month_spin_input (GtkSpinButton *spin_button,
   for (i = 1; i <= 12; i++)
     {
       tmp1 = g_ascii_strup (month[i - 1], -1);
-      tmp2 = g_ascii_strup (gtk_entry_get_text (GTK_ENTRY (spin_button)), -1);
+      tmp2 = g_ascii_strup (gtk_spin_button_get_text (spin_button), -1);
       if (strstr (tmp1, tmp2) == tmp1)
         found = TRUE;
       g_free (tmp1);
@@ -162,8 +162,8 @@ month_spin_output (GtkSpinButton *spin_button)
   for (i = 1; i <= 12; i++)
     if (fabs (value - (double)i) < 1e-5)
       {
-        if (strcmp (month[i-1], gtk_entry_get_text (GTK_ENTRY (spin_button))))
-          gtk_entry_set_text (GTK_ENTRY (spin_button), month[i-1]);
+        if (strcmp (month[i-1], gtk_spin_button_get_text (spin_button)))
+          gtk_spin_button_set_text (spin_button, month[i-1]);
       }
 
   return TRUE;
