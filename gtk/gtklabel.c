@@ -55,7 +55,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkwidgetprivate.h"
 
 #include "a11y/gtklabelaccessibleprivate.h"
@@ -253,7 +252,6 @@ struct _GtkLabelPrivate
   GtkLabelSelectionInfo *select_info;
   GtkWidget *mnemonic_widget;
   GtkWindow *mnemonic_window;
-  GtkCssGadget *gadget;
 
   PangoAttrList *attrs;
   PangoAttrList *markup_attrs;
@@ -537,22 +535,13 @@ static void   gtk_label_drag_gesture_update         (GtkGestureDrag *gesture,
                                                      GtkLabel       *label);
 
 static GtkSizeRequestMode gtk_label_get_request_mode                (GtkWidget           *widget);
-static void     gtk_label_measure_ (GtkWidget     *widget,
+static void     gtk_label_measure (GtkWidget     *widget,
                                    GtkOrientation  orientation,
                                    int             for_size,
                                    int            *minimum,
                                    int            *natural,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
-
-static void     gtk_label_measure (GtkCssGadget   *gadget,
-                                   GtkOrientation  orientation,
-                                   int             for_size,
-                                   int            *minimum,
-                                   int            *natural,
-                                   int            *minimum_baseline,
-                                   int            *natural_baseline,
-                                   gpointer        unused);
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
@@ -613,7 +602,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->focus = gtk_label_focus;
   widget_class->get_request_mode = gtk_label_get_request_mode;
-  widget_class->measure = gtk_label_measure_;
+  widget_class->measure = gtk_label_measure;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -1327,14 +1316,6 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonic_window = NULL;
 
   priv->mnemonics_visible = TRUE;
-
-  priv->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (label)),
-                                                     GTK_WIDGET (label),
-                                                     gtk_label_measure,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
 }
 
 
@@ -3232,8 +3213,6 @@ gtk_label_finalize (GObject *object)
   gtk_label_clear_links (label);
   g_free (priv->select_info);
 
-  g_clear_object (&priv->gadget);
-
   G_OBJECT_CLASS (gtk_label_parent_class)->finalize (object);
 }
 
@@ -3325,7 +3304,7 @@ gtk_label_update_layout_width (GtkLabel *label)
     {
       GtkAllocation allocation;
 
-      gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
+      gtk_widget_get_content_allocation (GTK_WIDGET (label), &allocation);
 
       pango_layout_set_width (priv->layout, allocation.width * PANGO_SCALE);
     }
@@ -3633,22 +3612,16 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
 }
 
 static void
-gtk_label_measure (GtkCssGadget   *gadget,
+gtk_label_measure (GtkWidget      *widget,
                    GtkOrientation  orientation,
                    int             for_size,
                    int            *minimum,
                    int            *natural,
                    int            *minimum_baseline,
-                   int            *natural_baseline,
-                   gpointer        unused)
+                   int            *natural_baseline)
 {
-  GtkWidget *widget;
-  GtkLabel *label;
-  GtkLabelPrivate *priv;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  label = GTK_LABEL (widget);
-  priv = label->priv;
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
   if (orientation == GTK_ORIENTATION_VERTICAL && for_size != -1 && priv->wrap)
     {
@@ -3658,22 +3631,6 @@ gtk_label_measure (GtkCssGadget   *gadget,
     }
   else
     gtk_label_get_preferred_size (widget, orientation, minimum, natural, minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_label_measure_ (GtkWidget     *widget,
-                    GtkOrientation  orientation,
-                    int             for_size,
-                    int            *minimum,
-                    int            *natural,
-                    int            *minimum_baseline,
-                    int            *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_LABEL (widget)->priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
 }
 
 static void
@@ -3706,9 +3663,9 @@ get_layout_location (GtkLabel  *label,
   req_width  = logical.width;
   req_height = logical.height;
 
-  gtk_css_gadget_get_content_allocation (priv->gadget,
-                                         &allocation,
-                                         &baseline);
+  gtk_widget_get_content_allocation (widget, &allocation);
+
+  baseline = gtk_widget_get_allocated_baseline (widget);
 
   x = floor (allocation.x + xalign * (allocation.width - req_width) - logical.x);
 
@@ -3776,11 +3733,6 @@ gtk_label_size_allocate (GtkWidget     *widget,
   GdkRectangle clip_rect, clip;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
-
-  gtk_css_gadget_allocate (priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
 
   if (priv->layout)
     gtk_label_update_layout_width (label);
