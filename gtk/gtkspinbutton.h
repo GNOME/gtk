@@ -33,7 +33,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkentry.h>
+#include <gtk/gtkwidget.h>
 
 
 G_BEGIN_DECLS
@@ -108,7 +108,7 @@ typedef struct _GtkSpinButtonClass         GtkSpinButtonClass;
  */
 struct _GtkSpinButton
 {
-  GtkEntry entry;
+  GtkWidget parent_instance;
 
   /*< private >*/
   GtkSpinButtonPrivate *priv;
@@ -116,7 +116,7 @@ struct _GtkSpinButton
 
 struct _GtkSpinButtonClass
 {
-  GtkEntryClass parent_class;
+  GtkWidgetClass parent_class;
 
   gint (*input)  (GtkSpinButton *spin_button,
 		  gdouble       *new_value);
