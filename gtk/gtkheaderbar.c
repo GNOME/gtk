@@ -897,7 +897,7 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
   GtkWidget *title_widget;
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
   GtkRequestedSize *sizes;

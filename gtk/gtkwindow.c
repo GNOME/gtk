@@ -7219,6 +7219,8 @@ gtk_window_size_allocate (GtkWidget     *widget,
     gtk_widget_size_allocate (child, &child_allocation);
 
   gtk_window_restack_popovers (window);
+
+  gtk_widget_set_clip (widget, allocation);
 }
 
 static gint

@@ -1275,7 +1275,7 @@ static void
 gtk_image_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
   GdkRectangle extents;
 
   _gtk_style_context_get_icon_extents (gtk_widget_get_style_context (widget),

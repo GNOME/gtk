@@ -662,7 +662,10 @@ gtk_progress_bar_size_allocate (GtkWidget     *widget,
   gdk_rectangle_union (&clip, &child_clip, &clip);
 
   if (!priv->show_text)
-    return;
+    {
+      gtk_widget_set_clip (widget, &clip);
+      return;
+    }
 
   gtk_widget_measure (priv->label, GTK_ORIENTATION_HORIZONTAL, -1,
                       &text_min, &text_nat,

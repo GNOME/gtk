@@ -2119,6 +2119,8 @@ gtk_calendar_size_allocate (GtkWidget     *widget,
             }
         }
     }
+
+  gtk_widget_set_clip (widget, allocation);
 }
 
 

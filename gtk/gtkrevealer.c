@@ -441,15 +441,18 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
   int bin_x, bin_y;
   GtkRevealerTransitionType transition;
   GtkBorder padding;
+  GtkAllocation clip = *allocation;
 
   g_return_if_fail (allocation != NULL);
 
-  gtk_widget_set_allocation (widget, allocation);
   gtk_revealer_get_child_allocation (revealer, allocation, &child_allocation);
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, &child_allocation);
+    {
+      gtk_widget_size_allocate (child, &child_allocation);
+      gtk_widget_get_clip (child, &clip);
+    }
 
   if (gtk_widget_get_realized (widget))
     {
@@ -501,6 +504,8 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
                               bin_y + allocation->y,
                               child_allocation.width, child_allocation.height);
     }
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
