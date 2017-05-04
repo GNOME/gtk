@@ -31,7 +31,6 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 
 /**
  * SECTION:gtkseparator
@@ -53,7 +52,6 @@
 struct _GtkSeparatorPrivate
 {
   GtkOrientation orientation;
-  GtkCssGadget *gadget;
 };
 
 
@@ -114,65 +112,15 @@ gtk_separator_get_property (GObject    *object,
     }
 }
 
-static void gtk_separator_measure (GtkWidget *widget,
-                                   GtkOrientation  orientation,
-                                   gint            for_size,
-                                   gint           *minimum,
-                                   gint           *natural,
-                                   gint           *minimum_baseline,
-                                   gint           *natural_baseline)
-{
-  gtk_css_gadget_get_preferred_size (GTK_SEPARATOR (widget)->priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_separator_size_allocate (GtkWidget     *widget,
-                             GtkAllocation *allocation)
-{
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (GTK_SEPARATOR (widget)->priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
 static void
 gtk_separator_init (GtkSeparator *separator)
 {
-  GtkCssNode *widget_node;
-
   separator->priv = gtk_separator_get_instance_private (separator);
   separator->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   gtk_widget_set_has_window (GTK_WIDGET (separator), FALSE);
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (separator));
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (separator));
-  separator->priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                                GTK_WIDGET (separator),
-                                                                NULL, NULL, NULL,
-                                                                NULL, NULL);
-}
-
-static void
-gtk_separator_finalize (GObject *object)
-{
-  GtkSeparatorPrivate *priv = GTK_SEPARATOR (object)->priv;
-
-  g_clear_object (&priv->gadget);
-
-
-  G_OBJECT_CLASS (gtk_separator_parent_class)->finalize (object);
 }
 
 static void
@@ -183,10 +131,6 @@ gtk_separator_class_init (GtkSeparatorClass *class)
 
   object_class->set_property = gtk_separator_set_property;
   object_class->get_property = gtk_separator_get_property;
-  object_class->finalize = gtk_separator_finalize;
-
-  widget_class->measure = gtk_separator_measure;
-  widget_class->size_allocate = gtk_separator_size_allocate;
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
