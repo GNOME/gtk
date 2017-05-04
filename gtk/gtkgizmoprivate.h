@@ -3,8 +3,6 @@
 #define __GTK_GIZMO_H__
 
 #include "gtkwidget.h"
-#include "gtkcssgadgetprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 
 #define GTK_TYPE_GIZMO                 (gtk_gizmo_get_type ())
 #define GTK_GIZMO(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_GIZMO, GtkGizmo))
@@ -34,8 +32,6 @@ typedef gboolean (* GtkGizmoSnapshotFunc) (GtkGizmo    *gizmo,
 struct _GtkGizmo
 {
   GtkWidget parent_instance;
-
-  GtkCssGadget *gadget;
 
   GtkGizmoMeasureFunc  measure_func;
   GtkGizmoAllocateFunc allocate_func;
