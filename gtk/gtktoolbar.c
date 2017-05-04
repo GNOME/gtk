@@ -39,7 +39,6 @@
 #include "gtkbindings.h"
 #include "gtkbox.h"
 #include "gtkcontainerprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -122,7 +121,6 @@ struct _GtkToolbarPrivate
   GtkWidget       *arrow;
   GtkWidget       *arrow_button;
 
-  GtkCssGadget    *gadget;
   GtkAllocation    prev_allocation;
 
   GList           *content;
@@ -195,13 +193,6 @@ static void       gtk_toolbar_get_property         (GObject             *object,
 						    GParamSpec          *pspec);
 static void       gtk_toolbar_snapshot             (GtkWidget           *widget,
                                                     GtkSnapshot         *snapshot);
-static void       gtk_toolbar_measure_             (GtkWidget      *widget,
-                                                    GtkOrientation  orientation,
-                                                    int             for_size,
-                                                    int            *minimum,
-                                                    int            *natural,
-                                                    int            *minimum_baseline,
-                                                    int            *natural_baseline);
 static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
 						    GtkAllocation       *allocation);
 static void       gtk_toolbar_style_updated        (GtkWidget           *widget);
@@ -248,19 +239,13 @@ static void       gtk_toolbar_arrow_button_clicked (GtkWidget           *button,
 static gboolean   gtk_toolbar_popup_menu           (GtkWidget           *toolbar);
 static void       gtk_toolbar_reconfigured         (GtkToolbar          *toolbar);
 
-static void       gtk_toolbar_allocate             (GtkCssGadget        *gadget,
-                                                    const GtkAllocation *allocation,
-                                                    int                  baseline,
-                                                    GtkAllocation       *out_clip,
-                                                    gpointer             data);
-static void       gtk_toolbar_measure              (GtkCssGadget   *gadget,
+static void       gtk_toolbar_measure              (GtkWidget      *widget,
                                                     GtkOrientation  orientation,
                                                     int             for_size,
                                                     int            *minimum,
                                                     int            *natural,
                                                     int            *minimum_baseline,
-                                                    int            *natural_baseline,
-                                                    gpointer        data);
+                                                    int            *natural_baseline);
 static void       gtk_toolbar_pressed_cb           (GtkGestureMultiPress *gesture,
                                                     int                   n_press,
                                                     double                x,
@@ -387,7 +372,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   gobject_class->dispose = gtk_toolbar_dispose;
   
   widget_class->snapshot = gtk_toolbar_snapshot;
-  widget_class->measure = gtk_toolbar_measure_;
+  widget_class->measure = gtk_toolbar_measure;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_updated = gtk_toolbar_style_updated;
   widget_class->focus = gtk_toolbar_focus;
@@ -611,7 +596,6 @@ gtk_toolbar_init (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv;
   GtkWidget *widget;
-  GtkCssNode *widget_node;
 
   widget = GTK_WIDGET (toolbar);
   toolbar->priv = gtk_toolbar_get_instance_private (toolbar);
@@ -626,14 +610,6 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   priv->animation = DEFAULT_ANIMATION_STATE;
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (toolbar));
-
-  widget_node = gtk_widget_get_css_node (widget);
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     widget,
-                                                     gtk_toolbar_measure,
-                                                     gtk_toolbar_allocate,
-                                                     NULL,
-                                                     NULL, NULL);
 
   priv->arrow_button = gtk_toggle_button_new ();
   g_signal_connect (priv->arrow_button, "button-press-event",
@@ -754,16 +730,14 @@ gtk_toolbar_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_toolbar_measure (GtkCssGadget   *gadget,
+gtk_toolbar_measure (GtkWidget      *widget,
                      GtkOrientation  orientation,
                      int             for_size,
                      int            *minimum,
                      int            *natural,
                      int            *minimum_baseline,
-                     int            *natural_baseline,
-                     gpointer        data)
+                     int            *natural_baseline)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
   GList *list;
@@ -869,26 +843,6 @@ gtk_toolbar_measure (GtkCssGadget   *gadget,
       *minimum = min_requisition.height;
       *natural = nat_requisition.height;
     }
-}
-
-static void
-gtk_toolbar_measure_ (GtkWidget      *widget,
-                      GtkOrientation  orientation,
-                      int             for_size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline)
-{
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-
 }
 
 static gint
@@ -1111,8 +1065,7 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
       g_source_set_name_by_id (priv->idle_id, "[gtk+] slide_idle_handler");
     }
 
-  gtk_css_gadget_get_content_allocation (priv->gadget,
-                                         &content_allocation, NULL);
+  gtk_widget_get_content_allocation (widget, &content_allocation);
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   vertical = (priv->orientation == GTK_ORIENTATION_VERTICAL);
@@ -1310,13 +1263,9 @@ rebuild_menu (GtkToolbar *toolbar)
 }
 
 static void
-gtk_toolbar_allocate (GtkCssGadget        *gadget,
-                      const GtkAllocation *allocation,
-                      int                  baseline,
-                      GtkAllocation       *out_clip,
-                      gpointer             data)
+gtk_toolbar_size_allocate (GtkWidget     *widget,
+                           GtkAllocation *allocation)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
   GtkAllocation arrow_allocation, item_area, widget_allocation;
@@ -1636,24 +1585,8 @@ gtk_toolbar_allocate (GtkCssGadget        *gadget,
 
   g_free (allocations);
   g_free (new_states);
-}
 
-static void
-gtk_toolbar_size_allocate (GtkWidget     *widget,
-			   GtkAllocation *allocation)
-{
-  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
-  GtkToolbarPrivate *priv = toolbar->priv;
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+  gtk_widget_set_clip (widget, allocation);
 }
 
 static void
@@ -2826,7 +2759,6 @@ gtk_toolbar_finalize (GObject *object)
   if (priv->idle_id)
     g_source_remove (priv->idle_id);
 
-  g_clear_object (&priv->gadget);
   g_clear_object (&priv->click_gesture);
 
   G_OBJECT_CLASS (gtk_toolbar_parent_class)->finalize (object);
