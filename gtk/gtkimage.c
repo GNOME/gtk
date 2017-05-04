@@ -40,7 +40,6 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 
 #include "a11y/gtkimageaccessible.h"
 
@@ -132,8 +131,6 @@ struct _GtkImagePrivate
   GdkPixbufAnimationIter *animation_iter;
   gint animation_timeout;
 
-  GtkCssGadget *gadget;
-
   float baseline_align;
 
   gchar                *filename;       /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_PIXBUF */
@@ -155,14 +152,6 @@ static void gtk_image_measure (GtkWidget      *widget,
                                int           *natural,
                                int           *minimum_baseline,
                                int           *natural_baseline);
-static void gtk_image_get_content_size (GtkCssGadget   *gadget,
-                                        GtkOrientation  orientation,
-                                        gint            for_size,
-                                        gint           *minimum,
-                                        gint           *natural,
-                                        gint           *minimum_baseline,
-                                        gint           *natural_baseline,
-                                        gpointer        unused);
 
 static void gtk_image_style_updated        (GtkWidget    *widget);
 static void gtk_image_finalize             (GObject      *object);
@@ -361,14 +350,6 @@ gtk_image_init (GtkImage *image)
 
   priv->icon_helper = gtk_icon_helper_new (widget_node, GTK_WIDGET (image));
   _gtk_icon_helper_set_icon_size (priv->icon_helper, DEFAULT_ICON_SIZE);
-
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     GTK_WIDGET (image),
-                                                     gtk_image_get_content_size,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL, NULL);
-
 }
 
 static void
@@ -377,7 +358,6 @@ gtk_image_finalize (GObject *object)
   GtkImage *image = GTK_IMAGE (object);
 
   g_clear_object (&image->priv->icon_helper);
-  g_clear_object (&image->priv->gadget);
 
   g_free (image->priv->filename);
   g_free (image->priv->resource_path);
@@ -1298,12 +1278,6 @@ gtk_image_size_allocate (GtkWidget     *widget,
   GtkAllocation clip;
   GdkRectangle extents;
 
-  gtk_widget_set_allocation (widget, allocation);
-  gtk_css_gadget_allocate (GTK_IMAGE (widget)->priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
   _gtk_style_context_get_icon_extents (gtk_widget_get_style_context (widget),
                                        &extents,
                                        allocation->x,
@@ -1409,41 +1383,6 @@ gtk_image_get_baseline_align (GtkImage *image)
     }
 
   return image->priv->baseline_align;
-}
-
-static void
-gtk_image_get_content_size (GtkCssGadget   *gadget,
-                            GtkOrientation  orientation,
-                            gint            for_size,
-                            gint           *minimum,
-                            gint           *natural,
-                            gint           *minimum_baseline,
-                            gint           *natural_baseline,
-                            gpointer        unused)
-{
-  GtkWidget *widget;
-  gint width, height;
-  float baseline_align;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-
-  _gtk_icon_helper_get_size (GTK_IMAGE (widget)->priv->icon_helper,
-                             &width, &height);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      *minimum = *natural = width;
-    }
-  else
-    {
-      baseline_align = gtk_image_get_baseline_align (GTK_IMAGE (widget));
-      *minimum = *natural = height;
-      if (minimum_baseline)
-        *minimum_baseline = height * baseline_align;
-      if (natural_baseline)
-        *natural_baseline = height * baseline_align;
-    }
-
 }
 
 static void
@@ -1601,11 +1540,25 @@ gtk_image_measure (GtkWidget      *widget,
                    int           *minimum_baseline,
                    int           *natural_baseline)
 {
-  gtk_css_gadget_get_preferred_size (GTK_IMAGE (widget)->priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
+  gint width, height;
+  float baseline_align;
+
+  _gtk_icon_helper_get_size (GTK_IMAGE (widget)->priv->icon_helper,
+                             &width, &height);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      *minimum = *natural = width;
+    }
+  else
+    {
+      baseline_align = gtk_image_get_baseline_align (GTK_IMAGE (widget));
+      *minimum = *natural = height;
+      if (minimum_baseline)
+        *minimum_baseline = height * baseline_align;
+      if (natural_baseline)
+        *natural_baseline = height * baseline_align;
+    }
 }
 
 static void
