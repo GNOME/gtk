@@ -625,6 +625,8 @@ gtk_application_window_real_size_allocate (GtkWidget     *widget,
   else
     GTK_WIDGET_CLASS (gtk_application_window_parent_class)
       ->size_allocate (widget, allocation);
+
+  gtk_widget_set_clip (widget, allocation);
 }
 
 static void

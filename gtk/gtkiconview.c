@@ -1675,8 +1675,6 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
-  gtk_widget_set_allocation (widget, allocation);
-
   gtk_icon_view_layout (icon_view);
 
   if (gtk_widget_get_realized (widget))
@@ -1714,6 +1712,8 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
   /* Emit any pending signals now */
   g_object_thaw_notify (G_OBJECT (icon_view->priv->hadjustment));
   g_object_thaw_notify (G_OBJECT (icon_view->priv->vadjustment));
+
+  gtk_widget_set_clip (widget, allocation);
 }
 
 static void

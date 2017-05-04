@@ -192,11 +192,14 @@ gtk_bin_size_allocate (GtkWidget     *widget,
   GtkBin *bin = GTK_BIN (widget);
   GtkBinPrivate *priv = bin->priv;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   if (priv->child && gtk_widget_get_visible (priv->child))
     {
+      GtkAllocation clip = *allocation;
+
       gtk_widget_size_allocate (priv->child, allocation);
+      gtk_widget_get_clip (priv->child, &clip);
+
+      gtk_widget_set_clip (widget, &clip);
     }
 }
 

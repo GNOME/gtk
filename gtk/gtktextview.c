@@ -4312,6 +4312,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    */
   if (size_changed)
     gtk_widget_queue_draw (widget);
+
+  gtk_widget_set_clip (widget, allocation);
 }
 
 static void
