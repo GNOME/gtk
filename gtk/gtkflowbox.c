@@ -2443,6 +2443,8 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
 
   gtk_widget_get_allocation (widget, &allocation);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   x = allocation.x;
   y = allocation.y;
   width = allocation.width;
