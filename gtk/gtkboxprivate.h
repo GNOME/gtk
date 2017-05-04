@@ -24,11 +24,7 @@
 
 G_BEGIN_DECLS
 
-
 GList      *_gtk_box_get_children       (GtkBox         *box);
-
-GtkCssGadget *gtk_box_get_gadget (GtkBox *box);
-
 
 G_END_DECLS
 

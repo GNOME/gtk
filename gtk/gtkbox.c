@@ -1414,12 +1414,6 @@ gtk_box_init (GtkBox *box)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
 }
 
-GtkCssGadget *
-gtk_box_get_gadget (GtkBox *box)
-{
-  return box->priv->gadget;
-}
-
 /**
  * gtk_box_new:
  * @orientation: the box’s orientation.
