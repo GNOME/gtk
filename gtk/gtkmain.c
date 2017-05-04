@@ -1329,6 +1329,7 @@ synth_crossing_for_motion (GtkWidget     *widget,
   gdouble x, y;
 
   event = gdk_event_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY);
+  gdk_event_set_user_data (event, G_OBJECT (widget));
   gdk_event_set_device (event, gdk_event_get_device (source));
   gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
@@ -1677,6 +1678,8 @@ gtk_main_do_event (GdkEvent *event)
    */
   if (check_event_in_child_popover (event_widget, grab_widget))
     grab_widget = event_widget;
+
+  gdk_event_set_user_data (event, G_OBJECT (event_widget));
 
   /* If the widget receiving events is actually blocked by another
    * device GTK+ grab
@@ -2359,6 +2362,50 @@ gtk_get_event_widget (GdkEvent *event)
     }
 
   return widget;
+}
+
+/**
+ * gtk_get_event_target:
+ * @event: a #GdkEvent
+ *
+ * If @event is %NULL or the event was not associated with any widget,
+ * returns %NULL, otherwise returns the widget that is the deepmost
+ * receiver of the event.
+ *
+ * Returns: (transfer none) (nullable): the target widget, or %NULL
+ *
+ * Since: 3.90
+ */
+GtkWidget *
+gtk_get_event_target (GdkEvent *event)
+{
+  return GTK_WIDGET (gdk_event_get_user_data (event));
+}
+
+/**
+ * gtk_get_event_target_with_type:
+ * @event: a #GdkEvent
+ *
+ * If @event is %NULL or the event was not associated with any widget,
+ * returns %NULL, otherwise returns first widget found from the event
+ * target to the toplevel that matches @type.
+ *
+ * Returns: (transfer none) (nullable): the widget in the target stack
+ * with the given type, or %NULL
+ *
+ * Since: 3.90
+ */
+GtkWidget *
+gtk_get_event_target_with_type (GdkEvent *event,
+                                GType     type)
+{
+  GtkWidget *target;
+
+  target = gtk_get_event_target (event);
+  while (target && !g_type_is_a (G_OBJECT_TYPE (target), type))
+    target = gtk_widget_get_parent (target);
+
+  return target;
 }
 
 static gboolean
