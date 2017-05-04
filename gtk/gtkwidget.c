@@ -13646,6 +13646,29 @@ gtk_widget_get_allocation (GtkWidget     *widget,
   *allocation = priv->allocation;
 }
 
+void
+gtk_widget_get_content_allocation (GtkWidget     *widget,
+                                   GtkAllocation *allocation)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  *allocation = priv->allocation;
+
+  allocation->x += margin.left + border.left + padding.left;
+  allocation->y += margin.top + border.top + padding.top;
+  allocation->width -= margin.left + border.left + padding.left +
+                       margin.right + border.right + padding.right;
+  allocation->height -= margin.top + border.top + padding.top +
+                        margin.bottom + border.bottom + padding.bottom;
+}
+
 /**
  * gtk_widget_set_allocation:
  * @widget: a #GtkWidget
