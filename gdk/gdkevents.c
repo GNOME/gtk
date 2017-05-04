@@ -663,6 +663,7 @@ gdk_event_copy (const GdkEvent *event)
       new_private->source_device = private->source_device ? g_object_ref (private->source_device) : NULL;
       new_private->seat = private->seat;
       new_private->tool = private->tool;
+      g_set_object (&new_private->user_data, private->user_data);
     }
 
   switch (event->any.type)
@@ -2576,4 +2577,29 @@ gdk_event_get_scancode (GdkEvent *event)
 
   private = (GdkEventPrivate *) event;
   return private->key_scancode;
+}
+
+void
+gdk_event_set_user_data (GdkEvent *event,
+                         GObject  *user_data)
+{
+  GdkEventPrivate *private;
+
+  if (!gdk_event_is_allocated (event))
+    return;
+
+  private = (GdkEventPrivate *) event;
+  g_set_object (&private->user_data, user_data);
+}
+
+GObject *
+gdk_event_get_user_data (GdkEvent *event)
+{
+  GdkEventPrivate *private;
+
+  if (!gdk_event_is_allocated (event))
+    return NULL;
+
+  private = (GdkEventPrivate *) event;
+  return private->user_data;
 }

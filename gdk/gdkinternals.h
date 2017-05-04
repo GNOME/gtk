@@ -150,6 +150,8 @@ struct _GdkEventPrivate
   GdkSeat   *seat;
   GdkDeviceTool *tool;
   guint16    key_scancode;
+
+  GObject *user_data;
 };
 
 typedef struct _GdkWindowPaint GdkWindowPaint;
