@@ -154,7 +154,6 @@ struct _GtkModelButton
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
-  GtkCssGadget *gadget;
   GtkCssGadget *indicator_gadget;
   gboolean active;
   gboolean centered;
@@ -238,10 +237,10 @@ gtk_model_button_update_state (GtkModelButton *button)
 
   gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (button->indicator_gadget), image_type);
 
-  /*if (button->iconic)*/
-    /*gtk_css_gadget_set_state (button->gadget, indicator_state);*/
-  /*else*/
-    /*gtk_css_gadget_set_state (button->gadget, state);*/
+  if (button->iconic)
+    gtk_widget_set_state_flags (GTK_WIDGET (button), indicator_state, TRUE);
+  else
+    gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
 
   gtk_css_gadget_set_state (button->indicator_gadget, indicator_state);
 }
@@ -454,6 +453,7 @@ gtk_model_button_set_iconic (GtkModelButton *button,
 {
   GtkCssNode *widget_node;
   GtkCssNode *indicator_node;
+  GtkStyleContext *context;
 
   if (button->iconic == iconic)
     return;
@@ -462,19 +462,20 @@ gtk_model_button_set_iconic (GtkModelButton *button,
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (button));
   indicator_node = gtk_css_gadget_get_node (button->indicator_gadget);
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
   if (iconic)
     {
       gtk_css_node_set_name (widget_node, I_("button"));
-      /*gtk_css_gadget_add_class (button->gadget, "model");*/
-      /*gtk_css_gadget_add_class (button->gadget, "image-button");*/
+      gtk_style_context_add_class (context, "model");
+      gtk_style_context_add_class (context, "image-button");
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NORMAL);
       gtk_css_node_set_visible (indicator_node, FALSE);
     }
   else
     {
       gtk_css_node_set_name (widget_node, I_("modelbutton"));
-      /*gtk_css_gadget_remove_class (button->gadget, "model");*/
-      /*gtk_css_gadget_remove_class (button->gadget, "image-button");*/
+      gtk_style_context_remove_class (context, "model");
+      gtk_style_context_remove_class (context, "image-button");
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
       gtk_css_node_set_visible (indicator_node,
                                 button->role != GTK_BUTTON_ROLE_NORMAL ||
@@ -806,6 +807,7 @@ gtk_model_button_size_allocate (GtkWidget     *widget,
                                &child_allocation,
                                gtk_widget_get_allocated_baseline (widget),
                                &check_clip);
+      gdk_rectangle_union (&clip, &check_clip, &clip);
 
       if (child && gtk_widget_get_visible (child))
         {
@@ -837,7 +839,7 @@ gtk_model_button_size_allocate (GtkWidget     *widget,
         }
 
       gtk_container_get_children_clip (GTK_CONTAINER (widget), &child_clip);
-      gdk_rectangle_union (&clip, &check_clip, &clip);
+      gdk_rectangle_union (&clip, &child_clip, &clip);
 
       gtk_widget_set_clip (widget, &clip);
     }
@@ -905,7 +907,6 @@ gtk_model_button_finalize (GObject *object)
   GtkModelButton *button = GTK_MODEL_BUTTON (object);
 
   g_clear_object (&button->indicator_gadget);
-  /*g_clear_object (&button->gadget);*/
 
   G_OBJECT_CLASS (gtk_model_button_parent_class)->finalize (object);
 }
@@ -1076,17 +1077,11 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_container_add (GTK_CONTAINER (button), button->box);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (button));
-  button->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                       GTK_WIDGET (button),
-                                                       NULL,
-                                                       NULL,
-                                                       NULL,
-                                                       NULL,
-                                                       NULL);
   button->indicator_gadget = gtk_builtin_icon_new ("check",
                                                    GTK_WIDGET (button),
                                                    NULL,
                                                    NULL);
+  gtk_css_node_set_parent (gtk_css_gadget_get_node (button->indicator_gadget), widget_node);
   gtk_builtin_icon_set_default_size (GTK_BUILTIN_ICON (button->indicator_gadget), 16);
   update_node_ordering (button);
   gtk_css_node_set_visible (gtk_css_gadget_get_node (button->indicator_gadget), FALSE);
