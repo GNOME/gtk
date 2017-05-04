@@ -79,7 +79,6 @@
 #include "gtkbox.h"
 #include "gtkboxprivate.h"
 #include "gtkcontainerprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkintl.h"
@@ -117,7 +116,6 @@ typedef struct _GtkBoxChild        GtkBoxChild;
 struct _GtkBoxPrivate
 {
   GList          *children;
-  GtkCssGadget   *gadget;
 
   GtkOrientation  orientation;
   gint16          spacing;
@@ -191,17 +189,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
-gtk_box_dispose (GObject *object)
-{
-  GtkBox *box = GTK_BOX (object);
-  GtkBoxPrivate *priv = box->priv;
-
-  g_clear_object (&priv->gadget);
-
-  G_OBJECT_CLASS (gtk_box_parent_class)->dispose (object);
-}
-
-static void
 gtk_box_class_init (GtkBoxClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -210,7 +197,6 @@ gtk_box_class_init (GtkBoxClass *class)
 
   object_class->set_property = gtk_box_set_property;
   object_class->get_property = gtk_box_get_property;
-  object_class->dispose = gtk_box_dispose;
 
   widget_class->size_allocate = gtk_box_size_allocate;
   widget_class->measure = gtk_box_measure;
@@ -1402,14 +1388,6 @@ gtk_box_init (GtkBox *box)
   private->homogeneous = FALSE;
   private->spacing = 0;
   private->baseline_pos = GTK_BASELINE_POSITION_CENTER;
-
-  private->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (box)),
-                                                        GTK_WIDGET (box),
-                                                        NULL,
-                                                        NULL,
-                                                        NULL,
-                                                        NULL,
-                                                        NULL);
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
 }
