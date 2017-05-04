@@ -47,7 +47,7 @@
  *
  * Button-like widgets like #GtkToggleButton, #GtkMenuButton, #GtkVolumeButton,
  * #GtkLockButton, #GtkColorButton, #GtkFontButton or #GtkFileChooserButton use
- * style classes such as .toggle, .popup, .scale, .lock, .color, .font, .file
+ * style classes such as .toggle, .popup, .scale, .lock, .color, .file
  * to differentiate themselves from a plain GtkButton.
  */
 
