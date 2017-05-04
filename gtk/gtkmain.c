@@ -1619,16 +1619,16 @@ gtk_main_do_event (GdkEvent *event)
       event_widget = gtk_get_event_widget (event);
     }
 
-  if (is_pointing_event (event))
-    event_widget = handle_pointing_event (event);
-
-  if (!event_widget)
-    return;
-
   /* Push the event onto a stack of current events for
    * gtk_current_event_get().
    */
   current_events = g_list_prepend (current_events, event);
+
+  if (is_pointing_event (event))
+    event_widget = handle_pointing_event (event);
+
+  if (!event_widget)
+    goto cleanup;
 
   window_group = gtk_main_get_window_group (event_widget);
   device = gdk_event_get_device (event);
