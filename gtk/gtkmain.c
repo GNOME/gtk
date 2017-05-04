@@ -1475,14 +1475,20 @@ handle_pointing_event (GdkEvent *event)
   switch (event->type)
     {
     case GDK_LEAVE_NOTIFY:
+      if (event->crossing.mode == GDK_CROSSING_GRAB ||
+          event->crossing.mode == GDK_CROSSING_UNGRAB)
+        break;
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
       break;
+    case GDK_ENTER_NOTIFY:
+      if (event->crossing.mode == GDK_CROSSING_GRAB ||
+          event->crossing.mode == GDK_CROSSING_UNGRAB)
+        break;
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_MOTION_NOTIFY:
-    case GDK_ENTER_NOTIFY:
       target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
       old_target = update_pointer_focus_state (toplevel, event, target);
       if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
