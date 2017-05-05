@@ -599,17 +599,23 @@ gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
   const gchar *label, *uri;
+  gchar *text, *markup;
 
   label = gtk_button_get_label (GTK_BUTTON (link_button));
   uri = link_button->priv->uri;
+  text = gtk_widget_get_tooltip_text (widget);
+  markup = gtk_widget_get_tooltip_markup (widget);
 
-  if (!gtk_widget_get_tooltip_text (widget)
-    && !gtk_widget_get_tooltip_markup (widget)
-    && label && *label != '\0' && uri && strcmp (label, uri) != 0)
+  if (text == NULL &&
+      markup == NULL &&
+      label && *label != '\0' && uri && strcmp (label, uri) != 0)
     {
       gtk_tooltip_set_text (tooltip, uri);
       return TRUE;
     }
+
+  g_free (text);
+  g_free (markup);
 
   return FALSE;
 }
