@@ -415,7 +415,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 				GtkAllocation *allocation)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
-  GdkRectangle clip;
+  GdkRectangle clip = *allocation;
 
   if (priv->draw_indicator)
     {

@@ -118,7 +118,7 @@ gtk_icon_size_allocate (GtkWidget     *widget,
 {
   GtkIcon *self = GTK_ICON (widget);
   GtkIconPrivate *priv = gtk_icon_get_instance_private (self);
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
 
   gtk_css_gadget_allocate (priv->gadget, allocation,
                            gtk_widget_get_allocated_baseline (widget),

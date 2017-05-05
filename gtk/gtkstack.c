@@ -2120,9 +2120,7 @@ gtk_stack_size_allocate (GtkWidget     *widget,
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
+  GtkAllocation clip = *allocation;
 
   gtk_css_gadget_allocate (priv->gadget,
                            allocation,

@@ -3853,6 +3853,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->allocation.y = -1;
   priv->allocation.width = 1;
   priv->allocation.height = 1;
+  priv->clip = priv->allocation;
   priv->user_alpha = 255;
   priv->alpha = 255;
   priv->window = NULL;
@@ -13488,24 +13489,6 @@ gtk_widget_set_clip (GtkWidget           *widget,
   allocation.width += shadow.left + shadow.right;
   allocation.height += shadow.top + shadow.bottom;
   gdk_rectangle_union (&allocation, clip, &priv->clip);
-
-
-  while (priv->parent &&
-         _gtk_widget_get_window (widget) == _gtk_widget_get_window (priv->parent))
-    {
-      GtkWidgetPrivate *parent_priv = priv->parent->priv;
-      GdkRectangle union_rect;
-
-      gdk_rectangle_union (&priv->clip,
-                           &parent_priv->clip,
-                           &union_rect);
-
-      if (gdk_rectangle_equal (&parent_priv->clip, &union_rect))
-        break;
-
-      parent_priv->clip = union_rect;
-      priv = parent_priv;
-    }
 }
 
 /*
