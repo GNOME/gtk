@@ -464,8 +464,6 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   gint down_slider_offset = 0;
   GtkRequisition child_requisition;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   /* No path is set; we don't have to allocate anything. */
   if (path_bar->priv->button_list == NULL)
     {

@@ -2060,7 +2060,6 @@ gtk_calendar_size_allocate (GtkWidget     *widget,
   gint calendar_xsep = calendar_get_xsep (calendar);
 
   get_component_paddings (calendar, &padding, NULL, NULL, NULL);
-  gtk_widget_set_allocation (widget, allocation);
 
   if (priv->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     {

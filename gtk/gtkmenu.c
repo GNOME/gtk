@@ -2806,8 +2806,6 @@ gtk_menu_size_allocate (GtkWidget     *widget,
   menu_shell = GTK_MENU_SHELL (widget);
   priv = menu->priv;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   get_menu_padding (widget, &padding);
 
   g_free (priv->heights);

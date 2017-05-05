@@ -113,8 +113,6 @@ gtk_fishbowl_size_allocate (GtkWidget     *widget,
   GtkRequisition child_requisition;
   GList *children;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   for (children = priv->children; children; children = children->next)
     {
       child = children->data;
@@ -130,6 +128,8 @@ gtk_fishbowl_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (child->widget, &child_allocation);
     }
+
+  gtk_widget_set_clip (widget, allocation);
 }
 
 static double

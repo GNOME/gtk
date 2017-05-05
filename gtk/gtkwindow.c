@@ -7109,8 +7109,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
   g_assert (allocation != NULL);
   g_assert (allocation_out != NULL);
 
-  gtk_widget_set_allocation (widget, allocation);
-
   child_allocation.x = 0;
   child_allocation.y = 0;
   child_allocation.width = allocation->width;

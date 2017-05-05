@@ -419,8 +419,6 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
   GtkRequisition child_requisition;
   GList *children;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   if (gtk_widget_get_has_window (widget))
     {
       if (gtk_widget_get_realized (widget))

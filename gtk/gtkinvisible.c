@@ -255,7 +255,7 @@ static void
 gtk_invisible_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
-  gtk_widget_set_allocation (widget, allocation);
+  gtk_widget_set_clip (widget, allocation);
 }
 
 
