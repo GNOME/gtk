@@ -466,8 +466,6 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 
   bin = GTK_BIN (widget);
 
-  gtk_widget_set_allocation (widget, allocation);
-
   if (!gtk_widget_get_has_window (widget))
     {
       child_allocation.x = allocation->x;

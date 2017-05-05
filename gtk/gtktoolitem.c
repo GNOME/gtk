@@ -312,8 +312,6 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkWidget *child;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {

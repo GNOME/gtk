@@ -2610,8 +2610,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   if (allocation->width != old_width)
     width_changed = TRUE;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   /* We size-allocate the columns first because the width of the
    * tree view (used in updating the adjustments below) might change.
    */

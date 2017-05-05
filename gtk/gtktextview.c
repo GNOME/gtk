@@ -4207,8 +4207,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
     widget_allocation.width != allocation->width ||
     widget_allocation.height != allocation->height;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   /* distribute width/height among child windows. Ensure all
    * windows get at least a 1x1 allocation.
    */
