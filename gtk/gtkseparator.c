@@ -124,10 +124,19 @@ gtk_separator_init (GtkSeparator *separator)
 }
 
 static void
+gtk_separator_size_allocate (GtkWidget     *widget,
+                             GtkAllocation *allocation)
+{
+  gtk_widget_set_clip (widget, allocation);
+}
+
+static void
 gtk_separator_class_init (GtkSeparatorClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  widget_class->size_allocate = gtk_separator_size_allocate;
 
   object_class->set_property = gtk_separator_set_property;
   object_class->get_property = gtk_separator_get_property;

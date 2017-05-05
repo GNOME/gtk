@@ -1588,7 +1588,7 @@ gtk_grid_size_allocate (GtkWidget     *widget,
                         GtkAllocation *allocation)
 {
   GtkAllocation clip = *allocation;
-  GtkAllocation children_clip;
+  GtkAllocation children_clip = *allocation;
   GtkGrid *grid = GTK_GRID (widget);
   GtkGridPrivate *priv = grid->priv;
   GtkGridRequest request;

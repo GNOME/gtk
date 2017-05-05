@@ -1057,7 +1057,7 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
                                GtkAllocation *allocation)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (GTK_SPIN_BUTTON (widget));
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
 
   gtk_widget_size_allocate_with_baseline (priv->box, allocation,
                                           gtk_widget_get_allocated_baseline (widget));

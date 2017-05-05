@@ -272,7 +272,7 @@ gtk_action_bar_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (widget));
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
 
   gtk_widget_size_allocate (priv->revealer, (GtkAllocation *)allocation);
   gtk_widget_get_clip (priv->revealer, &clip);

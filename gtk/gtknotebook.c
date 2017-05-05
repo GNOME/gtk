@@ -2264,9 +2264,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
+  GtkAllocation clip = *allocation;
 
   gtk_css_gadget_allocate (priv->gadget,
                            allocation,

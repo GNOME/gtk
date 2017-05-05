@@ -372,7 +372,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
 
   gtk_widget_size_allocate_with_baseline (priv->box, allocation,
                                           gtk_widget_get_allocated_baseline (widget));
