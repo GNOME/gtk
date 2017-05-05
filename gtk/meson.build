@@ -904,6 +904,7 @@ libgtk_dep = declare_dependency(sources: [gtkversion, gtktypebuiltins_h],
 if not meson.is_cross_build()
   gir_args = [
     '--c-include=gtk/gtk.h',
+    '--quiet',
   ]
 
   gdk_gir = gnome.generate_gir(libgtk,
@@ -932,6 +933,7 @@ if not meson.is_cross_build()
                        install: true,
                        dependencies: gdk_gir_dep,
                        extra_args: [
+                         '--quiet',
                          '--c-include=gdk/gdkx.h',
                          '--include-uninstalled=./gtk/Gdk-4.0.gir',
                          '-DGDK_COMPILATION',
