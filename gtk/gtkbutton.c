@@ -70,7 +70,6 @@
 #include "a11y/gtkbuttonaccessible.h"
 #include "gtkapplicationprivate.h"
 #include "gtkactionhelper.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkcontainerprivate.h"
 
 /* Time out before giving up on getting a key release when animating
@@ -443,14 +442,6 @@ gtk_button_init (GtkButton *button)
   g_signal_connect (priv->gesture, "cancel", G_CALLBACK (multipress_gesture_cancel_cb), button);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_CAPTURE);
 
-  priv->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (button)),
-                                                     GTK_WIDGET (button),
-                                                     NULL,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
-
 }
 
 static void
@@ -460,7 +451,6 @@ gtk_button_finalize (GObject *object)
   GtkButtonPrivate *priv = button->priv;
 
   g_clear_object (&priv->gesture);
-  g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_button_parent_class)->finalize (object);
 }
@@ -759,7 +749,6 @@ static void
 gtk_button_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
 {
-  GtkButton *button = GTK_BUTTON (widget);
   GtkAllocation clip = *allocation;
   GtkWidget *child;
 
@@ -770,6 +759,8 @@ gtk_button_size_allocate (GtkWidget     *widget,
                                               gtk_widget_get_allocated_baseline (widget));
       gtk_widget_get_clip (child, &clip);
     }
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
