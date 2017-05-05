@@ -785,7 +785,8 @@ gtk_revealer_snapshot (GtkWidget   *widget,
     return;
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE)
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
     {
       gtk_widget_snapshot_child (widget, child, snapshot);
     }
