@@ -5578,7 +5578,8 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
 
   /* Set the widget allocation to real_allocation now, pass the smaller allocation to the vfunc */
-  gtk_widget_set_allocation (widget, &real_allocation);
+  priv->allocation = real_allocation;
+  priv->clip = real_allocation;
 
   style = gtk_css_node_get_style (priv->cssnode);
   get_box_margin (style, &margin);
@@ -13430,8 +13431,6 @@ gtk_widget_get_clip (GtkWidget     *widget,
  *
  * Sets the widget’s clip.  This must not be used directly,
  * but from within a widget’s size_allocate method.
- * It must be called after gtk_widget_set_allocation() (or after chaining up
- * to the parent class), because that function resets the clip.
  *
  * The clip set should be the area that @widget draws on. If @widget is a
  * #GtkContainer, the area must contain all children's clips.
@@ -13501,8 +13500,7 @@ gtk_widget_set_clip (GtkWidget           *widget,
  * This is a convenience function for gtk_widget_set_clip(), if you
  * just want to set the clip for @widget based on its allocation,
  * CSS properties and - if the widget is a #GtkContainer - its
- * children. gtk_widget_set_allocation() must have been called
- * and all children must have been allocated with
+ * children. All children must have been allocated with
  * gtk_widget_size_allocate() before calling this function.
  * It is therefore a good idea to call this function last in
  * your implementation of GtkWidget::size_allocate().
@@ -13690,39 +13688,6 @@ gtk_widget_get_margin_allocation (GtkWidget     *widget,
   allocation->y += margin.top;
   allocation->width -= margin.left + margin.right;
   allocation->height -= margin.top + margin.bottom;
-}
-
-/**
- * gtk_widget_set_allocation:
- * @widget: a #GtkWidget
- * @allocation: a pointer to a #GtkAllocation to copy from
- *
- * Sets the widget’s allocation.  This should not be used
- * directly, but from within a widget’s size_allocate method.
- *
- * The allocation set should be the “adjusted” or actual
- * allocation. If you’re implementing a #GtkContainer, you want to use
- * gtk_widget_size_allocate() instead of gtk_widget_set_allocation().
- * The GtkWidgetClass::adjust_size_allocation virtual method adjusts the
- * allocation inside gtk_widget_size_allocate() to create an adjusted
- * allocation.
- *
- * Since: 2.18
- */
-void
-gtk_widget_set_allocation (GtkWidget           *widget,
-                           const GtkAllocation *allocation)
-{
-  GtkWidgetPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (_gtk_widget_get_visible (widget) || _gtk_widget_is_toplevel (widget));
-  g_return_if_fail (allocation != NULL);
-
-  priv = widget->priv;
-
-  priv->allocation = *allocation;
-  priv->clip = *allocation;
 }
 
 /**
