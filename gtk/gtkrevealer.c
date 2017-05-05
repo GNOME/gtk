@@ -113,18 +113,6 @@ static void     gtk_revealer_snapshot                            (GtkWidget     
 G_DEFINE_TYPE_WITH_PRIVATE (GtkRevealer, gtk_revealer, GTK_TYPE_BIN)
 
 static void
-gtk_revealer_get_padding (GtkRevealer *revealer,
-                          GtkBorder   *padding)
-{
-  GtkWidget *widget = GTK_WIDGET (revealer);
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_get_padding (context, padding);
-}
-
-static void
 gtk_revealer_init (GtkRevealer *revealer)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
@@ -317,16 +305,9 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
 {
   GtkWidget *child;
   GtkRevealerTransitionType transition;
-  GtkBorder padding;
-  gint vertical_padding, horizontal_padding;
 
   g_return_if_fail (revealer != NULL);
   g_return_if_fail (allocation != NULL);
-
-  /* See explanation on gtk_revealer_real_size_allocate */
-  gtk_revealer_get_padding (revealer, &padding);
-  vertical_padding = padding.top + padding.bottom;
-  horizontal_padding = padding.left + padding.right;
 
   child_allocation->x = 0;
   child_allocation->y = 0;
@@ -340,16 +321,16 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
       if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
           transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
         gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
-                            MAX (0, allocation->height - vertical_padding),
+                            MAX (0, allocation->height),
                             NULL, &child_allocation->width, NULL, NULL);
       else
         gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
-                            MAX (0, allocation->width - horizontal_padding),
+                            MAX (0, allocation->width),
                             NULL, &child_allocation->height, NULL, NULL);
     }
 
-  child_allocation->width = MAX (child_allocation->width, allocation->width - horizontal_padding);
-  child_allocation->height = MAX (child_allocation->height, allocation->height - vertical_padding);
+  child_allocation->width = MAX (child_allocation->width, allocation->width);
+  child_allocation->height = MAX (child_allocation->height, allocation->height);
 }
 
 static void
@@ -361,7 +342,6 @@ gtk_revealer_real_realize (GtkWidget *widget)
   GtkAllocation child_allocation;
   GtkWidget *child;
   GtkRevealerTransitionType transition;
-  GtkBorder padding;
 
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->realize (widget);
 
@@ -369,24 +349,22 @@ gtk_revealer_real_realize (GtkWidget *widget)
 
   gtk_revealer_get_child_allocation (revealer, &allocation, &child_allocation);
 
-  gtk_revealer_get_padding (revealer, &padding);
-
   /* See explanation on gtk_revealer_real_size_allocate */
   transition = effective_transition (revealer);
   if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
     {
-      child_allocation.y = allocation.height - child_allocation.height - padding.bottom;
-      child_allocation.x = padding.left;
+      child_allocation.y = allocation.height - child_allocation.height;
+      child_allocation.x = 0;
     }
   else if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
     {
-      child_allocation.y = padding.top;
-      child_allocation.x = allocation.width - child_allocation.width - padding.right;
+      child_allocation.y = 0;
+      child_allocation.x = allocation.width - child_allocation.width;
     }
  else
    {
-     child_allocation.y = padding.top;
-     child_allocation.x = padding.left;
+     child_allocation.y = 0;
+     child_allocation.x = 0;
    }
 
   priv->bin_window =
@@ -440,7 +418,6 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
   GtkWidget *child;
   int bin_x, bin_y;
   GtkRevealerTransitionType transition;
-  GtkBorder padding;
   GtkAllocation clip = *allocation;
 
   g_return_if_fail (allocation != NULL);
@@ -456,7 +433,6 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gtk_revealer_get_padding (revealer, &padding);
       bin_x = 0;
       bin_y = 0;
 
@@ -485,19 +461,14 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
        */
       if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
         {
-          bin_y = allocation->height - child_allocation.height - padding.bottom;
-          bin_x = padding.left;
+          bin_y = allocation->height - child_allocation.height;
+          bin_x = 0;
         }
       else if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
         {
-          bin_y = padding.top;
-          bin_x = allocation->width - child_allocation.width - padding.right;
+          bin_y = 0;
+          bin_x = allocation->width - child_allocation.width;
         }
-     else
-       {
-         bin_x = padding.left;
-         bin_y = padding.top;
-       }
 
       gdk_window_move_resize (priv->bin_window,
                               bin_x + allocation->x,
@@ -686,69 +657,39 @@ gtk_revealer_get_child_revealed (GtkRevealer *revealer)
  */
 
 static void
-set_height_with_paddings (GtkRevealer *revealer,
-                          gint         preferred_minimum_height,
-                          gint         preferred_natural_height,
-                          gint        *minimum_height_out,
-                          gint        *natural_height_out)
+set_height (GtkRevealer *revealer,
+            gint        *minimum_height,
+            gint        *natural_height)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  gint minimum_height;
-  gint natural_height;
   GtkRevealerTransitionType transition;
-  GtkBorder padding;
-  gint vertical_padding;
-
-  gtk_revealer_get_padding (revealer, &padding);
-  vertical_padding = padding.top + padding.bottom;
-  minimum_height = preferred_minimum_height + vertical_padding;
-  natural_height = preferred_natural_height + vertical_padding;
 
   transition = effective_transition (revealer);
   if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
     {
-      /* Padding are included in the animation */
-      minimum_height = round (minimum_height * priv->current_pos);
-      natural_height = round (natural_height * priv->current_pos);
+      *minimum_height = round (*minimum_height * priv->current_pos);
+      *natural_height = round (*natural_height * priv->current_pos);
     }
-
-  *minimum_height_out = MIN (minimum_height, natural_height);
-  *natural_height_out = natural_height;
 }
 
 static void
-set_width_with_paddings (GtkRevealer *revealer,
-                         gint         preferred_minimum_width,
-                         gint         preferred_natural_width,
-                         gint        *minimum_width_out,
-                         gint        *natural_width_out)
+set_width (GtkRevealer *revealer,
+           gint        *minimum_width,
+           gint        *natural_width)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  gint minimum_width;
-  gint natural_width;
   GtkRevealerTransitionType transition;
-  GtkBorder padding;
-  gint horizontal_padding;
-
-  gtk_revealer_get_padding (revealer, &padding);
-  horizontal_padding = padding.left + padding.right;
-  minimum_width = preferred_minimum_width + horizontal_padding;
-  natural_width = preferred_natural_width + horizontal_padding;
 
   transition = effective_transition (revealer);
   if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
     {
-      /* Paddings are included in the animation */
-      minimum_width = round (minimum_width * priv->current_pos);
-      natural_width = round (natural_width * priv->current_pos);
+      *minimum_width = round (*minimum_width * priv->current_pos);
+      *natural_width = round (*natural_width * priv->current_pos);
     }
-
-  *minimum_width_out = MIN (minimum_width, natural_width);
-  *natural_width_out = natural_width;
 }
 
 static void
@@ -760,16 +701,15 @@ gtk_revealer_measure (GtkWidget      *widget,
                       int            *minimum_baseline,
                       int            *natural_baseline)
 {
-  int min_size, nat_size;
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->measure (widget,
                                                          orientation,
                                                          for_size,
-                                                         &min_size, &nat_size,
+                                                         minimum, natural,
                                                          NULL, NULL);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    set_width_with_paddings (GTK_REVEALER (widget), min_size, nat_size, minimum, natural);
+    set_width (GTK_REVEALER (widget), minimum, natural);
   else
-    set_height_with_paddings (GTK_REVEALER (widget), min_size, nat_size, minimum, natural);
+    set_height (GTK_REVEALER (widget), minimum, natural);
 }
 
 static void
