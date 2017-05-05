@@ -79,7 +79,6 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkcontainerprivate.h"
 
 #include "a11y/gtkflowboxaccessibleprivate.h"
@@ -264,7 +263,6 @@ typedef struct _GtkFlowBoxChildPrivate GtkFlowBoxChildPrivate;
 struct _GtkFlowBoxChildPrivate
 {
   GSequenceIter *iter;
-  GtkCssGadget  *gadget;
   gboolean       selected;
 };
 
@@ -397,7 +395,7 @@ gtk_flow_box_child_get_request_mode (GtkWidget *widget)
 }
 
 static void
-gtk_flow_box_child_measure_ (GtkWidget     *widget,
+gtk_flow_box_child_measure (GtkWidget     *widget,
                             GtkOrientation  orientation,
                             int             for_size,
                             int            *minimum,
@@ -405,27 +403,8 @@ gtk_flow_box_child_measure_ (GtkWidget     *widget,
                             int            *minimum_baseline,
                             int            *natural_baseline)
 {
-  gtk_css_gadget_get_preferred_size (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_flow_box_child_measure (GtkCssGadget   *gadget,
-                            GtkOrientation  orientation,
-                            int             for_size,
-                            int            *minimum,
-                            int            *natural,
-                            int            *minimum_baseline,
-                            int            *natural_baseline,
-                            gpointer        data)
-{
-  GtkWidget *widget;
   GtkWidget *child;
 
-  widget = gtk_css_gadget_get_owner (gadget);
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (!child || ! gtk_widget_get_visible (child))
     {
@@ -442,45 +421,18 @@ gtk_flow_box_child_size_allocate (GtkWidget     *widget,
                                   GtkAllocation *allocation)
 {
   GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (CHILD_PRIV (GTK_FLOW_BOX_CHILD (widget))->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
-static void
-gtk_flow_box_child_allocate (GtkCssGadget        *gadget,
-                             const GtkAllocation *allocation,
-                             int                  baseline,
-                             GtkAllocation       *out_clip,
-                             gpointer             data)
-{
-  GtkWidget *widget;
   GtkWidget *child;
-
-  widget = gtk_css_gadget_get_owner (gadget);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     gtk_widget_size_allocate (child, (GtkAllocation *)allocation);
 
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
+  gtk_container_get_children_clip (GTK_CONTAINER (widget), &clip);
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 /* GObject implementation {{{2 */
-
-static void
-gtk_flow_box_child_finalize (GObject *object)
-{
-  g_clear_object (&CHILD_PRIV (GTK_FLOW_BOX_CHILD (object))->gadget);
-
-  G_OBJECT_CLASS (gtk_flow_box_child_parent_class)->finalize (object);
-}
 
 static void
 gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
@@ -488,10 +440,8 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  object_class->finalize = gtk_flow_box_child_finalize;
-
   widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
-  widget_class->measure = gtk_flow_box_child_measure_;
+  widget_class->measure = gtk_flow_box_child_measure;
   widget_class->size_allocate = gtk_flow_box_child_size_allocate;
   widget_class->focus = gtk_flow_box_child_focus;
 
@@ -528,14 +478,6 @@ gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
   gtk_widget_set_can_focus (GTK_WIDGET (child), TRUE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (child), TRUE);
-
-  CHILD_PRIV (child)->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (child)),
-                                                     GTK_WIDGET (child),
-                                                     gtk_flow_box_child_measure,
-                                                     gtk_flow_box_child_allocate,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
 }
 
 /* Public API {{{2 */
@@ -708,7 +650,6 @@ struct _GtkFlowBoxPrivate {
 
   GSequence        *children;
 
-  GtkCssGadget     *gadget;
   GtkFlowBoxFilterFunc filter_func;
   gpointer             filter_data;
   GDestroyNotify       filter_destroy;
@@ -1459,28 +1400,9 @@ static void
 gtk_flow_box_size_allocate (GtkWidget     *widget,
                             GtkAllocation *allocation)
 {
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (BOX_PRIV (widget)->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  _gtk_widget_set_simple_clip (widget, &clip);
-}
-
-static void
-gtk_flow_box_allocate (GtkCssGadget        *gadget,
-                       const GtkAllocation *allocation,
-                       int                  baseline,
-                       GtkAllocation       *out_clip,
-                       gpointer             unused)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate  *priv = BOX_PRIV (box);
+  GtkAllocation clip = *allocation;
   GtkAllocation widget_allocation;
   GtkAllocation child_allocation;
   gint avail_size, avail_other_size, min_items, item_spacing, line_spacing;
@@ -1830,7 +1752,9 @@ gtk_flow_box_allocate (GtkCssGadget        *gadget,
   g_free (item_sizes);
   g_free (line_sizes);
 
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
+  gtk_container_get_children_clip (GTK_CONTAINER (widget), &clip);
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static GtkSizeRequestMode
@@ -1911,7 +1835,7 @@ get_largest_aligned_line_length (GtkFlowBox     *box,
 }
 
 static void
-gtk_flow_box_measure_ (GtkWidget     *widget,
+gtk_flow_box_measure (GtkWidget      *widget,
                       GtkOrientation  orientation,
                       int             for_size,
                       int            *minimum,
@@ -1919,24 +1843,6 @@ gtk_flow_box_measure_ (GtkWidget     *widget,
                       int            *minimum_baseline,
                       int            *natural_baseline)
 {
-  gtk_css_gadget_get_preferred_size (BOX_PRIV (widget)->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_flow_box_measure (GtkCssGadget   *gadget,
-                      GtkOrientation  orientation,
-                      int             for_size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline,
-                      gpointer        data)
-{
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
@@ -2008,17 +1914,18 @@ gtk_flow_box_measure (GtkCssGadget   *gadget,
             {
               /* Return the width for the minimum height */
               gint min_height;
+              int dummy;
 
-              gtk_css_gadget_get_preferred_size (gadget,
-                                                 GTK_ORIENTATION_VERTICAL,
-                                                 -1,
-                                                 &min_height, NULL,
-                                                 NULL, NULL);
-              gtk_css_gadget_get_preferred_size (gadget,
-                                                 GTK_ORIENTATION_HORIZONTAL,
-                                                 min_height,
-                                                 &min_width, &nat_width,
-                                                 NULL, NULL);
+              gtk_flow_box_measure (widget,
+                                    GTK_ORIENTATION_VERTICAL,
+                                    -1,
+                                    &min_height, &dummy,
+                                    NULL, NULL);
+              gtk_flow_box_measure (widget,
+                                    GTK_ORIENTATION_HORIZONTAL,
+                                    min_height,
+                                    &min_width, &nat_width,
+                                    NULL, NULL);
             }
 
           *minimum = min_width;
@@ -2039,28 +1946,29 @@ gtk_flow_box_measure (GtkCssGadget   *gadget,
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
               /* Return the minimum width */
-              gtk_css_gadget_get_preferred_size (gadget,
-                                                 GTK_ORIENTATION_HORIZONTAL,
-                                                 -1,
-                                                 &min_width, &nat_width,
-                                                 NULL, NULL);
+              gtk_flow_box_measure (widget,
+                                    GTK_ORIENTATION_HORIZONTAL,
+                                    -1,
+                                    &min_width, &nat_width,
+                                    NULL, NULL);
             }
           else /* GTK_ORIENTATION_VERTICAL */
             {
               gint min_height;
               gint line_length;
               gint item_size, extra_pixels;
+              int dummy;
 
               n_children = get_visible_children (box);
               if (n_children <= 0)
                 goto out_width;
 
               /* Make sure its no smaller than the minimum */
-              gtk_css_gadget_get_preferred_size (gadget,
-                                                 GTK_ORIENTATION_VERTICAL,
-                                                 -1,
-                                                 &min_height, NULL,
-                                                 NULL, NULL);
+              gtk_flow_box_measure (widget,
+                                    GTK_ORIENTATION_VERTICAL,
+                                    -1,
+                                    &min_height, &dummy,
+                                    NULL, NULL);
 
               avail_size = MAX (for_size, min_height);
               if (avail_size <= 0)
@@ -2197,17 +2105,18 @@ gtk_flow_box_measure (GtkCssGadget   *gadget,
             {
               /* Return the height for the minimum width */
               gint min_width;
+              int dummy;
 
-              gtk_css_gadget_get_preferred_size (gadget,
-                                                 GTK_ORIENTATION_HORIZONTAL,
-                                                 -1,
-                                                 &min_width, NULL,
-                                                 NULL, NULL);
-              gtk_css_gadget_get_preferred_size (gadget,
-                                                 GTK_ORIENTATION_VERTICAL,
-                                                 min_width,
-                                                 &min_height, &nat_height,
-                                                 NULL, NULL);
+              gtk_flow_box_measure (widget,
+                                    GTK_ORIENTATION_HORIZONTAL,
+                                    -1,
+                                    &min_width, &dummy,
+                                   NULL, NULL);
+              gtk_flow_box_measure (widget,
+                                    GTK_ORIENTATION_VERTICAL,
+                                    min_width,
+                                    &min_height, &nat_height,
+                                    NULL, NULL);
             }
           else /* GTK_ORIENTATION_VERTICAL */
             {
@@ -2286,17 +2195,18 @@ gtk_flow_box_measure (GtkCssGadget   *gadget,
               gint min_width;
               gint line_length;
               gint item_size, extra_pixels;
+              int dummy;
 
               n_children = get_visible_children (box);
               if (n_children <= 0)
                 goto out_height;
 
               /* Make sure its no smaller than the minimum */
-              gtk_css_gadget_get_preferred_size (gadget,
-                                                 GTK_ORIENTATION_HORIZONTAL,
-                                                 -1,
-                                                 &min_width, NULL,
-                                                 NULL, NULL);
+              gtk_flow_box_measure (widget,
+                                    GTK_ORIENTATION_HORIZONTAL,
+                                    -1,
+                                    &min_width, &dummy,
+                                    NULL, NULL);
 
               avail_size = MAX (for_size, min_width);
               if (avail_size <= 0)
@@ -2416,11 +2326,11 @@ gtk_flow_box_measure (GtkCssGadget   *gadget,
           else /* GTK_ORIENTATION_VERTICAL */
             {
               /* Return the minimum height */
-              gtk_css_gadget_get_preferred_size (gadget,
-                                                 GTK_ORIENTATION_VERTICAL,
-                                                 -1,
-                                                 &min_height, &nat_height,
-                                                 NULL, NULL);
+              gtk_flow_box_measure (widget,
+                                    GTK_ORIENTATION_VERTICAL,
+                                    -1,
+                                    &min_height, &nat_height,
+                                    NULL, NULL);
             }
 
          out_height:
@@ -2441,10 +2351,9 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
   GtkAllocation allocation;
   int x, y, width, height;
 
-  gtk_widget_get_allocation (widget, &allocation);
+  GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->snapshot (widget, snapshot);
 
-  gtk_widget_get_allocation (widget, &allocation);
-
+  gtk_widget_get_content_allocation (widget, &allocation);
   x = allocation.x;
   y = allocation.y;
   width = allocation.width;
@@ -3517,8 +3426,6 @@ gtk_flow_box_finalize (GObject *obj)
       g_clear_object (&priv->bound_model);
     }
 
-  g_clear_object (&priv->gadget);
-
   G_OBJECT_CLASS (gtk_flow_box_parent_class)->finalize (obj);
 }
 
@@ -3543,7 +3450,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   widget_class->snapshot = gtk_flow_box_snapshot;
   widget_class->key_press_event = gtk_flow_box_key_press_event;
   widget_class->get_request_mode = gtk_flow_box_get_request_mode;
-  widget_class->measure = gtk_flow_box_measure_;
+  widget_class->measure = gtk_flow_box_measure;
 
   container_class->add = gtk_flow_box_add;
   container_class->remove = gtk_flow_box_remove;
@@ -3852,7 +3759,6 @@ static void
 gtk_flow_box_init (GtkFlowBox *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  GtkCssNode *widget_node;
 
   gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), TRUE);
@@ -3895,15 +3801,6 @@ gtk_flow_box_init (GtkFlowBox *box)
                     G_CALLBACK (gtk_flow_box_drag_gesture_update), box);
   g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_flow_box_drag_gesture_end), box);
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (box));
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     GTK_WIDGET (box),
-                                                     gtk_flow_box_measure,
-                                                     gtk_flow_box_allocate,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
 }
 
 static void
