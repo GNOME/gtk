@@ -26,7 +26,6 @@
 #include "gtkprivate.h"
 #include "gtkorientableprivate.h"
 #include "gtkrender.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkwidgetprivate.h"
 #include <gobject/gmarshal.h>
 #include "gtkbuildable.h"
@@ -97,7 +96,7 @@ static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	 
 								gpointer      	      *data);
 
 static GtkSizeRequestMode gtk_cell_view_get_request_mode       (GtkWidget             *widget);
-static void gtk_cell_view_measure_ (GtkWidget      *widget,
+static void gtk_cell_view_measure (GtkWidget      *widget,
                                    GtkOrientation  orientation,
                                    int             for_size,
                                    int            *minimum,
@@ -112,27 +111,6 @@ static void       row_changed_cb                               (GtkTreeModel    
 								GtkTreeIter          *iter,
 								GtkCellView          *view);
 
-static void     gtk_cell_view_measure  (GtkCssGadget        *gadget,
-                                        GtkOrientation       orientation,
-                                        int                  for_size,
-                                        int                 *minimum,
-                                        int                 *natural,
-                                        int                 *minimum_baseline,
-                                        int                 *natural_baseline,
-                                        gpointer             data);
-static void     gtk_cell_view_allocate (GtkCssGadget        *gadget,
-                                        const GtkAllocation *allocation,
-                                        int                  baseline,
-                                        GtkAllocation       *out_clip,
-                                        gpointer             data);
-static gboolean gtk_cell_view_render   (GtkCssGadget        *gadget,
-                                        GtkSnapshot         *snapshot,
-                                        int                  x,
-                                        int                  y,
-                                        int                  width,
-                                        int                  height,
-                                        gpointer             data);
-
 struct _GtkCellViewPrivate
 {
   GtkTreeModel        *model;
@@ -140,8 +118,6 @@ struct _GtkCellViewPrivate
 
   GtkCellArea         *area;
   GtkCellAreaContext  *context;
-
-  GtkCssGadget        *gadget;
 
   gulong               size_changed_id;
   gulong               row_changed_id;
@@ -188,7 +164,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   widget_class->snapshot                       = gtk_cell_view_snapshot;
   widget_class->size_allocate                  = gtk_cell_view_size_allocate;
   widget_class->get_request_mode               = gtk_cell_view_get_request_mode;
-  widget_class->measure                        = gtk_cell_view_measure_;
+  widget_class->measure                        = gtk_cell_view_measure;
 
   /* properties */
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
@@ -439,21 +415,10 @@ gtk_cell_view_set_property (GObject      *object,
 static void
 gtk_cell_view_init (GtkCellView *cellview)
 {
-  GtkCssNode *widget_node;
-
   cellview->priv = gtk_cell_view_get_instance_private (cellview);
   cellview->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (cellview));
-  cellview->priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                               GTK_WIDGET (cellview),
-                                                               gtk_cell_view_measure,
-                                                               gtk_cell_view_allocate,
-                                                               gtk_cell_view_render,
-                                                               NULL,
-                                                               NULL);
 }
 
 static void
@@ -463,8 +428,6 @@ gtk_cell_view_finalize (GObject *object)
 
   if (cellview->priv->displayed_row)
      gtk_tree_row_reference_free (cellview->priv->displayed_row);
-
-  g_clear_object (&cellview->priv->gadget);
 
   G_OBJECT_CLASS (gtk_cell_view_parent_class)->finalize (object);
 }
@@ -498,31 +461,10 @@ static void
 gtk_cell_view_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
-  GtkAllocation clip;
-
-  gtk_widget_set_allocation (widget, allocation);
-
-  gtk_css_gadget_allocate (GTK_CELL_VIEW (widget)->priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
-static void
-gtk_cell_view_allocate (GtkCssGadget        *gadget,
-                        const GtkAllocation *allocation,
-                        int                  baseline,
-                        GtkAllocation       *out_clip,
-                        gpointer             data)
-{
-  GtkWidget *widget;
   GtkCellView *cellview;
   GtkCellViewPrivate *priv;
   gint alloc_width, alloc_height, width, height;
 
-  widget = gtk_css_gadget_get_owner (gadget);
   cellview = GTK_CELL_VIEW (widget);
   priv = cellview->priv;
 
@@ -545,7 +487,7 @@ gtk_cell_view_allocate (GtkCssGadget        *gadget,
   else if (alloc_height != allocation->height && priv->orientation == GTK_ORIENTATION_VERTICAL)
     gtk_cell_area_context_allocate (priv->context, -1, height);
 
-  *out_clip = *allocation;
+  gtk_widget_set_clip (widget, allocation);
 }
 
 static void
@@ -608,9 +550,8 @@ gtk_cell_view_get_request_mode (GtkWidget *widget)
   return gtk_cell_area_get_request_mode (priv->area);
 }
 
-
 static void
-gtk_cell_view_measure_ (GtkWidget      *widget,
+gtk_cell_view_measure (GtkWidget      *widget,
                        GtkOrientation  orientation,
                        int             for_size,
                        int            *minimum,
@@ -618,28 +559,9 @@ gtk_cell_view_measure_ (GtkWidget      *widget,
                        int            *minimum_baseline,
                        int            *natural_baseline)
 {
-  gtk_css_gadget_get_preferred_size (GTK_CELL_VIEW (widget)->priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_cell_view_measure (GtkCssGadget   *gadget,
-                       GtkOrientation  orientation,
-                       int             for_size,
-                       int            *minimum,
-                       int            *natural,
-                       int            *minimum_baseline,
-                       int            *natural_baseline,
-                       gpointer        data)
-{
-  GtkWidget *widget;
   GtkCellView *cellview;
   GtkCellViewPrivate *priv;
 
-  widget = gtk_css_gadget_get_owner (gadget);
   cellview = GTK_CELL_VIEW (widget);
   priv = cellview->priv;
 
@@ -725,37 +647,24 @@ static void
 gtk_cell_view_snapshot (GtkWidget   *widget,
                         GtkSnapshot *snapshot)
 {
-  gtk_css_gadget_snapshot (GTK_CELL_VIEW (widget)->priv->gadget, snapshot);
-}
-
-static gboolean
-gtk_cell_view_render (GtkCssGadget *gadget,
-                      GtkSnapshot  *snapshot,
-                      int           x,
-                      int           y,
-                      int           width,
-                      int           height,
-                      gpointer      data)
-{
-  GtkWidget *widget;
   GtkCellView *cellview;
   GdkRectangle area;
+  GdkRectangle allocation;
   GtkCellRendererState state;
 
-  widget = gtk_css_gadget_get_owner (gadget);
   cellview = GTK_CELL_VIEW (widget);
 
   /* render cells */
-  area.x = x;
-  area.y = y;
-  area.width  = width;
-  area.height = height;
+  gtk_widget_get_content_allocation (widget, &area);
+  gtk_widget_get_allocation (widget, &allocation);
+  area.x -= allocation.x;
+  area.y -= allocation.y;
 
   /* set cell data (if available) */
   if (cellview->priv->displayed_row)
     gtk_cell_view_set_cell_data (cellview);
   else if (cellview->priv->model)
-    return FALSE;
+    return;
 
   if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_PRELIGHT)
     state = GTK_CELL_RENDERER_PRELIT;
@@ -766,7 +675,7 @@ gtk_cell_view_render (GtkCssGadget *gadget,
   gtk_cell_area_snapshot (cellview->priv->area, cellview->priv->context,
 			  widget, snapshot, &area, &area, state, FALSE);
 
-  return FALSE;
+
 }
 
 static void
