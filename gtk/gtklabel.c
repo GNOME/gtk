@@ -3732,8 +3732,6 @@ gtk_label_size_allocate (GtkWidget     *widget,
   GtkLabelPrivate *priv = label->priv;
   GdkRectangle clip_rect;
 
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->size_allocate (widget, allocation);
-
   if (priv->layout)
     gtk_label_update_layout_width (label);
 
