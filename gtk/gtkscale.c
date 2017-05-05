@@ -598,12 +598,12 @@ gtk_scale_size_allocate (GtkWidget     *widget,
 {
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = scale->priv;
-  GtkAllocation clip, marks_clip, range_rect, marks_rect;
+  GtkAllocation clip = *allocation;
+  GtkAllocation marks_clip, range_rect, marks_rect;
   GtkOrientation orientation;
 
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->size_allocate (widget, allocation);
 
-  gtk_widget_get_clip (widget, &clip);
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   gtk_range_get_range_rect (GTK_RANGE (scale), &range_rect);
 
