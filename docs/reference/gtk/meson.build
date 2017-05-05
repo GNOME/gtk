@@ -45,3 +45,50 @@ gnome.gtkdoc('gtk4',
              ],
              html_assets: images,
              install: true)
+
+xsltproc = find_program('xsltproc', required: false)
+if get_option('enable-man-pages') and not xsltproc.found()
+  error('No xsltproc found, but man pages were explicitly enabled')
+endif
+
+if get_option('enable-man-pages') and xsltproc.found()
+  xlstproc_flags = [
+    '--nonet',
+    '--stringparam', 'man.output.quietly', '1',
+    '--stringparam', 'funcsynopsis.style', 'ansi',
+    '--stringparam', 'man.th.extra1.suppress', '1',
+    '--stringparam', 'man.authors.section.enabled', '0',
+    '--stringparam', 'man.copyright.section.enabled', '0',
+  ]
+
+  man_files = [
+    [ 'gtk4-broadwayd', '1', ],
+    [ 'gtk4-builder-tool', '1', ],
+    [ 'gtk4-demo', '1', ],
+    [ 'gtk4-demo-application', '1', ],
+    [ 'gtk4-encode-symbolic-svg', '1', ],
+    [ 'gtk4-icon-browser', '1', ],
+    [ 'gtk4-launch', '1', ],
+    [ 'gtk4-query-immodules', '1', ],
+    [ 'gtk4-query-settings', '1', ],
+    [ 'gtk4-update-icon-cache', '1', ],
+    [ 'gtk4-widget-factory', '1', ],
+  ]
+
+  foreach man: man_files
+    man_name = man.get(0)
+    man_section = man.get(1, '1')
+    custom_target('@0@.@1@'.format(man_name, man_section),
+                  input: '@0@.xml'.format(man_name),
+                  output: '@0@.@1@'.format(man_name, man_section),
+                  command: [
+                    xsltproc,
+                    xlstproc_flags,
+                    '-o', '@OUTPUT@',
+                    'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
+                    '@INPUT@',
+                  ],
+                  install: true,
+                  install_dir: join_paths(get_option('mandir'), 'man@0@'.format(man_section)))
+  endforeach
+endif

@@ -30,3 +30,5 @@ option('with-included-immodules', type: 'string', value : '',
   description : 'Build the specified input methods into gtk (comma-separated list or "all" or "none")')
 option('enable-documentation', type: 'boolean', value: 'false',
   description : 'Build API reference and tools documentation')
+option('enable-man-pages', type: 'boolean', value: 'false',
+  description : 'Build man pages for installed tools')
