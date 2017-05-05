@@ -27,7 +27,6 @@
 
 
 #include <gtk/gtkrange.h>
-#include <gtk/gtkcssgadgetprivate.h>
 #include <gtk/gtkcssnodeprivate.h>
 
 

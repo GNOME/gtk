@@ -90,7 +90,6 @@ struct _GtkRangePrivate
   /* Steppers are: < > ---- < >
    *               a b      c d
    */
-  GtkCssGadget *gadget;
   GtkCssGadget *contents_gadget;
   GtkCssGadget *stepper_a_gadget;
   GtkCssGadget *stepper_b_gadget;
@@ -632,15 +631,12 @@ gtk_range_init (GtkRange *range)
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (range));
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     GTK_WIDGET (range),
-                                                     NULL,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL, NULL);
   priv->contents_gadget = gtk_box_gadget_new ("contents",
                                               GTK_WIDGET (range),
-                                              priv->gadget, NULL);
+                                              NULL, NULL);
+  gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->contents_gadget),
+                           widget_node);
+
   priv->trough_gadget = gtk_css_custom_gadget_new ("trough",
                                                    GTK_WIDGET (range),
                                                    NULL, NULL,
@@ -1551,7 +1547,6 @@ gtk_range_finalize (GObject *object)
   g_clear_object (&priv->multipress_gesture);
   g_clear_object (&priv->long_press_gesture);
 
-  g_clear_object (&priv->gadget);
   g_clear_object (&priv->contents_gadget);
   g_clear_object (&priv->trough_gadget);
   g_clear_object (&priv->fill_gadget);
@@ -3099,8 +3094,10 @@ gtk_range_update_mouse_location (GtkRange *range)
     priv->mouse_location = priv->slider_gadget;
   else if (rectangle_contains_point (&slider_trace, x, y))
     priv->mouse_location = priv->trough_gadget;
+#if 0
   else if (gtk_css_gadget_margin_box_contains_point (priv->gadget, x, y))
     priv->mouse_location = priv->gadget;
+#endif
   else
     priv->mouse_location = NULL;
 
