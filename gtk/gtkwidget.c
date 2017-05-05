@@ -5860,8 +5860,6 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  gtk_widget_set_allocation (widget, allocation);
-
   if (_gtk_widget_get_realized (widget) &&
       _gtk_widget_get_has_window (widget))
      {
