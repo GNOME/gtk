@@ -50,7 +50,6 @@ void               _gtk_range_set_steppers                 (GtkRange      *range
                                                             gboolean       has_d);
 
 GtkCssGadget      *gtk_range_get_slider_gadget             (GtkRange *range);
-GtkCssGadget      *gtk_range_get_gadget                    (GtkRange *range);
 
 G_END_DECLS
 
