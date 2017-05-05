@@ -3967,7 +3967,8 @@ xdg_exported_handle (void                    *data,
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->exported.callback (window, handle, impl->exported.user_data);
-  impl->exported.user_data = NULL;
+  g_clear_pointer (&impl->exported.user_data,
+                   impl->exported.destroy_func);
 }
 
 static const struct zxdg_exported_v1_listener xdg_exported_listener = {
