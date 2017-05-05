@@ -25,7 +25,6 @@
 #include "gtkstack.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
@@ -136,8 +135,6 @@ typedef struct {
 
   GtkStackChildInfo *visible_child;
 
-  GtkCssGadget *gadget;
-
   gboolean hhomogeneous;
   gboolean vhomogeneous;
 
@@ -177,7 +174,7 @@ static void     gtk_stack_size_allocate                  (GtkWidget     *widget,
                                                           GtkAllocation *allocation);
 static void     gtk_stack_snapshot                       (GtkWidget     *widget,
                                                           GtkSnapshot   *snapshot);
-static void     gtk_stack_measure_                       (GtkWidget      *widget,
+static void     gtk_stack_measure                        (GtkWidget      *widget,
                                                           GtkOrientation  orientation,
                                                           int             for_size,
                                                           int            *minimum,
@@ -220,8 +217,6 @@ gtk_stack_finalize (GObject *obj)
   gtk_stack_unschedule_ticks (stack);
 
   g_clear_pointer (&priv->last_visible_node, gsk_render_node_unref);
-
-  g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_stack_parent_class)->finalize (obj);
 }
@@ -320,7 +315,7 @@ gtk_stack_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_stack_parent_class)->realize (widget);
 
-  gtk_css_gadget_get_content_allocation (priv->gadget, &allocation, NULL);
+  gtk_widget_get_content_allocation (widget, &allocation);
 
   priv->bin_window =
     gdk_window_new_child (gtk_widget_get_window (widget),
@@ -392,7 +387,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   widget_class->unrealize = gtk_stack_unrealize;
   widget_class->map = gtk_stack_map;
   widget_class->unmap = gtk_stack_unmap;
-  widget_class->measure = gtk_stack_measure_;
+  widget_class->measure = gtk_stack_measure;
   widget_class->compute_expand = gtk_stack_compute_expand;
 
   container_class->add = gtk_stack_add;
@@ -2121,30 +2116,7 @@ gtk_stack_size_allocate (GtkWidget     *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkAllocation clip = *allocation;
-
-  gtk_css_gadget_allocate (priv->gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip);
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
-static void
-gtk_stack_allocate (GtkCssGadget        *gadget,
-                    const GtkAllocation *allocation,
-                    int                  baseline,
-                    GtkAllocation       *out_clip,
-                    gpointer             data)
-{
-  GtkWidget *widget;
-  GtkStack *stack;
-  GtkStackPrivate *priv;
   GtkAllocation child_allocation;
-
-  widget = gtk_css_gadget_get_owner (gadget);
-  stack = GTK_STACK (widget);
-  priv = gtk_stack_get_instance_private (stack);
 
   child_allocation.x = 0;
   child_allocation.y = 0;
@@ -2216,39 +2188,25 @@ gtk_stack_allocate (GtkCssGadget        *gadget,
 
       gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
     }
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), out_clip);
-}
-static void
-gtk_stack_measure_ (GtkWidget      *widget,
-                    GtkOrientation  orientation,
-                    int             for_size,
-                    int            *minimum,
-                    int            *natural,
-                    int            *minimum_baseline,
-                    int            *natural_baseline)
-{
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (GTK_STACK (widget));
 
-  gtk_css_gadget_get_preferred_size (priv->gadget,
-                                     orientation,
-                                     for_size,
-                                     minimum, natural,
-                                     minimum_baseline, natural_baseline);
+  gtk_container_get_children_clip (GTK_CONTAINER (widget), &clip);
+
+  clip.x += allocation->x;
+  clip.y += allocation->y;
+
+  gtk_widget_set_clip (widget, &clip);
 }
 
 #define LERP(a, b, t) ((a) + (((b) - (a)) * (1.0 - (t))))
-
 static void
-gtk_stack_measure (GtkCssGadget   *gadget,
+gtk_stack_measure (GtkWidget      *widget,
                    GtkOrientation  orientation,
                    int             for_size,
                    int            *minimum,
                    int            *natural,
                    int            *minimum_baseline,
-                   int            *natural_baseline,
-                   gpointer        data)
+                   int            *natural_baseline)
 {
-  GtkWidget *widget = gtk_css_gadget_get_owner (gadget);
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackChildInfo *child_info;
@@ -2306,13 +2264,4 @@ gtk_stack_init (GtkStack *stack)
   priv->hhomogeneous = TRUE;
   priv->transition_duration = 200;
   priv->transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
-
-  priv->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (stack)),
-                                                     GTK_WIDGET (stack),
-                                                     gtk_stack_measure,
-                                                     gtk_stack_allocate,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL);
-
 }
