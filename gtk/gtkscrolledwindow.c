@@ -1731,7 +1731,6 @@ gtk_scrolled_window_allocate (GtkCssGadget        *gadget,
     {
       priv->hscrollbar_visible = priv->hscrollbar_policy == GTK_POLICY_ALWAYS;
       priv->vscrollbar_visible = priv->vscrollbar_policy == GTK_POLICY_ALWAYS;
-      gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
     }
 
   gtk_widget_set_child_visible (priv->hscrollbar, priv->hscrollbar_visible);
