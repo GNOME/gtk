@@ -138,6 +138,7 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_widget_set_hexpand (label, TRUE);
   gtk_box_pack_start (GTK_BOX (box), label);
 
   check = gtk_image_new_from_icon_name ("object-select-symbolic", GTK_ICON_SIZE_MENU);
@@ -150,6 +151,7 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_container_add (GTK_CONTAINER (row), box);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
 
+  gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (list, row, -1);
 
   gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->priv->labels), label);
@@ -176,6 +178,7 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_widget_set_hexpand (label, TRUE);
   gtk_box_pack_start (GTK_BOX (box), label);
 
   label = gtk_label_new (value);
@@ -189,6 +192,7 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_container_add (GTK_CONTAINER (row), box);
   gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
 
+  gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
   gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->priv->labels), label);
