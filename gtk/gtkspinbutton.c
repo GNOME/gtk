@@ -2305,3 +2305,48 @@ gtk_spin_button_set_text (GtkSpinButton *spin_button,
 
   g_object_notify (G_OBJECT (spin_button), "text");
 }
+
+int
+gtk_spin_button_get_max_width_chars (GtkSpinButton *spin_button)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), -1);
+
+  return gtk_entry_get_width_chars (GTK_ENTRY (priv->entry));
+}
+
+
+void
+gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
+                                    int            max_width_chars)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+
+  gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), max_width_chars);
+  g_object_notify (G_OBJECT (spin_button), "max-width-chars");
+}
+
+int
+gtk_spin_button_get_width_chars (GtkSpinButton *spin_button)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), -1);
+
+  return gtk_entry_get_width_chars (GTK_ENTRY (priv->entry));
+}
+
+void
+gtk_spin_button_set_width_chars (GtkSpinButton *spin_button,
+                                 int            width_chars)
+{
+  GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
+
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+
+  gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), width_chars);
+  g_object_notify (G_OBJECT (spin_button), "width-chars");
+}

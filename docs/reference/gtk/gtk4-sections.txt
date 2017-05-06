@@ -2741,6 +2741,10 @@ gtk_spin_button_get_value
 gtk_spin_button_get_wrap
 gtk_spin_button_set_text
 gtk_spin_button_get_text
+gtk_spin_button_set_max_width_chars
+gtk_spin_button_get_max_width_chars
+gtk_spin_button_set_width_chars
+gtk_spin_button_get_width_chars
 GTK_INPUT_ERROR
 <SUBSECTION Standard>
 GTK_SPIN_BUTTON
