@@ -273,7 +273,8 @@ static gint gtk_spin_button_motion_notify (GtkWidget      *widget,
 
 static gint gtk_spin_button_scroll         (GtkWidget          *widget,
                                             GdkEventScroll     *event);
-static void gtk_spin_button_activate       (GtkEntry           *entry);
+static void gtk_spin_button_activate       (GtkEntry           *entry,
+                                            gpointer            user_data);
 static void gtk_spin_button_unset_adjustment (GtkSpinButton *spin_button);
 static void gtk_spin_button_set_orientation (GtkSpinButton     *spin_button,
                                              GtkOrientation     orientation);
@@ -867,6 +868,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   priv->box = gtk_box_new (priv->orientation, 0);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (spin_button));
   priv->entry = gtk_entry_new ();
+  g_signal_connect (priv->entry, "activate", G_CALLBACK (gtk_spin_button_activate), spin_button);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->entry);
 
   priv->down_button = gtk_button_new_from_icon_name ("list-remove-symbolic", GTK_ICON_SIZE_BUTTON);
@@ -1339,13 +1341,14 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
 }
 
 static void
-gtk_spin_button_activate (GtkEntry *entry)
+gtk_spin_button_activate (GtkEntry *entry,
+                          gpointer  user_data)
 {
-  if (gtk_editable_get_editable (GTK_EDITABLE (entry)))
-    gtk_spin_button_update (GTK_SPIN_BUTTON (entry));
+  GtkSpinButton *spin_button = user_data;
+  GtkSpinButtonPrivate *priv = spin_button->priv;
 
-  /* Chain up so that entry->activates_default is honored */
-  GTK_ENTRY_CLASS (gtk_spin_button_parent_class)->activate (entry);
+  if (gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))
+    gtk_spin_button_update (spin_button);
 }
 
 static void
