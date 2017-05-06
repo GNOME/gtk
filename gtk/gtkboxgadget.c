@@ -46,8 +46,6 @@ struct _GtkBoxGadgetPrivate {
   guint align_reverse    : 1;
 };
 
-typedef gboolean (* ComputeExpandFunc) (GObject *object, GtkOrientation orientation);
-
 typedef struct _GtkBoxGadgetChild GtkBoxGadgetChild;
 struct _GtkBoxGadgetChild {
   GObject *object;
