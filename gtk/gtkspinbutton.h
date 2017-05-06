@@ -232,6 +232,18 @@ const char *    gtk_spin_button_get_text           (GtkSpinButton *spin_button);
 GDK_AVAILABLE_IN_3_92
 void            gtk_spin_button_set_text           (GtkSpinButton *spin_button,
                                                     const char    *text);
+GDK_AVAILABLE_IN_3_92
+int             gtk_spin_button_get_max_width_chars (GtkSpinButton *spin_button);
+GDK_AVAILABLE_IN_3_92
+void            gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
+                                                     int            max_width_chars);
+GDK_AVAILABLE_IN_3_92
+int             gtk_spin_button_get_width_chars     (GtkSpinButton *spin_button);
+GDK_AVAILABLE_IN_3_92
+void            gtk_spin_button_set_width_chars     (GtkSpinButton *spin_button,
+                                                     int            width_chars);
+
+
 
 G_END_DECLS
 
