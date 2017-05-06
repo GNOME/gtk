@@ -15416,7 +15416,8 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
   _gtk_widget_get_allocation (widget, &allocation);
 
-  if (!GTK_IS_WINDOW (widget))
+  if (!GTK_IS_WINDOW (widget) &&
+      !GTK_IS_POPOVER (widget))
     {
       gtk_snapshot_offset (snapshot, margin.left, margin.top);
       gtk_css_style_snapshot_background (style,
