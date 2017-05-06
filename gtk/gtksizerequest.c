@@ -479,16 +479,29 @@ gtk_widget_measure (GtkWidget        *widget,
       GtkWidget *tmp_widget = key;
       gint min_dimension, nat_dimension;
 
+      style = gtk_css_node_get_style (gtk_widget_get_css_node (tmp_widget));
+      get_box_margin (style, &margin);
+      get_box_border (style, &border);
+      get_box_padding (style, &padding);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          css_extra_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
+          css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+        }
+      else
+        {
+          css_extra_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
+          css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+        }
+
       gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size, &min_dimension, &nat_dimension, NULL, NULL);
 
-      min_result = MAX (min_result, min_dimension);
-      nat_result = MAX (nat_result, nat_dimension);
+      min_result = MAX (min_result, MAX (min_dimension, css_min_size) + css_extra_size);
+      nat_result = MAX (nat_result, MAX (nat_dimension, css_min_size) + css_extra_size);
     }
 
   g_hash_table_destroy (widgets);
-
-  /* TODO: Since we query the content sizes for all the widget in the size group, we need to also
-   *       query all the widget sizes for all of them and MAX that? */
 
   /* Baselines make no sense with sizegroups really */
   if (minimum_baseline)
@@ -498,10 +511,10 @@ gtk_widget_measure (GtkWidget        *widget,
     *natural_baseline = -1;
 
   if (minimum)
-    *minimum = min_result + css_extra_size;
+    *minimum = min_result;
 
   if (natural)
-    *natural = nat_result + css_extra_size;
+    *natural = nat_result;
 }
 
 /**
