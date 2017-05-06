@@ -116,17 +116,15 @@ gtk_check_menu_item_size_allocate (GtkWidget     *widget,
 {
   GtkAllocation clip, widget_clip;
   GtkAllocation content_alloc, indicator_alloc;
-  GtkCssGadget *menu_item_gadget;
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
-  gint content_baseline, toggle_size;
+  gint toggle_size;
 
   GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->size_allocate
     (widget, allocation);
 
-  menu_item_gadget = _gtk_menu_item_get_gadget (GTK_MENU_ITEM (widget));
-  gtk_css_gadget_get_content_allocation (menu_item_gadget,
-                                         &content_alloc, &content_baseline);
+  gtk_widget_get_content_allocation (widget, &content_alloc);
+
 
   gtk_css_gadget_get_preferred_size (priv->indicator_gadget,
                                      GTK_ORIENTATION_HORIZONTAL,
@@ -152,7 +150,7 @@ gtk_check_menu_item_size_allocate (GtkWidget     *widget,
 
   gtk_css_gadget_allocate (check_menu_item->priv->indicator_gadget,
                            &indicator_alloc,
-                           content_baseline,
+                           gtk_widget_get_allocated_baseline (widget),
                            &clip);
 
   gtk_widget_get_clip (widget, &widget_clip);
@@ -496,8 +494,10 @@ gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
   priv->indicator_gadget =
     gtk_builtin_icon_new ("check",
                           GTK_WIDGET (check_menu_item),
-                          _gtk_menu_item_get_gadget (GTK_MENU_ITEM (check_menu_item)),
+                          NULL,
                           NULL);
+  gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->indicator_gadget),
+                           gtk_widget_get_css_node (GTK_WIDGET (check_menu_item)));
   update_node_state (check_menu_item);
 }
 
