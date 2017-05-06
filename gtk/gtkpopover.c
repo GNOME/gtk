@@ -1255,10 +1255,9 @@ gtk_popover_measure (GtkWidget      *widget,
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
-  GtkBorder border, margin;
+  GtkBorder margin;
   int minimal_size, extra;
 
-  get_padding_and_border (widget, &border);
   get_margin (widget, &margin);
 
   *minimum = 0;
@@ -1290,16 +1289,15 @@ gtk_popover_measure (GtkWidget      *widget,
   minimal_size = get_minimal_size (popover, orientation);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      *minimum = MAX (*minimum, minimal_size) + border.left + border.right;
-      *natural = MAX (*natural, minimal_size) + border.left + border.right;
+      *minimum = MAX (*minimum, minimal_size);
+      *natural = MAX (*natural, minimal_size);
       extra = MAX (TAIL_HEIGHT, margin.left) + MAX (TAIL_HEIGHT, margin.right);
     }
   else
     {
-      *minimum = MAX (*minimum, minimal_size) + border.top + border.bottom;
-      *natural = MAX (*natural, minimal_size) + border.top + border.bottom;
+      *minimum = MAX (*minimum, minimal_size);
+      *natural = MAX (*natural, minimal_size);
       extra = MAX (TAIL_HEIGHT, margin.bottom) + MAX (TAIL_HEIGHT, margin.top);
-
     }
 
   *minimum += extra;
