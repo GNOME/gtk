@@ -352,6 +352,15 @@ property_query_event (GtkWidget *widget,
   return TRUE;
 }
 
+static void
+prepare_inspect_func (GdkSeat   *seat,
+                      GdkWindow *window,
+                      gpointer   user_data)
+{
+  gdk_window_show (window);
+}
+
+
 void
 gtk_inspector_on_inspect (GtkWidget          *button,
                           GtkInspectorWindow *iw)
@@ -372,7 +381,7 @@ gtk_inspector_on_inspect (GtkWidget          *button,
   status = gdk_seat_grab (gdk_display_get_default_seat (display),
                           gtk_widget_get_window (iw->invisible),
                           GDK_SEAT_CAPABILITY_ALL_POINTING, TRUE,
-                          cursor, NULL, NULL, NULL);
+                          cursor, NULL, prepare_inspect_func, NULL);
   g_object_unref (cursor);
   iw->grabbed = status == GDK_GRAB_SUCCESS;
 
