@@ -1358,7 +1358,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkBin *bin;
-  GtkAllocation relative_allocation;
   GtkAllocation child_allocation;
   GtkAllocation sw_allocation;
   GtkWidget *child;
@@ -1587,7 +1586,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
     {
       priv->hscrollbar_visible = priv->hscrollbar_policy == GTK_POLICY_ALWAYS;
       priv->vscrollbar_visible = priv->vscrollbar_policy == GTK_POLICY_ALWAYS;
-      gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
     }
 
   gtk_widget_set_child_visible (priv->hscrollbar, priv->hscrollbar_visible);
