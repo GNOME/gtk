@@ -28,7 +28,7 @@ libreftest = static_library('gtkreftest',
   dependencies : libgtk_dep)
 
 tcdata = configuration_data()
-tcdata.set('libexecdir', join_paths(get_option('prefix'), get_option('libdir'))) # FIXME
+tcdata.set('libexecdir', join_paths(get_option('prefix'), get_option('libexecdir')))
 
 #built_tests = ['reftests', 'reftests-dark', 'reftests-hc', 'reftests-hci']
 #foreach t : built_tests
