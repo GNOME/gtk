@@ -146,9 +146,9 @@ struct _GtkExpanderPrivate
   GtkWidget        *box;
   GtkWidget        *title_widget;
   GtkWidget        *arrow_widget;
+  GtkWidget        *child;
 
   GtkGesture       *multipress_gesture;
-  gint              spacing;
 
   guint             expand_timer;
 
@@ -227,19 +227,23 @@ static void     gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
                                                 gdouble               y,
                                                 GtkExpander          *expander);
 
-G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_BIN,
+G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkExpander)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_expander_buildable_init))
 
 static void
-gtk_expander_finalize (GObject *obj)
+gtk_expander_forall (GtkContainer *container,
+                     GtkCallback   callback,
+                     gpointer      user_data)
 {
-  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (GTK_EXPANDER (obj));
+  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (GTK_EXPANDER (container));
 
-  gtk_widget_unparent (priv->box);
+  if (priv->child)
+    (*callback) (priv->child, user_data);
 
-  G_OBJECT_CLASS (gtk_expander_parent_class)->finalize (obj);
+  if (priv->label_widget)
+    (*callback) (priv->label_widget, user_data);
 }
 
 static void
@@ -253,7 +257,6 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   widget_class    = (GtkWidgetClass *) klass;
   container_class = (GtkContainerClass *) klass;
 
-  gobject_class->finalize     = gtk_expander_finalize;
   gobject_class->set_property = gtk_expander_set_property;
   gobject_class->get_property = gtk_expander_get_property;
 
@@ -269,6 +272,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 
   container_class->add    = gtk_expander_add;
   container_class->remove = gtk_expander_remove;
+  container_class->forall = gtk_expander_forall;
 
   klass->activate = gtk_expander_activate;
 
@@ -360,7 +364,7 @@ gtk_expander_init (GtkExpander *expander)
   gtk_widget_set_has_window (GTK_WIDGET (expander), FALSE);
 
   priv->label_widget = NULL;
-  priv->spacing = 0;
+  priv->child = NULL;
 
   priv->expanded = FALSE;
   priv->use_underline = FALSE;
@@ -505,6 +509,15 @@ gtk_expander_destroy (GtkWidget *widget)
     {
       g_source_remove (priv->expand_timer);
       priv->expand_timer = 0;
+    }
+
+  if (priv->box)
+    {
+      gtk_widget_unparent (priv->box);
+      priv->box = NULL;
+      priv->child = NULL;
+      priv->label_widget = NULL;
+      priv->arrow_widget = NULL;
     }
 
   g_clear_object (&priv->multipress_gesture);
@@ -718,7 +731,7 @@ focus_in_site (GtkExpander      *expander,
         return FALSE;
     case FOCUS_CHILD:
       {
-        GtkWidget *child = gtk_bin_get_child (GTK_BIN (expander));
+        GtkWidget *child = expander->priv->child;
 
         if (child && gtk_widget_get_child_visible (child))
           return gtk_widget_child_focus (child, direction);
@@ -810,7 +823,7 @@ static void
 gtk_expander_resize_toplevel (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv = expander->priv;
-  GtkWidget *child = gtk_bin_get_child (GTK_BIN (expander));
+  GtkWidget *child = priv->child;
 
   if (child && priv->resize_toplevel &&
       gtk_widget_get_realized (GTK_WIDGET (expander)))
@@ -888,7 +901,18 @@ gtk_expander_add (GtkContainer *container,
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   if (priv->expanded)
-    gtk_container_add (GTK_CONTAINER (priv->box), widget);
+    {
+      gtk_container_add (GTK_CONTAINER (priv->box), widget);
+    }
+  else
+    {
+      if (g_object_is_floating (widget))
+        g_object_ref_sink (widget);
+
+      g_object_ref (widget);
+    }
+
+  priv->child = widget;
 }
 
 static void
@@ -903,6 +927,11 @@ gtk_expander_remove (GtkContainer *container,
   else
     {
       gtk_container_remove (GTK_CONTAINER (priv->box), widget);
+      if (!priv->expanded)
+        {
+          /* We hold an extra ref */
+          g_object_unref (widget);
+        }
       GTK_CONTAINER_CLASS (gtk_expander_parent_class)->remove (container, widget);
     }
 }
@@ -1004,16 +1033,20 @@ gtk_expander_set_expanded (GtkExpander *expander,
 
   update_node_state (expander);
 
-  child = gtk_bin_get_child (GTK_BIN (expander));
+  child = priv->child;
 
   if (child)
     {
       if (priv->expanded)
-        gtk_container_add (GTK_CONTAINER (priv->box), child);
+        {
+          gtk_container_add (GTK_CONTAINER (priv->box), child);
+          g_object_unref (priv->child);
+        }
       else
-        gtk_container_remove (GTK_CONTAINER (priv->box), child);
-      /* TODO: Yeah, I don't think this will work... */
-
+        {
+          g_object_ref (priv->child);
+          gtk_container_remove (GTK_CONTAINER (priv->box), child);
+        }
       gtk_expander_resize_toplevel (expander);
     }
 

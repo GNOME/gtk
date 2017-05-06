@@ -43,7 +43,7 @@ typedef struct _GtkExpanderPrivate GtkExpanderPrivate;
 
 struct _GtkExpander
 {
-  GtkBin              bin;
+  GtkContainer parent_instance;
 
   GtkExpanderPrivate *priv;
 };
@@ -55,7 +55,7 @@ struct _GtkExpander
  */
 struct _GtkExpanderClass
 {
-  GtkBinClass    parent_class;
+  GtkContainerClass parent_class;
 
   /*< public >*/
 
