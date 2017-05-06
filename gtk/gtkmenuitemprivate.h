@@ -20,7 +20,6 @@
 
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkactionhelper.h>
-#include <gtk/gtkcssgadgetprivate.h>
 #include <gtk/gtkcssnodeprivate.h>
 
 G_BEGIN_DECLS
@@ -48,7 +47,6 @@ struct _GtkMenuItemPrivate
   guint reserve_indicator      : 1;
 };
 
-GtkCssGadget * _gtk_menu_item_get_gadget     (GtkMenuItem   *menu_item);
 void     _gtk_menu_item_refresh_accel_path   (GtkMenuItem   *menu_item,
                                               const gchar   *prefix,
                                               GtkAccelGroup *accel_group,

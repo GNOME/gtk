@@ -29,7 +29,6 @@
 #include "gtkaccellabel.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkcontainerprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuprivate.h"
@@ -694,7 +693,6 @@ static void
 gtk_menu_item_init (GtkMenuItem *menu_item)
 {
   GtkMenuItemPrivate *priv;
-  GtkCssNode *widget_node;
 
   priv = gtk_menu_item_get_instance_private (menu_item);
   menu_item->priv = priv;
@@ -710,20 +708,6 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
     priv->submenu_direction = GTK_DIRECTION_RIGHT;
   priv->submenu_placement = GTK_TOP_BOTTOM;
   priv->timer = 0;
-
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (menu_item));
-  priv->gadget = gtk_css_custom_gadget_new_for_node (widget_node,
-                                                     GTK_WIDGET (menu_item),
-                                                     NULL,
-                                                     NULL,
-                                                     NULL,
-                                                     NULL, NULL);
-}
-
-GtkCssGadget *
-_gtk_menu_item_get_gadget (GtkMenuItem *menu_item)
-{
-  return menu_item->priv->gadget;
 }
 
 /**
@@ -786,7 +770,6 @@ gtk_menu_item_dispose (GObject *object)
   g_clear_object (&priv->action_helper);
 
   g_clear_object (&priv->arrow_gadget);
-  g_clear_object (&priv->gadget);
 
   G_OBJECT_CLASS (gtk_menu_item_parent_class)->dispose (object);
 }
@@ -996,8 +979,10 @@ update_arrow_gadget (GtkMenuItem *menu_item)
         {
           priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
                                                      widget,
-                                                     priv->gadget,
+                                                     NULL,
                                                      NULL);
+          gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->arrow_gadget),
+                                   gtk_widget_get_css_node (widget));
           update_node_classes (menu_item);
         }
     }
