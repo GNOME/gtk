@@ -290,13 +290,13 @@ gtk_scale_allocate_value (GtkScale      *scale,
   GtkScalePrivate *priv = scale->priv;
   GtkWidget *widget = GTK_WIDGET (scale);
   GtkRange *range = GTK_RANGE (widget);
-  GtkCssGadget *slider_gadget;
+  GtkWidget *slider_widget;
   GtkAllocation range_alloc, slider_alloc, value_alloc;
 
   gtk_widget_get_margin_allocation (widget, &range_alloc);
 
-  slider_gadget = gtk_range_get_slider_gadget (range);
-  gtk_css_gadget_get_border_allocation (slider_gadget, &slider_alloc, NULL);
+  slider_widget = gtk_range_get_slider_widget (range);
+  gtk_widget_get_border_allocation (slider_widget, &slider_alloc);
 
   gtk_css_gadget_get_preferred_size (priv->value_gadget,
                                      GTK_ORIENTATION_HORIZONTAL, -1,
