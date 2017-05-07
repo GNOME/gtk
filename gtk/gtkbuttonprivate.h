@@ -36,7 +36,6 @@ struct _GtkButtonPrivate
   guint                  activate_timeout;
 
   guint          button_down           : 1;
-  guint          constructed           : 1;
   guint          in_button             : 1;
   guint          use_underline         : 1;
   guint          child_type            : 2;
