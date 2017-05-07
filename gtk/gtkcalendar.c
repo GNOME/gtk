@@ -715,6 +715,9 @@ gtk_calendar_init (GtkCalendar *calendar)
   gtk_widget_set_can_focus (widget, TRUE);
   gtk_widget_set_has_window (widget, FALSE);
 
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (calendar)),
+                               GTK_STYLE_CLASS_VIEW);
+
   if (!default_abbreviated_dayname[0])
     for (i=0; i<7; i++)
       {
@@ -2731,22 +2734,7 @@ gtk_calendar_snapshot (GtkWidget   *widget,
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = calendar->priv;
-  GtkStyleContext *context;
   int i;
-
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-
-  gtk_snapshot_render_background (snapshot, context, 0, 0,
-                                  gtk_widget_get_allocated_width (widget),
-                                  gtk_widget_get_allocated_height (widget));
-  gtk_snapshot_render_frame (snapshot, context, 0, 0,
-                             gtk_widget_get_allocated_width (widget),
-                             gtk_widget_get_allocated_height (widget));
-
-  gtk_style_context_restore (context);
 
   calendar_snapshot_main (calendar, snapshot);
 
