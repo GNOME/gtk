@@ -59,8 +59,7 @@
  * adjustment, e.g #GtkScale or #GtkScrollbar.
  *
  * Apart from signals for monitoring the parameters of the adjustment,
- * #GtkRange provides properties and methods for influencing the sensitivity
- * of the “steppers”. It also provides properties and methods for setting a
+ * #GtkRange provides properties and methods for setting a
  * “fill level” on range widgets. See gtk_range_set_fill_level().
  */
 
@@ -84,17 +83,8 @@ struct _GtkRangePrivate
   GtkRangeStepTimer *timer;
 
   GtkAdjustment     *adjustment;
-  GtkSensitivityType lower_sensitivity;
-  GtkSensitivityType upper_sensitivity;
 
-  /* Steppers are: < > ---- < >
-   *               a b      c d
-   */
   GtkCssGadget *contents_gadget;
-  GtkCssGadget *stepper_a_gadget;
-  GtkCssGadget *stepper_b_gadget;
-  GtkCssGadget *stepper_c_gadget;
-  GtkCssGadget *stepper_d_gadget;
   GtkCssGadget *trough_gadget;
   GtkCssGadget *fill_gadget;
   GtkCssGadget *highlight_gadget;
@@ -115,10 +105,6 @@ struct _GtkRangePrivate
   guint inverted               : 1;
   guint slider_size_fixed      : 1;
   guint trough_click_forward   : 1;  /* trough click was on the forward side of slider */
-
-  /* Stepper sensitivity */
-  guint lower_sensitive        : 1;
-  guint upper_sensitive        : 1;
 
   /* The range has an origin, should be drawn differently. Used by GtkScale */
   guint has_origin             : 1;
@@ -146,8 +132,6 @@ enum {
   PROP_0,
   PROP_ADJUSTMENT,
   PROP_INVERTED,
-  PROP_LOWER_STEPPER_SENSITIVITY,
-  PROP_UPPER_STEPPER_SENSITIVITY,
   PROP_SHOW_FILL_LEVEL,
   PROP_RESTRICT_TO_FILL_LEVEL,
   PROP_FILL_LEVEL,
@@ -235,7 +219,6 @@ static gboolean      gtk_range_scroll                   (GtkRange      *range,
                                                          GtkScrollType  scroll);
 static void          gtk_range_update_mouse_location    (GtkRange      *range);
 static void          gtk_range_calc_slider              (GtkRange      *range);
-static void          gtk_range_calc_stepper_sensitivity (GtkRange      *range);
 static void          gtk_range_calc_marks               (GtkRange      *range);
 static void          gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
                                                          gpointer       data);
@@ -410,22 +393,6 @@ gtk_range_class_init (GtkRangeClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  properties[PROP_LOWER_STEPPER_SENSITIVITY] =
-      g_param_spec_enum ("lower-stepper-sensitivity",
-                         P_("Lower stepper sensitivity"),
-                         P_("The sensitivity policy for the stepper that points to the adjustment’s lower side"),
-                         GTK_TYPE_SENSITIVITY_TYPE,
-                         GTK_SENSITIVITY_AUTO,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  properties[PROP_UPPER_STEPPER_SENSITIVITY] =
-      g_param_spec_enum ("upper-stepper-sensitivity",
-                         P_("Upper stepper sensitivity"),
-                         P_("The sensitivity policy for the stepper that points to the adjustment’s upper side"),
-                         GTK_TYPE_SENSITIVITY_TYPE,
-                         GTK_SENSITIVITY_AUTO,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
   /**
    * GtkRange:show-fill-level:
    *
@@ -532,12 +499,6 @@ gtk_range_set_property (GObject      *object,
     case PROP_INVERTED:
       gtk_range_set_inverted (range, g_value_get_boolean (value));
       break;
-    case PROP_LOWER_STEPPER_SENSITIVITY:
-      gtk_range_set_lower_stepper_sensitivity (range, g_value_get_enum (value));
-      break;
-    case PROP_UPPER_STEPPER_SENSITIVITY:
-      gtk_range_set_upper_stepper_sensitivity (range, g_value_get_enum (value));
-      break;
     case PROP_SHOW_FILL_LEVEL:
       gtk_range_set_show_fill_level (range, g_value_get_boolean (value));
       break;
@@ -576,12 +537,6 @@ gtk_range_get_property (GObject      *object,
     case PROP_INVERTED:
       g_value_set_boolean (value, priv->inverted);
       break;
-    case PROP_LOWER_STEPPER_SENSITIVITY:
-      g_value_set_enum (value, gtk_range_get_lower_stepper_sensitivity (range));
-      break;
-    case PROP_UPPER_STEPPER_SENSITIVITY:
-      g_value_set_enum (value, gtk_range_get_upper_stepper_sensitivity (range));
-      break;
     case PROP_SHOW_FILL_LEVEL:
       g_value_set_boolean (value, gtk_range_get_show_fill_level (range));
       break;
@@ -618,10 +573,6 @@ gtk_range_init (GtkRange *range)
   priv->round_digits = -1;
   priv->mouse_x = G_MININT;
   priv->mouse_y = G_MININT;
-  priv->lower_sensitivity = GTK_SENSITIVITY_AUTO;
-  priv->upper_sensitivity = GTK_SENSITIVITY_AUTO;
-  priv->lower_sensitive = TRUE;
-  priv->upper_sensitive = TRUE;
   priv->has_origin = FALSE;
   priv->show_fill_level = FALSE;
   priv->restrict_to_fill_level = TRUE;
@@ -819,56 +770,6 @@ update_fill_position (GtkRange *range)
     }
 }
 
-static void
-update_stepper_state (GtkRange     *range,
-                      GtkCssGadget *gadget)
-{
-  GtkRangePrivate *priv = range->priv;
-  GtkStateFlags state;
-  gboolean arrow_sensitive;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (range));
-
-  if ((!priv->inverted &&
-       (gadget == priv->stepper_a_gadget || gadget == priv->stepper_c_gadget)) ||
-      (priv->inverted &&
-       (gadget == priv->stepper_b_gadget || gadget == priv->stepper_d_gadget)))
-    arrow_sensitive = priv->lower_sensitive;
-  else
-    arrow_sensitive = priv->upper_sensitive;
-
-  state &= ~(GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT);
-
-  if ((state & GTK_STATE_FLAG_INSENSITIVE) || !arrow_sensitive)
-    {
-      state |= GTK_STATE_FLAG_INSENSITIVE;
-    }
-  else
-    {
-      if (priv->grab_location == gadget)
-        state |= GTK_STATE_FLAG_ACTIVE;
-      if (priv->mouse_location == gadget)
-        state |= GTK_STATE_FLAG_PRELIGHT;
-    }
-
-  gtk_css_gadget_set_state (gadget, state);
-}
-
-static void
-update_steppers_state (GtkRange *range)
-{
-  GtkRangePrivate *priv = range->priv;
-
-  if (priv->stepper_a_gadget)
-    update_stepper_state (range, priv->stepper_a_gadget);
-  if (priv->stepper_b_gadget)
-    update_stepper_state (range, priv->stepper_b_gadget);
-  if (priv->stepper_c_gadget)
-    update_stepper_state (range, priv->stepper_c_gadget);
-  if (priv->stepper_d_gadget)
-    update_stepper_state (range, priv->stepper_d_gadget);
-}
-
 /**
  * gtk_range_set_inverted:
  * @range: a #GtkRange
@@ -895,7 +796,6 @@ gtk_range_set_inverted (GtkRange *range,
     {
       priv->inverted = setting;
 
-      update_steppers_state (range);
       update_fill_position (range);
       update_highlight_position (range);
 
@@ -1044,8 +944,8 @@ measure_one_gadget (GtkCssGadget *gadget,
  * @range: a #GtkRange
  * @range_rect: (out): return location for the range rectangle
  *
- * This function returns the area that contains the range’s trough
- * and its steppers, in widget->window coordinates.
+ * This function returns the area that contains the range’s trough,
+ * in widget->window coordinates.
  *
  * This function is useful mainly for #GtkRange subclasses.
  *
@@ -1108,104 +1008,6 @@ gtk_range_get_slider_range (GtkRange *range,
       if (slider_end)
         *slider_end = slider_alloc.x + slider_alloc.width;
     }
-}
-
-/**
- * gtk_range_set_lower_stepper_sensitivity:
- * @range:       a #GtkRange
- * @sensitivity: the lower stepper’s sensitivity policy.
- *
- * Sets the sensitivity policy for the stepper that points to the
- * 'lower' end of the GtkRange’s adjustment.
- *
- * Since: 2.10
- **/
-void
-gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
-                                         GtkSensitivityType  sensitivity)
-{
-  GtkRangePrivate *priv;
-
-  g_return_if_fail (GTK_IS_RANGE (range));
-
-  priv = range->priv;
-
-  if (priv->lower_sensitivity != sensitivity)
-    {
-      priv->lower_sensitivity = sensitivity;
-
-      gtk_range_calc_stepper_sensitivity (range);
-
-      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_LOWER_STEPPER_SENSITIVITY]);
-    }
-}
-
-/**
- * gtk_range_get_lower_stepper_sensitivity:
- * @range: a #GtkRange
- *
- * Gets the sensitivity policy for the stepper that points to the
- * 'lower' end of the GtkRange’s adjustment.
- *
- * Returns: The lower stepper’s sensitivity policy.
- *
- * Since: 2.10
- **/
-GtkSensitivityType
-gtk_range_get_lower_stepper_sensitivity (GtkRange *range)
-{
-  g_return_val_if_fail (GTK_IS_RANGE (range), GTK_SENSITIVITY_AUTO);
-
-  return range->priv->lower_sensitivity;
-}
-
-/**
- * gtk_range_set_upper_stepper_sensitivity:
- * @range:       a #GtkRange
- * @sensitivity: the upper stepper’s sensitivity policy.
- *
- * Sets the sensitivity policy for the stepper that points to the
- * 'upper' end of the GtkRange’s adjustment.
- *
- * Since: 2.10
- **/
-void
-gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
-                                         GtkSensitivityType  sensitivity)
-{
-  GtkRangePrivate *priv;
-
-  g_return_if_fail (GTK_IS_RANGE (range));
-
-  priv = range->priv;
-
-  if (priv->upper_sensitivity != sensitivity)
-    {
-      priv->upper_sensitivity = sensitivity;
-
-      gtk_range_calc_stepper_sensitivity (range);
-
-      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_UPPER_STEPPER_SENSITIVITY]);
-    }
-}
-
-/**
- * gtk_range_get_upper_stepper_sensitivity:
- * @range: a #GtkRange
- *
- * Gets the sensitivity policy for the stepper that points to the
- * 'upper' end of the GtkRange’s adjustment.
- *
- * Returns: The upper stepper’s sensitivity policy.
- *
- * Since: 2.10
- **/
-GtkSensitivityType
-gtk_range_get_upper_stepper_sensitivity (GtkRange *range)
-{
-  g_return_val_if_fail (GTK_IS_RANGE (range), GTK_SENSITIVITY_AUTO);
-
-  return range->priv->upper_sensitivity;
 }
 
 /**
@@ -1552,10 +1354,6 @@ gtk_range_finalize (GObject *object)
   g_clear_object (&priv->fill_gadget);
   g_clear_object (&priv->highlight_gadget);
   g_clear_object (&priv->slider_gadget);
-  g_clear_object (&priv->stepper_a_gadget);
-  g_clear_object (&priv->stepper_b_gadget);
-  g_clear_object (&priv->stepper_c_gadget);
-  g_clear_object (&priv->stepper_d_gadget);
 
   G_OBJECT_CLASS (gtk_range_parent_class)->finalize (object);
 }
@@ -1661,7 +1459,6 @@ gtk_range_allocate_trough (GtkCssGadget        *gadget,
 
   /* Slider */
   gtk_range_calc_marks (range);
-  gtk_range_calc_stepper_sensitivity (range);
 
   gtk_widget_get_allocation (widget, &widget_alloc);
   gtk_range_compute_slider_position (range,
@@ -1969,7 +1766,6 @@ gtk_range_state_flags_changed (GtkWidget     *widget,
 
   update_trough_state (range);
   update_slider_state (range);
-  update_steppers_state (range);
 
   GTK_WIDGET_CLASS (gtk_range_parent_class)->state_flags_changed (widget, previous_state);
 }
@@ -2036,7 +1832,6 @@ range_grab_add (GtkRange      *range,
 
   update_trough_state (range);
   update_slider_state (range);
-  update_steppers_state (range);
 
   gtk_style_context_add_class (context, "dragging");
 }
@@ -2074,7 +1869,6 @@ range_grab_remove (GtkRange *range)
   gtk_range_update_mouse_location (range);
 
   update_slider_state (range);
-  update_steppers_state (range);
   update_zoom_state (range, FALSE);
 
   gtk_style_context_remove_class (context, "dragging");
@@ -2084,54 +1878,9 @@ static GtkScrollType
 range_get_scroll_for_grab (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
-  guint grab_button;
-  gboolean invert;
-
-  invert = should_invert (range);
-  grab_button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (range->priv->multipress_gesture));
 
   if (!priv->grab_location)
     return GTK_SCROLL_NONE;
-
-  /* Backward stepper */
-  if (priv->grab_location == priv->stepper_a_gadget ||
-      priv->grab_location == priv->stepper_c_gadget)
-    {
-      switch (grab_button)
-        {
-        case GDK_BUTTON_PRIMARY:
-          return invert ? GTK_SCROLL_STEP_FORWARD : GTK_SCROLL_STEP_BACKWARD;
-          break;
-        case GDK_BUTTON_SECONDARY:
-          return invert ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_PAGE_BACKWARD;
-          break;
-        case GDK_BUTTON_MIDDLE:
-          return invert ? GTK_SCROLL_END : GTK_SCROLL_START;
-          break;
-        default:
-          return GTK_SCROLL_NONE;
-        }
-    }
-
-  /* Forward stepper */
-  if (priv->grab_location == priv->stepper_b_gadget ||
-      priv->grab_location == priv->stepper_d_gadget)
-    {
-      switch (grab_button)
-        {
-        case GDK_BUTTON_PRIMARY:
-          return invert ? GTK_SCROLL_STEP_BACKWARD : GTK_SCROLL_STEP_FORWARD;
-          break;
-        case GDK_BUTTON_SECONDARY:
-          return invert ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_PAGE_FORWARD;
-          break;
-        case GDK_BUTTON_MIDDLE:
-          return invert ? GTK_SCROLL_START : GTK_SCROLL_END;
-          break;
-        default:
-          return GTK_SCROLL_NONE;
-        }
-    }
 
   /* In the trough */
   if (priv->grab_location == priv->trough_gadget)
@@ -2329,25 +2078,6 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       range_grab_add (range, priv->slider_gadget);
 
       gtk_widget_queue_draw (widget);
-    }
-  else if (priv->mouse_location == priv->stepper_a_gadget ||
-           priv->mouse_location == priv->stepper_b_gadget ||
-           priv->mouse_location == priv->stepper_c_gadget ||
-           priv->mouse_location == priv->stepper_d_gadget)
-    {
-      GtkScrollType scroll;
-
-      range_grab_add (range, priv->mouse_location);
-
-      scroll = range_get_scroll_for_grab (range);
-      if (scroll == GTK_SCROLL_START || scroll == GTK_SCROLL_END)
-        gtk_range_scroll (range, scroll);
-      else if (scroll != GTK_SCROLL_NONE)
-        {
-          remove_autoscroll (range);
-          range->priv->autoscroll_mode = scroll;
-          add_autoscroll (range);
-        }
     }
   else if (priv->mouse_location == priv->trough_gadget &&
            (source == GDK_SOURCE_TOUCHSCREEN ||
@@ -2806,7 +2536,6 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
   GtkRange *range = GTK_RANGE (data);
 
   gtk_range_calc_slider (range);
-  gtk_range_calc_stepper_sensitivity (range);
 
   /* Note that we don't round off to priv->round_digits here.
    * that's because it's really broken to change a value
@@ -2824,7 +2553,6 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
   GtkRange *range = GTK_RANGE (data);
 
   gtk_range_calc_slider (range);
-  gtk_range_calc_stepper_sensitivity (range);
   
   /* now check whether the layout changed  */
   if (GTK_IS_SCALE (range) && gtk_scale_get_draw_value (GTK_SCALE (range)))
@@ -3078,18 +2806,6 @@ gtk_range_update_mouse_location (GtkRange *range)
 
   if (priv->grab_location != NULL)
     priv->mouse_location = priv->grab_location;
-  else if (priv->stepper_a_gadget &&
-           gtk_css_gadget_border_box_contains_point (priv->stepper_a_gadget, x, y))
-    priv->mouse_location = priv->stepper_a_gadget;
-  else if (priv->stepper_b_gadget &&
-           gtk_css_gadget_border_box_contains_point (priv->stepper_b_gadget, x, y))
-    priv->mouse_location = priv->stepper_b_gadget;
-  else if (priv->stepper_c_gadget &&
-           gtk_css_gadget_border_box_contains_point (priv->stepper_c_gadget, x, y))
-    priv->mouse_location = priv->stepper_c_gadget;
-  else if (priv->stepper_d_gadget &&
-           gtk_css_gadget_border_box_contains_point (priv->stepper_d_gadget, x, y))
-    priv->mouse_location = priv->stepper_d_gadget;
   else if (gtk_css_gadget_border_box_contains_point (priv->slider_gadget, x, y))
     priv->mouse_location = priv->slider_gadget;
   else if (rectangle_contains_point (&slider_trace, x, y))
@@ -3118,7 +2834,6 @@ gtk_range_update_mouse_location (GtkRange *range)
 
       update_trough_state (range);
       update_slider_state (range);
-      update_steppers_state (range);
     }
 }
 
@@ -3262,66 +2977,6 @@ gtk_range_calc_slider (GtkRange *range)
     gtk_css_gadget_queue_allocate (priv->trough_gadget);
 
   gtk_range_update_mouse_location (range);
-}
-
-static void
-gtk_range_calc_stepper_sensitivity (GtkRange *range)
-{
-  GtkRangePrivate *priv = range->priv;
-  gboolean was_upper_sensitive, was_lower_sensitive;
-
-  was_upper_sensitive = priv->upper_sensitive;
-  switch (priv->upper_sensitivity)
-    {
-    case GTK_SENSITIVITY_AUTO:
-      priv->upper_sensitive =
-        (gtk_adjustment_get_value (priv->adjustment) <
-         (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment)));
-      break;
-
-    case GTK_SENSITIVITY_ON:
-      priv->upper_sensitive = TRUE;
-      break;
-
-    case GTK_SENSITIVITY_OFF:
-      priv->upper_sensitive = FALSE;
-      break;
-    }
-
-  was_lower_sensitive = priv->lower_sensitive;
-  switch (priv->lower_sensitivity)
-    {
-    case GTK_SENSITIVITY_AUTO:
-      priv->lower_sensitive =
-        (gtk_adjustment_get_value (priv->adjustment) > gtk_adjustment_get_lower (priv->adjustment));
-      break;
-
-    case GTK_SENSITIVITY_ON:
-      priv->lower_sensitive = TRUE;
-      break;
-
-    case GTK_SENSITIVITY_OFF:
-      priv->lower_sensitive = FALSE;
-      break;
-    }
-
-  /* Too many side effects can influence which stepper reacts to wat condition.
-   * So we just invalidate them all.
-   */
-  if (was_upper_sensitive != priv->upper_sensitive ||
-      was_lower_sensitive != priv->lower_sensitive)
-    {
-      update_steppers_state (range);
-
-      if (priv->stepper_a_gadget)
-        gtk_css_gadget_queue_allocate (priv->stepper_a_gadget);
-      if (priv->stepper_b_gadget)
-        gtk_css_gadget_queue_allocate (priv->stepper_b_gadget);
-      if (priv->stepper_c_gadget)
-        gtk_css_gadget_queue_allocate (priv->stepper_c_gadget);
-      if (priv->stepper_d_gadget)
-        gtk_css_gadget_queue_allocate (priv->stepper_d_gadget);
-    }
 }
 
 static void
@@ -3557,93 +3212,6 @@ gtk_range_get_round_digits (GtkRange *range)
   g_return_val_if_fail (GTK_IS_RANGE (range), -1);
 
   return range->priv->round_digits;
-}
-
-static void
-sync_stepper_gadget (GtkRange                *range,
-                     gboolean                 should_have_stepper,
-                     GtkCssGadget           **gadget_ptr,
-                     const gchar             *class,
-                     GtkCssImageBuiltinType   image_type,
-                     GtkCssGadget            *prev_sibling)
-{
-  GtkWidget *widget;
-  GtkCssGadget *gadget;
-  GtkCssNode *widget_node;
-  gboolean has_stepper;
-  GtkRangePrivate *priv = range->priv;
-
-  has_stepper = (*gadget_ptr != NULL);
-  if (has_stepper == should_have_stepper)
-    return;
-
-  if (!should_have_stepper)
-    {
-      if (*gadget_ptr != NULL)
-        {
-          if (*gadget_ptr == priv->grab_location)
-            stop_scrolling (range);
-          if (*gadget_ptr == priv->mouse_location)
-            priv->mouse_location = NULL;
-          gtk_css_node_set_parent (gtk_css_gadget_get_node (*gadget_ptr), NULL);
-          gtk_box_gadget_remove_gadget (GTK_BOX_GADGET (priv->contents_gadget), *gadget_ptr);
-        }
-      g_clear_object (gadget_ptr);
-      return;
-    }
-
-  widget = GTK_WIDGET (range);
-  widget_node = gtk_widget_get_css_node (widget);
-  gadget = gtk_builtin_icon_new ("button",
-                                 widget,
-                                 NULL, NULL);
-  gtk_builtin_icon_set_image (GTK_BUILTIN_ICON (gadget), image_type);
-  gtk_css_gadget_add_class (gadget, class);
-  gtk_css_gadget_set_state (gadget, gtk_css_node_get_state (widget_node));
-
-  gtk_box_gadget_insert_gadget_after (GTK_BOX_GADGET (priv->contents_gadget), prev_sibling,
-                                      gadget, FALSE, GTK_ALIGN_FILL);
-  *gadget_ptr = gadget;
-}
-
-void
-_gtk_range_set_steppers (GtkRange *range,
-                         gboolean  has_a,
-                         gboolean  has_b,
-                         gboolean  has_c,
-                         gboolean  has_d)
-{
-  GtkRangePrivate *priv = range->priv;
-
-  sync_stepper_gadget (range,
-                       has_a, &priv->stepper_a_gadget,
-                       "up",
-                       priv->orientation == GTK_ORIENTATION_VERTICAL ?
-                       GTK_CSS_IMAGE_BUILTIN_ARROW_UP : GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT,
-                       NULL);
-
-  sync_stepper_gadget (range,
-                       has_b, &priv->stepper_b_gadget,
-                       "down",
-                       priv->orientation == GTK_ORIENTATION_VERTICAL ?
-                       GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN : GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT,
-                       priv->stepper_a_gadget);
-
-  sync_stepper_gadget (range,
-                       has_c, &priv->stepper_c_gadget,
-                       "up",
-                       priv->orientation == GTK_ORIENTATION_VERTICAL ?
-                       GTK_CSS_IMAGE_BUILTIN_ARROW_UP : GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT,
-                       priv->trough_gadget);
-
-  sync_stepper_gadget (range,
-                       has_d, &priv->stepper_d_gadget,
-                       "down",
-                       priv->orientation == GTK_ORIENTATION_VERTICAL ?
-                       GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN : GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT,
-                       priv->stepper_c_gadget ? priv->stepper_c_gadget : priv->trough_gadget);
-
-  gtk_widget_queue_resize (GTK_WIDGET (range));
 }
 
 GtkCssGadget *
