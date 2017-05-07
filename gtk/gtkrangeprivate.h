@@ -42,11 +42,6 @@ void               _gtk_range_set_stop_values              (GtkRange      *range
                                                             gint           n_values);
 gint               _gtk_range_get_stop_positions           (GtkRange      *range,
                                                             gint         **values);
-void               _gtk_range_set_steppers                 (GtkRange      *range,
-                                                            gboolean       has_a,
-                                                            gboolean       has_b,
-                                                            gboolean       has_c,
-                                                            gboolean       has_d);
 
 GtkCssGadget      *gtk_range_get_slider_gadget             (GtkRange *range);
 
