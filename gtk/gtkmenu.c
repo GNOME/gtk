@@ -2888,20 +2888,13 @@ gtk_menu_snapshot (GtkWidget   *widget,
 {
   GtkMenu *menu;
   GtkMenuPrivate *priv;
-  GtkStyleContext *context;
   GtkAllocation allocation;
   int x, y;
 
   menu = GTK_MENU (widget);
   priv = menu->priv;
-  context = gtk_widget_get_style_context (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
-
-  gtk_snapshot_render_background (snapshot, context, 0, 0,
-                                  allocation.width, allocation.height);
-  gtk_snapshot_render_frame (snapshot, context, 0, 0,
-                             allocation.width, allocation.height);
 
   if (priv->upper_arrow_visible)
     gtk_css_gadget_snapshot (priv->top_arrow_gadget, snapshot);
