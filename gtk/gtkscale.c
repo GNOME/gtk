@@ -86,11 +86,10 @@
  * ┊   ┊
  * │   ╰── mark
  * ├── [value]
- * ├── contents
- * │   ╰── trough
- * │       ├── slider
- * │       ├── [highlight]
- * │       ╰── [fill]
+ * ├── trough
+ * │   ├── slider
+ * │   ├── [highlight]
+ * │   ╰── [fill]
  * ╰── marks.bottom
  *     ├── mark
  *     ┊    ├── indicator
@@ -112,7 +111,7 @@
  * there is a subnode with name fill below the trough node that is used for
  * rendering the filled in part of the trough.
  *
- * If marks are present, there is a marks subnode before or after the contents
+ * If marks are present, there is a marks subnode before or after the trough
  * node, below which each mark gets a node with name mark. The marks nodes get
  * either the .top or .bottom style class.
  *
@@ -605,9 +604,6 @@ gtk_scale_size_allocate (GtkWidget     *widget,
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   gtk_range_get_range_rect (GTK_RANGE (scale), &range_rect);
-
-  range_rect.x += allocation->x;
-  range_rect.y += allocation->y;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
