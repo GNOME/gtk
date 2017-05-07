@@ -1233,18 +1233,6 @@ gtk_tool_item_group_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->unrealize (widget);
 }
 
-static gboolean
-gtk_tool_item_group_draw (GtkWidget *widget,
-                          cairo_t   *cr)
-{
-  gtk_render_background (gtk_widget_get_style_context (widget), cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
-
-  return GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->draw (widget, cr);
-}
-
 static void
 gtk_tool_item_group_style_updated (GtkWidget *widget)
 {
@@ -1568,7 +1556,6 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
   wclass->unrealize            = gtk_tool_item_group_unrealize;
   wclass->style_updated        = gtk_tool_item_group_style_updated;
   wclass->screen_changed       = gtk_tool_item_group_screen_changed;
-  wclass->draw                 = gtk_tool_item_group_draw;
   wclass->state_flags_changed  = gtk_tool_item_group_state_flags_changed;
 
   cclass->add                = gtk_tool_item_group_add;
