@@ -48,12 +48,12 @@ typedef struct _GtkScrollbarClass   GtkScrollbarClass;
 
 struct _GtkScrollbar
 {
-  GtkRange range;
+  GtkWidget parent_instance;
 };
 
 struct _GtkScrollbarClass
 {
-  GtkRangeClass parent_class;
+  GtkWidgetClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -68,6 +68,11 @@ GType       gtk_scrollbar_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_scrollbar_new      (GtkOrientation  orientation,
                                     GtkAdjustment  *adjustment);
+GDK_AVAILABLE_IN_3_92
+void           gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
+                                             GtkAdjustment *adjustment);
+GDK_AVAILABLE_IN_3_92
+GtkAdjustment *gtk_scrollbar_get_adjustment (GtkScrollbar  *self);
 
 G_END_DECLS
 

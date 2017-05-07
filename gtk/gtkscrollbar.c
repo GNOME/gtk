@@ -31,7 +31,9 @@
 #include "gtkadjustment.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include "gtkprivate.h"
+#include "gtkbox.h"
 
 
 /**
@@ -81,77 +83,174 @@
  * classes related to overlay scrolling (.overlay-indicator, .dragging, .hovering).
  */
 
+typedef struct {
+  GtkOrientation orientation;
+  GtkWidget *box;
+  GtkWidget *range;
+} GtkScrollbarPrivate;
 
-static void gtk_scrollbar_style_updated (GtkWidget *widget);
+enum {
+  PROP_0,
+  PROP_ADJUSTMENT,
 
-G_DEFINE_TYPE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_RANGE)
+  PROP_ORIENTATION,
+  LAST_PROP = PROP_ORIENTATION
+};
+
+G_DEFINE_TYPE_WITH_CODE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkScrollbar)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
+
+
+static GParamSpec *props[LAST_PROP] = { NULL, };
+
+
+static void
+gtk_scrollbar_measure (GtkWidget      *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
+{
+  GtkScrollbar *self = GTK_SCROLLBAR (widget);
+  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+
+  gtk_widget_measure (priv->box, orientation, for_size,
+                      minimum, natural, minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_scrollbar_size_allocate (GtkWidget     *widget,
+                             GtkAllocation *allocation)
+{
+  GtkScrollbar *self = GTK_SCROLLBAR (widget);
+  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+
+  gtk_widget_size_allocate (priv->box, allocation);
+
+  gtk_widget_set_clip (widget, allocation);
+}
+
+static void
+gtk_scrollbar_get_property (GObject    *object,
+                            guint       property_id,
+                            GValue     *value,
+                            GParamSpec *pspec)
+{
+  GtkScrollbar *self = GTK_SCROLLBAR (object);
+  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+
+  switch (property_id)
+   {
+    case PROP_ADJUSTMENT:
+      g_value_set_object (value, gtk_scrollbar_get_adjustment (self));
+      break;
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, priv->orientation);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_scrollbar_set_property (GObject      *object,
+                            guint         property_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
+{
+  GtkScrollbar *self = GTK_SCROLLBAR (object);
+  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+
+  switch (property_id)
+    {
+    case PROP_ADJUSTMENT:
+      gtk_scrollbar_set_adjustment (self, g_value_get_object (value));
+      break;
+    case PROP_ORIENTATION:
+      {
+        GtkOrientation orientation = g_value_get_enum (value);
+
+        if (orientation != priv->orientation)
+          {
+            gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), orientation);
+            gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->range), orientation);
+            priv->orientation = orientation;
+            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+
+            gtk_widget_queue_resize (GTK_WIDGET (self));
+          }
+      }
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_scrollbar_dispose (GObject *object)
+{
+  GtkScrollbar *self = GTK_SCROLLBAR (object);
+  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+
+  if (priv->box)
+    {
+      gtk_widget_unparent (priv->box);
+      priv->box = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_scrollbar_parent_class)->dispose (object);
+}
 
 static void
 gtk_scrollbar_class_init (GtkScrollbarClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  widget_class->style_updated = gtk_scrollbar_style_updated;
+  object_class->get_property = gtk_scrollbar_get_property;
+  object_class->set_property = gtk_scrollbar_set_property;
+  object_class->dispose = gtk_scrollbar_dispose;
 
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("has-backward-stepper",
-                                                                 P_("Backward stepper"),
-                                                                 P_("Display the standard backward arrow button"),
-                                                                 TRUE,
-                                                                 GTK_PARAM_READABLE));
+  widget_class->measure = gtk_scrollbar_measure;
+  widget_class->size_allocate = gtk_scrollbar_size_allocate;
 
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("has-forward-stepper",
-                                                                 P_("Forward stepper"),
-                                                                 P_("Display the standard forward arrow button"),
-                                                                 TRUE,
-                                                                 GTK_PARAM_READABLE));
+  props[PROP_ADJUSTMENT] =
+      g_param_spec_object ("adjustment",
+                           P_("Adjustment"),
+                           P_("The GtkAdjustment that contains the current value of this scrollbar"),
+                           GTK_TYPE_ADJUSTMENT,
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
 
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("has-secondary-backward-stepper",
-                                                                 P_("Secondary backward stepper"),
-                                                                 P_("Display a second backward arrow button on the opposite end of the scrollbar"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
+  g_object_class_install_properties (object_class, LAST_PROP, props);
 
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("has-secondary-forward-stepper",
-                                                                 P_("Secondary forward stepper"),
-                                                                 P_("Display a second forward arrow button on the opposite end of the scrollbar"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
+  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SCROLL_BAR);
   gtk_widget_class_set_css_name (widget_class, "scrollbar");
 }
 
 static void
-gtk_scrollbar_update_style (GtkScrollbar *scrollbar)
+gtk_scrollbar_init (GtkScrollbar *self)
 {
-  gboolean has_a, has_b, has_c, has_d;
-  GtkRange *range = GTK_RANGE (scrollbar);
-  GtkWidget *widget = GTK_WIDGET (scrollbar);
+  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
 
-  gtk_widget_style_get (widget,
-                        "has-backward-stepper", &has_a,
-                        "has-secondary-forward-stepper", &has_b,
-                        "has-secondary-backward-stepper", &has_c,
-                        "has-forward-stepper", &has_d,
-                        NULL);
-  _gtk_range_set_steppers (range, has_a, has_b, has_c, has_d);
-}
+  gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
 
-static void
-gtk_scrollbar_init (GtkScrollbar *scrollbar)
-{
-  gtk_scrollbar_update_style (scrollbar);
-}
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
-static void
-gtk_scrollbar_style_updated (GtkWidget *widget)
-{
-  gtk_scrollbar_update_style (GTK_SCROLLBAR (widget));
-  GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_updated (widget);
+  priv->box = gtk_box_new (priv->orientation, 0);
+  gtk_widget_set_parent (priv->box, GTK_WIDGET (self));
+  priv->range = g_object_new (GTK_TYPE_RANGE, NULL);
+  gtk_widget_set_hexpand (priv->range, TRUE);
+  gtk_widget_set_vexpand (priv->range, TRUE);
+  gtk_container_add (GTK_CONTAINER (priv->box), priv->range);
+
+  _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
 }
 
 /**
@@ -176,4 +275,44 @@ gtk_scrollbar_new (GtkOrientation  orientation,
                        "orientation", orientation,
                        "adjustment",  adjustment,
                        NULL);
+}
+
+/**
+ * gtk_scrollbar_set_adjustment:
+ * @self: a #GtkScrollbar
+ * @adjustment: (nullable): the adjustment to set
+ *
+ * Makes the scrollbar use the given adjustment.
+ */
+void
+gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
+                              GtkAdjustment *adjustment)
+{
+  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_SCROLLBAR (self));
+  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
+
+
+  gtk_range_set_adjustment (GTK_RANGE (priv->range), adjustment);
+
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_ADJUSTMENT]);
+}
+
+/**
+ * gtk_scrollbar_get_adjustment:
+ * @self: a #GtkScrollbar
+ *
+ * Returns the scrollbar's adjustment.
+ *
+ * Returns: (transfer none): the scrollbar's adjustment
+ */
+GtkAdjustment *
+gtk_scrollbar_get_adjustment (GtkScrollbar  *self)
+{
+  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+
+  g_return_val_if_fail (GTK_IS_SCROLLBAR (self), NULL);
+
+  return gtk_range_get_adjustment (GTK_RANGE (priv->range));
 }
