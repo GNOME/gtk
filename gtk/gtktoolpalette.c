@@ -29,6 +29,7 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtkorientableprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 
 #define DEFAULT_ICON_SIZE       GTK_ICON_SIZE_SMALL_TOOLBAR
@@ -707,18 +708,6 @@ gtk_tool_palette_adjustment_value_changed (GtkAdjustment *adjustment,
   gtk_tool_palette_size_allocate (widget, &allocation);
 }
 
-static gboolean
-gtk_tool_palette_draw (GtkWidget *widget,
-                       cairo_t   *cr)
-{
-  gtk_render_background (gtk_widget_get_style_context (widget), cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
-
-  return GTK_WIDGET_CLASS (gtk_tool_palette_parent_class)->draw (widget, cr);
-}
-
 static void
 gtk_tool_palette_add (GtkContainer *container,
                       GtkWidget    *child)
@@ -854,6 +843,26 @@ gtk_tool_palette_screen_changed (GtkWidget *widget,
   gtk_tool_palette_reconfigured (palette);
 }
 
+static void
+gtk_tool_palette_snapshot (GtkWidget   *widget,
+                           GtkSnapshot *snapshot)
+{
+  GtkAllocation content_allocation;
+
+  gtk_widget_get_content_allocation (widget, &content_allocation);
+
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT(
+                            content_allocation.x,
+                            content_allocation.y,
+                            content_allocation.width,
+                            content_allocation.height),
+                          "ToolPalette Clip");
+
+  GTK_WIDGET_CLASS (gtk_tool_palette_parent_class)->snapshot (widget, snapshot);
+
+  gtk_snapshot_pop (snapshot);
+}
 
 static void
 gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
@@ -869,7 +878,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
 
   wclass->measure             = gtk_tool_palette_measure;
   wclass->size_allocate       = gtk_tool_palette_size_allocate;
-  wclass->draw                = gtk_tool_palette_draw;
+  wclass->snapshot            = gtk_tool_palette_snapshot;
 
   cclass->add                 = gtk_tool_palette_add;
   cclass->remove              = gtk_tool_palette_remove;
