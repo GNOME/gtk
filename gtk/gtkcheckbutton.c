@@ -352,7 +352,7 @@ gtk_check_button_init (GtkCheckButton *check_button)
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (check_button));
   priv->gadget = gtk_box_gadget_new_for_node (widget_node, GTK_WIDGET (check_button));
   gtk_box_gadget_set_orientation (GTK_BOX_GADGET (priv->gadget), GTK_ORIENTATION_HORIZONTAL);
-  gtk_box_gadget_set_draw_focus (GTK_BOX_GADGET (priv->gadget), TRUE);
+  gtk_box_gadget_set_draw_focus (GTK_BOX_GADGET (priv->gadget), FALSE);
   priv->indicator_gadget = gtk_builtin_icon_new ("check",
                                                  GTK_WIDGET (check_button),
                                                  priv->gadget,
