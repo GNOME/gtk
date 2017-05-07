@@ -376,7 +376,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   container_class->add = gtk_search_bar_add;
 
   /**
-   * GtkEntry:search-mode-enabled:
+   * GtkSearchBar:search-mode-enabled:
    *
    * Whether the search mode is on and the search bar shown.
    *
@@ -389,9 +389,9 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                                  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:show-close-button:
+   * GtkSearchBar:show-close-button:
    *
-   * Whether to show the close button in the toolbar.
+   * Whether to show the close button in the search bar.
    */
   widget_props[PROP_SHOW_CLOSE_BUTTON] = g_param_spec_boolean ("show-close-button",
                                                                P_("Show Close Button"),
