@@ -43,7 +43,7 @@ void               _gtk_range_set_stop_values              (GtkRange      *range
 gint               _gtk_range_get_stop_positions           (GtkRange      *range,
                                                             gint         **values);
 
-GtkCssGadget      *gtk_range_get_slider_gadget             (GtkRange *range);
+GtkWidget         *gtk_range_get_slider_widget             (GtkRange *range);
 
 G_END_DECLS
 
