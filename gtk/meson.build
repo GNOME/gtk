@@ -109,7 +109,6 @@ gtk_public_sources = files([
   'gtkcsslookup.c',
   'gtkcssmatcher.c',
   'gtkcssnode.c',
-  'gtkcssnode.c',
   'gtkcssnodedeclaration.c',
   'gtkcssnodestylecache.c',
   'gtkcssnumbervalue.c',
