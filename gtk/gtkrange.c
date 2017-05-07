@@ -274,10 +274,10 @@ static gboolean      gtk_range_render_trough            (GtkCssGadget *gadget,
                                                          int           height,
                                                          gpointer      user_data);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
-                                  G_ADD_PRIVATE (GtkRange)
-                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
-                                                         NULL))
+G_DEFINE_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkRange)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
+                                                NULL))
 
 static guint signals[LAST_SIGNAL];
 static GParamSpec *properties[LAST_PROP];
