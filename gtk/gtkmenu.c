@@ -2864,7 +2864,6 @@ gtk_menu_size_allocate (GtkWidget     *widget,
                                                   priv->toggle_size);
 
               gtk_widget_size_allocate (child, &child_allocation);
-              gtk_widget_queue_draw (child);
             }
         }
 
