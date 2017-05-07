@@ -30,7 +30,6 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtksizerequest.h"
-#include "gtksnapshot.h"
 
 
 /**
@@ -62,8 +61,6 @@ static void     gtk_event_box_map           (GtkWidget        *widget);
 static void     gtk_event_box_unmap         (GtkWidget        *widget);
 static void     gtk_event_box_size_allocate (GtkWidget        *widget,
                                              GtkAllocation    *allocation);
-static void     gtk_event_box_snapshot      (GtkWidget        *widget,
-                                             GtkSnapshot      *snapshot);
 static void     gtk_event_box_set_property  (GObject          *object,
                                              guint             prop_id,
                                              const GValue     *value,
@@ -89,7 +86,6 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
   widget_class->map = gtk_event_box_map;
   widget_class->unmap = gtk_event_box_unmap;
   widget_class->size_allocate = gtk_event_box_size_allocate;
-  widget_class->snapshot = gtk_event_box_snapshot;
 
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBLE_WINDOW,
@@ -502,25 +498,4 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
   child = gtk_bin_get_child (bin);
   if (child)
     gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
-}
-
-static void
-gtk_event_box_snapshot (GtkWidget   *widget,
-                        GtkSnapshot *snapshot)
-{
-  if (gtk_widget_get_has_window (widget))
-    {
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (widget);
-
-      gtk_snapshot_render_background (snapshot, context, 0, 0,
-                                      gtk_widget_get_allocated_width (widget),
-                                      gtk_widget_get_allocated_height (widget));
-      gtk_snapshot_render_frame (snapshot, context, 0, 0,
-                                 gtk_widget_get_allocated_width (widget),
-                                 gtk_widget_get_allocated_height (widget));
-    }
-
-  GTK_WIDGET_CLASS (gtk_event_box_parent_class)->snapshot (widget, snapshot);
 }
