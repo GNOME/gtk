@@ -363,23 +363,6 @@ gtk_search_bar_dispose (GObject *object)
 }
 
 static void
-gtk_search_bar_snapshot (GtkWidget   *widget,
-                         GtkSnapshot *snapshot)
-{
-  gint width, height;
-  GtkStyleContext *context;
-
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_snapshot_render_background (snapshot, context, 0, 0, width, height);
-  gtk_snapshot_render_frame (snapshot, context, 0, 0, width, height);
-
-  GTK_WIDGET_CLASS (gtk_search_bar_parent_class)->snapshot (widget, snapshot);
-}
-
-static void
 gtk_search_bar_class_init (GtkSearchBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -389,7 +372,6 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   object_class->dispose = gtk_search_bar_dispose;
   object_class->set_property = gtk_search_bar_set_property;
   object_class->get_property = gtk_search_bar_get_property;
-  widget_class->snapshot = gtk_search_bar_snapshot;
 
   container_class->add = gtk_search_bar_add;
 
