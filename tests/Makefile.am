@@ -176,6 +176,10 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpopupat			\
 	$(NULL)
 
+if USE_WAYLAND
+noinst_PROGRAMS += testforeign
+endif
+
 if USE_X11
 noinst_PROGRAMS += testerrors
 endif
@@ -364,6 +368,9 @@ testfontchooserdialog_SOURCES = \
 
 testfontoptions_SOURCES = \
 	testfontoptions.c
+
+testforeign_SOURCES = \
+	testforeign.c
 
 testgrid_SOURCES =	\
 	testgrid.c
