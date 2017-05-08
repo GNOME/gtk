@@ -237,6 +237,8 @@ static void calculate_moved_to_rect_result (GdkWindow    *window,
                                             gboolean     *flipped_x,
                                             gboolean     *flipped_y);
 
+static gboolean gdk_wayland_window_is_exported (GdkWindow *window);
+
 GType _gdk_window_impl_wayland_get_type (void);
 
 G_DEFINE_TYPE (GdkWindowImplWayland, _gdk_window_impl_wayland, GDK_TYPE_WINDOW_IMPL)
@@ -955,6 +957,9 @@ gdk_window_impl_wayland_finalize (GObject *object)
   g_return_if_fail (GDK_IS_WINDOW_IMPL_WAYLAND (object));
 
   impl = GDK_WINDOW_IMPL_WAYLAND (object);
+
+  if (gdk_wayland_window_is_exported (window))
+    gdk_wayland_window_unexport_handle (window);
 
   g_free (impl->title);
 
@@ -3988,6 +3993,12 @@ static const struct zxdg_exported_v1_listener xdg_exported_listener = {
  *
  * Since: 3.22
  */
+
+static gboolean
+gdk_wayland_window_is_exported (GdkWindow *window)
+{
+  return !!impl->display_server.xdg_exported;
+}
 
 /**
  * gdk_wayland_window_export_handle:
