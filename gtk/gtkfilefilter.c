@@ -673,19 +673,21 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
       switch (rule->type)
 	{
 	case FILTER_RULE_MIME_TYPE:
-      if (filter_info->mime_type != NULL)
-        {
-          gchar *filter_content_type, *rule_content_type;
-          gboolean match;
+          if (filter_info->mime_type != NULL)
+            {
+              gchar *filter_content_type, *rule_content_type;
+              gboolean match;
 
-          filter_content_type = g_content_type_from_mime_type (filter_info->mime_type);
-          rule_content_type = g_content_type_from_mime_type (rule->u.mime_type);
-          match = g_content_type_is_a (filter_content_type, rule_content_type);
-          g_free (filter_content_type);
-          g_free (rule_content_type);
+              filter_content_type = g_content_type_from_mime_type (filter_info->mime_type);
+              rule_content_type = g_content_type_from_mime_type (rule->u.mime_type);
+              match = filter_content_type != NULL &&
+                      rule_content_type != NULL &&
+                      g_content_type_is_a (filter_content_type, rule_content_type);
+              g_free (filter_content_type);
+              g_free (rule_content_type);
 
-          if (match)
-            return TRUE;
+              if (match)
+                return TRUE;
         }
 	  break;
 	case FILTER_RULE_PATTERN:
