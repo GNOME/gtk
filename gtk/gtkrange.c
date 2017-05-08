@@ -2500,6 +2500,8 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
    */
 
   g_signal_emit (range, signals[VALUE_CHANGED], 0);
+
+  gtk_widget_queue_allocate (range->priv->trough_widget);
 }
 
 static void
