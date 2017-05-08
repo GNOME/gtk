@@ -1729,7 +1729,7 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
    */
   if (GTK_IS_COLOR_SCALE (widget))
     gtk_color_scale_snapshot_trough (GTK_COLOR_SCALE (widget), snapshot,
-                                     alloc.x, alloc.y, alloc.width, alloc.height);
+                                     0, 0, alloc.width, alloc.height);
 
   if (priv->show_fill_level &&
       gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
