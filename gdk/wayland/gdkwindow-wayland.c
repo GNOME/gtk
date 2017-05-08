@@ -100,6 +100,13 @@ typedef enum _PositionMethod
   POSITION_METHOD_MOVE_TO_RECT
 } PositionMethod;
 
+typedef struct _ExportedClosure
+{
+  GdkWaylandWindowExported callback;
+  gpointer user_data;
+  GDestroyNotify destroy_func;
+} ExportedClosure;
+
 struct _GdkWindowImplWayland
 {
   GdkWindowImpl parent_instance;
@@ -200,9 +207,10 @@ struct _GdkWindowImplWayland
   } pending;
 
   struct {
-    GdkWaylandWindowExported callback;
-    gpointer user_data;
-    GDestroyNotify destroy_func;
+    char *handle;
+    int export_count;
+    GList *closures;
+    guint idle_source_id;
   } exported;
 
   struct zxdg_imported_v1 *imported_transient_for;
@@ -240,6 +248,7 @@ static void calculate_moved_to_rect_result (GdkWindow    *window,
                                             gboolean     *flipped_y);
 
 static gboolean gdk_wayland_window_is_exported (GdkWindow *window);
+static void gdk_wayland_window_unexport (GdkWindow *window);
 
 GType _gdk_window_impl_wayland_get_type (void);
 
@@ -4019,6 +4028,26 @@ _gdk_wayland_window_offset_next_wl_buffer (GdkWindow *window,
 }
 
 static void
+invoke_exported_closures (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GList *l;
+
+  for (l = impl->exported.closures; l; l = l->next)
+    {
+      ExportedClosure *closure = l->data;
+
+      closure->callback (window, impl->exported.handle, closure->user_data);
+
+      if (closure->destroy_func)
+        closure->destroy_func (closure->user_data);
+    }
+
+  g_list_free_full (impl->exported.closures, g_free);
+  impl->exported.closures = NULL;
+}
+
+static void
 xdg_exported_handle (void                    *data,
                      struct zxdg_exported_v1 *zxdg_exported_v1,
                      const char              *handle)
@@ -4026,9 +4055,9 @@ xdg_exported_handle (void                    *data,
   GdkWindow *window = data;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  impl->exported.callback (window, handle, impl->exported.user_data);
-  g_clear_pointer (&impl->exported.user_data,
-                   impl->exported.destroy_func);
+  impl->exported.handle = g_strdup (handle);
+
+  invoke_exported_closures (window);
 }
 
 static const struct zxdg_exported_v1_listener xdg_exported_listener = {
@@ -4057,6 +4086,19 @@ gdk_wayland_window_is_exported (GdkWindow *window)
   return !!impl->display_server.xdg_exported;
 }
 
+static gboolean
+exported_idle (gpointer user_data)
+{
+  GdkWindow *window = user_data;
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  invoke_exported_closures (window);
+
+  impl->exported.idle_source_id = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 /**
  * gdk_wayland_window_export_handle:
  * @window: the #GdkWindow to obtain a handle for
@@ -4068,11 +4110,16 @@ gdk_wayland_window_is_exported (GdkWindow *window)
  * to other processes. When the handle has been obtained, @callback
  * will be called.
  *
- * It is an error to call this function on a window that is already
- * exported.
+ * Up until 3.22.12 it was an error to call this function on a window that is
+ * already exported. When the handle is no longer needed,
+ * gdk_wayland_window_unexport_handle() should be called to clean up resources.
  *
- * When the handle is no longer needed, gdk_wayland_window_unexport_handle()
- * should be called to clean up resources.
+ * Starting with 3.22.13, calling this function on an already exported window
+ * will cause the callback to be invoked with the same handle as was already
+ * invoked, from an idle callback. To unexport the window,
+ * gdk_wayland_window_unexport_handle() must be called the same number of times
+ * as gdk_wayland_window_export_handle() was called. Any 'exported' callback
+ * may still be invoked until the window is unexported or destroyed.
  *
  * The main purpose for obtaining a handle is to mark a surface
  * from another window as transient for this one, see
@@ -4095,7 +4142,7 @@ gdk_wayland_window_export_handle (GdkWindow                *window,
   GdkWindowImplWayland *impl;
   GdkWaylandDisplay *display_wayland;
   GdkDisplay *display = gdk_window_get_display (window);
-  struct zxdg_exported_v1 *xdg_exported;
+  ExportedClosure *closure;
 
   g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
@@ -4103,24 +4150,65 @@ gdk_wayland_window_export_handle (GdkWindow                *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  g_return_val_if_fail (!impl->display_server.xdg_exported, FALSE);
-
   if (!display_wayland->xdg_exporter)
     {
       g_warning ("Server is missing xdg_foreign support");
       return FALSE;
     }
 
-  xdg_exported = zxdg_exporter_v1_export (display_wayland->xdg_exporter,
-                                          impl->display_server.wl_surface);
-  zxdg_exported_v1_add_listener (xdg_exported,  &xdg_exported_listener, window);
+  if (!impl->display_server.xdg_exported)
+    {
+      struct zxdg_exported_v1 *xdg_exported;
 
-  impl->display_server.xdg_exported = xdg_exported;
-  impl->exported.callback = callback;
-  impl->exported.user_data = user_data;
-  impl->exported.destroy_func = destroy_func;
+      xdg_exported = zxdg_exporter_v1_export (display_wayland->xdg_exporter,
+                                              impl->display_server.wl_surface);
+      zxdg_exported_v1_add_listener (xdg_exported,
+                                     &xdg_exported_listener,
+                                     window);
+
+      impl->display_server.xdg_exported = xdg_exported;
+    }
+
+  closure = g_new0 (ExportedClosure, 1);
+  closure->callback = callback;
+  closure->user_data = user_data;
+  closure->destroy_func = destroy_func;
+
+  impl->exported.closures = g_list_append (impl->exported.closures, closure);
+  impl->exported.export_count++;
+
+  if (impl->exported.handle && !impl->exported.idle_source_id)
+    impl->exported.idle_source_id = g_idle_add (exported_idle, window);
 
   return TRUE;
+}
+
+static void
+gdk_wayland_window_unexport (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GList *l;
+
+  g_clear_pointer (&impl->display_server.xdg_exported,
+                   zxdg_exported_v1_destroy);
+
+  for (l = impl->exported.closures; l; l = l->next)
+    {
+      ExportedClosure *closure = l->data;
+
+      if (closure->destroy_func)
+        closure->destroy_func (closure->user_data);
+    }
+
+  g_list_free_full (impl->exported.closures, g_free);
+  impl->exported.closures = NULL;
+  g_clear_pointer (&impl->exported.handle, g_free);
+
+  if (impl->exported.idle_source_id)
+    {
+      g_source_remove (impl->exported.idle_source_id);
+      impl->exported.idle_source_id = 0;
+    }
 }
 
 /**
@@ -4149,10 +4237,9 @@ gdk_wayland_window_unexport_handle (GdkWindow *window)
 
   g_return_if_fail (impl->display_server.xdg_exported);
 
-  g_clear_pointer (&impl->display_server.xdg_exported,
-                   zxdg_exported_v1_destroy);
-  g_clear_pointer (&impl->exported.user_data,
-                   impl->exported.destroy_func);
+  impl->exported.export_count--;
+  if (impl->exported.export_count == 0)
+    gdk_wayland_window_unexport (window);
 }
 
 static void
