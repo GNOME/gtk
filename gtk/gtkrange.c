@@ -2725,28 +2725,26 @@ gtk_range_update_mouse_location (GtkRange *range)
   GtkWidget *old_location;
   GtkWidget *widget = GTK_WIDGET (range);
   GdkRectangle trough_alloc, slider_alloc, slider_trace;
+  GtkAllocation range_alloc;
 
   old_location = priv->mouse_location;
 
   x = priv->mouse_x;
   y = priv->mouse_y;
 
+  gtk_widget_get_allocation (widget, &range_alloc);
   gtk_widget_get_border_allocation (priv->trough_widget, &trough_alloc);
   gtk_widget_get_border_allocation (priv->slider_widget, &slider_alloc);
   gdk_rectangle_union (&slider_alloc, &trough_alloc, &slider_trace);
 
   if (priv->grab_location != NULL)
     priv->mouse_location = priv->grab_location;
-#if 0
-  else if (gtk_css_gadget_border_box_contains_point (priv->slider_gadget, x, y))
+  else if (rectangle_contains_point (&slider_alloc, range_alloc.x + x, range_alloc.y + y))
     priv->mouse_location = priv->slider_widget;
-#endif
   else if (rectangle_contains_point (&slider_trace, x, y))
     priv->mouse_location = priv->trough_widget;
-#if 0
-  else if (gtk_css_gadget_margin_box_contains_point (priv->gadget, x, y))
-    priv->mouse_location = priv->gadget;
-#endif
+  else if (rectangle_contains_point (&range_alloc, range_alloc.x + x, range_alloc.y + y))
+    priv->mouse_location = widget;
   else
     priv->mouse_location = NULL;
 
