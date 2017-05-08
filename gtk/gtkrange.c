@@ -166,8 +166,6 @@ static void gtk_range_measure        (GtkWidget      *widget,
 static void gtk_range_size_allocate  (GtkWidget        *widget,
                                       GtkAllocation    *allocation);
 static void gtk_range_unmap          (GtkWidget        *widget);
-static void gtk_range_snapshot       (GtkWidget        *widget,
-                                      GtkSnapshot      *snapshot);
 
 static void gtk_range_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
                                                    guint                 n_press,
@@ -284,7 +282,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->snapshot = gtk_range_snapshot;
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->unmap = gtk_range_unmap;
-  widget_class->snapshot = gtk_range_snapshot;
   widget_class->event = gtk_range_event;
   widget_class->scroll_event = gtk_range_scroll_event;
   widget_class->key_press_event = gtk_range_key_press;
@@ -1742,31 +1739,9 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
   if (priv->has_origin)
     gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->highlight_widget, snapshot);
 
+  gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->slider_widget, snapshot);
+
   return gtk_widget_has_visible_focus (widget);
-}
-
-static void
-gtk_range_snapshot (GtkWidget   *widget,
-                    GtkSnapshot *snapshot)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-  GtkAllocation range_allocation;
-  GtkAllocation trough_allocation;
-  int x, y;
-
-  gtk_widget_snapshot_child (widget, priv->trough_widget, snapshot);
-
-  /* Draw the slider last, so that e.g. the focus ring stays below it */
-  gtk_widget_get_allocation (widget, &range_allocation);
-  gtk_widget_get_content_allocation (priv->trough_widget, &trough_allocation);
-
-  x = trough_allocation.x - range_allocation.x;
-  y = trough_allocation.y - range_allocation.y;
-
-  gtk_snapshot_offset (snapshot, x, y);
-  gtk_widget_snapshot_child (priv->trough_widget, priv->slider_widget, snapshot);
-  gtk_snapshot_offset (snapshot, -x, -y);
 }
 
 static void
