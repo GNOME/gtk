@@ -1943,7 +1943,7 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
-  gboolean found;
+  gboolean found = FALSE;
   GtkTreeIter iter;
   GtkTreeIter new_iter;
 
@@ -1953,7 +1953,7 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
   if (event->direction == GDK_SCROLL_UP)
     found = tree_prev (combo_box, priv->model,
                        &iter, &new_iter);
-  else
+  else if (event->direction == GDK_SCROLL_DOWN)
     found = tree_next (combo_box, priv->model,
                        &iter, &new_iter);
 
