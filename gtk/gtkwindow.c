@@ -5806,7 +5806,8 @@ update_csd_visibility (GtkWindow *window)
   if (priv->title_box == NULL)
     return FALSE;
 
-  visible = !priv->fullscreen;
+  visible = !priv->fullscreen &&
+            priv->decorated;
 
   gtk_widget_set_child_visible (priv->title_box, visible);
 
