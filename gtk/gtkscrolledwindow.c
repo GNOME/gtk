@@ -1083,13 +1083,20 @@ event_close_to_indicator (GtkScrolledWindow *sw,
 {
   GtkScrolledWindowPrivate *priv;
   GtkAllocation indicator_alloc;
+  GtkAllocation sw_alloc;
   gdouble x, y;
   gint distance;
 
   priv = sw->priv;
 
+  gtk_widget_get_allocation (GTK_WIDGET (sw), &sw_alloc);
   gtk_widget_get_allocation (indicator->scrollbar, &indicator_alloc);
   gdk_event_get_coords (event, &x, &y);
+
+  /* Make indicator alloc relative to scrolledwindow alloc, which is also
+   * what the event coords are relative to */
+  indicator_alloc.x -= sw_alloc.x;
+  indicator_alloc.y -= sw_alloc.y;
 
   if (indicator->over)
     distance = INDICATOR_FAR_DISTANCE;
