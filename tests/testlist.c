@@ -18,15 +18,15 @@ struct _RowClass
 };
 
 const char *css =
-  "GtkListBoxRow {"
+  "list row {"
   " border-width: 1px;"
   " border-style: solid;"
   " border-color: blue;"
   "}"
-  "GtkListBoxRow:prelight {"
+  "list row:hover {"
   "background-color: green;"
   "}"
-  "GtkListBoxRow:active {"
+  "list row:active {"
   "background-color: red;"
   "}";
 
