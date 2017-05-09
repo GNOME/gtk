@@ -67,6 +67,7 @@
 #include "gtktooltip.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtklinkbuttonaccessible.h"
 
@@ -324,8 +325,7 @@ set_hand_cursor (GtkWidget *widget,
   if (show_hand)
     cursor = gdk_cursor_new_from_name (display, "pointer");
 
-  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
-  gdk_display_flush (display);
+  gtk_widget_set_cursor (widget, cursor);
 
   if (cursor)
     g_object_unref (cursor);
