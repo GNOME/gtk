@@ -115,7 +115,6 @@ typedef struct
   GtkListBoxRow *drag_highlighted_row;
 
   int n_visible_rows;
-  gboolean in_widget;
 
   GListModel *bound_model;
   GtkListBoxCreateWidgetFunc create_widget_func;
@@ -1828,11 +1827,6 @@ gtk_list_box_enter_notify_event (GtkWidget        *widget,
   GtkListBox *box = GTK_LIST_BOX (widget);
   GtkListBoxRow *row;
 
-  if (event->window != BOX_PRIV (box)->view_window)
-    return FALSE;
-
-  BOX_PRIV (box)->in_widget = TRUE;
-
   row = gtk_list_box_get_row_at_y (box, event->y);
   gtk_list_box_update_prelight (box, row);
   gtk_list_box_update_active (box, row);
@@ -1845,21 +1839,9 @@ gtk_list_box_leave_notify_event (GtkWidget        *widget,
                                  GdkEventCrossing *event)
 {
   GtkListBox *box = GTK_LIST_BOX (widget);
-  GtkListBoxRow *row = NULL;
 
-  if (event->window != BOX_PRIV (box)->view_window)
-    return FALSE;
-
-  if (event->detail != GDK_NOTIFY_INFERIOR)
-    {
-      BOX_PRIV (box)->in_widget = FALSE;
-      row = NULL;
-    }
-  else
-    row = gtk_list_box_get_row_at_y (box, event->y);
-
-  gtk_list_box_update_prelight (box, row);
-  gtk_list_box_update_active (box, row);
+  gtk_list_box_update_prelight (box, NULL);
+  gtk_list_box_update_active (box, NULL);
 
   return FALSE;
 }
@@ -1870,25 +1852,9 @@ gtk_list_box_motion_notify_event (GtkWidget      *widget,
 {
   GtkListBox *box = GTK_LIST_BOX (widget);
   GtkListBoxRow *row;
-  GdkWindow *window, *event_window;
-  gint relative_y;
-  gdouble parent_y;
 
-  if (!BOX_PRIV (box)->in_widget)
-    return FALSE;
+  row = gtk_list_box_get_row_at_y (box, event->y);
 
-  window = BOX_PRIV (box)->view_window;
-  event_window = event->window;
-  relative_y = event->y;
-
-  while ((event_window != NULL) && (event_window != window))
-    {
-      gdk_window_coords_to_parent (event_window, 0, relative_y, NULL, &parent_y);
-      relative_y = parent_y;
-      event_window = gdk_window_get_parent (event_window);
-    }
-
-  row = gtk_list_box_get_row_at_y (box, relative_y);
   gtk_list_box_update_prelight (box, row);
   gtk_list_box_update_active (box, row);
 
