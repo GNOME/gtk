@@ -1898,7 +1898,7 @@ menubar,
 menu,
 .menu,
 .context-menu {
-  margin: 4px;
+  margin: 4px; // See https://bugzilla.gnome.org/show_bug.cgi?id=591258
   padding: 2px 0px;
   background-color: $menu_color;
   border: 1px solid $borders_color; // adds borders in a non composited env
