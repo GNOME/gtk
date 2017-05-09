@@ -9,6 +9,7 @@ AM_CPPFLAGS =				\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
 	-DG_LOG_USE_STRUCTURED=1	\
 	-DGDK_COMPILATION		\
+	-DGDK_DISABLE_DEPRECATION_WARNINGS \
 	-I$(top_srcdir)			\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\
