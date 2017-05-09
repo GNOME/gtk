@@ -428,7 +428,7 @@ gtk_scrolled_window_leave_notify (GtkWidget        *widget,
 {
   GtkScrolledWindowPrivate *priv = GTK_SCROLLED_WINDOW (widget)->priv;
 
-  if (priv->use_indicators && event->detail != GDK_NOTIFY_INFERIOR)
+  if (priv->use_indicators)
     {
       indicator_set_over (&priv->hindicator, FALSE);
       indicator_set_over (&priv->vindicator, FALSE);
