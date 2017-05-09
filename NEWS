@@ -1,3 +1,44 @@
+Overview of Changes in GTK+ 3.22.13
+===================================
+
+* Bug fixes:
+ 358970 gtk_scale_set_digits does not cause value to be rounded if draw-value is false...
+ 771269 Open in new tab / window doesn't work on unmounted file systems
+ 773814 attempt to allocate widget with width -700975964 and height 400
+ 778301 GtkTooltip doesn't clear source ID in all circumstances
+ 778617 GtkListBox: placeholder is not removed properly
+ 779570 popover: Add more padding between checkbox and label
+ 780301 wayland: Fix harmless clang warnings
+ 781118 gtk 3.22.12 quartz backend segfault
+ 781162 Make GtkPlacesView monitor network
+ 781195 Fix testsuite for GtkPlacesView
+ 781214 define entry-tag in Adwaita.
+ 781422 translate_wm_button_layout_to_gtk() is licensed under the GPL
+ 781605 GtkVolumeButton limited to 10 values
+ 781622 gtkplacesview.ui: Update helper label to include IPv6 addresses
+ 781737 Drag icon is always postioned in the top left corner
+ 781767 Wayland: increase key delivery verbosity
+ 781814 Applications don't receive clipboard when data source mimetype is "text/plain;...
+ 781992 GtkMenuButton with no popover retains prelight state when no longer selected
+ 782109 wayland: memory leak when exporting handle
+ 782180 commit "Improve GContentType" usage breaks apps on win32 (example: virt-viewer)
+ 782202 linkbutton: Fix memory leak
+
+* Translation updates:
+ Brazilian Portuguese
+ Croatian
+ German
+ Hungarian
+ Indonesian
+ Italian
+ Latvian
+ Polish
+ Russian
+ Serbian
+ Slovak
+ Swedish
+
+
 Overview of Changes in GTK+ 3.22.12
 ===================================
 
