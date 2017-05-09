@@ -757,7 +757,7 @@ menubar > menuitem:hover, .menubar > menuitem:hover { box-shadow: inset 0 -3px #
 
 menubar > menuitem:disabled, .menubar > menuitem:disabled { color: #919494; box-shadow: none; }
 
-menu, .menu, .context-menu { margin: 4px; padding: 2px 0px; background-color: #262b2d; border: 1px solid #1b1f20; }
+menu, .menu, .context-menu { padding: 2px 0px; background-color: #262b2d; border: 1px solid #1b1f20; }
 
 .csd menu, .csd .menu, .csd .context-menu { border: none; }
 
