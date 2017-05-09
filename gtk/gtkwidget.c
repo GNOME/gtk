@@ -688,7 +688,7 @@ static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
 static void             gtk_widget_update_alpha                 (GtkWidget        *widget);
 
 static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
-								 GdkEvent	  *event);
+                                                                 const GdkEvent   *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
 static void             gtk_widget_real_measure                 (GtkWidget        *widget,
@@ -764,7 +764,7 @@ static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
 static void gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
                                               GtkWidget     *widget);
 
-static gboolean event_window_is_still_viewable (GdkEvent *event);
+static gboolean event_window_is_still_viewable (const GdkEvent *event);
 
 static void gtk_widget_update_input_shape (GtkWidget *widget);
 
@@ -6656,8 +6656,8 @@ gtk_widget_real_grab_broken_event (GtkWidget          *widget,
  *               the event was handled)
  **/
 gboolean
-gtk_widget_event (GtkWidget *widget,
-		  GdkEvent  *event)
+gtk_widget_event (GtkWidget       *widget,
+		  const GdkEvent  *event)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
@@ -6748,12 +6748,16 @@ cancel_event_sequence_on_hierarchy (GtkWidget        *widget,
     }
 }
 
+static void
+translate_coordinates (GdkEvent  *event,
+                       GtkWidget *widget);
 gboolean
-_gtk_widget_captured_event (GtkWidget *widget,
-                            GdkEvent  *event)
+_gtk_widget_captured_event (GtkWidget      *widget,
+                            const GdkEvent *event)
 {
   gboolean return_val = FALSE;
   GtkCapturedEventHandler handler;
+  GdkEvent *event_copy;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
@@ -6769,29 +6773,35 @@ _gtk_widget_captured_event (GtkWidget *widget,
   if (!event_window_is_still_viewable (event))
     return TRUE;
 
-  return_val = _gtk_widget_run_controllers (widget, event, GTK_PHASE_CAPTURE);
+  event_copy = gdk_event_copy (event);
+  translate_coordinates (event_copy, widget);
+
+  return_val = _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
 
   handler = g_object_get_data (G_OBJECT (widget), "captured-event-handler");
   if (!handler)
-    return return_val;
+    goto out;
 
   g_object_ref (widget);
 
-  return_val |= handler (widget, event);
-  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
+  return_val |= handler (widget, event_copy);
+  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event_copy);
 
   /* The widget that was originally to receive the event
    * handles motion hints, but the capturing widget might
    * not, so ensure we get further motion events.
    */
   if (return_val &&
-      event->type == GDK_MOTION_NOTIFY &&
-      event->motion.is_hint &&
-      (gdk_window_get_events (event->any.window) &
+      event_copy->type == GDK_MOTION_NOTIFY &&
+      event_copy->motion.is_hint &&
+      (gdk_window_get_events (event_copy->any.window) &
        GDK_POINTER_MOTION_HINT_MASK) != 0)
-    gdk_event_request_motions (&event->motion);
+    gdk_event_request_motions (&event_copy->motion);
 
   g_object_unref (widget);
+
+out:
+  gdk_event_free (event_copy);
 
   return return_val;
 }
@@ -6871,7 +6881,7 @@ gtk_cairo_transform_to_window (cairo_t   *cr,
 }
 
 static gboolean
-event_window_is_still_viewable (GdkEvent *event)
+event_window_is_still_viewable (const GdkEvent *event)
 {
   /* Check that we think the event's window is viewable before
    * delivering the event, to prevent surprises. We do this here
@@ -6927,14 +6937,17 @@ translate_coordinates (GdkEvent  *event,
   y = yd;
   gtk_widget_translate_coordinates (event_widget, widget,
                                     x, y, &x, &y);
+
+  /*g_message ("New coords for %p: %d/%d (widget %s)", event, x, y, G_OBJECT_TYPE_NAME (widget));*/
   gdk_event_set_coords (event, x, y);
 }
 
 static gint
-gtk_widget_event_internal (GtkWidget *widget,
-			   GdkEvent  *event)
+gtk_widget_event_internal (GtkWidget      *widget,
+                           const GdkEvent *event)
 {
   gboolean return_val = FALSE, handled;
+  GdkEvent *event_copy;
 
   /* We check only once for is-still-visible; if someone
    * hides the window in on of the signals on the widget,
@@ -6945,22 +6958,23 @@ gtk_widget_event_internal (GtkWidget *widget,
     return TRUE;
 
   g_object_ref (widget);
+  event_copy = gdk_event_copy (event);
   translate_coordinates (event_copy, widget);
 
-  if (widget == gtk_get_event_widget (event))
-    return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_TARGET);
+  if (widget == gtk_get_event_widget (event_copy))
+    return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
 
-  g_signal_emit (widget, widget_signals[EVENT], 0, event, &handled);
-  return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event);
+  g_signal_emit (widget, widget_signals[EVENT], 0, event_copy, &handled);
+  return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event_copy);
   if (!return_val)
     {
       gint signal_num;
 
-      switch (event->type)
+      switch (event_copy->type)
 	{
         case GDK_TOUCHPAD_SWIPE:
         case GDK_TOUCHPAD_PINCH:
-          return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
+          return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
           /* Fall through */
         case GDK_PAD_BUTTON_PRESS:
         case GDK_PAD_BUTTON_RELEASE:
@@ -7012,8 +7026,8 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  signal_num = LEAVE_NOTIFY_EVENT;
 	  break;
 	case GDK_FOCUS_CHANGE:
-	  signal_num = event->focus_change.in ? FOCUS_IN_EVENT : FOCUS_OUT_EVENT;
-	  if (event->focus_change.in)
+	  signal_num = event_copy->focus_change.in ? FOCUS_IN_EVENT : FOCUS_OUT_EVENT;
+	  if (event_copy->focus_change.in)
 	    _gtk_tooltip_focus_in (widget);
 	  else
 	    _gtk_tooltip_focus_out (widget);
@@ -7052,22 +7066,23 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  signal_num = GRAB_BROKEN_EVENT;
 	  break;
 	default:
-	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->type);
+	  g_warning ("gtk_widget_event(): unhandled event type: %d", event_copy->type);
 	  signal_num = -1;
 	  break;
 	}
       if (signal_num != -1)
         {
-	  g_signal_emit (widget, widget_signals[signal_num], 0, event, &handled);
+	  g_signal_emit (widget, widget_signals[signal_num], 0, event_copy, &handled);
           return_val |= handled;
         }
     }
-  if (WIDGET_REALIZED_FOR_EVENT (widget, event))
-    g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event);
+  if (WIDGET_REALIZED_FOR_EVENT (widget, event_copy))
+    g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event_copy);
   else
     return_val = TRUE;
 
   g_object_unref (widget);
+  gdk_event_free (event_copy);
 
   return return_val;
 }

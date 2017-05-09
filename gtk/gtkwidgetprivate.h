@@ -248,8 +248,8 @@ typedef gboolean (*GtkCapturedEventHandler) (GtkWidget *widget, GdkEvent *event)
 void              _gtk_widget_set_captured_event_handler (GtkWidget               *widget,
                                                           GtkCapturedEventHandler  handler);
 
-gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
-                                                            GdkEvent  *event);
+gboolean          _gtk_widget_captured_event               (GtkWidget      *widget,
+                                                            const GdkEvent *event);
 
 GtkWidgetPath *   _gtk_widget_create_path                  (GtkWidget    *widget);
 void              gtk_widget_clear_path                    (GtkWidget    *widget);
