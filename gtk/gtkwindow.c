@@ -12664,8 +12664,6 @@ wayland_window_handle_exported (GdkWindow  *window,
   handle_str = g_strdup_printf ("wayland:%s", wayland_handle_str);
   data->callback (data->window, handle_str, data->user_data);
   g_free (handle_str);
-
-  g_free (data);
 }
 #endif
 
