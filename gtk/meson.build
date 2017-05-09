@@ -240,6 +240,7 @@ gtk_public_sources = files([
   'gtkplacessidebar.c',
   'gtkplacesview.c',
   'gtkplacesviewrow.c',
+  'gtkpointerfocus.c',
   'gtkpopover.c',
   'gtkpopovermenu.c',
   'gtkprintcontext.c',
