@@ -81,6 +81,7 @@
 #include "gtkmodelbutton.h"
 #include "gtkgesturelongpress.h"
 #include "gtkdebug.h"
+#include "gtkfilechoosererrorstackprivate.h"
 
 #include <cairo-gobject.h>
 
@@ -248,11 +249,11 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_path_bar;
   GtkWidget *new_folder_name_entry;
   GtkWidget *new_folder_create_button;
-  GtkWidget *new_folder_error_label;
+  GtkWidget *new_folder_error_stack;
   GtkWidget *new_folder_popover;
   GtkWidget *rename_file_name_entry;
   GtkWidget *rename_file_rename_button;
-  GtkWidget *rename_file_error_label;
+  GtkWidget *rename_file_error_stack;
   GtkWidget *rename_file_popover;
   GFile *rename_file_source_file;
 
@@ -985,7 +986,9 @@ new_folder_popover_active (GtkWidget            *button,
 
   gtk_entry_set_text (GTK_ENTRY (priv->new_folder_name_entry), "");
   gtk_widget_set_sensitive (priv->new_folder_create_button, FALSE);
-  gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), "");
+  gtk_file_chooser_error_stack_set_error (GTK_FILE_CHOOSER_ERROR_STACK (priv->new_folder_error_stack),
+                                          FALSE,
+                                          "no-error");
 }
 
 struct FileExistsData
@@ -994,7 +997,7 @@ struct FileExistsData
   gboolean file_exists_and_is_not_folder;
   GFile *parent_file;
   GFile *file;
-  GtkWidget *error_label;
+  GtkWidget *error_stack;
   GtkWidget *button;
 };
 
@@ -1018,15 +1021,10 @@ name_exists_get_info_cb (GCancellable *cancellable,
 
   if (info != NULL)
     {
-      const gchar *msg;
-
-      if (_gtk_file_info_consider_as_directory (info))
-        msg = _("A folder with that name already exists");
-      else
-        msg = _("A file with that name already exists");
-
       gtk_widget_set_sensitive (data->button, FALSE);
-      gtk_label_set_text (GTK_LABEL (data->error_label), msg);
+      gtk_file_chooser_error_stack_set_error (GTK_FILE_CHOOSER_ERROR_STACK (data->error_stack),
+                                              _gtk_file_info_consider_as_directory (info),
+                                              "name-already-exists");
     }
   else
     {
@@ -1047,38 +1045,31 @@ check_valid_child_name (GtkFileChooserWidget *impl,
                         const gchar          *name,
                         gboolean              is_folder,
                         GFile                *original,
-                        GtkWidget            *error_label,
+                        GtkWidget            *error_stack,
                         GtkWidget            *button)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkFileChooserErrorStack *stack = GTK_FILE_CHOOSER_ERROR_STACK (error_stack);
 
   gtk_widget_set_sensitive (button, FALSE);
 
   if (name[0] == '\0')
-    gtk_label_set_text (GTK_LABEL (error_label), "");
+    gtk_file_chooser_error_stack_set_error (stack, FALSE, "no-error");
   else if (strcmp (name, ".") == 0)
-    gtk_label_set_text (GTK_LABEL (error_label),
-                        is_folder ? _("A folder cannot be called “.”")
-                                  : _("A file cannot be called “.”"));
+    gtk_file_chooser_error_stack_set_error (stack, is_folder, "cannot-be-called-dot");
   else if (strcmp (name, "..") == 0)
-    gtk_label_set_text (GTK_LABEL (error_label),
-                        is_folder ? _("A folder cannot be called “..”")
-                                  : _("A file cannot be called “..”"));
+    gtk_file_chooser_error_stack_set_error (stack, is_folder, "cannot-be-called-dot-dot");
   else if (strchr (name, '/') != NULL)
-    gtk_label_set_text (GTK_LABEL (error_label),
-                        is_folder ? _("Folder names cannot contain “/”")
-                                  : _("File names cannot contain “/”"));
+    gtk_file_chooser_error_stack_set_error (stack, is_folder, "name-cannot-contain-slash");
   else
     {
       GFile *file;
       GError *error = NULL;
 
-      gtk_label_set_text (GTK_LABEL (error_label), "");
-
       file = g_file_get_child_for_display_name (parent, name, &error);
       if (file == NULL)
         {
-          gtk_label_set_text (GTK_LABEL (error_label), error->message);
+          gtk_file_chooser_error_stack_set_custom_error (stack, error->message);
           g_error_free (error);
         }
       else if (original && g_file_equal (original, file))
@@ -1092,23 +1083,18 @@ check_valid_child_name (GtkFileChooserWidget *impl,
 
           /* Warn the user about questionable names that are technically valid */
           if (g_ascii_isspace (name[0]))
-            gtk_label_set_text (GTK_LABEL (error_label),
-                                is_folder ? _("Folder names should not begin with a space")
-                                          : _("File names should not begin with a space"));
-
+            gtk_file_chooser_error_stack_set_error (stack, is_folder, "name-should-not-begin-with-space");
           else if (g_ascii_isspace (name[strlen (name) - 1]))
-            gtk_label_set_text (GTK_LABEL (error_label),
-                                is_folder ? _("Folder names should not end with a space")
-                                          : _("File names should not end with a space"));
+            gtk_file_chooser_error_stack_set_error (stack, is_folder, "name-should-not-end-with-space");
           else if (name[0] == '.')
-            gtk_label_set_text (GTK_LABEL (error_label),
-                                is_folder ? _("Folder names starting with a “.” are hidden")
-                                          : _("File names starting with a “.” are hidden"));
+            gtk_file_chooser_error_stack_set_error (stack, is_folder, "name-with-dot-is-hidden");
+          else
+            gtk_file_chooser_error_stack_set_error (stack, FALSE, "no-error");
 
           data = g_new0 (struct FileExistsData, 1);
           data->impl = g_object_ref (impl);
           data->file = g_object_ref (file);
-          data->error_label = error_label;
+          data->error_stack = error_stack;
           data->button = button;
 
           if (priv->file_exists_get_info_cancellable)
@@ -1137,7 +1123,7 @@ new_folder_name_changed (GtkEntry             *entry,
                           gtk_entry_get_text (entry),
                           TRUE,
                           NULL,
-                          priv->new_folder_error_label,
+                          priv->new_folder_error_stack,
                           priv->new_folder_create_button);
 }
 
@@ -1570,7 +1556,7 @@ rename_file_name_changed (GtkEntry             *entry,
                           gtk_entry_get_text (entry),
                           file_type == G_FILE_TYPE_DIRECTORY,
                           priv->rename_file_source_file,
-                          priv->rename_file_error_label,
+                          priv->rename_file_error_stack,
                           priv->rename_file_rename_button);
 }
 
@@ -8499,11 +8485,11 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_location_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_name_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_create_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_error_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_error_stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_popover);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_name_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_rename_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_error_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_error_stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_popover);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, remote_warning_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, box);
@@ -8661,6 +8647,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
    */
   g_type_ensure (GTK_TYPE_PATH_BAR);
   g_type_ensure (GTK_TYPE_PLACES_VIEW);
+  g_type_ensure (GTK_TYPE_FILE_CHOOSER_ERROR_STACK);
 
   gtk_widget_init_template (GTK_WIDGET (impl));
   gtk_widget_set_size_request (priv->browse_files_tree_view, 280, -1);

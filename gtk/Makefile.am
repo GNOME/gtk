@@ -463,6 +463,7 @@ gtk_private_h_sources =		\
 	gtkfilechooserprivate.h	\
 	gtkfilechoosernativeprivate.h	\
 	gtkfilechooserwidgetprivate.h	\
+	gtkfilechoosererrorstackprivate.h \
 	gtkfilechooserutils.h	\
 	gtkfilefilterprivate.h	\
 	gtkfilesystem.h		\
@@ -943,7 +944,8 @@ gtk_base_c_sources = 		\
 	gtkwin32theme.c		\
 	gdkpixbufutils.c 	\
 	gtkgizmo.c 		\
-	gtkcenterbox.c
+	gtkcenterbox.c 		\
+	gtkfilechoosererrorstack.c
 
 if USE_QUARTZ
 gtk_base_c_sources += 		\

@@ -427,8 +427,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="new_folder_error_label">
-            <property name="halign">start</property>
+          <object class="GtkFileChooserErrorStack" id="new_folder_error_stack">
           </object>
           <packing>
             <property name="left-attach">0</property>
@@ -487,8 +486,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="rename_file_error_label">
-            <property name="halign">start</property>
+          <object class="GtkFileChooserErrorStack" id="rename_file_error_stack">
           </object>
           <packing>
             <property name="left-attach">0</property>
