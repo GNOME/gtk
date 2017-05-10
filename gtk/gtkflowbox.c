@@ -2830,29 +2830,8 @@ gtk_flow_box_motion_notify_event (GtkWidget      *widget,
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxChild *child;
-  GdkWindow *window;
-  GdkWindow *event_window;
-  gint relative_x;
-  gint relative_y;
-  gdouble parent_x;
-  gdouble parent_y;
 
-  window = gtk_widget_get_window (GTK_WIDGET (box));
-  event_window = event->window;
-  relative_x = event->x;
-  relative_y = event->y;
-
-  while ((event_window != NULL) && (event_window != window))
-    {
-      gdk_window_coords_to_parent (event_window,
-                                   relative_x, relative_y,
-                                   &parent_x, &parent_y);
-      relative_x = parent_x;
-      relative_y = parent_y;
-      event_window = gdk_window_get_parent (event_window);
-    }
-
-  child = gtk_flow_box_get_child_at_pos (box, relative_x, relative_y);
+  child = gtk_flow_box_get_child_at_pos (box, event->x, event->y);
   gtk_flow_box_update_active (box, child);
 
   return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->motion_notify_event (widget, event);
