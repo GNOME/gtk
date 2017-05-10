@@ -548,7 +548,8 @@ gtk_menu_shell_real_insert (GtkMenuShell *menu_shell,
 
   priv->children = g_list_insert (priv->children, child, position);
 
-  gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
+  if (gtk_widget_get_parent (child) == NULL)
+    gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
 }
 
 /**

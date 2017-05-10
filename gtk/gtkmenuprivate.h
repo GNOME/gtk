@@ -26,7 +26,6 @@
 #define __GTK_MENU_PRIVATE_H__
 
 #include <gtk/gtkmenu.h>
-#include <gtk/gtkcssgadgetprivate.h>
 #include <gtk/gtkcssnodeprivate.h>
 #include <gtk/gtkgesturemultipress.h>
 
@@ -76,8 +75,8 @@ struct _GtkMenuPrivate
   GdkWindow *view_window;
   GdkWindow *bin_window;
 
-  GtkCssGadget *top_arrow_gadget;
-  GtkCssGadget *bottom_arrow_gadget;
+  GtkWidget *top_arrow_widget;
+  GtkWidget *bottom_arrow_widget;
 
   GtkGesture *click_gesture;
 
