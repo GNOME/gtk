@@ -4192,7 +4192,8 @@ indicator_set_fade (Indicator *indicator,
       gdk_window_show (indicator->window);
       indicator->conceil_timer = g_timeout_add (INDICATOR_FADE_OUT_TIME, maybe_hide_indicator, indicator);
     }
-  if (!visible && gdk_window_is_visible (indicator->window))
+  if (!visible && gdk_window_is_visible (indicator->window) &&
+      indicator->conceil_timer != 0)
     {
       gdk_window_hide (indicator->window);
       g_source_remove (indicator->conceil_timer);
