@@ -47,7 +47,7 @@ gtk_icon_snapshot (GtkWidget   *widget,
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   GtkAllocation alloc;
 
-  gtk_widget_get_allocation (widget, &alloc);
+  gtk_widget_get_content_allocation (widget, &alloc);
 
   gtk_css_style_snapshot_icon (style,
                                snapshot,
