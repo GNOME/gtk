@@ -64,7 +64,7 @@ test_size (GtkOrientation orientation,
         {
           gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (scrolledwindow), MIN_SIZE);
 
-          gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_HORIZONTAL, -1,
+          gtk_widget_measure (scrolledwindow, GTK_ORIENTATION_VERTICAL, -1,
                               &size, NULL, NULL, NULL);
 
           g_assert_cmpint (size, ==, MIN_SIZE);
