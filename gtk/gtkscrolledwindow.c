@@ -36,7 +36,6 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtkscrollbar.h"
-#include "gtkrangeprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkviewport.h"
 #include "gtkwidgetprivate.h"
@@ -3262,11 +3261,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           gdouble new_value;
           gdouble delta;
 
-#if 0
-TODO: What to do here with the new scrollbars?
-          delta = _gtk_range_get_wheel_delta (GTK_SCROLLBAR (range), event);
-#endif
-          delta = 1;
+          delta = gtk_scrollbar_get_wheel_delta (GTK_SCROLLBAR (range), event);
 
           new_value = CLAMP (gtk_adjustment_get_value (adj) + delta,
                              gtk_adjustment_get_lower (adj),

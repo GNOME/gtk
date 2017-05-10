@@ -2285,18 +2285,7 @@ stop_scrolling (GtkRange *range)
   remove_autoscroll (range);
 }
 
-/**
- * _gtk_range_get_wheel_delta:
- * @range: a #GtkRange
- * @event: A #GdkEventScroll
- *
- * Returns a good step value for the mouse wheel.
- *
- * Returns: A good step value for the mouse wheel.
- *
- * Since: 2.4
- **/
-gdouble
+static gdouble
 _gtk_range_get_wheel_delta (GtkRange       *range,
                             GdkEventScroll *event)
 {
@@ -2304,18 +2293,13 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
   GtkAdjustment *adjustment = priv->adjustment;
   gdouble dx, dy;
   gdouble delta = 0;
-  gdouble page_size;
   gdouble page_increment;
   gdouble scroll_unit;
   GdkScrollDirection direction;
 
-  page_size = gtk_adjustment_get_page_size (adjustment);
   page_increment = gtk_adjustment_get_page_increment (adjustment);
 
-  if (GTK_IS_SCROLLBAR (range))
-    scroll_unit = pow (page_size, 2.0 / 3.0);
-  else
-    scroll_unit = page_increment;
+  scroll_unit = page_increment;
 
   if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &dx, &dy))
     {
