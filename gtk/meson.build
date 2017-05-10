@@ -919,7 +919,7 @@ if not meson.is_cross_build()
                                extra_args: gir_args + [
                                  '-DGDK_COMPILATION',
                                ])
-  gdk_gir_dep = declare_dependency(link_with: libgtk, sources: gdk_gir)
+  gdk_gir_dep = declare_dependency(sources: gdk_gir)
 
   if x11_enabled
     gnome.generate_gir(libgtk,
@@ -955,9 +955,7 @@ if not meson.is_cross_build()
                                  '-DGSK_COMPILATION',
                                ])
 
-  gsk_gir_dep = declare_dependency(link_with: libgtk,
-                                   dependencies: gdk_gir_dep,
-                                   sources: gsk_gir)
+  gsk_gir_dep = declare_dependency(dependencies: gdk_gir_dep, sources: gsk_gir)
 
 
   gnome.generate_gir(libgtk,
@@ -972,7 +970,7 @@ if not meson.is_cross_build()
                      export_packages: 'gtk+-4.0',
                      includes: [ 'Atk-1.0', ],
                      install: true,
-                     dependencies: [ gdk_gir_dep, gsk_gir_dep ],
+                     dependencies: gsk_gir_dep,
                      extra_args: gir_args + [
                        '--include-uninstalled=./gtk/Gdk-4.0.gir',
                        '--include-uninstalled=./gtk/Gsk-4.0.gir',
