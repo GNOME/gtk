@@ -316,3 +316,43 @@ gtk_scrollbar_get_adjustment (GtkScrollbar  *self)
 
   return gtk_range_get_adjustment (GTK_RANGE (priv->range));
 }
+
+double
+gtk_scrollbar_get_wheel_delta (GtkScrollbar         *self,
+                               const GdkEventScroll *event)
+{
+  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
+  GtkAdjustment *adjustment;
+  gdouble dx, dy;
+  gdouble delta = 0;
+  gdouble page_size;
+  gdouble scroll_unit;
+  GdkScrollDirection direction;
+
+  adjustment = gtk_scrollbar_get_adjustment (self);
+  page_size = gtk_adjustment_get_page_size (adjustment);
+
+  scroll_unit = pow (page_size, 2.0 / 3.0);
+
+  if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &dx, &dy))
+    {
+#ifdef GDK_WINDOWING_QUARTZ
+      scroll_unit = 1;
+#endif
+
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        delta = - (dx ? dx : dy) * scroll_unit;
+      else
+        delta = dy * scroll_unit;
+    }
+  else if (gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
+    {
+      if (direction == GDK_SCROLL_UP ||
+          direction == GDK_SCROLL_LEFT)
+        delta = - scroll_unit;
+      else
+        delta = scroll_unit;
+    }
+
+  return delta;
+}

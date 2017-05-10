@@ -32,8 +32,6 @@
 
 G_BEGIN_DECLS
 
-gdouble            _gtk_range_get_wheel_delta              (GtkRange       *range,
-                                                            GdkEventScroll *event);
 void               _gtk_range_set_has_origin               (GtkRange      *range,
                                                             gboolean       has_origin);
 gboolean           _gtk_range_get_has_origin               (GtkRange      *range);
