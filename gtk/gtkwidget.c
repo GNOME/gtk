@@ -3585,7 +3585,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   next_child = event_widget;
   parent = _gtk_widget_get_parent (next_child);
 
-  while (parent != widget)
+  while (parent && parent != widget)
     {
       next_child = parent;
       parent = _gtk_widget_get_parent (parent);
