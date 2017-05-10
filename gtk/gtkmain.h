@@ -149,10 +149,10 @@ GDK_AVAILABLE_IN_ALL
 GdkDevice *gtk_get_current_event_device (void);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *gtk_get_event_widget         (GdkEvent        *event);
+GtkWidget *gtk_get_event_widget         (const GdkEvent  *event);
 
 GDK_AVAILABLE_IN_3_90
-GtkWidget *gtk_get_event_target         (GdkEvent        *event);
+GtkWidget *gtk_get_event_target         (const GdkEvent  *event);
 
 GDK_AVAILABLE_IN_3_90
 GtkWidget *gtk_get_event_target_with_type (GdkEvent *event,

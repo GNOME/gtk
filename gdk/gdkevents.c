@@ -2593,7 +2593,7 @@ gdk_event_set_user_data (GdkEvent *event,
 }
 
 GObject *
-gdk_event_get_user_data (GdkEvent *event)
+gdk_event_get_user_data (const GdkEvent *event)
 {
   GdkEventPrivate *private;
 

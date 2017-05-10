@@ -1571,7 +1571,7 @@ GDK_AVAILABLE_IN_3_90
 void           gdk_event_set_user_data (GdkEvent *event,
                                         GObject  *user_data);
 GDK_AVAILABLE_IN_3_90
-GObject *      gdk_event_get_user_data (GdkEvent *event);
+GObject *      gdk_event_get_user_data (const GdkEvent *event);
 
 G_END_DECLS
 

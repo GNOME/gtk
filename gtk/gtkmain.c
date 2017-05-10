@@ -2348,7 +2348,7 @@ gtk_get_current_event_device (void)
  *     received @event, or %NULL
  */
 GtkWidget*
-gtk_get_event_widget (GdkEvent *event)
+gtk_get_event_widget (const GdkEvent *event)
 {
   GtkWidget *widget;
   gpointer widget_ptr;
@@ -2377,7 +2377,7 @@ gtk_get_event_widget (GdkEvent *event)
  * Since: 3.90
  */
 GtkWidget *
-gtk_get_event_target (GdkEvent *event)
+gtk_get_event_target (const GdkEvent *event)
 {
   return GTK_WIDGET (gdk_event_get_user_data (event));
 }
