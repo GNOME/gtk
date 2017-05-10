@@ -1045,7 +1045,7 @@ request_text_received_func (GtkClipboard     *clipboard,
       if (target == gdk_atom_intern_static_string ("text/plain;charset=utf-8"))
         {
           gtk_clipboard_request_contents (clipboard,
-                                          gdk_atom_intern_static_string ("UTF8_TEXT"),
+                                          gdk_atom_intern_static_string ("UTF8_STRING"),
                                           request_text_received_func, info);
           return;
         }
