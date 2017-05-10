@@ -1821,7 +1821,7 @@ AC_SUBST(GDK_HIDDEN_VISIBILITY_CFLAGS)
 
 AC_PATH_PROG([SASSC], [sassc])
 AC_ARG_VAR(SASSC)
-AM_CONDITIONAL([REBUILD_SCSS], [test "xSASSC" != x])
+AM_CONDITIONAL([REBUILD_SCSS], [test "x$SASSC" != x])
 
 ##################################################
 # Output commands
