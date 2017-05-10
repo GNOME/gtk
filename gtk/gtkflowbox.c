@@ -4136,7 +4136,8 @@ gtk_flow_box_get_child_at_index (GtkFlowBox *box,
  * @x: the x coordinate of the child
  * @y: the y coordinate of the child
  *
- * Gets the child in the (@x, @y) position.
+ * Gets the child in the (@x, @y) position. Both @x and @y are
+ * assumed to be relative to the allocation of @box.
  *
  * Returns: (transfer none) (nullable): the child widget, which will
  *     always be a #GtkFlowBoxChild or %NULL in case no child widget
@@ -4152,6 +4153,9 @@ gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
   GtkWidget *child;
   GSequenceIter *iter;
   GtkAllocation allocation;
+  GtkAllocation box_allocation;
+
+  gtk_widget_get_allocation (GTK_WIDGET (box), &box_allocation);
 
   for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
        !g_sequence_iter_is_end (iter);
@@ -4160,7 +4164,10 @@ gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
       child = g_sequence_get (iter);
       if (!child_is_visible (child))
         continue;
+
       gtk_widget_get_allocation (child, &allocation);
+      allocation.x -= box_allocation.x;
+      allocation.y -= box_allocation.y;
       if (x >= allocation.x && x < (allocation.x + allocation.width) &&
           y >= allocation.y && y < (allocation.y + allocation.height))
         return GTK_FLOW_BOX_CHILD (child);
