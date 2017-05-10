@@ -1830,15 +1830,15 @@ gtk_flow_box_allocate (GtkCssGadget        *gadget,
       /* Do the actual allocation */
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          child_allocation.x = item_offset;
-          child_allocation.y = line_offset;
+          child_allocation.x = widget_allocation.x + item_offset;
+          child_allocation.y = widget_allocation.y + line_offset;
           child_allocation.width = this_item_size;
           child_allocation.height = this_line_size;
         }
       else /* GTK_ORIENTATION_VERTICAL */
         {
-          child_allocation.x = line_offset;
-          child_allocation.y = item_offset;
+          child_allocation.x = widget_allocation.x + line_offset;
+          child_allocation.y = widget_allocation.y + item_offset;
           child_allocation.width = this_line_size;
           child_allocation.height = this_item_size;
         }
