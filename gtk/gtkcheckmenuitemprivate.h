@@ -19,13 +19,12 @@
 #define __GTK_CHECK_MENU_ITEM_PRIVATE_H__
 
 #include <gtk/gtkcheckmenuitem.h>
-#include <gtk/gtkcssgadgetprivate.h>
 
 G_BEGIN_DECLS
 
 void       _gtk_check_menu_item_set_active       (GtkCheckMenuItem *check_menu_item,
                                                   gboolean          is_active);
-GtkCssGadget * _gtk_check_menu_item_get_indicator_gadget (GtkCheckMenuItem *check_menu_item);
+GtkWidget * _gtk_check_menu_item_get_indicator_widget (GtkCheckMenuItem *check_menu_item);
 
 G_END_DECLS
 

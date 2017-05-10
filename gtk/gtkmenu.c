@@ -2998,19 +2998,18 @@ static void gtk_menu_measure (GtkWidget      *widget,
           !priv->no_toggle_size)
         {
           GtkWidget *menu_item;
-          GtkCssGadget *indicator_gadget;
+          GtkWidget *indicator_widget;
           gint indicator_width;
 
           /* Create a GtkCheckMenuItem, to query indicator size */
           menu_item = gtk_check_menu_item_new ();
-          indicator_gadget = _gtk_check_menu_item_get_indicator_gadget
-            (GTK_CHECK_MENU_ITEM (menu_item));
+          indicator_widget = _gtk_check_menu_item_get_indicator_widget (GTK_CHECK_MENU_ITEM (menu_item));
 
-          gtk_css_gadget_get_preferred_size (indicator_gadget,
-                                             GTK_ORIENTATION_HORIZONTAL,
-                                             -1,
-                                             &indicator_width, NULL,
-                                             NULL, NULL);
+          gtk_widget_measure (indicator_widget,
+                              GTK_ORIENTATION_HORIZONTAL,
+                              -1,
+                              &indicator_width, NULL,
+                              NULL, NULL);
           max_toggle_size = indicator_width;
 
           gtk_widget_destroy (menu_item);
