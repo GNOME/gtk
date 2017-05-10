@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include "gtkaccellabel.h"
-#include "gtkbuiltiniconprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -46,6 +45,7 @@
 #include "a11y/gtkmenuitemaccessible.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkiconprivate.h"
 
 #define MENU_POPUP_DELAY     225
 
@@ -246,22 +246,6 @@ gtk_menu_item_actionable_interface_init (GtkActionableInterface *iface)
 }
 
 static void
-gtk_menu_item_snapshot (GtkWidget   *widget,
-                        GtkSnapshot *snapshot)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkWidget *parent;
-
-  parent = gtk_widget_get_parent (widget);
-
-  if (priv->submenu && !GTK_IS_MENU_BAR (parent))
-    gtk_css_gadget_snapshot (priv->arrow_gadget, snapshot);
-
-  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->snapshot (widget, snapshot);
-}
-
-static void
 gtk_menu_item_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
@@ -314,16 +298,16 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
 	{
           GtkAllocation arrow_alloc;
 
-          gtk_css_gadget_get_preferred_size (priv->arrow_gadget,
-                                             GTK_ORIENTATION_HORIZONTAL,
-                                             -1,
-                                             &arrow_alloc.width, NULL,
-                                             NULL, NULL);
-          gtk_css_gadget_get_preferred_size (priv->arrow_gadget,
-                                             GTK_ORIENTATION_VERTICAL,
-                                             -1,
-                                             &arrow_alloc.height, NULL,
-                                             NULL, NULL);
+          gtk_widget_measure (priv->arrow_widget,
+                              GTK_ORIENTATION_HORIZONTAL,
+                              -1,
+                              &arrow_alloc.width, NULL,
+                              NULL, NULL);
+          gtk_widget_measure (priv->arrow_widget,
+                              GTK_ORIENTATION_VERTICAL,
+                              -1,
+                              &arrow_alloc.height, NULL,
+                              NULL, NULL);
 
           if (direction == GTK_TEXT_DIR_LTR)
             {
@@ -340,10 +324,9 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
           arrow_alloc.y = child_allocation.y +
             (child_allocation.height - arrow_alloc.height) / 2;
 
-          gtk_css_gadget_allocate (priv->arrow_gadget,
-                                   &arrow_alloc,
-                                   -1,
-                                   &arrow_clip);
+          gtk_widget_size_allocate (priv->arrow_widget, &arrow_alloc);
+          gtk_widget_get_clip (priv->arrow_widget, &arrow_clip);
+          gdk_rectangle_union (&arrow_clip, &clip, &clip);
 	}
 
       child_allocation.width = MAX (1, child_allocation.width);
@@ -406,11 +389,11 @@ gtk_menu_item_real_get_width (GtkWidget *widget,
 	{
           gint arrow_size;
 
-          gtk_css_gadget_get_preferred_size (priv->arrow_gadget,
-                                             GTK_ORIENTATION_HORIZONTAL,
-                                             -1,
-                                             &arrow_size, NULL,
-                                             NULL, NULL);
+          gtk_widget_measure (priv->arrow_widget,
+                              GTK_ORIENTATION_HORIZONTAL,
+                              -1,
+                              &arrow_size, NULL,
+                              NULL, NULL);
 
           min_width += arrow_size;
           nat_width = min_width;
@@ -458,11 +441,11 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
       gint arrow_size = 0;
 
       if ((priv->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
-        gtk_css_gadget_get_preferred_size (priv->arrow_gadget,
-                                           GTK_ORIENTATION_VERTICAL,
-                                           -1,
-                                           &arrow_size, NULL,
-                                           NULL, NULL);
+        gtk_widget_measure (priv->arrow_widget,
+                            GTK_ORIENTATION_VERTICAL,
+                            -1,
+                            &arrow_size, NULL,
+                            NULL, NULL);
 
       if (for_size != -1)
         {
@@ -527,7 +510,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 
   widget_class->destroy = gtk_menu_item_destroy;
   widget_class->size_allocate = gtk_menu_item_size_allocate;
-  widget_class->snapshot = gtk_menu_item_snapshot;
   widget_class->enter_notify_event = gtk_menu_item_enter;
   widget_class->leave_notify_event = gtk_menu_item_leave;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
@@ -769,7 +751,11 @@ gtk_menu_item_dispose (GObject *object)
 
   g_clear_object (&priv->action_helper);
 
-  g_clear_object (&priv->arrow_gadget);
+  if (priv->arrow_widget)
+    {
+      gtk_widget_unparent (priv->arrow_widget);
+      priv->arrow_widget = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_menu_item_parent_class)->dispose (object);
 }
@@ -865,7 +851,11 @@ gtk_menu_item_detacher (GtkWidget *widget,
   g_return_if_fail (priv->submenu == (GtkWidget*) menu);
 
   priv->submenu = NULL;
-  g_clear_object (&priv->arrow_gadget);
+  if (priv->arrow_widget)
+    {
+      gtk_widget_unparent (priv->arrow_widget);
+      priv->arrow_widget = NULL;
+    }
 }
 
 static void
@@ -930,65 +920,61 @@ gtk_menu_item_buildable_custom_finished (GtkBuildable *buildable,
 }
 
 static void
-update_node_classes (GtkMenuItem *menu_item)
+update_arrow_classes (GtkMenuItem *menu_item)
 {
   GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkCssNode *arrow_node, *widget_node, *node;
+  GtkStyleContext *context;
+  GtkWidget *child;
 
-  if (!priv->arrow_gadget)
+  if (!priv->arrow_widget)
     return;
 
-  arrow_node = gtk_css_gadget_get_node (priv->arrow_gadget);
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (menu_item));
-
-  gtk_css_node_set_state (arrow_node, gtk_css_node_get_state (widget_node));
+  context = gtk_widget_get_style_context (priv->arrow_widget);
 
   if (gtk_widget_get_direction (GTK_WIDGET (menu_item)) == GTK_TEXT_DIR_RTL)
     {
-      gtk_css_node_add_class (arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
-      gtk_css_node_remove_class (arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
 
-      node = gtk_css_node_get_first_child (widget_node);
-      if (node != arrow_node)
-        gtk_css_node_insert_before (widget_node, arrow_node, node);
+      child = gtk_widget_get_first_child (GTK_WIDGET (menu_item));
+
+      if (child != priv->arrow_widget)
+        gtk_widget_insert_after (GTK_WIDGET (menu_item), priv->arrow_widget, NULL);
     }
   else
     {
-      gtk_css_node_remove_class (arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_LEFT));
-      gtk_css_node_add_class (arrow_node, g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT));
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
 
-      node = gtk_css_node_get_last_child (widget_node);
-      if (node != arrow_node)
-        gtk_css_node_insert_after (widget_node, arrow_node, node);
+      child = gtk_widget_get_last_child (GTK_WIDGET (menu_item));
+
+      if (child != priv->arrow_widget)
+        gtk_widget_insert_before (GTK_WIDGET (menu_item), priv->arrow_widget, NULL);
     }
 }
 
 static void
-update_arrow_gadget (GtkMenuItem *menu_item)
+update_arrow_widget (GtkMenuItem *menu_item)
 {
   GtkMenuItemPrivate *priv = menu_item->priv;
   GtkWidget *widget = GTK_WIDGET (menu_item);
-  gboolean should_have_gadget;
+  gboolean should_have_arrow;
 
-  should_have_gadget = priv->reserve_indicator ||
+  should_have_arrow = priv->reserve_indicator ||
     (priv->submenu && !GTK_IS_MENU_BAR (gtk_widget_get_parent (widget)));
 
-  if (should_have_gadget)
+  if (should_have_arrow)
     {
-      if (!priv->arrow_gadget)
+      if (!priv->arrow_widget)
         {
-          priv->arrow_gadget = gtk_builtin_icon_new ("arrow",
-                                                     widget,
-                                                     NULL,
-                                                     NULL);
-          gtk_css_node_set_parent (gtk_css_gadget_get_node (priv->arrow_gadget),
-                                   gtk_widget_get_css_node (widget));
-          update_node_classes (menu_item);
+          priv->arrow_widget = gtk_icon_new ("arrow");
+          gtk_widget_set_parent (priv->arrow_widget, widget);
         }
     }
-  else
+  else if (priv->arrow_widget)
     {
-      g_clear_object (&priv->arrow_gadget);
+      gtk_widget_unparent (priv->arrow_widget);
+      priv->arrow_widget = NULL;
     }
 }
 
@@ -1029,7 +1015,7 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
                                      gtk_menu_item_detacher);
         }
 
-      update_arrow_gadget (menu_item);
+      update_arrow_widget (menu_item);
 
       if (gtk_widget_get_parent (widget))
         gtk_widget_queue_resize (widget);
@@ -1651,7 +1637,7 @@ gtk_menu_item_parent_set (GtkWidget *widget,
                                        menu->priv->accel_group,
                                        TRUE);
 
-  update_arrow_gadget (menu_item);
+  update_arrow_widget (menu_item);
 
   if (GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->parent_set)
     GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->parent_set (widget, previous_parent);
@@ -1663,7 +1649,7 @@ gtk_menu_item_direction_changed (GtkWidget        *widget,
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
 
-  update_node_classes (menu_item);
+  update_arrow_classes (menu_item);
 
   GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->direction_changed (widget, previous_dir);
 }
@@ -1963,7 +1949,7 @@ gtk_menu_item_set_reserve_indicator (GtkMenuItem *menu_item,
   if (priv->reserve_indicator != reserve)
     {
       priv->reserve_indicator = reserve;
-      update_arrow_gadget (menu_item);
+      update_arrow_widget (menu_item);
       gtk_widget_queue_resize (GTK_WIDGET (menu_item));
     }
 }
