@@ -58,7 +58,22 @@ gtk_micro_version = gtk_version.split('.')[2].to_int()
 gtk_interface_age = 0
 add_project_arguments('-DGTK_VERSION="@0@"'.format(meson.project_version()), language: 'c')
 
-add_project_arguments('-D_GNU_SOURCE', language : 'c')
+add_project_arguments('-D_GNU_SOURCE', language: 'c')
+
+gtk_debug_cflags = []
+buildtype = get_option('buildtype')
+if buildtype == 'debugoptimized' or buildtype == 'debug'
+  gtk_debug_cflags += '-DG_ENABLE_DEBUG'
+  if buildtype == 'debug'
+    gtk_debug_cflags += '-DG_ENABLE_CONSISTENCY_CHECKS'
+  else
+    gtk_debug_cflags += '-DG_DISABLE_CAST_CHECKS'
+  endif
+else
+  gtk_debug_cflags += [ '-DG_DISABLE_ASSERT', '-DG_DISABLE_CAST_CHECKS', '-DG_DISABLE_CHECKS', ]
+endif
+
+add_project_arguments(gtk_debug_cflags, language: 'c')
 
 # Define a string for the earliest version that this release has
 # backwards binary compatibility with for all interfaces a module
