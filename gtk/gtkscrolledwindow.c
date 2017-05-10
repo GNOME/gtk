@@ -3810,7 +3810,8 @@ indicator_set_fade (Indicator *indicator,
     {
       indicator->conceil_timer = g_timeout_add (INDICATOR_FADE_OUT_TIME, maybe_hide_indicator, indicator);
     }
-  if (!visible && gtk_widget_get_mapped (indicator->scrollbar))
+  if (!visible && gtk_widget_get_mapped (indicator->scrollbar) &&
+      indicator->conceil_timer != 0)
     {
       g_source_remove (indicator->conceil_timer);
       indicator->conceil_timer = 0;
