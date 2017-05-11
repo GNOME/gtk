@@ -409,6 +409,20 @@ gtk_list_box_finalize (GObject *obj)
 }
 
 static void
+gtk_list_box_dispose (GObject *object)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (object);
+
+  if (priv->placeholder)
+    {
+      gtk_widget_unparent (priv->placeholder);
+      priv->placeholder = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_list_box_parent_class)->dispose (object);
+}
+
+static void
 gtk_list_box_class_init (GtkListBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -421,6 +435,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   object_class->get_property = gtk_list_box_get_property;
   object_class->set_property = gtk_list_box_set_property;
   object_class->finalize = gtk_list_box_finalize;
+  object_class->dispose = gtk_list_box_dispose;
   widget_class->enter_notify_event = gtk_list_box_enter_notify_event;
   widget_class->leave_notify_event = gtk_list_box_leave_notify_event;
   widget_class->motion_notify_event = gtk_list_box_motion_notify_event;
