@@ -20,7 +20,8 @@
 #ifndef __GTK_ICON_PRIVATE_H__
 #define __GTK_ICON_PRIVATE_H__
 
-#include "gtk/gtkwidget.h"
+#include "gtkwidget.h"
+#include "gtkcsstypesprivate.h"
 
 G_BEGIN_DECLS
 
@@ -37,6 +38,7 @@ typedef struct _GtkIconClass      GtkIconClass;
 struct _GtkIcon
 {
   GtkWidget parent;
+  GtkCssImageBuiltinType image;
 };
 
 struct _GtkIconClass
@@ -47,6 +49,9 @@ struct _GtkIconClass
 GType        gtk_icon_get_type               (void) G_GNUC_CONST;
 
 GtkWidget *  gtk_icon_new                    (const char *css_name);
+
+void         gtk_icon_set_image              (GtkIcon                *self,
+                                              GtkCssImageBuiltinType  image);
 
 G_END_DECLS
 

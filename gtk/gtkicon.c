@@ -44,6 +44,7 @@ static void
 gtk_icon_snapshot (GtkWidget   *widget,
                    GtkSnapshot *snapshot)
 {
+  GtkIcon *self = GTK_ICON (widget);
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
   GtkAllocation alloc;
 
@@ -52,7 +53,7 @@ gtk_icon_snapshot (GtkWidget   *widget,
   gtk_css_style_snapshot_icon (style,
                                snapshot,
                                alloc.width, alloc.height,
-                               GTK_CSS_IMAGE_BUILTIN_NONE);
+                               self->image);
 }
 
 static void
@@ -68,6 +69,7 @@ static void
 gtk_icon_init (GtkIcon *self)
 {
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
+  self->image = GTK_CSS_IMAGE_BUILTIN_NONE;
 }
 
 GtkWidget *
@@ -76,4 +78,11 @@ gtk_icon_new (const char *css_name)
   return g_object_new (GTK_TYPE_ICON,
                        "css-name", css_name,
                        NULL);
+}
+
+void
+gtk_icon_set_image (GtkIcon                *self,
+                    GtkCssImageBuiltinType  image)
+{
+  self->image = image;
 }
