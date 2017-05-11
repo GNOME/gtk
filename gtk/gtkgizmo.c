@@ -51,9 +51,31 @@ gtk_gizmo_snapshot (GtkWidget   *widget,
 }
 
 static void
+gtk_gizmo_finalize (GObject *object)
+{
+  GtkGizmo *self = GTK_GIZMO (object);
+  GtkWidget *widget;
+
+  widget = _gtk_widget_get_first_child (GTK_WIDGET (self));
+  while (widget != NULL)
+    {
+      GtkWidget *next = _gtk_widget_get_next_sibling (widget);
+
+      gtk_widget_unparent (widget);
+
+      widget = next;
+    }
+
+  G_OBJECT_CLASS (gtk_gizmo_parent_class)->finalize (object);
+}
+
+static void
 gtk_gizmo_class_init (GtkGizmoClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->finalize = gtk_gizmo_finalize;
 
   widget_class->measure = gtk_gizmo_measure;
   widget_class->size_allocate = gtk_gizmo_size_allocate;
