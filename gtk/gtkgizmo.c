@@ -46,6 +46,8 @@ gtk_gizmo_snapshot (GtkWidget   *widget,
 
   if (self->snapshot_func)
     self->snapshot_func (self, snapshot);
+  else
+    GTK_WIDGET_CLASS (gtk_gizmo_parent_class)->snapshot (widget, snapshot);
 }
 
 static void
