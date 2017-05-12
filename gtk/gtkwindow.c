@@ -737,6 +737,49 @@ gtk_window_add (GtkContainer *container,
   GTK_CONTAINER_CLASS (gtk_window_parent_class)->add (container, child);
 }
 
+static void popover_get_rect (GtkWindowPopover      *popover,
+                              GtkWindow             *window,
+                              cairo_rectangle_int_t *rect);
+
+static GtkWidget *
+gtk_window_pick (GtkWidget *widget,
+                 gdouble    x,
+                 gdouble    y,
+                 gdouble   *x_out,
+                 gdouble   *y_out)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GList *popovers = window->priv->popovers;
+
+  while (popovers)
+    {
+      GtkWindowPopover *popover = popovers->data;
+      cairo_rectangle_int_t rect;
+
+      popovers = popovers->next;
+
+      if (!gtk_widget_is_sensitive (popover->widget) ||
+          !gtk_widget_is_drawable (popover->widget))
+        continue;
+
+      popover_get_rect (popover, window, &rect);
+
+      if (gdk_rectangle_contains_point (&rect, x, y))
+        {
+          if (x_out && y_out)
+            {
+              *x_out = x - rect.x;
+              *y_out = y - rect.y;
+            }
+
+          return popover->widget;
+        }
+    }
+
+  return GTK_WIDGET_CLASS (gtk_window_parent_class)->pick (widget, x, y,
+                                                           x_out, y_out);
+}
+
 static void
 gtk_window_class_init (GtkWindowClass *klass)
 {
@@ -782,6 +825,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->style_updated = gtk_window_style_updated;
   widget_class->snapshot = gtk_window_snapshot;
   widget_class->queue_draw_region = gtk_window_queue_draw_region;
+  widget_class->pick = gtk_window_pick;
 
   container_class->add = gtk_window_add;
   container_class->remove = gtk_window_remove;
