@@ -948,6 +948,78 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
 }
 
 static void
+transform_to_child_coords (GtkWidget *widget,
+                           GtkWidget *child,
+                           gdouble    x,
+                           gdouble    y,
+                           gdouble   *x_out,
+                           gdouble   *y_out)
+{
+  GtkAllocation alloc, child_alloc;
+  GdkWindow *window;
+  gdouble dx = 0, dy = 0;
+
+  gtk_widget_get_allocation (widget, &alloc);
+  gtk_widget_get_allocation (child, &child_alloc);
+
+  child_alloc.x -= alloc.x;
+  child_alloc.y -= alloc.y;
+
+  window = _gtk_widget_get_window (child);
+
+  while (window != _gtk_widget_get_window (widget))
+    {
+      gdk_window_coords_to_parent (window, dx, dy, &dx, &dy);
+      window = gdk_window_get_parent (window);
+    }
+
+  *x_out = x - child_alloc.x - dx;
+  *y_out = y - child_alloc.y - dy;
+}
+
+static GtkWidget *
+gtk_widget_real_pick (GtkWidget *widget,
+                      gdouble    x,
+                      gdouble    y,
+                      gdouble   *x_out,
+                      gdouble   *y_out)
+{
+  GtkAllocation allocation, parent_allocation;
+  GtkWidget *child;
+
+  gtk_widget_get_allocation (widget, &parent_allocation);
+
+  for (child = _gtk_widget_get_last_child (widget);
+       child;
+       child = _gtk_widget_get_prev_sibling (child))
+    {
+      gdouble tx = x, ty = y;
+
+      if (!gtk_widget_is_sensitive (child) ||
+          !gtk_widget_is_drawable (child))
+        continue;
+
+      transform_to_child_coords (widget, child, tx, ty, &tx, &ty);
+      _gtk_widget_get_allocation (child, &allocation);
+      allocation.x = 0;
+      allocation.y = 0;
+
+      if (gdk_rectangle_contains_point (&allocation, tx, ty))
+        {
+          if (x_out && y_out)
+            {
+              *x_out = tx;
+              *y_out = ty;
+            }
+
+          return child;
+        }
+    }
+
+  return NULL;
+}
+
+static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   static GObjectNotifyContext cpn_context = { 0, NULL, NULL };
@@ -1060,6 +1132,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   klass->queue_draw_region = gtk_widget_real_queue_draw_region;
   klass->queue_draw_child = gtk_widget_real_queue_draw_child;
+
+  klass->pick = gtk_widget_real_pick;
 
   widget_props[PROP_NAME] =
       g_param_spec_string ("name",

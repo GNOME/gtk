@@ -480,6 +480,12 @@ struct _GtkWidgetClass
   void         (* snapshot)                    (GtkWidget            *widget,
                                                 GtkSnapshot          *snapshot);
 
+  GtkWidget *  (* pick)                        (GtkWidget *widget,
+                                                gdouble    x,
+                                                gdouble    y,
+                                                gdouble   *x_out,
+                                                gdouble   *y_out);
+
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
