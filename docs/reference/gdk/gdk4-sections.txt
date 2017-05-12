@@ -534,6 +534,7 @@ GdkRectangle
 gdk_rectangle_intersect
 gdk_rectangle_union
 gdk_rectangle_equal
+gdk_rectangle_contains_point
 
 <SUBSECTION Private>
 gdk_rectangle_get_type

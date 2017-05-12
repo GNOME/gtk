@@ -137,6 +137,31 @@ gdk_rectangle_intersect (const GdkRectangle *src1,
 }
 
 /**
+ * gdk_rectangle_contains_point:
+ * @rect: a #GdkRectangle
+ * @x: X coordinate
+ * @y: Y coordinate
+ *
+ * Returns #TRUE if @rect contains the point described by @x and @y.
+ *
+ * Returns: #TRUE if @rect contains the point
+ *
+ * Since: 3.90
+ **/
+gboolean
+gdk_rectangle_contains_point (const GdkRectangle *rect,
+                              int                 x,
+                              int                 y)
+{
+  g_return_val_if_fail (rect != NULL, FALSE);
+
+  return x >= rect->x &&
+    x < rect->x + rect->width &&
+    y >= rect->y &&
+    y < rect->y + rect->height;
+}
+
+/**
  * gdk_rectangle_equal:
  * @rect1: a #GdkRectangle
  * @rect2: a #GdkRectangle

@@ -49,6 +49,11 @@ GDK_AVAILABLE_IN_3_20
 gboolean gdk_rectangle_equal     (const GdkRectangle *rect1,
                                   const GdkRectangle *rect2);
 
+GDK_AVAILABLE_IN_3_90
+gboolean gdk_rectangle_contains_point (const GdkRectangle *rect,
+                                       int                 x,
+                                       int                 y);
+
 GDK_AVAILABLE_IN_ALL
 GType gdk_rectangle_get_type (void) G_GNUC_CONST;
 
