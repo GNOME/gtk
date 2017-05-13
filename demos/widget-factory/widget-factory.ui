@@ -3172,9 +3172,9 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="valign">center</property>
                             <property name="popover">notebook_info_popover</property>
                             <property name="icon-name">emblem-important-symbolic</property>
+                            <property name="relief">none</property>
                             <style>
                               <class name="circular"/>
-                              <class name="flat"/>
                             </style>
                           </object>
                         </child>
