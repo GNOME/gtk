@@ -682,8 +682,9 @@ gtk_range_set_adjustment (GtkRange      *range,
       g_signal_connect (adjustment, "value-changed",
 			G_CALLBACK (gtk_range_adjustment_value_changed),
 			range);
-      
+
       gtk_range_adjustment_changed (adjustment, range);
+      gtk_range_adjustment_value_changed (adjustment, range);
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_ADJUSTMENT]);
     }
 }
