@@ -252,10 +252,9 @@
             <property name="visible">1</property>
             <property name="label">Plain</property>
             <property name="halign">end</property>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
           </object>
-          <packing>
-            <property name="expand">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton">

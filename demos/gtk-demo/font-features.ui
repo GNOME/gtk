@@ -1647,15 +1647,13 @@
                 <property name="valign">end</property>
                 <property name="width-chars">50</property>
                 <property name="max-width-chars">50</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
               </object>
-              <packing>
-                <property name="expand">1</property>
-              </packing>
             </child>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
           </object>
-          <packing>
-            <property name="expand">1</property>
-          </packing>
         </child>
       </object>
     </child>
