@@ -3750,6 +3750,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="visible">1</property>
                             <property name="valign">center</property>
                             <property name="popover">notebook_info_popover</property>
+                            <property name="relief">none</property>
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">1</property>
@@ -3760,7 +3761,6 @@ microphone-sensitivity-medium-symbolic</property>
                             <style>
                               <class name="image-button"/>
                               <class name="circular"/>
-                              <class name="flat"/>
                             </style>
                           </object>
                         </child>
