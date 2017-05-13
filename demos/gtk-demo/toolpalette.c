@@ -124,11 +124,13 @@ palette_drop_item (GtkToolItem      *drag_item,
 
   if (GTK_TOOL_ITEM_GROUP (drag_group) != drop_group)
     {
-      gboolean homogeneous, new_row;
+      gboolean homogeneous, expand, fill, new_row;
 
       g_object_ref (drag_item);
       gtk_container_child_get (GTK_CONTAINER (drag_group), GTK_WIDGET (drag_item),
                                "homogeneous", &homogeneous,
+                               "expand", &expand,
+                               "fill", &fill,
                                "new-row", &new_row,
                                NULL);
       gtk_container_remove (GTK_CONTAINER (drag_group), GTK_WIDGET (drag_item));
@@ -136,6 +138,8 @@ palette_drop_item (GtkToolItem      *drag_item,
                                   drag_item, drop_position);
       gtk_container_child_set (GTK_CONTAINER (drop_group), GTK_WIDGET (drag_item),
                                "homogeneous", homogeneous,
+                               "expand", expand,
+                               "fill", fill,
                                "new-row", new_row,
                                NULL);
       g_object_unref (drag_item);
@@ -747,19 +751,19 @@ load_special_items (GtkToolPalette *palette)
   item = create_entry_item ("homogeneous=FALSE, expand=TRUE");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_container_child_set (GTK_CONTAINER (group), GTK_WIDGET (item),
-                           "homogeneous", FALSE,
+                           "homogeneous", FALSE, "expand", TRUE,
                            NULL);
 
   item = create_entry_item ("homogeneous=FALSE, expand=TRUE, fill=FALSE");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_container_child_set (GTK_CONTAINER (group), GTK_WIDGET (item),
-                           "homogeneous", FALSE,
-                           NULL);
+                           "homogeneous", FALSE, "expand", TRUE,
+                           "fill", FALSE, NULL);
 
   item = create_entry_item ("homogeneous=FALSE, expand=TRUE, new-row=TRUE");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_container_child_set (GTK_CONTAINER (group), GTK_WIDGET (item),
-                           "homogeneous", FALSE,
+                           "homogeneous", FALSE, "expand", TRUE,
                            "new-row", TRUE, NULL);
 
   item = gtk_tool_button_new (NULL, NULL);
