@@ -404,7 +404,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                                                      P_("Width in chars"),
                                                      P_("Number of characters to leave space for in the entry"),
                                                      -1, G_MAXINT,
-                                                     -1,
+                                                     0,
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
@@ -413,7 +413,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                                                      P_("Maximum width in characters"),
                                                      P_("The desired maximum width of the entry, in characters"),
                                                      -1, G_MAXINT,
-                                                     -1,
+                                                     0,
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (gobject_class,
@@ -868,6 +868,8 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   priv->box = gtk_box_new (priv->orientation, 0);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (spin_button));
   priv->entry = gtk_entry_new ();
+  gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), 0);
+  gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), 0);
   g_signal_connect (priv->entry, "activate", G_CALLBACK (gtk_spin_button_activate), spin_button);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->entry);
 
