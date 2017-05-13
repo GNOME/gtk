@@ -62,8 +62,6 @@ struct _GtkScaleClass
   gchar* (* format_value) (GtkScale *scale,
                            gdouble   value);
 
-  void (* draw_value) (GtkScale *scale);
-
   void (* get_layout_offsets) (GtkScale *scale,
                                gint     *x,
                                gint     *y);
