@@ -1132,6 +1132,7 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
   priv->orientation = orientation;
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
+  update_node_classes (pbar);
   gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
   g_object_notify (G_OBJECT (pbar), "orientation");
