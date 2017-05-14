@@ -59,7 +59,6 @@
  * of forall().
  */
 #define SPECIAL_CONTAINER(x) (GTK_IS_ASSISTANT (x) || \
-                              GTK_IS_ACTION_BAR (x) || \
                               GTK_IS_POPOVER_MENU (x) || \
                               GTK_IS_SHORTCUTS_SECTION (x) || \
                               GTK_IS_SHORTCUTS_WINDOW (x))
