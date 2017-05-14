@@ -3879,6 +3879,9 @@ gdk_window_hide (GdkWindow *window)
 				     GDK_WINDOW_STATE_WITHDRAWN);
     }
   else if (was_mapped)
+    window->state = GDK_WINDOW_STATE_WITHDRAWN;
+
+  if (was_mapped)
     {
       GdkDisplay *display;
       GdkSeat *seat;
@@ -3908,7 +3911,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
             }
         }
 
-      window->state = GDK_WINDOW_STATE_WITHDRAWN;
       g_list_free (devices);
     }
 
