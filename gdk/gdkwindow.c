@@ -3624,10 +3624,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
       gdk_window_update_visibility_recursively (window, NULL);
 
       if (gdk_window_is_viewable (window))
-	{
-	  _gdk_synthesize_crossing_events_for_geometry_change (window);
-	  gdk_window_invalidate_rect_full (window, NULL, TRUE);
-	}
+        gdk_window_invalidate_rect_full (window, NULL, TRUE);
     }
 }
 
@@ -3749,7 +3746,6 @@ gdk_window_lower (GdkWindow *window)
   /* Keep children in (reverse) stacking order */
   gdk_window_lower_internal (window);
 
-  _gdk_synthesize_crossing_events_for_geometry_change (window);
   gdk_window_invalidate_in_parent (window);
 }
 
@@ -3823,7 +3819,6 @@ gdk_window_restack (GdkWindow     *window,
                                                     &window->children_list_node);
     }
 
-  _gdk_synthesize_crossing_events_for_geometry_change (window);
   gdk_window_invalidate_in_parent (window);
 }
 
@@ -3936,8 +3931,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (window->parent && window->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
 	_gdk_make_event (window, GDK_UNMAP, NULL, FALSE);
-
-      _gdk_synthesize_crossing_events_for_geometry_change (window->parent);
     }
 
   /* Invalidate the rect */
@@ -3978,8 +3971,6 @@ gdk_window_withdraw (GdkWindow *window)
 
 	  if (window->parent && window->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
 	    _gdk_make_event (window, GDK_UNMAP, NULL, FALSE);
-
-	  _gdk_synthesize_crossing_events_for_geometry_change (window->parent);
 	}
 
       recompute_visible_regions (window, FALSE);
@@ -4192,8 +4183,6 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
     }
-
-  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 
@@ -4284,8 +4273,6 @@ gdk_window_move_resize_internal (GdkWindow *window,
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
     }
-
-  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 
@@ -4465,8 +4452,6 @@ gdk_window_scroll (GdkWindow *window,
   recompute_visible_regions (window, TRUE);
 
   gdk_window_invalidate_rect_full (window, NULL, TRUE);
-
-  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 /**
@@ -5138,9 +5123,6 @@ gdk_window_input_shape_combine_region (GdkWindow       *window,
       impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
       impl_class->input_shape_combine_region (window, window->input_shape, 0, 0);
     }
-
-  /* Pointer may have e.g. moved outside window due to the input mask change */
-  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 static void
@@ -5221,9 +5203,6 @@ gdk_window_set_pass_through (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   window->pass_through = !!pass_through;
-
-  /* Pointer may have e.g. moved outside window due to the input region change */
-  _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
 /**
@@ -6217,42 +6196,6 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
     }
 }
 
-/* Returns the window inside the event window with the pointer in it
- * at the specified coordinates, or NULL if its not in any child of
- * the toplevel. It also takes into account !owner_events grabs.
- */
-static GdkWindow *
-get_pointer_window (GdkDisplay *display,
-		    GdkWindow *event_window,
-                    GdkDevice *device,
-		    gdouble toplevel_x,
-		    gdouble toplevel_y,
-		    gulong serial)
-{
-  GdkWindow *pointer_window;
-  GdkDeviceGrabInfo *grab;
-  GdkPointerWindowInfo *pointer_info;
-
-  pointer_info = _gdk_display_get_pointer_info (display, device);
-
-  if (event_window == pointer_info->toplevel_under_pointer)
-    pointer_window =
-      _gdk_window_find_descendant_at (event_window,
-				      toplevel_x, toplevel_y,
-				      NULL, NULL);
-  else
-    pointer_window = NULL;
-
-  grab = _gdk_display_has_device_grab (display, device, serial);
-  if (grab != NULL &&
-      !grab->owner_events &&
-      pointer_window != grab->window &&
-      !gdk_window_is_ancestor (pointer_window, grab->window))
-    pointer_window = NULL;
-
-  return pointer_window;
-}
-
 void
 _gdk_display_set_window_under_pointer (GdkDisplay *display,
                                        GdkDevice  *device,
@@ -6414,90 +6357,6 @@ gdk_window_get_source_events (GdkWindow      *window,
 
   return GPOINTER_TO_UINT (g_hash_table_lookup (window->source_event_masks,
                                                 GUINT_TO_POINTER (source)));
-}
-
-static gboolean
-do_synthesize_crossing_event (gpointer data)
-{
-  GdkDisplay *display;
-  GdkWindow *changed_toplevel;
-  GHashTableIter iter;
-  gpointer key, value;
-  gulong serial;
-
-  changed_toplevel = data;
-
-  changed_toplevel->synthesize_crossing_event_queued = FALSE;
-
-  if (GDK_WINDOW_DESTROYED (changed_toplevel))
-    return FALSE;
-
-  display = gdk_window_get_display (changed_toplevel);
-  serial = _gdk_display_get_next_serial (display);
-  g_hash_table_iter_init (&iter, display->pointers_info);
-
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      GdkWindow *new_window_under_pointer;
-      GdkPointerWindowInfo *pointer_info = value;
-      GdkDevice *device = key;
-
-      if (changed_toplevel == pointer_info->toplevel_under_pointer)
-        {
-          new_window_under_pointer =
-            get_pointer_window (display, changed_toplevel,
-                                device,
-                                pointer_info->toplevel_x,
-                                pointer_info->toplevel_y,
-                                serial);
-          if (new_window_under_pointer != pointer_info->window_under_pointer)
-            {
-              GdkDevice *source_device;
-
-              if (pointer_info->last_slave)
-                source_device = pointer_info->last_slave;
-              else
-                source_device = device;
-
-              _gdk_synthesize_crossing_events (display,
-                                               pointer_info->window_under_pointer,
-                                               new_window_under_pointer,
-                                               device, source_device,
-                                               GDK_CROSSING_NORMAL,
-                                               pointer_info->toplevel_x,
-                                               pointer_info->toplevel_y,
-                                               pointer_info->state,
-                                               GDK_CURRENT_TIME,
-                                               NULL,
-                                               serial,
-                                               FALSE);
-              _gdk_display_set_window_under_pointer (display, device, new_window_under_pointer);
-            }
-        }
-    }
-
-  return FALSE;
-}
-
-void
-_gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
-{
-  GdkWindow *toplevel;
-
-  toplevel = get_event_toplevel (changed_window);
-
-  if (!toplevel->synthesize_crossing_event_queued)
-    {
-      guint id;
-
-      toplevel->synthesize_crossing_event_queued = TRUE;
-
-      id = gdk_threads_add_idle_full (GDK_PRIORITY_EVENTS - 1,
-                                      do_synthesize_crossing_event,
-                                      g_object_ref (toplevel),
-                                      g_object_unref);
-      g_source_set_name_by_id (id, "[gtk+] do_synthesize_crossing_event");
-    }
 }
 
 #define GDK_ANY_BUTTON_MASK (GDK_BUTTON1_MASK | \

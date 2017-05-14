@@ -436,9 +436,6 @@ void _gdk_display_set_window_under_pointer (GdkDisplay *display,
                                             GdkDevice  *device,
                                             GdkWindow  *window);
 
-
-void _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window);
-
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
 
