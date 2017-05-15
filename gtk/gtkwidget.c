@@ -13447,6 +13447,7 @@ gtk_widget_set_clip (GtkWidget           *widget,
   GtkWidgetPrivate *priv;
   GtkBorder shadow;
   GtkAllocation allocation;
+  GtkBorder margin;
   GtkCssStyle *style;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -13480,13 +13481,14 @@ gtk_widget_set_clip (GtkWidget           *widget,
 
   /* Always untion the given clip with the widget allocation */
   /* ... and with the box shadow size */
-  allocation = priv->allocation;
   style = gtk_css_node_get_style (priv->cssnode);
+  allocation = priv->allocation;
+  get_box_margin (style, &margin);
   _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
-  allocation.x -= shadow.left;
-  allocation.y -= shadow.top;
-  allocation.width += shadow.left + shadow.right;
-  allocation.height += shadow.top + shadow.bottom;
+  allocation.x += margin.left - shadow.left;
+  allocation.y += margin.top - shadow.top;
+  allocation.width += shadow.left + shadow.right - margin.left - margin.right;
+  allocation.height += shadow.top + shadow.bottom - margin.top - margin.bottom;
   gdk_rectangle_union (&allocation, clip, &priv->clip);
 }
 
