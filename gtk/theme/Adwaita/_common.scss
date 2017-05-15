@@ -2869,7 +2869,7 @@ treeview.view radio:selected { &:focus, & { @extend %radio; }} // This is a work
 
 scale {
   // sizing
-  $_marks_lenght: 6px;
+  $_marks_length: 6px;
   $_marks_distance: 6px;
 
   min-height: 10px;
@@ -3020,7 +3020,7 @@ scale {
                                                      (bottom, right, left) {
       &.#{$marks_class} {
         margin-#{$marks_margin}: $_marks_distance;
-        margin-#{$marks_pos}: -($_marks_distance + $_marks_lenght);
+        margin-#{$marks_pos}: -($_marks_distance + $_marks_length);
       }
     }
   }
@@ -3032,27 +3032,27 @@ scale {
                                                      (bottom, right, left) {
       &.#{$marks_class} {
         margin-#{$marks_margin}: $_marks_distance;
-        margin-#{$marks_pos}: -($_marks_distance + $_marks_lenght - 3px);
+        margin-#{$marks_pos}: -($_marks_distance + $_marks_length - 3px);
       }
     }
   }
 
   &.horizontal {
     indicator {
-      min-height: $_marks_lenght;
+      min-height: $_marks_length;
       min-width: 1px;
     }
 
-    &.fine-tune indicator { min-height: ($_marks_lenght - 3px); }
+    &.fine-tune indicator { min-height: ($_marks_length - 3px); }
   }
 
   &.vertical {
     indicator {
       min-height: 1px;
-      min-width: $_marks_lenght;
+      min-width: $_marks_length;
     }
 
-    &.fine-tune indicator { min-width: ($_marks_lenght - 3px); }
+    &.fine-tune indicator { min-width: ($_marks_length - 3px); }
   }
 
   // *WARNING* scale with marks madness following
