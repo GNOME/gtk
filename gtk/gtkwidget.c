@@ -6961,7 +6961,7 @@ gtk_widget_event_internal (GtkWidget      *widget,
   event_copy = gdk_event_copy (event);
   translate_coordinates (event_copy, widget);
 
-  if (widget == gtk_get_event_widget (event_copy))
+  if (widget == gtk_get_event_target (event_copy))
     return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
 
   g_signal_emit (widget, widget_signals[EVENT], 0, event_copy, &handled);
