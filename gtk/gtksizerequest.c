@@ -462,10 +462,10 @@ gtk_widget_measure (GtkWidget        *widget,
                                              minimum_baseline, natural_baseline);
 
       if (minimum)
-        *minimum = MAX (*minimum, css_min_size) + css_extra_size;
+        *minimum = MAX (0, MAX (*minimum, css_min_size) + css_extra_size);
 
       if (natural)
-        *natural = MAX (*natural, css_min_size) + css_extra_size;
+        *natural = MAX (0, MAX (*natural, css_min_size) + css_extra_size);
       /* TODO: Baselines! */
 
       return;
@@ -497,8 +497,8 @@ gtk_widget_measure (GtkWidget        *widget,
 
       gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size, &min_dimension, &nat_dimension, NULL, NULL);
 
-      min_result = MAX (min_result, MAX (min_dimension, css_min_size) + css_extra_size);
-      nat_result = MAX (nat_result, MAX (nat_dimension, css_min_size) + css_extra_size);
+      min_result = MAX (0, MAX (min_result, MAX (min_dimension, css_min_size) + css_extra_size));
+      nat_result = MAX (0, MAX (nat_result, MAX (nat_dimension, css_min_size) + css_extra_size));
     }
 
   g_hash_table_destroy (widgets);
