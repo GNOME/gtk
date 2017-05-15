@@ -661,6 +661,9 @@ gtk_entry_buffer_insert_text (GtkEntryBuffer *buffer,
         n_chars -= (length + n_chars) - pv->max_length;
     }
 
+  if (n_chars == 0)
+    return 0;
+
   klass = GTK_ENTRY_BUFFER_GET_CLASS (buffer);
   g_return_val_if_fail (klass->insert_text != NULL, 0);
 
