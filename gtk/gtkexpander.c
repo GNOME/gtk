@@ -119,7 +119,6 @@
 #include "gtkdnd.h"
 #include "a11y/gtkexpanderaccessible.h"
 #include "gtkstylecontextprivate.h"
-#include "gtkbuiltiniconprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkiconprivate.h"

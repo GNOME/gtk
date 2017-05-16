@@ -43,7 +43,6 @@
 #include "gtkbuildable.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
-#include "gtkbuiltiniconprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
