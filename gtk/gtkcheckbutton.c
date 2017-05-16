@@ -33,7 +33,6 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtkwidgetprivate.h"
-#include "gtkbuiltiniconprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkstylecontextprivate.h"

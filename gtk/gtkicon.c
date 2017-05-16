@@ -20,7 +20,6 @@
 
 #include "config.h"
 
-#include "gtkbuiltiniconprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkiconprivate.h"
 #include "gtkwidgetprivate.h"

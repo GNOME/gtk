@@ -32,7 +32,6 @@
 #include "gtkrangeprivate.h"
 
 #include "gtkadjustmentprivate.h"
-#include "gtkbuiltiniconprivate.h"
 #include "gtkcolorscaleprivate.h"
 #include "gtkintl.h"
 #include "gtkgesturelongpressprivate.h"

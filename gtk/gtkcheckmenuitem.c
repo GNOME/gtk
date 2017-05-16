@@ -23,7 +23,6 @@
  */
 
 #include "config.h"
-#include "gtkbuiltiniconprivate.h"
 #include "gtkcheckmenuitemprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkaccellabel.h"

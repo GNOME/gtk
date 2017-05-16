@@ -38,7 +38,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtkspinneraccessible.h"
-#include "gtkbuiltiniconprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkrendericonprivate.h"
 

@@ -40,7 +40,6 @@ gtk_public_sources = files([
   'gtkbuilder-menus.c',
   'gtkbuilder.c',
   'gtkbuilderparser.c',
-  'gtkbuiltinicon.c',
   'gtkbutton.c',
   'gtkcalendar.c',
   'gtkcellarea.c',

@@ -109,7 +109,6 @@
 #include "gtkaccelmap.h"
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
-#include "gtkbuiltiniconprivate.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkcheckmenuitemprivate.h"
 #include "gtkmain.h"
