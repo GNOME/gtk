@@ -1312,7 +1312,7 @@ gdk_wayland_window_create_subsurface (GdkWindow *window)
   if (impl->transient_for)
     parent_impl = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
 
-  if (parent_impl)
+  if (parent_impl && parent_impl->display_server.wl_surface)
     {
       display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
       impl->display_server.wl_subsurface =
