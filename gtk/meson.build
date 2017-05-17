@@ -35,7 +35,6 @@ gtk_public_sources = files([
   'gtkbookmarksmanager.c',
   'gtkborder.c',
   'gtkbox.c',
-  'gtkboxgadget.c',
   'gtkbuildable.c',
   'gtkbuilder-menus.c',
   'gtkbuilder.c',
