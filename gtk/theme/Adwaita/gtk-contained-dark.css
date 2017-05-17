@@ -748,8 +748,6 @@ treeview.view header button:hover { color: #bcbdbc; box-shadow: none; transition
 
 treeview.view header button:active { color: #eeeeec; transition: none; }
 
-treeview.view header button:last-child:backdrop, treeview.view header button:last-child { border-right-style: none; }
-
 treeview.view button.dnd:active, treeview.view button.dnd:selected, treeview.view button.dnd:hover, treeview.view button.dnd, treeview.view header.button.dnd:active, treeview.view header.button.dnd:selected, treeview.view header.button.dnd:hover, treeview.view header.button.dnd { padding: 0 6px; color: #232729; background-image: none; background-color: #215d9c; border-style: none; border-radius: 0; box-shadow: inset 0 0 0 1px #232729; text-shadow: none; transition: none; }
 
 treeview.view acceleditor > label { background-color: #215d9c; }
@@ -761,6 +759,8 @@ treeview.view header button:disabled { border-color: #33393b; background-image: 
 treeview.view header button:backdrop { color: #626768; border-color: #33393b; border-style: none solid solid none; background-image: none; background-color: #252a2c; }
 
 treeview.view header button:backdrop:disabled { border-color: #33393b; background-image: none; }
+
+treeview.view header button:last-child:backdrop, treeview.view header button:last-child { border-right-style: none; }
 
 /********* Menus * */
 menubar, .menubar { -GtkWidget-window-dragging: true; padding: 0px; box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1); }
