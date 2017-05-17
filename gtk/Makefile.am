@@ -374,7 +374,6 @@ gtk_private_h_sources =		\
 	gtkbitmaskprivateimpl.h	\
 	gtkbookmarksmanager.h	\
 	gtkboxprivate.h         \
-	gtkboxgadgetprivate.h	\
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
@@ -621,7 +620,6 @@ gtk_base_c_sources = 		\
 	gtkbookmarksmanager.c	\
 	gtkborder.c		\
 	gtkbox.c		\
-	gtkboxgadget.c		\
 	gtkbuildable.c		\
 	gtkbuilder.c		\
 	gtkbuilderparser.c	\
