@@ -1878,8 +1878,6 @@ treeview.view {
         transition: none; //I shouldn't need this
       }
     }
-
-    button:last-child { &:backdrop, & { border-right-style: none; }}
   }
 
   button.dnd,
@@ -1925,6 +1923,8 @@ treeview.view {
       background-image: none;
     }
   }
+
+  &:last-child { &:backdrop, & { border-right-style: none; }}
 }
 
 
