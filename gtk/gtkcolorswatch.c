@@ -28,9 +28,7 @@
 #include "gtkmenushell.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkiconhelperprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkcsscustomgadgetprivate.h"
 #include "gtkroundedboxprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -60,7 +58,7 @@ struct _GtkColorSwatchPrivate
 
   GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
-  GtkCssGadget *overlay_gadget;
+  GtkWidget *overlay_widget;
 
   GtkWidget *popover;
 };
@@ -162,7 +160,7 @@ swatch_snapshot (GtkWidget   *widget,
       gtk_snapshot_pop (snapshot);
     }
 
-  gtk_css_gadget_snapshot (swatch->priv->overlay_gadget, snapshot);
+  gtk_widget_snapshot_child (widget, swatch->priv->overlay_widget, snapshot);
 }
 
 
@@ -395,11 +393,8 @@ swatch_size_allocate (GtkWidget     *widget,
   GtkAllocation clip = *allocation, clip2 = *allocation;
 
 
-  gtk_css_gadget_allocate (swatch->priv->overlay_gadget,
-                           allocation,
-                           gtk_widget_get_allocated_baseline (widget),
-                           &clip2);
-
+  gtk_widget_size_allocate (swatch->priv->overlay_widget, allocation);
+  gtk_widget_get_clip (swatch->priv->overlay_widget, &clip2);
   gdk_rectangle_union (&clip, &clip2, &clip);
 
   gtk_widget_set_clip (widget, &clip);
@@ -419,11 +414,11 @@ gtk_color_swatch_measure (GtkWidget *widget,
 
   swatch = GTK_COLOR_SWATCH (widget);
 
-  gtk_css_gadget_get_preferred_size (swatch->priv->overlay_gadget,
-                                     orientation,
-                                     -1,
-                                     minimum, natural,
-                                     NULL, NULL);
+  gtk_widget_measure (swatch->priv->overlay_widget,
+                      orientation,
+                      -1,
+                      minimum, natural,
+                      NULL, NULL);
 
   gtk_widget_get_size_request (widget, &w, &h);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -447,14 +442,14 @@ swatch_popup_menu (GtkWidget *widget)
 static void
 update_icon (GtkColorSwatch *swatch)
 {
-  GtkIconHelper *icon_helper = GTK_ICON_HELPER (swatch->priv->overlay_gadget);
+  GtkImage *image = GTK_IMAGE (swatch->priv->overlay_widget);
 
   if (swatch->priv->icon)
-    _gtk_icon_helper_set_icon_name (icon_helper, swatch->priv->icon, GTK_ICON_SIZE_BUTTON);
+    gtk_image_set_from_icon_name (image, swatch->priv->icon, GTK_ICON_SIZE_BUTTON);
   else if (gtk_widget_get_state_flags (GTK_WIDGET (swatch)) & GTK_STATE_FLAG_SELECTED)
-    _gtk_icon_helper_set_icon_name (icon_helper, "object-select-symbolic", GTK_ICON_SIZE_BUTTON);
+    gtk_image_set_from_icon_name (image, "object-select-symbolic", GTK_ICON_SIZE_BUTTON);
   else
-    _gtk_icon_helper_clear (icon_helper);
+    gtk_image_clear (image);
 }
 
 static void
@@ -462,8 +457,6 @@ swatch_state_flags_changed (GtkWidget     *widget,
                             GtkStateFlags  previous_state)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-
-  gtk_css_gadget_set_state (swatch->priv->overlay_gadget, gtk_widget_get_state_flags (widget));
 
   update_icon (swatch);
 
@@ -530,7 +523,7 @@ swatch_finalize (GObject *object)
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (object);
 
   g_free (swatch->priv->icon);
-  g_clear_object (&swatch->priv->overlay_gadget);
+  gtk_widget_unparent (swatch->priv->overlay_widget);
 
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->finalize (object);
 }
@@ -606,8 +599,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
 static void
 gtk_color_swatch_init (GtkColorSwatch *swatch)
 {
-  GtkCssNode *widget_node;
-
   swatch->priv = gtk_color_swatch_get_instance_private (swatch);
   swatch->priv->use_alpha = TRUE;
   swatch->priv->selectable = TRUE;
@@ -627,13 +618,12 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   g_signal_connect (swatch->priv->multipress_gesture, "pressed",
                     G_CALLBACK (tap_action), swatch);
 
-  widget_node = gtk_widget_get_css_node (GTK_WIDGET (swatch));
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (swatch)), "activatable");
 
-  swatch->priv->overlay_gadget = gtk_icon_helper_new_named ("overlay", GTK_WIDGET (swatch));
-  _gtk_icon_helper_set_force_scale_pixbuf (GTK_ICON_HELPER (swatch->priv->overlay_gadget), TRUE);
-  gtk_css_node_set_parent (gtk_css_gadget_get_node (swatch->priv->overlay_gadget), widget_node);
-
+  swatch->priv->overlay_widget = g_object_new (GTK_TYPE_IMAGE,
+                                               "css-name", "overlay",
+                                               NULL);
+  gtk_widget_set_parent (swatch->priv->overlay_widget, GTK_WIDGET (swatch));
 }
 
 /* Public API {{{1 */
