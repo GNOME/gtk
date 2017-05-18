@@ -2546,8 +2546,29 @@ dialog_set_page_set (GtkPrintUnixDialog *dialog,
 static gint
 dialog_get_n_copies (GtkPrintUnixDialog *dialog)
 {
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  GtkAdjustment *adjustment;
+  const gchar *text;
+  gchar *endptr = NULL;
+  gint n_copies;
+
+  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->copies_spin));
+
+  text = gtk_entry_get_text (GTK_ENTRY (priv->copies_spin));
+  n_copies = g_ascii_strtoull (text, &endptr, 0);
+
   if (gtk_widget_is_sensitive (dialog->priv->copies_spin))
-    return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (dialog->priv->copies_spin));
+    {
+      if (n_copies != 0 && endptr != text && (endptr != NULL && endptr[0] == '\0') &&
+          n_copies >= gtk_adjustment_get_lower (adjustment) &&
+          n_copies <= gtk_adjustment_get_upper (adjustment))
+        {
+          return n_copies;
+        }
+
+      return gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (priv->copies_spin));
+    }
+
   return 1;
 }
 
