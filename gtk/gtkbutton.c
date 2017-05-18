@@ -931,15 +931,6 @@ gtk_button_measure_ (GtkWidget      *widget,
                            minimum, natural,
                            minimum_baseline, natural_baseline);
     }
-  else
-    {
-      *minimum = 0;
-      *natural = 0;
-      if (minimum_baseline)
-        *minimum_baseline = 0;
-      if (natural_baseline)
-        *natural_baseline = 0;
-    }
 }
 
 /**
