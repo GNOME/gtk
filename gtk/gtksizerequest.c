@@ -31,7 +31,6 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkbutton.h"
 
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
@@ -129,6 +128,12 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   gint min_baseline = -1;
   gint nat_baseline = -1;
   gboolean found_in_cache;
+  GtkCssStyle *style;
+  GtkBorder margin, border, padding;
+  int css_min_size;
+  int css_min_for_size;
+  int css_extra_for_size;
+  int css_extra_size;
 
   gtk_widget_ensure_resize (widget);
 
@@ -145,10 +150,31 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                                    &nat_baseline);
 
   widget_class = GTK_WIDGET_GET_CLASS (widget);
-  
+
   if (!found_in_cache)
     {
-      int adjusted_min, adjusted_natural, adjusted_for_size = for_size;
+      int adjusted_min, adjusted_natural;
+      int adjusted_for_size = for_size;
+
+      style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+      get_box_margin (style, &margin);
+      get_box_border (style, &border);
+      get_box_padding (style, &padding);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          css_extra_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
+          css_extra_for_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
+          css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+          css_min_for_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+        }
+      else
+        {
+          css_extra_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
+          css_extra_for_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
+          css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
+          css_min_for_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
+        }
 
       if (for_size < 0)
         {
@@ -161,30 +187,43 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
       else
         {
           int dummy = 0;
-          int minimum_size;
-          int natural_size;
+          int minimum_for_size;
+          int natural_for_size;
 
           /* Pull the base natural size from the cache as it's needed to adjust
            * the proposed 'for_size' */
           widget_class->measure (widget, OPPOSITE_ORIENTATION (orientation), -1,
-                                 &minimum_size, &natural_size, &dummy, &dummy);
+                                 &minimum_for_size, &natural_for_size, &dummy, &dummy);
 
           gtk_widget_adjust_size_allocation (widget,
                                              OPPOSITE_ORIENTATION (orientation),
-                                             &minimum_size,
-                                             &natural_size,
+                                             &minimum_for_size,
+                                             &natural_for_size,
                                              &dummy,
                                              &adjusted_for_size);
+
+          /* adjusted_for_size now without widget margins */
+          adjusted_for_size -= css_extra_for_size;
+
+          /* TODO: Warn if the given for_size is too small? */
+
+          if (adjusted_for_size < MAX (minimum_for_size, css_min_for_size))
+            adjusted_for_size = MAX (minimum_for_size, css_min_for_size);
 
           push_recursion_check (widget, orientation);
           widget_class->measure (widget,
                                  orientation,
-                                 MAX (adjusted_for_size, minimum_size),
+                                 adjusted_for_size,
                                  &min_size, &nat_size,
                                  &min_baseline, &nat_baseline);
           pop_recursion_check (widget, orientation);
 
         }
+
+      /* TODO: Baselines */
+
+      min_size = MAX (0, MAX (min_size, css_min_size)) + css_extra_size;
+      nat_size = MAX (0, MAX (nat_size, css_min_size)) + css_extra_size;
 
       if (G_UNLIKELY (min_size > nat_size))
         {
@@ -340,12 +379,6 @@ gtk_widget_measure (GtkWidget        *widget,
   GHashTableIter iter;
   gpointer key;
   gint    min_result = 0, nat_result = 0;
-  GtkCssStyle *style;
-  GtkBorder margin, border, padding;
-  int css_min_size;
-  int css_min_for_size;
-  int css_extra_for_size;
-  int css_extra_size;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (for_size >= -1);
@@ -369,50 +402,10 @@ gtk_widget_measure (GtkWidget        *widget,
       return;
     }
 
-  /* The passed for_size is for the widget allocation, but we want to pass down the for_size
-   * of the content allocation, so remove margin, border and padding from the for_size,
-   * pass that down to gtk_widget_query_size_for_orientation and then take the
-   * retrieved values and add margin, border and padding again as well as MAX it with the
-   * CSS min-width/min-height properties. */
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      css_extra_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
-      css_extra_for_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
-      css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
-      css_min_for_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
-    }
-  else
-    {
-      css_extra_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
-      css_extra_for_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
-      css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
-      css_min_for_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
-    }
-
-  /* TODO: Baselines */
-  /* TODO: The GtkCssGadget code has a warning for for_size < min_for_size
-   *       where min_for_size depends on the css values */
-  if (for_size > -1)
-    for_size = MAX (for_size - css_extra_for_size, css_min_for_size);
-
-
   if (G_LIKELY (!_gtk_widget_get_sizegroups (widget)))
     {
       gtk_widget_query_size_for_orientation (widget, orientation, for_size, minimum, natural,
                                              minimum_baseline, natural_baseline);
-
-      if (minimum)
-        *minimum = MAX (0, MAX (*minimum, css_min_size) + css_extra_size);
-
-      if (natural)
-        *natural = MAX (0, MAX (*natural, css_min_size) + css_extra_size);
-      /* TODO: Baselines! */
-
       return;
     }
 
@@ -424,26 +417,10 @@ gtk_widget_measure (GtkWidget        *widget,
       GtkWidget *tmp_widget = key;
       gint min_dimension, nat_dimension;
 
-      style = gtk_css_node_get_style (gtk_widget_get_css_node (tmp_widget));
-      get_box_margin (style, &margin);
-      get_box_border (style, &border);
-      get_box_padding (style, &padding);
-
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          css_extra_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
-          css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
-        }
-      else
-        {
-          css_extra_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
-          css_min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
-        }
-
       gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size, &min_dimension, &nat_dimension, NULL, NULL);
 
-      min_result = MAX (0, MAX (min_result, MAX (min_dimension, css_min_size) + css_extra_size));
-      nat_result = MAX (0, MAX (nat_result, MAX (nat_dimension, css_min_size) + css_extra_size));
+      min_result = MAX (min_result, min_dimension);
+      nat_result = MAX (nat_result, nat_dimension);
     }
 
   g_hash_table_destroy (widgets);
