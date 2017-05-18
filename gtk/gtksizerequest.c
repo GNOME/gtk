@@ -39,38 +39,25 @@ static GQuark recursion_check_quark = 0;
 
 static void
 push_recursion_check (GtkWidget       *widget,
-                      GtkOrientation   orientation,
-                      gint             for_size)
+                      GtkOrientation   orientation)
 {
-  const char *previous_method;
-  const char *method;
+  gboolean in_measure = FALSE;
 
   if (recursion_check_quark == 0)
     recursion_check_quark = g_quark_from_static_string ("gtk-size-request-in-progress");
 
-  previous_method = g_object_get_qdata (G_OBJECT (widget), recursion_check_quark);
+  in_measure = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), recursion_check_quark));
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (in_measure)
     {
-      method = for_size < 0 ? "get_width" : "get_width_for_height";
-    }
-  else
-    {
-      method = for_size < 0 ? "get_height" : "get_height_for_width";
-    }
-
-  if (previous_method != NULL)
-    {
-      g_warning ("%s %p: widget tried to gtk_widget_%s inside "
-                 " GtkWidget     ::%s implementation. "
-                 "Should just invoke GTK_WIDGET_GET_CLASS(widget)->%s "
-                 "directly rather than using gtk_widget_%s",
-                 G_OBJECT_TYPE_NAME (widget), widget,
-                 method, previous_method,
-                 method, method);
+      g_warning ("%s %p: widget tried to gtk_widget_measure inside "
+                 " GtkWidget::measure implementation. "
+                 "Should just invoke GTK_WIDGET_GET_CLASS(widget)->measure "
+                 "directly rather than using gtk_widget_measure",
+                 G_OBJECT_TYPE_NAME (widget), widget);
     }
 
-  g_object_set_qdata (G_OBJECT (widget), recursion_check_quark, (char*) method);
+  g_object_set_qdata (G_OBJECT (widget), recursion_check_quark, GINT_TO_POINTER(TRUE));
 }
 
 static void
@@ -80,7 +67,7 @@ pop_recursion_check (GtkWidget       *widget,
   g_object_set_qdata (G_OBJECT (widget), recursion_check_quark, NULL);
 }
 #else
-#define push_recursion_check(widget, orientation, for_size)
+#define push_recursion_check(widget, orientation)
 #define pop_recursion_check(widget, orientation)
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
@@ -167,7 +154,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         {
           if (for_size < 0)
             {
-	      push_recursion_check (widget, orientation, for_size);
+              push_recursion_check (widget, orientation);
               widget_class->measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
                                      &min_size, &nat_size, NULL, NULL);
 	      pop_recursion_check (widget, orientation);
@@ -191,7 +178,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                                  &dummy,
                                                  &adjusted_for_size);
 
-	      push_recursion_check (widget, orientation, for_size);
+              push_recursion_check (widget, orientation);
               widget_class->measure (widget,
                                      GTK_ORIENTATION_HORIZONTAL,
                                      MAX (adjusted_for_size, minimum_height),
@@ -204,7 +191,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         {
           if (for_size < 0)
             {
-	      push_recursion_check (widget, orientation, for_size);
+              push_recursion_check (widget, orientation);
               widget_class->measure (widget,
                                      GTK_ORIENTATION_VERTICAL,
                                      -1,
@@ -231,7 +218,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                                  &dummy,
                                                  &adjusted_for_size);
 
-	      push_recursion_check (widget, orientation, for_size);
+              push_recursion_check (widget, orientation);
               widget_class->measure (widget,
                                      GTK_ORIENTATION_VERTICAL,
                                      MAX (adjusted_for_size, minimum_width),
