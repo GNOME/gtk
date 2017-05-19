@@ -68,6 +68,7 @@
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkcontainerprivate.h"
+#include "gtkgizmoprivate.h"
 
 #include "fallback-c89.c"
 
@@ -671,7 +672,7 @@ gtk_switch_init (GtkSwitch *self)
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
-  priv->slider = g_object_new (GTK_TYPE_BUTTON, "css-name", "slider", NULL);
+  priv->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL);
   gtk_widget_set_parent (priv->slider, GTK_WIDGET (self));
 
   gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
