@@ -130,7 +130,6 @@ typedef struct _PointData PointData;
 
 enum {
   PROP_N_POINTS = 1,
-  PROP_WINDOW
 };
 
 enum {
@@ -795,21 +794,6 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                                                       1, G_MAXUINT, 1,
                                                       GTK_PARAM_READWRITE |
 						      G_PARAM_CONSTRUCT_ONLY));
-  /**
-   * GtkGesture:window:
-   *
-   * If non-%NULL, the gesture will only listen for events that happen on
-   * this #GdkWindow, or a child of it.
-   *
-   * Since: 3.14
-   */
-  g_object_class_install_property (object_class,
-                                   PROP_WINDOW,
-                                   g_param_spec_object ("window",
-                                                        P_("GdkWindow to receive events about"),
-                                                        P_("GdkWindow to receive events about"),
-                                                        GDK_TYPE_WINDOW,
-                                                        GTK_PARAM_READWRITE));
   /**
    * GtkGesture::begin:
    * @gesture: the object which received the signal
