@@ -1989,6 +1989,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                 "gtk-primary-button-warps-slider", &primary_warps,
                 NULL);
 
+
   if (priv->mouse_location == priv->slider_widget &&
       gdk_event_triggers_context_menu (event))
     {
@@ -2727,7 +2728,7 @@ gtk_range_update_mouse_location (GtkRange *range)
     priv->mouse_location = priv->grab_location;
   else if (rectangle_contains_point (&slider_alloc, range_alloc.x + x, range_alloc.y + y))
     priv->mouse_location = priv->slider_widget;
-  else if (rectangle_contains_point (&slider_trace, x, y))
+  else if (rectangle_contains_point (&slider_trace, range_alloc.x + x, range_alloc.y + y))
     priv->mouse_location = priv->trough_widget;
   else if (rectangle_contains_point (&range_alloc, range_alloc.x + x, range_alloc.y + y))
     priv->mouse_location = widget;
