@@ -24,6 +24,7 @@
 #include "gtkiconprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkrendericonprivate.h"
+#include "gtksnapshot.h"
 
 /* GtkIcon was a minimal widget wrapped around a GtkBuiltinIcon gadget,
  * It should be used whenever builtin-icon functionality is desired
@@ -45,14 +46,22 @@ gtk_icon_snapshot (GtkWidget   *widget,
 {
   GtkIcon *self = GTK_ICON (widget);
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
+  GtkAllocation content_alloc;
   GtkAllocation alloc;
+  int x, y;
 
-  gtk_widget_get_content_allocation (widget, &alloc);
+  gtk_widget_get_allocation (widget, &alloc);
+  gtk_widget_get_content_allocation (widget, &content_alloc);
 
+  x = content_alloc.x - alloc.x;
+  y = content_alloc.y - alloc.y;
+
+  gtk_snapshot_offset (snapshot, x, y);
   gtk_css_style_snapshot_icon (style,
                                snapshot,
-                               alloc.width, alloc.height,
+                               content_alloc.width, content_alloc.height,
                                self->image);
+  gtk_snapshot_offset (snapshot, -x, -y);
 }
 
 static void
