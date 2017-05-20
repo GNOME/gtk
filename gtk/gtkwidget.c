@@ -15355,6 +15355,59 @@ gtk_widget_reset_controllers (GtkWidget *widget)
     }
 }
 
+static inline void
+gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
+                                         GtkSnapshot           *snapshot)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GdkDisplay *display = gtk_widget_get_display (widget);
+
+  if (GTK_DISPLAY_DEBUG_CHECK (display, BASELINES))
+    {
+      int baseline = gtk_widget_get_allocated_baseline (widget);
+
+      if (baseline != -1)
+        {
+          GdkRGBA black = {1, 0, 0, 1};
+          graphene_rect_t bounds;
+
+          style = gtk_css_node_get_style (priv->cssnode);
+          get_box_margin (style, &margin);
+          get_box_border (style, &border);
+          get_box_padding (style, &padding);
+
+          /* Baselines are relative to the widget's origin,
+           * and we are offset to the widget's allocation here */
+          graphene_rect_init (&bounds,
+                              0,
+                              margin.top + border.top + padding.top + baseline,
+                              priv->allocation.width, 1);
+          gtk_snapshot_append_color (snapshot,
+                                     &black,
+                                     &bounds,
+                                     "Baseline Debug");
+        }
+    }
+
+  if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE) &&
+      priv->highlight_resize)
+    {
+      GdkRGBA red = {1, 0, 0, 0.2};
+      graphene_rect_t bounds;
+
+      graphene_rect_init (&bounds,
+                          0, 0,
+                          priv->allocation.width, priv->allocation.height);
+
+      gtk_snapshot_append_color (snapshot,
+                                 &red,
+                                 &bounds,
+                                 "Baseline Debug");
+      priv->highlight_resize = FALSE;
+      gtk_widget_queue_draw (widget);
+    }
+}
+
 void
 gtk_widget_snapshot (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
@@ -15480,6 +15533,11 @@ gtk_widget_snapshot (GtkWidget   *widget,
     }
 
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
+
+#ifdef G_ENABLE_DEBUG
+  gtk_widget_maybe_add_debug_render_nodes (widget, snapshot);
+#endif
+
 
   if (GTK_DEBUG_CHECK (SNAPSHOT))
     gtk_snapshot_pop (snapshot);
