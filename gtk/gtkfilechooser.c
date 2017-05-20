@@ -1829,7 +1829,7 @@ gtk_file_chooser_set_extra_widget (GtkFileChooser *chooser,
  * gtk_file_chooser_get_extra_widget:
  * @chooser: a #GtkFileChooser
  *
- * Gets the current preview widget; see
+ * Gets the current extra widget; see
  * gtk_file_chooser_set_extra_widget().
  *
  * Returns: (nullable) (transfer none): the current extra widget, or %NULL
