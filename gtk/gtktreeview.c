@@ -2602,7 +2602,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *tmp_list;
-  gboolean width_changed = FALSE;
+  gboolean width_changed = TRUE;
   gint old_width;
   double page_size;
 
