@@ -1337,6 +1337,11 @@ synth_crossing_for_motion (GtkWidget     *widget,
   if (other_widget)
     event->crossing.subwindow = g_object_ref (gtk_widget_get_window (other_widget));
 
+  if (enter)
+    gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
+  else
+    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+
   gdk_event_get_coords (source, &x, &y);
   event->crossing.x = x;
   event->crossing.y = y;
