@@ -15361,6 +15361,73 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkDisplay *display = gtk_widget_get_display (widget);
+  GtkCssStyle *style;
+  GtkBorder margin, border, padding;
+
+  /* We should be offset to the widget allocation at this point */
+
+  if (GTK_DISPLAY_DEBUG_CHECK (display, LAYOUT))
+    {
+      graphene_rect_t bounds;
+      GdkRGBA margin_color  = {0.3, 0.3, 0, 0.6};
+      GdkRGBA padding_color = {0.3, 0, 0.3, 0.6};
+
+      style = gtk_css_node_get_style (priv->cssnode);
+      get_box_margin (style, &margin);
+      get_box_border (style, &border);
+      get_box_padding (style, &padding);
+
+      /* Margins */
+      graphene_rect_init (&bounds,
+                          0, 0,
+                          priv->allocation.width, margin.top);
+      gtk_snapshot_append_color (snapshot, &margin_color, &bounds, "Margin top");
+
+      graphene_rect_init (&bounds,
+                          0, priv->allocation.height - margin.bottom,
+                          priv->allocation.width, margin.bottom);
+      gtk_snapshot_append_color (snapshot, &margin_color, &bounds, "Margin bottom");
+
+      graphene_rect_init (&bounds,
+                          0, margin.top,
+                          margin.left, priv->allocation.height - margin.top - margin.bottom);
+      gtk_snapshot_append_color (snapshot, &margin_color, &bounds, "Margin left");
+
+      graphene_rect_init (&bounds,
+                          priv->allocation.width - margin.right, margin.top,
+                          margin.left, priv->allocation.height - margin.top - margin.bottom);
+      gtk_snapshot_append_color (snapshot, &margin_color, &bounds, "Margin right");
+
+
+      /* Padding */
+      graphene_rect_init (&bounds,
+                          margin.left + border.left,
+                          margin.top + border.top,
+                          priv->allocation.width - margin.left - margin.right - border.left - border.right,
+                          padding.top);
+      gtk_snapshot_append_color (snapshot, &padding_color, &bounds, "Padding top");
+
+      graphene_rect_init (&bounds,
+                          margin.left + border.left,
+                          priv->allocation.height - margin.bottom - border.bottom - padding.bottom,
+                          priv->allocation.width - margin.left - margin.right - border.left - border.right,
+                          padding.bottom);
+      gtk_snapshot_append_color (snapshot, &padding_color, &bounds, "Padding bottom");
+
+      graphene_rect_init (&bounds,
+                          margin.left + border.left,
+                          margin.top + border.top + padding.top,
+                          padding.left,
+                          priv->allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom);
+      gtk_snapshot_append_color (snapshot, &padding_color, &bounds, "Padding left");
+
+      graphene_rect_init (&bounds,
+                          priv->allocation.width - margin.left - border.right - padding.right,
+                          margin.top + border.top + padding.top,
+                          padding.right,
+                          priv->allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom);
+      gtk_snapshot_append_color (snapshot, &padding_color, &bounds, "Padding right");
+    }
 
   if (GTK_DISPLAY_DEBUG_CHECK (display, BASELINES))
     {
