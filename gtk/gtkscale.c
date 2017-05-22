@@ -1953,7 +1953,10 @@ gtk_scale_add_mark (GtkScale        *scale,
                                          "use-markup", TRUE,
                                          "label", mark->markup,
                                          NULL);
-      gtk_widget_set_parent (mark->label_widget, mark->widget);
+      if (marks_widget == priv->top_marks_widget)
+        gtk_widget_insert_after (mark->label_widget, mark->widget, NULL);
+      else
+        gtk_widget_insert_before (mark->label_widget, mark->widget, NULL);
     }
 
   m = g_slist_find (priv->marks, mark);
