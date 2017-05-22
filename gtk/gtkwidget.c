@@ -15473,6 +15473,38 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
       priv->highlight_resize = FALSE;
       gtk_widget_queue_draw (widget);
     }
+
+  if (GTK_DISPLAY_DEBUG_CHECK (display, GEOMETRY))
+    {
+      GdkRGBA clip_color = {0, 0, 1, 0.7};
+      GtkAllocation offset_clip;
+      graphene_rect_t bounds;
+
+      offset_clip = priv->clip;
+      offset_clip.x -= priv->allocation.x;
+      offset_clip.y -= priv->allocation.y;
+
+      graphene_rect_init (&bounds,
+                          offset_clip.x, offset_clip.y,
+                          offset_clip.width, 1);
+      gtk_snapshot_append_color (snapshot, &clip_color, &bounds, "Clip Top");
+
+      graphene_rect_init (&bounds,
+                          offset_clip.x, offset_clip.y + offset_clip.height - 1,
+                          offset_clip.width, 1);
+      gtk_snapshot_append_color (snapshot, &clip_color, &bounds, "Clip bottom");
+
+      graphene_rect_init (&bounds,
+                          offset_clip.x, offset_clip.y + 1,
+                          1, offset_clip.height - 2);
+      gtk_snapshot_append_color (snapshot, &clip_color, &bounds, "Clip left");
+
+      graphene_rect_init (&bounds,
+                          offset_clip.x + offset_clip.width - 1, offset_clip.y + 1,
+                          1, offset_clip.height - 2);
+      gtk_snapshot_append_color (snapshot, &clip_color, &bounds, "Clip right");
+
+    }
 }
 
 void
