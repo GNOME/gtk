@@ -2275,9 +2275,11 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
 
 /**
  * gtk_spin_button_get_text:
- * @spin_button:
+ * @spin_button: a #GtkSpinButton
  *
- * Returns: (transfer none): The text
+ * Returns: (transfer none): The current text shown in the entry area of @spin_button.
+ *
+ * Since: 3.92
  */
 const char *
 gtk_spin_button_get_text (GtkSpinButton *spin_button)
@@ -2291,9 +2293,12 @@ gtk_spin_button_get_text (GtkSpinButton *spin_button)
 
 /**
  * gtk_spin_button_set_text:
- * @spin_button
+ * @spin_button: a #GtkSpinButton
  *
+ * Sets the current text of the spinbutton. Note that setting this will not change
+ * the value of the adjustment @spin_button.
  *
+ * Since: 3.92
  */
 void
 gtk_spin_button_set_text (GtkSpinButton *spin_button,
@@ -2308,6 +2313,20 @@ gtk_spin_button_set_text (GtkSpinButton *spin_button,
   g_object_notify (G_OBJECT (spin_button), "text");
 }
 
+/**
+ * gtk_spin_button_get_max_width_chars:
+ * @spin_button: a #GtkSpinButton
+ *
+ * Retrieves the desired maximum width of @spin_button, in characters.
+ * Note that this only applies to the entry area of @spin_button, not the
+ * spin button. This is especially important for horizontal spinbuttons.
+ *
+ * See also #GtkEntry:max-width-chars
+ *
+ * Returns: the maximum width of the spin button, in characters
+ *
+ * Since: 3.92
+ */
 int
 gtk_spin_button_get_max_width_chars (GtkSpinButton *spin_button)
 {
@@ -2318,7 +2337,17 @@ gtk_spin_button_get_max_width_chars (GtkSpinButton *spin_button)
   return gtk_entry_get_width_chars (GTK_ENTRY (priv->entry));
 }
 
-
+/**
+ * gtk_spin_button_set_max_width_chars:
+ * @spin_button: a #GtkSpinButton
+ * @max_width_chars: new desired maximum width in chars
+ *
+ * Sets the desired maximum width of @spin_button, in characters.
+ * Note that this only applies to the entry area of @spin_button, not the
+ * spin button. This is especially important for horizontal spinbuttons.
+ *
+ * Since: 3.92
+ */
 void
 gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
                                     int            max_width_chars)
@@ -2331,6 +2360,18 @@ gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
   g_object_notify (G_OBJECT (spin_button), "max-width-chars");
 }
 
+/**
+ * gtk_spin_button_get_width_chars:
+ * @spin_button: a #GtkSpinButton
+ *
+ * Get the value set by gtk_spin_button_set_width_chars(). Note that this
+ * value only applies to the entry area of @spin_button.
+ *
+ * Returns: The number of characters to request space for in the entry
+ *          area of @spin_button
+ *
+ * Since: 3.92
+ */
 int
 gtk_spin_button_get_width_chars (GtkSpinButton *spin_button)
 {
@@ -2341,6 +2382,16 @@ gtk_spin_button_get_width_chars (GtkSpinButton *spin_button)
   return gtk_entry_get_width_chars (GTK_ENTRY (priv->entry));
 }
 
+/**
+ * gtk_spin_button_set_width_chars:
+ * @spin_button: a #GtkSpinButton
+ * @width_chars: desired width in characters
+ *
+ * Changes the size request of the entry area of @spin_button
+ * to be about the right size for @width_chars characters.
+ *
+ * Since: 3.92
+ */
 void
 gtk_spin_button_set_width_chars (GtkSpinButton *spin_button,
                                  int            width_chars)
