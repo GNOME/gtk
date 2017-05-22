@@ -36,6 +36,7 @@
 #include "gtkimageprivate.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
+#include "gtkoffscreenwindow.h"
 #include "deprecated/gtkstock.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
@@ -354,7 +355,10 @@ get_toplevel_nswindow (GtkWidget *widget)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
   GdkWindow *window = gtk_widget_get_window (toplevel);
-  
+
+  if (GTK_IS_OFFSCREEN_WINDOW (toplevel))
+    return NULL;
+
   if (gtk_widget_is_toplevel (toplevel) && window)
     return [gdk_quartz_window_get_nsview (window) window];
   else
