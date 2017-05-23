@@ -332,21 +332,21 @@ count_expand_children (GtkBox *box,
                        gint *expand_children)
 {
   GtkBoxPrivate  *private = box->priv;
-  GList       *children;
-  GtkBoxChild *child;
+  GtkWidget *child;
 
   *visible_children = *expand_children = 0;
 
-  for (children = private->children; children; children = children->next)
+  for (child = _gtk_widget_get_first_child (GTK_WIDGET (box));
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
     {
-      child = children->data;
+      if (_gtk_widget_get_visible (child))
+        {
+          *visible_children += 1;
 
-      if (_gtk_widget_get_visible (child->widget))
-	{
-	  *visible_children += 1;
-          if (gtk_widget_compute_expand (child->widget, private->orientation))
-	    *expand_children += 1;
-	}
+          if (gtk_widget_compute_expand (child, private->orientation))
+            *expand_children += 1;
+        }
     }
 }
 
