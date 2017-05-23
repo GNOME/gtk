@@ -15,22 +15,6 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-  menubutton
-    "toggle button"
-    parent: window1
-    index: 0
-    name: Menu
-    state: enabled focusable sensitive showing visible
-    toolkit: gtk
-    <AtkComponent>
-    layer: widget
-    alpha: 1
-    <AtkImage>
-    image size: 16 x 16
-    image description: (null)
-    <AtkAction>
-    action 0 name: click
-    action 0 description: Clicks the button
   unnamed-GtkPopoverAccessible-1
     "panel"
     parent: menubutton
@@ -101,3 +85,19 @@ window1
                 <AtkAction>
                 action 0 name: click
                 action 0 description: Clicks the button
+  menubutton
+    "toggle button"
+    parent: window1
+    index: 0
+    name: Menu
+    state: enabled focusable sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    <AtkImage>
+    image size: 16 x 16
+    image description: (null)
+    <AtkAction>
+    action 0 name: click
+    action 0 description: Clicks the button

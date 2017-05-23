@@ -20,7 +20,7 @@ window1
       "unknown"
       parent: grid1
       index: 0
-      state: enabled sensitive visible
+      state: enabled sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -29,7 +29,7 @@ window1
       "unknown"
       parent: grid1
       index: 1
-      state: enabled sensitive visible
+      state: enabled sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

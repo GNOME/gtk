@@ -50,25 +50,8 @@ window1
       action 0 description: Clicks the button
     button5
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
-      index: 2
+      parent: unnamed-GtkWidgetAccessible-1
       name: Center
-      state: enabled focusable sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-      action 0 description: Clicks the button
-    button4
-      "push button"
-      parent: unnamed-GtkContainerAccessible-0
-      index: 3
-      name: End 2
       state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
@@ -82,9 +65,25 @@ window1
       action 0 description: Clicks the button
     button3
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
-      index: 4
+      parent: unnamed-GtkContainerAccessible-2
+      index: 1
       name: End 1
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+    button4
+      "push button"
+      parent: unnamed-GtkContainerAccessible-2
+      index: 0
+      name: End 2
       state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
