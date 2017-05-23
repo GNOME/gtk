@@ -103,7 +103,7 @@ gdk_enums = gnome.mkenums('gdkenumtypes',
   sources: gdk_public_headers,
   c_template : 'gdkenumtypes.c.template',
   h_template : 'gdkenumtypes.h.template',
-  install_dir : 'include/gtk-4.0/gdk',
+  install_dir: join_paths(gtk_includedir, 'gtk-4.0/gdk'),
   install_header : true)
 
 gdkenum_h = gdk_enums[1]
@@ -126,7 +126,7 @@ gdkconfig = configure_file(
   input  : 'gdkconfig.h.meson',
   output : 'gdkconfig.h',
   configuration : gdkconfig_cdata,
-  install_dir: 'include/gtk-4.0/gdk/')
+  install_dir: join_paths(gtk_includedir, 'gtk-4.0/gdk'))
 
 
 gdkversion_cdata = configuration_data()
@@ -138,7 +138,7 @@ gdkversionmacros = configure_file(
   input  : 'gdkversionmacros.h.in',
   output : 'gdkversionmacros.h',
   configuration: gdkversion_cdata,
-  install_dir: 'include/gtk-4.0/gdk/')
+  install_dir: join_paths(gtk_includedir, 'gtk-4.0/gdk'))
 
 gdkinc = include_directories('.')
 
