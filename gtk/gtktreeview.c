@@ -4372,14 +4372,17 @@ static void
 gtk_tree_view_invalidate_bin_region (GtkTreeView    *tree_view,
                                      cairo_region_t *region)
 {
+  GtkAllocation allocation;
+
   cairo_region_intersect_rectangle (region,
                                     &(GdkRectangle) { 0, 0,
                                                       gdk_window_get_width (tree_view->priv->bin_window),
                                                       gdk_window_get_height (tree_view->priv->bin_window)});
 
+  gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
   cairo_region_translate (region,
-                          - (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
-                          gtk_tree_view_get_effective_header_height (tree_view));
+                          allocation.x - (gint) gtk_adjustment_get_value (tree_view->priv->hadjustment),
+                          allocation.y + gtk_tree_view_get_effective_header_height (tree_view));
 
   gtk_widget_queue_draw_region (GTK_WIDGET (tree_view), region);
 
@@ -10982,11 +10985,13 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 {
   if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     {
+      GtkAllocation allocation;
       gint dy;
-	
+
+      gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
       gdk_window_move (tree_view->priv->bin_window,
-		       - gtk_adjustment_get_value (tree_view->priv->hadjustment),
-		       gtk_tree_view_get_effective_header_height (tree_view));
+		       allocation.x - gtk_adjustment_get_value (tree_view->priv->hadjustment),
+		       allocation.y + gtk_tree_view_get_effective_header_height (tree_view));
       dy = tree_view->priv->dy - (int) gtk_adjustment_get_value (tree_view->priv->vadjustment);
       tree_view->priv->in_scroll = TRUE;
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
