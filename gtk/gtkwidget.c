@@ -15104,7 +15104,7 @@ event_controller_sequence_state_changed (GtkGesture            *gesture,
   if (!event)
     return;
 
-  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+  event_widget = gtk_get_event_target ((GdkEvent *) event);
   cancel_event_sequence_on_hierarchy (widget, event_widget, sequence);
 }
 
