@@ -3703,6 +3703,7 @@ gtk_list_box_bind_model (GtkListBox                 *box,
                          GDestroyNotify              user_data_free_func)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
+  GSequenceIter *iter;
 
   g_return_if_fail (GTK_IS_LIST_BOX (box));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
@@ -3717,7 +3718,14 @@ gtk_list_box_bind_model (GtkListBox                 *box,
       g_clear_object (&priv->bound_model);
     }
 
-  gtk_list_box_forall (GTK_CONTAINER (box), (GtkCallback) gtk_widget_destroy, NULL);
+  iter = g_sequence_get_begin_iter (priv->children);
+  while (!g_sequence_iter_is_end (iter))
+    {
+      GtkWidget *row = g_sequence_get (iter);
+      iter = g_sequence_iter_next (iter);
+      gtk_list_box_remove (GTK_CONTAINER (box), row);
+    }
+
 
   if (model == NULL)
     return;
