@@ -2400,7 +2400,8 @@ gtk_icon_view_update_rubberband (gpointer data)
   GdkRectangle old_area;
   GdkRectangle new_area;
   cairo_region_t *invalid_region;
-  
+  GtkAllocation allocation;
+
   icon_view = GTK_ICON_VIEW (data);
 
   gdk_window_get_device_position (icon_view->priv->bin_window,
@@ -2427,9 +2428,11 @@ gtk_icon_view_update_rubberband (gpointer data)
   invalid_region = cairo_region_create_rectangle (&old_area);
   cairo_region_union_rectangle (invalid_region, &new_area);
 
+  gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
+
   cairo_region_translate (invalid_region,
-                          - gtk_adjustment_get_value (icon_view->priv->hadjustment),
-                          - gtk_adjustment_get_value (icon_view->priv->vadjustment));
+                          allocation.x - gtk_adjustment_get_value (icon_view->priv->hadjustment),
+                          allocation.y - gtk_adjustment_get_value (icon_view->priv->vadjustment));
   gtk_widget_queue_draw_region (GTK_WIDGET (icon_view), invalid_region);
     
   cairo_region_destroy (invalid_region);
@@ -2807,12 +2810,14 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
                                   GtkIconView   *icon_view)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
+  GtkAllocation allocation;
 
   if (gtk_widget_get_realized (GTK_WIDGET (icon_view)))
     {
+      gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
       gdk_window_move (priv->bin_window,
-                       - gtk_adjustment_get_value (priv->hadjustment),
-                       - gtk_adjustment_get_value (priv->vadjustment));
+                       allocation.x - gtk_adjustment_get_value (priv->hadjustment),
+                       allocation.y - gtk_adjustment_get_value (priv->vadjustment));
 
       if (icon_view->priv->doing_rubberband)
         gtk_icon_view_update_rubberband (GTK_WIDGET (icon_view));
@@ -3094,14 +3099,19 @@ gtk_icon_view_queue_draw_item (GtkIconView     *icon_view,
 {
   GdkRectangle  rect;
   GdkRectangle *item_area = &item->cell_area;
+  GtkAllocation allocation;
 
   rect.x      = item_area->x - icon_view->priv->item_padding;
   rect.y      = item_area->y - icon_view->priv->item_padding;
   rect.width  = item_area->width  + icon_view->priv->item_padding * 2;
   rect.height = item_area->height + icon_view->priv->item_padding * 2;
 
-  rect.x -= gtk_adjustment_get_value (icon_view->priv->hadjustment);
-  rect.y -= gtk_adjustment_get_value (icon_view->priv->vadjustment);
+  gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
+
+  rect.x += allocation.x -
+    gtk_adjustment_get_value (icon_view->priv->hadjustment);
+  rect.y += allocation.y -
+    gtk_adjustment_get_value (icon_view->priv->vadjustment);
 
   gtk_widget_queue_draw_area (GTK_WIDGET (icon_view), rect.x, rect.y, rect.width, rect.height);
 }
@@ -4134,6 +4144,9 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
 
   gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
   gtk_widget_get_allocation (widget, &allocation);
+
+  x -= allocation.x;
+  y -= allocation.y;
 
   hadj = icon_view->priv->hadjustment;
   vadj = icon_view->priv->vadjustment;
