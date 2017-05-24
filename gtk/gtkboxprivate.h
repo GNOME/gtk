@@ -20,7 +20,6 @@
 #define __GTK_BOX_PRIVATE_H__
 
 #include "gtkbox.h"
-#include "gtkcssgadgetprivate.h"
 
 G_BEGIN_DECLS
 

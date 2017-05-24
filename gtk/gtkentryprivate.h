@@ -23,7 +23,6 @@
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkentry.h>
-#include <gtk/gtkcssgadgetprivate.h>
 #include <gtk/gtkspinbutton.h>
 
 G_BEGIN_DECLS
