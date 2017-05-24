@@ -426,8 +426,8 @@ static gint gtk_text_view_focus_out_event      (GtkWidget        *widget,
                                                 GdkEventFocus    *event);
 static gint gtk_text_view_motion_event         (GtkWidget        *widget,
                                                 GdkEventMotion   *event);
-static gint gtk_text_view_draw                 (GtkWidget        *widget,
-                                                cairo_t          *cr);
+static void gtk_text_view_snapshot             (GtkWidget        *widget,
+                                                GtkSnapshot      *snapshot);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
                                                 GtkDirectionType  direction);
 static void gtk_text_view_select_all           (GtkWidget        *widget,
@@ -752,7 +752,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->focus_in_event = gtk_text_view_focus_in_event;
   widget_class->focus_out_event = gtk_text_view_focus_out_event;
   widget_class->motion_notify_event = gtk_text_view_motion_event;
-  widget_class->draw = gtk_text_view_draw;
+  widget_class->snapshot = gtk_text_view_snapshot;
   widget_class->focus = gtk_text_view_focus;
   widget_class->drag_begin = gtk_text_view_drag_begin;
   widget_class->drag_end = gtk_text_view_drag_end;
@@ -5895,23 +5895,27 @@ paint_border_window (GtkTextView     *text_view,
   gtk_style_context_restore (context);
 }
 
-static gboolean
-gtk_text_view_draw (GtkWidget *widget,
-                    cairo_t   *cr)
+static void
+gtk_text_view_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
   GtkTextViewPrivate *priv = ((GtkTextView *)widget)->priv;
   GSList *tmp_list;
   GdkWindow *window;
   GtkStyleContext *context;
+  graphene_rect_t bounds;
+  cairo_t *cr;
+
+  graphene_rect_init (&bounds,
+                      0, 0,
+                      gtk_widget_get_allocated_width (widget),
+                      gtk_widget_get_allocated_height (widget));
+
+  cr = gtk_snapshot_append_cairo (snapshot, &bounds, "GtkTextView");
 
   context = gtk_widget_get_style_context (widget);
 
   text_window_set_padding (GTK_TEXT_VIEW (widget), context);
-
-  gtk_render_background (context, cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
                                      GTK_TEXT_WINDOW_TEXT);
@@ -5945,8 +5949,8 @@ gtk_text_view_draw (GtkWidget *widget,
       
       tmp_list = tmp_list->next;
     }
-  
-  return FALSE;
+
+  cairo_destroy (cr);
 }
 
 static gboolean
