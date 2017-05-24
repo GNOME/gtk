@@ -39,8 +39,6 @@
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
 
-#define MAX_TOOLTIP_LINE_WIDTH  70
-
 struct _GtkTooltipWindow
 {
   GtkWindow parent_type;
