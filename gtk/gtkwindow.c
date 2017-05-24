@@ -11432,15 +11432,31 @@ gtk_window_set_pointer_focus_grab (GtkWindow        *window,
 static void
 update_cursor (GtkWindow *toplevel,
                GdkDevice *device,
+               GtkWidget *grab_widget,
                GtkWidget *target)
 {
   GdkCursor *cursor = NULL;
   GList *widgets = NULL, *l;
 
-  while (target)
+  if (grab_widget && !gtk_widget_is_ancestor (target, grab_widget))
     {
-      widgets = g_list_prepend (widgets, target);
-      target = _gtk_widget_get_parent (target);
+      /* Outside the grab widget, cursor stays to whatever the grab
+       * widget says.
+       */
+      widgets = g_list_prepend (widgets, grab_widget);
+    }
+  else
+    {
+      /* Inside the grab widget or in absence of grabs, allow walking
+       * up the hierarchy to find out the cursor.
+       */
+      while (target)
+        {
+          widgets = g_list_prepend (widgets, target);
+          if (grab_widget && target == grab_widget)
+            break;
+          target = _gtk_widget_get_parent (target);
+        }
     }
 
   for (l = widgets; l; l = l->next)
@@ -11465,17 +11481,38 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
   for (l = window->priv->foci; l; l = l->next)
     {
       GtkPointerFocus *focus = l->data;
+      GtkWidget *grab_widget, *target;
+      GtkWindowGroup *group;
 
       if (focus->sequence)
         continue;
       if (device && device != focus->device)
         continue;
 
-      if (widget != focus->target &&
-          !gtk_widget_is_ancestor (focus->target, widget))
-        continue;
+      group = gtk_window_get_group (window);
+      grab_widget = gtk_window_group_get_current_device_grab (group,
+                                                              focus->device);
+      if (!grab_widget)
+        grab_widget = gtk_window_group_get_current_grab (group);
+      if (!grab_widget)
+        grab_widget = gtk_pointer_focus_get_implicit_grab (focus);
 
-      update_cursor (focus->toplevel, focus->device, focus->target);
+      target = gtk_pointer_focus_get_target (focus);
+
+      if (widget)
+        {
+          /* Check whether the changed widget affects the current cursor
+           * lookups.
+           */
+          if (grab_widget && grab_widget != widget &&
+              !gtk_widget_is_ancestor (widget, grab_widget))
+            continue;
+          if (grab_widget != widget &&
+              !gtk_widget_is_ancestor (target, widget))
+            continue;
+        }
+
+      update_cursor (focus->toplevel, focus->device, grab_widget, target);
 
       if (device)
         break;

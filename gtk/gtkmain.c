@@ -1498,7 +1498,7 @@ handle_pointing_event (GdkEvent *event)
       target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
       old_target = update_pointer_focus_state (toplevel, event, target);
       if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
-        gtk_window_maybe_update_cursor (toplevel, target, device);
+        gtk_window_maybe_update_cursor (toplevel, NULL, device);
 
       if (event->type == GDK_TOUCH_BEGIN)
         gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
@@ -1516,6 +1516,9 @@ handle_pointing_event (GdkEvent *event)
       gtk_window_set_pointer_focus_grab (toplevel, device, sequence,
                                          event->type == GDK_BUTTON_PRESS ?
                                          target : NULL);
+
+      if (event->type == GDK_BUTTON_RELEASE)
+        gtk_window_maybe_update_cursor (toplevel, NULL, device);
       break;
     case GDK_SCROLL:
     case GDK_TOUCHPAD_PINCH:
