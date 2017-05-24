@@ -1292,9 +1292,10 @@ gtk_real_menu_item_set_label (GtkMenuItem *menu_item,
   gtk_menu_item_ensure_label (menu_item);
 
   child = gtk_bin_get_child (GTK_BIN (menu_item));
-  if (GTK_IS_LABEL (child))
+  if (GTK_IS_LABEL (child) ||
+      GTK_IS_ACCEL_LABEL (child))
     {
-      gtk_label_set_label (GTK_LABEL (child), label ? label : "");
+      g_object_set (child, "label", label ? label : "", NULL);
 
       g_object_notify_by_pspec (G_OBJECT (menu_item), menu_item_props[PROP_LABEL]);
     }
@@ -1308,8 +1309,15 @@ gtk_real_menu_item_get_label (GtkMenuItem *menu_item)
   gtk_menu_item_ensure_label (menu_item);
 
   child = gtk_bin_get_child (GTK_BIN (menu_item));
-  if (GTK_IS_LABEL (child))
-    return gtk_label_get_label (GTK_LABEL (child));
+  if (GTK_IS_LABEL (child) ||
+      GTK_IS_ACCEL_LABEL (child))
+    {
+      const char *label;
+
+      g_object_get (child, "label", &label, NULL);
+
+      return label;
+    }
 
   return NULL;
 }
@@ -1818,7 +1826,7 @@ gtk_menu_item_ensure_label (GtkMenuItem *menu_item)
 
   if (!gtk_bin_get_child (GTK_BIN (menu_item)))
     {
-      accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, "xalign", 0.0, NULL);
+      accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
       gtk_widget_set_halign (accel_label, GTK_ALIGN_FILL);
       gtk_widget_set_valign (accel_label, GTK_ALIGN_CENTER);
 
@@ -1886,10 +1894,10 @@ gtk_menu_item_set_use_underline (GtkMenuItem *menu_item,
   gtk_menu_item_ensure_label (menu_item);
 
   child = gtk_bin_get_child (GTK_BIN (menu_item));
-  if (GTK_IS_LABEL (child) &&
-      gtk_label_get_use_underline (GTK_LABEL (child)) != setting)
+  if (GTK_IS_ACCEL_LABEL (child) &&
+      gtk_accel_label_get_use_underline (GTK_ACCEL_LABEL (child)) != setting)
     {
-      gtk_label_set_use_underline (GTK_LABEL (child), setting);
+      gtk_accel_label_set_use_underline (GTK_ACCEL_LABEL (child), setting);
       g_object_notify_by_pspec (G_OBJECT (menu_item), menu_item_props[PROP_USE_UNDERLINE]);
     }
 }

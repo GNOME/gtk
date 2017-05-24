@@ -143,6 +143,8 @@ gtk_accel_label_get_accel_width
 gtk_accel_label_set_accel
 gtk_accel_label_get_accel
 gtk_accel_label_refetch
+gtk_accel_label_set_label
+gtk_accel_label_get_label
 <SUBSECTION Standard>
 GTK_ACCEL_LABEL
 GTK_IS_ACCEL_LABEL
