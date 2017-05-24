@@ -1508,8 +1508,12 @@ handle_pointing_event (GdkEvent *event)
 
       if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
         {
-          gtk_synthesize_crossing_events (toplevel, old_target, target,
-                                          event, GDK_CROSSING_NORMAL);
+          if (!gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device,
+                                                              sequence))
+            {
+              gtk_synthesize_crossing_events (toplevel, old_target, target,
+                                              event, GDK_CROSSING_NORMAL);
+            }
 
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
@@ -1532,7 +1536,13 @@ handle_pointing_event (GdkEvent *event)
                                          target : NULL);
 
       if (event->type == GDK_BUTTON_RELEASE)
-        gtk_window_maybe_update_cursor (toplevel, NULL, device);
+        {
+          old_target = target;
+          target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
+          gtk_synthesize_crossing_events (toplevel, old_target, target, event,
+                                          GDK_CROSSING_UNGRAB);
+          gtk_window_maybe_update_cursor (toplevel, NULL, device);
+        }
       break;
     case GDK_SCROLL:
     case GDK_TOUCHPAD_PINCH:

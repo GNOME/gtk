@@ -146,6 +146,9 @@ GtkWidget *      gtk_window_lookup_pointer_focus_widget (GtkWindow        *windo
 GtkWidget *      gtk_window_lookup_effective_pointer_focus_widget (GtkWindow        *window,
                                                                    GdkDevice        *device,
                                                                    GdkEventSequence *sequence);
+GtkWidget *      gtk_window_lookup_pointer_focus_implicit_grab (GtkWindow        *window,
+                                                                GdkDevice        *device,
+                                                                GdkEventSequence *sequence);
 
 void             gtk_window_update_pointer_focus (GtkWindow        *window,
                                                   GdkDevice        *device,
