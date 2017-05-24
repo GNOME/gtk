@@ -63,7 +63,10 @@ gdk_event_source_prepare (GSource *base,
   source->reading = TRUE;
 
   if (wl_display_flush (display->wl_display) < 0)
-    g_error ("Error flushing display: %s", g_strerror (errno));
+    {
+      g_message ("Error flushing display: %s", g_strerror (errno));
+      _exit (1);
+    }
 
   return FALSE;
 }
