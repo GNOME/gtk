@@ -29,7 +29,6 @@
 
 #include "gtklabel.h"
 #include "gtklabelprivate.h"
-#include "gtkaccellabel.h"
 #include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -1829,8 +1828,6 @@ static void
 label_shortcut_setting_apply (GtkLabel *label)
 {
   gtk_label_recalculate (label);
-  if (GTK_IS_ACCEL_LABEL (label))
-    gtk_accel_label_refetch (GTK_ACCEL_LABEL (label));
 }
 
 static void
@@ -3927,14 +3924,6 @@ gtk_label_snapshot (GtkWidget   *widget,
   x = 0;
   width = allocation.width;
   height = allocation.height;
-
-  if (GTK_IS_ACCEL_LABEL (widget))
-    {
-      guint ac_width = gtk_accel_label_get_accel_width (GTK_ACCEL_LABEL (widget));
-      width -= ac_width;
-      if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        x += ac_width;
-    }
 
   if (priv->text && (*priv->text != '\0'))
     {

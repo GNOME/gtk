@@ -56,13 +56,13 @@ typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
  */
 struct _GtkAccelLabel
 {
-  GtkLabel label;
+  GtkWidget parent_instance;
   GtkAccelLabelPrivate *priv;
 };
 
 struct _GtkAccelLabelClass
 {
-  GtkLabelClass	 parent_class;
+  GtkWidgetClass parent_class;
 
   gchar		*signal_quote1;
   gchar		*signal_quote2;
@@ -103,6 +103,13 @@ GDK_AVAILABLE_IN_3_12
 void       gtk_accel_label_get_accel         (GtkAccelLabel   *accel_label,
                                               guint           *accelerator_key,
                                               GdkModifierType *accelerator_mods);
+
+GDK_AVAILABLE_IN_3_92
+void      gtk_accel_label_set_label          (GtkAccelLabel   *accel_label,
+                                              const char      *text);
+
+GDK_AVAILABLE_IN_3_92
+const char * gtk_accel_label_get_label       (GtkAccelLabel   *accel_label);
 
 /* private */
 gchar *    _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
