@@ -1318,12 +1318,13 @@ get_virtual_notify_type (GdkNotifyType notify_type)
 }
 
 static void
-synth_crossing_for_motion (GtkWidget     *widget,
-                           GtkWidget     *toplevel,
-                           gboolean       enter,
-                           GtkWidget     *other_widget,
-                           GdkEvent      *source,
-                           GdkNotifyType  notify_type)
+synth_crossing (GtkWidget       *widget,
+                GtkWidget       *toplevel,
+                gboolean         enter,
+                GtkWidget       *other_widget,
+                GdkEvent        *source,
+                GdkNotifyType    notify_type,
+                GdkCrossingMode  crossing_mode)
 {
   GdkEvent *event;
   gdouble x, y;
@@ -1345,7 +1346,7 @@ synth_crossing_for_motion (GtkWidget     *widget,
   gdk_event_get_coords (source, &x, &y);
   event->crossing.x = x;
   event->crossing.y = y;
-  event->crossing.mode = GDK_CROSSING_NORMAL;
+  event->crossing.mode = crossing_mode;
   event->crossing.detail = notify_type;
 
   gtk_widget_event (widget, event);
@@ -1357,8 +1358,7 @@ update_pointer_focus_state (GtkWindow *toplevel,
                             GdkEvent  *event,
                             GtkWidget *new_target)
 {
-  GtkWidget *old_target = NULL, *ancestor = NULL, *widget;
-  GdkNotifyType enter_type, leave_type, notify_type;
+  GtkWidget *old_target = NULL;
   GdkEventSequence *sequence;
   GdkDevice *device;
   gdouble x, y;
@@ -1373,8 +1373,18 @@ update_pointer_focus_state (GtkWindow *toplevel,
   gtk_window_update_pointer_focus (toplevel, device, sequence,
                                    new_target, x, y);
 
-  if (sequence != NULL)
-    return old_target;
+  return old_target;
+}
+
+static void
+gtk_synthesize_crossing_events (GtkWindow       *toplevel,
+                                GtkWidget       *old_target,
+                                GtkWidget       *new_target,
+                                GdkEvent        *event,
+                                GdkCrossingMode  mode)
+{
+  GtkWidget *ancestor = NULL, *widget;
+  GdkNotifyType enter_type, leave_type, notify_type;
 
   if (old_target && new_target)
     ancestor = gtk_widget_common_ancestor (old_target, new_target);
@@ -1401,8 +1411,8 @@ update_pointer_focus_state (GtkWindow *toplevel,
           notify_type = (widget == old_target) ?
             leave_type : get_virtual_notify_type (leave_type);
 
-          synth_crossing_for_motion (widget, GTK_WIDGET (toplevel), FALSE,
-                                     new_target, event, notify_type);
+          synth_crossing (widget, GTK_WIDGET (toplevel), FALSE,
+                          new_target, event, notify_type, mode);
           widget = gtk_widget_get_parent (widget);
         }
     }
@@ -1426,12 +1436,10 @@ update_pointer_focus_state (GtkWindow *toplevel,
           notify_type = (widget == new_target) ?
             enter_type : get_virtual_notify_type (enter_type);
 
-          synth_crossing_for_motion (widget, GTK_WIDGET (toplevel), TRUE,
-                                     old_target, event, notify_type);
+          synth_crossing (widget, GTK_WIDGET (toplevel), TRUE,
+                          old_target, event, notify_type, mode);
         }
     }
-
-  return old_target;
 }
 
 static gboolean
@@ -1497,8 +1505,14 @@ handle_pointing_event (GdkEvent *event)
     case GDK_MOTION_NOTIFY:
       target = _gtk_toplevel_pick (toplevel, x, y, NULL, NULL);
       old_target = update_pointer_focus_state (toplevel, event, target);
+
       if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
-        gtk_window_maybe_update_cursor (toplevel, NULL, device);
+        {
+          gtk_synthesize_crossing_events (toplevel, old_target, target,
+                                          event, GDK_CROSSING_NORMAL);
+
+          gtk_window_maybe_update_cursor (toplevel, NULL, device);
+        }
 
       if (event->type == GDK_TOUCH_BEGIN)
         gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
