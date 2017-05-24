@@ -110,29 +110,25 @@ find_widget (GtkWidget      *widget,
       (data->x < new_allocation.x + new_allocation.width) &&
       (data->y < new_allocation.y + new_allocation.height))
     {
+      FindWidgetData new_data = *data;
       /* First, check if the drag is in a valid drop site in
        * one of our children 
        */
-      if (GTK_IS_CONTAINER (widget))
-        {
-          FindWidgetData new_data = *data;
+      new_data.x -= x_offset;
+      new_data.y -= y_offset;
+      new_data.found = FALSE;
+      new_data.first = FALSE;
 
-          new_data.x -= x_offset;
-          new_data.y -= y_offset;
-          new_data.found = FALSE;
-          new_data.first = FALSE;
+      for (child = gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+         {
+            find_widget (child, &new_data);
+         }
 
-          for (child = gtk_widget_get_first_child (widget);
-               child != NULL;
-               child = gtk_widget_get_next_sibling (child))
-             {
-                find_widget (child, &new_data);
-             }
-
-          data->found = new_data.found;
-          if (data->found)
-            data->res_widget = new_data.res_widget;
-        }
+      data->found = new_data.found;
+      if (data->found)
+        data->res_widget = new_data.res_widget;
 
       /* If not, and this widget is registered as a drop site, check to
        * emit "drag_motion" to check if we are actually in
