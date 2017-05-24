@@ -23,6 +23,38 @@
 
 #include <gtk/gtk.h>
 
+typedef struct _MyTooltip MyTooltip;
+typedef struct _MyTooltipClass MyTooltipClass;
+
+
+struct _MyTooltip
+{
+  GtkBin parent_instance;
+};
+
+struct _MyTooltipClass
+{
+  GtkBinClass parent_class;
+};
+
+G_DEFINE_TYPE (MyTooltip, my_tooltip, GTK_TYPE_BIN)
+
+static void
+my_tooltip_init (MyTooltip *tt)
+{
+  GtkWidget *label = gtk_label_new ("Some text in a tooltip");
+
+  gtk_container_add (GTK_CONTAINER (tt), label);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (tt)), "background");
+}
+
+static void
+my_tooltip_class_init (MyTooltipClass *tt_class)
+{
+  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (tt_class), "tooltip");
+}
+
 static gboolean
 query_tooltip_cb (GtkWidget  *widget,
 		  gint        x,
@@ -248,6 +280,7 @@ main (int argc, char *argv[])
   GtkWidget *drawing_area;
   GtkWidget *button;
   GtkWidget *label;
+  GtkWidget *tooltip;
 
   GtkWidget *tooltip_window;
   GtkWidget *tooltip_button;
@@ -271,6 +304,13 @@ main (int argc, char *argv[])
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_container_add (GTK_CONTAINER (window), box);
+
+  tooltip = g_object_new (my_tooltip_get_type (), NULL);
+  gtk_widget_set_margin_top (tooltip, 20);
+  gtk_widget_set_margin_bottom (tooltip, 20);
+  gtk_widget_set_halign (tooltip, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (box), tooltip);
+
 
   /* A check button using the tooltip-markup property */
   button = gtk_check_button_new_with_label ("This one uses the tooltip-markup property");
