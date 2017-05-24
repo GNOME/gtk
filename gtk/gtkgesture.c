@@ -693,6 +693,11 @@ gtk_gesture_handle_event (GtkEventController *controller,
            (event->type == GDK_TOUCHPAD_PINCH &&
             event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
     {
+      gboolean was_claimed;
+
+      was_claimed =
+        gtk_gesture_get_sequence_state (gesture, sequence) == GTK_EVENT_SEQUENCE_CLAIMED;
+
       if (_gtk_gesture_update_point (gesture, event, FALSE))
         {
           if (was_recognized &&
@@ -701,6 +706,8 @@ gtk_gesture_handle_event (GtkEventController *controller,
 
           _gtk_gesture_remove_point (gesture, event);
         }
+
+      return was_claimed && was_recognized;
     }
   else if (event->type == GDK_MOTION_NOTIFY ||
            event->type == GDK_TOUCH_UPDATE ||
