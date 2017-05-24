@@ -73,6 +73,7 @@ gdk_public_headers = files([
   'gdkthreads.h',
   'gdktypes.h',
   'gdkvisual.h',
+  'gdkvulkancontext.h',
   'gdkwindow.h',
 ])
 install_headers(gdk_public_headers, subdir: 'gtk-4.0/gdk/')
