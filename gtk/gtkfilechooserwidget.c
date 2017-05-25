@@ -2693,8 +2693,8 @@ save_widgets_create (GtkFileChooserWidget *impl)
   gtk_label_set_mnemonic_widget (GTK_LABEL (widget), priv->location_entry);
 
   priv->save_widgets = vbox;
-  gtk_box_pack_start (GTK_BOX (impl), priv->save_widgets);
-  gtk_box_reorder_child (GTK_BOX (impl), priv->save_widgets, 0);
+  gtk_box_pack_start (GTK_BOX (priv->box), priv->save_widgets);
+  gtk_box_reorder_child (GTK_BOX (priv->box), priv->save_widgets, 0);
   gtk_widget_show (priv->save_widgets);
 }
 
