@@ -2524,6 +2524,8 @@ gtk_scrollable_get_type
 <TITLE>GtkScrollbar</TITLE>
 GtkScrollbar
 gtk_scrollbar_new
+gtk_scrollbar_get_adjustment
+gtk_scrollbar_set_adjustment
 <SUBSECTION Standard>
 GTK_SCROLLBAR
 GTK_IS_SCROLLBAR
