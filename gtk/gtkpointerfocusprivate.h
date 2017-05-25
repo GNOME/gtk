@@ -24,6 +24,7 @@ typedef struct _GtkPointerFocus GtkPointerFocus;
 
 struct _GtkPointerFocus
 {
+  gint ref_count;
   GdkDevice *device;
   GdkEventSequence *sequence;
   GtkWindow *toplevel;
@@ -38,7 +39,8 @@ GtkPointerFocus * gtk_pointer_focus_new  (GtkWindow        *toplevel,
                                           GdkEventSequence *sequence,
                                           gdouble           x,
                                           gdouble           y);
-void              gtk_pointer_focus_free (GtkPointerFocus *focus);
+GtkPointerFocus * gtk_pointer_focus_ref   (GtkPointerFocus *focus);
+void              gtk_pointer_focus_unref (GtkPointerFocus *focus);
 
 void              gtk_pointer_focus_set_coordinates (GtkPointerFocus *focus,
                                                      gdouble          x,

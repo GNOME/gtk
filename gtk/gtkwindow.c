@@ -1689,9 +1689,9 @@ device_removed_cb (GdkSeat   *seat,
 
       if (focus->device == device)
         {
-          gtk_pointer_focus_free (focus);
           window->priv->foci =
             g_list_delete_link (window->priv->foci, cur);
+          gtk_pointer_focus_unref (focus);
         }
     }
 }
@@ -11275,7 +11275,7 @@ gtk_window_add_pointer_focus (GtkWindow       *window,
 {
   GtkWindowPrivate *priv = window->priv;
 
-  priv->foci = g_list_prepend (priv->foci, focus);
+  priv->foci = g_list_prepend (priv->foci, gtk_pointer_focus_ref (focus));
 }
 
 static void
@@ -11283,8 +11283,14 @@ gtk_window_remove_pointer_focus (GtkWindow       *window,
                                  GtkPointerFocus *focus)
 {
   GtkWindowPrivate *priv = window->priv;
+  GList *pos;
+
+  pos = g_list_find (priv->foci, focus);
+  if (!pos)
+    return;
 
   priv->foci = g_list_remove (priv->foci, focus);
+  gtk_pointer_focus_unref (focus);
 }
 
 static GtkPointerFocus *
@@ -11351,6 +11357,8 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
   focus = gtk_window_lookup_pointer_focus (window, device, sequence);
   if (focus)
     {
+      gtk_pointer_focus_ref (focus);
+
       if (target)
         {
           gtk_pointer_focus_set_target (focus, target);
@@ -11359,8 +11367,9 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
       else
         {
           gtk_window_remove_pointer_focus (window, focus);
-          gtk_pointer_focus_free (focus);
         }
+
+      gtk_pointer_focus_unref (focus);
     }
   else if (target)
     {
@@ -11383,17 +11392,20 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
       focus = cur->data;
       l = cur->next;
 
+      gtk_pointer_focus_ref (focus);
+
       if (GTK_WIDGET (focus->toplevel) == widget)
         {
           /* Unmapping the toplevel, remove pointer focus */
           gtk_window_remove_pointer_focus (window, focus);
-          gtk_pointer_focus_free (focus);
         }
       else if (focus->target == widget ||
                gtk_widget_is_ancestor (focus->target, widget))
         {
           gtk_pointer_focus_repick_target (focus);
         }
+
+      gtk_pointer_focus_unref (focus);
     }
 }
 

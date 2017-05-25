@@ -39,6 +39,7 @@ gtk_pointer_focus_new (GtkWindow        *toplevel,
   GtkPointerFocus *focus;
 
   focus = g_new0 (GtkPointerFocus, 1);
+  focus->ref_count = 1;
   focus->toplevel = toplevel;
   focus->device = device;
   focus->sequence = sequence;
@@ -48,12 +49,24 @@ gtk_pointer_focus_new (GtkWindow        *toplevel,
   return focus;
 }
 
-void
-gtk_pointer_focus_free (GtkPointerFocus *focus)
+GtkPointerFocus *
+gtk_pointer_focus_ref (GtkPointerFocus *focus)
 {
-  gtk_pointer_focus_set_target (focus, NULL);
-  gtk_pointer_focus_set_implicit_grab (focus, NULL);
-  g_free (focus);
+  focus->ref_count++;
+  return focus;
+}
+
+void
+gtk_pointer_focus_unref (GtkPointerFocus *focus)
+{
+  focus->ref_count--;
+
+  if (focus->ref_count == 0)
+    {
+      gtk_pointer_focus_set_target (focus, NULL);
+      gtk_pointer_focus_set_implicit_grab (focus, NULL);
+      g_free (focus);
+    }
 }
 
 void
