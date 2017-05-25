@@ -26,7 +26,7 @@
 #include "config.h"
 
 #include "gtkscrollbar.h"
-#include "gtkrangeprivate.h"
+#include "gtkrange.h"
 
 #include "gtkadjustment.h"
 #include "gtkintl.h"
@@ -59,17 +59,15 @@
  *
  * |[<!-- language="plain" -->
  * scrollbar[.fine-tune]
- * ╰── contents
- *     ├── [button.up]
- *     ├── [button.down]
- *     ├── trough
- *     │   ╰── slider
- *     ├── [button.up]
- *     ╰── [button.down]
+ * ╰── box
+ *     ╰── range
+ *         ╰── trough
+ *             ╰── slider
  * ]|
  *
  * GtkScrollbar has a main CSS node with name scrollbar and a subnode for its
- * contents, with subnodes named trough and slider.
+ * contents. Both the main node and the box subnode get the .horizontal or .vertical
+ * style classes applied, depending on the scrollbar's orientation.
  *
  * The main node gets the style class .fine-tune added when the scrollbar is
  * in 'fine-tuning' mode.

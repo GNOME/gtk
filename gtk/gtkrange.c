@@ -458,6 +458,7 @@ gtk_range_class_init (GtkRangeClass *class)
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RANGE_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, "range");
 }
 
 static void
