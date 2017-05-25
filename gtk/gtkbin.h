@@ -49,9 +49,6 @@ typedef struct _GtkBinClass         GtkBinClass;
 struct _GtkBin
 {
   GtkContainer container;
-
-  /*< private >*/
-  GtkBinPrivate *priv;
 };
 
 /**
