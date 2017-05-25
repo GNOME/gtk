@@ -37,8 +37,6 @@
 
 #include "config.h"
 #include "gtkbin.h"
-#include "gtksizerequest.h"
-#include "gtkintl.h"
 
 
 struct _GtkBinPrivate
@@ -85,8 +83,6 @@ gtk_bin_class_init (GtkBinClass *class)
 static void
 gtk_bin_init (GtkBin *bin)
 {
-  bin->priv = gtk_bin_get_instance_private (bin);
-
   gtk_widget_set_has_window (GTK_WIDGET (bin), FALSE);
 }
 
@@ -94,7 +90,7 @@ gtk_bin_init (GtkBin *bin)
 static GType
 gtk_bin_child_type (GtkContainer *container)
 {
-  GtkBinPrivate *priv = GTK_BIN (container)->priv;
+  GtkBinPrivate *priv = gtk_bin_get_instance_private (GTK_BIN (container));
 
   if (!priv->child)
     return GTK_TYPE_WIDGET;
@@ -107,7 +103,7 @@ gtk_bin_add (GtkContainer *container,
 	     GtkWidget    *child)
 {
   GtkBin *bin = GTK_BIN (container);
-  GtkBinPrivate *priv = bin->priv;
+  GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
 
   if (priv->child != NULL)
     {
@@ -130,7 +126,7 @@ gtk_bin_remove (GtkContainer *container,
 		GtkWidget    *child)
 {
   GtkBin *bin = GTK_BIN (container);
-  GtkBinPrivate *priv = bin->priv;
+  GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
   gboolean widget_was_visible;
 
   g_return_if_fail (priv->child == child);
@@ -153,7 +149,7 @@ gtk_bin_forall (GtkContainer *container,
 		gpointer      callback_data)
 {
   GtkBin *bin = GTK_BIN (container);
-  GtkBinPrivate *priv = bin->priv;
+  GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
 
   if (priv->child)
     (* callback) (priv->child, callback_data);
@@ -190,7 +186,7 @@ gtk_bin_size_allocate (GtkWidget     *widget,
                        GtkAllocation *allocation)
 {
   GtkBin *bin = GTK_BIN (widget);
-  GtkBinPrivate *priv = bin->priv;
+  GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
 
   if (priv->child && gtk_widget_get_visible (priv->child))
     {
@@ -216,14 +212,18 @@ gtk_bin_size_allocate (GtkWidget     *widget,
 GtkWidget*
 gtk_bin_get_child (GtkBin *bin)
 {
+  GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
+
   g_return_val_if_fail (GTK_IS_BIN (bin), NULL);
 
-  return bin->priv->child;
+  return priv->child;
 }
 
 void
 _gtk_bin_set_child (GtkBin    *bin,
                     GtkWidget *widget)
 {
-  bin->priv->child = widget;
+  GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
+
+  priv->child = widget;
 }
