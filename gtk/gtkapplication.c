@@ -140,6 +140,7 @@ enum {
   PROP_APP_MENU,
   PROP_MENUBAR,
   PROP_ACTIVE_WINDOW,
+  PROP_STATUS_MENU,
   NUM_PROPERTIES
 };
 
@@ -160,6 +161,8 @@ struct _GtkApplicationPrivate
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
   gchar           *help_overlay_path;
+
+  GMenuModel      *status_menu;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -258,6 +261,9 @@ gtk_application_load_resources (GtkApplication *application)
         menu = gtk_builder_get_object (application->priv->menus_builder, "menubar");
         if (menu != NULL && G_IS_MENU_MODEL (menu))
           gtk_application_set_menubar (application, G_MENU_MODEL (menu));
+        menu = gtk_builder_get_object (application->priv->menus_builder, "status-menu");
+        if (menu != NULL && G_IS_MENU_MODEL (menu))
+          gtk_application_set_status_menu (application, G_MENU_MODEL (menu));
       }
   }
 
@@ -531,6 +537,10 @@ gtk_application_get_property (GObject    *object,
       g_value_set_object (value, gtk_application_get_active_window (application));
       break;
 
+    case PROP_STATUS_MENU:
+      g_value_set_object (value, gtk_application_get_status_menu (application));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -559,6 +569,10 @@ gtk_application_set_property (GObject      *object,
       gtk_application_set_menubar (application, g_value_get_object (value));
       break;
 
+    case PROP_STATUS_MENU:
+      gtk_application_set_status_menu (application, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -575,6 +589,7 @@ gtk_application_finalize (GObject *object)
   g_clear_object (&application->priv->menubar);
   g_clear_object (&application->priv->muxer);
   g_clear_object (&application->priv->accels);
+  g_clear_object (&application->priv->status_menu);
 
   g_free (application->priv->help_overlay_path);
 
@@ -670,6 +685,13 @@ gtk_application_class_init (GtkApplicationClass *class)
                          P_("The window which most recently had focus"),
                          GTK_TYPE_WINDOW,
                          G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+
+  gtk_application_props[PROP_STATUS_MENU] =
+    g_param_spec_object ("status-menu",
+                         P_("Status menu"),
+                         P_("The GMenuModel for the status menu"),
+                         G_TYPE_MENU_MODEL,
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, gtk_application_props);
 }
@@ -1377,3 +1399,29 @@ gtk_application_get_menu_by_id (GtkApplication *application,
 
   return G_MENU (object);
 }
+
+void
+gtk_application_set_status_menu (GtkApplication *application,
+                                 GMenuModel     *menu)
+{
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
+  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
+  g_return_if_fail (menu == NULL || G_IS_MENU_MODEL (menu));
+
+  if (g_set_object (&application->priv->status_menu, menu))
+    {
+      gtk_application_impl_set_status_menu (application->priv->impl, menu);
+
+      g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_STATUS_MENU]);
+    }
+}
+
+GMenuModel *
+gtk_application_get_status_menu (GtkApplication *application)
+{
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
+
+  return application->priv->status_menu;
+}
+

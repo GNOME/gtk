@@ -55,6 +55,7 @@ gtk_application_impl_x11_handle_window_realize (GtkApplicationImpl *impl,
   gdk_x11_window_set_utf8_property (gdk_window, "_GTK_WINDOW_OBJECT_PATH", window_path);
   gdk_x11_window_set_utf8_property (gdk_window, "_GTK_APP_MENU_OBJECT_PATH", dbus->app_menu_path);
   gdk_x11_window_set_utf8_property (gdk_window, "_GTK_MENUBAR_OBJECT_PATH", dbus->menubar_path);
+  gdk_x11_window_set_utf8_property (gdk_window, "_GTK_STATUS_MENU_OBJECT_PATH", dbus->status_menu_path);
 
   g_free (window_path);
 }

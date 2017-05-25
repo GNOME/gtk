@@ -443,6 +443,15 @@ gtk_application_impl_dbus_set_menubar (GtkApplicationImpl *impl,
   gtk_application_impl_dbus_publish_menu (dbus, "menubar", menubar, &dbus->menubar_id, &dbus->menubar_path);
 }
 
+static void
+gtk_application_impl_dbus_set_status_menu (GtkApplicationImpl *impl,
+                                           GMenuModel         *menu)
+{
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
+
+  gtk_application_impl_dbus_publish_menu (dbus, "statusmenu", menu, &dbus->status_menu_id, &dbus->status_menu_path);
+}
+
 static GVariant *
 gtk_application_impl_dbus_real_get_window_system_id (GtkApplicationImplDBus *dbus,
                                                      GtkWindow              *window)
@@ -693,6 +702,7 @@ gtk_application_impl_dbus_finalize (GObject *object)
   g_slist_free_full (dbus->inhibit_handles, inhibit_handle_free);
   g_free (dbus->app_menu_path);
   g_free (dbus->menubar_path);
+  g_free (dbus->status_menu_path);
   g_clear_object (&dbus->sm_proxy);
 
   G_OBJECT_CLASS (gtk_application_impl_dbus_parent_class)->finalize (object);
@@ -713,6 +723,7 @@ gtk_application_impl_dbus_class_init (GtkApplicationImplDBusClass *class)
   impl_class->active_window_changed = gtk_application_impl_dbus_active_window_changed;
   impl_class->set_app_menu = gtk_application_impl_dbus_set_app_menu;
   impl_class->set_menubar = gtk_application_impl_dbus_set_menubar;
+  impl_class->set_status_menu = gtk_application_impl_dbus_set_status_menu;
   impl_class->inhibit = gtk_application_impl_dbus_inhibit;
   impl_class->uninhibit = gtk_application_impl_dbus_uninhibit;
   impl_class->is_inhibited = gtk_application_impl_dbus_is_inhibited;

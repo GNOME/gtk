@@ -61,6 +61,7 @@ gtk_application_impl_class_init (GtkApplicationImplClass *class)
   class->uninhibit = (gpointer) do_nothing;
   class->is_inhibited = (gpointer) do_nothing;
   class->prefers_app_menu = (gpointer) return_false;
+  class->set_status_menu = (gpointer) do_nothing;
 }
 
 void
@@ -159,6 +160,13 @@ gboolean
 gtk_application_impl_prefers_app_menu (GtkApplicationImpl *impl)
 {
   return GTK_APPLICATION_IMPL_GET_CLASS (impl)->prefers_app_menu (impl);
+}
+
+void
+gtk_application_impl_set_status_menu (GtkApplicationImpl *impl,
+                                      GMenuModel         *menu)
+{
+  GTK_APPLICATION_IMPL_GET_CLASS (impl)->set_status_menu (impl, menu);
 }
 
 GtkApplicationImpl *

@@ -98,6 +98,10 @@ typedef struct
 
   gboolean    (* prefers_app_menu)          (GtkApplicationImpl          *impl);
 
+  void        (* set_status_icon)           (GtkApplicationImpl          *impl,
+                                             GIcon                       *icon);
+  void        (* set_status_menu)           (GtkApplicationImpl          *impl,
+                                             GMenuModel                  *menu);
 
 } GtkApplicationImplClass;
 
@@ -124,6 +128,9 @@ typedef struct
 
   gchar           *menubar_path;
   guint            menubar_id;
+
+  gchar           *status_menu_path;
+  guint            status_menu_id;
 
   /* Session management... */
   GDBusProxy      *sm_proxy;
@@ -187,6 +194,12 @@ gboolean                gtk_application_impl_prefers_app_menu           (GtkAppl
 
 void                    gtk_application_impl_quartz_setup_menu          (GMenuModel                  *model,
                                                                          GtkActionMuxer              *muxer);
+
+void                    gtk_application_impl_set_status_icon            (GtkApplicationImpl          *impl,
+                                                                         GIcon                       *icon);
+
+void                    gtk_application_impl_set_status_menu            (GtkApplicationImpl          *impl,
+                                                                         GMenuModel                  *menu);
 
 G_END_DECLS
 
