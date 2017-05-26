@@ -94,7 +94,6 @@ typedef struct
   GDestroyNotify update_header_func_target_destroy_notify;
 
   GtkListBoxRow *selected_row;
-  GtkListBoxRow *prelight_row;
   GtkListBoxRow *cursor_row;
 
   gboolean active_row_active;
@@ -187,8 +186,6 @@ static void                 gtk_list_box_add_move_binding             (GtkBindin
 static void                 gtk_list_box_update_cursor                (GtkListBox          *box,
                                                                        GtkListBoxRow       *row,
                                                                        gboolean             grab_focus);
-static void                 gtk_list_box_update_prelight              (GtkListBox          *box,
-                                                                       GtkListBoxRow       *row);
 static void                 gtk_list_box_update_active                (GtkListBox          *box,
                                                                        GtkListBoxRow       *row);
 static gboolean             gtk_list_box_enter_notify_event           (GtkWidget           *widget,
@@ -1722,32 +1719,6 @@ gtk_list_box_select_and_activate_full (GtkListBox    *box,
 }
 
 static void
-gtk_list_box_update_prelight (GtkListBox    *box,
-                              GtkListBoxRow *row)
-{
-  GtkListBoxPrivate *priv = BOX_PRIV (box);
-
-  if (row != priv->prelight_row)
-    {
-      if (priv->prelight_row)
-        gtk_widget_unset_state_flags (GTK_WIDGET (priv->prelight_row),
-                                      GTK_STATE_FLAG_PRELIGHT);
-
-      if (row != NULL && gtk_widget_is_sensitive (GTK_WIDGET (row)))
-        {
-          priv->prelight_row = row;
-          gtk_widget_set_state_flags (GTK_WIDGET (priv->prelight_row),
-                                      GTK_STATE_FLAG_PRELIGHT,
-                                      FALSE);
-        }
-      else
-        {
-          priv->prelight_row = NULL;
-        }
-    }
-}
-
-static void
 gtk_list_box_update_active (GtkListBox    *box,
                             GtkListBoxRow *row)
 {
@@ -1777,7 +1748,6 @@ gtk_list_box_enter_notify_event (GtkWidget        *widget,
   GtkListBoxRow *row;
 
   row = gtk_list_box_get_row_at_y (box, event->y);
-  gtk_list_box_update_prelight (box, row);
   gtk_list_box_update_active (box, row);
 
   return FALSE;
@@ -1789,7 +1759,6 @@ gtk_list_box_leave_notify_event (GtkWidget        *widget,
 {
   GtkListBox *box = GTK_LIST_BOX (widget);
 
-  gtk_list_box_update_prelight (box, NULL);
   gtk_list_box_update_active (box, NULL);
 
   return FALSE;
@@ -1804,7 +1773,6 @@ gtk_list_box_motion_notify_event (GtkWidget      *widget,
 
   row = gtk_list_box_get_row_at_y (box, event->y);
 
-  gtk_list_box_update_prelight (box, row);
   gtk_list_box_update_active (box, row);
 
   return FALSE;
@@ -2360,11 +2328,6 @@ gtk_list_box_remove (GtkContainer *container,
 
   if (row == priv->selected_row)
     priv->selected_row = NULL;
-  if (row == priv->prelight_row)
-    {
-      gtk_widget_unset_state_flags (GTK_WIDGET (row), GTK_STATE_FLAG_PRELIGHT);
-      priv->prelight_row = NULL;
-    }
   if (row == priv->cursor_row)
     priv->cursor_row = NULL;
   if (row == priv->active_row)
@@ -2559,13 +2522,13 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
   int child_min;
 
 
-  child_allocation.x = allocation->x - allocation->x;
-  child_allocation.y = allocation->y - allocation->y;
+  child_allocation.x = allocation->x;
+  child_allocation.y = allocation->y;
   child_allocation.width = allocation->width;
   child_allocation.height = 0;
 
-  header_allocation.x = allocation->x - allocation->x;
-  header_allocation.y = allocation->y - allocation->y;
+  header_allocation.x = allocation->x;
+  header_allocation.y = allocation->y;
   header_allocation.width = allocation->width;
   header_allocation.height = 0;
 
