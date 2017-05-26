@@ -283,7 +283,6 @@ gtk_switch_enter (GtkWidget        *widget,
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
 
   priv->in_switch = TRUE;
-  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
 
   return FALSE;
 }
@@ -295,7 +294,6 @@ gtk_switch_leave (GtkWidget        *widget,
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
 
   priv->in_switch = FALSE;
-  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
 
   return FALSE;
 }
