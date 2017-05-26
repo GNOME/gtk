@@ -81,8 +81,6 @@ typedef struct
 
   GtkWidget *placeholder;
 
-  GdkWindow *view_window;
-
   GtkListBoxSortFunc sort_func;
   gpointer sort_func_target;
   GDestroyNotify sort_func_target_destroy_notify;
@@ -206,10 +204,6 @@ static GSequenceIter*       gtk_list_box_get_previous_visible         (GtkListBo
                                                                        GSequenceIter       *iter);
 static GtkListBoxRow       *gtk_list_box_get_first_focusable          (GtkListBox          *box);
 static GtkListBoxRow       *gtk_list_box_get_last_focusable           (GtkListBox          *box);
-static void                 gtk_list_box_realize                      (GtkWidget           *widget);
-static void                 gtk_list_box_unrealize                    (GtkWidget           *widget);
-static void                 gtk_list_box_map                          (GtkWidget           *widget);
-static void                 gtk_list_box_unmap                        (GtkWidget           *widget);
 static void                 gtk_list_box_add                          (GtkContainer        *container,
                                                                        GtkWidget           *widget);
 static void                 gtk_list_box_remove                       (GtkContainer        *container,
@@ -392,10 +386,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->motion_notify_event = gtk_list_box_motion_notify_event;
   widget_class->show = gtk_list_box_show;
   widget_class->focus = gtk_list_box_focus;
-  widget_class->realize = gtk_list_box_realize;
-  widget_class->unrealize = gtk_list_box_unrealize;
-  widget_class->map = gtk_list_box_map;
-  widget_class->unmap = gtk_list_box_unmap;
   widget_class->compute_expand = gtk_list_box_compute_expand;
   widget_class->get_request_mode = gtk_list_box_get_request_mode;
   widget_class->measure = gtk_list_box_measure;
@@ -931,8 +921,6 @@ gtk_list_box_set_placeholder (GtkListBox *box,
 
   if (placeholder)
     {
-      if (priv->view_window)
-        gtk_widget_set_parent_window (placeholder, priv->view_window);
       gtk_widget_set_parent (placeholder, GTK_WIDGET (box));
       gtk_widget_set_child_visible (placeholder,
                                     priv->n_visible_rows == 0);
@@ -2051,60 +2039,6 @@ gtk_list_box_focus (GtkWidget        *widget,
 }
 
 static void
-gtk_list_box_realize (GtkWidget *widget)
-{
-  GtkListBox *box = GTK_LIST_BOX (widget);
-  GtkListBoxPrivate *priv = BOX_PRIV (box);
-  GtkAllocation allocation;
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  priv->view_window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                            GDK_ALL_EVENTS_MASK,
-                                            &allocation);
-  gdk_window_set_user_data (priv->view_window, (GObject*) widget);
-
-  gtk_widget_forall (widget, (GtkCallback)gtk_widget_set_parent_window, priv->view_window);
-
-  GTK_WIDGET_CLASS (gtk_list_box_parent_class)->realize (widget);
-}
-
-static void
-gtk_list_box_unrealize (GtkWidget *widget)
-{
-  GtkListBox *box = GTK_LIST_BOX (widget);
-  GtkListBoxPrivate *priv = BOX_PRIV (box);
-
-  gtk_widget_unregister_window (widget, priv->view_window);
-  gdk_window_destroy (priv->view_window);
-  priv->view_window = NULL;
-
-  GTK_WIDGET_CLASS (gtk_list_box_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_list_box_map (GtkWidget *widget)
-{
-  GtkListBox *box = GTK_LIST_BOX (widget);
-  GtkListBoxPrivate *priv = BOX_PRIV (box);
-
-  gdk_window_show (priv->view_window);
-
-  GTK_WIDGET_CLASS (gtk_list_box_parent_class)->map (widget);
-}
-
-static void
-gtk_list_box_unmap (GtkWidget *widget)
-{
-  GtkListBox *box = GTK_LIST_BOX (widget);
-  GtkListBoxPrivate *priv = BOX_PRIV (box);
-
-  GTK_WIDGET_CLASS (gtk_list_box_parent_class)->unmap (widget);
-
-  gdk_window_hide (priv->view_window);
-}
-
-static void
 list_box_add_visible_rows (GtkListBox *box,
                            gint        n)
 {
@@ -2319,8 +2253,6 @@ gtk_list_box_update_header (GtkListBox    *box,
           if (ROW_PRIV (row)->header != NULL)
             {
               g_hash_table_insert (priv->header_hash, ROW_PRIV (row)->header, row);
-              if (priv->view_window)
-                gtk_widget_set_parent_window (ROW_PRIV (row)->header, priv->view_window);
               gtk_widget_set_parent (ROW_PRIV (row)->header, GTK_WIDGET (box));
               gtk_widget_show (ROW_PRIV (row)->header);
             }
@@ -2627,11 +2559,6 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
   int child_min;
 
 
-  if (priv->view_window != NULL)
-    gdk_window_move_resize (priv->view_window,
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
-
   child_allocation.x = allocation->x - allocation->x;
   child_allocation.y = allocation->y - allocation->y;
   child_allocation.width = allocation->width;
@@ -2788,8 +2715,6 @@ gtk_list_box_insert (GtkListBox *box,
   gtk_list_box_insert_css_node (box, GTK_WIDGET (row), iter);
 
   ROW_PRIV (row)->iter = iter;
-  if (priv->view_window)
-    gtk_widget_set_parent_window (GTK_WIDGET (row), priv->view_window);
   gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (box));
   gtk_widget_set_child_visible (GTK_WIDGET (row), TRUE);
   ROW_PRIV (row)->visible = gtk_widget_get_visible (GTK_WIDGET (row));
