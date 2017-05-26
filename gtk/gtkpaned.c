@@ -1805,27 +1805,18 @@ gtk_paned_remove (GtkContainer *container,
 {
   GtkPaned *paned = GTK_PANED (container);
   GtkPanedPrivate *priv = paned->priv;
-  gboolean was_visible;
-
-  was_visible = gtk_widget_get_visible (widget);
 
   if (priv->child1 == widget)
     {
       gtk_widget_unparent (widget);
 
       priv->child1 = NULL;
-
-      if (was_visible && gtk_widget_get_visible (GTK_WIDGET (container)))
-	gtk_widget_queue_resize_no_redraw (GTK_WIDGET (container));
     }
   else if (priv->child2 == widget)
     {
       gtk_widget_unparent (widget);
 
       priv->child2 = NULL;
-
-      if (was_visible && gtk_widget_get_visible (GTK_WIDGET (container)))
-	gtk_widget_queue_resize_no_redraw (GTK_WIDGET (container));
     }
 }
 
