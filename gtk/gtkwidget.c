@@ -74,6 +74,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkdebugupdatesprivate.h"
 #include "gsk/gskdebugprivate.h"
+#include "gtkeventcontrollerlegacyprivate.h"
 
 #include "inspector/window.h"
 
@@ -3844,6 +3845,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   gtk_css_node_set_visible (priv->cssnode, priv->visible);
   /* need to set correct type here, and only class has the correct type here */
   gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
+
+  gtk_widget_init_legacy_controller (widget);
 }
 
 
@@ -6463,16 +6466,14 @@ static gboolean
 gtk_widget_real_button_event (GtkWidget      *widget,
                               GdkEventButton *event)
 {
-  return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
-                                      GTK_PHASE_BUBBLE);
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
 gtk_widget_real_motion_event (GtkWidget      *widget,
                               GdkEventMotion *event)
 {
-  return _gtk_widget_run_controllers (widget, (GdkEvent *) event,
-                                      GTK_PHASE_BUBBLE);
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -6514,10 +6515,6 @@ gtk_widget_real_touch_event (GtkWidget     *widget,
   GdkEvent *bevent;
   gboolean return_val;
   gint signum;
-
-  if (!event->emulating_pointer)
-    return _gtk_widget_run_controllers (widget, (GdkEvent*) event,
-                                        GTK_PHASE_BUBBLE);
 
   if (event->type == GDK_TOUCH_BEGIN ||
       event->type == GDK_TOUCH_END)
@@ -6584,8 +6581,7 @@ static gboolean
 gtk_widget_real_grab_broken_event (GtkWidget          *widget,
                                    GdkEventGrabBroken *event)
 {
-  return _gtk_widget_run_controllers (widget, (GdkEvent*) event,
-                                      GTK_PHASE_BUBBLE);
+  return GDK_EVENT_PROPAGATE;
 }
 
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
@@ -6824,7 +6820,7 @@ static gint
 gtk_widget_event_internal (GtkWidget      *widget,
                            const GdkEvent *event)
 {
-  gboolean return_val = FALSE, handled;
+  gboolean return_val = FALSE;
   GdkEvent *event_copy;
 
   /* We check only once for is-still-visible; if someone
@@ -6835,7 +6831,27 @@ gtk_widget_event_internal (GtkWidget      *widget,
   if (!event_window_is_still_viewable (event))
     return TRUE;
 
-  g_object_ref (widget);
+  /* Non input events get handled right away */
+  switch (event->type)
+    {
+    case GDK_VISIBILITY_NOTIFY:
+    case GDK_EXPOSE:
+    case GDK_NOTHING:
+    case GDK_DELETE:
+    case GDK_DESTROY:
+    case GDK_CONFIGURE:
+    case GDK_MAP:
+    case GDK_UNMAP:
+    case GDK_WINDOW_STATE:
+    case GDK_PROPERTY_NOTIFY:
+    case GDK_SELECTION_CLEAR:
+    case GDK_SELECTION_REQUEST:
+    case GDK_SELECTION_NOTIFY:
+      return gtk_widget_emit_event_signals (widget, event);
+    default:
+      break;
+    }
+
   event_copy = gdk_event_copy (event);
 
   translate_event_coordinates (event_copy, widget);
@@ -6843,18 +6859,39 @@ gtk_widget_event_internal (GtkWidget      *widget,
   if (widget == gtk_get_event_target (event_copy))
     return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
 
-  g_signal_emit (widget, widget_signals[EVENT], 0, event_copy, &handled);
-  return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event_copy);
+  /* XXX: Tooltips should be handled through captured events in the toplevel */
+  if (event_copy->type == GDK_FOCUS_CHANGE)
+    {
+      if (event_copy->focus_change.in)
+        _gtk_tooltip_focus_in (widget);
+      else
+        _gtk_tooltip_focus_out (widget);
+    }
+
+  return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
+  gdk_event_free (event_copy);
+
+  return return_val;
+}
+
+gboolean
+gtk_widget_emit_event_signals (GtkWidget      *widget,
+                               const GdkEvent *event)
+{
+  gboolean return_val = FALSE, handled;
+
+  g_object_ref (widget);
+
+  g_signal_emit (widget, widget_signals[EVENT], 0, event, &handled);
+  return_val |= handled | !WIDGET_REALIZED_FOR_EVENT (widget, event);
   if (!return_val)
     {
       gint signal_num;
 
-      switch (event_copy->type)
+      switch (event->type)
 	{
         case GDK_TOUCHPAD_SWIPE:
         case GDK_TOUCHPAD_PINCH:
-          return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
-          /* Fall through */
         case GDK_PAD_BUTTON_PRESS:
         case GDK_PAD_BUTTON_RELEASE:
         case GDK_PAD_RING:
@@ -6905,11 +6942,7 @@ gtk_widget_event_internal (GtkWidget      *widget,
 	  signal_num = LEAVE_NOTIFY_EVENT;
 	  break;
 	case GDK_FOCUS_CHANGE:
-	  signal_num = event_copy->focus_change.in ? FOCUS_IN_EVENT : FOCUS_OUT_EVENT;
-	  if (event_copy->focus_change.in)
-	    _gtk_tooltip_focus_in (widget);
-	  else
-	    _gtk_tooltip_focus_out (widget);
+	  signal_num = event->focus_change.in ? FOCUS_IN_EVENT : FOCUS_OUT_EVENT;
 	  break;
 	case GDK_CONFIGURE:
 	  signal_num = CONFIGURE_EVENT;
@@ -6945,23 +6978,22 @@ gtk_widget_event_internal (GtkWidget      *widget,
 	  signal_num = GRAB_BROKEN_EVENT;
 	  break;
 	default:
-	  g_warning ("gtk_widget_event(): unhandled event type: %d", event_copy->type);
+	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->type);
 	  signal_num = -1;
 	  break;
 	}
       if (signal_num != -1)
         {
-	  g_signal_emit (widget, widget_signals[signal_num], 0, event_copy, &handled);
+	  g_signal_emit (widget, widget_signals[signal_num], 0, event, &handled);
           return_val |= handled;
         }
     }
-  if (WIDGET_REALIZED_FOR_EVENT (widget, event_copy))
-    g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event_copy);
+  if (WIDGET_REALIZED_FOR_EVENT (widget, event))
+    g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event);
   else
     return_val = TRUE;
 
   g_object_unref (widget);
-  gdk_event_free (event_copy);
 
   return return_val;
 }
@@ -15548,4 +15580,15 @@ gboolean
 gtk_widget_get_pass_through (GtkWidget *widget)
 {
   return widget->priv->pass_through;
+}
+
+void
+gtk_widget_init_legacy_controller (GtkWidget *widget)
+{
+  GtkEventController *controller;
+
+  controller = _gtk_event_controller_legacy_new (widget);
+  g_object_set_data_full (G_OBJECT (widget),
+                          "gtk-widget-legacy-event-controller",
+                          controller, g_object_unref);
 }
