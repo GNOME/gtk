@@ -334,6 +334,12 @@ void              gtk_widget_set_pass_through              (GtkWidget *widget,
                                                             gboolean   pass_through);
 gboolean          gtk_widget_get_pass_through              (GtkWidget *widget);
 
+gboolean          gtk_widget_emit_event_signals            (GtkWidget      *widget,
+                                                            const GdkEvent *event);
+
+void              gtk_widget_init_legacy_controller        (GtkWidget *widget);
+
+
 /* inline getters */
 
 static inline GtkWidget *

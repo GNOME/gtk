@@ -146,6 +146,7 @@ gtk_public_sources = files([
   'gtkentrybuffer.c',
   'gtkentrycompletion.c',
   'gtkeventcontroller.c',
+  'gtkeventcontrollerlegacy.c',
   'gtkexpander.c',
   'gtkfilechooser.c',
   'gtkfilechooserbutton.c',
@@ -364,6 +365,7 @@ gtk_public_sources = files([
 gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
   'gtktexthandleprivate.h',
+  'gtkeventcontrollerlegacyprivate.h',
 ])
 
 gtk_private_headers = gtk_private_type_headers + files([
