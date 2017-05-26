@@ -20,9 +20,9 @@ drag_begin (GtkWidget      *widget,
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, alloc.width, alloc.height);
   cr = cairo_create (surface);
 
-  gtk_style_context_add_class (gtk_widget_get_style_context (row), "during-dnd");
+  gtk_style_context_add_class (gtk_widget_get_style_context (row), "drag-icon");
   gtk_widget_draw (row, cr);
-  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "during-dnd");
+  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "drag-icon");
 
   gtk_widget_translate_coordinates (widget, row, 0, 0, &x, &y);
   cairo_surface_set_device_offset (surface, -x, -y);
@@ -30,8 +30,23 @@ drag_begin (GtkWidget      *widget,
 
   cairo_destroy (cr);
   cairo_surface_destroy (surface);
+
+  g_object_set_data (G_OBJECT (gtk_widget_get_parent (row)), "drag-row", row);
+  gtk_style_context_add_class (gtk_widget_get_style_context (row), "drag-row");
 }
 
+static void
+drag_end (GtkWidget      *widget,
+          GdkDragContext *context,
+          gpointer        data)
+{
+  GtkWidget *row;
+
+  row = gtk_widget_get_ancestor (widget, GTK_TYPE_LIST_BOX_ROW);
+  g_object_set_data (G_OBJECT (gtk_widget_get_parent (row)), "drag-row", NULL);
+  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "drag-row");
+  gtk_style_context_remove_class (gtk_widget_get_style_context (row), "drag-hover");
+}
 
 void
 drag_data_get (GtkWidget        *widget,
@@ -48,6 +63,39 @@ drag_data_get (GtkWidget        *widget,
                           sizeof (gpointer));
 }
 
+static GtkListBoxRow *
+get_last_row (GtkListBox *list)
+{
+  int i;
+  GtkListBoxRow *row;
+
+  row = NULL;
+  for (i = 0; ; i++)
+    {
+      GtkListBoxRow *tmp;
+      tmp = gtk_list_box_get_row_at_index (list, i);
+      if (tmp == NULL)
+        return row;
+      row = tmp;
+    }
+  return row;
+}
+
+static GtkListBoxRow *
+get_row_before (GtkListBox    *list,
+                GtkListBoxRow *row)
+{
+  int pos = gtk_list_box_row_get_index (row);
+  return gtk_list_box_get_row_at_index (list, pos - 1);
+}
+
+static GtkListBoxRow *
+get_row_after (GtkListBox    *list,
+               GtkListBoxRow *row)
+{
+  int pos = gtk_list_box_row_get_index (row);
+  return gtk_list_box_get_row_at_index (list, pos + 1);
+}
 
 static void
 drag_data_received (GtkWidget        *widget,
@@ -59,24 +107,126 @@ drag_data_received (GtkWidget        *widget,
                     guint32           time,
                     gpointer          data)
 {
-  GtkWidget *target;
+  GtkWidget *row_before;
+  GtkWidget *row_after;
   GtkWidget *row;
   GtkWidget *source;
   int pos;
 
-  target = widget;
+  row_before = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-before"));
+  row_after = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-after"));
 
-  pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (target));
+  g_object_set_data (G_OBJECT (widget), "row-before", NULL);
+  g_object_set_data (G_OBJECT (widget), "row-after", NULL);
+
+  if (row_before)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
+  if (row_after)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
+
   row = (gpointer)* (gpointer*)gtk_selection_data_get_data (selection_data);
   source = gtk_widget_get_ancestor (row, GTK_TYPE_LIST_BOX_ROW);
 
-  if (source == target)
+  if (source == row_after)
     return;
 
   g_object_ref (source);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (source)), source);
-  gtk_list_box_insert (GTK_LIST_BOX (gtk_widget_get_parent (target)), source, pos);
+
+  if (row_after)
+    pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row_after));
+  else
+    pos = gtk_list_box_row_get_index (GTK_LIST_BOX_ROW (row_before)) + 1;
+
+  gtk_list_box_insert (GTK_LIST_BOX (widget), source, pos);
   g_object_unref (source);
+}
+
+static gboolean
+drag_motion (GtkWidget      *widget,
+             GdkDragContext *context,
+             int             x,
+             int             y,
+             guint           time)
+{
+  GtkAllocation alloc;
+  GtkWidget *row;
+  int hover_row_y;
+  int hover_row_height;
+  GtkWidget *drag_row;
+  GtkWidget *row_before;
+  GtkWidget *row_after;
+
+  row = GTK_WIDGET (gtk_list_box_get_row_at_y (GTK_LIST_BOX (widget), y));
+
+  drag_row = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "drag-row"));
+  row_before = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-before"));
+  row_after = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-after"));
+
+  gtk_style_context_remove_class (gtk_widget_get_style_context (drag_row), "drag-hover");
+  if (row_before)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
+  if (row_after)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
+
+  if (row)
+    {
+      gtk_widget_get_allocation (row, &alloc);
+      hover_row_y = alloc.y;
+      hover_row_height = alloc.height;
+
+      if (y < hover_row_y + hover_row_height/2)
+        {
+          row_after = row;
+          row_before = GTK_WIDGET (get_row_before (GTK_LIST_BOX (widget), GTK_LIST_BOX_ROW (row)));
+        }
+      else
+        {
+          row_before = row;
+          row_after = GTK_WIDGET (get_row_after (GTK_LIST_BOX (widget), GTK_LIST_BOX_ROW (row)));
+        }
+    }
+  else
+    {
+      row_before = GTK_WIDGET (get_last_row (GTK_LIST_BOX (widget)));
+      row_after = NULL;
+    }
+
+  g_object_set_data (G_OBJECT (widget), "row-before", row_before);
+  g_object_set_data (G_OBJECT (widget), "row-after", row_after);
+
+  if (drag_row == row_before || drag_row == row_after)
+    {
+      gtk_style_context_add_class (gtk_widget_get_style_context (drag_row), "drag-hover");
+      return FALSE;
+    }
+
+  if (row_before)
+    gtk_style_context_add_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
+  if (row_after)
+    gtk_style_context_add_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
+
+  return TRUE;
+}
+
+static void
+drag_leave (GtkWidget      *widget,
+            GdkDragContext *context,
+            guint           time)
+{
+  GtkWidget *drag_row;
+  GtkWidget *row_before;
+  GtkWidget *row_after;
+
+  drag_row = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "drag-row"));
+  row_before = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-before"));
+  row_after = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "row-after"));
+
+  gtk_style_context_remove_class (gtk_widget_get_style_context (drag_row), "drag-hover");
+  if (row_before)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_before), "drag-hover-bottom");
+  if (row_after)
+    gtk_style_context_remove_class (gtk_widget_get_style_context (row_after), "drag-hover-top");
 }
 
 static GtkWidget *
@@ -84,7 +234,7 @@ create_row (const gchar *text)
 {
   GtkWidget *row, *ebox, *box, *label, *image;
 
-  row = gtk_list_box_row_new (); 
+  row = gtk_list_box_row_new ();
   ebox = gtk_event_box_new ();
   image = gtk_image_new_from_icon_name ("open-menu-symbolic", 1);
   gtk_container_add (GTK_CONTAINER (ebox), image);
@@ -95,12 +245,11 @@ create_row (const gchar *text)
   gtk_box_pack_start (GTK_BOX (box), label, TRUE, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (box), ebox);
 
+  gtk_style_context_add_class (gtk_widget_get_style_context (row), "row");
   gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
   g_signal_connect (ebox, "drag-begin", G_CALLBACK (drag_begin), NULL);
+  g_signal_connect (ebox, "drag-end", G_CALLBACK (drag_end), NULL);
   g_signal_connect (ebox, "drag-data-get", G_CALLBACK (drag_data_get), NULL);
-
-  gtk_drag_dest_set (row, GTK_DEST_DEFAULT_ALL, entries, 1, GDK_ACTION_MOVE);
-  g_signal_connect (row, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
 
   return row;
 }
@@ -135,10 +284,41 @@ selection_mode_changed (GtkComboBox *combo, gpointer data)
 }
 
 static const char *css =
-  ".during-dnd { "
+  ".row:not(:first-child) { "
+  "  border-top: 1px solid alpha(gray,0.5); "
+  "  border-bottom: 1px solid transparent; "
+  "}"
+  ".row:first-child { "
+  "  border-top: 1px solid transparent; "
+  "  border-bottom: 1px solid transparent; "
+  "}"
+  ".row:last-child { "
+  "  border-top: 1px solid alpha(gray,0.5); "
+  "  border-bottom: 1px solid alpha(gray,0.5); "
+  "}"
+  ".row.drag-icon { "
   "  background: white; "
   "  border: 1px solid black; "
-  "}";
+  "}"
+  ".row.drag-row { "
+  "  color: gray; "
+  "  background: alpha(gray,0.2); "
+  "}"
+  ".row.drag-row.drag-hover { "
+  "  border-top: 1px solid #4e9a06; "
+  "  border-bottom: 1px solid #4e9a06; "
+  "}"
+  ".row.drag-hover image, "
+  ".row.drag-hover label { "
+  "  color: #4e9a06; "
+  "}"
+  ".row.drag-hover-top {"
+  "  border-top: 1px solid #4e9a06; "
+  "}"
+  ".row.drag-hover-bottom {"
+  "  border-bottom: 1px solid #4e9a06; "
+  "}"
+;
 
 int
 main (int argc, char *argv[])
@@ -165,6 +345,11 @@ main (int argc, char *argv[])
 
   list = gtk_list_box_new ();
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_NONE);
+
+  gtk_drag_dest_set (list, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP, entries, 1, GDK_ACTION_MOVE);
+  g_signal_connect (list, "drag-data-received", G_CALLBACK (drag_data_received), NULL);
+  g_signal_connect (list, "drag-motion", G_CALLBACK (drag_motion), NULL);
+  g_signal_connect (list, "drag-leave", G_CALLBACK (drag_leave), NULL);
 
   g_signal_connect (list, "row-activated", G_CALLBACK (on_row_activated), NULL);
   g_signal_connect (list, "selected-rows-changed", G_CALLBACK (on_selected_children_changed), NULL);
