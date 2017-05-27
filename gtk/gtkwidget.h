@@ -473,10 +473,6 @@ struct _GtkWidgetClass
 
   void         (* queue_draw_region)           (GtkWidget            *widget,
 					        const cairo_region_t *region);
-  void         (* queue_draw_child)            (GtkWidget            *widget,
-                                                GtkWidget            *child,
-					        const cairo_region_t *region);
-
   void         (* snapshot)                    (GtkWidget            *widget,
                                                 GtkSnapshot          *snapshot);
 

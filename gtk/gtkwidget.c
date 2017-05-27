@@ -705,9 +705,6 @@ static void             gtk_widget_real_state_flags_changed     (GtkWidget      
                                                                  GtkStateFlags     old_state);
 static void             gtk_widget_real_queue_draw_region       (GtkWidget         *widget,
 								 const cairo_region_t *region);
-static void             gtk_widget_real_queue_draw_child        (GtkWidget         *widget,
-                                                                 GtkWidget         *child,
-								 const cairo_region_t *region);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
@@ -1132,7 +1129,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_accessible = gtk_widget_real_get_accessible;
 
   klass->queue_draw_region = gtk_widget_real_queue_draw_region;
-  klass->queue_draw_child = gtk_widget_real_queue_draw_child;
 
   klass->pick = gtk_widget_real_pick;
 
@@ -4978,11 +4974,10 @@ gtk_widget_unrealize (GtkWidget *widget)
 /*****************************************
  * Draw queueing.
  *****************************************/
-
 static void
-gtk_widget_real_queue_draw_child (GtkWidget            *widget,
-                                  GtkWidget            *child,
-				  const cairo_region_t *child_region)
+gtk_widget_queue_draw_child (GtkWidget            *widget,
+                             GtkWidget            *child,
+                             const cairo_region_t *child_region)
 {
   GdkWindow *child_window, *window;
   cairo_region_t *region;
@@ -5012,14 +5007,6 @@ gtk_widget_real_queue_draw_child (GtkWidget            *widget,
 
   gtk_widget_queue_draw_region (widget, region);
   cairo_region_destroy (region);
-}
-
-static void
-gtk_widget_queue_draw_child (GtkWidget            *parent,
-                             GtkWidget            *child,
-                             const cairo_region_t *region)
-{
-  WIDGET_CLASS (parent)->queue_draw_child (parent, child, region);
 }
 
 static void
