@@ -2015,7 +2015,6 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
       priv->hscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadjustment);
 
       gtk_widget_set_parent (priv->hscrollbar, GTK_WIDGET (scrolled_window));
-      g_object_ref (priv->hscrollbar);
       update_scrollbar_positions (scrolled_window);
     }
   else
@@ -2082,7 +2081,6 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
       priv->vscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, vadjustment);
 
       gtk_widget_set_parent (priv->vscrollbar, GTK_WIDGET (scrolled_window));
-      g_object_ref (priv->vscrollbar);
       update_scrollbar_positions (scrolled_window);
     }
   else
@@ -2532,8 +2530,6 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
 					    gtk_scrolled_window_adjustment_changed,
 					    scrolled_window);
       gtk_widget_unparent (priv->hscrollbar);
-      gtk_widget_destroy (priv->hscrollbar);
-      g_object_unref (priv->hscrollbar);
       priv->hscrollbar = NULL;
     }
   if (priv->vscrollbar)
@@ -2542,8 +2538,6 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
 					    gtk_scrolled_window_adjustment_changed,
 					    scrolled_window);
       gtk_widget_unparent (priv->vscrollbar);
-      gtk_widget_destroy (priv->vscrollbar);
-      g_object_unref (priv->vscrollbar);
       priv->vscrollbar = NULL;
     }
 
