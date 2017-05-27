@@ -1567,10 +1567,10 @@ int            gdk_event_get_scancode    (GdkEvent *event);
 GDK_AVAILABLE_IN_3_22
 gboolean       gdk_event_get_pointer_emulated (GdkEvent *event);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_92
 void           gdk_event_set_user_data (GdkEvent *event,
                                         GObject  *user_data);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_92
 GObject *      gdk_event_get_user_data (const GdkEvent *event);
 
 G_END_DECLS
