@@ -946,36 +946,6 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
     gtk_widget_snapshot_child (widget, child, snapshot);
 }
 
-static void
-transform_to_child_coords (GtkWidget *widget,
-                           GtkWidget *child,
-                           gdouble    x,
-                           gdouble    y,
-                           gdouble   *x_out,
-                           gdouble   *y_out)
-{
-  GtkAllocation alloc, child_alloc;
-  GdkWindow *window;
-  gdouble dx = 0, dy = 0;
-
-  gtk_widget_get_allocation (widget, &alloc);
-  gtk_widget_get_allocation (child, &child_alloc);
-
-  child_alloc.x -= alloc.x;
-  child_alloc.y -= alloc.y;
-
-  window = _gtk_widget_get_window (child);
-
-  while (window != _gtk_widget_get_window (widget))
-    {
-      gdk_window_coords_to_parent (window, dx, dy, &dx, &dy);
-      window = gdk_window_get_parent (window);
-    }
-
-  *x_out = x - child_alloc.x - dx;
-  *y_out = y - child_alloc.y - dy;
-}
-
 static GtkWidget *
 gtk_widget_real_pick (GtkWidget *widget,
                       gdouble    x,
@@ -983,24 +953,23 @@ gtk_widget_real_pick (GtkWidget *widget,
                       gdouble   *x_out,
                       gdouble   *y_out)
 {
-  GtkAllocation allocation, parent_allocation;
   GtkWidget *child;
-
-  gtk_widget_get_allocation (widget, &parent_allocation);
 
   for (child = _gtk_widget_get_last_child (widget);
        child;
        child = _gtk_widget_get_prev_sibling (child))
     {
       gdouble tx = x, ty = y;
+      GtkAllocation allocation;
 
       if (gtk_widget_get_pass_through (child) ||
           !gtk_widget_is_sensitive (child) ||
           !gtk_widget_is_drawable (child))
         continue;
 
-      transform_to_child_coords (widget, child, tx, ty, &tx, &ty);
       _gtk_widget_get_allocation (child, &allocation);
+      tx -= allocation.x;
+      ty -= allocation.y;
       allocation.x = 0;
       allocation.y = 0;
 
@@ -5575,8 +5544,8 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
   /* Since gtk_widget_measure does it for us, we can be sure here that
    * the given alloaction is large enough for the css margin/bordder/padding */
-  real_allocation.x += margin.left + border.left + padding.left;
-  real_allocation.y += margin.top + border.top + padding.top;
+  real_allocation.x = 0;
+  real_allocation.y = 0;
   real_allocation.width -= margin.left + border.left + padding.left +
                            margin.right + border.right + padding.right;
   real_allocation.height -= margin.top + border.top + padding.top +
@@ -15587,7 +15556,10 @@ gtk_widget_snapshot (GtkWidget   *widget,
       if (opacity < 1.0)
         gtk_snapshot_push_opacity (snapshot, opacity, "Opacity<%s,%f>", G_OBJECT_TYPE_NAME (widget), opacity);
 
+      /* Offset to content allocation */
+      gtk_snapshot_offset (snapshot, margin.left + padding.left + border.left, margin.top + border.top + padding.top);
       klass->snapshot (widget, snapshot);
+      gtk_snapshot_offset (snapshot, - (margin.left + padding.left + border.left), -(margin.top + border.top + padding.top));
 
       if (g_signal_has_handler_pending (widget, widget_signals[DRAW], 0, FALSE))
         {
@@ -15835,56 +15807,6 @@ gtk_widget_forall (GtkWidget   *widget,
     }
 }
 
-static void
-gtk_widget_get_translation_to_child (GtkWidget *widget,
-                                     GtkWidget *child,
-                                     int       *x_out,
-                                     int       *y_out)
-{
-  GtkAllocation allocation;
-  GdkWindow *window, *w;
-  int x, y;
-
-  /* translate coordinates. Ugly business, that. */
-  if (!_gtk_widget_get_has_window (widget))
-    {
-      _gtk_widget_get_allocation (widget, &allocation);
-      x = -allocation.x;
-      y = -allocation.y;
-    }
-  else
-    {
-      x = 0;
-      y = 0;
-    }
-
-  window = _gtk_widget_get_window (widget);
-
-  for (w = _gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
-    {
-      int wx, wy;
-      gdk_window_get_position (w, &wx, &wy);
-      x += wx;
-      y += wy;
-    }
-
-  if (w == NULL)
-    {
-      x = 0;
-      y = 0;
-    }
-
-  if (!_gtk_widget_get_has_window (child))
-    {
-      _gtk_widget_get_allocation (child, &allocation);
-      x += allocation.x;
-      y += allocation.y;
-    }
-
-  *x_out = x;
-  *y_out = y;
-}
-
 /**
  * gtk_widget_snapshot_child:
  * @widget: a #GtkWidget
@@ -15910,12 +15832,15 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
                            GtkWidget   *child,
                            GtkSnapshot *snapshot)
 {
+  GtkAllocation content_allocation;
   int x, y;
 
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  gtk_widget_get_translation_to_child (widget, child, &x, &y);
+  gtk_widget_get_allocation (child, &content_allocation);
+  x = content_allocation.x;
+  y = content_allocation.y;
 
   gtk_snapshot_offset (snapshot, x, y);
   gtk_widget_snapshot (child, snapshot);
