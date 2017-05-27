@@ -95,8 +95,8 @@ static void gtk_im_context_ime_get_property (GObject      *object,
                                              GParamSpec   *pspec);
 
 /* GtkIMContext's virtual functions */
-static void gtk_im_context_ime_set_client_window   (GtkIMContext *context,
-                                                    GdkWindow    *client_window);
+static void gtk_im_context_ime_set_client_widget   (GtkIMContext *context,
+                                                    GtkWidget    *widget);
 static gboolean gtk_im_context_ime_filter_keypress (GtkIMContext   *context,
                                                     GdkEventKey    *event);
 static void gtk_im_context_ime_reset               (GtkIMContext   *context);
@@ -163,7 +163,7 @@ gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
   gobject_class->set_property = gtk_im_context_ime_set_property;
   gobject_class->get_property = gtk_im_context_ime_get_property;
 
-  im_context_class->set_client_window   = gtk_im_context_ime_set_client_window;
+  im_context_class->set_client_widget   = gtk_im_context_ime_set_client_widget;
   im_context_class->filter_keypress     = gtk_im_context_ime_filter_keypress;
   im_context_class->reset               = gtk_im_context_ime_reset;
   im_context_class->get_preedit_string  = gtk_im_context_ime_get_preedit_string;
@@ -205,7 +205,7 @@ gtk_im_context_ime_dispose (GObject *obj)
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (obj);
 
   if (context_ime->client_window)
-    gtk_im_context_ime_set_client_window (context, NULL);
+    gtk_im_context_ime_set_client_widget (context, NULL);
 
   FREE_PREEDIT_BUFFER (context_ime);
 
@@ -272,13 +272,17 @@ gtk_im_context_ime_new (void)
 
 
 static void
-gtk_im_context_ime_set_client_window (GtkIMContext *context,
-                                      GdkWindow    *client_window)
+gtk_im_context_ime_set_client_widget (GtkIMContext *context,
+                                      GtkWidget    *widget)
 {
   GtkIMContextIME *context_ime;
+  GtkWidget *toplevel;
+  GdkWindow *client_window;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
   context_ime = GTK_IM_CONTEXT_IME (context);
+  toplevel = gtk_widget_get_toplevel (widget);
+  client_window = gtk_widget_get_window (toplevel);
 
   if (client_window)
     {
