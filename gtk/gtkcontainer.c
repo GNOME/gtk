@@ -2970,56 +2970,6 @@ gtk_container_get_children_clip (GtkContainer  *container,
     union_with_clip (child, out_clip);
 }
 
-static void
-gtk_container_get_translation_to_child (GtkContainer *container,
-                                        GtkWidget    *child,
-                                        int          *x_out,
-                                        int          *y_out)
-{
-  GtkAllocation allocation;
-  GdkWindow *window, *w;
-  int x, y;
-
-  /* translate coordinates. Ugly business, that. */
-  if (!_gtk_widget_get_has_window (GTK_WIDGET (container)))
-    {
-      _gtk_widget_get_allocation (GTK_WIDGET (container), &allocation);
-      x = -allocation.x;
-      y = -allocation.y;
-    }
-  else
-    {
-      x = 0;
-      y = 0;
-    }
-
-  window = _gtk_widget_get_window (GTK_WIDGET (container));
-
-  for (w = _gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
-    {
-      int wx, wy;
-      gdk_window_get_position (w, &wx, &wy);
-      x += wx;
-      y += wy;
-    }
-
-  if (w == NULL)
-    {
-      x = 0;
-      y = 0;
-    }
-
-  if (!_gtk_widget_get_has_window (child))
-    {
-      _gtk_widget_get_allocation (child, &allocation);
-      x += allocation.x;
-      y += allocation.y;
-    }
-
-  *x_out = x;
-  *y_out = y;
-}
-
 /**
  * gtk_container_propagate_draw:
  * @container: a #GtkContainer
@@ -3049,7 +2999,7 @@ gtk_container_propagate_draw (GtkContainer *container,
                               GtkWidget    *child,
                               cairo_t      *cr)
 {
-  int x, y;
+  GtkAllocation child_allocation;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -3059,10 +3009,10 @@ gtk_container_propagate_draw (GtkContainer *container,
   if (!gtk_container_should_propagate_draw (container, child, cr))
     return;
 
-  gtk_container_get_translation_to_child (container, child, &x, &y);
+  gtk_widget_get_allocation (child, &child_allocation);
 
   cairo_save (cr);
-  cairo_translate (cr, x, y);
+  cairo_translate (cr, child_allocation.x, child_allocation.y);
 
   gtk_widget_draw_internal (child, cr, TRUE);
 
