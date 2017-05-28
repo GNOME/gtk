@@ -49,7 +49,7 @@ GDK_AVAILABLE_IN_3_20
 gboolean gdk_rectangle_equal     (const GdkRectangle *rect1,
                                   const GdkRectangle *rect2);
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_92
 gboolean gdk_rectangle_contains_point (const GdkRectangle *rect,
                                        int                 x,
                                        int                 y);

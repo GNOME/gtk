@@ -1461,7 +1461,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_coords		(const GdkEvent  *event,
 					 gdouble	 *x_win,
 					 gdouble	 *y_win);
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_92
 void      gdk_event_set_coords          (GdkEvent *event,
                                          gdouble   x,
                                          gdouble   y);

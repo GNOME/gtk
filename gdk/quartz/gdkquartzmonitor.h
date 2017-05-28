@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 typedef struct _GdkQuartzMonitor      GdkQuartzMonitor;
 typedef struct _GdkQuartzMonitorClass GdkQuartzMonitorClass;
 
-GDK_AVAILABLE_IN_3_90
+GDK_AVAILABLE_IN_3_92
 GType             gdk_quartz_monitor_get_type            (void) G_GNUC_CONST;
 
 
