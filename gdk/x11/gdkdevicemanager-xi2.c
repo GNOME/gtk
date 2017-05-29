@@ -1582,6 +1582,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
         else
           {
+#ifdef XINPUT_2_2
+            if (xev->flags & XIPointerEmulated)
+              return FALSE;
+#endif
             event->button.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
 
             event->button.window = window;
@@ -1620,11 +1624,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             event->button.button = xev->detail;
           }
-
-#ifdef XINPUT_2_2
-        if (xev->flags & XIPointerEmulated)
-          gdk_event_set_pointer_emulated (event, TRUE);
-#endif
 
         if (return_val == FALSE)
           break;
@@ -1697,6 +1696,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             break;
           }
 
+#ifdef XINPUT_2_2
+        if (xev->flags & XIPointerEmulated)
+          return FALSE;
+#endif
+
         event->motion.type = GDK_MOTION_NOTIFY;
         event->motion.window = window;
         event->motion.time = xev->time;
@@ -1711,11 +1715,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         gdk_event_set_device_tool (event, source_device->last_tool);
 
         event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
-
-#ifdef XINPUT_2_2
-        if (xev->flags & XIPointerEmulated)
-          gdk_event_set_pointer_emulated (event, TRUE);
-#endif
 
         /* There doesn't seem to be motion hints in XI */
         event->motion.is_hint = FALSE;
