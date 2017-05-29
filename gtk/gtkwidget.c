@@ -6512,69 +6512,7 @@ static gboolean
 gtk_widget_real_touch_event (GtkWidget     *widget,
                              GdkEventTouch *event)
 {
-  GdkEvent *bevent;
-  gboolean return_val;
-  gint signum;
-
-  if (event->type == GDK_TOUCH_BEGIN ||
-      event->type == GDK_TOUCH_END)
-    {
-      GdkEventType type;
-
-      if (event->type == GDK_TOUCH_BEGIN)
-        {
-          type = GDK_BUTTON_PRESS;
-          signum = BUTTON_PRESS_EVENT;
-        }
-      else
-        {
-          type = GDK_BUTTON_RELEASE;
-          signum = BUTTON_RELEASE_EVENT;
-        }
-      bevent = gdk_event_new (type);
-      bevent->any.window = g_object_ref (event->window);
-      bevent->any.send_event = FALSE;
-      bevent->button.time = event->time;
-      bevent->button.state = event->state;
-      bevent->button.button = 1;
-      bevent->button.x_root = event->x_root;
-      bevent->button.y_root = event->y_root;
-      bevent->button.x = event->x;
-      bevent->button.y = event->y;
-      bevent->button.device = event->device;
-      bevent->button.axes = g_memdup (event->axes,
-                                      sizeof (gdouble) * gdk_device_get_n_axes (event->device));
-      gdk_event_set_source_device (bevent, gdk_event_get_source_device ((GdkEvent*)event));
-
-      if (event->type == GDK_TOUCH_END)
-        bevent->button.state |= GDK_BUTTON1_MASK;
-    }
-  else if (event->type == GDK_TOUCH_UPDATE)
-    {
-      signum = MOTION_NOTIFY_EVENT;
-      bevent = gdk_event_new (GDK_MOTION_NOTIFY);
-      bevent->any.window = g_object_ref (event->window);
-      bevent->any.send_event = FALSE;
-      bevent->motion.time = event->time;
-      bevent->motion.state = event->state | GDK_BUTTON1_MASK;
-      bevent->motion.x_root = event->x_root;
-      bevent->motion.y_root = event->y_root;
-      bevent->motion.x = event->x;
-      bevent->motion.y = event->y;
-      bevent->motion.device = event->device;
-      bevent->motion.is_hint = FALSE;
-      bevent->motion.axes = g_memdup (event->axes,
-                                      sizeof (gdouble) * gdk_device_get_n_axes (event->device));
-      gdk_event_set_source_device (bevent, gdk_event_get_source_device ((GdkEvent*)event));
-    }
-  else
-    return FALSE;
-
-  g_signal_emit (widget, widget_signals[signum], 0, bevent, &return_val);
-
-  gdk_event_free (bevent);
-
-  return return_val;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
