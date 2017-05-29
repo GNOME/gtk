@@ -45,8 +45,4 @@ struct _GtkEventControllerClass
   gpointer padding[10];
 };
 
-void         gtk_event_controller_set_event_mask (GtkEventController *controller,
-						  GdkEventMask        event_mask);
-GdkEventMask gtk_event_controller_get_event_mask (GtkEventController *controller);
-
 #endif /* __GTK_EVENT_CONTROLLER_PRIVATE_H__ */

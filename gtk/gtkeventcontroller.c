@@ -234,34 +234,6 @@ gtk_event_controller_handle_event (GtkEventController *controller,
   return retval;
 }
 
-void
-gtk_event_controller_set_event_mask (GtkEventController *controller,
-                                     GdkEventMask        event_mask)
-{
-  GtkEventControllerPrivate *priv;
-
-  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
-
-  priv = gtk_event_controller_get_instance_private (controller);
-
-  if (priv->evmask == event_mask)
-    return;
-
-  priv->evmask = event_mask;
-}
-
-GdkEventMask
-gtk_event_controller_get_event_mask (GtkEventController *controller)
-{
-  GtkEventControllerPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER (controller), 0);
-
-  priv = gtk_event_controller_get_instance_private (controller);
-
-  return priv->evmask;
-}
-
 /**
  * gtk_event_controller_get_widget:
  * @controller: a #GtkEventController
