@@ -305,22 +305,6 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
 }
 
 static void
-_gtk_gesture_single_update_evmask (GtkGestureSingle *gesture)
-{
-  GtkGestureSinglePrivate *priv;
-  GdkEventMask evmask;
-
-  priv = gtk_gesture_single_get_instance_private (gesture);
-  evmask = GDK_TOUCH_MASK;
-
-  if (!priv->touch_only || gtk_simulate_touchscreen ())
-    evmask |= GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-      GDK_BUTTON_MOTION_MASK;
-
-  gtk_event_controller_set_event_mask (GTK_EVENT_CONTROLLER (gesture), evmask);
-}
-
-static void
 gtk_gesture_single_init (GtkGestureSingle *gesture)
 {
   GtkGestureSinglePrivate *priv;
@@ -328,7 +312,6 @@ gtk_gesture_single_init (GtkGestureSingle *gesture)
   priv = gtk_gesture_single_get_instance_private (gesture);
   priv->touch_only = FALSE;
   priv->button = GDK_BUTTON_PRIMARY;
-  _gtk_gesture_single_update_evmask (gesture);
 }
 
 /**
@@ -379,7 +362,6 @@ gtk_gesture_single_set_touch_only (GtkGestureSingle *gesture,
     return;
 
   priv->touch_only = touch_only;
-  _gtk_gesture_single_update_evmask (gesture);
   g_object_notify_by_pspec (G_OBJECT (gesture), properties[PROP_TOUCH_ONLY]);
 }
 
@@ -433,7 +415,6 @@ gtk_gesture_single_set_exclusive (GtkGestureSingle *gesture,
     return;
 
   priv->exclusive = exclusive;
-  _gtk_gesture_single_update_evmask (gesture);
   g_object_notify_by_pspec (G_OBJECT (gesture), properties[PROP_EXCLUSIVE]);
 }
 
