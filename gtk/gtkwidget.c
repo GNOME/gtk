@@ -3537,9 +3537,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
     }
 
   /* Perform propagation state starting from the next child in the chain */
-  if (!_gtk_propagate_captured_event (event_widget, press, next_child))
-    gtk_propagate_event (event_widget, press);
-
+  gtk_propagate_event_internal (event_widget, press, next_child);
   gdk_event_free (press);
 }
 

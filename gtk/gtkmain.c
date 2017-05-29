@@ -1605,7 +1605,6 @@ gtk_main_do_event (GdkEvent *event)
 {
   GtkWidget *event_widget;
   GtkWidget *grab_widget = NULL;
-  GtkWidget *topmost_widget = NULL;
   GtkWindowGroup *window_group;
   GdkEvent *rewritten_event = NULL;
   GdkDevice *device;
@@ -1688,14 +1687,6 @@ gtk_main_do_event (GdkEvent *event)
             goto cleanup;
         }
     }
-
-  /* Find out the topmost widget where captured event propagation
-   * should start, which is the widget holding the GTK+ grab
-   * if any, otherwise it's left NULL and events are emitted
-   * from the toplevel (or topmost parentless parent).
-   */
-  if (grab_widget)
-    topmost_widget = grab_widget;
 
   /* If the grab widget is an ancestor of the event widget
    * then we send the event to the original event widget.
@@ -1835,8 +1826,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_PAD_RING:
     case GDK_PAD_STRIP:
     case GDK_PAD_GROUP_MODE:
-      if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
-        gtk_propagate_event (grab_widget, event);
+      gtk_propagate_event (grab_widget, event);
       break;
 
     case GDK_ENTER_NOTIFY:
@@ -2575,13 +2565,24 @@ propagate_event (GtkWidget *widget,
     propagate_event_up (widget, event, topmost);
 }
 
+void
+gtk_propagate_event_internal (GtkWidget *widget,
+                              GdkEvent  *event,
+                              GtkWidget *topmost)
+{
+  /* Propagate the event down and up */
+  if (!propagate_event (widget, event, TRUE, topmost))
+    propagate_event (widget, event, FALSE, topmost);
+}
+
 /**
  * gtk_propagate_event:
  * @widget: a #GtkWidget
  * @event: an event
  *
  * Sends an event to a widget, propagating the event to parent widgets
- * if the event remains unhandled.
+ * if the event remains unhandled. This function will emit the event
+ * through all the hierarchy of @widget through all propagation phases.
  *
  * Events received by GTK+ from GDK normally begin in gtk_main_do_event().
  * Depending on the type of event, existence of modal dialogs, grabs, etc.,
@@ -2603,18 +2604,24 @@ void
 gtk_propagate_event (GtkWidget *widget,
                      GdkEvent  *event)
 {
+  GtkWindowGroup *window_group;
+  GtkWidget *event_widget, *topmost = NULL;
+  GdkDevice *device;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (event != NULL);
 
-  propagate_event (widget, event, FALSE, NULL);
-}
+  event_widget = gtk_get_event_widget (event);
+  window_group = gtk_main_get_window_group (event_widget);
+  device = gdk_event_get_device (event);
 
-gboolean
-_gtk_propagate_captured_event (GtkWidget *widget,
-                               GdkEvent  *event,
-                               GtkWidget *topmost)
-{
-  return propagate_event (widget, event, TRUE, topmost);
+  /* check whether there is a (device) grab in effect... */
+  if (device)
+    topmost = gtk_window_group_get_current_device_grab (window_group, device);
+  if (!topmost)
+    topmost = gtk_window_group_get_current_grab (window_group);
+
+  gtk_propagate_event_internal (widget, event, topmost);
 }
 
 GtkWidget *
