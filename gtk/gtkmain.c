@@ -2406,7 +2406,7 @@ gtk_get_event_widget (const GdkEvent *event)
  *
  * Returns: (transfer none) (nullable): the target widget, or %NULL
  *
- * Since: 3.90
+ * Since: 3.92
  */
 GtkWidget *
 gtk_get_event_target (const GdkEvent *event)
@@ -2425,7 +2425,7 @@ gtk_get_event_target (const GdkEvent *event)
  * Returns: (transfer none) (nullable): the widget in the target stack
  * with the given type, or %NULL
  *
- * Since: 3.90
+ * Since: 3.92
  */
 GtkWidget *
 gtk_get_event_target_with_type (GdkEvent *event,

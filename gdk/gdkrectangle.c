@@ -146,7 +146,7 @@ gdk_rectangle_intersect (const GdkRectangle *src1,
  *
  * Returns: #TRUE if @rect contains the point
  *
- * Since: 3.90
+ * Since: 3.92
  **/
 gboolean
 gdk_rectangle_contains_point (const GdkRectangle *rect,
