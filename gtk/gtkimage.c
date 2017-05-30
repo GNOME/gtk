@@ -1391,15 +1391,13 @@ gtk_image_snapshot (GtkWidget   *widget,
 {
   GtkImage *image = GTK_IMAGE (widget);
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-  GtkAllocation allocation;
   GtkAllocation content_allocation;
   int x, y, width, height;
   gint w, h, baseline;
 
-  gtk_widget_get_allocation (widget, &allocation);
   gtk_widget_get_content_allocation (widget, &content_allocation);
-  x = content_allocation.x - allocation.x;
-  y = content_allocation.y - allocation.y;
+  x = 0;
+  y = 0;
   width = content_allocation.width;
   height = content_allocation.height;
 
