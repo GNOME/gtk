@@ -3037,7 +3037,7 @@ gtk_entry_get_text_allocation (GtkEntry     *entry,
   GtkEntryPrivate *priv = entry->priv;
 
   gtk_widget_get_content_allocation (GTK_WIDGET (entry), allocation);
-  allocation->x += priv->text_x;
+  allocation->x = priv->text_x;
   allocation->width = priv->text_width;
 }
 
@@ -3474,8 +3474,8 @@ gtk_entry_snapshot (GtkWidget   *widget,
 
   /* Draw text and cursor */
   cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (allocation.x + priv->text_x,
-                                                       allocation.y,
+                                  &GRAPHENE_RECT_INIT (priv->text_x,
+                                                       0,
                                                        priv->text_width,
                                                        allocation.height),
                                   "Entry Text");
