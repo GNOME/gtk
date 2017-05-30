@@ -6951,21 +6951,24 @@ static void
 translate_coordinates (GdkEvent  *event,
                        GtkWidget *widget)
 {
-  GtkWidget *event_widget;
-  gdouble xd, yd;
-  gint x, y;
+  double x, y;
 
-  if (!gdk_event_get_coords (event, &xd, &yd))
+  if (!gdk_event_get_coords (event, &x, &y))
     return;
-  event_widget = gtk_get_event_widget (event);
 
-  /* FIXME: loses precision */
-  x = xd;
-  y = yd;
-  gtk_widget_translate_coordinates (event_widget, widget,
-                                    x, y, &x, &y);
+  /* @event's coordinates are in toplevel coordinates, so we can simply
+   * walk up the hierarchy starting at @widget to translate the coordinates. */
+  while (widget)
+    {
+      GtkAllocation alloc;
 
-  /*g_message ("New coords for %p: %d/%d (widget %s)", event, x, y, G_OBJECT_TYPE_NAME (widget));*/
+      _gtk_widget_get_allocation (widget, &alloc);
+      x -= alloc.x;
+      y -= alloc.y;
+
+      widget = _gtk_widget_get_parent (widget);
+    }
+
   gdk_event_set_coords (event, x, y);
 }
 
