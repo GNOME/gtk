@@ -662,11 +662,11 @@ headerbar switch { margin-top: 9px; margin-bottom: 9px; }
 
 .background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar:backdrop, .background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar { border-top-left-radius: 7px; border-top-right-radius: 7px; }
 
-window:not(.tiled):not(.maximized):not(.solid-csd) separator:first-child + headerbar:backdrop, window:not(.tiled):not(.maximized):not(.solid-csd) separator:first-child + headerbar, window:not(.tiled):not(.maximized):not(.solid-csd) headerbar:first-child:backdrop, window:not(.tiled):not(.maximized):not(.solid-csd) headerbar:first-child { border-top-left-radius: 7px; }
+window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) separator:first-child + headerbar:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) separator:first-child + headerbar, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:first-child:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:first-child { border-top-left-radius: 7px; }
 
-window:not(.tiled):not(.maximized):not(.solid-csd) headerbar:last-child:backdrop, window:not(.tiled):not(.maximized):not(.solid-csd) headerbar:last-child { border-top-right-radius: 7px; }
+window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:last-child:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:last-child { border-top-right-radius: 7px; }
 
-window:not(.tiled):not(.maximized):not(.solid-csd) stack headerbar:first-child:backdrop, window:not(.tiled):not(.maximized):not(.solid-csd) stack headerbar:first-child, window:not(.tiled):not(.maximized):not(.solid-csd) stack headerbar:last-child:backdrop, window:not(.tiled):not(.maximized):not(.solid-csd) stack headerbar:last-child { border-top-left-radius: 7px; border-top-right-radius: 7px; }
+window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack headerbar:first-child:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack headerbar:first-child, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack headerbar:last-child:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack headerbar:last-child { border-top-left-radius: 7px; border-top-right-radius: 7px; }
 
 window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparent; background-image: none; border-style: none; border-color: transparent; box-shadow: none; }
 
