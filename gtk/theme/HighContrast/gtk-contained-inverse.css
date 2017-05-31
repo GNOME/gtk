@@ -1408,8 +1408,9 @@ headerbar {
       border-width: 0;
       background-image: none;
       box-shadow: none; }
-  .tiled .titlebar, .maximized .titlebar, .tiled
+  .tiled .titlebar, .maximized .titlebar, .fullscreen .titlebar, .tiled
   headerbar, .maximized
+  headerbar, .fullscreen
   headerbar {
     border-radius: 0; }
 
