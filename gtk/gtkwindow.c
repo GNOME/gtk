@@ -7994,12 +7994,6 @@ static void
 gtk_window_queue_draw_region (GtkWidget            *widget,
 		              const cairo_region_t *region)
 {
-  if (_gtk_widget_get_parent (widget))
-    {
-      GTK_WIDGET_CLASS (gtk_window_parent_class)->queue_draw_region (widget, region);
-      return;
-    }
-
   gtk_debug_updates_add (widget, region);
 
   gdk_window_invalidate_region (_gtk_widget_get_window (widget), region, TRUE);
