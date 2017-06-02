@@ -342,22 +342,45 @@ filechooser_win32_thread_done (gpointer _data)
   return FALSE;
 }
 
+static GFile *
+get_file_for_shell_item (IShellItem *item)
+{
+  HRESULT hr;
+  PWSTR pathw = NULL;
+  char *path;
+  GFile *file;
+
+  hr = IShellItem_GetDisplayName (item, SIGDN_FILESYSPATH, &pathw);
+  if (SUCCEEDED (hr))
+    {
+      path = g_utf16_to_utf8 (pathw, -1, NULL, NULL, NULL);
+      CoTaskMemFree (pathw);
+      if (path != NULL)
+        {
+          file = g_file_new_for_path (path);
+          g_free (path);
+          return file;
+       }
+    }
+
+  /* TODO: also support URLs through SIGDN_URL, but Windows URLS are not
+   * RFC 3986 compliant and we'd need to convert them first.
+   */
+
+  return NULL;
+}
+
 static void
 data_add_shell_item (FilechooserWin32ThreadData *data,
                      IShellItem *item)
 {
-  HRESULT hr;
-  PWSTR urlw = NULL;
-  char *url;
+  GFile *file;
 
-  hr = IShellItem_GetDisplayName (item, SIGDN_URL, &urlw);
-  if (SUCCEEDED (hr))
+  file = get_file_for_shell_item (item);
+  if (file != NULL)
     {
-      url = g_utf16_to_utf8 (urlw, -1, NULL, NULL, NULL);
-      CoTaskMemFree (urlw);
-      data->files = g_slist_prepend (data->files, g_file_new_for_uri (url));
+      data->files = g_slist_prepend (data->files, file);
       data->response = GTK_RESPONSE_ACCEPT;
-      g_free (url);
     }
 }
 
