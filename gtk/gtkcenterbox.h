@@ -1,3 +1,23 @@
+/*
+ * Copyright (c) 2017 Timm Bäder <mail@baedert.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public
+ * License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * Author: Timm Bäder <mail@baedert.org>
+ *
+ */
 
 #ifndef __GTK_CENTER_BOX_H__
 #define __GTK_CENTER_BOX_H__
@@ -31,9 +51,12 @@ struct _GtkCenterBoxClass
 GType      gtk_center_box_get_type (void) G_GNUC_CONST;
 
 GtkWidget *gtk_center_box_new (void);
-void       gtk_center_box_set_start_widget  (GtkCenterBox *self, GtkWidget *child);
-void       gtk_center_box_set_center_widget (GtkCenterBox *self, GtkWidget *child);
-void       gtk_center_box_set_end_widget    (GtkCenterBox *self, GtkWidget *child);
+void       gtk_center_box_set_start_widget   (GtkCenterBox *self,
+                                              GtkWidget    *child);
+void       gtk_center_box_set_center_widget  (GtkCenterBox *self,
+                                              GtkWidget    *child);
+void       gtk_center_box_set_end_widget     (GtkCenterBox *self,
+                                              GtkWidget    *child);
 
 GtkWidget * gtk_center_box_get_start_widget  (GtkCenterBox *self);
 GtkWidget * gtk_center_box_get_center_widget (GtkCenterBox *self);

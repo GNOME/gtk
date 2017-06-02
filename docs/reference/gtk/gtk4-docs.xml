@@ -68,6 +68,7 @@
     <chapter id="LayoutContainers">
       <title>Layout Containers</title>
       <xi:include href="xml/gtkbox.xml" />
+      <xi:include href="xml/gtkcenterbox.xml" />
       <xi:include href="xml/gtkgrid.xml" />
       <xi:include href="xml/gtkrevealer.xml" />
       <xi:include href="xml/gtklistbox.xml" />
