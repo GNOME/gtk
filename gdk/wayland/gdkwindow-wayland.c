@@ -3399,7 +3399,7 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if (!impl->display_server.xdg_surface)
+  if (!impl->display_server.xdg_toplevel)
     return;
 
   serial = _gdk_wayland_seat_get_last_implicit_grab_serial (gdk_device_get_seat (device),
@@ -3436,7 +3436,7 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if (!impl->display_server.xdg_surface)
+  if (!impl->display_server.xdg_toplevel)
     return;
 
   serial = _gdk_wayland_seat_get_last_implicit_grab_serial (gdk_device_get_seat (device),
