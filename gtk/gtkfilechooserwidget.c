@@ -744,8 +744,8 @@ error_message_with_parent (GtkWindow  *parent,
     gtk_window_group_add_window (gtk_window_get_group (parent),
                                  GTK_WINDOW (dialog));
 
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
+  gtk_widget_show (dialog);
 }
 
 /* Returns a toplevel GtkWindow, or NULL if none */
@@ -1456,14 +1456,45 @@ add_to_shortcuts_cb (GSimpleAction *action,
                                        impl);
 }
 
-static gboolean
-confirm_delete (GtkFileChooserWidget *impl,
-                GFileInfo            *info)
+struct FileTuple {
+  GtkFileChooserWidget *widget;
+  GFile *file;
+  GFileInfo *info;
+};
+
+static void
+file_tuple_free (gpointer data, GClosure *closure)
+{
+  struct FileTuple *t = data;
+
+  g_object_unref (t->file);
+  g_object_unref (t->info);
+  g_object_unref (t->widget);
+  g_free (t);
+}
+
+static void
+on_confirm_delete (GtkDialog *dialog, guint response_id, struct FileTuple *data)
+{
+  GError *error = NULL;
+
+  if (response_id == GTK_RESPONSE_ACCEPT)
+    {
+      if (!g_file_delete (data->file, NULL, &error))
+        error_deleting_file (data->widget, data->file, error);      
+    }
+
+  gtk_widget_destroy (GTK_WIDGET(dialog));
+}
+
+static void
+show_confirm_delete_dialog (GtkFileChooserWidget *impl,
+                            struct FileTuple     *data)
 {
   GtkWindow *toplevel;
   GtkWidget *dialog;
-  gint response;
   const gchar *name;
+  GFileInfo *info = data->info;
 
   name = g_file_info_get_display_name (info);
 
@@ -1484,11 +1515,9 @@ confirm_delete (GtkFileChooserWidget *impl,
   if (gtk_window_has_group (toplevel))
     gtk_window_group_add_window (gtk_window_get_group (toplevel), GTK_WINDOW (dialog));
 
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  gtk_widget_destroy (dialog);
-
-  return (response == GTK_RESPONSE_ACCEPT);
+  g_signal_connect_data (dialog, "response", G_CALLBACK(on_confirm_delete),
+                         data, file_tuple_free, 0);
+  gtk_widget_show (dialog);
 }
 
 static void
@@ -1500,16 +1529,17 @@ delete_selected_cb (GtkTreeModel *model,
   GtkFileChooserWidget *impl = data;
   GFile *file;
   GFileInfo *info;
-  GError *error = NULL;
+  struct FileTuple *file_data;
 
   file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (model), iter);
   info = _gtk_file_system_model_get_info (GTK_FILE_SYSTEM_MODEL (model), iter);
 
-  if (confirm_delete (impl, info))
-    {
-      if (!g_file_delete (file, NULL, &error))
-        error_deleting_file (impl, file, error);
-    }
+  file_data = g_new (struct FileTuple, 1);
+  file_data->file = g_object_ref (file);
+  file_data->info = g_object_ref (info);
+  file_data->widget = g_object_ref (impl);
+
+  show_confirm_delete_dialog (impl, file_data);
 }
 
 static void
