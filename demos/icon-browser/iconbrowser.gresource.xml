@@ -3,5 +3,6 @@
   <gresource prefix="/org/gtk/iconbrowser/gtk">
     <file preprocess="xml-stripblanks">window.ui</file>
     <file preprocess="xml-stripblanks">menus.ui</file>
+    <file>icon.list</file>
   </gresource>
 </gresources>
