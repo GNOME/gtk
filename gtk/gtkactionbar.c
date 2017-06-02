@@ -30,7 +30,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkprivate.h"
-#include "gtkcenterboxprivate.h"
+#include "gtkcenterbox.h"
 
 #include <string.h>
 
