@@ -185,7 +185,7 @@ void gtk_dialog_response           (GtkDialog *dialog,
                                     gint       response_id);
 
 /* Returns response_id */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED
 gint gtk_dialog_run                (GtkDialog *dialog);
 
 GDK_AVAILABLE_IN_ALL
