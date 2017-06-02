@@ -56,6 +56,7 @@ weather-showers=The icon used while rain showers are occurring in a region
 weather-showers-scattered=The icon used while scattered rain showers are occurring in a region
 weather-snow=The icon used while snow showers are occurring in a region
 weather-storm=The icon used while storms are occurring in a region
+weather-windy=The icon used while the weather is windy
 
 [navigation]
 Name=Navigation
@@ -98,6 +99,7 @@ edit-redo=The icon for the redo action
 edit-select-all=The icon for the select all action
 edit-select=
 edit-undo=The icon for the undo action
+error-correct=
 document-properties=The icon for the action to view the properties of a document in an application
 document-new=The icon used for the action to create a new document
 document-open=The icon used for the action to open a document
@@ -132,6 +134,7 @@ view-continuous=The icon used for a continuous view mode
 view-paged=The icon used for a paged view mode (as opposed to continuous)
 view-dual=The icon used for a side-by-side view of paginated content
 view-wrapped=The icon used to indicate a wrap-around to the beginning
+view-pin=The icon used for 'pin a view'
 
 [calendar]
 Name=Calendar, Tasks and Alarms
@@ -508,3 +511,6 @@ touchpad-disabled=
 trophy-bronze=
 trophy-silver=
 trophy-gold=
+night-light=
+daytime-sunrise=
+daytime-sunset=
