@@ -281,6 +281,16 @@ key_press_event_cb (GtkWidget *widget,
   return gtk_search_bar_handle_event (GTK_SEARCH_BAR (win->searchbar), event);
 }
 
+static void
+copy_to_clipboard (GtkButton         *button,
+                   IconBrowserWindow *win)
+{
+  GtkClipboard *clipboard;
+
+  clipboard = gtk_clipboard_get_default (gdk_display_get_default ());
+  gtk_clipboard_set_text (clipboard, gtk_window_get_title (GTK_WINDOW (win->details)), -1);
+}
+
 static gboolean
 icon_visible_func (GtkTreeModel *model,
                    GtkTreeIter  *iter,
@@ -453,6 +463,7 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), selected_context_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), symbolic_toggled);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), key_press_event_cb);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), copy_to_clipboard);
 }
 
 IconBrowserWindow *
