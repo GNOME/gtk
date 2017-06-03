@@ -2121,16 +2121,14 @@ gtk_popover_get_pointing_to (GtkPopover   *popover,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
+  g_return_val_if_fail (rect != NULL, FALSE);
 
-  if (rect)
+  if (priv->has_pointing_to)
+    *rect = priv->pointing_to;
+  else if (priv->widget)
     {
-      if (priv->has_pointing_to)
-        *rect = priv->pointing_to;
-      else if (priv->widget)
-        {
-          gtk_widget_get_allocation (priv->widget, rect);
-          rect->x = rect->y = 0;
-        }
+      gtk_widget_get_allocation (priv->widget, rect);
+      rect->x = rect->y = 0;
     }
 
   return priv->has_pointing_to;
