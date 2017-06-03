@@ -3,8 +3,11 @@
   <!-- interface-requires gtk+ 3.8 -->
   <object class="IconStore" id="store">
   </object>
+  <object class="GtkTreeModelSort" id="sort_model">
+    <property name="model">store</property>
+  </object>
   <object class="GtkTreeModelFilter" id="filter_model">
-    <property name="child_model">store</property>
+    <property name="child_model">sort_model</property>
   </object>
   <template class="IconBrowserWindow" parent="GtkApplicationWindow">
     <property name="title" translatable="yes">Icon Browser</property>

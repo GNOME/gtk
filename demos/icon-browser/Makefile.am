@@ -21,6 +21,11 @@ gtk3_icon_browser_SOURCES = \
 	iconbrowserapp.c iconbrowserapp.h \
 	iconbrowserwin.c iconbrowserwin.h \
 	iconstore.c iconstore.h \
+	fuzzy/dzl-fuzzy-index-builder.c fuzzy/dzl-fuzzy-index-builder.h \
+	fuzzy/dzl-fuzzy-index.c fuzzy/dzl-fuzzy-index.h \
+	fuzzy/dzl-fuzzy-util.c fuzzy/dzl-fuzzy-util.h \
+	fuzzy/dzl-fuzzy-index-cursor.c fuzzy/dzl-fuzzy-index-cursor.h \
+	fuzzy/dzl-fuzzy-index-match.c fuzzy/dzl-fuzzy-index-match.h \
 	resources.c
 
 BUILT_SOURCES = \
@@ -34,7 +39,8 @@ EXTRA_DIST = \
 	menus.ui \
 	iconbrowser.gresource.xml \
 	window.ui \
-	icon.list
+	icon.list \
+	icon.index
 
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gtk3-icon-browser

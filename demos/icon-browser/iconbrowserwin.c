@@ -3,6 +3,8 @@
 #include "iconbrowserwin.h"
 #include "iconstore.h"
 #include <gtk/gtk.h>
+#include <fuzzy/dzl-fuzzy-index.h>
+#include <fuzzy/dzl-fuzzy-index-match.h>
 
 typedef struct
 {
@@ -32,6 +34,7 @@ struct _IconBrowserWindow
   gboolean symbolic;
   GtkWidget *symbolic_radio;
   GtkTreeModelFilter *filter_model;
+  GtkTreeModelSort *sort_model;
   GtkWidget *details;
 
   GtkListStore *store;
@@ -47,6 +50,9 @@ struct _IconBrowserWindow
   GtkWidget *image4;
   GtkWidget *image5;
   GtkWidget *description;
+
+  DzlFuzzyIndex *index;
+  GHashTable *visible;
 };
 
 struct _IconBrowserWindowClass
@@ -55,6 +61,31 @@ struct _IconBrowserWindowClass
 };
 
 G_DEFINE_TYPE(IconBrowserWindow, icon_browser_window, GTK_TYPE_APPLICATION_WINDOW);
+
+static void
+query_cb (GObject *object,
+          GAsyncResult *result,
+          gpointer data)
+{
+  IconBrowserWindow *win = data;
+  GListModel *model;
+  GError *error = NULL;
+  int i;
+
+  model = dzl_fuzzy_index_query_finish (win->index, result, &error);
+  g_print ("%d matches found.\n", g_list_model_get_n_items (model));
+
+  g_hash_table_remove_all (win->visible);
+  for (i = 0; i < g_list_model_get_n_items (model); i++)
+    {
+      DzlFuzzyIndexMatch *match = g_list_model_get_item (model, i);
+      GVariant *document = dzl_fuzzy_index_match_get_document (match);
+      char *str = g_variant_dup_string (document, NULL);
+      g_hash_table_insert (win->visible, str, GINT_TO_POINTER (i + 1));
+    }
+  g_object_unref (model);
+  gtk_tree_model_filter_refilter (win->filter_model);
+}
 
 static void
 search_text_changed (GtkEntry *entry, IconBrowserWindow *win)
@@ -66,7 +97,7 @@ search_text_changed (GtkEntry *entry, IconBrowserWindow *win)
   if (text[0] == '\0')
     return;
 
-  gtk_tree_model_filter_refilter (win->filter_model);
+  dzl_fuzzy_index_query_async (win->index, text, 0, NULL, query_cb, win);
 }
 
 static GdkPixbuf *
@@ -301,11 +332,9 @@ icon_visible_func (GtkTreeModel *model,
   gchar *name;
   gint column;
   gboolean search;
-  const gchar *search_text;
   gboolean visible;
 
   search = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (win->search));
-  search_text = gtk_entry_get_text (GTK_ENTRY (win->searchentry));
 
   if (win->symbolic)
     column = ICON_STORE_SYMBOLIC_NAME_COLUMN;
@@ -319,7 +348,7 @@ icon_visible_func (GtkTreeModel *model,
   if (!name)
     visible = FALSE;
   else if (search)
-    visible = strstr (name, search_text) != NULL;
+    visible = g_hash_table_lookup (win->visible, name) != NULL;
   else
     visible = win->current_context != NULL && g_strcmp0 (context, win->current_context->id) == 0;
 
@@ -355,6 +384,8 @@ search_mode_toggled (GObject *searchbar, GParamSpec *pspec, IconBrowserWindow *w
 {
   if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (searchbar)))
     gtk_list_box_unselect_all (GTK_LIST_BOX (win->context_list));
+
+  gtk_tree_model_filter_refilter (win->filter_model);
 }
 
 static void
@@ -391,12 +422,56 @@ setup_image_dnd (GtkWidget *image)
   g_signal_connect (parent, "drag-data-get", G_CALLBACK (get_image_data), NULL);
 }
 
+static gint
+sort_func (GtkTreeModel *model,
+           GtkTreeIter  *a,
+           GtkTreeIter  *b,
+           gpointer      data)
+{
+  IconBrowserWindow *win = data;
+  char *aname = NULL;
+  char *bname = NULL;
+  int column;
+  int apos, bpos;
+  gboolean search;
+  int ret;
+
+  search = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (win->search));
+
+  if (win->symbolic)
+    column = ICON_STORE_SYMBOLIC_NAME_COLUMN;
+  else
+    column = ICON_STORE_NAME_COLUMN;
+
+  gtk_tree_model_get (model, a, column, &aname, -1);
+  gtk_tree_model_get (model, b, column, &bname, -1);
+
+  if (!aname || !bname)
+    ret = 0;
+  else if (search)
+    {
+      apos = GPOINTER_TO_INT (g_hash_table_lookup (win->visible, aname));
+      bpos = GPOINTER_TO_INT (g_hash_table_lookup (win->visible, bname));
+
+      ret = apos - bpos;
+    }
+  else
+    ret = strcmp (aname, bname);
+
+  g_free (aname);
+  g_free (bname);
+
+  return ret;
+}
+
 static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
   GtkTargetList *list;
   GtkTargetEntry *targets;
   gint n_targets;
+  GFile *file;
+  GError *error = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (win));
 
@@ -421,6 +496,7 @@ icon_browser_window_init (IconBrowserWindow *win)
   win->contexts = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, context_free);
 
   gtk_tree_model_filter_set_visible_func (win->filter_model, icon_visible_func, win, NULL);
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (win->sort_model), sort_func, win, NULL);
   gtk_window_set_transient_for (GTK_WINDOW (win->details), GTK_WINDOW (win));
 
   g_signal_connect (win->searchbar, "notify::search-mode-enabled",
@@ -429,6 +505,18 @@ icon_browser_window_init (IconBrowserWindow *win)
   symbolic_toggled (GTK_TOGGLE_BUTTON (win->symbolic_radio), win);
 
   populate (win);
+
+  win->index = dzl_fuzzy_index_new ();
+  file = g_file_new_for_path ("icon.index");
+  if (!dzl_fuzzy_index_load_file (win->index, file, NULL, &error))
+    {
+      g_printerr ("Failed to load index: %s\n", error->message);
+      g_error_free (error);
+    }
+
+  g_object_unref (file);
+
+  win->visible = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 }
 
 static void
@@ -441,6 +529,7 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
 
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, context_list);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, filter_model);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, sort_model);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, symbolic_radio);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, details);
 
