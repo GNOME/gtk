@@ -157,6 +157,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpopupat			\
 	testgaction 			\
 	testwidgetfocus 		\
+	testcenterbox			\
 	$(NULL)
 
 if USE_X11
@@ -270,6 +271,7 @@ testtitlebar_DEPENDENCIES = $(TEST_DEPS)
 testwindowsize_DEPENDENCIES = $(TEST_DEPS)
 listmodel_DEPENDENCIES = $(TEST_DEPS)
 testwidgetfocus_DEPENDENCIES = $(TEST_DEPS)
+testcenterbox_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
@@ -460,6 +462,8 @@ testglblending_SOURCES =	\
 listmodel_SOURCES = listmodel.c
 
 testwidgetfocus_SOURCES = testwidgetfocus.c
+
+testcenterbox_SOURCES = testcenterbox.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
