@@ -33,10 +33,36 @@
 #include "gtkcenterbox.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkbuildable.h"
 
 
-G_DEFINE_TYPE (GtkCenterBox, gtk_center_box, GTK_TYPE_WIDGET);
+static void gtk_center_box_buildable_init (GtkBuildableIface *iface);
 
+G_DEFINE_TYPE_WITH_CODE (GtkCenterBox, gtk_center_box, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_center_box_buildable_init))
+
+static void
+gtk_center_box_buildable_add_child (GtkBuildable  *buildable,
+                                    GtkBuilder    *builder,
+                                    GObject       *child,
+                                    const gchar   *type)
+{
+  if (g_strcmp0 (type, "start") == 0)
+    gtk_center_box_set_start_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
+  else if (g_strcmp0 (type, "center") == 0)
+    gtk_center_box_set_center_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
+  else if (g_strcmp0 (type, "end") == 0)
+    gtk_center_box_set_end_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
+  else
+    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (GTK_CENTER_BOX (buildable), type);
+}
+
+static void
+gtk_center_box_buildable_init (GtkBuildableIface *iface)
+{
+  iface->add_child = gtk_center_box_buildable_add_child;
+}
 
 static void
 gtk_center_box_measure (GtkWidget      *widget,
