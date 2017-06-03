@@ -127,6 +127,8 @@ gtk_tests = [
   ['testpopup'],
   ['testpopupat'],
   ['testgaction'],
+  ['testwidgetfocus'],
+  ['testcenterbox'],
 ]
 
 if os_linux
