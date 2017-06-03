@@ -48,18 +48,26 @@ struct _GtkCenterBoxClass
   GtkWidgetClass parent_class;
 };
 
+GDK_AVAILABLE_IN_3_92
 GType      gtk_center_box_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_3_92
 GtkWidget *gtk_center_box_new (void);
+GDK_AVAILABLE_IN_3_92
 void       gtk_center_box_set_start_widget   (GtkCenterBox *self,
                                               GtkWidget    *child);
+GDK_AVAILABLE_IN_3_92
 void       gtk_center_box_set_center_widget  (GtkCenterBox *self,
                                               GtkWidget    *child);
+GDK_AVAILABLE_IN_3_92
 void       gtk_center_box_set_end_widget     (GtkCenterBox *self,
                                               GtkWidget    *child);
 
+GDK_AVAILABLE_IN_3_92
 GtkWidget * gtk_center_box_get_start_widget  (GtkCenterBox *self);
+GDK_AVAILABLE_IN_3_92
 GtkWidget * gtk_center_box_get_center_widget (GtkCenterBox *self);
+GDK_AVAILABLE_IN_3_92
 GtkWidget * gtk_center_box_get_end_widget    (GtkCenterBox *self);
 
 
