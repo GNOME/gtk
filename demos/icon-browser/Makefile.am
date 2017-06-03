@@ -33,7 +33,8 @@ resources.c: iconbrowser.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourc
 EXTRA_DIST = \
 	menus.ui \
 	iconbrowser.gresource.xml \
-	window.ui
+	window.ui \
+	icon.list
 
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gtk3-icon-browser
