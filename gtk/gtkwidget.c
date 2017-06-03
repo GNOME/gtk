@@ -967,18 +967,17 @@ gtk_widget_real_pick (GtkWidget *widget,
           !gtk_widget_is_drawable (child))
         continue;
 
-      _gtk_widget_get_allocation (child, &allocation);
-      tx -= allocation.x;
-      ty -= allocation.y;
-      allocation.x = 0;
-      allocation.y = 0;
+      gtk_widget_get_margin_allocation (child, &allocation);
 
       if (gdk_rectangle_contains_point (&allocation, tx, ty))
         {
           if (x_out && y_out)
             {
-              *x_out = tx;
-              *y_out = ty;
+              GtkAllocation content_alloc;
+              gtk_widget_get_content_allocation (child, &content_alloc);
+
+              *x_out = x - content_alloc.x;
+              *y_out = y - content_alloc.y;
             }
 
           return child;
@@ -4944,50 +4943,17 @@ gtk_widget_unrealize (GtkWidget *widget)
  * Draw queueing.
  *****************************************/
 static void
-gtk_widget_queue_draw_child (GtkWidget            *widget,
-                             GtkWidget            *child,
-                             const cairo_region_t *child_region)
-{
-  GdkWindow *child_window, *window;
-  cairo_region_t *region;
-
-  window = _gtk_widget_get_window (widget);
-  child_window = _gtk_widget_get_window (child);
-
-  if (child_window == window)
-    gtk_widget_queue_draw_region (widget, child_region);
-
-  region = cairo_region_copy (child_region);
-  while (child_window != window && !cairo_region_is_empty (region))
-    {
-      int x, y;
-
-      /* clip to current window */
-      cairo_region_intersect_rectangle (region, &(GdkRectangle) { 
-                                        0, 0,
-                                        gdk_window_get_width (child_window),
-                                        gdk_window_get_height (child_window)});
-
-      /* make region relative to next window */
-      gdk_window_get_position (child_window, &x, &y);
-      cairo_region_translate (region, x, y);
-      child_window = gdk_window_get_parent (child_window);
-    }
-
-  gtk_widget_queue_draw_region (widget, region);
-  cairo_region_destroy (region);
-}
-
-static void
 gtk_widget_real_queue_draw_region (GtkWidget            *widget,
 				   const cairo_region_t *region)
 {
-  GtkWidget *parent = _gtk_widget_get_parent (widget);
+  GtkWidget *toplevel;
 
-  if (parent == NULL)
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (!GTK_IS_WINDOW (toplevel))
     return;
 
-  gtk_widget_queue_draw_child (parent, widget, region);
+  GTK_WIDGET_GET_CLASS (toplevel)->queue_draw_region (toplevel, region);
 }
 
 /**
@@ -5021,7 +4987,35 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
   if (!_gtk_widget_get_mapped (widget))
     return;
 
-  WIDGET_CLASS (widget)->queue_draw_region (widget, region);
+  if (!GTK_IS_WINDOW (widget))
+    {
+      GtkWidget *toplevel;
+      GtkAllocation alloc;
+      int x, y;
+      cairo_region_t *region2;
+
+      toplevel = gtk_widget_get_toplevel (widget);
+      if (!GTK_IS_WINDOW (toplevel))
+        return;
+
+      gtk_widget_get_allocation (widget, &alloc);
+
+      gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
+                                        toplevel,
+                                        alloc.x, alloc.y,
+                                        &x, &y);
+
+      region2 = cairo_region_copy (region);
+      cairo_region_translate (region2, x - alloc.x, y-  alloc.y);
+
+      WIDGET_CLASS (widget)->queue_draw_region (toplevel, region2);
+      cairo_region_destroy (region2);
+    }
+  else
+    {
+      WIDGET_CLASS (widget)->queue_draw_region (widget, region);
+    }
+
 }
 
 /**
@@ -5717,11 +5711,8 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 				  gint       *dest_x,
 				  gint       *dest_y)
 {
-  GtkWidgetPrivate *src_priv = src_widget->priv;
-  GtkWidgetPrivate *dest_priv = dest_widget->priv;
   GtkWidget *ancestor;
-  GdkWindow *window;
-  GList *dest_list = NULL;
+  GtkWidget *parent;
 
   g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
@@ -5730,82 +5721,36 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   if (!ancestor || !_gtk_widget_get_realized (src_widget) || !_gtk_widget_get_realized (dest_widget))
     return FALSE;
 
-  /* Translate from allocation relative to window relative */
-  if (_gtk_widget_get_has_window (src_widget) && src_priv->parent)
+
+  parent = src_widget;
+  while (parent != ancestor)
     {
-      gint wx, wy;
-      gdk_window_get_position (src_priv->window, &wx, &wy);
+      GtkAllocation content_alloc;
 
-      src_x -= wx - src_priv->allocation.x;
-      src_y -= wy - src_priv->allocation.y;
-    }
-  else
-    {
-      src_x += src_priv->allocation.x;
-      src_y += src_priv->allocation.y;
-    }
+      gtk_widget_get_content_allocation (parent, &content_alloc);
 
-  /* Translate to the common ancestor */
-  window = src_priv->window;
-  while (window != ancestor->priv->window)
-    {
-      gdouble dx, dy;
+      src_x += content_alloc.x;
+      src_y += content_alloc.y;
 
-      gdk_window_coords_to_parent (window, src_x, src_y, &dx, &dy);
-
-      src_x = dx;
-      src_y = dy;
-
-      window = gdk_window_get_parent (window);
-
-      if (!window)		/* Handle GtkHandleBox */
-	return FALSE;
+      parent = _gtk_widget_get_parent (parent);
     }
 
-  /* And back */
-  window = dest_priv->window;
-  while (window != ancestor->priv->window)
+  parent = dest_widget;
+  while (parent != ancestor)
     {
-      dest_list = g_list_prepend (dest_list, window);
+      GtkAllocation content_alloc;
 
-      window = gdk_window_get_parent (window);
+      gtk_widget_get_content_allocation (parent, &content_alloc);
 
-      if (!window)		/* Handle GtkHandleBox */
-        {
-          g_list_free (dest_list);
-          return FALSE;
-        }
-    }
+      src_x -= content_alloc.x;
+      src_y -= content_alloc.y;
 
-  while (dest_list)
-    {
-      gdouble dx, dy;
-
-      gdk_window_coords_from_parent (dest_list->data, src_x, src_y, &dx, &dy);
-
-      src_x = dx;
-      src_y = dy;
-
-      dest_list = g_list_remove (dest_list, dest_list->data);
-    }
-
-  /* Translate from window relative to allocation relative */
-  if (_gtk_widget_get_has_window (dest_widget) && dest_priv->parent)
-    {
-      gint wx, wy;
-      gdk_window_get_position (dest_priv->window, &wx, &wy);
-
-      src_x += wx - dest_priv->allocation.x;
-      src_y += wy - dest_priv->allocation.y;
-    }
-  else
-    {
-      src_x -= dest_priv->allocation.x;
-      src_y -= dest_priv->allocation.y;
+      parent = _gtk_widget_get_parent (parent);
     }
 
   if (dest_x)
     *dest_x = src_x;
+
   if (dest_y)
     *dest_y = src_y;
 
@@ -6776,7 +6721,7 @@ cancel_event_sequence_on_hierarchy (GtkWidget        *widget,
 }
 
 static void
-translate_coordinates (GdkEvent  *event,
+translate_event_coordinates (GdkEvent  *event,
                        GtkWidget *widget);
 gboolean
 _gtk_widget_captured_event (GtkWidget      *widget,
@@ -6801,7 +6746,7 @@ _gtk_widget_captured_event (GtkWidget      *widget,
     return TRUE;
 
   event_copy = gdk_event_copy (event);
-  translate_coordinates (event_copy, widget);
+  translate_event_coordinates (event_copy, widget);
 
   return_val = _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
 
@@ -6948,28 +6893,24 @@ event_window_is_still_viewable (const GdkEvent *event)
 }
 
 static void
-translate_coordinates (GdkEvent  *event,
-                       GtkWidget *widget)
+translate_event_coordinates (GdkEvent  *event,
+                             GtkWidget *widget)
 {
+  GtkWidget *event_widget;
   double x, y;
+  int dx, dy;
 
   if (!gdk_event_get_coords (event, &x, &y))
     return;
 
-  /* @event's coordinates are in toplevel coordinates, so we can simply
-   * walk up the hierarchy starting at @widget to translate the coordinates. */
-  while (widget)
-    {
-      GtkAllocation alloc;
+  event_widget = gtk_get_event_widget (event);
 
-      _gtk_widget_get_allocation (widget, &alloc);
-      x -= alloc.x;
-      y -= alloc.y;
+  gtk_widget_translate_coordinates (event_widget,
+                                    widget,
+                                    x, y,
+                                    &dx, &dy);
 
-      widget = _gtk_widget_get_parent (widget);
-    }
-
-  gdk_event_set_coords (event, x, y);
+  gdk_event_set_coords (event, dx, dy);
 }
 
 static gint
@@ -6989,7 +6930,8 @@ gtk_widget_event_internal (GtkWidget      *widget,
 
   g_object_ref (widget);
   event_copy = gdk_event_copy (event);
-  translate_coordinates (event_copy, widget);
+
+  translate_event_coordinates (event_copy, widget);
 
   if (widget == gtk_get_event_target (event_copy))
     return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
