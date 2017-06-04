@@ -131,8 +131,6 @@ struct _GtkStackChildInfo {
 typedef struct {
   GList *children;
 
-  GdkWindow* bin_window;
-
   GtkStackChildInfo *visible_child;
 
   gboolean hhomogeneous;
@@ -201,10 +199,6 @@ static void     gtk_stack_set_child_property             (GtkContainer  *contain
                                                           const GValue  *value,
                                                           GParamSpec    *pspec);
 static void     gtk_stack_unschedule_ticks               (GtkStack      *stack);
-static gint     get_bin_window_x                         (GtkStack            *stack,
-                                                          const GtkAllocation *allocation);
-static gint     get_bin_window_y                         (GtkStack            *stack,
-                                                          const GtkAllocation *allocation);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkStack, gtk_stack, GTK_TYPE_CONTAINER)
 
@@ -305,72 +299,6 @@ gtk_stack_set_property (GObject     *object,
 }
 
 static void
-gtk_stack_realize (GtkWidget *widget)
-{
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkAllocation allocation;
-  GtkStackChildInfo *info;
-  GList *l;
-
-  GTK_WIDGET_CLASS (gtk_stack_parent_class)->realize (widget);
-
-  gtk_widget_get_content_allocation (widget, &allocation);
-
-  priv->bin_window =
-    gdk_window_new_child (gtk_widget_get_window (widget),
-                          GDK_ALL_EVENTS_MASK,
-                          &(GdkRectangle) {
-                            get_bin_window_x (stack, &allocation),
-                            get_bin_window_y (stack, &allocation),
-                            allocation.width,
-                            allocation.height});
-  gtk_widget_register_window (widget, priv->bin_window);
-
-  for (l = priv->children; l != NULL; l = l->next)
-    {
-      info = l->data;
-
-      gtk_widget_set_parent_window (info->widget, priv->bin_window);
-    }
-}
-
-static void
-gtk_stack_unrealize (GtkWidget *widget)
-{
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-
-  gtk_widget_unregister_window (widget, priv->bin_window);
-  gdk_window_destroy (priv->bin_window);
-  priv->bin_window = NULL;
-
-  GTK_WIDGET_CLASS (gtk_stack_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_stack_map (GtkWidget *widget)
-{
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-
-  GTK_WIDGET_CLASS (gtk_stack_parent_class)->map (widget);
-
-  gdk_window_show (priv->bin_window);
-}
-
-static void
-gtk_stack_unmap (GtkWidget *widget)
-{
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-
-  gdk_window_hide (priv->bin_window);
-
-  GTK_WIDGET_CLASS (gtk_stack_parent_class)->unmap (widget);
-}
-
-static void
 gtk_stack_class_init (GtkStackClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -383,10 +311,6 @@ gtk_stack_class_init (GtkStackClass *klass)
 
   widget_class->size_allocate = gtk_stack_size_allocate;
   widget_class->snapshot = gtk_stack_snapshot;
-  widget_class->realize = gtk_stack_realize;
-  widget_class->unrealize = gtk_stack_unrealize;
-  widget_class->map = gtk_stack_map;
-  widget_class->unmap = gtk_stack_unmap;
   widget_class->measure = gtk_stack_measure;
   widget_class->compute_expand = gtk_stack_compute_expand;
 
@@ -792,39 +716,43 @@ get_simple_transition_type (gboolean               new_child_first,
 }
 
 static gint
-get_bin_window_x (GtkStack            *stack,
-                  const GtkAllocation *allocation)
+get_bin_window_x (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkAllocation allocation;
   int x = 0;
+
+  gtk_widget_get_content_allocation (GTK_WIDGET (stack), &allocation);
 
   if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
     {
       if (is_left_transition (priv->active_transition_type))
-        x = allocation->width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+        x = allocation.width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
       if (is_right_transition (priv->active_transition_type))
-        x = -allocation->width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+        x = -allocation.width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
     }
 
-  return x + allocation->x;
+  return x;
 }
 
 static gint
-get_bin_window_y (GtkStack            *stack,
-                  const GtkAllocation *allocation)
+get_bin_window_y (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkAllocation allocation;
   int y = 0;
+
+  gtk_widget_get_content_allocation (GTK_WIDGET (stack), &allocation);
 
   if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
     {
       if (is_up_transition (priv->active_transition_type))
-        y = allocation->height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+        y = allocation.height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
       if (is_down_transition(priv->active_transition_type))
-        y = -allocation->height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+        y = -allocation.height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
     }
 
-  return y + allocation->y;
+  return y;
 }
 
 static void
@@ -836,15 +764,8 @@ gtk_stack_progress_updated (GtkStack *stack)
 
   if (!priv->vhomogeneous || !priv->hhomogeneous)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
-
-  if (priv->bin_window != NULL &&
-      is_window_moving_transition (priv->active_transition_type))
-    {
-      GtkAllocation allocation;
-      gtk_widget_get_allocation (GTK_WIDGET (stack), &allocation);
-      gdk_window_move (priv->bin_window,
-                       get_bin_window_x (stack, &allocation), get_bin_window_y (stack, &allocation));
-    }
+  else if (is_window_moving_transition (priv->active_transition_type))
+    gtk_widget_queue_allocate (GTK_WIDGET (stack));
 
   if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
@@ -1209,12 +1130,7 @@ gtk_stack_add (GtkContainer *container,
   priv->children = g_list_append (priv->children, child_info);
 
   gtk_widget_set_child_visible (child, FALSE);
-  gtk_widget_set_parent_window (child, priv->bin_window);
   gtk_widget_set_parent (child, GTK_WIDGET (stack));
-
-  if (priv->bin_window)
-    gdk_window_set_events (priv->bin_window,
-                           GDK_ALL_EVENTS_MASK);
 
   g_signal_connect (child, "notify::visible",
                     G_CALLBACK (stack_child_visibility_notify_cb), stack);
@@ -1990,8 +1906,8 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
 
       gtk_widget_get_allocation (widget, &allocation);
 
-      x = get_bin_window_x (stack, &allocation) - allocation.x;
-      y = get_bin_window_y (stack, &allocation) - allocation.y;
+      x = get_bin_window_x (stack);
+      y = get_bin_window_y (stack);
 
       switch (priv->active_transition_type)
         {
@@ -2019,9 +1935,6 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
           g_assert_not_reached ();
           break;
         }
-
-      x += priv->last_visible_surface_allocation.x;
-      y += priv->last_visible_surface_allocation.y;
 
       if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_END &&
           priv->last_visible_widget_height > allocation.height)
@@ -2118,15 +2031,8 @@ gtk_stack_size_allocate (GtkWidget     *widget,
   GtkAllocation clip = *allocation;
   GtkAllocation child_allocation;
 
-  child_allocation.x = 0;
-  child_allocation.y = 0;
-
-  if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_move_resize (priv->bin_window,
-                              get_bin_window_x (stack, allocation), get_bin_window_y (stack, allocation),
-                              allocation->width, allocation->height);
-    }
+  child_allocation.x = get_bin_window_x (stack);
+  child_allocation.y = get_bin_window_y (stack);
 
   if (priv->last_visible_child)
     {
@@ -2190,9 +2096,6 @@ gtk_stack_size_allocate (GtkWidget     *widget,
     }
 
   gtk_container_get_children_clip (GTK_CONTAINER (widget), &clip);
-
-  clip.x += allocation->x;
-  clip.y += allocation->y;
 
   gtk_widget_set_clip (widget, &clip);
 }
