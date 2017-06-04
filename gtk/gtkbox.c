@@ -433,24 +433,6 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
                           &sizes[i].minimum_size, &sizes[i].natural_size,
                           NULL, NULL);
 
-      /* Assert the api is working properly */
-      if (sizes[i].minimum_size < 0)
-	g_error ("GtkBox child %s minimum %s: %d < 0 for %s %d",
-		 gtk_widget_get_name (GTK_WIDGET (child->widget)),
-		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
-		 sizes[i].minimum_size,
-		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "height" : "width",
-		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
-
-      if (sizes[i].natural_size < sizes[i].minimum_size)
-	g_error ("GtkBox child %s natural %s: %d < minimum %d for %s %d",
-		 gtk_widget_get_name (GTK_WIDGET (child->widget)),
-		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
-		 sizes[i].natural_size,
-		 sizes[i].minimum_size,
-		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "height" : "width",
-		 (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? allocation->height : allocation->width);
-
       children_minimum_size += sizes[i].minimum_size;
 
       sizes[i].data = child;
@@ -1116,20 +1098,6 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
                               -1,
                               &sizes[i].minimum_size, &sizes[i].natural_size,
                               NULL, NULL);
-
-	  /* Assert the api is working properly */
-	  if (sizes[i].minimum_size < 0)
-	    g_error ("GtkBox child %s minimum %s: %d < 0",
-		     gtk_widget_get_name (GTK_WIDGET (child->widget)),
-		     (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
-		     sizes[i].minimum_size);
-
-	  if (sizes[i].natural_size < sizes[i].minimum_size)
-	    g_error ("GtkBox child %s natural %s: %d < minimum %d",
-		     gtk_widget_get_name (GTK_WIDGET (child->widget)),
-		     (private->orientation == GTK_ORIENTATION_HORIZONTAL) ? "width" : "height",
-		     sizes[i].natural_size,
-		     sizes[i].minimum_size);
 
           children_minimum_size += sizes[i].minimum_size;
 
