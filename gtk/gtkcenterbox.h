@@ -34,20 +34,6 @@
 typedef struct _GtkCenterBox             GtkCenterBox;
 typedef struct _GtkCenterBoxClass        GtkCenterBoxClass;
 
-struct _GtkCenterBox
-{
-  GtkWidget parent_instance;
-
-  GtkWidget *start_widget;
-  GtkWidget *center_widget;
-  GtkWidget *end_widget;
-};
-
-struct _GtkCenterBoxClass
-{
-  GtkWidgetClass parent_class;
-};
-
 GDK_AVAILABLE_IN_3_92
 GType      gtk_center_box_get_type (void) G_GNUC_CONST;
 

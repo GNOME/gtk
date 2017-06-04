@@ -38,6 +38,21 @@
 #include "gtkbuildable.h"
 #include "gtksizerequest.h"
 
+struct _GtkCenterBox
+{
+  GtkWidget parent_instance;
+
+  GtkWidget *start_widget;
+  GtkWidget *center_widget;
+  GtkWidget *end_widget;
+};
+
+
+struct _GtkCenterBoxClass
+{
+  GtkWidgetClass parent_class;
+};
+
 
 static void gtk_center_box_buildable_init (GtkBuildableIface *iface);
 
