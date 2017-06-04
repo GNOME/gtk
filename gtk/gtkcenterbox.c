@@ -33,6 +33,8 @@
 #include "gtkcenterbox.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkorientable.h"
+#include "gtkorientableprivate.h"
 #include "gtkbuildable.h"
 
 
@@ -113,9 +115,6 @@ gtk_center_box_measure (GtkWidget      *widget,
       *minimum = MAX (start_min, MAX (center_min, end_min));
       *natural = MAX (start_nat, MAX (center_nat, end_nat));
     }
-
-if (orientation == GTK_ORIENTATION_HORIZONTAL)
-  g_print ("center box measure: min %d nat %d\n", *minimum, *natural);
 }
 
 static void
@@ -138,21 +137,21 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
   int right_min = 0;
   int right_nat = 0;
   int avail;
+  gboolean left_expand = FALSE;
+  gboolean center_expand = FALSE;
+  gboolean right_expand = FALSE;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     {
       left = self->start_widget;
       right = self->end_widget;
-g_print ("left to right\n");
     }
   else
     {
       right = self->start_widget;
       left = self->end_widget;
-g_print ("right to left\n");
     }
 
-g_print ("center box allocate: %d\n", allocation->width);
   GTK_WIDGET_CLASS (gtk_center_box_parent_class)->size_allocate (widget, allocation);
 
   if (left)
@@ -170,34 +169,28 @@ g_print ("center box allocate: %d\n", allocation->width);
                         allocation->height,
                         &center_min, &center_nat, NULL, NULL);
 
-  child_allocation.y = allocation->y;
-  child_allocation.height = allocation->height;
-
-  center_size = CLAMP (allocation->width - (left_min + right_min), center_min, center_nat);
+  if (self->center_widget)
+    {
+      center_size = CLAMP (allocation->width - (left_min + right_min), center_min, center_nat);
+      center_expand = gtk_widget_get_hexpand (self->center_widget);
+    }
 
   if (left)
     {
       avail = MIN ((allocation->width - center_size) / 2, allocation->width - (center_size + right_min));
-      child_allocation.width = CLAMP (avail, left_min, left_nat);
-      child_allocation.x = allocation->x;
-
-      gtk_widget_size_allocate (left, &child_allocation);
-      gtk_widget_get_clip (left, &child_clip);
-      gdk_rectangle_union (&clip, &clip, &child_clip);
-      left_size = child_allocation.width;
+      left_size = CLAMP (avail, left_min, left_nat);
+      left_expand = gtk_widget_get_hexpand (left);
     }
 
   if (right)
     {
       avail = MIN ((allocation->width - center_size) / 2, allocation->width - (center_size + left_min));
-      child_allocation.width = CLAMP (avail, right_min, right_nat);
-      child_allocation.x = allocation->x + allocation->width - child_allocation.width;
-
-      gtk_widget_size_allocate (right, &child_allocation);
-      gtk_widget_get_clip (right, &child_clip);
-      gdk_rectangle_union (&clip, &clip, &child_clip);
-      right_size = child_allocation.width;
+      right_size = CLAMP (avail, right_min, right_nat);
+      right_expand = gtk_widget_get_hexpand (right);
     }
+
+  child_allocation.y = allocation->y;
+  child_allocation.height = allocation->height;
 
   if (self->center_widget)
     {
@@ -209,10 +202,56 @@ g_print ("center box allocate: %d\n", allocation->width);
         child_allocation.x = left_size;
       else if (allocation->width - right_size < child_allocation.x + child_allocation.width)
         child_allocation.x = allocation->width - child_allocation.width - right_size;
+      else if (center_expand)
+        {
+          child_allocation.width = allocation->width - 2 * MAX (left_size, right_size);
+          child_allocation.x = (allocation->width / 2) - (child_allocation.width / 2);
+        }
 
       child_allocation.x += allocation->x;
       gtk_widget_size_allocate (self->center_widget, &child_allocation);
       gtk_widget_get_clip (self->center_widget, &child_clip);
+      gdk_rectangle_union (&clip, &clip, &child_clip);
+
+      if (left_expand)
+        left_size = child_allocation.x - allocation->x;
+
+      if (right_expand)
+        right_size = allocation->x + allocation->width - (child_allocation.x + child_allocation.width);
+    }
+  else
+    {
+      avail = allocation->width - (left_size + right_size);
+      if (left_expand && right_expand)
+        {
+          left_size += avail / 2;
+          right_size += avail / 2;
+        }
+      else if (left_expand)
+        {
+          left_size += avail;
+        }
+      else if (right_expand)
+        {
+          right_size += avail;
+        }
+    }
+
+  if (left)
+    {
+      child_allocation.width = left_size;
+      child_allocation.x = allocation->x;
+      gtk_widget_size_allocate (left, &child_allocation);
+      gtk_widget_get_clip (left, &child_clip);
+      gdk_rectangle_union (&clip, &clip, &child_clip);
+    }
+
+  if (right)
+    {
+      child_allocation.width = right_size;
+      child_allocation.x = allocation->x + allocation->width - child_allocation.width;
+      gtk_widget_size_allocate (right, &child_allocation);
+      gtk_widget_get_clip (right, &child_clip);
       gdk_rectangle_union (&clip, &clip, &child_clip);
     }
 
