@@ -386,7 +386,7 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   GtkCssNode *widget_node;
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (group), FALSE);
-  gtk_widget_set_has_window (GTK_WIDGET (group), TRUE);
+  gtk_widget_set_has_window (GTK_WIDGET (group), FALSE);
 
   group->priv = priv = gtk_tool_item_group_get_instance_private (group);
 
@@ -1200,26 +1200,9 @@ gtk_tool_item_group_set_toplevel_window (GtkToolItemGroup *group,
 static void
 gtk_tool_item_group_realize (GtkWidget *widget)
 {
-  GtkAllocation allocation;
   GtkWidget *toplevel_window;
-  GdkWindow *window;
 
-  gtk_widget_set_realized (widget, TRUE);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 GDK_ALL_EVENTS_MASK,
-                                 &allocation);
-  gtk_widget_set_window (widget, window);
-
-  gtk_widget_register_window (widget, window);
-
-  gtk_container_forall (GTK_CONTAINER (widget),
-                        (GtkCallback) gtk_widget_set_parent_window,
-                        window);
-
-  gtk_widget_queue_resize_no_redraw (widget);
+  GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->realize (widget);
 
   toplevel_window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
   gtk_tool_item_group_set_toplevel_window (GTK_TOOL_ITEM_GROUP (widget),
