@@ -85,13 +85,13 @@ slide_left_no_animations ()
 static void
 none_animations ()
 {
-  keep_size (0, GTK_REVEALER_TRANSITION_TYPE_NONE, TRUE);
+  keep_size (KEEP_WIDTH | KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_NONE, TRUE);
 }
 
 static void
 none_no_animations ()
 {
-  keep_size (0, GTK_REVEALER_TRANSITION_TYPE_NONE, FALSE);
+  keep_size (KEEP_WIDTH | KEEP_HEIGHT, GTK_REVEALER_TRANSITION_TYPE_NONE, FALSE);
 }
 
 static void

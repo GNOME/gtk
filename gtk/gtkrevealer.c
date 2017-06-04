@@ -385,10 +385,17 @@ gtk_revealer_set_position (GtkRevealer *revealer,
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL &&
       new_visible != gtk_widget_get_child_visible (child))
-    gtk_widget_set_child_visible (child, new_visible);
+    {
+      gtk_widget_set_child_visible (child, new_visible);
+      gtk_widget_queue_resize (GTK_WIDGET (revealer));
+    }
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE)
+    {
+      gtk_widget_queue_draw (GTK_WIDGET (revealer));
+    }
+  else if (transition == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
     {
       gtk_widget_set_opacity (GTK_WIDGET (revealer), priv->current_pos);
       gtk_widget_queue_draw (GTK_WIDGET (revealer));
@@ -550,8 +557,7 @@ set_height (GtkRevealer *revealer,
   GtkRevealerTransitionType transition;
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
-      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
     {
       *minimum_height = round (*minimum_height * priv->current_pos);
@@ -568,8 +574,7 @@ set_width (GtkRevealer *revealer,
   GtkRevealerTransitionType transition;
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
-      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
     {
       *minimum_width = round (*minimum_width * priv->current_pos);
