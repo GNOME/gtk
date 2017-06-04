@@ -271,41 +271,62 @@ gtk_center_box_measure_opposite (GtkWidget      *widget,
                                  int            *natural_baseline)
 {
   GtkCenterBox *self = GTK_CENTER_BOX (widget);
-  int min_baseline, nat_baseline;
-  int start_min = 0;
-  int start_nat = 0;
-  int center_min = 0;
-  int center_nat = 0;
-  int end_min = 0;
-  int end_nat = 0;
+  int child_min, child_nat;
+  int child_min_baseline, child_nat_baseline;
+  int total_min, above_min, below_min;
+  int total_nat, above_nat, below_nat;
+  GtkWidget *child[3];
   GtkRequestedSize sizes[3];
+  int i;
+
+  child[0] = self->start_widget;
+  child[1] = self->center_widget;
+  child[2] = self->end_widget;
 
   if (for_size >= 0)
     gtk_center_box_distribute (self, -1, for_size, sizes);
 
-  if (self->start_widget)
-    gtk_widget_measure (self->start_widget,
-                        orientation,
-                        for_size >= 0 ? sizes[0].minimum_size : -1,
-                        &start_min, &start_nat,
-                        &min_baseline, &nat_baseline);
+  above_min = below_min = above_nat = below_nat = -1;
+  total_min = total_nat = 0;
 
-  if (self->center_widget)
-    gtk_widget_measure (self->center_widget,
-                        orientation,
-                        for_size >= 0 ? sizes[1].minimum_size : -1,
-                        &center_min, &center_nat,
-                        &min_baseline, &nat_baseline);
+  for (i = 0; i < 3; i++)
+    {
+      if (child[i] == NULL)
+        continue;
 
-  if (self->end_widget)
-    gtk_widget_measure (self->end_widget,
-                        orientation,
-                        for_size >= 0 ? sizes[2].minimum_size : -1,
-                        &end_min, &end_nat,
-                        &min_baseline, &nat_baseline);
+      gtk_widget_measure (child[i],
+                          orientation,
+                          for_size >= 0 ? sizes[i].minimum_size : -1,
+                          &child_min, &child_nat,
+                          &child_min_baseline, &child_nat_baseline);
 
-  *minimum = MAX (start_min, MAX (center_min, end_min));
-  *natural = MAX (start_nat, MAX (center_nat, end_nat));
+      if (child_min_baseline >= 0)
+        {
+          below_min = MAX (below_min, child_min - child_min_baseline);
+          above_min = MAX (above_min, child_min_baseline);
+          below_nat = MAX (below_nat, child_nat - child_nat_baseline);
+          above_nat = MAX (above_nat, child_nat_baseline);
+        }
+      else
+        {
+          total_min = MAX (total_min, child_min);
+          total_nat = MAX (total_nat, child_nat);
+        }
+   }
+
+  if (above_min >= 0)
+    {
+      total_min = MAX (total_min, above_min + below_min);
+      total_nat = MAX (total_nat, above_nat + below_nat);
+      /* assume GTK_BASELINE_POSITION_CENTER for now */
+      if (minimum_baseline)
+        *minimum_baseline = above_min + (total_min - (above_min + below_min)) / 2;
+      if (natural_baseline)
+        *natural_baseline = above_nat + (total_nat - (above_nat + below_nat)) / 2;
+    }
+
+  *minimum = total_min;
+  *natural = total_nat;
 }
 
 static void
@@ -325,22 +346,6 @@ gtk_center_box_measure (GtkWidget      *widget,
     gtk_center_box_measure_opposite (widget, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
 }
 
-#define SET_CHILD_ALLOC(pos,size) \
-      if (self->orientation == GTK_ORIENTATION_HORIZONTAL) \
-        { \
-          child_allocation.x = allocation->x + (pos); \
-          child_allocation.y = allocation->y; \
-          child_allocation.width = (size); \
-          child_allocation.height = allocation->height; \
-        } \
-      else \
-        { \
-          child_allocation.x = allocation->x; \
-          child_allocation.y = allocation->y + (pos); \
-          child_allocation.width = allocation->width; \
-          child_allocation.height = (size); \
-        }
-
 static void
 gtk_center_box_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
@@ -349,16 +354,14 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkAllocation clip = *allocation;
   GtkAllocation child_clip;
-  GtkWidget *start;
-  GtkWidget *center;
-  GtkWidget *end;
-  int start_size = 0;
-  int center_size = 0;
-  int end_size = 0;
+  GtkWidget *child[3];
+  int child_size[3];
+  int child_pos[3];
   GtkRequestedSize sizes[3];
   int size;
   int for_size;
-  int child_pos;
+  int baseline;
+  int i;
 
   GTK_WIDGET_CLASS (gtk_center_box_parent_class)->size_allocate (widget, allocation);
 
@@ -366,11 +369,13 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
     {
       size = allocation->width;
       for_size = allocation->height;
+      baseline = gtk_widget_get_allocated_baseline (widget);
     }
   else
     {
       size = allocation->height;
       for_size = allocation->width;
+      baseline = -1;
     }
 
   gtk_center_box_distribute (self, for_size, size, sizes);
@@ -378,56 +383,60 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL &&
       gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     {
-      start = self->end_widget;
-      start_size = sizes[2].minimum_size;
-      end = self->start_widget;
-      end_size = sizes[0].minimum_size;
+      child[0] = self->end_widget;
+      child[1] = self->center_widget;
+      child[2] = self->start_widget;
+      child_size[0] = sizes[2].minimum_size;
+      child_size[1] = sizes[1].minimum_size;
+      child_size[2] = sizes[0].minimum_size;
     }
   else
     {
-      start = self->start_widget;
-      start_size = sizes[0].minimum_size;
-      end = self->end_widget;
-      end_size = sizes[2].minimum_size;
+      child[0] = self->start_widget;
+      child[1] = self->center_widget;
+      child[2] = self->end_widget;
+      child_size[0] = sizes[0].minimum_size;
+      child_size[1] = sizes[1].minimum_size;
+      child_size[2] = sizes[2].minimum_size;
     }
 
-  center = self->center_widget;
-  center_size = sizes[1].minimum_size;
+  child_pos[0] = 0;
+  child_pos[1] = (size / 2) - (child_size[1] / 2);
+  child_pos[2] = size - child_size[2];
+
+  if (child[1])
+    {
+      /* Push in from start/end */
+      if (child_size[0] > child_pos[1])
+        child_pos[1] = child_size[0];
+      else if (size - child_size[2] < child_pos[1] + child_size[1])
+        child_pos[1] = size - child_size[1] - child_size[2];
+    }
 
   child_allocation = *allocation;
 
-  if (center)
+  for (i = 0; i < 3; i++)
     {
-      child_pos = (size / 2) - (center_size / 2);
+      if (child[i] == NULL)
+        continue;
 
-      /* Push in from start/end */
-      if (start_size > child_pos)
-        child_pos = start_size;
-      else if (size - end_size < child_pos + center_size)
-        child_pos = size - center_size - end_size;
+      if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          child_allocation.x = allocation->x + child_pos[i];
+          child_allocation.y = allocation->y;
+          child_allocation.width = child_size[i];
+          child_allocation.height = allocation->height;
+        }
+      else
+        {
+          child_allocation.x = allocation->x;
+          child_allocation.y = allocation->y + child_pos[i];
+          child_allocation.width = allocation->width;
+          child_allocation.height = child_size[i];
+        }
 
-      SET_CHILD_ALLOC (child_pos, center_size);
-
-      gtk_widget_size_allocate (center, &child_allocation);
-      gtk_widget_get_clip (center, &child_clip);
-      gdk_rectangle_union (&clip, &clip, &child_clip);
-    }
-
-  if (start)
-    {
-      SET_CHILD_ALLOC (0, start_size);
-
-      gtk_widget_size_allocate (start, &child_allocation);
-      gtk_widget_get_clip (start, &child_clip);
-      gdk_rectangle_union (&clip, &clip, &child_clip);
-    }
-
-  if (end)
-    {
-      SET_CHILD_ALLOC (size - end_size, end_size);
-
-      gtk_widget_size_allocate (end, &child_allocation);
-      gtk_widget_get_clip (end, &child_clip);
+      gtk_widget_size_allocate_with_baseline (child[i], &child_allocation, baseline);
+      gtk_widget_get_clip (child[i], &child_clip);
       gdk_rectangle_union (&clip, &clip, &child_clip);
     }
 
