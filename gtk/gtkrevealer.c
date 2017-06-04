@@ -82,8 +82,6 @@ typedef struct {
   GtkRevealerTransitionType transition_type;
   guint transition_duration;
 
-  GdkWindow* bin_window;
-
   gdouble current_pos;
   gdouble source_pos;
   gdouble target_pos;
@@ -94,8 +92,6 @@ typedef struct {
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
-static void     gtk_revealer_real_realize                        (GtkWidget     *widget);
-static void     gtk_revealer_real_unrealize                      (GtkWidget     *widget);
 static void     gtk_revealer_real_add                            (GtkContainer  *widget,
                                                                   GtkWidget     *child);
 static void     gtk_revealer_real_size_allocate                  (GtkWidget     *widget,
@@ -224,8 +220,6 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   object_class->set_property = gtk_revealer_set_property;
   object_class->finalize = gtk_revealer_finalize;
 
-  widget_class->realize = gtk_revealer_real_realize;
-  widget_class->unrealize = gtk_revealer_real_unrealize;
   widget_class->unmap = gtk_revealer_unmap;
   widget_class->size_allocate = gtk_revealer_real_size_allocate;
   widget_class->measure = gtk_revealer_measure;
@@ -334,66 +328,6 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
 }
 
 static void
-gtk_revealer_real_realize (GtkWidget *widget)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  GtkAllocation allocation;
-  GtkAllocation child_allocation;
-  GtkWidget *child;
-  GtkRevealerTransitionType transition;
-
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  gtk_revealer_get_child_allocation (revealer, &allocation, &child_allocation);
-
-  /* See explanation on gtk_revealer_real_size_allocate */
-  transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
-    {
-      child_allocation.y = allocation.height - child_allocation.height;
-      child_allocation.x = 0;
-    }
-  else if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-    {
-      child_allocation.y = 0;
-      child_allocation.x = allocation.width - child_allocation.width;
-    }
- else
-   {
-     child_allocation.y = 0;
-     child_allocation.x = 0;
-   }
-
-  priv->bin_window =
-    gdk_window_new_child (gtk_widget_get_window (widget),
-                          GDK_ALL_EVENTS_MASK,
-                          &child_allocation);
-  gtk_widget_register_window (widget, priv->bin_window);
-
-  child = gtk_bin_get_child (GTK_BIN (revealer));
-  if (child != NULL)
-    gtk_widget_set_parent_window (child, priv->bin_window);
-
-  gdk_window_show (priv->bin_window);
-}
-
-static void
-gtk_revealer_real_unrealize (GtkWidget *widget)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-
-  gtk_widget_unregister_window (widget, priv->bin_window);
-  gdk_window_destroy (priv->bin_window);
-  priv->bin_window = NULL;
-
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->unrealize (widget);
-}
-
-static void
 gtk_revealer_real_add (GtkContainer *container,
                        GtkWidget    *child)
 {
@@ -402,7 +336,6 @@ gtk_revealer_real_add (GtkContainer *container,
 
   g_return_if_fail (child != NULL);
 
-  gtk_widget_set_parent_window (child, priv->bin_window);
   gtk_widget_set_child_visible (child, priv->current_pos != 0.0);
 
   GTK_CONTAINER_CLASS (gtk_revealer_parent_class)->add (container, child);
@@ -413,11 +346,8 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
                                  GtkAllocation *allocation)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkAllocation child_allocation;
   GtkWidget *child;
-  int bin_x, bin_y;
-  GtkRevealerTransitionType transition;
   GtkAllocation clip = *allocation;
 
   g_return_if_fail (allocation != NULL);
@@ -429,51 +359,6 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_size_allocate (child, &child_allocation);
       gtk_widget_get_clip (child, &clip);
-    }
-
-  if (gtk_widget_get_realized (widget))
-    {
-      bin_x = 0;
-      bin_y = 0;
-
-      transition = effective_transition (revealer);
-      /* The child allocation is fixed (it is not modified by the animation),
-       * and it's origin is relative to the bin_window.
-       * The bin_window has the same allocation as the child, and then the bin_window
-       * deals with the relative positioning with respect to the revealer taking
-       * into account the paddings of the revealer.
-       *
-       * For most of transitions, the bin_window moves along with the revealer,
-       * as its allocation changes.
-       * However for GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN
-       * we need to first move the bin_window upwards and then slide it down in
-       * the revealer.
-       * Otherwise the child would appear as static and the revealer will allocate
-       * following the animation, clipping the child.
-       * To calculate the correct y position for this case:
-       * allocation->height - child_allocation.height is the relative position
-       * towards the revealer taking into account the animation progress with
-       * both vertical paddings added, therefore we need to substract the part
-       * that we don't want to take into account for the y position, which
-       * in this case is the bottom padding.
-       *
-       * The same special treatment is needed for GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT.
-       */
-      if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
-        {
-          bin_y = allocation->height - child_allocation.height;
-          bin_x = 0;
-        }
-      else if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
-        {
-          bin_y = 0;
-          bin_x = allocation->width - child_allocation.width;
-        }
-
-      gdk_window_move_resize (priv->bin_window,
-                              bin_x + allocation->x,
-                              bin_y + allocation->y,
-                              child_allocation.width, child_allocation.height);
     }
 
   gtk_widget_set_clip (widget, &clip);
