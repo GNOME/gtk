@@ -45,8 +45,9 @@ struct _GtkCenterBox
   GtkWidget *start_widget;
   GtkWidget *center_widget;
   GtkWidget *end_widget;
-};
 
+  GtkOrientation orientation;
+};
 
 struct _GtkCenterBoxClass
 {
@@ -54,11 +55,16 @@ struct _GtkCenterBoxClass
 };
 
 
+enum {
+  PROP_0,
+  PROP_ORIENTATION
+};
+
 static void gtk_center_box_buildable_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkCenterBox, gtk_center_box, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                gtk_center_box_buildable_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_center_box_buildable_init))
 
 static void
 gtk_center_box_buildable_add_child (GtkBuildable  *buildable,
@@ -102,14 +108,14 @@ gtk_center_box_distribute (GtkCenterBox     *self,
 
   if (self->start_widget)
     gtk_widget_measure (self->start_widget,
-                        GTK_ORIENTATION_HORIZONTAL,
+                        self->orientation,
                         for_size,
                         &sizes[0].minimum_size, &sizes[0].natural_size,
                         NULL, NULL);
 
   if (self->center_widget)
     gtk_widget_measure (self->center_widget,
-                        GTK_ORIENTATION_HORIZONTAL,
+                        self->orientation,
                         for_size,
                         &sizes[1].minimum_size, &sizes[1].natural_size,
                         NULL, NULL);
@@ -117,7 +123,7 @@ gtk_center_box_distribute (GtkCenterBox     *self,
 
   if (self->end_widget)
     gtk_widget_measure (self->end_widget,
-                        GTK_ORIENTATION_HORIZONTAL,
+                        self->orientation,
                         for_size,
                         &sizes[2].minimum_size, &sizes[2].natural_size,
                         NULL, NULL);
@@ -287,11 +293,29 @@ gtk_center_box_measure (GtkWidget      *widget,
                         int            *minimum_baseline,
                         int            *natural_baseline)
 {
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+  GtkCenterBox *self = GTK_CENTER_BOX (widget);
+
+  if (self->orientation == orientation)
     gtk_center_box_measure_orientation (widget, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
   else
     gtk_center_box_measure_opposite (widget, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
 }
+
+#define SET_CHILD_ALLOC(pos,size) \
+      if (self->orientation == GTK_ORIENTATION_HORIZONTAL) \
+        { \
+          child_allocation.x = allocation->x + (pos); \
+          child_allocation.y = allocation->y; \
+          child_allocation.width = (size); \
+          child_allocation.height = allocation->height; \
+        } \
+      else \
+        { \
+          child_allocation.x = allocation->x; \
+          child_allocation.y = allocation->y + (pos); \
+          child_allocation.width = allocation->width; \
+          child_allocation.height = (size); \
+        }
 
 static void
 gtk_center_box_size_allocate (GtkWidget     *widget,
@@ -301,66 +325,85 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkAllocation clip = *allocation;
   GtkAllocation child_clip;
-  GtkWidget *left;
-  GtkWidget *right;
-  int left_size = 0;
-  int right_size = 0;
+  GtkWidget *start;
+  GtkWidget *center;
+  GtkWidget *end;
+  int start_size = 0;
+  int center_size = 0;
+  int end_size = 0;
   GtkRequestedSize sizes[3];
+  int size;
+  int for_size;
+  int child_pos;
 
   GTK_WIDGET_CLASS (gtk_center_box_parent_class)->size_allocate (widget, allocation);
 
-  gtk_center_box_distribute (self, allocation->height, allocation->width, sizes);
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+  if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      left = self->start_widget;
-      left_size = sizes[0].minimum_size;
-      right = self->end_widget;
-      right_size = sizes[2].minimum_size;
+      size = allocation->width;
+      for_size = allocation->height;
     }
   else
     {
-      right = self->start_widget;
-      right_size = sizes[0].minimum_size;
-      left = self->end_widget;
-      left_size = sizes[2].minimum_size;
+      size = allocation->height;
+      for_size = allocation->width;
     }
 
-  child_allocation.y = allocation->y;
-  child_allocation.height = allocation->height;
+  gtk_center_box_distribute (self, for_size, size, sizes);
 
-  if (self->center_widget)
+  if (self->orientation == GTK_ORIENTATION_HORIZONTAL &&
+      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     {
-      child_allocation.width = sizes[1].minimum_size;
-      child_allocation.x = (allocation->width / 2) - (child_allocation.width / 2);
+      start = self->end_widget;
+      start_size = sizes[2].minimum_size;
+      end = self->start_widget;
+      end_size = sizes[0].minimum_size;
+    }
+  else
+    {
+      start = self->start_widget;
+      start_size = sizes[0].minimum_size;
+      end = self->end_widget;
+      end_size = sizes[2].minimum_size;
+    }
+
+  center = self->center_widget;
+  center_size = sizes[1].minimum_size;
+
+  child_allocation = *allocation;
+
+  if (center)
+    {
+      child_pos = (size / 2) - (center_size / 2);
 
       /* Push in from start/end */
-      if (left_size > child_allocation.x)
-        child_allocation.x = left_size;
-      else if (allocation->width - right_size < child_allocation.x + child_allocation.width)
-        child_allocation.x = allocation->width - child_allocation.width - right_size;
+      if (start_size > child_pos)
+        child_pos = start_size;
+      else if (size - end_size < child_pos + center_size)
+        child_pos = size - center_size - end_size;
 
-      child_allocation.x += allocation->x;
-      gtk_widget_size_allocate (self->center_widget, &child_allocation);
-      gtk_widget_get_clip (self->center_widget, &child_clip);
+      SET_CHILD_ALLOC (child_pos, center_size);
+
+      gtk_widget_size_allocate (center, &child_allocation);
+      gtk_widget_get_clip (center, &child_clip);
       gdk_rectangle_union (&clip, &clip, &child_clip);
     }
 
-  if (left)
+  if (start)
     {
-      child_allocation.width = left_size;
-      child_allocation.x = allocation->x;
-      gtk_widget_size_allocate (left, &child_allocation);
-      gtk_widget_get_clip (left, &child_clip);
+      SET_CHILD_ALLOC (0, start_size);
+
+      gtk_widget_size_allocate (start, &child_allocation);
+      gtk_widget_get_clip (start, &child_clip);
       gdk_rectangle_union (&clip, &clip, &child_clip);
     }
 
-  if (right)
+  if (end)
     {
-      child_allocation.width = right_size;
-      child_allocation.x = allocation->x + allocation->width - child_allocation.width;
-      gtk_widget_size_allocate (right, &child_allocation);
-      gtk_widget_get_clip (right, &child_clip);
+      SET_CHILD_ALLOC (size - end_size, end_size);
+
+      gtk_widget_size_allocate (end, &child_allocation);
+      gtk_widget_get_clip (end, &child_clip);
       gdk_rectangle_union (&clip, &clip, &child_clip);
     }
 
@@ -441,15 +484,70 @@ gtk_center_box_get_request_mode (GtkWidget *widget)
 }
 
 static void
+gtk_center_box_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GtkCenterBox *self = GTK_CENTER_BOX (object);
+
+  switch (prop_id)
+    {
+    case PROP_ORIENTATION:
+      {
+        GtkOrientation orientation = g_value_get_enum (value);
+        if (self->orientation != orientation)
+          {
+            self->orientation = orientation;
+            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+            gtk_widget_queue_resize (GTK_WIDGET (self));
+            g_object_notify (object, "orientation");
+          }
+      }
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_center_box_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GtkCenterBox *self = GTK_CENTER_BOX (object);
+
+  switch (prop_id)
+    {
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, self->orientation);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_center_box_class_init (GtkCenterBoxClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->set_property = gtk_center_box_set_property;
+  object_class->get_property = gtk_center_box_get_property;
 
   widget_class->measure = gtk_center_box_measure;
   widget_class->size_allocate = gtk_center_box_size_allocate;
   widget_class->snapshot = gtk_center_box_snapshot;
   widget_class->direction_changed = gtk_center_box_direction_changed;
   widget_class->get_request_mode = gtk_center_box_get_request_mode;
+
+  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
   gtk_widget_class_set_css_name (widget_class, "box");
@@ -463,6 +561,8 @@ gtk_center_box_init (GtkCenterBox *self)
   self->start_widget = NULL;
   self->center_widget = NULL;
   self->end_widget = NULL;
+
+  self->orientation = GTK_ORIENTATION_HORIZONTAL;
 }
 
 /**
