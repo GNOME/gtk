@@ -610,21 +610,12 @@ render_para (GtkTextRenderer    *text_renderer,
   PangoLayout *layout = line_display->layout;
   int byte_offset = 0;
   PangoLayoutIter *iter;
-  PangoRectangle layout_logical;
   int screen_width;
   GdkRGBA selection;
   gboolean first = TRUE;
   GtkCssNode *selection_node;
 
   iter = pango_layout_get_iter (layout);
-
-  pango_layout_iter_get_layout_extents (iter, NULL, &layout_logical);
-
-  /* Adjust for margins */
-  
-  layout_logical.x += line_display->x_offset * PANGO_SCALE;
-  layout_logical.y += line_display->top_margin * PANGO_SCALE;
-
   screen_width = line_display->total_width;
 
   context = gtk_widget_get_style_context (text_renderer->widget);
