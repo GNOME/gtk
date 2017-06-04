@@ -297,6 +297,7 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
                                    GtkAllocation *allocation,
                                    GtkAllocation *child_allocation)
 {
+  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *child;
   GtkRevealerTransitionType transition;
 
@@ -312,6 +313,7 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
   if (child != NULL && gtk_widget_get_visible (child))
     {
       transition = effective_transition (revealer);
+
       if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
           transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
         gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
@@ -321,10 +323,23 @@ gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
         gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
                             MAX (0, allocation->width),
                             NULL, &child_allocation->height, NULL, NULL);
+
+      child_allocation->width = MAX (child_allocation->width, allocation->width);
+      child_allocation->height = MAX (child_allocation->height, allocation->height);
+
+      switch (transition)
+        {
+          case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
+            child_allocation->x = - child_allocation->width * (1 - priv->current_pos);
+          break;
+          case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
+            child_allocation->y = - child_allocation->height * (1 - priv->current_pos);
+          break;
+
+          default: {}
+        }
     }
 
-  child_allocation->width = MAX (child_allocation->width, allocation->width);
-  child_allocation->height = MAX (child_allocation->height, allocation->height);
 }
 
 static void
@@ -346,17 +361,15 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
                                  GtkAllocation *allocation)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkAllocation child_allocation;
   GtkWidget *child;
   GtkAllocation clip = *allocation;
-
-  g_return_if_fail (allocation != NULL);
-
-  gtk_revealer_get_child_allocation (revealer, allocation, &child_allocation);
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL && gtk_widget_get_visible (child))
     {
+      GtkAllocation child_allocation;
+
+      gtk_revealer_get_child_allocation (revealer, allocation, &child_allocation);
       gtk_widget_size_allocate (child, &child_allocation);
       gtk_widget_get_clip (child, &clip);
     }
