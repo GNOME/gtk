@@ -238,6 +238,17 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                          G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size, for_size);
 
             }
+
+          nat_size = min_size;
+        }
+      else if (G_UNLIKELY (min_size < 0))
+        {
+          g_warning ("%s %p reported min %s %d, but sizes must be >= 0",
+                     G_OBJECT_TYPE_NAME (widget), widget,
+                     orientation == GTK_ORIENTATION_HORIZONTAL ? "width" : "height",
+                     min_size);
+          min_size = 0;
+          nat_size = MAX (0, min_size);
         }
 
       adjusted_min     = min_size;
