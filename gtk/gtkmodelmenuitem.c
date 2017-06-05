@@ -150,7 +150,7 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
     {
       gtk_menu_item_get_label (GTK_MENU_ITEM (item));
       child = gtk_bin_get_child (GTK_BIN (item));
-      g_assert (GTK_IS_LABEL (child));
+      g_assert (GTK_IS_ACCEL_LABEL (child));
     }
 
   /* If it is a box, make sure there are no images inside of it already.
@@ -244,7 +244,7 @@ gtk_model_menu_item_set_text (GtkModelMenuItem *item,
     {
       gtk_menu_item_get_label (GTK_MENU_ITEM (item));
       child = gtk_bin_get_child (GTK_BIN (item));
-      g_assert (GTK_IS_LABEL (child));
+      g_assert (GTK_IS_ACCEL_LABEL (child));
     }
 
   if (GTK_IS_LABEL (child))
