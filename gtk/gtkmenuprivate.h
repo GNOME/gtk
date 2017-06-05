@@ -72,9 +72,6 @@ struct _GtkMenuPrivate
    */
   GtkWidget *toplevel;
 
-  GdkWindow *view_window;
-  GdkWindow *bin_window;
-
   GtkWidget *top_arrow_widget;
   GtkWidget *bottom_arrow_widget;
 
