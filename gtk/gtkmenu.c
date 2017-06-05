@@ -1504,9 +1504,6 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
   ai->top_attach = -1;
   ai->bottom_attach = -1;
 
-  if (gtk_widget_get_realized (GTK_WIDGET (menu_shell)))
-    gtk_widget_set_parent_window (child, priv->bin_window);
-
   gtk_widget_insert_before (child, GTK_WIDGET (menu), priv->bottom_arrow_widget);
 
   GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->insert (menu_shell, child, position);
@@ -2563,10 +2560,7 @@ static void
 gtk_menu_realize (GtkWidget *widget)
 {
   GtkMenu *menu = GTK_MENU (widget);
-  GtkMenuPrivate *priv = menu->priv;
   GtkAllocation allocation;
-  GtkWidget *child;
-  GList *children;
   GtkBorder arrow_border;
 
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->realize (widget);
@@ -2574,40 +2568,9 @@ gtk_menu_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
   get_arrows_border (menu, &arrow_border);
 
-  priv->view_window = gdk_window_new_child (gtk_widget_get_window (widget),
-                                            GDK_ALL_EVENTS_MASK,
-                                            &(GdkRectangle) {
-                                              allocation.x,
-                                              allocation.y + arrow_border.top,
-                                              MAX (1, allocation.width),
-                                              MAX (1, allocation.height -
-                                                      arrow_border.top - arrow_border.bottom)});
-  gtk_widget_register_window (widget, priv->view_window);
-
-  priv->bin_window = gdk_window_new_child (priv->view_window,
-                                           GDK_ALL_EVENTS_MASK,
-                                           &(GdkRectangle) {
-                                             0,
-                                             - priv->scroll_offset,
-                                             MAX (1, allocation.width),
-                                             MAX (1, priv->requested_height)});
-  gtk_widget_register_window (widget, priv->bin_window);
-
-  children = GTK_MENU_SHELL (menu)->priv->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      gtk_widget_set_parent_window (child, priv->bin_window);
-    }
-
   if (GTK_MENU_SHELL (widget)->priv->active_menu_item)
     gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
                                   GTK_MENU_SHELL (widget)->priv->active_menu_item);
-
-  gdk_window_show (priv->bin_window);
-  gdk_window_show (priv->view_window);
 }
 
 static gboolean
@@ -2659,17 +2622,8 @@ static void
 gtk_menu_unrealize (GtkWidget *widget)
 {
   GtkMenu *menu = GTK_MENU (widget);
-  GtkMenuPrivate *priv = menu->priv;
 
   menu_grab_transfer_window_destroy (menu);
-
-  gtk_widget_unregister_window (widget, priv->view_window);
-  gdk_window_destroy (priv->view_window);
-  priv->view_window = NULL;
-
-  gtk_widget_unregister_window (widget, priv->bin_window);
-  gdk_window_destroy (priv->bin_window);
-  priv->bin_window = NULL;
 
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->unrealize (widget);
 }
@@ -2803,11 +2757,6 @@ gtk_menu_size_allocate (GtkWidget     *widget,
   width = MAX (1, width);
   height = MAX (1, height);
 
-  if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_move_resize (priv->view_window, x, y, width, height);
-    }
-
   if (menu_shell->priv->children)
     {
       gint base_width = width / gtk_menu_get_n_columns (menu);
@@ -2851,19 +2800,6 @@ gtk_menu_size_allocate (GtkWidget     *widget,
               gtk_widget_size_allocate (child, &child_allocation);
             }
         }
-
-      /* Resize the item window */
-      if (gtk_widget_get_realized (widget))
-        {
-          gint w, h;
-
-          h = 0;
-          for (i = 0; i < gtk_menu_get_n_rows (menu); i++)
-            h += priv->heights[i];
-
-          w = gtk_menu_get_n_columns (menu) * base_width;
-          gdk_window_resize (priv->bin_window, w, h);
-        }
     }
 
   gtk_widget_set_clip (widget, &clip);
@@ -2873,25 +2809,16 @@ static void
 gtk_menu_snapshot (GtkWidget   *widget,
                    GtkSnapshot *snapshot)
 {
-  GtkMenu *menu;
-  GtkMenuPrivate *priv;
   GtkAllocation allocation;
-  int x, y;
 
-  menu = GTK_MENU (widget);
-  priv = menu->priv;
-
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_content_allocation (widget, &allocation);
 
   /* XXX The arrows *might* be missing here */
 
-  gdk_window_get_position (priv->view_window, &x, &y);
-
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT(
-                              x - allocation.x, y - allocation.y,
-                              gdk_window_get_width (priv->view_window),
-                              gdk_window_get_height (priv->view_window)
+                              0, 0,
+                              allocation.width, allocation.height
                           ),
                           "MenuClip");
 
@@ -4277,20 +4204,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
 {
   GtkMenuPrivate *priv = menu->priv;
   GtkCssNode *top_arrow_node, *bottom_arrow_node;
-  GtkWidget *widget;
-  GtkAllocation allocation;
-  gint x, y;
-  gint view_width, view_height;
-
-  widget = GTK_WIDGET (menu);
-
-  gtk_widget_get_allocation (widget, &allocation);
-  /* Move/resize the viewport according to arrows: */
-  view_width = allocation.width;
-  view_height = allocation.height;
-
-  x = allocation.x;
-  y = allocation.y;
 
   top_arrow_node = gtk_widget_get_css_node (priv->top_arrow_widget);
   gtk_css_node_set_visible (top_arrow_node, priv->upper_arrow_visible);
@@ -4299,13 +4212,6 @@ gtk_menu_scroll_to (GtkMenu *menu,
   bottom_arrow_node = gtk_widget_get_css_node (priv->bottom_arrow_widget);
   gtk_css_node_set_visible (bottom_arrow_node, priv->lower_arrow_visible);
   gtk_css_node_set_state (bottom_arrow_node, priv->lower_arrow_state);
-
-  /* Scroll the menu: */
-  if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_move (priv->bin_window, 0, -offset);
-      gdk_window_move_resize (priv->view_window, x, y, view_width, view_height);
-    }
 
   priv->scroll_offset = offset;
 }
