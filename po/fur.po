@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-03 02:31+0000\n"
-"PO-Revision-Date: 2017-06-04 14:10+0200\n"
+"PO-Revision-Date: 2017-06-05 15:03+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -1845,6 +1845,8 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
+"Impussibil creâ la cartele, viodût che un file cul stes non al esist za.  "
+"Cîr di doprâ un non diferent pe cartele opûr prime cambie il non dal file."
 
 #: gtk/gtkfilechooserwidget.c:821
 msgid "You need to choose a valid filename."
@@ -1853,11 +1855,11 @@ msgstr "Si scugne sielzi un non file valit."
 #: gtk/gtkfilechooserwidget.c:824
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr ""
+msgstr "Impussibil creâ un file sot di %s viodût che nol è une cartele"
 
 #: gtk/gtkfilechooserwidget.c:834
 msgid "Cannot create file as the filename is too long"
-msgstr ""
+msgstr "Impussibil creâ il file viodût che il non dal file al è masse lunc"
 
 #: gtk/gtkfilechooserwidget.c:835
 msgid "Try using a shorter name."
@@ -1865,11 +1867,13 @@ msgstr "Prove a doprâ un non plui curt."
 
 #: gtk/gtkfilechooserwidget.c:845
 msgid "You may only select folders"
-msgstr ""
+msgstr "Si podarès selezionâ dome cartelis"
 
 #: gtk/gtkfilechooserwidget.c:846
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
+"L'element che si à selezionât nol è une cartele, prove dopre un altri "
+"element."
 
 #: gtk/gtkfilechooserwidget.c:854
 msgid "Invalid file name"
@@ -1877,89 +1881,89 @@ msgstr "Non di file no valit"
 
 #: gtk/gtkfilechooserwidget.c:863
 msgid "The folder contents could not be displayed"
-msgstr ""
+msgstr "I contignûts de cartele no puedin jessi mostrâts"
 
 #: gtk/gtkfilechooserwidget.c:871
 msgid "The file could not be deleted"
-msgstr ""
+msgstr "Il file nol pues jessi eliminât"
 
 #: gtk/gtkfilechooserwidget.c:879
 msgid "The file could not be moved to the Trash"
-msgstr ""
+msgstr "Il file nol pues jessi spostât te scovacere"
 
 #: gtk/gtkfilechooserwidget.c:1024
 msgid "A folder with that name already exists"
-msgstr ""
+msgstr "Une cartele cun chel non e esist za"
 
 #: gtk/gtkfilechooserwidget.c:1026
 msgid "A file with that name already exists"
-msgstr ""
+msgstr "Un file cun chel non al esist za"
 
 #: gtk/gtkfilechooserwidget.c:1061
 msgid "A folder cannot be called “.”"
-msgstr ""
+msgstr "Une cartele no pues jessi clamade “.”"
 
 #: gtk/gtkfilechooserwidget.c:1062
 msgid "A file cannot be called “.”"
-msgstr ""
+msgstr "Un file nol pues jessi clamât “.”"
 
 #: gtk/gtkfilechooserwidget.c:1065
 msgid "A folder cannot be called “..”"
-msgstr ""
+msgstr "Une cartele no pues jessi clamade “..”"
 
 #: gtk/gtkfilechooserwidget.c:1066
 msgid "A file cannot be called “..”"
-msgstr ""
+msgstr "Un file nol pues jessi clamât “..”"
 
 #: gtk/gtkfilechooserwidget.c:1069
 msgid "Folder names cannot contain “/”"
-msgstr ""
+msgstr "I nons des cartelis no puedin contignî il caratar “/”"
 
 #: gtk/gtkfilechooserwidget.c:1070
 msgid "File names cannot contain “/”"
-msgstr ""
+msgstr "I nons dai file no puedi contignî il caratar “/”"
 
 #: gtk/gtkfilechooserwidget.c:1096
 msgid "Folder names should not begin with a space"
-msgstr ""
+msgstr "I nons des cartelis no puedin tacâ cuntun spazi"
 
 #: gtk/gtkfilechooserwidget.c:1097
 msgid "File names should not begin with a space"
-msgstr ""
+msgstr "I nons dai file no puedin tacâ cuntun spazi"
 
 #: gtk/gtkfilechooserwidget.c:1101
 msgid "Folder names should not end with a space"
-msgstr ""
+msgstr "I nons des cartelis no puedin finî cuntun spazi"
 
 #: gtk/gtkfilechooserwidget.c:1102
 msgid "File names should not end with a space"
-msgstr ""
+msgstr "I nons dai file no puedin finî cuntun spazi"
 
 #: gtk/gtkfilechooserwidget.c:1105
 msgid "Folder names starting with a “.” are hidden"
-msgstr ""
+msgstr "I nons des cartelis che a tachin cuntun “.” a son platâts"
 
 #: gtk/gtkfilechooserwidget.c:1106
 msgid "File names starting with a “.” are hidden"
-msgstr ""
+msgstr "I nons dai file che a tachin cuntun “.” a son platâts"
 
 #: gtk/gtkfilechooserwidget.c:1476
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
-msgstr ""
+msgstr "Sigûrs di eliminâ par simpri “%s”?"
 
 #: gtk/gtkfilechooserwidget.c:1479
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
-msgstr ""
+msgstr "Se si elimine un element, al vignarà pierdût par simpri."
 
 #: gtk/gtkfilechooserwidget.c:1607
 msgid "The file could not be renamed"
-msgstr ""
+msgstr "No si pues cambiâ non al file"
 
 #: gtk/gtkfilechooserwidget.c:1921
 msgid "Could not select file"
-msgstr ""
+msgstr "Impussibil selezionâ il file"
 
 #: gtk/gtkfilechooserwidget.c:2270
 msgid "_Visit File"
@@ -1992,57 +1996,57 @@ msgstr "Mostre file _platâts"
 
 #: gtk/gtkfilechooserwidget.c:2281
 msgid "Show _Size Column"
-msgstr ""
+msgstr "Mostre colone _Dimension"
 
 #: gtk/gtkfilechooserwidget.c:2282
 msgid "Show _Time"
-msgstr ""
+msgstr "Mostre _date"
 
 #: gtk/gtkfilechooserwidget.c:2283
 msgid "Sort _Folders before Files"
-msgstr ""
+msgstr "Ordene _cartelis prime dai file"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2607 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:183 gtk/ui/gtkprintunixdialog.ui:124
 msgid "Location"
-msgstr ""
+msgstr "Posizion"
 
 #. Label
 #: gtk/gtkfilechooserwidget.c:2696
 msgid "_Name:"
-msgstr ""
+msgstr "_Non:"
 
 #: gtk/gtkfilechooserwidget.c:3314
 msgid "Searching"
-msgstr ""
+msgstr "Ricercje"
 
 #: gtk/gtkfilechooserwidget.c:3319 gtk/gtkfilechooserwidget.c:3333
 #, c-format
 msgid "Searching in %s"
-msgstr ""
+msgstr "Daûr a cirî in %s"
 
 #: gtk/gtkfilechooserwidget.c:3343
 msgid "Enter location"
-msgstr ""
+msgstr "Inserìs posizion"
 
 #: gtk/gtkfilechooserwidget.c:3345
 msgid "Enter location or URL"
-msgstr ""
+msgstr "Inserìs posizion o URL"
 
 #: gtk/gtkfilechooserwidget.c:4373 gtk/gtkfilechooserwidget.c:7262
 #: gtk/ui/gtkfilechooserwidget.ui:211
 msgid "Modified"
-msgstr ""
+msgstr "Modificât"
 
 #: gtk/gtkfilechooserwidget.c:4651
 #, c-format
 msgid "Could not read the contents of %s"
-msgstr ""
+msgstr "Impussibil lei i contignûts di %s"
 
 #: gtk/gtkfilechooserwidget.c:4655
 msgid "Could not read the contents of the folder"
-msgstr ""
+msgstr "Impussibil lei i contignûts de cartele"
 
 #. Translators: see g_date_time_format() for details on the format
 #: gtk/gtkfilechooserwidget.c:4785 gtk/gtkfilechooserwidget.c:4833
@@ -2055,7 +2059,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:4791
 msgid "Yesterday"
-msgstr ""
+msgstr "Îr"
 
 #: gtk/gtkfilechooserwidget.c:4799
 msgid "%-e %b"
@@ -2070,7 +2074,7 @@ msgstr ""
 #: gtk/gtkfilechooserwidget.c:5038 gtk/inspector/prop-editor.c:1626
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
-msgstr ""
+msgstr "No cognossût"
 
 #: gtk/gtkfilechooserwidget.c:5077 gtk/gtkplacessidebar.c:940
 msgid "Home"
