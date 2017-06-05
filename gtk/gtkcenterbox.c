@@ -31,6 +31,15 @@
  * To add children to GtkCenterBox, use gtk_center_box_set_start_widget(),
  * gtk_center_box_set_center_widget() and gtk_center_box_set_end_widget().
  *
+ * The sizing and positioning of children can be influenced with the
+ * align and expand properties of the children.
+ *
+ * # GtkCenterBox as GtkBuildable
+ *
+ * The GtkCenterBox implementation of the GtkBuildable interface supports
+ * placing children in the 3 positions by specifying “start”, “center” or
+ * “end” as the “type” attribute of a <child> element.
+ *
  * # CSS nodes
  *
  * GtkCenterBox uses a single CSS node with name box.
