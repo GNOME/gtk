@@ -1731,10 +1731,6 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   icon_view = GTK_ICON_VIEW (widget);
 
   context = gtk_widget_get_style_context (widget);
-  gtk_snapshot_render_background (snapshot, context,
-                                  0, 0,
-                                  gtk_widget_get_allocated_width (widget),
-                                  gtk_widget_get_allocated_height (widget));
 
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (
