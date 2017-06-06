@@ -164,6 +164,7 @@ gtk_public_h_sources = 		\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h		\
+	gtkcenterbox.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
 	gtkclipboard.h		\
