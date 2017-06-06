@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-03 02:31+0000\n"
-"PO-Revision-Date: 2017-06-05 15:03+0200\n"
+"PO-Revision-Date: 2017-06-07 00:40+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -398,7 +398,7 @@ msgstr "Nissune configurazion disponibile pal formât pixel furnît"
 
 #: gdk/mir/gdkmirwindowimpl.c:2117
 msgid "3.2 core GL profile is not available on EGL implementation"
-msgstr ""
+msgstr "Il profîl GL core 3.2 nol è disponibil su la implementazion EGL"
 
 #: gdk/quartz/gdkglcontext-quartz.c:37
 msgid "Not implemented on OS X"
@@ -406,7 +406,7 @@ msgstr "No implementât su OS X"
 
 #: gdk/wayland/gdkglcontext-wayland.c:441
 msgid "Core GL is not available on EGL implementation"
-msgstr ""
+msgstr "GL core nol è disponibil su la implementazion EGL"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:53
@@ -483,7 +483,7 @@ msgstr "Fâs clic sul boton"
 #: gtk/a11y/gtkcellaccessible.c:255
 msgctxt "Action name"
 msgid "Expand or contract"
-msgstr ""
+msgstr "Slargje o strenç"
 
 #: gtk/a11y/gtkcellaccessible.c:257
 msgctxt "Action name"
@@ -500,6 +500,7 @@ msgstr "Ative"
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
 msgstr ""
+"Al slargje o al strenç la rie te viodude a arbul che e conten cheste cele"
 
 #: gtk/a11y/gtkcellaccessible.c:274
 msgctxt "Action description"
@@ -560,7 +561,7 @@ msgstr "Al ative la vôs"
 #: gtk/a11y/gtkexpanderaccessible.c:290
 msgctxt "Action description"
 msgid "Activates the expander"
-msgstr ""
+msgstr "Al ative l'espansôr"
 
 #: gtk/a11y/gtkimageaccessible.c:53
 msgctxt "Stock label"
@@ -946,22 +947,22 @@ msgstr "Menù"
 #: gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
-msgstr ""
+msgstr "Al fâs clic su la vôs di menù"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
 msgid "Pops up the slider"
-msgstr ""
+msgstr "Mostre il control dal scori"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:142
 msgctxt "Action description"
 msgid "Dismisses the slider"
-msgstr ""
+msgstr "Cesse il control dal scori"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action name"
 msgid "Popup"
-msgstr ""
+msgstr "Mostre"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:172
 msgctxt "Action name"
@@ -971,7 +972,7 @@ msgstr "Dismet"
 #: gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr ""
+msgstr "Indicadôr pulsant di avanzament"
 
 #: gtk/a11y/gtkspinneraccessible.c:40
 msgid "Provides visual indication of progress"
@@ -984,7 +985,7 @@ msgstr "Al comute l'interutôr"
 
 #: gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
-msgstr ""
+msgstr "Bute fûr su cheste cartele invezit che su cwd"
 
 #: gtk/encodesymbolic.c:266
 #, c-format
@@ -1271,32 +1272,32 @@ msgstr "%s al esist za inte liste dai segnelibris"
 #: gtk/gtkbuilder-menus.c:223
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
-msgstr ""
+msgstr "Element <%s> no permetût dentri <%s>"
 
 #: gtk/gtkbuilder-menus.c:228
 #, c-format
 msgid "Element <%s> not allowed at toplevel"
-msgstr ""
+msgstr "Element <%s> no permetût a nivel primari"
 
 #: gtk/gtkbuilder-menus.c:317
 #, c-format
 msgid "Text may not appear inside <%s>"
-msgstr ""
+msgstr "Il test al podarès no aparî dentri <%s>"
 
 #: gtk/gtk-builder-tool.c:124
 #, c-format
 msgid "Packing property %s::%s not found\n"
-msgstr ""
+msgstr "Proprietât di impachetament %s::%s no cjatade\n"
 
 #: gtk/gtk-builder-tool.c:126
 #, c-format
 msgid "Cell property %s::%s not found\n"
-msgstr ""
+msgstr "Proprietât cele %s::%s no cjatade\n"
 
 #: gtk/gtk-builder-tool.c:128
 #, c-format
 msgid "Property %s::%s not found\n"
-msgstr ""
+msgstr "Proprietât %s::%s no cjatade\n"
 
 #: gtk/gtk-builder-tool.c:136
 #, c-format
@@ -1329,6 +1330,23 @@ msgid ""
 "\n"
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
+"Ûs:\n"
+"  gtk-builder-tool [COMANT] FILE\n"
+"\n"
+"Comants:\n"
+"  validate           Valide il file\n"
+"  simplify [OPTIONS] Semplifiche il file\n"
+"  enumerate          Liste ducj i ogjets cul non\n"
+"  preview [OPTIONS]  Anteprime dal file\n"
+"\n"
+"Opzions di semplificazion:\n"
+"  --replace          Sostituìs il file\n"
+"\n"
+"Opzions anteprime:\n"
+"  --id=ID            Anteprime dome dal ogjet cul non\n"
+"  --css=FILE         Dopre stîl dal file CSS\n"
+"\n"
+"Eseguìs diviersis operazions sui file .ui di GtkBuilder.\n"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1699,7 +1717,7 @@ msgstr "mm"
 
 #: gtk/gtkcustompaperunixdialog.c:615
 msgid "Margins from Printer…"
-msgstr ""
+msgstr "Margjins de stampant…"
 
 #: gtk/gtkcustompaperunixdialog.c:781
 #, c-format
@@ -1967,11 +1985,11 @@ msgstr "Impussibil selezionâ il file"
 
 #: gtk/gtkfilechooserwidget.c:2270
 msgid "_Visit File"
-msgstr ""
+msgstr "_Visite File"
 
 #: gtk/gtkfilechooserwidget.c:2271
 msgid "_Open With File Manager"
-msgstr ""
+msgstr "_Vierç cul gjestôr di file"
 
 #: gtk/gtkfilechooserwidget.c:2272
 msgid "_Copy Location"
@@ -2051,11 +2069,11 @@ msgstr "Impussibil lei i contignûts de cartele"
 #. Translators: see g_date_time_format() for details on the format
 #: gtk/gtkfilechooserwidget.c:4785 gtk/gtkfilechooserwidget.c:4833
 msgid "%H:%M"
-msgstr ""
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4787 gtk/gtkfilechooserwidget.c:4835
 msgid "%l:%M %p"
-msgstr ""
+msgstr "%l:%M %p"
 
 #: gtk/gtkfilechooserwidget.c:4791
 msgid "Yesterday"
@@ -2063,11 +2081,11 @@ msgstr "Îr"
 
 #: gtk/gtkfilechooserwidget.c:4799
 msgid "%-e %b"
-msgstr ""
+msgstr "%-e %b"
 
 #: gtk/gtkfilechooserwidget.c:4803
 msgid "%-e %b %Y"
-msgstr ""
+msgstr "%-e %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
@@ -2078,38 +2096,40 @@ msgstr "No cognossût"
 
 #: gtk/gtkfilechooserwidget.c:5077 gtk/gtkplacessidebar.c:940
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: gtk/gtkfilechooserwidget.c:5570
 msgid "Cannot change to folder because it is not local"
-msgstr ""
+msgstr "Impussibil spostâsi ae cartele par vie che no je locâl"
 
 #: gtk/gtkfilechooserwidget.c:6347 gtk/gtkprintunixdialog.c:666
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr ""
+msgstr "Un file clamât “%s” al esist za. Sostituîlu?"
 
 #: gtk/gtkfilechooserwidget.c:6350 gtk/gtkprintunixdialog.c:670
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
+"Il file al esist za in “%s”. Se al ven sostituît, al vignarà sorescrit il sô "
+"contignût."
 
 #: gtk/gtkfilechooserwidget.c:6355 gtk/gtkprintunixdialog.c:678
 msgid "_Replace"
-msgstr ""
+msgstr "_Sostituìs"
 
 #: gtk/gtkfilechooserwidget.c:6563
 msgid "You do not have access to the specified folder."
-msgstr ""
+msgstr "No si à il permès par acedi ae cartele specificade."
 
 #: gtk/gtkfilechooserwidget.c:7186
 msgid "Could not send the search request"
-msgstr ""
+msgstr "Impussibil inviâ la richieste di ricercje"
 
 #: gtk/gtkfilechooserwidget.c:7472
 msgid "Accessed"
-msgstr ""
+msgstr "Acès eseguît"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -2118,85 +2138,85 @@ msgstr ""
 #.
 #: gtk/gtkfilesystem.c:49
 msgid "File System"
-msgstr ""
+msgstr "File System"
 
 #: gtk/gtkfontbutton.c:367 gtk/gtkfontbutton.c:535
 msgid "Sans 12"
-msgstr ""
+msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:520 gtk/gtkfontbutton.c:667
 msgid "Pick a Font"
-msgstr ""
+msgstr "Sielç un caratar"
 
 #: gtk/gtkfontbutton.c:642 gtk/inspector/visual.ui:221
 msgid "Font"
-msgstr ""
+msgstr "Caratar"
 
 #: gtk/gtkfontbutton.c:1399
 msgctxt "font"
 msgid "None"
-msgstr ""
+msgstr "Nissun"
 
 #: gtk/gtkglarea.c:293
 msgid "OpenGL context creation failed"
-msgstr ""
+msgstr "Creazion dal contest OpenGL falide"
 
 #: gtk/gtkheaderbar.c:379
 msgid "Application menu"
-msgstr ""
+msgstr "Menù aplicazion"
 
 #: gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:8264
 msgid "Close"
-msgstr ""
+msgstr "Siere"
 
 #: gtk/gtkicontheme.c:2304 gtk/gtkicontheme.c:2368
 #, c-format
 msgid "Icon “%s” not present in theme %s"
-msgstr ""
+msgstr "Icone “%s” no presinte tal teme %s"
 
 #: gtk/gtkicontheme.c:3974 gtk/gtkicontheme.c:4341
 msgid "Failed to load icon"
-msgstr ""
+msgstr "No si è rivâts a cjariâ la icone"
 
 #: gtk/gtkimmodule.c:601
 msgctxt "input method menu"
 msgid "Simple"
-msgstr ""
+msgstr "Sempliç"
 
 #: gtk/gtkimmodule.c:617
 msgctxt "input method menu"
 msgid "None"
-msgstr ""
+msgstr "Nissun"
 
 #: gtk/gtkinfobar.c:1060 gtk/gtkmessagedialog.c:353
 msgid "Information"
-msgstr ""
+msgstr "Informazion"
 
 #: gtk/gtkinfobar.c:1064 gtk/gtkmessagedialog.c:357
 msgid "Question"
-msgstr ""
+msgstr "Domande"
 
 #: gtk/gtkinfobar.c:1068 gtk/gtkmessagedialog.c:361
 msgid "Warning"
-msgstr ""
+msgstr "Avertiment"
 
 #: gtk/gtkinfobar.c:1072 gtk/gtkmessagedialog.c:365
 msgid "Error"
-msgstr ""
+msgstr "Erôr"
 
 #. Open Link
 #: gtk/gtklabel.c:6173
 msgid "_Open Link"
-msgstr ""
+msgstr "_Vierç colegament"
 
 #. Copy Link Address
 #: gtk/gtklabel.c:6182
 msgid "Copy _Link Address"
-msgstr ""
+msgstr "Copie direzion _colegament"
 
 #: gtk/gtk-launch.c:40
 msgid "Show program version"
-msgstr ""
+msgstr "Mostre la version dal program"
 
 #. Translators: this message will appear immediately after the
 #. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
