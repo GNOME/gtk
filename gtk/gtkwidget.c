@@ -15464,15 +15464,16 @@ gtk_widget_get_prev_sibling (GtkWidget *widget)
   return widget->priv->prev_sibling;
 }
 
-/*
+/**
+ * gtk_widget_insert_after:
  * @widget: a #GtkWidget
  * @parent: the parent #GtkWidget to insert @widget into
- * @previous_child: (nullable): the new previous sibling of @widget
+ * @previous_sibling: (nullable): the new previous sibling of @widget or %NULL
  *
  * Inserts @widget into the child widget list of @parent.
- * It will be placed after @previous_child, or at the beginning if @previous_child is %NULL.
+ * It will be placed after @previous_sibling, or at the beginning if @previous_sibling is %NULL.
  *
- * After calling this function, gtk_widget_get_prev_sibling(widget) will return @previous_child.
+ * After calling this function, gtk_widget_get_prev_sibling(widget) will return @previous_sibling.
  *
  * If @parent is already set as the parent widget of @widget, this function can also be used
  * to reorder @widget in the child widget list of @parent.
@@ -15501,16 +15502,16 @@ gtk_widget_insert_after (GtkWidget *widget,
                                previous_sibling);
 }
 
-/*
+/**
+ * gtk_widget_insert_before:
  * @widget: a #GtkWidget
  * @parent: the parent #GtkWidget to insert @widget into
- * @next_child: (nullable): the new next sibling of @widget or %NULL
+ * @next_sibling: (nullable): the new next sibling of @widget or %NULL
  *
  * Inserts @widget into the child widget list of @parent.
- * It will be placed before @next_child, or at the end if @next_child is %NULL.
+ * It will be placed before @next_sibling, or at the end if @next_sibling is %NULL.
  *
- * After calling this function, gtk_widget_get_next_sibling(widget) will return @next_child
- * if @next_child was not %NULL.
+ * After calling this function, gtk_widget_get_next_sibling(widget) will return @next_sibling.
  *
  * If @parent is already set as the parent widget of @widget, this function can also be used
  * to reorder @widget in the child widget list of @parent.
