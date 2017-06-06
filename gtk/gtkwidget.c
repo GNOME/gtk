@@ -15783,7 +15783,7 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  gtk_widget_get_allocation (child, &content_allocation);
+  _gtk_widget_get_allocation (child, &content_allocation);
   x = content_allocation.x;
   y = content_allocation.y;
 
