@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-03 02:31+0000\n"
-"PO-Revision-Date: 2017-06-07 00:40+0200\n"
+"PO-Revision-Date: 2017-06-07 12:34+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -2222,7 +2222,7 @@ msgstr "Mostre la version dal program"
 #. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI…] — launch an APPLICATION"
-msgstr ""
+msgstr "APLICAZION [URI…] — invie une APLICAZION"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -2231,76 +2231,85 @@ msgid ""
 "Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
 msgstr ""
+"Invie une aplicazion (specificade dal so non file desktop),\n"
+"passant in maniere opzionâl un o plui URI come argoments."
 
 #: gtk/gtk-launch.c:88
 #, c-format
 msgid "Error parsing commandline options: %s\n"
-msgstr ""
+msgstr "Erôr tal analizâ lis opzions a rie di comant: %s\n"
 
 #: gtk/gtk-launch.c:90 gtk/gtk-launch.c:111
 #, c-format
 msgid "Try “%s --help” for more information."
-msgstr ""
+msgstr "Prove “%s --help” par vê plui informazions."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
 #: gtk/gtk-launch.c:109
 #, c-format
 msgid "%s: missing application name"
-msgstr ""
+msgstr "%s: al mancje il non de aplicazion"
 
 #: gtk/gtk-launch.c:138
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
+"La creazion di AppInfo dal id no je supuartade sui sistemis operatîfs no-unix"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
 #: gtk/gtk-launch.c:146
 #, c-format
 msgid "%s: no such application %s"
-msgstr ""
+msgstr "%s: aplicazion %s inesistente"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
 #: gtk/gtk-launch.c:164
 #, c-format
 msgid "%s: error launching application: %s\n"
-msgstr ""
+msgstr "%s: erôr tal inviâ la aplicazion: %s\n"
 
 #: gtk/gtklinkbutton.c:383
 msgid "Copy URL"
-msgstr ""
+msgstr "Copie URL"
 
 #: gtk/gtklinkbutton.c:548
 msgid "Invalid URI"
-msgstr ""
+msgstr "URI no valit"
 
 #: gtk/gtklockbutton.c:275 gtk/ui/gtklockbutton.ui:23
 msgid "Lock"
-msgstr ""
+msgstr "Bloche"
 
 #: gtk/gtklockbutton.c:284 gtk/ui/gtklockbutton.ui:29
 msgid "Unlock"
-msgstr ""
+msgstr "Sbloche"
 
 #: gtk/gtklockbutton.c:293
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
 msgstr ""
+"Il dialic al è sblocât.\n"
+"Fâ clic par prevignî altris modifichis"
 
 #: gtk/gtklockbutton.c:302
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
 msgstr ""
+"Il dialic al è blocât.\n"
+"Fâ clic par realizâ lis modifichis"
 
 #: gtk/gtklockbutton.c:311
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
 msgstr ""
+"La politiche dal sisteme e impedìs lis modifichis.\n"
+"Contatâ l'aministradôr di sisteme"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2309,126 +2318,126 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:934
 msgid "default:LTR"
-msgstr ""
+msgstr "default:LTR"
 
 #: gtk/gtkmessagedialog.c:844 gtk/gtkmessagedialog.c:862
 #: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11047
 msgid "_OK"
-msgstr ""
+msgstr "_Va ben"
 
 #: gtk/gtkmessagedialog.c:856
 msgid "_No"
-msgstr ""
+msgstr "_No"
 
 #: gtk/gtkmessagedialog.c:857
 msgid "_Yes"
-msgstr ""
+msgstr "_Sì"
 
 #: gtk/gtkmountoperation.c:543
 msgid "Co_nnect"
-msgstr ""
+msgstr "Co_net"
 
 #: gtk/gtkmountoperation.c:610
 msgid "Connect As"
-msgstr ""
+msgstr "Conet come"
 
 #: gtk/gtkmountoperation.c:619
 msgid "_Anonymous"
-msgstr ""
+msgstr "_Anonim"
 
 #: gtk/gtkmountoperation.c:627
 msgid "Registered U_ser"
-msgstr ""
+msgstr "Utent _regjistrât"
 
 #: gtk/gtkmountoperation.c:637
 msgid "_Username"
-msgstr ""
+msgstr "_Non utent"
 
 #: gtk/gtkmountoperation.c:642
 msgid "_Domain"
-msgstr ""
+msgstr "_Domini"
 
 #: gtk/gtkmountoperation.c:648
 msgid "_Password"
-msgstr ""
+msgstr "_Password"
 
 #: gtk/gtkmountoperation.c:670
 msgid "Forget password _immediately"
-msgstr ""
+msgstr "Dismentee la password _subite"
 
 #: gtk/gtkmountoperation.c:680
 msgid "Remember password until you _logout"
-msgstr ""
+msgstr "Visâsi la password fintremai che no si _jes de session"
 
 #: gtk/gtkmountoperation.c:690
 msgid "Remember _forever"
-msgstr ""
+msgstr "Visâsi par _simpri"
 
 #: gtk/gtkmountoperation.c:1079
 #, c-format
 msgid "Unknown Application (PID %d)"
-msgstr ""
+msgstr "Aplicazion no cognossude (PID %d)"
 
 #: gtk/gtkmountoperation.c:1264
 #, c-format
 msgid "Unable to end process"
-msgstr ""
+msgstr "Impussibil terminâ il procès"
 
 #: gtk/gtkmountoperation.c:1298
 msgid "_End Process"
-msgstr ""
+msgstr "_Termine procès"
 
 #: gtk/gtkmountoperation-stub.c:62
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr ""
+msgstr "Impussibil copâ il procès cun PID %d. La operazion no je implementade."
 
 #. translators: this string is a name for the 'less' command
 #: gtk/gtkmountoperation-x11.c:955
 msgid "Terminal Pager"
-msgstr ""
+msgstr "Pager dal terminâl («less»)"
 
 #: gtk/gtkmountoperation-x11.c:956
 msgid "Top Command"
-msgstr ""
+msgstr "Comant Top"
 
 #: gtk/gtkmountoperation-x11.c:957
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Bourne Again Shell"
 
 #: gtk/gtkmountoperation-x11.c:958
 msgid "Bourne Shell"
-msgstr ""
+msgstr "Bourne Shell"
 
 #: gtk/gtkmountoperation-x11.c:959
 msgid "Z Shell"
-msgstr ""
+msgstr "Z Shell"
 
 #: gtk/gtkmountoperation-x11.c:1056
 #, c-format
 msgid "Cannot end process with PID %d: %s"
-msgstr ""
+msgstr "Impussibil terminâ il procès cun PID %d: %s"
 
 #: gtk/gtknotebook.c:4772 gtk/gtknotebook.c:6995
 #, c-format
 msgid "Page %u"
-msgstr ""
+msgstr "Pagjine %u"
 
 #: gtk/gtkpagesetup.c:652 gtk/gtkpapersize.c:986 gtk/gtkpapersize.c:1026
 msgid "Not a valid page setup file"
-msgstr ""
+msgstr "Nol è un file di impostazion pagjine valit"
 
 #: gtk/gtkpagesetupunixdialog.c:197 gtk/ui/gtkassistant.ui:47
 msgid "_Apply"
-msgstr ""
+msgstr "_Apliche"
 
 #: gtk/gtkpagesetupunixdialog.c:203
 msgid "Any Printer"
-msgstr ""
+msgstr "Cualsisei stampant"
 
 #: gtk/gtkpagesetupunixdialog.c:203
 msgid "For portable documents"
-msgstr ""
+msgstr "Par documents che si rivin a puartâ"
 
 #: gtk/gtkpagesetupunixdialog.c:822
 #, c-format
@@ -2439,253 +2448,258 @@ msgid ""
 " Top: %s %s\n"
 " Bottom: %s %s"
 msgstr ""
+"Margjins:\n"
+" A çampe: %s %s\n"
+" A drete: %s %s\n"
+" Parsore: %s %s\n"
+" Parsot: %s %s"
 
 #: gtk/gtkpagesetupunixdialog.c:871 gtk/gtkprintunixdialog.c:3373
 msgid "Manage Custom Sizes…"
-msgstr ""
+msgstr "Gjestìs dimensions personalizadis…"
 
 #: gtk/gtkpagesetupunixdialog.c:893 gtk/ui/gtkpagesetupunixdialog.ui:30
 #: gtk/ui/gtkprintunixdialog.ui:812
 msgid "Page Setup"
-msgstr ""
+msgstr "Impostazions pagjine"
 
 #: gtk/gtkpathbar.c:1426
 msgid "File System Root"
-msgstr ""
+msgstr "Lidrîs dal filesystem"
 
 #: gtk/gtkplacessidebar.c:929
 msgid "Recent"
-msgstr ""
+msgstr "Resint"
 
 #: gtk/gtkplacessidebar.c:931
 msgid "Recent files"
-msgstr ""
+msgstr "File resints"
 
 #: gtk/gtkplacessidebar.c:942
 msgid "Open your personal folder"
-msgstr ""
+msgstr "Vierç la cartele personâl"
 
 #: gtk/gtkplacessidebar.c:957
 msgid "Open the contents of your desktop in a folder"
-msgstr ""
+msgstr "Vierç il contignût de scrivanie intune cartele"
 
 #: gtk/gtkplacessidebar.c:971
 msgid "Enter Location"
-msgstr ""
+msgstr "Inserìs posizion"
 
 #: gtk/gtkplacessidebar.c:973
 msgid "Manually enter a location"
-msgstr ""
+msgstr "Inserìs a man une posizion"
 
 #: gtk/gtkplacessidebar.c:983
 msgid "Trash"
-msgstr ""
+msgstr "Scovacere"
 
 #: gtk/gtkplacessidebar.c:985
 msgid "Open the trash"
-msgstr ""
+msgstr "Vierç la scovacere"
 
 #: gtk/gtkplacessidebar.c:1058 gtk/gtkplacessidebar.c:1086
 #: gtk/gtkplacessidebar.c:1285
 #, c-format
 msgid "Mount and open “%s”"
-msgstr ""
+msgstr "Monte e vierç “%s”"
 
 #: gtk/gtkplacessidebar.c:1174
 msgid "Open the contents of the file system"
-msgstr ""
+msgstr "Vierç i contignûts dal filesystem"
 
 #: gtk/gtkplacessidebar.c:1260
 msgid "New bookmark"
-msgstr ""
+msgstr "Gnûf segnelibri"
 
 #: gtk/gtkplacessidebar.c:1262
 msgid "Add a new bookmark"
-msgstr ""
+msgstr "Zonte un gnûf segnelibri"
 
 #: gtk/gtkplacessidebar.c:1330
 msgid "Other Locations"
-msgstr ""
+msgstr "Altris posizions"
 
 #: gtk/gtkplacessidebar.c:1331
 msgid "Show other locations"
-msgstr ""
+msgstr "Mostre altris posizions"
 
 #. Adjust start/stop items to reflect the type of the drive
 #: gtk/gtkplacessidebar.c:2121 gtk/gtkplacessidebar.c:3400
 msgid "_Start"
-msgstr ""
+msgstr "_Fâs partî"
 
 #: gtk/gtkplacessidebar.c:2122 gtk/gtkplacessidebar.c:3401
 msgid "_Stop"
-msgstr ""
+msgstr "_Ferme"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
 #: gtk/gtkplacessidebar.c:2129
 msgid "_Power On"
-msgstr ""
+msgstr "_Impie"
 
 #: gtk/gtkplacessidebar.c:2130
 msgid "_Safely Remove Drive"
-msgstr ""
+msgstr "_Gjave dispositîf in sigurece"
 
 #: gtk/gtkplacessidebar.c:2134
 msgid "_Connect Drive"
-msgstr ""
+msgstr "_Conet unitât"
 
 #: gtk/gtkplacessidebar.c:2135
 msgid "_Disconnect Drive"
-msgstr ""
+msgstr "_Disconet unitât"
 
 #: gtk/gtkplacessidebar.c:2139
 msgid "_Start Multi-disk Device"
-msgstr ""
+msgstr "_Fâs partî il dispositîf Multi-disc"
 
 #: gtk/gtkplacessidebar.c:2140
 msgid "_Stop Multi-disk Device"
-msgstr ""
+msgstr "_Ferme il dispositîf Multi-disc"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: gtk/gtkplacessidebar.c:2145
 msgid "_Unlock Device"
-msgstr ""
+msgstr "_Sbloche dispositîf"
 
 #: gtk/gtkplacessidebar.c:2146
 msgid "_Lock Device"
-msgstr ""
+msgstr "_Bloche dispositîf"
 
 #: gtk/gtkplacessidebar.c:2184 gtk/gtkplacessidebar.c:3150
 #, c-format
 msgid "Unable to start “%s”"
-msgstr ""
+msgstr "Impussibil fâ partî “%s”"
 
 #: gtk/gtkplacessidebar.c:2214
 #, c-format
 msgid "Unable to access “%s”"
-msgstr ""
+msgstr "Impussibil jentrâ in “%s”"
 
 #: gtk/gtkplacessidebar.c:2423
 msgid "This name is already taken"
-msgstr ""
+msgstr "Chest non al è za cjapât"
 
 #: gtk/gtkplacessidebar.c:2492 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:92
 #: gtk/ui/gtkfilechooserwidget.ui:165 gtk/ui/gtkfilechooserwidget.ui:451
 msgid "Name"
-msgstr ""
+msgstr "Non"
 
 #: gtk/gtkplacessidebar.c:2691
 #, c-format
 msgid "Unable to unmount “%s”"
-msgstr ""
+msgstr "Impussibil dismontâ “%s”"
 
 #: gtk/gtkplacessidebar.c:2867
 #, c-format
 msgid "Unable to stop “%s”"
-msgstr ""
+msgstr "Impussibil fermâ “%s”"
 
 #: gtk/gtkplacessidebar.c:2896
 #, c-format
 msgid "Unable to eject “%s”"
-msgstr ""
+msgstr "Impussibil parâ fûr “%s”"
 
 #: gtk/gtkplacessidebar.c:2925 gtk/gtkplacessidebar.c:2954
 #, c-format
 msgid "Unable to eject %s"
-msgstr ""
+msgstr "Impussibil parâ fûr %s"
 
 #: gtk/gtkplacessidebar.c:3102
 #, c-format
 msgid "Unable to poll “%s” for media changes"
-msgstr ""
+msgstr "Impussibil interogâ “%s” pai cambiaments dai supuarts"
 
 #: gtk/gtkplacessidebar.c:3383 gtk/gtkplacesview.c:1636
 msgid "Open in New _Tab"
-msgstr ""
+msgstr "Vierç intune gnove _schede"
 
 #: gtk/gtkplacessidebar.c:3386 gtk/gtkplacesview.c:1646
 msgid "Open in New _Window"
-msgstr ""
+msgstr "Vierç intun gnûf _barcon"
 
 #: gtk/gtkplacessidebar.c:3390
 msgid "_Add Bookmark"
-msgstr ""
+msgstr "_Zonte segnelibri"
 
 #: gtk/gtkplacessidebar.c:3391
 msgid "_Remove"
-msgstr ""
+msgstr "_Gjave"
 
 #: gtk/gtkplacessidebar.c:3392
 msgid "Rename…"
-msgstr ""
+msgstr "Cambie non..."
 
 #: gtk/gtkplacessidebar.c:3396 gtk/gtkplacesview.c:1677
 msgid "_Mount"
-msgstr ""
+msgstr "_Monte"
 
 #: gtk/gtkplacessidebar.c:3397 gtk/gtkplacesview.c:1668
 msgid "_Unmount"
-msgstr ""
+msgstr "_Dismonte"
 
 #: gtk/gtkplacessidebar.c:3398
 msgid "_Eject"
-msgstr ""
+msgstr "Par_e fûr"
 
 #: gtk/gtkplacessidebar.c:3399
 msgid "_Detect Media"
-msgstr ""
+msgstr "_Rilevâ supuart"
 
 #: gtk/gtkplacessidebar.c:3844 gtk/gtkplacesview.c:1115
 msgid "Computer"
-msgstr ""
+msgstr "Computer"
 
 #: gtk/gtkplacesview.c:891
 msgid "Searching for network locations"
-msgstr ""
+msgstr "Daûr a cirî posizions di rêt"
 
 #: gtk/gtkplacesview.c:898
 msgid "No network locations found"
-msgstr ""
+msgstr "Nissune posizion di rêt cjatade"
 
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1226 gtk/gtkplacesview.c:1301
 msgid "Unable to access location"
-msgstr ""
+msgstr "Impussibil jentrâ te posizion"
 
 #. Restore from Cancel to Connect
 #: gtk/gtkplacesview.c:1244 gtk/ui/gtkplacesview.ui:407
 msgid "Con_nect"
-msgstr ""
+msgstr "Co_net"
 
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1364
 msgid "Unable to unmount volume"
-msgstr ""
+msgstr "Impussibil dismontâ il volum"
 
 #. Allow to cancel the operation
 #: gtk/gtkplacesview.c:1464
 msgid "Cance_l"
-msgstr ""
+msgstr "Anu_le"
 
 #: gtk/gtkplacesview.c:1668
 msgid "_Disconnect"
-msgstr ""
+msgstr "_Disconet"
 
 #: gtk/gtkplacesview.c:1677
 msgid "_Connect"
-msgstr ""
+msgstr "_Conet"
 
 #: gtk/gtkplacesview.c:1817
 msgid "Unable to get remote server location"
-msgstr ""
+msgstr "Impussibil vê la posizion rimote dal servidôr"
 
 #: gtk/gtkplacesview.c:1956 gtk/gtkplacesview.c:1965
 msgid "Networks"
-msgstr ""
+msgstr "Rêts"
 
 #: gtk/gtkplacesview.c:1956 gtk/gtkplacesview.c:1965
 msgid "On This Computer"
-msgstr ""
+msgstr "Su chest computer"
 
 #. Translators: respectively, free and total space of the drive. The plural form
 #. * should be based on the free space available.
@@ -2695,37 +2709,37 @@ msgstr ""
 #, c-format
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s / %s disponibil"
+msgstr[1] "%s / %s disponibii"
 
 #: gtk/gtkplacesviewrow.c:481
 msgid "Disconnect"
-msgstr ""
+msgstr "Disconet"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
 msgid "Unmount"
-msgstr ""
+msgstr "Dismonte"
 
 #: gtk/gtkprintbackend.c:762
 msgid "Authentication"
-msgstr ""
+msgstr "Autenticazion"
 
 #: gtk/gtkprintbackend.c:835
 msgid "_Remember password"
-msgstr ""
+msgstr "_Visâsi password"
 
 #: gtk/gtkprinteroptionwidget.c:542
 msgid "Select a filename"
-msgstr ""
+msgstr "Selezione un non di file"
 
 #: gtk/gtkprinteroptionwidget.c:546 gtk/ui/gtkappchooserdialog.ui:64
 #: gtk/ui/gtkcolorchooserdialog.ui:40 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
-msgstr ""
+msgstr "_Selezione"
 
 #: gtk/gtkprinteroptionwidget.c:767
 msgid "Not available"
-msgstr ""
+msgstr "No disponibil"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -2734,12 +2748,12 @@ msgstr ""
 #: gtk/gtkprintoperation.c:259
 #, c-format
 msgid "%s job #%d"
-msgstr ""
+msgstr "%s lavôr n. #%d"
 
 #: gtk/gtkprintoperation.c:1802
 msgctxt "print operation status"
 msgid "Initial state"
-msgstr ""
+msgstr "Stât iniziâl"
 
 #: gtk/gtkprintoperation.c:1803
 msgctxt "print operation status"
