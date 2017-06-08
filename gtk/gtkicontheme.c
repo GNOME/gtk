@@ -2343,6 +2343,7 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
     }
 
   pixbuf = gtk_icon_info_load_icon (icon_info, error);
+  g_prefix_error (error, "Failed to load %s: ", icon_info->filename);
   g_object_unref (icon_info);
 
   return pixbuf;
