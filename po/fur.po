@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-03 02:31+0000\n"
-"PO-Revision-Date: 2017-06-07 12:34+0200\n"
+"PO-Revision-Date: 2017-06-08 13:43+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -2758,144 +2758,144 @@ msgstr "Stât iniziâl"
 #: gtk/gtkprintoperation.c:1803
 msgctxt "print operation status"
 msgid "Preparing to print"
-msgstr ""
+msgstr "Daûr a prontâ la stampe"
 
 #: gtk/gtkprintoperation.c:1804
 msgctxt "print operation status"
 msgid "Generating data"
-msgstr ""
+msgstr "Daûr a gjenerâ dâts"
 
 #: gtk/gtkprintoperation.c:1805
 msgctxt "print operation status"
 msgid "Sending data"
-msgstr ""
+msgstr "Daûr a inviâ i dâts"
 
 #: gtk/gtkprintoperation.c:1806
 msgctxt "print operation status"
 msgid "Waiting"
-msgstr ""
+msgstr "In spiete"
 
 #: gtk/gtkprintoperation.c:1807
 msgctxt "print operation status"
 msgid "Blocking on issue"
-msgstr ""
+msgstr "Blocât par vie di un probleme"
 
 #: gtk/gtkprintoperation.c:1808
 msgctxt "print operation status"
 msgid "Printing"
-msgstr ""
+msgstr "In stampe"
 
 #: gtk/gtkprintoperation.c:1809
 msgctxt "print operation status"
 msgid "Finished"
-msgstr ""
+msgstr "Finît"
 
 #: gtk/gtkprintoperation.c:1810
 msgctxt "print operation status"
 msgid "Finished with error"
-msgstr ""
+msgstr "Finît cun erôr"
 
 #: gtk/gtkprintoperation.c:2374
 #, c-format
 msgid "Preparing %d"
-msgstr ""
+msgstr "Preparazion di %d"
 
 #: gtk/gtkprintoperation.c:2376 gtk/gtkprintoperation.c:3005
 #, c-format
 msgid "Preparing"
-msgstr ""
+msgstr "Daûr a prontâ"
 
 #: gtk/gtkprintoperation.c:2379
 #, c-format
 msgid "Printing %d"
-msgstr ""
+msgstr "Stampe di %d"
 
 #: gtk/gtkprintoperation.c:3036
 #, c-format
 msgid "Error creating print preview"
-msgstr ""
+msgstr "Erôr tal creâ la anteprime di stampe"
 
 #: gtk/gtkprintoperation.c:3039
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr ""
+msgstr "Il motîf plui probabil al è che nol è pussibil creâ un file temporani."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:229 gtk/gtkprintoperation-portal.c:533
 #: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3395
 msgid "Print"
-msgstr ""
+msgstr "Stampe"
 
 #: gtk/gtkprintoperation-win32.c:615
 msgid "Printer offline"
-msgstr ""
+msgstr "Stampant distacade"
 
 #: gtk/gtkprintoperation-win32.c:617
 msgid "Out of paper"
-msgstr ""
+msgstr "Cjarte esauride"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:619
 #: modules/printbackends/cups/gtkprintbackendcups.c:2588
 msgid "Paused"
-msgstr ""
+msgstr "In pause"
 
 #: gtk/gtkprintoperation-win32.c:621
 msgid "Need user intervention"
-msgstr ""
+msgstr "Al è necessari l'intervent dal utent"
 
 #: gtk/gtkprintoperation-win32.c:721
 msgid "Custom size"
-msgstr ""
+msgstr "Dimension personalizade"
 
 #: gtk/gtkprintoperation-win32.c:1558
 msgid "No printer found"
-msgstr ""
+msgstr "Nissune stampant cjatade"
 
 #: gtk/gtkprintoperation-win32.c:1585
 msgid "Invalid argument to CreateDC"
-msgstr ""
+msgstr "Argoment no valit par CreateDC"
 
 #: gtk/gtkprintoperation-win32.c:1621 gtk/gtkprintoperation-win32.c:1867
 msgid "Error from StartDoc"
-msgstr ""
+msgstr "Erôr dal StartDoc"
 
 #: gtk/gtkprintoperation-win32.c:1722 gtk/gtkprintoperation-win32.c:1745
 #: gtk/gtkprintoperation-win32.c:1793
 msgid "Not enough free memory"
-msgstr ""
+msgstr "No vonde memorie libare"
 
 #: gtk/gtkprintoperation-win32.c:1798
 msgid "Invalid argument to PrintDlgEx"
-msgstr ""
+msgstr "Argoment no valit par PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1803
 msgid "Invalid pointer to PrintDlgEx"
-msgstr ""
+msgstr "Pontadôr no valit par PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1808
 msgid "Invalid handle to PrintDlgEx"
-msgstr ""
+msgstr "Gjestion no valide par PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1813
 msgid "Unspecified error"
-msgstr ""
+msgstr "Erôr no specificât"
 
 #: gtk/gtkprintunixdialog.c:741
 msgid "Pre_view"
-msgstr ""
+msgstr "Ante_prime"
 
 #: gtk/gtkprintunixdialog.c:743
 msgid "_Print"
-msgstr ""
+msgstr "_Stampe"
 
 #: gtk/gtkprintunixdialog.c:863
 msgid "Getting printer information failed"
-msgstr ""
+msgstr "No si è rivâts a otignî informazions su la stampant"
 
 #: gtk/gtkprintunixdialog.c:2073
 msgid "Getting printer information…"
-msgstr ""
+msgstr "Daûr a otignî informazions su la stampant…"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
@@ -2906,101 +2906,101 @@ msgstr ""
 #: gtk/gtkprintunixdialog.c:3102
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, top to bottom"
-msgstr ""
+msgstr "Di çampe a drete, dal alt in bas"
 
 #: gtk/gtkprintunixdialog.c:3102
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, bottom to top"
-msgstr ""
+msgstr "Di çampe a drete, dal bas in alt"
 
 #: gtk/gtkprintunixdialog.c:3103
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, top to bottom"
-msgstr ""
+msgstr "Di drete a çampe, dal alt in bas"
 
 #: gtk/gtkprintunixdialog.c:3103
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, bottom to top"
-msgstr ""
+msgstr "Di drete a çampe, dal bas in alt"
 
 #: gtk/gtkprintunixdialog.c:3104
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, left to right"
-msgstr ""
+msgstr "Dal alt in bas, di çampe a drete"
 
 #: gtk/gtkprintunixdialog.c:3104
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, right to left"
-msgstr ""
+msgstr "Dal alt in bas, di drete a çampe"
 
 #: gtk/gtkprintunixdialog.c:3105
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, left to right"
-msgstr ""
+msgstr "Dal bas in alt, di çampe a drete"
 
 #: gtk/gtkprintunixdialog.c:3105
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, right to left"
-msgstr ""
+msgstr "Dal bas in alt, di drete a çampe"
 
 #: gtk/gtkprintunixdialog.c:3109 gtk/gtkprintunixdialog.c:3122
 msgid "Page Ordering"
-msgstr ""
+msgstr "Ordinament pagjinis"
 
 #: gtk/gtkprintunixdialog.c:3138
 msgid "Left to right"
-msgstr ""
+msgstr "Di çampe a drete"
 
 #: gtk/gtkprintunixdialog.c:3139
 msgid "Right to left"
-msgstr ""
+msgstr "Di drete a çampe"
 
 #: gtk/gtkprintunixdialog.c:3151
 msgid "Top to bottom"
-msgstr ""
+msgstr "Dal alt in bas"
 
 #: gtk/gtkprintunixdialog.c:3152
 msgid "Bottom to top"
-msgstr ""
+msgstr "Dal bas in alt"
 
 #: gtk/gtkprogressbar.c:673
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
-msgstr ""
+msgstr "%.0f %%"
 
 #: gtk/gtkrecentchooserdefault.c:1013 gtk/gtkrecentchooserdefault.c:1050
 #, c-format
 msgid "No item for URI “%s” found"
-msgstr ""
+msgstr "Nissun element cjatât pal URI “%s”"
 
 #: gtk/gtkrecentchooserdefault.c:1177
 msgid "Untitled filter"
-msgstr ""
+msgstr "Filtri cence titul"
 
 #: gtk/gtkrecentchooserdefault.c:1499
 msgid "Could not remove item"
-msgstr ""
+msgstr "Impussibil cjatâ l'element"
 
 #: gtk/gtkrecentchooserdefault.c:1543
 msgid "Could not clear list"
-msgstr ""
+msgstr "Impussibil netâ la liste"
 
 #: gtk/gtkrecentchooserdefault.c:1627
 msgid "Copy _Location"
-msgstr ""
+msgstr "Copie _posizion"
 
 #: gtk/gtkrecentchooserdefault.c:1638
 msgid "_Remove From List"
-msgstr ""
+msgstr "_Gjave de liste"
 
 #: gtk/gtkrecentchooserdefault.c:1645
 msgid "_Clear List"
-msgstr ""
+msgstr "_Nete liste"
 
 #: gtk/gtkrecentchooserdefault.c:1657
 msgid "Show _Private Resources"
-msgstr ""
+msgstr "Mostre risorsis pri_vadis"
 
 #. we create a placeholder menuitem, to be used in case
 #. * the menu is empty. this placeholder will stay around
@@ -3014,21 +3014,21 @@ msgstr ""
 #.
 #: gtk/gtkrecentchoosermenu.c:316
 msgid "No items found"
-msgstr ""
+msgstr "Nissun element cjatât"
 
 #: gtk/gtkrecentchoosermenu.c:494 gtk/gtkrecentchoosermenu.c:550
 #, c-format
 msgid "No recently used resource found with URI “%s”"
-msgstr ""
+msgstr "Nissune risorse doprade di resint cjatade cun URI “%s”"
 
 #: gtk/gtkrecentchoosermenu.c:749
 #, c-format
 msgid "Open “%s”"
-msgstr ""
+msgstr "Vierç “%s”"
 
 #: gtk/gtkrecentchoosermenu.c:780
 msgid "Unknown item"
-msgstr ""
+msgstr "Element no cognossût"
 
 #. This is the label format that is used for the first 10 items
 #. * in a recent files menu. The %d is the number of the item,
@@ -3039,7 +3039,7 @@ msgstr ""
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
-msgstr ""
+msgstr "_%d. %s"
 
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
@@ -3048,28 +3048,30 @@ msgstr ""
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
-msgstr ""
+msgstr "%d. %s"
 
 #: gtk/gtkrecentmanager.c:1053 gtk/gtkrecentmanager.c:1066
 #: gtk/gtkrecentmanager.c:1203 gtk/gtkrecentmanager.c:1213
 #: gtk/gtkrecentmanager.c:1265 gtk/gtkrecentmanager.c:1274
 #, c-format
 msgid "Unable to find an item with URI “%s”"
-msgstr ""
+msgstr "Impussibil cjatâ un element cun URI “%s”"
 
 #: gtk/gtkrecentmanager.c:1289
 #, c-format
 msgid "Unable to move the item with URI “%s” to “%s”"
-msgstr ""
+msgstr "Impussibil spostâ l'element cun URI “%s” su “%s”"
 
 #: gtk/gtkrecentmanager.c:2507
 #, c-format
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr ""
+"No je stade cjatade nissune aplicazion regjistrade cul non “%s” pal element "
+"cun URI “%s”"
 
 #: gtk/gtksearchentry.c:371
 msgid "Search"
-msgstr ""
+msgstr "Ricercje"
 
 #. Translators: This string is used to mark left/right variants of modifier
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
@@ -3079,7 +3081,7 @@ msgstr ""
 #: gtk/gtkshortcutlabel.c:80
 msgctxt "keyboard side marker"
 msgid "L"
-msgstr ""
+msgstr "Ç"
 
 #. Translators: This string is used to mark left/right variants of modifier
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
@@ -3089,11 +3091,11 @@ msgstr ""
 #: gtk/gtkshortcutlabel.c:93
 msgctxt "keyboard side marker"
 msgid "R"
-msgstr ""
+msgstr "D"
 
 #: gtk/gtkshortcutssection.c:442
 msgid "_Show All"
-msgstr ""
+msgstr "Mostre _dut"
 
 #: gtk/gtkshortcutsshortcut.c:137
 msgid "Two finger pinch"
