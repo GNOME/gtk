@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-03 02:31+0000\n"
-"PO-Revision-Date: 2017-06-08 13:43+0200\n"
+"PO-Revision-Date: 2017-06-08 16:47+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -21,19 +21,19 @@ msgstr ""
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
-msgstr ""
+msgstr "Gjenar di schermi broadway no supuartât: %s"
 
 #: gdk/gdkwindow.c:2095
 msgid "GL support disabled via GDK_DEBUG"
-msgstr ""
+msgstr "Supuart GL disabilitât vie GDK_DEBUG"
 
 #: gdk/gdkwindow.c:2106
 msgid "The current backend does not support OpenGL"
-msgstr ""
+msgstr "Il backend atuâl nol supuarte OpenGL"
 
 #: gdk/gdkwindow.c:2199
 msgid "Vulkan support disabled via GDK_DEBUG"
-msgstr ""
+msgstr "Supuart Vulkan disabilitât vie GDK_DEBUG"
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -3099,56 +3099,60 @@ msgstr "Mostre _dut"
 
 #: gtk/gtkshortcutsshortcut.c:137
 msgid "Two finger pinch"
-msgstr ""
+msgstr "Piçâ cun doi dêts"
 
 #: gtk/gtkshortcutsshortcut.c:141
 msgid "Two finger stretch"
-msgstr ""
+msgstr "Tirâ cun doi dêts"
 
 #: gtk/gtkshortcutsshortcut.c:145
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "Zire in sens orari"
 
 #: gtk/gtkshortcutsshortcut.c:149
 msgid "Rotate counterclockwise"
-msgstr ""
+msgstr "Zire in sens antiorari"
 
 #: gtk/gtkshortcutsshortcut.c:153
 msgid "Two finger swipe left"
-msgstr ""
+msgstr "Scori a çampe cun doi dêts"
 
 #: gtk/gtkshortcutsshortcut.c:157
 msgid "Two finger swipe right"
-msgstr ""
+msgstr "Scori a diestre cun doi dêts"
 
 #: gtk/gtkshortcutsshortcut.c:161
 msgid "Swipe left"
-msgstr ""
+msgstr "Scor a çampe"
 
 #: gtk/gtkshortcutsshortcut.c:165
 msgid "Swipe right"
-msgstr ""
+msgstr "Scor a drete"
 
 #: gtk/gtkshortcutswindow.c:910
 msgid "Shortcuts"
-msgstr ""
+msgstr "Scurtis"
 
+# risultâts di ricercje o cîr risultâts
 #: gtk/gtkshortcutswindow.c:914
+#, fuzzy
 msgid "Search Results"
-msgstr ""
+msgstr "Risultâts di ricercje"
 
+# o cîr scurtis?
 #: gtk/gtkshortcutswindow.c:958
+#, fuzzy
 msgid "Search Shortcuts"
-msgstr ""
+msgstr "Scurtis di ricercje"
 
 #: gtk/gtkshortcutswindow.c:1015 gtk/ui/gtkfilechooserwidget.ui:280
 msgid "No Results Found"
-msgstr ""
+msgstr "Nissun risultât cjatât"
 
 #: gtk/gtkshortcutswindow.c:1021 gtk/ui/gtkfilechooserwidget.ui:293
 #: gtk/ui/gtkplacesview.ui:368
 msgid "Try a different search"
-msgstr ""
+msgstr "Prove une ricercje diferente"
 
 #. Translators: if the "on" state label requires more than three
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
@@ -3157,7 +3161,7 @@ msgstr ""
 #: gtk/gtkswitch.c:762
 msgctxt "switch"
 msgid "ON"
-msgstr ""
+msgstr "❙"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -3165,7 +3169,7 @@ msgstr ""
 #: gtk/gtkswitch.c:768
 msgctxt "switch"
 msgid "OFF"
-msgstr ""
+msgstr "○"
 
 #: gtk/gtktextbufferrichtext.c:658
 #, c-format
@@ -3180,96 +3184,97 @@ msgstr ""
 #: gtk/gtktextbufferserialize.c:709 gtk/gtktextbufferserialize.c:735
 #, c-format
 msgid "Both “id” and “name” were found on the <%s> element"
-msgstr ""
+msgstr "Ducj i doi “id” e “name” a son stâts cjatâts sul element <%s>"
 
 #: gtk/gtktextbufferserialize.c:719 gtk/gtktextbufferserialize.c:745
 #, c-format
 msgid "The attribute “%s” was found twice on the <%s> element"
-msgstr ""
+msgstr "L'atribût “%s” al è stât cjatât dôs voltis sul element <%s>"
 
 #: gtk/gtktextbufferserialize.c:761
 #, c-format
 msgid "<%s> element has invalid ID “%s”"
-msgstr ""
+msgstr "<%s> l'element al à un ID “%s” no valit"
 
 #: gtk/gtktextbufferserialize.c:771
 #, c-format
 msgid "<%s> element has neither a “name” nor an “id” attribute"
-msgstr ""
+msgstr "L'element <%s> nol à ni un atribût “name” ni un atribût “id”"
 
 #: gtk/gtktextbufferserialize.c:858
 #, c-format
 msgid "Attribute “%s” repeated twice on the same <%s> element"
-msgstr ""
+msgstr "Atribût “%s” ripetût dôs voltis sul stes element <%s>"
 
 #: gtk/gtktextbufferserialize.c:876 gtk/gtktextbufferserialize.c:901
 #, c-format
 msgid "Attribute “%s” is invalid on <%s> element in this context"
-msgstr ""
+msgstr "L'atribût “%s” nol è valit sul element <%s> in chest contest"
 
 #: gtk/gtktextbufferserialize.c:940
 #, c-format
 msgid "Tag “%s” has not been defined."
-msgstr ""
+msgstr "La etichete “%s” no je stade definide."
 
 #: gtk/gtktextbufferserialize.c:952
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "Cjatade etichete anonime. Nol è pussibil creâ altris etichetis."
 
 #: gtk/gtktextbufferserialize.c:963
 #, c-format
 msgid "Tag “%s” does not exist in buffer and tags can not be created."
 msgstr ""
+"L'etichete “%s” no esist intal buffer. Nol è pussibil creâ altris etichetis."
 
 #: gtk/gtktextbufferserialize.c:1064 gtk/gtktextbufferserialize.c:1139
 #: gtk/gtktextbufferserialize.c:1244 gtk/gtktextbufferserialize.c:1318
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "L'element <%s> nol è permetût sot di <%s>"
 
 #: gtk/gtktextbufferserialize.c:1095
 #, c-format
 msgid "“%s” is not a valid attribute type"
-msgstr ""
+msgstr "“%s” nol è un gjenar di atribût valit"
 
 #: gtk/gtktextbufferserialize.c:1103
 #, c-format
 msgid "“%s” is not a valid attribute name"
-msgstr ""
+msgstr "“%s” nol è un non di atribût valit"
 
 #: gtk/gtktextbufferserialize.c:1113
 #, c-format
 msgid "“%s” could not be converted to a value of type “%s” for attribute “%s”"
-msgstr ""
+msgstr "Impussibil convertî “%s” a un valôr di gjenar “%s” pal atribût “%s”"
 
 #: gtk/gtktextbufferserialize.c:1122
 #, c-format
 msgid "“%s” is not a valid value for attribute “%s”"
-msgstr ""
+msgstr "“%s” nol è un valôr valit pal atribût “%s”"
 
 #: gtk/gtktextbufferserialize.c:1207
 #, c-format
 msgid "Tag “%s” already defined"
-msgstr ""
+msgstr "Etichete “%s” za definide"
 
 #: gtk/gtktextbufferserialize.c:1220
 #, c-format
 msgid "Tag “%s” has invalid priority “%s”"
-msgstr ""
+msgstr "La etichete “%s” e à une prioritât “%s” no valide"
 
 #: gtk/gtktextbufferserialize.c:1273
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr ""
+msgstr "L'element plui esterni al scugne jessi <text_view_markup> no <%s>"
 
 #: gtk/gtktextbufferserialize.c:1282 gtk/gtktextbufferserialize.c:1298
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr ""
+msgstr "Un element <%s> al è za stât specificât"
 
 #: gtk/gtktextbufferserialize.c:1304
 msgid "A <text> element can’t occur before a <tags> element"
-msgstr ""
+msgstr "Un element <text> nol pues capitâ prime di un element <tags>"
 
 #: gtk/gtktextbufferserialize.c:1710
 msgid "Serialized data is malformed"
@@ -3282,27 +3287,27 @@ msgstr ""
 
 #: gtk/gtktextutil.c:57
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "LRM - segn _çampe-a-diestre"
 
 #: gtk/gtktextutil.c:58
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "RLM - segn _diestre-a-çampe"
 
 #: gtk/gtktextutil.c:59
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE - _incorporament çampe-a-drete"
 
 #: gtk/gtktextutil.c:60
 msgid "RLE Right-to-left e_mbedding"
-msgstr ""
+msgstr "RLE - i_ncorporament diestre-a-çampe"
 
 #: gtk/gtktextutil.c:61
 msgid "LRO Left-to-right _override"
-msgstr ""
+msgstr "LRO - s_fuarçâ çampe-a-drete"
 
 #: gtk/gtktextutil.c:62
 msgid "RLO Right-to-left o_verride"
-msgstr ""
+msgstr "RLO - sf_uarçâ drete-a-çampe"
 
 #: gtk/gtktextutil.c:63
 msgid "PDF _Pop directional formatting"
@@ -3322,15 +3327,15 @@ msgstr ""
 
 #: gtk/gtkvolumebutton.c:189
 msgid "Adjusts the volume"
-msgstr ""
+msgstr "Juste il volum"
 
 #: gtk/gtkvolumebutton.c:232
 msgid "Muted"
-msgstr ""
+msgstr "Cidinât"
 
 #: gtk/gtkvolumebutton.c:236
 msgid "Full Volume"
-msgstr ""
+msgstr "Plen volum"
 
 #. Translators: this is the percentage of the current volume,
 #. * as used in the tooltip, eg. "49 %".
@@ -3341,24 +3346,24 @@ msgstr ""
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: gtk/gtkwindow.c:8212
 msgid "Move"
-msgstr ""
+msgstr "Sposte"
 
 #: gtk/gtkwindow.c:8220
 msgid "Resize"
-msgstr ""
+msgstr "Ridimensione"
 
 #: gtk/gtkwindow.c:8251
 msgid "Always on Top"
-msgstr ""
+msgstr "Simpri denant"
 
 #: gtk/gtkwindow.c:11034
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
-msgstr ""
+msgstr "Doprâ GTK+ Inspector?"
 
 #: gtk/gtkwindow.c:11036
 #, c-format
