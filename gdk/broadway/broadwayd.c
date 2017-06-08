@@ -423,6 +423,8 @@ main (int argc, char *argv[])
   char *ssl_key = NULL;
   char *display;
   int port = 0;
+  gboolean no_blocks = FALSE;
+  int compression = -1;
   const GOptionEntry entries[] = {
     { "port", 'p', 0, G_OPTION_ARG_INT, &http_port, "Httpd port", "PORT" },
     { "address", 'a', 0, G_OPTION_ARG_STRING, &http_address, "Ip address to bind to ", "ADDRESS" },
@@ -431,6 +433,8 @@ main (int argc, char *argv[])
 #endif
     { "cert", 'c', 0, G_OPTION_ARG_STRING, &ssl_cert, "SSL certificate path", "PATH" },
     { "key", 'k', 0, G_OPTION_ARG_STRING, &ssl_key, "SSL key path", "PATH" },
+    { "no-blocks", 'b', 0, G_OPTION_ARG_NONE, &no_blocks, "Disable blocks matching", NULL },
+    { "compression", 'c', 0, G_OPTION_ARG_INT, &compression, "ZLib compression level", "(-1, 0..9)" },
     { NULL }
   };
 
@@ -500,12 +504,14 @@ main (int argc, char *argv[])
     http_port = 8080 + port;
 
   if (unixsocket_address != NULL)
-    server = broadway_server_on_unix_socket_new (unixsocket_address, &error);
+    server = broadway_server_on_unix_socket_new (unixsocket_address, no_blocks, compression, &error);
   else
     server = broadway_server_new (http_address,
                                   http_port,
                                   ssl_cert,
                                   ssl_key,
+                                  no_blocks, 
+                                  compression,
                                   &error);
 
   if (server == NULL)

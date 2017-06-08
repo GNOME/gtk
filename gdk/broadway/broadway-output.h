@@ -18,7 +18,8 @@ typedef enum {
 } BroadwayWSOpCode;
 
 BroadwayOutput *broadway_output_new             (GOutputStream  *out,
-						 guint32         serial);
+						 guint32         serial,
+                                                 int             compression);
 void            broadway_output_free            (BroadwayOutput *output);
 int             broadway_output_flush           (BroadwayOutput *output);
 int             broadway_output_has_error       (BroadwayOutput *output);

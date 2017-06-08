@@ -13,19 +13,23 @@
 
 struct BroadwayOutput {
   GOutputStream *out;
-  GString *buf;
+  GOutputStream *buf;
   int error;
   guint32 serial;
+  int compression;
 };
+
+#define SEND_CMD_RESERVE_SIZE	16
 
 static void
 broadway_output_send_cmd (BroadwayOutput *output,
 			  gboolean fin, BroadwayWSOpCode code,
-			  const void *buf, gsize count)
+			  void *reservation_and_data, gsize count)
 {
   gboolean mask = FALSE;
-  guchar header[16];
-  size_t p;
+  guchar header[SEND_CMD_RESERVE_SIZE];
+  guchar *ptr;
+  size_t header_size;
 
   gboolean mid_header = count > 125 && count <= 65535;
   gboolean long_header = count > 65535;
@@ -34,21 +38,28 @@ broadway_output_send_cmd (BroadwayOutput *output,
   header[0] = ( (fin ? 0x80 : 0) | (code & 0x0f) );
   header[1] = ( (mask ? 0x80 : 0) |
                 (mid_header ? 126 : long_header ? 127 : count) );
-  p = 2;
+  header_size = 2;
   if (mid_header)
     {
-      *(guint16 *)(header + p) = GUINT16_TO_BE( (guint16)count );
-      p += 2;
+      *(guint16 *)(header + header_size) = GUINT16_TO_BE( (guint16)count );
+      header_size += 2;
     }
   else if (long_header)
     {
-      *(guint64 *)(header + p) = GUINT64_TO_BE( count );
-      p += 8;
+      *(guint64 *)(header + header_size) = GUINT64_TO_BE( count );
+      header_size += 8;
     }
-  // FIXME: if we are paranoid we should 'mask' the data
-  // FIXME: we should really emit these as a single write
-  g_output_stream_write_all (output->out, header, p, NULL, NULL, NULL);
-  g_output_stream_write_all (output->out, buf, count, NULL, NULL, NULL);
+  if (reservation_and_data && count)
+    {
+      ptr = (guchar *)reservation_and_data;
+      ptr+= (SEND_CMD_RESERVE_SIZE - header_size);
+      memcpy(ptr, header, header_size);
+      g_output_stream_write_all (output->out, ptr, count + header_size, NULL, NULL, NULL);
+    }
+  else
+    {
+      g_output_stream_write_all (output->out, header, header_size, NULL, NULL, NULL);
+    }
 }
 
 void broadway_output_pong (BroadwayOutput *output)
@@ -59,28 +70,44 @@ void broadway_output_pong (BroadwayOutput *output)
 int
 broadway_output_flush (BroadwayOutput *output)
 {
-  if (output->buf->len == 0)
+  GError *error;
+  gpointer data;
+  gsize len;
+
+  len = g_seekable_tell(G_SEEKABLE (output->buf));
+  if (len == SEND_CMD_RESERVE_SIZE)
     return TRUE;
 
-  broadway_output_send_cmd (output, TRUE, BROADWAY_WS_BINARY,
-                            output->buf->str, output->buf->len);
+  assert( len > SEND_CMD_RESERVE_SIZE);
 
-  g_string_set_size (output->buf, 0);
+  data = g_memory_output_stream_get_data(G_MEMORY_OUTPUT_STREAM (output->buf) );
 
-  return !output->error;
+  broadway_output_send_cmd (output, TRUE, BROADWAY_WS_BINARY, data, len - SEND_CMD_RESERVE_SIZE);
+  if (output->error)
+      return FALSE;
 
+  g_seekable_seek(G_SEEKABLE(output->buf), 
+    SEND_CMD_RESERVE_SIZE, G_SEEK_SET, NULL, &error);
+  return TRUE;
 }
 
 BroadwayOutput *
-broadway_output_new (GOutputStream *out, guint32 serial)
+broadway_output_new (GOutputStream *out, guint32 serial, int compression)
 {
   BroadwayOutput *output;
-
+  char reservation[SEND_CMD_RESERVE_SIZE] = { 0 };
+  if (compression > 9)
+      compression = 9;
+  if (compression < -1)
+      compression = -1;
   output = g_new0 (BroadwayOutput, 1);
 
   output->out = g_object_ref (out);
-  output->buf = g_string_new ("");
+  output->buf = g_memory_output_stream_new_resizable ();
   output->serial = serial;
+  output->compression = compression;
+  g_output_stream_write_all (output->buf, &reservation, 
+      SEND_CMD_RESERVE_SIZE, NULL, NULL, NULL);
 
   return output;
 }
@@ -89,6 +116,7 @@ void
 broadway_output_free (BroadwayOutput *output)
 {
   g_object_unref (output->out);
+  g_object_unref (output->buf);
   free (output);
 }
 
@@ -110,48 +138,38 @@ broadway_output_set_next_serial (BroadwayOutput *output,
  *                     Core rendering operations                        *
  ************************************************************************/
 
-static void
+static inline void
 append_char (BroadwayOutput *output, char c)
 {
-  g_string_append_c (output->buf, c);
+  g_output_stream_write_all (output->buf, &c, sizeof (c), NULL, NULL, NULL);
 }
 
-static void
+static inline void
 append_bool (BroadwayOutput *output, gboolean val)
 {
-  g_string_append_c (output->buf, val ? 1: 0);
+  const unsigned char tmp = val ? 1 : 0;
+  g_output_stream_write_all (output->buf, &tmp, sizeof (tmp), NULL, NULL, NULL);
 }
 
-static void
+static inline void
 append_flags (BroadwayOutput *output, guint32 val)
 {
-  g_string_append_c (output->buf, val);
+  const unsigned char tmp = (unsigned char)val;
+  g_output_stream_write_all (output->buf, &tmp, sizeof (tmp), NULL, NULL, NULL);
 }
 
 static void
 append_uint16 (BroadwayOutput *output, guint32 v)
 {
-  gsize old_len = output->buf->len;
-  guint8 *buf;
-
-  g_string_set_size (output->buf, old_len + 2);
-  buf = (guint8 *)output->buf->str + old_len;
-  buf[0] = (v >> 0) & 0xff;
-  buf[1] = (v >> 8) & 0xff;
+  const unsigned char tmp[2] = { (v >> 0) & 0xff, (v >> 8) & 0xff };
+  g_output_stream_write_all (output->buf, &tmp, sizeof (tmp), NULL, NULL, NULL);
 }
 
 static void
 append_uint32 (BroadwayOutput *output, guint32 v)
 {
-  gsize old_len = output->buf->len;
-  guint8 *buf;
-
-  g_string_set_size (output->buf, old_len + 4);
-  buf = (guint8 *)output->buf->str + old_len;
-  buf[0] = (v >> 0) & 0xff;
-  buf[1] = (v >> 8) & 0xff;
-  buf[2] = (v >> 16) & 0xff;
-  buf[3] = (v >> 24) & 0xff;
+  const unsigned char tmp[4] = { (v >> 0) & 0xff, (v >> 8) & 0xff, (v >> 16) & 0xff, (v >> 24) & 0xff };
+  g_output_stream_write_all (output->buf, &tmp, sizeof (tmp), NULL, NULL, NULL);
 }
 
 static void
@@ -292,13 +310,17 @@ broadway_output_put_buffer (BroadwayOutput *output,
                             BroadwayBuffer *prev_buffer,
                             BroadwayBuffer *buffer)
 {
-  gsize len;
-  int w, h;
+  guint32 len;
+  unsigned char *plen;
+  goffset where_is_len;
   GZlibCompressor *compressor;
-  GOutputStream *out, *out_mem;
-  GString *encoded;
+  GOutputStream *out;
+  GError *error;
+  gpointer data;
+  int w, h;
 
-  write_header (output, BROADWAY_OP_PUT_BUFFER);
+  write_header (output, (output->compression == 0) 
+      ? BROADWAY_OP_PUT_UNCOMPRESSED_BUFFER : BROADWAY_OP_PUT_BUFFER);
 
   w = broadway_buffer_get_width (buffer);
   h = broadway_buffer_get_height (buffer);
@@ -307,26 +329,40 @@ broadway_output_put_buffer (BroadwayOutput *output,
   append_uint16 (output, w);
   append_uint16 (output, h);
 
-  encoded = g_string_new ("");
-  broadway_buffer_encode (buffer, prev_buffer, encoded);
+  //remember where to seek and write later when len will be known, put now dummy 32 bits here
+  where_is_len = g_seekable_tell(G_SEEKABLE (output->buf));
+  len = 0xdeadbeef;
+  g_output_stream_write_all (output->buf, &len, sizeof(len), NULL, NULL, NULL);
 
-  compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_RAW, -1);
-  out_mem = g_memory_output_stream_new_resizable ();
-  out = g_converter_output_stream_new (out_mem, G_CONVERTER (compressor));
-  g_object_unref (compressor);
+  if (output->compression == 0)
+    {
+      broadway_buffer_encode (buffer, prev_buffer, output->buf);
+    }
+  else
+    {
+      compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_RAW, output->compression);
+      if (!compressor)
+          return;
 
-  if (!g_output_stream_write_all (out, encoded->str, encoded->len,
-                                  NULL, NULL, NULL) ||
-      !g_output_stream_close (out, NULL, NULL))
-    g_warning ("compression failed");
+      out = g_converter_output_stream_new (output->buf, G_CONVERTER (compressor));
+      g_object_unref (compressor);
+      if (!out)
+          return;
 
+      broadway_buffer_encode (buffer, prev_buffer, out);
+      g_filter_output_stream_set_close_base_stream(G_FILTER_OUTPUT_STREAM(out), FALSE);
+      if (!g_output_stream_close (out, NULL, &error))
+          g_warning ("compression failed");
 
-  len = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (out_mem));
-  append_uint32 (output, len);
+      g_object_unref (out);
+    }
+  len = (guint32) (g_seekable_tell(G_SEEKABLE (output->buf)) - (where_is_len + sizeof(len)));
 
-  g_string_append_len (output->buf, g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (out_mem)), len);
-
-  g_string_free (encoded, TRUE);
-  g_object_unref (out);
-  g_object_unref (out_mem);
+  //now we know actual len value, put it where it should be
+  data = g_memory_output_stream_get_data(G_MEMORY_OUTPUT_STREAM (output->buf) );
+  plen = (unsigned char *)data + where_is_len;
+  plen[0] = len & 0xff;
+  plen[1] = (len >> 8) & 0xff;
+  plen[2] = (len >> 16) & 0xff;
+  plen[3] = (len >> 24) & 0xff;
 }

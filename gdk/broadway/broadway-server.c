@@ -42,6 +42,8 @@ struct _BroadwayServer {
 
   char *address;
   int port;
+  gboolean no_blocks;
+  int compression;
   char *ssl_cert;
   char *ssl_key;
   GSocketService *service;
@@ -1052,7 +1054,7 @@ start_input (HttpRequest *request)
   g_byte_array_append (input->buffer, data_buffer, data_buffer_size);
 
   input->output =
-    broadway_output_new (g_io_stream_get_output_stream (request->connection), 0);
+    broadway_output_new (g_io_stream_get_output_stream (request->connection), 0, input->server->compression);
 
   /* This will free and close the data input stream, but we got all the buffered content already */
   http_request_free (request);
@@ -1287,6 +1289,8 @@ broadway_server_new (char        *address,
                      int          port,
                      const char  *ssl_cert,
                      const char  *ssl_key,
+                     gboolean no_blocks, 
+                     int compression,
                      GError     **error)
 {
   BroadwayServer *server;
@@ -1298,6 +1302,8 @@ broadway_server_new (char        *address,
   server->address = g_strdup (address);
   server->ssl_cert = g_strdup (ssl_cert);
   server->ssl_key = g_strdup (ssl_key);
+  server->no_blocks = no_blocks;
+  server->compression = compression;
 
   if (address == NULL)
     {
@@ -1344,7 +1350,7 @@ broadway_server_new (char        *address,
 }
 
 BroadwayServer *
-broadway_server_on_unix_socket_new (char *address, GError **error)
+broadway_server_on_unix_socket_new (char *address, gboolean no_blocks, int compression, GError **error)
 {
   BroadwayServer *server;
   GSocketAddress *socket_address = NULL;
@@ -1352,6 +1358,8 @@ broadway_server_on_unix_socket_new (char *address, GError **error)
   server = g_object_new (BROADWAY_TYPE_SERVER, NULL);
   server->port = -1;
   server->address = g_strdup (address);
+  server->no_blocks = no_blocks;
+  server->compression = compression;
 
   if (address == NULL)
     {
@@ -1615,7 +1623,8 @@ broadway_server_window_update (BroadwayServer *server,
 
   buffer = broadway_buffer_create (window->width, window->height,
                                    cairo_image_surface_get_data (surface),
-                                   cairo_image_surface_get_stride (surface));
+                                   cairo_image_surface_get_stride (surface),
+                                   server->no_blocks);
 
   if (server->output != NULL)
     {
