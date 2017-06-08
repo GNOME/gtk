@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-03 02:31+0000\n"
-"PO-Revision-Date: 2017-06-08 16:47+0200\n"
+"PO-Revision-Date: 2017-06-09 00:38+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -524,19 +524,16 @@ msgid "Customize"
 msgstr "Personalize"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:161
-#, fuzzy
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "Al selezione il colôr"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:162
-#, fuzzy
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "Al ative il colôr"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:163
-#, fuzzy
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Al personalize il colôr"
@@ -547,13 +544,11 @@ msgid "Press"
 msgstr "Frache"
 
 #: gtk/a11y/gtkcomboboxaccessible.c:319
-#, fuzzy
 msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Al frache la casele cumbinade"
 
 #: gtk/a11y/gtkentryaccessible.c:1557
-#, fuzzy
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "Al ative la vôs"
@@ -3315,15 +3310,15 @@ msgstr ""
 
 #: gtk/gtktextutil.c:64
 msgid "ZWS _Zero width space"
-msgstr ""
+msgstr "ZWS - spa_zi a largjece nule"
 
 #: gtk/gtktextutil.c:65
 msgid "ZWJ Zero width _joiner"
-msgstr ""
+msgstr "ZWJ - spazi di _union a largjece nule"
 
 #: gtk/gtktextutil.c:66
 msgid "ZWNJ Zero width _non-joiner"
-msgstr ""
+msgstr "ZWNJ - spazi _no di union a largjece nule"
 
 #: gtk/gtkvolumebutton.c:189
 msgid "Adjusts the volume"
@@ -3375,120 +3370,124 @@ msgstr ""
 
 #: gtk/gtkwindow.c:11041
 msgid "Don’t show this message again"
-msgstr ""
+msgstr "No stâ mostrâ plui chest messaç"
 
 #: gtk/inspector/action-editor.c:279
 msgid "Activate"
-msgstr ""
+msgstr "Ative"
 
 #: gtk/inspector/action-editor.c:300 gtk/inspector/actions.ui:82
 #: gtk/inspector/css-node-tree.ui:78 gtk/inspector/misc-info.ui:99
 msgid "State"
-msgstr ""
+msgstr "Stât"
 
 #: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:112
 #: gtk/ui/gtkplacesview.ui:145
 msgid "Prefix"
-msgstr ""
+msgstr "Prefìs"
 
 #: gtk/inspector/actions.ui:56
 msgid "Enabled"
-msgstr ""
+msgstr "Abilitât"
 
 #: gtk/inspector/actions.ui:69
 msgid "Parameter Type"
-msgstr ""
+msgstr "Gjenar di parametri"
 
 #: gtk/inspector/css-editor.c:112
 msgid "You can type here any CSS rule recognized by GTK+."
-msgstr ""
+msgstr "Si pues scrivi achì cualsisei regule CSS ricognossude di GTK+."
 
 #: gtk/inspector/css-editor.c:113
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
+"Si pues disabilitâ in maniere temporanie chest CSS personalizât fasint clic "
+"su il boton “Pause” parsore."
 
 #: gtk/inspector/css-editor.c:114
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr ""
+"Lis modifichis a son aplicadis daurman e in maniere globâl par dute la "
+"aplicazion."
 
 #: gtk/inspector/css-editor.c:162
 #, c-format
 msgid "Saving CSS failed"
-msgstr ""
+msgstr "No si è rivâts a salvâ il CSS"
 
 #: gtk/inspector/css-editor.ui:34
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "Disabilite chest CSS personalizât"
 
 #: gtk/inspector/css-editor.ui:46
 msgid "Save the current CSS"
-msgstr ""
+msgstr "Salve il CSS atuâl"
 
 #: gtk/inspector/css-node-tree.ui:52
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: gtk/inspector/css-node-tree.ui:65 gtk/inspector/object-tree.ui:124
 msgid "Style Classes"
-msgstr ""
+msgstr "Classis di stîl"
 
 #: gtk/inspector/css-node-tree.ui:110
 msgid "CSS Property"
-msgstr ""
+msgstr "Proprietât CSS"
 
 #: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
 #: gtk/ui/gtkcoloreditor.ui:271
 msgid "Value"
-msgstr ""
+msgstr "Valôr"
 
 #: gtk/inspector/data-list.ui:15
 msgid "Show data"
-msgstr ""
+msgstr "Mostre dâts"
 
 #: gtk/inspector/general.c:307
 msgctxt "GL version"
 msgid "None"
-msgstr ""
+msgstr "Nissune"
 
 #: gtk/inspector/general.c:308
 msgctxt "GL vendor"
 msgid "None"
-msgstr ""
+msgstr "Nissun"
 
 #: gtk/inspector/general.ui:35
 msgid "GTK+ Version"
-msgstr ""
+msgstr "Version GTK+"
 
 #: gtk/inspector/general.ui:67
 msgid "GDK Backend"
-msgstr ""
+msgstr "Backend GDK"
 
 #: gtk/inspector/general.ui:356
 msgid "Display"
-msgstr ""
+msgstr "Visôr"
 
 #: gtk/inspector/general.ui:389
 msgid "RGBA Visual"
-msgstr ""
+msgstr "Visuâl RGBA"
 
 #: gtk/inspector/general.ui:421
 msgid "Composited"
-msgstr ""
+msgstr "Composit"
 
 #: gtk/inspector/general.ui:466
 msgid "GL Version"
-msgstr ""
+msgstr "Version GL"
 
 #: gtk/inspector/general.ui:499
 msgid "GL Vendor"
-msgstr ""
+msgstr "Produtôr GL"
 
 #: gtk/inspector/gestures.c:129
 msgctxt "event phase"
 msgid "None"
-msgstr ""
+msgstr "Nissune"
 
 #: gtk/inspector/gestures.c:130
 msgctxt "event phase"
