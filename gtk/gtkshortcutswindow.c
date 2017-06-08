@@ -907,10 +907,12 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                     NULL);
   gtk_header_bar_set_custom_title (priv->header_bar, GTK_WIDGET (priv->title_stack));
 
+  /* Translators: This is the window title for the shortcuts window in normal mode */
   label = gtk_label_new (_("Shortcuts"));
   gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
   gtk_stack_add_named (priv->title_stack, label, "title");
 
+  /* Translators: This is the window title for the shortcuts window in search mode */
   label = gtk_label_new (_("Search Results"));
   gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_TITLE);
   gtk_stack_add_named (priv->title_stack, label, "search");
@@ -955,6 +957,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   priv->search_entry = GTK_SEARCH_ENTRY (gtk_search_entry_new ());
   gtk_container_add (GTK_CONTAINER (priv->search_bar), GTK_WIDGET (priv->search_entry));
   g_object_set (priv->search_entry,
+                /* Translators: This is placeholder text for the search entry in the shortcuts window */
                 "placeholder-text", _("Search Shortcuts"),
                 "width-chars", 40,
                 NULL);
