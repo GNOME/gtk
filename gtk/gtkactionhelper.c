@@ -41,7 +41,8 @@ static void             gtk_action_helper_action_added                  (GtkActi
                                                                          GVariant           *state,
                                                                          gboolean            should_emit_signals);
 
-static void             gtk_action_helper_action_removed                (GtkActionHelper    *helper);
+static void             gtk_action_helper_action_removed                (GtkActionHelper    *helper,
+                                                                         gboolean            should_emit_signals);
 
 static void             gtk_action_helper_action_enabled_changed        (GtkActionHelper    *helper,
                                                                          gboolean            enabled);
@@ -190,7 +191,8 @@ gtk_action_helper_action_added (GtkActionHelper    *helper,
 }
 
 static void
-gtk_action_helper_action_removed (GtkActionHelper *helper)
+gtk_action_helper_action_removed (GtkActionHelper *helper,
+                                  gboolean         should_emit_signals)
 {
   GTK_NOTE(ACTIONS, g_message ("%s: action %s was removed", "actionhelper", helper->action_name));
 
@@ -202,13 +204,17 @@ gtk_action_helper_action_removed (GtkActionHelper *helper)
   if (helper->enabled)
     {
       helper->enabled = FALSE;
-      gtk_action_helper_report_change (helper, PROP_ENABLED);
+
+      if (should_emit_signals)
+        gtk_action_helper_report_change (helper, PROP_ENABLED);
     }
 
   if (helper->active)
     {
       helper->active = FALSE;
-      gtk_action_helper_report_change (helper, PROP_ACTIVE);
+
+      if (should_emit_signals)
+        gtk_action_helper_report_change (helper, PROP_ACTIVE);
     }
 }
 
@@ -327,7 +333,7 @@ gtk_action_helper_observer_action_removed (GtkActionObserver   *observer,
                                            GtkActionObservable *observable,
                                            const gchar         *action_name)
 {
-  gtk_action_helper_action_removed (GTK_ACTION_HELPER (observer));
+  gtk_action_helper_action_removed (GTK_ACTION_HELPER (observer), TRUE);
 }
 
 static void
@@ -421,40 +427,44 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
                         "it is unlikely to work",
                         "actionhelper", action_name));
 
-  if (helper->action_name)
-    {
-      gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
-                                                 helper->action_name,
-                                                 GTK_ACTION_OBSERVER (helper));
-      g_free (helper->action_name);
-    }
-
-  helper->action_name = g_strdup (action_name);
-
-  gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
-                                           helper->action_name,
-                                           GTK_ACTION_OBSERVER (helper));
-
   /* Start by recording the current state of our properties so we know
    * what notify signals we will need to send.
    */
   was_enabled = helper->enabled;
   was_active = helper->active;
 
-  if (g_action_group_query_action (G_ACTION_GROUP (helper->action_context), helper->action_name,
-                                   &enabled, &parameter_type, NULL, NULL, &state))
+  if (helper->action_name)
     {
-      GTK_NOTE(ACTIONS, g_message ("%s: action %s existed from the start", "actionhelper", helper->action_name));
-
-      gtk_action_helper_action_added (helper, enabled, parameter_type, state, FALSE);
-
-      if (state)
-        g_variant_unref (state);
+      gtk_action_helper_action_removed (helper, FALSE);
+      gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
+                                                 helper->action_name,
+                                                 GTK_ACTION_OBSERVER (helper));
+      g_clear_pointer (&helper->action_name, g_free);
     }
-  else
+
+  if (action_name)
     {
-      GTK_NOTE(ACTIONS, g_message ("%s: action %s missing from the start", "actionhelper", helper->action_name));
-      helper->enabled = FALSE;
+      helper->action_name = g_strdup (action_name);
+
+      gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
+                                               helper->action_name,
+                                               GTK_ACTION_OBSERVER (helper));
+
+      if (g_action_group_query_action (G_ACTION_GROUP (helper->action_context), helper->action_name,
+                                       &enabled, &parameter_type, NULL, NULL, &state))
+        {
+          GTK_NOTE(ACTIONS, g_message ("%s: action %s existed from the start", "actionhelper", helper->action_name));
+
+          gtk_action_helper_action_added (helper, enabled, parameter_type, state, FALSE);
+
+          if (state)
+            g_variant_unref (state);
+        }
+      else
+        {
+          GTK_NOTE(ACTIONS, g_message ("%s: action %s missing from the start", "actionhelper", helper->action_name));
+          helper->enabled = FALSE;
+        }
     }
 
   /* Send the notifies for the properties that changed.
