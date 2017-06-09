@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-03 02:31+0000\n"
-"PO-Revision-Date: 2017-06-09 00:38+0200\n"
+"POT-Creation-Date: 2017-06-08 22:39+0000\n"
+"PO-Revision-Date: 2017-06-09 09:50+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -1698,7 +1698,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3319
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3340
 msgid "Manage Custom Sizes"
 msgstr "Gjestìs dimensions personalizadis"
 
@@ -2164,12 +2164,12 @@ msgstr "Menù aplicazion"
 msgid "Close"
 msgstr "Siere"
 
-#: gtk/gtkicontheme.c:2304 gtk/gtkicontheme.c:2368
+#: gtk/gtkicontheme.c:2304 gtk/gtkicontheme.c:2369
 #, c-format
 msgid "Icon “%s” not present in theme %s"
 msgstr "Icone “%s” no presinte tal teme %s"
 
-#: gtk/gtkicontheme.c:3974 gtk/gtkicontheme.c:4341
+#: gtk/gtkicontheme.c:3975 gtk/gtkicontheme.c:4342
 msgid "Failed to load icon"
 msgstr "No si è rivâts a cjariâ la icone"
 
@@ -2449,7 +2449,7 @@ msgstr ""
 " Parsore: %s %s\n"
 " Parsot: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:871 gtk/gtkprintunixdialog.c:3373
+#: gtk/gtkpagesetupunixdialog.c:871 gtk/gtkprintunixdialog.c:3394
 msgid "Manage Custom Sizes…"
 msgstr "Gjestìs dimensions personalizadis…"
 
@@ -2817,7 +2817,7 @@ msgstr "Il motîf plui probabil al è che nol è pussibil creâ un file temporan
 
 #. window
 #: gtk/gtkprintoperation-portal.c:229 gtk/gtkprintoperation-portal.c:533
-#: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3395
+#: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3416
 msgid "Print"
 msgstr "Stampe"
 
@@ -2898,63 +2898,63 @@ msgstr "Daûr a otignî informazions su la stampant…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3102
+#: gtk/gtkprintunixdialog.c:3123
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, top to bottom"
 msgstr "Di çampe a drete, dal alt in bas"
 
-#: gtk/gtkprintunixdialog.c:3102
+#: gtk/gtkprintunixdialog.c:3123
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, bottom to top"
 msgstr "Di çampe a drete, dal bas in alt"
 
-#: gtk/gtkprintunixdialog.c:3103
+#: gtk/gtkprintunixdialog.c:3124
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, top to bottom"
 msgstr "Di drete a çampe, dal alt in bas"
 
-#: gtk/gtkprintunixdialog.c:3103
+#: gtk/gtkprintunixdialog.c:3124
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, bottom to top"
 msgstr "Di drete a çampe, dal bas in alt"
 
-#: gtk/gtkprintunixdialog.c:3104
+#: gtk/gtkprintunixdialog.c:3125
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, left to right"
 msgstr "Dal alt in bas, di çampe a drete"
 
-#: gtk/gtkprintunixdialog.c:3104
+#: gtk/gtkprintunixdialog.c:3125
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, right to left"
 msgstr "Dal alt in bas, di drete a çampe"
 
-#: gtk/gtkprintunixdialog.c:3105
+#: gtk/gtkprintunixdialog.c:3126
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, left to right"
 msgstr "Dal bas in alt, di çampe a drete"
 
-#: gtk/gtkprintunixdialog.c:3105
+#: gtk/gtkprintunixdialog.c:3126
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, right to left"
 msgstr "Dal bas in alt, di drete a çampe"
 
-#: gtk/gtkprintunixdialog.c:3109 gtk/gtkprintunixdialog.c:3122
+#: gtk/gtkprintunixdialog.c:3130 gtk/gtkprintunixdialog.c:3143
 msgid "Page Ordering"
 msgstr "Ordinament pagjinis"
 
-#: gtk/gtkprintunixdialog.c:3138
+#: gtk/gtkprintunixdialog.c:3159
 msgid "Left to right"
 msgstr "Di çampe a drete"
 
-#: gtk/gtkprintunixdialog.c:3139
+#: gtk/gtkprintunixdialog.c:3160
 msgid "Right to left"
 msgstr "Di drete a çampe"
 
-#: gtk/gtkprintunixdialog.c:3151
+#: gtk/gtkprintunixdialog.c:3172
 msgid "Top to bottom"
 msgstr "Dal alt in bas"
 
-#: gtk/gtkprintunixdialog.c:3152
+#: gtk/gtkprintunixdialog.c:3173
 msgid "Bottom to top"
 msgstr "Dal bas in alt"
 
@@ -3124,27 +3124,28 @@ msgstr "Scor a çampe"
 msgid "Swipe right"
 msgstr "Scor a drete"
 
-#: gtk/gtkshortcutswindow.c:910
+#. Translators: This is the window title for the shortcuts window in normal mode
+#: gtk/gtkshortcutswindow.c:911
 msgid "Shortcuts"
 msgstr "Scurtis"
 
 # risultâts di ricercje o cîr risultâts
-#: gtk/gtkshortcutswindow.c:914
-#, fuzzy
+#. Translators: This is the window title for the shortcuts window in search mode
+#: gtk/gtkshortcutswindow.c:916
 msgid "Search Results"
 msgstr "Risultâts di ricercje"
 
 # o cîr scurtis?
-#: gtk/gtkshortcutswindow.c:958
-#, fuzzy
+#. Translators: This is placeholder text for the search entry in the shortcuts window
+#: gtk/gtkshortcutswindow.c:961
 msgid "Search Shortcuts"
-msgstr "Scurtis di ricercje"
+msgstr "Cîr scurtis"
 
-#: gtk/gtkshortcutswindow.c:1015 gtk/ui/gtkfilechooserwidget.ui:280
+#: gtk/gtkshortcutswindow.c:1018 gtk/ui/gtkfilechooserwidget.ui:280
 msgid "No Results Found"
 msgstr "Nissun risultât cjatât"
 
-#: gtk/gtkshortcutswindow.c:1021 gtk/ui/gtkfilechooserwidget.ui:293
+#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkfilechooserwidget.ui:293
 #: gtk/ui/gtkplacesview.ui:368
 msgid "Try a different search"
 msgstr "Prove une ricercje diferente"
@@ -3510,62 +3511,62 @@ msgstr ""
 
 #: gtk/inspector/menu.ui:26 gtk/inspector/object-tree.ui:107
 msgid "Label"
-msgstr ""
+msgstr "Etichete"
 
 #: gtk/inspector/menu.ui:39 gtk/inspector/prop-editor.c:1325
 msgid "Action"
-msgstr ""
+msgstr "Azion"
 
 #: gtk/inspector/menu.ui:52
 msgid "Target"
-msgstr ""
+msgstr "Obietîf"
 
 #: gtk/inspector/menu.ui:65
 msgid "Icon"
-msgstr ""
+msgstr "Icone"
 
 #: gtk/inspector/misc-info.ui:35
 msgid "Address"
-msgstr ""
+msgstr "Direzion"
 
 #: gtk/inspector/misc-info.ui:67
 msgid "Reference Count"
-msgstr ""
+msgstr "Conte dai riferiments"
 
 #: gtk/inspector/misc-info.ui:131
 msgid "Buildable ID"
-msgstr ""
+msgstr "ID compilabil"
 
 #: gtk/inspector/misc-info.ui:163
 msgid "Default Widget"
-msgstr ""
+msgstr "Widget predefinît"
 
 #: gtk/inspector/misc-info.ui:183 gtk/inspector/misc-info.ui:226
 #: gtk/inspector/misc-info.ui:430 gtk/inspector/prop-editor.c:1025
 #: gtk/inspector/prop-editor.c:1209 gtk/inspector/prop-editor.c:1333
 #: gtk/inspector/prop-editor.c:1443 gtk/inspector/window.ui:320
 msgid "Properties"
-msgstr ""
+msgstr "Proprietâts"
 
 #: gtk/inspector/misc-info.ui:205
 msgid "Focus Widget"
-msgstr ""
+msgstr "Widget focus"
 
 #: gtk/inspector/misc-info.ui:248
 msgid "Mnemonic Label"
-msgstr ""
+msgstr "Etichete mnemoniche"
 
 #: gtk/inspector/misc-info.ui:281
 msgid "Request Mode"
-msgstr ""
+msgstr "Modalitât richieste"
 
 #: gtk/inspector/misc-info.ui:313
 msgid "Allocation"
-msgstr ""
+msgstr "Assegnazion"
 
 #: gtk/inspector/misc-info.ui:345
 msgid "Baseline"
-msgstr ""
+msgstr "Linie di base"
 
 #: gtk/inspector/misc-info.ui:377
 msgid "Clip Area"
@@ -6206,75 +6207,75 @@ msgstr ""
 
 #: modules/printbackends/file/gtkprintbackendfile.c:250
 msgid "output"
-msgstr ""
+msgstr "jessude"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:537
 msgid "Print to File"
-msgstr ""
+msgstr "Stampe su file"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "PostScript"
-msgstr ""
+msgstr "PostScript"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "SVG"
-msgstr ""
+msgstr "SVG"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "File"
-msgstr ""
+msgstr "File"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:745
 msgid "_Output format"
-msgstr ""
+msgstr "Formât di _jessude"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:393
 msgid "Print to LPR"
-msgstr ""
+msgstr "Stampe su LPR"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:419
 msgid "Pages Per Sheet"
-msgstr ""
+msgstr "Pagjinis par sfuei"
 
 #: modules/printbackends/lpr/gtkprintbackendlpr.c:426
 msgid "Command Line"
-msgstr ""
+msgstr "Rie di comant"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:786
 msgid "printer offline"
-msgstr ""
+msgstr "stampant distacade"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:804
 msgid "ready to print"
-msgstr ""
+msgstr "pronte par stampâ"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:807
 msgid "processing job"
-msgstr ""
+msgstr "elaborazion lavôr"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "paused"
-msgstr ""
+msgstr "in pause"
 
 #. SUN_BRANDING
 #: modules/printbackends/papi/gtkprintbackendpapi.c:814
 msgid "unknown"
-msgstr ""
+msgstr "no cognossût"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:232
 #, c-format
 msgid "test-output.%s"
-msgstr ""
+msgstr "jessude-prove.%s"
 
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
-msgstr ""
+msgstr "Stampe su stampant di prove"
