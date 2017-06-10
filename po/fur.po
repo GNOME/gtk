@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-08 22:39+0000\n"
-"PO-Revision-Date: 2017-06-09 09:50+0200\n"
+"PO-Revision-Date: 2017-06-10 11:42+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -3493,7 +3493,7 @@ msgstr "Nissune"
 #: gtk/inspector/gestures.c:130
 msgctxt "event phase"
 msgid "Capture"
-msgstr ""
+msgstr "Cature"
 
 #: gtk/inspector/gestures.c:131
 msgctxt "event phase"
@@ -3503,11 +3503,11 @@ msgstr ""
 #: gtk/inspector/gestures.c:132
 msgctxt "event phase"
 msgid "Target"
-msgstr ""
+msgstr "Obietîf"
 
 #: gtk/inspector/menu.c:92
 msgid "Unnamed section"
-msgstr ""
+msgstr "Sezion cence non"
 
 #: gtk/inspector/menu.ui:26 gtk/inspector/object-tree.ui:107
 msgid "Label"
@@ -3590,15 +3590,15 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:550
 msgid "Accessible Role"
-msgstr ""
+msgstr "Rûl acessibil"
 
 #: gtk/inspector/misc-info.ui:582
 msgid "Accessible Name"
-msgstr ""
+msgstr "Non acessibil"
 
 #: gtk/inspector/misc-info.ui:616
 msgid "Accessible Description"
-msgstr ""
+msgstr "Descrizion acessibile"
 
 #: gtk/inspector/misc-info.ui:650
 msgid "Mapped"
@@ -3606,39 +3606,39 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:684
 msgid "Realized"
-msgstr ""
+msgstr "Realizât"
 
 #: gtk/inspector/misc-info.ui:718
 msgid "Is Toplevel"
-msgstr ""
+msgstr "Al è di nivel superiôr"
 
 #: gtk/inspector/misc-info.ui:752
 msgid "Child Visible"
-msgstr ""
+msgstr "Fi visibil"
 
 #: gtk/inspector/object-tree.ui:77
 msgid "Object"
-msgstr ""
+msgstr "Ogjet"
 
 #: gtk/inspector/prop-editor.c:679
 #, c-format
 msgid "Pointer: %p"
-msgstr ""
+msgstr "Pontadôr: %p"
 
 #: gtk/inspector/prop-editor.c:694
 msgctxt "type name"
 msgid "Unknown"
-msgstr ""
+msgstr "No cognossût"
 
 #: gtk/inspector/prop-editor.c:695
 #, c-format
 msgid "Object: %p (%s)"
-msgstr ""
+msgstr "Ogjet: %p (%s)"
 
 #: gtk/inspector/prop-editor.c:1082
 #, c-format
 msgid "Uneditable property type: %s"
-msgstr ""
+msgstr "Gjenar di proprietât no modificabil: %s"
 
 #: gtk/inspector/prop-editor.c:1200
 msgid "Attribute mapping"
@@ -3646,62 +3646,62 @@ msgstr ""
 
 #: gtk/inspector/prop-editor.c:1205
 msgid "Model:"
-msgstr ""
+msgstr "Model:"
 
 #: gtk/inspector/prop-editor.c:1206
 #, c-format
 msgid "%p (%s)"
-msgstr ""
+msgstr "%p (%s)"
 
 #: gtk/inspector/prop-editor.c:1216
 msgid "Column:"
-msgstr ""
+msgstr "Colone:"
 
 #: gtk/inspector/prop-editor.c:1226
 msgctxt "property name"
 msgid "None"
-msgstr ""
+msgstr "Nissune"
 
 #: gtk/inspector/prop-editor.c:1329
 #, c-format
 msgid "Defined at: %p (%s)"
-msgstr ""
+msgstr "Definît in: %p (%s)"
 
 #: gtk/inspector/prop-editor.c:1392 gtk/inspector/prop-editor.c:1408
 msgid "inverted"
-msgstr ""
+msgstr "invertît"
 
 #: gtk/inspector/prop-editor.c:1424
 msgid "bidirectional, inverted"
-msgstr ""
+msgstr "bidirezionâl, invertît"
 
 #: gtk/inspector/prop-editor.c:1429 gtk/inspector/prop-editor.c:1542
 msgid "bidirectional"
-msgstr ""
+msgstr "bidirezionâl"
 
 #: gtk/inspector/prop-editor.c:1434
 msgid "Binding:"
-msgstr ""
+msgstr "Associazion:"
 
 #: gtk/inspector/prop-editor.c:1561
 msgid "Setting:"
-msgstr ""
+msgstr "Impostazion:"
 
 #: gtk/inspector/prop-editor.c:1600
 msgid "Source:"
-msgstr ""
+msgstr "Sorzint:"
 
 #: gtk/inspector/prop-editor.c:1602
 msgid "Reset"
-msgstr ""
+msgstr "Azere"
 
 #: gtk/inspector/prop-editor.c:1613
 msgid "Default"
-msgstr ""
+msgstr "Predefinît"
 
 #: gtk/inspector/prop-editor.c:1616
 msgid "Theme"
-msgstr ""
+msgstr "Teme"
 
 #: gtk/inspector/prop-editor.c:1619
 msgid "XSettings"
@@ -3709,120 +3709,120 @@ msgstr ""
 
 #: gtk/inspector/prop-list.ui:34
 msgid "Property"
-msgstr ""
+msgstr "Proprietât"
 
 #: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
 msgid "Type"
-msgstr ""
+msgstr "Gjenar"
 
 #: gtk/inspector/prop-list.ui:86
 msgid "Attribute"
-msgstr ""
+msgstr "Atribût"
 
 #: gtk/inspector/prop-list.ui:102 gtk/inspector/signals-list.ui:73
 msgid "Defined At"
-msgstr ""
+msgstr "Definît in"
 
 #: gtk/inspector/recorder.c:269
 #, c-format
 msgid "Saving RenderNode failed"
-msgstr ""
+msgstr "Salvament di RenderNode falît"
 
 #: gtk/inspector/resource-list.ui:82
 msgid "Path"
-msgstr ""
+msgstr "Percors"
 
 #: gtk/inspector/resource-list.ui:100 gtk/inspector/signals-list.ui:63
 msgid "Count"
-msgstr ""
+msgstr "Conte"
 
 #: gtk/inspector/resource-list.ui:112 gtk/ui/gtkfilechooserwidget.ui:199
 msgid "Size"
-msgstr ""
+msgstr "Dimension"
 
 #: gtk/inspector/resource-list.ui:145
 msgid "Name:"
-msgstr ""
+msgstr "Non:"
 
 #: gtk/inspector/resource-list.ui:169
 msgid "Type:"
-msgstr ""
+msgstr "Gjenar:"
 
 #: gtk/inspector/resource-list.ui:192
 msgid "Size:"
-msgstr ""
+msgstr "Dimension:"
 
 #: gtk/inspector/selector.ui:31
 msgid "Selector"
-msgstr ""
+msgstr "Seletôr"
 
 #: gtk/inspector/signals-list.c:117
 msgid "Yes"
-msgstr ""
+msgstr "Sì"
 
 #: gtk/inspector/signals-list.ui:36
 msgid "Signal"
-msgstr ""
+msgstr "Segnâl"
 
 #: gtk/inspector/signals-list.ui:50
 msgid "Connected"
-msgstr ""
+msgstr "Colegât"
 
 #: gtk/inspector/size-groups.c:224
 msgid "Mode"
-msgstr ""
+msgstr "Modalitât"
 
 #: gtk/inspector/size-groups.c:234
 msgctxt "sizegroup mode"
 msgid "None"
-msgstr ""
+msgstr "Nissune"
 
 #: gtk/inspector/size-groups.c:235
 msgctxt "sizegroup mode"
 msgid "Horizontal"
-msgstr ""
+msgstr "Orizontâl"
 
 #: gtk/inspector/size-groups.c:236
 msgctxt "sizegroup mode"
 msgid "Vertical"
-msgstr ""
+msgstr "Verticâl"
 
 #: gtk/inspector/size-groups.c:237
 msgctxt "sizegroup mode"
 msgid "Both"
-msgstr ""
+msgstr "Ducj i doi"
 
 #: gtk/inspector/statistics.c:372
 msgid "GLib must be configured with --enable-debug"
-msgstr ""
+msgstr "GLib al scugne jessi configurât cun --enable-debug"
 
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
-msgstr ""
+msgstr "Propri 1"
 
 #: gtk/inspector/statistics.ui:80
 msgid "Cumulative 1"
-msgstr ""
+msgstr "Cumulatîf 1"
 
 #: gtk/inspector/statistics.ui:92
 msgid "Self 2"
-msgstr ""
+msgstr "Propri 2"
 
 #: gtk/inspector/statistics.ui:104
 msgid "Cumulative 2"
-msgstr ""
+msgstr "Cumulatîf 2"
 
 #: gtk/inspector/statistics.ui:116
 msgid "Self"
-msgstr ""
+msgstr "Propri"
 
 #: gtk/inspector/statistics.ui:133
 msgid "Cumulative"
-msgstr ""
+msgstr "Cumulatîf"
 
 #: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr ""
+msgstr "Abilite statistichis cun GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/visual.c:406 gtk/inspector/visual.c:421
 msgid "Theme is hardcoded by GTK_THEME"
@@ -3830,7 +3830,7 @@ msgstr ""
 
 #: gtk/inspector/visual.c:629
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "Il backend nol supuarte la riduzion in scjale dai barcons"
 
 #: gtk/inspector/visual.c:724
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
@@ -3845,27 +3845,27 @@ msgstr ""
 #: gtk/inspector/visual.c:803 gtk/inspector/visual.c:804
 #: gtk/inspector/visual.c:805
 msgid "GL rendering is disabled"
-msgstr ""
+msgstr "Rese video GL disabilitade"
 
 #: gtk/inspector/visual.ui:62
 msgid "GTK+ Theme"
-msgstr ""
+msgstr "Teme Gtk+"
 
 #: gtk/inspector/visual.ui:93
 msgid "Dark Variant"
-msgstr ""
+msgstr "Variante scure"
 
 #: gtk/inspector/visual.ui:124
 msgid "Cursor Theme"
-msgstr ""
+msgstr "Teme cursôr"
 
 #: gtk/inspector/visual.ui:155
 msgid "Cursor Size"
-msgstr ""
+msgstr "Dimension cursôr"
 
 #: gtk/inspector/visual.ui:190
 msgid "Icon Theme"
-msgstr ""
+msgstr "Teme iconis"
 
 #: gtk/inspector/visual.ui:252
 msgid "Font Scale"
@@ -3873,15 +3873,15 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:296
 msgid "Text Direction"
-msgstr ""
+msgstr "Direzion test"
 
 #: gtk/inspector/visual.ui:310
 msgid "Left-to-Right"
-msgstr ""
+msgstr "Di çampe a drete"
 
 #: gtk/inspector/visual.ui:311
 msgid "Right-to-Left"
-msgstr ""
+msgstr "Di drete a çampe"
 
 #: gtk/inspector/visual.ui:332
 msgid "Window Scaling"
@@ -3889,7 +3889,7 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:365
 msgid "Animations"
-msgstr ""
+msgstr "Animazions"
 
 #: gtk/inspector/visual.ui:396
 msgid "Slowdown"
@@ -3897,35 +3897,35 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:453
 msgid "Rendering Mode"
-msgstr ""
+msgstr "Modalitât rese video"
 
 #: gtk/inspector/visual.ui:467
 msgid "Similar"
-msgstr ""
+msgstr "Simil"
 
 #: gtk/inspector/visual.ui:468
 msgid "Image"
-msgstr ""
+msgstr "Imagjin"
 
 #: gtk/inspector/visual.ui:469
 msgid "Recording"
-msgstr ""
+msgstr "Regjistrazion"
 
 #: gtk/inspector/visual.ui:490
 msgid "Show Graphic Updates"
-msgstr ""
+msgstr "Mostre inzornaments grafics"
 
 #: gtk/inspector/visual.ui:522
 msgid "Show Baselines"
-msgstr ""
+msgstr "Mostre liniis di base"
 
 #: gtk/inspector/visual.ui:554
 msgid "Show Layout Borders"
-msgstr ""
+msgstr "Mostre ôrs disposizion"
 
 #: gtk/inspector/visual.ui:586
 msgid "Snapshot Debug Nodes"
-msgstr ""
+msgstr "Istantanie grops di debug"
 
 #: gtk/inspector/visual.ui:618
 msgid "Show Widget Resizes"
@@ -3933,27 +3933,27 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:650
 msgid "Simulate Touchscreen"
-msgstr ""
+msgstr "Simule touchscreen"
 
 #: gtk/inspector/visual.ui:693
 msgid "GL Rendering"
-msgstr ""
+msgstr "Rese video GL"
 
 #: gtk/inspector/visual.ui:706
 msgid "When Needed"
-msgstr ""
+msgstr "Cuant che al covente"
 
 #: gtk/inspector/visual.ui:707
 msgid "Always"
-msgstr ""
+msgstr "Simpri"
 
 #: gtk/inspector/visual.ui:708
 msgid "Disabled"
-msgstr ""
+msgstr "Disabilitât"
 
 #: gtk/inspector/visual.ui:729
 msgid "Software GL"
-msgstr ""
+msgstr "GL software"
 
 #: gtk/inspector/visual.ui:761
 msgid "Software Surfaces"
@@ -3969,19 +3969,19 @@ msgstr ""
 
 #: gtk/inspector/window.ui:45 gtk/inspector/window.ui:98
 msgid "Show Details"
-msgstr ""
+msgstr "Mostre detais"
 
 #: gtk/inspector/window.ui:59
 msgid "Show all Objects"
-msgstr ""
+msgstr "Mostre ducj i ogjets"
 
 #: gtk/inspector/window.ui:80
 msgid "Collect Statistics"
-msgstr ""
+msgstr "Colezione statistichis"
 
 #: gtk/inspector/window.ui:111
 msgid "Show all Resources"
-msgstr ""
+msgstr "Mostre dutis lis risorsis"
 
 #: gtk/inspector/window.ui:221
 msgid "Trace signal emissions on this object"
@@ -3989,43 +3989,43 @@ msgstr ""
 
 #: gtk/inspector/window.ui:229
 msgid "Clear log"
-msgstr ""
+msgstr "Nete regjistri"
 
 #: gtk/inspector/window.ui:308
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Variis"
 
 #: gtk/inspector/window.ui:331
 msgid "Signals"
-msgstr ""
+msgstr "Segnâi"
 
 #: gtk/inspector/window.ui:342
 msgid "Child Properties"
-msgstr ""
+msgstr "Proprietâts fi"
 
 #: gtk/inspector/window.ui:351
 msgid "Class Hierarchy"
-msgstr ""
+msgstr "Gjerarchie classe"
 
 #: gtk/inspector/window.ui:360
 msgid "CSS Selector"
-msgstr ""
+msgstr "Seletôr CSS"
 
 #: gtk/inspector/window.ui:369
 msgid "CSS Nodes"
-msgstr ""
+msgstr "Grops CSS"
 
 #: gtk/inspector/window.ui:376
 msgid "Size Groups"
-msgstr ""
+msgstr "Dimension grups"
 
 #: gtk/inspector/window.ui:383
 msgid "Data"
-msgstr ""
+msgstr "Dâts"
 
 #: gtk/inspector/window.ui:390
 msgid "Actions"
-msgstr ""
+msgstr "Azions"
 
 #: gtk/inspector/window.ui:406
 msgid "Gestures"
@@ -4033,957 +4033,957 @@ msgstr ""
 
 #: gtk/inspector/window.ui:415
 msgid "Magnifier"
-msgstr ""
+msgstr "Ingranditôr"
 
 #: gtk/inspector/window.ui:428
 msgid "Objects"
-msgstr ""
+msgstr "Ogjets"
 
 #: gtk/inspector/window.ui:438
 msgid "Statistics"
-msgstr ""
+msgstr "Statistichis"
 
 #: gtk/inspector/window.ui:448
 msgid "Resources"
-msgstr ""
+msgstr "Risorsis"
 
 #: gtk/inspector/window.ui:457
 msgid "CSS"
-msgstr ""
+msgstr "CSS"
 
 #: gtk/inspector/window.ui:466
 msgid "Recorder"
-msgstr ""
+msgstr "Regjistradôr"
 
 #: gtk/inspector/window.ui:475
 msgid "Visual"
-msgstr ""
+msgstr "Visuâl"
 
 #: gtk/inspector/window.ui:484 gtk/ui/gtkprintunixdialog.ui:406
 msgid "General"
-msgstr ""
+msgstr "Gjenerâl"
 
 #: gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
-msgstr ""
+msgstr "asme_f"
 
 #: gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0×2"
-msgstr ""
+msgstr "A0×2"
 
 #: gtk/paper_names_offsets.c:6
 msgctxt "paper size"
 msgid "A0"
-msgstr ""
+msgstr "A0"
 
 #: gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0×3"
-msgstr ""
+msgstr "A0×3"
 
 #: gtk/paper_names_offsets.c:8
 msgctxt "paper size"
 msgid "A1"
-msgstr ""
+msgstr "A1"
 
 #: gtk/paper_names_offsets.c:9
 msgctxt "paper size"
 msgid "A10"
-msgstr ""
+msgstr "A10"
 
 #: gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1×3"
-msgstr ""
+msgstr "A1×3"
 
 #: gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1×4"
-msgstr ""
+msgstr "A1×4"
 
 #: gtk/paper_names_offsets.c:12
 msgctxt "paper size"
 msgid "A2"
-msgstr ""
+msgstr "A2"
 
 #: gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2×3"
-msgstr ""
+msgstr "A2×3"
 
 #: gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2×4"
-msgstr ""
+msgstr "A2×4"
 
 #: gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2×5"
-msgstr ""
+msgstr "A2×5"
 
 #: gtk/paper_names_offsets.c:16
 msgctxt "paper size"
 msgid "A3"
-msgstr ""
+msgstr "A3"
 
 #: gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
-msgstr ""
+msgstr "A3 Extra"
 
 #: gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3×3"
-msgstr ""
+msgstr "A3×3"
 
 #: gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3×4"
-msgstr ""
+msgstr "A3×4"
 
 #: gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3×5"
-msgstr ""
+msgstr "A3×5"
 
 #: gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3×6"
-msgstr ""
+msgstr "A3×6"
 
 #: gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3×7"
-msgstr ""
+msgstr "A3×7"
 
 #: gtk/paper_names_offsets.c:23
 msgctxt "paper size"
 msgid "A4"
-msgstr ""
+msgstr "A4"
 
 #: gtk/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
-msgstr ""
+msgstr "A4 Extra"
 
 #: gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr ""
+msgstr "A4 tabulât"
 
 #: gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4×3"
-msgstr ""
+msgstr "A4×3"
 
 #: gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4×4"
-msgstr ""
+msgstr "A4×4"
 
 #: gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4×5"
-msgstr ""
+msgstr "A4×5"
 
 #: gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4×6"
-msgstr ""
+msgstr "A4×6"
 
 #: gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4×7"
-msgstr ""
+msgstr "A4×7"
 
 #: gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4×8"
-msgstr ""
+msgstr "A4×8"
 
 #: gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4×9"
-msgstr ""
+msgstr "A4×9"
 
 #: gtk/paper_names_offsets.c:33
 msgctxt "paper size"
 msgid "A5"
-msgstr ""
+msgstr "A5"
 
 #: gtk/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
-msgstr ""
+msgstr "A5 Extra"
 
 #: gtk/paper_names_offsets.c:35
 msgctxt "paper size"
 msgid "A6"
-msgstr ""
+msgstr "A6"
 
 #: gtk/paper_names_offsets.c:36
 msgctxt "paper size"
 msgid "A7"
-msgstr ""
+msgstr "A7"
 
 #: gtk/paper_names_offsets.c:37
 msgctxt "paper size"
 msgid "A8"
-msgstr ""
+msgstr "A8"
 
 #: gtk/paper_names_offsets.c:38
 msgctxt "paper size"
 msgid "A9"
-msgstr ""
+msgstr "A9"
 
 #: gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "B0"
-msgstr ""
+msgstr "B0"
 
 #: gtk/paper_names_offsets.c:40
 msgctxt "paper size"
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #: gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "B10"
-msgstr ""
+msgstr "B10"
 
 #: gtk/paper_names_offsets.c:42
 msgctxt "paper size"
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #: gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #: gtk/paper_names_offsets.c:44
 msgctxt "paper size"
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #: gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "B5"
-msgstr ""
+msgstr "B5"
 
 #: gtk/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
-msgstr ""
+msgstr "B5 Extra"
 
 #: gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "B6"
-msgstr ""
+msgstr "B6"
 
 #: gtk/paper_names_offsets.c:48
 msgctxt "paper size"
 msgid "B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #: gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "B7"
-msgstr ""
+msgstr "B7"
 
 #: gtk/paper_names_offsets.c:50
 msgctxt "paper size"
 msgid "B8"
-msgstr ""
+msgstr "B8"
 
 #: gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "B9"
-msgstr ""
+msgstr "B9"
 
 #: gtk/paper_names_offsets.c:52
 msgctxt "paper size"
 msgid "C0"
-msgstr ""
+msgstr "C0"
 
 #: gtk/paper_names_offsets.c:53
 msgctxt "paper size"
 msgid "C1"
-msgstr ""
+msgstr "C1"
 
 #: gtk/paper_names_offsets.c:54
 msgctxt "paper size"
 msgid "C10"
-msgstr ""
+msgstr "C10"
 
 #: gtk/paper_names_offsets.c:55
 msgctxt "paper size"
 msgid "C2"
-msgstr ""
+msgstr "C2"
 
 #: gtk/paper_names_offsets.c:56
 msgctxt "paper size"
 msgid "C3"
-msgstr ""
+msgstr "C3"
 
 #: gtk/paper_names_offsets.c:57
 msgctxt "paper size"
 msgid "C4"
-msgstr ""
+msgstr "C4"
 
 #: gtk/paper_names_offsets.c:58
 msgctxt "paper size"
 msgid "C5"
-msgstr ""
+msgstr "C5"
 
 #: gtk/paper_names_offsets.c:59
 msgctxt "paper size"
 msgid "C6"
-msgstr ""
+msgstr "C6"
 
 #: gtk/paper_names_offsets.c:60
 msgctxt "paper size"
 msgid "C6/C5"
-msgstr ""
+msgstr "C6/C5"
 
 #: gtk/paper_names_offsets.c:61
 msgctxt "paper size"
 msgid "C7"
-msgstr ""
+msgstr "C7"
 
 #: gtk/paper_names_offsets.c:62
 msgctxt "paper size"
 msgid "C7/C6"
-msgstr ""
+msgstr "C7/C6"
 
 #: gtk/paper_names_offsets.c:63
 msgctxt "paper size"
 msgid "C8"
-msgstr ""
+msgstr "C8"
 
 #: gtk/paper_names_offsets.c:64
 msgctxt "paper size"
 msgid "C9"
-msgstr ""
+msgstr "C9"
 
 #: gtk/paper_names_offsets.c:65
 msgctxt "paper size"
 msgid "DL Envelope"
-msgstr ""
+msgstr "Buste DL"
 
 #: gtk/paper_names_offsets.c:66
 msgctxt "paper size"
 msgid "RA0"
-msgstr ""
+msgstr "RA0"
 
 #: gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "RA1"
-msgstr ""
+msgstr "RA1"
 
 #: gtk/paper_names_offsets.c:68
 msgctxt "paper size"
 msgid "RA2"
-msgstr ""
+msgstr "RA2"
 
 #: gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "RA3"
-msgstr ""
+msgstr "RA3"
 
 #: gtk/paper_names_offsets.c:70
 msgctxt "paper size"
 msgid "RA4"
-msgstr ""
+msgstr "RA4"
 
 #: gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "SRA0"
-msgstr ""
+msgstr "SRA0"
 
 #: gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "SRA1"
-msgstr ""
+msgstr "SRA1"
 
 #: gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "SRA2"
-msgstr ""
+msgstr "SRA2"
 
 #: gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "SRA3"
-msgstr ""
+msgstr "SRA3"
 
 #: gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "SRA4"
-msgstr ""
+msgstr "SRA4"
 
 #: gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB0"
-msgstr ""
+msgstr "JB0"
 
 #: gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB1"
-msgstr ""
+msgstr "JB1"
 
 #: gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB10"
-msgstr ""
+msgstr "JB10"
 
 #: gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB2"
-msgstr ""
+msgstr "JB2"
 
 #: gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB3"
-msgstr ""
+msgstr "JB3"
 
 #: gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB4"
-msgstr ""
+msgstr "JB4"
 
 #: gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB5"
-msgstr ""
+msgstr "JB5"
 
 #: gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "JB6"
-msgstr ""
+msgstr "JB6"
 
 #: gtk/paper_names_offsets.c:84
 msgctxt "paper size"
 msgid "JB7"
-msgstr ""
+msgstr "JB7"
 
 #: gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "JB8"
-msgstr ""
+msgstr "JB8"
 
 #: gtk/paper_names_offsets.c:86
 msgctxt "paper size"
 msgid "JB9"
-msgstr ""
+msgstr "JB9"
 
 #: gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #: gtk/paper_names_offsets.c:88
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
-msgstr ""
+msgstr "Buste choukei 2"
 
 #: gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
-msgstr ""
+msgstr "Buste choukei 3"
 
 #: gtk/paper_names_offsets.c:90
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
-msgstr ""
+msgstr "Buste choukei 4"
 
 #: gtk/paper_names_offsets.c:91
 msgctxt "paper size"
 msgid "Choukei 40 Envelope"
-msgstr ""
+msgstr "Buste choukei 40"
 
 #: gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "hagaki (postcard)"
-msgstr ""
+msgstr "hagaki (cartuline)"
 
 #: gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "kahu Envelope"
-msgstr ""
+msgstr "Buste kahu"
 
 #: gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "kaku2 Envelope"
-msgstr ""
+msgstr "Buste kaku2"
 
 #: gtk/paper_names_offsets.c:95
 msgctxt "paper size"
 msgid "kaku3 Envelope"
-msgstr ""
+msgstr "Buste kaku3"
 
 #: gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "kaku4 Envelope"
-msgstr ""
+msgstr "Buste kaku4"
 
 #: gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "kaku5 Envelope"
-msgstr ""
+msgstr "Buste kaku5"
 
 #: gtk/paper_names_offsets.c:98
 msgctxt "paper size"
 msgid "kaku7 Envelope"
-msgstr ""
+msgstr "Buste kaku7"
 
 #: gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "kaku8 Envelope"
-msgstr ""
+msgstr "Buste kaku8"
 
 #: gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
-msgstr ""
+msgstr "oufuku (cartuline di rispueste)"
 
 #: gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "you4 Envelope"
-msgstr ""
+msgstr "Buste you4"
 
 #: gtk/paper_names_offsets.c:102
 msgctxt "paper size"
 msgid "you6 Envelope"
-msgstr ""
+msgstr "Buste you6"
 
 #: gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "10×11"
-msgstr ""
+msgstr "10×11"
 
 #: gtk/paper_names_offsets.c:104
 msgctxt "paper size"
 msgid "10×13"
-msgstr ""
+msgstr "10×13"
 
 #: gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "10×14"
-msgstr ""
+msgstr "10×14"
 
 #: gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "10×15"
-msgstr ""
+msgstr "10×15"
 
 #: gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "11×12"
-msgstr ""
+msgstr "11×12"
 
 #: gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "11×15"
-msgstr ""
+msgstr "11×15"
 
 #: gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "12×19"
-msgstr ""
+msgstr "12×19"
 
 #: gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "5×7"
-msgstr ""
+msgstr "5×7"
 
 #: gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "6×9 Envelope"
-msgstr ""
+msgstr "Buste 6×9"
 
 #: gtk/paper_names_offsets.c:112
 msgctxt "paper size"
 msgid "7×9 Envelope"
-msgstr ""
+msgstr "Buste 7×9"
 
 #: gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "8×10 Envelope"
-msgstr ""
+msgstr "Buste 8×10"
 
 #: gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "9×11 Envelope"
-msgstr ""
+msgstr "Buste 9×11"
 
 #: gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "9×12 Envelope"
-msgstr ""
+msgstr "Buste 9×12"
 
 #: gtk/paper_names_offsets.c:116
 msgctxt "paper size"
 msgid "a2 Envelope"
-msgstr ""
+msgstr "Buste a2"
 
 #: gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #: gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #: gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #: gtk/paper_names_offsets.c:120
 msgctxt "paper size"
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #: gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #: gtk/paper_names_offsets.c:122
 msgctxt "paper size"
 msgid "b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #: gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "c"
-msgstr ""
+msgstr "c"
 
 #: gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "c5 Envelope"
-msgstr ""
+msgstr "Buste c5"
 
 #: gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #: gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "e"
-msgstr ""
+msgstr "e"
 
 #: gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "edp"
-msgstr ""
+msgstr "edp"
 
 #: gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "European edp"
-msgstr ""
+msgstr "edp european"
 
 #: gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Executive"
-msgstr ""
+msgstr "Executive"
 
 #: gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "Fan-Fold European"
-msgstr ""
+msgstr "Modul continui european"
 
 #: gtk/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "Fan-Fold US"
-msgstr ""
+msgstr "Modul continui Stâts Unîts"
 
 #: gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "Fan-Fold German Legal"
-msgstr ""
+msgstr "Modul continui legal todesc"
 
 #: gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "Government Legal"
-msgstr ""
+msgstr "Legal ministeriâl"
 
 #: gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "Government Letter"
-msgstr ""
+msgstr "Letare ministeriâl"
 
 #: gtk/paper_names_offsets.c:136
 msgctxt "paper size"
 msgid "Index 3×5"
-msgstr ""
+msgstr "Bilietut 3×5"
 
 #: gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "Index 4×6 (postcard)"
-msgstr ""
+msgstr "Bilietut 4×6 (cartuline)"
 
 #: gtk/paper_names_offsets.c:138
 msgctxt "paper size"
 msgid "Index 4×6 ext"
-msgstr ""
+msgstr "Bilietut 4×6 ext"
 
 #: gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "Index 5×8"
-msgstr ""
+msgstr "Bilietut 5×8"
 
 #: gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "Invoice"
-msgstr ""
+msgstr "Fature"
 
 #: gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #: gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "US Legal"
-msgstr ""
+msgstr "US Legal"
 
 #: gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr ""
+msgstr "US Legal Extra"
 
 #: gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "US Letter"
-msgstr ""
+msgstr "US Letter"
 
 #: gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr ""
+msgstr "US Letter Extra"
 
 #: gtk/paper_names_offsets.c:146
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr ""
+msgstr "US Letter Plus"
 
 #: gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Monarch Envelope"
-msgstr ""
+msgstr "Buste Monarch"
 
 #: gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "#10 Envelope"
-msgstr ""
+msgstr "Buste #10"
 
 #: gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "#11 Envelope"
-msgstr ""
+msgstr "Buste #11"
 
 #: gtk/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "#12 Envelope"
-msgstr ""
+msgstr "Buste #12"
 
 #: gtk/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "#14 Envelope"
-msgstr ""
+msgstr "Buste #14"
 
 #: gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "#9 Envelope"
-msgstr ""
+msgstr "Buste #9"
 
 #: gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Oficio"
-msgstr ""
+msgstr "Oficio"
 
 #: gtk/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Personal Envelope"
-msgstr ""
+msgstr "Buste personâl"
 
 #: gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "Quarto"
-msgstr ""
+msgstr "Quarto"
 
 #: gtk/paper_names_offsets.c:156
 msgctxt "paper size"
 msgid "Super A"
-msgstr ""
+msgstr "Super A"
 
 #: gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "Super B"
-msgstr ""
+msgstr "Super B"
 
 #: gtk/paper_names_offsets.c:158
 msgctxt "paper size"
 msgid "Wide Format"
-msgstr ""
+msgstr "Formât larc"
 
 #: gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "Photo L"
-msgstr ""
+msgstr "Foto L"
 
 #: gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "Dai-pa-kai"
-msgstr ""
+msgstr "Dai-pa-kai"
 
 #: gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "Folio"
-msgstr ""
+msgstr "Folio"
 
 #: gtk/paper_names_offsets.c:162
 msgctxt "paper size"
 msgid "Folio sp"
-msgstr ""
+msgstr "Folio sp"
 
 #: gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "Invite Envelope"
-msgstr ""
+msgstr "Buste invît"
 
 #: gtk/paper_names_offsets.c:164
 msgctxt "paper size"
 msgid "Italian Envelope"
-msgstr ""
+msgstr "Buste taliane"
 
 #: gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "juuro-ku-kai"
-msgstr ""
+msgstr "juuro-ku-kai"
 
 #: gtk/paper_names_offsets.c:166
 msgctxt "paper size"
 msgid "Large Photo"
-msgstr ""
+msgstr "Foto grande"
 
 #: gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "Medium Photo"
-msgstr ""
+msgstr "Foto medie"
 
 #: gtk/paper_names_offsets.c:168
 msgctxt "paper size"
 msgid "pa-kai"
-msgstr ""
+msgstr "pa-kai"
 
 #: gtk/paper_names_offsets.c:169
 msgctxt "paper size"
 msgid "Postfix Envelope"
-msgstr ""
+msgstr "Buste Postfix"
 
 #: gtk/paper_names_offsets.c:170
 msgctxt "paper size"
 msgid "Small Photo"
-msgstr ""
+msgstr "Foto piçule"
 
 #: gtk/paper_names_offsets.c:171
 msgctxt "paper size"
 msgid "Wide Photo"
-msgstr ""
+msgstr "Foto largje"
 
 #: gtk/paper_names_offsets.c:172
 msgctxt "paper size"
 msgid "prc1 Envelope"
-msgstr ""
+msgstr "Buste prc1"
 
 #: gtk/paper_names_offsets.c:173
 msgctxt "paper size"
 msgid "prc10 Envelope"
-msgstr ""
+msgstr "Buste prc10"
 
 #: gtk/paper_names_offsets.c:174
 msgctxt "paper size"
 msgid "prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #: gtk/paper_names_offsets.c:175
 msgctxt "paper size"
 msgid "prc2 Envelope"
-msgstr ""
+msgstr "Buste prc2"
 
 #: gtk/paper_names_offsets.c:176
 msgctxt "paper size"
 msgid "prc3 Envelope"
-msgstr ""
+msgstr "Buste prc3"
 
 #: gtk/paper_names_offsets.c:177
 msgctxt "paper size"
 msgid "prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #: gtk/paper_names_offsets.c:178
 msgctxt "paper size"
 msgid "prc4 Envelope"
-msgstr ""
+msgstr "Buste prc4"
 
 #: gtk/paper_names_offsets.c:179
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr ""
+msgstr "Buste prc5"
 
 #: gtk/paper_names_offsets.c:180
 msgctxt "paper size"
 msgid "prc6 Envelope"
-msgstr ""
+msgstr "Buste prc6"
 
 #: gtk/paper_names_offsets.c:181
 msgctxt "paper size"
 msgid "prc7 Envelope"
-msgstr ""
+msgstr "Buste prc7"
 
 #: gtk/paper_names_offsets.c:182
 msgctxt "paper size"
 msgid "prc8 Envelope"
-msgstr ""
+msgstr "Buste prc8"
 
 #: gtk/paper_names_offsets.c:183
 msgctxt "paper size"
 msgid "prc9 Envelope"
-msgstr ""
+msgstr "Buste prc9"
 
 #: gtk/paper_names_offsets.c:184
 msgctxt "paper size"
 msgid "ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #: gtk/paper_names_offsets.c:185
 msgctxt "paper size"
 msgid "ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #: gtk/ui/gtkaboutdialog.ui:116
 msgid "About"
-msgstr ""
+msgstr "Informazions"
 
 #: gtk/ui/gtkaboutdialog.ui:154
 msgid "Credits"
-msgstr ""
+msgstr "Ricognossiments"
 
 #: gtk/ui/gtkaboutdialog.ui:216
 msgid "System"
-msgstr ""
+msgstr "Sisteme"
 
 #: gtk/ui/gtkappchooserdialog.ui:75
 msgid "_View All Applications"
