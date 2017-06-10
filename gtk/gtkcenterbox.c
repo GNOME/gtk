@@ -201,7 +201,7 @@ gtk_center_box_distribute (GtkCenterBox     *self,
         start_size = center_pos;
 
       if (end_expand)
-        end_size = size - center_pos + center_size;
+        end_size = size - (center_pos + center_size);
     }
   else
     {
