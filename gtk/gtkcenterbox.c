@@ -59,6 +59,9 @@
 #include "gtkorientableprivate.h"
 #include "gtkbuildable.h"
 #include "gtksizerequest.h"
+#include "gtktypebuiltins.h"
+#include "gtkprivate.h"
+#include "gtkintl.h"
 
 struct _GtkCenterBox
 {
@@ -69,6 +72,7 @@ struct _GtkCenterBox
   GtkWidget *end_widget;
 
   GtkOrientation orientation;
+  GtkBaselinePosition baseline_pos;
 };
 
 struct _GtkCenterBoxClass
@@ -79,6 +83,7 @@ struct _GtkCenterBoxClass
 
 enum {
   PROP_0,
+  PROP_BASELINE_POSITION,
   PROP_ORIENTATION
 };
 
@@ -386,6 +391,8 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
       baseline = -1;
     }
 
+  /* Allocate child sizes */
+
   gtk_center_box_distribute (self, for_size, size, sizes);
 
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL &&
@@ -407,6 +414,65 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
       child_size[1] = sizes[1].minimum_size;
       child_size[2] = sizes[2].minimum_size;
     }
+
+  /* Determine baseline */
+  if (self->orientation == GTK_ORIENTATION_HORIZONTAL &&
+      baseline == -1)
+    {
+      int min_above, nat_above;
+      int min_below, nat_below;
+      gboolean have_baseline;
+
+      have_baseline = FALSE;
+      min_above = nat_above = 0;
+      min_below = nat_below = 0;
+
+      for (i = 0; i < 3; i++)
+        {
+          if (gtk_widget_get_valign (child[i]) == GTK_ALIGN_BASELINE)
+            {
+              int child_min_height, child_nat_height;
+              int child_min_baseline, child_nat_baseline;
+
+              child_min_baseline = child_nat_baseline = -1;
+
+              gtk_widget_measure (child[i], GTK_ORIENTATION_VERTICAL,
+                                  child_size[i],
+                                  &child_min_height, &child_nat_height,
+                                  &child_min_baseline, &child_nat_baseline);
+
+              if (child_min_baseline >= 0)
+                {
+                  have_baseline = TRUE;
+                  min_below = MAX (min_below, child_min_height - child_min_baseline);
+                  nat_below = MAX (nat_below, child_nat_height - child_nat_baseline);
+                  min_above = MAX (min_above, child_min_baseline);
+                  nat_above = MAX (nat_above, child_nat_baseline);
+                }
+            }
+        }
+
+      if (have_baseline)
+        {
+          /* TODO: This is purely based on the minimum baseline.
+           * When things fit we should use the natural one
+           */
+          switch (self->baseline_pos)
+            {
+            case GTK_BASELINE_POSITION_TOP:
+              baseline = min_above;
+              break;
+            case GTK_BASELINE_POSITION_CENTER:
+              baseline = min_above + (allocation->height - (min_above + min_below)) / 2;
+              break;
+            case GTK_BASELINE_POSITION_BOTTOM:
+              baseline = allocation->height - min_below;
+              break;
+            }
+        }
+    }
+
+  /* Allocate child positions */
 
   child_pos[0] = 0;
   child_pos[1] = (size / 2) - (child_size[1] / 2);
@@ -443,7 +509,7 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
           child_allocation.height = child_size[i];
         }
 
-      gtk_widget_size_allocate_with_baseline (child[i], &child_allocation, baseline);
+      gtk_widget_size_allocate_with_baseline (child[i], &child_allocation, allocation->y + baseline);
       gtk_widget_get_clip (child[i], &child_clip);
       gdk_rectangle_union (&clip, &clip, &child_clip);
     }
@@ -534,6 +600,10 @@ gtk_center_box_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_BASELINE_POSITION:
+      gtk_center_box_set_baseline_position (self, g_value_get_enum (value));
+      break;
+
     case PROP_ORIENTATION:
       {
         GtkOrientation orientation = g_value_get_enum (value);
@@ -563,6 +633,10 @@ gtk_center_box_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_BASELINE_POSITION:
+      g_value_set_enum (value, self->baseline_pos);
+      break;
+
     case PROP_ORIENTATION:
       g_value_set_enum (value, self->orientation);
       break;
@@ -590,6 +664,15 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
+  g_object_class_install_property (object_class, PROP_BASELINE_POSITION,
+          g_param_spec_enum ("baseline-position",
+                             P_("Baseline position"),
+                             P_("The position of the baseline aligned widgets if extra space is available"),
+                             GTK_TYPE_BASELINE_POSITION,
+                             GTK_BASELINE_POSITION_CENTER,
+                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
   gtk_widget_class_set_css_name (widget_class, "box");
 }
@@ -604,6 +687,7 @@ gtk_center_box_init (GtkCenterBox *self)
   self->end_widget = NULL;
 
   self->orientation = GTK_ORIENTATION_HORIZONTAL;
+  self->baseline_pos = GTK_BASELINE_POSITION_CENTER;
 }
 
 /**
@@ -737,3 +821,51 @@ gtk_center_box_get_end_widget (GtkCenterBox *self)
 {
   return self->end_widget;
 }
+
+/**
+ * gtk_center_box_set_baseline_position:
+ * @self: a #GtkCenterBox
+ * @position: a #GtkBaselinePosition
+ *
+ * Sets the baseline position of a center box.
+ *
+ * This affects only horizontal boxes with at least one baseline
+ * aligned child. If there is more vertical space available than
+ * requested, and the baseline is not allocated by the parent then
+ * @position is used to allocate the baseline wrt. the extra space
+ * available.
+ *
+ * Since: 3.92
+ */
+void
+gtk_center_box_set_baseline_position (GtkCenterBox        *self,
+                                      GtkBaselinePosition  position)
+{
+  g_return_if_fail (GTK_IS_CENTER_BOX (self));
+
+  if (self->baseline_pos != position)
+    {
+      self->baseline_pos = position;
+      g_object_notify (G_OBJECT (self), "baseline-position");
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+    }
+}
+
+/**
+ * gtk_center_box_get_baseline_position:
+ * @self: a #GtkCenterBox
+ *
+ * Gets the value set by gtk_center_box_set_baseline_position().
+ *
+ * Returns: the baseline position
+ *
+ * Since: 3.92
+ */
+GtkBaselinePosition
+gtk_center_box_get_baseline_position (GtkCenterBox *self)
+{
+  g_return_val_if_fail (GTK_IS_CENTER_BOX (self), GTK_BASELINE_POSITION_CENTER);
+
+  return self->baseline_pos;
+}
+

@@ -56,5 +56,10 @@ GtkWidget * gtk_center_box_get_center_widget (GtkCenterBox *self);
 GDK_AVAILABLE_IN_3_92
 GtkWidget * gtk_center_box_get_end_widget    (GtkCenterBox *self);
 
+GDK_AVAILABLE_IN_3_92
+void                gtk_center_box_set_baseline_position (GtkCenterBox        *self,
+                                                          GtkBaselinePosition  position);
+GDK_AVAILABLE_IN_3_92
+GtkBaselinePosition gtk_center_box_get_baseline_position (GtkCenterBox        *self);
 
 #endif
