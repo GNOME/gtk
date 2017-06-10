@@ -177,7 +177,6 @@ gtk_center_box_distribute (GtkCenterBox     *self,
     {
       avail = MIN ((size - center_size) / 2, size - (center_size + sizes[0].minimum_size));
       end_size = CLAMP (avail, sizes[2].minimum_size, sizes[2].natural_size);
-      end_expand = gtk_widget_get_hexpand (self->end_widget);
       end_expand = get_expand (self->end_widget, self->orientation);
     }
 
