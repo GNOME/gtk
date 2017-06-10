@@ -329,13 +329,32 @@ gtk_center_box_measure_opposite (GtkWidget      *widget,
 
   if (above_min >= 0)
     {
+      int min_baseline;
+      int nat_baseline;
+
       total_min = MAX (total_min, above_min + below_min);
       total_nat = MAX (total_nat, above_nat + below_nat);
-      /* assume GTK_BASELINE_POSITION_CENTER for now */
+
+      switch (self->baseline_pos)
+        {
+        case GTK_BASELINE_POSITION_TOP:
+          min_baseline = above_min;
+          nat_baseline = above_nat;
+          break;
+        case GTK_BASELINE_POSITION_CENTER:
+          min_baseline = above_min + (total_min - (above_min + below_min)) / 2;
+          nat_baseline = above_nat + (total_nat - (above_nat + below_nat)) / 2;
+          break;
+        case GTK_BASELINE_POSITION_BOTTOM:
+          min_baseline = total_min - below_min;
+          nat_baseline = total_nat - below_nat;
+          break;
+        }
+
       if (minimum_baseline)
-        *minimum_baseline = above_min + (total_min - (above_min + below_min)) / 2;
+        *minimum_baseline = min_baseline;
       if (natural_baseline)
-        *natural_baseline = above_nat + (total_nat - (above_nat + below_nat)) / 2;
+        *natural_baseline = nat_baseline;
     }
 
   *minimum = total_min;
