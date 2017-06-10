@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-08 22:39+0000\n"
-"PO-Revision-Date: 2017-06-10 11:42+0200\n"
+"PO-Revision-Date: 2017-06-10 11:57+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -4987,248 +4987,250 @@ msgstr "Sisteme"
 
 #: gtk/ui/gtkappchooserdialog.ui:75
 msgid "_View All Applications"
-msgstr ""
+msgstr "_Visualize dutis lis aplicazions"
 
 #: gtk/ui/gtkappchooserdialog.ui:83
 msgid "_Find New Applications"
-msgstr ""
+msgstr "_Cjate gnovis aplicazions"
 
 #: gtk/ui/gtkappchooserwidget.ui:116
 msgid "No applications found."
-msgstr ""
+msgstr "Nissune aplicazion cjatade."
 
 #. used for the application menu on MacOS
 #: gtk/ui/gtkapplication-quartz.ui:15
 msgid "Preferences"
-msgstr ""
+msgstr "Preferencis"
 
 #. used for the application menu on MacOS
 #: gtk/ui/gtkapplication-quartz.ui:22
 msgid "Services"
-msgstr ""
+msgstr "Servizis"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
 #, c-format
 msgid "Hide %s"
-msgstr ""
+msgstr "Plate %s"
 
 #. used for the application menu on MacOS
 #: gtk/ui/gtkapplication-quartz.ui:35
 msgid "Hide Others"
-msgstr ""
+msgstr "Plate altris"
 
 #. used for the application menu on MacOS
 #: gtk/ui/gtkapplication-quartz.ui:41
 msgid "Show All"
-msgstr ""
+msgstr "Mostre dut"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
 #, c-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Jes %s"
 
 #: gtk/ui/gtkassistant.ui:63
 msgid "_Next"
-msgstr ""
+msgstr "_Sucessîf"
 
 #: gtk/ui/gtkassistant.ui:81
 msgid "_Back"
-msgstr ""
+msgstr "_Indaûr"
 
 #: gtk/ui/gtkassistant.ui:99
 msgid "_Finish"
-msgstr ""
+msgstr "_Termine"
 
 #: gtk/ui/gtkcolorchooserdialog.ui:5
 msgid "Select a Color"
-msgstr ""
+msgstr "Selezione un colôr"
 
 #: gtk/ui/gtkcoloreditor.ui:59
 msgid "Color Name"
-msgstr ""
+msgstr "Non colôr"
 
 #: gtk/ui/gtkcoloreditor.ui:142
 msgctxt "Color channel"
 msgid "A"
-msgstr ""
+msgstr "A"
 
 #: gtk/ui/gtkcoloreditor.ui:157
 msgid "Alpha"
-msgstr ""
+msgstr "Alpha"
 
 #: gtk/ui/gtkcoloreditor.ui:185
 msgctxt "Color channel"
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: gtk/ui/gtkcoloreditor.ui:200
 msgid "Hue"
-msgstr ""
+msgstr "Tonalitât"
 
 #: gtk/ui/gtkcoloreditor.ui:229
 msgctxt "Color Channel"
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: gtk/ui/gtkcoloreditor.ui:238
 msgctxt "Color Channel"
 msgid "V"
-msgstr ""
+msgstr "V"
 
 #: gtk/ui/gtkcoloreditor.ui:253
 msgid "Saturation"
-msgstr ""
+msgstr "Saturazion"
 
 #: gtk/ui/gtkfilechooserwidget.ui:62
 msgid "Create Folder"
-msgstr ""
+msgstr "Cree cartele"
 
 #: gtk/ui/gtkfilechooserwidget.ui:144
 msgid "Files"
-msgstr ""
+msgstr "File"
 
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Remote location — only searching the current folder"
-msgstr ""
+msgstr "Posizion rimote — si cîr dome te cartele atuâl"
 
 #: gtk/ui/gtkfilechooserwidget.ui:350
 msgid "Select which types of files are shown"
-msgstr ""
+msgstr "Selezione cuai gjenars di file mostrâ"
 
 #: gtk/ui/gtkfilechooserwidget.ui:390
 msgid "Folder Name"
-msgstr ""
+msgstr "Non de cartele"
 
 #: gtk/ui/gtkfilechooserwidget.ui:415
 msgid "_Create"
-msgstr ""
+msgstr "_Cree"
 
 #: gtk/ui/gtkfontchooserdialog.ui:5
 msgid "Select Font"
-msgstr ""
+msgstr "Selezione caratar"
 
 #: gtk/ui/gtkfontchooserwidget.ui:50
 msgid "Search font name"
-msgstr ""
+msgstr "Cîr non dal caratar"
 
 #: gtk/ui/gtkfontchooserwidget.ui:97
 msgid "Font Family"
-msgstr ""
+msgstr "Famee dal caratar"
 
 #: gtk/ui/gtkfontchooserwidget.ui:118
 msgid "Preview text"
-msgstr ""
+msgstr "Test di anteprime"
 
 #: gtk/ui/gtkfontchooserwidget.ui:184
 msgid "No Fonts Found"
-msgstr ""
+msgstr "Nissun caratar cjatât"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:48
 msgid "_Format for:"
-msgstr ""
+msgstr "_Formât par:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:81 gtk/ui/gtkprintunixdialog.ui:715
 msgid "_Paper size:"
-msgstr ""
+msgstr "Dimension _cjarte:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:123
 msgid "_Orientation:"
-msgstr ""
+msgstr "_Orientament:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:153 gtk/ui/gtkprintunixdialog.ui:762
 msgid "Portrait"
-msgstr ""
+msgstr "Verticâl"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:189 gtk/ui/gtkprintunixdialog.ui:764
 msgid "Reverse portrait"
-msgstr ""
+msgstr "Verticâl invertît"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:225 gtk/ui/gtkprintunixdialog.ui:763
 msgid "Landscape"
-msgstr ""
+msgstr "Orizontâl"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:260 gtk/ui/gtkprintunixdialog.ui:765
 msgid "Reverse landscape"
-msgstr ""
+msgstr "Orizontâl invertît"
 
 #: gtk/ui/gtkpathbar.ui:10
 msgid "Down Path"
-msgstr ""
+msgstr "Jù tal percors"
 
 #: gtk/ui/gtkpathbar.ui:33
 msgid "Up Path"
-msgstr ""
+msgstr "Sù pal percors"
 
 #: gtk/ui/gtkplacesview.ui:28
 msgid "Server Addresses"
-msgstr ""
+msgstr "Direzions servidôrs"
 
 #: gtk/ui/gtkplacesview.ui:40
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr ""
+"Lis direzions dai servidôrs a son fatis di un prefìs pal protocol e une "
+"direzion. Esemplis:"
 
 #: gtk/ui/gtkplacesview.ui:72
 msgid "Available Protocols"
-msgstr ""
+msgstr "Protocoi disponibii"
 
 #: gtk/ui/gtkplacesview.ui:85
 msgid "AppleTalk"
-msgstr ""
+msgstr "AppleTalk"
 
 #: gtk/ui/gtkplacesview.ui:95
 msgid "File Transfer Protocol"
-msgstr ""
+msgstr "Protocol di trasferiment file (FTP)"
 
 #: gtk/ui/gtkplacesview.ui:105
 msgid "Network File System"
-msgstr ""
+msgstr "File system di rêt (NFS)"
 
 #: gtk/ui/gtkplacesview.ui:115
 msgid "Samba"
-msgstr ""
+msgstr "Samba"
 
 #: gtk/ui/gtkplacesview.ui:125
 msgid "SSH File Transfer Protocol"
-msgstr ""
+msgstr "Protocol di trasferiment file SSH"
 
 #: gtk/ui/gtkplacesview.ui:135
 msgid "WebDAV"
-msgstr ""
+msgstr "WebDav"
 
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/ui/gtkplacesview.ui:168
 msgid "ftp:// or ftps://"
-msgstr ""
+msgstr "ftp:// o ftps://"
 
 #: gtk/ui/gtkplacesview.ui:188
 msgid "smb://"
-msgstr ""
+msgstr "smb://"
 
 #. Translators: do not translate sftp:// and ssh://
 #: gtk/ui/gtkplacesview.ui:198
 msgid "sftp:// or ssh://"
-msgstr ""
+msgstr "sftp:// o ssh://"
 
 #. Translators: do not translate dav:// and davs://
 #: gtk/ui/gtkplacesview.ui:208
 msgid "dav:// or davs://"
-msgstr ""
+msgstr "dav:// o davs://"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:244
 msgid "No recent servers found"
-msgstr ""
+msgstr "Nissun servidôrs resint cjatât"
 
 #: gtk/ui/gtkplacesview.ui:265
 msgid "Recent Servers"
-msgstr ""
+msgstr "Servidôrs resints"
 
 #: gtk/ui/gtkplacesview.ui:356
 msgid "No results found"
-msgstr ""
+msgstr "Nissun risultât cjatât"
 
 #: gtk/ui/gtkplacesview.ui:397
 msgid "Connect to _Server"
