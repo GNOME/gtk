@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-08 22:39+0000\n"
-"PO-Revision-Date: 2017-06-10 15:05+0200\n"
+"PO-Revision-Date: 2017-06-10 18:06+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -3170,12 +3170,12 @@ msgstr "○"
 #: gtk/gtktextbufferrichtext.c:658
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
-msgstr ""
+msgstr "Erôr no cognossût intant che si cirive di deserializâ %s"
 
 #: gtk/gtktextbufferrichtext.c:717
 #, c-format
 msgid "No deserialize function found for format %s"
-msgstr ""
+msgstr "Nissune funzion di deserializazion cjatade pal formât %s"
 
 #: gtk/gtktextbufferserialize.c:709 gtk/gtktextbufferserialize.c:735
 #, c-format
@@ -3274,12 +3274,14 @@ msgstr "Un element <text> nol pues capitâ prime di un element <tags>"
 
 #: gtk/gtktextbufferserialize.c:1710
 msgid "Serialized data is malformed"
-msgstr ""
+msgstr "I dâts serializâts a son malformâts"
 
 #: gtk/gtktextbufferserialize.c:1789
 msgid ""
 "Serialized data is malformed. First section isn’t GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
+"I dâts serializâts a son malformâts. La prime sezion no je "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: gtk/gtktextutil.c:57
 msgid "LRM _Left-to-right mark"
@@ -3965,7 +3967,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:31
 msgid "Select an Object"
-msgstr ""
+msgstr "Selezione un ogjet"
 
 #: gtk/inspector/window.ui:45 gtk/inspector/window.ui:98
 msgid "Show Details"
@@ -5585,313 +5587,316 @@ msgstr ""
 #: modules/input/imam-et.c:452
 msgctxt "input method menu"
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "Amaric (EZ+)"
 
 #. ID
 #: modules/input/imbroadway.c:51
 msgctxt "input method menu"
 msgid "Broadway"
-msgstr ""
+msgstr "Broadway"
 
 #. ID
 #: modules/input/imcedilla.c:90
 msgctxt "input method menu"
 msgid "Cedilla"
-msgstr ""
+msgstr "Cedilie"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:215
 msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "Cirilic (Trasliterât)"
 
 #: modules/input/imime.c:30
 msgctxt "input method menu"
 msgid "Windows IME"
-msgstr ""
+msgstr "Windows IME"
 
 #. ID
 #: modules/input/iminuktitut.c:125
 msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
-msgstr ""
+msgstr "Inuktitut (Trasliterât)"
 
 #. ID
 #: modules/input/imipa.c:143
 msgctxt "input method menu"
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/immultipress.c:30
 msgctxt "input method menu"
 msgid "Multipress"
-msgstr ""
+msgstr "Pression multiple"
 
 #: modules/input/imquartz.c:58
 msgctxt "input method menu"
 msgid "Mac OS X Quartz"
-msgstr ""
+msgstr "Mac OS X Quartz"
 
 #. ID
 #: modules/input/imthai.c:33
 msgctxt "input method menu"
 msgid "Thai-Lao"
-msgstr ""
+msgstr "Thai-Lao"
 
 #. ID
 #: modules/input/imti-er.c:451
 msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Tigrin-Eritreu (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:451
 msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Tigrin-Etiopic (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:242
 msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "Vietnamît (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:26
 msgctxt "input method menu"
 msgid "X Input Method"
-msgstr ""
+msgstr "Metodi di input X"
 
 #. Translators: The printer status is online, i.e. it is
 #. * ready to print.
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
 msgid "Online"
-msgstr ""
+msgstr "Disponibile"
 
 #. Translators: The printer is offline.
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:751
 msgid "Offline"
-msgstr ""
+msgstr "No disponibile"
 
 #. We shouldn't get here because the query omits dormant
 #. * printers by default.
 #. Translators: Printer has been offline for a long time.
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:757
 msgid "Dormant"
-msgstr ""
+msgstr "No ative"
 
 #. How many document pages to go onto one side of paper.
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:939
 #: modules/printbackends/file/gtkprintbackendfile.c:676
 #: modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
-msgstr ""
+msgstr "Pagjinis par _sfuei:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1106
 #: modules/printbackends/cups/gtkprintbackendcups.c:1415
 msgid "Username:"
-msgstr ""
+msgstr "Non utent:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1107
 #: modules/printbackends/cups/gtkprintbackendcups.c:1424
 msgid "Password:"
-msgstr ""
+msgstr "Password:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1146
 #: modules/printbackends/cups/gtkprintbackendcups.c:1437
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
+"La autenticazion e je necessarie par stampâ il document “%s” su la stampant "
+"%s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1148
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr ""
+msgstr "La autenticazion e je necessarie par stampâ un document su %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1152
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
-msgstr ""
+msgstr "La autenticazion e je necessarie par vê i atribûts dal lavôr “%s”"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1154
 msgid "Authentication is required to get attributes of a job"
-msgstr ""
+msgstr "La autenticazion e je necessarie par vê i atribûts di un lavôr"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1158
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr ""
+msgstr "La autenticazion e je necessarie par vê i atribûts de stampant %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1160
 msgid "Authentication is required to get attributes of a printer"
-msgstr ""
+msgstr "La autenticazion e je necessarie par vê i atribûts di une stampant"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1163
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
+msgstr "La autenticazion e je necessarie par vê la stampant predefinide di %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1166
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr ""
+msgstr "La autenticazion e je necessarie par vê lis stampants di %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1171
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr ""
+msgstr "La autenticazion e je necessarie par vê un file di %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1173
 #, c-format
 msgid "Authentication is required on %s"
-msgstr ""
+msgstr "La autenticazion e je necessarie su %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1409
 msgid "Domain:"
-msgstr ""
+msgstr "Domini:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1439
 #, c-format
 msgid "Authentication is required to print document “%s”"
-msgstr ""
+msgstr "La autenticazion e je necessarie par stampâ il document “%s”"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1444
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
+"La autenticazion e je necessarie par stampâ chest document su la stampant %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1446
 msgid "Authentication is required to print this document"
-msgstr ""
+msgstr "La autenticazion e je necessarie par stampâ chest document"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2517
 #, c-format
 msgid "Printer “%s” is low on toner."
-msgstr ""
+msgstr "Toner de stampant “%s” in esauriment."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2521
 #, c-format
 msgid "Printer “%s” has no toner left."
-msgstr ""
+msgstr "Toner de stampant “%s” esaurît."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2526
 #, c-format
 msgid "Printer “%s” is low on developer."
-msgstr ""
+msgstr "Developer de stampant “%s” in esauriment."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2531
 #, c-format
 msgid "Printer “%s” is out of developer."
-msgstr ""
+msgstr "Developer de stampant “%s” esaurît."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2536
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
-msgstr ""
+msgstr "Almancul une cartucje de stampant “%s” e je in esauriment."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2541
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
-msgstr ""
+msgstr "Almancul une cartucje de stampant “%s” e je esauride."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2545
 #, c-format
 msgid "The cover is open on printer “%s”."
-msgstr ""
+msgstr "Il tapon de stampant “%s” al è viert."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2549
 #, c-format
 msgid "The door is open on printer “%s”."
-msgstr ""
+msgstr "Il sportel de stampant “%s” al è viert."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2553
 #, c-format
 msgid "Printer “%s” is low on paper."
-msgstr ""
+msgstr "Cjarte de stampant “%s” in esauriment."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2557
 #, c-format
 msgid "Printer “%s” is out of paper."
-msgstr ""
+msgstr "Cjarte de stampant “%s” esauride."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2561
 #, c-format
 msgid "Printer “%s” is currently offline."
-msgstr ""
+msgstr "La stampant “%s” e je atualmentri disconetude."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2565
 #, c-format
 msgid "There is a problem on printer “%s”."
-msgstr ""
+msgstr "Al esist un probleme su la stampant “%s”."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2585
 msgid "Paused; Rejecting Jobs"
-msgstr ""
+msgstr "In pause; lavôrs ricusâts"
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2591
 msgid "Rejecting Jobs"
-msgstr ""
+msgstr "Lavôrs refudâts"
 
 #. Translators: this string connects multiple printer states together.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2632
 msgid "; "
-msgstr ""
+msgstr "; "
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4318
 #: modules/printbackends/cups/gtkprintbackendcups.c:4385
 msgctxt "printing option"
 msgid "Two Sided"
-msgstr ""
+msgstr "Denant e daûr"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4319
 msgctxt "printing option"
 msgid "Paper Type"
-msgstr ""
+msgstr "Gjenar di cjarte"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4320
 msgctxt "printing option"
 msgid "Paper Source"
-msgstr ""
+msgstr "Sorzint cjarte"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4321
 #: modules/printbackends/cups/gtkprintbackendcups.c:4386
 msgctxt "printing option"
 msgid "Output Tray"
-msgstr ""
+msgstr "Scansel di jessude"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4322
 msgctxt "printing option"
 msgid "Resolution"
-msgstr ""
+msgstr "Risoluzion"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4323
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
-msgstr ""
+msgstr "Pre-filtradure GhostScript"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4332
 msgctxt "printing option value"
 msgid "One Sided"
-msgstr ""
+msgstr "Une bande"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4334
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
-msgstr ""
+msgstr "Ôr lunc (standard)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4336
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
-msgstr ""
+msgstr "Ôr curt (ribaltât)"
 
 #. Translators: this is an option of "Paper Source"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4338
@@ -5899,7 +5904,7 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:4348
 msgctxt "printing option value"
 msgid "Auto Select"
-msgstr ""
+msgstr "Selezion automatiche"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
@@ -5909,185 +5914,185 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:4350
 msgctxt "printing option value"
 msgid "Printer Default"
-msgstr ""
+msgstr "Impostazions predefinidis stampant"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4352
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
-msgstr ""
+msgstr "Inclût nome i caratars GhostScript"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4354
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
-msgstr ""
+msgstr "Convertî a PS nivel 1"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4356
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
-msgstr ""
+msgstr "Convertî a PS nivel 2"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4358
 msgctxt "printing option value"
 msgid "No pre-filtering"
-msgstr ""
+msgstr "Nissune pre-filtradure"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
 #: modules/printbackends/cups/gtkprintbackendcups.c:4367
 msgctxt "printing option group"
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Variis"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4394
 msgctxt "sides"
 msgid "One Sided"
-msgstr ""
+msgstr "Une bande"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4396
 msgctxt "sides"
 msgid "Long Edge (Standard)"
-msgstr ""
+msgstr "Ôr lunc (standard)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4398
 msgctxt "sides"
 msgid "Short Edge (Flip)"
-msgstr ""
+msgstr "Ôr curt (ribaltât)"
 
 #. Translators: Top output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4401
 msgctxt "output-bin"
 msgid "Top Bin"
-msgstr ""
+msgstr "Cassele superiôr"
 
 #. Translators: Middle output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4403
 msgctxt "output-bin"
 msgid "Middle Bin"
-msgstr ""
+msgstr "Cassele centrâl"
 
 #. Translators: Bottom output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4405
 msgctxt "output-bin"
 msgid "Bottom Bin"
-msgstr ""
+msgstr "Cassele inferiôr"
 
 #. Translators: Side output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4407
 msgctxt "output-bin"
 msgid "Side Bin"
-msgstr ""
+msgstr "Cassele laterâl"
 
 #. Translators: Left output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4409
 msgctxt "output-bin"
 msgid "Left Bin"
-msgstr ""
+msgstr "Cassele a çampe"
 
 #. Translators: Right output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4411
 msgctxt "output-bin"
 msgid "Right Bin"
-msgstr ""
+msgstr "Cassele a diestre"
 
 #. Translators: Center output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4413
 msgctxt "output-bin"
 msgid "Center Bin"
-msgstr ""
+msgstr "Cassele centrâl"
 
 #. Translators: Rear output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4415
 msgctxt "output-bin"
 msgid "Rear Bin"
-msgstr ""
+msgstr "Cassele par daûr"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4417
 msgctxt "output-bin"
 msgid "Face Up Bin"
-msgstr ""
+msgstr "Cassele muse in sù"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4419
 msgctxt "output-bin"
 msgid "Face Down Bin"
-msgstr ""
+msgstr "Cassele muse in jù"
 
 #. Translators: Large capacity output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4421
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
-msgstr ""
+msgstr "Cassele a alte capacitât"
 
 #. Translators: Output stacker number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4443
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
-msgstr ""
+msgstr "Fassiculadôr %d"
 
 #. Translators: Output mailbox number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4447
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
-msgstr ""
+msgstr "Cassete de pueste %d"
 
 #. Translators: Private mailbox
 #: modules/printbackends/cups/gtkprintbackendcups.c:4451
 msgctxt "output-bin"
 msgid "My Mailbox"
-msgstr ""
+msgstr "Mê cassete de pueste"
 
 #. Translators: Output tray number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4455
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
-msgstr ""
+msgstr "Scansel %d"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4926
 msgid "Printer Default"
-msgstr ""
+msgstr "Impostazions predefinidis stampant"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5367
 msgid "Urgent"
-msgstr ""
+msgstr "Urgjent"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5367
 msgid "High"
-msgstr ""
+msgstr "Alte"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5367
 msgid "Medium"
-msgstr ""
+msgstr "Medie"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5367
 msgid "Low"
-msgstr ""
+msgstr "Basse"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5397
 msgid "Job Priority"
-msgstr ""
+msgstr "Prioritât lavôr"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
 #: modules/printbackends/cups/gtkprintbackendcups.c:5408
 msgid "Billing Info"
-msgstr ""
+msgstr "Informazion di fature"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
@@ -6095,37 +6100,37 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:5432
 msgctxt "cover page"
 msgid "None"
-msgstr ""
+msgstr "Nissune"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5433
 msgctxt "cover page"
 msgid "Classified"
-msgstr ""
+msgstr "Classificât"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5434
 msgctxt "cover page"
 msgid "Confidential"
-msgstr ""
+msgstr "Confidenziâl"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgctxt "cover page"
 msgid "Secret"
-msgstr ""
+msgstr "Segret"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5436
 msgctxt "cover page"
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5437
 msgctxt "cover page"
 msgid "Top Secret"
-msgstr ""
+msgstr "Massime segretece"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5438
 msgctxt "cover page"
 msgid "Unclassified"
-msgstr ""
+msgstr "No classificât"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
@@ -6133,7 +6138,7 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:5450
 msgctxt "printer option"
 msgid "Pages per Sheet"
-msgstr ""
+msgstr "Pagjinis par sfuei"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
@@ -6141,7 +6146,7 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:5467
 msgctxt "printer option"
 msgid "Page Ordering"
-msgstr ""
+msgstr "Ordinament pagjinis"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
@@ -6149,7 +6154,7 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:5509
 msgctxt "printer option"
 msgid "Before"
-msgstr ""
+msgstr "Prime"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
@@ -6157,7 +6162,7 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:5524
 msgctxt "printer option"
 msgid "After"
-msgstr ""
+msgstr "Dopo"
 
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
@@ -6166,7 +6171,7 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:5544
 msgctxt "printer option"
 msgid "Print at"
-msgstr ""
+msgstr "Stampe"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
@@ -6174,7 +6179,7 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:5555
 msgctxt "printer option"
 msgid "Print at time"
-msgstr ""
+msgstr "Stampe aes"
 
 #. Translators: this format is used to display a custom
 #. * paper size. The two placeholders are replaced with
@@ -6184,35 +6189,35 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:5597
 #, c-format
 msgid "Custom %s×%s"
-msgstr ""
+msgstr "Personalizât %s×%s"
 
 #. TRANSLATORS: this this the ICC color profile to use for this job
 #: modules/printbackends/cups/gtkprintbackendcups.c:5706
 msgctxt "printer option"
 msgid "Printer Profile"
-msgstr ""
+msgstr "Profîl stampant"
 
 #. TRANSLATORS: this is when color profile information is unavailable
 #: modules/printbackends/cups/gtkprintbackendcups.c:5713
 msgctxt "printer option value"
 msgid "Unavailable"
-msgstr ""
+msgstr "No disponibile"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
 #: modules/printbackends/cups/gtkprintercups.c:267
 msgid "Color management unavailable"
-msgstr ""
+msgstr "Gjestion colôrs no disponibile"
 
 #. TRANSLATORS: when there is no color profile available
 #: modules/printbackends/cups/gtkprintercups.c:279
 msgid "No profile available"
-msgstr ""
+msgstr "Nissun profîl disponibil"
 
 #. TRANSLATORS: when the color profile has no title
 #: modules/printbackends/cups/gtkprintercups.c:290
 msgid "Unspecified profile"
-msgstr ""
+msgstr "Profîl no specificât"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:250
 msgid "output"
