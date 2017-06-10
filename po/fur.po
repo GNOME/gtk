@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-06-08 22:39+0000\n"
-"PO-Revision-Date: 2017-06-10 11:57+0200\n"
+"PO-Revision-Date: 2017-06-10 15:05+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -5234,40 +5234,40 @@ msgstr "Nissun risultât cjatât"
 
 #: gtk/ui/gtkplacesview.ui:397
 msgid "Connect to _Server"
-msgstr ""
+msgstr "Conet al _servidôr"
 
 #: gtk/ui/gtkplacesview.ui:427
 msgid "Enter server address…"
-msgstr ""
+msgstr "Scrîf direzion servidôr…"
 
 #: gtk/ui/gtkprintunixdialog.ui:113
 msgid "Printer"
-msgstr ""
+msgstr "Stampant"
 
 #. this is the header for the printer status column in the print dialog
 #: gtk/ui/gtkprintunixdialog.ui:135
 msgid "Status"
-msgstr ""
+msgstr "Stât"
 
 #: gtk/ui/gtkprintunixdialog.ui:176
 msgid "Range"
-msgstr ""
+msgstr "Interval"
 
 #: gtk/ui/gtkprintunixdialog.ui:193
 msgid "_All Pages"
-msgstr ""
+msgstr "_Dutis lis pagjinis"
 
 #: gtk/ui/gtkprintunixdialog.ui:208
 msgid "C_urrent Page"
-msgstr ""
+msgstr "Pagjine at_uâl"
 
 #: gtk/ui/gtkprintunixdialog.ui:225
 msgid "Se_lection"
-msgstr ""
+msgstr "Se_lezion"
 
 #: gtk/ui/gtkprintunixdialog.ui:241
 msgid "Pag_es:"
-msgstr ""
+msgstr "Pagj_inis:"
 
 #: gtk/ui/gtkprintunixdialog.ui:244 gtk/ui/gtkprintunixdialog.ui:262
 #: gtk/ui/gtkprintunixdialog.ui:268
@@ -5275,108 +5275,110 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
+"Specifiche un o plui intervai di pagjinis,\n"
+" p.e. 1–3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:267
 msgid "Pages"
-msgstr ""
+msgstr "Pagjinis"
 
 #: gtk/ui/gtkprintunixdialog.ui:299
 msgid "Copies"
-msgstr ""
+msgstr "Copiis"
 
 #: gtk/ui/gtkprintunixdialog.ui:319
 msgid "Copie_s:"
-msgstr ""
+msgstr "Copi_is:"
 
 #: gtk/ui/gtkprintunixdialog.ui:345
 msgid "C_ollate"
-msgstr ""
+msgstr "Met d_ongje"
 
 #: gtk/ui/gtkprintunixdialog.ui:359
 msgid "_Reverse"
-msgstr ""
+msgstr "_Invertìs ordin"
 
 #: gtk/ui/gtkprintunixdialog.ui:430
 msgid "Layout"
-msgstr ""
+msgstr "Impagjinazion"
 
 #: gtk/ui/gtkprintunixdialog.ui:450
 msgid "T_wo-sided:"
-msgstr ""
+msgstr "_Denant e daûr:"
 
 #: gtk/ui/gtkprintunixdialog.ui:475
 msgid "Pages per _side:"
-msgstr ""
+msgstr "Pagjinis par _bande:"
 
 #: gtk/ui/gtkprintunixdialog.ui:502
 msgid "Page or_dering:"
-msgstr ""
+msgstr "Or_denament pagjinis:"
 
 #: gtk/ui/gtkprintunixdialog.ui:528
 msgid "_Only print:"
-msgstr ""
+msgstr "_Nome stampâ:"
 
 #: gtk/ui/gtkprintunixdialog.ui:545
 msgid "All sheets"
-msgstr ""
+msgstr "Dutis lis pagjinis"
 
 #: gtk/ui/gtkprintunixdialog.ui:546
 msgid "Even sheets"
-msgstr ""
+msgstr "Pagjinis pâr"
 
 #: gtk/ui/gtkprintunixdialog.ui:547
 msgid "Odd sheets"
-msgstr ""
+msgstr "Pagjinis dispar"
 
 #: gtk/ui/gtkprintunixdialog.ui:560
 msgid "Sc_ale:"
-msgstr ""
+msgstr "Scj_ale:"
 
 #: gtk/ui/gtkprintunixdialog.ui:620
 msgid "Paper"
-msgstr ""
+msgstr "Cjarte"
 
 #: gtk/ui/gtkprintunixdialog.ui:640
 msgid "Paper _type:"
-msgstr ""
+msgstr "_Gjenar di cjarte:"
 
 #: gtk/ui/gtkprintunixdialog.ui:665
 msgid "Paper _source:"
-msgstr ""
+msgstr "_Sorzint cjarte:"
 
 #: gtk/ui/gtkprintunixdialog.ui:690
 msgid "Output t_ray:"
-msgstr ""
+msgstr "_Scansel di jessude:"
 
 #: gtk/ui/gtkprintunixdialog.ui:744
 msgid "Or_ientation:"
-msgstr ""
+msgstr "Or_ientament:"
 
 #: gtk/ui/gtkprintunixdialog.ui:834
 msgid "Job Details"
-msgstr ""
+msgstr "Detais lavôr"
 
 #: gtk/ui/gtkprintunixdialog.ui:854
 msgid "Pri_ority:"
-msgstr ""
+msgstr "Pri_oritât:"
 
 #: gtk/ui/gtkprintunixdialog.ui:878
 msgid "_Billing info:"
-msgstr ""
+msgstr "Informazion _fature:"
 
 #: gtk/ui/gtkprintunixdialog.ui:921
 msgid "Print Document"
-msgstr ""
+msgstr "Stampe document"
 
 #. this is one of the choices for the print at option in the print dialog
 #: gtk/ui/gtkprintunixdialog.ui:938
 msgid "_Now"
-msgstr ""
+msgstr "_Cumò"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
 #: gtk/ui/gtkprintunixdialog.ui:954
 msgid "A_t:"
-msgstr ""
+msgstr "_Aes:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
 #: gtk/ui/gtkprintunixdialog.ui:958 gtk/ui/gtkprintunixdialog.ui:960
@@ -5386,186 +5388,188 @@ msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
+"Specificâ la ore de stampe,\n"
+" p.e. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 
 #: gtk/ui/gtkprintunixdialog.ui:985
 msgid "Time of print"
-msgstr ""
+msgstr "Ore di stampe"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
 #: gtk/ui/gtkprintunixdialog.ui:999
 msgid "On _hold"
-msgstr ""
+msgstr "_In spiete"
 
 #: gtk/ui/gtkprintunixdialog.ui:1003 gtk/ui/gtkprintunixdialog.ui:1004
 msgid "Hold the job until it is explicitly released"
-msgstr ""
+msgstr "Tratignî il lavôr fintant che nol ven molât in maniere esplicite"
 
 #: gtk/ui/gtkprintunixdialog.ui:1040
 msgid "Add Cover Page"
-msgstr ""
+msgstr "Zonte pagjine di cuvierte"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/ui/gtkprintunixdialog.ui:1060
 msgid "Be_fore:"
-msgstr ""
+msgstr "P_rime:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
 #: gtk/ui/gtkprintunixdialog.ui:1084
 msgid "_After:"
-msgstr ""
+msgstr "_Dopo:"
 
 #: gtk/ui/gtkprintunixdialog.ui:1125
 msgid "Job"
-msgstr ""
+msgstr "Lavôr"
 
 #. This will appear as a tab label in the print dialog.
 #: gtk/ui/gtkprintunixdialog.ui:1159
 msgid "Image Quality"
-msgstr ""
+msgstr "Cualitât Imagjin"
 
 #. This will appear as a tab label in the print dialog.
 #: gtk/ui/gtkprintunixdialog.ui:1192
 msgid "Color"
-msgstr ""
+msgstr "Colôr"
 
 #. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
 #: gtk/ui/gtkprintunixdialog.ui:1225
 msgid "Finishing"
-msgstr ""
+msgstr "Finidure"
 
 #: gtk/ui/gtkprintunixdialog.ui:1258
 msgid "Advanced"
-msgstr ""
+msgstr "Avanzadis"
 
 #: gtk/ui/gtkprintunixdialog.ui:1279
 msgid "Some of the settings in the dialog conflict"
-msgstr ""
+msgstr "Cualchi impostazion tal dialic e je in conflit"
 
 #: gtk/ui/gtkrecentchooserdefault.ui:78
 msgid "Select which type of documents are shown"
-msgstr ""
+msgstr "Selezione cuai gjenars di documents mostrâ"
 
 #: gtk/ui/gtkvolumebutton.ui:23
 msgid "Volume"
-msgstr ""
+msgstr "Volum"
 
 #: gtk/ui/gtkvolumebutton.ui:24
 msgid "Turns volume up or down"
-msgstr ""
+msgstr "Alce o sbasse il volum"
 
 #: gtk/ui/gtkvolumebutton.ui:33
 msgid "Volume Up"
-msgstr ""
+msgstr "Alce il volum"
 
 #: gtk/ui/gtkvolumebutton.ui:34
 msgid "Increases the volume"
-msgstr ""
+msgstr "Aumente il volum"
 
 #: gtk/ui/gtkvolumebutton.ui:43
 msgid "Volume Down"
-msgstr ""
+msgstr "Sbasse il volum"
 
 #: gtk/ui/gtkvolumebutton.ui:44
 msgid "Decreases the volume"
-msgstr ""
+msgstr "Diminuìs il volum"
 
 #: gtk/updateiconcache.c:1390
 #, c-format
 msgid "Failed to write header\n"
-msgstr ""
+msgstr "No si è rivâts a scrivi la intestazion\n"
 
 #: gtk/updateiconcache.c:1396
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr ""
+msgstr "No si è rivâts a scrivi la tabele hash\n"
 
 #: gtk/updateiconcache.c:1402
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr ""
+msgstr "No si è rivâts a scrivi l'indiç de cartele\n"
 
 #: gtk/updateiconcache.c:1410
 #, c-format
 msgid "Failed to rewrite header\n"
-msgstr ""
+msgstr "No si è rivâts a tornâ a scrivi la intestazion\n"
 
 #: gtk/updateiconcache.c:1504
 #, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr ""
+msgstr "No si è rivât a vierzi il file %s : %s\n"
 
 #: gtk/updateiconcache.c:1512 gtk/updateiconcache.c:1542
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr ""
+msgstr "No si è rivâts a scrivi il file cache: %s\n"
 
 #: gtk/updateiconcache.c:1552
 #, c-format
 msgid "The generated cache was invalid.\n"
-msgstr ""
+msgstr "La cache gjenerade no jere valide.\n"
 
 #: gtk/updateiconcache.c:1566
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr ""
+msgstr "Impussibil cambiâ non di %s a %s: %s, duncje si è daûr a gjavâ %s.\n"
 
 #: gtk/updateiconcache.c:1580
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr ""
+msgstr "Impussibil cambiâ non di %s a %s: %s\n"
 
 #: gtk/updateiconcache.c:1590
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr ""
+msgstr "Impussibil cambiâ non a %s tornant a meti %s: %s.\n"
 
 #: gtk/updateiconcache.c:1617
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "File cache creât cun sucès.\n"
 
 #: gtk/updateiconcache.c:1656
 msgid "Overwrite an existing cache, even if up to date"
-msgstr ""
+msgstr "Sorescrîf une cache esistente, ancje se inzornade"
 
 #: gtk/updateiconcache.c:1657
 msgid "Don’t check for the existence of index.theme"
-msgstr ""
+msgstr "No sta controlâ la esistence di index.theme"
 
 #: gtk/updateiconcache.c:1658
 msgid "Don’t include image data in the cache"
-msgstr ""
+msgstr "No sta includi  i dâts de imagjin inte cache"
 
 #: gtk/updateiconcache.c:1659
 msgid "Include image data in the cache"
-msgstr ""
+msgstr "Inclût i dâts de imagjin inte cache"
 
 #: gtk/updateiconcache.c:1660
 msgid "Output a C header file"
-msgstr ""
+msgstr "Gjenere un file di intestazion (header) C"
 
 #: gtk/updateiconcache.c:1661
 msgid "Turn off verbose output"
-msgstr ""
+msgstr "Disabilite jessude prolisse"
 
 #: gtk/updateiconcache.c:1662
 msgid "Validate existing icon cache"
-msgstr ""
+msgstr "Convalide la cache di iconis esistente"
 
 #: gtk/updateiconcache.c:1729
 #, c-format
 msgid "File not found: %s\n"
-msgstr ""
+msgstr "File no cjatât: %s\n"
 
 #: gtk/updateiconcache.c:1735
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr ""
+msgstr "Cache iconis no valide: %s\n"
 
 #: gtk/updateiconcache.c:1748
 #, c-format
 msgid "No theme index file.\n"
-msgstr ""
+msgstr "Nissun file indiç di teme.\n"
 
 #: gtk/updateiconcache.c:1752
 #, c-format
@@ -5573,6 +5577,9 @@ msgid ""
 "No theme index file in “%s”.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
+"Nissun file indiç di teme in “%s”.\n"
+"Se si desidere pardabon creâ une cache di iconis achì, doprâ --ignore-theme-"
+"index.\n"
 
 #. ID
 #: modules/input/imam-et.c:452
