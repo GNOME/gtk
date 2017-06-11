@@ -3512,7 +3512,9 @@ get_char_pixels (GtkWidget   *label,
 static void
 gtk_label_get_preferred_layout_size (GtkLabel *label,
                                      PangoRectangle *smallest,
-                                     PangoRectangle *widest)
+                                     PangoRectangle *widest,
+                                     int *smallest_baseline,
+                                     int *widest_baseline)
 {
   GtkLabelPrivate *priv = label->priv;
   PangoLayout *layout;
@@ -3541,10 +3543,11 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
     char_pixels = get_char_pixels (GTK_WIDGET (label), layout);
   else
     char_pixels = 0;
-      
+
   pango_layout_get_extents (layout, NULL, widest);
   widest->width = MAX (widest->width, char_pixels * priv->width_chars);
   widest->x = widest->y = 0;
+  *widest_baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
 
   if (priv->ellipsize || priv->wrap)
     {
@@ -3558,6 +3561,8 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
       smallest->width = MAX (smallest->width, char_pixels * priv->width_chars);
       smallest->x = smallest->y = 0;
 
+      *smallest_baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
+
       if (priv->max_width_chars > -1 && widest->width > char_pixels * priv->max_width_chars)
         {
           layout = gtk_label_get_measuring_layout (label,
@@ -3566,14 +3571,20 @@ gtk_label_get_preferred_layout_size (GtkLabel *label,
           pango_layout_get_extents (layout, NULL, widest);
           widest->width = MAX (widest->width, char_pixels * priv->width_chars);
           widest->x = widest->y = 0;
+
+          *widest_baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
         }
 
       if (widest->width < smallest->width)
-        *smallest = *widest;
+        {
+          *smallest = *widest;
+          *smallest_baseline = *widest_baseline;
+        }
     }
   else
     {
       *smallest = *widest;
+      *smallest_baseline = *widest_baseline;
     }
 
   g_object_unref (layout);
@@ -3590,8 +3601,12 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
   GtkLabel      *label = GTK_LABEL (widget);
   PangoRectangle widest_rect;
   PangoRectangle smallest_rect;
+  int smallest_baseline;
+  int widest_baseline;
 
-  gtk_label_get_preferred_layout_size (label, &smallest_rect, &widest_rect);
+  gtk_label_get_preferred_layout_size (label,
+                                       &smallest_rect, &widest_rect,
+                                       &smallest_baseline, &widest_baseline);
 
   widest_rect.width  = PANGO_PIXELS_CEIL (widest_rect.width);
   widest_rect.height = PANGO_PIXELS_CEIL (widest_rect.height);
@@ -3615,6 +3630,12 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
     {
       *minimum_size = MIN (smallest_rect.height, widest_rect.height);
       *natural_size = MAX (smallest_rect.height, widest_rect.height);
+
+      if (minimum_baseline)
+        *minimum_baseline = smallest_baseline;
+
+      if (natural_baseline)
+        *natural_baseline = widest_baseline;
     }
 }
 
