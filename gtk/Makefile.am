@@ -578,8 +578,7 @@ gtk_private_h_sources =		\
 	gtkwindowprivate.h	\
 	gtktreemenu.h		\
 	gdkpixbufutilsprivate.h \
-	gtkgizmoprivate.h \
-	gtkcenterboxprivate.h
+	gtkgizmoprivate.h
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources = 		\
