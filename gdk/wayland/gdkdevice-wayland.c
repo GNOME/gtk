@@ -3441,6 +3441,9 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
                   sizeof (gdouble) *
                   gdk_device_get_n_axes (tablet->current_device));
       break;
+    case GDK_SCROLL:
+      event->scroll.time = time;
+      break;
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
       event->proximity.time = time;
@@ -3862,7 +3865,32 @@ tablet_tool_handle_wheel (void                      *data,
                           int32_t                    degrees,
                           int32_t                    clicks)
 {
-  /* FIXME: Handle wheel */
+  GdkWaylandTabletToolData *tool = data;
+  GdkWaylandTabletData *tablet = tool->current_tablet;
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
+  GdkEvent *event;
+
+  GDK_NOTE (EVENTS,
+            g_message ("tablet tool %d wheel %d/%d",
+                       gdk_device_tool_get_tool_type (tool->tool), degrees, clicks));
+
+  if (clicks == 0)
+    return;
+
+  /* Send smooth event */
+  event = create_scroll_event (seat, &tablet->pointer_info,
+                               tablet->master, tablet->current_device, FALSE);
+  gdk_event_set_device_tool (event, tablet->current_tool->tool);
+  event->scroll.direction = GDK_SCROLL_SMOOTH;
+  event->scroll.delta_y = clicks;
+  _gdk_wayland_display_deliver_event (seat->display, event);
+
+  /* Send discrete event */
+  event = create_scroll_event (seat, &tablet->pointer_info,
+                               tablet->master, tablet->current_device, TRUE);
+  gdk_event_set_device_tool (event, tablet->current_tool->tool);
+  event->scroll.direction = (clicks > 0) ? GDK_SCROLL_DOWN : GDK_SCROLL_UP;
+  _gdk_wayland_display_deliver_event (seat->display, event);
 }
 
 static void
