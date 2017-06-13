@@ -387,22 +387,17 @@ GtkActionHelper *
 gtk_action_helper_new (GtkActionable *widget)
 {
   GtkActionHelper *helper;
+  GParamSpec *pspec;
 
   g_return_val_if_fail (GTK_IS_ACTIONABLE (widget), NULL);
   helper = g_object_new (GTK_TYPE_ACTION_HELPER, NULL);
 
   helper->widget = GTK_WIDGET (widget);
+  helper->enabled = gtk_widget_get_sensitive (GTK_WIDGET (helper->widget));
 
-  if (helper->widget)
-    {
-      GParamSpec *pspec;
-
-      helper->enabled = gtk_widget_get_sensitive (GTK_WIDGET (helper->widget));
-
-      pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (helper->widget), "active");
-      if (pspec && G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN)
-        g_object_get (G_OBJECT (helper->widget), "active", &helper->active, NULL);
-    }
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (helper->widget), "active");
+  if (pspec && G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN)
+    g_object_get (G_OBJECT (helper->widget), "active", &helper->active, NULL);
 
   helper->action_context = _gtk_widget_get_action_muxer (GTK_WIDGET (widget), TRUE);
 
