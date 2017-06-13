@@ -288,6 +288,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
   GDBusMessage *message;
   GVariantBuilder opt_builder;
   gboolean multiple;
+  const char *title;
 
   message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
                                             "/org/freedesktop/portal/desktop",
@@ -333,10 +334,12 @@ show_portal_file_chooser (GtkFileChooserNative *self,
     g_variant_builder_add (&opt_builder, "{sv}", "choices",
                            serialize_choices (GTK_FILE_CHOOSER_NATIVE (self)));
 
+  title = gtk_native_dialog_get_title (GTK_NATIVE_DIALOG (self));
+
   g_dbus_message_set_body (message,
                            g_variant_new ("(ss@a{sv})",
                                           parent_window_str ? parent_window_str : "",
-                                          gtk_native_dialog_get_title (GTK_NATIVE_DIALOG (self)),
+                                          title ? title : "",
                                           g_variant_builder_end (&opt_builder)));
 
   g_dbus_connection_send_message_with_reply (data->connection,
