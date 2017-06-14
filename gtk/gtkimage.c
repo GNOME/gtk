@@ -155,7 +155,6 @@ static void gtk_image_measure (GtkWidget      *widget,
 
 static void gtk_image_style_updated        (GtkWidget    *widget);
 static void gtk_image_finalize             (GObject      *object);
-static void gtk_image_reset                (GtkImage     *image);
 
 static void gtk_image_set_property         (GObject      *object,
                                             guint         prop_id,
@@ -1480,8 +1479,16 @@ gtk_image_set_from_definition (GtkImage           *image,
   g_object_thaw_notify (G_OBJECT (image));
 }
 
-static void
-gtk_image_reset (GtkImage *image)
+/**
+ * gtk_image_clear:
+ * @image: a #GtkImage
+ *
+ * Resets the image to be empty.
+ *
+ * Since: 2.8
+ */
+void
+gtk_image_clear (GtkImage *image)
 {
   GtkImagePrivate *priv = image->priv;
   GtkImageType storage_type;
@@ -1515,20 +1522,6 @@ gtk_image_reset (GtkImage *image)
   _gtk_icon_helper_clear (priv->icon_helper);
 
   g_object_thaw_notify (G_OBJECT (image));
-}
-
-/**
- * gtk_image_clear:
- * @image: a #GtkImage
- *
- * Resets the image to be empty.
- *
- * Since: 2.8
- */
-void
-gtk_image_clear (GtkImage *image)
-{
-  gtk_image_reset (image);
 }
 
 static void
