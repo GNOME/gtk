@@ -1124,17 +1124,19 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
 {
   GtkScrolledWindowPrivate *priv = sw->priv;
   gboolean indicator_close, on_scrollbar, on_other_scrollbar;
-  GtkWidget *event_widget;
+  GtkWidget *event_target;
+  GtkWidget *event_target_ancestor;
 
-  event_widget = gtk_get_event_widget (event);
+  event_target = gtk_get_event_target (event);
+  event_target_ancestor = gtk_widget_get_ancestor (event_target, GTK_TYPE_SCROLLBAR);
 
   indicator_close = event_close_to_indicator (sw, indicator, event);
-  on_scrollbar = (event_widget == indicator->scrollbar &&
+  on_scrollbar = (event_target_ancestor == indicator->scrollbar &&
                   event->type != GDK_LEAVE_NOTIFY);
   on_other_scrollbar = (!on_scrollbar &&
                         event->type != GDK_LEAVE_NOTIFY &&
-                        (event_widget == priv->hindicator.scrollbar ||
-                         event_widget == priv->vindicator.scrollbar));
+                        (event_target_ancestor == priv->hindicator.scrollbar ||
+                         event_target_ancestor == priv->vindicator.scrollbar));
 
   if (indicator->over_timeout_id)
     {
@@ -1274,7 +1276,8 @@ captured_event_cb (GtkWidget *widget,
   GtkScrolledWindow *sw;
   GdkInputSource input_source;
   GdkDevice *source_device;
-  GtkWidget *event_widget;
+  GtkWidget *event_target;
+  GtkWidget *event_target_ancestor;
   gboolean on_scrollbar;
 
   sw = GTK_SCROLLED_WINDOW (widget);
@@ -1300,9 +1303,10 @@ captured_event_cb (GtkWidget *widget,
       input_source == GDK_SOURCE_TOUCHSCREEN)
     return GDK_EVENT_PROPAGATE;
 
-  event_widget = gtk_get_event_widget (event);
-  on_scrollbar = (event_widget == priv->hindicator.scrollbar ||
-                  event_widget == priv->vindicator.scrollbar);
+  event_target = gtk_get_event_target (event);
+  event_target_ancestor = gtk_widget_get_ancestor (event_target, GTK_TYPE_SCROLLBAR);
+  on_scrollbar = (event_target_ancestor == priv->hindicator.scrollbar ||
+                  event_target_ancestor == priv->vindicator.scrollbar);
 
   if (event->type == GDK_MOTION_NOTIFY)
     {
