@@ -7689,15 +7689,7 @@ gtk_entry_get_layout_offsets (GtkEntry *entry,
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
   gtk_entry_get_text_allocation (entry, &text_allocation);
 
-  /* this gets coords relative to text area */
   get_layout_position (entry, x, y);
-
-  /* convert to widget coords */
-  if (x)
-    *x += text_allocation.x - allocation.x;
-
-  if (y)
-    *y += text_allocation.y - allocation.y;
 }
 
 
