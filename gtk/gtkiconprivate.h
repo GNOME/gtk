@@ -53,6 +53,9 @@ GtkWidget *  gtk_icon_new                    (const char *css_name);
 void         gtk_icon_set_image              (GtkIcon                *self,
                                               GtkCssImageBuiltinType  image);
 
+void         gtk_icon_set_css_name           (GtkIcon    *self,
+                                              const char *css_name);
+
 G_END_DECLS
 
 #endif /* __GTK_ICON_PRIVATE_H__ */
