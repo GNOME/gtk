@@ -2171,7 +2171,7 @@ gtk_header_bar_get_show_close_button (GtkHeaderBar *bar)
 /**
  * gtk_header_bar_set_show_close_button:
  * @bar: a #GtkHeaderBar
- * @setting: %TRUE to show standard widow decorations
+ * @setting: %TRUE to show standard window decorations
  *
  * Sets whether this header bar shows the standard window decorations,
  * including close, maximize, and minimize.
