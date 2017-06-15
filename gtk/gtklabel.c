@@ -3664,7 +3664,7 @@ get_layout_location (GtkLabel  *label,
 
   baseline = gtk_widget_get_allocated_baseline (widget);
 
-  x = floor (allocation.x + xalign * (allocation.width - req_width) - logical.x);
+  x = floor ((xalign * (allocation.width - req_width)) - logical.x);
 
   baseline_offset = 0;
   if (baseline != -1)
@@ -3688,9 +3688,9 @@ get_layout_location (GtkLabel  *label,
    *   middle".  You want to read the first line, at least, to get some context.
    */
   if (pango_layout_get_line_count (priv->layout) == 1)
-    y = floor (allocation.y + (allocation.height - req_height) * yalign) - logical.y + baseline_offset;
+    y = floor ((allocation.height - req_height) * yalign) + baseline_offset;
   else
-    y = floor (allocation.y + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y + baseline_offset;
+    y = floor (MAX ((allocation.height - req_height) * yalign, 0)) + baseline_offset;
 
   if (xp)
     *xp = x;
@@ -3894,11 +3894,7 @@ gtk_label_get_focus_link (GtkLabel *label)
   return NULL;
 }
 
-static void layout_to_window_coords (GtkLabel *label,
-                                     gint     *x,
-                                     gint     *y);
 #define GRAPHENE_RECT_FROM_RECT(_r) (GRAPHENE_RECT_INIT ((_r)->x, (_r)->y, (_r)->width, (_r)->height))
-
 
 static void
 gtk_label_snapshot (GtkWidget   *widget,
@@ -3927,8 +3923,7 @@ gtk_label_snapshot (GtkWidget   *widget,
 
   if (priv->text && (*priv->text != '\0'))
     {
-      lx = ly = 0;
-      layout_to_window_coords (label, &lx, &ly);
+      get_layout_location (label, &lx, &ly);
 
       gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
 
@@ -4208,25 +4203,6 @@ window_to_layout_coords (GtkLabel *label,
 
   *y += allocation.y; /* go to widget->window */
   *y -= ly;                   /* go to layout */
-}
-
-static void
-layout_to_window_coords (GtkLabel *label,
-                         gint     *x,
-                         gint     *y)
-{
-  gint lx, ly;
-  GtkAllocation allocation;
-
-  /* get layout location in widget->window coords */
-  get_layout_location (label, &lx, &ly);
-  _gtk_widget_get_allocation (GTK_WIDGET (label), &allocation);
-
-  *x += lx;           /* go to widget->window */
-  *x -= allocation.x; /* go to selection window */
-
-  *y += ly;           /* go to widget->window */
-  *y -= allocation.y; /* go to selection window */
 }
 
 static gboolean
