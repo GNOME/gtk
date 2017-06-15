@@ -575,7 +575,7 @@ gtk_range_init (GtkRange *range)
 
   gtk_widget_set_parent (priv->trough_widget, GTK_WIDGET (range));
 
-  priv->slider_widget = gtk_icon_new ("slider");
+  priv->slider_widget = gtk_gizmo_new ("slider", NULL, NULL, NULL);
   gtk_widget_set_parent (priv->slider_widget, priv->trough_widget);
 
   /* Note: Order is important here.
