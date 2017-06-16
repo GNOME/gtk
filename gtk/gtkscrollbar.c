@@ -180,6 +180,7 @@ gtk_scrollbar_set_property (GObject      *object,
             _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
 
             gtk_widget_queue_resize (GTK_WIDGET (self));
+            g_object_notify_by_pspec (object, pspec);
           }
       }
       break;
