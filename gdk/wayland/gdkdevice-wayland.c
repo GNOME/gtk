@@ -2867,6 +2867,10 @@ tablet_handle_done (void                 *data,
     GDK_WAYLAND_DEVICE_MANAGER (seat->device_manager);
   GdkDevice *master, *stylus_device, *eraser_device;
   gchar *master_name, *eraser_name;
+  gchar *vid, *pid;
+
+  vid = g_strdup_printf ("%.4x", tablet->vid);
+  pid = g_strdup_printf ("%.4x", tablet->pid);
 
   master_name = g_strdup_printf ("Master pointer for %s", tablet->name);
   master = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
@@ -2892,6 +2896,8 @@ tablet_handle_done (void                 *data,
                                 "display", display,
                                 "device-manager", device_manager,
                                 "seat", seat,
+                                "vendor-id", vid,
+                                "product-id", pid,
                                 NULL);
 
   eraser_device = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
@@ -2903,6 +2909,8 @@ tablet_handle_done (void                 *data,
                                 "display", display,
                                 "device-manager", device_manager,
                                 "seat", seat,
+                                "vendor-id", vid,
+                                "product-id", pid,
                                 NULL);
 
   tablet->master = master;
@@ -2926,6 +2934,8 @@ tablet_handle_done (void                 *data,
 
   g_free (eraser_name);
   g_free (master_name);
+  g_free (vid);
+  g_free (pid);
 }
 
 static void
