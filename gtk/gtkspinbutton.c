@@ -620,13 +620,13 @@ gtk_spin_button_set_property (GObject      *object,
       gtk_spin_button_set_orientation (spin_button, g_value_get_enum (value));
       break;
     case PROP_WIDTH_CHARS:
-      gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), g_value_get_int (value));
+      gtk_spin_button_set_width_chars (spin_button, g_value_get_int (value));
       break;
     case PROP_MAX_WIDTH_CHARS:
-      gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), g_value_get_int (value));
+      gtk_spin_button_set_max_width_chars (spin_button, g_value_get_int (value));
       break;
     case PROP_TEXT:
-      gtk_entry_set_text (GTK_ENTRY (priv->entry), g_value_get_string (value));
+      gtk_spin_button_set_text (spin_button, g_value_get_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -673,13 +673,14 @@ gtk_spin_button_get_property (GObject      *object,
       g_value_set_enum (value, priv->orientation);
       break;
     case PROP_WIDTH_CHARS:
-      g_value_set_int (value, gtk_entry_get_width_chars (GTK_ENTRY (priv->entry)));
+      g_value_set_int (value, gtk_spin_button_get_width_chars (spin_button));
       break;
     case PROP_MAX_WIDTH_CHARS:
-      g_value_set_int (value, gtk_entry_get_max_width_chars (GTK_ENTRY (priv->entry)));
+      g_value_set_int (value, gtk_spin_button_get_max_width_chars (spin_button));
       break;
     case PROP_TEXT:
-      g_value_set_string (value, gtk_entry_get_text (GTK_ENTRY (priv->entry)));
+      g_value_set_string (value, gtk_spin_button_get_text (spin_button));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2334,7 +2335,7 @@ gtk_spin_button_get_max_width_chars (GtkSpinButton *spin_button)
 
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), -1);
 
-  return gtk_entry_get_width_chars (GTK_ENTRY (priv->entry));
+  return gtk_entry_get_max_width_chars (GTK_ENTRY (priv->entry));
 }
 
 /**
@@ -2356,8 +2357,11 @@ gtk_spin_button_set_max_width_chars (GtkSpinButton *spin_button,
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
-  gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), max_width_chars);
-  g_object_notify (G_OBJECT (spin_button), "max-width-chars");
+  if (max_width_chars != gtk_entry_get_max_width_chars (GTK_ENTRY (priv->entry)))
+    {
+      gtk_entry_set_max_width_chars (GTK_ENTRY (priv->entry), max_width_chars);
+      g_object_notify (G_OBJECT (spin_button), "max-width-chars");
+    }
 }
 
 /**
@@ -2400,6 +2404,9 @@ gtk_spin_button_set_width_chars (GtkSpinButton *spin_button,
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
-  gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), width_chars);
-  g_object_notify (G_OBJECT (spin_button), "width-chars");
+  if (width_chars != gtk_entry_get_width_chars (GTK_ENTRY (priv->entry)))
+    {
+      gtk_entry_set_width_chars (GTK_ENTRY (priv->entry), width_chars);
+      g_object_notify (G_OBJECT (spin_button), "width-chars");
+    }
 }
