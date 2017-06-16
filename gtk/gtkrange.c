@@ -909,7 +909,7 @@ gtk_range_get_slider_size_fixed (GtkRange *range)
  * @range_rect: (out): return location for the range rectangle
  *
  * This function returns the area that contains the range’s trough,
- * in widget->window coordinates.
+ * in coordinates relative to @range's origin.
  *
  * This function is useful mainly for #GtkRange subclasses.
  *
@@ -922,7 +922,7 @@ gtk_range_get_range_rect (GtkRange     *range,
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (range_rect != NULL);
 
-  gtk_widget_get_margin_allocation (GTK_WIDGET (range->priv->trough_widget), range_rect);
+  gtk_widget_get_own_allocation (range->priv->trough_widget, range_rect);
 }
 
 /**
@@ -1627,8 +1627,8 @@ gtk_range_size_allocate (GtkWidget     *widget,
   else
     clamp_dimensions (allocation, &box_min_width, &box_min_height, &border, FALSE);
 
-  box_alloc.x = border.left + allocation->x;
-  box_alloc.y = border.top + allocation->y;
+  box_alloc.x = border.left;
+  box_alloc.y = border.top;
   box_alloc.width = box_min_width;
   box_alloc.height = box_min_height;
 
@@ -2695,15 +2695,6 @@ gtk_range_move_slider (GtkRange     *range,
     gtk_widget_error_bell (GTK_WIDGET (range));
 }
 
-static gboolean
-rectangle_contains_point (GdkRectangle *rect,
-                          gint          x,
-                          gint          y)
-{
-  return (x >= rect->x) && (x < rect->x + rect->width) &&
-         (y >= rect->y) && (y < rect->y + rect->height);
-}
-
 /* Update mouse location, return TRUE if it changes */
 static void
 gtk_range_update_mouse_location (GtkRange *range)
@@ -2720,18 +2711,22 @@ gtk_range_update_mouse_location (GtkRange *range)
   x = priv->mouse_x;
   y = priv->mouse_y;
 
-  gtk_widget_get_allocation (widget, &range_alloc);
+  gtk_widget_get_own_allocation (widget, &range_alloc);
   gtk_widget_get_border_allocation (priv->trough_widget, &trough_alloc);
-  gtk_widget_get_border_allocation (priv->slider_widget, &slider_alloc);
+
+  gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
+  gtk_widget_translate_coordinates (priv->trough_widget, widget,
+                                    slider_alloc.x, slider_alloc.y, &slider_alloc.x, &slider_alloc.y);
+
   gdk_rectangle_union (&slider_alloc, &trough_alloc, &slider_trace);
 
   if (priv->grab_location != NULL)
     priv->mouse_location = priv->grab_location;
-  else if (rectangle_contains_point (&slider_alloc, range_alloc.x + x, range_alloc.y + y))
+  else if (gdk_rectangle_contains_point (&slider_alloc, x, y))
     priv->mouse_location = priv->slider_widget;
-  else if (rectangle_contains_point (&slider_trace, range_alloc.x + x, range_alloc.y + y))
+  else if (gdk_rectangle_contains_point (&slider_trace, x, y))
     priv->mouse_location = priv->trough_widget;
-  else if (rectangle_contains_point (&range_alloc, range_alloc.x + x, range_alloc.y + y))
+  else if (gdk_rectangle_contains_point (&range_alloc, x, y))
     priv->mouse_location = widget;
   else
     priv->mouse_location = NULL;
@@ -2784,13 +2779,13 @@ gtk_range_compute_slider_position (GtkRange     *range,
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      slider_rect->x = trough_content_alloc.x + (int) floor ((trough_content_alloc.width - slider_width) / 2);
+      slider_rect->x = (int) floor ((trough_content_alloc.width - slider_width) / 2);
       slider_rect->width = slider_width;
 
       min_slider_size = slider_height;
 
       /* Compute slider position/length */
-      top = trough_content_alloc.y;
+      top = 0;
       bottom = top + trough_content_alloc.height;
 
       /* Scale slider half extends over the trough edge */
@@ -2837,13 +2832,13 @@ gtk_range_compute_slider_position (GtkRange     *range,
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      slider_rect->y = trough_content_alloc.y + (int) floor ((trough_content_alloc.height - slider_height) / 2);
+      slider_rect->y = (int) floor ((trough_content_alloc.height - slider_height) / 2);
       slider_rect->height = slider_height;
 
       min_slider_size = slider_width;
 
       /* Compute slider position/length */
-      left = trough_content_alloc.x;
+      left = 0;
       right = left + trough_content_alloc.width;
 
       /* Scale slider half extends over the trough edge */
@@ -2915,6 +2910,8 @@ gtk_range_calc_marks (GtkRange *range)
   for (i = 0; i < priv->n_marks; i++)
     {
       gtk_range_compute_slider_position (range, priv->marks[i], &slider);
+      gtk_widget_translate_coordinates (priv->slider_widget, GTK_WIDGET (range),
+                                        slider.x, slider.y, &slider.x, &slider.y);
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         priv->mark_pos[i] = slider.x + slider.width / 2;
