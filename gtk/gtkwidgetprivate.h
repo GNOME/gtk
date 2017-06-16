@@ -324,7 +324,13 @@ void              gtk_widget_get_border_allocation         (GtkWidget        *wi
                                                             GtkAllocation    *allocation);
 void              gtk_widget_get_margin_allocation         (GtkWidget        *widget,
                                                             GtkAllocation    *allocation);
-
+void              gtk_widget_get_outer_allocation          (GtkWidget        *widget,
+                                                            GtkAllocation    *allocation);
+void              gtk_widget_get_own_allocation            (GtkWidget        *widget,
+                                                            GtkAllocation    *allocation);
+void              gtk_widget_get_content_size              (GtkWidget        *widget,
+                                                            int              *width,
+                                                            int              *height);
 
 GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,
                                                             GtkWidget *widget_b);

@@ -13529,6 +13529,57 @@ gtk_widget_get_allocation (GtkWidget     *widget,
 }
 
 void
+gtk_widget_get_outer_allocation (GtkWidget    *widget,
+                                 GdkRectangle *allocation)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkBorder margin;
+  GtkCssStyle *style;
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+
+  *allocation = priv->allocation;
+
+  allocation->x += margin.left;
+  allocation->y += margin.top;
+  allocation->width -= margin.left + margin.right;
+  allocation->height -= margin.top + margin.bottom;
+}
+
+void
+gtk_widget_get_own_allocation (GtkWidget    *widget,
+                               GdkRectangle *allocation)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  allocation->x = -padding.left - border.left;
+  allocation->y = -padding.top - border.top;
+  allocation->width = priv->allocation.width - margin.left - margin.right;
+  allocation->height = priv->allocation.height -margin.top - margin.bottom;
+}
+
+void
+gtk_widget_get_content_size (GtkWidget *widget,
+                             int       *width,
+                             int       *height)
+{
+  GtkAllocation alloc;
+
+  gtk_widget_get_content_allocation (widget, &alloc);
+
+  *width = alloc.width;
+  *height = alloc.height;
+}
+
+void
 gtk_widget_get_content_allocation (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
