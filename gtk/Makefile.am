@@ -396,7 +396,6 @@ gtk_private_h_sources =		\
 	gtkcsscalcvalueprivate.h	\
 	gtkcsscolorvalueprivate.h	\
 	gtkcsscornervalueprivate.h	\
-	gtkcsscustomgadgetprivate.h	\
 	gtkcssdimensionvalueprivate.h	\
 	gtkcsseasevalueprivate.h	\
 	gtkcssenumvalueprivate.h	\
@@ -665,7 +664,6 @@ gtk_base_c_sources = 		\
 	gtkcsscalcvalue.c	\
 	gtkcsscolorvalue.c	\
 	gtkcsscornervalue.c	\
-	gtkcsscustomgadget.c	\
 	gtkcssdimensionvalue.c	\
 	gtkcsseasevalue.c	\
 	gtkcssenumvalue.c	\

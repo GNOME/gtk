@@ -81,7 +81,6 @@ gtk_public_sources = files([
   'gtkcsscalcvalue.c',
   'gtkcsscolorvalue.c',
   'gtkcsscornervalue.c',
-  'gtkcsscustomgadget.c',
   'gtkcssdimensionvalue.c',
   'gtkcsseasevalue.c',
   'gtkcssenumvalue.c',
