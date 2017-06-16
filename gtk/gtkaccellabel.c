@@ -115,6 +115,7 @@ enum {
   PROP_ACCEL_CLOSURE,
   PROP_ACCEL_WIDGET,
   PROP_LABEL,
+  PROP_USE_UNDERLINE,
   LAST_PROP
 };
 
@@ -240,6 +241,13 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
                          "",
                          GTK_PARAM_READWRITE);
 
+  props[PROP_USE_UNDERLINE] =
+    g_param_spec_boolean ("use-underline",
+                          P_("Use underline"),
+                          P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
   gtk_widget_class_set_css_name (widget_class, "accellabel");
@@ -265,6 +273,9 @@ gtk_accel_label_set_property (GObject      *object,
       break;
     case PROP_LABEL:
       gtk_accel_label_set_label (accel_label, g_value_get_string (value));
+      break;
+    case PROP_USE_UNDERLINE:
+      gtk_accel_label_set_use_underline (accel_label, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -293,6 +304,9 @@ gtk_accel_label_get_property (GObject    *object,
     case PROP_LABEL:
       g_value_set_string (value, gtk_accel_label_get_label (accel_label));
       break;
+    case PROP_USE_UNDERLINE:
+      g_value_set_boolean (value, gtk_accel_label_get_use_underline (accel_label));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -317,7 +331,6 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
   priv->text_label = gtk_label_new ("");
   gtk_widget_set_hexpand (priv->text_label, TRUE);
   gtk_label_set_xalign (GTK_LABEL (priv->text_label), 0.0f);
-  gtk_label_set_use_underline (GTK_LABEL (priv->text_label), TRUE);
   priv->accel_label = g_object_new (GTK_TYPE_LABEL,
                                     "css-name", "accelerator",
                                     NULL);
@@ -991,4 +1004,33 @@ gtk_accel_label_get_label (GtkAccelLabel   *accel_label)
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), NULL);
 
   return gtk_label_get_label (GTK_LABEL (priv->text_label));
+}
+
+
+void
+gtk_accel_label_set_use_underline (GtkAccelLabel *accel_label,
+                                   gboolean       setting)
+{
+  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
+
+  g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
+
+  setting = !!setting;
+
+  if (setting != gtk_label_get_use_underline (GTK_LABEL (priv->text_label)))
+    {
+      gtk_label_set_use_underline (GTK_LABEL (priv->text_label), setting);
+
+      g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_USE_UNDERLINE]);
+    }
+}
+
+gboolean
+gtk_accel_label_get_use_underline (GtkAccelLabel *accel_label)
+{
+  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
+
+  g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
+
+  return gtk_label_get_use_underline (GTK_LABEL (priv->text_label));
 }

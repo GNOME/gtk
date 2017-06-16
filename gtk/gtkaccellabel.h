@@ -111,6 +111,14 @@ void      gtk_accel_label_set_label          (GtkAccelLabel   *accel_label,
 GDK_AVAILABLE_IN_3_92
 const char * gtk_accel_label_get_label       (GtkAccelLabel   *accel_label);
 
+GDK_AVAILABLE_IN_3_92
+void      gtk_accel_label_set_use_underline  (GtkAccelLabel   *accel_label,
+                                              gboolean         setting);
+
+GDK_AVAILABLE_IN_3_92
+gboolean  gtk_accel_label_get_use_underline  (GtkAccelLabel   *accel_label);
+
+
 /* private */
 gchar *    _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
 							 guint               accelerator_key,
