@@ -36,6 +36,9 @@ void            gtk_image_set_from_definition           (GtkImage               
                                                          GtkImageDefinition     *def,
                                                          GtkIconSize             size);
 
+
+GtkImageDefinition * gtk_image_get_definition           (GtkImage *image);
+
 G_END_DECLS
 
 #endif /* __GTK_IMAGE_H__ */

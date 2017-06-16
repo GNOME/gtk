@@ -1479,6 +1479,12 @@ gtk_image_set_from_definition (GtkImage           *image,
   g_object_thaw_notify (G_OBJECT (image));
 }
 
+GtkImageDefinition *
+gtk_image_get_definition (GtkImage *image)
+{
+  return gtk_icon_helper_get_definition (image->priv->icon_helper);
+}
+
 /**
  * gtk_image_clear:
  * @image: a #GtkImage
