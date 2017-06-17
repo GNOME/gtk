@@ -3755,7 +3755,7 @@ indicator_set_fade (Indicator *indicator,
 
   visible = indicator->current_pos != 0.0 || indicator->target_pos != 0.0;
 
-  if (visible && !gtk_widget_get_mapped (indicator->scrollbar))
+  if (visible)
     {
       indicator->conceil_timer = g_timeout_add (INDICATOR_FADE_OUT_TIME, maybe_hide_indicator, indicator);
     }
@@ -3769,7 +3769,6 @@ indicator_set_fade (Indicator *indicator,
   if (changed)
     {
       gtk_widget_set_opacity (indicator->scrollbar, indicator->current_pos);
-      gtk_widget_queue_draw (indicator->scrollbar);
     }
 }
 
