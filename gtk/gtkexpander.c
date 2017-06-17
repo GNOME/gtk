@@ -545,20 +545,16 @@ gesture_multipress_pressed_cb (GtkGestureMultiPress *gesture,
                                GtkExpander          *expander)
 {
   GtkExpanderPrivate *priv = expander->priv;
-  GtkAllocation title_allocation, allocation;
+  GtkAllocation title_allocation;
 
-  gtk_widget_get_allocation (GTK_WIDGET (expander), &allocation);
-  gtk_widget_get_allocation (priv->title_widget, &title_allocation);
+  gtk_widget_get_own_allocation (priv->title_widget, &title_allocation);
+  gtk_widget_translate_coordinates (priv->title_widget, GTK_WIDGET (expander),
+                                    title_allocation.x, title_allocation.y,
+                                    &title_allocation.x, &title_allocation.y);
   /* Coordinates are in the widget coordinate system, so transform
    * the title_allocation to it.
    */
-  title_allocation.x -= allocation.x;
-  title_allocation.y -= allocation.y;
-
-  priv->pressed_in_title = (x >= title_allocation.x &&
-                            x < title_allocation.x + title_allocation.width &&
-                            y >= title_allocation.y &&
-                            y < title_allocation.y + title_allocation.height);
+  priv->pressed_in_title = gdk_rectangle_contains_point (&title_allocation, x, y);
 }
 
 static void
