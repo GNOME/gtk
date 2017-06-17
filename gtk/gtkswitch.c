@@ -85,7 +85,6 @@ struct _GtkSwitchPrivate
 
   guint state                 : 1;
   guint is_active             : 1;
-  guint in_switch             : 1;
 
   GtkWidget *on_label;
   GtkWidget *off_label;
@@ -209,12 +208,14 @@ gtk_switch_multipress_gesture_released (GtkGestureMultiPress *gesture,
                                         gdouble               y,
                                         GtkSwitch            *sw)
 {
-  GtkSwitchPrivate *priv = sw->priv;
   GdkEventSequence *sequence;
+  GdkRectangle own_alloc;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
-  if (priv->in_switch &&
+  gtk_widget_get_own_allocation (GTK_WIDGET (sw), &own_alloc);
+
+  if (gdk_rectangle_contains_point (&own_alloc, x, y) &&
       gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
     gtk_switch_begin_toggle_animation (sw);
 }
@@ -275,28 +276,6 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
   priv->handle_pos = active ? 1.0 : 0.0;
   gtk_switch_set_active (sw, active);
   gtk_widget_queue_allocate (GTK_WIDGET (sw));
-}
-
-static gboolean
-gtk_switch_enter (GtkWidget        *widget,
-                  GdkEventCrossing *event)
-{
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-
-  priv->in_switch = TRUE;
-
-  return FALSE;
-}
-
-static gboolean
-gtk_switch_leave (GtkWidget        *widget,
-                  GdkEventCrossing *event)
-{
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-
-  priv->in_switch = FALSE;
-
-  return FALSE;
 }
 
 static void
@@ -593,8 +572,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   widget_class->measure = gtk_switch_measure;
   widget_class->size_allocate = gtk_switch_size_allocate;
   widget_class->snapshot = gtk_switch_snapshot;
-  widget_class->enter_notify_event = gtk_switch_enter;
-  widget_class->leave_notify_event = gtk_switch_leave;
 
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
