@@ -8035,17 +8035,9 @@ create_mainloop (GtkWidget *widget)
 static gboolean
 layout_draw_handler (GtkWidget *widget, cairo_t *cr)
 {
-  GtkLayout *layout;
-  GdkWindow *bin_window;
   GdkRectangle clip;
-  gint i,j,x,y;
+  gint i,j;
   gint imin, imax, jmin, jmax;
-
-  layout = GTK_LAYOUT (widget);
-  bin_window = gtk_layout_get_bin_window (layout);
-
-  gdk_window_get_position (bin_window, &x, &y);
-  cairo_translate (cr, x, y);
 
   gdk_cairo_get_clip_rectangle (cr, &clip);
 
