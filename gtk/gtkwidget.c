@@ -15491,10 +15491,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
   if (gtk_snapshot_clips_rect (snapshot, &offset_clip))
     return;
 
-  if (_gtk_widget_is_toplevel (widget))
-    opacity = 1.0;
-  else
-    opacity = widget->priv->alpha / 255.0;
+  opacity = widget->priv->alpha / 255.0;
   if (opacity <= 0.0)
     return;
 
