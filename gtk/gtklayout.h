@@ -76,8 +76,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_layout_new             (GtkAdjustment *hadjustment,
 				           GtkAdjustment *vadjustment);
 GDK_AVAILABLE_IN_ALL
-GdkWindow*     gtk_layout_get_bin_window  (GtkLayout     *layout);
-GDK_AVAILABLE_IN_ALL
 void           gtk_layout_put             (GtkLayout     *layout,
 		                           GtkWidget     *child_widget,
 		                           gint           x,

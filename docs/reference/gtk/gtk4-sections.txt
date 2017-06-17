@@ -1707,7 +1707,6 @@ gtk_layout_put
 gtk_layout_move
 gtk_layout_set_size
 gtk_layout_get_size
-gtk_layout_get_bin_window
 <SUBSECTION Standard>
 GTK_LAYOUT
 GTK_IS_LAYOUT
