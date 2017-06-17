@@ -400,7 +400,6 @@ gtk_private_h_sources =		\
 	gtkcsseasevalueprivate.h	\
 	gtkcssenumvalueprivate.h	\
 	gtkcssfiltervalueprivate.h	\
-	gtkcssgadgetprivate.h		\
 	gtkcssiconthemevalueprivate.h	\
 	gtkcssimagebuiltinprivate.h	\
 	gtkcssimagecrossfadeprivate.h	\
@@ -668,7 +667,6 @@ gtk_base_c_sources = 		\
 	gtkcsseasevalue.c	\
 	gtkcssenumvalue.c	\
 	gtkcssfiltervalue.c	\
-	gtkcssgadget.c		\
 	gtkcssiconthemevalue.c	\
 	gtkcssimage.c		\
 	gtkcssimagebuiltin.c	\
