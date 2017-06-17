@@ -87,7 +87,6 @@ enum {
   CHILD_PROP_Y
 };
 
-static void gtk_fixed_realize       (GtkWidget        *widget);
 static void gtk_fixed_measure (GtkWidget      *widget,
                                GtkOrientation  orientation,
                                int             for_size,
@@ -132,7 +131,6 @@ gtk_fixed_class_init (GtkFixedClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  widget_class->realize = gtk_fixed_realize;
   widget_class->measure = gtk_fixed_measure;
   widget_class->size_allocate = gtk_fixed_size_allocate;
   widget_class->snapshot = gtk_fixed_snapshot;
@@ -172,9 +170,9 @@ gtk_fixed_init (GtkFixed *fixed)
 {
   fixed->priv = gtk_fixed_get_instance_private (fixed);
 
-  gtk_widget_set_has_window (GTK_WIDGET (fixed), FALSE);
-
   fixed->priv->children = NULL;
+
+  gtk_widget_set_has_window (GTK_WIDGET (fixed), FALSE);
 }
 
 /**
@@ -347,28 +345,6 @@ gtk_fixed_get_child_property (GtkContainer *container,
 }
 
 static void
-gtk_fixed_realize (GtkWidget *widget)
-{
-  GtkAllocation allocation;
-  GdkWindow *window;
-
-  if (!gtk_widget_get_has_window (widget))
-    GTK_WIDGET_CLASS (gtk_fixed_parent_class)->realize (widget);
-  else
-    {
-      gtk_widget_set_realized (widget, TRUE);
-
-      gtk_widget_get_allocation (widget, &allocation);
-
-      window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                     GDK_ALL_EVENTS_MASK,
-                                     &allocation);
-      gtk_widget_set_window (widget, window);
-      gtk_widget_register_window (widget, window);
-    }
-}
-
-static void
 gtk_fixed_measure (GtkWidget      *widget,
                    GtkOrientation  orientation,
                    int             for_size,
@@ -419,16 +395,6 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
   GtkRequisition child_requisition;
   GList *children;
 
-  if (gtk_widget_get_has_window (widget))
-    {
-      if (gtk_widget_get_realized (widget))
-        gdk_window_move_resize (gtk_widget_get_window (widget),
-                                allocation->x,
-                                allocation->y,
-                                allocation->width,
-                                allocation->height);
-    }
-
   for (children = priv->children; children; children = children->next)
     {
       child = children->data;
@@ -439,12 +405,6 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
       gtk_widget_get_preferred_size (child->widget, &child_requisition, NULL);
       child_allocation.x = child->x;
       child_allocation.y = child->y;
-
-      if (!gtk_widget_get_has_window (widget))
-        {
-          child_allocation.x += allocation->x;
-          child_allocation.y += allocation->y;
-        }
 
       child_allocation.width = child_requisition.width;
       child_allocation.height = child_requisition.height;
