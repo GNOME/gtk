@@ -112,15 +112,13 @@ gtk_check_menu_item_size_allocate (GtkWidget     *widget,
                                    GtkAllocation *allocation)
 {
   GtkAllocation clip, widget_clip;
-  GtkAllocation content_alloc, indicator_alloc;
+  GtkAllocation indicator_alloc;
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
   gint toggle_size;
 
   GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->size_allocate
     (widget, allocation);
-
-  gtk_widget_get_content_allocation (widget, &content_alloc);
 
   gtk_widget_measure (priv->indicator_widget,
                       GTK_ORIENTATION_HORIZONTAL,
@@ -135,14 +133,12 @@ gtk_check_menu_item_size_allocate (GtkWidget     *widget,
   toggle_size = GTK_MENU_ITEM (check_menu_item)->priv->toggle_size;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    indicator_alloc.x = content_alloc.x +
-      (toggle_size - indicator_alloc.width) / 2;
+    indicator_alloc.x = (toggle_size - indicator_alloc.width) / 2;
   else
-    indicator_alloc.x = content_alloc.x + content_alloc.width - toggle_size +
+    indicator_alloc.x = allocation->width - toggle_size +
       (toggle_size - indicator_alloc.width) / 2;
 
-  indicator_alloc.y = content_alloc.y +
-    (content_alloc.height - indicator_alloc.height) / 2;
+  indicator_alloc.y = (allocation->height - indicator_alloc.height) / 2;
 
   gtk_widget_size_allocate_with_baseline (priv->indicator_widget,
                                           &indicator_alloc,
