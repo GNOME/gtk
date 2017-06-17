@@ -191,7 +191,7 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   GtkSwitchPrivate *priv = sw->priv;
   GtkAllocation allocation;
 
-  gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
+  gtk_widget_get_outer_allocation (GTK_WIDGET (sw), &allocation);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   /* If the press didn't happen in the draggable handle,
@@ -228,13 +228,14 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
   GtkWidget *widget = GTK_WIDGET (sw);
   GtkSwitchPrivate *priv = sw->priv;
   gint width;
+  int height;
 
   if (direction == GTK_PAN_DIRECTION_LEFT)
     offset = -offset;
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-  width = gtk_widget_get_allocated_width (widget);
+  gtk_widget_get_content_size (widget, &width, &height);
 
   if (priv->is_active)
     offset += width / 2;
@@ -354,8 +355,8 @@ gtk_switch_size_allocate (GtkWidget     *widget,
   GtkAllocation slider_alloc;
   int min;
 
-  slider_alloc.x = allocation->x + round (priv->handle_pos * (allocation->width - allocation->width / 2));
-  slider_alloc.y = allocation->y;
+  slider_alloc.x = round (priv->handle_pos * (allocation->width / 2));
+  slider_alloc.y = 0;
   slider_alloc.width = allocation->width / 2;
   slider_alloc.height = allocation->height;
 
@@ -366,10 +367,10 @@ gtk_switch_size_allocate (GtkWidget     *widget,
 
   /* Center ON label in left half */
   gtk_widget_measure (priv->on_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-  child_alloc.x = allocation->x + ((allocation->width / 2) - min) / 2;
+  child_alloc.x = ((allocation->width / 2) - min) / 2;
   child_alloc.width = min;
   gtk_widget_measure (priv->on_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
-  child_alloc.y = allocation->y + (allocation->height - min) / 2;
+  child_alloc.y = (allocation->height - min) / 2;
   child_alloc.height = min;
   gtk_widget_size_allocate (priv->on_label, &child_alloc);
   gtk_widget_get_clip (priv->on_label, &child_clip);
@@ -377,10 +378,10 @@ gtk_switch_size_allocate (GtkWidget     *widget,
 
   /* Center OFF label in right half */
   gtk_widget_measure (priv->off_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
-  child_alloc.x = allocation->x + (allocation->width / 2) + ((allocation->width / 2) - min) / 2;
+  child_alloc.x = (allocation->width / 2) + ((allocation->width / 2) - min) / 2;
   child_alloc.width = min;
   gtk_widget_measure (priv->off_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
-  child_alloc.y = allocation->y + (allocation->height - min) / 2;
+  child_alloc.y = (allocation->height - min) / 2;
   child_alloc.height = min;
   gtk_widget_size_allocate (priv->off_label, &child_alloc);
   gtk_widget_get_clip (priv->off_label, &child_clip);
