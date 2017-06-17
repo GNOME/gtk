@@ -38,7 +38,6 @@
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkentryprivate.h"
-#include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
