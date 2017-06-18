@@ -858,7 +858,7 @@ gtk_paned_set_property (GObject        *object,
       if (priv->position_set != g_value_get_boolean (value))
         {
           priv->position_set = g_value_get_boolean (value);
-          gtk_widget_queue_resize_no_redraw (GTK_WIDGET (paned));
+          gtk_widget_queue_resize (GTK_WIDGET (paned));
           g_object_notify_by_pspec (object, pspec);
         }
       break;
@@ -952,7 +952,7 @@ gtk_paned_set_child_property (GtkContainer    *container,
       break;
     }
   if (old_value != new_value)
-    gtk_widget_queue_resize_no_redraw (GTK_WIDGET (container));
+    gtk_widget_queue_resize (GTK_WIDGET (container));
 }
 
 static void
@@ -1228,13 +1228,13 @@ gtk_paned_size_allocate (GtkWidget     *widget,
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
   GtkAllocation clip = *allocation;
+  GtkAllocation child_clip;
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     {
       GtkAllocation child1_allocation;
       GtkAllocation child2_allocation;
-      GtkAllocation priv_child1_allocation;
       GdkRectangle old_handle_pos;
       gint handle_size;
 
@@ -1336,7 +1336,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
         }
 
       gtk_widget_size_allocate (priv->handle_widget, &priv->handle_pos);
-      gtk_widget_get_clip (priv->handle_widget, &clip);
+      gtk_widget_get_clip (priv->handle_widget, &child_clip);
+      gdk_rectangle_union (&clip, &child_clip, &clip);
 
       if (gtk_widget_get_mapped (widget) &&
           (old_handle_pos.x != priv->handle_pos.x ||
@@ -1352,25 +1353,14 @@ gtk_paned_size_allocate (GtkWidget     *widget,
                                       priv->handle_pos.width, priv->handle_pos.height);
         }
 
-      /* Now allocate the childen, making sure, when resizing not to
-       * overlap the windows
-       */
-      gtk_widget_get_allocation (priv->child1, &priv_child1_allocation);
-      if (gtk_widget_get_mapped (widget) &&
-          ((priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-            priv_child1_allocation.width < child1_allocation.width) ||
 
-           (priv->orientation == GTK_ORIENTATION_VERTICAL &&
-            priv_child1_allocation.height < child1_allocation.height)))
-	{
-          gtk_widget_size_allocate (priv->child2, &child2_allocation);
-          gtk_widget_size_allocate (priv->child1, &child1_allocation);
-	}
-      else
-	{
-          gtk_widget_size_allocate (priv->child1, &child1_allocation);
-          gtk_widget_size_allocate (priv->child2, &child2_allocation);
-	}
+      gtk_widget_size_allocate (priv->child1, &child1_allocation);
+      gtk_widget_get_clip (priv->child1, &child_clip);
+      gdk_rectangle_union (&clip, &child_clip, &clip);
+
+      gtk_widget_size_allocate (priv->child2, &child2_allocation);
+      gtk_widget_get_clip (priv->child2, &child_clip);
+      gdk_rectangle_union (&clip, &child_clip, &clip);
     }
   else
     {
@@ -1387,6 +1377,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
           gtk_paned_set_child_visible (paned, CHILD2, FALSE);
 
           gtk_widget_size_allocate (priv->child1, &child_allocation);
+          gtk_widget_get_clip (priv->child1, &child_clip);
+          gdk_rectangle_union (&clip, &child_clip, &clip);
         }
       else if (priv->child2 && gtk_widget_get_visible (priv->child2))
         {
@@ -1394,6 +1386,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
           gtk_paned_set_child_visible (paned, CHILD2, TRUE);
 
           gtk_widget_size_allocate (priv->child2, &child_allocation);
+          gtk_widget_get_clip (priv->child2, &child_clip);
+          gdk_rectangle_union (&clip, &child_clip, &clip);
         }
       else
         {
@@ -1401,8 +1395,6 @@ gtk_paned_size_allocate (GtkWidget     *widget,
           gtk_paned_set_child_visible (paned, CHILD2, FALSE);
         }
     }
-
-  gtk_container_get_children_clip (GTK_CONTAINER (paned), &clip);
 
   gtk_widget_set_clip (widget, &clip);
 }
@@ -1523,11 +1515,6 @@ gtk_paned_init (GtkPaned *paned)
 
   gtk_widget_set_has_window (GTK_WIDGET (paned), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
-
-  /* We only need to redraw when the handle position moves, which is
-   * independent of the overall allocation of the GtkPaned
-   */
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (paned), FALSE);
 
   paned->priv = gtk_paned_get_instance_private (paned);
   priv = paned->priv;
@@ -1890,7 +1877,7 @@ gtk_paned_set_position (GtkPaned *paned,
       if (priv->child1_size != position)
         {
           g_object_notify (G_OBJECT (paned), "position");
-          gtk_widget_queue_resize_no_redraw (GTK_WIDGET (paned));
+          gtk_widget_queue_allocate (GTK_WIDGET (paned));
         }
 
       priv->child1_size = position;
