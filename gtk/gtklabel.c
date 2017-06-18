@@ -3299,11 +3299,11 @@ gtk_label_update_layout_width (GtkLabel *label)
 
   if (priv->ellipsize || priv->wrap)
     {
-      GtkAllocation allocation;
+      int width, height;
 
-      gtk_widget_get_content_allocation (GTK_WIDGET (label), &allocation);
+      gtk_widget_get_content_size (GTK_WIDGET (label), &width, &height);
 
-      pango_layout_set_width (priv->layout, allocation.width * PANGO_SCALE);
+      pango_layout_set_width (priv->layout, width * PANGO_SCALE);
     }
   else
     {
@@ -3635,7 +3635,6 @@ get_layout_location (GtkLabel  *label,
                      gint      *xp,
                      gint      *yp)
 {
-  GtkAllocation allocation;
   GtkWidget *widget;
   GtkLabelPrivate *priv;
   gint req_width, x, y;
@@ -3643,6 +3642,7 @@ get_layout_location (GtkLabel  *label,
   gfloat xalign, yalign;
   PangoRectangle logical;
   gint baseline, layout_baseline, baseline_offset;
+  int label_width, label_height;
 
   widget = GTK_WIDGET (label);
   priv   = label->priv;
@@ -3660,11 +3660,11 @@ get_layout_location (GtkLabel  *label,
   req_width  = logical.width;
   req_height = logical.height;
 
-  gtk_widget_get_content_allocation (widget, &allocation);
+  gtk_widget_get_content_size (widget, &label_width, &label_height);
 
   baseline = gtk_widget_get_allocated_baseline (widget);
 
-  x = floor ((xalign * (allocation.width - req_width)) - logical.x);
+  x = floor ((xalign * (label_width - req_width)) - logical.x);
 
   baseline_offset = 0;
   if (baseline != -1)
@@ -3688,9 +3688,9 @@ get_layout_location (GtkLabel  *label,
    *   middle".  You want to read the first line, at least, to get some context.
    */
   if (pango_layout_get_line_count (priv->layout) == 1)
-    y = floor ((allocation.height - req_height) * yalign) + baseline_offset;
+    y = floor ((label_height - req_height) * yalign) + baseline_offset;
   else
-    y = floor (MAX ((allocation.height - req_height) * yalign, 0)) + baseline_offset;
+    y = floor (MAX ((label_height - req_height) * yalign, 0)) + baseline_offset;
 
   if (xp)
     *xp = x;

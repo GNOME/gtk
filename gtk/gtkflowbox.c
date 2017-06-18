@@ -2348,16 +2348,13 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  GtkAllocation allocation;
   int x, y, width, height;
 
   GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->snapshot (widget, snapshot);
 
-  gtk_widget_get_content_allocation (widget, &allocation);
-  x = allocation.x;
-  y = allocation.y;
-  width = allocation.width;
-  height = allocation.height;
+  gtk_widget_get_content_size (widget, &width, &height);
+  x = 0;
+  y = 0;
 
   if (priv->rubberband_first && priv->rubberband_last)
     {

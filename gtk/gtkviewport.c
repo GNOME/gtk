@@ -120,19 +120,19 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
   GtkScrollablePolicy scroll_policy;
   GtkScrollablePolicy other_scroll_policy;
   GtkOrientation other_orientation;
-  GtkAllocation view_allocation;
   GtkWidget *child;
   gdouble upper, value;
   int viewport_size, other_viewport_size;
+  int view_width, view_height;
 
-  gtk_widget_get_content_allocation (GTK_WIDGET (viewport), &view_allocation);
+  gtk_widget_get_content_size (GTK_WIDGET (viewport), &view_width, &view_height);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       adjustment = priv->hadjustment;
       other_orientation = GTK_ORIENTATION_VERTICAL;
-      viewport_size = view_allocation.width;
-      other_viewport_size = view_allocation.height;
+      viewport_size = view_width;
+      other_viewport_size = view_height;
       scroll_policy = priv->hscroll_policy;
       other_scroll_policy = priv->vscroll_policy;
     }
@@ -140,8 +140,8 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
     {
       adjustment = priv->vadjustment;
       other_orientation = GTK_ORIENTATION_HORIZONTAL;
-      viewport_size = view_allocation.height;
-      other_viewport_size = view_allocation.width;
+      viewport_size = view_height;
+      other_viewport_size = view_width;
       scroll_policy = priv->vscroll_policy;
       other_scroll_policy = priv->hscroll_policy;
     }
@@ -490,19 +490,12 @@ static void
 gtk_viewport_snapshot (GtkWidget   *widget,
                        GtkSnapshot *snapshot)
 {
-  GtkAllocation content_allocation;
-  GtkAllocation widget_allocation;
+  int width, height;
 
-  gtk_widget_get_content_allocation (widget, &content_allocation);
-  gtk_widget_get_allocation (widget, &widget_allocation);
+  gtk_widget_get_content_size (widget, &width, &height);
 
   gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT(
-                            content_allocation.x - widget_allocation.x,
-                            content_allocation.y - widget_allocation.y,
-                            content_allocation.width,
-                            content_allocation.height),
-                          "Viewport");
+                          &GRAPHENE_RECT_INIT(0, 0, width, height), "Viewport");
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->snapshot (widget, snapshot);
 

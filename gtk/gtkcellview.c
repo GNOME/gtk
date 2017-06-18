@@ -649,16 +649,14 @@ gtk_cell_view_snapshot (GtkWidget   *widget,
 {
   GtkCellView *cellview;
   GdkRectangle area;
-  GdkRectangle allocation;
   GtkCellRendererState state;
 
   cellview = GTK_CELL_VIEW (widget);
 
   /* render cells */
-  gtk_widget_get_content_allocation (widget, &area);
-  gtk_widget_get_allocation (widget, &allocation);
-  area.x -= allocation.x;
-  area.y -= allocation.y;
+  area.x = 0;
+  area.y = 0;
+  gtk_widget_get_content_size (widget, &area.width, &area.height);
 
   /* set cell data (if available) */
   if (cellview->priv->displayed_row)

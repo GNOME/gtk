@@ -1721,16 +1721,16 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
   GtkWidget *widget = gtk_widget_get_parent (GTK_WIDGET (gizmo));
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GtkAllocation alloc;
+  int width, height;
 
-  gtk_widget_get_content_allocation (GTK_WIDGET (gizmo), &alloc);
+  gtk_widget_get_content_size (GTK_WIDGET (gizmo), &width, &height);
 
   /* HACK: GtkColorScale wants to draw its own trough
    * so we let it...
    */
   if (GTK_IS_COLOR_SCALE (widget))
     gtk_color_scale_snapshot_trough (GTK_COLOR_SCALE (widget), snapshot,
-                                     0, 0, alloc.width, alloc.height);
+                                     0, 0, width, height);
 
   if (priv->show_fill_level &&
       gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
@@ -2758,7 +2758,7 @@ gtk_range_compute_slider_position (GtkRange     *range,
                                    GdkRectangle *slider_rect)
 {
   GtkRangePrivate *priv = range->priv;
-  GtkAllocation trough_content_alloc;
+  int trough_width, trough_height;
   int slider_width, slider_height, min_slider_size;
 
   gtk_widget_measure (priv->slider_widget,
@@ -2770,7 +2770,7 @@ gtk_range_compute_slider_position (GtkRange     *range,
                       &slider_height, NULL,
                       NULL, NULL);
 
-  gtk_widget_get_content_allocation (priv->trough_widget, &trough_content_alloc);
+  gtk_widget_get_content_size (priv->trough_widget, &trough_width, &trough_height);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -2779,14 +2779,14 @@ gtk_range_compute_slider_position (GtkRange     *range,
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      slider_rect->x = (int) floor ((trough_content_alloc.width - slider_width) / 2);
+      slider_rect->x = (int) floor ((trough_width - slider_width) / 2);
       slider_rect->width = slider_width;
 
       min_slider_size = slider_height;
 
       /* Compute slider position/length */
       top = 0;
-      bottom = top + trough_content_alloc.height;
+      bottom = top + trough_height;
 
       /* Scale slider half extends over the trough edge */
       if (GTK_IS_SCALE (range))
@@ -2809,7 +2809,7 @@ gtk_range_compute_slider_position (GtkRange     *range,
           priv->slider_size_fixed)
         height = min_slider_size;
 
-      height = MIN (height, trough_content_alloc.height);
+      height = MIN (height, trough_height);
       
       y = top;
 
@@ -2832,14 +2832,14 @@ gtk_range_compute_slider_position (GtkRange     *range,
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      slider_rect->y = (int) floor ((trough_content_alloc.height - slider_height) / 2);
+      slider_rect->y = (int) floor ((trough_height - slider_height) / 2);
       slider_rect->height = slider_height;
 
       min_slider_size = slider_width;
 
       /* Compute slider position/length */
       left = 0;
-      right = left + trough_content_alloc.width;
+      right = left + trough_width;
 
       /* Scale slider half extends over the trough edge */
       if (GTK_IS_SCALE (range))
@@ -2862,7 +2862,7 @@ gtk_range_compute_slider_position (GtkRange     *range,
           priv->slider_size_fixed)
         width = min_slider_size;
 
-      width = MIN (width, trough_content_alloc.width);
+      width = MIN (width, trough_width);
 
       x = left;
 
