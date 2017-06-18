@@ -1473,24 +1473,14 @@ gtk_paned_render_handle (GtkGizmo    *gizmo,
 {
   GtkWidget *widget = GTK_WIDGET (gizmo);
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  GtkAllocation content_alloc;
-  GtkAllocation widget_alloc;
-  int x, y;
+  int width, height;
 
-  gtk_widget_get_content_allocation (widget, &content_alloc);
-  gtk_widget_get_allocation (widget, &widget_alloc);
-
-  x = content_alloc.x - widget_alloc.x;
-  y = content_alloc.y - widget_alloc.y;
-
-  gtk_snapshot_offset (snapshot, x, y);
+  gtk_widget_get_content_size (widget, &width, &height);
 
   gtk_css_style_snapshot_icon (style,
                                snapshot,
-                               content_alloc.width, content_alloc.height,
+                               width, height,
                                GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR);
-
-  gtk_snapshot_offset (snapshot, -x, -y);
 
   return FALSE;
 }
