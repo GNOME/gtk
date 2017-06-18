@@ -13345,17 +13345,16 @@ void
 gtk_widget_set_clip (GtkWidget           *widget,
                      const GtkAllocation *clip)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkBorder shadow;
   GtkAllocation allocation;
-  GtkBorder margin;
+  GtkBorder margin, border, padding;
   GtkCssStyle *style;
+  GdkRectangle new_clip;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (_gtk_widget_get_visible (widget) || _gtk_widget_is_toplevel (widget));
   g_return_if_fail (clip != NULL);
-
-  priv = widget->priv;
 
 #ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (GEOMETRY))
@@ -13380,17 +13379,38 @@ gtk_widget_set_clip (GtkWidget           *widget,
     }
 #endif /* G_ENABLE_DEBUG */
 
-  /* Always untion the given clip with the widget allocation */
-  /* ... and with the box shadow size */
+
+  /* The given clip is relative to the widget's origin, but we union
+   * it with priv->allocation, which is the orgin minus CSS padding, border and margin.
+   * Additionally, the box shadow is drawn around the widget's border box */
+
   style = gtk_css_node_get_style (priv->cssnode);
   allocation = priv->allocation;
   get_box_margin (style, &margin);
+  get_box_margin (style, &border);
+  get_box_margin (style, &padding);
   _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
-  allocation.x += margin.left - shadow.left;
-  allocation.y += margin.top - shadow.top;
-  allocation.width += shadow.left + shadow.right - margin.left - margin.right;
-  allocation.height += shadow.top + shadow.bottom - margin.top - margin.bottom;
-  gdk_rectangle_union (&allocation, clip, &priv->clip);
+
+  /* Get border box from allocation */
+  allocation.x += margin.left;
+  allocation.y += margin.top;
+  allocation.width -= margin.left + margin.right;
+  allocation.height -= margin.top + margin.bottom;
+
+  /* Add box shadow size to border box */
+  allocation.x -= shadow.left;
+  allocation.y -= shadow.top;
+  allocation.width += shadow.left + shadow.right;
+  allocation.height += shadow.top + shadow.bottom;
+
+  /* Transform clip into coordinate space of priv->allocation */
+  new_clip = *clip;
+  new_clip.x += priv->allocation.x + border.left + padding.left;
+  new_clip.y += priv->allocation.y + border.top  + padding.top;
+  new_clip.width -= margin.left + margin.right;
+  new_clip.height -= margin.top + margin.bottom;
+
+  gdk_rectangle_union (&allocation, &new_clip, &priv->clip);
 }
 
 /*
