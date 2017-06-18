@@ -46,13 +46,13 @@ gtk_icon_snapshot (GtkWidget   *widget,
 {
   GtkIcon *self = GTK_ICON (widget);
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  GtkAllocation content_alloc;
+  int width, height;
 
-  gtk_widget_get_content_allocation (widget, &content_alloc);
+  gtk_widget_get_content_size (widget, &width, &height);
 
   gtk_css_style_snapshot_icon (style,
                                snapshot,
-                               content_alloc.width, content_alloc.height,
+                               width, height,
                                self->image);
 }
 

@@ -3255,17 +3255,11 @@ gtk_entry_snapshot (GtkWidget   *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  GtkAllocation allocation;
-  GtkAllocation content_allocation;
+  int width, height;
   cairo_t *cr;
   int i;
 
-  gtk_widget_get_content_allocation (widget, &content_allocation);
-  gtk_widget_get_allocation (widget, &allocation);
-
-  allocation.x = content_allocation.x - allocation.x;
-  allocation.y = content_allocation.y - allocation.y;
-  allocation.height = content_allocation.height;
+  gtk_widget_get_content_size (widget, &width, &height);
 
   /* Draw progress */
   if (priv->progress_widget && gtk_widget_get_visible (priv->progress_widget))
@@ -3276,7 +3270,7 @@ gtk_entry_snapshot (GtkWidget   *widget,
                                   &GRAPHENE_RECT_INIT (priv->text_x,
                                                        0,
                                                        priv->text_width,
-                                                       allocation.height),
+                                                       height),
                                   "Entry Text");
 
   if (priv->dnd_position != -1)

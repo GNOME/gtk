@@ -677,10 +677,10 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 					 GtkAllocation *child_allocation)
 {
   GtkFramePrivate *priv = frame->priv;
-  GtkAllocation allocation;
+  int frame_width, frame_height;
   gint height;
 
-  gtk_widget_get_content_allocation (GTK_WIDGET (frame), &allocation);
+  gtk_widget_get_content_size (GTK_WIDGET (frame), &frame_width, &frame_height);
 
   if (priv->label_widget)
     {
@@ -688,7 +688,7 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 
       gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_HORIZONTAL, -1,
                           NULL, &nat_width, NULL, NULL);
-      width = MIN (allocation.width, nat_width);
+      width = MIN (frame_width, nat_width);
       gtk_widget_measure (priv->label_widget, GTK_ORIENTATION_VERTICAL, width,
                           &height, NULL, NULL, NULL);
     }
@@ -697,8 +697,8 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 
   child_allocation->x = 0;
   child_allocation->y = height;
-  child_allocation->width = MAX (1, allocation.width);
-  child_allocation->height = MAX (1, allocation.height - height);
+  child_allocation->width = MAX (1, frame_width);
+  child_allocation->height = MAX (1, frame_height - height);
 }
 
 static void

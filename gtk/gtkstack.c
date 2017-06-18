@@ -719,17 +719,17 @@ static gint
 get_bin_window_x (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkAllocation allocation;
+  int width, height;
   int x = 0;
 
-  gtk_widget_get_content_allocation (GTK_WIDGET (stack), &allocation);
+  gtk_widget_get_content_size (GTK_WIDGET (stack), &width, &height);
 
   if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
     {
       if (is_left_transition (priv->active_transition_type))
-        x = allocation.width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+        x = width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
       if (is_right_transition (priv->active_transition_type))
-        x = -allocation.width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+        x = -width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
     }
 
   return x;
@@ -739,17 +739,17 @@ static gint
 get_bin_window_y (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkAllocation allocation;
+  int width, height;
   int y = 0;
 
-  gtk_widget_get_content_allocation (GTK_WIDGET (stack), &allocation);
+  gtk_widget_get_content_size (GTK_WIDGET (stack), &width, &height);
 
   if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
     {
       if (is_up_transition (priv->active_transition_type))
-        y = allocation.height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+        y = height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
       if (is_down_transition(priv->active_transition_type))
-        y = -allocation.height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+        y = -height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
     }
 
   return y;

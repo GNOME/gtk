@@ -2809,18 +2809,14 @@ static void
 gtk_menu_snapshot (GtkWidget   *widget,
                    GtkSnapshot *snapshot)
 {
-  GtkAllocation allocation;
+  int width, height;
 
-  gtk_widget_get_content_allocation (widget, &allocation);
+  gtk_widget_get_content_size (widget, &width, &height);
 
   /* XXX The arrows *might* be missing here */
 
   gtk_snapshot_push_clip (snapshot,
-                          &GRAPHENE_RECT_INIT(
-                              0, 0,
-                              allocation.width, allocation.height
-                          ),
-                          "MenuClip");
+                          &GRAPHENE_RECT_INIT(0, 0, width, height), "MenuClip");
 
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->snapshot (widget, snapshot);
 

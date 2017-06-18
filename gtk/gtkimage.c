@@ -1390,15 +1390,12 @@ gtk_image_snapshot (GtkWidget   *widget,
 {
   GtkImage *image = GTK_IMAGE (widget);
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-  GtkAllocation content_allocation;
   int x, y, width, height;
   gint w, h, baseline;
 
-  gtk_widget_get_content_allocation (widget, &content_allocation);
+  gtk_widget_get_content_size (widget, &width, &height);
   x = 0;
   y = 0;
-  width = content_allocation.width;
-  height = content_allocation.height;
 
   _gtk_icon_helper_get_size (priv->icon_helper, &w, &h);
 
