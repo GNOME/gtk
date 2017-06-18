@@ -89,31 +89,15 @@ typedef struct _GtkStyleProvider GtkStyleProvider; /* dummy typedef */
 
 /**
  * GtkStyleProviderIface:
- * @get_style_property: Gets the value of a widget style property that applies to a widget path.
  */
 struct _GtkStyleProviderIface
 {
   /*< private >*/
   GTypeInterface g_iface;
-
-  /*< public >*/
-
-  gboolean (* get_style_property) (GtkStyleProvider *provider,
-                                   GtkWidgetPath    *path,
-                                   GtkStateFlags     state,
-                                   GParamSpec       *pspec,
-                                   GValue           *value);
 };
 
 GDK_AVAILABLE_IN_ALL
 GType gtk_style_provider_get_type (void) G_GNUC_CONST;
-
-GDK_AVAILABLE_IN_ALL
-gboolean gtk_style_provider_get_style_property (GtkStyleProvider *provider,
-                                                GtkWidgetPath    *path,
-                                                GtkStateFlags     state,
-                                                GParamSpec       *pspec,
-                                                GValue           *value);
 
 G_END_DECLS
 

@@ -1049,17 +1049,6 @@ gboolean gtk_style_context_has_class    (GtkStyleContext *context,
                                          const gchar     *class_name);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_style_context_get_style_property (GtkStyleContext *context,
-                                           const gchar     *property_name,
-                                           GValue          *value);
-GDK_AVAILABLE_IN_ALL
-void gtk_style_context_get_style_valist   (GtkStyleContext *context,
-                                           va_list          args);
-GDK_AVAILABLE_IN_ALL
-void gtk_style_context_get_style          (GtkStyleContext *context,
-                                           ...);
-
-GDK_AVAILABLE_IN_ALL
 void        gtk_style_context_set_screen (GtkStyleContext *context,
                                           GdkScreen       *screen);
 GDK_AVAILABLE_IN_ALL

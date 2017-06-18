@@ -25,7 +25,7 @@ clicked_icon (GtkTreeView  *tv,
        */
       depth = gtk_tree_path_get_depth (*path);
       level_indentation = gtk_tree_view_get_level_indentation (tv);
-      gtk_widget_style_get (GTK_WIDGET (tv), "expander-size", &expander_size, NULL);
+      expander_size = 16; /* Hardcoded in gtktreeview.c */
       expander_size += 4;
       indent = (depth - 1) * level_indentation + depth * expander_size;
 #else

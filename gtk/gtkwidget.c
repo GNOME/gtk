@@ -259,22 +259,6 @@
  * If this has a value other than -1 you need to align the widget such that the baseline
  * appears at the position.
  *
- * # Style Properties
- *
- * #GtkWidget introduces “style
- * properties” - these are basically object properties that are stored
- * not on the object, but in the style object associated to the widget. Style
- * properties are set in [resource files][gtk3-Resource-Files].
- * This mechanism is used for configuring such things as the location of the
- * scrollbar arrows through the theme, giving theme authors more control over the
- * look of applications without the need to write a theme engine in C.
- *
- * Use gtk_widget_class_install_style_property() to install style properties for
- * a widget class, gtk_widget_class_find_style_property() or
- * gtk_widget_class_list_style_properties() to get information about existing
- * style properties and gtk_widget_style_get_property(), gtk_widget_style_get() or
- * gtk_widget_style_get_valist() to obtain the value of a style property.
- *
  * # GtkWidget as GtkBuildable
  *
  * The GtkWidget implementation of the GtkBuildable interface supports a
@@ -776,9 +760,7 @@ static gint             GtkWidget_private_offset = 0;
 static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
-static GParamSpecPool  *style_property_spec_pool = NULL;
 
-static GQuark		quark_property_parser = 0;
 static GQuark		quark_accel_path = 0;
 static GQuark		quark_accel_closures = 0;
 static GQuark		quark_parent_window = 0;
@@ -788,7 +770,6 @@ static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
 static GQuark		quark_tooltip_markup = 0;
 static GQuark		quark_tooltip_window = 0;
-static GQuark           quark_modifier_style = 0;
 static GQuark           quark_enabled_devices = 0;
 static GQuark           quark_size_groups = 0;
 static GQuark           quark_auto_children = 0;
@@ -997,7 +978,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   g_type_class_adjust_private_offset (klass, &GtkWidget_private_offset);
   gtk_widget_parent_class = g_type_class_peek_parent (klass);
 
-  quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
   quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
   quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
   quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
@@ -1007,7 +987,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
   quark_tooltip_markup = g_quark_from_static_string ("gtk-tooltip-markup");
   quark_tooltip_window = g_quark_from_static_string ("gtk-tooltip-window");
-  quark_modifier_style = g_quark_from_static_string ("gtk-widget-modifier-style");
   quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
   quark_auto_children = g_quark_from_static_string ("gtk-widget-auto-children");
@@ -1016,7 +995,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
   quark_font_map = g_quark_from_static_string ("gtk-widget-font-map");
 
-  style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
   cpn_context.quark_notify_queue = g_quark_from_static_string ("GtkWidget-child-property-notify-queue");
   cpn_context.dispatcher = child_property_notify_dispatcher;
@@ -3181,18 +3159,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 static void
 gtk_widget_base_class_finalize (GtkWidgetClass *klass)
 {
-  GList *list, *node;
-
-  list = g_param_spec_pool_list_owned (style_property_spec_pool, G_OBJECT_CLASS_TYPE (klass));
-  for (node = list; node; node = node->next)
-    {
-      GParamSpec *pspec = node->data;
-
-      g_param_spec_pool_remove (style_property_spec_pool, pspec);
-      g_param_spec_unref (pspec);
-    }
-  g_list_free (list);
-
   template_data_free (klass->priv->template);
 }
 
@@ -11175,165 +11141,6 @@ gtk_widget_input_shape_combine_region (GtkWidget      *widget,
                              cairo_region_copy (region),
                              (GDestroyNotify) cairo_region_destroy);
   gtk_widget_update_input_shape (widget);
-}
-
-
-/* style properties
- */
-static void
-gtk_widget_class_install_style_property_parser (GtkWidgetClass     *klass,
-						GParamSpec         *pspec,
-						GtkRcPropertyParser parser)
-{
-  g_return_if_fail (GTK_IS_WIDGET_CLASS (klass));
-  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
-  g_return_if_fail (pspec->flags & G_PARAM_READABLE);
-  g_return_if_fail (!(pspec->flags & (G_PARAM_CONSTRUCT_ONLY | G_PARAM_CONSTRUCT)));
-
-  if (g_param_spec_pool_lookup (style_property_spec_pool, pspec->name, G_OBJECT_CLASS_TYPE (klass), FALSE))
-    {
-      g_warning (G_STRLOC ": class '%s' already contains a style property named '%s'",
-		 G_OBJECT_CLASS_NAME (klass),
-		 pspec->name);
-      return;
-    }
-
-  g_param_spec_ref_sink (pspec);
-  g_param_spec_set_qdata (pspec, quark_property_parser, (gpointer) parser);
-  g_param_spec_pool_insert (style_property_spec_pool, pspec, G_OBJECT_CLASS_TYPE (klass));
-}
-
-/**
- * gtk_widget_class_install_style_property:
- * @klass: a #GtkWidgetClass
- * @pspec: the #GParamSpec for the property
- *
- * Installs a style property on a widget class. The parser for the
- * style property is determined by the value type of @pspec.
- **/
-void
-gtk_widget_class_install_style_property (GtkWidgetClass *klass,
-					 GParamSpec     *pspec)
-{
-  GtkRcPropertyParser parser;
-
-  g_return_if_fail (GTK_IS_WIDGET_CLASS (klass));
-  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
-
-  parser = _gtk_rc_property_parser_from_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
-
-  gtk_widget_class_install_style_property_parser (klass, pspec, parser);
-}
-
-/**
- * gtk_widget_class_find_style_property:
- * @klass: a #GtkWidgetClass
- * @property_name: the name of the style property to find
- *
- * Finds a style property of a widget class by name.
- *
- * Returns: (transfer none): the #GParamSpec of the style property or
- *   %NULL if @class has no style property with that name.
- *
- * Since: 2.2
- */
-GParamSpec*
-gtk_widget_class_find_style_property (GtkWidgetClass *klass,
-				      const gchar    *property_name)
-{
-  g_return_val_if_fail (property_name != NULL, NULL);
-
-  return g_param_spec_pool_lookup (style_property_spec_pool,
-				   property_name,
-				   G_OBJECT_CLASS_TYPE (klass),
-				   TRUE);
-}
-
-/**
- * gtk_widget_style_get_valist:
- * @widget: a #GtkWidget
- * @first_property_name: the name of the first property to get
- * @var_args: a va_list of pairs of property names and
- *     locations to return the property values, starting with the location
- *     for @first_property_name.
- *
- * Non-vararg variant of gtk_widget_style_get(). Used primarily by language
- * bindings.
- */
-void
-gtk_widget_style_get_valist (GtkWidget   *widget,
-			     const gchar *first_property_name,
-			     va_list      var_args)
-{
-  GtkStyleContext *context;
-  const gchar *name;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  g_object_ref (widget);
-  context = _gtk_widget_get_style_context (widget);
-
-  name = first_property_name;
-  while (name)
-    {
-      const GValue *peek_value;
-      GParamSpec *pspec;
-      gchar *error;
-
-      pspec = g_param_spec_pool_lookup (style_property_spec_pool,
-					name,
-					G_OBJECT_TYPE (widget),
-					TRUE);
-      if (!pspec)
-	{
-	  g_warning ("%s: widget class '%s' has no property named '%s'",
-		     G_STRLOC,
-		     G_OBJECT_TYPE_NAME (widget),
-		     name);
-	  break;
-	}
-      /* style pspecs are always readable so we can spare that check here */
-
-      peek_value = _gtk_style_context_peek_style_property (context,
-                                                           G_OBJECT_TYPE (widget),
-                                                           pspec);
-
-      G_VALUE_LCOPY (peek_value, var_args, 0, &error);
-      if (error)
-	{
-	  g_warning ("%s: %s", G_STRLOC, error);
-	  g_free (error);
-	  break;
-	}
-
-      name = va_arg (var_args, gchar*);
-    }
-
-  g_object_unref (widget);
-}
-
-/**
- * gtk_widget_style_get:
- * @widget: a #GtkWidget
- * @first_property_name: the name of the first property to get
- * @...: pairs of property names and locations to return the
- *     property values, starting with the location for
- *     @first_property_name, terminated by %NULL.
- *
- * Gets the values of a multiple style properties of @widget.
- */
-void
-gtk_widget_style_get (GtkWidget   *widget,
-		      const gchar *first_property_name,
-		      ...)
-{
-  va_list var_args;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  va_start (var_args, first_property_name);
-  gtk_widget_style_get_valist (widget, first_property_name, var_args);
-  va_end (var_args);
 }
 
 /**
