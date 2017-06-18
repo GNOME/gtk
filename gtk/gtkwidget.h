@@ -925,23 +925,6 @@ GDK_AVAILABLE_IN_ALL
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
 					       const gchar *text);
 
-/* widget style properties
- */
-GDK_AVAILABLE_IN_ALL
-void gtk_widget_class_install_style_property        (GtkWidgetClass     *klass,
-						     GParamSpec         *pspec);
-GDK_AVAILABLE_IN_ALL
-GParamSpec*  gtk_widget_class_find_style_property   (GtkWidgetClass     *klass,
-						     const gchar        *property_name);
-GDK_AVAILABLE_IN_ALL
-void gtk_widget_style_get_valist   (GtkWidget	     *widget,
-				    const gchar    *first_property_name,
-				    va_list         var_args);
-GDK_AVAILABLE_IN_ALL
-void gtk_widget_style_get          (GtkWidget	     *widget,
-				    const gchar    *first_property_name,
-				    ...) G_GNUC_NULL_TERMINATED;
-
 /* Functions for setting directionality for widgets */
 
 GDK_AVAILABLE_IN_ALL

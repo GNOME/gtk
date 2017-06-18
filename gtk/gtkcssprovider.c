@@ -81,7 +81,6 @@
 typedef struct GtkCssRuleset GtkCssRuleset;
 typedef struct _GtkCssScanner GtkCssScanner;
 typedef struct _PropertyValue PropertyValue;
-typedef struct _WidgetPropertyValue WidgetPropertyValue;
 typedef enum ParserScope ParserScope;
 typedef enum ParserSymbol ParserSymbol;
 
@@ -91,24 +90,14 @@ struct _PropertyValue {
   GtkCssSection       *section;
 };
 
-struct _WidgetPropertyValue {
-  WidgetPropertyValue *next;
-  char *name;
-  char *value;
-
-  GtkCssSection *section;
-};
-
 struct GtkCssRuleset
 {
   GtkCssSelector *selector;
   GtkCssSelectorTree *selector_match;
-  WidgetPropertyValue *widget_style;
   PropertyValue *styles;
   GtkBitmask *set_styles;
   guint n_styles;
   guint owns_styles : 1;
-  guint owns_widget_style : 1;
 };
 
 struct _GtkCssScanner
@@ -145,7 +134,6 @@ static guint css_provider_signals[LAST_SIGNAL] = { 0 };
 static void gtk_css_provider_finalize (GObject *object);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 static void gtk_css_style_provider_private_iface_init (GtkStyleProviderPrivateInterface *iface);
-static void widget_property_value_list_free (WidgetPropertyValue *head);
 static void gtk_css_style_provider_emit_error (GtkStyleProviderPrivate *provider,
                                                GtkCssSection           *section,
                                                const GError            *error);
@@ -255,8 +243,6 @@ gtk_css_ruleset_init_copy (GtkCssRuleset       *new,
   /* First copy takes over ownership */
   if (ruleset->owns_styles)
     ruleset->owns_styles = FALSE;
-  if (ruleset->owns_widget_style)
-    ruleset->owns_widget_style = FALSE;
   if (new->set_styles)
     new->set_styles = _gtk_bitmask_copy (new->set_styles);
 }
@@ -279,80 +265,10 @@ gtk_css_ruleset_clear (GtkCssRuleset *ruleset)
     }
   if (ruleset->set_styles)
     _gtk_bitmask_free (ruleset->set_styles);
-  if (ruleset->owns_widget_style)
-    widget_property_value_list_free (ruleset->widget_style);
   if (ruleset->selector)
     _gtk_css_selector_free (ruleset->selector);
 
   memset (ruleset, 0, sizeof (GtkCssRuleset));
-}
-
-static WidgetPropertyValue *
-widget_property_value_new (char *name, GtkCssSection *section)
-{
-  WidgetPropertyValue *value;
-
-  value = g_slice_new0 (WidgetPropertyValue);
-
-  value->name = name;
-  if (gtk_keep_css_sections)
-    value->section = gtk_css_section_ref (section);
-
-  return value;
-}
-
-static void
-widget_property_value_free (WidgetPropertyValue *value)
-{
-  g_free (value->value);
-  g_free (value->name);
-  if (value->section)
-    gtk_css_section_unref (value->section);
-
-  g_slice_free (WidgetPropertyValue, value);
-}
-
-static void
-widget_property_value_list_free (WidgetPropertyValue *head)
-{
-  WidgetPropertyValue *l, *next;
-  for (l = head; l != NULL; l = next)
-    {
-      next = l->next;
-      widget_property_value_free (l);
-    }
-}
-
-static WidgetPropertyValue *
-widget_property_value_list_remove_name (WidgetPropertyValue *head, const char *name)
-{
-  WidgetPropertyValue *l, **last;
-
-  last = &head;
-
-  for (l = head; l != NULL; l = l->next)
-    {
-      if (strcmp (l->name, name) == 0)
-	{
-	  *last = l->next;
-	  widget_property_value_free (l);
-	  break;
-	}
-
-      last = &l->next;
-    }
-
-  return head;
-}
-
-static void
-gtk_css_ruleset_add_style (GtkCssRuleset *ruleset,
-                           char          *name,
-                           WidgetPropertyValue *value)
-{
-  value->next = widget_property_value_list_remove_name (ruleset->widget_style, name);
-  ruleset->widget_style = value;
-  ruleset->owns_widget_style = TRUE;
 }
 
 static void
@@ -622,92 +538,9 @@ verify_tree_get_change_results (GtkCssProvider *provider,
 }
 
 
-static gboolean
-gtk_css_provider_get_style_property (GtkStyleProvider *provider,
-                                     GtkWidgetPath    *path,
-                                     GtkStateFlags     state,
-                                     GParamSpec       *pspec,
-                                     GValue           *value)
-{
-  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
-  GtkCssProviderPrivate *priv = css_provider->priv;
-  WidgetPropertyValue *val;
-  GPtrArray *tree_rules;
-  GtkCssMatcher matcher;
-  gboolean found = FALSE;
-  gchar *prop_name;
-  gint i;
-
-  if (state == gtk_widget_path_iter_get_state (path, -1))
-    {
-      gtk_widget_path_ref (path);
-    }
-  else
-    {
-      path = gtk_widget_path_copy (path);
-      gtk_widget_path_iter_set_state (path, -1, state);
-    }
-
-  if (!_gtk_css_matcher_init (&matcher, path, NULL))
-    {
-      gtk_widget_path_unref (path);
-      return FALSE;
-    }
-
-  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, &matcher);
-  if (tree_rules)
-    {
-      verify_tree_match_results (css_provider, &matcher, tree_rules);
-
-      prop_name = g_strdup_printf ("-%s-%s",
-                                   g_type_name (pspec->owner_type),
-                                   pspec->name);
-
-      for (i = tree_rules->len - 1; i >= 0; i--)
-        {
-          GtkCssRuleset *ruleset = tree_rules->pdata[i];
-
-          if (ruleset->widget_style == NULL)
-            continue;
-
-          for (val = ruleset->widget_style; val != NULL; val = val->next)
-            {
-              if (strcmp (val->name, prop_name) == 0)
-                {
-                  GtkCssScanner *scanner;
-
-	          scanner = gtk_css_scanner_new (css_provider,
-                                                 NULL,
-                                                 val->section,
-                                                 val->section != NULL ? gtk_css_section_get_file (val->section) : NULL,
-                                                 val->value);
-                  if (!val->section)
-                    gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_VALUE);
-                  found = _gtk_css_style_funcs_parse_value (value, scanner->parser);
-                  if (!val->section)
-                    gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
-                  gtk_css_scanner_destroy (scanner);
-	          break;
-                }
-            }
-
-          if (found)
-            break;
-        }
-
-      g_free (prop_name);
-      g_ptr_array_free (tree_rules, TRUE);
-    }
-
-  gtk_widget_path_unref (path);
-
-  return found;
-}
-
 static void
 gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style_property = gtk_css_provider_get_style_property;
 }
 
 static GtkCssValue *
@@ -915,12 +748,6 @@ css_provider_commit (GtkCssProvider *css_provider,
   GSList *l;
 
   priv = css_provider->priv;
-
-  if (ruleset->styles == NULL && ruleset->widget_style == NULL)
-    {
-      g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
-      return;
-    }
 
   for (l = selectors; l; l = l->next)
     {
@@ -1311,67 +1138,6 @@ parse_selector_list (GtkCssScanner *scanner)
   return selectors;
 }
 
-static gboolean
-name_is_style_property (const char *name)
-{
-  if (name[0] != '-')
-    return FALSE;
-
-  if (g_str_has_prefix (name, "-gtk-"))
-    return FALSE;
-
-  return TRUE;
-}
-
-static void
-warn_if_deprecated (GtkCssScanner *scanner,
-                    const gchar   *name)
-{
-  gchar *n = NULL;
-  gchar *p;
-  const gchar *type_name;
-  const gchar *property_name;
-  GType type;
-  GTypeClass *class = NULL;
-  GParamSpec *pspec;
-
-  n = g_strdup (name);
-
-  /* skip initial - */
-  type_name = n + 1;
-
-  p = strchr (type_name, '-');
-  if (!p)
-    goto out;
-
-  p[0] = '\0';
-  property_name = p + 1;
-
-  type = g_type_from_name (type_name);
-  if (type == G_TYPE_INVALID ||
-      !g_type_is_a (type, GTK_TYPE_WIDGET))
-    goto out;
-
-  class = g_type_class_ref (type);
-  pspec = gtk_widget_class_find_style_property (GTK_WIDGET_CLASS (class), property_name);
-  if (!pspec)
-    goto out;
-
-  if (!(pspec->flags & G_PARAM_DEPRECATED))
-    goto out;
-
-  _gtk_css_parser_error_full (scanner->parser,
-                              GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                              "The style property %s:%s is deprecated and shouldn't be "
-                              "used anymore. It will be removed in a future version",
-                              g_type_name (pspec->owner_type), pspec->name);
-
-out:
-  g_free (n);
-  if (class)
-    g_type_class_unref (class);
-}
-
 static void
 parse_declaration (GtkCssScanner *scanner,
                    GtkCssRuleset *ruleset)
@@ -1386,19 +1152,6 @@ parse_declaration (GtkCssScanner *scanner,
     goto check_for_semicolon;
 
   property = _gtk_style_property_lookup (name);
-  if (property == NULL && !name_is_style_property (name))
-    {
-      gtk_css_provider_error (scanner->provider,
-                              scanner,
-                              GTK_CSS_PROVIDER_ERROR,
-                              GTK_CSS_PROVIDER_ERROR_NAME,
-                              "'%s' is not a valid property name",
-                              name);
-      _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-      g_free (name);
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
-      return;
-    }
 
   if (property != NULL && strcmp (name, property->name) != 0)
     {
@@ -1487,34 +1240,6 @@ parse_declaration (GtkCssScanner *scanner,
           _gtk_css_value_unref (value);
         }
 
-
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
-    }
-  else if (name_is_style_property (name))
-    {
-      char *value_str;
-
-      warn_if_deprecated (scanner, name);
-
-      gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_VALUE);
-
-      value_str = _gtk_css_parser_read_value (scanner->parser);
-      if (value_str)
-        {
-          WidgetPropertyValue *val;
-
-          val = widget_property_value_new (name, scanner->section);
-	  val->value = value_str;
-
-          gtk_css_ruleset_add_style (ruleset, name, val);
-        }
-      else
-        {
-          _gtk_css_parser_resync (scanner->parser, TRUE, '}');
-          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
-          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
-          return;
-        }
 
       gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
     }
@@ -2145,20 +1870,10 @@ compare_properties (gconstpointer a, gconstpointer b, gpointer style)
                  _gtk_style_property_get_name (GTK_STYLE_PROPERTY (styles[*ub].property)));
 }
 
-static int
-compare_names (gconstpointer a, gconstpointer b)
-{
-  const WidgetPropertyValue *aa = a;
-  const WidgetPropertyValue *bb = b;
-  return strcmp (aa->name, bb->name);
-}
-
 static void
 gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
                        GString             *str)
 {
-  GList *values, *walk;
-  WidgetPropertyValue *widget_value;
   guint i;
 
   _gtk_css_selector_tree_match_print (ruleset->selector_match, str);
@@ -2186,29 +1901,6 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
         }
 
       g_free (sorted);
-    }
-
-  if (ruleset->widget_style)
-    {
-      values = NULL;
-      for (widget_value = ruleset->widget_style; widget_value != NULL; widget_value = widget_value->next)
-	values = g_list_prepend (values, widget_value);
-
-      /* so the output is identical for identical selector styles */
-      values = g_list_sort (values, compare_names);
-
-      for (walk = values; walk; walk = walk->next)
-        {
-	  widget_value = walk->data;
-
-          g_string_append (str, "  ");
-          g_string_append (str, widget_value->name);
-          g_string_append (str, ": ");
-          g_string_append (str, widget_value->value);
-          g_string_append (str, ";\n");
-        }
-
-      g_list_free (values);
     }
 
   g_string_append (str, "}\n");

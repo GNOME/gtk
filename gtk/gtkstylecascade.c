@@ -96,40 +96,9 @@ gtk_style_cascade_iter_clear (GtkStyleCascadeIter *iter)
   g_free (iter->cascade_index);
 }
 
-static gboolean
-gtk_style_cascade_get_style_property (GtkStyleProvider *provider,
-                                      GtkWidgetPath    *path,
-                                      GtkStateFlags     state,
-                                      GParamSpec       *pspec,
-                                      GValue           *value)
-{
-  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
-  GtkStyleCascadeIter iter;
-  GtkStyleProvider *item;
-
-  for (item = gtk_style_cascade_iter_init (cascade, &iter);
-       item;
-       item = gtk_style_cascade_iter_next (cascade, &iter))
-    {
-      if (gtk_style_provider_get_style_property (item,
-                                                 path,
-                                                 state,
-                                                 pspec,
-                                                 value))
-        {
-          gtk_style_cascade_iter_clear (&iter);
-          return TRUE;
-        }
-    }
-
-  gtk_style_cascade_iter_clear (&iter);
-  return FALSE;
-}
-
 static void
 gtk_style_cascade_provider_iface_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style_property = gtk_style_cascade_get_style_property;
 }
 
 static GtkSettings *
