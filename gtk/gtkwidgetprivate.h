@@ -242,8 +242,6 @@ void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
                                                             GtkWidget *toplevel,
                                                             gpointer   user_data);
 GtkStyleContext * _gtk_widget_peek_style_context           (GtkWidget *widget);
-void              _gtk_widget_set_simple_clip              (GtkWidget *widget,
-                                                            GtkAllocation *content_clip);
 
 typedef gboolean (*GtkCapturedEventHandler) (GtkWidget *widget, GdkEvent *event);
 

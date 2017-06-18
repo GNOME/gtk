@@ -13413,67 +13413,6 @@ gtk_widget_set_clip (GtkWidget           *widget,
   gdk_rectangle_union (&allocation, &new_clip, &priv->clip);
 }
 
-/*
- * _gtk_widget_set_simple_clip:
- * @widget: a #GtkWidget
- * @content_clip: (nullable): Clipping area of the contents
- *     or %NULL, if the contents
- *     do not extent the allocation.
- *
- * This is a convenience function for gtk_widget_set_clip(), if you
- * just want to set the clip for @widget based on its allocation,
- * CSS properties and - if the widget is a #GtkContainer - its
- * children. All children must have been allocated with
- * gtk_widget_size_allocate() before calling this function.
- * It is therefore a good idea to call this function last in
- * your implementation of GtkWidget::size_allocate().
- *
- * If your widget overdraws its contents, you cannot use this
- * function and must call gtk_widget_set_clip() yourself.
- **/
-void
-_gtk_widget_set_simple_clip (GtkWidget     *widget,
-                             GtkAllocation *content_clip)
-{
-  GtkStyleContext *context;
-  GtkAllocation clip, allocation;
-  GtkBorder extents;
-
-  context = _gtk_widget_get_style_context (widget);
-
-  _gtk_widget_get_allocation (widget, &allocation);
-
-  _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context,
-                                                                        GTK_CSS_PROPERTY_BOX_SHADOW),
-                                      &extents);
-
-  clip = allocation;
-  clip.x -= extents.left;
-  clip.y -= extents.top;
-  clip.width += extents.left + extents.right;
-  clip.height += extents.top + extents.bottom;
-
-  if (content_clip)
-    gdk_rectangle_union (content_clip, &clip, &clip);
-
-  if (GTK_IS_CONTAINER (widget))
-    {
-      GdkRectangle children_clip;
-
-      gtk_container_get_children_clip (GTK_CONTAINER (widget), &children_clip);
-
-      if (_gtk_widget_get_has_window (widget))
-        {
-          children_clip.x += allocation.x;
-          children_clip.y += allocation.y;
-        }
-
-      gdk_rectangle_union (&children_clip, &clip, &clip);
-    }
-
-  gtk_widget_set_clip (widget, &clip);
-}
-
 /**
  * gtk_widget_get_allocated_size:
  * @widget: a #GtkWidget
