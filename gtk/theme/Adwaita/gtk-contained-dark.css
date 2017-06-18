@@ -1,4 +1,4 @@
-* { padding: 0; -GtkToolButton-icon-spacing: 4; -GtkTextView-error-underline-color: #cc0000; -GtkScrolledWindow-scrollbar-spacing: 0; -GtkToolItemGroup-expander-size: 11; -GtkWidget-text-handle-width: 20; -GtkWidget-text-handle-height: 24; -GtkDialog-button-spacing: 4; -GtkDialog-action-area-border: 0; outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 2px; -gtk-secondary-caret-color: #215d9c; }
+* { padding: 0; outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 2px; -gtk-secondary-caret-color: #215d9c; }
 
 /*************** Base States * */
 .background { color: #eeeeec; background-color: #33393b; }
@@ -553,7 +553,7 @@ combobox arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); min-heig
 combobox:drop(active) { box-shadow: none; }
 
 /************ Toolbars * */
-toolbar, .inline-toolbar, searchbar, .location-bar { -GtkWidget-window-dragging: true; padding: 4px; background-color: #33393b; }
+toolbar, .inline-toolbar, searchbar, .location-bar { padding: 4px; background-color: #33393b; }
 
 toolbar { padding: 4px 3px 3px 4px; }
 
@@ -644,8 +644,6 @@ searchbar, .location-bar { border-width: 0 0 1px; padding: 3px; }
 
 .selection-mode.titlebar:not(headerbar) .selection-menu:backdrop, .selection-mode.titlebar:not(headerbar) .selection-menu, headerbar.selection-mode .selection-menu:backdrop, headerbar.selection-mode .selection-menu { border-color: rgba(33, 93, 156, 0); background-color: rgba(33, 93, 156, 0); background-image: none; box-shadow: none; padding-left: 10px; padding-right: 10px; }
 
-.selection-mode.titlebar:not(headerbar) .selection-menu:backdrop GtkArrow, .selection-mode.titlebar:not(headerbar) .selection-menu GtkArrow, headerbar.selection-mode .selection-menu:backdrop GtkArrow, headerbar.selection-mode .selection-menu GtkArrow { -GtkArrow-arrow-scaling: 1; }
-
 .selection-mode.titlebar:not(headerbar) .selection-menu:backdrop .arrow, .selection-mode.titlebar:not(headerbar) .selection-menu .arrow, headerbar.selection-mode .selection-menu:backdrop .arrow, headerbar.selection-mode .selection-menu .arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); color: rgba(255, 255, 255, 0.5); -gtk-icon-shadow: none; }
 
 .tiled .titlebar:backdrop:not(headerbar), .tiled .titlebar:not(headerbar), .maximized .titlebar:backdrop:not(headerbar), .maximized .titlebar:not(headerbar), .fullscreen .titlebar:backdrop:not(headerbar), .fullscreen .titlebar:not(headerbar), .tiled headerbar:backdrop, .tiled headerbar, .maximized headerbar:backdrop, .maximized headerbar, .fullscreen headerbar:backdrop, .fullscreen headerbar { border-radius: 0; }
@@ -687,8 +685,6 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 /************** Tree Views * */
 treeview.view { border-left-color: #898b8b; border-top-color: #33393b; }
-
-* { -GtkTreeView-horizontal-separator: 4; -GtkTreeView-grid-line-width: 1; -GtkTreeView-grid-line-pattern: ''; -GtkTreeView-tree-line-width: 1; -GtkTreeView-tree-line-pattern: ''; -GtkTreeView-expander-size: 16; }
 
 treeview.view:selected:focus, treeview.view:selected { border-radius: 0; }
 
@@ -763,7 +759,7 @@ treeview.view header button:backdrop:disabled { border-color: #33393b; backgroun
 treeview.view header button:last-child:backdrop, treeview.view header button:last-child { border-right-style: none; }
 
 /********* Menus * */
-menubar, .menubar { -GtkWidget-window-dragging: true; padding: 0px; box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1); }
+menubar, .menubar { padding: 0px; box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1); }
 
 menubar:backdrop, .menubar:backdrop { background-color: #33393b; }
 
@@ -971,8 +967,6 @@ notebook box > stack:not(:only-child):backdrop { background-color: #252a2c; }
 
 /************** Scrollbars * */
 scrollbar { background-color: #2b3032; transition: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-
-* { -GtkScrollbar-has-backward-stepper: false; -GtkScrollbar-has-forward-stepper: false; }
 
 scrollbar.top { border-bottom: 1px solid #1b1f20; }
 
