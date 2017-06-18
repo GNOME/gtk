@@ -819,68 +819,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                                     FALSE,
                                                                     GTK_PARAM_READWRITE));
 
-/**
- * GtkNotebook:has-secondary-backward-stepper:
- *
- * The “has-secondary-backward-stepper” property determines whether
- * a second backward arrow button is displayed on the opposite end
- * of the tab area.
- *
- * Since: 2.4
- */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("has-secondary-backward-stepper",
-                                                                 P_("Secondary backward stepper"),
-                                                                 P_("Display a second backward arrow button on the opposite end of the tab area"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
-
-/**
- * GtkNotebook:has-secondary-forward-stepper:
- *
- * The “has-secondary-forward-stepper” property determines whether
- * a second forward arrow button is displayed on the opposite end
- * of the tab area.
- *
- * Since: 2.4
- */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("has-secondary-forward-stepper",
-                                                                 P_("Secondary forward stepper"),
-                                                                 P_("Display a second forward arrow button on the opposite end of the tab area"),
-                                                                 FALSE,
-                                                                 GTK_PARAM_READABLE));
-
-/**
- * GtkNotebook:has-backward-stepper:
- *
- * The “has-backward-stepper” property determines whether
- * the standard backward arrow button is displayed.
- *
- * Since: 2.4
- */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("has-backward-stepper",
-                                                                 P_("Backward stepper"),
-                                                                 P_("Display the standard backward arrow button"),
-                                                                 TRUE,
-                                                                 GTK_PARAM_READABLE));
-
-/**
- * GtkNotebook:has-forward-stepper:
- *
- * The “has-forward-stepper” property determines whether
- * the standard forward arrow button is displayed.
- *
- * Since: 2.4
- */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_boolean ("has-forward-stepper",
-                                                                 P_("Forward stepper"),
-                                                                 P_("Display the standard forward arrow button"),
-                                                                 TRUE,
-                                                                 GTK_PARAM_READABLE));
-
   /**
    * GtkNotebook::switch-page:
    * @notebook: the object which received the signal.
@@ -2868,12 +2806,10 @@ update_arrow_nodes (GtkNotebook *notebook)
       down_icon_name = "pan-start-symbolic";
     }
 
-  gtk_widget_style_get (GTK_WIDGET (notebook),
-                        "has-backward-stepper", &arrow[0],
-                        "has-secondary-forward-stepper", &arrow[1],
-                        "has-secondary-backward-stepper", &arrow[2],
-                        "has-forward-stepper", &arrow[3],
-                        NULL);
+  arrow[0] = TRUE;
+  arrow[1] = FALSE;
+  arrow[2] = FALSE;
+  arrow[3] = TRUE;
 
   for (i = 0; i < 4; i++)
     {
