@@ -541,42 +541,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 
 
   /**
-   * GtkCalendar:inner-border:
-   *
-   * The spacing around the day/week headers and main area.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("inner-border",
-                                                             P_("Inner border"),
-                                                             P_("Inner border space"),
-                                                             0, G_MAXINT, 4,
-                                                             GTK_PARAM_READABLE));
-
-  /**
-   * GtkCalndar:vertical-separation:
-   *
-   * Separation between day headers and main area.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("vertical-separation",
-                                                             P_("Vertical separation"),
-                                                             P_("Space between day headers and main area"),
-                                                             0, G_MAXINT, 4,
-                                                             GTK_PARAM_READABLE));
-
-  /**
-   * GtkCalendar:horizontal-separation:
-   *
-   * Separation between week headers and main area.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("horizontal-separation",
-                                                             P_("Horizontal separation"),
-                                                             P_("Space between week headers and main area"),
-                                                             0, G_MAXINT, 4,
-                                                             GTK_PARAM_READABLE));
-
-  /**
    * GtkCalendar::month-changed:
    * @calendar: the object which received the signal.
    *
@@ -1582,37 +1546,20 @@ calendar_unrealize_arrows (GtkCalendar *calendar)
 static gint
 calendar_get_inner_border (GtkCalendar *calendar)
 {
-  gint inner_border;
-
-  gtk_widget_style_get (GTK_WIDGET (calendar),
-                        "inner-border", &inner_border,
-                        NULL);
-
-  return inner_border;
+  return 4;
 }
 
 static gint
 calendar_get_xsep (GtkCalendar *calendar)
 {
-  gint xsep;
-
-  gtk_widget_style_get (GTK_WIDGET (calendar),
-                        "horizontal-separation", &xsep,
-                        NULL);
-
-  return xsep;
+  return 4;
 }
 
 static gint
 calendar_get_ysep (GtkCalendar *calendar)
 {
-  gint ysep;
 
-  gtk_widget_style_get (GTK_WIDGET (calendar),
-                        "vertical-separation", &ysep,
-                        NULL);
-
-  return ysep;
+  return 4;
 }
 
 static void
