@@ -1032,10 +1032,10 @@ gtk_tree_view_accessible_get_cell_area (GtkCellAccessibleParent *parent,
       expander_column = gtk_tree_view_get_expander_column (tree_view);
       if (expander_column == tv_col)
         {
-          gint expander_size;
-          gtk_widget_style_get (widget,
-                                "expander-size", &expander_size,
-                                NULL);
+          /* Values from gtktreeview.c ... */
+#define _TREE_VIEW_EXPANDER_SIZE 16
+#define _TREE_VIEW_HORIZONTAL_SEPARATOR 4
+          gint expander_size = _TREE_VIEW_EXPANDER_SIZE + (_TREE_VIEW_HORIZONTAL_SEPARATOR / 2);
           cell_rect->x += expander_size + EXTRA_EXPANDER_PADDING;
           cell_rect->width -= expander_size + EXTRA_EXPANDER_PADDING;
         }
