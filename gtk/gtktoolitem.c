@@ -99,8 +99,6 @@ static void gtk_tool_item_get_property (GObject         *object,
 					GParamSpec      *pspec);
 static void gtk_tool_item_property_notify (GObject      *object,
 					   GParamSpec   *pspec);
-static void gtk_tool_item_size_allocate (GtkWidget      *widget,
-					 GtkAllocation  *allocation);
 
 static guint toolitem_signals[LAST_SIGNAL] = { 0 };
 
@@ -121,7 +119,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   object_class->finalize     = gtk_tool_item_finalize;
   object_class->notify       = gtk_tool_item_property_notify;
 
-  widget_class->size_allocate = gtk_tool_item_size_allocate;
   widget_class->parent_set    = gtk_tool_item_parent_set;
 
   klass->create_menu_proxy = _gtk_tool_item_create_menu_proxy;
@@ -303,27 +300,6 @@ gtk_tool_item_property_notify (GObject    *object,
 
   if (G_OBJECT_CLASS (gtk_tool_item_parent_class)->notify)
     G_OBJECT_CLASS (gtk_tool_item_parent_class)->notify (object, pspec);
-}
-
-static void
-gtk_tool_item_size_allocate (GtkWidget     *widget,
-			     GtkAllocation *allocation)
-{
-  GtkAllocation child_allocation;
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child && gtk_widget_get_visible (child))
-    {
-      child_allocation.x = allocation->x;
-      child_allocation.y = allocation->y;
-      child_allocation.width = allocation->width;
-      child_allocation.height = allocation->height;
-      
-      gtk_widget_size_allocate (child, &child_allocation);
-    }
-
-  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 gboolean
