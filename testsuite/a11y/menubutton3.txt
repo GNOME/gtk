@@ -7,14 +7,6 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GtkContainerAccessible-0
-    "panel"
-    parent: window1
-    state: enabled sensitive showing visible
-    toolkit: gtk
-    <AtkComponent>
-    layer: widget
-    alpha: 1
   menubutton
     "toggle button"
     parent: window1
@@ -31,7 +23,7 @@ window1
     <AtkAction>
     action 0 name: click
     action 0 description: Clicks the button
-  unnamed-GtkPopoverAccessible-1
+  unnamed-GtkPopoverAccessible-0
     "panel"
     parent: menubutton
     popup-for: menubutton
@@ -40,54 +32,54 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkStackAccessible-2
+    unnamed-GtkStackAccessible-1
       "panel"
-      parent: unnamed-GtkPopoverAccessible-1
+      parent: unnamed-GtkPopoverAccessible-0
       index: 0
       state: enabled sensitive visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkContainerAccessible-3
+      unnamed-GtkContainerAccessible-2
         "filler"
-        parent: unnamed-GtkStackAccessible-2
+        parent: unnamed-GtkStackAccessible-1
         index: 0
         state: enabled sensitive vertical visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkContainerAccessible-4
+        unnamed-GtkContainerAccessible-3
           "filler"
-          parent: unnamed-GtkContainerAccessible-3
+          parent: unnamed-GtkContainerAccessible-2
           index: 0
           state: enabled sensitive vertical visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GtkContainerAccessible-5
+          unnamed-GtkContainerAccessible-4
             "filler"
-            parent: unnamed-GtkContainerAccessible-4
+            parent: unnamed-GtkContainerAccessible-3
             index: 0
             state: enabled sensitive vertical visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            unnamed-GtkContainerAccessible-6
+            unnamed-GtkContainerAccessible-5
               "filler"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: unnamed-GtkContainerAccessible-4
               index: 0
               state: enabled sensitive vertical visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              unnamed-GtkButtonAccessible-7
+              unnamed-GtkButtonAccessible-6
                 "push button"
-                parent: unnamed-GtkContainerAccessible-6
+                parent: unnamed-GtkContainerAccessible-5
                 index: 0
                 name: New
                 state: enabled focusable sensitive visible
