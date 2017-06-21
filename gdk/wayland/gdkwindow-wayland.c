@@ -1373,6 +1373,7 @@ xdg_surface_configure (void                   *data,
   int width = impl->pending.width;
   int height = impl->pending.height;
   gboolean fixed_size;
+  gboolean saved_size;
 
   if (!impl->initial_configure_received)
     {
@@ -1392,6 +1393,7 @@ xdg_surface_configure (void                   *data,
   fixed_size =
     new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_TILED);
 
+  saved_size = (width == 0 && height == 0);
   /* According to xdg_shell, an xdg_surface.configure with size 0x0
    * should be interpreted as that it is up to the client to set a
    * size.
@@ -1400,7 +1402,7 @@ xdg_surface_configure (void                   *data,
    * the client should configure its size back to what it was before
    * being maximize or fullscreen.
    */
-  if (width == 0 && height == 0 && !fixed_size)
+  if (saved_size && !fixed_size)
     {
       width = impl->saved_width;
       height = impl->saved_height;
@@ -1413,16 +1415,19 @@ xdg_surface_configure (void                   *data,
       /* Ignore size increments for maximized/fullscreen windows */
       if (fixed_size)
         geometry_mask &= ~GDK_HINT_RESIZE_INC;
+      if (!saved_size)
+        {
+          /* Do not reapply contrains if we are restoring original size */
+          gdk_window_constrain_size (&impl->geometry_hints,
+                                     geometry_mask,
+                                     width + impl->margin_left + impl->margin_right,
+                                     height + impl->margin_top + impl->margin_bottom,
+                                     &width,
+                                     &height);
 
-      gdk_window_constrain_size (&impl->geometry_hints,
-                                 geometry_mask,
-                                 width + impl->margin_left + impl->margin_right,
-                                 height + impl->margin_top + impl->margin_bottom,
-                                 &width,
-                                 &height);
-
-      /* Save size for next time we get 0x0 */
-      _gdk_wayland_window_save_size (window);
+          /* Save size for next time we get 0x0 */
+          _gdk_wayland_window_save_size (window);
+        }
 
       gdk_wayland_window_configure (window, width, height, impl->scale);
     }
