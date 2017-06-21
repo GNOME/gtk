@@ -4927,8 +4927,6 @@ gtk_widget_get_window_allocation (GtkWidget     *widget,
   GtkWidget *parent;
   GtkAllocation alloc;
 
-  g_assert (gtk_widget_get_has_window (widget));
-
   /* Don't consider the parent == widget case here. */
   parent = _gtk_widget_get_parent (widget);
   while (parent && !_gtk_widget_get_has_window (parent))
