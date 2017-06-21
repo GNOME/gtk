@@ -170,10 +170,8 @@ struct _GtkWindowPopover
 {
   GtkWidget *widget;
   GtkWidget *parent;
-  GdkWindow *window;
   GtkPositionType pos;
   cairo_rectangle_int_t rect;
-  gulong unmap_id;
   guint clamp_allocation : 1;
 };
 
@@ -1381,17 +1379,8 @@ gtk_window_close (GtkWindow *window)
 static void
 popover_destroy (GtkWindowPopover *popover)
 {
-  if (popover->unmap_id)
-    {
-      g_signal_handler_disconnect (popover->widget, popover->unmap_id);
-      popover->unmap_id = 0;
-    }
-
   if (popover->widget && _gtk_widget_get_parent (popover->widget))
     gtk_widget_unparent (popover->widget);
-
-  if (popover->window)
-    gdk_window_destroy (popover->window);
 
   g_free (popover);
 }
@@ -6019,43 +6008,12 @@ gtk_window_hide (GtkWidget *widget)
 }
 
 static void
-popover_unmap (GtkWidget        *widget,
-               GtkWindowPopover *popover)
-{
-  if (popover->unmap_id)
-    {
-      g_signal_handler_disconnect (widget, popover->unmap_id);
-      popover->unmap_id = 0;
-    }
-
-  if (popover->window)
-    {
-      gdk_window_hide (popover->window);
-      gtk_widget_unmap (popover->widget);
-    }
-}
-
-static void
-popover_map (GtkWidget        *widget,
-             GtkWindowPopover *popover)
-{
-  if (popover->window && gtk_widget_get_visible (popover->widget))
-    {
-      gdk_window_show_unraised (popover->window);
-      gtk_widget_map (popover->widget);
-      popover->unmap_id = g_signal_connect (popover->widget, "unmap",
-                                            G_CALLBACK (popover_unmap), popover);
-    }
-}
-
-static void
 gtk_window_map (GtkWidget *widget)
 {
   GtkWidget *child;
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GdkWindow *gdk_window;
-  GList *link;
   GdkDisplay *display;
 
   if (!_gtk_widget_is_toplevel (widget))
@@ -6155,15 +6113,6 @@ gtk_window_map (GtkWidget *widget)
 
   if (priv->application)
     gtk_application_handle_window_map (priv->application, window);
-
-  link = priv->popovers;
-
-  while (link)
-    {
-      GtkWindowPopover *popover = link->data;
-      link = link->next;
-      popover_map (popover->widget, popover);
-    }
 }
 
 static gboolean
@@ -6193,21 +6142,11 @@ gtk_window_unmap (GtkWidget *widget)
   GtkWindowGeometryInfo *info;
   GdkWindow *gdk_window;
   GdkWindowState state;
-  GList *link;
 
   if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
     {
       GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
       return;
-    }
-
-  link = priv->popovers;
-
-  while (link)
-    {
-      GtkWindowPopover *popover = link->data;
-      link = link->next;
-      popover_unmap (popover->widget, popover);
     }
 
   gdk_window = _gtk_widget_get_window (widget);
@@ -6455,39 +6394,6 @@ popover_get_rect (GtkWindowPopover      *popover,
             rect->height = win_alloc.y + win_alloc.height - rect->y;
         }
     }
-}
-
-static void
-popover_realize (GtkWidget        *widget,
-                 GtkWindowPopover *popover,
-                 GtkWindow        *window)
-{
-  cairo_rectangle_int_t rect;
-
-  if (popover->window)
-    return;
-
-  popover_get_rect (popover, window, &rect);
-
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    {
-      popover->window = gdk_wayland_window_new_subsurface (gtk_widget_get_display (GTK_WIDGET (window)),
-                                                           GDK_ALL_EVENTS_MASK,
-                                                           &rect);
-      gdk_window_set_transient_for (popover->window,
-                                    _gtk_widget_get_window (GTK_WIDGET (window)));
-    }
-  else
-#endif
-    {
-      popover->window = gdk_window_new_child (_gtk_widget_get_window (GTK_WIDGET (window)),
-                                              GDK_ALL_EVENTS_MASK,
-                                              &rect);
-    }
-
-  gtk_widget_register_window (GTK_WIDGET (window), popover->window);
-  gtk_widget_set_parent_window (popover->widget, popover->window);
 }
 
 static void
@@ -6754,7 +6660,6 @@ gtk_window_realize (GtkWidget *widget)
   GdkWindow *gdk_window;
   GtkBorder window_border;
   GtkWindowPrivate *priv;
-  GList *link;
 
   window = GTK_WINDOW (widget);
   priv = window->priv;
@@ -6772,15 +6677,6 @@ gtk_window_realize (GtkWidget *widget)
       gtk_widget_set_window (widget, gdk_window);
       gtk_widget_register_window (widget, gdk_window);
       gtk_widget_set_realized (widget, TRUE);
-
-      link = priv->popovers;
-
-      while (link)
-        {
-          GtkWindowPopover *popover = link->data;
-          link = link->next;
-          popover_realize (popover->widget, popover, window);
-        }
 
       priv->renderer = gsk_renderer_new_for_window (gdk_window);
       gsk_renderer_set_scale_factor (priv->renderer, gtk_widget_get_scale_factor (widget));
@@ -6937,32 +6833,7 @@ gtk_window_realize (GtkWidget *widget)
   /* Icons */
   gtk_window_realize_icon (window);
 
-  link = priv->popovers;
-
-  while (link)
-    {
-      GtkWindowPopover *popover = link->data;
-      link = link->next;
-      popover_realize (popover->widget, popover, window);
-    }
-
   check_scale_changed (window);
-}
-
-static void
-popover_unrealize (GtkWidget        *widget,
-                   GtkWindowPopover *popover,
-                   GtkWindow        *window)
-{
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    gdk_window_set_transient_for (popover->window, NULL);
-#endif
-
-  gtk_widget_unregister_window (GTK_WIDGET (window), popover->window);
-  gtk_widget_unrealize (popover->widget);
-  gdk_window_destroy (popover->window);
-  popover->window = NULL;
 }
 
 static void
@@ -6971,7 +6842,6 @@ gtk_window_unrealize (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GtkWindowGeometryInfo *info;
-  GList *link;
 
   /* On unrealize, we reset the size of the window such
    * that we will re-apply the default sizing stuff
@@ -7001,15 +6871,6 @@ gtk_window_unrealize (GtkWidget *widget)
 
   /* Icons */
   gtk_window_unrealize_icon (window);
-
-  link = priv->popovers;
-
-  while (link)
-    {
-      GtkWindowPopover *popover = link->data;
-      link = link->next;
-      popover_unrealize (popover->widget, popover, window);
-    }
 
   gtk_container_forall (GTK_CONTAINER (widget),
                         (GtkCallback) gtk_widget_unrealize,
@@ -7054,26 +6915,11 @@ popover_size_allocate (GtkWidget        *widget,
 {
   cairo_rectangle_int_t rect;
 
-  if (!popover->window)
-    return;
-
   if (GTK_IS_POPOVER (popover->widget))
     gtk_popover_update_position (GTK_POPOVER (popover->widget));
 
   popover_get_rect (popover, window, &rect);
-  gdk_window_move_resize (popover->window, rect.x, rect.y,
-                          rect.width, rect.height);
-  rect.x = rect.y = 0;
   gtk_widget_size_allocate (widget, &rect);
-
-  if (gtk_widget_is_drawable (GTK_WIDGET (window)) &&
-      gtk_widget_is_visible (widget))
-    {
-      if (!gdk_window_is_visible (popover->window))
-        gdk_window_show_unraised (popover->window);
-    }
-  else if (gdk_window_is_visible (popover->window))
-    gdk_window_hide (popover->window);
 }
 
 /* _gtk_window_set_allocation:
@@ -7187,22 +7033,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
 }
 
 static void
-gtk_window_restack_popovers (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = window->priv;
-  GList *link = priv->popovers;
-
-  while (link)
-    {
-      GtkWindowPopover *popover = link->data;
-      link = link->next;
-
-      if (popover->window)
-        gdk_window_raise (popover->window);
-    }
-}
-
-static void
 gtk_window_size_allocate (GtkWidget     *widget,
                           GtkAllocation *allocation)
 {
@@ -7215,8 +7045,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
   child = gtk_bin_get_child (GTK_BIN (window));
   if (child && gtk_widget_get_visible (child))
     gtk_widget_size_allocate (child, &child_allocation);
-
-  gtk_window_restack_popovers (window);
 
   gtk_widget_set_clip (widget, allocation);
 }
@@ -10747,9 +10575,6 @@ _gtk_window_add_popover (GtkWindow *window,
   data->clamp_allocation = !!clamp_allocation;
   priv->popovers = g_list_prepend (priv->popovers, data);
 
-  if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-    popover_realize (popover, data, window);
-
   gtk_widget_set_parent (popover, GTK_WIDGET (window));
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (window));
@@ -10778,11 +10603,6 @@ _gtk_window_remove_popover (GtkWindow *window,
   g_object_ref (popover);
   gtk_widget_unparent (popover);
 
-  popover_unmap (popover, data);
-
-  if (_gtk_widget_get_realized (GTK_WIDGET (popover)))
-    popover_unrealize (popover, data, window);
-
   priv->popovers = g_list_remove (priv->popovers, data);
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (window));
@@ -10798,8 +10618,6 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
                                   GtkPositionType              pos,
                                   const cairo_rectangle_int_t *rect)
 {
-  gboolean need_resize;
-  gboolean need_move;
   GtkWindowPopover *data;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -10815,36 +10633,10 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
       return;
     }
 
-
-  /* Don't queue a resize if the position as well as the size are the same */
-  need_move = data->pos    != pos ||
-              data->rect.x != rect->x ||
-              data->rect.y != rect->y;
-
-  need_resize = data->pos != pos ||
-                data->rect.width  != rect->width ||
-                data->rect.height != rect->height;
-
   data->rect = *rect;
   data->pos = pos;
 
-  if (gtk_widget_is_visible (popover) && !data->window &&
-      gtk_widget_get_realized (GTK_WIDGET (window)))
-    {
-      popover_realize (popover, data, window);
-      popover_map (popover, data);
-    }
-
-  if (need_resize)
-    {
-      gtk_widget_queue_resize (popover);
-    }
-  else if (need_move)
-    {
-      cairo_rectangle_int_t new_size;
-      popover_get_rect (data, window, &new_size);
-      gdk_window_move (data->window, new_size.x, new_size.y);
-    }
+  gtk_widget_queue_allocate (GTK_WIDGET (window));
 }
 
 void
@@ -10940,7 +10732,6 @@ _gtk_window_raise_popover (GtkWindow *window,
       g_list_free (link);
       break;
     }
-  gtk_window_restack_popovers (window);
 }
 
 static GtkWidget *inspector_window = NULL;
