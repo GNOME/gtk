@@ -378,11 +378,30 @@ gtk_popover_realize (GtkWidget *widget)
   GtkAllocation allocation;
   GdkWindow *window;
 
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_window_allocation (widget, &allocation);
 
-  window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                 GDK_ALL_EVENTS_MASK,
-                                 &(GdkRectangle) { 0, 0, allocation.width, allocation.height });
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    {
+      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+
+      g_assert (GTK_IS_WINDOW (toplevel));
+
+      window = gdk_wayland_window_new_subsurface (gtk_widget_get_display (toplevel),
+                                                  GDK_ALL_EVENTS_MASK,
+                                                  &allocation);
+
+      gdk_window_set_transient_for (window,
+                                    gtk_widget_get_window (toplevel));
+    }
+  else
+#endif
+    {
+      window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
+                                     GDK_ALL_EVENTS_MASK,
+                                     &allocation);
+    }
+
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
   gtk_widget_set_realized (widget, TRUE);
