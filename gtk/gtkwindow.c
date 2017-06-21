@@ -760,14 +760,19 @@ gtk_window_pick (GtkWidget *widget,
           !gtk_widget_is_drawable (popover->widget))
         continue;
 
-      popover_get_rect (popover, window, &rect);
+      gtk_widget_get_outer_allocation (popover->widget, &rect);
 
       if (gdk_rectangle_contains_point (&rect, x, y))
         {
           if (x_out && y_out)
             {
-              *x_out = x - rect.x;
-              *y_out = y - rect.y;
+              int dest_x, dest_y;
+              gtk_widget_translate_coordinates (widget, popover->widget,
+                                                x, y,
+                                                &dest_x, &dest_y);
+
+              *x_out = dest_x;
+              *y_out = dest_y;
             }
 
           return popover->widget;
@@ -7824,7 +7829,7 @@ gtk_window_queue_draw_region (GtkWidget            *widget,
 {
   gtk_debug_updates_add (widget, region);
 
-  gdk_window_invalidate_region (_gtk_widget_get_window (widget), region, TRUE);
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->queue_draw_region (widget, region);
 }
 
 /**

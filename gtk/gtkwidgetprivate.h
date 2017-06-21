@@ -330,6 +330,10 @@ void              gtk_widget_get_content_size              (GtkWidget        *wi
                                                             int              *width,
                                                             int              *height);
 
+void              gtk_widget_get_window_allocation         (GtkWidget *widget,
+                                                            GtkAllocation *allocation);
+
+
 GtkWidget *       gtk_widget_common_ancestor               (GtkWidget *widget_a,
                                                             GtkWidget *widget_b);
 
