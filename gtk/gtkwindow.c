@@ -9037,15 +9037,15 @@ gtk_window_snapshot (GtkWidget   *widget,
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkStyleContext *context;
-  GtkAllocation allocation;
   GtkBorder window_border;
   gint title_height;
   GList *l;
+  int width, height;
 
   context = gtk_widget_get_style_context (widget);
 
   get_shadow_width (GTK_WINDOW (widget), &window_border);
-  _gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_content_size (widget, &width, &height);
 
   if (priv->client_decorated &&
       priv->decorated &&
@@ -9064,26 +9064,24 @@ gtk_window_snapshot (GtkWidget   *widget,
 
           gtk_snapshot_render_background (snapshot, context,
                                           window_border.left - border.left, window_border.top - border.top,
-                                          allocation.width -
+                                          width -
                                             (window_border.left + window_border.right - border.left - border.right),
-                                          allocation.height -
+                                          height -
                                             (window_border.top + window_border.bottom - border.top - border.bottom));
           gtk_snapshot_render_frame (snapshot, context,
                                      window_border.left - border.left, window_border.top - border.top,
-                                     allocation.width -
+                                     width -
                                        (window_border.left + window_border.right - border.left - border.right),
-                                     allocation.height -
+                                     height -
                                        (window_border.top + window_border.bottom - border.top - border.bottom));
         }
       else
         {
           gtk_snapshot_render_background (snapshot, context, 0, 0,
-                                          allocation.width,
-                                          allocation.height);
+                                          width, height);
 
           gtk_snapshot_render_frame (snapshot, context, 0, 0,
-                                     allocation.width,
-                                     allocation.height);
+                                     width, height);
         }
       gtk_style_context_restore (context);
     }
@@ -9098,16 +9096,16 @@ gtk_window_snapshot (GtkWidget   *widget,
   gtk_snapshot_render_background (snapshot, context,
                                   window_border.left,
                                   window_border.top + title_height,
-                                  allocation.width -
+                                  width -
                                     (window_border.left + window_border.right),
-                                  allocation.height -
+                                  height -
                                     (window_border.top + window_border.bottom + title_height));
   gtk_snapshot_render_frame (snapshot, context,
                              window_border.left,
                              window_border.top + title_height,
-                             allocation.width -
+                             width -
                                (window_border.left + window_border.right),
-                             allocation.height -
+                             height -
                                (window_border.top + window_border.bottom + title_height));
 
   if (priv->title_box != NULL)
