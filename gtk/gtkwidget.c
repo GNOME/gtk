@@ -4912,76 +4912,37 @@ static void
 gtk_widget_real_queue_draw_region (GtkWidget            *widget,
 				   const cairo_region_t *region)
 {
-  GtkWidget *toplevel;
-
-  toplevel = gtk_widget_get_toplevel (widget);
-
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
-
-  GTK_WIDGET_GET_CLASS (toplevel)->queue_draw_region (toplevel, region);
+  g_assert (_gtk_widget_get_has_window (widget));
+  gdk_window_invalidate_region (_gtk_widget_get_window (widget), region, TRUE);
 }
 
-/**
- * gtk_widget_queue_draw_region:
- * @widget: a #GtkWidget
- * @region: region to draw
- *
- * Invalidates the area of @widget defined by @region by notifying
- * the parent via its GtkWidgetClass::queue_draw_child() function.
- * Once the main loop becomes idle (after the current batch of
- * events has been processed, roughly), the window will receive
- * expose events for the union of all regions that have been
- * invalidated.
- *
- * Normally you would only use this function in widget
- * implementations. You might also use it to schedule a redraw of a
- * #GtkDrawingArea or some portion thereof.
- *
- * Since: 3.0
- **/
+/*
+ * Returns the values you're supposed to pass to gdk_window_move_resize
+ * for a windowed widget.
+ */
 void
-gtk_widget_queue_draw_region (GtkWidget            *widget,
-                              const cairo_region_t *region)
+gtk_widget_get_window_allocation (GtkWidget     *widget,
+                                  GtkAllocation *allocation)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  GtkWidget *parent;
+  GtkAllocation alloc;
 
-  if (cairo_region_is_empty (region))
-    return;
+  g_assert (gtk_widget_get_has_window (widget));
 
-  /* Just return if the widget isn't mapped */
-  if (!_gtk_widget_get_mapped (widget))
-    return;
+  /* Don't consider the parent == widget case here. */
+  parent = _gtk_widget_get_parent (widget);
+  while (parent && !_gtk_widget_get_has_window (parent))
+    parent = _gtk_widget_get_parent (parent);
 
-  if (!GTK_IS_WINDOW (widget))
-    {
-      GtkWidget *toplevel;
-      GtkAllocation alloc;
-      int x, y;
-      cairo_region_t *region2;
+  g_assert (GTK_IS_WINDOW (parent) || GTK_IS_POPOVER (parent));
 
-      toplevel = gtk_widget_get_toplevel (widget);
-      if (!GTK_IS_WINDOW (toplevel))
-        return;
+  gtk_widget_get_own_allocation (widget, &alloc);
+  gtk_widget_translate_coordinates (widget,
+                                    parent,
+                                    alloc.x, alloc.y,
+                                    &alloc.x, &alloc.y);
 
-      gtk_widget_get_allocation (widget, &alloc);
-
-      gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
-                                        toplevel,
-                                        alloc.x, alloc.y,
-                                        &x, &y);
-
-      region2 = cairo_region_copy (region);
-      cairo_region_translate (region2, x - alloc.x, y-  alloc.y);
-
-      WIDGET_CLASS (widget)->queue_draw_region (toplevel, region2);
-      cairo_region_destroy (region2);
-    }
-  else
-    {
-      WIDGET_CLASS (widget)->queue_draw_region (widget, region);
-    }
-
+  *allocation = alloc;
 }
 
 /**
@@ -5299,6 +5260,94 @@ get_box_padding (GtkCssStyle *style,
   border->bottom = get_number (style, GTK_CSS_PROPERTY_PADDING_BOTTOM);
   border->right = get_number (style, GTK_CSS_PROPERTY_PADDING_RIGHT);
 }
+
+/**
+ * gtk_widget_queue_draw_region:
+ * @widget: a #GtkWidget
+ * @region: region to draw
+ *
+ * Invalidates the area of @widget defined by @region by notifying
+ * the parent via its GtkWidgetClass::queue_draw_child() function.
+ * Once the main loop becomes idle (after the current batch of
+ * events has been processed, roughly), the window will receive
+ * expose events for the union of all regions that have been
+ * invalidated.
+ *
+ * Normally you would only use this function in widget
+ * implementations. You might also use it to schedule a redraw of a
+ * #GtkDrawingArea or some portion thereof.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_queue_draw_region (GtkWidget            *widget,
+                              const cairo_region_t *region)
+{
+  GtkWidget *parent;
+  cairo_region_t *region2;
+  GtkAllocation alloc;
+  int x, y;
+  GtkCssStyle *parent_style;
+  GtkBorder border, padding;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (cairo_region_is_empty (region))
+    return;
+
+  /* Just return if the widget isn't mapped */
+  if (!_gtk_widget_get_mapped (widget))
+    return;
+
+
+  if (!_gtk_widget_get_parent (widget))
+    {
+      g_assert (_gtk_widget_get_has_window (widget));
+      region2 = cairo_region_copy (region);
+      parent = widget;
+      goto invalidate;
+    }
+
+  /* Look for the parent with a window and invalidate @region in there. */
+  parent = widget;
+  while (parent != NULL && !gtk_widget_get_has_window (parent))
+    parent = _gtk_widget_get_parent (parent);
+
+  g_assert (parent != NULL);
+
+  /* @region's coordinates are originally relative to @widget's origin */
+  gtk_widget_get_allocation (widget, &alloc);
+  if (widget != parent)
+    gtk_widget_translate_coordinates (_gtk_widget_get_parent (widget),
+                                      parent,
+                                      0, 0,
+                                      &x, &y);
+  else
+    x = y = 0;
+
+  /* At this point, x and y are relative to the windowed parent's origin,
+   * but the window of the parent spans over its entire allocation, so we need
+   * to account for border and padding manually. The values returned from
+   * gtk_widget_get_window_allocation, which should've been used to size and position
+   * @parent's window, do not include widget margins nor css margins.
+   */
+  parent_style = gtk_css_node_get_style (parent->priv->cssnode);
+  get_box_border (parent_style, &border);
+  get_box_padding (parent_style, &padding);
+
+  x += border.left + padding.left;
+  y += border.top + padding.top;
+
+  region2 = cairo_region_copy (region);
+  cairo_region_translate (region2, x, y);
+
+invalidate:
+  WIDGET_CLASS (widget)->queue_draw_region (parent, region2);
+  cairo_region_destroy (region2);
+}
+
+
+
 
 /**
  * gtk_widget_size_allocate_with_baseline:
