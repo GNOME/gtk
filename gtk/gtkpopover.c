@@ -886,9 +886,9 @@ gtk_popover_apply_tail_path (GtkPopover *popover,
                               &final_x, &final_y,
                               NULL);
 
-  cairo_move_to (cr, initial_x, initial_y);
-  cairo_line_to (cr, tip_x, tip_y);
-  cairo_line_to (cr, final_x, final_y);
+  cairo_move_to (cr, initial_x, initial_y - TAIL_HEIGHT);
+  cairo_line_to (cr, tip_x, tip_y - TAIL_HEIGHT);
+  cairo_line_to (cr, final_x, final_y - TAIL_HEIGHT);
 }
 
 static void
@@ -1097,7 +1097,7 @@ gtk_popover_snapshot (GtkWidget   *widget,
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkStyleContext *context;
-  GtkAllocation allocation, clip;
+  GtkAllocation clip;
   GtkWidget *child;
   GtkBorder border;
   GdkRGBA border_color;
@@ -1107,10 +1107,10 @@ gtk_popover_snapshot (GtkWidget   *widget,
   GtkPositionType gap_side;
   graphene_rect_t bounds;
   cairo_t *cr;
+  int width, height;
 
   context = gtk_widget_get_style_context (widget);
 
-  gtk_widget_get_allocation (widget, &allocation);
   gtk_widget_get_clip (widget, &clip);
 
   gtk_style_context_get_border (context, &border);
@@ -1118,16 +1118,17 @@ gtk_popover_snapshot (GtkWidget   *widget,
                                &rect_x, &rect_y,
                                &rect_w, &rect_h);
 
+  gtk_widget_get_content_size (widget, &width, &height);
+
   graphene_rect_init (&bounds,
-                      clip.x - allocation.x, clip.y - allocation.y,
+                      - TAIL_HEIGHT, -TAIL_HEIGHT,
                       clip.width, clip.height);
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &bounds,
                                   "Popover");
   /* Render the rect background */
   gtk_render_background (context, cr,
-                         rect_x, rect_y,
-                         rect_w, rect_h);
+                         0, 0, width, height);
 
   if (popover->priv->widget)
     {
@@ -1150,16 +1151,14 @@ gtk_popover_snapshot (GtkWidget   *widget,
 
       /* Now render the frame, without the gap for the arrow tip */
       gtk_render_frame_gap (context, cr,
-                            rect_x, rect_y,
-                            rect_w, rect_h,
+                            0, 0, width, height,
                             gap_side,
                             gap_start, gap_end);
     }
   else
     {
       gtk_render_frame (context, cr,
-                        rect_x, rect_y,
-                        rect_w, rect_h);
+                        0, 0, width, height);
     }
 
   /* Clip to the arrow shape */
@@ -1170,8 +1169,8 @@ gtk_popover_snapshot (GtkWidget   *widget,
 
   /* Render the arrow background */
   gtk_render_background (context, cr,
-                         0, 0,
-                         allocation.width, allocation.height);
+                         - TAIL_HEIGHT, - TAIL_HEIGHT,
+                         width + (TAIL_HEIGHT * 2), height + (TAIL_HEIGHT * 2));
 
   /* Render the border of the arrow tip */
   if (border.bottom > 0)
@@ -1255,53 +1254,22 @@ gtk_popover_measure (GtkWidget      *widget,
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
-  GtkBorder margin;
-  int minimal_size, extra;
-
-  get_margin (widget, &margin);
+  int minimal_size;
 
   *minimum = 0;
   *natural = 0;
 
   if (child != NULL)
     {
-      int child_size = -1;
-
       if (for_size >= 0)
-        {
-          GdkRectangle child_rect;
+        for_size -= TAIL_HEIGHT;
 
-          if (orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              gtk_popover_get_rect_for_size (popover, for_size, 0, &child_rect);
-              child_size = child_rect.width;
-            }
-          else
-            {
-              gtk_popover_get_rect_for_size (popover, 0, for_size, &child_rect);
-              child_size = child_rect.height;
-            }
-        }
-
-      gtk_widget_measure (child, orientation, child_size, minimum, natural, NULL, NULL);
+      gtk_widget_measure (child, orientation, for_size, minimum, natural, NULL, NULL);
     }
 
   minimal_size = get_minimal_size (popover, orientation);
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      *minimum = MAX (*minimum, minimal_size);
-      *natural = MAX (*natural, minimal_size);
-      extra = MAX (TAIL_HEIGHT, margin.left) + MAX (TAIL_HEIGHT, margin.right);
-    }
-  else
-    {
-      *minimum = MAX (*minimum, minimal_size);
-      *natural = MAX (*natural, minimal_size);
-      extra = MAX (TAIL_HEIGHT, margin.bottom) + MAX (TAIL_HEIGHT, margin.top);
-    }
-
-  *minimum += extra;
-  *natural += extra;
+  *minimum = MAX (*minimum, minimal_size);
+  *natural = MAX (*natural, minimal_size);
 }
 
 static void
@@ -1355,35 +1323,22 @@ gtk_popover_size_allocate (GtkWidget     *widget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child)
     {
-      GtkAllocation child_alloc;
-      int x, y, w, h;
-      GtkBorder border;
-
-      gtk_popover_get_rect_coords (popover, &x, &y, &w, &h);
-      get_padding_and_border (widget, &border);
-
-      child_alloc.x = x + border.left;
-      child_alloc.y = y + border.top;
-      child_alloc.width = w - border.left - border.right;
-      child_alloc.height = h - border.top - border.bottom;
-      gtk_widget_size_allocate (child, &child_alloc);
+      gtk_widget_size_allocate (child, allocation);
+      gtk_widget_get_clip (child, &child_clip);
+      gdk_rectangle_union (&clip, &child_clip, &clip);
     }
 
   if (gtk_widget_get_realized (widget))
     {
+      GtkAllocation a;
+      gtk_widget_get_window_allocation (widget, &a);
       gdk_window_move_resize (gtk_widget_get_window (widget),
-                              0, 0, allocation->width, allocation->height);
+                              a.x, a.y, a.width, a.height);
       gtk_popover_update_shape (popover);
     }
 
   if (gtk_widget_is_drawable (widget))
     gtk_popover_check_invalidate_borders (popover);
-
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), &child_clip);
-  gdk_rectangle_union (&clip, &child_clip, &clip);
-
-  clip.x += allocation->x;
-  clip.y += allocation->y;
 
   gtk_widget_set_clip (widget, &clip);
 }
