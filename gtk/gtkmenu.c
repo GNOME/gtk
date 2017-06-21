@@ -4085,7 +4085,7 @@ gtk_menu_position (GtkMenu  *menu,
   else if (priv->widget)
     {
       rect_window = gtk_widget_get_window (priv->widget);
-      gtk_widget_get_allocation (priv->widget, &rect);
+      gtk_widget_get_window_allocation (priv->widget, &rect);
       text_direction = gtk_widget_get_direction (priv->widget);
     }
   else if (!priv->position_func)
