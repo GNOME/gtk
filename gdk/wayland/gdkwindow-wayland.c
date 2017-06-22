@@ -4105,11 +4105,11 @@ exported_idle (gpointer user_data)
  * to other processes. When the handle has been obtained, @callback
  * will be called.
  *
- * Up until 3.22.12 it was an error to call this function on a window that is
+ * Up until 3.22.15 it was an error to call this function on a window that is
  * already exported. When the handle is no longer needed,
  * gdk_wayland_window_unexport_handle() should be called to clean up resources.
  *
- * Starting with 3.22.13, calling this function on an already exported window
+ * Starting with 3.22.16, calling this function on an already exported window
  * will cause the callback to be invoked with the same handle as was already
  * invoked, from an idle callback. To unexport the window,
  * gdk_wayland_window_unexport_handle() must be called the same number of times
