@@ -329,7 +329,7 @@ label:focus {
     </example>
 
     <example>
-      <title>Theme inconsistent checkbuttons</title>
+      <title>Theme indeterminate checkbuttons</title>
       <programlisting><![CDATA[
 checkbutton:indeterminate {
   background-color: #20395a;
@@ -421,13 +421,13 @@ checkbutton:indeterminate {
             <entry>E:active, E:hover, E:focus</entry>
             <entry>any E node which is part of a widget with the corresponding state</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#useraction-pseudos">CSS</ulink></entry>
-            <entry>Corresponds to GTK_STATE_FLAG_ACTIVE, GTK_STATE_FLAG_PRELIGHT and GTK_STATE_FLAGS_FOCUSED; GTK+ also allows E:prelight and E:focused</entry>
+            <entry>Correspond to GTK_STATE_FLAG_ACTIVE, GTK_STATE_FLAG_PRELIGHT and GTK_STATE_FLAGS_FOCUSED respectively</entry>
           </row>
           <row>
             <entry>E:disabled</entry>
             <entry>any E node which is part of a widget which is disabled</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#UIstates">CSS</ulink></entry>
-            <entry>Corresponds to GTK_STATE_FLAG_INSENSITIVE; GTK+ also allows E:insensitive</entry>
+            <entry>Corresponds to GTK_STATE_FLAG_INSENSITIVE</entry>
           </row>
           <row>
             <entry>E:checked</entry>
@@ -437,10 +437,10 @@ checkbutton:indeterminate {
           </row>
           <row>
             <entry>E:indeterminate</entry>
-            <entry>any E node which is part of a widget (e.g. radio- or checkbuttons) which is in an inconsistent state</entry>
+            <entry>any E node which is part of a widget (e.g. radio- or checkbuttons) which is in an indeterminate state</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#indeterminate">CSS3</ulink>,
                    <ulink url="https://drafts.csswg.org/selectors/#indeterminate">CSS4</ulink></entry>
-            <entry>Corresponds to GTK_STATE_FLAG_INCONSISTENT; GTK+ also allows E:inconsistent</entry>
+            <entry>Corresponds to GTK_STATE_FLAG_INCONSISTENT</entry>
           </row>
           <row>
             <entry>E:backdrop, E:selected</entry>
