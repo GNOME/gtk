@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-18 18:26+0000\n"
-"PO-Revision-Date: 2016-11-19 17:13+0500\n"
+"POT-Creation-Date: 2017-06-20 19:25+0000\n"
+"PO-Revision-Date: 2017-06-22 19:27+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -81,11 +81,11 @@ msgstr "ЖАЛАУШАЛАР"
 msgid "GDK debugging flags to unset"
 msgstr "GDK жөндеу жалаушалары орнатылмаған"
 
-#: gdk/gdkwindow.c:2813
+#: gdk/gdkwindow.c:2826
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL қолдауы GDK_DEBUG арқылы сөндірілген"
 
-#: gdk/gdkwindow.c:2824
+#: gdk/gdkwindow.c:2837
 msgid "The current backend does not support OpenGL"
 msgstr "Ағымдағы қозғалтқыш OpenGL қолдамайды"
 
@@ -431,8 +431,8 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1631
-#: gdk/wayland/gdkglcontext-wayland.c:456 gdk/win32/gdkglcontext-win32.c:796
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2226
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:796
 #: gdk/x11/gdkglcontext-x11.c:1274
 msgid "No GL implementation is available"
 msgstr "Бірде-бір GL іске асыру нұсқасы қолжетерсіз"
@@ -443,14 +443,14 @@ msgstr "Бірде-бір GL іске асыру нұсқасы қолжетер
 msgid "Unable to create a GL context"
 msgstr "GL контекстін жасау сәтсіз"
 
-#: gdk/mir/gdkmirwindowimpl.c:1593 gdk/mir/gdkmirwindowimpl.c:1603
-#: gdk/wayland/gdkglcontext-wayland.c:417
-#: gdk/wayland/gdkglcontext-wayland.c:427 gdk/win32/gdkglcontext-win32.c:702
+#: gdk/mir/gdkmirwindowimpl.c:2188 gdk/mir/gdkmirwindowimpl.c:2198
+#: gdk/wayland/gdkglcontext-wayland.c:418
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:702
 #: gdk/x11/gdkglcontext-x11.c:968
 msgid "No available configurations for the given pixel format"
 msgstr "Берілген пиксельдер пішімі үшін қолжетерлік баптаулар жоқ"
 
-#: gdk/mir/gdkmirwindowimpl.c:1639
+#: gdk/mir/gdkmirwindowimpl.c:2234
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 негізгі GL профилі EGL іске асыру нұсқасында қолжетерсіз"
 
@@ -458,7 +458,7 @@ msgstr "3.2 негізгі GL профилі EGL іске асыру нұсқа�
 msgid "Not implemented on OS X"
 msgstr "OS X үшін іске асырылмаған"
 
-#: gdk/wayland/gdkglcontext-wayland.c:464
+#: gdk/wayland/gdkglcontext-wayland.c:476
 msgid "Core GL is not available on EGL implementation"
 msgstr "Негізгі GL профилі EGL іске асыру нұсқасында қолжетерсіз"
 
@@ -643,15 +643,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Жабу"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:9045
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406 gtk/gtkwindow.c:9047
 msgid "Minimize"
 msgstr "Қайыру"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:9054
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9056
 msgid "Maximize"
 msgstr "Жазық қылу"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:9011
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429 gtk/gtkwindow.c:9013
 msgid "Restore"
 msgstr "Қалпына келтіру"
 
@@ -792,7 +792,7 @@ msgstr "Шегінуді үлкейту"
 #: gtk/a11y/gtkimageaccessible.c:87 gtk/deprecated/gtkstock.c:387
 msgctxt "Stock label"
 msgid "_Italic"
-msgstr "Кө_лбеу"
+msgstr "Курс_ив"
 
 #: gtk/a11y/gtkimageaccessible.c:88 gtk/deprecated/gtkstock.c:388
 msgctxt "Stock label"
@@ -977,7 +977,7 @@ msgstr "Тоқ_тату"
 #: gtk/a11y/gtkimageaccessible.c:121 gtk/deprecated/gtkstock.c:450
 msgctxt "Stock label"
 msgid "_Strikethrough"
-msgstr "С_ызылған"
+msgstr "_Сызып тасталған"
 
 #. Font variant
 #: gtk/a11y/gtkimageaccessible.c:122 gtk/deprecated/gtkstock.c:453
@@ -1193,12 +1193,12 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:514 gtk/gtkfilechoosernative.c:606
-#: gtk/gtkfilechooserwidget.c:1477 gtk/gtkfilechooserwidget.c:6380
+#: gtk/gtkfilechooserwidget.c:1477 gtk/gtkfilechooserwidget.c:6384
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12514 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12516 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1247,7 +1247,7 @@ msgid "_Apply"
 msgstr "Іске _асыру"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12515
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12517
 msgid "_OK"
 msgstr "О_К"
 
@@ -1411,7 +1411,7 @@ msgstr "%s файлын сақтау мүмкін емес: %s\n"
 msgid "Can't close stream"
 msgstr "Ағынды жабу мүмкін емес"
 
-#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:221
+#: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:206
 msgid "License"
 msgstr "Лицензиясы"
 
@@ -1658,7 +1658,7 @@ msgstr "Туыс қолданбалар"
 msgid "Other Applications"
 msgstr "Басқа қолданбалар"
 
-#: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:482
+#: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:484
 #: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Қолданба"
@@ -2107,7 +2107,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3315
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3336
 msgid "Manage Custom Sizes"
 msgstr "Таңдауыңызша өлшемдерді басқару"
 
@@ -2160,44 +2160,44 @@ msgstr "Оң ж_ақ:"
 msgid "Paper Margins"
 msgstr "Қағаздың шет өрістері"
 
-#: gtk/gtkentry.c:9477 gtk/gtklabel.c:6665 gtk/gtktextview.c:9423
+#: gtk/gtkentry.c:9508 gtk/gtklabel.c:6662 gtk/gtktextview.c:9448
 msgid "Cu_t"
 msgstr "Қ_иып алу"
 
-#: gtk/gtkentry.c:9481 gtk/gtklabel.c:6666 gtk/gtktextview.c:9427
+#: gtk/gtkentry.c:9512 gtk/gtklabel.c:6663 gtk/gtktextview.c:9452
 msgid "_Copy"
 msgstr "_Көшіру"
 
-#: gtk/gtkentry.c:9485 gtk/gtklabel.c:6667 gtk/gtktextview.c:9429
+#: gtk/gtkentry.c:9516 gtk/gtklabel.c:6664 gtk/gtktextview.c:9454
 msgid "_Paste"
 msgstr "Кірі_стіру"
 
-#: gtk/gtkentry.c:9488 gtk/gtkfilechooserwidget.c:1478
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6669 gtk/gtktextview.c:9432
+#: gtk/gtkentry.c:9519 gtk/gtkfilechooserwidget.c:1478
+#: gtk/gtkfilechooserwidget.c:2278 gtk/gtklabel.c:6666 gtk/gtktextview.c:9457
 msgid "_Delete"
 msgstr "Ө_шіру"
 
-#: gtk/gtkentry.c:9499 gtk/gtklabel.c:6678 gtk/gtktextview.c:9446
+#: gtk/gtkentry.c:9530 gtk/gtklabel.c:6675 gtk/gtktextview.c:9471
 msgid "Select _All"
 msgstr "Б_арлығын таңдау"
 
-#: gtk/gtkentry.c:9672 gtk/gtktextview.c:9671
+#: gtk/gtkentry.c:9703 gtk/gtktextview.c:9696
 msgid "Select all"
 msgstr "Барлығын таңдау"
 
-#: gtk/gtkentry.c:9675 gtk/gtktextview.c:9674
+#: gtk/gtkentry.c:9706 gtk/gtktextview.c:9699
 msgid "Cut"
 msgstr "Қиып алу"
 
-#: gtk/gtkentry.c:9678 gtk/gtktextview.c:9677
+#: gtk/gtkentry.c:9709 gtk/gtktextview.c:9702
 msgid "Copy"
 msgstr "Көшіру"
 
-#: gtk/gtkentry.c:9681 gtk/gtktextview.c:9680
+#: gtk/gtkentry.c:9712 gtk/gtktextview.c:9705
 msgid "Paste"
 msgstr "Кірістіру"
 
-#: gtk/gtkentry.c:10748
+#: gtk/gtkentry.c:10779
 msgid "Caps Lock is on"
 msgstr "Caps Lock іске қосулы тұр"
 
@@ -2223,11 +2223,11 @@ msgstr "_Аты"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1643
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1630
 msgid "_Open"
 msgstr "_Ашу"
 
-#: gtk/gtkfilechoosernative.c:600 gtk/inspector/css-editor.c:209
+#: gtk/gtkfilechoosernative.c:600 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "_Сақтау"
 
@@ -2367,134 +2367,134 @@ msgstr "Нәрсені өшірсеңіз, ол толығымен жоғала�
 msgid "The file could not be renamed"
 msgstr "Файл атын ауыстыру мүмкін емес"
 
-#: gtk/gtkfilechooserwidget.c:1922
+#: gtk/gtkfilechooserwidget.c:1924
 msgid "Could not select file"
 msgstr "Файлды таңдау мүмкін емес"
 
-#: gtk/gtkfilechooserwidget.c:2271
+#: gtk/gtkfilechooserwidget.c:2273
 msgid "_Visit File"
 msgstr "Бұл файлға _бару"
 
-#: gtk/gtkfilechooserwidget.c:2272
+#: gtk/gtkfilechooserwidget.c:2274
 msgid "_Open With File Manager"
 msgstr "Файлдар басқарушысы көмегімен а_шу"
 
-#: gtk/gtkfilechooserwidget.c:2273
+#: gtk/gtkfilechooserwidget.c:2275
 msgid "_Copy Location"
 msgstr "_Орналасуын көшіру"
 
-#: gtk/gtkfilechooserwidget.c:2274
+#: gtk/gtkfilechooserwidget.c:2276
 msgid "_Add to Bookmarks"
 msgstr "Б_етбелгілерге қосу"
 
-#: gtk/gtkfilechooserwidget.c:2275 gtk/gtkplacessidebar.c:2529
+#: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2529
 #: gtk/ui/gtkfilechooserwidget.ui:525
 msgid "_Rename"
 msgstr "Атын ауысты_ру"
 
-#: gtk/gtkfilechooserwidget.c:2277
+#: gtk/gtkfilechooserwidget.c:2279
 msgid "_Move to Trash"
 msgstr "Қоқы_с шелегіне тастау"
 
-#: gtk/gtkfilechooserwidget.c:2281
+#: gtk/gtkfilechooserwidget.c:2283
 msgid "Show _Hidden Files"
 msgstr "Жас_ырын файлдарды көрсету"
 
-#: gtk/gtkfilechooserwidget.c:2282
+#: gtk/gtkfilechooserwidget.c:2284
 msgid "Show _Size Column"
 msgstr "Ө_лшем бағанын көрсету"
 
-#: gtk/gtkfilechooserwidget.c:2283
+#: gtk/gtkfilechooserwidget.c:2285
 msgid "Show _Time"
 msgstr "Уақыт_ты көрсету"
 
-#: gtk/gtkfilechooserwidget.c:2284
+#: gtk/gtkfilechooserwidget.c:2286
 msgid "Sort _Folders before Files"
 msgstr "Бу_маларды файлдардың алдында сұрыптау"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2608 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2610 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Орналасуы"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2699
+#: gtk/gtkfilechooserwidget.c:2703
 msgid "_Name:"
 msgstr "_Аты:"
 
-#: gtk/gtkfilechooserwidget.c:3321
+#: gtk/gtkfilechooserwidget.c:3325
 msgid "Searching"
 msgstr "Іздеу"
 
-#: gtk/gtkfilechooserwidget.c:3326 gtk/gtkfilechooserwidget.c:3340
+#: gtk/gtkfilechooserwidget.c:3330 gtk/gtkfilechooserwidget.c:3344
 #, c-format
 msgid "Searching in %s"
 msgstr "%s ішінде іздеу"
 
-#: gtk/gtkfilechooserwidget.c:3350
+#: gtk/gtkfilechooserwidget.c:3354
 msgid "Enter location"
 msgstr "Орналасуды енгізіңіз"
 
-#: gtk/gtkfilechooserwidget.c:3352
+#: gtk/gtkfilechooserwidget.c:3356
 msgid "Enter location or URL"
 msgstr "Орналасуды не сілтемені енгізіңіз"
 
-#: gtk/gtkfilechooserwidget.c:4390 gtk/gtkfilechooserwidget.c:7307
+#: gtk/gtkfilechooserwidget.c:4394 gtk/gtkfilechooserwidget.c:7298
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
 msgstr "Өзгертілген"
 
-#: gtk/gtkfilechooserwidget.c:4668
+#: gtk/gtkfilechooserwidget.c:4672
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s құрамасын оқу мүмкін емес"
 
-#: gtk/gtkfilechooserwidget.c:4672
+#: gtk/gtkfilechooserwidget.c:4676
 msgid "Could not read the contents of the folder"
 msgstr "Бума құрамасын оқу мүмкін емес"
 
-#: gtk/gtkfilechooserwidget.c:4802 gtk/gtkfilechooserwidget.c:4850
+#: gtk/gtkfilechooserwidget.c:4806 gtk/gtkfilechooserwidget.c:4854
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4804 gtk/gtkfilechooserwidget.c:4852
+#: gtk/gtkfilechooserwidget.c:4808 gtk/gtkfilechooserwidget.c:4856
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4808
+#: gtk/gtkfilechooserwidget.c:4812
 msgid "Yesterday"
 msgstr "Кеше"
 
-#: gtk/gtkfilechooserwidget.c:4816
+#: gtk/gtkfilechooserwidget.c:4820
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4820
+#: gtk/gtkfilechooserwidget.c:4824
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5055 gtk/inspector/prop-editor.c:1689
+#: gtk/gtkfilechooserwidget.c:5059 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Белгісіз"
 
-#: gtk/gtkfilechooserwidget.c:5094 gtk/gtkplacessidebar.c:961
+#: gtk/gtkfilechooserwidget.c:5098 gtk/gtkplacessidebar.c:961
 msgid "Home"
 msgstr "Үй бумасы"
 
-#: gtk/gtkfilechooserwidget.c:5587
+#: gtk/gtkfilechooserwidget.c:5591
 msgid "Cannot change to folder because it is not local"
 msgstr "Бумаға ауысу мүмкін емес, өйткені ол жергілікті емес"
 
-#: gtk/gtkfilechooserwidget.c:6373 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6377 gtk/gtkprintunixdialog.c:664
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "“%s” файлы бар болып тұр. Оны алмастыруды қалайсыз ба?"
 
-#: gtk/gtkfilechooserwidget.c:6376 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:6380 gtk/gtkprintunixdialog.c:668
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2502,31 +2502,19 @@ msgstr ""
 "Файл “%s” ішінде бар болып тұр.  Оны алмастыру нәтижесінде құрамасы үстінен "
 "жазылады."
 
-#: gtk/gtkfilechooserwidget.c:6381 gtk/gtkprintunixdialog.c:676
+#: gtk/gtkfilechooserwidget.c:6385 gtk/gtkprintunixdialog.c:676
 msgid "_Replace"
 msgstr "А_лмастыру"
 
-#: gtk/gtkfilechooserwidget.c:6595
+#: gtk/gtkfilechooserwidget.c:6599
 msgid "You do not have access to the specified folder."
 msgstr "Көрсетілген бумаға қатынау үшін керек рұқсаттарыңыз жоқ."
 
-#: gtk/gtkfilechooserwidget.c:7218
-msgid "Could not start the search process"
-msgstr "Іздеу үрдісін бастау мүмкін емес"
-
-#: gtk/gtkfilechooserwidget.c:7219
-msgid ""
-"The program was not able to create a connection to the indexer daemon. "
-"Please make sure it is running."
-msgstr ""
-"Бағдарлама индекстеу қызметімен байланысты орната алмады. Оның іске қосулы "
-"тұрғанын тексеріңіз."
-
-#: gtk/gtkfilechooserwidget.c:7231
+#: gtk/gtkfilechooserwidget.c:7222
 msgid "Could not send the search request"
 msgstr "Іздеу сұранымын жіберу мүмкін емес"
 
-#: gtk/gtkfilechooserwidget.c:7525
+#: gtk/gtkfilechooserwidget.c:7508
 msgid "Accessed"
 msgstr "Қатынаған"
 
@@ -2556,11 +2544,11 @@ msgstr "Ешнәрсе"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL контекстін жасау сәтсіз"
 
-#: gtk/gtkheaderbar.c:383
+#: gtk/gtkheaderbar.c:385
 msgid "Application menu"
 msgstr "Қолданба мәзірі"
 
-#: gtk/gtkheaderbar.c:445 gtk/gtkwindow.c:9081
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:9083
 msgid "Close"
 msgstr "Жабу"
 
@@ -2611,12 +2599,12 @@ msgid "Error"
 msgstr "Қате"
 
 #. Open Link
-#: gtk/gtklabel.c:6646
+#: gtk/gtklabel.c:6643
 msgid "_Open Link"
 msgstr "Сі_лтемені ашу"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6655
+#: gtk/gtklabel.c:6652
 msgid "Copy _Link Address"
 msgstr "Сілтеме адр_есін көшіру"
 
@@ -2746,11 +2734,11 @@ msgstr "GTK+ жөндеу жалаушалары орнатылмаған"
 msgid "Cannot open display: %s"
 msgstr "Экранды ашу мүмкін емес: %s"
 
-#: gtk/gtkmain.c:916
+#: gtk/gtkmain.c:919
 msgid "GTK+ Options"
 msgstr "GTK+ опциялары"
 
-#: gtk/gtkmain.c:916
+#: gtk/gtkmain.c:919
 msgid "Show GTK+ Options"
 msgstr "GTK+ опцияларын көрсету"
 
@@ -2759,7 +2747,7 @@ msgstr "GTK+ опцияларын көрсету"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1248
+#: gtk/gtkmain.c:1259
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2856,7 +2844,7 @@ msgstr "Z қоршамы"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d бар үрдісті аяқтау мүмкін емес: %s"
 
-#: gtk/gtknotebook.c:5115 gtk/gtknotebook.c:7384
+#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7389
 #, c-format
 msgid "Page %u"
 msgstr "Бет %u"
@@ -2888,7 +2876,7 @@ msgstr ""
 " Үсті: %s %s\n"
 " Асты: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3369
+#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3390
 msgid "Manage Custom Sizes…"
 msgstr "Таңдауыңызша өлшемдерді басқару…"
 
@@ -3055,11 +3043,11 @@ msgstr "%s шығару мүмкін емес"
 msgid "Unable to poll “%s” for media changes"
 msgstr "“%s” тасушы өзгерістеріне бақылау мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1653
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1640
 msgid "Open in New _Tab"
 msgstr "Жаңа бе_тте ашу"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1664
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1651
 msgid "Open in New _Window"
 msgstr "Жаңа т_ерезеде ашу"
 
@@ -3075,11 +3063,11 @@ msgstr "Ө_шіру"
 msgid "Rename…"
 msgstr "Атын ауыстыру…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1698
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1685
 msgid "_Mount"
 msgstr "Тір_кеу"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1688
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1675
 msgid "_Unmount"
 msgstr "Тіркеуден бос_ату"
 
@@ -3091,55 +3079,55 @@ msgstr "Ш_ығару"
 msgid "_Detect Media"
 msgstr "Тасушыны анық_тау"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1081
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1118
 msgid "Computer"
 msgstr "Компьютер"
 
-#: gtk/gtkplacesview.c:892
+#: gtk/gtkplacesview.c:894
 msgid "Searching for network locations"
 msgstr "Желілік орналасуларды іздеу"
 
-#: gtk/gtkplacesview.c:899
+#: gtk/gtkplacesview.c:901
 msgid "No network locations found"
 msgstr "Желілік орналасулар табылмады"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1192 gtk/gtkplacesview.c:1267
+#: gtk/gtkplacesview.c:1229 gtk/gtkplacesview.c:1304
 msgid "Unable to access location"
 msgstr "Орналасуға қатынау мүмкін емес"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1210 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1247 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "Ба_йланысты орнату"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1330
+#: gtk/gtkplacesview.c:1367
 msgid "Unable to unmount volume"
 msgstr "Томды тіркеуден босату мүмкін емес"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1431
+#: gtk/gtkplacesview.c:1467
 msgid "Cance_l"
 msgstr "Бас _тарту"
 
-#: gtk/gtkplacesview.c:1688
+#: gtk/gtkplacesview.c:1675
 msgid "_Disconnect"
 msgstr "Ба_йланысты үзу"
 
-#: gtk/gtkplacesview.c:1698
+#: gtk/gtkplacesview.c:1685
 msgid "_Connect"
 msgstr "Ба_йланыс орнату"
 
-#: gtk/gtkplacesview.c:1839
+#: gtk/gtkplacesview.c:1826
 msgid "Unable to get remote server location"
 msgstr "Қашықтағы сервер орналасуын алу мүмкін емес"
 
-#: gtk/gtkplacesview.c:1978 gtk/gtkplacesview.c:1987
+#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
 msgid "Networks"
 msgstr "Желілер"
 
-#: gtk/gtkplacesview.c:1978 gtk/gtkplacesview.c:1987
+#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
 msgid "On This Computer"
 msgstr "Бұл компьютерде"
 
@@ -3258,7 +3246,7 @@ msgstr "Ең мүмкін болған себебі - уақытша файлд�
 
 #. window
 #: gtk/gtkprintoperation-portal.c:229 gtk/gtkprintoperation-portal.c:533
-#: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3391
+#: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3412
 msgid "Print"
 msgstr "Баспаға шығару"
 
@@ -3339,67 +3327,67 @@ msgstr "Принтер ақпаратын алу…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3098
+#: gtk/gtkprintunixdialog.c:3119
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, top to bottom"
 msgstr "Солдан оңға, үстінен астыға"
 
-#: gtk/gtkprintunixdialog.c:3098
+#: gtk/gtkprintunixdialog.c:3119
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, bottom to top"
 msgstr "Солдан оңға, астынан үстіге"
 
-#: gtk/gtkprintunixdialog.c:3099
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, top to bottom"
 msgstr "Оңнан солға, үстінен астыға"
 
-#: gtk/gtkprintunixdialog.c:3099
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, bottom to top"
 msgstr "Оңнан солға, астынан үстіге"
 
-#: gtk/gtkprintunixdialog.c:3100
+#: gtk/gtkprintunixdialog.c:3121
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, left to right"
 msgstr "Үстінен астыға, солдан оңға"
 
-#: gtk/gtkprintunixdialog.c:3100
+#: gtk/gtkprintunixdialog.c:3121
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, right to left"
 msgstr "Үстінен астыға, оңнан солға"
 
-#: gtk/gtkprintunixdialog.c:3101
+#: gtk/gtkprintunixdialog.c:3122
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, left to right"
 msgstr "Астынан үстіге, солдан оңға"
 
-#: gtk/gtkprintunixdialog.c:3101
+#: gtk/gtkprintunixdialog.c:3122
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, right to left"
 msgstr "Астынан үстіге, оңнан солға"
 
-#: gtk/gtkprintunixdialog.c:3105 gtk/gtkprintunixdialog.c:3118
+#: gtk/gtkprintunixdialog.c:3126 gtk/gtkprintunixdialog.c:3139
 msgid "Page Ordering"
 msgstr "Беттер реті"
 
-#: gtk/gtkprintunixdialog.c:3134
+#: gtk/gtkprintunixdialog.c:3155
 msgid "Left to right"
 msgstr "Солдан оңға"
 
-#: gtk/gtkprintunixdialog.c:3135
+#: gtk/gtkprintunixdialog.c:3156
 msgid "Right to left"
 msgstr "Оңнан солға"
 
-#: gtk/gtkprintunixdialog.c:3147
+#: gtk/gtkprintunixdialog.c:3168
 msgid "Top to bottom"
 msgstr "Үстінен астыға"
 
-#: gtk/gtkprintunixdialog.c:3148
+#: gtk/gtkprintunixdialog.c:3169
 msgid "Bottom to top"
 msgstr "Астынан үстіге"
 
-#: gtk/gtkprogressbar.c:698
+#: gtk/gtkprogressbar.c:729
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3527,7 +3515,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "R"
 
-#: gtk/gtkshortcutssection.c:450
+#: gtk/gtkshortcutssection.c:451
 msgid "_Show All"
 msgstr "Барлығын _көрсету"
 
@@ -3774,24 +3762,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9029
+#: gtk/gtkwindow.c:9031
 msgid "Move"
 msgstr "Жылжыту"
 
-#: gtk/gtkwindow.c:9037
+#: gtk/gtkwindow.c:9039
 msgid "Resize"
 msgstr "Өлшемін өзгерту"
 
-#: gtk/gtkwindow.c:9068
+#: gtk/gtkwindow.c:9070
 msgid "Always on Top"
 msgstr "Әрқашан үстінде"
 
-#: gtk/gtkwindow.c:12502
+#: gtk/gtkwindow.c:12504
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "GTK+ Inspector қолданғыңыз келе ме?"
 
-#: gtk/gtkwindow.c:12504
+#: gtk/gtkwindow.c:12506
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3802,7 +3790,7 @@ msgstr ""
 "қолданбасының ішкі құрылысын шолып, түзете аласыз. Оны қолдану нәтижесінде "
 "қолданба сынуы, немесе құлап түсуі  де мүмкін."
 
-#: gtk/gtkwindow.c:12509
+#: gtk/gtkwindow.c:12511
 msgid "Don't show this message again"
 msgstr "Бұл хабарламаны келесіде көрсетпеу"
 
@@ -3828,11 +3816,11 @@ msgstr "Іске қосулы"
 msgid "Parameter Type"
 msgstr "Параметр түрі"
 
-#: gtk/inspector/css-editor.c:118
+#: gtk/inspector/css-editor.c:112
 msgid "You can type here any CSS rule recognized by GTK+."
 msgstr "Сіз осында GTK+ танитын кез-келген CSS тере аласыз."
 
-#: gtk/inspector/css-editor.c:119
+#: gtk/inspector/css-editor.c:113
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
@@ -3840,12 +3828,12 @@ msgstr ""
 "Бұл таңдауыңызша CSS-ті сіз жоғарыдағы “Аялдату” батырмасын басу арқылы "
 "уақытша сөндіре аласыз."
 
-#: gtk/inspector/css-editor.c:120
+#: gtk/inspector/css-editor.c:114
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr ""
 "Өзгерістер лезде және глобалды түрде, қолданба толығымен үшін іске асырылады."
 
-#: gtk/inspector/css-editor.c:169
+#: gtk/inspector/css-editor.c:162
 #, c-format
 msgid "Saving CSS failed"
 msgstr "CSS сақтау сәтсіз"
@@ -4255,19 +4243,19 @@ msgstr "Жинақы"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Статистиканы GOBJECT_DEBUG=instance-count арқылы іске қосыңыз"
 
-#: gtk/inspector/visual.c:371 gtk/inspector/visual.c:386
+#: gtk/inspector/visual.c:406 gtk/inspector/visual.c:421
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Тема GTK_THEME арқылы қатаң берілген"
 
-#: gtk/inspector/visual.c:594
+#: gtk/inspector/visual.c:631
 msgid "Backend does not support window scaling"
 msgstr "Қозғалтқыш терезелерді масштабтауды қолдамайды"
 
-#: gtk/inspector/visual.c:689
+#: gtk/inspector/visual.c:726
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Баптау GTK_TEST_TOUCHSCREEN арқылы қатаң берілген"
 
-#: gtk/inspector/visual.c:754
+#: gtk/inspector/visual.c:791
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -4275,8 +4263,8 @@ msgstr ""
 "Орындалу кезінде орнату мүмкін емес.\n"
 "Орнына GDK_GL=always не GDK_GL=disable қолданыңыз"
 
-#: gtk/inspector/visual.c:768 gtk/inspector/visual.c:769
-#: gtk/inspector/visual.c:770
+#: gtk/inspector/visual.c:805 gtk/inspector/visual.c:806
+#: gtk/inspector/visual.c:807
 msgid "GL rendering is disabled"
 msgstr "GL рендерингі сөндірілген"
 
@@ -5406,11 +5394,11 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/ui/gtkaboutdialog.ui:148
+#: gtk/ui/gtkaboutdialog.ui:133
 msgid "About"
 msgstr "Осы туралы"
 
-#: gtk/ui/gtkaboutdialog.ui:188
+#: gtk/ui/gtkaboutdialog.ui:173
 msgid "Credits"
 msgstr "Жасағандар"
 
@@ -5598,10 +5586,6 @@ msgstr "Сервер адрестері"
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr "Сервер адрестері хаттама префиксі және адрестен тұруы керек. Мысалдар:"
-
-#: gtk/ui/gtkplacesview.ui:57
-msgid "smb://foo.example.com, ssh://192.168.0.1"
-msgstr "smb://foo.example.com, ssh://192.168.0.1"
 
 #: gtk/ui/gtkplacesview.ui:78
 msgid "Available Protocols"
@@ -6715,6 +6699,19 @@ msgstr "сынау-шығысы.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Сынау принтеріне баспаға шығару"
+
+#~ msgid "Could not start the search process"
+#~ msgstr "Іздеу үрдісін бастау мүмкін емес"
+
+#~ msgid ""
+#~ "The program was not able to create a connection to the indexer daemon. "
+#~ "Please make sure it is running."
+#~ msgstr ""
+#~ "Бағдарлама индекстеу қызметімен байланысты орната алмады. Оның іске "
+#~ "қосулы тұрғанын тексеріңіз."
+
+#~ msgid "smb://foo.example.com, ssh://192.168.0.1"
+#~ msgstr "smb://foo.example.com, ssh://192.168.0.1"
 
 #~ msgid ""
 #~ "The WGL_ARB_create_context extension needed to create core profiles is "
