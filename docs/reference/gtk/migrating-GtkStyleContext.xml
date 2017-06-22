@@ -415,7 +415,7 @@
 
     <para>
       It is worth mentioning that the new file format does not support
-      custom keybindings nor stock icon mappings as the RC format did.
+      stock icon mappings as the RC format did.
     </para>
   </section>
 
