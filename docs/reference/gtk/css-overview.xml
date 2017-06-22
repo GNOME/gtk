@@ -425,7 +425,7 @@ checkbutton:indeterminate {
           </row>
           <row>
             <entry>E:disabled</entry>
-            <entry>any E node which is part of a widget with is disabled</entry>
+            <entry>any E node which is part of a widget which is disabled</entry>
             <entry><ulink url="https://www.w3.org/TR/css3-selectors/#UIstates">CSS</ulink></entry>
             <entry>Corresponds to GTK_STATE_FLAG_INSENSITIVE; GTK+ also allows E:insensitive</entry>
           </row>
