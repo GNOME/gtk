@@ -347,6 +347,9 @@ main (gint argc, gchar *argv[])
 
   gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
+
+  g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
+
   gtk_widget_show (window);
 
   gtk_main ();
