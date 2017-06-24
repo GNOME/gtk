@@ -359,6 +359,7 @@ update_node_state (GtkCheckMenuItem *check_menu_item)
   GtkStateFlags state;
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (check_menu_item));
+  state &= ~(GTK_STATE_FLAG_CHECKED | GTK_STATE_FLAG_INCONSISTENT);
 
   if (priv->inconsistent)
     state |= GTK_STATE_FLAG_INCONSISTENT;
