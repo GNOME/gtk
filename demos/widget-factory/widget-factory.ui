@@ -2286,7 +2286,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkStatusbar" id="statusbar">
-                                    <property name="visible">0</property>
+                                    <property name="visible">1</property>
                                   </object>
                                 </child>
                               </object>
