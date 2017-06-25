@@ -2938,38 +2938,6 @@ gtk_container_should_propagate_draw (GtkContainer   *container,
   return TRUE;
 }
 
-static void
-union_with_clip (GtkWidget     *widget,
-                 GtkAllocation *clip)
-{
-  GtkAllocation widget_clip;
-
-  if (!gtk_widget_is_visible (widget) ||
-      !_gtk_widget_get_child_visible (widget))
-    return;
-
-  gtk_widget_get_clip (widget, &widget_clip);
-
-  if (clip->width == 0 || clip->height == 0)
-    *clip = widget_clip;
-  else
-    gdk_rectangle_union (&widget_clip, clip, clip);
-}
-
-void
-gtk_container_get_children_clip (GtkContainer  *container,
-                                 GtkAllocation *out_clip)
-{
-  GtkWidget *child;
-
-  memset (out_clip, 0, sizeof (GtkAllocation));
-
-  for (child = _gtk_widget_get_first_child (GTK_WIDGET (container));
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    union_with_clip (child, out_clip);
-}
-
 /**
  * gtk_container_propagate_draw:
  * @container: a #GtkContainer
