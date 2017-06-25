@@ -788,8 +788,6 @@ button_pressed_cb (GtkGestureMultiPress *gesture,
 
   gtk_widget_grab_focus (GTK_WIDGET (spin_button));
 
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
   if (gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))
     {
       int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
