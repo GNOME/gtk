@@ -2029,6 +2029,7 @@ gtk_stack_size_allocate (GtkWidget     *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkAllocation clip = *allocation;
+  GdkRectangle child_clip;
   GtkAllocation child_allocation;
 
   child_allocation.x = get_bin_window_x (stack);
@@ -2048,6 +2049,9 @@ gtk_stack_size_allocate (GtkWidget     *widget,
       child_allocation.height = MAX (min, allocation->height);
 
       gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation);
+      gtk_widget_get_clip (priv->last_visible_child->widget, &child_clip);
+      gdk_rectangle_union (&clip, &child_clip, &clip);
+
 
       if (!gdk_rectangle_equal (&priv->last_visible_surface_allocation,
                                 &child_allocation))
@@ -2093,9 +2097,9 @@ gtk_stack_size_allocate (GtkWidget     *widget,
         }
 
       gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
+      gtk_widget_get_clip (priv->visible_child->widget, &child_clip);
+      gdk_rectangle_union (&clip, &child_clip, &clip);
     }
-
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), &clip);
 
   gtk_widget_set_clip (widget, &clip);
 }
