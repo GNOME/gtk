@@ -769,7 +769,8 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   gint baseline;
   gint child_baseline;
   gint i;
-  GtkAllocation clip;
+  GtkAllocation clip = *allocation;
+  GdkRectangle child_clip;
 
   if (priv->layout_style == GTK_BUTTONBOX_EXPAND)
     {
@@ -1026,6 +1027,8 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
             }
 
           gtk_widget_size_allocate_with_baseline (child, &child_allocation, child_baseline);
+          gtk_widget_get_clip (child, &child_clip);
+          gdk_rectangle_union (&clip, &child_clip, &clip);
           i++;
         }
     }
@@ -1034,8 +1037,6 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   g_free (widths);
   g_free (heights);
   g_free (baselines);
-
-  gtk_container_get_children_clip (GTK_CONTAINER (widget), &clip);
 
   gtk_widget_set_clip (widget, &clip);
 }
