@@ -2853,8 +2853,8 @@ update_node_ordering (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info;
-  GtkEntryIconPosition icon_pos;
-  GtkCssNode *sibling, *parent;
+  GtkEntryIconPosition first_icon_pos, second_icon_pos;
+  GtkCssNode *parent;
 
   if (priv->progress_widget)
     {
@@ -2864,21 +2864,25 @@ update_node_ordering (GtkEntry *entry)
     }
 
   if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
-    icon_pos = GTK_ENTRY_ICON_SECONDARY;
-  else
-    icon_pos = GTK_ENTRY_ICON_PRIMARY;
-
-  icon_info = priv->icons[icon_pos];
-  if (icon_info)
     {
-      GtkCssNode *node;
-
-      node = gtk_widget_get_css_node (icon_info->widget);
-      parent = gtk_css_node_get_parent (node);
-      sibling = gtk_css_node_get_first_child (parent);
-      if (node != sibling)
-        gtk_css_node_insert_before (parent, node, sibling);
+      first_icon_pos = GTK_ENTRY_ICON_SECONDARY;
+      second_icon_pos = GTK_ENTRY_ICON_PRIMARY;
     }
+  else
+    {
+      first_icon_pos = GTK_ENTRY_ICON_PRIMARY;
+      second_icon_pos = GTK_ENTRY_ICON_SECONDARY;
+    }
+
+  parent = gtk_widget_get_css_node (GTK_WIDGET (entry));
+
+  icon_info = priv->icons[first_icon_pos];
+  if (icon_info)
+    gtk_css_node_insert_after (parent, gtk_widget_get_css_node (icon_info->widget), NULL);
+
+  icon_info = priv->icons[second_icon_pos];
+  if (icon_info)
+    gtk_css_node_insert_before (parent, gtk_widget_get_css_node (icon_info->widget), NULL);
 }
 
 static EntryIconInfo*
