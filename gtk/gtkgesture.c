@@ -554,7 +554,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
   widget_window = _find_widget_window (gesture, event->any.window);
 
   if (!widget_window)
-    return FALSE;
+    widget_window = event->any.window;
 
   touchpad = EVENT_IS_TOUCHPAD_GESTURE (event);
 
