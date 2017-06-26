@@ -31,124 +31,11 @@
 #include "gtkmain.h"
 #include "gtkinvisible.h"
 
-typedef struct
-{
-  gint x;
-  gint y;
-  gboolean found;
-  gboolean first;
-  GtkWidget *res_widget;
-} FindWidgetData;
-
-static void
-find_widget (GtkWidget      *widget,
-             FindWidgetData *data)
-{
-  GtkAllocation new_allocation;
-  gint x_offset = 0;
-  gint y_offset = 0;
-  GtkWidget *child;
-
-  gtk_widget_get_allocation (widget, &new_allocation);
-
-  if (data->found || !gtk_widget_get_mapped (widget))
-    return;
-
-  /* Note that in the following code, we only count the
-   * position as being inside a WINDOW widget if it is inside
-   * widget->window; points that are outside of widget->window
-   * but within the allocation are not counted. This is consistent
-   * with the way we highlight drag targets.
-   */
-  if (gtk_widget_get_has_window (widget))
-    {
-      new_allocation.x = 0;
-      new_allocation.y = 0;
-    }
-
-  if (gtk_widget_get_parent (widget) && !data->first)
-    {
-      GdkWindow *window;
-
-      window = gtk_widget_get_window (widget);
-      while (window != gtk_widget_get_window (gtk_widget_get_parent (widget)))
-        {
-          gint tx, ty, twidth, theight;
-
-          if (window == NULL)
-            return;
-
-          twidth = gdk_window_get_width (window);
-          theight = gdk_window_get_height (window);
-
-          if (new_allocation.x < 0)
-            {
-              new_allocation.width += new_allocation.x;
-              new_allocation.x = 0;
-            }
-          if (new_allocation.y < 0)
-            {
-              new_allocation.height += new_allocation.y;
-              new_allocation.y = 0;
-            }
-          if (new_allocation.x + new_allocation.width > twidth)
-            new_allocation.width = twidth - new_allocation.x;
-          if (new_allocation.y + new_allocation.height > theight)
-            new_allocation.height = theight - new_allocation.y;
-
-          gdk_window_get_position (window, &tx, &ty);
-          new_allocation.x += tx;
-          x_offset += tx;
-          new_allocation.y += ty;
-          y_offset += ty;
-
-          window = gdk_window_get_parent (window);
-        }
-    }
-
-  if ((data->x >= new_allocation.x) && (data->y >= new_allocation.y) &&
-      (data->x < new_allocation.x + new_allocation.width) &&
-      (data->y < new_allocation.y + new_allocation.height))
-    {
-      FindWidgetData new_data = *data;
-      /* First, check if the drag is in a valid drop site in
-       * one of our children 
-       */
-      new_data.x -= x_offset;
-      new_data.y -= y_offset;
-      new_data.found = FALSE;
-      new_data.first = FALSE;
-
-      for (child = gtk_widget_get_first_child (widget);
-           child != NULL;
-           child = gtk_widget_get_next_sibling (child))
-         {
-            find_widget (child, &new_data);
-         }
-
-      data->found = new_data.found;
-      if (data->found)
-        data->res_widget = new_data.res_widget;
-
-      /* If not, and this widget is registered as a drop site, check to
-       * emit "drag_motion" to check if we are actually in
-       * a drop site.
-       */
-      if (!data->found)
-        {
-          data->found = TRUE;
-          data->res_widget = widget;
-        }
-    }
-}
-
 static GtkWidget *
 find_widget_at_pointer (GdkDevice *device)
 {
   GtkWidget *widget = NULL;
   GdkWindow *pointer_window;
-  gint x, y;
-  FindWidgetData data;
 
   pointer_window = gdk_device_get_window_at_position (device, NULL, NULL);
 
@@ -158,23 +45,45 @@ find_widget_at_pointer (GdkDevice *device)
 
       gdk_window_get_user_data (pointer_window, &widget_ptr);
       widget = widget_ptr;
+
+      if (!GTK_IS_WINDOW (widget))
+        {
+          while (TRUE)
+            {
+              GdkWindow *parent = gdk_window_get_parent (pointer_window);
+
+              if (!parent)
+                break;
+
+              pointer_window = parent;
+              gdk_window_get_user_data (pointer_window, &widget_ptr);
+              widget = widget_ptr;
+
+              if (GTK_IS_WINDOW (widget))
+                break;
+            }
+
+        }
     }
 
   if (widget)
     {
-      gdk_window_get_device_position (gtk_widget_get_window (widget),
-                                      device, &x, &y, NULL);
+      double x, y;
 
-      data.x = x;
-      data.y = y;
-      data.found = FALSE;
-      data.first = TRUE;
+      gdk_window_get_device_position_double (gtk_widget_get_window (widget),
+                                             device, &x, &y, NULL);
 
-      find_widget (widget, &data);
-      if (data.found)
-        return data.res_widget;
+      while (widget)
+        {
+          GtkWidget *w;
 
-      return widget;
+          w = GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y, &x, &y);
+
+          if (!w)
+            return widget;
+
+          widget = w;
+        }
     }
 
   return NULL;
