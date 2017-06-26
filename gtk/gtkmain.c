@@ -1471,6 +1471,7 @@ handle_pointing_event (GdkEvent *event)
 {
   GtkWidget *target = NULL, *old_target = NULL, *widget;
   GtkWindow *toplevel;
+  GtkWidget *toplevel_widget;
   GdkEventSequence *sequence;
   GdkDevice *device;
   gdouble x, y;
@@ -1480,9 +1481,11 @@ handle_pointing_event (GdkEvent *event)
   if (!device || !gdk_event_get_coords (event, &x, &y))
     return widget;
 
-  toplevel = GTK_WINDOW (gtk_widget_get_toplevel (widget));
-  if (!GTK_IS_WINDOW (toplevel))
+  toplevel_widget = gtk_widget_get_toplevel (widget);
+  if (!GTK_IS_WINDOW (toplevel_widget))
     return widget;
+
+  toplevel = GTK_WINDOW (toplevel_widget);
 
   sequence = gdk_event_get_event_sequence (event);
 
