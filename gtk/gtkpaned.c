@@ -965,8 +965,10 @@ gtk_paned_get_child_property (GtkContainer *container,
   GtkPaned *paned = GTK_PANED (container);
   GtkPanedPrivate *priv = paned->priv;
 
-  g_assert (child == priv->child1 || child == priv->child2);
-  
+  if (child != priv->child1 &&
+      child != priv->child2)
+    return;
+
   switch (property_id)
     {
     case CHILD_PROP_RESIZE:
