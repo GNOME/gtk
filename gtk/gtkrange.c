@@ -2426,6 +2426,8 @@ range_grab_add (GtkRange      *range,
   update_steppers_state (range);
 
   gtk_style_context_add_class (context, "dragging");
+
+  gtk_grab_add (GTK_WIDGET (range));
 }
 
 static void
@@ -2453,6 +2455,7 @@ range_grab_remove (GtkRange *range)
   if (!priv->grab_location)
     return;
 
+  gtk_grab_remove (GTK_WIDGET (range));
   context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
   gtk_css_gadget_queue_allocate (priv->grab_location);
