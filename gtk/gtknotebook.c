@@ -2873,7 +2873,7 @@ update_arrow_nodes (GtkNotebook *notebook)
               else
                 {
                   gtk_style_context_add_class (context, "up");
-                  gtk_widget_insert_after (priv->arrow_widget[i], priv->tabs_widget, next_widget);
+                  gtk_widget_insert_before (priv->arrow_widget[i], priv->tabs_widget, next_widget);
                 }
            }
 
@@ -3975,6 +3975,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   GtkNotebookPage *page;
   gint nchildren;
   GList *list;
+  GtkWidget *sibling;
 
   gtk_widget_freeze_child_notify (child);
 
@@ -3987,6 +3988,13 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
   priv->children = g_list_insert (priv->children, page, position);
 
+  if (position < nchildren)
+    sibling = GTK_NOTEBOOK_PAGE (g_list_nth (priv->children, position))->tab_widget;
+  else if (priv->arrow_widget[ARROW_LEFT_AFTER])
+    sibling = priv->arrow_widget[ARROW_LEFT_AFTER];
+  else
+  sibling = priv->arrow_widget[ARROW_RIGHT_AFTER];
+
   if (priv->tabs_reversed)
     gtk_css_node_reverse_children (gtk_widget_get_css_node (priv->tabs_widget));
 
@@ -3995,7 +4003,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
                                     allocate_tab,
                                     NULL);
   g_object_set_data (G_OBJECT (page->tab_widget), "notebook", notebook);
-  gtk_widget_set_parent (page->tab_widget, priv->tabs_widget);
+  gtk_widget_insert_before (page->tab_widget, priv->tabs_widget, sibling);
 
   if (priv->tabs_reversed)
     gtk_css_node_reverse_children (gtk_widget_get_css_node (priv->tabs_widget));
@@ -7160,12 +7168,7 @@ gtk_notebook_set_action_widget (GtkNotebook *notebook,
 
   if (widget)
     {
-      int pos;
-
-      if (priv->tabs_reversed)
-        pos = pack_type == GTK_PACK_START ? -1 : 0;
-      else
-        pos = pack_type == GTK_PACK_START ? 0 : -1;
+      int pos = pack_type == GTK_PACK_START ? 0 : -1;
 
       gtk_container_add (GTK_CONTAINER (priv->header_widget), widget);
       gtk_box_reorder_child (GTK_BOX (priv->header_widget), widget, pos);
