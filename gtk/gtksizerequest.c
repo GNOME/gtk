@@ -155,6 +155,8 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
     {
       int adjusted_min, adjusted_natural;
       int adjusted_for_size = for_size;
+      int reported_min_size = 0;
+      int reported_nat_size = 0;
 
       style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
       get_box_margin (style, &margin);
@@ -180,7 +182,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
         {
           push_recursion_check (widget, orientation);
           widget_class->measure (widget, orientation, -1,
-                                 &min_size, &nat_size,
+                                 &reported_min_size, &reported_nat_size,
                                  &min_baseline, &nat_baseline);
           pop_recursion_check (widget, orientation);
         }
@@ -214,16 +216,14 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           widget_class->measure (widget,
                                  orientation,
                                  adjusted_for_size,
-                                 &min_size, &nat_size,
+                                 &reported_min_size, &reported_nat_size,
                                  &min_baseline, &nat_baseline);
           pop_recursion_check (widget, orientation);
 
         }
 
-      /* TODO: Baselines */
-
-      min_size = MAX (0, MAX (min_size, css_min_size)) + css_extra_size;
-      nat_size = MAX (0, MAX (nat_size, css_min_size)) + css_extra_size;
+      min_size = MAX (0, MAX (reported_min_size, css_min_size)) + css_extra_size;
+      nat_size = MAX (0, MAX (reported_nat_size, css_min_size)) + css_extra_size;
 
       if (G_UNLIKELY (min_size > nat_size))
         {
@@ -306,8 +306,19 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 	      nat_baseline = -1;
 	    }
 	  else
-            gtk_widget_adjust_baseline_request (widget, &min_baseline, &nat_baseline);
-	}
+            {
+              if (css_min_size > reported_min_size)
+                {
+                  min_baseline += (css_min_size - reported_min_size) / 2;
+                  nat_baseline += (css_min_size - reported_min_size) / 2;
+                }
+
+              min_baseline += margin.top + border.top + padding.top;
+              nat_baseline += margin.top + border.top + padding.top;
+
+              gtk_widget_adjust_baseline_request (widget, &min_baseline, &nat_baseline);
+            }
+        }
 
       _gtk_size_request_cache_commit (cache,
                                       orientation,

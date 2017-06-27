@@ -5557,7 +5557,6 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
                            margin.right + border.right + padding.right;
   real_allocation.height -= margin.top + border.top + padding.top +
                             margin.bottom + border.bottom + padding.bottom;
-  /* TODO: Baseline! */
 
   priv->allocated_baseline = baseline;
   if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
