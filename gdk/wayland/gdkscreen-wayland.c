@@ -754,11 +754,22 @@ output_handle_scale (void             *data,
                      int32_t           scale)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+  GdkRectangle previous_geometry;
+  int previous_scale;
+  int width;
+  int height;
 
   GDK_NOTE (MISC,
             g_message ("handle scale output %d, scale %d", monitor->id, scale));
 
+  gdk_monitor_get_geometry (GDK_MONITOR (monitor), &previous_geometry);
+  previous_scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+
+  width = previous_geometry.width * previous_scale;
+  height = previous_geometry.height * previous_scale;
+
   gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), scale);
+  gdk_monitor_set_size (GDK_MONITOR (monitor), width / scale, height / scale);
 
   if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
     {
@@ -776,6 +787,7 @@ output_handle_mode (void             *data,
                     int               refresh)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+  int scale;
 
   GDK_NOTE (MISC,
             g_message ("handle mode output %d, size %d %d, rate %d",
@@ -784,7 +796,8 @@ output_handle_mode (void             *data,
   if ((flags & WL_OUTPUT_MODE_CURRENT) == 0)
     return;
 
-  gdk_monitor_set_size (GDK_MONITOR (monitor), width, height);
+  scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+  gdk_monitor_set_size (GDK_MONITOR (monitor), width / scale, height / scale);
   gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh);
 
   if (width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
