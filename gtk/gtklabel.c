@@ -3905,7 +3905,6 @@ gtk_label_snapshot (GtkWidget   *widget,
   GtkLabelSelectionInfo *info;
   GtkStyleContext *context;
   gint lx, ly;
-  GtkAllocation allocation;
   int width, height, x;
 
   label = GTK_LABEL (widget);
@@ -3916,10 +3915,8 @@ gtk_label_snapshot (GtkWidget   *widget,
 
   context = _gtk_widget_get_style_context (widget);
 
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_content_size (widget, &width, &height);
   x = 0;
-  width = allocation.width;
-  height = allocation.height;
 
   if (priv->text && (*priv->text != '\0'))
     {
