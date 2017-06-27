@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
-  <object class="GtkImage" id="image1">
-    <property name="visible">1</property>
-    <property name="icon-name">help-about</property>
-  </object>
   <template class="GtkAboutDialog" parent="GtkDialog">
     <property name="resizable">0</property>
     <property name="type-hint">dialog</property>
