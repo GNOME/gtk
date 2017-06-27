@@ -3270,10 +3270,12 @@ gtk_entry_snapshot (GtkWidget   *widget,
     gtk_widget_snapshot_child (widget, priv->progress_widget, snapshot);
 
   /* Draw text and cursor */
+  /* We add 1 to priv->text_width here simply because we might draw the
+   * cursor at the very right, one pixel after all the text. */
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (priv->text_x,
                                                        0,
-                                                       priv->text_width,
+                                                       priv->text_width + 1,
                                                        height),
                                   "Entry Text");
 
@@ -5626,7 +5628,7 @@ get_layout_position (GtkEntry *entry,
   y_pos = y_pos / PANGO_SCALE;
 
   if (x)
-    *x = - priv->scroll_offset;
+    *x = priv->text_x - priv->scroll_offset;
 
   if (y)
     *y = y_pos;
@@ -5642,14 +5644,14 @@ gtk_entry_draw_text (GtkEntry *entry,
   PangoLayout *layout;
   gint x, y;
   gint start_pos, end_pos;
-  GtkAllocation allocation;
+  int width, height;
 
   /* Nothing to display at all */
   if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
     return;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+  gtk_widget_get_content_size (widget, &width, &height);
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
   cairo_save (cr);
@@ -5679,10 +5681,7 @@ gtk_entry_draw_text (GtkEntry *entry,
       cairo_clip (cr);
       cairo_region_destroy (clip);
 
-      gtk_render_background (context, cr,
-                             0, 0,
-                             allocation.width, allocation.height);
-
+      gtk_render_background (context, cr, 0, 0, width, height);
       gtk_render_layout (context, cr, x, y, layout);
 
       gtk_style_context_restore (context);
@@ -5723,7 +5722,6 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   else
     block = _gtk_text_util_get_block_cursor_location (layout,
                                                       cursor_index, &cursor_rect, &block_at_line_end);
-
   if (!block)
     {
       gtk_render_insertion_cursor (context, cr,
@@ -7399,12 +7397,7 @@ gtk_entry_get_layout_offsets (GtkEntry *entry,
                               gint     *x,
                               gint     *y)
 {
-  GtkAllocation allocation, text_allocation;
-
   g_return_if_fail (GTK_IS_ENTRY (entry));
-
-  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
-  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   get_layout_position (entry, x, y);
 }
