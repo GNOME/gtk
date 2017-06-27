@@ -433,6 +433,8 @@ create_device (GdkDeviceManager *device_manager,
         input_source = GDK_SOURCE_ERASER;
       else if (strstr (tmp_name, "cursor"))
         input_source = GDK_SOURCE_CURSOR;
+      else if (strstr (tmp_name, " pad"))
+        input_source = GDK_SOURCE_TABLET_PAD;
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen"))
         input_source = GDK_SOURCE_PEN;
