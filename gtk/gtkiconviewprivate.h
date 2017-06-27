@@ -27,7 +27,7 @@ struct _GtkIconViewItem
   GdkRectangle cell_area;
 
   gint index;
-  
+
   gint row, col;
 
   guint selected : 1;
@@ -47,11 +47,10 @@ struct _GtkIconViewPrivate
   GPtrArray          *row_contexts;
 
   gint width, height;
+  double mouse_x;
+  double mouse_y;
 
   GtkSelectionMode selection_mode;
-
-  GdkWindow *view_window;
-  GdkWindow *bin_window;
 
   GList *children;
 

@@ -2862,14 +2862,19 @@ update_arrow_nodes (GtkNotebook *notebook)
               priv->arrow_widget[i] = g_object_new (GTK_TYPE_BUTTON,
                                                     "css-name", "arrow",
                                                     NULL);
-              gtk_widget_insert_before (priv->arrow_widget[i], priv->tabs_widget, next_widget);
 
               context = gtk_widget_get_style_context (priv->arrow_widget[i]);
 
               if (i == ARROW_LEFT_BEFORE || i == ARROW_LEFT_AFTER)
-                gtk_style_context_add_class (context, "down");
+                {
+                  gtk_style_context_add_class (context, "down");
+                  gtk_widget_insert_after (priv->arrow_widget[i], priv->tabs_widget, next_widget);
+                }
               else
-                gtk_style_context_add_class (context, "up");
+                {
+                  gtk_style_context_add_class (context, "up");
+                  gtk_widget_insert_after (priv->arrow_widget[i], priv->tabs_widget, next_widget);
+                }
            }
 
           if (i == ARROW_LEFT_BEFORE || i == ARROW_LEFT_AFTER)
