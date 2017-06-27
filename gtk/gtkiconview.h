@@ -155,27 +155,27 @@ void           gtk_icon_view_set_item_width    (GtkIconView    *icon_view,
 GDK_AVAILABLE_IN_ALL
 gint           gtk_icon_view_get_item_width    (GtkIconView    *icon_view);
 GDK_AVAILABLE_IN_ALL
-void           gtk_icon_view_set_spacing       (GtkIconView    *icon_view, 
+void           gtk_icon_view_set_spacing       (GtkIconView    *icon_view,
 		 			        gint            spacing);
 GDK_AVAILABLE_IN_ALL
 gint           gtk_icon_view_get_spacing       (GtkIconView    *icon_view);
 GDK_AVAILABLE_IN_ALL
-void           gtk_icon_view_set_row_spacing   (GtkIconView    *icon_view, 
+void           gtk_icon_view_set_row_spacing   (GtkIconView    *icon_view,
 					        gint            row_spacing);
 GDK_AVAILABLE_IN_ALL
 gint           gtk_icon_view_get_row_spacing   (GtkIconView    *icon_view);
 GDK_AVAILABLE_IN_ALL
-void           gtk_icon_view_set_column_spacing (GtkIconView    *icon_view, 
+void           gtk_icon_view_set_column_spacing (GtkIconView    *icon_view,
 					        gint            column_spacing);
 GDK_AVAILABLE_IN_ALL
 gint           gtk_icon_view_get_column_spacing (GtkIconView    *icon_view);
 GDK_AVAILABLE_IN_ALL
-void           gtk_icon_view_set_margin        (GtkIconView    *icon_view, 
+void           gtk_icon_view_set_margin        (GtkIconView    *icon_view,
 					        gint            margin);
 GDK_AVAILABLE_IN_ALL
 gint           gtk_icon_view_get_margin        (GtkIconView    *icon_view);
 GDK_AVAILABLE_IN_ALL
-void           gtk_icon_view_set_item_padding  (GtkIconView    *icon_view, 
+void           gtk_icon_view_set_item_padding  (GtkIconView    *icon_view,
 					        gint            item_padding);
 GDK_AVAILABLE_IN_ALL
 gint           gtk_icon_view_get_item_padding  (GtkIconView    *icon_view);
@@ -291,12 +291,6 @@ GDK_AVAILABLE_IN_ALL
 cairo_surface_t       *gtk_icon_view_create_drag_icon         (GtkIconView              *icon_view,
 							       GtkTreePath              *path);
 
-GDK_AVAILABLE_IN_ALL
-void    gtk_icon_view_convert_widget_to_bin_window_coords     (GtkIconView *icon_view,
-                                                               gint         wx,
-                                                               gint         wy,
-                                                               gint        *bx,
-                                                               gint        *by);
 GDK_AVAILABLE_IN_3_6
 gboolean gtk_icon_view_get_cell_rect                          (GtkIconView     *icon_view,
 							       GtkTreePath     *path,
