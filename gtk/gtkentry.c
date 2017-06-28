@@ -3194,7 +3194,6 @@ gtk_entry_draw_undershoot (GtkEntry    *entry,
   GtkEntryPrivate *priv = entry->priv;
   GtkStyleContext *context;
   gint min_offset, max_offset;
-  GtkAllocation allocation;
   GdkRectangle rect;
   gboolean rtl;
 
@@ -3204,9 +3203,6 @@ gtk_entry_draw_undershoot (GtkEntry    *entry,
   gtk_entry_get_scroll_limits (entry, &min_offset, &max_offset);
 
   gtk_entry_get_text_allocation (entry, &rect);
-  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
-  rect.x -= allocation.x;
-  rect.y -= allocation.y;
 
   if (priv->scroll_offset > min_offset)
     {
@@ -3490,7 +3486,7 @@ gtk_entry_event (GtkWidget *widget,
       GtkAllocation icon_alloc;
       if (priv->icons[i])
         {
-          gtk_widget_get_allocation (priv->icons[i]->widget, &icon_alloc);
+          gtk_widget_get_outer_allocation (priv->icons[i]->widget, &icon_alloc);
 
           if (gdk_rectangle_contains_point (&icon_alloc, (int)x, (int)y))
             {
