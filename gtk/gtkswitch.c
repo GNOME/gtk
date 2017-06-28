@@ -40,9 +40,9 @@
  *
  * |[<!-- language="plain" -->
  * switch
- * ├── slider
  * ├── label
- * ╰── label
+ * ├── label
+ * ╰── slider
  * ]|
  *
  * GtkSwitch has four css nodes, the main node with the name switch and subnodes
@@ -370,17 +370,6 @@ gtk_switch_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_switch_snapshot (GtkWidget   *widget,
-                     GtkSnapshot *snapshot)
-{
-  GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-
-  gtk_widget_snapshot_child (widget, priv->on_label, snapshot);
-  gtk_widget_snapshot_child (widget, priv->off_label, snapshot);
-  gtk_widget_snapshot_child (widget, priv->slider, snapshot);
-}
-
-static void
 gtk_switch_set_action_name (GtkActionable *actionable,
                             const gchar   *action_name)
 {
@@ -571,7 +560,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   widget_class->measure = gtk_switch_measure;
   widget_class->size_allocate = gtk_switch_size_allocate;
-  widget_class->snapshot = gtk_switch_snapshot;
 
   klass->activate = gtk_switch_activate;
   klass->state_set = state_set;
@@ -648,9 +636,6 @@ gtk_switch_init (GtkSwitch *self)
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
-  priv->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL);
-  gtk_widget_set_parent (priv->slider, GTK_WIDGET (self));
-
   gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
@@ -686,6 +671,9 @@ gtk_switch_init (GtkSwitch *self)
    */
   priv->off_label = gtk_label_new (C_("switch", "OFF"));
   gtk_widget_set_parent (priv->off_label, GTK_WIDGET (self));
+
+  priv->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL);
+  gtk_widget_set_parent (priv->slider, GTK_WIDGET (self));
 }
 
 /**
