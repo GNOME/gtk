@@ -1834,35 +1834,34 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkAllocation allocation;
+  int widget_width, widget_height;
   gint x, y, width, height, pos_x, pos_y;
 
-  gtk_widget_get_allocation (widget, &allocation);
+
+  gtk_widget_get_content_size (widget, &widget_width, &widget_height);
   x = y = 0;
-  width = allocation.width;
-  height = allocation.height;
   pos_x = pos_y = 0;
 
   switch (priv->active_transition_type)
     {
     case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
       y = 0;
-      height = allocation.height * (gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      height = widget_height * (gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
       pos_y = height;
       break;
     case GTK_STACK_TRANSITION_TYPE_UNDER_UP:
-      y = allocation.height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
-      height = allocation.height - y;
-      pos_y = y - allocation.height;
+      y = widget_height * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      height = widget_height - y;
+      pos_y = y - widget_height;
       break;
     case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
-      x = allocation.width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
-      width = allocation.width - x;
-      pos_x = x - allocation.width;
+      x = widget_width * (1 - gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      width = widget_width - x;
+      pos_x = x - widget_width;
       break;
     case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
       x = 0;
-      width = allocation.width * (gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
+      width = widget_width * (gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE));
       pos_x = width;
       break;
     default:
@@ -1900,11 +1899,11 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
 
   if (priv->last_visible_node)
     {
-      GtkAllocation allocation;
       graphene_matrix_t matrix;
       int x, y;
+      int width, height;
 
-      gtk_widget_get_allocation (widget, &allocation);
+      gtk_widget_get_content_size (widget, &width, &height);
 
       x = get_bin_window_x (stack);
       y = get_bin_window_y (stack);
@@ -1912,16 +1911,16 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
       switch (priv->active_transition_type)
         {
         case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
-          x -= allocation.width;
+          x -= width;
           break;
         case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
-          x += allocation.width;
+          x += width;
           break;
         case GTK_STACK_TRANSITION_TYPE_SLIDE_UP:
-          y -= allocation.height;
+          y -= height;
           break;
         case GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN:
-          y += allocation.height;
+          y += height;
           break;
         case GTK_STACK_TRANSITION_TYPE_OVER_UP:
         case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
@@ -1937,10 +1936,10 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
         }
 
       if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_END &&
-          priv->last_visible_widget_height > allocation.height)
-        y -= priv->last_visible_widget_height - allocation.height;
+          priv->last_visible_widget_height > height)
+        y -= priv->last_visible_widget_height - height;
       else if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_CENTER)
-        y -= (priv->last_visible_widget_height - allocation.height) / 2;
+        y -= (priv->last_visible_widget_height - height) / 2;
 
       graphene_matrix_init_translate (&matrix, &GRAPHENE_POINT3D_INIT (x, y, 0));
       gtk_snapshot_push_transform (snapshot, &matrix, "StackSlide");
@@ -1964,6 +1963,8 @@ gtk_stack_snapshot (GtkWidget   *widget,
     {
       if (gtk_progress_tracker_get_state (&priv->tracker) != GTK_PROGRESS_STATE_AFTER)
         {
+          int width, height;
+
           if (priv->last_visible_node == NULL &&
               priv->last_visible_child != NULL)
             {
@@ -1980,11 +1981,11 @@ gtk_stack_snapshot (GtkWidget   *widget,
               priv->last_visible_node = gtk_snapshot_finish (&last_visible_snapshot);
             }
 
+          gtk_widget_get_content_size (widget, &width, &height);
           gtk_snapshot_push_clip (snapshot,
                                   &GRAPHENE_RECT_INIT(
                                       0, 0,
-                                      gtk_widget_get_allocated_width (widget),
-                                      gtk_widget_get_allocated_height (widget)
+                                      width, height
                                   ),
                                   "StackAnimationClip");
 

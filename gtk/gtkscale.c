@@ -485,9 +485,9 @@ find_next_pos (GtkWidget       *widget,
                gint            *marks,
                GtkPositionType  pos)
 {
-  GtkAllocation allocation;
   GSList *m;
   gint i;
+  int width, height;
 
   for (m = list->next, i = 1; m; m = m->next, i++)
     {
@@ -497,11 +497,11 @@ find_next_pos (GtkWidget       *widget,
         return marks[i];
     }
 
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_content_size (widget, &width, &height);
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL)
-    return allocation.width;
+    return width;
   else
-    return allocation.height;
+    return height;
 }
 
 static void

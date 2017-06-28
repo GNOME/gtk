@@ -1412,15 +1412,12 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
   GtkWidget *widget = gtk_widget_get_parent (GTK_WIDGET (gizmo));
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GtkAllocation slider_alloc, widget_alloc;
-  GtkAllocation trough_alloc;
+  GtkAllocation slider_alloc;
   double value;
 
   /* Slider */
   gtk_range_calc_marks (range);
 
-  gtk_widget_get_allocation (widget, &widget_alloc);
-  gtk_widget_get_allocation (GTK_WIDGET (gizmo), &trough_alloc);
   gtk_range_compute_slider_position (range,
                                      gtk_adjustment_get_value (priv->adjustment),
                                      &slider_alloc);
@@ -2358,19 +2355,19 @@ update_autoscroll_mode (GtkRange *range)
 
   if (range->priv->zoom)
     {
-      GtkAllocation allocation;
+      int width, height;
       gint size, pos;
 
-      gtk_widget_get_allocation (GTK_WIDGET (range), &allocation);
+      gtk_widget_get_content_size (GTK_WIDGET (range), &width, &height);
 
       if (range->priv->orientation == GTK_ORIENTATION_VERTICAL)
         {
-          size = allocation.height;
+          size = height;
           pos = range->priv->mouse_y;
         }
       else
         {
-          size = allocation.width;
+          size = width;
           pos = range->priv->mouse_x;
         }
 

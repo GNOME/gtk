@@ -2559,14 +2559,7 @@ gtk_menu_reorder_child (GtkMenu   *menu,
 static void
 gtk_menu_realize (GtkWidget *widget)
 {
-  GtkMenu *menu = GTK_MENU (widget);
-  GtkAllocation allocation;
-  GtkBorder arrow_border;
-
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->realize (widget);
-
-  gtk_widget_get_allocation (widget, &allocation);
-  get_arrows_border (menu, &arrow_border);
 
   if (GTK_MENU_SHELL (widget)->priv->active_menu_item)
     gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
@@ -3160,7 +3153,7 @@ definitely_within_item (GtkWidget *widget,
   GtkAllocation allocation;
   int w, h;
 
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_outer_allocation (widget, &allocation);
   w = allocation.width;
   h = allocation.height;
 

@@ -98,22 +98,16 @@ swatch_snapshot (GtkWidget   *widget,
     {
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
-      GtkAllocation allocation, border_allocation;
+      GtkAllocation border_allocation;
       GskRoundedRect content_box;
 
-      gtk_widget_get_allocation (widget, &allocation);
-      /* TODO: This should be the border allocation */
-      gtk_widget_get_allocation (widget, &border_allocation);
-
-      border_allocation.x -= allocation.x;
-      border_allocation.y -= allocation.y;
+      gtk_widget_get_border_allocation (widget, &border_allocation);
 
       gtk_rounded_boxes_init_for_style (NULL,
                                         NULL,
                                         &content_box,
                                         gtk_style_context_lookup_style (context),
-                                        border_allocation.x,
-                                        border_allocation.y,
+                                        0, 0,
                                         border_allocation.width,
                                         border_allocation.height);
       gtk_snapshot_push_rounded_clip (snapshot,

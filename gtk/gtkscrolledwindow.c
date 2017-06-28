@@ -1083,7 +1083,7 @@ event_close_to_indicator (GtkScrolledWindow *sw,
 
   priv = sw->priv;
 
-  gtk_widget_get_allocation (indicator->scrollbar, &indicator_alloc);
+  gtk_widget_get_outer_allocation (indicator->scrollbar, &indicator_alloc);
   gdk_event_get_coords (event, &x, &y);
 
   if (indicator->over)
@@ -1354,14 +1354,11 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkBin *bin;
   GtkAllocation child_allocation;
-  GtkAllocation sw_allocation;
   GtkWidget *child;
   gint sb_width;
   gint sb_height;
 
   bin = GTK_BIN (scrolled_window);
-  gtk_widget_get_allocation (GTK_WIDGET (scrolled_window), &sw_allocation);
-
 
   /* Get possible scrollbar dimensions */
   gtk_widget_measure (priv->vscrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
@@ -3985,9 +3982,6 @@ gtk_scrolled_window_realize (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-  GtkAllocation allocation;
-
-  gtk_widget_get_allocation (widget, &allocation);
 
   priv->hindicator.scrollbar = priv->hscrollbar;
   priv->vindicator.scrollbar = priv->vscrollbar;

@@ -28,6 +28,7 @@
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontext.h"
+#include "gtkwidgetprivate.h"
 
 typedef struct _GtkDrawingAreaPrivate GtkDrawingAreaPrivate;
 
@@ -235,21 +236,22 @@ gtk_drawing_area_snapshot (GtkWidget   *widget,
   GtkDrawingArea *self = GTK_DRAWING_AREA (widget);
   GtkDrawingAreaPrivate *priv = gtk_drawing_area_get_instance_private (self);
   cairo_t *cr;
+  int width, height;
 
   if (!priv->draw_func)
     return;
 
+  gtk_widget_get_content_size (widget, &width, &height);
+
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (
                                       0, 0,
-                                      gtk_widget_get_allocated_width (widget),
-                                      gtk_widget_get_allocated_height (widget)
+                                      width, height
                                   ),
                                   "DrawingAreaContents");
   priv->draw_func (self,
                    cr,
-                   gtk_widget_get_allocated_width (widget),
-                   gtk_widget_get_allocated_height (widget),
+                   width, height,
                    priv->draw_func_target);
   cairo_destroy (cr);
 }
