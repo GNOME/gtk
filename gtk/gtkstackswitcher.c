@@ -26,6 +26,7 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkstackswitcher
@@ -294,26 +295,21 @@ gtk_stack_switcher_drag_motion (GtkWidget      *widget,
 {
   GtkStackSwitcher *self = GTK_STACK_SWITCHER (widget);
   GtkStackSwitcherPrivate *priv;
-  GtkAllocation allocation;
   GtkWidget *button;
   GHashTableIter iter;
   gpointer value;
   gboolean retval = FALSE;
 
-  gtk_widget_get_allocation (widget, &allocation);
-
   priv = gtk_stack_switcher_get_instance_private (self);
-
-  x += allocation.x;
-  y += allocation.y;
 
   button = NULL;
   g_hash_table_iter_init (&iter, priv->buttons);
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
-      gtk_widget_get_allocation (GTK_WIDGET (value), &allocation);
-      if (x >= allocation.x && x <= allocation.x + allocation.width &&
-          y >= allocation.y && y <= allocation.y + allocation.height)
+      GdkRectangle allocation;
+
+      gtk_widget_get_outer_allocation (GTK_WIDGET (value), &allocation);
+      if (gdk_rectangle_contains_point (&allocation, (int)x, (int)y))
         {
           button = GTK_WIDGET (value);
           retval = TRUE;

@@ -1660,16 +1660,17 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
   GtkIconViewDropPosition dest_pos;
   GtkIconViewItem *dest_item = NULL;
   GtkStyleContext *context;
+  int width, height;
 
   icon_view = GTK_ICON_VIEW (widget);
 
   context = gtk_widget_get_style_context (widget);
 
+  gtk_widget_get_content_size (widget, &width, &height);
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (
                               0, 0,
-                              gtk_widget_get_allocated_width (widget),
-                              gtk_widget_get_allocated_height (widget)
+                              width, height
                           ),
                           "IconView Clip");
 
@@ -1790,7 +1791,6 @@ static gboolean
 gtk_icon_view_motion (GtkWidget      *widget,
 		      GdkEventMotion *event)
 {
-  GtkAllocation allocation;
   GtkIconView *icon_view;
   gint abs_y;
   
@@ -1802,6 +1802,7 @@ gtk_icon_view_motion (GtkWidget      *widget,
 
   if (icon_view->priv->doing_rubberband)
     {
+      int width, height;
       gtk_icon_view_update_rubberband (icon_view);
       
       abs_y = event->y - icon_view->priv->height *
@@ -1809,14 +1810,14 @@ gtk_icon_view_motion (GtkWidget      *widget,
 	 (gtk_adjustment_get_upper (icon_view->priv->vadjustment) -
 	  gtk_adjustment_get_lower (icon_view->priv->vadjustment)));
 
-      gtk_widget_get_allocation (widget, &allocation);
+      gtk_widget_get_content_size (widget, &width, &height);
 
-      if (abs_y < 0 || abs_y > allocation.height)
+      if (abs_y < 0 || abs_y > height)
 	{
 	  if (abs_y < 0)
 	    icon_view->priv->scroll_value_diff = abs_y;
 	  else
-	    icon_view->priv->scroll_value_diff = abs_y - allocation.height;
+	    icon_view->priv->scroll_value_diff = abs_y - height;
 
 	  icon_view->priv->event_last_x = event->x;
 	  icon_view->priv->event_last_y = event->y;
@@ -2582,7 +2583,7 @@ gtk_icon_view_real_toggle_cursor_item (GtkIconView *icon_view)
 static void
 gtk_icon_view_set_hadjustment_values (GtkIconView *icon_view)
 {
-  GtkAllocation  allocation;
+  int width, height;
   GtkAdjustment *adj = icon_view->priv->hadjustment;
   gdouble old_page_size;
   gdouble old_upper;
@@ -2590,12 +2591,12 @@ gtk_icon_view_set_hadjustment_values (GtkIconView *icon_view)
   gdouble new_value;
   gdouble new_upper;
 
-  gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
+  gtk_widget_get_content_size (GTK_WIDGET (icon_view), &width, &height);
 
   old_value = gtk_adjustment_get_value (adj);
   old_upper = gtk_adjustment_get_upper (adj);
   old_page_size = gtk_adjustment_get_page_size (adj);
-  new_upper = MAX (allocation.width, icon_view->priv->width);
+  new_upper = MAX (width, icon_view->priv->width);
 
   if (gtk_widget_get_direction (GTK_WIDGET (icon_view)) == GTK_TEXT_DIR_RTL)
     {
@@ -2609,37 +2610,37 @@ gtk_icon_view_set_hadjustment_values (GtkIconView *icon_view)
        *   rectangle fixed. This means right edge of thumb should remain fixed.
        *   In this case, upper - value - page_size should remain constant.
        */
-      new_value = (new_upper - allocation.width) -
+      new_value = (new_upper - width) -
                   (old_upper - old_value - old_page_size);
-      new_value = CLAMP (new_value, 0, new_upper - allocation.width);
+      new_value = CLAMP (new_value, 0, new_upper - width);
     }
   else
-    new_value = CLAMP (old_value, 0, new_upper - allocation.width);
+    new_value = CLAMP (old_value, 0, new_upper - width);
 
   gtk_adjustment_configure (adj,
                             new_value,
                             0.0,
                             new_upper,
-                            allocation.width * 0.1,
-                            allocation.width * 0.9,
-                            allocation.width);
+                            width * 0.1,
+                            width * 0.9,
+                            width);
 }
 
 static void
 gtk_icon_view_set_vadjustment_values (GtkIconView *icon_view)
 {
-  GtkAllocation  allocation;
+  int width, height;
   GtkAdjustment *adj = icon_view->priv->vadjustment;
 
-  gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
+  gtk_widget_get_content_size (GTK_WIDGET (icon_view), &width, &height);
 
   gtk_adjustment_configure (adj,
                             gtk_adjustment_get_value (adj),
                             0.0,
-                            MAX (allocation.height, icon_view->priv->height),
-                            allocation.height * 0.1,
-                            allocation.height * 0.9,
-                            allocation.height);
+                            MAX (height, icon_view->priv->height),
+                            height * 0.1,
+                            height * 0.9,
+                            height);
 }
 
 static void
@@ -2735,6 +2736,7 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   gint col, row;
   GtkRequestedSize *sizes;
   gboolean rtl;
+  int width, height;
 
   if (gtk_icon_view_is_empty (icon_view))
     return;
@@ -2742,16 +2744,18 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   rtl = gtk_widget_get_direction (GTK_WIDGET (icon_view)) == GTK_TEXT_DIR_RTL;
   n_items = gtk_icon_view_get_n_items (icon_view);
 
+  gtk_widget_get_content_size (widget, &width, &height);
+
   gtk_icon_view_compute_n_items_for_size (icon_view, 
                                           GTK_ORIENTATION_HORIZONTAL,
-                                          gtk_widget_get_allocated_width (widget),
+                                          width,
                                           NULL, NULL,
                                           &n_columns, &item_width);
   n_rows = (n_items + n_columns - 1) / n_columns;
 
   priv->width = n_columns * (item_width + 2 * priv->item_padding + priv->column_spacing) - priv->column_spacing;
   priv->width += 2 * priv->margin;
-  priv->width = MAX (priv->width, gtk_widget_get_allocated_width (widget));
+  priv->width = MAX (priv->width, width);
 
   /* Clear the per row contexts */
   g_ptr_array_set_size (icon_view->priv->row_contexts, 0);
@@ -2801,9 +2805,9 @@ gtk_icon_view_layout (GtkIconView *icon_view)
 
   priv->height -= priv->row_spacing;
   priv->height += priv->margin;
-  priv->height = MIN (priv->height, gtk_widget_get_allocated_height (widget));
+  priv->height = MIN (priv->height, height);
 
-  gtk_distribute_natural_allocation (gtk_widget_get_allocated_height (widget) - priv->height,
+  gtk_distribute_natural_allocation (height - priv->height,
                                      n_rows,
                                      sizes);
 
@@ -2842,7 +2846,7 @@ gtk_icon_view_layout (GtkIconView *icon_view)
 
   priv->height -= priv->row_spacing;
   priv->height += priv->margin;
-  priv->height = MAX (priv->height, gtk_widget_get_allocated_height (widget));
+  priv->height = MAX (priv->height, height);
 }
 
 static void
@@ -2989,23 +2993,7 @@ static void
 gtk_icon_view_queue_draw_item (GtkIconView     *icon_view,
 			       GtkIconViewItem *item)
 {
-  GdkRectangle  rect;
-  GdkRectangle *item_area = &item->cell_area;
-  GtkAllocation allocation;
-
-  rect.x      = item_area->x - icon_view->priv->item_padding;
-  rect.y      = item_area->y - icon_view->priv->item_padding;
-  rect.width  = item_area->width  + icon_view->priv->item_padding * 2;
-  rect.height = item_area->height + icon_view->priv->item_padding * 2;
-
-  gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
-
-  rect.x += allocation.x -
-    gtk_adjustment_get_value (icon_view->priv->hadjustment);
-  rect.y += allocation.y -
-    gtk_adjustment_get_value (icon_view->priv->vadjustment);
-
-  gtk_widget_queue_draw_area (GTK_WIDGET (icon_view), rect.x, rect.y, rect.width, rect.height);
+  gtk_widget_queue_draw (GTK_WIDGET (icon_view));
 }
 
 void
@@ -3988,7 +3976,7 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
 
   if (use_align)
     {
-      GtkAllocation allocation;
+      int width, height;
       gint x, y;
       gfloat offset;
       GdkRectangle item_area = 
@@ -4002,14 +3990,14 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
       x =0;
       y =0;
 
-      gtk_widget_get_allocation (widget, &allocation);
+      gtk_widget_get_content_size (widget, &width, &height);
 
-      offset = y + item_area.y - row_align * (allocation.height - item_area.height);
+      offset = y + item_area.y - row_align * (height - item_area.height);
 
       gtk_adjustment_set_value (icon_view->priv->vadjustment,
                                 gtk_adjustment_get_value (icon_view->priv->vadjustment) + offset);
 
-      offset = x + item_area.x - col_align * (allocation.width - item_area.width);
+      offset = x + item_area.x - col_align * (width - item_area.width);
 
       gtk_adjustment_set_value (icon_view->priv->hadjustment,
                                 gtk_adjustment_get_value (icon_view->priv->hadjustment) + offset);
@@ -5931,15 +5919,13 @@ remove_scroll_timeout (GtkIconView *icon_view)
 static void
 gtk_icon_view_autoscroll (GtkIconView *icon_view)
 {
-  GtkAllocation allocation;
   gint px, py, width, height;
   gint hoffset, voffset;
 
-  gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
   px = icon_view->priv->event_last_x;
   py = icon_view->priv->event_last_y;
-  width = allocation.width;
-  height = allocation.height;
+
+  gtk_widget_get_content_size (GTK_WIDGET (icon_view), &width, &height);
 
   /* see if we are near the edge. */
   voffset = py - 2 * SCROLL_EDGE_SIZE;

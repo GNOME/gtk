@@ -86,6 +86,7 @@
 
 #include "gtkprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkwidgetprivate.h"
 
 #include <string.h>
 
@@ -1515,7 +1516,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   if (!completion->priv->filter_model)
     return;
 
-  gtk_widget_get_allocation (completion->priv->entry, &allocation);
+  gtk_widget_get_window_allocation (completion->priv->entry, &allocation);
   gtk_widget_get_preferred_size (completion->priv->entry,
                                  &entry_req, NULL);
 

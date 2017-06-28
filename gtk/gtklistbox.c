@@ -1440,7 +1440,7 @@ ensure_row_visible (GtkListBox    *box,
   if (!priv->adjustment)
     return;
 
-  gtk_widget_get_allocation (GTK_WIDGET (row), &allocation);
+  gtk_widget_get_outer_allocation (GTK_WIDGET (row), &allocation);
   y = allocation.y;
   height = allocation.height;
 
@@ -1448,7 +1448,7 @@ ensure_row_visible (GtkListBox    *box,
   header = ROW_PRIV (row)->header;
   if (GTK_IS_WIDGET (header) && gtk_widget_is_drawable (header))
     {
-      gtk_widget_get_allocation (header, &allocation);
+      gtk_widget_get_outer_allocation (header, &allocation);
       y = allocation.y;
       height += allocation.height;
     }
