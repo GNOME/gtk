@@ -1420,15 +1420,14 @@ gtk_paned_snapshot (GtkWidget   *widget,
                     GtkSnapshot *snapshot)
 {
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (GTK_PANED (widget));
-  GtkAllocation widget_allocation;
   GtkAllocation child_allocation;
+  int width, height;
 
-  gtk_widget_get_allocation (widget, &widget_allocation);
+  gtk_widget_get_content_size (widget, &width, &height);
   gtk_snapshot_push_clip (snapshot,
                           &GRAPHENE_RECT_INIT (
                               0, 0,
-                              widget_allocation.width,
-                              widget_allocation.height
+                              width, height
                           ),
                           "GtkPaned");
 
@@ -1438,11 +1437,11 @@ gtk_paned_snapshot (GtkWidget   *widget,
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1))
     {
-      gtk_widget_get_allocation (priv->child1, &child_allocation);
+      gtk_widget_get_outer_allocation (priv->child1, &child_allocation);
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT (
-                                  child_allocation.x - widget_allocation.x,
-                                  child_allocation.y - widget_allocation.y,
+                                  child_allocation.x,
+                                  child_allocation.y,
                                   child_allocation.width,
                                   child_allocation.height
                               ),
@@ -1453,11 +1452,11 @@ gtk_paned_snapshot (GtkWidget   *widget,
 
   if (priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      gtk_widget_get_allocation (priv->child2, &child_allocation);
+      gtk_widget_get_outer_allocation (priv->child2, &child_allocation);
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT (
-                                  child_allocation.x - widget_allocation.x,
-                                  child_allocation.y - widget_allocation.y,
+                                  child_allocation.x,
+                                  child_allocation.y,
                                   child_allocation.width,
                                   child_allocation.height
                               ),
