@@ -80,8 +80,7 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  *
  * Note that GDK automatically clears the exposed area before causing a
  * redraw, and that drawing is implicitly clipped to the exposed
- * area. If you want to have a theme-provided background, you need
- * to call gtk_render_background() in your ::draw method.
+ * area.
  *
  * ## Simple GtkDrawingArea usage
  *
@@ -95,8 +94,6 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  *   GtkStyleContext *context;
  *
  *   context = gtk_widget_get_style_context (GTK_WIDGET (area));
- *
- *   gtk_render_background (context, cr, 0, 0, width, height);
  *
  *   cairo_arc (cr,
  *              width / 2.0, height / 2.0,
