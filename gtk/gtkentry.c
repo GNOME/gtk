@@ -3107,7 +3107,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   GdkRectangle clip = *allocation;
-  GtkAllocation child_clip = *allocation;
+  GtkAllocation child_clip;
   gint i;
 
   priv->text_baseline = -1;
@@ -3157,18 +3157,11 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 
   if (priv->progress_widget && gtk_widget_get_visible (priv->progress_widget))
     {
-      int req_width;
       GtkAllocation progress_alloc;
-
-      gtk_widget_measure (priv->progress_widget,
-                          GTK_ORIENTATION_HORIZONTAL,
-                          allocation->height,
-                          &req_width, NULL,
-                          NULL, NULL);
 
       progress_alloc.x = 0;
       progress_alloc.y = 0;
-      progress_alloc.width = MAX (allocation->width, req_width);
+      progress_alloc.width = allocation->width;
       progress_alloc.height = allocation->height;
 
       gtk_widget_size_allocate (priv->progress_widget, &progress_alloc);
