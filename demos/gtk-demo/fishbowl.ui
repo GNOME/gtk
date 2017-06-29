@@ -10,7 +10,6 @@
         <child>
           <object class="GtkLabel" id="info_label">
             <property name="visible">True</property>
-            <property name="label">icons - 0 fps</property>
           </object>
           <packing>
             <property name="pack_type">end</property>

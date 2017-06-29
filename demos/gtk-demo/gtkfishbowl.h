@@ -46,6 +46,9 @@ GType      gtk_fishbowl_get_type          (void) G_GNUC_CONST;
 
 GtkWidget* gtk_fishbowl_new               (void);
 
+void       gtk_fishbowl_set_use_icons     (GtkFishbowl       *fishbowl,
+                                           gboolean           use_icons);
+
 guint      gtk_fishbowl_get_count         (GtkFishbowl       *fishbowl);
 void       gtk_fishbowl_set_count         (GtkFishbowl       *fishbowl,
                                            guint              count);
