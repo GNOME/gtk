@@ -1425,8 +1425,11 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
   gtk_widget_size_allocate (priv->slider_widget, &slider_alloc);
   gtk_widget_get_clip (priv->slider_widget, out_clip);
 
-  value = (gtk_adjustment_get_value (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment)) /
-          (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment));
+  if (gtk_adjustment_get_lower (priv->adjustment) == gtk_adjustment_get_upper (priv->adjustment))
+    value = 0;
+  else
+    value = (gtk_adjustment_get_value (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment)) /
+            (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment));
 
   if (priv->show_fill_level &&
       gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
