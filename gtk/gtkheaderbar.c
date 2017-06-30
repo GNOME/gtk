@@ -701,7 +701,7 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
 
       if (gtk_widget_get_visible (child->widget))
         {
-          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, avail_size,
+          gtk_widget_measure (child->widget, GTK_ORIENTATION_HORIZONTAL, avail_size,
                               &child_size, &child_natural, NULL, NULL);
 
           required_size += child_size;
