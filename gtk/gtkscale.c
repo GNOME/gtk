@@ -1596,39 +1596,6 @@ gtk_scale_measure (GtkWidget      *widget,
     }
 }
 
-static gboolean
-gtk_scale_render_mark_indicator (GtkGizmo    *gizmo,
-                                 GtkSnapshot *snapshot)
-{
-  GtkWidget *widget = GTK_WIDGET (gizmo);
-  GtkScale *scale = GTK_SCALE (gtk_widget_get_parent (gtk_widget_get_parent (gtk_widget_get_parent (widget))));
-  GtkStyleContext *context;
-  GtkOrientation orientation;
-  GdkRGBA color;
-  GtkAllocation allocation;
-
-  gtk_widget_get_content_allocation (widget, &allocation);
-
-  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (scale));
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_get_color (context, &color);
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_snapshot_append_color (snapshot,
-                               &color,
-                               &GRAPHENE_RECT_INIT(allocation.width / 2,
-                                                   0, 1, allocation.height),
-                               "ScaleMark");
-  else
-    gtk_snapshot_append_color (snapshot,
-                               &color,
-                               &GRAPHENE_RECT_INIT(0, allocation.height / 2,
-                                                   allocation.width, 1),
-                               "ScaleMark");
-
-  return FALSE;
-}
-
 static void
 gtk_scale_snapshot (GtkWidget   *widget,
                     GtkSnapshot *snapshot)
@@ -1942,7 +1909,7 @@ gtk_scale_add_mark (GtkScale        *scale,
   mark->indicator_widget = gtk_gizmo_new ("indicator",
                                           NULL,
                                           NULL,
-                                          gtk_scale_render_mark_indicator);
+                                          NULL);
   gtk_widget_set_parent (mark->indicator_widget, mark->widget);
   if (mark->markup && *mark->markup)
     {
