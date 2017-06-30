@@ -1025,6 +1025,7 @@ gtk_use_quartz_c_sources = 	\
 	gtkmountoperation-stub.c \
 	gtkapplication-quartz.c \
 	gtkapplication-quartz-menu.c \
+	gtkfilechoosernativequartz.c \
 	gtkquartz.c
 gtk_use_stub_c_sources = 	\
 	gtkmountoperation-stub.c
