@@ -922,7 +922,7 @@ gtk_range_get_range_rect (GtkRange     *range,
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (range_rect != NULL);
 
-  gtk_widget_get_own_allocation (range->priv->trough_widget, range_rect);
+  gtk_widget_get_outer_allocation (range->priv->trough_widget, range_rect);
 }
 
 /**
