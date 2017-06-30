@@ -1760,7 +1760,6 @@ range_grab_add (GtkRange  *range,
    * is the only widget receiving the pointer events.
    */
   priv->grab_location = location;
-  gtk_widget_queue_resize (location);
 
   update_trough_state (range);
   update_slider_state (range);
@@ -1795,7 +1794,6 @@ range_grab_remove (GtkRange *range)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
-  gtk_widget_queue_resize (priv->grab_location);
   priv->grab_location = NULL;
 
   gtk_range_update_mouse_location (range);
@@ -2910,7 +2908,7 @@ gtk_range_calc_marks (GtkRange *range)
   for (i = 0; i < priv->n_marks; i++)
     {
       gtk_range_compute_slider_position (range, priv->marks[i], &slider);
-      gtk_widget_translate_coordinates (priv->slider_widget, GTK_WIDGET (range),
+      gtk_widget_translate_coordinates (priv->trough_widget, GTK_WIDGET (range),
                                         slider.x, slider.y, &slider.x, &slider.y);
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
