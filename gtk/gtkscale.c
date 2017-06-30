@@ -432,7 +432,7 @@ gtk_scale_allocate_mark (GtkGizmo            *gizmo,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      indicator_alloc.x = indicator_width / 2;
+      indicator_alloc.x = (allocation->width - indicator_width) / 2;
       if (mark->position == GTK_POS_TOP)
         indicator_alloc.y = allocation->y + allocation->height - indicator_height;
       else
@@ -446,7 +446,7 @@ gtk_scale_allocate_mark (GtkGizmo            *gizmo,
         indicator_alloc.x = allocation->x + allocation->width - indicator_width;
       else
         indicator_alloc.x = allocation->x;
-      indicator_alloc.y = indicator_height / 2;
+      indicator_alloc.y = (allocation->height - indicator_height) / 2;
       indicator_alloc.width = indicator_width;
       indicator_alloc.height = indicator_height;
     }
@@ -479,31 +479,6 @@ gtk_scale_allocate_mark (GtkGizmo            *gizmo,
     }
 }
 
-static gint
-find_next_pos (GtkWidget       *widget,
-               GSList          *list,
-               gint            *marks,
-               GtkPositionType  pos)
-{
-  GSList *m;
-  gint i;
-  int width, height;
-
-  for (m = list->next, i = 1; m; m = m->next, i++)
-    {
-      GtkScaleMark *mark = m->data;
-
-      if (mark->position == pos)
-        return marks[i];
-    }
-
-  gtk_widget_get_content_size (widget, &width, &height);
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL)
-    return width;
-  else
-    return height;
-}
-
 static void
 gtk_scale_allocate_marks (GtkGizmo            *gizmo,
                           const GtkAllocation *allocation,
@@ -515,19 +490,11 @@ gtk_scale_allocate_marks (GtkGizmo            *gizmo,
   GtkScalePrivate *priv = scale->priv;
   GtkOrientation orientation;
   int *marks;
-  int min_pos_before, min_pos_after;
-  int min_sep = 4;
   int i;
-  int min_pos, max_pos;
   GSList *m;
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (scale));
   _gtk_range_get_stop_positions (GTK_RANGE (scale), &marks);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    min_pos_before = min_pos_after = allocation->x;
-  else
-    min_pos_before = min_pos_after = allocation->y;
 
   for (m = priv->marks, i = 0; m; m = m->next, i++)
     {
@@ -552,32 +519,7 @@ gtk_scale_allocate_marks (GtkGizmo            *gizmo,
           mark_alloc.width = mark_size;
           mark_alloc.height = allocation->height;
 
-          if (mark->position == GTK_POS_TOP)
-            {
-              min_pos = min_pos_before;
-              max_pos = find_next_pos (GTK_WIDGET (scale),
-                                       m, marks + i, GTK_POS_TOP) - min_sep + allocation->x;
-            }
-          else
-            {
-              min_pos = min_pos_after;
-              max_pos = find_next_pos (GTK_WIDGET (scale),
-                                       m, marks + i, GTK_POS_BOTTOM) - min_sep + allocation->x;
-            }
-
           mark_alloc.x -= mark_size / 2;
-
-          if (mark_alloc.x < min_pos)
-            mark_alloc.x = min_pos;
-          if (mark_alloc.x + mark_size > max_pos)
-            mark_alloc.x = max_pos - mark_size;
-          if (mark_alloc.x < 0)
-            mark_alloc.x = 0;
-
-          if (mark->position == GTK_POS_TOP)
-            min_pos_before = mark_alloc.x + mark_size + min_sep;
-          else
-            min_pos_after = mark_alloc.x + mark_size + min_sep;
         }
       else
         {
@@ -586,32 +528,7 @@ gtk_scale_allocate_marks (GtkGizmo            *gizmo,
           mark_alloc.width = allocation->width;
           mark_alloc.height = mark_size;
 
-          if (mark->position == GTK_POS_TOP)
-            {
-              min_pos = min_pos_before;
-              max_pos = find_next_pos (GTK_WIDGET (scale),
-                                       m, marks + i, GTK_POS_TOP) - min_sep + allocation->y;
-            }
-          else
-            {
-              min_pos = min_pos_after;
-              max_pos = find_next_pos (GTK_WIDGET (scale),
-                                       m, marks + i, GTK_POS_BOTTOM) - min_sep + allocation->y;
-            }
-
           mark_alloc.y -= mark_size / 2;
-
-          if (mark_alloc.y < min_pos)
-            mark_alloc.y = min_pos;
-          if (mark_alloc.y + mark_size > max_pos)
-            mark_alloc.y = max_pos - mark_size;
-          if (mark_alloc.y < 0)
-            mark_alloc.y = 0;
-
-          if (mark->position == GTK_POS_TOP)
-            min_pos_before = mark_alloc.y + mark_size + min_sep;
-          else
-            min_pos_after = mark_alloc.y + mark_size + min_sep;
         }
 
       gtk_widget_size_allocate_with_baseline (mark->widget, &mark_alloc, baseline);
@@ -648,7 +565,7 @@ gtk_scale_size_allocate (GtkWidget     *widget,
                               &marks_height, NULL,
                               NULL, NULL);
           marks_rect = range_rect;
-          marks_rect.y -= marks_height;
+          marks_rect.y = 0;
           marks_rect.height = marks_height;
           gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect);
           gtk_widget_get_clip (priv->top_marks_widget, &marks_clip);

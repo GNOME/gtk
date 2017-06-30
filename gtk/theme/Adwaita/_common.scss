@@ -2986,8 +2986,8 @@ scale {
                                                      (top, left, right),
                                                      (bottom, right, left) {
       &.#{$marks_class} {
-        margin-#{$marks_margin}: $_marks_distance;
-        margin-#{$marks_pos}: -($_marks_distance + $_marks_length);
+        //margin-#{$marks_margin}: $_marks_distance;
+        //margin-#{$marks_pos}: -($_marks_distance + $_marks_length);
       }
     }
   }
@@ -3006,6 +3006,7 @@ scale {
 
   &.horizontal {
     indicator {
+      background-color: currentColor;
       min-height: $_marks_length;
       min-width: 1px;
     }
@@ -3015,6 +3016,7 @@ scale {
 
   &.vertical {
     indicator {
+      background-color: currentColor;
       min-height: 1px;
       min-width: $_marks_length;
     }
@@ -3308,7 +3310,6 @@ progressbar {
 
   trough.empty progress { all: unset; } // makes the progress indicator disappear, when the fraction is 0
 }
-
 
 /*************
  * Level Bar *
