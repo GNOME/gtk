@@ -513,8 +513,6 @@ static void        gtk_window_do_popup         (GtkWindow      *window,
 static void gtk_window_style_updated (GtkWidget     *widget);
 static void gtk_window_state_flags_changed (GtkWidget     *widget,
                                             GtkStateFlags  previous_state);
-static void gtk_window_queue_draw_region (GtkWidget            *widget,
-				          const cairo_region_t *region);
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -827,7 +825,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->style_updated = gtk_window_style_updated;
   widget_class->snapshot = gtk_window_snapshot;
-  widget_class->queue_draw_region = gtk_window_queue_draw_region;
   widget_class->pick = gtk_window_pick;
 
   container_class->add = gtk_window_add;
@@ -7821,15 +7818,6 @@ gtk_window_style_updated (GtkWidget *widget)
 
   if (change == NULL || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_ICON_THEME))
     update_themed_icon (GTK_WINDOW (widget));
-}
-
-static void
-gtk_window_queue_draw_region (GtkWidget            *widget,
-		              const cairo_region_t *region)
-{
-  gtk_debug_updates_add (widget, region);
-
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->queue_draw_region (widget, region);
 }
 
 /**

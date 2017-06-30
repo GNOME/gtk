@@ -72,6 +72,7 @@
 #include "gtkrenderborderprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkdebugupdatesprivate.h"
 
 #include "inspector/window.h"
 
@@ -4913,6 +4914,7 @@ gtk_widget_real_queue_draw_region (GtkWidget            *widget,
 				   const cairo_region_t *region)
 {
   g_assert (_gtk_widget_get_has_window (widget));
+  gtk_debug_updates_add (widget, region);
   gdk_window_invalidate_region (_gtk_widget_get_window (widget), region, TRUE);
 }
 
