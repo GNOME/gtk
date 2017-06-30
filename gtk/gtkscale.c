@@ -432,7 +432,7 @@ gtk_scale_allocate_mark (GtkGizmo            *gizmo,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      indicator_alloc.x = mark->stop_position - indicator_width / 2;
+      indicator_alloc.x = indicator_width / 2;
       if (mark->position == GTK_POS_TOP)
         indicator_alloc.y = allocation->y + allocation->height - indicator_height;
       else
@@ -446,7 +446,7 @@ gtk_scale_allocate_mark (GtkGizmo            *gizmo,
         indicator_alloc.x = allocation->x + allocation->width - indicator_width;
       else
         indicator_alloc.x = allocation->x;
-      indicator_alloc.y = mark->stop_position - indicator_height / 2;
+      indicator_alloc.y = indicator_height / 2;
       indicator_alloc.width = indicator_width;
       indicator_alloc.height = indicator_height;
     }
