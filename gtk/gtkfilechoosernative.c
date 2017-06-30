@@ -192,6 +192,7 @@
 enum {
   MODE_FALLBACK,
   MODE_WIN32,
+  MODE_QUARTZ,
   MODE_PORTAL,
 };
 
@@ -704,6 +705,7 @@ gtk_file_chooser_native_get_files (GtkFileChooser *chooser)
     {
     case MODE_PORTAL:
     case MODE_WIN32:
+    case MODE_QUARTZ:
       return g_slist_copy_deep (self->custom_files, (GCopyFunc)g_object_ref, NULL);
 
     case MODE_FALLBACK:
@@ -722,6 +724,11 @@ gtk_file_chooser_native_show (GtkNativeDialog *native)
 #ifdef GDK_WINDOWING_WIN32
   if (gtk_file_chooser_native_win32_show (self))
     self->mode = MODE_WIN32;
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+  if (gtk_file_chooser_native_quartz_show (self))
+    self->mode = MODE_QUARTZ;
 #endif
 
   if (self->mode == MODE_FALLBACK &&
@@ -745,6 +752,11 @@ gtk_file_chooser_native_hide (GtkNativeDialog *native)
     case MODE_WIN32:
 #ifdef GDK_WINDOWING_WIN32
       gtk_file_chooser_native_win32_hide (self);
+#endif
+      break;
+    case MODE_QUARTZ:
+#ifdef GDK_WINDOWING_QUARTZ
+      gtk_file_chooser_native_quartz_hide (self);
 #endif
       break;
     case MODE_PORTAL:
