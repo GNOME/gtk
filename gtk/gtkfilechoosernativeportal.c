@@ -180,6 +180,7 @@ open_file_msg_cb (GObject *source_object,
   GtkFileChooserNative *self = data->self;
   GDBusMessage *reply;
   GError *error = NULL;
+  g_autofree char *handle = NULL;
 
   reply = g_dbus_connection_send_message_with_reply_finish (data->connection, res, &error);
 
@@ -197,8 +198,7 @@ open_file_msg_cb (GObject *source_object,
       return;
     }
 
-  g_variant_get_child (g_dbus_message_get_body (reply), 0, "o",
-                       &data->portal_handle);
+  g_variant_get_child (g_dbus_message_get_body (reply), 0, "o", &handle);
 
   if (data->hidden)
     {
@@ -207,8 +207,13 @@ open_file_msg_cb (GObject *source_object,
       filechooser_portal_data_free (data);
       self->mode_data = NULL;
     }
-  else
+  else if (strcmp (handle, data->portal_handle) != 0)
     {
+      g_free (data->portal_handle);
+      data->portal_handle = g_steal_pointer (&handle);
+      g_dbus_connection_signal_unsubscribe (data->connection,
+                                            data->portal_response_signal_id);
+
       data->portal_response_signal_id =
         g_dbus_connection_signal_subscribe (data->connection,
                                             "org.freedesktop.portal.Desktop",
@@ -289,14 +294,42 @@ show_portal_file_chooser (GtkFileChooserNative *self,
   GVariantBuilder opt_builder;
   gboolean multiple;
   const char *title;
+  char *token;
+  char *sender;
+  int i;
 
   message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
                                             "/org/freedesktop/portal/desktop",
                                             "org.freedesktop.portal.FileChooser",
                                             data->method_name);
 
+  token = g_strdup_printf ("gtk%d", g_random_int_range (0, G_MAXINT));
+  sender = g_strdup (g_dbus_connection_get_unique_name (data->connection) + 1);
+  for (i = 0; sender[i]; i++)
+    if (sender[i] == '.')
+      sender[i] = '_';
+
+  data->portal_handle = g_strdup_printf ("/org/fredesktop/portal/desktop/request/%s/%s", sender, token);
+  g_free (sender);
+
+  data->portal_response_signal_id =
+        g_dbus_connection_signal_subscribe (data->connection,
+                                            "org.freedesktop.portal.Desktop",
+                                            "org.freedesktop.portal.Request",
+                                            "Response",
+                                            data->portal_handle,
+                                            NULL,
+                                            G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
+                                            response_cb,
+                                            self, NULL);
+
   multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self));
   g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
+
+  g_variant_builder_add (&opt_builder, "{sv}", "handle_token",
+                         g_variant_new_string (token));
+  g_free (token);
+
   g_variant_builder_add (&opt_builder, "{sv}", "multiple",
                          g_variant_new_boolean (multiple));
   if (self->accept_label)
