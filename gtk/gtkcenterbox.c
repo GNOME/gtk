@@ -448,7 +448,7 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
 
       for (i = 0; i < 3; i++)
         {
-          if (gtk_widget_get_valign (child[i]) == GTK_ALIGN_BASELINE)
+          if (child[i] && gtk_widget_get_valign (child[i]) == GTK_ALIGN_BASELINE)
             {
               int child_min_height, child_nat_height;
               int child_min_baseline, child_nat_baseline;
