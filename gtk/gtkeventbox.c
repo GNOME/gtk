@@ -30,6 +30,7 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtksizerequest.h"
+#include "gtkwidgetprivate.h"
 
 
 /**
@@ -106,7 +107,7 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
 static void
 gtk_event_box_init (GtkEventBox *event_box)
 {
-  gtk_widget_set_has_window (GTK_WIDGET (event_box), TRUE);
+  gtk_widget_set_has_window (GTK_WIDGET (event_box), FALSE);
 
   event_box->priv = gtk_event_box_get_instance_private (event_box);
   event_box->priv->above_child = FALSE;
@@ -370,40 +371,16 @@ gtk_event_box_realize (GtkWidget *widget)
 {
   GtkEventBoxPrivate *priv;
   GtkAllocation allocation;
-  GdkWindow *window;
-  gboolean visible_window;
 
   priv = GTK_EVENT_BOX (widget)->priv;
 
-  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_get_window_allocation (widget, &allocation);
 
-  gtk_widget_set_realized (widget, TRUE);
+  GTK_WIDGET_CLASS (gtk_event_box_parent_class)->realize (widget);
 
-  visible_window = gtk_widget_get_has_window (widget);
-  if (visible_window)
+  if (priv->above_child)
     {
-      window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                     GDK_ALL_EVENTS_MASK,
-                                     &allocation);
-
-      gtk_widget_set_window (widget, window);
-      gtk_widget_register_window (widget, window);
-    }
-  else
-    {
-      window = gtk_widget_get_parent_window (widget);
-      gtk_widget_set_window (widget, window);
-      g_object_ref (window);
-    }
-
-  if (!visible_window || priv->above_child)
-    {
-      if (visible_window)
-        {
-          allocation.x = 0;
-          allocation.y = 0;
-        }
-      priv->event_window = gdk_window_new_input (window,
+      priv->event_window = gdk_window_new_input (gtk_widget_get_window (widget),
                                                  GDK_ALL_EVENTS_MASK,
                                                  &allocation);
       gtk_widget_register_window (widget, priv->event_window);
@@ -483,13 +460,6 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
         gdk_window_move_resize (priv->event_window,
                                 child_allocation.x,
                                 child_allocation.y,
-                                child_allocation.width,
-                                child_allocation.height);
-
-      if (gtk_widget_get_has_window (widget))
-        gdk_window_move_resize (gtk_widget_get_window (widget),
-                                allocation->x,
-                                allocation->y,
                                 child_allocation.width,
                                 child_allocation.height);
     }
