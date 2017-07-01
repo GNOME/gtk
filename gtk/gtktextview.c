@@ -5905,11 +5905,12 @@ gtk_text_view_snapshot (GtkWidget   *widget,
   GtkStyleContext *context;
   graphene_rect_t bounds;
   cairo_t *cr;
+  int width, height;
 
+  gtk_widget_get_content_size (widget, &width, &height);
   graphene_rect_init (&bounds,
                       0, 0,
-                      gtk_widget_get_allocated_width (widget),
-                      gtk_widget_get_allocated_height (widget));
+                      width, height);
 
   cr = gtk_snapshot_append_cairo (snapshot, &bounds, "GtkTextView");
 
