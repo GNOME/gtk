@@ -1840,6 +1840,9 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
 
   gtk_widget_get_content_size (widget, &widget_width, &widget_height);
   x = y = 0;
+  width = widget_width;
+  height = widget_height;
+
   pos_x = pos_y = 0;
 
   switch (priv->active_transition_type)
