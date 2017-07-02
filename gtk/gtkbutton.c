@@ -183,6 +183,13 @@ gtk_button_remove (GtkContainer *container, GtkWidget *child)
 }
 
 static void
+gtk_button_unmap (GtkWidget *widget)
+{
+  GTK_BUTTON (widget)->priv->in_button = FALSE;
+  GTK_WIDGET_CLASS (gtk_button_parent_class)->unmap (widget);
+}
+
+static void
 gtk_button_class_init (GtkButtonClass *klass)
 {
   GObjectClass *gobject_class;
@@ -208,6 +215,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->leave_notify_event = gtk_button_leave_notify;
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
+  widget_class->unmap = gtk_button_unmap;
 
   container_class->add    = gtk_button_add;
   container_class->remove = gtk_button_remove;
