@@ -4186,7 +4186,6 @@ static void
 gtk_text_view_size_allocate (GtkWidget *widget,
                              GtkAllocation *allocation)
 {
-  GtkAllocation widget_allocation;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   gint width, height;
@@ -4195,17 +4194,11 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
-  gboolean size_changed;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
   DV(g_print(G_STRLOC"\n"));
-
-  gtk_widget_get_allocation (widget, &widget_allocation);
-  size_changed =
-    widget_allocation.width != allocation->width ||
-    widget_allocation.height != allocation->height;
 
   /* distribute width/height among child windows. Ensure all
    * windows get at least a 1x1 allocation.
@@ -4304,12 +4297,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    * chance to run. So we do the work here. 
    */
   gtk_text_view_flush_first_validate (text_view);
-
-  /* widget->window doesn't get auto-redrawn as the layout is computed, so has to
-   * be invalidated
-   */
-  if (size_changed)
-    gtk_widget_queue_draw (widget);
 
   gtk_widget_set_clip (widget, allocation);
 }
