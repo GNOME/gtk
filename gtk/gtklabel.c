@@ -4183,25 +4183,6 @@ gtk_label_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_label_parent_class)->unmap (widget);
 }
 
-static void
-window_to_layout_coords (GtkLabel *label,
-                         gint     *x,
-                         gint     *y)
-{
-  GtkAllocation allocation;
-  gint lx, ly;
-
-  /* get layout location in widget->window coords */
-  get_layout_location (label, &lx, &ly);
-  _gtk_widget_get_allocation (GTK_WIDGET (label), &allocation);
-
-  *x += allocation.x; /* go to widget->window */
-  *x -= lx;                   /* go to layout */
-
-  *y += allocation.y; /* go to widget->window */
-  *y -= ly;                   /* go to layout */
-}
-
 static gboolean
 get_layout_index (GtkLabel *label,
                   gint      x,
@@ -4213,12 +4194,16 @@ get_layout_index (GtkLabel *label,
   const gchar *cluster;
   const gchar *cluster_end;
   gboolean inside;
+  int lx, ly;
 
   *index = 0;
 
   gtk_label_ensure_layout (label);
+  get_layout_location (label, &lx, &ly);
 
-  window_to_layout_coords (label, &x, &y);
+  /* Translate x/y to layout position */
+  x -= lx;
+  y -= ly;
 
   x *= PANGO_SCALE;
   y *= PANGO_SCALE;
