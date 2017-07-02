@@ -275,8 +275,6 @@ struct _GtkTextViewPrivate
 
   guint accepts_tab : 1;
 
-  guint width_changed : 1;
-
   /* debug flag - means that we've validated onscreen since the
    * last "invalidate" signal from the layout
    */
@@ -2607,9 +2605,6 @@ gtk_text_view_update_adjustments (GtkTextView *text_view)
 
   if (priv->width != width || priv->height != height)
     {
-      if (priv->width != width)
-	priv->width_changed = TRUE;
-
       priv->width = width;
       priv->height = height;
 
@@ -4194,17 +4189,19 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
+  GdkRectangle window_alloc;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
   DV(g_print(G_STRLOC"\n"));
 
+  gtk_widget_get_window_allocation (widget, &window_alloc);
   /* distribute width/height among child windows. Ensure all
    * windows get at least a 1x1 allocation.
    */
 
-  width = allocation->width;
+  width = window_alloc.width;
 
   if (priv->left_window)
     left_rect.width = priv->left_window->requisition.width;
@@ -4225,7 +4222,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   top_rect.width = text_rect.width;
   bottom_rect.width = text_rect.width;
 
-  height = allocation->height;
+  height = window_alloc.height;
 
   if (priv->top_window)
     top_rect.height = priv->top_window->requisition.height;
@@ -4247,8 +4244,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   right_rect.height = text_rect.height;
 
   /* Origins */
-  left_rect.x = allocation->x;
-  top_rect.y = allocation->y;
+  left_rect.x = window_alloc.x;
+  top_rect.y = window_alloc.y;
 
   text_rect.x = left_rect.x + left_rect.width;
   text_rect.y = top_rect.y + top_rect.height;
@@ -5875,7 +5872,6 @@ paint_border_window (GtkTextView     *text_view,
   gtk_style_context_save_to_node (context, text_window->css_node);
 
   cairo_save (cr);
-  gtk_cairo_transform_to_window (cr, GTK_WIDGET (text_view), window);
   gtk_render_background (context, cr, 0, 0, w, h);
   cairo_restore (cr);
 
@@ -5888,7 +5884,6 @@ gtk_text_view_snapshot (GtkWidget   *widget,
 {
   GtkTextViewPrivate *priv = ((GtkTextView *)widget)->priv;
   GSList *tmp_list;
-  GdkWindow *window;
   GtkStyleContext *context;
   graphene_rect_t bounds;
   cairo_t *cr;
@@ -5905,13 +5900,9 @@ gtk_text_view_snapshot (GtkWidget   *widget,
 
   text_window_set_padding (GTK_TEXT_VIEW (widget), context);
 
-  window = gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
-                                     GTK_TEXT_WINDOW_TEXT);
-
   DV(g_print (">Exposed ("G_STRLOC")\n"));
 
   cairo_save (cr);
-  gtk_cairo_transform_to_window (cr, widget, window);
   draw_text (widget, cr); 
   cairo_restore (cr);
 
@@ -8722,20 +8713,6 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
     {
       dx = priv->xoffset - (gint)gtk_adjustment_get_value (adjustment);
       priv->xoffset = (gint)gtk_adjustment_get_value (adjustment) - priv->left_padding;
-
-      /* If the change is due to a size change we need 
-       * to invalidate the entire text window because there might be
-       * right-aligned or centered text 
-       */
-      if (priv->width_changed)
-	{
-          GdkRectangle *rect = &priv->text_window->allocation;
-          gtk_widget_queue_draw_area (GTK_WIDGET (text_view),
-                                      rect->x, rect->y,
-                                      rect->width, rect->height);
-	  
-	  priv->width_changed = FALSE;
-	}
     }
   else if (adjustment == priv->vadjustment)
     {
@@ -8863,6 +8840,8 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
   if (priv->text_handle)
     gtk_text_view_update_handles (text_view,
                                   _gtk_text_handle_get_mode (priv->text_handle));
+
+  gtk_widget_queue_draw (GTK_WIDGET (text_view));
 
   DV(g_print(">End scroll offset changed handler ("G_STRLOC")\n"));
 }
@@ -9875,6 +9854,10 @@ text_window_invalidate_rect (GtkTextWindow *win,
 {
   GtkTextViewPrivate *priv = GTK_TEXT_VIEW (win->widget)->priv;
   GdkRectangle window_rect;
+
+  /* TODO: Remove this and fix the actual invalidation? */
+  gtk_widget_queue_draw (GTK_WIDGET (win->widget));
+  return;
 
   if (!win->bin_window)
     return;
