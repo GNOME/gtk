@@ -174,55 +174,67 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
 
   // GTK_FILE_CHOOSER_ACTION_SAVE and GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
   if (data->save)
-  {
-    NSSavePanel *panel = [[NSSavePanel savePanel] retain];
-
-    /*if ([panel respondsToSelector:@selector(setShowsTagField:)])
     {
-      [(id<CanSetShowsTagField>)panel setShowsTagField:NO];
-    }
-    */
 
-    if (!data->folder && !data->create_folders)
-    {
-      [panel setCanCreateDirectories:NO];
-    }
-    else
-    {
-      [panel setCanCreateDirectories:YES];
-    }
+      /*if ([panel respondsToSelector:@selector(setShowsTagField:)])
+        {
+          [(id<CanSetShowsTagField>)panel setShowsTagField:NO];
+        }
+      */
 
-    data->panel = panel;
-  }
-  // GTK_FILE_CHOOSER_ACTION_OPEN and GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
+      // GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
+      if (data->folder)
+        {
+          NSOpenPanel *panel = [[NSOpenPanel openPanel] retain];
+          [panel setCanChooseDirectories:YES];
+          [panel setCanChooseFiles:NO];
+          [panel setCanCreateDirectories:YES];
+          data->panel = panel;
+        }
+      // GTK_FILE_CHOOSER_ACTION_SAVE
+      else
+        {
+          NSSavePanel *panel = [[NSSavePanel savePanel] retain];
+          if (data->create_folders)
+            {
+              [panel setCanCreateDirectories:YES];
+            }
+          else
+            {
+              [panel setCanCreateDirectories:NO];
+            }
+          data->panel = panel;
+        }
+    }
+    // GTK_FILE_CHOOSER_ACTION_OPEN and GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
   else
-  {
-    NSOpenPanel *panel = [[NSOpenPanel openPanel] retain];
+    {
+      NSOpenPanel *panel = [[NSOpenPanel openPanel] retain];
 
-    if (data->select_multiple)
-    {
-      [panel setAllowsMultipleSelection:YES];
-    }
-    if (data->folder)
-    {
-      [panel setCanChooseDirectories:YES];
-      [panel setCanChooseFiles:NO];
-    }
-    else
-    {
-      [panel setCanChooseDirectories:NO];
-      [panel setCanChooseFiles:YES];
-    }
+      if (data->select_multiple)
+        {
+          [panel setAllowsMultipleSelection:YES];
+        }
+      if (data->folder)
+        {
+          [panel setCanChooseDirectories:YES];
+          [panel setCanChooseFiles:NO];
+        }
+      else
+      {
+        [panel setCanChooseDirectories:NO];
+        [panel setCanChooseFiles:YES];
+      }
 
-    data->panel = panel;
+      data->panel = panel;
   }
 
   [data->panel setReleasedWhenClosed:YES];
 
   if (data->show_hidden)
-  {
-    [data->panel setShowsHiddenFiles:YES];
-  }
+    {
+      [data->panel setShowsHiddenFiles:YES];
+    }
 
   if (data->accept_label)
     [data->panel setPrompt:[NSString stringWithUTF8String:data->accept_label]];
@@ -298,7 +310,7 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
     {
       [data->panel setLevel:NSModalPanelWindowLevel];
       [data->panel beginWithCompletionHandler:handler];
-  }
+    }
 
   return TRUE;
 }
