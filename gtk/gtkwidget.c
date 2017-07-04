@@ -15666,15 +15666,14 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
                            GtkWidget   *child,
                            GtkSnapshot *snapshot)
 {
-  GtkAllocation content_allocation;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (child);
   int x, y;
 
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
 
-  _gtk_widget_get_allocation (child, &content_allocation);
-  x = content_allocation.x;
-  y = content_allocation.y;
+  x = priv->allocation.x;
+  y = priv->allocation.y;
 
   gtk_snapshot_offset (snapshot, x, y);
   gtk_widget_snapshot (child, snapshot);
