@@ -299,12 +299,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 	      min_baseline = -1;
 	      nat_baseline = -1;
 	    }
-	  else if (gtk_widget_get_valign (widget) != GTK_ALIGN_BASELINE)
-	    {
-	      /* Ignore requested baseline for non-aligned widgets */
-	      min_baseline = -1;
-	      nat_baseline = -1;
-	    }
           else if (min_baseline > reported_min_size ||
                    nat_baseline > reported_nat_size ||
                    min_baseline < 0 ||

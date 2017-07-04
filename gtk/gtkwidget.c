@@ -3793,6 +3793,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->last_child = NULL;
   priv->prev_sibling = NULL;
   priv->next_sibling = NULL;
+  priv->allocated_baseline = -1;
+  priv->allocated_size_baseline = -1;
 
   priv->sensitive = TRUE;
   priv->redraw_on_alloc = TRUE;
@@ -5366,9 +5368,6 @@ invalidate:
  * margins, and applying the widget’s #GtkWidget:halign and
  * #GtkWidget:valign properties.
  *
- * If the child widget does not have a valign of %GTK_ALIGN_BASELINE the
- * baseline argument is ignored and -1 is used instead.
- *
  * Since: 3.10
  **/
 void
@@ -5435,12 +5434,6 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
                  baseline);
     }
 #endif /* G_ENABLE_DEBUG */
-
-  /* Never pass a baseline to a child unless it requested it.
-     This means containers don't have to manually check for this. */
-  if (baseline != -1 &&
-      gtk_widget_get_valign (widget) != GTK_ALIGN_BASELINE)
-    baseline = -1;
 
   alloc_needed = priv->alloc_needed;
   /* Preserve request/allocate ordering */
