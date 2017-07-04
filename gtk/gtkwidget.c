@@ -15134,20 +15134,43 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
 
-  /* We should be offset to the widget allocation at this point */
+  /* We should be offset to priv->allocation at this point */
 
   if (GTK_DISPLAY_DEBUG_CHECK (display, LAYOUT))
     {
       graphene_rect_t bounds;
-      GdkRGBA margin_color  = {0.3, 0.3, 0, 0.6};
-      GdkRGBA padding_color = {0.3, 0, 0.3, 0.6};
+      GdkRGBA widget_margin_color = {0.7, 0,   0, 0.6};
+      GdkRGBA margin_color        = {0.7, 0.7, 0, 0.6};
+      GdkRGBA padding_color       = {0.7, 0, 0.7, 0.6};
 
       style = gtk_css_node_get_style (priv->cssnode);
       get_box_margin (style, &margin);
       get_box_border (style, &border);
       get_box_padding (style, &padding);
 
-      /* Margins */
+      /* Widget margins */
+      graphene_rect_init (&bounds,
+                          0, -priv->margin.top,
+                          priv->allocation.width, priv->margin.top);
+      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds, "Widget margin top");
+
+      graphene_rect_init (&bounds,
+                          0, priv->allocation.height,
+                          priv->allocation.width, priv->margin.bottom);
+      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds, "Widget margin bottom");
+
+      graphene_rect_init (&bounds,
+                          -priv->margin.left, 0,
+                          priv->margin.left, priv->allocation.height);
+      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds, "Widget margin left");
+
+      graphene_rect_init (&bounds,
+                          priv->allocation.width, 0,
+                          priv->margin.right, priv->allocation.height);
+      gtk_snapshot_append_color (snapshot, &widget_margin_color, &bounds, "Widget margin right");
+
+
+      /* CSS Margins */
       graphene_rect_init (&bounds,
                           0, 0,
                           priv->allocation.width, margin.top);
