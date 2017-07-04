@@ -61,6 +61,7 @@ typedef struct {
   char *accept_label;
   char *cancel_label;
   char *title;
+  char *message;
 
   GSList *shortcut_uris;
 
@@ -165,6 +166,7 @@ filechooser_quartz_data_free (FileChooserQuartzData *data)
   g_free (data->accept_label);
   g_free (data->cancel_label);
   g_free (data->title);
+  g_free (data->message);
   g_free (data);
 }
 
@@ -241,6 +243,9 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
 
   if (data->title)
     [data->panel setTitle:[NSString stringWithUTF8String:data->title]];
+
+  if (data->message)
+    [data->panel setMessage:[NSString stringWithUTF8String:data->message]];
 
   if (data->current_file)
     {
@@ -328,13 +333,13 @@ strip_mnemonic (const gchar *s)
   pango_parse_markup (escaped, -1, '_', NULL, &ret, NULL, NULL);
 
   if (ret != NULL)
-  {
-    return ret;
-  }
+    {
+      return ret;
+    }
   else
-  {
-    return g_strdup (s);
-  }
+    {
+      return g_strdup (s);
+    }
 } 
 
 gboolean
@@ -347,9 +352,18 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
   guint update_preview_signal;
   GSList *filters, *l;
   int n_filters, i;
+  GtkWidget *extra_widget = NULL;
+  char *message = NULL;
 
-  if (gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self)) != NULL)
-    return FALSE;
+  extra_widget = gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self));
+  // if the extra_widget is a GtkLabel, then use its text to set the dialog message
+  if (extra_widget != NULL)
+    {
+      if (!GTK_IS_LABEL (extra_widget))
+        return FALSE;
+      else
+        message = g_strdup (gtk_label_get_text (GTK_LABEL (extra_widget)));
+    }
 
   update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
   if (g_signal_has_handler_pending (self, update_preview_signal, 0, TRUE))
@@ -406,6 +420,8 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
 
   data->title =
     g_strdup (gtk_native_dialog_get_title (GTK_NATIVE_DIALOG (self)));
+
+  data->message = message;
 
   if (self->current_file)
     data->current_file = g_object_ref (self->current_file);
