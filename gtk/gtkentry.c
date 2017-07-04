@@ -3110,7 +3110,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
   GtkAllocation child_clip;
   gint i;
 
-  priv->text_baseline = -1;
+  priv->text_baseline = gtk_widget_get_allocated_baseline (widget);
 
   priv->text_x = 0;
   priv->text_width = allocation->width;
