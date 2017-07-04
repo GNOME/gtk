@@ -15165,7 +15165,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
 
       graphene_rect_init (&bounds,
                           priv->allocation.width - margin.right, margin.top,
-                          margin.left, priv->allocation.height - margin.top - margin.bottom);
+                          margin.right, priv->allocation.height - margin.top - margin.bottom);
       gtk_snapshot_append_color (snapshot, &margin_color, &bounds, "Margin right");
 
 
