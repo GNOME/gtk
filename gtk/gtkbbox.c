@@ -731,10 +731,13 @@ gtk_button_box_measure (GtkWidget      *widget,
       else
         *minimum = *natural = requisition.height;
 
-      if (minimum_baseline)
-        *minimum_baseline = baseline;
-      if (natural_baseline)
-        *natural_baseline = baseline;
+      if (orientation == GTK_ORIENTATION_VERTICAL)
+        {
+          if (minimum_baseline)
+            *minimum_baseline = baseline;
+          if (natural_baseline)
+            *natural_baseline = baseline;
+        }
     }
 }
 
