@@ -966,6 +966,36 @@ gtk_image_set_from_file   (GtkImage    *image,
   g_object_thaw_notify (G_OBJECT (image));
 }
 
+#ifndef GDK_PIXBUF_MAGIC_NUMBER
+#define GDK_PIXBUF_MAGIC_NUMBER (0x47646b50)    /* 'GdkP' */
+#endif
+
+static gboolean
+resource_is_pixdata (const gchar *resource_path)
+{
+  const guint8 *stream;
+  guint32 magic;
+  gsize data_size;
+  GBytes *bytes;
+  gboolean ret = FALSE;
+
+  bytes = g_resources_lookup_data (resource_path, 0, NULL);
+  if (bytes == NULL)
+    return FALSE;
+
+  stream = g_bytes_get_data (bytes, &data_size);
+  if (data_size < sizeof(guint32))
+    goto out;
+
+  magic = (stream[0] << 24) + (stream[1] << 16) + (stream[2] << 8) + stream[3];
+  if (magic == GDK_PIXBUF_MAGIC_NUMBER)
+    ret = TRUE;
+
+out:
+  g_bytes_unref (bytes);
+  return ret;
+}
+
 /**
  * gtk_image_set_from_resource:
  * @image: a #GtkImage
@@ -979,7 +1009,7 @@ gtk_image_set_from_resource (GtkImage    *image,
 {
   GtkImagePrivate *priv;
   GdkPixbufAnimation *animation;
-  gint scale_factor;
+  gint scale_factor = 1;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -995,7 +1025,10 @@ gtk_image_set_from_resource (GtkImage    *image,
       return;
     }
 
-  animation = load_scalable_with_loader (image, NULL, resource_path, &scale_factor);
+  if (resource_is_pixdata (resource_path))
+    animation = gdk_pixbuf_animation_new_from_resource (resource_path, NULL);
+  else
+    animation = load_scalable_with_loader (image, NULL, resource_path, &scale_factor);
 
   if (animation == NULL)
     {
