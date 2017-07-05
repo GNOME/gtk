@@ -278,8 +278,6 @@ struct _GtkWidget
  * @touch_event:
  * @queue_draw_region: Invalidates the area of widget defined by
  *   region.
- * @queue_draw_child: Child wants to be redrawn. The region given is in
- *   the child's coordinate system.
  * @snapshot: Signal emitted when a widget is supposed to create a snapshot
  *   of itself.
  */

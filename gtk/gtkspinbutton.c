@@ -2292,6 +2292,7 @@ gtk_spin_button_get_text (GtkSpinButton *spin_button)
 /**
  * gtk_spin_button_set_text:
  * @spin_button: a #GtkSpinButton
+ * @text: The text to set
  *
  * Sets the current text of the spinbutton. Note that setting this will not change
  * the value of the adjustment @spin_button.

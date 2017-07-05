@@ -37,6 +37,8 @@ gtk_about_dialog_get_logo
 gtk_about_dialog_set_logo
 gtk_about_dialog_get_logo_icon_name
 gtk_about_dialog_set_logo_icon_name
+gtk_about_dialog_get_system_information
+gtk_about_dialog_set_system_information
 gtk_about_dialog_add_credit_section
 gtk_show_about_dialog
 <SUBSECTION Standard>
@@ -363,6 +365,8 @@ GTK_CENTER_BOX_CLASS
 GTK_IS_CENTER_BOX
 GTK_IS_CENTER_BOX_CLASS
 GTK_CENTER_BOX_GET_CLASS
+<SUBSECTION Private>
+gtk_center_box_get_type
 </SECTION>
 
 <SECTION>
@@ -795,7 +799,6 @@ gtk_dialog_set_default_response
 gtk_dialog_set_response_sensitive
 gtk_dialog_get_response_for_widget
 gtk_dialog_get_widget_for_response
-gtk_dialog_get_action_area
 gtk_dialog_get_content_area
 gtk_dialog_get_header_bar
 
@@ -1551,7 +1554,6 @@ GtkImageGIconData
 GtkIMContext
 GtkIMContextClass
 GtkIMContextInfo
-gtk_im_context_set_client_window
 gtk_im_context_get_preedit_string
 gtk_im_context_filter_keypress
 gtk_im_context_focus_in
@@ -4472,7 +4474,6 @@ gtk_volume_button_get_type
 <TITLE>GtkSnapshot</TITLE>
 GtkSnapshot
 gtk_snapshot_push
-gtk_snapshot_push_node
 gtk_snapshot_push_transform
 gtk_snapshot_push_opacity
 gtk_snapshot_push_color_matrix
@@ -4482,8 +4483,6 @@ gtk_snapshot_push_rounded_clip
 gtk_snapshot_push_cross_fade
 gtk_snapshot_push_blend
 gtk_snapshot_pop
-gtk_snapshot_set_transform
-gtk_snapshot_transform
 gtk_snapshot_offset
 gtk_snapshot_get_offset
 gtk_snapshot_append_node
@@ -4895,10 +4894,8 @@ gtk_window_group_get_type
 gtk_disable_setlocale
 gtk_get_default_language
 gtk_get_locale_direction
-gtk_parse_args
 gtk_init
 gtk_init_check
-gtk_get_option_group
 gtk_events_pending
 gtk_main
 gtk_main_level
@@ -4930,6 +4927,8 @@ gtk_get_current_event_time
 gtk_get_current_event_state
 gtk_get_current_event_device
 gtk_get_event_widget
+gtk_get_event_target
+gtk_get_event_target_with_type
 gtk_propagate_event
 
 <SUBSECTION Private>
