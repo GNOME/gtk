@@ -799,7 +799,7 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
  *
  * Gets the start widget.
  *
- * Returns: the start widget.
+ * Returns: (transfer none): the start widget.
  *
  * Since: 3.92
  */
@@ -815,7 +815,7 @@ gtk_center_box_get_start_widget (GtkCenterBox *self)
  *
  * Gets the center widget.
  *
- * Returns: the center widget.
+ * Returns: (transfer none): the center widget.
  *
  * Since: 3.92
  */
@@ -831,7 +831,7 @@ gtk_center_box_get_center_widget (GtkCenterBox *self)
  *
  * Gets the end widget.
  *
- * Returns: the end widget.
+ * Returns: (transfer none): the end widget.
  *
  * Since: 3.92
  */
