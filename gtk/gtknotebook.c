@@ -2210,8 +2210,10 @@ static gboolean
 gtk_notebook_page_tab_label_is_visible (GtkNotebookPage *page)
 {
   return page->tab_label &&
-         gtk_widget_is_drawable (page->tab_widget) &&
-         gtk_widget_is_drawable (page->tab_label);
+         gtk_widget_get_visible (page->tab_widget) &&
+         gtk_widget_get_child_visible (page->tab_widget) &&
+         gtk_widget_get_visible (page->tab_label) &&
+         gtk_widget_get_child_visible (page->tab_label);
 }
 
 static GList*
@@ -5107,8 +5109,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
           gtk_widget_size_allocate (page->tab_widget, &fixed_allocation);
           gtk_widget_get_clip (page->tab_widget, &page_clip);
         }
-      else if (gtk_widget_is_drawable (page->tab_widget) &&
-               gtk_widget_is_drawable (page->tab_label))
+      else if (gtk_notebook_page_tab_label_is_visible (page))
         {
           gtk_widget_size_allocate (page->tab_widget, &child_allocation);
           gtk_widget_get_clip (page->tab_widget, &page_clip);
