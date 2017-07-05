@@ -5046,6 +5046,12 @@ gtk_widget_queue_allocate (GtkWidget *widget)
   gtk_widget_set_alloc_needed (widget);
 }
 
+static inline gboolean
+gtk_widget_get_resize_needed (GtkWidget *widget)
+{
+  return widget->priv->resize_needed;
+}
+
 /*
  * gtk_widget_queue_resize_internal:
  * @widget: a #GtkWidget
