@@ -97,7 +97,7 @@ gdk_rgba_free (GdkRGBA *rgba)
  * Checks if an @rgba value is transparent. That is, drawing with the value
  * would not produce any change.
  *
- * Returns: %TRUE if the @rgab is clear
+ * Returns: %TRUE if the @rgba is clear
  *
  * Since: 3.90
  */
@@ -114,7 +114,7 @@ gdk_rgba_is_clear (const GdkRGBA *rgba)
  * Checks if an @rgba value is opaque. That is, drawing with the value
  * will not retain any results from previous contents.
  *
- * Returns: %TRUE if the @rgab is opaque
+ * Returns: %TRUE if the @rgba is opaque
  *
  * Since: 3.90
  */
