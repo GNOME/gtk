@@ -184,7 +184,7 @@ parse_rgb_value (const gchar  *str,
  *
  * Where “r”, “g”, “b” and “a” are respectively the red, green, blue and
  * alpha color values. In the last two cases, r g and b are either integers
- * in the range 0 to 255 or precentage values in the range 0% to 100%, and
+ * in the range 0 to 255 or percentage values in the range 0% to 100%, and
  * a is a floating point value in the range 0 to 1.
  *
  * Returns: %TRUE if the parsing succeeded
