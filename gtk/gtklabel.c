@@ -108,7 +108,7 @@
  * <object class="GtkLabel">
  *   <attributes>
  *     <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
- *     <attribute name="background" value="red" start="5" end="10"/>"
+ *     <attribute name="background" value="red" start="5" end="10"/>
  *   </attributes>
  * </object>
  * ]|
