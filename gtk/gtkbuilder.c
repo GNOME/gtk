@@ -62,10 +62,6 @@
  * specified in an XML format which can be roughly described by the
  * RELAX NG schema below. We refer to these descriptions as “GtkBuilder
  * UI definitions” or just “UI definitions” if the context is clear.
- * Do not confuse GtkBuilder UI Definitions with
- * [GtkUIManager UI Definitions][XML-UI], which are more limited in scope.
- * It is common to use `.ui` as the filename extension for files containing
- * GtkBuilder UI definitions.
  *
  * [RELAX NG Compact Syntax](https://git.gnome.org/browse/gtk+/tree/gtk/gtkbuilder.rnc)
  *

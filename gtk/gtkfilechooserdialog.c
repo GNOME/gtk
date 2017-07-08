@@ -45,7 +45,7 @@
  * SECTION:gtkfilechooserdialog
  * @Short_description: A file chooser dialog, suitable for “File/Open” or “File/Save” commands
  * @Title: GtkFileChooserDialog
- * @See_also: #GtkFileChooser, #GtkDialog, GtkFileChooserNative
+ * @See_also: #GtkFileChooser, #GtkDialog, #GtkFileChooserNative
  *
  * #GtkFileChooserDialog is a dialog box suitable for use with
  * “File/Open” or “File/Save as” commands.  This widget works by
