@@ -263,9 +263,6 @@
                 <property name="centered">True</property>
                 <property name="icon">icon-list</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkModelButton">
@@ -277,9 +274,6 @@
                 <property name="centered">True</property>
                 <property name="icon">icon-grid</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-              </packing>
             </child>
           </object>
         </child>
@@ -340,9 +334,6 @@
                 <property name="iconic">True</property>
                 <property name="centered">True</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkModelButton">
@@ -353,9 +344,6 @@
                 <property name="centered">True</property>
                 <property name="icon">icon-italic</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkModelButton">
@@ -366,9 +354,6 @@
                 <property name="centered">True</property>
                 <property name="icon">icon-strikethrough</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkModelButton">
@@ -379,9 +364,6 @@
                 <property name="centered">True</property>
                 <property name="icon">icon-underline</property>
               </object>
-              <packing>
-                <property name="expand">True</property>
-              </packing>
             </child>
           </object>
         </child>

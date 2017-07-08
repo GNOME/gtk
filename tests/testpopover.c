@@ -151,6 +151,7 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), combo, 2, 5, 1, 1);
 
 
+  g_signal_connect (win, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
   gtk_widget_show (win);
 
   gtk_main ();
