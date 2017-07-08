@@ -15360,21 +15360,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
   _gtk_widget_get_allocation (widget, &allocation);
 
-  if (!GTK_IS_WINDOW (widget) &&
-      !GTK_IS_POPOVER (widget))
-    {
-      gtk_snapshot_offset (snapshot, margin.left, margin.top);
-      gtk_css_style_snapshot_background (style,
-                                         snapshot,
-                                         allocation.width - margin.left - margin.right,
-                                         allocation.height - margin.top - margin.bottom);
-      gtk_css_style_snapshot_border (style,
-                                     snapshot,
-                                     allocation.width - margin.left - margin.right,
-                                     allocation.height - margin.top - margin.bottom);
-      gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
-    }
-
   if (mode == RENDER_DRAW)
     {
       cairo_t *cr;
@@ -15389,6 +15374,20 @@ gtk_widget_snapshot (GtkWidget   *widget,
     {
       if (opacity < 1.0)
         gtk_snapshot_push_opacity (snapshot, opacity, "Opacity<%s,%f>", G_OBJECT_TYPE_NAME (widget), opacity);
+
+      if (!GTK_IS_WINDOW (widget))
+        {
+          gtk_snapshot_offset (snapshot, margin.left, margin.top);
+          gtk_css_style_snapshot_background (style,
+                                             snapshot,
+                                             allocation.width - margin.left - margin.right,
+                                             allocation.height - margin.top - margin.bottom);
+          gtk_css_style_snapshot_border (style,
+                                         snapshot,
+                                         allocation.width - margin.left - margin.right,
+                                         allocation.height - margin.top - margin.bottom);
+          gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
+        }
 
       /* Offset to content allocation */
       gtk_snapshot_offset (snapshot, margin.left + padding.left + border.left, margin.top + border.top + padding.top);
@@ -15410,19 +15409,21 @@ gtk_widget_snapshot (GtkWidget   *widget,
           cairo_destroy (cr);
         }
 
+
+      if (gtk_widget_has_visible_focus (widget))
+        {
+          gtk_snapshot_offset (snapshot, margin.left, margin.top);
+          gtk_css_style_snapshot_outline (style,
+                                          snapshot,
+                                          allocation.width - margin.left - margin.right,
+                                          allocation.height - margin.top - margin.bottom);
+          gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
+        }
+
       if (opacity < 1.0)
         gtk_snapshot_pop (snapshot);
     }
 
-  if (gtk_widget_has_visible_focus (widget))
-    {
-      gtk_snapshot_offset (snapshot, margin.left, margin.top);
-      gtk_css_style_snapshot_outline (style,
-                                      snapshot,
-                                      allocation.width - margin.left - margin.right,
-                                      allocation.height - margin.top - margin.bottom);
-      gtk_snapshot_offset (snapshot, - margin.left, - margin.top);
-    }
 
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
