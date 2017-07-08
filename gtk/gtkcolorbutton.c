@@ -48,7 +48,7 @@
  * SECTION:gtkcolorbutton
  * @Short_description: A button to launch a color selection dialog
  * @Title: GtkColorButton
- * @See_also: #GtkColorSelectionDialog, #GtkFontButton
+ * @See_also: #GtkFontButton
  *
  * The #GtkColorButton is a button which displays the currently selected
  * color and allows to open a color selection dialog to change the color.
@@ -251,7 +251,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    * @widget: the object which received the signal.
    *
    * The ::color-set signal is emitted when the user selects a color.
-   * When handling this signal, use gtk_color_button_get_rgba() to
+   * When handling this signal, use gtk_color_chooser_get_rgba() to
    * find out which color was just selected.
    *
    * Note that this signal is only emitted when the user

@@ -2420,6 +2420,7 @@ gtk_get_event_target (const GdkEvent *event)
 /**
  * gtk_get_event_target_with_type:
  * @event: a #GdkEvent
+ * @type: the type to look for
  *
  * If @event is %NULL or the event was not associated with any widget,
  * returns %NULL, otherwise returns first widget found from the event

@@ -61,8 +61,7 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  * creating a drawing area, the application may want to connect to:
  *
  * - Mouse and button press signals to respond to input from
- *   the user. (Use gtk_widget_add_events() to enable events
- *   you wish to receive.)
+ *   the user.
  *
  * - The #GtkWidget::realize signal to take any necessary actions
  *   when the widget is instantiated on a particular display.
