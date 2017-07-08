@@ -20,6 +20,7 @@
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
 #include "gtkintl.h"
+#include "gtkpopoverprivate.h"
 
 
 /**
@@ -96,9 +97,12 @@
  * </object>
  * ]|
  *
- * Just like normal popovers created using gtk_popover_new_from_model,
- * #GtkPopoverMenu instances have a single css node called "popover"
- * and get the .menu style class.
+ * # CSS Nodes
+ *
+ * #GtkPopoverMenu is just a subclass of #GtkPopover that adds
+ * custom content to it, therefore it has the same CSS nodes.
+ * It is one of the cases that add a .menu style class to the
+ * popover's contents node.
  */
 
 struct _GtkPopoverMenu
@@ -140,7 +144,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   g_signal_connect (stack, "notify::visible-child-name",
                     G_CALLBACK (visible_submenu_changed), popover);
 
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
+  style_context = gtk_widget_get_style_context (gtk_popover_get_contents_widget (GTK_POPOVER (popover)));
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
 }
 
