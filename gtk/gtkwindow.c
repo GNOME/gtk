@@ -5254,8 +5254,8 @@ gtk_window_resize (GtkWindow *window,
 /**
  * gtk_window_get_size:
  * @window: a #GtkWindow
- * @width: (out) (nullable): return location for width, or %NULL
- * @height: (out) (nullable): return location for height, or %NULL
+ * @width: (out) (optional): return location for width, or %NULL
+ * @height: (out) (optional): return location for height, or %NULL
  *
  * Obtains the current size of @window.
  *
@@ -5555,9 +5555,9 @@ gtk_window_move (GtkWindow *window,
 /**
  * gtk_window_get_position:
  * @window: a #GtkWindow
- * @root_x: (out) (allow-none): return location for X coordinate of
+ * @root_x: (out) (optional): return location for X coordinate of
  *     gravity-determined reference point, or %NULL
- * @root_y: (out) (allow-none): return location for Y coordinate of
+ * @root_y: (out) (optional): return location for Y coordinate of
  *     gravity-determined reference point, or %NULL
  *
  * This function returns the position you need to pass to
