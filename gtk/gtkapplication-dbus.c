@@ -131,6 +131,9 @@ gtk_application_get_proxy_if_service_present (GDBusConnection *connection,
                                  NULL,
                                  error);
 
+  if (!proxy)
+    return NULL;
+
   /* is there anyone actually providing the service? */
   owner = g_dbus_proxy_get_name_owner (proxy);
   if (owner == NULL)
