@@ -5381,7 +5381,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 					GtkAllocation *allocation,
 					gint           baseline)
 {
-  GtkWidgetPrivate *priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle real_allocation;
   GdkRectangle old_allocation, old_clip;
   GdkRectangle adjusted_allocation;
@@ -5394,8 +5394,6 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   gint old_baseline;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
-
-  priv = widget->priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
