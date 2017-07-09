@@ -63,17 +63,45 @@ typedef struct {
   char *title;
   char *message;
 
-  GSList *shortcut_uris;
-
   GFile *current_folder;
   GFile *current_file;
   char *current_name;
 
-  NSArray<NSString *> *filters;
+  NSMutableArray<NSArray<NSString *> *> *filters;
+  NSMutableArray<NSString *> *filter_names;
+  NSComboBox *filter_combo_box;
 
   GSList *files;
   int response;
 } FileChooserQuartzData;
+
+@interface FilterComboBox : NSObject<NSComboBoxDelegate>
+{
+  FileChooserQuartzData *data;
+}
+- (id) initWithData:(FileChooserQuartzData *) quartz_data;
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification;
+@end
+
+@implementation FilterComboBox
+
+- (id) initWithData:(FileChooserQuartzData *) quartz_data
+{
+  [super init];
+  data = quartz_data;
+  return self;
+}
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification
+{
+  NSInteger selected_index = [data->filter_combo_box indexOfSelectedItem];
+  NSArray<NSString *> *filter = [data->filters objectAtIndex:selected_index];
+  // check for empty strings in filter -> indicates all filetypes should be allowed!
+  if ([filter containsObject:@""])
+    [data->panel setAllowedFileTypes:nil];
+  else
+    [data->panel setAllowedFileTypes:filter];
+}
+@end
 
 static GFile *
 ns_url_to_g_file (NSURL *url)
@@ -150,16 +178,21 @@ chooser_set_current_name (FileChooserQuartzData *data,
 static void
 filechooser_quartz_data_free (FileChooserQuartzData *data)
 {
-  int i;
+  
   if (data->filters)
     {
+      [data->filters release];
     }
 
+  if (data->filter_names)
+    {
+      [data->filter_names release];
+    }
+  
   g_clear_object (&data->current_folder);
   g_clear_object (&data->current_file);
   g_free (data->current_name);
 
-  g_slist_free_full (data->shortcut_uris, g_free);
   g_slist_free_full (data->files, g_object_unref);
   if (data->self)
     g_object_unref (data->self);
@@ -174,17 +207,9 @@ static gboolean
 filechooser_quartz_launch (FileChooserQuartzData *data)
 {
 
-  // GTK_FILE_CHOOSER_ACTION_SAVE and GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
   if (data->save)
     {
 
-      /*if ([panel respondsToSelector:@selector(setShowsTagField:)])
-        {
-          [(id<CanSetShowsTagField>)panel setShowsTagField:NO];
-        }
-      */
-
-      // GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
       if (data->folder)
         {
           NSOpenPanel *panel = [[NSOpenPanel openPanel] retain];
@@ -193,7 +218,6 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
           [panel setCanCreateDirectories:YES];
           data->panel = panel;
         }
-      // GTK_FILE_CHOOSER_ACTION_SAVE
       else
         {
           NSSavePanel *panel = [[NSSavePanel savePanel] retain];
@@ -208,7 +232,6 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
           data->panel = panel;
         }
     }
-    // GTK_FILE_CHOOSER_ACTION_OPEN and GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
   else
     {
       NSOpenPanel *panel = [[NSOpenPanel openPanel] retain];
@@ -274,7 +297,20 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
 
   if (data->filters)
     {
-      // TODO
+      // when filters have been provided, a combobox needs to be added
+      data->filter_combo_box = [[NSComboBox alloc] initWithFrame:NSMakeRect(0.0, 0.0, 200, 20)];
+      [data->filter_combo_box addItemsWithObjectValues:data->filter_names];
+      [data->filter_combo_box setEditable:NO];
+      [data->filter_combo_box setDelegate:[[FilterComboBox alloc] initWithData:data]];
+      [data->filter_combo_box selectItemAtIndex:0];
+      [data->filter_combo_box setToolTip:[NSString stringWithUTF8String:_("Select which types of files are shown")]];
+      [data->panel setAccessoryView:data->filter_combo_box];
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_11_AND_LATER
+      if (!data->save)
+        {
+          [(NSOpenPanel *) data->panel setAccessoryViewDisclosed:YES];
+        }
+#endif
     }
 
   data->response = GTK_RESPONSE_CANCEL;
@@ -342,6 +378,36 @@ strip_mnemonic (const gchar *s)
     }
 } 
 
+static gboolean
+file_filter_to_quartz (GtkFileFilter *file_filter,
+                       NSMutableArray<NSArray<NSString *> *> *filters,
+		       NSMutableArray<NSString *> *filter_names)
+{
+  const char *name;
+  NSArray<NSString *> *pattern_nsstrings;
+
+  pattern_nsstrings = _gtk_file_filter_get_as_pattern_nsstrings (file_filter);
+  if (pattern_nsstrings == NULL)
+    return FALSE;
+
+  name = gtk_file_filter_get_name (file_filter);
+  NSString *name_nsstring;
+  if (name == NULL)
+    {
+      name_nsstring = [pattern_nsstrings componentsJoinedByString:@","];;
+    }
+  else
+    {
+      name_nsstring = [NSString stringWithUTF8String:name];
+      [name_nsstring retain];
+    }
+
+  [filter_names addObject:name_nsstring];
+  [filters addObject:pattern_nsstrings];
+
+  return TRUE;
+}
+
 gboolean
 gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
 {
@@ -371,12 +437,30 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
 
   data = g_new0 (FileChooserQuartzData, 1);
 
-  // examine filters! TODO
+  // examine filters!
+  filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (self));
+  n_filters = g_slist_length (filters);
+  if (n_filters > 0)
+    {
+      data->filters = [NSMutableArray<NSArray<NSString *> *> arrayWithCapacity:n_filters];
+      [data->filters retain];
+      data->filter_names = [NSMutableArray<NSString *> arrayWithCapacity:n_filters];
+      [data->filter_names retain];
+
+      for (l = filters, i = 0; l != NULL; l = l->next, i++)
+        {
+          if (!file_filter_to_quartz (l->data, data->filters, data->filter_names))
+            {
+              filechooser_quartz_data_free (data);
+              return FALSE;
+            }
+        }
+    }
 
   self->mode_data = data;
   data->self = g_object_ref (self);
 
-  data->create_folders = gtk_file_chooser_get_create_folders( GTK_FILE_CHOOSER (self));
+  data->create_folders = gtk_file_chooser_get_create_folders (GTK_FILE_CHOOSER (self));
 
   // shortcut_folder_uris support seems difficult if not impossible 
 

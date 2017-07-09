@@ -20,10 +20,20 @@
 #define __GTK_FILE_FILTER_PRIVATE_H__
 
 #include <gtk/gtkfilefilter.h>
+#include <gdk/gdkconfig.h>
+
+#ifdef GDK_WINDOWING_QUARTZ
+#import <Foundation/Foundation.h>
+#endif
 
 G_BEGIN_DECLS
 
 char ** _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter);
+
+#ifdef GDK_WINDOWING_QUARTZ
+NSArray<NSString *> * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter);
+#endif
+
 
 G_END_DECLS
 
