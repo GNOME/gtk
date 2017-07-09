@@ -15572,7 +15572,7 @@ gtk_widget_forall (GtkWidget   *widget,
  * gtk_widget_snapshot_child:
  * @widget: a #GtkWidget
  * @child: a child of @widget
- * @snapshot: #GtkSnapshot as passed to the container. In particular, no
+ * @snapshot: #GtkSnapshot as passed to the widget. In particular, no
  *   calls to gtk_snapshot_offset() should have been applied by the
  *   parent.
  *
