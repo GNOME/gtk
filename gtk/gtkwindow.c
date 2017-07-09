@@ -1710,11 +1710,21 @@ edge_under_coordinates (GtkWindow     *window,
   _gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
   gtk_style_context_save_to_node (context, priv->decoration_node);
-  gtk_style_context_get_margin (context, &border);
-  gtk_style_context_restore (context);
 
-  handle_h = MIN (RESIZE_HANDLE_SIZE, allocation.width / 2);
-  handle_v = MIN (RESIZE_HANDLE_SIZE, allocation.height / 2);
+  if (priv->use_client_shadow)
+    {
+      handle_h = MIN (RESIZE_HANDLE_SIZE, allocation.width / 2);
+      handle_v = MIN (RESIZE_HANDLE_SIZE, allocation.height / 2);
+      gtk_style_context_get_margin (context, &border);
+    }
+  else
+    {
+      handle_h = 0;
+      handle_v = 0;
+      gtk_style_context_get_padding (context, &border);
+    }
+
+  gtk_style_context_restore (context);
 
   /* Check whether the click falls outside the handle area */
   if (x >= allocation.x + border.left + handle_h &&
