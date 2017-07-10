@@ -5383,7 +5383,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle real_allocation;
-  GdkRectangle old_allocation, old_clip;
+  GdkRectangle old_clip;
   GdkRectangle adjusted_allocation;
   gboolean alloc_needed;
   gboolean size_changed;
@@ -5391,7 +5391,6 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   gboolean position_changed;
   gint natural_width, natural_height, dummy;
   gint min_width, min_height;
-  gint old_baseline;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
 
@@ -5443,9 +5442,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   /* Preserve request/allocate ordering */
   priv->alloc_needed = FALSE;
 
-  old_allocation = priv->allocation;
   old_clip = priv->clip;
-  old_baseline = priv->allocated_baseline;
   real_allocation = *allocation;
 
   priv->allocated_size = *allocation;
@@ -5537,18 +5534,19 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   real_allocation.width = MAX (real_allocation.width, 1);
   real_allocation.height = MAX (real_allocation.height, 1);
 
-  baseline_changed = old_baseline != baseline;
-  size_changed = (old_allocation.width != real_allocation.width ||
-		  old_allocation.height != real_allocation.height);
-  position_changed = (old_allocation.x != real_allocation.x ||
-		      old_allocation.y != real_allocation.y);
-
-  if (!alloc_needed && !size_changed && !position_changed && !baseline_changed)
-    goto out;
+  baseline_changed = priv->allocated_baseline != baseline;
+  size_changed = (priv->allocation.width != real_allocation.width ||
+                  priv->allocation.height != real_allocation.height);
+  position_changed = (priv->allocation.x != real_allocation.x ||
+                      priv->allocation.y != real_allocation.y);
 
   /* Set the widget allocation to real_allocation now, pass the smaller allocation to the vfunc */
   priv->allocation = real_allocation;
   priv->clip = real_allocation;
+  priv->allocated_baseline = baseline;
+
+  if (!alloc_needed && !size_changed && !baseline_changed)
+    goto out;
 
   /* Since gtk_widget_measure does it for us, we can be sure here that
    * the given alloaction is large enough for the css margin/bordder/padding */
@@ -5559,7 +5557,6 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   real_allocation.height -= margin.top + border.top + padding.top +
                             margin.bottom + border.bottom + padding.bottom;
 
-  priv->allocated_baseline = baseline;
   if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
     g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
   else
