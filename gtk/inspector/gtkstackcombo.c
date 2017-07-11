@@ -249,16 +249,13 @@ gtk_stack_combo_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_stack_combo_size_allocate (GtkWidget     *widget,
-                               GtkAllocation *allocation)
+gtk_stack_combo_size_allocate (GtkWidget           *widget,
+                               const GtkAllocation *allocation,
+                               int                  baseline,
+                               GtkAllocation       *out_clip)
 {
   GtkStackCombo *self = GTK_STACK_COMBO (widget);
-  GtkAllocation clip = *allocation;
-
-  gtk_widget_size_allocate (GTK_WIDGET (self->combo), allocation);
-  gtk_widget_get_clip (GTK_WIDGET (self->combo), &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+  gtk_widget_size_allocate (GTK_WIDGET (self->combo), allocation, baseline, out_clip);
 }
 
 static void

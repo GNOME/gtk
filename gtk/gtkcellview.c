@@ -66,8 +66,10 @@ static void        gtk_cell_view_set_property             (GObject          *obj
                                                            GParamSpec       *pspec);
 static void        gtk_cell_view_finalize                 (GObject          *object);
 static void        gtk_cell_view_dispose                  (GObject          *object);
-static void        gtk_cell_view_size_allocate            (GtkWidget        *widget,
-                                                           GtkAllocation    *allocation);
+static void        gtk_cell_view_size_allocate            (GtkWidget           *widget,
+                                                           const GtkAllocation *allocation,
+                                                           int                  baseline,
+                                                           GtkAllocation       *out_clip);
 static void        gtk_cell_view_snapshot                 (GtkWidget        *widget,
                                                            GtkSnapshot      *snapshot);
 static void        gtk_cell_view_set_value                (GtkCellView     *cell_view,
@@ -458,8 +460,10 @@ gtk_cell_view_dispose (GObject *object)
 }
 
 static void
-gtk_cell_view_size_allocate (GtkWidget     *widget,
-                             GtkAllocation *allocation)
+gtk_cell_view_size_allocate (GtkWidget           *widget,
+                             const GtkAllocation *allocation,
+                             int                  baseline,
+                             GtkAllocation       *out_clip)
 {
   GtkCellView *cellview;
   GtkCellViewPrivate *priv;
@@ -486,8 +490,6 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
     gtk_cell_area_context_allocate (priv->context, width, -1);
   else if (alloc_height != allocation->height && priv->orientation == GTK_ORIENTATION_VERTICAL)
     gtk_cell_area_context_allocate (priv->context, -1, height);
-
-  gtk_widget_set_clip (widget, allocation);
 }
 
 static void

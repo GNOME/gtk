@@ -60,10 +60,21 @@ static void               gtk_bin_measure                         (GtkWidget    
                                                                    int            *natural,
                                                                    int            *minimum_baseline,
                                                                    int            *natural_baseline);
-static void               gtk_bin_size_allocate                   (GtkWidget           *widget,
-                                                                   GtkAllocation       *allocation);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
+
+static void
+gtk_bin_size_allocate (GtkWidget           *widget,
+                       const GtkAllocation *allocation,
+                       int                  baseline,
+                       GtkAllocation       *out_clip)
+{
+  GtkBin *bin = GTK_BIN (widget);
+  GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
+
+  if (priv->child && gtk_widget_get_visible (priv->child))
+    gtk_widget_size_allocate (priv->child, allocation, baseline, out_clip);
+}
 
 static void
 gtk_bin_class_init (GtkBinClass *class)
@@ -85,7 +96,6 @@ gtk_bin_init (GtkBin *bin)
 {
   gtk_widget_set_has_window (GTK_WIDGET (bin), FALSE);
 }
-
 
 static GType
 gtk_bin_child_type (GtkContainer *container)
@@ -178,24 +188,6 @@ gtk_bin_measure (GtkWidget *widget,
     {
       *minimum = 0;
       *natural = 0;
-    }
-}
-
-static void
-gtk_bin_size_allocate (GtkWidget     *widget,
-                       GtkAllocation *allocation)
-{
-  GtkBin *bin = GTK_BIN (widget);
-  GtkBinPrivate *priv = gtk_bin_get_instance_private (bin);
-
-  if (priv->child && gtk_widget_get_visible (priv->child))
-    {
-      GtkAllocation clip = *allocation;
-
-      gtk_widget_size_allocate (priv->child, allocation);
-      gtk_widget_get_clip (priv->child, &clip);
-
-      gtk_widget_set_clip (widget, &clip);
     }
 }
 

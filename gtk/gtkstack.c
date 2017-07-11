@@ -168,8 +168,10 @@ static void     gtk_stack_forall                         (GtkContainer  *contain
 static void     gtk_stack_compute_expand                 (GtkWidget     *widget,
                                                           gboolean      *hexpand,
                                                           gboolean      *vexpand);
-static void     gtk_stack_size_allocate                  (GtkWidget     *widget,
-                                                          GtkAllocation *allocation);
+static void     gtk_stack_size_allocate                  (GtkWidget           *widget,
+                                                          const GtkAllocation *allocation,
+                                                          int                  baseline,
+                                                          GtkAllocation       *out_clip);
 static void     gtk_stack_snapshot                       (GtkWidget     *widget,
                                                           GtkSnapshot   *snapshot);
 static void     gtk_stack_measure                        (GtkWidget      *widget,
@@ -2027,12 +2029,13 @@ gtk_stack_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_stack_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
+gtk_stack_size_allocate (GtkWidget           *widget,
+                         const GtkAllocation *allocation,
+                         int                  baseline,
+                         GtkAllocation       *out_clip)
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkAllocation clip = *allocation;
   GdkRectangle child_clip;
   GtkAllocation child_allocation;
 
@@ -2052,10 +2055,8 @@ gtk_stack_size_allocate (GtkWidget     *widget,
                           &min, &nat, NULL, NULL);
       child_allocation.height = MAX (min, allocation->height);
 
-      gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation);
-      gtk_widget_get_clip (priv->last_visible_child->widget, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
-
+      gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation, -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
       if (!gdk_rectangle_equal (&priv->last_visible_surface_allocation,
                                 &child_allocation))
@@ -2100,12 +2101,9 @@ gtk_stack_size_allocate (GtkWidget     *widget,
             child_allocation.x = (allocation->height - child_allocation.height);
         }
 
-      gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
-      gtk_widget_get_clip (priv->visible_child->widget, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation, -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 #define LERP(a, b, t) ((a) + (((b) - (a)) * (1.0 - (t))))

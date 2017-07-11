@@ -463,17 +463,15 @@ gtk_font_button_measure (GtkWidget       *widget,
 }
 
 static void
-gtk_font_button_size_allocate (GtkWidget     *widget,
-                               GtkAllocation *allocation)
+gtk_font_button_size_allocate (GtkWidget           *widget,
+                               const GtkAllocation *allocation,
+                               int                  baseline,
+                               GtkAllocation       *out_clip)
 {
   GtkFontButton *button = GTK_FONT_BUTTON (widget);
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
-  GtkAllocation clip = *allocation;
 
-  gtk_widget_size_allocate (priv->button, allocation);
-  gtk_widget_get_clip (priv->button, &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+  gtk_widget_size_allocate (priv->button, allocation, baseline, out_clip);
 }
 
 static void

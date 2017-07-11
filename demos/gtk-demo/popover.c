@@ -55,8 +55,10 @@ create_complex_popover (GtkWidget       *parent,
 }
 
 static void
-entry_size_allocate_cb (GtkEntry      *entry,
-                        GtkAllocation *allocation,
+entry_size_allocate_cb (GtkEntry            *entry,
+                        const GtkAllocation *allocation,
+                        int                  baseline,
+                        GtkAllocation       *out_clip,
                         gpointer       user_data)
 {
   GtkEntryIconPosition popover_pos;

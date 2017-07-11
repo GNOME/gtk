@@ -84,7 +84,10 @@ GType gtk_focus_widget_get_type (void) G_GNUC_CONST;
 G_DEFINE_TYPE(GtkFocusWidget, gtk_focus_widget, GTK_TYPE_WIDGET)
 
 static void
-gtk_focus_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
+gtk_focus_widget_size_allocate (GtkWidget           *widget,
+                                const GtkAllocation *allocation,
+                                int                  baseline,
+                                GtkAllocation       *out_clip)
 {
   GtkFocusWidget *self = GTK_FOCUS_WIDGET (widget);
   int child_width  = (allocation->width)  / 2;
@@ -96,19 +99,19 @@ gtk_focus_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
   child_alloc.width = child_width;
   child_alloc.height = child_height;
 
-  gtk_widget_size_allocate (self->child1, &child_alloc);
+  gtk_widget_size_allocate (self->child1, &child_alloc, -1, out_clip);
 
   child_alloc.x += child_width;
 
-  gtk_widget_size_allocate (self->child2, &child_alloc);
+  gtk_widget_size_allocate (self->child2, &child_alloc, -1, out_clip);
 
   child_alloc.y += child_height;
 
-  gtk_widget_size_allocate (self->child4, &child_alloc);
+  gtk_widget_size_allocate (self->child4, &child_alloc, -1, out_clip);
 
   child_alloc.x -= child_width;
 
-  gtk_widget_size_allocate (self->child3, &child_alloc);
+  gtk_widget_size_allocate (self->child3, &child_alloc, -1, out_clip);
 }
 
 static void

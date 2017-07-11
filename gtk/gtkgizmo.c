@@ -23,19 +23,18 @@ gtk_gizmo_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_gizmo_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
+gtk_gizmo_size_allocate (GtkWidget           *widget,
+                         const GtkAllocation *allocation,
+                         int                  baseline,
+                         GtkAllocation       *out_clip)
 {
   GtkGizmo *self = GTK_GIZMO (widget);
-  GtkAllocation clip = *allocation;
 
   if (self->allocate_func)
     self->allocate_func (self,
                          allocation,
-                         gtk_widget_get_allocated_baseline (widget),
-                         &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+                         baseline,
+                         out_clip);
 }
 
 static void

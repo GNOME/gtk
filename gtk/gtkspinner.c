@@ -104,13 +104,6 @@ gtk_spinner_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_spinner_size_allocate (GtkWidget     *widget,
-                           GtkAllocation *allocation)
-{
-  gtk_widget_set_clip (widget, allocation);
-}
-
-static void
 gtk_spinner_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
@@ -195,7 +188,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   gobject_class->set_property = gtk_spinner_set_property;
 
   widget_class = GTK_WIDGET_CLASS(klass);
-  widget_class->size_allocate = gtk_spinner_size_allocate;
   widget_class->snapshot = gtk_spinner_snapshot;
   widget_class->measure = gtk_spinner_measure;
 

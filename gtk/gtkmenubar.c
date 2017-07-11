@@ -88,8 +88,10 @@ static void gtk_menu_bar_measure (GtkWidget     *widget,
                                   int            *natural,
                                   int            *minimum_baseline,
                                   int            *natural_baseline);
-static void gtk_menu_bar_size_allocate     (GtkWidget       *widget,
-					    GtkAllocation   *allocation);
+static void gtk_menu_bar_size_allocate     (GtkWidget           *widget,
+                                            const GtkAllocation *allocation,
+                                            int                  baseline,
+                                            GtkAllocation       *out_clip);
 static void gtk_menu_bar_hierarchy_changed (GtkWidget       *widget,
 					    GtkWidget       *old_toplevel);
 static gint gtk_menu_bar_get_popup_delay   (GtkMenuShell    *menu_shell);
@@ -342,12 +344,13 @@ gtk_menu_bar_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_menu_bar_size_allocate (GtkWidget     *widget,
-                            GtkAllocation *allocation)
+gtk_menu_bar_size_allocate (GtkWidget           *widget,
+                            const GtkAllocation *allocation,
+                            int                  baseline,
+                            GtkAllocation       *out_clip)
 {
   GtkMenuBar *menu_bar = GTK_MENU_BAR (widget);
   GtkMenuBarPrivate *priv = menu_bar->priv;
-  GtkAllocation clip = *allocation;
   GtkMenuShell *menu_shell;
   GtkWidget *child;
   GList *children;
@@ -416,7 +419,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
           else
             child_allocation.x += remaining_space.width;
 
-          gtk_widget_size_allocate (request->data, &child_allocation);
+          gtk_widget_size_allocate (request->data, &child_allocation, -1, out_clip);
         }
     }
   else
@@ -470,13 +473,11 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
           else
             child_allocation.y += remaining_space.height;
 
-          gtk_widget_size_allocate (request->data, &child_allocation);
+          gtk_widget_size_allocate (request->data, &child_allocation, -1, out_clip);
         }
     }
 
   g_array_free (requested_sizes, TRUE);
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static GList *

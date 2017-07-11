@@ -60,8 +60,10 @@ static void     gtk_event_box_realize       (GtkWidget        *widget);
 static void     gtk_event_box_unrealize     (GtkWidget        *widget);
 static void     gtk_event_box_map           (GtkWidget        *widget);
 static void     gtk_event_box_unmap         (GtkWidget        *widget);
-static void     gtk_event_box_size_allocate (GtkWidget        *widget,
-                                             GtkAllocation    *allocation);
+static void     gtk_event_box_size_allocate (GtkWidget           *widget,
+                                             const GtkAllocation *allocation,
+                                             int                  baseline,
+                                             GtkAllocation       *out_clip);
 static void     gtk_event_box_set_property  (GObject          *object,
                                              guint             prop_id,
                                              const GValue     *value,
@@ -428,12 +430,13 @@ gtk_event_box_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_event_box_size_allocate (GtkWidget     *widget,
-                             GtkAllocation *allocation)
+gtk_event_box_size_allocate (GtkWidget           *widget,
+                             const GtkAllocation *allocation,
+                             int                  baseline,
+                             GtkAllocation       *out_clip)
 {
   GtkBin *bin;
   GtkAllocation child_allocation;
-  gint baseline;
   GtkEventBoxPrivate *priv;
   GtkWidget *child;
 
@@ -464,8 +467,7 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
                                 child_allocation.height);
     }
 
-  baseline = gtk_widget_get_allocated_baseline (widget);
   child = gtk_bin_get_child (bin);
   if (child)
-    gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
+    gtk_widget_size_allocate (child, &child_allocation, baseline, out_clip);
 }

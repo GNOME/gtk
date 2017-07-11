@@ -142,7 +142,9 @@ struct _GtkBoxChild
 };
 
 static void gtk_box_size_allocate         (GtkWidget              *widget,
-                                           GtkAllocation          *allocation);
+                                           const GtkAllocation    *allocation,
+                                           int                     baseline,
+                                           GtkAllocation          *out_clip);
 
 static void gtk_box_direction_changed  (GtkWidget        *widget,
                                         GtkTextDirection  previous_direction);
@@ -369,6 +371,7 @@ get_spacing (GtkBox *box)
 static void
 gtk_box_size_allocate_no_center (GtkWidget           *widget,
                                  const GtkAllocation *allocation,
+                                 int                  baseline,
                                  GdkRectangle        *out_clip)
 {
   GtkBox *box = GTK_BOX (widget);
@@ -385,7 +388,6 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
   gint minimum_above, natural_above;
   gint minimum_below, natural_below;
   gboolean have_baseline;
-  int baseline = -1;
 
   GtkPackType packing;
 
@@ -550,8 +552,8 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	}
     }
 
-  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-    baseline = gtk_widget_get_allocated_baseline (widget);
+  if (private->orientation == GTK_ORIENTATION_VERTICAL)
+    baseline = -1;
 
   /* we only calculate our own baseline if we don't get one passed from the parent
    * and any of the child widgets explicitly request one */
@@ -656,8 +658,7 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 		  child_allocation.y -= child_size;
 		}
 	    }
-	  gtk_widget_size_allocate_with_baseline (child->widget, &child_allocation, baseline);
-          gtk_widget_get_clip (child->widget, &clip);
+	  gtk_widget_size_allocate (child->widget, &child_allocation, baseline, &clip);
           gdk_rectangle_union (&clip, out_clip, out_clip);
 
 	  i++;
@@ -666,14 +667,12 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 }
 
 static void
-gtk_box_size_allocate (GtkWidget     *widget,
-                       GtkAllocation *allocation)
+gtk_box_size_allocate (GtkWidget           *widget,
+                       const GtkAllocation *allocation,
+                       int                  baseline,
+                       GtkAllocation       *out_clip)
 {
-  GtkAllocation clip = *allocation;
-
-  gtk_box_size_allocate_no_center (widget, allocation, &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+  gtk_box_size_allocate_no_center (widget, allocation, baseline, out_clip);
 }
 
 static GType

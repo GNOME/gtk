@@ -59,8 +59,6 @@ static void gtk_invisible_destroy       (GtkWidget         *widget);
 static void gtk_invisible_realize       (GtkWidget         *widget);
 static void gtk_invisible_style_updated (GtkWidget         *widget);
 static void gtk_invisible_show          (GtkWidget         *widget);
-static void gtk_invisible_size_allocate (GtkWidget         *widget,
-					 GtkAllocation     *allocation);
 static void gtk_invisible_set_property  (GObject           *object,
 					 guint              prop_id,
 					 const GValue      *value,
@@ -85,7 +83,6 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
   widget_class->realize = gtk_invisible_realize;
   widget_class->style_updated = gtk_invisible_style_updated;
   widget_class->show = gtk_invisible_show;
-  widget_class->size_allocate = gtk_invisible_size_allocate;
   widget_class->destroy = gtk_invisible_destroy;
 
   gobject_class->set_property = gtk_invisible_set_property;
@@ -250,14 +247,6 @@ gtk_invisible_show (GtkWidget *widget)
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_widget_map (widget);
 }
-
-static void
-gtk_invisible_size_allocate (GtkWidget     *widget,
-                             GtkAllocation *allocation)
-{
-  gtk_widget_set_clip (widget, allocation);
-}
-
 
 static void 
 gtk_invisible_set_property  (GObject      *object,

@@ -68,8 +68,6 @@ static void     gtk_separator_tool_item_get_property      (GObject              
                                                            guint                      prop_id,
                                                            GValue                    *value,
                                                            GParamSpec                *pspec);
-static void     gtk_separator_tool_item_size_allocate     (GtkWidget                 *widget,
-                                                           GtkAllocation             *allocation);
 static void     gtk_separator_tool_item_add               (GtkContainer              *container,
                                                            GtkWidget                 *child);
 
@@ -90,8 +88,6 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 
   object_class->set_property = gtk_separator_tool_item_set_property;
   object_class->get_property = gtk_separator_tool_item_get_property;
-
-  widget_class->size_allocate = gtk_separator_tool_item_size_allocate;
 
   toolitem_class->create_menu_proxy = gtk_separator_tool_item_create_menu_proxy;
   
@@ -176,13 +172,6 @@ gtk_separator_tool_item_get_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-gtk_separator_tool_item_size_allocate (GtkWidget     *widget,
-                                       GtkAllocation *allocation)
-{
-  gtk_widget_set_clip (widget, allocation);
 }
 
 /**

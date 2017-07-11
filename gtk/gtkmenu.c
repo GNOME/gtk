@@ -231,8 +231,10 @@ static void     gtk_menu_get_child_property(GtkContainer     *container,
 static void     gtk_menu_destroy           (GtkWidget        *widget);
 static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
-static void     gtk_menu_size_allocate     (GtkWidget        *widget,
-                                            GtkAllocation    *allocation);
+static void     gtk_menu_size_allocate     (GtkWidget           *widget,
+                                            const GtkAllocation *allocation,
+                                            int                  baseline,
+                                            GtkAllocation       *out_clip);
 static void     gtk_menu_show              (GtkWidget        *widget);
 static void     gtk_menu_snapshot          (GtkWidget        *widget,
                                             GtkSnapshot      *snapshot);
@@ -2691,15 +2693,16 @@ calculate_line_heights (GtkMenu *menu,
 }
 
 static void
-gtk_menu_size_allocate (GtkWidget     *widget,
-                        GtkAllocation *allocation)
+gtk_menu_size_allocate (GtkWidget           *widget,
+                        const GtkAllocation *allocation,
+                        int                  baseline,
+                        GtkAllocation       *out_clip)
 {
   GtkMenu *menu;
   GtkMenuPrivate *priv;
   GtkMenuShell *menu_shell;
   GtkWidget *child;
   GtkAllocation arrow_allocation, child_allocation;
-  GtkAllocation clip = *allocation;
   GList *children;
   gint x, y, i;
   gint width, height;
@@ -2739,13 +2742,13 @@ gtk_menu_size_allocate (GtkWidget     *widget,
   arrow_allocation.height = arrow_border.top;
 
   if (priv->upper_arrow_visible)
-    gtk_widget_size_allocate (priv->top_arrow_widget, &arrow_allocation);
+    gtk_widget_size_allocate (priv->top_arrow_widget, &arrow_allocation, -1, out_clip);
 
   arrow_allocation.y = height - y - arrow_border.bottom;
   arrow_allocation.height = arrow_border.bottom;
 
   if (priv->lower_arrow_visible)
-    gtk_widget_size_allocate (priv->bottom_arrow_widget, &arrow_allocation);
+    gtk_widget_size_allocate (priv->bottom_arrow_widget, &arrow_allocation, -1, out_clip);
 
   width = MAX (1, width);
   height = MAX (1, height);
@@ -2790,12 +2793,10 @@ gtk_menu_size_allocate (GtkWidget     *widget,
               gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
                                                   priv->toggle_size);
 
-              gtk_widget_size_allocate (child, &child_allocation);
+              gtk_widget_size_allocate (child, &child_allocation, -1, out_clip);
             }
         }
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

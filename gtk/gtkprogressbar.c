@@ -140,8 +140,10 @@ static void gtk_progress_bar_get_property         (GObject        *object,
                                                    guint           prop_id,
                                                    GValue         *value,
                                                    GParamSpec     *pspec);
-static void gtk_progress_bar_size_allocate        (GtkWidget      *widget,
-                                                   GtkAllocation  *allocation);
+static void gtk_progress_bar_size_allocate        (GtkWidget           *widget,
+                                                   const GtkAllocation *allocation,
+                                                   int                  baseline,
+                                                   GtkAllocation       *out_clip);
 
 static void     gtk_progress_bar_snapshot         (GtkWidget      *widget,
                                                    GtkSnapshot    *snapshot);
@@ -445,8 +447,7 @@ allocate_trough (GtkGizmo            *gizmo,
         }
     }
 
-  gtk_widget_size_allocate (priv->progress_widget, &alloc);
-  gtk_widget_get_clip (priv->progress_widget, out_clip);
+  gtk_widget_size_allocate (priv->progress_widget, &alloc,-1, out_clip);
 
 }
 
@@ -624,10 +625,11 @@ get_current_text (GtkProgressBar *pbar)
 }
 
 static void
-gtk_progress_bar_size_allocate (GtkWidget     *widget,
-                                GtkAllocation *allocation)
+gtk_progress_bar_size_allocate (GtkWidget           *widget,
+                                const GtkAllocation *allocation,
+                                int                  baseline,
+                                GtkAllocation       *out_clip)
 {
-  GtkAllocation clip = *allocation;
   GtkAllocation child_clip = *allocation;
   GtkProgressBarPrivate *priv;
   gint bar_width, bar_height;
@@ -657,15 +659,11 @@ gtk_progress_bar_size_allocate (GtkWidget     *widget,
   alloc.width = bar_width;
   alloc.height = bar_height;
 
-  gtk_widget_size_allocate (priv->trough_widget, &alloc);
-  gtk_widget_get_clip (priv->trough_widget, &child_clip);
-  gdk_rectangle_union (&clip, &child_clip, &clip);
+  gtk_widget_size_allocate (priv->trough_widget, &alloc, -1, &child_clip);
+  gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
   if (!priv->show_text)
-    {
-      gtk_widget_set_clip (widget, &clip);
-      return;
-    }
+    return;
 
   gtk_widget_measure (priv->label, GTK_ORIENTATION_HORIZONTAL, -1,
                       &text_min, &text_nat,
@@ -691,11 +689,8 @@ gtk_progress_bar_size_allocate (GtkWidget     *widget,
       alloc.height = text_height;
     }
 
-  gtk_widget_size_allocate (priv->label, &alloc);
-  gtk_widget_get_clip (priv->label, &text_clip);
-  gdk_rectangle_union (&clip, &text_clip, &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+  gtk_widget_size_allocate (priv->label, &alloc, -1, &text_clip);
+  gdk_rectangle_union (out_clip, &text_clip, out_clip);
 }
 
 static void

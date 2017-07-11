@@ -592,8 +592,10 @@ static void     gtk_tree_view_measure              (GtkWidget        *widget,
                                                     int            *natural,
                                                     int            *minimum_baseline,
                                                     int            *natural_baseline);
-static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
-						    GtkAllocation    *allocation);
+static void     gtk_tree_view_size_allocate        (GtkWidget           *widget,
+                                                    const GtkAllocation *allocation,
+                                                    int                  baseline,
+                                                    GtkAllocation       *out_clip);
 static void     gtk_tree_view_snapshot             (GtkWidget        *widget,
                                                     GtkSnapshot      *snapshot);
 static gboolean gtk_tree_view_key_press            (GtkWidget        *widget,
@@ -2553,6 +2555,7 @@ gtk_tree_view_size_allocate_drag_column (GtkWidget *widget)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkAllocation drag_allocation;
+  GtkAllocation clip;
   GtkWidget *button;
 
   if (tree_view->priv->drag_column == NULL)
@@ -2564,12 +2567,14 @@ gtk_tree_view_size_allocate_drag_column (GtkWidget *widget)
   drag_allocation.y = 0;
   drag_allocation.width = gdk_window_get_width (tree_view->priv->drag_window);
   drag_allocation.height = gdk_window_get_height (tree_view->priv->drag_window);
-  gtk_widget_size_allocate (button, &drag_allocation);
+  gtk_widget_size_allocate (button, &drag_allocation, -1, &clip);
 }
 
 static void
-gtk_tree_view_size_allocate (GtkWidget     *widget,
-			     GtkAllocation *allocation)
+gtk_tree_view_size_allocate (GtkWidget           *widget,
+                             const GtkAllocation *allocation,
+                             int                  baseline,
+                             GtkAllocation       *out_clip)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *tmp_list;
@@ -2743,10 +2748,8 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
       child_rect.y = MAX (min_y, MIN (max_y, child_rect.y));
 
       gtk_tree_path_free (path);
-      gtk_widget_size_allocate (child->widget, &child_rect);
+      gtk_widget_size_allocate (child->widget, &child_rect, -1, out_clip);
     }
-
-  gtk_widget_set_clip (widget, allocation);
 }
 
 /* Grabs the focus and unsets the GTK_TREE_VIEW_DRAW_KEYFOCUS flag */
@@ -9642,6 +9645,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
                                   GdkDevice         *device)
 {
   GtkAllocation allocation;
+  GtkAllocation clip;
   GtkAllocation button_allocation;
   GtkWidget *button;
   GtkStyleContext *context;
@@ -9679,7 +9683,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   tree_view->priv->drag_column_x = button_allocation.x;
   allocation = button_allocation;
   allocation.x = 0;
-  gtk_widget_size_allocate (button, &allocation);
+  gtk_widget_size_allocate (button, &allocation, -1, &clip);
 
   tree_view->priv->drag_column = column;
   gdk_window_show (tree_view->priv->drag_window);

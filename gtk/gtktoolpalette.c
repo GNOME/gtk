@@ -472,8 +472,10 @@ gtk_tool_palette_measure (GtkWidget      *widget,
 
 
 static void
-gtk_tool_palette_size_allocate (GtkWidget     *widget,
-                                GtkAllocation *allocation)
+gtk_tool_palette_size_allocate (GtkWidget           *widget,
+                                const GtkAllocation *allocation,
+                                int                  baseline,
+                                GtkAllocation       *out_clip)
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
   GtkAdjustment *adjustment = NULL;
@@ -496,7 +498,8 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
 
   direction = gtk_widget_get_direction (widget);
 
-  GTK_WIDGET_CLASS (gtk_tool_palette_parent_class)->size_allocate (widget, allocation);
+  GTK_WIDGET_CLASS (gtk_tool_palette_parent_class)->size_allocate (widget, allocation,
+                                                                   baseline, out_clip);
 
   if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
     {
@@ -640,7 +643,7 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
           else
             child_allocation.x = x;
 
-          gtk_widget_size_allocate (GTK_WIDGET (group->widget), &child_allocation);
+          gtk_widget_size_allocate (GTK_WIDGET (group->widget), &child_allocation, -1, out_clip);
           gtk_widget_show (GTK_WIDGET (group->widget));
 
           if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
@@ -702,10 +705,11 @@ gtk_tool_palette_adjustment_value_changed (GtkAdjustment *adjustment,
                                            gpointer       data)
 {
   GtkAllocation allocation;
+  GtkAllocation clip;
   GtkWidget *widget = GTK_WIDGET (data);
 
   gtk_widget_get_allocation (widget, &allocation);
-  gtk_tool_palette_size_allocate (widget, &allocation);
+  gtk_tool_palette_size_allocate (widget, &allocation, -1, &clip);
 }
 
 static void

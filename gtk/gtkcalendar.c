@@ -264,8 +264,10 @@ static void     gtk_calendar_measure        (GtkWidget        *widget,
                                              int            *natural,
                                              int            *minimum_baseline,
                                              int            *natural_baseline);
-static void     gtk_calendar_size_allocate  (GtkWidget        *widget,
-                                             GtkAllocation    *allocation);
+static void     gtk_calendar_size_allocate  (GtkWidget           *widget,
+                                             const GtkAllocation *allocation,
+                                             int                  baseline,
+                                             GtkAllocation       *out_clip);
 static void     gtk_calendar_snapshot       (GtkWidget        *widget,
                                              GtkSnapshot      *snapshot);
 static gboolean gtk_calendar_button_press   (GtkWidget        *widget,
@@ -1823,8 +1825,10 @@ gtk_calendar_measure (GtkWidget        *widget,
 }
 
 static void
-gtk_calendar_size_allocate (GtkWidget     *widget,
-                            GtkAllocation *allocation)
+gtk_calendar_size_allocate (GtkWidget           *widget,
+                            const GtkAllocation *allocation,
+                            int                  baseline,
+                            GtkAllocation       *out_clip)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = calendar->priv;
@@ -1853,9 +1857,6 @@ gtk_calendar_size_allocate (GtkWidget     *widget,
                          - (DAY_XSEP * 6))/7;
       priv->week_width = 0;
     }
-
-
-  gtk_widget_set_clip (widget, allocation);
 }
 
 

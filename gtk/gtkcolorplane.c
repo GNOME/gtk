@@ -179,13 +179,14 @@ create_surface (GtkColorPlane *plane)
 }
 
 static void
-plane_size_allocate (GtkWidget     *widget,
-                     GtkAllocation *allocation)
+plane_size_allocate (GtkWidget           *widget,
+                     const GtkAllocation *allocation,
+                     int                   baseline,
+                     GtkAllocation        *out_clip)
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
 
   create_surface (plane);
-  gtk_widget_set_clip (widget, allocation);
 }
 
 static void

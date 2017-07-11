@@ -119,8 +119,6 @@ static void gtk_button_get_property   (GObject            *object,
 static void gtk_button_screen_changed (GtkWidget          *widget,
 				       GdkScreen          *previous_screen);
 static void gtk_button_unrealize (GtkWidget * widget);
-static void gtk_button_size_allocate (GtkWidget * widget,
-				      GtkAllocation * allocation);
 static gint gtk_button_grab_broken (GtkWidget * widget,
 				    GdkEventGrabBroken * event);
 static gint gtk_button_key_release (GtkWidget * widget, GdkEventKey * event);
@@ -208,7 +206,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->measure = gtk_button_measure_;
   widget_class->screen_changed = gtk_button_screen_changed;
   widget_class->unrealize = gtk_button_unrealize;
-  widget_class->size_allocate = gtk_button_size_allocate;
   widget_class->grab_broken_event = gtk_button_grab_broken;
   widget_class->key_release_event = gtk_button_key_release;
   widget_class->enter_notify_event = gtk_button_enter_notify;
@@ -750,24 +747,6 @@ gtk_button_unrealize (GtkWidget *widget)
     gtk_button_finish_activate (button, FALSE);
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->unrealize (widget);
-}
-
-static void
-gtk_button_size_allocate (GtkWidget     *widget,
-			  GtkAllocation *allocation)
-{
-  GtkAllocation clip = *allocation;
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child && gtk_widget_get_visible (child))
-    {
-      gtk_widget_size_allocate_with_baseline (child, allocation,
-                                              gtk_widget_get_allocated_baseline (widget));
-      gtk_widget_get_clip (child, &clip);
-    }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

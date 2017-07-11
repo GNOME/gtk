@@ -246,12 +246,13 @@ gtk_menu_item_actionable_interface_init (GtkActionableInterface *iface)
 }
 
 static void
-gtk_menu_item_size_allocate (GtkWidget     *widget,
-                             GtkAllocation *allocation)
+gtk_menu_item_size_allocate (GtkWidget           *widget,
+                             const GtkAllocation *allocation,
+                             int                  baseline,
+                             GtkAllocation       *out_clip)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
-  GtkAllocation clip = *allocation;
   GtkAllocation child_allocation;
   GtkAllocation arrow_clip = { 0 };
   GtkAllocation child_clip = *allocation;
@@ -324,22 +325,18 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
           arrow_alloc.y = child_allocation.y +
             (child_allocation.height - arrow_alloc.height) / 2;
 
-          gtk_widget_size_allocate (priv->arrow_widget, &arrow_alloc);
-          gtk_widget_get_clip (priv->arrow_widget, &arrow_clip);
-          gdk_rectangle_union (&arrow_clip, &clip, &clip);
-	}
+          gtk_widget_size_allocate(priv->arrow_widget, &arrow_alloc, baseline, &arrow_clip);
+          gdk_rectangle_union (out_clip, &arrow_clip, out_clip);
+        }
 
       child_allocation.width = MAX (1, child_allocation.width);
 
-      gtk_widget_size_allocate (child, &child_allocation);
-      gtk_widget_get_clip (child, &child_clip);
-      gdk_rectangle_union (&child_clip, &clip, &clip);
+      gtk_widget_size_allocate (child, &child_allocation, baseline, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
 
   if (priv->submenu)
     gtk_menu_reposition (GTK_MENU (priv->submenu));
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

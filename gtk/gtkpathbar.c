@@ -121,8 +121,10 @@ static void gtk_path_bar_measure (GtkWidget *widget,
                                   int            *minimum_baseline,
                                   int            *natural_baseline);
 static void gtk_path_bar_unmap                    (GtkWidget        *widget);
-static void gtk_path_bar_size_allocate            (GtkWidget        *widget,
-						   GtkAllocation    *allocation);
+static void gtk_path_bar_size_allocate            (GtkWidget           *widget,
+                                                   const GtkAllocation *allocation,
+                                                   int                  baseline,
+                                                   GtkAllocation       *out_clip);
 static void gtk_path_bar_add                      (GtkContainer     *container,
 						   GtkWidget        *widget);
 static void gtk_path_bar_remove                   (GtkContainer     *container,
@@ -449,8 +451,10 @@ gtk_path_bar_unmap (GtkWidget *widget)
 /* This is a tad complicated
  */
 static void
-gtk_path_bar_size_allocate (GtkWidget     *widget,
-			    GtkAllocation *allocation)
+gtk_path_bar_size_allocate (GtkWidget           *widget,
+                            const GtkAllocation *allocation,
+                            int                  baseline,
+                            GtkAllocation       *out_clip)
 {
   GtkWidget *child;
   GtkPathBar *path_bar = GTK_PATH_BAR (widget);
@@ -463,16 +467,11 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   gint up_slider_offset = 0;
   gint down_slider_offset = 0;
   GtkRequisition child_requisition;
-  GtkAllocation clip = *allocation;
   GtkAllocation child_clip;
 
   /* No path is set; we don't have to allocate anything. */
   if (path_bar->priv->button_list == NULL)
-    {
-      gtk_widget_set_clip (widget, allocation);
-
-      return;
-    }
+    return;
 
   direction = gtk_widget_get_direction (widget);
   allocation_width = allocation->width;
@@ -623,9 +622,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	gtk_widget_set_tooltip_text (child, NULL);
       
       gtk_widget_set_child_visible (child, TRUE);
-      gtk_widget_size_allocate (child, &child_allocation);
-      gtk_widget_get_clip (child, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (child, &child_allocation, baseline, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
       if (direction == GTK_TEXT_DIR_RTL)
         {
@@ -654,9 +652,10 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
     {
       child_allocation.width = path_bar->priv->slider_width;
       child_allocation.x = up_slider_offset + allocation->x;
-      gtk_widget_size_allocate (path_bar->priv->up_slider_button, &child_allocation);
-      gtk_widget_get_clip (path_bar->priv->up_slider_button, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (path_bar->priv->up_slider_button,
+                                &child_allocation,
+                                -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
       gtk_widget_set_child_visible (path_bar->priv->up_slider_button, TRUE);
       gtk_widget_show (path_bar->priv->up_slider_button);
@@ -674,9 +673,10 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       child_allocation.width = path_bar->priv->slider_width;
       child_allocation.x = down_slider_offset + allocation->x;
       
-      gtk_widget_size_allocate (path_bar->priv->down_slider_button, &child_allocation);
-      gtk_widget_get_clip (path_bar->priv->down_slider_button, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (path_bar->priv->down_slider_button,
+                                &child_allocation,
+                                -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
       gtk_widget_set_child_visible (path_bar->priv->down_slider_button, TRUE);
       gtk_widget_show (path_bar->priv->down_slider_button);
@@ -686,8 +686,6 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_set_child_visible (path_bar->priv->down_slider_button, FALSE);
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

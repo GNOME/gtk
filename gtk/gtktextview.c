@@ -386,8 +386,10 @@ static void gtk_text_view_measure (GtkWidget      *widget,
                                    int            *natural,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
-static void gtk_text_view_size_allocate        (GtkWidget        *widget,
-                                                GtkAllocation    *allocation);
+static void gtk_text_view_size_allocate        (GtkWidget           *widget,
+                                                const GtkAllocation *allocation,
+                                                int                  baseline,
+                                                GtkAllocation       *out_clip);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
 static void gtk_text_view_map                  (GtkWidget        *widget);
@@ -4066,10 +4068,11 @@ gtk_text_view_update_child_allocation (GtkTextView      *text_view,
                                        GtkTextViewChild *vc)
 {
   GtkAllocation allocation;
+  GtkAllocation clip;
 
   gtk_text_view_compute_child_allocation (text_view, vc, &allocation);
   
-  gtk_widget_size_allocate (vc->widget, &allocation);
+  gtk_widget_size_allocate (vc->widget, &allocation, -1, &clip);
 
 #if 0
   g_print ("allocation for %p allocated to %d,%d yoffset = %d\n",
@@ -4151,6 +4154,7 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
       else
         {
           GtkAllocation allocation;
+          GtkAllocation clip;
           GtkRequisition child_req;
              
           allocation.x = child->x;
@@ -4170,7 +4174,7 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
           allocation.width = child_req.width;
           allocation.height = child_req.height;
           
-          gtk_widget_size_allocate (child->widget, &allocation);          
+          gtk_widget_size_allocate (child->widget, &allocation, -1, &clip);
         }
 
       tmp_list = tmp_list->next;
@@ -4178,8 +4182,10 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_size_allocate (GtkWidget *widget,
-                             GtkAllocation *allocation)
+gtk_text_view_size_allocate (GtkWidget           *widget,
+                             const GtkAllocation *allocation,
+                             int                  baseline,
+                             GtkAllocation       *out_clip)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
@@ -4294,8 +4300,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    * chance to run. So we do the work here. 
    */
   gtk_text_view_flush_first_validate (text_view);
-
-  gtk_widget_set_clip (widget, allocation);
 }
 
 static void
@@ -8677,6 +8681,7 @@ adjust_allocation (GtkWidget *widget,
                    int        dy)
 {
   GtkAllocation allocation;
+  GtkAllocation clip;
 
   if (!gtk_widget_is_drawable (widget))
     return;
@@ -8684,7 +8689,7 @@ adjust_allocation (GtkWidget *widget,
   gtk_widget_get_allocation (widget, &allocation);
   allocation.x += dx;
   allocation.y += dy;
-  gtk_widget_size_allocate (widget, &allocation);
+  gtk_widget_size_allocate (widget, &allocation, -1, &clip);
 }
 
 static void

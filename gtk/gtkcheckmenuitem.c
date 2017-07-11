@@ -108,17 +108,21 @@ G_DEFINE_TYPE_WITH_CODE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_IT
                          G_ADD_PRIVATE (GtkCheckMenuItem))
 
 static void
-gtk_check_menu_item_size_allocate (GtkWidget     *widget,
-                                   GtkAllocation *allocation)
+gtk_check_menu_item_size_allocate (GtkWidget           *widget,
+                                   const GtkAllocation *allocation,
+                                   int                  baseline,
+                                   GtkAllocation       *out_clip)
 {
-  GtkAllocation clip, widget_clip;
+  GtkAllocation child_clip;
   GtkAllocation indicator_alloc;
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
   gint toggle_size;
 
-  GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->size_allocate
-    (widget, allocation);
+  GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->size_allocate (widget,
+                                                                      allocation,
+                                                                      baseline,
+                                                                      out_clip);
 
   gtk_widget_measure (priv->indicator_widget,
                       GTK_ORIENTATION_HORIZONTAL,
@@ -140,14 +144,11 @@ gtk_check_menu_item_size_allocate (GtkWidget     *widget,
 
   indicator_alloc.y = (allocation->height - indicator_alloc.height) / 2;
 
-  gtk_widget_size_allocate_with_baseline (priv->indicator_widget,
-                                          &indicator_alloc,
-                                          gtk_widget_get_allocated_baseline (widget));
-  gtk_widget_get_clip (priv->indicator_widget, &clip);
-
-  gtk_widget_get_clip (widget, &widget_clip);
-  gdk_rectangle_union (&widget_clip, &clip, &widget_clip);
-  gtk_widget_set_clip (widget, &widget_clip);
+  gtk_widget_size_allocate (priv->indicator_widget,
+                            &indicator_alloc,
+                            baseline,
+                            &child_clip);
+  gdk_rectangle_union (out_clip, &child_clip, out_clip);
 }
 
 static void

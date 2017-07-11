@@ -209,8 +209,10 @@ static void     gtk_paned_measure (GtkWidget *widget,
                                    int            *natural,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
-static void     gtk_paned_size_allocate         (GtkWidget        *widget,
-                                                 GtkAllocation    *allocation);
+static void     gtk_paned_size_allocate         (GtkWidget           *widget,
+                                                 const GtkAllocation *allocation,
+                                                 int                  baseline,
+                                                 GtkAllocation       *out_clip);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
 static void     gtk_paned_direction_changed     (GtkWidget        *widget,
                                                  GtkTextDirection  previous_direction);
@@ -1224,12 +1226,13 @@ gtk_paned_set_child_visible (GtkPaned  *paned,
 }
 
 static void
-gtk_paned_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
+gtk_paned_size_allocate (GtkWidget           *widget,
+                         const GtkAllocation *allocation,
+                         int                  baseline,
+                         GtkAllocation       *out_clip)
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
-  GtkAllocation clip = *allocation;
   GtkAllocation child_clip;
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
@@ -1337,9 +1340,8 @@ gtk_paned_size_allocate (GtkWidget     *widget,
             child2_allocation.height = child2_height;
         }
 
-      gtk_widget_size_allocate (priv->handle_widget, &priv->handle_pos);
-      gtk_widget_get_clip (priv->handle_widget, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (priv->handle_widget, &priv->handle_pos, -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
       if (gtk_widget_get_mapped (widget) &&
           (old_handle_pos.x != priv->handle_pos.x ||
@@ -1356,13 +1358,11 @@ gtk_paned_size_allocate (GtkWidget     *widget,
         }
 
 
-      gtk_widget_size_allocate (priv->child1, &child1_allocation);
-      gtk_widget_get_clip (priv->child1, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (priv->child1, &child1_allocation, -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
-      gtk_widget_size_allocate (priv->child2, &child2_allocation);
-      gtk_widget_get_clip (priv->child2, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (priv->child2, &child2_allocation, -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
   else
     {
@@ -1378,18 +1378,16 @@ gtk_paned_size_allocate (GtkWidget     *widget,
           gtk_paned_set_child_visible (paned, CHILD1, TRUE);
           gtk_paned_set_child_visible (paned, CHILD2, FALSE);
 
-          gtk_widget_size_allocate (priv->child1, &child_allocation);
-          gtk_widget_get_clip (priv->child1, &child_clip);
-          gdk_rectangle_union (&clip, &child_clip, &clip);
+          gtk_widget_size_allocate (priv->child1, &child_allocation, -1, &child_clip);
+          gdk_rectangle_union (out_clip, &child_clip, out_clip);
         }
       else if (priv->child2 && gtk_widget_get_visible (priv->child2))
         {
           gtk_paned_set_child_visible (paned, CHILD1, FALSE);
           gtk_paned_set_child_visible (paned, CHILD2, TRUE);
 
-          gtk_widget_size_allocate (priv->child2, &child_allocation);
-          gtk_widget_get_clip (priv->child2, &child_clip);
-          gdk_rectangle_union (&clip, &child_clip, &clip);
+          gtk_widget_size_allocate (priv->child2, &child_allocation, -1, &child_clip);
+          gdk_rectangle_union (out_clip, &child_clip, out_clip);
         }
       else
         {
@@ -1397,8 +1395,6 @@ gtk_paned_size_allocate (GtkWidget     *widget,
           gtk_paned_set_child_visible (paned, CHILD2, FALSE);
         }
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 

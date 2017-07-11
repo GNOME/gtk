@@ -34,13 +34,6 @@
 G_DEFINE_TYPE (GtkIcon, gtk_icon, GTK_TYPE_WIDGET)
 
 static void
-gtk_icon_size_allocate (GtkWidget     *widget,
-                        GtkAllocation *allocation)
-{
-  gtk_widget_set_clip (widget, allocation);
-}
-
-static void
 gtk_icon_snapshot (GtkWidget   *widget,
                    GtkSnapshot *snapshot)
 {
@@ -61,7 +54,6 @@ gtk_icon_class_init (GtkIconClass *klass)
 {
   GtkWidgetClass *wclass = GTK_WIDGET_CLASS (klass);
 
-  wclass->size_allocate = gtk_icon_size_allocate;
   wclass->snapshot = gtk_icon_snapshot;
 }
 

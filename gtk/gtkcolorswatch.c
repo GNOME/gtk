@@ -380,18 +380,13 @@ tap_action (GtkGestureMultiPress *gesture,
 }
 
 static void
-swatch_size_allocate (GtkWidget     *widget,
-                      GtkAllocation *allocation)
+swatch_size_allocate (GtkWidget           *widget,
+                      const GtkAllocation *allocation,
+                      int                  baseline,
+                      GtkAllocation       *out_clip)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  GtkAllocation clip = *allocation, clip2 = *allocation;
-
-
-  gtk_widget_size_allocate (swatch->priv->overlay_widget, allocation);
-  gtk_widget_get_clip (swatch->priv->overlay_widget, &clip2);
-  gdk_rectangle_union (&clip, &clip2, &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+  gtk_widget_size_allocate (swatch->priv->overlay_widget, allocation, -1, out_clip);
 }
 
 static void

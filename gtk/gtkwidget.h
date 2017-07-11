@@ -302,8 +302,10 @@ struct _GtkWidgetClass
   void (* unmap)	       (GtkWidget        *widget);
   void (* realize)	       (GtkWidget        *widget);
   void (* unrealize)	       (GtkWidget        *widget);
-  void (* size_allocate)       (GtkWidget        *widget,
-				GtkAllocation    *allocation);
+  void (* size_allocate)       (GtkWidget           *widget,
+                                const GtkAllocation *allocation,
+                                int                  baseline,
+                                GtkAllocation       *out_clip);
   void (* state_flags_changed) (GtkWidget        *widget,
 				GtkStateFlags  	  previous_state_flags);
   void (* parent_set)	       (GtkWidget        *widget,
@@ -542,12 +544,10 @@ GDK_AVAILABLE_IN_3_8
 GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
-void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
-					   GtkAllocation       *allocation);
-GDK_AVAILABLE_IN_3_10
-void	   gtk_widget_size_allocate_with_baseline	  (GtkWidget	       *widget,
-							   GtkAllocation       *allocation,
-							   gint                 baseline);
+void	   gtk_widget_size_allocate	  (GtkWidget           *widget,
+                                           const GtkAllocation *allocation,
+                                           int                  baseline,
+                                           GtkAllocation       *out_clip);
 
 GDK_AVAILABLE_IN_ALL
 GtkSizeRequestMode  gtk_widget_get_request_mode               (GtkWidget      *widget);
