@@ -15343,7 +15343,6 @@ gtk_widget_snapshot (GtkWidget   *widget,
           cairo_destroy (cr);
         }
 
-
       if (gtk_widget_has_visible_focus (widget))
         {
           gtk_snapshot_offset (snapshot, margin.left, margin.top);
@@ -15631,6 +15630,12 @@ gtk_widget_set_focus_child (GtkWidget *widget,
       g_return_if_fail (GTK_IS_WIDGET (child));
       g_return_if_fail (gtk_widget_get_parent (child) == widget);
     }
+
+  if (priv->focus_child)
+    gtk_widget_unset_state_flags (priv->focus_child, GTK_STATE_FLAG_FOCUSED);
+
+  if (child)
+    gtk_widget_set_state_flags (child, GTK_STATE_FLAG_FOCUSED, FALSE);
 
   g_set_object (&priv->focus_child, child);
 
