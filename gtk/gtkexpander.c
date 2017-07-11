@@ -170,8 +170,10 @@ static void gtk_expander_get_property (GObject          *object,
                                        GParamSpec       *pspec);
 
 static void     gtk_expander_destroy        (GtkWidget        *widget);
-static void     gtk_expander_size_allocate  (GtkWidget        *widget,
-                                             GtkAllocation    *allocation);
+static void     gtk_expander_size_allocate  (GtkWidget           *widget,
+                                             const GtkAllocation *allocation,
+                                             int                  baseline,
+                                             GtkAllocation       *out_clip);
 static gboolean gtk_expander_enter_notify   (GtkWidget        *widget,
                                              GdkEventCrossing *event);
 static gboolean gtk_expander_leave_notify   (GtkWidget        *widget,
@@ -525,16 +527,13 @@ gtk_expander_destroy (GtkWidget *widget)
 }
 
 static void
-gtk_expander_size_allocate (GtkWidget     *widget,
-                            GtkAllocation *allocation)
+gtk_expander_size_allocate (GtkWidget           *widget,
+                            const GtkAllocation *allocation,
+                            int                  baseline,
+                            GtkAllocation       *out_clip)
 {
   GtkExpanderPrivate *priv = GTK_EXPANDER (widget)->priv;
-  GtkAllocation clip = *allocation;
-
-  gtk_widget_size_allocate_with_baseline (priv->box, allocation,
-                                          gtk_widget_get_allocated_baseline (widget));
-  gtk_widget_get_clip (priv->box, &clip);
-  gtk_widget_set_clip (widget, &clip);
+  gtk_widget_size_allocate (priv->box, allocation, baseline, out_clip);
 }
 
 static void

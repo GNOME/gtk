@@ -78,7 +78,9 @@
 
 
 static void gtk_check_button_size_allocate       (GtkWidget           *widget,
-						  GtkAllocation       *allocation);
+                                                  const GtkAllocation *allocation,
+                                                  int                  baseline,
+                                                  GtkAllocation       *out_clip);
 
 typedef struct {
   GtkWidget *indicator_widget;
@@ -432,12 +434,13 @@ gtk_check_button_new_with_mnemonic (const gchar *label)
 }
 
 static void
-gtk_check_button_size_allocate (GtkWidget     *widget,
-				GtkAllocation *allocation)
+gtk_check_button_size_allocate (GtkWidget           *widget,
+                                const GtkAllocation *allocation,
+                                int                  baseline,
+                                GtkAllocation       *out_clip)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (widget));
   GtkAllocation child_alloc = { 0 };
-  GdkRectangle clip = *allocation;
   GdkRectangle child_clip;
   GtkWidget *child;
   gboolean is_rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
@@ -462,9 +465,8 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
           child_alloc.x = allocation->x;
         }
 
-      gtk_widget_size_allocate (priv->indicator_widget, &child_alloc);
-      gtk_widget_get_clip (priv->indicator_widget, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (priv->indicator_widget, &child_alloc, baseline, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
@@ -475,12 +477,9 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
       child_alloc.width = allocation->width - child_alloc.width; /* Indicator width */
       child_alloc.height = allocation->height;
 
-      gtk_widget_size_allocate (child, &child_alloc);
-      gtk_widget_get_clip (child, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (child, &child_alloc, baseline, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 GtkCssNode *

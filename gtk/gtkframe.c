@@ -117,8 +117,10 @@ static void gtk_frame_get_property (GObject     *object,
 				    guint        param_id,
 				    GValue      *value,
 				    GParamSpec  *pspec);
-static void gtk_frame_size_allocate (GtkWidget      *widget,
-				     GtkAllocation  *allocation);
+static void gtk_frame_size_allocate (GtkWidget           *widget,
+                                     const GtkAllocation *allocation,
+                                     int                  baseline,
+                                     GtkAllocation       *out_clip);
 static void gtk_frame_remove        (GtkContainer   *container,
 				     GtkWidget      *child);
 static void gtk_frame_forall        (GtkContainer   *container,
@@ -611,15 +613,16 @@ gtk_frame_get_shadow_type (GtkFrame *frame)
 }
 
 static void
-gtk_frame_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
+gtk_frame_size_allocate (GtkWidget           *widget,
+                         const GtkAllocation *allocation,
+                         int                  baseline,
+                         GtkAllocation       *out_clip)
 {
   GtkFrame *frame = GTK_FRAME (widget);
   GtkFramePrivate *priv = frame->priv;
   GtkWidget *child;
   GtkAllocation new_allocation;
-  GtkAllocation clip = *allocation;
-  GtkAllocation child_clip = *allocation;
+  GtkAllocation child_clip;
 
   gtk_frame_compute_child_allocation (frame, &new_allocation);
   priv->child_allocation = new_allocation;
@@ -646,20 +649,16 @@ gtk_frame_size_allocate (GtkWidget     *widget,
       priv->label_allocation.height = height;
       priv->label_allocation.width = width;
 
-      gtk_widget_size_allocate (priv->label_widget, &priv->label_allocation);
-      gtk_widget_get_clip (priv->label_widget, &child_clip);
-      gdk_rectangle_union (&child_clip, &clip, &clip);
+      gtk_widget_size_allocate (priv->label_widget, &priv->label_allocation, -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
-      gtk_widget_size_allocate (child, &priv->child_allocation);
-      gtk_widget_get_clip (child, &child_clip);
-      gdk_rectangle_union (&child_clip, &clip, &clip);
+      gtk_widget_size_allocate (child, &priv->child_allocation, -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

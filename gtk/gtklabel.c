@@ -398,8 +398,10 @@ static void gtk_label_get_property      (GObject          *object,
 					 GParamSpec       *pspec);
 static void gtk_label_finalize          (GObject          *object);
 static void gtk_label_destroy           (GtkWidget        *widget);
-static void gtk_label_size_allocate     (GtkWidget        *widget,
-                                         GtkAllocation    *allocation);
+static void gtk_label_size_allocate     (GtkWidget           *widget,
+                                         const GtkAllocation *allocation,
+                                         int                  baseline,
+                                         GtkAllocation       *out_clip);
 static void gtk_label_state_flags_changed   (GtkWidget        *widget,
                                              GtkStateFlags     prev_state);
 static void gtk_label_style_updated     (GtkWidget        *widget);
@@ -3722,19 +3724,18 @@ gtk_label_get_ink_rect (GtkLabel     *label,
 }
 
 static void
-gtk_label_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
+gtk_label_size_allocate (GtkWidget           *widget,
+                         const GtkAllocation *allocation,
+                         int                  baseline,
+                         GtkAllocation       *out_clip)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
-  GdkRectangle clip_rect;
 
   if (priv->layout)
     gtk_label_update_layout_width (label);
 
-  gtk_label_get_ink_rect (label, &clip_rect);
-  gdk_rectangle_union (&clip_rect, allocation, &clip_rect);
-  gtk_widget_set_clip (widget, &clip_rect);
+  gtk_label_get_ink_rect (label, out_clip);
 }
 
 static void

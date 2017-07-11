@@ -141,8 +141,10 @@ struct _GtkImagePrivate
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_BUTTON
 static void gtk_image_snapshot             (GtkWidget    *widget,
                                             GtkSnapshot  *snapshot);
-static void gtk_image_size_allocate        (GtkWidget    *widget,
-                                            GtkAllocation*allocation);
+static void gtk_image_size_allocate        (GtkWidget           *widget,
+                                            const GtkAllocation *allocation,
+                                            int                  baseline,
+                                            GtkAllocation       *out_clip);
 static void gtk_image_unmap                (GtkWidget    *widget);
 static void gtk_image_unrealize            (GtkWidget    *widget);
 static void gtk_image_measure (GtkWidget      *widget,
@@ -1271,22 +1273,17 @@ gtk_image_reset_anim_iter (GtkImage *image)
 }
 
 static void
-gtk_image_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
+gtk_image_size_allocate (GtkWidget           *widget,
+                         const GtkAllocation *allocation,
+                         int                  baseline,
+                         GtkAllocation       *out_clip)
 {
-  GtkAllocation clip = *allocation;
-  GdkRectangle extents;
-
   _gtk_style_context_get_icon_extents (gtk_widget_get_style_context (widget),
-                                       &extents,
+                                       out_clip,
                                        allocation->x,
                                        allocation->y,
                                        allocation->width,
                                        allocation->height);
-
-  gdk_rectangle_union (&clip, &extents, &clip);
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

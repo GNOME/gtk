@@ -594,8 +594,10 @@ gtk_application_window_measure (GtkWidget *widget,
 }
 
 static void
-gtk_application_window_real_size_allocate (GtkWidget     *widget,
-                                           GtkAllocation *allocation)
+gtk_application_window_real_size_allocate (GtkWidget           *widget,
+                                           const GtkAllocation *allocation,
+                                           int                  baseline,
+                                           GtkAllocation       *out_clip)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
 
@@ -614,19 +616,19 @@ gtk_application_window_real_size_allocate (GtkWidget     *widget,
                           &menubar_height, NULL, NULL, NULL);
 
       menubar_allocation.height = menubar_height;
-      gtk_widget_size_allocate (window->priv->menubar, &menubar_allocation);
+      gtk_widget_size_allocate  (window->priv->menubar, &menubar_allocation, baseline, out_clip);
 
       child_allocation.y += menubar_height;
       child_allocation.height -= menubar_height;
       child = gtk_bin_get_child (GTK_BIN (window));
       if (child != NULL && gtk_widget_get_visible (child))
-        gtk_widget_size_allocate (child, &child_allocation);
+        gtk_widget_size_allocate (child, &child_allocation, baseline, out_clip);
     }
   else
-    GTK_WIDGET_CLASS (gtk_application_window_parent_class)
-      ->size_allocate (widget, allocation);
-
-  gtk_widget_set_clip (widget, allocation);
+    GTK_WIDGET_CLASS (gtk_application_window_parent_class)->size_allocate (widget,
+                                                                           allocation,
+                                                                           baseline,
+                                                                           out_clip);
 }
 
 static void

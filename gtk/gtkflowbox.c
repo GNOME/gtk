@@ -417,24 +417,16 @@ gtk_flow_box_child_measure (GtkWidget     *widget,
 }
 
 static void
-gtk_flow_box_child_size_allocate (GtkWidget     *widget,
-                                  GtkAllocation *allocation)
+gtk_flow_box_child_size_allocate (GtkWidget           *widget,
+                                  const GtkAllocation *allocation,
+                                  int                  baseline,
+                                  GtkAllocation       *out_clip)
 {
-  GtkAllocation clip = *allocation;
   GtkWidget *child;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
-    {
-      GdkRectangle child_clip;
-
-      gtk_widget_size_allocate (child, allocation);
-      gtk_widget_get_clip (child, &child_clip);
-
-      gdk_rectangle_union (&child_clip, &clip, &clip);
-    }
-
-  gtk_widget_set_clip (widget, &clip);
+    gtk_widget_size_allocate (child, allocation, -1, out_clip);
 }
 
 /* GObject implementation {{{2 */
@@ -1402,12 +1394,13 @@ get_offset_pixels (GtkAlign align,
 }
 
 static void
-gtk_flow_box_size_allocate (GtkWidget     *widget,
-                            GtkAllocation *allocation)
+gtk_flow_box_size_allocate (GtkWidget           *widget,
+                            const GtkAllocation *allocation,
+                            int                  baseline,
+                            GtkAllocation       *out_clip)
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate  *priv = BOX_PRIV (box);
-  GtkAllocation clip = *allocation;
   GdkRectangle child_clip;
   GtkAllocation widget_allocation;
   GtkAllocation child_allocation;
@@ -1748,9 +1741,8 @@ gtk_flow_box_size_allocate (GtkWidget     *widget,
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         child_allocation.x = allocation->width - child_allocation.x - child_allocation.width;
 
-      gtk_widget_size_allocate (child, &child_allocation);
-      gtk_widget_get_clip (child, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (child, &child_allocation, -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
       item_offset += this_item_size;
       item_offset += item_spacing;
@@ -1760,8 +1752,6 @@ gtk_flow_box_size_allocate (GtkWidget     *widget,
 
   g_free (item_sizes);
   g_free (line_sizes);
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static GtkSizeRequestMode

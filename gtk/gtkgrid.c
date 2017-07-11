@@ -1575,20 +1575,19 @@ gtk_grid_request_allocate_children (GtkGridRequest      *request,
         child_allocation.x = allocation->x + allocation->width
                              - (child_allocation.x - allocation->x) - child_allocation.width;
 
-      gtk_widget_size_allocate_with_baseline (child->widget, &child_allocation, baseline);
-      gtk_widget_get_clip (child->widget, &child_clip);
-      gdk_rectangle_union (&child_clip, out_clip, out_clip);
+      gtk_widget_size_allocate (child->widget, &child_allocation, baseline, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
 }
 
 #define GET_SIZE(allocation, orientation) (orientation == GTK_ORIENTATION_HORIZONTAL ? allocation->width : allocation->height)
 
 static void
-gtk_grid_size_allocate (GtkWidget     *widget,
-                        GtkAllocation *allocation)
+gtk_grid_size_allocate (GtkWidget          *widget,
+                        const GtkAllocation *allocation,
+                        int                  baseline,
+                        GtkAllocation       *out_clip)
 {
-  GtkAllocation clip = *allocation;
-  GtkAllocation children_clip = *allocation;
   GtkGrid *grid = GTK_GRID (widget);
   GtkGridPrivate *priv = grid->priv;
   GtkGridRequest request;
@@ -1596,10 +1595,7 @@ gtk_grid_size_allocate (GtkWidget     *widget,
   GtkOrientation orientation;
 
   if (priv->children == NULL)
-    {
-      gtk_widget_set_clip (widget, &clip);
-      return;
-    }
+    return;
 
   request.grid = grid;
 
@@ -1625,10 +1621,7 @@ gtk_grid_size_allocate (GtkWidget     *widget,
   gtk_grid_request_position (&request, 0);
   gtk_grid_request_position (&request, 1);
 
-  gtk_grid_request_allocate_children (&request, allocation, &children_clip);
-  gdk_rectangle_union (&children_clip, &clip, &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+  gtk_grid_request_allocate_children (&request, allocation, out_clip);
 }
 
 static void

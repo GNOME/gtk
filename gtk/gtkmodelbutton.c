@@ -755,23 +755,26 @@ gtk_model_button_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_model_button_size_allocate (GtkWidget     *widget,
-                                GtkAllocation *allocation)
+gtk_model_button_size_allocate (GtkWidget           *widget,
+                                const GtkAllocation *allocation,
+                                int                  baseline,
+                                GtkAllocation       *out_clip)
 {
   if (GTK_MODEL_BUTTON (widget)->iconic)
     {
-      GTK_WIDGET_CLASS (gtk_model_button_parent_class)->size_allocate (widget, allocation);
+      GTK_WIDGET_CLASS (gtk_model_button_parent_class)->size_allocate (widget,
+                                                                       allocation,
+                                                                       baseline,
+                                                                       out_clip);
     }
   else
     {
-      GtkAllocation clip = *allocation;
       GtkAllocation child_clip = *allocation;
       GtkModelButton *button;
       GtkAllocation child_allocation;
       GtkWidget *child;
       gint check_min_width, check_nat_width;
       gint check_min_height, check_nat_height;
-      int baseline;
 
       button = GTK_MODEL_BUTTON (widget);
       child = gtk_bin_get_child (GTK_BIN (widget));
@@ -797,10 +800,8 @@ gtk_model_button_size_allocate (GtkWidget     *widget,
       child_allocation.width = check_nat_width;
       child_allocation.height = check_nat_height;
 
-      gtk_widget_size_allocate_with_baseline (button->indicator_widget, &child_allocation,
-                                              gtk_widget_get_allocated_baseline (widget));
-      gtk_widget_get_clip (button->indicator_widget, &child_clip);
-      gdk_rectangle_union (&clip, &child_clip, &clip);
+      gtk_widget_size_allocate (button->indicator_widget, &child_allocation, baseline, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
       if (child && gtk_widget_get_visible (child))
         {
@@ -824,16 +825,12 @@ gtk_model_button_size_allocate (GtkWidget     *widget,
           child_allocation.width = allocation->width - border.left - border.right;
           child_allocation.height = allocation->height - border.top - border.bottom;
 
-          baseline = gtk_widget_get_allocated_baseline (widget);
           if (baseline != -1)
             baseline -= border.top;
 
-          gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
-          gtk_widget_get_clip (child, &child_clip);
-          gdk_rectangle_union (&clip, &child_clip, &clip);
+          gtk_widget_size_allocate (child, &child_allocation, baseline, &child_clip);
+          gdk_rectangle_union (out_clip, &child_clip, out_clip);
         }
-
-      gtk_widget_set_clip (widget, &clip);
     }
 }
 

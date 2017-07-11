@@ -98,8 +98,10 @@ static void gtk_viewport_get_property             (GObject         *object,
 static void gtk_viewport_destroy                  (GtkWidget        *widget);
 static void gtk_viewport_snapshot                 (GtkWidget        *widget,
 						   GtkSnapshot      *snapshot);
-static void gtk_viewport_size_allocate            (GtkWidget        *widget,
-						   GtkAllocation    *allocation);
+static void gtk_viewport_size_allocate            (GtkWidget           *widget,
+                                                   const GtkAllocation *allocation,
+                                                   int                  baseline,
+                                                   GtkAllocation       *out_clip);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 						   gpointer          data);
 static void viewport_set_adjustment               (GtkViewport      *viewport,
@@ -503,12 +505,13 @@ gtk_viewport_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_viewport_size_allocate (GtkWidget     *widget,
-                            GtkAllocation *allocation)
+gtk_viewport_size_allocate (GtkWidget           *widget,
+                            const GtkAllocation *allocation,
+                            int                  baseline,
+                            GtkAllocation       *out_clip)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
-  GtkAllocation clip = *allocation;
   GtkAdjustment *hadjustment = priv->hadjustment;
   GtkAdjustment *vadjustment = priv->vadjustment;
   GtkWidget *child;
@@ -522,21 +525,19 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
-      GtkAllocation child_allocation;
+      GtkAllocation child_allocation, child_clip;
 
       child_allocation.x = allocation->x - gtk_adjustment_get_value (hadjustment);
       child_allocation.y = allocation->y - gtk_adjustment_get_value (vadjustment);
       child_allocation.width = gtk_adjustment_get_upper (hadjustment);
       child_allocation.height = gtk_adjustment_get_upper (vadjustment);
 
-      gtk_widget_size_allocate (child, &child_allocation);
-      gtk_widget_get_clip (child, &clip);
+      /* Explicitly ignore the child clip here. */
+      gtk_widget_size_allocate (child, &child_allocation, -1, &child_clip);
     }
 
   g_object_thaw_notify (G_OBJECT (hadjustment));
   g_object_thaw_notify (G_OBJECT (vadjustment));
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

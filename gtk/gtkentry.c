@@ -398,8 +398,10 @@ static void   gtk_entry_realize              (GtkWidget        *widget);
 static void   gtk_entry_unrealize            (GtkWidget        *widget);
 static void   gtk_entry_map                  (GtkWidget        *widget);
 static void   gtk_entry_unmap                (GtkWidget        *widget);
-static void   gtk_entry_size_allocate        (GtkWidget        *widget,
-					      GtkAllocation    *allocation);
+static void   gtk_entry_size_allocate        (GtkWidget           *widget,
+                                              const GtkAllocation *allocation,
+                                              int                  baseline,
+                                              GtkAllocation       *out_clip);
 static void   gtk_entry_snapshot             (GtkWidget        *widget,
                                               GtkSnapshot      *snapshot);
 static gboolean gtk_entry_event              (GtkWidget        *widget,
@@ -3101,17 +3103,17 @@ gtk_entry_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_entry_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
+gtk_entry_size_allocate (GtkWidget           *widget,
+                         const GtkAllocation *allocation,
+                         int                  baseline,
+                         GtkAllocation       *out_clip)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  GdkRectangle clip = *allocation;
   GtkAllocation child_clip;
   gint i;
 
-  priv->text_baseline = gtk_widget_get_allocated_baseline (widget);
-
+  priv->text_baseline = baseline;
   priv->text_x = 0;
   priv->text_width = allocation->width;
 
@@ -3150,9 +3152,8 @@ gtk_entry_size_allocate (GtkWidget     *widget,
       icon_alloc.height = height;
       priv->text_width -= width;
 
-      gtk_widget_size_allocate (icon_info->widget, &icon_alloc);
-      gtk_widget_get_clip (icon_info->widget, &child_clip);
-      gdk_rectangle_union (&child_clip, &clip, &clip);
+      gtk_widget_size_allocate (icon_info->widget, &icon_alloc, baseline, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
 
   if (priv->progress_widget && gtk_widget_get_visible (priv->progress_widget))
@@ -3164,10 +3165,8 @@ gtk_entry_size_allocate (GtkWidget     *widget,
       progress_alloc.width = allocation->width;
       progress_alloc.height = allocation->height;
 
-      gtk_widget_size_allocate (priv->progress_widget, &progress_alloc);
-      gtk_widget_get_clip (priv->progress_widget, &child_clip);
-
-      gdk_rectangle_union (&child_clip, &clip, &clip);
+      gtk_widget_size_allocate (priv->progress_widget, &progress_alloc, -1, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
 
   /* Do this here instead of gtk_entry_size_allocate() so it works
@@ -3183,8 +3182,6 @@ gtk_entry_size_allocate (GtkWidget     *widget,
       if (completion)
         _gtk_entry_completion_resize_popup (completion);
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

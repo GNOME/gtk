@@ -252,7 +252,7 @@ allocate_contents (GtkGizmo            *gizmo,
   GtkWidget *child = gtk_bin_get_child (GTK_BIN (popover));
 
   if (child)
-    gtk_widget_size_allocate (child, (GtkAllocation*)allocation);
+    gtk_widget_size_allocate (child, allocation, -1, out_clip);
 }
 
 static void
@@ -368,6 +368,7 @@ gtk_popover_get_property (GObject    *object,
 static gboolean
 transitions_enabled (GtkPopover *popover)
 {
+  /*return FALSE;*/
   return gtk_settings_get_enable_animations (gtk_widget_get_settings (GTK_WIDGET (popover)));
 }
 
@@ -1366,13 +1367,13 @@ gtk_popover_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_popover_size_allocate (GtkWidget     *widget,
-                           GtkAllocation *allocation)
+gtk_popover_size_allocate (GtkWidget           *widget,
+                           const GtkAllocation *allocation,
+                           int                  baseline,
+                           GtkAllocation       *out_clip)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkAllocation child_clip;
-  GtkAllocation clip = *allocation;
   GtkAllocation child_alloc = *allocation;
 
   /* Note that we in measure() we add TAIL_HEIGHT in both directions, regardless
@@ -1401,9 +1402,7 @@ gtk_popover_size_allocate (GtkWidget     *widget,
       break;
     }
 
-  gtk_widget_size_allocate (priv->contents_widget, &child_alloc);
-  gtk_widget_get_clip (priv->contents_widget, &child_clip);
-  gdk_rectangle_union (&clip, &child_clip, &clip);
+  gtk_widget_size_allocate (priv->contents_widget, &child_alloc, -1, out_clip);
 
   if (gtk_widget_get_realized (widget))
     {
@@ -1413,8 +1412,6 @@ gtk_popover_size_allocate (GtkWidget     *widget,
                               a.x, a.y, a.width, a.height);
       gtk_popover_update_shape (popover);
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static gboolean
@@ -1835,9 +1832,11 @@ _gtk_popover_parent_unmap (GtkWidget *widget,
 }
 
 static void
-_gtk_popover_parent_size_allocate (GtkWidget     *widget,
-                                   GtkAllocation *allocation,
-                                   GtkPopover    *popover)
+_gtk_popover_parent_size_allocate (GtkWidget           *widget,
+                                   const GtkAllocation *allocation,
+                                   int                  baseline,
+                                   GtkAllocation       *out_clip,
+                                   GtkPopover          *popover)
 {
   gtk_popover_update_position (popover);
 }

@@ -238,6 +238,7 @@ gtk_overlay_child_allocate (GtkOverlay      *overlay,
                             GtkOverlayChild *child)
 {
   GtkAllocation child_allocation;
+  GtkAllocation child_clip;
 
   if (!gtk_widget_get_visible (child->widget))
     return;
@@ -245,23 +246,25 @@ gtk_overlay_child_allocate (GtkOverlay      *overlay,
   gtk_overlay_compute_child_allocation (overlay, child, &child_allocation);
 
   gtk_overlay_child_update_style_classes (overlay, child->widget, &child_allocation);
-  gtk_widget_size_allocate (child->widget, &child_allocation);
+  gtk_widget_size_allocate (child->widget, &child_allocation, -1, &child_clip);
 }
 
 static void
-gtk_overlay_size_allocate (GtkWidget     *widget,
-                           GtkAllocation *allocation)
+gtk_overlay_size_allocate (GtkWidget           *widget,
+                           const GtkAllocation *allocation,
+                           int                  baseline,
+                           GtkAllocation       *out_clip)
 {
   GtkOverlay *overlay = GTK_OVERLAY (widget);
   GtkOverlayPrivate *priv = overlay->priv;
   GSList *children;
   GtkWidget *main_widget;
 
-  GTK_WIDGET_CLASS (gtk_overlay_parent_class)->size_allocate (widget, allocation);
+  GTK_WIDGET_CLASS (gtk_overlay_parent_class)->size_allocate (widget, allocation, baseline, out_clip);
 
   main_widget = gtk_bin_get_child (GTK_BIN (overlay));
   if (main_widget && gtk_widget_get_visible (main_widget))
-    gtk_widget_size_allocate (main_widget, allocation);
+    gtk_widget_size_allocate (main_widget, allocation, -1, out_clip);
 
   for (children = priv->children; children; children = children->next)
     gtk_overlay_child_allocate (overlay, children->data);

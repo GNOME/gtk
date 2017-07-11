@@ -135,7 +135,11 @@ state_flags_changed (GtkWidget *w, GtkStateFlags old_flags, GtkInspectorMiscInfo
 }
 
 static void
-allocation_changed (GtkWidget *w, GdkRectangle *allocation, GtkInspectorMiscInfo *sl)
+allocation_changed (GtkWidget    *w,
+                    GdkRectangle *allocation,
+                    int           baseline,
+                    GdkRectangle *out_clip,
+                    GtkInspectorMiscInfo *sl)
 {
   GtkAllocation alloc;
   GtkAllocation clip;
@@ -467,7 +471,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       state_flags_changed (GTK_WIDGET (sl->priv->object), 0, sl);
 
       g_signal_connect_object (object, "size-allocate", G_CALLBACK (allocation_changed), sl, 0);
-      allocation_changed (GTK_WIDGET (sl->priv->object), NULL, sl);
+      allocation_changed (GTK_WIDGET (sl->priv->object), NULL, -1, NULL, sl);
     }
   else
     {

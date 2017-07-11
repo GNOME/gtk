@@ -94,8 +94,10 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
 
 static void     gtk_revealer_real_add                            (GtkContainer  *widget,
                                                                   GtkWidget     *child);
-static void     gtk_revealer_real_size_allocate                  (GtkWidget     *widget,
-                                                                  GtkAllocation *allocation);
+static void     gtk_revealer_real_size_allocate                  (GtkWidget           *widget,
+                                                                  const GtkAllocation *allocation,
+                                                                  int                  baseline,
+                                                                  GtkAllocation       *out_clip);
 static void gtk_revealer_measure (GtkWidget      *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
@@ -293,9 +295,9 @@ effective_transition (GtkRevealer *revealer)
 }
 
 static void
-gtk_revealer_get_child_allocation (GtkRevealer   *revealer,
-                                   GtkAllocation *allocation,
-                                   GtkAllocation *child_allocation)
+gtk_revealer_get_child_allocation (GtkRevealer         *revealer,
+                                   const GtkAllocation *allocation,
+                                   GtkAllocation       *child_allocation)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   GtkWidget *child;
@@ -357,12 +359,13 @@ gtk_revealer_real_add (GtkContainer *container,
 }
 
 static void
-gtk_revealer_real_size_allocate (GtkWidget     *widget,
-                                 GtkAllocation *allocation)
+gtk_revealer_real_size_allocate (GtkWidget           *widget,
+                                 const GtkAllocation *allocation,
+                                 int                  baseline,
+                                 GtkAllocation       *out_clip)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
   GtkWidget *child;
-  GtkAllocation clip = *allocation;
 
   child = gtk_bin_get_child (GTK_BIN (revealer));
   if (child != NULL && gtk_widget_get_visible (child))
@@ -370,11 +373,8 @@ gtk_revealer_real_size_allocate (GtkWidget     *widget,
       GtkAllocation child_allocation;
 
       gtk_revealer_get_child_allocation (revealer, allocation, &child_allocation);
-      gtk_widget_size_allocate (child, &child_allocation);
-      gtk_widget_get_clip (child, &clip);
+      gtk_widget_size_allocate (child, &child_allocation, -1, out_clip);
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

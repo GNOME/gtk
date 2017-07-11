@@ -164,6 +164,8 @@ gtk_magnifier_measure (GtkWidget      *widget,
 static void
 resize_handler (GtkWidget     *widget,
                 GtkAllocation *alloc,
+                int            baseline,
+                GtkAllocation *out_clip,
                 GtkWidget     *magnifier)
 {
   gtk_widget_queue_resize (magnifier);

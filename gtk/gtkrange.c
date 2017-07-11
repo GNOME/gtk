@@ -162,8 +162,10 @@ static void gtk_range_measure        (GtkWidget      *widget,
                                       int            *natural,
                                       int            *minimum_baseline,
                                       int            *natural_baseline);
-static void gtk_range_size_allocate  (GtkWidget        *widget,
-                                      GtkAllocation    *allocation);
+static void gtk_range_size_allocate  (GtkWidget           *widget,
+                                      const GtkAllocation *allocation,
+                                      int                  baseline,
+                                      GtkAllocation       *out_clip);
 static void gtk_range_unmap          (GtkWidget        *widget);
 
 static void gtk_range_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
@@ -1422,8 +1424,7 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
                                      gtk_adjustment_get_value (priv->adjustment),
                                      &slider_alloc);
 
-  gtk_widget_size_allocate (priv->slider_widget, &slider_alloc);
-  gtk_widget_get_clip (priv->slider_widget, out_clip);
+  gtk_widget_size_allocate (priv->slider_widget, &slider_alloc, -1, out_clip);
 
   if (gtk_adjustment_get_lower (priv->adjustment) == gtk_adjustment_get_upper (priv->adjustment))
     value = 0;
@@ -1465,8 +1466,7 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
             fill_alloc.y += allocation->height - fill_alloc.height;
         }
 
-      gtk_widget_size_allocate (priv->fill_widget, &fill_alloc);
-      gtk_widget_get_clip (priv->fill_widget, &fill_clip);
+      gtk_widget_size_allocate (priv->fill_widget, &fill_alloc, -1, &fill_clip);
       gdk_rectangle_union (out_clip, &fill_clip, out_clip);
     }
 
@@ -1505,9 +1505,7 @@ gtk_range_allocate_trough (GtkGizmo            *gizmo,
           highlight_alloc.height = MAX (min, allocation->height* value);
         }
 
-      gtk_widget_size_allocate (priv->highlight_widget, &highlight_alloc);
-      gtk_widget_get_clip (priv->highlight_widget, &highlight_clip);
-      gdk_rectangle_union (out_clip, &highlight_clip, out_clip);
+      gtk_widget_size_allocate (priv->highlight_widget, &highlight_alloc, -1, &highlight_clip);
     }
 }
 
@@ -1599,13 +1597,13 @@ clamp_dimensions (const GtkAllocation *allocation,
 }
 
 static void
-gtk_range_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
+gtk_range_size_allocate (GtkWidget           *widget,
+                         const GtkAllocation *allocation,
+                         int                  baseline,
+                         GtkAllocation       *out_clip)
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GtkAllocation clip = *allocation;
-  GtkAllocation child_clip;
   GtkBorder border = { 0 };
   GtkAllocation box_alloc;
   int box_min_width, box_min_height;
@@ -1632,14 +1630,11 @@ gtk_range_size_allocate (GtkWidget     *widget,
   box_alloc.width = box_min_width;
   box_alloc.height = box_min_height;
 
-  gtk_widget_size_allocate (priv->trough_widget, &box_alloc);
-  gtk_widget_get_clip (priv->trough_widget, &child_clip);
+  gtk_widget_size_allocate (priv->trough_widget, &box_alloc, -1, out_clip);
 
   /* TODO: we should compute a proper clip from get_range_border(),
    * but this will at least give us outset shadows.
    */
-  gdk_rectangle_union (&child_clip, &clip, &clip);
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

@@ -1818,6 +1818,7 @@ gtk_container_real_check_resize (GtkContainer *container)
     {
       if (!_gtk_widget_is_toplevel (widget))
         {
+          GtkAllocation clip;
           gtk_widget_get_preferred_size (widget, &requisition, NULL);
           gtk_widget_get_allocated_size (widget, &allocation, &baseline);
 
@@ -1825,7 +1826,7 @@ gtk_container_real_check_resize (GtkContainer *container)
             allocation.width = requisition.width;
           if (allocation.height < requisition.height)
             allocation.height = requisition.height;
-          gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
+          gtk_widget_size_allocate (widget, &allocation, baseline, &clip);
         }
       else
         gtk_widget_queue_resize (widget);

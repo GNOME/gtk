@@ -879,8 +879,10 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
 }
 
 static void
-gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
-                                        GtkAllocation *allocation)
+gtk_tool_item_group_real_size_allocate (GtkWidget           *widget,
+                                        const GtkAllocation *allocation,
+                                        int                  baseline,
+                                        GtkAllocation       *out_clip)
 {
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (widget);
   GtkToolItemGroupPrivate* priv = group->priv;
@@ -903,7 +905,8 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
   orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
 
   /* chain up */
-  GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->size_allocate (widget, allocation);
+  GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->size_allocate (widget, allocation,
+                                                                      baseline, out_clip);
 
   child_allocation.x = 0;
   child_allocation.y = 0;
@@ -928,7 +931,7 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
             child_allocation.x = allocation->width - child_allocation.width;
         }
 
-      gtk_widget_size_allocate (priv->header, &child_allocation);
+      gtk_widget_size_allocate (priv->header, &child_allocation, -1, out_clip);
 
       if (GTK_ORIENTATION_VERTICAL == orientation)
         child_allocation.y += child_allocation.height;
@@ -1055,7 +1058,7 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
 
           child_allocation.height = item_size.height;
 
-          gtk_widget_size_allocate (GTK_WIDGET (child->item), &child_allocation);
+          gtk_widget_size_allocate (GTK_WIDGET (child->item), &child_allocation, -1, out_clip);
           gtk_widget_set_child_visible (GTK_WIDGET (child->item), TRUE);
         }
 
@@ -1076,12 +1079,12 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_tool_item_group_size_allocate (GtkWidget     *widget,
-                                   GtkAllocation *allocation)
+gtk_tool_item_group_size_allocate (GtkWidget           *widget,
+                                   const GtkAllocation *allocation,
+                                   int                  baseline,
+                                   GtkAllocation       *out_clip)
 {
-  gtk_tool_item_group_real_size_allocate (widget, allocation);
-
-  gtk_widget_queue_draw (widget);
+  gtk_tool_item_group_real_size_allocate (widget, allocation, baseline, out_clip);
 }
 
 static void

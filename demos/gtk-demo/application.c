@@ -455,12 +455,15 @@ demo_application_window_constructed (GObject *object)
 }
 
 static void
-demo_application_window_size_allocate (GtkWidget     *widget,
-                                       GtkAllocation *allocation)
+demo_application_window_size_allocate (GtkWidget           *widget,
+                                       const GtkAllocation *allocation,
+                                       int                  baseline,
+                                       GtkAllocation       *out_clip)
 {
   DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
 
-  GTK_WIDGET_CLASS (demo_application_window_parent_class)->size_allocate (widget, allocation);
+  GTK_WIDGET_CLASS (demo_application_window_parent_class)->size_allocate (widget, allocation,
+                                                                          baseline, out_clip);
 
   if (!window->maximized && !window->fullscreen)
     gtk_window_get_size (GTK_WINDOW (window), &window->width, &window->height);

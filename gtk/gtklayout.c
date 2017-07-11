@@ -122,8 +122,10 @@ static void gtk_layout_measure (GtkWidget *widget,
                                 int            *natural,
                                 int            *minimum_baseline,
                                 int            *natural_baseline);
-static void gtk_layout_size_allocate      (GtkWidget      *widget,
-                                           GtkAllocation  *allocation);
+static void gtk_layout_size_allocate      (GtkWidget          *widget,
+                                           const GtkAllocation *allocation,
+                                           int                 baseline,
+                                           GtkAllocation      *out_clip);
 static void gtk_layout_add                (GtkContainer   *container,
 					   GtkWidget      *widget);
 static void gtk_layout_remove             (GtkContainer   *container,
@@ -757,8 +759,10 @@ gtk_layout_measure (GtkWidget *widget,
 
 
 static void
-gtk_layout_size_allocate (GtkWidget     *widget,
-			  GtkAllocation *allocation)
+gtk_layout_size_allocate (GtkWidget           *widget,
+                          const GtkAllocation *allocation,
+                          int                  baseline,
+                          GtkAllocation       *out_clip)
 {
   GtkLayout *layout = GTK_LAYOUT (widget);
   GtkLayoutPrivate *priv = layout->priv;
@@ -776,8 +780,6 @@ gtk_layout_size_allocate (GtkWidget     *widget,
 
   gtk_layout_set_hadjustment_values (layout);
   gtk_layout_set_vadjustment_values (layout);
-
-  gtk_widget_set_clip (widget, allocation);
 }
 
 /* Container methods
@@ -846,6 +848,7 @@ gtk_layout_allocate_child (GtkLayout      *layout,
 {
   GtkAllocation allocation;
   GtkRequisition requisition;
+  GtkAllocation child_clip;
 
   allocation.x = child->x;
   allocation.y = child->y;
@@ -853,8 +856,8 @@ gtk_layout_allocate_child (GtkLayout      *layout,
   gtk_widget_get_preferred_size (child->widget, &requisition, NULL);
   allocation.width = requisition.width;
   allocation.height = requisition.height;
-  
-  gtk_widget_size_allocate (child->widget, &allocation);
+
+  gtk_widget_size_allocate (child->widget, &allocation, -1, &child_clip);
 }
 
 /* Callbacks */

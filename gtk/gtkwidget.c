@@ -619,8 +619,10 @@ static void	gtk_widget_real_map		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unmap		 (GtkWidget	    *widget);
 static void	gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unrealize	 (GtkWidget	    *widget);
-static void	gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
-                                                  GtkAllocation	    *allocation);
+static void	gtk_widget_real_size_allocate    (GtkWidget               *widget,
+                                                  const GtkAllocation     *allocation,
+                                                  int                      baseline,
+                                                  GtkAllocation           *out_clip);
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
@@ -1646,6 +1648,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal.
    * @allocation: (type Gtk.Allocation): the region which has been
    *   allocated to the widget.
+   * @baseline: the baseline
+   * @out_clip: (type Gtk.Allocation): Return address for the widget's clip
    */
   widget_signals[SIZE_ALLOCATE] =
     g_signal_new (I_("size-allocate"),
@@ -1654,8 +1658,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_STRUCT_OFFSET (GtkWidgetClass, size_allocate),
 		  NULL, NULL,
 		  NULL,
-		  G_TYPE_NONE, 1,
-		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_NONE, 3,
+		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  G_TYPE_INT,
+                  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
    * GtkWidget::state-flags-changed:
@@ -5293,7 +5299,6 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
 {
   GtkWidget *parent;
   cairo_region_t *region2;
-  GtkAllocation alloc;
   int x, y;
   GtkCssStyle *parent_style;
   GtkBorder border, padding;
@@ -5324,7 +5329,6 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
   g_assert (parent != NULL);
 
   /* @region's coordinates are originally relative to @widget's origin */
-  gtk_widget_get_allocation (widget, &alloc);
   if (widget != parent)
     gtk_widget_translate_coordinates (_gtk_widget_get_parent (widget),
                                       parent,
@@ -5358,28 +5362,27 @@ invalidate:
 
 
 /**
- * gtk_widget_size_allocate_with_baseline:
+ * gtk_widget_size_allocate:
  * @widget: a #GtkWidget
  * @allocation: position and size to be allocated to @widget
  * @baseline: The baseline of the child, or -1
+ * @out_clip: (out): Return location for @widget's clip region. The returned clip
+ *   will be in the coordinate system of @widget's parent, just like @allocation.
  *
- * This function is only used by #GtkContainer subclasses, to assign a size,
+ * This function is only used by #GtkWidget subclasses, to assign a size,
  * position and (optionally) baseline to their child widgets.
  *
- * In this function, the allocation and baseline may be adjusted. It
- * will be forced to a 1x1 minimum size, and the
- * adjust_size_allocation virtual and adjust_baseline_allocation
- * methods on the child will be used to adjust the allocation and
- * baseline. Standard adjustments include removing the widget's
- * margins, and applying the widget’s #GtkWidget:halign and
- * #GtkWidget:valign properties.
+ * In this function, the allocation and baseline may be adjusted. The given
+ * allocation will be forced to be bigger than the widget's minimum size,
+ * as well as at least 1×1 in size.
  *
  * Since: 3.10
  **/
 void
-gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
-					GtkAllocation *allocation,
-					gint           baseline)
+gtk_widget_size_allocate (GtkWidget           *widget,
+                          const GtkAllocation *allocation,
+                          int                  baseline,
+                          GtkAllocation       *out_clip)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle real_allocation;
@@ -5393,13 +5396,20 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   gint min_width, min_height;
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
+  GtkAllocation new_clip;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (!priv->visible && !_gtk_widget_is_toplevel (widget))
-    return;
+  g_return_if_fail (baseline >= -1);
+  g_return_if_fail (out_clip != NULL);
+  g_return_if_fail (allocation != NULL);
 
   gtk_widget_push_verify_invariants (widget);
+
+  if (!priv->visible && !_gtk_widget_is_toplevel (widget))
+    {
+      memset (out_clip, 0, sizeof (GdkRectangle));
+      goto out;
+    }
 
 #ifdef G_ENABLE_DEBUG
   if (GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), RESIZE))
@@ -5424,10 +5434,10 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
       depth = 0;
       parent = widget;
       while (parent)
-	{
-	  depth++;
-	  parent = _gtk_widget_get_parent (parent);
-	}
+        {
+          depth++;
+          parent = _gtk_widget_get_parent (parent);
+        }
 
       name = g_type_name (G_OBJECT_TYPE (G_OBJECT (widget)));
       g_message ("gtk_widget_size_allocate: %*s%s %d %d %d %d, baseline %d",
@@ -5542,11 +5552,27 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
   /* Set the widget allocation to real_allocation now, pass the smaller allocation to the vfunc */
   priv->allocation = real_allocation;
-  priv->clip = real_allocation;
   priv->allocated_baseline = baseline;
 
   if (!alloc_needed && !size_changed && !baseline_changed)
-    goto out;
+    {
+      gtk_widget_set_clip (widget, &priv->reported_clip);
+      *out_clip = priv->clip;
+
+      /* Still have to move the window... */
+      if (_gtk_widget_get_realized (widget) &&
+          _gtk_widget_get_has_window (widget))
+         {
+           GtkAllocation window_alloc;
+
+           gtk_widget_get_window_allocation (widget, &window_alloc);
+           gdk_window_move_resize (priv->window,
+                                   window_alloc.x, window_alloc.y,
+                                   window_alloc.width, window_alloc.height);
+         }
+
+      goto check_clip;
+    }
 
   /* Since gtk_widget_measure does it for us, we can be sure here that
    * the given alloaction is large enough for the css margin/bordder/padding */
@@ -5556,11 +5582,18 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
                            margin.right + border.right + padding.right;
   real_allocation.height -= margin.top + border.top + padding.top +
                             margin.bottom + border.bottom + padding.bottom;
+  new_clip = real_allocation;
 
   if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
-    g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
+    g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
+                   &real_allocation,
+                   baseline,
+                   &new_clip);
   else
-    GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget, &real_allocation);
+    GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
+                                                  &real_allocation,
+                                                  baseline,
+                                                  &new_clip);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
 #ifdef G_ENABLE_DEBUG
@@ -5570,10 +5603,16 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
                  gtk_widget_get_name (widget), widget);
     }
 #endif
+
+  priv->reported_clip = new_clip;
+  gtk_widget_set_clip (widget, &priv->reported_clip);
+  *out_clip = priv->clip;
+
   gtk_widget_ensure_resize (widget);
   priv->alloc_needed = FALSE;
   priv->alloc_needed_on_child = FALSE;
 
+check_clip:
   size_changed |= (old_clip.width != priv->clip.width ||
                    old_clip.height != priv->clip.height);
   position_changed |= (old_clip.x != priv->clip.x ||
@@ -5609,31 +5648,6 @@ out:
     gtk_widget_ensure_allocate (widget);
 
   gtk_widget_pop_verify_invariants (widget);
-}
-
-
-/**
- * gtk_widget_size_allocate:
- * @widget: a #GtkWidget
- * @allocation: position and size to be allocated to @widget
- *
- * This function is only used by #GtkContainer subclasses, to assign a size
- * and position to their child widgets.
- *
- * In this function, the allocation may be adjusted. It will be forced
- * to a 1x1 minimum size, and the adjust_size_allocation virtual
- * method on the child will be used to adjust the allocation. Standard
- * adjustments include removing the widget’s margins, and applying the
- * widget’s #GtkWidget:halign and #GtkWidget:valign properties.
- *
- * For baseline support in containers you need to use gtk_widget_size_allocate_with_baseline()
- * instead.
- **/
-void
-gtk_widget_size_allocate (GtkWidget	*widget,
-			  GtkAllocation *allocation)
-{
-  gtk_widget_size_allocate_with_baseline (widget, allocation, -1);
 }
 
 /**
@@ -5768,17 +5782,22 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 }
 
 static void
-gtk_widget_real_size_allocate (GtkWidget     *widget,
-			       GtkAllocation *allocation)
+gtk_widget_real_size_allocate (GtkWidget           *widget,
+                               const GtkAllocation *allocation,
+                               int                  baseline,
+                               GtkAllocation       *out_clip)
 {
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   if (_gtk_widget_get_realized (widget) &&
       _gtk_widget_get_has_window (widget))
      {
-	gdk_window_move_resize (priv->window,
-				allocation->x, allocation->y,
-				allocation->width, allocation->height);
+       GtkAllocation window_alloc;
+
+       gtk_widget_get_window_allocation (widget, &window_alloc);
+       gdk_window_move_resize (priv->window,
+                               window_alloc.x, window_alloc.y,
+                               window_alloc.width, window_alloc.height);
      }
 }
 
@@ -13127,14 +13146,37 @@ gtk_widget_set_clip (GtkWidget           *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkBorder shadow;
-  GtkAllocation allocation;
-  GtkBorder margin, border, padding;
+  GtkBorder margin;
   GtkCssStyle *style;
   GdkRectangle new_clip;
+  GtkAllocation allocation;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (_gtk_widget_get_visible (widget) || _gtk_widget_is_toplevel (widget));
   g_return_if_fail (clip != NULL);
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
+
+  /* The given clip is in @widget's coordinates, but we need it to be in the parent's coordinates,
+   * just like priv->allocation is. So first we transform the clip, then union it with
+   * the allocation (minus css margins) and then we add the box shadow size. */
+  new_clip = *clip;
+  new_clip.x += priv->allocation.x + margin.left;
+  new_clip.y += priv->allocation.y + margin.top;
+
+  allocation = priv->allocation;
+  allocation.x += margin.left;
+  allocation.y += margin.top;
+  allocation.width -= margin.left + margin.right;
+  allocation.height -= margin.top + margin.bottom;
+
+  gdk_rectangle_union (&allocation, &new_clip, &priv->clip);
+  priv->clip.x -= shadow.left;
+  priv->clip.y -= shadow.top;
+  priv->clip.width += shadow.left + shadow.right;
+  priv->clip.height += shadow.top + shadow.bottom;
 
 #ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (GEOMETRY))
@@ -13142,55 +13184,25 @@ gtk_widget_set_clip (GtkWidget           *widget,
       gint depth;
       GtkWidget *parent;
       const gchar *name;
+      const char *cssname;
 
       depth = 0;
       parent = widget;
       while (parent)
-	{
-	  depth++;
-	  parent = _gtk_widget_get_parent (parent);
-	}
+        {
+          depth++;
+          parent = _gtk_widget_get_parent (parent);
+        }
 
       name = g_type_name (G_OBJECT_TYPE (G_OBJECT (widget)));
-      g_message ("gtk_widget_set_clip:      %*s%s %d %d %d %d",
-	         2 * depth, " ", name,
-	         clip->x, clip->y,
-	         clip->width, clip->height);
+      cssname = gtk_css_node_get_name (priv->cssnode);
+      g_message ("gtk_widget_set_clip:      %s %s %d %d %d %d",
+                 name,
+                 cssname,
+                 priv->clip.x, priv->clip.y,
+                 priv->clip.width, priv->clip.height);
     }
 #endif /* G_ENABLE_DEBUG */
-
-
-  /* The given clip is relative to the widget's origin, but we union
-   * it with priv->allocation, which is the orgin minus CSS padding, border and margin.
-   * Additionally, the box shadow is drawn around the widget's border box */
-
-  style = gtk_css_node_get_style (priv->cssnode);
-  allocation = priv->allocation;
-  get_box_margin (style, &margin);
-  get_box_margin (style, &border);
-  get_box_margin (style, &padding);
-  _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
-
-  /* Get border box from allocation */
-  allocation.x += margin.left;
-  allocation.y += margin.top;
-  allocation.width -= margin.left + margin.right;
-  allocation.height -= margin.top + margin.bottom;
-
-  /* Add box shadow size to border box */
-  allocation.x -= shadow.left;
-  allocation.y -= shadow.top;
-  allocation.width += shadow.left + shadow.right;
-  allocation.height += shadow.top + shadow.bottom;
-
-  /* Transform clip into coordinate space of priv->allocation */
-  new_clip = *clip;
-  new_clip.x += priv->allocation.x + border.left + padding.left;
-  new_clip.y += priv->allocation.y + border.top  + padding.top;
-  new_clip.width -= margin.left + margin.right;
-  new_clip.height -= margin.top + margin.bottom;
-
-  gdk_rectangle_union (&allocation, &new_clip, &priv->clip);
 }
 
 /**
@@ -13202,7 +13214,7 @@ gtk_widget_set_clip (GtkWidget           *widget,
  * Retrieves the widget’s allocated size.
  *
  * This function returns the last values passed to
- * gtk_widget_size_allocate_with_baseline(). The value differs from
+ * gtk_widget_size_allocate(). The value differs from
  * the size returned in gtk_widget_get_allocation() in that functions
  * like gtk_widget_set_halign() can adjust the allocation, but not
  * the value returned by this function.
@@ -13887,10 +13899,11 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
   if (priv->alloc_needed)
     {
       GtkAllocation allocation;
+      GtkAllocation clip;
       int baseline;
 
       gtk_widget_get_allocated_size (widget, &allocation, &baseline);
-      gtk_widget_size_allocate_with_baseline (widget, &allocation, baseline);
+      gtk_widget_size_allocate (widget, &allocation, baseline, &clip);
     }
   else if (priv->alloc_needed_on_child)
     {

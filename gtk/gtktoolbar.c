@@ -194,7 +194,9 @@ static void       gtk_toolbar_get_property         (GObject             *object,
 static void       gtk_toolbar_snapshot             (GtkWidget           *widget,
                                                     GtkSnapshot         *snapshot);
 static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
-						    GtkAllocation       *allocation);
+                                                    const GtkAllocation *allocation,
+                                                    int                  baseline,
+                                                    GtkAllocation       *out_clip);
 static void       gtk_toolbar_style_updated        (GtkWidget           *widget);
 static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
 						    GtkDirectionType     dir);
@@ -1263,8 +1265,10 @@ rebuild_menu (GtkToolbar *toolbar)
 }
 
 static void
-gtk_toolbar_size_allocate (GtkWidget     *widget,
-                           GtkAllocation *allocation)
+gtk_toolbar_size_allocate (GtkWidget           *widget,
+                           const GtkAllocation *allocation,
+                           int                  baseline,
+                           GtkAllocation       *out_clip)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
@@ -1571,8 +1575,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
   if (need_arrow)
     {
-      gtk_widget_size_allocate (GTK_WIDGET (priv->arrow_button),
-                                &arrow_allocation);
+      gtk_widget_size_allocate (GTK_WIDGET (priv->arrow_button), &arrow_allocation, -1, out_clip);
       gtk_widget_show (GTK_WIDGET (priv->arrow_button));
     }
   else
@@ -1585,8 +1588,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
   g_free (allocations);
   g_free (new_states);
-
-  gtk_widget_set_clip (widget, allocation);
 }
 
 static void
@@ -3117,9 +3118,10 @@ static void
 toolbar_content_size_allocate (ToolbarContent *content,
 			       GtkAllocation  *allocation)
 {
+  GtkAllocation clip;
+
   content->allocation = *allocation;
-  gtk_widget_size_allocate (GTK_WIDGET (content->item),
-                            allocation);
+  gtk_widget_size_allocate (GTK_WIDGET (content->item), allocation, -1, &clip);
 }
 
 static void

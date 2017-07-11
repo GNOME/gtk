@@ -94,8 +94,6 @@ struct _GtkWidgetPrivate
   guint   halign              : 4;
   guint   valign              : 4;
 
-  guint clip_set : 1;
-
   guint8 alpha;
   guint8 user_alpha;
 
@@ -139,6 +137,7 @@ struct _GtkWidgetPrivate
   gint allocated_size_baseline;
   GtkAllocation allocation;
   GtkAllocation clip;
+  GtkAllocation reported_clip;
   gint allocated_baseline;
 
   /* The widget's requested sizes */

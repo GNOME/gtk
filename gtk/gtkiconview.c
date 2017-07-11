@@ -150,8 +150,10 @@ static void gtk_icon_view_measure (GtkWidget *widget,
                                    int            *natural,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
-static void             gtk_icon_view_size_allocate             (GtkWidget          *widget,
-								 GtkAllocation      *allocation);
+static void             gtk_icon_view_size_allocate             (GtkWidget           *widget,
+                                                                 const GtkAllocation *allocation,
+                                                                 int                  baseline,
+                                                                 GtkAllocation       *out_clip);
 static void             gtk_icon_view_snapshot                  (GtkWidget          *widget,
                                                                  GtkSnapshot        *snapshot);
 static gboolean         gtk_icon_view_motion                    (GtkWidget          *widget,
@@ -1604,15 +1606,18 @@ gtk_icon_view_allocate_children (GtkIconView *icon_view)
   for (list = icon_view->priv->children; list; list = list->next)
     {
       GtkIconViewChild *child = list->data;
+      GtkAllocation clip;
 
       /* totally ignore our child's requisition */
-      gtk_widget_size_allocate (child->widget, &child->area);
+      gtk_widget_size_allocate (child->widget, &child->area, -1, &clip);
     }
 }
 
 static void
-gtk_icon_view_size_allocate (GtkWidget      *widget,
-			     GtkAllocation  *allocation)
+gtk_icon_view_size_allocate (GtkWidget           *widget,
+                             const GtkAllocation *allocation,
+                             int                  baseline,
+                             GtkAllocation       *out_clip)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
@@ -1645,8 +1650,6 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
   /* Emit any pending signals now */
   g_object_thaw_notify (G_OBJECT (icon_view->priv->hadjustment));
   g_object_thaw_notify (G_OBJECT (icon_view->priv->vadjustment));
-
-  gtk_widget_set_clip (widget, allocation);
 }
 
 static void

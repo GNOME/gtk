@@ -379,12 +379,13 @@ gtk_center_box_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_center_box_size_allocate (GtkWidget     *widget,
-                              GtkAllocation *allocation)
+gtk_center_box_size_allocate (GtkWidget           *widget,
+                              const GtkAllocation *allocation,
+                              int                  baseline,
+                              GtkAllocation       *out_clip)
 {
   GtkCenterBox *self = GTK_CENTER_BOX (widget);
   GtkAllocation child_allocation;
-  GtkAllocation clip = *allocation;
   GtkAllocation child_clip;
   GtkWidget *child[3];
   int child_size[3];
@@ -392,16 +393,12 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
   GtkRequestedSize sizes[3];
   int size;
   int for_size;
-  int baseline;
   int i;
-
-  GTK_WIDGET_CLASS (gtk_center_box_parent_class)->size_allocate (widget, allocation);
 
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       size = allocation->width;
       for_size = allocation->height;
-      baseline = gtk_widget_get_allocated_baseline (widget);
     }
   else
     {
@@ -528,12 +525,9 @@ gtk_center_box_size_allocate (GtkWidget     *widget,
           child_allocation.height = child_size[i];
         }
 
-      gtk_widget_size_allocate_with_baseline (child[i], &child_allocation, allocation->y + baseline);
-      gtk_widget_get_clip (child[i], &child_clip);
-      gdk_rectangle_union (&clip, &clip, &child_clip);
+      gtk_widget_size_allocate (child[i], &child_allocation, allocation->y + baseline, &child_clip);
+      gdk_rectangle_union (out_clip, &child_clip, out_clip);
     }
-
-  gtk_widget_set_clip (widget, &clip);
 }
 
 static void

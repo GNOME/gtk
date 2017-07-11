@@ -381,17 +381,15 @@ gtk_file_chooser_button_measure (GtkWidget       *widget,
 }
 
 static void
-gtk_file_chooser_button_size_allocate (GtkWidget     *widget,
-                                       GtkAllocation *allocation)
+gtk_file_chooser_button_size_allocate (GtkWidget           *widget,
+                                       const GtkAllocation *allocation,
+                                       int                  baseline,
+                                       GtkAllocation       *out_clip)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
-  GtkAllocation clip = *allocation;
 
-  gtk_widget_size_allocate (priv->child, allocation);
-  gtk_widget_get_clip (priv->child, &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+  gtk_widget_size_allocate (priv->child, allocation, baseline, out_clip);
 }
 
 static void

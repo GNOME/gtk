@@ -323,12 +323,13 @@ gtk_switch_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_switch_size_allocate (GtkWidget     *widget,
-                          GtkAllocation *allocation)
+gtk_switch_size_allocate (GtkWidget           *widget,
+                          const GtkAllocation *allocation,
+                          int                  baseline,
+                          GtkAllocation       *out_clip)
 {
   GtkSwitch *self = GTK_SWITCH (widget);
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
-  GtkAllocation clip = *allocation;
   GtkAllocation child_clip;
   GtkAllocation child_alloc;
   GtkAllocation slider_alloc;
@@ -339,9 +340,9 @@ gtk_switch_size_allocate (GtkWidget     *widget,
   slider_alloc.width = allocation->width / 2;
   slider_alloc.height = allocation->height;
 
-  gtk_widget_size_allocate (priv->slider, &slider_alloc);
+  gtk_widget_size_allocate (priv->slider, &slider_alloc, -1, &child_clip);
   gtk_widget_get_clip (priv->slider, &child_clip);
-  gdk_rectangle_union (&child_clip, &clip, &clip);
+  gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
 
   /* Center ON label in left half */
@@ -351,9 +352,8 @@ gtk_switch_size_allocate (GtkWidget     *widget,
   gtk_widget_measure (priv->on_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
   child_alloc.y = (allocation->height - min) / 2;
   child_alloc.height = min;
-  gtk_widget_size_allocate (priv->on_label, &child_alloc);
-  gtk_widget_get_clip (priv->on_label, &child_clip);
-  gdk_rectangle_union (&child_clip, &clip, &clip);
+  gtk_widget_size_allocate (priv->on_label, &child_alloc, -1, &child_clip);
+  gdk_rectangle_union (out_clip, &child_clip, out_clip);
 
   /* Center OFF label in right half */
   gtk_widget_measure (priv->off_label, GTK_ORIENTATION_HORIZONTAL, -1, &min, NULL, NULL, NULL);
@@ -362,11 +362,8 @@ gtk_switch_size_allocate (GtkWidget     *widget,
   gtk_widget_measure (priv->off_label, GTK_ORIENTATION_VERTICAL, min, &min, NULL, NULL, NULL);
   child_alloc.y = (allocation->height - min) / 2;
   child_alloc.height = min;
-  gtk_widget_size_allocate (priv->off_label, &child_alloc);
-  gtk_widget_get_clip (priv->off_label, &child_clip);
-  gdk_rectangle_union (&child_clip, &clip, &clip);
-
-  gtk_widget_set_clip (widget, &clip);
+  gtk_widget_size_allocate (priv->off_label, &child_alloc, -1, &child_clip);
+  gdk_rectangle_union (out_clip, &child_clip, out_clip);
 }
 
 static void

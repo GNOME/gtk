@@ -154,15 +154,17 @@ gtk_recent_chooser_widget_snapshot (GtkWidget   *widget,
 }
 
 static void
-gtk_recent_chooser_widget_size_allocate (GtkWidget     *widget,
-                                       GtkAllocation *allocation)
+gtk_recent_chooser_widget_size_allocate (GtkWidget           *widget,
+                                         const GtkAllocation *allocation,
+                                         int                  baseline,
+                                         GtkAllocation       *out_clip)
 {
   GtkRecentChooserWidget *self = GTK_RECENT_CHOOSER_WIDGET (widget);
   GtkRecentChooserWidgetPrivate *priv = gtk_recent_chooser_widget_get_instance_private (self);
 
-  GTK_WIDGET_CLASS (gtk_recent_chooser_widget_parent_class)->size_allocate (widget, allocation);
+  GTK_WIDGET_CLASS (gtk_recent_chooser_widget_parent_class)->size_allocate (widget, allocation, -1, out_clip);
 
-  gtk_widget_size_allocate (priv->chooser, allocation);
+  gtk_widget_size_allocate (priv->chooser, allocation, -1, out_clip);
 }
 
 static void
