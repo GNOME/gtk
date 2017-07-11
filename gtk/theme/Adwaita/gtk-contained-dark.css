@@ -1,4 +1,6 @@
-* { padding: 0; outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 2px; -gtk-secondary-caret-color: #215d9c; }
+* { padding: 0; -gtk-secondary-caret-color: #215d9c; }
+
+*:focus { outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 2px; }
 
 /*************** Base States * */
 .background { color: #eeeeec; background-color: #33393b; }
