@@ -52,6 +52,9 @@
  * # CSS nodes
  *
  * GtkRevealer has a single CSS node with name revealer.
+ * When styling #GtkRevealer using CSS, remember that it only hides its contents,
+ * not itself. That means applied margin, padding and borders will be
+ * visible even when the #GtkRevealer:reveal-child property is set to %FALSE.
  *
  * The GtkRevealer widget was added in GTK+ 3.10.
  */
