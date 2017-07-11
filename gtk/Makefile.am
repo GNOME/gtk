@@ -1196,19 +1196,21 @@ gtkmarshalers.h: stamp-gtkmarshalers.h
 	@true
 stamp-gtkmarshalers.h: gtkmarshalers.list
 	$(AM_V_GEN) $(GLIB_GENMARSHAL) \
-		--prefix=_gtk_marshal \
 		--header \
+		--prefix=_gtk_marshal \
 		--valist-marshallers \
-		$(srcdir)/gtkmarshalers.list >> xgen-gmlh \
+		$(srcdir)/gtkmarshalers.list > xgen-gmlh \
 	&& (cmp -s xgen-gmlh gtkmarshalers.h || cp xgen-gmlh gtkmarshalers.h) \
 	&& rm -f xgen-gmlh \
 	&& echo timestamp > $(@F)
 gtkmarshalers.c: gtkmarshalers.list
-	$(AM_V_GEN) (echo "#undef G_ENABLE_DEBUG"; \
-	 $(GLIB_GENMARSHAL) \
-	 	--prefix=_gtk_marshal \
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) \
 		--body \
-		--valist-marshallers $(srcdir)/gtkmarshalers.list) >> xgen-gmlc \
+		--prefix=_gtk_marshal \
+		--valist-marshallers \
+		--include-header="gtkmarshalers.h" \
+		-U G_ENABLE_DEBUG \
+		$(srcdir)/gtkmarshalers.list > xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
 

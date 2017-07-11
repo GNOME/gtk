@@ -426,6 +426,7 @@ gdkmarshalers.c: gdkmarshalers.list
 	$(AM_V_GEN) $(GLIB_GENMARSHAL) \
 		--prefix=_gdk_marshal \
 		--body \
+		--prototypes \
 		$(srcdir)/gdkmarshalers.list > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
