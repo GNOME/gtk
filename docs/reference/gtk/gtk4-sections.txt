@@ -4612,7 +4612,6 @@ gtk_widget_get_allocation
 gtk_widget_get_allocated_baseline
 gtk_widget_get_allocated_size
 gtk_widget_get_clip
-gtk_widget_set_clip
 gtk_widget_get_can_default
 gtk_widget_set_can_default
 gtk_widget_get_can_focus
