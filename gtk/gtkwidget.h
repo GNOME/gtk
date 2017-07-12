@@ -276,8 +276,6 @@ struct _GtkWidget
  * @style_updated: Signal emitted when the GtkStyleContext of a widget
  *   is changed.
  * @touch_event:
- * @queue_draw_region: Invalidates the area of widget defined by
- *   region.
  * @snapshot: Signal emitted when a widget is supposed to create a snapshot
  *   of itself.
  */
@@ -471,8 +469,6 @@ struct _GtkWidgetClass
   gboolean     (* touch_event)            (GtkWidget     *widget,
                                            GdkEventTouch *event);
 
-  void         (* queue_draw_region)           (GtkWidget            *widget,
-					        const cairo_region_t *region);
   void         (* snapshot)                    (GtkWidget            *widget,
                                                 GtkSnapshot          *snapshot);
 
