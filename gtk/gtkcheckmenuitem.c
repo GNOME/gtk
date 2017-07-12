@@ -495,9 +495,13 @@ gtk_check_menu_item_snapshot (GtkWidget   *widget,
                               GtkSnapshot *snapshot)
 {
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
+  GtkWidget *child;
 
-  if (GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->snapshot)
-    GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->snapshot (widget, snapshot);
+  child = gtk_bin_get_child (GTK_BIN (widget));
+
+
+  if (child)
+    gtk_widget_snapshot_child (widget, child, snapshot);
 
   if (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->snapshot_indicator)
     GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->snapshot_indicator (check_menu_item, snapshot);
