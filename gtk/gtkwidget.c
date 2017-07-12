@@ -754,6 +754,7 @@ static gboolean event_window_is_still_viewable (const GdkEvent *event);
 static void gtk_widget_update_input_shape (GtkWidget *widget);
 
 static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class);
+static void gtk_widget_set_clip (GtkWidget *widget, const GtkAllocation *clip);
 
 
 /* --- variables --- */
@@ -13123,10 +13124,8 @@ gtk_widget_get_clip (GtkWidget     *widget,
  *
  * If this function is not called by @widget during a ::size-allocate handler,
  * the clip will be set to @widget's allocation.
- *
- * Since: 3.14
  */
-void
+static void
 gtk_widget_set_clip (GtkWidget           *widget,
                      const GtkAllocation *clip)
 {

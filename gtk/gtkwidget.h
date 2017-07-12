@@ -750,9 +750,6 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_get_allocation         (GtkWidget     *widget,
                                                          GtkAllocation *allocation);
 GDK_AVAILABLE_IN_3_14
-void                  gtk_widget_set_clip               (GtkWidget     *widget,
-                                                         const GtkAllocation *clip);
-GDK_AVAILABLE_IN_3_14
 void                  gtk_widget_get_clip               (GtkWidget     *widget,
                                                          GtkAllocation *clip);
 
