@@ -995,7 +995,7 @@ gtk_accel_label_set_label (GtkAccelLabel *accel_label,
 
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
 
-  gtk_label_set_label (GTK_LABEL (priv->text_label), text);
+  gtk_label_set_text_with_mnemonic (GTK_LABEL (priv->text_label), text);
 }
 
 const char *
