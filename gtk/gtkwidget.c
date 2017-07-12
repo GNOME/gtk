@@ -690,8 +690,6 @@ static void             gtk_widget_real_measure                 (GtkWidget      
                                                                  int              *natural_baseline);
 static void             gtk_widget_real_state_flags_changed     (GtkWidget        *widget,
                                                                  GtkStateFlags     old_state);
-static void             gtk_widget_real_queue_draw_region       (GtkWidget         *widget,
-								 const cairo_region_t *region);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
@@ -1076,8 +1074,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->priv->accessible_type = GTK_TYPE_ACCESSIBLE;
   klass->priv->accessible_role = ATK_ROLE_INVALID;
   klass->get_accessible = gtk_widget_real_get_accessible;
-
-  klass->queue_draw_region = gtk_widget_real_queue_draw_region;
 
   klass->pick = gtk_widget_real_pick;
 
@@ -4914,18 +4910,6 @@ gtk_widget_unrealize (GtkWidget *widget)
   g_object_unref (widget);
 }
 
-/*****************************************
- * Draw queueing.
- *****************************************/
-static void
-gtk_widget_real_queue_draw_region (GtkWidget            *widget,
-				   const cairo_region_t *region)
-{
-  g_assert (_gtk_widget_get_has_window (widget));
-  gtk_debug_updates_add (widget, region);
-  gdk_window_invalidate_region (_gtk_widget_get_window (widget), region, TRUE);
-}
-
 /*
  * Returns the values you're supposed to pass to gdk_window_move_resize
  * for a windowed widget.
@@ -5354,7 +5338,9 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
   cairo_region_translate (region2, x, y);
 
 invalidate:
-  WIDGET_CLASS (widget)->queue_draw_region (parent, region2);
+  gtk_debug_updates_add (widget, region);
+  gdk_window_invalidate_region (_gtk_widget_get_window (widget), region2, TRUE);
+
   cairo_region_destroy (region2);
 }
 
