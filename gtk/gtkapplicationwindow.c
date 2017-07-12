@@ -252,8 +252,6 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
     {
       gtk_widget_unparent (window->priv->menubar);
       window->priv->menubar = NULL;
-
-      gtk_widget_queue_resize (GTK_WIDGET (window));
     }
 
   if (!have_menubar && should_have_menubar)
@@ -267,8 +265,6 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
       window->priv->menubar = gtk_menu_bar_new_from_model (G_MENU_MODEL (combined));
       gtk_widget_set_parent (window->priv->menubar, GTK_WIDGET (window));
       g_object_unref (combined);
-
-      gtk_widget_queue_resize (GTK_WIDGET (window));
     }
 }
 
