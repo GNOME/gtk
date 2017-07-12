@@ -252,6 +252,11 @@ gtk_model_menu_item_set_text (GtkModelMenuItem *item,
       gtk_label_set_text_with_mnemonic (GTK_LABEL (child), text);
       return;
     }
+  else if (GTK_IS_ACCEL_LABEL (child))
+    {
+      gtk_accel_label_set_label (GTK_ACCEL_LABEL (child), text);
+      return;
+    }
 
   if (!GTK_IS_CONTAINER (child))
     return;

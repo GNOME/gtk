@@ -1923,6 +1923,9 @@ gtk_menu_item_get_use_underline (GtkMenuItem *menu_item)
   child = gtk_bin_get_child (GTK_BIN (menu_item));
   if (GTK_IS_LABEL (child))
     return gtk_label_get_use_underline (GTK_LABEL (child));
+  else if (GTK_IS_ACCEL_LABEL (child))
+    return gtk_accel_label_get_use_underline (GTK_ACCEL_LABEL (child));
+
 
   return FALSE;
 }

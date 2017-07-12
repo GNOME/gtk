@@ -1813,8 +1813,6 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
       label = gtk_menu_tracker_item_get_label (item);
       if (label)
         gtk_menu_item_set_label (GTK_MENU_ITEM (widget), label);
-
-      gtk_widget_show (widget);
     }
   else if (gtk_menu_tracker_item_get_has_link (item, G_MENU_LINK_SUBMENU))
     {
@@ -1852,8 +1850,6 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
           g_signal_connect (submenu, "hide", G_CALLBACK (gtk_menu_shell_submenu_hidden), item);
           g_signal_connect (submenu, "selection-done", G_CALLBACK (gtk_menu_shell_submenu_selection_done), item);
         }
-
-      gtk_widget_show (widget);
     }
   else
     {
