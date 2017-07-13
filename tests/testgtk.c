@@ -9334,8 +9334,11 @@ native_response (GtkNativeDialog *self,
   GSList *uris, *l;
   GString *s;
   char *response;
+  GtkFileFilter *filter;
+  GSList *filter_list = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (self));
 
   uris = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (self));
+  filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (self));
   s = g_string_new ("");
   for (l = uris; l != NULL; l = l->next)
     {
@@ -9362,12 +9365,23 @@ native_response (GtkNativeDialog *self,
       break;
     }
 
-  res = g_strdup_printf ("Response #%d: %s\n"
-                         "Files:\n"
-                         "%s",
-                         ++count,
-                         response,
-                         s->str);
+  if (filter)
+    res = g_strdup_printf ("Response #%d: %s\n"
+                           "Filter: %s\n"
+                           "Files:\n"
+                           "%s",
+                           ++count,
+                           response,
+                           gtk_file_filter_get_name (filter),
+                           s->str);
+  else
+    res = g_strdup_printf ("Response #%d: %s\n"
+                           "NO Filter\n"
+                           "Files:\n"
+                           "%s",
+                           ++count,
+                           response,
+                           s->str);
   gtk_label_set_text (GTK_LABEL (label), res);
   g_free (response);
   g_string_free (s, TRUE);
@@ -9535,6 +9549,7 @@ native_filter_changed (GtkWidget *combo,
       gtk_file_filter_set_name (filter, "Images");
       gtk_file_filter_add_pixbuf_formats (filter);
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
+      gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (native), filter);
 
       filter = gtk_file_filter_new ();
       gtk_file_filter_set_name (filter, "All");
@@ -9552,6 +9567,7 @@ native_filter_changed (GtkWidget *combo,
       gtk_file_filter_set_name (filter, "All");
       gtk_file_filter_add_pattern (filter, "*");
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
+      gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (native), filter);
       break;
     }
 }
