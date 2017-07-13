@@ -862,7 +862,8 @@ gtk_application_get_window_by_id (GtkApplication *application,
  * if another application has it — this is just the most
  * recently-focused window within this application.
  *
- * Returns: (transfer none): the active window
+ * Returns: (transfer none) (nullable): the active window, or %NULL if
+ *   there isn't one.
  *
  * Since: 3.6
  **/
