@@ -331,6 +331,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           strcmp (pspec->name, "show-desktop") == 0)
         continue;
 
+      /* GtkRange constructs an adjustment on its own if NULL is set and
+       * the property is a CONSTRUCT one, so the returned value is never NULL. */
+      if (g_type_is_a (type, GTK_TYPE_RANGE) &&
+          strcmp (pspec->name, "adjustment") == 0)
+        continue;
+
+      /* ... and GtkScrollbar wraps that property. */
+      if (g_type_is_a (type, GTK_TYPE_SCROLLBAR) &&
+          strcmp (pspec->name, "adjustment") == 0)
+        continue;
+
+
       if (g_test_verbose ())
       g_print ("Property %s.%s\n",
 	     g_type_name (pspec->owner_type),

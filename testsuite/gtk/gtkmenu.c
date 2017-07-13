@@ -228,6 +228,8 @@ get_label (GtkMenuItem *item)
         children = g_list_concat (children, gtk_container_get_children (children->data));
       else if (GTK_IS_LABEL (children->data))
         label = gtk_label_get_text (children->data);
+      else if (GTK_IS_ACCEL_LABEL (children->data))
+        label = gtk_accel_label_get_label (children->data);
 
       children = g_list_delete_link (children, children);
     }
@@ -372,6 +374,8 @@ assert_section_equality (GSList      **children,
       contents = gtk_bin_get_child ((*children)->data);
       if (GTK_IS_LABEL (contents))
         label = gtk_label_get_label (GTK_LABEL (contents));
+      else if (GTK_IS_ACCEL_LABEL (contents))
+        label = gtk_accel_label_get_label (GTK_ACCEL_LABEL (contents));
       else
         label = "";
 
