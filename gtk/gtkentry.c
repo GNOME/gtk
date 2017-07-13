@@ -7864,7 +7864,7 @@ gtk_entry_get_icon_sensitive (GtkEntry             *entry,
   icon_info = priv->icons[icon_pos];
 
   if (!icon_info)
-    return FALSE;
+    return TRUE; /* Default of the property */
 
   return gtk_widget_get_sensitive (icon_info->widget);
 }

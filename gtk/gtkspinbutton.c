@@ -422,7 +422,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                                    g_param_spec_string ("text",
                                    P_("Text"),
                                    P_("The contents of the entry"),
-                                   "",
+                                   "0",  /* Default value of the default adjustment */
                                    GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_override_property (gobject_class,
@@ -436,8 +436,8 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    *
    * The ::input signal can be used to influence the conversion of
    * the users input into a double value. The signal handler is
-   * expected to use gtk_entry_get_text() to retrieve the text of
-   * the entry and set @new_value to the new value.
+   * expected to use gtk_spin_button_get_text() to retrieve the text of
+   * the spinbutton and set @new_value to the new value.
    *
    * The default conversion uses g_strtod().
    *
