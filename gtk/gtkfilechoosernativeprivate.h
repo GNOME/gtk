@@ -44,6 +44,7 @@ struct _GtkFileChooserNative
   GFile *current_folder;
   GFile *current_file;
   char *current_name;
+  GtkFileFilter *current_filter;
   GSList *choices;
 
   /* Fallback mode */

@@ -100,6 +100,11 @@ typedef struct {
     [data->panel setAllowedFileTypes:nil];
   else
     [data->panel setAllowedFileTypes:filter];
+
+  GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (data->self));
+  data->self->current_filter = g_slist_nth_data (filters, selected_index);
+  g_slist_free (filters);
+  g_object_notify (G_OBJECT (data->self), "filter");
 }
 @end
 
@@ -302,7 +307,22 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
       [data->filter_combo_box addItemsWithObjectValues:data->filter_names];
       [data->filter_combo_box setEditable:NO];
       [data->filter_combo_box setDelegate:[[FilterComboBox alloc] initWithData:data]];
-      [data->filter_combo_box selectItemAtIndex:0];
+
+      if (data->self->current_filter)
+        {
+          GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (data->self));
+	  gint current_filter_index = g_slist_index (filters, data->self->current_filter);
+	  g_slist_free (filters);
+
+	  if (current_filter_index >= 0)
+            [data->filter_combo_box selectItemAtIndex:current_filter_index];
+	  else
+            [data->filter_combo_box selectItemAtIndex:0];
+        }
+      else
+        {
+          [data->filter_combo_box selectItemAtIndex:0];
+        }
       [data->filter_combo_box setToolTip:[NSString stringWithUTF8String:_("Select which types of files are shown")]];
       [data->panel setAccessoryView:data->filter_combo_box];
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_11_AND_LATER
@@ -455,8 +475,12 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
               return FALSE;
             }
         }
+      self->current_filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (self));
     }
-
+  else
+    {
+      self->current_filter = NULL;
+    }
   self->mode_data = data;
   data->self = g_object_ref (self);
 
@@ -488,7 +512,6 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
   if (gtk_file_chooser_get_do_overwrite_confirmation (GTK_FILE_CHOOSER (self->dialog)))
     data->overwrite_confirmation = TRUE;
 
-  // showsHiddenFiles??
   if (gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (self->dialog)))
     data->show_hidden = TRUE;
 

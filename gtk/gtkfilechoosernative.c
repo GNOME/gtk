@@ -464,6 +464,11 @@ gtk_file_chooser_native_set_property (GObject      *object,
       gtk_file_chooser_native_set_cancel_label (self, g_value_get_string (value));
       break;
 
+    case GTK_FILE_CHOOSER_PROP_FILTER:
+      self->current_filter = g_value_get_object (value);
+      g_object_notify (G_OBJECT (self), "filter");
+      break;
+
     default:
       g_object_set_property (G_OBJECT (self->dialog), pspec->name, value);
       break;
@@ -486,6 +491,10 @@ gtk_file_chooser_native_get_property (GObject    *object,
 
     case PROP_CANCEL_LABEL:
       g_value_set_string (value, self->cancel_label);
+      break;
+
+    case GTK_FILE_CHOOSER_PROP_FILTER:
+      g_value_set_object (value, self->current_filter);
       break;
 
     default:
