@@ -112,18 +112,18 @@ typedef struct
 static const LicenseInfo gtk_license_info [] = {
   { N_("License"), NULL },
   { N_("Custom License") , NULL },
-  { N_("GNU General Public License, version 2 or later"), "http://www.gnu.org/licenses/old-licenses/gpl-2.0.html" },
-  { N_("GNU General Public License, version 3 or later"), "http://www.gnu.org/licenses/gpl-3.0.html" },
-  { N_("GNU Lesser General Public License, version 2.1 or later"), "http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
-  { N_("GNU Lesser General Public License, version 3 or later"), "http://www.gnu.org/licenses/lgpl-3.0.html" },
-  { N_("BSD 2-Clause License"), "http://opensource.org/licenses/bsd-license.php" },
-  { N_("The MIT License (MIT)"), "http://opensource.org/licenses/mit-license.php" },
-  { N_("Artistic License 2.0"), "http://opensource.org/licenses/artistic-license-2.0.php" },
-  { N_("GNU General Public License, version 2 only"), "http://www.gnu.org/licenses/old-licenses/gpl-2.0.html" },
-  { N_("GNU General Public License, version 3 only"), "http://www.gnu.org/licenses/gpl-3.0.html" },
-  { N_("GNU Lesser General Public License, version 2.1 only"), "http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
-  { N_("GNU Lesser General Public License, version 3 only"), "http://www.gnu.org/licenses/lgpl-3.0.html" },
-  { N_("GNU Affero General Public License, version 3 or later"), "http://www.gnu.org/licenses/agpl-3.0.html" }
+  { N_("GNU General Public License, version 2 or later"), "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" },
+  { N_("GNU General Public License, version 3 or later"), "https://www.gnu.org/licenses/gpl-3.0.html" },
+  { N_("GNU Lesser General Public License, version 2.1 or later"), "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
+  { N_("GNU Lesser General Public License, version 3 or later"), "https://www.gnu.org/licenses/lgpl-3.0.html" },
+  { N_("BSD 2-Clause License"), "https://opensource.org/licenses/bsd-license.php" },
+  { N_("The MIT License (MIT)"), "https://opensource.org/licenses/mit-license.php" },
+  { N_("Artistic License 2.0"), "https://opensource.org/licenses/artistic-license-2.0.php" },
+  { N_("GNU General Public License, version 2 only"), "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html" },
+  { N_("GNU General Public License, version 3 only"), "https://www.gnu.org/licenses/gpl-3.0.html" },
+  { N_("GNU Lesser General Public License, version 2.1 only"), "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
+  { N_("GNU Lesser General Public License, version 3 only"), "https://www.gnu.org/licenses/lgpl-3.0.html" },
+  { N_("GNU Affero General Public License, version 3 or later"), "https://www.gnu.org/licenses/agpl-3.0.html" }
 };
 
 typedef struct
