@@ -989,6 +989,8 @@ modelbutton.flat,
 
 modelbutton.flat arrow {
   background: none;
+  min-width: 16px;
+  min-height: 16px;
 
   &:hover { background: none; }
 

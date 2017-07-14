@@ -447,7 +447,7 @@ modelbutton.flat, .menuitem.button.flat { min-height: 26px; padding-left: 5px; p
 
 modelbutton.flat:hover, .menuitem.button.flat:hover { background-color: #f4f4f4; }
 
-modelbutton.flat arrow { background: none; }
+modelbutton.flat arrow { background: none; min-width: 16px; min-height: 16px; }
 
 modelbutton.flat arrow:hover { background: none; }
 
