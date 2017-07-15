@@ -9,7 +9,7 @@
 # Jordi Serratosa <jordis@softcatala.cat>, 2012.
 # Gil Forcada <gilforcada@guifi.net>, 2011-2014.
 # Benet R.i Camps <benny@softcatala.org>, 2015
-# Jordi Mas <jmas@softcatala.org>, 2015-2016
+# Jordi Mas <jmas@softcatala.org>, 2015-2017
 #
 # Recull de termes
 #
@@ -34,13 +34,15 @@
 #
 # Hint        - Indicació
 #
+# Attachment  - Acoblament (no pas adjunció)
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-23 08:28+0100\n"
 "PO-Revision-Date: 2016-09-12 21:16+0200\n"
-"Last-Translator: <>\n"
+"Last-Translator: Jordi Mas <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -2303,7 +2305,7 @@ msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
-"L'alineació horitzontal, des de 0 (esquerre) a 1 (dreta). Només per a "
+"L'alineació horitzontal, des de 0 (esquerra) a 1 (dreta). Només per a "
 "formats RTL (dreta a esquerra)."
 
 #: ../gtk/gtkentry.c:928
@@ -3153,7 +3155,7 @@ msgstr ""
 
 #: ../gtk/gtkgrid.c:1757
 msgid "Left attachment"
-msgstr "Adjunt esquerre"
+msgstr "Acoblament a l'esquerra"
 
 #: ../gtk/gtkgrid.c:1758 ../gtk/gtkmenu.c:826
 msgid "The column number to attach the left side of the child to"
@@ -3161,7 +3163,7 @@ msgstr "El número de columna on adjuntar la banda esquerra del fill"
 
 #: ../gtk/gtkgrid.c:1764
 msgid "Top attachment"
-msgstr "Fitxer adjunt superior"
+msgstr "Acoblament superior"
 
 #: ../gtk/gtkgrid.c:1765
 msgid "The row number to attach the top side of a child widget to"
