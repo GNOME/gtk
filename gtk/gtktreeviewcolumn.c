@@ -35,6 +35,7 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtktreeviewaccessibleprivate.h"
+#include "gtkwidgetprivate.h"
 
 
 /**
@@ -130,7 +131,6 @@ struct _GtkTreeViewColumnPrivate
   GtkWidget *child;
   GtkWidget *arrow;
   GtkWidget *frame;
-  GdkWindow *window;
   gulong property_changed_signal;
   gfloat xalign;
 
@@ -829,6 +829,7 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   priv->frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), GTK_SHADOW_NONE);
+  gtk_widget_set_hexpand (priv->frame, TRUE);
   gtk_widget_set_halign (priv->frame, GTK_ALIGN_START);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
@@ -976,25 +977,10 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
           gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
 	{
           gtk_widget_show (priv->button);
-
-	  if (priv->window)
-	    {
-	      if (priv->resizable)
-		{
-		  gdk_window_show (priv->window);
-		  gdk_window_raise (priv->window);
-		}
-	      else
-		{
-		  gdk_window_hide (priv->window);
-		}
-	    }
 	}
       else
 	{
 	  gtk_widget_hide (priv->button);
-	  if (priv->window)
-	    gdk_window_hide (priv->window);
 	}
     }
   
@@ -1297,50 +1283,12 @@ void
 _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 {
   GtkTreeViewColumnPrivate *priv = column->priv;
-  GtkAllocation allocation;
-  GtkTreeView *tree_view;
-  gboolean rtl;
-  GdkDisplay *display;
-  GdkCursor *cursor;
 
-  tree_view = (GtkTreeView *)priv->tree_view;
-  rtl       = (gtk_widget_get_direction (priv->tree_view) == GTK_TEXT_DIR_RTL);
-
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (GTK_IS_TREE_VIEW (priv->tree_view));
   g_return_if_fail (gtk_widget_get_realized (priv->tree_view));
   g_return_if_fail (priv->button != NULL);
 
-  gtk_widget_set_parent_window (priv->button, gtk_widget_get_window (priv->tree_view));
-
-  display = gtk_widget_get_display (priv->tree_view);
-  gtk_widget_get_allocation (priv->button, &allocation);
-
-  priv->window = gdk_window_new_input (gtk_widget_get_window (priv->tree_view),
-                                       GDK_ALL_EVENTS_MASK,
-                                       &(GdkRectangle) {(allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2, 0,
-                                                        TREE_VIEW_DRAG_WIDTH, _gtk_tree_view_get_header_height (tree_view)});
-  cursor = gdk_cursor_new_from_name (display, "col-resize");
-  gdk_window_set_cursor (priv->window, cursor);
-  g_object_unref (cursor);
-
-  gtk_widget_register_window (GTK_WIDGET (tree_view), priv->window);
-
   gtk_tree_view_column_update_button (column);
-}
-
-void
-_gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column)
-{
-  GtkTreeViewColumnPrivate *priv;
-
-  g_return_if_fail (column != NULL);
-
-  priv = column->priv;
-  g_return_if_fail (priv->window != NULL);
-
-  gtk_widget_unregister_window (GTK_WIDGET (priv->tree_view), priv->window);
-  gdk_window_destroy (priv->window);
-  priv->window = NULL;
 }
 
 void
@@ -2069,9 +2017,7 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
 				int                width)
 {
   GtkTreeViewColumnPrivate *priv;
-  gboolean                  rtl;
   GtkAllocation             allocation = { 0, 0, 0, 0 };
-  GtkAllocation             widget_allocation;
   GtkAllocation clip;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
@@ -2085,25 +2031,18 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
   priv->width = width;
 
   gtk_cell_area_context_allocate (priv->cell_area_context, priv->width - priv->padding, -1);
-  gtk_widget_get_allocation (priv->tree_view, &widget_allocation);
 
   if (gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
     {
-      allocation.x      = widget_allocation.x + x_offset;
-      allocation.y      = widget_allocation.y;
+      /* TODO: Underallocates the button horizontally, but
+       * https://bugzilla.gnome.org/show_bug.cgi?id=770388
+       */
+      allocation.x      = x_offset;
+      allocation.y      = 0;
       allocation.width  = width;
       allocation.height = _gtk_tree_view_get_header_height (GTK_TREE_VIEW (priv->tree_view));
 
       gtk_widget_size_allocate (priv->button, &allocation, -1, &clip);
-    }
-
-  if (priv->window)
-    {
-      rtl = (gtk_widget_get_direction (priv->tree_view) == GTK_TEXT_DIR_RTL);
-      gdk_window_move_resize (priv->window,
-			      allocation.x + (rtl ? 0 : allocation.width) - TREE_VIEW_DRAG_WIDTH/2,
-			      allocation.y,
-			      TREE_VIEW_DRAG_WIDTH, allocation.height);
     }
 
   g_object_notify_by_pspec (G_OBJECT (tree_column), tree_column_props[PROP_X_OFFSET]);
@@ -3104,12 +3043,6 @@ gtk_tree_view_column_get_button (GtkTreeViewColumn *tree_column)
   return tree_column->priv->button;
 }
 
-GdkWindow *
-_gtk_tree_view_column_get_window (GtkTreeViewColumn  *column)
-{
-  return column->priv->window;
-}
-
 void
 _gtk_tree_view_column_push_padding (GtkTreeViewColumn  *column,
 				    gint                padding)
@@ -3137,4 +3070,31 @@ GtkCellAreaContext *
 _gtk_tree_view_column_get_context (GtkTreeViewColumn  *column)
 {
   return column->priv->cell_area_context;
+}
+
+gboolean
+_gtk_tree_view_column_coords_in_resize_rect (GtkTreeViewColumn *column,
+                                             double             x,
+                                             double             y)
+{
+  GtkTreeViewColumnPrivate *priv = column->priv;
+  GtkAllocation button_allocation;
+
+  /* x and y are in treeview coordinates. */
+
+  if (!gtk_widget_get_realized (priv->button) ||
+      !priv->resizable ||
+      !priv->visible)
+    return FALSE;
+
+  gtk_widget_get_outer_allocation (priv->button, &button_allocation);
+
+  /* No translation needed */
+  g_assert (gtk_widget_get_parent (priv->button) == priv->tree_view);
+
+  if (gtk_widget_get_direction (priv->tree_view) == GTK_TEXT_DIR_LTR)
+    button_allocation.x += button_allocation.width - TREE_VIEW_DRAG_WIDTH;
+
+  button_allocation.width = TREE_VIEW_DRAG_WIDTH;
+  return gdk_rectangle_contains_point (&button_allocation, (int)x, (int)y);
 }
