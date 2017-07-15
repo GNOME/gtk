@@ -2165,7 +2165,6 @@ gtk_tree_view_map_buttons (GtkTreeView *tree_view)
     {
       GtkTreeViewColumn *column;
       GtkWidget         *button;
-      GdkWindow         *window;
 
       for (list = tree_view->priv->columns; list; list = list->next)
 	{
@@ -2178,21 +2177,6 @@ gtk_tree_view_map_buttons (GtkTreeView *tree_view)
           if (gtk_widget_get_visible (button) &&
               !gtk_widget_get_mapped (button))
             gtk_widget_map (button);
-	}
-      for (list = tree_view->priv->columns; list; list = list->next)
-	{
-	  column = list->data;
-	  if (gtk_tree_view_column_get_visible (column) == FALSE)
-	    continue;
-
-	  window = _gtk_tree_view_column_get_window (column);
-	  if (gtk_tree_view_column_get_resizable (column))
-	    {
-	      gdk_window_raise (window);
-	      gdk_window_show (window);
-	    }
-	  else
-	    gdk_window_hide (window);
 	}
     }
 }
@@ -2245,7 +2229,6 @@ gtk_tree_view_unrealize (GtkWidget *widget)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkTreeViewPrivate *priv = tree_view->priv;
-  GList *list;
 
   if (priv->scroll_timeout != 0)
     {
@@ -2288,9 +2271,6 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       g_source_remove (priv->typeselect_flush_timeout);
       priv->typeselect_flush_timeout = 0;
     }
-  
-  for (list = priv->columns; list; list = list->next)
-    _gtk_tree_view_column_unrealize_button (GTK_TREE_VIEW_COLUMN (list->data));
 
   if (priv->drag_window)
     {
@@ -3126,24 +3106,18 @@ gtk_tree_view_column_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                                  gdouble               y,
                                                  GtkTreeView          *tree_view)
 {
-  GdkEventSequence *sequence;
   GtkTreeViewColumn *column;
-  const GdkEvent *event;
   GList *list;
-  gint i;
 
   if (n_press != 2)
     return;
 
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-
-  for (i = 0, list = tree_view->priv->columns; list; list = list->next, i++)
+  for (list = tree_view->priv->columns; list; list = list->next)
     {
       column = list->data;
 
-      if (event->any.window != _gtk_tree_view_column_get_window (column) ||
-	  !gtk_tree_view_column_get_resizable (column))
+      if (!_gtk_tree_view_column_coords_in_resize_rect (column, x, y) ||
+          !gtk_tree_view_column_get_resizable (column))
         continue;
 
       if (gtk_tree_view_column_get_sizing (column) != GTK_TREE_VIEW_COLUMN_AUTOSIZE)
@@ -3164,18 +3138,12 @@ gtk_tree_view_column_drag_gesture_begin (GtkGestureDrag *gesture,
                                          gdouble         start_y,
                                          GtkTreeView    *tree_view)
 {
-  GdkEventSequence *sequence;
   GtkTreeViewColumn *column;
-  const GdkEvent *event;
-  GdkWindow *window;
   gboolean rtl;
   GList *list;
   gint i;
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  window = event->any.window;
 
   for (i = 0, list = tree_view->priv->columns; list; list = list->next, i++)
     {
@@ -3184,7 +3152,7 @@ gtk_tree_view_column_drag_gesture_begin (GtkGestureDrag *gesture,
 
       column = list->data;
 
-      if (window != _gtk_tree_view_column_get_window (column))
+      if (!_gtk_tree_view_column_coords_in_resize_rect (column, start_x, start_y))
         continue;
 
       if (!gtk_tree_view_column_get_resizable (column))
@@ -3254,13 +3222,6 @@ gtk_tree_view_button_release_drag_column (GtkTreeView *tree_view)
   gtk_widget_set_parent (button, GTK_WIDGET (tree_view));
   g_object_unref (button);
   gtk_widget_queue_resize (widget);
-  if (gtk_tree_view_column_get_resizable (tree_view->priv->drag_column))
-    {
-      gdk_window_raise (_gtk_tree_view_column_get_window (tree_view->priv->drag_column));
-      gdk_window_show (_gtk_tree_view_column_get_window (tree_view->priv->drag_column));
-    }
-  else
-    gdk_window_hide (_gtk_tree_view_column_get_window (tree_view->priv->drag_column));
 
   gtk_widget_grab_focus (button);
 
@@ -4505,6 +4466,8 @@ gtk_tree_view_motion (GtkWidget      *widget,
   GtkRBTree *tree;
   GtkRBNode *node;
   gint new_y;
+  GList *list;
+  gboolean cursor_set = FALSE;
 
   tree_view = (GtkTreeView *) widget;
 
@@ -4523,6 +4486,25 @@ gtk_tree_view_motion (GtkWidget      *widget,
       tree_view->priv->event_last_y = event->y;
       prelight_or_select (tree_view, tree, node, event->x, event->y);
     }
+
+  for (list = tree_view->priv->columns; list; list = list->next)
+    {
+      GtkTreeViewColumn *column = list->data;
+
+      if (_gtk_tree_view_column_coords_in_resize_rect (column, event->x, event->y))
+        {
+          GdkDisplay *display = gtk_widget_get_display (widget);
+          GdkCursor *cursor = gdk_cursor_new_from_name (display, "col-resize");
+
+          gtk_widget_set_cursor (widget, cursor);
+          g_object_unref (cursor);
+          cursor_set = TRUE;
+          break;
+        }
+    }
+
+  if (!cursor_set)
+    gtk_widget_set_cursor (widget, NULL);
 
   return GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->motion_notify_event (widget, event);
 }
@@ -11498,9 +11480,6 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
                                         tree_view);
 
   position = g_list_index (tree_view->priv->columns, column);
-
-  if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
-    _gtk_tree_view_column_unrealize_button (column);
 
   _gtk_tree_view_column_unset_tree_view (column);
 
