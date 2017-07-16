@@ -273,6 +273,8 @@ gtk_model_menu_item_get_text (GtkModelMenuItem *item)
 
   if (GTK_IS_LABEL (child))
     return gtk_label_get_text (GTK_LABEL (child));
+  else if (GTK_IS_ACCEL_LABEL (child))
+    return gtk_accel_label_get_label (GTK_ACCEL_LABEL (child));
 
   if (GTK_IS_CONTAINER (child))
     {
