@@ -1822,6 +1822,7 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
 
       submenu = GTK_MENU_SHELL (gtk_menu_new ());
+      gtk_widget_hide (GTK_WIDGET (submenu));
 
       /* We recurse directly here: we could use an idle instead to
        * prevent arbitrary recursion depth.  We could also do it
