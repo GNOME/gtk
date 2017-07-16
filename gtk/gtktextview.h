@@ -45,6 +45,7 @@ G_BEGIN_DECLS
 
 /**
  * GtkTextWindowType:
+ * @GTK_TEXT_WINDOW_PRIVATE: Private value, used internally
  * @GTK_TEXT_WINDOW_WIDGET: Window that floats over scrolling areas.
  * @GTK_TEXT_WINDOW_TEXT: Scrollable text window.
  * @GTK_TEXT_WINDOW_LEFT: Left side border window.
@@ -56,9 +57,7 @@ G_BEGIN_DECLS
  */
 typedef enum
 {
-  /*< private >*/
   GTK_TEXT_WINDOW_PRIVATE,
-  /*< public >*/
   GTK_TEXT_WINDOW_WIDGET,
   GTK_TEXT_WINDOW_TEXT,
   GTK_TEXT_WINDOW_LEFT,
