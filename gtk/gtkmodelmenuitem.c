@@ -76,7 +76,8 @@ gtk_model_menu_item_set_has_indicator (GtkModelMenuItem *item,
 
   item->has_indicator = has_indicator;
 
-  gtk_widget_queue_resize (GTK_WIDGET (item));
+  gtk_widget_set_visible (_gtk_check_menu_item_get_indicator_widget (GTK_CHECK_MENU_ITEM (item)),
+                          item->has_indicator);
 }
 
 static void
