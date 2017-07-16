@@ -59,7 +59,6 @@ struct _GtkCheckMenuItem
  * GtkCheckMenuItemClass:
  * @parent_class: The parent class.
  * @toggled: Signal emitted when the state of the check box is changed.
- * @snapshot_indicator: Called to draw the check indicator.
  */
 struct _GtkCheckMenuItemClass
 {
@@ -68,8 +67,6 @@ struct _GtkCheckMenuItemClass
   /*< public >*/
 
   void (* toggled)	        (GtkCheckMenuItem *check_menu_item);
-  void (* snapshot_indicator)   (GtkCheckMenuItem *check_menu_item,
-			         GtkSnapshot      *snapshot);
 
   /*< private >*/
 

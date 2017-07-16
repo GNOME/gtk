@@ -81,13 +81,9 @@ enum {
   PROP_DRAW_AS_RADIO
 };
 
-static void gtk_check_menu_item_snapshot             (GtkWidget             *widget,
-                                                      GtkSnapshot           *snapshot);
 static void gtk_check_menu_item_activate             (GtkMenuItem           *menu_item);
 static void gtk_check_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
                                                       gint                  *requisition);
-static void gtk_real_check_menu_item_snapshot_indicator (GtkCheckMenuItem   *check_menu_item,
-                                                      GtkSnapshot           *snapshot);
 static void gtk_check_menu_item_set_property         (GObject               *object,
                                                       guint                  prop_id,
                                                       const GValue          *value,
@@ -204,14 +200,11 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
-  widget_class->snapshot = gtk_check_menu_item_snapshot;
-
   menu_item_class->activate = gtk_check_menu_item_activate;
   menu_item_class->hide_on_activate = FALSE;
   menu_item_class->toggle_size_request = gtk_check_menu_item_toggle_size_request;
   
   klass->toggled = NULL;
-  klass->snapshot_indicator = gtk_real_check_menu_item_snapshot_indicator;
 
   /**
    * GtkCheckMenuItem::toggled:
@@ -491,23 +484,6 @@ gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 }
 
 static void
-gtk_check_menu_item_snapshot (GtkWidget   *widget,
-                              GtkSnapshot *snapshot)
-{
-  GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (widget);
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-
-  if (child)
-    gtk_widget_snapshot_child (widget, child, snapshot);
-
-  if (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->snapshot_indicator)
-    GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->snapshot_indicator (check_menu_item, snapshot);
-}
-
-static void
 gtk_check_menu_item_activate (GtkMenuItem *menu_item)
 {
   GtkCheckMenuItemPrivate *priv;
@@ -571,15 +547,6 @@ gtk_check_menu_item_direction_changed (GtkWidget        *widget,
     }
 
   GTK_WIDGET_CLASS (gtk_check_menu_item_parent_class)->direction_changed (widget, previous_dir);
-}
-
-static void
-gtk_real_check_menu_item_snapshot_indicator (GtkCheckMenuItem *check_menu_item,
-                                             GtkSnapshot      *snapshot)
-{
-  gtk_widget_snapshot_child (GTK_WIDGET (check_menu_item),
-                             check_menu_item->priv->indicator_widget,
-                             snapshot);
 }
 
 static void
