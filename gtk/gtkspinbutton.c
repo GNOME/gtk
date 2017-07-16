@@ -86,22 +86,22 @@
  *
  * |[<!-- language="plain" -->
  * spinbutton.horizontal
- * ├── undershoot.left
- * ├── undershoot.right
- * ├── entry
- * │   ╰── ...
- * ├── button.down
- * ╰── button.up
+ * ╰── box.horizontal
+ *     ├── entry
+ *     │    ├── undershoot.left
+ *     │    ╰── undershoot.right
+ *     ├── button.down
+ *     ╰── button.up
  * ]|
  *
  * |[<!-- language="plain" -->
  * spinbutton.vertical
- * ├── undershoot.left
- * ├── undershoot.right
- * ├── button.up
- * ├── entry
- * │   ╰── ...
- * ╰── button.down
+ * ╰── box.vertical
+ *     ├── button.up
+ *     ├── entry
+ *     │    ├── undershoot.left
+ *     │    ╰── undershoot.right
+ *     ╰── button.up
  * ]|
  *
  * GtkSpinButtons main CSS node has the name spinbutton. It creates subnodes
