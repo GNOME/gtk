@@ -68,49 +68,6 @@
  * The image file may contain an animation, if so the #GtkImage will
  * display an animation (#GdkPixbufAnimation) instead of a static image.
  *
- * #GtkImage is a “no window” widget (has no #GdkWindow of its own),
- * so by default does not receive events. If you want to receive events
- * on the image, such as button clicks, place the image inside a
- * #GtkEventBox, then connect to the event signals on the event box.
- *
- * ## Handling button press events on a #GtkImage.
- *
- * |[<!-- language="C" -->
- *   static gboolean
- *   button_press_callback (GtkWidget      *event_box,
- *                          GdkEventButton *event,
- *                          gpointer        data)
- *   {
- *     g_print ("Event box clicked at coordinates %f,%f\n",
- *              event->x, event->y);
- *
- *     // Returning TRUE means we handled the event, so the signal
- *     // emission should be stopped (don’t call any further callbacks
- *     // that may be connected). Return FALSE to continue invoking callbacks.
- *     return TRUE;
- *   }
- *
- *   static GtkWidget*
- *   create_image (void)
- *   {
- *     GtkWidget *image;
- *     GtkWidget *event_box;
- *
- *     image = gtk_image_new_from_file ("myfile.png");
- *
- *     event_box = gtk_event_box_new ();
- *
- *     gtk_container_add (GTK_CONTAINER (event_box), image);
- *
- *     g_signal_connect (G_OBJECT (event_box),
- *                       "button_press_event",
- *                       G_CALLBACK (button_press_callback),
- *                       image);
- *
- *     return image;
- *   }
- * ]|
- *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. GTK+ comes with a program to avoid this,
  * called “gdk-pixbuf-csource”. This library
