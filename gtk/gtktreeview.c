@@ -7576,8 +7576,8 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
                                                 path);
   cairo_surface_set_device_offset (row_pix,
                                    /* the + 1 is for the black border in the icon */
-                                   - (tree_view->priv->press_start_x + 1),
-                                   - (cell_y + 1));
+                                   tree_view->priv->press_start_x + 1,
+                                   1);
 
   gtk_drag_set_icon_surface (context, row_pix);
 
