@@ -5433,10 +5433,7 @@ gtk_label_get_layout (GtkLabel *label)
  * Obtains the coordinates where the label will draw the #PangoLayout
  * representing the text in the label; useful to convert mouse events
  * into coordinates inside the #PangoLayout, e.g. to take some action
- * if some part of the label is clicked. Of course you will need to
- * create a #GtkEventBox to receive the events, and pack the label
- * inside it, since labels are windowless (they return %FALSE from
- * gtk_widget_get_has_window()). Remember
+ * if some part of the label is clicked. Remember
  * when using the #PangoLayout functions you need to convert to
  * and from pixels using PANGO_PIXELS() or #PANGO_SCALE.
  **/
