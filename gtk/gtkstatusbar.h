@@ -48,7 +48,7 @@ typedef struct _GtkStatusbarClass         GtkStatusbarClass;
 
 struct _GtkStatusbar
 {
-  GtkBox parent_widget;
+  GtkWidget parent_instance;
 
   /*< private >*/
   GtkStatusbarPrivate *priv;
@@ -56,7 +56,7 @@ struct _GtkStatusbar
 
 struct _GtkStatusbarClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 
   gpointer reserved;
 

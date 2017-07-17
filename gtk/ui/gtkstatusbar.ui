@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
-  <template class="GtkStatusbar" parent="GtkBox">
-    <property name="spacing">2</property>
+  <template class="GtkStatusbar" parent="GtkWidget">
     <property name="hexpand">0</property>
     <child>
       <object class="GtkFrame" id="frame">
@@ -11,7 +10,6 @@
         <child>
           <object class="GtkBox" id="message_area">
             <property name="spacing">4</property>
-            <property name="margin">4</property>
             <child>
               <object class="GtkLabel" id="label">
                 <property name="halign">start</property>
