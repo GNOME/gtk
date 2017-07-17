@@ -114,13 +114,59 @@ static void     gtk_statusbar_destroy           (GtkWidget         *widget);
 
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkStatusbar, gtk_statusbar, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkStatusbar, gtk_statusbar, GTK_TYPE_WIDGET)
+
+static void
+gtk_statusbar_dispose (GObject *object)
+{
+  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (GTK_STATUSBAR (object));
+
+  if (priv->frame)
+    {
+      gtk_widget_unparent (priv->frame);
+      priv->frame = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_statusbar_parent_class)->dispose (object);
+}
+
+static void
+gtk_statusbar_measure (GtkWidget      *widget,
+                       GtkOrientation  orientation,
+                       int             for_size,
+                       int            *minimum,
+                       int            *natural,
+                       int            *minimum_baseline,
+                       int            *natural_baseline)
+{
+  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (GTK_STATUSBAR (widget));
+
+  gtk_widget_measure (priv->frame, orientation, for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_statusbar_size_allocate (GtkWidget           *widget,
+                             const GtkAllocation *allocation,
+                             int                  baseline,
+                             GtkAllocation       *out_clip)
+{
+  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (GTK_STATUSBAR (widget));
+
+  gtk_widget_size_allocate (priv->frame, allocation, baseline, out_clip);
+}
 
 static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  object_class->dispose = gtk_statusbar_dispose;
+
+  widget_class->measure = gtk_statusbar_measure;
+  widget_class->size_allocate = gtk_statusbar_size_allocate;
   widget_class->destroy = gtk_statusbar_destroy;
 
   class->text_pushed = gtk_statusbar_update;
@@ -179,6 +225,8 @@ static void
 gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkStatusbarPrivate *priv;
+
+  gtk_widget_set_has_window (GTK_WIDGET (statusbar), FALSE);
 
   statusbar->priv = gtk_statusbar_get_instance_private (statusbar);
   priv = statusbar->priv;
