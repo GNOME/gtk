@@ -268,13 +268,13 @@ quartz_reset (GtkIMContext *context)
 }
 
 static void
-quartz_set_client_window (GtkIMContext *context, GdkWindow *window)
+quartz_set_client_window (GtkIMContext *context, GtkWidget *widget)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
 
-  GTK_NOTE (MISC, g_print ("quartz_set_client_window: %p\n", window));
+  GTK_NOTE (MISC, g_print ("quartz_set_client_window: %p\n", widget));
 
-  qc->client_window = window;
+  qc->client_window = gtk_widget_get_parent_window (widget);
 }
 
 static void
@@ -372,7 +372,7 @@ gtk_im_context_quartz_class_init (GtkIMContextClass *klass)
   klass->get_preedit_string = quartz_get_preedit_string;
   klass->filter_keypress = quartz_filter_keypress;
   klass->reset = quartz_reset;
-  klass->set_client_window = quartz_set_client_window;
+  klass->set_client_widget = quartz_set_client_window;
   klass->focus_in = quartz_focus_in;
   klass->focus_out = quartz_focus_out;
   klass->set_cursor_location = quartz_set_cursor_location;
