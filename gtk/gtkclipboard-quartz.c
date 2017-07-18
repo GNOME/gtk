@@ -512,8 +512,11 @@ void
 gtk_clipboard_clear (GtkClipboard *clipboard)
 {
   clipboard_unset (clipboard);
-
-  [clipboard->pasteboard declareTypes:nil owner:nil];
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_6_AND_LATER
+    [clipboard->pasteboard clearContents];
+#else
+    [clipboard->pasteboard declareTypes:nil owner:nil];
+#endif
 }
 
 static void
@@ -762,7 +765,6 @@ GdkPixbuf *
 gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
 {
   GdkAtom target = gdk_atom_intern_static_string("image/tiff");
-  int i;
   GtkSelectionData *data;
 
   data = gtk_clipboard_wait_for_contents (clipboard, target);
