@@ -125,6 +125,7 @@ gtk/gtkfilechooser.c
 gtk/gtkfilechooserdialog.c
 gtk/gtkfilechooserembed.c
 gtk/gtkfilechooserentry.c
+gtk/gtkfilechoosererrorstack.c
 gtk/gtkfilechoosernative.c
 gtk/gtkfilechoosernativequartz.c
 gtk/gtkfilechooserutils.c
