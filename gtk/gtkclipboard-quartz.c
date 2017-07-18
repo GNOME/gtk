@@ -268,6 +268,15 @@ gtk_clipboard_get (GdkAtom selection)
   return gtk_clipboard_get_for_display (gdk_display_get_default (), selection);
 }
 
+GtkClipboard *
+gtk_clipboard_get_default (GdkDisplay *display)
+{
+  g_return_val_if_fail (display != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return gtk_clipboard_get_for_display (display, GDK_SELECTION_CLIPBOARD);
+}
+
 static void
 clipboard_owner_destroyed (gpointer data)
 {
@@ -1108,12 +1117,6 @@ _gtk_clipboard_store_all (void)
     }
 }
 
-/**
- * gtk_clipboard_get_selection:
- * @clipboard:
- *
- * Since: 3.22
- */
 GdkAtom
 gtk_clipboard_get_selection (GtkClipboard *clipboard)
 {
