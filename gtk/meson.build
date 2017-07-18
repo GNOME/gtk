@@ -157,6 +157,7 @@ gtk_public_sources = files([
   'gtkfilechooserdialog.c',
   'gtkfilechooserembed.c',
   'gtkfilechooserentry.c',
+  'gtkfilechoosererrorstack.c',
   'gtkfilechoosernative.c',
   'gtkfilechoosernativeportal.c',
   'gtkfilechooserutils.c',
