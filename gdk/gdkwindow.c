@@ -3585,9 +3585,9 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
   if (gdk_window_has_impl (window))
     {
       if (!was_mapped)
-	gdk_synthesize_window_state (window,
-				     GDK_WINDOW_STATE_WITHDRAWN,
-				     GDK_WINDOW_STATE_FOCUSED);
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_WITHDRAWN,
+                                     0);
     }
   else
     {
