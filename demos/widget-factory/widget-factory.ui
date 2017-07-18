@@ -2493,6 +2493,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="height-request">300</property>
                             <property name="halign">start</property>
                             <property name="shadow-type">in</property>
+                            <property name="hexpand">0</property>
                             <child>
                               <object class="GtkTreeView" id="charletree">
                                 <property name="enable-grid-lines">vertical</property>
