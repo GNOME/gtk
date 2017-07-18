@@ -173,7 +173,7 @@ _gdk_x11_window_get_toplevel (GdkWindow *window)
   if (!impl->toplevel)
     {
       impl->toplevel = g_new0 (GdkToplevelX11, 1);
-      impl->toplevel->have_focused = TRUE;
+      impl->toplevel->have_focused = FALSE;
     }
 
   return impl->toplevel;
