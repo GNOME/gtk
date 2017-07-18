@@ -659,6 +659,7 @@ if quartz_enabled
     'gtkmountoperation-stub.c',
     'gtkapplication-quartz.c',
     'gtkapplication-quartz-menu.c',
+    'gtkfilechoosernativequartz.c',
     'gtkquartz.c',
   ]
   gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?
