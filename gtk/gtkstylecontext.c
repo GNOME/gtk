@@ -125,7 +125,6 @@ struct _GtkStyleContextPrivate
   GtkStyleContext *parent;
   GtkCssNode *cssnode;
   GSList *saved_nodes;
-  GArray *property_cache;
 
   GdkFrameClock *frame_clock;
 
@@ -238,23 +237,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
-void
-gtk_style_context_clear_property_cache (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-  guint i;
-
-  for (i = 0; i < priv->property_cache->len; i++)
-    {
-      PropertyValue *node = &g_array_index (priv->property_cache, PropertyValue, i);
-
-      g_param_spec_unref (node->pspec);
-      g_value_unset (&node->value);
-    }
-
-  g_array_set_size (priv->property_cache, 0);
-}
-
 static void
 gtk_style_context_pop_style_node (GtkStyleContext *context)
 {
@@ -321,8 +303,6 @@ gtk_style_context_init (GtkStyleContext *context)
   if (priv->screen == NULL)
     g_error ("Can't create a GtkStyleContext without a display connection");
 
-  priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
-
   gtk_style_context_set_cascade (context,
                                  _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (priv->screen), 1));
 
@@ -356,9 +336,6 @@ gtk_style_context_finalize (GObject *object)
   gtk_style_context_set_cascade (context, NULL);
 
   g_object_unref (priv->cssnode);
-
-  gtk_style_context_clear_property_cache (context);
-  g_array_free (priv->property_cache, TRUE);
 
   G_OBJECT_CLASS (gtk_style_context_parent_class)->finalize (object);
 }
