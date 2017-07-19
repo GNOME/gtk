@@ -1,3 +1,57 @@
+Overview of Changes in GTK+ 3.91.1
+==================================
+
+* Redo event delivery and focus handling and grabs, and stop using
+  subwindows for widgets. API changes due to this include:
+  - a new GtkWidget::pick vfunc
+  - drop event mask apis
+  - drop windows from gestures
+
+* The prelight state is now automatically set on widgets
+
+* New widget: GtkCenterBox. This widget provides the center child
+  functionality that used to be part of GtkBox
+
+* Wayland
+ - Improve the key repeat implementation
+ - Set vid/pid on tablet devices
+
+* OS X:
+ - Add native file chooser support
+
+* Bugs fixed:
+ 745289 wayland: do not use g_error() on connection errors
+ 759308 Instant apply in printing dialog (number of copies)
+ 766517 GtkAboutDialog should use https:// license URLs
+ 770513 MainToolbar in full-screen mode has rounded corners, which show video pix...
+ 772281 Quartz backend: gtk_clipboard_get_selection not implemented
+ 773299 Ensure GTK+-4.x builds and works on Windows (MSVC in particular)
+ 775636 "New folder" creation popover warnings about trailing spaces flashes in...
+ 781285 Key repeat cancel under Wayland should depend on which key is repeating
+ 781583 gtk_image_new_from_resource does not work
+ 781935 Add nullable return annotation to gtk_notebook_get_tab_label
+ 781945 SIGSEGV dragging window on Wayland when toplevel window set_transient_for...
+ 782040 Wacom pen calibration application responds to mouse input
+ 782283 Wayland: Crash when dismissing a menu when a tooltip is visible
+ 783047 Many apps crash in gdk_event_source_prepare when logging out of GNOME
+ 783347 gtkfilechoosernativewin32: Fix support for non-ASCII paths
+ 783397 Remove unused code in gtktextdisplay.c
+ 783445 Incomplete documentation of gtk_widget_insert_after/before()
+ 783587 Crash when NULL is passed to GtkActionHelper to unset action-name
+ 784323 Quartz backend: gtk_clipboard_get_default not implemented
+ 784723 macOS: native file chooser dialog
+ 784888 gtkapplication: Mark gtk_application_get_active_window() as nullable
+
+* Translation updates:
+ Catalan
+ Czech
+ Friulian
+ Hebrew
+ Kazakh
+ Norwegian bokmål
+ Spanish
+
+
 Overview of Changes in GTK+ 3.91.0
 ==================================
 
