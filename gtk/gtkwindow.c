@@ -11375,6 +11375,7 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
     {
       focus = gtk_pointer_focus_new (window, target, device, sequence, x, y);
       gtk_window_add_pointer_focus (window, focus);
+      gtk_pointer_focus_unref (focus);
     }
 }
 
