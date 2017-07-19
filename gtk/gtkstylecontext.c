@@ -305,10 +305,6 @@ gtk_style_context_init (GtkStyleContext *context)
 
   gtk_style_context_set_cascade (context,
                                  _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (priv->screen), 1));
-
-  /* Create default info store */
-  priv->cssnode = gtk_css_path_node_new (context);
-  gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
 }
 
 static void
@@ -335,7 +331,8 @@ gtk_style_context_finalize (GObject *object)
   gtk_style_context_clear_parent (context);
   gtk_style_context_set_cascade (context, NULL);
 
-  g_object_unref (priv->cssnode);
+  if (priv->cssnode)
+    g_object_unref (priv->cssnode);
 
   G_OBJECT_CLASS (gtk_style_context_parent_class)->finalize (object);
 }
@@ -458,7 +455,15 @@ gtk_style_context_get_node (GtkStyleContext *context)
 GtkStyleContext *
 gtk_style_context_new (void)
 {
-  return g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
+  GtkStyleContext *context;
+
+  context = g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
+
+  /* Create default info store */
+  context->priv->cssnode = gtk_css_path_node_new (context);
+  gtk_css_node_set_state (context->priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
+
+  return context;
 }
 
 GtkStyleContext *
@@ -468,8 +473,8 @@ gtk_style_context_new_for_node (GtkCssNode *node)
 
   g_return_val_if_fail (GTK_IS_CSS_NODE (node), NULL);
 
-  context = gtk_style_context_new ();
-  g_set_object (&context->priv->cssnode, node);
+  context = g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
+  context->priv->cssnode = g_object_ref (node);
 
   return context;
 }
