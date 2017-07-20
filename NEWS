@@ -1,3 +1,21 @@
+Overview of Changes in GTK+ 3.91.2
+==================================
+
+* All widgets are drawing CSS backgrounds and borders
+
+* All gadgets have been replaced by widgets
+
+* GtkSpinButton no longer derives from GtkEntry
+
+* GtkScrollbar no longer derives from GtkRange
+
+* GtkAccelLabel no longer derives from GtkLabel
+
+* All remaining style properties have been removed
+
+* A new 'widget bowl' demo has been added in gtk4-demo
+
+
 Overview of Changes in GTK+ 3.91.1
 ==================================
 
