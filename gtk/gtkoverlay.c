@@ -93,16 +93,11 @@ gtk_overlay_compute_child_allocation (GtkOverlay      *overlay,
                                       GtkOverlayChild *child,
                                       GtkAllocation   *widget_allocation)
 {
-  GtkAllocation allocation, overlay_allocation;
+  GtkAllocation allocation;
   gboolean result;
 
   g_signal_emit (overlay, signals[GET_CHILD_POSITION],
                  0, child->widget, &allocation, &result);
-
-  gtk_widget_get_allocation (GTK_WIDGET (overlay), &overlay_allocation);
-
-  allocation.x += overlay_allocation.x;
-  allocation.y += overlay_allocation.y;
 
   widget_allocation->x = allocation.x;
   widget_allocation->y = allocation.y;
