@@ -145,6 +145,11 @@ void                 gtk_places_sidebar_set_show_other_locations (GtkPlacesSideb
 GDK_AVAILABLE_IN_3_18
 gboolean             gtk_places_sidebar_get_show_other_locations (GtkPlacesSidebar   *sidebar);
 
+GDK_AVAILABLE_IN_3_22
+void                 gtk_places_sidebar_set_show_starred_location (GtkPlacesSidebar   *sidebar,
+                                                                   gboolean            show_starred_location);
+GDK_AVAILABLE_IN_3_22
+gboolean             gtk_places_sidebar_get_show_starred_location (GtkPlacesSidebar   *sidebar);
 G_END_DECLS
 
 #endif /* __GTK_PLACES_SIDEBAR_H__ */
