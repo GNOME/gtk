@@ -1299,23 +1299,26 @@ static GdkDevice * get_scroll_device (GdkWaylandSeat              *seat,
                                       enum wl_pointer_axis_source  source);
 
 static GdkEvent *
-create_scroll_event (GdkWaylandSeat *seat,
-                     gboolean        emulated)
+create_scroll_event (GdkWaylandSeat        *seat,
+                     GdkWaylandPointerData *pointer_info,
+                     GdkDevice             *device,
+                     GdkDevice             *source_device,
+                     gboolean               emulated)
 {
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event;
 
   event = gdk_event_new (GDK_SCROLL);
-  event->scroll.window = g_object_ref (seat->pointer_info.focus);
-  gdk_event_set_device (event, seat->master_pointer);
-  gdk_event_set_source_device (event, get_scroll_device (seat, seat->pointer_info.frame.source));
-  event->scroll.time = seat->pointer_info.time;
-  event->scroll.state = device_get_modifiers (seat->master_pointer);
+  event->scroll.window = g_object_ref (pointer_info->focus);
+  gdk_event_set_device (event, device);
+  gdk_event_set_source_device (event, source_device);
+  event->scroll.time = pointer_info->time;
+  event->scroll.state = device_get_modifiers (device);
   gdk_event_set_screen (event, display->screen);
 
   gdk_event_set_pointer_emulated (event, emulated);
 
-  get_coordinates (seat->master_pointer,
+  get_coordinates (device,
                    &event->scroll.x,
                    &event->scroll.y,
                    &event->scroll.x_root,
@@ -1329,8 +1332,11 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
                              GdkScrollDirection  direction)
 {
   GdkEvent *event;
+  GdkDevice *source;
 
-  event = create_scroll_event (seat, TRUE);
+  source = get_scroll_device (seat, seat->pointer_info.frame.source);
+  event = create_scroll_event (seat, &seat->pointer_info,
+                               seat->master_pointer, source, TRUE);
   event->scroll.direction = direction;
 
   _gdk_wayland_display_deliver_event (seat->display, event);
@@ -1343,8 +1349,11 @@ flush_smooth_scroll_event (GdkWaylandSeat *seat,
                            gboolean        is_stop)
 {
   GdkEvent *event;
+  GdkDevice *source;
 
-  event = create_scroll_event (seat, FALSE);
+  source = get_scroll_device (seat, seat->pointer_info.frame.source);
+  event = create_scroll_event (seat, &seat->pointer_info,
+                               seat->master_pointer, source, FALSE);
   event->scroll.direction = GDK_SCROLL_SMOOTH;
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
