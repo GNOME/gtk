@@ -336,6 +336,19 @@ gtk_overlay_get_child_position (GtkOverlay    *overlay,
 }
 
 static void
+gtk_overlay_add (GtkContainer *container,
+                 GtkWidget    *widget)
+{
+
+  /* We only get into this path if we have no child
+   * (since GtkOverlay is a GtkBin) and the only child
+   * we can add through gtk_container_add is the main child,
+   * which we want to keep the lowest in the hierarchy. */
+  gtk_widget_insert_after (widget, GTK_WIDGET (container), NULL);
+  _gtk_bin_set_child (GTK_BIN (container), widget);
+}
+
+static void
 gtk_overlay_remove (GtkContainer *container,
                     GtkWidget    *widget)
 {
@@ -596,6 +609,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 
   widget_class->size_allocate = gtk_overlay_size_allocate;
 
+  container_class->add = gtk_overlay_add;
   container_class->remove = gtk_overlay_remove;
   container_class->forall = gtk_overlay_forall;
   container_class->set_child_property = gtk_overlay_set_child_property;
