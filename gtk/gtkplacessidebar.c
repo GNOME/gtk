@@ -187,6 +187,7 @@ struct _GtkPlacesSidebar {
   guint show_enter_location    : 1;
   guint show_other_locations   : 1;
   guint show_trash             : 1;
+  guint show_starred_location  : 1;
   guint local_only             : 1;
   guint populate_all           : 1;
 };
@@ -222,6 +223,8 @@ struct _GtkPlacesSidebarClass {
   void    (* show_other_locations_with_flags)   (GtkPlacesSidebar   *sidebar,
                                                  GtkPlacesOpenFlags  open_flags);
 
+  void    (* show_starred_location)    (GtkPlacesSidebar   *sidebar);
+
   void    (* mount)                  (GtkPlacesSidebar   *sidebar,
                                       GMountOperation    *mount_operation);
   void    (* unmount)                (GtkPlacesSidebar   *sidebar,
@@ -239,6 +242,7 @@ enum {
   DRAG_PERFORM_DROP,
   SHOW_OTHER_LOCATIONS,
   SHOW_OTHER_LOCATIONS_WITH_FLAGS,
+  SHOW_STARRED_LOCATION,
   MOUNT,
   UNMOUNT,
   LAST_SIGNAL
@@ -252,6 +256,7 @@ enum {
   PROP_SHOW_CONNECT_TO_SERVER,
   PROP_SHOW_ENTER_LOCATION,
   PROP_SHOW_TRASH,
+  PROP_SHOW_STARRED_LOCATION,
   PROP_LOCAL_ONLY,
   PROP_SHOW_OTHER_LOCATIONS,
   PROP_POPULATE_ALL,
@@ -370,6 +375,15 @@ emit_show_other_locations_with_flags (GtkPlacesSidebar   *sidebar,
   g_signal_emit (sidebar, places_sidebar_signals[SHOW_OTHER_LOCATIONS_WITH_FLAGS],
                  0, open_flags);
 }
+
+static void
+emit_show_starred_location (GtkPlacesSidebar  *sidebar,
+                            GtkPlacesOpenFlags open_flags)
+{
+  g_signal_emit (sidebar, places_sidebar_signals[SHOW_STARRED_LOCATION], 0,
+                 open_flags);
+}
+
 
 static void
 emit_mount_operation (GtkPlacesSidebar *sidebar,
@@ -1038,6 +1052,18 @@ update_places (GtkPlacesSidebar *sidebar)
       g_object_unref (start_icon);
     }
 
+  if (sidebar->show_starred_location)
+    {
+      mount_uri = "favorites:///";
+      start_icon = g_themed_icon_new_with_default_fallbacks ("starred-symbolic");
+      add_place (sidebar, PLACES_STARRED_LOCATION,
+                 SECTION_COMPUTER,
+                 _("Starred"), start_icon, NULL, mount_uri,
+                 NULL, NULL, NULL, NULL, 0,
+                 _("Favorite files"));
+      g_object_unref (start_icon);
+    }
+
   /* home folder */
   home_uri = get_home_directory_uri ();
   start_icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_HOME);
@@ -1531,6 +1557,12 @@ check_valid_drop_target (GtkPlacesSidebar *sidebar,
                 "section_type", &section_type,
                 "uri", &uri,
                 NULL);
+
+  if (place_type == PLACES_STARRED_LOCATION)
+    {
+      g_free (uri);
+      return FALSE;
+    }
 
   if (place_type == PLACES_CONNECT_TO_SERVER)
     {
@@ -2474,6 +2506,10 @@ open_row (GtkSidebarRow      *row,
     {
       emit_show_other_locations (sidebar);
       emit_show_other_locations_with_flags (sidebar, open_flags);
+    }
+  else if (place_type == PLACES_STARRED_LOCATION)
+    {
+      emit_show_starred_location (sidebar, open_flags);
     }
   else if (uri != NULL)
     {
@@ -4150,6 +4186,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_places_sidebar_set_show_trash (sidebar, g_value_get_boolean (value));
       break;
 
+    case PROP_SHOW_STARRED_LOCATION:
+      gtk_places_sidebar_set_show_starred_location (sidebar, g_value_get_boolean (value));
+      break;
+
     case PROP_LOCAL_ONLY:
       gtk_places_sidebar_set_local_only (sidebar, g_value_get_boolean (value));
       break;
@@ -4210,6 +4250,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case PROP_SHOW_TRASH:
       g_value_set_boolean (value, gtk_places_sidebar_get_show_trash (sidebar));
+      break;
+
+    case PROP_SHOW_STARRED_LOCATION:
+      g_value_set_boolean (value, gtk_places_sidebar_get_show_starred_location (sidebar));
       break;
 
     case PROP_LOCAL_ONLY:
@@ -4649,6 +4693,26 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         1,
                         G_TYPE_MOUNT_OPERATION);
 
+  /**
+   * GtkPlacesSidebar::show-starred-location:
+   * @sidebar: the object which received the signal.
+   *
+   * The places sidebar emits this signal when it needs the calling
+   * application to present a way to show the starred files. In GNOME,
+   * starred files are implemented by setting the nao:predefined-tag-favorite
+   * tag in the tracker database.
+   *
+   * Since: 3.22.26
+   */
+  places_sidebar_signals [SHOW_STARRED_LOCATION] =
+          g_signal_new (I_("show-starred-location"),
+                        G_OBJECT_CLASS_TYPE (gobject_class),
+                        G_SIGNAL_RUN_FIRST,
+                        G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_starred_location),
+                        NULL, NULL,
+                        NULL,
+                        G_TYPE_NONE, 1,
+                        GTK_TYPE_PLACES_OPEN_FLAGS);
 
   properties[PROP_LOCATION] =
           g_param_spec_object ("location",
@@ -4705,6 +4769,13 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 P_("Whether the sidebar includes an item to show external locations"),
                                 FALSE,
                                 G_PARAM_READWRITE);
+  properties[PROP_SHOW_STARRED_LOCATION] =
+          g_param_spec_boolean ("show-starred-location",
+                                P_("Show 'Starred Location'"),
+                                P_("Whether the sidebar includes an item to show starred files"),
+                                FALSE,
+                                G_PARAM_READWRITE);
+
 
   /**
    * GtkPlacesSidebar:populate-all:
@@ -5461,4 +5532,47 @@ gtk_places_sidebar_set_drop_targets_visible (GtkPlacesSidebar *sidebar,
             }
         }
     }
+}
+
+/**
+ * gtk_places_sidebar_set_show_starred_location:
+ * @sidebar: a places sidebar
+ * @show_starred_location: whether to show an item for Starred files
+ *
+ * If you enable this, you should connect to the
+ * #GtkPlacesSidebar::show-starred-location signal.
+ *
+ * Since: 3.22.26
+ */
+void
+gtk_places_sidebar_set_show_starred_location (GtkPlacesSidebar *sidebar,
+                                              gboolean          show_starred_location)
+{
+  g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+  show_starred_location = !!show_starred_location;
+  if (sidebar->show_starred_location != show_starred_location)
+    {
+      sidebar->show_starred_location = show_starred_location;
+      update_places (sidebar);
+      g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_SHOW_STARRED_LOCATION]);
+    }
+}
+
+/**
+ * gtk_places_sidebar_get_show_starred_location:
+ * @sidebar: a places sidebar
+ *
+ * Returns the value previously set with gtk_places_sidebar_set_show_starred_location()
+ *
+ * Returns: %TRUE if the sidebar will display a Starred item.
+ *
+ * Since: 3.22.26
+ */
+gboolean
+gtk_places_sidebar_get_show_starred_location (GtkPlacesSidebar *sidebar)
+{
+  g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+
+  return sidebar->show_starred_location;
 }
