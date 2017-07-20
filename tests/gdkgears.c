@@ -120,6 +120,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   overlay = gtk_overlay_new ();
+  g_object_set (overlay, "margin", 12, NULL);
   gtk_container_add (GTK_CONTAINER (window), overlay);
   gtk_widget_show (overlay);
 
