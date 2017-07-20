@@ -38,7 +38,6 @@
 G_BEGIN_DECLS
 
 typedef struct _GdkGeometry          GdkGeometry;
-typedef struct _GdkWindowRedirect    GdkWindowRedirect;
 
 /**
  * GdkWindowWindowClass:
