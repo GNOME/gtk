@@ -40,23 +40,6 @@ G_BEGIN_DECLS
 typedef struct _GdkGeometry          GdkGeometry;
 
 /**
- * GdkWindowWindowClass:
- * @GDK_INPUT_OUTPUT: window for graphics and events
- * @GDK_INPUT_ONLY: window for events only
- *
- * @GDK_INPUT_OUTPUT windows are the standard kind of window you might expect.
- * Such windows receive events and are also displayed on screen.
- * @GDK_INPUT_ONLY windows are invisible; they are usually placed above other
- * windows in order to trap or filter the events. You can’t draw on
- * @GDK_INPUT_ONLY windows.
- */
-typedef enum
-{
-  GDK_INPUT_OUTPUT, /*< nick=input-output >*/
-  GDK_INPUT_ONLY    /*< nick=input-only >*/
-} GdkWindowWindowClass;
-
-/**
  * GdkWindowType:
  * @GDK_WINDOW_ROOT: root window; this window has no parent, covers the entire
  *  screen, and is created by the window system

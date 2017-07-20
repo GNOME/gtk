@@ -156,6 +156,13 @@ struct _GdkEventPrivate
 
 typedef struct _GdkWindowPaint GdkWindowPaint;
 
+typedef enum
+{
+  GDK_INPUT_OUTPUT,
+  GDK_INPUT_ONLY
+} GdkWindowWindowClass;
+
+
 struct _GdkWindowAttr
 {
   gint event_mask;
