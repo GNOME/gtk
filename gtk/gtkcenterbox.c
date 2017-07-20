@@ -329,8 +329,8 @@ gtk_center_box_measure_opposite (GtkWidget      *widget,
 
   if (above_min >= 0)
     {
-      int min_baseline;
-      int nat_baseline;
+      int min_baseline = -1;
+      int nat_baseline = -1;
 
       total_min = MAX (total_min, above_min + below_min);
       total_nat = MAX (total_nat, above_nat + below_nat);
