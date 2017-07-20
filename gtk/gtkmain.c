@@ -876,7 +876,7 @@ gtk_get_option_group (gboolean open_default_display)
  *    of #GOptionEntry<!-- -->s describing the options of your program
  * @translation_domain: a translation domain to use for translating
  *    the <option>--help</option> output for the options in @entries
- *    with gettext(), or %NULL
+ *    and the @parameter_string with gettext(), or %NULL
  * @error: a return location for errors 
  *
  * This function does the same work as gtk_init_check(). 
@@ -915,6 +915,8 @@ gtk_init_with_args (int            *argc,
   context = g_option_context_new (parameter_string);
   g_option_context_add_group (context, gtk_group);
   
+  g_option_context_set_translation_domain (context, translation_domain);
+
   if (entries)
     g_option_context_add_main_entries (context, entries, translation_domain);
   retval = g_option_context_parse (context, argc, argv, error);
