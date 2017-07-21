@@ -1406,7 +1406,6 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
           alloc.width = LOWORD (lparam);
           alloc.height = HIWORD (lparam);
 
-          gtk_widget_set_allocation (op_win32->embed_widget, &alloc);
           gtk_widget_queue_resize (op_win32->embed_widget);
         }
 
