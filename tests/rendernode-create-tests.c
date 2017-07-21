@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 
 #include <math.h>
+#include <stdlib.h>
 
 static void
 hsv_to_rgb (GdkRGBA *rgba,
@@ -80,7 +81,7 @@ hsv_to_rgb (GdkRGBA *rgba,
 GskRenderNode *
 rounded_borders (guint n)
 {
-  GskRenderNode *nodes[n];
+  GskRenderNode **nodes = g_newa (GskRenderNode *, n);
   GskRenderNode *container;
   GskRoundedRect outline;
   float widths[4];
@@ -114,7 +115,7 @@ rounded_borders (guint n)
 GskRenderNode *
 rounded_backgrounds (guint n)
 {
-  GskRenderNode *nodes[n];
+  GskRenderNode **nodes = g_newa (GskRenderNode *, n);
   GskRenderNode *container, *texture;
   GskRoundedRect outline;
   GdkRGBA color;
@@ -147,7 +148,7 @@ rounded_backgrounds (guint n)
 GskRenderNode *
 colors (guint n)
 {
-  GskRenderNode *nodes[10 * n];
+  GskRenderNode **nodes = g_newa (GskRenderNode *, 10 * n);
   GskRenderNode *container;
   graphene_rect_t bounds;
   GdkRGBA color;
@@ -175,7 +176,7 @@ colors (guint n)
 GskRenderNode *
 clipped_colors (guint n)
 {
-  GskRenderNode *nodes[n];
+  GskRenderNode **nodes = g_newa (GskRenderNode *,n);
   GskRenderNode *container;
   graphene_rect_t bounds;
   GdkRGBA color;
@@ -242,7 +243,7 @@ compare_color_stops (gconstpointer a,
 GskRenderNode *
 linear_gradient (guint n)
 {
-  GskRenderNode *nodes[n];
+  GskRenderNode **nodes = g_newa (GskRenderNode *, n);
   GskRenderNode *container;
   graphene_rect_t bounds;
   GskColorStop stops[5];
@@ -307,7 +308,7 @@ linear_gradient (guint n)
 GskRenderNode *
 borders (guint n)
 {
-  GskRenderNode *nodes[n];
+  GskRenderNode **nodes = g_newa (GskRenderNode *, n);
   GskRenderNode *container;
   GskRoundedRect outline;
   GdkRGBA colors[4];
