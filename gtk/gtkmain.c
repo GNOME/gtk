@@ -992,15 +992,22 @@ gtk_init_with_args (gint                 *argc,
     return FALSE;
 
 done:
-  if (GDK_PRIVATE_CALL (gdk_display_open_default) () != NULL)
+  if (GDK_PRIVATE_CALL (gdk_display_open_default) () == NULL)
     {
-      if (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE)
-        gtk_window_set_interactive_debugging (TRUE);
+      const char *display_name = gdk_get_display_arg_name ();
+      g_set_error (error,
+                   G_OPTION_ERROR,
+                   G_OPTION_ERROR_FAILED,
+                   _("Cannot open display: %s"),
+                   display_name ? display_name : "" );
 
-      return TRUE;
+      return FALSE;
     }
 
-  return FALSE;
+  if (gtk_get_debug_flags () & GTK_DEBUG_INTERACTIVE)
+    gtk_window_set_interactive_debugging (TRUE);
+
+  return TRUE;
 }
 
 
