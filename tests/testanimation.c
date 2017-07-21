@@ -19,10 +19,13 @@
 #include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 #include <errno.h>
 #include <gtk/gtk.h>
+
+#ifndef G_OS_WIN32
+# include <unistd.h>
+#endif
 
 typedef struct _LoadContext LoadContext;
 
