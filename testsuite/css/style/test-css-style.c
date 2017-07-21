@@ -22,6 +22,10 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
+#ifdef G_OS_WIN32
+# include <io.h>
+#endif
+
 /* There shall be no other styles */
 #define GTK_STYLE_PROVIDER_PRIORITY_FORCE G_MAXUINT
 

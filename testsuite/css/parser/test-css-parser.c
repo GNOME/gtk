@@ -26,6 +26,10 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
+#ifdef G_OS_WIN32
+# include <io.h>
+#endif
+
 static char *
 test_get_reference_file (const char *css_file)
 {

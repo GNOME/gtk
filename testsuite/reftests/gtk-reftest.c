@@ -28,6 +28,10 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
+#ifdef G_OS_WIN32
+# include <direct.h>
+#endif
+
 typedef enum {
   SNAPSHOT_WINDOW,
   SNAPSHOT_DRAW

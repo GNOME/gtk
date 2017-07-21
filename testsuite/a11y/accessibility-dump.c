@@ -25,6 +25,10 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
+#ifdef G_OS_WIN32
+# include <io.h>
+#endif
+
 #define DEPTH_INCREMENT 2
 
 static char *
