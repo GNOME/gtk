@@ -950,8 +950,9 @@ gtk_get_option_group (gboolean open_default_display)
  * `--help` output. Note that your program will
  * be terminated after writing out the help output.
  *
- * Returns: %TRUE if the windowing system has been successfully
- *     initialized, %FALSE otherwise
+ * Returns: %TRUE if the commandline arguments (if any) were valid and
+ *     if the windowing system has been successfully initialized,
+ *     %FALSE otherwise
  *
  * Since: 2.6
  */
