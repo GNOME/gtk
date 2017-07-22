@@ -5094,6 +5094,10 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
           break;
         }
 
+      /* set child visible */
+      if (page->tab_label)
+        gtk_widget_set_child_visible (page->tab_widget, TRUE);
+
       if (page == priv->cur_page && priv->operation == DRAG_OPERATION_REORDER)
         {
           GtkAllocation fixed_allocation = { priv->drag_window_x, priv->drag_window_y,
@@ -5160,10 +5164,6 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
 
           break;
         }
-
-      /* set child visible */
-      if (page->tab_label)
-        gtk_widget_set_child_visible (page->tab_widget, TRUE);
     }
 
   /* Don't move the current tab past the last position during tabs reordering */
