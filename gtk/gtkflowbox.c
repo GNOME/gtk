@@ -3991,9 +3991,6 @@ gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
   GtkWidget *child;
   GSequenceIter *iter;
   GtkAllocation allocation;
-  GtkAllocation box_allocation;
-
-  gtk_widget_get_allocation (GTK_WIDGET (box), &box_allocation);
 
   for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
        !g_sequence_iter_is_end (iter);
@@ -4004,10 +4001,7 @@ gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
         continue;
 
       gtk_widget_get_allocation (child, &allocation);
-      allocation.x -= box_allocation.x;
-      allocation.y -= box_allocation.y;
-      if (x >= allocation.x && x < (allocation.x + allocation.width) &&
-          y >= allocation.y && y < (allocation.y + allocation.height))
+      if (gdk_rectangle_contains_point (&allocation, x, y))
         return GTK_FLOW_BOX_CHILD (child);
     }
 
