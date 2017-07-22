@@ -530,7 +530,6 @@ create_window (void)
   gtk_widget_show (hbox);
 
   widget = gtk_label_new ("H Spacing");
-  gtk_widget_set_hexpand (widget, TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), widget);
 
   widget = gtk_spin_button_new_with_range (0, 30, 1);
@@ -551,7 +550,6 @@ create_window (void)
   gtk_widget_show (hbox);
 
   widget = gtk_label_new ("V Spacing");
-  gtk_widget_set_hexpand (widget, TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), widget);
 
   widget = gtk_spin_button_new_with_range (0, 30, 1);
