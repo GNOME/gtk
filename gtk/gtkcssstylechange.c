@@ -129,10 +129,8 @@ gtk_css_style_change_print (GtkCssStyleChange *change,
           prop = _gtk_css_style_property_lookup_by_id (i);
           name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
 
-          value = gtk_css_style_get_value (old, i);
-          _gtk_css_value_print (value, string);
-
           g_string_append_printf (string, "%s: ", name);
+          value = gtk_css_style_get_value (old, i);
           _gtk_css_value_print (value, string);
           g_string_append (string, "\n");
 
