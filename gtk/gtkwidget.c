@@ -693,8 +693,6 @@ static void             gtk_widget_real_state_flags_changed     (GtkWidget      
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
-static void             gtk_widget_invalidate_widget_windows    (GtkWidget        *widget,
-								 cairo_region_t        *region);
 static GdkScreen *      gtk_widget_get_screen_unchecked         (GtkWidget        *widget);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
                                                                  guint      signal_id);
@@ -5181,43 +5179,6 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
     }
 }
 
-static gboolean
-invalidate_predicate (GdkWindow *window,
-		      gpointer   data)
-{
-  gpointer user_data;
-
-  gdk_window_get_user_data (window, &user_data);
-
-  return (user_data == data);
-}
-
-/* Invalidate @region in widget->window and all children
- * of widget->window owned by widget. @region is in the
- * same coordinates as widget->allocation and will be
- * modified by this call.
- */
-static void
-gtk_widget_invalidate_widget_windows (GtkWidget      *widget,
-				      cairo_region_t *region)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-
-  if (!_gtk_widget_get_realized (widget))
-    return;
-
-  if (_gtk_widget_get_has_window (widget) && priv->parent)
-    {
-      int x, y;
-
-      gdk_window_get_position (priv->window, &x, &y);
-      cairo_region_translate (region, -x, -y);
-    }
-
-  gdk_window_invalidate_maybe_recurse (priv->window, region,
-				       invalidate_predicate, widget);
-}
-
 static gint
 get_number (GtkCssStyle *style,
             guint        property)
@@ -5607,27 +5568,16 @@ check_clip:
 
   if (_gtk_widget_get_mapped (widget) && priv->redraw_on_alloc)
     {
-      if (!_gtk_widget_get_has_window (widget) && position_changed)
-	{
-	  /* Invalidate union(old_clip,priv->clip) in priv->window
-	   */
-	  cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->clip);
-	  cairo_region_union_rectangle (invalidate, &old_clip);
-
-	  gtk_widget_queue_draw_region (widget, invalidate);
-	  cairo_region_destroy (invalidate);
-	}
-
-      if (size_changed || baseline_changed)
-	{
-          /* Invalidate union(old_clip,priv->clip) in priv->window and descendants owned by widget
+      if (position_changed || size_changed || baseline_changed)
+        {
+          /* Invalidate union(old_clip,priv->clip) in the toplevel's window
            */
           cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->clip);
           cairo_region_union_rectangle (invalidate, &old_clip);
 
-          gtk_widget_invalidate_widget_windows (widget, invalidate);
+          gtk_widget_queue_draw_region (widget, invalidate);
           cairo_region_destroy (invalidate);
-	}
+        }
     }
 
 out:
