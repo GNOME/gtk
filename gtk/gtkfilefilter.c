@@ -596,9 +596,9 @@ gtk_file_filter_get_needed (GtkFileFilter *filter)
 
 #import <Foundation/Foundation.h>
 
-NSArray<NSString *> * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
+NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
 {
-  NSMutableArray<NSString *> *array = [[NSMutableArray alloc] init];
+  NSMutableArray *array = [[NSMutableArray alloc] init];
   GSList *tmp_list;
 
   for (tmp_list = filter->rules; tmp_list; tmp_list = tmp_list->next)
