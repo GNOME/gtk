@@ -67,8 +67,8 @@ typedef struct {
   GFile *current_file;
   char *current_name;
 
-  NSMutableArray<NSArray<NSString *> *> *filters;
-  NSMutableArray<NSString *> *filter_names;
+  NSMutableArray *filters;
+  NSMutableArray *filter_names;
   NSComboBox *filter_combo_box;
 
   GSList *files;
@@ -94,7 +94,7 @@ typedef struct {
 - (void)comboBoxSelectionDidChange:(NSNotification *)notification
 {
   NSInteger selected_index = [data->filter_combo_box indexOfSelectedItem];
-  NSArray<NSString *> *filter = [data->filters objectAtIndex:selected_index];
+  NSArray *filter = [data->filters objectAtIndex:selected_index];
   // check for empty strings in filter -> indicates all filetypes should be allowed!
   if ([filter containsObject:@""])
     [data->panel setAllowedFileTypes:nil];
@@ -400,11 +400,11 @@ strip_mnemonic (const gchar *s)
 
 static gboolean
 file_filter_to_quartz (GtkFileFilter *file_filter,
-                       NSMutableArray<NSArray<NSString *> *> *filters,
-		       NSMutableArray<NSString *> *filter_names)
+                       NSMutableArray *filters,
+		       NSMutableArray *filter_names)
 {
   const char *name;
-  NSArray<NSString *> *pattern_nsstrings;
+  NSArray *pattern_nsstrings;
 
   pattern_nsstrings = _gtk_file_filter_get_as_pattern_nsstrings (file_filter);
   if (pattern_nsstrings == NULL)
@@ -462,9 +462,9 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
   n_filters = g_slist_length (filters);
   if (n_filters > 0)
     {
-      data->filters = [NSMutableArray<NSArray<NSString *> *> arrayWithCapacity:n_filters];
+      data->filters = [NSMutableArray arrayWithCapacity:n_filters];
       [data->filters retain];
-      data->filter_names = [NSMutableArray<NSString *> arrayWithCapacity:n_filters];
+      data->filter_names = [NSMutableArray arrayWithCapacity:n_filters];
       [data->filter_names retain];
 
       for (l = filters, i = 0; l != NULL; l = l->next, i++)
