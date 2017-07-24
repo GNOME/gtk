@@ -180,7 +180,7 @@ open_file_msg_cb (GObject *source_object,
   GtkFileChooserNative *self = data->self;
   GDBusMessage *reply;
   GError *error = NULL;
-  g_autofree char *handle = NULL;
+  char *handle = NULL;
 
   reply = g_dbus_connection_send_message_with_reply_finish (data->connection, res, &error);
 
@@ -227,6 +227,7 @@ open_file_msg_cb (GObject *source_object,
     }
 
   g_object_unref (reply);
+  g_free (handle);
 }
 
 static GVariant *
