@@ -6583,8 +6583,18 @@ gdk_window_set_cursor (GdkWindow *window,
 
       for (s = seats; s; s = s->next)
         {
+          GList *devices, *d;
+
           device = gdk_seat_get_pointer (s->data);
           gdk_window_set_cursor_internal (window, device, window->cursor);
+
+          devices = gdk_seat_get_slaves (s->data, GDK_SEAT_CAPABILITY_TABLET_STYLUS);
+          for (d = devices; d; d = d->next)
+            {
+              device = gdk_device_get_associated_device (d->data);
+              gdk_window_set_cursor_internal (window, device, window->cursor);
+            }
+          g_list_free (devices);
         }
 
       g_list_free (seats);
