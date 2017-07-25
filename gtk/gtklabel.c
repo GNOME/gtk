@@ -471,6 +471,9 @@ static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
                                            gint      end_index);
 
+static void gtk_label_update_active_link  (GtkWidget *widget,
+                                           gdouble    x,
+                                           gdouble    y);
 
 static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
@@ -4973,6 +4976,7 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  gtk_label_update_active_link (widget, widget_x, widget_y);
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
@@ -5313,9 +5317,10 @@ gtk_label_drag_gesture_update (GtkGestureDrag *gesture,
     }
 }
 
-static gboolean
-gtk_label_motion (GtkWidget      *widget,
-                  GdkEventMotion *event)
+static void
+gtk_label_update_active_link (GtkWidget *widget,
+                              gdouble    x,
+                              gdouble    y)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
@@ -5323,7 +5328,7 @@ gtk_label_motion (GtkWidget      *widget,
   gint index;
 
   if (info == NULL)
-    return FALSE;
+    return;
 
   if (info->links && !info->in_drag)
     {
@@ -5333,7 +5338,7 @@ gtk_label_motion (GtkWidget      *widget,
 
       if (info->selection_anchor == info->selection_end)
         {
-          if (get_layout_index (label, event->x, event->y, &index))
+          if (get_layout_index (label, x, y, &index))
             {
               for (l = info->links; l != NULL; l = l->next)
                 {
@@ -5371,6 +5376,16 @@ gtk_label_motion (GtkWidget      *widget,
             }
         }
     }
+}
+
+static gboolean
+gtk_label_motion (GtkWidget      *widget,
+                  GdkEventMotion *event)
+{
+  gdouble x, y;
+
+  gdk_event_get_coords ((GdkEvent *) event, &x, &y);
+  gtk_label_update_active_link (widget, x, y);
 
   return GTK_WIDGET_CLASS (gtk_label_parent_class)->motion_notify_event (widget, event);
 }
