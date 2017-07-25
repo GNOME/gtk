@@ -106,12 +106,6 @@ static void     gtk_link_button_set_property (GObject          *object,
 					      GParamSpec       *pspec);
 static void     gtk_link_button_clicked      (GtkButton        *button);
 static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
-static gboolean gtk_link_button_enter_cb     (GtkWidget        *widget,
-					      GdkEventCrossing *event,
-					      gpointer          user_data);
-static gboolean gtk_link_button_leave_cb     (GtkWidget        *widget,
-					      GdkEventCrossing *event,
-					      gpointer          user_data);
 static void gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      GtkSelectionData *selection,
@@ -131,6 +125,9 @@ static void gtk_link_button_pressed_cb (GtkGestureMultiPress *gesture,
                                         gpointer              user_data);
 
 static gboolean gtk_link_button_activate_link (GtkLinkButton *link_button);
+
+static void     set_hand_cursor (GtkWidget *widget,
+				 gboolean   show_hand);
 
 static const GtkTargetEntry link_drop_types[] = {
   { (char *) "text/uri-list", 0, 0 },
@@ -227,10 +224,6 @@ gtk_link_button_init (GtkLinkButton *link_button)
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
   gtk_widget_set_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK, FALSE);
 
-  g_signal_connect (link_button, "enter-notify-event",
-  		    G_CALLBACK (gtk_link_button_enter_cb), NULL);
-  g_signal_connect (link_button, "leave-notify-event",
-  		    G_CALLBACK (gtk_link_button_leave_cb), NULL);
   g_signal_connect (link_button, "drag-data-get",
   		    G_CALLBACK (gtk_link_button_drag_data_get_cb), NULL);
 
@@ -253,6 +246,8 @@ gtk_link_button_init (GtkLinkButton *link_button)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (link_button));
   gtk_style_context_add_class (context, "link");
+
+  set_hand_cursor (GTK_WIDGET (link_button), TRUE);
 }
 
 static void
@@ -457,26 +452,6 @@ gtk_link_button_popup_menu (GtkWidget *widget)
   gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), NULL);
 
   return TRUE; 
-}
-
-static gboolean
-gtk_link_button_enter_cb (GtkWidget        *widget,
-			  GdkEventCrossing *crossing,
-			  gpointer          user_data)
-{
-  set_hand_cursor (widget, TRUE);
-  
-  return FALSE;
-}
-
-static gboolean
-gtk_link_button_leave_cb (GtkWidget        *widget,
-			  GdkEventCrossing *crossing,
-			  gpointer          user_data)
-{
-  set_hand_cursor (widget, FALSE);
-  
-  return FALSE;
 }
 
 static void
