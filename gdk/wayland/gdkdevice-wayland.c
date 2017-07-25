@@ -4884,6 +4884,19 @@ gdk_wayland_seat_get_slaves (GdkSeat             *seat,
   if (wayland_seat->touch && (capabilities & GDK_SEAT_CAPABILITY_TOUCH))
     slaves = g_list_prepend (slaves, wayland_seat->touch);
 
+  if (wayland_seat->tablets && (capabilities & GDK_SEAT_CAPABILITY_TABLET_STYLUS))
+    {
+      GList *l;
+
+      for (l = wayland_seat->tablets; l; l = l->next)
+        {
+          GdkWaylandTabletData *tablet = l->data;
+
+          slaves = g_list_prepend (slaves, tablet->stylus_device);
+          slaves = g_list_prepend (slaves, tablet->eraser_device);
+        }
+    }
+
   return slaves;
 }
 
