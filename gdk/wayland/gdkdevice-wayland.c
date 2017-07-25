@@ -3632,6 +3632,7 @@ tablet_tool_handle_proximity_out (void                      *data,
   tablet->pointer_info.focus = NULL;
 
   gdk_device_update_tool (tablet->current_device, NULL);
+  g_clear_object (&tablet->pointer_info.cursor);
 }
 
 static void
