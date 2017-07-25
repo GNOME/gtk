@@ -106,13 +106,8 @@ static gboolean gtk_link_button_button_press (GtkWidget        *widget,
 					      GdkEventButton   *event);
 static void     gtk_link_button_clicked      (GtkButton        *button);
 static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
+static void     gtk_link_button_realize      (GtkWidget        *widget);
 static void     gtk_link_button_unrealize    (GtkWidget        *widget);
-static gboolean gtk_link_button_enter_cb     (GtkWidget        *widget,
-					      GdkEventCrossing *event,
-					      gpointer          user_data);
-static gboolean gtk_link_button_leave_cb     (GtkWidget        *widget,
-					      GdkEventCrossing *event,
-					      gpointer          user_data);
 static void gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      GtkSelectionData *selection,
@@ -149,6 +144,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
 
   widget_class->button_press_event = gtk_link_button_button_press;
   widget_class->popup_menu = gtk_link_button_popup_menu;
+  widget_class->realize = gtk_link_button_realize;
   widget_class->unrealize = gtk_link_button_unrealize;
 
   button_class->clicked = gtk_link_button_clicked;
@@ -223,10 +219,6 @@ gtk_link_button_init (GtkLinkButton *link_button)
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
   gtk_widget_set_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK, FALSE);
 
-  g_signal_connect (link_button, "enter-notify-event",
-  		    G_CALLBACK (gtk_link_button_enter_cb), NULL);
-  g_signal_connect (link_button, "leave-notify-event",
-  		    G_CALLBACK (gtk_link_button_leave_cb), NULL);
   g_signal_connect (link_button, "drag-data-get",
   		    G_CALLBACK (gtk_link_button_drag_data_get_cb), NULL);
 
@@ -311,11 +303,19 @@ set_hand_cursor (GtkWidget *widget,
   if (show_hand)
     cursor = gdk_cursor_new_from_name (display, "pointer");
 
-  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
+  gdk_window_set_cursor (gtk_button_get_event_window (GTK_BUTTON (widget)), cursor);
   gdk_display_flush (display);
 
   if (cursor)
     g_object_unref (cursor);
+}
+
+static void
+gtk_link_button_realize (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_link_button_parent_class)->realize (widget);
+
+  set_hand_cursor (widget, TRUE);
 }
 
 static void
@@ -450,26 +450,6 @@ gtk_link_button_popup_menu (GtkWidget *widget)
   gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), NULL);
 
   return TRUE; 
-}
-
-static gboolean
-gtk_link_button_enter_cb (GtkWidget        *widget,
-			  GdkEventCrossing *crossing,
-			  gpointer          user_data)
-{
-  set_hand_cursor (widget, TRUE);
-  
-  return FALSE;
-}
-
-static gboolean
-gtk_link_button_leave_cb (GtkWidget        *widget,
-			  GdkEventCrossing *crossing,
-			  gpointer          user_data)
-{
-  set_hand_cursor (widget, FALSE);
-  
-  return FALSE;
 }
 
 static void
