@@ -52,7 +52,6 @@ struct _GtkEventBoxPrivate
 
 enum {
   PROP_0,
-  PROP_VISIBLE_WINDOW,
   PROP_ABOVE_CHILD
 };
 
@@ -90,13 +89,6 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
   widget_class->unmap = gtk_event_box_unmap;
   widget_class->size_allocate = gtk_event_box_size_allocate;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_VISIBLE_WINDOW,
-                                   g_param_spec_boolean ("visible-window",
-                                                        P_("Visible Window"),
-                                                        P_("Whether the event box is visible, as opposed to invisible and only used to trap events."),
-                                                        FALSE,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_ABOVE_CHILD,
                                    g_param_spec_boolean ("above-child",
@@ -140,10 +132,6 @@ gtk_event_box_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_VISIBLE_WINDOW:
-      gtk_event_box_set_visible_window (event_box, g_value_get_boolean (value));
-      break;
-
     case PROP_ABOVE_CHILD:
       gtk_event_box_set_above_child (event_box, g_value_get_boolean (value));
       break;
@@ -166,10 +154,6 @@ gtk_event_box_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_VISIBLE_WINDOW:
-      g_value_set_boolean (value, gtk_event_box_get_visible_window (event_box));
-      break;
-
     case PROP_ABOVE_CHILD:
       g_value_set_boolean (value, gtk_event_box_get_above_child (event_box));
       break;
@@ -177,108 +161,6 @@ gtk_event_box_get_property (GObject     *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
-    }
-}
-
-/**
- * gtk_event_box_get_visible_window:
- * @event_box: a #GtkEventBox
- *
- * Returns whether the event box has a visible window.
- * See gtk_event_box_set_visible_window() for details.
- *
- * Returns: %TRUE if the event box window is visible
- *
- * Since: 2.4
- */
-gboolean
-gtk_event_box_get_visible_window (GtkEventBox *event_box)
-{
-  g_return_val_if_fail (GTK_IS_EVENT_BOX (event_box), FALSE);
-
-  return gtk_widget_get_has_window (GTK_WIDGET (event_box));
-}
-
-/**
- * gtk_event_box_set_visible_window:
- * @event_box: a #GtkEventBox
- * @visible_window: %TRUE to make the event box have a visible window
- *
- * Set whether the event box uses a visible or invisible child
- * window. The default is to use visible windows.
- *
- * In an invisible window event box, the window that the
- * event box creates is a %GDK_INPUT_ONLY window, which
- * means that it is invisible and only serves to receive
- * events.
- *
- * A visible window event box creates a visible (%GDK_INPUT_OUTPUT)
- * window that acts as the parent window for all the widgets
- * contained in the event box.
- *
- * You should generally make your event box invisible if
- * you just want to trap events. Creating a visible window
- * may cause artifacts that are visible to the user, especially
- * if the user is using a theme with gradients or pixmaps.
- *
- * The main reason to create a non input-only event box is if
- * you want to set the background to a different color or
- * draw on it.
- *
- * There is one unexpected issue for an invisible event box that has its
- * window below the child. (See gtk_event_box_set_above_child().)
- * Since the input-only window is not an ancestor window of any windows
- * that descendent widgets of the event box create, events on these
- * windows aren’t propagated up by the windowing system, but only by GTK+.
- * The practical effect of this is if an event isn’t in the event
- * mask for the descendant window (see gtk_widget_add_events()),
- * it won’t be received by the event box.
- * 
- * This problem doesn’t occur for visible event boxes, because in
- * that case, the event box window is actually the ancestor of the
- * descendant windows, not just at the same place on the screen.
- *
- * Since: 2.4
- */
-void
-gtk_event_box_set_visible_window (GtkEventBox *event_box,
-                                  gboolean     visible_window)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_EVENT_BOX (event_box));
-
-  widget = GTK_WIDGET (event_box);
-
-  visible_window = visible_window != FALSE;
-
-  if (visible_window != gtk_widget_get_has_window (widget))
-    {
-      if (gtk_widget_get_realized (widget))
-        {
-          gboolean visible = gtk_widget_get_visible (widget);
-
-          if (visible)
-            gtk_widget_hide (widget);
-
-          gtk_widget_unrealize (widget);
-
-          gtk_widget_set_has_window (widget, visible_window);
-
-          gtk_widget_realize (widget);
-
-          if (visible)
-            gtk_widget_show (widget);
-        }
-      else
-        {
-          gtk_widget_set_has_window (widget, visible_window);
-        }
-
-      if (gtk_widget_get_visible (widget))
-        gtk_widget_queue_resize (widget);
-
-      g_object_notify (G_OBJECT (event_box), "visible-window");
     }
 }
 

@@ -283,7 +283,6 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       GtkStyleContext *context;
 
       widget = gtk_event_box_new ();
-      gtk_event_box_set_visible_window (GTK_EVENT_BOX (widget), TRUE);
 
       gtk_widget_set_direction (widget, priv->windows[pos].dir);
 

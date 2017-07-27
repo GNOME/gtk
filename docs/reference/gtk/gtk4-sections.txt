@@ -1038,8 +1038,6 @@ GtkEventBoxClass
 gtk_event_box_new
 gtk_event_box_set_above_child
 gtk_event_box_get_above_child
-gtk_event_box_set_visible_window
-gtk_event_box_get_visible_window
 <SUBSECTION Standard>
 GTK_EVENT_BOX
 GTK_IS_EVENT_BOX

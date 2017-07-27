@@ -3263,14 +3263,6 @@ event_box_button_clicked (GtkWidget *widget,
 }
 
 static void
-event_box_toggle_visible_window (GtkWidget *checkbutton,
-				 GtkEventBox *event_box)
-{
-  gtk_event_box_set_visible_window (event_box,
-                                    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
-}
-
-static void
 event_box_toggle_above_child (GtkWidget *checkbutton,
 			      GtkEventBox *event_box)
 {
@@ -3290,7 +3282,6 @@ create_event_box (GtkWidget *widget)
   GtkWidget *separator;
   GtkWidget *event_box;
   GtkWidget *label;
-  GtkWidget *visible_window_check;
   GtkWidget *above_child_check;
 
   if (!window)
@@ -3331,13 +3322,6 @@ create_event_box (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK (event_box_button_clicked),
 			NULL);
-
-
-      visible_window_check = gtk_check_button_new_with_label("Visible Window");
-      gtk_box_pack_start (GTK_BOX (box1), visible_window_check);
-      g_signal_connect (visible_window_check, "toggled",
-			G_CALLBACK (event_box_toggle_visible_window), event_box);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (visible_window_check), TRUE);
 
       above_child_check = gtk_check_button_new_with_label("Above Child");
       gtk_box_pack_start (GTK_BOX (box1), above_child_check);
