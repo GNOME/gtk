@@ -11,15 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-04 15:40+0200\n"
-"PO-Revision-Date: 2017-05-04 15:52+0200\n"
+"POT-Creation-Date: 2017-07-27 13:27+0200\n"
+"PO-Revision-Date: 2017-07-27 13:32+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 2.0.1\n"
 
@@ -3507,7 +3508,7 @@ msgstr "Poišči"
 #: gtk/gtkshortcutlabel.c:68
 msgctxt "keyboard side marker"
 msgid "L"
-msgstr ""
+msgstr "L"
 
 #. Translators: This string is used to mark left/right variants of modifier
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
@@ -3517,7 +3518,7 @@ msgstr ""
 #: gtk/gtkshortcutlabel.c:81
 msgctxt "keyboard side marker"
 msgid "R"
-msgstr ""
+msgstr "D"
 
 #: gtk/gtkshortcutssection.c:450
 msgid "_Show All"
@@ -3525,31 +3526,31 @@ msgstr "Pokaži _vse"
 
 #: gtk/gtkshortcutsshortcut.c:133
 msgid "Two finger pinch"
-msgstr ""
+msgstr "Dvoprstni uščip"
 
 #: gtk/gtkshortcutsshortcut.c:137
 msgid "Two finger stretch"
-msgstr ""
+msgstr "Dvoprstno raztegovanje"
 
 #: gtk/gtkshortcutsshortcut.c:141
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "Zavrti v smeri urinega kazalca"
 
 #: gtk/gtkshortcutsshortcut.c:145
 msgid "Rotate counterclockwise"
-msgstr ""
+msgstr "Zavrti v nasprotni smeri urinega kazalca"
 
 #: gtk/gtkshortcutsshortcut.c:149
 msgid "Two finger swipe left"
-msgstr ""
+msgstr "Dvoprstni poteg v levo"
 
 #: gtk/gtkshortcutsshortcut.c:153
 msgid "Two finger swipe right"
-msgstr ""
+msgstr "Dvoprstni poteg v desno"
 
 #: gtk/gtkshortcutswindow.c:860
 msgid "Shortcuts"
-msgstr ""
+msgstr "Tipkovne bližnjice"
 
 #: gtk/gtkshortcutswindow.c:865
 msgid "Search Results"
@@ -3557,7 +3558,7 @@ msgstr "Poišči"
 
 #: gtk/gtkshortcutswindow.c:919
 msgid "Search Shortcuts"
-msgstr ""
+msgstr "Iskalne bližnjice"
 
 #: gtk/gtkshortcutswindow.c:984 gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
@@ -3767,11 +3768,11 @@ msgstr "%d %%"
 
 #: gtk/gtkwindow.c:8992
 msgid "Move"
-msgstr ""
+msgstr "Premakni"
 
 #: gtk/gtkwindow.c:9000
 msgid "Resize"
-msgstr ""
+msgstr "Spremeni velikost"
 
 #: gtk/gtkwindow.c:9031
 msgid "Always on Top"
@@ -3977,27 +3978,23 @@ msgstr "Oznaka pomagala"
 
 #: gtk/inspector/misc-info.ui:294
 msgid "Request mode"
-msgstr ""
+msgstr "Način zahteve"
 
 #: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
 msgstr "Dodelitev"
 
 #: gtk/inspector/misc-info.ui:362
-#, fuzzy
-#| msgid "Show Baselines"
 msgid "Baseline"
-msgstr "Pokaži črte vrstic"
+msgstr "Osnovnica besedila"
 
 #: gtk/inspector/misc-info.ui:396
 msgid "Clip area"
 msgstr "Površina predmeta"
 
 #: gtk/inspector/misc-info.ui:430
-#, fuzzy
-#| msgid "Frame count"
 msgid "Frame Clock"
-msgstr "Števec sličic"
+msgstr "Okvir ure"
 
 #: gtk/inspector/misc-info.ui:475
 msgid "Tick callback"
@@ -4116,7 +4113,7 @@ msgstr "Vir:"
 
 #: gtk/inspector/prop-editor.c:1665
 msgid "Reset"
-msgstr ""
+msgstr "Ponastavi"
 
 #: gtk/inspector/prop-editor.c:1676
 msgid "Default"
@@ -4337,7 +4334,7 @@ msgstr "Pokaži črte vrstic"
 
 #: gtk/inspector/visual.ui:476
 msgid "Show Layout Borders"
-msgstr ""
+msgstr "Pokaži razporeditev okvirjev"
 
 #: gtk/inspector/visual.ui:510
 msgid "Show Pixel Cache"
