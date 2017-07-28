@@ -15118,6 +15118,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
         }
     }
 
+#ifdef G_ENABLE_DEBUG
   if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE) &&
       priv->highlight_resize)
     {
@@ -15135,6 +15136,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
       priv->highlight_resize = FALSE;
       gtk_widget_queue_draw (widget);
     }
+#endif
 
   if (GTK_DISPLAY_DEBUG_CHECK (display, GEOMETRY))
     {
