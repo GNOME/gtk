@@ -267,7 +267,6 @@ struct _GtkEntryPrivate
 struct _EntryIconInfo
 {
   GtkWidget *widget;
-  GtkWidget *image;
   gchar *tooltip;
   guint nonactivatable : 1;
   guint in_drag        : 1;
