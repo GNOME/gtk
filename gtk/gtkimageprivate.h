@@ -34,6 +34,9 @@ G_BEGIN_DECLS
 
 void            gtk_image_set_from_definition           (GtkImage               *image,
                                                          GtkImageDefinition     *def);
+void            gtk_image_get_image_size                (GtkImage               *image,
+                                                         int                    *width,
+                                                         int                    *height);
 
 G_END_DECLS
 

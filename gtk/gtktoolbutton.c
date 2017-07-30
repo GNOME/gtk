@@ -724,22 +724,9 @@ clone_image_menu_size (GtkImage *image)
     }
   else if (storage_type == GTK_IMAGE_PIXBUF)
     {
-      gint width, height;
+      GdkPixbuf *src_pixbuf = gtk_image_get_pixbuf (image);
       
-      if (gtk_icon_size_lookup (GTK_ICON_SIZE_NORMAL, &width, &height))
-	{
-	  GdkPixbuf *src_pixbuf, *dest_pixbuf;
-	  GtkWidget *cloned_image;
-
-	  src_pixbuf = gtk_image_get_pixbuf (image);
-	  dest_pixbuf = gdk_pixbuf_scale_simple (src_pixbuf, width, height,
-						 GDK_INTERP_BILINEAR);
-
-	  cloned_image = gtk_image_new_from_pixbuf (dest_pixbuf);
-	  g_object_unref (dest_pixbuf);
-
-	  return cloned_image;
-	}
+      return gtk_image_new_from_pixbuf (src_pixbuf);
     }
 
   return NULL;
