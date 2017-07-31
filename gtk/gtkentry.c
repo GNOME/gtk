@@ -9007,14 +9007,11 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
   for (i = 0; i < MAX_ICONS; i++)
     {
       EntryIconInfo *icon_info = priv->icons[i];
-      GtkAllocation allocation;
 
       if (icon_info == NULL)
         continue;
 
-      gtk_css_gadget_get_border_allocation (icon_info->gadget, &allocation, NULL);
-      if (x >= allocation.x && x < allocation.x + allocation.width &&
-          y >= allocation.y && y < allocation.y + allocation.height)
+      if (gtk_css_gadget_border_box_contains_point (icon_info->gadget, x, y))
         return i;
     }
 
