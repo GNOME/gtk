@@ -190,13 +190,24 @@ main (int argc, char **argv)
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 2, 1, 1);
 
+  gtk_entry_set_placeholder_text (GTK_ENTRY (entry),
+                                  "Type some text, then click an icon");
+
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
                                      GTK_ENTRY_ICON_PRIMARY,
                                      "edit-find-symbolic");
 
+  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+                                   GTK_ENTRY_ICON_PRIMARY,
+                                   "Clicking the other icon is more interesting!");
+
   gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
                                      GTK_ENTRY_ICON_SECONDARY,
                                      "edit-clear-symbolic");
+
+  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+                                   GTK_ENTRY_ICON_SECONDARY,
+                                   "Clear");
 
   g_signal_connect (entry, "icon-press", G_CALLBACK (clear_pressed), NULL);
 
@@ -221,6 +232,10 @@ main (int argc, char **argv)
 				  GTK_ENTRY_ICON_PRIMARY,
 				  FALSE);
 
+  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+                                   GTK_ENTRY_ICON_PRIMARY,
+                                   "The password is hidden for security");
+
   /* Name - Does not set any icons. */
   label = gtk_label_new ("Name:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);
@@ -229,6 +244,11 @@ main (int argc, char **argv)
 
   entry = gtk_entry_new ();
   gtk_widget_set_hexpand (entry, TRUE);
+  gtk_entry_set_placeholder_text (GTK_ENTRY (entry),
+                                  "Use the RadioButtons to choose an icon");
+  gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+                                   GTK_ENTRY_ICON_SECONDARY,
+                                   "Use the RadioButtons to change this icon");
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 4, 1, 1);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
