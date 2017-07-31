@@ -208,6 +208,10 @@ filechooser_quartz_data_free (FileChooserQuartzData *data)
   g_free (data);
 }
 
+@protocol CanSetAccessoryViewDisclosed
+- (void)setAccessoryViewDisclosed:(BOOL)val;
+@end
+
 static gboolean
 filechooser_quartz_launch (FileChooserQuartzData *data)
 {
@@ -325,14 +329,11 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
         }
       [data->filter_combo_box setToolTip:[NSString stringWithUTF8String:_("Select which types of files are shown")]];
       [data->panel setAccessoryView:data->filter_combo_box];
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_11_AND_LATER
-      if (!data->save)
+      if ([data->panel isKindOfClass:[NSOpenPanel class]] && [data->panel respondsToSelector:@selector(setAccessoryViewDisclosed:)])
         {
-          [(NSOpenPanel *) data->panel setAccessoryViewDisclosed:YES];
+          [(id<CanSetAccessoryViewDisclosed>) data->panel setAccessoryViewDisclosed:YES];
         }
-#endif
     }
-
   data->response = GTK_RESPONSE_CANCEL;
 
   
