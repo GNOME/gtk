@@ -316,46 +316,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\gtk\gtkdbusinterfaces.xml">
-      <Message Condition="'$(Configuration)'=='Debug'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)'=='Debug'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)'=='Release'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Generating GTK+ DBus Sources...</Message>
-      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Platform)'=='Win32'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Platform)'=='Win32'">$(GenerateGtkDbusBuiltSources)</Command>
+      <Outputs Condition="'$(Platform)'=='Win32'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Platform)'=='x64'">Generating GTK+ DBus Sources...</Message>
+      <Command Condition="'$(Platform)'=='x64'">$(GenerateGtkDbusBuiltSourcesX64)</Command>
+      <Outputs Condition="'$(Platform)'=='x64'">..\..\gtk\gtkdbusgenerated.c;..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\gtk\gtk-win32.rc.body">
-      <Message Condition="'$(Configuration)'=='Debug'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)'=='Debug'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)'=='Release'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release'">..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Copying GTK+ Win32 Version Resource...</Message>
-      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(CopyGtkWin32RC)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
+      <Message>Copying GTK+ Win32 Version Resource...</Message>
+      <Command>$(CopyGtkWin32RC)</Command>
+      <Outputs>..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\gtk\libgtk4.manifest.in">
-      <Message Condition="'$(Configuration)'=='Debug'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)'=='Debug'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)'=='Release'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Generating GTK+ Win32 Manifest...</Message>
-      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(GenerateGtkWin32Manifest)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Platform)'=='Win32'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Platform)'=='Win32'">$(GenerateGtkWin32Manifest)</Command>
+      <Outputs Condition="'$(Platform)'=='Win32'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
+      <Message Condition="'$(Platform)'=='x64'">Generating GTK+ Win32 Manifest...</Message>
+      <Command Condition="'$(Platform)'=='x64'">$(GenerateGtkWin32ManifestX64)</Command>
+      <Outputs Condition="'$(Platform)'=='x64'">..\..\gtk\libgtk4.manifest;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

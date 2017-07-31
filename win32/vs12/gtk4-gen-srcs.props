@@ -39,10 +39,11 @@ echo $(Configuration) &gt; ..\..\MSVC_$(Configuration)_Vulkan
 :DONE_GDKCONFIG_H
     </GenGdkConfigHVulkan>
     <GDbusCodeGenCmd>$(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml</GDbusCodeGenCmd>
-    <GenerateGtkDbusBuiltSources>cd ..\..\gtk &amp; $(PythonPath)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSources>
-    <GenerateGtkDbusBuiltSourcesX64>cd ..\..\gtk &amp; $(PythonPathX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSourcesX64>
+    <GenerateGtkDbusBuiltSources>cd ..\..\gtk &amp; $(PythonDir)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSources>
+    <GenerateGtkDbusBuiltSourcesX64>cd ..\..\gtk &amp; $(PythonDirX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSourcesX64>
     <CopyGtkWin32RC>copy ..\..\gtk\gtk-win32.rc.body ..\..\gtk\gtk-win32.rc</CopyGtkWin32RC>
-    <GenerateGtkWin32Manifest>$(PythonPath)\python ..\replace.py --action=replace-var --input=..\..\gtk\libgtk4.manifest.in --output=..\..\gtk\libgtk4.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
+    <GenerateGtkWin32Manifest>$(PythonDir)\python ..\replace.py --action=replace-var --input=..\..\gtk\libgtk4.manifest.in --output=..\..\gtk\libgtk4.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
+    <GenerateGtkWin32ManifestX64>$(PythonDirX64)\python ..\replace.py --action=replace-var --input=..\..\gtk\libgtk4.manifest.in --output=..\..\gtk\libgtk4.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32ManifestX64>
     <CopyDemosH>copy ..\..\demos\gtk-demo\demos.h.win32 ..\..\demos\gtk-demo\demos.h</CopyDemosH>
     <GenGSKEnumSrcs>(cd ..) &amp; (call gen-enums.bat $(GlibEtcInstallRoot)) &amp; (cd $(SolutionDir))</GenGSKEnumSrcs>
     <GenGSKRsrcSrcs>
@@ -86,6 +87,9 @@ $(GlibEtcInstallRoot)\bin\glib-compile-resources.exe --sourcedir=..\..\gsk --c-n
     </BuildMacro>
     <BuildMacro Include="GenerateGtkWin32Manifest">
       <Value>$(GenerateGtkWin32Manifest)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkWin32ManifestX64">
+      <Value>$(GenerateGtkWin32ManifestX64)</Value>
     </BuildMacro>
     <BuildMacro Include="CopyDemosH">
       <Value>$(CopyDemosH)</Value>

@@ -13,8 +13,10 @@
     <GtkSeparateVSDllSuffix>-vs$(VSVer)</GtkSeparateVSDllSuffix>
     <GtkDllPrefix>$(GtkSeparateVSDllPrefix)</GtkDllPrefix>
     <GtkDllSuffix>$(GtkSeparateVSDllSuffix)</GtkDllSuffix>
-    <PythonPath>c:\python34</PythonPath>
-    <PythonPathX64>$(PythonPath).x64</PythonPathX64>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '12.0'">c:\\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '14.0'">c:\\python36</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '15.0'">c:\\python36</PythonDir>
+    <PythonDirX64>$(PythonDir).x64</PythonDirX64>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk4versionpathsprops</_PropertySheetDisplayName>
@@ -56,11 +58,11 @@
     <BuildMacro Include="GtkDllSuffix">
       <Value>$(GtkDllSuffix)</Value>
     </BuildMacro>
-    <BuildMacro Include="PythonPath">
-      <Value>$(PythonPath)</Value>
+    <BuildMacro Include="PythonDir">
+      <Value>$(PythonDir)</Value>
     </BuildMacro>
-    <BuildMacro Include="PythonPathX64">
-      <Value>$(PythonPathX64)</Value>
+    <BuildMacro Include="PythonDirX64">
+      <Value>$(PythonDirX64)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

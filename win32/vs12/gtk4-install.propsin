@@ -104,8 +104,8 @@ $(GlibEtcInstallRoot)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\sch
 echo "Generating icon cache..."
 $(CopyDir)\bin\gtk$(ApiVersionShort)-update-icon-cache.exe --ignore-theme-index --force "$(CopyDir)\share\icons\hicolor"
     </GtkPostInstall>
-    <GenerateGtkPC>$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)</GenerateGtkPC>
-    <GenerateGtkPCX64>$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)</GenerateGtkPCX64>
+    <GenerateGtkPC>$(PythonDir)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)</GenerateGtkPC>
+    <GenerateGtkPCX64>$(PythonDirX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)</GenerateGtkPCX64>
     <GtkPCFiles>..\gtk+-$(ApiVersion).pc</GtkPCFiles>
   </PropertyGroup>
   <PropertyGroup>
