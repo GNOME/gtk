@@ -48,6 +48,7 @@ typedef struct {
 
   NSSavePanel *panel;
   NSWindow *parent;
+  NSWindow *key_window;
   gboolean skip_response;
   gboolean save;
   gboolean folder;
@@ -350,6 +351,16 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
 
     self->mode_data = NULL;
 
+    if (data->parent)
+      {
+        [data->panel orderOut:nil];
+        [data->parent makeKeyAndOrderFront:nil];
+      }
+    else
+      {
+        [data->key_window makeKeyAndOrderFront:nil];
+      }
+
     if (!data->skip_response)
       {
         g_slist_free_full (self->custom_files, g_object_unref);
@@ -365,12 +376,10 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
 
   if (data->parent != NULL && data->modal)
     {
-      [data->panel setLevel:NSModalPanelWindowLevel];
       [data->panel beginSheetModalForWindow:data->parent completionHandler:handler];
     }
   else
     {
-      [data->panel setLevel:NSModalPanelWindowLevel];
       [data->panel beginWithCompletionHandler:handler];
     }
 
@@ -543,6 +552,8 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
         data->current_name = g_strdup (self->current_name);
     }
 
+  data->key_window = [NSApp keyWindow];
+
   return filechooser_quartz_launch(data);
 }
 
@@ -560,8 +571,15 @@ gtk_file_chooser_native_quartz_hide (GtkFileChooserNative *self)
 
   [data->panel orderBack:nil];
   [data->panel close];
+
   if (data->parent)
-    [data->parent orderFront:nil];
+    {
+      [data->parent makeKeyAndOrderFront:nil];
+    }
+  else
+    {
+      [data->key_window makeKeyAndOrderFront:nil];
+    }
   data->panel = NULL;
 }
 
