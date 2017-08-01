@@ -1644,7 +1644,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @allocation: (type Gtk.Allocation): the region which has been
    *   allocated to the widget.
    * @baseline: the baseline
-   * @out_clip: (type Gtk.Allocation): Return address for the widget's clip
+   * @out_clip: (out) (type Gtk.Allocation): Return address for the widget's clip
    */
   widget_signals[SIZE_ALLOCATE] =
     g_signal_new (I_("size-allocate"),
