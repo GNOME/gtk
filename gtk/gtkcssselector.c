@@ -1124,8 +1124,8 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     { "visited",       0, GTK_STATE_FLAG_VISITED, },
     { "checked",       0, GTK_STATE_FLAG_CHECKED, },
     { "drop(active)",  0, GTK_STATE_FLAG_DROP_ACTIVE, }
-
   };
+
   guint i;
 
   if (_gtk_css_parser_try (parser, "nth-child", FALSE))
@@ -1145,7 +1145,8 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
               selector->state.state = pseudo_classes[i].state_flag;
               if (pseudo_classes[i].deprecated)
                 {
-                  if (pseudo_classes[i + 1].state_flag == pseudo_classes[i].state_flag)
+                  if (i + 1 < G_N_ELEMENTS (pseudo_classes) &&
+                      pseudo_classes[i + 1].state_flag == pseudo_classes[i].state_flag)
                     _gtk_css_parser_error_full (parser,
                                                 GTK_CSS_PROVIDER_ERROR_DEPRECATED,
                                                 "The :%s pseudo-class is deprecated. Use :%s instead.",
