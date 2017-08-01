@@ -17,9 +17,15 @@ if debug: print ('Output file: ', out_file)
 
 if debug: print (len(in_files), 'input files')
 
+def open_file(filename, mode):
+    if sys.version_info[0] < 3:
+        return open(filename, mode=mode)
+    else:
+        return open(filename, mode=mode, encoding='utf-8')
+
 for filename in in_files:
   if debug: print ('Input file: ', filename)
-  with open(filename, "r") as f:
+  with open_file(filename, "r") as f:
     for line in f:
       line = line.rstrip('\n').rstrip('\r')
       # print line
