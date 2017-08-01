@@ -60,6 +60,10 @@ gtk_css_value_border_compute (GtkCssValue             *value,
           values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style);
           changed |= (values[i] != value->values[i]);
         }
+      else
+        {
+          values[i] = NULL;
+        }
     }
 
   if (!changed)
