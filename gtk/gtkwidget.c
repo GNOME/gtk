@@ -5959,9 +5959,9 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   gint min_width, min_height;
   gint old_baseline;
 
-  priv = widget->priv;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
 
   if (!priv->visible && !_gtk_widget_is_toplevel (widget))
     return;
