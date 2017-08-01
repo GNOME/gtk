@@ -8246,7 +8246,8 @@ gtk_widget_set_sensitive (GtkWidget *widget,
       else
         {
           data.flags_to_set = GTK_STATE_FLAG_INSENSITIVE;
-          data.flags_to_unset = 0;
+          data.flags_to_unset = GTK_STATE_FLAG_PRELIGHT |
+                                GTK_STATE_FLAG_ACTIVE;
         }
 
       gtk_widget_propagate_state (widget, &data);
