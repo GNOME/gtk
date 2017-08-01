@@ -995,7 +995,7 @@ create_alpha_widgets (GtkWidget *widget)
   if (!window)
     {
       GtkWidget *vbox2, *vbox, *main_hbox;
-      GtkWidget *button, *event_box, *label, *scale;
+      GtkWidget *button, *label, *scale;
       GtkWidget *alpha1, *alpha2, *alpha3;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -1028,19 +1028,14 @@ create_alpha_widgets (GtkWidget *widget)
       label = gtk_label_new ("\nwindow widget");
       gtk_box_pack_start (GTK_BOX (vbox), label);
 
-      alpha2 = event_box = gtk_event_box_new ();
-      gtk_box_pack_start (GTK_BOX (vbox), event_box);
-
-      vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (event_box), vbox2);
+      alpha2 = vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), vbox2);
 
       button = gtk_button_new_with_label ("A Button");
       gtk_box_pack_start (GTK_BOX (vbox2), button);
 
-      event_box = gtk_event_box_new ();
       button = gtk_button_new_with_label ("A Button (in window)");
-      gtk_container_add (GTK_CONTAINER (event_box), button);
-      gtk_box_pack_start (GTK_BOX (vbox2), event_box);
+      gtk_box_pack_start (GTK_BOX (vbox2), button);
 
       /* non-windowed container with both windowed and normal button */
       label = gtk_label_new ("\nnon-window widget with widget child");
@@ -1052,10 +1047,8 @@ create_alpha_widgets (GtkWidget *widget)
       button = gtk_button_new_with_label ("A Button");
       gtk_box_pack_start (GTK_BOX (vbox2), button);
 
-      event_box = gtk_event_box_new ();
       button = gtk_button_new_with_label ("A Button (in window)");
-      gtk_container_add (GTK_CONTAINER (event_box), button);
-      gtk_box_pack_start (GTK_BOX (vbox2), event_box);
+      gtk_box_pack_start (GTK_BOX (vbox2), button);
 
       scale = gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL,
                                          0, 100, 1);
@@ -1500,131 +1493,6 @@ create_rotated_text (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-/*
- * Reparent demo
- */
-
-static void
-reparent_label (GtkWidget *widget,
-		GtkWidget *new_parent)
-{
-  GtkWidget *label;
-
-  label = g_object_get_data (G_OBJECT (widget), "user_data");
-
-  g_object_ref (label);
-  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (widget)), label);
-  gtk_container_add (GTK_CONTAINER (new_parent), label);
-  g_object_unref (label);
-}
-
-static void
-set_parent_signal (GtkWidget *child,
-		   GtkWidget *old_parent,
-		   gpointer   func_data)
-{
-  GtkWidget *parent;
-
-  parent = gtk_widget_get_parent (child);
-  g_message ("set_parent for \"%s\": new parent: \"%s\", old parent: \"%s\", data: %d\n",
-             g_type_name (G_OBJECT_TYPE (child)),
-             parent ? g_type_name (G_OBJECT_TYPE (parent)) : "NULL",
-             old_parent ? g_type_name (G_OBJECT_TYPE (old_parent)) : "NULL",
-             GPOINTER_TO_INT (func_data));
-}
-
-static void
-create_reparent (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *box1;
-  GtkWidget *box2;
-  GtkWidget *box3;
-  GtkWidget *frame;
-  GtkWidget *button;
-  GtkWidget *label;
-  GtkWidget *separator;
-  GtkWidget *event_box;
-
-  if (!window)
-    {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-
-      gtk_window_set_title (GTK_WINDOW (window), "reparent");
-
-      box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
-
-      box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-      gtk_box_pack_start (GTK_BOX (box1), box2);
-
-      label = gtk_label_new ("Hello World");
-
-      frame = gtk_frame_new ("Frame 1");
-      gtk_box_pack_start (GTK_BOX (box2), frame);
-
-      box3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (frame), box3);
-
-      button = gtk_button_new_with_label ("switch");
-      g_object_set_data (G_OBJECT (button), "user_data", label);
-      gtk_box_pack_start (GTK_BOX (box3), button);
-
-      event_box = gtk_event_box_new ();
-      gtk_box_pack_start (GTK_BOX (box3), event_box);
-      gtk_container_add (GTK_CONTAINER (event_box), label);
-
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (reparent_label),
-			event_box);
-
-      g_signal_connect (label, "parent_set",
-			G_CALLBACK (set_parent_signal),
-			GINT_TO_POINTER (42));
-
-      frame = gtk_frame_new ("Frame 2");
-      gtk_box_pack_start (GTK_BOX (box2), frame);
-
-      box3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_container_add (GTK_CONTAINER (frame), box3);
-
-      button = gtk_button_new_with_label ("switch");
-      g_object_set_data (G_OBJECT (button), "user_data", label);
-      gtk_box_pack_start (GTK_BOX (box3), button);
-
-      event_box = gtk_event_box_new ();
-      gtk_box_pack_start (GTK_BOX (box3), event_box);
-
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (reparent_label),
-			event_box);
-
-      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_box_pack_start (GTK_BOX (box1), separator);
-
-      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2);
-
-      button = gtk_button_new_with_label ("close");
-      g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy), window);
-      gtk_box_pack_start (GTK_BOX (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
 
 /*
  * Saved Position
@@ -3219,129 +3087,6 @@ create_expander (GtkWidget *widget)
       hidden = gtk_label_new ("Revealed!");
 
       gtk_container_add (GTK_CONTAINER (expander), hidden);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
-
-
-/* GtkEventBox */
-
-
-static gboolean
-event_box_draw (GtkWidget *widget,
-		cairo_t   *cr,
-		gpointer   user_data)
-{
-  if (gtk_widget_get_window (widget) ==
-      gtk_widget_get_window (gtk_widget_get_parent (widget)))
-    return FALSE;
-
-  cairo_set_source_rgb (cr, 0, 1, 0);
-  cairo_paint (cr);
-
-  return FALSE;
-}
-
-static void
-event_box_label_pressed (GtkWidget        *widget,
-			 GdkEventButton   *event,
-			 gpointer user_data)
-{
-  g_print ("clicked on event box\n");
-}
-
-static void
-event_box_button_clicked (GtkWidget *widget,
-			  GtkWidget *button,
-			  gpointer user_data)
-{
-  g_print ("pushed button\n");
-}
-
-static void
-event_box_toggle_above_child (GtkWidget *checkbutton,
-			      GtkEventBox *event_box)
-{
-  gtk_event_box_set_above_child (event_box,
-                                 gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
-}
-
-static void
-create_event_box (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *box1;
-  GtkWidget *box2;
-  GtkWidget *hbox;
-  GtkWidget *vbox;
-  GtkWidget *button;
-  GtkWidget *separator;
-  GtkWidget *event_box;
-  GtkWidget *label;
-  GtkWidget *above_child_check;
-
-  if (!window)
-    {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-
-      gtk_window_set_title (GTK_WINDOW (window), "event box");
-
-      box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
-
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_box_pack_start (GTK_BOX (box1), hbox);
-
-      event_box = gtk_event_box_new ();
-      gtk_box_pack_start (GTK_BOX (hbox), event_box);
-
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_container_add (GTK_CONTAINER (event_box), vbox);
-      g_signal_connect (event_box, "button_press_event",
-			G_CALLBACK (event_box_label_pressed),
-			NULL);
-      g_signal_connect (event_box, "draw",
-			G_CALLBACK (event_box_draw),
-			NULL);
-
-      label = gtk_label_new ("Click on this label");
-      gtk_box_pack_start (GTK_BOX (vbox), label);
-
-      button = gtk_button_new_with_label ("button in eventbox");
-      gtk_box_pack_start (GTK_BOX (vbox), button);
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (event_box_button_clicked),
-			NULL);
-
-      above_child_check = gtk_check_button_new_with_label("Above Child");
-      gtk_box_pack_start (GTK_BOX (box1), above_child_check);
-      g_signal_connect (above_child_check, "toggled",
-			G_CALLBACK (event_box_toggle_above_child), event_box);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (above_child_check), FALSE);
-
-      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_box_pack_start (GTK_BOX (box1), separator);
-
-      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2);
-
-      button = gtk_button_new_with_label ("close");
-      g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
-				window);
-      gtk_box_pack_start (GTK_BOX (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -8531,7 +8276,6 @@ struct {
   { "dialog", create_dialog },
   { "display", create_display_screen, TRUE },
   { "entry", create_entry },
-  { "event box", create_event_box },
   { "event watcher", create_event_watcher },
   { "expander", create_expander },
   { "flipping", create_flipping },
@@ -8553,7 +8297,6 @@ struct {
   { "progress bar", create_progress_bar },
   { "radio buttons", create_radio_buttons },
   { "range controls", create_range_controls },
-  { "reparent", create_reparent },
   { "rotated text", create_rotated_text },
   { "saved position", create_saved_position },
   { "scrolled windows", create_scrolled_windows },
