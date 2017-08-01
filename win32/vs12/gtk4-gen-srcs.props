@@ -45,7 +45,8 @@ echo $(Configuration) &gt; ..\..\MSVC_$(Configuration)_Vulkan
     <GenerateGtkWin32Manifest>$(PythonDir)\python ..\replace.py --action=replace-var --input=..\..\gtk\libgtk4.manifest.in --output=..\..\gtk\libgtk4.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
     <GenerateGtkWin32ManifestX64>$(PythonDirX64)\python ..\replace.py --action=replace-var --input=..\..\gtk\libgtk4.manifest.in --output=..\..\gtk\libgtk4.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32ManifestX64>
     <CopyDemosH>copy ..\..\demos\gtk-demo\demos.h.win32 ..\..\demos\gtk-demo\demos.h</CopyDemosH>
-    <GenGSKEnumSrcs>(cd ..) &amp; (call gen-enums.bat $(GlibEtcInstallRoot)) &amp; (cd $(SolutionDir))</GenGSKEnumSrcs>
+    <GenGSKEnumSrcs>(cd ..) &amp; (call gen-enums.bat $(GlibEtcInstallRoot) $(PythonDir)) &amp; (cd $(SolutionDir))</GenGSKEnumSrcs>
+    <GenGSKEnumSrcsX64>(cd ..) &amp; (call gen-enums.bat $(GlibEtcInstallRoot) $(PythonDirX64)) &amp; (cd $(SolutionDir))</GenGSKEnumSrcsX64>
     <GenGSKRsrcSrcs>
 echo ^&lt;?xml version='1.0' encoding='UTF-8'?^&gt; &gt; ..\..\gsk\gsk.gresource.xml
 echo ^&lt;gresources^&gt; &gt;&gt; ..\..\gsk\gsk.gresource.xml
@@ -96,6 +97,9 @@ $(GlibEtcInstallRoot)\bin\glib-compile-resources.exe --sourcedir=..\..\gsk --c-n
     </BuildMacro>
     <BuildMacro Include="GenGSKEnumSrcs">
       <Value>$(GenGSKEnumSrcs)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenGSKEnumSrcsX64">
+      <Value>$(GenGSKEnumSrcsX64)</Value>
     </BuildMacro>
     <BuildMacro Include="GenGSKRsrcSrcs">
       <Value>$(GenGSKRsrcSrcs)</Value>

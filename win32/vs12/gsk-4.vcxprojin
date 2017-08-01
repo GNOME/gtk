@@ -222,32 +222,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\gsk\gskenumtypes.c.template">
-      <Message Condition="'$(Configuration)'=='Debug'">Generating GSK enumeration sources...</Message>
-      <Command Condition="'$(Configuration)'=='Debug'">$(GenGSKEnumSrcs)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\gsk\gskenumtypes.h;..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Generating GSK enumeration sources...</Message>
-      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(GenGSKEnumSrcs)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\gsk\gskenumtypes.h;..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release'">Generating GSK enumeration sources...</Message>
-      <Command Condition="'$(Configuration)'=='Release'">$(GenGSKEnumSrcs)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release'">..\..\gsk\gskenumtypes.h;..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Generating GSK enumeration sources...</Message>
-      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(GenGSKEnumSrcs)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\gsk\gskenumtypes.h;..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
+      <Message Condition="'$(Platform)'=='Win32'">Generating GSK enumeration sources...</Message>
+      <Command Condition="'$(Platform)'=='Win32'">$(GenGSKEnumSrcs)</Command>
+      <Outputs Condition="'$(Platform)'=='Win32'">..\..\gsk\gskenumtypes.h;..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
+      <Message Condition="'$(Platform)'=='x64'">Generating GSK enumeration sources...</Message>
+      <Command Condition="'$(Platform)'=='x64'">$(GenGSKEnumSrcsX64)</Command>
+      <Outputs Condition="'$(Platform)'=='x64'">..\..\gsk\gskenumtypes.h;..\..\gsk\gskenumtypes.c;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="..\..\gsk\gsk.gresource.xml">
-      <Message Condition="'$(Configuration)'=='Debug'">Generating GSK resource sources...</Message>
-      <Command Condition="'$(Configuration)'=='Debug'">$(GenGSKRsrcSrcs)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug'">..\..\gsk\gskresources.h;..\..\gsk\gskresources.c;..\..\gsk\gsk.gresource.xml;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Debug_Vulkan'">Generating GSK resource sources...</Message>
-      <Command Condition="'$(Configuration)'=='Debug_Vulkan'">$(GenGSKRsrcSrcs)</Command>
-      <Outputs Condition="'$(Configuration)'=='Debug_Vulkan'">..\..\gsk\gskresources.h;..\..\gsk\gskresources.c;..\..\gsk\gsk.gresource.xml;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release'">Generating GSK resource sources...</Message>
-      <Command Condition="'$(Configuration)'=='Release'">$(GenGSKRsrcSrcs)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release'">..\..\gsk\gskresources.h;..\..\gsk\gskresources.c;..\..\gsk\gsk.gresource.xml;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)'=='Release_Vulkan'">Generating GSK resource sources...</Message>
-      <Command Condition="'$(Configuration)'=='Release_Vulkan'">$(GenGSKRsrcSrcs)</Command>
-      <Outputs Condition="'$(Configuration)'=='Release_Vulkan'">..\..\gsk\gskresources.h;..\..\gsk\gskresources.c;..\..\gsk\gsk.gresource.xml;%(Outputs)</Outputs>
+      <Message>Generating GSK resource sources...</Message>
+      <Command>$(GenGSKRsrcSrcs)</Command>
+      <Outputs>..\..\gsk\gskresources.h;..\..\gsk\gskresources.c;..\..\gsk\gsk.gresource.xml;%(Outputs)</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
