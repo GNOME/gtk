@@ -2098,7 +2098,7 @@ gtk_stack_size_allocate (GtkWidget           *widget,
           if (valign == GTK_ALIGN_CENTER || valign == GTK_ALIGN_FILL)
             child_allocation.y = (allocation->height - child_allocation.height) / 2;
           else if (valign == GTK_ALIGN_END)
-            child_allocation.x = (allocation->height - child_allocation.height);
+            child_allocation.y = (allocation->height - child_allocation.height);
         }
 
       gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation, -1, &child_clip);
