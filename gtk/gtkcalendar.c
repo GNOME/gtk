@@ -1224,6 +1224,9 @@ calendar_arrow_rectangle (GtkCalendar  *calendar,
         rect->x = (width - padding.left - padding.right
                    - 3 - priv->arrow_width);
       break;
+
+    default:
+      g_assert_not_reached();
     }
 
   rect->x += padding.left;
