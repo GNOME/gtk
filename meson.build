@@ -104,8 +104,11 @@ os_darwin = false
 
 if host_machine.system().contains('darwin')
   os_darwin = true
-elif host_machine.system().contains('mingw')
+elif host_machine.system() == 'windows'
   os_win32 = true
+  win32_enabled = true
+  x11_enabled = false
+  wayland_enabled = false
 elif host_machine.system().contains('linux')
   os_linux = true
 endif
@@ -208,25 +211,9 @@ endif
 if cc.get_id() == 'msvc'
   # Compiler options taken from msvc_recommended_pragmas.h
   # in GLib, based on _Win32_Programming_ by Rector and Newcomer
-  test_cflags = [
-    '-we4002', # too many actual parameters for macro
-    '-we4003', # not enough actual parameters for macro
-    '-w14010', # single-line comment contains line-continuation character
-    '-we4013', # 'function' undefined; assuming extern returning int
-    '-w14016', # no function return type; using int as default
-    '-we4020', # too many actual parameters
-    '-we4021', # too few actual parameters
-    '-we4027', # function declared without formal parameter list
-    '-we4029', # declared formal parameter list different from definition
-    '-we4033', # 'function' must return a value
-    '-we4035', # 'function' : no return value
-    '-we4045', # array bounds overflow
-    '-we4047', # different levels of indirection
-    '-we4049', # terminating line number emission
-    '-we4053', # an expression of type void was used as an operand
-    '-we4071', # no function prototype given
-    '-we4819', # the file contains a character that cannot be represented in the current code page
-  ]
+  test_cflags = []
+  add_project_arguments('-FImsvc_recommended_pragmas.h', language: 'c')
+  add_project_arguments('-D_USE_MATH_DEFINES', language: 'c')
 elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
   test_cflags = [
     '-fno-strict-aliasing',
@@ -317,17 +304,27 @@ glib_dep       = dependency('glib-2.0', version: glib_req,
                             fallback : ['glib', 'libglib_dep'])
 gobject_dep    = dependency('gobject-2.0', version: glib_req,
                             fallback : ['glib', 'libgobject_dep'])
-giounix_dep    = dependency('gio-unix-2.0', version: glib_req, required: false,
+if host_machine.system() == 'windows'
+  giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled,
                             fallback : ['glib', 'libgio_dep'])
+else
+  giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false,
+                            fallback : ['glib', 'libgio_dep'])
+endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
                             fallback : ['glib', 'libgmodule_dep'])
 cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() != 'msvc')
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc')
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
-pangoft_dep    = dependency('pangoft2', required: wayland_enabled or x11_enabled,
-                            fallback : ['pango', 'libpangoft2_dep'])
-pangocairo_dep = dependency('pangocairo', version: pango_req,
+
+if wayland_enabled or x11_enabled
+  pangoft_dep  = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
+else
+  pangoft_dep  = dependency('pangoft2', required: false)
+endif
+
+pangocairo_dep = dependency('pangocairo', version: cairo_req,
                             fallback : ['pango', 'libpangocairo_dep'])
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
@@ -335,12 +332,18 @@ epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
 atk_dep        = dependency('atk', version: atk_req)
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
-xkbdep         = dependency('xkbcommon', version: xkbcommon_req)
+xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'])
 
 fontconfig_dep = [] # only used in x11 backend
 atkbridge_dep  = [] # only used in x11 backend
+
+if host_machine.system() == 'windows'
+  platform_gio_dep = giowin32_dep
+else
+  platform_gio_dep = giounix_dep
+endif
 
 backend_immodules = []
 
@@ -529,9 +532,11 @@ if quartz_enabled
 endif
 
 if win32_enabled
-  pc_gdk_extra_libs += ['-lgdi32', '-limm32', '-lshell32', '-lole32',
-                        '-Wl,-luuid', '-lwinmm', '-ldwmapi', '-lsetupapi',
-                        '-lcfgmgr32']
+  pc_gdk_extra_libs += ['-lgdi32', '-limm32', '-lshell32', '-lole32']
+  if cc.get_id() != 'msvc'
+    pc_gdk_extra_libs += ['-Wl,-luuid']
+  endif
+  pc_gdk_extra_libs += ['-lwinmm', '-ldwmapi', '-lsetupapi', '-lcfgmgr32']
   backend_immodules += ['ime']
 endif
 
@@ -543,7 +548,9 @@ if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
   cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
 endif
 
-cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
+if host_machine.system() != 'windows'
+  cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
+endif
 
 # Check for Vulkan support
 # TODO: move to gsk subfolder maybe? Or will it be used elsewhere too?

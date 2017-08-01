@@ -243,7 +243,6 @@ gtk_public_sources = files([
   'gtkpopover.c',
   'gtkpopovermenu.c',
   'gtkprintcontext.c',
-  'gtkprintoperation-portal.c',
   'gtkprintoperation.c',
   'gtkprintoperationpreview.c',
   'gtkprintsettings.c',
@@ -812,10 +811,9 @@ gtk_sources += [
 
 gtk_deps = [
   gmodule_dep,
-  giounix_dep,
   glib_dep,
   gobject_dep,
-  atkbridge_dep,
+  platform_gio_dep,
   pangocairo_dep,
   pango_dep,
   cairogobj_dep,
@@ -838,6 +836,19 @@ endif
 
 if wayland_enabled
   gtk_sources += gtk_wayland_sources
+endif
+
+if win32_enabled
+  gtk_cargs += ['-DGTK_PRINT_BACKENDS="file,lpr"']
+  gtk_deps += [ giowin32_dep ]
+  gtk_deps += [cc.find_library('advapi32'),
+               cc.find_library('comctl32'),
+               cc.find_library('dwmapi'),
+               cc.find_library('imm32'),
+               cc.find_library('setupapi'),
+               cc.find_library('winmm')]
+else
+  gtk_deps += [ atkbridge_dep, ]
 endif
 
 # So we don't add these twice
@@ -1012,9 +1023,12 @@ gtk_tools = [
   ['gtk4-builder-tool', ['gtk-builder-tool.c']],
   ['gtk4-update-icon-cache', ['updateiconcache.c']],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c']],
-  ['gtk4-launch', ['gtk-launch.c']],
   ['gtk4-query-immodules', ['queryimmodules.c', 'gtkutils.c']],
 ]
+
+if os_unix
+  gtk_tools += ['gtk4-launch', ['gtk-launch.c']]
+endif
 
 foreach tool: gtk_tools
   tool_name = tool.get(0)

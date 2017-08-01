@@ -121,6 +121,7 @@ gdkmarshal_h = gdk_marshalers[1]
 gdkconfig_cdata = configuration_data()
 gdkconfig_cdata.set('GDK_WINDOWING_X11', x11_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WAYLAND', wayland_enabled)
+gdkconfig_cdata.set('GDK_WINDOWING_WIN32', win32_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_BROADWAY', broadway_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_MIR', mir_enabled)
 gdkconfig_cdata.set('GDK_RENDERING_VULKAN', have_vulkan)
@@ -160,7 +161,7 @@ gdk_deps = [
   gobject_dep,
   epoxy_dep,
   fontconfig_dep,
-  giounix_dep,
+  platform_gio_dep,
   pangocairo_dep,
   vulkan_lib
 ]
