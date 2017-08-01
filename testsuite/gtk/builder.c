@@ -25,15 +25,21 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
+#ifdef G_OS_WIN32
+# define _BUILDER_TEST_EXPORT __declspec(dllexport)
+#else
+# define _BUILDER_TEST_EXPORT
+#endif
+
 /* exported for GtkBuilder */
-void signal_normal (GtkWindow *window, GParamSpec *spec);
-void signal_after (GtkWindow *window, GParamSpec *spec);
-void signal_object (GtkButton *button, GParamSpec *spec);
-void signal_object_after (GtkButton *button, GParamSpec *spec);
-void signal_first (GtkButton *button, GParamSpec *spec);
-void signal_second (GtkButton *button, GParamSpec *spec);
-void signal_extra (GtkButton *button, GParamSpec *spec);
-void signal_extra2 (GtkButton *button, GParamSpec *spec);
+_BUILDER_TEST_EXPORT void signal_normal (GtkWindow *window, GParamSpec *spec);
+_BUILDER_TEST_EXPORT void signal_after (GtkWindow *window, GParamSpec *spec);
+_BUILDER_TEST_EXPORT void signal_object (GtkButton *button, GParamSpec *spec);
+_BUILDER_TEST_EXPORT void signal_object_after (GtkButton *button, GParamSpec *spec);
+_BUILDER_TEST_EXPORT void signal_first (GtkButton *button, GParamSpec *spec);
+_BUILDER_TEST_EXPORT void signal_second (GtkButton *button, GParamSpec *spec);
+_BUILDER_TEST_EXPORT void signal_extra (GtkButton *button, GParamSpec *spec);
+_BUILDER_TEST_EXPORT void signal_extra2 (GtkButton *button, GParamSpec *spec);
 
 
 static GtkBuilder *
@@ -2335,13 +2341,13 @@ test_level_bar (void)
 
 static GObject *external_object = NULL, *external_object_swapped = NULL;
 
-void
+_BUILDER_TEST_EXPORT void
 on_button_clicked (GtkButton *button, GObject *data)
 {
   external_object = data;
 }
 
-void
+_BUILDER_TEST_EXPORT void
 on_button_clicked_swapped (GObject *data, GtkButton *button)
 {
   external_object_swapped = data;
@@ -2559,7 +2565,7 @@ test_template ()
   g_assert (GTK_IS_LABEL (my_gtk_grid->priv->label));
 }
 
-void
+_BUILDER_TEST_EXPORT void
 on_cellrenderertoggle1_toggled (GtkCellRendererToggle *cell)
 {
 }

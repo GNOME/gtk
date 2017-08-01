@@ -1,9 +1,15 @@
+gtk_tests_export_dynamic_ldflag = []
+
+if cc.get_id() != 'msvc'
+  gtk_tests_export_dynamic_ldflag = ['-Wl,--export-dynamic']
+endif
+
 tests = [
   ['accel'],
   ['accessible'],
   ['adjustment'],
   ['bitmask', ['../../gtk/gtkallocatedbitmask.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
-  ['builder', [], [], ['-Wl,--export-dynamic']],
+  ['builder', [], [], gtk_tests_export_dynamic_ldflag],
   ['builderparser'],
   ['cellarea'],
   ['check-icon-names'],
