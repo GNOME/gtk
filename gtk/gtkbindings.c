@@ -654,9 +654,13 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
       else
         handled = TRUE;
 
-      for (i = 0; i < query.n_params + 1; i++)
-        g_value_unset (&params[i]);
-      g_free (params);
+      if (params != NULL)
+        {
+          for (i = 0; i < query.n_params + 1; i++)
+            g_value_unset (&params[i]);
+
+          g_free (params);
+        }
 
       if (entry->destroyed)
         break;
