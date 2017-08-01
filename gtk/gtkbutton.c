@@ -1058,11 +1058,7 @@ gtk_button_update_state (GtkButton *button)
   else
     depressed = priv->in_button && priv->button_down;
 
-  new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) &
-    ~(GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
-
-  if (priv->in_button)
-    new_state |= GTK_STATE_FLAG_PRELIGHT;
+  new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) & ~(GTK_STATE_FLAG_ACTIVE);
 
   if (depressed)
     new_state |= GTK_STATE_FLAG_ACTIVE;
