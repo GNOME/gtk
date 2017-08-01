@@ -10933,11 +10933,15 @@ gtk_widget_propagate_state (GtkWidget    *widget,
       child_data.flags_to_set = data->flags_to_set & GTK_STATE_FLAGS_DO_PROPAGATE;
       child_data.flags_to_unset = data->flags_to_unset & GTK_STATE_FLAGS_DO_PROPAGATE;
 
-      for (child = _gtk_widget_get_first_child (widget);
-           child != NULL;
-           child = _gtk_widget_get_next_sibling (child))
+      if (child_data.flags_to_set != 0 ||
+          child_data.flags_to_unset != 0)
         {
-          gtk_widget_propagate_state (child, &child_data);
+          for (child = _gtk_widget_get_first_child (widget);
+               child != NULL;
+               child = _gtk_widget_get_next_sibling (child))
+            {
+              gtk_widget_propagate_state (child, &child_data);
+            }
         }
 
       g_object_unref (widget);
