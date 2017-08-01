@@ -8362,6 +8362,7 @@ create_main_window (void)
   gtk_widget_set_name (label, "testgtk-version-label");
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_vexpand (scrolled_window, TRUE);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
      		                  GTK_POLICY_NEVER, 
                                   GTK_POLICY_AUTOMATIC);
