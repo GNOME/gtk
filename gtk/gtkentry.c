@@ -9157,18 +9157,18 @@ gtk_entry_get_icon_area (GtkEntry             *entry,
 static void
 ensure_has_tooltip (GtkEntry *entry)
 {
-  GtkEntryPrivate *priv;
-  EntryIconInfo *icon_info;
-  int i;
-  gboolean has_tooltip = FALSE;
+  gboolean has_tooltip = gtk_widget_get_tooltip_text (GTK_WIDGET (entry)) != NULL;
 
-  priv = entry->priv;
-
-  for (i = 0; i < MAX_ICONS; i++)
+  if (!has_tooltip)
     {
-      if ((icon_info = priv->icons[i]) != NULL)
+      GtkEntryPrivate *priv = entry->priv;
+      int i;
+
+      for (i = 0; i < MAX_ICONS; i++)
         {
-          if (icon_info->tooltip != NULL)
+          EntryIconInfo *icon_info = priv->icons[i];
+
+          if (icon_info != NULL && icon_info->tooltip != NULL)
             {
               has_tooltip = TRUE;
               break;
