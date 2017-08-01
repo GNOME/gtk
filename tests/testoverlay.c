@@ -394,7 +394,7 @@ test_stacking (void)
 
   grid = gtk_grid_new ();
   overlay = gtk_overlay_new ();
-  main_child = gtk_event_box_new ();
+  main_child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (main_child), "overlay-green");
   gtk_widget_set_hexpand (main_child, TRUE);
   gtk_widget_set_vexpand (main_child, TRUE);
@@ -489,7 +489,7 @@ test_child_order (void)
   GtkWidget *overlay;
   GtkWidget *button;
   GtkWidget *label;
-  GtkWidget *ebox;
+  GtkWidget *box;
   int i;
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -503,7 +503,7 @@ test_child_order (void)
       char *style_classes[] = {
         "transparent-red", "transparent-green", "transparent-blue", "transparent-purple"
       };
-      ebox = gtk_event_box_new ();
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       button = gtk_button_new_with_label (g_strdup_printf ("Child %d", i));
       g_signal_connect (button, "clicked", G_CALLBACK (reorder_overlay), overlay);
       gtk_widget_set_margin_start (button, 20);
@@ -511,24 +511,24 @@ test_child_order (void)
       gtk_widget_set_margin_top (button, 10);
       gtk_widget_set_margin_bottom (button, 10);
 
-      gtk_container_add (GTK_CONTAINER (ebox), button);
+      gtk_container_add (GTK_CONTAINER (box), button);
 
-      gtk_style_context_add_class (gtk_widget_get_style_context (ebox), style_classes[i]);
+      gtk_style_context_add_class (gtk_widget_get_style_context (box), style_classes[i]);
 
-      gtk_widget_set_halign (ebox, (i == 0 || i == 3) ? GTK_ALIGN_START : GTK_ALIGN_END);
-      gtk_widget_set_valign (ebox, i < 2 ? GTK_ALIGN_START : GTK_ALIGN_END);
-      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), ebox);
+      gtk_widget_set_halign (box, (i == 0 || i == 3) ? GTK_ALIGN_START : GTK_ALIGN_END);
+      gtk_widget_set_valign (box, i < 2 ? GTK_ALIGN_START : GTK_ALIGN_END);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), box);
     }
 
-  ebox = gtk_event_box_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (ebox), "overlay-white");
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (box), "overlay-white");
 
   label = gtk_label_new ("Main\n"
 			 "Main\n"
 			 "Main\n"
 			 "Main\n");
-  gtk_container_add (GTK_CONTAINER (ebox), label);
-  gtk_container_add (GTK_CONTAINER (overlay), ebox);
+  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (overlay), box);
 
   return win;
 }

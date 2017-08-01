@@ -82,23 +82,21 @@ drag_data_received (GtkWidget        *widget,
 static GtkWidget *
 create_row (const gchar *text)
 {
-  GtkWidget *row, *ebox, *box, *label, *image;
+  GtkWidget *row, *box, *label, *image;
 
   row = gtk_list_box_row_new (); 
-  ebox = gtk_event_box_new ();
   image = gtk_image_new_from_icon_name ("open-menu-symbolic", 1);
-  gtk_container_add (GTK_CONTAINER (ebox), image);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   g_object_set (box, "margin-start", 10, "margin-end", 10, NULL);
   label = gtk_label_new (text);
   gtk_container_add (GTK_CONTAINER (row), box);
   gtk_widget_set_hexpand (label, TRUE);
   gtk_container_add (GTK_CONTAINER (box), label);
-  gtk_container_add (GTK_CONTAINER (box), ebox);
+  gtk_container_add (GTK_CONTAINER (box), image);
 
-  gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
-  g_signal_connect (ebox, "drag-begin", G_CALLBACK (drag_begin), NULL);
-  g_signal_connect (ebox, "drag-data-get", G_CALLBACK (drag_data_get), NULL);
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, entries, 1, GDK_ACTION_MOVE);
+  g_signal_connect (image, "drag-begin", G_CALLBACK (drag_begin), NULL);
+  g_signal_connect (image, "drag-data-get", G_CALLBACK (drag_data_get), NULL);
 
   gtk_drag_dest_set (row, GTK_DEST_DEFAULT_ALL, entries, 1, GDK_ACTION_MOVE);
   g_signal_connect (row, "drag-data-received", G_CALLBACK (drag_data_received), NULL);

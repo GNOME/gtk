@@ -81,12 +81,12 @@ drag_widget_destroyed (GtkWidget *image, gpointer data)
 }
 
 static void
-window_drag_end (GtkWidget *ebox, GdkDragContext *context, gpointer data)
+window_drag_end (GtkWidget *widget, GdkDragContext *context, gpointer data)
 {
   GtkWidget *window = data;
 
   gtk_widget_destroy (window);
-  g_signal_handlers_disconnect_by_func (ebox, window_drag_end, data);
+  g_signal_handlers_disconnect_by_func (widget, window_drag_end, data);
 }
 
 static void
@@ -121,7 +121,7 @@ window_drag_begin (GtkWidget      *widget,
 }
 
 static void
-update_source_target_list (GtkWidget *ebox, GtkWidget *image)
+update_source_target_list (GtkWidget *image)
 {
   GtkTargetList *target_list;
 
@@ -131,13 +131,13 @@ update_source_target_list (GtkWidget *ebox, GtkWidget *image)
   if (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME)
     gtk_target_list_add_text_targets (target_list, TARGET_TEXT);
 
-  gtk_drag_source_set_target_list (ebox, target_list);
+  gtk_drag_source_set_target_list (image, target_list);
 
   gtk_target_list_unref (target_list);
 }
 
 static void
-update_dest_target_list (GtkWidget *ebox)
+update_dest_target_list (GtkWidget *image)
 {
   GtkTargetList *target_list;
 
@@ -146,7 +146,7 @@ update_dest_target_list (GtkWidget *ebox)
   gtk_target_list_add_image_targets (target_list, TARGET_IMAGE, FALSE);
   gtk_target_list_add_text_targets (target_list, TARGET_TEXT);
 
-  gtk_drag_dest_set_target_list (ebox, target_list);
+  gtk_drag_dest_set_target_list (image, target_list);
 
   gtk_target_list_unref (target_list);
 }
@@ -218,51 +218,45 @@ image_drag_data_received (GtkWidget        *widget,
 GtkWidget *
 make_image (const gchar *icon_name, int hotspot)
 {
-  GtkWidget *image, *ebox;
+  GtkWidget *image;
 
   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
-  ebox = gtk_event_box_new ();
 
-  gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
-  update_source_target_list (ebox, image);
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  update_source_target_list (image);
 
   g_object_set_data  (G_OBJECT (image), "hotspot", GINT_TO_POINTER (hotspot));
 
-  g_signal_connect (ebox, "drag-begin", G_CALLBACK (image_drag_begin), image);
-  g_signal_connect (ebox, "drag-data-get", G_CALLBACK (image_drag_data_get), image);
+  g_signal_connect (image, "drag-begin", G_CALLBACK (image_drag_begin), image);
+  g_signal_connect (image, "drag-data-get", G_CALLBACK (image_drag_data_get), image);
 
-  gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
-  g_signal_connect (ebox, "drag-data-received", G_CALLBACK (image_drag_data_received), image);
-  update_dest_target_list (ebox);
+  gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
+  g_signal_connect (image, "drag-data-received", G_CALLBACK (image_drag_data_received), image);
+  update_dest_target_list (image);
 
-  gtk_container_add (GTK_CONTAINER (ebox), image);
-
-  return ebox;
+  return image;
 }
 
 GtkWidget *
 make_image2 (const gchar *icon_name, int hotspot)
 {
-  GtkWidget *image, *ebox;
+  GtkWidget *image;
 
   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_DIALOG);
-  ebox = gtk_event_box_new ();
 
-  gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
-  update_source_target_list (ebox, image);
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  update_source_target_list (image);
 
   g_object_set_data  (G_OBJECT (image), "hotspot", GINT_TO_POINTER (hotspot));
 
-  g_signal_connect (ebox, "drag-begin", G_CALLBACK (window_drag_begin), image);
-  g_signal_connect (ebox, "drag-data-get", G_CALLBACK (image_drag_data_get), image);
+  g_signal_connect (image, "drag-begin", G_CALLBACK (window_drag_begin), image);
+  g_signal_connect (image, "drag-data-get", G_CALLBACK (image_drag_data_get), image);
 
-  gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
-  g_signal_connect (ebox, "drag-data-received", G_CALLBACK (image_drag_data_received), image);
-  update_dest_target_list (ebox);
+  gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
+  g_signal_connect (image, "drag-data-received", G_CALLBACK (image_drag_data_received), image);
+  update_dest_target_list (image);
 
-  gtk_container_add (GTK_CONTAINER (ebox), image);
-
-  return ebox;
+  return image;
 }
 
 static void
@@ -325,23 +319,20 @@ spinner_drag_data_get (GtkWidget        *widget,
 static GtkWidget *
 make_spinner (void)
 {
-  GtkWidget *spinner, *ebox;
+  GtkWidget *spinner;
 
   spinner = gtk_spinner_new ();
   gtk_spinner_start (GTK_SPINNER (spinner));
-  ebox = gtk_event_box_new ();
 
-  gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
-  gtk_drag_source_add_text_targets (ebox);
+  gtk_drag_source_set (spinner, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_source_add_text_targets (spinner);
 
-  g_signal_connect (ebox, "drag-begin", G_CALLBACK (spinner_drag_begin), spinner);
-  g_signal_connect (ebox, "drag-end", G_CALLBACK (spinner_drag_end), spinner);
-  g_signal_connect (ebox, "drag-failed", G_CALLBACK (spinner_drag_failed), spinner);
-  g_signal_connect (ebox, "drag-data-get", G_CALLBACK (spinner_drag_data_get), spinner);
+  g_signal_connect (spinner, "drag-begin", G_CALLBACK (spinner_drag_begin), spinner);
+  g_signal_connect (spinner, "drag-end", G_CALLBACK (spinner_drag_end), spinner);
+  g_signal_connect (spinner, "drag-failed", G_CALLBACK (spinner_drag_failed), spinner);
+  g_signal_connect (spinner, "drag-data-get", G_CALLBACK (spinner_drag_data_get), spinner);
 
-  gtk_container_add (GTK_CONTAINER (ebox), spinner);
-
-  return ebox;
+  return spinner;
 }
 
 int

@@ -63,12 +63,10 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (win), 600, 600);
 
   grid = gtk_grid_new ();
-  child = gtk_event_box_new ();
-  gtk_widget_set_hexpand (child, TRUE);
-  gtk_widget_set_vexpand (child, TRUE);
-  gtk_container_add (GTK_CONTAINER (grid), child);
   label = gtk_label_new ("Out of overlay");
-  gtk_container_add (GTK_CONTAINER (child), label);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_widget_set_vexpand (label, TRUE);
+  gtk_container_add (GTK_CONTAINER (grid), label);
 
   overlay = gtk_overlay_new ();
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -77,7 +75,7 @@ main (int argc, char *argv[])
                                   GTK_POLICY_ALWAYS);
   gtk_container_add (GTK_CONTAINER (overlay), sw);
 
-  main_child = gtk_event_box_new ();
+  main_child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (sw), main_child);
   gtk_widget_set_hexpand (main_child, TRUE);
   gtk_widget_set_vexpand (main_child, TRUE);

@@ -9,9 +9,9 @@ oriented_test_widget (const gchar *label, const gchar *color)
   gchar *data;
 
   widget = gtk_label_new (label);
-  box = gtk_event_box_new ();
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   provider = gtk_css_provider_new ();
-  data = g_strdup_printf ("GtkEventBox { background-color: %s; }", color);
+  data = g_strdup_printf ("box { background: %s; }", color);
   gtk_css_provider_load_from_data (provider, data, -1);
   gtk_style_context_add_provider (gtk_widget_get_style_context (box),
                                   GTK_STYLE_PROVIDER (provider),

@@ -25,21 +25,6 @@
 #include <gtk/gtk.h>
 
 static void
-redraw_event_box (GtkWidget *widget)
-{
-  while (widget)
-    {
-      if (GTK_IS_EVENT_BOX (widget))
-        {
-          gtk_widget_queue_draw (widget);
-          break;
-        }
-
-      widget = gtk_widget_get_parent (widget);
-    }
-}
-
-static void
 combo_changed_cb (GtkWidget *combo,
 		  gpointer   data)
 {
@@ -48,16 +33,6 @@ combo_changed_cb (GtkWidget *combo,
 
   active = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
   gtk_label_set_ellipsize (GTK_LABEL (label), (PangoEllipsizeMode)active);
-  redraw_event_box (label);
-}
-
-static void
-scale_changed_cb (GtkRange *range,
-		  gpointer   data)
-{
-  GtkWidget *label = GTK_WIDGET (data);
-  
-  redraw_event_box (label);
 }
 
 static void
@@ -163,8 +138,6 @@ main (int argc, char *argv[])
   g_object_set_data (G_OBJECT (label), "combo", combo);
 
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed_cb), label);
-  g_signal_connect (scale, "value-changed", G_CALLBACK (scale_changed_cb), label);
-
 
   gtk_widget_show (window);
 

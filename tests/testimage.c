@@ -79,7 +79,7 @@ int
 main (int argc, char **argv)
 {
   GtkWidget *window, *grid;
-  GtkWidget *label, *image, *box;
+  GtkWidget *label, *image;
   GtkIconTheme *theme;
   GdkPixbuf *pixbuf;
   gchar *icon_name = "gnome-terminal";
@@ -111,24 +111,22 @@ main (int argc, char **argv)
   theme = gtk_icon_theme_get_default ();
   pixbuf = gtk_icon_theme_load_icon (theme, icon_name, 48, 0, NULL);
   image = gtk_image_new_from_pixbuf (pixbuf);
-  box = gtk_event_box_new ();
-  gtk_container_add (GTK_CONTAINER (box), image);
-  gtk_grid_attach (GTK_GRID (grid), box, 2, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), image, 2, 1, 1, 1);
 
-  gtk_drag_source_set (box, GDK_BUTTON1_MASK, 
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, 
 		       NULL, 0,
 		       GDK_ACTION_COPY);
-  gtk_drag_source_add_image_targets (box);
-  g_signal_connect (box, "drag_begin", G_CALLBACK (drag_begin), image);
-  g_signal_connect (box, "drag_data_get", G_CALLBACK (drag_data_get), image);
+  gtk_drag_source_add_image_targets (image);
+  g_signal_connect (image, "drag_begin", G_CALLBACK (drag_begin), image);
+  g_signal_connect (image, "drag_data_get", G_CALLBACK (drag_data_get), image);
 
-  gtk_drag_dest_set (box,
+  gtk_drag_dest_set (image,
                      GTK_DEST_DEFAULT_MOTION |
                      GTK_DEST_DEFAULT_HIGHLIGHT |
                      GTK_DEST_DEFAULT_DROP,
                      NULL, 0, GDK_ACTION_COPY);
-  gtk_drag_dest_add_image_targets (box);
-  g_signal_connect (box, "drag_data_received",
+  gtk_drag_dest_add_image_targets (image);
+  g_signal_connect (image, "drag_data_received",
 		    G_CALLBACK (drag_data_received), image);
 
   label = gtk_label_new ("GTK_IMAGE_ICON_NAME");

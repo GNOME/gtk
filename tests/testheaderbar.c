@@ -81,22 +81,19 @@ change_header (GtkButton *button, gpointer data)
   GtkWidget *label;
   GtkWidget *widget;
   GtkWidget *image;
-  GtkWidget *box;
 
   if (button && gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
     {
-      header = gtk_event_box_new ();
+      header = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
       gtk_style_context_add_class (gtk_widget_get_style_context (header), "titlebar");
       gtk_style_context_add_class (gtk_widget_get_style_context (header), "header-bar");
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      g_object_set (box, "margin", 10, NULL);
-      gtk_container_add (GTK_CONTAINER (header), box);
+      g_object_set (header, "margin", 10, NULL);
       label = gtk_label_new ("Label");
-      gtk_box_pack_start (GTK_BOX (box), label);
+      gtk_box_pack_start (GTK_BOX (header), label);
       widget = gtk_level_bar_new ();
       gtk_level_bar_set_value (GTK_LEVEL_BAR (widget), 0.4);
       gtk_widget_set_hexpand (widget, TRUE);
-      gtk_box_pack_start (GTK_BOX (box), widget);
+      gtk_box_pack_start (GTK_BOX (header), widget);
     }
   else
     {
