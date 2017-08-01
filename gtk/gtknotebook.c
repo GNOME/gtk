@@ -5167,8 +5167,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
     }
 
   /* Don't move the current tab past the last position during tabs reordering */
-  if (children &&
-      priv->operation == DRAG_OPERATION_REORDER &&
+  if (priv->operation == DRAG_OPERATION_REORDER &&
       direction == STEP_NEXT)
     {
       switch (tab_pos)
