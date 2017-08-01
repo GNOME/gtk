@@ -8517,7 +8517,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
  * Use %NULL for @tooltip to remove an existing tooltip.
  *
  * See also gtk_widget_set_tooltip_markup() and 
- * gtk_enty_set_icon_tooltip_text().
+ * gtk_entry_set_icon_tooltip_text().
  *
  * Since: 2.16
  */
