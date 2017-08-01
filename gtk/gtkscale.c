@@ -359,13 +359,11 @@ gtk_scale_allocate_value (GtkScale      *scale,
 
         case GTK_POS_TOP:
           value_alloc.x = slider_alloc.x + (slider_alloc.width - value_alloc.width) / 2;
-          value_alloc.x = CLAMP (value_alloc.x, range_alloc.x, range_alloc.x + range_alloc.width - value_alloc.width);
           value_alloc.y = 0;
           break;
 
         case GTK_POS_BOTTOM:
           value_alloc.x = slider_alloc.x + (slider_alloc.width - value_alloc.width) / 2;
-          value_alloc.x = CLAMP (value_alloc.x, range_alloc.x, range_alloc.x + range_alloc.width - value_alloc.width);
           value_alloc.y = range_alloc.height - value_alloc.height;
           break;
 
@@ -374,18 +372,18 @@ gtk_scale_allocate_value (GtkScale      *scale,
           break;
         }
     }
-  else
+  else /* VERTICAL */
     {
       switch (priv->value_pos)
         {
         case GTK_POS_LEFT:
           value_alloc.x = 0;
-          value_alloc.y = CLAMP (value_alloc.y, range_alloc.y, range_alloc.y + range_alloc.height - value_alloc.height);
+          value_alloc.y = (slider_alloc.y + (slider_alloc.height / 2)) - value_alloc.height / 2;
           break;
 
         case GTK_POS_RIGHT:
           value_alloc.x = range_alloc.width - value_alloc.width;
-          value_alloc.y = CLAMP (value_alloc.y, range_alloc.y, range_alloc.y + range_alloc.height - value_alloc.height);
+          value_alloc.y = (slider_alloc.y + (slider_alloc.height / 2)) - value_alloc.height / 2;
           break;
 
         case GTK_POS_TOP:
