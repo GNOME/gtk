@@ -673,8 +673,8 @@ static void             gtk_widget_pop_verify_invariants        (GtkWidget      
 #endif
 static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
 static void     	gtk_widget_update_pango_context		(GtkWidget	  *widget);
-static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
-								 GtkStateData 	  *data);
+static void             gtk_widget_propagate_state              (GtkWidget          *widget,
+                                                                 const GtkStateData *data);
 static void             gtk_widget_update_alpha                 (GtkWidget        *widget);
 
 static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
@@ -10845,8 +10845,8 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 }
 
 static void
-gtk_widget_propagate_state (GtkWidget    *widget,
-                            GtkStateData *data)
+gtk_widget_propagate_state (GtkWidget          *widget,
+                            const GtkStateData *data)
 {
   GtkWidgetPrivate *priv = widget->priv;
   GtkStateFlags new_flags, old_flags = priv->state_flags;
