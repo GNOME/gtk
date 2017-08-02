@@ -26,7 +26,6 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcellview.h"
 #include "gtkcontainerprivate.h"
-#include "gtkeventbox.h"
 #include "gtkframe.h"
 #include "gtkiconprivate.h"
 #include "gtkbox.h"

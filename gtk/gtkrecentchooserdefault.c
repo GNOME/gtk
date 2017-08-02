@@ -41,7 +41,6 @@
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkdragsource.h"
 #include "gtkentry.h"
-#include "gtkeventbox.h"
 #include "gtkexpander.h"
 #include "gtkframe.h"
 #include "gtkbox.h"

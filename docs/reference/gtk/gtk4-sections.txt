@@ -1031,26 +1031,6 @@ gtk_entry_completion_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkeventbox</FILE>
-<TITLE>GtkEventBox</TITLE>
-GtkEventBox
-GtkEventBoxClass
-gtk_event_box_new
-gtk_event_box_set_above_child
-gtk_event_box_get_above_child
-<SUBSECTION Standard>
-GTK_EVENT_BOX
-GTK_IS_EVENT_BOX
-GTK_TYPE_EVENT_BOX
-GTK_EVENT_BOX_CLASS
-GTK_IS_EVENT_BOX_CLASS
-GTK_EVENT_BOX_GET_CLASS
-<SUBSECTION Private>
-GtkEventBoxPrivate
-gtk_event_box_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkexpander</FILE>
 <TITLE>GtkExpander</TITLE>
 GtkExpander

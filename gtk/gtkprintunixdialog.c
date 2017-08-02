@@ -48,7 +48,6 @@
 #include "gtkgrid.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
-#include "gtkeventbox.h"
 #include "gtkbuildable.h"
 #include "gtkmessagedialog.h"
 #include "gtkbutton.h"

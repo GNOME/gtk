@@ -656,11 +656,6 @@ How do I change the color of a widget?
 See gtk_widget_override_color() and gtk_widget_override_background_color().
 You can also change the appearance of a widget by installing a
 custom style provider, see gtk_style_context_add_provider().
-</para>
-
-<para>To change the background color for widgets such as #GtkLabel that
-have no background, place them in a #GtkEventBox and set the background
-of the event box.
 </para></answer>
 </qandaentry>
 

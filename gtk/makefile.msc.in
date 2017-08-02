@@ -203,7 +203,6 @@ gtk_OBJECTS = \
 	gtkentry.obj \
 	gtkentrybuffer.obj \
 	gtkentrycompletion.obj \
-	gtkeventbox.obj \
 	gtkexpander.obj \
 	gtkfixed.obj \
 	gtkfontsel.obj \
@@ -392,7 +391,6 @@ gtk_public_h_sources = 		\
 	gtkentrybuffer.h	\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
-	gtkeventbox.h		\
 	gtkexpander.h		\
 	gtkfilechooser.h	\
 	gtkfilechooserbutton.h	\

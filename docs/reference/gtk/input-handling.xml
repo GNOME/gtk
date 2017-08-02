@@ -192,14 +192,6 @@
     </para>
 
     <para>
-      If a widget is windowless (gtk_widget_get_has_window() returns %FALSE) and
-      an application wants to receive custom events on it, it must be placed
-      inside a #GtkEventBox to receive the events, and an appropriate event mask
-      must be set on the box. When implementing a widget, use a %GDK_INPUT_ONLY
-      #GdkWindow to receive the events instead.
-    </para>
-
-    <para>
       Filtering events against event masks happens inside #GdkWindow, which
       exposes event masks to the windowing system to reduce the number of events
       GDK receives from it. On receiving an event, it is filtered against the
