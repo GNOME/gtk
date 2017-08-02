@@ -108,6 +108,7 @@ snapshot_window_native (GdkWindow *window,
       XWindowAttributes attrs;
 
       if (gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL ||
+          gdk_window_get_window_type (window) == GDK_WINDOW_TEMP ||
           gdk_window_get_window_type (window) == GDK_WINDOW_FOREIGN)
         {
           /* give the WM/server some time to sync. They need it.
