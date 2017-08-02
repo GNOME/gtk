@@ -12,7 +12,7 @@
         <property name="orientation">vertical</property>
         <property name="position">10</property>
         <child>
-          <object class="GtkEventBox" id="eventbox1">
+          <object class="GtkBox" id="box1">
             <property name="width_request">50</property>
             <property name="height_request">10</property>
             <property name="visible">True</property>

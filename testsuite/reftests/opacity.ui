@@ -42,7 +42,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="box4">
+          <object class="GtkBox" id="box4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="name">alpha</property>

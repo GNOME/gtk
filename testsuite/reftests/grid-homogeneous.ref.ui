@@ -9,7 +9,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkEventBox" id="eventbox1">
+          <object class="GtkBox" id="box1">
             <property name="name">red</property>
             <property name="width_request">30</property>
             <property name="height_request">30</property>
@@ -24,7 +24,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox2">
+          <object class="GtkBox" id="box2">
             <property name="name">green</property>
             <property name="width_request">20</property>
             <property name="height_request">20</property>
@@ -39,7 +39,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox3">
+          <object class="GtkBox" id="box3">
             <property name="name">red</property>
             <property name="width_request">30</property>
             <property name="height_request">30</property>
@@ -54,7 +54,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox4">
+          <object class="GtkBox" id="box4">
             <property name="name">green</property>
             <property name="width_request">20</property>
             <property name="height_request">30</property>
@@ -69,7 +69,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox5">
+          <object class="GtkBox" id="box5">
             <property name="name">red</property>
             <property name="width_request">30</property>
             <property name="height_request">30</property>
@@ -84,7 +84,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox6">
+          <object class="GtkBox" id="box6">
             <property name="name">green</property>
             <property name="width_request">30</property>
             <property name="height_request">20</property>
@@ -99,7 +99,7 @@
           </packing>
         </child>
             <child>
-              <object class="GtkEventBox" id="eventbox7">
+              <object class="GtkBox" id="box7">
                 <property name="name">red</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>
@@ -114,7 +114,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox8">
+              <object class="GtkBox" id="box8">
                 <property name="name">green</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>

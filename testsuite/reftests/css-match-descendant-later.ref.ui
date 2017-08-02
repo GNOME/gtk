@@ -5,7 +5,7 @@
     <property name="can_focus">False</property>
     <property name="type">popup</property>
     <child>
-      <object class="GtkEventBox" id="eventbox1">
+      <object class="GtkBox" id="box1">
         <property name="width_request">10</property>
         <property name="height_request">10</property>
         <property name="visible">True</property>

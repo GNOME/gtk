@@ -1,11 +1,11 @@
-GtkEventBox {
+box {
   background-color: blue
 }
 
-GtkGrid GtkEventBox {
+grid box {
   background-color: red
 }
 
-window > GtkGrid GtkEventBox {
+window > grid box {
   background-color: blue
 }

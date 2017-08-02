@@ -12,7 +12,7 @@
         <property name="row-spacing">10</property>
         <property name="column-spacing">5</property>
         <child>
-          <object class="GtkEventBox" id="eventbox1">
+          <object class="GtkBox" id="box1">
             <property name="name">red</property>
             <property name="width_request">30</property>
             <property name="height_request">30</property>
@@ -27,7 +27,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox2">
+          <object class="GtkBox" id="box2">
             <property name="name">green</property>
             <property name="width_request">30</property>
             <property name="height_request">30</property>
@@ -42,7 +42,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox3">
+          <object class="GtkBox" id="box3">
             <property name="name">green</property>
             <property name="width_request">30</property>
             <property name="height_request">30</property>
@@ -57,7 +57,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEventBox" id="eventbox4">
+          <object class="GtkBox" id="box4">
             <property name="name">red</property>
             <property name="width_request">30</property>
             <property name="height_request">30</property>

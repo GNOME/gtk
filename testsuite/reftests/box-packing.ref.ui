@@ -16,7 +16,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkEventBox" id="eventbox1">
+              <object class="GtkImage" id="image1">
                 <property name="name">red</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>
@@ -28,7 +28,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox2">
+              <object class="GtkImage" id="image2">
                 <property name="name">green</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>
@@ -49,7 +49,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkEventBox" id="eventbox3">
+              <object class="GtkImage" id="image3">
                 <property name="name">red</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>
@@ -61,7 +61,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox4">
+              <object class="GtkImage" id="image4">
                 <property name="name">green</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>
@@ -82,7 +82,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkEventBox" id="eventbox5">
+              <object class="GtkImage" id="image5">
                 <property name="name">red</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>
@@ -94,7 +94,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox6">
+              <object class="GtkImage" id="image6">
                 <property name="name">green</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>
@@ -115,7 +115,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkEventBox" id="eventbox7">
+              <object class="GtkImage" id="image7">
                 <property name="name">red</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>
@@ -127,7 +127,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox8">
+              <object class="GtkImage" id="image8">
                 <property name="name">green</property>
                 <property name="width_request">30</property>
                 <property name="height_request">30</property>
@@ -153,7 +153,7 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkEventBox" id="eventbox9">
+                  <object class="GtkImage" id="image9">
                     <property name="name">red</property>
                     <property name="width_request">30</property>
                     <property name="height_request">30</property>
@@ -165,7 +165,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEventBox" id="eventbox10">
+                  <object class="GtkImage" id="image10">
                     <property name="name">green</property>
                     <property name="width_request">30</property>
                     <property name="height_request">30</property>
@@ -187,7 +187,7 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkEventBox" id="eventbox11">
+                  <object class="GtkImage" id="image11">
                     <property name="name">red</property>
                     <property name="width_request">30</property>
                     <property name="height_request">30</property>
@@ -199,7 +199,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEventBox" id="eventbox12">
+                  <object class="GtkImage" id="image12">
                     <property name="name">green</property>
                     <property name="width_request">30</property>
                     <property name="height_request">30</property>
@@ -221,7 +221,7 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkEventBox" id="eventbox13">
+                  <object class="GtkImage" id="image13">
                     <property name="name">red</property>
                     <property name="width_request">30</property>
                     <property name="height_request">30</property>
@@ -233,7 +233,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEventBox" id="eventbox14">
+                  <object class="GtkImage" id="image14">
                     <property name="name">green</property>
                     <property name="width_request">30</property>
                     <property name="height_request">30</property>
@@ -255,7 +255,7 @@
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkEventBox" id="eventbox15">
+                  <object class="GtkImage" id="image15">
                     <property name="name">red</property>
                     <property name="width_request">30</property>
                     <property name="height_request">30</property>
@@ -267,7 +267,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEventBox" id="eventbox16">
+                  <object class="GtkImage" id="image16">
                     <property name="name">green</property>
                     <property name="width_request">30</property>
                     <property name="height_request">30</property>
@@ -294,7 +294,7 @@
             <property name="can_focus">False</property>
             <property name="orientation">horizontal</property>
             <child>
-              <object class="GtkEventBox" id="eventbox17">
+              <object class="GtkImage" id="image17">
                 <property name="name">red</property>
                 <property name="width_request">10</property>
                 <property name="height_request">30</property>
@@ -303,7 +303,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox18">
+              <object class="GtkImage" id="image18">
                 <property name="name">green</property>
                 <property name="width_request">10</property>
                 <property name="height_request">30</property>
@@ -312,7 +312,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox19">
+              <object class="GtkImage" id="image19">
                 <property name="name">red</property>
                 <property name="width_request">20</property>
                 <property name="height_request">30</property>
@@ -321,7 +321,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox20">
+              <object class="GtkImage" id="image20">
                 <property name="name">green</property>
                 <property name="width_request">20</property>
                 <property name="height_request">30</property>
@@ -330,7 +330,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox21">
+              <object class="GtkImage" id="image21">
                 <property name="name">red</property>
                 <property name="width_request">40</property>
                 <property name="height_request">30</property>
@@ -339,7 +339,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkEventBox" id="eventbox22">
+              <object class="GtkImage" id="image22">
                 <property name="name">green</property>
                 <property name="width_request">40</property>
                 <property name="height_request">30</property>
