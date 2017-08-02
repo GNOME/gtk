@@ -92,7 +92,7 @@ set_image (GtkWidget *image, const gchar *name, gint size)
   gtk_image_set_from_icon_name (GTK_IMAGE (image), name, 1);
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
   pixbuf = get_icon (image, name, size);
-  gtk_drag_source_set_icon_pixbuf (gtk_widget_get_parent (image), pixbuf);
+  gtk_drag_source_set_icon_pixbuf (image, pixbuf);
   g_object_unref (pixbuf);
 }
 
@@ -383,12 +383,9 @@ get_image_data (GtkWidget        *widget,
 static void
 setup_image_dnd (GtkWidget *image)
 {
-  GtkWidget *parent;
-
-  parent = gtk_widget_get_parent (image);
-  gtk_drag_source_set (parent, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
-  gtk_drag_source_add_image_targets (parent);
-  g_signal_connect (parent, "drag-data-get", G_CALLBACK (get_image_data), NULL);
+  gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_source_add_image_targets (image);
+  g_signal_connect (image, "drag-data-get", G_CALLBACK (get_image_data), NULL);
 }
 
 static void
