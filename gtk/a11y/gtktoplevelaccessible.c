@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <gtk/gtkeventbox.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtkmenu.h>
@@ -90,33 +89,6 @@ static const char *
 gtk_toplevel_accessible_get_name (AtkObject *obj)
 {
   return g_get_prgname ();
-}
-
-static gboolean
-is_combo_window (GtkWidget *widget)
-{
-  GtkWidget *child;
-  AtkObject *obj;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (!GTK_IS_EVENT_BOX (child))
-    return FALSE;
-
-  child = gtk_bin_get_child (GTK_BIN (child));
-
-  if (!GTK_IS_FRAME (child))
-    return FALSE;
-
-  child = gtk_bin_get_child (GTK_BIN (child));
-
-  if (!GTK_IS_SCROLLED_WINDOW (child))
-    return FALSE;
-
-  obj = gtk_widget_get_accessible (child);
-  obj = atk_object_get_parent (obj);
-
-  return FALSE;
 }
 
 static gboolean
@@ -206,8 +178,7 @@ show_event_watcher (GSignalInvocationHint *ihint,
 
   widget = GTK_WIDGET (object);
   if (gtk_widget_get_parent (widget) ||
-      is_attached_menu_window (widget) ||
-      is_combo_window (widget))
+      is_attached_menu_window (widget))
     return TRUE;
 
   child = gtk_widget_get_accessible (widget);
