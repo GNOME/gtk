@@ -48,7 +48,6 @@ struct _GtkPlacesViewRow
   GtkSpinner    *busy_spinner;
   GtkButton     *eject_button;
   GtkImage      *eject_icon;
-  GtkEventBox   *event_box;
   GtkImage      *icon_image;
   GtkLabel      *name_label;
   GtkLabel      *path_label;
@@ -382,7 +381,6 @@ gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, busy_spinner);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, eject_button);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, eject_icon);
-  gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, event_box);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, icon_image);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, name_label);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, path_label);
@@ -434,14 +432,6 @@ gtk_places_view_row_get_eject_button (GtkPlacesViewRow *row)
   g_return_val_if_fail (GTK_IS_PLACES_VIEW_ROW (row), NULL);
 
   return GTK_WIDGET (row->eject_button);
-}
-
-GtkWidget*
-gtk_places_view_row_get_event_box (GtkPlacesViewRow *row)
-{
-  g_return_val_if_fail (GTK_IS_PLACES_VIEW_ROW (row), NULL);
-
-  return GTK_WIDGET (row->event_box);
 }
 
 void

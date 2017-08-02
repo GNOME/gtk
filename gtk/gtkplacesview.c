@@ -671,7 +671,7 @@ insert_row (GtkPlacesView *view,
 
   g_object_set_data (G_OBJECT (row), "is-network", GINT_TO_POINTER (is_network));
 
-  g_signal_connect_swapped (gtk_places_view_row_get_event_box (GTK_PLACES_VIEW_ROW (row)),
+  g_signal_connect_swapped (GTK_PLACES_VIEW_ROW (row),
                             "button-press-event",
                             G_CALLBACK (on_button_press_event),
                             row);

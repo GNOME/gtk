@@ -6,97 +6,92 @@
     <property name="visible">True</property>
     <property name="can-focus">True</property>
     <child>
-      <object class="GtkEventBox" id="event_box">
+      <object class="GtkBox" id="box">
         <property name="visible">1</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="spacing">18</property>
         <child>
-          <object class="GtkBox" id="box">
+          <object class="GtkImage" id="icon_image">
             <property name="visible">1</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-            <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
-            <property name="spacing">18</property>
+            <property name="pixel-size">32</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="name_label">
+            <property name="visible">1</property>
+            <property name="hexpand">1</property>
+            <property name="xalign">0</property>
+            <property name="ellipsize">end</property>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="available_space_label">
+            <property name="xalign">1</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="path_label">
+            <property name="visible">1</property>
+            <property name="justify">right</property>
+            <property name="ellipsize">middle</property>
+            <property name="xalign">0</property>
+            <property name="max-width-chars">15</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStack" id="mount_stack">
+            <property name="visible">1</property>
+            <property name="hhomogeneous">1</property>
+            <property name="vhomogeneous">1</property>
             <child>
-              <object class="GtkImage" id="icon_image">
-                <property name="visible">1</property>
-                <property name="pixel-size">32</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel" id="name_label">
-                <property name="visible">1</property>
-                <property name="hexpand">1</property>
-                <property name="xalign">0</property>
-                <property name="ellipsize">end</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="available_space_label">
-                <property name="xalign">1</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="path_label">
-                <property name="visible">1</property>
-                <property name="justify">right</property>
-                <property name="ellipsize">middle</property>
-                <property name="xalign">0</property>
-                <property name="max-width-chars">15</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkStack" id="mount_stack">
-                <property name="visible">1</property>
-                <property name="hhomogeneous">1</property>
-                <property name="vhomogeneous">1</property>
+              <object class="GtkButton" id="eject_button">
+                <property name="visible">0</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="tooltip-text" translatable="yes">Unmount</property>
                 <child>
-                  <object class="GtkButton" id="eject_button">
-                    <property name="visible">0</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="tooltip-text" translatable="yes">Unmount</property>
-                    <child>
-                      <object class="GtkImage" id="eject_icon">
-                        <property name="visible">1</property>
-                        <property name="icon-name">media-eject-symbolic</property>
-                        <property name="icon-size">1</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="image-button"/>
-                      <class name="sidebar-button"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkSpinner" id="busy_spinner">
+                  <object class="GtkImage" id="eject_icon">
                     <property name="visible">1</property>
-                    <property name="active">1</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
+                    <property name="icon-name">media-eject-symbolic</property>
+                    <property name="icon-size">1</property>
                   </object>
                 </child>
+                <style>
+                  <class name="image-button"/>
+                  <class name="sidebar-button"/>
+                </style>
               </object>
-              <packing>
-                <property name="position">4</property>
-              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinner" id="busy_spinner">
+                <property name="visible">1</property>
+                <property name="active">1</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+              </object>
             </child>
           </object>
+          <packing>
+            <property name="position">4</property>
+          </packing>
         </child>
       </object>
     </child>

@@ -38,8 +38,6 @@ GtkWidget*         gtk_places_view_row_new                       (GVolume       
 
 GtkWidget*         gtk_places_view_row_get_eject_button          (GtkPlacesViewRow   *row);
 
-GtkWidget*         gtk_places_view_row_get_event_box             (GtkPlacesViewRow   *row);
-
 GMount*            gtk_places_view_row_get_mount                 (GtkPlacesViewRow   *row);
 
 GVolume*           gtk_places_view_row_get_volume                (GtkPlacesViewRow   *row);
