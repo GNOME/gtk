@@ -282,7 +282,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       GtkWidget *widget, *window;
       GtkStyleContext *context;
 
-      widget = gtk_event_box_new ();
+      widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
       gtk_widget_set_direction (widget, priv->windows[pos].dir);
 
