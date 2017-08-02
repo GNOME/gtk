@@ -117,7 +117,6 @@ gtk/gtkeditable.c
 gtk/gtkentrybuffer.c
 gtk/gtkentry.c
 gtk/gtkentrycompletion.c
-gtk/gtkeventbox.c
 gtk/gtkeventcontroller.c
 gtk/gtkexpander.c
 gtk/gtkfilechooserbutton.c
