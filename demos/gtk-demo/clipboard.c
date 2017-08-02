@@ -207,7 +207,7 @@ do_clipboard (GtkWidget *do_widget)
       GtkWidget *vbox, *hbox;
       GtkWidget *label;
       GtkWidget *entry, *button;
-      GtkWidget *ebox, *image;
+      GtkWidget *image;
       GtkClipboard *clipboard;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -268,53 +268,49 @@ do_clipboard (GtkWidget *do_widget)
       /* Create the first image */
       image = gtk_image_new_from_icon_name ("dialog-warning",
                                             GTK_ICON_SIZE_BUTTON);
-      ebox = gtk_event_box_new ();
-      gtk_container_add (GTK_CONTAINER (ebox), image);
-      gtk_container_add (GTK_CONTAINER (hbox), ebox);
+      gtk_container_add (GTK_CONTAINER (hbox), image);
 
-      /* make ebox a drag source */
-      gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
-      gtk_drag_source_add_image_targets (ebox);
-      g_signal_connect (ebox, "drag-begin",
+      /* make image a drag source */
+      gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+      gtk_drag_source_add_image_targets (image);
+      g_signal_connect (image, "drag-begin",
                         G_CALLBACK (drag_begin), image);
-      g_signal_connect (ebox, "drag-data-get",
+      g_signal_connect (image, "drag-data-get",
                         G_CALLBACK (drag_data_get), image);
 
-      /* accept drops on ebox */
-      gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL,
+      /* accept drops on image */
+      gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL,
                          NULL, 0, GDK_ACTION_COPY);
-      gtk_drag_dest_add_image_targets (ebox);
-      g_signal_connect (ebox, "drag-data-received",
+      gtk_drag_dest_add_image_targets (image);
+      g_signal_connect (image, "drag-data-received",
                         G_CALLBACK (drag_data_received), image);
 
-      /* context menu on ebox */
-      g_signal_connect (ebox, "button-press-event",
+      /* context menu on image */
+      g_signal_connect (image, "button-press-event",
                         G_CALLBACK (button_press), image);
 
       /* Create the second image */
       image = gtk_image_new_from_icon_name ("process-stop",
                                             GTK_ICON_SIZE_BUTTON);
-      ebox = gtk_event_box_new ();
-      gtk_container_add (GTK_CONTAINER (ebox), image);
-      gtk_container_add (GTK_CONTAINER (hbox), ebox);
+      gtk_container_add (GTK_CONTAINER (hbox), image);
 
-      /* make ebox a drag source */
-      gtk_drag_source_set (ebox, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
-      gtk_drag_source_add_image_targets (ebox);
-      g_signal_connect (ebox, "drag-begin",
+      /* make image a drag source */
+      gtk_drag_source_set (image, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+      gtk_drag_source_add_image_targets (image);
+      g_signal_connect (image, "drag-begin",
                         G_CALLBACK (drag_begin), image);
-      g_signal_connect (ebox, "drag-data-get",
+      g_signal_connect (image, "drag-data-get",
                         G_CALLBACK (drag_data_get), image);
 
-      /* accept drops on ebox */
-      gtk_drag_dest_set (ebox, GTK_DEST_DEFAULT_ALL,
+      /* accept drops on image */
+      gtk_drag_dest_set (image, GTK_DEST_DEFAULT_ALL,
                          NULL, 0, GDK_ACTION_COPY);
-      gtk_drag_dest_add_image_targets (ebox);
-      g_signal_connect (ebox, "drag-data-received",
+      gtk_drag_dest_add_image_targets (image);
+      g_signal_connect (image, "drag-data-received",
                         G_CALLBACK (drag_data_received), image);
 
-      /* context menu on ebox */
-      g_signal_connect (ebox, "button-press-event",
+      /* context menu on image */
+      g_signal_connect (image, "button-press-event",
                         G_CALLBACK (button_press), image);
 
       /* tell the clipboard manager to make the data persistent */

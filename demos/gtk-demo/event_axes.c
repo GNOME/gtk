@@ -140,6 +140,9 @@ update_axes_from_event (GdkEvent  *event,
       return;
     }
 
+  if (!source_device)
+    return;
+
   if (!sequence)
     {
       info = g_hash_table_lookup (data->pointer_info, device);
@@ -614,7 +617,7 @@ do_event_axes (GtkWidget *toplevel)
 {
   static GtkWidget *window = NULL;
   EventData *event_data;
-  GtkWidget *box, *label;
+  GtkWidget *label;
 
   if (!window)
     {
@@ -625,22 +628,20 @@ do_event_axes (GtkWidget *toplevel)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      box = gtk_event_box_new ();
-      gtk_container_add (GTK_CONTAINER (window), box);
-      gtk_widget_set_support_multidevice (box, TRUE);
+      gtk_widget_set_support_multidevice (window, TRUE);
 
       event_data = event_data_new ();
-      g_object_set_data_full (G_OBJECT (box), "gtk-demo-event-data",
+      g_object_set_data_full (G_OBJECT (window), "gtk-demo-event-data",
                               event_data, (GDestroyNotify) event_data_free);
 
-      g_signal_connect (box, "event",
+      g_signal_connect (window, "event",
                         G_CALLBACK (event_cb), event_data);
-      g_signal_connect (box, "draw",
+      g_signal_connect (window, "draw",
                         G_CALLBACK (draw_cb), event_data);
 
       label = gtk_label_new ("");
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      gtk_container_add (GTK_CONTAINER (box), label);
+      gtk_container_add (GTK_CONTAINER (window), label);
 
       init_pad_controller (window, label);
     }
