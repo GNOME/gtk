@@ -437,7 +437,6 @@ add_place (GtkPlacesSidebar            *sidebar,
   gboolean show_eject_button;
   GtkWidget *row;
   GtkWidget *eject_button;
-  GtkWidget *event_box;
 
   check_unmount_and_eject (mount, volume, drive,
                            &show_unmount, &show_eject);
@@ -463,13 +462,12 @@ add_place (GtkPlacesSidebar            *sidebar,
                       NULL);
 
   eject_button = gtk_sidebar_row_get_eject_button (GTK_SIDEBAR_ROW (row));
-  event_box = gtk_sidebar_row_get_event_box (GTK_SIDEBAR_ROW (row));
 
   g_signal_connect_swapped (eject_button, "clicked",
                             G_CALLBACK (eject_or_unmount_bookmark), row);
-  g_signal_connect (event_box, "button-press-event",
+  g_signal_connect (GTK_SIDEBAR_ROW (row), "button-press-event",
                     G_CALLBACK (on_button_press_event), row);
-  g_signal_connect (event_box, "button-release-event",
+  g_signal_connect (GTK_SIDEBAR_ROW (row), "button-release-event",
                     G_CALLBACK (on_button_release_event), row);
 
   gtk_container_add (GTK_CONTAINER (sidebar->list_box), GTK_WIDGET (row));

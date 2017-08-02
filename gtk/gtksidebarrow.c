@@ -46,7 +46,6 @@ struct _GtkSidebarRow
   GMount *mount;
   gboolean placeholder;
   GtkPlacesSidebar *sidebar;
-  GtkWidget *event_box;
   GtkWidget *revealer;
 };
 
@@ -454,7 +453,6 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, icon_widget);
   gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, label_widget);
   gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, eject_button);
-  gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, event_box);
   gtk_widget_class_bind_template_child (widget_class, GtkSidebarRow, revealer);
 
   gtk_widget_class_bind_template_callback (widget_class, on_child_revealed);
@@ -485,10 +483,4 @@ GtkWidget *
 gtk_sidebar_row_get_eject_button (GtkSidebarRow *self)
 {
   return self->eject_button;
-}
-
-GtkWidget *
-gtk_sidebar_row_get_event_box (GtkSidebarRow *self)
-{
-  return self->event_box;
 }

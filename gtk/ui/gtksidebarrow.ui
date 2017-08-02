@@ -14,36 +14,32 @@
           <class name="sidebar-revealer"/>
         </style>
         <child>
-          <object class="GtkEventBox" id="event_box">
+          <object class="GtkBox">
             <child>
-              <object class="GtkBox">
-                <child>
-                  <object class="GtkImage" id="icon_widget">
-                    <style>
-                      <class name="sidebar-icon"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label_widget">
-                    <property name="hexpand">1</property>
-                    <property name="xalign">0</property>
-                    <style>
-                      <class name="sidebar-label"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="eject_button">
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="margin-start">4px</property>
-                    <property name="icon-name">media-eject-symbolic</property>
-                    <style>
-                      <class name="sidebar-button"/>
-                    </style>
-                  </object>
-                </child>
+              <object class="GtkImage" id="icon_widget">
+                <style>
+                  <class name="sidebar-icon"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label_widget">
+                <property name="hexpand">1</property>
+                <property name="xalign">0</property>
+                <style>
+                  <class name="sidebar-label"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="eject_button">
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="margin-start">4px</property>
+                <property name="icon-name">media-eject-symbolic</property>
+                <style>
+                  <class name="sidebar-button"/>
+                </style>
               </object>
             </child>
           </object>
