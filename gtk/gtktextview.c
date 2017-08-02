@@ -8392,9 +8392,6 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       y > (target_rect.y + target_rect.height))
     return FALSE; /* outside the text window, allow parent widgets to handle event */
 
-  x -= target_rect.x;
-  y -= target_rect.y;
-
   gtk_text_view_window_to_buffer_coords (text_view,
                                          GTK_TEXT_WINDOW_WIDGET,
                                          x, y,
@@ -8454,8 +8451,11 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       gtk_text_mark_set_visible (priv->dnd_mark, FALSE);
     }
 
-  priv->dnd_x = x;
-  priv->dnd_y = y;
+  /* DnD uses text window coords, so subtract extra widget
+   * coords that happen e.g. when displaying line numbers.
+   */
+  priv->dnd_x = x - target_rect.x;
+  priv->dnd_y = y - target_rect.y;
 
   if (!priv->scroll_timeout)
   {
