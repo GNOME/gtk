@@ -641,7 +641,6 @@ test_types (void)
     "  <object class=\"GtkCheckButton\" id=\"checkbutton\"/>"
     "  <object class=\"GtkDialog\" id=\"dialog\"/>"
     "  <object class=\"GtkDrawingArea\" id=\"drawingarea\"/>"
-    "  <object class=\"GtkEventBox\" id=\"eventbox\"/>"
     "  <object class=\"GtkEntry\" id=\"entry\"/>"
     "  <object class=\"GtkFontButton\" id=\"fontbutton\"/>"
     "  <object class=\"GtkImage\" id=\"image\"/>"
