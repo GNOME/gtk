@@ -926,8 +926,12 @@ create_notebook (void)
   gtk_notebook_append_page (GTK_NOTEBOOK (widget), 
 			    gtk_label_new ("Notebook"),
 			    NULL);
-  gtk_notebook_append_page (GTK_NOTEBOOK (widget), gtk_event_box_new (), NULL);
-  gtk_notebook_append_page (GTK_NOTEBOOK (widget), gtk_event_box_new (), NULL);
+  gtk_notebook_append_page (GTK_NOTEBOOK (widget),
+			    gtk_label_new ("Notebook"),
+			    NULL);
+  gtk_notebook_append_page (GTK_NOTEBOOK (widget),
+			    gtk_label_new ("Notebook"),
+			    NULL);
 
   return new_widget_info ("notebook", widget, MEDIUM);
 }
