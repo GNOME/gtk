@@ -2558,6 +2558,7 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
   cairo_paint (cr);
 
   cairo_restore (cr);
+  cairo_pattern_destroy (pattern);
 }
 
 #define GSK_COLOR_MATRIX_NODE_VARIANT_TYPE "(dddddddddddddddddddduv)"
