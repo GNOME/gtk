@@ -44,14 +44,16 @@
  * @Short_description: Infinite scrollable area containing child widgets
  *   and/or custom drawing
  * @Title: GtkLayout
- * @See_also: #GtkDrawingArea, #GtkScrolledWindow
+ * @See_also: #GtkDrawingArea, #GtkFixed
  *
- * #GtkLayout is similar to #GtkDrawingArea in that it’s a “blank slate”
- * and doesn’t do anything but paint a blank background by default. It's
- * different in that it supports scrolling natively (you can add it to a
- * #GtkScrolledWindow), and it can contain child widgets, since it’s a
- * #GtkContainer. However if you’re just going to draw, a #GtkDrawingArea
- * is a better choice since it has lower overhead.
+ * #GtkLayout is similar to #GtkDrawingArea in that it’s a “blank slate” and
+ * doesn’t do anything except paint a blank background by default. It’s
+ * different in that it supports scrolling natively due to implementing
+ * #GtkScrollable, and can contain child widgets since it’s a #GtkContainer.
+ *
+ * If you just want to draw, a #GtkDrawingArea is a better choice since it has
+ * lower overhead. If you just need to position child widgets at specific
+ * points, then #GtkFixed provides that functionality on its own.
  */
 
 
