@@ -9181,9 +9181,10 @@ gtk_widget_set_parent_window (GtkWidget *widget,
  * gtk_widget_get_parent_window:
  * @widget: a #GtkWidget.
  *
- * Gets @widget’s parent window.
+ * Gets @widget’s parent window, or %NULL if it does not have one.
  *
- * Returns: (transfer none): the parent window of @widget.
+ * Returns: (transfer none) (nullable): the parent window of @widget, or %NULL
+ * if it does not have a parent window.
  **/
 GdkWindow *
 gtk_widget_get_parent_window (GtkWidget *widget)
