@@ -187,76 +187,81 @@
                 <property name="visible">1</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox">
-                    <property name="visible">1</property>
-                    <property name="spacing">10</property>
-                    <child>
-                      <object class="GtkStackCombo" id="stackcombo">
-                        <property name="visible">True</property>
-                        <property name="margin">6</property>
-                        <property name="stack">object_details</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkStack" id="object_start_stack">
-                        <property name="visible">True</property>
+                  <object class="GtkCenterBox">
+                    <child type="start">
+                      <object class="GtkBox">
+                        <property name="spacing">10</property>
                         <child>
-                          <object class="GtkBox">
+                          <object class="GtkStackCombo" id="stackcombo">
                             <property name="visible">True</property>
-                          </object>
-                          <packing>
-                            <property name="name">empty</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="spacing">6</property>
                             <property name="margin">6</property>
-                            <child>
-                              <object class="GtkToggleButton" id="signals_trace_button">
-                                <property name="visible">True</property>
-                                <property name="relief">none</property>
-                                <property name="tooltip-text" translatable="yes">Trace signal emissions on this object</property>
-                                <property name="icon-name">media-record-symbolic</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="signals_clear_button">
-                                <property name="visible">True</property>
-                                <property name="relief">none</property>
-                                <property name="tooltip-text" translatable="yes">Clear log</property>
-                                <property name="icon-name">edit-clear-symbolic</property>
-                              </object>
-                            </child>
+                            <property name="stack">object_details</property>
                           </object>
-                          <packing>
-                            <property name="name">signals</property>
-                          </packing>
                         </child>
                         <child>
-                          <object class="GtkScale">
+                          <object class="GtkStack" id="object_start_stack">
                             <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="width-request">150</property>
-                            <property name="draw-value">False</property>
-                            <property name="adjustment">magnification_adjustment</property>
-                            <marks>
-                              <mark value="1.0" position="bottom"/>
-                              <mark value="2.0" position="bottom"/>
-                              <mark value="3.0" position="bottom"/>
-                              <mark value="4.0" position="bottom"/>
-                              <mark value="5.0" position="bottom"/>
-                            </marks>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                              </object>
+                              <packing>
+                                <property name="name">empty</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <property name="spacing">6</property>
+                                <property name="margin">6</property>
+                                <child>
+                                  <object class="GtkToggleButton" id="signals_trace_button">
+                                    <property name="visible">True</property>
+                                    <property name="relief">none</property>
+                                    <property name="tooltip-text" translatable="yes">Trace signal emissions on this object</property>
+                                    <property name="icon-name">media-record-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="signals_clear_button">
+                                    <property name="visible">True</property>
+                                    <property name="relief">none</property>
+                                    <property name="tooltip-text" translatable="yes">Clear log</property>
+                                    <property name="icon-name">edit-clear-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="name">signals</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkScale">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <property name="width-request">150</property>
+                                <property name="draw-value">False</property>
+                                <property name="adjustment">magnification_adjustment</property>
+                                <marks>
+                                  <mark value="1.0" position="bottom"/>
+                                  <mark value="2.0" position="bottom"/>
+                                  <mark value="3.0" position="bottom"/>
+                                  <mark value="4.0" position="bottom"/>
+                                  <mark value="5.0" position="bottom"/>
+                                </marks>
+                              </object>
+                              <packing>
+                                <property name="name">magnifier</property>
+                              </packing>
+                            </child>
                           </object>
-                          <packing>
-                            <property name="name">magnifier</property>
-                          </packing>
                         </child>
                       </object>
                     </child>
-                    <child>
+
+
+                    <child type="center">
                       <object class="GtkStack" id="object_center_stack">
                         <property name="visible">1</property>
                         <property name="transition-type">crossfade</property>
