@@ -10637,9 +10637,9 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
 
   if (!data)
     {
-      g_warning ("Widget %s(%p) is not a popover of window %s",
+      g_warning ("Widget %s(%p) is not a popover of window %s(%p)",
                  gtk_widget_get_name (popover), popover,
-                 gtk_widget_get_name (GTK_WIDGET (window)));
+                 gtk_widget_get_name (GTK_WIDGET (window)), window);
       return;
     }
 
@@ -10664,9 +10664,9 @@ _gtk_window_get_popover_position (GtkWindow             *window,
 
   if (!data)
     {
-      g_warning ("Widget %s(%p) is not a popover of window %s",
+      g_warning ("Widget %s(%p) is not a popover of window %s(%p)",
                  gtk_widget_get_name (popover), popover,
-                 gtk_widget_get_name (GTK_WIDGET (window)));
+                 gtk_widget_get_name (GTK_WIDGET (window)), window);
       return;
     }
 
