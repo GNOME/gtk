@@ -496,6 +496,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="invisible_char">•</property>
                             <property name="placeholder-text" translatable="yes">Click icon to change mode</property>
                             <property name="secondary_icon_name">view-refresh-symbolic</property>
+                            <property name="secondary_icon_tooltip_text">Change mode</property>
                             <signal name="icon-release" handler="on_entry_icon_release" swapped="no"/>
                           </object>
                           <packing>
