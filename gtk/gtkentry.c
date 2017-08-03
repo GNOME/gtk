@@ -8044,7 +8044,8 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  * entry in a draw callback.
  *
  * If the entry is not realized or has no icon at the given position,
- * @icon_area is filled with zeros.
+ * @icon_area is filled with zeros. Otherwise, @icon_area will be filled
+ * with the icon's allocation, relative to @entry's allocation.
  *
  * See also gtk_entry_get_text_area()
  *
@@ -8067,11 +8068,7 @@ gtk_entry_get_icon_area (GtkEntry             *entry,
 
   if (icon_info)
     {
-      GtkAllocation widget_allocation;
-      gtk_widget_get_allocation (GTK_WIDGET (entry), &widget_allocation);
-      gtk_widget_get_border_allocation (icon_info->widget, icon_area);
-      icon_area->x -= widget_allocation.x;
-      icon_area->y -= widget_allocation.y;
+      gtk_widget_get_outer_allocation (icon_info->widget, icon_area);
     }
   else
     {
