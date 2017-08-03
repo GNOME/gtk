@@ -27,6 +27,7 @@
  * @Short_description: A container which allows you to position
  * widgets at fixed coordinates
  * @Title: GtkFixed
+ * @See_also: #GtkLayout
  *
  * The #GtkFixed widget is a container which can place child widgets
  * at fixed positions and with fixed sizes, given in pixels. #GtkFixed
@@ -43,18 +44,19 @@
  * - Fonts other than the one you used to write the app will of course
  *   change the size of widgets containing text; keep in mind that
  *   users may use a larger font because of difficulty reading the
- *   default, or they may be using Windows or the framebuffer port of
- *   GTK+, where different fonts are available.
+ *   default, or they may be using a different OS that provides different fonts.
  *
  * - Translation of text into other languages changes its size. Also,
  *   display of non-English text will use a different font in many
  *   cases.
  *
- * In addition, the fixed widget can’t properly be mirrored in
- * right-to-left languages such as Hebrew and Arabic. i.e. normally
- * GTK+ will flip the interface to put labels to the right of the
- * thing they label, but it can’t do that with #GtkFixed. So your
- * application will not be usable in right-to-left languages.
+ * In addition, #GtkFixed does not pay attention to text direction and thus may
+ * produce unwanted results if your app is run under right-to-left languages
+ * such as Hebrew or Arabic. That is: normally GTK+ will order containers
+ * appropriately for the text direction, e.g. to put labels to the right of the
+ * thing they label when using an RTL language, but it can’t do that with
+ * #GtkFixed. So if you need to reorder widgets depending on the text direction,
+ * you would need to manually detect it and adjust child positions accordingly.
  *
  * Finally, fixed positioning makes it kind of annoying to add/remove
  * GUI elements, since you have to reposition all the other
@@ -64,6 +66,9 @@
  * If you know none of these things are an issue for your application,
  * and prefer the simplicity of #GtkFixed, by all means use the
  * widget. But you should be aware of the tradeoffs.
+ *
+ * See also #GtkLayout, which shares the ability to perform fixed positioning
+ * of child widgets and additionally adds custom drawing and scrollability.
  */
 
 #include "config.h"
