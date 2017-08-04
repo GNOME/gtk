@@ -312,7 +312,7 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
       g_error_free (error);
       error = NULL;
       uri = g_filename_to_uri (filename, NULL, NULL);
-      gtk_show_uri (screen, uri, GDK_CURRENT_TIME, &error);
+      gtk_show_uri_on_window (parent, uri, GDK_CURRENT_TIME, &error);
       g_free (uri);
     }
 
