@@ -5999,7 +5999,6 @@ gtk_mount_operation_set_parent
 gtk_mount_operation_get_parent
 gtk_mount_operation_set_screen
 gtk_mount_operation_get_screen
-gtk_show_uri
 gtk_show_uri_on_window
 <SUBSECTION Standard>
 GTK_IS_MOUNT_OPERATION

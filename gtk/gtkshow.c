@@ -25,53 +25,6 @@
 #include "gtkshow.h"
 #include "gtkwindowprivate.h"
 
-/**
- * gtk_show_uri:
- * @screen: (allow-none): screen to show the uri on
- *     or %NULL for the default screen
- * @uri: the uri to show
- * @timestamp: a timestamp to prevent focus stealing
- * @error: a #GError that is returned in case of errors
- *
- * A convenience function for launching the default application
- * to show the uri. Like gtk_show_uri_on_window(), but takes a screen
- * as transient parent instead of a window.
- *
- * Note that this function is deprecated as it does not pass the necessary
- * information for helpers to parent their dialog properly, when run from
- * sandboxed applications for example.
- *
- * Returns: %TRUE on success, %FALSE on error
- *
- * Since: 2.14
- */
-gboolean
-gtk_show_uri (GdkScreen    *screen,
-              const gchar  *uri,
-              guint32       timestamp,
-              GError      **error)
-{
-  GdkAppLaunchContext *context;
-  gboolean ret;
-  GdkDisplay *display;
-
-  g_return_val_if_fail (uri != NULL, FALSE);
-
-  if (screen != NULL)
-    display = gdk_screen_get_display (screen);
-  else
-    display = gdk_display_get_default ();
-
-  context = gdk_display_get_app_launch_context (display);
-  gdk_app_launch_context_set_screen (context, screen);
-  gdk_app_launch_context_set_timestamp (context, timestamp);
-
-  ret = g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), error);
-  g_object_unref (context);
-
-  return ret;
-}
-
 static void
 launch_uri_done (GObject      *source,
                  GAsyncResult *result,
@@ -119,7 +72,7 @@ window_handle_exported (GtkWindow  *window,
  * - `mailto:me@gnome.org`
  *
  * Ideally the timestamp is taken from the event triggering
- * the gtk_show_uri() call. If timestamp is not known you can take
+ * the gtk_show_uri_on_window() call. If timestamp is not known you can take
  * %GDK_CURRENT_TIME.
  *
  * This is the recommended call to be used as it passes information
