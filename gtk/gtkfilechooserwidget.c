@@ -1767,18 +1767,19 @@ open_folder_cb (GSimpleAction *action,
                 gpointer       data)
 {
   GtkFileChooserWidget *impl = data;
+  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
   GSList *files;
 
   files = get_selected_files (impl);
 
   /* Sigh, just use the first one */
-  if (files)
+  if (files && gtk_widget_is_toplevel (toplevel))
     {
       GFile *file = files->data;
       gchar *uri;
 
       uri = g_file_get_uri (file);
-      gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (impl)), uri, gtk_get_current_event_time (), NULL);
+      gtk_show_uri_on_window (GTK_WINDOW (toplevel), uri, gtk_get_current_event_time (), NULL);
       g_free (uri);
     }
 
