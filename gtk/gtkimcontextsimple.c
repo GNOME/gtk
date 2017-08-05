@@ -963,6 +963,7 @@ check_emoji (GtkIMContextSimple *context_simple,
   gint i;
   gchar buf[7];
   char *lower;
+  gboolean has_completion;
 
   priv->tentative_match = 0;
   priv->tentative_match_len = 0;
@@ -979,9 +980,6 @@ check_emoji (GtkIMContextSimple *context_simple,
       if (ch == 0)
         return FALSE;
 
-      if (priv->in_hex_sequence && !g_unichar_isxdigit (ch))
-        return FALSE;
-
       buf[g_unichar_to_utf8 (ch, buf)] = '\0';
 
       g_string_append (str, buf);
@@ -991,6 +989,7 @@ check_emoji (GtkIMContextSimple *context_simple,
 
   lower = g_utf8_strdown (str->str, str->len);
 
+  has_completion = FALSE;
   for (i = 0; emoji[i].name; i++)
     {
       if (strcmp (str->str, emoji[i].name) == 0 ||
@@ -1000,12 +999,19 @@ check_emoji (GtkIMContextSimple *context_simple,
           priv->tentative_match_len = n_compose;
           break;
         }
+
+      if (!has_completion &&
+          (g_str_has_prefix (emoji[i].name, str->str) ||
+           g_str_has_prefix (emoji[i].name, lower)))
+        {
+          has_completion = TRUE;
+        }
     }
 
   g_string_free (str, TRUE);
   g_free (lower);
 
-  return priv->tentative_match != 0;
+  return priv->tentative_match != 0 || has_completion;
 }
 
 static void
@@ -1177,7 +1183,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	    {
 	      priv->modifiers_dropped = TRUE;
 	    }
-	  else
+	  else if (priv->in_hex_sequence)
 	    {
 	      /* invalid hex sequence */
 	      beep_window (event->window);
