@@ -31,6 +31,7 @@
 #include "gdkwindowimpl.h"
 #include "gdkdisplay.h"
 #include "gdkprivate.h"
+#include "gdkeventsprivate.h"
 
 G_BEGIN_DECLS
 

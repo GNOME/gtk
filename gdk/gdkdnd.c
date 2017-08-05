@@ -30,6 +30,7 @@
 #include "gdkintl.h"
 #include "gdkenumtypes.h"
 #include "gdkcursor.h"
+#include "gdkeventsprivate.h"
 
 static struct {
   GdkDragAction action;
