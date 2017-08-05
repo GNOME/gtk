@@ -36,19 +36,20 @@
  *
  * # GtkCenterBox as GtkBuildable
  *
- * The GtkCenterBox implementation of the GtkBuildable interface supports
+ * The GtkCenterBox implementation of the #GtkBuildable interface supports
  * placing children in the 3 positions by specifying “start”, “center” or
  * “end” as the “type” attribute of a <child> element.
  *
  * # CSS nodes
  *
- * GtkCenterBox uses a single CSS node with name box.
+ * GtkCenterBox uses a single CSS node with the name “box”,
  *
  * In horizontal orientation, the nodes of the children are always arranged
  * from left to right. So :first-child will always select the leftmost child,
  * regardless of text direction.
  *
- * In vertical orientation, the are arranged from top to bottom.
+ * In vertical orientation, the nodes of the children are arranged from top to
+ * bottom.
  */
 
 #include "config.h"
