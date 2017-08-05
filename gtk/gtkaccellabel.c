@@ -816,7 +816,7 @@ _gtk_accel_label_class_get_accelerator_label (GtkAccelLabelClass *klass,
     }
   
   ch = gdk_keyval_to_unicode (accelerator_key);
-  if (ch && ch < 0x80 && (g_unichar_isgraph (ch) || ch == ' '))
+  if (ch && (ch == ' ' || g_unichar_isgraph (ch)))
     {
       if (seen_mod)
         g_string_append (gstring, klass->mod_separator);
