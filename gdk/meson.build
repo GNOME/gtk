@@ -81,6 +81,7 @@ install_headers(gdk_public_headers, subdir: 'gtk-4.0/gdk/')
 gdk_sources = gdk_public_sources
 
 gdk_private_h_sources = files([
+  'gdkeventsprivate.h',
   'gdkdevicetoolprivate.h',
   'gdkdrawingcontextprivate.h',
   'gdkmonitorprivate.h',
