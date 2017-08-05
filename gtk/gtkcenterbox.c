@@ -721,9 +721,9 @@ gtk_center_box_new (void)
 /**
  * gtk_center_box_set_start_widget:
  * @self: a #GtkCenterBox
- * @child: the child
+ * @child: (nullable): the new start widget, or %NULL
  *
- * Sets the start widget.
+ * Sets the start widget. To remove the existing start widget, pass %NULL.
  *
  * Since: 3.92
  */
@@ -744,15 +744,15 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
 /**
  * gtk_center_box_set_center_widget:
  * @self: a #GtkCenterBox
- * @child: the child
+ * @child: (nullable): the new center widget, or %NULL
  *
- * Sets the center widget.
+ * Sets the center widget. To remove the existing center widget, pas %NULL.
  *
  * Since: 3.92
  */
 void
 gtk_center_box_set_center_widget (GtkCenterBox *self,
-                                 GtkWidget     *child)
+                                  GtkWidget    *child)
 {
   if (self->center_widget)
     gtk_widget_unparent (self->center_widget);
@@ -767,9 +767,9 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
 /**
  * gtk_center_box_set_end_widget:
  * @self: a #GtkCenterBox
- * @child: the child
+ * @child: (nullable): the new end widget, or %NULL
  *
- * Sets the end widget.
+ * Sets the end widget. To remove the existing end widget, pass %NULL.
  *
  * Since: 3.92
  */
@@ -791,9 +791,9 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
  * gtk_center_box_get_start_widget:
  * @self: a #GtkCenterBox
  *
- * Gets the start widget.
+ * Gets the start widget, or %NULL if there is none.
  *
- * Returns: (transfer none): the start widget.
+ * Returns: (transfer none) (nullable): the start widget.
  *
  * Since: 3.92
  */
@@ -807,9 +807,9 @@ gtk_center_box_get_start_widget (GtkCenterBox *self)
  * gtk_center_box_get_center_widget:
  * @self: a #GtkCenterBox
  *
- * Gets the center widget.
+ * Gets the center widget, or %NULL if there is none.
  *
- * Returns: (transfer none): the center widget.
+ * Returns: (transfer none) (nullable): the center widget.
  *
  * Since: 3.92
  */
@@ -823,9 +823,9 @@ gtk_center_box_get_center_widget (GtkCenterBox *self)
  * gtk_center_box_get_end_widget:
  * @self: a #GtkCenterBox
  *
- * Gets the end widget.
+ * Gets the end widget, or %NULL if there is none.
  *
- * Returns: (transfer none): the end widget.
+ * Returns: (transfer none) (nullable): the end widget.
  *
  * Since: 3.92
  */
