@@ -190,7 +190,7 @@ struct _GtkWindowPrivate
   GdkDisplay            *display;
   GtkApplication        *application;
 
-  GList                 *popovers;
+  GQueue                 popovers;
 
   GdkModifierType        mnemonic_modifier;
 
@@ -747,14 +747,12 @@ gtk_window_pick (GtkWidget *widget,
                  gdouble   *y_out)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  GList *popovers = window->priv->popovers;
+  GList *popovers;
 
-  while (popovers)
+  for (popovers = window->priv->popovers.tail; popovers; popovers = popovers->prev)
     {
       GtkWindowPopover *popover = popovers->data;
       cairo_rectangle_int_t rect;
-
-      popovers = popovers->next;
 
       if (!gtk_widget_is_sensitive (popover->widget) ||
           !gtk_widget_is_drawable (popover->widget))
@@ -3250,13 +3248,11 @@ gtk_window_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
   unset_titlebar (window);
 
-  while (priv->popovers)
+  while (!g_queue_is_empty (&priv->popovers))
     {
-      GtkWindowPopover *popover = priv->popovers->data;
-      priv->popovers = g_list_delete_link (priv->popovers, priv->popovers);
+      GtkWindowPopover *popover = g_queue_pop_head (&priv->popovers);
       popover_destroy (popover);
     }
-
 }
 
 static void
@@ -7042,11 +7038,9 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
   *allocation_out = child_allocation;
 
-  link = priv->popovers;
-  while (link)
+  for (link = priv->popovers.head; link; link = link->next)
     {
       GtkWindowPopover *popover = link->data;
-      link = link->next;
       popover_size_allocate (popover->widget, popover, window);
     }
 
@@ -7571,7 +7565,7 @@ _gtk_window_has_popover (GtkWindow *window,
   GtkWindowPrivate *priv = window->priv;
   GList *link;
 
-  for (link = priv->popovers; link; link = link->next)
+  for (link = priv->popovers.head; link; link = link->next)
     {
       GtkWindowPopover *popover = link->data;
 
@@ -9121,7 +9115,7 @@ gtk_window_snapshot (GtkWidget   *widget,
   if (gtk_bin_get_child (GTK_BIN (widget)))
     gtk_widget_snapshot_child (widget, gtk_bin_get_child (GTK_BIN (widget)), snapshot);
 
-  for (l = priv->popovers; l; l = l->next)
+  for (l = priv->popovers.head; l; l = l->next)
     {
       GtkWindowPopover *data = l->data;
       gtk_widget_snapshot_child (widget, data->widget, snapshot);
@@ -10583,7 +10577,7 @@ _gtk_window_add_popover (GtkWindow *window,
   data->widget = popover;
   data->parent = parent;
   data->clamp_allocation = !!clamp_allocation;
-  priv->popovers = g_list_prepend (priv->popovers, data);
+  g_queue_push_head (&priv->popovers, data);
 
   gtk_widget_set_parent (popover, GTK_WIDGET (window));
 
@@ -10613,7 +10607,7 @@ _gtk_window_remove_popover (GtkWindow *window,
   g_object_ref (popover);
   gtk_widget_unparent (popover);
 
-  priv->popovers = g_list_remove (priv->popovers, data);
+  g_queue_remove (&priv->popovers, data);
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (window));
   _gtk_container_accessible_remove_child (GTK_CONTAINER_ACCESSIBLE (accessible),
@@ -10730,15 +10724,15 @@ _gtk_window_raise_popover (GtkWindow *window,
   GtkWindowPrivate *priv = window->priv;
   GList *link;
 
-  for (link = priv->popovers; link; link = link->next)
+  for (link = priv->popovers.head; link; link = link->next)
     {
       GtkWindowPopover *popover = link->data;
 
       if (popover->widget != widget)
         continue;
 
-      priv->popovers = g_list_remove_link (priv->popovers, link);
-      priv->popovers = g_list_append (priv->popovers, link->data);
+      g_queue_unlink (&priv->popovers, link);
+      g_queue_push_tail (&priv->popovers, link->data);
       g_list_free (link);
       break;
     }
