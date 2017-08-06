@@ -49,7 +49,7 @@
  * @See_also: #GtkAccelGroup
  *
  * The #GtkAccelLabel widget is a subclass of #GtkLabel that also displays an
- * accelerator key on the right of the label text, e.g. “Ctl+S”.
+ * accelerator key on the right of the label text, e.g. “Ctrl+S”.
  * It is commonly used in menus to show the keyboard short-cuts for commands.
  *
  * The accelerator key to display is typically not set explicitly (although it
@@ -58,10 +58,10 @@
  * set by calling gtk_accel_label_set_accel_widget().
  *
  * For example, a #GtkMenuItem widget may have an accelerator added to emit
- * the “activate” signal when the “Ctl+S” key combination is pressed.
+ * the “activate” signal when the “Ctrl+S” key combination is pressed.
  * A #GtkAccelLabel is created and added to the #GtkMenuItem, and
  * gtk_accel_label_set_accel_widget() is called with the #GtkMenuItem as the
- * second argument. The #GtkAccelLabel will now display “Ctl+S” after its label.
+ * second argument. The #GtkAccelLabel will now display “Ctrl+S” after its label.
  *
  * Note that creating a #GtkMenuItem with gtk_menu_item_new_with_label() (or
  * one of the similar functions for #GtkCheckMenuItem and #GtkRadioMenuItem)
