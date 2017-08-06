@@ -523,6 +523,21 @@ nevertheless.
 </formalpara>
 
 <formalpara>
+  <title><envar>GTK_CSD</envar></title>
+
+  <para>
+    The default value of this environment variable is 1. If changed to 0, this
+    disables the default use of client-side decorations on GTK+ windows, thus
+    making the window manager responsible for drawing the decorations of
+    windows that do not have a custom titlebar widget.
+  </para>
+  <para>
+    CSD is always used for windows with a custom titlebar widget set, as the WM
+    should not draw another titlebar or other decorations around the custom one.
+  </para>
+</formalpara>
+
+<formalpara>
   <title><envar>XDG_DATA_HOME</envar>, <envar>XDG_DATA_DIRS</envar></title>
 
   <para>
