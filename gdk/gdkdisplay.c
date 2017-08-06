@@ -2053,9 +2053,7 @@ gdk_error_trap_pop_internal (gboolean need_code)
   result = 0;
   for (l = trap->displays; l != NULL; l = l->next)
     {
-      gint code = 0;
-
-      code = class->pop_error_trap (l->data, !need_code);
+      gint code = class->pop_error_trap (l->data, !need_code);
 
       /* we use the error on the last display listed, why not. */
       if (code != 0)
