@@ -352,6 +352,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "icon");
                   gtk_widget_set_size_request (button, 20, 20);
+
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     {
                       gtk_widget_destroy (button);
@@ -372,12 +373,16 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   image = gtk_image_new ();
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
+
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Application menu"));
+
                   priv->titlebar_icon = image;
                   if (!_gtk_header_bar_update_window_icon (bar, window))
-                    gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "process-stop-symbolic", GTK_ICON_SIZE_MENU);
+                    gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon),
+                                                  "application-x-executable-symbolic", GTK_ICON_SIZE_MENU);
+
                   priv->shows_app_menu = TRUE;
                 }
               else if (strcmp (t[j], "minimize") == 0 &&
@@ -393,6 +398,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_iconify), window);
+
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Minimize"));
@@ -415,6 +421,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (_gtk_window_toggle_maximized), window);
+
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, maximized ? _("Restore") : _("Maximize"));
@@ -432,6 +439,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_widget_set_can_focus (button, FALSE);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_close), window);
+
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Close"));
