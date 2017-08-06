@@ -108,6 +108,7 @@ document-save=The icon for the save action. Should be an arrow pointing down and
 document-save-as=The icon for the save as action
 document-send=The icon for the send action. Should be an arrow pointing up and away from a hard disk
 document-page-setup=The icon for the page setup action of a document editor
+document-edit=The icon for the action to edit a document
 object-flip-horizontal=The icon for the action to flip an object horizontally
 object-flip-vertical=The icon for the action to flip an object vertically
 object-rotate-left=The icon for the rotate left action performed on an object
