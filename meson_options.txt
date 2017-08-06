@@ -1,0 +1,32 @@
+option('enable-colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Build colord support code')
+option('enable-x11-backend', type: 'boolean', value: 'true',
+  description : 'Enable the X11 gdk backend')
+option('enable-wayland-backend', type: 'boolean', value: 'true',
+  description : 'Enable the wayland gdk backend')
+option('enable-broadway-backend', type: 'boolean', value: 'false',
+  description : 'Enable the broadway (HTML5) gdk backend')
+option('enable-mir-backend', type: 'boolean', value: 'false',
+  description : 'Enable the Mir gdk backend (UNTESTED, NEEDS WORK)')
+option('enable-win32-backend', type: 'boolean', value: 'false',
+  description : 'Enable the Windows gdk backend')
+option('enable-quartz-backend', type: 'boolean', value: 'false',
+  description : 'Enable the macOS gdk backend')
+option('enable-vulkan', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable support for the Vulkan graphics API')
+option('enable-test-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'no',
+  description : 'Enable the test print backend')
+option('enable-cups-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable the CUPS print backend')
+option('enable-papi-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable the papi print backend')
+option('enable-cloudprint-print-backend', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable the cloudprint print backend')
+option('enable-xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable support for the Xinerama extension')
+option('disable-modules', type: 'boolean', value : 'false',
+  description : 'Disable dynamic module loading')
+option('with-included-immodules', type: 'string', value : '',
+  description : 'Build the specified input methods into gtk (comma-separated list or "all" or "none")')
+option('enable-documentation', type: 'boolean', value: 'false',
+  description : 'Build API reference and tools documentation')

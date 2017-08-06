@@ -56,9 +56,6 @@ die "Could not open file keysymdef.h: $!\n" unless open(IN_KEYSYMDEF, "<:utf8", 
 # Output: gtk+/gdk/gdkkeysyms.h
 die "Could not open file gdkkeysyms.h: $!\n" unless open(OUT_GDKKEYSYMS, ">:utf8", "gdkkeysyms.h");
 
-# Output: gtk+/gdk/gdkkeysyms-compat.h
-die "Could not open file gdkkeysyms-compat.h: $!\n" unless open(OUT_GDKKEYSYMS_COMPAT, ">:utf8", "gdkkeysyms-compat.h");
-
 my $LICENSE_HEADER= <<EOF;
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
@@ -81,7 +78,6 @@ my $LICENSE_HEADER= <<EOF;
 EOF
 
 print OUT_GDKKEYSYMS $LICENSE_HEADER;
-print OUT_GDKKEYSYMS_COMPAT $LICENSE_HEADER;
 
 print OUT_GDKKEYSYMS<<EOF;
 
@@ -106,20 +102,6 @@ print OUT_GDKKEYSYMS<<EOF;
 
 EOF
 
-print OUT_GDKKEYSYMS_COMPAT<<EOF;
-/*
- * Compatibility version of gdkkeysyms.h.
- *
- * In GTK3, keysyms changed to have a KEY_ prefix.  This is a compatibility header
- * your application can include to gain access to the old names as well.  Consider
- * porting to the new names instead.
- */
-
-#ifndef __GDK_KEYSYMS_COMPAT_H__
-#define __GDK_KEYSYMS_COMPAT_H__
-
-EOF
-
 while (<IN_KEYSYMDEF>)
 {
 	next if ( ! /^#define / );
@@ -136,11 +118,8 @@ while (<IN_KEYSYMDEF>)
 	my $element = $keysymelements[1];
 	my $binding = $element;
 	$binding =~ s/^XK_/GDK_KEY_/g;
-	my $compat_binding = $element;
-	$compat_binding =~ s/^XK_/GDK_/g;
 
 	printf OUT_GDKKEYSYMS "#define %s 0x%03x\n", $binding, hex($keysymelements[2]);
-	printf OUT_GDKKEYSYMS_COMPAT "#define %s 0x%03x\n", $compat_binding, hex($keysymelements[2]);
 }
 
 close IN_KEYSYMDEF;
@@ -178,11 +157,8 @@ while (<IN_XF86KEYSYM>)
 	my $element = $keysymelements[1];
 	my $binding = $element;
 	$binding =~ s/^XF86XK_/GDK_KEY_/g;
-	my $compat_binding = $element;
-	$compat_binding =~ s/^XF86XK_/GDK_/g;
 
 	printf OUT_GDKKEYSYMS "#define %s 0x%03x\n", $binding, hex($keysymelements[2]);
-	printf OUT_GDKKEYSYMS_COMPAT "#define %s 0x%03x\n", $compat_binding, hex($keysymelements[2]);
 }
 
 close IN_XF86KEYSYM;
@@ -193,9 +169,4 @@ print OUT_GDKKEYSYMS<<EOF;
 #endif /* __GDK_KEYSYMS_H__ */
 EOF
 
-print OUT_GDKKEYSYMS_COMPAT<<EOF;
-
-#endif /* __GDK_KEYSYMS_COMPAT_H__ */
-EOF
-
-printf "We just finished converting keysymdef.h to gdkkeysyms.h and gdkkeysyms-compat.h\nThank you\n";
+printf "We just finished converting keysymdef.h to gdkkeysyms.h\nThank you\n";

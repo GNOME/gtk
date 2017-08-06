@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 static void
 activate (GSimpleAction *action,
@@ -47,6 +48,10 @@ main (int argc, char *argv[])
   GtkWidget *label;
   GtkWidget *check;
   GtkWidget *combo;
+
+#ifdef GTK_SRCDIR
+  g_chdir (GTK_SRCDIR);
+#endif
 
   gtk_init ();
 

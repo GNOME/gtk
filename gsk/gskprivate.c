@@ -1,4 +1,5 @@
 #include "gskresources.h"
+#include "gskprivate.h"
 
 static gpointer
 register_resources (gpointer data)
