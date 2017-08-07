@@ -2032,15 +2032,11 @@ gtk_container_compute_expand (GtkWidget         *widget,
 }
 
 static void
-gtk_container_real_set_focus_child (GtkContainer     *container,
-                                    GtkWidget        *child)
+gtk_container_real_set_focus_child (GtkContainer *container,
+                                    GtkWidget    *focus_child)
 {
-  GtkWidget *focus_child;
-
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
-
-  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (container));
+  g_return_if_fail (focus_child == NULL || GTK_IS_WIDGET (focus_child));
 
   /* check for h/v adjustments
    */
@@ -2055,17 +2051,19 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
       vadj = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
       if (hadj || vadj)
         {
-          while (gtk_widget_get_focus_child (focus_child))
-            focus_child = gtk_widget_get_focus_child (focus_child);
+          GtkWidget *child = focus_child;
 
-          gtk_widget_translate_coordinates (focus_child, focus_child,
+          while (gtk_widget_get_focus_child (child))
+            child = gtk_widget_get_focus_child (child);
+
+          gtk_widget_translate_coordinates (child, focus_child,
                                             0, 0, &x, &y);
 
           _gtk_widget_get_allocation (focus_child, &allocation);
           x += allocation.x;
           y += allocation.y;
 
-          _gtk_widget_get_allocation (focus_child, &allocation);
+          _gtk_widget_get_allocation (child, &allocation);
 
           if (vadj)
             gtk_adjustment_clamp_page (vadj, y, y + allocation.height);
