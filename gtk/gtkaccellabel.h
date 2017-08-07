@@ -44,17 +44,19 @@ typedef struct _GtkAccelLabel	     GtkAccelLabel;
 GDK_AVAILABLE_IN_ALL
 GType	   gtk_accel_label_get_type	     (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_accel_label_new		     (const gchar   *string);
+GtkWidget *gtk_accel_label_new		     (const gchar   *string);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_accel_label_get_accel_widget  (GtkAccelLabel *accel_label);
+GtkWidget *gtk_accel_label_get_accel_widget  (GtkAccelLabel *accel_label);
 GDK_AVAILABLE_IN_ALL
 guint	   gtk_accel_label_get_accel_width   (GtkAccelLabel *accel_label);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_accel_label_set_accel_widget  (GtkAccelLabel *accel_label,
 					      GtkWidget	    *accel_widget);
 GDK_AVAILABLE_IN_ALL
-void	   gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
-					      GClosure	    *accel_closure);
+void       gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
+                                              GClosure      *accel_closure);
+GDK_AVAILABLE_IN_ALL
+GClosure * gtk_accel_label_get_accel_closure (GtkAccelLabel *accel_label);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_accel_label_refetch           (GtkAccelLabel *accel_label);
 GDK_AVAILABLE_IN_ALL

@@ -373,7 +373,8 @@ gtk_accel_label_finalize (GObject *object)
  * Fetches the widget monitored by this accelerator label. See
  * gtk_accel_label_set_accel_widget().
  *
- * Returns: (nullable) (transfer none): the object monitored by the accelerator label, or %NULL.
+ * Returns: (nullable) (transfer none): the widget monitored by @accel_label,
+ * or %NULL if it is not monitoring a widget.
  **/
 GtkWidget *
 gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)
@@ -559,6 +560,26 @@ gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
       gtk_accel_label_reset (accel_label);
       g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_ACCEL_CLOSURE]);
     }
+}
+
+/**
+ * gtk_accel_label_get_accel_closure:
+ * @accel_label: a #GtkAccelLabel
+ *
+ * Fetches the closure monitored by this accelerator label. See
+ * gtk_accel_label_set_accel_closure().
+ *
+ * Returns: (nullable) (transfer none): the closure monitored by @accel_label,
+ *   or %NULL if it is not monitoring a closure.
+ */
+GClosure *
+gtk_accel_label_get_accel_closure (GtkAccelLabel *accel_label)
+{
+  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
+
+  g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), NULL);
+
+  return priv->accel_closure;
 }
 
 static gboolean
