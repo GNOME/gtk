@@ -2680,14 +2680,14 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
     {
       if (priv->focus_child)
         g_object_unref (priv->focus_child);
+
       priv->focus_child = child;
+
       if (priv->focus_child)
         g_object_ref (priv->focus_child);
     }
 
-
-  /* check for h/v adjustments
-   */
+  /* Check for h/v adjustments and scroll to show the focus child if possible */
   if (priv->focus_child)
     {
       GtkAdjustment *hadj;
@@ -2700,15 +2700,15 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
       vadj = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
       if (hadj || vadj)
         {
-
           focus_child = priv->focus_child;
           while (GTK_IS_CONTAINER (focus_child) && gtk_container_get_focus_child (GTK_CONTAINER (focus_child)))
             {
               focus_child = gtk_container_get_focus_child (GTK_CONTAINER (focus_child));
             }
 
-          gtk_widget_translate_coordinates (focus_child, priv->focus_child,
-                                            0, 0, &x, &y);
+          if (!gtk_widget_translate_coordinates (focus_child, priv->focus_child,
+                                                 0, 0, &x, &y))
+            return;
 
           _gtk_widget_get_allocation (priv->focus_child, &allocation);
           x += allocation.x;
