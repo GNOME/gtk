@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.22.18
+===================================
+
+* Support entering emoji by name, using Ctrl-Shift-E
+
+* Wayland:
+ - Add support for the shortcut inhibitor protocol
+ - Support Wacome tablet wheel scrolling
+
+* Bug fixes:
+ 771959 gtk_init_with_args fails when no display is found / does not comply w...
+ 776903 Label with hyperlinks cannot be opened with touch on wayland
+ 776909 gtk_adjustment_clamp_page: Conditional jump or move depends on uninit...
+ 777333 In a GNOME Wayland session, gnome-terminal windows cannot be moved ar...
+ 777515 gtk3-icon-browser doesn't list document-edit-symbolic icon
+ 778188 VTE crashes on multiple repeated BELL chars
+ 780938 No icon tooltip shown in GtkEntry
+ 781246 Return value of gtk_widget_get_parent_window should be marked (nullable)
+ 782870 X11 Grabbing Broken with GtkScrolledWindow
+ 783343 Wayland: RFC - add shortcut inhibitor support
+ 783649 negative content width warning in GtkLevelbar
+ 783716 Support wayland-tablet wheel events
+ 783906 gtk_accelerator_get_label broken
+ 784624 process-stop-symbolic hardcoded as app menu fallback
+ 785255 Quitting world's simplest program containing a single GtkEntry causes...
+ 785375 Cursors for Wacom tablets are not always updated correctly under Wayland
+ 785423 Missing nullable annotation for gtk_bin_get_child
+ 785672 Entry: Setting icon tooltip to empty disables tooltip on whole widget
+
+* Translation updates:
+ Finnish
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.22.17
 ===================================
 
