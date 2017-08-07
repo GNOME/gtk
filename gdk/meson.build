@@ -158,6 +158,7 @@ gdkx11_inc = include_directories('x11')
 gdkwayland_inc = include_directories('wayland')
 
 wlinc = include_directories('.')
+win32rcinc = include_directories('win32/rc')
 
 gdk_gen_headers = [gdkenum_h, gdkmarshal_h, gdkconfig, gdkversionmacros]
 
