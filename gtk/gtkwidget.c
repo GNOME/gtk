@@ -6321,9 +6321,6 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
       src_y = dy;
 
       window = gdk_window_get_effective_parent (window);
-
-      if (!window)		/* Handle GtkHandleBox */
-	return FALSE;
     }
 
   /* And back */
@@ -6333,12 +6330,6 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
       dest_list = g_list_prepend (dest_list, window);
 
       window = gdk_window_get_effective_parent (window);
-
-      if (!window)		/* Handle GtkHandleBox */
-        {
-          g_list_free (dest_list);
-          return FALSE;
-        }
     }
 
   while (dest_list)
