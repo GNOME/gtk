@@ -55,9 +55,9 @@
  * lower overhead. If you just need to position child widgets at specific
  * points, then #GtkFixed provides that functionality on its own.
  *
- * When handling expose events on a #GtkLayout, you must draw to
- * GTK_LAYOUT (layout)->bin_window, rather than to
- * GTK_WIDGET (layout)->window, as you would for a #GtkDrawingArea.
+ * When handling expose events on a #GtkLayout, you must draw to the #GdkWindow
+ * returned by gtk_layout_get_bin_window(), rather than to the one returned by
+ * gtk_widget_get_window() as you would for a #GtkDrawingArea.
  */
 
 
