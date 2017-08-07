@@ -553,16 +553,20 @@ check_accel_changed (GtkAccelGroup  *accel_group,
 /**
  * gtk_accel_label_set_accel_closure:
  * @accel_label: a #GtkAccelLabel
- * @accel_closure: the closure to monitor for accelerator changes.
+ * @accel_closure: (nullable): the closure to monitor for accelerator changes,
+ * or %NULL
  *
  * Sets the closure to be monitored by this accelerator label. The closure
  * must be connected to an accelerator group; see gtk_accel_group_connect().
+ * Passing %NULL for @accel_closure will dissociate @accel_label from its
+ * current closure, if any.
  **/
 void
 gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 				   GClosure      *accel_closure)
 {
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
+
   if (accel_closure)
     g_return_if_fail (gtk_accel_group_from_accel_closure (accel_closure) != NULL);
 
@@ -576,7 +580,9 @@ gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 	  accel_label->priv->accel_group = NULL;
 	  g_closure_unref (accel_label->priv->accel_closure);
 	}
+
       accel_label->priv->accel_closure = accel_closure;
+
       if (accel_label->priv->accel_closure)
 	{
 	  g_closure_ref (accel_label->priv->accel_closure);
@@ -585,6 +591,7 @@ gtk_accel_label_set_accel_closure (GtkAccelLabel *accel_label,
 				   G_CALLBACK (check_accel_changed),
 				   accel_label, 0);
 	}
+
       gtk_accel_label_reset (accel_label);
       g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_ACCEL_CLOSURE]);
     }
