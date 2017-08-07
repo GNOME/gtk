@@ -150,6 +150,7 @@
             <property name="margin">10</property>
             <property name="row-spacing">18</property>
             <property name="column-spacing">18</property>
+            <property name="halign">center</property>
             <child>
               <object class="GtkImage" id="image1">
                 <property name="visible">True</property>
@@ -202,6 +203,22 @@
               </object>
               <packing>
                 <property name="left-attach">4</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEventBox">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkImage" id="image6">
+                    <property name="visible">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">end</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">5</property>
                 <property name="top-attach">1</property>
               </packing>
             </child>
@@ -282,17 +299,18 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="description">
+              <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">60</property>
-                <property name="xalign">0</property>
-                <property name="valign">start</property>
+                <property name="halign">center</property>
+                <property name="valign">baseline</property>
+                <property name="label">scalable</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
               </object>
               <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-                <property name="width">5</property>
+                <property name="left-attach">5</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
@@ -310,6 +328,15 @@
                 <property name="width">5</property>
               </packing>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="description">
+            <property name="margin">10</property>
+            <property name="visible">True</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">60</property>
+            <property name="valign">start</property>
           </object>
         </child>
       </object>
