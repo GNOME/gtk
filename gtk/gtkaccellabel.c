@@ -528,15 +528,17 @@ accel_widget_weak_ref_cb (GtkAccelLabel *accel_label,
 /**
  * gtk_accel_label_set_accel_widget:
  * @accel_label: a #GtkAccelLabel
- * @accel_widget: the widget to be monitored.
+ * @accel_widget: (nullable): the widget to be monitored, or %NULL
  *
- * Sets the widget to be monitored by this accelerator label.
+ * Sets the widget to be monitored by this accelerator label. Passing %NULL for
+ * @accel_widget will dissociate @accel_label from its current widget, if any.
  */
 void
 gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
                                   GtkWidget     *accel_widget)
 {
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
+
   if (accel_widget)
     g_return_if_fail (GTK_IS_WIDGET (accel_widget));
 
@@ -551,7 +553,9 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
           g_object_weak_unref (G_OBJECT (accel_label->priv->accel_widget),
                                (GWeakNotify) accel_widget_weak_ref_cb, accel_label);
         }
+
       accel_label->priv->accel_widget = accel_widget;
+
       if (accel_label->priv->accel_widget)
         {
           g_object_weak_ref (G_OBJECT (accel_label->priv->accel_widget),
@@ -561,6 +565,7 @@ gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
                                    accel_label, G_CONNECT_SWAPPED);
           refetch_widget_accel_closure (accel_label);
         }
+
       g_object_notify_by_pspec (G_OBJECT (accel_label), props[PROP_ACCEL_WIDGET]);
     }
 }
