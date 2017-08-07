@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-27 13:34+0200\n"
-"PO-Revision-Date: 2017-07-27 14:56+0200\n"
+"POT-Creation-Date: 2017-07-31 16:12+0200\n"
+"PO-Revision-Date: 2017-07-31 16:18+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -1300,7 +1300,7 @@ msgstr "Ime dejanja"
 
 #: gtk/gtkactionable.c:72
 msgid "The name of the associated action, like 'app.quit'"
-msgstr "Ime povezanega dejanja, npr. 'app.quit'"
+msgstr "Ime povezanega dejanja, na primer »app.quit«"
 
 #: gtk/gtkactionable.c:76
 msgid "Action target value"
@@ -1384,7 +1384,7 @@ msgstr "Velikost strani prilagoditve"
 
 #: gtk/gtkappchooserbutton.c:618
 msgid "Include an 'Other…' item"
-msgstr "Vključi predmet 'Drugo ...'"
+msgstr "Vključi možnost »Drugo ...«"
 
 #: gtk/gtkappchooserbutton.c:619
 msgid ""
@@ -2491,7 +2491,7 @@ msgstr "Pisava"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtkfontchooser.c:65 gtk/gtktexttag.c:325
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr "Opis pisave kot niz, npr. \"Sans Italic 12\""
+msgstr "Opis pisave kot niz, na primer »Sans Italic 12«"
 
 #: gtk/gtkcellrenderertext.c:372 gtk/gtkfontchooser.c:78 gtk/gtktexttag.c:333
 msgid "Font description as a PangoFontDescription struct"
@@ -2890,7 +2890,7 @@ msgstr "Nestalno"
 
 #: gtk/gtkcheckmenuitem.c:218
 msgid "Whether to display an \"inconsistent\" state"
-msgstr "Ali naj se prikaže \"nestalno\" stanje"
+msgstr "Ali naj se prikaže »nestalno« stanje"
 
 #: gtk/gtkcheckmenuitem.c:225
 msgid "Draw as radio menu item"
@@ -3321,7 +3321,7 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
-"Izbrana možnost omogoča, da se namesto \"nevidnih znakov\" (geselski način), "
+"Izbrana možnost omogoča, da se namesto »nevidnih znakov« (geselski način), "
 "prikaže dejansko vneseno besedilo"
 
 #: gtk/gtkentry.c:874
@@ -4927,7 +4927,7 @@ msgstr "Sidro X"
 
 #: gtk/gtkmenu.c:807
 msgid "Rect anchor horizontal offset"
-msgstr ""
+msgstr "Vodoravni odmik sidrišča"
 
 #: gtk/gtkmenu.c:833
 msgid "Rect anchor dy"
@@ -4935,7 +4935,7 @@ msgstr "Sidro Y"
 
 #: gtk/gtkmenu.c:834
 msgid "Rect anchor vertical offset"
-msgstr ""
+msgstr "Navpični odmik sidrišča"
 
 #: gtk/gtkmenu.c:860
 msgid "Menu type hint"
@@ -5458,11 +5458,11 @@ msgstr "Skupina dejanj, iz katere bo izvedeno dejanje"
 
 #: gtk/gtkpadcontroller.c:379
 msgid "Pad device"
-msgstr ""
+msgstr "Tablična naprava"
 
 #: gtk/gtkpadcontroller.c:380
 msgid "Pad device to control"
-msgstr ""
+msgstr "Tablična naprava za nadzor"
 
 #: gtk/gtkpaned.c:369
 msgid ""
@@ -5484,7 +5484,7 @@ msgstr "Najmanjši položaj"
 
 #: gtk/gtkpaned.c:394
 msgid "Smallest possible value for the \"position\" property"
-msgstr "Najnižja možna vrednost za lastnost \"Položaj\""
+msgstr "Najnižja možna vrednost za lastnost »položaj«"
 
 #: gtk/gtkpaned.c:410
 msgid "Maximal Position"
@@ -5492,7 +5492,7 @@ msgstr "Največji položaj"
 
 #: gtk/gtkpaned.c:411
 msgid "Largest possible value for the \"position\" property"
-msgstr "Najvišja možna vrednost za lastnost \"Položaj\""
+msgstr "Najvišja možna vrednost za lastnost »položaj«"
 
 #: gtk/gtkpaned.c:427
 msgid "Wide Handle"
@@ -5559,7 +5559,7 @@ msgstr "Ali bočno okno vključuje tudi vgrajeno bližnjico do nedavnih datotek"
 
 #: gtk/gtkplacessidebar.c:4465
 msgid "Show 'Desktop'"
-msgstr "Pokaži 'Namizje'"
+msgstr "Pokaži »Namizje«"
 
 #: gtk/gtkplacessidebar.c:4466
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
@@ -5579,7 +5579,7 @@ msgstr ""
 
 #: gtk/gtkplacessidebar.c:4477
 msgid "Show 'Enter Location'"
-msgstr "Pokaži polje "
+msgstr "Pokaži »Vpis mesta«"
 
 #: gtk/gtkplacessidebar.c:4478
 msgid ""
@@ -5592,7 +5592,7 @@ msgstr "Ali naj bočno okno vključuje le krajevne datoteke"
 
 #: gtk/gtkplacessidebar.c:4489
 msgid "Show 'Trash'"
-msgstr "Pokaži 'Smeti'"
+msgstr "Pokaži »Smeti«"
 
 #: gtk/gtkplacessidebar.c:4490
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
@@ -5600,7 +5600,7 @@ msgstr "Ali bočno okno vključuje tudi vgrajeno bližnjico do Smeti"
 
 #: gtk/gtkplacessidebar.c:4495
 msgid "Show 'Other locations'"
-msgstr "Pokaži 'Druga mesta'"
+msgstr "Pokaži »Druga mesta«"
 
 #: gtk/gtkplacessidebar.c:4496
 msgid "Whether the sidebar includes an item to show external locations"
@@ -6646,7 +6646,7 @@ msgstr "Največja višina vsebine, ki bo dodeljena vsebini okna z drsnikom."
 
 #: gtk/gtkscrolledwindow.c:747 gtk/gtkscrolledwindow.c:748
 msgid "Propagate Natural Width"
-msgstr ""
+msgstr "Upoštevaj naravno višino"
 
 #: gtk/gtkscrolledwindow.c:765 gtk/gtkscrolledwindow.c:766
 msgid "Propagate Natural Height"
@@ -7375,7 +7375,7 @@ msgid ""
 "Whether a middle click on a mouse should paste the 'PRIMARY' clipboard "
 "content at the cursor location."
 msgstr ""
-"Ali naj se s srednjim klikom prilepi 'OSNOVNA' vsebina odložišča na mestu "
+"Ali naj se s srednjim klikom prilepi »OSNOVNA« vsebina odložišča na mestu "
 "kazalke."
 
 #: gtk/gtksettings.c:1724
@@ -8235,7 +8235,7 @@ msgstr "Ali naj bo preklopni gumb pritisnjen"
 
 #: gtk/gtktogglebutton.c:193
 msgid "If the toggle button is in an \"in between\" state"
-msgstr "Ali je preklopni gumb v \"vmesnem\" stanju"
+msgstr "Ali je preklopni gumb v »vmesnem« stanju"
 
 #: gtk/gtktogglebutton.c:199
 msgid "Draw Indicator"
@@ -8493,7 +8493,7 @@ msgstr "Podrejeni način"
 
 #: gtk/gtktreemodelfilter.c:533
 msgid "The model for the filtermodel to filter"
-msgstr ""
+msgstr "Model filtra za razvrščanje"
 
 #: gtk/gtktreemodelfilter.c:540
 msgid "The virtual root"
@@ -8985,7 +8985,7 @@ msgstr "Ali lahko gradniku določimo namig"
 
 #: gtk/gtkwidget.c:1339
 msgid "The widget's window if it is realized"
-msgstr "Udejanjeno okno gradnika"
+msgstr "Okno gradnika, če je to udejanjeno"
 
 #: gtk/gtkwidget.c:1354
 msgid "Double Buffered"
@@ -9529,6 +9529,55 @@ msgstr "Naziv barvnega profila"
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Naziv barvnega profila, ki bo uporabljen"
+
+#~| msgid "Xft RGBA"
+#~ msgid "RGBA"
+#~ msgstr "RGBA"
+
+#~ msgid "System Information"
+#~ msgstr "Podrobnosti sistema"
+
+#, fuzzy
+#~| msgid "The keyval of the accelerator"
+#~ msgid "The text displayed next to the accelerator"
+#~ msgstr "Vrednost tipke pospeševalnika"
+
+#, fuzzy
+#~| msgid "Reveal Child"
+#~ msgid "Reveal"
+#~ msgstr "Pokaži podrejen predmet"
+
+#, fuzzy
+#~| msgid "The name of the icon from the icon theme"
+#~ msgid "The name of the icon used to automatically populate the button"
+#~ msgstr "Ime ikone iz ikonske teme"
+
+#~ msgid "Content Width"
+#~ msgstr "Širina vsebine"
+
+#~ msgid "Desired width for displayed content"
+#~ msgstr "Želena širina prikazane vsebine"
+
+#~ msgid "Content Height"
+#~ msgstr "Višina vsebine"
+
+#~ msgid "Desired height for displayed content"
+#~ msgstr "Želena višina prikazane vsebine"
+
+#~ msgid "Show “Trash”"
+#~ msgstr "Pokaži »Smeti«"
+
+#, fuzzy
+#~| msgid ""
+#~| "The GtkAdjustment that contains the current value of this range object"
+#~ msgid "The GtkAdjustment that contains the current value of this scrollbar"
+#~ msgstr "GtkAdjustment, ki vsebuje trenutno vrednost tega predmeta"
+
+#~ msgid "CSS Name"
+#~ msgstr "Ime CSS"
+
+#~ msgid "The name of this widget in the CSS tree"
+#~ msgstr "Ime gradnika v drevesni strukturi CSS"
 
 #~ msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 #~ msgstr "Ali lahko spustno polje postane dejavno, kadar je izbrano z miško"
