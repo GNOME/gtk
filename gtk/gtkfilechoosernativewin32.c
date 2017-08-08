@@ -239,13 +239,16 @@ ifiledialogevents_OnTypeChange (IFileDialogEvents * self,
   FileDialogEvents *events = (FileDialogEvents *) self;
   UINT fileType;
   HRESULT hr = IFileDialog_GetFileTypeIndex (pfd, &fileType);
+  GSList *filters;
+
   if (FAILED (hr))
     {
       g_warning_hr ("Can't get current file type", hr);
       return S_OK;
     }
+
   fileType--; // fileTypeIndex starts at 1 
-  GSList *filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (events->data->self));
+  filters = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (events->data->self));
   events->data->self->current_filter = g_slist_nth_data (filters, fileType);
   g_slist_free (filters);
   g_object_notify (G_OBJECT (events->data->self), "filter");
