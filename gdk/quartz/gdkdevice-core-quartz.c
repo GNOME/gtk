@@ -258,7 +258,6 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
 static void
 gdk_quartz_device_core_query_state (GdkDevice        *device,
                                     GdkWindow        *window,
-                                    GdkWindow       **root_window,
                                     GdkWindow       **child_window,
                                     gdouble          *root_x,
                                     gdouble          *root_y,
@@ -269,6 +268,9 @@ gdk_quartz_device_core_query_state (GdkDevice        *device,
   GdkWindow *found_window;
   NSPoint point;
   gint x_tmp, y_tmp;
+
+  if (window == NULL)
+    window = _gdk_root;
 
   found_window = gdk_quartz_device_core_query_state_helper (window, device,
                                                             win_x, win_y,

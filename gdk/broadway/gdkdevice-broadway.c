@@ -149,14 +149,10 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 				 gdouble          *win_y,
 				 GdkModifierType  *mask)
 {
-  GdkWindow *toplevel;
-  GdkWindowImplBroadway *impl;
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
-  GdkScreen *screen;
   gint32 device_root_x, device_root_y;
   guint32 mouse_toplevel_id;
-  GdkWindow *mouse_toplevel;
   guint32 mask32;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
@@ -165,15 +161,11 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   display = gdk_device_get_display (device);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-  toplevel = impl->wrapper;
-
   _gdk_broadway_server_query_mouse (broadway_display->server,
 				    &mouse_toplevel_id,
 				    &device_root_x,
 				    &device_root_y,
 				    &mask32);
-  mouse_toplevel = g_hash_table_lookup (broadway_display->id_ht, GUINT_TO_POINTER (mouse_toplevel_id));
 
   if (root_x)
     *root_x = device_root_x;
@@ -187,6 +179,17 @@ gdk_broadway_device_query_state (GdkDevice        *device,
     *mask = mask32;
   if (child_window)
     {
+      GdkWindowImplBroadway *impl;
+      GdkWindow *toplevel;
+      GdkWindow *mouse_toplevel;
+
+      if (window == NULL)
+        window = gdk_get_default_root_window ();
+
+      impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+      toplevel = impl->wrapper;
+
+      mouse_toplevel = g_hash_table_lookup (broadway_display->id_ht, GUINT_TO_POINTER (mouse_toplevel_id));
       if (gdk_window_get_window_type (toplevel) == GDK_WINDOW_ROOT)
 	{
 	  *child_window = mouse_toplevel;
