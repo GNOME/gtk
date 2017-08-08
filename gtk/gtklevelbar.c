@@ -430,7 +430,6 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
   GtkAllocation block_area, clip;
   gdouble fill_percentage;
   gboolean inverted;
-  int block_min;
 
   inverted = gtk_level_bar_get_real_inverted (self);
 
@@ -446,13 +445,9 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
   fill_percentage = (self->priv->cur_value - self->priv->min_value) /
     (self->priv->max_value - self->priv->min_value);
 
-  gtk_widget_measure (self->priv->block_widget[inverted ? 1 : 0], self->priv->orientation, -1,
-                      &block_min, NULL, NULL, NULL);
-
   if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       block_area.width = (gint) floor (block_area.width * fill_percentage);
-      block_area.width = MAX (block_area.width, block_min);
 
       if (inverted)
         block_area.x += allocation->width - block_area.width;
@@ -460,7 +455,6 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
   else
     {
       block_area.height = (gint) floor (block_area.height * fill_percentage);
-      block_area.height = MAX (block_area.height, block_min);
 
       if (inverted)
         block_area.y += allocation->height - block_area.height;
