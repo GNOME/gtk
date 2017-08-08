@@ -586,7 +586,6 @@ gdk_device_get_position_double (GdkDevice        *device,
   GdkDisplay *display;
   gdouble tmp_x, tmp_y;
   GdkScreen *default_screen;
-  GdkWindow *root;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
@@ -600,12 +599,12 @@ gdk_device_get_position_double (GdkDevice        *device,
 
   _gdk_device_query_state (device,
                            gdk_screen_get_root_window (default_screen),
-                           &root, NULL,
+                           NULL,
                            &tmp_x, &tmp_y,
                            NULL, NULL, NULL);
 
   if (screen)
-    *screen = gdk_window_get_screen (root);
+    *screen = default_screen;
   if (x)
     *x = tmp_x;
   if (y)
@@ -1838,7 +1837,6 @@ _gdk_device_translate_axis (GdkDevice *device,
 void
 _gdk_device_query_state (GdkDevice        *device,
                          GdkWindow        *window,
-                         GdkWindow       **root_window,
                          GdkWindow       **child_window,
                          gdouble          *root_x,
                          gdouble          *root_y,
@@ -1848,7 +1846,6 @@ _gdk_device_query_state (GdkDevice        *device,
 {
   GDK_DEVICE_GET_CLASS (device)->query_state (device,
                                               window,
-                                              root_window,
                                               child_window,
                                               root_x,
                                               root_y,

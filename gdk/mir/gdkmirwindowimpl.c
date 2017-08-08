@@ -1327,7 +1327,7 @@ gdk_mir_window_impl_get_device_state (GdkWindow       *window,
 {
   GdkWindow *child;
 
-  _gdk_device_query_state (device, window, NULL, &child, NULL, NULL, x, y, mask);
+  _gdk_device_query_state (device, window, &child, NULL, NULL, x, y, mask);
 
   return child != NULL;
 }

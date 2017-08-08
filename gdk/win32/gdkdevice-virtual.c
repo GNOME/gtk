@@ -133,7 +133,6 @@ gdk_device_virtual_warp (GdkDevice *device,
 static void
 gdk_device_virtual_query_state (GdkDevice        *device,
 				GdkWindow        *window,
-				GdkWindow       **root_window,
 				GdkWindow       **child_window,
 				gdouble          *root_x,
 				gdouble          *root_y,
@@ -144,7 +143,7 @@ gdk_device_virtual_query_state (GdkDevice        *device,
   GdkDeviceVirtual *virtual = GDK_DEVICE_VIRTUAL (device);
 
   _gdk_device_query_state (virtual->active_device,
-			   window, root_window, child_window,
+			   window, child_window,
 			   root_x, root_y,
 			   win_x, win_y,
 			   mask);

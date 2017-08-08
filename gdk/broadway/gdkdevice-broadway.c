@@ -42,7 +42,6 @@ static void gdk_broadway_device_warp (GdkDevice *device,
 				      gdouble    y);
 static void gdk_broadway_device_query_state (GdkDevice        *device,
                                              GdkWindow        *window,
-                                             GdkWindow       **root_window,
                                              GdkWindow       **child_window,
                                              gdouble          *root_x,
                                              gdouble          *root_y,
@@ -143,7 +142,6 @@ gdk_broadway_device_warp (GdkDevice *device,
 static void
 gdk_broadway_device_query_state (GdkDevice        *device,
 				 GdkWindow        *window,
-				 GdkWindow       **root_window,
 				 GdkWindow       **child_window,
 				 gdouble          *root_x,
 				 gdouble          *root_y,
@@ -169,12 +167,6 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
   toplevel = impl->wrapper;
-
-  if (root_window)
-    {
-      screen = gdk_window_get_screen (window);
-      *root_window = gdk_screen_get_root_window (screen);
-    }
 
   _gdk_broadway_server_query_mouse (broadway_display->server,
 				    &mouse_toplevel_id,
@@ -347,7 +339,7 @@ gdk_broadway_device_window_at_position (GdkDevice       *device,
   screen = gdk_display_get_default_screen (gdk_device_get_display (device));
   root_window = gdk_screen_get_root_window (screen);
 
-  gdk_broadway_device_query_state (device, root_window, NULL, &window, NULL, NULL, win_x, win_y, mask);
+  gdk_broadway_device_query_state (device, root_window, &window, NULL, NULL, win_x, win_y, mask);
 
   return window;
 }

@@ -94,7 +94,6 @@ struct _GdkDeviceClass
                               gdouble     y);
   void (* query_state)       (GdkDevice       *device,
                               GdkWindow       *window,
-                              GdkWindow      **root_window,
                               GdkWindow      **child_window,
                               gdouble          *root_x,
                               gdouble          *root_y,
@@ -172,7 +171,6 @@ void _gdk_device_remove_slave (GdkDevice *device,
                                GdkDevice *slave);
 void _gdk_device_query_state                  (GdkDevice        *device,
                                                GdkWindow        *window,
-                                               GdkWindow       **root_window,
                                                GdkWindow       **child_window,
                                                gdouble          *root_x,
                                                gdouble          *root_y,

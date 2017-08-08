@@ -60,7 +60,6 @@ static void     gdk_x11_device_core_warp (GdkDevice *device,
                                           gdouble    y);
 static void gdk_x11_device_core_query_state (GdkDevice        *device,
                                              GdkWindow        *window,
-                                             GdkWindow       **root_window,
                                              GdkWindow       **child_window,
                                              gdouble          *root_x,
                                              gdouble          *root_y,
@@ -250,7 +249,6 @@ gdk_x11_device_core_warp (GdkDevice *device,
 static void
 gdk_x11_device_core_query_state (GdkDevice        *device,
                                  GdkWindow        *window,
-                                 GdkWindow       **root_window,
                                  GdkWindow       **child_window,
                                  gdouble          *root_x,
                                  gdouble          *root_y,
@@ -296,9 +294,6 @@ gdk_x11_device_core_query_state (GdkDevice        *device,
                      &xmask);
       XDestroyWindow (xdisplay, w);
     }
-
-  if (root_window)
-    *root_window = gdk_x11_window_lookup_for_display (display, xroot_window);
 
   if (child_window)
     *child_window = gdk_x11_window_lookup_for_display (display, xchild_window);
