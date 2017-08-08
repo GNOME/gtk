@@ -2384,9 +2384,6 @@ gtk_drag_motion_cb (GtkWidget      *widget,
   return TRUE;
 }
 
-#define BIG_STEP 20
-#define SMALL_STEP 1
-
 /* “key-press/release-event” callback during drag */
 static gboolean
 gtk_drag_key_cb (GtkWidget   *widget, 
@@ -2394,14 +2391,6 @@ gtk_drag_key_cb (GtkWidget   *widget,
                  gpointer     data)
 {
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
-  GdkModifierType state;
-  GdkWindow *root_window;
-  GdkDevice *pointer;
-  gint dx, dy;
-
-  dx = dy = 0;
-  state = event->state & gtk_accelerator_get_default_mod_mask ();
-  pointer = gdk_device_get_associated_device (gdk_event_get_device ((GdkEvent *) event));
 
   if (event->type == GDK_KEY_PRESS)
     {
@@ -2409,7 +2398,7 @@ gtk_drag_key_cb (GtkWidget   *widget,
         {
         case GDK_KEY_Escape:
           gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_USER_CANCELLED, event->time);
-          return TRUE;
+          break;
 
         case GDK_KEY_space:
         case GDK_KEY_Return:
@@ -2426,51 +2415,9 @@ gtk_drag_key_cb (GtkWidget   *widget,
             {
               gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_NO_TARGET, event->time);
             }
-
-          return TRUE;
-
-        case GDK_KEY_Up:
-        case GDK_KEY_KP_Up:
-          dy = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
           break;
-
-        case GDK_KEY_Down:
-        case GDK_KEY_KP_Down:
-          dy = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
-          break;
-
-        case GDK_KEY_Left:
-        case GDK_KEY_KP_Left:
-          dx = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
-          break;
-
-        case GDK_KEY_Right:
-        case GDK_KEY_KP_Right:
-          dx = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
-          break;
-        }
+       }
     }
-
-  /* Now send a "motion" so that the modifier state is updated */
-
-  /* The state is not yet updated in the event, so we need
-   * to query it here. We could use XGetModifierMapping, but
-   * that would be overkill.
-   */
-  root_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
-  gdk_window_get_device_position (root_window, pointer, NULL, NULL, &state);
-  event->state = state;
-
-  if (dx != 0 || dy != 0)
-    {
-      info->cur_x += dx;
-      info->cur_y += dy;
-      gdk_device_warp (pointer,
-                       gtk_widget_get_screen (widget),
-                       info->cur_x, info->cur_y);
-    }
-
-  gtk_drag_update (info, info->cur_screen, info->cur_x, info->cur_y, (GdkEvent *)event);
 
   return TRUE;
 }
