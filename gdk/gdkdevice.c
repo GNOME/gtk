@@ -598,7 +598,7 @@ gdk_device_get_position_double (GdkDevice        *device,
   default_screen = gdk_display_get_default_screen (display);
 
   _gdk_device_query_state (device,
-                           gdk_screen_get_root_window (default_screen),
+                           NULL,
                            NULL,
                            &tmp_x, &tmp_y,
                            NULL, NULL, NULL);
