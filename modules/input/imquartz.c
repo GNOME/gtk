@@ -131,8 +131,8 @@ output_result (GtkIMContext *context,
   gboolean retval = FALSE;
   gchar *fixed_str, *marked_str;
 
-  fixed_str = g_object_get_data (G_OBJECT (win), TIC_INSERT_TEXT);
-  marked_str = g_object_get_data (G_OBJECT (win), TIC_MARKED_TEXT);
+  fixed_str = g_strdup (g_object_get_data (G_OBJECT (win), TIC_INSERT_TEXT));
+  marked_str = g_strdup (g_object_get_data (G_OBJECT (win), TIC_MARKED_TEXT));
   if (fixed_str)
     {
       GTK_NOTE (MISC, g_print ("tic-insert-text: %s\n", fixed_str));
@@ -171,7 +171,8 @@ output_result (GtkIMContext *context,
       if (qc->preedit_str && strlen (qc->preedit_str) > 0)
         retval = TRUE;
     }
-
+  g_free (fixed_str);
+  g_free (marked_str);
   return retval;
 }
 
