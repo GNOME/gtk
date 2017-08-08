@@ -15,6 +15,42 @@ Overview of Changes in GTK+ 3.91.2
 
 * A new 'widget bowl' demo has been added in gtk4-demo
 
+* GtkEventBox has been removed. It is no longer needed
+
+* Add support for entering emoji by name using Ctrl-Shift-e
+
+* Wayland:
+ - Support Wacom tablet wheel scrolling
+ - Support the shortcut inhibitor protocol
+
+* Bugs fixed:
+ 776903 Label with hyperlinks cannot be opened with touch on wayland
+ 776909 gtk_adjustment_clamp_page: Conditional jump or move depends on unin...
+ 777333 In a GNOME Wayland session, gnome-terminal windows cannot be moved ...
+ 777515 gtk3-icon-browser doesn't list document-edit-symbolic icon
+ 778188 TE crashes on multiple repeated BELL chars
+ 780938 No icon tooltip shown in GtkEntry
+ 781246 Return value of gtk_widget_get_parent_window should be marked (nullable)
+ 783343 wayland: RFC - add shortcut inhibitor support
+ 783906 gtk_accelerator_get_label broken
+ 784016 Crash in gnome-terminal due to calling a GdkDisplayClass vfunc on a ...
+ 784624 process-stop-symbolic hardcoded as app menu fallback
+ 785280 GtkCenterBox: No G_BEGIN_DECLS and G_END_DECLS in gtkcenterbox.h
+ 785318 GtkActionBar: g_object_class_install_properties() is not called
+ 785375 Cursors for Wacom tablets are not always updated correctly under Wayland
+ 785423 Missing nullable annotation for gtk_bin_get_child
+ 785672 Entry: Setting icon tooltip to empty disables tooltip on whole widget
+ 785793 gsk_color_matrix_node_draw leaking cairo_pattern_t
+
+* Translation updates:
+ Croatian
+ Czech
+ Friulian
+ Indonesian
+ Punjabi
+ Slovenian
+ Spanish
+
 
 Overview of Changes in GTK+ 3.91.1
 ==================================
