@@ -85,7 +85,6 @@ static void gdk_x11_device_xi2_warp (GdkDevice *device,
                                      gdouble    y);
 static void gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                             GdkWindow        *window,
-                                            GdkWindow       **root_window,
                                             GdkWindow       **child_window,
                                             gdouble          *root_x,
                                             gdouble          *root_y,
@@ -271,7 +270,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
 
   if (mask)
     gdk_x11_device_xi2_query_state (device, window,
-                                    NULL, NULL,
+                                    NULL,
                                     NULL, NULL,
                                     NULL, NULL,
                                     mask);
@@ -321,7 +320,6 @@ gdk_x11_device_xi2_warp (GdkDevice *device,
 static void
 gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                 GdkWindow        *window,
-                                GdkWindow       **root_window,
                                 GdkWindow       **child_window,
                                 gdouble          *root_x,
                                 gdouble          *root_y,
@@ -347,7 +345,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
       GdkDevice *master = gdk_device_get_associated_device (device);
 
       if (master)
-        _gdk_device_query_state (master, window, root_window, child_window,
+        _gdk_device_query_state (master, window, child_window,
                                  root_x, root_y, win_x, win_y, mask);
       return;
     }
@@ -386,9 +384,6 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
                       &group_state);
       XDestroyWindow (xdisplay, w);
     }
-
-  if (root_window)
-    *root_window = gdk_x11_window_lookup_for_display (display, xroot_window);
 
   if (child_window)
     *child_window = gdk_x11_window_lookup_for_display (display, xchild_window);

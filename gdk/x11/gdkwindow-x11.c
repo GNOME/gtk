@@ -2791,7 +2791,7 @@ gdk_window_x11_get_device_state (GdkWindow       *window,
 
   /*HIDPI: handle coords here?*/
   GDK_DEVICE_GET_CLASS (device)->query_state (device, window,
-                                              NULL, &child,
+                                              &child,
                                               NULL, NULL,
                                               x, y, mask);
   return child != NULL;

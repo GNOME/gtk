@@ -2780,7 +2780,7 @@ gdk_window_wayland_get_device_state (GdkWindow       *window,
       GdkWindow *child;
 
       GDK_DEVICE_GET_CLASS (device)->query_state (device, window,
-                                                  NULL, &child,
+                                                  &child,
                                                   NULL, NULL,
                                                   x, y, mask);
       return_val = (child != NULL);

@@ -2214,7 +2214,7 @@ gdk_window_win32_get_device_state (GdkWindow       *window,
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), FALSE);
 
   GDK_DEVICE_GET_CLASS (device)->query_state (device, window,
-                                              NULL, &child,
+                                              &child,
                                               NULL, NULL,
                                               x, y, mask);
   return (child != NULL);

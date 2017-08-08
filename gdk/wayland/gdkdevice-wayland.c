@@ -583,7 +583,6 @@ device_get_modifiers (GdkDevice *device)
 static void
 gdk_wayland_device_query_state (GdkDevice        *device,
                                 GdkWindow        *window,
-                                GdkWindow       **root_window,
                                 GdkWindow       **child_window,
                                 gdouble          *root_x,
                                 gdouble          *root_y,
@@ -591,16 +590,10 @@ gdk_wayland_device_query_state (GdkDevice        *device,
                                 gdouble          *win_y,
                                 GdkModifierType  *mask)
 {
-  GdkWaylandSeat *seat;
   GdkWaylandPointerData *pointer;
-  GdkScreen *default_screen;
 
-  seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
   pointer = GDK_WAYLAND_DEVICE (device)->pointer;
-  default_screen = gdk_display_get_default_screen (seat->display);
 
-  if (root_window)
-    *root_window = gdk_screen_get_root_window (default_screen);
   if (child_window)
     /* Set child only if actually a child of the given window, as XIQueryPointer() does */
     *child_window = g_list_find (window->children, pointer->focus) ? pointer->focus : NULL;
