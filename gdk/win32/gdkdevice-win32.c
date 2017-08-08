@@ -100,7 +100,6 @@ get_current_mask (void)
 static void
 gdk_device_win32_query_state (GdkDevice        *device,
                               GdkWindow        *window,
-                              GdkWindow       **root_window,
                               GdkWindow       **child_window,
                               gdouble          *root_x,
                               gdouble          *root_y,
@@ -108,12 +107,12 @@ gdk_device_win32_query_state (GdkDevice        *device,
                               gdouble          *win_y,
                               GdkModifierType  *mask)
 {
-  GdkScreen *screen;
   POINT point;
   HWND hwnd, hwndc;
   GdkWindowImplWin32 *impl;
 
-  screen = gdk_window_get_screen (window);
+  if (window == NULL)
+    window = gdk_get_default_root_window ();
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_WINDOW_HWND (window);
@@ -133,7 +132,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
   if (win_y)
     *win_y = point.y / impl->window_scale;
 
-  if (window == gdk_screen_get_root_window (screen))
+  if (window == gdk_get_default_root_window ())
     {
       if (win_x)
         *win_x += _gdk_offset_x;
@@ -157,9 +156,6 @@ gdk_device_win32_query_state (GdkDevice        *device,
       else
         *child_window = NULL; /* Direct child unknown to gdk */
     }
-
-  if (root_window)
-    *root_window = gdk_screen_get_root_window (screen);
 
   if (mask)
     *mask = get_current_mask ();

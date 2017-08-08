@@ -133,7 +133,6 @@ gdk_mir_pointer_warp (GdkDevice *device,
 static void
 gdk_mir_pointer_query_state (GdkDevice        *device,
                              GdkWindow        *window,
-                             GdkWindow       **root_window,
                              GdkWindow       **child_window,
                              gdouble          *root_x,
                              gdouble          *root_y,
@@ -143,8 +142,6 @@ gdk_mir_pointer_query_state (GdkDevice        *device,
 {
   GdkMirPointer *p = GDK_MIR_POINTER (device);
 
-  if (root_window)
-    *root_window = gdk_screen_get_root_window (gdk_display_get_default_screen (gdk_device_get_display (device)));
   if (child_window)
     *child_window = p->over_window;
   if (root_x)

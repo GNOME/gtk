@@ -592,6 +592,9 @@ gdk_wayland_device_query_state (GdkDevice        *device,
 {
   GdkWaylandPointerData *pointer;
 
+  if (window == NULL)
+    window = gdk_get_default_root_window ();
+
   pointer = GDK_WAYLAND_DEVICE (device)->pointer;
 
   if (child_window)

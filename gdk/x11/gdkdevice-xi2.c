@@ -327,7 +327,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                 gdouble          *win_y,
                                 GdkModifierType  *mask)
 {
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+  GdkWindowImplX11 *impl;
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
   GdkScreen *default_screen;
@@ -337,8 +337,11 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   XIModifierState mod_state;
   XIGroupState group_state;
 
-  display = gdk_window_get_display (window);
+  display = gdk_device_get_display (device);
   default_screen = gdk_display_get_default_screen (display);
+  if (window == NULL)
+    window = gdk_screen_get_root_window (default_screen);
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
   if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_SLAVE)
     {

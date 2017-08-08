@@ -109,7 +109,6 @@ gdk_device_wintab_warp (GdkDevice *device,
 static void
 gdk_device_wintab_query_state (GdkDevice        *device,
                                GdkWindow        *window,
-                               GdkWindow       **root_window,
                                GdkWindow       **child_window,
                                gdouble          *root_x,
                                gdouble          *root_y,
@@ -118,13 +117,13 @@ gdk_device_wintab_query_state (GdkDevice        *device,
                                GdkModifierType  *mask)
 {
   GdkDeviceWintab *device_wintab;
-  GdkScreen *screen;
   POINT point;
   HWND hwnd, hwndc;
   GdkWindowImplWin32 *impl;
 
   device_wintab = GDK_DEVICE_WINTAB (device);
-  screen = gdk_window_get_screen (window);
+  if (window == NULL)
+    window = gdk_get_default_root_window ();
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_WINDOW_HWND (window);
@@ -162,9 +161,6 @@ gdk_device_wintab_query_state (GdkDevice        *device,
       else
         *child_window = NULL; /* Direct child unknown to gdk */
     }
-
-  if (root_window)
-    *root_window = gdk_screen_get_root_window (screen);
 
   if (mask)
     {

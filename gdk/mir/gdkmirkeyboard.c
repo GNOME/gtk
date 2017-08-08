@@ -94,7 +94,6 @@ gdk_mir_keyboard_warp (GdkDevice *device,
 static void
 gdk_mir_keyboard_query_state (GdkDevice        *device,
                               GdkWindow        *window,
-                              GdkWindow       **root_window,
                               GdkWindow       **child_window,
                               gdouble          *root_x,
                               gdouble          *root_y,

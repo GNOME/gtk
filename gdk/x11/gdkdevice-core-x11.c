@@ -256,15 +256,18 @@ gdk_x11_device_core_query_state (GdkDevice        *device,
                                  gdouble          *win_y,
                                  GdkModifierType  *mask)
 {
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+  GdkWindowImplX11 *impl;
   GdkDisplay *display;
   GdkScreen *default_screen;
   Window xroot_window, xchild_window;
   int xroot_x, xroot_y, xwin_x, xwin_y;
   unsigned int xmask;
 
-  display = gdk_window_get_display (window);
+  display = gdk_device_get_display (device);
   default_screen = gdk_display_get_default_screen (display);
+  if (window == NULL)
+    window = gdk_screen_get_root_window (default_screen);
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
   if (!GDK_X11_DISPLAY (display)->trusted_client ||
       !XQueryPointer (GDK_WINDOW_XDISPLAY (window),
