@@ -268,8 +268,8 @@ gdk_win32_window_get_queued_window_rect (GdkWindow *window,
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
   gdk_window_get_position (window, &x, &y);
-  window_rect.left = x;
-  window_rect.top = y;
+  window_rect.left = x * impl->window_scale;
+  window_rect.top = y * impl->window_scale;
   window_rect.right = window_rect.left + gdk_window_get_width (window) * impl->window_scale;
   window_rect.bottom = window_rect.top + gdk_window_get_height (window) * impl->window_scale;
 
@@ -999,8 +999,8 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
   ClientToScreen ((HWND) anid, &point);
   if (parent != GetDesktopWindow ())
     ScreenToClient (parent, &point);
-  window->x = point.x;
-  window->y = point.y;
+  window->x = point.x / impl->window_scale;
+  window->y = point.y / impl->window_scale;
   impl->unscaled_width = rect.right - rect.left;
   impl->unscaled_height = rect.bottom - rect.top;
   window->width = (impl->unscaled_width + impl->window_scale - 1) / impl->window_scale;
@@ -3282,8 +3282,8 @@ stash_window (GdkWindow          *window,
               gint                monitor)
 {
   gint x, y;
-  gint width;
-  gint height;
+  gint width, wwidth;
+  gint height, wheight;
   WINDOWPLACEMENT placement;
   HMONITOR hmonitor;
   MONITORINFO hmonitor_info;
@@ -3327,20 +3327,23 @@ stash_window (GdkWindow          *window,
                            placement.rcNormalPosition.left,
                            placement.rcNormalPosition.top));
 
-  width = placement.rcNormalPosition.right - placement.rcNormalPosition.left;
-  height = placement.rcNormalPosition.bottom - placement.rcNormalPosition.top;
-  x = placement.rcNormalPosition.left - hmonitor_info.rcMonitor.left;
-  y = placement.rcNormalPosition.top - hmonitor_info.rcMonitor.top;
+  width = (placement.rcNormalPosition.right - placement.rcNormalPosition.left) / impl->window_scale;
+  height = (placement.rcNormalPosition.bottom - placement.rcNormalPosition.top) / impl->window_scale;
+  x = (placement.rcNormalPosition.left - hmonitor_info.rcMonitor.left) / impl->window_scale;
+  y = (placement.rcNormalPosition.top - hmonitor_info.rcMonitor.top) / impl->window_scale;
 
-  impl->snap_stash->x = ((gdouble) (x) / (gdouble) (hmonitor_info.rcWork.right - hmonitor_info.rcWork.left)) / impl->window_scale;
-  impl->snap_stash->y = ((gdouble) (y) / (gdouble) (hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top)) / impl->window_scale;
-  impl->snap_stash->width = ((gdouble) width / (gdouble) (hmonitor_info.rcWork.right - hmonitor_info.rcWork.left)) / impl->window_scale;
-  impl->snap_stash->height = ((gdouble) height / (gdouble) (hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top)) / impl->window_scale;
+  wwidth = (hmonitor_info.rcWork.right - hmonitor_info.rcWork.left) / impl->window_scale;
+  wheight = (hmonitor_info.rcWork.bottom - hmonitor_info.rcWork.top) / impl->window_scale;
 
-  impl->snap_stash_int->x = x / impl->window_scale;
-  impl->snap_stash_int->y = y / impl->window_scale;
-  impl->snap_stash_int->width = width / impl->window_scale;
-  impl->snap_stash_int->height = height / impl->window_scale;
+  impl->snap_stash->x = (gdouble) (x) / (gdouble) (wwidth);
+  impl->snap_stash->y = (gdouble) (y) / (gdouble) (wheight);
+  impl->snap_stash->width = (gdouble) width / (gdouble) (wwidth);
+  impl->snap_stash->height = (gdouble) height / (gdouble) (wheight);
+
+  impl->snap_stash_int->x = x;
+  impl->snap_stash_int->y = y;
+  impl->snap_stash_int->width = width;
+  impl->snap_stash_int->height = height;
 
   GDK_NOTE (MISC, g_print ("Stashed window %d x %d @ %d : %d as %f x %f @ %f : %f\n",
                            width, height, x, y,
@@ -3370,8 +3373,8 @@ snap_up (GdkWindow *window,
   y = 0;
   height = maxysize;
 
-  x = (x - impl->margins.left) / impl->window_scale;
-  y = (y - impl->margins.top) / impl->window_scale;
+  x = x - impl->margins.left;
+  y = y - impl->margins.top;
   width += impl->margins_x;
   height += impl->margins_y;
 
@@ -3395,10 +3398,10 @@ snap_left (GdkWindow *window,
 
   stash_window (window, impl, screen, monitor);
 
-  rect.width = rect.width / 2 / impl->window_scale;
+  rect.width = rect.width / 2;
 
-  rect.x = rect.x - impl->margins.left / impl->window_scale;
-  rect.y = rect.y - impl->margins.top / impl->window_scale;
+  rect.x = rect.x - impl->margins.left;
+  rect.y = rect.y - impl->margins.top;
   rect.width = rect.width + impl->margins_x;
   rect.height = rect.height + impl->margins_y;
 
@@ -3422,13 +3425,13 @@ snap_right (GdkWindow *window,
 
   stash_window (window, impl, screen, monitor);
 
-  rect.width = rect.width / 2 / impl->window_scale;;
+  rect.width = rect.width / 2;
   rect.x += rect.width;
 
-  rect.x = rect.x - impl->margins.left / impl->window_scale;
-  rect.y = rect.y - impl->margins.top / impl->window_scale;
-  rect.width = rect.width + impl->margins_x / impl->window_scale;
-  rect.height = rect.height + impl->margins_y / impl->window_scale;
+  rect.x = rect.x - impl->margins.left;
+  rect.y = rect.y - impl->margins.top;
+  rect.width = rect.width + impl->margins_x;
+  rect.height = rect.height + impl->margins_y;
 
   gdk_window_move_resize (window, rect.x, rect.y, rect.width, rect.height);
 }
@@ -3672,8 +3675,7 @@ ensure_snap_indicator_surface (GdkW32DragMoveResizeContext *context,
  */
 static void
 adjust_indicator_rectangle (GdkRectangle *rect,
-                            gboolean      inward,
-                            guint         scale)
+                            gboolean      inward)
 {
   gdouble inverter;
   const gint gap = AEROSNAP_INDICATOR_EDGE_GAP;
@@ -3688,8 +3690,8 @@ adjust_indicator_rectangle (GdkRectangle *rect,
 
   rect->x += (gap * inverter);
   rect->y += (gap * inverter);
-  rect->width -= (gap * 2 * inverter) * scale;
-  rect->height -= (gap * 2 * inverter) * scale;
+  rect->width -= (gap * 2 * inverter);
+  rect->height -= (gap * 2 * inverter);
 
 #if defined(MORE_AEROSNAP_DEBUGGING)
   GDK_NOTE (MISC, g_print ("Adjusted %d x %d @ %d : %d -> %d x %d @ %d : %d\n",
@@ -3707,8 +3709,7 @@ rounded_rectangle (cairo_t  *cr,
                    gdouble   radius,
                    gdouble   line_width,
                    GdkRGBA  *fill,
-                   GdkRGBA  *outline,
-                   guint     scale)
+                   GdkRGBA  *outline)
 {
   gdouble degrees = M_PI / 180.0;
 
@@ -3717,10 +3718,10 @@ rounded_rectangle (cairo_t  *cr,
 
   cairo_save (cr);
   cairo_new_sub_path (cr);
-  cairo_arc (cr, x * scale + width - radius * scale, y * scale + radius * scale, radius * scale, -90 * degrees, 0 * degrees);
-  cairo_arc (cr, x * scale + width - radius * scale, y * scale + height - radius * scale, radius * scale, 0 * degrees, 90 * degrees);
-  cairo_arc (cr, (x + radius) * scale, y * scale + height - radius * scale, radius * scale, 90 * degrees, 180 * degrees);
-  cairo_arc (cr, (x + radius) * scale, (y + radius) * scale, radius * scale, 180 * degrees, 270 * degrees);
+  cairo_arc (cr, x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);
+  cairo_arc (cr, x + width - radius, y + height - radius, radius, 0 * degrees, 90 * degrees);
+  cairo_arc (cr, (x + radius), y + height - radius, radius, 90 * degrees, 180 * degrees);
+  cairo_arc (cr, (x + radius), (y + radius), radius, 180 * degrees, 270 * degrees);
   cairo_close_path (cr);
 
   if (fill)
@@ -3767,7 +3768,7 @@ draw_indicator (GdkW32DragMoveResizeContext *context,
   gint64 animation_duration;
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (context->window->impl);
 
-  line_width = AEROSNAP_INDICATOR_LINE_WIDTH;
+  line_width = AEROSNAP_INDICATOR_LINE_WIDTH * impl->window_scale;
   corner_radius = AEROSNAP_INDICATOR_CORNER_RADIUS;
   animation_duration = AEROSNAP_INDICATOR_ANIMATION_DURATION;
   last_draw = FALSE;
@@ -3835,13 +3836,13 @@ draw_indicator (GdkW32DragMoveResizeContext *context,
 
   cr = cairo_create (context->indicator_surface);
   rounded_rectangle (cr,
-                     current_rect.x - context->indicator_window_rect.x,
-                     current_rect.y - context->indicator_window_rect.y,
-                     current_rect.width,
-                     current_rect.height,
+                     (current_rect.x - context->indicator_window_rect.x) * impl->window_scale,
+                     (current_rect.y - context->indicator_window_rect.y) * impl->window_scale,
+                     current_rect.width * impl->window_scale,
+                     current_rect.height * impl->window_scale,
                      corner_radius,
                      line_width,
-                     &fill, &outline, impl->window_scale);
+                     &fill, &outline);
   cairo_destroy (cr);
 
 #if defined(MORE_AEROSNAP_DEBUGGING)
@@ -3985,10 +3986,10 @@ start_indicator_drawing (GdkW32DragMoveResizeContext *context,
     return;
 
   to_adjusted = to;
-  adjust_indicator_rectangle (&to_adjusted, TRUE, scale);
+  adjust_indicator_rectangle (&to_adjusted, TRUE);
 
   from_adjusted = from;
-  adjust_indicator_rectangle (&from_adjusted, TRUE, scale);
+  adjust_indicator_rectangle (&from_adjusted, TRUE);
 
   context->draw_timestamp = 0;
   context->indicator_start = from_adjusted;
@@ -4029,10 +4030,8 @@ update_fullup_indicator (GdkWindow                   *window,
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
   maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN);
   gdk_window_get_position (window, &to.x, &to.y);
-  to.x /= impl->window_scale;
-  to.y /= impl->window_scale;
-  to.width = gdk_window_get_width (window) * impl->window_scale;
-  to.height = gdk_window_get_height (window) * impl->window_scale;
+  to.width = gdk_window_get_width (window);
+  to.height = gdk_window_get_height (window);
 
   to.y = 0;
   to.height = maxysize;
@@ -4041,7 +4040,7 @@ update_fullup_indicator (GdkWindow                   *window,
   if (context->timer == 0)
     {
       from_adjusted = from;
-      adjust_indicator_rectangle (&from_adjusted, FALSE, impl->window_scale);
+      adjust_indicator_rectangle (&from_adjusted, FALSE);
 
       GDK_NOTE (MISC, g_print ("Restart fullup animation from %d x %d @ %d : %d -> %d x %d @ %d x %d\n",
                                context->indicator_target.width, context->indicator_target.height,
@@ -4055,7 +4054,7 @@ update_fullup_indicator (GdkWindow                   *window,
   from_or_to = unity_of_rects (from, to);
 
   to_adjusted = to;
-  adjust_indicator_rectangle (&to_adjusted, TRUE, impl->window_scale);
+  adjust_indicator_rectangle (&to_adjusted, TRUE);
 
   GDK_NOTE (MISC, g_print ("Retarget fullup animation %d x %d @ %d : %d -> %d x %d @ %d x %d\n",
                            context->indicator_target.width, context->indicator_target.height,
@@ -4110,7 +4109,7 @@ start_indicator (GdkWindow                   *window,
       end_size.height = workarea.height;
       break;
     case GDK_WIN32_AEROSNAP_STATE_HALFRIGHT:
-      end_size.x = (workarea.x + workarea.width / 2) / impl->window_scale;
+      end_size.x = (workarea.x + workarea.width / 2);
       end_size.y = workarea.y;
       end_size.width = workarea.width / 2;
       end_size.height = workarea.height;
@@ -4146,21 +4145,18 @@ stop_indicator (GdkWindow                   *window,
 static gint
 point_in_aerosnap_region (gint                x,
                           gint                y,
-                          AeroSnapEdgeRegion *region,
-                          guint               scale)
+                          AeroSnapEdgeRegion *region)
 {
   gint edge, trigger;
-  gint x_scaled = x * scale;
-  gint y_scaled = y * scale;
 
-  edge = (x_scaled >= region->edge.x &&
-          y_scaled >= region->edge.y &&
-          x_scaled <= region->edge.x + region->edge.width &&
-          y_scaled <= region->edge.y + region->edge.height) ? 1 : 0;
-  trigger = (x_scaled >= region->trigger.x &&
-             y_scaled >= region->trigger.y &&
-             x_scaled <= region->trigger.x + region->trigger.width &&
-             y_scaled <= region->trigger.y + region->trigger.height) ? 1 : 0;
+  edge = (x >= region->edge.x &&
+          y >= region->edge.y &&
+          x <= region->edge.x + region->edge.width &&
+          y <= region->edge.y + region->edge.height) ? 1 : 0;
+  trigger = (x >= region->trigger.x &&
+             y >= region->trigger.y &&
+             x <= region->trigger.x + region->trigger.width &&
+             y <= region->trigger.y + region->trigger.height) ? 1 : 0;
   return edge + trigger;
 }
 
@@ -4198,25 +4194,25 @@ handle_aerosnap_move_resize (GdkWindow                   *window,
   for (i = 0; i < context->maximize_regions->len && maximize == 0; i++)
     {
       reg = &g_array_index (context->maximize_regions, AeroSnapEdgeRegion, i);
-      maximize = point_in_aerosnap_region (x, y, reg, impl->window_scale);
+      maximize = point_in_aerosnap_region (x, y, reg);
     }
 
   for (i = 0; i < context->halfleft_regions->len && halfleft == 0; i++)
     {
       reg = &g_array_index (context->halfleft_regions, AeroSnapEdgeRegion, i);
-      halfleft = point_in_aerosnap_region (x, y, reg, impl->window_scale);
+      halfleft = point_in_aerosnap_region (x, y, reg);
     }
 
   for (i = 0; i < context->halfright_regions->len && halfright == 0; i++)
     {
       reg = &g_array_index (context->halfright_regions, AeroSnapEdgeRegion, i);
-      halfright = point_in_aerosnap_region (x, y, reg, impl->window_scale);
+      halfright = point_in_aerosnap_region (x, y, reg);
     }
 
   for (i = 0; i < context->fullup_regions->len && fullup == 0; i++)
     {
       reg = &g_array_index (context->fullup_regions, AeroSnapEdgeRegion, i);
-      fullup = point_in_aerosnap_region (x, y, reg, impl->window_scale);
+      fullup = point_in_aerosnap_region (x, y, reg);
     }
 
 #if defined(MORE_AEROSNAP_DEBUGGING)
@@ -4382,7 +4378,7 @@ get_cursor_name_from_op (GdkW32WindowDragOp op,
 
 static gboolean
 point_in_window (GdkWindow *window,
-		 gdouble    x,
+                 gdouble    x,
                  gdouble    y)
 {
   return x >= 0 && x < window->width &&
@@ -5803,8 +5799,8 @@ gdk_win32_ref_cairo_surface_layered (GdkWindow          *window,
   RECT window_rect;
 
   gdk_window_get_position (window, &x, &y);
-  window_rect.left = x;
-  window_rect.top = y;
+  window_rect.left = x * impl->window_scale;
+  window_rect.top = y * impl->window_scale;
   window_rect.right = window_rect.left + gdk_window_get_width (window) * impl->window_scale;
   window_rect.bottom = window_rect.top + gdk_window_get_height (window) * impl->window_scale;
 
