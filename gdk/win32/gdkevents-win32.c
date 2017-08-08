@@ -1580,8 +1580,8 @@ _gdk_win32_do_emit_configure_event (GdkWindow *window,
   impl->unscaled_height = rect.bottom - rect.top;
   window->width = (impl->unscaled_width + impl->window_scale - 1) / impl->window_scale;
   window->height = (impl->unscaled_height + impl->window_scale - 1) / impl->window_scale;
-  window->x = rect.left;
-  window->y = rect.top;
+  window->x = rect.left / impl->window_scale;
+  window->y = rect.top / impl->window_scale;
 
   _gdk_window_update_size (window);
 
