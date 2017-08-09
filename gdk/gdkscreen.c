@@ -261,16 +261,6 @@ gdk_screen_get_display (GdkScreen *screen)
   return GDK_SCREEN_GET_CLASS (screen)->get_display (screen);
 }
 
-/**
- * gdk_screen_get_root_window:
- * @screen: a #GdkScreen
- *
- * Gets the root window of @screen.
- *
- * Returns: (transfer none): the root window
- *
- * Since: 2.2
- **/
 GdkWindow *
 gdk_screen_get_root_window (GdkScreen *screen)
 {

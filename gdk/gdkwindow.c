@@ -1159,8 +1159,7 @@ gdk_window_new_toplevel (GdkDisplay *display,
   attr.height = height;
   attr.window_type = GDK_WINDOW_TOPLEVEL;
 
-  return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
-                         &attr);
+  return gdk_window_new (NULL, &attr);
 }
 
 /**
@@ -1194,8 +1193,7 @@ gdk_window_new_popup (GdkDisplay         *display,
   attr.height = position->height;
   attr.window_type = GDK_WINDOW_TEMP;
 
-  return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
-                         &attr);
+  return gdk_window_new (NULL, &attr);
 }
 
 /**
@@ -1226,8 +1224,7 @@ gdk_window_new_temp (GdkDisplay *display)
   attr.height = 10;
   attr.window_type = GDK_WINDOW_TEMP;
 
-  return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
-                         &attr);
+  return gdk_window_new (NULL, &attr);
 }
 
 /**
@@ -1938,8 +1935,7 @@ gdk_window_remove_filter (GdkWindow     *window,
  * @screen: The #GdkScreen where the toplevels are located.
  *
  * Obtains a list of all toplevel windows known to GDK on the screen @screen.
- * A toplevel window is a child of the root window (see
- * gdk_get_default_root_window()).
+ * A toplevel window has no parent window.
  *
  * The returned list should be freed with g_list_free(), but
  * its elements need not be freed.
@@ -3446,14 +3442,6 @@ gdk_window_get_device_position (GdkWindow       *window,
   return window;
 }
 
-/**
- * gdk_get_default_root_window:
- *
- * Obtains the root window (parent all other windows are inside)
- * for the default display and screen.
- *
- * Returns: (transfer none): the default root window
- **/
 GdkWindow *
 gdk_get_default_root_window (void)
 {

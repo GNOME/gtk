@@ -42,8 +42,6 @@ GDK_AVAILABLE_IN_ALL
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkWindow *  gdk_screen_get_root_window       (GdkScreen   *screen);
-GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);
 
 GDK_AVAILABLE_IN_ALL

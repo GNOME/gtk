@@ -884,9 +884,6 @@ void       gdk_window_constrain_size      (GdkGeometry    *geometry,
                                            gint           *new_width,
                                            gint           *new_height);
 
-GDK_AVAILABLE_IN_ALL
-GdkWindow *gdk_get_default_root_window (void);
-
 /* Multidevice support */
 GDK_AVAILABLE_IN_ALL
 void       gdk_window_set_support_multidevice (GdkWindow *window,
