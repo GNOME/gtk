@@ -1986,7 +1986,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv = gtk_header_bar_get_instance_private (bar);
 
   gtk_widget_set_has_window (GTK_WIDGET (bar), FALSE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (bar), FALSE);
 
   priv->title = NULL;
   priv->subtitle = NULL;

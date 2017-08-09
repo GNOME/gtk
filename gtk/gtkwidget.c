@@ -3798,7 +3798,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->allocated_size_baseline = -1;
 
   priv->sensitive = TRUE;
-  priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
   priv->alloc_needed_on_child = TRUE;
   priv->focus_on_click = TRUE;
@@ -5566,7 +5565,7 @@ check_clip:
   position_changed |= (old_clip.x != priv->clip.x ||
                       old_clip.y != priv->clip.y);
 
-  if (_gtk_widget_get_mapped (widget) && priv->redraw_on_alloc)
+  if (_gtk_widget_get_mapped (widget))
     {
       if (position_changed || size_changed || baseline_changed)
         {
@@ -8170,38 +8169,6 @@ gtk_widget_get_mapped (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   return widget->priv->mapped;
-}
-
-/**
- * gtk_widget_set_redraw_on_allocate:
- * @widget: a #GtkWidget
- * @redraw_on_allocate: if %TRUE, the entire widget will be redrawn
- *   when it is allocated to a new size. Otherwise, only the
- *   new portion of the widget will be redrawn.
- *
- * Sets whether the entire widget is queued for drawing when its size
- * allocation changes. By default, this setting is %TRUE and
- * the entire widget is redrawn on every size change. If your widget
- * leaves the upper left unchanged when made bigger, turning this
- * setting off will improve performance.
-
- * Note that for widgets where gtk_widget_get_has_window() is %FALSE
- * setting this flag to %FALSE turns off all allocation on resizing:
- * the widget will not even redraw if its position changes; this is to
- * allow containers that don’t draw anything to avoid excess
- * invalidations. If you set this flag on a widget with no window that
- * does draw on @widget->window, you are
- * responsible for invalidating both the old and new allocation of the
- * widget when the widget is moved and responsible for invalidating
- * regions newly when the widget increases size.
- **/
-void
-gtk_widget_set_redraw_on_allocate (GtkWidget *widget,
-				   gboolean   redraw_on_allocate)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  widget->priv->redraw_on_alloc = redraw_on_allocate;
 }
 
 /**

@@ -1713,9 +1713,6 @@ gtk_text_view_init (GtkTextView *text_view)
   priv->text_window = text_window_new (GTK_TEXT_WINDOW_TEXT,
                                        widget, 200, 200);
 
-  /* We handle all our own redrawing */
-  gtk_widget_set_redraw_on_allocate (widget, FALSE);
-
   priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
   g_signal_connect (priv->multipress_gesture, "pressed",

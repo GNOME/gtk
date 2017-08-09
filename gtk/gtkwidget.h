@@ -702,10 +702,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_mapped             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_redraw_on_allocate (GtkWidget    *widget,
-							 gboolean      redraw_on_allocate);
-
-GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_parent             (GtkWidget    *widget,
 							 GtkWidget    *parent);
 GDK_AVAILABLE_IN_ALL

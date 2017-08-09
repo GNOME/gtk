@@ -195,7 +195,6 @@ gtk_path_bar_init (GtkPathBar *path_bar)
 			    G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
 
   gtk_widget_set_has_window (GTK_WIDGET (path_bar), FALSE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (path_bar), FALSE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (path_bar));
   gtk_style_context_add_class (context, "path-bar");

@@ -237,7 +237,6 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   priv->keys = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (statusbar));
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (statusbar), TRUE);
 }
 
 /**

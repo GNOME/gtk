@@ -428,8 +428,6 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
 
   priv = info_bar->priv = gtk_info_bar_get_instance_private (info_bar);
 
-  gtk_widget_set_redraw_on_allocate (widget, TRUE);
-
   /* message-type is a CONSTRUCT property, so we init to a value
    * different from its default to trigger its property setter
    * during construction */

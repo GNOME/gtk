@@ -1351,7 +1351,6 @@ gtk_box_init (GtkBox *box)
   private = box->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), FALSE);
 
   private->orientation = GTK_ORIENTATION_HORIZONTAL;
   private->children = NULL;

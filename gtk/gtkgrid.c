@@ -1727,7 +1727,6 @@ gtk_grid_init (GtkGrid *grid)
   priv = grid->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (grid), FALSE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (grid), FALSE);
 
   priv->children = NULL;
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;

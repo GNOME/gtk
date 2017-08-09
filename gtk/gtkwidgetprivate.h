@@ -66,7 +66,6 @@ struct _GtkWidgetPrivate
   guint receives_default      : 1;
   guint has_grab              : 1;
   guint shadowed              : 1;
-  guint redraw_on_alloc       : 1;
   guint child_visible         : 1;
   guint multidevice           : 1;
   guint has_shape_mask        : 1;

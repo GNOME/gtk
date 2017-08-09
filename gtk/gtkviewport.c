@@ -343,7 +343,6 @@ gtk_viewport_init (GtkViewport *viewport)
   widget = GTK_WIDGET (viewport);
 
   gtk_widget_set_has_window (widget, FALSE);
-  gtk_widget_set_redraw_on_allocate (widget, FALSE);
 
   priv->shadow_type = GTK_SHADOW_IN;
   priv->hadjustment = NULL;

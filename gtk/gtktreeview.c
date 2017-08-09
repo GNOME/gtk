@@ -1670,7 +1670,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   priv = tree_view->priv = gtk_tree_view_get_instance_private (tree_view);
 
   gtk_widget_set_can_focus (GTK_WIDGET (tree_view), TRUE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (tree_view), FALSE);
 
   priv->show_expanders = TRUE;
   priv->draw_keyfocus = TRUE;

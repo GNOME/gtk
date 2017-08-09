@@ -474,7 +474,6 @@ static void
 gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
   gtk_widget_set_can_focus (GTK_WIDGET (child), TRUE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (child), TRUE);
 }
 
 /* Public API {{{2 */
@@ -3755,7 +3754,6 @@ gtk_flow_box_init (GtkFlowBox *box)
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
   gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), TRUE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->selection_mode = GTK_SELECTION_SINGLE;
