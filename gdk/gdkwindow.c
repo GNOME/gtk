@@ -1263,38 +1263,6 @@ gdk_window_new_child (GdkWindow          *parent,
 }
 
 /**
- * gdk_window_new_input: (constructor)
- * @parent: the parent window
- * @event_mask: event mask (see gdk_window_set_events())
- * @position: placement of the window inside @parent
- *
- * Creates a new client-side input-only window.
- *
- * Returns: (transfer full): the new #GdkWindow
- *
- * Since: 3.90
- **/
-GdkWindow *
-gdk_window_new_input (GdkWindow          *parent,
-                      gint                event_mask,
-                      const GdkRectangle *position)
-{
-  GdkWindowAttr attr;
-
-  g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
-
-  attr.event_mask = event_mask;
-  attr.wclass = GDK_INPUT_ONLY;
-  attr.x = position->x;
-  attr.y = position->y;
-  attr.width = position->width;
-  attr.height = position->height;
-  attr.window_type = GDK_WINDOW_CHILD;
-
-  return gdk_window_new (parent, &attr);
-}
-
-/**
  * _gdk_event_filter_unref:
  * @window: (allow-none): A #GdkWindow, or %NULL to be the global window
  * @filter: A window filter
