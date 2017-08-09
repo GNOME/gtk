@@ -392,6 +392,10 @@ void       _gdk_screen_set_resolution    (GdkScreen      *screen,
                                           gdouble         dpi);
 void       _gdk_screen_close             (GdkScreen      *screen);
 
+GdkWindow *gdk_screen_get_root_window (GdkScreen *screen);
+GdkWindow *gdk_get_default_root_window (void);
+
+
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/
