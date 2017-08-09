@@ -660,14 +660,12 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   KeySym keysym;
   Status status;
   gboolean result = FALSE;
-  GdkWindow *root_window;
   GdkWindow *window;
   XKeyPressedEvent xevent;
 
   if (event->type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
-  root_window = gdk_screen_get_root_window (gdk_window_get_screen (event->window));
   window = gdk_window_get_toplevel (event->window);
 
   xevent.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
@@ -675,7 +673,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.send_event = event->send_event;
   xevent.display = GDK_WINDOW_XDISPLAY (window);
   xevent.window = GDK_WINDOW_XID (window);
-  xevent.root = GDK_WINDOW_XID (root_window);
+  xevent.root = DefaultRootWindow(GDK_WINDOW_XDISPLAY (window));
   xevent.subwindow = xevent.window;
   xevent.time = event->time;
   xevent.x = xevent.x_root = 0;
@@ -1638,7 +1636,7 @@ on_status_toplevel_configure (GtkWidget         *toplevel,
 
   if (status_window->window)
     {
-      height = gdk_window_get_height (gdk_screen_get_root_window (gtk_widget_get_screen (toplevel)));
+      height = DisplayHeight(GDK_WINDOW_XDISPLAY (gtk_widget_get_window (toplevel)), 0);
 
       gdk_window_get_frame_extents (gtk_widget_get_window (toplevel),
                                     &rect);
