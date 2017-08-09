@@ -5702,7 +5702,7 @@ create_paned_keyboard_navigation (GtkWidget *widget)
     gtk_widget_show (GTK_WIDGET (window4));
 }
 
-
+#if 0
 /*
  * Shaped Windows
  */
@@ -5925,6 +5925,7 @@ create_shapes (GtkWidget *widget)
   else
     gtk_widget_destroy (with_region);
 }
+#endif
 
 /*
  * WM Hints demo
@@ -8300,7 +8301,9 @@ struct {
   { "rotated text", create_rotated_text },
   { "saved position", create_saved_position },
   { "scrolled windows", create_scrolled_windows },
+#if 0
   { "shapes", create_shapes },
+#endif
   { "size groups", create_size_groups },
   { "snapshot", create_snapshot },
   { "spinbutton", create_spins },
