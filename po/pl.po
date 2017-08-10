@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-24 18:43+0000\n"
-"PO-Revision-Date: 2017-03-25 22:39+0100\n"
+"POT-Creation-Date: 2017-08-10 13:56+0000\n"
+"PO-Revision-Date: 2017-08-11 00:08+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -157,22 +157,22 @@ msgstr "Home"
 #: gdk/keyname-table.h:6852
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "Lewo"
+msgstr "W lewo"
 
 #: gdk/keyname-table.h:6853
 msgctxt "keyboard label"
 msgid "Up"
-msgstr "Góra"
+msgstr "W górę"
 
 #: gdk/keyname-table.h:6854
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "Prawo"
+msgstr "W prawo"
 
 #: gdk/keyname-table.h:6855
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "Dół"
+msgstr "W dół"
 
 #: gdk/keyname-table.h:6856 gtk/gtkshortcutlabel.c:222
 msgctxt "keyboard label"
@@ -233,22 +233,22 @@ msgstr "Home na klawiaturze numerycznej"
 #: gdk/keyname-table.h:6868
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "Lewo na klawiaturze numerycznej"
+msgstr "W lewo na klawiaturze numerycznej"
 
 #: gdk/keyname-table.h:6869
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "Góra na klawiaturze numerycznej"
+msgstr "W górę na klawiaturze numerycznej"
 
 #: gdk/keyname-table.h:6870
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "Prawo na klawiaturze numerycznej"
+msgstr "W prawo na klawiaturze numerycznej"
 
 #: gdk/keyname-table.h:6871
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "Dół na klawiaturze numerycznej"
+msgstr "W dół na klawiaturze numerycznej"
 
 #: gdk/keyname-table.h:6872
 msgctxt "keyboard label"
@@ -653,15 +653,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_mknij"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:9045
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:411 gtk/gtkwindow.c:9047
 msgid "Minimize"
 msgstr "Zminimalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:9054
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9056
 msgid "Maximize"
 msgstr "Zmaksymalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:9011
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9013
 msgid "Restore"
 msgstr "Przywróć"
 
@@ -1204,13 +1204,13 @@ msgstr ""
 "prawym przyciskiem i wybrać „Zapisz kolor w tym miejscu”."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechoosernative.c:514 gtk/gtkfilechoosernative.c:606
+#: gtk/gtkfilechoosernative.c:540 gtk/gtkfilechoosernative.c:632
 #: gtk/gtkfilechooserwidget.c:1477 gtk/gtkfilechooserwidget.c:6384
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12514 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12516 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1259,7 +1259,7 @@ msgid "_Apply"
 msgstr "_Zastosuj"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12515
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12517
 msgid "_OK"
 msgstr "_OK"
 
@@ -1573,7 +1573,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:831 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkaccellabel.c:843 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
@@ -1584,7 +1584,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:844 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkaccellabel.c:856 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1595,18 +1595,18 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkaccellabel.c:870 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:875
+#: gtk/gtkaccellabel.c:887
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Spacja"
 
-#: gtk/gtkaccellabel.c:878 gtk/gtkshortcutlabel.c:181
+#: gtk/gtkaccellabel.c:890 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1792,7 +1792,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1863
+#: gtk/gtkcalendar.c:1866
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "8888"
@@ -1807,7 +1807,7 @@ msgstr "8888"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1894 gtk/gtkcalendar.c:2590
+#: gtk/gtkcalendar.c:1897 gtk/gtkcalendar.c:2593
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1823,7 +1823,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1926 gtk/gtkcalendar.c:2456
+#: gtk/gtkcalendar.c:1929 gtk/gtkcalendar.c:2459
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1839,7 +1839,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2223
+#: gtk/gtkcalendar.c:2226
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -2120,7 +2120,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3315
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3336
 msgid "Manage Custom Sizes"
 msgstr "Zarządzanie niestandardowymi rozmiarami"
 
@@ -2173,44 +2173,44 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: gtk/gtkentry.c:9508 gtk/gtklabel.c:6665 gtk/gtktextview.c:9443
+#: gtk/gtkentry.c:9514 gtk/gtklabel.c:6677 gtk/gtktextview.c:9448
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtkentry.c:9512 gtk/gtklabel.c:6666 gtk/gtktextview.c:9447
+#: gtk/gtkentry.c:9518 gtk/gtklabel.c:6678 gtk/gtktextview.c:9452
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtkentry.c:9516 gtk/gtklabel.c:6667 gtk/gtktextview.c:9449
+#: gtk/gtkentry.c:9522 gtk/gtklabel.c:6679 gtk/gtktextview.c:9454
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtkentry.c:9519 gtk/gtkfilechooserwidget.c:1478
-#: gtk/gtkfilechooserwidget.c:2278 gtk/gtklabel.c:6669 gtk/gtktextview.c:9452
+#: gtk/gtkentry.c:9525 gtk/gtkfilechooserwidget.c:1478
+#: gtk/gtkfilechooserwidget.c:2278 gtk/gtklabel.c:6681 gtk/gtktextview.c:9457
 msgid "_Delete"
 msgstr "_Usuń"
 
-#: gtk/gtkentry.c:9530 gtk/gtklabel.c:6678 gtk/gtktextview.c:9466
+#: gtk/gtkentry.c:9536 gtk/gtklabel.c:6690 gtk/gtktextview.c:9471
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
-#: gtk/gtkentry.c:9703 gtk/gtktextview.c:9691
+#: gtk/gtkentry.c:9709 gtk/gtktextview.c:9696
 msgid "Select all"
 msgstr "Zaznacz wszystko"
 
-#: gtk/gtkentry.c:9706 gtk/gtktextview.c:9694
+#: gtk/gtkentry.c:9712 gtk/gtktextview.c:9699
 msgid "Cut"
 msgstr "Wytnij"
 
-#: gtk/gtkentry.c:9709 gtk/gtktextview.c:9697
+#: gtk/gtkentry.c:9715 gtk/gtktextview.c:9702
 msgid "Copy"
 msgstr "Skopiuj"
 
-#: gtk/gtkentry.c:9712 gtk/gtktextview.c:9700
+#: gtk/gtkentry.c:9718 gtk/gtktextview.c:9705
 msgid "Paste"
 msgstr "Wklej"
 
-#: gtk/gtkentry.c:10779
+#: gtk/gtkentry.c:10785
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
@@ -2235,14 +2235,18 @@ msgid "_Name"
 msgstr "_Nazwa"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1640
+#: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
+#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1630
 msgid "_Open"
 msgstr "_Otwórz"
 
-#: gtk/gtkfilechoosernative.c:600 gtk/inspector/css-editor.c:202
+#: gtk/gtkfilechoosernative.c:626 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "_Zapisz"
+
+#: gtk/gtkfilechoosernativequartz.c:326 gtk/ui/gtkfilechooserwidget.ui:392
+msgid "Select which types of files are shown"
+msgstr "Wybór typów wyświetlanych plików"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -2402,7 +2406,7 @@ msgid "_Add to Bookmarks"
 msgstr "_Dodaj zakładkę"
 
 #: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2529
-#: gtk/ui/gtkfilechooserwidget.ui:525
+#: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "Z_mień nazwę"
 
@@ -2454,7 +2458,7 @@ msgstr "Proszę wprowadzić położenie"
 msgid "Enter location or URL"
 msgstr "Proszę wprowadzić położenie lub adres URL"
 
-#: gtk/gtkfilechooserwidget.c:4394 gtk/gtkfilechooserwidget.c:7311
+#: gtk/gtkfilechooserwidget.c:4394 gtk/gtkfilechooserwidget.c:7298
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
 msgstr "Modyfikacja"
@@ -2482,11 +2486,11 @@ msgstr "Wczoraj"
 
 #: gtk/gtkfilechooserwidget.c:4820
 msgid "%-e %b"
-msgstr "%-e %b"
+msgstr "%-d %b"
 
 #: gtk/gtkfilechooserwidget.c:4824
 msgid "%-e %b %Y"
-msgstr "%-e %b %Y"
+msgstr "%-d %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
@@ -2525,22 +2529,10 @@ msgid "You do not have access to the specified folder."
 msgstr "Brak dostępu do podanego katalogu."
 
 #: gtk/gtkfilechooserwidget.c:7222
-msgid "Could not start the search process"
-msgstr "Nie można rozpocząć procesu wyszukiwania"
-
-#: gtk/gtkfilechooserwidget.c:7223
-msgid ""
-"The program was not able to create a connection to the indexer daemon. "
-"Please make sure it is running."
-msgstr ""
-"Nie można utworzyć połączenia z usługą indeksowania. Proszę się upewnić, że "
-"usługa jest uruchomiona."
-
-#: gtk/gtkfilechooserwidget.c:7235
 msgid "Could not send the search request"
 msgstr "Nie można wysłać żądania wyszukiwania"
 
-#: gtk/gtkfilechooserwidget.c:7529
+#: gtk/gtkfilechooserwidget.c:7508
 msgid "Accessed"
 msgstr "Dostęp"
 
@@ -2570,11 +2562,11 @@ msgstr "Brak"
 msgid "OpenGL context creation failed"
 msgstr "Utworzenie kontekstu OpenGL się nie powiodło"
 
-#: gtk/gtkheaderbar.c:383
+#: gtk/gtkheaderbar.c:387
 msgid "Application menu"
 msgstr "Menu programu"
 
-#: gtk/gtkheaderbar.c:445 gtk/gtkwindow.c:9081
+#: gtk/gtkheaderbar.c:454 gtk/gtkwindow.c:9083
 msgid "Close"
 msgstr "Zamknij"
 
@@ -2625,12 +2617,12 @@ msgid "Error"
 msgstr "Błąd"
 
 #. Open Link
-#: gtk/gtklabel.c:6646
+#: gtk/gtklabel.c:6658
 msgid "_Open Link"
 msgstr "_Otwórz odnośnik"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6655
+#: gtk/gtklabel.c:6667
 msgid "Copy _Link Address"
 msgstr "S_kopiuj adres odnośnika"
 
@@ -2694,7 +2686,7 @@ msgstr "%s: błąd podczas uruchamiania programu: %s\n"
 msgid "Copy URL"
 msgstr "Skopiuj adres URL"
 
-#: gtk/gtklinkbutton.c:531
+#: gtk/gtklinkbutton.c:511
 msgid "Invalid URI"
 msgstr "Nieprawidłowy adres URI"
 
@@ -2755,7 +2747,7 @@ msgstr "Ustawione znaczniki debugowania biblioteki GTK+"
 msgid "GTK+ debugging flags to unset"
 msgstr "Wyczyszczone znaczniki debugowania biblioteki GTK+"
 
-#: gtk/gtkmain.c:807
+#: gtk/gtkmain.c:807 gtk/gtkmain.c:1001
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nie można otworzyć ekranu: %s"
@@ -2773,7 +2765,7 @@ msgstr "Wyświetla opcje biblioteki GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1259
+#: gtk/gtkmain.c:1269
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2871,7 +2863,7 @@ msgstr "Powłoka Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nie można zakończyć procesu o PID %d: %s"
 
-#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7389
+#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7388
 #, c-format
 msgid "Page %u"
 msgstr "%u. strona"
@@ -2903,7 +2895,7 @@ msgstr ""
 " Górny: %s %s\n"
 " Dolny: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3369
+#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3390
 msgid "Manage Custom Sizes…"
 msgstr "Zarządzaj niestandardowymi rozmiarami…"
 
@@ -3041,7 +3033,7 @@ msgstr "Ta nazwa jest już zajęta"
 
 #: gtk/gtkplacessidebar.c:2523 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
-#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:499
+#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "Nazwa"
 
@@ -3070,11 +3062,11 @@ msgstr "Nie można wysunąć %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Nie można odpytać „%s” o zmiany nośnika"
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1650
+#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1640
 msgid "Open in New _Tab"
 msgstr "O_twórz w nowej karcie"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1661
+#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1651
 msgid "Open in New _Window"
 msgstr "Otwórz w nowy_m oknie"
 
@@ -3090,11 +3082,11 @@ msgstr "_Usuń"
 msgid "Rename…"
 msgstr "Zmień nazwę…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1695
+#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1685
 msgid "_Mount"
 msgstr "Za_montuj"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1685
+#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1675
 msgid "_Unmount"
 msgstr "O_dmontuj"
 
@@ -3106,55 +3098,55 @@ msgstr "Wy_suń"
 msgid "_Detect Media"
 msgstr "Wy_kryj nośnik"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1078
+#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1118
 msgid "Computer"
 msgstr "Komputer"
 
-#: gtk/gtkplacesview.c:889
+#: gtk/gtkplacesview.c:894
 msgid "Searching for network locations"
 msgstr "Wyszukiwanie położeń sieciowych"
 
-#: gtk/gtkplacesview.c:896
+#: gtk/gtkplacesview.c:901
 msgid "No network locations found"
 msgstr "Brak położeń sieciowych"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1189 gtk/gtkplacesview.c:1264
+#: gtk/gtkplacesview.c:1229 gtk/gtkplacesview.c:1304
 msgid "Unable to access location"
 msgstr "Nie można uzyskać dostępu do położenia"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1207 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1247 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "P_ołącz"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1327
+#: gtk/gtkplacesview.c:1367
 msgid "Unable to unmount volume"
 msgstr "Nie można odmontować woluminu"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1428
+#: gtk/gtkplacesview.c:1467
 msgid "Cance_l"
 msgstr "_Anuluj"
 
-#: gtk/gtkplacesview.c:1685
+#: gtk/gtkplacesview.c:1675
 msgid "_Disconnect"
 msgstr "_Rozłącz"
 
-#: gtk/gtkplacesview.c:1695
+#: gtk/gtkplacesview.c:1685
 msgid "_Connect"
 msgstr "P_ołącz"
 
-#: gtk/gtkplacesview.c:1836
+#: gtk/gtkplacesview.c:1826
 msgid "Unable to get remote server location"
 msgstr "Nie można uzyskać położenia zdalnego serwera"
 
-#: gtk/gtkplacesview.c:1975 gtk/gtkplacesview.c:1984
+#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
 msgid "Networks"
 msgstr "Sieci"
 
-#: gtk/gtkplacesview.c:1975 gtk/gtkplacesview.c:1984
+#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
 msgid "On This Computer"
 msgstr "Na tym komputerze"
 
@@ -3274,8 +3266,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Najprawdopodobniej plik tymczasowy nie mógł zostać utworzony."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:229 gtk/gtkprintoperation-portal.c:533
-#: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3391
+#: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
+#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3412
 msgid "Print"
 msgstr "Wydruk"
 
@@ -3356,63 +3348,63 @@ msgstr "Pobieranie informacji o drukarce…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3098
+#: gtk/gtkprintunixdialog.c:3119
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, top to bottom"
 msgstr "Od lewej do prawej, z góry do dołu"
 
-#: gtk/gtkprintunixdialog.c:3098
+#: gtk/gtkprintunixdialog.c:3119
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, bottom to top"
 msgstr "Od lewej do prawej, z dołu na górę"
 
-#: gtk/gtkprintunixdialog.c:3099
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, top to bottom"
 msgstr "Od prawej do lewej, z góry na dół"
 
-#: gtk/gtkprintunixdialog.c:3099
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, bottom to top"
 msgstr "Od prawej do lewej, z dołu na górę"
 
-#: gtk/gtkprintunixdialog.c:3100
+#: gtk/gtkprintunixdialog.c:3121
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, left to right"
 msgstr "Z góry do dołu, od lewej do prawej"
 
-#: gtk/gtkprintunixdialog.c:3100
+#: gtk/gtkprintunixdialog.c:3121
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, right to left"
 msgstr "Z góry do dołu, od prawej do lewej"
 
-#: gtk/gtkprintunixdialog.c:3101
+#: gtk/gtkprintunixdialog.c:3122
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, left to right"
 msgstr "Z dołu do góry, od lewej do prawej"
 
-#: gtk/gtkprintunixdialog.c:3101
+#: gtk/gtkprintunixdialog.c:3122
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, right to left"
 msgstr "Z dołu do góry, od prawej do lewej"
 
-#: gtk/gtkprintunixdialog.c:3105 gtk/gtkprintunixdialog.c:3118
+#: gtk/gtkprintunixdialog.c:3126 gtk/gtkprintunixdialog.c:3139
 msgid "Page Ordering"
 msgstr "Kolejność stron"
 
-#: gtk/gtkprintunixdialog.c:3134
+#: gtk/gtkprintunixdialog.c:3155
 msgid "Left to right"
 msgstr "Od lewej do prawej"
 
-#: gtk/gtkprintunixdialog.c:3135
+#: gtk/gtkprintunixdialog.c:3156
 msgid "Right to left"
 msgstr "Od prawej do lewej"
 
-#: gtk/gtkprintunixdialog.c:3147
+#: gtk/gtkprintunixdialog.c:3168
 msgid "Top to bottom"
 msgstr "Z góry do dołu"
 
-#: gtk/gtkprintunixdialog.c:3148
+#: gtk/gtkprintunixdialog.c:3169
 msgid "Bottom to top"
 msgstr "Z dołu do góry"
 
@@ -3546,7 +3538,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "P"
 
-#: gtk/gtkshortcutssection.c:450
+#: gtk/gtkshortcutssection.c:451
 msgid "_Show All"
 msgstr "_Wyświetl wszystkie"
 
@@ -3794,24 +3786,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/gtkwindow.c:9029
+#: gtk/gtkwindow.c:9031
 msgid "Move"
 msgstr "Przenieś"
 
-#: gtk/gtkwindow.c:9037
+#: gtk/gtkwindow.c:9039
 msgid "Resize"
 msgstr "Zmień rozmiar"
 
-#: gtk/gtkwindow.c:9068
+#: gtk/gtkwindow.c:9070
 msgid "Always on Top"
 msgstr "Zawsze na wierzchu"
 
-#: gtk/gtkwindow.c:12502
+#: gtk/gtkwindow.c:12504
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Użyć Inspektora biblioteki GTK+?"
 
-#: gtk/gtkwindow.c:12504
+#: gtk/gtkwindow.c:12506
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3822,7 +3814,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK+. Jego użycie może spowodować awarię "
 "lub uszkodzenie programu."
 
-#: gtk/gtkwindow.c:12509
+#: gtk/gtkwindow.c:12511
 msgid "Don't show this message again"
 msgstr "Bez wyświetlania ponownie"
 
@@ -5542,15 +5534,11 @@ msgstr "Pliki"
 msgid "Remote location — only searching the current folder"
 msgstr "Zdalne położenie — przeszukiwanie tylko bieżącego katalogu"
 
-#: gtk/ui/gtkfilechooserwidget.ui:392
-msgid "Select which types of files are shown"
-msgstr "Wybór typów wyświetlanych plików"
-
 #: gtk/ui/gtkfilechooserwidget.ui:433
 msgid "Folder Name"
 msgstr "Nazwa katalogu"
 
-#: gtk/ui/gtkfilechooserwidget.ui:460
+#: gtk/ui/gtkfilechooserwidget.ui:461
 msgid "_Create"
 msgstr "_Utwórz"
 
@@ -5618,10 +5606,6 @@ msgstr "Adres serwera"
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr "Adres serwera składa się z przedrostka protokołu i adresu. Przykłady:"
-
-#: gtk/ui/gtkplacesview.ui:57
-msgid "smb://foo.example.com, ssh://192.168.0.1"
-msgstr "smb://foo.example.com, ssh://192.168.0.1"
 
 #: gtk/ui/gtkplacesview.ui:78
 msgid "Available Protocols"
