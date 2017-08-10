@@ -6183,7 +6183,8 @@ gtk_menu_grab_notify (GtkWidget *widget,
   group = gtk_window_get_group (GTK_WINDOW (toplevel));
   grab = gtk_window_group_get_current_grab (group);
 
-  if (GTK_MENU_SHELL (widget)->priv->active && !GTK_IS_MENU_SHELL (grab))
+  if (GTK_MENU_SHELL (widget)->priv->active && !GTK_IS_MENU_SHELL (grab) &&
+      !gtk_widget_is_ancestor (grab, widget))
     gtk_menu_shell_cancel (GTK_MENU_SHELL (widget));
 
   menu->priv->drag_scroll_started = FALSE;
