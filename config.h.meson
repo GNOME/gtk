@@ -15,6 +15,9 @@
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #mesondefine HAVE_BIND_TEXTDOMAIN_CODESET
 
+/* Have the cloudproviders library */
+#mesondefine HAVE_CLOUDPROVIDERS
+
 /* define if we have colord */
 #mesondefine HAVE_COLORD
 

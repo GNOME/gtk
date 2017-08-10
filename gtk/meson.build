@@ -845,6 +845,10 @@ if x11_enabled or wayland_enabled
   gtk_deps += pangoft_dep
 endif
 
+if cloudproviders_enabled
+  gtk_deps += cloudproviders_dep
+endif
+
 gtk_settings_schemas = [
   'org.gtk.Settings.FileChooser.gschema.xml',
   'org.gtk.Settings.ColorChooser.gschema.xml',

@@ -24,19 +24,20 @@ else
   glib_max_allowed = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req)
 endif
 
-glib_req          = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
-pango_req         = '>= 1.37.3'
-atk_req           = '>= 2.15.1'
-cairo_req         = '>= 1.14.0'
-gdk_pixbuf_req    = '>= 2.30.0'
-introspection_req = '>= 1.39.0'
-wayland_proto_req = '>= 1.7'
-wayland_req       = '>= 1.9.91'
-mirclient_req     = '>= 0.22.0'
-mircookie_req     = '>= 0.17.0'
-graphene_req      = '>= 1.5.1'
-epoxy_req         = '>= 1.0'
-xkbcommon_req     = '>= 0.2.0'
+glib_req           = '>= @0@.@1@.@2@'.format(glib_major_req, glib_minor_req, glib_micro_req)
+pango_req          = '>= 1.37.3'
+atk_req            = '>= 2.15.1'
+cairo_req          = '>= 1.14.0'
+gdk_pixbuf_req     = '>= 2.30.0'
+introspection_req  = '>= 1.39.0'
+wayland_proto_req  = '>= 1.7'
+wayland_req        = '>= 1.9.91'
+mirclient_req      = '>= 0.22.0'
+mircookie_req      = '>= 0.17.0'
+graphene_req       = '>= 1.5.1'
+epoxy_req          = '>= 1.0'
+cloudproviders_req = '>= 0.2.0'
+xkbcommon_req      = '>= 0.2.0'
 
 gnome = import('gnome')
 
@@ -86,12 +87,13 @@ gtk_soversion = '0.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk_inter
 
 gtk_api_version = '4.0'
 
-x11_enabled      = get_option('enable-x11-backend')
-wayland_enabled  = get_option('enable-wayland-backend')
-broadway_enabled = get_option('enable-broadway-backend')
-mir_enabled      = get_option('enable-mir-backend')
-quartz_enabled   = get_option('enable-quartz-backend')
-win32_enabled    = get_option('enable-win32-backend')
+x11_enabled            = get_option('enable-x11-backend')
+wayland_enabled        = get_option('enable-wayland-backend')
+broadway_enabled       = get_option('enable-broadway-backend')
+mir_enabled            = get_option('enable-mir-backend')
+quartz_enabled         = get_option('enable-quartz-backend')
+win32_enabled          = get_option('enable-win32-backend')
+cloudproviders_enabled = get_option('enable-cloudproviders')
 
 os_unix   = false
 os_linux  = false
@@ -503,6 +505,15 @@ if enable_vulkan != 'no'
   endif
 else
   message('Vulkan support explicitly disabled')
+endif
+
+if cloudproviders_enabled
+  cloudproviders_dep = dependency('cloudproviders', required: true)
+  if cloudproviders_dep.found()
+    cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
+  else
+    error('Cloudproviders support not found, but was explicitly requested.')
+  endif
 endif
 
 subdir('modules/input')
