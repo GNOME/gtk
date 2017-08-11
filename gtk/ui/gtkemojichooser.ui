@@ -138,7 +138,7 @@
                         <child>
                           <object class="GtkLabel" id="objects.heading">
                             <property name="visible">1</property>
-                            <property name="label" translatable="yes">Objects</property>
+                            <property name="label" translatable="yes" context="emoji category">Objects</property>
                             <property name="xalign">0</property>
                           </object>
                         </child>
