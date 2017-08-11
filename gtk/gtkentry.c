@@ -71,6 +71,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcsscustomgadgetprivate.h"
 #include "gtkprogresstrackerprivate.h"
+#include "gtkemojichooser.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -249,6 +250,7 @@ struct _GtkEntryPrivate
 
   guint         shadow_type             : 4;
   guint         editable                : 1;
+  guint         show_emoji_icon         : 1;
   guint         in_drag                 : 1;
   guint         overwrite_mode          : 1;
   guint         visible                 : 1;
@@ -375,6 +377,7 @@ enum {
   PROP_ATTRIBUTES,
   PROP_POPULATE_ALL,
   PROP_TABS,
+  PROP_SHOW_EMOJI_ICON,
   PROP_EDITING_CANCELED,
   NUM_PROPERTIES = PROP_EDITING_CANCELED
 };
@@ -697,6 +700,8 @@ static void         buffer_notify_max_length           (GtkEntryBuffer *buffer,
 static void         buffer_connect_signals             (GtkEntry       *entry);
 static void         buffer_disconnect_signals          (GtkEntry       *entry);
 static GtkEntryBuffer *get_buffer                      (GtkEntry       *entry);
+static void         set_show_emoji_icon                (GtkEntry       *entry,
+                                                        gboolean        value);
 
 static void     gtk_entry_measure  (GtkCssGadget        *gadget,
                                     GtkOrientation       orientation,
@@ -1513,6 +1518,21 @@ gtk_entry_class_init (GtkEntryClass *class)
                           P_("A list of tabstop locations to apply to the text of the entry"),
                           PANGO_TYPE_TAB_ARRAY,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkEntry::show-emoji-icon:
+   *
+   * When this is %TRUE, the entry will show an emoji icon in the secondary
+   * icon position that brings up the Emoji chooser when clicked.
+   *
+   * Since: 3.22.19
+   */
+  entry_props[PROP_SHOW_EMOJI_ICON] =
+      g_param_spec_boolean ("show-emoji-icon",
+                            P_("Emoji icon"),
+                            P_("Whether to show an icon for Emoji"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, entry_props);
 
@@ -2394,6 +2414,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_tabs (entry, g_value_get_boxed (value));
       break;
 
+    case PROP_SHOW_EMOJI_ICON:
+      set_show_emoji_icon (entry, g_value_get_boolean (value));
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -2644,6 +2668,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_TABS:
       g_value_set_boxed (value, priv->tabs);
+      break;
+
+    case PROP_SHOW_EMOJI_ICON:
+      g_value_set_boolean (value, priv->show_emoji_icon);
       break;
 
     default:
@@ -9483,6 +9511,8 @@ typedef struct
   GdkEvent *trigger_event;
 } PopupInfo;
 
+static void gtk_entry_choose_emoji (GtkEntry *entry);
+
 static void
 popup_targets_received (GtkClipboard     *clipboard,
 			GtkSelectionData *data,
@@ -9537,6 +9567,15 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_set_sensitive (menuitem, gtk_entry_buffer_get_length (info_entry_priv->buffer) > 0);
       g_signal_connect_swapped (menuitem, "activate",
                                 G_CALLBACK (gtk_entry_select_all), entry);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+
+      menuitem = gtk_menu_item_new_with_mnemonic (_("Insert _Emoji"));
+      gtk_widget_set_sensitive (menuitem,
+                                mode == DISPLAY_NORMAL &&
+                                info_entry_priv->editable);
+      g_signal_connect_swapped (menuitem, "activate",
+                                G_CALLBACK (gtk_entry_choose_emoji), entry);
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
@@ -10991,4 +11030,85 @@ gtk_entry_get_tabs (GtkEntry *entry)
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
 
   return entry->priv->tabs;
+}
+
+static void
+emoji_picked (GtkEmojiChooser *chooser,
+              const char      *text,
+              gpointer         data)
+{
+  GtkEntry *entry = data;
+  int pos, start, end;
+
+  if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
+    gtk_editable_delete_text (GTK_EDITABLE (entry), start, end);
+
+  pos = MIN (start, end);
+  gtk_editable_insert_text (GTK_EDITABLE (entry), text, -1, &pos);
+  gtk_editable_set_position (GTK_EDITABLE (entry), pos);
+}
+
+static void
+gtk_entry_choose_emoji (GtkEntry *entry)
+{
+  GtkWidget *chooser;
+  GdkRectangle rect;
+
+  chooser = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "gtk-emoji-chooser"));
+  if (!chooser)
+    {
+      chooser = gtk_emoji_chooser_new ();
+      g_object_set_data_full (G_OBJECT (entry), "gtk-emoji-chooser", chooser, (GDestroyNotify)gtk_widget_destroy);
+
+      gtk_popover_set_relative_to (GTK_POPOVER (chooser), GTK_WIDGET (entry));
+      if (entry->priv->show_emoji_icon)
+        {
+          gtk_entry_get_icon_area (entry, GTK_ENTRY_ICON_SECONDARY, &rect);
+          gtk_popover_set_pointing_to (GTK_POPOVER (chooser), &rect);
+        }
+      g_signal_connect (chooser, "emoji-picked", G_CALLBACK (emoji_picked), entry);
+    }
+
+  gtk_popover_popup (GTK_POPOVER (chooser));
+}
+
+static void
+pick_emoji (GtkEntry *entry,
+            int       icon,
+            GdkEvent *event,
+            gpointer  data)
+{
+  gtk_entry_choose_emoji (entry);
+}
+
+static void
+set_show_emoji_icon (GtkEntry *entry,
+                     gboolean  value)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (priv->show_emoji_icon == value)
+    return;
+
+  priv->show_emoji_icon = value;
+
+  if (priv->show_emoji_icon)
+    {
+      gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                         GTK_ENTRY_ICON_SECONDARY,
+                                         "face-smile-symbolic");
+
+      gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
+                                    GTK_ENTRY_ICON_SECONDARY,
+                                    TRUE);
+
+      gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
+                                      GTK_ENTRY_ICON_SECONDARY,
+                                      TRUE);
+
+      g_signal_connect (entry, "icon-press", G_CALLBACK (pick_emoji), NULL);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SHOW_EMOJI_ICON]);
+  gtk_widget_queue_resize (GTK_WIDGET (entry));
 }
