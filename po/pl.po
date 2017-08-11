@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-10 13:56+0000\n"
-"PO-Revision-Date: 2017-08-11 00:08+0200\n"
+"POT-Creation-Date: 2017-08-11 20:20+0000\n"
+"PO-Revision-Date: 2017-08-11 22:22+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2173,44 +2173,48 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: gtk/gtkentry.c:9514 gtk/gtklabel.c:6677 gtk/gtktextview.c:9448
+#: gtk/gtkentry.c:9544 gtk/gtklabel.c:6677 gtk/gtktextview.c:9448
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtkentry.c:9518 gtk/gtklabel.c:6678 gtk/gtktextview.c:9452
+#: gtk/gtkentry.c:9548 gtk/gtklabel.c:6678 gtk/gtktextview.c:9452
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtkentry.c:9522 gtk/gtklabel.c:6679 gtk/gtktextview.c:9454
+#: gtk/gtkentry.c:9552 gtk/gtklabel.c:6679 gtk/gtktextview.c:9454
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtkentry.c:9525 gtk/gtkfilechooserwidget.c:1478
+#: gtk/gtkentry.c:9555 gtk/gtkfilechooserwidget.c:1478
 #: gtk/gtkfilechooserwidget.c:2278 gtk/gtklabel.c:6681 gtk/gtktextview.c:9457
 msgid "_Delete"
 msgstr "_Usuń"
 
-#: gtk/gtkentry.c:9536 gtk/gtklabel.c:6690 gtk/gtktextview.c:9471
+#: gtk/gtkentry.c:9566 gtk/gtklabel.c:6690 gtk/gtktextview.c:9471
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
-#: gtk/gtkentry.c:9709 gtk/gtktextview.c:9696
+#: gtk/gtkentry.c:9573
+msgid "Insert _Emoji"
+msgstr "Wstaw _emoji"
+
+#: gtk/gtkentry.c:9748 gtk/gtktextview.c:9696
 msgid "Select all"
 msgstr "Zaznacz wszystko"
 
-#: gtk/gtkentry.c:9712 gtk/gtktextview.c:9699
+#: gtk/gtkentry.c:9751 gtk/gtktextview.c:9699
 msgid "Cut"
 msgstr "Wytnij"
 
-#: gtk/gtkentry.c:9715 gtk/gtktextview.c:9702
+#: gtk/gtkentry.c:9754 gtk/gtktextview.c:9702
 msgid "Copy"
 msgstr "Skopiuj"
 
-#: gtk/gtkentry.c:9718 gtk/gtktextview.c:9705
+#: gtk/gtkentry.c:9757 gtk/gtktextview.c:9705
 msgid "Paste"
 msgstr "Wklej"
 
-#: gtk/gtkentry.c:10785
+#: gtk/gtkentry.c:10824
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
@@ -3578,12 +3582,13 @@ msgstr "Wyniki wyszukiwania"
 msgid "Search Shortcuts"
 msgstr "Wyszukiwanie skrótów"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkfilechooserwidget.ui:310
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:313
+#: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Brak wyników"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkfilechooserwidget.ui:324
-#: gtk/ui/gtkplacesview.ui:406
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:327
+#: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Proszę spróbować innych słów"
 
@@ -5521,6 +5526,43 @@ msgstr "W"
 #: gtk/ui/gtkcoloreditor.ui:276
 msgid "Saturation"
 msgstr "Nasycenie"
+
+#: gtk/ui/gtkemojichooser.ui:51
+msgid "Smileys & People"
+msgstr "Uśmieszki i osoby"
+
+#: gtk/ui/gtkemojichooser.ui:66
+msgid "Body & Clothing"
+msgstr "Ciało i ubrania"
+
+#: gtk/ui/gtkemojichooser.ui:81
+msgid "Animals & Nature"
+msgstr "Zwierzęta i przyroda"
+
+#: gtk/ui/gtkemojichooser.ui:96
+msgid "Food & Drink"
+msgstr "Jedzenie i napoje"
+
+#: gtk/ui/gtkemojichooser.ui:111
+msgid "Travel & Places"
+msgstr "Podróże i miejsca"
+
+#: gtk/ui/gtkemojichooser.ui:126
+msgid "Activities"
+msgstr "Sport"
+
+#: gtk/ui/gtkemojichooser.ui:141
+msgctxt "emoji category"
+msgid "Objects"
+msgstr "Rzeczy"
+
+#: gtk/ui/gtkemojichooser.ui:156
+msgid "Symbols"
+msgstr "Symbole"
+
+#: gtk/ui/gtkemojichooser.ui:171
+msgid "Flags"
+msgstr "Flagi"
 
 #: gtk/ui/gtkfilechooserwidget.ui:69
 msgid "Create Folder"
