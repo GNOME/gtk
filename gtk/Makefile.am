@@ -1277,6 +1277,7 @@ gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	  echo "    <file preprocess='xml-stripblanks'>inspector/$$n</file>" >> $@; \
 	done; \
 	echo "    <file>inspector/logo.png</file>" >> $@; \
+	echo "    <file>emoji/emoji.data</file>" >> $@; \
 	echo "  </gresource>" >> $@; \
 	echo "</gresources>" >> $@;
 
@@ -1698,6 +1699,8 @@ EXTRA_DIST +=                   \
 	$(gesture_sources)	\
 	$(theme_sources)	\
 	$(gsettings_SCHEMAS)	\
+	emoji/convert-emoji.c	\
+	emoji/emoji.json	\
 	a11y/Makefile.inc	\
 	deprecated/Makefile.inc	\
 	inspector/Makefile.inc	\
