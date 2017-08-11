@@ -252,24 +252,38 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 4, 1, 1);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_widget_set_vexpand (GTK_WIDGET (box), TRUE);
   gtk_grid_attach (GTK_GRID (grid), box, 0, 5, 3, 1);
 
   button1 = gtk_radio_button_new_with_label (NULL, "Blank");
+  gtk_widget_set_valign (button1, GTK_ALIGN_START);
   g_signal_connect (button1, "toggled", G_CALLBACK (set_blank), entry);
   gtk_container_add (GTK_CONTAINER (box), button1);
   button2 = gtk_radio_button_new_with_label (NULL, "Icon Name");
+  gtk_widget_set_valign (button2, GTK_ALIGN_START);
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button2), GTK_RADIO_BUTTON (button1));
   g_signal_connect (button2, "toggled", G_CALLBACK (set_icon_name), entry);
   gtk_container_add (GTK_CONTAINER (box), button2);
   button3 = gtk_radio_button_new_with_label (NULL, "GIcon");
+  gtk_widget_set_valign (button3, GTK_ALIGN_START);
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button3), GTK_RADIO_BUTTON (button1));
   g_signal_connect (button3, "toggled", G_CALLBACK (set_gicon), entry);
   gtk_container_add (GTK_CONTAINER (box), button3);
   button4 = gtk_radio_button_new_with_label (NULL, "Pixbuf");
+  gtk_widget_set_valign (button4, GTK_ALIGN_START);
   gtk_radio_button_join_group (GTK_RADIO_BUTTON (button4), GTK_RADIO_BUTTON (button1));
   g_signal_connect (button4, "toggled", G_CALLBACK (set_pixbuf), entry);
   gtk_container_add (GTK_CONTAINER (box), button4);
 
+  label = gtk_label_new ("Emoji:");
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 6, 1, 1);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+
+  entry = gtk_entry_new ();
+  g_object_set (entry, "show-emoji-icon", TRUE, NULL);
+  gtk_widget_set_hexpand (entry, TRUE);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, 6, 1, 1);
   gtk_widget_show (window);
 
   gtk_main();
