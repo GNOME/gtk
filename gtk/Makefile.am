@@ -451,6 +451,7 @@ gtk_private_h_sources =		\
 	gtkdebugupdatesprivate.h	\
 	gtkdialogprivate.h 	\
 	gtkdndprivate.h		\
+	gtkemojichooser.h	\
 	gtkentryprivate.h	\
 	gtkeventcontrollerprivate.h	\
 	gtkfilechooserembed.h	\
@@ -722,6 +723,7 @@ gtk_base_c_sources = 		\
 	gtkdragsource.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c		\
+	gtkemojichooser.c	\
 	gtkentry.c		\
 	gtkentrybuffer.c	\
 	gtkentrycompletion.c	\
@@ -1147,7 +1149,8 @@ templates =				\
 	ui/gtkcolorchooserdialog.ui	\
 	ui/gtkcoloreditor.ui		\
 	ui/gtkcombobox.ui		\
-	ui/gtkdialog.ui		\
+	ui/gtkdialog.ui			\
+	ui/gtkemojichooser.ui		\
 	ui/gtkfilechooserwidget.ui	\
 	ui/gtkfilechooserdialog.ui	\
 	ui/gtkfontchooserdialog.ui	\
@@ -1690,6 +1693,7 @@ files:
 gsettings_SCHEMAS = \
 	org.gtk.Settings.FileChooser.gschema.xml \
 	org.gtk.Settings.ColorChooser.gschema.xml \
+	org.gtk.Settings.EmojiChooser.gschema.xml \
 	org.gtk.Settings.Debug.gschema.xml
 
 @GSETTINGS_RULES@
