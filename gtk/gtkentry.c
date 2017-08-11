@@ -191,7 +191,6 @@ struct _GtkEntryPrivate
 
   gchar        *placeholder_text;
 
-  GtkWidget     *bubble_window;
   GtkTextHandle *text_handle;
   GtkWidget     *selection_bubble;
   guint          selection_bubble_timeout_id;
