@@ -1896,11 +1896,11 @@ _gdk_win32_dnd_do_dragdrop (void)
 
       GDK_NOTE (DND, g_print ("Calling DoDragDrop\n"));
 
-      _gdk_win32_begin_modal_call ();
+      _gdk_win32_begin_modal_call (GDK_WIN32_MODAL_OP_DND);
       hr = DoDragDrop (&dobj->ido, &pending_src_context->ids,
 		       DROPEFFECT_COPY | DROPEFFECT_MOVE,
 		       &dwEffect);
-      _gdk_win32_end_modal_call ();
+      _gdk_win32_end_modal_call (GDK_WIN32_MODAL_OP_DND);
 
       GDK_NOTE (DND, g_print ("DoDragDrop returned %s\n",
 			      (hr == DRAGDROP_S_DROP ? "DRAGDROP_S_DROP" :

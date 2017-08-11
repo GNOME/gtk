@@ -974,7 +974,7 @@ gdk_input_other_event (GdkDisplay *display,
       /* Don't produce any button or motion events while a window is being
        * moved or resized, see bug #151090.
        */
-      if (_modal_operation_in_progress)
+      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... ignored when moving/sizing\n"));
           return FALSE;

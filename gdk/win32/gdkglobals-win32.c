@@ -74,7 +74,7 @@ GdkWin32DndState  _dnd_source_state = GDK_WIN32_DND_NONE;
 gint		  _gdk_input_ignore_wintab = FALSE;
 gint		  _gdk_max_colors = 0;
 
-gboolean	  _modal_operation_in_progress = FALSE;
+GdkWin32ModalOpKind	  _modal_operation_in_progress = GDK_WIN32_MODAL_OP_NONE;
 HWND              _modal_move_resize_window = NULL;
 gboolean	  _ignore_destroy_clipboard = FALSE;
 

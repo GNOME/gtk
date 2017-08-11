@@ -1717,36 +1717,42 @@ modal_timer_proc (HWND     hwnd,
 {
   int arbitrary_limit = 10;
 
-  while (_modal_operation_in_progress &&
+  while (_modal_operation_in_progress != GDK_WIN32_MODAL_OP_NONE &&
 	 g_main_context_pending (NULL) &&
 	 arbitrary_limit--)
     g_main_context_iteration (NULL, FALSE);
 }
 
 void
-_gdk_win32_begin_modal_call (void)
+_gdk_win32_begin_modal_call (GdkWin32ModalOpKind kind)
 {
-  g_assert (!_modal_operation_in_progress);
+  GdkWin32ModalOpKind was = _modal_operation_in_progress;
+  g_assert (!(_modal_operation_in_progress & kind));
 
-  _modal_operation_in_progress = TRUE;
+  _modal_operation_in_progress |= kind;
 
-  modal_timer = SetTimer (NULL, 0, 10, modal_timer_proc);
-  if (modal_timer == 0)
-    WIN32_API_FAILED ("SetTimer");
+  if (was == GDK_WIN32_MODAL_OP_NONE)
+    {
+      modal_timer = SetTimer (NULL, 0, 10, modal_timer_proc);
+
+      if (modal_timer == 0)
+	WIN32_API_FAILED ("SetTimer");
+    }
 }
 
 void
-_gdk_win32_end_modal_call (void)
+_gdk_win32_end_modal_call (GdkWin32ModalOpKind kind)
 {
-  g_assert (_modal_operation_in_progress);
+  g_assert (_modal_operation_in_progress & kind);
 
-  _modal_operation_in_progress = FALSE;
+  _modal_operation_in_progress &= ~kind;
 
-  if (modal_timer != 0)
+  if (_modal_operation_in_progress == GDK_WIN32_MODAL_OP_NONE &&
+      modal_timer != 0)
     {
       API_CALL (KillTimer, (NULL, modal_timer));
       modal_timer = 0;
-   }
+    }
 }
 
 static VOID CALLBACK
@@ -3245,30 +3251,37 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_ENTERSIZEMOVE:
-    case WM_ENTERMENULOOP:
-      if (msg->message == WM_ENTERSIZEMOVE)
-	_modal_move_resize_window = msg->hwnd;
-
-      _gdk_win32_begin_modal_call ();
+      _modal_move_resize_window = msg->hwnd;
+      _gdk_win32_begin_modal_call (GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
       break;
 
     case WM_EXITSIZEMOVE:
-    case WM_EXITMENULOOP:
-      if (_modal_operation_in_progress)
+      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
 	{
 	  _modal_move_resize_window = NULL;
-	  _gdk_win32_end_modal_call ();
+	  _gdk_win32_end_modal_call (GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
 	}
+      break;
+
+    case WM_ENTERMENULOOP:
+      _gdk_win32_begin_modal_call (GDK_WIN32_MODAL_OP_MENU);
+      break;
+
+    case WM_EXITMENULOOP:
+      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_MENU)
+	_gdk_win32_end_modal_call (GDK_WIN32_MODAL_OP_MENU);
+      break;
+
       break;
 
     case WM_CAPTURECHANGED:
       /* Sometimes we don't get WM_EXITSIZEMOVE, for instance when you
 	 select move/size in the menu and then click somewhere without
 	 moving/resizing. We work around this using WM_CAPTURECHANGED. */
-      if (_modal_operation_in_progress)
+      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
 	{
 	  _modal_move_resize_window = NULL;
-	  _gdk_win32_end_modal_call ();
+	  _gdk_win32_end_modal_call (GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
 	}
 
       impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
@@ -3423,7 +3436,7 @@ gdk_event_translate (MSG  *msg,
 	}
 
       /* Call modal timer immediate so that we repaint faster after a resize. */
-      if (_modal_operation_in_progress)
+      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
 	modal_timer_proc (0,0,0,0);
 
       /* Claim as handled, so that WM_SIZE and WM_MOVE are avoided */
