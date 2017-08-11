@@ -508,12 +508,19 @@ cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
 # TODO: move to gsk subfolder maybe? Or will it be used elsewhere too?
 have_vulkan = false
 vulkan_lib = []
+
+if cc.get_id() == 'msvc'
+  vulkan_libname = 'vulkan-1'
+else
+  vulkan_libname = 'vulkan'
+endif
+
 enable_vulkan = get_option('enable-vulkan')
 if enable_vulkan != 'no'
-  vulkan_lib = cc.find_library('vulkan', required: false)
+  vulkan_lib = cc.find_library(vulkan_libname, required: false)
   if vulkan_lib.found() and cc.has_function('vkCreateInstance', dependencies: vulkan_lib) and cc.has_header('vulkan/vulkan.h')
     have_vulkan = true
-    pc_gdk_extra_libs += ['-lvulkan']
+    pc_gdk_extra_libs += ['-l@0@'.format(vulkan_libname)]
   elif enable_vulkan == 'yes'
     error('Vulkan support not found, but was explicitly requested.')
   endif
