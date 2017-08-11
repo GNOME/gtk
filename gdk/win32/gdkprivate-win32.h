@@ -343,8 +343,23 @@ void _gdk_win32_ole2_dnd_property_change (GdkAtom       type,
 					  const guchar *data,
 					  gint          nelements);
 
-void  _gdk_win32_begin_modal_call (void);
-void  _gdk_win32_end_modal_call (void);
+typedef enum {
+  GDK_WIN32_MODAL_OP_NONE = 0x0,
+  GDK_WIN32_MODAL_OP_SIZE = 0x1 << 0,
+  GDK_WIN32_MODAL_OP_MOVE = 0x1 << 1,
+  GDK_WIN32_MODAL_OP_MENU = 0x1 << 2,
+  GDK_WIN32_MODAL_OP_DND  = 0x1 << 3
+} GdkWin32ModalOpKind;
+
+#define GDK_WIN32_MODAL_OP_SIZEMOVE_MASK (GDK_WIN32_MODAL_OP_SIZE | GDK_WIN32_MODAL_OP_MOVE)
+
+/* Non-zero while a modal sizing, moving, or dnd operation is in progress */
+extern GdkWin32ModalOpKind _modal_operation_in_progress;
+
+extern HWND		_modal_move_resize_window;
+
+void  _gdk_win32_begin_modal_call (GdkWin32ModalOpKind kind);
+void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
 
 
 /* Options */
@@ -352,11 +367,6 @@ extern gboolean		 _gdk_input_ignore_wintab;
 extern gint		 _gdk_max_colors;
 
 #define GDK_WIN32_COLORMAP_DATA(cmap) ((GdkColormapPrivateWin32 *) GDK_COLORMAP (cmap)->windowing_data)
-
-/* TRUE while a modal sizing, moving, or dnd operation is in progress */
-extern gboolean		_modal_operation_in_progress;
-
-extern HWND		_modal_move_resize_window;
 
 /* TRUE when we are emptying the clipboard ourselves */
 extern gboolean		_ignore_destroy_clipboard;
