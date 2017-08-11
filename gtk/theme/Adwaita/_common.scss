@@ -3331,15 +3331,9 @@ progressbar {
  * Level Bar *
  *************/
 levelbar {
-  block {
-    min-width: 32px;
-    min-height: 1px;
-  }
+  block { min-height: 1px; }
 
-  &.vertical block {
-    min-width: 1px;
-    min-height: 32px;
-  }
+  &.vertical block { min-width: 1px; }
 
   &:backdrop { transition: $backdrop_transition; }
 

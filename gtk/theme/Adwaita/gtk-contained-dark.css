@@ -1441,9 +1441,9 @@ progressbar.osd progress { border-style: none; border-radius: 0; }
 progressbar trough.empty progress { all: unset; }
 
 /************* Level Bar * */
-levelbar block { min-width: 32px; min-height: 1px; }
+levelbar block { min-height: 1px; }
 
-levelbar.vertical block { min-width: 1px; min-height: 32px; }
+levelbar.vertical block { min-width: 1px; }
 
 levelbar:backdrop { transition: 200ms ease-out; }
 
