@@ -622,7 +622,12 @@ gtk_popover_apply_modality (GtkPopover *popover,
       /* Let prev_focus_widget regain focus */
       if (priv->prev_focus_widget &&
           gtk_widget_is_drawable (priv->prev_focus_widget))
-        gtk_widget_grab_focus (priv->prev_focus_widget);
+        {
+           if (GTK_IS_ENTRY (priv->prev_focus_widget))
+             gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->prev_focus_widget));
+           else
+             gtk_widget_grab_focus (priv->prev_focus_widget);
+        }
       else if (priv->window)
         gtk_widget_grab_focus (GTK_WIDGET (priv->window));
 
