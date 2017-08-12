@@ -13627,18 +13627,6 @@ gtk_widget_get_opacity (GtkWidget *widget)
   return widget->priv->user_alpha / 255.0;
 }
 
-static void
-_gtk_widget_set_has_focus (GtkWidget *widget,
-                           gboolean   has_focus)
-{
-  widget->priv->has_focus = has_focus;
-
-  if (has_focus)
-    gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_FOCUSED, FALSE);
-  else
-    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_FOCUSED);
-}
-
 /**
  * gtk_widget_send_focus_change:
  * @widget: a #GtkWidget
@@ -13684,7 +13672,7 @@ gtk_widget_send_focus_change (GtkWidget *widget,
 
   g_object_ref (widget);
 
-  _gtk_widget_set_has_focus (widget, event->focus_change.in);
+  widget->priv->has_focus = event->focus_change.in;
 
   res = gtk_widget_event (widget, event);
 
