@@ -434,9 +434,8 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
   inverted = gtk_level_bar_get_real_inverted (self);
 
   /* allocate the empty (unfilled) part */
-  block_area = *allocation;
   gtk_widget_size_allocate (self->priv->block_widget[inverted ? 0 : 1],
-                            &block_area,
+                            allocation
                             baseline,
                             out_clip);
 
