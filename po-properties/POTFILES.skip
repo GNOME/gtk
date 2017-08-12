@@ -118,6 +118,7 @@ gtk/ui/gtkcolorchooserdialog.ui
 gtk/ui/gtkcolorchooserdialog.ui.h
 gtk/ui/gtkcoloreditor.ui
 gtk/ui/gtkcoloreditor.ui.h
+gtk/ui/gtkemojichooser.ui
 gtk/ui/gtkfilechooserbutton.ui.h
 gtk/ui/gtkfilechooserdialog.ui
 gtk/ui/gtkfilechooserdialog.ui.h
