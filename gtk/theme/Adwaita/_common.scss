@@ -3331,9 +3331,27 @@ progressbar {
  * Level Bar *
  *************/
 levelbar {
-  block { min-height: 1px; }
+  &.horizontal {
+    block {
+      min-height: 1px;
+    }
 
-  &.vertical block { min-width: 1px; }
+    &.discrete block {
+      margin: 0 1px;
+      min-width: 32px;
+    }
+  }
+
+  &.vertical {
+    block {
+      min-width: 1px;
+    }
+
+    &.discrete block {
+      margin: 1px 0;
+      min-height: 32px;
+    }
+  }
 
   &:backdrop { transition: $backdrop_transition; }
 
@@ -3345,10 +3363,6 @@ levelbar {
 
     &:backdrop { @include entry(backdrop); }
   }
-
-  &.horizontal.discrete block { margin: 0 1px; }
-
-  &.vertical.discrete block { margin: 1px 0; }
 
   block {
     border: 1px solid;
