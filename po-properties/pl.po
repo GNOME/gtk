@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-09 15:54+0000\n"
-"PO-Revision-Date: 2017-08-11 00:02+0200\n"
+"POT-Creation-Date: 2017-08-12 23:07+0000\n"
+"PO-Revision-Date: 2017-08-13 01:20+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -209,11 +209,11 @@ msgstr "Pomniejszy"
 msgid "Minor version number"
 msgstr "Pomniejszy numer wersji"
 
-#: gdk/x11/gdkdevice-xi2.c:143
+#: gdk/x11/gdkdevice-xi2.c:142
 msgid "Device ID"
 msgstr "Identyfikator urządzenia"
 
-#: gdk/x11/gdkdevice-xi2.c:144
+#: gdk/x11/gdkdevice-xi2.c:143
 msgid "Device identifier"
 msgstr "Identyfikator urządzenia"
 
@@ -440,7 +440,7 @@ msgstr ""
 "z odwołaniem do początku lub końca kontrolki nadrzędnej"
 
 #: gtk/gtkactionbar.c:390 gtk/gtkbox.c:252 gtk/gtkheaderbar.c:1876
-#: gtk/gtknotebook.c:790 gtk/gtkpaned.c:388 gtk/gtkpopover.c:1623
+#: gtk/gtknotebook.c:790 gtk/gtkpaned.c:388 gtk/gtkpopover.c:1628
 #: gtk/gtkpopovermenu.c:371 gtk/gtkstack.c:404 gtk/gtktoolitemgroup.c:1618
 msgid "Position"
 msgstr "Pozycja"
@@ -1235,7 +1235,7 @@ msgid "Value of the progress bar"
 msgstr "Wartość paska postępu"
 
 #: gtk/gtkcellrendererprogress.c:156 gtk/gtkcellrenderertext.c:253
-#: gtk/gtkentrybuffer.c:350 gtk/gtkentry.c:856 gtk/gtkmessagedialog.c:201
+#: gtk/gtkentrybuffer.c:350 gtk/gtkentry.c:860 gtk/gtkmessagedialog.c:201
 #: gtk/gtkmodelbutton.c:964 gtk/gtkprogressbar.c:215 gtk/gtkspinbutton.c:423
 #: gtk/gtktextbuffer.c:218
 msgid "Text"
@@ -1276,7 +1276,7 @@ msgstr "Pionowe wyrównanie tekstu"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Wyrównanie pionowe, od 0 (góra) do 1 (dół)."
 
-#: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1043
+#: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1042
 #: gtk/gtkmodelbutton.c:1010 gtk/gtkprogressbar.c:192 gtk/gtkrange.c:391
 msgid "Inverted"
 msgstr "Odwrócony"
@@ -1341,7 +1341,7 @@ msgstr "Tekst ze znacznikami"
 msgid "Marked up text to render"
 msgstr "Rysowany tekst opisany znacznikami"
 
-#: gtk/gtkcellrenderertext.c:267 gtk/gtkentry.c:1345 gtk/gtklabel.c:762
+#: gtk/gtkcellrenderertext.c:267 gtk/gtkentry.c:1349 gtk/gtklabel.c:762
 msgid "Attributes"
 msgstr "Atrybuty"
 
@@ -1389,7 +1389,7 @@ msgstr "Kolor elementu jako wartość RGBA"
 msgid "Foreground color as a GdkRGBA"
 msgstr "Kolor elementu jako GdkRGBA"
 
-#: gtk/gtkcellrenderertext.c:323 gtk/gtkentry.c:780 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:323 gtk/gtkentry.c:784 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:816
 msgid "Editable"
 msgstr "Można modyfikować"
@@ -1559,7 +1559,7 @@ msgstr "Wyrównanie"
 msgid "How to align the lines"
 msgstr "Sposób wyrównania wierszy"
 
-#: gtk/gtkcellrenderertext.c:562 gtk/gtkentry.c:993
+#: gtk/gtkcellrenderertext.c:562 gtk/gtkentry.c:997
 msgid "Placeholder text"
 msgstr "Tekst zastępczy"
 
@@ -1922,7 +1922,7 @@ msgstr "Aktywny element"
 msgid "The item which is currently active"
 msgstr "Obecnie aktywny element"
 
-#: gtk/gtkcombobox.c:763 gtk/gtkentry.c:802
+#: gtk/gtkcombobox.c:763 gtk/gtkentry.c:806
 msgid "Has Frame"
 msgstr "Ma ramkę"
 
@@ -2104,7 +2104,7 @@ msgstr "Żądana wysokość wyświetlanej zawartości"
 msgid "The contents of the buffer"
 msgstr "Zawartość bufora"
 
-#: gtk/gtkentrybuffer.c:364 gtk/gtkentry.c:914
+#: gtk/gtkentrybuffer.c:364 gtk/gtkentry.c:918
 msgid "Text length"
 msgstr "Długość tekstu"
 
@@ -2112,52 +2112,52 @@ msgstr "Długość tekstu"
 msgid "Length of the text currently in the buffer"
 msgstr "Długość tekstu obecnego w buforze"
 
-#: gtk/gtkentrybuffer.c:378 gtk/gtkentry.c:787
+#: gtk/gtkentrybuffer.c:378 gtk/gtkentry.c:791
 msgid "Maximum length"
 msgstr "Maksymalna długość"
 
-#: gtk/gtkentrybuffer.c:379 gtk/gtkentry.c:788
+#: gtk/gtkentrybuffer.c:379 gtk/gtkentry.c:792
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Maksymalna liczba znaków dla tego wejścia. Wartość zero oznacza brak maksimum"
 
-#: gtk/gtkentry.c:757
+#: gtk/gtkentry.c:761
 msgid "Text Buffer"
 msgstr "Bufor tekstu"
 
-#: gtk/gtkentry.c:758
+#: gtk/gtkentry.c:762
 msgid "Text buffer object which actually stores entry text"
 msgstr ""
 "Obiekt bufora tekstu, który w rzeczywistości przechowuje wpisy tekstowe"
 
-#: gtk/gtkentry.c:764 gtk/gtklabel.c:880
+#: gtk/gtkentry.c:768 gtk/gtklabel.c:880
 msgid "Cursor Position"
 msgstr "Pozycja kursora"
 
-#: gtk/gtkentry.c:765 gtk/gtklabel.c:881
+#: gtk/gtkentry.c:769 gtk/gtklabel.c:881
 msgid "The current position of the insertion cursor in chars"
 msgstr "Bieżące położenie kursora wstawiania liczone w znakach"
 
-#: gtk/gtkentry.c:772 gtk/gtklabel.c:888
+#: gtk/gtkentry.c:776 gtk/gtklabel.c:888
 msgid "Selection Bound"
 msgstr "Granica zaznaczenia"
 
-#: gtk/gtkentry.c:773 gtk/gtklabel.c:889
+#: gtk/gtkentry.c:777 gtk/gtklabel.c:889
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "Położenie końca zaznaczenia przeciwnego w stosunku do kursora liczone "
 "w znakach"
 
-#: gtk/gtkentry.c:781
+#: gtk/gtkentry.c:785
 msgid "Whether the entry contents can be edited"
 msgstr "Określa, czy treść wejścia może być redagowana"
 
-#: gtk/gtkentry.c:795
+#: gtk/gtkentry.c:799
 msgid "Visibility"
 msgstr "Widoczność"
 
-#: gtk/gtkentry.c:796
+#: gtk/gtkentry.c:800
 msgid ""
 "FALSE displays the “invisible char” instead of the actual text (password "
 "mode)"
@@ -2166,23 +2166,23 @@ msgstr ""
 "wówczas tekst będzie widoczny w postaci ciągu „niewidocznych znaków”, co "
 "jest przydatne przy wprowadzaniu haseł"
 
-#: gtk/gtkentry.c:803
+#: gtk/gtkentry.c:807
 msgid "FALSE removes outside bevel from entry"
 msgstr "Określa, czy ma być wyświetlana wypukłość wokół elementu"
 
-#: gtk/gtkentry.c:809
+#: gtk/gtkentry.c:813
 msgid "Invisible character"
 msgstr "Niewidoczny znak"
 
-#: gtk/gtkentry.c:810
+#: gtk/gtkentry.c:814
 msgid "The character to use when masking entry contents (in “password mode”)"
 msgstr "Znak używany przy maskowaniu zawartości wejścia (w trybie hasła)"
 
-#: gtk/gtkentry.c:816
+#: gtk/gtkentry.c:820
 msgid "Activates default"
 msgstr "Aktywuje domyślny"
 
-#: gtk/gtkentry.c:817
+#: gtk/gtkentry.c:821
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2190,39 +2190,39 @@ msgstr ""
 "Określa, czy przy przyciśnięciu klawisza Enter ma być aktywowany domyślny "
 "widżet (np. domyślny przycisk w oknie dialogowym)"
 
-#: gtk/gtkentry.c:823 gtk/gtkspinbutton.c:405
+#: gtk/gtkentry.c:827 gtk/gtkspinbutton.c:405
 msgid "Width in chars"
 msgstr "Szerokość w znakach"
 
-#: gtk/gtkentry.c:824 gtk/gtkspinbutton.c:406
+#: gtk/gtkentry.c:828 gtk/gtkspinbutton.c:406
 msgid "Number of characters to leave space for in the entry"
 msgstr "Liczba znaków, na jaką ma pozostać miejsce w polu wejściowym"
 
-#: gtk/gtkentry.c:840 gtk/gtkspinbutton.c:414
+#: gtk/gtkentry.c:844 gtk/gtkspinbutton.c:414
 msgid "Maximum width in characters"
 msgstr "Maksymalna szerokość w znakach"
 
-#: gtk/gtkentry.c:841 gtk/gtkspinbutton.c:415
+#: gtk/gtkentry.c:845 gtk/gtkspinbutton.c:415
 msgid "The desired maximum width of the entry, in characters"
 msgstr "Żądana maksymalna szerokość pola wejściowego (w znakach)"
 
-#: gtk/gtkentry.c:848
+#: gtk/gtkentry.c:852
 msgid "Scroll offset"
 msgstr "Przesunięcie przewinięcia"
 
-#: gtk/gtkentry.c:849
+#: gtk/gtkentry.c:853
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Liczba pikseli wejścia przewiniętych w lewo za jego obszar"
 
-#: gtk/gtkentry.c:857 gtk/gtkspinbutton.c:424
+#: gtk/gtkentry.c:861 gtk/gtkspinbutton.c:424
 msgid "The contents of the entry"
 msgstr "Zawartość wejścia"
 
-#: gtk/gtkentry.c:871 gtk/gtklabel.c:801
+#: gtk/gtkentry.c:875 gtk/gtklabel.c:801
 msgid "X align"
 msgstr "Wyrównanie poziome"
 
-#: gtk/gtkentry.c:872 gtk/gtklabel.c:802
+#: gtk/gtkentry.c:876 gtk/gtklabel.c:802
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2230,57 +2230,57 @@ msgstr ""
 "Wyrównanie poziome, od 0 (lewa) do 1 (prawa). Odwrócone dla układów RTL (od "
 "prawej do lewej)."
 
-#: gtk/gtkentry.c:886
+#: gtk/gtkentry.c:890
 msgid "Truncate multiline"
 msgstr "Ucinanie wielowierszowych"
 
-#: gtk/gtkentry.c:887
+#: gtk/gtkentry.c:891
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Określa, czy przycinać wielowierszowe wklejenia do jednego wiersza."
 
-#: gtk/gtkentry.c:900 gtk/gtktextview.c:956
+#: gtk/gtkentry.c:904 gtk/gtktextview.c:956
 msgid "Overwrite mode"
 msgstr "Tryb nadpisywania"
 
-#: gtk/gtkentry.c:901
+#: gtk/gtkentry.c:905
 msgid "Whether new text overwrites existing text"
 msgstr "Określa, czy wprowadzony tekst nadpisuje istniejący"
 
-#: gtk/gtkentry.c:915
+#: gtk/gtkentry.c:919
 msgid "Length of the text currently in the entry"
 msgstr "Długość tekstu obecnego we wpisie"
 
-#: gtk/gtkentry.c:929
+#: gtk/gtkentry.c:933
 msgid "Invisible character set"
 msgstr "Niewidoczny zestaw znaków"
 
-#: gtk/gtkentry.c:930
+#: gtk/gtkentry.c:934
 msgid "Whether the invisible character has been set"
 msgstr "Określa, czy ustawiono niewidoczny zestaw znaków"
 
-#: gtk/gtkentry.c:947
+#: gtk/gtkentry.c:951
 msgid "Caps Lock warning"
 msgstr "Ostrzeżenie o klawiszu Caps Lock"
 
-#: gtk/gtkentry.c:948
+#: gtk/gtkentry.c:952
 msgid "Whether password entries will show a warning when Caps Lock is on"
 msgstr ""
 "Określa, czy podczas wprowadzania haseł ma być wyświetlane ostrzeżenie "
 "o wciśniętym klawiszu Caps Lock"
 
-#: gtk/gtkentry.c:961
+#: gtk/gtkentry.c:965
 msgid "Progress Fraction"
 msgstr "Część postępu"
 
-#: gtk/gtkentry.c:962
+#: gtk/gtkentry.c:966
 msgid "The current fraction of the task that’s been completed"
 msgstr "Ukończona część zadania"
 
-#: gtk/gtkentry.c:977
+#: gtk/gtkentry.c:981
 msgid "Progress Pulse Step"
 msgstr "Krok postępu jako impuls"
 
-#: gtk/gtkentry.c:978
+#: gtk/gtkentry.c:982
 msgid ""
 "The fraction of total entry width to move the progress bouncing block for "
 "each call to gtk_entry_progress_pulse()"
@@ -2288,183 +2288,191 @@ msgstr ""
 "Część postępu, o jaką ma zostać przesunięty odbijający się prostokąt przy "
 "każdym wywołaniu gtk_entry_progress_pulse()"
 
-#: gtk/gtkentry.c:994
+#: gtk/gtkentry.c:998
 msgid "Show text in the entry when it’s empty and unfocused"
 msgstr "Wyświetla tekst w elemencie, kiedy jest pusty i nieaktywny"
 
-#: gtk/gtkentry.c:1007
+#: gtk/gtkentry.c:1011
 msgid "Primary pixbuf"
 msgstr "Główny bufor pikseli"
 
-#: gtk/gtkentry.c:1008
+#: gtk/gtkentry.c:1012
 msgid "Primary pixbuf for the entry"
 msgstr "Główny bufor pikseli dla elementu"
 
-#: gtk/gtkentry.c:1021
+#: gtk/gtkentry.c:1025
 msgid "Secondary pixbuf"
 msgstr "Drugorzędny bufor pikseli"
 
-#: gtk/gtkentry.c:1022
+#: gtk/gtkentry.c:1026
 msgid "Secondary pixbuf for the entry"
 msgstr "Drugorzędny bufor pikseli dla elementu"
 
-#: gtk/gtkentry.c:1035
+#: gtk/gtkentry.c:1039
 msgid "Primary icon name"
 msgstr "Główna nazwa ikony"
 
-#: gtk/gtkentry.c:1036
+#: gtk/gtkentry.c:1040
 msgid "Icon name for primary icon"
 msgstr "Nazwa ikony dla ikony głównej"
 
-#: gtk/gtkentry.c:1049
+#: gtk/gtkentry.c:1053
 msgid "Secondary icon name"
 msgstr "Drugorzędna nazwa ikony"
 
-#: gtk/gtkentry.c:1050
+#: gtk/gtkentry.c:1054
 msgid "Icon name for secondary icon"
 msgstr "Nazwa ikony dla ikony drugorzędnej"
 
-#: gtk/gtkentry.c:1063
+#: gtk/gtkentry.c:1067
 msgid "Primary GIcon"
 msgstr "Główna GIcon"
 
-#: gtk/gtkentry.c:1064
+#: gtk/gtkentry.c:1068
 msgid "GIcon for primary icon"
 msgstr "GIcon dla głównej ikony"
 
-#: gtk/gtkentry.c:1077
+#: gtk/gtkentry.c:1081
 msgid "Secondary GIcon"
 msgstr "Drugorzędna GIcon"
 
-#: gtk/gtkentry.c:1078
+#: gtk/gtkentry.c:1082
 msgid "GIcon for secondary icon"
 msgstr "GIcon dla ikony drugorzędnej"
 
-#: gtk/gtkentry.c:1091
+#: gtk/gtkentry.c:1095
 msgid "Primary storage type"
 msgstr "Główny typ przechowywania"
 
-#: gtk/gtkentry.c:1092
+#: gtk/gtkentry.c:1096
 msgid "The representation being used for primary icon"
 msgstr "Reprezentacja używana dla podstawowej ikony"
 
-#: gtk/gtkentry.c:1106
+#: gtk/gtkentry.c:1110
 msgid "Secondary storage type"
 msgstr "Drugorzędny typ przechowywania"
 
-#: gtk/gtkentry.c:1107
+#: gtk/gtkentry.c:1111
 msgid "The representation being used for secondary icon"
 msgstr "Reprezentacja używana dla drugorzędnej ikony"
 
-#: gtk/gtkentry.c:1127
+#: gtk/gtkentry.c:1131
 msgid "Primary icon activatable"
 msgstr "Możliwa aktywacja ikony głównej"
 
-#: gtk/gtkentry.c:1128
+#: gtk/gtkentry.c:1132
 msgid "Whether the primary icon is activatable"
 msgstr "Określa, czy jest możliwość aktywacji ikony głównej"
 
-#: gtk/gtkentry.c:1147
+#: gtk/gtkentry.c:1151
 msgid "Secondary icon activatable"
 msgstr "Możliwa aktywacja ikony drugorzędnej"
 
-#: gtk/gtkentry.c:1148
+#: gtk/gtkentry.c:1152
 msgid "Whether the secondary icon is activatable"
 msgstr "Określa, czy jest możliwość aktywacji ikony drugorzędnej"
 
-#: gtk/gtkentry.c:1168
+#: gtk/gtkentry.c:1172
 msgid "Primary icon sensitive"
 msgstr "Czułość podstawowej ikony"
 
-#: gtk/gtkentry.c:1169
+#: gtk/gtkentry.c:1173
 msgid "Whether the primary icon is sensitive"
 msgstr "Określa, czy ikona podstawowa jest czuła"
 
-#: gtk/gtkentry.c:1189
+#: gtk/gtkentry.c:1193
 msgid "Secondary icon sensitive"
 msgstr "Czułość drugorzędnej ikony"
 
-#: gtk/gtkentry.c:1190
+#: gtk/gtkentry.c:1194
 msgid "Whether the secondary icon is sensitive"
 msgstr "Określa, czy drugorzędna ikona jest czuła"
 
-#: gtk/gtkentry.c:1205
+#: gtk/gtkentry.c:1209
 msgid "Primary icon tooltip text"
 msgstr "Tekst podpowiedzi ikony głównej"
 
-#: gtk/gtkentry.c:1206 gtk/gtkentry.c:1239
+#: gtk/gtkentry.c:1210 gtk/gtkentry.c:1243
 msgid "The contents of the tooltip on the primary icon"
 msgstr "Zawartość podpowiedzi ikony głównej"
 
-#: gtk/gtkentry.c:1221
+#: gtk/gtkentry.c:1225
 msgid "Secondary icon tooltip text"
 msgstr "Tekst podpowiedzi ikony drugorzędnej"
 
-#: gtk/gtkentry.c:1222 gtk/gtkentry.c:1256
+#: gtk/gtkentry.c:1226 gtk/gtkentry.c:1260
 msgid "The contents of the tooltip on the secondary icon"
 msgstr "Zawartość podpowiedzi ikony drugorzędnej"
 
-#: gtk/gtkentry.c:1238
+#: gtk/gtkentry.c:1242
 msgid "Primary icon tooltip markup"
 msgstr "Znacznik podpowiedzi ikony podstawowej"
 
-#: gtk/gtkentry.c:1255
+#: gtk/gtkentry.c:1259
 msgid "Secondary icon tooltip markup"
 msgstr "Znacznik podpowiedzi ikony drugorzędnej"
 
-#: gtk/gtkentry.c:1274 gtk/gtktextview.c:984
+#: gtk/gtkentry.c:1278 gtk/gtktextview.c:984
 msgid "IM module"
 msgstr "Moduł metody wprowadzania"
 
-#: gtk/gtkentry.c:1275 gtk/gtktextview.c:985
+#: gtk/gtkentry.c:1279 gtk/gtktextview.c:985
 msgid "Which IM module should be used"
 msgstr "Określa, który moduł metody wprowadzania ma być używany domyślnie"
 
-#: gtk/gtkentry.c:1288
+#: gtk/gtkentry.c:1292
 msgid "Completion"
 msgstr "Uzupełnianie"
 
-#: gtk/gtkentry.c:1289
+#: gtk/gtkentry.c:1293
 msgid "The auxiliary completion object"
 msgstr "Pomocniczy obiekt uzupełniania"
 
-#: gtk/gtkentry.c:1309 gtk/gtkimcontext.c:331 gtk/gtktextview.c:1002
+#: gtk/gtkentry.c:1313 gtk/gtkimcontext.c:331 gtk/gtktextview.c:1002
 msgid "Purpose"
 msgstr "Przeznaczenie"
 
-#: gtk/gtkentry.c:1310 gtk/gtkimcontext.c:332 gtk/gtktextview.c:1003
+#: gtk/gtkentry.c:1314 gtk/gtkimcontext.c:332 gtk/gtktextview.c:1003
 msgid "Purpose of the text field"
 msgstr "Przeznaczenie pola tekstowego"
 
-#: gtk/gtkentry.c:1325 gtk/gtkimcontext.c:339 gtk/gtktextview.c:1020
+#: gtk/gtkentry.c:1329 gtk/gtkimcontext.c:339 gtk/gtktextview.c:1020
 msgid "hints"
 msgstr "podpowiedzi"
 
-#: gtk/gtkentry.c:1326 gtk/gtkimcontext.c:340 gtk/gtktextview.c:1021
+#: gtk/gtkentry.c:1330 gtk/gtkimcontext.c:340 gtk/gtktextview.c:1021
 msgid "Hints for the text field behaviour"
 msgstr "Podpowiedzi dla zachowania pola tekstowego"
 
-#: gtk/gtkentry.c:1346 gtk/gtklabel.c:763
+#: gtk/gtkentry.c:1350 gtk/gtklabel.c:763
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Lista atrybutów stylu stosowanych do tekstu etykiety"
 
-#: gtk/gtkentry.c:1360 gtk/gtkplacessidebar.c:4410 gtk/gtktextview.c:1037
+#: gtk/gtkentry.c:1364 gtk/gtkplacessidebar.c:4410 gtk/gtktextview.c:1037
 msgid "Populate all"
 msgstr "Umieszczanie we wszystkich"
 
-#: gtk/gtkentry.c:1361 gtk/gtktextview.c:1038
+#: gtk/gtkentry.c:1365 gtk/gtktextview.c:1038
 msgid "Whether to emit ::populate-popup for touch popups"
 msgstr ""
 "Określa, czy wysyłać sygnał ::populate-popup dla dotykowych wyskakujących "
 "menu"
 
-#: gtk/gtkentry.c:1374 gtk/gtktexttag.c:544 gtk/gtktextview.c:932
+#: gtk/gtkentry.c:1378 gtk/gtktexttag.c:544 gtk/gtktextview.c:932
 msgid "Tabs"
 msgstr "Tabulatory"
 
-#: gtk/gtkentry.c:1375
+#: gtk/gtkentry.c:1379
 msgid "A list of tabstop locations to apply to the text of the entry"
 msgstr "Lista położeń zatrzymania tabulatora stosowana do tekstu elementu"
+
+#: gtk/gtkentry.c:1393
+msgid "Emoji icon"
+msgstr "Ikona emoji"
+
+#: gtk/gtkentry.c:1394
+msgid "Whether to show an icon for Emoji"
+msgstr "Określa, czy wyświetlać ikonę dla emoji"
 
 #: gtk/gtkentrycompletion.c:349
 msgid "Completion Model"
@@ -3448,39 +3456,39 @@ msgstr "Szerokość układu"
 msgid "The height of the layout"
 msgstr "Wysokość układu"
 
-#: gtk/gtklevelbar.c:976
+#: gtk/gtklevelbar.c:975
 msgid "Currently filled value level"
 msgstr "Obecnie wypełniony poziom wartości"
 
-#: gtk/gtklevelbar.c:977
+#: gtk/gtklevelbar.c:976
 msgid "Currently filled value level of the level bar"
 msgstr "Obecnie wypełniony poziom wartości paska"
 
-#: gtk/gtklevelbar.c:991
+#: gtk/gtklevelbar.c:990
 msgid "Minimum value level for the bar"
 msgstr "Minimalny poziom wartości paska"
 
-#: gtk/gtklevelbar.c:992
+#: gtk/gtklevelbar.c:991
 msgid "Minimum value level that can be displayed by the bar"
 msgstr "Minimalny poziom, jaki może być wyświetlany przez pasek"
 
-#: gtk/gtklevelbar.c:1006
+#: gtk/gtklevelbar.c:1005
 msgid "Maximum value level for the bar"
 msgstr "Maksymalny poziom wartości paska"
 
-#: gtk/gtklevelbar.c:1007
+#: gtk/gtklevelbar.c:1006
 msgid "Maximum value level that can be displayed by the bar"
 msgstr "Maksymalny poziom, jaki może być wyświetlany przez pasek"
 
-#: gtk/gtklevelbar.c:1027
+#: gtk/gtklevelbar.c:1026
 msgid "The mode of the value indicator"
 msgstr "Tryb wskaźnika wartości"
 
-#: gtk/gtklevelbar.c:1028
+#: gtk/gtklevelbar.c:1027
 msgid "The mode of the value indicator displayed by the bar"
 msgstr "Tryb wskaźnika wartości wyświetlanego przez pasek"
 
-#: gtk/gtklevelbar.c:1044
+#: gtk/gtklevelbar.c:1043
 msgid "Invert the direction in which the level bar grows"
 msgstr "Odwraca kierunek przyrostu paska poziomu"
 
@@ -3900,7 +3908,7 @@ msgstr "Tytuł okna dialogowego"
 msgid "The title of the file chooser dialog"
 msgstr "Tytuł okna dialogowego wyboru plików"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1638 gtk/gtkwindow.c:889
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1643 gtk/gtkwindow.c:889
 msgid "Modal"
 msgstr "Modalne"
 
@@ -4274,35 +4282,35 @@ msgstr "Plik przedstawiany przez rząd, jeśli dotyczy"
 msgid "Whether the row represents a network location"
 msgstr "Określa, czy rząd przedstawia położenie sieciowe"
 
-#: gtk/gtkpopover.c:1595
+#: gtk/gtkpopover.c:1600
 msgid "Relative to"
 msgstr "Względne do"
 
-#: gtk/gtkpopover.c:1596
+#: gtk/gtkpopover.c:1601
 msgid "Widget the bubble window points to"
 msgstr "Widżet, na który wskazuje okrągłe okno"
 
-#: gtk/gtkpopover.c:1609
+#: gtk/gtkpopover.c:1614
 msgid "Pointing to"
 msgstr "Wskazujące na"
 
-#: gtk/gtkpopover.c:1610
+#: gtk/gtkpopover.c:1615
 msgid "Rectangle the bubble window points to"
 msgstr "Prostokąt, na który wskazuje okrągłe okno"
 
-#: gtk/gtkpopover.c:1624
+#: gtk/gtkpopover.c:1629
 msgid "Position to place the bubble window"
 msgstr "Położenie do umieszczenia okrągłego okna"
 
-#: gtk/gtkpopover.c:1639
+#: gtk/gtkpopover.c:1644
 msgid "Whether the popover is modal"
 msgstr "Określa, czy widżet popover jest modalny"
 
-#: gtk/gtkpopover.c:1652
+#: gtk/gtkpopover.c:1657
 msgid "Constraint"
 msgstr "Ograniczenie"
 
-#: gtk/gtkpopover.c:1653
+#: gtk/gtkpopover.c:1658
 msgid "Constraint for the popover position"
 msgstr "Ograniczenie położenia widżetu popover"
 
