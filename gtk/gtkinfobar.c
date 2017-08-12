@@ -81,7 +81,7 @@
  * GtkInfoBar *bar;
  *
  * widget = gtk_info_bar_new ();
- * bar = GTK_INFO_BAR (bar);
+ * bar = GTK_INFO_BAR (widget);
  *
  * message_label = gtk_label_new ("");
  * gtk_widget_show (message_label);
