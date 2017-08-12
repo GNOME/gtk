@@ -141,6 +141,7 @@ gtk_public_sources = files([
   'gtkdragsource.c',
   'gtkdrawingarea.c',
   'gtkeditable.c',
+  'gtkemojichooser.c',
   'gtkentry.c',
   'gtkentrybuffer.c',
   'gtkentrycompletion.c',
@@ -845,6 +846,7 @@ endif
 gtk_settings_schemas = [
   'org.gtk.Settings.FileChooser.gschema.xml',
   'org.gtk.Settings.ColorChooser.gschema.xml',
+  'org.gtk.Settings.EmojiChooser.gschema.xml',
   'org.gtk.Settings.Debug.gschema.xml',
 ]
 install_data(gtk_settings_schemas, install_dir: gtk_schemasdir)
