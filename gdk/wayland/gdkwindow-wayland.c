@@ -3719,7 +3719,8 @@ gdk_wayland_window_new_subsurface (GdkDisplay         *display,
   attr.height = position->height;
   attr.window_type = GDK_WINDOW_SUBSURFACE;
 
-  return gdk_window_new (gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
+  return gdk_window_new (display,
+                         gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
                          &attr);
 }
 

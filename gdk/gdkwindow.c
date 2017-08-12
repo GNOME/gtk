@@ -976,12 +976,12 @@ get_native_event_mask (GdkWindow *private)
 }
 
 GdkWindow*
-gdk_window_new (GdkWindow     *parent,
+gdk_window_new (GdkDisplay    *display,
+                GdkWindow     *parent,
 		GdkWindowAttr *attributes)
 {
   GdkWindow *window;
   GdkScreen *screen;
-  GdkDisplay *display;
   gboolean native;
   GdkEventMask event_mask;
 
@@ -989,7 +989,7 @@ gdk_window_new (GdkWindow     *parent,
 
   if (!parent)
     {
-      screen = gdk_screen_get_default ();
+      screen = gdk_display_get_default_screen (display);
       parent = gdk_screen_get_root_window (screen);
     }
   else
@@ -1002,8 +1002,6 @@ gdk_window_new (GdkWindow     *parent,
       g_warning ("gdk_window_new(): parent is destroyed");
       return NULL;
     }
-
-  display = gdk_screen_get_display (screen);
 
   window = _gdk_display_create_window (display);
 
@@ -1159,7 +1157,7 @@ gdk_window_new_toplevel (GdkDisplay *display,
   attr.height = height;
   attr.window_type = GDK_WINDOW_TOPLEVEL;
 
-  return gdk_window_new (NULL, &attr);
+  return gdk_window_new (display, NULL, &attr);
 }
 
 /**
@@ -1193,7 +1191,7 @@ gdk_window_new_popup (GdkDisplay         *display,
   attr.height = position->height;
   attr.window_type = GDK_WINDOW_TEMP;
 
-  return gdk_window_new (NULL, &attr);
+  return gdk_window_new (display, NULL, &attr);
 }
 
 /**
@@ -1224,7 +1222,7 @@ gdk_window_new_temp (GdkDisplay *display)
   attr.height = 10;
   attr.window_type = GDK_WINDOW_TEMP;
 
-  return gdk_window_new (NULL, &attr);
+  return gdk_window_new (display, NULL, &attr);
 }
 
 /**
@@ -1256,7 +1254,7 @@ gdk_window_new_child (GdkWindow          *parent,
   attr.height = position->height;
   attr.window_type = GDK_WINDOW_CHILD;
 
-  return gdk_window_new (parent, &attr);
+  return gdk_window_new (gdk_window_get_display (parent), parent, &attr);
 }
 
 /**

@@ -368,7 +368,8 @@ void            gdk_cairo_set_drawing_context    (cairo_t           *cr,
 cairo_surface_t *
            _gdk_window_ref_cairo_surface (GdkWindow *window);
 
-GdkWindow* gdk_window_new                (GdkWindow      *parent,
+GdkWindow* gdk_window_new                (GdkDisplay     *display,
+                                          GdkWindow      *parent,
                                           GdkWindowAttr  *attributes);
 void       _gdk_window_destroy           (GdkWindow      *window,
                                           gboolean        foreign_destroy);
