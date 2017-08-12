@@ -11032,22 +11032,6 @@ gtk_entry_get_tabs (GtkEntry *entry)
 }
 
 static void
-emoji_picked (GtkEmojiChooser *chooser,
-              const char      *text,
-              gpointer         data)
-{
-  GtkEntry *entry = data;
-  int pos, start, end;
-
-  if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
-    gtk_editable_delete_text (GTK_EDITABLE (entry), start, end);
-
-  pos = MIN (start, end);
-  gtk_editable_insert_text (GTK_EDITABLE (entry), text, -1, &pos);
-  gtk_editable_set_position (GTK_EDITABLE (entry), pos);
-}
-
-static void
 gtk_entry_choose_emoji (GtkEntry *entry)
 {
   GtkWidget *chooser;
@@ -11065,7 +11049,7 @@ gtk_entry_choose_emoji (GtkEntry *entry)
           gtk_entry_get_icon_area (entry, GTK_ENTRY_ICON_SECONDARY, &rect);
           gtk_popover_set_pointing_to (GTK_POPOVER (chooser), &rect);
         }
-      g_signal_connect (chooser, "emoji-picked", G_CALLBACK (emoji_picked), entry);
+      g_signal_connect_swapped (chooser, "emoji-picked", G_CALLBACK (gtk_entry_enter_text), entry);
     }
 
   gtk_popover_popup (GTK_POPOVER (chooser));
