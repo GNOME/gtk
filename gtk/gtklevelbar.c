@@ -342,7 +342,8 @@ gtk_level_bar_draw_fill_continuous (GtkLevelBar *self,
   gtk_css_gadget_draw (self->priv->block_gadget[inverted ? 0 : 1], cr);
 
   /* now render the filled part on top of it */
-  gtk_css_gadget_draw (self->priv->block_gadget[inverted ? 1 : 0], cr);
+  if (self->priv->cur_value != 0)
+    gtk_css_gadget_draw (self->priv->block_gadget[inverted ? 1 : 0], cr);
 }
 
 static void
@@ -458,6 +459,7 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
   GtkAllocation block_area, clip;
   gdouble fill_percentage;
   gboolean inverted;
+  int block_min;
 
   inverted = gtk_level_bar_get_real_inverted (self);
 
@@ -467,14 +469,23 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
                            baseline,
                            out_clip);
 
+  if (self->priv->cur_value == 0)
+    return;
+
   /* now allocate the filled part */
   block_area = *allocation;
   fill_percentage = (self->priv->cur_value - self->priv->min_value) /
     (self->priv->max_value - self->priv->min_value);
 
+  gtk_css_gadget_get_preferred_size (self->priv->block_gadget[inverted ? 1 : 0],
+                                     self->priv->orientation, -1,
+                                     &block_min, NULL,
+                                     NULL, NULL);
+
   if (self->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       block_area.width = (gint) floor (block_area.width * fill_percentage);
+      block_area.width = MAX (block_area.width, block_min);
 
       if (inverted)
         block_area.x += allocation->width - block_area.width;
@@ -482,6 +493,7 @@ gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
   else
     {
       block_area.height = (gint) floor (block_area.height * fill_percentage);
+      block_area.height = MAX (block_area.height, block_min);
 
       if (inverted)
         block_area.y += allocation->height - block_area.height;

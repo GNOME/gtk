@@ -1114,13 +1114,13 @@ levelbar trough { padding: 2px; border-radius: 3px; background-color: transparen
 
 levelbar trough:backdrop { background-color: transparent; border-style: solid; background-image: linear-gradient(to bottom, #090909, #111 90%); color: #fff; background-image: linear-gradient(to bottom, #111, #111); box-shadow: 0 1px rgba(255, 255, 255, 0); }
 
-levelbar block { min-width: 32px; min-height: 1px; }
+levelbar.horizontal block { min-height: 1px; }
 
-levelbar.vertical block { min-width: 1px; min-height: 32px; }
+levelbar.horizontal.discrete block { margin: 0 1px; min-width: 32px; }
 
-levelbar.horizontal.discrete block { margin: 0 1px; }
+levelbar.vertical block { min-width: 1px; }
 
-levelbar.vertical.discrete block { margin: 1px 0; }
+levelbar.vertical.discrete block { margin: 1px 0; min-height: 32px; }
 
 levelbar block.filled.low { border-color: #c26000; background-color: #f57900; }
 
