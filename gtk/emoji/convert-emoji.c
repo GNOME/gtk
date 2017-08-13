@@ -22,28 +22,31 @@
 #include <string.h>
 
 gboolean
-parse_code (GVariantBuilder *b, const char *code)
+parse_code (GVariantBuilder *b,
+            const char      *code)
 {
-        g_auto(GStrv) strv = NULL;
-        int j;
-        guint32 u1;
+  g_auto(GStrv) strv = NULL;
+  int j;
 
-        strv = g_strsplit (code, " ", -1);
-        for (j = 0; strv[j]; j++) {
-                guint32 u;
-                char *end;
+  strv = g_strsplit (code, " ", -1);
+  for (j = 0; strv[j]; j++)
+    {
+      guint32 u;
+      char *end;
 
-                u = (guint32) g_ascii_strtoull (strv[j], &end, 16);
-                if (*end != '\0') {
-                        g_error ("failed to parse code: %s\n", strv[j]);
-                        return FALSE;
-                }
-                //if (u != 0xfe0f || strv[j+1] != 0)
-                        g_variant_builder_add (b, "u", u);
-                u1 = u;
+      u = (guint32) g_ascii_strtoull (strv[j], &end, 16);
+      if (*end != '\0')
+        {
+          g_error ("failed to parse code: %s\n", strv[j]);
+          return FALSE;
         }
+      if (0x1f3fb <= u && u <= 0x1f3ff)
+        g_variant_builder_add (b, "u", 0);
+      else
+        g_variant_builder_add (b, "u", u);
+    }
 
-        return TRUE;
+  return TRUE;
 }
 
 static const char *blacklist[] = {
@@ -78,97 +81,102 @@ static const char *blacklist[] = {
 int
 main (int argc, char *argv[])
 {
-        JsonParser *parser;
-        JsonNode *root;
-        JsonArray *array;
-        GError *error = NULL;
-        guint length, i;
-        GVariantBuilder builder;
-        GVariant *v;
-        GString *s;
-        GBytes *bytes;
+  JsonParser *parser;
+  JsonNode *root;
+  JsonArray *array;
+  GError *error = NULL;
+  guint length, i;
+  GVariantBuilder builder;
+  GVariant *v;
+  GString *s;
+  GBytes *bytes;
 
-        if (argc != 3) {
-                g_print ("Usage: emoji-convert INPUT OUTPUT\n");
-                return 1;
+  if (argc != 3)
+    {
+      g_print ("Usage: emoji-convert INPUT OUTPUT\n");
+      return 1;
+    }
+
+  parser = json_parser_new ();
+
+  if (!json_parser_load_from_file (parser, argv[1], &error))
+    {
+      g_error ("%s", error->message);
+      return 1;
+    }
+
+  root = json_parser_get_root (parser);
+  array = json_node_get_array (root);
+  length = json_array_get_length (array);
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(aus)"));
+  i = 0;
+  while (i < length)
+    {
+      JsonNode *node = json_array_get_element (array, i);
+      JsonObject *obj = json_node_get_object (node);
+      GVariantBuilder b1;
+      const char *name;
+      char *code;
+      int j;
+      gboolean skip;
+      gboolean has_variations;
+
+      i++;
+
+      g_variant_builder_init (&b1, G_VARIANT_TYPE ("au"));
+
+      name = json_object_get_string_member (obj, "name");
+      code = g_strdup (json_object_get_string_member (obj, "code"));
+
+      if (strcmp (name, "world map") == 0)
+        continue;
+
+      skip = FALSE;
+      for (j = 0; blacklist[j]; j++)
+        {
+          if (strstr (name, blacklist[j]) != 0)
+            skip = TRUE;
+        }
+      if (skip)
+        continue;
+
+      has_variations = FALSE;
+      while (i < length)
+        {
+          JsonNode *node2 = json_array_get_element (array, i);
+          JsonObject *obj2 = json_node_get_object (node2);
+          const char *name2;
+          const char *code2;
+
+          name2 = json_object_get_string_member (obj2, "name");
+          code2 = json_object_get_string_member (obj2, "code");
+
+          if (!strstr (name2, "skin tone") || !g_str_has_prefix (name2, name))
+            break;
+
+          if (!has_variations)
+            {
+              has_variations = TRUE;
+              g_free (code);
+              code = g_strdup (code2);
+            }
+          i++;
         }
 
-        parser = json_parser_new ();
+      if (!parse_code (&b1, code))
+        return 1;
 
-        if (!json_parser_load_from_file (parser, argv[1], &error)) {
-                g_error ("%s", error->message);
-                return 1;
-        }
+      g_variant_builder_add (&builder, "(aus)", &b1, name);
+    }
 
-        root = json_parser_get_root (parser);
-        array = json_node_get_array (root);
-        length = json_array_get_length (array);
+  v = g_variant_builder_end (&builder);
+  bytes = g_variant_get_data_as_bytes (v);
+  if (!g_file_set_contents (argv[2], g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), &error))
+    {
+      g_error ("%s", error->message);
+      return 1;
+    }
 
-        g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ausaau)"));
-        i = 0;
-        while (i < length) {
-                JsonNode *node = json_array_get_element (array, i);
-                JsonObject *obj = json_node_get_object (node);
-                GVariantBuilder b1, b2;
-                const char *name;
-                const char *code;
-                int j;
-                gboolean skip;
-
-                i++;
-
-                g_variant_builder_init (&b1, G_VARIANT_TYPE ("au"));
-                g_variant_builder_init (&b2, G_VARIANT_TYPE ("aau"));
-
-                name = json_object_get_string_member (obj, "name");
-                code = json_object_get_string_member (obj, "code");
-
-                if (strcmp (name, "world map") == 0)
-                        continue;
-
-                skip = FALSE;
-                for (j = 0; blacklist[j]; j++) {
-                        if (strstr (name, blacklist[j]) != 0) {
-                                skip = TRUE;
-                                break;
-			}
-                }
-                if (skip)
-                        continue;
-
-                if (!parse_code (&b1, code))
-                        return 1;
-
-                while (i < length) {
-                        JsonNode *node2 = json_array_get_element (array, i);
-                        JsonObject *obj2 = json_node_get_object (node2);
-                        const char *name2;
-                        const char *code2;
-                        GVariantBuilder b22;
-
-                        name2 = json_object_get_string_member (obj2, "name");
-                        code2 = json_object_get_string_member (obj2, "code");
-
-                        if (!strstr (name2, "skin tone") || !g_str_has_prefix (name2, name))
-                                break;
-
-                        g_variant_builder_init (&b22, G_VARIANT_TYPE ("au"));
-                        if (!parse_code (&b22, code2))
-                                return 1;
-
-                        g_variant_builder_add (&b2, "au", &b22);
-                        i++;
-                }
-
-                g_variant_builder_add (&builder, "(ausaau)", &b1, name, &b2);
-        }
-
-        v = g_variant_builder_end (&builder);
-        bytes = g_variant_get_data_as_bytes (v);
-        if (!g_file_set_contents (argv[2], g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), &error)) {
-                g_error ("%s", error->message);
-                return 1;
-        }
-
-        return 0;
+  return 0;
 }
