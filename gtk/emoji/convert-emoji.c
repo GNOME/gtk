@@ -133,7 +133,10 @@ main (int argc, char *argv[])
       for (j = 0; blacklist[j]; j++)
         {
           if (strstr (name, blacklist[j]) != 0)
-            skip = TRUE;
+            {
+              skip = TRUE;
+              break;
+            }
         }
       if (skip)
         continue;
