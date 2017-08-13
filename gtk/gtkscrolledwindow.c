@@ -3760,14 +3760,12 @@ indicator_set_fade (Indicator *indicator,
 
   visible = indicator->current_pos != 0.0 || indicator->target_pos != 0.0;
 
-  if (visible)
+  if (visible && indicator->conceil_timer == 0)
     {
-if (indicator->conceil_timer != 0) g_print ("leaking conceil_timer!\n");
       indicator->conceil_timer = g_timeout_add (INDICATOR_FADE_OUT_TIME, maybe_hide_indicator, indicator);
       g_source_set_name_by_id (indicator->conceil_timer, "[gtk+] maybe_hide_indicator");
     }
-  if (!visible && gtk_widget_get_mapped (indicator->scrollbar) &&
-      indicator->conceil_timer != 0)
+  if (!visible && indicator->conceil_timer != 0)
     {
       g_source_remove (indicator->conceil_timer);
       indicator->conceil_timer = 0;
