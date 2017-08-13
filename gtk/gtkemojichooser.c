@@ -442,11 +442,9 @@ invalidate_section (EmojiSection *section)
   gtk_flow_box_invalidate_filter (GTK_FLOW_BOX (section->box));
 }
 
-static gboolean
-update_headings (gpointer data)
+static void
+update_headings (GtkEmojiChooser *chooser)
 {
-  GtkEmojiChooser *chooser = data;
-
   gtk_widget_set_visible (chooser->people.heading, !chooser->people.empty);
   gtk_widget_set_visible (chooser->body.heading, !chooser->body.empty);
   gtk_widget_set_visible (chooser->nature.heading, !chooser->nature.empty);
@@ -465,8 +463,6 @@ update_headings (gpointer data)
     gtk_stack_set_visible_child_name (GTK_STACK (chooser->stack), "empty");
   else
     gtk_stack_set_visible_child_name (GTK_STACK (chooser->stack), "list");
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -486,7 +482,7 @@ search_changed (GtkEntry *entry,
   invalidate_section (&chooser->symbols);
   invalidate_section (&chooser->flags);
 
-  g_idle_add (update_headings, data);
+  update_headings (chooser);
 }
 
 static void
