@@ -1148,7 +1148,10 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
   if (on_scrollbar)
     indicator_set_over (indicator, TRUE);
   else if (indicator_close && !on_other_scrollbar)
-    indicator->over_timeout_id = gdk_threads_add_timeout (30, enable_over_timeout_cb, indicator);
+    {
+      indicator->over_timeout_id = gdk_threads_add_timeout (30, enable_over_timeout_cb, indicator);
+      g_source_set_name_by_id (indicator->over_timeout_id, "[gtk+] enable_over_timeout_cb");
+    }
   else
     indicator_set_over (indicator, FALSE);
 
@@ -3759,7 +3762,9 @@ indicator_set_fade (Indicator *indicator,
 
   if (visible)
     {
+if (indicator->conceil_timer != 0) g_print ("leaking conceil_timer!\n");
       indicator->conceil_timer = g_timeout_add (INDICATOR_FADE_OUT_TIME, maybe_hide_indicator, indicator);
+      g_source_set_name_by_id (indicator->conceil_timer, "[gtk+] maybe_hide_indicator");
     }
   if (!visible && gtk_widget_get_mapped (indicator->scrollbar) &&
       indicator->conceil_timer != 0)

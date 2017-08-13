@@ -2603,6 +2603,7 @@ completion_insert_text_callback (GtkEntry           *entry,
                             g_cclosure_new_object (G_CALLBACK (check_completion_callback),
                                                    G_OBJECT (completion)));
       g_source_attach (completion->priv->check_completion_idle, NULL);
+      g_source_set_name (completion->priv->check_completion_idle, "[gtk+] check_completion_callback");
     }
 }
 

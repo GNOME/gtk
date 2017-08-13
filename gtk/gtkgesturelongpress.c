@@ -137,10 +137,8 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
 
   gtk_gesture_get_point (gesture, sequence,
                          &priv->initial_x, &priv->initial_y);
-  priv->timeout_id =
-    gdk_threads_add_timeout (delay,
-                             _gtk_gesture_long_press_timeout,
-                             gesture);
+  priv->timeout_id = gdk_threads_add_timeout (delay, _gtk_gesture_long_press_timeout, gesture);
+  g_source_set_name_by_id (priv->timeout_id, "[gtk+] _gtk_gesture_long_press_timeout");
 }
 
 static void

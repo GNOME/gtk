@@ -2620,6 +2620,7 @@ gdk_x11_drag_context_drop_done (GdkDragContext *context,
   cairo_surface_t *win_surface;
   cairo_surface_t *surface;
   cairo_t *cr;
+  guint id;
 
   if (success)
     {
@@ -2652,9 +2653,10 @@ gdk_x11_drag_context_drop_done (GdkDragContext *context,
   anim->frame_clock = gdk_window_get_frame_clock (x11_context->drag_window);
   anim->start_time = gdk_frame_clock_get_frame_time (anim->frame_clock);
 
-  gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 17,
-                                gdk_drag_anim_timeout, anim,
-                                (GDestroyNotify) gdk_drag_anim_destroy);
+  id = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 17,
+                                     gdk_drag_anim_timeout, anim,
+                                     (GDestroyNotify) gdk_drag_anim_destroy);
+  g_source_set_name_by_id (id, "[gtk+] gdk_drag_anim_timeout");
 }
 
 static gboolean
