@@ -560,6 +560,7 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
       add_emoji (chooser->recent.box, FALSE, codes, item);
       g_variant_iter_free (codes);
     }
+  g_variant_unref (variant);
 }
 
 static void
