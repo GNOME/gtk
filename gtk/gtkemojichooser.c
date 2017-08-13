@@ -120,36 +120,55 @@ scroll_to_section (GtkButton *button,
 static void
 add_emoji (GtkWidget    *box,
            gboolean      prepend,
-           GVariantIter *iter,
-           GVariant     *data);
+           GVariant     *item,
+           gunichar      modifier);
 
 #define MAX_RECENT (7*3)
 
 static void
+populate_recent_section (GtkEmojiChooser *chooser)
+{
+  GVariant *variant;
+  GVariant *item;
+  GVariantIter iter;
+
+  variant = g_settings_get_value (chooser->settings, "recent-emoji");
+  g_variant_iter_init (&iter, variant);
+  while ((item = g_variant_iter_next_value (&iter)))
+    {
+      GVariant *emoji_data;
+      gunichar modifier;
+
+      emoji_data = g_variant_get_child_value (item, 0);
+      g_variant_get_child (item, 1, "u", &modifier);
+      add_emoji (chooser->recent.box, FALSE, emoji_data, modifier);
+      g_variant_unref (emoji_data);
+      g_variant_unref (item);
+    }
+  g_variant_unref (variant);
+}
+
+static void
 add_recent_item (GtkEmojiChooser *chooser,
-                 GVariant       *item)
+                 GVariant        *item,
+                 gunichar         modifier)
 {
   GList *children, *l;
-  GVariantIter *codes;
-  const char *name;
   int i;
   GVariantBuilder builder;
 
   g_variant_ref (item);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ausaau)"));
-  g_variant_builder_add_value (&builder, item);
-
-  g_variant_get_child (item, 1, "&s", &name);
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((aus)u)"));
+  g_variant_builder_add (&builder, "(@(aus)u)", item, modifier);
 
   children = gtk_container_get_children (GTK_CONTAINER (chooser->recent.box));
   for (l = children, i = 1; l; l = l->next, i++)
     {
       GVariant *item2 = g_object_get_data (G_OBJECT (l->data), "emoji-data");
-      const char *name2;
+      gunichar modifier2 = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (l->data), "modifier"));
 
-      g_variant_get_child (item2, 1, "&s", &name2);
-      if (strcmp (name, name2) == 0)
+      if (modifier == modifier2 && g_variant_equal (item, item2))
         {
           gtk_widget_destroy (GTK_WIDGET (l->data));
           i--;
@@ -161,13 +180,11 @@ add_recent_item (GtkEmojiChooser *chooser,
           continue;
         }
 
-      g_variant_builder_add_value (&builder, item2);
+      g_variant_builder_add (&builder, "(@(aus)u)", item2, modifier2);
     }
   g_list_free (children);
 
-  g_variant_get_child (item, 0, "au", &codes);
-  add_emoji (chooser->recent.box, TRUE, codes, item);
-  g_variant_iter_free (codes);
+  add_emoji (chooser->recent.box, TRUE, item, modifier);
 
   g_settings_set_value (chooser->settings, "recent-emoji", g_variant_builder_end (&builder));
 
@@ -183,6 +200,7 @@ emoji_activated (GtkFlowBox      *box,
   char *text;
   GtkWidget *label;
   GVariant *item;
+  gunichar modifier;
 
   gtk_popover_popdown (GTK_POPOVER (chooser));
 
@@ -190,7 +208,8 @@ emoji_activated (GtkFlowBox      *box,
   text = g_strdup (gtk_label_get_label (GTK_LABEL (label)));
 
   item = (GVariant*) g_object_get_data (G_OBJECT (child), "emoji-data");
-  add_recent_item (chooser, item);
+  modifier = (gunichar) GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (child), "modifier"));
+  add_recent_item (chooser, item, modifier);
 
   g_signal_emit (data, signals[EMOJI_PICKED], 0, text);
   g_free (text);
@@ -208,8 +227,10 @@ long_pressed_cb (GtkGesture *gesture,
   GtkWidget *box;
   GVariant *emoji_data;
   GtkWidget *parent_popover;
-  GVariantIter *iter;
-  GVariantIter *codes;
+  GVariant *codes;
+  int i;
+  gboolean has_variations;
+  gunichar modifier;
 
   box = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   child = GTK_WIDGET (gtk_flow_box_get_child_at_pos (GTK_FLOW_BOX (box), x, y));
@@ -220,12 +241,21 @@ long_pressed_cb (GtkGesture *gesture,
   if (!emoji_data)
     return;
 
-  g_variant_get_child (emoji_data, 2, "aau", &iter);
-  if (g_variant_iter_n_children (iter) == 0)
+  has_variations = FALSE;
+  codes = g_variant_get_child_value (emoji_data, 0);
+  for (i = 0; i < g_variant_n_children (codes); i++)
     {
-      g_variant_iter_free (iter);
-      return;
+      gunichar code;
+      g_variant_get_child (codes, i, "u", &code);
+      if (code == 0)
+        {
+          has_variations = TRUE;
+          break;
+        }
     }
+  g_variant_unref (codes);
+  if (!has_variations)
+    return;
 
   parent_popover = gtk_widget_get_ancestor (child, GTK_TYPE_POPOVER);
   popover = gtk_popover_new (child);
@@ -242,13 +272,11 @@ long_pressed_cb (GtkGesture *gesture,
 
   g_signal_connect (box, "child-activated", G_CALLBACK (emoji_activated), parent_popover);
 
-  g_variant_get_child (emoji_data, 0, "au", &codes);
-  add_emoji (box, FALSE, codes, emoji_data);
-  g_variant_iter_free (codes);
-  while (g_variant_iter_next (iter, "au", &codes))
+  add_emoji (box, FALSE, emoji_data, 0);
+  for (modifier = 0x1f3fb; modifier <= 0x1f3ff; modifier++)
     {
-      add_emoji (box, FALSE, codes, emoji_data);
-      g_variant_iter_free (codes);
+      add_emoji (box, FALSE, emoji_data, modifier);
+      g_variant_unref (codes);
     }
 
   gtk_popover_popup (GTK_POPOVER (popover));
@@ -257,19 +285,29 @@ long_pressed_cb (GtkGesture *gesture,
 static void
 add_emoji (GtkWidget    *box,
            gboolean      prepend,
-           GVariantIter *iter,
-           GVariant     *data)
+           GVariant     *item,
+           gunichar      modifier)
 {
   GtkWidget *child;
   GtkWidget *label;
   PangoAttrList *attrs;
+  GVariant *codes;
   char text[64];
   char *p = text;
-  gunichar code;
+  int i;
 
-  while (g_variant_iter_next (iter, "u", &code))
-    p += g_unichar_to_utf8 (code, p);
-  p[0] = 0;
+  codes = g_variant_get_child_value (item, 0);
+  for (i = 0; i < g_variant_n_children (codes); i++)
+    {
+      gunichar code;
+
+      g_variant_get_child (codes, i, "u", &code);
+      if (code == 0)
+        code = modifier;
+      if (code != 0)
+        p += g_unichar_to_utf8 (code, p);
+    }
+   p[0] = 0;
 
   label = gtk_label_new (text);
   attrs = pango_attr_list_new ();
@@ -280,8 +318,10 @@ add_emoji (GtkWidget    *box,
   child = gtk_flow_box_child_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (child), "emoji");
   g_object_set_data_full (G_OBJECT (child), "emoji-data",
-                          g_variant_ref (data),
+                          g_variant_ref (item),
                           (GDestroyNotify)g_variant_unref);
+  if (modifier != 0)
+    g_object_set_data (G_OBJECT (child), "modifier", GUINT_TO_POINTER (modifier));
 
   gtk_container_add (GTK_CONTAINER (child), label);
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);
@@ -296,16 +336,14 @@ populate_emoji_chooser (GtkEmojiChooser *chooser)
   GtkWidget *box;
 
   bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
-  chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(ausaau)"), bytes, TRUE));
+  chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(aus)"), bytes, TRUE));
 
   g_variant_iter_init (&iter, chooser->data);
   box = chooser->people.box;
   while ((item = g_variant_iter_next_value (&iter)))
     {
-      GVariantIter *codes;
       const char *name;
 
-      g_variant_get_child (item, 0, "au", &codes);
       g_variant_get_child (item, 1, "&s", &name);
 
       if (strcmp (name, chooser->body.first) == 0)
@@ -325,8 +363,7 @@ populate_emoji_chooser (GtkEmojiChooser *chooser)
       else if (strcmp (name, chooser->flags.first) == 0)
         box = chooser->flags.box;
 
-      add_emoji (box, FALSE, codes, item);
-      g_variant_iter_free (codes);
+      add_emoji (box, FALSE, item, 0);
     }
 }
 
@@ -476,9 +513,8 @@ static void
 gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
 {
   GtkAdjustment *adj;
-  GVariant *variant;
-  GVariantIter iter;
-  GVariant *item;
+
+  chooser->settings = g_settings_new ("org.gtk.Settings.EmojiChooser");
 
   gtk_widget_init_template (GTK_WIDGET (chooser));
 
@@ -506,19 +542,7 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   setup_section (chooser, &chooser->flags, "chequered flag", 0x1f3f4);
 
   populate_emoji_chooser (chooser);
-
-  chooser->settings = g_settings_new ("org.gtk.Settings.EmojiChooser");
-  variant = g_settings_get_value (chooser->settings, "recent-emoji");
-  g_variant_iter_init (&iter, variant);
-  while ((item = g_variant_iter_next_value (&iter)))
-    {
-      GVariantIter *codes;
-
-      g_variant_get_child (item, 0, "au", &codes);
-      add_emoji (chooser->recent.box, FALSE, codes, item);
-      g_variant_iter_free (codes);
-    }
-  g_variant_unref (variant);
+  populate_recent_section (chooser);
 }
 
 static void

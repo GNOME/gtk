@@ -40,7 +40,10 @@ parse_code (GVariantBuilder *b,
           g_error ("failed to parse code: %s\n", strv[j]);
           return FALSE;
         }
-      g_variant_builder_add (b, "u", u);
+      if (0x1f3fb <= u && u <= 0x1f3ff)
+        g_variant_builder_add (b, "u", 0);
+      else
+        g_variant_builder_add (b, "u", u);
     }
 
   return TRUE;
@@ -106,25 +109,25 @@ main (int argc, char *argv[])
   array = json_node_get_array (root);
   length = json_array_get_length (array);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(ausaau)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(aus)"));
   i = 0;
   while (i < length)
     {
       JsonNode *node = json_array_get_element (array, i);
       JsonObject *obj = json_node_get_object (node);
-      GVariantBuilder b1, b2;
+      GVariantBuilder b1;
       const char *name;
-      const char *code;
+      char *code;
       int j;
       gboolean skip;
+      gboolean has_variations;
 
       i++;
 
       g_variant_builder_init (&b1, G_VARIANT_TYPE ("au"));
-      g_variant_builder_init (&b2, G_VARIANT_TYPE ("aau"));
 
       name = json_object_get_string_member (obj, "name");
-      code = json_object_get_string_member (obj, "code");
+      code = g_strdup (json_object_get_string_member (obj, "code"));
 
       if (strcmp (name, "world map") == 0)
         continue;
@@ -141,16 +144,13 @@ main (int argc, char *argv[])
       if (skip)
         continue;
 
-      if (!parse_code (&b1, code))
-        return 1;
-
+      has_variations = FALSE;
       while (i < length)
         {
           JsonNode *node2 = json_array_get_element (array, i);
           JsonObject *obj2 = json_node_get_object (node2);
           const char *name2;
           const char *code2;
-          GVariantBuilder b22;
 
           name2 = json_object_get_string_member (obj2, "name");
           code2 = json_object_get_string_member (obj2, "code");
@@ -158,15 +158,19 @@ main (int argc, char *argv[])
           if (!strstr (name2, "skin tone") || !g_str_has_prefix (name2, name))
             break;
 
-          g_variant_builder_init (&b22, G_VARIANT_TYPE ("au"));
-          if (!parse_code (&b22, code2))
-            return 1;
-
-          g_variant_builder_add (&b2, "au", &b22);
+          if (!has_variations)
+            {
+              has_variations = TRUE;
+              g_free (code);
+              code = g_strdup (code2);
+            }
           i++;
         }
 
-      g_variant_builder_add (&builder, "(ausaau)", &b1, name, &b2);
+      if (!parse_code (&b1, code))
+        return 1;
+
+      g_variant_builder_add (&builder, "(aus)", &b1, name);
     }
 
   v = g_variant_builder_end (&builder);
