@@ -419,7 +419,7 @@ filter_func (GtkFlowBoxChild *child,
   text = gtk_entry_get_text (GTK_ENTRY (chooser->search_entry));
   emoji_data = (GVariant *) g_object_get_data (G_OBJECT (child), "emoji-data");
 
-  if (text[0] == 0 || text[1] == 0)
+  if (text[0] == 0)
     goto out;
 
   if (!emoji_data)
