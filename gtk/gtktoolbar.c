@@ -1067,7 +1067,7 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
       g_source_set_name_by_id (priv->idle_id, "[gtk+] slide_idle_handler");
     }
 
-  gtk_widget_get_content_allocation (widget, &content_allocation);
+  gtk_widget_get_own_allocation (widget, &content_allocation);
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   vertical = (priv->orientation == GTK_ORIENTATION_VERTICAL);

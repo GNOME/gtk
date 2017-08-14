@@ -1570,12 +1570,13 @@ update_drag (GtkPaned *paned,
              int       ypos)
 {
   GtkPanedPrivate *priv = paned->priv;
-  GtkAllocation allocation;
+  int width, height;
   gint pos;
   gint handle_size;
   gint size;
 
-  gtk_widget_get_content_allocation (GTK_WIDGET (paned), &allocation);
+  gtk_widget_get_content_size (GTK_WIDGET (paned), &width, &height);
+
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     pos = xpos;
   else
@@ -1591,7 +1592,7 @@ update_drag (GtkPaned *paned,
                           NULL, &handle_size,
                           NULL, NULL);
 
-      size = allocation.width - pos - handle_size;
+      size = width - pos - handle_size;
     }
   else
     {

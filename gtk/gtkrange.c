@@ -1832,7 +1832,7 @@ coord_to_value (GtkRange *range,
   GtkAllocation slider_alloc, trough_alloc;
 
   gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
-  gtk_widget_get_content_allocation (priv->trough_widget, &trough_alloc);
+  gtk_widget_get_outer_allocation (priv->trough_widget, &trough_alloc);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {

@@ -2881,7 +2881,7 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
   GtkScrolledWindowPrivate *priv;
   gint sb_width;
   gint sb_height;
-  GtkAllocation content_allocation;
+  int width, height;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (allocation != NULL);
@@ -2895,12 +2895,12 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
   gtk_widget_measure (priv->hscrollbar, GTK_ORIENTATION_VERTICAL, -1,
                       &sb_height, NULL, NULL, NULL);
 
-  gtk_widget_get_content_allocation (widget, &content_allocation);
+  gtk_widget_get_content_size (widget, &width, &height);
 
-  allocation->x = content_allocation.x;
-  allocation->y = content_allocation.y;
-  allocation->width = content_allocation.width;
-  allocation->height = content_allocation.height;
+  allocation->x = 0;
+  allocation->y = 0;
+  allocation->width = width;
+  allocation->height = height;
 
   /* Subtract some things from our available allocation size */
   if (priv->vscrollbar_visible && !priv->use_indicators)
@@ -2917,7 +2917,7 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 	    priv->window_placement == GTK_CORNER_BOTTOM_LEFT)))
         allocation->x += sb_width;
 
-      allocation->width = MAX (1, content_allocation.width - sb_width);
+      allocation->width = MAX (1, width - sb_width);
     }
 
   if (priv->hscrollbar_visible && !priv->use_indicators)
@@ -2927,7 +2927,7 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 	  priv->window_placement == GTK_CORNER_BOTTOM_RIGHT)
 	allocation->y += (sb_height);
 
-      allocation->height = MAX (1, content_allocation.height - sb_height);
+      allocation->height = MAX (1, height - sb_height);
     }
 }
 

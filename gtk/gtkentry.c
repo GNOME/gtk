@@ -2962,7 +2962,7 @@ gtk_entry_get_text_allocation (GtkEntry     *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
 
-  gtk_widget_get_content_allocation (GTK_WIDGET (entry), allocation);
+  gtk_widget_get_own_allocation (GTK_WIDGET (entry), allocation);
   allocation->x = priv->text_x;
   allocation->width = priv->text_width;
 }
@@ -6170,7 +6170,6 @@ static void
 gtk_entry_move_adjustments (GtkEntry *entry)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
-  GtkAllocation allocation;
   GtkAdjustment *adjustment;
   PangoContext *context;
   PangoFontMetrics *metrics;
@@ -6181,12 +6180,10 @@ gtk_entry_move_adjustments (GtkEntry *entry)
   if (!adjustment)
     return;
 
-  gtk_widget_get_content_allocation (GTK_WIDGET (entry), &allocation);
-
-  /* Cursor/char position, layout offset, border width, and widget allocation */
+  /* Cursor/char position, layout offset and border width*/
   gtk_entry_get_cursor_locations (entry, &x, NULL);
   get_layout_position (entry, &layout_x, NULL);
-  x += allocation.x + layout_x;
+  x += layout_x;
 
   /* Approximate width of a char, so user can see what is ahead/behind */
   context = gtk_widget_get_pango_context (widget);

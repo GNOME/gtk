@@ -1392,8 +1392,6 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
   gint active_item;
-  GtkAllocation border_allocation;
-  GtkAllocation content_allocation;
   GtkWidget *active;
 
   update_menu_sensitivity (combo_box, priv->popup_widget);
@@ -1413,10 +1411,9 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box)
 
   if (priv->wrap_width == 0)
     {
-      gint width, min_width, nat_width;
+      int width, height, min_width, nat_width;
 
-      gtk_widget_get_content_allocation (GTK_WIDGET (combo_box), &content_allocation);
-      width = content_allocation.width;
+      gtk_widget_get_content_size (GTK_WIDGET (combo_box), &width, &height);
       gtk_widget_set_size_request (priv->popup_widget, -1, -1);
       gtk_widget_measure (priv->popup_widget, GTK_ORIENTATION_HORIZONTAL, -1,
                           &min_width, &nat_width, NULL, NULL);
@@ -1437,14 +1434,11 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box)
 
   if (priv->wrap_width > 0 || priv->cell_view == NULL)
     {
-      gtk_widget_get_border_allocation (GTK_WIDGET (combo_box), &border_allocation);
-      gtk_widget_get_content_allocation (GTK_WIDGET (combo_box), &content_allocation);
-
       g_object_set (priv->popup_widget,
                     "anchor-hints", (GDK_ANCHOR_FLIP_Y |
                                      GDK_ANCHOR_SLIDE |
                                      GDK_ANCHOR_RESIZE),
-                    "rect-anchor-dx", border_allocation.x - content_allocation.x,
+                    "rect-anchor-dx", 0,
                     NULL);
 
       gtk_menu_popup_at_widget (GTK_MENU (priv->popup_widget),

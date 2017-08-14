@@ -954,11 +954,11 @@ gtk_widget_real_pick (GtkWidget *widget,
         {
           if (x_out && y_out)
             {
-              GtkAllocation content_alloc;
-              gtk_widget_get_content_allocation (child, &content_alloc);
+              GtkAllocation own_alloc;
+              gtk_widget_get_own_allocation (child, &own_alloc);
 
-              *x_out = x - content_alloc.x;
-              *y_out = y - content_alloc.y;
+              *x_out = own_alloc.x + (x - allocation.x);
+              *y_out = own_alloc.y + (y - allocation.y);
             }
 
           return child;
@@ -5645,6 +5645,30 @@ gtk_widget_common_ancestor (GtkWidget *widget_a,
   return widget_a;
 }
 
+static void
+gtk_widget_get_origin_relative_to_parent (GtkWidget *widget,
+                                          int       *origin_x,
+                                          int       *origin_y)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  /* allocation is relative to the parent's origin */
+  *origin_x = priv->allocation.x;
+  *origin_y = priv->allocation.y;
+
+  /* ... but points to the upper left, excluding widget margins
+   * but including all the css properties */
+  *origin_x += margin.left + border.left + padding.left;
+  *origin_y += margin.top + border.top + padding.top;
+}
+
 /**
  * gtk_widget_translate_coordinates:
  * @src_widget:  a #GtkWidget
@@ -5685,12 +5709,12 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   parent = src_widget;
   while (parent != ancestor)
     {
-      GtkAllocation content_alloc;
+      int origin_x, origin_y;
 
-      gtk_widget_get_content_allocation (parent, &content_alloc);
+      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_x += content_alloc.x;
-      src_y += content_alloc.y;
+      src_x += origin_x;
+      src_y += origin_y;
 
       parent = _gtk_widget_get_parent (parent);
     }
@@ -5698,12 +5722,12 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   parent = dest_widget;
   while (parent != ancestor)
     {
-      GtkAllocation content_alloc;
+      int origin_x, origin_y;
 
-      gtk_widget_get_content_allocation (parent, &content_alloc);
+      gtk_widget_get_origin_relative_to_parent (parent, &origin_x, &origin_y);
 
-      src_x -= content_alloc.x;
-      src_y -= content_alloc.y;
+      src_x -= origin_x;
+      src_y -= origin_y;
 
       parent = _gtk_widget_get_parent (parent);
     }
@@ -13230,18 +13254,6 @@ gtk_widget_get_content_size (GtkWidget *widget,
                              int       *width,
                              int       *height)
 {
-  GtkAllocation alloc;
-
-  gtk_widget_get_content_allocation (widget, &alloc);
-
-  *width = alloc.width;
-  *height = alloc.height;
-}
-
-void
-gtk_widget_get_content_allocation (GtkWidget     *widget,
-                                   GtkAllocation *allocation)
-{
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkBorder margin, border, padding;
   GtkCssStyle *style;
@@ -13251,14 +13263,13 @@ gtk_widget_get_content_allocation (GtkWidget     *widget,
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  *allocation = priv->allocation;
+  *width = priv->allocation.width;
+  *height = priv->allocation.height;
 
-  allocation->x += margin.left + border.left + padding.left;
-  allocation->y += margin.top + border.top + padding.top;
-  allocation->width -= margin.left + border.left + padding.left +
-                       margin.right + border.right + padding.right;
-  allocation->height -= margin.top + border.top + padding.top +
-                        margin.bottom + border.bottom + padding.bottom;
+  *width -= margin.left + border.left + padding.left +
+            margin.right + border.right + padding.right;
+  *height -= margin.top + border.top + padding.top +
+             margin.bottom + border.bottom + padding.bottom;
 }
 
 void
