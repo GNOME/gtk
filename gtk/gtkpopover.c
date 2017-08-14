@@ -849,7 +849,6 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   gtk_style_context_get (context,
                          GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
                          NULL);
-  pos = get_effective_position (popover, priv->final_position);
 
   if (pos == GTK_POS_BOTTOM || pos == GTK_POS_RIGHT)
     {
