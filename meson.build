@@ -41,7 +41,6 @@ xkbcommon_req     = '>= 0.2.0'
 gnome = import('gnome')
 
 add_project_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
-add_project_arguments('-DG_ENABLE_CONSISTENCY_CHECKS', language: 'c')
 add_project_arguments('-DGLIB_MIN_REQUIRED_VERSION=' + glib_min_required, language: 'c')
 add_project_arguments('-DGLIB_MAX_ALLOWED_VERSION=' + glib_max_allowed, language: 'c')
 
