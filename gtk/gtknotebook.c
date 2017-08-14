@@ -2310,7 +2310,7 @@ gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
           priv->drag_begin_x = priv->mouse_x;
           priv->drag_begin_y = priv->mouse_y;
 
-          gtk_widget_get_margin_allocation (page->tab_widget, &allocation);
+          gtk_widget_get_outer_allocation (page->tab_widget, &allocation);
 
           priv->drag_offset_x = priv->drag_begin_x - allocation.x;
           priv->drag_offset_y = priv->drag_begin_y - allocation.y;

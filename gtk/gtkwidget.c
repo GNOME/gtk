@@ -948,7 +948,7 @@ gtk_widget_real_pick (GtkWidget *widget,
           !gtk_widget_is_drawable (child))
         continue;
 
-      gtk_widget_get_margin_allocation (child, &allocation);
+      gtk_widget_get_outer_allocation (child, &allocation);
 
       if (gdk_rectangle_contains_point (&allocation, tx, ty))
         {
@@ -13281,26 +13281,6 @@ gtk_widget_get_border_allocation (GtkWidget     *widget,
                        margin.right + border.right;
   allocation->height -= margin.top + border.top +
                         margin.bottom + border.bottom;
-}
-
-void
-gtk_widget_get_margin_allocation (GtkWidget     *widget,
-                                  GtkAllocation *allocation)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkBorder margin, border;
-  GtkCssStyle *style;
-
-  style = gtk_css_node_get_style (priv->cssnode);
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-
-  *allocation = priv->allocation;
-
-  allocation->x += margin.left;
-  allocation->y += margin.top;
-  allocation->width -= margin.left + margin.right;
-  allocation->height -= margin.top + margin.bottom;
 }
 
 /**

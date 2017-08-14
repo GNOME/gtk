@@ -954,7 +954,7 @@ gtk_range_get_slider_range (GtkRange *range,
 
   priv = range->priv;
 
-  gtk_widget_get_margin_allocation (priv->slider_widget, &slider_alloc);
+  gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -1831,7 +1831,7 @@ coord_to_value (GtkRange *range,
   gint    slider_length;
   GtkAllocation slider_alloc, trough_alloc;
 
-  gtk_widget_get_margin_allocation (priv->slider_widget, &slider_alloc);
+  gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
   gtk_widget_get_content_allocation (priv->trough_widget, &trough_alloc);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
@@ -1888,7 +1888,7 @@ gtk_range_key_press (GtkWidget   *widget,
     {
       GtkAllocation slider_alloc;
 
-      gtk_widget_get_margin_allocation (priv->slider_widget, &slider_alloc);
+      gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
 
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
         priv->slide_initial_slider_position = slider_alloc.y;
@@ -1936,7 +1936,7 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
     {
       GtkAllocation slider_alloc;
 
-      gtk_widget_get_margin_allocation (priv->slider_widget, &slider_alloc);
+      gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
       update_initial_slider_position (range, x, y, &slider_alloc);
       update_zoom_state (range, TRUE);
     }
@@ -1977,7 +1977,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   priv->mouse_y = y;
 
   gtk_range_update_mouse_location (range);
-  gtk_widget_get_margin_allocation (priv->slider_widget, &slider_alloc);
+  gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-primary-button-warps-slider", &primary_warps,
@@ -2116,7 +2116,7 @@ update_slider_position (GtkRange *range,
     {
       GtkAllocation trough_alloc;
 
-      gtk_widget_get_margin_allocation (priv->trough_widget, &trough_alloc);
+      gtk_widget_get_outer_allocation (priv->trough_widget, &trough_alloc);
 
       zoom = MIN(1.0, (priv->orientation == GTK_ORIENTATION_VERTICAL ?
                        trough_alloc.height : trough_alloc.width) /
@@ -2135,7 +2135,7 @@ update_slider_position (GtkRange *range,
     {
       GtkAllocation slider_alloc;
 
-      gtk_widget_get_margin_allocation (priv->slider_widget, &slider_alloc);
+      gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
 
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
         priv->slide_initial_slider_position = (zoom * (mouse_y - priv->slide_initial_coordinate_delta) - slider_alloc.y) / (zoom - 1.0);
