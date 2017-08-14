@@ -10062,7 +10062,7 @@ gtk_window_mnemonic_hash_foreach (guint      keyval,
   (*info->func) (info->window, keyval, info->window->priv->mnemonic_modifier, TRUE, info->func_data);
 }
 
-void
+static void
 _gtk_window_keys_foreach (GtkWindow                *window,
 			  GtkWindowKeysForeachFunc func,
 			  gpointer                 func_data)
