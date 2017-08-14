@@ -601,7 +601,7 @@ endif
 
 # Keep this in sync with post-install.sh expected arguments
 meson.add_install_script('build-aux/meson/post-install.sh',
-                         gtk_version,
+                         gtk_api_version,
                          gtk_binary_version,
                          gtk_libdir,
                          gtk_datadir)
