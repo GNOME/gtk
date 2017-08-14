@@ -2412,7 +2412,7 @@ get_drop_position (GtkNotebook *notebook)
         {
           GtkAllocation allocation;
 
-          gtk_widget_get_border_allocation (page->tab_widget, &allocation);
+          gtk_widget_get_outer_allocation (page->tab_widget, &allocation);
 
           switch (priv->tab_pos)
             {

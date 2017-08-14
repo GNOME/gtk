@@ -2705,7 +2705,7 @@ gtk_range_update_mouse_location (GtkRange *range)
   y = priv->mouse_y;
 
   gtk_widget_get_own_allocation (widget, &range_alloc);
-  gtk_widget_get_border_allocation (priv->trough_widget, &trough_alloc);
+  gtk_widget_get_outer_allocation (priv->trough_widget, &trough_alloc);
 
   gtk_widget_get_outer_allocation (priv->slider_widget, &slider_alloc);
   gtk_widget_translate_coordinates (priv->trough_widget, widget,

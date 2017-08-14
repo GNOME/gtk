@@ -314,8 +314,6 @@ void              gtk_widget_focus_sort                    (GtkWidget        *wi
 gboolean          gtk_widget_focus_move                    (GtkWidget        *widget,
                                                             GtkDirectionType  direction,
                                                             GPtrArray        *focus_order);
-void              gtk_widget_get_border_allocation         (GtkWidget        *widget,
-                                                            GtkAllocation    *allocation);
 void              gtk_widget_get_outer_allocation          (GtkWidget        *widget,
                                                             GtkAllocation    *allocation);
 void              gtk_widget_get_own_allocation            (GtkWidget        *widget,

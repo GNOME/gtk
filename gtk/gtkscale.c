@@ -333,7 +333,7 @@ gtk_scale_allocate_value (GtkScale      *scale,
   gtk_widget_get_content_size (widget, &range_width, &range_height);
 
   slider_widget = gtk_range_get_slider_widget (range);
-  gtk_widget_get_border_allocation (slider_widget, &slider_alloc);
+  gtk_widget_get_outer_allocation (slider_widget, &slider_alloc);
 
   gtk_widget_measure (priv->value_widget,
                       GTK_ORIENTATION_HORIZONTAL, -1,

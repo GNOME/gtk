@@ -7961,9 +7961,8 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
       if (icon_info == NULL)
         continue;
 
-      gtk_widget_get_border_allocation (icon_info->widget, &allocation);
-      if (x >= allocation.x && x < allocation.x + allocation.width &&
-          y >= allocation.y && y < allocation.y + allocation.height)
+      gtk_widget_get_outer_allocation (icon_info->widget, &allocation);
+      if (gdk_rectangle_contains_point (&allocation, x, y))
         return i;
     }
 
