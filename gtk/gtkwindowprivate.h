@@ -28,9 +28,6 @@ G_BEGIN_DECLS
 
 void            _gtk_window_internal_set_focus (GtkWindow *window,
                                                 GtkWidget *focus);
-void            _gtk_window_reposition         (GtkWindow *window,
-                                                gint       x,
-                                                gint       y);
 void            _gtk_window_group_add_grab    (GtkWindowGroup *window_group,
                                                GtkWidget      *widget);
 void            _gtk_window_group_remove_grab (GtkWindowGroup *window_group,
