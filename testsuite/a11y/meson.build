@@ -18,9 +18,7 @@ foreach t: a11y_tests
                     '@0@.c'.format(t),
                     dependencies: libgtk_dep),
         args: [ '--tap', '-k', ],
-        env: installed_test_env,
-        install: true,
-        install_dir: installed_test_bindir)
+        env: installed_test_env)
 endforeach
 
 a11y_installed_tests = [
