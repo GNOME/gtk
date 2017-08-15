@@ -413,11 +413,6 @@ GDK_AVAILABLE_IN_3_90
 GdkWindow *   gdk_window_new_child             (GdkWindow     *parent,
                                                 gint           event_mask,
                                                 const GdkRectangle *position);
-GDK_AVAILABLE_IN_3_90
-GdkWindow *   gdk_window_new_input             (GdkWindow     *parent,
-                                                gint           event_mask,
-                                                const GdkRectangle *position);
-
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_destroy               (GdkWindow     *window);
