@@ -469,6 +469,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkEntry" id="entry1">
                             <property name="can_focus">1</property>
+                            <property name="enable-emoji-completion">1</property>
                             <property name="invisible_char">•</property>
                             <property name="placeholder-text" translatable="yes">Click icon to change mode</property>
                             <property name="secondary_icon_name">view-refresh-symbolic</property>
