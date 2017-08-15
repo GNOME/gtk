@@ -274,10 +274,7 @@ long_pressed_cb (GtkGesture *gesture,
 
   add_emoji (box, FALSE, emoji_data, 0);
   for (modifier = 0x1f3fb; modifier <= 0x1f3ff; modifier++)
-    {
-      add_emoji (box, FALSE, emoji_data, modifier);
-      g_variant_unref (codes);
-    }
+    add_emoji (box, FALSE, emoji_data, modifier);
 
   gtk_popover_popup (GTK_POPOVER (popover));
 }
