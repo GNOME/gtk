@@ -44,25 +44,6 @@ AtkAttributeSet *_gtk_pango_get_run_attributes     (AtkAttributeSet *attributes,
                                                     gint            *start_offset,
                                                     gint            *end_offset);
 
-gint _gtk_pango_move_chars     (PangoLayout  *layout,
-                                gint          offset,
-                                gint          count);
-gint _gtk_pango_move_words     (PangoLayout  *layout,
-                                gint          offset,
-                                gint          count);
-gint _gtk_pango_move_sentences (PangoLayout  *layout,
-                                gint          offset,
-                                gint          count);
-gint _gtk_pango_move_lines     (PangoLayout  *layout,
-                                gint          offset,
-                                gint          count);
-
-gboolean _gtk_pango_is_inside_word     (PangoLayout  *layout,
-                                        gint          offset);
-gboolean _gtk_pango_is_inside_sentence (PangoLayout  *layout,
-                                        gint          offset);
-
-
 gchar *_gtk_pango_get_text_before (PangoLayout     *layout,
                                    AtkTextBoundary  boundary_type,
                                    gint             offset,

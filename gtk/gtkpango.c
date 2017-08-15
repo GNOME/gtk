@@ -541,7 +541,7 @@ _gtk_pango_get_run_attributes (AtkAttributeSet *attributes,
  *
  * Returns: the new position
  */
-gint
+static gint
 _gtk_pango_move_chars (PangoLayout *layout,
                        gint         offset,
                        gint         count)
@@ -587,7 +587,7 @@ _gtk_pango_move_chars (PangoLayout *layout,
  *
  * Returns: the new position
  */
-gint
+static gint
 _gtk_pango_move_words (PangoLayout  *layout,
                        gint          offset,
                        gint          count)
@@ -633,7 +633,7 @@ _gtk_pango_move_words (PangoLayout  *layout,
  *
  * Returns: the new position
  */
-gint
+static gint
 _gtk_pango_move_sentences (PangoLayout  *layout,
                            gint          offset,
                            gint          count)
@@ -664,76 +664,6 @@ _gtk_pango_move_sentences (PangoLayout  *layout,
 }
 
 /*
- * _gtk_pango_move_lines:
- * @layout: a #PangoLayout
- * @offset: a character offset in @layout
- * @count: the number of lines to move from @offset
- *
- * Returns the position that is @count lines from the
- * given @offset. @count may be positive or negative.
- *
- * If @count is negative, the returned position will
- * be the start of a line, else it will be the end of
- * line.
- *
- * Returns: the new position
- */
-gint
-_gtk_pango_move_lines (PangoLayout *layout,
-                       gint         offset,
-                       gint         count)
-{
-  GSList *lines, *l;
-  PangoLayoutLine *line;
-  gint num;
-  const gchar *text;
-  gint pos, line_pos;
-  gint index;
-  gint len;
-
-  text = pango_layout_get_text (layout);
-  index = g_utf8_offset_to_pointer (text, offset) - text;
-  lines = pango_layout_get_lines (layout);
-  line = NULL;
-
-  num = 0;
-  for (l = lines; l; l = l->next)
-    {
-      line = l->data;
-      if (index < line->start_index + line->length)
-        break;
-      num++;
-    }
-
-  if (count < 0)
-    {
-      num += count;
-      if (num < 0)
-        num = 0;
-
-      line = g_slist_nth_data (lines, num);
-
-      return g_utf8_pointer_to_offset (text, text + line->start_index);
-    }
-  else
-    {
-      line_pos = index - line->start_index;
-
-      len = g_slist_length (lines);
-      num += count;
-      if (num >= len || (count == 0 && num == len - 1))
-        return g_utf8_strlen (text, -1) - 1;
-
-      line = l->data;
-      pos = line->start_index + line_pos;
-      if (pos >= line->start_index + line->length)
-        pos = line->start_index + line->length - 1;
-
-      return g_utf8_pointer_to_offset (text, text + pos);
-    }
-}
-
-/*
  * _gtk_pango_is_inside_word:
  * @layout: a #PangoLayout
  * @offset: a character offset in @layout
@@ -743,7 +673,7 @@ _gtk_pango_move_lines (PangoLayout *layout,
  *
  * Returns: %TRUE if @offset is inside a word
  */
-gboolean
+static gboolean
 _gtk_pango_is_inside_word (PangoLayout  *layout,
                            gint          offset)
 {
@@ -772,7 +702,7 @@ _gtk_pango_is_inside_word (PangoLayout  *layout,
  *
  * Returns: %TRUE if @offset is inside a sentence
  */
-gboolean
+static gboolean
 _gtk_pango_is_inside_sentence (PangoLayout  *layout,
                                gint          offset)
 {
