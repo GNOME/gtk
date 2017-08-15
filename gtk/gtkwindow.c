@@ -277,9 +277,11 @@ struct _GtkWindowPrivate
   GList *foci;
 };
 
+#ifdef GDK_WINDOWING_X11
 static const char *dnd_dest_targets [] = {
   "application/x-rootwindow-drop"
 };
+#endif
 
 enum {
   SET_FOCUS,
@@ -1909,12 +1911,14 @@ gtk_window_init (GtkWindow *window)
 
   priv->scale = gtk_widget_get_scale_factor (widget);
 
+#ifdef GDK_WINDOWING_X11
   targets = gdk_content_formats_new (dnd_dest_targets, G_N_ELEMENTS (dnd_dest_targets));
   gtk_drag_dest_set (GTK_WIDGET (window),
                      GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
                      targets,
                      GDK_ACTION_MOVE);
   gdk_content_formats_unref (targets);
+#endif
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
   g_signal_connect (seat, "device-removed",
