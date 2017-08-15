@@ -56,7 +56,7 @@ How to compile GTK+ itself
     </para>
     <para>
       You can get a list of all available options for the build by
-      running <application>mesonconf</application>.
+      running <application>meson configure</application>.
     </para>
     <para>
       After Meson successfully configured the build directory, you then

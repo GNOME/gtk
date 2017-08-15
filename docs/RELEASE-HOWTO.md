@@ -54,7 +54,7 @@ $ ninja -C _build gtk40-properties-pot
      release. **Note**: this is critical, a slip-up here will cause the soname
      to change.
 
-  6. Make sure that `mesontest` is happy (`ninja dist` will also run the test
+  6. Make sure that `meson test` is happy (`ninja dist` will also run the test
      suite, but it's better to catch issues before committing and tagging
      the release). Typical problems to expect here (depending on whether this
      is a devel  snapshot or a stable release):

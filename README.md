@@ -84,7 +84,7 @@ $ ninja
 You can run the test suite using:
 
 ```sh
-$ mesontest
+$ meson test
 ```
 
 And, finally, you can install GTK+ using:
