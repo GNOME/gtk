@@ -1390,19 +1390,12 @@ gtk_scrolled_window_size_allocate (GtkWidget           *widget,
     {
       gint child_scroll_width;
       gint child_scroll_height;
-      GtkScrollablePolicy hscroll_policy;
-      GtkScrollablePolicy vscroll_policy;
       gboolean previous_hvis;
       gboolean previous_vvis;
       guint count = 0;
       GtkScrollable *scrollable_child = GTK_SCROLLABLE (child);
-
-      hscroll_policy = scrollable_child != NULL
-                       ? gtk_scrollable_get_hscroll_policy (scrollable_child)
-                       : GTK_SCROLL_MINIMUM;
-      vscroll_policy = scrollable_child != NULL
-                       ? gtk_scrollable_get_vscroll_policy (scrollable_child)
-                       : GTK_SCROLL_MINIMUM;
+      GtkScrollablePolicy hscroll_policy = gtk_scrollable_get_hscroll_policy (scrollable_child);
+      GtkScrollablePolicy vscroll_policy = gtk_scrollable_get_vscroll_policy (scrollable_child);
 
       /* Determine scrollbar visibility first via hfw apis */
       if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
