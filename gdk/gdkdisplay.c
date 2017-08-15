@@ -2011,40 +2011,37 @@ void
 gdk_error_trap_push (void)
 {
   GdkDisplayManager *manager;
-  GdkDisplayClass *class;
   GdkGlobalErrorTrap *trap;
+  GSList *displays;
   GSList *l;
 
   manager = gdk_display_manager_get ();
-  class = GDK_DISPLAY_GET_CLASS (gdk_display_manager_get_default_display (manager));
+  displays = gdk_display_manager_list_displays (manager);
 
-  if (class->push_error_trap == NULL)
-    return;
+  trap = g_slice_new0 (GdkGlobalErrorTrap);
+  for (l = displays; l != NULL; l = l->next)
+    {
+      GdkDisplay *display = l->data;
+      GdkDisplayClass *class = GDK_DISPLAY_GET_CLASS (display);
 
-  trap = g_slice_new (GdkGlobalErrorTrap);
-  trap->displays = gdk_display_manager_list_displays (manager);
-
-  g_slist_foreach (trap->displays, (GFunc) g_object_ref, NULL);
-  for (l = trap->displays; l != NULL; l = l->next)
-    class->push_error_trap (l->data);
+      if (class->push_error_trap != NULL)
+        {
+          class->push_error_trap (display);
+          trap->displays = g_slist_prepend (trap->displays, g_object_ref (display));
+        }
+    }
 
   g_queue_push_head (&gdk_error_traps, trap);
+
+  g_slist_free (displays);
 }
 
 static gint
 gdk_error_trap_pop_internal (gboolean need_code)
 {
-  GdkDisplayManager *manager;
-  GdkDisplayClass *class;
   GdkGlobalErrorTrap *trap;
   gint result;
   GSList *l;
-
-  manager = gdk_display_manager_get ();
-  class = GDK_DISPLAY_GET_CLASS (gdk_display_manager_get_default_display (manager));
-
-  if (class->pop_error_trap == NULL)
-    return 0;
 
   trap = g_queue_pop_head (&gdk_error_traps);
 
@@ -2053,7 +2050,9 @@ gdk_error_trap_pop_internal (gboolean need_code)
   result = 0;
   for (l = trap->displays; l != NULL; l = l->next)
     {
-      gint code = class->pop_error_trap (l->data, !need_code);
+      GdkDisplay *display = l->data;
+      GdkDisplayClass *class = GDK_DISPLAY_GET_CLASS (display);
+      gint code = class->pop_error_trap (display, !need_code);
 
       /* we use the error on the last display listed, why not. */
       if (code != 0)
