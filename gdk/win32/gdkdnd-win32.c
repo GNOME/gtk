@@ -423,7 +423,7 @@ dnd_event_put (GdkEventType    type,
   e->dnd.context = g_object_ref (context);
   e->dnd.time = GDK_CURRENT_TIME;
   e->dnd.x_root = pt.x + _gdk_offset_x;
-  e->dnd.y_root = pt.x + _gdk_offset_y;
+  e->dnd.y_root = pt.y + _gdk_offset_y;
 
   if (e->dnd.window != NULL)
     g_object_ref (e->dnd.window);
