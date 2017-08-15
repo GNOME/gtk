@@ -327,7 +327,7 @@ add_emoji (GtkWidget    *box,
 static void
 populate_emoji_chooser (GtkEmojiChooser *chooser)
 {
-  g_autoptr(GBytes) bytes = NULL;
+  GBytes *bytes = NULL;
   GVariantIter iter;
   GVariant *item;
   GtkWidget *box;
@@ -362,6 +362,8 @@ populate_emoji_chooser (GtkEmojiChooser *chooser)
 
       add_emoji (box, FALSE, item, 0);
     }
+
+  g_bytes_unref (bytes);
 }
 
 static void
