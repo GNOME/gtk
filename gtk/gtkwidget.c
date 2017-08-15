@@ -15227,14 +15227,11 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
  * @widget: a #GtkWidget
  * @custom_window: (allow-none): a #GtkWindow, or %NULL
  *
- * Replaces the default, usually yellow, window used for displaying
+ * Replaces the default window used for displaying
  * tooltips with @custom_window. GTK+ will take care of showing and
  * hiding @custom_window at the right moment, to behave likewise as
  * the default tooltip window. If @custom_window is %NULL, the default
  * tooltip window will be used.
- *
- * If the custom window should have the default theming it needs to
- * have the name “gtk-tooltip”, see gtk_widget_set_name().
  *
  * Since: 2.12
  */
