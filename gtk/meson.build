@@ -396,6 +396,7 @@ gtk_public_headers = files([
   'gtkbuilder.h',
   'gtkbutton.h',
   'gtkcalendar.h',
+  'gtkcenterbox.h',
   'gtkcellarea.h',
   'gtkcellareabox.h',
   'gtkcellareacontext.h',
