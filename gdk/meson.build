@@ -216,6 +216,5 @@ libgdk = static_library('gdk',
 # "public" libgtk_dep used by internal executables.
 libgdk_dep = declare_dependency(
   sources: ['gdk.h', gdkconfig, gdkenum_h],
-  depends: gdk_sources,
   include_directories: [confinc, xinc, wlinc],
   dependencies: gdk_deps)
