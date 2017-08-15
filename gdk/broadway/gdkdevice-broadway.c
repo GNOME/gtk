@@ -172,9 +172,9 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   if (root_y)
     *root_y = device_root_y;
   if (win_x)
-    *win_x = device_root_x - toplevel->x;
+    *win_x = device_root_x;
   if (win_y)
-    *win_y = device_root_y - toplevel->y;
+    *win_y = device_root_y;
   if (mask)
     *mask = mask32;
   if (child_window)
