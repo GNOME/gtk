@@ -916,7 +916,6 @@ libgtk_dep = declare_dependency(sources: [gtkversion, gtktypebuiltins_h],
 # Introspection
 if not meson.is_cross_build()
   gir_args = [
-    '--c-include=gtk/gtk.h',
     '--quiet',
   ]
 
@@ -930,6 +929,7 @@ if not meson.is_cross_build()
                                includes: [ 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'cairo-1.0', ],
                                install: true,
                                extra_args: gir_args + [
+                                 '--c-include=gdk/gdk.h',
                                  '-DGDK_COMPILATION',
                                ])
   gdk_gir_dep = declare_dependency(sources: gdk_gir)
@@ -964,6 +964,7 @@ if not meson.is_cross_build()
                                install: true,
                                dependencies: gdk_gir_dep,
                                extra_args: gir_args + [
+                                 '--c-include=gsk/gsk.h',
                                  '--include-uninstalled=./gtk/Gdk-4.0.gir',
                                  '-DGSK_COMPILATION',
                                ])
@@ -985,6 +986,7 @@ if not meson.is_cross_build()
                      install: true,
                      dependencies: gsk_gir_dep,
                      extra_args: gir_args + [
+                       '--c-include=gtk/gtk.h',
                        '--include-uninstalled=./gtk/Gdk-4.0.gir',
                        '--include-uninstalled=./gtk/Gsk-4.0.gir',
                        '-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API',
