@@ -68,61 +68,7 @@ if have_vulkan
     'gskvulkanshader.c',
   ])
 
-# FIXME: what's up with these?
-#  gsk_private_vulkan_include_shaders = [
-#    'resources/vulkan/clip.frag.glsl',
-#    'resources/vulkan/clip.vert.glsl',
-#    'resources/vulkan/constants.glsl',
-#    'resources/vulkan/rounded-rect.glsl',
-#  ]
-
-  gsk_private_vulkan_fragment_shaders = [
-    'resources/vulkan/blend.frag',
-    'resources/vulkan/border.frag',
-    'resources/vulkan/color.frag',
-    'resources/vulkan/color-matrix.frag',
-    'resources/vulkan/inset-shadow.frag',
-    'resources/vulkan/linear.frag',
-    'resources/vulkan/outset-shadow.frag',
-  ]
-
-  gsk_private_vulkan_vertex_shaders = [
-    'resources/vulkan/blend.vert',
-    'resources/vulkan/border.vert',
-    'resources/vulkan/color.vert',
-    'resources/vulkan/color-matrix.vert',
-    'resources/vulkan/inset-shadow.vert',
-    'resources/vulkan/linear.vert',
-    'resources/vulkan/outset-shadow.vert',
-  ]
-
-  gsk_private_vulkan_shaders += gsk_private_vulkan_fragment_shaders
-  gsk_private_vulkan_shaders += gsk_private_vulkan_vertex_shaders
-
-  glslc = find_program('glslc', required: false)
-  foreach shader: gsk_private_vulkan_shaders
-    basefn = shader.split('.').get(0)
-    suffix = shader.split('.').get(1)
-
-    stage_arg = suffix == 'frag' ? '-fshader-stage=fragment' : '-fshader-stage=vertex'
-    spv_shader = '@0@.@1@.spv'.format(basefn, suffix)
-
-    if glslc.found()
-      compiled_shader = custom_target(spv_shader,
-                                      input: shader,
-                                      output: spv_shader,
-                                      command: [
-                                        glslc,
-                                        stage_arg,
-                                        '-DCLIP_NONE',
-                                        '-o', '@OUTPUT@'
-                                      ])
-    endif
-    gsk_private_vulkan_compiled_shaders += spv_shader
-    gsk_private_vulkan_compiled_shaders += '@0@-clip.@1@.spv'.format(basefn, suffix)
-    gsk_private_vulkan_compiled_shaders += '@0@-clip-rounded.@1@.spv'.format(basefn, suffix)
-  endforeach
-
+  subdir('resources/vulkan')
 endif # have_vulkan
 
 gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
