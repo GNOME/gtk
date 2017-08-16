@@ -33,4 +33,6 @@ void            gdk_window_move_to_rect         (GdkWindow          *window,
                                                  gint                rect_anchor_dx,
                                                  gint                rect_anchor_dy);
 
+GObject *       gdk_event_get_user_data         (const GdkEvent *event);
+
 #endif /* __GDK__PRIVATE_H__ */

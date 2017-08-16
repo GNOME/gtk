@@ -27,6 +27,7 @@
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdndprivate.h"
+#include "gdk-private.h"
 
 #include <string.h>
 #include <math.h>
