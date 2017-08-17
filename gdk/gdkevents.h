@@ -520,21 +520,38 @@ typedef enum
  * @GDK_WINDOW_STATE_ABOVE: the window is kept above other windows.
  * @GDK_WINDOW_STATE_BELOW: the window is kept below other windows.
  * @GDK_WINDOW_STATE_FOCUSED: the window is presented as focused (with active decorations).
- * @GDK_WINDOW_STATE_TILED: the window is in a tiled state, Since 3.10
+ * @GDK_WINDOW_STATE_TILED: the window is in a tiled state, Since 3.10. Since 3.22.23, this
+ *                          is deprecated in favor of per-edge information.
+ * @GDK_WINDOW_STATE_TOP_TILED: whether the top edge is tiled, Since 3.22.23
+ * @GDK_WINDOW_STATE_TOP_RESIZABLE: whether the top edge is resizable, Since 3.22.23
+ * @GDK_WINDOW_STATE_RIGHT_TILED: whether the right edge is tiled, Since 3.22.23
+ * @GDK_WINDOW_STATE_RIGHT_RESIZABLE: whether the right edge is resizable, Since 3.22.23
+ * @GDK_WINDOW_STATE_BOTTOM_TILED: whether the bottom edge is tiled, Since 3.22.23
+ * @GDK_WINDOW_STATE_BOTTOM_RESIZABLE: whether the bottom edge is resizable, Since 3.22.23
+ * @GDK_WINDOW_STATE_LEFT_TILED: whether the left edge is tiled, Since 3.22.23
+ * @GDK_WINDOW_STATE_LEFT_RESIZABLE: whether the left edge is resizable, Since 3.22.23
  *
  * Specifies the state of a toplevel window.
  */
 typedef enum
 {
-  GDK_WINDOW_STATE_WITHDRAWN  = 1 << 0,
-  GDK_WINDOW_STATE_ICONIFIED  = 1 << 1,
-  GDK_WINDOW_STATE_MAXIMIZED  = 1 << 2,
-  GDK_WINDOW_STATE_STICKY     = 1 << 3,
-  GDK_WINDOW_STATE_FULLSCREEN = 1 << 4,
-  GDK_WINDOW_STATE_ABOVE      = 1 << 5,
-  GDK_WINDOW_STATE_BELOW      = 1 << 6,
-  GDK_WINDOW_STATE_FOCUSED    = 1 << 7,
-  GDK_WINDOW_STATE_TILED      = 1 << 8
+  GDK_WINDOW_STATE_WITHDRAWN        = 1 << 0,
+  GDK_WINDOW_STATE_ICONIFIED        = 1 << 1,
+  GDK_WINDOW_STATE_MAXIMIZED        = 1 << 2,
+  GDK_WINDOW_STATE_STICKY           = 1 << 3,
+  GDK_WINDOW_STATE_FULLSCREEN       = 1 << 4,
+  GDK_WINDOW_STATE_ABOVE            = 1 << 5,
+  GDK_WINDOW_STATE_BELOW            = 1 << 6,
+  GDK_WINDOW_STATE_FOCUSED          = 1 << 7,
+  GDK_WINDOW_STATE_TILED            = 1 << 8,
+  GDK_WINDOW_STATE_TOP_TILED        = 1 << 9,
+  GDK_WINDOW_STATE_TOP_RESIZABLE    = 1 << 10,
+  GDK_WINDOW_STATE_RIGHT_TILED      = 1 << 11,
+  GDK_WINDOW_STATE_RIGHT_RESIZABLE  = 1 << 12,
+  GDK_WINDOW_STATE_BOTTOM_TILED     = 1 << 13,
+  GDK_WINDOW_STATE_BOTTOM_RESIZABLE = 1 << 14,
+  GDK_WINDOW_STATE_LEFT_TILED       = 1 << 15,
+  GDK_WINDOW_STATE_LEFT_RESIZABLE   = 1 << 16
 } GdkWindowState;
 
 /**
