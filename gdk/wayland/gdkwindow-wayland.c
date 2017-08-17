@@ -2961,6 +2961,57 @@ gtk_surface_configure (void                *data,
         case GTK_SURFACE1_STATE_TILED:
           new_state |= GDK_WINDOW_STATE_TILED;
           break;
+
+        /* Since v2 */
+        case GTK_SURFACE1_STATE_TILED_TOP:
+          new_state |= GDK_WINDOW_STATE_TOP_TILED;
+          break;
+        case GTK_SURFACE1_STATE_TILED_RIGHT:
+          new_state |= GDK_WINDOW_STATE_RIGHT_TILED;
+          break;
+        case GTK_SURFACE1_STATE_TILED_BOTTOM:
+          new_state |= GDK_WINDOW_STATE_BOTTOM_TILED;
+          break;
+        case GTK_SURFACE1_STATE_TILED_LEFT:
+          new_state |= GDK_WINDOW_STATE_LEFT_TILED;
+          break;
+        default:
+          /* Unknown state */
+          break;
+        }
+    }
+
+  impl->pending.state |= new_state;
+}
+
+static void
+gtk_surface_configure_edges (void                *data,
+                             struct gtk_surface1 *gtk_surface,
+                             struct wl_array     *edge_constraints)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindowState new_state = 0;
+  uint32_t *p;
+
+  wl_array_for_each (p, edge_constraints)
+    {
+      uint32_t constraint = *p;
+
+      switch (constraint)
+        {
+        case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_TOP:
+          new_state |= GDK_WINDOW_STATE_TOP_RESIZABLE;
+          break;
+        case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_RIGHT:
+          new_state |= GDK_WINDOW_STATE_TOP_TILED;
+          break;
+        case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_BOTTOM:
+          new_state |= GDK_WINDOW_STATE_BOTTOM_RESIZABLE;
+          break;
+        case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_LEFT:
+          new_state |= GDK_WINDOW_STATE_LEFT_RESIZABLE;
+          break;
         default:
           /* Unknown state */
           break;
@@ -2971,7 +3022,8 @@ gtk_surface_configure (void                *data,
 }
 
 static const struct gtk_surface1_listener gtk_surface_listener = {
-  gtk_surface_configure
+  gtk_surface_configure,
+  gtk_surface_configure_edges
 };
 
 static void

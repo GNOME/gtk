@@ -1,6 +1,6 @@
 <protocol name="gtk">
 
-  <interface name="gtk_shell1" version="1">
+  <interface name="gtk_shell1" version="2">
     <description summary="gtk specific extensions">
       gtk_shell is a protocol extension providing additional features for
       clients implementing it.
@@ -30,7 +30,7 @@
     </request>
   </interface>
 
-  <interface name="gtk_surface1" version="1">
+  <interface name="gtk_surface1" version="2">
     <request name="set_dbus_properties">
       <arg name="application_id" type="string" allow-null="true"/>
       <arg name="app_menu_path" type="string" allow-null="true"/>
@@ -51,10 +51,26 @@
 
     <enum name="state">
       <entry name="tiled" value="1"/>
+
+      <entry name="tiled_top" value="2" since="2" />
+      <entry name="tiled_right" value="3" since="2" />
+      <entry name="tiled_bottom" value="4" since="2" />
+      <entry name="tiled_left" value="5"  since="2" />
+    </enum>
+
+    <enum name="edge_constraint" since="2">
+      <entry name="resizable_top" value="1"/>
+      <entry name="resizable_right" value="2"/>
+      <entry name="resizable_bottom" value="3"/>
+      <entry name="resizable_left" value="4"/>
     </enum>
 
     <event name="configure">
       <arg name="states" type="array"/>
+    </event>
+
+    <event name="configure_edges" since="2">
+      <arg name="constraints" type="array"/>
     </event>
   </interface>
 
