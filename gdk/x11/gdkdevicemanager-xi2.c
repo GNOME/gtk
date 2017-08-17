@@ -980,12 +980,13 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
     _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
 }
 
-static guint
-device_get_tool_serial (GdkDevice *device)
+static gboolean
+device_get_tool_serial_and_id (GdkDevice *device,
+                               guint     *serial_id,
+                               guint     *id)
 {
   GdkDisplay *display;
   gulong nitems, bytes_after;
-  guint serial_id = 0;
   guint32 *data;
   int rc, format;
   Atom type;
@@ -997,19 +998,24 @@ device_get_tool_serial (GdkDevice *device)
   rc = XIGetProperty (GDK_DISPLAY_XDISPLAY (display),
                       gdk_x11_device_get_id (device),
                       gdk_x11_get_xatom_by_name_for_display (display, "Wacom Serial IDs"),
-                      0, 4, False, XA_INTEGER, &type, &format, &nitems, &bytes_after,
+                      0, 5, False, XA_INTEGER, &type, &format, &nitems, &bytes_after,
                       (guchar **) &data);
   gdk_x11_display_error_trap_pop_ignored (display);
 
   if (rc != Success)
-    return 0;
+    return FALSE;
 
-  if (type == XA_INTEGER && format == 32 && nitems >= 4)
-    serial_id = data[3];
+  if (type == XA_INTEGER && format == 32)
+    {
+      if (nitems >= 4)
+        *serial_id = data[3];
+      if (nitems >= 5)
+        *id = data[4];
+    }
 
   XFree (data);
 
-  return serial_id;
+  return TRUE;
 }
 
 static void
@@ -1024,18 +1030,18 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
   if (ev->property == gdk_x11_get_xatom_by_name ("Wacom Serial IDs"))
     {
       GdkDeviceTool *tool = NULL;
-      guint serial_id;
+      guint serial_id = 0, tool_id = 0;
       GdkSeat *seat;
 
-      if (ev->what != XIPropertyDeleted)
+      if (ev->what != XIPropertyDeleted &&
+          device_get_tool_serial_and_id (device, &serial_id, &tool_id))
         {
-          serial_id = device_get_tool_serial (device);
           seat = gdk_device_get_seat (device);
           tool = gdk_seat_get_tool (seat, serial_id);
 
           if (!tool && serial_id > 0)
             {
-              tool = gdk_device_tool_new (serial_id, 0,
+              tool = gdk_device_tool_new (serial_id, tool_id,
                                           GDK_DEVICE_TOOL_TYPE_UNKNOWN, 0);
               gdk_seat_default_add_tool (GDK_SEAT_DEFAULT (seat), tool);
             }
