@@ -215,6 +215,7 @@ struct _GtkWindowPrivate
   GtkWidget *popup_menu;
 
   gint       initial_fullscreen_monitor;
+  guint      edge_constraints;
 
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
@@ -1702,9 +1703,11 @@ edge_under_coordinates (GtkWindow     *window,
   if (priv->type != GTK_WINDOW_TOPLEVEL ||
       !priv->client_decorated ||
       !priv->resizable ||
-      priv->tiled ||
       priv->fullscreen ||
       priv->maximized)
+    return FALSE;
+
+  if (priv->tiled && !priv->edge_constraints)
     return FALSE;
 
   _gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
@@ -1740,12 +1743,18 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_WINDOW_EDGE_WEST &&
           edge != GDK_WINDOW_EDGE_SOUTH_WEST)
         return FALSE;
+
+      if (!(priv->edge_constraints & GDK_WINDOW_STATE_LEFT_RESIZABLE))
+        return FALSE;
     }
   else if (x >= allocation.x + allocation.width - border.right - handle_h)
     {
       if (edge != GDK_WINDOW_EDGE_NORTH_EAST &&
           edge != GDK_WINDOW_EDGE_EAST &&
           edge != GDK_WINDOW_EDGE_SOUTH_EAST)
+        return FALSE;
+
+      if (!(priv->edge_constraints & GDK_WINDOW_STATE_RIGHT_RESIZABLE))
         return FALSE;
     }
   else if (edge != GDK_WINDOW_EDGE_NORTH &&
@@ -1759,12 +1768,18 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_WINDOW_EDGE_NORTH &&
           edge != GDK_WINDOW_EDGE_NORTH_EAST)
         return FALSE;
+
+      if (!(priv->edge_constraints & GDK_WINDOW_STATE_TOP_RESIZABLE))
+        return FALSE;
     }
   else if (y > allocation.y + allocation.height - border.bottom - handle_v)
     {
       if (edge != GDK_WINDOW_EDGE_SOUTH_WEST &&
           edge != GDK_WINDOW_EDGE_SOUTH &&
           edge != GDK_WINDOW_EDGE_SOUTH_EAST)
+        return FALSE;
+
+      if (!(priv->edge_constraints & GDK_WINDOW_STATE_BOTTOM_RESIZABLE))
         return FALSE;
     }
   else if (edge != GDK_WINDOW_EDGE_WEST &&
@@ -7132,6 +7147,25 @@ gtk_window_configure_event (GtkWidget         *widget,
   return TRUE;
 }
 
+static void
+update_edge_constraints (GtkWindow           *window,
+                         GdkEventWindowState *event)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GdkWindowState state = event->new_window_state;
+
+  priv->edge_constraints = (state & GDK_WINDOW_STATE_TOP_TILED) |
+                           (state & GDK_WINDOW_STATE_TOP_RESIZABLE) |
+                           (state & GDK_WINDOW_STATE_RIGHT_TILED) |
+                           (state & GDK_WINDOW_STATE_RIGHT_RESIZABLE) |
+                           (state & GDK_WINDOW_STATE_BOTTOM_TILED) |
+                           (state & GDK_WINDOW_STATE_BOTTOM_RESIZABLE) |
+                           (state & GDK_WINDOW_STATE_LEFT_TILED) |
+                           (state & GDK_WINDOW_STATE_LEFT_RESIZABLE);
+
+  priv->tiled = (state & GDK_WINDOW_STATE_TILED) ? 1 : 0;
+}
+
 static gboolean
 gtk_window_state_event (GtkWidget           *widget,
                         GdkEventWindowState *event)
@@ -7148,18 +7182,14 @@ gtk_window_state_event (GtkWidget           *widget,
         (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? 1 : 0;
     }
 
-  if (event->changed_mask & GDK_WINDOW_STATE_TILED)
-    {
-      priv->tiled =
-        (event->new_window_state & GDK_WINDOW_STATE_TILED) ? 1 : 0;
-    }
-
   if (event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED)
     {
       priv->maximized =
         (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
       g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_IS_MAXIMIZED]);
     }
+
+  update_edge_constraints (window, event);
 
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
     {
