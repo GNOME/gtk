@@ -166,6 +166,9 @@ struct _GdkToplevelX11
   GdkWindowHints last_geometry_hints_mask;
   GdkGeometry last_geometry_hints;
   
+  /* Constrained edge information */
+  guint edge_constraints;
+
 #ifdef HAVE_XSYNC
   XID update_counter;
   XID extended_update_counter;
