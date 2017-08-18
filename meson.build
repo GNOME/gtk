@@ -599,6 +599,20 @@ if get_option('enable-documentation')
   subdir('docs/reference')
 endif
 
+summary = [
+  '',
+  '------',
+  'GTK+ @0@ (@1@)'.format(gtk_version, gtk_api_version),
+  '',
+  '  Enabled backends: @0@'.format(pkg_targets.strip()),
+  '  Documentation: @0@'.format(get_option('enable-documentation')),
+  '  Vulkan support: @0@'.format(have_vulkan),
+  '------',
+  ''
+]
+
+message('\n'.join(summary))
+
 # Keep this in sync with post-install.sh expected arguments
 meson.add_install_script('build-aux/meson/post-install.sh',
                          gtk_api_version,
