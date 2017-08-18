@@ -336,8 +336,8 @@ gdk_wayland_window_update_size (GdkWindow *window,
                             width * scale,
                             height * scale,
                             0, 0);
-      wl_surface_set_buffer_scale (impl->display_server.wl_surface, scale);
     }
+  wl_surface_set_buffer_scale (impl->display_server.wl_surface, scale);
 
   area.x = 0;
   area.y = 0;
