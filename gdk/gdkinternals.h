@@ -285,6 +285,8 @@ struct _GdkWindow
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
 
   GdkDrawingContext *drawing_context;
+
+  cairo_region_t *opaque_region;
 };
 
 #define GDK_WINDOW_TYPE(d) ((((GdkWindow *)(d)))->window_type)

@@ -404,6 +404,9 @@ gdk_window_finalize (GObject *object)
 
   g_clear_object (&window->display);
 
+  if (window->opaque_region)
+    cairo_region_destroy (window->opaque_region);
+
   G_OBJECT_CLASS (gdk_window_parent_class)->finalize (object);
 }
 
@@ -8141,6 +8144,14 @@ gdk_window_set_opaque_region (GdkWindow      *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (!GDK_WINDOW_DESTROYED (window));
+
+  if (cairo_region_equal (window->opaque_region, region))
+    return;
+
+  g_clear_pointer (&window->opaque_region, cairo_region_destroy);
+
+  if (region != NULL)
+    window->opaque_region = cairo_region_reference (region);
 
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
