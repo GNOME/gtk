@@ -386,6 +386,8 @@ struct _GdkWindow
   GdkWindowInvalidateHandlerFunc invalidate_handler;
 
   GdkDrawingContext *drawing_context;
+
+  cairo_region_t *opaque_region;
 };
 
 #define GDK_WINDOW_TYPE(d) ((((GdkWindow *)(d)))->window_type)
