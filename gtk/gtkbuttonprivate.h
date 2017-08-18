@@ -48,7 +48,6 @@ struct _GtkButtonPrivate
   gfloat                 baseline_align;
 
   guint                  activate_timeout;
-  guint32                grab_time;
 
   GtkPositionType        image_position;
 

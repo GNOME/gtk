@@ -1990,7 +1990,6 @@ gtk_real_button_activate (GtkButton *button)
   GtkWidget *widget = GTK_WIDGET (button);
   GtkButtonPrivate *priv = button->priv;
   GdkDevice *device;
-  guint32 time;
 
   device = gtk_get_current_event_device ();
 
@@ -1999,21 +1998,13 @@ gtk_real_button_activate (GtkButton *button)
 
   if (gtk_widget_get_realized (widget) && !priv->activate_timeout)
     {
-      time = gtk_get_current_event_time ();
-
       /* bgo#626336 - Only grab if we have a device (from an event), not if we
        * were activated programmatically when no event is available.
        */
       if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
 	{
-          if (gdk_seat_grab (gdk_device_get_seat (device), priv->event_window,
-                             GDK_SEAT_CAPABILITY_KEYBOARD, TRUE,
-                             NULL, NULL, NULL, NULL) == GDK_GRAB_SUCCESS)
-            {
-              gtk_device_grab_add (widget, device, TRUE);
-              priv->grab_keyboard = device;
-              priv->grab_time = time;
-	    }
+          gtk_device_grab_add (widget, device, TRUE);
+          priv->grab_keyboard = device;
 	}
 
       priv->activate_timeout = gdk_threads_add_timeout (ACTIVATE_TIMEOUT,
@@ -2037,7 +2028,6 @@ gtk_button_finish_activate (GtkButton *button,
 
   if (priv->grab_keyboard)
     {
-      gdk_seat_ungrab (gdk_device_get_seat (priv->grab_keyboard));
       gtk_device_grab_remove (widget, priv->grab_keyboard);
       priv->grab_keyboard = NULL;
     }
