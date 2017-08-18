@@ -192,6 +192,147 @@ gdk_x11_display_event_translator_init (GdkEventTranslatorIface *iface)
 }
 
 static void
+do_edge_constraint_state_check (GdkWindow      *window,
+                                GdkWindowState  old_state,
+                                GdkWindowState *set,
+                                GdkWindowState *unset)
+{
+  GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
+  GdkWindowState local_set, local_unset;
+  GdkScreen *screen = GDK_WINDOW_SCREEN (window);
+  guint edge_constraints;
+
+  local_set = *set;
+  local_unset = *unset;
+  edge_constraints = toplevel->edge_constraints;
+
+  /* If the WM doesn't support _GTK_EDGE_CONSTRAINTS, rely on the fallback
+   * implementation. If it supports _GTK_EDGE_CONSTRAINTS, however, remove
+   * the GDK_WINDOW_STATE_TILED flag explicitly.
+   */
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_GTK_EDGE_CONSTRAINTS")))
+    {
+      /* FIXME: we rely on implementation details of mutter here:
+       * mutter only tiles horizontally, and sets maxvert when it does
+       * and if it tiles, it always affects all edges
+       */
+      if (old_state & GDK_WINDOW_STATE_TILED)
+        {
+          if (!toplevel->have_maxvert)
+            local_unset |= GDK_WINDOW_STATE_TILED;
+        }
+      else
+        {
+          if (toplevel->have_maxvert && !toplevel->have_maxhorz)
+            local_set |= GDK_WINDOW_STATE_TILED;
+        }
+    }
+  else
+    {
+      if (!(old_state & GDK_WINDOW_STATE_TILED))
+        {
+          local_set |= GDK_WINDOW_STATE_TILED;
+        }
+    }
+
+  /* Top edge */
+  if (old_state & GDK_WINDOW_STATE_TOP_TILED)
+    {
+      if ((edge_constraints & GDK_WINDOW_STATE_TOP_TILED) == 0)
+        local_unset |= GDK_WINDOW_STATE_TOP_TILED;
+    }
+  else
+    {
+      if (edge_constraints & GDK_WINDOW_STATE_TOP_TILED)
+        local_set |= GDK_WINDOW_STATE_TOP_TILED;
+    }
+
+  if (old_state & GDK_WINDOW_STATE_TOP_RESIZABLE)
+    {
+      if ((edge_constraints & GDK_WINDOW_STATE_TOP_RESIZABLE) == 0)
+        local_unset |= GDK_WINDOW_STATE_TOP_RESIZABLE;
+    }
+  else
+    {
+      if (edge_constraints & GDK_WINDOW_STATE_TOP_RESIZABLE)
+        local_set |= GDK_WINDOW_STATE_TOP_RESIZABLE;
+    }
+
+  /* Right edge */
+  if (old_state & GDK_WINDOW_STATE_RIGHT_TILED)
+    {
+      if ((edge_constraints & GDK_WINDOW_STATE_RIGHT_TILED) == 0)
+        local_unset |= GDK_WINDOW_STATE_RIGHT_TILED;
+    }
+  else
+    {
+      if (edge_constraints & GDK_WINDOW_STATE_RIGHT_TILED)
+        local_set |= GDK_WINDOW_STATE_RIGHT_TILED;
+    }
+
+  if (old_state & GDK_WINDOW_STATE_RIGHT_RESIZABLE)
+    {
+      if ((edge_constraints & GDK_WINDOW_STATE_RIGHT_RESIZABLE) == 0)
+        local_unset |= GDK_WINDOW_STATE_RIGHT_RESIZABLE;
+    }
+  else
+    {
+      if (edge_constraints & GDK_WINDOW_STATE_RIGHT_RESIZABLE)
+        local_set |= GDK_WINDOW_STATE_RIGHT_RESIZABLE;
+    }
+
+  /* Bottom edge */
+  if (old_state & GDK_WINDOW_STATE_BOTTOM_TILED)
+    {
+      if ((edge_constraints & GDK_WINDOW_STATE_BOTTOM_TILED) == 0)
+        local_unset |= GDK_WINDOW_STATE_BOTTOM_TILED;
+    }
+  else
+    {
+      if (edge_constraints & GDK_WINDOW_STATE_BOTTOM_TILED)
+        local_set |= GDK_WINDOW_STATE_BOTTOM_TILED;
+    }
+
+  if (old_state & GDK_WINDOW_STATE_BOTTOM_RESIZABLE)
+    {
+      if ((edge_constraints & GDK_WINDOW_STATE_BOTTOM_RESIZABLE) == 0)
+        local_unset |= GDK_WINDOW_STATE_BOTTOM_RESIZABLE;
+    }
+  else
+    {
+      if (edge_constraints & GDK_WINDOW_STATE_BOTTOM_RESIZABLE)
+        local_set |= GDK_WINDOW_STATE_BOTTOM_RESIZABLE;
+    }
+
+  /* Left edge */
+  if (old_state & GDK_WINDOW_STATE_LEFT_TILED)
+    {
+      if ((edge_constraints & GDK_WINDOW_STATE_LEFT_TILED) == 0)
+        local_unset |= GDK_WINDOW_STATE_LEFT_TILED;
+    }
+  else
+    {
+      if (edge_constraints & GDK_WINDOW_STATE_LEFT_TILED)
+        local_set |= GDK_WINDOW_STATE_LEFT_TILED;
+    }
+
+  if (old_state & GDK_WINDOW_STATE_LEFT_RESIZABLE)
+    {
+      if ((edge_constraints & GDK_WINDOW_STATE_LEFT_RESIZABLE) == 0)
+        local_unset |= GDK_WINDOW_STATE_LEFT_RESIZABLE;
+    }
+  else
+    {
+      if (edge_constraints & GDK_WINDOW_STATE_LEFT_RESIZABLE)
+        local_set |= GDK_WINDOW_STATE_LEFT_RESIZABLE;
+    }
+
+  *set = local_set;
+  *unset = local_unset;
+}
+
+static void
 do_net_wm_state_changes (GdkWindow *window)
 {
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
@@ -244,21 +385,6 @@ do_net_wm_state_changes (GdkWindow *window)
         set |= GDK_WINDOW_STATE_MAXIMIZED;
     }
 
-  /* FIXME: we rely on implementation details of mutter here:
-   * mutter only tiles horizontally, and sets maxvert when it does
-   * and if it tiles, it always affects all edges
-   */
-  if (old_state & GDK_WINDOW_STATE_TILED)
-    {
-      if (!toplevel->have_maxvert)
-        unset |= GDK_WINDOW_STATE_TILED;
-    }
-  else
-    {
-      if (toplevel->have_maxvert && !toplevel->have_maxhorz)
-        set |= GDK_WINDOW_STATE_TILED;
-    }
-
   if (old_state & GDK_WINDOW_STATE_FOCUSED)
     {
       if (!toplevel->have_focused)
@@ -280,6 +406,9 @@ do_net_wm_state_changes (GdkWindow *window)
       if (toplevel->have_hidden)
         set |= GDK_WINDOW_STATE_ICONIFIED;
     }
+
+  /* Update edge constraints and tiling */
+  do_edge_constraint_state_check (window, old_state, &set, &unset);
 
   gdk_synthesize_window_state (window, unset, set);
 }
@@ -395,6 +524,49 @@ gdk_check_wm_state_changed (GdkWindow *window)
     gdk_check_wm_desktop_changed (window);
   else
     do_net_wm_state_changes (window);
+}
+
+static void
+gdk_check_edge_constraints_changed (GdkWindow *window)
+{
+  GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
+  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
+
+  Atom type;
+  gint format;
+  gulong nitems;
+  gulong bytes_after;
+  guchar *data;
+  gulong *constraints;
+
+  type = None;
+  gdk_x11_display_error_trap_push (display);
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
+                      GDK_WINDOW_XID (window),
+                      gdk_x11_get_xatom_by_name_for_display (display, "_GTK_EDGE_CONSTRAINTS"),
+                      0, G_MAXLONG, False, XA_CARDINAL, &type,
+                      &format, &nitems,
+                      &bytes_after, &data);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (type != None)
+    {
+      constraints = (gulong *)data;
+
+      /* The GDK enum for these states does not begin at zero so, to avoid
+       * messing around with shifts, just make the passed value and GDK's
+       * enum values match by shifting to the first tiled state.
+       */
+      toplevel->edge_constraints = constraints[0] << 9;
+
+      XFree (constraints);
+    }
+  else
+    {
+      toplevel->edge_constraints = 0;
+    }
+
+  do_net_wm_state_changes (window);
 }
 
 static Atom
@@ -887,6 +1059,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
 	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"))
 	    gdk_check_wm_desktop_changed (window);
+
+	  if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_GTK_EDGE_CONSTRAINTS"))
+	    gdk_check_edge_constraints_changed (window);
 	}
 
       if (window->event_mask & GDK_PROPERTY_CHANGE_MASK)
