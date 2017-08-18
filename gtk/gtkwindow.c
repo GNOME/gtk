@@ -7643,10 +7643,37 @@ update_window_style_classes (GtkWindow *window)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (window));
 
-  if (priv->tiled)
-    gtk_style_context_add_class (context, "tiled");
+  if (priv->edge_constraints == 0)
+    {
+      if (priv->tiled)
+        gtk_style_context_add_class (context, "tiled");
+      else
+        gtk_style_context_remove_class (context, "tiled");
+    }
   else
-    gtk_style_context_remove_class (context, "tiled");
+    {
+      guint edge_constraints = priv->edge_constraints;
+
+      if (edge_constraints & GDK_WINDOW_STATE_TOP_TILED)
+        gtk_style_context_add_class (context, "tiled-top");
+      else
+        gtk_style_context_remove_class (context, "tiled-top");
+
+      if (edge_constraints & GDK_WINDOW_STATE_RIGHT_TILED)
+        gtk_style_context_add_class (context, "tiled-right");
+      else
+        gtk_style_context_remove_class (context, "tiled-right");
+
+      if (edge_constraints & GDK_WINDOW_STATE_BOTTOM_TILED)
+        gtk_style_context_add_class (context, "tiled-bottom");
+      else
+        gtk_style_context_remove_class (context, "tiled-bottom");
+
+      if (edge_constraints & GDK_WINDOW_STATE_LEFT_TILED)
+        gtk_style_context_add_class (context, "tiled-left");
+      else
+        gtk_style_context_remove_class (context, "tiled-left");
+    }
 
   if (priv->maximized)
     gtk_style_context_add_class (context, "maximized");
@@ -7940,7 +7967,13 @@ gtk_window_state_event (GtkWidget           *widget,
 
   update_edge_constraints (window, event);
 
-  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
+  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN |
+                             GDK_WINDOW_STATE_MAXIMIZED |
+                             GDK_WINDOW_STATE_TILED |
+                             GDK_WINDOW_STATE_TOP_TILED |
+                             GDK_WINDOW_STATE_RIGHT_TILED |
+                             GDK_WINDOW_STATE_BOTTOM_TILED |
+                             GDK_WINDOW_STATE_LEFT_TILED))
     {
       update_window_style_classes (window);
       update_window_buttons (window);

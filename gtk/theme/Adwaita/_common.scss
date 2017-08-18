@@ -1589,11 +1589,20 @@ headerbar {
 
   // squared corners when the window is maximized, tiled, or fullscreen
   .tiled &,
+  .tiled-top &,
   .maximized &,
   .fullscreen & {
     &:backdrop, & {
       border-radius: 0;
     }
+  }
+
+  .tiled-left & {
+    border-top-left-radius: 0;
+  }
+
+  .tiled-right & {
+    border-top-right-radius: 0;
   }
 
   &.default-decoration {
@@ -1636,24 +1645,49 @@ headerbar {
   }
 }
 
-.background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar {
+.background .titlebar {
   &:backdrop, & {
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
   }
 }
 
+.background.tiled .titlebar,
+.background.tiled-top .titlebar,
+.background.tiled-right .titlebar,
+.background.tiled-bottom .titlebar,
+.background.tiled-left .titlebar,
+.background.maximized .titlebar,
+.backgrounf.solid-csd .titlebar {
+  &:backdrop, & {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+}
+
 headerbar { // headerbar border rounding
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) separator:first-child + &, // tackles the paned container case
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) &:first-child { &:backdrop, & { border-top-left-radius: 7px; }}
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) &:last-child { &:backdrop, & { border-top-right-radius: 7px; }}
-  window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack & { // tackles the stacked headerbars case
+
+  window separator:first-child + &,
+  window stack &,
+  &:first-child,
+  &:last-child {
     &:first-child, &:last-child {
       &:backdrop, & {
         border-top-left-radius: 7px;
         border-top-right-radius: 7px;
       }
     }
+  }
+
+  window.tiled &,
+  window.tiled-top &,
+  window.tiled-right &,
+  window.tiled-bottom &,
+  window.tiled-left &,
+  window.maximized &,
+  window.fullscreen & {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 }
 
@@ -4273,7 +4307,11 @@ decoration {
 
   .maximized &,
   .fullscreen &,
-  .tiled & { border-radius: 0; }
+  .tiled &,
+  .tiled-top &,
+  .tiled-right &,
+  .tiled-bottom &,
+  .tiled-left & { border-radius: 0; }
 
   .popup & { box-shadow: none; }
 

@@ -648,7 +648,11 @@ searchbar, .location-bar { border-width: 0 0 1px; padding: 3px; }
 
 .selection-mode.titlebar:not(headerbar) .selection-menu:backdrop .arrow, .selection-mode.titlebar:not(headerbar) .selection-menu .arrow, headerbar.selection-mode .selection-menu:backdrop .arrow, headerbar.selection-mode .selection-menu .arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); color: rgba(255, 255, 255, 0.5); -gtk-icon-shadow: none; }
 
-.tiled .titlebar:backdrop:not(headerbar), .tiled .titlebar:not(headerbar), .maximized .titlebar:backdrop:not(headerbar), .maximized .titlebar:not(headerbar), .fullscreen .titlebar:backdrop:not(headerbar), .fullscreen .titlebar:not(headerbar), .tiled headerbar:backdrop, .tiled headerbar, .maximized headerbar:backdrop, .maximized headerbar, .fullscreen headerbar:backdrop, .fullscreen headerbar { border-radius: 0; }
+.tiled .titlebar:backdrop:not(headerbar), .tiled .titlebar:not(headerbar), .tiled-top .titlebar:backdrop:not(headerbar), .tiled-top .titlebar:not(headerbar), .maximized .titlebar:backdrop:not(headerbar), .maximized .titlebar:not(headerbar), .fullscreen .titlebar:backdrop:not(headerbar), .fullscreen .titlebar:not(headerbar), .tiled headerbar:backdrop, .tiled headerbar, .tiled-top headerbar:backdrop, .tiled-top headerbar, .maximized headerbar:backdrop, .maximized headerbar, .fullscreen headerbar:backdrop, .fullscreen headerbar { border-radius: 0; }
+
+.tiled-left .titlebar:not(headerbar), .tiled-left headerbar { border-top-left-radius: 0; }
+
+.tiled-right .titlebar:not(headerbar), .tiled-right headerbar { border-top-right-radius: 0; }
 
 .default-decoration.titlebar:not(headerbar), headerbar.default-decoration { min-height: 28px; padding: 4px; }
 
@@ -660,13 +664,13 @@ headerbar entry, headerbar spinbutton, headerbar separator, headerbar button { m
 
 headerbar switch { margin-top: 9px; margin-bottom: 9px; }
 
-.background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar:backdrop, .background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar { border-top-left-radius: 7px; border-top-right-radius: 7px; }
+.background .titlebar:backdrop, .background .titlebar { border-top-left-radius: 7px; border-top-right-radius: 7px; }
 
-window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) separator:first-child + headerbar:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) separator:first-child + headerbar, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:first-child:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:first-child { border-top-left-radius: 7px; }
+.background.tiled .titlebar:backdrop, .background.tiled .titlebar, .background.tiled-top .titlebar:backdrop, .background.tiled-top .titlebar, .background.tiled-right .titlebar:backdrop, .background.tiled-right .titlebar, .background.tiled-bottom .titlebar:backdrop, .background.tiled-bottom .titlebar, .background.tiled-left .titlebar:backdrop, .background.tiled-left .titlebar, .background.maximized .titlebar:backdrop, .background.maximized .titlebar, .backgrounf.solid-csd .titlebar:backdrop, .backgrounf.solid-csd .titlebar { border-top-left-radius: 0; border-top-right-radius: 0; }
 
-window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:last-child:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) headerbar:last-child { border-top-right-radius: 7px; }
+window separator:first-child + headerbar:first-child:backdrop, window separator:first-child + headerbar:first-child, window separator:first-child + headerbar:last-child:backdrop, window separator:first-child + headerbar:last-child, window stack headerbar:first-child:backdrop, window stack headerbar:first-child, window stack headerbar:last-child:backdrop, window stack headerbar:last-child, headerbar:first-child:first-child:backdrop, headerbar:first-child:first-child, headerbar:first-child:last-child:backdrop, headerbar:first-child:last-child, headerbar:last-child:first-child:backdrop, headerbar:last-child:first-child, headerbar:last-child:last-child:backdrop, headerbar:last-child:last-child { border-top-left-radius: 7px; border-top-right-radius: 7px; }
 
-window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack headerbar:first-child:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack headerbar:first-child, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack headerbar:last-child:backdrop, window:not(.tiled):not(.maximized):not(.fullscreen):not(.solid-csd) stack headerbar:last-child { border-top-left-radius: 7px; border-top-right-radius: 7px; }
+window.tiled headerbar, window.tiled-top headerbar, window.tiled-right headerbar, window.tiled-bottom headerbar, window.tiled-left headerbar, window.maximized headerbar, window.fullscreen headerbar { border-top-left-radius: 0; border-top-right-radius: 0; }
 
 window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparent; background-image: none; border-style: none; border-color: transparent; box-shadow: none; }
 
@@ -1832,7 +1836,7 @@ decoration { border-radius: 7px 7px 0 0; border-width: 0px; box-shadow: 0 3px 9p
 
 decoration:backdrop { box-shadow: 0 3px 9px 1px transparent, 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(27, 31, 32, 0.9); transition: 200ms ease-out; }
 
-.maximized decoration, .fullscreen decoration, .tiled decoration { border-radius: 0; }
+.maximized decoration, .fullscreen decoration, .tiled decoration, .tiled-top decoration, .tiled-right decoration, .tiled-bottom decoration, .tiled-left decoration { border-radius: 0; }
 
 .popup decoration { box-shadow: none; }
 
