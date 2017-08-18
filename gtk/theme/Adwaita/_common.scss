@@ -1557,6 +1557,10 @@ headerbar {
 
   // squared corners when the window is maximized, tiled, or fullscreen
   .tiled &,
+  .tiled-top &,
+  .tiled-left &,
+  .tiled-right &,
+  .tiled-bottom &,
   .maximized &,
   .fullscreen & {
     &:backdrop, & {
@@ -1604,7 +1608,11 @@ headerbar {
   }
 }
 
-.background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar {
+.background:not(.tiled):not(.maximized):not(.solid-csd) .titlebar,
+.background:not(.tiled-top):not(.maximized):not(.solid-csd) .titlebar,
+.background:not(.tiled-left):not(.maximized):not(.solid-csd) .titlebar,
+.background:not(.tiled-right):not(.maximized):not(.solid-csd) .titlebar,
+.background:not(.tiled-bottom):not(.maximized):not(.solid-csd) .titlebar {
   &:backdrop, & {
     border-top-left-radius: 7px;
     border-top-right-radius: 7px;
@@ -4236,7 +4244,11 @@ decoration {
 
   .maximized &,
   .fullscreen &,
-  .tiled & { border-radius: 0; }
+  .tiled &,
+  .tiled-top &,
+  .tiled-left &,
+  .tiled-right &,
+  .tiled-bottom & { border-radius: 0; }
 
   .popup & { box-shadow: none; }
 
