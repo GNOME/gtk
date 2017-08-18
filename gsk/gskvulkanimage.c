@@ -203,20 +203,22 @@ gsk_vulkan_image_upload_data (GskVulkanImage *self,
                               gsize           height,
                               gsize           data_stride)
 {
-  VkMemoryRequirements requirements;
+  VkImageSubresource image_res;
+  VkSubresourceLayout image_layout;
   gsize mem_stride;
   guchar *mem;
 
+  image_res.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+  image_res.mipLevel = 0;
+  image_res.arrayLayer = 0;
+
   mem_stride = width * 4;
-  vkGetImageMemoryRequirements (gdk_vulkan_context_get_device (self->vulkan),
-                                self->vk_image,
-                                &requirements);
-  if (mem_stride % requirements.alignment != 0)
-    mem_stride = (mem_stride / requirements.alignment + 1) * requirements.alignment;
+  vkGetImageSubresourceLayout (gdk_vulkan_context_get_device (self->vulkan),
+                               self->vk_image, &image_res, &image_layout);
 
-  mem = gsk_vulkan_memory_map (self->memory);
+  mem = gsk_vulkan_memory_map (self->memory) + image_layout.offset;
 
-  if (data_stride == width * 4 && data_stride == mem_stride)
+  if (image_layout.rowPitch == width * 4 && data_stride == mem_stride)
     {
       memcpy (mem, data, data_stride * height);
     }
@@ -224,7 +226,7 @@ gsk_vulkan_image_upload_data (GskVulkanImage *self,
     {
       for (gsize i = 0; i < height; i++)
         {
-          memcpy (mem + i * mem_stride, data + i * data_stride, width * 4);
+          memcpy (mem + i * image_layout.rowPitch, data + i * data_stride, width * 4);
         }
     }
 
