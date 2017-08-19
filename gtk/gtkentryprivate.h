@@ -88,6 +88,13 @@ GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
 void     _gtk_entry_grab_focus             (GtkEntry  *entry,
                                             gboolean   select_all);
 
+void     gtk_entry_enter_text              (GtkEntry   *entry,
+                                            const char *text);
+void     gtk_entry_set_positions           (GtkEntry   *entry,
+                                            int         current_pos,
+                                            int         selection_bound);
+
+
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_PRIVATE_H__ */

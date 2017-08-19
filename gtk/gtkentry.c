@@ -560,11 +560,6 @@ static void   gtk_entry_drag_gesture_end           (GtkGestureDrag *gesture,
 
 /* Internal routines
  */
-static void         gtk_entry_enter_text               (GtkEntry       *entry,
-                                                        const gchar    *str);
-static void         gtk_entry_set_positions            (GtkEntry       *entry,
-							gint            current_pos,
-							gint            selection_bound);
 static void         gtk_entry_draw_text                (GtkEntry       *entry,
                                                         GtkSnapshot    *snapshot);
 static void         gtk_entry_draw_cursor              (GtkEntry       *entry,
@@ -5345,7 +5340,7 @@ gtk_entry_delete_surrounding_cb (GtkIMContext *slave,
  */
 
 /* Used for im_commit_cb and inserting Unicode chars */
-static void
+void
 gtk_entry_enter_text (GtkEntry       *entry,
                       const gchar    *str)
 {
@@ -5380,7 +5375,7 @@ gtk_entry_enter_text (GtkEntry       *entry,
 /* All changes to priv->current_pos and priv->selection_bound
  * should go through this function.
  */
-static void
+void
 gtk_entry_set_positions (GtkEntry *entry,
 			 gint      current_pos,
 			 gint      selection_bound)
