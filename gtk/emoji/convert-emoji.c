@@ -23,7 +23,8 @@
 
 gboolean
 parse_code (GVariantBuilder *b,
-            const char      *code)
+            const char      *code,
+            GString         *name_key)
 {
   g_auto(GStrv) strv = NULL;
   int j;
@@ -43,7 +44,12 @@ parse_code (GVariantBuilder *b,
       if (0x1f3fb <= u && u <= 0x1f3ff)
         g_variant_builder_add (b, "u", 0);
       else
-        g_variant_builder_add (b, "u", u);
+        {
+          g_variant_builder_add (b, "u", u);
+          if (j > 0)
+            g_string_append_c (name_key, '-');
+          g_string_append_printf (name_key, "%x", u);
+        }
     }
 
   return TRUE;
@@ -84,18 +90,53 @@ main (int argc, char *argv[])
   JsonParser *parser;
   JsonNode *root;
   JsonArray *array;
+  JsonObject *ro;
+  JsonNode *node;
+  const char *name;
+  JsonObjectIter iter;
   GError *error = NULL;
   guint length, i;
   GVariantBuilder builder;
   GVariant *v;
   GString *s;
   GBytes *bytes;
+  GHashTable *names;
+  GString *name_key;
 
-  if (argc != 3)
+  if (argc != 4)
     {
-      g_print ("Usage: emoji-convert INPUT OUTPUT\n");
+      g_print ("Usage: emoji-convert INPUT INPUT1 OUTPUT\n");
       return 1;
     }
+
+  parser = json_parser_new ();
+
+  if (!json_parser_load_from_file (parser, argv[2], &error))
+    {
+      g_error ("%s", error->message);
+      return 1;
+    }
+
+  root = json_parser_get_root (parser);
+  ro = json_node_get_object (root);
+  json_object_iter_init (&iter, ro);
+
+  names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  name_key = g_string_new ("");
+
+  while (json_object_iter_next (&iter, &name, &node))
+    {
+      JsonObject *obj = json_node_get_object (node);
+      const char *unicode;
+      const char *shortname;
+
+      unicode = json_object_get_string_member (obj, "unicode");
+      shortname = json_object_get_string_member (obj, "shortname");
+
+      g_hash_table_insert (names, g_strdup (unicode), g_strdup (shortname));
+    }
+
+  g_object_unref (parser);
 
   parser = json_parser_new ();
 
@@ -109,7 +150,7 @@ main (int argc, char *argv[])
   array = json_node_get_array (root);
   length = json_array_get_length (array);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(aus)"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(auss)"));
   i = 0;
   while (i < length)
     {
@@ -117,6 +158,7 @@ main (int argc, char *argv[])
       JsonObject *obj = json_node_get_object (node);
       GVariantBuilder b1;
       const char *name;
+      const char *shortname;
       char *code;
       int j;
       gboolean skip;
@@ -164,15 +206,18 @@ main (int argc, char *argv[])
           i++;
         }
 
-      if (!parse_code (&b1, code))
+      g_string_set_size (name_key, 0);
+      if (!parse_code (&b1, code, name_key))
         return 1;
 
-      g_variant_builder_add (&builder, "(aus)", &b1, name);
+      shortname = g_hash_table_lookup (names, name_key->str);
+
+      g_variant_builder_add (&builder, "(auss)", &b1, name, shortname ? shortname : "");
     }
 
   v = g_variant_builder_end (&builder);
   bytes = g_variant_get_data_as_bytes (v);
-  if (!g_file_set_contents (argv[2], g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), &error))
+  if (!g_file_set_contents (argv[3], g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), &error))
     {
       g_error ("%s", error->message);
       return 1;
