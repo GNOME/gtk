@@ -73,6 +73,11 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkpopover.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkimageprivate.h"
+#include "gtkemojichooser.h"
+#include "gtkemojicompletion.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -253,6 +258,7 @@ struct _GtkEntryPrivate
 
   guint         editable                : 1;
   guint         show_emoji_icon         : 1;
+  guint         enable_emoji_completion : 1;
   guint         in_drag                 : 1;
   guint         overwrite_mode          : 1;
   guint         visible                 : 1;
@@ -371,6 +377,7 @@ enum {
   PROP_POPULATE_ALL,
   PROP_TABS,
   PROP_SHOW_EMOJI_ICON,
+  PROP_ENABLE_EMOJI_COMPLETION,
   PROP_EDITING_CANCELED,
   NUM_PROPERTIES = PROP_EDITING_CANCELED
 };
@@ -651,6 +658,8 @@ static void         buffer_connect_signals             (GtkEntry       *entry);
 static void         buffer_disconnect_signals          (GtkEntry       *entry);
 static GtkEntryBuffer *get_buffer                      (GtkEntry       *entry);
 static void         set_show_emoji_icon                (GtkEntry       *entry,
+                                                        gboolean        value);
+static void         set_enable_emoji_completion        (GtkEntry       *entry,
                                                         gboolean        value);
 
 static void     gtk_entry_measure (GtkWidget           *widget,
@@ -1401,6 +1410,13 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_boolean ("show-emoji-icon",
                             P_("Emoji icon"),
                             P_("Whether to show an icon for Emoji"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  entry_props[PROP_ENABLE_EMOJI_COMPLETION] =
+      g_param_spec_boolean ("enable-emoji-completion",
+                            P_("Enable Emoji completion"),
+                            P_("Whether to suggest Emoji replacements"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -2179,6 +2195,10 @@ gtk_entry_set_property (GObject         *object,
       set_show_emoji_icon (entry, g_value_get_boolean (value));
       break;
 
+    case PROP_ENABLE_EMOJI_COMPLETION:
+      set_enable_emoji_completion (entry, g_value_get_boolean (value));
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -2409,6 +2429,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_SHOW_EMOJI_ICON:
       g_value_set_boolean (value, priv->show_emoji_icon);
+      break;
+
+    case PROP_ENABLE_EMOJI_COMPLETION:
+      g_value_set_boolean (value, priv->enable_emoji_completion);
       break;
 
     default:
@@ -9579,4 +9603,24 @@ set_show_emoji_icon (GtkEntry *entry,
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SHOW_EMOJI_ICON]);
   gtk_widget_queue_resize (GTK_WIDGET (entry));
+}
+
+static void
+set_enable_emoji_completion (GtkEntry *entry,
+                             gboolean  value)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  if (priv->enable_emoji_completion == value)
+    return;
+
+  priv->enable_emoji_completion = value;
+
+  if (priv->enable_emoji_completion)
+    g_object_set_data (G_OBJECT (entry), "emoji-completion-popup",
+                       gtk_emoji_completion_new (entry));
+  else
+    g_object_set_data (G_OBJECT (entry), "emoji-completion-popup", NULL);
+
+  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_ENABLE_EMOJI_COMPLETION]);
 }
