@@ -176,8 +176,8 @@ add_recent_item (GtkEmojiChooser *chooser,
 
   g_variant_ref (item);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((aus)u)"));
-  g_variant_builder_add (&builder, "(@(aus)u)", item, modifier);
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((auss)u)"));
+  g_variant_builder_add (&builder, "(@(auss)u)", item, modifier);
 
   children = gtk_container_get_children (GTK_CONTAINER (chooser->recent.box));
   for (l = children, i = 1; l; l = l->next, i++)
@@ -197,7 +197,7 @@ add_recent_item (GtkEmojiChooser *chooser,
           continue;
         }
 
-      g_variant_builder_add (&builder, "(@(aus)u)", item2, modifier2);
+      g_variant_builder_add (&builder, "(@(auss)u)", item2, modifier2);
     }
   g_list_free (children);
 
@@ -371,7 +371,7 @@ populate_emoji_chooser (GtkEmojiChooser *chooser)
   GtkWidget *box;
 
   bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
-  chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(aus)"), bytes, TRUE));
+  chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
 
   g_variant_iter_init (&iter, chooser->data);
   box = chooser->people.box;
