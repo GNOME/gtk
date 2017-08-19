@@ -4557,7 +4557,7 @@ button.emoji-section {
   &:checked label { opacity: 1; }
 }
 
-.emoji {
+popover.emoji-picker .emoji {
   font-size: x-large;
   padding: 6px;
   border-radius: 6px;
@@ -4565,4 +4565,18 @@ button.emoji-section {
   :hover {
     background: $selected_bg_color;
   }
+}
+
+popover.emoji-completion arrow {
+  border: none;
+  background: none;
+}
+
+popover.emoji-completion contents row box {
+  border-spacing: 10px;
+  padding: 2px 10px;
+}
+
+popover.emoji-completion .emoji:hover {
+  background: $popover_hover_color;
 }

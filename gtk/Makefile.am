@@ -469,6 +469,7 @@ gtk_private_h_sources =		\
 	gtkdialogprivate.h 	\
 	gtkdndprivate.h		\
 	gtkemojichooser.h	\
+	gtkemojicompletion.h	\
 	gtkentryprivate.h	\
 	gtkeventcontrollerprivate.h	\
 	gtkfilechooserembed.h	\
@@ -747,6 +748,7 @@ gtk_base_c_sources = 		\
 	gtkdrawingarea.c	\
 	gtkeditable.c		\
 	gtkemojichooser.c	\
+	gtkemojicompletion.c	\
 	gtkentry.c		\
 	gtkentrybuffer.c	\
 	gtkentrycompletion.c	\
