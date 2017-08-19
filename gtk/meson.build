@@ -142,6 +142,7 @@ gtk_public_sources = files([
   'gtkdrawingarea.c',
   'gtkeditable.c',
   'gtkemojichooser.c',
+  'gtkemojicompletion.c',
   'gtkentry.c',
   'gtkentrybuffer.c',
   'gtkentrycompletion.c',
