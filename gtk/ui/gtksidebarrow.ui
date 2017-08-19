@@ -46,6 +46,7 @@
                     <property name="valign">center</property>
                     <property name="margin-start">4px</property>
                     <property name="no-show-all">1</property>
+                    <property name="tooltip-text" translatable="yes">Unmount</property>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">1</property>
