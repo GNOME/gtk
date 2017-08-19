@@ -551,9 +551,12 @@ inner_clipboard_window_procedure (HWND   hwnd,
     case WM_DRAWCLIPBOARD:
       {
         HWND hwnd_owner;
+        HWND stored_hwnd_owner;
         HWND hwnd_opener;
         GdkEvent *event;
         GdkWindow *owner;
+        GdkWindow *stored_owner;
+        GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
 
         hwnd_owner = GetClipboardOwner ();
 
@@ -568,14 +571,16 @@ inner_clipboard_window_procedure (HWND   hwnd,
 #ifdef G_ENABLE_DEBUG
         if (_gdk_debug_flags & GDK_DEBUG_DND)
           {
-            if (OpenClipboard (hwnd))
+            if (win32_sel->clipboard_opened_for != INVALID_HANDLE_VALUE ||
+                OpenClipboard (hwnd))
               {
                 UINT nFormat = 0;
 
                 while ((nFormat = EnumClipboardFormats (nFormat)) != 0)
                   g_print ("%s ", _gdk_win32_cf_to_string (nFormat));
 
-                CloseClipboard ();
+                if (win32_sel->clipboard_opened_for == INVALID_HANDLE_VALUE)
+                  CloseClipboard ();
               }
             else
               {
@@ -589,6 +594,27 @@ inner_clipboard_window_procedure (HWND   hwnd,
         owner = gdk_win32_window_lookup_for_display (_gdk_display, hwnd_owner);
         if (owner == NULL)
           owner = gdk_win32_window_foreign_new_for_display (_gdk_display, hwnd_owner);
+
+        stored_owner = _gdk_win32_display_get_selection_owner (gdk_display_get_default (),
+                                                               GDK_SELECTION_CLIPBOARD);
+
+        if (stored_owner)
+          stored_hwnd_owner = GDK_WINDOW_HWND (stored_owner);
+        else
+          stored_hwnd_owner = NULL;
+
+        if (stored_hwnd_owner != hwnd_owner)
+          {
+            if (win32_sel->clipboard_opened_for != INVALID_HANDLE_VALUE)
+              {
+                CloseClipboard ();
+                GDK_NOTE (DND, g_print ("Closed clipboard @ %s:%d\n", __FILE__, __LINE__));
+              }
+
+            win32_sel->clipboard_opened_for = INVALID_HANDLE_VALUE;
+
+            _gdk_win32_clear_clipboard_queue ();
+          }
 
         event = gdk_event_new (GDK_OWNER_CHANGE);
         event->owner_change.window = gdk_get_default_root_window ();
@@ -719,16 +745,30 @@ gdk_win32_display_request_selection_notification (GdkDisplay *display,
 static gboolean
 gdk_win32_display_supports_clipboard_persistence (GdkDisplay *display)
 {
-  return FALSE;
+  return TRUE;
 }
 
 static void
 gdk_win32_display_store_clipboard (GdkDisplay    *display,
-			     GdkWindow     *clipboard_window,
-			     guint32        time_,
-			     const GdkAtom *targets,
-			     gint           n_targets)
+                                   GdkWindow     *clipboard_window,
+                                   guint32        time_,
+                                   const GdkAtom *targets,
+                                   gint           n_targets)
 {
+  GdkEvent tmp_event;
+  SendMessage (GDK_WINDOW_HWND (clipboard_window), WM_RENDERALLFORMATS, 0, 0);
+
+  memset (&tmp_event, 0, sizeof (tmp_event));
+  tmp_event.selection.type = GDK_SELECTION_NOTIFY;
+  tmp_event.selection.window = clipboard_window;
+  tmp_event.selection.send_event = FALSE;
+  tmp_event.selection.selection = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_CLIPBOARD_MANAGER);
+  tmp_event.selection.target = 0;
+  tmp_event.selection.property = GDK_NONE;
+  tmp_event.selection.requestor = 0;
+  tmp_event.selection.time = GDK_CURRENT_TIME;
+
+  gdk_event_put (&tmp_event);
 }
 
 static gboolean

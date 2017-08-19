@@ -137,20 +137,15 @@ _gdk_win32_window_get_property (GdkWindow   *window,
 }
 
 void
-_gdk_win32_window_change_property (GdkWindow    *window,
-		     GdkAtom       property,
-		     GdkAtom       type,
-		     gint          format,
-		     GdkPropMode   mode,
-		     const guchar *data,
-		     gint          nelements)
+_gdk_win32_window_change_property (GdkWindow         *window,
+                                   GdkAtom            property,
+                                   GdkAtom            type,
+                                   gint               format,
+                                   GdkPropMode        mode,
+                                   const guchar      *data,
+                                   gint               nelements)
 {
-  HGLOBAL hdata;
-  gint i, size;
-  guchar *ucptr;
-  wchar_t *wcptr, *p;
-  glong wclen;
-  GError *err = NULL;
+  GdkWin32Selection *win32_sel = _gdk_win32_selection_get ();
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -161,6 +156,7 @@ _gdk_win32_window_change_property (GdkWindow    *window,
   GDK_NOTE (DND, {
       gchar *prop_name = gdk_atom_name (property);
       gchar *type_name = gdk_atom_name (type);
+      gchar *datastring = _gdk_win32_data_to_string (data, MIN (10, format*nelements/8));
 
       g_print ("gdk_property_change: %p %s %s %s %d*%d bits: %s\n",
 	       GDK_WINDOW_HWND (window),
@@ -171,103 +167,35 @@ _gdk_win32_window_change_property (GdkWindow    *window,
 		 (mode == GDK_PROP_MODE_APPEND ? "APPEND" :
 		  "???"))),
 	       format, nelements,
-	       _gdk_win32_data_to_string (data, MIN (10, format*nelements/8)));
+	       datastring);
+      g_free (datastring);
       g_free (prop_name);
       g_free (type_name);
     });
 
+#ifndef G_DISABLE_CHECKS
   /* We should never come here for these types */
-  g_return_if_fail (type != GDK_TARGET_STRING);
-  g_return_if_fail (type != _text);
-  g_return_if_fail (type != _compound_text);
-  g_return_if_fail (type != _save_targets);
-
-  if (property == _gdk_selection &&
-      format == 8 &&
-      mode == GDK_PROP_MODE_REPLACE)
+  if (G_UNLIKELY (type == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_COMPOUND_TEXT) ||
+                  type == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_SAVE_TARGETS)))
     {
-      if (type == _image_bmp && nelements < sizeof (BITMAPFILEHEADER))
-        {
-           g_warning ("Clipboard contains invalid bitmap data");
-           return;
-        }
-
-      if (type == _utf8_string)
-	{
-	  wcptr = g_utf8_to_utf16 ((char *) data, nelements, NULL, &wclen, &err);
-          if (err != NULL)
-            {
-              g_warning ("Failed to convert utf8: %s", err->message);
-              g_clear_error (&err);
-              return;
-            }
-
-	  if (!OpenClipboard (GDK_WINDOW_HWND (window)))
-	    {
-	      WIN32_API_FAILED ("OpenClipboard");
-	      g_free (wcptr);
-	      return;
-	    }
-
-	  wclen++;		/* Terminating 0 */
-	  size = wclen * 2;
-	  for (i = 0; i < wclen; i++)
-	    if (wcptr[i] == '\n' && (i == 0 || wcptr[i - 1] != '\r'))
-	      size += 2;
-
-	  if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, size)))
-	    {
-	      WIN32_API_FAILED ("GlobalAlloc");
-	      if (!CloseClipboard ())
-		WIN32_API_FAILED ("CloseClipboard");
-	      g_free (wcptr);
-	      return;
-	    }
-
-	  ucptr = GlobalLock (hdata);
-
-	  p = (wchar_t *) ucptr;
-	  for (i = 0; i < wclen; i++)
-	    {
-	      if (wcptr[i] == '\n' && (i == 0 || wcptr[i - 1] != '\r'))
-		*p++ = '\r';
-	      *p++ = wcptr[i];
-	    }
-	  g_free (wcptr);
-
-	  GlobalUnlock (hdata);
-	  GDK_NOTE (DND, g_print ("... SetClipboardData(CF_UNICODETEXT,%p)\n",
-				  hdata));
-	  if (!SetClipboardData (CF_UNICODETEXT, hdata))
-	    WIN32_API_FAILED ("SetClipboardData");
-
-	  if (!CloseClipboard ())
-	    WIN32_API_FAILED ("CloseClipboard");
-	}
-      else
-        {
-	  /* We use delayed rendering for everything else than
-	   * text. We can't assign hdata to the clipboard here as type
-	   * may be "image/png", "image/jpg", etc. In this case
-	   * there's a further conversion afterwards.
-	   */
-	  GDK_NOTE (DND, g_print ("... delayed rendering\n"));
-	  _delayed_rendering_data = NULL;
-	  if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, nelements > 0 ? nelements : 1)))
-	    {
-	      WIN32_API_FAILED ("GlobalAlloc");
-	      return;
-	    }
-	  ucptr = GlobalLock (hdata);
-	  memcpy (ucptr, data, nelements);
-	  GlobalUnlock (hdata);
-	  _delayed_rendering_data = hdata;
-	}
+      g_return_if_fail_warning (G_LOG_DOMAIN,
+                                G_STRFUNC,
+                                "change_property called with a bad type");
+      return;
     }
-  else if (property == _gdk_ole2_dnd)
+#endif
+
+  if (property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_GDK_SELECTION) ||
+      property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_OLE2_DND))
     {
-      /* Will happen only if gdkdnd-win32.c has OLE2 dnd support compiled in */
-      _gdk_win32_ole2_dnd_property_change (type, format, data, nelements);
+      _gdk_win32_selection_property_change (win32_sel,
+                                            window,
+                                            property,
+                                            type,
+                                            format,
+                                            mode,
+                                            data,
+                                            nelements);
     }
   else
     g_warning ("gdk_property_change: General case not implemented");
@@ -291,9 +219,10 @@ _gdk_win32_window_delete_property (GdkWindow *window,
       g_free (prop_name);
     });
 
-  if (property == _gdk_selection)
+  if (property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_GDK_SELECTION) ||
+      property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_OLE2_DND))
     _gdk_selection_property_delete (window);
-  else if (property == _wm_transient_for)
+  else if (property == _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_WM_TRANSIENT_FOR))
     {
       GdkScreen *screen;
 

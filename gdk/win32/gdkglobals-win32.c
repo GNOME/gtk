@@ -41,41 +41,11 @@ HKL		  _gdk_input_locale;
 gboolean	  _gdk_input_locale_is_ime;
 UINT		  _gdk_input_codepage;
 
-GdkAtom           _gdk_selection;
-GdkAtom	          _wm_transient_for;
-GdkAtom		  _targets;
-GdkAtom		  _delete;
-GdkAtom		  _save_targets;
-GdkAtom           _utf8_string;
-GdkAtom		  _text;
-GdkAtom		  _compound_text;
-GdkAtom		  _text_uri_list;
-GdkAtom		  _text_html;
-GdkAtom		  _image_png;
-GdkAtom		  _image_jpeg;
-GdkAtom		  _image_bmp;
-GdkAtom		  _image_gif;
-
-GdkAtom		  _local_dnd;
-GdkAtom		  _gdk_win32_dropfiles;
-GdkAtom		  _gdk_ole2_dnd;
-
-UINT		  _cf_png;
-UINT		  _cf_jfif;
-UINT		  _cf_gif;
-UINT		  _cf_url;
-UINT		  _cf_html_format;
-UINT		  _cf_text_html;
-
-GdkWin32DndState  _dnd_target_state = GDK_WIN32_DND_NONE;
-GdkWin32DndState  _dnd_source_state = GDK_WIN32_DND_NONE;
-
 gint		  _gdk_input_ignore_wintab = FALSE;
 gint		  _gdk_max_colors = 0;
 
 GdkWin32ModalOpKind	  _modal_operation_in_progress = GDK_WIN32_MODAL_OP_NONE;
 HWND              _modal_move_resize_window = NULL;
-gboolean	  _ignore_destroy_clipboard = FALSE;
 
-HGLOBAL           _delayed_rendering_data = NULL;
-GHashTable       *_format_atom_table = NULL;
+/* The singleton selection object pointer */
+GdkWin32Selection *_win32_selection = NULL;

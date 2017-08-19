@@ -56,6 +56,7 @@
 #include "gdkdevice-wintab.h"
 #include "gdkwin32dnd.h"
 #include "gdkdisplay-win32.h"
+#include "gdkselection-win32.h"
 #include "gdkdndprivate.h"
 
 #include <windowsx.h>
@@ -2286,6 +2287,10 @@ gdk_event_translate (MSG  *msg,
 
   int i;
 
+  GdkWin32Selection *win32_sel = NULL;
+
+  STGMEDIUM *property_change_data;
+
   display = gdk_display_get_default ();
   window = gdk_win32_handle_table_lookup (msg->hwnd);
 
@@ -3145,7 +3150,8 @@ gdk_event_translate (MSG  *msg,
 
     case WM_KILLFOCUS:
       if (keyboard_grab != NULL &&
-	  !GDK_WINDOW_DESTROYED (keyboard_grab->window))
+	  !GDK_WINDOW_DESTROYED (keyboard_grab->window) &&
+	  (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND) == 0)
 	{
 	  generate_grab_broken_event (device_manager, keyboard_grab->window, TRUE, NULL);
 	}
@@ -3734,7 +3740,9 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_DESTROYCLIPBOARD:
-      if (!_ignore_destroy_clipboard)
+      win32_sel = _gdk_win32_selection_get ();
+
+      if (!win32_sel->ignore_destroy_clipboard)
 	{
 	  event = gdk_event_new (GDK_SELECTION_CLEAR);
 	  event->selection.window = window;
@@ -3752,12 +3760,29 @@ gdk_event_translate (MSG  *msg,
     case WM_RENDERFORMAT:
       GDK_NOTE (EVENTS, g_print (" %s", _gdk_win32_cf_to_string (msg->wParam)));
 
-      if (!(target = g_hash_table_lookup (_format_atom_table, GINT_TO_POINTER (msg->wParam))))
-	{
-	  GDK_NOTE (EVENTS, g_print (" (target not found)"));
-	  return_val = TRUE;
-	  break;
-	}
+      *ret_valp = 0;
+      return_val = TRUE;
+
+      win32_sel = _gdk_win32_selection_get ();
+
+      for (target = NULL, i = 0;
+           i < win32_sel->clipboard_selection_targets->len;
+           i++)
+        {
+          GdkSelTargetFormat target_format = g_array_index (win32_sel->clipboard_selection_targets, GdkSelTargetFormat, i);
+
+          if (target_format.format == msg->wParam)
+            {
+              target = target_format.target;
+              win32_sel->property_change_transmute = target_format.transmute;
+            }
+        }
+
+      if (target == NULL)
+        {
+          GDK_NOTE (EVENTS, g_print (" (target not found)"));
+          break;
+        }
 
       /* We need to render to clipboard immediately, don't call
        * _gdk_win32_append_event()
@@ -3767,45 +3792,61 @@ gdk_event_translate (MSG  *msg,
       event->selection.send_event = FALSE;
       event->selection.selection = GDK_SELECTION_CLIPBOARD;
       event->selection.target = target;
-      event->selection.property = _gdk_selection;
+      event->selection.property = _gdk_win32_selection_atom (GDK_WIN32_ATOM_INDEX_GDK_SELECTION);
       event->selection.requestor = gdk_win32_handle_table_lookup (msg->hwnd);
       event->selection.time = msg->time;
+      property_change_data = g_new0 (STGMEDIUM, 1);
+      win32_sel->property_change_data = property_change_data;
+      win32_sel->property_change_format = msg->wParam;
 
       fixup_event (event);
       GDK_NOTE (EVENTS, g_print (" (calling _gdk_event_emit)"));
       GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
       _gdk_event_emit (event);
       gdk_event_free (event);
+      win32_sel->property_change_format = 0;
 
       /* Now the clipboard owner should have rendered */
-      if (!_delayed_rendering_data)
+      if (!property_change_data->hGlobal)
         {
           GDK_NOTE (EVENTS, g_print (" (no _delayed_rendering_data?)"));
         }
       else
         {
-          if (msg->wParam == CF_DIB)
-            {
-              _delayed_rendering_data =
-                _gdk_win32_selection_convert_to_dib (_delayed_rendering_data,
-                                                     target);
-              if (!_delayed_rendering_data)
-                {
-                  g_warning ("Cannot convert to DIB from delayed rendered image");
-                  break;
-                }
-            }
-
           /* The requestor is holding the clipboard, no
            * OpenClipboard() is required/possible
            */
           GDK_NOTE (DND,
                     g_print (" SetClipboardData(%s,%p)",
                              _gdk_win32_cf_to_string (msg->wParam),
-                             _delayed_rendering_data));
+                             property_change_data->hGlobal));
 
-          API_CALL (SetClipboardData, (msg->wParam, _delayed_rendering_data));
-          _delayed_rendering_data = NULL;
+          API_CALL (SetClipboardData, (msg->wParam, property_change_data->hGlobal));
+        }
+
+        g_clear_pointer (&property_change_data, g_free);
+        *ret_valp = 0;
+        return_val = TRUE;
+      break;
+
+    case WM_RENDERALLFORMATS:
+      *ret_valp = 0;
+      return_val = TRUE;
+
+      win32_sel = _gdk_win32_selection_get ();
+
+      if (API_CALL (OpenClipboard, (msg->hwnd)))
+        {
+          for (target = NULL, i = 0;
+               i < win32_sel->clipboard_selection_targets->len;
+               i++)
+            {
+              GdkSelTargetFormat target_format = g_array_index (win32_sel->clipboard_selection_targets, GdkSelTargetFormat, i);
+              if (target_format.format != 0)
+                SendMessage (msg->hwnd, WM_RENDERFORMAT, target_format.format, 0);
+            }
+
+          API_CALL (CloseClipboard, ());
         }
       break;
 
@@ -3975,16 +4016,18 @@ gdk_event_dispatch (GSource     *source,
 
   if (event)
     {
+      GdkWin32Selection *sel_win32 = _gdk_win32_selection_get ();
+
       _gdk_event_emit (event);
 
       gdk_event_free (event);
 
       /* Do drag & drop if it is still pending */
-      if (_dnd_source_state == GDK_WIN32_DND_PENDING)
+      if (sel_win32->dnd_source_state == GDK_WIN32_DND_PENDING)
         {
-          _dnd_source_state = GDK_WIN32_DND_DRAGGING;
+          sel_win32->dnd_source_state = GDK_WIN32_DND_DRAGGING;
           _gdk_win32_dnd_do_dragdrop ();
-          _dnd_source_state = GDK_WIN32_DND_NONE;
+          sel_win32->dnd_source_state = GDK_WIN32_DND_NONE;
         }
     }
 

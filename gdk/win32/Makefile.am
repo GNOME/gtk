@@ -54,11 +54,13 @@ libgdk_win32_la_SOURCES = \
 	gdkproperty-win32.c \
 	gdkscreen-win32.c \
 	gdkselection-win32.c \
+	gdkselection-win32.h \
 	gdktestutils-win32.c \
 	gdkwin32cursor.h \
 	gdkwin32display.h \
 	gdkwin32displaymanager.h \
 	gdkwin32dnd.h \
+	gdkwin32dnd-private.h \
 	gdkwin32glcontext.h \
 	gdkwin32.h \
 	gdkwin32id.c \
