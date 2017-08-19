@@ -44,6 +44,9 @@
 #include <wintab.h>
 #include <imm.h>
 
+/* for CFSTR_SHELLIDLIST */
+#include <shlobj.h>
+
 static gboolean gdk_synchronize = FALSE;
 
 static gboolean dummy;
@@ -87,38 +90,6 @@ _gdk_win32_windowing_init (void)
   _gdk_input_codepage = atoi (buf);
   GDK_NOTE (EVENTS, g_print ("input_locale:%p, codepage:%d\n",
 			     _gdk_input_locale, _gdk_input_codepage));
-
-  _gdk_selection = gdk_atom_intern_static_string ("GDK_SELECTION");
-  _wm_transient_for = gdk_atom_intern_static_string ("WM_TRANSIENT_FOR");
-  _targets = gdk_atom_intern_static_string ("TARGETS");
-  _delete = gdk_atom_intern_static_string ("DELETE");
-  _save_targets = gdk_atom_intern_static_string ("SAVE_TARGETS");
-  _utf8_string = gdk_atom_intern_static_string ("UTF8_STRING");
-  _text = gdk_atom_intern_static_string ("TEXT");
-  _compound_text = gdk_atom_intern_static_string ("COMPOUND_TEXT");
-  _text_uri_list = gdk_atom_intern_static_string ("text/uri-list");
-  _text_html = gdk_atom_intern_static_string ("text/html");
-  _image_png = gdk_atom_intern_static_string ("image/png");
-  _image_jpeg = gdk_atom_intern_static_string ("image/jpeg");
-  _image_bmp = gdk_atom_intern_static_string ("image/bmp");
-  _image_gif = gdk_atom_intern_static_string ("image/gif");
-
-  _local_dnd = gdk_atom_intern_static_string ("LocalDndSelection");
-  _gdk_win32_dropfiles = gdk_atom_intern_static_string ("DROPFILES_DND");
-  _gdk_ole2_dnd = gdk_atom_intern_static_string ("OLE2_DND");
-
-  /* MS Office 2007, at least, offers images in common file formats
-   * using clipboard format names like "PNG" and "JFIF". So we follow
-   * the lead and map the GDK target name "image/png" to the clipboard
-   * format name "PNG" etc.
-   */
-  _cf_png = RegisterClipboardFormat ("PNG");
-  _cf_jfif = RegisterClipboardFormat ("JFIF");
-  _cf_gif = RegisterClipboardFormat ("GIF");
-
-  _cf_url = RegisterClipboardFormat ("UniformResourceLocatorW");
-  _cf_html_format = RegisterClipboardFormat ("HTML Format");
-  _cf_text_html = RegisterClipboardFormat ("text/html");
 
   _gdk_win32_selection_init ();
 }

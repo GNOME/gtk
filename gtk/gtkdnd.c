@@ -45,6 +45,10 @@
 #endif
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
+#include <gdk/win32/gdkwin32.h>
+#endif
+
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
 #endif
@@ -1157,6 +1161,9 @@ gtk_drag_is_managed (GtkWidget *source_widget)
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
     GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (source_widget)) ||
+#endif
+#ifdef GDK_WINDOWING_WIN32
+    GDK_IS_WIN32_DISPLAY (gtk_widget_get_display (source_widget)) ||
 #endif
     FALSE;
 }

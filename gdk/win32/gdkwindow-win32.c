@@ -789,6 +789,14 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY)
     dwExStyle |= WS_EX_TOOLWINDOW;
 
+  /* WS_EX_TRANSPARENT means "try draw this window last, and ignore input".
+   * It's the last part we're after. We don't want DND indicator to accept
+   * input, because that will make it a potential drop target, and if it's
+   * under the mouse cursor, this will kill any DND.
+   */
+  if (impl->type_hint == GDK_WINDOW_TYPE_HINT_DND)
+    dwExStyle |= WS_EX_TRANSPARENT;
+
   klass = RegisterGdkClass (window->window_type, impl->type_hint);
 
   wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);

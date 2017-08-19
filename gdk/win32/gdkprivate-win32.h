@@ -40,6 +40,7 @@
 #include <gdk/win32/gdkwin32screen.h>
 #include <gdk/win32/gdkwin32keys.h>
 #include <gdk/win32/gdkdevicemanager-win32.h>
+#include <gdk/win32/gdkselection-win32.h>
 
 #include "gdkinternals.h"
 
@@ -284,46 +285,8 @@ extern UINT		 _gdk_input_codepage;
 
 extern guint		 _gdk_keymap_serial;
 
-/* GdkAtoms: properties, targets and types */
-extern GdkAtom		 _gdk_selection;
-extern GdkAtom		 _wm_transient_for;
-extern GdkAtom		 _targets;
-extern GdkAtom		 _delete;
-extern GdkAtom		 _save_targets;
-extern GdkAtom           _utf8_string;
-extern GdkAtom		 _text;
-extern GdkAtom		 _compound_text;
-extern GdkAtom		 _text_uri_list;
-extern GdkAtom		 _text_html;
-extern GdkAtom		 _image_png;
-extern GdkAtom		 _image_jpeg;
-extern GdkAtom		 _image_bmp;
-extern GdkAtom		 _image_gif;
-
-/* DND selections */
-extern GdkAtom           _local_dnd;
-extern GdkAtom		 _gdk_win32_dropfiles;
-extern GdkAtom		 _gdk_ole2_dnd;
-
-/* Clipboard formats */
-extern UINT		 _cf_png;
-extern UINT		 _cf_jfif;
-extern UINT		 _cf_gif;
-extern UINT		 _cf_url;
-extern UINT		 _cf_html_format;
-extern UINT		 _cf_text_html;
-
-/* OLE-based DND state */
-typedef enum {
-  GDK_WIN32_DND_NONE,
-  GDK_WIN32_DND_PENDING,
-  GDK_WIN32_DND_DROPPED,
-  GDK_WIN32_DND_FAILED,
-  GDK_WIN32_DND_DRAGGING,
-} GdkWin32DndState;
-
-extern GdkWin32DndState  _dnd_target_state;
-extern GdkWin32DndState  _dnd_source_state;
+/* The singleton selection object pointer */
+GdkWin32Selection *_win32_selection;
 
 void _gdk_win32_dnd_do_dragdrop (void);
 void _gdk_win32_ole2_dnd_property_change (GdkAtom       type,
@@ -353,20 +316,6 @@ void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
 /* Options */
 extern gboolean		 _gdk_input_ignore_wintab;
 extern gint		 _gdk_max_colors;
-
-/* TRUE when we are emptying the clipboard ourselves */
-extern gboolean		_ignore_destroy_clipboard;
-
-/* Mapping from registered clipboard format id (native) to
- * corresponding GdkAtom
- */
-extern GHashTable	*_format_atom_table;
-
-/* Hold the result of a delayed rendering */
-extern HGLOBAL		_delayed_rendering_data;
-
-HGLOBAL _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
-					     GdkAtom  target);
 
 /* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
  * Windows XP, thresholds alpha otherwise.
@@ -512,6 +461,9 @@ void _gdk_win32_window_change_property (GdkWindow    *window,
 					const guchar *data,
 					gint          nelements);
 void _gdk_win32_window_delete_property (GdkWindow *window, GdkAtom    property);
+
+void gdk_win32_selection_clear_targets (GdkDisplay *display,
+                                        GdkAtom     selection);
 
 /* Stray GdkWin32Screen members */
 gboolean _gdk_win32_get_setting (const gchar *name, GValue *value);
