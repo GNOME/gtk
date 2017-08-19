@@ -4947,10 +4947,6 @@ gtk_widget_get_window_allocation (GtkWidget     *widget,
  * the region created from the given coordinates.
  *
  * The region here is specified in widget coordinates.
- * Widget coordinates are a bit odd; for historical reasons, they are
- * defined as @widget->window coordinates for widgets that return %TRUE for
- * gtk_widget_get_has_window(), and are relative to @widget->allocation.x,
- * @widget->allocation.y otherwise.
  *
  * @width or @height may be 0, in this case this function does
  * nothing. Negative values for @width and @height are not allowed.
