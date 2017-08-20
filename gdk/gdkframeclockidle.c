@@ -413,7 +413,6 @@ gdk_frame_clock_paint_idle (void *data)
         case GDK_FRAME_CLOCK_PHASE_LAYOUT:
           if (priv->freeze_count == 0)
             {
-	      int iter;
 #ifdef G_ENABLE_DEBUG
               if (GDK_DEBUG_CHECK (FRAMES))
                 {
@@ -424,20 +423,8 @@ gdk_frame_clock_paint_idle (void *data)
 #endif /* G_ENABLE_DEBUG */
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
-	      /* We loop in the layout phase, because we don't want to progress
-	       * into the paint phase with invalid size allocations. This may
-	       * happen in some situation like races between user window
-	       * resizes and natural size changes.
-	       */
-	      iter = 0;
-              while ((priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT) &&
-		     priv->freeze_count == 0 && iter++ < 4)
-                {
-                  priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
-                  _gdk_frame_clock_emit_layout (clock);
-                }
-	      if (iter == 5)
-		g_warning ("gdk-frame-clock: layout continuously requested, giving up after 4 tries");
+              priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
+              _gdk_frame_clock_emit_layout (clock);
             }
           /* fallthrough */
         case GDK_FRAME_CLOCK_PHASE_PAINT:

@@ -43,6 +43,7 @@
 #include "gtkwindow.h"
 
 #include "a11y/gtkcontaineraccessibleprivate.h"
+#include "gtkwindowprivate.h"
 
 #include <gobject/gobjectnotifyqueue.c>
 #include <gobject/gvaluecollector.h>
@@ -58,6 +59,9 @@
                               GTK_IS_POPOVER_MENU (x) || \
                               GTK_IS_SHORTCUTS_SECTION (x) || \
                               GTK_IS_SHORTCUTS_WINDOW (x))
+
+
+#define N_RESIZE_ITERATIONS 2
 
 /**
  * SECTION:gtkcontainer
@@ -159,6 +163,7 @@ struct _GtkContainerPrivate
 
   guint has_focus_chain    : 1;
   guint restyle_pending    : 1;
+  guint last_size_allocate : 1;
 };
 
 enum {
@@ -1556,11 +1561,54 @@ gtk_container_needs_idle_sizer (GtkContainer *container)
   return gtk_widget_needs_allocate (GTK_WIDGET (container));
 }
 
+gboolean
+gtk_container_doing_last_size_allocate (GtkContainer *container)
+{
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
+
+  return priv->last_size_allocate;
+}
+
+static void
+apply_resize_widgets (GtkWindow *window)
+{
+  GPtrArray *resize_widgets = gtk_window_get_resize_widgets (window);
+  GPtrArray *allocate_widgets = gtk_window_get_allocate_widgets (window);
+  guint i, p;
+
+  g_message ("Resize widgets  : %u", resize_widgets->len);
+  for (i = 0, p = resize_widgets->len; i < p; i ++)
+    {
+      GtkWidget *widget = g_ptr_array_index (resize_widgets, i);
+      g_message ("  - %s %p", G_OBJECT_TYPE_NAME (widget), widget);
+      _gtk_widget_queue_resize (widget);
+
+      g_object_unref (G_OBJECT (widget));
+    }
+
+  g_message ("Allocate widgets: %u", allocate_widgets->len);
+  for (i = 0, p = allocate_widgets->len; i < p; i ++)
+    {
+      GtkWidget *widget = g_ptr_array_index (allocate_widgets, i);
+      g_message ("  - %s %p", G_OBJECT_TYPE_NAME (widget), widget);
+      _gtk_widget_queue_allocate (widget);
+
+      g_object_unref (G_OBJECT (widget));
+    }
+
+  g_ptr_array_remove_range (resize_widgets, 0, resize_widgets->len);
+  g_ptr_array_remove_range (allocate_widgets, 0, allocate_widgets->len);
+}
+
 static void
 gtk_container_idle_sizer (GdkFrameClock *clock,
 			  GtkContainer  *container)
 {
   GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
+  guint resize_iteration;
+
+  static int k;
+  g_message ("####### %d Idle Sizer for %s", ++k, G_OBJECT_TYPE_NAME (container));
 
   /* We validate the style contexts in a single loop before even trying
    * to handle resizes instead of doing validations inline.
@@ -1584,9 +1632,52 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
    * than trying to explicitly work around them with some extra flags,
    * since it doesn't cause any actual harm.
    */
-  if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
+  for (resize_iteration = 0; resize_iteration < N_RESIZE_ITERATIONS; resize_iteration ++)
     {
-      gtk_container_check_resize (container);
+      const gboolean last_iteration = (resize_iteration == N_RESIZE_ITERATIONS - 1);
+
+      if (GTK_IS_WINDOW (container))
+        apply_resize_widgets (GTK_WINDOW (container));
+
+      if (last_iteration)
+        priv->last_size_allocate = TRUE;
+
+      if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
+        gtk_container_check_resize (container);
+
+      if (last_iteration)
+        priv->last_size_allocate = FALSE;
+    }
+
+  if (GTK_IS_WINDOW (container))
+    {
+      GPtrArray *resize_widgets = gtk_window_get_resize_widgets (GTK_WINDOW (container));
+      GPtrArray *allocate_widgets = gtk_window_get_allocate_widgets (GTK_WINDOW (container));
+
+      /* Explicitly drop all resize/allocate widgets still present after the above loop */
+      if (resize_widgets->len > 0 || allocate_widgets->len > 0)
+        {
+          g_warning ("AFTER size-allocate No. %d:", N_RESIZE_ITERATIONS);
+          guint i, p;
+
+          g_message ("Resize widgets  : %u", resize_widgets->len);
+          for (i = 0, p = resize_widgets->len; i < p; i ++)
+            {
+              GtkWidget *widget = g_ptr_array_index (resize_widgets, i);
+              g_message ("  - %s %p", G_OBJECT_TYPE_NAME (widget), widget);
+            }
+
+          g_message ("Allocate widgets: %u", allocate_widgets->len);
+          for (i = 0, p = allocate_widgets->len; i < p; i ++)
+            {
+              GtkWidget *widget = g_ptr_array_index (allocate_widgets, i);
+              g_message ("  - %s %p", G_OBJECT_TYPE_NAME (widget), widget);
+            }
+
+          /* Ignore every queue_resize and queue_allocate after the second iteration. */
+          g_ptr_array_remove_range (resize_widgets, 0, resize_widgets->len);
+          g_ptr_array_remove_range (allocate_widgets, 0, allocate_widgets->len);
+        }
     }
 
   if (!gtk_container_needs_idle_sizer (container))
@@ -1642,7 +1733,6 @@ gtk_container_queue_resize_handler (GtkContainer *container)
   widget = GTK_WIDGET (container);
 
   if (_gtk_widget_get_visible (widget) &&
-      gtk_widget_needs_allocate (widget) &&
       _gtk_widget_is_toplevel (widget))
     {
       gtk_container_start_idle_sizer (container);

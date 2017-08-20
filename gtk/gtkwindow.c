@@ -204,6 +204,9 @@ struct _GtkWindowPrivate
 
   GdkModifierType        mnemonic_modifier;
 
+  GPtrArray *resize_widgets;
+  GPtrArray *allocate_widgets;
+
   gchar   *startup_id;
   gchar   *title;
   gchar   *wm_role;
@@ -1889,6 +1892,9 @@ gtk_window_init (GtkWindow *window)
   priv = window->priv;
 
   gtk_widget_set_has_surface (widget, TRUE);
+  priv->resize_widgets = g_ptr_array_new ();
+  priv->allocate_widgets = g_ptr_array_new ();
+
   _gtk_widget_set_is_toplevel (widget, TRUE);
   _gtk_widget_set_anchored (widget, TRUE);
 
@@ -11448,4 +11454,72 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
       if (device)
         break;
     }
+}
+
+void
+gtk_window_add_resize_widget (GtkWindow *window,
+                              GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_ptr_array_add (priv->resize_widgets, g_object_ref (G_OBJECT (widget)));
+}
+
+void
+gtk_window_add_allocate_widget (GtkWindow *window,
+                                GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_ptr_array_add (priv->allocate_widgets, g_object_ref (G_OBJECT (widget)));
+}
+
+void
+gtk_window_dequeue_resize_for (GtkWindow *window,
+                               GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  guint i;
+
+  for (i = 0; i < priv->resize_widgets->len; i ++)
+    {
+      GtkWidget *w = g_ptr_array_index (priv->resize_widgets, i);
+
+      if (w == widget)
+        {
+          g_ptr_array_remove_index (priv->resize_widgets, i);
+          i --;
+        }
+    }
+
+  for (i = 0; i < priv->allocate_widgets->len; i ++)
+    {
+      GtkWidget *w = g_ptr_array_index (priv->allocate_widgets, i);
+
+      if (w == widget)
+        {
+          g_ptr_array_remove_index (priv->allocate_widgets, i);
+          i --;
+        }
+    }
+
+  if (priv->resize_widgets->len == 0 &&
+      priv->allocate_widgets->len == 0)
+    _gtk_container_stop_idle_sizer (GTK_CONTAINER (window));
+}
+
+GPtrArray *
+gtk_window_get_resize_widgets (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  return priv->resize_widgets;
+}
+
+GPtrArray *
+gtk_window_get_allocate_widgets (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  return priv->allocate_widgets;
 }

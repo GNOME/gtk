@@ -164,6 +164,18 @@ void             gtk_window_maybe_update_cursor (GtkWindow *window,
                                                  GtkWidget *widget,
                                                  GdkDevice *device);
 
+
+void gtk_window_add_resize_widget (GtkWindow *window,
+                                   GtkWidget *widget);
+void gtk_window_add_allocate_widget (GtkWindow *window,
+                                     GtkWidget *widget);
+
+void gtk_window_dequeue_resize_for (GtkWindow *window,
+                                    GtkWidget *widget);
+
+GPtrArray *gtk_window_get_resize_widgets (GtkWindow *window);
+GPtrArray *gtk_window_get_allocate_widgets (GtkWindow *window);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */

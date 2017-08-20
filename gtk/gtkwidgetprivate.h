@@ -333,9 +333,13 @@ void              gtk_widget_init_legacy_controller        (GtkWidget *widget);
 void              gtk_widget_get_origin_relative_to_parent (GtkWidget        *widget,
                                                             int              *origin_x,
                                                             int              *origin_y);
+void              gtk_widget_dequeue_resize (GtkWidget *widget);
 
 
 
+
+void              _gtk_widget_queue_resize                 (GtkWidget *widget);
+void              _gtk_widget_queue_allocate               (GtkWidget *widget);
 
 /* inline getters */
 

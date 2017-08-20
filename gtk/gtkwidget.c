@@ -3225,6 +3225,8 @@ gtk_widget_unparent (GtkWidget *widget)
 				priv->clip.width,
 				priv->clip.height);
 
+  gtk_widget_dequeue_resize (widget);
+
   if (priv->visible && _gtk_widget_get_visible (priv->parent))
     gtk_widget_queue_resize (priv->parent);
 
@@ -3411,8 +3413,6 @@ gtk_widget_show (GtkWidget *widget)
       parent = _gtk_widget_get_parent (widget);
       if (parent)
         {
-          gtk_widget_queue_resize (parent);
-
           /* see comment in set_parent() for why this should and can be
            * conditional
            */
@@ -3428,6 +3428,7 @@ gtk_widget_show (GtkWidget *widget)
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
 
       gtk_widget_pop_verify_invariants (widget);
+      gtk_widget_queue_resize (widget);
       g_object_unref (widget);
     }
 }
@@ -3487,9 +3488,9 @@ gtk_widget_hide (GtkWidget *widget)
 
       parent = gtk_widget_get_parent (widget);
       if (parent)
-	gtk_widget_queue_resize (parent);
+        gtk_widget_queue_resize (parent);
 
-      gtk_widget_queue_allocate (widget);
+      gtk_widget_dequeue_resize (widget);
 
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
@@ -4066,10 +4067,16 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+
   if (_gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
 
-  gtk_widget_set_alloc_needed (widget);
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      gtk_window_add_allocate_widget (GTK_WINDOW (toplevel), widget);
+      gtk_container_queue_resize_handler (GTK_CONTAINER (toplevel));
+    }
 }
 
 static inline gboolean
@@ -4140,8 +4147,44 @@ gtk_widget_queue_resize (GtkWidget *widget)
   if (_gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
 
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    {
+
+      if (gtk_container_doing_last_size_allocate (GTK_CONTAINER (toplevel)))
+        {
+          g_warning ("%s in last size-allocate iteration!", __FUNCTION__);
+        }
+
+      gtk_window_add_resize_widget (GTK_WINDOW (toplevel), widget);
+      gtk_container_queue_resize_handler (GTK_CONTAINER (toplevel));
+    }
+}
+
+void
+gtk_widget_dequeue_resize (GtkWidget *widget)
+{
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      gtk_window_dequeue_resize_for (GTK_WINDOW (toplevel), widget);
+    }
+}
+
+void
+_gtk_widget_queue_resize (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
   gtk_widget_queue_resize_internal (widget);
 }
+
+void
+_gtk_widget_queue_allocate (GtkWidget *widget)
+{
+  gtk_widget_set_alloc_needed (widget);
+}
+
 
 /**
  * gtk_widget_queue_resize_no_redraw:
@@ -4155,7 +4198,11 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_queue_resize_internal (widget);
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      gtk_window_add_resize_widget (GTK_WINDOW (toplevel), widget);
+    }
 }
 
 /**
@@ -7337,7 +7384,7 @@ gtk_widget_reposition_after (GtkWidget *widget,
           _gtk_widget_get_mapped (priv->parent))
         gtk_widget_map (widget);
 
-      gtk_widget_queue_resize (priv->parent);
+      gtk_widget_queue_resize (widget);
     }
 
   /* child may cause parent's expand to change, if the child is
