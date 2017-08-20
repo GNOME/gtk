@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-19 17:34+0000\n"
-"PO-Revision-Date: 2017-08-20 02:02+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2017-08-20 14:34+0000\n"
+"PO-Revision-Date: 2017-08-20 16:38+0200\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -3713,7 +3713,7 @@ msgstr "Emoticon-Symbol"
 
 #: gtk/gtkentry.c:1532
 msgid "Whether to show an icon for Emoji"
-msgstr "Legt fest, ob ein Emoticon-Symbol dargestellt werden spöö"
+msgstr "Legt fest, ob ein Emoticon-Symbol dargestellt werden soll"
 
 #: gtk/gtkentry.c:1551
 msgid "Icon Prelight"
