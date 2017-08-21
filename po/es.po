@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-13 22:36+0000\n"
-"PO-Revision-Date: 2017-02-27 09:41+0100\n"
+"POT-Creation-Date: 2017-08-20 23:42+0000\n"
+"PO-Revision-Date: 2017-08-21 13:34+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -32,15 +32,15 @@ msgstr ""
 msgid "Broadway display type not supported: %s"
 msgstr "Tipo de pantalla «broadway» no soportado: %s"
 
-#: gdk/gdkwindow.c:2057
+#: gdk/gdkwindow.c:2060
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Soporte de GL desactivado mediante GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2068
+#: gdk/gdkwindow.c:2071
 msgid "The current backend does not support OpenGL"
 msgstr "El «backend» actual no soporta OpenGL"
 
-#: gdk/gdkwindow.c:2161
+#: gdk/gdkwindow.c:2164
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Soporte de Vulkan desactivado mediante GDK_DEBUG"
 
@@ -598,15 +598,18 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:8055
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:404
+#: gtk/gtkwindow.c:8055
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:8064
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:427
+#: gtk/gtkwindow.c:8064
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:8021
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427
+#: gtk/gtkwindow.c:8021
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1696,7 +1699,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
 
-#: gtk/gtkcolorswatch.c:315
+#: gtk/gtkcolorswatch.c:314
 msgid "C_ustomize"
 msgstr "_Personalizar"
 
@@ -1764,51 +1767,50 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: gtk/gtkentry.c:8466 gtk/gtklabel.c:6108 gtk/gtktextview.c:9281
+#: gtk/gtkentry.c:8462 gtk/gtklabel.c:6108 gtk/gtktextview.c:9281
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtkentry.c:8470 gtk/gtklabel.c:6109 gtk/gtktextview.c:9285
+#: gtk/gtkentry.c:8466 gtk/gtklabel.c:6109 gtk/gtktextview.c:9285
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtkentry.c:8474 gtk/gtklabel.c:6110 gtk/gtktextview.c:9287
+#: gtk/gtkentry.c:8470 gtk/gtklabel.c:6110 gtk/gtktextview.c:9287
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtkentry.c:8477 gtk/gtkfilechooserwidget.c:1467
+#: gtk/gtkentry.c:8473 gtk/gtkfilechooserwidget.c:1467
 #: gtk/gtkfilechooserwidget.c:2261 gtk/gtklabel.c:6112 gtk/gtktextview.c:9290
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: gtk/gtkentry.c:8488 gtk/gtklabel.c:6121 gtk/gtktextview.c:9304
+#: gtk/gtkentry.c:8484 gtk/gtklabel.c:6121 gtk/gtktextview.c:9304
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtkentry.c:8495
-#, fuzzy
+#: gtk/gtkentry.c:8491
 #| msgctxt "keyboard label"
 #| msgid "Insert"
 msgid "Insert _Emoji"
-msgstr "Insertar"
+msgstr "Insertar _emoticono"
 
-#: gtk/gtkentry.c:8668 gtk/gtktextview.c:9529
+#: gtk/gtkentry.c:8664 gtk/gtktextview.c:9529
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: gtk/gtkentry.c:8671 gtk/gtktextview.c:9532
+#: gtk/gtkentry.c:8667 gtk/gtktextview.c:9532
 msgid "Cut"
 msgstr "Cortar"
 
-#: gtk/gtkentry.c:8674 gtk/gtktextview.c:9535
+#: gtk/gtkentry.c:8670 gtk/gtktextview.c:9535
 msgid "Copy"
 msgstr "Copiar"
 
-#: gtk/gtkentry.c:8677 gtk/gtktextview.c:9538
+#: gtk/gtkentry.c:8673 gtk/gtktextview.c:9538
 msgid "Paste"
 msgstr "Pegar"
 
-#: gtk/gtkentry.c:9624
+#: gtk/gtkentry.c:9620
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -5122,37 +5124,35 @@ msgstr "Saturación"
 #: gtk/ui/gtkemojichooser.ui:43
 msgctxt "emoji category"
 msgid "Smileys & People"
-msgstr ""
+msgstr "Caritas y personas"
 
 #: gtk/ui/gtkemojichooser.ui:56
 msgctxt "emoji category"
 msgid "Body & Clothing"
-msgstr ""
+msgstr "Cuerpo y ropa"
 
 #: gtk/ui/gtkemojichooser.ui:69
 msgctxt "emoji category"
 msgid "Animals & Nature"
-msgstr ""
+msgstr "Animales y naturaleza"
 
 #: gtk/ui/gtkemojichooser.ui:82
 msgctxt "emoji category"
 msgid "Food & Drink"
-msgstr ""
+msgstr "Comida y bebida"
 
 #: gtk/ui/gtkemojichooser.ui:95
 msgctxt "emoji category"
 msgid "Travel & Places"
-msgstr ""
+msgstr "Viajes y lugares"
 
 #: gtk/ui/gtkemojichooser.ui:108
-#, fuzzy
 #| msgid "Activate"
 msgctxt "emoji category"
 msgid "Activities"
-msgstr "Activar"
+msgstr "Actividades"
 
 #: gtk/ui/gtkemojichooser.ui:121
-#, fuzzy
 #| msgid "Objects"
 msgctxt "emoji category"
 msgid "Objects"
@@ -5161,12 +5161,12 @@ msgstr "Objetos"
 #: gtk/ui/gtkemojichooser.ui:134
 msgctxt "emoji category"
 msgid "Symbols"
-msgstr ""
+msgstr "Símbolos"
 
 #: gtk/ui/gtkemojichooser.ui:147
 msgctxt "emoji category"
 msgid "Flags"
-msgstr ""
+msgstr "Banderas"
 
 # C en conflicto con Cancelar
 #: gtk/ui/gtkfilechooserwidget.ui:62
