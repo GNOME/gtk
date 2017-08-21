@@ -5891,9 +5891,12 @@ gtk_text_view_snapshot (GtkWidget   *widget,
   int width, height;
 
   gtk_widget_get_content_size (widget, &width, &height);
+
   graphene_rect_init (&bounds,
                       0, 0,
                       width, height);
+
+  gtk_snapshot_push_clip (snapshot, &bounds, "Textview Clip");
 
   cr = gtk_snapshot_append_cairo (snapshot, &bounds, "GtkTextView");
 
@@ -5912,6 +5915,8 @@ gtk_text_view_snapshot (GtkWidget   *widget,
   paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->top_window, context);
   paint_border_window (GTK_TEXT_VIEW (widget), cr, priv->bottom_window, context);
 
+  cairo_destroy (cr);
+
   /* Propagate exposes to all unanchored children. 
    * Anchored children are handled in gtk_text_view_paint(). 
    */
@@ -5920,17 +5925,11 @@ gtk_text_view_snapshot (GtkWidget   *widget,
     {
       GtkTextViewChild *vc = tmp_list->data;
 
-      /* propagate_draw checks that event->window matches
-       * child->window
-       */
-      gtk_container_propagate_draw (GTK_CONTAINER (widget),
-                                    vc->widget,
-                                    cr);
-      
+      gtk_widget_snapshot_child (widget, vc->widget, snapshot);
       tmp_list = tmp_list->next;
     }
 
-  cairo_destroy (cr);
+  gtk_snapshot_pop (snapshot);
 }
 
 static gboolean
