@@ -179,9 +179,6 @@ gboolean     _gtk_widget_get_alloc_needed   (GtkWidget *widget);
 gboolean     gtk_widget_needs_allocate      (GtkWidget *widget);
 void         gtk_widget_ensure_resize       (GtkWidget *widget);
 void         gtk_widget_ensure_allocate     (GtkWidget *widget);
-void         gtk_widget_draw_internal       (GtkWidget *widget,
-					     cairo_t   *cr,
-                                             gboolean   do_clip);
 void          _gtk_widget_scale_changed     (GtkWidget *widget);
 
 

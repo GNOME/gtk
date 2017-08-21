@@ -6284,23 +6284,19 @@ get_render_mode (GtkWidgetClass *klass)
   return RENDER_SNAPSHOT;
 }
 
-void
+static void
 gtk_widget_draw_internal (GtkWidget *widget,
-                          cairo_t   *cr,
-                          gboolean   clip_to_size)
+                          cairo_t   *cr)
 {
   if (!_gtk_widget_is_drawable (widget))
     return;
 
-  if (clip_to_size)
-    {
-      cairo_rectangle (cr,
-                       widget->priv->clip.x - widget->priv->allocation.x,
-                       widget->priv->clip.y - widget->priv->allocation.y,
-                       widget->priv->clip.width,
-                       widget->priv->clip.height);
-      cairo_clip (cr);
-    }
+  cairo_rectangle (cr,
+                   widget->priv->clip.x - widget->priv->allocation.x,
+                   widget->priv->clip.y - widget->priv->allocation.y,
+                   widget->priv->clip.width,
+                   widget->priv->clip.height);
+  cairo_clip (cr);
 
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
@@ -6457,7 +6453,7 @@ gtk_widget_draw (GtkWidget *widget,
 
   cairo_save (cr);
 
-  gtk_widget_draw_internal (widget, cr, TRUE);
+  gtk_widget_draw_internal (widget, cr);
 
   cairo_restore (cr);
 }
@@ -15159,7 +15155,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
       cr = gtk_snapshot_append_cairo (snapshot, 
                                       &bounds, "Fallback<%s>",
                                       G_OBJECT_TYPE_NAME (widget));
-      gtk_widget_draw_internal (widget, cr, TRUE);
+      gtk_widget_draw_internal (widget, cr);
       cairo_destroy (cr);
     }
   else
