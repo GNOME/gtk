@@ -2059,11 +2059,7 @@ gtk_container_real_set_focus_child (GtkContainer *container,
                                                  0, 0, &x, &y))
             return;
 
-          _gtk_widget_get_allocation (focus_child, &allocation);
-          x += allocation.x;
-          y += allocation.y;
-
-          _gtk_widget_get_allocation (child, &allocation);
+          gtk_widget_get_outer_allocation (child, &allocation);
 
           if (vadj)
             gtk_adjustment_clamp_page (vadj, y, y + allocation.height);
