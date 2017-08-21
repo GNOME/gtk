@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-13 22:20+0000\n"
-"PO-Revision-Date: 2017-02-27 10:08+0100\n"
+"POT-Creation-Date: 2017-08-20 22:45+0000\n"
+"PO-Revision-Date: 2017-08-21 13:30+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -90,11 +90,11 @@ msgstr "OPCIONES"
 msgid "GDK debugging flags to unset"
 msgstr "Opciones de depuración GTK+ que quitar"
 
-#: gdk/gdkwindow.c:2826
+#: gdk/gdkwindow.c:2829
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Soporte de GL desactivado mediante GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2837
+#: gdk/gdkwindow.c:2840
 msgid "The current backend does not support OpenGL"
 msgstr "El «backend» actual no soporta OpenGL"
 
@@ -655,15 +655,18 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:411 gtk/gtkwindow.c:9047
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:411
+#: gtk/gtkwindow.c:9047
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9056
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:435
+#: gtk/gtkwindow.c:9056
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9013
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:435
+#: gtk/gtkwindow.c:9013
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -2204,11 +2207,10 @@ msgid "Select _All"
 msgstr "Seleccionar _todo"
 
 #: gtk/gtkentry.c:9572
-#, fuzzy
 #| msgctxt "keyboard label"
 #| msgid "Insert"
 msgid "Insert _Emoji"
-msgstr "Insertar"
+msgstr "Insertar _emoticono"
 
 #: gtk/gtkentry.c:9747 gtk/gtktextview.c:9696
 msgid "Select all"
@@ -5545,32 +5547,30 @@ msgstr "Saturación"
 
 #: gtk/ui/gtkemojichooser.ui:51
 msgid "Smileys & People"
-msgstr ""
+msgstr "Caritas y personas"
 
 #: gtk/ui/gtkemojichooser.ui:66
 msgid "Body & Clothing"
-msgstr ""
+msgstr "Cuerpo y ropa"
 
 #: gtk/ui/gtkemojichooser.ui:81
 msgid "Animals & Nature"
-msgstr ""
+msgstr "Animales y naturaleza"
 
 #: gtk/ui/gtkemojichooser.ui:96
 msgid "Food & Drink"
-msgstr ""
+msgstr "Comida y bebida"
 
 #: gtk/ui/gtkemojichooser.ui:111
 msgid "Travel & Places"
-msgstr ""
+msgstr "Viajes y lugares"
 
 #: gtk/ui/gtkemojichooser.ui:126
-#, fuzzy
 #| msgid "Activate"
 msgid "Activities"
-msgstr "Activar"
+msgstr "Actividades"
 
 #: gtk/ui/gtkemojichooser.ui:141
-#, fuzzy
 #| msgid "Objects"
 msgctxt "emoji category"
 msgid "Objects"
@@ -5578,11 +5578,11 @@ msgstr "Objetos"
 
 #: gtk/ui/gtkemojichooser.ui:156
 msgid "Symbols"
-msgstr ""
+msgstr "Símbolos"
 
 #: gtk/ui/gtkemojichooser.ui:171
 msgid "Flags"
-msgstr ""
+msgstr "Banderas"
 
 # C en conflicto con Cancelar
 #: gtk/ui/gtkfilechooserwidget.ui:69
