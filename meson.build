@@ -321,13 +321,14 @@ cairo_dep      = dependency('cairo', version: cairo_req)
 pangocairo_dep = dependency('pangocairo', version: cairo_req)
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req)
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req)
-epoxy_dep      = dependency('epoxy', version: epoxy_req)
+epoxy_dep      = dependency('epoxy', version: epoxy_req,
+                            fallback: ['libepoxy', 'libepoxy_dep'])
 atk_dep        = dependency('atk', version: atk_req)
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req)
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
-                            fallback : ['graphene', 'graphene_dep'])
+                            fallback: ['graphene', 'graphene_dep'])
 
 fontconfig_dep = [] # only used in x11 backend
 atkbridge_dep  = [] # only used in x11 backend
