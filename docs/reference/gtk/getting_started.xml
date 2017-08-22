@@ -256,7 +256,7 @@
 
     <example>
       <title>Packing buttons with GtkBuilder</title>
-      <para>Create a new file with the following content named example-4.c.</para>
+      <para>Create a new file with the following content named example-3.c.</para>
       <programlisting><xi:include href="../../../../examples/builder.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       <para>Create a new file with the following content named builder.ui.</para>
       <programlisting><xi:include href="../../../../examples/builder.ui" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
@@ -264,7 +264,7 @@
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-4 example-4.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-3 example-3.c `pkg-config --libs gtk+-3.0`</literal>
       </literallayout>
     </para>
 
@@ -1072,13 +1072,13 @@ example_app_window_init (ExampleAppWindow *win)
 
     <example id="gtk-getting-started-drawing">
       <title>Drawing in response to input</title>
-      <para>Create a new file with the following content named example-3.c.</para>
+      <para>Create a new file with the following content named example-4.c.</para>
       <programlisting><xi:include href="../../../../examples/drawing.c" parse="text"><xi:fallback>MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </example>
     <para>
       You can compile the program above with GCC using:
       <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-3 example-3.c `pkg-config --libs gtk+-3.0`</literal>
+        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-4 example-4.c `pkg-config --libs gtk+-3.0`</literal>
       </literallayout>
     </para>
   </section>
