@@ -1177,11 +1177,14 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      gtk_im_context_simple_commit_char (context, priv->tentative_match);
 	      priv->compose_buffer[0] = 0;
 
+	      return TRUE;
 	    }
 	  else if (priv->in_emoji_sequence ||
                    (priv->in_hex_sequence && n_compose == 0))
 	    {
 	      priv->modifiers_dropped = TRUE;
+
+	      return TRUE;
 	    }
 	  else if (priv->in_hex_sequence)
 	    {
@@ -1195,12 +1198,12 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
 	      g_signal_emit_by_name (context_simple, "preedit-changed");
 	      g_signal_emit_by_name (context_simple, "preedit-end");
-	    }
 
-	  return TRUE;
+	      return TRUE;
+	    }
 	}
-      else
-	return FALSE;
+
+      return FALSE;
     }
 
   /* Ignore modifier key presses */
