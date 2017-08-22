@@ -59,7 +59,7 @@ struct _GdkX11Screen
   char *window_manager_name;
 
   /* X Settings */
-  GdkWindow *xsettings_manager_window;
+  Window xsettings_manager_window;
   Atom xsettings_selection_atom;
   GHashTable *xsettings; /* string of GDK settings name => GValue */
 

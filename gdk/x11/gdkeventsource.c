@@ -22,6 +22,7 @@
 #include "gdkinternals.h"
 #include "gdkwindow-x11.h"
 #include "gdkprivate-x11.h"
+#include "xsettings-client.h"
 
 
 static gboolean gdk_event_source_prepare  (GSource     *source,
@@ -175,6 +176,9 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
   GdkEventTranslator *event_translator;
   GdkWindow *filter_window;
   Display *dpy;
+  GdkX11Screen *x11_screen;
+
+  x11_screen = (GdkX11Screen*)gdk_display_get_default_screen (event_source->display);
 
   dpy = GDK_DISPLAY_XDISPLAY (event_source->display);
 
@@ -191,8 +195,17 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
   if (filter_window)
     event->any.window = g_object_ref (filter_window);
 
+  /* apply XSettings filters */
+  if (xevent->xany.window == XRootWindow (dpy, 0))
+    result = gdk_xsettings_root_window_filter (xevent, event, x11_screen);
+
+  if (result == GDK_FILTER_CONTINUE &&
+      xevent->xany.window == x11_screen->xsettings_manager_window)
+    result = gdk_xsettings_manager_window_filter (xevent, event, x11_screen);
+
   /* Run default filters */
-  if (_gdk_default_filters)
+  if (result == GDK_FILTER_CONTINUE &&
+      _gdk_default_filters)
     {
       /* Apply global filters */
       result = gdk_event_apply_filters (xevent, event, NULL);

@@ -417,14 +417,14 @@ read_settings (GdkX11Screen *x11_screen,
 
   x11_screen->xsettings = NULL;
 
-  if (x11_screen->xsettings_manager_window)
+  if (x11_screen->xsettings_manager_window != 0)
     {
       GdkDisplay *display = x11_screen->display;
       Atom xsettings_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XSETTINGS_SETTINGS");
 
       gdk_x11_display_error_trap_push (display);
       result = XGetWindowProperty (gdk_x11_display_get_xdisplay (display),
-                                   gdk_x11_window_get_xid (x11_screen->xsettings_manager_window),
+                                   x11_screen->xsettings_manager_window,
 				   xsettings_atom, 0, LONG_MAX,
 				   False, xsettings_atom,
 				   &type, &format, &n_items, &bytes_after, &data);
@@ -516,53 +516,33 @@ get_selection_atom (GdkX11Screen *x11_screen)
   return _gdk_x11_get_xatom_for_display_printf (x11_screen->display, "_XSETTINGS_S%d", x11_screen->screen_num);
 }
 
-static GdkFilterReturn
-gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
-                                     GdkEvent  *event,
-                                     gpointer   data);
-
 static void
 check_manager_window (GdkX11Screen *x11_screen,
                       gboolean      notify_changes)
 {
   GdkDisplay *display;
   Display *xdisplay;
-  Window manager_window_xid;
 
   display = x11_screen->display;
   xdisplay = gdk_x11_display_get_xdisplay (display);
 
-  if (x11_screen->xsettings_manager_window)
-    {
-      gdk_window_remove_filter (x11_screen->xsettings_manager_window, gdk_xsettings_manager_window_filter, x11_screen);
-      g_object_unref (x11_screen->xsettings_manager_window);
-    }
-
   gdk_x11_display_grab (display);
 
-  manager_window_xid = XGetSelectionOwner (xdisplay, get_selection_atom (x11_screen));
-  x11_screen->xsettings_manager_window = gdk_x11_window_foreign_new_for_display (display,
-                                                                   manager_window_xid);
-  /* XXX: Can't use gdk_window_set_events() here because the first call to this
-   * function happens too early in gdk_init() */
-  if (x11_screen->xsettings_manager_window)
+  x11_screen->xsettings_manager_window = XGetSelectionOwner (xdisplay, get_selection_atom (x11_screen));
+
+  if (x11_screen->xsettings_manager_window != 0)
     XSelectInput (xdisplay,
-                  gdk_x11_window_get_xid (x11_screen->xsettings_manager_window),
+                  x11_screen->xsettings_manager_window,
                   PropertyChangeMask | StructureNotifyMask);
 
   gdk_x11_display_ungrab (display);
-  
+
   gdk_display_flush (display);
 
-  if (x11_screen->xsettings_manager_window)
-    {
-      gdk_window_add_filter (x11_screen->xsettings_manager_window, gdk_xsettings_manager_window_filter, x11_screen);
-    }
-      
   read_settings (x11_screen, notify_changes);
 }
 
-static GdkFilterReturn
+GdkFilterReturn
 gdk_xsettings_root_window_filter (GdkXEvent *xevent,
                                   GdkEvent  *event,
                                   gpointer   data)
@@ -583,11 +563,11 @@ gdk_xsettings_root_window_filter (GdkXEvent *xevent,
       check_manager_window (x11_screen, TRUE);
       return GDK_FILTER_REMOVE;
     }
-  
+
   return GDK_FILTER_CONTINUE;
 }
 
-static GdkFilterReturn
+GdkFilterReturn
 gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
                                      GdkEvent  *event,
                                      gpointer   data)
@@ -599,22 +579,20 @@ gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
     {
       check_manager_window (x11_screen, TRUE);
       /* let GDK do its cleanup */
-      return GDK_FILTER_CONTINUE; 
+      return GDK_FILTER_CONTINUE;
     }
   else if (xev->xany.type == PropertyNotify)
     {
       read_settings (x11_screen, TRUE);
       return GDK_FILTER_REMOVE;
     }
-  
-  return GDK_FILTER_CONTINUE;;
+
+  return GDK_FILTER_CONTINUE;
 }
 
 void
 _gdk_x11_xsettings_init (GdkX11Screen *x11_screen)
 {
-  gdk_window_add_filter (gdk_screen_get_root_window (GDK_SCREEN (x11_screen)), gdk_xsettings_root_window_filter, x11_screen);
-
   check_manager_window (x11_screen, FALSE);
 }
 
@@ -627,18 +605,12 @@ _gdk_x11_settings_force_reread (GdkX11Screen *x11_screen)
 void
 _gdk_x11_xsettings_finish (GdkX11Screen *x11_screen)
 {
-  gdk_window_remove_filter (gdk_screen_get_root_window (GDK_SCREEN (x11_screen)), gdk_xsettings_root_window_filter, x11_screen);
   if (x11_screen->xsettings_manager_window)
-    {
-      gdk_window_remove_filter (x11_screen->xsettings_manager_window, gdk_xsettings_manager_window_filter, x11_screen);
-      g_object_unref (x11_screen->xsettings_manager_window);
-      x11_screen->xsettings_manager_window = NULL;
-    }
-  
+    x11_screen->xsettings_manager_window = 0;
+
   if (x11_screen->xsettings)
     {
       g_hash_table_unref (x11_screen->xsettings);
       x11_screen->xsettings = NULL;
     }
 }
-
