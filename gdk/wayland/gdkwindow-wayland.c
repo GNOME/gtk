@@ -47,12 +47,8 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-#define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
+#define WINDOW_IS_TOPLEVEL(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
-
-#define WINDOW_IS_TOPLEVEL(window)                   \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 
@@ -2989,7 +2985,7 @@ gdk_wayland_window_set_geometry_hints (GdkWindow         *window,
   int width, height;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
@@ -3178,7 +3174,7 @@ gdk_wayland_window_iconify (GdkWindow *window)
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   if (!impl->display_server.xdg_toplevel)
@@ -3191,7 +3187,7 @@ static void
 gdk_wayland_window_deiconify (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
@@ -3352,7 +3348,7 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   uint32_t resize_edges, serial;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   switch (edge)
@@ -3461,9 +3457,7 @@ gdk_wayland_window_destroy_notify (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
-        g_warning ("GdkWindow %p unexpectedly destroyed", window);
-
+      g_warning ("GdkWindow %p unexpectedly destroyed", window);
       _gdk_window_destroy (window, TRUE);
     }
 
