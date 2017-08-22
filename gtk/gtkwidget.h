@@ -1170,6 +1170,8 @@ GDK_AVAILABLE_IN_3_90
 GtkWidget *             gtk_widget_get_first_child      (GtkWidget *widget);
 GDK_AVAILABLE_IN_3_90
 GtkWidget *             gtk_widget_get_last_child       (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_92
+guint                   gtk_widget_get_n_children       (GtkWidget *widget);
 GDK_AVAILABLE_IN_3_90
 GtkWidget *             gtk_widget_get_next_sibling     (GtkWidget *widget);
 GDK_AVAILABLE_IN_3_90

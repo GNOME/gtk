@@ -15307,6 +15307,28 @@ gtk_widget_get_last_child (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_get_n_children:
+ * @widget: a #GtkWidget
+ *
+ * Returns: the number of children
+ *
+ * Since: 3.92
+ */
+guint
+gtk_widget_get_n_children (GtkWidget *widget)
+{
+  guint n = 0;
+  GtkWidget *child;
+
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk-widget_get_next_sibling (child))
+    n++;
+
+  return n;
+}
+
+/**
  * gtk_widget_get_next_sibling:
  * @widget: a #GtkWidget
  *
