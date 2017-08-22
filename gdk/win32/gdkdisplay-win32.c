@@ -686,10 +686,11 @@ gdk_win32_display_request_selection_notification (GdkDisplay *display,
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   gboolean ret = FALSE;
+  gchar *selection_name = gdk_atom_name (selection);
 
   GDK_NOTE (DND,
             g_print ("gdk_display_request_selection_notification (..., %s)",
-                     gdk_atom_name (selection)));
+                     selection_name));
 
   if (selection == GDK_SELECTION_CLIPBOARD ||
       selection == GDK_SELECTION_PRIMARY)
@@ -708,6 +709,8 @@ gdk_win32_display_request_selection_notification (GdkDisplay *display,
       GDK_NOTE (DND, g_print (" unsupported"));
       ret = FALSE;
     }
+
+  g_free (selection_name);
 
   GDK_NOTE (DND, g_print (" -> %s\n", ret ? "TRUE" : "FALSE"));
   return ret;
