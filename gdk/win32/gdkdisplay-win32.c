@@ -626,13 +626,8 @@ inner_clipboard_window_procedure (HWND   hwnd,
 
         GDK_NOTE (DND, g_print (" \n"));
 
-        owner = gdk_win32_window_lookup_for_display (_gdk_display, hwnd_owner);
-        if (owner == NULL)
-          owner = gdk_win32_window_foreign_new_for_display (_gdk_display, hwnd_owner);
-
         event = gdk_event_new (GDK_OWNER_CHANGE);
         event->owner_change.window = gdk_get_default_root_window ();
-        event->owner_change.owner = owner;
         event->owner_change.reason = GDK_OWNER_CHANGE_NEW_OWNER;
         event->owner_change.selection = GDK_SELECTION_CLIPBOARD;
         event->owner_change.time = _gdk_win32_get_next_tick (0);

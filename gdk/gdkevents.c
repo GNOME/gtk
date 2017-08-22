@@ -723,12 +723,6 @@ gdk_event_copy (const GdkEvent *event)
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
       break;
 
-    case GDK_OWNER_CHANGE:
-      new_event->owner_change.owner = event->owner_change.owner;
-      if (new_event->owner_change.owner)
-        g_object_ref (new_event->owner_change.owner);
-      break;
-
     case GDK_SELECTION_CLEAR:
     case GDK_SELECTION_NOTIFY:
     case GDK_SELECTION_REQUEST:
@@ -813,18 +807,13 @@ gdk_event_free (GdkEvent *event)
       if (event->expose.region)
 	cairo_region_destroy (event->expose.region);
       break;
-      
+
     case GDK_MOTION_NOTIFY:
       g_free (event->motion.axes);
       break;
-      
+
     case GDK_SETTING:
       g_free (event->setting.name);
-      break;
-      
-    case GDK_OWNER_CHANGE:
-      if (event->owner_change.owner)
-        g_object_unref (event->owner_change.owner);
       break;
 
     case GDK_SELECTION_CLEAR:
