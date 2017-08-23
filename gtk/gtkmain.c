@@ -1895,7 +1895,6 @@ gtk_main_do_event (GdkEvent *event)
 
     case GDK_DRAG_STATUS:
     case GDK_DROP_FINISHED:
-      _gtk_drag_source_handle_event (event_widget, event);
       break;
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:

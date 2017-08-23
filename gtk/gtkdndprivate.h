@@ -52,8 +52,6 @@ void                    gtk_drag_set_icon_definition    (GdkDragContext         
                                                          GtkImageDefinition     *def,
                                                          gint                    hot_x,
                                                          gint                    hot_y);
-void                    _gtk_drag_source_handle_event   (GtkWidget              *widget,
-                                                         GdkEvent               *event);
 void                    _gtk_drag_dest_handle_event     (GtkWidget              *toplevel,
 				                         GdkEvent               *event);
 
