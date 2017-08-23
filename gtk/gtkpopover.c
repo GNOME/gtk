@@ -1099,6 +1099,7 @@ gtk_popover_update_position (GtkPopover *popover)
   GtkPopoverPrivate *priv = popover->priv;
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkAllocation window_alloc;
+  GtkBorder window_shadow;
   GdkRectangle rect;
   GtkRequisition req;
   GtkPositionType pos;
@@ -1111,6 +1112,7 @@ gtk_popover_update_position (GtkPopover *popover)
 
   gtk_widget_get_preferred_size (widget, NULL, &req);
   gtk_widget_get_allocation (GTK_WIDGET (priv->window), &window_alloc);
+  _gtk_window_get_shadow_width (priv->window, &window_shadow);
   priv->final_position = priv->preferred_position;
 
   gtk_popover_get_pointing_to (popover, &rect);
@@ -1119,10 +1121,12 @@ gtk_popover_update_position (GtkPopover *popover)
 
   pos = get_effective_position (popover, priv->preferred_position);
 
-  overshoot[GTK_POS_TOP] = req.height - rect.y;
-  overshoot[GTK_POS_BOTTOM] = rect.y + rect.height + req.height - window_alloc.height;
-  overshoot[GTK_POS_LEFT] = req.width - rect.x;
-  overshoot[GTK_POS_RIGHT] = rect.x + rect.width + req.width - window_alloc.width;
+  overshoot[GTK_POS_TOP] = req.height - rect.y + window_shadow.top;
+  overshoot[GTK_POS_BOTTOM] = rect.y + rect.height + req.height - window_alloc.height
+                              + window_shadow.bottom;
+  overshoot[GTK_POS_LEFT] = req.width - rect.x + window_shadow.left;
+  overshoot[GTK_POS_RIGHT] = rect.x + rect.width + req.width - window_alloc.width
+                             + window_shadow.right;
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)) &&
