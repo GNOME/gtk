@@ -18,6 +18,8 @@
 #include "config.h"
 #include "gtk/gtk.h"
 #include "gtkmagnifierprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtksnapshotprivate.h"
 #include "gtkintl.h"
 
 enum {
@@ -95,42 +97,42 @@ _gtk_magnifier_get_property (GObject    *object,
     }
 }
 
-static gboolean
-_gtk_magnifier_draw (GtkWidget *widget,
-                     cairo_t   *cr)
+static void
+gtk_magnifier_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
 {
-  GtkAllocation allocation, inspected_alloc;
-  GtkMagnifier *magnifier;
-  GtkMagnifierPrivate *priv;
-  gdouble x, y;
-
-  magnifier = GTK_MAGNIFIER (widget);
-  priv = _gtk_magnifier_get_instance_private (magnifier);
+  GtkMagnifier *magnifier = GTK_MAGNIFIER (widget);
+  GtkMagnifierPrivate *priv = _gtk_magnifier_get_instance_private (magnifier);
+  GtkSnapshot inspected_snapshot;
+  GskRenderNode *inspected_node;
+  graphene_matrix_t transform;
 
   if (priv->inspected == NULL)
-    return FALSE;
+    return;
 
   if (!gtk_widget_is_visible (priv->inspected))
-    return FALSE;
+    return;
 
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_widget_get_allocation (priv->inspected, &inspected_alloc);
-
-  if (!priv->resize)
-    cairo_translate (cr, allocation.width / 2, allocation.height / 2);
-
-  x = CLAMP (priv->x, 0, inspected_alloc.width);
-  y = CLAMP (priv->y, 0, inspected_alloc.height);
-
-  cairo_save (cr);
-  cairo_scale (cr, priv->magnification, priv->magnification);
-  cairo_translate (cr, -x, -y);
   g_signal_handler_block (priv->inspected, priv->draw_handler);
-  gtk_widget_draw (priv->inspected, cr);
-  g_signal_handler_unblock (priv->inspected, priv->draw_handler);
-  cairo_restore (cr);
 
-  return TRUE;
+  gtk_snapshot_init (&inspected_snapshot,
+                     gtk_snapshot_get_renderer (snapshot),
+                     snapshot->record_names,
+                     NULL,
+                     "MagnifierSnapshot");
+
+  gtk_widget_snapshot (priv->inspected, &inspected_snapshot);
+  inspected_node = gtk_snapshot_finish (&inspected_snapshot);
+
+  graphene_matrix_init_identity (&transform);
+  graphene_matrix_scale (&transform, priv->magnification, priv->magnification, 1);
+
+  gtk_snapshot_push_transform (snapshot, &transform, "Magnifier transform");
+  gtk_snapshot_append_node (snapshot, inspected_node);
+  gtk_snapshot_pop (snapshot);
+
+
+  g_signal_handler_unblock (priv->inspected, priv->draw_handler);
 }
 
 static void
@@ -159,7 +161,6 @@ gtk_magnifier_measure (GtkWidget      *widget,
   *minimum = size;
   *natural = size;
 }
-
 
 static void
 resize_handler (GtkWidget     *widget,
@@ -204,6 +205,7 @@ draw_handler (GtkWidget     *widget,
               GtkWidget     *magnifier)
 {
   gtk_widget_queue_draw (magnifier);
+
   return FALSE;
 }
 
@@ -271,7 +273,7 @@ _gtk_magnifier_class_init (GtkMagnifierClass *klass)
   object_class->get_property = _gtk_magnifier_get_property;
 
   widget_class->destroy = _gtk_magnifier_destroy;
-  widget_class->draw = _gtk_magnifier_draw;
+  widget_class->snapshot = gtk_magnifier_snapshot;
   widget_class->measure = gtk_magnifier_measure;
   widget_class->map = gtk_magnifier_map;
   widget_class->unmap = gtk_magnifier_unmap;
