@@ -1177,8 +1177,7 @@ gdk_wayland_window_sync_opaque_region (GdkWindow *window)
     wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)),
                                              impl->opaque_region);
 
-  if (impl->display_server.wl_surface)
-    wl_surface_set_opaque_region (impl->display_server.wl_surface, wl_region);
+  wl_surface_set_opaque_region (impl->display_server.wl_surface, wl_region);
 
   if (wl_region != NULL)
     wl_region_destroy (wl_region);
