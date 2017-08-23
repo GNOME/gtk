@@ -1453,20 +1453,6 @@ gtk_drag_set_icon_default (GdkDragContext *context)
   gtk_drag_set_icon_name (context, "text-x-generic", -2, -2);
 }
 
-/*
- * _gtk_drag_source_handle_event:
- * @toplevel: Toplevel widget that received the event
- * @event: the event to handle
- *
- * Called from widget event handling code on Drag events
- * for drag sources.
- */
-void
-_gtk_drag_source_handle_event (GtkWidget *widget,
-                               GdkEvent  *event)
-{
-}
-
 static void
 gtk_drag_source_check_selection (GtkDragSourceInfo *info, 
                                  GdkAtom            selection,
