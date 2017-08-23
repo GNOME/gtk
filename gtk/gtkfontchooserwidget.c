@@ -784,7 +784,9 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
   qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
 
   g_signal_handlers_block_by_func (priv->family_face_list, cursor_changed_cb, fontchooser);
+  g_signal_handlers_block_by_func (priv->filter_model, row_deleted_cb, fontchooser);
   gtk_list_store_clear (list_store);
+  g_signal_handlers_unblock_by_func (priv->filter_model, row_deleted_cb, fontchooser);
   g_signal_handlers_unblock_by_func (priv->family_face_list, cursor_changed_cb, fontchooser);
 
   /* Iterate over families and faces */
@@ -828,6 +830,12 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser,
     memset (&priv->font_iter, 0, sizeof (GtkTreeIter));
 
   gtk_font_chooser_widget_ensure_selection (fontchooser);
+
+  /* We block row_deleted_cb when reloading, now manually switch to the
+   * "empty" pane if the filter model is empty.
+   */
+  if (gtk_tree_model_iter_n_children (priv->filter_model, NULL) == 0)
+    gtk_stack_set_visible_child_name (GTK_STACK (priv->list_stack), "empty");
 }
 
 static gboolean
