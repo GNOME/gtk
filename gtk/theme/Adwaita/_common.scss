@@ -3805,6 +3805,10 @@ stacksidebar {
  ****************/
 $_placesidebar_icons_opacity: 0.7;
 
+row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sidebar icons
+                                                                  // see bug #786613 for details 
+                                                                  // on this oddity
+
 placessidebar {
   > viewport.frame { border-style: none; }
 
@@ -3830,8 +3834,6 @@ placessidebar {
     }
 
     image.sidebar-icon {
-      opacity: $_placesidebar_icons_opacity; // dim the device icons
-
       &:dir(ltr) { padding-right: 8px; }
       &:dir(rtl) { padding-left: 8px; }
     }
