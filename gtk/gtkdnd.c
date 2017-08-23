@@ -83,14 +83,6 @@ static GSList *source_widgets = NULL;
 typedef struct _GtkDragSourceInfo GtkDragSourceInfo;
 typedef struct _GtkDragDestInfo GtkDragDestInfo;
 
-
-typedef enum 
-{
-  GTK_DRAG_STATUS_DRAG,
-  GTK_DRAG_STATUS_WAIT,
-  GTK_DRAG_STATUS_DROP
-} GtkDragStatus;
-
 struct _GtkDragSourceInfo 
 {
   GtkWidget         *widget;
@@ -100,24 +92,12 @@ struct _GtkDragSourceInfo
   GtkWidget         *icon_window; /* Window for drag */
   GtkWidget         *icon_widget; /* Widget for drag */
   GtkWidget         *ipc_widget;  /* GtkInvisible for grab, message passing */
-  GdkCursor         *cursor;      /* Cursor for drag */
-  gint hot_x, hot_y;              /* Hot spot for drag */
-  gint button;                    /* mouse button starting drag */
-
-  GtkDragStatus      status;      /* drag status */
-  GdkEvent          *last_event;  /* pending event */
-
-  gint               start_x, start_y; /* Initial position */
-  gint               cur_x, cur_y;     /* Current Position */
-  GdkScreen         *cur_screen;       /* Current screen for pointer */
 
   guint32            grab_time;   /* timestamp for initial grab */
   GList             *selections;  /* selections we've claimed */
 
-  guint              update_idle;      /* Idle function to update the drag */
   guint              drop_timeout;     /* Timeout for aborting drop */
   guint              destroy_icon : 1; /* If true, destroy icon_widget */
-  guint              have_grab    : 1; /* Do we still have the pointer grab */
 };
 
 struct _GtkDragDestInfo
@@ -148,11 +128,6 @@ static void          gtk_drag_get_event_actions (const GdkEvent  *event,
                                                  GdkDragAction    actions,
                                                  GdkDragAction   *suggested_action,
                                                  GdkDragAction   *possible_actions);
-static GdkCursor *   gtk_drag_get_cursor         (GtkWidget      *widget,
-                                                  GdkDisplay     *display,
-                                                  GdkDragAction   action,
-                                                  GtkDragSourceInfo *info);
-static void          gtk_drag_update_cursor      (GtkDragSourceInfo *info);
 static GtkWidget    *gtk_drag_get_ipc_widget            (GtkWidget *widget);
 static GtkWidget    *gtk_drag_get_ipc_widget_for_screen (GdkScreen *screen);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
@@ -220,28 +195,7 @@ static void gtk_drag_context_cancel_cb         (GdkDragContext      *context,
                                                 GtkDragSourceInfo   *info);
 static void gtk_drag_context_dnd_finished_cb   (GdkDragContext    *context,
                                                 GtkDragSourceInfo *info);
-static void gtk_drag_add_update_idle           (GtkDragSourceInfo *info);
 
-static void gtk_drag_update                    (GtkDragSourceInfo *info,
-                                                GdkScreen         *screen,
-                                                gint               x_root,
-                                                gint               y_root,
-                                                const GdkEvent    *event);
-static gboolean gtk_drag_motion_cb             (GtkWidget         *widget, 
-                                                GdkEventMotion    *event, 
-                                                gpointer           data);
-static gboolean gtk_drag_key_cb                (GtkWidget         *widget, 
-                                                GdkEventKey       *event, 
-                                                gpointer           data);
-static gboolean gtk_drag_grab_broken_event_cb  (GtkWidget          *widget,
-                                                GdkEventGrabBroken *event,
-                                                gpointer            data);
-static void     gtk_drag_grab_notify_cb        (GtkWidget         *widget,
-                                                gboolean           was_grabbed,
-                                                gpointer           data);
-static gboolean gtk_drag_button_release_cb     (GtkWidget         *widget, 
-                                                GdkEventButton    *event, 
-                                                gpointer           data);
 static gboolean gtk_drag_abort_timeout         (gpointer           data);
 
 static void     set_icon_helper (GdkDragContext    *context,
@@ -249,23 +203,6 @@ static void     set_icon_helper (GdkDragContext    *context,
                                  gint               hot_x,
                                  gint               hot_y);
 
-/************************
- * Cursor and Icon data *
- ************************/
-
-static struct {
-  GdkDragAction action;
-  const gchar  *name;
-  GdkPixbuf    *pixbuf;
-  GdkCursor    *cursor;
-} drag_cursors[] = {
-  { GDK_ACTION_DEFAULT, NULL },
-  { GDK_ACTION_ASK,   "dnd-ask",  NULL, NULL },
-  { GDK_ACTION_COPY,  "copy", NULL, NULL },
-  { GDK_ACTION_MOVE,  "move", NULL, NULL },
-  { GDK_ACTION_LINK,  "alias", NULL, NULL },
-  { 0              ,  "no-drop", NULL, NULL },
-};
 
 /*********************
  * Utility functions *
@@ -337,43 +274,6 @@ gtk_drag_release_ipc_widget (GtkWidget *widget)
     gtk_window_group_remove_window (gtk_window_get_group (window), window);
   drag_widgets = g_slist_prepend (drag_widgets, widget);
   g_object_set_data (G_OBJECT (screen), I_("gtk-dnd-ipc-widgets"), drag_widgets);
-}
-
-static guint32
-gtk_drag_get_event_time (GdkEvent *event)
-{
-  guint32 tm = GDK_CURRENT_TIME;
-  
-  if (event)
-    switch (event->type)
-      {
-      case GDK_MOTION_NOTIFY:
-        tm = event->motion.time; break;
-      case GDK_BUTTON_PRESS:
-      case GDK_2BUTTON_PRESS:
-      case GDK_3BUTTON_PRESS:
-      case GDK_BUTTON_RELEASE:
-        tm = event->button.time; break;
-      case GDK_KEY_PRESS:
-      case GDK_KEY_RELEASE:
-        tm = event->key.time; break;
-      case GDK_ENTER_NOTIFY:
-      case GDK_LEAVE_NOTIFY:
-        tm = event->crossing.time; break;
-      case GDK_PROPERTY_NOTIFY:
-        tm = event->property.time; break;
-      case GDK_SELECTION_CLEAR:
-      case GDK_SELECTION_REQUEST:
-      case GDK_SELECTION_NOTIFY:
-        tm = event->selection.time; break;
-      case GDK_PROXIMITY_IN:
-      case GDK_PROXIMITY_OUT:
-        tm = event->proximity.time; break;
-      default:                  /* use current time */
-        break;
-      }
-  
-  return tm;
 }
 
 static void
@@ -469,97 +369,6 @@ gtk_drag_get_event_actions (const GdkEvent *event,
         *suggested_action = GDK_ACTION_MOVE;
       else if (actions & GDK_ACTION_LINK)
         *suggested_action = GDK_ACTION_LINK;
-    }
-}
-
-static void
-ensure_drag_cursor_pixbuf (int i)
-{
-  if (drag_cursors[i].pixbuf == NULL)
-    {
-      char *path = g_strconcat ("/org/gtk/libgtk/cursor/",  drag_cursors[i].name, ".png", NULL);
-      GInputStream *stream = g_resources_open_stream (path, 0, NULL);
-      if (stream != NULL)
-        {
-          drag_cursors[i].pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
-          g_object_unref (stream);
-        }
-      g_free (path);
-    }
-}
-
-static GdkCursor *
-gtk_drag_get_cursor (GtkWidget         *widget,
-                     GdkDisplay        *display,
-                     GdkDragAction      action,
-                     GtkDragSourceInfo *info)
-{
-  gint i;
-
-  /* reconstruct the cursors for each new drag (thus !info),
-   * to catch cursor theme changes
-   */
-  if (!info)
-    {
-      for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
-        g_clear_object (&drag_cursors[i].cursor);
-    }
-
-  for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
-    if (drag_cursors[i].action == action)
-      break;
-
-  if (drag_cursors[i].cursor != NULL)
-    {
-      if (display != gdk_cursor_get_display (drag_cursors[i].cursor))
-        g_clear_object (&drag_cursors[i].cursor);
-    }
-
-  if (drag_cursors[i].cursor == NULL)
-    drag_cursors[i].cursor = gdk_cursor_new_from_name (display, drag_cursors[i].name);
-
-  if (drag_cursors[i].cursor == NULL)
-    {
-      ensure_drag_cursor_pixbuf (i);
-      drag_cursors[i].cursor = gdk_cursor_new_from_pixbuf (display, drag_cursors[i].pixbuf, 0, 0);
-    }
-
-  return drag_cursors[i].cursor;
-}
-
-static void
-gtk_drag_update_cursor (GtkDragSourceInfo *info)
-{
-  GdkCursor *cursor;
-  gint i;
-
-  if (!info->have_grab)
-    return;
-
-  for (i = 0 ; i < G_N_ELEMENTS (drag_cursors) - 1; i++)
-    if (info->cursor == drag_cursors[i].cursor)
-      break;
-
-  if (i == G_N_ELEMENTS (drag_cursors))
-    return;
-
-  cursor = gtk_drag_get_cursor (info->widget,
-                                gdk_cursor_get_display (info->cursor),
-                                drag_cursors[i].action, info);
-
-  if (cursor != info->cursor)
-    {
-      GdkDevice *pointer;
-
-      pointer = gdk_drag_context_get_device (info->context);
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gdk_device_grab (pointer,
-                       gtk_widget_get_window (info->ipc_widget),
-                       GDK_OWNERSHIP_APPLICATION, FALSE,
-                       GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
-                       cursor, info->grab_time);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      info->cursor = cursor;
     }
 }
 
@@ -1189,20 +998,6 @@ gtk_drag_dest_drop (GtkWidget      *widget,
  * Source side *
  ***************/
 
-
-static gboolean
-gtk_drag_is_managed (GtkWidget *source_widget)
-{
-  return
-#ifdef GDK_WINDOWING_X11
-    GDK_IS_X11_DISPLAY (gtk_widget_get_display (source_widget)) ||
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-    GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (source_widget)) ||
-#endif
-    FALSE;
-}
-
 /* Like gtk_drag_begin(), but also takes a GtkIconHelper
  * so that we can set the icon from the source site information
  */
@@ -1223,26 +1018,17 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GdkDragAction possible_actions, suggested_action;
   GdkDragContext *context;
   GtkWidget *ipc_widget;
-  GdkCursor *cursor;
   GdkDevice *pointer, *keyboard;
   GdkWindow *ipc_window;
   gint start_x, start_y;
   GdkAtom selection;
-  gboolean managed;
-
-  managed = gtk_drag_is_managed (widget);
 
   pointer = keyboard = NULL;
   ipc_widget = gtk_drag_get_ipc_widget (widget);
-  
+
   gtk_drag_get_event_actions (event, button, actions,
                               &suggested_action, &possible_actions);
-  
-  cursor = gtk_drag_get_cursor (widget,
-                                gtk_widget_get_display (widget), 
-                                suggested_action,
-                                NULL);
-  
+
   if (event)
     {
       time = gdk_event_get_time (event);
@@ -1272,30 +1058,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
     return NULL;
 
   ipc_window = gtk_widget_get_window (ipc_widget);
-
-  if (!managed)
-    {
-      gboolean grabbed;
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      grabbed = gdk_device_grab (pointer, ipc_window,
-                                 GDK_OWNERSHIP_APPLICATION, FALSE,
-                                 GDK_POINTER_MOTION_MASK |
-                                 GDK_BUTTON_RELEASE_MASK,
-                                 cursor, time) == GDK_GRAB_SUCCESS;
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      if (!grabbed)
-        {
-          gtk_drag_release_ipc_widget (ipc_widget);
-          return NULL;
-        }
-
-      /* We use a GTK grab here to override any grabs that the widget
-       * we are dragging from might have held
-       */
-      gtk_device_grab_add (ipc_widget, pointer, FALSE);
-    }
 
   tmp_list = g_list_last (target_list->list);
   while (tmp_list)
@@ -1329,42 +1091,29 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   gdk_drag_context_set_device (context, pointer);
   g_list_free (targets);
 
-  if (managed &&
-      !gdk_drag_context_manage_dnd (context, ipc_window, actions))
+  if (!gdk_drag_context_manage_dnd (context, ipc_window, actions))
     {
       gtk_drag_release_ipc_widget (ipc_widget);
       g_object_unref (context);
       return NULL;
     }
-  
+
   info = gtk_drag_get_source_info (context, TRUE);
-  
+
   info->ipc_widget = ipc_widget;
   g_object_set_data (G_OBJECT (info->ipc_widget), I_("gtk-info"), info);
 
   info->widget = g_object_ref (widget);
-  
-  info->button = button;
-  info->cursor = cursor;
+
   info->target_list = target_list;
   gtk_target_list_ref (target_list);
 
   info->possible_actions = actions;
 
-  info->status = GTK_DRAG_STATUS_DRAG;
-  info->last_event = NULL;
   info->selections = NULL;
   info->icon_window = NULL;
   info->icon_widget = NULL;
   info->destroy_icon = FALSE;
-
-  if (event)
-    info->cur_screen = gdk_event_get_screen (event);
-  else
-    gdk_device_get_position (pointer, &info->cur_screen, NULL, NULL);
-
-  info->start_x = start_x;
-  info->start_y = start_y;
 
   gtk_widget_reset_controllers (widget);
 
@@ -1388,47 +1137,20 @@ gtk_drag_begin_internal (GtkWidget          *widget,
         }
     }
 
-  if (managed)
-    {
-      g_signal_connect (context, "drop-performed",
-                        G_CALLBACK (gtk_drag_context_drop_performed_cb), info);
-      g_signal_connect (context, "dnd-finished",
-                        G_CALLBACK (gtk_drag_context_dnd_finished_cb), info);
-      g_signal_connect (context, "cancel",
-                        G_CALLBACK (gtk_drag_context_cancel_cb), info);
+  g_signal_connect (context, "drop-performed",
+                    G_CALLBACK (gtk_drag_context_drop_performed_cb), info);
+  g_signal_connect (context, "dnd-finished",
+                    G_CALLBACK (gtk_drag_context_dnd_finished_cb), info);
+  g_signal_connect (context, "cancel",
+                    G_CALLBACK (gtk_drag_context_cancel_cb), info);
 
-      selection = gdk_drag_get_selection (context);
-      if (selection)
-        gtk_drag_source_check_selection (info, selection, time);
-    }
-  else
-    {
-      info->cur_x = info->start_x;
-      info->cur_y = info->start_y;
-
-      if (event && event->type == GDK_MOTION_NOTIFY)
-        gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
-      else
-        gtk_drag_update (info, info->cur_screen, info->cur_x, info->cur_y, event);
-
-      g_signal_connect (info->ipc_widget, "grab-broken-event",
-                        G_CALLBACK (gtk_drag_grab_broken_event_cb), info);
-      g_signal_connect (info->ipc_widget, "grab-notify",
-                        G_CALLBACK (gtk_drag_grab_notify_cb), info);
-      g_signal_connect (info->ipc_widget, "button-release-event",
-                        G_CALLBACK (gtk_drag_button_release_cb), info);
-      g_signal_connect (info->ipc_widget, "motion-notify-event",
-                        G_CALLBACK (gtk_drag_motion_cb), info);
-      g_signal_connect (info->ipc_widget, "key-press-event",
-                        G_CALLBACK (gtk_drag_key_cb), info);
-      g_signal_connect (info->ipc_widget, "key-release-event",
-                        G_CALLBACK (gtk_drag_key_cb), info);
-    }
+  selection = gdk_drag_get_selection (context);
+  if (selection)
+    gtk_drag_source_check_selection (info, selection, time);
 
   g_signal_connect (info->ipc_widget, "selection-get",
                     G_CALLBACK (gtk_drag_selection_get), info);
 
-  info->have_grab = TRUE;
   info->grab_time = time;
 
   return info->context;
@@ -1505,22 +1227,6 @@ icon_widget_destroyed (GtkWidget         *widget,
 }
 
 static void
-gtk_drag_update_icon_window (GtkDragSourceInfo *info)
-{
-  if (!gtk_drag_is_managed (info->widget) && info->icon_window)
-    {
-      gtk_window_move (GTK_WINDOW (info->icon_window),
-                       info->cur_x - info->hot_x,
-                       info->cur_y - info->hot_y);
-
-      if (gtk_widget_get_visible (info->icon_window))
-        gdk_window_raise (gtk_widget_get_window (info->icon_window));
-      else
-        gtk_widget_show (info->icon_window);
-    }
-}
-
-static void
 gtk_drag_set_icon_widget_internal (GdkDragContext *context,
                                    GtkWidget      *widget,
                                    gint            hot_x,
@@ -1545,12 +1251,10 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
     g_object_ref (widget);
 
   info->icon_widget = widget;
-  info->hot_x = hot_x;
-  info->hot_y = hot_y;
   info->destroy_icon = destroy_on_release;
 
   if (!widget)
-    goto out;
+    return;
 
   g_signal_connect (widget, "destroy", G_CALLBACK (icon_widget_destroyed), info);
 
@@ -1576,10 +1280,6 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
   if (gtk_bin_get_child (GTK_BIN (info->icon_window)))
     gtk_container_remove (GTK_CONTAINER (info->icon_window), gtk_bin_get_child (GTK_BIN (info->icon_window)));
   gtk_container_add (GTK_CONTAINER (info->icon_window), widget);
-
-out:
-  gtk_drag_update_cursor (info);
-  gtk_drag_update_icon_window (info);
 }
 
 /**
@@ -1787,53 +1487,6 @@ void
 _gtk_drag_source_handle_event (GtkWidget *widget,
                                GdkEvent  *event)
 {
-  GtkDragSourceInfo *info;
-  GdkDragContext *context;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (event != NULL);
-
-  context = event->dnd.context;
-  info = gtk_drag_get_source_info (context, FALSE);
-  if (!info)
-    return;
-
-  switch (event->type)
-    {
-    case GDK_DRAG_STATUS:
-      {
-        GdkCursor *cursor;
-        if (info->have_grab)
-          {
-            cursor = gtk_drag_get_cursor (widget, 
-                                          gtk_widget_get_display (widget),
-                                          gdk_drag_context_get_selected_action (event->dnd.context),
-                                          info);
-            if (info->cursor != cursor)
-              {
-                GdkDevice *pointer;
-
-                pointer = gdk_drag_context_get_device (context);
-                G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-                gdk_device_grab (pointer, gtk_widget_get_window (widget),
-                                 GDK_OWNERSHIP_APPLICATION, FALSE,
-                                 GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK,
-                                 cursor, info->grab_time);
-                G_GNUC_END_IGNORE_DEPRECATIONS;
-                info->cursor = cursor;
-              }
-            
-            gtk_drag_add_update_idle (info);
-          }
-      }
-      break;
-      
-    case GDK_DROP_FINISHED:
-      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, event->dnd.time);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
 }
 
 static void
@@ -2054,21 +1707,6 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
                                         info);
 
   g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_grab_broken_event_cb,
-                                        info);
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_grab_notify_cb,
-                                        info);
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_button_release_cb,
-                                        info);
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_motion_cb,
-                                        info);
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_key_cb,
-                                        info);
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
                                         gtk_drag_selection_get,
                                         info);
 
@@ -2086,114 +1724,11 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   if (info->drop_timeout)
     g_source_remove (info->drop_timeout);
 
-  if (info->update_idle)
-    g_source_remove (info->update_idle);
-
   /* keep the icon_window alive until the (possible) drag cancel animation is done */
   g_object_set_data_full (G_OBJECT (info->context), "former-gtk-source-info", info, (GDestroyNotify)gtk_drag_source_info_free);
 
   gtk_drag_clear_source_info (info->context);
   g_object_unref (info->context);
-
-  if (info->last_event)
-    gdk_event_free (info->last_event);
-}
-
-static gboolean
-gtk_drag_update_idle (gpointer data)
-{
-  GtkDragSourceInfo *info = data;
-  GdkWindow *dest_window;
-  GdkDragProtocol protocol;
-  GdkAtom selection;
-
-  GdkDragAction action;
-  GdkDragAction possible_actions;
-  guint32 time;
-
-  info->update_idle = 0;
-    
-  if (info->last_event)
-    {
-      time = gtk_drag_get_event_time (info->last_event);
-      gtk_drag_get_event_actions (info->last_event,
-                                  info->button, 
-                                  info->possible_actions,
-                                  &action, &possible_actions);
-
-      gtk_drag_update_icon_window (info);
-      gdk_drag_find_window_for_screen (info->context,
-                                       info->icon_window ? gtk_widget_get_window (info->icon_window) : NULL,
-                                       info->cur_screen, info->cur_x, info->cur_y,
-                                       &dest_window, &protocol);
-      
-      if (!gdk_drag_motion (info->context, dest_window, protocol,
-                            info->cur_x, info->cur_y, action, 
-                            possible_actions,
-                            time))
-        {
-          gdk_event_free ((GdkEvent *)info->last_event);
-          info->last_event = NULL;
-        }
-  
-      if (dest_window)
-        g_object_unref (dest_window);
-      
-      selection = gdk_drag_get_selection (info->context);
-      if (selection)
-        gtk_drag_source_check_selection (info, selection, time);
-
-    }
-
-  return FALSE;
-}
-
-static void
-gtk_drag_add_update_idle (GtkDragSourceInfo *info)
-{
-  /* We use an idle lower than GDK_PRIORITY_REDRAW so that exposes
-   * from the last move can catch up before we move again.
-   */
-  if (!info->update_idle)
-    {
-      info->update_idle = gdk_threads_add_idle_full (GDK_PRIORITY_REDRAW + 5,
-                                                     gtk_drag_update_idle,
-                                                     info,
-                                                     NULL);
-      g_source_set_name_by_id (info->update_idle, "[gtk+] gtk_drag_update_idle");
-    }
-}
-
-/*
- * gtk_drag_update:
- * @info: DragSourceInfo for the drag
- * @screen: new screen
- * @x_root: new X position 
- * @y_root: new y position
- * @event: event received requiring update
- * 
- * Updates the status of the drag; called when the
- * cursor moves or the modifier changes
- */
-static void
-gtk_drag_update (GtkDragSourceInfo *info,
-                 GdkScreen         *screen,
-                 gint               x_root,
-                 gint               y_root,
-                 const GdkEvent    *event)
-{
-  info->cur_screen = screen;
-  info->cur_x = x_root;
-  info->cur_y = y_root;
-  if (info->last_event)
-    {
-      gdk_event_free ((GdkEvent *)info->last_event);
-      info->last_event = NULL;
-    }
-  if (event)
-    info->last_event = gdk_event_copy ((GdkEvent *)event);
-
-  gtk_drag_add_update_idle (info);
 }
 
 /* Called when the user finishes to drag, either by
@@ -2210,37 +1745,7 @@ gtk_drag_end (GtkDragSourceInfo *info,
   /* Prevent ungrab before grab (see bug 623865) */
   if (info->grab_time == GDK_CURRENT_TIME)
     time = GDK_CURRENT_TIME;
-
-  if (info->update_idle)
-    {
-      g_source_remove (info->update_idle);
-      info->update_idle = 0;
-    }
-  
-  if (info->last_event)
-    {
-      gdk_event_free (info->last_event);
-      info->last_event = NULL;
-    }
-  
-  info->have_grab = FALSE;
-  
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_grab_broken_event_cb,
-                                        info);
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_grab_notify_cb,
-                                        info);
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_button_release_cb,
-                                        info);
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_motion_cb,
-                                        info);
-  g_signal_handlers_disconnect_by_func (info->ipc_widget,
-                                        gtk_drag_key_cb,
-                                        info);
-
+ 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gdk_device_ungrab (pointer, time);
   G_GNUC_END_IGNORE_DEPRECATIONS;
@@ -2309,136 +1814,6 @@ gtk_drag_context_dnd_finished_cb (GdkDragContext    *context,
   gtk_drag_source_info_destroy (info);
 }
 
-/* “motion-notify-event” callback during drag. */
-static gboolean
-gtk_drag_motion_cb (GtkWidget      *widget,
-                    GdkEventMotion *event,
-                    gpointer        data)
-{
-  GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
-  GdkScreen *screen;
-  gint x_root, y_root;
-
-  if (event->is_hint)
-    {
-      gdk_device_get_position (event->device, &screen, &x_root, &y_root);
-      event->x_root = x_root;
-      event->y_root = y_root;
-    }
-  else
-    screen = gdk_event_get_screen ((GdkEvent *)event);
-
-  x_root = (gint)(event->x_root + 0.5);
-  y_root = (gint)(event->y_root + 0.5);
-  gtk_drag_update (info, screen, x_root, y_root, (GdkEvent *) event);
-
-  return TRUE;
-}
-
-/* “key-press/release-event” callback during drag */
-static gboolean
-gtk_drag_key_cb (GtkWidget   *widget, 
-                 GdkEventKey *event, 
-                 gpointer     data)
-{
-  GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
-
-  if (event->type == GDK_KEY_PRESS)
-    {
-      switch (event->keyval)
-        {
-        case GDK_KEY_Escape:
-          gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_USER_CANCELLED, event->time);
-          break;
-
-        case GDK_KEY_space:
-        case GDK_KEY_Return:
-        case GDK_KEY_ISO_Enter:
-        case GDK_KEY_KP_Enter:
-        case GDK_KEY_KP_Space:
-          if ((gdk_drag_context_get_selected_action (info->context) != 0) &&
-              (gdk_drag_context_get_dest_window (info->context) != NULL))
-            {
-              gtk_drag_end (info, event->time);
-              gtk_drag_drop (info, event->time);
-            }
-          else
-            {
-              gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_NO_TARGET, event->time);
-            }
-          break;
-       }
-    }
-
-  return TRUE;
-}
-
-static gboolean
-gtk_drag_grab_broken_event_cb (GtkWidget          *widget,
-                               GdkEventGrabBroken *event,
-                               gpointer            data)
-{
-  GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
-
-  /* Don't cancel if we break the implicit grab from the initial button_press.
-   * Also, don't cancel if we re-grab on the widget or on our IPC window, for
-   * example, when changing the drag cursor.
-   */
-  if (event->implicit
-      || event->grab_window == gtk_widget_get_window (info->widget)
-      || event->grab_window == gtk_widget_get_window (info->ipc_widget))
-    return FALSE;
-
-  gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_GRAB_BROKEN, gtk_get_current_event_time ());
-  return TRUE;
-}
-
-static void
-gtk_drag_grab_notify_cb (GtkWidget *widget,
-                         gboolean   was_grabbed,
-                         gpointer   data)
-{
-  GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
-  GdkDevice *pointer;
-
-  pointer = gdk_drag_context_get_device (info->context);
-
-  if (gtk_widget_device_is_shadowed (widget, pointer))
-    {
-      /* We have to block callbacks to avoid recursion here, because
-       * gtk_drag_cancel_internal calls gtk_grab_remove (via gtk_drag_end)
-       */
-      g_signal_handlers_block_by_func (widget, gtk_drag_grab_notify_cb, data);
-      gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_GRAB_BROKEN, gtk_get_current_event_time ());
-      g_signal_handlers_unblock_by_func (widget, gtk_drag_grab_notify_cb, data);
-    }
-}
-
-/* “button-release-event” callback during drag */
-static gboolean
-gtk_drag_button_release_cb (GtkWidget      *widget, 
-                            GdkEventButton *event, 
-                            gpointer        data)
-{
-  GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
-
-  if (event->button != info->button)
-    return FALSE;
-
-  if ((gdk_drag_context_get_selected_action (info->context) != 0) &&
-      (gdk_drag_context_get_dest_window (info->context) != NULL))
-    {
-      gtk_drag_end (info, event->time);
-      gtk_drag_drop (info, event->time);
-    }
-  else
-    {
-      gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_NO_TARGET, event->time);
-    }
-
-  return TRUE;
-}
-
 static gboolean
 gtk_drag_abort_timeout (gpointer data)
 {
@@ -2448,7 +1823,7 @@ gtk_drag_abort_timeout (gpointer data)
   info->drop_timeout = 0;
   gtk_drag_drop_finished (info, GTK_DRAG_RESULT_TIMEOUT_EXPIRED, time);
   
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 /**
