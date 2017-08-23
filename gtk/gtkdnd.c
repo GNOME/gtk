@@ -320,30 +320,6 @@ gtk_drag_get_ipc_widget (GtkWidget *widget)
   return result;
 }
 
-static void
-grab_dnd_keys (GtkWidget *widget,
-               GdkDevice *device,
-               guint32    time)
-{
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gdk_device_grab (device,
-                   gtk_widget_get_window (widget),
-                   GDK_OWNERSHIP_APPLICATION, FALSE,
-                   GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
-                   NULL, time);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
-static void
-ungrab_dnd_keys (GtkWidget *widget,
-                 GdkDevice *device,
-                 guint32    time)
-{
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gdk_device_ungrab (device, time);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-}
-
 /*
  * gtk_drag_release_ipc_widget:
  * @widget: the widget to release
@@ -355,27 +331,12 @@ gtk_drag_release_ipc_widget (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GdkScreen *screen = gtk_widget_get_screen (widget);
-  GdkDragContext *context = g_object_get_data (G_OBJECT (widget), "drag-context");
-  GSList *drag_widgets = g_object_get_data (G_OBJECT (screen),
-                                            "gtk-dnd-ipc-widgets");
-  GdkDevice *pointer, *keyboard;
-
-  if (context)
-    {
-      pointer = gdk_drag_context_get_device (context);
-      keyboard = gdk_device_get_associated_device (pointer);
-
-      if (keyboard)
-        ungrab_dnd_keys (widget, keyboard, GDK_CURRENT_TIME);
-    }
+  GSList *drag_widgets = g_object_get_data (G_OBJECT (screen), "gtk-dnd-ipc-widgets");
 
   if (gtk_window_has_group (window))
-    gtk_window_group_remove_window (gtk_window_get_group (window),
-                                    window);
+    gtk_window_group_remove_window (gtk_window_get_group (window), window);
   drag_widgets = g_slist_prepend (drag_widgets, widget);
-  g_object_set_data (G_OBJECT (screen),
-                     I_("gtk-dnd-ipc-widgets"),
-                     drag_widgets);
+  g_object_set_data (G_OBJECT (screen), I_("gtk-dnd-ipc-widgets"), drag_widgets);
 }
 
 static guint32
@@ -1330,9 +1291,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
           return NULL;
         }
 
-      if (keyboard)
-        grab_dnd_keys (ipc_widget, keyboard, time);
-
       /* We use a GTK grab here to override any grabs that the widget
        * we are dragging from might have held
        */
@@ -2245,10 +2203,9 @@ static void
 gtk_drag_end (GtkDragSourceInfo *info,
               guint32            time)
 {
-  GdkDevice *pointer, *keyboard;
+  GdkDevice *pointer;
 
   pointer = gdk_drag_context_get_device (info->context);
-  keyboard = gdk_device_get_associated_device (pointer);
 
   /* Prevent ungrab before grab (see bug 623865) */
   if (info->grab_time == GDK_CURRENT_TIME)
@@ -2288,7 +2245,6 @@ gtk_drag_end (GtkDragSourceInfo *info,
   gdk_device_ungrab (pointer, time);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
-  ungrab_dnd_keys (info->ipc_widget, keyboard, time);
   gtk_device_grab_remove (info->ipc_widget, pointer);
 }
 
