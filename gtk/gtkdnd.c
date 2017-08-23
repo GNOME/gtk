@@ -34,34 +34,15 @@
 
 #include "gdk/gdk.h"
 
-#ifdef GDK_WINDOWING_X11
-#include <X11/Xlib.h>
-#include <X11/keysym.h>
-#include "gdk/x11/gdkx.h"
-#ifdef XINPUT_2
-#include <X11/extensions/XInput2.h>
-#endif
-#endif
-
-#ifdef GDK_WINDOWING_WAYLAND
-#include <gdk/wayland/gdkwayland.h>
-#endif
-
 #include "gtkdragdest.h"
-#include "gtkgesturedrag.h"
-#include "gtkgesturesingle.h"
-#include "gtkicontheme.h"
 #include "gtkimageprivate.h"
 #include "gtkintl.h"
-#include "gtkmain.h"
 #include "gtktooltipprivate.h"
 #include "gtkwindow.h"
-#include "gtkrender.h"
 #include "gtkselectionprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkdrawingarea.h"
 
 
 /**
