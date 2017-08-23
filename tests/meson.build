@@ -130,6 +130,7 @@ gtk_tests = [
   ['testoutsetshadowdrawing'],
   ['testblur'],
   ['testtexture'],
+  ['testsizeallocate'],
 ]
 
 if os_linux
