@@ -331,13 +331,9 @@ gdk_wayland_window_update_size (GdkWindow *window,
   impl->scale = scale;
 
   if (impl->display_server.egl_window)
-    {
-      wl_egl_window_resize (impl->display_server.egl_window,
-                            width * scale,
-                            height * scale,
-                            0, 0);
-    }
-  wl_surface_set_buffer_scale (impl->display_server.wl_surface, scale);
+    wl_egl_window_resize (impl->display_server.egl_window, width * scale, height * scale, 0, 0);
+  if (impl->display_server.wl_surface)
+    wl_surface_set_buffer_scale (impl->display_server.wl_surface, scale);
 
   area.x = 0;
   area.y = 0;
