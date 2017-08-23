@@ -7,17 +7,8 @@
 }
 
 * {
-    -GtkToolbar-space-size: 10;
-    -GtkToolbar-space-style: line;
-    -GtkToolbar-button-relief: none;
-    -GtkButtonBox-child-min-width: 0;
-    -GtkButtonBox-child-min-height: 0;
-
     font-family: Sans;
     font-size: 12px;
-
-    -Gtest-foo: 47;
-    -Gtest-bar: 47;
 }
 
 label:selected {
