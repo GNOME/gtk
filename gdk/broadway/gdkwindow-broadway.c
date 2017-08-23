@@ -47,12 +47,8 @@ static void        gdk_window_impl_broadway_finalize   (GObject            *obje
 
 static const cairo_user_data_key_t gdk_broadway_cairo_key;
 
-#define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
+#define WINDOW_IS_TOPLEVEL(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
-
-#define WINDOW_IS_TOPLEVEL(window)		     \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
 struct _GdkBroadwayWindow {
   GdkWindow parent;
@@ -391,12 +387,7 @@ static void
 gdk_broadway_window_destroy_notify (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window))
-    {
-      if (GDK_WINDOW_TYPE(window) != GDK_WINDOW_FOREIGN)
-	g_warning ("GdkWindow %p unexpectedly destroyed", window);
-
-      _gdk_window_destroy (window, TRUE);
-    }
+    _gdk_window_destroy (window, TRUE);
 
   g_object_unref (window);
 }
@@ -800,7 +791,7 @@ gdk_broadway_window_set_icon_name (GdkWindow   *window,
 				   const gchar *name)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   g_object_set_qdata (G_OBJECT (window), g_quark_from_static_string ("gdk-icon-name-set"),
@@ -811,7 +802,7 @@ static void
 gdk_broadway_window_iconify (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 }
 
@@ -819,7 +810,7 @@ static void
 gdk_broadway_window_deiconify (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 }
 
@@ -827,7 +818,7 @@ static void
 gdk_broadway_window_stick (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
 }
@@ -836,7 +827,7 @@ static void
 gdk_broadway_window_unstick (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
 }
@@ -850,7 +841,7 @@ gdk_broadway_window_maximize (GdkWindow *window)
   GdkRectangle geom;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
@@ -882,7 +873,7 @@ gdk_broadway_window_unmaximize (GdkWindow *window)
   GdkWindowImplBroadway *impl;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
@@ -905,7 +896,7 @@ static void
 gdk_broadway_window_fullscreen (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
 }
@@ -914,7 +905,7 @@ static void
 gdk_broadway_window_unfullscreen (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
 }
@@ -926,7 +917,7 @@ gdk_broadway_window_set_keep_above (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
 }
@@ -937,7 +928,7 @@ gdk_broadway_window_set_keep_below (GdkWindow *window, gboolean setting)
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
 }
@@ -963,7 +954,7 @@ gdk_broadway_window_set_decorations (GdkWindow      *window,
 				     GdkWMDecoration decorations)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
 }
@@ -975,7 +966,7 @@ gdk_broadway_window_get_decorations (GdkWindow       *window,
   gboolean result = FALSE;
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return FALSE;
 
   return result;
@@ -988,7 +979,7 @@ gdk_broadway_window_set_functions (GdkWindow    *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 }
 
@@ -1372,7 +1363,7 @@ gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   if (impl->maximized)
@@ -1412,7 +1403,7 @@ gdk_broadway_window_begin_move_drag (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+      !WINDOW_IS_TOPLEVEL (window))
     return;
 
   if (impl->maximized)
