@@ -17,5 +17,7 @@ if [ -z "$DESTDIR" ]; then
   gtk-update-icon-cache -q -t -f ${gtk_datadir}/icons/hicolor
 
   echo Updating input method modules cache...
-  gtk4-query-immodules > ${gtk_libdir}/gtk-${gtk_api_version}/${gtk_abi_version}/immodules.cache
+  gtk_imdir=${gtk_libdir}/gtk-${gtk_api_version}/${gtk_abi_version}
+  mkdir -p ${gtk_imdir}
+  gtk4-query-immodules > ${gtk_imdir}/immodules.cache
 fi
