@@ -882,11 +882,6 @@ gtk_drag_selection_received (GtkWidget        *widget,
     {
       gtk_drag_finish (context, TRUE, FALSE, time);
     }
-  else if ((target == gdk_atom_intern_static_string ("XmTRANSFER_SUCCESS")) ||
-           (target == gdk_atom_intern_static_string ("XmTRANSFER_FAILURE")))
-    {
-      /* Do nothing */
-    }
   else
     {
       GtkDragDestSite *site;
