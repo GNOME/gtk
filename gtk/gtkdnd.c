@@ -93,7 +93,6 @@ struct _GtkDragSourceInfo
   GtkWidget         *icon_widget; /* Widget for drag */
   GtkWidget         *ipc_widget;  /* GtkInvisible for grab, message passing */
 
-  guint32            grab_time;   /* timestamp for initial grab */
   GList             *selections;  /* selections we've claimed */
 
   guint              drop_timeout;     /* Timeout for aborting drop */
@@ -1151,8 +1150,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   g_signal_connect (info->ipc_widget, "selection-get",
                     G_CALLBACK (gtk_drag_selection_get), info);
 
-  info->grab_time = time;
-
   return info->context;
 }
 
@@ -1731,28 +1728,6 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   g_object_unref (info->context);
 }
 
-/* Called when the user finishes to drag, either by
- * releasing the mouse, or by pressing Esc.
- */
-static void
-gtk_drag_end (GtkDragSourceInfo *info,
-              guint32            time)
-{
-  GdkDevice *pointer;
-
-  pointer = gdk_drag_context_get_device (info->context);
-
-  /* Prevent ungrab before grab (see bug 623865) */
-  if (info->grab_time == GDK_CURRENT_TIME)
-    time = GDK_CURRENT_TIME;
- 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gdk_device_ungrab (pointer, time);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  gtk_device_grab_remove (info->ipc_widget, pointer);
-}
-
 /* Called on cancellation of a drag, either by the user
  * or programmatically.
  */
@@ -1761,7 +1736,6 @@ gtk_drag_cancel_internal (GtkDragSourceInfo *info,
                           GtkDragResult      result,
                           guint32            time)
 {
-  gtk_drag_end (info, time);
   gdk_drag_abort (info->context, time);
   gtk_drag_drop_finished (info, result, time);
 }
@@ -1771,7 +1745,6 @@ gtk_drag_context_drop_performed_cb (GdkDragContext    *context,
                                     guint32            time_,
                                     GtkDragSourceInfo *info)
 {
-  gtk_drag_end (info, time_);
   gtk_drag_drop (info, time_);
 }
 
