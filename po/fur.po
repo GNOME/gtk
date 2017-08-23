@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-06 20:48+0000\n"
-"PO-Revision-Date: 2017-08-07 08:03+0200\n"
+"POT-Creation-Date: 2017-08-23 07:14+0000\n"
+"PO-Revision-Date: 2017-08-23 14:57+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -16,22 +16,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "Gjenar di schermi broadway no supuartât: %s"
 
-#: gdk/gdkwindow.c:2095
+#: gdk/gdkwindow.c:2060
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Supuart GL disabilitât vie GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2106
+#: gdk/gdkwindow.c:2071
 msgid "The current backend does not support OpenGL"
 msgstr "Il backend atuâl nol supuarte OpenGL"
 
-#: gdk/gdkwindow.c:2199
+#: gdk/gdkwindow.c:2164
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Supuart Vulkan disabilitât vie GDK_DEBUG"
 
@@ -1151,7 +1151,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:783 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkaccellabel.c:795 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
@@ -1162,7 +1162,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:796 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkaccellabel.c:808 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1173,18 +1173,18 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:810 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkaccellabel.c:822 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:827
+#: gtk/gtkaccellabel.c:839
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Spazi"
 
-#: gtk/gtkaccellabel.c:830 gtk/gtkshortcutlabel.c:181
+#: gtk/gtkaccellabel.c:842 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Sbare contrarie"
@@ -1683,7 +1683,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alpha"
 
-#: gtk/gtkcolorswatch.c:315
+#: gtk/gtkcolorswatch.c:314
 msgid "C_ustomize"
 msgstr "P_ersonalize"
 
@@ -1751,44 +1751,48 @@ msgstr "_Diestre:"
 msgid "Paper Margins"
 msgstr "Margjins cjarte"
 
-#: gtk/gtkentry.c:8437 gtk/gtklabel.c:6108 gtk/gtktextview.c:9284
+#: gtk/gtkentry.c:8462 gtk/gtklabel.c:6108 gtk/gtktextview.c:9280
 msgid "Cu_t"
 msgstr "_Taie"
 
-#: gtk/gtkentry.c:8441 gtk/gtklabel.c:6109 gtk/gtktextview.c:9288
+#: gtk/gtkentry.c:8466 gtk/gtklabel.c:6109 gtk/gtktextview.c:9284
 msgid "_Copy"
 msgstr "_Copie"
 
-#: gtk/gtkentry.c:8445 gtk/gtklabel.c:6110 gtk/gtktextview.c:9290
+#: gtk/gtkentry.c:8470 gtk/gtklabel.c:6110 gtk/gtktextview.c:9286
 msgid "_Paste"
 msgstr "T_ache"
 
-#: gtk/gtkentry.c:8448 gtk/gtkfilechooserwidget.c:1467
-#: gtk/gtkfilechooserwidget.c:2261 gtk/gtklabel.c:6112 gtk/gtktextview.c:9293
+#: gtk/gtkentry.c:8473 gtk/gtkfilechooserwidget.c:1467
+#: gtk/gtkfilechooserwidget.c:2261 gtk/gtklabel.c:6112 gtk/gtktextview.c:9289
 msgid "_Delete"
 msgstr "_Elimine"
 
-#: gtk/gtkentry.c:8459 gtk/gtklabel.c:6121 gtk/gtktextview.c:9307
+#: gtk/gtkentry.c:8484 gtk/gtklabel.c:6121 gtk/gtktextview.c:9303
 msgid "Select _All"
 msgstr "Selezione _dut"
 
-#: gtk/gtkentry.c:8630 gtk/gtktextview.c:9532
+#: gtk/gtkentry.c:8491
+msgid "Insert _Emoji"
+msgstr "Inserìs _Emoji"
+
+#: gtk/gtkentry.c:8664 gtk/gtktextview.c:9528
 msgid "Select all"
 msgstr "Selezione dut"
 
-#: gtk/gtkentry.c:8633 gtk/gtktextview.c:9535
+#: gtk/gtkentry.c:8667 gtk/gtktextview.c:9531
 msgid "Cut"
 msgstr "Taie"
 
-#: gtk/gtkentry.c:8636 gtk/gtktextview.c:9538
+#: gtk/gtkentry.c:8670 gtk/gtktextview.c:9534
 msgid "Copy"
 msgstr "Copie"
 
-#: gtk/gtkentry.c:8639 gtk/gtktextview.c:9541
+#: gtk/gtkentry.c:8673 gtk/gtktextview.c:9537
 msgid "Paste"
 msgstr "Tache"
 
-#: gtk/gtkentry.c:9586
+#: gtk/gtkentry.c:9620
 msgid "Caps Lock is on"
 msgstr "BlocMaiusc al è atîf"
 
@@ -2187,19 +2191,19 @@ msgctxt "input method menu"
 msgid "None"
 msgstr "Nissun"
 
-#: gtk/gtkinfobar.c:1060 gtk/gtkmessagedialog.c:353
+#: gtk/gtkinfobar.c:1058 gtk/gtkmessagedialog.c:353
 msgid "Information"
 msgstr "Informazion"
 
-#: gtk/gtkinfobar.c:1064 gtk/gtkmessagedialog.c:357
+#: gtk/gtkinfobar.c:1062 gtk/gtkmessagedialog.c:357
 msgid "Question"
 msgstr "Domande"
 
-#: gtk/gtkinfobar.c:1068 gtk/gtkmessagedialog.c:361
+#: gtk/gtkinfobar.c:1066 gtk/gtkmessagedialog.c:361
 msgid "Warning"
 msgstr "Avertiment"
 
-#: gtk/gtkinfobar.c:1072 gtk/gtkmessagedialog.c:365
+#: gtk/gtkinfobar.c:1070 gtk/gtkmessagedialog.c:365
 msgid "Error"
 msgstr "Erôr"
 
@@ -2462,7 +2466,7 @@ msgstr "Gjestìs dimensions personalizadis…"
 msgid "Page Setup"
 msgstr "Impostazions pagjine"
 
-#: gtk/gtkpathbar.c:1430
+#: gtk/gtkpathbar.c:1429
 msgid "File System Root"
 msgstr "Lidrîs dal filesystem"
 
@@ -3145,12 +3149,13 @@ msgstr "Risultâts di ricercje"
 msgid "Search Shortcuts"
 msgstr "Cîr scurtis"
 
-#: gtk/gtkshortcutswindow.c:1018 gtk/ui/gtkfilechooserwidget.ui:280
+#: gtk/gtkshortcutswindow.c:1018 gtk/ui/gtkemojichooser.ui:274
+#: gtk/ui/gtkfilechooserwidget.ui:280
 msgid "No Results Found"
 msgstr "Nissun risultât cjatât"
 
-#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkfilechooserwidget.ui:293
-#: gtk/ui/gtkplacesview.ui:368
+#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:287
+#: gtk/ui/gtkfilechooserwidget.ui:293 gtk/ui/gtkplacesview.ui:368
 msgid "Try a different search"
 msgstr "Prove une ricercje diferente"
 
@@ -5091,6 +5096,51 @@ msgstr "V"
 #: gtk/ui/gtkcoloreditor.ui:253
 msgid "Saturation"
 msgstr "Saturazion"
+
+#: gtk/ui/gtkemojichooser.ui:43
+msgctxt "emoji category"
+msgid "Smileys & People"
+msgstr "Musutis e personis"
+
+#: gtk/ui/gtkemojichooser.ui:56
+msgctxt "emoji category"
+msgid "Body & Clothing"
+msgstr "Cuarp e vistîts"
+
+#: gtk/ui/gtkemojichooser.ui:69
+msgctxt "emoji category"
+msgid "Animals & Nature"
+msgstr "Bestiis e nature"
+
+#: gtk/ui/gtkemojichooser.ui:82
+msgctxt "emoji category"
+msgid "Food & Drink"
+msgstr "Mangjâ e bevi"
+
+#: gtk/ui/gtkemojichooser.ui:95
+msgctxt "emoji category"
+msgid "Travel & Places"
+msgstr "Viaçs e lûcs"
+
+#: gtk/ui/gtkemojichooser.ui:108
+msgctxt "emoji category"
+msgid "Activities"
+msgstr "Ativitâts"
+
+#: gtk/ui/gtkemojichooser.ui:121
+msgctxt "emoji category"
+msgid "Objects"
+msgstr "Ogjets"
+
+#: gtk/ui/gtkemojichooser.ui:134
+msgctxt "emoji category"
+msgid "Symbols"
+msgstr "Simbui"
+
+#: gtk/ui/gtkemojichooser.ui:147
+msgctxt "emoji category"
+msgid "Flags"
+msgstr "Bandieris"
 
 #: gtk/ui/gtkfilechooserwidget.ui:62
 msgid "Create Folder"
