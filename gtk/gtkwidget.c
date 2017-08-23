@@ -5295,7 +5295,7 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
   cairo_region_translate (region2, x, y);
 
 invalidate:
-  gtk_debug_updates_add (widget, region);
+  gtk_debug_updates_add (parent, region2);
   gdk_window_invalidate_region (_gtk_widget_get_window (widget), region2, TRUE);
 
   cairo_region_destroy (region2);
