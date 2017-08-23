@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-08 20:20+0000\n"
-"PO-Revision-Date: 2017-08-09 14:51+0200\n"
+"POT-Creation-Date: 2017-08-23 07:12+0000\n"
+"PO-Revision-Date: 2017-08-23 14:54+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -81,11 +81,11 @@ msgstr "OPZIONS"
 msgid "GDK debugging flags to unset"
 msgstr "Opzions di debug GDK di no stabilî"
 
-#: gdk/gdkwindow.c:2826
+#: gdk/gdkwindow.c:2829
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Supuart GL disabilitât vie GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2837
+#: gdk/gdkwindow.c:2840
 msgid "The current backend does not support OpenGL"
 msgstr "Il backend atuâl nol supuarte OpenGL"
 
@@ -1075,6 +1075,8 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
+"Fâs clic sul contegotis, dopo fâs clic dulà che tu vûs tal schermi par "
+"selezionâ il colôr che al sta lì."
 
 #: gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
@@ -1389,7 +1391,7 @@ msgstr "Dâts di caratar inspietâts te rie %d caratar %d"
 
 #: gtk/deprecated/gtkuimanager.c:2703
 msgid "Empty"
-msgstr ""
+msgstr "Vueit"
 
 #: gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
@@ -2164,44 +2166,48 @@ msgstr "_Diestre:"
 msgid "Paper Margins"
 msgstr "Margjins cjarte"
 
-#: gtk/gtkentry.c:9514 gtk/gtklabel.c:6677 gtk/gtktextview.c:9448
+#: gtk/gtkentry.c:9543 gtk/gtklabel.c:6677 gtk/gtktextview.c:9448
 msgid "Cu_t"
 msgstr "_Taie"
 
-#: gtk/gtkentry.c:9518 gtk/gtklabel.c:6678 gtk/gtktextview.c:9452
+#: gtk/gtkentry.c:9547 gtk/gtklabel.c:6678 gtk/gtktextview.c:9452
 msgid "_Copy"
 msgstr "_Copie"
 
-#: gtk/gtkentry.c:9522 gtk/gtklabel.c:6679 gtk/gtktextview.c:9454
+#: gtk/gtkentry.c:9551 gtk/gtklabel.c:6679 gtk/gtktextview.c:9454
 msgid "_Paste"
 msgstr "T_ache"
 
-#: gtk/gtkentry.c:9525 gtk/gtkfilechooserwidget.c:1478
+#: gtk/gtkentry.c:9554 gtk/gtkfilechooserwidget.c:1478
 #: gtk/gtkfilechooserwidget.c:2278 gtk/gtklabel.c:6681 gtk/gtktextview.c:9457
 msgid "_Delete"
 msgstr "_Elimine"
 
-#: gtk/gtkentry.c:9536 gtk/gtklabel.c:6690 gtk/gtktextview.c:9471
+#: gtk/gtkentry.c:9565 gtk/gtklabel.c:6690 gtk/gtktextview.c:9471
 msgid "Select _All"
 msgstr "Selezione _dut"
 
-#: gtk/gtkentry.c:9709 gtk/gtktextview.c:9696
+#: gtk/gtkentry.c:9572
+msgid "Insert _Emoji"
+msgstr "Inserìs _Emoji"
+
+#: gtk/gtkentry.c:9747 gtk/gtktextview.c:9696
 msgid "Select all"
 msgstr "Selezione dut"
 
-#: gtk/gtkentry.c:9712 gtk/gtktextview.c:9699
+#: gtk/gtkentry.c:9750 gtk/gtktextview.c:9699
 msgid "Cut"
 msgstr "Taie"
 
-#: gtk/gtkentry.c:9715 gtk/gtktextview.c:9702
+#: gtk/gtkentry.c:9753 gtk/gtktextview.c:9702
 msgid "Copy"
 msgstr "Copie"
 
-#: gtk/gtkentry.c:9718 gtk/gtktextview.c:9705
+#: gtk/gtkentry.c:9756 gtk/gtktextview.c:9705
 msgid "Paste"
 msgstr "Tache"
 
-#: gtk/gtkentry.c:10785
+#: gtk/gtkentry.c:10823
 msgid "Caps Lock is on"
 msgstr "BlocMaiusc al è atîf"
 
@@ -3569,12 +3575,13 @@ msgstr "Risultâts di ricercje"
 msgid "Search Shortcuts"
 msgstr "Cîr scurtis"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkfilechooserwidget.ui:310
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:313
+#: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Nissun risultât cjatât"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkfilechooserwidget.ui:324
-#: gtk/ui/gtkplacesview.ui:406
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:327
+#: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Prove une ricercje diferente"
 
@@ -5513,6 +5520,43 @@ msgstr "V"
 #: gtk/ui/gtkcoloreditor.ui:276
 msgid "Saturation"
 msgstr "Saturazion"
+
+#: gtk/ui/gtkemojichooser.ui:51
+msgid "Smileys & People"
+msgstr "Musutis e personis"
+
+#: gtk/ui/gtkemojichooser.ui:66
+msgid "Body & Clothing"
+msgstr "Cuarp e vistîts"
+
+#: gtk/ui/gtkemojichooser.ui:81
+msgid "Animals & Nature"
+msgstr "Bestiis e nature"
+
+#: gtk/ui/gtkemojichooser.ui:96
+msgid "Food & Drink"
+msgstr "Mangjâ e bevi"
+
+#: gtk/ui/gtkemojichooser.ui:111
+msgid "Travel & Places"
+msgstr "Viaçs e lûcs"
+
+#: gtk/ui/gtkemojichooser.ui:126
+msgid "Activities"
+msgstr "Ativitâts"
+
+#: gtk/ui/gtkemojichooser.ui:141
+msgctxt "emoji category"
+msgid "Objects"
+msgstr "Ogjets"
+
+#: gtk/ui/gtkemojichooser.ui:156
+msgid "Symbols"
+msgstr "Simbui"
+
+#: gtk/ui/gtkemojichooser.ui:171
+msgid "Flags"
+msgstr "Bandieris"
 
 #: gtk/ui/gtkfilechooserwidget.ui:69
 msgid "Create Folder"
