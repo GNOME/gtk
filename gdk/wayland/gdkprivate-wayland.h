@@ -101,8 +101,6 @@ void       _gdk_wayland_cursor_set_scale (GdkCursor *cursor,
                                           guint      scale);
 
 void       gdk_wayland_window_sync (GdkWindow *window);
-GdkDragProtocol _gdk_wayland_window_get_drag_protocol (GdkWindow *window,
-						       GdkWindow **target);
 
 void            _gdk_wayland_window_register_dnd (GdkWindow *window);
 GdkDragContext *_gdk_wayland_window_drag_begin (GdkWindow *window,

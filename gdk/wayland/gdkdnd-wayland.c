@@ -486,12 +486,6 @@ gdk_wayland_drag_context_class_init (GdkWaylandDragContextClass *klass)
   context_class->commit_drag_status = gdk_wayland_drag_context_commit_status;
 }
 
-GdkDragProtocol
-_gdk_wayland_window_get_drag_protocol (GdkWindow *window, GdkWindow **target)
-{
-  return GDK_DRAG_PROTO_WAYLAND;
-}
-
 void
 _gdk_wayland_window_register_dnd (GdkWindow *window)
 {

@@ -1250,32 +1250,6 @@ gdk_x11_window_destroy_notify (GdkWindow *window)
   g_object_unref (window);
 }
 
-static GdkDragProtocol
-gdk_x11_window_get_drag_protocol (GdkWindow *window,
-                                  GdkWindow **target)
-{
-  GdkDragProtocol protocol;
-  GdkDisplay *display;
-  guint version;
-  Window xid;
-
-  display = gdk_window_get_display (window);
-  xid = _gdk_x11_display_get_drag_protocol (display,
-                                            GDK_WINDOW_XID (window->impl_window),
-                                            &protocol,
-                                            &version);
-
-  if (target)
-    {
-      if (xid != None)
-        *target = gdk_x11_window_foreign_new_for_display (display, xid);
-      else
-        *target = NULL;
-    }
-
-  return protocol;
-}
-
 static void
 update_wm_hints (GdkWindow *window,
 		 gboolean   force)
@@ -5059,7 +5033,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->begin_move_drag = gdk_x11_window_begin_move_drag;
   impl_class->set_opacity = gdk_x11_window_set_opacity;
   impl_class->destroy_notify = gdk_x11_window_destroy_notify;
-  impl_class->get_drag_protocol = gdk_x11_window_get_drag_protocol;
   impl_class->register_dnd = _gdk_x11_window_register_dnd;
   impl_class->drag_begin = _gdk_x11_window_drag_begin;
   impl_class->get_property = _gdk_x11_window_get_property;
