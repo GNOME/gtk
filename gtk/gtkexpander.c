@@ -1089,6 +1089,26 @@ gtk_expander_focus (GtkWidget        *widget,
 }
 
 static void
+gtk_expander_update_child_mapped (GtkExpander *expander,
+                                  GtkWidget   *child)
+{
+  /* If collapsing, we must unmap the child, as gtk_box_gadget_remove() does
+   * not, so otherwise the child is not drawn but still consumes input in-place.
+   */
+
+  if (expander->priv->expanded &&
+      gtk_widget_get_realized (child) &&
+      gtk_widget_get_visible (child))
+    {
+      gtk_widget_map (child);
+    }
+  else
+    {
+      gtk_widget_unmap (child);
+    }
+}
+
+static void
 gtk_expander_add (GtkContainer *container,
                   GtkWidget    *widget)
 {
@@ -1100,6 +1120,8 @@ gtk_expander_add (GtkContainer *container,
 
   if (expander->priv->expanded)
     gtk_box_gadget_insert_widget (GTK_BOX_GADGET (expander->priv->gadget), -1, widget);
+
+  gtk_expander_update_child_mapped (expander, widget);
 }
 
 static void
@@ -1274,6 +1296,8 @@ gtk_expander_set_expanded (GtkExpander *expander,
 
       gtk_widget_queue_resize (GTK_WIDGET (expander));
       gtk_expander_resize_toplevel (expander);
+
+      gtk_expander_update_child_mapped (expander, child);
     }
 
   g_object_notify (G_OBJECT (expander), "expanded");
