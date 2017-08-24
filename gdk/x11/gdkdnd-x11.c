@@ -2396,7 +2396,30 @@ gdk_x11_drag_context_drag_drop (GdkDragContext *context,
           break;
 
         case GDK_DRAG_PROTO_ROOTWIN:
-          g_warning ("Drops for GDK_DRAG_PROTO_ROOTWIN must be handled internally");
+          {
+            GdkEvent *temp_event;
+            /* GTK+ traditionally has used application/x-rootwin-drop,
+             * but the XDND spec specifies x-rootwindow-drop.
+             */
+            GdkAtom target1 = gdk_atom_intern_static_string ("application/x-rootwindow-drop");
+            GdkAtom target2 = gdk_atom_intern_static_string ("application/x-rootwin-drop");
+
+            if (g_list_find (context->targets, GDK_ATOM_TO_POINTER (target1)) ||
+                g_list_find (context->targets, GDK_ATOM_TO_POINTER (target2)))
+              {
+                temp_event = gdk_event_new (GDK_SELECTION_REQUEST);
+                temp_event->selection.window = g_object_ref (context->source_window);
+                temp_event->selection.send_event = FALSE;
+                temp_event->selection.selection = gdk_atom_intern_static_string ("XdndSelection");
+                temp_event->selection.target = target1;
+                temp_event->selection.property = GDK_NONE;
+                temp_event->selection.requestor = g_object_ref (context->source_window);
+                gdk_event_set_device (temp_event, gdk_drag_context_get_device (context));
+
+                gdk_event_put (temp_event);
+                gdk_event_free (temp_event);
+              }
+          }
           break;
         case GDK_DRAG_PROTO_NONE:
           g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_drop()");

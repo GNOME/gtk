@@ -1537,52 +1537,14 @@ static void
 gtk_drag_drop (GtkDragSourceInfo *info, 
                guint32            time)
 {
-  if (gdk_drag_context_get_protocol (info->context) == GDK_DRAG_PROTO_ROOTWIN)
-    {
-      GtkSelectionData selection_data;
-      GList *tmp_list;
-      /* GTK+ traditionally has used application/x-rootwin-drop, but the
-       * XDND spec specifies x-rootwindow-drop.
-       */
-      GdkAtom target1 = gdk_atom_intern_static_string ("application/x-rootwindow-drop");
-      GdkAtom target2 = gdk_atom_intern_static_string ("application/x-rootwin-drop");
-      
-      tmp_list = info->target_list->list;
-      while (tmp_list)
-        {
-          GtkTargetPair *pair = tmp_list->data;
-          
-          if (pair->target == target1 || pair->target == target2)
-            {
-              selection_data.selection = GDK_NONE;
-              selection_data.target = pair->target;
-              selection_data.data = NULL;
-              selection_data.length = -1;
+  if (info->icon_window)
+    gtk_widget_hide (info->icon_window);
 
-              g_signal_emit_by_name (info->widget, "drag-data-get",
-                                     info->context, &selection_data,
-                                     pair->info,
-                                     time);
-
-              /* FIXME: Should we check for length >= 0 here? */
-              gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, time);
-              return;
-            }
-          tmp_list = tmp_list->next;
-        }
-      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_NO_TARGET, time);
-    }
-  else
-    {
-      if (info->icon_window)
-        gtk_widget_hide (info->icon_window);
-
-      gdk_drag_drop (info->context, time);
-      info->drop_timeout = gdk_threads_add_timeout (DROP_ABORT_TIME,
-                                          gtk_drag_abort_timeout,
-                                          info);
-      g_source_set_name_by_id (info->drop_timeout, "[gtk+] gtk_drag_abort_timeout");
-    }
+  gdk_drag_drop (info->context, time);
+  info->drop_timeout = gdk_threads_add_timeout (DROP_ABORT_TIME,
+                                                gtk_drag_abort_timeout,
+                                                info);
+  g_source_set_name_by_id (info->drop_timeout, "[gtk+] gtk_drag_abort_timeout");
 }
 
 /*
