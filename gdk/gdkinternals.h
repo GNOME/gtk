@@ -33,6 +33,7 @@
 #include "gdkdisplay.h"
 #include "gdkeventsprivate.h"
 #include "gdkenumtypes.h"
+#include "gdkdndprivate.h"
 
 G_BEGIN_DECLS
 

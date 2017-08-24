@@ -89,8 +89,6 @@ guint      _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
                                                      guint             *next_image_delay);
 
 void       gdk_wayland_window_sync (GdkWindow *window);
-GdkDragProtocol _gdk_wayland_window_get_drag_protocol (GdkWindow *window,
-						       GdkWindow **target);
 
 void            _gdk_wayland_window_register_dnd          (GdkWindow *window);
 GdkDragContext *_gdk_wayland_window_drag_begin            (GdkWindow *window,

@@ -183,24 +183,6 @@ gdk_drag_context_get_dest_window (GdkDragContext *context)
 }
 
 /**
- * gdk_drag_context_get_protocol:
- * @context: a #GdkDragContext
- *
- * Returns the drag protocol thats used by this context.
- *
- * Returns: the drag protocol
- *
- * Since: 3.0
- */
-GdkDragProtocol
-gdk_drag_context_get_protocol (GdkDragContext *context)
-{
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_DRAG_PROTO_NONE);
-
-  return context->protocol;
-}
-
-/**
  * gdk_drag_context_set_device:
  * @context: a #GdkDragContext
  * @device: a #GdkDevice
@@ -362,7 +344,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                   G_TYPE_NONE, 1, GDK_TYPE_DRAG_ACTION);
 }
 
-/**
+/*
  * gdk_drag_find_window:
  * @context: a #GdkDragContext
  * @drag_window: a window which may be at the pointer position, but

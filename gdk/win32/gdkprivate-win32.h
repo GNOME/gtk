@@ -177,9 +177,6 @@ void _gdk_win32_window_move_region (GdkWindow       *window,
 void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
 
-GdkDragProtocol _gdk_win32_window_get_drag_protocol (GdkWindow *window,
-						     GdkWindow **target);
-
 void	 gdk_win32_handle_table_insert  (HANDLE   *handle,
 					 gpointer data);
 void	 gdk_win32_handle_table_remove  (HANDLE handle);

@@ -789,11 +789,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_window_register_dnd    (GdkWindow       *window);
 
 GDK_AVAILABLE_IN_ALL
-GdkDragProtocol
-              gdk_window_get_drag_protocol(GdkWindow      *window,
-                                           GdkWindow     **target);
-
-GDK_AVAILABLE_IN_ALL
 void gdk_window_begin_resize_drag            (GdkWindow     *window,
                                               GdkWindowEdge  edge,
                                               gint           button,

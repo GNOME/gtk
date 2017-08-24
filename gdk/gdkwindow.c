@@ -6924,28 +6924,6 @@ gdk_window_register_dnd (GdkWindow *window)
 }
 
 /**
- * gdk_window_get_drag_protocol:
- * @window: the destination window
- * @target: (out) (allow-none) (transfer full): location of the window
- *    where the drop should happen. This may be @window or a proxy window,
- *    or %NULL if @window does not support Drag and Drop.
- *
- * Finds out the DND protocol supported by a window.
- *
- * Returns: the supported DND protocol.
- *
- * Since: 3.0
- */
-GdkDragProtocol
-gdk_window_get_drag_protocol (GdkWindow  *window,
-                              GdkWindow **target)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_DRAG_PROTO_NONE);
-
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_drag_protocol (window, target);
-}
-
-/**
  * gdk_drag_begin:
  * @window: the source window for this drag.
  * @formats: (transfer none): the offered formats

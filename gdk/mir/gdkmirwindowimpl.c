@@ -1659,13 +1659,6 @@ gdk_mir_window_impl_destroy_notify (GdkWindow *window)
 {
 }
 
-static GdkDragProtocol
-gdk_mir_window_impl_get_drag_protocol (GdkWindow *window,
-                                       GdkWindow **target)
-{
-  return 0;
-}
-
 static void
 gdk_mir_window_impl_register_dnd (GdkWindow *window)
 {
@@ -2272,7 +2265,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->configure_finished = gdk_mir_window_impl_configure_finished;
   impl_class->set_opacity = gdk_mir_window_impl_set_opacity;
   impl_class->destroy_notify = gdk_mir_window_impl_destroy_notify;
-  impl_class->get_drag_protocol = gdk_mir_window_impl_get_drag_protocol;
   impl_class->register_dnd = gdk_mir_window_impl_register_dnd;
   impl_class->drag_begin = gdk_mir_window_impl_drag_begin;
   impl_class->process_updates_recurse = gdk_mir_window_impl_process_updates_recurse;

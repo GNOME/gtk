@@ -80,34 +80,6 @@ typedef enum {
   GDK_DRAG_CANCEL_ERROR
 } GdkDragCancelReason;
 
-/**
- * GdkDragProtocol:
- * @GDK_DRAG_PROTO_NONE: no protocol.
- * @GDK_DRAG_PROTO_MOTIF: The Motif DND protocol. No longer supported
- * @GDK_DRAG_PROTO_XDND: The Xdnd protocol.
- * @GDK_DRAG_PROTO_ROOTWIN: An extension to the Xdnd protocol for
- *  unclaimed root window drops.
- * @GDK_DRAG_PROTO_WIN32_DROPFILES: The simple WM_DROPFILES protocol.
- * @GDK_DRAG_PROTO_OLE2: The complex OLE2 DND protocol (not implemented).
- * @GDK_DRAG_PROTO_LOCAL: Intra-application DND.
- * @GDK_DRAG_PROTO_WAYLAND: Wayland DND protocol.
- *
- * Used in #GdkDragContext to indicate the protocol according to
- * which DND is done.
- */
-typedef enum
-{
-  GDK_DRAG_PROTO_NONE = 0,
-  GDK_DRAG_PROTO_MOTIF,
-  GDK_DRAG_PROTO_XDND,
-  GDK_DRAG_PROTO_ROOTWIN,
-  GDK_DRAG_PROTO_WIN32_DROPFILES,
-  GDK_DRAG_PROTO_OLE2,
-  GDK_DRAG_PROTO_LOCAL,
-  GDK_DRAG_PROTO_WAYLAND
-} GdkDragProtocol;
-
-
 GDK_AVAILABLE_IN_ALL
 GType            gdk_drag_context_get_type             (void) G_GNUC_CONST;
 
@@ -130,8 +102,6 @@ GDK_AVAILABLE_IN_ALL
 GdkWindow       *gdk_drag_context_get_source_window    (GdkDragContext *context);
 GDK_AVAILABLE_IN_ALL
 GdkWindow       *gdk_drag_context_get_dest_window      (GdkDragContext *context);
-GDK_AVAILABLE_IN_ALL
-GdkDragProtocol  gdk_drag_context_get_protocol         (GdkDragContext *context);
 
 /* Destination side */
 GDK_AVAILABLE_IN_ALL
@@ -165,14 +135,6 @@ GdkDragContext *        gdk_drag_begin_from_point       (GdkWindow              
                                                          GdkContentFormats      *formats,
                                                          gint                    x_root,
                                                          gint                    y_root);
-
-GDK_AVAILABLE_IN_ALL
-void    gdk_drag_find_window (GdkDragContext   *context,
-                              GdkWindow        *drag_window,
-                              gint              x_root,
-                              gint              y_root,
-                              GdkWindow       **dest_window,
-                              GdkDragProtocol  *protocol);
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);

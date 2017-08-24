@@ -102,13 +102,6 @@ _gdk_broadway_window_drag_begin (GdkWindow         *window,
   return new_context;
 }
 
-GdkDragProtocol
-_gdk_broadway_window_get_drag_protocol (GdkWindow *window,
-					GdkWindow **target)
-{
-  return GDK_DRAG_PROTO_NONE;
-}
-
 static GdkWindow *
 gdk_broadway_drag_context_find_window (GdkDragContext  *context,
 				       GdkWindow       *drag_window,

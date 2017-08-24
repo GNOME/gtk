@@ -2152,34 +2152,6 @@ _gdk_win32_dnd_do_dragdrop (void)
     }
 }
 
-/* Untested, may not work ...
- * ... but as of this writing is only used by exlusive X11 gtksocket.c
- */
-GdkDragProtocol
-_gdk_win32_window_get_drag_protocol (GdkWindow *window,
-                                     GdkWindow **target)
-{
-  GdkDragProtocol protocol = GDK_DRAG_PROTO_NONE;
-
-  if (gdk_window_get_window_type (window) != GDK_WINDOW_FOREIGN)
-    {
-      if (g_object_get_data (G_OBJECT (window), "gdk-dnd-registered") != NULL)
-	{
-	  if (use_ole2_dnd)
-	    protocol = GDK_DRAG_PROTO_OLE2;
-	  else
-	    protocol = GDK_DRAG_PROTO_LOCAL;
-	}
-    }
-
-  if (target)
-    {
-      *target = NULL;
-    }
-
-  return protocol;
-}
-
 typedef struct {
   gint x;
   gint y;
