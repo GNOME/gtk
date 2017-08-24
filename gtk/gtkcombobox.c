@@ -2377,11 +2377,12 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
 /**
  * gtk_combo_box_get_active_iter:
  * @combo_box: A #GtkComboBox
- * @iter: (out): The uninitialized #GtkTreeIter
+ * @iter: (out): A #GtkTreeIter
  *
- * Sets @iter to point to the current active item, if it exists.
+ * Sets @iter to point to the currently active item, if any item is active.
+ * Otherwise, @iter is left unchanged.
  *
- * Returns: %TRUE, if @iter was set
+ * Returns: %TRUE if @iter was set, %FALSE otherwise
  *
  * Since: 2.4
  */
