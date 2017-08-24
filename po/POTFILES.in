@@ -370,6 +370,7 @@ gtk/ui/gtkplacesview.ui
 gtk/ui/gtkprintunixdialog.ui
 gtk/ui/gtkrecentchooserdefault.ui
 gtk/ui/gtkscalebutton.ui
+gtk/ui/gtksidebarrow.ui
 gtk/ui/gtkstatusbar.ui
 gtk/ui/gtkvolumebutton.ui
 gtk/updateiconcache.c

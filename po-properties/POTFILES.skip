@@ -145,6 +145,7 @@ gtk/ui/gtkprintunixdialog.ui
 gtk/ui/gtkprintunixdialog.ui.h
 gtk/ui/gtkrecentchooserdefault.ui
 gtk/ui/gtkrecentchooserdefault.ui.h
+gtk/ui/gtksidebarrow.ui
 gtk/ui/gtkvolumebutton.ui
 gtk/ui/gtkvolumebutton.ui.h
 tests/dialog.ui
