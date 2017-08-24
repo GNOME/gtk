@@ -1540,7 +1540,6 @@ gtk_drag_drop (GtkDragSourceInfo *info,
   if (info->icon_window)
     gtk_widget_hide (info->icon_window);
 
-  gdk_drag_drop (info->context, time);
   info->drop_timeout = gdk_threads_add_timeout (DROP_ABORT_TIME,
                                                 gtk_drag_abort_timeout,
                                                 info);
@@ -1665,7 +1664,6 @@ gtk_drag_cancel_internal (GtkDragSourceInfo *info,
                           GtkDragResult      result,
                           guint32            time)
 {
-  gdk_drag_abort (info->context, time);
   gtk_drag_drop_finished (info, result, time);
 }
 
