@@ -124,6 +124,21 @@ gboolean gdk_drag_context_handle_dest_event   (GdkEvent *event);
 GdkCursor * gdk_drag_get_cursor               (GdkDragContext *context,
                                                GdkDragAction   action);
 
+gboolean gdk_drag_motion (GdkDragContext *context,
+                          GdkWindow      *dest_window,
+                          GdkDragProtocol protocol,
+                          gint            x_root,
+                          gint            y_root,
+                          GdkDragAction   suggested_action,
+                          GdkDragAction   possible_actions,
+                          guint32         time_);
+void     gdk_drag_abort  (GdkDragContext *context,
+                          guint32         time_);
+void     gdk_drag_drop   (GdkDragContext *context,
+                          guint32         time_);
+
+
+
 G_END_DECLS
 
 #endif
