@@ -416,7 +416,7 @@ gdk_drag_status (GdkDragContext *context,
   GDK_DRAG_CONTEXT_GET_CLASS (context)->drag_status (context, action, time_);
 }
 
-/**
+/*
  * gdk_drag_motion:
  * @context: a #GdkDragContext
  * @dest_window: the new destination window, obtained by
@@ -432,9 +432,6 @@ gdk_drag_status (GdkDragContext *context,
  * set of actions changes.
  *
  * This function is called by the drag source.
- *
- * This function does not need to be called in managed drag and drop
- * operations. See gdk_drag_context_manage_dnd() for more information.
  *
  * Returns:
  */
@@ -461,7 +458,7 @@ gdk_drag_motion (GdkDragContext *context,
                       time_);
 }
 
-/**
+/*
  * gdk_drag_abort:
  * @context: a #GdkDragContext
  * @time_: the timestamp for this operation
@@ -469,9 +466,6 @@ gdk_drag_motion (GdkDragContext *context,
  * Aborts a drag without dropping.
  *
  * This function is called by the drag source.
- *
- * This function does not need to be called in managed drag and drop
- * operations. See gdk_drag_context_manage_dnd() for more information.
  */
 void
 gdk_drag_abort (GdkDragContext *context,
@@ -482,7 +476,7 @@ gdk_drag_abort (GdkDragContext *context,
   GDK_DRAG_CONTEXT_GET_CLASS (context)->drag_abort (context, time_);
 }
 
-/**
+/*
  * gdk_drag_drop:
  * @context: a #GdkDragContext
  * @time_: the timestamp for this operation
@@ -490,9 +484,6 @@ gdk_drag_abort (GdkDragContext *context,
  * Drops on the current destination.
  *
  * This function is called by the drag source.
- *
- * This function does not need to be called in managed drag and drop
- * operations. See gdk_drag_context_manage_dnd() for more information.
  */
 void
 gdk_drag_drop (GdkDragContext *context,

@@ -134,7 +134,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDragProtocol  gdk_drag_context_get_protocol         (GdkDragContext *context);
 
 /* Destination side */
-
 GDK_AVAILABLE_IN_ALL
 void             gdk_drag_status        (GdkDragContext   *context,
                                          GdkDragAction     action,
@@ -175,21 +174,6 @@ void    gdk_drag_find_window (GdkDragContext   *context,
                               GdkWindow       **dest_window,
                               GdkDragProtocol  *protocol);
 
-GDK_AVAILABLE_IN_ALL
-gboolean        gdk_drag_motion      (GdkDragContext *context,
-                                      GdkWindow      *dest_window,
-                                      GdkDragProtocol protocol,
-                                      gint            x_root,
-                                      gint            y_root,
-                                      GdkDragAction   suggested_action,
-                                      GdkDragAction   possible_actions,
-                                      guint32         time_);
-GDK_AVAILABLE_IN_ALL
-void            gdk_drag_drop        (GdkDragContext *context,
-                                      guint32         time_);
-GDK_AVAILABLE_IN_ALL
-void            gdk_drag_abort       (GdkDragContext *context,
-                                      guint32         time_);
 GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
 
