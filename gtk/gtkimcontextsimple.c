@@ -1036,7 +1036,8 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   GtkIMContext *context;
   gunichar ch;
-  
+  guint keyval;
+
   context = GTK_IM_CONTEXT (context_simple);
   
   /* No compose sequences found, check first if we have a partial
@@ -1061,16 +1062,16 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
 
       return gtk_im_context_filter_keypress (context, event);
     }
-  else
+  else if (gdk_event_get_keyval ((GdkEvent *) event, &keyval))
     {
       priv->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
-	  beep_window (event->window);
+	  beep_window (gdk_event_get_window ((GdkEvent *) event));
 	  return TRUE;
 	}
   
-      ch = gdk_keyval_to_unicode (event->keyval);
+      ch = gdk_keyval_to_unicode (keyval);
       if (ch != 0 && !g_unichar_iscntrl (ch))
 	{
 	  gtk_im_context_simple_commit_char (context, ch);
@@ -1079,6 +1080,8 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       else
 	return FALSE;
     }
+  else
+    return FALSE;
 }
 
 static gboolean
@@ -1092,21 +1095,25 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_window_get_display (event->window));
-  guint keyval;
+  GdkWindow *window = gdk_event_get_window ((GdkEvent *) event);
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_window_get_display (window));
+  guint keyval, event_keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;
   gint i;
-  
+
+  if (gdk_event_get_keyval ((GdkEvent *) event, &event_keyval))
+    return 0;
+
   /* See if the keyval is already a hex digit */
-  if (is_hex_keyval (event->keyval))
-    return event->keyval;
+  if (is_hex_keyval (event_keyval))
+    return event_keyval;
 
   /* See if this key would have generated a hex keyval in
    * any other state, and return that hex keyval if so
    */
   gdk_keymap_get_entries_for_keycode (keymap,
-				      event->hardware_keycode,
+                                      gdk_event_get_scancode ((GdkEvent *) event),
 				      NULL,
 				      &keyvals, &n_vals);
 
@@ -1136,7 +1143,10 @@ canonical_hex_keyval (GdkEventKey *event)
 static guint
 canonical_emoji_keyval (GdkEventKey *event)
 {
-  return event->keyval;
+  guint keyval;
+  gdk_event_get_keyval ((GdkEvent *) event, &keyval);
+
+  return keyval;
 }
 
 static gboolean
@@ -1145,7 +1155,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GtkIMContextSimplePrivate *priv = context_simple->priv;
-  GdkDisplay *display = gdk_window_get_display (event->window);
+  GdkWindow *window = gdk_event_get_window ((GdkEvent *) event);
+  GdkDisplay *display = gdk_window_get_display (window);
   GSList *tmp_list;
   int n_compose = 0;
   GdkModifierType hex_mod_mask;
@@ -1161,14 +1172,19 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   gboolean compose_finish;
   gboolean compose_match;
   gunichar output_char;
+  guint keyval, state;
 
   while (priv->compose_buffer[n_compose] != 0)
     n_compose++;
 
-  if (event->type == GDK_KEY_RELEASE)
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
+    return GDK_EVENT_PROPAGATE;
+
+  if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE)
     {
-      if ((event->keyval == GDK_KEY_Control_L || event->keyval == GDK_KEY_Control_R ||
-	   event->keyval == GDK_KEY_Shift_L || event->keyval == GDK_KEY_Shift_R))
+      if ((keyval == GDK_KEY_Control_L || keyval == GDK_KEY_Control_R ||
+	   keyval == GDK_KEY_Shift_L || keyval == GDK_KEY_Shift_R))
 	{
           if ((priv->in_hex_sequence || priv->in_emoji_sequence) &&
 	      priv->tentative_match &&
@@ -1189,7 +1205,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  else if (priv->in_hex_sequence)
 	    {
 	      /* invalid hex sequence */
-	      beep_window (event->window);
+	      beep_window (window);
 
 	      priv->tentative_match = 0;
 	      priv->in_hex_sequence = FALSE;
@@ -1208,7 +1224,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
   /* Ignore modifier key presses */
   for (i = 0; i < G_N_ELEMENTS (gtk_compose_ignore); i++)
-    if (event->keyval == gtk_compose_ignore[i])
+    if (keyval == gtk_compose_ignore[i])
       return FALSE;
 
   hex_mod_mask = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
@@ -1218,16 +1234,16 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   if ((priv->in_hex_sequence || priv->in_emoji_sequence) && priv->modifiers_dropped)
     have_hex_mods = TRUE;
   else
-    have_hex_mods = (event->state & (hex_mod_mask)) == hex_mod_mask;
-  is_hex_start = event->keyval == GDK_KEY_U;
-  is_emoji_start = event->keyval == GDK_KEY_E;
-  is_end = (event->keyval == GDK_KEY_space ||
-            event->keyval == GDK_KEY_KP_Space ||
-            event->keyval == GDK_KEY_Return ||
-	    event->keyval == GDK_KEY_ISO_Enter ||
-	    event->keyval == GDK_KEY_KP_Enter);
-  is_backspace = event->keyval == GDK_KEY_BackSpace;
-  is_escape = event->keyval == GDK_KEY_Escape;
+    have_hex_mods = (state & (hex_mod_mask)) == hex_mod_mask;
+  is_hex_start = keyval == GDK_KEY_U;
+  is_emoji_start = keyval == GDK_KEY_E;
+  is_end = (keyval == GDK_KEY_space ||
+            keyval == GDK_KEY_KP_Space ||
+            keyval == GDK_KEY_Return ||
+	    keyval == GDK_KEY_ISO_Enter ||
+	    keyval == GDK_KEY_KP_Enter);
+  is_backspace = keyval == GDK_KEY_BackSpace;
+  is_escape = keyval == GDK_KEY_Escape;
   hex_keyval = canonical_hex_keyval (event);
   emoji_keyval = canonical_emoji_keyval (event);
 
@@ -1251,11 +1267,11 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
         gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
                                       GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
-      if (event->state & no_text_input_mask ||
+      if (state & no_text_input_mask ||
 	  ((priv->in_hex_sequence || priv->in_emoji_sequence) && priv->modifiers_dropped &&
-	   (event->keyval == GDK_KEY_Return ||
-	    event->keyval == GDK_KEY_ISO_Enter ||
-	    event->keyval == GDK_KEY_KP_Enter)))
+	   (keyval == GDK_KEY_Return ||
+	    keyval == GDK_KEY_ISO_Enter ||
+	    keyval == GDK_KEY_KP_Enter)))
 	{
 	  return FALSE;
 	}
@@ -1300,8 +1316,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	{
 	  /* invalid hex sequence */
 	  if (n_compose > 0)
-	    beep_window (event->window);
-	  
+	    beep_window (window);
+
 	  priv->tentative_match = 0;
 	  priv->in_hex_sequence = FALSE;
 	  priv->compose_buffer[0] = 0;
@@ -1349,7 +1365,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       else if (!is_end)
 	{
 	  /* non-hex character in hex sequence */
-	  beep_window (event->window);
+	  beep_window (window);
 	  return TRUE;
 	}
     }
@@ -1364,16 +1380,16 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
         }
       else
         {
-	  beep_window (event->window);
+	  beep_window (window);
 	  return TRUE;
         }
     }
   else
-    priv->compose_buffer[n_compose++] = event->keyval;
+    priv->compose_buffer[n_compose++] = keyval;
 
   if (n_compose == MAX(GTK_MAX_COMPOSE_LEN + 1, 9))
     {
-      beep_window (event->window);
+      beep_window (window);
       priv->tentative_match = 0;
       priv->in_hex_sequence = FALSE;
       priv->in_emoji_sequence = FALSE;
@@ -1402,7 +1418,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	      else
 		{
 		  /* invalid hex sequence */
-		  beep_window (event->window);
+		  beep_window (window);
 
 		  priv->tentative_match = 0;
 		  priv->in_hex_sequence = FALSE;
@@ -1412,7 +1428,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
             }
           else if ((priv->in_hex_sequence && !check_hex (context_simple, n_compose)) ||
                    (priv->in_emoji_sequence && !check_emoji (context_simple, n_compose)))
-	    beep_window (event->window);
+	    beep_window (window);
 
 	  g_signal_emit_by_name (context_simple, "preedit-changed");
 
