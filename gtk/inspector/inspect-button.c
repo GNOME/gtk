@@ -223,8 +223,9 @@ property_query_event (GtkWidget *widget,
                       gpointer   data)
 {
   GtkInspectorWindow *iw = (GtkInspectorWindow *)data;
+  GdkEventType event_type = gdk_event_get_event_type (event);
 
-  if (event->type == GDK_BUTTON_RELEASE)
+  if (event_type == GDK_BUTTON_RELEASE)
     {
       g_signal_handlers_disconnect_by_func (widget, property_query_event, data);
       gtk_grab_remove (widget);
@@ -234,15 +235,15 @@ property_query_event (GtkWidget *widget,
 
       on_inspect_widget (widget, event, data);
     }
-  else if (event->type == GDK_MOTION_NOTIFY)
+  else if (event_type == GDK_MOTION_NOTIFY)
     {
       on_highlight_widget (widget, event, data);
     }
-  else if (event->type == GDK_KEY_PRESS)
+  else if (event_type == GDK_KEY_PRESS)
     {
-      GdkEventKey *ke = (GdkEventKey*)event;
+      guint keyval;
 
-      if (ke->keyval == GDK_KEY_Escape)
+      if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
         {
           g_signal_handlers_disconnect_by_func (widget, property_query_event, data);
           gtk_grab_remove (widget);
