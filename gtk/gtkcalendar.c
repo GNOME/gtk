@@ -2537,6 +2537,8 @@ calendar_main_button_press (GtkCalendar    *calendar,
   gint row, col;
   gint day_month;
   gint day;
+  guint button;
+  GdkEventType event_type;
 
   gdk_event_get_coords ((const GdkEvent *)event, &x, &y);
 
@@ -2548,8 +2550,9 @@ calendar_main_button_press (GtkCalendar    *calendar,
     return;
 
   day_month = priv->day_month[row][col];
+  event_type = gdk_event_get_event_type ((GdkEvent *) event);
 
-  if (event->type == GDK_BUTTON_PRESS)
+  if (event_type == GDK_BUTTON_PRESS)
     {
       day = priv->day[row][col];
 
@@ -2561,7 +2564,8 @@ calendar_main_button_press (GtkCalendar    *calendar,
       if (!gtk_widget_has_focus (widget))
         gtk_widget_grab_focus (widget);
 
-      if (event->button == GDK_BUTTON_PRIMARY)
+      if (gdk_event_get_button ((GdkEvent *) event, &button) &&
+          button == GDK_BUTTON_PRIMARY)
         {
           priv->in_drag = 1;
           priv->drag_start_x = x;
@@ -2570,7 +2574,7 @@ calendar_main_button_press (GtkCalendar    *calendar,
 
       calendar_select_and_focus_day (calendar, day);
     }
-  else if (event->type == GDK_2BUTTON_PRESS)
+  else if (event_type == GDK_2BUTTON_PRESS)
     {
       priv->in_drag = 0;
       if (day_month == MONTH_CURRENT)
@@ -2588,6 +2592,7 @@ gtk_calendar_button_press (GtkWidget      *widget,
   GtkCalendarPrivate *priv = calendar->priv;
   gint arrow = -1;
   double x, y;
+  guint button;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
@@ -2606,9 +2611,10 @@ gtk_calendar_button_press (GtkWidget      *widget,
       if (gdk_rectangle_contains_point (&arrow_rect, (int)x, (int)y))
         {
           /* only call the action on single click, not double */
-          if (event->type == GDK_BUTTON_PRESS)
+          if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_BUTTON_PRESS)
             {
-              if (event->button == GDK_BUTTON_PRIMARY)
+              if (gdk_event_get_button ((GdkEvent *) event, &button) &&
+                  button == GDK_BUTTON_PRIMARY)
                 calendar_start_spinning (calendar, arrow);
 
               calendar_arrow_action (calendar, arrow);
@@ -2628,7 +2634,7 @@ gtk_calendar_button_release (GtkWidget    *widget,
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   GtkCalendarPrivate *priv = calendar->priv;
 
-  if (event->button == GDK_BUTTON_PRIMARY)
+  if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_BUTTON_PRIMARY)
     {
       calendar_stop_spinning (calendar);
 
@@ -2644,12 +2650,14 @@ gtk_calendar_motion_notify (GtkWidget      *widget,
                             GdkEventMotion *event)
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR (widget)->priv;
+  gdouble x, y;
 
   if (priv->in_drag)
     {
-      if (gtk_drag_check_threshold (widget,
+      if (gdk_event_get_coords ((GdkEvent *) event, &x, &y) &&
+          gtk_drag_check_threshold (widget,
                                     priv->drag_start_x, priv->drag_start_y,
-                                    event->x, event->y))
+                                    x, y))
         {
           GdkDragContext *context;
           GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
@@ -2672,14 +2680,18 @@ gtk_calendar_scroll (GtkWidget      *widget,
                      GdkEventScroll *event)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
+  GdkScrollDirection direction;
 
-  if (event->direction == GDK_SCROLL_UP)
+  if (!gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
+    return GDK_EVENT_PROPAGATE;
+
+  if (direction == GDK_SCROLL_UP)
     {
       if (!gtk_widget_has_focus (widget))
         gtk_widget_grab_focus (widget);
       calendar_set_month_prev (calendar);
     }
-  else if (event->direction == GDK_SCROLL_DOWN)
+  else if (direction == GDK_SCROLL_DOWN)
     {
       if (!gtk_widget_has_focus (widget))
         gtk_widget_grab_focus (widget);
@@ -2746,18 +2758,23 @@ gtk_calendar_key_press (GtkWidget   *widget,
   gint old_focus_row;
   gint old_focus_col;
   gint row, col, day;
+  guint keyval, state;
 
   return_val = FALSE;
+
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
+    return return_val;
 
   old_focus_row = priv->focus_row;
   old_focus_col = priv->focus_col;
 
-  switch (event->keyval)
+  switch (keyval)
     {
     case GDK_KEY_KP_Left:
     case GDK_KEY_Left:
       return_val = TRUE;
-      if (event->state & GDK_CONTROL_MASK)
+      if (state & GDK_CONTROL_MASK)
         calendar_set_month_prev (calendar);
       else
         {
@@ -2770,7 +2787,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
     case GDK_KEY_KP_Right:
     case GDK_KEY_Right:
       return_val = TRUE;
-      if (event->state & GDK_CONTROL_MASK)
+      if (state & GDK_CONTROL_MASK)
         calendar_set_month_next (calendar);
       else
         {
@@ -2783,7 +2800,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
     case GDK_KEY_KP_Up:
     case GDK_KEY_Up:
       return_val = TRUE;
-      if (event->state & GDK_CONTROL_MASK)
+      if (state & GDK_CONTROL_MASK)
         calendar_set_year_prev (calendar);
       else
         {
@@ -2801,7 +2818,7 @@ gtk_calendar_key_press (GtkWidget   *widget,
     case GDK_KEY_KP_Down:
     case GDK_KEY_Down:
       return_val = TRUE;
-      if (event->state & GDK_CONTROL_MASK)
+      if (state & GDK_CONTROL_MASK)
         calendar_set_year_next (calendar);
       else
         {
