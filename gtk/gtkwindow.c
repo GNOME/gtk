@@ -1787,7 +1787,7 @@ captured_event_cb (GtkWidget *widget,
     "sw-resize", "s-resize", "se-resize"
   };
 
-  if (event->type != GDK_MOTION_NOTIFY)
+  if (gdk_event_get_event_type (event) != GDK_MOTION_NOTIFY)
     return GDK_EVENT_PROPAGATE;
   if (!gdk_event_get_coords (event, &x, &y))
     return GDK_EVENT_PROPAGATE;
@@ -7368,12 +7368,13 @@ gtk_window_handle_wm_event (GtkWindow *window,
                             GdkEvent  *event,
                             gboolean   run_drag)
 {
+  GdkEventType event_type = gdk_event_get_event_type (event);
   gboolean retval = GDK_EVENT_PROPAGATE;
   GtkWindowPrivate *priv;
 
-  if (event->type == GDK_BUTTON_PRESS || event->type == GDK_BUTTON_RELEASE ||
-      event->type == GDK_TOUCH_BEGIN || event->type == GDK_TOUCH_UPDATE ||
-      event->type == GDK_MOTION_NOTIFY || event->type == GDK_TOUCH_END)
+  if (event_type == GDK_BUTTON_PRESS || event_type == GDK_BUTTON_RELEASE ||
+      event_type == GDK_TOUCH_BEGIN || event_type == GDK_TOUCH_UPDATE ||
+      event_type == GDK_MOTION_NOTIFY || event_type == GDK_TOUCH_END)
     {
       priv = window->priv;
 
@@ -7394,6 +7395,7 @@ _gtk_window_check_handle_wm_event (GdkEvent *event)
 {
   GtkWindowPrivate *priv;
   GtkWidget *widget;
+  GdkEventType event_type;
 
   widget = gtk_get_event_widget (event);
 
@@ -7408,9 +7410,11 @@ _gtk_window_check_handle_wm_event (GdkEvent *event)
   if (!priv->multipress_gesture)
     return GDK_EVENT_PROPAGATE;
 
-  if (event->type != GDK_BUTTON_PRESS && event->type != GDK_BUTTON_RELEASE &&
-      event->type != GDK_MOTION_NOTIFY && event->type != GDK_TOUCH_BEGIN &&
-      event->type != GDK_TOUCH_END && event->type != GDK_TOUCH_UPDATE)
+  event_type = gdk_event_get_event_type (event);
+
+  if (event_type != GDK_BUTTON_PRESS && event_type != GDK_BUTTON_RELEASE &&
+      event_type != GDK_MOTION_NOTIFY && event_type != GDK_TOUCH_BEGIN &&
+      event_type != GDK_TOUCH_END && event_type != GDK_TOUCH_UPDATE)
     return GDK_EVENT_PROPAGATE;
 
   if (gtk_widget_event (widget, event))
