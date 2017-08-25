@@ -1747,8 +1747,10 @@ gtk_list_box_enter_notify_event (GtkWidget        *widget,
 {
   GtkListBox *box = GTK_LIST_BOX (widget);
   GtkListBoxRow *row;
+  gdouble y;
 
-  row = gtk_list_box_get_row_at_y (box, event->y);
+  gdk_event_get_coords ((GdkEvent *) event, NULL, &y);
+  row = gtk_list_box_get_row_at_y (box, y);
   gtk_list_box_update_active (box, row);
 
   return FALSE;
@@ -1771,8 +1773,10 @@ gtk_list_box_motion_notify_event (GtkWidget      *widget,
 {
   GtkListBox *box = GTK_LIST_BOX (widget);
   GtkListBoxRow *row;
+  gdouble y;
 
-  row = gtk_list_box_get_row_at_y (box, event->y);
+  gdk_event_get_coords ((GdkEvent *) event, NULL, &y);
+  row = gtk_list_box_get_row_at_y (box, y);
 
   gtk_list_box_update_active (box, row);
 
