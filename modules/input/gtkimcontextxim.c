@@ -662,30 +662,37 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   gboolean result = FALSE;
   GdkWindow *window;
   XKeyPressedEvent xevent;
+  GdkEventType event_type;
+  guint state;
 
-  if (event->type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
+  event_type = gdk_event_get_event_type ((GdkEvent *) event);
+
+  if (!gdk_event_get_state ((GdkEvent *) event, &state))
+    return GDK_EVENT_PROPAGATE;
+
+  if (event_type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
-  window = gdk_window_get_toplevel (event->window);
+  window = gdk_window_get_toplevel (gdk_event_get_window ((GdkEvent *) event));
 
-  xevent.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
+  xevent.type = (event_type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
   xevent.send_event = event->send_event;
   xevent.display = GDK_WINDOW_XDISPLAY (window);
   xevent.window = GDK_WINDOW_XID (window);
   xevent.root = DefaultRootWindow(GDK_WINDOW_XDISPLAY (window));
   xevent.subwindow = xevent.window;
-  xevent.time = event->time;
+  xevent.time = gdk_event_get_time ((GdkEvent *) event);
   xevent.x = xevent.x_root = 0;
   xevent.y = xevent.y_root = 0;
-  xevent.state = event->state;
-  xevent.keycode = event->hardware_keycode;
+  xevent.state = state;
+  xevent.keycode = gdk_event_get_scancode ((GdkEvent *) event);
   xevent.same_screen = True;
   
   if (XFilterEvent ((XEvent *)&xevent, context_xim->client_window_xid))
     return TRUE;
   
-  if (event->state &
+  if (state &
       (gtk_accelerator_get_default_mod_mask () & ~(GDK_SHIFT_MASK | GDK_CONTROL_MASK))) 
     return FALSE;
 

@@ -281,20 +281,24 @@ gtk_im_context_thai_filter_keypress (GtkIMContext *context,
   gunichar prev_char, new_char;
   gboolean is_reject;
   GtkIMContextThaiISCMode isc_mode;
+  GdkModifierType state;
+  guint keyval;
 
-  if (event->type != GDK_KEY_PRESS)
+  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_KEY_PRESS ||
+      !gdk_event_get_state ((GdkEvent *) event, &state) ||
+      !gdk_event_get_keyval ((GdkEvent *) event, &keyval))
     return FALSE;
 
-  if (event->state & (GDK_MODIFIER_MASK
-                      & ~(GDK_SHIFT_MASK | GDK_LOCK_MASK | GDK_MOD2_MASK)) ||
-      is_context_lost_key (event->keyval))
+  if (state & (GDK_MODIFIER_MASK
+               & ~(GDK_SHIFT_MASK | GDK_LOCK_MASK | GDK_MOD2_MASK)) ||
+      is_context_lost_key (keyval))
     {
 #ifndef GTK_IM_CONTEXT_THAI_NO_FALLBACK
       forget_previous_chars (context_thai);
 #endif /* !GTK_IM_CONTEXT_THAI_NO_FALLBACK */
       return FALSE;
     }
-  if (event->keyval == 0 || is_context_intact_key (event->keyval))
+  if (keyval == 0 || is_context_intact_key (keyval))
     {
       return FALSE;
     }
@@ -302,7 +306,7 @@ gtk_im_context_thai_filter_keypress (GtkIMContext *context,
   prev_char = get_previous_char (context_thai, -1);
   if (!prev_char)
     prev_char = ' ';
-  new_char = gdk_keyval_to_unicode (event->keyval);
+  new_char = gdk_keyval_to_unicode (keyval);
   is_reject = TRUE;
   isc_mode = gtk_im_context_thai_get_isc_mode (context_thai);
   if (thai_is_accept (new_char, prev_char, isc_mode))

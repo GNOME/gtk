@@ -224,15 +224,18 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
 
   multipress_context = GTK_IM_CONTEXT_MULTIPRESS (context);
 
-  if (event->type == GDK_KEY_PRESS)
+  if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_PRESS)
     {
       KeySequence *possible;
+      guint keyval;
+
+      gdk_event_get_keyval ((GdkEvent *) event, &keyval);
 
       /* Check whether the current key is the same as previously entered, because
        * if it is not then we should accept the previous one, and start a new
        * character. */
       if (multipress_context->compose_count > 0
-          && multipress_context->key_last_entered != event->keyval
+          && multipress_context->key_last_entered != keyval
           && multipress_context->tentative_match != NULL)
         {
           /* Accept the previously chosen character.  This wipes
@@ -243,7 +246,7 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
 
       /* Decide what character this key press would choose: */
       possible = g_hash_table_lookup (multipress_context->key_sequences,
-                                      GUINT_TO_POINTER (event->keyval));
+                                      GUINT_TO_POINTER (keyval));
       if (possible != NULL)
         {
           if (multipress_context->compose_count == 0)
@@ -255,7 +258,7 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
             multipress_context->compose_count = 0;
 
           /* Store the last key pressed in the compose sequence. */
-          multipress_context->key_last_entered = event->keyval; 
+          multipress_context->key_last_entered = keyval; 
 
           /* Get the possible match for this number of presses of the key.
            * compose_count starts at 1, so that 0 can mean not composing. */ 
@@ -291,7 +294,7 @@ vfunc_filter_keypress (GtkIMContext *context, GdkEventKey *event)
               accept_character (multipress_context,
                                 multipress_context->tentative_match);
             }
-          keyval_uchar = gdk_keyval_to_unicode (event->keyval);
+          keyval_uchar = gdk_keyval_to_unicode (keyval);
 
           /* Convert to a string for accept_character(). */
           if (keyval_uchar != 0)
