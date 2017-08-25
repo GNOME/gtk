@@ -395,7 +395,11 @@ key_press_event (GtkWidget                *window,
                  GdkEvent                 *event,
                  GtkInspectorResourceList *sl)
 {
-  if (gtk_widget_get_mapped (GTK_WIDGET (sl)))
+  guint keyval, state;
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (sl)) &&
+      gdk_event_get_keyval (event, &keyval) &&
+      gdk_event_get_state (event, &state))
     {
       GdkModifierType default_accel;
       gboolean search_started;
@@ -404,9 +408,9 @@ key_press_event (GtkWidget                *window,
       default_accel = gtk_widget_get_modifier_mask (GTK_WIDGET (sl), GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
 
       if (search_started &&
-          (event->key.keyval == GDK_KEY_Return ||
-           event->key.keyval == GDK_KEY_ISO_Enter ||
-           event->key.keyval == GDK_KEY_KP_Enter))
+          (keyval == GDK_KEY_Return ||
+           keyval == GDK_KEY_ISO_Enter ||
+           keyval == GDK_KEY_KP_Enter))
         {
           GtkTreeSelection *selection;
           GtkTreeModel *model;
@@ -428,14 +432,14 @@ key_press_event (GtkWidget                *window,
             return GDK_EVENT_PROPAGATE;
         }
       else if (search_started &&
-               (event->key.keyval == GDK_KEY_Escape))
+               (keyval == GDK_KEY_Escape))
         {
           gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (sl->priv->search_bar), FALSE);
           return GDK_EVENT_STOP;
         }
       else if (search_started &&
-               ((event->key.state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK)) &&
-               (event->key.keyval == GDK_KEY_g || event->key.keyval == GDK_KEY_G))
+               ((state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK)) &&
+               (keyval == GDK_KEY_g || keyval == GDK_KEY_G))
         {
           GtkTreeIter iter;
           if (gtk_tree_walk_next_match (sl->priv->walk, TRUE, TRUE, &iter))
@@ -446,8 +450,8 @@ key_press_event (GtkWidget                *window,
           return GDK_EVENT_STOP;
         }
       else if (search_started &&
-               ((event->key.state & (default_accel | GDK_SHIFT_MASK)) == default_accel) &&
-               (event->key.keyval == GDK_KEY_g || event->key.keyval == GDK_KEY_G))
+               ((state & (default_accel | GDK_SHIFT_MASK)) == default_accel) &&
+               (keyval == GDK_KEY_g || keyval == GDK_KEY_G))
         {
           GtkTreeIter iter;
 

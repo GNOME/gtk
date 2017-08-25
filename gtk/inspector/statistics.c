@@ -252,11 +252,15 @@ key_press_event (GtkWidget              *window,
                  GdkEvent               *event,
                  GtkInspectorStatistics *sl)
 {
-  if (gtk_widget_get_mapped (GTK_WIDGET (sl)))
+  guint keyval, state;
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (sl)) &&
+      gdk_event_get_keyval (event, &keyval) &&
+      gdk_event_get_state (event, &state))
     {
-      if (event->key.keyval == GDK_KEY_Return ||
-          event->key.keyval == GDK_KEY_ISO_Enter ||
-          event->key.keyval == GDK_KEY_KP_Enter)
+      if (keyval == GDK_KEY_Return ||
+          keyval == GDK_KEY_ISO_Enter ||
+          keyval == GDK_KEY_KP_Enter)
         {
           GtkTreeSelection *selection;
           GtkTreeModel *model;
