@@ -2613,11 +2613,14 @@ gtk_flow_box_enter_notify_event (GtkWidget        *widget,
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxChild *child;
+  gdouble x, y;
 
-  if (event->window != gtk_widget_get_window (GTK_WIDGET (box)))
-    return FALSE;
+  if ((gdk_event_get_window ((GdkEvent *) event) !=
+       gtk_widget_get_window (GTK_WIDGET (box))) ||
+      gdk_event_get_coords ((GdkEvent *) event, &x, &y))
+    return GDK_EVENT_PROPAGATE;
 
-  child = gtk_flow_box_get_child_at_pos (box, event->x, event->y);
+  child = gtk_flow_box_get_child_at_pos (box, x, y);
   gtk_flow_box_update_active (box, child);
 
   return FALSE;
@@ -2629,14 +2632,16 @@ gtk_flow_box_leave_notify_event (GtkWidget        *widget,
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxChild *child = NULL;
+  gdouble x, y;
 
-  if (event->window != gtk_widget_get_window (GTK_WIDGET (box)))
+  if (gdk_event_get_window ((GdkEvent *) event) !=
+      gtk_widget_get_window (GTK_WIDGET (box)))
     return FALSE;
 
   if (event->detail != GDK_NOTIFY_INFERIOR)
     child = NULL;
-  else
-    child = gtk_flow_box_get_child_at_pos (box, event->x, event->y);
+  else if (gdk_event_get_coords ((GdkEvent *) event, &x, &y))
+    child = gtk_flow_box_get_child_at_pos (box, x, y);
 
   gtk_flow_box_update_active (box, child);
 
@@ -2700,8 +2705,12 @@ gtk_flow_box_motion_notify_event (GtkWidget      *widget,
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxChild *child;
+  gdouble x, y;
 
-  child = gtk_flow_box_get_child_at_pos (box, event->x, event->y);
+  if (!gdk_event_get_coords ((GdkEvent *) event, &x, &y))
+    return GDK_EVENT_PROPAGATE;
+
+  child = gtk_flow_box_get_child_at_pos (box, x, y);
   gtk_flow_box_update_active (box, child);
 
   return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->motion_notify_event (widget, event);
@@ -2861,10 +2870,12 @@ gtk_flow_box_key_press_event (GtkWidget   *widget,
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  guint keyval;
 
   if (priv->rubberband_select)
     {
-      if (event->keyval == GDK_KEY_Escape)
+      if (gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
+          keyval == GDK_KEY_Escape)
         {
           gtk_flow_box_stop_rubberband (box);
           return TRUE;
