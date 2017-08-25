@@ -2019,8 +2019,12 @@ text_view_key_press_event (GtkWidget      *text_view,
 {
   GtkTextIter iter;
   GtkTextBuffer *buffer;
+  guint keyval;
 
-  switch (event->keyval)
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+    return GDK_EVENT_PROPAGATE;
+
+  switch (keyval)
     {
       case GDK_KEY_Return:
       case GDK_KEY_ISO_Enter:
@@ -2045,15 +2049,14 @@ text_view_event_after (GtkWidget      *text_view,
 {
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
-  GdkEventButton *button_event;
+  gdouble event_x, event_y;
   gint x, y;
+  guint button;
 
-  if (event->type != GDK_BUTTON_RELEASE)
+  if (gdk_event_get_event_type (event) != GDK_BUTTON_RELEASE)
     return FALSE;
 
-  button_event = (GdkEventButton *)event;
-
-  if (button_event->button != GDK_BUTTON_PRIMARY)
+  if (!gdk_event_get_button (event, &button) || button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
@@ -2063,9 +2066,10 @@ text_view_event_after (GtkWidget      *text_view,
   if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end))
     return FALSE;
 
+  gdk_event_get_coords (event, &event_x, &event_y);
   gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
-                                         button_event->x, button_event->y, &x, &y);
+                                         event_x, event_y, &x, &y);
 
   gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, x, y);
 
@@ -2119,13 +2123,16 @@ text_view_motion_notify_event (GtkWidget      *text_view,
                                GdkEventMotion *event,
                                GtkAboutDialog *about)
 {
+  gdouble event_x, event_y;
   gint x, y;
 
+  gdk_event_get_coords ((GdkEvent *) event, &event_x, &event_y);
   gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
-                                         event->x, event->y, &x, &y);
+                                         event_x, event_y, &x, &y);
 
-  set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), event->device, x, y);
+  set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view),
+                             gdk_event_get_device ((GdkEvent *) event), x, y);
 
   gdk_event_request_motions (event);
 
