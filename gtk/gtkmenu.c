@@ -58,23 +58,23 @@
  * my_popup_handler (GtkWidget *widget, GdkEvent *event)
  * {
  *   GtkMenu *menu;
- *   GdkEventButton *event_button;
+ *   guint button;
  *
  *   g_return_val_if_fail (widget != NULL, FALSE);
  *   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
  *   g_return_val_if_fail (event != NULL, FALSE);
  *
- *   // The "widget" is the menu that was supplied when 
+ *   // The "widget" is the menu that was supplied when
  *   // g_signal_connect_swapped() was called.
  *   menu = GTK_MENU (widget);
  *
- *   if (event->type == GDK_BUTTON_PRESS)
+ *   if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
  *     {
- *       event_button = (GdkEventButton *) event;
- *       if (event_button->button == GDK_BUTTON_SECONDARY)
+ *       gdk_event_get_button (event, &button);
+ *       if (button == GDK_BUTTON_SECONDARY)
  *         {
- *           gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
- *                           event_button->button, event_button->time);
+ *           gtk_menu_popup (menu, NULL, NULL, NULL, NULL,
+ *                           button, gdk_event_get_time (event));
  *           return TRUE;
  *         }
  *     }
@@ -1127,7 +1127,7 @@ gtk_menu_window_event (GtkWidget *window,
   g_object_ref (window);
   g_object_ref (menu);
 
-  switch (event->type)
+  switch (gdk_event_get_event_type (event))
     {
     case GDK_WINDOW_STATE:
       /* Window for the menu has been closed by the display server or by GDK.
@@ -1681,8 +1681,10 @@ gtk_menu_popup_internal (GtkMenu             *menu,
   current_event = gtk_get_current_event ();
   if (current_event)
     {
-      if ((current_event->type != GDK_BUTTON_PRESS) &&
-          (current_event->type != GDK_ENTER_NOTIFY))
+      GdkEventType event_type = gdk_event_get_event_type (current_event);
+
+      if ((event_type != GDK_BUTTON_PRESS) &&
+          (event_type != GDK_ENTER_NOTIFY))
         menu_shell->priv->ignore_enter = TRUE;
 
       source_device = gdk_event_get_source_device (current_event);
@@ -3618,7 +3620,7 @@ gtk_menu_captured_event (GtkWidget *widget,
   source_device = gdk_event_get_source_device (event);
   gdk_event_get_root_coords (event, &x_root, &y_root);
 
-  switch (event->type)
+  switch (gdk_event_get_event_type (event))
     {
     case GDK_TOUCH_BEGIN:
     case GDK_BUTTON_PRESS:
