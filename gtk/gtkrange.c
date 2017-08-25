@@ -1869,13 +1869,17 @@ gtk_range_key_press (GtkWidget   *widget,
   GdkDevice *device;
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
+  guint keyval;
 
   device = gdk_event_get_device ((GdkEvent *) event);
   device = gdk_device_get_associated_device (device);
 
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+    return GDK_EVENT_PROPAGATE;
+
   if (gtk_gesture_is_active (priv->drag_gesture) &&
       device == gtk_gesture_get_device (priv->drag_gesture) &&
-      event->keyval == GDK_KEY_Escape &&
+      keyval == GDK_KEY_Escape &&
       priv->grab_location != NULL)
     {
       stop_scrolling (range);
@@ -1883,8 +1887,8 @@ gtk_range_key_press (GtkWidget   *widget,
       return GDK_EVENT_STOP;
     }
   else if (priv->in_drag &&
-           (event->keyval == GDK_KEY_Shift_L ||
-            event->keyval == GDK_KEY_Shift_R))
+           (keyval == GDK_KEY_Shift_L ||
+            keyval == GDK_KEY_Shift_R))
     {
       GtkAllocation slider_alloc;
 
@@ -2423,7 +2427,7 @@ gtk_range_event (GtkWidget *widget,
   GtkRangePrivate *priv = range->priv;
   gdouble x, y;
 
-  if (event->type == GDK_LEAVE_NOTIFY)
+  if (gdk_event_get_event_type (event) == GDK_LEAVE_NOTIFY)
     {
       priv->mouse_x = G_MININT;
       priv->mouse_y = G_MININT;
