@@ -83,7 +83,7 @@ gtk_gesture_swipe_filter_event (GtkEventController *controller,
                                 const GdkEvent     *event)
 {
   /* Let touchpad swipe events go through, only if they match n-points  */
-  if (event->type == GDK_TOUCHPAD_SWIPE)
+  if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_SWIPE)
     {
       guint n_points;
 

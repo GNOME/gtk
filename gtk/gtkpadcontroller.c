@@ -211,12 +211,13 @@ gtk_pad_controller_filter_event (GtkEventController *controller,
                                  const GdkEvent     *event)
 {
   GtkPadController *pad_controller = GTK_PAD_CONTROLLER (controller);
+  GdkEventType event_type = gdk_event_get_event_type (event);
 
-  if (event->type != GDK_PAD_BUTTON_PRESS &&
-      event->type != GDK_PAD_BUTTON_RELEASE &&
-      event->type != GDK_PAD_RING &&
-      event->type != GDK_PAD_STRIP &&
-      event->type != GDK_PAD_GROUP_MODE)
+  if (event_type != GDK_PAD_BUTTON_PRESS &&
+      event_type != GDK_PAD_BUTTON_RELEASE &&
+      event_type != GDK_PAD_RING &&
+      event_type != GDK_PAD_STRIP &&
+      event_type != GDK_PAD_GROUP_MODE)
     return TRUE;
 
   if (pad_controller->pad &&
@@ -231,11 +232,12 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
                                  const GdkEvent     *event)
 {
   GtkPadController *pad_controller = GTK_PAD_CONTROLLER (controller);
+  GdkEventType event_type = gdk_event_get_event_type (event);
   const GtkPadActionEntry *entry;
   GtkPadActionType type;
   gint index, mode;
 
-  if (event->type == GDK_PAD_GROUP_MODE)
+  if (event_type == GDK_PAD_GROUP_MODE)
     {
       gtk_pad_controller_handle_mode_switch (pad_controller,
                                              gdk_event_get_source_device (event),
@@ -244,7 +246,7 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
       return GDK_EVENT_PROPAGATE;
     }
 
-  switch (event->type)
+  switch (event_type)
     {
     case GDK_PAD_BUTTON_PRESS:
       type = GTK_PAD_ACTION_BUTTON;
@@ -253,7 +255,7 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
       break;
     case GDK_PAD_RING:
     case GDK_PAD_STRIP:
-      type = event->type == GDK_PAD_RING ?
+      type = event_type == GDK_PAD_RING ?
         GTK_PAD_ACTION_RING : GTK_PAD_ACTION_STRIP;
       index = event->pad_axis.index;
       mode = event->pad_axis.mode;
@@ -267,8 +269,8 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
   if (!entry)
     return GDK_EVENT_PROPAGATE;
 
-  if (event->type == GDK_PAD_RING ||
-      event->type == GDK_PAD_STRIP)
+  if (event_type == GDK_PAD_RING ||
+      event_type == GDK_PAD_STRIP)
     {
       gtk_pad_controller_activate_action_with_axis (pad_controller, entry,
                                                     event->pad_axis.value);

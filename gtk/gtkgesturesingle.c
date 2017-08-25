@@ -137,8 +137,9 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   GtkGestureSinglePrivate *priv;
   GdkDevice *source_device;
   GdkInputSource source;
-  guint button = 0, i;
+  guint button = 0, state, i;
   gboolean retval, test_touchscreen = FALSE;
+  GdkEventType event_type;
 
   source_device = gdk_event_get_source_device (event);
 
@@ -151,7 +152,9 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   if (source != GDK_SOURCE_TOUCHSCREEN)
     test_touchscreen = gtk_simulate_touchscreen ();
 
-  switch (event->type)
+  event_type = gdk_event_get_event_type (event);
+
+  switch (event_type)
     {
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_END:
@@ -159,7 +162,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       if (priv->exclusive && !event->touch.emulating_pointer)
         return FALSE;
 
-      sequence = event->touch.sequence;
+      sequence = gdk_event_get_event_sequence (event);
       button = 1;
       break;
     case GDK_BUTTON_PRESS:
@@ -167,23 +170,25 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       if (priv->touch_only && !test_touchscreen && source != GDK_SOURCE_TOUCHSCREEN)
         return FALSE;
 
-      button = event->button.button;
+      gdk_event_get_button (event, &button);
       break;
     case GDK_MOTION_NOTIFY:
       if (!gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
         return FALSE;
       if (priv->touch_only && !test_touchscreen && source != GDK_SOURCE_TOUCHSCREEN)
         return FALSE;
+      if (!gdk_event_get_state (event, &state))
+        return FALSE;
 
       if (priv->current_button > 0 && priv->current_button <= 5 &&
-          (event->motion.state & (GDK_BUTTON1_MASK << (priv->current_button - 1))))
+          (state & (GDK_BUTTON1_MASK << (priv->current_button - 1))))
         button = priv->current_button;
       else if (priv->current_button == 0)
         {
           /* No current button, find out from the mask */
           for (i = 0; i < 3; i++)
             {
-              if ((event->motion.state & (GDK_BUTTON1_MASK << i)) == 0)
+              if ((state & (GDK_BUTTON1_MASK << i)) == 0)
                 continue;
               button = i + 1;
               break;
@@ -210,8 +215,8 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       return FALSE;
     }
 
-  if (event->type == GDK_BUTTON_PRESS || event->type == GDK_TOUCH_BEGIN ||
-      event->type == GDK_MOTION_NOTIFY || event->type == GDK_TOUCH_UPDATE)
+  if (event_type == GDK_BUTTON_PRESS || event_type == GDK_TOUCH_BEGIN ||
+      event_type == GDK_MOTION_NOTIFY || event_type == GDK_TOUCH_UPDATE)
     {
       if (!gtk_gesture_is_active (GTK_GESTURE (controller)))
         priv->current_sequence = sequence;
@@ -222,14 +227,14 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   retval = GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event);
 
   if (sequence == priv->current_sequence &&
-      (event->type == GDK_BUTTON_RELEASE || event->type == GDK_TOUCH_END))
+      (event_type == GDK_BUTTON_RELEASE || event_type == GDK_TOUCH_END))
     priv->current_button = 0;
   else if (priv->current_sequence == sequence &&
            !gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
     {
-      if (button == priv->current_button && event->type == GDK_BUTTON_PRESS)
+      if (button == priv->current_button && event_type == GDK_BUTTON_PRESS)
         priv->current_button = 0;
-      else if (sequence == priv->current_sequence && event->type == GDK_TOUCH_BEGIN)
+      else if (sequence == priv->current_sequence && event_type == GDK_TOUCH_BEGIN)
         priv->current_sequence = NULL;
     }
 
