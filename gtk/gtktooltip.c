@@ -690,7 +690,8 @@ find_topmost_widget_coords_from_event (GdkEvent *event,
   gdk_event_get_coords (event, &dx, &dy);
 
   /* Returns coordinates relative to tmp's allocation. */
-  tmp = _gtk_widget_find_at_coords (event->any.window, dx, dy, &tx, &ty);
+  tmp = _gtk_widget_find_at_coords (gdk_event_get_window (event),
+                                    dx, dy, &tx, &ty);
 
   if (!tmp)
     return NULL;
@@ -1406,12 +1407,13 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
 
   /* Returns coordinates relative to has_tooltip_widget's allocation. */
   has_tooltip_widget = find_topmost_widget_coords_from_event (event, &x, &y);
-  display = gdk_window_get_display (event->any.window);
+  display = gdk_window_get_display (gdk_event_get_window (event));
   current_tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   if (current_tooltip)
     {
-      gtk_tooltip_set_last_window (current_tooltip, event->any.window);
+      gtk_tooltip_set_last_window (current_tooltip,
+                                   gdk_event_get_window (event));
     }
 
   if (current_tooltip && current_tooltip->keyboard_mode_enabled)
@@ -1435,7 +1437,7 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
     }
 
   /* Always poll for a next motion event */
-  gdk_event_request_motions (&event->motion);
+  gdk_event_request_motions ((GdkEventMotion *) event);
 
   /* Hide the tooltip when there's no new tooltip widget */
   if (!has_tooltip_widget)
@@ -1446,7 +1448,7 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
       return;
     }
 
-  switch (event->type)
+  switch (gdk_event_get_event_type (event))
     {
       case GDK_BUTTON_PRESS:
       case GDK_2BUTTON_PRESS:
@@ -1475,7 +1477,7 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
                                      &x, &y);
 
 	    /* Leave notify should override the query function */
-	    hide_tooltip = (event->type == GDK_LEAVE_NOTIFY);
+	    hide_tooltip = (gdk_event_get_event_type (event) == GDK_LEAVE_NOTIFY);
 
 	    /* Is the pointer above another widget now? */
 	    if (GTK_TOOLTIP_VISIBLE (current_tooltip))
@@ -1505,7 +1507,8 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
 			      G_CALLBACK (gtk_tooltip_display_closed),
 			      current_tooltip);
 
-	    gtk_tooltip_set_last_window (current_tooltip, event->any.window);
+	    gtk_tooltip_set_last_window (current_tooltip,
+                                         gdk_event_get_window (event));
 
 	    gtk_tooltip_start_delay (display);
 	  }
