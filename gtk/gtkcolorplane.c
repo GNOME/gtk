@@ -333,23 +333,28 @@ plane_key_press (GtkWidget   *widget,
 {
   GtkColorPlane *plane = GTK_COLOR_PLANE (widget);
   gdouble step;
+  guint keyval, state;
 
-  if ((event->state & GDK_MOD1_MASK) != 0)
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
+    return GDK_EVENT_PROPAGATE;
+
+  if ((state & GDK_MOD1_MASK) != 0)
     step = 0.1;
   else
     step = 0.01;
 
-  if (event->keyval == GDK_KEY_Up ||
-      event->keyval == GDK_KEY_KP_Up)
+  if (keyval == GDK_KEY_Up ||
+      keyval == GDK_KEY_KP_Up)
     sv_move (plane, step, 0);
-  else if (event->keyval == GDK_KEY_Down ||
-           event->keyval == GDK_KEY_KP_Down)
+  else if (keyval == GDK_KEY_Down ||
+           keyval == GDK_KEY_KP_Down)
     sv_move (plane, -step, 0);
-  else if (event->keyval == GDK_KEY_Left ||
-           event->keyval == GDK_KEY_KP_Left)
+  else if (keyval == GDK_KEY_Left ||
+           keyval == GDK_KEY_KP_Left)
     sv_move (plane, 0, -step);
-  else if (event->keyval == GDK_KEY_Right ||
-           event->keyval == GDK_KEY_KP_Right)
+  else if (keyval == GDK_KEY_Right ||
+           keyval == GDK_KEY_KP_Right)
     sv_move (plane, 0, step);
   else
     return GTK_WIDGET_CLASS (gtk_color_plane_parent_class)->key_press_event (widget, event);
