@@ -4467,8 +4467,10 @@ gtk_tree_view_motion (GtkWidget      *widget,
   gint new_y;
   GList *list;
   gboolean cursor_set = FALSE;
+  gdouble x, y;
 
   tree_view = (GtkTreeView *) widget;
+  gdk_event_get_coords ((GdkEvent *) event, &x, &y);
 
   if (tree_view->priv->tree)
     {
@@ -4477,20 +4479,20 @@ gtk_tree_view_motion (GtkWidget      *widget,
           gtk_gesture_is_active (tree_view->priv->multipress_gesture))
         node = NULL;
 
-      new_y = MAX (0, TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, event->y));
+      new_y = MAX (0, TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y));
 
       _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
-      tree_view->priv->event_last_x = event->x;
-      tree_view->priv->event_last_y = event->y;
-      prelight_or_select (tree_view, tree, node, event->x, event->y);
+      tree_view->priv->event_last_x = x;
+      tree_view->priv->event_last_y = y;
+      prelight_or_select (tree_view, tree, node, x, y);
     }
 
   for (list = tree_view->priv->columns; list; list = list->next)
     {
       GtkTreeViewColumn *column = list->data;
 
-      if (_gtk_tree_view_column_coords_in_resize_rect (column, event->x, event->y))
+      if (_gtk_tree_view_column_coords_in_resize_rect (column, x, y))
         {
           GdkDisplay *display = gtk_widget_get_display (widget);
           GdkCursor *cursor = gdk_cursor_new_from_name (display, "col-resize");
@@ -5591,10 +5593,15 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 {
   GtkTreeView *tree_view = (GtkTreeView *) widget;
   GtkWidget   *button;
+  guint        keyval, state;
+
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
+    return GDK_EVENT_PROPAGATE;
 
   if (tree_view->priv->rubber_band_status)
     {
-      if (event->keyval == GDK_KEY_Escape)
+      if (keyval == GDK_KEY_Escape)
 	gtk_tree_view_stop_rubber_band (tree_view);
 
       return TRUE;
@@ -5602,7 +5609,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
   if (tree_view->priv->in_column_drag)
     {
-      if (event->keyval == GDK_KEY_Escape)
+      if (keyval == GDK_KEY_Escape)
         gtk_gesture_set_state (GTK_GESTURE (tree_view->priv->column_drag_gesture),
                                GTK_EVENT_SEQUENCE_DENIED);
       return TRUE;
@@ -5627,9 +5634,9 @@ gtk_tree_view_key_press (GtkWidget   *widget,
         }
 
       if (focus_column &&
-          (event->state & GDK_SHIFT_MASK) && (event->state & GDK_MOD1_MASK) &&
-          (event->keyval == GDK_KEY_Left || event->keyval == GDK_KEY_KP_Left
-           || event->keyval == GDK_KEY_Right || event->keyval == GDK_KEY_KP_Right))
+          (state & GDK_SHIFT_MASK) && (state & GDK_MOD1_MASK) &&
+          (keyval == GDK_KEY_Left || keyval == GDK_KEY_KP_Left
+           || keyval == GDK_KEY_Right || keyval == GDK_KEY_KP_Right))
         {
           GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (focus_column->data);
           gint column_width;
@@ -5642,13 +5649,13 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
 	  column_width = gtk_tree_view_column_get_width (column);
 
-          if (event->keyval == (rtl ? GDK_KEY_Right : GDK_KEY_Left)
-              || event->keyval == (rtl ? GDK_KEY_KP_Right : GDK_KEY_KP_Left))
+          if (keyval == (rtl ? GDK_KEY_Right : GDK_KEY_Left)
+              || keyval == (rtl ? GDK_KEY_KP_Right : GDK_KEY_KP_Left))
             {
 	      column_width = MAX (column_width - 2, 0);
             }
-          else if (event->keyval == (rtl ? GDK_KEY_Left : GDK_KEY_Right)
-                   || event->keyval == (rtl ? GDK_KEY_KP_Left : GDK_KEY_KP_Right))
+          else if (keyval == (rtl ? GDK_KEY_Left : GDK_KEY_Right)
+                   || keyval == (rtl ? GDK_KEY_KP_Left : GDK_KEY_KP_Right))
             {
 	      column_width = column_width + 2;
             }
@@ -5659,16 +5666,16 @@ gtk_tree_view_key_press (GtkWidget   *widget,
         }
 
       if (focus_column &&
-          (event->state & GDK_MOD1_MASK) &&
-          (event->keyval == GDK_KEY_Left || event->keyval == GDK_KEY_KP_Left
-           || event->keyval == GDK_KEY_Right || event->keyval == GDK_KEY_KP_Right
-           || event->keyval == GDK_KEY_Home || event->keyval == GDK_KEY_KP_Home
-           || event->keyval == GDK_KEY_End || event->keyval == GDK_KEY_KP_End))
+          (state & GDK_MOD1_MASK) &&
+          (keyval == GDK_KEY_Left || keyval == GDK_KEY_KP_Left
+           || keyval == GDK_KEY_Right || keyval == GDK_KEY_KP_Right
+           || keyval == GDK_KEY_Home || keyval == GDK_KEY_KP_Home
+           || keyval == GDK_KEY_End || keyval == GDK_KEY_KP_End))
         {
           GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (focus_column->data);
 
-          if (event->keyval == (rtl ? GDK_KEY_Right : GDK_KEY_Left)
-              || event->keyval == (rtl ? GDK_KEY_KP_Right : GDK_KEY_KP_Left))
+          if (keyval == (rtl ? GDK_KEY_Right : GDK_KEY_Left)
+              || keyval == (rtl ? GDK_KEY_KP_Right : GDK_KEY_KP_Left))
             {
               GtkTreeViewColumn *col;
               col = gtk_tree_view_get_drop_column (tree_view, column, DROP_LEFT);
@@ -5677,8 +5684,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
               else
                 gtk_widget_error_bell (widget);
             }
-          else if (event->keyval == (rtl ? GDK_KEY_Left : GDK_KEY_Right)
-                   || event->keyval == (rtl ? GDK_KEY_KP_Left : GDK_KEY_KP_Right))
+          else if (keyval == (rtl ? GDK_KEY_Left : GDK_KEY_Right)
+                   || keyval == (rtl ? GDK_KEY_KP_Left : GDK_KEY_KP_Right))
             {
               GtkTreeViewColumn *col;
               col = gtk_tree_view_get_drop_column (tree_view, column, DROP_RIGHT);
@@ -5687,7 +5694,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
               else
                 gtk_widget_error_bell (widget);
             }
-          else if (event->keyval == GDK_KEY_Home || event->keyval == GDK_KEY_KP_Home)
+          else if (keyval == GDK_KEY_Home || keyval == GDK_KEY_KP_Home)
             {
               GtkTreeViewColumn *col;
               col = gtk_tree_view_get_drop_column (tree_view, column, DROP_HOME);
@@ -5696,7 +5703,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
               else
                 gtk_widget_error_bell (widget);
             }
-          else if (event->keyval == GDK_KEY_End || event->keyval == GDK_KEY_KP_End)
+          else if (keyval == GDK_KEY_End || keyval == GDK_KEY_KP_End)
             {
               GtkTreeViewColumn *col;
               col = gtk_tree_view_get_drop_column (tree_view, column, DROP_END);
@@ -5729,7 +5736,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
   if (gtk_widget_has_focus (GTK_WIDGET (tree_view))
       && tree_view->priv->enable_search
       && !tree_view->priv->search_custom_entry_set
-      && !gtk_tree_view_search_key_cancels_search (event->keyval))
+      && !gtk_tree_view_search_key_cancels_search (keyval))
     {
       GtkWidget *search_window;
 
@@ -5814,23 +5821,25 @@ gtk_tree_view_enter_notify (GtkWidget        *widget,
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkRBTree *tree;
   GtkRBNode *node;
+  gdouble x, y;
   gint new_y;
 
-  if (tree_view->priv->tree == NULL)
+  if (tree_view->priv->tree == NULL ||
+      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
     return FALSE;
 
   /* find the node internally */
-  new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, event->y);
+  new_y = TREE_WINDOW_Y_TO_RBTREE_Y(tree_view, y);
   if (new_y < 0)
     new_y = 0;
   _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
-  tree_view->priv->event_last_x = event->x;
-  tree_view->priv->event_last_y = event->y;
+  tree_view->priv->event_last_x = x;
+  tree_view->priv->event_last_y = y;
 
   if ((tree_view->priv->button_pressed_node == NULL) ||
       (tree_view->priv->button_pressed_node == node))
-    prelight_or_select (tree_view, tree, node, event->x, event->y);
+    prelight_or_select (tree_view, tree, node, x, y);
 
   return TRUE;
 }
@@ -14547,7 +14556,7 @@ gtk_tree_view_search_button_press_event (GtkWidget *widget,
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  keyb_device = gdk_device_get_associated_device (event->device);
+  keyb_device = gdk_device_get_associated_device (gdk_event_get_device ((GdkEvent *) event));
   gtk_tree_view_search_window_hide (widget, tree_view, keyb_device);
 
   return TRUE;
@@ -14559,13 +14568,17 @@ gtk_tree_view_search_scroll_event (GtkWidget *widget,
 				   GtkTreeView *tree_view)
 {
   gboolean retval = FALSE;
+  GdkScrollDirection direction;
 
-  if (event->direction == GDK_SCROLL_UP)
+  if (!gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
+    return retval;
+
+  if (direction == GDK_SCROLL_UP)
     {
       gtk_tree_view_search_move (widget, tree_view, TRUE);
       retval = TRUE;
     }
-  else if (event->direction == GDK_SCROLL_DOWN)
+  else if (direction == GDK_SCROLL_DOWN)
     {
       gtk_tree_view_search_move (widget, tree_view, FALSE);
       retval = TRUE;
@@ -14593,13 +14606,18 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
 {
   GdkModifierType default_accel;
   gboolean        retval = FALSE;
+  guint           keyval, state;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
+    return GDK_EVENT_PROPAGATE;
+
   /* close window and cancel the search */
   if (!tree_view->priv->search_custom_entry_set
-      && gtk_tree_view_search_key_cancels_search (event->keyval))
+      && gtk_tree_view_search_key_cancels_search (keyval))
     {
       gtk_tree_view_search_window_hide (widget, tree_view,
                                         gdk_event_get_device ((GdkEvent *) event));
@@ -14610,7 +14628,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
                                                 GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
 
   /* select previous matching iter */
-  if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_KP_Up)
+  if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up)
     {
       if (!gtk_tree_view_search_move (widget, tree_view, TRUE))
         gtk_widget_error_bell (widget);
@@ -14618,8 +14636,8 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
       retval = TRUE;
     }
 
-  if (((event->state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK))
-      && (event->keyval == GDK_KEY_g || event->keyval == GDK_KEY_G))
+  if (((state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK))
+      && (keyval == GDK_KEY_g || keyval == GDK_KEY_G))
     {
       if (!gtk_tree_view_search_move (widget, tree_view, TRUE))
         gtk_widget_error_bell (widget);
@@ -14628,7 +14646,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
     }
 
   /* select next matching iter */
-  if (event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down)
+  if (keyval == GDK_KEY_Down || keyval == GDK_KEY_KP_Down)
     {
       if (!gtk_tree_view_search_move (widget, tree_view, FALSE))
         gtk_widget_error_bell (widget);
@@ -14636,8 +14654,8 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
       retval = TRUE;
     }
 
-  if (((event->state & (default_accel | GDK_SHIFT_MASK)) == default_accel)
-      && (event->keyval == GDK_KEY_g || event->keyval == GDK_KEY_G))
+  if (((state & (default_accel | GDK_SHIFT_MASK)) == default_accel)
+      && (keyval == GDK_KEY_g || keyval == GDK_KEY_G))
     {
       if (!gtk_tree_view_search_move (widget, tree_view, FALSE))
         gtk_widget_error_bell (widget);

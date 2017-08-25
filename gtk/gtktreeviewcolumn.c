@@ -1017,24 +1017,30 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 {
   GtkTreeViewColumn        *column = (GtkTreeViewColumn *) data;
   GtkTreeViewColumnPrivate *priv   = column->priv;
+  GdkEventType              event_type;
 
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (event->type == GDK_BUTTON_PRESS &&
+  event_type = gdk_event_get_event_type (event);
+
+  if (event_type == GDK_BUTTON_PRESS &&
       priv->reorderable &&
       ((GdkEventButton *)event)->button == GDK_BUTTON_PRIMARY)
     {
+      gdouble x, y;
+
+      gdk_event_get_coords (event, &x, &y);
       priv->maybe_reordered = TRUE;
-      priv->drag_x = event->button.x;
-      priv->drag_y = event->button.y;
+      priv->drag_x = x;
+      priv->drag_y = y;
       gtk_widget_grab_focus (widget);
     }
 
-  if (event->type == GDK_BUTTON_RELEASE ||
-      event->type == GDK_LEAVE_NOTIFY)
+  if (event_type == GDK_BUTTON_RELEASE ||
+      event_type == GDK_LEAVE_NOTIFY)
     priv->maybe_reordered = FALSE;
   
-  if (event->type == GDK_MOTION_NOTIFY &&
+  if (event_type == GDK_MOTION_NOTIFY &&
       priv->maybe_reordered &&
       (gtk_drag_check_threshold (widget,
 				 priv->drag_x,
@@ -1044,13 +1050,13 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
     {
       priv->maybe_reordered = FALSE;
       _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (priv->tree_view), column,
-                                        event->motion.device);
+                                        gdk_event_get_device (event));
       return TRUE;
     }
 
   if (priv->clickable == FALSE)
     {
-      switch (event->type)
+      switch (event_type)
 	{
 	case GDK_BUTTON_PRESS:
 	case GDK_2BUTTON_PRESS:
