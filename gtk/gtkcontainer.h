@@ -138,11 +138,6 @@ GDK_AVAILABLE_IN_ALL
 GList*   gtk_container_get_children     (GtkContainer       *container);
 
 GDK_AVAILABLE_IN_ALL
-void     gtk_container_propagate_draw   (GtkContainer   *container,
-					 GtkWidget      *child,
-					 cairo_t        *cr);
-
-GDK_AVAILABLE_IN_ALL
 void     gtk_container_set_focus_chain  (GtkContainer   *container,
                                          GList          *focusable_widgets);
 GDK_AVAILABLE_IN_ALL
