@@ -1383,7 +1383,7 @@ gtk_popover_button_press (GtkWidget      *widget,
 {
   GtkPopover *popover = GTK_POPOVER (widget);
 
-  if (event->type != GDK_BUTTON_PRESS)
+  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_BUTTON_PRESS)
     return GDK_EVENT_PROPAGATE;
 
   popover->priv->button_pressed = TRUE;
@@ -1398,18 +1398,20 @@ gtk_popover_button_release (GtkWidget      *widget,
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkAllocation child_alloc;
   GtkWidget *child;
+  gdouble x, y;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
-  if (!popover->priv->button_pressed)
+  if (!popover->priv->button_pressed ||
+      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
     return GDK_EVENT_PROPAGATE;
 
   gtk_widget_get_allocation (child, &child_alloc);
 
-  if (event->x < child_alloc.x ||
-      event->x > child_alloc.x + child_alloc.width ||
-      event->y < child_alloc.y ||
-      event->y > child_alloc.y + child_alloc.height)
+  if (x < child_alloc.x ||
+      x > child_alloc.x + child_alloc.width ||
+      y < child_alloc.y ||
+      y > child_alloc.y + child_alloc.height)
     gtk_popover_popdown (popover);
 
   return GDK_EVENT_PROPAGATE;
@@ -1420,8 +1422,12 @@ gtk_popover_key_press (GtkWidget   *widget,
                        GdkEventKey *event)
 {
   GtkWidget *toplevel, *focus;
+  guint keyval;
 
-  if (event->keyval == GDK_KEY_Escape)
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+    return GDK_EVENT_PROPAGATE;
+
+  if (keyval == GDK_KEY_Escape)
     {
       gtk_popover_popdown (GTK_POPOVER (widget));
       return GDK_EVENT_STOP;
