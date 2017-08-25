@@ -2265,7 +2265,7 @@ gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
-  if (event->type != GDK_BUTTON_PRESS || !priv->children)
+  if (gdk_event_get_event_type (event) != GDK_BUTTON_PRESS || !priv->children)
     return;
 
   arrow = gtk_notebook_get_arrow (notebook, x, y);
@@ -2549,7 +2549,7 @@ gtk_notebook_gesture_released (GtkGestureMultiPress *gesture,
   if (!event)
     return;
 
-  if (event->type != GDK_BUTTON_RELEASE)
+  if (gdk_event_get_event_type (event) != GDK_BUTTON_RELEASE)
     return;
 
   if (priv->pressed_button != button)
@@ -2663,22 +2663,26 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
+  gdouble x, y;
+  guint state;
 
   page = priv->cur_page;
 
 
-  if (!page)
+  if (!page ||
+      !gdk_event_get_state ((GdkEvent *) event, &state) ||
+      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
     return FALSE;
 
-  if (!(event->state & GDK_BUTTON1_MASK) &&
+  if (!(state & GDK_BUTTON1_MASK) &&
       priv->pressed_button != 0)
     {
       gtk_notebook_stop_reorder (notebook);
       stop_scrolling (notebook);
     }
 
-  priv->mouse_x = event->x;
-  priv->mouse_y = event->y;
+  priv->mouse_x = x;
+  priv->mouse_y = y;
 
   if (priv->pressed_button == 0)
     return FALSE;
