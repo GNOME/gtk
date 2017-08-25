@@ -187,6 +187,9 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
                               GtkTextHandle *handle)
 {
   GtkTextHandlePrivate *priv;
+  GdkEventType event_type;
+  gdouble event_x, event_y;
+  guint state;
   gint pos;
 
   priv = handle->priv;
@@ -195,31 +198,35 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
   if (pos < 0)
     return FALSE;
 
-  if (event->type == GDK_BUTTON_PRESS)
+  event_type = gdk_event_get_event_type (event);
+  gdk_event_get_coords (event, &event_x, &event_y);
+
+  if (event_type == GDK_BUTTON_PRESS)
     {
-      priv->windows[pos].dx = event->button.x;
-      priv->windows[pos].dy = event->button.y;
+      priv->windows[pos].dx = event_x;
+      priv->windows[pos].dy = event_y;
       priv->windows[pos].dragged = TRUE;
       gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
       g_signal_emit (handle, signals[DRAG_STARTED], 0, pos);
     }
-  else if (event->type == GDK_BUTTON_RELEASE)
+  else if (event_type == GDK_BUTTON_RELEASE)
     {
       g_signal_emit (handle, signals[DRAG_FINISHED], 0, pos);
       priv->windows[pos].dragged = FALSE;
       gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
     }
-  else if (event->type == GDK_ENTER_NOTIFY)
+  else if (event_type == GDK_ENTER_NOTIFY)
     gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_PRELIGHT);
-  else if (event->type == GDK_LEAVE_NOTIFY)
+  else if (event_type == GDK_LEAVE_NOTIFY)
     {
       if (!priv->windows[pos].dragged &&
           (event->crossing.mode == GDK_CROSSING_NORMAL ||
            event->crossing.mode == GDK_CROSSING_UNGRAB))
         gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_PRELIGHT);
     }
-  else if (event->type == GDK_MOTION_NOTIFY &&
-           event->motion.state & GDK_BUTTON1_MASK &&
+  else if (event_type == GDK_MOTION_NOTIFY &&
+           gdk_event_get_state (event, &state) &&
+           state & GDK_BUTTON1_MASK &&
            priv->windows[pos].dragged)
     {
       gint x, y, handle_width, handle_height;
@@ -235,8 +242,8 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
                                         priv->windows[pos].widget,
                                         NULL, &rect);
 
-      x = rect.x + event->motion.x - priv->windows[pos].dx;
-      y = rect.y + event->motion.y - priv->windows[pos].dy +
+      x = rect.x + event_x - priv->windows[pos].dx;
+      y = rect.y + event_y - priv->windows[pos].dy +
         priv->windows[pos].border.top / 2;
 
       if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
