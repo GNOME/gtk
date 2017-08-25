@@ -188,9 +188,13 @@ get_app_info_for_event (GtkAppChooserWidget *self,
   GtkTreeModel *model;
   GAppInfo *info;
   gboolean recommended;
+  gdouble x, y;
+
+  if (!gdk_event_get_coords ((GdkEvent *) event, &x, &y))
+    return GDK_EVENT_PROPAGATE;
 
   if (!gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (self->priv->program_list),
-                                      event->x, event->y,
+                                      x, y,
                                       &path,
                                       NULL, NULL, NULL))
     return NULL;
@@ -230,8 +234,11 @@ widget_button_press_event_cb (GtkWidget      *widget,
                               gpointer        user_data)
 {
   GtkAppChooserWidget *self = user_data;
+  guint button;
 
-  if (event->button == GDK_BUTTON_SECONDARY && event->type == GDK_BUTTON_PRESS)
+  if (gdk_event_get_button ((GdkEvent *) event, &button) &&
+      button == GDK_BUTTON_SECONDARY &&
+      gdk_event_get_event_type ((GdkEvent *) event) == GDK_BUTTON_PRESS)
     {
       GAppInfo *info;
       GtkWidget *menu;
