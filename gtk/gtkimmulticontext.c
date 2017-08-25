@@ -353,28 +353,30 @@ gtk_im_multicontext_filter_keypress (GtkIMContext *context,
 {
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMContext *slave = gtk_im_multicontext_get_slave (multicontext);
+  guint keyval, state;
 
   if (slave)
     {
       return gtk_im_context_filter_keypress (slave, event);
     }
-  else
+  else if (gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
+           gdk_event_get_state ((GdkEvent *) event, &state))
     {
       GdkDisplay *display;
       GdkModifierType no_text_input_mask;
 
-      display = gdk_window_get_display (event->window);
+      display = gdk_window_get_display (gdk_event_get_window ((GdkEvent *) event));
 
       no_text_input_mask =
         gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
                                       GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
-      if (event->type == GDK_KEY_PRESS &&
-          (event->state & no_text_input_mask) == 0)
+      if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_PRESS &&
+          (state & no_text_input_mask) == 0)
         {
           gunichar ch;
 
-          ch = gdk_keyval_to_unicode (event->keyval);
+          ch = gdk_keyval_to_unicode (keyval);
           if (ch != 0 && !g_unichar_iscntrl (ch))
             {
               gint len;
