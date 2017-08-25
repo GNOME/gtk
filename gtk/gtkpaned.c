@@ -312,12 +312,14 @@ gtk_paned_motion_notify (GtkWidget      *widget,
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
   GdkRectangle handle_area;
   GdkDisplay *display;
+  gdouble x, y;
 
   get_handle_area (paned, &handle_area);
   display = gtk_widget_get_display (widget);
 
-  if (gdk_rectangle_contains_point (&handle_area, event->x, event->y) ||
-      priv->panning)
+  if (gdk_event_get_coords ((GdkEvent *) event, &x, &y) &&
+      (gdk_rectangle_contains_point (&handle_area, x, y) ||
+       priv->panning))
     {
       GdkCursor *cursor;
 
@@ -765,7 +767,7 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
   device = gdk_event_get_source_device (event);
   priv->panning = FALSE;
 
-  is_touch = (event->type == GDK_TOUCH_BEGIN ||
+  is_touch = (gdk_event_get_event_type (event) == GDK_TOUCH_BEGIN ||
               gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN);
 
   get_handle_area (paned, &handle_area);
