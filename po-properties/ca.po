@@ -2501,7 +2501,7 @@ msgstr "Icona emoji"
 
 #: gtk/gtkentry.c:1394
 msgid "Whether to show an icon for Emoji"
-msgstr "Si es mostrarà una icona pel emoji"
+msgstr "Si es mostrarà una icona per l'emoji"
 
 #: gtk/gtkentrycompletion.c:349
 msgid "Completion Model"
