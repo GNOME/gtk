@@ -1713,7 +1713,7 @@ on_button_press_event (GtkPlacesViewRow *row,
 {
   if (row &&
       gdk_event_triggers_context_menu ((GdkEvent*) event) &&
-      event->type == GDK_BUTTON_PRESS)
+      gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
     {
       popup_menu (row, event);
 
@@ -1729,19 +1729,22 @@ on_key_press_event (GtkWidget     *widget,
                     GtkPlacesView *view)
 {
   GtkPlacesViewPrivate *priv;
+  guint keyval, state;
 
   priv = gtk_places_view_get_instance_private (view);
 
-  if (event)
+  if (event &&
+      gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
+      gdk_event_get_state ((GdkEvent *) event, &state))
     {
       guint modifiers;
 
       modifiers = gtk_accelerator_get_default_mod_mask ();
 
-      if (event->keyval == GDK_KEY_Return ||
-          event->keyval == GDK_KEY_KP_Enter ||
-          event->keyval == GDK_KEY_ISO_Enter ||
-          event->keyval == GDK_KEY_space)
+      if (keyval == GDK_KEY_Return ||
+          keyval == GDK_KEY_KP_Enter ||
+          keyval == GDK_KEY_ISO_Enter ||
+          keyval == GDK_KEY_space)
         {
           GtkWidget *focus_widget;
           GtkWindow *toplevel;
@@ -1757,9 +1760,9 @@ on_key_press_event (GtkWidget     *widget,
           if (!GTK_IS_PLACES_VIEW_ROW (focus_widget))
             return FALSE;
 
-          if ((event->state & modifiers) == GDK_SHIFT_MASK)
+          if ((state & modifiers) == GDK_SHIFT_MASK)
             priv->current_open_flags = GTK_PLACES_OPEN_NEW_TAB;
-          else if ((event->state & modifiers) == GDK_CONTROL_MASK)
+          else if ((state & modifiers) == GDK_CONTROL_MASK)
             priv->current_open_flags = GTK_PLACES_OPEN_NEW_WINDOW;
 
           activate_row (view, GTK_PLACES_VIEW_ROW (focus_widget), priv->current_open_flags);
