@@ -500,23 +500,30 @@ resize_by_scroll_cb (GtkWidget      *scrolled_window,
   GtkFontChooserWidget *fc = user_data;
   GtkFontChooserWidgetPrivate *priv = fc->priv;
   GtkAdjustment *adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin));
+  GdkScrollDirection direction;
+  gdouble delta_x, delta_y;
 
-  if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_RIGHT)
+  if (!gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
+    return GDK_EVENT_PROPAGATE;
+
+  gdk_event_get_scroll_deltas ((GdkEvent *) event, &delta_x, &delta_y);
+
+  if (direction == GDK_SCROLL_UP || direction == GDK_SCROLL_RIGHT)
     gtk_adjustment_set_value (adj,
                               gtk_adjustment_get_value (adj) +
                               gtk_adjustment_get_step_increment (adj));
-  else if (event->direction == GDK_SCROLL_DOWN || event->direction == GDK_SCROLL_LEFT)
+  else if (direction == GDK_SCROLL_DOWN || direction == GDK_SCROLL_LEFT)
     gtk_adjustment_set_value (adj,
                               gtk_adjustment_get_value (adj) -
                               gtk_adjustment_get_step_increment (adj));
-  else if (event->direction == GDK_SCROLL_SMOOTH && event->delta_x != 0.0)
+  else if (direction == GDK_SCROLL_SMOOTH && delta_x != 0.0)
     gtk_adjustment_set_value (adj,
                               gtk_adjustment_get_value (adj) +
-                              gtk_adjustment_get_step_increment (adj) * event->delta_x);
-  else if (event->direction == GDK_SCROLL_SMOOTH && event->delta_y != 0.0)
+                              gtk_adjustment_get_step_increment (adj) * delta_x);
+  else if (direction == GDK_SCROLL_SMOOTH && delta_y != 0.0)
     gtk_adjustment_set_value (adj,
                               gtk_adjustment_get_value (adj) -
-                              gtk_adjustment_get_step_increment (adj) * event->delta_y);
+                              gtk_adjustment_get_step_increment (adj) * delta_y);
 
   return TRUE;
 }
