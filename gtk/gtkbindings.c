@@ -1594,7 +1594,7 @@ gtk_bindings_activate_event (GObject     *object,
                                   event->group);
 
   handled = gtk_bindings_activate_list (object, entries,
-                                        event->type == GDK_KEY_RELEASE);
+                                        gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE);
 
   g_slist_free (entries);
 
