@@ -3235,12 +3235,16 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
     return TRUE; /* clicked outside window? */
 
   gtk_tree_model_get_iter (priv->model, &iter, path);
+
+  /* Use iter before popdown, as mis-users like GtkFileChooserButton alter the
+   * model during notify::popped-up, which means the iterator becomes invalid.
+   */
+  if (tree_column_row_is_sensitive (combo_box, &iter))
+    gtk_combo_box_set_active_internal (combo_box, path);
+
   gtk_tree_path_free (path);
 
   gtk_combo_box_popdown (combo_box);
-
-  if (tree_column_row_is_sensitive (combo_box, &iter))
-    gtk_combo_box_set_active_iter (combo_box, &iter);
 
   return TRUE;
 }
