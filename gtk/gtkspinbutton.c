@@ -1115,14 +1115,18 @@ gtk_spin_button_scroll (GtkWidget      *widget,
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin->priv;
+  GdkScrollDirection direction;
 
-  if (event->direction == GDK_SCROLL_UP)
+  if (!gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
+    return GDK_EVENT_PROPAGATE;
+
+  if (direction == GDK_SCROLL_UP)
     {
       if (!gtk_widget_has_focus (widget))
         gtk_widget_grab_focus (widget);
       gtk_spin_button_real_spin (spin, gtk_adjustment_get_step_increment (priv->adjustment));
     }
-  else if (event->direction == GDK_SCROLL_DOWN)
+  else if (direction == GDK_SCROLL_DOWN)
     {
       if (!gtk_widget_has_focus (widget))
         gtk_widget_grab_focus (widget);
