@@ -503,11 +503,15 @@ gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
   GtkEditable *editable;
   GdkModifierType state;
   gint start, end;
+  guint keyval;
 
   chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
 
-  if (event->keyval == GDK_KEY_Escape &&
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+    return GDK_EVENT_PROPAGATE;
+
+  if (keyval == GDK_KEY_Escape &&
       chooser_entry->eat_escape)
     {
       g_signal_emit (widget, signals[HIDE_ENTRY], 0);
@@ -517,7 +521,7 @@ gtk_file_chooser_entry_tab_handler (GtkWidget *widget,
   if (!chooser_entry->eat_tabs)
     return FALSE;
 
-  if (event->keyval != GDK_KEY_Tab)
+  if (keyval != GDK_KEY_Tab)
     return FALSE;
 
   if (gtk_get_current_event_state (&state) &&

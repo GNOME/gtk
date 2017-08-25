@@ -1274,15 +1274,19 @@ places_sidebar_show_error_message_cb (GtkPlacesSidebar *sidebar,
 static gboolean
 key_is_left_or_right (GdkEventKey *event)
 {
-  guint modifiers;
+  guint modifiers, keyval, state;
+
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
+    return FALSE;
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
 
-  return ((event->keyval == GDK_KEY_Right
-           || event->keyval == GDK_KEY_KP_Right
-           || event->keyval == GDK_KEY_Left
-           || event->keyval == GDK_KEY_KP_Left)
-          && (event->state & modifiers) == 0);
+  return ((keyval == GDK_KEY_Right
+           || keyval == GDK_KEY_KP_Right
+           || keyval == GDK_KEY_Left
+           || keyval == GDK_KEY_KP_Left)
+          && (state & modifiers) == 0);
 }
 
 static gboolean
@@ -1290,20 +1294,23 @@ should_trigger_location_entry (GtkFileChooserWidget *impl,
                                GdkEventKey          *event)
 {
   GdkModifierType no_text_input_mask;
+  guint keyval, state;
 
-  if (impl->priv->operation_mode == OPERATION_MODE_SEARCH)
+  if (impl->priv->operation_mode == OPERATION_MODE_SEARCH ||
+      !gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
     return FALSE;
 
   no_text_input_mask =
     gtk_widget_get_modifier_mask (GTK_WIDGET (impl), GDK_MODIFIER_INTENT_NO_TEXT_INPUT);
 
-  if ((event->keyval == GDK_KEY_slash
-       || event->keyval == GDK_KEY_KP_Divide
-       || event->keyval == GDK_KEY_period
+  if ((keyval == GDK_KEY_slash
+       || keyval == GDK_KEY_KP_Divide
+       || keyval == GDK_KEY_period
 #ifdef G_OS_UNIX
-       || event->keyval == GDK_KEY_asciitilde
+       || keyval == GDK_KEY_asciitilde
 #endif
-       ) && !(event->state & no_text_input_mask))
+       ) && !(state & no_text_input_mask))
     return TRUE;
 
   return FALSE;
@@ -1320,6 +1327,7 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+  guint keyval, state;
 
   if (should_trigger_location_entry (impl, event) &&
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
@@ -1335,12 +1343,16 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
         return TRUE;
     }
 
-  if ((event->keyval == GDK_KEY_Return
-       || event->keyval == GDK_KEY_ISO_Enter
-       || event->keyval == GDK_KEY_KP_Enter
-       || event->keyval == GDK_KEY_space
-       || event->keyval == GDK_KEY_KP_Space)
-      && !(event->state & gtk_accelerator_get_default_mod_mask ())
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
+    return GDK_EVENT_PROPAGATE;
+
+  if ((keyval == GDK_KEY_Return
+       || keyval == GDK_KEY_ISO_Enter
+       || keyval == GDK_KEY_KP_Enter
+       || keyval == GDK_KEY_space
+       || keyval == GDK_KEY_KP_Space)
+      && !(state & gtk_accelerator_get_default_mod_mask ())
       && !(priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
            priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
     {
@@ -1364,7 +1376,7 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
         }
     }
 
-  if (event->keyval == GDK_KEY_Escape &&
+  if (keyval == GDK_KEY_Escape &&
       priv->operation_mode == OPERATION_MODE_SEARCH)
     {
       gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event);
@@ -2370,15 +2382,18 @@ get_selection_modifiers (GtkWidget       *widget,
                          gboolean        *extend)
 {
   GdkModifierType mask;
+  guint state;
 
   *modify = FALSE;
   *extend = FALSE;
 
   mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
-  if ((event->state & mask) == mask)
+  gdk_event_get_state ((GdkEvent *) event, &state);
+
+  if ((state & mask) == mask)
     *modify = TRUE;
   mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-  if ((event->state & mask) == mask)
+  if ((state & mask) == mask)
     *extend = TRUE;
 }
 
@@ -2396,9 +2411,15 @@ list_button_press_event_cb (GtkWidget            *widget,
   GtkTreeViewColumn *column;
   GdkDevice *device;
   gboolean modify, extend, is_touchscreen;
+  guint button;
+  gdouble x, y;
 
   if (in_press)
     return FALSE;
+
+  if (!gdk_event_get_button ((GdkEvent *) event, &button) ||
+      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
+    return GDK_EVENT_PROPAGATE;
 
   device = gdk_event_get_source_device ((GdkEvent *) event);
   is_touchscreen = gtk_simulate_touchscreen () ||
@@ -2407,11 +2428,10 @@ list_button_press_event_cb (GtkWidget            *widget,
   get_selection_modifiers (widget, event, &modify, &extend);
   if (!is_touchscreen &&
       !modify && !extend &&
-      event->type == GDK_BUTTON_PRESS &&
-      event->button == GDK_BUTTON_PRIMARY &&
+      gdk_event_get_event_type ((GdkEvent *) event) == GDK_BUTTON_PRESS &&
+      button == GDK_BUTTON_PRIMARY &&
       gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (priv->browse_files_tree_view),
-                                     event->x, event->y,
-                                     &path, &column, NULL, NULL))
+                                     x, y, &path, &column, NULL, NULL))
     {
       GtkTreeSelection *selection;
 
@@ -2433,7 +2453,7 @@ list_button_press_event_cb (GtkWidget            *widget,
   gtk_widget_event (priv->browse_files_tree_view, (GdkEvent *) event);
   in_press = FALSE;
 
-  file_list_show_popover (impl, event->x, event->y);
+  file_list_show_popover (impl, x, y);
 
   return TRUE;
 }
