@@ -950,13 +950,14 @@ gtk_entry_completion_list_button_press (GtkWidget      *widget,
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
   GtkTreePath *path = NULL;
+  gdouble x, y;
 
-  if (!gtk_widget_get_mapped (completion->priv->popup_window))
+  if (!gtk_widget_get_mapped (completion->priv->popup_window) ||
+      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
     return FALSE;
 
   if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
-                                     event->x, event->y,
-                                     &path, NULL, NULL, NULL))
+                                     x, y, &path, NULL, NULL, NULL))
     {
       GtkTreeIter iter;
       gboolean entry_set;
@@ -993,15 +994,16 @@ gtk_entry_completion_action_button_press (GtkWidget      *widget,
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
   GtkTreePath *path = NULL;
+  gdouble x, y;
 
-  if (!gtk_widget_get_mapped (completion->priv->popup_window))
+  if (!gtk_widget_get_mapped (completion->priv->popup_window) ||
+      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
     return FALSE;
 
   gtk_entry_reset_im_context (GTK_ENTRY (completion->priv->entry));
 
   if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
-                                     event->x, event->y,
-                                     &path, NULL, NULL, NULL))
+                                     x, y, &path, NULL, NULL, NULL))
     {
       g_signal_emit (completion, entry_completion_signals[ACTION_ACTIVATED],
                      0, gtk_tree_path_get_indices (path)[0]);
@@ -2221,14 +2223,16 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 {
   gint matches, actions = 0;
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
+  guint keyval;
 
-  if (!completion->priv->popup_completion)
+  if (!completion->priv->popup_completion ||
+      !gdk_event_get_keyval ((GdkEvent *) event, &keyval))
     return FALSE;
 
-  if (event->keyval == GDK_KEY_Return ||
-      event->keyval == GDK_KEY_KP_Enter ||
-      event->keyval == GDK_KEY_ISO_Enter ||
-      event->keyval == GDK_KEY_Escape)
+  if (keyval == GDK_KEY_Return ||
+      keyval == GDK_KEY_KP_Enter ||
+      keyval == GDK_KEY_ISO_Enter ||
+      keyval == GDK_KEY_Escape)
     {
       if (completion->priv->completion_timeout)
         {
@@ -2245,25 +2249,25 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
   if (completion->priv->actions)
     actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
 
-  if (keyval_is_cursor_move (event->keyval))
+  if (keyval_is_cursor_move (keyval))
     {
       GtkTreePath *path = NULL;
 
-      if (event->keyval == GDK_KEY_Up || event->keyval == GDK_KEY_KP_Up)
+      if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up)
         {
           if (completion->priv->current_selected < 0)
             completion->priv->current_selected = matches + actions - 1;
           else
             completion->priv->current_selected--;
         }
-      else if (event->keyval == GDK_KEY_Down || event->keyval == GDK_KEY_KP_Down)
+      else if (keyval == GDK_KEY_Down || keyval == GDK_KEY_KP_Down)
         {
           if (completion->priv->current_selected < matches + actions - 1)
             completion->priv->current_selected++;
           else
             completion->priv->current_selected = -1;
         }
-      else if (event->keyval == GDK_KEY_Page_Up)
+      else if (keyval == GDK_KEY_Page_Up)
         {
           if (completion->priv->current_selected < 0)
             completion->priv->current_selected = matches + actions - 1;
@@ -2282,7 +2286,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
                 completion->priv->current_selected = matches - 1;
             }
         }
-      else if (event->keyval == GDK_KEY_Page_Down)
+      else if (keyval == GDK_KEY_Page_Down)
         {
           if (completion->priv->current_selected < 0)
             completion->priv->current_selected = 0;
@@ -2368,11 +2372,11 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 
       return TRUE;
     }
-  else if (event->keyval == GDK_KEY_Escape ||
-           event->keyval == GDK_KEY_Left ||
-           event->keyval == GDK_KEY_KP_Left ||
-           event->keyval == GDK_KEY_Right ||
-           event->keyval == GDK_KEY_KP_Right)
+  else if (keyval == GDK_KEY_Escape ||
+           keyval == GDK_KEY_Left ||
+           keyval == GDK_KEY_KP_Left ||
+           keyval == GDK_KEY_Right ||
+           keyval == GDK_KEY_KP_Right)
     {
       gboolean retval = TRUE;
 
@@ -2387,7 +2391,7 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
       else if (completion->priv->inline_selection)
         {
           /* Escape rejects the tentative completion */
-          if (event->keyval == GDK_KEY_Escape)
+          if (keyval == GDK_KEY_Escape)
             {
               if (completion->priv->completion_prefix)
                 gtk_entry_set_text (GTK_ENTRY (completion->priv->entry),
@@ -2397,9 +2401,9 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
             }
 
           /* Move the cursor to the end for Right/Esc */
-          if (event->keyval == GDK_KEY_Right ||
-              event->keyval == GDK_KEY_KP_Right ||
-              event->keyval == GDK_KEY_Escape)
+          if (keyval == GDK_KEY_Right ||
+              keyval == GDK_KEY_KP_Right ||
+              keyval == GDK_KEY_Escape)
             gtk_editable_set_position (GTK_EDITABLE (widget), -1);
           /* Let the default keybindings run for Left, i.e. either move to the
  *            * previous character or select word if a modifier is used */
@@ -2416,9 +2420,9 @@ keypress_completion_out:
 
       return retval;
     }
-  else if (event->keyval == GDK_KEY_Tab ||
-           event->keyval == GDK_KEY_KP_Tab ||
-           event->keyval == GDK_KEY_ISO_Left_Tab)
+  else if (keyval == GDK_KEY_Tab ||
+           keyval == GDK_KEY_KP_Tab ||
+           keyval == GDK_KEY_ISO_Left_Tab)
     {
       gtk_entry_reset_im_context (GTK_ENTRY (widget));
       _gtk_entry_completion_popdown (completion);
@@ -2428,9 +2432,9 @@ keypress_completion_out:
 
       return FALSE;
     }
-  else if (event->keyval == GDK_KEY_ISO_Enter ||
-           event->keyval == GDK_KEY_KP_Enter ||
-           event->keyval == GDK_KEY_Return)
+  else if (keyval == GDK_KEY_ISO_Enter ||
+           keyval == GDK_KEY_KP_Enter ||
+           keyval == GDK_KEY_Return)
     {
       GtkTreeIter iter;
       GtkTreeModel *model = NULL;
