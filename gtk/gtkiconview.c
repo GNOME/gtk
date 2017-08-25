@@ -1820,7 +1820,7 @@ gtk_icon_view_motion (GtkWidget      *widget,
       int width, height;
       gtk_icon_view_update_rubberband (icon_view);
       
-      abs_y = event->y - icon_view->priv->height *
+      abs_y = icon_view->priv->mouse_y - icon_view->priv->height *
 	(gtk_adjustment_get_value (icon_view->priv->vadjustment) /
 	 (gtk_adjustment_get_upper (icon_view->priv->vadjustment) -
 	  gtk_adjustment_get_lower (icon_view->priv->vadjustment)));
@@ -1834,8 +1834,8 @@ gtk_icon_view_motion (GtkWidget      *widget,
 	  else
 	    icon_view->priv->scroll_value_diff = abs_y - height;
 
-	  icon_view->priv->event_last_x = event->x;
-	  icon_view->priv->event_last_y = event->y;
+	  icon_view->priv->event_last_x = icon_view->priv->mouse_x;
+	  icon_view->priv->event_last_y = icon_view->priv->mouse_x;
 
 	  if (icon_view->priv->scroll_timeout_id == 0) {
 	    icon_view->priv->scroll_timeout_id = gdk_threads_add_timeout (30, rubberband_scroll_timeout, 
@@ -1853,7 +1853,8 @@ gtk_icon_view_motion (GtkWidget      *widget,
 
       last_prelight_item = icon_view->priv->last_prelight;
       item = _gtk_icon_view_get_item_at_widget_coords (icon_view,
-                                                       event->x, event->y,
+                                                       icon_view->priv->mouse_x,
+                                                       icon_view->priv->mouse_y,
                                                        FALSE,
                                                        &cell);
 
@@ -2122,11 +2123,13 @@ gtk_icon_view_button_press (GtkGestureMultiPress *gesture,
   int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   const GdkEventButton *event = (const GdkEventButton *)gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  GdkModifierType state;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if (button == GDK_BUTTON_PRIMARY)
+  if (button == GDK_BUTTON_PRIMARY &&
+      gdk_event_get_state ((GdkEvent *) event, &state))
     {
       GdkModifierType extend_mod_mask;
       GdkModifierType modify_mod_mask;
@@ -2162,7 +2165,7 @@ gtk_icon_view_button_press (GtkGestureMultiPress *gesture,
 	      _gtk_icon_view_set_cursor_item (icon_view, item, cursor_cell);
 	    }
 	  else if (icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE &&
-		   (event->state & extend_mod_mask))
+		   (state & extend_mod_mask))
 	    {
 	      gtk_icon_view_unselect_all_internal (icon_view);
 
@@ -2175,11 +2178,11 @@ gtk_icon_view_button_press (GtkGestureMultiPress *gesture,
 						  item);
 	      dirty = TRUE;
 	    }
-	  else 
+	  else
 	    {
 	      if ((icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE ||
 		  ((icon_view->priv->selection_mode == GTK_SELECTION_SINGLE) && item->selected)) &&
-		  (event->state & modify_mod_mask))
+		  (state & modify_mod_mask))
 		{
 		  item->selected = !item->selected;
 		  gtk_icon_view_queue_draw_item (icon_view, item);
@@ -2225,13 +2228,15 @@ gtk_icon_view_button_press (GtkGestureMultiPress *gesture,
       else
 	{
 	  if (icon_view->priv->selection_mode != GTK_SELECTION_BROWSE &&
-	      !(event->state & modify_mod_mask))
+	      !(state & modify_mod_mask))
 	    {
 	      dirty = gtk_icon_view_unselect_all_internal (icon_view);
 	    }
-	  
+
 	  if (icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE)
-            gtk_icon_view_start_rubberbanding (icon_view, event->device, x, y);
+            gtk_icon_view_start_rubberbanding (icon_view,
+					       gtk_gesture_get_device (GTK_GESTURE (gesture)),
+					       x, y);
 	}
 
       /* don't draw keyboard focus around an clicked-on item */
@@ -2267,7 +2272,10 @@ gtk_icon_view_button_press (GtkGestureMultiPress *gesture,
 static gboolean
 button_event_modifies_selection (GdkEventButton *event)
 {
-        return (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
+  guint state;
+
+  gdk_event_get_state ((GdkEvent *) event, &state);
+  return (state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
 }
 
 static void
@@ -2317,10 +2325,12 @@ gtk_icon_view_key_press (GtkWidget      *widget,
 			 GdkEventKey    *event)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
+  guint keyval;
 
   if (icon_view->priv->doing_rubberband)
     {
-      if (event->keyval == GDK_KEY_Escape)
+      if (gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
+          keyval == GDK_KEY_Escape)
 	gtk_icon_view_stop_rubberbanding (icon_view);
 
       return TRUE;
@@ -6135,17 +6145,19 @@ gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
   gint button;
   GtkTreeModel *model;
   gboolean retval = FALSE;
+  gdouble x, y;
 
   if (!icon_view->priv->source_set)
     goto out;
 
-  if (icon_view->priv->pressed_button < 0)
+  if (icon_view->priv->pressed_button < 0 ||
+      !gdk_event_get_coords ((GdkEvent *) event, &x, &y))
     goto out;
 
   if (!gtk_drag_check_threshold (GTK_WIDGET (icon_view),
                                  icon_view->priv->press_start_x,
                                  icon_view->priv->press_start_y,
-                                 event->x, event->y))
+                                 x, y))
     goto out;
 
   model = gtk_icon_view_get_model (icon_view);
