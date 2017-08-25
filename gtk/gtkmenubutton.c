@@ -411,8 +411,8 @@ gtk_menu_button_toggled (GtkToggleButton *button)
           popup_menu (menu_button, event);
 
           if (!event ||
-              event->type == GDK_KEY_PRESS ||
-              event->type == GDK_KEY_RELEASE)
+              gdk_event_get_event_type (event) == GDK_KEY_PRESS ||
+              gdk_event_get_event_type (event) == GDK_KEY_RELEASE)
             gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
 
           if (event)
