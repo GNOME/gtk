@@ -280,14 +280,20 @@ gtk_cell_renderer_spin_key_press_event (GtkWidget   *widget,
 					GdkEventKey *event,
 					gpointer     data)
 {
-  if (event->state == 0)
+  guint state, keyval;
+
+  if (!gdk_event_get_state ((GdkEvent *) event, &state) ||
+      !gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+    return GDK_EVENT_PROPAGATE;
+
+  if (state == 0)
     {
-      if (event->keyval == GDK_KEY_Up)
+      if (keyval == GDK_KEY_Up)
 	{
 	  gtk_spin_button_spin (GTK_SPIN_BUTTON (widget), GTK_SPIN_STEP_FORWARD, 1);
 	  return TRUE;
 	}
-      else if (event->keyval == GDK_KEY_Down)
+      else if (keyval == GDK_KEY_Down)
 	{
 	  gtk_spin_button_spin (GTK_SPIN_BUTTON (widget), GTK_SPIN_STEP_BACKWARD, 1);
 	  return TRUE;
@@ -302,11 +308,13 @@ gtk_cell_renderer_spin_button_press_event (GtkWidget      *widget,
                                            GdkEventButton *event,
                                            gpointer        user_data)
 {
+  GdkEventType event_type = gdk_event_get_event_type ((GdkEvent *) event);
+
   /* Block 2BUTTON and 3BUTTON here, so that they won't be eaten
    * by tree view.
    */
-  if (event->type == GDK_2BUTTON_PRESS
-      || event->type == GDK_3BUTTON_PRESS)
+  if (event_type == GDK_2BUTTON_PRESS
+      || event_type == GDK_3BUTTON_PRESS)
     return TRUE;
 
   return FALSE;
