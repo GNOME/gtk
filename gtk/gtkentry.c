@@ -3496,7 +3496,7 @@ gtk_entry_event (GtkWidget *widget,
 
   gdk_event_get_coords (event, &x, &y);
 
-  if (event->type == GDK_MOTION_NOTIFY &&
+  if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY &&
       priv->mouse_cursor_obscured)
     {
       set_text_cursor (widget);
@@ -3530,7 +3530,7 @@ gtk_entry_event (GtkWidget *widget,
   sequence = gdk_event_get_event_sequence (event);
   device = gdk_event_get_device (event);
 
-  switch (event->type)
+  switch (gdk_event_get_event_type (event))
     {
     case GDK_TOUCH_BEGIN:
       if (icon_info->current_sequence)
@@ -3674,6 +3674,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       GtkTextHandleMode mode;
       gboolean is_touchscreen, extend_selection;
       GdkDevice *source;
+      guint state;
 
       source = gdk_event_get_source_device (event);
       is_touchscreen = gtk_simulate_touchscreen () ||
@@ -3693,8 +3694,10 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       priv->select_words = FALSE;
       priv->select_lines = FALSE;
 
+      gdk_event_get_state (event, &state);
+
       extend_selection =
-        (event->button.state &
+        (state &
          gtk_widget_get_modifier_mask (widget,
                                        GDK_MODIFIER_INTENT_EXTEND_SELECTION));
 
@@ -4042,6 +4045,10 @@ gtk_entry_key_press (GtkWidget   *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   gboolean retval = FALSE;
+  guint keyval;
+
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+    return GDK_EVENT_PROPAGATE;
 
   priv->handling_key_event = TRUE;
 
@@ -4064,10 +4071,10 @@ gtk_entry_key_press (GtkWidget   *widget,
 	}
     }
 
-  if (event->keyval == GDK_KEY_Return ||
-      event->keyval == GDK_KEY_KP_Enter ||
-      event->keyval == GDK_KEY_ISO_Enter ||
-      event->keyval == GDK_KEY_Escape)
+  if (keyval == GDK_KEY_Return ||
+      keyval == GDK_KEY_KP_Enter ||
+      keyval == GDK_KEY_ISO_Enter ||
+      keyval == GDK_KEY_Escape)
     gtk_entry_reset_im_context (entry);
 
   if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_press_event (widget, event))
@@ -4463,8 +4470,12 @@ gtk_cell_editable_key_press_event (GtkEntry    *entry,
 				   gpointer     data)
 {
   GtkEntryPrivate *priv = entry->priv;
+  guint keyval;
 
-  if (key_event->keyval == GDK_KEY_Escape)
+  if (!gdk_event_get_keyval ((GdkEvent *) key_event, &keyval))
+    return GDK_EVENT_PROPAGATE;
+
+  if (keyval == GDK_KEY_Escape)
     {
       priv->editing_canceled = TRUE;
       gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
@@ -4474,7 +4485,7 @@ gtk_cell_editable_key_press_event (GtkEntry    *entry,
     }
 
   /* override focus */
-  if (key_event->keyval == GDK_KEY_Up || key_event->keyval == GDK_KEY_Down)
+  if (keyval == GDK_KEY_Up || keyval == GDK_KEY_Down)
     {
       gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
       gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
