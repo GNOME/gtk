@@ -200,13 +200,19 @@ G_GNUC_END_IGNORE_DEPRECATIONS
             if (dir)
               {
                 const char *dent;
+                GList *list = NULL, *iterator = NULL;
 
                 while ((dent = g_dir_read_name (dir)))
+                  list = g_list_prepend (list, g_strdup (dent));
+
+                list = g_list_sort (list, (GCompareFunc) strcmp);
+                for (iterator = list; iterator; iterator = iterator->next)
                   {
-                    if (g_str_has_suffix (dent, SOEXT))
-                      error |= query_module (dirs[i], dent, contents);
+                    if (g_str_has_suffix (iterator->data, SOEXT))
+                      error |= query_module (dirs[i], iterator->data, contents);
                   }
 
+                g_list_free_full (list, g_free);
                 g_dir_close (dir);
               }
 
