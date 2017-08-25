@@ -4936,21 +4936,19 @@ gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
 static gboolean
 get_event_coordinates (GdkEvent *event, gint *x, gint *y)
 {
+  gdouble event_x, event_y;
+
   if (event)
-    switch (event->type)
+    switch (gdk_event_get_event_type (event))
       {
       case GDK_MOTION_NOTIFY:
-        *x = event->motion.x;
-        *y = event->motion.y;
-        return TRUE;
-        break;
-
       case GDK_BUTTON_PRESS:
       case GDK_2BUTTON_PRESS:
       case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
-        *x = event->button.x;
-        *y = event->button.y;
+        gdk_event_get_coords (event, &event_x, &event_y);
+        *x = event_x;
+        *y = event_y;
         return TRUE;
         break;
 
@@ -5321,6 +5319,7 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   gint x = 0, y = 0;
+  GdkEventType event_type;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -5328,6 +5327,8 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
   if (priv->layout == NULL ||
       get_buffer (text_view) == NULL)
     return FALSE;
+
+  event_type = gdk_event_get_event_type (event);
 
   if (get_event_coordinates (event, &x, &y))
     {
@@ -5346,8 +5347,8 @@ gtk_text_view_event (GtkWidget *widget, GdkEvent *event)
 
       return emit_event_on_tags (widget, event, &iter);
     }
-  else if (event->type == GDK_KEY_PRESS ||
-           event->type == GDK_KEY_RELEASE)
+  else if (event_type == GDK_KEY_PRESS ||
+           event_type == GDK_KEY_RELEASE)
     {
       GtkTextIter iter;
 
@@ -5369,12 +5370,17 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   GtkTextIter iter;
   gboolean can_insert;
   gboolean retval = FALSE;
+  guint keyval, state;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
   if (priv->layout == NULL || get_buffer (text_view) == NULL)
     return FALSE;
+
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval) ||
+      !gdk_event_get_state ((GdkEvent *) event, &state))
+    return GDK_EVENT_PROPAGATE;
 
   priv->handling_key_event = TRUE;
 
@@ -5398,9 +5404,9 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     }
   /* use overall editability not can_insert, more predictable for users */
   else if (priv->editable &&
-           (event->keyval == GDK_KEY_Return ||
-            event->keyval == GDK_KEY_ISO_Enter ||
-            event->keyval == GDK_KEY_KP_Enter))
+           (keyval == GDK_KEY_Return ||
+            keyval == GDK_KEY_ISO_Enter ||
+            keyval == GDK_KEY_KP_Enter))
     {
       /* this won't actually insert the newline if the cursor isn't
        * editable
@@ -5410,10 +5416,10 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       retval = TRUE;
     }
   /* Pass through Tab as literal tab, unless Control is held down */
-  else if ((event->keyval == GDK_KEY_Tab ||
-            event->keyval == GDK_KEY_KP_Tab ||
-            event->keyval == GDK_KEY_ISO_Left_Tab) &&
-           !(event->state & GDK_CONTROL_MASK))
+  else if ((keyval == GDK_KEY_Tab ||
+            keyval == GDK_KEY_KP_Tab ||
+            keyval == GDK_KEY_ISO_Left_Tab) &&
+           !(state & GDK_CONTROL_MASK))
     {
       /* If the text widget isn't editable overall, or if the application
        * has turned off "accepts_tab", move the focus instead
@@ -5425,7 +5431,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 	}
       else
 	g_signal_emit_by_name (text_view, "move-focus",
-                               (event->state & GDK_SHIFT_MASK) ?
+                               (state & GDK_SHIFT_MASK) ?
                                GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD);
 
       retval = TRUE;
@@ -8826,7 +8832,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
       current_event = gtk_get_current_event ();
       if (current_event != NULL)
         {
-          if (current_event->type == GDK_SCROLL)
+          if (gdk_event_get_event_type (current_event) == GDK_SCROLL)
             move_mark_to_pointer_and_scroll (text_view, "insert");
 
           gdk_event_free (current_event);
