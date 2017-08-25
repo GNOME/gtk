@@ -252,12 +252,16 @@ swatch_key_press (GtkWidget   *widget,
                   GdkEventKey *event)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
+  guint keyval;
 
-  if (event->keyval == GDK_KEY_space ||
-      event->keyval == GDK_KEY_Return ||
-      event->keyval == GDK_KEY_ISO_Enter||
-      event->keyval == GDK_KEY_KP_Enter ||
-      event->keyval == GDK_KEY_KP_Space)
+  if (gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+    return GDK_EVENT_PROPAGATE;
+
+  if (keyval == GDK_KEY_space ||
+      keyval == GDK_KEY_Return ||
+      keyval == GDK_KEY_ISO_Enter||
+      keyval == GDK_KEY_KP_Enter ||
+      keyval == GDK_KEY_KP_Space)
     {
       if (swatch->priv->has_color &&
           swatch->priv->selectable &&
