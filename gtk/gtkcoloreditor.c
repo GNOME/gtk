@@ -232,7 +232,10 @@ popup_key_press (GtkWidget      *popup,
                  GdkEventKey    *event,
                  GtkColorEditor *editor)
 {
-  if (event->keyval == GDK_KEY_Escape)
+  guint keyval;
+
+  if (gdk_event_get_keyval ((GdkEvent *) event, &keyval) &&
+      keyval == GDK_KEY_Escape)
     {
       dismiss_current_popup (editor);
       return TRUE;
