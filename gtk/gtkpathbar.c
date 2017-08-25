@@ -942,13 +942,13 @@ gtk_path_bar_stop_scrolling (GtkPathBar *path_bar)
 
 static gboolean
 gtk_path_bar_slider_up_defocus (GtkWidget      *widget,
-                                    GdkEventButton *event,
-                                    GtkPathBar     *path_bar)
+                                GdkEventButton *event,
+                                GtkPathBar     *path_bar)
 {
   GList *list;
   GList *up_button = NULL;
 
-  if (event->type != GDK_FOCUS_CHANGE)
+  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_FOCUS_CHANGE)
     return FALSE;
 
   for (list = g_list_last (path_bar->priv->button_list); list; list = list->prev)
@@ -970,13 +970,13 @@ gtk_path_bar_slider_up_defocus (GtkWidget      *widget,
 
 static gboolean
 gtk_path_bar_slider_down_defocus (GtkWidget      *widget,
-                                    GdkEventButton *event,
-                                    GtkPathBar     *path_bar)
+                                  GdkEventButton *event,
+                                  GtkPathBar     *path_bar)
 {
   GList *list;
   GList *down_button = NULL;
 
-  if (event->type != GDK_FOCUS_CHANGE)
+  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_FOCUS_CHANGE)
     return FALSE;
 
   for (list = path_bar->priv->button_list; list; list = list->next)
@@ -1001,7 +1001,8 @@ gtk_path_bar_slider_button_press (GtkWidget      *widget,
 				  GdkEventButton *event,
 				  GtkPathBar     *path_bar)
 {
-  if (event->type != GDK_BUTTON_PRESS || event->button != GDK_BUTTON_PRIMARY)
+  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_BUTTON_PRESS ||
+      event->button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   path_bar->priv->ignore_click = FALSE;
@@ -1036,7 +1037,7 @@ gtk_path_bar_slider_button_release (GtkWidget      *widget,
 				    GdkEventButton *event,
 				    GtkPathBar     *path_bar)
 {
-  if (event->type != GDK_BUTTON_RELEASE)
+  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_BUTTON_RELEASE)
     return FALSE;
 
   path_bar->priv->ignore_click = TRUE;

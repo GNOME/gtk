@@ -447,13 +447,16 @@ gtk_search_entry_handle_event (GtkSearchEntry *entry,
 {
   GtkSearchEntryPrivate *priv = GET_PRIV (entry);
   gboolean handled;
+  guint keyval;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     gtk_widget_realize (GTK_WIDGET (entry));
 
+  gdk_event_get_keyval (event, &keyval);
+
   if (gtk_search_entry_is_keynav_event (event) ||
-      event->key.keyval == GDK_KEY_space ||
-      event->key.keyval == GDK_KEY_Menu)
+      keyval == GDK_KEY_space ||
+      keyval == GDK_KEY_Menu)
     return GDK_EVENT_PROPAGATE;
 
   priv->content_changed = FALSE;
