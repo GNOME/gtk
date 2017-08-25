@@ -1855,14 +1855,16 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
   gboolean found = FALSE;
   GtkTreeIter iter;
   GtkTreeIter new_iter;
+  GdkScrollDirection direction;
 
-  if (!gtk_combo_box_get_active_iter (combo_box, &iter))
+  if (!gtk_combo_box_get_active_iter (combo_box, &iter) ||
+      !gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
     return TRUE;
 
-  if (event->direction == GDK_SCROLL_UP)
+  if (direction == GDK_SCROLL_UP)
     found = tree_prev (combo_box, priv->model,
                        &iter, &new_iter);
-  else if (event->direction == GDK_SCROLL_DOWN)
+  else if (direction == GDK_SCROLL_DOWN)
     found = tree_next (combo_box, priv->model,
                        &iter, &new_iter);
 
@@ -2814,8 +2816,12 @@ gtk_cell_editable_key_press (GtkWidget   *widget,
                              gpointer     data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
+  guint keyval;
 
-  if (event->keyval == GDK_KEY_Escape)
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
+    return GDK_EVENT_PROPAGATE;
+
+  if (keyval == GDK_KEY_Escape)
     {
       g_object_set (combo_box,
                     "editing-canceled", TRUE,
@@ -2825,9 +2831,9 @@ gtk_cell_editable_key_press (GtkWidget   *widget,
 
       return TRUE;
     }
-  else if (event->keyval == GDK_KEY_Return ||
-           event->keyval == GDK_KEY_ISO_Enter ||
-           event->keyval == GDK_KEY_KP_Enter)
+  else if (keyval == GDK_KEY_Return ||
+           keyval == GDK_KEY_ISO_Enter ||
+           keyval == GDK_KEY_KP_Enter)
     {
       gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (combo_box));
       gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (combo_box));
