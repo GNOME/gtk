@@ -116,6 +116,7 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
 {
   GtkGestureLongPressPrivate *priv;
   const GdkEvent *event;
+  GdkEventType event_type;
   GtkWidget *widget;
   gint delay;
 
@@ -123,9 +124,13 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (gesture, sequence);
 
-  if (!event ||
-      (event->type != GDK_BUTTON_PRESS &&
-       event->type != GDK_TOUCH_BEGIN))
+  if (!event)
+    return;
+
+  event_type = gdk_event_get_event_type (event);
+
+  if (event_type != GDK_BUTTON_PRESS &&
+      event_type != GDK_TOUCH_BEGIN)
     return;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));

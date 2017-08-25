@@ -233,6 +233,7 @@ _gtk_gesture_get_n_touchpad_points (GtkGesture *gesture,
 {
   GtkGesturePrivate *priv;
   PointData *data;
+  GdkEventType event_type;
 
   priv = gtk_gesture_get_instance_private (gesture);
 
@@ -244,15 +245,17 @@ _gtk_gesture_get_n_touchpad_points (GtkGesture *gesture,
   if (!data)
     return 0;
 
+  event_type = gdk_event_get_event_type (data->event);
+
   if (only_active &&
       (data->state == GTK_EVENT_SEQUENCE_DENIED ||
-       (data->event->type == GDK_TOUCHPAD_SWIPE &&
+       (event_type == GDK_TOUCHPAD_SWIPE &&
         data->event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
-       (data->event->type == GDK_TOUCHPAD_PINCH &&
+       (event_type == GDK_TOUCHPAD_PINCH &&
         data->event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END)))
     return 0;
 
-  switch (data->event->type)
+  switch (event_type)
     {
     case GDK_TOUCHPAD_SWIPE:
       return data->event->touchpad_swipe.n_fingers;
@@ -271,16 +274,19 @@ _gtk_gesture_get_n_touch_points (GtkGesture *gesture,
   GHashTableIter iter;
   guint n_points = 0;
   PointData *data;
+  GdkEventType event_type;
 
   priv = gtk_gesture_get_instance_private (gesture);
   g_hash_table_iter_init (&iter, priv->points);
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &data))
     {
+      event_type = gdk_event_get_event_type (data->event);
+
       if (only_active &&
           (data->state == GTK_EVENT_SEQUENCE_DENIED ||
-           data->event->type == GDK_TOUCH_END ||
-           data->event->type == GDK_BUTTON_RELEASE))
+           event_type == GDK_TOUCH_END ||
+           event_type == GDK_BUTTON_RELEASE))
         continue;
 
       n_points++;
@@ -385,11 +391,14 @@ static void
 _update_touchpad_deltas (PointData *data)
 {
   GdkEvent *event = data->event;
+  GdkEventType event_type;
 
   if (!event)
     return;
 
-  if (event->type == GDK_TOUCHPAD_SWIPE)
+  event_type = gdk_event_get_event_type (event);
+
+  if (event_type == GDK_TOUCHPAD_SWIPE)
     {
       if (event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
         data->accum_dx = data->accum_dy = 0;
@@ -399,7 +408,7 @@ _update_touchpad_deltas (PointData *data)
           data->accum_dy += event->touchpad_swipe.dy;
         }
     }
-  else if (event->type == GDK_TOUCHPAD_PINCH)
+  else if (event_type == GDK_TOUCHPAD_PINCH)
     {
       if (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
         data->accum_dx = data->accum_dy = 0;
@@ -639,6 +648,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
   GtkGesturePrivate *priv;
   GdkDevice *source_device;
   gboolean was_recognized;
+  GdkEventType event_type;
 
   source_device = gdk_event_get_source_device (event);
 
@@ -648,15 +658,16 @@ gtk_gesture_handle_event (GtkEventController *controller,
   priv = gtk_gesture_get_instance_private (gesture);
   sequence = gdk_event_get_event_sequence (event);
   was_recognized = gtk_gesture_is_recognized (gesture);
+  event_type = gdk_event_get_event_type (event);
 
   if (gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_DENIED)
     priv->last_sequence = sequence;
 
-  if (event->type == GDK_BUTTON_PRESS ||
-      event->type == GDK_TOUCH_BEGIN ||
-      (event->type == GDK_TOUCHPAD_SWIPE &&
+  if (event_type == GDK_BUTTON_PRESS ||
+      event_type == GDK_TOUCH_BEGIN ||
+      (event_type == GDK_TOUCHPAD_SWIPE &&
        event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
-      (event->type == GDK_TOUCHPAD_PINCH &&
+      (event_type == GDK_TOUCHPAD_PINCH &&
        event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN))
     {
       if (_gtk_gesture_update_point (gesture, event, TRUE))
@@ -686,11 +697,11 @@ gtk_gesture_handle_event (GtkEventController *controller,
             }
         }
     }
-  else if (event->type == GDK_BUTTON_RELEASE ||
-           event->type == GDK_TOUCH_END ||
-           (event->type == GDK_TOUCHPAD_SWIPE &&
+  else if (event_type == GDK_BUTTON_RELEASE ||
+           event_type == GDK_TOUCH_END ||
+           (event_type == GDK_TOUCHPAD_SWIPE &&
             event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
-           (event->type == GDK_TOUCHPAD_PINCH &&
+           (event_type == GDK_TOUCHPAD_PINCH &&
             event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
     {
       gboolean was_claimed;
@@ -709,14 +720,14 @@ gtk_gesture_handle_event (GtkEventController *controller,
 
       return was_claimed && was_recognized;
     }
-  else if (event->type == GDK_MOTION_NOTIFY ||
-           event->type == GDK_TOUCH_UPDATE ||
-           (event->type == GDK_TOUCHPAD_SWIPE &&
+  else if (event_type == GDK_MOTION_NOTIFY ||
+           event_type == GDK_TOUCH_UPDATE ||
+           (event_type == GDK_TOUCHPAD_SWIPE &&
             event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE) ||
-           (event->type == GDK_TOUCHPAD_PINCH &&
+           (event_type == GDK_TOUCHPAD_PINCH &&
             event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE))
     {
-      if (event->type == GDK_MOTION_NOTIFY)
+      if (event_type == GDK_MOTION_NOTIFY)
         {
           if ((event->motion.state & BUTTONS_MASK) == 0)
             return FALSE;
@@ -729,20 +740,20 @@ gtk_gesture_handle_event (GtkEventController *controller,
           _gtk_gesture_check_recognized (gesture, sequence))
         g_signal_emit (gesture, signals[UPDATE], 0, sequence);
     }
-  else if (event->type == GDK_TOUCH_CANCEL)
+  else if (event_type == GDK_TOUCH_CANCEL)
     {
       if (!priv->touchpad)
         _gtk_gesture_cancel_sequence (gesture, sequence);
     }
-  else if ((event->type == GDK_TOUCHPAD_SWIPE &&
+  else if ((event_type == GDK_TOUCHPAD_SWIPE &&
             event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL) ||
-           (event->type == GDK_TOUCHPAD_PINCH &&
+           (event_type == GDK_TOUCHPAD_PINCH &&
             event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL))
     {
       if (priv->touchpad)
         _gtk_gesture_cancel_sequence (gesture, sequence);
     }
-  else if (event->type == GDK_GRAB_BROKEN)
+  else if (event_type == GDK_GRAB_BROKEN)
     {
       if (!event->grab_broken.grab_window ||
           !gesture_within_window (gesture, event->grab_broken.grab_window))
@@ -1139,6 +1150,7 @@ gtk_gesture_get_sequences (GtkGesture *gesture)
   GList *sequences = NULL;
   GHashTableIter iter;
   PointData *data;
+  GdkEventType event_type;
 
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), NULL);
 
@@ -1149,8 +1161,11 @@ gtk_gesture_get_sequences (GtkGesture *gesture)
     {
       if (data->state == GTK_EVENT_SEQUENCE_DENIED)
         continue;
-      if (data->event->type == GDK_TOUCH_END ||
-          data->event->type == GDK_BUTTON_RELEASE)
+
+      event_type = gdk_event_get_event_type (data->event);
+
+      if (event_type == GDK_TOUCH_END ||
+          event_type == GDK_BUTTON_RELEASE)
         continue;
 
       sequences = g_list_prepend (sequences, sequence);
@@ -1304,6 +1319,7 @@ gtk_gesture_get_bounding_box (GtkGesture   *gesture,
   GHashTableIter iter;
   guint n_points = 0;
   PointData *data;
+  GdkEventType event_type;
 
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
   g_return_val_if_fail (rect != NULL, FALSE);
@@ -1320,8 +1336,11 @@ gtk_gesture_get_bounding_box (GtkGesture   *gesture,
 
       if (data->state == GTK_EVENT_SEQUENCE_DENIED)
         continue;
-      if (data->event->type == GDK_TOUCH_END ||
-          data->event->type == GDK_BUTTON_RELEASE)
+
+      event_type = gdk_event_get_event_type (data->event);
+
+      if (event_type == GDK_TOUCH_END ||
+          event_type == GDK_BUTTON_RELEASE)
         continue;
 
       gdk_event_get_coords (data->event, &x, &y);
@@ -1660,7 +1679,7 @@ _gtk_gesture_get_pointer_emulating_sequence (GtkGesture        *gesture,
 
   while (g_hash_table_iter_next (&iter, (gpointer*) &seq, (gpointer*) &data))
     {
-      switch (data->event->type)
+      switch (gdk_event_get_event_type (data->event))
         {
         case GDK_TOUCH_BEGIN:
         case GDK_TOUCH_UPDATE:

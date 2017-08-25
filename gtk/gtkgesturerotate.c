@@ -96,7 +96,7 @@ _gtk_gesture_rotate_get_angle (GtkGestureRotate *rotate,
 
   last_event = gtk_gesture_get_last_event (gesture, sequences->data);
 
-  if (last_event->type == GDK_TOUCHPAD_PINCH &&
+  if (gdk_event_get_event_type (last_event) == GDK_TOUCHPAD_PINCH &&
       (last_event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
        last_event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE ||
        last_event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
@@ -169,7 +169,7 @@ gtk_gesture_rotate_filter_event (GtkEventController *controller,
                                  const GdkEvent     *event)
 {
   /* Let 2-finger touchpad pinch events go through */
-  if (event->type == GDK_TOUCHPAD_PINCH)
+  if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH)
     {
       if (event->touchpad_pinch.n_fingers == 2)
         return FALSE;
@@ -189,7 +189,7 @@ gtk_gesture_rotate_handle_event (GtkEventController *controller,
 
   priv = gtk_gesture_rotate_get_instance_private (rotate);
 
-  if (event->type == GDK_TOUCHPAD_PINCH)
+  if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH)
     {
       if (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
           event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END)

@@ -198,6 +198,7 @@ gtk_gesture_multi_press_begin (GtkGesture       *gesture,
   guint n_presses, button = 1;
   GdkEventSequence *current;
   const GdkEvent *event;
+  GdkEventType event_type;
   GdkDevice *device;
   gdouble x, y;
 
@@ -209,10 +210,11 @@ gtk_gesture_multi_press_begin (GtkGesture       *gesture,
   event = gtk_gesture_get_last_event (gesture, sequence);
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   device = gdk_event_get_source_device (event);
+  event_type = gdk_event_get_event_type (event);
 
-  if (event->type == GDK_BUTTON_PRESS)
-    button = event->button.button;
-  else if (event->type == GDK_TOUCH_BEGIN)
+  if (event_type == GDK_BUTTON_PRESS)
+    gdk_event_get_button (event, &button);
+  else if (event_type == GDK_TOUCH_BEGIN)
     button = 1;
   else
     return;
