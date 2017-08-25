@@ -779,31 +779,36 @@ gtk_scale_button_scroll (GtkWidget      *widget,
   GtkScaleButton *button;
   GtkScaleButtonPrivate *priv;
   GtkAdjustment *adjustment;
+  GdkScrollDirection direction;
   gdouble d;
 
   button = GTK_SCALE_BUTTON (widget);
   priv = button->priv;
   adjustment = priv->adjustment;
 
-  if (event->type != GDK_SCROLL)
+  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_SCROLL ||
+      !gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
     return FALSE;
 
   d = gtk_scale_button_get_value (button);
-  if (event->direction == GDK_SCROLL_UP)
+  if (direction == GDK_SCROLL_UP)
     {
       d += gtk_adjustment_get_step_increment (adjustment);
       if (d > gtk_adjustment_get_upper (adjustment))
 	d = gtk_adjustment_get_upper (adjustment);
     }
-  else if (event->direction == GDK_SCROLL_DOWN)
+  else if (direction == GDK_SCROLL_DOWN)
     {
       d -= gtk_adjustment_get_step_increment (adjustment);
       if (d < gtk_adjustment_get_lower (adjustment))
 	d = gtk_adjustment_get_lower (adjustment);
     }
-  else if (event->direction == GDK_SCROLL_SMOOTH)
+  else if (direction == GDK_SCROLL_SMOOTH)
     {
-      d -= event->delta_y * gtk_adjustment_get_step_increment (adjustment);
+      gdouble delta_y;
+
+      gdk_event_get_scroll_deltas ((GdkEvent *) event, NULL, &delta_y);
+      d -= delta_y * gtk_adjustment_get_step_increment (adjustment);
       d = CLAMP (d, gtk_adjustment_get_lower (adjustment),
                  gtk_adjustment_get_upper (adjustment));
     }
