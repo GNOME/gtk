@@ -1698,15 +1698,16 @@ recent_view_button_press_cb (GtkWidget      *widget,
 			     gpointer        user_data)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
+  gdouble x, y;
 
-  if (gdk_event_triggers_context_menu ((GdkEvent *) event))
+  if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
+      gdk_event_get_coords ((GdkEvent *) event, &x, &y))
     {
       GtkTreePath *path;
       gboolean res;
 
       res = gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (impl->priv->recent_view),
-		      			   event->x, event->y,
-					   &path,
+                                           x, y, &path,
 					   NULL, NULL, NULL);
       if (!res)
         return FALSE;
