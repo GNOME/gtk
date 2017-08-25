@@ -328,7 +328,7 @@ touch_release_in_button (GtkButton *button)
   if (!event)
     return FALSE;
 
-  if (event->type != GDK_TOUCH_END)
+  if (gdk_event_get_event_type (event) != GDK_TOUCH_END)
     {
       gdk_event_free (event);
       return FALSE;
