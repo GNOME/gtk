@@ -74,8 +74,6 @@ struct _GdkX11DragContext
 {
   GdkDragContext context;
 
-  guint   ref_count;
-
   gint start_x;                /* Where the drag started */
   gint start_y;
   guint16 last_x;              /* Coordinates from last event */
