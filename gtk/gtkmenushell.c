@@ -648,8 +648,13 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
   if (!priv->active || !priv->button)
     {
       gboolean initially_active = priv->active;
+      guint button;
+      guint32 time;
 
-      priv->button = event->button;
+      gdk_event_get_button ((GdkEvent *)event, &button);
+      time = gdk_event_get_time ((GdkEvent *)event);
+
+      priv->button = button;
 
       if (menu_item)
         {
@@ -661,7 +666,7 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 
               if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
                 {
-                  priv->activate_time = event->time;
+                  priv->activate_time = time;
                   gtk_menu_shell_select_item (menu_shell, menu_item);
                 }
             }
@@ -682,8 +687,11 @@ gtk_menu_shell_grab_broken (GtkWidget          *widget,
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GtkMenuShellPrivate *priv = menu_shell->priv;
+  GdkWindow *window;
 
-  if (priv->have_xgrab && event->grab_window == NULL)
+  gdk_event_get_grab_window ((GdkEvent *)event, &window);
+
+  if (priv->have_xgrab && window == NULL)
     {
       /* Unset the active menu item so gtk_menu_popdown() doesn't see it. */
       gtk_menu_shell_deselect (menu_shell);
@@ -701,6 +709,11 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
   GtkMenuShellPrivate *priv = menu_shell->priv;
   GtkMenuShell *parent_shell = GTK_MENU_SHELL (priv->parent_menu_shell);
   gboolean activated_submenu = FALSE;
+  guint new_button;
+  guint32 time;
+
+  gdk_event_get_button ((GdkEvent *)event, &new_button);
+  time = gdk_event_get_time ((GdkEvent *)event);
 
   if (parent_shell)
     {
@@ -713,7 +726,7 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
     }
 
   if (priv->parent_menu_shell &&
-      (event->time - GTK_MENU_SHELL (priv->parent_menu_shell)->priv->activate_time) < MENU_SHELL_TIMEOUT)
+      (time - GTK_MENU_SHELL (priv->parent_menu_shell)->priv->activate_time) < MENU_SHELL_TIMEOUT)
     {
       /* The button-press originated in the parent menu bar and we are
        * a pop-up menu. It was a quick press-and-release so we don't want
@@ -731,13 +744,13 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 
       priv->button = 0;
 
-      if (button && (event->button != button) && priv->parent_menu_shell)
+      if (button && (new_button != button) && priv->parent_menu_shell)
         {
           gtk_menu_shell_deactivate_and_emit_done (gtk_menu_shell_get_toplevel_shell (menu_shell));
           return GDK_EVENT_STOP;
         }
 
-      if ((event->time - priv->activate_time) <= MENU_SHELL_TIMEOUT)
+      if ((time - priv->activate_time) <= MENU_SHELL_TIMEOUT)
         {
           /* We only ever want to prevent deactivation on the first
            * press/release. Setting the time to zero is a bit of a
@@ -1549,6 +1562,9 @@ gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
   GtkKeyHash *key_hash;
   GSList *entries;
   gboolean result = FALSE;
+  guint16 keycode;
+  GdkModifierType state;
+  guint group;
 
   mnemonic_hash = gtk_menu_shell_get_mnemonic_hash (menu_shell, FALSE);
   if (!mnemonic_hash)
@@ -1558,11 +1574,15 @@ gtk_menu_shell_activate_mnemonic (GtkMenuShell *menu_shell,
   if (!key_hash)
     return FALSE;
 
+  gdk_event_get_keycode ((GdkEvent *)event, &keycode);
+  gdk_event_get_state ((GdkEvent *)event, &state);
+  gdk_event_get_key_group ((GdkEvent *)event, &group);
+
   entries = _gtk_key_hash_lookup (key_hash,
-                                  event->hardware_keycode,
-                                  event->state,
+                                  keycode,
+                                  state,
                                   gtk_accelerator_get_default_mod_mask (),
-                                  event->group);
+                                  group);
 
   if (entries)
     {
