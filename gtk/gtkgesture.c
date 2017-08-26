@@ -389,30 +389,26 @@ _update_touchpad_deltas (PointData *data)
 {
   GdkEvent *event = data->event;
   GdkEventType event_type;
+  GdkTouchpadGesturePhase phase;
+  double dx;
+  double dy;
 
   if (!event)
     return;
 
   event_type = gdk_event_get_event_type (event);
+  gdk_event_get_touchpad_gesture_phase (event, &phase);
+  gdk_event_get_touchpad_deltas (event, &dx, &dy);
 
-  if (event_type == GDK_TOUCHPAD_SWIPE)
+  if (event_type == GDK_TOUCHPAD_SWIPE ||
+      event_type == GDK_TOUCHPAD_PINCH)
     {
-      if (event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
+      if (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
         data->accum_dx = data->accum_dy = 0;
-      else if (event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE)
+      else if (phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE)
         {
-          data->accum_dx += event->touchpad_swipe.dx;
-          data->accum_dy += event->touchpad_swipe.dy;
-        }
-    }
-  else if (event_type == GDK_TOUCHPAD_PINCH)
-    {
-      if (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
-        data->accum_dx = data->accum_dy = 0;
-      else if (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE)
-        {
-          data->accum_dx += event->touchpad_pinch.dx;
-          data->accum_dy += event->touchpad_pinch.dy;
+          data->accum_dx += dx;
+          data->accum_dy += dy;
         }
     }
 }
@@ -646,6 +642,8 @@ gtk_gesture_handle_event (GtkEventController *controller,
   GdkDevice *source_device;
   gboolean was_recognized;
   GdkEventType event_type;
+  GdkTouchpadGesturePhase phase;
+  GdkModifierType state;
 
   source_device = gdk_event_get_source_device (event);
 
@@ -656,16 +654,16 @@ gtk_gesture_handle_event (GtkEventController *controller,
   sequence = gdk_event_get_event_sequence (event);
   was_recognized = gtk_gesture_is_recognized (gesture);
   event_type = gdk_event_get_event_type (event);
+  gdk_event_get_state (event, &state);
+  gdk_event_get_touchpad_gesture_phase (event, &phase);
 
   if (gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_DENIED)
     priv->last_sequence = sequence;
 
   if (event_type == GDK_BUTTON_PRESS ||
       event_type == GDK_TOUCH_BEGIN ||
-      (event_type == GDK_TOUCHPAD_SWIPE &&
-       event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
-      (event_type == GDK_TOUCHPAD_PINCH &&
-       event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN))
+      (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
+      (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN))
     {
       if (_gtk_gesture_update_point (gesture, event, TRUE))
         {
@@ -696,10 +694,8 @@ gtk_gesture_handle_event (GtkEventController *controller,
     }
   else if (event_type == GDK_BUTTON_RELEASE ||
            event_type == GDK_TOUCH_END ||
-           (event_type == GDK_TOUCHPAD_SWIPE &&
-            event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
-           (event_type == GDK_TOUCHPAD_PINCH &&
-            event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
+           (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
+           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
     {
       gboolean was_claimed;
 
@@ -719,18 +715,15 @@ gtk_gesture_handle_event (GtkEventController *controller,
     }
   else if (event_type == GDK_MOTION_NOTIFY ||
            event_type == GDK_TOUCH_UPDATE ||
-           (event_type == GDK_TOUCHPAD_SWIPE &&
-            event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE) ||
-           (event_type == GDK_TOUCHPAD_PINCH &&
-            event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE))
+           (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE) ||
+           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE))
     {
       if (event_type == GDK_MOTION_NOTIFY)
         {
-          if ((event->motion.state & BUTTONS_MASK) == 0)
+          if ((state & BUTTONS_MASK) == 0)
             return FALSE;
 
-          if (event->motion.is_hint)
-            gdk_event_request_motions (&event->motion);
+          gdk_event_request_motions ((GdkEventMotion *)event);
         }
 
       if (_gtk_gesture_update_point (gesture, event, FALSE) &&
@@ -742,18 +735,18 @@ gtk_gesture_handle_event (GtkEventController *controller,
       if (!priv->touchpad)
         _gtk_gesture_cancel_sequence (gesture, sequence);
     }
-  else if ((event_type == GDK_TOUCHPAD_SWIPE &&
-            event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL) ||
-           (event_type == GDK_TOUCHPAD_PINCH &&
-            event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL))
+  else if ((event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL) ||
+           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL))
     {
       if (priv->touchpad)
         _gtk_gesture_cancel_sequence (gesture, sequence);
     }
   else if (event_type == GDK_GRAB_BROKEN)
     {
-      if (!event->grab_broken.grab_window ||
-          !gesture_within_window (gesture, event->grab_broken.grab_window))
+      GdkWindow *window = NULL;
+
+      gdk_event_get_grab_window (event, &window);
+      if (!window || !gesture_within_window (gesture, window))
         _gtk_gesture_cancel_all (gesture);
 
       return FALSE;
@@ -1668,6 +1661,7 @@ _gtk_gesture_get_pointer_emulating_sequence (GtkGesture        *gesture,
   GdkEventSequence *seq;
   GHashTableIter iter;
   PointData *data;
+  gboolean emulating;
 
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
 
@@ -1681,7 +1675,8 @@ _gtk_gesture_get_pointer_emulating_sequence (GtkGesture        *gesture,
         case GDK_TOUCH_BEGIN:
         case GDK_TOUCH_UPDATE:
         case GDK_TOUCH_END:
-          if (!data->event->touch.emulating_pointer)
+          gdk_event_get_touch_emulating_pointer (data->event, &emulating);
+          if (!emulating)
             continue;
           /* Fall through */
         case GDK_BUTTON_PRESS:
