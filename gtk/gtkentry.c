@@ -4040,12 +4040,14 @@ gtk_entry_obscure_mouse_cursor (GtkEntry *entry)
 
 static gint
 gtk_entry_key_press (GtkWidget   *widget,
-		     GdkEventKey *event)
+		     GdkEventKey *ev)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
+  GdkEvent *event = (GdkEvent *) ev;
   gboolean retval = FALSE;
   guint keyval;
+  const char *string;
 
   if (!gdk_event_get_keyval ((GdkEvent *) event, &keyval))
     return GDK_EVENT_PROPAGATE;
@@ -4057,13 +4059,13 @@ gtk_entry_key_press (GtkWidget   *widget,
 
   gtk_entry_selection_bubble_popup_unset (entry);
 
-  if (!event->send_event && priv->text_handle)
+  if (!gdk_event_is_sent (event) && priv->text_handle)
     _gtk_text_handle_set_mode (priv->text_handle,
                                GTK_TEXT_HANDLE_MODE_NONE);
 
   if (priv->editable)
     {
-      if (gtk_im_context_filter_keypress (priv->im_context, event))
+      if (gtk_im_context_filter_keypress (priv->im_context, ev))
 	{
 	  priv->need_im_reset = TRUE;
 	  retval = TRUE;
@@ -4077,14 +4079,16 @@ gtk_entry_key_press (GtkWidget   *widget,
       keyval == GDK_KEY_Escape)
     gtk_entry_reset_im_context (entry);
 
-  if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_press_event (widget, event))
+  if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_press_event (widget, ev))
     {
       /* Activate key bindings */
       retval = TRUE;
       goto out;
     }
 
-  if (!priv->editable && event->length)
+  gdk_event_get_string (event, &string);
+
+  if (!priv->editable && string[0] != '\0')
     gtk_widget_error_bell (widget);
 
 out:
