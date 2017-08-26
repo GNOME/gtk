@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-19 14:45+0000\n"
-"PO-Revision-Date: 2017-08-19 22:32+0500\n"
+"POT-Creation-Date: 2017-08-26 02:18+0000\n"
+"PO-Revision-Date: 2017-08-26 11:26+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -2209,7 +2209,7 @@ msgstr "Caps Lock іске қосулы тұр"
 msgid "Select a File"
 msgstr "Файлды таңдаңыз"
 
-#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:976
+#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:1060
 msgid "Desktop"
 msgstr "Жұмыс үстелі"
 
@@ -2227,7 +2227,7 @@ msgstr "_Аты"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1630
+#: gtk/gtkplacessidebar.c:3613 gtk/gtkplacesview.c:1630
 msgid "_Open"
 msgstr "_Ашу"
 
@@ -2235,7 +2235,7 @@ msgstr "_Ашу"
 msgid "_Save"
 msgstr "_Сақтау"
 
-#: gtk/gtkfilechoosernativequartz.c:326 gtk/ui/gtkfilechooserwidget.ui:392
+#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:392
 msgid "Select which types of files are shown"
 msgstr "Файлдардың қай түрлері көрсетілетінін таңдаңыз"
 
@@ -2395,7 +2395,7 @@ msgstr "_Орналасуын көшіру"
 msgid "_Add to Bookmarks"
 msgstr "Б_етбелгілерге қосу"
 
-#: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2529
+#: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2672
 #: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "Атын ауысты_ру"
@@ -2489,7 +2489,7 @@ msgstr "%-e %b %Y"
 msgid "Unknown"
 msgstr "Белгісіз"
 
-#: gtk/gtkfilechooserwidget.c:5098 gtk/gtkplacessidebar.c:961
+#: gtk/gtkfilechooserwidget.c:5098 gtk/gtkplacessidebar.c:1045
 msgid "Home"
 msgstr "Үй бумасы"
 
@@ -2897,197 +2897,211 @@ msgstr "Бет баптаулары"
 msgid "File System Root"
 msgstr "Файлдық жүйенің түбірі"
 
-#: gtk/gtkplacessidebar.c:950
+#: gtk/gtkplacessidebar.c:1034
 msgid "Recent"
 msgstr "Жуырдағы"
 
-#: gtk/gtkplacessidebar.c:952
+#: gtk/gtkplacessidebar.c:1036
 msgid "Recent files"
 msgstr "Жуырда қолданылған файлдар"
 
-#: gtk/gtkplacessidebar.c:963
+#: gtk/gtkplacessidebar.c:1047
 msgid "Open your personal folder"
 msgstr "Жеке бумаңызды ашу"
 
-#: gtk/gtkplacessidebar.c:978
+#: gtk/gtkplacessidebar.c:1062
 msgid "Open the contents of your desktop in a folder"
 msgstr "Жұмыс үстеліңіздің құрамасын бумада ашу"
 
-#: gtk/gtkplacessidebar.c:992
+#: gtk/gtkplacessidebar.c:1076
 msgid "Enter Location"
 msgstr "Орналасуды енгізіңіз"
 
-#: gtk/gtkplacessidebar.c:994
+#: gtk/gtkplacessidebar.c:1078
 msgid "Manually enter a location"
 msgstr "Орналасуды қолмен енгізу"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1088
 msgid "Trash"
 msgstr "Қоқыс шелегі"
 
-#: gtk/gtkplacessidebar.c:1007
+#: gtk/gtkplacessidebar.c:1090
 msgid "Open the trash"
 msgstr "Қоқыс шелегін ашу"
 
-#: gtk/gtkplacessidebar.c:1078 gtk/gtkplacessidebar.c:1106
-#: gtk/gtkplacessidebar.c:1313
+#. translators: %s is the name of a cloud provider for files
+#: gtk/gtkplacessidebar.c:1133
+#, c-format
+msgid "Open %s"
+msgstr "%s ашу"
+
+#: gtk/gtkplacessidebar.c:1212 gtk/gtkplacessidebar.c:1240
+#: gtk/gtkplacessidebar.c:1456
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "“%s” тіркеу және ашу"
 
-#: gtk/gtkplacessidebar.c:1193
+#: gtk/gtkplacessidebar.c:1328
 msgid "Open the contents of the file system"
 msgstr "Файлдық жүйенің құрамасын ашу"
 
-#: gtk/gtkplacessidebar.c:1277
+#: gtk/gtkplacessidebar.c:1412
 msgid "New bookmark"
 msgstr "Жаңа бетбелгі"
 
-#: gtk/gtkplacessidebar.c:1279
+#: gtk/gtkplacessidebar.c:1414
 msgid "Add a new bookmark"
 msgstr "Жаңа бетбелгіні қосу"
 
-#: gtk/gtkplacessidebar.c:1292
+#: gtk/gtkplacessidebar.c:1427
 msgid "Connect to Server"
 msgstr "Серверге байланысты орнату"
 
-#: gtk/gtkplacessidebar.c:1294
+#: gtk/gtkplacessidebar.c:1429
 msgid "Connect to a network server address"
 msgstr "Желілік сервер адресіне байланысу"
 
-#: gtk/gtkplacessidebar.c:1356
+#: gtk/gtkplacessidebar.c:1436
+msgid "Browse Network"
+msgstr "Желіні шолу"
+
+#: gtk/gtkplacessidebar.c:1438
+msgid "Browse the contents of the network"
+msgstr "Желі құрамасын шолу"
+
+#: gtk/gtkplacessidebar.c:1499
 msgid "Other Locations"
 msgstr "Басқа орналасулар"
 
-#: gtk/gtkplacessidebar.c:1357
+#: gtk/gtkplacessidebar.c:1500
 msgid "Show other locations"
 msgstr "Басқа орналасуларды көрсету"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2147 gtk/gtkplacessidebar.c:3432
+#: gtk/gtkplacessidebar.c:2290 gtk/gtkplacessidebar.c:3633
 msgid "_Start"
 msgstr "Ба_стау"
 
-#: gtk/gtkplacessidebar.c:2148 gtk/gtkplacessidebar.c:3433
+#: gtk/gtkplacessidebar.c:2291 gtk/gtkplacessidebar.c:3634
 msgid "_Stop"
 msgstr "Т_оқтату"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2155
+#: gtk/gtkplacessidebar.c:2298
 msgid "_Power On"
 msgstr "І_ске қосу"
 
-#: gtk/gtkplacessidebar.c:2156
+#: gtk/gtkplacessidebar.c:2299
 msgid "_Safely Remove Drive"
 msgstr "Дискті қауіп_сіз шығару"
 
-#: gtk/gtkplacessidebar.c:2160
+#: gtk/gtkplacessidebar.c:2303
 msgid "_Connect Drive"
 msgstr "Дискті і_ске қосу"
 
-#: gtk/gtkplacessidebar.c:2161
+#: gtk/gtkplacessidebar.c:2304
 msgid "_Disconnect Drive"
 msgstr "Дискті а_жырату"
 
-#: gtk/gtkplacessidebar.c:2165
+#: gtk/gtkplacessidebar.c:2308
 msgid "_Start Multi-disk Device"
 msgstr "Көпдискті құрылғыны іске қ_осу"
 
-#: gtk/gtkplacessidebar.c:2166
+#: gtk/gtkplacessidebar.c:2309
 msgid "_Stop Multi-disk Device"
 msgstr "Көпдискті құрылғыны т_оқтату"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2171
+#: gtk/gtkplacessidebar.c:2314
 msgid "_Unlock Device"
 msgstr "Құрылғыны блоктаудан б_осату"
 
-#: gtk/gtkplacessidebar.c:2172
+#: gtk/gtkplacessidebar.c:2315
 msgid "_Lock Device"
 msgstr "Құрылғыны б_локтау"
 
-#: gtk/gtkplacessidebar.c:2210 gtk/gtkplacessidebar.c:3182
+#: gtk/gtkplacessidebar.c:2353 gtk/gtkplacessidebar.c:3325
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "“%s” іске қосу мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2240
+#: gtk/gtkplacessidebar.c:2383
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "“%s” қатынау мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2454
+#: gtk/gtkplacessidebar.c:2597
 msgid "This name is already taken"
 msgstr "Бұл атау қолдануда болып тұр"
 
-#: gtk/gtkplacessidebar.c:2523 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2666 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "Аты"
 
-#: gtk/gtkplacessidebar.c:2723
+#: gtk/gtkplacessidebar.c:2866
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "“%s” тіркеуден босату мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2899
+#: gtk/gtkplacessidebar.c:3042
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "\"%s\" тоқтату мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2928
+#: gtk/gtkplacessidebar.c:3071
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "\"%s\" шығару мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:2957 gtk/gtkplacessidebar.c:2986
+#: gtk/gtkplacessidebar.c:3100 gtk/gtkplacessidebar.c:3129
 #, c-format
 msgid "Unable to eject %s"
 msgstr "%s шығару мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:3134
+#: gtk/gtkplacessidebar.c:3277
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "“%s” тасушы өзгерістеріне бақылау мүмкін емес"
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1640
+#: gtk/gtkplacessidebar.c:3616 gtk/gtkplacesview.c:1640
 msgid "Open in New _Tab"
 msgstr "Жаңа бе_тте ашу"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1651
+#: gtk/gtkplacessidebar.c:3619 gtk/gtkplacesview.c:1651
 msgid "Open in New _Window"
 msgstr "Жаңа т_ерезеде ашу"
 
-#: gtk/gtkplacessidebar.c:3422
+#: gtk/gtkplacessidebar.c:3623
 msgid "_Add Bookmark"
 msgstr "Б_етбелгілерге қосу"
 
-#: gtk/gtkplacessidebar.c:3423
+#: gtk/gtkplacessidebar.c:3624
 msgid "_Remove"
 msgstr "Ө_шіру"
 
-#: gtk/gtkplacessidebar.c:3424
+#: gtk/gtkplacessidebar.c:3625
 msgid "Rename…"
 msgstr "Атын ауыстыру…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1685
+#: gtk/gtkplacessidebar.c:3629 gtk/gtkplacesview.c:1685
 msgid "_Mount"
 msgstr "Тір_кеу"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1675
+#: gtk/gtkplacessidebar.c:3630 gtk/gtkplacesview.c:1675
 msgid "_Unmount"
 msgstr "Тіркеуден бос_ату"
 
-#: gtk/gtkplacessidebar.c:3430
+#: gtk/gtkplacessidebar.c:3631
 msgid "_Eject"
 msgstr "Ш_ығару"
 
-#: gtk/gtkplacessidebar.c:3431
+#: gtk/gtkplacessidebar.c:3632
 msgid "_Detect Media"
 msgstr "Тасушыны анық_тау"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1118
+#: gtk/gtkplacessidebar.c:4078 gtk/gtkplacesview.c:1118
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -3154,6 +3168,7 @@ msgid "Disconnect"
 msgstr "Байланысты үзу"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
+#: gtk/ui/gtksidebarrow.ui:60
 msgid "Unmount"
 msgstr "Тіркеуден босату"
 
@@ -6849,12 +6864,6 @@ msgstr "Сынау принтеріне баспаға шығару"
 
 #~ msgid "Bookmarks"
 #~ msgstr "Бетбелгілер"
-
-#~ msgid "Browse Network"
-#~ msgstr "Желіні шолу"
-
-#~ msgid "Browse the contents of the network"
-#~ msgstr "Желі құрамасын шолу"
 
 #~ msgid "Remove"
 #~ msgstr "Өшіру"
