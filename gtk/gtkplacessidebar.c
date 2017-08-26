@@ -1187,7 +1187,7 @@ update_places (GtkPlacesSidebar *sidebar)
                   tooltip = g_file_get_parse_name (root);
 
                   add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                             SECTION_DEVICES,
+                             SECTION_MOUNTS,
                              name, start_icon, NULL, mount_uri,
                              drive, volume, mount, NULL, 0, tooltip);
                   g_object_unref (root);
@@ -1212,7 +1212,7 @@ update_places (GtkPlacesSidebar *sidebar)
                   tooltip = g_strdup_printf (_("Mount and open “%s”"), name);
 
                   add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                             SECTION_DEVICES,
+                             SECTION_MOUNTS,
                              name, start_icon, NULL, NULL,
                              drive, volume, NULL, NULL, 0, tooltip);
                   g_object_unref (start_icon);
@@ -1240,7 +1240,7 @@ update_places (GtkPlacesSidebar *sidebar)
               tooltip = g_strdup_printf (_("Mount and open “%s”"), name);
 
               add_place (sidebar, PLACES_BUILT_IN,
-                         SECTION_DEVICES,
+                         SECTION_MOUNTS,
                          name, start_icon, NULL, NULL,
                          drive, NULL, NULL, NULL, 0, tooltip);
               g_object_unref (start_icon);
@@ -1290,7 +1290,7 @@ update_places (GtkPlacesSidebar *sidebar)
           tooltip = g_file_get_parse_name (root);
           name = g_mount_get_name (mount);
           add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                     SECTION_DEVICES,
+                     SECTION_MOUNTS,
                      name, start_icon, NULL, mount_uri,
                      NULL, volume, mount, NULL, 0, tooltip);
           g_object_unref (mount);
@@ -1306,7 +1306,7 @@ update_places (GtkPlacesSidebar *sidebar)
           start_icon = g_volume_get_symbolic_icon (volume);
           name = g_volume_get_name (volume);
           add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                     SECTION_DEVICES,
+                     SECTION_MOUNTS,
                      name, start_icon, NULL, NULL,
                      NULL, volume, NULL, NULL, 0, name);
           g_object_unref (start_icon);
@@ -1322,7 +1322,7 @@ update_places (GtkPlacesSidebar *sidebar)
       mount_uri = "file:///"; /* No need to strdup */
       start_icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_FILESYSTEM);
       add_place (sidebar, PLACES_BUILT_IN,
-                 SECTION_DEVICES,
+                 SECTION_MOUNTS,
                  sidebar->hostname, start_icon, NULL, mount_uri,
                  NULL, NULL, NULL, NULL, 0,
                  _("Open the contents of the file system"));
@@ -1429,14 +1429,6 @@ update_places (GtkPlacesSidebar *sidebar)
                      _("Connect to a network server address"));
           g_object_unref (start_icon);
         }
-      mount_uri = "network:///";
-      start_icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK);
-      add_place (sidebar, PLACES_BUILT_IN,
-                 SECTION_NETWORK,
-                 _("Browse Network"), start_icon, NULL, mount_uri,
-                 NULL, NULL, NULL, NULL, 0,
-                 _("Browse the contents of the network"));
-      g_object_unref (start_icon);
 
       network_volumes = g_list_reverse (network_volumes);
       for (l = network_volumes; l != NULL; l = l->next)
@@ -1456,7 +1448,7 @@ update_places (GtkPlacesSidebar *sidebar)
               tooltip = g_strdup_printf (_("Mount and open “%s”"), name);
 
               add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                         SECTION_NETWORK,
+                         SECTION_MOUNTS,
                          name, start_icon, NULL, NULL,
                          NULL, volume, NULL, NULL, 0, tooltip);
               g_object_unref (start_icon);
@@ -1475,7 +1467,7 @@ update_places (GtkPlacesSidebar *sidebar)
           name = g_mount_get_name (mount);
           tooltip = g_file_get_parse_name (root);
           add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                     SECTION_NETWORK,
+                     SECTION_MOUNTS,
                      name, start_icon, NULL, mount_uri,
                      NULL, NULL, mount, NULL, 0, tooltip);
           g_object_unref (root);
