@@ -77,10 +77,12 @@ window_state_event_cb (GtkWidget           *widget,
                        GdkEventWindowState *event)
 {
   AtkObject* obj;
+  GdkWindowState changed, new_state;
 
+  gdk_event_get_window_state ((GdkEvent *)event, &changed, &new_state);
   obj = gtk_widget_get_accessible (widget);
   atk_object_notify_state_change (obj, ATK_STATE_ICONIFIED,
-                                  (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED) != 0);
+                                  (new_state & GDK_WINDOW_STATE_ICONIFIED) != 0);
 
   return FALSE;
 }
