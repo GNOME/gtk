@@ -1018,18 +1018,19 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
   GtkTreeViewColumn        *column = (GtkTreeViewColumn *) data;
   GtkTreeViewColumnPrivate *priv   = column->priv;
   GdkEventType              event_type;
+  guint button;
+  gdouble x, y;
 
   g_return_val_if_fail (event != NULL, FALSE);
 
   event_type = gdk_event_get_event_type (event);
+  gdk_event_get_button (event, &button);
+  gdk_event_get_coords (event, &x, &y);
 
   if (event_type == GDK_BUTTON_PRESS &&
       priv->reorderable &&
-      ((GdkEventButton *)event)->button == GDK_BUTTON_PRIMARY)
+      button == GDK_BUTTON_PRIMARY)
     {
-      gdouble x, y;
-
-      gdk_event_get_coords (event, &x, &y);
       priv->maybe_reordered = TRUE;
       priv->drag_x = x;
       priv->drag_y = y;
@@ -1042,11 +1043,7 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
   
   if (event_type == GDK_MOTION_NOTIFY &&
       priv->maybe_reordered &&
-      (gtk_drag_check_threshold (widget,
-				 priv->drag_x,
-				 priv->drag_y,
-				 (gint) ((GdkEventMotion *)event)->x,
-				 (gint) ((GdkEventMotion *)event)->y)))
+      gtk_drag_check_threshold (widget, priv->drag_x, priv->drag_y, (gint) x, (gint) y))
     {
       priv->maybe_reordered = FALSE;
       _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (priv->tree_view), column,
