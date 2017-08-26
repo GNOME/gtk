@@ -1333,7 +1333,10 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
        priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
     {
-      location_popup_handler (impl, event->string);
+      const char *string;
+
+      gdk_event_get_string ((GdkEvent *)event, &string);
+      location_popup_handler (impl, string);
       return TRUE;
     }
 
@@ -1398,7 +1401,10 @@ gtk_file_chooser_widget_key_press_event (GtkWidget   *widget,
       if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
           priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
         {
-          location_popup_handler (impl, event->string);
+          const char *string;
+
+          gdk_event_get_string ((GdkEvent *)event, &string);
+          location_popup_handler (impl, string);
           return TRUE;
         }
     }
