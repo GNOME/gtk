@@ -5442,7 +5442,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
 
-  if (!event->send_event && priv->text_handle)
+  if (!gdk_event_is_sent ((GdkEvent *) event) && priv->text_handle)
     _gtk_text_handle_set_mode (priv->text_handle,
                                GTK_TEXT_HANDLE_MODE_NONE);
 
