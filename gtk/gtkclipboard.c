@@ -416,7 +416,11 @@ static gboolean
 selection_clear_event_cb (GtkWidget	    *widget,
 			  GdkEventSelection *event)
 {
-  GtkClipboard *clipboard = gtk_widget_get_clipboard (widget, event->selection);
+  GdkAtom selection;
+  GtkClipboard *clipboard;
+
+  gdk_event_get_selection ((GdkEvent *)event, &selection);
+  clipboard = gtk_widget_get_clipboard (widget, selection);
 
   if (clipboard)
     {
@@ -2018,10 +2022,12 @@ void
 _gtk_clipboard_handle_event (GdkEventOwnerChange *event)
 {
   GdkDisplay *display;
+  GdkAtom selection;
   GtkClipboard *clipboard;
   
-  display = gdk_window_get_display (event->window);
-  clipboard = clipboard_peek (display, event->selection, TRUE);
+  gdk_event_get_selection ((GdkEvent *)event, &selection);
+  display = gdk_window_get_display (gdk_event_get_window ((GdkEvent *)event));
+  clipboard = clipboard_peek (display, selection, TRUE);
       
   if (clipboard)
     g_signal_emit (clipboard, 
@@ -2110,7 +2116,10 @@ gtk_clipboard_selection_notify (GtkWidget         *widget,
 				GdkEventSelection *event,
 				GtkClipboard      *clipboard)
 {
-  if (event->selection == gdk_atom_intern_static_string ("CLIPBOARD_MANAGER") &&
+  GdkAtom selection;
+
+  gdk_event_get_selection ((GdkEvent *)event, &selection);
+  if (selection == gdk_atom_intern_static_string ("CLIPBOARD_MANAGER") &&
       clipboard->storing_selection)
     g_main_loop_quit (clipboard->store_loop);
 
