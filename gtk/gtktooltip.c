@@ -146,7 +146,10 @@ static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
 static void       gtk_tooltip_set_last_window      (GtkTooltip      *tooltip,
 						    GdkWindow       *window);
 
-static void       gtk_tooltip_handle_event_internal (GdkEvent        *event);
+static void       gtk_tooltip_handle_event_internal (GdkEventType  event_type,
+                                                     GdkWindow    *window,
+                                                     gdouble       dx,
+                                                     gdouble       dy);
 
 static inline GQuark tooltip_quark (void)
 {
@@ -414,7 +417,6 @@ gtk_tooltip_trigger_tooltip_query (GdkDisplay *display)
 {
   gint x, y;
   GdkWindow *window;
-  GdkEvent event;
   GdkDevice *device;
 
   /* Trigger logic as if the mouse moved */
@@ -423,17 +425,7 @@ gtk_tooltip_trigger_tooltip_query (GdkDisplay *display)
   if (!window)
     return;
 
-  event.type = GDK_MOTION_NOTIFY;
-  event.motion.window = window;
-  event.motion.x = x;
-  event.motion.y = y;
-  event.motion.is_hint = FALSE;
-
-  gdk_window_get_root_coords (window, x, y, &x, &y);
-  event.motion.x_root = x;
-  event.motion.y_root = y;
-
-  gtk_tooltip_handle_event_internal (&event);
+  gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, window, x, y);
 }
 
 /* private functions */
@@ -678,20 +670,18 @@ _gtk_widget_find_at_coords (GdkWindow *window,
  * allocation relative (x, y) of the returned widget.
  */
 static GtkWidget *
-find_topmost_widget_coords_from_event (GdkEvent *event,
-				       gint     *x,
-				       gint     *y)
+find_topmost_widget_coords (GdkWindow *window,
+                            gdouble    dx,
+                            gdouble    dy,
+                            gint      *x,
+                            gint      *y)
 {
   GtkAllocation allocation;
   gint tx, ty;
-  gdouble dx, dy;
   GtkWidget *tmp;
 
-  gdk_event_get_coords (event, &dx, &dy);
-
   /* Returns coordinates relative to tmp's allocation. */
-  tmp = _gtk_widget_find_at_coords (gdk_event_get_window (event),
-                                    dx, dy, &tx, &ty);
+  tmp = _gtk_widget_find_at_coords (window, dx, dy, &tx, &ty);
 
   if (!tmp)
     return NULL;
@@ -1391,30 +1381,41 @@ tooltips_enabled (GdkEvent *event)
 void
 _gtk_tooltip_handle_event (GdkEvent *event)
 {
+  GdkEventType event_type;
+  GdkWindow *window;
+  gdouble dx, dy;
+
   if (!tooltips_enabled (event))
     return;
 
-  gtk_tooltip_handle_event_internal (event);
+  event_type = gdk_event_get_event_type (event);
+  window = gdk_event_get_window (event);
+  gdk_event_get_coords (event, &dx, &dy);
+
+  gtk_tooltip_handle_event_internal (event_type, window, dx, dy);
+
+  /* Always poll for a next motion event */
+  gdk_event_request_motions ((GdkEventMotion *) event);
+
 }
 
 static void
-gtk_tooltip_handle_event_internal (GdkEvent *event)
+gtk_tooltip_handle_event_internal (GdkEventType  event_type,
+                                   GdkWindow    *window,
+                                   gdouble       dx,
+                                   gdouble       dy)
 {
   gint x, y;
   GtkWidget *has_tooltip_widget;
   GdkDisplay *display;
   GtkTooltip *current_tooltip;
 
-  /* Returns coordinates relative to has_tooltip_widget's allocation. */
-  has_tooltip_widget = find_topmost_widget_coords_from_event (event, &x, &y);
-  display = gdk_window_get_display (gdk_event_get_window (event));
+  has_tooltip_widget = find_topmost_widget_coords (window, dx, dy, &x, &y);
+  display = gdk_window_get_display (window);
   current_tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   if (current_tooltip)
-    {
-      gtk_tooltip_set_last_window (current_tooltip,
-                                   gdk_event_get_window (event));
-    }
+    gtk_tooltip_set_last_window (current_tooltip, window);
 
   if (current_tooltip && current_tooltip->keyboard_mode_enabled)
     {
@@ -1436,9 +1437,6 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
       return;
     }
 
-  /* Always poll for a next motion event */
-  gdk_event_request_motions ((GdkEventMotion *) event);
-
   /* Hide the tooltip when there's no new tooltip widget */
   if (!has_tooltip_widget)
     {
@@ -1448,7 +1446,7 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
       return;
     }
 
-  switch (gdk_event_get_event_type (event))
+  switch (event_type)
     {
       case GDK_BUTTON_PRESS:
       case GDK_2BUTTON_PRESS:
@@ -1477,7 +1475,7 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
                                      &x, &y);
 
 	    /* Leave notify should override the query function */
-	    hide_tooltip = (gdk_event_get_event_type (event) == GDK_LEAVE_NOTIFY);
+	    hide_tooltip = (event_type == GDK_LEAVE_NOTIFY);
 
 	    /* Is the pointer above another widget now? */
 	    if (GTK_TOOLTIP_VISIBLE (current_tooltip))
@@ -1507,8 +1505,7 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
 			      G_CALLBACK (gtk_tooltip_display_closed),
 			      current_tooltip);
 
-	    gtk_tooltip_set_last_window (current_tooltip,
-                                         gdk_event_get_window (event));
+	    gtk_tooltip_set_last_window (current_tooltip, window);
 
 	    gtk_tooltip_start_delay (display);
 	  }
