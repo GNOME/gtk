@@ -552,23 +552,33 @@ gtk_cell_editable_widget_key_press_event (GtkWidget   *widget,
   GtkCellEditableWidget *box = (GtkCellEditableWidget*)widget;
   GdkModifierType accel_mods = 0;
   guint accel_key;
-  guint keyval;
+  guint keyval = 0;
   gboolean edited;
   gboolean cleared;
   GdkModifierType consumed_modifiers;
   GdkDisplay *display;
+  gboolean is_modifier = FALSE;
+  guint16 keycode = 0;
+  guint group = 0;
+  GdkModifierType state = 0;
 
   display = gtk_widget_get_display (widget);
 
-  if (event->is_modifier)
+  gdk_event_get_state ((GdkEvent *)event, &state);
+  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
+  gdk_event_get_keycode ((GdkEvent *)event, &keycode);
+  gdk_event_get_key_group ((GdkEvent *)event, &group);
+  gdk_event_get_key_is_modifier ((GdkEvent *)event, &is_modifier);
+
+  if (is_modifier)
     return TRUE;
 
   edited = FALSE;
   cleared = FALSE;
 
-  accel_mods = event->state;
+  accel_mods = state;
 
-  if (event->keyval == GDK_KEY_Sys_Req && 
+  if (keyval == GDK_KEY_Sys_Req &&
       (accel_mods & GDK_MOD1_MASK) != 0)
     {
       /* HACK: we don't want to use SysRq as a keybinding (but we do
@@ -580,29 +590,27 @@ gtk_cell_editable_widget_key_press_event (GtkWidget   *widget,
   else
     {
       _gtk_translate_keyboard_accel_state (gdk_keymap_get_for_display (display),
-                                           event->hardware_keycode,
-                                           event->state,
+                                           keycode,
+                                           state,
                                            gtk_accelerator_get_default_mod_mask (),
-                                           event->group,
+                                           group,
                                            &keyval, NULL, NULL, &consumed_modifiers);
     }
 
   accel_key = gdk_keyval_to_lower (keyval);
-  if (accel_key == GDK_KEY_ISO_Left_Tab) 
+  if (accel_key == GDK_KEY_ISO_Left_Tab)
     accel_key = GDK_KEY_Tab;
 
   accel_mods &= gtk_accelerator_get_default_mod_mask ();
 
-  /* Filter consumed modifiers 
-   */
+  /* Filter consumed modifiers */
   if (box->accel_mode == GTK_CELL_RENDERER_ACCEL_MODE_GTK)
     accel_mods &= ~consumed_modifiers;
-  
-  /* Put shift back if it changed the case of the key, not otherwise.
-   */
+
+  /* Put shift back if it changed the case of the key, not otherwise. */
   if (accel_key != keyval)
     accel_mods |= GDK_SHIFT_MASK;
-    
+
   if (accel_mods == 0)
     {
       switch (keyval)
@@ -634,7 +642,7 @@ gtk_cell_editable_widget_key_press_event (GtkWidget   *widget,
 
   if (edited)
     g_signal_emit (box->cell, signals[ACCEL_EDITED], 0, box->path,
-                   accel_key, accel_mods, event->hardware_keycode);
+                   accel_key, accel_mods, keycode);
   else if (cleared)
     g_signal_emit (box->cell, signals[ACCEL_CLEARED], 0, box->path);
 
