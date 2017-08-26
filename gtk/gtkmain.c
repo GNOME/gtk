@@ -1613,7 +1613,7 @@ gtk_main_do_event (GdkEvent *event)
 
   if (event->type == GDK_SETTING)
     {
-      _gtk_settings_handle_event (&event->setting);
+      _gtk_settings_handle_event (event);
       return;
     }
 
