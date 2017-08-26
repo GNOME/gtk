@@ -112,25 +112,37 @@ static void
 atk_key_event_from_gdk_event_key (GdkEventKey       *key,
                                   AtkKeyEventStruct *event)
 {
-  if (key->type == GDK_KEY_PRESS)
+  GdkEventType type;
+  GdkModifierType state;
+  guint keyval;
+  guint16 keycode;
+  const char *string;
+
+  type = gdk_event_get_event_type ((GdkEvent *)key);
+  gdk_event_get_state ((GdkEvent *)key, &state);
+  gdk_event_get_keyval ((GdkEvent *)key, &keyval);
+  gdk_event_get_keycode ((GdkEvent *)key, &keycode);
+  gdk_event_get_string ((GdkEvent *)key, &string);
+
+  if (type == GDK_KEY_PRESS)
     event->type = ATK_KEY_EVENT_PRESS;
-  else if (key->type == GDK_KEY_RELEASE)
+  else if (type == GDK_KEY_RELEASE)
     event->type = ATK_KEY_EVENT_RELEASE;
   else
     g_assert_not_reached ();
 
-  event->state = key->state;
-  event->keyval = key->keyval;
-  event->length = key->length;
-  if (key->string && key->string[0] &&
-      (key->state & GDK_CONTROL_MASK ||
-       g_unichar_isgraph (g_utf8_get_char (key->string))))
-    event->string = key->string;
+  event->state = state;
+  event->keyval = keyval;
+  if (string && string[0] &&
+      (state & GDK_CONTROL_MASK ||
+       g_unichar_isgraph (g_utf8_get_char (string))))
+    event->string = string;
   else
-    event->string = gdk_keyval_name (key->keyval);
+    event->string = gdk_keyval_name (keyval);
 
-  event->keycode = key->hardware_keycode;
-  event->timestamp = key->time;
+  event->length = strlen (string);
+  event->keycode = keycode;
+  event->timestamp = gdk_event_get_time ((GdkEvent *)key);
 }
 
 gboolean
