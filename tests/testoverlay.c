@@ -317,7 +317,7 @@ test_builder (void)
 static void
 on_enter (GtkWidget *overlay, GdkEventCrossing *event, GtkWidget *child)
 {
-  if (event->window != gtk_widget_get_window (child))
+  if (gdk_event_get_window ((GdkEvent*)event) != gtk_widget_get_window (child))
     return;
 
   if (gtk_widget_get_halign (child) == GTK_ALIGN_START)
