@@ -1713,7 +1713,7 @@ on_button_press_event (GtkPlacesViewRow *row,
 {
   if (row &&
       gdk_event_triggers_context_menu ((GdkEvent*) event) &&
-      gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+      gdk_event_get_event_type ((GdkEvent *)event) == GDK_BUTTON_PRESS)
     {
       popup_menu (row, event);
 
