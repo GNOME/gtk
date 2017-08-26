@@ -1129,10 +1129,13 @@ gtk_menu_item_enter (GtkWidget        *widget,
                      GdkEventCrossing *event)
 {
   GtkWidget *menu_shell;
+  GdkCrossingMode mode;
 
-  if (event->mode == GDK_CROSSING_GTK_GRAB ||
-      event->mode == GDK_CROSSING_GTK_UNGRAB ||
-      event->mode == GDK_CROSSING_STATE_CHANGED)
+  gdk_event_get_crossing_mode ((GdkEvent *)event, &mode);
+
+  if (mode == GDK_CROSSING_GTK_GRAB ||
+      mode == GDK_CROSSING_GTK_UNGRAB ||
+      mode == GDK_CROSSING_STATE_CHANGED)
     return GDK_EVENT_STOP;
 
   if (gdk_event_get_device ((GdkEvent*) event) ==
