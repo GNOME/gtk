@@ -2633,12 +2633,15 @@ gtk_flow_box_leave_notify_event (GtkWidget        *widget,
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxChild *child = NULL;
   gdouble x, y;
+  GdkNotifyType detail;
 
   if (gdk_event_get_window ((GdkEvent *) event) !=
       gtk_widget_get_window (GTK_WIDGET (box)))
     return FALSE;
 
-  if (event->detail != GDK_NOTIFY_INFERIOR)
+  gdk_event_get_crossing_detail ((GdkEvent *)event, &detail);
+
+  if (detail != GDK_NOTIFY_INFERIOR)
     child = NULL;
   else if (gdk_event_get_coords ((GdkEvent *) event, &x, &y))
     child = gtk_flow_box_get_child_at_pos (box, x, y);
