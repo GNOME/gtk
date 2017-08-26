@@ -65,10 +65,12 @@ gtk_gesture_drag_filter_event (GtkEventController *controller,
   if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_SWIPE)
     {
       guint n_points;
+      guint n_fingers;
 
       g_object_get (G_OBJECT (controller), "n-points", &n_points, NULL);
+      gdk_event_get_touchpad_gesture_n_fingers (event, &n_fingers);
 
-      if (event->touchpad_swipe.n_fingers == n_points)
+      if (n_fingers == n_points)
         return FALSE;
       else
         return TRUE;
