@@ -1291,6 +1291,7 @@ captured_event_cb (GtkWidget *widget,
   gboolean on_scrollbar;
   GdkEventType event_type;
   guint state;
+  GdkCrossingMode mode;
 
   sw = GTK_SCROLLED_WINDOW (widget);
   priv = sw->priv;
@@ -1320,6 +1321,7 @@ captured_event_cb (GtkWidget *widget,
   event_target_ancestor = gtk_widget_get_ancestor (event_target, GTK_TYPE_SCROLLBAR);
   on_scrollbar = (event_target_ancestor == priv->hindicator.scrollbar ||
                   event_target_ancestor == priv->vindicator.scrollbar);
+  gdk_event_get_crossing_mode (event, &mode);
 
   if (event_type == GDK_MOTION_NOTIFY)
     {
@@ -1353,7 +1355,7 @@ captured_event_cb (GtkWidget *widget,
         }
     }
   else if (event_type == GDK_LEAVE_NOTIFY && on_scrollbar &&
-           event->crossing.mode == GDK_CROSSING_UNGRAB)
+           mode == GDK_CROSSING_UNGRAB)
     {
       check_update_scrollbar_proximity (sw, &priv->vindicator, event);
       check_update_scrollbar_proximity (sw, &priv->hindicator, event);
