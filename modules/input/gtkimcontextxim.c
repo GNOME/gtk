@@ -677,7 +677,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
 
   xevent.type = (event_type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
-  xevent.send_event = event->send_event;
+  xevent.send_event = gdk_event_is_sent ((GdkEvent *)event);
   xevent.display = GDK_WINDOW_XDISPLAY (window);
   xevent.window = GDK_WINDOW_XID (window);
   xevent.root = DefaultRootWindow(GDK_WINDOW_XDISPLAY (window));
