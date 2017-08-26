@@ -1412,6 +1412,69 @@ gdk_event_get_keycode (const GdkEvent *event,
   return fetched;
 }
 
+gboolean
+gdk_event_get_key_group (const GdkEvent *event,
+                         guint          *group)
+{
+  gboolean fetched = TRUE;
+
+  switch (event->type)
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      *group = event->key.group;
+      break;
+    default:
+      *group = 0;
+      fetched = FALSE;
+      break;
+    }
+
+  return fetched;
+}
+
+gboolean
+gdk_event_get_string (const GdkEvent  *event,
+                      const char     **string)
+{
+  gboolean fetched = TRUE;
+
+  switch (event->type)
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      *string = event->key.string;
+      break;
+    default:
+      *string = NULL;
+      fetched = FALSE;
+      break;
+    }
+
+  return fetched;
+}
+
+gboolean
+gdk_event_get_key_is_modifier (const GdkEvent *event,
+                               gboolean       *is_modifier)
+{
+  gboolean fetched = TRUE;
+
+  switch (event->type)
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      *is_modifier = event->key.is_modifier;
+      break;
+    default:
+      *is_modifier = FALSE;
+      fetched = FALSE;
+      break;
+    }
+
+  return fetched;
+}
+
 /**
  * gdk_event_get_scroll_direction:
  * @event: a #GdkEvent
@@ -2604,4 +2667,123 @@ gdk_event_get_user_data (const GdkEvent *event)
 
   private = (GdkEventPrivate *) event;
   return private->user_data;
+}
+
+gboolean
+gdk_event_get_setting (const GdkEvent  *event,
+                       const char     **setting)
+{
+  if (event && event->type == GDK_SETTING)
+    {
+      *setting = event->setting.name;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_is_sent (const GdkEvent *event)
+{
+  if (!event)
+    return FALSE;
+
+  return event->any.send_event;
+}
+
+gboolean
+gdk_event_get_drag_context (const GdkEvent  *event,
+                            GdkDragContext **context)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_DRAG_ENTER ||
+      event->type == GDK_DRAG_LEAVE ||
+      event->type == GDK_DRAG_MOTION ||
+      event->type == GDK_DRAG_STATUS ||
+      event->type == GDK_DROP_START ||
+      event->type == GDK_DROP_FINISHED)
+    {
+      *context = event->dnd.context;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_crossing_mode (const GdkEvent  *event,
+                             GdkCrossingMode *mode)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_ENTER_NOTIFY ||
+      event->type == GDK_LEAVE_NOTIFY)
+    {
+      *mode = event->crossing.mode;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_crossing_detail (const GdkEvent *event,
+                               GdkNotifyType  *detail)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_ENTER_NOTIFY ||
+      event->type == GDK_LEAVE_NOTIFY)
+    {
+      *detail = event->crossing.detail;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
+                                      GdkTouchpadGesturePhase *phase)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_TOUCHPAD_PINCH)
+    {
+      *phase = event->touchpad_pinch.phase;
+      return TRUE;
+    }
+  else if (event->type == GDK_TOUCHPAD_SWIPE)
+    {
+      *phase = event->touchpad_swipe.phase;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
+                                          guint          *n_fingers)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_TOUCHPAD_PINCH)
+    {
+      *n_fingers = event->touchpad_pinch.n_fingers;
+      return TRUE;
+    }
+  else if (event->type == GDK_TOUCHPAD_SWIPE)
+    {
+      *n_fingers = event->touchpad_swipe.n_fingers;
+      return TRUE;
+    }
+
+  return FALSE;
 }

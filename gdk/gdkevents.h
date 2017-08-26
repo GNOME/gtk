@@ -639,6 +639,16 @@ gboolean  gdk_event_get_keyval          (const GdkEvent *event,
 GDK_AVAILABLE_IN_3_2
 gboolean  gdk_event_get_keycode         (const GdkEvent *event,
                                          guint16        *keycode);
+GDK_AVAILABLE_IN_3_92
+gboolean  gdk_event_get_key_is_modifier (const GdkEvent *event,
+                                         gboolean       *is_modifier);
+GDK_AVAILABLE_IN_3_92
+gboolean  gdk_event_get_key_group       (const GdkEvent *event,
+                                         guint          *group);
+GDK_AVAILABLE_IN_3_92
+gboolean  gdk_event_get_string          (const GdkEvent  *event,
+                                         const char     **string);
+
 GDK_AVAILABLE_IN_3_2
 gboolean gdk_event_get_scroll_direction (const GdkEvent *event,
                                          GdkScrollDirection *direction);
@@ -728,6 +738,30 @@ gboolean       gdk_event_get_pointer_emulated (GdkEvent *event);
 GDK_AVAILABLE_IN_3_92
 void           gdk_event_set_user_data (GdkEvent *event,
                                         GObject  *user_data);
+
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_setting   (const GdkEvent  *event,
+                                        const char     **setting);
+
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_is_sent       (const GdkEvent *event);
+
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_drag_context (const GdkEvent  *event,
+                                           GdkDragContext **context);
+
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_crossing_mode (const GdkEvent  *event,
+                                            GdkCrossingMode *mode);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_crossing_detail (const GdkEvent *event,
+                                              GdkNotifyType  *detail);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
+                                                     GdkTouchpadGesturePhase *phase);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_touchpad_gesture_n_fingers(const GdkEvent *event,
+                                                        guint          *n_fingers);
 
 G_END_DECLS
 
