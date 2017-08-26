@@ -713,7 +713,10 @@ static gboolean
 gtk_path_bar_scroll (GtkWidget      *widget,
 		     GdkEventScroll *event)
 {
-  switch (event->direction)
+  GdkScrollDirection direction;
+
+  gdk_event_get_scroll_direction ((GdkEvent*)event, &direction);
+  switch (direction)
     {
     case GDK_SCROLL_RIGHT:
     case GDK_SCROLL_DOWN:
@@ -1001,8 +1004,12 @@ gtk_path_bar_slider_button_press (GtkWidget      *widget,
 				  GdkEventButton *event,
 				  GtkPathBar     *path_bar)
 {
+  guint button;
+
+  gdk_event_get_button ((GdkEvent*)event, &button);
+
   if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_BUTTON_PRESS ||
-      event->button != GDK_BUTTON_PRIMARY)
+      button != GDK_BUTTON_PRIMARY)
     return FALSE;
 
   path_bar->priv->ignore_click = FALSE;
