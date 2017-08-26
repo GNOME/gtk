@@ -1375,6 +1375,15 @@ gdk_event_get_keyval (const GdkEvent *event,
   return fetched;
 }
 
+void
+gdk_event_set_keyval (GdkEvent *event,
+                      guint     keyval)
+{
+  if (event->type == GDK_KEY_PRESS ||
+      event->type == GDK_KEY_RELEASE)
+    event->key.keyval = keyval;
+}
+
 /**
  * gdk_event_get_keycode:
  * @event: a #GdkEvent
@@ -2786,4 +2795,269 @@ gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
     }
 
   return FALSE;
+}
+
+gboolean
+gdk_event_get_touchpad_deltas (const GdkEvent *event,
+                               double         *dx,
+                               double         *dy)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_TOUCHPAD_PINCH)
+    {
+      *dx = event->touchpad_pinch.dx;
+      *dy = event->touchpad_pinch.dy;
+      return TRUE;
+    }
+  else if (event->type == GDK_TOUCHPAD_SWIPE)
+    {
+      *dx = event->touchpad_swipe.dx;
+      *dy = event->touchpad_swipe.dy;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_touchpad_angle_delta (const GdkEvent *event,
+                                    double         *delta)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_TOUCHPAD_PINCH)
+    {
+      *delta = event->touchpad_pinch.angle_delta;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_touchpad_scale (const GdkEvent *event,
+                              double         *scale)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_TOUCHPAD_PINCH)
+    {
+      *scale = event->touchpad_pinch.scale;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
+                                       gboolean       *emulating)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_TOUCH_BEGIN ||
+      event->type == GDK_TOUCH_UPDATE ||
+      event->type == GDK_TOUCH_END)
+    {
+      *emulating = event->touch.emulating_pointer;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_grab_window (const GdkEvent  *event,
+                           GdkWindow      **window)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_GRAB_BROKEN)
+    {
+      *window = event->grab_broken.grab_window;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_window_state (const GdkEvent *event,
+                            GdkWindowState *changed,
+                            GdkWindowState *new_state)
+
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_WINDOW_STATE)
+    {
+      *changed = event->window_state.changed_mask;
+      *new_state = event->window_state.new_window_state;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_focus_in (const GdkEvent *event,
+                        gboolean       *focus_in)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_FOCUS_CHANGE)
+    {
+      *focus_in = event->focus_change.in;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_pad_group_mode (const GdkEvent *event,
+                              guint          *group,
+                              guint          *mode)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_PAD_GROUP_MODE)
+    {
+      *group = event->pad_group_mode.group;
+      *mode = event->pad_group_mode.mode;
+      return TRUE;
+    }
+  else if (event->type == GDK_PAD_BUTTON_PRESS ||
+           event->type == GDK_PAD_BUTTON_RELEASE)
+    {
+      *group = event->pad_button.group;
+      *mode = event->pad_button.mode;
+      return TRUE;
+    }
+  else if (event->type == GDK_PAD_RING ||
+           event->type == GDK_PAD_STRIP)
+    {
+      *group = event->pad_axis.group;
+      *mode = event->pad_axis.mode;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_pad_button (const GdkEvent *event,
+                          guint          *button)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_PAD_BUTTON_PRESS ||
+      event->type == GDK_PAD_BUTTON_RELEASE)
+    {
+      *button = event->pad_button.button;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_pad_axis_value (const GdkEvent *event,
+                              guint          *index,
+                              gdouble        *value)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_PAD_RING ||
+      event->type == GDK_PAD_STRIP)
+    {
+      *index = event->pad_axis.index;
+      *value = event->pad_axis.value;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_property (const GdkEvent   *event,
+                        GdkAtom          *property,
+                        GdkPropertyState *state)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_PROPERTY_NOTIFY)
+    {
+      *property = event->property.atom;
+      *state = event->property.state;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_selection (const GdkEvent   *event,
+                         GdkAtom          *selection)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_SELECTION_CLEAR ||
+      event->type == GDK_SELECTION_NOTIFY ||
+      event->type == GDK_SELECTION_REQUEST)
+    {
+      *selection = event->selection.selection;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gdk_event_get_selection_property (const GdkEvent  *event,
+                                  GdkAtom         *property,
+                                  GdkAtom         *target,
+                                  GdkWindow      **requestor)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_SELECTION_CLEAR ||
+      event->type == GDK_SELECTION_NOTIFY ||
+      event->type == GDK_SELECTION_REQUEST)
+    {
+      if (property)
+        *property = event->selection.property;
+      if (target)
+        *target = event->selection.target;
+      if (requestor)
+        *requestor = event->selection.requestor;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+void
+gdk_event_set_selection (GdkEvent  *event,
+                         GdkWindow *window,
+                         GdkAtom    selection,
+                         guint32    time)
+{
+  event->selection.window = g_object_ref (window);
+  event->selection.selection = selection;
+  event->selection.time = time;
 }

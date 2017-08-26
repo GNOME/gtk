@@ -619,6 +619,11 @@ gboolean  gdk_event_get_click_count     (const GdkEvent *event,
 GDK_AVAILABLE_IN_3_2
 gboolean  gdk_event_get_keyval          (const GdkEvent *event,
                                          guint          *keyval);
+
+GDK_AVAILABLE_IN_3_92
+void      gdk_event_set_keyval          (GdkEvent *event,
+                                         guint     keyval);
+
 GDK_AVAILABLE_IN_3_2
 gboolean  gdk_event_get_keycode         (const GdkEvent *event,
                                          guint16        *keycode);
@@ -743,8 +748,62 @@ GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
                                                      GdkTouchpadGesturePhase *phase);
 GDK_AVAILABLE_IN_3_92
-gboolean       gdk_event_get_touchpad_gesture_n_fingers(const GdkEvent *event,
-                                                        guint          *n_fingers);
+gboolean       gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
+                                                         guint          *n_fingers);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_touchpad_deltas (const GdkEvent *event,
+                                              double         *dx,
+                                              double         *dy);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_touchpad_angle_delta (const GdkEvent *event,
+                                                   double         *delta);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_touchpad_scale (const GdkEvent *event,
+                                             double         *scale);
+
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
+                                                      gboolean       *emulating);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_grab_window (const GdkEvent  *event,
+                                          GdkWindow      **window);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_window_state (const GdkEvent  *event,
+                                           GdkWindowState  *changed,
+                                           GdkWindowState  *new_state);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_focus_in (const GdkEvent *event,
+                                       gboolean       *focus_in);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_pad_group_mode (const GdkEvent *event,
+                                             guint          *group,
+                                             guint          *mode);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_pad_button (const GdkEvent *event,
+                                         guint          *button);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_pad_axis_value (const GdkEvent *event,
+                                             guint          *index,
+                                             gdouble        *value);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_property (const GdkEvent   *event,
+                                       GdkAtom          *property,
+                                       GdkPropertyState *state);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_selection (const GdkEvent   *event,
+                                        GdkAtom          *selection);
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_selection_property (const GdkEvent  *event,
+                                                 GdkAtom         *property,
+                                                 GdkAtom         *target,
+                                                 GdkWindow      **requestor);
+GDK_AVAILABLE_IN_3_92
+void           gdk_event_set_selection (GdkEvent  *event,
+                                        GdkWindow *window,
+                                        GdkAtom    selection,
+                                        guint32    time);
+
+
 
 G_END_DECLS
 
