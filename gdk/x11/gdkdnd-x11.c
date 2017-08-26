@@ -2668,6 +2668,7 @@ drag_context_grab (GdkDragContext *context)
   GdkWindow *root;
   GdkSeat *seat;
   gint keycode, i;
+  GdkCursor *cursor;
 
   if (!x11_context->ipc_window)
     return FALSE;
@@ -2681,6 +2682,9 @@ drag_context_grab (GdkDragContext *context)
   else
 #endif
     capabilities = GDK_SEAT_CAPABILITY_ALL;
+
+  cursor = gdk_drag_get_cursor (context, x11_context->current_action);
+  g_set_object (&x11_context->cursor, cursor);
 
   if (gdk_seat_grab (seat, x11_context->ipc_window,
                      capabilities, FALSE,
