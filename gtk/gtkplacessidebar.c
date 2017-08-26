@@ -1670,6 +1670,7 @@ on_motion_notify_event (GtkWidget      *widget,
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
   guint state;
+  double x_root, y_root;
 
   if (sidebar->drag_row == NULL || sidebar->dragging_over)
     return FALSE;
@@ -1678,9 +1679,11 @@ on_motion_notify_event (GtkWidget      *widget,
       !(state & GDK_BUTTON1_MASK))
     return FALSE;
 
+  gdk_event_get_root_coords ((GdkEvent *) event, &x_root, &y_root);
+
   if (gtk_drag_check_threshold (widget,
                                 sidebar->drag_root_x, sidebar->drag_root_y,
-                                event->x_root, event->y_root))
+                                x_root, y_root))
     {
       sidebar->dragging_over = TRUE;
 
@@ -3679,6 +3682,7 @@ on_button_press_event (GtkWidget      *widget,
   GtkPlacesSidebar *sidebar;
   GtkPlacesSidebarSectionType section_type;
   gdouble x, y;
+  double x_root, y_root;
 
   g_object_get (GTK_SIDEBAR_ROW (row),
                 "sidebar", &sidebar,
@@ -3688,12 +3692,13 @@ on_button_press_event (GtkWidget      *widget,
   if (section_type == SECTION_BOOKMARKS)
     {
       gdk_event_get_coords ((GdkEvent *) event, &x, &y);
+      gdk_event_get_root_coords ((GdkEvent *) event, &x_root, &y_root);
       sidebar->drag_row = GTK_WIDGET (row);
       sidebar->drag_row_x = (gint)x;
       sidebar->drag_row_y = (gint)y;
 
-      sidebar->drag_root_x = event->x_root;
-      sidebar->drag_root_y = event->y_root;
+      sidebar->drag_root_x = x_root;
+      sidebar->drag_root_y = y_root;
     }
 
   g_object_unref (sidebar);
