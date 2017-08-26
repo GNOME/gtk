@@ -49,10 +49,12 @@ focus_cb (GtkWidget     *widget,
           GdkEventFocus *event)
 {
   AtkObject *obj;
+  gboolean in;
 
   obj = gtk_widget_get_accessible (widget);
 
-  g_signal_emit_by_name (obj, "focus-event", event->in);
+  gdk_event_get_focus_in ((GdkEvent *)event, &in);
+  g_signal_emit_by_name (obj, "focus-event", in);
 
   return FALSE;
 }
