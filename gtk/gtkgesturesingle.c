@@ -140,6 +140,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   guint button = 0, state, i;
   gboolean retval, test_touchscreen = FALSE;
   GdkEventType event_type;
+  gboolean emulating;
 
   source_device = gdk_event_get_source_device (event);
 
@@ -159,7 +160,8 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_END:
     case GDK_TOUCH_UPDATE:
-      if (priv->exclusive && !event->touch.emulating_pointer)
+      gdk_event_get_touch_emulating_pointer (event, &emulating);
+      if (priv->exclusive && !emulating)
         return FALSE;
 
       sequence = gdk_event_get_event_sequence (event);
