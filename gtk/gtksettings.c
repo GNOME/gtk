@@ -2007,15 +2007,20 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
 }
 
 void
-_gtk_settings_handle_event (GdkEventSetting *event)
+_gtk_settings_handle_event (GdkEvent *event)
 {
   GdkScreen *screen;
   GtkSettings *settings;
   GParamSpec *pspec;
+  const char *name;
 
-  screen = gdk_window_get_screen (event->window);
+  screen = gdk_window_get_screen (gdk_event_get_window (event));
   settings = gtk_settings_get_for_screen (screen);
-  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name);
+
+  if (!gdk_event_get_setting (event, &name))
+    return;
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), name);
 
   if (!pspec)
     return;
