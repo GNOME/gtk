@@ -1054,7 +1054,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
       for (i=0; i < n_compose - len - 1; i++)
 	{
 	  GdkEvent *tmp_event = gdk_event_copy ((GdkEvent *)event);
-	  tmp_event->key.keyval = priv->compose_buffer[len + i];
+          gdk_event_set_keyval (tmp_event, priv->compose_buffer[len + i]);
 	  
 	  gtk_im_context_filter_keypress (context, (GdkEventKey *)tmp_event);
 	  gdk_event_free (tmp_event);
