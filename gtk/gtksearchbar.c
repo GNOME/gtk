@@ -103,7 +103,11 @@ entry_key_pressed_event_cb (GtkWidget    *widget,
                             GdkEvent     *event,
                             GtkSearchBar *bar)
 {
-  if (event->key.keyval == GDK_KEY_Escape)
+  guint keyval;
+
+  gdk_event_get_keyval (event, &keyval);
+
+  if (keyval == GDK_KEY_Escape)
     {
       stop_search_cb (widget, bar);
       return GDK_EVENT_STOP;
@@ -130,10 +134,14 @@ gtk_search_bar_handle_event_for_entry (GtkSearchBar *bar,
   guint preedit_change_id;
   gboolean res;
   char *old_text, *new_text;
+  guint keyval;
+
+  gdk_event_get_keyval (event, &keyval);
+
 
   if (gtk_search_entry_is_keynav_event (event) ||
-      event->key.keyval == GDK_KEY_space ||
-      event->key.keyval == GDK_KEY_Menu)
+      keyval == GDK_KEY_space ||
+      keyval == GDK_KEY_Menu)
     return GDK_EVENT_PROPAGATE;
 
   if (!gtk_widget_get_realized (priv->entry))
