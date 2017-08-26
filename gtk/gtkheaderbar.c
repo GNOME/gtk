@@ -1801,8 +1801,10 @@ window_state_changed (GtkWidget           *window,
                       gpointer             data)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (data);
+  GdkWindowState changed, new_state;
 
-  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
+  gdk_event_get_window_state ((GdkEvent *)event, &changed, &new_state);
+  if (changed & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
     _gtk_header_bar_update_window_buttons (bar);
 
   return FALSE;
