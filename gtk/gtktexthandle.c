@@ -191,6 +191,7 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
   gdouble event_x, event_y;
   guint state;
   gint pos;
+  GdkCrossingMode mode;
 
   priv = handle->priv;
   pos = _text_handle_pos_from_widget (handle, widget);
@@ -200,6 +201,7 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
 
   event_type = gdk_event_get_event_type (event);
   gdk_event_get_coords (event, &event_x, &event_y);
+  gdk_event_get_crossing_mode (event, &mode);
 
   if (event_type == GDK_BUTTON_PRESS)
     {
@@ -220,8 +222,8 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
   else if (event_type == GDK_LEAVE_NOTIFY)
     {
       if (!priv->windows[pos].dragged &&
-          (event->crossing.mode == GDK_CROSSING_NORMAL ||
-           event->crossing.mode == GDK_CROSSING_UNGRAB))
+          (mode == GDK_CROSSING_NORMAL ||
+           mode == GDK_CROSSING_UNGRAB))
         gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_PRELIGHT);
     }
   else if (event_type == GDK_MOTION_NOTIFY &&
