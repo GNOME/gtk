@@ -148,6 +148,7 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
   GtkWidget *widget;
   GdkEvent *event;
   GdkEventType event_type;
+  gboolean focus_in;
 
   object = g_value_get_object (param_values + 0);
   g_return_val_if_fail (GTK_IS_WIDGET(object), FALSE);
@@ -155,10 +156,11 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
   event = g_value_get_boxed (param_values + 1);
   widget = GTK_WIDGET (object);
   event_type = gdk_event_get_event_type (event);
+  gdk_event_get_focus_in (event, &focus_in);
 
   if (event_type == GDK_FOCUS_CHANGE)
     {
-      if (event->focus_change.in)
+      if (focus_in)
         {
           if (GTK_IS_WINDOW (widget))
             {
@@ -802,8 +804,9 @@ state_event_watcher (GSignalInvocationHint *hint,
   GtkWidget *widget;
   AtkObject *atk_obj;
   AtkObject *parent;
-  GdkEventWindowState *event;
+  GdkEvent *event;
   const char *signal_name;
+  GdkWindowState changed, new_state;
 
   object = g_value_get_object (param_values + 0);
   if (!GTK_IS_WINDOW (object))
@@ -814,11 +817,13 @@ state_event_watcher (GSignalInvocationHint *hint,
     return FALSE;
   widget = GTK_WIDGET (object);
 
-  if (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED)
+  gdk_event_get_window_state (event, &changed, &new_state);
+
+  if (new_state & GDK_WINDOW_STATE_MAXIMIZED)
     signal_name = "maximize";
-  else if (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED)
+  else if (new_state & GDK_WINDOW_STATE_ICONIFIED)
     signal_name = "minimize";
-  else if (event->new_window_state == 0)
+  else if (new_state == 0)
     signal_name = "restore";
   else
     return TRUE;
@@ -889,11 +894,13 @@ window_focus (GtkWidget     *widget,
               GdkEventFocus *event)
 {
   AtkObject *atk_obj;
+  gboolean focus_in;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
+  gdk_event_get_focus_in ((GdkEvent *)event, &focus_in);
   atk_obj = gtk_widget_get_accessible (widget);
-  g_signal_emit_by_name (atk_obj, event->in ? "activate" : "deactivate");
+  g_signal_emit_by_name (atk_obj, focus_in ? "activate" : "deactivate");
 
   return FALSE;
 }
