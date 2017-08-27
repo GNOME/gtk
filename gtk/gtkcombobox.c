@@ -1599,8 +1599,6 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 	    }
 
 	  gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
-          gtk_window_set_screen (GTK_WINDOW (priv->popup_window),
-                                 gtk_widget_get_screen (GTK_WIDGET (combo_box)));
 
 	  priv->scrolled_window = gtk_scrolled_window_new (NULL, NULL);
 	  
@@ -2118,6 +2116,8 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
 				  TRUE);
   
   /* popup */
+  gtk_window_set_screen (GTK_WINDOW (priv->popup_window),
+                         gtk_widget_get_screen (GTK_WIDGET (combo_box)));
   gtk_widget_show (priv->popup_window);
 
   if (path)
