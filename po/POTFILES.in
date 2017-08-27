@@ -41,6 +41,7 @@ gtk/a11y/gtkrenderercellaccessible.c
 gtk/a11y/gtkscalebuttonaccessible.c
 gtk/a11y/gtkspinneraccessible.c
 gtk/a11y/gtkswitchaccessible.c
+gtk/emoji/emoji.h
 gtk/encodesymbolic.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c

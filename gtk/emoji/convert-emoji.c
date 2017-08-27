@@ -102,10 +102,11 @@ main (int argc, char *argv[])
   GBytes *bytes;
   GHashTable *names;
   GString *name_key;
+  GString *name_header;
 
-  if (argc != 4)
+  if (argc != 5)
     {
-      g_print ("Usage: emoji-convert INPUT INPUT1 OUTPUT\n");
+      g_print ("Usage: emoji-convert INPUT1 INPUT2 OUTPUT1 OUTPUT2\n");
       return 1;
     }
 
@@ -123,6 +124,8 @@ main (int argc, char *argv[])
 
   names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
   name_key = g_string_new ("");
+
+  name_header = g_string_new ("#if 0\n\n");
 
   while (json_object_iter_next (&iter, &name, &node))
     {
@@ -216,11 +219,19 @@ main (int argc, char *argv[])
       shortname = g_hash_table_lookup (names, name_key->str);
 
       g_variant_builder_add (&builder, "(auss)", &b1, name, shortname ? shortname : "");
+      g_string_append_printf (name_header, "NC_(\"emoji name\", \"%s\")\n", name);
     }
 
   v = g_variant_builder_end (&builder);
   bytes = g_variant_get_data_as_bytes (v);
   if (!g_file_set_contents (argv[3], g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), &error))
+    {
+      g_error ("%s", error->message);
+      return 1;
+    }
+
+  g_string_append (name_header, "\n\n#endif\n");
+  if (!g_file_set_contents (argv[4], name_header->str, name_header->len, &error))
     {
       g_error ("%s", error->message);
       return 1;
