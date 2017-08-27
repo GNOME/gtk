@@ -992,12 +992,12 @@ update_places (GtkPlacesSidebar *sidebar)
   GtkListBoxRow *selected;
   gchar *home_uri;
   GIcon *start_icon;
-  GIcon *end_icon;
   GFile *root;
   gchar *tooltip;
   GList *network_mounts, *network_volumes;
   GIcon *new_bookmark_icon;
 #ifdef HAVE_CLOUDPROVIDERS
+  GIcon *end_icon;
   GList *cloud_provider_proxies;
   guint provider_status;
 #endif
