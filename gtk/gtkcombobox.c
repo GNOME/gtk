@@ -1855,8 +1855,6 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
     {
       if (!priv->popup_window)
         {
-          GtkWidget *toplevel;
-
           priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
           gtk_widget_set_name (priv->popup_window, "gtk-combobox-popup-window");
 
@@ -1869,15 +1867,6 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
           g_signal_connect (GTK_WINDOW (priv->popup_window),"hide",
                             G_CALLBACK (gtk_combo_box_child_hide),
                             combo_box);
-
-          toplevel = gtk_widget_get_toplevel (GTK_WIDGET (combo_box));
-          if (GTK_IS_WINDOW (toplevel))
-            {
-              gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
-                                           GTK_WINDOW (priv->popup_window));
-              gtk_window_set_transient_for (GTK_WINDOW (priv->popup_window),
-                                            GTK_WINDOW (toplevel));
-            }
 
           gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
 
@@ -2335,8 +2324,12 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (combo_box));
   if (GTK_IS_WINDOW (toplevel))
-    gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
-                                 GTK_WINDOW (priv->popup_window));
+    {
+      gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
+                                   GTK_WINDOW (priv->popup_window));
+      gtk_window_set_transient_for (GTK_WINDOW (priv->popup_window),
+                                    GTK_WINDOW (toplevel));
+    }
 
   gtk_widget_show_all (priv->scrolled_window);
   gtk_combo_box_list_position (combo_box, &x, &y, &width, &height);
