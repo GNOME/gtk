@@ -2855,6 +2855,7 @@ static void
 gdk_x11_drag_context_drop_performed (GdkDragContext *context,
                                      guint32         time_)
 {
+  gdk_drag_drop (context, time_);
   drag_context_ungrab (context);
 }
 
