@@ -9335,7 +9335,6 @@ native_response (GtkNativeDialog *self,
   GString *s;
   char *response;
   GtkFileFilter *filter;
-  GSList *filter_list = gtk_file_chooser_list_filters (GTK_FILE_CHOOSER (self));
 
   uris = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (self));
   filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (self));
