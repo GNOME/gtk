@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include "gtksidebarrowprivate.h"
 /* For section and place type enums */
 #include "gtkplacessidebarprivate.h"
@@ -26,6 +28,7 @@
 #include "gtkstylecontext.h"
 #include "gtkrevealer.h"
 #include "gtkselection.h"
+
 #ifdef HAVE_CLOUDPROVIDERS
 #include <cloudproviders/cloudproviderproxy.h>
 #endif
