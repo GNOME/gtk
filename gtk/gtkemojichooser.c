@@ -459,13 +459,15 @@ filter_func (GtkFlowBoxChild *child,
   GVariant *emoji_data;
   const char *text;
   const char *name;
-  const char *translated;
+  char *cf_text;
+  char *cf_name;
   gboolean res;
 
   res = TRUE;
 
   chooser = GTK_EMOJI_CHOOSER (gtk_widget_get_ancestor (GTK_WIDGET (child), GTK_TYPE_EMOJI_CHOOSER));
   text = gtk_entry_get_text (GTK_ENTRY (chooser->search_entry));
+
   emoji_data = (GVariant *) g_object_get_data (G_OBJECT (child), "emoji-data");
 
   if (text[0] == 0)
@@ -475,8 +477,13 @@ filter_func (GtkFlowBoxChild *child,
     goto out;
 
   g_variant_get_child (emoji_data, 1, "&s", &name);
-  translated = g_dpgettext2 (GETTEXT_PACKAGE, "emoji name", name);
-  res = strstr (translated, text) != NULL;
+  name = g_dpgettext2 (GETTEXT_PACKAGE, "emoji name", name);
+
+  cf_text = g_utf8_casefold (text, -1);
+  cf_name = g_utf8_casefold (name, -1);
+  res = strstr (cf_name, cf_text) != NULL;
+  g_free (cf_text);
+  g_free (cf_name);
 
 out:
   if (res)
