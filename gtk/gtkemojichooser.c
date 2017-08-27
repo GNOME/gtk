@@ -319,15 +319,17 @@ enter_or_leave (GtkWidget        *child,
       GVariant *emoji_data;
       gunichar modifier;
       const char *name;
+      const char *translated;
       char text[64];
 
       emoji_data = (GVariant*) g_object_get_data (G_OBJECT (child), "emoji-data");
       modifier = (gunichar) GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (child), "modifier"));
       g_variant_get_child (emoji_data, 1, "&s", &name);
+      translated = g_dpgettext2 (GETTEXT_PACKAGE, "emoji name", name);
 
       codes_to_utf8 (emoji_data, modifier, text);
       gtk_label_set_text (GTK_LABEL (chooser->emoji_preview), text);
-      gtk_label_set_text (GTK_LABEL (chooser->emoji_name_preview), name);
+      gtk_label_set_text (GTK_LABEL (chooser->emoji_name_preview), translated);
     }
   else
     {
@@ -457,6 +459,7 @@ filter_func (GtkFlowBoxChild *child,
   GVariant *emoji_data;
   const char *text;
   const char *name;
+  const char *translated;
   gboolean res;
 
   res = TRUE;
@@ -472,7 +475,8 @@ filter_func (GtkFlowBoxChild *child,
     goto out;
 
   g_variant_get_child (emoji_data, 1, "&s", &name);
-  res = strstr (name, text) != NULL;
+  translated = g_dpgettext2 (GETTEXT_PACKAGE, "emoji name", name);
+  res = strstr (translated, text) != NULL;
 
 out:
   if (res)
