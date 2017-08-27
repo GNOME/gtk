@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-03 11:48+0000\n"
-"PO-Revision-Date: 2017-03-04 01:58+0900\n"
+"POT-Creation-Date: 2017-08-27 19:47+0000\n"
+"PO-Revision-Date: 2017-08-28 06:20+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -85,11 +85,11 @@ msgstr "<플래그>"
 msgid "GDK debugging flags to unset"
 msgstr "설정 해제할 GDK 디버깅 플래그"
 
-#: gdk/gdkwindow.c:2826
+#: gdk/gdkwindow.c:2829
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GDK_DEBUG를 통해 GL 기능을 사용하지 않습니다"
 
-#: gdk/gdkwindow.c:2837
+#: gdk/gdkwindow.c:2840
 msgid "The current backend does not support OpenGL"
 msgstr "현재 백엔드가 OpenGL을 지원하지 않습니다"
 
@@ -462,7 +462,7 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "절전"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2153
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2226
 #: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:796
 #: gdk/x11/gdkglcontext-x11.c:1274
 msgid "No GL implementation is available"
@@ -474,14 +474,14 @@ msgstr "GL 구현이 없습니다"
 msgid "Unable to create a GL context"
 msgstr "GL 컨텍스트를 만들 수 없습니다"
 
-#: gdk/mir/gdkmirwindowimpl.c:2115 gdk/mir/gdkmirwindowimpl.c:2125
+#: gdk/mir/gdkmirwindowimpl.c:2188 gdk/mir/gdkmirwindowimpl.c:2198
 #: gdk/wayland/gdkglcontext-wayland.c:418
 #: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:702
 #: gdk/x11/gdkglcontext-x11.c:968
 msgid "No available configurations for the given pixel format"
 msgstr "주어진 픽셀 형식에 대한 설정이 없습니다"
 
-#: gdk/mir/gdkmirwindowimpl.c:2161
+#: gdk/mir/gdkmirwindowimpl.c:2234
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 코어 GL 프로파일이 EGL 구현에 없습니다"
 
@@ -673,15 +673,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "닫기(_C)"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:9045
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:411 gtk/gtkwindow.c:9047
 msgid "Minimize"
 msgstr "최소화"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:9054
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9056
 msgid "Maximize"
 msgstr "최대화"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:9011
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9013
 msgid "Restore"
 msgstr "복구"
 
@@ -1223,13 +1223,13 @@ msgstr ""
 "를 여기로 드래그하거나 오른쪽 클릭을 해 “색 여기에 저장”을 선택하십시오."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechoosernative.c:514 gtk/gtkfilechoosernative.c:606
+#: gtk/gtkfilechoosernative.c:540 gtk/gtkfilechoosernative.c:632
 #: gtk/gtkfilechooserwidget.c:1477 gtk/gtkfilechooserwidget.c:6384
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12514 gtk/inspector/css-editor.c:208
+#: gtk/gtkwindow.c:12516 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1278,7 +1278,7 @@ msgid "_Apply"
 msgstr "적용(_A)"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12515
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12517
 msgid "_OK"
 msgstr "확인(_O)"
 
@@ -1591,7 +1591,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:831 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkaccellabel.c:843 gtk/gtkshortcutlabel.c:114
 #: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
@@ -1602,7 +1602,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:844 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkaccellabel.c:856 gtk/gtkshortcutlabel.c:117
 #: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1613,18 +1613,18 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkaccellabel.c:870 gtk/gtkshortcutlabel.c:111
 #: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:875
+#: gtk/gtkaccellabel.c:887
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "스페이스"
 
-#: gtk/gtkaccellabel.c:878 gtk/gtkshortcutlabel.c:181
+#: gtk/gtkaccellabel.c:890 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "백슬래시"
@@ -1810,7 +1810,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1863
+#: gtk/gtkcalendar.c:1866
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1825,7 +1825,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1894 gtk/gtkcalendar.c:2590
+#: gtk/gtkcalendar.c:1897 gtk/gtkcalendar.c:2593
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1841,7 +1841,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1926 gtk/gtkcalendar.c:2456
+#: gtk/gtkcalendar.c:1929 gtk/gtkcalendar.c:2459
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1857,7 +1857,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2223
+#: gtk/gtkcalendar.c:2226
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -2138,7 +2138,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3315
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3336
 msgid "Manage Custom Sizes"
 msgstr "사용자 설정 크기 관리"
 
@@ -2191,45 +2191,50 @@ msgstr "오른쪽(_R):"
 msgid "Paper Margins"
 msgstr "용지 여백"
 
-#: gtk/gtkentry.c:9508 gtk/gtklabel.c:6665 gtk/gtktextview.c:9443
+#: gtk/gtkentry.c:9543 gtk/gtklabel.c:6677 gtk/gtktextview.c:9448
 msgid "Cu_t"
 msgstr "잘라내기(_T)"
 
-#: gtk/gtkentry.c:9512 gtk/gtklabel.c:6666 gtk/gtktextview.c:9447
+#: gtk/gtkentry.c:9547 gtk/gtklabel.c:6678 gtk/gtktextview.c:9452
 msgid "_Copy"
 msgstr "복사(_C)"
 
-#: gtk/gtkentry.c:9516 gtk/gtklabel.c:6667 gtk/gtktextview.c:9449
+#: gtk/gtkentry.c:9551 gtk/gtklabel.c:6679 gtk/gtktextview.c:9454
 msgid "_Paste"
 msgstr "붙여넣기(_P)"
 
-#: gtk/gtkentry.c:9519 gtk/gtkfilechooserwidget.c:1478
-#: gtk/gtkfilechooserwidget.c:2278 gtk/gtklabel.c:6669 gtk/gtktextview.c:9452
+#: gtk/gtkentry.c:9554 gtk/gtkfilechooserwidget.c:1478
+#: gtk/gtkfilechooserwidget.c:2278 gtk/gtklabel.c:6681 gtk/gtktextview.c:9457
 msgid "_Delete"
 msgstr "삭제(_D)"
 
-#: gtk/gtkentry.c:9530 gtk/gtklabel.c:6678 gtk/gtktextview.c:9466
+#: gtk/gtkentry.c:9565 gtk/gtklabel.c:6690 gtk/gtktextview.c:9471
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
-#: gtk/gtkentry.c:9703 gtk/gtktextview.c:9691
+# 키보드에 써 있는 단어이므로 번역하지 않는다
+#: gtk/gtkentry.c:9572
+msgid "Insert _Emoji"
+msgstr "에모지 입력(_E)"
+
+#: gtk/gtkentry.c:9747 gtk/gtktextview.c:9696
 msgid "Select all"
 msgstr "모두 선택"
 
-#: gtk/gtkentry.c:9706 gtk/gtktextview.c:9694
+#: gtk/gtkentry.c:9750 gtk/gtktextview.c:9699
 msgid "Cut"
 msgstr "잘라내기"
 
-#: gtk/gtkentry.c:9709 gtk/gtktextview.c:9697
+#: gtk/gtkentry.c:9753 gtk/gtktextview.c:9702
 msgid "Copy"
 msgstr "복사"
 
-#: gtk/gtkentry.c:9712 gtk/gtktextview.c:9700
+#: gtk/gtkentry.c:9756 gtk/gtktextview.c:9705
 msgid "Paste"
 msgstr "붙여넣기"
 
 # Caps Lock 키보드 위에 쓰여 있는 글이므로 번역/음역하지 않는다
-#: gtk/gtkentry.c:10779
+#: gtk/gtkentry.c:10823
 msgid "Caps Lock is on"
 msgstr "Caps Lock이 켜져 있습니다"
 
@@ -2237,7 +2242,7 @@ msgstr "Caps Lock이 켜져 있습니다"
 msgid "Select a File"
 msgstr "파일을 선택하십시오"
 
-#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:976
+#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:1060
 msgid "Desktop"
 msgstr "바탕 화면"
 
@@ -2254,14 +2259,18 @@ msgid "_Name"
 msgstr "이름(_N)"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:515 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1640
+#: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
+#: gtk/gtkplacessidebar.c:3613 gtk/gtkplacesview.c:1630
 msgid "_Open"
 msgstr "열기(_O)"
 
-#: gtk/gtkfilechoosernative.c:600 gtk/inspector/css-editor.c:209
+#: gtk/gtkfilechoosernative.c:626 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "저장(_S)"
+
+#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:392
+msgid "Select which types of files are shown"
+msgstr "어떤 종류의 파일을 표시할 지 선택합니다"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -2419,8 +2428,8 @@ msgstr "위치 복사(_C)"
 msgid "_Add to Bookmarks"
 msgstr "책갈피에 추가(_A)"
 
-#: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2529
-#: gtk/ui/gtkfilechooserwidget.ui:525
+#: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2672
+#: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "이름 바꾸기(_R)"
 
@@ -2472,7 +2481,7 @@ msgstr "위치 입력"
 msgid "Enter location or URL"
 msgstr "위치 또는 URL 입력"
 
-#: gtk/gtkfilechooserwidget.c:4394 gtk/gtkfilechooserwidget.c:7311
+#: gtk/gtkfilechooserwidget.c:4394 gtk/gtkfilechooserwidget.c:7298
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
 msgstr "수정"
@@ -2514,7 +2523,7 @@ msgid "Unknown"
 msgstr "알 수 없음"
 
 # 홈 폴더
-#: gtk/gtkfilechooserwidget.c:5098 gtk/gtkplacessidebar.c:961
+#: gtk/gtkfilechooserwidget.c:5098 gtk/gtkplacessidebar.c:1045
 msgid "Home"
 msgstr "홈"
 
@@ -2543,21 +2552,10 @@ msgid "You do not have access to the specified folder."
 msgstr "지정한 폴더에 접근할 수 없습니다."
 
 #: gtk/gtkfilechooserwidget.c:7222
-msgid "Could not start the search process"
-msgstr "검색 작업을 시작할 수 없습니다"
-
-#: gtk/gtkfilechooserwidget.c:7223
-msgid ""
-"The program was not able to create a connection to the indexer daemon. "
-"Please make sure it is running."
-msgstr ""
-"프로그램이 인덱스 데몬에 연결할 수 없습니다. 데몬이 실행 중인지 확인하십시오."
-
-#: gtk/gtkfilechooserwidget.c:7235
 msgid "Could not send the search request"
 msgstr "검색 요청을 보낼 수 없습니다"
 
-#: gtk/gtkfilechooserwidget.c:7529
+#: gtk/gtkfilechooserwidget.c:7508
 msgid "Accessed"
 msgstr "접근 시간"
 
@@ -2588,11 +2586,11 @@ msgstr "없음"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL 컨텍스트 만들기 실패"
 
-#: gtk/gtkheaderbar.c:383
+#: gtk/gtkheaderbar.c:387
 msgid "Application menu"
 msgstr "프로그램 메뉴"
 
-#: gtk/gtkheaderbar.c:445 gtk/gtkwindow.c:9081
+#: gtk/gtkheaderbar.c:454 gtk/gtkwindow.c:9083
 msgid "Close"
 msgstr "닫기"
 
@@ -2643,12 +2641,12 @@ msgid "Error"
 msgstr "오류"
 
 #. Open Link
-#: gtk/gtklabel.c:6646
+#: gtk/gtklabel.c:6658
 msgid "_Open Link"
 msgstr "링크 열기(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6655
+#: gtk/gtklabel.c:6667
 msgid "Copy _Link Address"
 msgstr "링크 주소 복사(_L)"
 
@@ -2711,7 +2709,7 @@ msgstr "%s: 프로그램 실행에 오류가 발생했습니다: %s\n"
 msgid "Copy URL"
 msgstr "URL 복사"
 
-#: gtk/gtklinkbutton.c:531
+#: gtk/gtklinkbutton.c:511
 msgid "Invalid URI"
 msgstr "올바르지 않은 URI"
 
@@ -2773,7 +2771,7 @@ msgstr "설정할 GTK+ 디버깅 플래그"
 msgid "GTK+ debugging flags to unset"
 msgstr "설정 해제할 GTK+ 디버깅 플래그"
 
-#: gtk/gtkmain.c:807
+#: gtk/gtkmain.c:807 gtk/gtkmain.c:1001
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "디스플레이를 열 수 없습니다: %s"
@@ -2791,7 +2789,7 @@ msgstr "GTK+ 옵션 표시"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1259
+#: gtk/gtkmain.c:1269
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2889,7 +2887,7 @@ msgstr "Z 셸"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d 프로세스를 끝낼 수 없습니다: %s"
 
-#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7390
+#: gtk/gtknotebook.c:5121 gtk/gtknotebook.c:7388
 #, c-format
 msgid "Page %u"
 msgstr "%u페이지"
@@ -2921,7 +2919,7 @@ msgstr ""
 " 위: %s %s\n"
 " 아래: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3369
+#: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3390
 msgid "Manage Custom Sizes…"
 msgstr "사용자 설정 크기 관리…"
 
@@ -2934,246 +2932,260 @@ msgstr "페이지 설정"
 msgid "File System Root"
 msgstr "파일 시스템 루트"
 
-#: gtk/gtkplacessidebar.c:950
+#: gtk/gtkplacessidebar.c:1034
 msgid "Recent"
 msgstr "최근"
 
-#: gtk/gtkplacessidebar.c:952
+#: gtk/gtkplacessidebar.c:1036
 msgid "Recent files"
 msgstr "최근 파일"
 
-#: gtk/gtkplacessidebar.c:963
+#: gtk/gtkplacessidebar.c:1047
 msgid "Open your personal folder"
 msgstr "개인 폴더를 엽니다"
 
 # "~/Desktop" 폴더를 사용하는 경우
-#: gtk/gtkplacessidebar.c:978
+#: gtk/gtkplacessidebar.c:1062
 msgid "Open the contents of your desktop in a folder"
 msgstr "폴더에 들어 있는 바탕 화면의 내용을 엽니다"
 
-#: gtk/gtkplacessidebar.c:992
+#: gtk/gtkplacessidebar.c:1076
 msgid "Enter Location"
 msgstr "위치 입력"
 
-#: gtk/gtkplacessidebar.c:994
+#: gtk/gtkplacessidebar.c:1078
 msgid "Manually enter a location"
 msgstr "수동으로 위치 입력"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1088
 msgid "Trash"
 msgstr "휴지통"
 
-#: gtk/gtkplacessidebar.c:1007
+#: gtk/gtkplacessidebar.c:1090
 msgid "Open the trash"
 msgstr "휴지통 열기"
 
-#: gtk/gtkplacessidebar.c:1078 gtk/gtkplacessidebar.c:1106
-#: gtk/gtkplacessidebar.c:1313
+#. translators: %s is the name of a cloud provider for files
+#: gtk/gtkplacessidebar.c:1133
+#, c-format
+msgid "Open %s"
+msgstr "%s 열기"
+
+#: gtk/gtkplacessidebar.c:1212 gtk/gtkplacessidebar.c:1240
+#: gtk/gtkplacessidebar.c:1456
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "“%s” 마운트 및 열기"
 
-#: gtk/gtkplacessidebar.c:1193
+#: gtk/gtkplacessidebar.c:1328
 msgid "Open the contents of the file system"
 msgstr "파일 시스템의 내용을 엽니다"
 
-#: gtk/gtkplacessidebar.c:1277
+#: gtk/gtkplacessidebar.c:1412
 msgid "New bookmark"
 msgstr "새 책갈피"
 
-#: gtk/gtkplacessidebar.c:1279
+#: gtk/gtkplacessidebar.c:1414
 msgid "Add a new bookmark"
 msgstr "새 책갈피 추가"
 
-#: gtk/gtkplacessidebar.c:1292
+#: gtk/gtkplacessidebar.c:1427
 msgid "Connect to Server"
 msgstr "서버에 연결"
 
-#: gtk/gtkplacessidebar.c:1294
+#: gtk/gtkplacessidebar.c:1429
 msgid "Connect to a network server address"
 msgstr "네트워크 서버 주소에 연결합니다"
 
-#: gtk/gtkplacessidebar.c:1356
+#: gtk/gtkplacessidebar.c:1436
+msgid "Browse Network"
+msgstr "네트워크 둘러보기"
+
+#: gtk/gtkplacessidebar.c:1438
+msgid "Browse the contents of the network"
+msgstr "네트워크의 내용을 둘러봅니다"
+
+#: gtk/gtkplacessidebar.c:1499
 msgid "Other Locations"
 msgstr "다른 위치"
 
-#: gtk/gtkplacessidebar.c:1357
+#: gtk/gtkplacessidebar.c:1500
 msgid "Show other locations"
 msgstr "다른 위치 표시"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2147 gtk/gtkplacessidebar.c:3432
+#: gtk/gtkplacessidebar.c:2290 gtk/gtkplacessidebar.c:3633
 msgid "_Start"
 msgstr "시작(_S)"
 
-#: gtk/gtkplacessidebar.c:2148 gtk/gtkplacessidebar.c:3433
+#: gtk/gtkplacessidebar.c:2291 gtk/gtkplacessidebar.c:3634
 msgid "_Stop"
 msgstr "중지(_S)"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2155
+#: gtk/gtkplacessidebar.c:2298
 msgid "_Power On"
 msgstr "전원 켜기(_P)"
 
-#: gtk/gtkplacessidebar.c:2156
+#: gtk/gtkplacessidebar.c:2299
 msgid "_Safely Remove Drive"
 msgstr "안전하게 드라이브 제거(_S)"
 
-#: gtk/gtkplacessidebar.c:2160
+#: gtk/gtkplacessidebar.c:2303
 msgid "_Connect Drive"
 msgstr "드라이브 연결(_C)"
 
-#: gtk/gtkplacessidebar.c:2161
+#: gtk/gtkplacessidebar.c:2304
 msgid "_Disconnect Drive"
 msgstr "드라이브 연결 해제(_D)"
 
-#: gtk/gtkplacessidebar.c:2165
+#: gtk/gtkplacessidebar.c:2308
 msgid "_Start Multi-disk Device"
 msgstr "다중 디스크 장치 시작(_S)"
 
-#: gtk/gtkplacessidebar.c:2166
+#: gtk/gtkplacessidebar.c:2309
 msgid "_Stop Multi-disk Device"
 msgstr "다중 디스크 장치 중지(_S)"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2171
+#: gtk/gtkplacessidebar.c:2314
 msgid "_Unlock Device"
 msgstr "장치 잠금 해제(_U)"
 
-#: gtk/gtkplacessidebar.c:2172
+#: gtk/gtkplacessidebar.c:2315
 msgid "_Lock Device"
 msgstr "장치 잠그기(_L)"
 
-#: gtk/gtkplacessidebar.c:2210 gtk/gtkplacessidebar.c:3182
+#: gtk/gtkplacessidebar.c:2353 gtk/gtkplacessidebar.c:3325
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "“%s”을(를) 시작할 수 없습니다"
 
-#: gtk/gtkplacessidebar.c:2240
+#: gtk/gtkplacessidebar.c:2383
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "“%s”에 접근할 수 없습니다"
 
-#: gtk/gtkplacessidebar.c:2454
+#: gtk/gtkplacessidebar.c:2597
 msgid "This name is already taken"
 msgstr "이 이름은 이미 있습니다"
 
-#: gtk/gtkplacessidebar.c:2523 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2666 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
-#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:499
+#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "이름"
 
-#: gtk/gtkplacessidebar.c:2723
+#: gtk/gtkplacessidebar.c:2866
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "“%s”의 마운트를 해제할 수 없습니다"
 
-#: gtk/gtkplacessidebar.c:2899
+#: gtk/gtkplacessidebar.c:3042
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "“%s”을(를) 중지할 수 없습니다"
 
-#: gtk/gtkplacessidebar.c:2928
+#: gtk/gtkplacessidebar.c:3071
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "“%s”을(를) 뺄 수 없습니다"
 
-#: gtk/gtkplacessidebar.c:2957 gtk/gtkplacessidebar.c:2986
+#: gtk/gtkplacessidebar.c:3100 gtk/gtkplacessidebar.c:3129
 #, c-format
 msgid "Unable to eject %s"
 msgstr "%s을(를) 뺄 수 없습니다"
 
-#: gtk/gtkplacessidebar.c:3134
+#: gtk/gtkplacessidebar.c:3277
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "미디어 상태 변화를 검사하는데 “%s”에 대해 poll()을 할 수 없습니다"
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1650
+#: gtk/gtkplacessidebar.c:3616 gtk/gtkplacesview.c:1640
 msgid "Open in New _Tab"
 msgstr "새 탭에서 열기(_T)"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1661
+#: gtk/gtkplacessidebar.c:3619 gtk/gtkplacesview.c:1651
 msgid "Open in New _Window"
 msgstr "새 창에서 열기(_W)"
 
-#: gtk/gtkplacessidebar.c:3422
+#: gtk/gtkplacessidebar.c:3623
 msgid "_Add Bookmark"
 msgstr "책갈피 추가(_A)"
 
-#: gtk/gtkplacessidebar.c:3423
+#: gtk/gtkplacessidebar.c:3624
 msgid "_Remove"
 msgstr "제거(_R)"
 
-#: gtk/gtkplacessidebar.c:3424
+#: gtk/gtkplacessidebar.c:3625
 msgid "Rename…"
 msgstr "이름 바꾸기…"
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1695
+#: gtk/gtkplacessidebar.c:3629 gtk/gtkplacesview.c:1685
 msgid "_Mount"
 msgstr "마운트(_M)"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1685
+#: gtk/gtkplacessidebar.c:3630 gtk/gtkplacesview.c:1675
 msgid "_Unmount"
 msgstr "마운트 해제(_U)"
 
-#: gtk/gtkplacessidebar.c:3430
+#: gtk/gtkplacessidebar.c:3631
 msgid "_Eject"
 msgstr "빼기(_E)"
 
-#: gtk/gtkplacessidebar.c:3431
+#: gtk/gtkplacessidebar.c:3632
 msgid "_Detect Media"
 msgstr "미디어 검색(_D)"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1078
+#: gtk/gtkplacessidebar.c:4078 gtk/gtkplacesview.c:1118
 msgid "Computer"
 msgstr "컴퓨터"
 
-#: gtk/gtkplacesview.c:889
+#: gtk/gtkplacesview.c:894
 msgid "Searching for network locations"
 msgstr "네트워크 위치 검색"
 
-#: gtk/gtkplacesview.c:896
+#: gtk/gtkplacesview.c:901
 msgid "No network locations found"
 msgstr "네트워크 위치가 없습니다"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1189 gtk/gtkplacesview.c:1264
+#: gtk/gtkplacesview.c:1229 gtk/gtkplacesview.c:1304
 msgid "Unable to access location"
 msgstr "위치에 접근할 수 없습니다"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1207 gtk/ui/gtkplacesview.ui:449
+#: gtk/gtkplacesview.c:1247 gtk/ui/gtkplacesview.ui:449
 msgid "Con_nect"
 msgstr "연결(_N)"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1327
+#: gtk/gtkplacesview.c:1367
 msgid "Unable to unmount volume"
 msgstr "볼륨의 마운트를 해제할 수 없습니다"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1428
+#: gtk/gtkplacesview.c:1467
 msgid "Cance_l"
 msgstr "취소(_L)"
 
-#: gtk/gtkplacesview.c:1685
+#: gtk/gtkplacesview.c:1675
 msgid "_Disconnect"
 msgstr "연결 끊기(_D)"
 
-#: gtk/gtkplacesview.c:1695
+#: gtk/gtkplacesview.c:1685
 msgid "_Connect"
 msgstr "연결(_C)"
 
-#: gtk/gtkplacesview.c:1836
+#: gtk/gtkplacesview.c:1826
 msgid "Unable to get remote server location"
 msgstr "원격 서버 위치를 가져올 수 없습니다"
 
-#: gtk/gtkplacesview.c:1975 gtk/gtkplacesview.c:1984
+#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
 msgid "Networks"
 msgstr "네트워크"
 
-#: gtk/gtkplacesview.c:1975 gtk/gtkplacesview.c:1984
+#: gtk/gtkplacesview.c:1965 gtk/gtkplacesview.c:1974
 msgid "On This Computer"
 msgstr "이 컴퓨터"
 
@@ -3192,6 +3204,7 @@ msgid "Disconnect"
 msgstr "연결 끊기"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
+#: gtk/ui/gtksidebarrow.ui:60
 msgid "Unmount"
 msgstr "마운트 해제"
 
@@ -3291,8 +3304,8 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "임시 파일을 만들 수 없는 경우일 가능성이 가장 높습니다."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:229 gtk/gtkprintoperation-portal.c:533
-#: gtk/gtkprintoperation-portal.c:585 gtk/gtkprintunixdialog.c:3391
+#: gtk/gtkprintoperation-portal.c:230 gtk/gtkprintoperation-portal.c:541
+#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3412
 msgid "Print"
 msgstr "인쇄"
 
@@ -3374,63 +3387,63 @@ msgstr "프린터 정보를 받는 중입니다…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3098
+#: gtk/gtkprintunixdialog.c:3119
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, top to bottom"
 msgstr "왼쪽에서 오른쪽, 위에서 아래"
 
-#: gtk/gtkprintunixdialog.c:3098
+#: gtk/gtkprintunixdialog.c:3119
 #: modules/printbackends/cups/gtkprintbackendcups.c:5372
 msgid "Left to right, bottom to top"
 msgstr "왼쪽에서 오른쪽, 아래에서 위"
 
-#: gtk/gtkprintunixdialog.c:3099
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, top to bottom"
 msgstr "오른쪽에서 왼쪽, 위에서 아래"
 
-#: gtk/gtkprintunixdialog.c:3099
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5373
 msgid "Right to left, bottom to top"
 msgstr "오른쪽에서 왼쪽, 아래에서 위"
 
-#: gtk/gtkprintunixdialog.c:3100
+#: gtk/gtkprintunixdialog.c:3121
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, left to right"
 msgstr "위에서 아래, 왼쪽에서 오른쪽"
 
-#: gtk/gtkprintunixdialog.c:3100
+#: gtk/gtkprintunixdialog.c:3121
 #: modules/printbackends/cups/gtkprintbackendcups.c:5374
 msgid "Top to bottom, right to left"
 msgstr "위에서 아래, 오른쪽에서 왼쪽"
 
-#: gtk/gtkprintunixdialog.c:3101
+#: gtk/gtkprintunixdialog.c:3122
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, left to right"
 msgstr "아래에서 위, 왼쪽에서 오른쪽"
 
-#: gtk/gtkprintunixdialog.c:3101
+#: gtk/gtkprintunixdialog.c:3122
 #: modules/printbackends/cups/gtkprintbackendcups.c:5375
 msgid "Bottom to top, right to left"
 msgstr "아래에서 위, 오른쪽에서 왼쪽"
 
-#: gtk/gtkprintunixdialog.c:3105 gtk/gtkprintunixdialog.c:3118
+#: gtk/gtkprintunixdialog.c:3126 gtk/gtkprintunixdialog.c:3139
 msgid "Page Ordering"
 msgstr "페이지 순서"
 
-#: gtk/gtkprintunixdialog.c:3134
+#: gtk/gtkprintunixdialog.c:3155
 msgid "Left to right"
 msgstr "왼쪽에서 오른쪽으로"
 
-#: gtk/gtkprintunixdialog.c:3135
+#: gtk/gtkprintunixdialog.c:3156
 msgid "Right to left"
 msgstr "오른쪽에서 왼쪽으로"
 
-#: gtk/gtkprintunixdialog.c:3147
+#: gtk/gtkprintunixdialog.c:3168
 msgid "Top to bottom"
 msgstr "위에서 아래로"
 
-#: gtk/gtkprintunixdialog.c:3148
+#: gtk/gtkprintunixdialog.c:3169
 msgid "Bottom to top"
 msgstr "아래에서 위로"
 
@@ -3562,7 +3575,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "R"
 
-#: gtk/gtkshortcutssection.c:450
+#: gtk/gtkshortcutssection.c:451
 msgid "_Show All"
 msgstr "모두 보이기(_S)"
 
@@ -3602,12 +3615,13 @@ msgstr "검색 결과"
 msgid "Search Shortcuts"
 msgstr "검색 바로 가기"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkfilechooserwidget.ui:310
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:313
+#: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "결과가 없습니다"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkfilechooserwidget.ui:324
-#: gtk/ui/gtkplacesview.ui:406
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:327
+#: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "다르게 검색해 보기"
 
@@ -3810,24 +3824,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9029
+#: gtk/gtkwindow.c:9031
 msgid "Move"
 msgstr "옮기기"
 
-#: gtk/gtkwindow.c:9037
+#: gtk/gtkwindow.c:9039
 msgid "Resize"
 msgstr "크기 조절"
 
-#: gtk/gtkwindow.c:9068
+#: gtk/gtkwindow.c:9070
 msgid "Always on Top"
 msgstr "항상 위"
 
-#: gtk/gtkwindow.c:12502
+#: gtk/gtkwindow.c:12504
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "GTK+ 인스펙터를 사용하시겠습니까?"
 
-#: gtk/gtkwindow.c:12504
+#: gtk/gtkwindow.c:12506
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3838,7 +3852,7 @@ msgstr ""
 "그램의 내부 구조를 살펴 보거나 수정할 수 있습니다. GTK+ 인스펙터를 사용했을 "
 "때 프로그램이 멈추거나 이상 동작으로 중지할 수도 있습니다."
 
-#: gtk/gtkwindow.c:12509
+#: gtk/gtkwindow.c:12511
 msgid "Don't show this message again"
 msgstr "이 메시지 다시 보지 않기"
 
@@ -3864,11 +3878,11 @@ msgstr "사용"
 msgid "Parameter Type"
 msgstr "파라미터 종류"
 
-#: gtk/inspector/css-editor.c:118
+#: gtk/inspector/css-editor.c:112
 msgid "You can type here any CSS rule recognized by GTK+."
 msgstr "GTK+에서 인식하는 모든 CSS 규칙을 여기 입력할 수 있습니다."
 
-#: gtk/inspector/css-editor.c:119
+#: gtk/inspector/css-editor.c:113
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
@@ -3876,11 +3890,11 @@ msgstr ""
 "위의 “일시 중지” 단추를 누르면 사용자 설정 CSS를 일시적으로 사용 중지할 수 있"
 "습니다."
 
-#: gtk/inspector/css-editor.c:120
+#: gtk/inspector/css-editor.c:114
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr "바뀐 사항을 즉시, 프로그램의 전체에 적용합니다."
 
-#: gtk/inspector/css-editor.c:169
+#: gtk/inspector/css-editor.c:162
 #, c-format
 msgid "Saving CSS failed"
 msgstr "CSS 저장 실패"
@@ -5546,6 +5560,43 @@ msgstr "V"
 msgid "Saturation"
 msgstr "채도"
 
+#: gtk/ui/gtkemojichooser.ui:51
+msgid "Smileys & People"
+msgstr "표정 및 사람"
+
+#: gtk/ui/gtkemojichooser.ui:66
+msgid "Body & Clothing"
+msgstr "몸짓 및 옷"
+
+#: gtk/ui/gtkemojichooser.ui:81
+msgid "Animals & Nature"
+msgstr "동물 및 자연"
+
+#: gtk/ui/gtkemojichooser.ui:96
+msgid "Food & Drink"
+msgstr "음식 및 음료"
+
+#: gtk/ui/gtkemojichooser.ui:111
+msgid "Travel & Places"
+msgstr "여행 및 장소"
+
+#: gtk/ui/gtkemojichooser.ui:126
+msgid "Activities"
+msgstr "활동"
+
+#: gtk/ui/gtkemojichooser.ui:141
+msgctxt "emoji category"
+msgid "Objects"
+msgstr "물건"
+
+#: gtk/ui/gtkemojichooser.ui:156
+msgid "Symbols"
+msgstr "기호"
+
+#: gtk/ui/gtkemojichooser.ui:171
+msgid "Flags"
+msgstr "깃발"
+
 #: gtk/ui/gtkfilechooserwidget.ui:69
 msgid "Create Folder"
 msgstr "폴더 만들기"
@@ -5558,15 +5609,11 @@ msgstr "파일"
 msgid "Remote location — only searching the current folder"
 msgstr "원격 위치 — 현재 폴더만 검색"
 
-#: gtk/ui/gtkfilechooserwidget.ui:392
-msgid "Select which types of files are shown"
-msgstr "어떤 종류의 파일을 표시할 지 선택합니다"
-
 #: gtk/ui/gtkfilechooserwidget.ui:433
 msgid "Folder Name"
 msgstr "폴더 이름"
 
-#: gtk/ui/gtkfilechooserwidget.ui:460
+#: gtk/ui/gtkfilechooserwidget.ui:461
 msgid "_Create"
 msgstr "만들기(_C)"
 
@@ -5634,10 +5681,6 @@ msgstr "서버 주소"
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr "서버 주소는 프로토콜과 주소로 이루어집니다. 예를 들어:"
-
-#: gtk/ui/gtkplacesview.ui:57
-msgid "smb://foo.example.com, ssh://192.168.0.1"
-msgstr "smb://foo.example.com, ssh://192.168.0.1"
 
 #: gtk/ui/gtkplacesview.ui:78
 msgid "Available Protocols"
@@ -6755,9 +6798,3 @@ msgstr "테스트-출력.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "테스트 프린터로 인쇄"
-
-#~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
-#~ msgstr ""
-#~ "코어 프로파일을 만드는데 필요한 WGL_ARB_create_context 확장이 없습니다"
