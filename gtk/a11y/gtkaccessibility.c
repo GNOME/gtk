@@ -841,6 +841,7 @@ state_event_watcher (GSignalInvocationHint *hint,
   return FALSE;
 }
 
+#if 0
 static gboolean
 configure_event_watcher (GSignalInvocationHint *hint,
                          guint                  n_param_values,
@@ -888,6 +889,7 @@ configure_event_watcher (GSignalInvocationHint *hint,
 
   return FALSE;
 }
+#endif
 
 static gboolean
 window_focus (GtkWidget     *widget,
@@ -959,8 +961,10 @@ do_window_event_initialization (void)
   g_type_class_ref (GTK_TYPE_WINDOW_ACCESSIBLE);
   g_signal_add_emission_hook (g_signal_lookup ("window-state-event", GTK_TYPE_WIDGET),
                               0, state_event_watcher, NULL, (GDestroyNotify) NULL);
+#if 0
   g_signal_add_emission_hook (g_signal_lookup ("configure-event", GTK_TYPE_WIDGET),
                               0, configure_event_watcher, NULL, (GDestroyNotify) NULL);
+#endif
 
   root = atk_get_root ();
   g_signal_connect (root, "children-changed::add", (GCallback) window_added, NULL);
