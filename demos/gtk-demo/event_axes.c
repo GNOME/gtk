@@ -120,6 +120,7 @@ update_axes_from_event (GdkEvent  *event,
   GdkDevice *device, *source_device;
   GdkEventSequence *sequence;
   GdkDeviceTool *tool;
+  GdkEventType type;
   gdouble x, y;
   AxesInfo *info;
 
@@ -127,14 +128,15 @@ update_axes_from_event (GdkEvent  *event,
   source_device = gdk_event_get_source_device (event);
   sequence = gdk_event_get_event_sequence (event);
   tool = gdk_event_get_device_tool (event);
+  type = gdk_event_get_event_type (event);
 
-  if (event->type == GDK_TOUCH_END ||
-      event->type == GDK_TOUCH_CANCEL)
+  if (type == GDK_TOUCH_END ||
+      type == GDK_TOUCH_CANCEL)
     {
       g_hash_table_remove (data->touch_info, sequence);
       return;
     }
-  else if (event->type == GDK_LEAVE_NOTIFY)
+  else if (type == GDK_LEAVE_NOTIFY)
     {
       g_hash_table_remove (data->pointer_info, device);
       return;
@@ -172,24 +174,24 @@ update_axes_from_event (GdkEvent  *event,
 
   g_clear_pointer (&info->axes, g_free);
 
-  if (event->type == GDK_TOUCH_BEGIN ||
-      event->type == GDK_TOUCH_UPDATE)
+  if (type == GDK_TOUCH_BEGIN ||
+      type == GDK_TOUCH_UPDATE)
     {
-      if (sequence && event->touch.emulating_pointer)
+      gboolean emulating_pointer;
+
+      gdk_event_get_touch_emulating_pointer (event, &emulating_pointer);
+      if (sequence && emulating_pointer)
         g_hash_table_remove (data->pointer_info, device);
     }
-  if (event->type == GDK_MOTION_NOTIFY)
+  if (type == GDK_MOTION_NOTIFY ||
+      type == GDK_BUTTON_PRESS ||
+      type == GDK_BUTTON_RELEASE)
     {
-      info->axes =
-      g_memdup (event->motion.axes,
-                sizeof (gdouble) * gdk_device_get_n_axes (source_device));
-    }
-  else if (event->type == GDK_BUTTON_PRESS ||
-           event->type == GDK_BUTTON_RELEASE)
-    {
-      info->axes =
-      g_memdup (event->button.axes,
-                sizeof (gdouble) * gdk_device_get_n_axes (source_device));
+      gdouble *axes;
+      guint n_axes;
+
+      gdk_event_get_axes (event, &axes, &n_axes);
+      info->axes = g_memdup (axes, sizeof (double) * n_axes);
     }
 
   if (gdk_event_get_coords (event, &x, &y))

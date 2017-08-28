@@ -110,8 +110,11 @@ key_press_event (GtkWidget *text_view,
 {
   GtkTextIter iter;
   GtkTextBuffer *buffer;
+  guint keyval;
 
-  switch (event->keyval)
+  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
+
+  switch (keyval)
     {
       case GDK_KEY_Return:
       case GDK_KEY_KP_Enter:
@@ -137,30 +140,26 @@ event_after (GtkWidget *text_view,
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
   gdouble ex, ey;
-  gint x, y;
+  int x, y;
+  GdkEventType type;
 
-  if (ev->type == GDK_BUTTON_RELEASE)
+  type = gdk_event_get_event_type (ev);
+
+  if (type == GDK_BUTTON_RELEASE)
     {
-      GdkEventButton *event;
+      guint button;
 
-      event = (GdkEventButton *)ev;
-      if (event->button != GDK_BUTTON_PRIMARY)
+      gdk_event_get_button (ev, &button);
+      if (button != GDK_BUTTON_PRIMARY)
         return FALSE;
-
-      ex = event->x;
-      ey = event->y;
     }
-  else if (ev->type == GDK_TOUCH_END)
+  else if (type == GDK_TOUCH_END)
     {
-      GdkEventTouch *event;
-
-      event = (GdkEventTouch *)ev;
-
-      ex = event->x;
-      ey = event->y;
     }
   else
     return FALSE;
+
+  gdk_event_get_coords (ev, &ex, &ey);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 
@@ -232,11 +231,13 @@ static gboolean
 motion_notify_event (GtkWidget      *text_view,
                      GdkEventMotion *event)
 {
+  gdouble ex, ey;
   gint x, y;
 
+  gdk_event_get_coords ((GdkEvent *)event, &ex, &ey);
   gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
-                                         event->x, event->y, &x, &y);
+                                         ex, ey, &x, &y);
 
   set_cursor_if_appropriate (GTK_TEXT_VIEW (text_view), x, y);
 

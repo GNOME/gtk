@@ -94,11 +94,17 @@ scribble_button_press_event (GtkWidget      *widget,
                              GdkEventButton *event,
                              gpointer        data)
 {
+  double x, y;
+  guint button;
+
   if (surface == NULL)
     return FALSE; /* paranoia check, in case we haven't gotten a configure event */
 
-  if (event->button == GDK_BUTTON_PRIMARY)
-    draw_brush (widget, event->x, event->y);
+  gdk_event_get_button ((GdkEvent *)event, &button);
+  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+
+  if (button == GDK_BUTTON_PRIMARY)
+    draw_brush (widget, x, y);
 
   /* We've handled the event, stop processing */
   return TRUE;
@@ -126,7 +132,9 @@ scribble_motion_notify_event (GtkWidget      *widget,
    * can cope.
    */
 
-  gdk_window_get_device_position (event->window, event->device, &x, &y, &state);
+  gdk_window_get_device_position (gdk_event_get_window ((GdkEvent *) event),
+                                  gdk_event_get_device ((GdkEvent *) event),
+                                  &x, &y, &state);
 
   if (state & GDK_BUTTON1_MASK)
     draw_brush (widget, x, y);

@@ -100,18 +100,20 @@ day_selected_cb (GtkCalendar *calendar,
   GtkAllocation allocation;
   GtkWidget *popover;
   GdkEvent *event;
+  GdkWindow *window;
+  gdouble x, y;
 
   event = gtk_get_current_event ();
 
-  if (event->type != GDK_BUTTON_PRESS)
+  if (gdk_event_get_event_type (event) != GDK_BUTTON_PRESS)
     return;
 
-  gdk_window_coords_to_parent (event->button.window,
-                               event->button.x, event->button.y,
-                               &event->button.x, &event->button.y);
+  window = gdk_event_get_window (event);
+  gdk_event_get_coords (event, &x, &y);
+  gdk_window_coords_to_parent (window, x, y, &x, &y);
   gtk_widget_get_allocation (GTK_WIDGET (calendar), &allocation);
-  rect.x = event->button.x - allocation.x;
-  rect.y = event->button.y - allocation.y;
+  rect.x = x - allocation.x;
+  rect.y = y - allocation.y;
   rect.width = rect.height = 1;
 
   popover = create_popover (GTK_WIDGET (calendar),

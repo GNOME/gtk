@@ -475,12 +475,14 @@ demo_application_window_state_event (GtkWidget           *widget,
 {
   DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
   gboolean res = GDK_EVENT_PROPAGATE;
+  GdkWindowState changed, new_state;
 
   if (GTK_WIDGET_CLASS (demo_application_window_parent_class)->window_state_event)
     res = GTK_WIDGET_CLASS (demo_application_window_parent_class)->window_state_event (widget, event);
 
-  window->maximized = (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) != 0;
-  window->fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+  gdk_event_get_window_state ((GdkEvent *)event, &changed, &new_state);
+  window->maximized = (new_state & GDK_WINDOW_STATE_MAXIMIZED) != 0;
+  window->fullscreen = (new_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
 
   return res;
 }
