@@ -1580,12 +1580,12 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 	  gtk_window_set_type_hint (GTK_WINDOW (priv->popup_window),
 				    GDK_WINDOW_TYPE_HINT_COMBO);
 
-	  g_signal_connect (GTK_WINDOW (priv->popup_window),"show",
-			    G_CALLBACK (gtk_combo_box_child_show),
-			    combo_box);
-	  g_signal_connect (GTK_WINDOW (priv->popup_window),"hide",
-			    G_CALLBACK (gtk_combo_box_child_hide),
-			    combo_box);
+          g_signal_connect (priv->popup_window, "show",
+                            G_CALLBACK (gtk_combo_box_child_show),
+                            combo_box);
+          g_signal_connect (priv->popup_window, "hide",
+                            G_CALLBACK (gtk_combo_box_child_hide),
+                            combo_box);
   	  
 	  gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
 
@@ -3187,13 +3187,9 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
 
-  g_signal_handlers_disconnect_matched (priv->button,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
-                                        gtk_combo_box_menu_button_press, NULL);
-  g_signal_handlers_disconnect_matched (priv->button,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
+  g_signal_handlers_disconnect_by_func (priv->button,
+                                        gtk_combo_box_menu_button_press, combo_box);
+  g_signal_handlers_disconnect_by_func (priv->button,
                                         gtk_combo_box_button_state_changed, combo_box);
 
   /* unparent will remove our latest ref */
@@ -3965,36 +3961,11 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
   GtkComboBoxPrivate *priv = combo_box->priv;
 
   /* disconnect signals */
-  g_signal_handlers_disconnect_matched (priv->tree_view,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL, NULL, combo_box);
-  g_signal_handlers_disconnect_matched (priv->button,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
+  g_signal_handlers_disconnect_by_data (priv->tree_view, combo_box);
+  g_signal_handlers_disconnect_by_func (priv->button,
                                         gtk_combo_box_list_button_pressed,
-                                        NULL);
-  g_signal_handlers_disconnect_matched (priv->popup_window,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
-                                        gtk_combo_box_list_button_pressed,
-                                        NULL);
-  g_signal_handlers_disconnect_matched (priv->popup_window,
-                                        G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL,
-                                        gtk_combo_box_list_button_released,
-                                        NULL);
-
-  g_signal_handlers_disconnect_matched (priv->popup_window,
-					G_SIGNAL_MATCH_DATA,
-					0, 0, NULL, 
-					gtk_combo_box_child_show,
-					NULL);
-
-  g_signal_handlers_disconnect_matched (priv->popup_window,
-					G_SIGNAL_MATCH_DATA,
-					0, 0, NULL, 
-					gtk_combo_box_child_hide,
-					NULL);
+                                        combo_box);
+  g_signal_handlers_disconnect_by_data (priv->popup_window, combo_box);
   
   if (priv->box)
     g_signal_handlers_disconnect_matched (priv->box,
