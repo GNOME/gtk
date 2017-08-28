@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-25 03:18+0000\n"
-"PO-Revision-Date: 2017-08-25 13:43+0200\n"
+"POT-Creation-Date: 2017-08-28 09:17+0000\n"
+"PO-Revision-Date: 2017-08-28 16:39+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -411,23 +411,23 @@ msgstr ""
 msgid "The parameter for action invocations"
 msgstr ""
 
-#: gtk/gtkactionbar.c:383 gtk/gtkbox.c:245 gtk/gtkheaderbar.c:1869
+#: gtk/gtkactionbar.c:383 gtk/gtkbox.c:245 gtk/gtkheaderbar.c:1873
 msgid "Pack type"
 msgstr ""
 
-#: gtk/gtkactionbar.c:384 gtk/gtkbox.c:246 gtk/gtkheaderbar.c:1870
+#: gtk/gtkactionbar.c:384 gtk/gtkbox.c:246 gtk/gtkheaderbar.c:1874
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr ""
 
-#: gtk/gtkactionbar.c:390 gtk/gtkbox.c:252 gtk/gtkheaderbar.c:1876
-#: gtk/gtknotebook.c:790 gtk/gtkpaned.c:388 gtk/gtkpopover.c:1631
+#: gtk/gtkactionbar.c:390 gtk/gtkbox.c:252 gtk/gtkheaderbar.c:1880
+#: gtk/gtknotebook.c:790 gtk/gtkpaned.c:388 gtk/gtkpopover.c:1635
 #: gtk/gtkpopovermenu.c:371 gtk/gtkstack.c:404 gtk/gtktoolitemgroup.c:1618
 msgid "Position"
 msgstr "Posizion"
 
-#: gtk/gtkactionbar.c:391 gtk/gtkbox.c:253 gtk/gtkheaderbar.c:1877
+#: gtk/gtkactionbar.c:391 gtk/gtkbox.c:253 gtk/gtkheaderbar.c:1881
 #: gtk/gtknotebook.c:791 gtk/gtkpopovermenu.c:372 gtk/gtkstack.c:405
 msgid "The index of the child in the parent"
 msgstr ""
@@ -721,12 +721,12 @@ msgstr ""
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr ""
 
-#: gtk/gtkbox.c:221 gtk/gtkcellareabox.c:310 gtk/gtkheaderbar.c:1904
+#: gtk/gtkbox.c:221 gtk/gtkcellareabox.c:310 gtk/gtkheaderbar.c:1908
 #: gtk/gtkiconview.c:510 gtk/gtktreeviewcolumn.c:275
 msgid "Spacing"
 msgstr ""
 
-#: gtk/gtkbox.c:222 gtk/gtkheaderbar.c:1905
+#: gtk/gtkbox.c:222 gtk/gtkheaderbar.c:1909
 msgid "The amount of space between children"
 msgstr ""
 
@@ -1764,7 +1764,7 @@ msgid "Whether to give the color an alpha value"
 msgstr ""
 
 #: gtk/gtkcolorbutton.c:226 gtk/gtkfilechooserbutton.c:465
-#: gtk/gtkfontbutton.c:507 gtk/gtkheaderbar.c:1883 gtk/gtkprintjob.c:132
+#: gtk/gtkfontbutton.c:507 gtk/gtkheaderbar.c:1887 gtk/gtkprintjob.c:132
 #: gtk/gtkshortcutsgroup.c:305 gtk/gtkshortcutssection.c:368
 #: gtk/gtkshortcutsshortcut.c:610 gtk/gtkstack.c:390
 #: gtk/gtktreeviewcolumn.c:315
@@ -2656,7 +2656,7 @@ msgid "Search mode"
 msgstr "Modalitât di ricercje"
 
 #: gtk/gtkfilechooserwidget.c:8450 gtk/gtkfilechooserwidget.c:8451
-#: gtk/gtkheaderbar.c:1890 gtk/gtkshortcutsshortcut.c:626
+#: gtk/gtkheaderbar.c:1894 gtk/gtkshortcutsshortcut.c:626
 msgid "Subtitle"
 msgstr "Sottitul"
 
@@ -2991,51 +2991,51 @@ msgstr "Altece"
 msgid "The number of rows that a child spans"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1884
+#: gtk/gtkheaderbar.c:1888
 msgid "The title to display"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1891
+#: gtk/gtkheaderbar.c:1895
 msgid "The subtitle to display"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1897
+#: gtk/gtkheaderbar.c:1901
 msgid "Custom Title"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1898
+#: gtk/gtkheaderbar.c:1902
 msgid "Custom title widget to display"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1922
+#: gtk/gtkheaderbar.c:1926
 msgid "Show decorations"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1923
+#: gtk/gtkheaderbar.c:1927
 msgid "Whether to show window decorations"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1941 gtk/gtksettings.c:918
+#: gtk/gtkheaderbar.c:1945 gtk/gtksettings.c:918
 msgid "Decoration Layout"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1942 gtk/gtksettings.c:919
+#: gtk/gtkheaderbar.c:1946 gtk/gtksettings.c:919
 msgid "The layout for window decorations"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1955
+#: gtk/gtkheaderbar.c:1959
 msgid "Decoration Layout Set"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1956
+#: gtk/gtkheaderbar.c:1960
 msgid "Whether the decoration-layout property has been set"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1970
+#: gtk/gtkheaderbar.c:1974
 msgid "Has Subtitle"
 msgstr ""
 
-#: gtk/gtkheaderbar.c:1971
+#: gtk/gtkheaderbar.c:1975
 msgid "Whether to reserve space for a subtitle"
 msgstr ""
 
@@ -3796,7 +3796,7 @@ msgstr ""
 msgid "The title of the file chooser dialog"
 msgstr ""
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1646 gtk/gtkwindow.c:889
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1650 gtk/gtkwindow.c:889
 msgid "Modal"
 msgstr ""
 
@@ -3832,7 +3832,7 @@ msgstr "Posizion schede"
 
 #: gtk/gtknotebook.c:724
 msgid "Which side of the notebook holds the tabs"
-msgstr ""
+msgstr "Di ce bande dal schedari che a vegnin tignudis lis schedis"
 
 #: gtk/gtknotebook.c:731
 msgid "Show Tabs"
@@ -4150,35 +4150,35 @@ msgstr ""
 msgid "Whether the row represents a network location"
 msgstr ""
 
-#: gtk/gtkpopover.c:1603
+#: gtk/gtkpopover.c:1607
 msgid "Relative to"
 msgstr ""
 
-#: gtk/gtkpopover.c:1604
+#: gtk/gtkpopover.c:1608
 msgid "Widget the bubble window points to"
 msgstr ""
 
-#: gtk/gtkpopover.c:1617
+#: gtk/gtkpopover.c:1621
 msgid "Pointing to"
 msgstr ""
 
-#: gtk/gtkpopover.c:1618
+#: gtk/gtkpopover.c:1622
 msgid "Rectangle the bubble window points to"
 msgstr ""
 
-#: gtk/gtkpopover.c:1632
+#: gtk/gtkpopover.c:1636
 msgid "Position to place the bubble window"
 msgstr ""
 
-#: gtk/gtkpopover.c:1647
+#: gtk/gtkpopover.c:1651
 msgid "Whether the popover is modal"
 msgstr ""
 
-#: gtk/gtkpopover.c:1660
+#: gtk/gtkpopover.c:1664
 msgid "Constraint"
 msgstr ""
 
-#: gtk/gtkpopover.c:1661
+#: gtk/gtkpopover.c:1665
 msgid "Constraint for the popover position"
 msgstr ""
 
