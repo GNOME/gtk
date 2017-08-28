@@ -88,7 +88,7 @@ reftest_uninhibit_snapshot (void)
 static void
 check_for_draw (GdkEvent *event, gpointer data)
 {
-  if (event->type == GDK_EXPOSE)
+  if (gdk_event_get_event_type (event) == GDK_EXPOSE)
     {
       reftest_uninhibit_snapshot ();
       gdk_event_handler_set ((GdkEventFunc) gtk_main_do_event, NULL, NULL);
