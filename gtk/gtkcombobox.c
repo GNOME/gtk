@@ -2374,6 +2374,7 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
       return;
     }
 
+  gtk_device_grab_add (priv->popup_window, pointer, TRUE);
   priv->grab_pointer = pointer;
 
   g_signal_connect (priv->popup_window,
@@ -2448,6 +2449,7 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
   if (priv->grab_pointer)
     gdk_seat_ungrab (gdk_device_get_seat (priv->grab_pointer));
 
+  gtk_device_grab_remove (priv->popup_window, priv->grab_pointer);
   gtk_widget_hide (priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button),
                                 FALSE);
