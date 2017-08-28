@@ -9875,15 +9875,15 @@ set_show_emoji_icon (GtkEntry *entry,
 
   if (priv->show_emoji_icon)
     {
-      gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+      gtk_entry_set_icon_from_icon_name (entry,
                                          GTK_ENTRY_ICON_SECONDARY,
                                          "face-smile-symbolic");
 
-      gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
+      gtk_entry_set_icon_sensitive (entry,
                                     GTK_ENTRY_ICON_SECONDARY,
                                     TRUE);
 
-      gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
+      gtk_entry_set_icon_activatable (entry,
                                       GTK_ENTRY_ICON_SECONDARY,
                                       TRUE);
 
