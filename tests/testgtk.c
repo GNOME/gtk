@@ -3812,6 +3812,8 @@ cursor_event (GtkWidget *widget,
   const gchar *name;
   gint i;
   const gint n = G_N_ELEMENTS (cursor_names);
+  GdkEventType type;
+  guint button;
 
   name = (const gchar *)g_object_get_data (G_OBJECT (widget), "name");
   if (name != NULL)
@@ -3823,11 +3825,13 @@ cursor_event (GtkWidget *widget,
   else
     i = 0;
 
-  if ((event->type == GDK_BUTTON_PRESS) &&
-      ((event->button.button == GDK_BUTTON_PRIMARY) ||
-       (event->button.button == GDK_BUTTON_SECONDARY)))
+  type = gdk_event_get_event_type (event);
+  gdk_event_get_button (event, &button);
+  if (type == GDK_BUTTON_PRESS &&
+      (button == GDK_BUTTON_PRIMARY ||
+       button == GDK_BUTTON_SECONDARY))
     {
-      if (event->button.button == GDK_BUTTON_PRIMARY)
+      if (button == GDK_BUTTON_PRIMARY)
         i = (i + 1) % n;
       else
         i = (i + n - 1) % n;
@@ -5799,21 +5803,23 @@ window_state_callback (GtkWidget *widget,
 {
   GtkWidget *label = data;
   gchar *msg;
+  GdkWindowState changed, new_state;
 
+  gdk_event_get_window_state ((GdkEvent *)event, &changed, &new_state);
   msg = g_strconcat (gtk_window_get_title (GTK_WINDOW (widget)), ": ",
-                     (event->new_window_state & GDK_WINDOW_STATE_WITHDRAWN) ?
+                     (new_state & GDK_WINDOW_STATE_WITHDRAWN) ?
                      "withdrawn" : "not withdrawn", ", ",
-                     (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED) ?
+                     (new_state & GDK_WINDOW_STATE_ICONIFIED) ?
                      "iconified" : "not iconified", ", ",
-                     (event->new_window_state & GDK_WINDOW_STATE_STICKY) ?
+                     (new_state & GDK_WINDOW_STATE_STICKY) ?
                      "sticky" : "not sticky", ", ",
-                     (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ?
+                     (new_state & GDK_WINDOW_STATE_MAXIMIZED) ?
                      "maximized" : "not maximized", ", ",
-                     (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ?
+                     (new_state & GDK_WINDOW_STATE_FULLSCREEN) ?
                      "fullscreen" : "not fullscreen",
-                     (event->new_window_state & GDK_WINDOW_STATE_ABOVE) ?
+                     (new_state & GDK_WINDOW_STATE_ABOVE) ?
                      "above" : "not above", ", ",
-                     (event->new_window_state & GDK_WINDOW_STATE_BELOW) ?
+                     (new_state & GDK_WINDOW_STATE_BELOW) ?
                      "below" : "not below", ", ",
                      NULL);
   
@@ -6109,7 +6115,7 @@ configure_event_callback (GtkWidget *widget,
   
   msg = g_strdup_printf ("event: %d,%d  %d x %d\n"
                          "position: %d, %d",
-                         event->x, event->y, event->width, event->height,
+                         0, 0, 0, 0, // FIXME
                          x, y);
   
   gtk_label_set_text (GTK_LABEL (label), msg);
@@ -6952,7 +6958,7 @@ snapshot_widget_event (GtkWidget	       *widget,
   if (!data->in_query)
     return FALSE;
   
-  if (event->type == GDK_BUTTON_RELEASE)
+  if (gdk_event_get_event_type (event) == GDK_BUTTON_RELEASE)
     {
       gtk_grab_remove (widget);
       gdk_seat_ungrab (gdk_event_get_seat (event));
@@ -7259,7 +7265,11 @@ static gint
 scroll_test_scroll (GtkWidget *widget, GdkEventScroll *event,
 		    GtkAdjustment *adjustment)
 {
-  gdouble new_value = gtk_adjustment_get_value (adjustment) + ((event->direction == GDK_SCROLL_UP) ?
+  GdkScrollDirection direction;
+  gdouble new_value;
+
+  gdk_event_get_scroll_direction ((GdkEvent *)event, &direction);
+  new_value = gtk_adjustment_get_value (adjustment) + (direction == GDK_SCROLL_UP ?
 				    -gtk_adjustment_get_page_increment (adjustment) / 2:
 				    gtk_adjustment_get_page_increment (adjustment) / 2);
   new_value = CLAMP (new_value, gtk_adjustment_get_lower (adjustment), gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_page_size (adjustment));

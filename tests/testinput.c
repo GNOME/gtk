@@ -133,17 +133,27 @@ print_axes (GdkDevice *device, gdouble *axes)
 static gint
 button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
-  if (event->button == GDK_BUTTON_PRIMARY &&
-      surface != NULL)
+  guint button;
+
+  gdk_event_get_button ((GdkEvent *)event, &button);
+
+  if (button == GDK_BUTTON_PRIMARY && surface != NULL)
     {
       gdouble pressure = 0.5;
+      GdkDevice *device;
+      gdouble *axes;
+      guint n_axes;
+      gdouble x, y;
 
-      print_axes (event->device, event->axes);
+      device = gdk_event_get_device ((GdkEvent *)event);
+      gdk_event_get_axes ((GdkEvent *)event, &axes, &n_axes);
+      gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+
+      print_axes (device, axes);
       gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
-      draw_brush (widget, gdk_device_get_source (event->device),
-                  event->x, event->y, pressure);
+      draw_brush (widget, gdk_device_get_source (device), x, y, pressure);
 
-      motion_time = event->time;
+      motion_time = gdk_event_get_time ((GdkEvent *)event);
     }
 
   return TRUE;
@@ -152,8 +162,12 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
 static gint
 key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
-  if ((event->keyval >= 0x20) && (event->keyval <= 0xFF))
-    printf("I got a %c\n", event->keyval);
+  guint keyval;
+
+  gdk_event_get_keyval ((GdkEvent*)event, &keyval);
+
+  if ((keyval >= 0x20) && (keyval <= 0xFF))
+    printf("I got a %c\n", keyval);
   else
     printf("I got some other key\n");
 
@@ -166,41 +180,50 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
   GdkTimeCoord **events;
   gint n_events;
   int i;
+  GdkModifierType state;
+  GdkDevice *device;
+  gdouble *axes;
+  guint n_axes;
 
-  if (event->state & GDK_BUTTON1_MASK && surface != NULL)
+  gdk_event_get_state ((GdkEvent *)event, &state);
+  device = gdk_event_get_device ((GdkEvent *)event);
+
+  if (state & GDK_BUTTON1_MASK && surface != NULL)
     {
-      if (gdk_device_get_history (event->device, event->window, 
-				  motion_time, event->time,
+      if (gdk_device_get_history (device,
+                                  gdk_event_get_window ((GdkEvent *)event),
+				  motion_time,
+                                  gdk_event_get_time ((GdkEvent *)event),
 				  &events, &n_events))
 	{
 	  for (i=0; i<n_events; i++)
 	    {
 	      double x = 0, y = 0, pressure = 0.5;
 
-	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_X, &x);
-	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_Y, &y);
-	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_PRESSURE, &pressure);
-	      draw_brush (widget, gdk_device_get_source (event->device),
-                          x, y, pressure);
+	      gdk_device_get_axis (device, events[i]->axes, GDK_AXIS_X, &x);
+	      gdk_device_get_axis (device, events[i]->axes, GDK_AXIS_Y, &y);
+	      gdk_device_get_axis (device, events[i]->axes, GDK_AXIS_PRESSURE, &pressure);
+	      draw_brush (widget, gdk_device_get_source (device), x, y, pressure);
 
-	      print_axes (event->device, events[i]->axes);
+	      print_axes (device, events[i]->axes);
 	    }
 	  gdk_device_free_history (events, n_events);
 	}
       else
 	{
 	  double pressure = 0.5;
+          gdouble x, y;
 
 	  gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
 
-	  draw_brush (widget, gdk_device_get_source (event->device),
-                      event->x, event->y, pressure);
+          gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+	  draw_brush (widget, gdk_device_get_source (device), x, y, pressure);
 	}
-      motion_time = event->time;
+      motion_time = gdk_event_get_time ((GdkEvent *)event);
     }
 
-
-  print_axes (event->device, event->axes);
+  gdk_event_get_axes ((GdkEvent *)event, &axes, &n_axes);
+  print_axes (device, axes);
 
   return TRUE;
 }

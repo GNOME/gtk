@@ -203,9 +203,12 @@ gtk_focus_widget_motion_notify_event (GtkWidget *widget,
                                       GdkEventMotion *event)
 {
   GtkFocusWidget *self = GTK_FOCUS_WIDGET (widget);
+  gdouble x, y;
 
-  self->mouse_x = event->x;
-  self->mouse_y = event->y;
+  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+
+  self->mouse_x = x;
+  self->mouse_y = y;
 
   gtk_widget_queue_draw (widget);
 

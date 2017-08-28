@@ -136,9 +136,11 @@ edited (GtkCellRendererText *cell,
 static gboolean
 button_press_event (GtkWidget *widget, GdkEventButton *event, gpointer callback_data)
 {
+        double x, y;
+
+        gdk_event_get_coords ((GdkEvent *)event, &x, &y);
 	/* Deselect if people click outside any row. */
-	if (!gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
-					    event->x, event->y, NULL, NULL, NULL, NULL)) {
+	if (!gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget), x, y, NULL, NULL, NULL, NULL)) {
 		gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (widget)));
 	}
 

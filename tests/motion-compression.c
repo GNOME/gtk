@@ -8,12 +8,15 @@ static void
 on_motion_notify (GtkWidget      *window,
                   GdkEventMotion *event)
 {
-  if (event->window == gtk_widget_get_window (window))
+  if (gdk_event_get_window ((GdkEvent*)event) == gtk_widget_get_window (window))
     {
+      gdouble x, y;
       float processing_ms = gtk_adjustment_get_value (adjustment);
       g_usleep (processing_ms * 1000);
-      cursor_x = event->x;
-      cursor_y = event->y;
+
+      gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+      cursor_x = x;
+      cursor_y = y;
       gtk_widget_queue_draw (window);
     }
 }
