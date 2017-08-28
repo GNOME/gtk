@@ -1,5 +1,8 @@
 #include <gtk/gtk.h>
 
+#define GDK_COMPILATION
+#include "gdk/gdkeventsprivate.h"
+
 typedef struct {
   GtkWidget *widget;
   gint x;
