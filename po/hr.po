@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-18 18:45+0000\n"
-"PO-Revision-Date: 2017-08-18 22:36+0200\n"
+"POT-Creation-Date: 2017-08-28 19:56+0000\n"
+"PO-Revision-Date: 2017-08-28 23:11+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -2212,7 +2212,7 @@ msgstr "Velika slova upaljena"
 msgid "Select a File"
 msgstr "Odaberi datoteku"
 
-#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:976
+#: gtk/gtkfilechooserbutton.c:108 gtk/gtkplacessidebar.c:1060
 msgid "Desktop"
 msgstr "Radna površina"
 
@@ -2230,7 +2230,7 @@ msgstr "_Naziv"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
-#: gtk/gtkplacessidebar.c:3412 gtk/gtkplacesview.c:1630
+#: gtk/gtkplacessidebar.c:3605 gtk/gtkplacesview.c:1630
 msgid "_Open"
 msgstr "_Otvori"
 
@@ -2238,7 +2238,7 @@ msgstr "_Otvori"
 msgid "_Save"
 msgstr "_Spremi"
 
-#: gtk/gtkfilechoosernativequartz.c:326 gtk/ui/gtkfilechooserwidget.ui:392
+#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:392
 msgid "Select which types of files are shown"
 msgstr "Odaberi koje vrste datoteka se prikazuju"
 
@@ -2398,7 +2398,7 @@ msgstr "_Kopiraj lokaciju"
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj u zabilješke"
 
-#: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2529
+#: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2664
 #: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "_Preimenuj"
@@ -2492,7 +2492,7 @@ msgstr "%-e %b %Y"
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: gtk/gtkfilechooserwidget.c:5098 gtk/gtkplacessidebar.c:961
+#: gtk/gtkfilechooserwidget.c:5098 gtk/gtkplacessidebar.c:1045
 msgid "Home"
 msgstr "Osobna mapa"
 
@@ -2898,197 +2898,203 @@ msgstr "Postavke ispisa"
 msgid "File System Root"
 msgstr "Korijenski datotečni sustav"
 
-#: gtk/gtkplacessidebar.c:950
+#: gtk/gtkplacessidebar.c:1034
 msgid "Recent"
 msgstr "Nedavno"
 
-#: gtk/gtkplacessidebar.c:952
+#: gtk/gtkplacessidebar.c:1036
 msgid "Recent files"
 msgstr "Nedavne datoteke"
 
-#: gtk/gtkplacessidebar.c:963
+#: gtk/gtkplacessidebar.c:1047
 msgid "Open your personal folder"
 msgstr "Otvorite svoju osobnu mapu"
 
-#: gtk/gtkplacessidebar.c:978
+#: gtk/gtkplacessidebar.c:1062
 msgid "Open the contents of your desktop in a folder"
 msgstr "Otvorite sadržaj svoje radne površine unutar mape"
 
-#: gtk/gtkplacessidebar.c:992
+#: gtk/gtkplacessidebar.c:1076
 msgid "Enter Location"
 msgstr "Upiši lokaciju"
 
-#: gtk/gtkplacessidebar.c:994
+#: gtk/gtkplacessidebar.c:1078
 msgid "Manually enter a location"
 msgstr "Ručno upiši lokaciju"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1088
 msgid "Trash"
 msgstr "Smeće"
 
-#: gtk/gtkplacessidebar.c:1007
+#: gtk/gtkplacessidebar.c:1090
 msgid "Open the trash"
 msgstr "Otvori smeće"
 
-#: gtk/gtkplacessidebar.c:1078 gtk/gtkplacessidebar.c:1106
-#: gtk/gtkplacessidebar.c:1313
+#. translators: %s is the name of a cloud provider for files
+#: gtk/gtkplacessidebar.c:1133
+#, c-format
+msgid "Open %s"
+msgstr "Otvori %s"
+
+#: gtk/gtkplacessidebar.c:1212 gtk/gtkplacessidebar.c:1240
+#: gtk/gtkplacessidebar.c:1448
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Montiraj i otvori “%s”"
 
-#: gtk/gtkplacessidebar.c:1193
+#: gtk/gtkplacessidebar.c:1328
 msgid "Open the contents of the file system"
 msgstr "Otvori sadržaj datotečnog sustava"
 
-#: gtk/gtkplacessidebar.c:1277
+#: gtk/gtkplacessidebar.c:1412
 msgid "New bookmark"
 msgstr "Nova zabilješka"
 
-#: gtk/gtkplacessidebar.c:1279
+#: gtk/gtkplacessidebar.c:1414
 msgid "Add a new bookmark"
 msgstr "Dodaj novu zabilješku"
 
-#: gtk/gtkplacessidebar.c:1292
+#: gtk/gtkplacessidebar.c:1427
 msgid "Connect to Server"
 msgstr "Povezivanje s poslužiteljem"
 
-#: gtk/gtkplacessidebar.c:1294
+#: gtk/gtkplacessidebar.c:1429
 msgid "Connect to a network server address"
 msgstr "Poveži se na adresu mrežnog poslužitelja"
 
-#: gtk/gtkplacessidebar.c:1356
+#: gtk/gtkplacessidebar.c:1491
 msgid "Other Locations"
 msgstr "Ostale lokacije"
 
-#: gtk/gtkplacessidebar.c:1357
+#: gtk/gtkplacessidebar.c:1492
 msgid "Show other locations"
 msgstr "Prikaži ostale lokacije"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2147 gtk/gtkplacessidebar.c:3432
+#: gtk/gtkplacessidebar.c:2282 gtk/gtkplacessidebar.c:3625
 msgid "_Start"
 msgstr "_Pokreni"
 
-#: gtk/gtkplacessidebar.c:2148 gtk/gtkplacessidebar.c:3433
+#: gtk/gtkplacessidebar.c:2283 gtk/gtkplacessidebar.c:3626
 msgid "_Stop"
 msgstr "_Zaustavi"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2155
+#: gtk/gtkplacessidebar.c:2290
 msgid "_Power On"
 msgstr "_Uključi"
 
-#: gtk/gtkplacessidebar.c:2156
+#: gtk/gtkplacessidebar.c:2291
 msgid "_Safely Remove Drive"
 msgstr "_Sigurno ukloni uređaj"
 
-#: gtk/gtkplacessidebar.c:2160
+#: gtk/gtkplacessidebar.c:2295
 msgid "_Connect Drive"
 msgstr "_Poveži uređaj"
 
-#: gtk/gtkplacessidebar.c:2161
+#: gtk/gtkplacessidebar.c:2296
 msgid "_Disconnect Drive"
 msgstr "_Odspoji uređaj"
 
-#: gtk/gtkplacessidebar.c:2165
+#: gtk/gtkplacessidebar.c:2300
 msgid "_Start Multi-disk Device"
 msgstr "_Pokreni uređaj s više diskova"
 
-#: gtk/gtkplacessidebar.c:2166
+#: gtk/gtkplacessidebar.c:2301
 msgid "_Stop Multi-disk Device"
 msgstr "_Zaustavi uređaj s više diskova"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2171
+#: gtk/gtkplacessidebar.c:2306
 msgid "_Unlock Device"
 msgstr "_Otključaj uređaj"
 
-#: gtk/gtkplacessidebar.c:2172
+#: gtk/gtkplacessidebar.c:2307
 msgid "_Lock Device"
 msgstr "_Zaključaj uređaj"
 
-#: gtk/gtkplacessidebar.c:2210 gtk/gtkplacessidebar.c:3182
+#: gtk/gtkplacessidebar.c:2345 gtk/gtkplacessidebar.c:3317
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Nemoguće pokretanje “%s”"
 
-#: gtk/gtkplacessidebar.c:2240
+#: gtk/gtkplacessidebar.c:2375
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Nemoguć pristup \"%s\""
 
-#: gtk/gtkplacessidebar.c:2454
+#: gtk/gtkplacessidebar.c:2589
 msgid "This name is already taken"
 msgstr "Ovaj naziv se već koristi"
 
-#: gtk/gtkplacessidebar.c:2523 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2658 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "Naziv"
 
-#: gtk/gtkplacessidebar.c:2723
+#: gtk/gtkplacessidebar.c:2858
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Nemoguće montiranje “%s”"
 
-#: gtk/gtkplacessidebar.c:2899
+#: gtk/gtkplacessidebar.c:3034
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Nemoguće zaustavljanje “%s”"
 
-#: gtk/gtkplacessidebar.c:2928
+#: gtk/gtkplacessidebar.c:3063
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Nemoguće izbaciti “%s”"
 
-#: gtk/gtkplacessidebar.c:2957 gtk/gtkplacessidebar.c:2986
+#: gtk/gtkplacessidebar.c:3092 gtk/gtkplacessidebar.c:3121
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nemoguće izbaciti %s"
 
-#: gtk/gtkplacessidebar.c:3134
+#: gtk/gtkplacessidebar.c:3269
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Nemoguće anketiranje “%s” za medijske promjene"
 
-#: gtk/gtkplacessidebar.c:3415 gtk/gtkplacesview.c:1640
+#: gtk/gtkplacessidebar.c:3608 gtk/gtkplacesview.c:1640
 msgid "Open in New _Tab"
 msgstr "Otvori u novoj _kartici"
 
-#: gtk/gtkplacessidebar.c:3418 gtk/gtkplacesview.c:1651
+#: gtk/gtkplacessidebar.c:3611 gtk/gtkplacesview.c:1651
 msgid "Open in New _Window"
 msgstr "Otvori u novom _prozoru"
 
-#: gtk/gtkplacessidebar.c:3422
+#: gtk/gtkplacessidebar.c:3615
 msgid "_Add Bookmark"
 msgstr "_Dodaj u zabilješke"
 
-#: gtk/gtkplacessidebar.c:3423
+#: gtk/gtkplacessidebar.c:3616
 msgid "_Remove"
 msgstr "_Ukloni"
 
-#: gtk/gtkplacessidebar.c:3424
+#: gtk/gtkplacessidebar.c:3617
 msgid "Rename…"
 msgstr "Preimenuj..."
 
-#: gtk/gtkplacessidebar.c:3428 gtk/gtkplacesview.c:1685
+#: gtk/gtkplacessidebar.c:3621 gtk/gtkplacesview.c:1685
 msgid "_Mount"
 msgstr "_Montiraj"
 
-#: gtk/gtkplacessidebar.c:3429 gtk/gtkplacesview.c:1675
+#: gtk/gtkplacessidebar.c:3622 gtk/gtkplacesview.c:1675
 msgid "_Unmount"
 msgstr "_Odmontiraj"
 
-#: gtk/gtkplacessidebar.c:3430
+#: gtk/gtkplacessidebar.c:3623
 msgid "_Eject"
 msgstr "_Izbaci"
 
-#: gtk/gtkplacessidebar.c:3431
+#: gtk/gtkplacessidebar.c:3624
 msgid "_Detect Media"
 msgstr "_Otkrij medij"
 
-#: gtk/gtkplacessidebar.c:3877 gtk/gtkplacesview.c:1118
+#: gtk/gtkplacessidebar.c:4070 gtk/gtkplacesview.c:1118
 msgid "Computer"
 msgstr "Računalo"
 
@@ -3157,6 +3163,7 @@ msgid "Disconnect"
 msgstr "Prekini povezivanje"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
+#: gtk/ui/gtksidebarrow.ui:60
 msgid "Unmount"
 msgstr "Odmontiraj"
 
