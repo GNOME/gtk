@@ -13,7 +13,7 @@
     <GtkGdkCommonLibs>imm32.lib</GtkGdkCommonLibs>
     <GdkAdditionalLibs>winmm.lib;dwmapi.lib;setupapi.lib;$(GtkGdkCommonLibs)</GdkAdditionalLibs>
     <GdkBroadwayAdditionalLibs>ws2_32.lib</GdkBroadwayAdditionalLibs>
-    <GtkAdditionalLibs>atk-1.0.lib;pango-1.0.lib;pangowin32-1.0.lib;winspool.lib;comctl32.lib;$(GtkGdkCommonLibs)</GtkAdditionalLibs>
+    <GtkAdditionalLibs>atk-1.0.lib;pangowin32-1.0.lib;winspool.lib;comctl32.lib;$(GtkGdkCommonLibs)</GtkAdditionalLibs>
     <GtkIntrospectNMakeCmd>cd ..
 set VCInstallDir=$(VCInstallDir)
 nmake -f gtk-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstallRoot)</GtkIntrospectNMakeCmd>
