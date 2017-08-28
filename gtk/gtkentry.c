@@ -9889,6 +9889,14 @@ set_show_emoji_icon (GtkEntry *entry,
 
       g_signal_connect (entry, "icon-press", G_CALLBACK (pick_emoji), NULL);
     }
+  else
+    {
+      g_signal_handlers_disconnect_by_func (entry, pick_emoji, NULL);
+
+      gtk_entry_set_icon_from_icon_name (entry,
+                                         GTK_ENTRY_ICON_SECONDARY,
+                                         NULL);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SHOW_EMOJI_ICON]);
   gtk_widget_queue_resize (GTK_WIDGET (entry));
