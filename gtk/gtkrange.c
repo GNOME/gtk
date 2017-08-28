@@ -1683,6 +1683,8 @@ update_trough_state (GtkRange *range)
 
   if (priv->grab_location == priv->trough_widget)
     state |= GTK_STATE_FLAG_ACTIVE;
+
+  gtk_widget_set_state_flags (priv->trough_widget, state, TRUE);
 }
 
 static void
