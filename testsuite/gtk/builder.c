@@ -668,6 +668,10 @@ test_types (void)
     "</interface>";
   const gchar buffer3[] = 
     "<interface>"
+    "  <object class=\"XXXInvalidType\" type-func=\"gtk_window_get_type\" id=\"window\"/>"
+    "</interface>";
+  const gchar buffer4[] =
+    "<interface>"
     "  <object type-func=\"xxx_invalid_get_type_function\" id=\"window\"/>"
     "</interface>";
   GtkBuilder *builder;
@@ -684,10 +688,16 @@ test_types (void)
   g_assert (GTK_IS_WINDOW (window));
   gtk_widget_destroy (GTK_WIDGET (window));
   g_object_unref (builder);
+
+  builder = builder_new_from_string (buffer3, -1, NULL);
+  window = gtk_builder_get_object (builder, "window");
+  g_assert (GTK_IS_WINDOW (window));
+  gtk_widget_destroy (GTK_WIDGET (window));
+  g_object_unref (builder);
   
   error = NULL;
   builder = gtk_builder_new ();
-  gtk_builder_add_from_string (builder, buffer3, -1, &error);
+  gtk_builder_add_from_string (builder, buffer4, -1, &error);
   g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION);
   g_error_free (error);
   g_object_unref (builder);

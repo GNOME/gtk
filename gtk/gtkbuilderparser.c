@@ -279,20 +279,7 @@ parse_object (GMarkupParseContext  *context,
       return;
     }
 
-  if (object_class)
-    {
-      object_type = gtk_builder_get_type_from_name (data->builder, object_class);
-      if (object_type == G_TYPE_INVALID)
-        {
-          g_set_error (error,
-                       GTK_BUILDER_ERROR,
-                       GTK_BUILDER_ERROR_INVALID_VALUE,
-                       "Invalid object type '%s'", object_class);
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-       }
-    }
-  else if (type_func)
+  if (type_func)
     {
       /* Call the GType function, and return the GType, it's guaranteed afterwards
        * that g_type_from_name on the name will return our GType
@@ -307,6 +294,19 @@ parse_object (GMarkupParseContext  *context,
           _gtk_builder_prefix_error (data->builder, context, error);
           return;
         }
+    }
+  else if (object_class)
+    {
+      object_type = gtk_builder_get_type_from_name (data->builder, object_class);
+      if (object_type == G_TYPE_INVALID)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Invalid object type '%s'", object_class);
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+       }
     }
   else
     {
