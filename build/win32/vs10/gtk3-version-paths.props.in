@@ -18,6 +18,8 @@
     <PythonDir Condition="'$(VisualStudioVersion)' == '14.0'">c:\python36</PythonDir>
     <PythonDir Condition="'$(VisualStudioVersion)' == '15.0'">c:\python36</PythonDir>
     <PythonDirX64>$(PythonDir).x64</PythonDirX64>
+    <IntrospectPythonParam>PYTHON=$(PythonDir)\python.exe</IntrospectPythonParam>
+    <IntrospectPythonParamX64>PYTHON=$(PythonDirX64)\python.exe</IntrospectPythonParamX64>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk3versionpathsprops</_PropertySheetDisplayName>
@@ -61,6 +63,12 @@
     </BuildMacro>
     <BuildMacro Include="PythonDirX64">
       <Value>$(PythonDirX64)</Value>
+    </BuildMacro>
+    <BuildMacro Include="IntrospectPythonParam">
+      <Value>$(IntrospectPythonParam)</Value>
+    </BuildMacro>
+    <BuildMacro Include="IntrospectPythonParamX64">
+      <Value>$(IntrospectPythonParamX64)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

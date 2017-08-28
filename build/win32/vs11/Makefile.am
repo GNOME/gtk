@@ -29,6 +29,7 @@ EXTRA_DIST +=	\
 	gailutil-3.vcxproj.filters	\
 	gtk3-install.vcxproj	\
 	gtk3-install.vcxproj.filters	\
+	gtk3-introspect.vcxproj		\
 	broadwayd.vcxproj	\
 	broadwayd.vcxproj.filters	\
 	gdk3-broadway.vcxproj	\

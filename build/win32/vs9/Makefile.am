@@ -36,6 +36,7 @@ EXTRA_DIST += \
 	gtk3-icon-browser.vcprojin	\
 	gailutil-3.vcprojin		\
 	gtk3-install.vcproj		\
+	gtk3-introspect.vcproj		\
 	broadwayd.vcprojin		\
 	gdk3-broadway.vcprojin		\
 	gtk3-build-defines.vsprops	\

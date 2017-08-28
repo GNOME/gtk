@@ -89,6 +89,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-install", "gtk3-instal
 		{9F22107A-3EF7-4B52-B269-747B65307F36} = {9F22107A-3EF7-4B52-B269-747B65307F36}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-introspect", "gtk3-introspect.vcproj", "{A8092C4E-0A21-4B1D-AC82-16764E418D1F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23BBF35F-78AF-4E8C-983F-7B90448CD7DF} = {23BBF35F-78AF-4E8C-983F-7B90448CD7DF}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -325,6 +330,14 @@ Global
 		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release_Broadway|Win32.Build.0 = Release|Win32
 		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release_Broadway|x64.ActiveCfg = Release|x64
 		{9F22107A-3EF7-4B52-B269-747B65307F36}.Release_Broadway|x64.Build.0 = Release|x64
+		{A8092C4E-0A21-4B1D-AC82-16764E418D1F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A8092C4E-0A21-4B1D-AC82-16764E418D1F}.Debug|x64.ActiveCfg = Debug|x64
+		{A8092C4E-0A21-4B1D-AC82-16764E418D1F}.Release|Win32.ActiveCfg = Release|Win32
+		{A8092C4E-0A21-4B1D-AC82-16764E418D1F}.Release|x64.ActiveCfg = Release|x64
+		{A8092C4E-0A21-4B1D-AC82-16764E418D1F}.Debug_Broadway|Win32.ActiveCfg = Debug|Win32
+		{A8092C4E-0A21-4B1D-AC82-16764E418D1F}.Debug_Broadway|x64.ActiveCfg = Debug|x64
+		{A8092C4E-0A21-4B1D-AC82-16764E418D1F}.Release_Broadway|Win32.ActiveCfg = Release|Win32
+		{A8092C4E-0A21-4B1D-AC82-16764E418D1F}.Release_Broadway|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

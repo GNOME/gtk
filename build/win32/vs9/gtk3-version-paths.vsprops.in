@@ -58,4 +58,12 @@
 		Name="PythonDirX64"
 		Value="$(PythonDir).x64"
 	/>
+	<UserMacro
+		Name="IntrospectPythonParam"
+		Value="PYTHON=$(PythonDir)\python.exe"
+	/>
+	<UserMacro
+		Name="IntrospectPythonParamX64"
+		Value="PYTHON=$(PythonDirX64)\python.exe"
+	/>
 </VisualStudioPropertySheet>

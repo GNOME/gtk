@@ -59,4 +59,12 @@
 		Name="GtkAdditionalLibs"
 		Value="atk-1.0.lib pangowin32-1.0.lib winspool.lib comctl32.lib $(GtkGdkCommonLibs)"
 	/>
+	<UserMacro
+		Name="GtkIntrospectNMakeCmd"
+		Value="cd ..&#x0D;&#x0A;set VCInstallDir=$(VCInstallDir)&#x0D;&#x0A;nmake -f gtk-introspection-msvc.mak CFG=$(ConfigurationName) PREFIX=$(GlibEtcInstallRoot)"
+	/>
+	<UserMacro
+		Name="GtkIntrospectBuiltFiles"
+		Value="$(SolutionDir)\..\Gtk-3.0.gir;$(SolutionDir)\..\Gtk-3.0.typelib;$(SolutionDir)\..\GdkWin32-3.0.gir;$(SolutionDir)\..\GdkWin32-3.0.typelib;$(SolutionDir)\..\Gdk-3.0.gir;$(SolutionDir)\..\Gdk-3.0.typelib"
+	/>
 </VisualStudioPropertySheet>

@@ -80,6 +80,21 @@ built DLLs go into <root>\vs9\<PlatformName>\bin, built LIBs into
 project files higher in the stack are supposed to look for them, not
 from a specific GLib source tree.
 
+There is now a "gtk3-introspect" project that is used to build the
+introspection files.  In order for this to work, check that the paths for
+PythonDir (32-bit builds) and PythonDirX64 (x64 builds) are correct for your
+system.  Note that it must be the same Python installation that was used to
+build GObject-Introspection (G-I), and a complete G-I build/installation
+needs to be found in <root>\vs9\<PlatformName>\, with the introspection files
+for ATK, Pango and GDK-Pixbuf.  Note also that this is not built by default,
+so you will need to right-click on the project to build it, which will build
+and "install" the other projects that are normally built, if those were not yet
+built.  The introspection files that are built will be "installed" to
+<root>\vs9\<PlatformName>\share\gir-1.0 (the .gir file(s)) and
+<root>\vs9\<PlatformName>\lib\girepository-1.0 (the .typelib files(s)) upon
+successful build.  for building this in a different configuration, therefore,
+you will need to clean this project specifically and then rebuild.
+
 Please note, as GTK+ uses the Adwaita theme for all platforms by default,
 most icons used are not included with GTK+ (which *are* needed), so please see
 https://live.gnome.org/GTK%2B/Win32/MSVCCompilationOfGTKStack (under the

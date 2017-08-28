@@ -62,6 +62,7 @@ EXTRA_DIST += \
 	gailutil-3.vcxproj.filtersin		\
 	gtk3-install.vcxproj			\
 	gtk3-install.vcxproj.filters		\
+	gtk3-introspect.vcxproj			\
 	gtk3-build-defines.props		\
 	gtk3-copy-gdk-broadway.props		\
 	gtk3-gen-srcs.props			\
