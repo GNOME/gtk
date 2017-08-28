@@ -21,6 +21,9 @@
 #include <math.h>
 #include <string.h>
 
+#define GDK_COMPILATION
+#include "gdkeventsprivate.h"
+
 #include "gtktreeview.h"
 
 #include "gtkadjustmentprivate.h"
@@ -5792,7 +5795,6 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
           g_signal_handler_disconnect (tree_view->priv->search_entry,
                                        popup_menu_id);
-
         }
     }
 
