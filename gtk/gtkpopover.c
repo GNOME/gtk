@@ -813,7 +813,7 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
 {
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkPopoverPrivate *priv = popover->priv;
-  GdkRectangle rect;
+  GdkRectangle rect = { 0 };
   gint base, tip, tip_pos;
   gint initial_x, initial_y;
   gint tip_x, tip_y;
@@ -1104,7 +1104,7 @@ gtk_popover_update_position (GtkPopover *popover)
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkAllocation window_alloc;
   GtkBorder window_shadow;
-  GdkRectangle rect;
+  GdkRectangle rect = { 0 };
   GtkRequisition req;
   GtkPositionType pos;
   gint overshoot[4];
