@@ -18,11 +18,13 @@ place_popup (GtkWidget *parent,
 {
   GdkEventMotion *ev_motion = (GdkEventMotion *) event;
   gint width, height;
+  gdouble x, y;
 
   gtk_window_get_size (GTK_WINDOW (popup), &width, &height);
+  gdk_event_get_root_coords (event, &x, &y);
   gtk_window_move (GTK_WINDOW (popup),
-                   (int) ev_motion->x_root - width / 2,
-                   (int) ev_motion->y_root - height / 2);
+                   (int) x - width / 2,
+                   (int) y - height / 2);
 
   return FALSE;
 }

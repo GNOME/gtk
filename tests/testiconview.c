@@ -341,7 +341,12 @@ do_popup_menu (GtkWidget      *icon_list,
   GList *list;
 
   if (event)
-    path = gtk_icon_view_get_path_at_pos (icon_view, event->x, event->y);
+    {
+      double x, y;
+
+      gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+      path = gtk_icon_view_get_path_at_pos (icon_view, x, y);
+    }
   else
     {
       list = gtk_icon_view_get_selected_items (icon_view);
@@ -370,8 +375,8 @@ do_popup_menu (GtkWidget      *icon_list,
 
   if (event)
     {
-      button = event->button;
-      event_time = event->time;
+      gdk_event_get_button ((GdkEvent*)event, &button);
+      event_time = gdk_event_get_time ((GdkEvent *)event);
     }
   else
     {
@@ -390,7 +395,7 @@ button_press_event_handler (GtkWidget      *widget,
 {
   /* Ignore double-clicks and triple-clicks */
   if (gdk_event_triggers_context_menu ((GdkEvent *) event) &&
-      event->type == GDK_BUTTON_PRESS)
+      gdk_event_get_event_type ((GdkEvent*)event) == GDK_BUTTON_PRESS)
     {
       do_popup_menu (widget, event);
       return TRUE;

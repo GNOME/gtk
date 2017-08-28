@@ -57,11 +57,13 @@ release_event (GtkTreeView    *tv,
                GdkEventButton *event)
 {
   GtkTreePath *path;
+  gdouble x, y;
 
-  if (event->type != GDK_BUTTON_RELEASE)
+  if (gdk_event_get_event_type ((GdkEvent *)event) != GDK_BUTTON_RELEASE)
     return TRUE;
 
-  if (clicked_icon (tv, event->x, event->y, &path))
+  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+  if (clicked_icon (tv, x, y, &path))
     {
       GtkTreeModel *model;
       GtkTreeIter iter;
