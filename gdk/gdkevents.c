@@ -3061,3 +3061,36 @@ gdk_event_set_selection (GdkEvent  *event,
   event->selection.selection = selection;
   event->selection.time = time;
 }
+
+gboolean
+gdk_event_get_axes (GdkEvent  *event,
+                    gdouble  **axes,
+                    guint     *n_axes)
+{
+  GdkDevice *source_device;
+
+  if (!event)
+    return FALSE;
+
+  source_device = gdk_event_get_source_device (event);
+
+  if (!source_device)
+    return FALSE;
+
+  if (event->type == GDK_MOTION_NOTIFY)
+    {
+      *axes = event->motion.axes;
+      *n_axes = gdk_device_get_n_axes (source_device);
+      return TRUE;
+    }
+  else if (event->type == GDK_BUTTON_PRESS ||
+           event->type == GDK_BUTTON_RELEASE)
+    {
+      *axes = event->button.axes;
+      *n_axes = gdk_device_get_n_axes (source_device);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
