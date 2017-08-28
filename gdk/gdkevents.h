@@ -802,8 +802,10 @@ void           gdk_event_set_selection (GdkEvent  *event,
                                         GdkWindow *window,
                                         GdkAtom    selection,
                                         guint32    time);
-
-
+GDK_AVAILABLE_IN_3_92
+gboolean       gdk_event_get_axes      (GdkEvent  *event,
+                                        gdouble  **axes,
+                                        guint     *n_axes);
 
 G_END_DECLS
 
