@@ -29,6 +29,9 @@
 #include <locale.h>
 #include <math.h>
 
+#define GDK_COMPILATION
+#include "gdk/gdkeventsprivate.h"
+
 #include <gobject/gvaluecollector.h>
 #include <gobject/gobjectnotifyqueue.c>
 #include <cairo-gobject.h>
