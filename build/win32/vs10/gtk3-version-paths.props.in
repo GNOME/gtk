@@ -12,7 +12,11 @@
     <GtkSeparateVSDllSuffix>-vs$(VSVer)</GtkSeparateVSDllSuffix>
     <GtkDllPrefix>$(GtkSeparateVSDllPrefix)</GtkDllPrefix>
     <GtkDllSuffix>$(GtkSeparateVSDllSuffix)</GtkDllSuffix>
-    <PythonDir>c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '10.0'">c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '11.0'">c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '12.0'">c:\python34</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '14.0'">c:\python36</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)' == '15.0'">c:\python36</PythonDir>
     <PythonDirX64>$(PythonDir).x64</PythonDirX64>
   </PropertyGroup>
   <PropertyGroup>
