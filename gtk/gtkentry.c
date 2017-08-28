@@ -9858,7 +9858,8 @@ pick_emoji (GtkEntry *entry,
             GdkEvent *event,
             gpointer  data)
 {
-  gtk_entry_choose_emoji (entry);
+  if (icon == GTK_ENTRY_ICON_SECONDARY)
+    gtk_entry_choose_emoji (entry);
 }
 
 static void
