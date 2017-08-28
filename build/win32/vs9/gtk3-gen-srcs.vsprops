@@ -60,11 +60,11 @@ echo $(ConfigurationName) &gt; ..\..\..\MSVC_$(ConfigurationName)_Broadway&#x0D;
 	/>
 	<UserMacro
 		Name="GenerateGtkDbusBuiltSources"
-		Value="cd ..\..\..\gtk &amp; $(PythonPath)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)"
+		Value="cd ..\..\..\gtk &amp; $(PythonDir)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)"
 	/>
 	<UserMacro
 		Name="GenerateGtkDbusBuiltSourcesX64"
-		Value="cd ..\..\..\gtk &amp; $(PythonPathX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)"
+		Value="cd ..\..\..\gtk &amp; $(PythonDirX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)"
 	/>
 	<UserMacro
 		Name="CopyGtkWin32RC"
@@ -72,7 +72,7 @@ echo $(ConfigurationName) &gt; ..\..\..\MSVC_$(ConfigurationName)_Broadway&#x0D;
 	/>
 	<UserMacro
 		Name="GenerateGtkWin32Manifest"
-		Value="$(PythonPath)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk3.manifest.in --output=..\..\..\gtk\libgtk3.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*"
+		Value="$(PythonDir)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk3.manifest.in --output=..\..\..\gtk\libgtk3.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*"
 	/>
 	<UserMacro
 		Name="CopyDemosH"

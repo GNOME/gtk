@@ -23,8 +23,8 @@ You will also need a Python 2.6+/3.x interpretor installed on your system,
 which can be obtained from the official installers available from
 http://www.python.org.  Please note that the Python interpretor (python.exe)
 either needs to be in your PATH before attempting the build of GTK+, or it
-can be found in the path specified by PythonPath in gtk-version-paths.vsprops.
-If you happen to change the PythonPath setting in gtk-version-paths.vsprops after
+can be found in the path specified by PythonDir in gtk-version-paths.vsprops.
+If you happen to change the PythonDir setting in gtk-version-paths.vsprops after
 opening gtk+.sln with Visual Studio, you will need to close the gtk+.sln solution,
 delete all the *.ncb, *.suo and *.user files before re-attempting the build.
 

@@ -156,10 +156,10 @@ mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway&#x0D;&#x0A;
 	/>
 	<UserMacro
 		Name="GenerateGtkPC"
-		Value="$(PythonPath)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)"
+		Value="$(PythonDir)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=i686-pc-vs$(VSVer)"
 	/>
 	<UserMacro
 		Name="GenerateGtkPCX64"
-		Value="$(PythonPathX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)"
+		Value="$(PythonDirX64)\python ..\gtkpc.py --prefix=$(CopyDir) --version=$(GtkVersion) --host=x86_64-pc-vs$(VSVer)"
 	/>
 </VisualStudioPropertySheet>

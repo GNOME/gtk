@@ -39,10 +39,10 @@ echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)_Broadway
 :DONE_GDKCONFIG_H
     </GenGdkConfigHBroadway>
     <GDbusCodeGenCmd>$(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml</GDbusCodeGenCmd>
-    <GenerateGtkDbusBuiltSources>cd ..\..\..\gtk &amp; $(PythonPath)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSources>
-    <GenerateGtkDbusBuiltSourcesX64>cd ..\..\..\gtk &amp; $(PythonPathX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSourcesX64>
+    <GenerateGtkDbusBuiltSources>cd ..\..\..\gtk &amp; $(PythonDir)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSources>
+    <GenerateGtkDbusBuiltSourcesX64>cd ..\..\..\gtk &amp; $(PythonDirX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSourcesX64>
     <CopyGtkWin32RC>copy ..\..\..\gtk\gtk-win32.rc.body ..\..\..\gtk\gtk-win32.rc</CopyGtkWin32RC>
-    <GenerateGtkWin32Manifest>$(PythonPath)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk3.manifest.in --output=..\..\..\gtk\libgtk3.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
+    <GenerateGtkWin32Manifest>$(PythonDir)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk3.manifest.in --output=..\..\..\gtk\libgtk3.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
     <CopyDemosH>copy ..\..\..\demos\gtk-demo\demos.h.win32 ..\..\..\demos\gtk-demo\demos.h</CopyDemosH>
   </PropertyGroup>
   <PropertyGroup>
