@@ -855,7 +855,7 @@ draw_shadow (cairo_t             *cr,
   cairo_set_fill_rule (shadow_cr, CAIRO_FILL_RULE_EVEN_ODD);
   gsk_rounded_rect_path (box, shadow_cr);
   if (inset)
-    cairo_rectangle (cr,
+    cairo_rectangle (shadow_cr,
                      clip_box->bounds.origin.x, clip_box->bounds.origin.y,
                      clip_box->bounds.size.width, clip_box->bounds.size.height);
 
