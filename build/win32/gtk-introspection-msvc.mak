@@ -29,9 +29,9 @@ setgirbuildenv:
 
 !include introspection.body.mak
 
-install-introspection: all 
-	@-copy *.gir $(G_IR_INCLUDEDIR)
-	@-copy /b *.typelib $(G_IR_TYPELIBDIR)
+install-introspection: all
+	@-copy *.gir "$(G_IR_INCLUDEDIR)"
+	@-copy /b *.typelib "$(G_IR_TYPELIBDIR)"
 
 !else
 all:
