@@ -456,7 +456,11 @@ switch_to_label (void)
 static gboolean
 entry_key_press (GtkEntry *entry, GdkEventKey *event)
 {
-  if (event->keyval == GDK_KEY_Escape)
+  guint keyval;
+
+  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
+
+  if (keyval == GDK_KEY_Escape)
     {
       gtk_entry_set_text (GTK_ENTRY (entry), text);
       switch_to_label ();

@@ -172,13 +172,16 @@ paste_image (GtkMenuItem *item,
 
 static gboolean
 button_press (GtkWidget      *widget,
-              GdkEventButton *button,
+              GdkEventButton *event,
               gpointer        data)
 {
   GtkWidget *menu;
   GtkWidget *item;
+  guint button;
 
-  if (button->button != GDK_BUTTON_SECONDARY)
+  gdk_event_get_button ((GdkEvent *)event, &button);
+
+  if (button != GDK_BUTTON_SECONDARY)
     return FALSE;
 
   menu = gtk_menu_new ();
@@ -193,7 +196,7 @@ button_press (GtkWidget      *widget,
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-  gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *) button);
+  gtk_menu_popup_at_pointer (GTK_MENU (menu), (GdkEvent *) event);
   return TRUE;
 }
 
