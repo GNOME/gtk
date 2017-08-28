@@ -82,15 +82,21 @@ button_press_event_cb (GtkWidget      *widget,
                        GdkEventButton *event,
                        gpointer        data)
 {
+  guint button;
+  double x, y;
+
   /* paranoia check, in case we haven't gotten a configure event */
   if (surface == NULL)
     return FALSE;
 
-  if (event->button == GDK_BUTTON_PRIMARY)
+  gdk_event_get_button ((GdkEvent *)event, &button);
+  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+
+  if (button == GDK_BUTTON_PRIMARY)
     {
-      draw_brush (widget, event->x, event->y);
+      draw_brush (widget, x, y);
     }
-  else if (event->button == GDK_BUTTON_SECONDARY)
+  else if (button == GDK_BUTTON_SECONDARY)
     {
       clear_surface ();
       gtk_widget_queue_draw (widget);
@@ -109,12 +115,18 @@ motion_notify_event_cb (GtkWidget      *widget,
                         GdkEventMotion *event,
                         gpointer        data)
 {
+  double x, y;
+  GdkModifierType state;
+
   /* paranoia check, in case we haven't gotten a configure event */
   if (surface == NULL)
     return FALSE;
 
-  if (event->state & GDK_BUTTON1_MASK)
-    draw_brush (widget, event->x, event->y);
+  gdk_event_get_state ((GdkEvent *)event, &state);
+  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
+
+  if (state & GDK_BUTTON1_MASK)
+    draw_brush (widget, x, y);
 
   /* We've handled it, stop processing */
   return TRUE;
