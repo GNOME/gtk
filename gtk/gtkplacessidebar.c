@@ -3545,13 +3545,13 @@ build_popup_menu_using_gmenu (GtkSidebarRow *row)
     {
       GMenu *menu = g_menu_new ();
       GMenuItem *item;
-      item = g_menu_item_new ("_Open", "row.open");
+      item = g_menu_item_new (_("_Open"), "row.open");
       g_menu_item_set_action_and_target_value (item, "row.open", g_variant_new_int32(GTK_PLACES_OPEN_NORMAL));
       g_menu_append_item (menu, item);
-      item = g_menu_item_new ("Open in new tab", "row.open-other");
+      item = g_menu_item_new (_("Open in New _Tab"), "row.open-other");
       g_menu_item_set_action_and_target_value (item, "row.open-other", g_variant_new_int32(GTK_PLACES_OPEN_NEW_TAB));
       g_menu_append_item (menu, item);
-      item = g_menu_item_new ("Open in new window", "row.open-other");
+      item = g_menu_item_new (_("Open in New _Window"), "row.open-other");
       g_menu_item_set_action_and_target_value (item, "row.open-other", g_variant_new_int32(GTK_PLACES_OPEN_NEW_WINDOW));
       g_menu_append_item (menu, item);
       cloud_provider_menu = cloud_provider_proxy_get_menu_model (cloud_provider_proxy);
