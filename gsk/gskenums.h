@@ -43,8 +43,8 @@
  * @GSK_CLIP_NODE: A node that clips its child to a rectangular area
  * @GSK_ROUNDED_CLIP_NODE: A node that clips its child to a rounded rectangle
  * @GSK_SHADOW_NODE: A node that draws a shadow below its child
- * @GSK_BLEND_NODE: A node the blends two children together
- * @GSK_CROSS_FADE_NODE: A node the cross-fades between two children
+ * @GSK_BLEND_NODE: A node that blends two children together
+ * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
  *
  * The type of a node determines what the node is rendering.
  *
