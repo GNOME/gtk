@@ -116,9 +116,10 @@ mkdir $(CopyDir)\include\gail-$(ApiVersion)\libgail-util
 for &#37;&#37;s in (16 22 24 32 48 256) do ((mkdir $(CopyDir)\share\icons\hicolor\&#37;&#37;sx&#37;&#37;s\apps) &amp; (copy /b ..\..\..\demos\gtk-demo\data\&#37;&#37;sx&#37;&#37;s\gtk3-demo.png $(CopyDir)\share\icons\hicolor\&#37;&#37;sx&#37;&#37;s\apps))
 
 mkdir $(CopyDir)\share\glib-2.0\schemas
-copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
 copy ..\..\..\gtk\org.gtk.Settings.ColorChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
 copy ..\..\..\gtk\org.gtk.Settings.Debug.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\..\gtk\org.gtk.Settings.EmojiChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
+copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas
 copy ..\..\..\demos\gtk-demo\org.gtk.Demo.gschema.xml $(CopyDir)\share\glib-2.0\schemas
     </GtkDoInstall>
     <GtkDoInstallBroadwayHeaders>

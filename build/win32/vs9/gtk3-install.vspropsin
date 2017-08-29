@@ -130,9 +130,10 @@ mkdir $(CopyDir)\share\icons\hicolor\256x256\apps&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\data\256x256\gtk3-demo.png $(CopyDir)\share\icons\hicolor\256x256\apps\&#x0D;&#x0A;
 
 mkdir $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
-copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 copy ..\..\..\gtk\org.gtk.Settings.ColorChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 copy ..\..\..\gtk\org.gtk.Settings.Debug.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
+copy ..\..\..\gtk\org.gtk.Settings.EmojiChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
+copy ..\..\..\gtk\org.gtk.Settings.FileChooser.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 copy ..\..\..\demos\gtk-demo\org.gtk.Demo.gschema.xml $(CopyDir)\share\glib-2.0\schemas&#x0D;&#x0A;
 		      "
 	/>
