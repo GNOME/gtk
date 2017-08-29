@@ -5070,6 +5070,10 @@ _text_window_to_widget_coords (GtkTextView *text_view,
                                gint        *y)
 {
   GtkTextViewPrivate *priv = text_view->priv;
+  gint border_width = gtk_container_get_border_width (GTK_CONTAINER (text_view));
+
+  *x += border_width;
+  *y += border_width;
 
   if (priv->top_window)
     (*y) += priv->top_window->requisition.height;
