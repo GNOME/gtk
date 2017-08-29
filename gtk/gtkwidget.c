@@ -15486,10 +15486,20 @@ gtk_widget_set_focus_child (GtkWidget *widget,
     }
 
   if (priv->focus_child)
-    gtk_widget_unset_state_flags (priv->focus_child, GTK_STATE_FLAG_FOCUSED);
+    gtk_widget_unset_state_flags (priv->focus_child,
+                                  GTK_STATE_FLAG_FOCUSED|GTK_STATE_FLAG_FOCUS_VISIBLE);
 
   if (child)
-    gtk_widget_set_state_flags (child, GTK_STATE_FLAG_FOCUSED, FALSE);
+    {
+      GtkWidget *toplevel;
+      GtkStateFlags flags = GTK_STATE_FLAG_FOCUSED;
+
+      toplevel = _gtk_widget_get_toplevel (widget);
+      if (!GTK_IS_WINDOW (toplevel) || gtk_window_get_focus_visible (GTK_WINDOW (toplevel)))
+        flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
+
+      gtk_widget_set_state_flags (child, flags, FALSE);
+    }
 
   g_set_object (&priv->focus_child, child);
 
