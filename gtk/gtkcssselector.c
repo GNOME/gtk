@@ -683,7 +683,8 @@ gtk_css_pseudoclass_name (GtkStateFlags state)
     "link",
     "visited",
     "checked",
-    "drop(active)"
+    "drop(active)",
+    "focus(visible)"
   };
   guint i;
 
@@ -1116,6 +1117,7 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     { "selected",      0, GTK_STATE_FLAG_SELECTED, },
     { "disabled",      0, GTK_STATE_FLAG_INSENSITIVE, },
     { "indeterminate", 0, GTK_STATE_FLAG_INCONSISTENT, },
+    { "focus(visible)",0, GTK_STATE_FLAG_FOCUS_VISIBLE, },
     { "focus",         0, GTK_STATE_FLAG_FOCUSED, },
     { "backdrop",      0, GTK_STATE_FLAG_BACKDROP, },
     { "dir(ltr)",      0, GTK_STATE_FLAG_DIR_LTR, },
