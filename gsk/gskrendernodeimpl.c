@@ -464,56 +464,52 @@ gsk_border_node_draw (GskRenderNode *node,
   else
     {
       const graphene_rect_t *bounds = &self->outline.bounds;
-      /* distance to center "line":
-       * +-------------------------+
-       * |                         |
-       * |                         |
-       * |     ---this-line---     |
-       * |                         |
-       * |                         |
-       * +-------------------------+
-       * That line is equidistant from all sides. It's either horiontal
-       * or vertical, depending on if the rect is wider or taller.
-       * We use the 4 sides spanned up by connecting the line to the corner
-       * points to color the regions of the rectangle differently.
-       * Note that the call to cairo_fill() will add the potential final
-       * segment by closing the path, so we don't have to care.
-       */
-      float dst = MIN (bounds->size.width, bounds->size.height) / 2.0;
 
       cairo_clip (cr);
 
-      /* top */
-      cairo_move_to (cr, bounds->origin.x + dst, bounds->origin.y + dst);
-      cairo_rel_line_to (cr, - dst, - dst);
-      cairo_rel_line_to (cr, bounds->size.width, 0);
-      cairo_rel_line_to (cr, - dst, dst);
-      gdk_cairo_set_source_rgba (cr, &self->border_color[0]);
-      cairo_fill (cr);
+      /* Top */
+      if (self->border_width[0] > 0)
+        {
+          cairo_move_to (cr, bounds->origin.x, bounds->origin.y);
+          cairo_rel_line_to (cr, self->border_width[3], self->border_width[0]);
+          cairo_rel_line_to (cr, bounds->size.width - self->border_width[3] - self->border_width[1], 0);
+          cairo_rel_line_to (cr, self->border_width[1], - self->border_width[0]);
+          gdk_cairo_set_source_rgba (cr, &self->border_color[0]);
+          cairo_fill (cr);
+        }
 
-      /* right */
-      cairo_move_to (cr, bounds->origin.x + bounds->size.width - dst, bounds->origin.y + dst);
-      cairo_rel_line_to (cr, dst, - dst);
-      cairo_rel_line_to (cr, 0, bounds->size.height);
-      cairo_rel_line_to (cr, - dst, - dst);
-      gdk_cairo_set_source_rgba (cr, &self->border_color[1]);
-      cairo_fill (cr);
+      /* Right */
+      if (self->border_width[1] > 0)
+        {
+          cairo_move_to (cr, bounds->origin.x + bounds->size.width, bounds->origin.y);
+          cairo_rel_line_to (cr, - self->border_width[1], self->border_width[0]);
+          cairo_rel_line_to (cr, 0, bounds->size.height - self->border_width[0] - self->border_width[2]);
+          cairo_rel_line_to (cr, self->border_width[1], self->border_width[2]);
+          gdk_cairo_set_source_rgba (cr, &self->border_color[1]);
+          cairo_fill (cr);
+        }
 
-      /* bottom */
-      cairo_move_to (cr, bounds->origin.x + bounds->size.width - dst, bounds->origin.y + bounds->size.height - dst);
-      cairo_rel_line_to (cr, dst, dst);
-      cairo_rel_line_to (cr, - bounds->size.width, 0);
-      cairo_rel_line_to (cr, dst, - dst);
-      gdk_cairo_set_source_rgba (cr, &self->border_color[2]);
-      cairo_fill (cr);
+      /* Bottom */
+      if (self->border_width[2] > 0)
+        {
+          cairo_move_to (cr, bounds->origin.x, bounds->origin.y + bounds->size.height);
+          cairo_rel_line_to (cr, self->border_width[3], - self->border_width[2]);
+          cairo_rel_line_to (cr, bounds->size.width - self->border_width[3] - self->border_width[1], 0);
+          cairo_rel_line_to (cr, self->border_width[1], self->border_width[2]);
+          gdk_cairo_set_source_rgba (cr, &self->border_color[2]);
+          cairo_fill (cr);
+        }
 
-      /* left */
-      cairo_move_to (cr, bounds->origin.x + dst, bounds->origin.y + bounds->size.height - dst);
-      cairo_rel_line_to (cr, - dst, dst);
-      cairo_rel_line_to (cr, 0, - bounds->size.height);
-      cairo_rel_line_to (cr, dst, dst);
-      gdk_cairo_set_source_rgba (cr, &self->border_color[3]);
-      cairo_fill (cr);
+      /* Left */
+      if (self->border_width[3] > 0)
+        {
+          cairo_move_to (cr, bounds->origin.x, bounds->origin.y);
+          cairo_rel_line_to (cr, self->border_width[3], self->border_width[0]);
+          cairo_rel_line_to (cr, 0, bounds->size.height - self->border_width[0] - self->border_width[2]);
+          cairo_rel_line_to (cr, - self->border_width[3], self->border_width[2]);
+          gdk_cairo_set_source_rgba (cr, &self->border_color[3]);
+          cairo_fill (cr);
+        }
     }
 
   cairo_restore (cr);
