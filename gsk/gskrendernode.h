@@ -174,6 +174,12 @@ GskRenderNode *         gsk_cross_fade_node_new                 (GskRenderNode  
                                                                  GskRenderNode            *end,
                                                                  double                    progress);
 
+GDK_AVAILABLE_IN_3_92
+GskRenderNode *         gsk_text_node_new                       (PangoFont        *font,
+                                                                 int               x,
+                                                                 int               y,
+                                                                 PangoGlyphString *glyphs);
+
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_scaling_filters     (GskRenderNode *node,
                                                                  GskScalingFilter min_filter,

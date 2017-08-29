@@ -3801,6 +3801,166 @@ gsk_cross_fade_node_get_progress (GskRenderNode *node)
   return self->progress;
 }
 
+/*** GSK_TEXT_NODE ***/
+
+typedef struct _GskTextNode GskTextNode;
+
+struct _GskTextNode
+{
+  GskRenderNode render_node;
+
+  PangoFont *font;
+  PangoGlyphString *glyphs;
+  int x;
+  int y;
+};
+
+static void
+gsk_text_node_finalize (GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  g_object_unref (self->font);
+  pango_glyph_string_free (self->glyphs);
+}
+
+static void
+gsk_text_node_draw (GskRenderNode *node,
+                    cairo_t       *cr)
+{
+  GskTextNode *self = (GskTextNode *) node;
+  int i;
+  PangoFontDescription *desc;
+  char *s;
+
+  desc = pango_font_describe (self->font);
+  s = pango_font_description_to_string (desc);
+  g_print ("draw gyphs: font %s, x %d y %d\n", s, self->x, self->y);
+  g_free (s);
+  pango_font_description_free (desc);
+
+  for (i = 0; i < self->glyphs->num_glyphs; i++)
+    {
+      PangoGlyphInfo *glyph = &self->glyphs->glyphs[i];
+      g_print ("  glyph %u width %d x %d y %d cs %d\n",
+               glyph->glyph,
+               glyph->geometry.width,
+               glyph->geometry.x_offset,
+               glyph->geometry.y_offset,
+               glyph->attr.is_cluster_start);
+    }
+  g_print ("\n");
+}
+
+#define GSK_TEXT_NODE_VARIANT_TYPE "(siia(uiiii))"
+
+static GVariant *
+gsk_text_node_serialize (GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+  GVariant *v;
+  GVariantBuilder builder;
+  int i;
+  PangoFontDescription *desc;
+  char *s;
+
+  desc = pango_font_describe (self->font);
+  s = pango_font_description_to_string (desc);
+  for (i = 0; i < self->glyphs->num_glyphs; i++)
+    {
+      PangoGlyphInfo *glyph = &self->glyphs->glyphs[i];
+      g_variant_builder_add (&builder, "(uiiii)",
+                             glyph->glyph,
+                             glyph->geometry.width,
+                             glyph->geometry.x_offset,
+                             glyph->geometry.y_offset,
+                             glyph->attr.is_cluster_start);
+    }
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(uiiii)"));
+  v = g_variant_new (GSK_TEXT_NODE_VARIANT_TYPE, s, self->x, self->y, &builder);
+
+  g_free (s);
+  pango_font_description_free (desc);
+
+  return v;
+}
+
+static GskRenderNode *
+gsk_text_node_deserialize (GVariant  *variant,
+                           GError   **error)
+{
+  PangoFont *font;
+  int x, y;
+  PangoGlyphString *glyphs;
+  GVariantIter iter;
+  GskRenderNode *result;
+  PangoGlyphInfo glyph;
+  PangoFontDescription *desc;
+  PangoFontMap *fontmap;
+  PangoContext *context;
+  int cluster_start;
+  char *s;
+  int i;
+
+  if (!check_variant_type (variant, GSK_TEXT_NODE_VARIANT_TYPE, error))
+    return NULL;
+
+  g_variant_get (variant, "(&siia(uiiii))", &s, &x, &y, &iter);
+
+  desc = pango_font_description_from_string (s);
+  fontmap = pango_cairo_font_map_get_default ();
+  context = pango_font_map_create_context (fontmap);
+  font = pango_font_map_load_font (fontmap, context, desc);
+
+  glyphs = pango_glyph_string_new ();
+  pango_glyph_string_set_size (glyphs, g_variant_iter_n_children (&iter));
+  i = 0;
+  while (g_variant_iter_next (&iter, "(uiiii)", &glyph.glyph, &glyph.geometry.width, &glyph.geometry.x_offset, &glyph.geometry.y_offset, &cluster_start))
+    {
+      glyph.attr.is_cluster_start = cluster_start;
+      glyphs->glyphs[i] = glyph;
+      i++;
+    }
+
+  result = gsk_text_node_new (font, x, y, glyphs);
+
+  pango_glyph_string_free (glyphs);
+  pango_font_description_free (desc);
+  g_object_unref (context);
+  g_object_unref (font);
+
+  return result;
+}
+
+static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
+  GSK_TEXT_NODE,
+  sizeof (GskTextNode),
+  "GskTextNode",
+  gsk_text_node_finalize,
+  gsk_text_node_draw,
+  gsk_text_node_serialize,
+  gsk_text_node_deserialize
+};
+
+GskRenderNode *
+gsk_text_node_new (PangoFont        *font,
+                   int               x,
+                   int               y,
+                   PangoGlyphString *glyphs)
+{
+  GskTextNode *self;
+
+  self = (GskTextNode *) gsk_render_node_new (&GSK_TEXT_NODE_CLASS, 0);
+
+  self->font = font ? g_object_ref (font) : NULL;
+  self->x = x;
+  self->y = y;
+  self->glyphs = pango_glyph_string_copy (glyphs);
+
+  return &self->render_node;
+}
+
 static const GskRenderNodeClass *klasses[] = {
   [GSK_CONTAINER_NODE] = &GSK_CONTAINER_NODE_CLASS,
   [GSK_CAIRO_NODE] = &GSK_CAIRO_NODE_CLASS,
@@ -3818,7 +3978,8 @@ static const GskRenderNodeClass *klasses[] = {
   [GSK_ROUNDED_CLIP_NODE] = &GSK_ROUNDED_CLIP_NODE_CLASS,
   [GSK_SHADOW_NODE] = &GSK_SHADOW_NODE_CLASS,
   [GSK_BLEND_NODE] = &GSK_BLEND_NODE_CLASS,
-  [GSK_CROSS_FADE_NODE] = &GSK_CROSS_FADE_NODE_CLASS
+  [GSK_CROSS_FADE_NODE] = &GSK_CROSS_FADE_NODE_CLASS,
+  [GSK_TEXT_NODE] = &GSK_TEXT_NODE_CLASS
 };
 
 GskRenderNode *
