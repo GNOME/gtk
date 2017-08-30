@@ -48,6 +48,7 @@ struct _GtkPrinterCups
   GtkPrinter parent_instance;
 
   gchar *device_uri;
+  gchar *original_device_uri;
   gchar *printer_uri;
   gchar *hostname;
   gint port;
