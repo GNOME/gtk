@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-28 09:17+0000\n"
-"PO-Revision-Date: 2017-08-28 16:39+0200\n"
+"PO-Revision-Date: 2017-08-30 10:30+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -2397,10 +2397,8 @@ msgid "Emoji icon"
 msgstr ""
 
 #: gtk/gtkentry.c:1394
-#, fuzzy
-#| msgid "Whether to use a monospace font"
 msgid "Whether to show an icon for Emoji"
-msgstr "Indiche se doprâ un caratar a spazi fis"
+msgstr "Indiche se mostrâ une icone pai Emoji"
 
 #: gtk/gtkentrycompletion.c:349
 msgid "Completion Model"
@@ -3666,11 +3664,12 @@ msgstr ""
 
 #: gtk/gtkmenushell.c:404
 msgid "Take Focus"
-msgstr ""
+msgstr "Cjape la metude a fûc"
 
 #: gtk/gtkmenushell.c:405
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
+"Un boolean che al determine se il menù al cjape la metude a fûc de tastiere"
 
 #: gtk/gtkmenutoolbutton.c:261
 msgid "Menu"
@@ -3682,11 +3681,11 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:184
 msgid "Message Buttons"
-msgstr ""
+msgstr "Botons messaçs"
 
 #: gtk/gtkmessagedialog.c:185
 msgid "The buttons shown in the message dialog"
-msgstr ""
+msgstr "I botons mostrâts tal dialic di messaç"
 
 #: gtk/gtkmessagedialog.c:202
 msgid "The primary text of the message dialog"
@@ -3702,11 +3701,11 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:232
 msgid "Secondary Text"
-msgstr ""
+msgstr "Test secondari"
 
 #: gtk/gtkmessagedialog.c:233
 msgid "The secondary text of the message dialog"
-msgstr ""
+msgstr "Il test secondari dal dialic di messaç"
 
 #: gtk/gtkmessagedialog.c:248
 msgid "Use Markup in secondary"
@@ -3718,7 +3717,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:265
 msgid "Message area"
-msgstr ""
+msgstr "Aree messaç"
 
 #: gtk/gtkmessagedialog.c:266
 msgid "GtkBox that holds the dialog’s primary and secondary labels"
@@ -3726,39 +3725,39 @@ msgstr ""
 
 #: gtk/gtkmodelbutton.c:934
 msgid "Role"
-msgstr ""
+msgstr "Rûl"
 
 #: gtk/gtkmodelbutton.c:935
 msgid "The role of this button"
-msgstr ""
+msgstr "Il rûl di chest boton"
 
 #: gtk/gtkmodelbutton.c:951
 msgid "The icon"
-msgstr ""
+msgstr "La icone"
 
 #: gtk/gtkmodelbutton.c:965
 msgid "The text"
-msgstr ""
+msgstr "Il test"
 
 #: gtk/gtkmodelbutton.c:994
 msgid "Menu name"
-msgstr ""
+msgstr "Non menù"
 
 #: gtk/gtkmodelbutton.c:995
 msgid "The name of the menu to open"
-msgstr ""
+msgstr "Il non dal menù di vierzi"
 
 #: gtk/gtkmodelbutton.c:1011
 msgid "Whether the menu is a parent"
-msgstr ""
+msgstr "Indiche se il menù al è un gjenitôr"
 
 #: gtk/gtkmodelbutton.c:1025
 msgid "Centered"
-msgstr ""
+msgstr "Centrât"
 
 #: gtk/gtkmodelbutton.c:1026
 msgid "Whether to center the contents"
-msgstr ""
+msgstr "Indiche se centrâ i contignûts"
 
 #: gtk/gtkmodelbutton.c:1041
 msgid "Iconic"
@@ -3766,7 +3765,7 @@ msgstr ""
 
 #: gtk/gtkmodelbutton.c:1042
 msgid "Whether to prefer the icon over text"
-msgstr ""
+msgstr "Indiche se preferî lis iconis al puest dai tescj"
 
 #: gtk/gtkmountoperation.c:164 gtk/gtkstylecontext.c:232
 msgid "Parent"
@@ -3786,29 +3785,31 @@ msgstr ""
 
 #: gtk/gtkmountoperation.c:181
 msgid "The screen where this window will be displayed."
-msgstr ""
+msgstr "Il schermi dulà che al vignarà mostrât chest barcon."
 
 #: gtk/gtknativedialog.c:214
 msgid "Dialog Title"
-msgstr ""
+msgstr "Titul dialic"
 
 #: gtk/gtknativedialog.c:215
 msgid "The title of the file chooser dialog"
-msgstr ""
+msgstr "Il titul dal dialic di selezion dal file"
 
 #: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1650 gtk/gtkwindow.c:889
 msgid "Modal"
-msgstr ""
+msgstr "Modâl"
 
 #: gtk/gtknativedialog.c:229
 msgid ""
 "If TRUE, the dialog is modal (other windows are not usable while this one is "
 "up)"
 msgstr ""
+"Se VÊR, il dialic al è modâl (altris barcons no puedin jessi doprâts "
+"fintremai che chest al reste viert)"
 
 #: gtk/gtknativedialog.c:243
 msgid "Whether the dialog is currently visible"
-msgstr ""
+msgstr "Indiche se il dialic al è visibil"
 
 #: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1106
 msgid "Transient for Window"
@@ -3836,19 +3837,19 @@ msgstr "Di ce bande dal schedari che a vegnin tignudis lis schedis"
 
 #: gtk/gtknotebook.c:731
 msgid "Show Tabs"
-msgstr ""
+msgstr "Mostre lis schedis"
 
 #: gtk/gtknotebook.c:732
 msgid "Whether tabs should be shown"
-msgstr ""
+msgstr "Indiche se lis schedis e varessin di jessi mostradis"
 
 #: gtk/gtknotebook.c:738
 msgid "Show Border"
-msgstr ""
+msgstr "Mostre ôr"
 
 #: gtk/gtknotebook.c:739
 msgid "Whether the border should be shown"
-msgstr ""
+msgstr "Indiche se l'ôr al varès di jessi mostrât"
 
 #: gtk/gtknotebook.c:745
 msgid "Scrollable"
@@ -3878,19 +3879,19 @@ msgstr ""
 
 #: gtk/gtknotebook.c:776
 msgid "Tab label"
-msgstr ""
+msgstr "Etichete schede"
 
 #: gtk/gtknotebook.c:777
 msgid "The string displayed on the child’s tab label"
-msgstr ""
+msgstr "La stringhe mostrade su la etichete des schedis fiis"
 
 #: gtk/gtknotebook.c:783
 msgid "Menu label"
-msgstr ""
+msgstr "Etichete menù"
 
 #: gtk/gtknotebook.c:784
 msgid "The string displayed in the child’s menu entry"
-msgstr ""
+msgstr "La stringhe mostrade tes vôs dai menù fîs"
 
 #: gtk/gtknotebook.c:797
 msgid "Tab expand"
@@ -3902,11 +3903,12 @@ msgstr ""
 
 #: gtk/gtknotebook.c:804
 msgid "Tab fill"
-msgstr ""
+msgstr "Jemple schede"
 
 #: gtk/gtknotebook.c:805
 msgid "Whether the child’s tab should fill the allocated area"
 msgstr ""
+"Indiche se lis schedis fiis e varessin di doprâ dute la aree disponibile"
 
 #: gtk/gtknotebook.c:812
 msgid "Tab reorderable"
@@ -4956,7 +4958,7 @@ msgstr "Lungjece dal cicli pal lampâ dal cursôr, in miliseconts."
 
 #: gtk/gtksettings.c:404
 msgid "Cursor Blink Timeout"
-msgstr ""
+msgstr "Durade dal lampâ dal cursôr"
 
 #: gtk/gtksettings.c:405
 msgid "Time after which the cursor stops blinking, in seconds"
@@ -5006,7 +5008,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:461
 msgid "Font Name"
-msgstr ""
+msgstr "Non caratar"
 
 #: gtk/gtksettings.c:462
 msgid "The default font family and size to use"
@@ -5396,7 +5398,7 @@ msgstr ""
 
 #: gtk/gtkshortcutsshortcut.c:712
 msgid "Action Name"
-msgstr ""
+msgstr "Non azion"
 
 #: gtk/gtkshortcutsshortcut.c:713
 msgid "The name of the action"
@@ -5404,7 +5406,7 @@ msgstr ""
 
 #: gtk/gtksizegroup.c:220 gtk/gtktreeselection.c:130
 msgid "Mode"
-msgstr ""
+msgstr "Modalitât"
 
 #: gtk/gtksizegroup.c:221
 msgid ""
@@ -6055,7 +6057,7 @@ msgstr "Se il cursôr di inseriment al è mostrât"
 
 #: gtk/gtktextview.c:948
 msgid "Buffer"
-msgstr ""
+msgstr "Buffer"
 
 #: gtk/gtktextview.c:949
 msgid "The buffer which is displayed"
@@ -6430,7 +6432,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:252 gtk/gtkwindow.c:882
 msgid "Resizable"
-msgstr ""
+msgstr "Ridimensionabil"
 
 #: gtk/gtktreeviewcolumn.c:253
 msgid "Column is user-resizable"
@@ -6897,19 +6899,19 @@ msgstr ""
 
 #: gtk/gtkwindow.c:1005
 msgid "Skip taskbar"
-msgstr ""
+msgstr "Salte la sbare des ativitâts"
 
 #: gtk/gtkwindow.c:1006
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "VÊR se il barcon nol varès di stâ te sbare des ativitâts."
 
 #: gtk/gtkwindow.c:1012
 msgid "Skip pager"
-msgstr ""
+msgstr "Salte pager"
 
 #: gtk/gtkwindow.c:1013
 msgid "TRUE if the window should not be in the pager."
-msgstr ""
+msgstr "VÊR se il barcon nol varès di stâ tal pager."
 
 #: gtk/gtkwindow.c:1019
 msgid "Urgent"
@@ -6921,11 +6923,11 @@ msgstr "VÊR se il barcon al à di jessi puartât ae atenzion dal utent."
 
 #: gtk/gtkwindow.c:1033
 msgid "Accept focus"
-msgstr ""
+msgstr "Acete metude a fûc"
 
 #: gtk/gtkwindow.c:1034
 msgid "TRUE if the window should receive the input focus."
-msgstr ""
+msgstr "VÊR se il barcon al varès di jessi metût a fûc pal input."
 
 #: gtk/gtkwindow.c:1047
 msgid "Focus on map"
@@ -6942,6 +6944,7 @@ msgstr ""
 #: gtk/gtkwindow.c:1062
 msgid "Whether the window should be decorated by the window manager"
 msgstr ""
+"Indiche se il barcon al varès di jessi decorât di un gjestôr dai barcons"
 
 #: gtk/gtkwindow.c:1075
 msgid "Deletable"
@@ -6949,15 +6952,15 @@ msgstr ""
 
 #: gtk/gtkwindow.c:1076
 msgid "Whether the window frame should have a close button"
-msgstr ""
+msgstr "Indiche se il ricuadri dal barcon al varès di vê un boton par sierâ"
 
 #: gtk/gtkwindow.c:1090
 msgid "Gravity"
-msgstr ""
+msgstr "Gravitât"
 
 #: gtk/gtkwindow.c:1091
 msgid "The window gravity of the window"
-msgstr ""
+msgstr "La gravitât dal barcon"
 
 #: gtk/gtkwindow.c:1126
 msgid "Attached to Widget"
