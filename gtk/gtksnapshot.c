@@ -1332,37 +1332,42 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
                             PangoLayout     *layout)
 {
   const GdkRGBA *fg_color;
-  graphene_rect_t bounds;
-  GtkBorder shadow_extents;
-  PangoRectangle ink_rect;
   GtkCssValue *shadow;
-  cairo_t *cr;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
-  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-  shadow = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
-  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
-  _gtk_css_shadows_value_get_extents (shadow, &shadow_extents);
-  graphene_rect_init (&bounds,
-                      ink_rect.x - shadow_extents.left,
-                      ink_rect.y - shadow_extents.top,
-                      ink_rect.width + shadow_extents.left + shadow_extents.right,
-                      ink_rect.height + shadow_extents.top + shadow_extents.bottom);
-
   gtk_snapshot_offset (snapshot, x, y);
 
-  cr = gtk_snapshot_append_cairo (snapshot, &bounds, "Text<%dchars>", pango_layout_get_character_count (layout));
+  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
-  _gtk_css_shadows_value_paint_layout (shadow, cr, layout);
+  shadow = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
+  if (!_gtk_css_shadows_value_is_none (shadow))
+    {
+      PangoRectangle ink_rect;
+      graphene_rect_t bounds;
+      GtkBorder shadow_extents = { 0, };
+      cairo_t *cr;
 
-  gdk_cairo_set_source_rgba (cr, fg_color);
+      pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+      _gtk_css_shadows_value_get_extents (shadow, &shadow_extents);
+      graphene_rect_init (&bounds,
+                          ink_rect.x - shadow_extents.left,
+                          ink_rect.y - shadow_extents.top,
+                          ink_rect.width + shadow_extents.left + shadow_extents.right,
+                          ink_rect.height + shadow_extents.top + shadow_extents.bottom);
 
-  gsk_pango_show_layout (cr, layout);
+      cr = gtk_snapshot_append_cairo (snapshot, &bounds, "Text<%dchars>", pango_layout_get_character_count (layout));
 
-  cairo_destroy (cr);
+      gdk_cairo_set_source_rgba (cr, fg_color);
+
+      _gtk_css_shadows_value_paint_layout (shadow, cr, layout);
+      cairo_destroy (cr);
+    }
+
+  gsk_pango_show_layout (snapshot, fg_color, layout);
+
   gtk_snapshot_offset (snapshot, -x, -y);
 }
 

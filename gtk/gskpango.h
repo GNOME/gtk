@@ -19,7 +19,8 @@
 #ifndef __GSK_PANGO_H__
 #define __GSK_PANGO_H__
 
-#include <gsk/gsk.h>
+#include <pango/pango.h>
+#include "gtk/gtksnapshot.h"
 
 G_BEGIN_DECLS
 
@@ -35,8 +36,9 @@ GDK_AVAILABLE_IN_3_92
 GType gsk_pango_renderer_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_92
-void gsk_pango_show_layout (cairo_t     *cr,
-                            PangoLayout *layout);
+void gsk_pango_show_layout (GtkSnapshot   *snapshot,
+                            const GdkRGBA *fg_color,
+                            PangoLayout   *layout);
 
 G_END_DECLS
 
