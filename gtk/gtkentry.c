@@ -6566,8 +6566,8 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
 }
 
 static void
-gtk_entry_clear (GtkEntry             *entry,
-                 GtkEntryIconPosition  icon_pos)
+gtk_entry_clear_icon (GtkEntry             *entry,
+                      GtkEntryIconPosition  icon_pos)
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
@@ -7522,7 +7522,7 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
       g_object_unref (pixbuf);
     }
   else
-    gtk_entry_clear (entry, icon_pos);
+    gtk_entry_clear_icon (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
@@ -7581,7 +7581,7 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
         }
     }
   else
-    gtk_entry_clear (entry, icon_pos);
+    gtk_entry_clear_icon (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
@@ -7638,7 +7638,7 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
         }
     }
   else
-    gtk_entry_clear (entry, icon_pos);
+    gtk_entry_clear_icon (entry, icon_pos);
 
   if (gtk_widget_get_visible (GTK_WIDGET (entry)))
     gtk_widget_queue_resize (GTK_WIDGET (entry));
