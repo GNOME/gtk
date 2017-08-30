@@ -231,6 +231,7 @@ gtk_public_sources = files([
   'gtkpagesetup.c',
   'gtkpaned.c',
   'gtkpango.c',
+  'gskpango.c',
   'gtkpapersize.c',
   'gtkpathbar.c',
   'gtkplacessidebar.c',
