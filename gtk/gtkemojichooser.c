@@ -482,14 +482,23 @@ static void
 update_headings (GtkEmojiChooser *chooser)
 {
   gtk_widget_set_visible (chooser->people.heading, !chooser->people.empty);
+  gtk_widget_set_visible (chooser->people.box, !chooser->people.empty);
   gtk_widget_set_visible (chooser->body.heading, !chooser->body.empty);
+  gtk_widget_set_visible (chooser->body.box, !chooser->body.empty);
   gtk_widget_set_visible (chooser->nature.heading, !chooser->nature.empty);
+  gtk_widget_set_visible (chooser->nature.box, !chooser->nature.empty);
   gtk_widget_set_visible (chooser->food.heading, !chooser->food.empty);
+  gtk_widget_set_visible (chooser->food.box, !chooser->food.empty);
   gtk_widget_set_visible (chooser->travel.heading, !chooser->travel.empty);
+  gtk_widget_set_visible (chooser->travel.box, !chooser->travel.empty);
   gtk_widget_set_visible (chooser->activities.heading, !chooser->activities.empty);
+  gtk_widget_set_visible (chooser->activities.box, !chooser->activities.empty);
   gtk_widget_set_visible (chooser->objects.heading, !chooser->objects.empty);
+  gtk_widget_set_visible (chooser->objects.box, !chooser->objects.empty);
   gtk_widget_set_visible (chooser->symbols.heading, !chooser->symbols.empty);
+  gtk_widget_set_visible (chooser->symbols.box, !chooser->symbols.empty);
   gtk_widget_set_visible (chooser->flags.heading, !chooser->flags.empty);
+  gtk_widget_set_visible (chooser->flags.box, !chooser->flags.empty);
 
   if (chooser->recent.empty && chooser->people.empty &&
       chooser->body.empty && chooser->nature.empty &&
