@@ -597,12 +597,12 @@ gtk_emoji_chooser_show (GtkWidget *widget)
   GtkEmojiChooser *chooser = GTK_EMOJI_CHOOSER (widget);
   GtkAdjustment *adj;
 
+  GTK_WIDGET_CLASS (gtk_emoji_chooser_parent_class)->show (widget);
+
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   gtk_adjustment_set_value (adj, 0);
 
   gtk_entry_set_text (GTK_ENTRY (chooser->search_entry), "");
-
-  GTK_WIDGET_CLASS (gtk_emoji_chooser_parent_class)->show (widget);
 }
 
 static void
