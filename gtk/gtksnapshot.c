@@ -29,6 +29,8 @@
 
 #include "gsk/gskrendernodeprivate.h"
 
+#include "gtk/gskpango.h"
+
 
 /**
  * SECTION:gtksnapshot
@@ -1357,7 +1359,8 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   _gtk_css_shadows_value_paint_layout (shadow, cr, layout);
 
   gdk_cairo_set_source_rgba (cr, fg_color);
-  pango_cairo_show_layout (cr, layout);
+
+  gsk_pango_show_layout (cr, layout);
 
   cairo_destroy (cr);
   gtk_snapshot_offset (snapshot, -x, -y);
