@@ -2728,11 +2728,11 @@ msgstr[1] "%s / %s dispoñíbeis"
 
 #: gtk/gtkplacesviewrow.c:470
 msgid "Disconnect"
-msgstr "_Desconectar"
+msgstr "Desconectar"
 
 #: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:69
 msgid "Unmount"
-msgstr "_Desmontar"
+msgstr "Desmontar"
 
 #: gtk/gtkprintbackend.c:762
 msgid "Authentication"
