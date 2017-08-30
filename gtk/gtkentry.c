@@ -11097,6 +11097,10 @@ set_show_emoji_icon (GtkEntry *entry,
                                       GTK_ENTRY_ICON_SECONDARY,
                                       TRUE);
 
+      gtk_entry_set_icon_tooltip_text (entry,
+                                       GTK_ENTRY_ICON_SECONDARY,
+                                       _("Insert Emoji"));
+
       g_signal_connect (entry, "icon-press", G_CALLBACK (pick_emoji), NULL);
     }
   else
@@ -11106,6 +11110,10 @@ set_show_emoji_icon (GtkEntry *entry,
       gtk_entry_set_icon_from_icon_name (entry,
                                          GTK_ENTRY_ICON_SECONDARY,
                                          NULL);
+
+      gtk_entry_set_icon_tooltip_text (entry,
+                                       GTK_ENTRY_ICON_SECONDARY,
+                                       NULL);
     }
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SHOW_EMOJI_ICON]);
