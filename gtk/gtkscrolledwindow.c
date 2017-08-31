@@ -1995,6 +1995,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
   GtkWidget *child;
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+
   if (hadjustment)
     g_return_if_fail (GTK_IS_ADJUSTMENT (hadjustment));
   else
@@ -2018,13 +2019,14 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
       if (old_adjustment == hadjustment)
 	return;
 
-      g_signal_handlers_disconnect_by_func (old_adjustment,
-					    gtk_scrolled_window_adjustment_changed,
-					    scrolled_window);
+      g_signal_handlers_disconnect_by_data (old_adjustment, scrolled_window);
+
       gtk_adjustment_enable_animation (old_adjustment, NULL, 0);
       gtk_scrollbar_set_adjustment (GTK_SCROLLBAR (priv->hscrollbar), hadjustment);
     }
+
   hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
+
   g_signal_connect (hadjustment,
                     "changed",
 		    G_CALLBACK (gtk_scrolled_window_adjustment_changed),
@@ -2033,6 +2035,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
                     "value-changed",
 		    G_CALLBACK (gtk_scrolled_window_adjustment_value_changed),
 		    scrolled_window);
+
   gtk_scrolled_window_adjustment_changed (hadjustment, scrolled_window);
   gtk_scrolled_window_adjustment_value_changed (hadjustment, scrolled_window);
 
@@ -2042,6 +2045,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
 
   if (gtk_widget_should_animate (GTK_WIDGET (scrolled_window)))
     gtk_adjustment_enable_animation (hadjustment, gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window)), ANIMATION_DURATION);
+
   g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_HADJUSTMENT]);
 }
 
@@ -2061,6 +2065,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
   GtkWidget *child;
 
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
+
   if (vadjustment)
     g_return_if_fail (GTK_IS_ADJUSTMENT (vadjustment));
   else
@@ -2084,13 +2089,14 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
       if (old_adjustment == vadjustment)
 	return;
 
-      g_signal_handlers_disconnect_by_func (old_adjustment,
-					    gtk_scrolled_window_adjustment_changed,
-					    scrolled_window);
+      g_signal_handlers_disconnect_by_data (old_adjustment, scrolled_window);
+
       gtk_adjustment_enable_animation (old_adjustment, NULL, 0);
       gtk_scrollbar_set_adjustment (GTK_SCROLLBAR (priv->vscrollbar), vadjustment);
     }
+
   vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
+
   g_signal_connect (vadjustment,
                     "changed",
 		    G_CALLBACK (gtk_scrolled_window_adjustment_changed),
@@ -2099,6 +2105,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
                     "value-changed",
 		    G_CALLBACK (gtk_scrolled_window_adjustment_value_changed),
 		    scrolled_window);
+
   gtk_scrolled_window_adjustment_changed (vadjustment, scrolled_window);
   gtk_scrolled_window_adjustment_value_changed (vadjustment, scrolled_window);
 
@@ -2519,17 +2526,22 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
 
   if (priv->hscrollbar)
     {
-      g_signal_handlers_disconnect_by_func (gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar)),
-					    gtk_scrolled_window_adjustment_changed,
-					    scrolled_window);
+      GtkAdjustment *hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
+
+      g_signal_handlers_disconnect_by_data (hadjustment, scrolled_window);
+      g_signal_handlers_disconnect_by_data (hadjustment, &priv->hindicator);
+
       gtk_widget_unparent (priv->hscrollbar);
       priv->hscrollbar = NULL;
     }
+
   if (priv->vscrollbar)
     {
-      g_signal_handlers_disconnect_by_func (gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar)),
-					    gtk_scrolled_window_adjustment_changed,
-					    scrolled_window);
+      GtkAdjustment *vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
+
+      g_signal_handlers_disconnect_by_data (vadjustment, scrolled_window);
+      g_signal_handlers_disconnect_by_data (vadjustment, &priv->vindicator);
+
       gtk_widget_unparent (priv->vscrollbar);
       priv->vscrollbar = NULL;
     }
@@ -3905,10 +3917,11 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
   indicator->scrollbar = NULL;
 
   context = gtk_widget_get_style_context (scrollbar);
-  adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (scrollbar));
-
   gtk_style_context_remove_class (context, "overlay-indicator");
-  g_signal_handlers_disconnect_by_func (adjustment, indicator_value_changed, indicator);
+
+  adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (scrollbar));
+  g_signal_handlers_disconnect_by_data (adjustment, indicator);
+
   if (indicator->conceil_timer)
     {
       g_source_remove (indicator->conceil_timer);
