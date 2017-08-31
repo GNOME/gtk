@@ -1858,9 +1858,10 @@ gtk_window_init (GtkWindow *window)
   gtk_window_update_debugging ();
 
 #ifdef GDK_WINDOWING_X11
-  g_signal_connect_object (gtk_settings_get_for_screen (priv->screen),
-                           "notify::gtk-application-prefer-dark-theme",
-                           G_CALLBACK (gtk_window_on_theme_variant_changed), window, 0);
+  if (priv->screen)
+    g_signal_connect (gtk_settings_get_for_screen (priv->screen),
+                      "notify::gtk-application-prefer-dark-theme",
+                      G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (window));
