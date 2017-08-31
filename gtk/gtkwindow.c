@@ -1695,14 +1695,16 @@ gtk_window_init (GtkWindow *window)
   gtk_window_update_debugging ();
 
   if (priv->screen)
-    g_signal_connect_object (priv->screen, "composited-changed",
-                             G_CALLBACK (gtk_window_on_composited_changed), window, 0);
+    {
+      g_signal_connect (priv->screen, "composited-changed",
+                        G_CALLBACK (gtk_window_on_composited_changed), window);
 
 #ifdef GDK_WINDOWING_X11
-  g_signal_connect_object (gtk_settings_get_for_screen (priv->screen),
-                           "notify::gtk-application-prefer-dark-theme",
-                           G_CALLBACK (gtk_window_on_theme_variant_changed), window, 0);
+      g_signal_connect (gtk_settings_get_for_screen (priv->screen),
+                        "notify::gtk-application-prefer-dark-theme",
+                        G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
+    }
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (window));
   priv->decoration_node = gtk_css_node_new ();
