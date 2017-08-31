@@ -301,10 +301,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
 
   if (graphene_matrix_is_identity (&transform_matrix))
     {
-      graphene_rect_init (&bounds,
-                          0, 0,
-                          gsk_texture_get_width (texture) / texture_scale,
-                          gsk_texture_get_height (texture) / texture_scale);
+      graphene_rect_init (&bounds, 0, 0, width, height);
       gtk_snapshot_append_texture (snapshot, texture, &bounds, "Icon");
     }
   else
