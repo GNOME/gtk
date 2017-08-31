@@ -1306,15 +1306,10 @@ gtk_real_menu_item_get_label (GtkMenuItem *menu_item)
   gtk_menu_item_ensure_label (menu_item);
 
   child = gtk_bin_get_child (GTK_BIN (menu_item));
-  if (GTK_IS_LABEL (child) ||
-      GTK_IS_ACCEL_LABEL (child))
-    {
-      const char *label;
-
-      g_object_get (child, "label", &label, NULL);
-
-      return label;
-    }
+  if (GTK_IS_LABEL (child))
+    return gtk_label_get_label (GTK_LABEL (child));
+  else if (GTK_IS_ACCEL_LABEL (child))
+    return gtk_accel_label_get_label (GTK_ACCEL_LABEL (child));
 
   return NULL;
 }
