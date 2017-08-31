@@ -187,6 +187,7 @@ gtk_im_context_ime_init (GtkIMContextIME *context_ime)
   context_ime->cursor_location.y      = 0;
   context_ime->cursor_location.width  = 0;
   context_ime->cursor_location.height = 0;
+  context_ime->commit_string          = NULL;
 
   context_ime->priv = g_malloc0 (sizeof (GtkIMContextIMEPrivate));
   context_ime->priv->conversion_mode  = 0;
@@ -1061,14 +1062,14 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
             gchar *utf8str = NULL;
             GError *error = NULL;
 
-	    len = ImmGetCompositionStringW (himc, GCS_RESULTSTR, NULL, 0);
+            len = ImmGetCompositionStringW (himc, GCS_RESULTSTR, NULL, 0);
 
             if (len > 0)
               {
-		gpointer buf = g_alloca (len);
-		ImmGetCompositionStringW (himc, GCS_RESULTSTR, buf, len);
-		len /= 2;
-		utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+                gpointer buf = g_alloca (len);
+                ImmGetCompositionStringW (himc, GCS_RESULTSTR, buf, len);
+                len /= 2;
+                context_ime->commit_string = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
                 if (error)
                   {
                     g_warning ("%s", error->message);
@@ -1076,12 +1077,8 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
                   }
               }
 
-            if (utf8str)
-              {
-                g_signal_emit_by_name (context, "commit", utf8str);
-                g_free (utf8str);
-		retval = TRUE;
-              }
+            if (context_ime->commit_string)
+              retval = TRUE;
           }
 
         if (context_ime->use_preedit)
@@ -1101,6 +1098,14 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
       context_ime->preediting = FALSE;
       g_signal_emit_by_name (context, "preedit-changed");
       g_signal_emit_by_name (context, "preedit-end");
+
+      if (context_ime->commit_string)
+        {
+          g_signal_emit_by_name (context, "commit", context_ime->commit_string);
+          g_free (context_ime->commit_string);
+          context_ime->commit_string = NULL;
+        }
+
       if (context_ime->use_preedit)
         retval = TRUE;
       break;
