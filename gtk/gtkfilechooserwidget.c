@@ -33,7 +33,6 @@
 #include "gtkdragsource.h"
 #include "gtkdragdest.h"
 #include "gtkentry.h"
-#include "gtkexpander.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserembed.h"
