@@ -523,6 +523,7 @@ append_node (GtkTreeModelRenderNode *nodemodel,
       break;
 
     case GSK_CAIRO_NODE:
+    case GSK_TEXT_NODE:
     case GSK_TEXTURE_NODE:
     case GSK_COLOR_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
