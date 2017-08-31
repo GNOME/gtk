@@ -97,20 +97,6 @@ set_color (GskPangoRenderer *crenderer,
     gdk_cairo_set_source_rgba (cr, crenderer->fg_color);
 }
 
-static gboolean
-_pango_cairo_font_install (PangoFont *font,
-                           cairo_t   *cr)
-{
-  cairo_scaled_font_t *scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-
-  if (G_UNLIKELY (scaled_font == NULL || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
-    return FALSE;
-
-  cairo_set_scaled_font (cr, scaled_font);
-
-  return TRUE;
-}
-
 static void
 gsk_pango_renderer_draw_unknown_glyph (GskPangoRenderer *crenderer,
                                        PangoFont        *font,
@@ -136,12 +122,6 @@ gsk_pango_renderer_draw_unknown_glyph (GskPangoRenderer *crenderer,
   cairo_destroy (cr);
 }
 
-#ifndef STACK_BUFFER_SIZE
-#define STACK_BUFFER_SIZE (512 * sizeof (int))
-#endif
-
-#define STACK_ARRAY_LENGTH(T) (STACK_BUFFER_SIZE / sizeof(T))
-
 static void
 gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
                                      const char           *text,
@@ -155,84 +135,68 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
                                      int                   y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-
-  cairo_t *cr;
-  int i, count;
-  int x_position = 0;
-  cairo_glyph_t *cairo_glyphs;
-  cairo_glyph_t stack_glyphs[STACK_ARRAY_LENGTH (cairo_glyph_t)];
   double base_x = crenderer->x_offset + (double)x / PANGO_SCALE;
   double base_y = crenderer->y_offset + (double)y / PANGO_SCALE;
+  int x_offset, y_offset;
+  cairo_scaled_font_t *scaled_font;
+  gboolean font_failed = FALSE;
+  int x_position;
+  int num_glyphs;
+  int i;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds, "Text<%dglyphs>", glyphs->num_glyphs);
+  gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
 
-  set_color (crenderer, PANGO_RENDER_PART_FOREGROUND, cr);
+  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
+  if (scaled_font == NULL || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS)
+    font_failed = TRUE;
 
-  if (!_pango_cairo_font_install (font, cr))
-    {
-      for (i = 0; i < glyphs->num_glyphs; i++)
-        {
-          PangoGlyphInfo *gi = &glyphs->glyphs[i];
-
-          if (gi->glyph != PANGO_GLYPH_EMPTY)
-            {
-              double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-              double cy = gi->geometry.y_offset == 0 ?
-                          base_y :
-                          base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
-
-              gsk_pango_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
-            }
-          x_position += gi->geometry.width;
-        }
-
-      goto done;
-    }
-
-  if (glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
-    cairo_glyphs = g_new (cairo_glyph_t, glyphs->num_glyphs);
-  else
-    cairo_glyphs = stack_glyphs;
-
-  count = 0;
+  x_position = 0;
+  num_glyphs = 0;
   for (i = 0; i < glyphs->num_glyphs; i++)
     {
       PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
-      if (gi->glyph != PANGO_GLYPH_EMPTY)
+      if (gi->glyph != PANGO_GLYPH_EMPTY &&
+          (font_failed || gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
         {
           double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-          double cy = gi->geometry.y_offset == 0 ?
-                      base_y :
-                      base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
+          double cy = gi->geometry.y_offset == 0
+                      ? base_y
+                      : base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
-          if (gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-            gsk_pango_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
+          gsk_pango_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
+
+          if (num_glyphs == 0)
+            base_x += (gi->geometry.x_offset + gi->geometry.width) / PANGO_SCALE;
           else
-            {
-              cairo_glyphs[count].index = gi->glyph;
-              cairo_glyphs[count].x = cx;
-              cairo_glyphs[count].y = cy;
-              count++;
-            }
+            glyphs->glyphs[num_glyphs - 1].geometry.width += gi->geometry.x_offset + gi->geometry.width;
+        }
+      else
+        {
+          if (i != num_glyphs)
+            glyphs->glyphs[num_glyphs] = glyphs->glyphs[i];
+          num_glyphs++;
         }
       x_position += gi->geometry.width;
     }
 
-  if (G_UNLIKELY (clusters))
-    cairo_show_text_glyphs (cr,
-                            text, text_len,
-                            cairo_glyphs, count,
-                            clusters, num_clusters,
-                            backward ? CAIRO_TEXT_CLUSTER_FLAG_BACKWARD : 0);
-  else
-    cairo_show_glyphs (cr, cairo_glyphs, count);
+  glyphs->num_glyphs = num_glyphs;
 
-  if (cairo_glyphs != stack_glyphs)
-    g_free (cairo_glyphs);
+  if (glyphs->num_glyphs > 0)
+    {
+      GskRenderNode *node;
+      char name[64];
 
-done:
-  cairo_destroy (cr);
+      gtk_snapshot_offset (crenderer->snapshot, base_x, base_y);
+
+      node = gsk_text_node_new (font, glyphs, crenderer->fg_color, x_offset, y_offset, base_x, base_y);
+      snprintf (name, sizeof (name), "Glyphs<%d>", glyphs->num_glyphs);
+      gsk_render_node_set_name (node, name);
+      gtk_snapshot_append_node (crenderer->snapshot, node);
+      gsk_render_node_unref (node);
+
+      gtk_snapshot_offset (crenderer->snapshot, -base_x, -base_y);
+    }
 }
 
 static void
