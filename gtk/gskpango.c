@@ -112,8 +112,6 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
                                      int                   y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  double base_x = (double)x / PANGO_SCALE;
-  double base_y = (double)y / PANGO_SCALE;
   int x_offset, y_offset;
   GskRenderNode *node;
   GdkRGBA color;
@@ -121,7 +119,7 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
   gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
-  node = gsk_text_node_new (font, glyphs, &color, x_offset, y_offset, base_x, base_y);
+  node = gsk_text_node_new (font, glyphs, &color, x_offset + (double)x/PANGO_SCALE, y_offset + (double)y/PANGO_SCALE);
   if (node == NULL)
     return;
 
@@ -132,12 +130,8 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
       gsk_render_node_set_name (node, name);
     }
 
-  gtk_snapshot_offset (crenderer->snapshot, base_x, base_y);
-
   gtk_snapshot_append_node (crenderer->snapshot, node);
   gsk_render_node_unref (node);
-
-  gtk_snapshot_offset (crenderer->snapshot, -base_x, -base_y);
 }
 
 static void

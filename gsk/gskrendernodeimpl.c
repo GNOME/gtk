@@ -3811,14 +3811,15 @@ struct _GskTextNode
 {
   GskRenderNode render_node;
 
-  PangoFont *font;
-  gboolean has_color;
   PangoGlyphString *glyphs;
+  cairo_surface_t *surface;
+
+  gboolean has_color;
   GdkRGBA color;
-  int x_offset;
-  int y_offset;
-  double base_x;
-  double base_y;
+  double x;
+  double y;
+  double ink_rect_y;
+  double ink_rect_height;
 };
 
 static void
@@ -3826,22 +3827,8 @@ gsk_text_node_finalize (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
-  g_object_unref (self->font);
   pango_glyph_string_free (self->glyphs);
-}
-
-static gboolean
-_pango_cairo_font_install (PangoFont *font,
-                           cairo_t   *cr)
-{
-  cairo_scaled_font_t *scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-
-  if (G_UNLIKELY (scaled_font == NULL || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
-    return FALSE;
-
-  cairo_set_scaled_font (cr, scaled_font);
-
-  return TRUE;
+  cairo_surface_destroy (self->surface);
 }
 
 #ifndef STACK_BUFFER_SIZE
@@ -3851,37 +3838,39 @@ _pango_cairo_font_install (PangoFont *font,
 #define STACK_ARRAY_LENGTH(T) (STACK_BUFFER_SIZE / sizeof(T))
 
 static void
-gsk_text_node_draw (GskRenderNode *node,
-                    cairo_t       *cr)
+render_text (cairo_t          *cr,
+             PangoGlyphString *glyphs,
+             PangoFont        *font,
+             double            x,
+             double            y)
 {
-  GskTextNode *self = (GskTextNode *) node;
   int i, count;
   int x_position = 0;
+  cairo_scaled_font_t *scaled_font;
   cairo_glyph_t *cairo_glyphs;
   cairo_glyph_t stack_glyphs[STACK_ARRAY_LENGTH (cairo_glyph_t)];
 
-  cairo_save (cr);
+  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
+  if (G_UNLIKELY (!scaled_font || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
+    return;
 
-  cairo_translate (cr, self->x_offset, self->y_offset);
+  cairo_set_scaled_font (cr, scaled_font);
+  cairo_set_source_rgba (cr, 0, 0, 0, 1);
 
-  gdk_cairo_set_source_rgba (cr, &self->color);
-  if (!_pango_cairo_font_install (self->font, cr))
-    goto done;
-
-  if (self->glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
-    cairo_glyphs = g_new (cairo_glyph_t, self->glyphs->num_glyphs);
+  if (glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
+    cairo_glyphs = g_new (cairo_glyph_t, glyphs->num_glyphs);
   else
     cairo_glyphs = stack_glyphs;
 
   count = 0;
-  for (i = 0; i < self->glyphs->num_glyphs; i++)
+  for (i = 0; i < glyphs->num_glyphs; i++)
     {
-      PangoGlyphInfo *gi = &self->glyphs->glyphs[i];
+      PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
       if (gi->glyph != PANGO_GLYPH_EMPTY)
         {
-          double cx = self->base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-          double cy = gi->geometry.y_offset == 0 ? self->base_y : self->base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
+          double cx = x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+          double cy = y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
           if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
             {
@@ -3898,108 +3887,71 @@ gsk_text_node_draw (GskRenderNode *node,
 
   if (cairo_glyphs != stack_glyphs)
     g_free (cairo_glyphs);
-
-done:
-  cairo_restore (cr);
 }
 
-#define GSK_TEXT_NODE_VARIANT_TYPE "(sddddiidda(uiiii))"
+static void
+gsk_text_node_draw (GskRenderNode *node,
+                    cairo_t       *cr)
+{
+  GskTextNode *self = (GskTextNode *) node;
+  int i;
+  int x_position = 0;
+
+  cairo_save (cr);
+
+  cairo_translate (cr, self->x, self->y);
+
+  gdk_cairo_set_source_rgba (cr, &self->color);
+
+  for (i = 0; i < self->glyphs->num_glyphs; i++)
+    {
+      PangoGlyphInfo *gi = &self->glyphs->glyphs[i];
+
+      if (gi->glyph != PANGO_GLYPH_EMPTY)
+        {
+          double cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+          double cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+
+          if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
+            {
+              cairo_rectangle (cr, cx,
+                                   cy + self->ink_rect_y,
+                                   gi->geometry.width / PANGO_SCALE,
+                                   self->ink_rect_height);
+              cairo_clip (cr);
+
+              cairo_move_to (cr, cx, cy + self->ink_rect_y);
+              if (self->has_color)
+                {
+                  cairo_set_source_surface (cr, self->surface, 0, self->ink_rect_y);
+                  cairo_paint (cr);
+                }
+              else
+                {
+                  cairo_mask_surface (cr, self->surface, 0, self->ink_rect_y);
+                }
+              cairo_reset_clip (cr);
+            }
+        }
+      x_position += gi->geometry.width;
+    }
+
+  cairo_restore (cr);
+}
 
 static GVariant *
 gsk_text_node_serialize (GskRenderNode *node)
 {
-  GskTextNode *self = (GskTextNode *) node;
-  GVariant *v;
-  GVariantBuilder builder;
-  int i;
-  PangoFontDescription *desc;
-  char *s;
-
-  desc = pango_font_describe (self->font);
-  s = pango_font_description_to_string (desc);
-  for (i = 0; i < self->glyphs->num_glyphs; i++)
-    {
-      PangoGlyphInfo *glyph = &self->glyphs->glyphs[i];
-      g_variant_builder_add (&builder, "(uiiii)",
-                             glyph->glyph,
-                             glyph->geometry.width,
-                             glyph->geometry.x_offset,
-                             glyph->geometry.y_offset,
-                             glyph->attr.is_cluster_start);
-    }
-
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(uiiii)"));
-  v = g_variant_new (GSK_TEXT_NODE_VARIANT_TYPE,
-                     s,
-                     self->color.red,
-                     self->color.green,
-                     self->color.blue,
-                     self->color.alpha,
-                     self->x_offset,
-                     self->y_offset,
-                     self->base_x,
-                     self->base_y,
-                     &builder);
-
-  g_free (s);
-  pango_font_description_free (desc);
-
-  return v;
+  g_assert_not_reached ();
+  return NULL;
 }
 
 static GskRenderNode *
 gsk_text_node_deserialize (GVariant  *variant,
                            GError   **error)
 {
-  PangoFont *font;
-  PangoGlyphString *glyphs;
-  GVariantIter iter;
-  GskRenderNode *result;
-  PangoGlyphInfo glyph;
-  PangoFontDescription *desc;
-  PangoFontMap *fontmap;
-  PangoContext *context;
-  int cluster_start;
-  char *s;
-  GdkRGBA color;
-  int x_offset, y_offset;
-  double base_x, base_y;
-  int i;
-
-  if (!check_variant_type (variant, GSK_TEXT_NODE_VARIANT_TYPE, error))
-    return NULL;
-
-  g_variant_get (variant, "(&sddddiidda(uiiii))",
-                 &color.red, &color.green, &color.blue, &color.alpha,
-                 &x_offset, &y_offset,
-                 &base_x, &base_y,
-                 &s, &iter);
-
-  desc = pango_font_description_from_string (s);
-  fontmap = pango_cairo_font_map_get_default ();
-  context = pango_font_map_create_context (fontmap);
-  font = pango_font_map_load_font (fontmap, context, desc);
-
-  glyphs = pango_glyph_string_new ();
-  pango_glyph_string_set_size (glyphs, g_variant_iter_n_children (&iter));
-  i = 0;
-  while (g_variant_iter_next (&iter, "(uiiii)", &glyph.glyph, &glyph.geometry.width, &glyph.geometry.x_offset, &glyph.geometry.y_offset, &cluster_start))
-    {
-      glyph.attr.is_cluster_start = cluster_start;
-      glyphs->glyphs[i] = glyph;
-      i++;
-    }
-
-  result = gsk_text_node_new (font, glyphs, &color, /* FIXME: Avoid copying glyphs */
-                              x_offset, y_offset,
-                              base_x, base_y);
-
-  pango_glyph_string_free (glyphs);
-  pango_font_description_free (desc);
-  g_object_unref (context);
-  g_object_unref (font);
-
-  return result;
+  g_assert_not_reached ();
+  return NULL;
 }
 
 static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
@@ -4033,13 +3985,12 @@ GskRenderNode *
 gsk_text_node_new (PangoFont        *font,
                    PangoGlyphString *glyphs,
                    const GdkRGBA    *color,
-                   int               x_offset,
-                   int               y_offset,
-                   double            base_x,
-                   double            base_y)
+                   double            x,
+                   double            y)
 {
   GskTextNode *self;
   PangoRectangle ink_rect;
+  cairo_t *cr;
 
   pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
   pango_extents_to_pixels (&ink_rect, NULL);
@@ -4050,22 +4001,27 @@ gsk_text_node_new (PangoFont        *font,
 
   self = (GskTextNode *) gsk_render_node_new (&GSK_TEXT_NODE_CLASS, 0);
 
-  self->font = g_object_ref (font);
   self->glyphs = pango_glyph_string_copy (glyphs);
   self->color = *color;
-  self->x_offset = x_offset;
-  self->y_offset = y_offset;
-  self->base_x = base_x;
-  self->base_y = base_y;
+  self->x = x;
+  self->y = y;
+  self->ink_rect_y = ink_rect.y;
+  self->ink_rect_height = ink_rect.height;
 
   self->has_color = font_has_color_glyphs (font);
 
-
   graphene_rect_init (&self->render_node.bounds,
-                      x_offset + base_x + ink_rect.x,
-                      y_offset + base_y + ink_rect.y,
-                      ink_rect.width,
+                      x,
+                      y + ink_rect.y,
+                      ink_rect.x + ink_rect.width,
                       ink_rect.height);
+
+  self->surface = cairo_image_surface_create (self->has_color ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_A8,
+                                              ink_rect.x + ink_rect.width,
+                                              ink_rect.height);
+  cr = cairo_create (self->surface);
+  render_text (cr, glyphs, font, 0, - ink_rect.y);
+  cairo_destroy (cr);
 
   return &self->render_node;
 }
