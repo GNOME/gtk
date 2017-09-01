@@ -3963,7 +3963,6 @@ gtk_label_snapshot (GtkWidget   *widget,
           cairo_region_t *range_clip;
           cairo_rectangle_int_t clip_extents;
           GdkRectangle rect;
-          cairo_t *cr;
 
           if (info->selectable &&
               gtk_widget_has_focus (widget) &&
