@@ -125,6 +125,7 @@
  * ├── undershoot.left
  * ├── undershoot.right
  * ├── [selection]
+ * ├── [block-cursor]
  * ├── [progress[.pulse]]
  * ╰── [window.popup]
  * ]|
@@ -137,6 +138,9 @@
  * style class .left or .right, depending on where the icon appears.
  *
  * When the entry has a selection, it adds a subnode with the name selection.
+ *
+ * When the entry is in overwrite mode, it adds a subnode with the name block-cursor
+ * that determines how the block cursor is drawn.
  *
  * When the entry shows progress, it adds a subnode with the name progress.
  * The node has the style class .pulse when the shown progress is pulsing.
@@ -204,6 +208,7 @@ struct _GtkEntryPrivate
 
   GtkWidget     *progress_widget;
   GtkCssNode    *selection_node;
+  GtkCssNode    *block_cursor_node;
   GtkCssNode    *undershoot_node[2];
 
   int           text_x;
@@ -559,9 +564,9 @@ static void         gtk_entry_set_positions            (GtkEntry       *entry,
 							gint            current_pos,
 							gint            selection_bound);
 static void         gtk_entry_draw_text                (GtkEntry       *entry,
-                                                        cairo_t        *cr);
+                                                        GtkSnapshot    *snapshot);
 static void         gtk_entry_draw_cursor              (GtkEntry       *entry,
-                                                        cairo_t        *cr,
+                                                        GtkSnapshot    *snapshot,
 							CursorType      type);
 static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
                                                         gboolean        include_preedit);
@@ -2872,6 +2877,9 @@ update_node_state (GtkEntry *entry)
   if (priv->selection_node)
     gtk_css_node_set_state (priv->selection_node, state);
 
+  if (priv->block_cursor_node)
+    gtk_css_node_set_state (priv->block_cursor_node, state);
+
   gtk_css_node_set_state (priv->undershoot_node[0], state);
   gtk_css_node_set_state (priv->undershoot_node[1], state);
 }
@@ -3272,7 +3280,6 @@ gtk_entry_snapshot (GtkWidget   *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   int width, height;
-  cairo_t *cr;
   int i;
 
   gtk_widget_get_content_size (widget, &width, &height);
@@ -3282,27 +3289,17 @@ gtk_entry_snapshot (GtkWidget   *widget,
     gtk_widget_snapshot_child (widget, priv->progress_widget, snapshot);
 
   /* Draw text and cursor */
-  /* We add 1 to priv->text_width here simply because we might draw the
-   * cursor at the very right, one pixel after all the text. */
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (priv->text_x,
-                                                       0,
-                                                       priv->text_width + 1,
-                                                       height),
-                                  "Entry Text");
 
   if (priv->dnd_position != -1)
-    gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);
+    gtk_entry_draw_cursor (GTK_ENTRY (widget), snapshot, CURSOR_DND);
 
-  gtk_entry_draw_text (GTK_ENTRY (widget), cr);
+  gtk_entry_draw_text (GTK_ENTRY (widget), snapshot);
 
   /* When no text is being displayed at all, don't show the cursor */
   if (gtk_entry_get_display_mode (entry) != DISPLAY_BLANK &&
       gtk_widget_has_focus (widget) &&
       priv->selection_bound == priv->current_pos && priv->cursor_visible)
-    gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
-
-  cairo_destroy (cr);
+    gtk_entry_draw_cursor (GTK_ENTRY (widget), snapshot, CURSOR_STANDARD);
 
   /* Draw icons */
   for (i = 0; i < MAX_ICONS; i++)
@@ -5162,6 +5159,29 @@ gtk_entry_toggle_overwrite (GtkEntry *entry)
   GtkEntryPrivate *priv = entry->priv;
 
   priv->overwrite_mode = !priv->overwrite_mode;
+
+  if (priv->overwrite_mode)
+    {
+      if (!priv->block_cursor_node)
+        {
+          GtkCssNode *widget_node = gtk_widget_get_css_node (GTK_WIDGET (entry));
+
+          priv->block_cursor_node = gtk_css_node_new ();
+          gtk_css_node_set_name (priv->block_cursor_node, I_("block-cursor"));
+          gtk_css_node_set_parent (priv->block_cursor_node, widget_node);
+          gtk_css_node_set_state (priv->block_cursor_node, gtk_css_node_get_state (widget_node));
+          g_object_unref (priv->block_cursor_node);
+        }
+    }
+  else
+    {
+      if (priv->block_cursor_node)
+        {
+          gtk_css_node_set_parent (priv->block_cursor_node, NULL);
+          priv->block_cursor_node = NULL;
+        }
+    }
+
   gtk_entry_pend_cursor_blink (entry);
   gtk_widget_queue_draw (GTK_WIDGET (entry));
 }
@@ -5653,9 +5673,11 @@ get_layout_position (GtkEntry *entry,
     *y = y_pos;
 }
 
+#define GRAPHENE_RECT_FROM_RECT(_r) (GRAPHENE_RECT_INIT ((_r)->x, (_r)->y, (_r)->width, (_r)->height))
+
 static void
-gtk_entry_draw_text (GtkEntry *entry,
-                     cairo_t  *cr)
+gtk_entry_draw_text (GtkEntry    *entry,
+                     GtkSnapshot *snapshot)
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
@@ -5673,14 +5695,12 @@ gtk_entry_draw_text (GtkEntry *entry,
   gtk_widget_get_content_size (widget, &width, &height);
   layout = gtk_entry_ensure_layout (entry, TRUE);
 
-  cairo_save (cr);
-
   gtk_entry_get_layout_offsets (entry, &x, &y);
 
   if (show_placeholder_text (entry))
     pango_layout_set_width (layout, PANGO_SCALE * priv->text_width);
 
-  gtk_render_layout (context, cr, x, y, layout);
+  gtk_snapshot_render_layout (snapshot, context, x, y, layout);
 
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
     {
@@ -5688,6 +5708,7 @@ gtk_entry_draw_text (GtkEntry *entry,
       gint start_index = g_utf8_offset_to_pointer (text, start_pos) - text;
       gint end_index = g_utf8_offset_to_pointer (text, end_pos) - text;
       cairo_region_t *clip;
+      cairo_rectangle_int_t clip_extents;
       gint range[2];
 
       range[0] = MIN (start_index, end_index);
@@ -5696,23 +5717,23 @@ gtk_entry_draw_text (GtkEntry *entry,
       gtk_style_context_save_to_node (context, priv->selection_node);
 
       clip = gdk_pango_layout_get_clip_region (layout, x, y, range, 1);
-      gdk_cairo_region (cr, clip);
-      cairo_clip (cr);
-      cairo_region_destroy (clip);
+      cairo_region_get_extents (clip, &clip_extents);
 
-      gtk_render_background (context, cr, 0, 0, width, height);
-      gtk_render_layout (context, cr, x, y, layout);
+      gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents), "Selected Text");
+      gtk_snapshot_render_background (snapshot, context, 0, 0, width, height);
+      gtk_snapshot_render_layout (snapshot, context, x, y, layout);
+      gtk_snapshot_pop (snapshot);
+
+      cairo_region_destroy (clip);
 
       gtk_style_context_restore (context);
     }
-
-  cairo_restore (cr);
 }
 
 static void
-gtk_entry_draw_cursor (GtkEntry  *entry,
-                       cairo_t   *cr,
-		       CursorType type)
+gtk_entry_draw_cursor (GtkEntry    *entry,
+                       GtkSnapshot *snapshot,
+		       CursorType   type)
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
@@ -5724,12 +5745,14 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
   PangoLayout *layout;
   const char *text;
   gint x, y;
+  int width, height;
 
   context = gtk_widget_get_style_context (widget);
 
   layout = gtk_entry_ensure_layout (entry, TRUE);
   text = pango_layout_get_text (layout);
   gtk_entry_get_layout_offsets (entry, &x, &y);
+  gtk_widget_get_content_size (widget, &width, &height);
 
   if (type == CURSOR_DND)
     cursor_index = g_utf8_offset_to_pointer (text, priv->dnd_position) - text;
@@ -5743,44 +5766,27 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
                                                       cursor_index, &cursor_rect, &block_at_line_end);
   if (!block)
     {
-      gtk_render_insertion_cursor (context, cr,
-                                   x, y,
-                                   layout, cursor_index, priv->resolved_dir);
+      gtk_snapshot_render_insertion_cursor (snapshot, context,
+                                            x, y,
+                                            layout, cursor_index, priv->resolved_dir);
     }
   else /* overwrite_mode */
     {
-      GdkRGBA cursor_color;
-      GdkRectangle rect;
+      graphene_rect_t bounds;
 
-      cairo_save (cr);
+      bounds.origin.x = PANGO_PIXELS (cursor_rect.x) + x;
+      bounds.origin.y = PANGO_PIXELS (cursor_rect.y) + y;
+      bounds.size.width = PANGO_PIXELS (cursor_rect.width);
+      bounds.size.height = PANGO_PIXELS (cursor_rect.height);
 
-      rect.x = PANGO_PIXELS (cursor_rect.x) + x;
-      rect.y = PANGO_PIXELS (cursor_rect.y) + y;
-      rect.width = PANGO_PIXELS (cursor_rect.width);
-      rect.height = PANGO_PIXELS (cursor_rect.height);
+      gtk_style_context_save_to_node (context, priv->block_cursor_node);
 
-      _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
-      gdk_cairo_set_source_rgba (cr, &cursor_color);
-      gdk_cairo_rectangle (cr, &rect);
-      cairo_fill (cr);
+      gtk_snapshot_push_clip (snapshot, &bounds, "Block Cursor");
+      gtk_snapshot_render_background (snapshot, context,  0, 0, width, height);
+      gtk_snapshot_render_layout (snapshot, context,  x, y, layout);
+      gtk_snapshot_pop (snapshot);
 
-      if (!block_at_line_end)
-        {
-          GdkRGBA color;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_style_context_get_background_color (context,
-                                                  &color);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-          gdk_cairo_rectangle (cr, &rect);
-          cairo_clip (cr);
-          cairo_move_to (cr, x, y);
-          gdk_cairo_set_source_rgba (cr, &color);
-          pango_cairo_show_layout (cr, layout);
-        }
-
-      cairo_restore (cr);
+      gtk_style_context_restore (context);
     }
 }
 
