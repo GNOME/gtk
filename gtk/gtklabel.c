@@ -3948,10 +3948,13 @@ gtk_label_snapshot (GtkWidget   *widget,
 
           range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
           cairo_region_get_extents (range_clip, &clip_extents);
+
           gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents), "Selected Text");
           gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
           gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
           gtk_snapshot_pop (snapshot);
+
+          cairo_region_destroy (range_clip);
 
           gtk_style_context_restore (context);
         }
@@ -3994,6 +3997,8 @@ gtk_label_snapshot (GtkWidget   *widget,
               gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
               gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
               gtk_snapshot_pop (snapshot);
+
+              cairo_region_destroy (range_clip);
 
               gtk_style_context_restore (context);
             }
