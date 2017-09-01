@@ -662,6 +662,32 @@ gtk_center_box_get_property (GObject    *object,
 }
 
 static void
+gtk_center_box_dispose (GObject *object)
+{
+  GtkCenterBox *self = GTK_CENTER_BOX (object);
+
+  if (self->start_widget)
+    {
+      gtk_widget_unparent (self->start_widget);
+      self->start_widget = NULL;
+    }
+
+  if (self->center_widget)
+    {
+      gtk_widget_unparent (self->center_widget);
+      self->center_widget = NULL;
+    }
+
+  if (self->end_widget)
+    {
+      gtk_widget_unparent (self->end_widget);
+      self->end_widget = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_center_box_parent_class)->dispose (object);
+}
+
+static void
 gtk_center_box_class_init (GtkCenterBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -669,6 +695,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 
   object_class->set_property = gtk_center_box_set_property;
   object_class->get_property = gtk_center_box_get_property;
+  object_class->dispose = gtk_center_box_dispose;
 
   widget_class->measure = gtk_center_box_measure;
   widget_class->size_allocate = gtk_center_box_size_allocate;
