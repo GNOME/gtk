@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-01 21:28+0000\n"
-"PO-Revision-Date: 2017-09-01 23:52+0200\n"
+"POT-Creation-Date: 2017-09-01 21:53+0000\n"
+"PO-Revision-Date: 2017-09-02 00:03+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -1190,7 +1190,7 @@ msgstr "Obrnuta kosa crta"
 
 #: gtk/gtkappchooserbutton.c:295
 msgid "Other application…"
-msgstr "Druge aplikacije..."
+msgstr "Druge aplikacije…"
 
 #: gtk/gtkappchooserdialog.c:206 gtk/gtkappchooserdialog.c:213
 #: gtk/gtkappchooserdialog.c:230 gtk/ui/gtkappchooserdialog.ui:5
@@ -1443,7 +1443,7 @@ msgstr "Neispravan"
 #.
 #: gtk/gtkcellrendereraccel.c:413 gtk/gtkcellrendereraccel.c:487
 msgid "New accelerator…"
-msgstr "Novi pokretač ..."
+msgstr "Novi pokretač…"
 
 #: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:470
 #, c-format
@@ -1796,10 +1796,8 @@ msgid "Caps Lock is on"
 msgstr "Velika slova upaljena"
 
 #: gtk/gtkentry.c:9905
-#, fuzzy
-#| msgid "Insert _Emoji"
 msgid "Insert Emoji"
-msgstr "Umetni _smajli"
+msgstr "Umetni smajli"
 
 #: gtk/gtkfilechooserbutton.c:106
 msgid "Select a File"
@@ -1815,7 +1813,7 @@ msgstr "(Ništa)"
 
 #: gtk/gtkfilechooserbutton.c:2198
 msgid "Other…"
-msgstr "Druga..."
+msgstr "Druga…"
 
 #: gtk/gtkfilechooserdialog.c:539
 msgid "_Name"
@@ -2461,7 +2459,7 @@ msgstr ""
 
 #: gtk/gtkpagesetupunixdialog.c:871 gtk/gtkprintunixdialog.c:3393
 msgid "Manage Custom Sizes…"
-msgstr "Upravljaj prilagođenim veličinama..."
+msgstr "Upravljaj prilagođenim veličinama…"
 
 #: gtk/gtkpagesetupunixdialog.c:893 gtk/ui/gtkpagesetupunixdialog.ui:30
 #: gtk/ui/gtkprintunixdialog.ui:812
@@ -2636,7 +2634,7 @@ msgstr "_Ukloni"
 
 #: gtk/gtkplacessidebar.c:3390
 msgid "Rename…"
-msgstr "Preimenuj..."
+msgstr "Preimenuj…"
 
 #: gtk/gtkplacessidebar.c:3394 gtk/gtkplacesview.c:1677
 msgid "_Mount"
@@ -2904,7 +2902,7 @@ msgstr "Neuspjelo dobivanje informacija pisača"
 
 #: gtk/gtkprintunixdialog.c:2072
 msgid "Getting printer information…"
-msgstr "Dobivanje informacija pisača..."
+msgstr "Dobivanje informacija pisača…"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
@@ -2981,7 +2979,7 @@ msgstr "%.0f %%"
 #: gtk/gtkrecentchooserdefault.c:1012 gtk/gtkrecentchooserdefault.c:1049
 #, c-format
 msgid "No item for URI “%s” found"
-msgstr "Nema pronađenih stavki za URI '%s'"
+msgstr "Nema pronađenih stavki za URI ”%s”"
 
 #: gtk/gtkrecentchooserdefault.c:1176
 msgid "Untitled filter"
@@ -3033,7 +3031,7 @@ msgstr "Nema nedavno korištenih resursa pronađenih sa URI-jem, \"%s\""
 #: gtk/gtkrecentchoosermenu.c:749
 #, c-format
 msgid "Open “%s”"
-msgstr "Otvaram “%s”."
+msgstr "Otvaram “%s”"
 
 #: gtk/gtkrecentchoosermenu.c:780
 msgid "Unknown item"
@@ -3746,24 +3744,20 @@ msgid "Saving RenderNode failed"
 msgstr "Spremanje čvora prikaza neuspjelo"
 
 #: gtk/inspector/recorder.ui:19
-#, fuzzy
-#| msgid "Recorder"
 msgid "Record frames"
-msgstr "Snimatelj"
+msgstr "Snimi okvire"
 
 #: gtk/inspector/recorder.ui:28
 msgid "Clear recorded frames"
-msgstr ""
+msgstr "Obriši snimljene okvire"
 
 #: gtk/inspector/recorder.ui:37
 msgid "Add debug nodes"
-msgstr ""
+msgstr "Dodaj čvorove otklanjanja grešaka"
 
 #: gtk/inspector/recorder.ui:55
-#, fuzzy
-#| msgid "_Save color here"
 msgid "Save recorded frames"
-msgstr "_Spremi boju ovdje"
+msgstr "Spremi snimljene okvire"
 
 #: gtk/inspector/resource-list.ui:82
 msgid "Path"
@@ -5030,7 +5024,7 @@ msgstr "_Pronađi nove aplikacije"
 
 #: gtk/ui/gtkappchooserwidget.ui:116
 msgid "No applications found."
-msgstr "Nema pronađenih novih aplikacija"
+msgstr "Nema pronađenih novih aplikacija."
 
 #. used for the application menu on MacOS
 #: gtk/ui/gtkapplication-quartz.ui:15
@@ -5313,7 +5307,7 @@ msgstr "Povezivanje s _poslužiteljem"
 
 #: gtk/ui/gtkplacesview.ui:427
 msgid "Enter server address…"
-msgstr "Upiši adresu poslužitelja..."
+msgstr "Upiši adresu poslužitelja…"
 
 #: gtk/ui/gtkprintunixdialog.ui:113
 msgid "Printer"
@@ -5383,11 +5377,11 @@ msgstr "O_bostrano:"
 
 #: gtk/ui/gtkprintunixdialog.ui:475
 msgid "Pages per _side:"
-msgstr "Stranica po _listu"
+msgstr "Stranica po _listu:"
 
 #: gtk/ui/gtkprintunixdialog.ui:502
 msgid "Page or_dering:"
-msgstr "Redosljed st_ranica"
+msgstr "Redosljed st_ranica:"
 
 #: gtk/ui/gtkprintunixdialog.ui:528
 msgid "_Only print:"
@@ -5805,22 +5799,22 @@ msgstr "Potrebna je ovjera za dobivanje podataka pisača"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1163
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr "Potrebna je ovjera za dobivanje zadanog pisača s '%s'"
+msgstr "Potrebna je ovjera za dobivanje zadanog pisača s %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1166
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr "Potrebna je ovjera za dobivanje pisača s '%s'"
+msgstr "Potrebna je ovjera za dobivanje pisača s %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1171
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr "Potrebna je ovjera za dobivanje datoteke s '%s'"
+msgstr "Potrebna je ovjera za dobivanje datoteke s %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1173
 #, c-format
 msgid "Authentication is required on %s"
-msgstr "Potrebna je ovjera na '%s'"
+msgstr "Potrebna je ovjera na %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1409
 msgid "Domain:"
