@@ -16,6 +16,7 @@
                 <property name="visible">1</property>
                 <property name="relief">none</property>
                 <property name="icon-name">media-record-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Record frames</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="recording" bind-flags="bidirectional|sync-create"/>
               </object>
             </child>
@@ -24,6 +25,7 @@
                 <property name="visible">1</property>
                 <property name="relief">none</property>
                 <property name="icon-name">edit-clear-all-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Clear recorded frames</property>
                 <signal name="clicked" handler="recordings_clear_all"/>
               </object>
             </child>
@@ -32,6 +34,7 @@
                 <property name="visible">1</property>
                 <property name="relief">none</property>
                 <property name="icon-name">insert-object-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Add debug nodes</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="debug-nodes" bind-flags="bidirectional|sync-create"/>
               </object>
             </child>
@@ -49,6 +52,7 @@
                 <property name="relief">none</property>
                 <property name="sensitive">0</property>
                 <property name="icon-name">document-save-as-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Save recorded frames</property>
                 <signal name="clicked" handler="render_node_save"/>
               </object>
               <packing>
