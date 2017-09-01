@@ -3990,18 +3990,13 @@ gtk_label_snapshot (GtkWidget   *widget,
 
               range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
               cairo_region_get_extents (range_clip, &clip_extents);
-              cr = gtk_snapshot_append_cairo (snapshot,
-                                              &GRAPHENE_RECT_FROM_RECT(&clip_extents),
-                                              "Active Link");
-              gdk_cairo_region (cr, range_clip);
-              cairo_clip (cr);
-              cairo_region_destroy (range_clip);
 
-              gtk_render_background (context, cr, x, 0, width, height);
-              gtk_render_layout (context, cr, lx, ly, priv->layout);
+              gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents), "Active Link");
+              gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
+              gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
+              gtk_snapshot_pop (snapshot);
 
               gtk_style_context_restore (context);
-              cairo_restore (cr);
             }
 
           if (focus_link && gtk_widget_has_visible_focus (widget))
