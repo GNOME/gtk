@@ -9851,7 +9851,7 @@ gtk_entry_choose_emoji (GtkEntry *entry)
   if (!chooser)
     {
       chooser = gtk_emoji_chooser_new ();
-      g_object_set_data_full (G_OBJECT (entry), "gtk-emoji-chooser", chooser, (GDestroyNotify)gtk_widget_destroy);
+      g_object_set_data (G_OBJECT (entry), "gtk-emoji-chooser", chooser);
 
       gtk_popover_set_relative_to (GTK_POPOVER (chooser), GTK_WIDGET (entry));
       if (entry->priv->show_emoji_icon)
