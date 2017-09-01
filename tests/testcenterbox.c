@@ -28,6 +28,8 @@ main (int argc, char *argv[])
   gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_END);
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (box), child);
 
+  g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
+
   gtk_widget_show (window);
 
   gtk_main ();
