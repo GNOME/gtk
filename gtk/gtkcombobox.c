@@ -1616,7 +1616,18 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
 
   if (priv->model)
     {
-      g_signal_handlers_disconnect_by_data (priv->model, combo_box);
+      g_signal_handlers_disconnect_by_func (priv->model,
+                                            gtk_combo_box_model_row_inserted,
+                                            combo_box);
+      g_signal_handlers_disconnect_by_func (priv->model,
+                                            gtk_combo_box_model_row_deleted,
+                                            combo_box);
+      g_signal_handlers_disconnect_by_func (priv->model,
+                                            gtk_combo_box_model_rows_reordered,
+                                            combo_box);
+      g_signal_handlers_disconnect_by_func (priv->model,
+                                            gtk_combo_box_model_row_changed,
+                                            combo_box);
 
       g_object_unref (priv->model);
       priv->model = NULL;
