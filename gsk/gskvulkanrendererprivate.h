@@ -25,6 +25,20 @@ GskVulkanImage *        gsk_vulkan_renderer_ref_texture_image           (GskVulk
                                                                          GskTexture             *texture,
                                                                          GskVulkanUploader      *uploader);
 
+typedef struct {
+  PangoGlyph glyph;
+  float x, y, width, height;
+} GskGlyphCoords;
+
+GskVulkanImage *        gsk_vulkan_renderer_ref_glyph_image             (GskVulkanRenderer      *self,
+                                                                         GskVulkanUploader      *uploader,
+                                                                         PangoFont              *font,
+                                                                         PangoGlyphString       *glyphs);
+void                    gsk_vulkan_renderer_get_glyph_coords            (GskVulkanRenderer      *self,
+                                                                         PangoFont              *font,
+                                                                         PangoGlyphString       *glyphs,
+                                                                         GskGlyphCoords         *coords);
+
 G_END_DECLS
 
 #endif /* __GSK_VULKAN_RENDERER_PRIVATE_H__ */

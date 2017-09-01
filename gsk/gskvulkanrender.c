@@ -15,8 +15,10 @@
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
+#include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
+#include "gskvulkantextpipelineprivate.h"
 
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
@@ -303,7 +305,7 @@ gsk_vulkan_render_collect_vertex_data (GskVulkanRender *self)
 
   for (l = self->render_passes; l; l = l->next)
     {
-      offset += gsk_vulkan_render_pass_collect_vertex_data (l->data, data, offset, n_bytes - offset);
+      offset += gsk_vulkan_render_pass_collect_vertex_data (l->data, self, data, offset, n_bytes - offset);
       g_assert (offset <= n_bytes);
     }
 
@@ -344,6 +346,12 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "blur", gsk_vulkan_blur_pipeline_new },
     { "blur-clip", gsk_vulkan_blur_pipeline_new },
     { "blur-clip-rounded", gsk_vulkan_blur_pipeline_new },
+    { "mask", gsk_vulkan_text_pipeline_new },
+    { "mask-clip", gsk_vulkan_text_pipeline_new },
+    { "mask-clip-rounded", gsk_vulkan_text_pipeline_new },
+    { "blend", gsk_vulkan_color_text_pipeline_new },
+    { "blend-clip", gsk_vulkan_color_text_pipeline_new },
+    { "blend-clip-rounded", gsk_vulkan_color_text_pipeline_new },
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);

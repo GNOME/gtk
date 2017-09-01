@@ -178,10 +178,8 @@ GDK_AVAILABLE_IN_3_92
 GskRenderNode *         gsk_text_node_new                       (PangoFont        *font,
                                                                  PangoGlyphString *glyphs,
                                                                  const GdkRGBA    *color,
-                                                                 int               x_offset,
-                                                                 int               y_offset,
-                                                                 double            base_x,
-                                                                 double            base_y);
+                                                                 double            x,
+                                                                 double            y);
 
 GDK_AVAILABLE_IN_3_92
 GskRenderNode *         gsk_blur_node_new                       (GskRenderNode *child,

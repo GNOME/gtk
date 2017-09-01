@@ -48,6 +48,12 @@ GskVulkanPipeline *     gsk_vulkan_pipeline_new                         (GType  
                                                                          GskVulkanPipelineLayout        *layout,
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
+GskVulkanPipeline *     gsk_vulkan_pipeline_new_full                    (GType                           pipeline_type,
+                                                                         GskVulkanPipelineLayout        *layout,
+                                                                         const char                     *shader_name,
+                                                                         VkRenderPass                    render_pass,
+                                                                         VkBlendFactor                   srcBlendFactor,
+                                                                         VkBlendFactor                   dstBlendFactor);
 
 VkPipeline              gsk_vulkan_pipeline_get_pipeline                (GskVulkanPipeline              *self);
 
