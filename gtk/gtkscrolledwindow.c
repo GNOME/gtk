@@ -2258,7 +2258,12 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
       if (old_adjustment == hadjustment)
 	return;
 
-      g_signal_handlers_disconnect_by_data (old_adjustment, scrolled_window);
+      g_signal_handlers_disconnect_by_func (old_adjustment,
+                                            gtk_scrolled_window_adjustment_changed,
+                                            scrolled_window);
+      g_signal_handlers_disconnect_by_func (old_adjustment,
+                                            gtk_scrolled_window_adjustment_value_changed,
+                                            scrolled_window);
 
       gtk_adjustment_enable_animation (old_adjustment, NULL, 0);
       gtk_range_set_adjustment (GTK_RANGE (priv->hscrollbar), hadjustment);
@@ -2329,7 +2334,12 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
       if (old_adjustment == vadjustment)
 	return;
 
-      g_signal_handlers_disconnect_by_data (old_adjustment, scrolled_window);
+      g_signal_handlers_disconnect_by_func (old_adjustment,
+                                            gtk_scrolled_window_adjustment_changed,
+                                            scrolled_window);
+      g_signal_handlers_disconnect_by_func (old_adjustment,
+                                            gtk_scrolled_window_adjustment_value_changed,
+                                            scrolled_window);
 
       gtk_adjustment_enable_animation (old_adjustment, NULL, 0);
       gtk_range_set_adjustment (GTK_RANGE (priv->vscrollbar), vadjustment);
