@@ -310,6 +310,7 @@ gtk/inspector/object-tree.ui
 gtk/inspector/prop-editor.c
 gtk/inspector/prop-list.ui
 gtk/inspector/recorder.c
+gtk/inspector/recorder.ui
 gtk/inspector/resource-list.ui
 gtk/inspector/selector.ui
 gtk/inspector/signals-list.c

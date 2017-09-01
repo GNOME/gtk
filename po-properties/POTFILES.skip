@@ -90,6 +90,7 @@ gtk/inspector/object-tree.ui
 gtk/inspector/object-tree.ui.h
 gtk/inspector/prop-list.ui
 gtk/inspector/prop-list.ui.h
+gtk/inspector/recorder.ui
 gtk/inspector/resource-list.ui
 gtk/inspector/resource-list.ui.h
 gtk/inspector/selector.ui
