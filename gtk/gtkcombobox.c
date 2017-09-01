@@ -3186,10 +3186,8 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
 
-  g_signal_handlers_disconnect_by_func (priv->button,
-                                        gtk_combo_box_menu_button_press, combo_box);
-  g_signal_handlers_disconnect_by_func (priv->button,
-                                        gtk_combo_box_button_state_changed, combo_box);
+  g_signal_handlers_disconnect_by_data (priv->button, combo_box);
+  g_signal_handlers_disconnect_by_data (priv->popup_widget, combo_box);
 
   /* unparent will remove our latest ref */
   gtk_widget_unparent (priv->button);
