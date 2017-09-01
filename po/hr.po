@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-18 17:26+0000\n"
-"PO-Revision-Date: 2017-08-18 22:31+0200\n"
+"POT-Creation-Date: 2017-09-01 21:28+0000\n"
+"PO-Revision-Date: 2017-09-01 23:52+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2017-04-10 20:36+0000\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -587,15 +587,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zatvori"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:8055
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:8056
 msgid "Minimize"
 msgstr "Smanji"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:8064
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:8065
 msgid "Maximize"
 msgstr "Uvećaj"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:8021
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:8022
 msgid "Restore"
 msgstr "Vrati"
 
@@ -1750,50 +1750,56 @@ msgstr "_Desno:"
 msgid "Paper Margins"
 msgstr "Rubovi papira"
 
-#: gtk/gtkentry.c:8462 gtk/gtklabel.c:6108 gtk/gtktextview.c:9281
+#: gtk/gtkentry.c:8475 gtk/gtklabel.c:6100 gtk/gtktextview.c:9280
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtkentry.c:8466 gtk/gtklabel.c:6109 gtk/gtktextview.c:9285
+#: gtk/gtkentry.c:8479 gtk/gtklabel.c:6101 gtk/gtktextview.c:9284
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtkentry.c:8470 gtk/gtklabel.c:6110 gtk/gtktextview.c:9287
+#: gtk/gtkentry.c:8483 gtk/gtklabel.c:6102 gtk/gtktextview.c:9286
 msgid "_Paste"
 msgstr "_Zalijepi"
 
-#: gtk/gtkentry.c:8473 gtk/gtkfilechooserwidget.c:1467
-#: gtk/gtkfilechooserwidget.c:2261 gtk/gtklabel.c:6112 gtk/gtktextview.c:9290
+#: gtk/gtkentry.c:8486 gtk/gtkfilechooserwidget.c:1466
+#: gtk/gtkfilechooserwidget.c:2261 gtk/gtklabel.c:6104 gtk/gtktextview.c:9289
 msgid "_Delete"
 msgstr "_Obriši"
 
-#: gtk/gtkentry.c:8484 gtk/gtklabel.c:6121 gtk/gtktextview.c:9304
+#: gtk/gtkentry.c:8497 gtk/gtklabel.c:6113 gtk/gtktextview.c:9303
 msgid "Select _All"
 msgstr "Odaberi _sve"
 
-#: gtk/gtkentry.c:8491
+#: gtk/gtkentry.c:8504
 msgid "Insert _Emoji"
 msgstr "Umetni _smajli"
 
-#: gtk/gtkentry.c:8664 gtk/gtktextview.c:9529
+#: gtk/gtkentry.c:8677 gtk/gtktextview.c:9528
 msgid "Select all"
 msgstr "Odaberi sve"
 
-#: gtk/gtkentry.c:8667 gtk/gtktextview.c:9532
+#: gtk/gtkentry.c:8680 gtk/gtktextview.c:9531
 msgid "Cut"
 msgstr "Izreži"
 
-#: gtk/gtkentry.c:8670 gtk/gtktextview.c:9535
+#: gtk/gtkentry.c:8683 gtk/gtktextview.c:9534
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: gtk/gtkentry.c:8673 gtk/gtktextview.c:9538
+#: gtk/gtkentry.c:8686 gtk/gtktextview.c:9537
 msgid "Paste"
 msgstr "Zalijepi"
 
-#: gtk/gtkentry.c:9620
+#: gtk/gtkentry.c:9633
 msgid "Caps Lock is on"
 msgstr "Velika slova upaljena"
+
+#: gtk/gtkentry.c:9905
+#, fuzzy
+#| msgid "Insert _Emoji"
+msgid "Insert Emoji"
+msgstr "Umetni _smajli"
 
 #: gtk/gtkfilechooserbutton.c:106
 msgid "Select a File"
@@ -1872,13 +1878,13 @@ msgid "A file with that name already exists"
 msgstr "Datoteka s tim nazivom već postoji"
 
 #: gtk/gtkfilechoosernative.c:540 gtk/gtkfilechoosernative.c:625
-#: gtk/gtkfilechooserwidget.c:1466 gtk/gtkfilechooserwidget.c:6340
+#: gtk/gtkfilechooserwidget.c:1465 gtk/gtkfilechooserwidget.c:6340
 #: gtk/gtkmessagedialog.c:852 gtk/gtkmessagedialog.c:861
 #: gtk/gtkmountoperation.c:542 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:741
-#: gtk/gtkwindow.c:10835 gtk/inspector/css-editor.c:201
-#: gtk/inspector/recorder.c:301 gtk/ui/gtkappchooserdialog.ui:58
+#: gtk/gtkwindow.c:10836 gtk/inspector/css-editor.c:201
+#: gtk/inspector/recorder.c:308 gtk/ui/gtkappchooserdialog.ui:58
 #: gtk/ui/gtkassistant.ui:116 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:28
 msgid "_Cancel"
@@ -1891,11 +1897,11 @@ msgid "_Open"
 msgstr "_Otvori"
 
 #: gtk/gtkfilechoosernative.c:619 gtk/inspector/css-editor.c:202
-#: gtk/inspector/recorder.c:302
+#: gtk/inspector/recorder.c:309
 msgid "_Save"
 msgstr "_Spremi"
 
-#: gtk/gtkfilechoosernativequartz.c:326 gtk/ui/gtkfilechooserwidget.ui:350
+#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:350
 msgid "Select which types of files are shown"
 msgstr "Odaberi koje vrste datoteka se prikazuju"
 
@@ -1908,15 +1914,15 @@ msgstr "Odaberi koje vrste datoteka se prikazuju"
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: gtk/gtkfilechooserwidget.c:376
+#: gtk/gtkfilechooserwidget.c:375
 msgid "Type name of new folder"
 msgstr "Upišite naziv nove mape"
 
-#: gtk/gtkfilechooserwidget.c:794
+#: gtk/gtkfilechooserwidget.c:793
 msgid "The folder could not be created"
 msgstr "Mapa nije mogla biti stvorena"
 
-#: gtk/gtkfilechooserwidget.c:807
+#: gtk/gtkfilechooserwidget.c:806
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1924,58 +1930,58 @@ msgstr ""
 "Mapa nije mogla biti stvorena, jer već postoji datoteka s istim nazivom. "
 "Pokušajte koristiti drugi naziv za mapu, ili prvo preimenujte datoteku."
 
-#: gtk/gtkfilechooserwidget.c:822
+#: gtk/gtkfilechooserwidget.c:821
 msgid "You need to choose a valid filename."
 msgstr "Morate odabrati valjani naziv datoteke."
 
-#: gtk/gtkfilechooserwidget.c:825
+#: gtk/gtkfilechooserwidget.c:824
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nemoguće stvaranje datoteke unutar %s pošto nije mapa"
 
-#: gtk/gtkfilechooserwidget.c:835
+#: gtk/gtkfilechooserwidget.c:834
 msgid "Cannot create file as the filename is too long"
 msgstr "Nemoguće stvaranje datoteke je je naziv predugačak"
 
-#: gtk/gtkfilechooserwidget.c:836
+#: gtk/gtkfilechooserwidget.c:835
 msgid "Try using a shorter name."
 msgstr "Pokušajte koristiti kraći naziv."
 
-#: gtk/gtkfilechooserwidget.c:846
+#: gtk/gtkfilechooserwidget.c:845
 msgid "You may only select folders"
 msgstr "Možete odabrati samo mape"
 
-#: gtk/gtkfilechooserwidget.c:847
+#: gtk/gtkfilechooserwidget.c:846
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Stavka koju ste odabrali nije mapa, pokušajte odabrati drugu stavku."
 
-#: gtk/gtkfilechooserwidget.c:855
+#: gtk/gtkfilechooserwidget.c:854
 msgid "Invalid file name"
 msgstr "Neispravni naziv datoteke"
 
-#: gtk/gtkfilechooserwidget.c:864
+#: gtk/gtkfilechooserwidget.c:863
 msgid "The folder contents could not be displayed"
 msgstr "Sadržaj mape nije mogao biti prikazan"
 
-#: gtk/gtkfilechooserwidget.c:872
+#: gtk/gtkfilechooserwidget.c:871
 msgid "The file could not be deleted"
 msgstr "Datoteku je nemoguće obrisati"
 
-#: gtk/gtkfilechooserwidget.c:880
+#: gtk/gtkfilechooserwidget.c:879
 msgid "The file could not be moved to the Trash"
 msgstr "Datoteka se ne može premjestiti u smeće"
 
-#: gtk/gtkfilechooserwidget.c:1462
+#: gtk/gtkfilechooserwidget.c:1461
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Sigurno želite trajno obrisati “%s”?"
 
-#: gtk/gtkfilechooserwidget.c:1465
+#: gtk/gtkfilechooserwidget.c:1464
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Ako obrišete stavku, biti će trajno izgubljena."
 
-#: gtk/gtkfilechooserwidget.c:1593
+#: gtk/gtkfilechooserwidget.c:1592
 msgid "The file could not be renamed"
 msgstr "Datoteka ne može biti preimenovana"
 
@@ -2018,7 +2024,7 @@ msgstr "Prikaži _stupac veličine"
 
 #: gtk/gtkfilechooserwidget.c:2268
 msgid "Show _Time"
-msgstr "Prikaži_vrijeme"
+msgstr "Prikaži _vrijeme"
 
 #: gtk/gtkfilechooserwidget.c:2269
 msgid "Sort _Folders before Files"
@@ -2163,7 +2169,7 @@ msgstr "Neuspjelo stvaranje OpenGL sadržaja"
 msgid "Application menu"
 msgstr "Izbornik aplikacije"
 
-#: gtk/gtkheaderbar.c:445 gtk/gtkwindow.c:8091
+#: gtk/gtkheaderbar.c:445 gtk/gtkwindow.c:8092
 msgid "Close"
 msgstr "Zatvori"
 
@@ -2203,12 +2209,12 @@ msgid "Error"
 msgstr "Greška"
 
 #. Open Link
-#: gtk/gtklabel.c:6089
+#: gtk/gtklabel.c:6081
 msgid "_Open Link"
 msgstr "_Otvori poveznicu"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6098
+#: gtk/gtklabel.c:6090
 msgid "Copy _Link Address"
 msgstr "Kopiraj _adresu poveznice"
 
@@ -2320,7 +2326,7 @@ msgid "default:LTR"
 msgstr "default:LTR"
 
 #: gtk/gtkmessagedialog.c:844 gtk/gtkmessagedialog.c:862
-#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:10836
+#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:10837
 msgid "_OK"
 msgstr "_U redu"
 
@@ -2717,6 +2723,7 @@ msgid "Disconnect"
 msgstr "Prekini povezivanje"
 
 #: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:69
+#: gtk/ui/gtksidebarrow.ui:40
 msgid "Unmount"
 msgstr "Odmontiraj"
 
@@ -3353,24 +3360,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:8039
+#: gtk/gtkwindow.c:8040
 msgid "Move"
 msgstr "Pomakni"
 
-#: gtk/gtkwindow.c:8047
+#: gtk/gtkwindow.c:8048
 msgid "Resize"
 msgstr "Promijeni veličinu"
 
-#: gtk/gtkwindow.c:8078
+#: gtk/gtkwindow.c:8079
 msgid "Always on Top"
 msgstr "Uvijek na vrhu"
 
-#: gtk/gtkwindow.c:10823
+#: gtk/gtkwindow.c:10824
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Želite li koristiti GTK+ Inspektora?"
 
-#: gtk/gtkwindow.c:10825
+#: gtk/gtkwindow.c:10826
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3381,7 +3388,7 @@ msgstr ""
 "otkrivanje i promjenu unutrašnjosti bilo koje GTK+ aplikacije. Njegovo "
 "korištenje može uzrokovati rušenje ili prekid u radu aplikacije."
 
-#: gtk/gtkwindow.c:10830
+#: gtk/gtkwindow.c:10831
 msgid "Don’t show this message again"
 msgstr "Ne prikazuj više ovu poruku"
 
@@ -3733,10 +3740,30 @@ msgstr "Značajka"
 msgid "Defined At"
 msgstr "Određeno"
 
-#: gtk/inspector/recorder.c:269
+#: gtk/inspector/recorder.c:276
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Spremanje čvora prikaza neuspjelo"
+
+#: gtk/inspector/recorder.ui:19
+#, fuzzy
+#| msgid "Recorder"
+msgid "Record frames"
+msgstr "Snimatelj"
+
+#: gtk/inspector/recorder.ui:28
+msgid "Clear recorded frames"
+msgstr ""
+
+#: gtk/inspector/recorder.ui:37
+msgid "Add debug nodes"
+msgstr ""
+
+#: gtk/inspector/recorder.ui:55
+#, fuzzy
+#| msgid "_Save color here"
+msgid "Save recorded frames"
+msgstr "_Spremi boju ovdje"
 
 #: gtk/inspector/resource-list.ui:82
 msgid "Path"
@@ -3834,19 +3861,19 @@ msgstr "Zajedničko"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Omogući statistiku s GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:406 gtk/inspector/visual.c:421
+#: gtk/inspector/visual.c:391 gtk/inspector/visual.c:406
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Tema je ugrađena u GTK_THEME"
 
-#: gtk/inspector/visual.c:629
+#: gtk/inspector/visual.c:614
 msgid "Backend does not support window scaling"
 msgstr "Pozadinski program ne podržava promjenu veličine prozora"
 
-#: gtk/inspector/visual.c:724
+#: gtk/inspector/visual.c:709
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Postavke su ugrađene u GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:789
+#: gtk/inspector/visual.c:774
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -3854,8 +3881,8 @@ msgstr ""
 "Ne može se postaviti u vrijeme izvršavanja.\n"
 "Koristi GDK_GL=always ili GDK_GL=disable umjesto"
 
-#: gtk/inspector/visual.c:803 gtk/inspector/visual.c:804
-#: gtk/inspector/visual.c:805
+#: gtk/inspector/visual.c:788 gtk/inspector/visual.c:789
+#: gtk/inspector/visual.c:790
 msgid "GL rendering is disabled"
 msgstr "GL prikazivanje je onemogućeno"
 
@@ -3936,42 +3963,38 @@ msgid "Show Layout Borders"
 msgstr "Prikaži rubove rasporeda"
 
 #: gtk/inspector/visual.ui:586
-msgid "Snapshot Debug Nodes"
-msgstr "Snimak čvora otklanjanja grešaka"
-
-#: gtk/inspector/visual.ui:618
 msgid "Show Widget Resizes"
 msgstr "Prikaži promjenu veličine widgeta"
 
-#: gtk/inspector/visual.ui:650
+#: gtk/inspector/visual.ui:618
 msgid "Simulate Touchscreen"
 msgstr "Simuliraj zaslon na dodir"
 
-#: gtk/inspector/visual.ui:693
+#: gtk/inspector/visual.ui:661
 msgid "GL Rendering"
 msgstr "GL prikazivanje"
 
-#: gtk/inspector/visual.ui:706
+#: gtk/inspector/visual.ui:674
 msgid "When Needed"
 msgstr "Kada je potrebno"
 
-#: gtk/inspector/visual.ui:707
+#: gtk/inspector/visual.ui:675
 msgid "Always"
 msgstr "Uvijek"
 
-#: gtk/inspector/visual.ui:708
+#: gtk/inspector/visual.ui:676
 msgid "Disabled"
 msgstr "Onemogućeno"
 
-#: gtk/inspector/visual.ui:729
+#: gtk/inspector/visual.ui:697
 msgid "Software GL"
 msgstr "Softverski GL"
 
-#: gtk/inspector/visual.ui:761
+#: gtk/inspector/visual.ui:729
 msgid "Software Surfaces"
 msgstr "Softverska površina"
 
-#: gtk/inspector/visual.ui:793
+#: gtk/inspector/visual.ui:761
 msgid "Texture Rectangle Extension"
 msgstr "Proširenje pravokutne teksture"
 
@@ -6341,6 +6364,9 @@ msgstr "testni-ispis.%s"
 msgid "Print to Test Printer"
 msgstr "Ispiši na testnom pisaču"
 
+#~ msgid "Snapshot Debug Nodes"
+#~ msgstr "Snimak čvora otklanjanja grešaka"
+
 #~ msgid "Could not start the search process"
 #~ msgstr "Nemoguće pokretanje postupka pretraživanja"
 
@@ -6482,9 +6508,6 @@ msgstr "Ispiši na testnom pisaču"
 
 #~ msgid "The color you’ve chosen."
 #~ msgstr "Boja koju ste odabrali."
-
-#~ msgid "_Save color here"
-#~ msgstr "_Spremi boju ovdje"
 
 #~ msgid ""
 #~ "Click this palette entry to make it the current color. To change this "
