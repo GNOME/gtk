@@ -51,7 +51,7 @@ struct _GskPangoRendererClass
 
 G_DEFINE_TYPE (GskPangoRenderer, gsk_pango_renderer, PANGO_TYPE_RENDERER)
 
-static gboolean
+static void
 get_color (GskPangoRenderer *crenderer,
            PangoRenderPart   part,
            GdkRGBA          *rgba)
@@ -60,8 +60,10 @@ get_color (GskPangoRenderer *crenderer,
   guint16 a = pango_renderer_get_alpha ((PangoRenderer *) (crenderer), part);
   gdouble red, green, blue, alpha;
 
-  if (!a && !color)
-    return FALSE;
+  red = crenderer->fg_color->red;
+  green = crenderer->fg_color->green;
+  blue = crenderer->fg_color->blue;
+  alpha = crenderer->fg_color->alpha;
 
   if (color)
     {
@@ -70,8 +72,6 @@ get_color (GskPangoRenderer *crenderer,
       blue = color->blue / 65535.;
       alpha = 1.;
     }
-  else
-    return FALSE;
 
   if (a)
     alpha = a / 65535.;
@@ -80,8 +80,6 @@ get_color (GskPangoRenderer *crenderer,
   rgba->green = green;
   rgba->blue = blue;
   rgba->alpha = alpha;
-
-  return TRUE;
 }
 
 static void
@@ -91,35 +89,8 @@ set_color (GskPangoRenderer *crenderer,
 {
   GdkRGBA rgba = { 0, 0, 0, 1 };
 
-  if (get_color (crenderer, part, &rgba))
-    gdk_cairo_set_source_rgba (cr, &rgba);
-  else
-    gdk_cairo_set_source_rgba (cr, crenderer->fg_color);
-}
-
-static void
-gsk_pango_renderer_draw_unknown_glyph (GskPangoRenderer *crenderer,
-                                       PangoFont        *font,
-                                       PangoGlyphInfo   *gi,
-                                       double            cx,
-                                       double            cy)
-{
-  cairo_t *cr;
-  PangoGlyphString *glyphs;
-
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds, "DrawUnknownGlyph<%u>", gi->glyph);
-
-  gdk_cairo_set_source_rgba (cr, crenderer->fg_color);
-
-  cairo_move_to (cr, cx, cy);
-
-  glyphs = pango_glyph_string_new ();
-  pango_glyph_string_set_size (glyphs, 1);
-  glyphs->glyphs[0] = *gi;
-
-  pango_cairo_show_glyph_string (cr, font, glyphs);
-
-  cairo_destroy (cr);
+  get_color (crenderer, part, &rgba);
+  gdk_cairo_set_source_rgba (cr, &rgba);
 }
 
 static void
@@ -135,68 +106,26 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
                                      int                   y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  double base_x = crenderer->x_offset + (double)x / PANGO_SCALE;
-  double base_y = crenderer->y_offset + (double)y / PANGO_SCALE;
+  double base_x = (double)x / PANGO_SCALE;
+  double base_y = (double)y / PANGO_SCALE;
   int x_offset, y_offset;
-  cairo_scaled_font_t *scaled_font;
-  gboolean font_failed = FALSE;
-  int x_position;
-  int num_glyphs;
-  int i;
+  GdkRGBA color;
+  GskRenderNode *node;
+  char name[64];
 
   gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
 
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-  if (scaled_font == NULL || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS)
-    font_failed = TRUE;
+  gtk_snapshot_offset (crenderer->snapshot, base_x, base_y);
 
-  x_position = 0;
-  num_glyphs = 0;
-  for (i = 0; i < glyphs->num_glyphs; i++)
-    {
-      PangoGlyphInfo *gi = &glyphs->glyphs[i];
+  get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
-      if (gi->glyph != PANGO_GLYPH_EMPTY &&
-          (font_failed || gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
-        {
-          double cx = base_x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-          double cy = gi->geometry.y_offset == 0
-                      ? base_y
-                      : base_y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
+  node = gsk_text_node_new (font, glyphs, &color, x_offset, y_offset, base_x, base_y);
+  snprintf (name, sizeof (name), "Glyphs<%d>", glyphs->num_glyphs);
+  gsk_render_node_set_name (node, name);
+  gtk_snapshot_append_node (crenderer->snapshot, node);
+  gsk_render_node_unref (node);
 
-          gsk_pango_renderer_draw_unknown_glyph (crenderer, font, gi, cx, cy);
-
-          if (num_glyphs == 0)
-            base_x += (gi->geometry.x_offset + gi->geometry.width) / PANGO_SCALE;
-          else
-            glyphs->glyphs[num_glyphs - 1].geometry.width += gi->geometry.x_offset + gi->geometry.width;
-        }
-      else
-        {
-          if (i != num_glyphs)
-            glyphs->glyphs[num_glyphs] = glyphs->glyphs[i];
-          num_glyphs++;
-        }
-      x_position += gi->geometry.width;
-    }
-
-  glyphs->num_glyphs = num_glyphs;
-
-  if (glyphs->num_glyphs > 0)
-    {
-      GskRenderNode *node;
-      char name[64];
-
-      gtk_snapshot_offset (crenderer->snapshot, base_x, base_y);
-
-      node = gsk_text_node_new (font, glyphs, crenderer->fg_color, x_offset, y_offset, base_x, base_y);
-      snprintf (name, sizeof (name), "Glyphs<%d>", glyphs->num_glyphs);
-      gsk_render_node_set_name (node, name);
-      gtk_snapshot_append_node (crenderer->snapshot, node);
-      gsk_render_node_unref (node);
-
-      gtk_snapshot_offset (crenderer->snapshot, -base_x, -base_y);
-    }
+  gtk_snapshot_offset (crenderer->snapshot, -base_x, -base_y);
 }
 
 static void
@@ -234,8 +163,7 @@ gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
   GdkRGBA rgba;
   graphene_rect_t bounds;
 
-  if (!get_color (crenderer, part, &rgba))
-    rgba = *crenderer->fg_color;
+  get_color (crenderer, part, &rgba);
 
   graphene_rect_init (&bounds,
                       crenderer->x_offset + (double)x / PANGO_SCALE,
@@ -362,14 +290,10 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   cairo_t *cr;
-  GdkRGBA rgba = { 0, 0, 0, 1 };
 
   cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds, "DrawTrapezoid");
 
-  if (get_color (crenderer, PANGO_RENDER_PART_UNDERLINE, &rgba))
-    gdk_cairo_set_source_rgba (cr, &rgba);
-  else
-    gdk_cairo_set_source_rgba (cr, crenderer->fg_color);
+  set_color (crenderer, PANGO_RENDER_PART_UNDERLINE, cr);
 
   cairo_new_path (cr);
 
