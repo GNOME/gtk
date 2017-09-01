@@ -31,6 +31,8 @@
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 
+#include "gtk/gtkdebug.h"
+
 #include "gtktreemodelrendernode.h"
 #include "recording.h"
 #include "rendernodeview.h"
@@ -50,6 +52,8 @@ struct _GtkInspectorRecorderPrivate
   GtkTreeModel *render_node_properties;
 
   GtkInspectorRecording *recording; /* start recording if recording or NULL if not */
+
+  gboolean debug_nodes;
 };
 
 enum {
@@ -62,6 +66,7 @@ enum
 {
   PROP_0,
   PROP_RECORDING,
+  PROP_DEBUG_NODES,
   LAST_PROP
 };
 
@@ -426,6 +431,10 @@ gtk_inspector_recorder_get_property (GObject    *object,
       g_value_set_boolean (value, priv->recording != NULL);
       break;
 
+    case PROP_DEBUG_NODES:
+      g_value_set_boolean (value, priv->debug_nodes);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -444,6 +453,10 @@ gtk_inspector_recorder_set_property (GObject      *object,
     {
     case PROP_RECORDING:
       gtk_inspector_recorder_set_recording (recorder, g_value_get_boolean (value));
+      break;
+
+    case PROP_DEBUG_NODES:
+      gtk_inspector_recorder_set_debug_nodes (recorder, g_value_get_boolean (value));
       break;
 
     default:
@@ -465,6 +478,12 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
     g_param_spec_boolean ("recording",
                           "Recording",
                           "Whether the recorder is currently recording",
+                          FALSE,
+                          G_PARAM_READWRITE);
+  props[PROP_DEBUG_NODES] =
+    g_param_spec_boolean ("debug-nodes",
+                          "Debug nodes",
+                          "Whether to insert extra debug nodes in the tree",
                           FALSE,
                           G_PARAM_READWRITE);
 
@@ -594,6 +613,30 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
   cairo_region_destroy (clip);
+}
+
+void
+gtk_inspector_recorder_set_debug_nodes (GtkInspectorRecorder *recorder,
+                                        gboolean              debug_nodes)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+  guint flags;
+
+  if (priv->debug_nodes == debug_nodes)
+    return;
+
+  priv->debug_nodes = debug_nodes;
+
+  flags = gtk_get_debug_flags ();
+
+  if (debug_nodes)
+    flags |= GTK_DEBUG_SNAPSHOT;
+  else
+    flags &= ~GTK_DEBUG_SNAPSHOT;
+
+  gtk_set_debug_flags (flags);
+
+  g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_DEBUG_NODES]);
 }
 
 // vim: set et sw=2 ts=2:

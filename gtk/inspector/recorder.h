@@ -48,6 +48,9 @@ void            gtk_inspector_recorder_set_recording            (GtkInspectorRec
                                                                  gboolean                record);
 gboolean        gtk_inspector_recorder_is_recording             (GtkInspectorRecorder   *recorder);
 
+void            gtk_inspector_recorder_set_debug_nodes          (GtkInspectorRecorder   *recorder,
+                                                                 gboolean                debug_nodes);
+
 void            gtk_inspector_recorder_record_render            (GtkInspectorRecorder   *recorder,
                                                                  GtkWidget              *widget,
                                                                  GskRenderer            *renderer,

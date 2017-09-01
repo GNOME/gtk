@@ -28,6 +28,14 @@
               </object>
             </child>
             <child>
+              <object class="GtkToggleButton">
+                <property name="visible">1</property>
+                <property name="relief">none</property>
+                <property name="icon-name">insert-object-symbolic</property>
+                <property name="active" bind-source="GtkInspectorRecorder" bind-property="debug-nodes" bind-flags="bidirectional|sync-create"/>
+              </object>
+            </child>
+            <child>
               <object class="GtkStackSwitcher">
                 <property name="visible">1</property>
                 <property name="stack">render_stack</property>
