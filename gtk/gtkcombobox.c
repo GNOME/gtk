@@ -151,10 +151,6 @@ struct _GtkComboBoxPrivate
 
   GtkCssGadget *gadget;
 
-  gulong inserted_id;
-  gulong deleted_id;
-  gulong reordered_id;
-  gulong changed_id;
   guint popup_idle_id;
   GdkEvent *trigger_event;
   guint scroll_timer;
@@ -2469,18 +2465,8 @@ gtk_combo_box_unset_model (GtkComboBox *combo_box)
 
   if (priv->model)
     {
-      g_signal_handler_disconnect (priv->model,
-                                   priv->inserted_id);
-      g_signal_handler_disconnect (priv->model,
-                                   priv->deleted_id);
-      g_signal_handler_disconnect (priv->model,
-                                   priv->reordered_id);
-      g_signal_handler_disconnect (priv->model,
-                                   priv->changed_id);
-    }
+      g_signal_handlers_disconnect_by_data (priv->model, combo_box);
 
-  if (priv->model)
-    {
       g_object_unref (priv->model);
       priv->model = NULL;
     }
@@ -3941,22 +3927,18 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
   priv->model = model;
   g_object_ref (priv->model);
 
-  priv->inserted_id =
-    g_signal_connect (priv->model, "row-inserted",
-                      G_CALLBACK (gtk_combo_box_model_row_inserted),
-                      combo_box);
-  priv->deleted_id =
-    g_signal_connect (priv->model, "row-deleted",
-                      G_CALLBACK (gtk_combo_box_model_row_deleted),
-                      combo_box);
-  priv->reordered_id =
-    g_signal_connect (priv->model, "rows-reordered",
-                      G_CALLBACK (gtk_combo_box_model_rows_reordered),
-                      combo_box);
-  priv->changed_id =
-    g_signal_connect (priv->model, "row-changed",
-                      G_CALLBACK (gtk_combo_box_model_row_changed),
-                      combo_box);
+  g_signal_connect (priv->model, "row-inserted",
+                    G_CALLBACK (gtk_combo_box_model_row_inserted),
+                    combo_box);
+  g_signal_connect (priv->model, "row-deleted",
+                    G_CALLBACK (gtk_combo_box_model_row_deleted),
+                    combo_box);
+  g_signal_connect (priv->model, "rows-reordered",
+                    G_CALLBACK (gtk_combo_box_model_rows_reordered),
+                    combo_box);
+  g_signal_connect (priv->model, "row-changed",
+                    G_CALLBACK (gtk_combo_box_model_row_changed),
+                    combo_box);
 
   if (priv->tree_view)
     {
