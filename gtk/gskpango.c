@@ -121,7 +121,7 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
 
   gtk_snapshot_offset (crenderer->snapshot, base_x, base_y);
 
-  node = gsk_text_node_new (font, glyphs, crenderer->fg_color, x_offset, y_offset, base_x, base_y);
+  node = gsk_text_node_new (font, glyphs, &crenderer->fg_color, x_offset, y_offset, base_x, base_y);
   snprintf (name, sizeof (name), "Glyphs<%d>", glyphs->num_glyphs);
   gsk_render_node_set_name (node, name);
   gtk_snapshot_append_node (crenderer->snapshot, node);
