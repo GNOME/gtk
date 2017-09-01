@@ -30,7 +30,7 @@
 #include "gtkselection.h"
 
 #ifdef HAVE_CLOUDPROVIDERS
-#include <cloudproviders/cloudproviderproxy.h>
+#include <cloudproviders/cloudprovideraccount.h>
 #endif
 
 struct _GtkSidebarRow
@@ -271,7 +271,7 @@ gtk_sidebar_row_set_property (GObject      *object,
 #ifdef HAVE_CLOUDPROVIDERS
         gpointer *object;
         object = g_value_get_object (value);
-        if (IS_CLOUD_PROVIDER_PROXY(object))
+        if (IS_CLOUD_PROVIDER_ACCOUNT(object))
           self->cloud_provider = g_object_ref (object);
 #endif
         break;
@@ -536,8 +536,8 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
 
   properties [PROP_CLOUD_PROVIDER] =
     g_param_spec_object ("cloud-provider",
-                         "CloudProviderProxy",
-                         "CloudProviderProxy",
+                         "CloudProviderAccount",
+                         "CloudProviderAccount",
                          G_TYPE_OBJECT,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));

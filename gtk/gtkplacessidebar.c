@@ -26,7 +26,7 @@
 #include <gio/gio.h>
 #ifdef HAVE_CLOUDPROVIDERS
 #include <cloudproviders/cloudproviders.h>
-#include <cloudproviders/cloudproviderproxy.h>
+#include <cloudproviders/cloudprovideraccount.h>
 #endif
 
 #include "gtkplacessidebarprivate.h"
@@ -462,9 +462,9 @@ add_place (GtkPlacesSidebar            *sidebar,
            GVolume                     *volume,
            GMount                      *mount,
 #ifdef HAVE_CLOUDPROVIDERS
-           CloudProviderProxy          *cloud_provider_proxy,
+           CloudProviderAccount        *cloud_provider_account,
 #else
-           gpointer                    *cloud_provider_proxy,
+           gpointer                    *cloud_provider_account,
 #endif
            const gint                   index,
            const gchar                 *tooltip)
@@ -498,7 +498,7 @@ add_place (GtkPlacesSidebar            *sidebar,
                       "volume", volume,
                       "mount", mount,
 #ifdef HAVE_CLOUDPROVIDERS
-                      "cloud-provider", cloud_provider_proxy,
+                      "cloud-provider", cloud_provider_account,
 #endif
                       NULL);
 
@@ -921,12 +921,12 @@ update_trash_icon (GtkPlacesSidebar *sidebar)
 
 #ifdef HAVE_CLOUDPROVIDERS
 static void
-cloud_row_update (CloudProviderProxy *cloud_provider_proxy,
+cloud_row_update (CloudProviderAccount *cloud_provider_account,
                   GtkWidget          *cloud_row)
 {
   GIcon *end_icon;
   gint provider_status;
-  provider_status = cloud_provider_proxy_get_status (cloud_provider_proxy);
+  provider_status = cloud_provider_account_get_status (cloud_provider_account);
   switch (provider_status)
     {
       case CLOUD_PROVIDER_STATUS_IDLE:
@@ -950,10 +950,10 @@ cloud_row_update (CloudProviderProxy *cloud_provider_proxy,
     g_object_unref (end_icon);
 
   g_object_set (cloud_row,
-                "label", cloud_provider_proxy_get_name (cloud_provider_proxy),
+                "label", cloud_provider_account_get_name (cloud_provider_account),
                 NULL);
   g_object_set (cloud_row,
-                "tooltip", cloud_provider_proxy_get_status_details (cloud_provider_proxy),
+                "tooltip", cloud_provider_account_get_status_details (cloud_provider_account),
                 NULL);
 
 }
@@ -963,15 +963,15 @@ cloud_row_destroy (GtkWidget *object,
                    gpointer   user_data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
-  CloudProviderProxy *cloud_provider_proxy = NULL;
-  g_object_get (GTK_SIDEBAR_ROW (object), "cloud-provider", &cloud_provider_proxy, NULL);
-  if (cloud_provider_proxy != NULL)
+  CloudProviderAccount *cloud_provider_account = NULL;
+  g_object_get (GTK_SIDEBAR_ROW (object), "cloud-provider", &cloud_provider_account, NULL);
+  if (cloud_provider_account != NULL)
     {
-      g_signal_handlers_disconnect_matched (cloud_provider_proxy,
+      g_signal_handlers_disconnect_matched (cloud_provider_account,
                                             G_SIGNAL_MATCH_DATA,
                                             0, 0, 0, cloud_row_update, object);
       g_object_unref (object);
-      g_object_unref (cloud_provider_proxy);
+      g_object_unref (cloud_provider_account);
     }
   sidebar->cloud_rows = g_list_remove (sidebar->cloud_rows, object);
 }
@@ -1101,16 +1101,16 @@ update_places (GtkPlacesSidebar *sidebar)
   cloud_provider_proxies = cloud_providers_get_providers (sidebar->cloud_manager);
   for (l = cloud_provider_proxies; l != NULL; l = l->next)
     {
-      start_icon = cloud_provider_proxy_get_icon (l->data);
-      name = cloud_provider_proxy_get_name (l->data);
-      provider_status = cloud_provider_proxy_get_status (l->data);
-      mount_uri = cloud_provider_proxy_get_path (l->data);
+      start_icon = cloud_provider_account_get_icon (l->data);
+      name = cloud_provider_account_get_name (l->data);
+      provider_status = cloud_provider_account_get_status (l->data);
+      mount_uri = cloud_provider_account_get_path (l->data);
       if (start_icon == NULL
           || name == NULL
           || provider_status == CLOUD_PROVIDER_STATUS_INVALID
           || mount_uri == NULL)
         continue;
-      mount_uri = g_strconcat ("file://", cloud_provider_proxy_get_path (l->data), NULL);
+      mount_uri = g_strconcat ("file://", cloud_provider_account_get_path (l->data), NULL);
       switch (provider_status)
         {
         case CLOUD_PROVIDER_STATUS_IDLE:
@@ -3530,18 +3530,18 @@ on_row_popover_destroy (GtkWidget        *row_popover,
 static void
 build_popup_menu_using_gmenu (GtkSidebarRow *row)
 {
-  CloudProviderProxy *cloud_provider_proxy;
+  CloudProviderAccount *cloud_provider_account;
   GtkPlacesSidebar *sidebar;
   GMenuModel *cloud_provider_menu;
   GActionGroup *cloud_provider_action_group;
 
   g_object_get (row,
                 "sidebar", &sidebar,
-                "cloud-provider", &cloud_provider_proxy,
+                "cloud-provider", &cloud_provider_account,
                 NULL);
 
   /* Cloud provider */
-  if (cloud_provider_proxy)
+  if (cloud_provider_account)
     {
       GMenu *menu = g_menu_new ();
       GMenuItem *item;
@@ -3554,9 +3554,9 @@ build_popup_menu_using_gmenu (GtkSidebarRow *row)
       item = g_menu_item_new (_("Open in New _Window"), "row.open-other");
       g_menu_item_set_action_and_target_value (item, "row.open-other", g_variant_new_int32(GTK_PLACES_OPEN_NEW_WINDOW));
       g_menu_append_item (menu, item);
-      cloud_provider_menu = cloud_provider_proxy_get_menu_model (cloud_provider_proxy);
+      cloud_provider_menu = cloud_provider_account_get_menu_model (cloud_provider_account);
       g_menu_append_section (menu, NULL, cloud_provider_menu);
-      cloud_provider_action_group = cloud_provider_proxy_get_action_group (cloud_provider_proxy);
+      cloud_provider_action_group = cloud_provider_account_get_action_group (cloud_provider_account);
       gtk_widget_insert_action_group (GTK_WIDGET (sidebar),
                                       "cloudprovider",
                                       G_ACTION_GROUP (cloud_provider_action_group));
@@ -3568,7 +3568,7 @@ build_popup_menu_using_gmenu (GtkSidebarRow *row)
                                                      G_MENU_MODEL (menu));
       g_signal_connect (sidebar->popover, "destroy", G_CALLBACK (on_row_popover_destroy), sidebar);
       g_object_unref (sidebar);
-      g_object_unref (cloud_provider_proxy);
+      g_object_unref (cloud_provider_account);
     }
 }
 #endif
@@ -3582,11 +3582,11 @@ create_row_popover (GtkPlacesSidebar *sidebar,
   GtkWidget *box;
 
 #ifdef HAVE_CLOUDPROVIDERS
-  CloudProviderProxy *cloud_provider_proxy;
+  CloudProviderAccount *cloud_provider_account;
 
-  g_object_get (row, "cloud-provider", &cloud_provider_proxy, NULL);
+  g_object_get (row, "cloud-provider", &cloud_provider_account, NULL);
 
-  if (cloud_provider_proxy) {
+  if (cloud_provider_account) {
     build_popup_menu_using_gmenu (row);
     return;
   }
