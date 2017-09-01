@@ -3933,7 +3933,6 @@ gtk_label_snapshot (GtkWidget   *widget,
           gint range[2];
           cairo_region_t *range_clip;
           cairo_rectangle_int_t clip_extents;
-          cairo_t *cr;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
@@ -3945,22 +3944,16 @@ gtk_label_snapshot (GtkWidget   *widget,
               range[1] = tmp;
             }
 
-          range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
-          cairo_region_get_extents (range_clip, &clip_extents);
-          cr = gtk_snapshot_append_cairo (snapshot,
-                                          &GRAPHENE_RECT_FROM_RECT (&clip_extents),
-                                          "Selected Text");
           gtk_style_context_save_to_node (context, info->selection_node);
 
-          gdk_cairo_region (cr, range_clip);
-          cairo_clip (cr);
-
-          gtk_render_background (context, cr, x, 0, width, height);
-          gtk_render_layout (context, cr, lx, ly, priv->layout);
+          range_clip = gdk_pango_layout_get_clip_region (priv->layout, lx, ly, range, 1);
+          cairo_region_get_extents (range_clip, &clip_extents);
+          gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_FROM_RECT (&clip_extents), "Selected Text");
+          gtk_snapshot_render_background (snapshot, context, x, 0, width, height);
+          gtk_snapshot_render_layout (snapshot, context, lx, ly, priv->layout);
+          gtk_snapshot_pop (snapshot);
 
           gtk_style_context_restore (context);
-          cairo_destroy (cr);
-          cairo_region_destroy (range_clip);
         }
       else if (info)
         {
