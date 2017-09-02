@@ -12,6 +12,7 @@
         <child>
           <object class="GtkSearchEntry" id="search_entry">
             <property name="visible">1</property>
+            <property name="input-hints">no-emoji</property>
             <signal name="search-changed" handler="search_changed"/>
           </object>
         </child>
