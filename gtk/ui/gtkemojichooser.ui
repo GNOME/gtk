@@ -10,6 +10,7 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkSearchEntry" id="search_entry">
+            <property name="input-hints">no-emoji</property>
             <signal name="search-changed" handler="search_changed"/>
           </object>
         </child>
