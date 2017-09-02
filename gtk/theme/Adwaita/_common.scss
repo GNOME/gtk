@@ -4451,15 +4451,14 @@ button.emoji-section {
   &:hover { border-color: $borders_color; }
   &:checked { border-color: $selected_bg_color; }
 
-  color: $borders_color;
-  &:hover { color: mix($fg_color, $borders_color, 50%); }
-  &:checked { color: $fg_color; }
-  &:backdrop { color: $backdrop_borders_color; }
-  &:backdrop:checked { color: $backdrop_fg_color; }
-
   label {
     padding: 0;
+
+    opacity: 0.55;
   }
+
+  &:hover label { opacity: 0.775; }
+  &:checked label { opacity: 1; }
 }
 
 .emoji {
