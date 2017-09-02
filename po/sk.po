@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-31 22:33+0000\n"
-"PO-Revision-Date: 2017-09-01 16:18+0200\n"
+"POT-Creation-Date: 2017-09-02 00:58+0000\n"
+"PO-Revision-Date: 2017-09-02 10:02+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -2242,6 +2242,11 @@ msgstr "Vložiť"
 #: gtk/gtkentry.c:10830
 msgid "Caps Lock is on"
 msgstr "Caps Lock je zapnutý"
+
+# tooltip
+#: gtk/gtkentry.c:11102
+msgid "Insert Emoji"
+msgstr "Vloží emotikonu"
 
 #: gtk/gtkfilechooserbutton.c:107
 msgid "Select a File"
