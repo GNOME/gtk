@@ -2227,7 +2227,7 @@ msgstr "Bloq Maiús está activado"
 #: gtk/gtkentry.c:11102
 #| msgid "Insert _Emoji"
 msgid "Insert Emoji"
-msgstr "Inserir Emoticono"
+msgstr "Inserir emoticono"
 
 #: gtk/gtkfilechooserbutton.c:107
 msgid "Select a File"
