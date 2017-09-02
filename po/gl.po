@@ -1781,7 +1781,7 @@ msgstr "Seleccionar _todo"
 
 #: gtk/gtkentry.c:8504
 msgid "Insert _Emoji"
-msgstr "Inserir _Emoji"
+msgstr "Inserir _emoticono"
 
 #: gtk/gtkentry.c:8677 gtk/gtktextview.c:9528
 msgid "Select all"
@@ -1806,7 +1806,7 @@ msgstr "Bloq Maiús está activado"
 #: gtk/gtkentry.c:9905
 #| msgid "Insert _Emoji"
 msgid "Insert Emoji"
-msgstr "Inserir emoticonos"
+msgstr "Inserir emoticono"
 
 #: gtk/gtkfilechooserbutton.c:106
 msgid "Select a File"
