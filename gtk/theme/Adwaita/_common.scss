@@ -4453,7 +4453,7 @@ button.emoji-section:backdrop:not(:checked) { border-color: transparent; }
 
 button.emoji-section { color: $borders_color; }
 
-button.emoji-section:hover { color: mix($fg_color, $borders_color, 0.5); }
+button.emoji-section:hover { color: mix($fg_color, $borders_color, 50%); }
 
 button.emoji-section:checked { color: $fg_color; }
 

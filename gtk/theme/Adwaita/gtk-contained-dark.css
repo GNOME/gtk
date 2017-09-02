@@ -1911,7 +1911,7 @@ button.emoji-section:backdrop:not(:checked) { border-color: transparent; }
 
 button.emoji-section { color: #1b1f20; }
 
-button.emoji-section:hover { color: #1c2021; }
+button.emoji-section:hover { color: #858686; }
 
 button.emoji-section:checked { color: #eeeeec; }
 
