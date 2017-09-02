@@ -49,9 +49,6 @@ typedef struct _GtkContainerClass         GtkContainerClass;
 struct _GtkContainer
 {
   GtkWidget widget;
-
-  /*< private >*/
-  GtkContainerPrivate *priv;
 };
 
 /**

@@ -1575,14 +1575,13 @@ gtk_container_remove_unimplemented (GtkContainer     *container,
 static void
 gtk_container_init (GtkContainer *container)
 {
-  container->priv = gtk_container_get_instance_private (container);
 }
 
 static void
 gtk_container_destroy (GtkWidget *widget)
 {
   GtkContainer *container = GTK_CONTAINER (widget);
-  GtkContainerPrivate *priv = container->priv;
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
 
   if (priv->restyle_pending)
     priv->restyle_pending = FALSE;
@@ -1679,7 +1678,7 @@ gtk_container_remove (GtkContainer *container,
 static gboolean
 gtk_container_needs_idle_sizer (GtkContainer *container)
 {
-  GtkContainerPrivate *priv = container->priv;
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
 
   if (priv->restyle_pending)
     return TRUE;
@@ -1691,6 +1690,8 @@ static void
 gtk_container_idle_sizer (GdkFrameClock *clock,
 			  GtkContainer  *container)
 {
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
+
   /* We validate the style contexts in a single loop before even trying
    * to handle resizes instead of doing validations inline.
    * This is mostly necessary for compatibility reasons with old code,
@@ -1701,9 +1702,9 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
    * sane values. So the result of an invalid style context will never be
    * a program crash, but only a wrong layout or rendering.
    */
-  if (container->priv->restyle_pending)
+  if (priv->restyle_pending)
     {
-      container->priv->restyle_pending = FALSE;
+      priv->restyle_pending = FALSE;
       gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)));
     }
 
@@ -1732,18 +1733,19 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
 static void
 gtk_container_start_idle_sizer (GtkContainer *container)
 {
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
   GdkFrameClock *clock;
 
-  if (container->priv->resize_handler != 0)
+  if (priv->resize_handler != 0)
     return;
 
   clock = gtk_widget_get_frame_clock (GTK_WIDGET (container));
   if (clock == NULL)
     return;
 
-  container->priv->resize_clock = clock;
-  container->priv->resize_handler = g_signal_connect (clock, "layout",
-						      G_CALLBACK (gtk_container_idle_sizer), container);
+  priv->resize_clock = clock;
+  priv->resize_handler = g_signal_connect (clock, "layout",
+                                           G_CALLBACK (gtk_container_idle_sizer), container);
   gdk_frame_clock_request_phase (clock,
                                  GDK_FRAME_CLOCK_PHASE_LAYOUT);
 }
@@ -1751,13 +1753,15 @@ gtk_container_start_idle_sizer (GtkContainer *container)
 void
 _gtk_container_stop_idle_sizer (GtkContainer *container)
 {
-  if (container->priv->resize_handler == 0)
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
+
+  if (priv->resize_handler == 0)
     return;
 
-  g_signal_handler_disconnect (container->priv->resize_clock,
-                               container->priv->resize_handler);
-  container->priv->resize_handler = 0;
-  container->priv->resize_clock = NULL;
+  g_signal_handler_disconnect (priv->resize_clock,
+                               priv->resize_handler);
+  priv->resize_handler = 0;
+  priv->resize_clock = NULL;
 }
 
 void
@@ -1778,11 +1782,9 @@ gtk_container_queue_resize_handler (GtkContainer *container)
 void
 _gtk_container_queue_restyle (GtkContainer *container)
 {
-  GtkContainerPrivate *priv;
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
 
   g_return_if_fail (GTK_CONTAINER (container));
-
-  priv = container->priv;
 
   if (priv->restyle_pending)
     return;
@@ -2108,16 +2110,16 @@ static gboolean
 gtk_container_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
 {
+  GtkContainerPrivate *priv;
   GList *children;
   GList *sorted_children;
   gint return_val;
   GtkContainer *container;
-  GtkContainerPrivate *priv;
 
   g_return_val_if_fail (GTK_IS_CONTAINER (widget), FALSE);
 
   container = GTK_CONTAINER (widget);
-  priv = container->priv;
+  priv = gtk_container_get_instance_private (container);
 
   return_val = FALSE;
 
@@ -2686,13 +2688,11 @@ void
 gtk_container_set_focus_chain (GtkContainer *container,
                                GList        *focusable_widgets)
 {
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
   GList *chain;
   GList *tmp_list;
-  GtkContainerPrivate *priv;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  priv = container->priv;
 
   if (priv->has_focus_chain)
     gtk_container_unset_focus_chain (container);
@@ -2750,11 +2750,9 @@ gboolean
 gtk_container_get_focus_chain (GtkContainer *container,
                                GList       **focus_chain)
 {
-  GtkContainerPrivate *priv;
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
 
   g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
-
-  priv = container->priv;
 
   if (focus_chain)
     {
@@ -2776,11 +2774,9 @@ gtk_container_get_focus_chain (GtkContainer *container,
 void
 gtk_container_unset_focus_chain (GtkContainer  *container)
 {
-  GtkContainerPrivate *priv;
+  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  priv = container->priv;
 
   if (priv->has_focus_chain)
     {
