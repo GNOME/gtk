@@ -4385,6 +4385,11 @@ stackswitcher button.text-button.circular { // FIXME aggregate with buttons
   padding: 0;
 }
 
+
+/*********
+ * Emoji *
+ ********/
+
 popover.emoji-picker { padding-left: 0; padding-right: 0; }
 
 button.emoji-section {
@@ -4404,32 +4409,28 @@ button.emoji-section {
   text-shadow: none;
 
   outline-offset: -5px;
+
+  &:backdrop:not(:checked) { border-color: transparent; }
+  &:hover { border-color: $borders_color; }
+  &:checked { border-color: $selected_bg_color; }
+
+  color: $borders_color;
+  &:hover { color: mix($fg_color, $borders_color, 50%); }
+  &:checked { color: $fg_color; }
+  &:backdrop { color: $backdrop_borders_color; }
+  &:backdrop:checked { color: $backdrop_fg_color; }
+
+  label {
+    padding: 0;
+  }
 }
-
-button.emoji-section label { padding: 0; }
-
-button.emoji-section:hover { border-color: $borders_color; }
-
-button.emoji-section:checked { border-color: $selected_bg_color; }
-
-button.emoji-section:backdrop:not(:checked) { border-color: transparent; }
-
-button.emoji-section { color: $borders_color; }
-
-button.emoji-section:hover { color: mix($fg_color, $borders_color, 50%); }
-
-button.emoji-section:checked { color: $fg_color; }
-
-button.emoji-section:backdrop { color: $backdrop_borders_color; }
-
-button.emoji-section:backdrop:checked { color: $backdrop_fg_color; }
 
 .emoji {
   font-size: x-large;
   padding: 6px;
   border-radius: 6px;
-}
 
-.emoji:hover {
-  background: $selected_bg_color;
+  :hover {
+    background: $selected_bg_color;
+  }
 }
