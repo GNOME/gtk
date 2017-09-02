@@ -589,6 +589,9 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
 
   populate_emoji_chooser (chooser);
   populate_recent_section (chooser);
+
+  /* We scroll to the top on show, so check the right button for the 1st time */
+  gtk_widget_set_state_flags (chooser->recent.button, GTK_STATE_FLAG_CHECKED, FALSE);
 }
 
 static void
