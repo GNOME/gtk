@@ -9576,14 +9576,18 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
-      menuitem = gtk_menu_item_new_with_mnemonic (_("Insert _Emoji"));
-      gtk_widget_set_sensitive (menuitem,
-                                mode == DISPLAY_NORMAL &&
-                                info_entry_priv->editable);
-      g_signal_connect_swapped (menuitem, "activate",
-                                G_CALLBACK (gtk_entry_choose_emoji), entry);
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+      if (info_entry_priv->show_emoji_icon ||
+          (gtk_entry_get_input_hints (entry) & GTK_INPUT_HINT_NO_EMOJI) == 0)
+        {
+          menuitem = gtk_menu_item_new_with_mnemonic (_("Insert _Emoji"));
+          gtk_widget_set_sensitive (menuitem,
+                                    mode == DISPLAY_NORMAL &&
+                                    info_entry_priv->editable);
+          g_signal_connect_swapped (menuitem, "activate",
+                                    G_CALLBACK (gtk_entry_choose_emoji), entry);
+          gtk_widget_show (menuitem);
+          gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+        }
 
       g_signal_emit (entry, signals[POPULATE_POPUP], 0, menu);
 
