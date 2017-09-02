@@ -240,18 +240,29 @@ gdk_window_impl_win32_finalize (GObject *object)
 }
 
 static void
+gdk_win32_get_window_client_area_rect (GdkWindow *window,
+                                       gint       scale,
+                                       RECT      *rect)
+{
+  gint x, y, width, height;
+
+  gdk_window_get_position (window, &x, &y);
+  width = gdk_window_get_width (window);
+  height = gdk_window_get_height (window);
+  rect->left = x * scale;
+  rect->top = y * scale;
+  rect->right = rect->left + width * scale;
+  rect->bottom = rect->top + height * scale;
+}
+
+static void
 gdk_win32_window_get_queued_window_rect (GdkWindow *window,
                                          RECT      *return_window_rect)
 {
-  gint x, y;
   RECT window_rect;
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  gdk_window_get_position (window, &x, &y);
-  window_rect.left = x * impl->window_scale;
-  window_rect.top = y * impl->window_scale;
-  window_rect.right = window_rect.left + gdk_window_get_width (window) * impl->window_scale;
-  window_rect.bottom = window_rect.top + gdk_window_get_height (window) * impl->window_scale;
+  gdk_win32_get_window_client_area_rect (window, impl->window_scale, &window_rect);
 
   /* Turn client area into window area */
   _gdk_win32_adjust_client_rect (window, &window_rect);
@@ -4504,6 +4515,83 @@ gdk_win32_window_end_move_resize_drag (GdkWindow *window)
   context->current_snap = GDK_WIN32_AEROSNAP_STATE_UNDETERMINED;
 }
 
+static void
+gdk_win32_get_window_size_and_position_from_client_rect (GdkWindow *window,
+                                                         RECT      *window_rect,
+                                                         SIZE      *window_size,
+                                                         POINT     *window_position)
+{
+  GdkWindowImplWin32 *impl;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  /* Turn client area into window area */
+  _gdk_win32_adjust_client_rect (window, window_rect);
+
+  /* Convert GDK screen coordinates to W32 desktop coordinates */
+  window_rect->left -= _gdk_offset_x * impl->window_scale;
+  window_rect->right -= _gdk_offset_x * impl->window_scale;
+  window_rect->top -= _gdk_offset_y * impl->window_scale;
+  window_rect->bottom -= _gdk_offset_y * impl->window_scale;
+
+  window_position->x = window_rect->left;
+  window_position->y = window_rect->top;
+  window_size->cx = window_rect->right - window_rect->left;
+  window_size->cy = window_rect->bottom - window_rect->top;
+}
+
+static void
+gdk_win32_update_layered_window_from_cache (GdkWindow *window,
+                                            RECT      *client_rect)
+{
+  POINT window_position;
+  SIZE window_size;
+  BLENDFUNCTION blender;
+  HDC hdc;
+  SIZE *window_size_ptr;
+  POINT source_point = { 0, 0 };
+  POINT *source_point_ptr;
+  GdkWindowImplWin32 *impl;
+
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+
+  gdk_win32_get_window_size_and_position_from_client_rect (window,
+                                                           client_rect,
+                                                           &window_size,
+                                                           &window_position);
+
+  blender.BlendOp = AC_SRC_OVER;
+  blender.BlendFlags = 0;
+  blender.AlphaFormat = AC_SRC_ALPHA;
+  blender.SourceConstantAlpha = impl->layered_opacity * 255;
+
+  /* Size didn't change, so move immediately, no need to wait for redraw */
+  /* Strictly speaking, we don't need to supply hdc, source_point and
+   * window_size here. However, without these arguments
+   * the window moves but does not update its contents on Windows 7 when
+   * desktop composition is off. This forces us to provide hdc and
+   * source_point. window_size is here to avoid the function
+   * inexplicably failing with error 317.
+   */
+  if (gdk_display_is_composited (gdk_window_get_display (window)))
+    {
+      hdc = NULL;
+      window_size_ptr = NULL;
+      source_point_ptr = NULL;
+    }
+  else
+    {
+      hdc = cairo_win32_surface_get_dc (impl->cache_surface);
+      window_size_ptr = &window_size;
+      source_point_ptr = &source_point;
+    }
+
+  API_CALL (UpdateLayeredWindow, (GDK_WINDOW_HWND (window), NULL,
+                                  &window_position, window_size_ptr,
+                                  hdc, source_point_ptr,
+                                  0, &blender, ULW_ALPHA));
+}
+
 void
 gdk_win32_window_do_move_resize_drag (GdkWindow *window,
                                       gint       x,
@@ -4680,67 +4768,24 @@ gdk_win32_window_do_move_resize_drag (GdkWindow *window,
            (rect.left != new_rect.left ||
             rect.top != new_rect.top))
     {
-      POINT window_position;
-      SIZE window_size;
-      BLENDFUNCTION blender;
-      HDC hdc;
-      SIZE *window_size_ptr;
-      POINT source_point = { 0, 0 };
-      POINT *source_point_ptr;
-
       context->native_move_resize_pending = FALSE;
 
       _gdk_win32_do_emit_configure_event (window, new_rect);
 
-      /* Turn client area into window area */
-      _gdk_win32_adjust_client_rect (window, &new_rect);
-
-      /* Convert GDK screen coordinates to W32 desktop coordinates */
-      new_rect.left -= _gdk_offset_x * impl->window_scale;
-      new_rect.right -= _gdk_offset_x * impl->window_scale;
-      new_rect.top -= _gdk_offset_y * impl->window_scale;
-      new_rect.bottom -= _gdk_offset_y * impl->window_scale;
-
-      window_position.x = new_rect.left;
-      window_position.y = new_rect.top;
-      window_size.cx = new_rect.right - new_rect.left;
-      window_size.cy = new_rect.bottom - new_rect.top;
-
-      blender.BlendOp = AC_SRC_OVER;
-      blender.BlendFlags = 0;
-      blender.AlphaFormat = AC_SRC_ALPHA;
-      blender.SourceConstantAlpha = impl->layered_opacity * 255;
-
-      /* Size didn't change, so move immediately, no need to wait for redraw */
-      /* Strictly speaking, we don't need to supply hdc, source_point and
-       * window_size here. However, without these arguments
-       * the window moves but does not update its contents on Windows 7 when
-       * desktop composition is off. This forces us to provide hdc and
-       * source_point. window_size is here to avoid the function
-       * inexplicably failing with error 317.
-       */
       if (impl->layered)
         {
-          if (gdk_display_is_composited (gdk_window_get_display (window)))
-            {
-              hdc = NULL;
-              window_size_ptr = NULL;
-              source_point_ptr = NULL;
-            }
-          else
-            {
-              hdc = cairo_win32_surface_get_dc (impl->cache_surface);
-              window_size_ptr = &window_size;
-              source_point_ptr = &source_point;
-            }
-
-          API_CALL (UpdateLayeredWindow, (GDK_WINDOW_HWND (window), NULL,
-                                          &window_position, window_size_ptr,
-                                          hdc, source_point_ptr,
-                                          0, &blender, ULW_ALPHA));
+          gdk_win32_update_layered_window_from_cache (window, &new_rect);
         }
       else
         {
+          SIZE window_size;
+          POINT window_position;
+
+          gdk_win32_get_window_size_and_position_from_client_rect (window,
+                                                                   &new_rect,
+                                                                   &window_size,
+                                                                   &window_position);
+
           API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
                                    SWP_NOZORDER_SPECIFIED,
                                    window_position.x, window_position.y,
@@ -5346,11 +5391,20 @@ gdk_win32_window_set_opacity (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-  impl->layered_opacity = opacity;
-
   if (impl->layered)
-    /* Layered windows have opacity applied elsewhere */
-    return;
+    {
+      if (impl->layered_opacity != opacity)
+        {
+          RECT window_rect;
+
+          impl->layered_opacity = opacity;
+
+          gdk_win32_get_window_client_area_rect (window, impl->window_scale, &window_rect);
+          gdk_win32_update_layered_window_from_cache (window, &window_rect);
+        }
+
+      return;
+    }
 
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
@@ -5503,14 +5557,10 @@ static cairo_surface_t *
 gdk_win32_ref_cairo_surface_layered (GdkWindow          *window,
                                      GdkWindowImplWin32 *impl)
 {
-  gint x, y, width, height;
+  gint width, height;
   RECT window_rect;
 
-  gdk_window_get_position (window, &x, &y);
-  window_rect.left = x * impl->window_scale;
-  window_rect.top = y * impl->window_scale;
-  window_rect.right = window_rect.left + gdk_window_get_width (window) * impl->window_scale;
-  window_rect.bottom = window_rect.top + gdk_window_get_height (window) * impl->window_scale;
+  gdk_win32_get_window_client_area_rect (window, impl->window_scale, &window_rect);
 
   /* Turn client area into window area */
   _gdk_win32_adjust_client_rect (window, &window_rect);
