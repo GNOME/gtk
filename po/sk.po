@@ -1830,7 +1830,7 @@ msgstr "Caps Lock je zapnutý"
 # tooltip
 #: gtk/gtkentry.c:9905
 msgid "Insert Emoji"
-msgstr "Vloží emotikonu"
+msgstr "Vložíť emotikonu"
 
 #: gtk/gtkfilechooserbutton.c:106
 msgid "Select a File"
