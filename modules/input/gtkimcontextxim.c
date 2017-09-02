@@ -1747,48 +1747,6 @@ status_window_get (GtkWidget *toplevel)
   return status_window;
 }
 
-/* Draw the background (normally white) and border for the status window
- */
-static gboolean
-on_status_window_expose_event (GtkWidget      *widget,
-			       GdkEventExpose *event)
-{
-  cairo_t *cr;
-
-  cr = gdk_cairo_create (widget->window);
-
-  gdk_cairo_set_source_color (cr, &widget->style->base[GTK_STATE_NORMAL]);
-  cairo_rectangle (cr,
-                   0, 0,
-                   widget->allocation.width, widget->allocation.height);
-  cairo_fill (cr);
-
-  gdk_cairo_set_source_color (cr, &widget->style->text[GTK_STATE_NORMAL]);
-  cairo_rectangle (cr, 
-                   0, 0,
-                   widget->allocation.width - 1, widget->allocation.height - 1);
-  cairo_fill (cr);
-
-  return FALSE;
-}
-
-/* We watch the ::style-set signal for our label widget
- * and use that to change it's foreground color to match
- * the 'text' color of the toplevel window. The text/base
- * pair of colors might be reversed from the fg/bg pair
- * that are normally used for labels.
- */
-static void
-on_status_window_style_set (GtkWidget *toplevel,
-			    GtkStyle  *previous_style,
-			    GtkWidget *label)
-{
-  gint i;
-  
-  for (i = 0; i < 5; i++)
-    gtk_widget_modify_fg (label, i, &toplevel->style->text[i]);
-}
-
 /* Creates the widgets for the status window; called when we
  * first need to show text for the status window.
  */
@@ -1802,18 +1760,12 @@ status_window_make_window (StatusWindow *status_window)
   window = status_window->window;
 
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-  gtk_widget_set_app_paintable (window, TRUE);
 
   status_label = gtk_label_new ("");
   gtk_misc_set_padding (GTK_MISC (status_label), 1, 1);
   gtk_widget_show (status_label);
   
-  g_signal_connect (window, "style-set",
-		    G_CALLBACK (on_status_window_style_set), status_label);
   gtk_container_add (GTK_CONTAINER (window), status_label);
-  
-  g_signal_connect (window, "expose-event",
-		    G_CALLBACK (on_status_window_expose_event), NULL);
   
   gtk_window_set_screen (GTK_WINDOW (status_window->window),
 			 gtk_widget_get_screen (status_window->toplevel));
