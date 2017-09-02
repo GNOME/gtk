@@ -918,6 +918,8 @@ typedef enum
  * @GTK_INPUT_HINT_INHIBIT_OSK: Suggest to not show an onscreen keyboard
  *     (e.g for a calculator that already has all the keys).
  * @GTK_INPUT_HINT_VERTICAL_WRITING: The text is vertical. Since 3.18
+ * @GTK_INPUT_HINT_EMOJI: Suggest offering Emoji support. Since 3.22.20
+ * @GTK_INPUT_HINT_NO_EMOJI: Suggest not offering Emoji support. Since 3.22.20
  *
  * Describes hints that might be taken into account by input methods
  * or applications. Note that input methods may already tailor their
@@ -942,7 +944,9 @@ typedef enum
   GTK_INPUT_HINT_UPPERCASE_WORDS     = 1 << 5,
   GTK_INPUT_HINT_UPPERCASE_SENTENCES = 1 << 6,
   GTK_INPUT_HINT_INHIBIT_OSK         = 1 << 7,
-  GTK_INPUT_HINT_VERTICAL_WRITING    = 1 << 8
+  GTK_INPUT_HINT_VERTICAL_WRITING    = 1 << 8,
+  GTK_INPUT_HINT_EMOJI               = 1 << 9,
+  GTK_INPUT_HINT_NO_EMOJI            = 1 << 10
 } GtkInputHints;
 
 /**
