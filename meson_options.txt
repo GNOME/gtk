@@ -32,3 +32,5 @@ option('enable-documentation', type: 'boolean', value: 'false',
   description : 'Build API reference and tools documentation')
 option('enable-man-pages', type: 'boolean', value: 'false',
   description : 'Build man pages for installed tools')
+option('enable-gir', type: 'boolean', value: 'true',
+  description : 'Build introspection data (requires gobject-introspection)')

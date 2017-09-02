@@ -916,7 +916,8 @@ libgtk_dep = declare_dependency(sources: [gtkversion, gtktypebuiltins_h],
                                 link_args: common_ldflags)
 
 # Introspection
-if not meson.is_cross_build()
+build_gir = get_option('enable-gir')
+if build_gir
   gir_args = [
     '--quiet',
   ]
