@@ -7,6 +7,7 @@
 #include "gskrenderer.h"
 #include "gskroundedrectprivate.h"
 #include "gskvulkanblendpipelineprivate.h"
+#include "gskvulkanblurpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkanclipprivate.h"
@@ -31,6 +32,7 @@ typedef enum {
   GSK_VULKAN_OP_COLOR,
   GSK_VULKAN_OP_LINEAR_GRADIENT,
   GSK_VULKAN_OP_OPACITY,
+  GSK_VULKAN_OP_BLUR,
   GSK_VULKAN_OP_COLOR_MATRIX,
   GSK_VULKAN_OP_BORDER,
   GSK_VULKAN_OP_INSET_SHADOW,
@@ -227,6 +229,20 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       else
         FALLBACK ("Opacity nodes can't deal with clip type %u\n", constants->clip.type);
       op.type = GSK_VULKAN_OP_OPACITY;
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+      g_array_append_val (self->render_ops, op);
+      return;
+
+    case GSK_BLUR_NODE:
+      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+        pipeline_type = GSK_VULKAN_PIPELINE_BLUR;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+        pipeline_type = GSK_VULKAN_PIPELINE_BLUR_CLIP;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+        pipeline_type = GSK_VULKAN_PIPELINE_BLUR_CLIP_ROUNDED;
+      else
+        FALLBACK ("Blur nodes can't deal with clip type %u\n", constants->clip.type);
+      op.type = GSK_VULKAN_OP_BLUR;
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
       g_array_append_val (self->render_ops, op);
       return;
@@ -543,6 +559,18 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           }
           break;
 
+        case GSK_VULKAN_OP_BLUR:
+          {
+            GskRenderNode *child = gsk_blur_node_get_child (op->render.node);
+
+            op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
+                                                                            render,
+                                                                            uploader,
+                                                                            child,
+                                                                            &child->bounds);
+          }
+          break;
+
         case GSK_VULKAN_OP_COLOR_MATRIX:
           {
             GskRenderNode *child = gsk_color_matrix_node_get_child (op->render.node);
@@ -604,6 +632,11 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_OPACITY:
         case GSK_VULKAN_OP_COLOR_MATRIX:
           op->render.vertex_count = gsk_vulkan_effect_pipeline_count_vertex_data (GSK_VULKAN_EFFECT_PIPELINE (op->render.pipeline));
+          n_bytes += op->render.vertex_count;
+          break;
+
+        case GSK_VULKAN_OP_BLUR:
+          op->render.vertex_count = gsk_vulkan_blur_pipeline_count_vertex_data (GSK_VULKAN_BLUR_PIPELINE (op->render.pipeline));
           n_bytes += op->render.vertex_count;
           break;
 
@@ -707,6 +740,17 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
           }
           break;
 
+        case GSK_VULKAN_OP_BLUR:
+          {
+            op->render.vertex_offset = offset + n_bytes;
+            gsk_vulkan_blur_pipeline_collect_vertex_data (GSK_VULKAN_BLUR_PIPELINE (op->render.pipeline),
+                                                          data + n_bytes + offset,
+                                                          &op->render.node->bounds,
+                                                          gsk_blur_node_get_radius (op->render.node));
+            n_bytes += op->render.vertex_count;
+          }
+          break;
+
         case GSK_VULKAN_OP_COLOR_MATRIX:
           {
             op->render.vertex_offset = offset + n_bytes;
@@ -792,6 +836,7 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
         case GSK_VULKAN_OP_OPACITY:
+        case GSK_VULKAN_OP_BLUR:
         case GSK_VULKAN_OP_COLOR_MATRIX:
           op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source);
           break;
@@ -897,6 +942,39 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
           current_draw_index += gsk_vulkan_effect_pipeline_draw (GSK_VULKAN_EFFECT_PIPELINE (current_pipeline),
                                                                  command_buffer,
                                                                  current_draw_index, 1);
+          break;
+
+        case GSK_VULKAN_OP_BLUR:
+          if (current_pipeline != op->render.pipeline)
+            {
+              current_pipeline = op->render.pipeline;
+              vkCmdBindPipeline (command_buffer,
+                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                 gsk_vulkan_pipeline_get_pipeline (current_pipeline));
+              vkCmdBindVertexBuffers (command_buffer,
+                                      0,
+                                      1,
+                                      (VkBuffer[1]) {
+                                          gsk_vulkan_buffer_get_buffer (vertex_buffer)
+                                      },
+                                      (VkDeviceSize[1]) { op->render.vertex_offset });
+              current_draw_index = 0;
+            }
+
+          vkCmdBindDescriptorSets (command_buffer,
+                                   VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                   gsk_vulkan_pipeline_layout_get_pipeline_layout (layout),
+                                   0,
+                                   1,
+                                   (VkDescriptorSet[1]) {
+                                       gsk_vulkan_render_get_descriptor_set (render, op->render.descriptor_set_index)
+                                   },
+                                   0,
+                                   NULL);
+
+          current_draw_index += gsk_vulkan_blur_pipeline_draw (GSK_VULKAN_BLUR_PIPELINE (current_pipeline),
+                                                               command_buffer,
+                                                               current_draw_index, 1);
           break;
 
         case GSK_VULKAN_OP_COLOR:
