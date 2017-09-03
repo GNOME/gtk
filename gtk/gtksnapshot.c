@@ -322,6 +322,57 @@ gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
 }
 
 static GskRenderNode *
+gtk_snapshot_collect_blur (GtkSnapshotState *state,
+                           GskRenderNode **nodes,
+                           guint           n_nodes,
+                           const char     *name)
+{
+  GskRenderNode *node, *blur_node;
+
+  node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  if (node == NULL)
+    return NULL;
+
+  blur_node = gsk_blur_node_new (node, state->data.blur.radius);
+  if (name)
+    gsk_render_node_set_name (blur_node, name);
+
+  gsk_render_node_unref (node);
+
+  return blur_node;
+}
+
+void
+gtk_snapshot_push_blur (GtkSnapshot *snapshot,
+                        double       radius,
+                        const char  *name,
+                        ...)
+{
+  GtkSnapshotState *state;
+  char *str;
+
+  if (name && snapshot->record_names)
+    {
+      va_list args;
+
+      va_start (args, name);
+      str = g_strdup_vprintf (name, args);
+      va_end (args);
+    }
+  else
+    str = NULL;
+
+  state = gtk_snapshot_state_new (snapshot->state,
+                                  str,
+                                  snapshot->state->clip_region,
+                                  snapshot->state->translate_x,
+                                  snapshot->state->translate_y,
+                                  gtk_snapshot_collect_blur);
+  state->data.blur.radius = radius;
+  snapshot->state = state;
+}
+
+static GskRenderNode *
 gtk_snapshot_collect_color_matrix (GtkSnapshotState *state,
                                    GskRenderNode   **nodes,
                                    guint             n_nodes,
