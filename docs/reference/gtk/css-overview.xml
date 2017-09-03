@@ -123,7 +123,7 @@ scale[.fine-tune]
       <programlisting><![CDATA[
 button, entry {
   color: #ff00ea;
-  font: Comic Sans 12
+  font: 12px "Comic Sans"
 }
 ]]></programlisting>
     </example>
@@ -216,7 +216,7 @@ notebook > entry {
       <title>Theme any widget within a GtkBox</title>
       <programlisting><![CDATA[
 box * {
-  font: Sans 20
+  font: 20px Sans
 }
 ]]></programlisting>
     </example>
@@ -225,7 +225,7 @@ box * {
       <title>Theme a label named title-label</title>
       <programlisting><![CDATA[
 label#title-label {
-  font: Sans 15
+  font: 15px Sans
 }
 ]]></programlisting>
     </example>
