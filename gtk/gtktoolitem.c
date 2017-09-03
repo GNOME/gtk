@@ -1356,6 +1356,8 @@ gtk_tool_item_rebuild_menu (GtkToolItem *tool_item)
  * Sets the #GtkMenuItem used in the toolbar overflow menu. The
  * @menu_item_id is used to identify the caller of this function and
  * should also be used with gtk_tool_item_get_proxy_menu_item().
+ *
+ * See also #GtkToolItem::create-menu-proxy.
  * 
  * Since: 2.4
  **/
