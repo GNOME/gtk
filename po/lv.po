@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-26 23:59+0000\n"
-"PO-Revision-Date: 2017-08-29 12:05+0200\n"
+"POT-Creation-Date: 2017-09-03 13:03+0000\n"
+"PO-Revision-Date: 2017-09-03 19:27+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -649,15 +649,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Aizvērt"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:411 gtk/gtkwindow.c:9047
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:411 gtk/gtkwindow.c:9049
 msgid "Minimize"
 msgstr "Minimizēt"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9056
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9058
 msgid "Maximize"
 msgstr "Maksimizēt"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9013
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:435 gtk/gtkwindow.c:9015
 msgid "Restore"
 msgstr "Atjaunot"
 
@@ -1199,12 +1199,12 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:540 gtk/gtkfilechoosernative.c:632
-#: gtk/gtkfilechooserwidget.c:1477 gtk/gtkfilechooserwidget.c:6384
+#: gtk/gtkfilechooserwidget.c:1476 gtk/gtkfilechooserwidget.c:6383
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12516 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12518 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1253,7 +1253,7 @@ msgid "_Apply"
 msgstr "_Pielietot"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12517
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12519
 msgid "_OK"
 msgstr "_Labi"
 
@@ -2166,52 +2166,55 @@ msgstr "_Labā:"
 msgid "Paper Margins"
 msgstr "Papīra apmales"
 
-#: gtk/gtkentry.c:9543 gtk/gtklabel.c:6677 gtk/gtktextview.c:9448
+#: gtk/gtkentry.c:9550 gtk/gtklabel.c:6677 gtk/gtktextview.c:9456
 msgid "Cu_t"
 msgstr "Izgriez_t"
 
-#: gtk/gtkentry.c:9547 gtk/gtklabel.c:6678 gtk/gtktextview.c:9452
+#: gtk/gtkentry.c:9554 gtk/gtklabel.c:6678 gtk/gtktextview.c:9460
 msgid "_Copy"
 msgstr "_Kopēt"
 
-#: gtk/gtkentry.c:9551 gtk/gtklabel.c:6679 gtk/gtktextview.c:9454
+#: gtk/gtkentry.c:9558 gtk/gtklabel.c:6679 gtk/gtktextview.c:9462
 msgid "_Paste"
 msgstr "_Ielīmēt"
 
-#: gtk/gtkentry.c:9554 gtk/gtkfilechooserwidget.c:1478
-#: gtk/gtkfilechooserwidget.c:2278 gtk/gtklabel.c:6681 gtk/gtktextview.c:9457
+#: gtk/gtkentry.c:9561 gtk/gtkfilechooserwidget.c:1477
+#: gtk/gtkfilechooserwidget.c:2277 gtk/gtklabel.c:6681 gtk/gtktextview.c:9465
 msgid "_Delete"
 msgstr "_Dzēst"
 
-#: gtk/gtkentry.c:9565 gtk/gtklabel.c:6690 gtk/gtktextview.c:9471
+#: gtk/gtkentry.c:9572 gtk/gtklabel.c:6690 gtk/gtktextview.c:9479
 msgid "Select _All"
 msgstr "Izvēlēties _visu"
 
-#: gtk/gtkentry.c:9572
-#| msgctxt "keyboard label"
-#| msgid "Insert"
+#: gtk/gtkentry.c:9582
 msgid "Insert _Emoji"
 msgstr "Ievietot _emocijzīmi"
 
-#: gtk/gtkentry.c:9747 gtk/gtktextview.c:9696
+#: gtk/gtkentry.c:9758 gtk/gtktextview.c:9704
 msgid "Select all"
 msgstr "Izvēlēties visu"
 
-#: gtk/gtkentry.c:9750 gtk/gtktextview.c:9699
+#: gtk/gtkentry.c:9761 gtk/gtktextview.c:9707
 msgid "Cut"
 msgstr "Izgriezt"
 
-#: gtk/gtkentry.c:9753 gtk/gtktextview.c:9702
+#: gtk/gtkentry.c:9764 gtk/gtktextview.c:9710
 msgid "Copy"
 msgstr "Kopēt"
 
-#: gtk/gtkentry.c:9756 gtk/gtktextview.c:9705
+#: gtk/gtkentry.c:9767 gtk/gtktextview.c:9713
 msgid "Paste"
 msgstr "Ielīmēt"
 
-#: gtk/gtkentry.c:10823
+#: gtk/gtkentry.c:10834
 msgid "Caps Lock is on"
 msgstr "Ieslēgts Caps Lock"
+
+#: gtk/gtkentry.c:11106
+#| msgid "Insert _Emoji"
+msgid "Insert Emoji"
+msgstr "Ievietot emocijzīmi"
 
 #: gtk/gtkfilechooserbutton.c:107
 msgid "Select a File"
@@ -2235,7 +2238,8 @@ msgstr "_Nosaukums"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:626
-#: gtk/gtkplacessidebar.c:3613 gtk/gtkplacesview.c:1630
+#: gtk/gtkplacessidebar.c:3548 gtk/gtkplacessidebar.c:3605
+#: gtk/gtkplacesview.c:1630
 msgid "_Open"
 msgstr "_Atvērt"
 
@@ -2256,15 +2260,15 @@ msgstr "Izvēlieties, kādu tipa datnes rādīt"
 msgid "%1$s on %2$s"
 msgstr "%1$s uz %2$s"
 
-#: gtk/gtkfilechooserwidget.c:371
+#: gtk/gtkfilechooserwidget.c:370
 msgid "Type name of new folder"
 msgstr "Ievadiet jaunās mapes nosaukumu"
 
-#: gtk/gtkfilechooserwidget.c:790
+#: gtk/gtkfilechooserwidget.c:789
 msgid "The folder could not be created"
 msgstr "Neizdevās izveidot mapi"
 
-#: gtk/gtkfilechooserwidget.c:803
+#: gtk/gtkfilechooserwidget.c:802
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2272,263 +2276,263 @@ msgstr ""
 "Neizdevās izveidot mapi, jo jau eksistē datne ar šādu nosaukumu. Mēģiniet "
 "izmantot citu mapes nosaukumu, vai vispirms pārdēvējiet datni."
 
-#: gtk/gtkfilechooserwidget.c:818
+#: gtk/gtkfilechooserwidget.c:817
 msgid "You need to choose a valid filename."
 msgstr "Jāizvēlas derīgs datnes nosaukums."
 
-#: gtk/gtkfilechooserwidget.c:821
+#: gtk/gtkfilechooserwidget.c:820
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nevar izveidot datni zem %s, jo tā nav mape"
 
-#: gtk/gtkfilechooserwidget.c:831
+#: gtk/gtkfilechooserwidget.c:830
 msgid "Cannot create file as the filename is too long"
 msgstr "Nevar izveidot datni, jo tās nosaukums ir pārāk garš"
 
-#: gtk/gtkfilechooserwidget.c:832
+#: gtk/gtkfilechooserwidget.c:831
 msgid "Try using a shorter name."
 msgstr "Mēģiniet izmantot īsāku nosaukumu."
 
-#: gtk/gtkfilechooserwidget.c:842
+#: gtk/gtkfilechooserwidget.c:841
 msgid "You may only select folders"
 msgstr "Izvēlēties var tikai mapes"
 
-#: gtk/gtkfilechooserwidget.c:843
+#: gtk/gtkfilechooserwidget.c:842
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Izvēlētais vienums nav mape; mēģiniet izmantot citu vienumu."
 
-#: gtk/gtkfilechooserwidget.c:851
+#: gtk/gtkfilechooserwidget.c:850
 msgid "Invalid file name"
 msgstr "Nederīgs datnes nosaukums"
 
-#: gtk/gtkfilechooserwidget.c:860
+#: gtk/gtkfilechooserwidget.c:859
 msgid "The folder contents could not be displayed"
 msgstr "Neizdevās parādīt mapes saturu"
 
-#: gtk/gtkfilechooserwidget.c:868
+#: gtk/gtkfilechooserwidget.c:867
 msgid "The file could not be deleted"
 msgstr "Neizdevās izdzēst datni"
 
-#: gtk/gtkfilechooserwidget.c:876
+#: gtk/gtkfilechooserwidget.c:875
 msgid "The file could not be moved to the Trash"
 msgstr "Nevarēja pārvietot datni uz miskasti"
 
-#: gtk/gtkfilechooserwidget.c:1021
+#: gtk/gtkfilechooserwidget.c:1020
 msgid "A folder with that name already exists"
 msgstr "Tāda mape jau pastāv"
 
-#: gtk/gtkfilechooserwidget.c:1023
+#: gtk/gtkfilechooserwidget.c:1022
 msgid "A file with that name already exists"
 msgstr "Tāda datne jau pastāv"
 
-#: gtk/gtkfilechooserwidget.c:1058
+#: gtk/gtkfilechooserwidget.c:1057
 msgid "A folder cannot be called “.”"
 msgstr "Mapes nosaukums nevar būt “.”"
 
-#: gtk/gtkfilechooserwidget.c:1059
+#: gtk/gtkfilechooserwidget.c:1058
 msgid "A file cannot be called “.”"
 msgstr "Datnes nosaukums nevar būt “.”"
 
-#: gtk/gtkfilechooserwidget.c:1062
+#: gtk/gtkfilechooserwidget.c:1061
 msgid "A folder cannot be called “..”"
 msgstr "Mapes nosaukums nevar būt “..”"
 
-#: gtk/gtkfilechooserwidget.c:1063
+#: gtk/gtkfilechooserwidget.c:1062
 msgid "A file cannot be called “..”"
 msgstr "Datnes nosaukums nevar būt “..”"
 
-#: gtk/gtkfilechooserwidget.c:1066
+#: gtk/gtkfilechooserwidget.c:1065
 msgid "Folder names cannot contain “/”"
 msgstr "Mapju nosaukumi nevar saturēt “/”"
 
-#: gtk/gtkfilechooserwidget.c:1067
+#: gtk/gtkfilechooserwidget.c:1066
 msgid "File names cannot contain “/”"
 msgstr "Datņu nosaukums nevar saturēt “/”"
 
-#: gtk/gtkfilechooserwidget.c:1093
+#: gtk/gtkfilechooserwidget.c:1092
 msgid "Folder names should not begin with a space"
 msgstr "Mapju nosaukumiem nevajadzētu sākties ar atstarpi"
 
-#: gtk/gtkfilechooserwidget.c:1094
+#: gtk/gtkfilechooserwidget.c:1093
 msgid "File names should not begin with a space"
 msgstr "Datņu nosaukumiem nevajadzētu sākties ar atstarpi"
 
-#: gtk/gtkfilechooserwidget.c:1098
+#: gtk/gtkfilechooserwidget.c:1097
 msgid "Folder names should not end with a space"
 msgstr "Mapju nosaukumiem nevajadzētu beigties ar atstarpi"
 
-#: gtk/gtkfilechooserwidget.c:1099
+#: gtk/gtkfilechooserwidget.c:1098
 msgid "File names should not end with a space"
 msgstr "Datņu nosaukumiem nevajadzētu beigties ar atstarpi"
 
-#: gtk/gtkfilechooserwidget.c:1102
+#: gtk/gtkfilechooserwidget.c:1101
 msgid "Folder names starting with a “.” are hidden"
 msgstr "Mapes, kuru nosaukumi sākas ar “.”, ir paslēptas"
 
-#: gtk/gtkfilechooserwidget.c:1103
+#: gtk/gtkfilechooserwidget.c:1102
 msgid "File names starting with a “.” are hidden"
 msgstr "Datnes, kuru nosaukumi sākas ar “.”, ir paslēptas"
 
-#: gtk/gtkfilechooserwidget.c:1473
+#: gtk/gtkfilechooserwidget.c:1472
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Vai tiešām vēlaties neatgriezeniski dzēst “%s”?"
 
-#: gtk/gtkfilechooserwidget.c:1476
+#: gtk/gtkfilechooserwidget.c:1475
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Ja izdzēsīsiet vienumu, tas būs neatgriezeniski zudis."
 
-#: gtk/gtkfilechooserwidget.c:1610
+#: gtk/gtkfilechooserwidget.c:1609
 msgid "The file could not be renamed"
 msgstr "Neizdevās pārdēvēt datni"
 
-#: gtk/gtkfilechooserwidget.c:1924
+#: gtk/gtkfilechooserwidget.c:1923
 msgid "Could not select file"
 msgstr "Neizdevās izvēlēties datni"
 
-#: gtk/gtkfilechooserwidget.c:2273
+#: gtk/gtkfilechooserwidget.c:2272
 msgid "_Visit File"
 msgstr "_Apmeklēt datni"
 
-#: gtk/gtkfilechooserwidget.c:2274
+#: gtk/gtkfilechooserwidget.c:2273
 msgid "_Open With File Manager"
 msgstr "_Atvērt ar datņu pārvaldnieku"
 
-#: gtk/gtkfilechooserwidget.c:2275
+#: gtk/gtkfilechooserwidget.c:2274
 msgid "_Copy Location"
 msgstr "_Kopēt atrašanās vietu"
 
-#: gtk/gtkfilechooserwidget.c:2276
+#: gtk/gtkfilechooserwidget.c:2275
 msgid "_Add to Bookmarks"
 msgstr "_Pievienot grāmatzīmēm"
 
-#: gtk/gtkfilechooserwidget.c:2277 gtk/gtkplacessidebar.c:2672
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtkplacessidebar.c:2664
 #: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "Pā_rdēvēt"
 
-#: gtk/gtkfilechooserwidget.c:2279
+#: gtk/gtkfilechooserwidget.c:2278
 msgid "_Move to Trash"
 msgstr "Pārvietot uz _miskasti"
 
-#: gtk/gtkfilechooserwidget.c:2283
+#: gtk/gtkfilechooserwidget.c:2282
 msgid "Show _Hidden Files"
 msgstr "Rādīt s_lēptās datnes"
 
-#: gtk/gtkfilechooserwidget.c:2284
+#: gtk/gtkfilechooserwidget.c:2283
 msgid "Show _Size Column"
 msgstr "Rādīt _izmēra kolonnu"
 
-#: gtk/gtkfilechooserwidget.c:2285
+#: gtk/gtkfilechooserwidget.c:2284
 msgid "Show _Time"
 msgstr "Rādī_t laiku"
 
-#: gtk/gtkfilechooserwidget.c:2286
+#: gtk/gtkfilechooserwidget.c:2285
 msgid "Sort _Folders before Files"
 msgstr "Sakārtot _mapes pirms datnēm"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2610 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2609 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Vieta"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2703
+#: gtk/gtkfilechooserwidget.c:2702
 msgid "_Name:"
 msgstr "_Nosaukums:"
 
-#: gtk/gtkfilechooserwidget.c:3325
+#: gtk/gtkfilechooserwidget.c:3324
 msgid "Searching"
 msgstr "Meklē"
 
-#: gtk/gtkfilechooserwidget.c:3330 gtk/gtkfilechooserwidget.c:3344
+#: gtk/gtkfilechooserwidget.c:3329 gtk/gtkfilechooserwidget.c:3343
 #, c-format
 msgid "Searching in %s"
 msgstr "Meklē iekš %s"
 
-#: gtk/gtkfilechooserwidget.c:3354
+#: gtk/gtkfilechooserwidget.c:3353
 msgid "Enter location"
 msgstr "Ievadiet vietu"
 
-#: gtk/gtkfilechooserwidget.c:3356
+#: gtk/gtkfilechooserwidget.c:3355
 msgid "Enter location or URL"
 msgstr "Ievadiet vietu vai URL"
 
-#: gtk/gtkfilechooserwidget.c:4394 gtk/gtkfilechooserwidget.c:7298
+#: gtk/gtkfilechooserwidget.c:4393 gtk/gtkfilechooserwidget.c:7297
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
 msgstr "Mainīts"
 
-#: gtk/gtkfilechooserwidget.c:4672
+#: gtk/gtkfilechooserwidget.c:4671
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Neizdevās nolasīt %s saturu"
 
-#: gtk/gtkfilechooserwidget.c:4676
+#: gtk/gtkfilechooserwidget.c:4675
 msgid "Could not read the contents of the folder"
 msgstr "Neizdevās nolasīt mapes saturu"
 
-#: gtk/gtkfilechooserwidget.c:4806 gtk/gtkfilechooserwidget.c:4854
+#: gtk/gtkfilechooserwidget.c:4805 gtk/gtkfilechooserwidget.c:4853
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4808 gtk/gtkfilechooserwidget.c:4856
+#: gtk/gtkfilechooserwidget.c:4807 gtk/gtkfilechooserwidget.c:4855
 msgid "%l:%M %p"
 msgstr "%H.%M"
 
-#: gtk/gtkfilechooserwidget.c:4812
+#: gtk/gtkfilechooserwidget.c:4811
 msgid "Yesterday"
 msgstr "Vakar"
 
-#: gtk/gtkfilechooserwidget.c:4820
+#: gtk/gtkfilechooserwidget.c:4819
 msgid "%-e %b"
 msgstr "%-e. %b"
 
-#: gtk/gtkfilechooserwidget.c:4824
+#: gtk/gtkfilechooserwidget.c:4823
 msgid "%-e %b %Y"
 msgstr "%Y. gada %-e. %b"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5059 gtk/inspector/prop-editor.c:1689
+#: gtk/gtkfilechooserwidget.c:5058 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Nezināms"
 
-#: gtk/gtkfilechooserwidget.c:5098 gtk/gtkplacessidebar.c:1045
+#: gtk/gtkfilechooserwidget.c:5097 gtk/gtkplacessidebar.c:1045
 msgid "Home"
 msgstr "Mājas"
 
-#: gtk/gtkfilechooserwidget.c:5591
+#: gtk/gtkfilechooserwidget.c:5590
 msgid "Cannot change to folder because it is not local"
 msgstr "Nevar pārslēgties uz mapi, jo tā nav lokāla "
 
-#: gtk/gtkfilechooserwidget.c:6377 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6376 gtk/gtkprintunixdialog.c:664
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Datne “%s” jau eksistē. Vai vēlaties to aizvietot?"
 
-#: gtk/gtkfilechooserwidget.c:6380 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:6379 gtk/gtkprintunixdialog.c:668
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Datne jau eksistē mapē “%s”. Aizvietojot tiks pārrakstīts tās saturs."
 
-#: gtk/gtkfilechooserwidget.c:6385 gtk/gtkprintunixdialog.c:676
+#: gtk/gtkfilechooserwidget.c:6384 gtk/gtkprintunixdialog.c:676
 msgid "_Replace"
 msgstr "_Aizvietot"
 
-#: gtk/gtkfilechooserwidget.c:6599
+#: gtk/gtkfilechooserwidget.c:6598
 msgid "You do not have access to the specified folder."
 msgstr "Jums nav pieejas norādītajai mapei."
 
-#: gtk/gtkfilechooserwidget.c:7222
+#: gtk/gtkfilechooserwidget.c:7221
 msgid "Could not send the search request"
 msgstr "Neizdevās nosūtīt meklēšanas pieprasījumu"
 
-#: gtk/gtkfilechooserwidget.c:7508
+#: gtk/gtkfilechooserwidget.c:7507
 msgid "Accessed"
 msgstr "Izmantots"
 
@@ -2562,7 +2566,7 @@ msgstr "Neizdevās iegūt OpenGL kontekstu"
 msgid "Application menu"
 msgstr "Lietotnes izvēlne"
 
-#: gtk/gtkheaderbar.c:454 gtk/gtkwindow.c:9083
+#: gtk/gtkheaderbar.c:454 gtk/gtkwindow.c:9085
 msgid "Close"
 msgstr "Aizvērt"
 
@@ -2936,12 +2940,11 @@ msgstr "Atvērt miskasti"
 #. translators: %s is the name of a cloud provider for files
 #: gtk/gtkplacessidebar.c:1133
 #, c-format
-#| msgid "Open '%s'"
 msgid "Open %s"
 msgstr "Atvērt %s"
 
 #: gtk/gtkplacessidebar.c:1212 gtk/gtkplacessidebar.c:1240
-#: gtk/gtkplacessidebar.c:1456
+#: gtk/gtkplacessidebar.c:1448
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Montēt un atvērt “%s”"
@@ -2966,149 +2969,141 @@ msgstr "Savienoties ar serveri"
 msgid "Connect to a network server address"
 msgstr "Savienoties ar tīkla servera adresi"
 
-#: gtk/gtkplacessidebar.c:1436
-#| msgid "Networks"
-msgid "Browse Network"
-msgstr "Pārlūkot tīklu"
-
-#: gtk/gtkplacessidebar.c:1438
-#| msgid "Open the contents of the file system"
-msgid "Browse the contents of the network"
-msgstr "Pārlūkot tīkla saturu"
-
-#: gtk/gtkplacessidebar.c:1499
+#: gtk/gtkplacessidebar.c:1491
 msgid "Other Locations"
 msgstr "Citas vietas"
 
-#: gtk/gtkplacessidebar.c:1500
+#: gtk/gtkplacessidebar.c:1492
 msgid "Show other locations"
 msgstr "Rādīt citas vietas"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2290 gtk/gtkplacessidebar.c:3633
+#: gtk/gtkplacessidebar.c:2282 gtk/gtkplacessidebar.c:3625
 msgid "_Start"
 msgstr "_Startēt"
 
-#: gtk/gtkplacessidebar.c:2291 gtk/gtkplacessidebar.c:3634
+#: gtk/gtkplacessidebar.c:2283 gtk/gtkplacessidebar.c:3626
 msgid "_Stop"
 msgstr "_Apturēt"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2298
+#: gtk/gtkplacessidebar.c:2290
 msgid "_Power On"
 msgstr "_Ieslēgt"
 
-#: gtk/gtkplacessidebar.c:2299
+#: gtk/gtkplacessidebar.c:2291
 msgid "_Safely Remove Drive"
 msgstr "_Droši izņemt dzini"
 
-#: gtk/gtkplacessidebar.c:2303
+#: gtk/gtkplacessidebar.c:2295
 msgid "_Connect Drive"
 msgstr "_Savienoties ar dzini"
 
-#: gtk/gtkplacessidebar.c:2304
+#: gtk/gtkplacessidebar.c:2296
 msgid "_Disconnect Drive"
 msgstr "_Atvienot dzini"
 
-#: gtk/gtkplacessidebar.c:2308
+#: gtk/gtkplacessidebar.c:2300
 msgid "_Start Multi-disk Device"
 msgstr "_Startēt vairākdisku ierīci"
 
-#: gtk/gtkplacessidebar.c:2309
+#: gtk/gtkplacessidebar.c:2301
 msgid "_Stop Multi-disk Device"
 msgstr "_Apstādināt vairākdisku ierīci"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2314
+#: gtk/gtkplacessidebar.c:2306
 msgid "_Unlock Device"
 msgstr "_Atbloķēt ierīci"
 
-#: gtk/gtkplacessidebar.c:2315
+#: gtk/gtkplacessidebar.c:2307
 msgid "_Lock Device"
 msgstr "B_loķēt ierīci"
 
-#: gtk/gtkplacessidebar.c:2353 gtk/gtkplacessidebar.c:3325
+#: gtk/gtkplacessidebar.c:2345 gtk/gtkplacessidebar.c:3317
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Neizdevās startēt “%s”"
 
-#: gtk/gtkplacessidebar.c:2383
+#: gtk/gtkplacessidebar.c:2375
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Neizdevās piekļūt “%s”"
 
-#: gtk/gtkplacessidebar.c:2597
+#: gtk/gtkplacessidebar.c:2589
 msgid "This name is already taken"
 msgstr "Šis nosaukums jau ir aizņemts"
 
-#: gtk/gtkplacessidebar.c:2666 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2658 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
 msgid "Name"
 msgstr "Nosaukums"
 
-#: gtk/gtkplacessidebar.c:2866
+#: gtk/gtkplacessidebar.c:2858
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Neizdevās atmontēt “%s”"
 
-#: gtk/gtkplacessidebar.c:3042
+#: gtk/gtkplacessidebar.c:3034
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Neizdevās apstādināt “%s”"
 
-#: gtk/gtkplacessidebar.c:3071
+#: gtk/gtkplacessidebar.c:3063
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Neizdevās izgrūst “%s”"
 
-#: gtk/gtkplacessidebar.c:3100 gtk/gtkplacessidebar.c:3129
+#: gtk/gtkplacessidebar.c:3092 gtk/gtkplacessidebar.c:3121
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Neizdevās izgrūst %s"
 
-#: gtk/gtkplacessidebar.c:3277
+#: gtk/gtkplacessidebar.c:3269
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Neizdevās aptaujāt “%s” par datu nesēju izmaiņām"
 
-#: gtk/gtkplacessidebar.c:3616 gtk/gtkplacesview.c:1640
+#: gtk/gtkplacessidebar.c:3551 gtk/gtkplacessidebar.c:3608
+#: gtk/gtkplacesview.c:1640
 msgid "Open in New _Tab"
 msgstr "Atvēr_t jaunā cilnē"
 
-#: gtk/gtkplacessidebar.c:3619 gtk/gtkplacesview.c:1651
+#: gtk/gtkplacessidebar.c:3554 gtk/gtkplacessidebar.c:3611
+#: gtk/gtkplacesview.c:1651
 msgid "Open in New _Window"
 msgstr "Atvērt jaunā _logā"
 
-#: gtk/gtkplacessidebar.c:3623
+#: gtk/gtkplacessidebar.c:3615
 msgid "_Add Bookmark"
 msgstr "Pievienot grām_atzīmi"
 
-#: gtk/gtkplacessidebar.c:3624
+#: gtk/gtkplacessidebar.c:3616
 msgid "_Remove"
 msgstr "_Izņemt"
 
-#: gtk/gtkplacessidebar.c:3625
+#: gtk/gtkplacessidebar.c:3617
 msgid "Rename…"
 msgstr "Pārdēvēt…"
 
-#: gtk/gtkplacessidebar.c:3629 gtk/gtkplacesview.c:1685
+#: gtk/gtkplacessidebar.c:3621 gtk/gtkplacesview.c:1685
 msgid "_Mount"
 msgstr "_Montēt"
 
-#: gtk/gtkplacessidebar.c:3630 gtk/gtkplacesview.c:1675
+#: gtk/gtkplacessidebar.c:3622 gtk/gtkplacesview.c:1675
 msgid "_Unmount"
 msgstr "_Atmontēt"
 
-#: gtk/gtkplacessidebar.c:3631
+#: gtk/gtkplacessidebar.c:3623
 msgid "_Eject"
 msgstr "_Izgrūst"
 
-#: gtk/gtkplacessidebar.c:3632
+#: gtk/gtkplacessidebar.c:3624
 msgid "_Detect Media"
 msgstr "Noteikt _datu nesēju"
 
-#: gtk/gtkplacessidebar.c:4078 gtk/gtkplacesview.c:1118
+#: gtk/gtkplacessidebar.c:4070 gtk/gtkplacesview.c:1118
 msgid "Computer"
 msgstr "Dators"
 
@@ -3588,12 +3583,12 @@ msgstr "Meklēšanas rezultāti"
 msgid "Search Shortcuts"
 msgstr "Meklēšanas saīsnes"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:313
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:314
 #: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Nav atrastu rezultātu"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:327
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:328
 #: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Mēģiniet ar citu meklējamo vārdu"
@@ -3794,24 +3789,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9031
+#: gtk/gtkwindow.c:9033
 msgid "Move"
 msgstr "Pārvietot"
 
-#: gtk/gtkwindow.c:9039
+#: gtk/gtkwindow.c:9041
 msgid "Resize"
 msgstr "Mainīt izmēru"
 
-#: gtk/gtkwindow.c:9070
+#: gtk/gtkwindow.c:9072
 msgid "Always on Top"
 msgstr "Vienmēr virspusē"
 
-#: gtk/gtkwindow.c:12504
+#: gtk/gtkwindow.c:12506
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vai vēlaties izmantot GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:12506
+#: gtk/gtkwindow.c:12508
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3822,7 +3817,7 @@ msgstr ""
 "jebkuras GTK+ lietotnes iekšējās komponentes. To izmantojot, lietotne var "
 "salūzt vai avarēt."
 
-#: gtk/gtkwindow.c:12511
+#: gtk/gtkwindow.c:12513
 msgid "Don't show this message again"
 msgstr "Vairs nerādīt šo ziņojumu"
 
@@ -5528,42 +5523,40 @@ msgstr "V"
 msgid "Saturation"
 msgstr "Piesātinājums"
 
-#: gtk/ui/gtkemojichooser.ui:51
+#: gtk/ui/gtkemojichooser.ui:52
 msgid "Smileys & People"
 msgstr "Smaidiņi un cilvēki"
 
-#: gtk/ui/gtkemojichooser.ui:66
+#: gtk/ui/gtkemojichooser.ui:67
 msgid "Body & Clothing"
 msgstr "Ķermenis un apģērbi"
 
-#: gtk/ui/gtkemojichooser.ui:81
+#: gtk/ui/gtkemojichooser.ui:82
 msgid "Animals & Nature"
 msgstr "Dzīvnieki un daba"
 
-#: gtk/ui/gtkemojichooser.ui:96
+#: gtk/ui/gtkemojichooser.ui:97
 msgid "Food & Drink"
 msgstr "Ēdieni un dzērieni"
 
-#: gtk/ui/gtkemojichooser.ui:111
+#: gtk/ui/gtkemojichooser.ui:112
 msgid "Travel & Places"
 msgstr "Ceļošana un vietas"
 
-#: gtk/ui/gtkemojichooser.ui:126
-#| msgid "Activate"
+#: gtk/ui/gtkemojichooser.ui:127
 msgid "Activities"
 msgstr "Aktivitātes"
 
-#: gtk/ui/gtkemojichooser.ui:141
-#| msgid "Objects"
+#: gtk/ui/gtkemojichooser.ui:142
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Objekti"
 
-#: gtk/ui/gtkemojichooser.ui:156
+#: gtk/ui/gtkemojichooser.ui:157
 msgid "Symbols"
 msgstr "Simboli"
 
-#: gtk/ui/gtkemojichooser.ui:171
+#: gtk/ui/gtkemojichooser.ui:172
 msgid "Flags"
 msgstr "Karogi"
 
@@ -6764,6 +6757,14 @@ msgstr "testa-izvade.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Drukāt testa printeri"
+
+#~| msgid "Networks"
+#~ msgid "Browse Network"
+#~ msgstr "Pārlūkot tīklu"
+
+#~| msgid "Open the contents of the file system"
+#~ msgid "Browse the contents of the network"
+#~ msgstr "Pārlūkot tīkla saturu"
 
 #~ msgid "Could not start the search process"
 #~ msgstr "Neizdevās sākt meklēšanas procesu"
