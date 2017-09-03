@@ -46,6 +46,7 @@
  * @GSK_BLEND_NODE: A node that blends two children together
  * @GSK_CROSS_FADE_NODE: A node that cross-fades between two children
  * @GSK_TEXT_NODE: A node containing a glyph string
+ * @GSK_BLUR_NODE: A node that applies a blur
  *
  * The type of a node determines what the node is rendering.
  *
@@ -71,7 +72,8 @@ typedef enum {
   GSK_SHADOW_NODE,
   GSK_BLEND_NODE,
   GSK_CROSS_FADE_NODE,
-  GSK_TEXT_NODE
+  GSK_TEXT_NODE,
+  GSK_BLUR_NODE
 } GskRenderNodeType;
 
 /**
