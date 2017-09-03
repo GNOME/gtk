@@ -73,6 +73,7 @@
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkdebugupdatesprivate.h"
+#include "gsk/gskdebugprivate.h"
 
 #include "inspector/window.h"
 
@@ -15223,6 +15224,13 @@ gtk_widget_snapshot (GtkWidget   *widget,
     gtk_snapshot_pop (snapshot);
 }
 
+static gboolean
+should_record_names (GtkWidget *widget)
+{
+  return gtk_inspector_is_recording (widget) ||
+         gsk_check_debug_flags (GSK_DEBUG_ANY);
+}
+
 void
 gtk_widget_render (GtkWidget            *widget,
                    GdkWindow            *window,
@@ -15247,7 +15255,7 @@ gtk_widget_render (GtkWidget            *widget,
 
   gtk_snapshot_init (&snapshot,
                      renderer,
-                     gtk_inspector_is_recording (widget),
+                     should_record_names (widget),
                      clip,
                      "Render<%s>", G_OBJECT_TYPE_NAME (widget));
   cairo_region_destroy (clip);

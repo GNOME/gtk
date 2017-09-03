@@ -17,6 +17,8 @@ typedef enum {
   GSK_DEBUG_FALLBACK    = 1 << 8
 } GskDebugFlags;
 
+#define GSK_DEBUG_ANY ((1 << 9) - 1)
+
 typedef enum {
   GSK_RENDERING_MODE_GEOMETRY       = 1 << 0,
   GSK_RENDERING_MODE_SHADERS        = 1 << 1,
