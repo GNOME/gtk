@@ -117,7 +117,6 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
   int x_offset, y_offset;
   GskRenderNode *node;
   GdkRGBA color;
-  PangoRectangle ink_rect;
 
   gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
