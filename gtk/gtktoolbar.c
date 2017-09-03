@@ -2648,7 +2648,8 @@ gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
  * size to show all of its items. If %TRUE, items which can’t fit in @toolbar,
  * and which have a proxy menu item set by gtk_tool_item_set_proxy_menu_item()
  * or #GtkToolItem::create-menu-proxy, will be available in an overflow menu,
- * which can be opened by an added arrow button.
+ * which can be opened by an added arrow button. If %FALSE, @toolbar will
+ * request enough size to fit all of its child items without any overflow.
  * 
  * Since: 2.4
  **/
