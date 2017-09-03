@@ -270,7 +270,7 @@ gsk_render_node_draw (GskRenderNode *node,
     }
 
   GSK_NOTE (CAIRO, g_print ("Rendering node %s[%p]\n",
-                            node->name,
+                            node->name ? node->name : node->node_class->type_name,
                             node));
 
   node->node_class->draw (node, cr);
