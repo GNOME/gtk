@@ -4041,6 +4041,13 @@ gsk_text_node_new (PangoFont        *font,
   GskTextNode *self;
   PangoRectangle ink_rect;
 
+  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
+  pango_extents_to_pixels (&ink_rect, NULL);
+
+  /* Don't create nodes with empty bounds */
+  if (ink_rect.width == 0 || ink_rect.height == 0)
+    return NULL;
+
   self = (GskTextNode *) gsk_render_node_new (&GSK_TEXT_NODE_CLASS, 0);
 
   self->font = g_object_ref (font);
@@ -4053,8 +4060,6 @@ gsk_text_node_new (PangoFont        *font,
 
   self->has_color = font_has_color_glyphs (font);
 
-  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
-  pango_extents_to_pixels (&ink_rect, NULL);
 
   graphene_rect_init (&self->render_node.bounds,
                       x_offset + base_x + ink_rect.x,
