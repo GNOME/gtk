@@ -1209,7 +1209,7 @@ headerbar {
     font-size: 80%;
     padding: 0 12px;
   }
-  & > GtkBox > separator.vertical {
+  & > box > separator.vertical {
     border-width: 0 1px;
     border-color: $fg_color;
     border-style: solid;
