@@ -2642,10 +2642,10 @@ switch {
 
       &:backdrop { border-color: $selected_borders_color; }
 
-      &.slider:dir(rtl) { border-left-color: $borders_color; }
-      &.slider:dir(ltr) { border-right-color: $borders_color; }
+      slider:dir(rtl) { border-left-color: $borders_color; }
+      slider:dir(ltr) { border-right-color: $borders_color; }
 
-      &.slider { &:checked, & { border-color: $selected_borders_color; } }
+      slider { &:checked, & { border-color: $selected_borders_color; } }
     }
   }
 }

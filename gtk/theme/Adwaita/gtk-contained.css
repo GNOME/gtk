@@ -1085,11 +1085,11 @@ row:selected switch { box-shadow: none; border-color: #184472; }
 
 row:selected switch:backdrop { border-color: #184472; }
 
-row:selected switch.slider:dir(rtl) { border-left-color: #b6b6b3; }
+row:selected switch slider:dir(rtl) { border-left-color: #b6b6b3; }
 
-row:selected switch.slider:dir(ltr) { border-right-color: #b6b6b3; }
+row:selected switch slider:dir(ltr) { border-right-color: #b6b6b3; }
 
-row:selected switch.slider:checked, row:selected switch.slider { border-color: #184472; }
+row:selected switch slider:checked, row:selected switch slider { border-color: #184472; }
 
 /************************* Check and Radio items * */
 .view.content-view.check:not(list), iconview.content-view.check:not(list), .content-view .tile check:not(list) { -gtk-icon-shadow: none; -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png")); background-color: transparent; min-width: 40px; min-height: 40px; background-image: none; transition: none; box-shadow: none; border-width: 0; }
