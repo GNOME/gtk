@@ -46,7 +46,7 @@ union _GtkCssFilter {
   struct {
     GtkCssFilterType     type;
     GtkCssValue         *value;
-  }            brightness, contrast, grayscale, hue_rotate, invert, opacity, saturate, sepia;
+  }            brightness, contrast, grayscale, hue_rotate, invert, opacity, saturate, sepia, blur;
 };
 
 struct _GtkCssValue {
@@ -87,8 +87,10 @@ gtk_css_filter_clear (GtkCssFilter *filter)
     case GTK_CSS_FILTER_SEPIA:
       _gtk_css_value_unref (filter->sepia.value);
       break;
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      _gtk_css_value_unref (filter->blur.value);
+      break;
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -126,8 +128,10 @@ gtk_css_filter_init_identity (GtkCssFilter     *filter,
     case GTK_CSS_FILTER_SEPIA:
       filter->sepia.value = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
       break;
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      filter->blur.value = _gtk_css_number_value_new (0, GTK_CSS_PX);
+      break;
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -141,7 +145,7 @@ gtk_css_filter_init_identity (GtkCssFilter     *filter,
 #define G 0.7152
 #define B 0.0722
 
-static void
+static gboolean
 gtk_css_filter_get_matrix (const GtkCssFilter *filter,
                            graphene_matrix_t  *matrix,
                            graphene_vec4_t    *offset)
@@ -240,30 +244,36 @@ gtk_css_filter_get_matrix (const GtkCssFilter *filter,
     case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
     case GTK_CSS_FILTER_DROP_SHADOW:
+      return FALSE;
     default:
       g_assert_not_reached ();
       break;
     }
+
+  return TRUE;
 }
 
 #undef R
 #undef G
 #undef B
 
-static void
+static int
 gtk_css_filter_value_compute_matrix (const GtkCssValue *value,
+                                     int                first,
                                      graphene_matrix_t *matrix,
                                      graphene_vec4_t   *offset)
 {
   graphene_matrix_t m, m2;
   graphene_vec4_t o, o2;
-  guint i;
+  int i;
 
-  gtk_css_filter_get_matrix (&value->filters[0], matrix, offset);
+  if (!gtk_css_filter_get_matrix (&value->filters[first], matrix, offset))
+    return first;
 
-  for (i = 1; i < value->n_filters; i++)
+  for (i = first + 1; i < value->n_filters; i++)
     {
-      gtk_css_filter_get_matrix (&value->filters[i], &m, &o);
+      if (!gtk_css_filter_get_matrix (&value->filters[i], &m, &o))
+        return i;
 
       graphene_matrix_multiply (matrix, &m, &m2);
       graphene_matrix_transform_vec4 (&m, offset, &o2);
@@ -271,6 +281,8 @@ gtk_css_filter_value_compute_matrix (const GtkCssValue *value,
       graphene_matrix_init_from_matrix (matrix, &m2);
       graphene_vec4_add (&o, &o2, offset);
     }
+
+  return value->n_filters;
 }
 
 static void
@@ -331,8 +343,11 @@ gtk_css_filter_compute (GtkCssFilter            *dest,
       dest->sepia.value = _gtk_css_value_compute (src->sepia.value, property_id, provider, style, parent_style);
       return dest->sepia.value == src->sepia.value;
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      dest->blur.value = _gtk_css_value_compute (src->blur.value, property_id, provider, style, parent_style);
+      return dest->blur.value == src->blur.value;
+
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -410,8 +425,10 @@ gtk_css_filter_equal (const GtkCssFilter *filter1,
     case GTK_CSS_FILTER_SEPIA:
       return _gtk_css_value_equal (filter1->sepia.value, filter2->sepia.value);
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      return _gtk_css_value_equal (filter1->blur.value, filter2->blur.value);
+
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -496,8 +513,11 @@ gtk_css_filter_transition (GtkCssFilter       *result,
       result->sepia.value = _gtk_css_value_transition (start->sepia.value, end->sepia.value, property_id, progress);
       break;
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      result->blur.value = _gtk_css_value_transition (start->blur.value, end->blur.value, property_id, progress);
+      break;
+
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -637,8 +657,13 @@ gtk_css_filter_print (const GtkCssFilter *filter,
       g_string_append (string, ")");
       break;
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      g_string_append (string, "blur(");
+      _gtk_css_value_print (filter->blur.value, string);
+      g_string_append (string, ")");
+      break;
+
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -770,6 +795,14 @@ gtk_css_filter_parse (GtkCssFilter *filter,
       if (filter->sepia.value == NULL)
         return FALSE;
     }
+  else if (_gtk_css_parser_try (parser, "blur(", TRUE))
+    {
+      filter->type = GTK_CSS_FILTER_BLUR;
+
+      filter->blur.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
+      if (filter->blur.value == NULL)
+        return FALSE;
+    }
   else
     {
       _gtk_css_parser_error (parser, "unknown syntax for filter");
@@ -821,43 +854,67 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
   return value;
 }
 
-gboolean
-gtk_css_filter_value_get_color_matrix (const GtkCssValue *filter,
-                                       graphene_matrix_t *matrix,
-                                       graphene_vec4_t   *offset)
-{
-  g_return_val_if_fail (filter->class == &GTK_CSS_VALUE_FILTER, FALSE);
-  g_return_val_if_fail (matrix != NULL, FALSE);
-  
-  gtk_css_filter_value_compute_matrix (filter, matrix, offset);
-
-  return TRUE;
-}
-
 void
 gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
                                     GtkSnapshot       *snapshot)
 {
   graphene_matrix_t matrix;
   graphene_vec4_t offset;
+  int i, j;
+  double radius;
 
   if (gtk_css_filter_value_is_none (filter))
     return;
 
-  gtk_css_filter_value_get_color_matrix (filter, &matrix, &offset);
+  i = 0;
+  while (i < filter->n_filters)
+    {
+      j = gtk_css_filter_value_compute_matrix (filter, i, &matrix, &offset);
+      if (i < j)
+        gtk_snapshot_push_color_matrix (snapshot,
+                                        &matrix,
+                                        &offset,
+                                        "CssFilter ColorMatrix<%d-%d>", i, j);
 
-  gtk_snapshot_push_color_matrix (snapshot,
-                                  &matrix,
-                                  &offset,
-                                  "CssFilter<%u>", filter->n_filters);
+      if (j < filter->n_filters)
+        {
+          if (filter->filters[j].type == GTK_CSS_FILTER_BLUR)
+            {
+              radius = _gtk_css_number_value_get (filter->filters[j].blur.value, 100.0);
+              gtk_snapshot_push_blur (snapshot, radius, "CssFilter Blur<%d, radius %g>", j, radius);
+            }
+          else
+            g_warning ("Don't know how to handle filter type %d", filter->filters[j].type);
+        }
+
+      i = j + 1;
+    }
 }
 
 void
 gtk_css_filter_value_pop_snapshot (const GtkCssValue *filter,
                                    GtkSnapshot       *snapshot)
 {
+  int i, j;
+
   if (gtk_css_filter_value_is_none (filter))
     return;
 
-  gtk_snapshot_pop (snapshot);
+  i = 0;
+  while (i < filter->n_filters)
+    {
+      for (j = i; j < filter->n_filters; j++)
+        {
+          if (filter->filters[j].type == GTK_CSS_FILTER_BLUR)
+            break;
+        }
+
+      if (i < j)
+        gtk_snapshot_pop (snapshot);
+
+      if (j < filter->n_filters)
+        gtk_snapshot_pop (snapshot);
+
+      i = j + 1;
+    }
 }

@@ -28,10 +28,6 @@ G_BEGIN_DECLS
 GtkCssValue *   gtk_css_filter_value_new_none           (void);
 GtkCssValue *   gtk_css_filter_value_parse              (GtkCssParser           *parser);
 
-gboolean        gtk_css_filter_value_get_color_matrix   (const GtkCssValue      *filter,
-                                                         graphene_matrix_t      *matrix,
-                                                         graphene_vec4_t        *offset);
-
 void            gtk_css_filter_value_push_snapshot      (const GtkCssValue      *filter,
                                                          GtkSnapshot            *snapshot);
 void            gtk_css_filter_value_pop_snapshot       (const GtkCssValue      *filter,
