@@ -443,6 +443,14 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
 
   node = op->node;
 
+  GSK_NOTE (FALLBACK,
+            g_print ("Upload op=%s, node %s[%p], bounds %gx%g\n",
+                     op->type == GSK_VULKAN_OP_FALLBACK_CLIP ? "fallback-clip" :
+                     (op->type == GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP ? "fallback-rounded-clip" : "fallback"),
+                     node->name ? node->name : node->node_class->type_name, node,
+                     ceil (node->bounds.size.width),
+                     ceil (node->bounds.size.height)));
+
   /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         ceil (node->bounds.size.width),
