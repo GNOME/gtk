@@ -46,7 +46,7 @@ union _GtkCssFilter {
   struct {
     GtkCssFilterType     type;
     GtkCssValue         *value;
-  }            brightness, contrast, grayscale, hue_rotate, invert, opacity, saturate, sepia;
+  }            brightness, contrast, grayscale, hue_rotate, invert, opacity, saturate, sepia, blur;
 };
 
 struct _GtkCssValue {
@@ -87,8 +87,10 @@ gtk_css_filter_clear (GtkCssFilter *filter)
     case GTK_CSS_FILTER_SEPIA:
       _gtk_css_value_unref (filter->sepia.value);
       break;
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      _gtk_css_value_unref (filter->blur.value);
+      break;
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -126,8 +128,10 @@ gtk_css_filter_init_identity (GtkCssFilter     *filter,
     case GTK_CSS_FILTER_SEPIA:
       filter->sepia.value = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
       break;
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      filter->blur.value = _gtk_css_number_value_new (0, GTK_CSS_PX);
+      break;
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -331,8 +335,11 @@ gtk_css_filter_compute (GtkCssFilter            *dest,
       dest->sepia.value = _gtk_css_value_compute (src->sepia.value, property_id, provider, style, parent_style);
       return dest->sepia.value == src->sepia.value;
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      dest->blur.value = _gtk_css_value_compute (src->blur.value, property_id, provider, style, parent_style);
+      return dest->blur.value == src->blur.value;
+
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -410,8 +417,10 @@ gtk_css_filter_equal (const GtkCssFilter *filter1,
     case GTK_CSS_FILTER_SEPIA:
       return _gtk_css_value_equal (filter1->sepia.value, filter2->sepia.value);
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      return _gtk_css_value_equal (filter1->blur.value, filter2->blur.value);
+
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -496,8 +505,11 @@ gtk_css_filter_transition (GtkCssFilter       *result,
       result->sepia.value = _gtk_css_value_transition (start->sepia.value, end->sepia.value, property_id, progress);
       break;
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      result->blur.value = _gtk_css_value_transition (start->blur.value, end->blur.value, property_id, progress);
+      break;
+
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -637,8 +649,13 @@ gtk_css_filter_print (const GtkCssFilter *filter,
       g_string_append (string, ")");
       break;
 
-    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_BLUR:
+      g_string_append (string, "blur(");
+      _gtk_css_value_print (filter->blur.value, string);
+      g_string_append (string, ")");
+      break;
+
+    case GTK_CSS_FILTER_NONE:
     case GTK_CSS_FILTER_DROP_SHADOW:
     default:
       g_assert_not_reached ();
@@ -770,6 +787,14 @@ gtk_css_filter_parse (GtkCssFilter *filter,
       if (filter->sepia.value == NULL)
         return FALSE;
     }
+  else if (_gtk_css_parser_try (parser, "blur(", TRUE))
+    {
+      filter->type = GTK_CSS_FILTER_BLUR;
+
+      filter->blur.value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
+      if (filter->blur.value == NULL)
+        return FALSE;
+    }
   else
     {
       _gtk_css_parser_error (parser, "unknown syntax for filter");
@@ -843,6 +868,13 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
 
   if (gtk_css_filter_value_is_none (filter))
     return;
+
+  if (filter->filters[0].type == GTK_CSS_FILTER_BLUR)
+    {
+      double radius = _gtk_css_number_value_get (filter->filters[0].blur.value, 100.0);
+      gtk_snapshot_push_blur (snapshot, radius, "CssFilter Blur<%g>", radius);
+      return; /* FIXME */
+    }
 
   gtk_css_filter_value_get_color_matrix (filter, &matrix, &offset);
 
