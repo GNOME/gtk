@@ -494,7 +494,7 @@ toolbar.inline-toolbar:backdrop, searchbar.inline-toolbar:backdrop { border-colo
 
 .titlebar .subtitle, headerbar .subtitle { font-size: 80%; padding: 0 12px; }
 
-.titlebar > GtkBox > separator.vertical, headerbar > GtkBox > separator.vertical { border-width: 0 1px; border-color: #000; border-style: solid; }
+.titlebar > box > separator.vertical, headerbar > box > separator.vertical { border-width: 0 1px; border-color: #000; border-style: solid; }
 
 .titlebar.selection-mode, headerbar.selection-mode { color: black; text-shadow: 0 1px rgba(0, 0, 0, 0.5); background-image: linear-gradient(to bottom, #0d0d0d, #050505); box-shadow: inset 0 -1px #d9d9d9, inset 0 1px gray; }
 
