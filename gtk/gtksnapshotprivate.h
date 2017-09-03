@@ -49,6 +49,9 @@ struct _GtkSnapshotState {
       double            opacity;
     } opacity;
     struct {
+      double            radius;
+    } blur;
+    struct {
       graphene_matrix_t matrix;
       graphene_vec4_t offset;
     } color_matrix;
