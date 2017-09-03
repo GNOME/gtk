@@ -117,6 +117,13 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
   int x_offset, y_offset;
   GskRenderNode *node;
   GdkRGBA color;
+  PangoRectangle ink_rect;
+
+  /* FIXME: vulkan fallbacks don't deal with empty nodes gracefully */
+  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
+  pango_extents_to_pixels (&ink_rect, NULL);
+  if (ink_rect.width == 0 || ink_rect.height == 0)
+    return;
 
   gtk_snapshot_get_offset (crenderer->snapshot, &x_offset, &y_offset);
 
