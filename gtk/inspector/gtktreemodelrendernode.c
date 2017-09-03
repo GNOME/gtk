@@ -546,6 +546,10 @@ append_node (GtkTreeModelRenderNode *nodemodel,
       append_node (nodemodel, gsk_color_matrix_node_get_child (node), priv->nodes->len - 1);
       break;
 
+    case GSK_BLUR_NODE:
+      append_node (nodemodel, gsk_blur_node_get_child (node), priv->nodes->len - 1);
+      break;
+
     case GSK_REPEAT_NODE:
       append_node (nodemodel, gsk_repeat_node_get_child (node), priv->nodes->len - 1);
       break;

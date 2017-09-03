@@ -4070,6 +4070,288 @@ gsk_text_node_new (PangoFont        *font,
   return &self->render_node;
 }
 
+/*** GSK_BLUR_NODE ***/
+
+typedef struct _GskBlurNode GskBlurNode;
+
+struct _GskBlurNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  double radius;
+};
+
+static void
+gsk_blur_node_finalize (GskRenderNode *node)
+{
+  GskBlurNode *self = (GskBlurNode *) node;
+
+  gsk_render_node_unref (self->child);
+}
+
+static void
+blur_once (cairo_surface_t *src,
+           cairo_surface_t *dest,
+           int radius,
+           guchar *div_kernel_size)
+{
+  int width, height, src_rowstride, dest_rowstride, n_channels;
+  guchar *p_src, *p_dest, *c1, *c2;
+  gint x, y, i, i1, i2, width_minus_1, height_minus_1, radius_plus_1;
+  gint r, g, b, a;
+  guchar *p_dest_row, *p_dest_col;
+
+  width = cairo_image_surface_get_width (src);
+  height = cairo_image_surface_get_height (src);
+  n_channels = 4;
+  radius_plus_1 = radius + 1;
+
+  /* horizontal blur */
+  p_src = cairo_image_surface_get_data (src);
+  p_dest = cairo_image_surface_get_data (dest);
+  src_rowstride = cairo_image_surface_get_stride (src);
+  dest_rowstride = cairo_image_surface_get_stride (dest);
+
+  width_minus_1 = width - 1;
+  for (y = 0; y < height; y++)
+    {
+      /* calc the initial sums of the kernel */
+      r = g = b = a = 0;
+      for (i = -radius; i <= radius; i++)
+        {
+          c1 = p_src + (CLAMP (i, 0, width_minus_1) * n_channels);
+          r += c1[0];
+          g += c1[1];
+          b += c1[2];
+        }
+      p_dest_row = p_dest;
+      for (x = 0; x < width; x++)
+        {
+          /* set as the mean of the kernel */
+          p_dest_row[0] = div_kernel_size[r];
+          p_dest_row[1] = div_kernel_size[g];
+          p_dest_row[2] = div_kernel_size[b];
+          p_dest_row += n_channels;
+
+          /* the pixel to add to the kernel */
+          i1 = x + radius_plus_1;
+          if (i1 > width_minus_1)
+            i1 = width_minus_1;
+          c1 = p_src + (i1 * n_channels);
+
+          /* the pixel to remove from the kernel */
+          i2 = x - radius;
+          if (i2 < 0)
+            i2 = 0;
+          c2 = p_src + (i2 * n_channels);
+
+          /* calc the new sums of the kernel */
+          r += c1[0] - c2[0];
+          g += c1[1] - c2[1];
+          b += c1[2] - c2[2];
+        }
+
+      p_src += src_rowstride;
+      p_dest += dest_rowstride;
+    }
+
+  /* vertical blur */
+  p_src = cairo_image_surface_get_data (dest);
+  p_dest = cairo_image_surface_get_data (src);
+  src_rowstride = cairo_image_surface_get_stride (dest);
+  dest_rowstride = cairo_image_surface_get_stride (src);
+
+  height_minus_1 = height - 1;
+  for (x = 0; x < width; x++)
+    {
+      /* calc the initial sums of the kernel */
+      r = g = b = a = 0;
+      for (i = -radius; i <= radius; i++)
+        {
+          c1 = p_src + (CLAMP (i, 0, height_minus_1) * src_rowstride);
+          r += c1[0];
+          g += c1[1];
+          b += c1[2];
+        }
+
+      p_dest_col = p_dest;
+      for (y = 0; y < height; y++)
+        {
+          /* set as the mean of the kernel */
+
+          p_dest_col[0] = div_kernel_size[r];
+          p_dest_col[1] = div_kernel_size[g];
+          p_dest_col[2] = div_kernel_size[b];
+          p_dest_col += dest_rowstride;
+
+          /* the pixel to add to the kernel */
+          i1 = y + radius_plus_1;
+          if (i1 > height_minus_1)
+            i1 = height_minus_1;
+          c1 = p_src + (i1 * src_rowstride);
+
+          /* the pixel to remove from the kernel */
+          i2 = y - radius;
+          if (i2 < 0)
+            i2 = 0;
+          c2 = p_src + (i2 * src_rowstride);
+          /* calc the new sums of the kernel */
+          r += c1[0] - c2[0];
+          g += c1[1] - c2[1];
+          b += c1[2] - c2[2];
+        }
+
+      p_src += n_channels;
+      p_dest += n_channels;
+    }
+}
+
+static void
+blur_image_surface (cairo_surface_t *surface, int radius, int iterations)
+{
+  int kernel_size;
+  int i;
+  guchar *div_kernel_size;
+  cairo_surface_t *tmp;
+  int width, height;
+
+  width = cairo_image_surface_get_width (surface);
+  height = cairo_image_surface_get_height (surface);
+  tmp = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+
+  kernel_size = 2 * radius + 1;
+  div_kernel_size = g_new (guchar, 256 * kernel_size);
+  for (i = 0; i < 256 * kernel_size; i++)
+    div_kernel_size[i] = (guchar) (i / kernel_size);
+
+  while (iterations-- > 0)
+    blur_once (surface, tmp, radius, div_kernel_size);
+
+  g_free (div_kernel_size);
+  cairo_surface_destroy (tmp);
+}
+
+static void
+gsk_blur_node_draw (GskRenderNode *node,
+                    cairo_t       *cr)
+{
+  GskBlurNode *self = (GskBlurNode *) node;
+  cairo_pattern_t *pattern;
+  cairo_surface_t *surface;
+  cairo_surface_t *image_surface;
+
+  cairo_save (cr);
+
+  /* clip so the push_group() creates a smaller surface */
+  cairo_rectangle (cr, node->bounds.origin.x, node->bounds.origin.y,
+                   node->bounds.size.width, node->bounds.size.height);
+  cairo_clip (cr);
+
+  cairo_push_group (cr);
+
+  gsk_render_node_draw (self->child, cr);
+
+  pattern = cairo_pop_group (cr);
+  cairo_pattern_get_surface (pattern, &surface);
+  image_surface = cairo_surface_map_to_image (surface, NULL);
+  blur_image_surface (image_surface, (int)self->radius, 3);
+  cairo_surface_mark_dirty (surface);
+  cairo_surface_unmap_image (surface, image_surface);
+
+  cairo_set_source (cr, pattern);
+  cairo_paint (cr);
+
+  cairo_restore (cr);
+  cairo_pattern_destroy (pattern);
+}
+
+#define GSK_BLUR_NODE_VARIANT_TYPE "(duv)"
+
+static GVariant *
+gsk_blur_node_serialize (GskRenderNode *node)
+{
+  GskBlurNode *self = (GskBlurNode *) node;
+
+  return g_variant_new (GSK_BLUR_NODE_VARIANT_TYPE,
+                        (double) self->radius,
+                        (guint32) gsk_render_node_get_node_type (self->child),
+                        gsk_render_node_serialize (self->child));
+}
+
+static GskRenderNode *
+gsk_blur_node_deserialize (GVariant  *variant,
+                           GError   **error)
+{
+  double radius;
+  guint32 child_type;
+  GVariant *child_variant;
+  GskRenderNode *result, *child;
+
+  g_variant_get (variant, GSK_BLUR_NODE_VARIANT_TYPE,
+                 &radius, &child_type, &child_variant);
+
+  child = gsk_render_node_deserialize_node (child_type, child_variant, error);
+  g_variant_unref (child_variant);
+
+  if (child == NULL)
+    return NULL;
+
+  result = gsk_blur_node_new (child, radius);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static const GskRenderNodeClass GSK_BLUR_NODE_CLASS = {
+  GSK_BLUR_NODE,
+  sizeof (GskBlurNode),
+  "GskBlurNode",
+  gsk_blur_node_finalize,
+  gsk_blur_node_draw,
+  gsk_blur_node_serialize,
+  gsk_blur_node_deserialize
+};
+
+GskRenderNode *
+gsk_blur_node_new (GskRenderNode *child,
+                   double         radius)
+{
+  GskBlurNode *self;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = (GskBlurNode *) gsk_render_node_new (&GSK_BLUR_NODE_CLASS, 0);
+
+  self->child = gsk_render_node_ref (child);
+  self->radius = radius;
+
+  graphene_rect_init_from_rect (&self->render_node.bounds, &child->bounds);
+
+  return &self->render_node;
+}
+
+GskRenderNode *
+gsk_blur_node_get_child (GskRenderNode *node)
+{
+  GskBlurNode *self = (GskBlurNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_BLUR_NODE), NULL);
+
+  return self->child;
+}
+
+double
+gsk_blur_node_get_radius (GskRenderNode *node)
+{
+  GskBlurNode *self = (GskBlurNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_BLUR_NODE), 0.0);
+
+  return self->radius;
+}
+
 static const GskRenderNodeClass *klasses[] = {
   [GSK_CONTAINER_NODE] = &GSK_CONTAINER_NODE_CLASS,
   [GSK_CAIRO_NODE] = &GSK_CAIRO_NODE_CLASS,
@@ -4088,7 +4370,8 @@ static const GskRenderNodeClass *klasses[] = {
   [GSK_SHADOW_NODE] = &GSK_SHADOW_NODE_CLASS,
   [GSK_BLEND_NODE] = &GSK_BLEND_NODE_CLASS,
   [GSK_CROSS_FADE_NODE] = &GSK_CROSS_FADE_NODE_CLASS,
-  [GSK_TEXT_NODE] = &GSK_TEXT_NODE_CLASS
+  [GSK_TEXT_NODE] = &GSK_TEXT_NODE_CLASS,
+  [GSK_BLUR_NODE] = &GSK_BLUR_NODE_CLASS
 };
 
 GskRenderNode *

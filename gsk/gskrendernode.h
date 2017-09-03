@@ -183,6 +183,10 @@ GskRenderNode *         gsk_text_node_new                       (PangoFont      
                                                                  double            base_x,
                                                                  double            base_y);
 
+GDK_AVAILABLE_IN_3_92
+GskRenderNode *         gsk_blur_node_new                       (GskRenderNode *child,
+                                                                 double         radius);
+
 GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_scaling_filters     (GskRenderNode *node,
                                                                  GskScalingFilter min_filter,

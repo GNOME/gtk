@@ -101,6 +101,9 @@ GskRenderNode * gsk_cross_fade_node_get_start_child (GskRenderNode *node);
 GskRenderNode * gsk_cross_fade_node_get_end_child (GskRenderNode *node);
 double gsk_cross_fade_node_get_progress (GskRenderNode *node);
 
+GskRenderNode * gsk_blur_node_get_child (GskRenderNode *node);
+double gsk_blur_node_get_radius (GskRenderNode *node);
+
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_PRIVATE_H__ */

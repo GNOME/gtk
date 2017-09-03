@@ -183,6 +183,8 @@ node_type_name (GskRenderNodeType type)
       return "CrossFade";
     case GSK_TEXT_NODE:
       return "Text";
+    case GSK_BLUR_NODE:
+      return "Blur";
     }
 }
 
