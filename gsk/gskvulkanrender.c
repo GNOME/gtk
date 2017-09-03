@@ -11,6 +11,7 @@
 #include "gskvulkanrenderpassprivate.h"
 
 #include "gskvulkanblendpipelineprivate.h"
+#include "gskvulkanblurpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
@@ -340,6 +341,9 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "outset-shadow", gsk_vulkan_box_shadow_pipeline_new },
     { "outset-shadow-clip", gsk_vulkan_box_shadow_pipeline_new },
     { "outset-shadow-clip-rounded", gsk_vulkan_box_shadow_pipeline_new },
+    { "blur", gsk_vulkan_blur_pipeline_new },
+    { "blur-clip", gsk_vulkan_blur_pipeline_new },
+    { "blur-clip-rounded", gsk_vulkan_blur_pipeline_new },
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
