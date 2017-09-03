@@ -22,6 +22,12 @@ the "expand" property set to #TRUE and the "draw" property set to
 toolbar.
 </para>
 <para>
+By default, a toolbar can be shrunk, upon which it will add an arrow button
+to show an overflow menu offering access to any #GtkToolItem child that has
+a proxy menu item. To disable this and request enough size for all children,
+call gtk_toolbar_set_show_arrow() to set #GtkToolbar:show-arrow to %FALSE.
+</para>
+<para>
 Creating a context menu for the toolbar can be done by connecting to
 the #GtkToolbar::popup-context-menu signal.
 </para>
