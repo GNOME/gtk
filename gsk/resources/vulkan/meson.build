@@ -36,6 +36,8 @@ foreach shader: gsk_private_vulkan_shaders
 
   stage_arg = suffix == 'frag' ? '-fshader-stage=fragment' : '-fshader-stage=vertex'
   spv_shader = '@0@.@1@.spv'.format(basefn, suffix)
+  clip_spv_shader = '@0@-clip.@1@.spv'.format(basefn, suffix)
+  clip_rounded_spv_shader = '@0@-clip-rounded.@1@.spv'.format(basefn, suffix)
 
   if glslc.found()
     compiled_shader = custom_target(spv_shader,
@@ -49,8 +51,30 @@ foreach shader: gsk_private_vulkan_shaders
                                       '@INPUT@',
                                       '-o', '@OUTPUT@'
                                     ])
+    compiled_clip_shader = custom_target(clip_spv_shader,
+                                         input: shader,
+                                         output: clip_spv_shader,
+                                         build_by_default: true,
+                                         command: [
+                                           glslc,
+                                           stage_arg,
+                                           '-DCLIP_RECT',
+                                           '@INPUT@',
+                                           '-o', '@OUTPUT@'
+                                         ])
+    compiled_clip_rounded_shader = custom_target(clip_rounded_spv_shader,
+                                                 input: shader,
+                                                 output: clip_rounded_spv_shader,
+                                                 build_by_default: true,
+                                                 command: [
+                                                   glslc,
+                                                   stage_arg,
+                                                   '-DCLIP_ROUNDED_RECT',
+                                                   '@INPUT@',
+                                                   '-o', '@OUTPUT@'
+                                                 ])
   endif
   gsk_private_vulkan_compiled_shaders += files(spv_shader)
-  gsk_private_vulkan_compiled_shaders += '@0@-clip.@1@.spv'.format(basefn, suffix)
-  gsk_private_vulkan_compiled_shaders += '@0@-clip-rounded.@1@.spv'.format(basefn, suffix)
+  gsk_private_vulkan_compiled_shaders += files(clip_spv_shader)
+  gsk_private_vulkan_compiled_shaders += files(clip_rounded_spv_shader)
 endforeach
