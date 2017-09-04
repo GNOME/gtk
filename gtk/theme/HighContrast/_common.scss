@@ -1209,11 +1209,7 @@ headerbar {
     font-size: 80%;
     padding: 0 12px;
   }
-  & > box > separator.vertical {
-    border-width: 0 1px;
-    border-color: $fg_color;
-    border-style: solid;
-  }
+
   &.selection-mode {
     color: darken($selected_bg_color, 15%);
     text-shadow: 0 1px transparentize(black, 0.5);
