@@ -1936,7 +1936,7 @@ button.emoji-section:checked label { opacity: 1; }
 
 .emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
 
-.emoji :hover { background: #4a90d9; }
+.emoji :hover { background: #4a90d9; color: #ffffff; }
 
 /* GTK NAMED COLORS ---------------- use responsibly! */
 /*
