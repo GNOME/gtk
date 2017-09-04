@@ -256,6 +256,21 @@ gdk_window_impl_win32_finalize (GObject *object)
 
   g_free (window_impl->decorations);
 
+  if (window_impl->cache_surface)
+    {
+      cairo_surface_destroy (window_impl->cache_surface);
+      window_impl->cache_surface = NULL;
+    }
+
+  if (window_impl->cairo_surface)
+    {
+      cairo_surface_destroy (window_impl->cairo_surface);
+      window_impl->cairo_surface = NULL;
+    }
+
+  g_assert (window_impl->transient_owner == NULL);
+  g_assert (window_impl->transient_children == NULL);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
