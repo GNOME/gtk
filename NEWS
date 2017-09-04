@@ -4,6 +4,9 @@ Overview of Changes in GTK+ 3.22.20
 * Add input hints for Emoji, that let applications indicate whether
   entries would benefit from Emoji support or not
 
+* Add support for cloud services in GtkPlacesSidebar. This adds a new,
+  optional dependency on libcloudproviders
+
 * Bugs fixed:
  468868 Popup of "appears-as-list" ComboBox does not change screen with its top...
  618160 Documentation for gtk_combo_box_get_active_iter is unclear
@@ -36,6 +39,7 @@ Overview of Changes in GTK+ 3.22.20
  787103 gtk3-widget-factory crashes on exit after inserting an emote on page3
  787158 gtk_widget_get_preferred_width on GtkToolbar gives wrong minimum width
  787195 gtk_toolbar_set_show_arrow does not show an arrow
+ 786956 EmojiChooser: Fix theming on Adwaita:dark, HighContrast, etc
 
 * Translation updates:
  Brazilian Portuguese
