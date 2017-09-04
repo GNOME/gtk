@@ -25,8 +25,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-02 15:16+0000\n"
-"PO-Revision-Date: 2017-09-02 18:20-0200\n"
+"POT-Creation-Date: 2017-09-04 18:29+0000\n"
+"PO-Revision-Date: 2017-09-04 16:45-0200\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -1821,7 +1821,6 @@ msgid "Caps Lock is on"
 msgstr "A tecla Caps Lock está ativa"
 
 #: gtk/gtkentry.c:9909
-#| msgid "Insert _Emoji"
 msgid "Insert Emoji"
 msgstr "Inserir Emoji"
 
@@ -1829,7 +1828,7 @@ msgstr "Inserir Emoji"
 msgid "Select a File"
 msgstr "Selecione um arquivo"
 
-#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:953
+#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:1038
 msgid "Desktop"
 msgstr "Área de trabalho"
 
@@ -1910,7 +1909,7 @@ msgstr "Um arquivo com esse nome já existe"
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:741
 #: gtk/gtkwindow.c:10836 gtk/inspector/css-editor.c:201
-#: gtk/inspector/recorder.c:308 gtk/ui/gtkappchooserdialog.ui:58
+#: gtk/inspector/recorder.c:310 gtk/ui/gtkappchooserdialog.ui:58
 #: gtk/ui/gtkassistant.ui:116 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:28
 msgid "_Cancel"
@@ -1918,12 +1917,13 @@ msgstr "_Cancelar"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:619
-#: gtk/gtkplacessidebar.c:3378 gtk/gtkplacesview.c:1627
+#: gtk/gtkplacessidebar.c:3515 gtk/gtkplacessidebar.c:3576
+#: gtk/gtkplacesview.c:1627
 msgid "_Open"
 msgstr "A_brir"
 
 #: gtk/gtkfilechoosernative.c:619 gtk/inspector/css-editor.c:202
-#: gtk/inspector/recorder.c:309
+#: gtk/inspector/recorder.c:311
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -2033,7 +2033,7 @@ msgstr "_Copiar localização"
 msgid "_Add to Bookmarks"
 msgstr "_Adicionar aos marcadores"
 
-#: gtk/gtkfilechooserwidget.c:2260 gtk/gtkplacessidebar.c:2496
+#: gtk/gtkfilechooserwidget.c:2260 gtk/gtkplacessidebar.c:2632
 #: gtk/ui/gtkfilechooserwidget.ui:475
 msgid "_Rename"
 msgstr "_Renomear"
@@ -2128,7 +2128,7 @@ msgstr "%-e de %b de %Y"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserwidget.c:5063 gtk/gtkplacessidebar.c:938
+#: gtk/gtkfilechooserwidget.c:5063 gtk/gtkplacessidebar.c:1023
 msgid "Home"
 msgstr "Pasta pessoal"
 
@@ -2504,193 +2504,202 @@ msgstr "Configuração da página"
 msgid "File System Root"
 msgstr "Raiz do sistema de arquivos"
 
-#: gtk/gtkplacessidebar.c:927
+#: gtk/gtkplacessidebar.c:1012
 msgid "Recent"
 msgstr "Recentes"
 
-#: gtk/gtkplacessidebar.c:929
+#: gtk/gtkplacessidebar.c:1014
 msgid "Recent files"
 msgstr "Arquivos recentes"
 
-#: gtk/gtkplacessidebar.c:940
+#: gtk/gtkplacessidebar.c:1025
 msgid "Open your personal folder"
 msgstr "Abre a sua pasta pessoal"
 
-#: gtk/gtkplacessidebar.c:955
+#: gtk/gtkplacessidebar.c:1040
 msgid "Open the contents of your desktop in a folder"
 msgstr "Abrir o conteúdo da sua área de trabalho em uma pasta"
 
-#: gtk/gtkplacessidebar.c:969
+#: gtk/gtkplacessidebar.c:1054
 msgid "Enter Location"
 msgstr "Inserir localização"
 
-#: gtk/gtkplacessidebar.c:971
+#: gtk/gtkplacessidebar.c:1056
 msgid "Manually enter a location"
 msgstr "Inserir manualmente uma localização"
 
-#: gtk/gtkplacessidebar.c:981
+#: gtk/gtkplacessidebar.c:1066
 msgid "Trash"
 msgstr "Lixeira"
 
-#: gtk/gtkplacessidebar.c:983
+#: gtk/gtkplacessidebar.c:1068
 msgid "Open the trash"
 msgstr "Abre a lixeira"
 
-#: gtk/gtkplacessidebar.c:1056 gtk/gtkplacessidebar.c:1084
-#: gtk/gtkplacessidebar.c:1283
+#. translators: %s is the name of a cloud provider for files
+#: gtk/gtkplacessidebar.c:1111
+#, c-format
+#| msgid "Open '%s'"
+msgid "Open %s"
+msgstr "Abrir %s"
+
+#: gtk/gtkplacessidebar.c:1192 gtk/gtkplacessidebar.c:1220
+#: gtk/gtkplacessidebar.c:1419
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Monta e abre “%s”"
 
-#: gtk/gtkplacessidebar.c:1172
+#: gtk/gtkplacessidebar.c:1308
 msgid "Open the contents of the file system"
 msgstr "Abre o conteúdo do sistema de arquivos"
 
-#: gtk/gtkplacessidebar.c:1258
+#: gtk/gtkplacessidebar.c:1394
 msgid "New bookmark"
 msgstr "Novo marcador"
 
-#: gtk/gtkplacessidebar.c:1260
+#: gtk/gtkplacessidebar.c:1396
 msgid "Add a new bookmark"
 msgstr "Adiciona um novo marcador"
 
-#: gtk/gtkplacessidebar.c:1328
+#: gtk/gtkplacessidebar.c:1464
 msgid "Other Locations"
 msgstr "Outros locais"
 
-#: gtk/gtkplacessidebar.c:1329
+#: gtk/gtkplacessidebar.c:1465
 msgid "Show other locations"
 msgstr "Mostra outros locais"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2119 gtk/gtkplacessidebar.c:3398
+#: gtk/gtkplacessidebar.c:2255 gtk/gtkplacessidebar.c:3596
 msgid "_Start"
 msgstr "_Iniciar"
 
-#: gtk/gtkplacessidebar.c:2120 gtk/gtkplacessidebar.c:3399
+#: gtk/gtkplacessidebar.c:2256 gtk/gtkplacessidebar.c:3597
 msgid "_Stop"
 msgstr "_Parar"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2127
+#: gtk/gtkplacessidebar.c:2263
 msgid "_Power On"
 msgstr "_Ligar"
 
-#: gtk/gtkplacessidebar.c:2128
+#: gtk/gtkplacessidebar.c:2264
 msgid "_Safely Remove Drive"
 msgstr "_Remover unidade com segurança"
 
-#: gtk/gtkplacessidebar.c:2132
+#: gtk/gtkplacessidebar.c:2268
 msgid "_Connect Drive"
 msgstr "_Conectar unidade"
 
-#: gtk/gtkplacessidebar.c:2133
+#: gtk/gtkplacessidebar.c:2269
 msgid "_Disconnect Drive"
 msgstr "_Desconectar unidade"
 
-#: gtk/gtkplacessidebar.c:2137
+#: gtk/gtkplacessidebar.c:2273
 msgid "_Start Multi-disk Device"
 msgstr "_Iniciar dispositivo multi-disco"
 
-#: gtk/gtkplacessidebar.c:2138
+#: gtk/gtkplacessidebar.c:2274
 msgid "_Stop Multi-disk Device"
 msgstr "_Parar dispositivo multi-disco"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2143
+#: gtk/gtkplacessidebar.c:2279
 msgid "_Unlock Device"
 msgstr "Desbloquear dispositivo"
 
-#: gtk/gtkplacessidebar.c:2144
+#: gtk/gtkplacessidebar.c:2280
 msgid "_Lock Device"
 msgstr "_Bloquear dispositivo"
 
-#: gtk/gtkplacessidebar.c:2182 gtk/gtkplacessidebar.c:3148
+#: gtk/gtkplacessidebar.c:2318 gtk/gtkplacessidebar.c:3284
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Não foi possível iniciar “%s”"
 
-#: gtk/gtkplacessidebar.c:2212
+#: gtk/gtkplacessidebar.c:2348
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Não foi possível acessar “%s”"
 
-#: gtk/gtkplacessidebar.c:2421
+#: gtk/gtkplacessidebar.c:2557
 msgid "This name is already taken"
 msgstr "Este nome já foi escolhido"
 
-#: gtk/gtkplacessidebar.c:2490 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2626 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:92
 #: gtk/ui/gtkfilechooserwidget.ui:165 gtk/ui/gtkfilechooserwidget.ui:451
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkplacessidebar.c:2689
+#: gtk/gtkplacessidebar.c:2825
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Não foi possível desmontar “%s”"
 
-#: gtk/gtkplacessidebar.c:2865
+#: gtk/gtkplacessidebar.c:3001
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Não foi possível parar “%s”"
 
-#: gtk/gtkplacessidebar.c:2894
+#: gtk/gtkplacessidebar.c:3030
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Não foi possível ejetar “%s”"
 
-#: gtk/gtkplacessidebar.c:2923 gtk/gtkplacessidebar.c:2952
+#: gtk/gtkplacessidebar.c:3059 gtk/gtkplacessidebar.c:3088
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Não foi possível ejetar %s"
 
-#: gtk/gtkplacessidebar.c:3100
+#: gtk/gtkplacessidebar.c:3236
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Não foi possível verificar “%s” por alterações de mídia"
 
 #  Concorre com "A_brir", "Abrir em nova _janela", "_Propriedades", "_Remover",
 #  "Digitar _local" e "_Marcar este local".
-#: gtk/gtkplacessidebar.c:3381 gtk/gtkplacesview.c:1636
+#: gtk/gtkplacessidebar.c:3519 gtk/gtkplacessidebar.c:3579
+#: gtk/gtkplacesview.c:1636
 msgid "Open in New _Tab"
 msgstr "Abrir em _nova aba"
 
 #  Concorre com "A_brir", "Abrir em _nova aba", "_Propriedades", "_Remover",
 #  "Digitar _local" e "_Marcar este local".
-#: gtk/gtkplacessidebar.c:3384 gtk/gtkplacesview.c:1646
+#: gtk/gtkplacessidebar.c:3523 gtk/gtkplacessidebar.c:3582
+#: gtk/gtkplacesview.c:1646
 msgid "Open in New _Window"
 msgstr "Abrir em nova _janela"
 
-#: gtk/gtkplacessidebar.c:3388
+#: gtk/gtkplacessidebar.c:3586
 msgid "_Add Bookmark"
 msgstr "_Adicionar marcador"
 
-#: gtk/gtkplacessidebar.c:3389
+#: gtk/gtkplacessidebar.c:3587
 msgid "_Remove"
 msgstr "_Remover"
 
-#: gtk/gtkplacessidebar.c:3390
+#: gtk/gtkplacessidebar.c:3588
 msgid "Rename…"
 msgstr "Renomear…"
 
-#: gtk/gtkplacessidebar.c:3394 gtk/gtkplacesview.c:1677
+#: gtk/gtkplacessidebar.c:3592 gtk/gtkplacesview.c:1677
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3395 gtk/gtkplacesview.c:1668
+#: gtk/gtkplacessidebar.c:3593 gtk/gtkplacesview.c:1668
 msgid "_Unmount"
 msgstr "Desmo_ntar"
 
-#: gtk/gtkplacessidebar.c:3396
+#: gtk/gtkplacessidebar.c:3594
 msgid "_Eject"
 msgstr "_Ejetar"
 
-#: gtk/gtkplacessidebar.c:3397
+#: gtk/gtkplacessidebar.c:3595
 msgid "_Detect Media"
 msgstr "_Detectar mídia"
 
-#: gtk/gtkplacessidebar.c:3842 gtk/gtkplacesview.c:1115
+#: gtk/gtkplacessidebar.c:4040 gtk/gtkplacesview.c:1115
 msgid "Computer"
 msgstr "Computador"
 
@@ -2758,7 +2767,7 @@ msgid "Disconnect"
 msgstr "Desconectar"
 
 #: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:69
-#: gtk/ui/gtksidebarrow.ui:40
+#: gtk/ui/gtksidebarrow.ui:51
 msgid "Unmount"
 msgstr "Desmontar"
 
@@ -3813,13 +3822,12 @@ msgstr "Atributo"
 msgid "Defined At"
 msgstr "Definido em"
 
-#: gtk/inspector/recorder.c:276
+#: gtk/inspector/recorder.c:278
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Falha ao salvar RenderNode"
 
 #: gtk/inspector/recorder.ui:19
-#| msgid "Recorder"
 msgid "Record frames"
 msgstr "Grava quadros"
 
@@ -3832,7 +3840,6 @@ msgid "Add debug nodes"
 msgstr "Adiciona nós de depuração"
 
 #: gtk/inspector/recorder.ui:55
-#| msgid "_Save color here"
 msgid "Save recorded frames"
 msgstr "Salva quadros gravados"
 
@@ -6782,9 +6789,6 @@ msgstr "Imprimir para testar impressora"
 
 #~ msgid "No recently used resource found with URI '%s'"
 #~ msgstr "Nenhum recurso usado recentemente foi encontrado com o URI “%s”"
-
-#~ msgid "Open '%s'"
-#~ msgstr "Abrir “%s”"
 
 #~ msgid "Unable to find an item with URI '%s'"
 #~ msgstr "Não foi possível encontrar um item com o URI “%s”"
