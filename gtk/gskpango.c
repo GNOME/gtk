@@ -26,7 +26,7 @@
 #include <math.h>
 
 #include <pango/pango.h>
-#include <cairo/cairo.h>
+#include <cairo.h>
 
 #define GSK_PANGO_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GSK_TYPE_PANGO_RENDERER, GskPangoRendererClass))
 #define GSK_IS_PANGO_RENDERER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GSK_TYPE_PANGO_RENDERER))
