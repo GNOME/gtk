@@ -367,37 +367,53 @@ populate_emoji_chooser (GtkEmojiChooser *chooser)
 }
 
 static void
-update_state (EmojiSection *section,
-              double        value)
-{
-  GtkAllocation alloc = { 0, 0, 0, 20 };
-
-  if (section->heading)
-    gtk_widget_get_allocation (section->heading, &alloc);
-
-  if (alloc.y <= value && value < alloc.y + alloc.height)
-    gtk_widget_set_state_flags (section->button, GTK_STATE_FLAG_CHECKED, FALSE);
-  else
-    gtk_widget_unset_state_flags (section->button, GTK_STATE_FLAG_CHECKED);
-}
-
-static void
 adj_value_changed (GtkAdjustment *adj,
                    gpointer       data)
 {
   GtkEmojiChooser *chooser = data;
   double value = gtk_adjustment_get_value (adj);
+  EmojiSection const *sections[] = {
+    &chooser->recent,
+    &chooser->people,
+    &chooser->body,
+    &chooser->nature,
+    &chooser->food,
+    &chooser->travel,
+    &chooser->activities,
+    &chooser->objects,
+    &chooser->symbols,
+    &chooser->flags,
+  };
+  EmojiSection const *select_section = sections[0];
+  gsize i;
 
-  update_state (&chooser->recent, value);
-  update_state (&chooser->people, value);
-  update_state (&chooser->body, value);
-  update_state (&chooser->nature, value);
-  update_state (&chooser->food, value);
-  update_state (&chooser->travel, value);
-  update_state (&chooser->activities, value);
-  update_state (&chooser->objects, value);
-  update_state (&chooser->symbols, value);
-  update_state (&chooser->flags, value);
+  /* Figure out which section the current scroll position is within */
+  for (i = 0; i < G_N_ELEMENTS (sections); ++i)
+    {
+      EmojiSection const *section = sections[i];
+      GtkAllocation alloc;
+
+      if (section->heading)
+        gtk_widget_get_allocation (section->heading, &alloc);
+      else
+        gtk_widget_get_allocation (section->box, &alloc);
+
+      if (value < alloc.y)
+        break;
+
+      select_section = section;
+    }
+
+  /* Un/Check the section buttons accordingly */
+  for (i = 0; i < G_N_ELEMENTS (sections); ++i)
+    {
+      EmojiSection const *section = sections[i];
+
+      if (section == select_section)
+        gtk_widget_set_state_flags (section->button, GTK_STATE_FLAG_CHECKED, FALSE);
+      else
+        gtk_widget_unset_state_flags (section->button, GTK_STATE_FLAG_CHECKED);
+    }
 }
 
 static gboolean
