@@ -1,3 +1,67 @@
+Overview of Changes in GTK+ 3.22.20
+===================================
+
+* Add input hints for Emoji, that let applications indicate whether
+  entries would benefit from Emoji support or not
+
+* Bugs fixed:
+ 468868 Popup of "appears-as-list" ComboBox does not change screen with its top...
+ 618160 Documentation for gtk_combo_box_get_active_iter is unclear
+ 705640 GtkWindow incorrectly requires a default screen
+ 729651 Crash in GtkFileChooserButton with appears-as-list
+ 759725 Setting Container:border-width on TextView breaks gesture positions
+ 766909 Tooltip of the eject button is a bit confusing - or just missing
+ 774134 GtkExpander: input window of title extends over child, if :expanded is ...
+ 775074 GtkScrolledWindow does not disconnect all GtkAdjustment signal handlers...
+ 776937 GtkExpander is incorrectly hiding content.
+ 780750 Shift + click in GtkEntry doesn't select
+ 783649 negative content width warning in GtkLevelbar
+ 785306 FileChooserNativeQuartz: two fixes
+ 785736 textview: fix bug on DnD displaced limits of selection
+ 786029 clicking on gtk-slider makes the parent disappear
+ 786123 GtkPlacesSidebar: Add support for libcloudproviders
+ 786209 X11: GtkPopover positioning doesn't "avoid" CSD window shadows
+ 786492 Incorrect scaling factor with Vulkan on Wayland
+ 786553 Wrong example number in Gtk Tutorial
+ 786771 Critical about mismatched GdkDisplays when opening Inspector combobox
+ 786841 Emoji categories are always in English
+ 786885 Add explanatory tooltip to emoji icon
+ 786932 Let the "type-func" override the object's "class" attribute when gettin...
+ 786938 Emoji picker wrongly opens when clicking on primary icon too
+ 786940 ::icon-pressed handler stays connected when setting :show-emoji-icon to...
+ 786960 Emoji chooser: don't show 'insert Emoji' item in emoji chooser context ...
+ 786964 Emoji Chooser: Can't scroll clicking on the scroll bar
+ 786966 Emoji chooser: unnecessary spacing b/w some rows in search result
+ 786986 text_window_to_widget_coords broken when Container:border-width > 0
+ 787103 gtk3-widget-factory crashes on exit after inserting an emote on page3
+ 787158 gtk_widget_get_preferred_width on GtkToolbar gives wrong minimum width
+ 787195 gtk_toolbar_set_show_arrow does not show an arrow
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan
+ Chinese (Taiwan)
+ Croatian
+ Czech
+ Danish
+ Friulian
+ Galician
+ German
+ Hungarian
+ Indonesian
+ Italian
+ Kazakh
+ Latvian
+ Lithuanian
+ Korean
+ Polish
+ Serbian
+ Serbian Latin
+ Slovak
+ Slovenian
+ Swedish
+
+
 Overview of Changes in GTK+ 3.22.19
 ===================================
 
