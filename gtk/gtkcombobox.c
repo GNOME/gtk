@@ -3160,16 +3160,21 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
 
   if (ewidget != priv->tree_view)
     {
+      GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (priv->scrolled_window);
+
       if (ewidget == priv->button &&
           !popup_in_progress &&
           gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button)))
         {
           gtk_combo_box_popdown (combo_box);
+
           return TRUE;
         }
 
-      /* released outside treeview */
-      if (ewidget != priv->button)
+      /* If released outside treeview, pop down, unless finishing a scroll */
+      if (ewidget != priv->button &&
+          ewidget != gtk_scrolled_window_get_hscrollbar (scrolled_window) &&
+          ewidget != gtk_scrolled_window_get_vscrollbar (scrolled_window))
         {
           gtk_combo_box_popdown (combo_box);
 
