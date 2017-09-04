@@ -25,7 +25,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtkwidgetprivate.h"
 #include "gtkmarshalers.h"
-#include "gtksnapshot.h"
+#include "gtksnapshotprivate.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -619,10 +619,12 @@ gtk_overlay_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
   GtkWidget *main_widget;
+  GskRenderNode *main_widget_node = NULL;
   GtkWidget *child;
   GtkAllocation main_alloc;
   cairo_region_t *clip = NULL;
   int i;
+  graphene_matrix_t translate;
 
   main_widget = gtk_bin_get_child (GTK_BIN (widget));
   gtk_widget_get_allocation (widget, &main_alloc);
@@ -638,21 +640,39 @@ gtk_overlay_snapshot (GtkWidget   *widget,
           GtkAllocation alloc;
           graphene_rect_t bounds;
 
+          if (main_widget_node == NULL)
+            {
+              GtkSnapshot child_snapshot;
+
+              gtk_snapshot_init (&child_snapshot,
+                                 gtk_snapshot_get_renderer (snapshot),
+                                 snapshot->record_names,
+                                 NULL,
+                                 "OverlayCaptureMainChild");
+              gtk_snapshot_offset (&child_snapshot, main_alloc.x, main_alloc.y);
+              gtk_widget_snapshot (main_widget, &child_snapshot);
+              gtk_snapshot_offset (&child_snapshot, -main_alloc.x, -main_alloc.y);
+              main_widget_node = gtk_snapshot_finish (&child_snapshot);
+              graphene_matrix_init_translate (&translate, &GRAPHENE_POINT3D_INIT (main_alloc.x,main_alloc.y, 0));
+            }
+
           gtk_widget_get_allocation (child, &alloc);
           graphene_rect_init (&bounds, alloc.x, alloc.y, alloc.width, alloc.height);
           gtk_snapshot_push_clip (snapshot, &bounds, "Overlay Effect Clip");
           gtk_snapshot_push_blur (snapshot, blur, "Overlay Effect");
-          gtk_widget_snapshot_child (widget, main_widget, snapshot);
+          gtk_snapshot_append_node (snapshot, main_widget_node);
           gtk_snapshot_pop (snapshot);
           gtk_snapshot_pop (snapshot);
 
           if (clip == NULL)
             {
+              cairo_rectangle_int_t rect;
+              rect.x = rect.y = 0;
+              rect.width = main_alloc.width;
+              rect.height = main_alloc.height;
               clip = cairo_region_create ();
-              main_alloc.x = main_alloc.y = 0;
-              cairo_region_union_rectangle (clip, (cairo_rectangle_int_t *)&main_alloc);
+              cairo_region_union_rectangle (clip, &rect);
             }
-
           cairo_region_subtract_rectangle (clip, (cairo_rectangle_int_t *)&alloc);
         }
     }
@@ -671,7 +691,7 @@ gtk_overlay_snapshot (GtkWidget   *widget,
       cairo_region_get_rectangle (clip, i, &rect);
       graphene_rect_init (&bounds, rect.x, rect.y, rect.width, rect.height);
       gtk_snapshot_push_clip (snapshot, &bounds, "Overlay Non-Effect Clip");
-      gtk_widget_snapshot_child (widget, main_widget, snapshot);
+      gtk_snapshot_append_node (snapshot, main_widget_node);
       gtk_snapshot_pop (snapshot);
     }
 
@@ -684,6 +704,8 @@ gtk_overlay_snapshot (GtkWidget   *widget,
       if (child != main_widget)
         gtk_widget_snapshot_child (widget, child, snapshot);
     }
+
+  gsk_render_node_unref (main_widget_node);
 }
 
 static void
