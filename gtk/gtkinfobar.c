@@ -1159,7 +1159,7 @@ gtk_info_bar_get_show_close_button (GtkInfoBar *info_bar)
  * @info_bar reveal (%TRUE) or conceal (%FALSE) itself via a sliding transition.
  *
  * Note: this does not show or hide @info_bar in the #GtkWidget:visible sense,
- * so revealing has no effect if #GtkWidget:visible is %FALSE and vice-versa.
+ * so revealing has no effect if #GtkWidget:visible is %FALSE.
  *
  * Since: 3.90
  */

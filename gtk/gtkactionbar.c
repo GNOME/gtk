@@ -550,11 +550,12 @@ gtk_action_bar_new (void)
  * @action_bar: a #GtkActionBar
  * @revealed: The new value of the property
  *
- * Sets the GtkActionBar:revealed property to @revealed. This will cause
- * @action_bar to show up with a slide-in transition.
+ * Sets the #GtkActionBar:revealed property to @revealed. Changing this will
+ * make @action_bar reveal (%TRUE) or conceal (%FALSE) itself via a sliding
+ * transition.
  *
- * Note that this settings does not automatically show @action_bar and thus won't
- * have any effect if it is invisible.
+ * Note: this does not show or hide @action_bar in the #GtkWidget:visible sense,
+ * so revealing has no effect if #GtkWidget:visible is %FALSE.
  *
  * Since: 3.90
  */
@@ -578,7 +579,7 @@ gtk_action_bar_set_revealed (GtkActionBar *action_bar,
  * gtk_action_bar_get_revealed:
  * @action_bar: a #GtkActionBar
  *
- * Returns:  the current value of the GtkActionBar:revealed property.
+ * Returns: the current value of the #GtkActionBar:revealed property.
  *
  * Since: 3.90
  */
