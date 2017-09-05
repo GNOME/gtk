@@ -45,7 +45,12 @@ gsk_public_headers = files([
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
 
 gsk_private_vulkan_shaders = []
+# This is an odd split because we use configure_file() below to workaround
+# a limitation in meson preventing using custom_target() with gnome.compile_resources()
+# and that requires file paths, but we also need to have dependencies during development
+# on constantly regenerated files.
 gsk_private_vulkan_compiled_shaders = []
+gsk_private_vulkan_compiled_shaders_deps = []
 
 if have_vulkan
   gsk_private_sources += files([
@@ -96,6 +101,7 @@ gskenum_h = gsk_enums[1]
 
 gskresources = gnome.compile_resources('gskresources',
                                        gsk_resources_xml,
+                                       dependencies: gsk_private_vulkan_compiled_shaders_deps,
                                        source_dir: '.',
                                        c_name: '_gsk',
                                        extra_args: [ '--manual-register', ])
@@ -126,5 +132,5 @@ libgsk = static_library('gsk',
 # list the dependencies and generated headers and such, for use in the
 # "public" libgtk_dep used by internal executables.
 libgsk_dep = declare_dependency(include_directories: [ confinc, ],
-                                sources: [ gskenum_h, gskresources, ],
+                                sources: [ gskenum_h, ],
                                 dependencies: libgdk_dep)

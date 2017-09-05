@@ -45,7 +45,6 @@ foreach shader: gsk_private_vulkan_shaders
     compiled_shader = custom_target(spv_shader,
                                     input: shader,
                                     output: spv_shader,
-                                    build_by_default: true,
                                     command: [
                                       glslc,
                                       stage_arg,
@@ -56,7 +55,6 @@ foreach shader: gsk_private_vulkan_shaders
     compiled_clip_shader = custom_target(clip_spv_shader,
                                          input: shader,
                                          output: clip_spv_shader,
-                                         build_by_default: true,
                                          command: [
                                            glslc,
                                            stage_arg,
@@ -67,7 +65,6 @@ foreach shader: gsk_private_vulkan_shaders
     compiled_clip_rounded_shader = custom_target(clip_rounded_spv_shader,
                                                  input: shader,
                                                  output: clip_rounded_spv_shader,
-                                                 build_by_default: true,
                                                  command: [
                                                    glslc,
                                                    stage_arg,
@@ -75,8 +72,7 @@ foreach shader: gsk_private_vulkan_shaders
                                                    '@INPUT@',
                                                    '-o', '@OUTPUT@'
                                                  ])
+    gsk_private_vulkan_compiled_shaders_deps += [compiled_shader, compiled_clip_shader, compiled_clip_rounded_shader]
   endif
-  gsk_private_vulkan_compiled_shaders += files(spv_shader)
-  gsk_private_vulkan_compiled_shaders += files(clip_spv_shader)
-  gsk_private_vulkan_compiled_shaders += files(clip_rounded_spv_shader)
+  gsk_private_vulkan_compiled_shaders += files(spv_shader, clip_spv_shader, clip_rounded_spv_shader)
 endforeach
