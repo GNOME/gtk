@@ -351,7 +351,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   props[PROP_REVEALED] =
     g_param_spec_boolean ("revealed",
                           P_("Reveal"),
-                          P_("Controls whether the action bar shows its contents or not"),
+                          P_("Controls whether the info bar shows its contents or not"),
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1152,14 +1152,14 @@ gtk_info_bar_get_show_close_button (GtkInfoBar *info_bar)
 
 /**
  * gtk_info_bar_set_revealed:
- * @info_bar: a #GtkActionBar
+ * @info_bar: a #GtkInfoBar
  * @revealed: The new value of the property
  *
- * Sets the GtkInfoBar:revealed property to @revealed. This will cause
- * @info_bar to show up with a slide-in transition.
+ * Sets the #GtkInfoBar:revealed property to @revealed. Changing this will make
+ * @info_bar reveal (%TRUE) or conceal (%FALSE) itself via a sliding transition.
  *
- * Note that this settings does not automatically show @info_bar and thus won't
- * have any effect if it is invisible.
+ * Note: this does not show or hide @info_bar in the #GtkWidget:visible sense,
+ * so revealing has no effect if #GtkWidget:visible is %FALSE and vice-versa.
  *
  * Since: 3.90
  */
@@ -1183,7 +1183,7 @@ gtk_info_bar_set_revealed (GtkInfoBar *info_bar,
  * gtk_info_bar_get_revealed:
  * @info_bar: a #GtkInfoBar
  *
- * Returns:  the current value of the GtkInfoBar:revealed property.
+ * Returns: the current value of the #GtkInfoBar:revealed property.
  *
  * Since: 3.90
  */
