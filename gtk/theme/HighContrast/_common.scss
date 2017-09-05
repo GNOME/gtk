@@ -3443,5 +3443,6 @@ button.emoji-section:backdrop { /* Dodge stuff inherited from backdrop button */
 
   :hover {
     background: $selected_bg_color;
+    color: $selected_fg_color;
   }
 }

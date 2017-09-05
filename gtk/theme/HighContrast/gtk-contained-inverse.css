@@ -1598,4 +1598,4 @@ button.emoji-section:checked label, button.emoji-section:backdrop:checked label 
 
 .emoji { font-size: x-large; padding: 6px; border-radius: 6px; }
 
-.emoji :hover { background: #ddd; }
+.emoji :hover { background: #ddd; color: #000; }
