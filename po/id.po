@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-01 23:54+0000\n"
-"PO-Revision-Date: 2017-09-02 07:59+0700\n"
+"POT-Creation-Date: 2017-09-05 00:43+0000\n"
+"PO-Revision-Date: 2017-09-05 08:12+0700\n"
 "Last-Translator: Andika Triwidada <atriwidada@gnome.org>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -1777,31 +1777,31 @@ msgstr "_Hapus"
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: gtk/gtkentry.c:8504
+#: gtk/gtkentry.c:8507
 msgid "Insert _Emoji"
 msgstr "Sisipkan _Emoji"
 
-#: gtk/gtkentry.c:8677 gtk/gtktextview.c:9528
+#: gtk/gtkentry.c:8681 gtk/gtktextview.c:9528
 msgid "Select all"
 msgstr "Pilih semua"
 
-#: gtk/gtkentry.c:8680 gtk/gtktextview.c:9531
+#: gtk/gtkentry.c:8684 gtk/gtktextview.c:9531
 msgid "Cut"
 msgstr "Potong"
 
-#: gtk/gtkentry.c:8683 gtk/gtktextview.c:9534
+#: gtk/gtkentry.c:8687 gtk/gtktextview.c:9534
 msgid "Copy"
 msgstr "Salin"
 
-#: gtk/gtkentry.c:8686 gtk/gtktextview.c:9537
+#: gtk/gtkentry.c:8690 gtk/gtktextview.c:9537
 msgid "Paste"
 msgstr "Tempel"
 
-#: gtk/gtkentry.c:9633
+#: gtk/gtkentry.c:9637
 msgid "Caps Lock is on"
 msgstr "Caps Lock menyala"
 
-#: gtk/gtkentry.c:9905
+#: gtk/gtkentry.c:9909
 msgid "Insert Emoji"
 msgstr "Sisipkan Emoji"
 
@@ -1809,7 +1809,7 @@ msgstr "Sisipkan Emoji"
 msgid "Select a File"
 msgstr "Pilih Berkas"
 
-#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:953
+#: gtk/gtkfilechooserbutton.c:107 gtk/gtkplacessidebar.c:1038
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -1888,7 +1888,7 @@ msgstr "Berkas dengan nama itu sudah ada"
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:741
 #: gtk/gtkwindow.c:10836 gtk/inspector/css-editor.c:201
-#: gtk/inspector/recorder.c:308 gtk/ui/gtkappchooserdialog.ui:58
+#: gtk/inspector/recorder.c:310 gtk/ui/gtkappchooserdialog.ui:58
 #: gtk/ui/gtkassistant.ui:116 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:28
 msgid "_Cancel"
@@ -1896,12 +1896,13 @@ msgstr "Ba_tal"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:619
-#: gtk/gtkplacessidebar.c:3378 gtk/gtkplacesview.c:1627
+#: gtk/gtkplacessidebar.c:3515 gtk/gtkplacessidebar.c:3576
+#: gtk/gtkplacesview.c:1627
 msgid "_Open"
 msgstr "Buk_a"
 
 #: gtk/gtkfilechoosernative.c:619 gtk/inspector/css-editor.c:202
-#: gtk/inspector/recorder.c:309
+#: gtk/inspector/recorder.c:311
 msgid "_Save"
 msgstr "_Simpan"
 
@@ -2010,7 +2011,7 @@ msgstr "Salin _Lokasi"
 msgid "_Add to Bookmarks"
 msgstr "T_ambah dalam Penanda Tautan"
 
-#: gtk/gtkfilechooserwidget.c:2260 gtk/gtkplacessidebar.c:2496
+#: gtk/gtkfilechooserwidget.c:2260 gtk/gtkplacessidebar.c:2632
 #: gtk/ui/gtkfilechooserwidget.ui:475
 msgid "_Rename"
 msgstr "_Ganti Nama"
@@ -2105,7 +2106,7 @@ msgstr "%-e %b %Y"
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: gtk/gtkfilechooserwidget.c:5063 gtk/gtkplacessidebar.c:938
+#: gtk/gtkfilechooserwidget.c:5063 gtk/gtkplacessidebar.c:1023
 msgid "Home"
 msgstr "Rumah"
 
@@ -2478,189 +2479,197 @@ msgstr "Atur Halaman"
 msgid "File System Root"
 msgstr "Akar Sistem Berkas"
 
-#: gtk/gtkplacessidebar.c:927
+#: gtk/gtkplacessidebar.c:1012
 msgid "Recent"
 msgstr "Baru-baru Ini Dipakai"
 
-#: gtk/gtkplacessidebar.c:929
+#: gtk/gtkplacessidebar.c:1014
 msgid "Recent files"
 msgstr "Berkas yang baru-baru ini dipakai"
 
-#: gtk/gtkplacessidebar.c:940
+#: gtk/gtkplacessidebar.c:1025
 msgid "Open your personal folder"
 msgstr "Buka folder personal Anda."
 
-#: gtk/gtkplacessidebar.c:955
+#: gtk/gtkplacessidebar.c:1040
 msgid "Open the contents of your desktop in a folder"
 msgstr "Buka isi dari desktop Anda dalam suatu folder"
 
-#: gtk/gtkplacessidebar.c:969
+#: gtk/gtkplacessidebar.c:1054
 msgid "Enter Location"
 msgstr "Masukkan Lokasi"
 
-#: gtk/gtkplacessidebar.c:971
+#: gtk/gtkplacessidebar.c:1056
 msgid "Manually enter a location"
 msgstr "Masukkan suatu lokasi secara manual"
 
-#: gtk/gtkplacessidebar.c:981
+#: gtk/gtkplacessidebar.c:1066
 msgid "Trash"
 msgstr "Tong Sampah"
 
-#: gtk/gtkplacessidebar.c:983
+#: gtk/gtkplacessidebar.c:1068
 msgid "Open the trash"
 msgstr "Buka tong sampah"
 
-#: gtk/gtkplacessidebar.c:1056 gtk/gtkplacessidebar.c:1084
-#: gtk/gtkplacessidebar.c:1283
+#. translators: %s is the name of a cloud provider for files
+#: gtk/gtkplacessidebar.c:1111
+#, c-format
+msgid "Open %s"
+msgstr "Buka %s"
+
+#: gtk/gtkplacessidebar.c:1192 gtk/gtkplacessidebar.c:1220
+#: gtk/gtkplacessidebar.c:1419
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Kait dan buka \"%s\""
 
-#: gtk/gtkplacessidebar.c:1172
+#: gtk/gtkplacessidebar.c:1308
 msgid "Open the contents of the file system"
 msgstr "Buka isi dari sistem berkas"
 
-#: gtk/gtkplacessidebar.c:1258
+#: gtk/gtkplacessidebar.c:1394
 msgid "New bookmark"
 msgstr "Tanda taut baru"
 
-#: gtk/gtkplacessidebar.c:1260
+#: gtk/gtkplacessidebar.c:1396
 msgid "Add a new bookmark"
 msgstr "Tambah penanda taut baru"
 
-#: gtk/gtkplacessidebar.c:1328
+#: gtk/gtkplacessidebar.c:1464
 msgid "Other Locations"
 msgstr "Lokasi Lain"
 
-#: gtk/gtkplacessidebar.c:1329
+#: gtk/gtkplacessidebar.c:1465
 msgid "Show other locations"
 msgstr "Tampilkan lokasi lain"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2119 gtk/gtkplacessidebar.c:3398
+#: gtk/gtkplacessidebar.c:2255 gtk/gtkplacessidebar.c:3596
 msgid "_Start"
 msgstr "_Mulai"
 
-#: gtk/gtkplacessidebar.c:2120 gtk/gtkplacessidebar.c:3399
+#: gtk/gtkplacessidebar.c:2256 gtk/gtkplacessidebar.c:3597
 msgid "_Stop"
 msgstr "_Hentikan"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2127
+#: gtk/gtkplacessidebar.c:2263
 msgid "_Power On"
 msgstr "_Nyalakan"
 
-#: gtk/gtkplacessidebar.c:2128
+#: gtk/gtkplacessidebar.c:2264
 msgid "_Safely Remove Drive"
 msgstr "Lepa_s Kandar Dengan Aman"
 
-#: gtk/gtkplacessidebar.c:2132
+#: gtk/gtkplacessidebar.c:2268
 msgid "_Connect Drive"
 msgstr "_Sambungkan Kandar"
 
-#: gtk/gtkplacessidebar.c:2133
+#: gtk/gtkplacessidebar.c:2269
 msgid "_Disconnect Drive"
 msgstr "Putuskan Kan_dar"
 
-#: gtk/gtkplacessidebar.c:2137
+#: gtk/gtkplacessidebar.c:2273
 msgid "_Start Multi-disk Device"
 msgstr "Mulai Perangkat Multi-di_ska"
 
-#: gtk/gtkplacessidebar.c:2138
+#: gtk/gtkplacessidebar.c:2274
 msgid "_Stop Multi-disk Device"
 msgstr "Hentikan Perangkat Multi-di_ska"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2143
+#: gtk/gtkplacessidebar.c:2279
 msgid "_Unlock Device"
 msgstr "B_uka Kunci Perangkat"
 
-#: gtk/gtkplacessidebar.c:2144
+#: gtk/gtkplacessidebar.c:2280
 msgid "_Lock Device"
 msgstr "_Kunci Perangkat"
 
-#: gtk/gtkplacessidebar.c:2182 gtk/gtkplacessidebar.c:3148
+#: gtk/gtkplacessidebar.c:2318 gtk/gtkplacessidebar.c:3284
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Tak bisa memulai \"%s\""
 
-#: gtk/gtkplacessidebar.c:2212
+#: gtk/gtkplacessidebar.c:2348
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Tak bisa mengakses \"%s\""
 
-#: gtk/gtkplacessidebar.c:2421
+#: gtk/gtkplacessidebar.c:2557
 msgid "This name is already taken"
 msgstr "Nama sudah dipakai"
 
-#: gtk/gtkplacessidebar.c:2490 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2626 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:92
 #: gtk/ui/gtkfilechooserwidget.ui:165 gtk/ui/gtkfilechooserwidget.ui:451
 msgid "Name"
 msgstr "Nama"
 
-#: gtk/gtkplacessidebar.c:2689
+#: gtk/gtkplacessidebar.c:2825
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Tak bisa melepas kait \"%s\""
 
-#: gtk/gtkplacessidebar.c:2865
+#: gtk/gtkplacessidebar.c:3001
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Tak bisa menghentikan \"%s\""
 
-#: gtk/gtkplacessidebar.c:2894
+#: gtk/gtkplacessidebar.c:3030
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Tak bisa mengeluarkan \"%s\""
 
-#: gtk/gtkplacessidebar.c:2923 gtk/gtkplacessidebar.c:2952
+#: gtk/gtkplacessidebar.c:3059 gtk/gtkplacessidebar.c:3088
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Tak bisa mengeluarkan %s"
 
-#: gtk/gtkplacessidebar.c:3100
+#: gtk/gtkplacessidebar.c:3236
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Tak bisa mem-poll \"%s\" untuk pergantian media"
 
-#: gtk/gtkplacessidebar.c:3381 gtk/gtkplacesview.c:1636
+#: gtk/gtkplacessidebar.c:3519 gtk/gtkplacessidebar.c:3579
+#: gtk/gtkplacesview.c:1636
 msgid "Open in New _Tab"
 msgstr "Buka dalam _Tab Baru"
 
-#: gtk/gtkplacessidebar.c:3384 gtk/gtkplacesview.c:1646
+#: gtk/gtkplacessidebar.c:3523 gtk/gtkplacessidebar.c:3582
+#: gtk/gtkplacesview.c:1646
 msgid "Open in New _Window"
 msgstr "Buka dalam _Jendela Baru"
 
-#: gtk/gtkplacessidebar.c:3388
+#: gtk/gtkplacessidebar.c:3586
 msgid "_Add Bookmark"
 msgstr "T_ambah Tanda Taut"
 
-#: gtk/gtkplacessidebar.c:3389
+#: gtk/gtkplacessidebar.c:3587
 msgid "_Remove"
 msgstr "_Hapus"
 
-#: gtk/gtkplacessidebar.c:3390
+#: gtk/gtkplacessidebar.c:3588
 msgid "Rename…"
 msgstr "Ubah Nama…"
 
-#: gtk/gtkplacessidebar.c:3394 gtk/gtkplacesview.c:1677
+#: gtk/gtkplacessidebar.c:3592 gtk/gtkplacesview.c:1677
 msgid "_Mount"
 msgstr "_Kait"
 
-#: gtk/gtkplacessidebar.c:3395 gtk/gtkplacesview.c:1668
+#: gtk/gtkplacessidebar.c:3593 gtk/gtkplacesview.c:1668
 msgid "_Unmount"
 msgstr "_Lepas Kait"
 
-#: gtk/gtkplacessidebar.c:3396
+#: gtk/gtkplacessidebar.c:3594
 msgid "_Eject"
 msgstr "_Keluarkan"
 
-#: gtk/gtkplacessidebar.c:3397
+#: gtk/gtkplacessidebar.c:3595
 msgid "_Detect Media"
 msgstr "_Deteksi Media"
 
-#: gtk/gtkplacessidebar.c:3842 gtk/gtkplacesview.c:1115
+#: gtk/gtkplacessidebar.c:4040 gtk/gtkplacesview.c:1115
 msgid "Computer"
 msgstr "Komputer"
 
@@ -2727,7 +2736,7 @@ msgid "Disconnect"
 msgstr "Putuskan"
 
 #: gtk/gtkplacesviewrow.c:470 gtk/ui/gtkplacesviewrow.ui:69
-#: gtk/ui/gtksidebarrow.ui:40
+#: gtk/ui/gtksidebarrow.ui:51
 msgid "Unmount"
 msgstr "Lepaskan Kaitan"
 
@@ -3155,12 +3164,12 @@ msgstr "Hasil Cari"
 msgid "Search Shortcuts"
 msgstr "Pintasan Cari"
 
-#: gtk/gtkshortcutswindow.c:1018 gtk/ui/gtkemojichooser.ui:274
+#: gtk/gtkshortcutswindow.c:1018 gtk/ui/gtkemojichooser.ui:275
 #: gtk/ui/gtkfilechooserwidget.ui:280
 msgid "No Results Found"
 msgstr "Tak Ada Hasil yang Ditemukan"
 
-#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:287
+#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:288
 #: gtk/ui/gtkfilechooserwidget.ui:293 gtk/ui/gtkplacesview.ui:368
 msgid "Try a different search"
 msgstr "Cobalah pencarian lain"
@@ -3742,7 +3751,7 @@ msgstr "Atribut"
 msgid "Defined At"
 msgstr "Didefinisikan Pada"
 
-#: gtk/inspector/recorder.c:276
+#: gtk/inspector/recorder.c:278
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Penyimpanan RenderNode gagal"
@@ -5114,47 +5123,47 @@ msgstr "V"
 msgid "Saturation"
 msgstr "Saturasi"
 
-#: gtk/ui/gtkemojichooser.ui:43
+#: gtk/ui/gtkemojichooser.ui:44
 msgctxt "emoji category"
 msgid "Smileys & People"
 msgstr "Senyum & Orang"
 
-#: gtk/ui/gtkemojichooser.ui:56
+#: gtk/ui/gtkemojichooser.ui:57
 msgctxt "emoji category"
 msgid "Body & Clothing"
 msgstr "Tubuh & Pakaian"
 
-#: gtk/ui/gtkemojichooser.ui:69
+#: gtk/ui/gtkemojichooser.ui:70
 msgctxt "emoji category"
 msgid "Animals & Nature"
 msgstr "Hewan & Alam"
 
-#: gtk/ui/gtkemojichooser.ui:82
+#: gtk/ui/gtkemojichooser.ui:83
 msgctxt "emoji category"
 msgid "Food & Drink"
 msgstr "Makanan & Minuman"
 
-#: gtk/ui/gtkemojichooser.ui:95
+#: gtk/ui/gtkemojichooser.ui:96
 msgctxt "emoji category"
 msgid "Travel & Places"
 msgstr "Perjalanan & Tempat"
 
-#: gtk/ui/gtkemojichooser.ui:108
+#: gtk/ui/gtkemojichooser.ui:109
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "Aktivitas"
 
-#: gtk/ui/gtkemojichooser.ui:121
+#: gtk/ui/gtkemojichooser.ui:122
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Objek"
 
-#: gtk/ui/gtkemojichooser.ui:134
+#: gtk/ui/gtkemojichooser.ui:135
 msgctxt "emoji category"
 msgid "Symbols"
 msgstr "Simbol"
 
-#: gtk/ui/gtkemojichooser.ui:147
+#: gtk/ui/gtkemojichooser.ui:148
 msgctxt "emoji category"
 msgid "Flags"
 msgstr "Bendera"
