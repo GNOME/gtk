@@ -13,7 +13,7 @@ typedef enum {
    * values we return if clips could even be computed.
    */
   GSK_VULKAN_CLIP_ALL_CLIPPED,
-  /* No clipping is necesary, but the clip rect is set
+  /* No clipping is necessary, but the clip rect is set
    * to the actual bounds of the underlying framebuffer
    */
   GSK_VULKAN_CLIP_NONE,
