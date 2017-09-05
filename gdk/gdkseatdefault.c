@@ -132,9 +132,22 @@ gdk_seat_default_grab (GdkSeat                *seat,
 
   if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
     {
+      /* ALL_POINTING spans 3 capabilities; get the mask for the ones we have */
+      GdkEventMask pointer_evmask = 0;
+
+      /* We let tablet styli take over the pointer cursor */
+      if (capabilities & (GDK_SEAT_CAPABILITY_POINTER |
+                          GDK_SEAT_CAPABILITY_TABLET_STYLUS))
+        {
+          pointer_evmask |= POINTER_EVENTS;
+        }
+
+      if (capabilities & GDK_SEAT_CAPABILITY_TOUCH)
+        pointer_evmask |= TOUCH_EVENTS;
+
       status = gdk_device_grab (priv->master_pointer, window,
                                 GDK_OWNERSHIP_NONE, owner_events,
-                                POINTER_EVENTS, cursor,
+                                pointer_evmask, cursor,
                                 evtime);
     }
 
