@@ -520,11 +520,15 @@ subdir('modules/input')
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
-subdir('demos')
 subdir('modules')
-subdir('tests')
-subdir('testsuite')
-subdir('examples')
+if get_option('enable-tests')
+  subdir('tests')
+  subdir('testsuite')
+endif
+if get_option('demos')
+  subdir('demos')
+  subdir('examples')
+endif
 
 # config.h
 configure_file(input: 'config.h.meson',
@@ -615,8 +619,10 @@ summary = [
   'GTK+ @0@ (@1@)'.format(gtk_version, gtk_api_version),
   '',
   '  Enabled backends: @0@'.format(pkg_targets.strip()),
-  '  Documentation: @0@'.format(get_option('enable-documentation')),
   '  Vulkan support: @0@'.format(have_vulkan),
+  '  Tests: @0@'.format(get_option('build-tests')),
+  '  Documentation: @0@'.format(get_option('enable-documentation')),
+  '  Demos: @0@'.format(get_option('demos')),
   '------',
   ''
 ]

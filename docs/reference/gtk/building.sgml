@@ -462,12 +462,12 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
-        <title><systemitem>-Denable-x11-backend</systemitem>,
-          <systemitem>-Denable-win32-backend</systemitem>,
-          <systemitem>-Denable-quartz-backend</systemitem>,
-          <systemitem>-Denable-broadway-backend</systemitem>,
-          <systemitem>-Denable-wayland-backend</systemitem>, and
-          <systemitem>-Denable-mir-backend</systemitem></title>
+        <title><systemitem>enable-x11-backend</systemitem>,
+          <systemitem>enable-win32-backend</systemitem>,
+          <systemitem>enable-quartz-backend</systemitem>,
+          <systemitem>enable-broadway-backend</systemitem>,
+          <systemitem>enable-wayland-backend</systemitem>, and
+          <systemitem>enable-mir-backend</systemitem></title>
 
         <para>
           Enable specific backends for GDK.  If none of these options
@@ -477,6 +477,18 @@ How to compile GTK+ itself
           default is win32, or the platform is macOS, in which case the
           default is quartz. If any backend is explicitly enabled or disabled,
           no other platform will be enabled automatically.
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title><systemitem>build-tests</systemitem>
+          <systemitem>demos</systemitem></title>
+
+        <para>
+          By default, GTK+ will build quite a few tests and demos.
+          While these are useful on a developer system, they are not
+          needed when GTK+ is built e.g. for a flatpak runtime. These
+          options allow to disable building tests and demos.
         </para>
       </formalpara>
 
