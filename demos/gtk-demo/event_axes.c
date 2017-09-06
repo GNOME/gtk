@@ -232,7 +232,8 @@ render_arrow (cairo_t     *cr,
 static void
 draw_axes_info (cairo_t       *cr,
                 AxesInfo      *info,
-                GtkAllocation *allocation)
+                int            width,
+                int            height)
 {
   gdouble pressure, tilt_x, tilt_y, distance, wheel, rotation, slider;
   GdkAxisFlags axes = gdk_device_get_axes (info->last_source);
@@ -243,9 +244,9 @@ draw_axes_info (cairo_t       *cr,
   gdk_cairo_set_source_rgba (cr, &info->color);
 
   cairo_move_to (cr, 0, info->y);
-  cairo_line_to (cr, allocation->width, info->y);
+  cairo_line_to (cr, width, info->y);
   cairo_move_to (cr, info->x, 0);
-  cairo_line_to (cr, info->x, allocation->height);
+  cairo_line_to (cr, info->x, height);
   cairo_stroke (cr);
 
   cairo_translate (cr, info->x, info->y);
@@ -465,19 +466,19 @@ draw_device_info (GtkWidget        *widget,
   g_string_free (string, TRUE);
 }
 
-static gboolean
-draw_cb (GtkWidget *widget,
-         cairo_t   *cr,
-         gpointer   user_data)
+static void
+draw_cb (GtkDrawingArea *da,
+         cairo_t        *cr,
+         int             width,
+         int             height,
+         gpointer        user_data)
 {
+  GtkWidget *widget = GTK_WIDGET (da);
   EventData *data = user_data;
-  GtkAllocation allocation;
   AxesInfo *info;
   GHashTableIter iter;
   gpointer key, value;
   gint y = 0;
-
-  gtk_widget_get_allocation (widget, &allocation);
 
   /* Draw Abs info */
   g_hash_table_iter_init (&iter, data->pointer_info);
@@ -485,7 +486,7 @@ draw_cb (GtkWidget *widget,
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
       info = value;
-      draw_axes_info (cr, info, &allocation);
+      draw_axes_info (cr, info, width, height);
     }
 
   g_hash_table_iter_init (&iter, data->touch_info);
@@ -493,7 +494,7 @@ draw_cb (GtkWidget *widget,
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
       info = value;
-      draw_axes_info (cr, info, &allocation);
+      draw_axes_info (cr, info, width, height);
     }
 
   /* Draw name, color legend and misc data */
@@ -512,8 +513,6 @@ draw_cb (GtkWidget *widget,
       info = value;
       draw_device_info (widget, cr, key, &y, info);
     }
-
-  return FALSE;
 }
 
 static void
@@ -618,12 +617,13 @@ do_event_axes (GtkWidget *toplevel)
   static GtkWidget *window = NULL;
   EventData *event_data;
   GtkWidget *label;
+  GtkWidget *overlay;
+  GtkWidget *da;
 
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Touch and Drawing Tablets");
-      gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
@@ -634,16 +634,27 @@ do_event_axes (GtkWidget *toplevel)
       g_object_set_data_full (G_OBJECT (window), "gtk-demo-event-data",
                               event_data, (GDestroyNotify) event_data_free);
 
-      g_signal_connect (window, "event",
+      da = gtk_drawing_area_new ();
+      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (da), 400);
+      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (da), 400);
+      gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), draw_cb, event_data, NULL);
+      gtk_widget_set_can_focus (da, TRUE);
+      gtk_widget_grab_focus (da);
+
+      g_signal_connect (da, "event",
                         G_CALLBACK (event_cb), event_data);
-      g_signal_connect (window, "draw",
-                        G_CALLBACK (draw_cb), event_data);
 
       label = gtk_label_new ("");
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_START);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      gtk_container_add (GTK_CONTAINER (window), label);
 
-      init_pad_controller (window, label);
+      overlay = gtk_overlay_new ();
+      gtk_container_add (GTK_CONTAINER (window), overlay);
+      gtk_container_add (GTK_CONTAINER (overlay), da);
+      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
+
+      init_pad_controller (da, label);
     }
 
   if (!gtk_widget_get_visible (window))
