@@ -621,6 +621,8 @@ gtk_popover_apply_modality (GtkPopover *popover,
   else
     {
       g_signal_handlers_disconnect_by_data (priv->window, popover);
+      if (priv->prev_focus_widget == GTK_WIDGET (priv->window))
+        priv->prev_focus_unmap_id = 0;
       gtk_grab_remove (GTK_WIDGET (popover));
 
       /* Let prev_focus_widget regain focus */
