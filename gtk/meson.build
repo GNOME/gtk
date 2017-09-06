@@ -920,7 +920,7 @@ libgtk_dep = declare_dependency(sources: [gtkversion, gtktypebuiltins_h],
                                 link_args: common_ldflags)
 
 # Introspection
-build_gir = get_option('enable-gir')
+build_gir = get_option('introspection')
 if build_gir
   gir_args = [
     '--quiet',

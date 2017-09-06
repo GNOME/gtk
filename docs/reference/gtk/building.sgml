@@ -384,6 +384,10 @@ How to compile GTK+ itself
             <arg choice="plain">-Denable-mir-backend=true</arg>
             <arg choice="plain">-Denable-mir-backend=false</arg>
           </group>
+          <group>
+            <arg choice="plain">-Dintrospection=true</arg>
+            <arg choice="plain">-Dintrospection=false</arg>
+          </group>
         </cmdsynopsis>
       </para>
 
@@ -477,6 +481,17 @@ How to compile GTK+ itself
           default is win32, or the platform is macOS, in which case the
           default is quartz. If any backend is explicitly enabled or disabled,
           no other platform will be enabled automatically.
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title><systemitem>introspection</systemitem></title>
+
+        <para>
+          Allows to disable building introspection support. This is option
+          is mainly useful for shortening turnaround times on developer
+          systems. Installed builds of GTK+ should always have introspection
+          support.
         </para>
       </formalpara>
 
