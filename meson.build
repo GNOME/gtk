@@ -521,7 +521,7 @@ subdir('gdk')
 subdir('gsk')
 subdir('gtk')
 subdir('modules')
-if get_option('enable-tests')
+if get_option('build-tests')
   subdir('tests')
   subdir('testsuite')
 endif
