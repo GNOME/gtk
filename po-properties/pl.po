@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-04 18:29+0000\n"
-"PO-Revision-Date: 2017-09-04 23:50+0200\n"
+"POT-Creation-Date: 2017-09-06 06:50+0000\n"
+"PO-Revision-Date: 2017-09-06 20:15+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -454,7 +454,7 @@ msgstr "Numer pozycji elementu potomnego w elemencie nadrzędnym"
 msgid "Reveal"
 msgstr "Ujawnianie"
 
-#: gtk/gtkactionbar.c:398 gtk/gtkinfobar.c:354
+#: gtk/gtkactionbar.c:398
 msgid "Controls whether the action bar shows its contents or not"
 msgstr "Kontroluje, czy pasek działań wyświetla swoją zawartość"
 
@@ -3325,6 +3325,10 @@ msgstr "Wyświetlanie przycisku Zamknij"
 #: gtk/gtkinfobar.c:347
 msgid "Whether to include a standard close button"
 msgstr "Określa, czy dołączyć standardowy przycisk zamykania"
+
+#: gtk/gtkinfobar.c:354
+msgid "Controls whether the info bar shows its contents or not"
+msgstr "Kontroluje, czy pasek informacji wyświetla swoją zawartość"
 
 #: gtk/gtkinvisible.c:95 gtk/gtkmountoperation.c:180 gtk/gtkstylecontext.c:210
 #: gtk/gtkwindow.c:983

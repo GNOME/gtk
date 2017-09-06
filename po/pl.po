@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-04 18:29+0000\n"
-"PO-Revision-Date: 2017-09-04 23:50+0200\n"
+"POT-Creation-Date: 2017-09-06 06:49+0000\n"
+"PO-Revision-Date: 2017-09-06 20:15+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -1760,52 +1760,52 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: gtk/gtkentry.c:8475 gtk/gtklabel.c:6100 gtk/gtktextview.c:9280
+#: gtk/gtkentry.c:8484 gtk/gtklabel.c:6100 gtk/gtktextview.c:9280
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtkentry.c:8479 gtk/gtklabel.c:6101 gtk/gtktextview.c:9284
+#: gtk/gtkentry.c:8488 gtk/gtklabel.c:6101 gtk/gtktextview.c:9284
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtkentry.c:8483 gtk/gtklabel.c:6102 gtk/gtktextview.c:9286
+#: gtk/gtkentry.c:8492 gtk/gtklabel.c:6102 gtk/gtktextview.c:9286
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtkentry.c:8486 gtk/gtkfilechooserwidget.c:1466
+#: gtk/gtkentry.c:8495 gtk/gtkfilechooserwidget.c:1466
 #: gtk/gtkfilechooserwidget.c:2261 gtk/gtklabel.c:6104 gtk/gtktextview.c:9289
 msgid "_Delete"
 msgstr "_Usuń"
 
-#: gtk/gtkentry.c:8497 gtk/gtklabel.c:6113 gtk/gtktextview.c:9303
+#: gtk/gtkentry.c:8506 gtk/gtklabel.c:6113 gtk/gtktextview.c:9303
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
-#: gtk/gtkentry.c:8507
+#: gtk/gtkentry.c:8516
 msgid "Insert _Emoji"
 msgstr "Wstaw _emoji"
 
-#: gtk/gtkentry.c:8681 gtk/gtktextview.c:9528
+#: gtk/gtkentry.c:8690 gtk/gtktextview.c:9528
 msgid "Select all"
 msgstr "Zaznacz wszystko"
 
-#: gtk/gtkentry.c:8684 gtk/gtktextview.c:9531
+#: gtk/gtkentry.c:8693 gtk/gtktextview.c:9531
 msgid "Cut"
 msgstr "Wytnij"
 
-#: gtk/gtkentry.c:8687 gtk/gtktextview.c:9534
+#: gtk/gtkentry.c:8696 gtk/gtktextview.c:9534
 msgid "Copy"
 msgstr "Skopiuj"
 
-#: gtk/gtkentry.c:8690 gtk/gtktextview.c:9537
+#: gtk/gtkentry.c:8699 gtk/gtktextview.c:9537
 msgid "Paste"
 msgstr "Wklej"
 
-#: gtk/gtkentry.c:9637
+#: gtk/gtkentry.c:9646
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
-#: gtk/gtkentry.c:9909
+#: gtk/gtkentry.c:9918
 msgid "Insert Emoji"
 msgstr "Wstawia emoji"
 
@@ -2310,7 +2310,7 @@ msgid ""
 "Click to prevent further changes"
 msgstr ""
 "Okno jest odblokowane.\n"
-"Kliknięcie uniemożliwi wprowadzanie dalszych zmian"
+"Kliknięcie uniemożliwi wprowadzanie dalszych zmian."
 
 #: gtk/gtklockbutton.c:302
 msgid ""
@@ -2318,15 +2318,15 @@ msgid ""
 "Click to make changes"
 msgstr ""
 "Okno jest zablokowane.\n"
-"Kliknięcie umożliwi wprowadzanie zmian"
+"Kliknięcie umożliwi wprowadzanie zmian."
 
 #: gtk/gtklockbutton.c:311
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
 msgstr ""
-"Polityka systemu uniemożliwia wprowadzanie zmian.\n"
-"Proszę skontaktować się z administratorem systemu"
+"Ustawienia systemu uniemożliwiają wprowadzanie zmian.\n"
+"Proszę skontaktować się z administratorem komputera."
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
