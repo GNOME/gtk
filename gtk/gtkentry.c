@@ -3280,9 +3280,16 @@ gtk_entry_snapshot (GtkWidget   *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   int width, height;
+  graphene_rect_t bounds;
   int i;
 
   gtk_widget_get_content_size (widget, &width, &height);
+
+  graphene_rect_init (&bounds,
+                      0, 0,
+                      width, height);
+
+  gtk_snapshot_push_clip (snapshot, &bounds, "Entry Clip");
 
   /* Draw progress */
   if (priv->progress_widget && gtk_widget_get_visible (priv->progress_widget))
@@ -3311,6 +3318,8 @@ gtk_entry_snapshot (GtkWidget   *widget,
     }
 
   gtk_entry_draw_undershoot (entry, snapshot);
+
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
