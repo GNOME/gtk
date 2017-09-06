@@ -305,13 +305,13 @@ How to compile GTK+ itself
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-documentation=true</arg>
-            <arg choice="plain">-Denable-documentation=false</arg>
+            <arg choice="plain">-Ddocumentation=true</arg>
+            <arg choice="plain">-Ddocumentation=false</arg>
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Denable-man-pages=true</arg>
-            <arg choice="plain">-Denable-man-pages=false</arg>
+            <arg choice="plain">-Dman-pages=true</arg>
+            <arg choice="plain">-Dman-pages=false</arg>
           </group>
           <sbr/>
           <group>

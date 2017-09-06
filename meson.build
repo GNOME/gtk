@@ -608,7 +608,7 @@ endif
 subdir('po')
 subdir('po-properties')
 
-if get_option('enable-documentation')
+if get_option('documentation')
   subdir('docs/tools')
   subdir('docs/reference')
 endif
@@ -621,7 +621,7 @@ summary = [
   '  Enabled backends: @0@'.format(pkg_targets.strip()),
   '  Vulkan support: @0@'.format(have_vulkan),
   '  Tests: @0@'.format(get_option('build-tests')),
-  '  Documentation: @0@'.format(get_option('enable-documentation')),
+  '  Documentation: @0@'.format(get_option('documentation')),
   '  Demos: @0@'.format(get_option('demos')),
   '------',
   ''

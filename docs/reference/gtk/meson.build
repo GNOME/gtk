@@ -47,11 +47,11 @@ gnome.gtkdoc('gtk4',
              install: true)
 
 xsltproc = find_program('xsltproc', required: false)
-if get_option('enable-man-pages') and not xsltproc.found()
+if get_option('man-pages') and not xsltproc.found()
   error('No xsltproc found, but man pages were explicitly enabled')
 endif
 
-if get_option('enable-man-pages') and xsltproc.found()
+if get_option('man-pages') and xsltproc.found()
   xlstproc_flags = [
     '--nonet',
     '--stringparam', 'man.output.quietly', '1',
