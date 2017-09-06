@@ -622,7 +622,7 @@ do_event_axes (GtkWidget *toplevel)
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_title (GTK_WINDOW (window), "Event Axes");
+      gtk_window_set_title (GTK_WINDOW (window), "Touch and Drawing Tablets");
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
       g_signal_connect (window, "destroy",
