@@ -3985,7 +3985,8 @@ gtk_paint_resize_grip (GtkStyle           *style,
  *
  * Draws a spinner on @window using the given parameters.
  *
- * Deprecated:3.0: Use gtk_render_activity() instead
+ * Deprecated: 3.0: Use gtk_render_icon() and the #GtkStyleContext
+ *   you are drawing instead
  */
 void
 gtk_paint_spinner (GtkStyle           *style,
