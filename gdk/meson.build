@@ -156,6 +156,7 @@ gdk_deps = [
   pango_dep,
   cairogobj_dep,
   glib_dep,
+  gobject_dep,
   epoxy_dep,
   fontconfig_dep,
   giounix_dep,

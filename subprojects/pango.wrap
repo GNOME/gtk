@@ -1,0 +1,5 @@
+[wrap-git]
+directory=pango
+url=https://git.gnome.org/browse/pango
+push-url=ssh://git.gnome.org/git/pango
+revision=origin/master

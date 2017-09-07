@@ -814,6 +814,7 @@ gtk_deps = [
   gmodule_dep,
   giounix_dep,
   glib_dep,
+  gobject_dep,
   atkbridge_dep,
   pangocairo_dep,
   pango_dep,

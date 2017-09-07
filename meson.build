@@ -3,7 +3,9 @@ project('gtk+-4.0', 'c',
         default_options: [
           'buildtype=debugoptimized',
           'warning_level=1',
-          'c_std=c99',
+          # We only need c99, but glib needs GNU-specific features
+          # https://github.com/mesonbuild/meson/issues/2289
+          'c_std=gnu99',
         ],
         meson_version : '>= 0.40.0',
         license: 'LGPLv2.1+')
@@ -313,18 +315,27 @@ gtkinc = include_directories('gtk')
 testinc = include_directories('tests')
 
 # Dependencies
-glib_dep       = dependency('glib-2.0', version: glib_req)
-giounix_dep    = dependency('gio-unix-2.0', version: glib_req, required: false)
-pango_dep      = dependency('pango', version: pango_req)
-pangoft_dep    = dependency('pangoft2', required: wayland_enabled or x11_enabled)
+glib_dep       = dependency('glib-2.0', version: glib_req,
+                            fallback : ['glib', 'libglib_dep'])
+gobject_dep    = dependency('gobject-2.0', version: glib_req,
+                            fallback : ['glib', 'libgobject_dep'])
+giounix_dep    = dependency('gio-unix-2.0', version: glib_req, required: false,
+                            fallback : ['glib', 'libgio_dep'])
+gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
+                            fallback : ['glib', 'libgmodule_dep'])
 cairo_dep      = dependency('cairo', version: cairo_req)
-pangocairo_dep = dependency('pangocairo', version: cairo_req)
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req)
-pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req)
+pango_dep      = dependency('pango', version: pango_req,
+                            fallback : ['pango', 'libpango_dep'])
+pangoft_dep    = dependency('pangoft2', required: wayland_enabled or x11_enabled,
+                            fallback : ['pango', 'libpangoft2_dep'])
+pangocairo_dep = dependency('pangocairo', version: cairo_req,
+                            fallback : ['pango', 'libpangocairo_dep'])
+pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
+                            fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
 atk_dep        = dependency('atk', version: atk_req)
-gmodule_dep    = dependency('gmodule-2.0', version: glib_req)
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
@@ -483,8 +494,11 @@ if win32_enabled
   backend_immodules += ['ime']
 endif
 
-# Check for bind_textdomain_codeset, including -lintl if GLib brings it in
-if cc.has_function('bind_textdomain_codeset', dependencies: glib_dep)
+# Check for bind_textdomain_codeset, including -lintl if GLib brings it in by
+# doing the same check as glib. We can't check that by linking to glib because
+# it might be a subproject and hence not built yet.
+libintl_dep = cc.find_library('intl', required : false)
+if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
   cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
 endif
 

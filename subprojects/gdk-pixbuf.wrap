@@ -1,0 +1,5 @@
+[wrap-git]
+directory=gdk-pixbuf
+url=https://git.gnome.org/browse/gdk-pixbuf
+push-url=ssh://git.gnome.org/git/gdk-pixbuf
+revision=origin/master
