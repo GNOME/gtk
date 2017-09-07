@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-01 19:21+0000\n"
-"PO-Revision-Date: 2017-09-01 23:55+0200\n"
+"POT-Creation-Date: 2017-09-07 14:03+0000\n"
+"PO-Revision-Date: 2017-09-07 20:34+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -1603,7 +1603,7 @@ msgstr "Obrnuta kosa crta"
 
 #: gtk/gtkappchooserbutton.c:295
 msgid "Other application…"
-msgstr "Druge aplikacije..."
+msgstr "Druge aplikacije…"
 
 #: gtk/gtkappchooserdialog.c:206 gtk/gtkappchooserdialog.c:213
 #: gtk/gtkappchooserdialog.c:230 gtk/ui/gtkappchooserdialog.ui:5
@@ -1856,7 +1856,7 @@ msgstr "Neispravan"
 #.
 #: gtk/gtkcellrendereraccel.c:414 gtk/gtkcellrendereraccel.c:488
 msgid "New accelerator…"
-msgstr "Novi pokretač ..."
+msgstr "Novi pokretač…"
 
 #: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:470
 #, c-format
@@ -2163,50 +2163,54 @@ msgstr "_Desno:"
 msgid "Paper Margins"
 msgstr "Rubovi papira"
 
-#: gtk/gtkentry.c:9550 gtk/gtklabel.c:6677 gtk/gtktextview.c:9456
+#: gtk/gtkentry.c:9555 gtk/gtklabel.c:6677 gtk/gtktextview.c:9456
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtkentry.c:9554 gtk/gtklabel.c:6678 gtk/gtktextview.c:9460
+#: gtk/gtkentry.c:9559 gtk/gtklabel.c:6678 gtk/gtktextview.c:9460
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtkentry.c:9558 gtk/gtklabel.c:6679 gtk/gtktextview.c:9462
+#: gtk/gtkentry.c:9563 gtk/gtklabel.c:6679 gtk/gtktextview.c:9462
 msgid "_Paste"
 msgstr "_Zalijepi"
 
-#: gtk/gtkentry.c:9561 gtk/gtkfilechooserwidget.c:1477
+#: gtk/gtkentry.c:9566 gtk/gtkfilechooserwidget.c:1477
 #: gtk/gtkfilechooserwidget.c:2277 gtk/gtklabel.c:6681 gtk/gtktextview.c:9465
 msgid "_Delete"
 msgstr "_Obriši"
 
-#: gtk/gtkentry.c:9572 gtk/gtklabel.c:6690 gtk/gtktextview.c:9479
+#: gtk/gtkentry.c:9577 gtk/gtklabel.c:6690 gtk/gtktextview.c:9479
 msgid "Select _All"
 msgstr "Odaberi _sve"
 
-#: gtk/gtkentry.c:9579
+#: gtk/gtkentry.c:9587
 msgid "Insert _Emoji"
 msgstr "Umetni _smajli"
 
-#: gtk/gtkentry.c:9754 gtk/gtktextview.c:9704
+#: gtk/gtkentry.c:9763 gtk/gtktextview.c:9704
 msgid "Select all"
 msgstr "Odaberi sve"
 
-#: gtk/gtkentry.c:9757 gtk/gtktextview.c:9707
+#: gtk/gtkentry.c:9766 gtk/gtktextview.c:9707
 msgid "Cut"
 msgstr "Izreži"
 
-#: gtk/gtkentry.c:9760 gtk/gtktextview.c:9710
+#: gtk/gtkentry.c:9769 gtk/gtktextview.c:9710
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: gtk/gtkentry.c:9763 gtk/gtktextview.c:9713
+#: gtk/gtkentry.c:9772 gtk/gtktextview.c:9713
 msgid "Paste"
 msgstr "Zalijepi"
 
-#: gtk/gtkentry.c:10830
+#: gtk/gtkentry.c:10839
 msgid "Caps Lock is on"
 msgstr "Velika slova upaljena"
+
+#: gtk/gtkentry.c:11111
+msgid "Insert Emoji"
+msgstr "Umetni smajli"
 
 #: gtk/gtkfilechooserbutton.c:107
 msgid "Select a File"
@@ -2222,7 +2226,7 @@ msgstr "(Ništa)"
 
 #: gtk/gtkfilechooserbutton.c:2152
 msgid "Other…"
-msgstr "Druga..."
+msgstr "Druga…"
 
 #: gtk/gtkfilechooserdialog.c:542
 msgid "_Name"
@@ -2888,7 +2892,7 @@ msgstr ""
 
 #: gtk/gtkpagesetupunixdialog.c:878 gtk/gtkprintunixdialog.c:3390
 msgid "Manage Custom Sizes…"
-msgstr "Upravljaj prilagođenim veličinama..."
+msgstr "Upravljaj prilagođenim veličinama…"
 
 #: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31
 #: gtk/ui/gtkprintunixdialog.ui:854
@@ -3079,7 +3083,7 @@ msgstr "_Ukloni"
 
 #: gtk/gtkplacessidebar.c:3617
 msgid "Rename…"
-msgstr "Preimenuj..."
+msgstr "Preimenuj…"
 
 #: gtk/gtkplacessidebar.c:3621 gtk/gtkplacesview.c:1685
 msgid "_Mount"
@@ -3342,7 +3346,7 @@ msgstr "Neuspjelo dobivanje informacija pisača"
 
 #: gtk/gtkprintunixdialog.c:2070
 msgid "Getting printer information…"
-msgstr "Dobivanje informacija pisača..."
+msgstr "Dobivanje informacija pisača…"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
@@ -3579,12 +3583,12 @@ msgstr "Rezultati pretrage"
 msgid "Search Shortcuts"
 msgstr "Prečaci pretrage"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:313
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:314
 #: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
 msgstr "Nema pronađenih rezultata"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:327
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:328
 #: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
 msgid "Try a different search"
 msgstr "Pokušaj drugačiju pretragu"
@@ -5436,7 +5440,7 @@ msgstr "_Pronađi nove aplikacije"
 
 #: gtk/ui/gtkappchooserwidget.ui:117
 msgid "No applications found."
-msgstr "Nema pronađenih novih aplikacija"
+msgstr "Nema pronađenih novih aplikacija."
 
 #. used for the application menu on MacOS
 #: gtk/ui/gtkapplication-quartz.ui:15
@@ -5522,40 +5526,40 @@ msgstr "V"
 msgid "Saturation"
 msgstr "Zasićenje"
 
-#: gtk/ui/gtkemojichooser.ui:51
+#: gtk/ui/gtkemojichooser.ui:52
 msgid "Smileys & People"
 msgstr "Smajliji i ljudi"
 
-#: gtk/ui/gtkemojichooser.ui:66
+#: gtk/ui/gtkemojichooser.ui:67
 msgid "Body & Clothing"
 msgstr "Tijelo i odjeća"
 
-#: gtk/ui/gtkemojichooser.ui:81
+#: gtk/ui/gtkemojichooser.ui:82
 msgid "Animals & Nature"
 msgstr "Životinje i priroda"
 
-#: gtk/ui/gtkemojichooser.ui:96
+#: gtk/ui/gtkemojichooser.ui:97
 msgid "Food & Drink"
 msgstr "Hrana i piće"
 
-#: gtk/ui/gtkemojichooser.ui:111
+#: gtk/ui/gtkemojichooser.ui:112
 msgid "Travel & Places"
 msgstr "Putovanja i mjesta"
 
-#: gtk/ui/gtkemojichooser.ui:126
+#: gtk/ui/gtkemojichooser.ui:127
 msgid "Activities"
 msgstr "Aktivnosti"
 
-#: gtk/ui/gtkemojichooser.ui:141
+#: gtk/ui/gtkemojichooser.ui:142
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Objekti"
 
-#: gtk/ui/gtkemojichooser.ui:156
+#: gtk/ui/gtkemojichooser.ui:157
 msgid "Symbols"
 msgstr "Simboli"
 
-#: gtk/ui/gtkemojichooser.ui:171
+#: gtk/ui/gtkemojichooser.ui:172
 msgid "Flags"
 msgstr "Zastave"
 
@@ -5711,7 +5715,7 @@ msgstr "Povezivanje s _poslužiteljem"
 
 #: gtk/ui/gtkplacesview.ui:472
 msgid "Enter server address…"
-msgstr "Upiši adresu poslužitelja..."
+msgstr "Upiši adresu poslužitelja…"
 
 #: gtk/ui/gtkprintunixdialog.ui:112
 msgid "Printer"
@@ -5781,11 +5785,11 @@ msgstr "O_bostrano:"
 
 #: gtk/ui/gtkprintunixdialog.ui:500
 msgid "Pages per _side:"
-msgstr "Stranica po _listu"
+msgstr "Stranica po _listu:"
 
 #: gtk/ui/gtkprintunixdialog.ui:527
 msgid "Page or_dering:"
-msgstr "Redosljed st_ranica"
+msgstr "Redosljed st_ranica:"
 
 #: gtk/ui/gtkprintunixdialog.ui:553
 msgid "_Only print:"
@@ -6203,22 +6207,22 @@ msgstr "Potrebna je ovjera za dobivanje podataka pisača"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1163
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr "Potrebna je ovjera za dobivanje zadanog pisača s '%s'"
+msgstr "Potrebna je ovjera za dobivanje zadanog pisača s %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1166
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr "Potrebna je ovjera za dobivanje pisača s '%s'"
+msgstr "Potrebna je ovjera za dobivanje pisača s %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1171
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr "Potrebna je ovjera za dobivanje datoteke s '%s'"
+msgstr "Potrebna je ovjera za dobivanje datoteke s %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1173
 #, c-format
 msgid "Authentication is required on %s"
-msgstr "Potrebna je ovjera na '%s'"
+msgstr "Potrebna je ovjera na %s"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1409
 msgid "Domain:"
