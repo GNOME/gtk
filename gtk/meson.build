@@ -913,12 +913,7 @@ libgtk = shared_library('gtk-4',
                         link_args: common_ldflags,
                         install: true)
 
-libgtk_dep = declare_dependency(sources: [gtkversion, gtktypebuiltins_h],
-                                include_directories: [confinc, gtkinc],
-                                dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
-                                link_with: libgtk,
-                                link_args: common_ldflags)
-
+gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
 # Introspection
 build_gir = get_option('introspection')
 if build_gir
@@ -940,24 +935,26 @@ if build_gir
                                  '-DGDK_COMPILATION',
                                ])
   gdk_gir_dep = declare_dependency(sources: gdk_gir)
+  gtk_dep_sources += gdk_gir
 
   if x11_enabled
-    gnome.generate_gir(libgtk,
-                       sources: gdk_x11_public_headers + gdk_x11_sources,
-                       namespace: 'GdkX11',
-                       nsversion: gtk_api_version,
-                       identifier_prefix: 'Gdk',
-                       symbol_prefix: 'gdk',
-                       export_packages: 'gtk+-x11-4.0',
-                       includes: [ 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'xlib-2.0', ],
-                       install: true,
-                       dependencies: gdk_gir_dep,
-                       extra_args: [
-                         '--quiet',
-                         '--c-include=gdk/gdkx.h',
-                         '--include-uninstalled=./gtk/Gdk-4.0.gir',
-                         '-DGDK_COMPILATION',
-                       ])
+    gdk_x11_gir = gnome.generate_gir(libgtk,
+                                     sources: gdk_x11_public_headers + gdk_x11_sources,
+                                     namespace: 'GdkX11',
+                                     nsversion: gtk_api_version,
+                                     identifier_prefix: 'Gdk',
+                                     symbol_prefix: 'gdk',
+                                     export_packages: 'gtk+-x11-4.0',
+                                     includes: [ 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'xlib-2.0', ],
+                                     install: true,
+                                     dependencies: gdk_gir_dep,
+                                     extra_args: [
+                                       '--quiet',
+                                       '--c-include=gdk/gdkx.h',
+                                       '--include-uninstalled=./gtk/Gdk-4.0.gir',
+                                       '-DGDK_COMPILATION',
+                                     ])
+    gtk_dep_sources += gdk_x11_gir
   endif
 
   gsk_gir = gnome.generate_gir(libgtk,
@@ -969,37 +966,44 @@ if build_gir
                                export_packages: 'gtk+-4.0',
                                includes: [ 'Graphene-1.0', 'Gdk-4.0' ],
                                install: true,
-                               dependencies: gdk_gir_dep,
+                               dependencies: [gdk_gir_dep, graphene_dep],
                                extra_args: gir_args + [
                                  '--c-include=gsk/gsk.h',
                                  '--include-uninstalled=./gtk/Gdk-4.0.gir',
                                  '-DGSK_COMPILATION',
                                ])
+  gsk_gir_dep = declare_dependency(dependencies: [gdk_gir_dep, graphene_dep], sources: gsk_gir)
+  gtk_dep_sources += gsk_gir
 
-  gsk_gir_dep = declare_dependency(dependencies: gdk_gir_dep, sources: gsk_gir)
 
-
-  gnome.generate_gir(libgtk,
-                     sources: gtk_public_headers + gtk_public_sources + dnd_sources + a11y_headers + a11y_sources + [
-                       gtktypebuiltins_h,
-                       gtkversion,
-                     ],
-                     namespace: 'Gtk',
-                     nsversion: gtk_api_version,
-                     identifier_prefix: 'Gtk',
-                     symbol_prefix: 'gtk',
-                     export_packages: 'gtk+-4.0',
-                     includes: [ 'Atk-1.0', ],
-                     install: true,
-                     dependencies: gsk_gir_dep,
-                     extra_args: gir_args + [
-                       '--c-include=gtk/gtk.h',
-                       '--include-uninstalled=./gtk/Gdk-4.0.gir',
-                       '--include-uninstalled=./gtk/Gsk-4.0.gir',
-                       '-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API',
-                       '-DGTK_COMPILATION',
-                     ])
+  gtk_gir = gnome.generate_gir(libgtk,
+                               sources: gtk_public_headers + gtk_public_sources + dnd_sources + a11y_headers + a11y_sources + [
+                                 gtktypebuiltins_h,
+                                 gtkversion,
+                               ],
+                               namespace: 'Gtk',
+                               nsversion: gtk_api_version,
+                               identifier_prefix: 'Gtk',
+                               symbol_prefix: 'gtk',
+                               export_packages: 'gtk+-4.0',
+                               includes: [ 'Atk-1.0', ],
+                               install: true,
+                               dependencies: gsk_gir_dep,
+                               extra_args: gir_args + [
+                                 '--c-include=gtk/gtk.h',
+                                 '--include-uninstalled=./gtk/Gdk-4.0.gir',
+                                 '--include-uninstalled=./gtk/Gsk-4.0.gir',
+                                 '-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API',
+                                 '-DGTK_COMPILATION',
+                               ])
+  gtk_dep_sources += gtk_gir
 endif
+
+libgtk_dep = declare_dependency(sources: gtk_dep_sources,
+                                include_directories: [confinc, gtkinc],
+                                dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
+                                link_with: libgtk,
+                                link_args: common_ldflags)
 
 # Installed tools
 gtk_tools = [
