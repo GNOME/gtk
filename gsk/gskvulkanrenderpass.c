@@ -172,6 +172,22 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       g_array_append_val (self->render_ops, op);
       return;
 
+    case GSK_TEXT_NODE:
+      if (gsk_text_node_get_surface (node) == NULL)
+        return;
+      if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+        pipeline_type = GSK_VULKAN_PIPELINE_BLEND;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP;
+      else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP_ROUNDED;
+      else
+        FALLBACK ("Cairo nodes can't deal with clip type %u\n", constants->clip.type);
+      op.type = GSK_VULKAN_OP_SURFACE;
+      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+      g_array_append_val (self->render_ops, op);
+      return;
+
     case GSK_TEXTURE_NODE:
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
         pipeline_type = GSK_VULKAN_PIPELINE_BLEND;
@@ -413,6 +429,10 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
           surface = cairo_surface_reference (gsk_cairo_node_get_surface (node));
           goto got_surface;
 
+        case GSK_TEXT_NODE:
+          surface = cairo_surface_reference (gsk_text_node_get_surface (node));
+          goto got_surface;
+
         default:
           break;
         }
@@ -528,7 +548,12 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
 
         case GSK_VULKAN_OP_SURFACE:
           {
-            cairo_surface_t *surface = gsk_cairo_node_get_surface (op->render.node);
+            cairo_surface_t *surface;
+
+            if (gsk_render_node_get_node_type (op->render.node) == GSK_CAIRO_NODE)
+              surface = gsk_cairo_node_get_surface (op->render.node);
+            else
+              surface = gsk_text_node_get_surface (op->render.node);
             op->render.source = gsk_vulkan_image_new_from_data (uploader,
                                                                 cairo_image_surface_get_data (surface),
                                                                 cairo_image_surface_get_width (surface),
