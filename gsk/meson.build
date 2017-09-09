@@ -65,6 +65,7 @@ if have_vulkan
     'gskvulkaneffectpipeline.c',
     'gskvulkanlineargradientpipeline.c',
     'gskvulkanimage.c',
+    'gskvulkanmaskpipeline.c',
     'gskvulkanmemory.c',
     'gskvulkanpipeline.c',
     'gskvulkanpushconstants.c',

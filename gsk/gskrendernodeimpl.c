@@ -3814,8 +3814,8 @@ struct _GskTextNode
   PangoGlyphString *glyphs;
   cairo_surface_t *surface;
 
-  gboolean has_color;
   GdkRGBA color;
+  gboolean has_color;
   double x;
   double y;
   double ink_rect_y;
@@ -4107,7 +4107,6 @@ gsk_text_node_new (PangoFont        *font,
 {
   GskTextNode *self;
   PangoRectangle ink_rect;
-  cairo_t *cr;
 
   pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
   pango_extents_to_pixels (&ink_rect, NULL);
@@ -4124,7 +4123,6 @@ gsk_text_node_new (PangoFont        *font,
   self->y = y;
   self->ink_rect_y = ink_rect.y;
   self->ink_rect_height = ink_rect.height;
-
   self->has_color = font_has_color_glyphs (font);
 
   graphene_rect_init (&self->render_node.bounds,
@@ -4136,7 +4134,9 @@ gsk_text_node_new (PangoFont        *font,
   self->surface = find_cached_surface (font, glyphs);
   if (!self->surface)
     {
-      self->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, //self->has_color ? CAIRO_FORMAT_ARGB32 : CAIRO_FORMAT_A8,
+      cairo_t *cr;
+
+      self->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                                   ink_rect.x + ink_rect.width,
                                                   ink_rect.height);
       cr = cairo_create (self->surface);
@@ -4155,6 +4155,22 @@ gsk_text_node_get_surface (GskRenderNode *node)
   GskTextNode *self = (GskTextNode *) node;
 
   return self->surface;
+}
+
+gboolean
+gsk_text_node_get_has_color (GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  return self->has_color;
+}
+
+const GdkRGBA *
+gsk_text_node_get_color (GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  return &self->color;
 }
 
 /*** GSK_BLUR_NODE ***/

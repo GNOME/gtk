@@ -17,6 +17,7 @@
 #include "gskvulkancolorpipelineprivate.h"
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
+#include "gskvulkanmaskpipelineprivate.h"
 
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
@@ -344,6 +345,9 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "blur", gsk_vulkan_blur_pipeline_new },
     { "blur-clip", gsk_vulkan_blur_pipeline_new },
     { "blur-clip-rounded", gsk_vulkan_blur_pipeline_new },
+    { "mask", gsk_vulkan_mask_pipeline_new },
+    { "mask-clip", gsk_vulkan_mask_pipeline_new },
+    { "mask-clip-rounded", gsk_vulkan_mask_pipeline_new },
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
