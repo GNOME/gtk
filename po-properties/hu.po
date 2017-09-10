@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-05 14:39+0000\n"
-"PO-Revision-Date: 2017-09-05 17:15+0200\n"
+"POT-Creation-Date: 2017-09-10 16:18+0000\n"
+"PO-Revision-Date: 2017-09-10 20:28+0200\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -437,7 +437,7 @@ msgstr ""
 "elejére vagy végére mutat"
 
 #: gtk/gtkactionbar.c:390 gtk/gtkbox.c:252 gtk/gtkheaderbar.c:1876
-#: gtk/gtknotebook.c:790 gtk/gtkpaned.c:388 gtk/gtkpopover.c:1635
+#: gtk/gtknotebook.c:790 gtk/gtkpaned.c:388 gtk/gtkpopover.c:1637
 #: gtk/gtkpopovermenu.c:371 gtk/gtkstack.c:404 gtk/gtktoolitemgroup.c:1618
 msgid "Position"
 msgstr "Pozíció"
@@ -451,7 +451,7 @@ msgstr "A gyermek indexe a szülőben"
 msgid "Reveal"
 msgstr "Felfedés"
 
-#: gtk/gtkactionbar.c:398 gtk/gtkinfobar.c:354
+#: gtk/gtkactionbar.c:398
 msgid "Controls whether the action bar shows its contents or not"
 msgstr "A műveletsáv megjelenítse-e a tartalmát vagy sem"
 
@@ -3306,6 +3306,12 @@ msgstr "Bezárás gomb megjelenítése"
 msgid "Whether to include a standard close button"
 msgstr "Legyen-e szabványos bezárás gomb"
 
+#: gtk/gtkinfobar.c:354
+#| msgid "Controls whether the action bar shows its contents or not"
+msgid "Controls whether the info bar shows its contents or not"
+msgstr ""
+"Azt szabályozza, hogy az információs sáv megjelenítse-e a tartalmát vagy sem"
+
 #: gtk/gtkinvisible.c:95 gtk/gtkmountoperation.c:180 gtk/gtkstylecontext.c:210
 #: gtk/gtkwindow.c:983
 msgid "Screen"
@@ -3881,7 +3887,7 @@ msgstr "Párbeszédablak címe"
 msgid "The title of the file chooser dialog"
 msgstr "A fájlválasztó párbeszédablak címe"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1650 gtk/gtkwindow.c:889
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1652 gtk/gtkwindow.c:889
 msgid "Modal"
 msgstr "Kizárólagos"
 
@@ -4254,35 +4260,35 @@ msgstr "A sor által képviselt fájl, ha van"
 msgid "Whether the row represents a network location"
 msgstr "A sor hálózati helyet képvisel-e"
 
-#: gtk/gtkpopover.c:1607
+#: gtk/gtkpopover.c:1609
 msgid "Relative to"
 msgstr "Ehhez viszonyítva"
 
-#: gtk/gtkpopover.c:1608
+#: gtk/gtkpopover.c:1610
 msgid "Widget the bubble window points to"
 msgstr "Felületi elem, amelyre a buborékablak mutat"
 
-#: gtk/gtkpopover.c:1621
+#: gtk/gtkpopover.c:1623
 msgid "Pointing to"
 msgstr "Erre mutatva"
 
-#: gtk/gtkpopover.c:1622
+#: gtk/gtkpopover.c:1624
 msgid "Rectangle the bubble window points to"
 msgstr "Téglalap, amelyre a buborékablak mutat"
 
-#: gtk/gtkpopover.c:1636
+#: gtk/gtkpopover.c:1638
 msgid "Position to place the bubble window"
 msgstr "Pozíció, ahova a buborékablak kerül"
 
-#: gtk/gtkpopover.c:1651
+#: gtk/gtkpopover.c:1653
 msgid "Whether the popover is modal"
 msgstr "A popover kizárólagos-e"
 
-#: gtk/gtkpopover.c:1664
+#: gtk/gtkpopover.c:1666
 msgid "Constraint"
 msgstr "Megszorítás"
 
-#: gtk/gtkpopover.c:1665
+#: gtk/gtkpopover.c:1667
 msgid "Constraint for the popover position"
 msgstr "A popover pozíciójához tartozó megszorítás"
 
