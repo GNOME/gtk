@@ -15,6 +15,7 @@
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
+#include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkantextpipelineprivate.h"

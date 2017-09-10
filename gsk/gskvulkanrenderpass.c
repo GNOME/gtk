@@ -12,6 +12,7 @@
 #include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkanclipprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
+#include "gskvulkancolortextpipelineprivate.h"
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkantextpipelineprivate.h"
@@ -29,8 +30,9 @@ typedef enum {
   GSK_VULKAN_OP_FALLBACK_CLIP,
   GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP,
   GSK_VULKAN_OP_SURFACE,
-  GSK_VULKAN_OP_SURFACE_MASK,
   GSK_VULKAN_OP_TEXTURE,
+  GSK_VULKAN_OP_TEXT,
+  GSK_VULKAN_OP_COLOR_TEXT,
   GSK_VULKAN_OP_COLOR,
   GSK_VULKAN_OP_LINEAR_GRADIENT,
   GSK_VULKAN_OP_OPACITY,
@@ -180,14 +182,14 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       if (gsk_text_node_get_has_color (node))
         {
           if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
-            pipeline_type = GSK_VULKAN_PIPELINE_BLEND;
+            pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT;
           else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
-            pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP;
+            pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP;
           else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
-            pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP_ROUNDED;
+            pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP_ROUNDED;
           else
             FALLBACK ("Text nodes can't deal with clip type %u\n", constants->clip.type);
-          op.type = GSK_VULKAN_OP_SURFACE;
+          op.type = GSK_VULKAN_OP_COLOR_TEXT;
         }
       else
         {
@@ -199,7 +201,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
             pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP_ROUNDED;
           else
             FALLBACK ("Text nodes can't deal with clip type %u\n", constants->clip.type);
-          op.type = GSK_VULKAN_OP_SURFACE_MASK;
+          op.type = GSK_VULKAN_OP_TEXT;
         }
       op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
       g_array_append_val (self->render_ops, op);
@@ -564,7 +566,8 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           break;
 
         case GSK_VULKAN_OP_SURFACE:
-        case GSK_VULKAN_OP_SURFACE_MASK:
+        case GSK_VULKAN_OP_TEXT:
+        case GSK_VULKAN_OP_COLOR_TEXT:
           {
             cairo_surface_t *surface;
 
@@ -662,8 +665,13 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
           n_bytes += op->render.vertex_count;
           break;
 
-        case GSK_VULKAN_OP_SURFACE_MASK:
+        case GSK_VULKAN_OP_TEXT:
           op->render.vertex_count = gsk_vulkan_text_pipeline_count_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->render.pipeline));
+          n_bytes += op->render.vertex_count;
+          break;
+
+        case GSK_VULKAN_OP_COLOR_TEXT:
+          op->render.vertex_count = gsk_vulkan_color_text_pipeline_count_vertex_data (GSK_VULKAN_COLOR_TEXT_PIPELINE (op->render.pipeline));
           n_bytes += op->render.vertex_count;
           break;
 
@@ -740,13 +748,23 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
           }
           break;
 
-        case GSK_VULKAN_OP_SURFACE_MASK:
+        case GSK_VULKAN_OP_TEXT:
           {
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_text_pipeline_collect_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->render.pipeline),
                                                           data + n_bytes + offset,
                                                           &op->render.node->bounds,
                                                           gsk_text_node_get_color (op->render.node));
+            n_bytes += op->render.vertex_count;
+          }
+          break;
+
+        case GSK_VULKAN_OP_COLOR_TEXT:
+          {
+            op->render.vertex_offset = offset + n_bytes;
+            gsk_vulkan_color_text_pipeline_collect_vertex_data (GSK_VULKAN_COLOR_TEXT_PIPELINE (op->render.pipeline),
+                                                                data + n_bytes + offset,
+                                                                &op->render.node->bounds);
             n_bytes += op->render.vertex_count;
           }
           break;
@@ -893,7 +911,8 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_SURFACE:
-        case GSK_VULKAN_OP_SURFACE_MASK:
+        case GSK_VULKAN_OP_TEXT:
+        case GSK_VULKAN_OP_COLOR_TEXT:
         case GSK_VULKAN_OP_TEXTURE:
         case GSK_VULKAN_OP_OPACITY:
         case GSK_VULKAN_OP_BLUR:
@@ -970,7 +989,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                                                 current_draw_index, 1);
           break;
 
-        case GSK_VULKAN_OP_SURFACE_MASK:
+        case GSK_VULKAN_OP_TEXT:
           if (current_pipeline != op->render.pipeline)
             {
               current_pipeline = op->render.pipeline;
@@ -1001,6 +1020,39 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
           current_draw_index += gsk_vulkan_text_pipeline_draw (GSK_VULKAN_TEXT_PIPELINE (current_pipeline),
                                                                 command_buffer,
                                                                 current_draw_index, 1);
+          break;
+
+        case GSK_VULKAN_OP_COLOR_TEXT:
+          if (current_pipeline != op->render.pipeline)
+            {
+              current_pipeline = op->render.pipeline;
+              vkCmdBindPipeline (command_buffer,
+                                 VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                 gsk_vulkan_pipeline_get_pipeline (current_pipeline));
+              vkCmdBindVertexBuffers (command_buffer,
+                                      0,
+                                      1,
+                                      (VkBuffer[1]) {
+                                          gsk_vulkan_buffer_get_buffer (vertex_buffer)
+                                      },
+                                      (VkDeviceSize[1]) { op->render.vertex_offset });
+              current_draw_index = 0;
+            }
+
+          vkCmdBindDescriptorSets (command_buffer,
+                                   VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                   gsk_vulkan_pipeline_layout_get_pipeline_layout (layout),
+                                   0,
+                                   1,
+                                   (VkDescriptorSet[1]) {
+                                       gsk_vulkan_render_get_descriptor_set (render, op->render.descriptor_set_index)
+                                   },
+                                   0,
+                                   NULL);
+
+          current_draw_index += gsk_vulkan_color_text_pipeline_draw (GSK_VULKAN_COLOR_TEXT_PIPELINE (current_pipeline),
+                                                                     command_buffer,
+                                                                     current_draw_index, 1);
           break;
 
         case GSK_VULKAN_OP_OPACITY:
