@@ -3891,10 +3891,8 @@ render_text (cairo_t          *cr,
 
 /*
  * Next steps:
- * - some renaming:
- *   - Text and ColorText pipelines
- *   - Mask and Blend render-ops / shaders
- * - push surface creation into vulkan renderer
+ * - drop surface caching
+ * - push texture creation into vulkan renderer
  * - use multiple instances, one per glyph for the text pipelines
  * - switch to using a font atlas instead of per-call cached surfaces
  */
