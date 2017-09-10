@@ -3891,7 +3891,8 @@ render_text (cairo_t          *cr,
 
 /*
  * Next steps:
- * - figure out A8 textures and masking
+ * - make the mask shader work
+ * - figure out A8 textures
  * - make the shader use per-glyph rects from a larger texture
  * - switch to using a font atlas insead of per-call cached surfaces
  */

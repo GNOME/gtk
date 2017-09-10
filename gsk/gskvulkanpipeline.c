@@ -68,6 +68,19 @@ gsk_vulkan_pipeline_new (GType                    pipeline_type,
                          const char              *shader_name,
                          VkRenderPass             render_pass)
 {
+  return gsk_vulkan_pipeline_new_full (pipeline_type, layout, shader_name, render_pass,
+                                       VK_BLEND_FACTOR_ONE,
+                                       VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
+}
+
+GskVulkanPipeline *
+gsk_vulkan_pipeline_new_full (GType                    pipeline_type,
+                              GskVulkanPipelineLayout *layout,
+                              const char              *shader_name,
+                              VkRenderPass             render_pass,
+                              VkBlendFactor            srcBlendFactor,
+                              VkBlendFactor            dstBlendFactor)
+{
   GskVulkanPipelinePrivate *priv;
   GskVulkanPipeline *self;
   
@@ -134,11 +147,11 @@ gsk_vulkan_pipeline_new (GType                    pipeline_type,
                                                        {
                                                            .blendEnable = VK_TRUE,
                                                            .colorBlendOp = VK_BLEND_OP_ADD,
-                                                           .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
-                                                           .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                                           .srcColorBlendFactor = srcBlendFactor,
+                                                           .dstColorBlendFactor = dstBlendFactor,
                                                            .alphaBlendOp = VK_BLEND_OP_ADD,
-                                                           .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-                                                           .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+                                                           .srcAlphaBlendFactor = srcBlendFactor,
+                                                           .dstAlphaBlendFactor = dstBlendFactor,
                                                            .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
                                                                            | VK_COLOR_COMPONENT_R_BIT
                                                                            | VK_COLOR_COMPONENT_G_BIT
