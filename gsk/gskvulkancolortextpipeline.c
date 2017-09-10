@@ -85,26 +85,61 @@ gsk_vulkan_color_text_pipeline_new (GskVulkanPipelineLayout *layout,
 }
 
 gsize
-gsk_vulkan_color_text_pipeline_count_vertex_data (GskVulkanColorTextPipeline *pipeline)
+gsk_vulkan_color_text_pipeline_count_vertex_data (GskVulkanColorTextPipeline *pipeline,
+                                                  int                         num_instances)
 {
-  return sizeof (GskVulkanColorTextInstance);
+  return sizeof (GskVulkanColorTextInstance) * num_instances;
 }
 
 void
 gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *pipeline,
                                                     guchar                     *data,
-                                                    const graphene_rect_t      *rect)
+                                                    GskVulkanRenderer          *renderer,
+                                                    const graphene_rect_t      *rect,
+                                                    PangoFont                  *font,
+                                                    PangoGlyphString           *glyphs,
+                                                    float                       x,
+                                                    float                       y)
 {
-  GskVulkanColorTextInstance *instance = (GskVulkanColorTextInstance *) data;
+  GskVulkanColorTextInstance *instances = (GskVulkanColorTextInstance *) data;
+  int i, count;
+  int x_position = 0;
+  float ink_rect_y;
+  float ink_rect_height;
 
-  instance->rect[0] = rect->origin.x;
-  instance->rect[1] = rect->origin.y;
-  instance->rect[2] = rect->size.width;
-  instance->rect[3] = rect->size.height;
-  instance->tex_rect[0] = 0.0;
-  instance->tex_rect[1] = 0.0;
-  instance->tex_rect[2] = 1.0;
-  instance->tex_rect[3] = 1.0;
+  /* XXX */
+  ink_rect_y = rect->origin.y - y;
+  ink_rect_height = rect->size.height;
+
+  count = 0;
+  for (i = 0; i < glyphs->num_glyphs; i++)
+    {
+      PangoGlyphInfo *gi = &glyphs->glyphs[i];
+
+      if (gi->glyph != PANGO_GLYPH_EMPTY)
+        {
+          double cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+          double cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+
+          if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
+            {
+              GskVulkanColorTextInstance *instance = &instances[count];
+
+              instance->rect[0] = x + cx;
+              instance->rect[1] = y + ink_rect_y + cy;
+              instance->rect[2] = (float)gi->geometry.width / PANGO_SCALE;
+              instance->rect[3] = ink_rect_height;
+              gsk_vulkan_renderer_get_glyph_coords (renderer, font, glyphs,
+                                                    gi->glyph,
+                                                    &instance->tex_rect[0],
+                                                    &instance->tex_rect[1],
+                                                    &instance->tex_rect[2],
+                                                    &instance->tex_rect[3]);
+              count++;
+           }
+       }
+     x_position += gi->geometry.width;
+   }
 }
 
 gsize
