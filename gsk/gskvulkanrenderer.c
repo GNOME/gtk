@@ -606,10 +606,9 @@ gsk_vulkan_renderer_get_glyph_coords (GskVulkanRenderer *self,
       if (coords[i].glyph == glyph)
         {
           *x = coords[i].x;
-          *y = coords[i].x;
+          *y = coords[i].y;
           *width = coords[i].width;
           *height = coords[i].height;
-//g_print ("using %g %g %g %g\n", coords[i].x, coords[i].y, coords[i].width, coords[i].height);
           break;
         }
     }
