@@ -2092,7 +2092,7 @@ msgstr "Afecta"
 
 #: gtk/gtkcssstyleproperty.c:196
 msgid "Set if the value affects the sizing of elements"
-msgstr "Establert si el valor afecta a la mida dels elements"
+msgstr "Establert si el valor afecta la mida dels elements"
 
 #: gtk/gtkcssstyleproperty.c:204
 msgid "The numeric id for quick access"
@@ -3007,7 +3007,7 @@ msgstr "Renderització automàtica"
 
 #: gtk/gtkglarea.c:747
 msgid "Whether the GtkGLArea renders on each redraw"
-msgstr "Si la GtkGLArea es renderitza al tornar a pintar"
+msgstr "Si la GtkGLArea es renderitza cada vegada que es torna a dibuixar"
 
 #: gtk/gtkglarea.c:767
 msgid "Has alpha"
