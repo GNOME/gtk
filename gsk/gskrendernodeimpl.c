@@ -3889,12 +3889,6 @@ gsk_text_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
-/*
- * Next steps:
- * - use multiple instances, one per glyph for the text pipelines
- * - switch to using a font atlas instead of per-call cached surfaces
- */
-
 static GVariant *
 gsk_text_node_serialize (GskRenderNode *node)
 {
