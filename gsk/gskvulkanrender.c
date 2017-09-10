@@ -348,6 +348,9 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "mask", gsk_vulkan_text_pipeline_new },
     { "mask-clip", gsk_vulkan_text_pipeline_new },
     { "mask-clip-rounded", gsk_vulkan_text_pipeline_new },
+    { "blend", gsk_vulkan_color_text_pipeline_new },
+    { "blend-clip", gsk_vulkan_color_text_pipeline_new },
+    { "blend-clip-rounded", gsk_vulkan_color_text_pipeline_new },
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
