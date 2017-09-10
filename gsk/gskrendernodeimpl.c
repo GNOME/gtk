@@ -26,8 +26,6 @@
 #include "gskroundedrectprivate.h"
 #include "gsktextureprivate.h"
 
-#include <cairo-ft.h>
-
 static gboolean
 check_variant_type (GVariant *variant,
                     const char *type_string,
@@ -3815,7 +3813,6 @@ struct _GskTextNode
   PangoGlyphString *glyphs;
 
   GdkRGBA color;
-  gboolean has_color;
   double x;
   double y;
   double ink_rect_y;
@@ -3923,23 +3920,6 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
   gsk_text_node_deserialize
 };
 
-static gboolean
-font_has_color_glyphs (PangoFont *font)
-{
-  cairo_scaled_font_t *scaled_font;
-  gboolean has_color = FALSE;
-
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-  if (cairo_scaled_font_get_type (scaled_font) == CAIRO_FONT_TYPE_FT)
-    {
-      FT_Face ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
-      has_color = (FT_HAS_COLOR (ft_face) != 0);
-      cairo_ft_scaled_font_unlock_face (scaled_font);
-    }
-
-  return has_color;
-}
-
 GskRenderNode *
 gsk_text_node_new (PangoFont        *font,
                    PangoGlyphString *glyphs,
@@ -3966,7 +3946,6 @@ gsk_text_node_new (PangoFont        *font,
   self->y = y;
   self->ink_rect_y = ink_rect.y;
   self->ink_rect_height = ink_rect.height;
-  self->has_color = font_has_color_glyphs (font);
 
   graphene_rect_init (&self->render_node.bounds,
                       x,
@@ -3975,16 +3954,6 @@ gsk_text_node_new (PangoFont        *font,
                       ink_rect.height);
 
   return &self->render_node;
-}
-
-gboolean
-gsk_text_node_get_has_color (GskRenderNode *node)
-{
-  GskTextNode *self = (GskTextNode *) node;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), FALSE);
-
-  return self->has_color;
 }
 
 const GdkRGBA *

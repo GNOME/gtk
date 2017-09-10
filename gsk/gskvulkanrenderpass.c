@@ -20,6 +20,8 @@
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanrendererprivate.h"
 
+#include <cairo-ft.h>
+
 typedef union _GskVulkanOp GskVulkanOp;
 typedef struct _GskVulkanOpRender GskVulkanOpRender;
 typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
@@ -97,6 +99,23 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_object_unref (self->vulkan);
 
   g_slice_free (GskVulkanRenderPass, self);
+}
+
+static gboolean
+font_has_color_glyphs (PangoFont *font)
+{
+  cairo_scaled_font_t *scaled_font;
+  gboolean has_color = FALSE;
+
+  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
+  if (cairo_scaled_font_get_type (scaled_font) == CAIRO_FONT_TYPE_FT)
+    {
+      FT_Face ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
+      has_color = (FT_HAS_COLOR (ft_face) != 0);
+      cairo_ft_scaled_font_unlock_face (scaled_font);
+    }
+
+  return has_color;
 }
 
 #define FALLBACK(...) G_STMT_START { \
@@ -177,7 +196,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       return;
 
     case GSK_TEXT_NODE:
-      if (gsk_text_node_get_has_color (node))
+      if (font_has_color_glyphs (gsk_text_node_get_font (node)))
         {
           if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
             pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT;
