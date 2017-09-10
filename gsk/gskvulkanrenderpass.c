@@ -657,9 +657,13 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_SURFACE:
-        case GSK_VULKAN_OP_SURFACE_MASK:
         case GSK_VULKAN_OP_TEXTURE:
           op->render.vertex_count = gsk_vulkan_blend_pipeline_count_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline));
+          n_bytes += op->render.vertex_count;
+          break;
+
+        case GSK_VULKAN_OP_SURFACE_MASK:
+          op->render.vertex_count = gsk_vulkan_mask_pipeline_count_vertex_data (GSK_VULKAN_MASK_PIPELINE (op->render.pipeline));
           n_bytes += op->render.vertex_count;
           break;
 

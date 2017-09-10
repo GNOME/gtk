@@ -4155,6 +4155,8 @@ gsk_text_node_get_surface (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), NULL);
+
   return self->surface;
 }
 
@@ -4163,6 +4165,8 @@ gsk_text_node_get_has_color (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), FALSE);
+
   return self->has_color;
 }
 
@@ -4170,6 +4174,8 @@ const GdkRGBA *
 gsk_text_node_get_color (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), NULL);
 
   return &self->color;
 }

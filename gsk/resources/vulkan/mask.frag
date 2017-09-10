@@ -12,5 +12,5 @@ layout(location = 0) out vec4 color;
 
 void main()
 {
-  color = clip (inPos, inColor * texture (inTexture, inTexCoord).a);
+  color = clip (inPos, vec4(inColor.rgb, texture(inTexture, inTexCoord).a));
 }
