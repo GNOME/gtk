@@ -33,6 +33,14 @@ GskVulkanImage *        gsk_vulkan_renderer_ref_glyph_image             (GskVulk
                                                                          GskVulkanUploader      *uploader,
                                                                          PangoFont              *font,
                                                                          PangoGlyphString       *glyphs);
+void                    gsk_vulkan_renderer_get_glyph_coords            (GskVulkanRenderer      *self,
+                                                                         PangoFont              *font,
+                                                                         PangoGlyphString       *glyphs,
+                                                                         PangoGlyph              glyph,
+                                                                         float                  *x,
+                                                                         float                  *y,
+                                                                         float                  *width,
+                                                                         float                  *height);
 
 G_END_DECLS
 

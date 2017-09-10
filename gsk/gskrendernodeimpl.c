@@ -3980,6 +3980,26 @@ gsk_text_node_get_glyphs (GskRenderNode *node)
   return self->glyphs;
 }
 
+float
+gsk_text_node_get_x (GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), 0.0);
+
+  return (float)self->x;
+}
+
+float
+gsk_text_node_get_y (GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), 0.0);
+
+  return (float)self->y;
+}
+
 /*** GSK_BLUR_NODE ***/
 
 typedef struct _GskBlurNode GskBlurNode;

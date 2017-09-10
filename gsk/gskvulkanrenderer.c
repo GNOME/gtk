@@ -44,6 +44,8 @@ struct _GskVulkanRenderer
 
   GSList *textures;
 
+  GHashTable *glyph_cache;
+
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
 #endif
@@ -350,12 +352,17 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
 
 #define STACK_ARRAY_LENGTH(T) (STACK_BUFFER_SIZE / sizeof(T))
 
+typedef struct {
+  PangoGlyph glyph;
+  float x, y, width, height;
+} GlyphCoords;
+
 static void
 render_text (cairo_t          *cr,
              PangoFont        *font,
              PangoGlyphString *glyphs,
-             GskRectangle     *glyph_rects,
-             int              *num_glyphs,
+             GlyphCoords      *coords,
+             int              *num_coords,
              float             x,
              float             y,
              float             width,
@@ -395,10 +402,11 @@ render_text (cairo_t          *cr,
               cairo_glyphs[count].x = cx;
               cairo_glyphs[count].y = cy;
 
-              glyph_rects[count].x = cx / width;
-              glyph_rects[count].y = 0.0;
-              glyph_rects[count].width = (float)gi->geometry.width / width;
-              glyph_rects[count].height = 1.0; // FIXME get actual glyph height
+              coords[count].glyph = gi->glyph;
+              coords[count].x = cx / width;
+              coords[count].y = 0.0;
+              coords[count].width = (float)gi->geometry.width / (PANGO_SCALE * width);
+              coords[count].height = 1.0; // FIXME get actual glyph height
 
               count++;
             }
@@ -406,12 +414,132 @@ render_text (cairo_t          *cr,
       x_position += gi->geometry.width;
     }
 
-  *num_glyphs = count;
+  *num_coords = count;
 
   cairo_show_glyphs (cr, cairo_glyphs, count);
 
   if (cairo_glyphs != stack_glyphs)
     g_free (cairo_glyphs);
+}
+
+typedef struct {
+  PangoFont *font;
+  PangoGlyphString *glyphs;
+  guint hash;
+  GlyphCoords *coords;
+  int num_coords;
+} CacheItem;
+
+static guint
+item_hash (gconstpointer key)
+{
+  const CacheItem *item = key;
+  PangoFontDescription *desc;
+  guint32 h = 5381;
+  char *p, *end;
+
+  if (item->hash != 0)
+    return item->hash;
+
+  end = ((char *)&item->glyphs->glyphs[item->glyphs->num_glyphs]);
+  for (p = (char *)item->glyphs->glyphs; p < end; p++)
+    h = (h << 5) + h + *p;
+
+  desc = pango_font_describe (item->font);
+  h ^= pango_font_description_hash (desc);
+  pango_font_description_free (desc);
+
+  if (h == 0)
+    h = 1;
+
+  return h;
+}
+
+static gboolean
+item_equal (gconstpointer v1, gconstpointer v2)
+{
+  const CacheItem *i1 = v1;
+  const CacheItem *i2 = v2;
+  int i;
+  PangoFontDescription *desc1, *desc2;
+  gboolean ret;
+
+  if (i1->glyphs->num_glyphs != i2->glyphs->num_glyphs)
+    return FALSE;
+
+  for (i = 0; i < i1->glyphs->num_glyphs; i++)
+    {
+      if (i1->glyphs->glyphs[i].glyph != i2->glyphs->glyphs[i].glyph)
+        return FALSE;
+    }
+
+  desc1 = pango_font_describe (i1->font);
+  desc2 = pango_font_describe (i2->font);
+  ret = pango_font_description_equal (desc1, desc2);
+  pango_font_description_free (desc1);
+  pango_font_description_free (desc2);
+
+  return ret;
+}
+
+static void
+item_free (gpointer data)
+{
+  CacheItem *item = data;
+
+  g_object_unref (item->font);
+  pango_glyph_string_free (item->glyphs);
+  g_free (item->coords);
+  g_free (item);
+}
+
+static void
+ensure_cache (GskVulkanRenderer *renderer)
+{
+  if (!renderer->glyph_cache)
+    renderer->glyph_cache = g_hash_table_new_full (item_hash, item_equal, NULL, item_free);
+}
+
+static int
+find_cached_item (GskVulkanRenderer *renderer, PangoFont *font, PangoGlyphString *glyphs, GlyphCoords **coords)
+{
+  CacheItem key;
+  CacheItem *value;
+
+  key.font = font;
+  key.glyphs = glyphs;
+  key.hash = 0;
+  key.coords = NULL;
+  key.num_coords = 0;
+
+  ensure_cache (renderer);
+
+  value = g_hash_table_lookup (renderer->glyph_cache, &key);
+  if (value)
+    {
+      *coords = value->coords;
+      return value->num_coords;
+    }
+
+  return 0;
+}
+
+static void
+cache_item (GskVulkanRenderer *renderer, PangoFont *font, PangoGlyphString *glyphs, GlyphCoords *coords, int num_coords)
+{
+  CacheItem *item;
+
+  item = g_new (CacheItem, 1);
+
+  item->font = g_object_ref (font);
+  item->glyphs = pango_glyph_string_copy (glyphs);
+  item->hash = 0;
+  item->coords = coords;
+  item->num_coords = num_coords;
+
+  ensure_cache (renderer);
+
+  g_hash_table_add (renderer->glyph_cache, item);
 }
 
 GskVulkanImage *
@@ -424,10 +552,10 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
   cairo_surface_t *surface;
   cairo_t *cr;
   GskVulkanImage *image;
-  GskRectangle *glyph_rects;
-  int num_glyphs;
+  GlyphCoords *coords;
+  int num_coords;
 
-  glyph_rects = g_new (GskRectangle, glyphs->num_glyphs);
+  coords = g_new0 (GlyphCoords, glyphs->num_glyphs);
 
   pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
   pango_extents_to_pixels (&ink_rect, NULL);
@@ -437,7 +565,7 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
                                         ink_rect.height);
 
   cr = cairo_create (surface);
-  render_text (cr, font, glyphs, glyph_rects, &num_glyphs,
+  render_text (cr, font, glyphs, coords, &num_coords,
                0, - ink_rect.y, ink_rect.x + ink_rect.width, ink_rect.height);
   cairo_destroy (cr);
 
@@ -448,7 +576,41 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
                                           cairo_image_surface_get_stride (surface));
   cairo_surface_destroy (surface);
 
-  g_free (glyph_rects); // FIXME: keep this around per-image
+  cache_item (self, font, glyphs, coords, num_coords);
 
   return image;
+}
+
+void
+gsk_vulkan_renderer_get_glyph_coords (GskVulkanRenderer *self,
+                                      PangoFont         *font,
+                                      PangoGlyphString  *glyphs,
+                                      PangoGlyph         glyph,
+                                      float             *x,
+                                      float             *y,
+                                      float             *width,
+                                      float             *height)
+{
+  GlyphCoords *coords;
+  int num_coords;
+  int i;
+
+  *x = 0.0;
+  *y = 0.0;
+  *width = 1.0;
+  *height = 1.0;
+
+  num_coords = find_cached_item (self, font, glyphs, &coords);
+  for (i = 0; i < num_coords; i++)
+    {
+      if (coords[i].glyph == glyph)
+        {
+          *x = coords[i].x;
+          *y = coords[i].x;
+          *width = coords[i].width;
+          *height = coords[i].height;
+//g_print ("using %g %g %g %g\n", coords[i].x, coords[i].y, coords[i].width, coords[i].height);
+          break;
+        }
+    }
 }

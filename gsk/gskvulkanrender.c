@@ -305,7 +305,7 @@ gsk_vulkan_render_collect_vertex_data (GskVulkanRender *self)
 
   for (l = self->render_passes; l; l = l->next)
     {
-      offset += gsk_vulkan_render_pass_collect_vertex_data (l->data, data, offset, n_bytes - offset);
+      offset += gsk_vulkan_render_pass_collect_vertex_data (l->data, self, data, offset, n_bytes - offset);
       g_assert (offset <= n_bytes);
     }
 

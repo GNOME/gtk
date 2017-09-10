@@ -19,6 +19,7 @@
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanrendererprivate.h"
+#include "gskprivate.h"
 
 #include <cairo-ft.h>
 
@@ -685,7 +686,8 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
           break;
 
         case GSK_VULKAN_OP_TEXT:
-          op->render.vertex_count = gsk_vulkan_text_pipeline_count_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->render.pipeline));
+          op->render.vertex_count = gsk_vulkan_text_pipeline_count_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->render.pipeline),
+                                                                                pango_glyph_string_num_glyphs (gsk_text_node_get_glyphs (op->render.node)));
           n_bytes += op->render.vertex_count;
           break;
 
@@ -738,6 +740,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
 
 gsize
 gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
+                                            GskVulkanRender     *render,
                                             guchar              *data,
                                             gsize                offset,
                                             gsize                total)
@@ -772,8 +775,13 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
             op->render.vertex_offset = offset + n_bytes;
             gsk_vulkan_text_pipeline_collect_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->render.pipeline),
                                                           data + n_bytes + offset,
+                                                          GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
                                                           &op->render.node->bounds,
-                                                          gsk_text_node_get_color (op->render.node));
+                                                          gsk_text_node_get_font (op->render.node),
+                                                          gsk_text_node_get_glyphs (op->render.node),
+                                                          gsk_text_node_get_color (op->render.node),
+                                                          gsk_text_node_get_x (op->render.node),
+                                                          gsk_text_node_get_y (op->render.node));
             n_bytes += op->render.vertex_count;
           }
           break;
@@ -1038,7 +1046,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
 
           current_draw_index += gsk_vulkan_text_pipeline_draw (GSK_VULKAN_TEXT_PIPELINE (current_pipeline),
                                                                 command_buffer,
-                                                                current_draw_index, 1);
+                                                                current_draw_index, pango_glyph_string_num_glyphs (gsk_text_node_get_glyphs (op->render.node)));
           break;
 
         case GSK_VULKAN_OP_COLOR_TEXT:

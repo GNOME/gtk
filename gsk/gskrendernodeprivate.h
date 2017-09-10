@@ -84,6 +84,8 @@ GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
 PangoFont *gsk_text_node_get_font (GskRenderNode *node);
 PangoGlyphString *gsk_text_node_get_glyphs (GskRenderNode *node);
 const GdkRGBA *gsk_text_node_get_color (GskRenderNode *node);
+float gsk_text_node_get_x (GskRenderNode *node);
+float gsk_text_node_get_y (GskRenderNode *node);
 
 const GdkRGBA *gsk_color_node_peek_color (GskRenderNode *node);
 

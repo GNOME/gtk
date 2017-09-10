@@ -26,6 +26,7 @@ void                    gsk_vulkan_render_pass_upload                   (GskVulk
 
 gsize                   gsk_vulkan_render_pass_count_vertex_data        (GskVulkanRenderPass    *self);
 gsize                   gsk_vulkan_render_pass_collect_vertex_data      (GskVulkanRenderPass    *self,
+                                                                         GskVulkanRender        *render,
                                                                          guchar                 *data,
                                                                          gsize                   offset,
                                                                          gsize                   total);

@@ -92,38 +92,74 @@ gsk_vulkan_text_pipeline_new (GskVulkanPipelineLayout *layout,
 }
 
 gsize
-gsk_vulkan_text_pipeline_count_vertex_data (GskVulkanTextPipeline *pipeline)
+gsk_vulkan_text_pipeline_count_vertex_data (GskVulkanTextPipeline *pipeline,
+                                            int                    num_instances)
 {
-  return sizeof (GskVulkanTextInstance);
+  return sizeof (GskVulkanTextInstance) * num_instances;
 }
 
 void
-gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline *pipeline,
-                                               guchar                 *data,
-                                               const graphene_rect_t  *rect,
-                                               const GdkRGBA          *color)
+gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
+                                              guchar                 *data,
+                                              GskVulkanRenderer      *renderer,
+                                              const graphene_rect_t  *rect,
+                                              PangoFont              *font,
+                                              PangoGlyphString       *glyphs,
+                                              const GdkRGBA          *color,
+                                              float                   x,
+                                              float                   y)
 {
-  GskVulkanTextInstance *instance = (GskVulkanTextInstance *) data;
+  GskVulkanTextInstance *instances = (GskVulkanTextInstance *) data;
+  int i, count;
+  int x_position = 0;
+  float ink_rect_y;
+  float ink_rect_height;
 
-  instance->rect[0] = rect->origin.x;
-  instance->rect[1] = rect->origin.y;
-  instance->rect[2] = rect->size.width;
-  instance->rect[3] = rect->size.height;
-  instance->tex_rect[0] = 0.0;
-  instance->tex_rect[1] = 0.0;
-  instance->tex_rect[2] = 1.0;
-  instance->tex_rect[3] = 1.0;
-  instance->color[0] = color->red;
-  instance->color[1] = color->green;
-  instance->color[2] = color->blue;
-  instance->color[3] = color->alpha;
+  /* XXX */
+  ink_rect_y = rect->origin.y - y;
+  ink_rect_height = rect->size.height;
+
+  count = 0;
+  for (i = 0; i < glyphs->num_glyphs; i++)
+    {
+      PangoGlyphInfo *gi = &glyphs->glyphs[i];
+
+      if (gi->glyph != PANGO_GLYPH_EMPTY)
+        {
+          double cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+          double cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+
+          if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
+            {
+              GskVulkanTextInstance *instance = &instances[count];
+
+              instance->rect[0] = x + cx;
+              instance->rect[1] = y + ink_rect_y + cy;
+              instance->rect[2] = (float)gi->geometry.width / PANGO_SCALE;
+              instance->rect[3] = ink_rect_height;
+              gsk_vulkan_renderer_get_glyph_coords (renderer, font, glyphs,
+                                                    gi->glyph,
+                                                    &instance->tex_rect[0],
+                                                    &instance->tex_rect[1],
+                                                    &instance->tex_rect[2],
+                                                    &instance->tex_rect[3]);
+              instance->color[0] = color->red;
+              instance->color[1] = color->green;
+              instance->color[2] = color->blue;
+              instance->color[3] = color->alpha;
+
+              count++;
+            }
+        }
+      x_position += gi->geometry.width;
+    }
 }
 
 gsize
 gsk_vulkan_text_pipeline_draw (GskVulkanTextPipeline *pipeline,
-                                VkCommandBuffer         command_buffer,
-                                gsize                   offset,
-                                gsize                   n_commands)
+                               VkCommandBuffer        command_buffer,
+                               gsize                  offset,
+                               gsize                  n_commands)
 {
   vkCmdDraw (command_buffer,
              6, n_commands,

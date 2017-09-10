@@ -4,6 +4,7 @@
 #include <graphene.h>
 
 #include "gskvulkanpipelineprivate.h"
+#include "gskvulkanrendererprivate.h"
 
 G_BEGIN_DECLS
 
@@ -17,11 +18,17 @@ GskVulkanPipeline *     gsk_vulkan_text_pipeline_new                   (GskVulka
                                                                         const char                     *shader_name,
                                                                         VkRenderPass                    render_pass);
 
-gsize                   gsk_vulkan_text_pipeline_count_vertex_data     (GskVulkanTextPipeline         *pipeline);
+gsize                   gsk_vulkan_text_pipeline_count_vertex_data     (GskVulkanTextPipeline         *pipeline,
+                                                                        int                            num_instances);
 void                    gsk_vulkan_text_pipeline_collect_vertex_data   (GskVulkanTextPipeline         *pipeline,
                                                                         guchar                         *data,
+                                                                        GskVulkanRenderer              *renderer,
                                                                         const graphene_rect_t          *rect,
-                                                                        const GdkRGBA                  *color);
+                                                                        PangoFont                      *font,
+                                                                        PangoGlyphString               *glyphs,
+                                                                        const GdkRGBA                  *color,
+                                                                        float                           x,
+                                                                        float                           y);
 gsize                   gsk_vulkan_text_pipeline_draw                  (GskVulkanTextPipeline         *pipeline,
                                                                         VkCommandBuffer                 command_buffer,
                                                                         gsize                           offset,
