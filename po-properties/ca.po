@@ -6,7 +6,7 @@
 # Mireia Farrús <mifarrus@hotmail.com>, 2003.
 # Josep Puigdemont <josep.puigdemont@gmail.com>, 2005, 2006.
 # David Planella <david.planella@gmail.com>, 2008, 2009, 2010.
-# Jordi Serratosa <jordis@softcatala.cat>, 2012.
+# Jordi Serratosa <jordis@softcatala.cat>, 2012, 2017.
 # Gil Forcada <gilforcada@guifi.net>, 2011-2014.
 # Benet R.i Camps <benny@softcatala.org>, 2015
 # Jordi Mas <jmas@softcatala.org>, 2015-2016
@@ -38,7 +38,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-31 22:33+0000\n"
+"POT-Creation-Date: 2017-09-07 18:35+0000\n"
 "PO-Revision-Date: 2017-09-01 12:22+0200\n"
 "Last-Translator: <>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -548,7 +548,7 @@ msgstr "Ombra de la fletxa"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Aparença de l'ombra que envolta la fletxa"
 
-#: gtk/deprecated/gtkarrow.c:138 gtk/gtkcombobox.c:1233 gtk/gtkmenu.c:1002
+#: gtk/deprecated/gtkarrow.c:138 gtk/gtkcombobox.c:1229 gtk/gtkmenu.c:1002
 #: gtk/gtkmenuitem.c:896
 msgid "Arrow Scaling"
 msgstr "Escalat de la fletxa"
@@ -646,8 +646,8 @@ msgstr "Text previsualitzat"
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "El text a visualitzar per demostrar el tipus de lletra seleccionat"
 
-#: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1252 gtk/gtkentry.c:995
-#: gtk/gtkmenubar.c:253 gtk/gtkstatusbar.c:177 gtk/gtktoolbar.c:675
+#: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1248 gtk/gtkentry.c:995
+#: gtk/gtkmenubar.c:253 gtk/gtkstatusbar.c:177 gtk/gtktoolbar.c:680
 #: gtk/gtkviewport.c:408
 msgid "Shadow type"
 msgstr "Tipus d'ombra"
@@ -995,7 +995,7 @@ msgid "The amount of space between two consecutive columns"
 msgstr "La quantitat d'espai entre dues columnes consecutives"
 
 #: gtk/deprecated/gtktable.c:221 gtk/gtkbox.c:289 gtk/gtkflowbox.c:3837
-#: gtk/gtkstack.c:459 gtk/gtktoolbar.c:592 gtk/gtktoolitemgroup.c:1690
+#: gtk/gtkstack.c:459 gtk/gtktoolbar.c:597 gtk/gtktoolitemgroup.c:1690
 msgid "Homogeneous"
 msgstr "Homogeni"
 
@@ -1150,7 +1150,7 @@ msgstr "Mida de les icones"
 msgid "The pixel size that icons should be forced to, or zero"
 msgstr "La mida de píxel a la qual s'haurien de forçar les icones, o zero"
 
-#: gtk/deprecated/gtkuimanager.c:457 gtk/gtkcombobox.c:1016
+#: gtk/deprecated/gtkuimanager.c:457 gtk/gtkcombobox.c:1012
 msgid "Add tearoffs to menus"
 msgstr "Afegeix separadors als menús"
 
@@ -1736,7 +1736,7 @@ msgstr ""
 "La posició dels ginys alineats al punt de referència si hi ha espai "
 "addicional disponible"
 
-#: gtk/gtkbox.c:322 gtk/gtkcellareabox.c:330 gtk/gtktoolbar.c:584
+#: gtk/gtkbox.c:322 gtk/gtkcellareabox.c:330 gtk/gtktoolbar.c:589
 #: gtk/gtktoolitemgroup.c:1697 gtk/gtktoolpalette.c:1027
 #: gtk/gtktreeviewcolumn.c:323
 msgid "Expand"
@@ -2269,7 +2269,7 @@ msgstr "Columna de text"
 msgid "A column in the data source model to get the strings from"
 msgstr "Una columna del model de font de dades per obtenir les cadenes"
 
-#: gtk/gtkcellrenderercombo.c:169 gtk/gtkcombobox.c:1101
+#: gtk/gtkcellrenderercombo.c:169 gtk/gtkcombobox.c:1097
 msgid "Has Entry"
 msgstr "Té una entrada"
 
@@ -2664,7 +2664,7 @@ msgstr ""
 "Com separar les cadenes en múltiples línies, si el representador de cadenes "
 "no conté espai suficient per mostrar tota la cadena"
 
-#: gtk/gtkcellrenderertext.c:561 gtk/gtkcombobox.c:927
+#: gtk/gtkcellrenderertext.c:561 gtk/gtkcombobox.c:923
 msgid "Wrap width"
 msgstr "Ajusta l'amplada"
 
@@ -2869,12 +2869,12 @@ msgstr "Model de la vista de cel·les"
 msgid "The model for cell view"
 msgstr "El model per la vista de cel·les"
 
-#: gtk/gtkcellview.c:282 gtk/gtkcombobox.c:1188 gtk/gtkentrycompletion.c:467
+#: gtk/gtkcellview.c:282 gtk/gtkcombobox.c:1184 gtk/gtkentrycompletion.c:467
 #: gtk/gtkiconview.c:649 gtk/gtktreemenu.c:307 gtk/gtktreeviewcolumn.c:399
 msgid "Cell Area"
 msgstr "Àrea de la cel·la"
 
-#: gtk/gtkcellview.c:283 gtk/gtkcombobox.c:1189 gtk/gtkentrycompletion.c:468
+#: gtk/gtkcellview.c:283 gtk/gtkcombobox.c:1185 gtk/gtkentrycompletion.c:468
 #: gtk/gtkiconview.c:650 gtk/gtktreemenu.c:308 gtk/gtktreeviewcolumn.c:400
 msgid "The GtkCellArea used to layout cells"
 msgstr "La GtkCellArea utilitzada per disposar les cel·les"
@@ -3019,61 +3019,61 @@ msgstr "Té menú"
 msgid "Whether the swatch should offer customization"
 msgstr "Si la mostra ha d'oferir personalització"
 
-#: gtk/gtkcombobox.c:910
+#: gtk/gtkcombobox.c:906
 msgid "ComboBox model"
 msgstr "Model quadre combinat"
 
-#: gtk/gtkcombobox.c:911
+#: gtk/gtkcombobox.c:907
 msgid "The model for the combo box"
 msgstr "El model per al quadre combinat"
 
-#: gtk/gtkcombobox.c:928
+#: gtk/gtkcombobox.c:924
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Ajusta l'amplada per formatar els elements en una graella"
 
-#: gtk/gtkcombobox.c:950 gtk/gtktreemenu.c:361
+#: gtk/gtkcombobox.c:946 gtk/gtktreemenu.c:361
 msgid "Row span column"
 msgstr "Columna de l'abast de les files"
 
-#: gtk/gtkcombobox.c:951 gtk/gtktreemenu.c:362
+#: gtk/gtkcombobox.c:947 gtk/gtktreemenu.c:362
 msgid "TreeModel column containing the row span values"
 msgstr ""
 "La columna del model d'arbre que conté els valors de l'abast de les files"
 
-#: gtk/gtkcombobox.c:972 gtk/gtktreemenu.c:382
+#: gtk/gtkcombobox.c:968 gtk/gtktreemenu.c:382
 msgid "Column span column"
 msgstr "Columna de l'abast de les columnes"
 
-#: gtk/gtkcombobox.c:973 gtk/gtktreemenu.c:383
+#: gtk/gtkcombobox.c:969 gtk/gtktreemenu.c:383
 msgid "TreeModel column containing the column span values"
 msgstr ""
 "La columna del model d'arbre que conté els valors de l'abast de les columnes"
 
-#: gtk/gtkcombobox.c:994
+#: gtk/gtkcombobox.c:990
 msgid "Active item"
 msgstr "Element actiu"
 
-#: gtk/gtkcombobox.c:995
+#: gtk/gtkcombobox.c:991
 msgid "The item which is currently active"
 msgstr "L'element que actualment està seleccionat"
 
-#: gtk/gtkcombobox.c:1017
+#: gtk/gtkcombobox.c:1013
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Si els menús desplegables han de tenir un element per desprendre'ls"
 
-#: gtk/gtkcombobox.c:1032 gtk/gtkentry.c:877
+#: gtk/gtkcombobox.c:1028 gtk/gtkentry.c:877
 msgid "Has Frame"
 msgstr "Té marc"
 
-#: gtk/gtkcombobox.c:1033
+#: gtk/gtkcombobox.c:1029
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Si el quadre combinat ha de dibuixar un marc al voltant del fill"
 
-#: gtk/gtkcombobox.c:1050 gtk/gtkmenu.c:695
+#: gtk/gtkcombobox.c:1046 gtk/gtkmenu.c:695
 msgid "Tearoff Title"
 msgstr "Títol del menú separat"
 
-#: gtk/gtkcombobox.c:1051
+#: gtk/gtkcombobox.c:1047
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
@@ -3081,31 +3081,31 @@ msgstr ""
 "Un títol que el gestor de finestres pot visualitzar si s'ha desactivat la "
 "part desplegable d'un quadre combinat"
 
-#: gtk/gtkcombobox.c:1068
+#: gtk/gtkcombobox.c:1064
 msgid "Popup shown"
 msgstr "Es mostra la part desplegable"
 
-#: gtk/gtkcombobox.c:1069
+#: gtk/gtkcombobox.c:1065
 msgid "Whether the combo's dropdown is shown"
 msgstr "Si s'està mostrant la part desplegable del quadre combinat"
 
-#: gtk/gtkcombobox.c:1085
+#: gtk/gtkcombobox.c:1081
 msgid "Button Sensitivity"
 msgstr "Sensibilitat del botó"
 
-#: gtk/gtkcombobox.c:1086
+#: gtk/gtkcombobox.c:1082
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Si el botó desplegable és sensible quan el model és buit"
 
-#: gtk/gtkcombobox.c:1102
+#: gtk/gtkcombobox.c:1098
 msgid "Whether combo box has an entry"
 msgstr "Si el quadre combinat conté una entrada"
 
-#: gtk/gtkcombobox.c:1117
+#: gtk/gtkcombobox.c:1113
 msgid "Entry Text Column"
 msgstr "Columna d'entrada de text"
 
-#: gtk/gtkcombobox.c:1118
+#: gtk/gtkcombobox.c:1114
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -3114,11 +3114,11 @@ msgstr ""
 "cadenes de l'entrada si el quadre combinat es va crear amb «#GtkComboBox:has-"
 "entry = %TRUE»"
 
-#: gtk/gtkcombobox.c:1135
+#: gtk/gtkcombobox.c:1131
 msgid "ID Column"
 msgstr "Id. de la columna"
 
-#: gtk/gtkcombobox.c:1136
+#: gtk/gtkcombobox.c:1132
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
@@ -3126,19 +3126,19 @@ msgstr ""
 "La columna en el model del quadre combinat que proporciona els "
 "identificadors de cadenes dels valors del model"
 
-#: gtk/gtkcombobox.c:1151
+#: gtk/gtkcombobox.c:1147
 msgid "Active id"
 msgstr "Id. actiu"
 
-#: gtk/gtkcombobox.c:1152
+#: gtk/gtkcombobox.c:1148
 msgid "The value of the id column for the active row"
 msgstr "El valor de la columna d'identificadors per a la fila activa"
 
-#: gtk/gtkcombobox.c:1168
+#: gtk/gtkcombobox.c:1164
 msgid "Popup Fixed Width"
 msgstr "Amplada fixa de la finestra emergent"
 
-#: gtk/gtkcombobox.c:1169
+#: gtk/gtkcombobox.c:1165
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
@@ -3146,28 +3146,28 @@ msgstr ""
 "Si l'amplada de la finestra emergent hauria de ser una amplada fixa que "
 "coincideixi amb l'amplada ubicada per al quadre combinat"
 
-#: gtk/gtkcombobox.c:1195
+#: gtk/gtkcombobox.c:1191
 msgid "Appears as list"
 msgstr "Apareix com una llista"
 
-#: gtk/gtkcombobox.c:1196
+#: gtk/gtkcombobox.c:1192
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Si els menús desplegables han d'assemblar-se a llistes en lloc de menús"
 
-#: gtk/gtkcombobox.c:1215
+#: gtk/gtkcombobox.c:1211
 msgid "Arrow Size"
 msgstr "Mida de la fletxa"
 
-#: gtk/gtkcombobox.c:1216
+#: gtk/gtkcombobox.c:1212
 msgid "The minimum size of the arrow in the combo box"
 msgstr "La mida mínima de la fletxa al quadre combinat"
 
-#: gtk/gtkcombobox.c:1234
+#: gtk/gtkcombobox.c:1230
 msgid "The amount of space used by the arrow"
 msgstr "La quantitat d'espai que ocupa la fletxa"
 
-#: gtk/gtkcombobox.c:1253
+#: gtk/gtkcombobox.c:1249
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "El tipus d'ombra que es dibuixarà al voltant del quadre combinat"
 
@@ -3253,7 +3253,7 @@ msgstr "Afecta"
 
 #: gtk/gtkcssstyleproperty.c:216
 msgid "Set if the value affects the sizing of elements"
-msgstr "Establert si el valor afecta a la mida dels elements"
+msgstr "Establert si el valor afecta la mida dels elements"
 
 #: gtk/gtkcssstyleproperty.c:224
 msgid "The numeric id for quick access"
@@ -4251,7 +4251,7 @@ msgstr "Renderització automàtica"
 
 #: gtk/gtkglarea.c:807
 msgid "Whether the GtkGLArea renders on each redraw"
-msgstr "Si la GtkGLArea es renderitza al tornar a pintar"
+msgstr "Si la GtkGLArea es renderitza cada vegada que es torna a dibuixar"
 
 #: gtk/gtkglarea.c:827
 msgid "Has alpha"
@@ -4519,7 +4519,7 @@ msgstr "Definiu icona"
 msgid "Icon set to display"
 msgstr "Definiu icona per visualitzar"
 
-#: gtk/gtkimage.c:302 gtk/gtkscalebutton.c:206 gtk/gtktoolbar.c:559
+#: gtk/gtkimage.c:302 gtk/gtkscalebutton.c:206 gtk/gtktoolbar.c:564
 #: gtk/gtktoolpalette.c:965
 msgid "Icon size"
 msgstr "Mida d'icona"
@@ -4880,7 +4880,7 @@ msgstr "L'orientació de la barra d'eines"
 msgid "Style of bevel around the menubar"
 msgstr "Estil del bisell que envolta la barra de menú"
 
-#: gtk/gtkmenubar.c:270 gtk/gtktoolbar.c:625
+#: gtk/gtkmenubar.c:270 gtk/gtktoolbar.c:630
 msgid "Internal padding"
 msgstr "Separació interna"
 
@@ -8439,83 +8439,83 @@ msgstr "Indicador de dibuix"
 msgid "If the toggle part of the button is displayed"
 msgstr "Si la part de commutació del botó es visualitza"
 
-#: gtk/gtktoolbar.c:530 gtk/gtktoolpalette.c:995
+#: gtk/gtktoolbar.c:535 gtk/gtktoolpalette.c:995
 msgid "Toolbar Style"
 msgstr "Estil de la barra d'eines"
 
-#: gtk/gtktoolbar.c:531
+#: gtk/gtktoolbar.c:536
 msgid "How to draw the toolbar"
 msgstr "Com dibuixar la barra d'eines"
 
-#: gtk/gtktoolbar.c:538
+#: gtk/gtktoolbar.c:543
 msgid "Show Arrow"
 msgstr "Mostra la fletxa"
 
-#: gtk/gtktoolbar.c:539
+#: gtk/gtktoolbar.c:544
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Si s'ha de dibuixar una fletxa en cas que la barra d'eines no hi càpiga"
 
-#: gtk/gtktoolbar.c:560
+#: gtk/gtktoolbar.c:565
 msgid "Size of icons in this toolbar"
 msgstr "Mida de les icones d'aquesta barra d'eines"
 
-#: gtk/gtktoolbar.c:575 gtk/gtktoolpalette.c:981
+#: gtk/gtktoolbar.c:580 gtk/gtktoolpalette.c:981
 msgid "Icon size set"
 msgstr "Mida de les icones establerta"
 
-#: gtk/gtktoolbar.c:576 gtk/gtktoolpalette.c:982
+#: gtk/gtktoolbar.c:581 gtk/gtktoolpalette.c:982
 msgid "Whether the icon-size property has been set"
 msgstr "Si la propietat de la mida de les icones s'ha establert"
 
-#: gtk/gtktoolbar.c:585
+#: gtk/gtktoolbar.c:590
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Si l'element ha de rebre espai addicional quan la barra d'eines creixi"
 
-#: gtk/gtktoolbar.c:593 gtk/gtktoolitemgroup.c:1691
+#: gtk/gtktoolbar.c:598 gtk/gtktoolitemgroup.c:1691
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Si l'element ha de tenir la mateixa mida que altres elements homogenis"
 
-#: gtk/gtktoolbar.c:607
+#: gtk/gtktoolbar.c:612
 msgid "Spacer size"
 msgstr "Mida de l'espaiador"
 
-#: gtk/gtktoolbar.c:608
+#: gtk/gtktoolbar.c:613
 msgid "Size of spacers"
 msgstr "Mida dels espaiadors"
 
-#: gtk/gtktoolbar.c:626
+#: gtk/gtktoolbar.c:631
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 "Quantitat d'espai del contorn entre l'ombra de la barra d'eines i els botons"
 
-#: gtk/gtktoolbar.c:634
+#: gtk/gtktoolbar.c:639
 msgid "Maximum child expand"
 msgstr "Expansió màxima del fill"
 
-#: gtk/gtktoolbar.c:635
+#: gtk/gtktoolbar.c:640
 msgid "Maximum amount of space an expandable item will be given"
 msgstr ""
 "La quantitat màxima d'espai que es donarà a un element per poder-s'hi "
 "expandir"
 
-#: gtk/gtktoolbar.c:651
+#: gtk/gtktoolbar.c:656
 msgid "Space style"
 msgstr "Estil de l'espaiador"
 
-#: gtk/gtktoolbar.c:652
+#: gtk/gtktoolbar.c:657
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Si els espaiadors són línies verticals o espais en blanc"
 
-#: gtk/gtktoolbar.c:659
+#: gtk/gtktoolbar.c:664
 msgid "Button relief"
 msgstr "Relleu del botó"
 
-#: gtk/gtktoolbar.c:660
+#: gtk/gtktoolbar.c:665
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipus de bisell que envolta els botons la barra d'eines"
 
-#: gtk/gtktoolbar.c:676
+#: gtk/gtktoolbar.c:681
 msgid "Style of bevel around the toolbar"
 msgstr "Estil de bisell que envolta la barra d'eines"
 
