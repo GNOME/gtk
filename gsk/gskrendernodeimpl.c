@@ -3894,8 +3894,6 @@ gsk_text_node_draw (GskRenderNode *node,
 
 /*
  * Next steps:
- * - drop surface caching
- * - push texture creation into vulkan renderer
  * - use multiple instances, one per glyph for the text pipelines
  * - switch to using a font atlas instead of per-call cached surfaces
  */
