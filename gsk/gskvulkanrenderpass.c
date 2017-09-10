@@ -14,7 +14,7 @@
 #include "gskvulkancolorpipelineprivate.h"
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
-#include "gskvulkanmaskpipelineprivate.h"
+#include "gskvulkantextpipelineprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanrendererprivate.h"
@@ -192,11 +192,11 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       else
         {
           if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
-            pipeline_type = GSK_VULKAN_PIPELINE_MASK;
+            pipeline_type = GSK_VULKAN_PIPELINE_TEXT;
           else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
-            pipeline_type = GSK_VULKAN_PIPELINE_MASK_CLIP;
+            pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP;
           else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
-            pipeline_type = GSK_VULKAN_PIPELINE_MASK_CLIP_ROUNDED;
+            pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP_ROUNDED;
           else
             FALLBACK ("Text nodes can't deal with clip type %u\n", constants->clip.type);
           op.type = GSK_VULKAN_OP_SURFACE_MASK;
@@ -663,7 +663,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
           break;
 
         case GSK_VULKAN_OP_SURFACE_MASK:
-          op->render.vertex_count = gsk_vulkan_mask_pipeline_count_vertex_data (GSK_VULKAN_MASK_PIPELINE (op->render.pipeline));
+          op->render.vertex_count = gsk_vulkan_text_pipeline_count_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->render.pipeline));
           n_bytes += op->render.vertex_count;
           break;
 
@@ -743,7 +743,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_SURFACE_MASK:
           {
             op->render.vertex_offset = offset + n_bytes;
-            gsk_vulkan_mask_pipeline_collect_vertex_data (GSK_VULKAN_MASK_PIPELINE (op->render.pipeline),
+            gsk_vulkan_text_pipeline_collect_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->render.pipeline),
                                                           data + n_bytes + offset,
                                                           &op->render.node->bounds,
                                                           gsk_text_node_get_color (op->render.node));
@@ -998,7 +998,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                    0,
                                    NULL);
 
-          current_draw_index += gsk_vulkan_mask_pipeline_draw (GSK_VULKAN_MASK_PIPELINE (current_pipeline),
+          current_draw_index += gsk_vulkan_text_pipeline_draw (GSK_VULKAN_TEXT_PIPELINE (current_pipeline),
                                                                 command_buffer,
                                                                 current_draw_index, 1);
           break;

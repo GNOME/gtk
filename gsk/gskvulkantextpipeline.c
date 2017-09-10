@@ -1,30 +1,30 @@
 #include "config.h"
 
-#include "gskvulkanmaskpipelineprivate.h"
+#include "gskvulkantextpipelineprivate.h"
 
-struct _GskVulkanMaskPipeline
+struct _GskVulkanTextPipeline
 {
   GObject parent_instance;
 };
 
-typedef struct _GskVulkanMaskInstance GskVulkanMaskInstance;
+typedef struct _GskVulkanTextInstance GskVulkanTextInstance;
 
-struct _GskVulkanMaskInstance
+struct _GskVulkanTextInstance
 {
   float rect[4];
   float tex_rect[4];
   float color[4];
 };
 
-G_DEFINE_TYPE (GskVulkanMaskPipeline, gsk_vulkan_mask_pipeline, GSK_TYPE_VULKAN_PIPELINE)
+G_DEFINE_TYPE (GskVulkanTextPipeline, gsk_vulkan_text_pipeline, GSK_TYPE_VULKAN_PIPELINE)
 
 static const VkPipelineVertexInputStateCreateInfo *
-gsk_vulkan_mask_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
+gsk_vulkan_text_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 {
   static const VkVertexInputBindingDescription vertexBindingDescriptions[] = {
       {
           .binding = 0,
-          .stride = sizeof (GskVulkanMaskInstance),
+          .stride = sizeof (GskVulkanTextInstance),
           .inputRate = VK_VERTEX_INPUT_RATE_INSTANCE
       }
   };
@@ -33,19 +33,19 @@ gsk_vulkan_mask_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
           .location = 0,
           .binding = 0,
           .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanMaskInstance, rect),
+          .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, rect),
       },
       {
           .location = 1,
           .binding = 0,
           .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanMaskInstance, tex_rect),
+          .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, tex_rect),
       },
       {
           .location = 2,
           .binding = 0,
           .format = VK_FORMAT_R32G32B32A32_SFLOAT,
-          .offset = G_STRUCT_OFFSET (GskVulkanMaskInstance, color),
+          .offset = G_STRUCT_OFFSET (GskVulkanTextInstance, color),
       }
   };
   static const VkPipelineVertexInputStateCreateInfo info = {
@@ -60,50 +60,50 @@ gsk_vulkan_mask_pipeline_get_input_state_create_info (GskVulkanPipeline *self)
 }
 
 static void
-gsk_vulkan_mask_pipeline_finalize (GObject *gobject)
+gsk_vulkan_text_pipeline_finalize (GObject *gobject)
 {
-  //GskVulkanMaskPipeline *self = GSK_VULKAN_MASK_PIPELINE (gobject);
+  //GskVulkanTextPipeline *self = GSK_VULKAN_TEXT_PIPELINE (gobject);
 
-  G_OBJECT_CLASS (gsk_vulkan_mask_pipeline_parent_class)->finalize (gobject);
+  G_OBJECT_CLASS (gsk_vulkan_text_pipeline_parent_class)->finalize (gobject);
 }
 
 static void
-gsk_vulkan_mask_pipeline_class_init (GskVulkanMaskPipelineClass *klass)
+gsk_vulkan_text_pipeline_class_init (GskVulkanTextPipelineClass *klass)
 {
   GskVulkanPipelineClass *pipeline_class = GSK_VULKAN_PIPELINE_CLASS (klass);
 
-  G_OBJECT_CLASS (klass)->finalize = gsk_vulkan_mask_pipeline_finalize;
+  G_OBJECT_CLASS (klass)->finalize = gsk_vulkan_text_pipeline_finalize;
 
-  pipeline_class->get_input_state_create_info = gsk_vulkan_mask_pipeline_get_input_state_create_info;
+  pipeline_class->get_input_state_create_info = gsk_vulkan_text_pipeline_get_input_state_create_info;
 }
 
 static void
-gsk_vulkan_mask_pipeline_init (GskVulkanMaskPipeline *self)
+gsk_vulkan_text_pipeline_init (GskVulkanTextPipeline *self)
 {
 }
 
 GskVulkanPipeline *
-gsk_vulkan_mask_pipeline_new (GskVulkanPipelineLayout *layout,
+gsk_vulkan_text_pipeline_new (GskVulkanPipelineLayout *layout,
                                const char              *shader_name,
                                VkRenderPass             render_pass)
 {
-  return gsk_vulkan_pipeline_new_full (GSK_TYPE_VULKAN_MASK_PIPELINE, layout, shader_name, render_pass,
+  return gsk_vulkan_pipeline_new_full (GSK_TYPE_VULKAN_TEXT_PIPELINE, layout, shader_name, render_pass,
                                        VK_BLEND_FACTOR_SRC_ALPHA, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
 }
 
 gsize
-gsk_vulkan_mask_pipeline_count_vertex_data (GskVulkanMaskPipeline *pipeline)
+gsk_vulkan_text_pipeline_count_vertex_data (GskVulkanTextPipeline *pipeline)
 {
-  return sizeof (GskVulkanMaskInstance);
+  return sizeof (GskVulkanTextInstance);
 }
 
 void
-gsk_vulkan_mask_pipeline_collect_vertex_data (GskVulkanMaskPipeline *pipeline,
+gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline *pipeline,
                                                guchar                 *data,
                                                const graphene_rect_t  *rect,
                                                const GdkRGBA          *color)
 {
-  GskVulkanMaskInstance *instance = (GskVulkanMaskInstance *) data;
+  GskVulkanTextInstance *instance = (GskVulkanTextInstance *) data;
 
   instance->rect[0] = rect->origin.x;
   instance->rect[1] = rect->origin.y;
@@ -120,7 +120,7 @@ gsk_vulkan_mask_pipeline_collect_vertex_data (GskVulkanMaskPipeline *pipeline,
 }
 
 gsize
-gsk_vulkan_mask_pipeline_draw (GskVulkanMaskPipeline *pipeline,
+gsk_vulkan_text_pipeline_draw (GskVulkanTextPipeline *pipeline,
                                 VkCommandBuffer         command_buffer,
                                 gsize                   offset,
                                 gsize                   n_commands)
