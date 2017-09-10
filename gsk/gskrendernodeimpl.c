@@ -3989,116 +3989,6 @@ font_has_color_glyphs (PangoFont *font)
   return has_color;
 }
 
-typedef struct {
-  PangoFont *font;
-  PangoGlyphString *glyphs;
-  guint hash;
-  cairo_surface_t *surface;
-} CacheItem;
-
-static guint
-item_hash (gconstpointer key)
-{
-  const CacheItem *item = key;
-  PangoFontDescription *desc;
-  guint32 h = 5381;
-  char *p, *end;
-
-  if (item->hash != 0)
-    return item->hash;
-
-  end = ((char *)&item->glyphs->glyphs[item->glyphs->num_glyphs]);
-  for (p = (char *)item->glyphs->glyphs; p < end; p++)
-    h = (h << 5) + h + *p;
-
-  desc = pango_font_describe (item->font);
-  h ^= pango_font_description_hash (desc);
-  pango_font_description_free (desc);
-
-  if (h == 0)
-    h = 1;
-
-  return h;
-}
-
-static gboolean
-item_equal (gconstpointer v1, gconstpointer v2)
-{
-  const CacheItem *i1 = v1;
-  const CacheItem *i2 = v2;
-  int i;
-  PangoFontDescription *desc1, *desc2;
-  gboolean ret;
-
-  if (i1->glyphs->num_glyphs != i2->glyphs->num_glyphs)
-    return FALSE;
-
-  for (i = 0; i < i1->glyphs->num_glyphs; i++)
-    {
-      if (i1->glyphs->glyphs[i].glyph != i2->glyphs->glyphs[i].glyph)
-        return FALSE;
-    }
-
-  desc1 = pango_font_describe (i1->font);
-  desc2 = pango_font_describe (i2->font);
-  ret = pango_font_description_equal (desc1, desc2);
-  pango_font_description_free (desc1);
-  pango_font_description_free (desc2);
-
-  return ret;
-}
-
-static void
-item_free (gpointer data)
-{
-  CacheItem *item = data;
-
-  g_object_unref (item->font);
-  pango_glyph_string_free (item->glyphs);
-  if (item->surface)
-    cairo_surface_destroy (item->surface);
-
-  g_free (item);
-}
-
-static GHashTable *cache;
-
-static cairo_surface_t *
-find_cached_surface (PangoFont *font, PangoGlyphString *glyphs)
-{
-  CacheItem key;
-  CacheItem *value;
-
-  key.font = font;
-  key.glyphs = glyphs;
-  key.hash = 0;
-  key.surface = NULL;
-
-  if (!cache)
-    cache = g_hash_table_new_full (item_hash, item_equal, NULL, item_free);
-
-  value = g_hash_table_lookup (cache, &key);
-  if (value)
-    return cairo_surface_reference (value->surface);
-
-  return NULL;
-}
-
-static void
-cache_surface (PangoFont *font, PangoGlyphString *glyphs, cairo_surface_t *surface)
-{
-  CacheItem *item;
-
-  item = g_new (CacheItem, 1);
-
-  item->font = g_object_ref (font);
-  item->glyphs = pango_glyph_string_copy (glyphs);
-  item->hash = 0;
-  item->surface = cairo_surface_reference (surface);
-
-  g_hash_table_insert (cache, item, item);
-}
-
 GskRenderNode *
 gsk_text_node_new (PangoFont        *font,
                    PangoGlyphString *glyphs,
@@ -4108,6 +3998,7 @@ gsk_text_node_new (PangoFont        *font,
 {
   GskTextNode *self;
   PangoRectangle ink_rect;
+  cairo_t *cr;
 
   pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
   pango_extents_to_pixels (&ink_rect, NULL);
@@ -4132,20 +4023,12 @@ gsk_text_node_new (PangoFont        *font,
                       ink_rect.x + ink_rect.width,
                       ink_rect.height);
 
-  self->surface = find_cached_surface (font, glyphs);
-  if (!self->surface)
-    {
-      cairo_t *cr;
-
-      self->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                  ink_rect.x + ink_rect.width,
-                                                  ink_rect.height);
-      cr = cairo_create (self->surface);
-      render_text (cr, glyphs, font, 0, - ink_rect.y);
-      cairo_destroy (cr);
-
-      cache_surface (font, glyphs, self->surface);
-    }
+  self->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                              ink_rect.x + ink_rect.width,
+                                              ink_rect.height);
+  cr = cairo_create (self->surface);
+  render_text (cr, glyphs, font, 0, - ink_rect.y);
+  cairo_destroy (cr);
 
   return &self->render_node;
 }
