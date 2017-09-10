@@ -3891,9 +3891,12 @@ render_text (cairo_t          *cr,
 
 /*
  * Next steps:
- * - figure out A8 textures
- * - make the shader use per-glyph rects from a larger texture
- * - switch to using a font atlas insead of per-call cached surfaces
+ * - some renaming:
+ *   - Text and ColorText pipelines
+ *   - Mask and Blend render-ops / shaders
+ * - push surface creation into vulkan renderer
+ * - use multiple instances, one per glyph for the text pipelines
+ * - switch to using a font atlas instead of per-call cached surfaces
  */
 
 static void
