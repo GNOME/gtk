@@ -25,6 +25,17 @@ GskVulkanImage *        gsk_vulkan_renderer_ref_texture_image           (GskVulk
                                                                          GskTexture             *texture,
                                                                          GskVulkanUploader      *uploader);
 
+typedef struct {
+  float x, y, width, height;
+} GskRectangle;
+
+GskVulkanImage *        gsk_vulkan_renderer_ref_glyph_image             (GskVulkanRenderer      *self,
+                                                                         GskVulkanUploader      *uploader,
+                                                                         PangoFont              *font,
+                                                                         PangoGlyphString       *glyphs,
+                                                                         GskRectangle           *glyph_rects,
+                                                                         int                    *num_glyphs);
+
 G_END_DECLS
 
 #endif /* __GSK_VULKAN_RENDERER_PRIVATE_H__ */

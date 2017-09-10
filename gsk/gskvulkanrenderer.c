@@ -343,3 +343,108 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
 
   return image;
 }
+
+#ifndef STACK_BUFFER_SIZE
+#define STACK_BUFFER_SIZE (512 * sizeof (int))
+#endif
+
+#define STACK_ARRAY_LENGTH(T) (STACK_BUFFER_SIZE / sizeof(T))
+
+static void
+render_text (cairo_t          *cr,
+             PangoFont        *font,
+             PangoGlyphString *glyphs,
+             GskRectangle     *glyph_rects,
+             int              *num_glyphs,
+             float             x,
+             float             y,
+             float             width,
+             float             height)
+{
+  int i, count;
+  int x_position = 0;
+  cairo_scaled_font_t *scaled_font;
+  cairo_glyph_t *cairo_glyphs;
+  cairo_glyph_t stack_glyphs[STACK_ARRAY_LENGTH (cairo_glyph_t)];
+
+  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
+  if (G_UNLIKELY (!scaled_font || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
+    return;
+
+  cairo_set_scaled_font (cr, scaled_font);
+  cairo_set_source_rgba (cr, 0, 0, 0, 1);
+
+  if (glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
+    cairo_glyphs = g_new (cairo_glyph_t, glyphs->num_glyphs);
+  else
+    cairo_glyphs = stack_glyphs;
+
+  count = 0;
+  for (i = 0; i < glyphs->num_glyphs; i++)
+    {
+      PangoGlyphInfo *gi = &glyphs->glyphs[i];
+
+      if (gi->glyph != PANGO_GLYPH_EMPTY)
+        {
+          double cx = x + (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+          double cy = y + (double)(gi->geometry.y_offset) / PANGO_SCALE;
+
+          if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
+            {
+              cairo_glyphs[count].index = gi->glyph;
+              cairo_glyphs[count].x = cx;
+              cairo_glyphs[count].y = cy;
+
+              glyph_rects[count].x = cx / width;
+              glyph_rects[count].y = 0.0;
+              glyph_rects[count].width = (float)gi->geometry.width / width;
+              glyph_rects[count].height = 1.0; // FIXME get actual glyph height
+
+              count++;
+            }
+        }
+      x_position += gi->geometry.width;
+    }
+
+  *num_glyphs = count;
+
+  cairo_show_glyphs (cr, cairo_glyphs, count);
+
+  if (cairo_glyphs != stack_glyphs)
+    g_free (cairo_glyphs);
+}
+
+GskVulkanImage *
+gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
+                                     GskVulkanUploader  *uploader,
+                                     PangoFont          *font,
+                                     PangoGlyphString   *glyphs,
+                                     GskRectangle       *glyph_rects,
+                                     int                *num_glyphs)
+{
+  PangoRectangle ink_rect;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  GskVulkanImage *image;
+
+  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
+  pango_extents_to_pixels (&ink_rect, NULL);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        ink_rect.x + ink_rect.width,
+                                        ink_rect.height);
+
+  cr = cairo_create (surface);
+  render_text (cr, font, glyphs, glyph_rects, num_glyphs,
+               0, - ink_rect.y, ink_rect.x + ink_rect.width, ink_rect.height);
+  cairo_destroy (cr);
+
+  image = gsk_vulkan_image_new_from_data (uploader,
+                                          cairo_image_surface_get_data (surface),
+                                          cairo_image_surface_get_width (surface),
+                                          cairo_image_surface_get_height (surface),
+                                          cairo_image_surface_get_stride (surface));
+  cairo_surface_destroy (surface);
+
+  return image;
+}
