@@ -32,9 +32,7 @@ typedef struct {
 GskVulkanImage *        gsk_vulkan_renderer_ref_glyph_image             (GskVulkanRenderer      *self,
                                                                          GskVulkanUploader      *uploader,
                                                                          PangoFont              *font,
-                                                                         PangoGlyphString       *glyphs,
-                                                                         GskRectangle           *glyph_rects,
-                                                                         int                    *num_glyphs);
+                                                                         PangoGlyphString       *glyphs);
 
 G_END_DECLS
 

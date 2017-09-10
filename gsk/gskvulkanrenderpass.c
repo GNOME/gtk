@@ -177,8 +177,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       return;
 
     case GSK_TEXT_NODE:
-      if (gsk_text_node_get_surface (node) == NULL)
-        return;
       if (gsk_text_node_get_has_color (node))
         {
           if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
@@ -448,10 +446,6 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
           surface = cairo_surface_reference (gsk_cairo_node_get_surface (node));
           goto got_surface;
 
-        case GSK_TEXT_NODE:
-          surface = cairo_surface_reference (gsk_text_node_get_surface (node));
-          goto got_surface;
-
         default:
           break;
         }
@@ -566,20 +560,26 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           break;
 
         case GSK_VULKAN_OP_SURFACE:
-        case GSK_VULKAN_OP_TEXT:
-        case GSK_VULKAN_OP_COLOR_TEXT:
           {
             cairo_surface_t *surface;
 
-            if (gsk_render_node_get_node_type (op->render.node) == GSK_CAIRO_NODE)
-              surface = gsk_cairo_node_get_surface (op->render.node);
-            else
-              surface = gsk_text_node_get_surface (op->render.node);
+            surface = gsk_cairo_node_get_surface (op->render.node);
             op->render.source = gsk_vulkan_image_new_from_data (uploader,
                                                                 cairo_image_surface_get_data (surface),
                                                                 cairo_image_surface_get_width (surface),
                                                                 cairo_image_surface_get_height (surface),
                                                                 cairo_image_surface_get_stride (surface));
+            gsk_vulkan_render_add_cleanup_image (render, op->render.source);
+          }
+          break;
+
+        case GSK_VULKAN_OP_TEXT:
+        case GSK_VULKAN_OP_COLOR_TEXT:
+          {
+            op->render.source = gsk_vulkan_renderer_ref_glyph_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
+                                                                     uploader,
+                                                                     gsk_text_node_get_font (op->render.node),
+                                                                     gsk_text_node_get_glyphs (op->render.node));
             gsk_vulkan_render_add_cleanup_image (render, op->render.source);
           }
           break;

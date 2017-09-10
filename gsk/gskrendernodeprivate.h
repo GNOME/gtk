@@ -81,7 +81,8 @@ cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
 
-cairo_surface_t *gsk_text_node_get_surface (GskRenderNode *node);
+PangoFont *gsk_text_node_get_font (GskRenderNode *node);
+PangoGlyphString *gsk_text_node_get_glyphs (GskRenderNode *node);
 gboolean gsk_text_node_get_has_color (GskRenderNode *node);
 const GdkRGBA *gsk_text_node_get_color (GskRenderNode *node);
 

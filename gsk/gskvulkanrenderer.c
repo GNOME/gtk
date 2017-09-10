@@ -418,14 +418,16 @@ GskVulkanImage *
 gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
                                      GskVulkanUploader  *uploader,
                                      PangoFont          *font,
-                                     PangoGlyphString   *glyphs,
-                                     GskRectangle       *glyph_rects,
-                                     int                *num_glyphs)
+                                     PangoGlyphString   *glyphs)
 {
   PangoRectangle ink_rect;
   cairo_surface_t *surface;
   cairo_t *cr;
   GskVulkanImage *image;
+  GskRectangle *glyph_rects;
+  int num_glyphs;
+
+  glyph_rects = g_new (GskRectangle, glyphs->num_glyphs);
 
   pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
   pango_extents_to_pixels (&ink_rect, NULL);
@@ -435,7 +437,7 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
                                         ink_rect.height);
 
   cr = cairo_create (surface);
-  render_text (cr, font, glyphs, glyph_rects, num_glyphs,
+  render_text (cr, font, glyphs, glyph_rects, &num_glyphs,
                0, - ink_rect.y, ink_rect.x + ink_rect.width, ink_rect.height);
   cairo_destroy (cr);
 
@@ -445,6 +447,8 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
                                           cairo_image_surface_get_height (surface),
                                           cairo_image_surface_get_stride (surface));
   cairo_surface_destroy (surface);
+
+  g_free (glyph_rects); // FIXME: keep this around per-image
 
   return image;
 }
