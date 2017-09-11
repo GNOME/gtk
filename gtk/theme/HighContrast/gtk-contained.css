@@ -486,47 +486,49 @@ toolbar.inline-toolbar, searchbar.inline-toolbar { border-style: solid; border-c
 toolbar.inline-toolbar:backdrop, searchbar.inline-toolbar:backdrop { border-color: #8d8d8d; background-color: #d7d7d7; box-shadow: none; }
 
 /*************** Header bars * */
-.titlebar, headerbar { min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: gray; border-radius: 7px 7px 0 0; background-color: transparent; background-image: linear-gradient(to bottom, white, #fff); box-shadow: inset 0 -1px #d9d9d9, inset 0 1px #fff; padding: 6px; }
+.titlebar:not(headerbar), headerbar { min-height: 46px; border-width: 0 0 1px; border-style: solid; border-color: gray; border-radius: 7px 7px 0 0; background-color: transparent; background-image: linear-gradient(to bottom, white, #fff); box-shadow: inset 0 -1px #d9d9d9, inset 0 1px #fff; padding: 6px; }
 
-.titlebar:backdrop, headerbar:backdrop { border-color: #8d8d8d; background-color: #fff; background-image: none; box-shadow: none; }
+.titlebar:backdrop:not(headerbar), headerbar:backdrop { border-color: #8d8d8d; background-color: #fff; background-image: none; box-shadow: none; }
 
-.titlebar .title, headerbar .title { font-weight: bold; padding: 0px 12px; }
+.titlebar:not(headerbar) .title, headerbar .title { font-weight: bold; padding: 0px 12px; }
 
-.titlebar .subtitle, headerbar .subtitle { font-size: 80%; padding: 0 12px; }
+.titlebar:not(headerbar) .subtitle, headerbar .subtitle { font-size: 80%; padding: 0 12px; }
 
-.titlebar.selection-mode, headerbar.selection-mode { color: black; text-shadow: 0 1px rgba(0, 0, 0, 0.5); background-image: linear-gradient(to bottom, #0d0d0d, #050505); box-shadow: inset 0 -1px #d9d9d9, inset 0 1px gray; }
+.selection-mode.titlebar:not(headerbar), headerbar.selection-mode { color: black; text-shadow: 0 1px rgba(0, 0, 0, 0.5); background-image: linear-gradient(to bottom, #0d0d0d, #050505); box-shadow: inset 0 -1px #d9d9d9, inset 0 1px gray; }
 
-.titlebar.selection-mode button, headerbar.selection-mode button { border-width: 2px; border-style: solid; color: #fff; background-image: none; background-color: #000; border-color: black; }
+.selection-mode.titlebar:not(headerbar) button, headerbar.selection-mode button { border-width: 2px; border-style: solid; color: #fff; background-image: none; background-color: #000; border-color: black; }
 
-.titlebar.selection-mode button:hover, headerbar.selection-mode button:hover { border-width: 2px; border-style: solid; color: #fff; background-color: #000; border-color: black; background-image: none; }
+.selection-mode.titlebar:not(headerbar) button:hover, headerbar.selection-mode button:hover { border-width: 2px; border-style: solid; color: #fff; background-color: #000; border-color: black; background-image: none; }
 
-.titlebar.selection-mode button:active, headerbar.selection-mode button:active { border-width: 2px; border-style: solid; background-image: none; color: black; background-color: white; border-color: black; }
+.selection-mode.titlebar:not(headerbar) button:active, headerbar.selection-mode button:active { border-width: 2px; border-style: solid; background-image: none; color: black; background-color: white; border-color: black; }
 
-.titlebar.selection-mode button:disabled, headerbar.selection-mode button:disabled { border-width: 2px; border-style: solid; color: gray; background-color: white; border-color: silver; background-image: none; }
+.selection-mode.titlebar:not(headerbar) button:disabled, headerbar.selection-mode button:disabled { border-width: 2px; border-style: solid; color: gray; background-color: white; border-color: silver; background-image: none; }
 
-.titlebar.selection-mode button:backdrop, headerbar.selection-mode button:backdrop { border-width: 2px; border-style: solid; color: #fff; background-color: #000; border-color: #000; background-image: none; border-color: black; }
+.selection-mode.titlebar:not(headerbar) button:backdrop, headerbar.selection-mode button:backdrop { border-width: 2px; border-style: solid; color: #fff; background-color: #000; border-color: #000; background-image: none; border-color: black; }
 
-.titlebar.selection-mode button:backdrop:disabled, headerbar.selection-mode button:backdrop:disabled { border-width: 2px; border-style: solid; color: gray; background-color: white; border-color: silver; background-image: none; }
+.selection-mode.titlebar:not(headerbar) button:backdrop:disabled, headerbar.selection-mode button:backdrop:disabled { border-width: 2px; border-style: solid; color: gray; background-color: white; border-color: silver; background-image: none; }
 
-.titlebar.selection-mode button.suggested-action, headerbar.selection-mode button.suggested-action { border-width: 2px; border-style: solid; color: #000; background-image: none; background-color: #fff; border-color: gray; }
+.selection-mode.titlebar:not(headerbar) button.suggested-action, headerbar.selection-mode button.suggested-action { border-width: 2px; border-style: solid; color: #000; background-image: none; background-color: #fff; border-color: gray; }
 
-.titlebar.selection-mode button.suggested-action:hover, headerbar.selection-mode button.suggested-action:hover { border-width: 2px; border-style: solid; color: #000; background-color: #fff; border-color: gray; background-image: none; }
+.selection-mode.titlebar:not(headerbar) button.suggested-action:hover, headerbar.selection-mode button.suggested-action:hover { border-width: 2px; border-style: solid; color: #000; background-color: #fff; border-color: gray; background-image: none; }
 
-.titlebar.selection-mode button.suggested-action:active, headerbar.selection-mode button.suggested-action:active { border-width: 2px; border-style: solid; background-image: none; color: white; background-color: black; border-color: gray; }
+.selection-mode.titlebar:not(headerbar) button.suggested-action:active, headerbar.selection-mode button.suggested-action:active { border-width: 2px; border-style: solid; background-image: none; color: white; background-color: black; border-color: gray; }
 
-.titlebar.selection-mode button.suggested-action:disabled, headerbar.selection-mode button.suggested-action:disabled { border-width: 2px; border-style: solid; color: gray; background-color: white; border-color: silver; background-image: none; }
+.selection-mode.titlebar:not(headerbar) button.suggested-action:disabled, headerbar.selection-mode button.suggested-action:disabled { border-width: 2px; border-style: solid; color: gray; background-color: white; border-color: silver; background-image: none; }
 
-.titlebar.selection-mode button.suggested-action:backdrop, headerbar.selection-mode button.suggested-action:backdrop { border-width: 2px; border-style: solid; color: #000; background-color: #fff; border-color: #8d8d8d; background-image: none; }
+.selection-mode.titlebar:not(headerbar) button.suggested-action:backdrop, headerbar.selection-mode button.suggested-action:backdrop { border-width: 2px; border-style: solid; color: #000; background-color: #fff; border-color: #8d8d8d; background-image: none; }
 
-.titlebar.selection-mode button.suggested-action:backdrop:disabled, headerbar.selection-mode button.suggested-action:backdrop:disabled { border-width: 2px; border-style: solid; color: gray; background-color: white; border-color: silver; background-image: none; }
+.selection-mode.titlebar:not(headerbar) button.suggested-action:backdrop:disabled, headerbar.selection-mode button.suggested-action:backdrop:disabled { border-width: 2px; border-style: solid; color: gray; background-color: white; border-color: silver; background-image: none; }
 
-.titlebar.selection-mode .selection-menu, headerbar.selection-mode .selection-menu { border-width: 0; background-image: none; box-shadow: none; }
+.selection-mode.titlebar:not(headerbar) .selection-menu, headerbar.selection-mode .selection-menu { border-width: 0; background-image: none; box-shadow: none; }
 
-.tiled .titlebar, .maximized .titlebar, .fullscreen .titlebar, .tiled headerbar, .maximized headerbar, .fullscreen headerbar { border-radius: 0; }
+.tiled .titlebar:not(headerbar), .maximized .titlebar:not(headerbar), .fullscreen .titlebar:not(headerbar), .tiled headerbar, .maximized headerbar, .fullscreen headerbar { border-radius: 0; }
 
-.titlebar.default-decoration, headerbar.default-decoration { min-height: 28px; padding: 4px; }
+.default-decoration.titlebar:not(headerbar), headerbar.default-decoration { min-height: 28px; padding: 4px; }
 
-.titlebar.default-decoration button.titlebutton, headerbar.default-decoration button.titlebutton { min-height: 26px; min-width: 26px; margin: 0; padding: 0; }
+.default-decoration.titlebar:not(headerbar) button.titlebutton, headerbar.default-decoration button.titlebutton { min-height: 26px; min-width: 26px; margin: 0; padding: 0; }
+
+window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparent; background-image: none; border-style: none; border-color: transparent; box-shadow: none; }
 
 /************ Pathbars * */
 .path-bar button { padding: 5px 6px 6px; }
