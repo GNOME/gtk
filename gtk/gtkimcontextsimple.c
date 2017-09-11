@@ -1220,7 +1220,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   else
     have_hex_mods = (event->state & (hex_mod_mask)) == hex_mod_mask;
   is_hex_start = event->keyval == GDK_KEY_U;
-  is_emoji_start = event->keyval == GDK_KEY_E;
+  is_emoji_start = (event->keyval == GDK_KEY_E) && !priv->in_hex_sequence;
   is_end = (event->keyval == GDK_KEY_space ||
             event->keyval == GDK_KEY_KP_Space ||
             event->keyval == GDK_KEY_Return ||
