@@ -1,3 +1,29 @@
+Overview of Changes in GTK+ 3.22.21
+===================================
+
+* Bugs fixed:
+ 738893 ComboBox in appears-as-list mode: Finishing scroll with mouse causes...
+ 786613 Adwaita: provide a generic sidebar icon and label styling
+ 787172 EmojiChooser: Improve selection of section buttons
+ 787279 EmojiChooser: Hovered emoji become impossible to see in HighContrast...
+ 787280 HighContrast: Fix regression in vertical separator in titlebar headerbar
+ 787410 entry: fix memory leak
+
+* Translation updates:
+ Basque
+ Catalan
+ Croatian
+ Czech
+ Danish
+ Finnish
+ German
+ Polish
+ Slovenian
+ Spanish
+ Swedish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.22.20
 ===================================
 
