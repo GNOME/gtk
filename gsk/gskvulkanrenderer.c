@@ -642,9 +642,17 @@ dump_glyph_cache_stats (GlyphCache *cache)
 {
   GHashTableIter iter;
   FontEntry *fe;
+  static gint64 time;
+  gint64 now;
 
   if (!cache->fonts)
     return;
+
+  now = g_get_monotonic_time ();
+  if (now - time < 1000000)
+    return;
+
+  time = now;
 
   g_print ("Glyph cache:\n");
   g_hash_table_iter_init (&iter, cache->fonts);
