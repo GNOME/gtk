@@ -315,11 +315,8 @@ test_builder (void)
 }
 
 static void
-on_enter (GtkWidget *overlay, GdkEventCrossing *event, GtkWidget *child)
+on_enter (GtkWidget *child, GdkEventCrossing *event, GtkWidget *overlay)
 {
-  if (event->window != gtk_widget_get_window (child))
-    return;
-
   if (gtk_widget_get_halign (child) == GTK_ALIGN_START)
     gtk_widget_set_halign (child, GTK_ALIGN_END);
   else
@@ -372,8 +369,8 @@ test_chase (void)
   gtk_overlay_add_overlay (GTK_OVERLAY (overlay), child);
   g_object_set (child, "margin", 4, NULL);
 
-  g_signal_connect (overlay, "enter-notify-event",
-                    G_CALLBACK (on_enter), child);
+  g_signal_connect (child, "enter-notify-event",
+                    G_CALLBACK (on_enter), overlay);
   return win;
 }
 
