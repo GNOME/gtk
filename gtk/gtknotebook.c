@@ -5952,8 +5952,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
         {
         case GTK_POS_TOP:
         case GTK_POS_BOTTOM:
-          if (priv->operation != DRAG_OPERATION_REORDER ||
-              (priv->operation == DRAG_OPERATION_REORDER && page != priv->cur_page))
+          if (priv->operation != DRAG_OPERATION_REORDER || page != priv->cur_page)
             {
               if (priv->operation == DRAG_OPERATION_REORDER)
                 {
@@ -5974,8 +5973,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
           break;
         case GTK_POS_LEFT:
         case GTK_POS_RIGHT:
-          if (priv->operation != DRAG_OPERATION_REORDER  ||
-              (priv->operation == DRAG_OPERATION_REORDER && page != priv->cur_page))
+          if (priv->operation != DRAG_OPERATION_REORDER || page != priv->cur_page)
             {
               if (priv->operation == DRAG_OPERATION_REORDER)
                 {
