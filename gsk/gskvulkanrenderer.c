@@ -419,8 +419,10 @@ gsk_vulkan_renderer_get_glyph_coords (GskVulkanRenderer *self,
                                       float             *ty,
                                       float             *tw,
                                       float             *th,
-                                      float             *ascent,
-                                      float             *height)
+                                      float             *dx,
+                                      float             *dy,
+                                      float             *dw,
+                                      float             *dh)
 {
   GlyphCacheValue *gv;
 
@@ -432,8 +434,10 @@ gsk_vulkan_renderer_get_glyph_coords (GskVulkanRenderer *self,
       *ty = gv->ty;
       *tw = gv->tw;
       *th = gv->th;
-      *ascent = - gv->draw_y;
-      *height = gv->draw_height;
+      *dx = gv->draw_x;
+      *dy = gv->draw_y;
+      *dw = gv->draw_width;
+      *dh = gv->draw_height;
     }
 }
 
@@ -502,10 +506,10 @@ add_to_cache (GlyphCache      *cache,
     return;
 
   cairo_set_scaled_font (cr, scaled_font);
-  cairo_set_source_rgba (cr, 0, 0, 0, 1);
+  cairo_set_source_rgba (cr, 1, 1, 1, 1);
 
   cg.index = glyph;
-  cg.x = cache->x;
+  cg.x = cache->x - value->draw_x;
   cg.y = cache->y0 - value->draw_y;
 
   cairo_show_glyphs (cr, &cg, 1);
@@ -515,7 +519,7 @@ add_to_cache (GlyphCache      *cache,
   cache->x = cache->x + value->draw_width + 1;
   cache->y = MAX (cache->y, cache->y0 + value->draw_height + 1);
 
-  value->tx = cg.x / cache->width;
+  value->tx = (cg.x + value->draw_x) / cache->width;
   value->ty = (cg.y + value->draw_y) / cache->height;
   value->tw = (float)value->draw_width / cache->width;
   value->th = (float)value->draw_height / cache->height;

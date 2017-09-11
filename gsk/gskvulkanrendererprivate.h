@@ -37,8 +37,10 @@ void                    gsk_vulkan_renderer_get_glyph_coords            (GskVulk
                                                                          float                  *ty,
                                                                          float                  *tw,
                                                                          float                  *th,
-                                                                         float                  *ascent,
-                                                                         float                  *height);
+                                                                         float                  *dx,
+                                                                         float                  *dy,
+                                                                         float                  *dw,
+                                                                         float                  *dh);
 
 void                    gsk_vulkan_renderer_cache_glyphs                (GskVulkanRenderer      *renderer,
                                                                          PangoFont              *font,

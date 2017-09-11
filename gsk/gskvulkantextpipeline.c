@@ -112,8 +112,7 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
   GskVulkanTextInstance *instances = (GskVulkanTextInstance *) data;
   int i, count;
   int x_position = 0;
-  float ascent;
-  float height;
+  float dx, dy, dw, dh;
 
   count = 0;
   for (i = 0; i < glyphs->num_glyphs; i++)
@@ -134,11 +133,11 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                                     &instance->tex_rect[1],
                                                     &instance->tex_rect[2],
                                                     &instance->tex_rect[3],
-                                                    &ascent, &height);
-              instance->rect[0] = x + cx;
-              instance->rect[1] = y + cy - ascent;
-              instance->rect[2] = PANGO_PIXELS_CEIL (gi->geometry.width);
-              instance->rect[3] = height;
+                                                    &dx, &dy, &dw, &dh);
+              instance->rect[0] = x + cx + dx;
+              instance->rect[1] = y + cy + dy;
+              instance->rect[2] = dw;
+              instance->rect[3] = dh;
               instance->color[0] = color->red;
               instance->color[1] = color->green;
               instance->color[2] = color->blue;
