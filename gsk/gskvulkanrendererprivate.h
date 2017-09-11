@@ -25,19 +25,24 @@ GskVulkanImage *        gsk_vulkan_renderer_ref_texture_image           (GskVulk
                                                                          GskTexture             *texture,
                                                                          GskVulkanUploader      *uploader);
 
-typedef struct {
-  PangoGlyph glyph;
-  float x, y, width, height;
-} GskGlyphCoords;
-
 GskVulkanImage *        gsk_vulkan_renderer_ref_glyph_image             (GskVulkanRenderer      *self,
                                                                          GskVulkanUploader      *uploader,
                                                                          PangoFont              *font,
                                                                          PangoGlyphString       *glyphs);
+
 void                    gsk_vulkan_renderer_get_glyph_coords            (GskVulkanRenderer      *self,
                                                                          PangoFont              *font,
-                                                                         PangoGlyphString       *glyphs,
-                                                                         GskGlyphCoords         *coords);
+                                                                         PangoGlyph              glyph,
+                                                                         float                  *tx,
+                                                                         float                  *ty,
+                                                                         float                  *tw,
+                                                                         float                  *th,
+                                                                         float                  *ascent,
+                                                                         float                  *height);
+
+void                    gsk_vulkan_renderer_cache_glyphs                (GskVulkanRenderer      *renderer,
+                                                                         PangoFont              *font,
+                                                                         PangoGlyphString       *glyphs);
 
 G_END_DECLS
 

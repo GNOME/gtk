@@ -112,16 +112,8 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
   GskVulkanTextInstance *instances = (GskVulkanTextInstance *) data;
   int i, count;
   int x_position = 0;
-  float ink_rect_y;
-  float ink_rect_height;
-  GskGlyphCoords *coords;
-
-  /* XXX */
-  ink_rect_y = rect->origin.y - y;
-  ink_rect_height = rect->size.height;
-
-  coords = g_new (GskGlyphCoords, glyphs->num_glyphs);
-  gsk_vulkan_renderer_get_glyph_coords (renderer, font, glyphs, coords);
+  float ascent;
+  float height;
 
   count = 0;
   for (i = 0; i < glyphs->num_glyphs; i++)
@@ -137,14 +129,16 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
             {
               GskVulkanTextInstance *instance = &instances[count];
 
+              gsk_vulkan_renderer_get_glyph_coords (renderer, font, gi->glyph,
+                                                    &instance->tex_rect[0],
+                                                    &instance->tex_rect[1],
+                                                    &instance->tex_rect[2],
+                                                    &instance->tex_rect[3],
+                                                    &ascent, &height);
               instance->rect[0] = x + cx;
-              instance->rect[1] = y + ink_rect_y + cy;
+              instance->rect[1] = y + cy - ascent;
               instance->rect[2] = (float)gi->geometry.width / PANGO_SCALE;
-              instance->rect[3] = ink_rect_height;
-              instance->tex_rect[0] = coords[i].x;
-              instance->tex_rect[1] = coords[i].y;
-              instance->tex_rect[2] = coords[i].width;
-              instance->tex_rect[3] = coords[i].height;
+              instance->rect[3] = height;
               instance->color[0] = color->red;
               instance->color[1] = color->green;
               instance->color[2] = color->blue;
@@ -155,8 +149,6 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
         }
       x_position += gi->geometry.width;
     }
-
-  g_free (coords);
 }
 
 gsize

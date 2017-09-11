@@ -197,6 +197,10 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       return;
 
     case GSK_TEXT_NODE:
+       gsk_vulkan_renderer_cache_glyphs (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
+                                         gsk_text_node_get_font (node),
+                                         gsk_text_node_get_glyphs (node));
+
       if (font_has_color_glyphs (gsk_text_node_get_font (node)))
         {
           if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
