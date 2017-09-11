@@ -137,7 +137,7 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                                     &ascent, &height);
               instance->rect[0] = x + cx;
               instance->rect[1] = y + cy - ascent;
-              instance->rect[2] = (float)gi->geometry.width / PANGO_SCALE;
+              instance->rect[2] = PANGO_PIXELS_CEIL (gi->geometry.width);
               instance->rect[3] = height;
               instance->color[0] = color->red;
               instance->color[1] = color->green;
