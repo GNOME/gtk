@@ -490,14 +490,14 @@ add_to_cache (GlyphCache *cache,
   pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
   pango_extents_to_pixels (&ink_rect, NULL);
 
-  if (cache->x + ink_rect.width >= cache->width)
+  if (cache->x + ink_rect.width + 1 >= cache->width)
     {
       /* start a new row */
       cache->y0 = cache->y + 1;
       cache->x = 1;
     }
 
-  if (cache->y0 + ink_rect.height >= cache->height)
+  if (cache->y0 + ink_rect.height + 1 >= cache->height)
     {
       g_critical ("Drats! Out of cache space. We should really handle this");
       return;
@@ -619,9 +619,9 @@ create_glyph_cache (void)
 
   cache = g_new0 (GlyphCache, 1);
   cache->fonts = g_hash_table_new_full (font_hash, font_equal, NULL, font_entry_free);
-  cache->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1024, 1024);
   cache->width = 1024;
   cache->height = 1024;
+  cache->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, cache->width, cache->height);
   cache->y0 = 1;
   cache->y = 1;
   cache->x = 1;
