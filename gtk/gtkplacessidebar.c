@@ -4271,6 +4271,10 @@ gtk_places_sidebar_dispose (GObject *object)
   g_slist_free_full (sidebar->shortcuts, g_object_unref);
   sidebar->shortcuts = NULL;
 
+#ifdef HAVE_CLOUDPROVIDERS
+  g_clear_object (&sidebar->cloud_manager);
+#endif
+
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
 }
 
