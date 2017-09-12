@@ -329,7 +329,7 @@ pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 pangoft_dep    = dependency('pangoft2', required: wayland_enabled or x11_enabled,
                             fallback : ['pango', 'libpangoft2_dep'])
-pangocairo_dep = dependency('pangocairo', version: cairo_req,
+pangocairo_dep = dependency('pangocairo', version: pango_req,
                             fallback : ['pango', 'libpangocairo_dep'])
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'])
