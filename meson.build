@@ -323,8 +323,8 @@ giounix_dep    = dependency('gio-unix-2.0', version: glib_req, required: false,
                             fallback : ['glib', 'libgio_dep'])
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
                             fallback : ['glib', 'libgmodule_dep'])
-cairo_dep      = dependency('cairo', version: cairo_req)
-cairogobj_dep  = dependency('cairo-gobject', version: cairo_req)
+cairo_dep      = dependency('cairo', version: cairo_req, required : cc.get_id() != 'msvc')
+cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required : cc.get_id() != 'msvc')
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 pangoft_dep    = dependency('pangoft2', required: wayland_enabled or x11_enabled,
@@ -357,10 +357,53 @@ foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
  cairo_backend_req = backend.get(1)
  cairo_backend = backend.get(0)
  if backend_enabled
-   dependency(cairo_backend, version: cairo_backend_req)
-   cairo_backends += [ cairo_backend ]
+   if dependency(cairo_backend, version: cairo_backend_req, required : cc.get_id() != 'msvc').found()
+     cairo_backends += [ cairo_backend ]
+   endif
  endif
 endforeach
+
+cairo_pkg_found = false
+cairogobj_pkg_found = false
+
+if cairo_dep.found()
+  cairo_pkg_found = true
+endif
+if cairogobj_dep.found()
+  cairogobj_pkg_found = true
+endif
+
+if cc.get_id() == 'msvc'
+  # Fallback depedency discovery for those on Visual Studio that do not generate
+  # pkg-config files in their build systems for MSVC
+  # Fallback for Cairo
+  cairo_libs = []
+  if not cairo_dep.found()
+    if (cc.has_header('cairo.h') and cc.has_header('cairo-win32.h'))
+      cairo_dep = cc.find_library('cairo')
+      if cairo_dep.found()
+        cairo_libs += '-lcairo'
+      endif
+    endif
+  endif
+
+  # Fallback for Cairo-GObject
+  if not cairogobj_dep.found()
+    if cc.has_header('cairo-gobject.h')
+      cairogobj_dep = cc.find_library('cairo-gobject')
+      if cairogobj_dep.found()
+        cairo_libs += '-lcairo-gobject'
+      endif
+    endif
+  endif
+
+  # Fallback for HarfBuzz
+  if not harfbuzz_dep.found()
+    if cc.has_header('harfbuzz/hb.h')
+      harfbuzz_dep = cc.find_library('harfbuzz', required : false)
+    endif
+  endif
+endif
 
 atk_pkgs = ['atk']
 
@@ -570,12 +613,18 @@ pkgconf.set('host', '@0@-@1@'.format(host_machine.cpu_family(), host_machine.sys
 
 # Requires
 pango_pkgname = win32_enabled ? 'pangowin32' : 'pango'
-pkgconf.set('GDK_PACKAGES',
-            ' '.join([ pango_pkgname, pango_req,
+gdk_packages = ' '.join([ pango_pkgname, pango_req,
                        'pangocairo', pango_req,
-                       'gdk-pixbuf-2.0', gdk_pixbuf_req,
-                       'cairo', cairo_req,
-                       'cairo-gobject', cairo_req ]))
+                       'gdk-pixbuf-2.0', gdk_pixbuf_req ])
+
+if cairo_pkg_found
+  gdk_packages += ' '.join([ ' cairo', cairo_req ])
+endif
+if cairogobj_pkg_found
+  gdk_packages += ' '.join([ ' cairo-gobject', cairo_req ])
+endif
+
+pkgconf.set('GDK_PACKAGES', gdk_packages)
 pkgconf.set('GSK_PACKAGES',
             ' '.join([ 'graphene-gobject-1.0', graphene_req ]))
 pkgconf.set('GTK_PACKAGES',
@@ -583,6 +632,8 @@ pkgconf.set('GTK_PACKAGES',
                        'gio-2.0', glib_req ]))
 
 # Requires.private
+pc_gdk_extra_libs += cairo_libs
+
 gio_pkgname = os_unix ? 'gio-unix-2.0' : 'gio-2.0'
 pkgconf.set('GDK_PRIVATE_PACKAGES',
             ' '.join([ gio_pkgname, glib_req,
