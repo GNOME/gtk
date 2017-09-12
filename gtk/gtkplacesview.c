@@ -1171,8 +1171,7 @@ update_places (GtkPlacesView *view)
   populate_servers (view);
 
   /* fetch networks and add them asynchronously */
-  if (!gtk_places_view_get_local_only (view))
-    fetch_networks (view);
+  fetch_networks (view);
 
   update_view_mode (view);
   /* Check whether we still are in a loading state */
@@ -1890,12 +1889,37 @@ on_listbox_row_activated (GtkPlacesView    *view,
 }
 
 static gboolean
+is_mount_locally_accessible (GMount *mount)
+{
+  GFile *base_file;
+  gchar *path;
+
+  if (mount == NULL)
+    return FALSE;
+
+  base_file = g_mount_get_root (mount);
+
+  if (base_file == NULL)
+    return FALSE;
+
+  path = g_file_get_path (base_file);
+  g_object_unref (base_file);
+
+  if (path == NULL)
+    return FALSE;
+
+  g_free (path);
+  return TRUE;
+}
+
+static gboolean
 listbox_filter_func (GtkListBoxRow *row,
                      gpointer       user_data)
 {
   GtkPlacesViewPrivate *priv;
   gboolean is_network;
   gboolean is_placeholder;
+  gboolean is_local = FALSE;
   gboolean retval;
   gboolean searching;
   gchar *name;
@@ -1908,7 +1932,20 @@ listbox_filter_func (GtkListBoxRow *row,
   is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-network"));
   is_placeholder = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-placeholder"));
 
-  if (is_network && priv->local_only)
+  if (GTK_IS_PLACES_VIEW_ROW (row))
+    {
+      GtkPlacesViewRow *placesviewrow;
+      GMount *mount;
+
+      placesviewrow = GTK_PLACES_VIEW_ROW (row);
+      g_object_get(G_OBJECT (placesviewrow), "mount", &mount, NULL);
+
+      is_local = is_mount_locally_accessible (mount);
+
+      g_clear_object (&mount);
+    }
+
+  if (is_network && priv->local_only && !is_local)
     return FALSE;
 
   if (is_placeholder && searching)
