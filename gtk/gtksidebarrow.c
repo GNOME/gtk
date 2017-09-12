@@ -267,15 +267,10 @@ gtk_sidebar_row_set_property (GObject      *object,
       break;
 
     case PROP_CLOUD_PROVIDER:
-      {
 #ifdef HAVE_CLOUDPROVIDERS
-        gpointer *object;
-        object = g_value_get_object (value);
-        if (IS_CLOUD_PROVIDER_ACCOUNT(object))
-          self->cloud_provider = g_object_ref (object);
+      g_set_object (&self->cloud_provider, g_value_get_object (value));
 #endif
-        break;
-      }
+      break;
 
     case PROP_PLACEHOLDER:
       {
@@ -297,6 +292,7 @@ gtk_sidebar_row_set_property (GObject      *object,
             g_clear_object (&self->drive);
             g_clear_object (&self->volume);
             g_clear_object (&self->mount);
+            g_clear_object (&self->cloud_provider);
 
             gtk_container_foreach (GTK_CONTAINER (self),
                                    (GtkCallback) gtk_widget_destroy,
@@ -403,6 +399,7 @@ gtk_sidebar_row_finalize (GObject *object)
   g_clear_object (&self->drive);
   g_clear_object (&self->volume);
   g_clear_object (&self->mount);
+  g_clear_object (&self->cloud_provider);
 
   G_OBJECT_CLASS (gtk_sidebar_row_parent_class)->finalize (object);
 }
