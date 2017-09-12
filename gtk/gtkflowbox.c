@@ -41,6 +41,10 @@
  * Reducing the height will require more columns, so a larger width will
  * be requested.
  *
+ * The size request of a GtkFlowBox alone may not be what you expect; if you
+ * need to be able to shrink it along both axes and dynamically reflow its
+ * children, you may have to wrap it in a #GtkScrolledWindow to enable that.
+ *
  * The children of a GtkFlowBox can be dynamically sorted and filtered.
  *
  * Although a GtkFlowBox must have only #GtkFlowBoxChild children,
