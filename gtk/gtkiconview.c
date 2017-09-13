@@ -160,10 +160,16 @@ static gboolean         gtk_icon_view_motion                    (GtkWidget      
 								 GdkEventMotion     *event);
 static gboolean         gtk_icon_view_leave                     (GtkWidget          *widget,
 								 GdkEventCrossing   *event);
-static gboolean         gtk_icon_view_button_press              (GtkWidget          *widget,
-								 GdkEventButton     *event);
-static gboolean         gtk_icon_view_button_release            (GtkWidget          *widget,
-								 GdkEventButton     *event);
+static void             gtk_icon_view_button_press              (GtkGestureMultiPress *gesture,
+                                                                 int                   n_press,
+                                                                 double                x,
+                                                                 double                y,
+                                                                 gpointer              user_data);
+static void             gtk_icon_view_button_release            (GtkGestureMultiPress *gesture,
+                                                                 int                   n_press,
+                                                                 double                x,
+                                                                 double                y,
+                                                                 gpointer              user_data);
 static gboolean         gtk_icon_view_key_press                 (GtkWidget          *widget,
 								 GdkEventKey        *event);
 static gboolean         gtk_icon_view_key_release               (GtkWidget          *widget,
@@ -355,8 +361,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->snapshot = gtk_icon_view_snapshot;
   widget_class->motion_notify_event = gtk_icon_view_motion;
   widget_class->leave_notify_event = gtk_icon_view_leave;
-  widget_class->button_press_event = gtk_icon_view_button_press;
-  widget_class->button_release_event = gtk_icon_view_button_release;
   widget_class->key_press_event = gtk_icon_view_key_press;
   widget_class->key_release_event = gtk_icon_view_key_release;
   widget_class->drag_begin = gtk_icon_view_drag_begin;
@@ -972,6 +976,12 @@ gtk_icon_view_init (GtkIconView *icon_view)
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (icon_view)),
                                GTK_STYLE_CLASS_VIEW);
+
+  icon_view->priv->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (icon_view));
+  g_signal_connect (icon_view->priv->press_gesture, "pressed", G_CALLBACK (gtk_icon_view_button_press),
+                    icon_view);
+  g_signal_connect (icon_view->priv->press_gesture, "released", G_CALLBACK (gtk_icon_view_button_release),
+                    icon_view);
 }
 
 /* GObject methods */
@@ -1019,6 +1029,8 @@ gtk_icon_view_dispose (GObject *object)
       g_object_unref (priv->cell_area);
       priv->cell_area = NULL;
     }
+
+  g_clear_object (&priv->press_gesture);
 
   G_OBJECT_CLASS (gtk_icon_view_parent_class)->dispose (object);
 }
@@ -2095,21 +2107,26 @@ gtk_icon_view_get_cursor (GtkIconView      *icon_view,
   return (item != NULL);
 }
 
-static gboolean
-gtk_icon_view_button_press (GtkWidget      *widget,
-			    GdkEventButton *event)
+static void
+gtk_icon_view_button_press (GtkGestureMultiPress *gesture,
+                            int                   n_press,
+                            double                x,
+                            double                y,
+                            gpointer              user_data)
 {
-  GtkIconView *icon_view;
+  GtkIconView *icon_view = user_data;
+  GtkWidget *widget = GTK_WIDGET (icon_view);
   GtkIconViewItem *item;
   gboolean dirty = FALSE;
   GtkCellRenderer *cell = NULL, *cursor_cell = NULL;
-
-  icon_view = GTK_ICON_VIEW (widget);
+  int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  const GdkEventButton *event = (const GdkEventButton *)gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
-  if (event->button == GDK_BUTTON_PRIMARY && event->type == GDK_BUTTON_PRESS)
+  if (button == GDK_BUTTON_PRIMARY)
     {
       GdkModifierType extend_mod_mask;
       GdkModifierType modify_mod_mask;
@@ -2121,7 +2138,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
         gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
 
       item = _gtk_icon_view_get_item_at_widget_coords (icon_view,
-                                                       event->x, event->y,
+                                                       x, y,
                                                        FALSE,
                                                        &cell);
 
@@ -2183,9 +2200,9 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	  /* Save press to possibly begin a drag */
 	  if (icon_view->priv->pressed_button < 0)
 	    {
-	      icon_view->priv->pressed_button = event->button;
-	      icon_view->priv->press_start_x = event->x;
-	      icon_view->priv->press_start_y = event->y;
+	      icon_view->priv->pressed_button = button;
+	      icon_view->priv->press_start_x = x;
+	      icon_view->priv->press_start_y = y;
 	    }
 
           icon_view->priv->last_single_clicked = item;
@@ -2214,7 +2231,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	    }
 	  
 	  if (icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE)
-            gtk_icon_view_start_rubberbanding (icon_view, event->device, event->x, event->y);
+            gtk_icon_view_start_rubberbanding (icon_view, event->device, x, y);
 	}
 
       /* don't draw keyboard focus around an clicked-on item */
@@ -2222,11 +2239,11 @@ gtk_icon_view_button_press (GtkWidget      *widget,
     }
 
   if (!icon_view->priv->activate_on_single_click
-      && event->button == GDK_BUTTON_PRIMARY
-      && event->type == GDK_2BUTTON_PRESS)
+      && button == GDK_BUTTON_PRIMARY
+      && n_press == 2)
     {
       item = _gtk_icon_view_get_item_at_widget_coords (icon_view,
-                                                       event->x, event->y,
+                                                       x, y,
                                                        FALSE,
                                                        NULL);
 
@@ -2245,8 +2262,6 @@ gtk_icon_view_button_press (GtkWidget      *widget,
   
   if (dirty)
     g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
-
-  return event->button == GDK_BUTTON_PRIMARY;
 }
 
 static gboolean
@@ -2255,22 +2270,26 @@ button_event_modifies_selection (GdkEventButton *event)
         return (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
 }
 
-static gboolean
-gtk_icon_view_button_release (GtkWidget      *widget,
-			      GdkEventButton *event)
+static void
+gtk_icon_view_button_release (GtkGestureMultiPress *gesture,
+                              int                   n_press,
+                              double                x,
+                              double                y,
+                              gpointer              user_data)
 {
-  GtkIconView *icon_view;
+  GtkIconView *icon_view = user_data;
+  int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
+  GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  const GdkEventButton *event = (const GdkEventButton *)gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
-  icon_view = GTK_ICON_VIEW (widget);
-  
-  if (icon_view->priv->pressed_button == event->button)
+  if (icon_view->priv->pressed_button == button)
     icon_view->priv->pressed_button = -1;
 
   gtk_icon_view_stop_rubberbanding (icon_view);
 
   remove_scroll_timeout (icon_view);
 
-  if (event->button == GDK_BUTTON_PRIMARY
+  if (button == GDK_BUTTON_PRIMARY
       && icon_view->priv->activate_on_single_click
       && !button_event_modifies_selection (event)
       && icon_view->priv->last_single_clicked != NULL)
@@ -2278,7 +2297,7 @@ gtk_icon_view_button_release (GtkWidget      *widget,
       GtkIconViewItem *item;
 
       item = _gtk_icon_view_get_item_at_widget_coords (icon_view,
-                                                       event->x, event->y,
+                                                       x, y,
                                                        FALSE,
                                                        NULL);
       if (item == icon_view->priv->last_single_clicked)
@@ -2291,8 +2310,6 @@ gtk_icon_view_button_release (GtkWidget      *widget,
 
       icon_view->priv->last_single_clicked = NULL;
     }
-
-  return TRUE;
 }
 
 static gboolean

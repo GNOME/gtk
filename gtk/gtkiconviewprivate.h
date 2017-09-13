@@ -17,6 +17,7 @@
 
 #include "gtk/gtkiconview.h"
 #include "gtk/gtkcssnodeprivate.h"
+#include "gtk/gtkgesturemultipress.h"
 
 #ifndef __GTK_ICON_VIEW_PRIVATE_H__
 #define __GTK_ICON_VIEW_PRIVATE_H__
@@ -57,6 +58,8 @@ struct _GtkIconViewPrivate
   GtkTreeModel *model;
 
   GList *items;
+
+  GtkGesture *press_gesture;
 
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
