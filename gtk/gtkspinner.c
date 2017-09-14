@@ -56,7 +56,8 @@
  *
  * # CSS nodes
  *
- * GtkSpinner has a single CSS node with the name spinner.
+ * GtkSpinner has a single CSS node with the name spinner. When the animation is
+ * active, the :checked pseudoclass is added to this node.
  */
 
 
