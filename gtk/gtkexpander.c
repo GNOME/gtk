@@ -973,7 +973,7 @@ gtk_expander_new (const gchar *label)
 
 /**
  * gtk_expander_new_with_mnemonic:
- * @label: (allow-none): the text of the label with an underscore
+ * @label: (nullable): the text of the label with an underscore
  *     in front of the mnemonic character
  *
  * Creates a new expander using @label as the text of the label.
@@ -1071,7 +1071,7 @@ gtk_expander_get_expanded (GtkExpander *expander)
 /**
  * gtk_expander_set_label:
  * @expander: a #GtkExpander
- * @label: (allow-none): a string
+ * @label: (nullable): a string
  *
  * Sets the text of the label of the expander to @label.
  *
@@ -1250,7 +1250,7 @@ gtk_expander_get_use_markup (GtkExpander *expander)
 /**
  * gtk_expander_set_label_widget:
  * @expander: a #GtkExpander
- * @label_widget: (allow-none): the new label widget
+ * @label_widget: (nullable): the new label widget
  *
  * Set the label widget for the expander. This is the widget
  * that will appear embedded alongside the expander arrow.
