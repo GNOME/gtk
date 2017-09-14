@@ -3281,6 +3281,23 @@ gdk_event_translate (MSG  *msg,
 
       break;
 
+    /*
+     * Handle WM_CANCELMODE and do nothing in response to it when DnD is
+     * active. Otherwise pass it to DefWindowProc, which will call ReleaseCapture()
+     * on our behalf.
+     * This prevents us from losing mouse capture when alt-tabbing during DnD
+     * (this includes the feature of Windows Explorer where dragging stuff over
+     * a window button in the taskbar causes that window to receive focus, i.e.
+     * keyboardless alt-tabbing).
+     */
+    case WM_CANCELMODE:
+      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND)
+        {
+          return_val = TRUE;
+          *ret_valp = 0;
+        }
+      break;
+
     case WM_CAPTURECHANGED:
       /* Sometimes we don't get WM_EXITSIZEMOVE, for instance when you
 	 select move/size in the menu and then click somewhere without
