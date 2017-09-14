@@ -99,8 +99,8 @@
  * ]|
  *
  * GtkExpander has three CSS nodes, the main node with the name expander,
- * a subnode with name title and node below it with name arrow. Neither of
- * them is using any style classes.
+ * a subnode with name title and node below it with name arrow. The arrow of an
+ * expander that is showing its child gets the :checked pseudoclass added to it.
  */
 
 #include "config.h"
