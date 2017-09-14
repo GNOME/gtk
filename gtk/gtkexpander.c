@@ -957,7 +957,7 @@ gtk_expander_measure (GtkWidget      *widget,
 
 /**
  * gtk_expander_new:
- * @label: the text of the label
+ * @label: (nullable): the text of the label
  *
  * Creates a new expander using @label as the text of the label.
  *
