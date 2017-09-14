@@ -60,6 +60,8 @@ gtk_inspector_init (void)
 
   g_type_ensure (G_TYPE_LIST_STORE);
 
+  g_type_ensure (GSK_TYPE_PIXEL_SHADER);
+
   g_type_ensure (GTK_TYPE_CELL_RENDERER_GRAPH);
   g_type_ensure (GTK_TYPE_GRAPH_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);

@@ -26,7 +26,18 @@
 #include <gdk/gdk.h>
 #include <gsk/gskenums.h>
 
+typedef struct _GskCodeLocation         GskCodeLocation;
+typedef struct _GskPixelShader          GskPixelShader;
 typedef struct _GskRenderer             GskRenderer;
 typedef struct _GskTexture              GskTexture;
+
+struct _GskCodeLocation
+{
+  gsize                  bytes;
+  gsize                  chars;
+  gsize                  lines;
+  gsize                  line_bytes;
+  gsize                  line_chars;
+};
 
 #endif /* __GSK_TYPES_H__ */

@@ -5,6 +5,7 @@ private_headers = [
   'gskgldriverprivate.h',
   'gskglprofilerprivate.h',
   'gskglrendererprivate.h',
+  'gskpixelshaderprivate.h',
   'gskprivate.h',
   'gskprofilerprivate.h',
   'gskrendererprivate.h',

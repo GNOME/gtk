@@ -21,6 +21,7 @@
 #define __GSK_H_INSIDE__
 
 #include <gsk/gskenums.h>
+#include <gsk/gskpixelshader.h>
 #include <gsk/gskrenderer.h>
 #include <gsk/gskrendernode.h>
 #include <gsk/gskroundedrect.h>

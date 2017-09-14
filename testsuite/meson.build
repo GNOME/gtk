@@ -4,6 +4,7 @@ installed_test_datadir = join_paths(gtk_datadir, 'installed-tests', 'gtk-4.0')
 
 subdir('gdk')
 subdir('gsk')
+subdir('gsksl')
 subdir('gtk')
 subdir('css')
 subdir('a11y')

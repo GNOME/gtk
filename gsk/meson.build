@@ -14,6 +14,7 @@ gsk_private_source_shaders = [
 ]
 
 gsk_public_sources = files([
+  'gskpixelshader.c',
   'gskrenderer.c',
   'gskrendernode.c',
   'gskrendernodeimpl.c',
@@ -31,10 +32,15 @@ gsk_private_sources = files([
   'gskprivate.c',
   'gskprofiler.c',
   'gskshaderbuilder.c',
+  'gskslnode.c',
+  'gskslpreprocessor.c',
+  'gsksltokenizer.c',
+  'gsksltype.c'
 ])
 
 gsk_public_headers = files([
   'gskenums.h',
+  'gskpixelshader.h',
   'gskrenderer.h',
   'gskrendernode.h',
   'gskroundedrect.h',
