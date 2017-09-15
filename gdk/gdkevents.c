@@ -528,8 +528,6 @@ gdk_event_new (GdkEventType type)
       new_event->motion.y_root = 0.;
       break;
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       new_event->button.x = 0.;
       new_event->button.y = 0.;
@@ -700,8 +698,6 @@ gdk_event_copy (const GdkEvent *event)
       break;
 
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       if (event->button.axes)
         new_event->button.axes = g_memdup (event->button.axes,
@@ -795,8 +791,6 @@ gdk_event_free (GdkEvent *event)
       break;
 
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       g_free (event->button.axes);
       break;
@@ -885,8 +879,6 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_MOTION_NOTIFY:
 	return event->motion.time;
       case GDK_BUTTON_PRESS:
-      case GDK_2BUTTON_PRESS:
-      case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
 	return event->button.time;
       case GDK_TOUCH_BEGIN:
@@ -978,8 +970,6 @@ gdk_event_get_state (const GdkEvent        *event,
 	*state = event->motion.state;
         return TRUE;
       case GDK_BUTTON_PRESS:
-      case GDK_2BUTTON_PRESS:
-      case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
         *state = event->button.state;
         return TRUE;
@@ -1083,8 +1073,6 @@ gdk_event_get_coords (const GdkEvent *event,
       y = event->scroll.y;
       break;
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       x = event->button.x;
       y = event->button.y;
@@ -1152,8 +1140,6 @@ gdk_event_get_root_coords (const GdkEvent *event,
       y = event->scroll.y_root;
       break;
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       x = event->button.x_root;
       y = event->button.y_root;
@@ -1223,8 +1209,6 @@ gdk_event_set_coords (GdkEvent *event,
       event->scroll.y = y;
       break;
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       event->button.x = x;
       event->button.y = y;
@@ -1276,8 +1260,6 @@ gdk_event_get_button (const GdkEvent *event,
   switch (event->type)
     {
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       number = event->button.button;
       break;
@@ -1321,12 +1303,6 @@ gdk_event_get_click_count (const GdkEvent *event,
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       number = 1;
-      break;
-    case GDK_2BUTTON_PRESS:
-      number = 2;
-      break;
-    case GDK_3BUTTON_PRESS:
-      number = 3;
       break;
     default:
       fetched = FALSE;
@@ -1634,8 +1610,6 @@ gdk_event_set_device (GdkEvent  *event,
       event->motion.device = device;
       break;
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       event->button.device = device;
       break;
@@ -1686,8 +1660,6 @@ gdk_event_get_device (const GdkEvent *event)
     case GDK_MOTION_NOTIFY:
       return event->motion.device;
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       return event->button.device;
     case GDK_TOUCH_BEGIN:
@@ -1709,8 +1681,6 @@ gdk_event_get_device (const GdkEvent *event)
     {
     case GDK_MOTION_NOTIFY:
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
@@ -2153,96 +2123,6 @@ gdk_get_show_events (void)
   return (_gdk_debug_flags & GDK_DEBUG_EVENTS) != 0;
 }
 
-static void
-gdk_synthesize_click (GdkDisplay *display,
-                      GdkEvent   *event,
-                      gint        nclicks)
-{
-  GdkEvent *event_copy;
-
-  event_copy = gdk_event_copy (event);
-  event_copy->type = (nclicks == 2) ? GDK_2BUTTON_PRESS : GDK_3BUTTON_PRESS;
-
-  _gdk_event_queue_append (display, event_copy);
-}
-
-void
-_gdk_event_button_generate (GdkDisplay *display,
-			    GdkEvent   *event)
-{
-  GdkMultipleClickInfo *info;
-  GdkDevice *source_device;
-
-  g_return_if_fail (event->type == GDK_BUTTON_PRESS);
-
-  source_device = gdk_event_get_source_device (event);
-  info = g_hash_table_lookup (display->multiple_click_info, event->button.device);
-
-  if (G_UNLIKELY (!info))
-    {
-      info = g_new0 (GdkMultipleClickInfo, 1);
-      info->button_number[0] = info->button_number[1] = -1;
-
-      g_hash_table_insert (display->multiple_click_info,
-                           event->button.device, info);
-    }
-
-  if ((event->button.time < (info->button_click_time[1] + 2 * display->double_click_time)) &&
-      (event->button.window == info->button_window[1]) &&
-      (event->button.button == info->button_number[1]) &&
-      (source_device == info->last_slave) &&
-      (ABS (event->button.x - info->button_x[1]) <= display->double_click_distance) &&
-      (ABS (event->button.y - info->button_y[1]) <= display->double_click_distance))
-    {
-      gdk_synthesize_click (display, event, 3);
-
-      info->button_click_time[1] = 0;
-      info->button_click_time[0] = 0;
-      info->button_window[1] = NULL;
-      info->button_window[0] = NULL;
-      info->button_number[1] = -1;
-      info->button_number[0] = -1;
-      info->button_x[0] = info->button_x[1] = 0;
-      info->button_y[0] = info->button_y[1] = 0;
-      info->last_slave = NULL;
-    }
-  else if ((event->button.time < (info->button_click_time[0] + display->double_click_time)) &&
-	   (event->button.window == info->button_window[0]) &&
-	   (event->button.button == info->button_number[0]) &&
-           (source_device == info->last_slave) &&
-	   (ABS (event->button.x - info->button_x[0]) <= display->double_click_distance) &&
-	   (ABS (event->button.y - info->button_y[0]) <= display->double_click_distance))
-    {
-      gdk_synthesize_click (display, event, 2);
-      
-      info->button_click_time[1] = info->button_click_time[0];
-      info->button_click_time[0] = event->button.time;
-      info->button_window[1] = info->button_window[0];
-      info->button_window[0] = event->button.window;
-      info->button_number[1] = info->button_number[0];
-      info->button_number[0] = event->button.button;
-      info->button_x[1] = info->button_x[0];
-      info->button_x[0] = event->button.x;
-      info->button_y[1] = info->button_y[0];
-      info->button_y[0] = event->button.y;
-      info->last_slave = source_device;
-    }
-  else
-    {
-      info->button_click_time[1] = 0;
-      info->button_click_time[0] = event->button.time;
-      info->button_window[1] = NULL;
-      info->button_window[0] = event->button.window;
-      info->button_number[1] = -1;
-      info->button_number[0] = event->button.button;
-      info->button_x[1] = 0;
-      info->button_x[0] = event->button.x;
-      info->button_y[1] = 0;
-      info->button_y[0] = event->button.y;
-      info->last_slave = source_device;
-    }
-}
-
 static GList *
 gdk_get_pending_window_state_event_link (GdkWindow *window)
 {
@@ -2340,8 +2220,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
  * @msec: double click time in milliseconds (thousandths of a second) 
  * 
  * Sets the double click time (two clicks within this time interval
- * count as a double click and result in a #GDK_2BUTTON_PRESS event).
- * Applications should not set this, it is a global 
+ * count as a double click). Applications should not set this, it is a global
  * user-configured setting.
  *
  * Since: 2.2
@@ -2375,8 +2254,7 @@ gdk_set_double_click_time (guint msec)
  * @distance: distance in pixels
  * 
  * Sets the double click distance (two clicks within this distance
- * count as a double click and result in a #GDK_2BUTTON_PRESS event).
- * See also gdk_display_set_double_click_time().
+ * count as a double click). See also gdk_display_set_double_click_time().
  * Applications should not set this, it is a global 
  * user-configured setting.
  *

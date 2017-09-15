@@ -1148,8 +1148,6 @@ rewrite_event_for_window (GdkEvent  *event,
                                 &event->scroll.x, &event->scroll.y);
       break;
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       rewrite_events_translate (event->any.window,
                                 new_window,
@@ -1217,8 +1215,6 @@ rewrite_event_for_grabs (GdkEvent *event)
     {
     case GDK_SCROLL:
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
     case GDK_MOTION_NOTIFY:
     case GDK_PROXIMITY_IN:
@@ -1809,8 +1805,6 @@ gtk_main_do_event (GdkEvent *event)
       /* else fall through */
     case GDK_SCROLL:
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_TOUCH_BEGIN:
     case GDK_MOTION_NOTIFY:
     case GDK_BUTTON_RELEASE:
@@ -1852,8 +1846,6 @@ gtk_main_do_event (GdkEvent *event)
   if (event->type == GDK_ENTER_NOTIFY
       || event->type == GDK_LEAVE_NOTIFY
       || event->type == GDK_BUTTON_PRESS
-      || event->type == GDK_2BUTTON_PRESS
-      || event->type == GDK_3BUTTON_PRESS
       || event->type == GDK_KEY_PRESS
       || event->type == GDK_DRAG_ENTER
       || event->type == GDK_GRAB_BROKEN

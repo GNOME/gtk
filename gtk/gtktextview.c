@@ -4946,8 +4946,6 @@ get_event_coordinates (GdkEvent *event, gint *x, gint *y)
         break;
 
       case GDK_BUTTON_PRESS:
-      case GDK_2BUTTON_PRESS:
-      case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
         *x = event->button.x;
         *y = event->button.y;

@@ -651,8 +651,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_EXPOSE);
     CASE (GDK_MOTION_NOTIFY);
     CASE (GDK_BUTTON_PRESS);
-    CASE (GDK_2BUTTON_PRESS);
-    CASE (GDK_3BUTTON_PRESS);
     CASE (GDK_BUTTON_RELEASE);
     CASE (GDK_KEY_PRESS);
     CASE (GDK_KEY_RELEASE);
@@ -704,8 +702,6 @@ _gdk_win32_print_event (const GdkEvent *event)
       print_event_state (event->motion.state);
       break;
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       g_print ("%d (%.4g,%.4g) (%.4g,%.4g) ",
 	       event->button.button,

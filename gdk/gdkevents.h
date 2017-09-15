@@ -224,13 +224,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *   redrawn.
  * @GDK_MOTION_NOTIFY: the pointer (usually a mouse) has moved.
  * @GDK_BUTTON_PRESS: a mouse button has been pressed.
- * @GDK_2BUTTON_PRESS: a mouse button has been double-clicked (clicked twice
- *   within a short period of time). Note that each click also generates a
- *   %GDK_BUTTON_PRESS event.
- * @GDK_DOUBLE_BUTTON_PRESS: alias for %GDK_2BUTTON_PRESS, added in 3.6.
- * @GDK_3BUTTON_PRESS: a mouse button has been clicked 3 times in a short period
- *   of time. Note that each click also generates a %GDK_BUTTON_PRESS event.
- * @GDK_TRIPLE_BUTTON_PRESS: alias for %GDK_3BUTTON_PRESS, added in 3.6.
  * @GDK_BUTTON_RELEASE: a mouse button has been released.
  * @GDK_KEY_PRESS: a key has been pressed.
  * @GDK_KEY_RELEASE: a key has been released.
@@ -298,13 +291,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * Do not confuse these events with the signals that GTK+ widgets emit.
  * Although many of these events result in corresponding signals being emitted,
  * the events are often transformed or filtered along the way.
- *
- * In some language bindings, the values %GDK_2BUTTON_PRESS and
- * %GDK_3BUTTON_PRESS would translate into something syntactically
- * invalid (eg `Gdk.EventType.2ButtonPress`, where a
- * symbol is not allowed to start with a number). In that case, the
- * aliases %GDK_DOUBLE_BUTTON_PRESS and %GDK_TRIPLE_BUTTON_PRESS can
- * be used instead.
  */
 typedef enum
 {
@@ -314,10 +300,6 @@ typedef enum
   GDK_EXPOSE		= 2,
   GDK_MOTION_NOTIFY	= 3,
   GDK_BUTTON_PRESS	= 4,
-  GDK_2BUTTON_PRESS	= 5,
-  GDK_DOUBLE_BUTTON_PRESS = GDK_2BUTTON_PRESS,
-  GDK_3BUTTON_PRESS	= 6,
-  GDK_TRIPLE_BUTTON_PRESS = GDK_3BUTTON_PRESS,
   GDK_BUTTON_RELEASE	= 7,
   GDK_KEY_PRESS		= 8,
   GDK_KEY_RELEASE	= 9,
@@ -674,8 +656,7 @@ struct _GdkEventMotion
 
 /**
  * GdkEventButton:
- * @type: the type of the event (%GDK_BUTTON_PRESS, %GDK_2BUTTON_PRESS,
- *   %GDK_3BUTTON_PRESS or %GDK_BUTTON_RELEASE).
+ * @type: the type of the event (%GDK_BUTTON_PRESS or %GDK_BUTTON_RELEASE).
  * @window: the window which received the event.
  * @send_event: %TRUE if the event was sent explicitly.
  * @time: the time of the event in milliseconds.
@@ -698,38 +679,7 @@ struct _GdkEventMotion
  *   screen.
  *
  * Used for button press and button release events. The
- * @type field will be one of %GDK_BUTTON_PRESS,
- * %GDK_2BUTTON_PRESS, %GDK_3BUTTON_PRESS or %GDK_BUTTON_RELEASE,
- *
- * Double and triple-clicks result in a sequence of events being received.
- * For double-clicks the order of events will be:
- *
- * - %GDK_BUTTON_PRESS
- * - %GDK_BUTTON_RELEASE
- * - %GDK_BUTTON_PRESS
- * - %GDK_2BUTTON_PRESS
- * - %GDK_BUTTON_RELEASE
- *
- * Note that the first click is received just like a normal
- * button press, while the second click results in a %GDK_2BUTTON_PRESS
- * being received just after the %GDK_BUTTON_PRESS.
- *
- * Triple-clicks are very similar to double-clicks, except that
- * %GDK_3BUTTON_PRESS is inserted after the third click. The order of the
- * events is:
- *
- * - %GDK_BUTTON_PRESS
- * - %GDK_BUTTON_RELEASE
- * - %GDK_BUTTON_PRESS
- * - %GDK_2BUTTON_PRESS
- * - %GDK_BUTTON_RELEASE
- * - %GDK_BUTTON_PRESS
- * - %GDK_3BUTTON_PRESS
- * - %GDK_BUTTON_RELEASE
- *
- * For a double click to occur, the second button press must occur within
- * 1/4 of a second of the first. For a triple click to occur, the third
- * button press must also occur within 1/2 second of the first button press.
+ * @type field will be one of %GDK_BUTTON_PRESS or %GDK_BUTTON_RELEASE,
  */
 struct _GdkEventButton
 {

@@ -86,27 +86,12 @@ typedef struct
   guint need_touch_press_enter : 1;
 } GdkPointerWindowInfo;
 
-typedef struct
-{
-  guint32 button_click_time[2]; /* last 2 button click times */
-  GdkWindow *button_window[2];  /* last 2 windows to receive button presses */
-  gint button_number[2];        /* last 2 buttons to be pressed */
-  gint button_x[2];             /* last 2 button click positions */
-  gint button_y[2];
-  GdkDevice *last_slave;
-} GdkMultipleClickInfo;
-
 struct _GdkDisplay
 {
   GObject parent_instance;
 
   GList *queued_events;
   GList *queued_tail;
-
-  /* Information for determining if the latest button click
-   * is part of a double-click or triple-click
-   */
-  GHashTable *multiple_click_info;
 
   guint event_pause_count;       /* How many times events are blocked */
 

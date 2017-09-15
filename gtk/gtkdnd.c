@@ -389,8 +389,6 @@ gtk_drag_get_event_time (GdkEvent *event)
       case GDK_MOTION_NOTIFY:
         tm = event->motion.time; break;
       case GDK_BUTTON_PRESS:
-      case GDK_2BUTTON_PRESS:
-      case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
         tm = event->button.time; break;
       case GDK_KEY_PRESS:
@@ -435,8 +433,6 @@ gtk_drag_get_event_actions (const GdkEvent *event,
           state = event->motion.state;
           break;
         case GDK_BUTTON_PRESS:
-        case GDK_2BUTTON_PRESS:
-        case GDK_3BUTTON_PRESS:
         case GDK_BUTTON_RELEASE:
           state = event->button.state;
           break;

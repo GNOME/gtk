@@ -1449,8 +1449,6 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
   switch (event->type)
     {
       case GDK_BUTTON_PRESS:
-      case GDK_2BUTTON_PRESS:
-      case GDK_3BUTTON_PRESS:
       case GDK_KEY_PRESS:
       case GDK_DRAG_ENTER:
       case GDK_GRAB_BROKEN:

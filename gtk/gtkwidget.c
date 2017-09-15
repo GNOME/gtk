@@ -6704,8 +6704,6 @@ event_window_is_still_viewable (const GdkEvent *event)
     case GDK_EXPOSE:
     case GDK_MOTION_NOTIFY:
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_KEY_PRESS:
     case GDK_ENTER_NOTIFY:
     case GDK_PROXIMITY_IN:
@@ -6839,8 +6837,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  signal_num = -1;
 	  break;
 	case GDK_BUTTON_PRESS:
-	case GDK_2BUTTON_PRESS:
-	case GDK_3BUTTON_PRESS:
 	  signal_num = BUTTON_PRESS_EVENT;
           break;
         case GDK_TOUCH_BEGIN:
