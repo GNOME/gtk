@@ -1393,10 +1393,6 @@ _gtk_tooltip_handle_event (GdkEvent *event)
   gdk_event_get_coords (event, &dx, &dy);
 
   gtk_tooltip_handle_event_internal (event_type, window, dx, dy);
-
-  /* Always poll for a next motion event */
-  gdk_event_request_motions ((GdkEventMotion *) event);
-
 }
 
 static void

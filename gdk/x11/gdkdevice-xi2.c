@@ -709,8 +709,7 @@ _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager
   *len = XIMaskLen (XI_LASTEVENT);
   mask = g_new0 (guchar, *len);
 
-  if (event_mask & GDK_POINTER_MOTION_MASK ||
-      event_mask & GDK_POINTER_MOTION_HINT_MASK)
+  if (event_mask & GDK_POINTER_MOTION_MASK)
     XISetMask (mask, XI_Motion);
 
   if (event_mask & GDK_BUTTON_MOTION_MASK ||

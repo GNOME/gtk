@@ -571,7 +571,6 @@ gdk_x11_device_core_select_window_events (GdkDevice    *device,
 
   window_mask = gdk_window_get_events (window);
   filter_mask = GDK_POINTER_MOTION_MASK
-                | GDK_POINTER_MOTION_HINT_MASK
                 | GDK_BUTTON_MOTION_MASK
                 | GDK_BUTTON1_MOTION_MASK
                 | GDK_BUTTON2_MOTION_MASK

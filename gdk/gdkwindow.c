@@ -948,14 +948,7 @@ get_native_device_event_mask (GdkWindow *private,
     {
       GdkEventMask mask;
 
-      /* Do whatever the app asks to, since the app
-       * may be asking for weird things for native windows,
-       * but don't use motion hints as that may affect non-native
-       * child windows that don't want it. Also, we need to
-       * set all the app-specified masks since they will be picked
-       * up by any implicit grabs (i.e. if they were not set as
-       * native we would not get the events we need). */
-      mask = private->event_mask & ~GDK_POINTER_MOTION_HINT_MASK;
+      mask = private->event_mask;
 
       /* We need thse for all native windows so we can
 	 emulate events on children: */
@@ -3397,8 +3390,6 @@ gdk_window_get_device_position_double (GdkWindow       *window,
   if (mask)
     *mask = tmp_mask;
 
-  _gdk_display_enable_motion_hints (gdk_window_get_display (window), device);
-
   if (normal_child)
     return _gdk_window_find_child_at (window, tmp_x, tmp_y);
   return NULL;
@@ -3953,26 +3944,11 @@ gdk_window_set_events (GdkWindow       *window,
 		       GdkEventMask     event_mask)
 {
   GdkWindowImplClass *impl_class;
-  GdkDisplay *display;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (window->destroyed)
     return;
-
-  /* If motion hint is disabled, enable motion events again */
-  display = gdk_window_get_display (window);
-  if ((window->event_mask & GDK_POINTER_MOTION_HINT_MASK) &&
-      !(event_mask & GDK_POINTER_MOTION_HINT_MASK))
-    {
-      GList *devices = window->devices_inside;
-
-      while (devices)
-        {
-          _gdk_display_enable_motion_hints (display, (GdkDevice *) devices->data);
-          devices = devices->next;
-        }
-    }
 
   window->event_mask = event_mask;
 
@@ -4027,7 +4003,6 @@ gdk_window_set_device_events (GdkWindow    *window,
                               GdkEventMask  event_mask)
 {
   GdkEventMask device_mask;
-  GdkDisplay *display;
   GdkWindow *native;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -4035,12 +4010,6 @@ gdk_window_set_device_events (GdkWindow    *window,
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
-
-  /* If motion hint is disabled, enable motion events again */
-  display = gdk_window_get_display (window);
-  if ((window->event_mask & GDK_POINTER_MOTION_HINT_MASK) &&
-      !(event_mask & GDK_POINTER_MOTION_HINT_MASK))
-    _gdk_display_enable_motion_hints (display, device);
 
   if (G_UNLIKELY (!window->device_events))
     window->device_events = g_hash_table_new (NULL, NULL);
@@ -5777,8 +5746,6 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
       g_object_ref (window);
       update_cursor (display, device);
     }
-
-  _gdk_display_enable_motion_hints (display, device);
 }
 
 static void
