@@ -635,7 +635,6 @@ struct _GtkFlowBoxPrivate {
   GtkFlowBoxChild  *cursor_child;
   GtkFlowBoxChild  *selected_child;
 
-  gboolean          active_child_active;
   GtkFlowBoxChild  *active_child;
 
   GtkSelectionMode  selection_mode;
@@ -723,22 +722,6 @@ get_visible_children (GtkFlowBox *box)
     }
 
   return i;
-}
-
-static void
-gtk_flow_box_update_active (GtkFlowBox      *box,
-                            GtkFlowBoxChild *child)
-{
-  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  gboolean val;
-
-  val = priv->active_child == child;
-  if (priv->active_child != NULL &&
-      val != priv->active_child_active)
-    {
-      priv->active_child_active = val;
-      gtk_widget_queue_draw (GTK_WIDGET (box));
-    }
 }
 
 static void
@@ -2524,8 +2507,6 @@ autoscroll_cb (GtkWidget     *widget,
 
       child = gtk_flow_box_get_child_at_pos (box, x, y);
 
-      gtk_flow_box_update_active (box, child);
-
       if (child != NULL)
         priv->rubberband_last = child;
     }
@@ -2611,42 +2592,6 @@ update_autoscroll_mode (GtkFlowBox *box,
 
 /* Event handling {{{3 */
 
-static gboolean
-gtk_flow_box_enter_notify_event (GtkWidget        *widget,
-                                 GdkEventCrossing *event)
-{
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxChild *child;
-
-  if (event->window != gtk_widget_get_window (GTK_WIDGET (box)))
-    return FALSE;
-
-  child = gtk_flow_box_get_child_at_pos (box, event->x, event->y);
-  gtk_flow_box_update_active (box, child);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_flow_box_leave_notify_event (GtkWidget        *widget,
-                                 GdkEventCrossing *event)
-{
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxChild *child = NULL;
-
-  if (event->window != gtk_widget_get_window (GTK_WIDGET (box)))
-    return FALSE;
-
-  if (event->detail != GDK_NOTIFY_INFERIOR)
-    child = NULL;
-  else
-    child = gtk_flow_box_get_child_at_pos (box, event->x, event->y);
-
-  gtk_flow_box_update_active (box, child);
-
-  return FALSE;
-}
-
 static void
 gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
                                   gdouble         offset_x,
@@ -2698,19 +2643,6 @@ gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
     }
 }
 
-static gboolean
-gtk_flow_box_motion_notify_event (GtkWidget      *widget,
-                                  GdkEventMotion *event)
-{
-  GtkFlowBox *box = GTK_FLOW_BOX (widget);
-  GtkFlowBoxChild *child;
-
-  child = gtk_flow_box_get_child_at_pos (box, event->x, event->y);
-  gtk_flow_box_update_active (box, child);
-
-  return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->motion_notify_event (widget, event);
-}
-
 static void
 gtk_flow_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                          guint                 n_press,
@@ -2732,7 +2664,6 @@ gtk_flow_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
   priv->active_child = child;
-  priv->active_child_active = TRUE;
   gtk_widget_queue_draw (GTK_WIDGET (box));
 
   if (n_press == 2 && !priv->activate_on_single_click)
@@ -2748,7 +2679,8 @@ gtk_flow_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
-  if (priv->active_child != NULL && priv->active_child_active)
+  if (priv->active_child != NULL &&
+      priv->active_child == gtk_flow_box_get_child_at_pos (box, x, y))
     {
       if (priv->activate_on_single_click)
         gtk_flow_box_select_and_activate (box, priv->active_child);
@@ -2786,7 +2718,6 @@ gtk_flow_box_multipress_gesture_stopped (GtkGestureMultiPress *gesture,
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
   priv->active_child = NULL;
-  priv->active_child_active = FALSE;
   gtk_widget_queue_draw (GTK_WIDGET (box));
 }
 
@@ -3438,9 +3369,6 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   object_class->get_property = gtk_flow_box_get_property;
   object_class->set_property = gtk_flow_box_set_property;
 
-  widget_class->enter_notify_event = gtk_flow_box_enter_notify_event;
-  widget_class->leave_notify_event = gtk_flow_box_leave_notify_event;
-  widget_class->motion_notify_event = gtk_flow_box_motion_notify_event;
   widget_class->size_allocate = gtk_flow_box_size_allocate;
   widget_class->unmap = gtk_flow_box_unmap;
   widget_class->focus = gtk_flow_box_focus;
