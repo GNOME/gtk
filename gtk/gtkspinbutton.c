@@ -198,6 +198,7 @@ struct _GtkSpinButtonPrivate
   GtkOrientation orientation;
 
   GtkGesture *swipe_gesture;
+  GtkEventController *scroll_controller;
 
   guint          digits        : 10;
   guint          need_timer    : 1;
@@ -272,8 +273,6 @@ static gint gtk_spin_button_key_release    (GtkWidget          *widget,
 static gint gtk_spin_button_motion_notify (GtkWidget      *widget,
                                            GdkEventMotion *event);
 
-static gint gtk_spin_button_scroll         (GtkWidget          *widget,
-                                            GdkEventScroll     *event);
 static void gtk_spin_button_activate       (GtkEntry           *entry,
                                             gpointer            user_data);
 static void gtk_spin_button_unset_adjustment (GtkSpinButton *spin_button);
@@ -323,7 +322,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->realize = gtk_spin_button_realize;
   widget_class->measure = gtk_spin_button_measure;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
-  widget_class->scroll_event = gtk_spin_button_scroll;
   widget_class->motion_notify_event = gtk_spin_button_motion_notify;
   widget_class->key_release_event = gtk_spin_button_key_release;
   widget_class->focus_out_event = gtk_spin_button_focus_out;
@@ -709,6 +707,20 @@ swipe_gesture_update (GtkGesture       *gesture,
 }
 
 static void
+scroll_controller_scroll (GtkEventControllerScroll *Scroll,
+			  gdouble                   dx,
+			  gdouble                   dy,
+			  GtkWidget                *widget)
+{
+  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
+  GtkSpinButtonPrivate *priv = spin->priv;
+
+  if (!gtk_widget_has_focus (widget))
+    gtk_widget_grab_focus (widget);
+  gtk_spin_button_real_spin (spin, -dy * gtk_adjustment_get_step_increment (priv->adjustment));
+}
+
+static void
 update_node_ordering (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
@@ -911,6 +923,13 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
                     G_CALLBACK (swipe_gesture_begin), spin_button);
   g_signal_connect (priv->swipe_gesture, "update",
                     G_CALLBACK (swipe_gesture_update), spin_button);
+
+  priv->scroll_controller =
+    gtk_event_controller_scroll_new (GTK_WIDGET (spin_button),
+                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
+				     GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+  g_signal_connect (priv->scroll_controller, "scroll",
+                    G_CALLBACK (scroll_controller_scroll), spin_button);
 }
 
 static void
@@ -921,6 +940,7 @@ gtk_spin_button_finalize (GObject *object)
 
   gtk_spin_button_unset_adjustment (spin_button);
 
+  g_object_unref (priv->scroll_controller);
   g_object_unref (priv->swipe_gesture);
   g_object_unref (priv->up_click_gesture);
   g_object_unref (priv->down_click_gesture);
@@ -1107,31 +1127,6 @@ gtk_spin_button_state_flags_changed (GtkWidget     *widget,
     }
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->state_flags_changed (widget, previous_state);
-}
-
-static gint
-gtk_spin_button_scroll (GtkWidget      *widget,
-                        GdkEventScroll *event)
-{
-  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPrivate *priv = spin->priv;
-
-  if (event->direction == GDK_SCROLL_UP)
-    {
-      if (!gtk_widget_has_focus (widget))
-        gtk_widget_grab_focus (widget);
-      gtk_spin_button_real_spin (spin, gtk_adjustment_get_step_increment (priv->adjustment));
-    }
-  else if (event->direction == GDK_SCROLL_DOWN)
-    {
-      if (!gtk_widget_has_focus (widget))
-        gtk_widget_grab_focus (widget);
-      gtk_spin_button_real_spin (spin, -gtk_adjustment_get_step_increment (priv->adjustment));
-    }
-  else
-    return FALSE;
-
-  return TRUE;
 }
 
 static gint
