@@ -1313,10 +1313,10 @@ update_pointer_info_foreach (GdkDisplay           *display,
 {
   GdkWindow *window = user_data;
 
-  if (pointer_info->toplevel_under_pointer == window)
+  if (pointer_info->window_under_pointer == window)
     {
-      g_object_unref (pointer_info->toplevel_under_pointer);
-      pointer_info->toplevel_under_pointer = NULL;
+      g_object_unref (pointer_info->window_under_pointer);
+      pointer_info->window_under_pointer = NULL;
     }
 }
 
