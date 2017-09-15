@@ -377,7 +377,6 @@ gdk_display_init (GdkDisplay *display)
   display->double_click_time = 250;
   display->double_click_distance = 5;
 
-  display->touch_implicit_grabs = g_array_new (FALSE, FALSE, sizeof (GdkTouchGrabInfo));
   display->device_grabs = g_hash_table_new (NULL, NULL);
 
   display->pointers_info = g_hash_table_new_full (NULL, NULL, NULL,
@@ -428,8 +427,6 @@ gdk_display_finalize (GObject *object)
                                free_device_grabs_foreach,
                                NULL);
   g_hash_table_destroy (display->device_grabs);
-
-  g_array_free (display->touch_implicit_grabs, TRUE);
 
   g_hash_table_destroy (display->pointers_info);
 
@@ -707,73 +704,6 @@ _gdk_display_add_device_grab (GdkDisplay       *display,
   return info;
 }
 
-static void
-_gdk_display_break_touch_grabs (GdkDisplay *display,
-                                GdkDevice  *device,
-                                GdkWindow  *new_grab_window)
-{
-  guint i;
-
-  for (i = 0; i < display->touch_implicit_grabs->len; i++)
-    {
-      GdkTouchGrabInfo *info;
-
-      info = &g_array_index (display->touch_implicit_grabs,
-                             GdkTouchGrabInfo, i);
-
-      if (info->device == device && info->window != new_grab_window)
-        generate_grab_broken_event (display, GDK_WINDOW (info->window),
-                                    device, TRUE, new_grab_window);
-    }
-}
-
-void
-_gdk_display_add_touch_grab (GdkDisplay       *display,
-                             GdkDevice        *device,
-                             GdkEventSequence *sequence,
-                             GdkWindow        *window,
-                             GdkWindow        *native_window,
-                             GdkEventMask      event_mask,
-                             unsigned long     serial,
-                             guint32           time)
-{
-  GdkTouchGrabInfo info;
-
-  info.device = device;
-  info.sequence = sequence;
-  info.window = g_object_ref (window);
-  info.native_window = g_object_ref (native_window);
-  info.serial = serial;
-  info.event_mask = event_mask;
-  info.time = time;
-
-  g_array_append_val (display->touch_implicit_grabs, info);
-}
-
-gboolean
-_gdk_display_end_touch_grab (GdkDisplay       *display,
-                             GdkDevice        *device,
-                             GdkEventSequence *sequence)
-{
-  guint i;
-
-  for (i = 0; i < display->touch_implicit_grabs->len; i++)
-    {
-      GdkTouchGrabInfo *info;
-
-      info = &g_array_index (display->touch_implicit_grabs,
-                             GdkTouchGrabInfo, i);
-
-      if (info->device == device && info->sequence == sequence)
-        {
-          g_array_remove_index_fast (display->touch_implicit_grabs, i);
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 static GdkWindow *
 get_current_toplevel (GdkDisplay      *display,
                       GdkDevice       *device,
@@ -948,9 +878,6 @@ _gdk_display_device_grab_update (GdkDisplay *display,
 	    next_grab = NULL; /* Actually its not yet active */
 	}
 
-      if (next_grab)
-        _gdk_display_break_touch_grabs (display, device, next_grab->window);
-
       if ((next_grab == NULL && current_grab->implicit_ungrab) ||
           (next_grab != NULL && current_grab->window != next_grab->window))
         generate_grab_broken_event (display, GDK_WINDOW (current_grab->window),
@@ -1011,33 +938,6 @@ _gdk_display_has_device_grab (GdkDisplay *display,
   l = find_device_grab (display, device, serial);
   if (l)
     return l->data;
-
-  return NULL;
-}
-
-GdkTouchGrabInfo *
-_gdk_display_has_touch_grab (GdkDisplay       *display,
-                             GdkDevice        *device,
-                             GdkEventSequence *sequence,
-                             gulong            serial)
-{
-  guint i;
-
-  for (i = 0; i < display->touch_implicit_grabs->len; i++)
-    {
-      GdkTouchGrabInfo *info;
-
-      info = &g_array_index (display->touch_implicit_grabs,
-                             GdkTouchGrabInfo, i);
-
-      if (info->device == device && info->sequence == sequence)
-        {
-          if (serial >= info->serial)
-            return info;
-          else
-            return NULL;
-        }
-    }
 
   return NULL;
 }

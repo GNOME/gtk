@@ -6050,14 +6050,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
        event->type == GDK_TOUCH_END) &&
       !event->any.send_event)
     {
-      GdkEventSequence *sequence;
-
-      sequence = gdk_event_get_event_sequence (event);
-      if (sequence)
-        {
-          _gdk_display_end_touch_grab (display, device, sequence);
-        }
-
       if (event->type == GDK_BUTTON_RELEASE ||
           gdk_event_get_pointer_emulated (event))
         {

@@ -54,19 +54,6 @@ typedef struct
   guint implicit : 1;
 } GdkDeviceGrabInfo;
 
-/* Tracks information about a touch implicit grab on this display */
-typedef struct
-{
-  GdkDevice *device;
-  GdkEventSequence *sequence;
-
-  GdkWindow *window;
-  GdkWindow *native_window;
-  gulong serial;
-  guint event_mask;
-  guint32 time;
-} GdkTouchGrabInfo;
-
 /* Tracks information about which window and position the pointer last was in.
  * This is useful when we need to synthesize events later.
  * Note that we track toplevel_under_pointer using enter/leave events,
@@ -97,7 +84,6 @@ struct _GdkDisplay
 
   guint closed             : 1;  /* Whether this display has been closed */
 
-  GArray *touch_implicit_grabs;
   GHashTable *device_grabs;
   GdkDeviceManager *device_manager;
   GList *input_devices; /* Deprecated, only used to keep gdk_display_list_devices working */
@@ -282,21 +268,6 @@ gboolean            _gdk_display_end_device_grab      (GdkDisplay       *display
 gboolean            _gdk_display_check_grab_ownership (GdkDisplay       *display,
                                                        GdkDevice        *device,
                                                        gulong            serial);
-void                _gdk_display_add_touch_grab       (GdkDisplay       *display,
-                                                       GdkDevice        *device,
-                                                       GdkEventSequence *sequence,
-                                                       GdkWindow        *window,
-                                                       GdkWindow        *native_window,
-                                                       GdkEventMask      event_mask,
-                                                       unsigned long     serial_start,
-                                                       guint32           time);
-GdkTouchGrabInfo *  _gdk_display_has_touch_grab       (GdkDisplay       *display,
-                                                       GdkDevice        *device,
-                                                       GdkEventSequence *sequence,
-                                                       gulong            serial);
-gboolean            _gdk_display_end_touch_grab       (GdkDisplay       *display,
-                                                       GdkDevice        *device,
-                                                       GdkEventSequence *sequence);
 GdkPointerWindowInfo * _gdk_display_get_pointer_info  (GdkDisplay       *display,
                                                        GdkDevice        *device);
 void                _gdk_display_pointer_info_foreach (GdkDisplay       *display,
