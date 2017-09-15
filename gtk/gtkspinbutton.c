@@ -270,8 +270,6 @@ static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
                                             GtkSpinButton      *spin_button);
 static gint gtk_spin_button_key_release    (GtkWidget          *widget,
                                             GdkEventKey        *event);
-static gint gtk_spin_button_motion_notify (GtkWidget      *widget,
-                                           GdkEventMotion *event);
 
 static void gtk_spin_button_activate       (GtkEntry           *entry,
                                             gpointer            user_data);
@@ -322,7 +320,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->realize = gtk_spin_button_realize;
   widget_class->measure = gtk_spin_button_measure;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
-  widget_class->motion_notify_event = gtk_spin_button_motion_notify;
   widget_class->key_release_event = gtk_spin_button_key_release;
   widget_class->focus_out_event = gtk_spin_button_focus_out;
   widget_class->grab_notify = gtk_spin_button_grab_notify;
@@ -1127,19 +1124,6 @@ gtk_spin_button_state_flags_changed (GtkWidget     *widget,
     }
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->state_flags_changed (widget, previous_state);
-}
-
-static gint
-gtk_spin_button_motion_notify (GtkWidget      *widget,
-                               GdkEventMotion *event)
-{
-  GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
-  GtkSpinButtonPrivate *priv = spin->priv;
-
-  if (gtk_gesture_is_recognized (priv->swipe_gesture))
-    return TRUE;
-
-  return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->motion_notify_event (widget, event);
 }
 
 static gint
