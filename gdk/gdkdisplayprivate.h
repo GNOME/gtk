@@ -99,7 +99,6 @@ struct _GdkDisplay
 
   GArray *touch_implicit_grabs;
   GHashTable *device_grabs;
-  GHashTable *motion_hint_info;
   GdkDeviceManager *device_manager;
   GList *input_devices; /* Deprecated, only used to keep gdk_display_list_devices working */
 
@@ -298,8 +297,6 @@ GdkTouchGrabInfo *  _gdk_display_has_touch_grab       (GdkDisplay       *display
 gboolean            _gdk_display_end_touch_grab       (GdkDisplay       *display,
                                                        GdkDevice        *device,
                                                        GdkEventSequence *sequence);
-void                _gdk_display_enable_motion_hints  (GdkDisplay       *display,
-                                                       GdkDevice        *device);
 GdkPointerWindowInfo * _gdk_display_get_pointer_info  (GdkDisplay       *display,
                                                        GdkDevice        *device);
 void                _gdk_display_pointer_info_foreach (GdkDisplay       *display,

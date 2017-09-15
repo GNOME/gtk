@@ -720,9 +720,6 @@ gtk_gesture_handle_event (GtkEventController *controller,
         {
           if ((event->motion.state & BUTTONS_MASK) == 0)
             return FALSE;
-
-          if (event->motion.is_hint)
-            gdk_event_request_motions (&event->motion);
         }
 
       if (_gtk_gesture_update_point (gesture, event, FALSE) &&

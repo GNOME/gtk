@@ -379,8 +379,6 @@ gdk_display_init (GdkDisplay *display)
 
   display->touch_implicit_grabs = g_array_new (FALSE, FALSE, sizeof (GdkTouchGrabInfo));
   display->device_grabs = g_hash_table_new (NULL, NULL);
-  display->motion_hint_info = g_hash_table_new_full (NULL, NULL, NULL,
-                                                     (GDestroyNotify) g_free);
 
   display->pointers_info = g_hash_table_new_full (NULL, NULL, NULL,
                                                   (GDestroyNotify) free_pointer_info);
@@ -433,7 +431,6 @@ gdk_display_finalize (GObject *object)
 
   g_array_free (display->touch_implicit_grabs, TRUE);
 
-  g_hash_table_destroy (display->motion_hint_info);
   g_hash_table_destroy (display->pointers_info);
 
   g_list_free_full (display->input_devices, g_object_unref);
@@ -603,35 +600,6 @@ gdk_flush (void)
     }
 
   g_slist_free (list);
-}
-
-void
-_gdk_display_enable_motion_hints (GdkDisplay *display,
-                                  GdkDevice  *device)
-{
-  gulong *device_serial, serial;
-
-  device_serial = g_hash_table_lookup (display->motion_hint_info, device);
-
-  if (!device_serial)
-    {
-      device_serial = g_new0 (gulong, 1);
-      *device_serial = G_MAXULONG;
-      g_hash_table_insert (display->motion_hint_info, device, device_serial);
-    }
-
-  if (*device_serial != 0)
-    {
-      serial = _gdk_display_get_next_serial (display);
-      /* We might not actually generate the next request, so
-	 make sure this triggers always, this may cause it to
-	 trigger slightly too early, but this is just a hint
-	 anyway. */
-      if (serial > 0)
-	serial--;
-      if (serial < *device_serial)
-	*device_serial = serial;
-    }
 }
 
 static void

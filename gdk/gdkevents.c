@@ -1788,46 +1788,6 @@ gdk_event_get_source_device (const GdkEvent *event)
 }
 
 /**
- * gdk_event_request_motions:
- * @event: a valid #GdkEvent
- *
- * Request more motion notifies if @event is a motion notify hint event.
- *
- * This function should be used instead of gdk_window_get_pointer() to
- * request further motion notifies, because it also works for extension
- * events where motion notifies are provided for devices other than the
- * core pointer. Coordinate extraction, processing and requesting more
- * motion events from a %GDK_MOTION_NOTIFY event usually works like this:
- *
- * |[<!-- language="C" -->
- * {
- *   // motion_event handler
- *   x = motion_event->x;
- *   y = motion_event->y;
- *   // handle (x,y) motion
- *   gdk_event_request_motions (motion_event); // handles is_hint events
- * }
- * ]|
- *
- * Since: 2.12
- **/
-void
-gdk_event_request_motions (const GdkEventMotion *event)
-{
-  GdkDisplay *display;
-  
-  g_return_if_fail (event != NULL);
-  
-  if (event->type == GDK_MOTION_NOTIFY && event->is_hint)
-    {
-      gdk_device_get_state (event->device, event->window, NULL, NULL);
-      
-      display = gdk_window_get_display (event->window);
-      _gdk_display_enable_motion_hints (display, event->device);
-    }
-}
-
-/**
  * gdk_event_triggers_context_menu:
  * @event: a #GdkEvent, currently only button events are meaningful values
  *

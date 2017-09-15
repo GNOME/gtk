@@ -2127,8 +2127,6 @@ text_view_motion_notify_event (GtkWidget      *text_view,
 
   set_cursor_if_appropriate (about, GTK_TEXT_VIEW (text_view), event->device, x, y);
 
-  gdk_event_request_motions (event);
-
   return FALSE;
 }
 

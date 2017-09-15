@@ -373,7 +373,6 @@ typedef enum
  * GdkEventMask:
  * @GDK_EXPOSURE_MASK: receive expose events
  * @GDK_POINTER_MOTION_MASK: receive all pointer motion events
- * @GDK_POINTER_MOTION_HINT_MASK: deprecated. see the explanation above
  * @GDK_BUTTON_MOTION_MASK: receive pointer motion events while any button is pressed
  * @GDK_BUTTON1_MOTION_MASK: receive pointer motion events while 1 button is pressed
  * @GDK_BUTTON2_MOTION_MASK: receive pointer motion events while 2 button is pressed
@@ -406,14 +405,6 @@ typedef enum
  * See the [input handling overview][chap-input-handling] for details of
  * [event masks][event-masks] and [event propagation][event-propagation].
  *
- * %GDK_POINTER_MOTION_HINT_MASK is deprecated. It is a special mask
- * to reduce the number of %GDK_MOTION_NOTIFY events received. When using
- * %GDK_POINTER_MOTION_HINT_MASK, fewer %GDK_MOTION_NOTIFY events will
- * be sent, some of which are marked as a hint (the is_hint member is
- * %TRUE). To receive more motion events after a motion hint event,
- * the application needs to asks for more, by calling
- * gdk_event_request_motions().
- * 
  * Since GTK 3.8, motion events are already compressed by default, independent
  * of this mechanism. This compression can be disabled with
  * gdk_window_set_event_compression(). See the documentation of that function
@@ -430,7 +421,6 @@ typedef enum
 {
   GDK_EXPOSURE_MASK             = 1 << 1,
   GDK_POINTER_MOTION_MASK       = 1 << 2,
-  GDK_POINTER_MOTION_HINT_MASK  = 1 << 3,
   GDK_BUTTON_MOTION_MASK        = 1 << 4,
   GDK_BUTTON1_MOTION_MASK       = 1 << 5,
   GDK_BUTTON2_MOTION_MASK       = 1 << 6,

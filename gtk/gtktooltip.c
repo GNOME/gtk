@@ -1434,9 +1434,6 @@ gtk_tooltip_handle_event_internal (GdkEvent *event)
       return;
     }
 
-  /* Always poll for a next motion event */
-  gdk_event_request_motions (&event->motion);
-
   /* Hide the tooltip when there's no new tooltip widget */
   if (!has_tooltip_widget)
     {
