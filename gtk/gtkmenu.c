@@ -240,8 +240,6 @@ static void     gtk_menu_snapshot          (GtkWidget        *widget,
                                             GtkSnapshot      *snapshot);
 static gboolean gtk_menu_key_press         (GtkWidget        *widget,
                                             GdkEventKey      *event);
-static gboolean gtk_menu_scroll            (GtkWidget        *widget,
-                                            GdkEventScroll   *event);
 static gboolean gtk_menu_motion_notify     (GtkWidget        *widget,
                                             GdkEventMotion   *event);
 static gboolean gtk_menu_enter_notify      (GtkWidget        *widget,
@@ -255,6 +253,10 @@ static void     gtk_menu_grab_notify       (GtkWidget        *widget,
 static gboolean gtk_menu_captured_event    (GtkWidget        *widget,
                                             GdkEvent         *event);
 
+static void     gtk_menu_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                                   gdouble                   dx,
+                                                   gdouble                   dy,
+                                                   GtkMenu                  *menu);
 
 static void     gtk_menu_stop_scrolling         (GtkMenu  *menu);
 static void     gtk_menu_remove_scroll_timeout  (GtkMenu  *menu);
@@ -513,7 +515,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->size_allocate = gtk_menu_size_allocate;
   widget_class->show = gtk_menu_show;
   widget_class->snapshot = gtk_menu_snapshot;
-  widget_class->scroll_event = gtk_menu_scroll;
   widget_class->key_press_event = gtk_menu_key_press;
   widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->enter_notify_event = gtk_menu_enter_notify;
@@ -1203,6 +1204,12 @@ gtk_menu_init (GtkMenu *menu)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture), GTK_PHASE_BUBBLE);
   g_signal_connect (priv->click_gesture, "pressed", G_CALLBACK (gtk_menu_pressed_cb), menu);
   g_signal_connect (priv->click_gesture, "released", G_CALLBACK (gtk_menu_released_cb), menu);
+
+  priv->scroll_controller =
+    gtk_event_controller_scroll_new (GTK_WIDGET (menu),
+                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  g_signal_connect (priv->scroll_controller, "scroll",
+                    G_CALLBACK (gtk_menu_scroll_controller_scroll), menu);
 }
 
 static void
@@ -1275,6 +1282,7 @@ gtk_menu_finalize (GObject *object)
   gtk_widget_unparent (priv->top_arrow_widget);
   gtk_widget_unparent (priv->bottom_arrow_widget);
   g_clear_object (&priv->click_gesture);
+  g_clear_object (&priv->scroll_controller);
 
   G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
@@ -3289,32 +3297,13 @@ gtk_menu_scroll_timeout (gpointer data)
   return TRUE;
 }
 
-static gboolean
-gtk_menu_scroll (GtkWidget      *widget,
-                 GdkEventScroll *event)
+static void
+gtk_menu_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                   gdouble                   dx,
+                                   gdouble                   dy,
+                                   GtkMenu                  *menu)
 {
-  GtkMenu *menu = GTK_MENU (widget);
-
-  if (gdk_event_get_pointer_emulated ((GdkEvent *) event))
-    return GDK_EVENT_PROPAGATE;
-
-  switch (event->direction)
-    {
-    case GDK_SCROLL_DOWN:
-      gtk_menu_scroll_by (menu, MENU_SCROLL_STEP2);
-      break;
-    case GDK_SCROLL_UP:
-      gtk_menu_scroll_by (menu, - MENU_SCROLL_STEP2);
-      break;
-    case GDK_SCROLL_SMOOTH:
-      gtk_menu_scroll_by (menu, event->delta_y * MENU_SCROLL_STEP2);
-      break;
-    default:
-      return GDK_EVENT_PROPAGATE;
-      break;
-    }
-
-  return GDK_EVENT_STOP;
+  gtk_menu_scroll_by (menu, dy * MENU_SCROLL_STEP2);
 }
 
 static void
