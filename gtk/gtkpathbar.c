@@ -36,6 +36,7 @@
 #include "gtktogglebutton.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerscroll.h"
 
 struct _GtkPathBarPrivate
 {
@@ -49,6 +50,8 @@ struct _GtkPathBarPrivate
   GIcon *root_icon;
   GIcon *home_icon;
   GIcon *desktop_icon;
+
+  GtkEventController *scroll_controller;
 
   GList *button_list;
   GList *first_scrolled_button;
@@ -132,8 +135,6 @@ static void gtk_path_bar_remove                   (GtkContainer     *container,
 static void gtk_path_bar_forall                   (GtkContainer     *container,
 						   GtkCallback       callback,
 						   gpointer          callback_data);
-static gboolean gtk_path_bar_scroll               (GtkWidget        *widget,
-						   GdkEventScroll   *event);
 static void gtk_path_bar_scroll_up                (GtkPathBar       *path_bar);
 static void gtk_path_bar_scroll_down              (GtkPathBar       *path_bar);
 static void gtk_path_bar_stop_scrolling           (GtkPathBar       *path_bar);
@@ -160,6 +161,11 @@ static void gtk_path_bar_check_icon_theme         (GtkPathBar       *path_bar);
 static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
 						   gboolean          current_dir);
+
+static void gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                                   gdouble                   dx,
+                                                   gdouble                   dy,
+                                                   GtkPathBar               *path_bar);
 
 static void
 on_slider_unmap (GtkWidget  *widget,
@@ -201,6 +207,14 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
   path_bar->priv->get_info_cancellable = NULL;
+
+  path_bar->priv->scroll_controller =
+    gtk_event_controller_scroll_new (GTK_WIDGET (path_bar),
+                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
+                                     GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+  g_signal_connect (path_bar->priv->scroll_controller, "scroll",
+                    G_CALLBACK (gtk_path_bar_scroll_controller_scroll),
+                    path_bar);
 }
 
 static void
@@ -224,7 +238,6 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   widget_class->screen_changed = gtk_path_bar_screen_changed;
   widget_class->grab_notify = gtk_path_bar_grab_notify;
   widget_class->state_flags_changed = gtk_path_bar_state_flags_changed;
-  widget_class->scroll_event = gtk_path_bar_scroll;
 
   container_class->add = gtk_path_bar_add;
   container_class->forall = gtk_path_bar_forall;
@@ -281,6 +294,8 @@ gtk_path_bar_finalize (GObject *object)
   g_clear_object (&path_bar->priv->desktop_icon);
 
   g_clear_object (&path_bar->priv->file_system);
+
+  g_clear_object (&path_bar->priv->scroll_controller);
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->finalize (object);
 }
@@ -709,28 +724,16 @@ gtk_path_bar_screen_changed (GtkWidget *widget,
   gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
 }
 
-static gboolean
-gtk_path_bar_scroll (GtkWidget      *widget,
-		     GdkEventScroll *event)
+static void
+gtk_path_bar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                       gdouble                   dx,
+                                       gdouble                   dy,
+                                       GtkPathBar               *path_bar)
 {
-  GdkScrollDirection direction;
-
-  gdk_event_get_scroll_direction ((GdkEvent*)event, &direction);
-  switch (direction)
-    {
-    case GDK_SCROLL_RIGHT:
-    case GDK_SCROLL_DOWN:
-      gtk_path_bar_scroll_down (GTK_PATH_BAR (widget));
-      break;
-    case GDK_SCROLL_LEFT:
-    case GDK_SCROLL_UP:
-      gtk_path_bar_scroll_up (GTK_PATH_BAR (widget));
-      break;
-    case GDK_SCROLL_SMOOTH:
-      break;
-    }
-
-  return TRUE;
+  if (dy > 0)
+    gtk_path_bar_scroll_down (path_bar);
+  else if (dy < 0)
+    gtk_path_bar_scroll_up (path_bar);
 }
 
 static void
