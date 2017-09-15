@@ -63,8 +63,6 @@ typedef struct
  */
 typedef struct
 {
-  GdkWindow *toplevel_under_pointer; /* toplevel window containing the pointer, */
-                                     /* tracked via native events */
   GdkWindow *window_under_pointer;   /* window that last got a normal enter event */
   gdouble toplevel_x, toplevel_y;
   guint32 state;

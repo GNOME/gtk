@@ -346,8 +346,7 @@ gdk_display_class_init (GdkDisplayClass *class)
 static void
 free_pointer_info (GdkPointerWindowInfo *info)
 {
-  if (info->toplevel_under_pointer)
-    g_object_unref (info->toplevel_under_pointer);
+  g_clear_object (&info->window_under_pointer);
   g_slice_free (GdkPointerWindowInfo, info);
 }
 
@@ -736,7 +735,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
 			guint32            time,
 			gulong             serial)
 {
-  GdkWindow *pointer_window, *new_toplevel;
+  GdkWindow *new_toplevel;
   GdkPointerWindowInfo *info;
   GList *old_grabs;
   GdkModifierType state;
@@ -768,13 +767,6 @@ switch_to_pointer_grab (GdkDisplay        *display,
       if (grab == NULL /* ungrab */ ||
 	  (!last_grab->owner_events && grab->owner_events) /* switched to owner_events */ )
 	{
-	  /* We force check what window we're in, and update the toplevel_under_pointer info,
-	   * as that won't get told of this change with toplevel enter events.
-	   */
-	  if (info->toplevel_under_pointer)
-	    g_object_unref (info->toplevel_under_pointer);
-	  info->toplevel_under_pointer = NULL;
-
           /* Ungrabbed slave devices don't have a position by
            * itself, rather depend on its master pointer, so
            * it doesn't make sense to track any position for
@@ -786,7 +778,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
 	  if (new_toplevel)
 	    {
 	      /* w is now toplevel and x,y in toplevel coords */
-	      info->toplevel_under_pointer = g_object_ref (new_toplevel);
+              _gdk_display_set_window_under_pointer (display, device, new_toplevel);
 	      info->toplevel_x = x;
 	      info->toplevel_y = y;
 	      info->state = state;
@@ -803,20 +795,11 @@ switch_to_pointer_grab (GdkDisplay        *display,
               (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN))
             info->need_touch_press_enter = TRUE;
 
-          pointer_window = NULL;
-
-          if (new_toplevel &&
-              !info->need_touch_press_enter)
-            {
-              /* Find (possibly virtual) child window */
-              pointer_window =
-                _gdk_window_find_descendant_at (new_toplevel,
-                                                x, y,
-                                                NULL, NULL);
-            }
+          if (info->need_touch_press_enter)
+            new_toplevel = NULL;
 
 	  /* We're now ungrabbed, update the window_under_pointer */
-	  _gdk_display_set_window_under_pointer (display, device, pointer_window);
+	  _gdk_display_set_window_under_pointer (display, device, new_toplevel);
 	}
     }
 
