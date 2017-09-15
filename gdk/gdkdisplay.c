@@ -787,17 +787,6 @@ switch_to_pointer_grab (GdkDisplay        *display,
 
       if (grab == NULL) /* Ungrabbed, send events */
 	{
-          /* If the source device is a touch device, do not
-           * propagate any enter event yet, until one is
-           * synthesized when needed.
-           */
-          if (source_device &&
-              (gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN))
-            info->need_touch_press_enter = TRUE;
-
-          if (info->need_touch_press_enter)
-            new_toplevel = NULL;
-
 	  /* We're now ungrabbed, update the window_under_pointer */
 	  _gdk_display_set_window_under_pointer (display, device, new_toplevel);
 	}
