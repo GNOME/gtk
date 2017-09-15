@@ -404,8 +404,6 @@ gdk_display_dispose (GObject *object)
   display->queued_events = NULL;
   display->queued_tail = NULL;
 
-  g_list_foreach (display->input_devices, (GFunc) g_object_run_dispose, NULL);
-
   if (device_manager)
     {
       /* this is to make it drop devices which may require using the X
@@ -430,7 +428,6 @@ gdk_display_finalize (GObject *object)
 
   g_hash_table_destroy (display->pointers_info);
 
-  g_list_free_full (display->input_devices, g_object_unref);
   g_list_free_full (display->seats, g_object_unref);
 
   if (display->device_manager)

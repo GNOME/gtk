@@ -86,7 +86,6 @@ struct _GdkDisplay
 
   GHashTable *device_grabs;
   GdkDeviceManager *device_manager;
-  GList *input_devices; /* Deprecated, only used to keep gdk_display_list_devices working */
 
   GHashTable *pointers_info;  /* GdkPointerWindowInfo for each device */
   guint32 last_event_time;    /* Last reported event time from server */
