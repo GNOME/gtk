@@ -119,6 +119,7 @@ struct _GtkRangePrivate
   GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
   GtkGesture *drag_gesture;
+  GtkEventController *scroll_controller;
 
   GtkScrollType autoscroll_mode;
   guint autoscroll_id;
@@ -192,8 +193,6 @@ static void gtk_range_long_press_gesture_pressed  (GtkGestureLongPress  *gesture
                                                    GtkRange             *range);
 
 
-static gboolean gtk_range_scroll_event   (GtkWidget        *widget,
-                                      GdkEventScroll   *event);
 static gboolean gtk_range_event       (GtkWidget       *widget,
                                        GdkEvent        *event);
 static void update_slider_position   (GtkRange	       *range,
@@ -247,6 +246,11 @@ static void          gtk_range_allocate_trough          (GtkGizmo            *gi
 static gboolean      gtk_range_render_trough            (GtkGizmo     *gizmo,
                                                          GtkSnapshot  *snapshot);
 
+static void          gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                                         gdouble                   dx,
+                                                         gdouble                   dy,
+                                                         GtkRange                 *range);
+
 G_DEFINE_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkRange)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
@@ -284,7 +288,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->unmap = gtk_range_unmap;
   widget_class->event = gtk_range_event;
-  widget_class->scroll_event = gtk_range_scroll_event;
   widget_class->key_press_event = gtk_range_key_press;
   widget_class->state_flags_changed = gtk_range_state_flags_changed;
   widget_class->direction_changed = gtk_range_direction_changed;
@@ -606,6 +609,12 @@ gtk_range_init (GtkRange *range)
   gtk_gesture_group (priv->drag_gesture, priv->long_press_gesture);
   g_signal_connect (priv->long_press_gesture, "pressed",
                     G_CALLBACK (gtk_range_long_press_gesture_pressed), range);
+
+  priv->scroll_controller =
+    gtk_event_controller_scroll_new (GTK_WIDGET (range),
+                                     GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
+  g_signal_connect (priv->scroll_controller, "scroll",
+                    G_CALLBACK (gtk_range_scroll_controller_scroll), range);
 }
 
 /**
@@ -1304,6 +1313,7 @@ gtk_range_finalize (GObject *object)
   g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->multipress_gesture);
   g_clear_object (&priv->long_press_gesture);
+  g_clear_object (&priv->scroll_controller);
 
   gtk_widget_unparent (priv->slider_widget);
 
@@ -2282,68 +2292,33 @@ stop_scrolling (GtkRange *range)
   remove_autoscroll (range);
 }
 
-static gdouble
-_gtk_range_get_wheel_delta (GtkRange       *range,
-                            GdkEventScroll *event)
+static void
+gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                    gdouble                   dx,
+                                    gdouble                   dy,
+                                    GtkRange                 *range)
 {
   GtkRangePrivate *priv = range->priv;
-  GtkAdjustment *adjustment = priv->adjustment;
-  gdouble dx, dy;
-  gdouble delta = 0;
-  gdouble page_increment;
-  gdouble scroll_unit;
-  GdkScrollDirection direction;
+  gdouble scroll_unit, delta;
+  gboolean handled;
 
-  page_increment = gtk_adjustment_get_page_increment (adjustment);
-
-  scroll_unit = page_increment;
-
-  if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &dx, &dy))
-    {
 #ifdef GDK_WINDOWING_QUARTZ
-      scroll_unit = 1;
+  scroll_unit = 1;
+#else
+  scroll_unit = gtk_adjustment_get_page_increment (priv->adjustment);
 #endif
 
-      if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
-        delta = - (dx ? dx : dy) * scroll_unit;
-      else
-        delta = dy * scroll_unit;
-    }
-  else if (gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
-    {
-      if (direction == GDK_SCROLL_UP ||
-          direction == GDK_SCROLL_LEFT)
-        delta = - scroll_unit;
-      else
-        delta = scroll_unit;
-    }
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
+    delta = - (dx ? dx : dy) * scroll_unit;
+  else
+    delta = dy * scroll_unit;
 
   if (priv->inverted)
     delta = - delta;
 
-  return delta;
-}
-
-static gboolean
-gtk_range_scroll_event (GtkWidget      *widget,
-			GdkEventScroll *event)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-
-  if (gtk_widget_get_realized (widget))
-    {
-      gdouble delta;
-      gboolean handled;
-
-      delta = _gtk_range_get_wheel_delta (range, event);
-
-      g_signal_emit (range, signals[CHANGE_VALUE], 0,
-                     GTK_SCROLL_JUMP, gtk_adjustment_get_value (priv->adjustment) + delta,
-                     &handled);
-    }
-
-  return GDK_EVENT_STOP;
+  g_signal_emit (range, signals[CHANGE_VALUE], 0,
+                 GTK_SCROLL_JUMP, gtk_adjustment_get_value (priv->adjustment) + delta,
+                 &handled);
 }
 
 static void
