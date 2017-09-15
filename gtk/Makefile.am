@@ -192,6 +192,7 @@ gtk_public_h_sources = 		\
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkeventcontroller.h	\
+	gtkeventcontrollerscroll.h	\
 	gtkexpander.h		\
 	gtkfilechooser.h	\
 	gtkfilechooserbutton.h	\
@@ -757,6 +758,7 @@ gtk_base_c_sources = 		\
 	gtkentrycompletion.c	\
 	gtkeventbox.c		\
 	gtkeventcontroller.c	\
+	gtkeventcontrollerscroll.c	\
 	gtkexpander.c		\
 	gtkfilechooser.c	\
 	gtkfilechooserbutton.c	\
