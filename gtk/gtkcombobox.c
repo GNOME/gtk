@@ -163,6 +163,8 @@ struct _GtkComboBoxPrivate
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer                    row_separator_data;
   GDestroyNotify              row_separator_destroy;
+
+  GtkEventController *scroll_controller;
 };
 
 /* There are 2 modes to this widget, which can be characterized as follows:
@@ -247,8 +249,6 @@ static void     gtk_combo_box_unset_model          (GtkComboBox      *combo_box)
 static void     gtk_combo_box_forall               (GtkContainer     *container,
                                                     GtkCallback       callback,
                                                     gpointer          callback_data);
-static gboolean gtk_combo_box_scroll_event         (GtkWidget        *widget,
-                                                    GdkEventScroll   *event);
 static void     gtk_combo_box_set_active_internal  (GtkComboBox      *combo_box,
                                                     GtkTreePath      *path);
 
@@ -256,6 +256,11 @@ static void     gtk_combo_box_real_move_active     (GtkComboBox      *combo_box,
                                                     GtkScrollType     scroll);
 static void     gtk_combo_box_real_popup           (GtkComboBox      *combo_box);
 static gboolean gtk_combo_box_real_popdown         (GtkComboBox      *combo_box);
+
+static void     gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                                        gdouble                   dx,
+                                                        gdouble                   dy,
+                                                        GtkComboBox              *combo_box);
 
 /* listening to the model */
 static void     gtk_combo_box_model_row_inserted   (GtkTreeModel     *model,
@@ -433,7 +438,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 
   widget_class = (GtkWidgetClass *)klass;
   widget_class->size_allocate = gtk_combo_box_size_allocate;
-  widget_class->scroll_event = gtk_combo_box_scroll_event;
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
   widget_class->measure = gtk_combo_box_measure;
@@ -979,6 +983,14 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   gtk_menu_attach_to_widget (GTK_MENU (menu),
                              GTK_WIDGET (combo_box),
                              NULL);
+
+  priv->scroll_controller =
+    gtk_event_controller_scroll_new (GTK_WIDGET (combo_box),
+                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
+                                     GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+  g_signal_connect (priv->scroll_controller, "scroll",
+                    G_CALLBACK (gtk_combo_box_scroll_controller_scroll),
+                    combo_box);
 }
 
 static void
@@ -1846,30 +1858,28 @@ tree_first (GtkComboBox  *combo,
   return search_data.set;
 }
 
-static gboolean
-gtk_combo_box_scroll_event (GtkWidget          *widget,
-                            GdkEventScroll     *event)
+static void
+gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                        gdouble                   dx,
+                                        gdouble                   dy,
+                                        GtkComboBox              *combo_box)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
   gboolean found = FALSE;
   GtkTreeIter iter;
   GtkTreeIter new_iter;
 
   if (!gtk_combo_box_get_active_iter (combo_box, &iter))
-    return TRUE;
+    return;
 
-  if (event->direction == GDK_SCROLL_UP)
-    found = tree_prev (combo_box, priv->model,
-                       &iter, &new_iter);
-  else if (event->direction == GDK_SCROLL_DOWN)
-    found = tree_next (combo_box, priv->model,
-                       &iter, &new_iter);
+  if (dy < 0)
+    found = tree_prev (combo_box, priv->model, &iter, &new_iter);
+  else if (dy > 0)
+    found = tree_next (combo_box, priv->model, &iter, &new_iter);
 
   if (found)
     gtk_combo_box_set_active_iter (combo_box, &new_iter);
 
-  return TRUE;
 }
 
 /* callbacks */
