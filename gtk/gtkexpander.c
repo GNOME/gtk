@@ -1120,12 +1120,12 @@ gtk_expander_set_label (GtkExpander *expander,
  * be avoided by fetching the label text directly from the label
  * widget.
  *
- * Returns: The text of the label widget. This string is owned
+ * Returns: (nullable): The text of the label widget. This string is owned
  *     by the widget and must not be modified or freed.
  *
  * Since: 2.4
  */
-const char *
+const gchar *
 gtk_expander_get_label (GtkExpander *expander)
 {
   GtkExpanderPrivate *priv;
