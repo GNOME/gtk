@@ -373,11 +373,11 @@ if cairogobj_dep.found()
   cairogobj_pkg_found = true
 endif
 
+cairo_libs = []
 if cc.get_id() == 'msvc'
   # Fallback depedency discovery for those on Visual Studio that do not generate
   # pkg-config files in their build systems for MSVC
   # Fallback for Cairo
-  cairo_libs = []
   if not cairo_dep.found()
     if (cc.has_header('cairo.h') and cc.has_header('cairo-win32.h'))
       cairo_dep = cc.find_library('cairo')
