@@ -278,24 +278,6 @@ swatch_key_press (GtkWidget   *widget,
   return FALSE;
 }
 
-static gboolean
-swatch_enter_notify (GtkWidget        *widget,
-                     GdkEventCrossing *event)
-{
-  gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
-
-  return FALSE;
-}
-
-static gboolean
-swatch_leave_notify (GtkWidget        *widget,
-                     GdkEventCrossing *event)
-{
-  gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
-
-  return FALSE;
-}
-
 static void
 emit_customize (GtkColorSwatch *swatch)
 {
@@ -555,8 +537,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->drag_data_received = swatch_drag_data_received;
   widget_class->key_press_event = swatch_key_press;
   widget_class->popup_menu = swatch_popup_menu;
-  widget_class->enter_notify_event = swatch_enter_notify;
-  widget_class->leave_notify_event = swatch_leave_notify;
   widget_class->size_allocate = swatch_size_allocate;
   widget_class->state_flags_changed = swatch_state_flags_changed;
 
