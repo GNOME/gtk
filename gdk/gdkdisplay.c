@@ -806,97 +806,6 @@ _gdk_display_end_touch_grab (GdkDisplay       *display,
   return FALSE;
 }
 
-/* _gdk_synthesize_crossing_events only works inside one toplevel.
-   This function splits things into two calls if needed, converting the
-   coordinates to the right toplevel */
-static void
-synthesize_crossing_events (GdkDisplay      *display,
-                            GdkDevice       *device,
-                            GdkDevice       *source_device,
-			    GdkWindow       *src_window,
-			    GdkWindow       *dest_window,
-			    GdkCrossingMode  crossing_mode,
-			    guint32          time,
-			    gulong           serial)
-{
-  GdkWindow *src_toplevel, *dest_toplevel;
-  GdkModifierType state;
-  double x, y;
-
-  if (src_window)
-    src_toplevel = gdk_window_get_toplevel (src_window);
-  else
-    src_toplevel = NULL;
-  if (dest_window)
-    dest_toplevel = gdk_window_get_toplevel (dest_window);
-  else
-    dest_toplevel = NULL;
-
-  if (src_toplevel == NULL && dest_toplevel == NULL)
-    return;
-  
-  if (src_toplevel == NULL ||
-      src_toplevel == dest_toplevel)
-    {
-      /* Same toplevels */
-      gdk_window_get_device_position_double (dest_toplevel,
-                                             device,
-                                             &x, &y, &state);
-      _gdk_synthesize_crossing_events (display,
-				       src_window,
-				       dest_window,
-                                       device, source_device,
-				       crossing_mode,
-				       x, y, state,
-				       time,
-				       NULL,
-				       serial, FALSE);
-    }
-  else if (dest_toplevel == NULL)
-    {
-      gdk_window_get_device_position_double (src_toplevel,
-                                             device,
-                                             &x, &y, &state);
-      _gdk_synthesize_crossing_events (display,
-                                       src_window,
-                                       NULL,
-                                       device, source_device,
-                                       crossing_mode,
-                                       x, y, state,
-                                       time,
-                                       NULL,
-                                       serial, FALSE);
-    }
-  else
-    {
-      /* Different toplevels */
-      gdk_window_get_device_position_double (src_toplevel,
-                                             device,
-                                             &x, &y, &state);
-      _gdk_synthesize_crossing_events (display,
-				       src_window,
-				       NULL,
-                                       device, source_device,
-				       crossing_mode,
-				       x, y, state,
-				       time,
-				       NULL,
-				       serial, FALSE);
-      gdk_window_get_device_position_double (dest_toplevel,
-                                             device,
-                                             &x, &y, &state);
-      _gdk_synthesize_crossing_events (display,
-				       NULL,
-				       dest_window,
-                                       device, source_device,
-				       crossing_mode,
-				       x, y, state,
-				       time,
-				       NULL,
-				       serial, FALSE);
-    }
-}
-
 static GdkWindow *
 get_current_toplevel (GdkDisplay      *display,
                       GdkDevice       *device,
@@ -932,7 +841,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
 			guint32            time,
 			gulong             serial)
 {
-  GdkWindow *src_window, *pointer_window, *new_toplevel;
+  GdkWindow *pointer_window, *new_toplevel;
   GdkPointerWindowInfo *info;
   GList *old_grabs;
   GdkModifierType state;
@@ -946,26 +855,8 @@ switch_to_pointer_grab (GdkDisplay        *display,
   if (grab)
     {
       /* New grab is in effect */
-
-      /* We need to generate crossing events for the grab.
-       * However, there are never any crossing events for implicit grabs
-       * TODO: ... Actually, this could happen if the pointer window
-       *           doesn't have button mask so a parent gets the event...
-       */
       if (!grab->implicit)
 	{
-	  /* We send GRAB crossing events from the window under the pointer to the
-	     grab window. Except if there is an old grab then we start from that */
-	  if (last_grab)
-	    src_window = last_grab->window;
-	  else
-	    src_window = info->window_under_pointer;
-
-	  if (src_window != grab->window)
-            synthesize_crossing_events (display, device, source_device,
-                                        src_window, grab->window,
-                                        GDK_CROSSING_GRAB, time, serial);
-
 	  /* !owner_event Grabbing a window that we're not inside, current status is
 	     now NULL (i.e. outside grabbed window) */
 	  if (!grab->owner_events && info->window_under_pointer != grab->window)
@@ -1028,12 +919,6 @@ switch_to_pointer_grab (GdkDisplay        *display,
                                                 x, y,
                                                 NULL, NULL);
             }
-
-	  if (!info->need_touch_press_enter &&
-	      pointer_window != last_grab->window)
-            synthesize_crossing_events (display, device, source_device,
-                                        last_grab->window, pointer_window,
-                                        GDK_CROSSING_UNGRAB, time, serial);
 
 	  /* We're now ungrabbed, update the window_under_pointer */
 	  _gdk_display_set_window_under_pointer (display, device, pointer_window);
