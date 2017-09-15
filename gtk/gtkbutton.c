@@ -122,10 +122,6 @@ static void gtk_button_unrealize (GtkWidget * widget);
 static gint gtk_button_grab_broken (GtkWidget * widget,
 				    GdkEventGrabBroken * event);
 static gint gtk_button_key_release (GtkWidget * widget, GdkEventKey * event);
-static gint gtk_button_enter_notify (GtkWidget * widget,
-				     GdkEventCrossing * event);
-static gint gtk_button_leave_notify (GtkWidget * widget,
-				     GdkEventCrossing * event);
 static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
 static void gtk_button_update_state   (GtkButton          *button);
@@ -208,8 +204,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->unrealize = gtk_button_unrealize;
   widget_class->grab_broken_event = gtk_button_grab_broken;
   widget_class->key_release_event = gtk_button_key_release;
-  widget_class->enter_notify_event = gtk_button_enter_notify;
-  widget_class->leave_notify_event = gtk_button_leave_notify;
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
   widget_class->unmap = gtk_button_unmap;
@@ -796,32 +790,6 @@ gtk_button_key_release (GtkWidget   *widget,
     return GTK_WIDGET_CLASS (gtk_button_parent_class)->key_release_event (widget, event);
   else
     return FALSE;
-}
-
-static gboolean
-gtk_button_enter_notify (GtkWidget        *widget,
-			 GdkEventCrossing *event)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
-
-  priv->in_button = TRUE;
-  gtk_button_update_state (button);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_button_leave_notify (GtkWidget        *widget,
-			 GdkEventCrossing *event)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
-
-  priv->in_button = FALSE;
-  gtk_button_update_state (button);
-
-  return FALSE;
 }
 
 static void
