@@ -96,7 +96,6 @@ typedef struct
   GtkListBoxRow *selected_row;
   GtkListBoxRow *cursor_row;
 
-  gboolean active_row_active;
   GtkListBoxRow *active_row;
 
   GtkSelectionMode selection_mode;
@@ -186,14 +185,6 @@ static void                 gtk_list_box_add_move_binding             (GtkBindin
 static void                 gtk_list_box_update_cursor                (GtkListBox          *box,
                                                                        GtkListBoxRow       *row,
                                                                        gboolean             grab_focus);
-static void                 gtk_list_box_update_active                (GtkListBox          *box,
-                                                                       GtkListBoxRow       *row);
-static gboolean             gtk_list_box_enter_notify_event           (GtkWidget           *widget,
-                                                                       GdkEventCrossing    *event);
-static gboolean             gtk_list_box_leave_notify_event           (GtkWidget           *widget,
-                                                                       GdkEventCrossing    *event);
-static gboolean             gtk_list_box_motion_notify_event          (GtkWidget           *widget,
-                                                                       GdkEventMotion      *event);
 static void                 gtk_list_box_show                         (GtkWidget           *widget);
 static gboolean             gtk_list_box_focus                        (GtkWidget           *widget,
                                                                        GtkDirectionType     direction);
@@ -380,9 +371,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   object_class->get_property = gtk_list_box_get_property;
   object_class->set_property = gtk_list_box_set_property;
   object_class->finalize = gtk_list_box_finalize;
-  widget_class->enter_notify_event = gtk_list_box_enter_notify_event;
-  widget_class->leave_notify_event = gtk_list_box_leave_notify_event;
-  widget_class->motion_notify_event = gtk_list_box_motion_notify_event;
   widget_class->show = gtk_list_box_show;
   widget_class->focus = gtk_list_box_focus;
   widget_class->compute_expand = gtk_list_box_compute_expand;
@@ -1720,70 +1708,6 @@ gtk_list_box_select_and_activate_full (GtkListBox    *box,
 }
 
 static void
-gtk_list_box_update_active (GtkListBox    *box,
-                            GtkListBoxRow *row)
-{
-  GtkListBoxPrivate *priv = BOX_PRIV (box);
-  gboolean val;
-
-  val = priv->active_row == row;
-  if (priv->active_row != NULL &&
-      val != priv->active_row_active)
-    {
-      priv->active_row_active = val;
-      if (priv->active_row_active)
-        gtk_widget_set_state_flags (GTK_WIDGET (priv->active_row),
-                                    GTK_STATE_FLAG_ACTIVE,
-                                    FALSE);
-      else
-        gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
-                                      GTK_STATE_FLAG_ACTIVE);
-    }
-}
-
-static gboolean
-gtk_list_box_enter_notify_event (GtkWidget        *widget,
-                                 GdkEventCrossing *event)
-{
-  GtkListBox *box = GTK_LIST_BOX (widget);
-  GtkListBoxRow *row;
-  gdouble y;
-
-  gdk_event_get_coords ((GdkEvent *) event, NULL, &y);
-  row = gtk_list_box_get_row_at_y (box, y);
-  gtk_list_box_update_active (box, row);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_list_box_leave_notify_event (GtkWidget        *widget,
-                                 GdkEventCrossing *event)
-{
-  GtkListBox *box = GTK_LIST_BOX (widget);
-
-  gtk_list_box_update_active (box, NULL);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_list_box_motion_notify_event (GtkWidget      *widget,
-                                  GdkEventMotion *event)
-{
-  GtkListBox *box = GTK_LIST_BOX (widget);
-  GtkListBoxRow *row;
-  gdouble y;
-
-  gdk_event_get_coords ((GdkEvent *) event, NULL, &y);
-  row = gtk_list_box_get_row_at_y (box, y);
-
-  gtk_list_box_update_active (box, row);
-
-  return FALSE;
-}
-
-static void
 gtk_list_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                          guint                 n_press,
                                          gdouble               x,
@@ -1799,7 +1723,6 @@ gtk_list_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   if (row != NULL && gtk_widget_is_sensitive (GTK_WIDGET (row)))
     {
       priv->active_row = row;
-      priv->active_row_active = TRUE;
       gtk_widget_set_state_flags (GTK_WIDGET (priv->active_row),
                                   GTK_STATE_FLAG_ACTIVE,
                                   FALSE);
@@ -1845,12 +1768,10 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
    */
   g_object_ref (box);
 
-  if (priv->active_row != NULL && priv->active_row_active)
+  if (priv->active_row != NULL &&
+      priv->active_row == gtk_list_box_get_row_at_y (box, y))
     {
       gboolean focus_on_click = gtk_widget_get_focus_on_click (GTK_WIDGET (priv->active_row));
-
-      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
-                                    GTK_STATE_FLAG_ACTIVE);
 
       if (n_press == 1 && priv->activate_single_click)
         gtk_list_box_select_and_activate_full (box, priv->active_row, focus_on_click);
@@ -1878,8 +1799,12 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
         }
     }
 
-  priv->active_row = NULL;
-  priv->active_row_active = FALSE;
+  if (priv->active_row)
+    {
+      gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
+                                    GTK_STATE_FLAG_ACTIVE);
+      priv->active_row = NULL;
+    }
 
   g_object_unref (box);
 }
