@@ -1056,8 +1056,6 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
       switch (event_type)
 	{
 	case GDK_BUTTON_PRESS:
-	case GDK_2BUTTON_PRESS:
-	case GDK_3BUTTON_PRESS:
 	case GDK_MOTION_NOTIFY:
 	case GDK_BUTTON_RELEASE:
 	case GDK_ENTER_NOTIFY:

@@ -303,23 +303,6 @@ gtk_cell_renderer_spin_key_press_event (GtkWidget   *widget,
   return FALSE;
 }
 
-static gboolean
-gtk_cell_renderer_spin_button_press_event (GtkWidget      *widget,
-                                           GdkEventButton *event,
-                                           gpointer        user_data)
-{
-  GdkEventType event_type = gdk_event_get_event_type ((GdkEvent *) event);
-
-  /* Block 2BUTTON and 3BUTTON here, so that they won't be eaten
-   * by tree view.
-   */
-  if (event_type == GDK_2BUTTON_PRESS
-      || event_type == GDK_3BUTTON_PRESS)
-    return TRUE;
-
-  return FALSE;
-}
-
 static GtkCellEditable *
 gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
@@ -347,10 +330,6 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
 
   spin = gtk_spin_button_new (priv->adjustment,
 			      priv->climb_rate, priv->digits);
-
-  g_signal_connect (spin, "button-press-event",
-                    G_CALLBACK (gtk_cell_renderer_spin_button_press_event),
-                    NULL);
 
   g_object_get (cell_text, "text", &text, NULL);
   if (text)

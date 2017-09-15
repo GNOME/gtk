@@ -5734,8 +5734,6 @@ _gdk_make_event (GdkWindow    *window,
       break;
 
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       event->button.time = the_time;
       event->button.axes = NULL;

@@ -132,7 +132,6 @@ device_removed_cb (GdkDeviceManager *device_manager,
                    GdkDevice        *device,
                    GdkDisplay       *display)
 {
-  g_hash_table_remove (display->multiple_click_info, device);
   g_hash_table_remove (display->device_grabs, device);
   g_hash_table_remove (display->pointers_info, device);
 
@@ -386,9 +385,6 @@ gdk_display_init (GdkDisplay *display)
   display->pointers_info = g_hash_table_new_full (NULL, NULL, NULL,
                                                   (GDestroyNotify) free_pointer_info);
 
-  display->multiple_click_info = g_hash_table_new_full (NULL, NULL, NULL,
-                                                        (GDestroyNotify) g_free);
-
   display->rendering_mode = _gdk_rendering_mode;
 
   display->composited = TRUE;
@@ -439,7 +435,6 @@ gdk_display_finalize (GObject *object)
 
   g_hash_table_destroy (display->motion_hint_info);
   g_hash_table_destroy (display->pointers_info);
-  g_hash_table_destroy (display->multiple_click_info);
 
   g_list_free_full (display->input_devices, g_object_unref);
   g_list_free_full (display->seats, g_object_unref);

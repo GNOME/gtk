@@ -3545,8 +3545,6 @@ gtk_entry_event (GtkWidget *widget,
       icon_info->current_sequence = sequence;
       /* Fall through */
     case GDK_BUTTON_PRESS:
-    case GDK_2BUTTON_PRESS:
-    case GDK_3BUTTON_PRESS:
       priv->start_x = x;
       priv->start_y = y;
       icon_info->pressed = TRUE;
