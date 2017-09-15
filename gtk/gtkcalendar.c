@@ -84,6 +84,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkgesturemultipress.h"
+#include "gtkeventcontrollerscroll.h"
 
 #define TIMEOUT_INITIAL  500
 #define TIMEOUT_REPEAT    50
@@ -247,6 +248,7 @@ struct _GtkCalendarPrivate
   gint detail_overflow[6];
 
   GtkGesture *press_gesture;
+  GtkEventController *scroll_controller;
 };
 
 static void gtk_calendar_finalize     (GObject      *calendar);
@@ -285,8 +287,6 @@ static void     gtk_calendar_button_release (GtkGestureMultiPress *gesture,
                                              gpointer              user_data);
 static gboolean gtk_calendar_motion_notify  (GtkWidget        *widget,
                                              GdkEventMotion   *event);
-static gboolean gtk_calendar_scroll         (GtkWidget        *widget,
-                                             GdkEventScroll   *event);
 static gboolean gtk_calendar_key_press      (GtkWidget        *widget,
                                              GdkEventKey      *event);
 static gboolean gtk_calendar_focus_out      (GtkWidget        *widget,
@@ -343,6 +343,11 @@ static gint calendar_get_xsep          (GtkCalendar *calendar);
 static gint calendar_get_ysep          (GtkCalendar *calendar);
 static gint calendar_get_inner_border  (GtkCalendar *calendar);
 
+static void gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                                   gdouble                   dx,
+                                                   gdouble                   dy,
+                                                   GtkWidget                *widget);
+
 static char    *default_abbreviated_dayname[7];
 static char    *default_monthname[12];
 
@@ -367,7 +372,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->size_allocate = gtk_calendar_size_allocate;
   widget_class->motion_notify_event = gtk_calendar_motion_notify;
   widget_class->key_press_event = gtk_calendar_key_press;
-  widget_class->scroll_event = gtk_calendar_scroll;
   widget_class->state_flags_changed = gtk_calendar_state_flags_changed;
   widget_class->grab_notify = gtk_calendar_grab_notify;
   widget_class->focus_out_event = gtk_calendar_focus_out;
@@ -676,6 +680,14 @@ gtk_calendar_init (GtkCalendar *calendar)
   priv->press_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (calendar));
   g_signal_connect (priv->press_gesture, "pressed", G_CALLBACK (gtk_calendar_button_press), calendar);
   g_signal_connect (priv->press_gesture, "released", G_CALLBACK (gtk_calendar_button_release), calendar);
+
+  priv->scroll_controller =
+    gtk_event_controller_scroll_new (GTK_WIDGET (calendar),
+                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
+                                     GTK_EVENT_CONTROLLER_SCROLL_DISCRETE);
+  g_signal_connect (priv->scroll_controller, "scroll",
+                    G_CALLBACK (gtk_calendar_scroll_controller_scroll),
+                    calendar);
 
   if (!default_abbreviated_dayname[0])
     for (i=0; i<7; i++)
@@ -1312,6 +1324,7 @@ gtk_calendar_finalize (GObject *object)
   GtkCalendarPrivate *priv = GTK_CALENDAR (object)->priv;
 
   g_object_unref (priv->press_gesture);
+  g_object_unref (priv->scroll_controller);
 
   G_OBJECT_CLASS (gtk_calendar_parent_class)->finalize (object);
 }
@@ -2683,32 +2696,21 @@ gtk_calendar_motion_notify (GtkWidget      *widget,
   return TRUE;
 }
 
-static gboolean
-gtk_calendar_scroll (GtkWidget      *widget,
-                     GdkEventScroll *event)
+static void
+gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                       gdouble                   dx,
+                                       gdouble                   dy,
+                                       GtkWidget                *widget)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
-  GdkScrollDirection direction;
 
-  if (!gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
-    return GDK_EVENT_PROPAGATE;
+  if (!gtk_widget_has_focus (widget))
+    gtk_widget_grab_focus (widget);
 
-  if (direction == GDK_SCROLL_UP)
-    {
-      if (!gtk_widget_has_focus (widget))
-        gtk_widget_grab_focus (widget);
-      calendar_set_month_prev (calendar);
-    }
-  else if (direction == GDK_SCROLL_DOWN)
-    {
-      if (!gtk_widget_has_focus (widget))
-        gtk_widget_grab_focus (widget);
-      calendar_set_month_next (calendar);
-    }
-  else
-    return FALSE;
-
-  return TRUE;
+  if (dy < 0)
+    calendar_set_month_prev (calendar);
+  else if (dy > 0)
+    calendar_set_month_next (calendar);
 }
 
 
