@@ -1387,10 +1387,9 @@ flush_scroll_event (GdkWaylandSeat             *seat,
       pointer_frame->discrete_x = 0;
       pointer_frame->discrete_y = 0;
     }
-
-  if (pointer_frame->is_scroll_stop ||
-      pointer_frame->delta_x != 0 ||
-      pointer_frame->delta_y != 0)
+  else if (pointer_frame->is_scroll_stop ||
+           pointer_frame->delta_x != 0 ||
+           pointer_frame->delta_y != 0)
     {
       /* Axes can stop independently, if we stop on one axis but have a
        * delta on the other, we don't count it as a stop event.
@@ -1404,11 +1403,13 @@ flush_scroll_event (GdkWaylandSeat             *seat,
                                  pointer_frame->delta_x,
                                  pointer_frame->delta_y,
                                  is_stop);
-
-      pointer_frame->delta_x = 0;
-      pointer_frame->delta_y = 0;
-      pointer_frame->is_scroll_stop = FALSE;
     }
+
+  pointer_frame->discrete_x = 0;
+  pointer_frame->discrete_y = 0;
+  pointer_frame->delta_x = 0;
+  pointer_frame->delta_y = 0;
+  pointer_frame->is_scroll_stop = FALSE;
 }
 
 static void
