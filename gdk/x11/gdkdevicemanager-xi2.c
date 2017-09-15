@@ -1537,6 +1537,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                              xev->detail,
                              xev->event_x, xev->event_y));
 
+#ifdef XINPUT_2_2
+        if (xev->flags & XIPointerEmulated)
+          return FALSE;
+#endif
+
         if (ev->evtype == XI_ButtonRelease &&
             (xev->detail >= 4 && xev->detail <= 7))
           return FALSE;
@@ -1574,18 +1579,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             gdk_event_set_seat (event, gdk_device_get_seat (device));
 
             event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
-
-#ifdef XINPUT_2_2
-            if (xev->flags & XIPointerEmulated)
-              gdk_event_set_pointer_emulated (event, TRUE);
-#endif
           }
         else
           {
-#ifdef XINPUT_2_2
-            if (xev->flags & XIPointerEmulated)
-              return FALSE;
-#endif
             event->button.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
 
             event->button.window = window;
@@ -1645,6 +1641,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         gdouble delta_x, delta_y;
 
+#ifdef XINPUT_2_2
+        if (xev->flags & XIPointerEmulated)
+          return FALSE;
+#endif
+
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
         device = g_hash_table_lookup (device_manager->id_table,
@@ -1669,12 +1670,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
               event->scroll.is_stop = TRUE;
 
             GDK_NOTE(EVENTS,
-                     g_message ("smooth scroll: %s\n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
-#ifdef XINPUT_2_2
-                                (xev->flags & XIPointerEmulated) ? "emulated" : "",
-#else
-                                 "",
-#endif
+                     g_message ("smooth scroll: \n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
                                 xev->deviceid, xev->sourceid,
                                 xev->event, delta_x, delta_y));
 
@@ -1695,11 +1691,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
             break;
           }
-
-#ifdef XINPUT_2_2
-        if (xev->flags & XIPointerEmulated)
-          return FALSE;
-#endif
 
         event->motion.type = GDK_MOTION_NOTIFY;
         event->motion.window = window;
