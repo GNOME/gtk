@@ -115,6 +115,8 @@ struct _GtkScaleButtonPrivate
   gchar **icon_list;
 
   GtkAdjustment *adjustment; /* needed because it must be settable in init() */
+
+  GtkEventController *scroll_controller;
 };
 
 static void     gtk_scale_button_constructed    (GObject             *object);
@@ -130,8 +132,6 @@ static void	gtk_scale_button_get_property	(GObject             *object,
 						 GParamSpec          *pspec);
 static void gtk_scale_button_set_orientation_private (GtkScaleButton *button,
                                                       GtkOrientation  orientation);
-static gboolean	gtk_scale_button_scroll		(GtkWidget           *widget,
-						 GdkEventScroll      *event);
 static void     gtk_scale_button_clicked        (GtkButton           *button);
 static void     gtk_scale_button_popup          (GtkWidget           *widget);
 static void     gtk_scale_button_popdown        (GtkWidget           *widget);
@@ -148,6 +148,11 @@ static void     cb_scale_value_changed          (GtkRange            *range,
                                                  gpointer             user_data);
 static void     cb_popup_mapped                 (GtkWidget           *popup,
                                                  gpointer             user_data);
+
+static void     gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                                           gdouble                   dx,
+                                                           gdouble                   dy,
+                                                           GtkScaleButton           *button);
 
 G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON,
                          G_ADD_PRIVATE (GtkScaleButton)
@@ -169,8 +174,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gobject_class->dispose = gtk_scale_button_dispose;
   gobject_class->set_property = gtk_scale_button_set_property;
   gobject_class->get_property = gtk_scale_button_get_property;
-
-  widget_class->scroll_event = gtk_scale_button_scroll;
 
   button_class->clicked = gtk_scale_button_clicked;
 
@@ -367,6 +370,13 @@ gtk_scale_button_init (GtkScaleButton *button)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (button));
   gtk_style_context_add_class (context, "scale");
+
+  priv->scroll_controller =
+    gtk_event_controller_scroll_new (GTK_WIDGET (button),
+                                     GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  g_signal_connect (priv->scroll_controller, "scroll",
+                    G_CALLBACK (gtk_scale_button_scroll_controller_scroll),
+                    button);
 }
 
 static void
@@ -468,6 +478,8 @@ gtk_scale_button_finalize (GObject *object)
       g_object_unref (priv->adjustment);
       priv->adjustment = NULL;
     }
+
+  g_object_unref (priv->scroll_controller);
 
   G_OBJECT_CLASS (gtk_scale_button_parent_class)->finalize (object);
 }
@@ -768,54 +780,30 @@ gtk_scale_button_set_orientation_private (GtkScaleButton *button,
     }
 }
 
-/*
- * button callbacks.
- */
-
-static gboolean
-gtk_scale_button_scroll (GtkWidget      *widget,
-			 GdkEventScroll *event)
+static void
+gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
+                                           gdouble                   dx,
+                                           gdouble                   dy,
+                                           GtkScaleButton           *button)
 {
-  GtkScaleButton *button;
   GtkScaleButtonPrivate *priv;
   GtkAdjustment *adjustment;
-  GdkScrollDirection direction;
   gdouble d;
 
-  button = GTK_SCALE_BUTTON (widget);
   priv = button->priv;
   adjustment = priv->adjustment;
 
-  if (gdk_event_get_event_type ((GdkEvent *) event) != GDK_SCROLL ||
-      !gdk_event_get_scroll_direction ((GdkEvent *) event, &direction))
-    return FALSE;
+  d = CLAMP (gtk_scale_button_get_value (button) -
+             (dy * gtk_adjustment_get_step_increment (adjustment)),
+             gtk_adjustment_get_lower (adjustment),
+             gtk_adjustment_get_upper (adjustment));
 
-  d = gtk_scale_button_get_value (button);
-  if (direction == GDK_SCROLL_UP)
-    {
-      d += gtk_adjustment_get_step_increment (adjustment);
-      if (d > gtk_adjustment_get_upper (adjustment))
-	d = gtk_adjustment_get_upper (adjustment);
-    }
-  else if (direction == GDK_SCROLL_DOWN)
-    {
-      d -= gtk_adjustment_get_step_increment (adjustment);
-      if (d < gtk_adjustment_get_lower (adjustment))
-	d = gtk_adjustment_get_lower (adjustment);
-    }
-  else if (direction == GDK_SCROLL_SMOOTH)
-    {
-      gdouble delta_y;
-
-      gdk_event_get_scroll_deltas ((GdkEvent *) event, NULL, &delta_y);
-      d -= delta_y * gtk_adjustment_get_step_increment (adjustment);
-      d = CLAMP (d, gtk_adjustment_get_lower (adjustment),
-                 gtk_adjustment_get_upper (adjustment));
-    }
   gtk_scale_button_set_value (button, d);
-
-  return TRUE;
 }
+
+/*
+ * button callbacks.
+ */
 
 static gboolean
 gtk_scale_popup (GtkWidget *widget)
