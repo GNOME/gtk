@@ -4079,20 +4079,28 @@ colorswatch {
     }
   }
 
-  &.dark overlay {
-    color: white;
+  &.dark {
+    outline-color: transparentize(white, 0.4);
 
-    &:hover { border-color: if($variant == 'light', transparentize(black, 0.2), $borders_color); }
+    overlay {
+      color: white;
 
-    &:backdrop { color: transparentize(white, 0.5); }
+      &:hover { border-color: if($variant == 'light', transparentize(black, 0.2), $borders_color); }
+
+      &:backdrop { color: transparentize(white, 0.5); }
+    }
   }
 
-  &.light overlay {
-    color: black;
+  &.light {
+    outline-color: transparentize(black, 0.4);
 
-    &:hover { border-color: if($variant == 'light', transparentize(black, 0.5), $borders_color); }
+    overlay {
+      color: black;
 
-    &:backdrop { color: transparentize(black, 0.5); }
+      &:hover { border-color: if($variant == 'light', transparentize(black, 0.5), $borders_color); }
+
+      &:backdrop { color: transparentize(black, 0.5); }
+    }
   }
 
   &:drop(active) {
