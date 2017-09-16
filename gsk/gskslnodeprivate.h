@@ -38,6 +38,7 @@ struct _GskSlNodeClass {
   void                  (* print)                               (GskSlNode           *node,
                                                                  GString             *string);
   GskSlType *           (* get_return_type)                     (GskSlNode           *node);
+  gboolean              (* is_constant)                         (GskSlNode           *node);
 };
 
 GskSlNode *             gsk_sl_node_new_program                 (GBytes              *source,
@@ -49,6 +50,7 @@ void                    gsk_sl_node_unref                       (GskSlNode      
 void                    gsk_sl_node_print                       (GskSlNode           *node,
                                                                  GString             *string);
 GskSlType *             gsk_sl_node_get_return_type             (GskSlNode           *node);
+gboolean                gsk_sl_node_is_constant                 (GskSlNode           *node);
 
 G_END_DECLS
 

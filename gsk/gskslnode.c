@@ -83,10 +83,17 @@ gsk_sl_node_program_get_return_type (GskSlNode *node)
   return NULL;
 }
 
+static gboolean
+gsk_sl_node_program_is_constant (GskSlNode *node)
+{
+  return TRUE;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_PROGRAM = {
   gsk_sl_node_program_free,
   gsk_sl_node_program_print,
-  gsk_sl_node_program_get_return_type
+  gsk_sl_node_program_get_return_type,
+  gsk_sl_node_program_is_constant
 };
 
 /* FUNCTION */
@@ -146,10 +153,17 @@ gsk_sl_node_function_get_return_type (GskSlNode *node)
   return function->return_type;
 }
 
+static gboolean
+gsk_sl_node_function_is_constant (GskSlNode *node)
+{
+  return TRUE;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_FUNCTION = {
   gsk_sl_node_function_free,
   gsk_sl_node_function_print,
-  gsk_sl_node_function_get_return_type
+  gsk_sl_node_function_get_return_type,
+  gsk_sl_node_function_is_constant
 };
 
 /* ASSIGNMENT */
@@ -234,10 +248,19 @@ gsk_sl_node_assignment_get_return_type (GskSlNode *node)
   return gsk_sl_node_get_return_type (assignment->lvalue);
 }
 
+static gboolean
+gsk_sl_node_assignment_is_constant (GskSlNode *node)
+{
+  //GskSlNodeAssignment *assignment = (GskSlNodeAssignment *) node;
+
+  return FALSE;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_ASSIGNMENT = {
   gsk_sl_node_assignment_free,
   gsk_sl_node_assignment_print,
-  gsk_sl_node_assignment_get_return_type
+  gsk_sl_node_assignment_get_return_type,
+  gsk_sl_node_assignment_is_constant
 };
 
 /* CONSTANT */
@@ -320,10 +343,17 @@ gsk_sl_node_constant_get_return_type (GskSlNode *node)
   return gsk_sl_type_get_builtin (constant->type);
 }
 
+static gboolean
+gsk_sl_node_constant_is_constant (GskSlNode *node)
+{
+  return TRUE;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_CONSTANT = {
   gsk_sl_node_constant_free,
   gsk_sl_node_constant_print,
-  gsk_sl_node_constant_get_return_type
+  gsk_sl_node_constant_get_return_type,
+  gsk_sl_node_constant_is_constant
 };
 
 /* API */
@@ -452,11 +482,23 @@ gsk_sl_node_parse_assignment_expression (GskSlNodeProgram  *program,
         return lvalue;
   }
 
+  if (gsk_sl_node_is_constant (lvalue))
+    {
+      gsk_sl_preprocessor_error (stream, "Cannot assign to a constant lvalue.");
+
+      /* Continue parsing like normal here to get more errors */
+      gsk_sl_preprocessor_consume (stream, lvalue);
+      gsk_sl_node_unref (lvalue);
+
+      return gsk_sl_node_parse_assignment_expression (program, stream);
+    }
+
   assign = gsk_sl_node_new (GskSlNodeAssignment, &GSK_SL_NODE_ASSIGNMENT);
   assign->lvalue = lvalue;
   assign->op = token->type;
 
   gsk_sl_preprocessor_consume (stream, (GskSlNode *) assign);
+
   assign->rvalue = gsk_sl_node_parse_assignment_expression (program, stream);
   if (assign->rvalue == NULL)
     {
@@ -621,4 +663,10 @@ GskSlType *
 gsk_sl_node_get_return_type (GskSlNode *node)
 {
   return node->class->get_return_type (node);
+}
+
+gboolean
+gsk_sl_node_is_constant (GskSlNode *node)
+{
+  return node->class->is_constant (node);
 }
