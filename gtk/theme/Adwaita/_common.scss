@@ -4080,19 +4080,19 @@ colorswatch {
   }
 
   &.dark overlay {
-    color: $selected_fg_color;
+    color: white;
 
     &:hover { border-color: if($variant == 'light', transparentize(black, 0.2), $borders_color); }
 
-    &:backdrop { color: $backdrop_selected_fg_color; }
+    &:backdrop { color: transparentize(white, 0.5); }
   }
 
   &.light overlay {
-    color: $text_color;
+    color: black;
 
     &:hover { border-color: if($variant == 'light', transparentize(black, 0.5), $borders_color); }
 
-    &:backdrop { color: $backdrop_text_color; }
+    &:backdrop { color: transparentize(black, 0.5); }
   }
 
   &:drop(active) {

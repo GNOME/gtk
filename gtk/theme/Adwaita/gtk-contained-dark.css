@@ -1760,17 +1760,17 @@ colorswatch.right, colorswatch:last-child:not(.bottom) { border-top-right-radius
 
 colorswatch.right overlay, colorswatch:last-child:not(.bottom) overlay { border-top-right-radius: 5px; border-bottom-right-radius: 5px; }
 
-colorswatch.dark overlay { color: #ffffff; }
+colorswatch.dark overlay { color: white; }
 
 colorswatch.dark overlay:hover { border-color: #1b1f20; }
 
-colorswatch.dark overlay:backdrop { color: #d3d4d5; }
+colorswatch.dark overlay:backdrop { color: rgba(255, 255, 255, 0.5); }
 
-colorswatch.light overlay { color: white; }
+colorswatch.light overlay { color: black; }
 
 colorswatch.light overlay:hover { border-color: #1b1f20; }
 
-colorswatch.light overlay:backdrop { color: #d3d4d5; }
+colorswatch.light overlay:backdrop { color: rgba(0, 0, 0, 0.5); }
 
 colorswatch:drop(active) { box-shadow: none; }
 
