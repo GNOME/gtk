@@ -77,9 +77,16 @@ gsk_sl_node_program_print (GskSlNode *node,
     gsk_sl_node_print (l->data, string);
 }
 
+static GskSlType *
+gsk_sl_node_program_get_return_type (GskSlNode *node)
+{
+  return NULL;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_PROGRAM = {
   gsk_sl_node_program_free,
-  gsk_sl_node_program_print
+  gsk_sl_node_program_print,
+  gsk_sl_node_program_get_return_type
 };
 
 /* FUNCTION */
@@ -131,9 +138,18 @@ gsk_sl_node_function_print (GskSlNode *node,
   g_string_append (string, "}\n");
 }
 
+static GskSlType *
+gsk_sl_node_function_get_return_type (GskSlNode *node)
+{
+  GskSlNodeFunction *function = (GskSlNodeFunction *) node;
+
+  return function->return_type;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_FUNCTION = {
   gsk_sl_node_function_free,
-  gsk_sl_node_function_print
+  gsk_sl_node_function_print,
+  gsk_sl_node_function_get_return_type
 };
 
 /* ASSIGNMENT */
@@ -210,9 +226,18 @@ gsk_sl_node_assignment_print (GskSlNode *node,
   gsk_sl_node_print (assignment->rvalue, string);
 }
 
+static GskSlType *
+gsk_sl_node_assignment_get_return_type (GskSlNode *node)
+{
+  GskSlNodeAssignment *assignment = (GskSlNodeAssignment *) node;
+
+  return gsk_sl_node_get_return_type (assignment->lvalue);
+}
+
 static const GskSlNodeClass GSK_SL_NODE_ASSIGNMENT = {
   gsk_sl_node_assignment_free,
-  gsk_sl_node_assignment_print
+  gsk_sl_node_assignment_print,
+  gsk_sl_node_assignment_get_return_type
 };
 
 /* CONSTANT */
@@ -287,9 +312,18 @@ gsk_sl_node_constant_print (GskSlNode *node,
   }
 }
 
+static GskSlType *
+gsk_sl_node_constant_get_return_type (GskSlNode *node)
+{
+  GskSlNodeConstant *constant = (GskSlNodeConstant *) node;
+
+  return gsk_sl_type_get_builtin (constant->type);
+}
+
 static const GskSlNodeClass GSK_SL_NODE_CONSTANT = {
   gsk_sl_node_constant_free,
-  gsk_sl_node_constant_print
+  gsk_sl_node_constant_print,
+  gsk_sl_node_constant_get_return_type
 };
 
 /* API */
@@ -581,4 +615,10 @@ gsk_sl_node_print (GskSlNode *node,
                    GString   *string)
 {
   node->class->print (node, string);
+}
+
+GskSlType *
+gsk_sl_node_get_return_type (GskSlNode *node)
+{
+  return node->class->get_return_type (node);
 }
