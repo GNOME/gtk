@@ -346,6 +346,9 @@ else
   platform_gio_dep = giounix_dep
 endif
 
+cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
+cdata.set('HAVE_PANGOFT', pangoft_dep.found())
+
 backend_immodules = []
 
 pc_gdk_extra_libs = []

@@ -289,3 +289,8 @@
 #mesondefine GTK_LIBDIR
 
 #mesondefine GTK_PRINT_BACKENDS
+#mesondefine GTK_PRINT_BACKENDS
+
+#mesondefine HAVE_HARFBUZZ
+
+#mesondefine HAVE_PANGOFT
