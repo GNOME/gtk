@@ -135,6 +135,85 @@ static const GskSlNodeClass GSK_SL_NODE_FUNCTION = {
   gsk_sl_node_function_print
 };
 
+/* ASSIGNMENT */
+
+typedef struct _GskSlNodeAssignment GskSlNodeAssignment;
+
+struct _GskSlNodeAssignment {
+  GskSlNode parent;
+
+  GskSlTokenType op;
+  GskSlNode *lvalue;
+  GskSlNode *rvalue;
+};
+
+static void
+gsk_sl_node_assignment_free (GskSlNode *node)
+{
+  GskSlNodeAssignment *assignment = (GskSlNodeAssignment *) node;
+
+  gsk_sl_node_unref (assignment->lvalue);
+  if (assignment->rvalue)
+    gsk_sl_node_unref (assignment->rvalue);
+
+  g_slice_free (GskSlNodeAssignment, assignment);
+}
+
+static void
+gsk_sl_node_assignment_print (GskSlNode *node,
+                              GString   *string)
+{
+  GskSlNodeAssignment *assignment = (GskSlNodeAssignment *) node;
+
+  gsk_sl_node_print (assignment->lvalue, string);
+
+  switch ((guint) assignment->op)
+  {
+    case GSK_SL_TOKEN_EQUAL:
+      g_string_append (string, " = ");
+      break;
+    case GSK_SL_TOKEN_MUL_ASSIGN:
+      g_string_append (string, " *= ");
+      break;
+    case GSK_SL_TOKEN_DIV_ASSIGN:
+      g_string_append (string, " /= ");
+      break;
+    case GSK_SL_TOKEN_MOD_ASSIGN:
+      g_string_append (string, " %= ");
+      break;
+    case GSK_SL_TOKEN_ADD_ASSIGN:
+      g_string_append (string, " += ");
+      break;
+    case GSK_SL_TOKEN_SUB_ASSIGN:
+      g_string_append (string, " -= ");
+      break;
+    case GSK_SL_TOKEN_LEFT_ASSIGN:
+      g_string_append (string, " <<= ");
+      break;
+    case GSK_SL_TOKEN_RIGHT_ASSIGN:
+      g_string_append (string, " >>= ");
+      break;
+    case GSK_SL_TOKEN_AND_ASSIGN:
+      g_string_append (string, " &= ");
+      break;
+    case GSK_SL_TOKEN_XOR_ASSIGN:
+      g_string_append (string, " ^= ");
+      break;
+    case GSK_SL_TOKEN_OR_ASSIGN:
+      g_string_append (string, " |= ");
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+  gsk_sl_node_print (assignment->rvalue, string);
+}
+
+static const GskSlNodeClass GSK_SL_NODE_ASSIGNMENT = {
+  gsk_sl_node_assignment_free,
+  gsk_sl_node_assignment_print
+};
+
 /* CONSTANT */
 
 typedef struct _GskSlNodeConstant GskSlNodeConstant;
@@ -307,30 +386,58 @@ gsk_sl_node_parse_constant (GskSlNodeProgram  *program,
 }
 
 static GskSlNode *
-gsk_sl_node_parse_expression (GskSlNodeProgram  *program,
-                              GskSlPreprocessor *stream)
+gsk_sl_node_parse_assignment_expression (GskSlNodeProgram  *program,
+                                         GskSlPreprocessor *stream)
 {
   const GskSlToken *token;
-  GskSlNode *node;
+  GskSlNode *lvalue;
+  GskSlNodeAssignment *assign;
+
+  lvalue = gsk_sl_node_parse_constant (program, stream);
+  if (lvalue == NULL)
+    return NULL;
 
   token = gsk_sl_preprocessor_get (stream);
   switch ((guint) token->type)
   {
-      case GSK_SL_TOKEN_INTCONSTANT:
-      case GSK_SL_TOKEN_UINTCONSTANT:
-      case GSK_SL_TOKEN_FLOATCONSTANT:
-      case GSK_SL_TOKEN_BOOLCONSTANT:
-      case GSK_SL_TOKEN_DOUBLECONSTANT:
-        node = gsk_sl_node_parse_constant (program, stream);
+      case GSK_SL_TOKEN_EQUAL:
+      case GSK_SL_TOKEN_MUL_ASSIGN:
+      case GSK_SL_TOKEN_DIV_ASSIGN:
+      case GSK_SL_TOKEN_MOD_ASSIGN:
+      case GSK_SL_TOKEN_ADD_ASSIGN:
+      case GSK_SL_TOKEN_SUB_ASSIGN:
+      case GSK_SL_TOKEN_LEFT_ASSIGN:
+      case GSK_SL_TOKEN_RIGHT_ASSIGN:
+      case GSK_SL_TOKEN_AND_ASSIGN:
+      case GSK_SL_TOKEN_XOR_ASSIGN:
+      case GSK_SL_TOKEN_OR_ASSIGN:
         break;
 
-      case GSK_SL_TOKEN_LEFT_PAREN:
       default:
-        node = NULL;
-        break;
+        return lvalue;
   }
 
-  return node;
+  assign = gsk_sl_node_new (GskSlNodeAssignment, &GSK_SL_NODE_ASSIGNMENT);
+  assign->lvalue = lvalue;
+  assign->op = token->type;
+
+  gsk_sl_preprocessor_consume (stream, (GskSlNode *) assign);
+  assign->rvalue = gsk_sl_node_parse_assignment_expression (program, stream);
+  if (assign->rvalue == NULL)
+    {
+      gsk_sl_node_unref ((GskSlNode *) assign);
+      return lvalue;
+    }
+
+  return (GskSlNode *) assign;
+}
+
+static GskSlNode *
+gsk_sl_node_parse_expression (GskSlNodeProgram  *program,
+                              GskSlPreprocessor *stream)
+{
+  /* XXX: Allow comma here */
+  return gsk_sl_node_parse_assignment_expression (program, stream);
 }
 
 static gboolean
