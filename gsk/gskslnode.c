@@ -90,6 +90,7 @@ struct _GskSlNodeFunction {
 
   GskSlType *return_type;
   char *name;
+  GSList *statements;
 };
 
 static void
@@ -100,6 +101,7 @@ gsk_sl_node_function_free (GskSlNode *node)
   if (function->return_type)
     gsk_sl_type_unref (function->return_type);
   g_free (function->name);
+  g_slist_free_full (function->statements, (GDestroyNotify) gsk_sl_node_unref);
 
   g_slice_free (GskSlNodeFunction, function);
 }
@@ -109,6 +111,7 @@ gsk_sl_node_function_print (GskSlNode *node,
                             GString   *string)
 {
   GskSlNodeFunction *function = (GskSlNodeFunction *) node;
+  GSList *l;
 
   gsk_sl_type_print (function->return_type, string);
   g_string_append (string, "\n");
@@ -118,12 +121,95 @@ gsk_sl_node_function_print (GskSlNode *node,
   g_string_append (string, ")\n");
 
   g_string_append (string, "{\n");
+  for (l = function->statements; l; l = l->next)
+    {
+      g_string_append (string, "  ");
+      gsk_sl_node_print (l->data, string);
+      g_string_append (string, ";\n");
+    }
   g_string_append (string, "}\n");
 }
 
 static const GskSlNodeClass GSK_SL_NODE_FUNCTION = {
   gsk_sl_node_function_free,
   gsk_sl_node_function_print
+};
+
+/* CONSTANT */
+
+typedef struct _GskSlNodeConstant GskSlNodeConstant;
+
+struct _GskSlNodeConstant {
+  GskSlNode parent;
+
+  GskSlBuiltinType type;
+  union {
+    gint32       i32;
+    guint32      u32;
+    float        f;
+    double       d;
+    gboolean     b;
+  };
+};
+
+static void
+gsk_sl_node_constant_free (GskSlNode *node)
+{
+  GskSlNodeConstant *constant = (GskSlNodeConstant *) node;
+
+  g_slice_free (GskSlNodeConstant, constant);
+}
+
+static void
+gsk_sl_node_constant_print (GskSlNode *node,
+                            GString   *string)
+{
+  GskSlNodeConstant *constant = (GskSlNodeConstant *) node;
+  char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+  switch (constant->type)
+  {
+    case GSK_SL_FLOAT:
+      g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, constant->f);
+      g_string_append (string, buf);
+      if (strchr (buf, '.') == NULL)
+        g_string_append (string, ".0");
+      break;
+
+    case GSK_SL_DOUBLE:
+      g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, constant->d);
+      g_string_append (string, buf);
+      if (strchr (buf, '.') == NULL)
+        g_string_append (string, ".0");
+      g_string_append (string, "lf");
+      break;
+
+    case GSK_SL_INT:
+      g_string_append_printf (string, "%i", (gint) constant->i32);
+      break;
+
+    case GSK_SL_UINT:
+      g_string_append_printf (string, "%uu", (guint) constant->u32);
+      break;
+
+    case GSK_SL_BOOL:
+      g_string_append (string, constant->b ? "true" : "false");
+      break;
+
+    case GSK_SL_VOID:
+    case GSK_SL_VEC2:
+    case GSK_SL_VEC3:
+    case GSK_SL_VEC4:
+    case GSK_SL_N_BUILTIN_TYPES:
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+}
+
+static const GskSlNodeClass GSK_SL_NODE_CONSTANT = {
+  gsk_sl_node_constant_free,
+  gsk_sl_node_constant_print
 };
 
 /* API */
@@ -174,12 +260,87 @@ gsk_sl_node_parse_function_prototype (GskSlNodeProgram  *program,
   return function;
 }
 
+static GskSlNode *
+gsk_sl_node_parse_constant (GskSlNodeProgram  *program,
+                            GskSlPreprocessor *stream)
+{
+  GskSlNodeConstant *constant;
+  const GskSlToken *token;
+
+  constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
+
+  token = gsk_sl_preprocessor_get (stream);
+  switch ((guint) token->type)
+  {
+    case GSK_SL_TOKEN_INTCONSTANT:
+      constant->type = GSK_SL_INT;
+      constant->i32 = token->i32;
+      break;
+
+    case GSK_SL_TOKEN_UINTCONSTANT:
+      constant->type = GSK_SL_UINT;
+      constant->u32 = token->u32;
+      break;
+
+    case GSK_SL_TOKEN_FLOATCONSTANT:
+      constant->type = GSK_SL_FLOAT;
+      constant->f = token->f;
+      break;
+
+    case GSK_SL_TOKEN_BOOLCONSTANT:
+      constant->type = GSK_SL_BOOL;
+      constant->b = token->b;
+      break;
+
+    case GSK_SL_TOKEN_DOUBLECONSTANT:
+      constant->type = GSK_SL_DOUBLE;
+      constant->d = token->d;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return NULL;
+  }
+  gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
+
+  return (GskSlNode *) constant;
+}
+
+static GskSlNode *
+gsk_sl_node_parse_expression (GskSlNodeProgram  *program,
+                              GskSlPreprocessor *stream)
+{
+  const GskSlToken *token;
+  GskSlNode *node;
+
+  token = gsk_sl_preprocessor_get (stream);
+  switch ((guint) token->type)
+  {
+      case GSK_SL_TOKEN_INTCONSTANT:
+      case GSK_SL_TOKEN_UINTCONSTANT:
+      case GSK_SL_TOKEN_FLOATCONSTANT:
+      case GSK_SL_TOKEN_BOOLCONSTANT:
+      case GSK_SL_TOKEN_DOUBLECONSTANT:
+        node = gsk_sl_node_parse_constant (program, stream);
+        break;
+
+      case GSK_SL_TOKEN_LEFT_PAREN:
+      default:
+        node = NULL;
+        break;
+  }
+
+  return node;
+}
+
 static gboolean
 gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
                                        GskSlPreprocessor *stream)
 {
   GskSlNodeFunction *function;
   const GskSlToken *token;
+  GskSlNode *node;
+  gboolean result = TRUE;
 
   function = gsk_sl_node_parse_function_prototype (program, stream);
   if (function == NULL)
@@ -201,18 +362,48 @@ gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
     }
   gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
 
-  token = gsk_sl_preprocessor_get (stream);
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
+  while (TRUE)
     {
-      gsk_sl_preprocessor_error (stream, "Expected a closing \"}\"");
-      gsk_sl_node_unref ((GskSlNode *) function);
-      return FALSE;
+      token = gsk_sl_preprocessor_get (stream);
+      switch ((guint) token->type)
+      {
+      case GSK_SL_TOKEN_SEMICOLON:
+        gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
+        break;
+
+      case GSK_SL_TOKEN_EOF:
+        gsk_sl_preprocessor_error (stream, "Unexpected end of function, expected \"}\"");
+        goto out;
+
+      case GSK_SL_TOKEN_RIGHT_BRACE:
+        goto out;
+
+      case GSK_SL_TOKEN_INTCONSTANT:
+      case GSK_SL_TOKEN_UINTCONSTANT:
+      case GSK_SL_TOKEN_FLOATCONSTANT:
+      case GSK_SL_TOKEN_BOOLCONSTANT:
+      case GSK_SL_TOKEN_DOUBLECONSTANT:
+      case GSK_SL_TOKEN_LEFT_PAREN:
+        node = gsk_sl_node_parse_expression (program, stream);
+        if (node)
+          function->statements = g_slist_append (function->statements, node);
+        else
+          result = FALSE;
+        break;
+
+      default:
+        gsk_sl_preprocessor_error (stream, "Unexpected token in stream.");
+        gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
+        result = FALSE;
+        break;
+      }
     }
+
+out:
   gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
 
   program->functions = g_slist_prepend (program->functions, function);
-
-  return TRUE;
+  return result;
 }
 
 static gboolean
