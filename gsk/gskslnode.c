@@ -21,6 +21,7 @@
 #include "gskslnodeprivate.h"
 
 #include "gskslpreprocessorprivate.h"
+#include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
 
 #include <string.h>

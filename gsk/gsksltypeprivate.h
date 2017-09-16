@@ -21,7 +21,7 @@
 
 #include <glib.h>
 
-#include "gskslpreprocessorprivate.h"
+#include "gsksltypesprivate.h"
 
 G_BEGIN_DECLS
 
@@ -38,8 +38,6 @@ typedef enum {
   /* add more above */
   GSK_SL_N_BUILTIN_TYPES
 } GskSlBuiltinType;
-
-typedef struct _GskSlType GskSlType;
 
 GskSlType *             gsk_sl_type_new_parse                   (GskSlPreprocessor   *stream);
 GskSlType *             gsk_sl_type_get_builtin                 (GskSlBuiltinType     builtin);

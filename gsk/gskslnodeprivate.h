@@ -21,9 +21,10 @@
 
 #include <glib.h>
 
+#include "gsk/gsksltypesprivate.h"
+
 G_BEGIN_DECLS
 
-typedef struct _GskSlNode GskSlNode;
 typedef struct _GskSlNodeClass GskSlNodeClass;
 
 struct _GskSlNode {

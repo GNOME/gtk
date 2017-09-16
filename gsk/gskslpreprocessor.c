@@ -20,6 +20,8 @@
 
 #include "gskslpreprocessorprivate.h"
 
+#include "gsksltokenizerprivate.h"
+
 struct _GskSlPreprocessor
 {
   int ref_count;

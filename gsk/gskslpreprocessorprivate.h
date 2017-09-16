@@ -21,12 +21,9 @@
 
 #include <glib.h>
 
-#include "gskslnodeprivate.h"
-#include "gsksltokenizerprivate.h"
+#include "gsksltypesprivate.h"
 
 G_BEGIN_DECLS
-
-typedef struct _GskSlPreprocessor GskSlPreprocessor;
 
 GskSlPreprocessor *     gsk_sl_preprocessor_new                 (GBytes              *source);
 
