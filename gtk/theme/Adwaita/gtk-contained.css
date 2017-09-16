@@ -1784,11 +1784,15 @@ colorswatch.right, colorswatch:last-child:not(.bottom) { border-top-right-radius
 
 colorswatch.right overlay, colorswatch:last-child:not(.bottom) overlay { border-top-right-radius: 5px; border-bottom-right-radius: 5px; }
 
+colorswatch.dark { outline-color: rgba(255, 255, 255, 0.6); }
+
 colorswatch.dark overlay { color: white; }
 
 colorswatch.dark overlay:hover { border-color: rgba(0, 0, 0, 0.8); }
 
 colorswatch.dark overlay:backdrop { color: rgba(255, 255, 255, 0.5); }
+
+colorswatch.light { outline-color: rgba(0, 0, 0, 0.6); }
 
 colorswatch.light overlay { color: black; }
 
