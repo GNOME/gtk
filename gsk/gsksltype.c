@@ -42,36 +42,11 @@ struct _GskSlTypeClass {
   void                  (* print)                               (const GskSlType     *type,
                                                                  GString             *string);
   GskSlScalarType       (* get_scalar_type)                     (const GskSlType     *type);
+  GskSlType *           (* get_index_type)                      (const GskSlType     *type);
   guint                 (* get_length)                          (const GskSlType     *type);
   gboolean              (* can_convert)                         (const GskSlType     *target,
                                                                  const GskSlType     *source);
 };
-
-static gboolean
-gsk_sl_scalar_type_can_convert (GskSlScalarType target,
-                                GskSlScalarType source)
-{
-  if (target == source)
-    return TRUE;
-
-  switch (source)
-  {
-    case GSK_SL_INT:
-      return target == GSK_SL_UINT
-          || target == GSK_SL_FLOAT
-          || target == GSK_SL_DOUBLE;
-    case GSK_SL_UINT:
-      return target == GSK_SL_FLOAT
-          || target == GSK_SL_DOUBLE;
-    case GSK_SL_FLOAT:
-      return target == GSK_SL_DOUBLE;
-    case GSK_SL_DOUBLE:
-    case GSK_SL_BOOL:
-    case GSK_SL_VOID:
-    default:
-      return FALSE;
-  }
-}
 
 /* SCALAR */
 
@@ -129,6 +104,12 @@ gsk_sl_type_scalar_get_scalar_type (const GskSlType *type)
   return scalar->scalar;
 }
 
+static GskSlType *
+gsk_sl_type_scalar_get_index_type (const GskSlType *type)
+{
+  return NULL;
+}
+
 static guint
 gsk_sl_type_scalar_get_length (const GskSlType *type)
 {
@@ -152,6 +133,7 @@ static const GskSlTypeClass GSK_SL_TYPE_SCALAR = {
   gsk_sl_type_scalar_free,
   gsk_sl_type_scalar_print,
   gsk_sl_type_scalar_get_scalar_type,
+  gsk_sl_type_scalar_get_index_type,
   gsk_sl_type_scalar_get_length,
   gsk_sl_type_scalar_can_convert
 };
@@ -213,6 +195,14 @@ gsk_sl_type_vector_get_scalar_type (const GskSlType *type)
   return vector->scalar;
 }
 
+static GskSlType *
+gsk_sl_type_vector_get_index_type (const GskSlType *type)
+{
+  const GskSlTypeVector *vector = (const GskSlTypeVector *) type;
+
+  return gsk_sl_type_get_scalar (vector->scalar);
+}
+
 static guint
 gsk_sl_type_vector_get_length (const GskSlType *type)
 {
@@ -241,6 +231,7 @@ static const GskSlTypeClass GSK_SL_TYPE_VECTOR = {
   gsk_sl_type_vector_free,
   gsk_sl_type_vector_print,
   gsk_sl_type_vector_get_scalar_type,
+  gsk_sl_type_vector_get_index_type,
   gsk_sl_type_vector_get_length,
   gsk_sl_type_vector_can_convert
 };
@@ -285,6 +276,14 @@ gsk_sl_type_matrix_get_scalar_type (const GskSlType *type)
   return matrix->scalar;
 }
 
+static GskSlType *
+gsk_sl_type_matrix_get_index_type (const GskSlType *type)
+{
+  const GskSlTypeMatrix *matrix = (const GskSlTypeMatrix *) type;
+
+  return gsk_sl_type_get_vector (matrix->scalar, matrix->rows);
+}
+
 static guint
 gsk_sl_type_matrix_get_length (const GskSlType *type)
 {
@@ -314,6 +313,7 @@ static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_free,
   gsk_sl_type_matrix_print,
   gsk_sl_type_matrix_get_scalar_type,
+  gsk_sl_type_matrix_get_index_type,
   gsk_sl_type_matrix_get_length,
   gsk_sl_type_matrix_can_convert
 };
@@ -637,10 +637,42 @@ gsk_sl_type_get_scalar_type (const GskSlType *type)
   return type->class->get_scalar_type (type);
 }
 
+GskSlType *
+gsk_sl_type_get_index_type (const GskSlType *type)
+{
+  return type->class->get_index_type (type);
+}
+
 GskSlScalarType
 gsk_sl_type_get_length (const GskSlType *type)
 {
   return type->class->get_length (type);
+}
+
+gboolean
+gsk_sl_scalar_type_can_convert (GskSlScalarType target,
+                                GskSlScalarType source)
+{
+  if (target == source)
+    return TRUE;
+
+  switch (source)
+  {
+    case GSK_SL_INT:
+      return target == GSK_SL_UINT
+          || target == GSK_SL_FLOAT
+          || target == GSK_SL_DOUBLE;
+    case GSK_SL_UINT:
+      return target == GSK_SL_FLOAT
+          || target == GSK_SL_DOUBLE;
+    case GSK_SL_FLOAT:
+      return target == GSK_SL_DOUBLE;
+    case GSK_SL_DOUBLE:
+    case GSK_SL_BOOL:
+    case GSK_SL_VOID:
+    default:
+      return FALSE;
+  }
 }
 
 gboolean
