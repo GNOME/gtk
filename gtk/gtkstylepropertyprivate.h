@@ -63,9 +63,6 @@ GType               _gtk_style_property_get_type             (void) G_GNUC_CONST
 
 void                _gtk_style_property_init_properties      (void);
 
-void                _gtk_style_property_add_alias (const gchar *name,
-                                                   const gchar *alias);
-
 GtkStyleProperty *       _gtk_style_property_lookup        (const char             *name);
 
 const char *             _gtk_style_property_get_name      (GtkStyleProperty       *property);

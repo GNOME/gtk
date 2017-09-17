@@ -202,26 +202,6 @@ _gtk_style_property_init_properties (void)
   _gtk_css_shorthand_property_init_properties ();
 }
 
-void
-_gtk_style_property_add_alias (const gchar *name,
-                               const gchar *alias)
-{
-  GtkStylePropertyClass *klass;
-  GtkStyleProperty *property;
-
-  g_return_if_fail (name != NULL);
-  g_return_if_fail (alias != NULL);
-
-  klass = g_type_class_peek (GTK_TYPE_STYLE_PROPERTY);
-
-  property = g_hash_table_lookup (klass->properties, name);
-
-  g_assert (property != NULL);
-  g_assert (g_hash_table_lookup (klass->properties, alias) == NULL);
-
-  g_hash_table_insert (klass->properties, (gpointer)alias, property);
-}
-
 /**
  * _gtk_style_property_lookup:
  * @name: name of the property to lookup
