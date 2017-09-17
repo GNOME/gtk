@@ -21,6 +21,7 @@
 #include "gskslnodeprivate.h"
 
 #include "gskslpreprocessorprivate.h"
+#include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
 
@@ -48,6 +49,7 @@ typedef struct _GskSlNodeProgram GskSlNodeProgram;
 struct _GskSlNodeProgram {
   GskSlNode parent;
 
+  GskSlScope *scope;
   GSList *declarations;
   GSList *functions;
 };
@@ -59,6 +61,7 @@ gsk_sl_node_program_free (GskSlNode *node)
 
   g_slist_free (program->declarations);
   g_slist_free (program->functions);
+  gsk_sl_scope_unref (program->scope);
 
   g_slice_free (GskSlNodeProgram, program);
 }
@@ -103,6 +106,7 @@ typedef struct _GskSlNodeFunction GskSlNodeFunction;
 struct _GskSlNodeFunction {
   GskSlNode parent;
 
+  GskSlScope *scope;
   GskSlType *return_type;
   char *name;
   GSList *statements;
@@ -113,6 +117,8 @@ gsk_sl_node_function_free (GskSlNode *node)
 {
   GskSlNodeFunction *function = (GskSlNodeFunction *) node;
 
+  if (function->scope)
+    gsk_sl_scope_unref (function->scope);
   if (function->return_type)
     gsk_sl_type_unref (function->return_type);
   g_free (function->name);
@@ -263,6 +269,128 @@ static const GskSlNodeClass GSK_SL_NODE_ASSIGNMENT = {
   gsk_sl_node_assignment_is_constant
 };
 
+/* DECLARATION */
+
+typedef struct _GskSlNodeDeclaration GskSlNodeDeclaration;
+
+struct _GskSlNodeDeclaration {
+  GskSlNode parent;
+
+  char *name;
+  GskSlType *type;
+  GskSlNode *initial;
+  guint constant :1;
+};
+
+static void
+gsk_sl_node_declaration_free (GskSlNode *node)
+{
+  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
+
+  g_free (declaration->name);
+  gsk_sl_type_unref (declaration->type);
+  if (declaration->initial)
+    gsk_sl_node_unref (declaration->initial);
+
+  g_slice_free (GskSlNodeDeclaration, declaration);
+}
+
+static void
+gsk_sl_node_declaration_print (GskSlNode *node,
+                               GString   *string)
+{
+  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
+
+  gsk_sl_type_print (declaration->type, string);
+  if (declaration->name)
+    {
+      g_string_append (string, " ");
+      g_string_append (string, declaration->name);
+      if (declaration->initial)
+        {
+          g_string_append (string, " = ");
+          gsk_sl_node_print (declaration->initial, string);
+        }
+    }
+}
+
+static GskSlType *
+gsk_sl_node_declaration_get_return_type (GskSlNode *node)
+{
+  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
+
+  return declaration->type;
+}
+
+static gboolean
+gsk_sl_node_declaration_is_constant (GskSlNode *node)
+{
+  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
+
+  return declaration->constant;
+}
+
+static const GskSlNodeClass GSK_SL_NODE_DECLARATION = {
+  gsk_sl_node_declaration_free,
+  gsk_sl_node_declaration_print,
+  gsk_sl_node_declaration_get_return_type,
+  gsk_sl_node_declaration_is_constant
+};
+
+/* REFERENCE */
+
+typedef struct _GskSlNodeReference GskSlNodeReference;
+
+struct _GskSlNodeReference {
+  GskSlNode parent;
+
+  char *name;
+  GskSlNode *declaration;
+};
+
+static void
+gsk_sl_node_reference_free (GskSlNode *node)
+{
+  GskSlNodeReference *reference = (GskSlNodeReference *) node;
+
+  g_free (reference->name);
+  gsk_sl_node_unref (reference->declaration);
+
+  g_slice_free (GskSlNodeReference, reference);
+}
+
+static void
+gsk_sl_node_reference_print (GskSlNode *node,
+                             GString   *string)
+{
+  GskSlNodeReference *reference = (GskSlNodeReference *) node;
+
+  g_string_append (string, reference->name);
+}
+
+static GskSlType *
+gsk_sl_node_reference_get_return_type (GskSlNode *node)
+{
+  GskSlNodeReference *reference = (GskSlNodeReference *) node;
+
+  return gsk_sl_node_get_return_type (reference->declaration);
+}
+
+static gboolean
+gsk_sl_node_reference_is_constant (GskSlNode *node)
+{
+  GskSlNodeReference *reference = (GskSlNodeReference *) node;
+
+  return gsk_sl_node_is_constant (reference->declaration);
+}
+
+static const GskSlNodeClass GSK_SL_NODE_REFERENCE = {
+  gsk_sl_node_reference_free,
+  gsk_sl_node_reference_print,
+  gsk_sl_node_reference_get_return_type,
+  gsk_sl_node_reference_is_constant
+};
+
 /* CONSTANT */
 
 typedef struct _GskSlNodeConstant GskSlNodeConstant;
@@ -405,60 +533,88 @@ gsk_sl_node_parse_function_prototype (GskSlNodeProgram  *program,
 }
 
 static GskSlNode *
-gsk_sl_node_parse_constant (GskSlNodeProgram  *program,
-                            GskSlPreprocessor *stream)
+gsk_sl_node_parse_primary_expression (GskSlNodeProgram  *program,
+                                      GskSlScope        *scope,
+                                      GskSlPreprocessor *stream)
 {
   GskSlNodeConstant *constant;
   const GskSlToken *token;
 
-  constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
-
   token = gsk_sl_preprocessor_get (stream);
   switch ((guint) token->type)
   {
+    case GSK_SL_TOKEN_IDENTIFIER:
+      {
+        GskSlNodeReference *reference;
+        GskSlNode *decl;
+
+        decl = gsk_sl_scope_lookup_variable (scope, token->str);
+        if (decl == NULL)
+          {
+            gsk_sl_preprocessor_error (stream, "No variable named \"%s\".", token->str);
+            gsk_sl_preprocessor_consume (stream, (GskSlNode *) program);
+            return NULL;
+          }
+
+        reference = gsk_sl_node_new (GskSlNodeReference, &GSK_SL_NODE_REFERENCE);
+        reference->name = g_strdup (token->str);
+        reference->declaration = gsk_sl_node_ref (decl);
+        gsk_sl_preprocessor_consume (stream, (GskSlNode *) reference);
+        return (GskSlNode *) reference;
+      }
+
     case GSK_SL_TOKEN_INTCONSTANT:
+      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
       constant->type = GSK_SL_INT;
       constant->i32 = token->i32;
-      break;
+      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
+      return (GskSlNode *) constant;
 
     case GSK_SL_TOKEN_UINTCONSTANT:
+      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
       constant->type = GSK_SL_UINT;
       constant->u32 = token->u32;
-      break;
+      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
+      return (GskSlNode *) constant;
 
     case GSK_SL_TOKEN_FLOATCONSTANT:
+      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
       constant->type = GSK_SL_FLOAT;
       constant->f = token->f;
-      break;
+      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
+      return (GskSlNode *) constant;
 
     case GSK_SL_TOKEN_BOOLCONSTANT:
+      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
       constant->type = GSK_SL_BOOL;
       constant->b = token->b;
-      break;
+      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
+      return (GskSlNode *) constant;
 
     case GSK_SL_TOKEN_DOUBLECONSTANT:
+      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
       constant->type = GSK_SL_DOUBLE;
       constant->d = token->d;
-      break;
+      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
+      return (GskSlNode *) constant;
 
     default:
-      g_assert_not_reached ();
+      gsk_sl_preprocessor_error (stream, "Expected an expression.");
+      gsk_sl_preprocessor_consume (stream, (GskSlNode *) program);
       return NULL;
   }
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
-
-  return (GskSlNode *) constant;
 }
 
 static GskSlNode *
 gsk_sl_node_parse_assignment_expression (GskSlNodeProgram  *program,
+                                         GskSlScope        *scope,
                                          GskSlPreprocessor *stream)
 {
   const GskSlToken *token;
   GskSlNode *lvalue;
   GskSlNodeAssignment *assign;
 
-  lvalue = gsk_sl_node_parse_constant (program, stream);
+  lvalue = gsk_sl_node_parse_primary_expression (program, scope, stream);
   if (lvalue == NULL)
     return NULL;
 
@@ -490,7 +646,7 @@ gsk_sl_node_parse_assignment_expression (GskSlNodeProgram  *program,
       gsk_sl_preprocessor_consume (stream, lvalue);
       gsk_sl_node_unref (lvalue);
 
-      return gsk_sl_node_parse_assignment_expression (program, stream);
+      return gsk_sl_node_parse_assignment_expression (program, scope, stream);
     }
 
   assign = gsk_sl_node_new (GskSlNodeAssignment, &GSK_SL_NODE_ASSIGNMENT);
@@ -499,7 +655,7 @@ gsk_sl_node_parse_assignment_expression (GskSlNodeProgram  *program,
 
   gsk_sl_preprocessor_consume (stream, (GskSlNode *) assign);
 
-  assign->rvalue = gsk_sl_node_parse_assignment_expression (program, stream);
+  assign->rvalue = gsk_sl_node_parse_assignment_expression (program, scope, stream);
   if (assign->rvalue == NULL)
     {
       gsk_sl_node_unref ((GskSlNode *) assign);
@@ -511,10 +667,46 @@ gsk_sl_node_parse_assignment_expression (GskSlNodeProgram  *program,
 
 static GskSlNode *
 gsk_sl_node_parse_expression (GskSlNodeProgram  *program,
+                              GskSlScope        *scope,
                               GskSlPreprocessor *stream)
 {
   /* XXX: Allow comma here */
-  return gsk_sl_node_parse_assignment_expression (program, stream);
+  return gsk_sl_node_parse_assignment_expression (program, scope, stream);
+}
+
+static GskSlNode *
+gsk_sl_node_parse_declaration (GskSlNodeProgram  *program,
+                               GskSlScope        *scope,
+                               GskSlPreprocessor *stream)
+{
+  GskSlNodeDeclaration *declaration;
+  const GskSlToken *token;
+  GskSlType *type;
+
+  type = gsk_sl_type_new_parse (stream);
+  if (type == NULL)
+    return FALSE;
+
+  declaration = gsk_sl_node_new (GskSlNodeDeclaration, &GSK_SL_NODE_DECLARATION);
+  declaration->type = type;
+  
+  token = gsk_sl_preprocessor_get (stream);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+    return (GskSlNode *) declaration;
+
+  declaration->name = g_strdup (token->str);
+  gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
+
+  token = gsk_sl_preprocessor_get (stream);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
+    {
+      gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
+      declaration->initial = gsk_sl_node_parse_assignment_expression (program, scope, stream);
+    }
+
+  gsk_sl_scope_add_variable (scope, declaration->name, (GskSlNode *) declaration);
+
+  return (GskSlNode *) declaration;
 }
 
 static gboolean
@@ -546,6 +738,8 @@ gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
     }
   gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
 
+  function->scope = gsk_sl_scope_new (program->scope);
+
   while (TRUE)
     {
       token = gsk_sl_preprocessor_get (stream);
@@ -562,23 +756,28 @@ gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
       case GSK_SL_TOKEN_RIGHT_BRACE:
         goto out;
 
-      case GSK_SL_TOKEN_INTCONSTANT:
-      case GSK_SL_TOKEN_UINTCONSTANT:
-      case GSK_SL_TOKEN_FLOATCONSTANT:
-      case GSK_SL_TOKEN_BOOLCONSTANT:
-      case GSK_SL_TOKEN_DOUBLECONSTANT:
-      case GSK_SL_TOKEN_LEFT_PAREN:
-        node = gsk_sl_node_parse_expression (program, stream);
+      case GSK_SL_TOKEN_VOID:
+      case GSK_SL_TOKEN_FLOAT:
+      case GSK_SL_TOKEN_DOUBLE:
+      case GSK_SL_TOKEN_INT:
+      case GSK_SL_TOKEN_UINT:
+      case GSK_SL_TOKEN_BOOL:
+      case GSK_SL_TOKEN_VEC2:
+      case GSK_SL_TOKEN_VEC3:
+      case GSK_SL_TOKEN_VEC4:
+        node = gsk_sl_node_parse_declaration (program, function->scope, stream);
+        if (node)
+          {
+            function->statements = g_slist_append (function->statements, node);
+          }
+        break;
+
+      default:
+        node = gsk_sl_node_parse_expression (program, function->scope, stream);
         if (node)
           function->statements = g_slist_append (function->statements, node);
         else
           result = FALSE;
-        break;
-
-      default:
-        gsk_sl_preprocessor_error (stream, "Unexpected token in stream.");
-        gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
-        result = FALSE;
         break;
       }
     }
@@ -620,6 +819,8 @@ gsk_sl_node_new_program (GBytes  *source,
   GskSlNodeProgram *program;
 
   program = gsk_sl_node_new (GskSlNodeProgram, &GSK_SL_NODE_PROGRAM);
+  program->scope = gsk_sl_scope_new (NULL);
+
   stream = gsk_sl_preprocessor_new (source);
 
   gsk_sl_node_parse_program (program, stream);

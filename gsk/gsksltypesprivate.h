@@ -1,5 +1,6 @@
 /* GSK - The GTK Scene Kit
- * Copyright 2016  Benjamin Otte
+ *   
+ * Copyright © 2017 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +23,7 @@
 
 typedef struct _GskSlNode               GskSlNode;
 typedef struct _GskSlPreprocessor       GskSlPreprocessor;
+typedef struct _GskSlScope              GskSlScope;
 typedef struct _GskSlToken              GskSlToken;
 typedef struct _GskSlType               GskSlType;
 
