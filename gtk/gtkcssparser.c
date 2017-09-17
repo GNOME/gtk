@@ -835,18 +835,8 @@ _gtk_css_parser_read_url (GtkCssParser *parser)
     {
       if (!_gtk_css_parser_try (parser, "(", TRUE))
         {
-          _gtk_css_parser_skip_whitespace (parser);
-          if (_gtk_css_parser_try (parser, "(", TRUE))
-            {
-              _gtk_css_parser_error_full (parser,
-                                          GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                          "Whitespace between 'url' and '(' is deprecated");
-            }
-          else
-            {
-              _gtk_css_parser_error (parser, "Expected '(' after 'url'");
-              return NULL;
-            }
+          _gtk_css_parser_error (parser, "Expected '(' after 'url'");
+          return NULL;
         }
 
       path = _gtk_css_parser_read_string (parser);
