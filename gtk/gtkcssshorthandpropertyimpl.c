@@ -1126,7 +1126,6 @@ _gtk_css_shorthand_property_init_properties (void)
                                           outline_radius_subproperties,
                                           parse_border_radius,
                                           pack_border_radius);
-  _gtk_style_property_add_alias ("-gtk-outline-radius", "outline-radius");
   _gtk_css_shorthand_property_register   ("outline",
                                           G_TYPE_NONE,
                                           outline_subproperties,

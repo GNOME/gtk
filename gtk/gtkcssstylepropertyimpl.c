@@ -1237,7 +1237,6 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                      _gtk_css_number_value_new (0, GTK_CSS_PX)));
-  _gtk_style_property_add_alias ("-gtk-outline-top-left-radius", "outline-top-left-radius");
   gtk_css_style_property_register        ("-gtk-outline-top-right-radius",
                                           GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS,
                                           G_TYPE_NONE,
@@ -1247,7 +1246,6 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                      _gtk_css_number_value_new (0, GTK_CSS_PX)));
-  _gtk_style_property_add_alias ("-gtk-outline-top-right-radius", "outline-top-right-radius");
   gtk_css_style_property_register        ("-gtk-outline-bottom-right-radius",
                                           GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS,
                                           G_TYPE_NONE,
@@ -1257,7 +1255,6 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                      _gtk_css_number_value_new (0, GTK_CSS_PX)));
-  _gtk_style_property_add_alias ("-gtk-outline-bottom-right-radius", "outline-bottom-right-radius");
   gtk_css_style_property_register        ("-gtk-outline-bottom-left-radius",
                                           GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS,
                                           G_TYPE_NONE,
@@ -1267,7 +1264,6 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_corner_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
                                                                      _gtk_css_number_value_new (0, GTK_CSS_PX)));
-  _gtk_style_property_add_alias ("-gtk-outline-bottom-left-radius", "outline-bottom-left-radius");
 
   gtk_css_style_property_register        ("background-clip",
                                           GTK_CSS_PROPERTY_BACKGROUND_CLIP,
