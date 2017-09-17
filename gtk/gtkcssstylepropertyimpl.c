@@ -1424,7 +1424,6 @@ _gtk_css_style_property_init_properties (void)
                                           shadow_value_parse,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
-  _gtk_style_property_add_alias ("-gtk-icon-shadow", "icon-shadow");
   gtk_css_style_property_register        ("-gtk-icon-style",
                                           GTK_CSS_PROPERTY_ICON_STYLE,
                                           G_TYPE_NONE,
