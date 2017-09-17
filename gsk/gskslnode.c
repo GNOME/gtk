@@ -1057,9 +1057,21 @@ gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
       case GSK_SL_TOKEN_INT:
       case GSK_SL_TOKEN_UINT:
       case GSK_SL_TOKEN_BOOL:
+      case GSK_SL_TOKEN_BVEC2:
+      case GSK_SL_TOKEN_BVEC3:
+      case GSK_SL_TOKEN_BVEC4:
+      case GSK_SL_TOKEN_IVEC2:
+      case GSK_SL_TOKEN_IVEC3:
+      case GSK_SL_TOKEN_IVEC4:
+      case GSK_SL_TOKEN_UVEC2:
+      case GSK_SL_TOKEN_UVEC3:
+      case GSK_SL_TOKEN_UVEC4:
       case GSK_SL_TOKEN_VEC2:
       case GSK_SL_TOKEN_VEC3:
       case GSK_SL_TOKEN_VEC4:
+      case GSK_SL_TOKEN_DVEC2:
+      case GSK_SL_TOKEN_DVEC3:
+      case GSK_SL_TOKEN_DVEC4:
         node = gsk_sl_node_parse_declaration (program, function->scope, stream);
         if (node)
           {

@@ -148,14 +148,84 @@ static const GskSlTypeClass GSK_SL_TYPE_SCALAR = {
   gsk_sl_type_scalar_can_convert
 };
 
-static GskSlTypeScalar
-builtin_types[N_SCALAR_TYPES] = {
-  [GSK_SL_VOID] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_VOID },
-  [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_FLOAT },
-  [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_DOUBLE },
-  [GSK_SL_INT] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_INT },
-  [GSK_SL_UINT] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_UINT },
-  [GSK_SL_BOOL] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_BOOL },
+/* VECTOR */
+
+typedef struct _GskSlTypeVector GskSlTypeVector;
+
+struct _GskSlTypeVector {
+  GskSlType parent;
+
+  GskSlScalarType scalar;
+  guint length;
+};
+
+static void
+gsk_sl_type_vector_free (GskSlType *type)
+{
+  g_assert_not_reached ();
+}
+
+static void
+gsk_sl_type_vector_print (const GskSlType *type,
+                          GString         *string)
+{
+  GskSlTypeVector *vector = (GskSlTypeVector *) type;
+
+  switch (vector->scalar)
+  {
+    case GSK_SL_FLOAT:
+      g_string_append (string, "vec");
+      break;
+    case GSK_SL_DOUBLE:
+      g_string_append (string, "dvec");
+      break;
+    case GSK_SL_INT:
+      g_string_append (string, "ivec");
+      break;
+    case GSK_SL_UINT:
+      g_string_append (string, "uvec");
+      break;
+    case GSK_SL_BOOL:
+      g_string_append (string, "bvec");
+      break;
+    case GSK_SL_VOID:
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+
+  g_string_append_printf (string, "%u", vector->length);
+}
+
+static GskSlScalarType
+gsk_sl_type_vector_get_scalar_type (const GskSlType *type)
+{
+  const GskSlTypeVector *vector = (const GskSlTypeVector *) type;
+
+  return vector->scalar;
+}
+
+static gboolean
+gsk_sl_type_vector_can_convert (const GskSlType *target,
+                                const GskSlType *source)
+{
+  const GskSlTypeVector *target_vector = (const GskSlTypeVector *) target;
+  const GskSlTypeVector *source_vector = (const GskSlTypeVector *) source;
+
+  if (target->class != source->class)
+    return FALSE;
+  
+  if (target_vector->length != source_vector->length)
+    return FALSE;
+
+  return gsk_sl_scalar_type_can_convert (target_vector->scalar, source_vector->scalar);
+}
+
+static const GskSlTypeClass GSK_SL_TYPE_VECTOR = {
+  gsk_sl_type_vector_free,
+  gsk_sl_type_vector_print,
+  gsk_sl_type_vector_get_scalar_type,
+  gsk_sl_type_vector_can_convert
 };
 
 GskSlType *
@@ -186,6 +256,51 @@ gsk_sl_type_new_parse (GskSlPreprocessor *stream)
     case GSK_SL_TOKEN_BOOL:
       type = gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_BOOL));
       break;
+    case GSK_SL_TOKEN_BVEC2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_BOOL, 2));
+      break;
+    case GSK_SL_TOKEN_BVEC3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_BOOL, 3));
+      break;
+    case GSK_SL_TOKEN_BVEC4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_BOOL, 4));
+      break;
+    case GSK_SL_TOKEN_IVEC2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_INT, 2));
+      break;
+    case GSK_SL_TOKEN_IVEC3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_INT, 3));
+      break;
+    case GSK_SL_TOKEN_IVEC4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_INT, 4));
+      break;
+    case GSK_SL_TOKEN_UVEC2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_UINT, 2));
+      break;
+    case GSK_SL_TOKEN_UVEC3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_UINT, 3));
+      break;
+    case GSK_SL_TOKEN_UVEC4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_UINT, 4));
+      break;
+    case GSK_SL_TOKEN_VEC2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_FLOAT, 2));
+      break;
+    case GSK_SL_TOKEN_VEC3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_FLOAT, 3));
+      break;
+    case GSK_SL_TOKEN_VEC4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_FLOAT, 4));
+      break;
+    case GSK_SL_TOKEN_DVEC2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_DOUBLE, 2));
+      break;
+    case GSK_SL_TOKEN_DVEC3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_DOUBLE, 3));
+      break;
+    case GSK_SL_TOKEN_DVEC4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_DOUBLE, 4));
+      break;
     default:
       gsk_sl_preprocessor_error (stream, "Expected type specifier");
       return NULL;
@@ -196,12 +311,58 @@ gsk_sl_type_new_parse (GskSlPreprocessor *stream)
   return type;
 }
 
+static GskSlTypeScalar
+builtin_scalar_types[N_SCALAR_TYPES] = {
+  [GSK_SL_VOID] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_VOID },
+  [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_FLOAT },
+  [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_DOUBLE },
+  [GSK_SL_INT] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_INT },
+  [GSK_SL_UINT] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_UINT },
+  [GSK_SL_BOOL] = { { &GSK_SL_TYPE_SCALAR, 1 }, GSK_SL_BOOL },
+};
+
 GskSlType *
 gsk_sl_type_get_scalar (GskSlScalarType scalar)
 {
   g_assert (scalar < N_SCALAR_TYPES);
 
-  return &builtin_types[scalar].parent;
+  return &builtin_scalar_types[scalar].parent;
+}
+
+static GskSlTypeVector
+builtin_vector_types[3][N_SCALAR_TYPES] = {
+  {
+    [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_FLOAT, 2 },
+    [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_DOUBLE, 2 },
+    [GSK_SL_INT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_INT, 2 },
+    [GSK_SL_UINT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_UINT, 2 },
+    [GSK_SL_BOOL] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_BOOL, 2 },
+  },
+  {
+    [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_FLOAT, 3 },
+    [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_DOUBLE, 3 },
+    [GSK_SL_INT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_INT, 3 },
+    [GSK_SL_UINT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_UINT, 3 },
+    [GSK_SL_BOOL] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_BOOL, 3 },
+  },
+  {
+    [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_FLOAT, 4 },
+    [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_DOUBLE, 4 },
+    [GSK_SL_INT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_INT, 4 },
+    [GSK_SL_UINT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_UINT, 4 },
+    [GSK_SL_BOOL] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_BOOL, 4 },
+  }
+};
+
+GskSlType *
+gsk_sl_type_get_vector (GskSlScalarType scalar,
+                        guint           length)
+{
+  g_assert (scalar < N_SCALAR_TYPES);
+  g_assert (scalar != GSK_SL_VOID);
+  g_assert (length >= 2 && length <= 4);
+
+  return &builtin_vector_types[length - 2][scalar].parent;
 }
 
 GskSlType *
