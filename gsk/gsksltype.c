@@ -42,6 +42,7 @@ struct _GskSlTypeClass {
   void                  (* print)                               (const GskSlType     *type,
                                                                  GString             *string);
   GskSlScalarType       (* get_scalar_type)                     (const GskSlType     *type);
+  guint                 (* get_length)                          (const GskSlType     *type);
   gboolean              (* can_convert)                         (const GskSlType     *target,
                                                                  const GskSlType     *source);
 };
@@ -128,6 +129,12 @@ gsk_sl_type_scalar_get_scalar_type (const GskSlType *type)
   return scalar->scalar;
 }
 
+static guint
+gsk_sl_type_scalar_get_length (const GskSlType *type)
+{
+  return 0;
+}
+
 static gboolean
 gsk_sl_type_scalar_can_convert (const GskSlType *target,
                                 const GskSlType *source)
@@ -145,6 +152,7 @@ static const GskSlTypeClass GSK_SL_TYPE_SCALAR = {
   gsk_sl_type_scalar_free,
   gsk_sl_type_scalar_print,
   gsk_sl_type_scalar_get_scalar_type,
+  gsk_sl_type_scalar_get_length,
   gsk_sl_type_scalar_can_convert
 };
 
@@ -205,6 +213,14 @@ gsk_sl_type_vector_get_scalar_type (const GskSlType *type)
   return vector->scalar;
 }
 
+static guint
+gsk_sl_type_vector_get_length (const GskSlType *type)
+{
+  GskSlTypeVector *vector = (GskSlTypeVector *) type;
+
+  return vector->length;
+}
+
 static gboolean
 gsk_sl_type_vector_can_convert (const GskSlType *target,
                                 const GskSlType *source)
@@ -225,7 +241,81 @@ static const GskSlTypeClass GSK_SL_TYPE_VECTOR = {
   gsk_sl_type_vector_free,
   gsk_sl_type_vector_print,
   gsk_sl_type_vector_get_scalar_type,
+  gsk_sl_type_vector_get_length,
   gsk_sl_type_vector_can_convert
+};
+
+/* MATRIX */
+
+typedef struct _GskSlTypeMatrix GskSlTypeMatrix;
+
+struct _GskSlTypeMatrix {
+  GskSlType parent;
+
+  GskSlScalarType scalar;
+  guint columns;
+  guint rows;
+};
+
+static void
+gsk_sl_type_matrix_free (GskSlType *type)
+{
+  g_assert_not_reached ();
+}
+
+static void
+gsk_sl_type_matrix_print (const GskSlType *type,
+                          GString         *string)
+{
+  const GskSlTypeMatrix *matrix = (const GskSlTypeMatrix *) type;
+
+  g_string_append (string, matrix->scalar == GSK_SL_DOUBLE ? "dmat" : "mat");
+  g_string_append_printf (string, "%u", matrix->columns);
+  if (matrix->columns != matrix->rows)
+    {
+      g_string_append_printf (string, "x%u", matrix->rows);
+    }
+}
+
+static GskSlScalarType
+gsk_sl_type_matrix_get_scalar_type (const GskSlType *type)
+{
+  const GskSlTypeMatrix *matrix = (const GskSlTypeMatrix *) type;
+
+  return matrix->scalar;
+}
+
+static guint
+gsk_sl_type_matrix_get_length (const GskSlType *type)
+{
+  GskSlTypeMatrix *matrix = (GskSlTypeMatrix *) type;
+
+  return matrix->columns;
+}
+
+static gboolean
+gsk_sl_type_matrix_can_convert (const GskSlType *target,
+                                const GskSlType *source)
+{
+  const GskSlTypeMatrix *target_matrix = (const GskSlTypeMatrix *) target;
+  const GskSlTypeMatrix *source_matrix = (const GskSlTypeMatrix *) source;
+
+  if (target->class != source->class)
+    return FALSE;
+  
+  if (target_matrix->rows != source_matrix->rows ||
+      target_matrix->columns != source_matrix->columns)
+    return FALSE;
+
+  return gsk_sl_scalar_type_can_convert (target_matrix->scalar, source_matrix->scalar);
+}
+
+static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
+  gsk_sl_type_matrix_free,
+  gsk_sl_type_matrix_print,
+  gsk_sl_type_matrix_get_scalar_type,
+  gsk_sl_type_matrix_get_length,
+  gsk_sl_type_matrix_can_convert
 };
 
 GskSlType *
@@ -301,6 +391,66 @@ gsk_sl_type_new_parse (GskSlPreprocessor *stream)
     case GSK_SL_TOKEN_DVEC4:
       type = gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_DOUBLE, 4));
       break;
+    case GSK_SL_TOKEN_MAT2:
+    case GSK_SL_TOKEN_MAT2X2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 2, 2));
+      break;
+    case GSK_SL_TOKEN_MAT2X3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 2, 3));
+      break;
+    case GSK_SL_TOKEN_MAT2X4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 2, 4));
+      break;
+    case GSK_SL_TOKEN_MAT3X2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 3, 2));
+      break;
+    case GSK_SL_TOKEN_MAT3:
+    case GSK_SL_TOKEN_MAT3X3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 3, 3));
+      break;
+    case GSK_SL_TOKEN_MAT3X4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 3, 4));
+      break;
+    case GSK_SL_TOKEN_MAT4X2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 4, 2));
+      break;
+    case GSK_SL_TOKEN_MAT4X3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 4, 3));
+      break;
+    case GSK_SL_TOKEN_MAT4:
+    case GSK_SL_TOKEN_MAT4X4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 4, 4));
+      break;
+    case GSK_SL_TOKEN_DMAT2:
+    case GSK_SL_TOKEN_DMAT2X2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 2, 2));
+      break;
+    case GSK_SL_TOKEN_DMAT2X3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 2, 3));
+      break;
+    case GSK_SL_TOKEN_DMAT2X4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 2, 4));
+      break;
+    case GSK_SL_TOKEN_DMAT3X2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 3, 2));
+      break;
+    case GSK_SL_TOKEN_DMAT3:
+    case GSK_SL_TOKEN_DMAT3X3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 3, 3));
+      break;
+    case GSK_SL_TOKEN_DMAT3X4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 3, 4));
+      break;
+    case GSK_SL_TOKEN_DMAT4X2:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 4, 2));
+      break;
+    case GSK_SL_TOKEN_DMAT4X3:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 4, 3));
+      break;
+    case GSK_SL_TOKEN_DMAT4:
+    case GSK_SL_TOKEN_DMAT4X4:
+      type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 4, 4));
+      break;
     default:
       gsk_sl_preprocessor_error (stream, "Expected type specifier");
       return NULL;
@@ -365,6 +515,64 @@ gsk_sl_type_get_vector (GskSlScalarType scalar,
   return &builtin_vector_types[length - 2][scalar].parent;
 }
 
+static GskSlTypeMatrix
+builtin_matrix_types[3][3][2] = {
+  {
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 2, 2 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 2, 2 }
+    },
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 2, 3 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 2, 3 }
+    },
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 2, 4 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 2, 4 }
+    },
+  },
+  {
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 3, 2 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 3, 2 }
+    },
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 3, 3 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 3, 3 }
+    },
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 3, 4 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 3, 4 }
+    },
+  },
+  {
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 4, 2 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 4, 2 }
+    },
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 4, 3 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 4, 3 }
+    },
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 4, 4 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 4, 4 }
+    },
+  },
+};
+
+GskSlType *
+gsk_sl_type_get_matrix (GskSlScalarType      scalar,
+                        guint                columns,
+                        guint                rows)
+{
+  g_assert (scalar == GSK_SL_FLOAT || scalar == GSK_SL_DOUBLE);
+  g_assert (columns >= 2 && columns <= 4);
+  g_assert (rows >= 2 && rows <= 4);
+
+  return &builtin_matrix_types[columns - 2][rows - 2][scalar == GSK_SL_FLOAT ? 0 : 1].parent;
+}
+
 GskSlType *
 gsk_sl_type_ref (GskSlType *type)
 {
@@ -406,9 +614,38 @@ gsk_sl_type_to_string (const GskSlType *type)
 }
 
 gboolean
+gsk_sl_type_is_scalar (const GskSlType *type)
+{
+  return type->class == &GSK_SL_TYPE_SCALAR;
+}
+
+gboolean
+gsk_sl_type_is_vector (const GskSlType *type)
+{
+  return type->class == &GSK_SL_TYPE_VECTOR;
+}
+
+gboolean
+gsk_sl_type_is_matrix (const GskSlType *type)
+{
+  return type->class == &GSK_SL_TYPE_MATRIX;
+}
+
+GskSlScalarType
+gsk_sl_type_get_scalar_type (const GskSlType *type)
+{
+  return type->class->get_scalar_type (type);
+}
+
+GskSlScalarType
+gsk_sl_type_get_length (const GskSlType *type)
+{
+  return type->class->get_length (type);
+}
+
+gboolean
 gsk_sl_type_can_convert (const GskSlType *target,
                          const GskSlType *source)
 {
   return target->class->can_convert (target, source);
 }
-

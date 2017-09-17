@@ -38,6 +38,9 @@ GskSlType *             gsk_sl_type_new_parse                   (GskSlPreprocess
 GskSlType *             gsk_sl_type_get_scalar                  (GskSlScalarType      scalar);
 GskSlType *             gsk_sl_type_get_vector                  (GskSlScalarType      scalar,
                                                                  guint                length);
+GskSlType *             gsk_sl_type_get_matrix                  (GskSlScalarType      scalar,
+                                                                 guint                columns,
+                                                                 guint                rows);
 
 GskSlType *             gsk_sl_type_ref                         (GskSlType           *type);
 void                    gsk_sl_type_unref                       (GskSlType           *type);
@@ -46,6 +49,11 @@ void                    gsk_sl_type_print                       (const GskSlType
                                                                  GString             *string);
 char *                  gsk_sl_type_to_string                   (const GskSlType     *type);
 
+gboolean                gsk_sl_type_is_scalar                   (const GskSlType     *type);
+gboolean                gsk_sl_type_is_vector                   (const GskSlType     *type);
+gboolean                gsk_sl_type_is_matrix                   (const GskSlType     *type);
+GskSlScalarType         gsk_sl_type_get_scalar_type             (const GskSlType     *type);
+guint                   gsk_sl_type_get_length                  (const GskSlType     *type);
 gboolean                gsk_sl_type_can_convert                 (const GskSlType     *target,
                                                                  const GskSlType     *source);
 
