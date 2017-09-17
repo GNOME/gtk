@@ -1102,28 +1102,27 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
 {
   static const struct {
     const char    *name;
-    gboolean       deprecated;
     GtkStateFlags  state_flag;
     PositionType   position_type;
     int            position_a;
     int            position_b;
   } pseudo_classes[] = {
-    { "first-child",   0, 0,                           POSITION_FORWARD,  0, 1 },
-    { "last-child",    0, 0,                           POSITION_BACKWARD, 0, 1 },
-    { "only-child",    0, 0,                           POSITION_ONLY,     0, 0 },
-    { "active",        0, GTK_STATE_FLAG_ACTIVE, },
-    { "hover",         0, GTK_STATE_FLAG_PRELIGHT, },
-    { "selected",      0, GTK_STATE_FLAG_SELECTED, },
-    { "disabled",      0, GTK_STATE_FLAG_INSENSITIVE, },
-    { "indeterminate", 0, GTK_STATE_FLAG_INCONSISTENT, },
-    { "focus",         0, GTK_STATE_FLAG_FOCUSED, },
-    { "backdrop",      0, GTK_STATE_FLAG_BACKDROP, },
-    { "dir(ltr)",      0, GTK_STATE_FLAG_DIR_LTR, },
-    { "dir(rtl)",      0, GTK_STATE_FLAG_DIR_RTL, },
-    { "link",          0, GTK_STATE_FLAG_LINK, },
-    { "visited",       0, GTK_STATE_FLAG_VISITED, },
-    { "checked",       0, GTK_STATE_FLAG_CHECKED, },
-    { "drop(active)",  0, GTK_STATE_FLAG_DROP_ACTIVE, }
+    { "first-child",   0,                           POSITION_FORWARD,  0, 1 },
+    { "last-child",    0,                           POSITION_BACKWARD, 0, 1 },
+    { "only-child",    0,                           POSITION_ONLY,     0, 0 },
+    { "active",        GTK_STATE_FLAG_ACTIVE, },
+    { "hover",         GTK_STATE_FLAG_PRELIGHT, },
+    { "selected",      GTK_STATE_FLAG_SELECTED, },
+    { "disabled",      GTK_STATE_FLAG_INSENSITIVE, },
+    { "indeterminate", GTK_STATE_FLAG_INCONSISTENT, },
+    { "focus",         GTK_STATE_FLAG_FOCUSED, },
+    { "backdrop",      GTK_STATE_FLAG_BACKDROP, },
+    { "dir(ltr)",      GTK_STATE_FLAG_DIR_LTR, },
+    { "dir(rtl)",      GTK_STATE_FLAG_DIR_RTL, },
+    { "link",          GTK_STATE_FLAG_LINK, },
+    { "visited",       GTK_STATE_FLAG_VISITED, },
+    { "checked",       GTK_STATE_FLAG_CHECKED, },
+    { "drop(active)",  GTK_STATE_FLAG_DROP_ACTIVE, }
   };
 
   guint i;
@@ -1143,21 +1142,6 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
                                                       : &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
                                                selector);
               selector->state.state = pseudo_classes[i].state_flag;
-              if (pseudo_classes[i].deprecated)
-                {
-                  if (i + 1 < G_N_ELEMENTS (pseudo_classes) &&
-                      pseudo_classes[i + 1].state_flag == pseudo_classes[i].state_flag)
-                    _gtk_css_parser_error_full (parser,
-                                                GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                                "The :%s pseudo-class is deprecated. Use :%s instead.",
-                                                pseudo_classes[i].name,
-                                                pseudo_classes[i + 1].name);
-                  else
-                    _gtk_css_parser_error_full (parser,
-                                                GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                                "The :%s pseudo-class is deprecated.",
-                                                pseudo_classes[i].name);
-                }
             }
           else
             {
@@ -1171,7 +1155,7 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
           return selector;
         }
     }
-      
+
   _gtk_css_parser_error (parser, "Invalid name of pseudo-class");
   if (selector)
     _gtk_css_selector_free (selector);
