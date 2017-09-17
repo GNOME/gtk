@@ -1602,7 +1602,6 @@ _gtk_css_style_property_init_properties (void)
                                           bindings_value_parse,
                                           bindings_value_query,
                                           _gtk_css_array_value_new (_gtk_css_string_value_new (NULL)));
-  _gtk_style_property_add_alias ("-gtk-key-bindings", "gtk-key-bindings");
 
   gtk_css_style_property_register        ("caret-color",
                                           GTK_CSS_PROPERTY_CARET_COLOR,
