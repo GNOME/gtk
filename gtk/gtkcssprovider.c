@@ -1153,25 +1153,6 @@ parse_declaration (GtkCssScanner *scanner,
 
   property = _gtk_style_property_lookup (name);
 
-  if (property != NULL && strcmp (name, property->name) != 0)
-    {
-      gtk_css_provider_error (scanner->provider,
-                              scanner,
-                              GTK_CSS_PROVIDER_ERROR,
-                              GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                              "The '%s' property has been renamed to '%s'",
-                              name, property->name);
-    }
-  else if (strcmp (name, "engine") == 0)
-    {
-      gtk_css_provider_error (scanner->provider,
-                              scanner,
-                              GTK_CSS_PROVIDER_ERROR,
-                              GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                              "The '%s' property is ignored",
-                              name);
-    }
-
   if (!_gtk_css_parser_try (scanner->parser, ":", TRUE))
     {
       gtk_css_provider_invalid_token (scanner->provider, scanner, "':'");
