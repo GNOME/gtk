@@ -384,10 +384,9 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
 
   if (linear->stops->len < 2)
     {
-      _gtk_css_parser_error_full (parser,
-                                  GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                  "Using one color stop with %s() is deprecated.",
-                                  linear->repeating ? "repeating-linear-gradient" : "linear-gradient");
+      _gtk_css_parser_error (parser, "%s() needs at least 2 color stops.",
+                             linear->repeating ? "repeating-linear-gradient" : "linear-gradient");
+      return FALSE;
     }
 
   if (!_gtk_css_parser_try (parser, ")", TRUE))

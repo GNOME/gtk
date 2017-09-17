@@ -379,10 +379,9 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
 
   if (radial->stops->len < 2)
     {
-      _gtk_css_parser_error_full (parser,
-                                  GTK_CSS_PROVIDER_ERROR_DEPRECATED,
-                                  "Using one color stop with %s() is deprecated.",
-                                  radial->repeating ? "repeating-radial-gradient" : "radial-gradient");
+      _gtk_css_parser_error (parser, "%s() needs at least 2 color stops.",
+                             radial->repeating ? "repeating-radial-gradient" : "radial-gradient");
+      return FALSE;
     }
 
   if (!_gtk_css_parser_try (parser, ")", TRUE))
