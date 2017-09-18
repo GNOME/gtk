@@ -203,6 +203,34 @@ _gtk_css_ident_value_try_parse (GtkCssParser *parser)
   return _gtk_css_ident_value_new_take (ident);
 }
 
+GtkCssValue *
+_gtk_css_ident_value_try (GtkCssParser *parser,
+                          const char   *ident,
+                          ...)
+{
+  va_list args;
+  const char *name;
+  GtkCssValue *value = NULL;
+
+  name = ident;
+
+  va_start (args, ident);
+
+  while (name)
+    {
+      if (_gtk_css_parser_try (parser, name, TRUE))
+        {
+          value = _gtk_css_ident_value_new (name);
+          break;
+        }
+      ident = va_arg (args, const char *);
+    }
+
+  va_end (args);
+
+  return value;
+}
+
 const char *
 _gtk_css_ident_value_get (const GtkCssValue *value)
 {

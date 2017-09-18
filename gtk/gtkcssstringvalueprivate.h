@@ -29,6 +29,9 @@ G_BEGIN_DECLS
 GtkCssValue *   _gtk_css_ident_value_new            (const char             *ident);
 GtkCssValue *   _gtk_css_ident_value_new_take       (char                   *ident);
 GtkCssValue *   _gtk_css_ident_value_try_parse      (GtkCssParser           *parser);
+GtkCssValue *   _gtk_css_ident_value_try            (GtkCssParser           *parser,
+                                                     const char             *ident,
+                                                     ...);
 
 const char *    _gtk_css_ident_value_get            (const GtkCssValue      *ident);
 
