@@ -642,6 +642,22 @@ parse_font_variant_position (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_font_variant_caps (GtkCssStyleProperty *property,
+                         GtkCssParser        *parser)
+{
+  GtkCssValue *value = NULL;
+
+  value = _gtk_css_ident_value_try (parser, "normal",
+                                            "small-caps", "all-small-caps",
+                                            "petite-caps", "all-petite-caps",
+                                            "unicase", "titling-caps", NULL);
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
@@ -1148,6 +1164,14 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_position,
+                                          NULL,
+                                          _gtk_css_ident_value_new ("normal"));
+  gtk_css_style_property_register        ("font-variant-caps",
+                                          GTK_CSS_PROPERTY_FONT_VARIANT_CAPS,
+                                          G_TYPE_NONE,
+                                          0,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          parse_font_variant_caps,
                                           NULL,
                                           _gtk_css_ident_value_new ("normal"));
   gtk_css_style_property_register        ("text-shadow",

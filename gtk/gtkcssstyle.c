@@ -228,6 +228,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   GtkCssValue *kerning;
   GtkCssValue *ligatures;
   GtkCssValue *position;
+  GtkCssValue *caps;
   GString *s;
   int i;
 
@@ -310,6 +311,38 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     {
       if (s->len > 0) g_string_append (s, ", ");
       g_string_append (s, "sups 1");
+    }
+
+  caps = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_CAPS);
+  if (strcmp (_gtk_css_ident_value_get (caps), "small-caps") == 0)
+    {
+      if (s->len > 0) g_string_append (s, ", ");
+      g_string_append (s, "smcp 1");
+    }
+  else if (strcmp (_gtk_css_ident_value_get (caps), "all-small-caps") == 0)
+    {
+      if (s->len > 0) g_string_append (s, ", ");
+      g_string_append (s, "c2sc 1, smcp 1");
+    }
+  else if (strcmp (_gtk_css_ident_value_get (caps), "petite-caps") == 0)
+    {
+      if (s->len > 0) g_string_append (s, ", ");
+      g_string_append (s, "pcap 1");
+    }
+  else if (strcmp (_gtk_css_ident_value_get (caps), "all-petite-caps") == 0)
+    {
+      if (s->len > 0) g_string_append (s, ", ");
+      g_string_append (s, "c2pc 1, pcap 1");
+    }
+  else if (strcmp (_gtk_css_ident_value_get (caps), "unicase") == 0)
+    {
+      if (s->len > 0) g_string_append (s, ", ");
+      g_string_append (s, "unic 1");
+    }
+  else if (strcmp (_gtk_css_ident_value_get (caps), "titling-caps") == 0)
+    {
+      if (s->len > 0) g_string_append (s, ", ");
+      g_string_append (s, "titl 1");
     }
 
   attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
