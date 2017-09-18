@@ -750,6 +750,68 @@ parse_font_variant_alternatives (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_font_variant_east_asian (GtkCssStyleProperty *property,
+                               GtkCssParser        *parser)
+{
+  GtkCssValue *value = NULL;
+
+  if (_gtk_css_parser_try (parser, "normal", TRUE))
+    value = _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal"));
+  else
+    {
+      GtkCssValue *values[3] = { NULL, NULL, NULL };
+      guint n_values = 0;
+      guint old_n;
+      gboolean variant = FALSE;
+      gboolean width = FALSE;
+      gboolean ruby = FALSE;
+
+      do {
+        old_n = n_values;
+        if (!variant)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "jis78", "jis83", "jis90", "jis04",
+                                                                 "simplified", "traditional", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                variant = TRUE;
+              }
+         }
+        if (!width)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "full-width"
+                                                                 "proportional-width", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                width = TRUE;
+              }
+         }
+        if (!ruby)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "ruby", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                ruby = TRUE;
+              }
+         }
+        if (old_n == n_values)
+          {
+            _gtk_css_parser_error (parser, "Not a valid value");
+            return NULL;
+          }
+      } while (!value_is_done_parsing (parser));
+
+      value = _gtk_css_array_value_new_from_array (values, n_values);
+    }
+
+  return value;
+}
+
+
+static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
@@ -1280,6 +1342,14 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_alternatives,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
+  gtk_css_style_property_register        ("font-variant-east-asian",
+                                          GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN,
+                                          G_TYPE_NONE,
+                                          0,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          parse_font_variant_east_asian,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
   gtk_css_style_property_register        ("text-shadow",

@@ -231,6 +231,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   GtkCssValue *caps;
   GtkCssValue *numeric;
   GtkCssValue *alternatives;
+  GtkCssValue *east_asian;
   GString *s;
   int i;
 
@@ -377,6 +378,31 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
       if (s->len > 0) g_string_append (s, ", ");
       if (strcmp (_gtk_css_ident_value_get (value), "historical-forms") == 0)
         g_string_append (s, "hist 1");
+    }
+
+  east_asian = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN);
+  for (i = 0; i < _gtk_css_array_value_get_n_values (east_asian); i++)
+    {
+      GtkCssValue *value = _gtk_css_array_value_get_nth (east_asian, i);
+      if (s->len > 0) g_string_append (s, ", ");
+      if (strcmp (_gtk_css_ident_value_get (value), "jis78") == 0)
+        g_string_append (s, "jp78 1");
+      if (strcmp (_gtk_css_ident_value_get (value), "jis83") == 0)
+        g_string_append (s, "jp83 1");
+      if (strcmp (_gtk_css_ident_value_get (value), "jis90") == 0)
+        g_string_append (s, "jp90 1");
+      if (strcmp (_gtk_css_ident_value_get (value), "jis04") == 0)
+        g_string_append (s, "jp04 1");
+      if (strcmp (_gtk_css_ident_value_get (value), "simplified") == 0)
+        g_string_append (s, "smpl 1");
+      if (strcmp (_gtk_css_ident_value_get (value), "traditional") == 0)
+        g_string_append (s, "trad 1");
+      if (strcmp (_gtk_css_ident_value_get (value), "full-width") == 0)
+        g_string_append (s, "fwid 1");
+      if (strcmp (_gtk_css_ident_value_get (value), "proportional-width") == 0)
+        g_string_append (s, "pwid 1");
+      if (strcmp (_gtk_css_ident_value_get (value), "ruby") == 0)
+        g_string_append (s, "ruby 1");
     }
 
   attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
