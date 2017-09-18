@@ -71,7 +71,7 @@ gsk_sl_function_constructor_print_name (GskSlFunction *function,
 {
   GskSlFunctionConstructor *constructor = (GskSlFunctionConstructor *) function;
 
-  gsk_sl_type_print (constructor->type, string);
+  g_string_append (string, gsk_sl_type_get_name (constructor->type));
 }
 
 
@@ -114,7 +114,10 @@ gsk_sl_function_constructor_matches (GskSlFunction  *function,
       provided = gsk_sl_function_builtin_get_args_by_type (arguments[i]);
       if (provided == 0)
         {
-          g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "Invalid type for constructor in argument %"G_GSIZE_FORMAT, i + 1);
+          g_set_error (error,
+                       G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                       "Invalid type %s for constructor in argument %"G_GSIZE_FORMAT,
+                       gsk_sl_type_get_name (arguments[i]), i + 1);
           return FALSE;
         }
 

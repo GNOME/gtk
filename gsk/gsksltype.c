@@ -39,8 +39,7 @@ struct _GskSlType
 struct _GskSlTypeClass {
   void                  (* free)                                (GskSlType           *type);
 
-  void                  (* print)                               (const GskSlType     *type,
-                                                                 GString             *string);
+  const char *          (* get_name)                            (const GskSlType     *type);
   GskSlScalarType       (* get_scalar_type)                     (const GskSlType     *type);
   GskSlType *           (* get_index_type)                      (const GskSlType     *type);
   guint                 (* get_length)                          (const GskSlType     *type);
@@ -64,32 +63,25 @@ gsk_sl_type_scalar_free (GskSlType *type)
   g_assert_not_reached ();
 }
 
-static void
-gsk_sl_type_scalar_print (const GskSlType *type,
-                          GString         *string)
+static const char *
+gsk_sl_type_scalar_get_name (const GskSlType *type)
 {
-  GskSlTypeScalar *scalar = (GskSlTypeScalar *) type;
+  const GskSlTypeScalar *scalar = (const GskSlTypeScalar *) type;
 
   switch (scalar->scalar)
   {
     case GSK_SL_VOID:
-      g_string_append (string, "void");
-      break;
+      return "void";
     case GSK_SL_FLOAT:
-      g_string_append (string, "float");
-      break;
+      return "float";
     case GSK_SL_DOUBLE:
-      g_string_append (string, "double");
-      break;
+      return "double";
     case GSK_SL_INT:
-      g_string_append (string, "int");
-      break;
+      return "int";
     case GSK_SL_UINT:
-      g_string_append (string, "uint");
-      break;
+      return "uint";
     case GSK_SL_BOOL:
-      g_string_append (string, "bool");
-      break;
+      return "bool";
     default:
       g_assert_not_reached ();
       break;
@@ -131,7 +123,7 @@ gsk_sl_type_scalar_can_convert (const GskSlType *target,
 
 static const GskSlTypeClass GSK_SL_TYPE_SCALAR = {
   gsk_sl_type_scalar_free,
-  gsk_sl_type_scalar_print,
+  gsk_sl_type_scalar_get_name,
   gsk_sl_type_scalar_get_scalar_type,
   gsk_sl_type_scalar_get_index_type,
   gsk_sl_type_scalar_get_length,
@@ -145,6 +137,7 @@ typedef struct _GskSlTypeVector GskSlTypeVector;
 struct _GskSlTypeVector {
   GskSlType parent;
 
+  const char *name;
   GskSlScalarType scalar;
   guint length;
 };
@@ -155,36 +148,12 @@ gsk_sl_type_vector_free (GskSlType *type)
   g_assert_not_reached ();
 }
 
-static void
-gsk_sl_type_vector_print (const GskSlType *type,
-                          GString         *string)
+static const char *
+gsk_sl_type_vector_get_name (const GskSlType *type)
 {
-  GskSlTypeVector *vector = (GskSlTypeVector *) type;
+  const GskSlTypeVector *vector = (const GskSlTypeVector *) type;
 
-  switch (vector->scalar)
-  {
-    case GSK_SL_FLOAT:
-      g_string_append (string, "vec");
-      break;
-    case GSK_SL_DOUBLE:
-      g_string_append (string, "dvec");
-      break;
-    case GSK_SL_INT:
-      g_string_append (string, "ivec");
-      break;
-    case GSK_SL_UINT:
-      g_string_append (string, "uvec");
-      break;
-    case GSK_SL_BOOL:
-      g_string_append (string, "bvec");
-      break;
-    case GSK_SL_VOID:
-    default:
-      g_assert_not_reached ();
-      break;
-  }
-
-  g_string_append_printf (string, "%u", vector->length);
+  return vector->name;
 }
 
 static GskSlScalarType
@@ -229,7 +198,7 @@ gsk_sl_type_vector_can_convert (const GskSlType *target,
 
 static const GskSlTypeClass GSK_SL_TYPE_VECTOR = {
   gsk_sl_type_vector_free,
-  gsk_sl_type_vector_print,
+  gsk_sl_type_vector_get_name,
   gsk_sl_type_vector_get_scalar_type,
   gsk_sl_type_vector_get_index_type,
   gsk_sl_type_vector_get_length,
@@ -243,6 +212,7 @@ typedef struct _GskSlTypeMatrix GskSlTypeMatrix;
 struct _GskSlTypeMatrix {
   GskSlType parent;
 
+  const char *name;
   GskSlScalarType scalar;
   guint columns;
   guint rows;
@@ -254,18 +224,12 @@ gsk_sl_type_matrix_free (GskSlType *type)
   g_assert_not_reached ();
 }
 
-static void
-gsk_sl_type_matrix_print (const GskSlType *type,
-                          GString         *string)
+static const char *
+gsk_sl_type_matrix_get_name (const GskSlType *type)
 {
   const GskSlTypeMatrix *matrix = (const GskSlTypeMatrix *) type;
 
-  g_string_append (string, matrix->scalar == GSK_SL_DOUBLE ? "dmat" : "mat");
-  g_string_append_printf (string, "%u", matrix->columns);
-  if (matrix->columns != matrix->rows)
-    {
-      g_string_append_printf (string, "x%u", matrix->rows);
-    }
+  return matrix->name;
 }
 
 static GskSlScalarType
@@ -311,7 +275,7 @@ gsk_sl_type_matrix_can_convert (const GskSlType *target,
 
 static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_free,
-  gsk_sl_type_matrix_print,
+  gsk_sl_type_matrix_get_name,
   gsk_sl_type_matrix_get_scalar_type,
   gsk_sl_type_matrix_get_index_type,
   gsk_sl_type_matrix_get_length,
@@ -482,25 +446,25 @@ gsk_sl_type_get_scalar (GskSlScalarType scalar)
 static GskSlTypeVector
 builtin_vector_types[3][N_SCALAR_TYPES] = {
   {
-    [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_FLOAT, 2 },
-    [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_DOUBLE, 2 },
-    [GSK_SL_INT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_INT, 2 },
-    [GSK_SL_UINT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_UINT, 2 },
-    [GSK_SL_BOOL] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_BOOL, 2 },
+    [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_VECTOR, 1 }, "vec2", GSK_SL_FLOAT, 2 },
+    [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_VECTOR, 1 }, "dvec2", GSK_SL_DOUBLE, 2 },
+    [GSK_SL_INT] = { { &GSK_SL_TYPE_VECTOR, 1 }, "ivec2", GSK_SL_INT, 2 },
+    [GSK_SL_UINT] = { { &GSK_SL_TYPE_VECTOR, 1 }, "uvec2", GSK_SL_UINT, 2 },
+    [GSK_SL_BOOL] = { { &GSK_SL_TYPE_VECTOR, 1 }, "bvec2", GSK_SL_BOOL, 2 },
   },
   {
-    [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_FLOAT, 3 },
-    [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_DOUBLE, 3 },
-    [GSK_SL_INT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_INT, 3 },
-    [GSK_SL_UINT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_UINT, 3 },
-    [GSK_SL_BOOL] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_BOOL, 3 },
+    [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_VECTOR, 1 }, "vec3", GSK_SL_FLOAT, 3 },
+    [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_VECTOR, 1 }, "dvec3", GSK_SL_DOUBLE, 3 },
+    [GSK_SL_INT] = { { &GSK_SL_TYPE_VECTOR, 1 }, "ivec3", GSK_SL_INT, 3 },
+    [GSK_SL_UINT] = { { &GSK_SL_TYPE_VECTOR, 1 }, "uvec3", GSK_SL_UINT, 3 },
+    [GSK_SL_BOOL] = { { &GSK_SL_TYPE_VECTOR, 1 }, "bvec3", GSK_SL_BOOL, 3 },
   },
   {
-    [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_FLOAT, 4 },
-    [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_DOUBLE, 4 },
-    [GSK_SL_INT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_INT, 4 },
-    [GSK_SL_UINT] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_UINT, 4 },
-    [GSK_SL_BOOL] = { { &GSK_SL_TYPE_VECTOR, 1 }, GSK_SL_BOOL, 4 },
+    [GSK_SL_FLOAT] = { { &GSK_SL_TYPE_VECTOR, 1 }, "vec4", GSK_SL_FLOAT, 4 },
+    [GSK_SL_DOUBLE] = { { &GSK_SL_TYPE_VECTOR, 1 }, "dvec4", GSK_SL_DOUBLE, 4 },
+    [GSK_SL_INT] = { { &GSK_SL_TYPE_VECTOR, 1 }, "ivec4", GSK_SL_INT, 4 },
+    [GSK_SL_UINT] = { { &GSK_SL_TYPE_VECTOR, 1 }, "uvec4", GSK_SL_UINT, 4 },
+    [GSK_SL_BOOL] = { { &GSK_SL_TYPE_VECTOR, 1 }, "bvec4", GSK_SL_BOOL, 4 },
   }
 };
 
@@ -519,44 +483,44 @@ static GskSlTypeMatrix
 builtin_matrix_types[3][3][2] = {
   {
     {
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 2, 2 },
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 2, 2 }
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "mat2",    GSK_SL_FLOAT,  2, 2 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "dmat2",   GSK_SL_DOUBLE, 2, 2 }
     },
     {
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 2, 3 },
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 2, 3 }
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "mat2x3",  GSK_SL_FLOAT,  2, 3 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "dmat2x3", GSK_SL_DOUBLE, 2, 3 }
     },
     {
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 2, 4 },
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 2, 4 }
-    },
-  },
-  {
-    {
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 3, 2 },
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 3, 2 }
-    },
-    {
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 3, 3 },
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 3, 3 }
-    },
-    {
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 3, 4 },
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 3, 4 }
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "mat2x4",  GSK_SL_FLOAT,  2, 4 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "dmat2x4", GSK_SL_DOUBLE, 2, 4 }
     },
   },
   {
     {
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 4, 2 },
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 4, 2 }
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "mat3x2",  GSK_SL_FLOAT,  3, 2 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "dmat3x2", GSK_SL_DOUBLE, 3, 2 }
     },
     {
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 4, 3 },
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 4, 3 }
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "mat3",    GSK_SL_FLOAT,  3, 3 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "dmat3",   GSK_SL_DOUBLE, 3, 3 }
     },
     {
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_FLOAT, 4, 4 },
-      { { &GSK_SL_TYPE_MATRIX, 1 }, GSK_SL_DOUBLE, 4, 4 }
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "mat3x4",  GSK_SL_FLOAT,  3, 4 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "dmat3x4", GSK_SL_DOUBLE, 3, 4 }
+    },
+  },
+  {
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "mat4x2",  GSK_SL_FLOAT,  4, 2 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "dmat4x2", GSK_SL_DOUBLE, 4, 2 }
+    },
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "mat4x3",  GSK_SL_FLOAT,  4, 3 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "dmat4x3", GSK_SL_DOUBLE, 4, 3 }
+    },
+    {
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "mat4",    GSK_SL_FLOAT,  4, 4 },
+      { { &GSK_SL_TYPE_MATRIX, 1 }, "dmat4",   GSK_SL_DOUBLE, 4, 4 }
     },
   },
 };
@@ -596,21 +560,10 @@ gsk_sl_type_unref (GskSlType *type)
   type->class->free (type);
 }
 
-void
-gsk_sl_type_print (const GskSlType *type,
-                   GString         *string)
+const char *
+gsk_sl_type_get_name (const GskSlType *type)
 {
-  return type->class->print (type, string);
-}
-
-char *
-gsk_sl_type_to_string (const GskSlType *type)
-{
-  GString *string;
-
-  string = g_string_new (NULL);
-  gsk_sl_type_print (type, string);
-  return g_string_free (string, FALSE);
+  return type->class->get_name (type);
 }
 
 gboolean

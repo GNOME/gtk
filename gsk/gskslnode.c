@@ -139,7 +139,7 @@ gsk_sl_node_function_print (GskSlNode *node,
   GskSlNodeFunction *function = (GskSlNodeFunction *) node;
   GSList *l;
 
-  gsk_sl_type_print (function->return_type, string);
+  g_string_append (string, gsk_sl_type_get_name (function->return_type));
   g_string_append (string, "\n");
 
   g_string_append (string, function->name);
@@ -372,11 +372,8 @@ gsk_sl_node_arithmetic_type_check (GskSlPreprocessor *stream,
     {
       if (stream)
         {
-          char *lstr = gsk_sl_type_to_string (ltype);
-          char *rstr = gsk_sl_type_to_string (rtype);
-          gsk_sl_preprocessor_error (stream, "Operand types %s and %s do not share compatible scalar types.", lstr, rstr);
-          g_free (lstr);
-          g_free (rstr);
+          gsk_sl_preprocessor_error (stream, "Operand types %s and %s do not share compatible scalar types.",
+                                             gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
         }
       return NULL;
     }
@@ -410,7 +407,8 @@ gsk_sl_node_arithmetic_type_check (GskSlPreprocessor *stream,
               else
                 {
                   if (stream)
-                    gsk_sl_preprocessor_error (stream, "Matrices to arithmetic operation have different size.");
+                    gsk_sl_preprocessor_error (stream, "Matrix types %s and %s have different size.",
+                                               gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
                   return NULL;
                 }
             }
@@ -456,7 +454,8 @@ gsk_sl_node_arithmetic_type_check (GskSlPreprocessor *stream,
               if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (gsk_sl_type_get_index_type (rtype)))
                 {
                   if (stream)
-                    gsk_sl_preprocessor_error (stream, "Vector length doesn't match matrix row count.");
+                    gsk_sl_preprocessor_error (stream, "Vector length for %s doesn't match row count for %s",
+                                                       gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
                   return NULL;
                 }
               return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (rtype));
@@ -473,7 +472,8 @@ gsk_sl_node_arithmetic_type_check (GskSlPreprocessor *stream,
           if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
             {
               if (stream)
-                gsk_sl_preprocessor_error (stream, "Vector operands to arithmetic operation have different length.");
+                gsk_sl_preprocessor_error (stream, "Vector operands %s and %s to arithmetic operation have different length.",
+                                                   gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
               return NULL;
             }
           return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (ltype));
@@ -533,33 +533,34 @@ gsk_sl_node_bitwise_type_check (GskSlPreprocessor *stream,
   if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand is not an integer type.");
+        gsk_sl_preprocessor_error (stream, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
       return NULL;
     }
   rscalar = gsk_sl_type_get_scalar_type (ltype);
   if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand is not an integer type.");
+        gsk_sl_preprocessor_error (stream, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
       return NULL;
     }
   if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand is neither a scalar nor a vector.");
+        gsk_sl_preprocessor_error (stream, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
       return NULL;
     }
   if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand is neither a scalar nor a vector.");
+        gsk_sl_preprocessor_error (stream, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
       return NULL;
     }
   if (gsk_sl_type_is_vector (ltype) && gsk_sl_type_is_vector (rtype) &&
       gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Vector operands do not have the same length.");
+        gsk_sl_preprocessor_error (stream, "Vector operands %s and %s do not have the same length.",
+                                           gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
       return NULL;
     }
 
@@ -581,26 +582,26 @@ gsk_sl_node_shift_type_check (GskSlPreprocessor *stream,
   if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand is not an integer type.");
+        gsk_sl_preprocessor_error (stream, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
       return FALSE;
     }
   rscalar = gsk_sl_type_get_scalar_type (ltype);
   if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand is not an integer type.");
+        gsk_sl_preprocessor_error (stream, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
       return FALSE;
     }
   if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand is neither a scalar nor a vector.");
+        gsk_sl_preprocessor_error (stream, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
       return FALSE;
     }
   if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand is neither a scalar nor a vector.");
+        gsk_sl_preprocessor_error (stream, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
       return FALSE;
     }
   if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_vector (rtype))
@@ -747,7 +748,7 @@ gsk_sl_node_declaration_print (GskSlNode *node,
 {
   GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
 
-  gsk_sl_type_print (declaration->type, string);
+  g_string_append (string, gsk_sl_type_get_name (declaration->type));
   if (declaration->name)
     {
       g_string_append (string, " ");
@@ -905,6 +906,70 @@ static const GskSlNodeClass GSK_SL_NODE_FUNCTION_CALL = {
   gsk_sl_node_function_call_print,
   gsk_sl_node_function_call_get_return_type,
   gsk_sl_node_function_call_is_constant
+};
+
+/* RETURN */
+
+typedef struct _GskSlNodeReturn GskSlNodeReturn;
+
+struct _GskSlNodeReturn {
+  GskSlNode parent;
+
+  GskSlNode *value;
+};
+
+static void
+gsk_sl_node_return_free (GskSlNode *node)
+{
+  GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
+
+  if (return_node->value)
+    gsk_sl_node_unref (return_node->value);
+
+  g_slice_free (GskSlNodeReturn, return_node);
+}
+
+static void
+gsk_sl_node_return_print (GskSlNode *node,
+                          GString   *string)
+{
+  GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
+
+  g_string_append (string, "return");
+  if (return_node->value)
+    {
+      g_string_append (string, " ");
+      gsk_sl_node_print (return_node->value, string);
+    }
+}
+
+static GskSlType *
+gsk_sl_node_return_get_return_type (GskSlNode *node)
+{
+  GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
+
+  if (return_node->value)
+    return gsk_sl_node_get_return_type (return_node->value);
+  else
+    return NULL;
+}
+
+static gboolean
+gsk_sl_node_return_is_constant (GskSlNode *node)
+{
+  GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
+
+  if (return_node->value)
+    return gsk_sl_node_is_constant (return_node->value);
+  else
+    return TRUE;
+}
+
+static const GskSlNodeClass GSK_SL_NODE_RETURN = {
+  gsk_sl_node_return_free,
+  gsk_sl_node_return_print,
+  gsk_sl_node_return_get_return_type,
+  gsk_sl_node_return_is_constant
 };
 
 /* CONSTANT */
@@ -1694,18 +1759,16 @@ gsk_sl_node_parse_logical_and_expression (GskSlNodeProgram  *program,
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_node_get_return_type (operation->right)))
         {
-          char *type_name = gsk_sl_type_to_string (gsk_sl_node_get_return_type (operation->right));
-          gsk_sl_preprocessor_error (stream, "Right operand of && expression is not bool but %s", type_name);
-          g_free (type_name);
+          gsk_sl_preprocessor_error (stream, "Right operand of && expression is not bool but %s",
+                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (operation->right)));
           gsk_sl_node_ref (node);
           gsk_sl_node_unref ((GskSlNode *) operation);
         }
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_node_get_return_type (node)))
         {
-          char *type_name = gsk_sl_type_to_string (gsk_sl_node_get_return_type (node));
-          gsk_sl_preprocessor_error (stream, "Left operand of && expression is not bool but %s", type_name);
-          g_free (type_name);
+          gsk_sl_preprocessor_error (stream, "Left operand of && expression is not bool but %s",
+                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (node)));
           node = operation->right;
           gsk_sl_node_ref (node);
           gsk_sl_node_unref ((GskSlNode *) operation);
@@ -1751,18 +1814,16 @@ gsk_sl_node_parse_logical_xor_expression (GskSlNodeProgram  *program,
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_node_get_return_type (operation->right)))
         {
-          char *type_name = gsk_sl_type_to_string (gsk_sl_node_get_return_type (operation->right));
-          gsk_sl_preprocessor_error (stream, "Right operand of || expression is not bool but %s", type_name);
-          g_free (type_name);
+          gsk_sl_preprocessor_error (stream, "Right operand of ^^ expression is not bool but %s",
+                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (operation->right)));
           gsk_sl_node_ref (node);
           gsk_sl_node_unref ((GskSlNode *) operation);
         }
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_node_get_return_type (node)))
         {
-          char *type_name = gsk_sl_type_to_string (gsk_sl_node_get_return_type (node));
-          gsk_sl_preprocessor_error (stream, "Left operand of || expression is not bool but %s", type_name);
-          g_free (type_name);
+          gsk_sl_preprocessor_error (stream, "Left operand of ^^ expression is not bool but %s",
+                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (node)));
           node = operation->right;
           gsk_sl_node_ref (node);
           gsk_sl_node_unref ((GskSlNode *) operation);
@@ -1808,18 +1869,16 @@ gsk_sl_node_parse_logical_or_expression (GskSlNodeProgram  *program,
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_node_get_return_type (operation->right)))
         {
-          char *type_name = gsk_sl_type_to_string (gsk_sl_node_get_return_type (operation->right));
-          gsk_sl_preprocessor_error (stream, "Right operand of ^^ expression is not bool but %s", type_name);
-          g_free (type_name);
+          gsk_sl_preprocessor_error (stream, "Right operand of || expression is not bool but %s",
+                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (operation->right)));
           gsk_sl_node_ref (node);
           gsk_sl_node_unref ((GskSlNode *) operation);
         }
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_node_get_return_type (node)))
         {
-          char *type_name = gsk_sl_type_to_string (gsk_sl_node_get_return_type (node));
-          gsk_sl_preprocessor_error (stream, "Left operand of ^^ expression is not bool but %s", type_name);
-          g_free (type_name);
+          gsk_sl_preprocessor_error (stream, "Left operand of || expression is not bool but %s",
+                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (node)));
           node = operation->right;
           gsk_sl_node_ref (node);
           gsk_sl_node_unref ((GskSlNode *) operation);
@@ -1877,7 +1936,7 @@ gsk_sl_node_parse_assignment_expression (GskSlNodeProgram  *program,
 
   if (gsk_sl_node_is_constant (lvalue))
     {
-      gsk_sl_preprocessor_error (stream, "Cannot assign to a constant lvalue.");
+      gsk_sl_preprocessor_error (stream, "Cannot assign to a return lvalue.");
 
       /* Continue parsing like normal here to get more errors */
       gsk_sl_preprocessor_consume (stream, lvalue);
@@ -2055,6 +2114,49 @@ gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
               function->statements = g_slist_append (function->statements, node);
             }
         }
+        break;
+
+      case GSK_SL_TOKEN_RETURN:
+        {
+          GskSlNodeReturn *return_node;
+
+          return_node = gsk_sl_node_new (GskSlNodeReturn, &GSK_SL_NODE_RETURN);
+          gsk_sl_preprocessor_consume (stream, (GskSlNode *) return_node);
+          token = gsk_sl_preprocessor_get (stream);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
+            {
+              return_node->value = gsk_sl_node_parse_expression (program, function->scope, stream);
+              if (return_node->value == NULL)
+                {
+                  gsk_sl_node_unref ((GskSlNode *) return_node);
+                  break;
+                }
+              if (function->return_type == NULL)
+                {
+                  gsk_sl_preprocessor_error (stream, "Cannot return a value from a void function.");
+                  gsk_sl_node_unref ((GskSlNode *) return_node);
+                  break;
+                }
+              else if (!gsk_sl_type_can_convert (function->return_type, gsk_sl_node_get_return_type (return_node->value)))
+                {
+                  gsk_sl_preprocessor_error (stream, "Cannot convert return type %s to function type %s.",
+                                                     gsk_sl_type_get_name (gsk_sl_node_get_return_type (return_node->value)),
+                                                     gsk_sl_type_get_name (function->return_type));
+                  gsk_sl_node_unref ((GskSlNode *) return_node);
+                  break;
+                }
+              }
+            else
+              {
+                if (function->return_type != NULL)
+                  {
+                    gsk_sl_preprocessor_error (stream, "Return statement does not return a value.");
+                    gsk_sl_node_unref ((GskSlNode *) return_node);
+                    break;
+                  }
+              }
+            function->statements = g_slist_append (function->statements, return_node);
+          }
         break;
 
       default:
