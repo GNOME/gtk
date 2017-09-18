@@ -2393,6 +2393,9 @@ _gdk_win32_selection_property_change (GdkWin32Selection *win32_sel,
 
           g_free (set_data);
         }
+
+      win32_sel->property_change_format = 0;
+      win32_sel->property_change_data = 0;
     }
   else
     {
