@@ -543,6 +543,91 @@ parse_font_kerning (GtkCssStyleProperty *property,
   return value;
 }
 
+static gboolean
+value_is_done_parsing (GtkCssParser *parser)
+{
+  return _gtk_css_parser_is_eof (parser) ||
+         _gtk_css_parser_begins_with (parser, ',') ||
+         _gtk_css_parser_begins_with (parser, ';') ||
+         _gtk_css_parser_begins_with (parser, '}');
+}
+
+static GtkCssValue *
+parse_font_variant_ligatures (GtkCssStyleProperty *property,
+                              GtkCssParser        *parser)
+{
+  GtkCssValue *value = NULL;
+
+  if (_gtk_css_parser_try (parser, "normal", TRUE))
+    value = _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal"));
+  else if (_gtk_css_parser_try (parser, "none", TRUE))
+    value = _gtk_css_array_value_new (_gtk_css_ident_value_new ("none"));
+  else
+    {
+      GtkCssValue *values[4] = { NULL, NULL, NULL, NULL };
+      guint n_values = 0;
+      guint old_n;
+      gboolean common = FALSE;
+      gboolean discretionary = FALSE;
+      gboolean historical = FALSE;
+      gboolean contextual = FALSE;
+
+      do {
+        old_n = n_values;
+        if (!common)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "common-ligatures",
+                                                                 "no-common-ligatures", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                common = TRUE;
+              }
+          }
+        if (!discretionary)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "discretionary-ligatures",
+                                                                 "no-discretionary-ligatures", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                discretionary = TRUE;
+              }
+          }
+        if (!historical)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "historical-ligatures",
+                                                                 "no-historical-ligatures",
+                                                                 NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                historical = TRUE;
+              }
+          }
+        if (!contextual)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "contextual",
+                                                                 "no-contextual", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                contextual = TRUE;
+              }
+          }
+        if (old_n == n_values)
+          {
+            _gtk_css_parser_error (parser, "Not a valid value");
+            return NULL;
+          }
+      } while (!value_is_done_parsing (parser));
+
+      value = _gtk_css_array_value_new_from_array (values, n_values);
+    }
+
+  return value;
+}
+
 static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
@@ -1036,6 +1121,14 @@ _gtk_css_style_property_init_properties (void)
                                           parse_font_kerning,
                                           NULL,
                                           _gtk_css_ident_value_new ("auto"));
+  gtk_css_style_property_register        ("font-variant-ligatures",
+                                          GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES,
+                                          G_TYPE_NONE,
+                                          0,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          parse_font_variant_ligatures,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
 
   gtk_css_style_property_register        ("text-shadow",
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,

@@ -226,6 +226,9 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   const GdkRGBA *decoration_color;
   gint letter_spacing;
   GtkCssValue *kerning;
+  GtkCssValue *ligatures;
+  GString *s;
+  int i;
 
   /* text-decoration */
   decoration_line = _gtk_css_text_decoration_line_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_TEXT_DECORATION_LINE));
@@ -261,11 +264,42 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
       attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
     }
 
+  /* OpenType features */
+  s = g_string_new ("");
+
   kerning = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_KERNING);
   if (strcmp (_gtk_css_ident_value_get (kerning), "normal") == 0)
-    attrs = add_pango_attr (attrs, pango_attr_font_features_new ("kern 1"));
+    g_string_append (s, "kern 1");
   else if (strcmp (_gtk_css_ident_value_get (kerning), "none") == 0)
-    attrs = add_pango_attr (attrs, pango_attr_font_features_new ("kern 0"));
+    g_string_append (s, "kern 0");
+
+  ligatures = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES);
+  for (i = 0; i < _gtk_css_array_value_get_n_values (ligatures); i++)
+    {
+      GtkCssValue *value = _gtk_css_array_value_get_nth (ligatures, i);
+      if (s->len > 0) g_string_append (s, ", ");
+      if (strcmp (_gtk_css_ident_value_get (value), "none") == 0)
+        g_string_append (s, "liga 0, clig 0, dlig 0, hlig 0, calt 0");
+      else if (strcmp (_gtk_css_ident_value_get (value), "common-ligatures") == 0)
+        g_string_append (s, "liga 1, clig 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "no-common-ligatures") == 0)
+        g_string_append (s, "liga 0, clig 0");
+      else if (strcmp (_gtk_css_ident_value_get (value), "discretionary-ligatures") == 0)
+        g_string_append (s, "dlig 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "no-discretionary-ligatures") == 0)
+        g_string_append (s, "dlig 0");
+      else if (strcmp (_gtk_css_ident_value_get (value), "historical-ligatures") == 0)
+        g_string_append (s, "hlig 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "no-historical-ligatures") == 0)
+        g_string_append (s, "hlig 0");
+      else if (strcmp (_gtk_css_ident_value_get (value), "contextual") == 0)
+        g_string_append (s, "calt 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "no-contextual") == 0)
+        g_string_append (s, "calt 0");
+    }
+
+  attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
+  g_string_free (s, TRUE);
 
   return attrs;
 }
