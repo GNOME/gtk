@@ -716,8 +716,8 @@ parse_font_variant_numeric (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
-parse_font_variant_alternatives (GtkCssStyleProperty *property,
-                                 GtkCssParser        *parser)
+parse_font_variant_alternates (GtkCssStyleProperty *property,
+                               GtkCssParser        *parser)
 {
   GtkCssValue *value = NULL;
 
@@ -1307,12 +1307,12 @@ _gtk_css_style_property_init_properties (void)
                                           parse_font_variant_numeric,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
-  gtk_css_style_property_register        ("font-variant-alternatives",
-                                          GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATIVES,
+  gtk_css_style_property_register        ("font-variant-alternates",
+                                          GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES,
                                           G_TYPE_NONE,
                                           0,
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
-                                          parse_font_variant_alternatives,
+                                          parse_font_variant_alternates,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
   gtk_css_style_property_register        ("font-variant-east-asian",

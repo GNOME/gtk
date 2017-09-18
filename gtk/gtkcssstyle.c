@@ -230,7 +230,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   GtkCssValue *position;
   GtkCssValue *caps;
   GtkCssValue *numeric;
-  GtkCssValue *alternatives;
+  GtkCssValue *alternates;
   GtkCssValue *east_asian;
   GString *s;
   int i;
@@ -371,10 +371,10 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
         g_string_append (s, "zero 1");
     }
 
-  alternatives = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATIVES);
-  for (i = 0; i < _gtk_css_array_value_get_n_values (alternatives); i++)
+  alternates = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES);
+  for (i = 0; i < _gtk_css_array_value_get_n_values (alternates); i++)
     {
-      GtkCssValue *value = _gtk_css_array_value_get_nth (alternatives, i);
+      GtkCssValue *value = _gtk_css_array_value_get_nth (alternates, i);
       if (s->len > 0) g_string_append (s, ", ");
       if (strcmp (_gtk_css_ident_value_get (value), "historical-forms") == 0)
         g_string_append (s, "hist 1");

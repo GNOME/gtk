@@ -1272,7 +1272,7 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *animation_subproperties[] = { "animation-name", "animation-iteration-count", "animation-duration", "animation-delay", 
                                             "animation-timing-function", "animation-direction", "animation-fill-mode", NULL };
   const char *text_decoration_subproperties[] = { "text-decoration-line", "text-decoration-style", "text-decoration-color", NULL };
-  const char *font_variant_subproperties[] = { "font-variant-ligatures", "font-variant-position", "font-variant-caps", "font-variant-numeric", "font-variant-alternatives", "font-variant-east-asian", NULL };
+  const char *font_variant_subproperties[] = { "font-variant-ligatures", "font-variant-position", "font-variant-caps", "font-variant-numeric", "font-variant-alternates", "font-variant-east-asian", NULL };
 
   const char **all_subproperties;
 
