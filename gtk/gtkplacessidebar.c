@@ -125,9 +125,12 @@ struct _GtkPlacesSidebar {
   GtkWidget *new_bookmark_row;
 
   GtkBookmarksManager     *bookmarks_manager;
+
 #ifdef HAVE_CLOUDPROVIDERS
   CloudProviders *cloud_manager;
+  GList *cloud_rows;
 #endif
+
   GVolumeMonitor    *volume_monitor;
   GtkTrashMonitor   *trash_monitor;
   GtkSettings       *gtk_settings;
@@ -156,8 +159,6 @@ struct _GtkPlacesSidebar {
   GtkWidget *row_placeholder;
   DropState drop_state;
   GtkGesture *long_press_gesture;
-
-  GList *cloud_rows;
 
   /* volume mounting - delayed open process */
   GtkPlacesOpenFlags go_to_after_mount_open_flags;
