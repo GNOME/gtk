@@ -3515,12 +3515,20 @@ gtk_window_release_application (GtkWindow *window)
 /**
  * gtk_window_set_application:
  * @window: a #GtkWindow
- * @application: (allow-none): a #GtkApplication, or %NULL
+ * @application: (allow-none): a #GtkApplication, or %NULL to unset
  *
  * Sets or unsets the #GtkApplication associated with the window.
  *
- * The application will be kept alive for at least as long as the window
- * is open.
+ * The application will be kept alive for at least as long as it has any windows
+ * associated with it (see g_application_hold() for a way to keep it alive
+ * without windows).
+ *
+ * Normally, the connection between the application and the window will remain
+ * until the window is destroyed, but you can explicitly remove it by setting
+ * the @application to %NULL.
+ *
+ * This is equivalent to calling gtk_application_remove_window() and/or
+ * gtk_application_add_window() on the old/new applications as relevant.
  *
  * Since: 3.0
  **/
