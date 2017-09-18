@@ -230,6 +230,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   GtkCssValue *position;
   GtkCssValue *caps;
   GtkCssValue *numeric;
+  GtkCssValue *alternatives;
   GString *s;
   int i;
 
@@ -367,6 +368,15 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
         g_string_append (s, "ordn 1");
       else if (strcmp (_gtk_css_ident_value_get (value), "slashed-zero") == 0)
         g_string_append (s, "zero 1");
+    }
+
+  alternatives = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATIVES);
+  for (i = 0; i < _gtk_css_array_value_get_n_values (alternatives); i++)
+    {
+      GtkCssValue *value = _gtk_css_array_value_get_nth (alternatives, i);
+      if (s->len > 0) g_string_append (s, ", ");
+      if (strcmp (_gtk_css_ident_value_get (value), "historical-forms") == 0)
+        g_string_append (s, "hist 1");
     }
 
   attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
