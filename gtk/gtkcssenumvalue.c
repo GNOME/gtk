@@ -376,53 +376,6 @@ _gtk_css_font_style_value_get (const GtkCssValue *value)
   return value->value;
 }
 
-/* PangoVariant */
-
-static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT = {
-  gtk_css_value_enum_free,
-  gtk_css_value_enum_compute,
-  gtk_css_value_enum_equal,
-  gtk_css_value_enum_transition,
-  gtk_css_value_enum_print
-};
-
-static GtkCssValue font_variant_values[] = {
-  { &GTK_CSS_VALUE_FONT_VARIANT, 1, PANGO_VARIANT_NORMAL, "normal" },
-  { &GTK_CSS_VALUE_FONT_VARIANT, 1, PANGO_VARIANT_SMALL_CAPS, "small-caps" }
-};
-
-GtkCssValue *
-_gtk_css_font_variant_value_new (PangoVariant font_variant)
-{
-  g_return_val_if_fail ((gint)font_variant < G_N_ELEMENTS (font_variant_values), NULL);
-
-  return _gtk_css_value_ref (&font_variant_values[font_variant]);
-}
-
-GtkCssValue *
-_gtk_css_font_variant_value_try_parse (GtkCssParser *parser)
-{
-  guint i;
-
-  g_return_val_if_fail (parser != NULL, NULL);
-
-  for (i = 0; i < G_N_ELEMENTS (font_variant_values); i++)
-    {
-      if (_gtk_css_parser_try (parser, font_variant_values[i].name, TRUE))
-        return _gtk_css_value_ref (&font_variant_values[i]);
-    }
-
-  return NULL;
-}
-
-PangoVariant
-_gtk_css_font_variant_value_get (const GtkCssValue *value)
-{
-  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_VARIANT, PANGO_VARIANT_NORMAL);
-
-  return value->value;
-}
-
 /* PangoWeight */
 
 #define BOLDER -1

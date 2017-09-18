@@ -45,10 +45,6 @@ GtkCssValue *   _gtk_css_font_style_value_new         (PangoStyle         style)
 GtkCssValue *   _gtk_css_font_style_value_try_parse   (GtkCssParser      *parser);
 PangoStyle      _gtk_css_font_style_value_get         (const GtkCssValue *value);
 
-GtkCssValue *   _gtk_css_font_variant_value_new       (PangoVariant       variant);
-GtkCssValue *   _gtk_css_font_variant_value_try_parse (GtkCssParser      *parser);
-PangoVariant    _gtk_css_font_variant_value_get       (const GtkCssValue *value);
-
 GtkCssValue *   _gtk_css_font_weight_value_new        (PangoWeight        weight);
 GtkCssValue *   _gtk_css_font_weight_value_try_parse  (GtkCssParser      *parser);
 PangoWeight     _gtk_css_font_weight_value_get        (const GtkCssValue *value);

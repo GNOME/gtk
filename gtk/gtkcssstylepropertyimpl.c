@@ -260,27 +260,6 @@ font_weight_query (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
-font_variant_parse (GtkCssStyleProperty *property,
-                    GtkCssParser        *parser)
-{
-  GtkCssValue *value = _gtk_css_font_variant_value_try_parse (parser);
-  
-  if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
-
-  return value;
-}
-
-static void
-font_variant_query (GtkCssStyleProperty *property,
-                    const GtkCssValue   *css_value,
-                     GValue              *value)
-{
-  g_value_init (value, PANGO_TYPE_VARIANT);
-  g_value_set_enum (value, _gtk_css_font_variant_value_get (css_value));
-}
-
-static GtkCssValue *
 font_stretch_parse (GtkCssStyleProperty *property,
                     GtkCssParser        *parser)
 {
@@ -1238,14 +1217,6 @@ _gtk_css_style_property_init_properties (void)
                                           font_style_parse,
                                           font_style_query,
                                           _gtk_css_font_style_value_new (PANGO_STYLE_NORMAL));
-  gtk_css_style_property_register        ("font-variant",
-                                          GTK_CSS_PROPERTY_FONT_VARIANT,
-                                          PANGO_TYPE_VARIANT,
-                                          GTK_STYLE_PROPERTY_INHERIT,
-                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
-                                          font_variant_parse,
-                                          font_variant_query,
-                                          _gtk_css_font_variant_value_new (PANGO_VARIANT_NORMAL));
   gtk_css_style_property_register        ("font-weight",
                                           GTK_CSS_PROPERTY_FONT_WEIGHT,
                                           PANGO_TYPE_WEIGHT,

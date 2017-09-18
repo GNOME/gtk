@@ -416,6 +416,16 @@ parse_border (GtkCssShorthandProperty  *shorthand,
   return TRUE;
 }
 
+static GtkCssValue *
+_gtk_css_font_variant_value_try_parse (GtkCssParser *parser)
+{
+  if (_gtk_css_parser_try (parser, "normal", TRUE))
+    return _gtk_css_ident_value_new ("normal");
+  else if (_gtk_css_parser_try (parser, "small-caps", TRUE))
+    return _gtk_css_ident_value_new ("small-caps");
+  return NULL;
+}
+
 static gboolean
 parse_font (GtkCssShorthandProperty  *shorthand,
             GtkCssValue             **values,
@@ -857,6 +867,219 @@ parse_text_decoration (GtkCssShorthandProperty  *shorthand,
 }
 
 static gboolean
+parse_font_variant (GtkCssShorthandProperty  *shorthand,
+                    GtkCssValue             **values,
+                    GtkCssParser             *parser)
+{
+  if (_gtk_css_parser_try (parser, "normal", TRUE))
+    {
+      /* all initial values */
+    }
+  else if (_gtk_css_parser_try (parser, "none", TRUE))
+    {
+      /* all initial values, except for font-variant-ligatures */
+      values[0] = _gtk_css_array_value_new (_gtk_css_ident_value_new ("none"));
+    }
+  else
+    {
+      gboolean found;
+      GtkCssValue *lig_values[4] = { NULL, NULL, NULL, NULL };
+      guint n_ligs = 0;
+      gboolean common = FALSE;
+      gboolean discretionary = FALSE;
+      gboolean historical = FALSE;
+      gboolean contextual = FALSE;
+      GtkCssValue *num_values[5] = { NULL, NULL, NULL, NULL };
+      guint n_num = 0;
+      gboolean figure = FALSE;
+      gboolean spacing = FALSE;
+      gboolean fraction = FALSE;
+      gboolean ordinal = FALSE;
+      gboolean zero = FALSE;
+      GtkCssValue *alt_value;
+      GtkCssValue *ea_values[5] = { NULL, NULL, NULL, NULL };
+      guint n_ea = 0;
+      gboolean variant = FALSE;
+      gboolean width = FALSE;
+      gboolean ruby = FALSE;
+
+      do {
+        found = FALSE;
+        if (!common)
+          {
+            lig_values[n_ligs] = _gtk_css_ident_value_try (parser, "common-ligatures",
+                                                                   "no-common-ligatures", NULL);
+            if (lig_values[n_ligs])
+              {
+                n_ligs++;
+                common = TRUE;
+                found = TRUE;
+              }
+          }
+        if (!discretionary)
+          {
+            lig_values[n_ligs] = _gtk_css_ident_value_try (parser, "discretionary-ligatures",
+                                                                   "no-discretionary-ligatures", NULL);
+            if (lig_values[n_ligs])
+              {
+                n_ligs++;
+                discretionary = TRUE;
+                found = TRUE;
+              }
+          }
+        if (!historical)
+          {
+            lig_values[n_ligs] = _gtk_css_ident_value_try (parser, "historical-ligatures",
+                                                                   "no-historical-ligatures", NULL);
+            if (lig_values[n_ligs])
+              {
+                n_ligs++;
+                historical = TRUE;
+                found = TRUE;
+              }
+          }
+        if (!contextual)
+          {
+            lig_values[n_ligs] = _gtk_css_ident_value_try (parser, "contextual",
+                                                                   "no-contextual", NULL);
+            if (lig_values[n_ligs])
+              {
+                n_ligs++;
+                contextual = TRUE;
+                found = TRUE;
+              }
+          }
+
+        if (!figure)
+          {
+            num_values[n_num] = _gtk_css_ident_value_try (parser, "lining-nums",
+                                                                  "oldstyle-nums", NULL);
+            if (num_values[n_num])
+              {
+                n_num++;
+                figure = TRUE;
+                found = TRUE;
+              }
+          }
+        if (!spacing)
+          {
+            num_values[n_num] = _gtk_css_ident_value_try (parser, "proportional-nums",
+                                                                  "tabular-nums", NULL);
+            if (num_values[n_num])
+              {
+                n_num++;
+                spacing = TRUE;
+                found = TRUE;
+              }
+          }
+        if (!fraction)
+          {
+            num_values[n_num] = _gtk_css_ident_value_try (parser, "diagonal-fractions",
+                                                                  "stacked-fractions", NULL);
+            if (num_values[n_num])
+              {
+                n_num++;
+                fraction = TRUE;
+                found = TRUE;
+              }
+          }
+        if (!ordinal)
+          {
+            num_values[n_num] = _gtk_css_ident_value_try (parser, "ordinal", NULL);
+            if (num_values[n_num])
+              {
+                n_num++;
+                ordinal = TRUE;
+                found = TRUE;
+              }
+          }
+        if (!zero)
+          {
+            num_values[n_num] = _gtk_css_ident_value_try (parser, "slashed-zero", NULL);
+            if (num_values[n_num])
+              {
+                n_num++;
+                zero = TRUE;
+                found = TRUE;
+              }
+          }
+        if (alt_value == NULL)
+          {
+            alt_value = _gtk_css_ident_value_try (parser, "historical-forms", NULL);
+            if (alt_value)
+              found = TRUE;
+          }
+
+        if (values[1] == NULL)
+          {
+            values[1] = _gtk_css_ident_value_try (parser, "sub", "super", NULL);
+            if (values[1])
+              found = TRUE;
+          }
+        if (values[2] == NULL)
+          {
+            values[2] = _gtk_css_ident_value_try (parser, "small-caps", "all-small-caps",
+                                                          "petite-caps", "all-petite-caps",
+                                                          "unicase", "titling-caps", NULL);
+            if (values[2])
+              found = TRUE;
+          }
+
+        if (!variant)
+          {
+            ea_values[n_ea] = _gtk_css_ident_value_try (parser, "jis78", "jis83", "jis90", "jis04",
+                                                        "simplified", "traditional", NULL);
+            if (ea_values[n_ea])
+              {
+                n_ea++;
+                variant = TRUE;
+              }
+         }
+        if (!width)
+          {
+            ea_values[n_ea] = _gtk_css_ident_value_try (parser, "full-width"
+                                                                "proportional-width", NULL);
+            if (ea_values[n_ea])
+              {
+                n_ea++;
+                width = TRUE;
+              }
+         }
+        if (!ruby)
+          {
+            ea_values[n_ea] = _gtk_css_ident_value_try (parser, "ruby", NULL);
+            if (ea_values[n_ea])
+              {
+                n_ea++;
+                ruby = TRUE;
+              }
+         }
+
+
+        if (!found)
+          {
+            _gtk_css_parser_error (parser, "Unknown value for property");
+            return FALSE;
+          }
+      } while (!value_is_done_parsing (parser));
+
+      if (n_ligs > 0)
+        values[0] = _gtk_css_array_value_new_from_array (lig_values, n_ligs);
+
+      if (n_num > 0)
+        values[3] = _gtk_css_array_value_new_from_array (num_values, n_num);
+
+      if (alt_value)
+        values[4] = _gtk_css_array_value_new (alt_value);
+
+      if (n_ea > 0)
+        values[5] = _gtk_css_array_value_new_from_array  (ea_values, n_ea);
+    }
+
+  return TRUE;
+}
+
+static gboolean
 parse_all (GtkCssShorthandProperty  *shorthand,
            GtkCssValue             **values,
            GtkCssParser             *parser)
@@ -949,10 +1172,6 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
   if (v)
     pango_font_description_set_style (description, _gtk_css_font_style_value_get (v));
 
-  v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-variant"))), query_data);
-  if (v)
-    pango_font_description_set_variant (description, _gtk_css_font_variant_value_get (v));
-
   v = (* query_func) (_gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (_gtk_style_property_lookup ("font-weight"))), query_data);
   if (v)
     pango_font_description_set_weight (description, _gtk_css_font_weight_value_get (v));
@@ -1027,7 +1246,7 @@ void
 _gtk_css_shorthand_property_init_properties (void)
 {
   /* The order is important here, be careful when changing it */
-  const char *font_subproperties[] = { "font-family", "font-style", "font-variant", "font-weight", "font-stretch", "font-size", NULL };
+  const char *font_subproperties[] = { "font-family", "font-style", "font-variant-caps", "font-weight", "font-stretch", "font-size", NULL };
   const char *margin_subproperties[] = { "margin-top", "margin-right", "margin-bottom", "margin-left", NULL };
   const char *padding_subproperties[] = { "padding-top", "padding-right", "padding-bottom", "padding-left", NULL };
   const char *border_width_subproperties[] = { "border-top-width", "border-right-width", "border-bottom-width", "border-left-width", NULL };
@@ -1053,6 +1272,7 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *animation_subproperties[] = { "animation-name", "animation-iteration-count", "animation-duration", "animation-delay", 
                                             "animation-timing-function", "animation-direction", "animation-fill-mode", NULL };
   const char *text_decoration_subproperties[] = { "text-decoration-line", "text-decoration-style", "text-decoration-color", NULL };
+  const char *font_variant_subproperties[] = { "font-variant-ligatures", "font-variant-position", "font-variant-caps", "font-variant-numeric", "font-variant-alternatives", "font-variant-east-asian", NULL };
 
   const char **all_subproperties;
 
@@ -1150,6 +1370,11 @@ _gtk_css_shorthand_property_init_properties (void)
                                           G_TYPE_NONE,
                                           text_decoration_subproperties,
                                           parse_text_decoration,
+                                          NULL);
+  _gtk_css_shorthand_property_register   ("font-variant",
+                                          G_TYPE_NONE,
+                                          font_variant_subproperties,
+                                          parse_font_variant,
                                           NULL);
 
   all_subproperties = get_all_subproperties ();
