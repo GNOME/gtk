@@ -531,6 +531,19 @@ parse_text_decoration_style (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_font_kerning (GtkCssStyleProperty *property,
+                    GtkCssParser        *parser)
+{
+  GtkCssValue *value = NULL;
+
+  value = _gtk_css_ident_value_try (parser, "auto", "normal", "none", NULL);
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
@@ -1015,6 +1028,14 @@ _gtk_css_style_property_init_properties (void)
                                           parse_text_decoration_style,
                                           NULL,
                                           _gtk_css_text_decoration_style_value_new (GTK_CSS_TEXT_DECORATION_STYLE_SOLID));
+  gtk_css_style_property_register        ("font-kerning",
+                                          GTK_CSS_PROPERTY_FONT_KERNING,
+                                          G_TYPE_NONE,
+                                          0,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          parse_font_kerning,
+                                          NULL,
+                                          _gtk_css_ident_value_new ("auto"));
 
   gtk_css_style_property_register        ("text-shadow",
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,
