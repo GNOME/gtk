@@ -629,6 +629,19 @@ parse_font_variant_ligatures (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_font_variant_position (GtkCssStyleProperty *property,
+                             GtkCssParser        *parser)
+{
+  GtkCssValue *value = NULL;
+
+  value = _gtk_css_ident_value_try (parser, "normal", "sub", "super", NULL);
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
@@ -1129,7 +1142,14 @@ _gtk_css_style_property_init_properties (void)
                                           parse_font_variant_ligatures,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
-
+  gtk_css_style_property_register        ("font-variant-position",
+                                          GTK_CSS_PROPERTY_FONT_VARIANT_POSITION,
+                                          G_TYPE_NONE,
+                                          0,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          parse_font_variant_position,
+                                          NULL,
+                                          _gtk_css_ident_value_new ("normal"));
   gtk_css_style_property_register        ("text-shadow",
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,
                                           G_TYPE_NONE,

@@ -227,6 +227,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   gint letter_spacing;
   GtkCssValue *kerning;
   GtkCssValue *ligatures;
+  GtkCssValue *position;
   GString *s;
   int i;
 
@@ -265,6 +266,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     }
 
   /* OpenType features */
+
   s = g_string_new ("");
 
   kerning = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_KERNING);
@@ -296,6 +298,18 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
         g_string_append (s, "calt 1");
       else if (strcmp (_gtk_css_ident_value_get (value), "no-contextual") == 0)
         g_string_append (s, "calt 0");
+    }
+
+  position = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_POSITION);
+  if (strcmp (_gtk_css_ident_value_get (position), "sub") == 0)
+    {
+      if (s->len > 0) g_string_append (s, ", ");
+      g_string_append (s, "subs 1");
+    }
+  else if (strcmp (_gtk_css_ident_value_get (kerning), "super") == 0)
+    {
+      if (s->len > 0) g_string_append (s, ", ");
+      g_string_append (s, "sups 1");
     }
 
   attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
