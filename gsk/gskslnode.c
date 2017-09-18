@@ -21,6 +21,7 @@
 #include "gskslnodeprivate.h"
 
 #include "gskslpreprocessorprivate.h"
+#include "gskslfunctionprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
@@ -77,7 +78,11 @@ gsk_sl_node_program_print (GskSlNode *node,
     gsk_sl_node_print (l->data, string);
 
   for (l = program->functions; l; l = l->next)
-    gsk_sl_node_print (l->data, string);
+    {
+      if (l != program->functions || program->declarations != NULL)
+        g_string_append (string, "\n");
+      gsk_sl_node_print (l->data, string);
+    }
 }
 
 static GskSlType *
@@ -832,6 +837,76 @@ static const GskSlNodeClass GSK_SL_NODE_REFERENCE = {
   gsk_sl_node_reference_is_constant
 };
 
+/* FUNCTION_CALL */
+
+typedef struct _GskSlNodeFunctionCall GskSlNodeFunctionCall;
+
+struct _GskSlNodeFunctionCall {
+  GskSlNode parent;
+
+  GskSlFunction *function;
+  GskSlNode **arguments;
+  guint n_arguments;
+};
+
+static void
+gsk_sl_node_function_call_free (GskSlNode *node)
+{
+  GskSlNodeFunctionCall *function_call = (GskSlNodeFunctionCall *) node;
+  guint i;
+
+  for (i = 0; i < function_call->n_arguments; i++)
+    {
+      gsk_sl_node_unref (function_call->arguments[i]);
+    }
+  g_free (function_call->arguments);
+
+  gsk_sl_function_unref (function_call->function);
+
+  g_slice_free (GskSlNodeFunctionCall, function_call);
+}
+
+static void
+gsk_sl_node_function_call_print (GskSlNode *node,
+                                 GString   *string)
+{
+  GskSlNodeFunctionCall *function_call = (GskSlNodeFunctionCall *) node;
+  guint i;
+
+  gsk_sl_function_print_name (function_call->function, string);
+  g_string_append (string, " (");
+  
+  for (i = 0; i < function_call->n_arguments; i++)
+    {
+      if (i > 0)
+        g_string_append (string, ", ");
+      gsk_sl_node_print (function_call->arguments[i], string);
+    }
+
+  g_string_append (string, ")");
+}
+
+static GskSlType *
+gsk_sl_node_function_call_get_return_type (GskSlNode *node)
+{
+  GskSlNodeFunctionCall *function_call = (GskSlNodeFunctionCall *) node;
+
+  return gsk_sl_function_get_return_type (function_call->function);
+}
+
+static gboolean
+gsk_sl_node_function_call_is_constant (GskSlNode *node)
+{
+  return FALSE;
+}
+
+static const GskSlNodeClass GSK_SL_NODE_FUNCTION_CALL = {
+  gsk_sl_node_function_call_free,
+  gsk_sl_node_function_call_print,
+  gsk_sl_node_function_call_get_return_type,
+  gsk_sl_node_function_call_is_constant
+};
+
 /* CONSTANT */
 
 typedef struct _GskSlNodeConstant GskSlNodeConstant;
@@ -970,6 +1045,89 @@ gsk_sl_node_parse_function_prototype (GskSlNodeProgram  *program,
 }
 
 static GskSlNode *
+gsk_sl_node_parse_assignment_expression (GskSlNodeProgram  *program,
+                                         GskSlScope        *scope,
+                                         GskSlPreprocessor *stream);
+
+static GskSlNode *
+gsk_sl_node_parse_constructor_call (GskSlNodeProgram  *program,
+                                    GskSlScope        *scope,
+                                    GskSlPreprocessor *stream,
+                                    GskSlType         *type)
+{
+  GskSlNodeFunctionCall *call;
+  const GskSlToken *token;
+  GskSlType **types;
+  GError *error = NULL;
+  gboolean fail = FALSE;
+  guint i;
+
+  call = gsk_sl_node_new (GskSlNodeFunctionCall, &GSK_SL_NODE_FUNCTION_CALL);
+  call->function = gsk_sl_function_new_constructor (type);
+  g_assert (call->function);
+
+  token = gsk_sl_preprocessor_get (stream);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+    {
+      gsk_sl_preprocessor_error (stream, "Expected opening \"(\" when calling constructor");
+      gsk_sl_node_unref ((GskSlNode *) call);
+      return NULL;
+    }
+  gsk_sl_preprocessor_consume (stream, (GskSlNode *) call);
+
+  token = gsk_sl_preprocessor_get (stream);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+    {
+      GPtrArray *arguments;
+  
+      arguments = g_ptr_array_new ();
+      while (TRUE)
+        {
+          GskSlNode *node = gsk_sl_node_parse_assignment_expression (program, scope, stream);
+
+          if (node != NULL)
+            g_ptr_array_add (arguments, node);
+          else
+            fail = TRUE;
+          
+          token = gsk_sl_preprocessor_get (stream);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
+            break;
+          gsk_sl_preprocessor_consume (stream, (GskSlNode *) call);
+        }
+
+      call->n_arguments = arguments->len;
+      call->arguments = (GskSlNode **) g_ptr_array_free (arguments, FALSE);
+    }
+
+  types = g_newa (GskSlType *, call->n_arguments);
+  for (i = 0; i < call->n_arguments; i++)
+    types[i] = gsk_sl_node_get_return_type (call->arguments[i]);
+  if (!gsk_sl_function_matches (call->function, types, call->n_arguments, &error))
+    {
+      gsk_sl_preprocessor_error (stream, "%s", error->message);
+      g_clear_error (&error);
+      fail = TRUE;
+    }
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+    {
+      gsk_sl_preprocessor_error (stream, "Expected closing \")\" after arguments.");
+      gsk_sl_node_unref ((GskSlNode *) call);
+      return NULL;
+    }
+  gsk_sl_preprocessor_consume (stream, (GskSlNode *) call);
+
+  if (fail)
+    {
+      gsk_sl_node_unref ((GskSlNode *) call);
+      return NULL;
+    }
+
+  return (GskSlNode *) call;
+}
+
+static GskSlNode *
 gsk_sl_node_parse_primary_expression (GskSlNodeProgram  *program,
                                       GskSlScope        *scope,
                                       GskSlPreprocessor *stream)
@@ -1035,6 +1193,61 @@ gsk_sl_node_parse_primary_expression (GskSlNodeProgram  *program,
       gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
       return (GskSlNode *) constant;
 
+    case GSK_SL_TOKEN_VOID:
+    case GSK_SL_TOKEN_FLOAT:
+    case GSK_SL_TOKEN_DOUBLE:
+    case GSK_SL_TOKEN_INT:
+    case GSK_SL_TOKEN_UINT:
+    case GSK_SL_TOKEN_BOOL:
+    case GSK_SL_TOKEN_BVEC2:
+    case GSK_SL_TOKEN_BVEC3:
+    case GSK_SL_TOKEN_BVEC4:
+    case GSK_SL_TOKEN_IVEC2:
+    case GSK_SL_TOKEN_IVEC3:
+    case GSK_SL_TOKEN_IVEC4:
+    case GSK_SL_TOKEN_UVEC2:
+    case GSK_SL_TOKEN_UVEC3:
+    case GSK_SL_TOKEN_UVEC4:
+    case GSK_SL_TOKEN_VEC2:
+    case GSK_SL_TOKEN_VEC3:
+    case GSK_SL_TOKEN_VEC4:
+    case GSK_SL_TOKEN_DVEC2:
+    case GSK_SL_TOKEN_DVEC3:
+    case GSK_SL_TOKEN_DVEC4:
+    case GSK_SL_TOKEN_MAT2:
+    case GSK_SL_TOKEN_MAT3:
+    case GSK_SL_TOKEN_MAT4:
+    case GSK_SL_TOKEN_DMAT2:
+    case GSK_SL_TOKEN_DMAT3:
+    case GSK_SL_TOKEN_DMAT4:
+    case GSK_SL_TOKEN_MAT2X2:
+    case GSK_SL_TOKEN_MAT2X3:
+    case GSK_SL_TOKEN_MAT2X4:
+    case GSK_SL_TOKEN_MAT3X2:
+    case GSK_SL_TOKEN_MAT3X3:
+    case GSK_SL_TOKEN_MAT3X4:
+    case GSK_SL_TOKEN_MAT4X2:
+    case GSK_SL_TOKEN_MAT4X3:
+    case GSK_SL_TOKEN_MAT4X4:
+    case GSK_SL_TOKEN_DMAT2X2:
+    case GSK_SL_TOKEN_DMAT2X3:
+    case GSK_SL_TOKEN_DMAT2X4:
+    case GSK_SL_TOKEN_DMAT3X2:
+    case GSK_SL_TOKEN_DMAT3X3:
+    case GSK_SL_TOKEN_DMAT3X4:
+    case GSK_SL_TOKEN_DMAT4X2:
+    case GSK_SL_TOKEN_DMAT4X3:
+    case GSK_SL_TOKEN_DMAT4X4:
+      {
+        GskSlType *type;
+
+        type = gsk_sl_type_new_parse (stream);
+        if (type == NULL)
+          return NULL;
+
+        return gsk_sl_node_parse_constructor_call (program, scope, stream, type);
+      }
+
     default:
       gsk_sl_preprocessor_error (stream, "Expected an expression.");
       gsk_sl_preprocessor_consume (stream, (GskSlNode *) program);
@@ -1043,11 +1256,19 @@ gsk_sl_node_parse_primary_expression (GskSlNodeProgram  *program,
 }
 
 static GskSlNode *
+gsk_sl_node_parse_postfix_expression (GskSlNodeProgram  *program,
+                                      GskSlScope        *scope,
+                                      GskSlPreprocessor *stream)
+{
+  return gsk_sl_node_parse_primary_expression (program, scope, stream);
+}
+
+static GskSlNode *
 gsk_sl_node_parse_unary_expression (GskSlNodeProgram  *program,
                                     GskSlScope        *scope,
                                     GskSlPreprocessor *stream)
 {
-  return gsk_sl_node_parse_primary_expression (program, scope, stream);
+  return gsk_sl_node_parse_postfix_expression (program, scope, stream);
 }
 
 static GskSlNode *
@@ -1693,18 +1914,14 @@ gsk_sl_node_parse_expression (GskSlNodeProgram  *program,
 static GskSlNode *
 gsk_sl_node_parse_declaration (GskSlNodeProgram  *program,
                                GskSlScope        *scope,
-                               GskSlPreprocessor *stream)
+                               GskSlPreprocessor *stream,
+                               GskSlType         *type)
 {
   GskSlNodeDeclaration *declaration;
   const GskSlToken *token;
-  GskSlType *type;
-
-  type = gsk_sl_type_new_parse (stream);
-  if (type == NULL)
-    return FALSE;
 
   declaration = gsk_sl_node_new (GskSlNodeDeclaration, &GSK_SL_NODE_DECLARATION);
-  declaration->type = type;
+  declaration->type = gsk_sl_type_ref (type);
   
   token = gsk_sl_preprocessor_get (stream);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
@@ -1817,11 +2034,27 @@ gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
       case GSK_SL_TOKEN_DMAT4X2:
       case GSK_SL_TOKEN_DMAT4X3:
       case GSK_SL_TOKEN_DMAT4X4:
-        node = gsk_sl_node_parse_declaration (program, function->scope, stream);
-        if (node)
-          {
-            function->statements = g_slist_append (function->statements, node);
-          }
+        {
+          GskSlType *type;
+
+          type = gsk_sl_type_new_parse (stream);
+          if (type == NULL)
+            return FALSE;
+
+          token = gsk_sl_preprocessor_get (stream);
+
+          if (token->type == GSK_SL_TOKEN_LEFT_BRACE)
+            node = gsk_sl_node_parse_constructor_call (program, function->scope, stream, type);
+          else
+            node = gsk_sl_node_parse_declaration (program, function->scope, stream, type);
+
+          gsk_sl_type_unref (type);
+
+          if (node)
+            {
+              function->statements = g_slist_append (function->statements, node);
+            }
+        }
         break;
 
       default:
@@ -1837,7 +2070,7 @@ gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
 out:
   gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
 
-  program->functions = g_slist_prepend (program->functions, function);
+  program->functions = g_slist_append (program->functions, function);
   return result;
 }
 
