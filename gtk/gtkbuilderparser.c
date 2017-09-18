@@ -268,6 +268,12 @@ parse_object (GMarkupParseContext  *context,
       return;
     }
 
+  /* Even though 'class' is a mandatory attribute, we don't flag its
+   * absence here because it's supposed to throw
+   * GTK_BUILDER_ERROR_MISSING_ATTRIBUTE, not
+   * G_MARKUP_ERROR_MISSING_ATTRIBUTE. It's handled immediately
+   * afterwards.
+   */
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "class", &object_class,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "constructor", &constructor,
@@ -276,6 +282,12 @@ parse_object (GMarkupParseContext  *context,
                                     G_MARKUP_COLLECT_INVALID))
     {
       _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      return;
+    }
+
+  if (!object_class)
+    {
+      error_missing_attribute (data, element_name, "class", error);
       return;
     }
 
@@ -295,8 +307,10 @@ parse_object (GMarkupParseContext  *context,
           return;
         }
     }
-  else if (object_class)
+  else
     {
+      g_assert_nonnull (object_class);
+
       object_type = gtk_builder_get_type_from_name (data->builder, object_class);
       if (object_type == G_TYPE_INVALID)
         {
@@ -307,11 +321,6 @@ parse_object (GMarkupParseContext  *context,
           _gtk_builder_prefix_error (data->builder, context, error);
           return;
        }
-    }
-  else
-    {
-      error_missing_attribute (data, element_name, "class", error);
-      return;
     }
 
   if (!object_id)
