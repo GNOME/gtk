@@ -81,6 +81,38 @@ GtkCssValue *   _gtk_css_icon_style_value_new         (GtkCssIconStyle    icon_s
 GtkCssValue *   _gtk_css_icon_style_value_try_parse   (GtkCssParser      *parser);
 GtkCssIconStyle _gtk_css_icon_style_value_get         (const GtkCssValue *value);
 
+GtkCssValue *     _gtk_css_font_kerning_value_new       (GtkCssFontKerning  kerning);
+GtkCssValue *     _gtk_css_font_kerning_value_try_parse (GtkCssParser      *parser);
+GtkCssFontKerning _gtk_css_font_kerning_value_get       (const GtkCssValue *value);
+
+GtkCssValue *        _gtk_css_font_variant_position_value_new       (GtkCssFontVariantPosition  position);
+GtkCssValue *        _gtk_css_font_variant_position_value_try_parse (GtkCssParser         *parser);
+GtkCssFontVariantPosition _gtk_css_font_variant_position_value_get       (const GtkCssValue    *value);
+
+GtkCssValue *         _gtk_css_font_variant_caps_value_new       (GtkCssFontVariantCaps  caps);
+GtkCssValue *         _gtk_css_font_variant_caps_value_try_parse (GtkCssParser          *parser);
+GtkCssFontVariantCaps _gtk_css_font_variant_caps_value_get       (const GtkCssValue     *value);
+
+GtkCssValue *        _gtk_css_font_variant_alternate_value_new       (GtkCssFontVariantAlternate  alternates);
+GtkCssValue *        _gtk_css_font_variant_alternate_value_try_parse (GtkCssParser         *parser);
+GtkCssFontVariantAlternate _gtk_css_font_variant_alternate_value_get       (const GtkCssValue    *value);
+
+GtkCssValue *        _gtk_css_font_variant_ligature_value_new          (GtkCssFontVariantLigature  ligatures);
+GtkCssFontVariantLigature _gtk_css_font_variant_ligature_try_parse_one (GtkCssParser               *parser,
+                                                                        GtkCssFontVariantLigature   base);
+GtkCssFontVariantLigature _gtk_css_font_variant_ligature_value_get     (const GtkCssValue          *value);
+
+GtkCssValue *        _gtk_css_font_variant_numeric_value_new          (GtkCssFontVariantNumeric     numeric);
+GtkCssFontVariantNumeric _gtk_css_font_variant_numeric_try_parse_one (GtkCssParser               *parser,
+                                                                      GtkCssFontVariantNumeric    base);
+GtkCssFontVariantNumeric _gtk_css_font_variant_numeric_value_get     (const GtkCssValue          *value);
+
+
+GtkCssValue *        _gtk_css_font_variant_east_asian_value_new          (GtkCssFontVariantEastAsian east_asian);
+GtkCssFontVariantEastAsian _gtk_css_font_variant_east_asian_try_parse_one (GtkCssParser               *parser,
+                                                                      GtkCssFontVariantEastAsian base);
+GtkCssFontVariantEastAsian _gtk_css_font_variant_east_asian_value_get     (const GtkCssValue          *value);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_ENUM_VALUE_PRIVATE_H__ */

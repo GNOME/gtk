@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+/*
  * Copyright (C) 2010 Carlos Garnacho <carlosg@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -513,9 +513,8 @@ static GtkCssValue *
 parse_font_kerning (GtkCssStyleProperty *property,
                     GtkCssParser        *parser)
 {
-  GtkCssValue *value = NULL;
+  GtkCssValue *value = _gtk_css_font_kerning_value_try_parse (parser);
 
-  value = _gtk_css_ident_value_try (parser, "auto", "normal", "none", NULL);
   if (value == NULL)
     _gtk_css_parser_error (parser, "unknown value for property");
 
@@ -536,73 +535,24 @@ parse_font_variant_ligatures (GtkCssStyleProperty *property,
                               GtkCssParser        *parser)
 {
   GtkCssValue *value = NULL;
+  GtkCssFontVariantLigature ligatures;
 
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
-    value = _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal"));
-  else if (_gtk_css_parser_try (parser, "none", TRUE))
-    value = _gtk_css_array_value_new (_gtk_css_ident_value_new ("none"));
-  else
-    {
-      GtkCssValue *values[4] = { NULL, NULL, NULL, NULL };
-      guint n_values = 0;
-      guint old_n;
-      gboolean common = FALSE;
-      gboolean discretionary = FALSE;
-      gboolean historical = FALSE;
-      gboolean contextual = FALSE;
+  ligatures = 0;
+  do {
+    GtkCssFontVariantLigature parsed;
 
-      do {
-        old_n = n_values;
-        if (!common)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "common-ligatures",
-                                                                 "no-common-ligatures", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                common = TRUE;
-              }
-          }
-        if (!discretionary)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "discretionary-ligatures",
-                                                                 "no-discretionary-ligatures", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                discretionary = TRUE;
-              }
-          }
-        if (!historical)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "historical-ligatures",
-                                                                 "no-historical-ligatures",
-                                                                 NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                historical = TRUE;
-              }
-          }
-        if (!contextual)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "contextual",
-                                                                 "no-contextual", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                contextual = TRUE;
-              }
-          }
-        if (old_n == n_values)
-          {
-            _gtk_css_parser_error (parser, "Not a valid value");
-            return NULL;
-          }
-      } while (!value_is_done_parsing (parser));
+    parsed = _gtk_css_font_variant_ligature_try_parse_one (parser, ligatures);
+    if (parsed == 0 || parsed == ligatures)
+      {
+        _gtk_css_parser_error (parser, "Not a valid value");
+        return NULL;
+      }
+    ligatures = parsed;
+  } while (!value_is_done_parsing (parser));
 
-      value = _gtk_css_array_value_new_from_array (values, n_values);
-    }
+  value = _gtk_css_font_variant_ligature_value_new (ligatures);
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "Invalid combination of values");
 
   return value;
 }
@@ -611,9 +561,8 @@ static GtkCssValue *
 parse_font_variant_position (GtkCssStyleProperty *property,
                              GtkCssParser        *parser)
 {
-  GtkCssValue *value = NULL;
+  GtkCssValue *value = _gtk_css_font_variant_position_value_try_parse (parser);
 
-  value = _gtk_css_ident_value_try (parser, "normal", "sub", "super", NULL);
   if (value == NULL)
     _gtk_css_parser_error (parser, "unknown value for property");
 
@@ -624,12 +573,8 @@ static GtkCssValue *
 parse_font_variant_caps (GtkCssStyleProperty *property,
                          GtkCssParser        *parser)
 {
-  GtkCssValue *value = NULL;
+  GtkCssValue *value = _gtk_css_font_variant_caps_value_try_parse (parser);
 
-  value = _gtk_css_ident_value_try (parser, "normal",
-                                            "small-caps", "all-small-caps",
-                                            "petite-caps", "all-petite-caps",
-                                            "unicase", "titling-caps", NULL);
   if (value == NULL)
     _gtk_css_parser_error (parser, "unknown value for property");
 
@@ -641,76 +586,24 @@ parse_font_variant_numeric (GtkCssStyleProperty *property,
                             GtkCssParser        *parser)
 {
   GtkCssValue *value = NULL;
+  GtkCssFontVariantNumeric numeric;
 
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
-    value = _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal"));
-  else
-    {
-      GtkCssValue *values[5] = { NULL, NULL, NULL, NULL };
-      guint n_values = 0;
-      guint old_n;
-      gboolean figure = FALSE;
-      gboolean spacing = FALSE;
-      gboolean fraction = FALSE;
-      gboolean ordinal = FALSE;
-      gboolean zero = FALSE;
+  numeric = 0;
+  do {
+    GtkCssFontVariantNumeric parsed;
 
-      do {
-        old_n = n_values;
-        if (!figure)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "lining-nums", "oldstyle-nums", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                figure = TRUE;
-              }
-         }
-        if (!spacing)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "proportional-nums", "tabular-nums", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                spacing = TRUE;
-              }
-         }
-        if (!fraction)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "diagonal-fractions", "stacked-fractions", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                fraction = TRUE;
-              }
-         }
-        if (!ordinal)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "ordinal", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                ordinal = TRUE;
-              }
-         }
-        if (!zero)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "slashed-zero", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                zero = TRUE;
-              }
-         }
-        if (old_n == n_values)
-          {
-            _gtk_css_parser_error (parser, "Not a valid value");
-            return NULL;
-          }
-      } while (!value_is_done_parsing (parser));
+    parsed = _gtk_css_font_variant_numeric_try_parse_one (parser, numeric);
+    if (parsed == 0 || parsed == numeric)
+      {
+        _gtk_css_parser_error (parser, "Not a valid value");
+        return NULL;
+      }
+    numeric = parsed;
+  } while (!value_is_done_parsing (parser));
 
-      value = _gtk_css_array_value_new_from_array (values, n_values);
-    }
+  value = _gtk_css_font_variant_numeric_value_new (numeric);
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "Invalid combination of values");
 
   return value;
 }
@@ -719,11 +612,10 @@ static GtkCssValue *
 parse_font_variant_alternates (GtkCssStyleProperty *property,
                                GtkCssParser        *parser)
 {
-  GtkCssValue *value = NULL;
+  GtkCssValue *value = _gtk_css_font_variant_alternate_value_try_parse (parser);
 
-  value = _gtk_css_ident_value_try (parser, "normal", "historical-forms", NULL);
   if (value == NULL)
-    _gtk_css_parser_error (parser, "Not a valid value");
+    _gtk_css_parser_error (parser, "unknown value for property");
 
   return value;
 }
@@ -733,62 +625,27 @@ parse_font_variant_east_asian (GtkCssStyleProperty *property,
                                GtkCssParser        *parser)
 {
   GtkCssValue *value = NULL;
+  GtkCssFontVariantEastAsian east_asian;
 
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
-    value = _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal"));
-  else
-    {
-      GtkCssValue *values[3] = { NULL, NULL, NULL };
-      guint n_values = 0;
-      guint old_n;
-      gboolean variant = FALSE;
-      gboolean width = FALSE;
-      gboolean ruby = FALSE;
+  east_asian = 0;
+  do {
+    GtkCssFontVariantEastAsian parsed;
 
-      do {
-        old_n = n_values;
-        if (!variant)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "jis78", "jis83", "jis90", "jis04",
-                                                                 "simplified", "traditional", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                variant = TRUE;
-              }
-         }
-        if (!width)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "full-width"
-                                                                 "proportional-width", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                width = TRUE;
-              }
-         }
-        if (!ruby)
-          {
-            values[n_values] = _gtk_css_ident_value_try (parser, "ruby", NULL);
-            if (values[n_values])
-              {
-                n_values++;
-                ruby = TRUE;
-              }
-         }
-        if (old_n == n_values)
-          {
-            _gtk_css_parser_error (parser, "Not a valid value");
-            return NULL;
-          }
-      } while (!value_is_done_parsing (parser));
+    parsed = _gtk_css_font_variant_east_asian_try_parse_one (parser, east_asian);
+    if (parsed == 0 || parsed == east_asian)
+      {
+        _gtk_css_parser_error (parser, "Not a valid value");
+        return NULL;
+      }
+    east_asian = parsed;
+  } while (!value_is_done_parsing (parser));
 
-      value = _gtk_css_array_value_new_from_array (values, n_values);
-    }
+  value = _gtk_css_font_variant_east_asian_value_new (east_asian);
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "Invalid combination of values");
 
   return value;
 }
-
 
 static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
@@ -1274,7 +1131,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_kerning,
                                           NULL,
-                                          _gtk_css_ident_value_new ("auto"));
+                                          _gtk_css_font_kerning_value_new (GTK_CSS_FONT_KERNING_AUTO));
   gtk_css_style_property_register        ("font-variant-ligatures",
                                           GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES,
                                           G_TYPE_NONE,
@@ -1282,7 +1139,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_ligatures,
                                           NULL,
-                                          _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
+                                          _gtk_css_font_variant_ligature_value_new (GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL));
   gtk_css_style_property_register        ("font-variant-position",
                                           GTK_CSS_PROPERTY_FONT_VARIANT_POSITION,
                                           G_TYPE_NONE,
@@ -1290,7 +1147,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_position,
                                           NULL,
-                                          _gtk_css_ident_value_new ("normal"));
+                                          _gtk_css_font_variant_position_value_new (GTK_CSS_FONT_VARIANT_POSITION_NORMAL));
   gtk_css_style_property_register        ("font-variant-caps",
                                           GTK_CSS_PROPERTY_FONT_VARIANT_CAPS,
                                           G_TYPE_NONE,
@@ -1298,7 +1155,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_caps,
                                           NULL,
-                                          _gtk_css_ident_value_new ("normal"));
+                                          _gtk_css_font_variant_caps_value_new (GTK_CSS_FONT_VARIANT_CAPS_NORMAL));
   gtk_css_style_property_register        ("font-variant-numeric",
                                           GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC,
                                           G_TYPE_NONE,
@@ -1306,7 +1163,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_numeric,
                                           NULL,
-                                          _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
+                                          _gtk_css_font_variant_numeric_value_new (GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL));
   gtk_css_style_property_register        ("font-variant-alternates",
                                           GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES,
                                           G_TYPE_NONE,
@@ -1314,7 +1171,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_alternates,
                                           NULL,
-                                          _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
+                                          _gtk_css_font_variant_alternate_value_new (GTK_CSS_FONT_VARIANT_ALTERNATE_NORMAL));
   gtk_css_style_property_register        ("font-variant-east-asian",
                                           GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN,
                                           G_TYPE_NONE,
@@ -1322,7 +1179,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_east_asian,
                                           NULL,
-                                          _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
+                                          _gtk_css_font_variant_east_asian_value_new (GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL));
   gtk_css_style_property_register        ("text-shadow",
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,
                                           G_TYPE_NONE,

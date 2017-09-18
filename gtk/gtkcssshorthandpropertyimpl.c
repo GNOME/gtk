@@ -878,202 +878,153 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
   else if (_gtk_css_parser_try (parser, "none", TRUE))
     {
       /* all initial values, except for font-variant-ligatures */
-      values[0] = _gtk_css_array_value_new (_gtk_css_ident_value_new ("none"));
+      values[0] = _gtk_css_font_variant_ligature_value_new (GTK_CSS_FONT_VARIANT_LIGATURE_NONE);
     }
   else
     {
-      gboolean found;
-      GtkCssValue *lig_values[4] = { NULL, NULL, NULL, NULL };
-      guint n_ligs = 0;
-      gboolean common = FALSE;
-      gboolean discretionary = FALSE;
-      gboolean historical = FALSE;
-      gboolean contextual = FALSE;
-      GtkCssValue *num_values[5] = { NULL, NULL, NULL, NULL };
-      guint n_num = 0;
-      gboolean figure = FALSE;
-      gboolean spacing = FALSE;
-      gboolean fraction = FALSE;
-      gboolean ordinal = FALSE;
-      gboolean zero = FALSE;
-      GtkCssValue *alt_value;
-      GtkCssValue *ea_values[5] = { NULL, NULL, NULL, NULL };
-      guint n_ea = 0;
-      gboolean variant = FALSE;
-      gboolean width = FALSE;
-      gboolean ruby = FALSE;
+      GtkCssFontVariantLigature ligatures;
+      GtkCssFontVariantNumeric numeric;
+      GtkCssFontVariantEastAsian east_asian;
 
+      ligatures = 0;
+      numeric = 0;
+      east_asian = 0;
       do {
-        found = FALSE;
-        if (!common)
+        GtkCssFontVariantLigature parsed_ligature;
+        GtkCssFontVariantNumeric parsed_numeric;
+        GtkCssFontVariantEastAsian parsed_east_asian;
+
+        parsed_ligature = _gtk_css_font_variant_ligature_try_parse_one (parser, ligatures);
+        if (parsed_ligature == 0 && ligatures != 0)
           {
-            lig_values[n_ligs] = _gtk_css_ident_value_try (parser, "common-ligatures",
-                                                                   "no-common-ligatures", NULL);
-            if (lig_values[n_ligs])
-              {
-                n_ligs++;
-                common = TRUE;
-                found = TRUE;
-              }
+            _gtk_css_parser_error (parser, "Invalid combination of ligature values");
+            return FALSE;
           }
-        if (!discretionary)
+        if (parsed_ligature == GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL ||
+            parsed_ligature == GTK_CSS_FONT_VARIANT_LIGATURE_NONE)
           {
-            lig_values[n_ligs] = _gtk_css_ident_value_try (parser, "discretionary-ligatures",
-                                                                   "no-discretionary-ligatures", NULL);
-            if (lig_values[n_ligs])
-              {
-                n_ligs++;
-                discretionary = TRUE;
-                found = TRUE;
-              }
+            _gtk_css_parser_error (parser, "Unexpected ligature value");
+            return FALSE;
           }
-        if (!historical)
+        if (parsed_ligature != ligatures)
           {
-            lig_values[n_ligs] = _gtk_css_ident_value_try (parser, "historical-ligatures",
-                                                                   "no-historical-ligatures", NULL);
-            if (lig_values[n_ligs])
-              {
-                n_ligs++;
-                historical = TRUE;
-                found = TRUE;
-              }
-          }
-        if (!contextual)
-          {
-            lig_values[n_ligs] = _gtk_css_ident_value_try (parser, "contextual",
-                                                                   "no-contextual", NULL);
-            if (lig_values[n_ligs])
-              {
-                n_ligs++;
-                contextual = TRUE;
-                found = TRUE;
-              }
+            ligatures = parsed_ligature;
+            goto found;
           }
 
-        if (!figure)
+        parsed_numeric = _gtk_css_font_variant_numeric_try_parse_one (parser, numeric);
+        if (parsed_numeric == 0 && numeric != 0)
           {
-            num_values[n_num] = _gtk_css_ident_value_try (parser, "lining-nums",
-                                                                  "oldstyle-nums", NULL);
-            if (num_values[n_num])
-              {
-                n_num++;
-                figure = TRUE;
-                found = TRUE;
-              }
+            _gtk_css_parser_error (parser, "Invalid combination of numeric values");
+            return FALSE;
           }
-        if (!spacing)
+        if (parsed_numeric == GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL)
           {
-            num_values[n_num] = _gtk_css_ident_value_try (parser, "proportional-nums",
-                                                                  "tabular-nums", NULL);
-            if (num_values[n_num])
-              {
-                n_num++;
-                spacing = TRUE;
-                found = TRUE;
-              }
+            _gtk_css_parser_error (parser, "Unexpected numeric value");
+            return FALSE;
           }
-        if (!fraction)
+        if (parsed_numeric != numeric)
           {
-            num_values[n_num] = _gtk_css_ident_value_try (parser, "diagonal-fractions",
-                                                                  "stacked-fractions", NULL);
-            if (num_values[n_num])
-              {
-                n_num++;
-                fraction = TRUE;
-                found = TRUE;
-              }
+            numeric = parsed_numeric;
+            goto found;
           }
-        if (!ordinal)
+
+        parsed_east_asian = _gtk_css_font_variant_east_asian_try_parse_one (parser, east_asian);
+        if (parsed_east_asian == 0 && east_asian != 0)
           {
-            num_values[n_num] = _gtk_css_ident_value_try (parser, "ordinal", NULL);
-            if (num_values[n_num])
-              {
-                n_num++;
-                ordinal = TRUE;
-                found = TRUE;
-              }
+            _gtk_css_parser_error (parser, "Invalid combination of east asian values");
+            return FALSE;
           }
-        if (!zero)
+        if (parsed_east_asian == GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL)
           {
-            num_values[n_num] = _gtk_css_ident_value_try (parser, "slashed-zero", NULL);
-            if (num_values[n_num])
-              {
-                n_num++;
-                zero = TRUE;
-                found = TRUE;
-              }
+            _gtk_css_parser_error (parser, "Unexpected east asian value");
+            return FALSE;
           }
-        if (alt_value == NULL)
+        if (parsed_east_asian != east_asian)
           {
-            alt_value = _gtk_css_ident_value_try (parser, "historical-forms", NULL);
-            if (alt_value)
-              found = TRUE;
+            east_asian = parsed_east_asian;
+            goto found;
           }
 
         if (values[1] == NULL)
           {
-            values[1] = _gtk_css_ident_value_try (parser, "sub", "super", NULL);
+            values[1] = _gtk_css_font_variant_position_value_try_parse (parser);
             if (values[1])
-              found = TRUE;
+              {
+                if (_gtk_css_font_variant_position_value_get (values[1]) == GTK_CSS_FONT_VARIANT_POSITION_NORMAL)
+                  {
+                    _gtk_css_parser_error (parser, "Unexpected position value");
+                    return FALSE;
+                  }
+                goto found;
+              }
           }
         if (values[2] == NULL)
           {
-            values[2] = _gtk_css_ident_value_try (parser, "small-caps", "all-small-caps",
-                                                          "petite-caps", "all-petite-caps",
-                                                          "unicase", "titling-caps", NULL);
+            values[2] = _gtk_css_font_variant_caps_value_try_parse (parser);
             if (values[2])
-              found = TRUE;
+              {
+                if (_gtk_css_font_variant_caps_value_get (values[2]) == GTK_CSS_FONT_VARIANT_CAPS_NORMAL)
+                  {
+                    _gtk_css_parser_error (parser, "Unexpected caps value");
+                    return FALSE;
+                  }
+                goto found;
+              }
           }
 
-        if (!variant)
+        if (values[4] == NULL)
           {
-            ea_values[n_ea] = _gtk_css_ident_value_try (parser, "jis78", "jis83", "jis90", "jis04",
-                                                        "simplified", "traditional", NULL);
-            if (ea_values[n_ea])
+            values[4] = _gtk_css_font_variant_alternate_value_try_parse (parser);
+            if (values[4])
               {
-                n_ea++;
-                variant = TRUE;
+                if (_gtk_css_font_variant_alternate_value_get (values[4]) == GTK_CSS_FONT_VARIANT_ALTERNATE_NORMAL)
+                  {
+                    _gtk_css_parser_error (parser, "Unexpected alternate value");
+                    return FALSE;
+                  }
+                goto found;
               }
-         }
-        if (!width)
-          {
-            ea_values[n_ea] = _gtk_css_ident_value_try (parser, "full-width"
-                                                                "proportional-width", NULL);
-            if (ea_values[n_ea])
-              {
-                n_ea++;
-                width = TRUE;
-              }
-         }
-        if (!ruby)
-          {
-            ea_values[n_ea] = _gtk_css_ident_value_try (parser, "ruby", NULL);
-            if (ea_values[n_ea])
-              {
-                n_ea++;
-                ruby = TRUE;
-              }
-         }
-
-
-        if (!found)
-          {
-            _gtk_css_parser_error (parser, "Unknown value for property");
-            return FALSE;
           }
-      } while (!value_is_done_parsing (parser));
 
-      if (n_ligs > 0)
-        values[0] = _gtk_css_array_value_new_from_array (lig_values, n_ligs);
+        _gtk_css_parser_error (parser, "Unknown value for property");
+        return FALSE;
 
-      if (n_num > 0)
-        values[3] = _gtk_css_array_value_new_from_array (num_values, n_num);
+found:
+        if (value_is_done_parsing (parser))
+          break;
 
-      if (alt_value)
-        values[4] = _gtk_css_array_value_new (alt_value);
+      } while (1);
 
-      if (n_ea > 0)
-        values[5] = _gtk_css_array_value_new_from_array  (ea_values, n_ea);
+      if (ligatures != 0)
+        {
+          values[0] = _gtk_css_font_variant_ligature_value_new (ligatures);
+          if (values[0] == NULL)
+            {
+              _gtk_css_parser_error (parser, "Invalid combination of ligature values");
+              return FALSE;
+            }
+        }
+
+      if (numeric != 0)
+        {
+          values[3] = _gtk_css_font_variant_numeric_value_new (numeric);
+          if (values[3] == NULL)
+            {
+              _gtk_css_parser_error (parser, "Invalid combination of numeric values");
+              return FALSE;
+            }
+        }
+
+      if (east_asian != 0)
+        {
+          values[5] = _gtk_css_font_variant_east_asian_value_new (east_asian);
+          if (values[5] == NULL)
+            {
+              _gtk_css_parser_error (parser, "Invalid combination of east asian values");
+              return FALSE;
+            }
+        }
     }
 
   return TRUE;

@@ -936,3 +936,570 @@ _gtk_css_icon_style_value_get (const GtkCssValue *value)
 
   return value->value;
 }
+
+/* GtkCssFontKerning */
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_KERNING = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue font_kerning_values[] = {
+  { &GTK_CSS_VALUE_FONT_KERNING, 1, GTK_CSS_FONT_KERNING_AUTO, "auto" },
+  { &GTK_CSS_VALUE_FONT_KERNING, 1, GTK_CSS_FONT_KERNING_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_FONT_KERNING, 1, GTK_CSS_FONT_KERNING_NONE, "none" }
+};
+
+GtkCssValue *
+_gtk_css_font_kerning_value_new (GtkCssFontKerning kerning)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (font_kerning_values); i++)
+    {
+      if (font_kerning_values[i].value == kerning)
+        return _gtk_css_value_ref (&font_kerning_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_font_kerning_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (font_kerning_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_kerning_values[i].name, TRUE))
+        return _gtk_css_value_ref (&font_kerning_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssFontKerning
+_gtk_css_font_kerning_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_KERNING, GTK_CSS_FONT_KERNING_AUTO);
+
+  return value->value;
+}
+
+/* GtkCssFontVariantPos */
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_POSITION = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue font_variant_position_values[] = {
+  { &GTK_CSS_VALUE_FONT_VARIANT_POSITION, 1, GTK_CSS_FONT_VARIANT_POSITION_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_FONT_VARIANT_POSITION, 1, GTK_CSS_FONT_VARIANT_POSITION_SUB, "sub" },
+  { &GTK_CSS_VALUE_FONT_VARIANT_POSITION, 1, GTK_CSS_FONT_VARIANT_POSITION_SUPER, "super" }
+};
+
+GtkCssValue *
+_gtk_css_font_variant_position_value_new (GtkCssFontVariantPosition position)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_position_values); i++)
+    {
+      if (font_variant_position_values[i].value == position)
+        return _gtk_css_value_ref (&font_variant_position_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_font_variant_position_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_position_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_variant_position_values[i].name, TRUE))
+        return _gtk_css_value_ref (&font_variant_position_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssFontVariantPosition
+_gtk_css_font_variant_position_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_VARIANT_POSITION, GTK_CSS_FONT_VARIANT_POSITION_NORMAL);
+
+  return value->value;
+}
+
+/* GtkCssFontVariantCaps */
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_CAPS = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue font_variant_caps_values[] = {
+  { &GTK_CSS_VALUE_FONT_VARIANT_CAPS, 1, GTK_CSS_FONT_VARIANT_CAPS_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_FONT_VARIANT_CAPS, 1, GTK_CSS_FONT_VARIANT_CAPS_SMALL_CAPS, "small-caps" },
+  { &GTK_CSS_VALUE_FONT_VARIANT_CAPS, 1, GTK_CSS_FONT_VARIANT_CAPS_ALL_SMALL_CAPS, "all-small-caps" },
+  { &GTK_CSS_VALUE_FONT_VARIANT_CAPS, 1, GTK_CSS_FONT_VARIANT_CAPS_PETITE_CAPS, "petite-caps" },
+  { &GTK_CSS_VALUE_FONT_VARIANT_CAPS, 1, GTK_CSS_FONT_VARIANT_CAPS_ALL_PETITE_CAPS, "all-petite-caps" },
+  { &GTK_CSS_VALUE_FONT_VARIANT_CAPS, 1, GTK_CSS_FONT_VARIANT_CAPS_UNICASE, "unicase" },
+  { &GTK_CSS_VALUE_FONT_VARIANT_CAPS, 1, GTK_CSS_FONT_VARIANT_CAPS_TITLING_CAPS, "titling-caps" }
+};
+
+GtkCssValue *
+_gtk_css_font_variant_caps_value_new (GtkCssFontVariantCaps caps)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_caps_values); i++)
+    {
+      if (font_variant_caps_values[i].value == caps)
+        return _gtk_css_value_ref (&font_variant_caps_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_font_variant_caps_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_caps_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_variant_caps_values[i].name, TRUE))
+        return _gtk_css_value_ref (&font_variant_caps_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssFontVariantCaps
+_gtk_css_font_variant_caps_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_VARIANT_CAPS, GTK_CSS_FONT_VARIANT_CAPS_NORMAL);
+
+  return value->value;
+}
+
+/* GtkCssFontVariantAlternate */
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_ALTERNATE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue font_variant_alternate_values[] = {
+  { &GTK_CSS_VALUE_FONT_VARIANT_ALTERNATE, 1, GTK_CSS_FONT_VARIANT_ALTERNATE_NORMAL, "normal" },
+  { &GTK_CSS_VALUE_FONT_VARIANT_ALTERNATE, 1, GTK_CSS_FONT_VARIANT_ALTERNATE_HISTORICAL_FORMS, "historical-forms" }
+};
+
+GtkCssValue *
+_gtk_css_font_variant_alternate_value_new (GtkCssFontVariantAlternate alternate)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_alternate_values); i++)
+    {
+      if (font_variant_alternate_values[i].value == alternate)
+        return _gtk_css_value_ref (&font_variant_alternate_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_font_variant_alternate_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_alternate_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_variant_alternate_values[i].name, TRUE))
+        return _gtk_css_value_ref (&font_variant_alternate_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssFontVariantAlternate
+_gtk_css_font_variant_alternate_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_VARIANT_ALTERNATE, GTK_CSS_FONT_VARIANT_ALTERNATE_NORMAL);
+
+  return value->value;
+}
+
+/* below are flags, which are handle a bit differently. We allocate values dynamically,
+ * and we parse one bit at a time, while allowing for detection of invalid combinations.
+ */
+
+typedef struct {
+  int value;
+  const char *name;
+} FlagsValue;
+
+static gboolean
+gtk_css_value_flags_equal (const GtkCssValue *enum1,
+                           const GtkCssValue *enum2)
+{
+  return enum1->value == enum2->value;
+}
+
+static void
+gtk_css_value_flags_print (const FlagsValue  *values,
+                           guint              n_values,
+                           const GtkCssValue *value,
+                           GString           *string)
+{
+  guint i;
+  const char *sep = "";
+
+  for (i = 0; i < n_values; i++)
+    {
+      if (value->value & values[i].value)
+        {
+          g_string_append (string, sep);
+          g_string_append (string, values[i].name);
+          sep = " ";
+        }
+    }
+}
+
+/* GtkCssFontVariantLigature */
+
+static FlagsValue font_variant_ligature_values[] = {
+  { GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL, "normal" },
+  { GTK_CSS_FONT_VARIANT_LIGATURE_NONE, "none" },
+  { GTK_CSS_FONT_VARIANT_LIGATURE_COMMON_LIGATURES, "common-ligatures" },
+  { GTK_CSS_FONT_VARIANT_LIGATURE_NO_COMMON_LIGATURES, "no-common-ligatures" },
+  { GTK_CSS_FONT_VARIANT_LIGATURE_DISCRETIONARY_LIGATURES, "discretionary-ligatures" },
+  { GTK_CSS_FONT_VARIANT_LIGATURE_NO_DISCRETIONARY_LIGATURES, "no-discretionary-ligatures" },
+  { GTK_CSS_FONT_VARIANT_LIGATURE_HISTORICAL_LIGATURES, "historical-ligatures" },
+  { GTK_CSS_FONT_VARIANT_LIGATURE_NO_HISTORICAL_LIGATURES, "no-historical-ligatures" },
+  { GTK_CSS_FONT_VARIANT_LIGATURE_CONTEXTUAL, "contextual" },
+  { GTK_CSS_FONT_VARIANT_LIGATURE_NO_CONTEXTUAL, "no-contextual" }
+};
+
+static void
+gtk_css_font_variant_ligature_value_print (const GtkCssValue *value,
+                                           GString           *string)
+{
+  gtk_css_value_flags_print (font_variant_ligature_values,
+                             G_N_ELEMENTS (font_variant_ligature_values),
+                             value, string);
+}
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_LIGATURE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_flags_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_font_variant_ligature_value_print
+};
+
+static gboolean
+ligature_value_is_valid (GtkCssFontVariantLigature ligatures)
+{
+  if (((ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL) &&
+       (ligatures != GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL)) ||
+      ((ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NONE) &&
+       (ligatures != GTK_CSS_FONT_VARIANT_LIGATURE_NONE)) ||
+      ((ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_COMMON_LIGATURES) &&
+       (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NO_COMMON_LIGATURES)) ||
+      ((ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_DISCRETIONARY_LIGATURES) &&
+       (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NO_DISCRETIONARY_LIGATURES)) ||
+      ((ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_HISTORICAL_LIGATURES) &&
+       (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NO_HISTORICAL_LIGATURES)) ||
+      ((ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_CONTEXTUAL) &&
+       (ligatures & GTK_CSS_FONT_VARIANT_LIGATURE_NO_CONTEXTUAL)))
+    return FALSE;
+
+  return TRUE;
+}
+
+GtkCssValue *
+_gtk_css_font_variant_ligature_value_new (GtkCssFontVariantLigature ligatures)
+{
+  GtkCssValue *value;
+
+  if (!ligature_value_is_valid (ligatures))
+    return NULL;
+
+  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIANT_LIGATURE);
+  value->value = ligatures;
+  value->name = NULL;
+
+  return value;
+}
+
+GtkCssFontVariantLigature
+_gtk_css_font_variant_ligature_try_parse_one (GtkCssParser              *parser,
+                                              GtkCssFontVariantLigature  base)
+{
+  guint i;
+  GtkCssFontVariantLigature value = 0;
+
+  g_return_val_if_fail (parser != NULL, 0);
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_ligature_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_variant_ligature_values[i].name, TRUE))
+        {
+          value = font_variant_ligature_values[i].value;
+          break;
+        }
+    }
+
+  if (value == 0)
+    return base; /* not parsing this value */
+
+  if ((base | value) == base)
+    return 0; /* repeated value */
+
+  if (!ligature_value_is_valid (base | value))
+    return 0; /* bad combination */
+
+  return base | value;
+}
+
+GtkCssFontVariantLigature
+_gtk_css_font_variant_ligature_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_VARIANT_LIGATURE, GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL);
+
+  return value->value;
+}
+
+/* GtkCssFontVariantNumeric */
+
+static FlagsValue font_variant_numeric_values[] = {
+  { GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL, "normal" },
+  { GTK_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS, "lining-nums" },
+  { GTK_CSS_FONT_VARIANT_NUMERIC_OLDSTYLE_NUMS, "oldstyle-nums" },
+  { GTK_CSS_FONT_VARIANT_NUMERIC_PROPORTIONAL_NUMS, "proportional-nums" },
+  { GTK_CSS_FONT_VARIANT_NUMERIC_TABULAR_NUMS, "tabular-nums" },
+  { GTK_CSS_FONT_VARIANT_NUMERIC_DIAGONAL_FRACTIONS, "diagonal-fractions" },
+  { GTK_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS, "stacked-fractions" },
+  { GTK_CSS_FONT_VARIANT_NUMERIC_ORDINAL, "ordinal" },
+  { GTK_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO, "slashed-zero" }
+};
+
+static void
+gtk_css_font_variant_numeric_value_print (const GtkCssValue *value,
+                                          GString           *string)
+{
+  gtk_css_value_flags_print (font_variant_numeric_values,
+                             G_N_ELEMENTS (font_variant_numeric_values),
+                             value, string);
+}
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_NUMERIC = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_flags_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_font_variant_numeric_value_print
+};
+
+static gboolean
+numeric_value_is_valid (GtkCssFontVariantNumeric numeric)
+{
+  if (((numeric & GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL) &&
+       (numeric != GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL)) ||
+      ((numeric & GTK_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS) &&
+       (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_OLDSTYLE_NUMS)) ||
+      ((numeric & GTK_CSS_FONT_VARIANT_NUMERIC_PROPORTIONAL_NUMS) &&
+       (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_TABULAR_NUMS)) ||
+      ((numeric & GTK_CSS_FONT_VARIANT_NUMERIC_DIAGONAL_FRACTIONS) &&
+       (numeric & GTK_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS)))
+    return FALSE;
+
+  return TRUE;
+}
+
+GtkCssValue *
+_gtk_css_font_variant_numeric_value_new (GtkCssFontVariantNumeric numeric)
+{
+  GtkCssValue *value;
+
+  if (!numeric_value_is_valid (numeric))
+    return NULL;
+
+  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIANT_NUMERIC);
+  value->value = numeric;
+  value->name = NULL;
+
+  return value;
+}
+
+GtkCssFontVariantNumeric
+_gtk_css_font_variant_numeric_try_parse_one (GtkCssParser             *parser,
+                                             GtkCssFontVariantNumeric  base)
+{
+  guint i;
+  GtkCssFontVariantNumeric value = 0;
+
+  g_return_val_if_fail (parser != NULL, 0);
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_numeric_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_variant_numeric_values[i].name, TRUE))
+        {
+          value = font_variant_numeric_values[i].value;
+          break;
+        }
+    }
+
+  if (value == 0)
+    return base; /* not parsing this value */
+
+  if ((base | value) == base)
+    return 0; /* repeated value */
+
+  if (!numeric_value_is_valid (base | value))
+    return 0; /* bad combination */
+
+  return base | value;
+}
+
+GtkCssFontVariantNumeric
+_gtk_css_font_variant_numeric_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_VARIANT_NUMERIC, GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL);
+
+  return value->value;
+}
+
+/* GtkCssFontVariantEastAsian */
+
+static FlagsValue font_variant_east_asian_values[] = {
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL, "normal" },
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS78, "jis78" },
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS83, "jis83" },
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS90, "jis90" },
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS04, "jis04" },
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED, "simplified" },
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL, "traditional" },
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH, "full-width" },
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL, "proportional-width" },
+  { GTK_CSS_FONT_VARIANT_EAST_ASIAN_RUBY, "ruby" }
+};
+
+static void
+gtk_css_font_variant_east_asian_value_print (const GtkCssValue *value,
+                                             GString           *string)
+{
+  gtk_css_value_flags_print (font_variant_east_asian_values,
+                             G_N_ELEMENTS (font_variant_east_asian_values),
+                             value, string);
+}
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_EAST_ASIAN = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_flags_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_font_variant_east_asian_value_print
+};
+
+static gboolean
+east_asian_value_is_valid (GtkCssFontVariantEastAsian east_asian)
+{
+  if ((east_asian & GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL) &&
+      (east_asian != GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL))
+    return FALSE;
+
+  if (__builtin_popcount (east_asian & (GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS78 |
+                                        GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS83 |
+                                        GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS90 |
+                                        GTK_CSS_FONT_VARIANT_EAST_ASIAN_JIS04 |
+                                        GTK_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED |
+                                        GTK_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL)) > 1)
+    return FALSE;
+
+  if (__builtin_popcount (east_asian & (GTK_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH |
+                                        GTK_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL)) > 1)
+    return FALSE;
+
+  return TRUE;
+}
+
+GtkCssValue *
+_gtk_css_font_variant_east_asian_value_new (GtkCssFontVariantEastAsian east_asian)
+{
+  GtkCssValue *value;
+
+  if (!east_asian_value_is_valid (east_asian))
+    return NULL;
+
+  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIANT_EAST_ASIAN);
+  value->value = east_asian;
+  value->name = NULL;
+
+  return value;
+}
+
+GtkCssFontVariantEastAsian
+_gtk_css_font_variant_east_asian_try_parse_one (GtkCssParser               *parser,
+                                                GtkCssFontVariantEastAsian  base)
+{
+  guint i;
+  GtkCssFontVariantEastAsian value = 0;
+
+  g_return_val_if_fail (parser != NULL, 0);
+
+  for (i = 0; i < G_N_ELEMENTS (font_variant_east_asian_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_variant_east_asian_values[i].name, TRUE))
+        {
+          value = font_variant_east_asian_values[i].value;
+          break;
+        }
+    }
+
+  if (value == 0)
+    return base; /* not parsing this value */
+
+  if ((base | value) == base)
+    return 0; /* repeated value */
+
+  if (!east_asian_value_is_valid (base | value))
+    return 0; /* bad combination */
+
+  return base | value;
+}
+
+GtkCssFontVariantEastAsian
+_gtk_css_font_variant_east_asian_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_VARIANT_EAST_ASIAN, GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL);
+
+  return value->value;
+}
