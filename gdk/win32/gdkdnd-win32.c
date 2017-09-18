@@ -1042,6 +1042,7 @@ idataobject_getdata (LPDATAOBJECT This,
   GdkEvent e;
   gint i;
   GdkAtom target;
+  gint64 loopend;
 
   GDK_NOTE (DND, g_print ("idataobject_getdata %p %s ",
 			  This, _gdk_win32_cf_to_string (pFormatEtc->cfFormat)));
@@ -1105,10 +1106,12 @@ idataobject_getdata (LPDATAOBJECT This,
 
   gdk_event_put (&e);
 
-  process_pending_events (gdk_device_get_display (gdk_drag_context_get_device (ctx->context)));
+  /* Don't hold up longer than one second */
+  loopend = g_get_monotonic_time () + 1000000000;
 
-  win32_sel->property_change_format = 0;
-  win32_sel->property_change_data = 0;
+  while (win32_sel->property_change_data != 0 &&
+         g_get_monotonic_time () < loopend)
+    process_pending_events (gdk_device_get_display (gdk_drag_context_get_device (ctx->context)));
 
   if (pMedium->hGlobal == NULL) {
     GDK_NOTE (DND, g_print (" E_UNEXPECTED\n"));
