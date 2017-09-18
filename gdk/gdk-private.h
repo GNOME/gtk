@@ -21,6 +21,8 @@ void            gdk_gl_set_flags                (GdkGLFlags flags);
 void            gdk_window_freeze_toplevel_updates      (GdkWindow *window);
 void            gdk_window_thaw_toplevel_updates        (GdkWindow *window);
 
+gboolean        gdk_window_supports_edge_constraints    (GdkWindow *window);
+
 GdkRenderingMode gdk_display_get_rendering_mode (GdkDisplay       *display);
 void             gdk_display_set_rendering_mode (GdkDisplay       *display,
                                                  GdkRenderingMode  mode);

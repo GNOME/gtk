@@ -1699,6 +1699,7 @@ edge_under_coordinates (GtkWindow     *window,
   GtkStyleContext *context;
   gint handle_v, handle_h;
   GtkBorder border;
+  gboolean supports_edge_constraints;
 
   if (priv->type != GTK_WINDOW_TOPLEVEL ||
       !priv->client_decorated ||
@@ -1707,7 +1708,16 @@ edge_under_coordinates (GtkWindow     *window,
       priv->maximized)
     return FALSE;
 
-  if (priv->tiled && !priv->edge_constraints)
+  supports_edge_constraints = gdk_window_supports_edge_constraints (_gtk_widget_get_window (GTK_WIDGET (window)));
+
+  if (!supports_edge_constraints && priv->tiled)
+    return FALSE;
+
+  if (supports_edge_constraints &&
+      !(priv->edge_constraints & GDK_WINDOW_STATE_TOP_RESIZABLE) &&
+      !(priv->edge_constraints & GDK_WINDOW_STATE_RIGHT_RESIZABLE) &&
+      !(priv->edge_constraints & GDK_WINDOW_STATE_BOTTOM_RESIZABLE) &&
+      !(priv->edge_constraints & GDK_WINDOW_STATE_LEFT_RESIZABLE))
     return FALSE;
 
   _gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
@@ -1744,7 +1754,8 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_WINDOW_EDGE_SOUTH_WEST)
         return FALSE;
 
-      if (!(priv->edge_constraints & GDK_WINDOW_STATE_LEFT_RESIZABLE))
+      if (supports_edge_constraints &&
+          !(priv->edge_constraints & GDK_WINDOW_STATE_LEFT_RESIZABLE))
         return FALSE;
     }
   else if (x >= allocation.x + allocation.width - border.right - handle_h)
@@ -1754,7 +1765,8 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_WINDOW_EDGE_SOUTH_EAST)
         return FALSE;
 
-      if (!(priv->edge_constraints & GDK_WINDOW_STATE_RIGHT_RESIZABLE))
+      if (supports_edge_constraints &&
+          !(priv->edge_constraints & GDK_WINDOW_STATE_RIGHT_RESIZABLE))
         return FALSE;
     }
   else if (edge != GDK_WINDOW_EDGE_NORTH &&
@@ -1769,7 +1781,8 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_WINDOW_EDGE_NORTH_EAST)
         return FALSE;
 
-      if (!(priv->edge_constraints & GDK_WINDOW_STATE_TOP_RESIZABLE))
+      if (supports_edge_constraints &&
+          !(priv->edge_constraints & GDK_WINDOW_STATE_TOP_RESIZABLE))
         return FALSE;
     }
   else if (y > allocation.y + allocation.height - border.bottom - handle_v)
@@ -1779,7 +1792,8 @@ edge_under_coordinates (GtkWindow     *window,
           edge != GDK_WINDOW_EDGE_SOUTH_EAST)
         return FALSE;
 
-      if (!(priv->edge_constraints & GDK_WINDOW_STATE_BOTTOM_RESIZABLE))
+      if (supports_edge_constraints &&
+          !(priv->edge_constraints & GDK_WINDOW_STATE_BOTTOM_RESIZABLE))
         return FALSE;
     }
   else if (edge != GDK_WINDOW_EDGE_WEST &&

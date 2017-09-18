@@ -269,6 +269,7 @@ struct _GdkWindowImplClass
 					   gboolean        attached,
                                            GdkGLContext   *share,
                                            GError        **error);
+  gboolean     (* supports_edge_constraints)(GdkWindow    *window);
 };
 
 /* Interface Functions */

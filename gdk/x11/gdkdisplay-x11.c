@@ -199,7 +199,6 @@ do_edge_constraint_state_check (GdkWindow      *window,
 {
   GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
   GdkWindowState local_set, local_unset;
-  GdkScreen *screen = GDK_WINDOW_SCREEN (window);
   guint edge_constraints;
 
   local_set = *set;
@@ -210,8 +209,7 @@ do_edge_constraint_state_check (GdkWindow      *window,
    * implementation. If it supports _GTK_EDGE_CONSTRAINTS, however, remove
    * the GDK_WINDOW_STATE_TILED flag explicitly.
    */
-  if (!gdk_x11_screen_supports_net_wm_hint (screen,
-                                            gdk_atom_intern_static_string ("_GTK_EDGE_CONSTRAINTS")))
+  if (!gdk_window_supports_edge_constraints (window))
     {
       /* FIXME: we rely on implementation details of mutter here:
        * mutter only tiles horizontally, and sets maxvert when it does

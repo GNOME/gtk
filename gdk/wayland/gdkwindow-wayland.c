@@ -3637,6 +3637,14 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
   return TRUE;
 }
 
+static gboolean
+gdk_wayland_window_supports_edge_constraints (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return gtk_surface1_get_version (impl->display_server.gtk_surface) > GTK_SURFACE1_CONFIGURE_EDGES_SINCE_VERSION;
+}
+
 static void
 _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
 {
@@ -3716,6 +3724,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->set_shadow_width = gdk_wayland_window_set_shadow_width;
   impl_class->show_window_menu = gdk_wayland_window_show_window_menu;
   impl_class->create_gl_context = gdk_wayland_window_create_gl_context;
+  impl_class->supports_edge_constraints = gdk_wayland_window_supports_edge_constraints;
 
   signals[COMMITTED] = g_signal_new ("committed",
                                      G_TYPE_FROM_CLASS (object_class),

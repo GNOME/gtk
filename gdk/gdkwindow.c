@@ -8234,3 +8234,19 @@ gdk_window_show_window_menu (GdkWindow *window,
   else
     return FALSE;
 }
+
+gboolean
+gdk_window_supports_edge_constraints (GdkWindow *window)
+{
+  GdkWindowImplClass *impl_class;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (!GDK_WINDOW_DESTROYED (window), FALSE);
+
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (impl_class->supports_edge_constraints)
+    return impl_class->supports_edge_constraints (window);
+  else
+    return FALSE;
+}
