@@ -658,6 +658,85 @@ parse_font_variant_caps (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_font_variant_numeric (GtkCssStyleProperty *property,
+                            GtkCssParser        *parser)
+{
+  GtkCssValue *value = NULL;
+
+  if (_gtk_css_parser_try (parser, "normal", TRUE))
+    value = _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal"));
+  else
+    {
+      GtkCssValue *values[5] = { NULL, NULL, NULL, NULL };
+      guint n_values = 0;
+      guint old_n;
+      gboolean figure = FALSE;
+      gboolean spacing = FALSE;
+      gboolean fraction = FALSE;
+      gboolean ordinal = FALSE;
+      gboolean zero = FALSE;
+
+      do {
+        old_n = n_values;
+        if (!figure)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "lining-nums", "oldstyle-nums", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                figure = TRUE;
+              }
+         }
+        if (!spacing)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "proportional-nums", "tabular-nums", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                spacing = TRUE;
+              }
+         }
+        if (!fraction)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "diagonal-fractions", "stacked-fractions", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                fraction = TRUE;
+              }
+         }
+        if (!ordinal)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "ordinal", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                ordinal = TRUE;
+              }
+         }
+        if (!zero)
+          {
+            values[n_values] = _gtk_css_ident_value_try (parser, "slashed-zero", NULL);
+            if (values[n_values])
+              {
+                n_values++;
+                zero = TRUE;
+              }
+         }
+        if (old_n == n_values)
+          {
+            _gtk_css_parser_error (parser, "Not a valid value");
+            return NULL;
+          }
+      } while (!value_is_done_parsing (parser));
+
+      value = _gtk_css_array_value_new_from_array (values, n_values);
+    }
+
+  return value;
+}
+
+static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
@@ -1174,6 +1253,14 @@ _gtk_css_style_property_init_properties (void)
                                           parse_font_variant_caps,
                                           NULL,
                                           _gtk_css_ident_value_new ("normal"));
+  gtk_css_style_property_register        ("font-variant-numeric",
+                                          GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC,
+                                          G_TYPE_NONE,
+                                          0,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          parse_font_variant_numeric,
+                                          NULL,
+                                          _gtk_css_array_value_new (_gtk_css_ident_value_new ("normal")));
   gtk_css_style_property_register        ("text-shadow",
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,
                                           G_TYPE_NONE,

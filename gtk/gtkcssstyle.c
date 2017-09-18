@@ -229,6 +229,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   GtkCssValue *ligatures;
   GtkCssValue *position;
   GtkCssValue *caps;
+  GtkCssValue *numeric;
   GString *s;
   int i;
 
@@ -343,6 +344,29 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     {
       if (s->len > 0) g_string_append (s, ", ");
       g_string_append (s, "titl 1");
+    }
+
+  numeric = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC);
+  for (i = 0; i < _gtk_css_array_value_get_n_values (numeric); i++)
+    {
+      GtkCssValue *value = _gtk_css_array_value_get_nth (numeric, i);
+      if (s->len > 0) g_string_append (s, ", ");
+      if (strcmp (_gtk_css_ident_value_get (value), "lining-nums") == 0)
+        g_string_append (s, "lnum 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "oldstyle-nums") == 0)
+        g_string_append (s, "onum 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "proportional-nums") == 0)
+        g_string_append (s, "pnum 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "tabular-nums") == 0)
+        g_string_append (s, "tnum 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "diagonal-fractions") == 0)
+        g_string_append (s, "frac 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "stacked-fractions") == 0)
+        g_string_append (s, "afrc 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "ordinal") == 0)
+        g_string_append (s, "ordn 1");
+      else if (strcmp (_gtk_css_ident_value_get (value), "slashed-zero") == 0)
+        g_string_append (s, "zero 1");
     }
 
   attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
