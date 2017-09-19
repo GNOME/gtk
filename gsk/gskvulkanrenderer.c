@@ -11,6 +11,7 @@
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanpipelineprivate.h"
 #include "gskvulkanrenderprivate.h"
+#include "gskvulkanglyphcacheprivate.h"
 
 #include <graphene.h>
 
@@ -29,23 +30,6 @@ typedef struct {
 } ProfileTimers;
 #endif
 
-typedef struct _GlyphCache GlyphCache;
-
-struct _GlyphCache {
-  GHashTable *hash_table;
-
-  cairo_surface_t *surface;
-  int width, height;
-  int x, y, y0;
-
-  GskVulkanImage *image;
-};
-
-
-static GlyphCache *create_glyph_cache     (void);
-static void        free_glyph_cache       (GlyphCache *cache);
-static void        dump_glyph_cache_stats (GlyphCache *cache);
-
 struct _GskVulkanRenderer
 {
   GskRenderer parent_instance;
@@ -61,7 +45,7 @@ struct _GskVulkanRenderer
 
   GSList *textures;
 
-  GlyphCache *glyph_cache;
+  GskVulkanGlyphCache *glyph_cache;
 
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
@@ -153,7 +137,7 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
 
   self->render = gsk_vulkan_render_new (renderer, self->vulkan);
 
-  self->glyph_cache = create_glyph_cache ();
+  self->glyph_cache = gsk_vulkan_glyph_cache_new ();
 
   return TRUE;
 }
@@ -165,8 +149,7 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
   VkDevice device;
   GSList *l;
 
-  free_glyph_cache (self->glyph_cache);
-  self->glyph_cache = NULL;
+  g_clear_object (&self->glyph_cache);
 
   for (l = self->textures; l; l = l->next)
     {
@@ -283,7 +266,9 @@ gsk_vulkan_renderer_begin_draw_frame (GskRenderer          *renderer,
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GdkDrawingContext *result;
 
+#if 0
   GSK_NOTE(RENDERER, dump_glyph_cache_stats (self->glyph_cache));
+#endif
 
   result = gdk_window_begin_draw_frame (gsk_renderer_get_window (renderer),
                                         GDK_DRAW_CONTEXT (self->vulkan),
@@ -370,198 +355,12 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
   return image;
 }
 
-typedef struct _GlyphCacheKey GlyphCacheKey;
-typedef struct _GlyphCacheValue GlyphCacheValue;
-
-struct _GlyphCacheKey {
-  PangoFont *font;
-  PangoGlyph glyph;
-};
-
-/*** Glyph cache ***/
-
-static gboolean
-glyph_cache_equal (gconstpointer v1, gconstpointer v2)
-{
-  const GlyphCacheKey *key1 = v1;
-  const GlyphCacheKey *key2 = v2;
-
-  return key1->font == key2->font &&
-         key1->glyph == key2->glyph;
-}
-
-static guint
-glyph_cache_hash (gconstpointer v)
-{
-  const GlyphCacheKey *key = v;
-
-  return GPOINTER_TO_UINT (key->font) ^ key->glyph;
-}
-
-static void
-glyph_cache_key_free (gpointer v)
-{
-  GlyphCacheKey *f = v;
-
-  g_object_unref (f->font);
-  g_free (f);
-}
-
-static void
-glyph_cache_value_free (gpointer v)
-{
-  g_free (v);
-}
-
-static void
-add_to_cache (GlyphCache           *cache,
-              PangoFont            *font,
-              PangoGlyph            glyph,
-              GskVulkanCachedGlyph *value)
-{
-  cairo_t *cr;
-  cairo_scaled_font_t *scaled_font;
-  cairo_glyph_t cg;
-
-  if (cache->x + value->draw_width + 1 >= cache->width)
-    {
-      /* start a new row */
-      cache->y0 = cache->y + 1;
-      cache->x = 1;
-    }
-
-  if (cache->y0 + value->draw_height + 1 >= cache->height)
-    {
-      g_critical ("Drats! Out of cache space. We should really handle this");
-      return;
-    }
-
-  cr = cairo_create (cache->surface);
-
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-  if (G_UNLIKELY (!scaled_font || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
-    return;
-
-  cairo_set_scaled_font (cr, scaled_font);
-  cairo_set_source_rgba (cr, 1, 1, 1, 1);
-
-  cg.index = glyph;
-  cg.x = cache->x - value->draw_x;
-  cg.y = cache->y0 - value->draw_y;
-
-  cairo_show_glyphs (cr, &cg, 1);
-
-  cairo_destroy (cr);
-
-  cache->x = cache->x + value->draw_width + 1;
-  cache->y = MAX (cache->y, cache->y0 + value->draw_height + 1);
-
-  value->tx = (cg.x + value->draw_x) / cache->width;
-  value->ty = (cg.y + value->draw_y) / cache->height;
-  value->tw = (float)value->draw_width / cache->width;
-  value->th = (float)value->draw_height / cache->height;
-
-  value->texture_index = 0;
-}
-
-static GskVulkanCachedGlyph *
-glyph_cache_lookup (GlyphCache *cache,
-                    gboolean    create,
-                    PangoFont  *font,
-                    PangoGlyph  glyph)
-{
-  GlyphCacheKey lookup_key;
-  GskVulkanCachedGlyph *value;
-
-  lookup_key.font = font;
-  lookup_key.glyph = glyph;
-
-  value = g_hash_table_lookup (cache->hash_table, &lookup_key);
-
-  if (create && value == NULL)
-    {
-      GlyphCacheKey *key;
-      PangoRectangle ink_rect;
-
-      value = g_new (GskVulkanCachedGlyph, 1);
-
-      value->texture_index = 0;
-
-      pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
-      pango_extents_to_pixels (&ink_rect, NULL);
-
-      value->draw_x = ink_rect.x;
-      value->draw_y = ink_rect.y;
-      value->draw_width = ink_rect.width;
-      value->draw_height = ink_rect.height;
-
-      if (ink_rect.width > 0 && ink_rect.height > 0)
-        add_to_cache (cache, font, glyph, value);
-
-      key = g_new (GlyphCacheKey, 1);
-      key->font = g_object_ref (font);
-      key->glyph = glyph;
-
-      g_hash_table_insert (cache->hash_table, key, value);
-    }
-
-  return value;
-}
-
-static void
-free_glyph_cache (GlyphCache *cache)
-{
-  g_hash_table_unref (cache->hash_table);
-  cairo_surface_destroy (cache->surface);
-  g_free (cache);
-}
-
-static void
-dump_glyph_cache_stats (GlyphCache *cache)
-{
-  static gint64 time;
-  gint64 now;
-
-  if (!cache->hash_table)
-    return;
-
-  now = g_get_monotonic_time ();
-  if (now - time < 1000000)
-    return;
-
-  time = now;
-
-  cairo_surface_write_to_png (cache->surface, "gsk-glyph-cache.png");
-}
-
 guint
 gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
                                  PangoFont         *font,
                                  PangoGlyph         glyph)
 {
-  GskVulkanCachedGlyph *value;
-
-  value = glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph);
-
-  return value->texture_index;
-}
-
-static GlyphCache *
-create_glyph_cache (void)
-{
-  GlyphCache *cache;
-
-  cache = g_new0 (GlyphCache, 1);
-  cache->hash_table = g_hash_table_new_full (glyph_cache_hash, glyph_cache_equal,
-                                             glyph_cache_key_free, glyph_cache_value_free);
-  cache->width = 1024;
-  cache->height = 1024;
-  cache->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, cache->width, cache->height);
-  cache->y0 = 1;
-  cache->y = 1;
-  cache->x = 1;
-
-  return cache;
+  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph)->texture_index;
 }
 
 GskVulkanImage *
@@ -569,14 +368,7 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
                                      GskVulkanUploader  *uploader,
                                      guint               index)
 {
-  if (self->glyph_cache->image == NULL)
-    self->glyph_cache->image = gsk_vulkan_image_new_from_data (uploader,
-                                    cairo_image_surface_get_data (self->glyph_cache->surface),
-                                    cairo_image_surface_get_width (self->glyph_cache->surface),
-                                    cairo_image_surface_get_height (self->glyph_cache->surface),
-                                    cairo_image_surface_get_stride (self->glyph_cache->surface));
-
-  return g_object_ref (self->glyph_cache->image);
+  return g_object_ref (gsk_vulkan_glyph_cache_get_glyph_image (self->glyph_cache, uploader, index));
 }
 
 GskVulkanCachedGlyph *
@@ -584,10 +376,5 @@ gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
                                       PangoFont         *font,
                                       PangoGlyph         glyph)
 {
-  GlyphCacheKey lookup_key;
-
-  lookup_key.font = font;
-  lookup_key.glyph = glyph;
-
-  return g_hash_table_lookup (self->glyph_cache->hash_table, &lookup_key);
+  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, FALSE, font, glyph);
 }

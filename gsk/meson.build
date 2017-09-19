@@ -64,6 +64,7 @@ if have_vulkan
     'gskvulkancolortextpipeline.c',
     'gskvulkancommandpool.c',
     'gskvulkaneffectpipeline.c',
+    'gskvulkanglyphcache.c',
     'gskvulkanlineargradientpipeline.c',
     'gskvulkanimage.c',
     'gskvulkantextpipeline.c',
