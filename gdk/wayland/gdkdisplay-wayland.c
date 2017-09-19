@@ -376,7 +376,7 @@ gdk_registry_handle_global (void               *data,
       display_wayland->gtk_shell =
         wl_registry_bind(display_wayland->wl_registry, id,
                          &gtk_shell1_interface,
-                         GTK_SHELL1_VERSION);
+                         MIN (version, GTK_SHELL1_VERSION));
       _gdk_wayland_screen_set_has_gtk_shell (display_wayland->screen);
       display_wayland->gtk_shell_version = version;
     }
