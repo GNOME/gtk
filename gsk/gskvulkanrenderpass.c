@@ -25,6 +25,7 @@
 
 typedef union _GskVulkanOp GskVulkanOp;
 typedef struct _GskVulkanOpRender GskVulkanOpRender;
+typedef struct _GskVulkanOpText GskVulkanOpText;
 typedef struct _GskVulkanOpPushConstants GskVulkanOpPushConstants;
 
 typedef enum {
@@ -60,6 +61,21 @@ struct _GskVulkanOpRender
   gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
 };
 
+struct _GskVulkanOpText
+{
+  GskVulkanOpType      type;
+  GskRenderNode       *node; /* node that's the source of this op */
+  GskVulkanPipeline   *pipeline; /* pipeline to use */
+  GskRoundedRect       clip; /* clip rect (or random memory if not relevant) */
+  GskVulkanImage      *source; /* source image to render */
+  gsize                vertex_offset; /* offset into vertex buffer */
+  gsize                vertex_count; /* number of vertices */
+  gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
+  guint                texture_index;
+  guint                start_glyph;
+  guint                num_glyphs;
+};
+
 struct _GskVulkanOpPushConstants
 {
   GskVulkanOpType         type;
@@ -72,6 +88,7 @@ union _GskVulkanOp
   GskVulkanOpType          type;
   GskVulkanOpRender        render;
   GskVulkanOpPushConstants constants;
+  GskVulkanOpText          text;
 };
 
 struct _GskVulkanRenderPass
@@ -197,37 +214,59 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       return;
 
     case GSK_TEXT_NODE:
-       gsk_vulkan_renderer_cache_glyphs (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
-                                         gsk_text_node_get_font (node),
-                                         gsk_text_node_get_glyphs (node));
+      {
+        PangoFont *font = gsk_text_node_get_font (node);
+        PangoGlyphString *glyphs = gsk_text_node_get_glyphs (node);
+        PangoGlyph glyph;
+        int i;
+        guint texture_index;
+        GskVulkanRenderer *renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
 
-      if (font_has_color_glyphs (gsk_text_node_get_font (node)))
-        {
-          if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
-            pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT;
-          else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
-            pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP;
-          else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
-            pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP_ROUNDED;
-          else
-            FALLBACK ("Text nodes can't deal with clip type %u\n", constants->clip.type);
-          op.type = GSK_VULKAN_OP_COLOR_TEXT;
-        }
-      else
-        {
-          if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
-            pipeline_type = GSK_VULKAN_PIPELINE_TEXT;
-          else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
-            pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP;
-          else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
-            pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP_ROUNDED;
-          else
-            FALLBACK ("Text nodes can't deal with clip type %u\n", constants->clip.type);
-          op.type = GSK_VULKAN_OP_TEXT;
-        }
-      op.render.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
-      g_array_append_val (self->render_ops, op);
-      return;
+        if (font_has_color_glyphs (font))
+          {
+            if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+              pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT;
+            else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+              pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP;
+            else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+              pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT_CLIP_ROUNDED;
+            else
+              FALLBACK ("Text nodes can't deal with clip type %u\n", constants->clip.type);
+            op.type = GSK_VULKAN_OP_COLOR_TEXT;
+          }
+        else
+          {
+            if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
+              pipeline_type = GSK_VULKAN_PIPELINE_TEXT;
+            else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
+              pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP;
+            else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
+              pipeline_type = GSK_VULKAN_PIPELINE_TEXT_CLIP_ROUNDED;
+            else
+              FALLBACK ("Text nodes can't deal with clip type %u\n", constants->clip.type);
+            op.type = GSK_VULKAN_OP_TEXT;
+          }
+        op.text.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
+
+        i = 0;
+        texture_index = gsk_vulkan_renderer_cache_glyph (renderer, font, glyphs->glyphs[0].glyph);
+        while (i < glyphs->num_glyphs)
+          {
+            op.text.start_glyph = i;
+            op.text.texture_index = texture_index;
+
+            do {
+              i++;
+              glyph = glyphs->glyphs[i].glyph;
+              if (glyph != PANGO_GLYPH_EMPTY && !(glyph & PANGO_GLYPH_UNKNOWN_FLAG))
+                texture_index = gsk_vulkan_renderer_cache_glyph (renderer, font, glyph);
+            } while (i < glyphs->num_glyphs && op.text.texture_index == texture_index);
+
+            op.text.num_glyphs = i - op.text.start_glyph;
+            g_array_append_val (self->render_ops, op);
+          }
+        return;
+      }
 
     case GSK_TEXTURE_NODE:
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
@@ -600,11 +639,10 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
         case GSK_VULKAN_OP_TEXT:
         case GSK_VULKAN_OP_COLOR_TEXT:
           {
-            op->render.source = gsk_vulkan_renderer_ref_glyph_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
-                                                                     uploader,
-                                                                     gsk_text_node_get_font (op->render.node),
-                                                                     gsk_text_node_get_glyphs (op->render.node));
-            gsk_vulkan_render_add_cleanup_image (render, op->render.source);
+            op->text.source = gsk_vulkan_renderer_ref_glyph_image (GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
+                                                                   uploader,
+                                                                   op->text.texture_index);
+            gsk_vulkan_render_add_cleanup_image (render, op->text.source);
           }
           break;
 
@@ -690,15 +728,15 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
           break;
 
         case GSK_VULKAN_OP_TEXT:
-          op->render.vertex_count = gsk_vulkan_text_pipeline_count_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->render.pipeline),
-                                                                                pango_glyph_string_num_glyphs (gsk_text_node_get_glyphs (op->render.node)));
-          n_bytes += op->render.vertex_count;
+          op->text.vertex_count = gsk_vulkan_text_pipeline_count_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->text.pipeline),
+                                                                              op->text.num_glyphs);
+          n_bytes += op->text.vertex_count;
           break;
 
         case GSK_VULKAN_OP_COLOR_TEXT:
-          op->render.vertex_count = gsk_vulkan_color_text_pipeline_count_vertex_data (GSK_VULKAN_COLOR_TEXT_PIPELINE (op->render.pipeline),
-                                                                                      pango_glyph_string_num_glyphs (gsk_text_node_get_glyphs (op->render.node)));
-          n_bytes += op->render.vertex_count;
+          op->text.vertex_count = gsk_vulkan_color_text_pipeline_count_vertex_data (GSK_VULKAN_COLOR_TEXT_PIPELINE (op->render.pipeline),
+                                                                                    op->text.num_glyphs);
+          n_bytes += op->text.vertex_count;
           break;
 
         case GSK_VULKAN_OP_COLOR:
@@ -777,32 +815,36 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
 
         case GSK_VULKAN_OP_TEXT:
           {
-            op->render.vertex_offset = offset + n_bytes;
-            gsk_vulkan_text_pipeline_collect_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->render.pipeline),
+            op->text.vertex_offset = offset + n_bytes;
+            gsk_vulkan_text_pipeline_collect_vertex_data (GSK_VULKAN_TEXT_PIPELINE (op->text.pipeline),
                                                           data + n_bytes + offset,
                                                           GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
-                                                          &op->render.node->bounds,
-                                                          gsk_text_node_get_font (op->render.node),
-                                                          gsk_text_node_get_glyphs (op->render.node),
-                                                          gsk_text_node_get_color (op->render.node),
-                                                          gsk_text_node_get_x (op->render.node),
-                                                          gsk_text_node_get_y (op->render.node));
-            n_bytes += op->render.vertex_count;
+                                                          &op->text.node->bounds,
+                                                          gsk_text_node_get_font (op->text.node),
+                                                          gsk_text_node_get_glyphs (op->text.node),
+                                                          gsk_text_node_get_color (op->text.node),
+                                                          gsk_text_node_get_x (op->text.node),
+                                                          gsk_text_node_get_y (op->text.node),
+                                                          op->text.start_glyph,
+                                                          op->text.num_glyphs);
+            n_bytes += op->text.vertex_count;
           }
           break;
 
         case GSK_VULKAN_OP_COLOR_TEXT:
           {
-            op->render.vertex_offset = offset + n_bytes;
-            gsk_vulkan_color_text_pipeline_collect_vertex_data (GSK_VULKAN_COLOR_TEXT_PIPELINE (op->render.pipeline),
+            op->text.vertex_offset = offset + n_bytes;
+            gsk_vulkan_color_text_pipeline_collect_vertex_data (GSK_VULKAN_COLOR_TEXT_PIPELINE (op->text.pipeline),
                                                                 data + n_bytes + offset,
                                                                 GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
-                                                                &op->render.node->bounds,
-                                                                gsk_text_node_get_font (op->render.node),
-                                                                gsk_text_node_get_glyphs (op->render.node),
-                                                                gsk_text_node_get_x (op->render.node),
-                                                                gsk_text_node_get_y (op->render.node));
-            n_bytes += op->render.vertex_count;
+                                                                &op->text.node->bounds,
+                                                                gsk_text_node_get_font (op->text.node),
+                                                                gsk_text_node_get_glyphs (op->text.node),
+                                                                gsk_text_node_get_x (op->text.node),
+                                                                gsk_text_node_get_y (op->text.node),
+                                                                op->text.start_glyph,
+                                                                op->text.num_glyphs);
+            n_bytes += op->text.vertex_count;
           }
           break;
 
@@ -948,8 +990,6 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_FALLBACK_CLIP:
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_SURFACE:
-        case GSK_VULKAN_OP_TEXT:
-        case GSK_VULKAN_OP_COLOR_TEXT:
         case GSK_VULKAN_OP_TEXTURE:
         case GSK_VULKAN_OP_OPACITY:
         case GSK_VULKAN_OP_BLUR:
@@ -957,6 +997,10 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
           op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source);
           break;
 
+        case GSK_VULKAN_OP_TEXT:
+        case GSK_VULKAN_OP_COLOR_TEXT:
+          op->text.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->text.source);
+          break;
         default:
           g_assert_not_reached ();
         case GSK_VULKAN_OP_COLOR:
@@ -1027,9 +1071,9 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
           break;
 
         case GSK_VULKAN_OP_TEXT:
-          if (current_pipeline != op->render.pipeline)
+          if (current_pipeline != op->text.pipeline)
             {
-              current_pipeline = op->render.pipeline;
+              current_pipeline = op->text.pipeline;
               vkCmdBindPipeline (command_buffer,
                                  VK_PIPELINE_BIND_POINT_GRAPHICS,
                                  gsk_vulkan_pipeline_get_pipeline (current_pipeline));
@@ -1039,7 +1083,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                       (VkBuffer[1]) {
                                           gsk_vulkan_buffer_get_buffer (vertex_buffer)
                                       },
-                                      (VkDeviceSize[1]) { op->render.vertex_offset });
+                                      (VkDeviceSize[1]) { op->text.vertex_offset });
               current_draw_index = 0;
             }
 
@@ -1049,20 +1093,20 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                    0,
                                    1,
                                    (VkDescriptorSet[1]) {
-                                       gsk_vulkan_render_get_descriptor_set (render, op->render.descriptor_set_index)
+                                       gsk_vulkan_render_get_descriptor_set (render, op->text.descriptor_set_index)
                                    },
                                    0,
                                    NULL);
 
           current_draw_index += gsk_vulkan_text_pipeline_draw (GSK_VULKAN_TEXT_PIPELINE (current_pipeline),
-                                                                command_buffer,
-                                                                current_draw_index, pango_glyph_string_num_glyphs (gsk_text_node_get_glyphs (op->render.node)));
+                                                               command_buffer,
+                                                               current_draw_index, op->text.num_glyphs);
           break;
 
         case GSK_VULKAN_OP_COLOR_TEXT:
-          if (current_pipeline != op->render.pipeline)
+          if (current_pipeline != op->text.pipeline)
             {
-              current_pipeline = op->render.pipeline;
+              current_pipeline = op->text.pipeline;
               vkCmdBindPipeline (command_buffer,
                                  VK_PIPELINE_BIND_POINT_GRAPHICS,
                                  gsk_vulkan_pipeline_get_pipeline (current_pipeline));
@@ -1072,7 +1116,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                       (VkBuffer[1]) {
                                           gsk_vulkan_buffer_get_buffer (vertex_buffer)
                                       },
-                                      (VkDeviceSize[1]) { op->render.vertex_offset });
+                                      (VkDeviceSize[1]) { op->text.vertex_offset });
               current_draw_index = 0;
             }
 
@@ -1082,14 +1126,14 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                                    0,
                                    1,
                                    (VkDescriptorSet[1]) {
-                                       gsk_vulkan_render_get_descriptor_set (render, op->render.descriptor_set_index)
+                                       gsk_vulkan_render_get_descriptor_set (render, op->text.descriptor_set_index)
                                    },
                                    0,
                                    NULL);
 
           current_draw_index += gsk_vulkan_color_text_pipeline_draw (GSK_VULKAN_COLOR_TEXT_PIPELINE (current_pipeline),
                                                                      command_buffer,
-                                                                     current_draw_index, pango_glyph_string_num_glyphs (gsk_text_node_get_glyphs (op->render.node)));
+                                                                     current_draw_index, op->text.num_glyphs);
           break;
 
         case GSK_VULKAN_OP_OPACITY:

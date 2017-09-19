@@ -27,7 +27,9 @@ void                    gsk_vulkan_color_text_pipeline_collect_vertex_data   (Gs
                                                                               PangoFont                      *font,
                                                                               PangoGlyphString               *glyphs,
                                                                               float                           x,
-                                                                              float                           y);
+                                                                              float                           y,
+                                                                              guint                           start_glyph,
+                                                                              guint                           num_glyphs);
 gsize                   gsk_vulkan_color_text_pipeline_draw                  (GskVulkanColorTextPipeline     *pipeline,
                                                                               VkCommandBuffer                 command_buffer,
                                                                               gsize                           offset,

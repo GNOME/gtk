@@ -370,22 +370,6 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
   return image;
 }
 
-GskVulkanImage *
-gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
-                                     GskVulkanUploader  *uploader,
-                                     PangoFont          *font,
-                                     PangoGlyphString   *glyphs)
-{
-  if (self->glyph_cache->image == NULL)
-    self->glyph_cache->image = gsk_vulkan_image_new_from_data (uploader,
-                                    cairo_image_surface_get_data (self->glyph_cache->surface),
-                                    cairo_image_surface_get_width (self->glyph_cache->surface),
-                                    cairo_image_surface_get_height (self->glyph_cache->surface),
-                                    cairo_image_surface_get_stride (self->glyph_cache->surface));
-
-  return g_object_ref (self->glyph_cache->image);
-}
-
 typedef struct _GlyphCacheKey GlyphCacheKey;
 typedef struct _GlyphCacheValue GlyphCacheValue;
 
@@ -393,53 +377,6 @@ struct _GlyphCacheKey {
   PangoFont *font;
   PangoGlyph glyph;
 };
-
-struct _GlyphCacheValue {
-  float tx;
-  float ty;
-  float tw;
-  float th;
-
-  float draw_x;
-  float draw_y;
-  float draw_width;
-  float draw_height;
-};
-
-static GlyphCacheValue *glyph_cache_lookup (GlyphCache *cache,
-                                            gboolean    create,
-                                            PangoFont  *font,
-                                            PangoGlyph  glyph);
-
-void
-gsk_vulkan_renderer_get_glyph_coords (GskVulkanRenderer *self,
-                                      PangoFont         *font,
-                                      PangoGlyph         glyph,
-                                      float             *tx,
-                                      float             *ty,
-                                      float             *tw,
-                                      float             *th,
-                                      float             *dx,
-                                      float             *dy,
-                                      float             *dw,
-                                      float             *dh)
-{
-  GlyphCacheValue *gv;
-
-  gv = glyph_cache_lookup (self->glyph_cache, FALSE, font, glyph);
-
-  if (gv)
-    {
-      *tx = gv->tx;
-      *ty = gv->ty;
-      *tw = gv->tw;
-      *th = gv->th;
-      *dx = gv->draw_x;
-      *dy = gv->draw_y;
-      *dw = gv->draw_width;
-      *dh = gv->draw_height;
-    }
-}
 
 /*** Glyph cache ***/
 
@@ -477,10 +414,10 @@ glyph_cache_value_free (gpointer v)
 }
 
 static void
-add_to_cache (GlyphCache      *cache,
-              PangoFont       *font,
-              PangoGlyph       glyph,
-              GlyphCacheValue *value)
+add_to_cache (GlyphCache           *cache,
+              PangoFont            *font,
+              PangoGlyph            glyph,
+              GskVulkanCachedGlyph *value)
 {
   cairo_t *cr;
   cairo_scaled_font_t *scaled_font;
@@ -523,16 +460,18 @@ add_to_cache (GlyphCache      *cache,
   value->ty = (cg.y + value->draw_y) / cache->height;
   value->tw = (float)value->draw_width / cache->width;
   value->th = (float)value->draw_height / cache->height;
+
+  value->texture_index = 0;
 }
 
-static GlyphCacheValue *
+static GskVulkanCachedGlyph *
 glyph_cache_lookup (GlyphCache *cache,
                     gboolean    create,
                     PangoFont  *font,
                     PangoGlyph  glyph)
 {
   GlyphCacheKey lookup_key;
-  GlyphCacheValue *value;
+  GskVulkanCachedGlyph *value;
 
   lookup_key.font = font;
   lookup_key.glyph = glyph;
@@ -544,7 +483,9 @@ glyph_cache_lookup (GlyphCache *cache,
       GlyphCacheKey *key;
       PangoRectangle ink_rect;
 
-      value = g_new (GlyphCacheValue, 1);
+      value = g_new (GskVulkanCachedGlyph, 1);
+
+      value->texture_index = 0;
 
       pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
       pango_extents_to_pixels (&ink_rect, NULL);
@@ -555,11 +496,7 @@ glyph_cache_lookup (GlyphCache *cache,
       value->draw_height = ink_rect.height;
 
       if (ink_rect.width > 0 && ink_rect.height > 0)
-        {
-          add_to_cache (cache, font, glyph, value);
-
-          g_clear_object (&cache->image);
-        }
+        add_to_cache (cache, font, glyph, value);
 
       key = g_new (GlyphCacheKey, 1);
       key->font = g_object_ref (font);
@@ -569,43 +506,6 @@ glyph_cache_lookup (GlyphCache *cache,
     }
 
   return value;
-}
-
-void
-gsk_vulkan_renderer_cache_glyphs (GskVulkanRenderer *self,
-                                  PangoFont         *font,
-                                  PangoGlyphString  *glyphs)
-{
-  int i;
-
-  for (i = 0; i < glyphs->num_glyphs; i++)
-    {
-      PangoGlyphInfo *gi = &glyphs->glyphs[i];
-
-      if (gi->glyph != PANGO_GLYPH_EMPTY)
-        {
-          if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
-            (void) glyph_cache_lookup (self->glyph_cache, TRUE, font, gi->glyph);
-        }
-    }
-}
-
-static GlyphCache *
-create_glyph_cache (void)
-{
-  GlyphCache *cache;
-
-  cache = g_new0 (GlyphCache, 1);
-  cache->hash_table = g_hash_table_new_full (glyph_cache_hash, glyph_cache_equal,
-                                             glyph_cache_key_free, glyph_cache_value_free);
-  cache->width = 1024;
-  cache->height = 1024;
-  cache->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, cache->width, cache->height);
-  cache->y0 = 1;
-  cache->y = 1;
-  cache->x = 1;
-
-  return cache;
 }
 
 static void
@@ -632,4 +532,62 @@ dump_glyph_cache_stats (GlyphCache *cache)
   time = now;
 
   cairo_surface_write_to_png (cache->surface, "gsk-glyph-cache.png");
+}
+
+guint
+gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
+                                 PangoFont         *font,
+                                 PangoGlyph         glyph)
+{
+  GskVulkanCachedGlyph *value;
+
+  value = glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph);
+
+  return value->texture_index;
+}
+
+static GlyphCache *
+create_glyph_cache (void)
+{
+  GlyphCache *cache;
+
+  cache = g_new0 (GlyphCache, 1);
+  cache->hash_table = g_hash_table_new_full (glyph_cache_hash, glyph_cache_equal,
+                                             glyph_cache_key_free, glyph_cache_value_free);
+  cache->width = 1024;
+  cache->height = 1024;
+  cache->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, cache->width, cache->height);
+  cache->y0 = 1;
+  cache->y = 1;
+  cache->x = 1;
+
+  return cache;
+}
+
+GskVulkanImage *
+gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
+                                     GskVulkanUploader  *uploader,
+                                     guint               index)
+{
+  if (self->glyph_cache->image == NULL)
+    self->glyph_cache->image = gsk_vulkan_image_new_from_data (uploader,
+                                    cairo_image_surface_get_data (self->glyph_cache->surface),
+                                    cairo_image_surface_get_width (self->glyph_cache->surface),
+                                    cairo_image_surface_get_height (self->glyph_cache->surface),
+                                    cairo_image_surface_get_stride (self->glyph_cache->surface));
+
+  return g_object_ref (self->glyph_cache->image);
+}
+
+GskVulkanCachedGlyph *
+gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
+                                      PangoFont         *font,
+                                      PangoGlyph         glyph)
+{
+  GlyphCacheKey lookup_key;
+
+  lookup_key.font = font;
+  lookup_key.glyph = glyph;
+
+  return g_hash_table_lookup (self->glyph_cache->hash_table, &lookup_key);
 }

@@ -99,15 +99,19 @@ gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *
                                                     PangoFont                  *font,
                                                     PangoGlyphString           *glyphs,
                                                     float                       x,
-                                                    float                       y)
+                                                    float                       y,
+                                                    guint                       start_glyph,
+                                                    guint                       num_glyphs)
 {
   GskVulkanColorTextInstance *instances = (GskVulkanColorTextInstance *) data;
-  int i, count;
+  int i
+  int count = 0;
   int x_position = 0;
-  float dx, dy, dw, dh;
 
-  count = 0;
-  for (i = 0; i < glyphs->num_glyphs; i++)
+  for (i = 0; i < start_glyph; i++)
+    x_position += glyphs->glyphs[i].geometry.width;
+
+  for (; i < num_glyphs; i++)
     {
       PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
@@ -119,17 +123,19 @@ gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *
           if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
             {
               GskVulkanColorTextInstance *instance = &instances[count];
+              GskVulkanCachedGlyph *glyph;
 
-              gsk_vulkan_renderer_get_glyph_coords (renderer, font, gi->glyph,
-                                                    &instance->tex_rect[0],
-                                                    &instance->tex_rect[1],
-                                                    &instance->tex_rect[2],
-                                                    &instance->tex_rect[3],
-                                                    &dx, &dy, &dw, &dh);
-              instance->rect[0] = x + cx + dx;
-              instance->rect[1] = y + cy + dy;
-              instance->rect[2] = dw;
-              instance->rect[3] = dh;
+              glyph = gsk_vulkan_renderer_get_cached_glyph (renderer, font, gi->glyph);
+
+              instance->tex_rect[0] = glyph->tx;
+              instance->tex_rect[1] = glyph->ty;
+              instance->tex_rect[2] = glyph->tw;
+              instance->tex_rect[3] = glyph->th;
+
+              instance->rect[0] = x + cx + glyph->draw_x;
+              instance->rect[1] = y + cy + glyph->draw_y;
+              instance->rect[2] = glyph->draw_width;
+              instance->rect[3] = glyph->draw_height;
 
               count++;
            }
