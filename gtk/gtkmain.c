@@ -1494,6 +1494,10 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
+
+      if (event->type == GDK_LEAVE_NOTIFY)
+        gtk_synthesize_crossing_events (toplevel, old_target, NULL,
+                                        event, event->crossing.mode);
       break;
     case GDK_ENTER_NOTIFY:
       if (event->crossing.mode == GDK_CROSSING_GRAB ||
