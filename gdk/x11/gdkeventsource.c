@@ -32,6 +32,8 @@ static gboolean gdk_event_source_dispatch (GSource     *source,
                                            gpointer     user_data);
 static void     gdk_event_source_finalize (GSource     *source);
 
+static GQuark quark_needs_enter = 0;
+
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
@@ -167,6 +169,100 @@ handle_focus_change (GdkEventCrossing *event)
 }
 
 static GdkEvent *
+create_synth_crossing_event (GdkEventType     evtype,
+                             GdkCrossingMode  mode,
+                             const GdkEvent  *real_event)
+{
+  GdkEvent *event;
+  gdouble x, y;
+  GdkModifierType state;
+
+  g_assert (evtype == GDK_ENTER_NOTIFY || evtype == GDK_LEAVE_NOTIFY);
+
+  event = gdk_event_new (evtype);
+  event->crossing.send_event = TRUE;
+  event->crossing.window = g_object_ref (real_event->any.window);
+  event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+  event->crossing.mode = mode;
+  event->crossing.time = gdk_event_get_time (real_event);
+  gdk_event_set_device (event, gdk_event_get_device (real_event));
+  gdk_event_set_source_device (event, gdk_event_get_device (real_event));
+
+  if (gdk_event_get_state (real_event, &state))
+    event->crossing.state = state;
+
+  if (gdk_event_get_coords (real_event, &x, &y))
+    gdk_event_set_coords (event, x, y);
+
+  return event;
+}
+
+static void
+handle_touch_synthetic_crossing (GdkEvent *event)
+{
+  GdkEventType evtype = gdk_event_get_event_type (event);
+  GdkDevice *device = gdk_event_get_device (event);
+  GdkEvent *crossing = NULL;
+  GdkSeat *seat = gdk_device_get_seat (device);
+  gboolean needs_enter, set_needs_enter = FALSE;
+
+  if (quark_needs_enter == 0)
+    quark_needs_enter = g_quark_from_static_string ("gdk-x11-needs-enter-after-touch-end");
+
+  needs_enter =
+    GPOINTER_TO_UINT (g_object_get_qdata (G_OBJECT (seat), quark_needs_enter));
+
+  if (evtype == GDK_MOTION_NOTIFY && needs_enter)
+    {
+      set_needs_enter = FALSE;
+      crossing = create_synth_crossing_event (GDK_ENTER_NOTIFY,
+                                              GDK_CROSSING_DEVICE_SWITCH,
+                                              event);
+    }
+  else if (evtype == GDK_TOUCH_BEGIN && needs_enter &&
+           gdk_event_get_pointer_emulated (event))
+    {
+      set_needs_enter = FALSE;
+      crossing = create_synth_crossing_event (GDK_ENTER_NOTIFY,
+                                              GDK_CROSSING_TOUCH_BEGIN,
+                                              event);
+    }
+  else if (evtype == GDK_TOUCH_END &&
+           gdk_event_get_pointer_emulated (event))
+    {
+      set_needs_enter = TRUE;
+      crossing = create_synth_crossing_event (GDK_LEAVE_NOTIFY,
+                                              GDK_CROSSING_TOUCH_END,
+                                              event);
+    }
+  else if (evtype == GDK_ENTER_NOTIFY ||
+           evtype == GDK_LEAVE_NOTIFY)
+    {
+      /* We are receiving or shall receive a real crossing event,
+       * turn this off.
+       */
+      set_needs_enter = FALSE;
+    }
+  else
+    return;
+
+  if (needs_enter != set_needs_enter)
+    {
+      if (!set_needs_enter)
+        g_object_steal_qdata (G_OBJECT (seat), quark_needs_enter);
+      else
+        g_object_set_qdata (G_OBJECT (seat), quark_needs_enter,
+                            GUINT_TO_POINTER (TRUE));
+    }
+
+  if (crossing)
+    {
+      gdk_event_put (crossing);
+      gdk_event_free (crossing);
+    }
+}
+
+static GdkEvent *
 gdk_event_source_translate_event (GdkEventSource *event_source,
                                   XEvent         *xevent)
 {
@@ -253,6 +349,16 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
     {
       /* Handle focusing (in the case where no window manager is running */
       handle_focus_change (&event->crossing);
+    }
+
+  if (event &&
+      (event->type == GDK_TOUCH_BEGIN ||
+       event->type == GDK_TOUCH_END ||
+       event->type == GDK_MOTION_NOTIFY ||
+       event->type == GDK_ENTER_NOTIFY ||
+       event->type == GDK_LEAVE_NOTIFY))
+    {
+      handle_touch_synthetic_crossing (event);
     }
 
 #ifdef HAVE_XGENERICEVENTS
