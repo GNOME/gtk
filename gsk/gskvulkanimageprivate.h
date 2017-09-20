@@ -31,6 +31,14 @@ GskVulkanImage *        gsk_vulkan_image_new_from_data                  (GskVulk
                                                                          gsize                   width,
                                                                          gsize                   height,
                                                                          gsize                   stride);
+void                    gsk_vulkan_image_upload_region                  (GskVulkanImage         *image,
+                                                                         GskVulkanUploader      *uploader,
+                                                                         guchar                 *data,
+                                                                         gsize                   width,
+                                                                         gsize                   height,
+                                                                         gsize                   stride,
+                                                                         gsize                   x,
+                                                                         gsize                   y);
 GskVulkanImage *        gsk_vulkan_image_new_for_framebuffer            (GdkVulkanContext       *context,
                                                                          gsize                   width,
                                                                          gsize                   height);
