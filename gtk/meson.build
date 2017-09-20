@@ -1024,6 +1024,7 @@ gtk_tools = [
   ['gtk4-update-icon-cache', ['updateiconcache.c']],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c']],
   ['gtk4-query-immodules', ['queryimmodules.c', 'gtkutils.c']],
+  ['gtk4-glsl', ['glsl.c']],
 ]
 
 if os_unix
