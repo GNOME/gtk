@@ -124,7 +124,8 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                                      .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
                                      .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
                                      .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
-                                     .unnormalizedCoordinates = VK_FALSE
+                                     .unnormalizedCoordinates = VK_FALSE,
+                                     .maxAnisotropy = 1.0,
                                  },
                                  NULL,
                                  &self->sampler);
