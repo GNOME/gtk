@@ -322,18 +322,7 @@ gsk_vulkan_glyph_cache_get_glyph_image (GskVulkanGlyphCache *cache,
   atlas = g_ptr_array_index (cache->atlases, index);
 
   if (atlas->image == NULL)
-    {
-      cairo_surface_t *surface;
-
-      /* FIXME: create the image without uploading data pointlessly */
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, atlas->width, atlas->height);
-      atlas->image = gsk_vulkan_image_new_from_data (uploader,
-                                                     cairo_image_surface_get_data (surface),
-                                                     cairo_image_surface_get_width (surface),
-                                                     cairo_image_surface_get_height (surface),
-                                                     cairo_image_surface_get_stride (surface));
-      cairo_surface_destroy (surface);
-    }
+    atlas->image = gsk_vulkan_image_new_for_atlas (cache->vulkan, atlas->width, atlas->height);
 
   for (l = atlas->dirty_glyphs; l; l = l->next)
     {
