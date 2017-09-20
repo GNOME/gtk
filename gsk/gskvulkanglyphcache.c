@@ -13,6 +13,7 @@ typedef struct {
   GskVulkanImage *image;
   int width, height;
   int x, y, y0;
+  int num_glyphs;
 } Atlas;
 
 struct _GskVulkanGlyphCache {
@@ -47,6 +48,7 @@ create_atlas (void)
   atlas->x = 1;
   atlas->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, atlas->width, atlas->height);
   atlas->image = NULL;
+  atlas->num_glyphs = 0;
 
   return atlas;
 }
@@ -191,6 +193,8 @@ add_to_cache (GskVulkanGlyphCache  *cache,
   atlas->x = atlas->x + value->draw_width + 1;
   atlas->y = MAX (atlas->y, atlas->y0 + value->draw_height + 1);
 
+  atlas->num_glyphs++;
+
   value->tx = (cg.x + value->draw_x) / atlas->width;
   value->ty = (cg.y + value->draw_y) / atlas->height;
   value->tw = (float)value->draw_width / atlas->width;
@@ -199,6 +203,24 @@ add_to_cache (GskVulkanGlyphCache  *cache,
   value->texture_index = i;
 
   g_clear_object (&atlas->image); /* force re-upload */
+
+#ifdef G_ENABLE_DEBUG
+  if (GSK_DEBUG_CHECK(GLYPH_CACHE))
+    {
+      gchar buffer[256];
+      g_print ("Glyph cache:\n");
+      for (i = 0; i < cache->atlases->len; i++)
+        {
+          atlas = g_ptr_array_index (cache->atlases, i);
+          g_print ("\tAtlas %d (%dx%d): %d glyphs, filled to %d, %d / %d\n",
+                   i, atlas->width, atlas->height, atlas->num_glyphs,
+                   atlas->x, atlas->y0, atlas->y);
+
+          snprintf (buffer, sizeof (buffer), "gsk-vulkan-glyph-cache-%d-%d.png", i, atlas->num_glyphs);
+          cairo_surface_write_to_png (atlas->surface, buffer);
+        }
+    }
+#endif
 }
 
 GskVulkanGlyphCache *
