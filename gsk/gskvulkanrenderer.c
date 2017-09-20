@@ -267,6 +267,8 @@ gsk_vulkan_renderer_begin_draw_frame (GskRenderer          *renderer,
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GdkDrawingContext *result;
 
+  gsk_vulkan_glyph_cache_begin_frame (self->glyph_cache);
+
 #if 0
   GSK_NOTE(RENDERER, dump_glyph_cache_stats (self->glyph_cache));
 #endif
