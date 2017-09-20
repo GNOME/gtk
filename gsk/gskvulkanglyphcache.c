@@ -8,16 +8,18 @@
 
 #include <graphene.h>
 
+typedef struct {
+  cairo_surface_t *surface;
+  GskVulkanImage *image;
+  int width, height;
+  int x, y, y0;
+} Atlas;
+
 struct _GskVulkanGlyphCache {
   GObject parent_instance;
 
   GHashTable *hash_table;
-
-  cairo_surface_t *surface;
-  int width, height;
-  int x, y, y0;
-
-  GskVulkanImage *image;
+  GPtrArray *atlases;
 };
 
 struct _GskVulkanGlyphCacheClass {
@@ -32,17 +34,41 @@ static gboolean glyph_cache_equal      (gconstpointer v1,
 static void     glyph_cache_key_free   (gpointer      v);
 static void     glyph_cache_value_free (gpointer      v);
 
+static Atlas *
+create_atlas (void)
+{
+  Atlas *atlas;
+
+  atlas = g_new (Atlas, 1);
+  atlas->width = 512;
+  atlas->height = 512;
+  atlas->y0 = 1;
+  atlas->y = 1;
+  atlas->x = 1;
+  atlas->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, atlas->width, atlas->height);
+  atlas->image = NULL;
+
+  return atlas;
+}
+
+static void
+free_atlas (gpointer v)
+{
+  Atlas *atlas = v;
+
+  if (atlas->surface)
+    cairo_surface_destroy (atlas->surface);
+  g_clear_object (&atlas->image);
+  g_free (atlas);
+}
+
 static void
 gsk_vulkan_glyph_cache_init (GskVulkanGlyphCache *cache)
 {
   cache->hash_table = g_hash_table_new_full (glyph_cache_hash, glyph_cache_equal,
                                              glyph_cache_key_free, glyph_cache_value_free);
-  cache->width = 1024;
-  cache->height = 1024;
-  cache->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, cache->width, cache->height);
-  cache->y0 = 1;
-  cache->y = 1;
-  cache->x = 1;
+  cache->atlases = g_ptr_array_new_with_free_func (free_atlas);
+  g_ptr_array_add (cache->atlases, create_atlas ());
 }
 
 static void
@@ -51,8 +77,7 @@ gsk_vulkan_glyph_cache_finalize (GObject *object)
   GskVulkanGlyphCache *cache = GSK_VULKAN_GLYPH_CACHE (object);
 
   g_hash_table_unref (cache->hash_table);
-  cairo_surface_destroy (cache->surface);
-  g_clear_object (&cache->image);
+  g_ptr_array_unref (cache->atlases);
 
   G_OBJECT_CLASS (gsk_vulkan_glyph_cache_parent_class)->finalize (object);
 }
@@ -112,21 +137,41 @@ add_to_cache (GskVulkanGlyphCache  *cache,
   cairo_t *cr;
   cairo_scaled_font_t *scaled_font;
   cairo_glyph_t cg;
+  Atlas *atlas;
+  int i;
 
-  if (cache->x + value->draw_width + 1 >= cache->width)
+  for (i = 0; i < cache->atlases->len; i++)
     {
-      /* start a new row */
-      cache->y0 = cache->y + 1;
-      cache->x = 1;
+      int x, y, y0;
+
+      atlas = g_ptr_array_index (cache->atlases, i);
+      x = atlas->x;
+      y = atlas->y;
+      y0 = atlas->y0;
+
+      if (atlas->x + value->draw_width + 1 >= atlas->width)
+        {
+          /* start a new row */
+          y0 = y + 1;
+          x = 1;
+        }
+
+      if (y0 + value->draw_height + 1 >= atlas->height)
+        continue;
+
+      atlas->y0 = y0;
+      atlas->x = x;
+      atlas->y = y;
+      break;
     }
 
-  if (cache->y0 + value->draw_height + 1 >= cache->height)
+  if (i == cache->atlases->len)
     {
-      g_critical ("Drats! Out of cache space. We should really handle this");
-      return;
+      atlas = create_atlas ();
+      g_ptr_array_add (cache->atlases, atlas);
     }
 
-  cr = cairo_create (cache->surface);
+  cr = cairo_create (atlas->surface);
 
   scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
   if (G_UNLIKELY (!scaled_font || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
@@ -136,43 +181,25 @@ add_to_cache (GskVulkanGlyphCache  *cache,
   cairo_set_source_rgba (cr, 1, 1, 1, 1);
 
   cg.index = glyph;
-  cg.x = cache->x - value->draw_x;
-  cg.y = cache->y0 - value->draw_y;
+  cg.x = atlas->x - value->draw_x;
+  cg.y = atlas->y0 - value->draw_y;
 
   cairo_show_glyphs (cr, &cg, 1);
 
   cairo_destroy (cr);
 
-  cache->x = cache->x + value->draw_width + 1;
-  cache->y = MAX (cache->y, cache->y0 + value->draw_height + 1);
+  atlas->x = atlas->x + value->draw_width + 1;
+  atlas->y = MAX (atlas->y, atlas->y0 + value->draw_height + 1);
 
-  value->tx = (cg.x + value->draw_x) / cache->width;
-  value->ty = (cg.y + value->draw_y) / cache->height;
-  value->tw = (float)value->draw_width / cache->width;
-  value->th = (float)value->draw_height / cache->height;
+  value->tx = (cg.x + value->draw_x) / atlas->width;
+  value->ty = (cg.y + value->draw_y) / atlas->height;
+  value->tw = (float)value->draw_width / atlas->width;
+  value->th = (float)value->draw_height / atlas->height;
 
-  value->texture_index = 0;
+  value->texture_index = i;
+
+  g_clear_object (&atlas->image); /* force re-upload */
 }
-
-#if 0
-static void
-dump_glyph_cache_stats (GskVulkanGlyphCache *cache)
-{
-  static gint64 time;
-  gint64 now;
-
-  if (!cache->hash_table)
-    return;
-
-  now = g_get_monotonic_time ();
-  if (now - time < 1000000)
-    return;
-
-  time = now;
-
-  cairo_surface_write_to_png (cache->surface, "gsk-glyph-cache.png");
-}
-#endif
 
 GskVulkanGlyphCache *
 gsk_vulkan_glyph_cache_new (void)
@@ -199,7 +226,7 @@ gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
       GlyphCacheKey *key;
       PangoRectangle ink_rect;
 
-      value = g_new (GskVulkanCachedGlyph, 1);
+      value = g_new0 (GskVulkanCachedGlyph, 1);
 
       pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
       pango_extents_to_pixels (&ink_rect, NULL);
@@ -210,10 +237,7 @@ gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
       value->draw_height = ink_rect.height;
 
       if (ink_rect.width > 0 && ink_rect.height > 0)
-        {
-          add_to_cache (cache, font, glyph, value);
-          g_clear_object (&cache->image);
-        }
+        add_to_cache (cache, font, glyph, value);
 
       key = g_new (GlyphCacheKey, 1);
       key->font = g_object_ref (font);
@@ -230,12 +254,18 @@ gsk_vulkan_glyph_cache_get_glyph_image (GskVulkanGlyphCache *cache,
                                         GskVulkanUploader   *uploader,
                                         guint                index)
 {
-  if (cache->image == NULL)
-    cache->image = gsk_vulkan_image_new_from_data (uploader,
-                                                   cairo_image_surface_get_data (cache->surface),
-                                                   cairo_image_surface_get_width (cache->surface),
-                                                   cairo_image_surface_get_height (cache->surface),
-                                                   cairo_image_surface_get_stride (cache->surface));
+  Atlas *atlas;
 
-  return cache->image;
+  g_return_val_if_fail (index < cache->atlases->len, NULL);
+
+  atlas = g_ptr_array_index (cache->atlases, index);
+
+  if (atlas->image == NULL)
+    atlas->image = gsk_vulkan_image_new_from_data (uploader,
+                                                   cairo_image_surface_get_data (atlas->surface),
+                                                   cairo_image_surface_get_width (atlas->surface),
+                                                   cairo_image_surface_get_height (atlas->surface),
+                                                   cairo_image_surface_get_stride (atlas->surface));
+
+  return atlas->image;
 }

@@ -104,14 +104,14 @@ gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *
                                                     guint                       num_glyphs)
 {
   GskVulkanColorTextInstance *instances = (GskVulkanColorTextInstance *) data;
-  int i
+  int i;
   int count = 0;
   int x_position = 0;
 
   for (i = 0; i < start_glyph; i++)
     x_position += glyphs->glyphs[i].geometry.width;
 
-  for (; i < num_glyphs; i++)
+  for (; i < glyphs->num_glyphs && count < num_glyphs; i++)
     {
       PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
