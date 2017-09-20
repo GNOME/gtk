@@ -19,6 +19,8 @@ typedef struct {
 struct _GskVulkanGlyphCache {
   GObject parent_instance;
 
+  GdkVulkanContext *vulkan;
+
   GHashTable *hash_table;
   GPtrArray *atlases;
 };
@@ -224,9 +226,14 @@ add_to_cache (GskVulkanGlyphCache  *cache,
 }
 
 GskVulkanGlyphCache *
-gsk_vulkan_glyph_cache_new (void)
+gsk_vulkan_glyph_cache_new (GdkVulkanContext *vulkan)
 {
-  return GSK_VULKAN_GLYPH_CACHE (g_object_new (GSK_TYPE_VULKAN_GLYPH_CACHE, NULL));
+  GskVulkanGlyphCache *cache;
+
+  cache = GSK_VULKAN_GLYPH_CACHE (g_object_new (GSK_TYPE_VULKAN_GLYPH_CACHE, NULL));
+  cache->vulkan = vulkan;
+
+  return cache;
 }
 
 GskVulkanCachedGlyph *

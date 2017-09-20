@@ -137,7 +137,7 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
 
   self->render = gsk_vulkan_render_new (renderer, self->vulkan);
 
-  self->glyph_cache = gsk_vulkan_glyph_cache_new ();
+  self->glyph_cache = gsk_vulkan_glyph_cache_new (self->vulkan);
 
   return TRUE;
 }
