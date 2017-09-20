@@ -14,7 +14,8 @@ typedef enum {
   GSK_DEBUG_TRANSFORMS  = 1 << 5,
   GSK_DEBUG_SURFACE     = 1 << 6,
   GSK_DEBUG_VULKAN      = 1 << 7,
-  GSK_DEBUG_FALLBACK    = 1 << 8
+  GSK_DEBUG_FALLBACK    = 1 << 8,
+  GSK_DEBUG_GLYPH_CACHE = 1 << 9
 } GskDebugFlags;
 
 #define GSK_DEBUG_ANY ((1 << 9) - 1)
