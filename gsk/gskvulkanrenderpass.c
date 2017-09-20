@@ -71,9 +71,9 @@ struct _GskVulkanOpText
   gsize                vertex_offset; /* offset into vertex buffer */
   gsize                vertex_count; /* number of vertices */
   gsize                descriptor_set_index; /* index into descriptor sets array for the right descriptor set to bind */
-  guint                texture_index;
-  guint                start_glyph;
-  guint                num_glyphs;
+  guint                texture_index; /* index of the texture in the glyph cache */
+  guint                start_glyph; /* the first glyph in nodes glyphstring that we render */
+  guint                num_glyphs; /* number of *non-empty* glyphs (== instances) we render */
 };
 
 struct _GskVulkanOpPushConstants
@@ -217,8 +217,8 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       {
         PangoFont *font = gsk_text_node_get_font (node);
         PangoGlyphString *glyphs = gsk_text_node_get_glyphs (node);
-        PangoGlyph glyph;
         int i;
+        guint count;
         guint texture_index;
         GskVulkanRenderer *renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
 
@@ -248,23 +248,39 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
           }
         op.text.pipeline = gsk_vulkan_render_get_pipeline (render, pipeline_type);
 
-        i = 0;
-        texture_index = gsk_vulkan_renderer_cache_glyph (renderer, font, glyphs->glyphs[0].glyph);
-        while (i < glyphs->num_glyphs)
+        op.text.start_glyph = 0;
+        op.text.texture_index = G_MAXUINT;
+
+        for (i = 0, count = 0; i < glyphs->num_glyphs; i++)
           {
-            op.text.start_glyph = i;
-            op.text.texture_index = texture_index;
+            PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
-            do {
-              i++;
-              glyph = glyphs->glyphs[i].glyph;
-              if (glyph != PANGO_GLYPH_EMPTY && !(glyph & PANGO_GLYPH_UNKNOWN_FLAG))
-                texture_index = gsk_vulkan_renderer_cache_glyph (renderer, font, glyph);
-            } while (i < glyphs->num_glyphs && op.text.texture_index == texture_index);
+            if (gi->glyph != PANGO_GLYPH_EMPTY && !(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
+              {
+                texture_index = gsk_vulkan_renderer_cache_glyph (renderer, font, gi->glyph);
+                if (op.text.texture_index == G_MAXUINT)
+                  op.text.texture_index = texture_index;
+                if (texture_index != op.text.texture_index)
+                  {
+                     op.text.num_glyphs = count;
 
-            op.text.num_glyphs = i - op.text.start_glyph;
+                     g_array_append_val (self->render_ops, op);
+
+                     count = 1;
+                     op.text.start_glyph = i;
+                     op.text.texture_index = texture_index;
+                  }
+                else
+                  count++;
+              }
+          }
+
+        if (op.text.texture_index != G_MAXUINT && count != 0)
+          {
+            op.text.num_glyphs = count;
             g_array_append_val (self->render_ops, op);
           }
+
         return;
       }
 

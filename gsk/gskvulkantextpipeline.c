@@ -112,14 +112,14 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                               guint                   num_glyphs)
 {
   GskVulkanTextInstance *instances = (GskVulkanTextInstance *) data;
-  int i
+  int i;
   int count = 0;
   int x_position = 0;
 
   for (i = 0; i < start_glyph; i++)
     x_position += glyphs->glyphs[i].geometry.width;
 
-  for (; i < num_glyphs; i++)
+  for (; i < glyphs->num_glyphs && count < num_glyphs; i++)
     {
       PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
@@ -134,6 +134,7 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
               GskVulkanCachedGlyph *glyph;
 
               glyph = gsk_vulkan_renderer_get_cached_glyph (renderer, font, gi->glyph);
+
               instance->tex_rect[0] = glyph->tx;
               instance->tex_rect[1] = glyph->ty;
               instance->tex_rect[2] = glyph->tw;
