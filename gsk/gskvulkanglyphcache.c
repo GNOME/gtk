@@ -8,6 +8,20 @@
 
 #include <graphene.h>
 
+/* Parameters for our cache eviction strategy.
+ *
+ * Each cached glyph has an age that gets reset every time a cached glyph gets used.
+ * Glyphs that have not been used for the MAX_AGE frames are considered old. We keep
+ * count of the pixels of each atlas that are taken up by old glyphs. We check the
+ * fraction of old pixels every CHECK_INTERVAL frames, and if it is above MAX_OLD, then
+ * we drop the atlas an all the glyphs contained in it from the cache.
+ */
+
+#define MAX_AGE 60
+#define CHECK_INTERVAL 10
+#define MAX_OLD 0.333
+
+
 typedef struct {
   cairo_surface_t *surface;
   GskVulkanImage *image;
@@ -15,6 +29,7 @@ typedef struct {
   int x, y, y0;
   int num_glyphs;
   GList *dirty_glyphs;
+  guint old_pixels;
 } Atlas;
 
 struct _GskVulkanGlyphCache {
@@ -24,6 +39,8 @@ struct _GskVulkanGlyphCache {
 
   GHashTable *hash_table;
   GPtrArray *atlases;
+
+  guint64 timestamp;
 };
 
 struct _GskVulkanGlyphCacheClass {
@@ -43,7 +60,7 @@ create_atlas (GskVulkanGlyphCache *cache)
 {
   Atlas *atlas;
 
-  atlas = g_new (Atlas, 1);
+  atlas = g_new0 (Atlas, 1);
   atlas->width = 512;
   atlas->height = 512;
   atlas->y0 = 1;
@@ -202,9 +219,10 @@ add_to_cache (GskVulkanGlyphCache  *cache,
       for (i = 0; i < cache->atlases->len; i++)
         {
           atlas = g_ptr_array_index (cache->atlases, i);
-          g_print ("\tAtlas %d (%dx%d): %d glyphs (%d dirty), filled to %d, %d / %d\n",
+          g_print ("\tAtlas %d (%dx%d): %d glyphs (%d dirty), %.2g%% old pixels, filled to %d, %d / %d\n",
                    i, atlas->width, atlas->height,
                    atlas->num_glyphs, g_list_length (atlas->dirty_glyphs),
+                   100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height),
                    atlas->x, atlas->y0, atlas->y);
         }
     }
@@ -281,6 +299,17 @@ gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
 
   value = g_hash_table_lookup (cache->hash_table, &lookup_key);
 
+  if (value)
+    {
+      if (cache->timestamp - value->timestamp >= MAX_AGE)
+        {
+          Atlas *atlas = g_ptr_array_index (cache->atlases, value->texture_index);
+
+          atlas->old_pixels -= value->draw_width * value->draw_height;
+          value->timestamp = cache->timestamp;
+        }
+    }
+
   if (create && value == NULL)
     {
       GlyphCacheKey *key;
@@ -296,6 +325,7 @@ gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
       value->draw_y = ink_rect.y;
       value->draw_width = ink_rect.width;
       value->draw_height = ink_rect.height;
+      value->timestamp = cache->timestamp;
 
       key->font = g_object_ref (font);
       key->glyph = glyph;
@@ -333,4 +363,86 @@ gsk_vulkan_glyph_cache_get_glyph_image (GskVulkanGlyphCache *cache,
   atlas->dirty_glyphs = NULL;
 
   return atlas->image;
+}
+
+void
+gsk_vulkan_glyph_cache_begin_frame (GskVulkanGlyphCache *cache)
+{
+  int i, j;
+  guint *drops;
+  guint *shifts;
+  guint len;
+  GHashTableIter iter;
+  GlyphCacheKey *key;
+  GskVulkanCachedGlyph *value;
+  guint dropped = 0;
+
+  cache->timestamp++;
+
+  if (cache->timestamp % CHECK_INTERVAL != 0)
+    return;
+
+  len = cache->atlases->len;
+
+  /* look for glyphs that have grown old since last time */
+  g_hash_table_iter_init (&iter, cache->hash_table);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+    {
+      guint age;
+
+      age = cache->timestamp - value->timestamp;
+      if (MAX_AGE <= age && age < MAX_AGE + CHECK_INTERVAL)
+        {
+          Atlas *atlas = g_ptr_array_index (cache->atlases, value->texture_index);
+          atlas->old_pixels += value->draw_width * value->draw_height;
+        }
+    }
+
+  drops = g_alloca (sizeof (guint) * len);
+  shifts = g_alloca (sizeof (guint) * len);
+
+  for (i = 0; i < len; i++)
+    {
+      drops[i] = 0;
+      shifts[i] = i;
+    }
+
+  /* look for atlases to drop, and create a mapping of updated texture indices */
+  for (i = cache->atlases->len - 1; i >= 0; i--)
+    {
+      Atlas *atlas = g_ptr_array_index (cache->atlases, i);
+
+      if (atlas->old_pixels > MAX_OLD * atlas->width * atlas->height)
+        {
+          GSK_NOTE(GLYPH_CACHE,
+                   g_print ("Dropping atlas %d (%g.2%% old)\n", i, 100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height)));
+          g_ptr_array_remove_index (cache->atlases, i);
+
+          drops[i] = 1;
+          for (j = i; j + 1 < len; j++)
+            shifts[j + 1] = shifts[j];
+        }
+    }
+
+  /* no atlas dropped, we're done */
+  if (len == cache->atlases->len)
+    return;
+
+  /* purge glyphs and update texture indices */
+  g_hash_table_iter_init (&iter, cache->hash_table);
+
+  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+    {
+      if (drops[value->texture_index])
+        {
+          dropped++;
+          g_hash_table_iter_remove (&iter);
+        }
+      else
+        {
+          value->texture_index = shifts[value->texture_index];
+        }
+    }
+
+  GSK_NOTE(GLYPH_CACHE, g_print ("Dropped %d glyphs\n", dropped));
 }

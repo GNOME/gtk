@@ -38,6 +38,8 @@ typedef struct
   int draw_y;
   int draw_width;
   int draw_height;
+
+  guint64 timestamp;
 } GskVulkanCachedGlyph;
 
 guint                  gsk_vulkan_renderer_cache_glyph      (GskVulkanRenderer *renderer,
