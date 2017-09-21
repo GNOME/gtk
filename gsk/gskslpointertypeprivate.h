@@ -22,6 +22,7 @@
 #include <glib.h>
 
 #include "gsksltypesprivate.h"
+#include "gskspvwriterprivate.h"
 
 G_BEGIN_DECLS
 
@@ -70,6 +71,14 @@ gboolean                gsk_sl_pointer_type_is_volatile                 (const G
 gboolean                gsk_sl_pointer_type_is_restrict                 (const GskSlPointerType     *type);
 gboolean                gsk_sl_pointer_type_is_readonly                 (const GskSlPointerType     *type);
 gboolean                gsk_sl_pointer_type_is_writeonly                (const GskSlPointerType     *type);
+
+gboolean                gsk_sl_pointer_type_equal                       (gconstpointer               a,
+                                                                         gconstpointer               b);
+guint                   gsk_sl_pointer_type_hash                        (gconstpointer               type);
+
+GskSpvStorageClass      gsk_sl_pointer_type_get_storage_class           (const GskSlPointerType     *type);
+guint32                 gsk_sl_pointer_type_write_spv                   (const GskSlPointerType     *type,
+                                                                         GskSpvWriter               *writer);
 
 G_END_DECLS
 

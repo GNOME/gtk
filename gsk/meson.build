@@ -38,7 +38,8 @@ gsk_private_sources = files([
   'gskslpointertype.c',
   'gskslscope.c',
   'gsksltokenizer.c',
-  'gsksltype.c'
+  'gsksltype.c',
+  'gskspvwriter.c'
 ])
 
 gsk_public_headers = files([

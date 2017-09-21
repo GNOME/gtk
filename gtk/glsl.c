@@ -46,7 +46,44 @@ bytes_new_from_file (const char  *filename,
   return g_bytes_new_take (data, length);
 }
 
-gboolean
+static gboolean
+compile (GOutputStream *output,
+         const char    *filename)
+{
+  GBytes *bytes;
+  GskSlNode *program;
+  GError *error = NULL;
+
+  bytes = bytes_new_from_file (filename, &error);
+  if (bytes == NULL)
+    {
+      g_print (error->message);
+      g_error_free (error);
+      return FALSE;
+    }
+
+  program = gsk_sl_node_new_program (bytes, NULL);
+  g_bytes_unref (bytes);
+  if (program == NULL)
+    return FALSE;
+
+  bytes = gsk_sl_node_compile (program);
+  if (!g_output_stream_write_all (output, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL, NULL, &error))
+    {
+      g_print (error->message);
+      g_error_free (error);
+      g_bytes_unref (bytes);
+      gsk_sl_node_unref (program);
+      return FALSE;
+    }
+
+  g_bytes_unref (bytes);
+  gsk_sl_node_unref (program);
+
+  return TRUE;
+}
+
+static gboolean
 dump (GOutputStream *output,
       const char    *filename)
 {
@@ -64,6 +101,7 @@ dump (GOutputStream *output,
     }
 
   program = gsk_sl_node_new_program (bytes, NULL);
+  g_bytes_unref (bytes);
   if (program == NULL)
     return FALSE;
 
@@ -100,7 +138,9 @@ main (int argc, char *argv[])
   GOptionContext *ctx;
   char **filenames = NULL;
   char *output_file = NULL;
+  gboolean print = FALSE;
   const GOptionEntry entries[] = {
+    { "print", 'p', 0, G_OPTION_ARG_NONE, &print, "Print instead of compiling", NULL },
     { "output", 'o', 0, G_OPTION_ARG_FILENAME, &output_file, "Output filename", "FILE" },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, "List of input files", "FILE [FILE...]" },
     { NULL, }
@@ -161,13 +201,12 @@ main (int argc, char *argv[])
         }
     }
 
-  for (i = 0; filenames[i] != NULL; i++)
+  for (i = 0; success && filenames[i] != NULL; i++)
     {
-      if (!dump (output, filenames[i]))
-        {
-          success = FALSE;
-          break;
-        }
+      if (print)
+        success = dump (output, filenames[i]);
+      else
+        success = compile (output, filenames[i]);
     }
 
  if (!g_output_stream_close (output, NULL, &error))

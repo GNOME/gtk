@@ -58,6 +58,13 @@ gboolean                gsk_sl_scalar_type_can_convert          (GskSlScalarType
 gboolean                gsk_sl_type_can_convert                 (const GskSlType     *target,
                                                                  const GskSlType     *source);
 
+gboolean                gsk_sl_type_equal                       (gconstpointer        a,
+                                                                 gconstpointer        b);
+guint                   gsk_sl_type_hash                        (gconstpointer        type);
+
+guint32                 gsk_sl_type_write_spv                   (const GskSlType     *type,
+                                                                 GskSpvWriter        *writer);
+
 G_END_DECLS
 
 #endif /* __GSK_SL_TYPE_PRIVATE_H__ */

@@ -23,6 +23,7 @@
 #include "gskslpreprocessorprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskspvwriterprivate.h"
 
 struct _GskSlPointerType {
   int ref_count;
@@ -383,4 +384,55 @@ gboolean
 gsk_sl_pointer_type_is_writeonly (const GskSlPointerType *type)
 {
   return type->flags & GSK_SL_POINTER_TYPE_WRITEONLY ? TRUE : FALSE;
+}
+
+GskSpvStorageClass
+gsk_sl_pointer_type_get_storage_class (const GskSlPointerType *type)
+{
+  if (type->flags & GSK_SL_POINTER_TYPE_LOCAL)
+    return GSK_SPV_STORAGE_CLASS_FUNCTION;
+
+  return GSK_SPV_STORAGE_CLASS_PRIVATE;
+}
+
+gboolean
+gsk_sl_pointer_type_equal (gconstpointer a,
+                           gconstpointer b)
+{
+  const GskSlPointerType *typea = a;
+  const GskSlPointerType *typeb = b;
+
+  if (!gsk_sl_type_equal (typea->type, typeb->type))
+    return FALSE;
+
+  return gsk_sl_pointer_type_get_storage_class (typea)
+      == gsk_sl_pointer_type_get_storage_class (typeb);
+}
+
+guint
+gsk_sl_pointer_type_hash (gconstpointer t)
+{
+  const GskSlPointerType *type = t;
+
+  return gsk_sl_type_hash (type->type)
+       ^ gsk_sl_pointer_type_get_storage_class (type);
+}
+
+guint32
+gsk_sl_pointer_type_write_spv (const GskSlPointerType *type,
+                               GskSpvWriter           *writer)
+{
+  guint32 type_id, result_id;
+
+  type_id = gsk_spv_writer_get_id_for_type (writer, type->type);
+  result_id = gsk_spv_writer_next_id (writer);
+
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_DECLARE,
+                      4, GSK_SPV_OP_TYPE_POINTER,
+                      (guint32[3]) { result_id,
+                                     gsk_sl_pointer_type_get_storage_class (type),
+                                     type_id });
+
+  return result_id;
 }

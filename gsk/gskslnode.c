@@ -26,6 +26,7 @@
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskspvwriterprivate.h"
 
 #include <string.h>
 
@@ -43,67 +44,6 @@ gsk_sl_node_alloc (const GskSlNodeClass *klass,
   return node;
 }
 #define gsk_sl_node_new(_name, _klass) ((_name *) gsk_sl_node_alloc ((_klass), sizeof (_name)))
-
-/* PROGRAM */
-
-typedef struct _GskSlNodeProgram GskSlNodeProgram;
-
-struct _GskSlNodeProgram {
-  GskSlNode parent;
-
-  GskSlScope *scope;
-  GSList *declarations;
-  GSList *functions;
-};
-
-static void
-gsk_sl_node_program_free (GskSlNode *node)
-{
-  GskSlNodeProgram *program = (GskSlNodeProgram *) node;
-
-  g_slist_free (program->declarations);
-  g_slist_free (program->functions);
-  gsk_sl_scope_unref (program->scope);
-
-  g_slice_free (GskSlNodeProgram, program);
-}
-
-static void
-gsk_sl_node_program_print (GskSlNode *node,
-                           GString   *string)
-{
-  GskSlNodeProgram *program = (GskSlNodeProgram *) node;
-  GSList *l;
-
-  for (l = program->declarations; l; l = l->next)
-    gsk_sl_node_print (l->data, string);
-
-  for (l = program->functions; l; l = l->next)
-    {
-      if (l != program->functions || program->declarations != NULL)
-        g_string_append (string, "\n");
-      gsk_sl_node_print (l->data, string);
-    }
-}
-
-static GskSlType *
-gsk_sl_node_program_get_return_type (GskSlNode *node)
-{
-  return NULL;
-}
-
-static gboolean
-gsk_sl_node_program_is_constant (GskSlNode *node)
-{
-  return TRUE;
-}
-
-static const GskSlNodeClass GSK_SL_NODE_PROGRAM = {
-  gsk_sl_node_program_free,
-  gsk_sl_node_program_print,
-  gsk_sl_node_program_get_return_type,
-  gsk_sl_node_program_is_constant
-};
 
 /* FUNCTION */
 
@@ -171,11 +111,142 @@ gsk_sl_node_function_is_constant (GskSlNode *node)
   return TRUE;
 }
 
+static guint32
+gsk_sl_node_function_write_spv (const GskSlNode *node,
+                                GskSpvWriter    *writer)
+{
+  GskSlNodeFunction *function = (GskSlNodeFunction *) node;
+  guint32 return_type_id, function_type_id, function_id, label_id;
+  GSList *l;
+
+  /* declare type of function */
+  return_type_id = gsk_spv_writer_get_id_for_type (writer, function->return_type);
+  function_type_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_DECLARE,
+                      3, GSK_SPV_OP_TYPE_FUNCTION,
+                      (guint32[2]) { function_type_id,
+                                     return_type_id });
+
+  /* add debug info */
+  /* FIXME */
+
+  /* add function body */
+  function_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      5, GSK_SPV_OP_FUNCTION,
+                      (guint32[4]) { return_type_id,
+                                     function_id,
+                                     0,
+                                     function_type_id });
+  label_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      2, GSK_SPV_OP_LABEL,
+                      (guint32[4]) { label_id });
+
+  for (l = function->statements; l; l = l->next)
+    {
+      gsk_sl_node_write_spv (l->data, writer);
+    }
+
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      1, GSK_SPV_OP_FUNCTION_END,
+                      NULL);
+  return function_id;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_FUNCTION = {
   gsk_sl_node_function_free,
   gsk_sl_node_function_print,
   gsk_sl_node_function_get_return_type,
-  gsk_sl_node_function_is_constant
+  gsk_sl_node_function_is_constant,
+  gsk_sl_node_function_write_spv
+};
+
+/* PROGRAM */
+
+typedef struct _GskSlNodeProgram GskSlNodeProgram;
+
+struct _GskSlNodeProgram {
+  GskSlNode parent;
+
+  GskSlScope *scope;
+  GSList *declarations;
+  GSList *functions;
+};
+
+static void
+gsk_sl_node_program_free (GskSlNode *node)
+{
+  GskSlNodeProgram *program = (GskSlNodeProgram *) node;
+
+  g_slist_free (program->declarations);
+  g_slist_free (program->functions);
+  gsk_sl_scope_unref (program->scope);
+
+  g_slice_free (GskSlNodeProgram, program);
+}
+
+static void
+gsk_sl_node_program_print (GskSlNode *node,
+                           GString   *string)
+{
+  GskSlNodeProgram *program = (GskSlNodeProgram *) node;
+  GSList *l;
+
+  for (l = program->declarations; l; l = l->next)
+    gsk_sl_node_print (l->data, string);
+
+  for (l = program->functions; l; l = l->next)
+    {
+      if (l != program->functions || program->declarations != NULL)
+        g_string_append (string, "\n");
+      gsk_sl_node_print (l->data, string);
+    }
+}
+
+static GskSlType *
+gsk_sl_node_program_get_return_type (GskSlNode *node)
+{
+  return NULL;
+}
+
+static gboolean
+gsk_sl_node_program_is_constant (GskSlNode *node)
+{
+  return TRUE;
+}
+
+static guint32
+gsk_sl_node_program_write_spv (const GskSlNode *node,
+                               GskSpvWriter    *writer)
+{
+  GskSlNodeProgram *program = (GskSlNodeProgram *) node;
+  GSList *l;
+
+  for (l = program->declarations; l; l = l->next)
+    gsk_sl_node_write_spv (l->data, writer);
+
+  for (l = program->functions; l; l = l->next)
+    {
+      guint32 id = gsk_sl_node_write_spv (l->data, writer);
+
+      if (g_str_equal (((GskSlNodeFunction *) l->data)->name, "main"))
+        gsk_spv_writer_set_entry_point (writer, id);
+    }
+
+  return 0;
+}
+
+static const GskSlNodeClass GSK_SL_NODE_PROGRAM = {
+  gsk_sl_node_program_free,
+  gsk_sl_node_program_print,
+  gsk_sl_node_program_get_return_type,
+  gsk_sl_node_program_is_constant,
+  gsk_sl_node_program_write_spv
 };
 
 /* ASSIGNMENT */
@@ -268,11 +339,21 @@ gsk_sl_node_assignment_is_constant (GskSlNode *node)
   return FALSE;
 }
 
+static guint32
+gsk_sl_node_assignment_write_spv (const GskSlNode *node,
+                                  GskSpvWriter    *writer)
+{
+  g_assert_not_reached ();
+
+  return 0;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_ASSIGNMENT = {
   gsk_sl_node_assignment_free,
   gsk_sl_node_assignment_print,
   gsk_sl_node_assignment_get_return_type,
-  gsk_sl_node_assignment_is_constant
+  gsk_sl_node_assignment_is_constant,
+  gsk_sl_node_assignment_write_spv
 };
 
 /* BINARY */
@@ -710,11 +791,21 @@ gsk_sl_node_operation_is_constant (GskSlNode *node)
       && gsk_sl_node_is_constant (operation->right);
 }
 
+static guint32
+gsk_sl_node_operation_write_spv (const GskSlNode *node,
+                                 GskSpvWriter    *writer)
+{
+  g_assert_not_reached ();
+
+  return 0;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_OPERATION = {
   gsk_sl_node_operation_free,
   gsk_sl_node_operation_print,
   gsk_sl_node_operation_get_return_type,
-  gsk_sl_node_operation_is_constant
+  gsk_sl_node_operation_is_constant,
+  gsk_sl_node_operation_write_spv
 };
 
 /* DECLARATION */
@@ -778,11 +869,41 @@ gsk_sl_node_declaration_is_constant (GskSlNode *node)
   return declaration->constant;
 }
 
+static guint32
+gsk_sl_node_declaration_write_spv (const GskSlNode *node,
+                                   GskSpvWriter    *writer)
+{
+  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
+  guint32 pointer_type_id, declaration_id;
+
+  pointer_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, declaration->type);
+  declaration_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      4, GSK_SPV_OP_VARIABLE,
+                      (guint32[3]) { pointer_type_id,
+                                     declaration_id,
+                                     gsk_sl_pointer_type_get_storage_class (declaration->type)});
+  gsk_spv_writer_set_id_for_declaration (writer, (GskSlNode *) node, declaration_id);
+  
+  if (declaration->initial)
+    {
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          3, GSK_SPV_OP_STORE,
+                          (guint32[2]) { declaration_id,
+                                         gsk_sl_node_write_spv (declaration->initial, writer)});
+    }
+
+  return declaration_id;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_DECLARATION = {
   gsk_sl_node_declaration_free,
   gsk_sl_node_declaration_print,
   gsk_sl_node_declaration_get_return_type,
-  gsk_sl_node_declaration_is_constant
+  gsk_sl_node_declaration_is_constant,
+  gsk_sl_node_declaration_write_spv
 };
 
 /* REFERENCE */
@@ -832,11 +953,32 @@ gsk_sl_node_reference_is_constant (GskSlNode *node)
   return gsk_sl_node_is_constant (reference->declaration);
 }
 
+static guint32
+gsk_sl_node_reference_write_spv (const GskSlNode *node,
+                                 GskSpvWriter    *writer)
+{
+  GskSlNodeReference *reference = (GskSlNodeReference *) node;
+  guint32 declaration_id, result_id, type_id;
+
+  type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_node_get_return_type (reference->declaration));
+  declaration_id = gsk_spv_writer_get_id_for_declaration (writer, reference->declaration);
+  result_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      4, GSK_SPV_OP_LOAD,
+                      (guint32[3]) { type_id,
+                                     result_id,
+                                     declaration_id });
+
+  return result_id;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_REFERENCE = {
   gsk_sl_node_reference_free,
   gsk_sl_node_reference_print,
   gsk_sl_node_reference_get_return_type,
-  gsk_sl_node_reference_is_constant
+  gsk_sl_node_reference_is_constant,
+  gsk_sl_node_reference_write_spv
 };
 
 /* FUNCTION_CALL */
@@ -902,11 +1044,21 @@ gsk_sl_node_function_call_is_constant (GskSlNode *node)
   return FALSE;
 }
 
+static guint32
+gsk_sl_node_function_call_write_spv (const GskSlNode *node,
+                                     GskSpvWriter    *writer)
+{
+  g_assert_not_reached ();
+
+  return 0;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_FUNCTION_CALL = {
   gsk_sl_node_function_call_free,
   gsk_sl_node_function_call_print,
   gsk_sl_node_function_call_get_return_type,
-  gsk_sl_node_function_call_is_constant
+  gsk_sl_node_function_call_is_constant,
+  gsk_sl_node_function_call_write_spv
 };
 
 /* RETURN */
@@ -966,11 +1118,21 @@ gsk_sl_node_return_is_constant (GskSlNode *node)
     return TRUE;
 }
 
+static guint32
+gsk_sl_node_return_write_spv (const GskSlNode *node,
+                              GskSpvWriter    *writer)
+{
+  g_assert_not_reached ();
+
+  return 0;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_RETURN = {
   gsk_sl_node_return_free,
   gsk_sl_node_return_print,
   gsk_sl_node_return_get_return_type,
-  gsk_sl_node_return_is_constant
+  gsk_sl_node_return_is_constant,
+  gsk_sl_node_return_write_spv
 };
 
 /* CONSTANT */
@@ -1055,11 +1217,85 @@ gsk_sl_node_constant_is_constant (GskSlNode *node)
   return TRUE;
 }
 
+static guint32
+gsk_sl_node_constant_write_spv (const GskSlNode *node,
+                                GskSpvWriter    *writer)
+{
+  GskSlNodeConstant *constant = (GskSlNodeConstant *) node;
+  guint32 type_id, result_id;
+
+  switch (constant->type)
+  {
+    case GSK_SL_FLOAT:
+      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_FLOAT));
+      result_id = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          4, GSK_SPV_OP_CONSTANT,
+                          (guint32[3]) { type_id,
+                                         result_id,
+                                         *(guint32 *) &constant->f });
+      break;
+
+    case GSK_SL_DOUBLE:
+      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_DOUBLE));
+      result_id = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          5, GSK_SPV_OP_CONSTANT,
+                          (guint32[4]) { type_id,
+                                         result_id,
+                                         *(guint32 *) &constant->d,
+                                         *(((guint32 *) &constant->d) + 1) });
+      break;
+
+    case GSK_SL_INT:
+      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_INT));
+      result_id = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          4, GSK_SPV_OP_CONSTANT,
+                          (guint32[3]) { type_id,
+                                         result_id,
+                                         constant->i32 });
+      break;
+
+    case GSK_SL_UINT:
+      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_UINT));
+      result_id = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          4, GSK_SPV_OP_CONSTANT,
+                          (guint32[3]) { type_id,
+                                         result_id,
+                                         constant->u32 });
+      break;
+
+    case GSK_SL_BOOL:
+      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_BOOL));
+      result_id = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          3, constant->b ? GSK_SPV_OP_CONSTANT_TRUE : GSK_SPV_OP_CONSTANT_FALSE,
+                          (guint32[2]) { type_id,
+                                         result_id });
+      break;
+
+    case GSK_SL_VOID:
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+
+  return result_id;
+}
+
 static const GskSlNodeClass GSK_SL_NODE_CONSTANT = {
   gsk_sl_node_constant_free,
   gsk_sl_node_constant_print,
   gsk_sl_node_constant_get_return_type,
-  gsk_sl_node_constant_is_constant
+  gsk_sl_node_constant_is_constant,
+  gsk_sl_node_constant_write_spv
 };
 
 /* API */
@@ -2277,6 +2513,22 @@ gsk_sl_node_print (GskSlNode *node,
   node->class->print (node, string);
 }
 
+GBytes *
+gsk_sl_node_compile (GskSlNode *node)
+{
+  GskSpvWriter *writer;
+  GBytes *bytes;
+
+  writer = gsk_spv_writer_new ();
+
+  gsk_sl_node_write_spv (node, writer);
+  bytes = gsk_spv_writer_write (writer);
+
+  gsk_spv_writer_unref (writer);
+
+  return bytes;
+}
+
 GskSlType *
 gsk_sl_node_get_return_type (GskSlNode *node)
 {
@@ -2288,3 +2540,11 @@ gsk_sl_node_is_constant (GskSlNode *node)
 {
   return node->class->is_constant (node);
 }
+
+guint32
+gsk_sl_node_write_spv (const GskSlNode *node,
+                       GskSpvWriter    *writer)
+{
+  return node->class->write_spv (node, writer);
+}
+

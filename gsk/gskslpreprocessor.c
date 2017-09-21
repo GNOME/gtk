@@ -93,29 +93,132 @@ static gboolean
 gsk_sl_token_is_skipped (const GskSlToken *token)
 {
   return gsk_sl_token_is (token, GSK_SL_TOKEN_ERROR)
+      || gsk_sl_token_is (token, GSK_SL_TOKEN_NEWLINE)
       || gsk_sl_token_is (token, GSK_SL_TOKEN_WHITESPACE)
       || gsk_sl_token_is (token, GSK_SL_TOKEN_COMMENT)
       || gsk_sl_token_is (token, GSK_SL_TOKEN_SINGLE_LINE_COMMENT);
 }
 
-static void
-gsk_sl_token_ensure (GskSlPreprocessor *preproc)
+static gboolean
+gsk_sl_preprocessor_next_token (GskSlPreprocessor *preproc)
 {
-  if (!gsk_sl_token_is (&preproc->token, GSK_SL_TOKEN_EOF))
-    return;
-
+  gboolean was_newline;
+  
   do 
     {
       preproc->location = *gsk_sl_tokenizer_get_location (preproc->tokenizer);
+      was_newline = gsk_sl_token_is (&preproc->token, GSK_SL_TOKEN_NEWLINE);
       gsk_sl_tokenizer_read_token (preproc->tokenizer, &preproc->token);
     }
   while (gsk_sl_token_is_skipped (&preproc->token));
+
+  return was_newline;
+}
+
+static void
+gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc)
+{
+  gboolean was_newline = gsk_sl_preprocessor_next_token (preproc);
+
+  /* empty # line */
+  if (was_newline)
+    return;
+
+  if (gsk_sl_token_is (&preproc->token, GSK_SL_TOKEN_IDENTIFIER))
+    {
+      if (g_str_equal (preproc->token.str, "define"))
+        {
+          gsk_sl_preprocessor_error (preproc, "Unknown preprocessor directive #define.");
+        }
+#if 0
+      else if (g_str_equal (preproc->token.str, "else"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "elif"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "endif"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "error"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "extension"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "if"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "ifdef"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "ifndef"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "line"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "pragma"))
+        {
+        }
+      else if (g_str_equal (preproc->token.str, "version"))
+        {
+        }
+#endif
+      else
+        {
+          gsk_sl_preprocessor_error (preproc, "Unknown preprocessor directive #%s.", preproc->token.str);
+        }
+    }
+  else if (gsk_sl_token_is (&preproc->token, GSK_SL_TOKEN_ELSE))
+    {
+      gsk_sl_preprocessor_error (preproc, "Unknown preprocessor directive #else.");
+    }
+  else
+    {
+      gsk_sl_preprocessor_error (preproc, "Missing identifier for preprocessor directive.");
+    }
+
+  while (!gsk_sl_preprocessor_next_token (preproc));
+}
+
+static void
+gsk_sl_preprocessor_ensure (GskSlPreprocessor *preproc)
+{
+  gboolean was_newline = FALSE;
+
+  if (!gsk_sl_token_is (&preproc->token, GSK_SL_TOKEN_EOF))
+    return;
+
+  was_newline = gsk_sl_preprocessor_next_token (preproc);
+
+  while (TRUE)
+    {
+      if (gsk_sl_token_is (&preproc->token, GSK_SL_TOKEN_HASH))
+        {
+          if (!was_newline &&
+              preproc->location.bytes != 0)
+            {
+              gsk_sl_preprocessor_error (preproc, "Unexpected \"#\" - preprocessor directives must be at start of line.");
+              was_newline = gsk_sl_preprocessor_next_token (preproc);
+            }
+          else
+            {
+              gsk_sl_preprocessor_handle_preprocessor_directive (preproc);
+              was_newline = TRUE;
+            }
+        }
+      else
+        {
+          break;
+        }
+    }
 }
 
 const GskSlToken *
 gsk_sl_preprocessor_get (GskSlPreprocessor *preproc)
 {
-  gsk_sl_token_ensure (preproc);
+  gsk_sl_preprocessor_ensure (preproc);
 
   return &preproc->token;
 }
@@ -123,7 +226,7 @@ gsk_sl_preprocessor_get (GskSlPreprocessor *preproc)
 const GskCodeLocation *
 gsk_sl_preprocessor_get_location (GskSlPreprocessor *preproc)
 {
-  gsk_sl_token_ensure (preproc);
+  gsk_sl_preprocessor_ensure (preproc);
 
   return &preproc->location;
 }
@@ -132,7 +235,7 @@ void
 gsk_sl_preprocessor_consume (GskSlPreprocessor *preproc,
                              GskSlNode         *consumer)
 {
-  gsk_sl_token_ensure (preproc);
+  gsk_sl_preprocessor_ensure (preproc);
 
   gsk_sl_token_clear (&preproc->token);
 }
@@ -152,7 +255,7 @@ gsk_sl_preprocessor_error (GskSlPreprocessor *preproc,
                               args);
   va_end (args);
 
-  gsk_sl_token_ensure (preproc);
+  gsk_sl_preprocessor_ensure (preproc);
   gsk_sl_preprocessor_error_func (preproc->tokenizer,
                                   TRUE,
                                   &preproc->location,

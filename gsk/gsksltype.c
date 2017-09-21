@@ -22,6 +22,7 @@
 
 #include "gsksltokenizerprivate.h"
 #include "gskslpreprocessorprivate.h"
+#include "gskspvwriterprivate.h"
 
 #include <string.h>
 
@@ -45,6 +46,8 @@ struct _GskSlTypeClass {
   guint                 (* get_length)                          (const GskSlType     *type);
   gboolean              (* can_convert)                         (const GskSlType     *target,
                                                                  const GskSlType     *source);
+  guint32               (* write_spv)                           (const GskSlType     *type,
+                                                                 GskSpvWriter        *writer);
 };
 
 /* SCALAR */
@@ -121,13 +124,85 @@ gsk_sl_type_scalar_can_convert (const GskSlType *target,
   return gsk_sl_scalar_type_can_convert (target_scalar->scalar, source_scalar->scalar);
 }
 
+static guint32
+gsk_sl_type_scalar_write_spv (const GskSlType *type,
+                              GskSpvWriter    *writer)
+{
+  GskSlTypeScalar *scalar = (GskSlTypeScalar *) type;
+  guint32 result;
+
+  switch (scalar->scalar)
+  {
+    case GSK_SL_VOID:
+      result = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          2, GSK_SPV_OP_TYPE_VOID,
+                          (guint32[1]) { result });
+      break;
+
+    case GSK_SL_FLOAT:
+      result = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          3, GSK_SPV_OP_TYPE_FLOAT,
+                          (guint32[2]) { result,
+                                         32 });
+      break;
+
+    case GSK_SL_DOUBLE:
+      result = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          3, GSK_SPV_OP_TYPE_FLOAT,
+                          (guint32[2]) { result,
+                                         64 });
+      break;
+
+    case GSK_SL_INT:
+      result = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          4, GSK_SPV_OP_TYPE_INT,
+                          (guint32[3]) { result,
+                                         32,
+                                         1 });
+      break;
+
+    case GSK_SL_UINT:
+      result = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          4, GSK_SPV_OP_TYPE_INT,
+                          (guint32[3]) { result,
+                                         32,
+                                         0 });
+      break;
+
+    case GSK_SL_BOOL:
+      result = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_DECLARE,
+                          2, GSK_SPV_OP_TYPE_BOOL,
+                          (guint32[1]) { result });
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+
+  return result;
+}
+
 static const GskSlTypeClass GSK_SL_TYPE_SCALAR = {
   gsk_sl_type_scalar_free,
   gsk_sl_type_scalar_get_name,
   gsk_sl_type_scalar_get_scalar_type,
   gsk_sl_type_scalar_get_index_type,
   gsk_sl_type_scalar_get_length,
-  gsk_sl_type_scalar_can_convert
+  gsk_sl_type_scalar_can_convert,
+  gsk_sl_type_scalar_write_spv
 };
 
 /* VECTOR */
@@ -196,13 +271,33 @@ gsk_sl_type_vector_can_convert (const GskSlType *target,
   return gsk_sl_scalar_type_can_convert (target_vector->scalar, source_vector->scalar);
 }
 
+static guint32
+gsk_sl_type_vector_write_spv (const GskSlType *type,
+                              GskSpvWriter    *writer)
+{
+  GskSlTypeVector *vector = (GskSlTypeVector *) type;
+  guint32 result_id, scalar_id;
+
+  scalar_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (vector->scalar));
+  result_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_DECLARE,
+                      4, GSK_SPV_OP_TYPE_VECTOR,
+                      (guint32[3]) { result_id,
+                                     scalar_id,
+                                     vector->length });
+  
+  return result_id;
+}
+
 static const GskSlTypeClass GSK_SL_TYPE_VECTOR = {
   gsk_sl_type_vector_free,
   gsk_sl_type_vector_get_name,
   gsk_sl_type_vector_get_scalar_type,
   gsk_sl_type_vector_get_index_type,
   gsk_sl_type_vector_get_length,
-  gsk_sl_type_vector_can_convert
+  gsk_sl_type_vector_can_convert,
+  gsk_sl_type_vector_write_spv
 };
 
 /* MATRIX */
@@ -273,13 +368,33 @@ gsk_sl_type_matrix_can_convert (const GskSlType *target,
   return gsk_sl_scalar_type_can_convert (target_matrix->scalar, source_matrix->scalar);
 }
 
+static guint32
+gsk_sl_type_matrix_write_spv (const GskSlType *type,
+                              GskSpvWriter    *writer)
+{
+  GskSlTypeMatrix *matrix = (GskSlTypeMatrix *) type;
+  guint32 result_id, vector_id;
+
+  vector_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_index_type (type));
+  result_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_DECLARE,
+                      4, GSK_SPV_OP_TYPE_MATRIX,
+                      (guint32[3]) { result_id,
+                                     vector_id,
+                                     matrix->columns });
+  
+  return result_id;
+}
+
 static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_free,
   gsk_sl_type_matrix_get_name,
   gsk_sl_type_matrix_get_scalar_type,
   gsk_sl_type_matrix_get_index_type,
   gsk_sl_type_matrix_get_length,
-  gsk_sl_type_matrix_can_convert
+  gsk_sl_type_matrix_can_convert,
+  gsk_sl_type_matrix_write_spv
 };
 
 GskSlType *
@@ -634,3 +749,24 @@ gsk_sl_type_can_convert (const GskSlType *target,
 {
   return target->class->can_convert (target, source);
 }
+
+gboolean
+gsk_sl_type_equal (gconstpointer a,
+                   gconstpointer b)
+{
+  return a == b;
+}
+
+guint
+gsk_sl_type_hash (gconstpointer type)
+{
+  return GPOINTER_TO_UINT (type);
+}
+
+guint32
+gsk_sl_type_write_spv (const GskSlType *type,
+                       GskSpvWriter    *writer)
+{
+  return type->class->write_spv (type, writer);
+}
+

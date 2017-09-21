@@ -90,6 +90,7 @@ gsk_sl_token_clear (GskSlToken *token)
 
     case GSK_SL_TOKEN_EOF:
     case GSK_SL_TOKEN_ERROR:
+    case GSK_SL_TOKEN_NEWLINE:
     case GSK_SL_TOKEN_WHITESPACE:
     case GSK_SL_TOKEN_COMMENT:
     case GSK_SL_TOKEN_SINGLE_LINE_COMMENT:
@@ -296,6 +297,7 @@ gsk_sl_token_clear (GskSlToken *token)
     case GSK_SL_TOKEN_CARET:
     case GSK_SL_TOKEN_AMPERSAND:
     case GSK_SL_TOKEN_QUESTION:
+    case GSK_SL_TOKEN_HASH:
     case GSK_SL_TOKEN_INVARIANT:
     case GSK_SL_TOKEN_PRECISE:
     case GSK_SL_TOKEN_HIGH_PRECISION:
@@ -487,6 +489,7 @@ gsk_sl_token_print (const GskSlToken *token,
     case GSK_SL_TOKEN_SINGLE_LINE_COMMENT:
       break;
 
+    case GSK_SL_TOKEN_NEWLINE:
     case GSK_SL_TOKEN_WHITESPACE:
       g_string_append (string, " ");
       break;
@@ -864,6 +867,10 @@ gsk_sl_token_print (const GskSlToken *token,
       g_string_append_c (string, '?');
       break;
 
+    case GSK_SL_TOKEN_HASH:
+      g_string_append_c (string, '#');
+      break;
+
     default:
       g_assert_not_reached ();
       break;
@@ -979,8 +986,7 @@ is_whitespace (char c)
   return c == ' '
       || c == '\t'
       || c == '\f'
-      || c == '\n'
-      || c == '\r';
+      || is_newline (c);
 }
 
 static inline gsize
@@ -1187,11 +1193,18 @@ static void
 gsk_sl_token_reader_read_whitespace (GskSlTokenReader  *reader,
                                      GskSlToken        *token)
 {
-  do {
-    gsk_sl_token_reader_consume (reader, 1);
-  } while (is_whitespace (gsk_sl_token_reader_get (reader, 0)));
+  gboolean has_newline = FALSE;
+  char c;
 
-  gsk_sl_token_init (token, GSK_SL_TOKEN_WHITESPACE);
+  for (c = gsk_sl_token_reader_get (reader, 0);
+       is_whitespace (c);
+       c = gsk_sl_token_reader_get (reader, 0))
+    {
+      has_newline |= is_newline (c);
+      gsk_sl_token_reader_consume (reader, 1);
+    }
+
+  gsk_sl_token_init (token, has_newline ? GSK_SL_TOKEN_NEWLINE : GSK_SL_TOKEN_WHITESPACE);
 }
 
 static gboolean
@@ -1795,6 +1808,11 @@ gsk_sl_tokenizer_read_token (GskSlTokenizer *tokenizer,
 
     case '?':
       gsk_sl_token_init (token, GSK_SL_TOKEN_QUESTION);
+      gsk_sl_token_reader_consume (&reader, 1);
+      break;
+
+    case '#':
+      gsk_sl_token_init (token, GSK_SL_TOKEN_HASH);
       gsk_sl_token_reader_consume (&reader, 1);
       break;
 

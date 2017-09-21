@@ -29,4 +29,6 @@ typedef struct _GskSlScope              GskSlScope;
 typedef struct _GskSlToken              GskSlToken;
 typedef struct _GskSlType               GskSlType;
 
+typedef struct _GskSpvWriter            GskSpvWriter;
+
 #endif /* __GSK_SL_TYPES_H__ */
