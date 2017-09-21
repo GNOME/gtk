@@ -54,6 +54,7 @@ static gboolean glyph_cache_equal      (gconstpointer v1,
                                         gconstpointer v2);
 static void     glyph_cache_key_free   (gpointer      v);
 static void     glyph_cache_value_free (gpointer      v);
+static void     dirty_glyph_free       (gpointer      v);
 
 static Atlas *
 create_atlas (GskVulkanGlyphCache *cache)
@@ -81,7 +82,7 @@ free_atlas (gpointer v)
   if (atlas->surface)
     cairo_surface_destroy (atlas->surface);
   g_clear_object (&atlas->image);
-  g_list_free_full (atlas->dirty_glyphs, g_free);
+  g_list_free_full (atlas->dirty_glyphs, dirty_glyph_free);
   g_free (atlas);
 }
 
@@ -153,7 +154,18 @@ glyph_cache_value_free (gpointer v)
 typedef struct {
   GlyphCacheKey *key;
   GskVulkanCachedGlyph *value;
+  cairo_surface_t *surface;
 } DirtyGlyph;
+
+static void
+dirty_glyph_free (gpointer v)
+{
+  DirtyGlyph *glyph = v;
+
+  if (glyph->surface)
+    cairo_surface_destroy (glyph->surface);
+  g_free (glyph);
+}
 
 static void
 add_to_cache (GskVulkanGlyphCache  *cache,
@@ -230,11 +242,12 @@ add_to_cache (GskVulkanGlyphCache  *cache,
 }
 
 static void
-upload_glyph (Atlas                *atlas,
-              GskVulkanUploader    *uploader,
-              GlyphCacheKey        *key,
-              GskVulkanCachedGlyph *value)
+render_glyph (Atlas          *atlas,
+              DirtyGlyph     *glyph,
+              GskImageRegion *region)
 {
+  GlyphCacheKey *key = glyph->key;
+  GskVulkanCachedGlyph *value = glyph->value;
   cairo_surface_t *surface;
   cairo_t *cr;
   cairo_scaled_font_t *scaled_font;
@@ -261,16 +274,38 @@ upload_glyph (Atlas                *atlas,
 
   cairo_destroy (cr);
 
-  gsk_vulkan_image_upload_region (atlas->image,
-                                  uploader,
-                                  cairo_image_surface_get_data (surface),
-                                  cairo_image_surface_get_width (surface),
-                                  cairo_image_surface_get_height (surface),
-                                  cairo_image_surface_get_stride (surface),
-                                  (gsize)(value->tx * atlas->width),
-                                  (gsize)(value->ty * atlas->height));
+  glyph->surface = surface;
 
-  cairo_surface_destroy (surface);
+  region->data = cairo_image_surface_get_data (surface);
+  region->width = cairo_image_surface_get_width (surface);
+  region->height = cairo_image_surface_get_height (surface);
+  region->stride = cairo_image_surface_get_stride (surface);
+  region->x = (gsize)(value->tx * atlas->width);
+  region->y = (gsize)(value->ty * atlas->height);
+}
+
+static void
+upload_dirty_glyphs (Atlas             *atlas,
+                     GskVulkanUploader *uploader)
+{
+  GList *l;
+  guint num_regions;
+  GskImageRegion *regions;
+  int i;
+
+  num_regions = g_list_length (atlas->dirty_glyphs);
+  regions = alloca (sizeof (GskImageRegion) * num_regions);
+
+  for (l = atlas->dirty_glyphs, i = 0; l; l = l->next, i++)
+    render_glyph (atlas, (DirtyGlyph *)l->data, &regions[i]);
+
+  GSK_NOTE (GLYPH_CACHE,
+            g_print ("uploading %d glyphs to cache\n", num_regions));
+
+  gsk_vulkan_image_upload_regions (atlas->image, uploader, num_regions, regions);
+
+  g_list_free_full (atlas->dirty_glyphs, dirty_glyph_free);
+  atlas->dirty_glyphs = NULL;
 }
 
 GskVulkanGlyphCache *
@@ -345,7 +380,6 @@ gsk_vulkan_glyph_cache_get_glyph_image (GskVulkanGlyphCache *cache,
                                         guint                index)
 {
   Atlas *atlas;
-  GList *l;
 
   g_return_val_if_fail (index < cache->atlases->len, NULL);
 
@@ -354,13 +388,8 @@ gsk_vulkan_glyph_cache_get_glyph_image (GskVulkanGlyphCache *cache,
   if (atlas->image == NULL)
     atlas->image = gsk_vulkan_image_new_for_atlas (cache->vulkan, atlas->width, atlas->height);
 
-  for (l = atlas->dirty_glyphs; l; l = l->next)
-    {
-      DirtyGlyph *glyph = l->data;
-      upload_glyph (atlas, uploader, glyph->key, glyph->value);
-    }
-  g_list_free_full (atlas->dirty_glyphs, g_free);
-  atlas->dirty_glyphs = NULL;
+  if (atlas->dirty_glyphs)
+    upload_dirty_glyphs (atlas, uploader);
 
   return atlas->image;
 }
