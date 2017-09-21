@@ -148,8 +148,12 @@ gsk_vulkan_uploader_upload (GskVulkanUploader *self)
 
       command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
       vkCmdPipelineBarrier (command_buffer,
+#if 0
                             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+#endif
+                            VK_PIPELINE_STAGE_TRANSFER_BIT,
+                            VK_PIPELINE_STAGE_TRANSFER_BIT,
                             0,
                             0, NULL,
                             self->before_buffer_barriers->len, (VkBufferMemoryBarrier *) self->before_buffer_barriers->data,
@@ -164,8 +168,12 @@ gsk_vulkan_uploader_upload (GskVulkanUploader *self)
     {
       VkCommandBuffer command_buffer = gsk_vulkan_uploader_get_copy_buffer (self);
       vkCmdPipelineBarrier (command_buffer,
+#if 0
                             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                             VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+#endif
+                            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
+                            VK_PIPELINE_STAGE_VERTEX_SHADER_BIT,
                             0,
                             0, NULL,
                             self->after_buffer_barriers->len, (VkBufferMemoryBarrier *) self->after_buffer_barriers->data,
@@ -664,22 +672,67 @@ gsk_vulkan_image_upload_region (GskVulkanImage    *self,
                                 gsize              x,
                                 gsize              y)
 {
+  gsk_vulkan_image_upload_regions (self, uploader, 1, (GskImageRegion[1]) {
+                                                       {
+                                                          .data = data,
+                                                          .width = width,
+                                                          .height = height,
+                                                          .stride = stride,
+                                                          .x = x,
+                                                          .y = y 
+                                                       } });
+}
+
+void
+gsk_vulkan_image_upload_regions (GskVulkanImage    *self,
+                                 GskVulkanUploader *uploader,
+                                 guint              num_regions,
+                                 GskImageRegion    *regions)
+{
   GskVulkanBuffer *staging;
   guchar *mem;
+  guchar *m;
+  gsize size;
+  gsize offset;
+  VkBufferImageCopy *bufferImageCopy;
 
-  staging = gsk_vulkan_buffer_new_staging (uploader->vulkan, width * height * 4);
+  size = 0;
+  for (int i = 0; i < num_regions; i++)
+    size += regions[i].width * regions[i].height * 4;
+
+  staging = gsk_vulkan_buffer_new_staging (uploader->vulkan, size);
   mem = gsk_vulkan_buffer_map (staging);
 
-  if (stride == width * 4)
+  bufferImageCopy = alloca (sizeof (VkBufferImageCopy) * num_regions);
+  memset (bufferImageCopy, 0, sizeof (VkBufferImageCopy) * num_regions);
+
+  offset = 0;
+  for (int i = 0; i < num_regions; i++)
     {
-      memcpy (mem, data, stride * height);
-    }
-  else
-    {
-      for (gsize i = 0; i < height; i++)
+      m = mem + offset;
+      if (regions[i].stride == regions[i].width * 4)
         {
-          memcpy (mem + i * width * 4, data + i * stride, width * 4);
+          memcpy (m, regions[i].data, regions[i].stride * regions[i].height);
         }
+      else
+        {
+          for (gsize r = 0; r < regions[i].height; i++)
+            memcpy (m + r * regions[i].width * 4, regions[i].data + r * regions[i].stride, regions[i].width * 4);
+        }
+
+      bufferImageCopy[i].bufferOffset = offset;
+      bufferImageCopy[i].imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+      bufferImageCopy[i].imageSubresource.mipLevel = 0;
+      bufferImageCopy[i].imageSubresource.baseArrayLayer = 0;
+      bufferImageCopy[i].imageSubresource.layerCount = 1;
+      bufferImageCopy[i].imageOffset.x = regions[i].x;
+      bufferImageCopy[i].imageOffset.y = regions[i].y;
+      bufferImageCopy[i].imageOffset.z = 0;
+      bufferImageCopy[i].imageExtent.width = regions[i].width;
+      bufferImageCopy[i].imageExtent.height = regions[i].height;
+      bufferImageCopy[i].imageExtent.depth = 1;
+
+      offset += regions[i].width * regions[i].height * 4;
     }
 
   gsk_vulkan_buffer_unmap (staging);
@@ -694,24 +747,8 @@ gsk_vulkan_image_upload_region (GskVulkanImage    *self,
                           gsk_vulkan_buffer_get_buffer (staging),
                           self->vk_image,
                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                          1,
-                          (VkBufferImageCopy[1]) {
-                               {
-                                   .bufferOffset = 0,
-                                   .imageSubresource = {
-                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                       .mipLevel = 0,
-                                       .baseArrayLayer = 0,
-                                       .layerCount = 1
-                                   },
-                                   .imageOffset = { x, y, 0 },
-                                   .imageExtent = {
-                                       .width = width,
-                                       .height = height,
-                                       .depth = 1
-                                   }
-                               }
-                          });
+                          num_regions,
+                          bufferImageCopy);
 
   gsk_vulkan_uploader_add_image_barrier (uploader,
                                          TRUE,

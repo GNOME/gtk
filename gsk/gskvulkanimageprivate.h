@@ -39,6 +39,20 @@ void                    gsk_vulkan_image_upload_region                  (GskVulk
                                                                          gsize                   stride,
                                                                          gsize                   x,
                                                                          gsize                   y);
+
+typedef struct {
+  guchar *data;
+  gsize width;
+  gsize height;
+  gsize stride;
+  gsize x;
+  gsize y;
+} GskImageRegion;
+
+void                    gsk_vulkan_image_upload_regions                 (GskVulkanImage         *image,
+                                                                         GskVulkanUploader      *uploader,
+                                                                         guint                   num_regions,
+                                                                         GskImageRegion         *regions);
 GskVulkanImage *        gsk_vulkan_image_new_for_framebuffer            (GdkVulkanContext       *context,
                                                                          gsize                   width,
                                                                          gsize                   height);
