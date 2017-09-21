@@ -1397,6 +1397,13 @@ gdk_event_get_keycode (const GdkEvent *event,
   return fetched;
 }
 
+/**
+ * gdk_event_get_key_group:
+ * @event: a #GdkEvent
+ * @group: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_key_group (const GdkEvent *event,
                          guint          *group)
@@ -1418,6 +1425,13 @@ gdk_event_get_key_group (const GdkEvent *event,
   return fetched;
 }
 
+/**
+ * gdk_event_get_string:
+ * @event: a #GdkEvent
+ * @string: (out) (transfer none):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_string (const GdkEvent  *event,
                       const char     **string)
@@ -1439,6 +1453,13 @@ gdk_event_get_string (const GdkEvent  *event,
   return fetched;
 }
 
+/**
+ * gdk_event_get_key_is_modifier:
+ * @event: a #GdkEvent
+ * @is_modifier: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_key_is_modifier (const GdkEvent *event,
                                gboolean       *is_modifier)
@@ -2516,6 +2537,13 @@ gdk_event_get_user_data (const GdkEvent *event)
   return private->user_data;
 }
 
+/**
+ * gdk_event_get_setting:
+ * @event: a #GdkEvent
+ * @setting: (out) (transfer none):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_setting (const GdkEvent  *event,
                        const char     **setting)
@@ -2538,6 +2566,13 @@ gdk_event_is_sent (const GdkEvent *event)
   return event->any.send_event;
 }
 
+/**
+ * gdk_event_get_drag_context:
+ * @event: a #GdkEvent
+ * @context: (out) (transfer none):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_drag_context (const GdkEvent  *event,
                             GdkDragContext **context)
@@ -2559,6 +2594,13 @@ gdk_event_get_drag_context (const GdkEvent  *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_crossing_mode:
+ * @event: a #GdkEvent
+ * @mode: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_crossing_mode (const GdkEvent  *event,
                              GdkCrossingMode *mode)
@@ -2576,6 +2618,13 @@ gdk_event_get_crossing_mode (const GdkEvent  *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_crossing_detail:
+ * @event: a #GdkEvent
+ * @detail: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_crossing_detail (const GdkEvent *event,
                                GdkNotifyType  *detail)
@@ -2593,6 +2642,13 @@ gdk_event_get_crossing_detail (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_touchpad_gesture_phase:
+ * @event: a #GdkEvent
+ * @phase: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
                                       GdkTouchpadGesturePhase *phase)
@@ -2614,6 +2670,13 @@ gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_touchpad_gesture_n_fingers:
+ * @event: a #GdkEvent
+ * @n_fingers: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
                                           guint          *n_fingers)
@@ -2635,6 +2698,14 @@ gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_touchpad_deltas:
+ * @event: a #GdkEvent
+ * @dx: (out):
+ * @dy: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_touchpad_deltas (const GdkEvent *event,
                                double         *dx,
@@ -2659,6 +2730,13 @@ gdk_event_get_touchpad_deltas (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_touchpad_angle_delta:
+ * @event: a #GdkEvent
+ * @delta: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_touchpad_angle_delta (const GdkEvent *event,
                                     double         *delta)
@@ -2675,6 +2753,13 @@ gdk_event_get_touchpad_angle_delta (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_touchpad_scale:
+ * @event: a #GdkEvent
+ * @scale: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_touchpad_scale (const GdkEvent *event,
                               double         *scale)
@@ -2691,6 +2776,13 @@ gdk_event_get_touchpad_scale (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_touch_emulating_pointer:
+ * @event: a #GdkEvent
+ * @emulating: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
                                        gboolean       *emulating)
@@ -2709,6 +2801,13 @@ gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_grab_window:
+ * @event: a #GdkEvent
+ * @window: (out) (transfer none):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_grab_window (const GdkEvent  *event,
                            GdkWindow      **window)
@@ -2725,6 +2824,14 @@ gdk_event_get_grab_window (const GdkEvent  *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_window_state:
+ * @event: a #GdkEvent
+ * @changed: (out):
+ * @new_state: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_window_state (const GdkEvent *event,
                             GdkWindowState *changed,
@@ -2744,6 +2851,13 @@ gdk_event_get_window_state (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_focus_in:
+ * @event: a #GdkEvent
+ * @focus_in: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_focus_in (const GdkEvent *event,
                         gboolean       *focus_in)
@@ -2760,6 +2874,14 @@ gdk_event_get_focus_in (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_pad_group_mode:
+ * @event: a #GdkEvent
+ * @group: (out):
+ * @mode: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_pad_group_mode (const GdkEvent *event,
                               guint          *group,
@@ -2792,6 +2914,13 @@ gdk_event_get_pad_group_mode (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_pad_button:
+ * @event: a #GdkEvent
+ * @button: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_pad_button (const GdkEvent *event,
                           guint          *button)
@@ -2809,6 +2938,14 @@ gdk_event_get_pad_button (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_pad_axis_value:
+ * @event: a #GdkEvent
+ * @index: (out):
+ * @value: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_pad_axis_value (const GdkEvent *event,
                               guint          *index,
@@ -2828,6 +2965,14 @@ gdk_event_get_pad_axis_value (const GdkEvent *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_property:
+ * @event: a #GdkEvent
+ * @property: (out):
+ * @state: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_property (const GdkEvent   *event,
                         GdkAtom          *property,
@@ -2846,6 +2991,13 @@ gdk_event_get_property (const GdkEvent   *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_selection:
+ * @event: a #GdkEvent
+ * @selection: (out):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_selection (const GdkEvent   *event,
                          GdkAtom          *selection)
@@ -2864,6 +3016,15 @@ gdk_event_get_selection (const GdkEvent   *event,
   return FALSE;
 }
 
+/**
+ * gdk_event_get_selection_property:
+ * @event: a #GdkEvent
+ * @property: (out) (optional):
+ * @target: (out) (optional):
+ * @requestor: (out) (optional) (transfer none):
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_selection_property (const GdkEvent  *event,
                                   GdkAtom         *property,
@@ -2900,6 +3061,14 @@ gdk_event_set_selection (GdkEvent  *event,
   event->selection.time = time;
 }
 
+/**
+ * gdk_event_get_axes:
+ * @event: a #GdkEvent
+ * @axes: (transfer none) (out) (array length=n_axes): the array of values for all axes
+ * @n_axes: (out): the length of array
+ * 
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
 gboolean
 gdk_event_get_axes (GdkEvent  *event,
                     gdouble  **axes,
