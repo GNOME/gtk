@@ -29,14 +29,12 @@
  * @GSK_CAIRO_NODE: A node drawing a #cairo_surface_t
  * @GSK_COLOR_NODE: A node drawing a single color rectangle
  * @GSK_LINEAR_GRADIENT_NODE: A node drawing a linear gradient
- * @GSK_REPEATING_LINEAR_GRADIENT_NODE: A node drawing a repeating
- *     linear gradient
+ * @GSK_REPEATING_LINEAR_GRADIENT_NODE: A node drawing a repeating linear gradient
  * @GSK_BORDER_NODE: A node stroking a border around an area
  * @GSK_TEXTURE_NODE: A node drawing a #GskTexture
  * @GSK_INSET_SHADOW_NODE: A node drawing an inset shadow
  * @GSK_OUTSET_SHADOW_NODE: A node drawing an outset shadow
- * @GSK_TRANSFORM_NODE: A node that renders its child after applying a
- *     matrix transform
+ * @GSK_TRANSFORM_NODE: A node that renders its child after applying a matrix transform
  * @GSK_OPACITY_NODE: A node that changes the opacity of its child
  * @GSK_COLOR_MATRIX_NODE: A node that applies a color matrix to every pixel
  * @GSK_REPEAT_NODE: A node that repeats the child's contents
