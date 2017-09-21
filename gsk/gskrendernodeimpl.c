@@ -3901,6 +3901,8 @@ gsk_text_node_serialize (GskRenderNode *node)
 
   desc = pango_font_describe (self->font);
   s = pango_font_description_to_string (desc);
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(uiiii)"));
   for (i = 0; i < self->glyphs->num_glyphs; i++)
     {
       PangoGlyphInfo *glyph = &self->glyphs->glyphs[i];
@@ -3912,7 +3914,6 @@ gsk_text_node_serialize (GskRenderNode *node)
                              glyph->attr.is_cluster_start);
     }
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(uiiii)"));
   v = g_variant_new (GSK_TEXT_NODE_VARIANT_TYPE,
                      s,
                      self->color.red,
@@ -3935,7 +3936,7 @@ gsk_text_node_deserialize (GVariant  *variant,
 {
   PangoFont *font;
   PangoGlyphString *glyphs;
-  GVariantIter iter;
+  GVariantIter *iter;
   GskRenderNode *result;
   PangoGlyphInfo glyph;
   PangoFontDescription *desc;
@@ -3950,7 +3951,7 @@ gsk_text_node_deserialize (GVariant  *variant,
   if (!check_variant_type (variant, GSK_TEXT_NODE_VARIANT_TYPE, error))
     return NULL;
 
-  g_variant_get (variant, "(&sddddiidda(uiiii))",
+  g_variant_get (variant, "(&sdddddda(uiiii))",
                  &s, &color.red, &color.green, &color.blue, &color.alpha,
                  &x, &y, &iter);
 
@@ -3960,9 +3961,9 @@ gsk_text_node_deserialize (GVariant  *variant,
   font = pango_font_map_load_font (fontmap, context, desc);
 
   glyphs = pango_glyph_string_new ();
-  pango_glyph_string_set_size (glyphs, g_variant_iter_n_children (&iter));
+  pango_glyph_string_set_size (glyphs, g_variant_iter_n_children (iter));
   i = 0;
-  while (g_variant_iter_next (&iter, "(uiiii)",
+  while (g_variant_iter_next (iter, "(uiiii)",
                               &glyph.glyph, &glyph.geometry.width,
                               &glyph.geometry.x_offset, &glyph.geometry.y_offset,
                               &cluster_start))
@@ -3971,6 +3972,7 @@ gsk_text_node_deserialize (GVariant  *variant,
       glyphs->glyphs[i] = glyph;
       i++;
     }
+  g_variant_iter_free (iter);
 
   result = gsk_text_node_new (font, glyphs, &color, x, y); /* FIXME: Avoid copying glyphs */
 
