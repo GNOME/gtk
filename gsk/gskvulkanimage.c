@@ -663,27 +663,6 @@ gsk_vulkan_image_download (GskVulkanImage    *self,
 }
 
 void
-gsk_vulkan_image_upload_region (GskVulkanImage    *self,
-                                GskVulkanUploader *uploader,
-                                guchar            *data,
-                                gsize              width,
-                                gsize              height,
-                                gsize              stride,
-                                gsize              x,
-                                gsize              y)
-{
-  gsk_vulkan_image_upload_regions (self, uploader, 1, (GskImageRegion[1]) {
-                                                       {
-                                                          .data = data,
-                                                          .width = width,
-                                                          .height = height,
-                                                          .stride = stride,
-                                                          .x = x,
-                                                          .y = y 
-                                                       } });
-}
-
-void
 gsk_vulkan_image_upload_regions (GskVulkanImage    *self,
                                  GskVulkanUploader *uploader,
                                  guint              num_regions,
