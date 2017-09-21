@@ -10,6 +10,7 @@ layout(location = 3) in flat vec4 inOutlineCornerHeights;
 layout(location = 4) in flat vec4 inColor;
 layout(location = 5) in flat vec2 inOffset;
 layout(location = 6) in flat float inSpread;
+layout(location = 7) in flat float inBlurRadius;
 
 layout(location = 0) out vec4 color;
 
