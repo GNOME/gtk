@@ -169,8 +169,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                                   }
                                                },
                                                .pDepthStencilAttachment = NULL,
-                                               .preserveAttachmentCount = 1,
-                                               .pPreserveAttachments = (uint32_t []) { 0 },
                                             }
                                          },
                                          .dependencyCount = 0
