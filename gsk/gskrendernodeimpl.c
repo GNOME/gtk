@@ -4373,6 +4373,7 @@ static const GskRenderNodeClass *klasses[] = {
   [GSK_TRANSFORM_NODE] = &GSK_TRANSFORM_NODE_CLASS,
   [GSK_OPACITY_NODE] = &GSK_OPACITY_NODE_CLASS,
   [GSK_COLOR_MATRIX_NODE] = &GSK_COLOR_MATRIX_NODE_CLASS,
+  [GSK_REPEAT_NODE] = &GSK_REPEAT_NODE_CLASS,
   [GSK_CLIP_NODE] = &GSK_CLIP_NODE_CLASS,
   [GSK_ROUNDED_CLIP_NODE] = &GSK_ROUNDED_CLIP_NODE_CLASS,
   [GSK_SHADOW_NODE] = &GSK_SHADOW_NODE_CLASS,
@@ -4398,7 +4399,7 @@ gsk_render_node_deserialize_node (GskRenderNodeType   type,
   if (klass == NULL)
     {
       g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_INVALID_DATA,
-                   "Type %u is not a valid node type", type);
+                   "Type %u is not a valid render node type", type);
       return NULL;
     }
 
