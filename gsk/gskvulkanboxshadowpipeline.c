@@ -111,11 +111,12 @@ gsk_vulkan_box_shadow_pipeline_init (GskVulkanBoxShadowPipeline *self)
 }
 
 GskVulkanPipeline *
-gsk_vulkan_box_shadow_pipeline_new (GskVulkanPipelineLayout *layout,
-                               const char              *shader_name,
-                               VkRenderPass             render_pass)
+gsk_vulkan_box_shadow_pipeline_new (GdkVulkanContext        *context,
+                                    VkPipelineLayout         layout,
+                                    const char              *shader_name,
+                                    VkRenderPass             render_pass)
 {
-  return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_BOX_SHADOW_PIPELINE, layout, shader_name, render_pass);
+  return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_BOX_SHADOW_PIPELINE, context, layout, shader_name, render_pass);
 }
 
 gsize

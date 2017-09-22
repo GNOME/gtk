@@ -14,9 +14,10 @@ typedef struct _GskVulkanTextPipelineLayout GskVulkanTextPipelineLayout;
 
 G_DECLARE_FINAL_TYPE (GskVulkanTextPipeline, gsk_vulkan_text_pipeline, GSK, VULKAN_TEXT_PIPELINE, GskVulkanPipeline)
 
-GskVulkanPipeline *     gsk_vulkan_text_pipeline_new                   (GskVulkanPipelineLayout *       layout,
-                                                                        const char                     *shader_name,
-                                                                        VkRenderPass                    render_pass);
+GskVulkanPipeline *     gsk_vulkan_text_pipeline_new                   (GdkVulkanContext              *context,
+                                                                        VkPipelineLayout               layout,
+                                                                        const char                    *shader_name,
+                                                                        VkRenderPass                   render_pass);
 
 gsize                   gsk_vulkan_text_pipeline_count_vertex_data     (GskVulkanTextPipeline         *pipeline,
                                                                         int                            num_instances);

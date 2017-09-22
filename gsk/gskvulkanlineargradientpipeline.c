@@ -159,11 +159,12 @@ gsk_vulkan_linear_gradient_pipeline_init (GskVulkanLinearGradientPipeline *self)
 }
 
 GskVulkanPipeline *
-gsk_vulkan_linear_gradient_pipeline_new (GskVulkanPipelineLayout *layout,
+gsk_vulkan_linear_gradient_pipeline_new (GdkVulkanContext        *context,
+                                         VkPipelineLayout         layout,
                                          const char              *shader_name,
                                          VkRenderPass             render_pass)
 {
-  return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_LINEAR_GRADIENT_PIPELINE, layout, shader_name, render_pass);
+  return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_LINEAR_GRADIENT_PIPELINE, context, layout, shader_name, render_pass);
 }
 
 gsize

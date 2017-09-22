@@ -16,7 +16,8 @@ typedef struct _GskVulkanLinearGradientPipelineLayout GskVulkanLinearGradientPip
 
 G_DECLARE_FINAL_TYPE (GskVulkanLinearGradientPipeline, gsk_vulkan_linear_gradient_pipeline, GSK, VULKAN_LINEAR_GRADIENT_PIPELINE, GskVulkanPipeline)
 
-GskVulkanPipeline *     gsk_vulkan_linear_gradient_pipeline_new         (GskVulkanPipelineLayout *       layout,
+GskVulkanPipeline *     gsk_vulkan_linear_gradient_pipeline_new         (GdkVulkanContext               *context,
+                                                                         VkPipelineLayout                layout,
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
 

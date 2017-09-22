@@ -1035,7 +1035,7 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
                              GskVulkanRender         *render,
                              GskVulkanBuffer         *vertex_buffer,
                              guint                    layout_count,
-                             GskVulkanPipelineLayout **layout,
+                             VkPipelineLayout        *pipeline_layout,
                              VkCommandBuffer          command_buffer)
 {
   GskVulkanPipeline *current_pipeline = NULL;
@@ -1316,8 +1316,8 @@ gsk_vulkan_render_pass_draw (GskVulkanRenderPass     *self,
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
           for (int i = 0; i < layout_count; i++)
             gsk_vulkan_push_constants_push (&op->constants.constants,
-                                            command_buffer, 
-                                            gsk_vulkan_pipeline_layout_get_pipeline_layout (layout[i]));
+                                            command_buffer,
+                                            pipeline_layout[i]);
           break;
 
         default:

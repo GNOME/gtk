@@ -14,7 +14,8 @@ typedef struct _GskVulkanBoxShadowPipelineLayout GskVulkanBoxShadowPipelineLayou
 
 G_DECLARE_FINAL_TYPE (GskVulkanBoxShadowPipeline, gsk_vulkan_box_shadow_pipeline, GSK, VULKAN_BOX_SHADOW_PIPELINE, GskVulkanPipeline)
 
-GskVulkanPipeline *     gsk_vulkan_box_shadow_pipeline_new              (GskVulkanPipelineLayout *       layout,
+GskVulkanPipeline *     gsk_vulkan_box_shadow_pipeline_new              (GdkVulkanContext               *context,
+                                                                         VkPipelineLayout                layout,
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
 

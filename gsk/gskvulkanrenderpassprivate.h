@@ -37,7 +37,7 @@ void                    gsk_vulkan_render_pass_draw                     (GskVulk
                                                                          GskVulkanRender        *render,
                                                                          GskVulkanBuffer        *vertex_buffer,
                                                                          guint                   layout_count,
-                                                                         GskVulkanPipelineLayout **layout,
+                                                                         VkPipelineLayout       *pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
 
 G_END_DECLS

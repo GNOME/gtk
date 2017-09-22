@@ -9,21 +9,14 @@
 
 typedef struct _GskVulkanPipelinePrivate GskVulkanPipelinePrivate;
 
-struct _GskVulkanPipelineLayout
-{
-  volatile gint ref_count;
-  GdkVulkanContext *vulkan;
-
-  VkPipelineLayout pipeline_layout;
-};
-
 struct _GskVulkanPipelinePrivate
 {
   GObject parent_instance;
 
-  GskVulkanPipelineLayout *layout;
+  GdkVulkanContext *context;
 
   VkPipeline pipeline;
+  VkPipelineLayout layout;
 
   GskVulkanShader *vertex_shader;
   GskVulkanShader *fragment_shader;
@@ -35,17 +28,16 @@ static void
 gsk_vulkan_pipeline_finalize (GObject *gobject)
 {
   GskVulkanPipelinePrivate *priv = gsk_vulkan_pipeline_get_instance_private (GSK_VULKAN_PIPELINE (gobject));
+  VkDevice device;
 
-  VkDevice device = gdk_vulkan_context_get_device (priv->layout->vulkan);
+  device = gdk_vulkan_context_get_device (priv->context);
 
   vkDestroyPipeline (device,
                      priv->pipeline,
                      NULL);
-  
+
   g_clear_pointer (&priv->fragment_shader, gsk_vulkan_shader_free);
   g_clear_pointer (&priv->vertex_shader, gsk_vulkan_shader_free);
-
-  g_clear_pointer (&priv->layout, gsk_vulkan_pipeline_layout_unref);
 
   G_OBJECT_CLASS (gsk_vulkan_pipeline_parent_class)->finalize (gobject);
 }
@@ -63,18 +55,20 @@ gsk_vulkan_pipeline_init (GskVulkanPipeline *self)
 
 GskVulkanPipeline *
 gsk_vulkan_pipeline_new (GType                    pipeline_type,
-                         GskVulkanPipelineLayout *layout,
+                         GdkVulkanContext        *context,
+                         VkPipelineLayout         layout,
                          const char              *shader_name,
                          VkRenderPass             render_pass)
 {
-  return gsk_vulkan_pipeline_new_full (pipeline_type, layout, shader_name, render_pass,
+  return gsk_vulkan_pipeline_new_full (pipeline_type, context, layout, shader_name, render_pass,
                                        VK_BLEND_FACTOR_ONE,
                                        VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
 }
 
 GskVulkanPipeline *
 gsk_vulkan_pipeline_new_full (GType                    pipeline_type,
-                              GskVulkanPipelineLayout *layout,
+                              GdkVulkanContext        *context,
+                              VkPipelineLayout         layout,
                               const char              *shader_name,
                               VkRenderPass             render_pass,
                               VkBlendFactor            srcBlendFactor,
@@ -82,11 +76,10 @@ gsk_vulkan_pipeline_new_full (GType                    pipeline_type,
 {
   GskVulkanPipelinePrivate *priv;
   GskVulkanPipeline *self;
-  
   VkDevice device;
 
   g_return_val_if_fail (g_type_is_a (pipeline_type, GSK_TYPE_VULKAN_PIPELINE), NULL);
-  g_return_val_if_fail (layout != NULL, NULL);
+  g_return_val_if_fail (layout != VK_NULL_HANDLE, NULL);
   g_return_val_if_fail (shader_name != NULL, NULL);
   g_return_val_if_fail (render_pass != VK_NULL_HANDLE, NULL);
 
@@ -94,12 +87,13 @@ gsk_vulkan_pipeline_new_full (GType                    pipeline_type,
 
   priv = gsk_vulkan_pipeline_get_instance_private (self);
 
-  priv->layout = gsk_vulkan_pipeline_layout_ref (layout);
+  device = gdk_vulkan_context_get_device (context);
 
-  device = gdk_vulkan_context_get_device (layout->vulkan);
+  priv->context = context;
+  priv->layout = layout;
 
-  priv->vertex_shader = gsk_vulkan_shader_new_from_resource (layout->vulkan, GSK_VULKAN_SHADER_VERTEX, shader_name, NULL);
-  priv->fragment_shader = gsk_vulkan_shader_new_from_resource (layout->vulkan, GSK_VULKAN_SHADER_FRAGMENT, shader_name, NULL);
+  priv->vertex_shader = gsk_vulkan_shader_new_from_resource (context, GSK_VULKAN_SHADER_VERTEX, shader_name, NULL);
+  priv->fragment_shader = gsk_vulkan_shader_new_from_resource (context, GSK_VULKAN_SHADER_FRAGMENT, shader_name, NULL);
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, device,
                                            VK_NULL_HANDLE,
@@ -166,7 +160,7 @@ gsk_vulkan_pipeline_new_full (GType                    pipeline_type,
                                                        VK_DYNAMIC_STATE_SCISSOR
                                                    },
                                                },
-                                               .layout = gsk_vulkan_pipeline_layout_get_pipeline_layout (priv->layout),
+                                               .layout = priv->layout,
                                                .renderPass = render_pass,
                                                .subpass = 0,
                                                .basePipelineHandle = VK_NULL_HANDLE,
@@ -191,69 +185,5 @@ gsk_vulkan_pipeline_get_pipeline_layout (GskVulkanPipeline *self)
 {
   GskVulkanPipelinePrivate *priv = gsk_vulkan_pipeline_get_instance_private (self);
 
-  return priv->layout->pipeline_layout;
-}
-
-/*** GskVulkanPipelineLayout ***/
-
-GskVulkanPipelineLayout *
-gsk_vulkan_pipeline_layout_new (GdkVulkanContext      *context,
-                                guint                  layout_count,
-                                VkDescriptorSetLayout *descriptor_set_layout)
-{
-  GskVulkanPipelineLayout *self;
-  VkDevice device;
-
-  self = g_slice_new0 (GskVulkanPipelineLayout);
-  self->ref_count = 1;
-  self->vulkan = g_object_ref (context);
-
-  device = gdk_vulkan_context_get_device (context);
-
-  GSK_VK_CHECK (vkCreatePipelineLayout, device,
-                                        &(VkPipelineLayoutCreateInfo) {
-                                            .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-                                            .setLayoutCount = layout_count,
-                                            .pSetLayouts = descriptor_set_layout,
-                                            .pushConstantRangeCount = gst_vulkan_push_constants_get_range_count (),
-                                            .pPushConstantRanges = gst_vulkan_push_constants_get_ranges ()
-                                        },
-                                        NULL,
-                                        &self->pipeline_layout);
-
-  return self;
-}
-
-GskVulkanPipelineLayout *
-gsk_vulkan_pipeline_layout_ref (GskVulkanPipelineLayout *self)
-{
-  self->ref_count++;
-
-  return self;
-}
-
-void
-gsk_vulkan_pipeline_layout_unref (GskVulkanPipelineLayout *self)
-{
-  VkDevice device;
-
-  self->ref_count--;
-
-  if (self->ref_count > 0)
-    return;
-
-  device = gdk_vulkan_context_get_device (self->vulkan);
-
-  vkDestroyPipelineLayout (device,
-                           self->pipeline_layout,
-                           NULL);
-
-  g_slice_free (GskVulkanPipelineLayout, self);
-}
-
-
-VkPipelineLayout
-gsk_vulkan_pipeline_layout_get_pipeline_layout (GskVulkanPipelineLayout *self)
-{
-  return self->pipeline_layout;
+  return priv->layout;
 }
