@@ -41,14 +41,14 @@ struct _GskVulkanRender
   VkFence fence;
   VkRenderPass render_pass;
   VkDescriptorSetLayout descriptor_set_layout;
-  GskVulkanPipelineLayout *layout;
+  GskVulkanPipelineLayout *layout[3]; /* indexed by number of textures */
   GskVulkanUploader *uploader;
   GskVulkanBuffer *vertex_buffer;
 
   GHashTable *descriptor_set_indexes;
   VkDescriptorPool descriptor_pool;
   uint32_t descriptor_pool_maxsets;
-  VkDescriptorSet *descriptor_sets;  
+  VkDescriptorSet *descriptor_sets;
   gsize n_descriptor_sets;
   GskVulkanPipeline *pipelines[GSK_VULKAN_N_PIPELINES];
 
@@ -194,7 +194,15 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                              &self->descriptor_set_layout);
 
 
-  self->layout = gsk_vulkan_pipeline_layout_new (self->vulkan, &self->descriptor_set_layout);
+  for (guint i = 0; i < 3; i++)
+    {
+      VkDescriptorSetLayout layouts[3] = {
+        self->descriptor_set_layout,
+        self->descriptor_set_layout,
+        self->descriptor_set_layout
+      };
+      self->layout[i] = gsk_vulkan_pipeline_layout_new (self->vulkan, i, layouts);
+    }
 
   self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
 
@@ -336,45 +344,46 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
 {
   static const struct {
     const char *name;
+    guint num_textures;
     GskVulkanPipeline * (* create_func) (GskVulkanPipelineLayout *layout, const char *name, VkRenderPass render_pass);
   } pipeline_info[GSK_VULKAN_N_PIPELINES] = {
-    { "blend", gsk_vulkan_blend_pipeline_new },
-    { "blend-clip", gsk_vulkan_blend_pipeline_new },
-    { "blend-clip-rounded", gsk_vulkan_blend_pipeline_new },
-    { "color", gsk_vulkan_color_pipeline_new },
-    { "color-clip", gsk_vulkan_color_pipeline_new },
-    { "color-clip-rounded", gsk_vulkan_color_pipeline_new },
-    { "linear", gsk_vulkan_linear_gradient_pipeline_new },
-    { "linear-clip", gsk_vulkan_linear_gradient_pipeline_new },
-    { "linear-clip-rounded", gsk_vulkan_linear_gradient_pipeline_new },
-    { "color-matrix", gsk_vulkan_effect_pipeline_new },
-    { "color-matrix-clip", gsk_vulkan_effect_pipeline_new },
-    { "color-matrix-clip-rounded", gsk_vulkan_effect_pipeline_new },
-    { "border", gsk_vulkan_border_pipeline_new },
-    { "border-clip", gsk_vulkan_border_pipeline_new },
-    { "border-clip-rounded", gsk_vulkan_border_pipeline_new },
-    { "inset-shadow", gsk_vulkan_box_shadow_pipeline_new },
-    { "inset-shadow-clip", gsk_vulkan_box_shadow_pipeline_new },
-    { "inset-shadow-clip-rounded", gsk_vulkan_box_shadow_pipeline_new },
-    { "outset-shadow", gsk_vulkan_box_shadow_pipeline_new },
-    { "outset-shadow-clip", gsk_vulkan_box_shadow_pipeline_new },
-    { "outset-shadow-clip-rounded", gsk_vulkan_box_shadow_pipeline_new },
-    { "blur", gsk_vulkan_blur_pipeline_new },
-    { "blur-clip", gsk_vulkan_blur_pipeline_new },
-    { "blur-clip-rounded", gsk_vulkan_blur_pipeline_new },
-    { "mask", gsk_vulkan_text_pipeline_new },
-    { "mask-clip", gsk_vulkan_text_pipeline_new },
-    { "mask-clip-rounded", gsk_vulkan_text_pipeline_new },
-    { "blend", gsk_vulkan_color_text_pipeline_new },
-    { "blend-clip", gsk_vulkan_color_text_pipeline_new },
-    { "blend-clip-rounded", gsk_vulkan_color_text_pipeline_new },
+    { "blend",                      1, gsk_vulkan_blend_pipeline_new },
+    { "blend-clip",                 1, gsk_vulkan_blend_pipeline_new },
+    { "blend-clip-rounded",         1, gsk_vulkan_blend_pipeline_new },
+    { "color",                      0, gsk_vulkan_color_pipeline_new },
+    { "color-clip",                 0, gsk_vulkan_color_pipeline_new },
+    { "color-clip-rounded",         0, gsk_vulkan_color_pipeline_new },
+    { "linear",                     0, gsk_vulkan_linear_gradient_pipeline_new },
+    { "linear-clip",                0, gsk_vulkan_linear_gradient_pipeline_new },
+    { "linear-clip-rounded",        0, gsk_vulkan_linear_gradient_pipeline_new },
+    { "color-matrix",               1, gsk_vulkan_effect_pipeline_new },
+    { "color-matrix-clip",          1, gsk_vulkan_effect_pipeline_new },
+    { "color-matrix-clip-rounded",  1, gsk_vulkan_effect_pipeline_new },
+    { "border",                     0, gsk_vulkan_border_pipeline_new },
+    { "border-clip",                0, gsk_vulkan_border_pipeline_new },
+    { "border-clip-rounded",        0, gsk_vulkan_border_pipeline_new },
+    { "inset-shadow",               0, gsk_vulkan_box_shadow_pipeline_new },
+    { "inset-shadow-clip",          0, gsk_vulkan_box_shadow_pipeline_new },
+    { "inset-shadow-clip-rounded",  0, gsk_vulkan_box_shadow_pipeline_new },
+    { "outset-shadow",              0, gsk_vulkan_box_shadow_pipeline_new },
+    { "outset-shadow-clip",         0, gsk_vulkan_box_shadow_pipeline_new },
+    { "outset-shadow-clip-rounded", 0, gsk_vulkan_box_shadow_pipeline_new },
+    { "blur",                       1, gsk_vulkan_blur_pipeline_new },
+    { "blur-clip",                  1, gsk_vulkan_blur_pipeline_new },
+    { "blur-clip-rounded",          1, gsk_vulkan_blur_pipeline_new },
+    { "mask",                       1, gsk_vulkan_text_pipeline_new },
+    { "mask-clip",                  1, gsk_vulkan_text_pipeline_new },
+    { "mask-clip-rounded",          1, gsk_vulkan_text_pipeline_new },
+    { "blend",                      1, gsk_vulkan_color_text_pipeline_new },
+    { "blend-clip",                 1, gsk_vulkan_color_text_pipeline_new },
+    { "blend-clip-rounded",         1, gsk_vulkan_color_text_pipeline_new },
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
 
   if (self->pipelines[type] == NULL)
     {
-      self->pipelines[type] = pipeline_info[type].create_func (self->layout,
+      self->pipelines[type] = pipeline_info[type].create_func (self->layout[pipeline_info[type].num_textures],
                                                                pipeline_info[type].name,
                                                                self->render_pass);
     }
@@ -561,7 +570,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
       for (l = self->render_passes; l; l = l->next)
         {
-          gsk_vulkan_render_pass_draw (l->data, self, self->vertex_buffer, self->layout, command_buffer);
+          gsk_vulkan_render_pass_draw (l->data, self, self->vertex_buffer, 3, self->layout, command_buffer);
         }
 
       vkCmdEndRenderPass (command_buffer);
@@ -654,7 +663,8 @@ gsk_vulkan_render_free (GskVulkanRender *self)
 
   g_clear_pointer (&self->uploader, gsk_vulkan_uploader_free);
 
-  g_clear_pointer (&self->layout, gsk_vulkan_pipeline_layout_unref);
+  for (i = 0; i < 3; i++)
+    g_clear_pointer (&self->layout[i], gsk_vulkan_pipeline_layout_unref);
 
   vkDestroyRenderPass (device,
                        self->render_pass,
