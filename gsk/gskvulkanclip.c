@@ -133,7 +133,7 @@ gsk_vulkan_clip_transform (GskVulkanClip           *dest,
                            const graphene_matrix_t *transform,
                            const graphene_rect_t   *viewport)
 {
-  switch (dest->type)
+  switch (src->type)
     {
     default:
       g_assert_not_reached();
