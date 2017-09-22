@@ -13,7 +13,8 @@ typedef struct _GskVulkanColorPipelineLayout GskVulkanColorPipelineLayout;
 
 G_DECLARE_FINAL_TYPE (GskVulkanColorPipeline, gsk_vulkan_color_pipeline, GSK, VULKAN_COLOR_PIPELINE, GskVulkanPipeline)
 
-GskVulkanPipeline *     gsk_vulkan_color_pipeline_new                   (GskVulkanPipelineLayout *       layout,
+GskVulkanPipeline *     gsk_vulkan_color_pipeline_new                   (GdkVulkanContext               *context,
+                                                                         VkPipelineLayout                layout,
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
 

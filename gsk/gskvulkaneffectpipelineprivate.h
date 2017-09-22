@@ -13,7 +13,8 @@ typedef struct _GskVulkanEffectPipelineLayout GskVulkanEffectPipelineLayout;
 
 G_DECLARE_FINAL_TYPE (GskVulkanEffectPipeline, gsk_vulkan_effect_pipeline, GSK, VULKAN_EFFECT_PIPELINE, GskVulkanPipeline)
 
-GskVulkanPipeline *     gsk_vulkan_effect_pipeline_new                  (GskVulkanPipelineLayout        *layout,
+GskVulkanPipeline *     gsk_vulkan_effect_pipeline_new                  (GdkVulkanContext               *context,
+                                                                         VkPipelineLayout                layout,
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
 

@@ -19,6 +19,7 @@
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkantextpipelineprivate.h"
+#include "gskvulkanpushconstantsprivate.h"
 
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
@@ -41,7 +42,7 @@ struct _GskVulkanRender
   VkFence fence;
   VkRenderPass render_pass;
   VkDescriptorSetLayout descriptor_set_layout;
-  GskVulkanPipelineLayout *layout[3]; /* indexed by number of textures */
+  VkPipelineLayout pipeline_layout[3]; /* indexed by number of textures */
   GskVulkanUploader *uploader;
   GskVulkanBuffer *vertex_buffer;
 
@@ -201,7 +202,17 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
         self->descriptor_set_layout,
         self->descriptor_set_layout
       };
-      self->layout[i] = gsk_vulkan_pipeline_layout_new (self->vulkan, i, layouts);
+
+      GSK_VK_CHECK (vkCreatePipelineLayout, device,
+                                            &(VkPipelineLayoutCreateInfo) {
+                                                .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+                                                .setLayoutCount = i,
+                                                .pSetLayouts = layouts,
+                                                .pushConstantRangeCount = gst_vulkan_push_constants_get_range_count (),
+                                                .pPushConstantRanges = gst_vulkan_push_constants_get_ranges ()
+                                            },
+                                            NULL,
+                                            &self->pipeline_layout[i]);
     }
 
   self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
@@ -345,7 +356,7 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
   static const struct {
     const char *name;
     guint num_textures;
-    GskVulkanPipeline * (* create_func) (GskVulkanPipelineLayout *layout, const char *name, VkRenderPass render_pass);
+    GskVulkanPipeline * (* create_func) (GdkVulkanContext *context, VkPipelineLayout layout, const char *name, VkRenderPass render_pass);
   } pipeline_info[GSK_VULKAN_N_PIPELINES] = {
     { "blend",                      1, gsk_vulkan_blend_pipeline_new },
     { "blend-clip",                 1, gsk_vulkan_blend_pipeline_new },
@@ -382,11 +393,10 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
 
   if (self->pipelines[type] == NULL)
-    {
-      self->pipelines[type] = pipeline_info[type].create_func (self->layout[pipeline_info[type].num_textures],
-                                                               pipeline_info[type].name,
-                                                               self->render_pass);
-    }
+    self->pipelines[type] = pipeline_info[type].create_func (self->vulkan,
+                                                             self->pipeline_layout[pipeline_info[type].num_textures],
+                                                             pipeline_info[type].name,
+                                                             self->render_pass);
 
   return self->pipelines[type];
 }
@@ -570,7 +580,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
       for (l = self->render_passes; l; l = l->next)
         {
-          gsk_vulkan_render_pass_draw (l->data, self, self->vertex_buffer, 3, self->layout, command_buffer);
+          gsk_vulkan_render_pass_draw (l->data, self, self->vertex_buffer, 3, self->pipeline_layout, command_buffer);
         }
 
       vkCmdEndRenderPass (command_buffer);
@@ -664,7 +674,9 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   g_clear_pointer (&self->uploader, gsk_vulkan_uploader_free);
 
   for (i = 0; i < 3; i++)
-    g_clear_pointer (&self->layout[i], gsk_vulkan_pipeline_layout_unref);
+    vkDestroyPipelineLayout (device,
+                             self->pipeline_layout[i],
+                             NULL);
 
   vkDestroyRenderPass (device,
                        self->render_pass,

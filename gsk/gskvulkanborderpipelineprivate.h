@@ -14,7 +14,8 @@ typedef struct _GskVulkanBorderPipelineLayout GskVulkanBorderPipelineLayout;
 
 G_DECLARE_FINAL_TYPE (GskVulkanBorderPipeline, gsk_vulkan_border_pipeline, GSK, VULKAN_BORDER_PIPELINE, GskVulkanPipeline)
 
-GskVulkanPipeline *     gsk_vulkan_border_pipeline_new                  (GskVulkanPipelineLayout *       layout,
+GskVulkanPipeline *     gsk_vulkan_border_pipeline_new                  (GdkVulkanContext               *context,
+                                                                         VkPipelineLayout                layout,
                                                                          const char                     *shader_name,
                                                                          VkRenderPass                    render_pass);
 

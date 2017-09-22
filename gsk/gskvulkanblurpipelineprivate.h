@@ -13,7 +13,8 @@ typedef struct _GskVulkanBlurPipelineLayout GskVulkanBlurPipelineLayout;
 
 G_DECLARE_FINAL_TYPE (GskVulkanBlurPipeline, gsk_vulkan_blur_pipeline, GSK, VULKAN_BLUR_PIPELINE, GskVulkanPipeline)
 
-GskVulkanPipeline *     gsk_vulkan_blur_pipeline_new                   (GskVulkanPipelineLayout *layout,
+GskVulkanPipeline *     gsk_vulkan_blur_pipeline_new                   (GdkVulkanContext        *context,
+                                                                        VkPipelineLayout         layout,
                                                                         const char              *shader_name,
                                                                         VkRenderPass             render_pass);
 

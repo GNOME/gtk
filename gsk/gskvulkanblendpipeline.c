@@ -76,11 +76,12 @@ gsk_vulkan_blend_pipeline_init (GskVulkanBlendPipeline *self)
 }
 
 GskVulkanPipeline *
-gsk_vulkan_blend_pipeline_new (GskVulkanPipelineLayout *layout,
+gsk_vulkan_blend_pipeline_new (GdkVulkanContext        *context,
+                               VkPipelineLayout         layout,
                                const char              *shader_name,
                                VkRenderPass             render_pass)
 {
-  return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_BLEND_PIPELINE, layout, shader_name, render_pass);
+  return gsk_vulkan_pipeline_new (GSK_TYPE_VULKAN_BLEND_PIPELINE, context, layout, shader_name, render_pass);
 }
 
 gsize
