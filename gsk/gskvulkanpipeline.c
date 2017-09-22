@@ -198,6 +198,7 @@ gsk_vulkan_pipeline_get_pipeline_layout (GskVulkanPipeline *self)
 
 GskVulkanPipelineLayout *
 gsk_vulkan_pipeline_layout_new (GdkVulkanContext      *context,
+                                guint                  layout_count,
                                 VkDescriptorSetLayout *descriptor_set_layout)
 {
   GskVulkanPipelineLayout *self;
@@ -212,7 +213,7 @@ gsk_vulkan_pipeline_layout_new (GdkVulkanContext      *context,
   GSK_VK_CHECK (vkCreatePipelineLayout, device,
                                         &(VkPipelineLayoutCreateInfo) {
                                             .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-                                            .setLayoutCount = 1,
+                                            .setLayoutCount = layout_count,
                                             .pSetLayouts = descriptor_set_layout,
                                             .pushConstantRangeCount = gst_vulkan_push_constants_get_range_count (),
                                             .pPushConstantRanges = gst_vulkan_push_constants_get_ranges ()

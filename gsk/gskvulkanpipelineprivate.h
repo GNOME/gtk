@@ -35,6 +35,7 @@ gsk_vulkan_handle_result (VkResult    res,
 #define GSK_VK_CHECK(func, ...) gsk_vulkan_handle_result (func (__VA_ARGS__), G_STRINGIFY (func))
 
 GskVulkanPipelineLayout *       gsk_vulkan_pipeline_layout_new          (GdkVulkanContext               *context,
+                                                                         guint                           layout_count,
                                                                          VkDescriptorSetLayout          *descriptor_set_layout);
 GskVulkanPipelineLayout *       gsk_vulkan_pipeline_layout_ref          (GskVulkanPipelineLayout        *self);
 void                            gsk_vulkan_pipeline_layout_unref        (GskVulkanPipelineLayout        *self);

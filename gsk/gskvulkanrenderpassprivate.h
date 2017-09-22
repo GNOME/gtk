@@ -36,7 +36,8 @@ void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulk
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
                                                                          GskVulkanBuffer        *vertex_buffer,
-                                                                         GskVulkanPipelineLayout *layout,
+                                                                         guint                   layout_count,
+                                                                         GskVulkanPipelineLayout **layout,
                                                                          VkCommandBuffer         command_buffer);
 
 G_END_DECLS
