@@ -32,7 +32,6 @@ gsk_vulkan_handle_result (VkResult    res,
 
 #define GSK_VK_CHECK(func, ...) gsk_vulkan_handle_result (func (__VA_ARGS__), G_STRINGIFY (func))
 
-
 GskVulkanPipeline *     gsk_vulkan_pipeline_new                         (GType                           pipeline_type,
                                                                          GdkVulkanContext               *context,
                                                                          VkPipelineLayout                layout,

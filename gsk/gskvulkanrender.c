@@ -16,6 +16,7 @@
 #include "gskvulkanboxshadowpipelineprivate.h"
 #include "gskvulkancolorpipelineprivate.h"
 #include "gskvulkancolortextpipelineprivate.h"
+#include "gskvulkancrossfadepipelineprivate.h"
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkantextpipelineprivate.h"
@@ -388,6 +389,9 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     { "blend",                      1, gsk_vulkan_color_text_pipeline_new },
     { "blend-clip",                 1, gsk_vulkan_color_text_pipeline_new },
     { "blend-clip-rounded",         1, gsk_vulkan_color_text_pipeline_new },
+    { "crossfade",                  2, gsk_vulkan_cross_fade_pipeline_new },
+    { "crossfade-clip",             2, gsk_vulkan_cross_fade_pipeline_new },
+    { "crossfade-clip-rounded",     2, gsk_vulkan_cross_fade_pipeline_new },
   };
 
   g_return_val_if_fail (type < GSK_VULKAN_N_PIPELINES, NULL);
