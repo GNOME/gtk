@@ -15,7 +15,6 @@ void main()
 {
   vec4 start = texture (startTexture, inTexCoord);
   vec4 end = texture (endTexture, inTexCoord);
-  float alpha = mix (start.a, end.a, inProgress);
 
-  color = clip (inPos, vec4(mix (start.rgb, end.rgb, inProgress) / alpha, alpha));
+  color = clip (inPos, mix (start, end, inProgress));
 }
