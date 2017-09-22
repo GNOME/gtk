@@ -1197,6 +1197,7 @@ searchbar {
 
 .titlebar:not(headerbar),
 headerbar {
+  min-height: 46px;
   border-width: 0 0 1px;
   border-style: solid;
   border-color: $borders_color;
@@ -1265,6 +1266,18 @@ headerbar {
   .maximized &,
   .fullscreen & {
     border-radius: 0;
+  }
+
+  &.default-decoration {
+    min-height: 28px;
+    padding: 4px;
+
+    button.titlebutton {
+      min-height: 26px;
+      min-width: 26px;
+      margin: 0;
+      padding: 0;
+    }
   }
 }
 
