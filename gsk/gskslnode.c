@@ -22,6 +22,7 @@
 
 #include "gskslpreprocessorprivate.h"
 #include "gskslfunctionprivate.h"
+#include "gskslpointertypeprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
@@ -724,7 +725,7 @@ struct _GskSlNodeDeclaration {
   GskSlNode parent;
 
   char *name;
-  GskSlType *type;
+  GskSlPointerType *type;
   GskSlNode *initial;
   guint constant :1;
 };
@@ -735,7 +736,7 @@ gsk_sl_node_declaration_free (GskSlNode *node)
   GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
 
   g_free (declaration->name);
-  gsk_sl_type_unref (declaration->type);
+  gsk_sl_pointer_type_unref (declaration->type);
   if (declaration->initial)
     gsk_sl_node_unref (declaration->initial);
 
@@ -748,7 +749,7 @@ gsk_sl_node_declaration_print (GskSlNode *node,
 {
   GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
 
-  g_string_append (string, gsk_sl_type_get_name (declaration->type));
+  gsk_sl_pointer_type_print (declaration->type, string);
   if (declaration->name)
     {
       g_string_append (string, " ");
@@ -766,7 +767,7 @@ gsk_sl_node_declaration_get_return_type (GskSlNode *node)
 {
   GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
 
-  return declaration->type;
+  return gsk_sl_pointer_type_get_type (declaration->type);
 }
 
 static gboolean
@@ -1974,13 +1975,13 @@ static GskSlNode *
 gsk_sl_node_parse_declaration (GskSlNodeProgram  *program,
                                GskSlScope        *scope,
                                GskSlPreprocessor *stream,
-                               GskSlType         *type)
+                               GskSlPointerType  *type)
 {
   GskSlNodeDeclaration *declaration;
   const GskSlToken *token;
 
   declaration = gsk_sl_node_new (GskSlNodeDeclaration, &GSK_SL_NODE_DECLARATION);
-  declaration->type = gsk_sl_type_ref (type);
+  declaration->type = gsk_sl_pointer_type_ref (type);
   
   token = gsk_sl_preprocessor_get (stream);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
@@ -2048,6 +2049,16 @@ gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
       case GSK_SL_TOKEN_RIGHT_BRACE:
         goto out;
 
+      case GSK_SL_TOKEN_CONST:
+      case GSK_SL_TOKEN_IN:
+      case GSK_SL_TOKEN_OUT:
+      case GSK_SL_TOKEN_INOUT:
+      case GSK_SL_TOKEN_INVARIANT:
+      case GSK_SL_TOKEN_COHERENT:
+      case GSK_SL_TOKEN_VOLATILE:
+      case GSK_SL_TOKEN_RESTRICT:
+      case GSK_SL_TOKEN_READONLY:
+      case GSK_SL_TOKEN_WRITEONLY:
       case GSK_SL_TOKEN_VOID:
       case GSK_SL_TOKEN_FLOAT:
       case GSK_SL_TOKEN_DOUBLE:
@@ -2095,21 +2106,40 @@ gsk_sl_node_parse_function_definition (GskSlNodeProgram  *program,
       case GSK_SL_TOKEN_DMAT4X4:
         {
           GskSlType *type;
+          GskSlPointerTypeFlags flags;
+          gboolean success;
+
+          success = gsk_sl_type_qualifier_parse (stream,
+                                                 GSK_SL_POINTER_TYPE_PARAMETER_QUALIFIER 
+                                                 | GSK_SL_POINTER_TYPE_MEMORY_QUALIFIER,
+                                                 &flags);
 
           type = gsk_sl_type_new_parse (stream);
           if (type == NULL)
-            return FALSE;
+            break;
 
           token = gsk_sl_preprocessor_get (stream);
 
           if (token->type == GSK_SL_TOKEN_LEFT_BRACE)
-            node = gsk_sl_node_parse_constructor_call (program, function->scope, stream, type);
+            {
+              node = gsk_sl_node_parse_constructor_call (program, function->scope, stream, type);
+            }
           else
-            node = gsk_sl_node_parse_declaration (program, function->scope, stream, type);
+            {
+              GskSlPointerType *pointer_type;
+          
+              pointer_type = gsk_sl_pointer_type_new (type, flags | GSK_SL_POINTER_TYPE_LOCAL);
+              node = gsk_sl_node_parse_declaration (program, function->scope, stream, pointer_type);
+              gsk_sl_pointer_type_unref (pointer_type);
+            }
 
           gsk_sl_type_unref (type);
 
-          if (node)
+          if (!success)
+            {
+              gsk_sl_node_unref (node);
+            }
+          else if (node)
             {
               function->statements = g_slist_append (function->statements, node);
             }

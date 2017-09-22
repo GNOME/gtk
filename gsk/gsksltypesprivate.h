@@ -24,6 +24,7 @@
 typedef struct _GskSlFunction           GskSlFunction;
 typedef struct _GskSlNode               GskSlNode;
 typedef struct _GskSlPreprocessor       GskSlPreprocessor;
+typedef struct _GskSlPointerType        GskSlPointerType;
 typedef struct _GskSlScope              GskSlScope;
 typedef struct _GskSlToken              GskSlToken;
 typedef struct _GskSlType               GskSlType;
