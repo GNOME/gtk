@@ -1195,7 +1195,7 @@ searchbar {
  * Header bars *
  ***************/
 
-.titlebar,
+.titlebar:not(headerbar),
 headerbar {
   border-width: 0 0 1px;
   border-style: solid;
