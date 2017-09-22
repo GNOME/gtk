@@ -1352,7 +1352,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   entry_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes",
                           P_("Attributes"),
-                          P_("A list of style attributes to apply to the text of the label"),
+                          P_("A list of style attributes to apply to the text of the entry"),
                           PANGO_TYPE_ATTR_LIST,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
