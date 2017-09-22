@@ -54,6 +54,7 @@ GskVulkanPipeline *     gsk_vulkan_pipeline_new_full                    (GType  
                                                                          VkBlendFactor                   dstBlendFactor);
 
 VkPipeline              gsk_vulkan_pipeline_get_pipeline                (GskVulkanPipeline              *self);
+VkPipelineLayout        gsk_vulkan_pipeline_get_pipeline_layout         (GskVulkanPipeline              *self);
 
 G_END_DECLS
 

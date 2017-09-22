@@ -186,6 +186,14 @@ gsk_vulkan_pipeline_get_pipeline (GskVulkanPipeline *self)
   return priv->pipeline;
 }
 
+VkPipelineLayout
+gsk_vulkan_pipeline_get_pipeline_layout (GskVulkanPipeline *self)
+{
+  GskVulkanPipelinePrivate *priv = gsk_vulkan_pipeline_get_instance_private (self);
+
+  return priv->layout->pipeline_layout;
+}
+
 /*** GskVulkanPipelineLayout ***/
 
 GskVulkanPipelineLayout *
