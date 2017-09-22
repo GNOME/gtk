@@ -40,6 +40,7 @@ struct _GskVulkanRender
   GskVulkanCommandPool *command_pool;
   VkFence fence;
   VkRenderPass render_pass;
+  VkDescriptorSetLayout descriptor_set_layout;
   GskVulkanPipelineLayout *layout;
   GskVulkanUploader *uploader;
   GskVulkanBuffer *vertex_buffer;
@@ -176,7 +177,24 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                       NULL,
                                       &self->render_pass);
 
-  self->layout = gsk_vulkan_pipeline_layout_new (self->vulkan);
+  GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
+                                             &(VkDescriptorSetLayoutCreateInfo) {
+                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+                                                 .bindingCount = 1,
+                                                 .pBindings = (VkDescriptorSetLayoutBinding[1]) {
+                                                     {
+                                                         .binding = 0,
+                                                         .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                         .descriptorCount = 1,
+                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
+                                                     }
+                                                 }
+                                             },
+                                             NULL,
+                                             &self->descriptor_set_layout);
+
+
+  self->layout = gsk_vulkan_pipeline_layout_new (self->vulkan, &self->descriptor_set_layout);
 
   self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
 
@@ -447,9 +465,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
 
   VkDescriptorSetLayout *layouts = g_newa (VkDescriptorSetLayout, needed_sets);
   for (i = 0; i < needed_sets; i++)
-    {
-      layouts[i] = gsk_vulkan_pipeline_layout_get_descriptor_set_layout (self->layout);
-    }
+    layouts[i] = self->descriptor_set_layout;
 
   GSK_VK_CHECK (vkAllocateDescriptorSets, device,
                                           &(VkDescriptorSetAllocateInfo) {
@@ -649,6 +665,10 @@ gsk_vulkan_render_free (GskVulkanRender *self)
                            NULL);
   g_free (self->descriptor_sets);
   g_hash_table_unref (self->descriptor_set_indexes);
+
+  vkDestroyDescriptorSetLayout (device,
+                                self->descriptor_set_layout,
+                                NULL);
 
   vkDestroyFence (device,
                   self->fence,

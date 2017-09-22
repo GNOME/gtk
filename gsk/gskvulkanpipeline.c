@@ -15,7 +15,6 @@ struct _GskVulkanPipelineLayout
   GdkVulkanContext *vulkan;
 
   VkPipelineLayout pipeline_layout;
-  VkDescriptorSetLayout descriptor_set_layout;
 };
 
 struct _GskVulkanPipelinePrivate
@@ -190,7 +189,8 @@ gsk_vulkan_pipeline_get_pipeline (GskVulkanPipeline *self)
 /*** GskVulkanPipelineLayout ***/
 
 GskVulkanPipelineLayout *
-gsk_vulkan_pipeline_layout_new (GdkVulkanContext *context)
+gsk_vulkan_pipeline_layout_new (GdkVulkanContext      *context,
+                                VkDescriptorSetLayout *descriptor_set_layout)
 {
   GskVulkanPipelineLayout *self;
   VkDevice device;
@@ -201,27 +201,11 @@ gsk_vulkan_pipeline_layout_new (GdkVulkanContext *context)
 
   device = gdk_vulkan_context_get_device (context);
 
-  GSK_VK_CHECK (vkCreateDescriptorSetLayout, device,
-                                             &(VkDescriptorSetLayoutCreateInfo) {
-                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-                                                 .bindingCount = 1,
-                                                 .pBindings = (VkDescriptorSetLayoutBinding[1]) {
-                                                     {
-                                                         .binding = 0,
-                                                         .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                         .descriptorCount = 1,
-                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-                                                     }
-                                                 }
-                                             },
-                                             NULL,
-                                             &self->descriptor_set_layout);
-
   GSK_VK_CHECK (vkCreatePipelineLayout, device,
                                         &(VkPipelineLayoutCreateInfo) {
                                             .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
                                             .setLayoutCount = 1,
-                                            .pSetLayouts = &self->descriptor_set_layout,
+                                            .pSetLayouts = descriptor_set_layout,
                                             .pushConstantRangeCount = gst_vulkan_push_constants_get_range_count (),
                                             .pPushConstantRanges = gst_vulkan_push_constants_get_ranges ()
                                         },
@@ -255,10 +239,6 @@ gsk_vulkan_pipeline_layout_unref (GskVulkanPipelineLayout *self)
                            self->pipeline_layout,
                            NULL);
 
-  vkDestroyDescriptorSetLayout (device,
-                                self->descriptor_set_layout,
-                                NULL);
-
   g_slice_free (GskVulkanPipelineLayout, self);
 }
 
@@ -268,10 +248,3 @@ gsk_vulkan_pipeline_layout_get_pipeline_layout (GskVulkanPipelineLayout *self)
 {
   return self->pipeline_layout;
 }
-
-VkDescriptorSetLayout
-gsk_vulkan_pipeline_layout_get_descriptor_set_layout (GskVulkanPipelineLayout *self)
-{
-  return self->descriptor_set_layout;
-}
-
