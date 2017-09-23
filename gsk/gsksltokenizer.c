@@ -1463,14 +1463,11 @@ gsk_sl_token_reader_read_number (GskSlTokenReader  *reader,
   return gsk_sl_token_reader_read_float_number (reader, token, error);
 }
 
-static gboolean
+static void
 gsk_sl_token_reader_read_identifier (GskSlTokenReader  *reader,
-                                     GskSlToken        *token,
-                                     GError           **error)
+                                     GskSlToken        *token)
 {
   GString *string;
-  guint i;
-  char *ident;
   char c;
 
   string = g_string_new ("");
@@ -1483,19 +1480,26 @@ gsk_sl_token_reader_read_identifier (GskSlTokenReader  *reader,
       gsk_sl_token_reader_consume (reader, 1);
     }
 
-  ident = g_string_free (string, FALSE);
+  gsk_sl_token_init (token, GSK_SL_TOKEN_IDENTIFIER);
+  token->str = g_string_free (string, FALSE);
+}
 
+void
+gsk_sl_token_init_from_identifier (GskSlToken *token,
+                                   const char *ident)
+{
+  guint i;
   if (g_str_equal (ident, "true"))
     {
       gsk_sl_token_init (token, GSK_SL_TOKEN_BOOLCONSTANT);
       token->b = TRUE;
-      return TRUE;
+      return;
     }
   else if (g_str_equal (ident, "false"))
     {
       gsk_sl_token_init (token, GSK_SL_TOKEN_BOOLCONSTANT);
       token->b = FALSE;
-      return TRUE;
+      return;
     }
 
   for (i = 0; i < G_N_ELEMENTS (keywords); i++)
@@ -1506,14 +1510,12 @@ gsk_sl_token_reader_read_identifier (GskSlTokenReader  *reader,
       if (g_str_equal (ident, keywords[i]))
         {
           gsk_sl_token_init (token, i);
-          return TRUE;
+          return;
         }
     }
 
   gsk_sl_token_init (token, GSK_SL_TOKEN_IDENTIFIER);
-  token->str = ident;
-  
-  return TRUE;
+  token->str = g_strdup (ident);
 }
 
 void
@@ -1828,7 +1830,7 @@ gsk_sl_tokenizer_read_token (GskSlTokenizer *tokenizer,
         }
       else if (is_identifier_start (c))
         {
-          gsk_sl_token_reader_read_identifier (&reader, token, &error);
+          gsk_sl_token_reader_read_identifier (&reader, token);
         }
       else
         {

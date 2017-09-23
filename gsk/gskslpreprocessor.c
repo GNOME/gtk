@@ -213,6 +213,13 @@ gsk_sl_preprocessor_ensure (GskSlPreprocessor *preproc)
           break;
         }
     }
+
+  if (gsk_sl_token_is (&preproc->token, GSK_SL_TOKEN_IDENTIFIER))
+    {
+      char *ident = preproc->token.str;
+      gsk_sl_token_init_from_identifier (&preproc->token, ident);
+      g_free (ident);
+    }
 }
 
 const GskSlToken *
