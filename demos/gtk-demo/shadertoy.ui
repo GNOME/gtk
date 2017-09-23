@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.6 -->
+  <object class="GtkWindow" id="window">
+    <property name="default-width">640</property>
+    <property name="default-height">480</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="title" translatable="yes">Shadertoy</property>
+        <property name="show-close-button">1</property>
+        <child>
+          <object class="GtkButton" id="rewind">
+            <property name="icon-name">media-skip-backward-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="play">
+            <property name="icon-name">media-playback-start-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="time">
+            <property name="margin-start">20</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="save">
+            <property name="icon-name">document-save-as-symbolic</property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="load">
+            <property name="icon-name">document-open-symbolic</property>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkPaned" id="content">
+        <property name="orientation">vertical</property>
+        <property name="position">240</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="expand">1</property>
+            <child>
+              <object class="GtkTextView" id="text">
+                <property name="top-margin">10</property>
+                <property name="bottom-margin">10</property>
+                <property name="left-margin">10</property>
+                <property name="right-margin">10</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

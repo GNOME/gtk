@@ -54,6 +54,7 @@ demos = files([
   'scale.c',
   'search_entry.c',
   'search_entry2.c',
+  'shadertoy.c',
   'shortcuts.c',
   'sidebar.c',
   'sizegroup.c',

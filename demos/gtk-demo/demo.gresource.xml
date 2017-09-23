@@ -187,6 +187,7 @@
     <file>scale.c</file>
     <file>search_entry.c</file>
     <file>search_entry2.c</file>
+    <file>shadertoy.c</file>
     <file>shortcuts.c</file>
     <file>sizegroup.c</file>
     <file>sidebar.c</file>
@@ -240,5 +241,8 @@
   </gresource>
   <gresource prefix="/modelbutton">
     <file>modelbutton.ui</file>
+  </gresource>
+  <gresource prefix="/shadertoy">
+    <file>shadertoy.ui</file>
   </gresource>
 </gresources>
