@@ -8,6 +8,7 @@
 
 gsk_private_vulkan_fragment_shaders = [
   'blend.frag',
+  'blendmode.frag',
   'blur.frag',
   'border.frag',
   'color.frag',
@@ -21,6 +22,7 @@ gsk_private_vulkan_fragment_shaders = [
 
 gsk_private_vulkan_vertex_shaders = [
   'blend.vert',
+  'blendmode.vert',
   'blur.vert',
   'border.vert',
   'color.vert',

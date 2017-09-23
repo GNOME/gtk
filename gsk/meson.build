@@ -54,6 +54,7 @@ gsk_private_vulkan_compiled_shaders_deps = []
 
 if have_vulkan
   gsk_private_sources += files([
+    'gskvulkanblendmodepipeline.c',
     'gskvulkanblendpipeline.c',
     'gskvulkanblurpipeline.c',
     'gskvulkanborderpipeline.c',
