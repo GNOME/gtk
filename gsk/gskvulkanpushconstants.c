@@ -94,13 +94,13 @@ gsk_vulkan_push_constants_push (const GskVulkanPushConstants *self,
 }
 
 uint32_t
-gst_vulkan_push_constants_get_range_count (void)
+gsk_vulkan_push_constants_get_range_count (void)
 {
   return 1;
 }
 
 const VkPushConstantRange *
-gst_vulkan_push_constants_get_ranges (void)
+gsk_vulkan_push_constants_get_ranges (void)
 {
   static const VkPushConstantRange ranges[1] = {
       {

@@ -210,8 +210,8 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                                 .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
                                                 .setLayoutCount = i,
                                                 .pSetLayouts = layouts,
-                                                .pushConstantRangeCount = gst_vulkan_push_constants_get_range_count (),
-                                                .pPushConstantRanges = gst_vulkan_push_constants_get_ranges ()
+                                                .pushConstantRangeCount = gsk_vulkan_push_constants_get_range_count (),
+                                                .pPushConstantRanges = gsk_vulkan_push_constants_get_ranges ()
                                             },
                                             NULL,
                                             &self->pipeline_layout[i]);
