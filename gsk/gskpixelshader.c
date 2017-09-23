@@ -34,6 +34,7 @@
 #include "gskpixelshaderprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gskslcompiler.h"
 #include "gskslprogram.h"
 
 #include "gdk/gdkinternals.h"
@@ -143,12 +144,15 @@ gsk_pixel_shader_new_for_data (GBytes             *source,
                                GskShaderErrorFunc  error_func,
                                gpointer            error_data)
 {
+  GskSlCompiler *compiler;
   GskPixelShader *shader;
   GskSlProgram *program;
 
   g_return_val_if_fail (source != NULL, NULL);
 
-  program = gsk_sl_program_new (source, NULL);
+  compiler = gsk_sl_compiler_new ();
+  program = gsk_sl_compiler_compile (compiler, source);
+  g_object_unref (compiler);
   if (program == NULL)
     return NULL;
 

@@ -1,5 +1,6 @@
-/* GSK - The GTK Scene Kit
- * Copyright 2016  Endless 
+/* GTK - The GIMP Toolkit
+ *
+ * Copyright © 2017 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,23 +16,17 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_H__
-#define __GSK_H__
+#ifndef __GSK_SL_PROGRAM_PRIVATE_H__
+#define __GSK_SL_PROGRAM_PRIVATE_H__
 
-#define __GSK_H_INSIDE__
+#include "gsk/gskslprogram.h"
+#include "gsk/gsksltypesprivate.h"
 
-#include <gsk/gskenums.h>
-#include <gsk/gskpixelshader.h>
-#include <gsk/gskrenderer.h>
-#include <gsk/gskrendernode.h>
-#include <gsk/gskroundedrect.h>
-#include <gsk/gskslcompiler.h>
-#include <gsk/gskslprogram.h>
-#include <gsk/gsktexture.h>
+G_BEGIN_DECLS
 
-#include <gsk/gsktypes.h>
-#include <gsk/gskenumtypes.h>
+gboolean                gsk_sl_program_parse                    (GskSlProgram           *program,
+                                                                 GskSlPreprocessor      *preproc);
 
-#undef __GSK_H_INSIDE__
+G_END_DECLS
 
-#endif /* __GSK_H__ */
+#endif /* __GSK_SL_PROGRAM_PRIVATE_H__ */

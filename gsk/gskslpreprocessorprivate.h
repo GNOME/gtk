@@ -25,7 +25,8 @@
 
 G_BEGIN_DECLS
 
-GskSlPreprocessor *     gsk_sl_preprocessor_new                 (GBytes              *source);
+GskSlPreprocessor *     gsk_sl_preprocessor_new                 (GskSlCompiler       *compiler,
+                                                                 GBytes              *source);
 
 GskSlPreprocessor *     gsk_sl_preprocessor_ref                 (GskSlPreprocessor   *preproc);
 void                    gsk_sl_preprocessor_unref               (GskSlPreprocessor   *preproc);

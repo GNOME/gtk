@@ -19,6 +19,7 @@ gsk_public_sources = files([
   'gskrendernode.c',
   'gskrendernodeimpl.c',
   'gskroundedrect.c',
+  'gskslcompiler.c',
   'gskslprogram.c',
   'gsktexture.c',
 ])

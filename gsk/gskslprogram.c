@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gskslprogram.h"
+#include "gskslprogramprivate.h"
 
 #include "gskslnodeprivate.h"
 #include "gskslpreprocessorprivate.h"
@@ -62,7 +62,7 @@ gsk_sl_program_init (GskSlProgram *program)
   program->scope = gsk_sl_scope_new (NULL);
 }
 
-static gboolean
+gboolean
 gsk_sl_program_parse (GskSlProgram      *program,
                       GskSlPreprocessor *preproc)
 {
@@ -87,28 +87,6 @@ gsk_sl_program_parse (GskSlProgram      *program,
     }
 
   return result;
-}
-
-GskSlProgram *
-gsk_sl_program_new (GBytes  *source,
-                    GError **error)
-{
-  GskSlPreprocessor *preproc;
-  GskSlProgram *program;
-
-  program = g_object_new (GSK_TYPE_SL_PROGRAM, NULL);
-
-  preproc = gsk_sl_preprocessor_new (source);
-
-  if (!gsk_sl_program_parse (program, preproc))
-    {
-      g_object_unref (program);
-      program = NULL;
-    }
-
-  gsk_sl_preprocessor_unref (preproc);
-
-  return program;
 }
 
 void

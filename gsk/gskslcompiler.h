@@ -16,8 +16,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_SL_PROGRAM_H__
-#define __GSK_SL_PROGRAM_H__
+#ifndef __GSK_SL_COMPILER_H__
+#define __GSK_SL_COMPILER_H__
 
 #if !defined (__GSK_H_INSIDE__) && !defined (GSK_COMPILATION)
 #error "Only <gsk/gsk.h> can be included directly."
@@ -27,17 +27,17 @@
 
 G_BEGIN_DECLS
 
-#define GSK_TYPE_SL_PROGRAM (gsk_sl_program_get_type ())
+#define GSK_TYPE_SL_COMPILER (gsk_sl_compiler_get_type ())
 
-G_DECLARE_FINAL_TYPE (GskSlProgram, gsk_sl_program, GSK, SL_PROGRAM, GObject)
+G_DECLARE_FINAL_TYPE (GskSlCompiler, gsk_sl_compiler, GSK, SL_COMPILER, GObject)
 
 GDK_AVAILABLE_IN_3_92
-void                    gsk_sl_program_print                    (GskSlProgram        *program,
-                                                                 GString             *string);
-GDK_AVAILABLE_IN_3_92
-GBytes *                gsk_sl_program_to_spirv                 (GskSlProgram        *program);
+GskSlCompiler *         gsk_sl_compiler_new                     (void);
 
+GDK_AVAILABLE_IN_3_92
+GskSlProgram *          gsk_sl_compiler_compile                 (GskSlCompiler       *compiler,
+                                                                 GBytes              *source);
 
 G_END_DECLS
 
-#endif /* __GSK_SL_PROGRAM_H__ */
+#endif /* __GSK_SL_COMPILER_H__ */

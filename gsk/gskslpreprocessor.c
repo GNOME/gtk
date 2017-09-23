@@ -26,6 +26,7 @@ struct _GskSlPreprocessor
 {
   int ref_count;
 
+  GskSlCompiler *compiler;
   GskSlTokenizer *tokenizer;
   GskCodeLocation location;
   GskSlToken token;
@@ -48,13 +49,15 @@ gsk_sl_preprocessor_error_func (GskSlTokenizer        *parser,
 }
 
 GskSlPreprocessor *
-gsk_sl_preprocessor_new (GBytes *source)
+gsk_sl_preprocessor_new (GskSlCompiler *compiler,
+                         GBytes        *source)
 {
   GskSlPreprocessor *preproc;
 
   preproc = g_slice_new0 (GskSlPreprocessor);
 
   preproc->ref_count = 1;
+  preproc->compiler = g_object_ref (compiler);
   preproc->tokenizer = gsk_sl_tokenizer_new (source, 
                                             gsk_sl_preprocessor_error_func,
                                             preproc,
@@ -85,6 +88,7 @@ gsk_sl_preprocessor_unref (GskSlPreprocessor *preproc)
 
   gsk_sl_tokenizer_unref (preproc->tokenizer);
   gsk_sl_token_clear (&preproc->token);
+  g_object_unref (preproc->compiler);
 
   g_slice_free (GskSlPreprocessor, preproc);
 }
