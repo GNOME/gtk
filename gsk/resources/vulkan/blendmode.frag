@@ -10,7 +10,7 @@ layout(location = 3) flat in uint inBlendMode;
 layout(set = 0, binding = 0) uniform sampler2D startTexture;
 layout(set = 1, binding = 0) uniform sampler2D endTexture;
 
-layout(location = 0) out vec4 color;
+layout(location = 0) out vec4 outColor;
 
 vec3
 multiply (vec3 source, vec3 backdrop, float opacity)
@@ -135,6 +135,121 @@ exclusion (vec3 source, vec3 backdrop, float opacity)
 }
 
 float
+lum (vec3 c)
+{
+  return 0.3 * c.r + 0.59 * c.g + 0.11 * c.b;
+}
+
+vec3
+clip_color (vec3 c)
+{
+  float l = lum (c);
+  float n = min (c.r, min (c.g, c.b));
+  float x = max (c.r, max (c.g, c.b));
+  if (n < 0) c = l + (((c - l) * l) / (l - n));
+  if (x > 1) c = l + (((c - l) * (1 - l)) / (x - l));
+  return c;
+}
+
+vec3
+set_lum (vec3 c, float l)
+{
+  float d = l - lum (c);
+  return clip_color (vec3 (c.r + d, c.g + d, c.b + d));
+}
+
+float
+sat (vec3 c)
+{
+  return max (c.r, max (c.g, c.b)) - min (c.r, min (c.g, c.b));
+}
+
+vec3
+set_sat (vec3 c, float s)
+{
+  float cmin = min (c.r, min (c.g, c.b));
+  float cmax = max (c.r, max (c.g, c.b));
+  vec3 res;
+
+  if (cmax == cmin)
+    res = vec3 (0, 0, 0);
+  else
+    {
+      if (c.r == cmax)
+        {
+          if (c.g == cmin)
+            {
+              res.b = ((c.b - cmin) * s) / (cmax - cmin);
+              res.g = 0;
+            }
+          else
+            {
+              res.g = ((c.g - cmin) * s) / (cmax - cmin);
+              res.b = 0;
+            }
+          res.r = s;
+        }
+      else if (c.g == cmax)
+        {
+          if (c.r == cmin)
+            {
+              res.b = ((c.b - cmin) * s) / (cmax - cmin);
+              res.r = 0;
+            }
+          else
+            {
+              res.r = ((c.r - cmin) * s) / (cmax - cmin);
+              res.b = 0;
+            }
+          res.g = s;
+        }
+      else
+        {
+          if (c.r == cmin)
+            {
+              res.g = ((c.g - cmin) * s) / (cmax - cmin);
+              res.r = 0;
+            }
+          else
+            {
+              res.r = ((c.r - cmin) * s) / (cmax - cmin);
+              res.g = 0;
+            }
+          res.b = s;
+        }
+    }
+  return res;
+}
+
+vec3
+color (vec3 source, vec3 backdrop, float opacity)
+{
+  vec3 result = set_lum (source, lum (backdrop));
+  return mix (source, result, opacity);
+}
+
+vec3
+hue (vec3 source, vec3 backdrop, float opacity)
+{
+  vec3 result = set_lum (set_sat (source, sat (backdrop)), lum (backdrop));
+  return mix (source, result, opacity);
+}
+
+vec3
+saturation (vec3 source, vec3 backdrop, float opacity)
+{
+  vec3 result = set_lum (set_sat (backdrop, sat (source)), lum (backdrop));
+  return mix (source, result, opacity);
+}
+
+vec3
+luminosity (vec3 source, vec3 backdrop, float opacity)
+{
+  vec3 result = set_lum (backdrop, lum (source));
+  return mix (source, result, opacity);
+}
+
+float
 combine (float source, float backdrop)
 {
   return source + backdrop * (1 - source);
@@ -176,8 +291,16 @@ void main()
     rgb = difference (source.rgb, backdrop.rgb, backdrop.a);
   else if (inBlendMode == 11)
     rgb = exclusion (source.rgb, backdrop.rgb, backdrop.a);
+  else if (inBlendMode == 12)
+    rgb = color (source.rgb, backdrop.rgb, backdrop.a);
+  else if (inBlendMode == 13)
+    rgb = hue (source.rgb, backdrop.rgb, backdrop.a);
+  else if (inBlendMode == 14)
+    rgb = saturation (source.rgb, backdrop.rgb, backdrop.a);
+  else if (inBlendMode == 15)
+    rgb = luminosity (source.rgb, backdrop.rgb, backdrop.a);
   else
     discard;
 
-  color = clip (inPos, vec4 (rgb, a));
+  outColor = clip (inPos, vec4 (rgb, a));
 }

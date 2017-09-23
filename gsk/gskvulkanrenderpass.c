@@ -186,11 +186,6 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       FALLBACK ("Unsupported node '%s'\n", node->node_class->type_name);
 
     case GSK_BLEND_NODE:
-      if (gsk_blend_node_get_blend_mode (node) == GSK_BLEND_MODE_COLOR ||
-          gsk_blend_node_get_blend_mode (node) == GSK_BLEND_MODE_HUE ||
-          gsk_blend_node_get_blend_mode (node) == GSK_BLEND_MODE_SATURATION ||
-          gsk_blend_node_get_blend_mode (node) == GSK_BLEND_MODE_LUMINOSITY)
-        FALLBACK ("Nonseparable blend modes not implemented\n");
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
         pipeline_type = GSK_VULKAN_PIPELINE_BLEND_MODE;
       else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
