@@ -481,7 +481,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:883
 msgid "calendar:MY"
-msgstr "Kalenner:MY"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday

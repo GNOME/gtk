@@ -504,7 +504,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:883
 msgid "calendar:MY"
-msgstr "දින දර්ශනය:MY"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -512,7 +512,7 @@ msgstr "දින දර්ශනය:MY"
 #.
 #: gtk/gtkcalendar.c:921
 msgid "calendar:week_start:0"
-msgstr "දින දර්ශනය:week_start:0"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text

@@ -1854,7 +1854,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:800
 msgid "calendar:MY"
-msgstr "पात्रो:MY"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1862,7 +1862,7 @@ msgstr "पात्रो:MY"
 #.
 #: gtk/gtkcalendar.c:838
 msgid "calendar:week_start:0"
-msgstr "पात्रो:हप्ता सुरु:०"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text

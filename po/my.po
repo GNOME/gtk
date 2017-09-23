@@ -480,7 +480,7 @@ msgstr "မကိုင်တွယ်နိုင်တဲ့ စာအမှ�
 #.
 #: gtk/gtkcalendar.c:883
 msgid "calendar:MY"
-msgstr "ပြက္ခဒိန် - MY"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -488,7 +488,7 @@ msgstr "ပြက္ခဒိန် - MY"
 #.
 #: gtk/gtkcalendar.c:921
 msgid "calendar:week_start:0"
-msgstr "ပြက္ခဒိန် - week_start:0"
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text
