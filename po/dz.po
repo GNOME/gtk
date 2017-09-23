@@ -515,7 +515,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:883
 msgid "calendar:MY"
-msgstr "ཟླ་ཐོ: ཨེམ་ཝའི། "
+msgstr ""
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -523,7 +523,7 @@ msgstr "ཟླ་ཐོ: ཨེམ་ཝའི། "
 #.
 #: gtk/gtkcalendar.c:921
 msgid "calendar:week_start:0"
-msgstr "ཟླ་ཐོ་: བདུན་ཕྲག་འགོ་བཙུགས་:༠།(_s)"
+msgstr ""
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text
