@@ -29,8 +29,6 @@
 #include <unistd.h>
 #endif
 
-#include "gsk/gskslnodeprivate.h"
-
 static GBytes *
 bytes_new_from_file (const char  *filename,
                      GError     **error)
@@ -51,7 +49,7 @@ compile (GOutputStream *output,
          const char    *filename)
 {
   GBytes *bytes;
-  GskSlNode *program;
+  GskSlProgram *program;
   GError *error = NULL;
 
   bytes = bytes_new_from_file (filename, &error);
@@ -62,23 +60,23 @@ compile (GOutputStream *output,
       return FALSE;
     }
 
-  program = gsk_sl_node_new_program (bytes, NULL);
+  program = gsk_sl_program_new (bytes, NULL);
   g_bytes_unref (bytes);
   if (program == NULL)
     return FALSE;
 
-  bytes = gsk_sl_node_compile (program);
+  bytes = gsk_sl_program_to_spirv (program);
   if (!g_output_stream_write_all (output, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL, NULL, &error))
     {
       g_print (error->message);
       g_error_free (error);
       g_bytes_unref (bytes);
-      gsk_sl_node_unref (program);
+      g_object_unref (program);
       return FALSE;
     }
 
   g_bytes_unref (bytes);
-  gsk_sl_node_unref (program);
+  g_object_unref (program);
 
   return TRUE;
 }
@@ -89,7 +87,7 @@ dump (GOutputStream *output,
 {
   GBytes *bytes;
   GString *string;
-  GskSlNode *program;
+  GskSlProgram *program;
   GError *error = NULL;
 
   bytes = bytes_new_from_file (filename, &error);
@@ -100,24 +98,24 @@ dump (GOutputStream *output,
       return FALSE;
     }
 
-  program = gsk_sl_node_new_program (bytes, NULL);
+  program = gsk_sl_program_new (bytes, NULL);
   g_bytes_unref (bytes);
   if (program == NULL)
     return FALSE;
 
   string = g_string_new (NULL);
-  gsk_sl_node_print (program, string);
+  gsk_sl_program_print (program, string);
   if (!g_output_stream_write_all (output, string->str, string->len, NULL, NULL, &error))
     {
       g_print (error->message);
       g_error_free (error);
       g_string_free (string, TRUE);
-      gsk_sl_node_unref (program);
+      g_object_unref (program);
       return FALSE;
     }
 
   g_string_free (string, TRUE);
-  gsk_sl_node_unref (program);
+  g_object_unref (program);
 
   return TRUE;
 }

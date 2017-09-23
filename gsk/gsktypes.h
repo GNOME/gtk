@@ -29,6 +29,7 @@
 typedef struct _GskCodeLocation         GskCodeLocation;
 typedef struct _GskPixelShader          GskPixelShader;
 typedef struct _GskRenderer             GskRenderer;
+typedef struct _GskSlProgram            GskSlProgram;
 typedef struct _GskTexture              GskTexture;
 
 struct _GskCodeLocation

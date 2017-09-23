@@ -3,8 +3,6 @@
 
 #include "gskpixelshader.h"
 
-#include "gskslnodeprivate.h"
-
 G_BEGIN_DECLS
 
 #define GSK_PIXEL_SHADER_CLASS(klass)            (G_TYPE_CHECK_CLASS_CAST ((klass), GSK_TYPE_TEXTURE, GskPixelShaderClass))
@@ -15,7 +13,7 @@ struct _GskPixelShader
 {
   GObject parent_instance;
 
-  GskSlNode *program;
+  GskSlProgram *program;
 
   guint n_textures;
 };

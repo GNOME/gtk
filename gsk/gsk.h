@@ -25,6 +25,7 @@
 #include <gsk/gskrenderer.h>
 #include <gsk/gskrendernode.h>
 #include <gsk/gskroundedrect.h>
+#include <gsk/gskslprogram.h>
 #include <gsk/gsktexture.h>
 
 #include <gsk/gsktypes.h>

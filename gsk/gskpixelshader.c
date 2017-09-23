@@ -34,6 +34,7 @@
 #include "gskpixelshaderprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gskslprogram.h"
 
 #include "gdk/gdkinternals.h"
 
@@ -97,7 +98,7 @@ gsk_pixel_shader_dispose (GObject *object)
 {    
   GskPixelShader *self = GSK_PIXEL_SHADER (object);
 
-  gsk_sl_node_unref (self->program);
+  g_object_unref (self->program);
 
   G_OBJECT_CLASS (gsk_pixel_shader_parent_class)->dispose (object);
 }
@@ -143,11 +144,11 @@ gsk_pixel_shader_new_for_data (GBytes             *source,
                                gpointer            error_data)
 {
   GskPixelShader *shader;
-  GskSlNode *program;
+  GskSlProgram *program;
 
   g_return_val_if_fail (source != NULL, NULL);
 
-  program = gsk_sl_node_new_program (source, NULL);
+  program = gsk_sl_program_new (source, NULL);
   if (program == NULL)
     return NULL;
 
@@ -165,7 +166,7 @@ gsk_pixel_shader_print (GskPixelShader *shader,
   g_return_if_fail (GSK_IS_PIXEL_SHADER (shader));
   g_return_if_fail (string != NULL);
 
-  gsk_sl_node_print (shader->program, string);
+  gsk_sl_program_print (shader->program, string);
 }
 
 char *

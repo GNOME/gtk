@@ -43,19 +43,14 @@ struct _GskSlNodeClass {
                                                                  GskSpvWriter        *writer);
 };
 
-GDK_AVAILABLE_IN_3_92
-GskSlNode *             gsk_sl_node_new_program                 (GBytes              *source,
-                                                                 GError             **error);
+GskSlNode *             gsk_sl_node_parse_function_definition   (GskSlScope          *scope,
+                                                                 GskSlPreprocessor   *preproc);
 
 GskSlNode *             gsk_sl_node_ref                         (GskSlNode           *node);
-GDK_AVAILABLE_IN_3_92
 void                    gsk_sl_node_unref                       (GskSlNode           *node);
 
-GDK_AVAILABLE_IN_3_92
 void                    gsk_sl_node_print                       (GskSlNode           *node,
                                                                  GString             *string);
-GDK_AVAILABLE_IN_3_92
-GBytes *                gsk_sl_node_compile                     (GskSlNode           *node);
 GskSlType *             gsk_sl_node_get_return_type             (GskSlNode           *node);
 gboolean                gsk_sl_node_is_constant                 (GskSlNode           *node);
 
