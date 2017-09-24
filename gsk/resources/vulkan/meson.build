@@ -32,6 +32,7 @@ gsk_private_vulkan_vertex_shaders = [
   'mask.vert',
   'outset-shadow.vert',
   'texture.vert',
+  'custom.vert'
 ]
 
 gsk_private_vulkan_shaders += gsk_private_vulkan_fragment_shaders

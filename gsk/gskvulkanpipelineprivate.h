@@ -4,6 +4,7 @@
 #include <gdk/gdk.h>
 
 #include "gskdebugprivate.h"
+#include "gskvulkanshaderprivate.h"
 
 G_BEGIN_DECLS
 
@@ -41,6 +42,14 @@ GskVulkanPipeline *     gsk_vulkan_pipeline_new_full                    (GType  
                                                                          GdkVulkanContext               *context,
                                                                          VkPipelineLayout                layout,
                                                                          const char                     *shader_name,
+                                                                         VkRenderPass                    render_pass,
+                                                                         VkBlendFactor                   srcBlendFactor,
+                                                                         VkBlendFactor                   dstBlendFactor);
+GskVulkanPipeline *     gsk_vulkan_pipeline_new_with_shaders            (GType                           pipeline_type,
+                                                                         GdkVulkanContext               *context,
+                                                                         VkPipelineLayout                layout,
+                                                                         GskVulkanShader                *vertex_shader,
+                                                                         GskVulkanShader                *fragment_shader,
                                                                          VkRenderPass                    render_pass,
                                                                          VkBlendFactor                   srcBlendFactor,
                                                                          VkBlendFactor                   dstBlendFactor);

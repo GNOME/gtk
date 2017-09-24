@@ -20,6 +20,10 @@ typedef struct _GskVulkanShader GskVulkanShader;
   .pName = "main", \
 }
 
+GskVulkanShader *       gsk_vulkan_shader_new_from_bytes                (GdkVulkanContext       *context,
+                                                                         GskVulkanShaderType     type,
+                                                                         GBytes                 *bytes,
+                                                                         GError                **error);
 GskVulkanShader *       gsk_vulkan_shader_new_from_resource             (GdkVulkanContext       *context,
                                                                          GskVulkanShaderType     type,
                                                                          const char             *resource_name,

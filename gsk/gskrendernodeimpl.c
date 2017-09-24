@@ -4414,6 +4414,223 @@ gsk_blur_node_get_radius (GskRenderNode *node)
   return self->radius;
 }
 
+/*** GSK_PIXEL_SHADER_NODE ***/
+
+typedef struct _GskPixelShaderNode GskPixelShaderNode;
+
+struct _GskPixelShaderNode
+{
+  GskRenderNode render_node;
+
+  GBytes *fragment_bytes;
+
+  float time;
+
+  GskRenderNode *child1;
+  GskRenderNode *child2;
+};
+
+static void
+gsk_pixel_shader_node_finalize (GskRenderNode *node)
+{
+  GskPixelShaderNode *self = (GskPixelShaderNode *) node;
+
+  g_bytes_unref (self->fragment_bytes);
+
+  if (self->child1)
+    gsk_render_node_unref (self->child1);
+  if (self->child2)
+    gsk_render_node_unref (self->child2);
+}
+
+static void
+gsk_pixel_shader_node_draw (GskRenderNode *node,
+                            cairo_t       *cr)
+{
+  GskPixelShaderNode *self = (GskPixelShaderNode *) node;
+
+  cairo_save (cr);
+  cairo_set_source_rgb (cr, 1, 0, 0);
+  cairo_paint (cr);
+  cairo_restore (cr);
+
+  if (self->child1)
+    gsk_render_node_draw (self->child1, cr);
+  if (self->child2)
+    gsk_render_node_draw (self->child2, cr);
+}
+
+#define GSK_PIXEL_SHADER_NODE_VARIANT_TYPE "(dddda(uv)ayd)"
+
+static GVariant *
+gsk_pixel_shader_node_serialize (GskRenderNode *node)
+{
+  GskPixelShaderNode *self = (GskPixelShaderNode *) node;
+  GVariantBuilder builder;
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE (GSK_CONTAINER_NODE_VARIANT_TYPE));
+
+  if (self->child1)
+    g_variant_builder_add (&builder, "(uv)",
+                           (guint32) gsk_render_node_get_node_type (self->child1),
+                           gsk_render_node_serialize_node (self->child1));
+  if (self->child2)
+    g_variant_builder_add (&builder, "(uv)",
+                           (guint32) gsk_render_node_get_node_type (self->child2),
+                           gsk_render_node_serialize_node (self->child2));
+
+  return g_variant_new ("(dddd@ayda(uv))",
+                        (double) node->bounds.origin.x, (double) node->bounds.origin.y,
+                        (double) node->bounds.size.width, (double) node->bounds.size.height,
+                         &builder,
+                         g_variant_new_fixed_array (G_VARIANT_TYPE ("y"),
+                                                    g_bytes_get_data (self->fragment_bytes, NULL),
+                                                    g_bytes_get_size (self->fragment_bytes), 1),
+                         self->time);
+}
+
+static GskRenderNode *
+gsk_pixel_shader_node_deserialize (GVariant  *variant,
+                                   GError   **error)
+{
+  GVariant *fragment_variant;
+  char *data;
+  double bounds[4];
+  double time;
+  gsize length;
+  GBytes *fragment_bytes;
+  GskRenderNode *node;
+  GVariantIter *iter;
+  gsize i, n_children;
+  guint32 child_type;
+  GVariant *child_variant;
+  GskRenderNode *children[2] = { NULL, NULL };
+
+  if (!check_variant_type (variant, GSK_PIXEL_SHADER_NODE_VARIANT_TYPE, error))
+    return NULL;
+
+  g_variant_get (variant, "(dddda(uv)@ayd)",
+                 &bounds[0], &bounds[1], &bounds[2], &bounds[3],
+                 &iter, &fragment_variant, &time);
+
+  n_children = g_variant_iter_init (iter, variant);
+  if (n_children > 2)
+    return NULL;
+
+  i = 0;
+  while (g_variant_iter_loop (iter, "(uv)", &child_type, &child_variant))
+    {
+      children[i] = gsk_render_node_deserialize_node (child_type, child_variant, error);
+      if (children[i] == NULL)
+        {
+          guint j;
+          for (j = 0; j < i; j++)
+            gsk_render_node_unref (children[j]);
+          g_variant_unref (child_variant);
+          return NULL;
+        }
+      i++;
+    }
+
+  data = g_variant_get_fixed_array (fragment_variant, &length, 1);
+  fragment_bytes = g_bytes_new (data, length);
+
+  node = gsk_pixel_shader_node_new (&GRAPHENE_RECT_INIT(bounds[0], bounds[1], bounds[2], bounds[3]),
+                                    children[0], children[1],
+                                    fragment_bytes, time);
+
+  if (children[0])
+    gsk_render_node_unref (children[0]);
+  if (children[1])
+    gsk_render_node_unref (children[1]);
+
+  g_bytes_unref (fragment_bytes);
+  g_variant_unref (fragment_variant);
+
+  return node;
+}
+
+static const GskRenderNodeClass GSK_PIXEL_SHADER_NODE_CLASS = {
+  GSK_PIXEL_SHADER_NODE,
+  sizeof (GskPixelShaderNode),
+  "GskPixelShaderNode",
+  gsk_pixel_shader_node_finalize,
+  gsk_pixel_shader_node_draw,
+  gsk_pixel_shader_node_serialize,
+  gsk_pixel_shader_node_deserialize
+};
+
+GskRenderNode *
+gsk_pixel_shader_node_new (const graphene_rect_t  *bounds,
+                           GskRenderNode          *child1,
+                           GskRenderNode          *child2,
+                           GBytes                 *fragment_bytes,
+                           float                   time)
+{
+  GskPixelShaderNode *self;
+
+  self = (GskPixelShaderNode *) gsk_render_node_new (&GSK_PIXEL_SHADER_NODE_CLASS, 0);
+
+  if (child1)
+    self->child1 = gsk_render_node_ref (child1);
+  else
+    self->child1 = NULL;
+
+  if (child2)
+    self->child2 = gsk_render_node_ref (child2);
+  else
+    self->child2 = NULL;
+
+  graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
+
+  self->fragment_bytes = g_bytes_ref (fragment_bytes);
+  self->time = time;
+
+  return &self->render_node;
+}
+
+GBytes *
+gsk_pixel_shader_node_get_fragment_bytes (GskRenderNode *node)
+{
+  GskPixelShaderNode *self = (GskPixelShaderNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_PIXEL_SHADER_NODE), NULL);
+
+  return self->fragment_bytes;
+}
+
+float
+gsk_pixel_shader_node_get_time (GskRenderNode *node)
+{
+  GskPixelShaderNode *self = (GskPixelShaderNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_PIXEL_SHADER_NODE), 0);
+
+  return self->time;
+}
+
+GskRenderNode *
+gsk_pixel_shader_node_get_child1 (GskRenderNode *node)
+{
+  GskPixelShaderNode *self = (GskPixelShaderNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_PIXEL_SHADER_NODE), 0);
+
+  return self->child1;
+}
+
+GskRenderNode *
+gsk_pixel_shader_node_get_child2 (GskRenderNode *node)
+{
+  GskPixelShaderNode *self = (GskPixelShaderNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_PIXEL_SHADER_NODE), 0);
+
+  return self->child2;
+}
+
+/*** ***/
+
 static const GskRenderNodeClass *klasses[] = {
   [GSK_CONTAINER_NODE] = &GSK_CONTAINER_NODE_CLASS,
   [GSK_CAIRO_NODE] = &GSK_CAIRO_NODE_CLASS,
@@ -4434,7 +4651,8 @@ static const GskRenderNodeClass *klasses[] = {
   [GSK_BLEND_NODE] = &GSK_BLEND_NODE_CLASS,
   [GSK_CROSS_FADE_NODE] = &GSK_CROSS_FADE_NODE_CLASS,
   [GSK_TEXT_NODE] = &GSK_TEXT_NODE_CLASS,
-  [GSK_BLUR_NODE] = &GSK_BLUR_NODE_CLASS
+  [GSK_BLUR_NODE] = &GSK_BLUR_NODE_CLASS,
+  [GSK_PIXEL_SHADER_NODE] = &GSK_PIXEL_SHADER_NODE_CLASS,
 };
 
 GskRenderNode *

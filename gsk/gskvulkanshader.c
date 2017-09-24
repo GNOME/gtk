@@ -11,7 +11,7 @@ struct _GskVulkanShader
   VkShaderModule vk_shader;
 };
 
-static GskVulkanShader *
+GskVulkanShader *
 gsk_vulkan_shader_new_from_bytes (GdkVulkanContext     *context,
                                   GskVulkanShaderType   type,
                                   GBytes               *bytes,

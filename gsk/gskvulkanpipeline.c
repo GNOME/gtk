@@ -60,7 +60,9 @@ gsk_vulkan_pipeline_new (GType                    pipeline_type,
                          const char              *shader_name,
                          VkRenderPass             render_pass)
 {
-  return gsk_vulkan_pipeline_new_full (pipeline_type, context, layout, shader_name, render_pass,
+  return gsk_vulkan_pipeline_new_full (pipeline_type, context, layout,
+                                       shader_name,
+                                       render_pass,
                                        VK_BLEND_FACTOR_ONE,
                                        VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA);
 }
@@ -74,13 +76,42 @@ gsk_vulkan_pipeline_new_full (GType                    pipeline_type,
                               VkBlendFactor            srcBlendFactor,
                               VkBlendFactor            dstBlendFactor)
 {
+  GskVulkanShader *vertex_shader;
+  GskVulkanShader *fragment_shader;
+
+  vertex_shader = gsk_vulkan_shader_new_from_resource (context,
+                                                       GSK_VULKAN_SHADER_VERTEX,
+                                                       shader_name,
+                                                       NULL);
+  fragment_shader = gsk_vulkan_shader_new_from_resource (context,
+                                                         GSK_VULKAN_SHADER_FRAGMENT,
+                                                         shader_name,
+                                                         NULL);
+
+  return gsk_vulkan_pipeline_new_with_shaders (pipeline_type, context, layout,
+                                               vertex_shader, fragment_shader,
+                                               render_pass,
+                                               srcBlendFactor, dstBlendFactor);
+}
+
+GskVulkanPipeline *
+gsk_vulkan_pipeline_new_with_shaders (GType                    pipeline_type,
+                                      GdkVulkanContext        *context,
+                                      VkPipelineLayout         layout,
+                                      GskVulkanShader         *vertex_shader,
+                                      GskVulkanShader         *fragment_shader,
+                                      VkRenderPass             render_pass,
+                                      VkBlendFactor            srcBlendFactor,
+                                      VkBlendFactor            dstBlendFactor)
+{
   GskVulkanPipelinePrivate *priv;
   GskVulkanPipeline *self;
   VkDevice device;
 
   g_return_val_if_fail (g_type_is_a (pipeline_type, GSK_TYPE_VULKAN_PIPELINE), NULL);
   g_return_val_if_fail (layout != VK_NULL_HANDLE, NULL);
-  g_return_val_if_fail (shader_name != NULL, NULL);
+  g_return_val_if_fail (vertex_shader != NULL, NULL);
+  g_return_val_if_fail (fragment_shader != NULL, NULL);
   g_return_val_if_fail (render_pass != VK_NULL_HANDLE, NULL);
 
   self = g_object_new (pipeline_type, NULL);
@@ -92,8 +123,8 @@ gsk_vulkan_pipeline_new_full (GType                    pipeline_type,
   priv->context = context;
   priv->layout = layout;
 
-  priv->vertex_shader = gsk_vulkan_shader_new_from_resource (context, GSK_VULKAN_SHADER_VERTEX, shader_name, NULL);
-  priv->fragment_shader = gsk_vulkan_shader_new_from_resource (context, GSK_VULKAN_SHADER_FRAGMENT, shader_name, NULL);
+  priv->vertex_shader = vertex_shader;
+  priv->fragment_shader = fragment_shader;
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, device,
                                            VK_NULL_HANDLE,
