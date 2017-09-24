@@ -2543,7 +2543,7 @@ gtk_button_grab_notify (GtkWidget *widget,
 /**
  * gtk_button_set_image:
  * @button: a #GtkButton
- * @image: a widget to set as the image for the button
+ * @image: (nullable): a widget to set as the image for the button, or %NULL to unset
  *
  * Set the image of @button to the given widget. The image will be
  * displayed if the label text is %NULL or if
