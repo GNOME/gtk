@@ -1744,7 +1744,7 @@ gtk_label_buildable_custom_finished (GtkBuildable *buildable,
 
 /**
  * gtk_label_new:
- * @str: (allow-none): The text of the label
+ * @str: (nullable): The text of the label
  *
  * Creates a new label with the given text inside it. You can
  * pass %NULL to get an empty label widget.
@@ -1766,7 +1766,7 @@ gtk_label_new (const gchar *str)
 
 /**
  * gtk_label_new_with_mnemonic:
- * @str: (allow-none): The text of the label, with an underscore in front of the
+ * @str: (nullable): The text of the label, with an underscore in front of the
  *       mnemonic character
  *
  * Creates a new #GtkLabel, containing the text in @str.
@@ -2047,7 +2047,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
 /**
  * gtk_label_set_mnemonic_widget:
  * @label: a #GtkLabel
- * @widget: (allow-none): the target #GtkWidget
+ * @widget: (nullable): the target #GtkWidget, or %NULL to unset
  *
  * If the label has been set so that it has an mnemonic key (using
  * i.e. gtk_label_set_markup_with_mnemonic(),
@@ -2280,7 +2280,7 @@ gtk_label_set_text (GtkLabel    *label,
 /**
  * gtk_label_set_attributes:
  * @label: a #GtkLabel
- * @attrs: (allow-none): a #PangoAttrList, or %NULL
+ * @attrs: (nullable): a #PangoAttrList, or %NULL
  *
  * Sets a #PangoAttrList; the attributes in the list are applied to the
  * label text.
@@ -6008,8 +6008,8 @@ gtk_label_get_layout (GtkLabel *label)
 /**
  * gtk_label_get_layout_offsets:
  * @label: a #GtkLabel
- * @x: (out) (allow-none): location to store X offset of layout, or %NULL
- * @y: (out) (allow-none): location to store Y offset of layout, or %NULL
+ * @x: (out) (optional): location to store X offset of layout, or %NULL
+ * @y: (out) (optional): location to store Y offset of layout, or %NULL
  *
  * Obtains the coordinates where the label will draw the #PangoLayout
  * representing the text in the label; useful to convert mouse events
