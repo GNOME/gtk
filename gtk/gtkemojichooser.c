@@ -336,7 +336,8 @@ add_emoji (GtkWidget    *box,
       if (code != 0)
         p += g_unichar_to_utf8 (code, p);
     }
-   p[0] = 0;
+  g_variant_unref (codes);
+  p[0] = 0;
 
   label = gtk_label_new (text);
   attrs = pango_attr_list_new ();
