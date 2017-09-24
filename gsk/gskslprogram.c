@@ -20,10 +20,12 @@
 
 #include "gskslprogramprivate.h"
 
+#include "gskslfunctionprivate.h"
 #include "gskslnodeprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
+#include "gsksltypeprivate.h"
 #include "gskspvwriterprivate.h"
 
 struct _GskSlProgram {
@@ -59,7 +61,48 @@ gsk_sl_program_class_init (GskSlProgramClass *klass)
 static void
 gsk_sl_program_init (GskSlProgram *program)
 {
-  program->scope = gsk_sl_scope_new (NULL);
+  program->scope = gsk_sl_scope_new (NULL, NULL);
+}
+
+static gboolean
+gsk_sl_program_parse_declaration (GskSlProgram      *program,
+                                  GskSlScope        *scope,
+                                  GskSlPreprocessor *preproc)
+{
+  GskSlType *type;
+  GskSlFunction *function;
+  const GskSlToken *token;
+  char *name;
+
+  type = gsk_sl_type_new_parse (preproc);
+  if (type == NULL)
+    {
+      gsk_sl_preprocessor_consume (preproc, program);
+      return FALSE;
+    }
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+    {
+      gsk_sl_preprocessor_error (preproc, "Expected a function name");
+      gsk_sl_type_unref (type);
+      return FALSE;
+    }
+
+  name = g_strdup (token->str);
+  gsk_sl_preprocessor_consume (preproc, program);
+
+  function = gsk_sl_function_new_parse (scope,
+                                        preproc,
+                                        type,
+                                        name);
+  if (function)
+    program->functions = g_slist_append (program->functions, function);
+
+  gsk_sl_type_unref (type);
+  g_free (name);
+
+  return function != NULL;
 }
 
 gboolean
@@ -67,26 +110,16 @@ gsk_sl_program_parse (GskSlProgram      *program,
                       GskSlPreprocessor *preproc)
 {
   const GskSlToken *token;
-  gboolean result = TRUE;
+  gboolean success = TRUE;
 
   for (token = gsk_sl_preprocessor_get (preproc);
        !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
        token = gsk_sl_preprocessor_get (preproc))
     {
-      GskSlNode *node = gsk_sl_node_parse_function_definition (program->scope, preproc);
-
-      if (node)
-        {
-          program->functions = g_slist_append (program->functions, node);
-        }
-      else
-        {
-          gsk_sl_preprocessor_consume (preproc, (GskSlNode *) program);
-          result = FALSE;
-        }
+      success &= gsk_sl_program_parse_declaration (program, program->scope, preproc);
     }
 
-  return result;
+  return success;
 }
 
 void
@@ -105,7 +138,7 @@ gsk_sl_program_print (GskSlProgram *program,
     {
       if (l != program->functions || program->declarations != NULL)
         g_string_append (string, "\n");
-      gsk_sl_node_print (l->data, string);
+      gsk_sl_function_print (l->data, string);
     }
 }
 

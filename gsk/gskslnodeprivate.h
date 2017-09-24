@@ -41,7 +41,7 @@ struct _GskSlNodeClass {
                                                                  GskSpvWriter        *writer);
 };
 
-GskSlNode *             gsk_sl_node_parse_function_definition   (GskSlScope          *scope,
+GskSlNode *             gsk_sl_node_parse_statement             (GskSlScope          *scope,
                                                                  GskSlPreprocessor   *preproc);
 
 GskSlNode *             gsk_sl_node_ref                         (GskSlNode           *node);

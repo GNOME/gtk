@@ -20,7 +20,12 @@
 
 #include "gskslfunctionprivate.h"
 
+#include "gskslnodeprivate.h"
+#include "gskslpreprocessorprivate.h"
+#include "gskslscopeprivate.h"
+#include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskspvwriterprivate.h"
 
 static GskSlFunction *
 gsk_sl_function_alloc (const GskSlFunctionClass *klass,
@@ -58,22 +63,27 @@ gsk_sl_function_constructor_free (GskSlFunction *function)
 }
 
 static GskSlType *
-gsk_sl_function_constructor_get_return_type (GskSlFunction *function)
+gsk_sl_function_constructor_get_return_type (const GskSlFunction *function)
 {
-  GskSlFunctionConstructor *constructor = (GskSlFunctionConstructor *) function;
+  const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
 
   return constructor->type;
 }
 
 static void
-gsk_sl_function_constructor_print_name (GskSlFunction *function,
-                                                GString       *string)
+gsk_sl_function_constructor_print_name (const GskSlFunction *function,
+                                        GString             *string)
 {
-  GskSlFunctionConstructor *constructor = (GskSlFunctionConstructor *) function;
+  const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
 
   g_string_append (string, gsk_sl_type_get_name (constructor->type));
 }
 
+static void
+gsk_sl_function_constructor_print (const GskSlFunction *function,
+                                   GString             *string)
+{
+}
 
 static guint
 gsk_sl_function_builtin_get_args_by_type (const GskSlType *type)
@@ -89,12 +99,12 @@ gsk_sl_function_builtin_get_args_by_type (const GskSlType *type)
 }
 
 static gboolean
-gsk_sl_function_constructor_matches (GskSlFunction  *function,
-                                             GskSlType     **arguments,
-                                             gsize           n_arguments,
-                                             GError        **error)
+gsk_sl_function_constructor_matches (const GskSlFunction  *function,
+                                     GskSlType           **arguments,
+                                     gsize                 n_arguments,
+                                     GError              **error)
 {
-  GskSlFunctionConstructor *constructor = (GskSlFunctionConstructor *) function;
+  const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
   guint needed, provided;
   gsize i;
 
@@ -127,11 +137,161 @@ gsk_sl_function_constructor_matches (GskSlFunction  *function,
   return TRUE;
 }
 
+static guint32
+gsk_sl_function_constructor_write_spv (const GskSlFunction *function,
+                                       GskSpvWriter        *writer)
+{
+  return 0;
+}
+
 static const GskSlFunctionClass GSK_SL_FUNCTION_CONSTRUCTOR = {
   gsk_sl_function_constructor_free,
   gsk_sl_function_constructor_get_return_type,
   gsk_sl_function_constructor_print_name,
+  gsk_sl_function_constructor_print,
   gsk_sl_function_constructor_matches,
+  gsk_sl_function_constructor_write_spv,
+};
+
+/* DECLARED */
+
+typedef struct _GskSlFunctionDeclared GskSlFunctionDeclared;
+
+struct _GskSlFunctionDeclared {
+  GskSlFunction parent;
+
+  GskSlScope *scope;
+  GskSlType *return_type;
+  char *name;
+  GSList *statements;
+};
+
+static void
+gsk_sl_function_declared_free (GskSlFunction *function)
+{
+  GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
+
+  if (declared->scope)
+    gsk_sl_scope_unref (declared->scope);
+  if (declared->return_type)
+    gsk_sl_type_unref (declared->return_type);
+  g_free (declared->name);
+  g_slist_free_full (declared->statements, (GDestroyNotify) gsk_sl_node_unref);
+
+  g_slice_free (GskSlFunctionDeclared, declared);
+}
+
+static GskSlType *
+gsk_sl_function_declared_get_return_type (const GskSlFunction *function)
+{
+  const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
+
+  return declared->return_type;
+}
+
+static void
+gsk_sl_function_declared_print_name (const GskSlFunction *function,
+                                     GString             *string)
+{
+  const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
+
+  g_string_append (string, declared->name);
+}
+
+static void
+gsk_sl_function_declared_print (const GskSlFunction *function,
+                                GString             *string)
+{
+  const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
+  GSList *l;
+
+  g_string_append (string, gsk_sl_type_get_name (declared->return_type));
+  g_string_append (string, "\n");
+
+  g_string_append (string, declared->name);
+  g_string_append (string, " (");
+  g_string_append (string, ")\n");
+
+  g_string_append (string, "{\n");
+  for (l = declared->statements; l; l = l->next)
+    {
+      g_string_append (string, "  ");
+      gsk_sl_node_print (l->data, string);
+      g_string_append (string, ";\n");
+    }
+  g_string_append (string, "}\n");
+}
+
+static gboolean
+gsk_sl_function_declared_matches (const GskSlFunction  *function,
+                                  GskSlType           **arguments,
+                                  gsize                 n_arguments,
+                                  GError              **error)
+{
+  if (n_arguments > 0)
+    {
+       g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "Function only takes %u arguments.", 0);
+       return FALSE;
+    }
+
+  return TRUE;
+}
+
+static guint32
+gsk_sl_function_declared_write_spv (const GskSlFunction *function,
+                                    GskSpvWriter        *writer)
+{
+  GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
+  guint32 return_type_id, function_type_id, function_id, label_id;
+  GSList *l;
+
+  /* declare type of function */
+  return_type_id = gsk_spv_writer_get_id_for_type (writer, declared->return_type);
+  function_type_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_DECLARE,
+                      3, GSK_SPV_OP_TYPE_FUNCTION,
+                      (guint32[2]) { function_type_id,
+                                     return_type_id });
+
+  /* add debug info */
+  /* FIXME */
+
+  /* add function body */
+  function_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      5, GSK_SPV_OP_FUNCTION,
+                      (guint32[4]) { return_type_id,
+                                     function_id,
+                                     0,
+                                     function_type_id });
+  label_id = gsk_spv_writer_next_id (writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      2, GSK_SPV_OP_LABEL,
+                      (guint32[1]) { label_id });
+
+  for (l = declared->statements; l; l = l->next)
+    {
+      gsk_sl_node_write_spv (l->data, writer);
+    }
+
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      1, GSK_SPV_OP_FUNCTION_END,
+                      NULL);
+
+  return function_id;
+}
+
+static const GskSlFunctionClass GSK_SL_FUNCTION_DECLARED = {
+  gsk_sl_function_declared_free,
+  gsk_sl_function_declared_get_return_type,
+  gsk_sl_function_declared_print_name,
+  gsk_sl_function_declared_print,
+  gsk_sl_function_declared_matches,
+  gsk_sl_function_declared_write_spv,
 };
 
 /* API */
@@ -146,6 +306,85 @@ gsk_sl_function_new_constructor (GskSlType *type)
   constructor->type = gsk_sl_type_ref (type);
 
   return &constructor->parent;
+}
+
+GskSlFunction *
+gsk_sl_function_new_parse (GskSlScope        *scope,
+                           GskSlPreprocessor *preproc,
+                           GskSlType         *return_type,
+                           const char        *name)
+{
+  GskSlFunctionDeclared *function;
+  const GskSlToken *token;
+  gboolean success = TRUE;
+
+  function = gsk_sl_function_new (GskSlFunctionDeclared, &GSK_SL_FUNCTION_DECLARED);
+  function->return_type = gsk_sl_type_ref (return_type);
+  function->name = g_strdup (name);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+    {
+      gsk_sl_preprocessor_error (preproc, "Expected an openening \"(\"");
+      gsk_sl_function_unref ((GskSlFunction *) function);
+      return NULL;
+    }
+  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+    {
+      gsk_sl_preprocessor_error (preproc, "Expected a closing \")\"");
+      gsk_sl_function_unref ((GskSlFunction *) function);
+      return NULL;
+    }
+  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
+    {
+      gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+      return (GskSlFunction *) function;
+    }
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
+    {
+      gsk_sl_preprocessor_error (preproc, "Expected an opening \"{\"");
+      gsk_sl_function_unref ((GskSlFunction *) function);
+      return NULL;
+    }
+  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+
+  function->scope = gsk_sl_scope_new (scope, function->return_type);
+
+  for (token = gsk_sl_preprocessor_get (preproc);
+       !gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE) && !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
+       token = gsk_sl_preprocessor_get (preproc))
+    {
+      GskSlNode *statement;
+
+      statement = gsk_sl_node_parse_statement (function->scope, preproc);
+      if (statement)
+        function->statements = g_slist_append (function->statements, statement);
+      else
+        success = FALSE;
+    }
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
+    {
+      gsk_sl_preprocessor_error (preproc, "Missing closing \"}\" at end.");
+      gsk_sl_function_unref ((GskSlFunction *) function);
+      return NULL;
+    }
+  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+
+  if (!success)
+    {
+      gsk_sl_function_unref ((GskSlFunction *) function);
+      return NULL;
+    }
+
+  return (GskSlFunction *) function;
 }
 
 GskSlFunction *
@@ -172,24 +411,38 @@ gsk_sl_function_unref (GskSlFunction *function)
 }
 
 GskSlType *
-gsk_sl_function_get_return_type (GskSlFunction *function)
+gsk_sl_function_get_return_type (const GskSlFunction *function)
 {
   return function->class->get_return_type (function);
 }
 
 void
-gsk_sl_function_print_name (GskSlFunction *function,
-                            GString       *string)
+gsk_sl_function_print_name (const GskSlFunction *function,
+                            GString             *string)
 {
   function->class->print_name (function, string);
 }
 
+void
+gsk_sl_function_print (const GskSlFunction *function,
+                       GString             *string)
+{
+  function->class->print (function, string);
+}
+
 gboolean
-gsk_sl_function_matches (GskSlFunction  *function,
-                         GskSlType     **arguments,
-                         gsize           n_arguments,
-                         GError        **error)
+gsk_sl_function_matches (const GskSlFunction  *function,
+                         GskSlType           **arguments,
+                         gsize                 n_arguments,
+                         GError              **error)
 {
   return function->class->matches (function, arguments, n_arguments, error);
+}
+
+guint32
+gsk_sl_function_write_spv (const GskSlFunction *function,
+                           GskSpvWriter        *writer)
+{
+  return function->class->write_spv (function, writer);
 }
 

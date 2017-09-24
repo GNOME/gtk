@@ -25,10 +25,13 @@
 
 G_BEGIN_DECLS
 
-GskSlScope *            gsk_sl_scope_new                        (GskSlScope           *parent);
+GskSlScope *            gsk_sl_scope_new                        (GskSlScope           *parent,
+                                                                 GskSlType            *return_type);
 
 GskSlScope *            gsk_sl_scope_ref                        (GskSlScope           *scope);
 void                    gsk_sl_scope_unref                      (GskSlScope           *scope);
+
+GskSlType *             gsk_sl_scope_get_return_type            (const GskSlScope     *scope);
 
 void                    gsk_sl_scope_add_variable               (GskSlScope           *scope,
                                                                  GskSlVariable        *variable);

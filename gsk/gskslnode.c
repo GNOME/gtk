@@ -47,109 +47,42 @@ gsk_sl_node_alloc (const GskSlNodeClass *klass,
 }
 #define gsk_sl_node_new(_name, _klass) ((_name *) gsk_sl_node_alloc ((_klass), sizeof (_name)))
 
-/* FUNCTION */
+/* EMPTY */
 
-typedef struct _GskSlNodeFunction GskSlNodeFunction;
+/* FIXME: This exists only so we dont return NULL from empty statements (ie just a semicolon)
+ */
 
-struct _GskSlNodeFunction {
+typedef struct _GskSlNodeEmpty GskSlNodeEmpty;
+
+struct _GskSlNodeEmpty {
   GskSlNode parent;
-
-  GskSlScope *scope;
-  GskSlType *return_type;
-  char *name;
-  GSList *statements;
 };
 
 static void
-gsk_sl_node_function_free (GskSlNode *node)
+gsk_sl_node_empty_free (GskSlNode *node)
 {
-  GskSlNodeFunction *function = (GskSlNodeFunction *) node;
+  GskSlNodeEmpty *empty = (GskSlNodeEmpty *) node;
 
-  if (function->scope)
-    gsk_sl_scope_unref (function->scope);
-  if (function->return_type)
-    gsk_sl_type_unref (function->return_type);
-  g_free (function->name);
-  g_slist_free_full (function->statements, (GDestroyNotify) gsk_sl_node_unref);
-
-  g_slice_free (GskSlNodeFunction, function);
+  g_slice_free (GskSlNodeEmpty, empty);
 }
 
 static void
-gsk_sl_node_function_print (GskSlNode *node,
-                            GString   *string)
+gsk_sl_node_empty_print (GskSlNode *node,
+                         GString   *string)
 {
-  GskSlNodeFunction *function = (GskSlNodeFunction *) node;
-  GSList *l;
-
-  g_string_append (string, gsk_sl_type_get_name (function->return_type));
-  g_string_append (string, "\n");
-
-  g_string_append (string, function->name);
-  g_string_append (string, " (");
-  g_string_append (string, ")\n");
-
-  g_string_append (string, "{\n");
-  for (l = function->statements; l; l = l->next)
-    {
-      g_string_append (string, "  ");
-      gsk_sl_node_print (l->data, string);
-      g_string_append (string, ";\n");
-    }
-  g_string_append (string, "}\n");
 }
 
 static guint32
-gsk_sl_node_function_write_spv (const GskSlNode *node,
-                                GskSpvWriter    *writer)
+gsk_sl_node_empty_write_spv (const GskSlNode *node,
+                             GskSpvWriter    *writer)
 {
-  GskSlNodeFunction *function = (GskSlNodeFunction *) node;
-  guint32 return_type_id, function_type_id, function_id, label_id;
-  GSList *l;
-
-  /* declare type of function */
-  return_type_id = gsk_spv_writer_get_id_for_type (writer, function->return_type);
-  function_type_id = gsk_spv_writer_next_id (writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_DECLARE,
-                      3, GSK_SPV_OP_TYPE_FUNCTION,
-                      (guint32[2]) { function_type_id,
-                                     return_type_id });
-
-  /* add debug info */
-  /* FIXME */
-
-  /* add function body */
-  function_id = gsk_spv_writer_next_id (writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      5, GSK_SPV_OP_FUNCTION,
-                      (guint32[4]) { return_type_id,
-                                     function_id,
-                                     0,
-                                     function_type_id });
-  label_id = gsk_spv_writer_next_id (writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      2, GSK_SPV_OP_LABEL,
-                      (guint32[4]) { label_id });
-
-  for (l = function->statements; l; l = l->next)
-    {
-      gsk_sl_node_write_spv (l->data, writer);
-    }
-
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      1, GSK_SPV_OP_FUNCTION_END,
-                      NULL);
-  return function_id;
+  return 0;
 }
 
-static const GskSlNodeClass GSK_SL_NODE_FUNCTION = {
-  gsk_sl_node_function_free,
-  gsk_sl_node_function_print,
-  gsk_sl_node_function_write_spv
+static const GskSlNodeClass GSK_SL_NODE_EMPTY = {
+  gsk_sl_node_empty_free,
+  gsk_sl_node_empty_print,
+  gsk_sl_node_empty_write_spv
 };
 
 /* DECLARATION */
@@ -312,52 +245,6 @@ static const GskSlNodeClass GSK_SL_NODE_EXPRESSION = {
 
 /* API */
 
-static GskSlNodeFunction *
-gsk_sl_node_parse_function_prototype (GskSlScope        *scope,
-                                      GskSlPreprocessor *stream)
-{
-  GskSlType *type;
-  GskSlNodeFunction *function;
-  const GskSlToken *token;
-
-  type = gsk_sl_type_new_parse (stream);
-  if (type == NULL)
-    return NULL;
-
-  token = gsk_sl_preprocessor_get (stream);
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
-    {
-      gsk_sl_preprocessor_error (stream, "Expected a function name");
-      gsk_sl_type_unref (type);
-      return NULL;
-    }
-
-  function = gsk_sl_node_new (GskSlNodeFunction, &GSK_SL_NODE_FUNCTION);
-  function->return_type = type;
-  function->name = g_strdup (token->str);
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
-
-  token = gsk_sl_preprocessor_get (stream);
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
-    {
-      gsk_sl_preprocessor_error (stream, "Expected an openening \"(\"");
-      gsk_sl_node_unref ((GskSlNode *) function);
-      return NULL;
-    }
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
-
-  token = gsk_sl_preprocessor_get (stream);
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
-    {
-      gsk_sl_preprocessor_error (stream, "Expected a closing \")\"");
-      gsk_sl_node_unref ((GskSlNode *) function);
-      return NULL;
-    }
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
-
-  return function;
-}
-
 static GskSlNode *
 gsk_sl_node_parse_declaration (GskSlScope        *scope,
                                GskSlPreprocessor *stream,
@@ -391,239 +278,228 @@ gsk_sl_node_parse_declaration (GskSlScope        *scope,
 }
 
 GskSlNode *
-gsk_sl_node_parse_function_definition (GskSlScope        *scope,
-                                       GskSlPreprocessor *stream)
+gsk_sl_node_parse_statement (GskSlScope        *scope,
+                             GskSlPreprocessor *preproc)
 {
-  GskSlNodeFunction *function;
   const GskSlToken *token;
-  gboolean result = TRUE;
+  GskSlNode *node;
 
-  function = gsk_sl_node_parse_function_prototype (scope, stream);
-  if (function == NULL)
-    return FALSE;
+  token = gsk_sl_preprocessor_get (preproc);
 
-  token = gsk_sl_preprocessor_get (stream);
-  if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-    {
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
-      return (GskSlNode *) function;
-    }
+  switch ((guint) token->type)
+  {
+    case GSK_SL_TOKEN_SEMICOLON:
+      node = (GskSlNode *) gsk_sl_node_new (GskSlNodeEmpty, &GSK_SL_NODE_EMPTY);
+      break;
 
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
-    {
-      gsk_sl_preprocessor_error (stream, "Expected an opening \"{\"");
-      gsk_sl_node_unref ((GskSlNode *) function);
-      return FALSE;
-    }
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
+    case GSK_SL_TOKEN_EOF:
+      gsk_sl_preprocessor_error (preproc, "Unexpected end of document");
+      return NULL;
 
-  function->scope = gsk_sl_scope_new (scope);
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      switch ((guint) token->type)
+    case GSK_SL_TOKEN_CONST:
+    case GSK_SL_TOKEN_IN:
+    case GSK_SL_TOKEN_OUT:
+    case GSK_SL_TOKEN_INOUT:
+    case GSK_SL_TOKEN_INVARIANT:
+    case GSK_SL_TOKEN_COHERENT:
+    case GSK_SL_TOKEN_VOLATILE:
+    case GSK_SL_TOKEN_RESTRICT:
+    case GSK_SL_TOKEN_READONLY:
+    case GSK_SL_TOKEN_WRITEONLY:
+    case GSK_SL_TOKEN_VOID:
+    case GSK_SL_TOKEN_FLOAT:
+    case GSK_SL_TOKEN_DOUBLE:
+    case GSK_SL_TOKEN_INT:
+    case GSK_SL_TOKEN_UINT:
+    case GSK_SL_TOKEN_BOOL:
+    case GSK_SL_TOKEN_BVEC2:
+    case GSK_SL_TOKEN_BVEC3:
+    case GSK_SL_TOKEN_BVEC4:
+    case GSK_SL_TOKEN_IVEC2:
+    case GSK_SL_TOKEN_IVEC3:
+    case GSK_SL_TOKEN_IVEC4:
+    case GSK_SL_TOKEN_UVEC2:
+    case GSK_SL_TOKEN_UVEC3:
+    case GSK_SL_TOKEN_UVEC4:
+    case GSK_SL_TOKEN_VEC2:
+    case GSK_SL_TOKEN_VEC3:
+    case GSK_SL_TOKEN_VEC4:
+    case GSK_SL_TOKEN_DVEC2:
+    case GSK_SL_TOKEN_DVEC3:
+    case GSK_SL_TOKEN_DVEC4:
+    case GSK_SL_TOKEN_MAT2:
+    case GSK_SL_TOKEN_MAT3:
+    case GSK_SL_TOKEN_MAT4:
+    case GSK_SL_TOKEN_DMAT2:
+    case GSK_SL_TOKEN_DMAT3:
+    case GSK_SL_TOKEN_DMAT4:
+    case GSK_SL_TOKEN_MAT2X2:
+    case GSK_SL_TOKEN_MAT2X3:
+    case GSK_SL_TOKEN_MAT2X4:
+    case GSK_SL_TOKEN_MAT3X2:
+    case GSK_SL_TOKEN_MAT3X3:
+    case GSK_SL_TOKEN_MAT3X4:
+    case GSK_SL_TOKEN_MAT4X2:
+    case GSK_SL_TOKEN_MAT4X3:
+    case GSK_SL_TOKEN_MAT4X4:
+    case GSK_SL_TOKEN_DMAT2X2:
+    case GSK_SL_TOKEN_DMAT2X3:
+    case GSK_SL_TOKEN_DMAT2X4:
+    case GSK_SL_TOKEN_DMAT3X2:
+    case GSK_SL_TOKEN_DMAT3X3:
+    case GSK_SL_TOKEN_DMAT3X4:
+    case GSK_SL_TOKEN_DMAT4X2:
+    case GSK_SL_TOKEN_DMAT4X3:
+    case GSK_SL_TOKEN_DMAT4X4:
       {
-      case GSK_SL_TOKEN_SEMICOLON:
-        gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
-        break;
+        GskSlType *type;
+        GskSlPointerTypeFlags flags;
+        gboolean success;
 
-      case GSK_SL_TOKEN_EOF:
-        gsk_sl_preprocessor_error (stream, "Unexpected end of function, expected \"}\"");
-        goto out;
+        success = gsk_sl_type_qualifier_parse (preproc,
+                                               GSK_SL_POINTER_TYPE_PARAMETER_QUALIFIER 
+                                               | GSK_SL_POINTER_TYPE_MEMORY_QUALIFIER,
+                                               &flags);
 
-      case GSK_SL_TOKEN_RIGHT_BRACE:
-        goto out;
-
-      case GSK_SL_TOKEN_CONST:
-      case GSK_SL_TOKEN_IN:
-      case GSK_SL_TOKEN_OUT:
-      case GSK_SL_TOKEN_INOUT:
-      case GSK_SL_TOKEN_INVARIANT:
-      case GSK_SL_TOKEN_COHERENT:
-      case GSK_SL_TOKEN_VOLATILE:
-      case GSK_SL_TOKEN_RESTRICT:
-      case GSK_SL_TOKEN_READONLY:
-      case GSK_SL_TOKEN_WRITEONLY:
-      case GSK_SL_TOKEN_VOID:
-      case GSK_SL_TOKEN_FLOAT:
-      case GSK_SL_TOKEN_DOUBLE:
-      case GSK_SL_TOKEN_INT:
-      case GSK_SL_TOKEN_UINT:
-      case GSK_SL_TOKEN_BOOL:
-      case GSK_SL_TOKEN_BVEC2:
-      case GSK_SL_TOKEN_BVEC3:
-      case GSK_SL_TOKEN_BVEC4:
-      case GSK_SL_TOKEN_IVEC2:
-      case GSK_SL_TOKEN_IVEC3:
-      case GSK_SL_TOKEN_IVEC4:
-      case GSK_SL_TOKEN_UVEC2:
-      case GSK_SL_TOKEN_UVEC3:
-      case GSK_SL_TOKEN_UVEC4:
-      case GSK_SL_TOKEN_VEC2:
-      case GSK_SL_TOKEN_VEC3:
-      case GSK_SL_TOKEN_VEC4:
-      case GSK_SL_TOKEN_DVEC2:
-      case GSK_SL_TOKEN_DVEC3:
-      case GSK_SL_TOKEN_DVEC4:
-      case GSK_SL_TOKEN_MAT2:
-      case GSK_SL_TOKEN_MAT3:
-      case GSK_SL_TOKEN_MAT4:
-      case GSK_SL_TOKEN_DMAT2:
-      case GSK_SL_TOKEN_DMAT3:
-      case GSK_SL_TOKEN_DMAT4:
-      case GSK_SL_TOKEN_MAT2X2:
-      case GSK_SL_TOKEN_MAT2X3:
-      case GSK_SL_TOKEN_MAT2X4:
-      case GSK_SL_TOKEN_MAT3X2:
-      case GSK_SL_TOKEN_MAT3X3:
-      case GSK_SL_TOKEN_MAT3X4:
-      case GSK_SL_TOKEN_MAT4X2:
-      case GSK_SL_TOKEN_MAT4X3:
-      case GSK_SL_TOKEN_MAT4X4:
-      case GSK_SL_TOKEN_DMAT2X2:
-      case GSK_SL_TOKEN_DMAT2X3:
-      case GSK_SL_TOKEN_DMAT2X4:
-      case GSK_SL_TOKEN_DMAT3X2:
-      case GSK_SL_TOKEN_DMAT3X3:
-      case GSK_SL_TOKEN_DMAT3X4:
-      case GSK_SL_TOKEN_DMAT4X2:
-      case GSK_SL_TOKEN_DMAT4X3:
-      case GSK_SL_TOKEN_DMAT4X4:
-        {
-          GskSlType *type;
-          GskSlPointerTypeFlags flags;
-          gboolean success;
-          GskSlNode *node = NULL;
-
-          success = gsk_sl_type_qualifier_parse (stream,
-                                                 GSK_SL_POINTER_TYPE_PARAMETER_QUALIFIER 
-                                                 | GSK_SL_POINTER_TYPE_MEMORY_QUALIFIER,
-                                                 &flags);
-
-          type = gsk_sl_type_new_parse (stream);
-          if (type == NULL)
+        type = gsk_sl_type_new_parse (preproc);
+        if (type == NULL)
+          {
+            node = NULL;
             break;
+          }
 
-          token = gsk_sl_preprocessor_get (stream);
+        token = gsk_sl_preprocessor_get (preproc);
 
-          if (token->type == GSK_SL_TOKEN_LEFT_BRACE)
-            {
-              GskSlExpression *expression = gsk_sl_expression_parse_constructor_call (function->scope, stream, type);
+        if (token->type == GSK_SL_TOKEN_LEFT_PAREN)
+          {
+            GskSlExpression *expression = gsk_sl_expression_parse_constructor_call (scope, preproc, type);
 
-              if (expression)
-                {
-                  GskSlNodeExpression *node;
-                  
-                  node = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
-                  node->expression = expression;
-
-                  function->statements = g_slist_append (function->statements, node);
-                }
-              else
-                {
-                  node = NULL;
-                }
-            }
-          else
-            {
-              GskSlPointerType *pointer_type;
-          
-              pointer_type = gsk_sl_pointer_type_new (type, flags | GSK_SL_POINTER_TYPE_LOCAL);
-              node = gsk_sl_node_parse_declaration (function->scope, stream, pointer_type);
-              gsk_sl_pointer_type_unref (pointer_type);
-            }
-
-          gsk_sl_type_unref (type);
-          
-          if (!success)
-            {
-              gsk_sl_node_unref (node);
-            }
-          else if (node)
-            {
-              function->statements = g_slist_append (function->statements, node);
-            }
-        }
-        break;
-
-      case GSK_SL_TOKEN_RETURN:
-        {
-          GskSlNodeReturn *return_node;
-
-          return_node = gsk_sl_node_new (GskSlNodeReturn, &GSK_SL_NODE_RETURN);
-          gsk_sl_preprocessor_consume (stream, (GskSlNode *) return_node);
-          token = gsk_sl_preprocessor_get (stream);
-          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-            {
-              return_node->value = gsk_sl_expression_parse (function->scope, stream);
-              if (return_node->value == NULL)
-                {
-                  gsk_sl_node_unref ((GskSlNode *) return_node);
-                  break;
-                }
-              if (function->return_type == NULL)
-                {
-                  gsk_sl_preprocessor_error (stream, "Cannot return a value from a void function.");
-                  gsk_sl_node_unref ((GskSlNode *) return_node);
-                  break;
-                }
-              else if (!gsk_sl_type_can_convert (function->return_type, gsk_sl_expression_get_return_type (return_node->value)))
-                {
-                  gsk_sl_preprocessor_error (stream, "Cannot convert return type %s to function type %s.",
-                                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (return_node->value)),
-                                                     gsk_sl_type_get_name (function->return_type));
-                  gsk_sl_node_unref ((GskSlNode *) return_node);
-                  break;
-                }
+            if (expression)
+              {
+                GskSlNodeExpression *node_expression;
+                
+                node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
+                node_expression->expression = expression;
+                node = (GskSlNode *) node_expression;
               }
             else
               {
-                if (function->return_type != NULL)
-                  {
-                    gsk_sl_preprocessor_error (stream, "Return statement does not return a value.");
-                    gsk_sl_node_unref ((GskSlNode *) return_node);
-                    break;
-                  }
+                node = NULL;
               }
-            function->statements = g_slist_append (function->statements, return_node);
           }
-        break;
+        else
+          {
+            GskSlPointerType *pointer_type;
+        
+            pointer_type = gsk_sl_pointer_type_new (type, flags | GSK_SL_POINTER_TYPE_LOCAL);
+            node = gsk_sl_node_parse_declaration (scope, preproc, pointer_type);
+            gsk_sl_pointer_type_unref (pointer_type);
+          }
 
-      default:
-        {
-          GskSlExpression * expression = gsk_sl_expression_parse (function->scope, stream);
+        gsk_sl_type_unref (type);
+        
+        if (!success)
+          {
+            gsk_sl_node_unref (node);
+            node = NULL;
+          }
+      }
+      break;
 
-          if (expression)
-            {
-              GskSlNodeExpression *node;
-              
-              node = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
-              node->expression = expression;
+    case GSK_SL_TOKEN_RETURN:
+      {
+        GskSlNodeReturn *return_node;
+        GskSlType *return_type;
 
-              function->statements = g_slist_append (function->statements, node);
-            }
-          else
-            {
-              result = FALSE;
+        return_node = gsk_sl_node_new (GskSlNodeReturn, &GSK_SL_NODE_RETURN);
+        gsk_sl_preprocessor_consume (preproc, (GskSlNode *) return_node);
+        token = gsk_sl_preprocessor_get (preproc);
+        if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
+          {
+            return_node->value = gsk_sl_expression_parse (scope, preproc);
+
+            if (return_node->value == NULL)
+              {
+                gsk_sl_node_unref ((GskSlNode *) return_node);
+                node = NULL;
+                break;
+              }
+          }
+
+        return_type = gsk_sl_scope_get_return_type (scope);
+        node = (GskSlNode *) return_node;
+
+        if (return_type == NULL)
+          {
+            gsk_sl_preprocessor_error (preproc, "Cannot return from here.");
+            gsk_sl_node_unref (node);
+            node = NULL;
+          }
+        else if (return_node->value == NULL)
+          {
+            if (!gsk_sl_type_equal (return_type, gsk_sl_type_get_scalar (GSK_SL_VOID)))
+              {
+                gsk_sl_preprocessor_error (preproc, "Functions expectes a return value of type %s", gsk_sl_type_get_name (return_type));
+                gsk_sl_node_unref (node);
+                node = NULL;
+              }
+          }
+        else
+          {
+            if (gsk_sl_type_equal (return_type, gsk_sl_type_get_scalar (GSK_SL_VOID)))
+              {
+                gsk_sl_preprocessor_error (preproc, "Cannot return a value from a void function.");
+                gsk_sl_node_unref (node);
+                node = NULL;
+              }
+            else if (!gsk_sl_type_can_convert (return_type, gsk_sl_expression_get_return_type (return_node->value)))
+              {
+                gsk_sl_preprocessor_error (preproc,
+                                           "Cannot convert type %s to return type %s.",
+                                           gsk_sl_type_get_name (gsk_sl_expression_get_return_type (return_node->value)),
+                                           gsk_sl_type_get_name (return_type));
+                gsk_sl_node_unref (node);
+                node = NULL;
+                break;
+              }
             }
         }
-        break;
+      break;
+
+    default:
+      {
+        GskSlExpression * expression = gsk_sl_expression_parse (scope, preproc);
+
+        if (expression)
+          {
+            GskSlNodeExpression *node_expression;
+            
+            node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
+            node_expression->expression = expression;
+
+            node = (GskSlNode *) node_expression;
+          }
+        else
+          {
+            return NULL;
+          }
       }
-    }
+      break;
+  }
 
-out:
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) function);
+  if (node == NULL)
+    return NULL;
 
-  if (result)
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     {
-      return (GskSlNode *) function;
-    }
-  else
-    {
-      gsk_sl_node_unref ((GskSlNode *) function);
+      gsk_sl_preprocessor_error (preproc, "No semicolon at end of statement.");
+      gsk_sl_node_unref (node);
       return NULL;
     }
+  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) node);
+
+  return node;
 }
 
 GskSlNode *

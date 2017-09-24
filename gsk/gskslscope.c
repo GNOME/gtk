@@ -20,6 +20,7 @@
 
 #include "gskslscopeprivate.h"
 
+#include "gsksltypeprivate.h"
 #include "gskslvariableprivate.h"
 
 #include <string.h>
@@ -30,12 +31,14 @@ struct _GskSlScope
 
   GskSlScope *parent;
   GSList *children;
+  GskSlType *return_type;
   
   GHashTable *variables;
 };
 
 GskSlScope *
-gsk_sl_scope_new (GskSlScope *parent)
+gsk_sl_scope_new (GskSlScope *parent,
+                  GskSlType  *return_type)
 {
   GskSlScope *scope;
   
@@ -47,6 +50,8 @@ gsk_sl_scope_new (GskSlScope *parent)
       scope->parent = parent;
       parent->children = g_slist_prepend (parent->children, scope);
     }
+  if (return_type)
+    scope->return_type = gsk_sl_type_ref (return_type);
   scope->variables = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_variable_unref);
 
   return scope;
@@ -81,8 +86,16 @@ gsk_sl_scope_unref (GskSlScope *scope)
   for (l = scope->children; l; l = l->next)
     ((GskSlScope *) l->data)->parent = NULL;
   g_slist_free (scope->children);
+  if (scope->return_type)
+    gsk_sl_type_unref (scope->return_type);
 
   g_slice_free (GskSlScope, scope);
+}
+
+GskSlType *
+gsk_sl_scope_get_return_type (const GskSlScope *scope)
+{
+  return scope->return_type;
 }
 
 void
