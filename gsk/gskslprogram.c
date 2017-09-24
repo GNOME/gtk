@@ -22,17 +22,19 @@
 
 #include "gskslfunctionprivate.h"
 #include "gskslnodeprivate.h"
+#include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
 
 struct _GskSlProgram {
   GObject parent_instance;
 
   GskSlScope *scope;
-  GSList *declarations;
+  GSList *variables;
   GSList *functions;
 };
 
@@ -43,8 +45,8 @@ gsk_sl_program_dispose (GObject *object)
 {
   GskSlProgram *program = GSK_SL_PROGRAM (object);
 
-  g_slist_free (program->declarations);
-  g_slist_free (program->functions);
+  g_slist_free_full (program->variables, (GDestroyNotify) gsk_sl_variable_unref);
+  g_slist_free_full (program->functions, (GDestroyNotify) gsk_sl_function_unref);
   gsk_sl_scope_unref (program->scope);
 
   G_OBJECT_CLASS (gsk_sl_program_parent_class)->dispose (object);
@@ -65,14 +67,43 @@ gsk_sl_program_init (GskSlProgram *program)
 }
 
 static gboolean
+gsk_sl_program_parse_variable (GskSlProgram      *program,
+                               GskSlScope        *scope,
+                               GskSlPreprocessor *preproc,
+                               GskSlPointerType  *type,
+                               const char        *name)
+{
+  GskSlVariable *variable;
+  const GskSlToken *token;
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
+    return FALSE;
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  variable = gsk_sl_variable_new (type, name);
+      
+  program->variables = g_slist_append (program->variables, variable);
+  gsk_sl_scope_add_variable (scope, variable);
+
+  return TRUE;
+}
+
+static gboolean
 gsk_sl_program_parse_declaration (GskSlProgram      *program,
                                   GskSlScope        *scope,
                                   GskSlPreprocessor *preproc)
 {
   GskSlType *type;
-  GskSlFunction *function;
   const GskSlToken *token;
+  GskSlPointerTypeFlags flags;
+  gboolean success;
   char *name;
+
+  success = gsk_sl_type_qualifier_parse (preproc,
+                                         GSK_SL_POINTER_TYPE_PARAMETER_QUALIFIER 
+                                         | GSK_SL_POINTER_TYPE_MEMORY_QUALIFIER,
+                                         &flags);
 
   type = gsk_sl_type_new_parse (preproc);
   if (type == NULL)
@@ -82,9 +113,22 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
     }
 
   token = gsk_sl_preprocessor_get (preproc);
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     {
-      gsk_sl_preprocessor_error (preproc, "Expected a function name");
+      if (success)
+        {
+          GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, flags);
+          GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL);
+          gsk_sl_pointer_type_unref (ptype);
+          program->variables = g_slist_append (program->variables, variable);
+          gsk_sl_preprocessor_consume (preproc, program);
+        }
+      gsk_sl_type_unref (type);
+      return success;
+    }
+  else if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+    {
+      gsk_sl_preprocessor_error (preproc, "Expected a variable name");
       gsk_sl_type_unref (type);
       return FALSE;
     }
@@ -92,17 +136,31 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
   name = g_strdup (token->str);
   gsk_sl_preprocessor_consume (preproc, program);
 
-  function = gsk_sl_function_new_parse (scope,
-                                        preproc,
-                                        type,
-                                        name);
-  if (function)
-    program->functions = g_slist_append (program->functions, function);
+  token = gsk_sl_preprocessor_get (preproc);
 
-  gsk_sl_type_unref (type);
-  g_free (name);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+    {
+      GskSlFunction *function;
 
-  return function != NULL;
+      function = gsk_sl_function_new_parse (scope,
+                                            preproc,
+                                            type,
+                                            name);
+      if (function)
+        program->functions = g_slist_append (program->functions, function);
+      else
+        success = FALSE;
+    }
+  else
+    {
+      GskSlPointerType *pointer_type;
+
+      pointer_type = gsk_sl_pointer_type_new (type, flags);
+      success &= gsk_sl_program_parse_variable (program, scope, preproc, pointer_type, name);
+      gsk_sl_pointer_type_unref (pointer_type);
+    }
+
+  return success;
 }
 
 gboolean
@@ -131,12 +189,15 @@ gsk_sl_program_print (GskSlProgram *program,
   g_return_if_fail (GSK_IS_SL_PROGRAM (program));
   g_return_if_fail (string != NULL);
 
-  for (l = program->declarations; l; l = l->next)
-    gsk_sl_node_print (l->data, string);
+  for (l = program->variables; l; l = l->next)
+    {
+      gsk_sl_variable_print (l->data, string);
+      g_string_append (string, ";\n");
+    }
 
   for (l = program->functions; l; l = l->next)
     {
-      if (l != program->functions || program->declarations != NULL)
+      if (l != program->functions || program->variables != NULL)
         g_string_append (string, "\n");
       gsk_sl_function_print (l->data, string);
     }
@@ -148,8 +209,8 @@ gsk_sl_program_write_spv (GskSlProgram *program,
 {
   GSList *l;
 
-  for (l = program->declarations; l; l = l->next)
-    gsk_sl_node_write_spv (l->data, writer);
+  for (l = program->variables; l; l = l->next)
+    gsk_spv_writer_get_id_for_variable (writer, l->data);
 
   for (l = program->functions; l; l = l->next)
     {
