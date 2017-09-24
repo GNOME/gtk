@@ -22,6 +22,7 @@
 #include <glib.h>
 
 #include "gsksltypesprivate.h"
+#include "gsksltokenizerprivate.h"
 
 G_BEGIN_DECLS
 
@@ -39,6 +40,11 @@ void                    gsk_sl_preprocessor_consume             (GskSlPreprocess
 void                    gsk_sl_preprocessor_error               (GskSlPreprocessor   *preproc,
                                                                  const char          *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
+void                    gsk_sl_preprocessor_error_full          (GskSlPreprocessor   *preproc,
+                                                                 const GskCodeLocation *location,
+                                                                 const GskSlToken    *token,
+                                                                 const char          *format,
+                                                                 ...) G_GNUC_PRINTF(4, 5);
 
 G_END_DECLS
 
