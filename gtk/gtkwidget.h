@@ -518,6 +518,10 @@ void	   gtk_widget_unrealize		  (GtkWidget	       *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_draw                (GtkWidget           *widget,
                                            cairo_t             *cr);
+GDK_AVAILABLE_IN_3_92
+void       gtk_widget_snapshot            (GtkWidget           *widget,
+                                           GtkSnapshot         *snapshot);
+
 /* Queuing draws */
 GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_queue_draw	  (GtkWidget	       *widget);

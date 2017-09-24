@@ -36,6 +36,13 @@
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_3_92
+GtkSnapshot *   gtk_snapshot_new                        (GtkSnapshot           *parent,
+                                                         const char            *name,
+                                                         ...) G_GNUC_PRINTF (2, 3);
+GDK_AVAILABLE_IN_3_92
+GskRenderNode * gtk_snapshot_free                       (GtkSnapshot           *snapshot);
+
 GDK_AVAILABLE_IN_3_90
 void            gtk_snapshot_push                       (GtkSnapshot            *snapshot,
                                                          gboolean                keep_coordinates,

@@ -87,14 +87,17 @@ struct _GtkSnapshot {
   GPtrArray             *nodes;
 };
 
+GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_init               (GtkSnapshot             *state,
                                                  GskRenderer             *renderer,
                                                  gboolean                 record_names,
                                                  const cairo_region_t    *clip,
                                                  const char              *name,
                                                  ...) G_GNUC_PRINTF (5, 6);
+GDK_AVAILABLE_IN_ALL
 GskRenderNode * gtk_snapshot_finish             (GtkSnapshot             *state);
 
+GDK_AVAILABLE_IN_ALL
 GskRenderer *   gtk_snapshot_get_renderer       (const GtkSnapshot       *snapshot);
 
 G_END_DECLS

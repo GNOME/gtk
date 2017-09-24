@@ -125,13 +125,13 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
   g_clear_pointer (&state->name, g_free);
 }
 
-void
-gtk_snapshot_init (GtkSnapshot          *snapshot,
-                   GskRenderer          *renderer,
-                   gboolean              record_names,
-                   const cairo_region_t *clip,
-                   const char           *name,
-                   ...)
+static void
+gtk_snapshot_init_va (GtkSnapshot          *snapshot,
+                      GskRenderer          *renderer,
+                      gboolean              record_names,
+                      const cairo_region_t *clip,
+                      const char           *name,
+                      va_list               args)
 {
   char *str;
 
@@ -142,13 +142,7 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
   snapshot->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_render_node_unref);
 
   if (name && record_names)
-    {
-      va_list args;
-
-      va_start (args, name);
-      str = g_strdup_vprintf (name, args);
-      va_end (args);
-    }
+    str = g_strdup_vprintf (name, args);
   else
     str = NULL;
 
@@ -157,6 +151,38 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
                            (cairo_region_t *) clip,
                            0, 0,
                            gtk_snapshot_collect_default);
+}
+
+void
+gtk_snapshot_init (GtkSnapshot          *snapshot,
+                   GskRenderer          *renderer,
+                   gboolean              record_names,
+                   const cairo_region_t *clip,
+                   const char           *name,
+                   ...)
+{
+  va_list args;
+
+  va_start (args, name);
+  gtk_snapshot_init_va (snapshot, renderer, record_names, clip, name, args);
+  va_end (args);
+}
+
+GtkSnapshot *
+gtk_snapshot_new (GtkSnapshot *parent,
+                  const char  *name,
+                  ...)
+{
+  GtkSnapshot *snapshot;
+  va_list args;
+
+  snapshot = g_new (GtkSnapshot, 1);
+
+  va_start (args, name);
+  gtk_snapshot_init_va (snapshot, parent->renderer, parent->record_names, NULL, name, args);
+  va_end (args);
+
+  return snapshot;
 }
 
 /**
@@ -1019,6 +1045,17 @@ gtk_snapshot_finish (GtkSnapshot *snapshot)
   g_array_free (snapshot->state_stack, TRUE);
   g_ptr_array_free (snapshot->nodes, TRUE);
   return result;
+}
+
+GskRenderNode *
+gtk_snapshot_free (GtkSnapshot *snapshot)
+{
+  GskRenderNode *node;
+
+  node = gtk_snapshot_finish (snapshot);
+  g_free (snapshot);
+
+  return node;
 }
 
 /**
