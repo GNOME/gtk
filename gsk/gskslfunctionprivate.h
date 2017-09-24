@@ -38,8 +38,7 @@ struct _GskSlFunctionClass {
   void                  (* free)                                (GskSlFunction  *function);
 
   GskSlType *           (* get_return_type)                     (const GskSlFunction    *function);
-  void                  (* print_name)                          (const GskSlFunction    *function,
-                                                                 GString                *string);
+  const char *          (* get_name)                            (const GskSlFunction    *function);
   void                  (* print)                               (const GskSlFunction    *function,
                                                                  GString                *string);
   gboolean              (* matches)                             (const GskSlFunction    *function,
@@ -62,8 +61,7 @@ void                    gsk_sl_function_unref                   (GskSlFunction  
 void                    gsk_sl_function_print                   (const GskSlFunction    *function,
                                                                  GString                *string);
 
-void                    gsk_sl_function_print_name              (const GskSlFunction    *function,
-                                                                 GString                *string);
+const char *            gsk_sl_function_get_name                (const GskSlFunction    *function);
 GskSlType *             gsk_sl_function_get_return_type         (const GskSlFunction    *function);
 gboolean                gsk_sl_function_matches                 (const GskSlFunction    *function,
                                                                  GskSlType             **arguments,

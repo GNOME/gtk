@@ -728,7 +728,7 @@ gsk_sl_expression_function_call_print (const GskSlExpression *expression,
   const GskSlExpressionFunctionCall *function_call = (const GskSlExpressionFunctionCall *) expression;
   guint i;
 
-  gsk_sl_function_print_name (function_call->function, string);
+  g_string_append (string, gsk_sl_function_get_name (function_call->function));
   g_string_append (string, " (");
   
   for (i = 0; i < function_call->n_arguments; i++)

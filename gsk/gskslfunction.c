@@ -70,13 +70,12 @@ gsk_sl_function_constructor_get_return_type (const GskSlFunction *function)
   return constructor->type;
 }
 
-static void
-gsk_sl_function_constructor_print_name (const GskSlFunction *function,
-                                        GString             *string)
+static const char *
+gsk_sl_function_constructor_get_name (const GskSlFunction *function)
 {
   const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
 
-  g_string_append (string, gsk_sl_type_get_name (constructor->type));
+  return gsk_sl_type_get_name (constructor->type);
 }
 
 static void
@@ -147,7 +146,7 @@ gsk_sl_function_constructor_write_spv (const GskSlFunction *function,
 static const GskSlFunctionClass GSK_SL_FUNCTION_CONSTRUCTOR = {
   gsk_sl_function_constructor_free,
   gsk_sl_function_constructor_get_return_type,
-  gsk_sl_function_constructor_print_name,
+  gsk_sl_function_constructor_get_name,
   gsk_sl_function_constructor_print,
   gsk_sl_function_constructor_matches,
   gsk_sl_function_constructor_write_spv,
@@ -189,13 +188,12 @@ gsk_sl_function_declared_get_return_type (const GskSlFunction *function)
   return declared->return_type;
 }
 
-static void
-gsk_sl_function_declared_print_name (const GskSlFunction *function,
-                                     GString             *string)
+static const char *
+gsk_sl_function_declared_get_name (const GskSlFunction *function)
 {
   const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
 
-  g_string_append (string, declared->name);
+  return declared->name;
 }
 
 static void
@@ -288,7 +286,7 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
 static const GskSlFunctionClass GSK_SL_FUNCTION_DECLARED = {
   gsk_sl_function_declared_free,
   gsk_sl_function_declared_get_return_type,
-  gsk_sl_function_declared_print_name,
+  gsk_sl_function_declared_get_name,
   gsk_sl_function_declared_print,
   gsk_sl_function_declared_matches,
   gsk_sl_function_declared_write_spv,
@@ -416,11 +414,10 @@ gsk_sl_function_get_return_type (const GskSlFunction *function)
   return function->class->get_return_type (function);
 }
 
-void
-gsk_sl_function_print_name (const GskSlFunction *function,
-                            GString             *string)
+const char *
+gsk_sl_function_get_name (const GskSlFunction *function)
 {
-  function->class->print_name (function, string);
+  return function->class->get_name (function);
 }
 
 void
