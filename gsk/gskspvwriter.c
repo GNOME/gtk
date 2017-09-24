@@ -23,6 +23,7 @@
 #include "gskslnodeprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvariableprivate.h"
 
 struct _GskSpvWriter
 {
@@ -34,7 +35,7 @@ struct _GskSpvWriter
   guint32 entry_point;
   GHashTable *types;
   GHashTable *pointer_types;
-  GHashTable *declarations;
+  GHashTable *variables;
 };
 
 GskSpvWriter *
@@ -55,8 +56,8 @@ gsk_spv_writer_new (void)
                                          (GDestroyNotify) gsk_sl_type_unref, NULL);
   writer->pointer_types = g_hash_table_new_full (gsk_sl_pointer_type_hash, gsk_sl_pointer_type_equal,
                                                  (GDestroyNotify) gsk_sl_pointer_type_unref, NULL);
-  writer->declarations = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-                                                (GDestroyNotify) gsk_sl_node_unref, NULL);
+  writer->variables = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                             (GDestroyNotify) gsk_sl_variable_unref, NULL);
   /* the ID 1 is reserved for the GLSL instruction set (for now) */
   writer->last_id = 1;
 
@@ -92,7 +93,7 @@ gsk_spv_writer_unref (GskSpvWriter *writer)
 
   g_hash_table_destroy (writer->pointer_types);
   g_hash_table_destroy (writer->types);
-  g_hash_table_destroy (writer->declarations);
+  g_hash_table_destroy (writer->variables);
 
   g_slice_free (GskSpvWriter, writer);
 }
@@ -196,18 +197,18 @@ gsk_spv_writer_get_id_for_pointer_type (GskSpvWriter       *writer,
 }
 
 guint32
-gsk_spv_writer_get_id_for_declaration (GskSpvWriter *writer,
-                                       GskSlNode    *node)
+gsk_spv_writer_get_id_for_variable (GskSpvWriter  *writer,
+                                    GskSlVariable *variable)
 {
-  return GPOINTER_TO_UINT (g_hash_table_lookup (writer->declarations, node));
-}
+  guint32 result;
 
-void
-gsk_spv_writer_set_id_for_declaration (GskSpvWriter *writer,
-                                       GskSlNode    *node,
-                                       guint32       id)
-{
-  g_hash_table_insert (writer->declarations, gsk_sl_node_ref (node), GUINT_TO_POINTER (id));
+  result = GPOINTER_TO_UINT (g_hash_table_lookup (writer->variables, variable));
+  if (result != 0)
+    return result;
+
+  result = gsk_sl_variable_write_spv (variable, writer);
+  g_hash_table_insert (writer->variables, gsk_sl_variable_ref (variable), GUINT_TO_POINTER (result));
+  return result;
 }
 
 guint32

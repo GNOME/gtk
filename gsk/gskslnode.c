@@ -26,6 +26,7 @@
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
 
 #include <string.h>
@@ -732,8 +733,7 @@ typedef struct _GskSlNodeDeclaration GskSlNodeDeclaration;
 struct _GskSlNodeDeclaration {
   GskSlNode parent;
 
-  char *name;
-  GskSlPointerType *type;
+  GskSlVariable *variable;
   GskSlNode *initial;
   guint constant :1;
 };
@@ -743,8 +743,7 @@ gsk_sl_node_declaration_free (GskSlNode *node)
 {
   GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
 
-  g_free (declaration->name);
-  gsk_sl_pointer_type_unref (declaration->type);
+  gsk_sl_variable_unref (declaration->variable);
   if (declaration->initial)
     gsk_sl_node_unref (declaration->initial);
 
@@ -757,16 +756,11 @@ gsk_sl_node_declaration_print (GskSlNode *node,
 {
   GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
 
-  gsk_sl_pointer_type_print (declaration->type, string);
-  if (declaration->name)
+  gsk_sl_variable_print (declaration->variable, string);
+  if (declaration->initial)
     {
-      g_string_append (string, " ");
-      g_string_append (string, declaration->name);
-      if (declaration->initial)
-        {
-          g_string_append (string, " = ");
-          gsk_sl_node_print (declaration->initial, string);
-        }
+      g_string_append (string, " = ");
+      gsk_sl_node_print (declaration->initial, string);
     }
 }
 
@@ -775,7 +769,7 @@ gsk_sl_node_declaration_get_return_type (GskSlNode *node)
 {
   GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
 
-  return gsk_sl_pointer_type_get_type (declaration->type);
+  return gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (declaration->variable));
 }
 
 static gboolean
@@ -791,28 +785,20 @@ gsk_sl_node_declaration_write_spv (const GskSlNode *node,
                                    GskSpvWriter    *writer)
 {
   GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
-  guint32 pointer_type_id, declaration_id;
+  guint32 variable_id;
 
-  pointer_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, declaration->type);
-  declaration_id = gsk_spv_writer_next_id (writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      4, GSK_SPV_OP_VARIABLE,
-                      (guint32[3]) { pointer_type_id,
-                                     declaration_id,
-                                     gsk_sl_pointer_type_get_storage_class (declaration->type)});
-  gsk_spv_writer_set_id_for_declaration (writer, (GskSlNode *) node, declaration_id);
+  variable_id = gsk_spv_writer_get_id_for_variable (writer, declaration->variable);
   
   if (declaration->initial)
     {
       gsk_spv_writer_add (writer,
                           GSK_SPV_WRITER_SECTION_CODE,
                           3, GSK_SPV_OP_STORE,
-                          (guint32[2]) { declaration_id,
+                          (guint32[2]) { variable_id,
                                          gsk_sl_node_write_spv (declaration->initial, writer)});
     }
 
-  return declaration_id;
+  return variable_id;
 }
 
 static const GskSlNodeClass GSK_SL_NODE_DECLARATION = {
@@ -830,8 +816,7 @@ typedef struct _GskSlNodeReference GskSlNodeReference;
 struct _GskSlNodeReference {
   GskSlNode parent;
 
-  char *name;
-  GskSlNode *declaration;
+  GskSlVariable *variable;
 };
 
 static void
@@ -839,8 +824,7 @@ gsk_sl_node_reference_free (GskSlNode *node)
 {
   GskSlNodeReference *reference = (GskSlNodeReference *) node;
 
-  g_free (reference->name);
-  gsk_sl_node_unref (reference->declaration);
+  gsk_sl_variable_unref (reference->variable);
 
   g_slice_free (GskSlNodeReference, reference);
 }
@@ -851,7 +835,7 @@ gsk_sl_node_reference_print (GskSlNode *node,
 {
   GskSlNodeReference *reference = (GskSlNodeReference *) node;
 
-  g_string_append (string, reference->name);
+  g_string_append (string, gsk_sl_variable_get_name (reference->variable));
 }
 
 static GskSlType *
@@ -859,15 +843,13 @@ gsk_sl_node_reference_get_return_type (GskSlNode *node)
 {
   GskSlNodeReference *reference = (GskSlNodeReference *) node;
 
-  return gsk_sl_node_get_return_type (reference->declaration);
+  return gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (reference->variable));
 }
 
 static gboolean
 gsk_sl_node_reference_is_constant (GskSlNode *node)
 {
-  GskSlNodeReference *reference = (GskSlNodeReference *) node;
-
-  return gsk_sl_node_is_constant (reference->declaration);
+  return FALSE;
 }
 
 static guint32
@@ -877,8 +859,8 @@ gsk_sl_node_reference_write_spv (const GskSlNode *node,
   GskSlNodeReference *reference = (GskSlNodeReference *) node;
   guint32 declaration_id, result_id, type_id;
 
-  type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_node_get_return_type (reference->declaration));
-  declaration_id = gsk_spv_writer_get_id_for_declaration (writer, reference->declaration);
+  type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (reference->variable)));
+  declaration_id = gsk_spv_writer_get_id_for_variable (writer, reference->variable);
   result_id = gsk_spv_writer_next_id (writer);
   gsk_spv_writer_add (writer,
                       GSK_SPV_WRITER_SECTION_CODE,
@@ -1357,10 +1339,10 @@ gsk_sl_node_parse_primary_expression (GskSlScope        *scope,
     case GSK_SL_TOKEN_IDENTIFIER:
       {
         GskSlNodeReference *reference;
-        GskSlNode *decl;
+        GskSlVariable *variable;
 
-        decl = gsk_sl_scope_lookup_variable (scope, token->str);
-        if (decl == NULL)
+        variable = gsk_sl_scope_lookup_variable (scope, token->str);
+        if (variable == NULL)
           {
             gsk_sl_preprocessor_error (stream, "No variable named \"%s\".", token->str);
             gsk_sl_preprocessor_consume (stream, NULL);
@@ -1368,8 +1350,7 @@ gsk_sl_node_parse_primary_expression (GskSlScope        *scope,
           }
 
         reference = gsk_sl_node_new (GskSlNodeReference, &GSK_SL_NODE_REFERENCE);
-        reference->name = g_strdup (token->str);
-        reference->declaration = gsk_sl_node_ref (decl);
+        reference->variable = gsk_sl_variable_ref (variable);
         gsk_sl_preprocessor_consume (stream, (GskSlNode *) reference);
         return (GskSlNode *) reference;
       }
@@ -2114,13 +2095,15 @@ gsk_sl_node_parse_declaration (GskSlScope        *scope,
   const GskSlToken *token;
 
   declaration = gsk_sl_node_new (GskSlNodeDeclaration, &GSK_SL_NODE_DECLARATION);
-  declaration->type = gsk_sl_pointer_type_ref (type);
   
   token = gsk_sl_preprocessor_get (stream);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
-    return (GskSlNode *) declaration;
+    {
+      declaration->variable = gsk_sl_variable_new (type, NULL);
+      return (GskSlNode *) declaration;
+    }
 
-  declaration->name = g_strdup (token->str);
+  declaration->variable = gsk_sl_variable_new (type, token->str);
   gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
 
   token = gsk_sl_preprocessor_get (stream);
@@ -2130,7 +2113,7 @@ gsk_sl_node_parse_declaration (GskSlScope        *scope,
       declaration->initial = gsk_sl_node_parse_assignment_expression (scope, stream);
     }
 
-  gsk_sl_scope_add_variable (scope, declaration->name, (GskSlNode *) declaration);
+  gsk_sl_scope_add_variable (scope, declaration->variable);
 
   return (GskSlNode *) declaration;
 }

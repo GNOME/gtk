@@ -28,6 +28,7 @@ typedef struct _GskSlPointerType        GskSlPointerType;
 typedef struct _GskSlScope              GskSlScope;
 typedef struct _GskSlToken              GskSlToken;
 typedef struct _GskSlType               GskSlType;
+typedef struct _GskSlVariable           GskSlVariable;
 
 typedef struct _GskSpvWriter            GskSpvWriter;
 

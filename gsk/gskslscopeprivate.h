@@ -31,9 +31,8 @@ GskSlScope *            gsk_sl_scope_ref                        (GskSlScope     
 void                    gsk_sl_scope_unref                      (GskSlScope           *scope);
 
 void                    gsk_sl_scope_add_variable               (GskSlScope           *scope,
-                                                                 const char           *name,
-                                                                 GskSlNode            *declaration);
-GskSlNode *             gsk_sl_scope_lookup_variable            (GskSlScope           *scope,
+                                                                 GskSlVariable        *variable);
+GskSlVariable *         gsk_sl_scope_lookup_variable            (GskSlScope           *scope,
                                                                  const char           *name);
 
 G_END_DECLS

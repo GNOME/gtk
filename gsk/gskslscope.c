@@ -20,7 +20,7 @@
 
 #include "gskslscopeprivate.h"
 
-#include "gskslnodeprivate.h"
+#include "gskslvariableprivate.h"
 
 #include <string.h>
 
@@ -47,7 +47,7 @@ gsk_sl_scope_new (GskSlScope *parent)
       scope->parent = parent;
       parent->children = g_slist_prepend (parent->children, scope);
     }
-  scope->variables = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_node_unref);
+  scope->variables = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_variable_unref);
 
   return scope;
 }
@@ -86,18 +86,17 @@ gsk_sl_scope_unref (GskSlScope *scope)
 }
 
 void
-gsk_sl_scope_add_variable (GskSlScope *scope,
-                           const char *name,
-                           GskSlNode  *declaration)
+gsk_sl_scope_add_variable (GskSlScope    *scope,
+                           GskSlVariable *variable)
 {
-  g_hash_table_replace (scope->variables, (gpointer) name, gsk_sl_node_ref (declaration));
+  g_hash_table_replace (scope->variables, (gpointer) gsk_sl_variable_get_name (variable), gsk_sl_variable_ref (variable));
 }
 
-GskSlNode *
+GskSlVariable *
 gsk_sl_scope_lookup_variable (GskSlScope *scope,
                               const char *name)
 {
-  GskSlNode *result;
+  GskSlVariable *result;
 
   for (;
        scope != NULL;

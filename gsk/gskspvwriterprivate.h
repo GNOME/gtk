@@ -182,11 +182,8 @@ guint32                 gsk_spv_writer_get_id_for_type          (GskSpvWriter   
                                                                  GskSlType              *type);
 guint32                 gsk_spv_writer_get_id_for_pointer_type  (GskSpvWriter           *writer,
                                                                  GskSlPointerType       *type);
-guint32                 gsk_spv_writer_get_id_for_declaration   (GskSpvWriter           *writer,
-                                                                 GskSlNode              *node);
-void                    gsk_spv_writer_set_id_for_declaration   (GskSpvWriter           *writer,
-                                                                 GskSlNode              *node,
-                                                                 guint32                 id);
+guint32                 gsk_spv_writer_get_id_for_variable      (GskSpvWriter           *writer,
+                                                                 GskSlVariable          *variable);
 
 guint32                 gsk_spv_writer_next_id                  (GskSpvWriter           *writer);
 void                    gsk_spv_writer_add                      (GskSpvWriter           *writer,
