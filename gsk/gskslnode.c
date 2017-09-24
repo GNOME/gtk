@@ -20,9 +20,10 @@
 
 #include "gskslnodeprivate.h"
 
-#include "gskslpreprocessorprivate.h"
+#include "gskslexpressionprivate.h"
 #include "gskslfunctionprivate.h"
 #include "gskslpointertypeprivate.h"
+#include "gskslpreprocessorprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
@@ -98,20 +99,6 @@ gsk_sl_node_function_print (GskSlNode *node,
   g_string_append (string, "}\n");
 }
 
-static GskSlType *
-gsk_sl_node_function_get_return_type (GskSlNode *node)
-{
-  GskSlNodeFunction *function = (GskSlNodeFunction *) node;
-
-  return function->return_type;
-}
-
-static gboolean
-gsk_sl_node_function_is_constant (GskSlNode *node)
-{
-  return TRUE;
-}
-
 static guint32
 gsk_sl_node_function_write_spv (const GskSlNode *node,
                                 GskSpvWriter    *writer)
@@ -162,568 +149,7 @@ gsk_sl_node_function_write_spv (const GskSlNode *node,
 static const GskSlNodeClass GSK_SL_NODE_FUNCTION = {
   gsk_sl_node_function_free,
   gsk_sl_node_function_print,
-  gsk_sl_node_function_get_return_type,
-  gsk_sl_node_function_is_constant,
   gsk_sl_node_function_write_spv
-};
-
-/* ASSIGNMENT */
-
-typedef struct _GskSlNodeAssignment GskSlNodeAssignment;
-
-struct _GskSlNodeAssignment {
-  GskSlNode parent;
-
-  GskSlTokenType op;
-  GskSlNode *lvalue;
-  GskSlNode *rvalue;
-};
-
-static void
-gsk_sl_node_assignment_free (GskSlNode *node)
-{
-  GskSlNodeAssignment *assignment = (GskSlNodeAssignment *) node;
-
-  gsk_sl_node_unref (assignment->lvalue);
-  if (assignment->rvalue)
-    gsk_sl_node_unref (assignment->rvalue);
-
-  g_slice_free (GskSlNodeAssignment, assignment);
-}
-
-static void
-gsk_sl_node_assignment_print (GskSlNode *node,
-                              GString   *string)
-{
-  GskSlNodeAssignment *assignment = (GskSlNodeAssignment *) node;
-
-  gsk_sl_node_print (assignment->lvalue, string);
-
-  switch ((guint) assignment->op)
-  {
-    case GSK_SL_TOKEN_EQUAL:
-      g_string_append (string, " = ");
-      break;
-    case GSK_SL_TOKEN_MUL_ASSIGN:
-      g_string_append (string, " *= ");
-      break;
-    case GSK_SL_TOKEN_DIV_ASSIGN:
-      g_string_append (string, " /= ");
-      break;
-    case GSK_SL_TOKEN_MOD_ASSIGN:
-      g_string_append (string, " %= ");
-      break;
-    case GSK_SL_TOKEN_ADD_ASSIGN:
-      g_string_append (string, " += ");
-      break;
-    case GSK_SL_TOKEN_SUB_ASSIGN:
-      g_string_append (string, " -= ");
-      break;
-    case GSK_SL_TOKEN_LEFT_ASSIGN:
-      g_string_append (string, " <<= ");
-      break;
-    case GSK_SL_TOKEN_RIGHT_ASSIGN:
-      g_string_append (string, " >>= ");
-      break;
-    case GSK_SL_TOKEN_AND_ASSIGN:
-      g_string_append (string, " &= ");
-      break;
-    case GSK_SL_TOKEN_XOR_ASSIGN:
-      g_string_append (string, " ^= ");
-      break;
-    case GSK_SL_TOKEN_OR_ASSIGN:
-      g_string_append (string, " |= ");
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-  }
-  gsk_sl_node_print (assignment->rvalue, string);
-}
-
-static GskSlType *
-gsk_sl_node_assignment_get_return_type (GskSlNode *node)
-{
-  GskSlNodeAssignment *assignment = (GskSlNodeAssignment *) node;
-
-  return gsk_sl_node_get_return_type (assignment->lvalue);
-}
-
-static gboolean
-gsk_sl_node_assignment_is_constant (GskSlNode *node)
-{
-  //GskSlNodeAssignment *assignment = (GskSlNodeAssignment *) node;
-
-  return FALSE;
-}
-
-static guint32
-gsk_sl_node_assignment_write_spv (const GskSlNode *node,
-                                  GskSpvWriter    *writer)
-{
-  g_assert_not_reached ();
-
-  return 0;
-}
-
-static const GskSlNodeClass GSK_SL_NODE_ASSIGNMENT = {
-  gsk_sl_node_assignment_free,
-  gsk_sl_node_assignment_print,
-  gsk_sl_node_assignment_get_return_type,
-  gsk_sl_node_assignment_is_constant,
-  gsk_sl_node_assignment_write_spv
-};
-
-/* BINARY */
-
-typedef enum {
-  GSK_SL_OPERATION_MUL,
-  GSK_SL_OPERATION_DIV,
-  GSK_SL_OPERATION_MOD,
-  GSK_SL_OPERATION_ADD,
-  GSK_SL_OPERATION_SUB,
-  GSK_SL_OPERATION_LSHIFT,
-  GSK_SL_OPERATION_RSHIFT,
-  GSK_SL_OPERATION_LESS,
-  GSK_SL_OPERATION_GREATER,
-  GSK_SL_OPERATION_LESS_EQUAL,
-  GSK_SL_OPERATION_GREATER_EQUAL,
-  GSK_SL_OPERATION_EQUAL,
-  GSK_SL_OPERATION_NOT_EQUAL,
-  GSK_SL_OPERATION_AND,
-  GSK_SL_OPERATION_XOR,
-  GSK_SL_OPERATION_OR,
-  GSK_SL_OPERATION_LOGICAL_AND,
-  GSK_SL_OPERATION_LOGICAL_XOR,
-  GSK_SL_OPERATION_LOGICAL_OR
-} GskSlOperation;
-
-typedef struct _GskSlNodeOperation GskSlNodeOperation;
-
-struct _GskSlNodeOperation {
-  GskSlNode parent;
-
-  GskSlOperation op;
-  GskSlNode *left;
-  GskSlNode *right;
-};
-
-static void
-gsk_sl_node_operation_free (GskSlNode *node)
-{
-  GskSlNodeOperation *operation = (GskSlNodeOperation *) node;
-
-  gsk_sl_node_unref (operation->left);
-  if (operation->right)
-    gsk_sl_node_unref (operation->right);
-
-  g_slice_free (GskSlNodeOperation, operation);
-}
-
-static void
-gsk_sl_node_operation_print (GskSlNode *node,
-                             GString   *string)
-{
-  const char *op_str[] = {
-    [GSK_SL_OPERATION_MUL] = " * ",
-    [GSK_SL_OPERATION_DIV] = " / ",
-    [GSK_SL_OPERATION_MOD] = " % ",
-    [GSK_SL_OPERATION_ADD] = " + ",
-    [GSK_SL_OPERATION_SUB] = " - ",
-    [GSK_SL_OPERATION_LSHIFT] = " << ",
-    [GSK_SL_OPERATION_RSHIFT] = " >> ",
-    [GSK_SL_OPERATION_LESS] = " < ",
-    [GSK_SL_OPERATION_GREATER] = " > ",
-    [GSK_SL_OPERATION_LESS_EQUAL] = " <= ",
-    [GSK_SL_OPERATION_GREATER_EQUAL] = " >= ",
-    [GSK_SL_OPERATION_EQUAL] = " == ",
-    [GSK_SL_OPERATION_NOT_EQUAL] = " != ",
-    [GSK_SL_OPERATION_AND] = " & ",
-    [GSK_SL_OPERATION_XOR] = " ^ ",
-    [GSK_SL_OPERATION_OR] = " | ",
-    [GSK_SL_OPERATION_LOGICAL_AND] = " && ",
-    [GSK_SL_OPERATION_LOGICAL_XOR] = " ^^ ",
-    [GSK_SL_OPERATION_LOGICAL_OR] = " || "
-  };
-  GskSlNodeOperation *operation = (GskSlNodeOperation *) node;
-
-  /* XXX: figure out the need for bracketing here */
-
-  gsk_sl_node_print (operation->left, string);
-  g_string_append (string, op_str[operation->op]);
-  gsk_sl_node_print (operation->right, string);
-}
-
-static GskSlType *
-gsk_sl_node_arithmetic_type_check (GskSlPreprocessor *stream,
-                                   gboolean           multiply,
-                                   GskSlType         *ltype,
-                                   GskSlType         *rtype)
-{
-  GskSlScalarType scalar;
-
-  if (gsk_sl_scalar_type_can_convert (gsk_sl_type_get_scalar_type (ltype),
-                                      gsk_sl_type_get_scalar_type (rtype)))
-    scalar = gsk_sl_type_get_scalar_type (ltype);
-  else if (gsk_sl_scalar_type_can_convert (gsk_sl_type_get_scalar_type (rtype),
-                                           gsk_sl_type_get_scalar_type (ltype)))
-    scalar = gsk_sl_type_get_scalar_type (rtype);
-  else
-    {
-      if (stream)
-        {
-          gsk_sl_preprocessor_error (stream, "Operand types %s and %s do not share compatible scalar types.",
-                                             gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-        }
-      return NULL;
-    }
-
-  if (gsk_sl_type_is_matrix (ltype))
-    {
-      if (gsk_sl_type_is_matrix (rtype))
-        {
-          if (multiply)
-            {
-              if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (gsk_sl_type_get_index_type (rtype)))
-                {
-                  if (stream)
-                    gsk_sl_preprocessor_error (stream, "Matrices to multiplication have incompatible dimensions.");
-                  return NULL;
-                }
-              return gsk_sl_type_get_matrix (scalar,
-                                             gsk_sl_type_get_length (gsk_sl_type_get_index_type (ltype)),
-                                             gsk_sl_type_get_length (rtype));
-            }
-          else
-            {
-              if (gsk_sl_type_can_convert (ltype, rtype))
-                {
-                  return ltype;
-                }
-              else if (gsk_sl_type_can_convert (rtype, ltype))
-                {
-                  return rtype;
-                }
-              else
-                {
-                  if (stream)
-                    gsk_sl_preprocessor_error (stream, "Matrix types %s and %s have different size.",
-                                               gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-                  return NULL;
-                }
-            }
-        }
-      else if (gsk_sl_type_is_vector (rtype))
-        {
-          if (multiply)
-            {
-              if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
-                {
-                  if (stream)
-                    gsk_sl_preprocessor_error (stream, "Matrix column count doesn't match vector length.");
-                  return NULL;
-                }
-              return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (gsk_sl_type_get_index_type (ltype)));
-            }
-          else
-            {
-              if (stream)
-                gsk_sl_preprocessor_error (stream, "Cannot perform arithmetic operation between matrix and vector.");
-              return NULL;
-            }
-        }
-      else if (gsk_sl_type_is_scalar (rtype))
-        {
-          return gsk_sl_type_get_matrix (scalar,
-                                         gsk_sl_type_get_length (ltype),
-                                         gsk_sl_type_get_length (gsk_sl_type_get_index_type (ltype)));
-        }
-      else
-        {
-          if (stream)
-            gsk_sl_preprocessor_error (stream, "Right operand is incompatible type for arithemtic operation.");
-          return NULL;
-        }
-    }
-  else if (gsk_sl_type_is_vector (ltype))
-    {
-      if (gsk_sl_type_is_matrix (rtype))
-        {
-          if (multiply)
-            {
-              if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (gsk_sl_type_get_index_type (rtype)))
-                {
-                  if (stream)
-                    gsk_sl_preprocessor_error (stream, "Vector length for %s doesn't match row count for %s",
-                                                       gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-                  return NULL;
-                }
-              return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (rtype));
-            }
-          else
-            {
-              if (stream)
-                gsk_sl_preprocessor_error (stream, "Cannot perform arithmetic operation between vector and matrix.");
-              return NULL;
-            }
-        }
-      else if (gsk_sl_type_is_vector (rtype))
-        {
-          if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
-            {
-              if (stream)
-                gsk_sl_preprocessor_error (stream, "Vector operands %s and %s to arithmetic operation have different length.",
-                                                   gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-              return NULL;
-            }
-          return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (ltype));
-        }
-      else if (gsk_sl_type_is_scalar (rtype))
-        {
-          return gsk_sl_type_get_vector (scalar,
-                                         gsk_sl_type_get_length (ltype));
-        }
-      else
-        {
-          if (stream)
-            gsk_sl_preprocessor_error (stream, "Right operand is incompatible type for arithemtic operation.");
-          return NULL;
-        }
-    }
-  else if (gsk_sl_type_is_scalar (ltype))
-    {
-      if (gsk_sl_type_is_matrix (rtype))
-        {
-          return gsk_sl_type_get_matrix (scalar,
-                                         gsk_sl_type_get_length (rtype),
-                                         gsk_sl_type_get_length (gsk_sl_type_get_index_type (rtype)));
-        }
-      else if (gsk_sl_type_is_vector (rtype))
-        {
-          return gsk_sl_type_get_vector (scalar,
-                                         gsk_sl_type_get_length (rtype));
-        }
-      else if (gsk_sl_type_is_scalar (rtype))
-        {
-          return gsk_sl_type_get_scalar (scalar);
-        }
-      else
-        {
-          if (stream)
-            gsk_sl_preprocessor_error (stream, "Right operand is incompatible type for arithemtic operation.");
-          return NULL;
-        }
-    }
-  else
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand is incompatible type for arithemtic operation.");
-      return NULL;
-    }
-}
-
-static GskSlType *
-gsk_sl_node_bitwise_type_check (GskSlPreprocessor *stream,
-                                GskSlType         *ltype,
-                                GskSlType         *rtype)
-{
-  GskSlScalarType lscalar, rscalar;
-
-  lscalar = gsk_sl_type_get_scalar_type (ltype);
-  if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
-      return NULL;
-    }
-  rscalar = gsk_sl_type_get_scalar_type (ltype);
-  if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
-      return NULL;
-    }
-  if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
-      return NULL;
-    }
-  if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
-      return NULL;
-    }
-  if (gsk_sl_type_is_vector (ltype) && gsk_sl_type_is_vector (rtype) &&
-      gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Vector operands %s and %s do not have the same length.",
-                                           gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-      return NULL;
-    }
-
-  rscalar = lscalar == GSK_SL_UINT ? GSK_SL_UINT : rscalar;
-  if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_scalar (rtype))
-    return gsk_sl_type_get_scalar (rscalar);
-  else
-    return gsk_sl_type_get_vector (rscalar, gsk_sl_type_get_length (ltype));
-}
-
-static gboolean
-gsk_sl_node_shift_type_check (GskSlPreprocessor *stream,
-                              GskSlType         *ltype,
-                              GskSlType         *rtype)
-{
-  GskSlScalarType lscalar, rscalar;
-
-  lscalar = gsk_sl_type_get_scalar_type (ltype);
-  if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
-      return FALSE;
-    }
-  rscalar = gsk_sl_type_get_scalar_type (ltype);
-  if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
-      return FALSE;
-    }
-  if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
-      return FALSE;
-    }
-  if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
-      return FALSE;
-    }
-  if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_vector (rtype))
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand to shift cannot be a vector if left operand is a scalar.");
-      return FALSE;
-    }
-  if (gsk_sl_type_is_vector (ltype) && gsk_sl_type_is_vector (rtype) &&
-      gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Vector operands do not have the same length.");
-      return FALSE;
-    }
-
-  return TRUE;
-}
-
-static gboolean
-gsk_sl_node_relational_type_check (GskSlPreprocessor *stream,
-                                   GskSlType        *ltype,
-                                   GskSlType        *rtype)
-{
-  if (!gsk_sl_type_is_scalar (ltype))
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand to relational operator is not a scalar.");
-      return FALSE;
-    }
-  if (gsk_sl_type_get_scalar_type (ltype) == GSK_SL_BOOL)
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand to relational operator must not be bool.");
-      return FALSE;
-    }
-  if (!gsk_sl_type_is_scalar (rtype))
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand to relational operator is not a scalar.");
-      return FALSE;
-    }
-  if (gsk_sl_type_get_scalar_type (rtype) == GSK_SL_BOOL)
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand to relational operator must not be bool.");
-      return FALSE;
-    }
-
-
-  return TRUE;
-}
-
-static GskSlType *
-gsk_sl_node_operation_get_return_type (GskSlNode *node)
-{
-  GskSlNodeOperation *operation = (GskSlNodeOperation *) node;
-
-  switch (operation->op)
-  {
-    case GSK_SL_OPERATION_MUL:
-      return gsk_sl_node_arithmetic_type_check (NULL,
-                                                TRUE,
-                                                gsk_sl_node_get_return_type (operation->left),
-                                                gsk_sl_node_get_return_type (operation->right));
-    case GSK_SL_OPERATION_DIV:
-    case GSK_SL_OPERATION_ADD:
-    case GSK_SL_OPERATION_SUB:
-      return gsk_sl_node_arithmetic_type_check (NULL,
-                                                FALSE,
-                                                gsk_sl_node_get_return_type (operation->left),
-                                                gsk_sl_node_get_return_type (operation->right));
-    case GSK_SL_OPERATION_LSHIFT:
-    case GSK_SL_OPERATION_RSHIFT:
-      return gsk_sl_node_get_return_type (operation->left);
-    case GSK_SL_OPERATION_MOD:
-    case GSK_SL_OPERATION_AND:
-    case GSK_SL_OPERATION_XOR:
-    case GSK_SL_OPERATION_OR:
-      return gsk_sl_node_bitwise_type_check (NULL,
-                                             gsk_sl_node_get_return_type (operation->left),
-                                             gsk_sl_node_get_return_type (operation->right));
-    case GSK_SL_OPERATION_LESS:
-    case GSK_SL_OPERATION_GREATER:
-    case GSK_SL_OPERATION_LESS_EQUAL:
-    case GSK_SL_OPERATION_GREATER_EQUAL:
-    case GSK_SL_OPERATION_EQUAL:
-    case GSK_SL_OPERATION_NOT_EQUAL:
-    case GSK_SL_OPERATION_LOGICAL_AND:
-    case GSK_SL_OPERATION_LOGICAL_XOR:
-    case GSK_SL_OPERATION_LOGICAL_OR:
-      return gsk_sl_type_get_scalar (GSK_SL_BOOL);
-    default:
-      g_assert_not_reached ();
-      return NULL;
-  }
-}
-
-static gboolean
-gsk_sl_node_operation_is_constant (GskSlNode *node)
-{
-  GskSlNodeOperation *operation = (GskSlNodeOperation *) node;
-
-  return gsk_sl_node_is_constant (operation->left)
-      && gsk_sl_node_is_constant (operation->right);
-}
-
-static guint32
-gsk_sl_node_operation_write_spv (const GskSlNode *node,
-                                 GskSpvWriter    *writer)
-{
-  g_assert_not_reached ();
-
-  return 0;
-}
-
-static const GskSlNodeClass GSK_SL_NODE_OPERATION = {
-  gsk_sl_node_operation_free,
-  gsk_sl_node_operation_print,
-  gsk_sl_node_operation_get_return_type,
-  gsk_sl_node_operation_is_constant,
-  gsk_sl_node_operation_write_spv
 };
 
 /* DECLARATION */
@@ -734,8 +160,7 @@ struct _GskSlNodeDeclaration {
   GskSlNode parent;
 
   GskSlVariable *variable;
-  GskSlNode *initial;
-  guint constant :1;
+  GskSlExpression *initial;
 };
 
 static void
@@ -745,7 +170,7 @@ gsk_sl_node_declaration_free (GskSlNode *node)
 
   gsk_sl_variable_unref (declaration->variable);
   if (declaration->initial)
-    gsk_sl_node_unref (declaration->initial);
+    gsk_sl_expression_unref (declaration->initial);
 
   g_slice_free (GskSlNodeDeclaration, declaration);
 }
@@ -760,24 +185,8 @@ gsk_sl_node_declaration_print (GskSlNode *node,
   if (declaration->initial)
     {
       g_string_append (string, " = ");
-      gsk_sl_node_print (declaration->initial, string);
+      gsk_sl_expression_print (declaration->initial, string);
     }
-}
-
-static GskSlType *
-gsk_sl_node_declaration_get_return_type (GskSlNode *node)
-{
-  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
-
-  return gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (declaration->variable));
-}
-
-static gboolean
-gsk_sl_node_declaration_is_constant (GskSlNode *node)
-{
-  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
-
-  return declaration->constant;
 }
 
 static guint32
@@ -795,7 +204,7 @@ gsk_sl_node_declaration_write_spv (const GskSlNode *node,
                           GSK_SPV_WRITER_SECTION_CODE,
                           3, GSK_SPV_OP_STORE,
                           (guint32[2]) { variable_id,
-                                         gsk_sl_node_write_spv (declaration->initial, writer)});
+                                         gsk_sl_expression_write_spv (declaration->initial, writer)});
     }
 
   return variable_id;
@@ -804,160 +213,7 @@ gsk_sl_node_declaration_write_spv (const GskSlNode *node,
 static const GskSlNodeClass GSK_SL_NODE_DECLARATION = {
   gsk_sl_node_declaration_free,
   gsk_sl_node_declaration_print,
-  gsk_sl_node_declaration_get_return_type,
-  gsk_sl_node_declaration_is_constant,
   gsk_sl_node_declaration_write_spv
-};
-
-/* REFERENCE */
-
-typedef struct _GskSlNodeReference GskSlNodeReference;
-
-struct _GskSlNodeReference {
-  GskSlNode parent;
-
-  GskSlVariable *variable;
-};
-
-static void
-gsk_sl_node_reference_free (GskSlNode *node)
-{
-  GskSlNodeReference *reference = (GskSlNodeReference *) node;
-
-  gsk_sl_variable_unref (reference->variable);
-
-  g_slice_free (GskSlNodeReference, reference);
-}
-
-static void
-gsk_sl_node_reference_print (GskSlNode *node,
-                             GString   *string)
-{
-  GskSlNodeReference *reference = (GskSlNodeReference *) node;
-
-  g_string_append (string, gsk_sl_variable_get_name (reference->variable));
-}
-
-static GskSlType *
-gsk_sl_node_reference_get_return_type (GskSlNode *node)
-{
-  GskSlNodeReference *reference = (GskSlNodeReference *) node;
-
-  return gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (reference->variable));
-}
-
-static gboolean
-gsk_sl_node_reference_is_constant (GskSlNode *node)
-{
-  return FALSE;
-}
-
-static guint32
-gsk_sl_node_reference_write_spv (const GskSlNode *node,
-                                 GskSpvWriter    *writer)
-{
-  GskSlNodeReference *reference = (GskSlNodeReference *) node;
-  guint32 declaration_id, result_id, type_id;
-
-  type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (reference->variable)));
-  declaration_id = gsk_spv_writer_get_id_for_variable (writer, reference->variable);
-  result_id = gsk_spv_writer_next_id (writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      4, GSK_SPV_OP_LOAD,
-                      (guint32[3]) { type_id,
-                                     result_id,
-                                     declaration_id });
-
-  return result_id;
-}
-
-static const GskSlNodeClass GSK_SL_NODE_REFERENCE = {
-  gsk_sl_node_reference_free,
-  gsk_sl_node_reference_print,
-  gsk_sl_node_reference_get_return_type,
-  gsk_sl_node_reference_is_constant,
-  gsk_sl_node_reference_write_spv
-};
-
-/* FUNCTION_CALL */
-
-typedef struct _GskSlNodeFunctionCall GskSlNodeFunctionCall;
-
-struct _GskSlNodeFunctionCall {
-  GskSlNode parent;
-
-  GskSlFunction *function;
-  GskSlNode **arguments;
-  guint n_arguments;
-};
-
-static void
-gsk_sl_node_function_call_free (GskSlNode *node)
-{
-  GskSlNodeFunctionCall *function_call = (GskSlNodeFunctionCall *) node;
-  guint i;
-
-  for (i = 0; i < function_call->n_arguments; i++)
-    {
-      gsk_sl_node_unref (function_call->arguments[i]);
-    }
-  g_free (function_call->arguments);
-
-  gsk_sl_function_unref (function_call->function);
-
-  g_slice_free (GskSlNodeFunctionCall, function_call);
-}
-
-static void
-gsk_sl_node_function_call_print (GskSlNode *node,
-                                 GString   *string)
-{
-  GskSlNodeFunctionCall *function_call = (GskSlNodeFunctionCall *) node;
-  guint i;
-
-  gsk_sl_function_print_name (function_call->function, string);
-  g_string_append (string, " (");
-  
-  for (i = 0; i < function_call->n_arguments; i++)
-    {
-      if (i > 0)
-        g_string_append (string, ", ");
-      gsk_sl_node_print (function_call->arguments[i], string);
-    }
-
-  g_string_append (string, ")");
-}
-
-static GskSlType *
-gsk_sl_node_function_call_get_return_type (GskSlNode *node)
-{
-  GskSlNodeFunctionCall *function_call = (GskSlNodeFunctionCall *) node;
-
-  return gsk_sl_function_get_return_type (function_call->function);
-}
-
-static gboolean
-gsk_sl_node_function_call_is_constant (GskSlNode *node)
-{
-  return FALSE;
-}
-
-static guint32
-gsk_sl_node_function_call_write_spv (const GskSlNode *node,
-                                     GskSpvWriter    *writer)
-{
-  g_assert_not_reached ();
-
-  return 0;
-}
-
-static const GskSlNodeClass GSK_SL_NODE_FUNCTION_CALL = {
-  gsk_sl_node_function_call_free,
-  gsk_sl_node_function_call_print,
-  gsk_sl_node_function_call_get_return_type,
-  gsk_sl_node_function_call_is_constant,
-  gsk_sl_node_function_call_write_spv
 };
 
 /* RETURN */
@@ -967,7 +223,7 @@ typedef struct _GskSlNodeReturn GskSlNodeReturn;
 struct _GskSlNodeReturn {
   GskSlNode parent;
 
-  GskSlNode *value;
+  GskSlExpression *value;
 };
 
 static void
@@ -976,7 +232,7 @@ gsk_sl_node_return_free (GskSlNode *node)
   GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
 
   if (return_node->value)
-    gsk_sl_node_unref (return_node->value);
+    gsk_sl_expression_unref (return_node->value);
 
   g_slice_free (GskSlNodeReturn, return_node);
 }
@@ -991,30 +247,8 @@ gsk_sl_node_return_print (GskSlNode *node,
   if (return_node->value)
     {
       g_string_append (string, " ");
-      gsk_sl_node_print (return_node->value, string);
+      gsk_sl_expression_print (return_node->value, string);
     }
-}
-
-static GskSlType *
-gsk_sl_node_return_get_return_type (GskSlNode *node)
-{
-  GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
-
-  if (return_node->value)
-    return gsk_sl_node_get_return_type (return_node->value);
-  else
-    return NULL;
-}
-
-static gboolean
-gsk_sl_node_return_is_constant (GskSlNode *node)
-{
-  GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
-
-  if (return_node->value)
-    return gsk_sl_node_is_constant (return_node->value);
-  else
-    return TRUE;
 }
 
 static guint32
@@ -1029,172 +263,51 @@ gsk_sl_node_return_write_spv (const GskSlNode *node,
 static const GskSlNodeClass GSK_SL_NODE_RETURN = {
   gsk_sl_node_return_free,
   gsk_sl_node_return_print,
-  gsk_sl_node_return_get_return_type,
-  gsk_sl_node_return_is_constant,
   gsk_sl_node_return_write_spv
 };
 
-/* CONSTANT */
+/* EXPRESSION */
+ 
+typedef struct _GskSlNodeExpression GskSlNodeExpression;
 
-typedef struct _GskSlNodeConstant GskSlNodeConstant;
-
-struct _GskSlNodeConstant {
+struct _GskSlNodeExpression {
   GskSlNode parent;
 
-  GskSlScalarType type;
-  union {
-    gint32       i32;
-    guint32      u32;
-    float        f;
-    double       d;
-    gboolean     b;
-  };
+  GskSlExpression *expression;
 };
 
 static void
-gsk_sl_node_constant_free (GskSlNode *node)
+gsk_sl_node_expression_free (GskSlNode *node)
 {
-  GskSlNodeConstant *constant = (GskSlNodeConstant *) node;
-
-  g_slice_free (GskSlNodeConstant, constant);
+  GskSlNodeExpression *expression_node = (GskSlNodeExpression *) node;
+ 
+  gsk_sl_expression_unref (expression_node->expression);
+ 
+  g_slice_free (GskSlNodeExpression, expression_node);
 }
-
+ 
 static void
-gsk_sl_node_constant_print (GskSlNode *node,
-                            GString   *string)
+gsk_sl_node_expression_print (GskSlNode *node,
+                              GString   *string)
 {
-  GskSlNodeConstant *constant = (GskSlNodeConstant *) node;
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
+  GskSlNodeExpression *expression_node = (GskSlNodeExpression *) node;
 
-  switch (constant->type)
-  {
-    case GSK_SL_FLOAT:
-      g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, constant->f);
-      g_string_append (string, buf);
-      if (strchr (buf, '.') == NULL)
-        g_string_append (string, ".0");
-      break;
-
-    case GSK_SL_DOUBLE:
-      g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, constant->d);
-      g_string_append (string, buf);
-      if (strchr (buf, '.') == NULL)
-        g_string_append (string, ".0");
-      g_string_append (string, "lf");
-      break;
-
-    case GSK_SL_INT:
-      g_string_append_printf (string, "%i", (gint) constant->i32);
-      break;
-
-    case GSK_SL_UINT:
-      g_string_append_printf (string, "%uu", (guint) constant->u32);
-      break;
-
-    case GSK_SL_BOOL:
-      g_string_append (string, constant->b ? "true" : "false");
-      break;
-
-    case GSK_SL_VOID:
-    default:
-      g_assert_not_reached ();
-      break;
-  }
+  gsk_sl_expression_print (expression_node->expression, string);
 }
-
-static GskSlType *
-gsk_sl_node_constant_get_return_type (GskSlNode *node)
-{
-  GskSlNodeConstant *constant = (GskSlNodeConstant *) node;
-
-  return gsk_sl_type_get_scalar (constant->type);
-}
-
-static gboolean
-gsk_sl_node_constant_is_constant (GskSlNode *node)
-{
-  return TRUE;
-}
-
+ 
 static guint32
-gsk_sl_node_constant_write_spv (const GskSlNode *node,
-                                GskSpvWriter    *writer)
+gsk_sl_node_expression_write_spv (const GskSlNode *node,
+                                  GskSpvWriter    *writer)
 {
-  GskSlNodeConstant *constant = (GskSlNodeConstant *) node;
-  guint32 type_id, result_id;
+  GskSlNodeExpression *expression_node = (GskSlNodeExpression *) node;
 
-  switch (constant->type)
-  {
-    case GSK_SL_FLOAT:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_FLOAT));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          4, GSK_SPV_OP_CONSTANT,
-                          (guint32[3]) { type_id,
-                                         result_id,
-                                         *(guint32 *) &constant->f });
-      break;
-
-    case GSK_SL_DOUBLE:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_DOUBLE));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          5, GSK_SPV_OP_CONSTANT,
-                          (guint32[4]) { type_id,
-                                         result_id,
-                                         *(guint32 *) &constant->d,
-                                         *(((guint32 *) &constant->d) + 1) });
-      break;
-
-    case GSK_SL_INT:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_INT));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          4, GSK_SPV_OP_CONSTANT,
-                          (guint32[3]) { type_id,
-                                         result_id,
-                                         constant->i32 });
-      break;
-
-    case GSK_SL_UINT:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_UINT));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          4, GSK_SPV_OP_CONSTANT,
-                          (guint32[3]) { type_id,
-                                         result_id,
-                                         constant->u32 });
-      break;
-
-    case GSK_SL_BOOL:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_BOOL));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          3, constant->b ? GSK_SPV_OP_CONSTANT_TRUE : GSK_SPV_OP_CONSTANT_FALSE,
-                          (guint32[2]) { type_id,
-                                         result_id });
-      break;
-
-    case GSK_SL_VOID:
-    default:
-      g_assert_not_reached ();
-      break;
-  }
-
-  return result_id;
+  return gsk_sl_expression_write_spv (expression_node->expression, writer);
 }
-
-static const GskSlNodeClass GSK_SL_NODE_CONSTANT = {
-  gsk_sl_node_constant_free,
-  gsk_sl_node_constant_print,
-  gsk_sl_node_constant_get_return_type,
-  gsk_sl_node_constant_is_constant,
-  gsk_sl_node_constant_write_spv
+ 
+static const GskSlNodeClass GSK_SL_NODE_EXPRESSION = {
+  gsk_sl_node_expression_free,
+  gsk_sl_node_expression_print,
+  gsk_sl_node_expression_write_spv
 };
 
 /* API */
@@ -1246,847 +359,6 @@ gsk_sl_node_parse_function_prototype (GskSlScope        *scope,
 }
 
 static GskSlNode *
-gsk_sl_node_parse_assignment_expression (GskSlScope        *scope,
-                                         GskSlPreprocessor *stream);
-
-static GskSlNode *
-gsk_sl_node_parse_constructor_call (GskSlScope        *scope,
-                                    GskSlPreprocessor *stream,
-                                    GskSlType         *type)
-{
-  GskSlNodeFunctionCall *call;
-  const GskSlToken *token;
-  GskSlType **types;
-  GError *error = NULL;
-  gboolean fail = FALSE;
-  guint i;
-
-  call = gsk_sl_node_new (GskSlNodeFunctionCall, &GSK_SL_NODE_FUNCTION_CALL);
-  call->function = gsk_sl_function_new_constructor (type);
-  g_assert (call->function);
-
-  token = gsk_sl_preprocessor_get (stream);
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
-    {
-      gsk_sl_preprocessor_error (stream, "Expected opening \"(\" when calling constructor");
-      gsk_sl_node_unref ((GskSlNode *) call);
-      return NULL;
-    }
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) call);
-
-  token = gsk_sl_preprocessor_get (stream);
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
-    {
-      GPtrArray *arguments;
-  
-      arguments = g_ptr_array_new ();
-      while (TRUE)
-        {
-          GskSlNode *node = gsk_sl_node_parse_assignment_expression (scope, stream);
-
-          if (node != NULL)
-            g_ptr_array_add (arguments, node);
-          else
-            fail = TRUE;
-          
-          token = gsk_sl_preprocessor_get (stream);
-          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
-            break;
-          gsk_sl_preprocessor_consume (stream, (GskSlNode *) call);
-        }
-
-      call->n_arguments = arguments->len;
-      call->arguments = (GskSlNode **) g_ptr_array_free (arguments, FALSE);
-    }
-
-  types = g_newa (GskSlType *, call->n_arguments);
-  for (i = 0; i < call->n_arguments; i++)
-    types[i] = gsk_sl_node_get_return_type (call->arguments[i]);
-  if (!gsk_sl_function_matches (call->function, types, call->n_arguments, &error))
-    {
-      gsk_sl_preprocessor_error (stream, "%s", error->message);
-      g_clear_error (&error);
-      fail = TRUE;
-    }
-
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
-    {
-      gsk_sl_preprocessor_error (stream, "Expected closing \")\" after arguments.");
-      gsk_sl_node_unref ((GskSlNode *) call);
-      return NULL;
-    }
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) call);
-
-  if (fail)
-    {
-      gsk_sl_node_unref ((GskSlNode *) call);
-      return NULL;
-    }
-
-  return (GskSlNode *) call;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_primary_expression (GskSlScope        *scope,
-                                      GskSlPreprocessor *stream)
-{
-  GskSlNodeConstant *constant;
-  const GskSlToken *token;
-
-  token = gsk_sl_preprocessor_get (stream);
-  switch ((guint) token->type)
-  {
-    case GSK_SL_TOKEN_IDENTIFIER:
-      {
-        GskSlNodeReference *reference;
-        GskSlVariable *variable;
-
-        variable = gsk_sl_scope_lookup_variable (scope, token->str);
-        if (variable == NULL)
-          {
-            gsk_sl_preprocessor_error (stream, "No variable named \"%s\".", token->str);
-            gsk_sl_preprocessor_consume (stream, NULL);
-            return NULL;
-          }
-
-        reference = gsk_sl_node_new (GskSlNodeReference, &GSK_SL_NODE_REFERENCE);
-        reference->variable = gsk_sl_variable_ref (variable);
-        gsk_sl_preprocessor_consume (stream, (GskSlNode *) reference);
-        return (GskSlNode *) reference;
-      }
-
-    case GSK_SL_TOKEN_INTCONSTANT:
-      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
-      constant->type = GSK_SL_INT;
-      constant->i32 = token->i32;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
-      return (GskSlNode *) constant;
-
-    case GSK_SL_TOKEN_UINTCONSTANT:
-      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
-      constant->type = GSK_SL_UINT;
-      constant->u32 = token->u32;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
-      return (GskSlNode *) constant;
-
-    case GSK_SL_TOKEN_FLOATCONSTANT:
-      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
-      constant->type = GSK_SL_FLOAT;
-      constant->f = token->f;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
-      return (GskSlNode *) constant;
-
-    case GSK_SL_TOKEN_BOOLCONSTANT:
-      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
-      constant->type = GSK_SL_BOOL;
-      constant->b = token->b;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
-      return (GskSlNode *) constant;
-
-    case GSK_SL_TOKEN_DOUBLECONSTANT:
-      constant = gsk_sl_node_new (GskSlNodeConstant, &GSK_SL_NODE_CONSTANT);
-      constant->type = GSK_SL_DOUBLE;
-      constant->d = token->d;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) constant);
-      return (GskSlNode *) constant;
-
-    case GSK_SL_TOKEN_VOID:
-    case GSK_SL_TOKEN_FLOAT:
-    case GSK_SL_TOKEN_DOUBLE:
-    case GSK_SL_TOKEN_INT:
-    case GSK_SL_TOKEN_UINT:
-    case GSK_SL_TOKEN_BOOL:
-    case GSK_SL_TOKEN_BVEC2:
-    case GSK_SL_TOKEN_BVEC3:
-    case GSK_SL_TOKEN_BVEC4:
-    case GSK_SL_TOKEN_IVEC2:
-    case GSK_SL_TOKEN_IVEC3:
-    case GSK_SL_TOKEN_IVEC4:
-    case GSK_SL_TOKEN_UVEC2:
-    case GSK_SL_TOKEN_UVEC3:
-    case GSK_SL_TOKEN_UVEC4:
-    case GSK_SL_TOKEN_VEC2:
-    case GSK_SL_TOKEN_VEC3:
-    case GSK_SL_TOKEN_VEC4:
-    case GSK_SL_TOKEN_DVEC2:
-    case GSK_SL_TOKEN_DVEC3:
-    case GSK_SL_TOKEN_DVEC4:
-    case GSK_SL_TOKEN_MAT2:
-    case GSK_SL_TOKEN_MAT3:
-    case GSK_SL_TOKEN_MAT4:
-    case GSK_SL_TOKEN_DMAT2:
-    case GSK_SL_TOKEN_DMAT3:
-    case GSK_SL_TOKEN_DMAT4:
-    case GSK_SL_TOKEN_MAT2X2:
-    case GSK_SL_TOKEN_MAT2X3:
-    case GSK_SL_TOKEN_MAT2X4:
-    case GSK_SL_TOKEN_MAT3X2:
-    case GSK_SL_TOKEN_MAT3X3:
-    case GSK_SL_TOKEN_MAT3X4:
-    case GSK_SL_TOKEN_MAT4X2:
-    case GSK_SL_TOKEN_MAT4X3:
-    case GSK_SL_TOKEN_MAT4X4:
-    case GSK_SL_TOKEN_DMAT2X2:
-    case GSK_SL_TOKEN_DMAT2X3:
-    case GSK_SL_TOKEN_DMAT2X4:
-    case GSK_SL_TOKEN_DMAT3X2:
-    case GSK_SL_TOKEN_DMAT3X3:
-    case GSK_SL_TOKEN_DMAT3X4:
-    case GSK_SL_TOKEN_DMAT4X2:
-    case GSK_SL_TOKEN_DMAT4X3:
-    case GSK_SL_TOKEN_DMAT4X4:
-      {
-        GskSlType *type;
-
-        type = gsk_sl_type_new_parse (stream);
-        if (type == NULL)
-          return NULL;
-
-        return gsk_sl_node_parse_constructor_call (scope, stream, type);
-      }
-
-    default:
-      gsk_sl_preprocessor_error (stream, "Expected an expression.");
-      gsk_sl_preprocessor_consume (stream, NULL);
-      return NULL;
-  }
-}
-
-static GskSlNode *
-gsk_sl_node_parse_postfix_expression (GskSlScope        *scope,
-                                      GskSlPreprocessor *stream)
-{
-  return gsk_sl_node_parse_primary_expression (scope, stream);
-}
-
-static GskSlNode *
-gsk_sl_node_parse_unary_expression (GskSlScope        *scope,
-                                    GskSlPreprocessor *stream)
-{
-  return gsk_sl_node_parse_postfix_expression (scope, stream);
-}
-
-static GskSlNode *
-gsk_sl_node_parse_multiplicative_expression (GskSlScope        *scope,
-                                             GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-  GskSlOperation op;
-
-  node = gsk_sl_node_parse_unary_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (gsk_sl_token_is (token, GSK_SL_TOKEN_STAR))
-        op = GSK_SL_OPERATION_MUL;
-      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_SLASH))
-        op = GSK_SL_OPERATION_DIV;
-      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_PERCENT))
-        op = GSK_SL_OPERATION_MOD;
-      else
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = op;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_unary_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if ((op == GSK_SL_OPERATION_MOD &&
-                !gsk_sl_node_bitwise_type_check (stream,
-                                                 gsk_sl_node_get_return_type (operation->left),
-                                                 gsk_sl_node_get_return_type (operation->right))) ||
-               (op != GSK_SL_OPERATION_MOD &&
-                !gsk_sl_node_arithmetic_type_check (stream,
-                                                    FALSE,
-                                                    gsk_sl_node_get_return_type (operation->left),
-                                                    gsk_sl_node_get_return_type (operation->right))))
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_additive_expression (GskSlScope        *scope,
-                                       GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-  GskSlOperation op;
-
-  node = gsk_sl_node_parse_multiplicative_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (gsk_sl_token_is (token, GSK_SL_TOKEN_PLUS))
-        op = GSK_SL_OPERATION_ADD;
-      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_DASH))
-        op = GSK_SL_OPERATION_SUB;
-      else
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = op;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_additive_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_node_arithmetic_type_check (stream,
-                                                   FALSE,
-                                                   gsk_sl_node_get_return_type (operation->left),
-                                                   gsk_sl_node_get_return_type (operation->right)))
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_shift_expression (GskSlScope        *scope,
-                                    GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-  GskSlOperation op;
-
-  node = gsk_sl_node_parse_additive_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_OP))
-        op = GSK_SL_OPERATION_LSHIFT;
-      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_OP))
-        op = GSK_SL_OPERATION_RSHIFT;
-      else
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = op;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_additive_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_node_shift_type_check (stream,
-                                              gsk_sl_node_get_return_type (operation->left),
-                                              gsk_sl_node_get_return_type (operation->right)))
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_relational_expression (GskSlScope        *scope,
-                                         GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-  GskSlOperation op;
-
-  node = gsk_sl_node_parse_shift_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_ANGLE))
-        op = GSK_SL_OPERATION_LESS;
-      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_ANGLE))
-        op = GSK_SL_OPERATION_GREATER;
-      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_LE_OP))
-        op = GSK_SL_OPERATION_LESS_EQUAL;
-      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_GE_OP))
-        op = GSK_SL_OPERATION_GREATER_EQUAL;
-      else
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = op;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_shift_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_node_relational_type_check (stream,
-                                                   gsk_sl_node_get_return_type (operation->left),
-                                                   gsk_sl_node_get_return_type (operation->right)))
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_equality_expression (GskSlScope        *scope,
-                                       GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-  GskSlOperation op;
-
-  node = gsk_sl_node_parse_relational_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQ_OP))
-        op = GSK_SL_OPERATION_EQUAL;
-      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_NE_OP))
-        op = GSK_SL_OPERATION_NOT_EQUAL;
-      else
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = op;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_relational_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_and_expression (GskSlScope        *scope,
-                                  GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-
-  node = gsk_sl_node_parse_equality_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_AMPERSAND))
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = GSK_SL_OPERATION_AND;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_equality_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_node_bitwise_type_check (stream,
-                                                gsk_sl_node_get_return_type (operation->left),
-                                                gsk_sl_node_get_return_type (operation->right)))
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_xor_expression (GskSlScope        *scope,
-                                  GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-
-  node = gsk_sl_node_parse_and_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_CARET))
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = GSK_SL_OPERATION_XOR;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_and_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_node_bitwise_type_check (stream,
-                                                gsk_sl_node_get_return_type (operation->left),
-                                                gsk_sl_node_get_return_type (operation->right)))
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_or_expression (GskSlScope        *scope,
-                                 GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-
-  node = gsk_sl_node_parse_xor_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_VERTICAL_BAR))
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = GSK_SL_OPERATION_OR;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_xor_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_node_bitwise_type_check (stream,
-                                                gsk_sl_node_get_return_type (operation->left),
-                                                gsk_sl_node_get_return_type (operation->right)))
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_logical_and_expression (GskSlScope        *scope,
-                                          GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-
-  node = gsk_sl_node_parse_or_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_AND_OP))
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = GSK_SL_OPERATION_LOGICAL_AND;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_or_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
-                                         gsk_sl_node_get_return_type (operation->right)))
-        {
-          gsk_sl_preprocessor_error (stream, "Right operand of && expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (operation->right)));
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
-                                         gsk_sl_node_get_return_type (node)))
-        {
-          gsk_sl_preprocessor_error (stream, "Left operand of && expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (node)));
-          node = operation->right;
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_logical_xor_expression (GskSlScope        *scope,
-                                          GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-
-  node = gsk_sl_node_parse_logical_and_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_XOR_OP))
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = GSK_SL_OPERATION_LOGICAL_XOR;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_logical_and_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
-                                         gsk_sl_node_get_return_type (operation->right)))
-        {
-          gsk_sl_preprocessor_error (stream, "Right operand of ^^ expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (operation->right)));
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
-                                         gsk_sl_node_get_return_type (node)))
-        {
-          gsk_sl_preprocessor_error (stream, "Left operand of ^^ expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (node)));
-          node = operation->right;
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_logical_or_expression (GskSlScope        *scope,
-                                         GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *node;
-  GskSlNodeOperation *operation;
-
-  node = gsk_sl_node_parse_logical_xor_expression (scope, stream);
-  if (node == NULL)
-    return NULL;
-
-  while (TRUE)
-    {
-      token = gsk_sl_preprocessor_get (stream);
-      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_OR_OP))
-        return node;
-
-      operation = gsk_sl_node_new (GskSlNodeOperation, &GSK_SL_NODE_OPERATION);
-      operation->left = node;
-      operation->op = GSK_SL_OPERATION_LOGICAL_OR;
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) operation);
-      operation->right = gsk_sl_node_parse_logical_xor_expression (scope, stream);
-      if (operation->right == NULL)
-        {
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
-                                         gsk_sl_node_get_return_type (operation->right)))
-        {
-          gsk_sl_preprocessor_error (stream, "Right operand of || expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (operation->right)));
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
-                                         gsk_sl_node_get_return_type (node)))
-        {
-          gsk_sl_preprocessor_error (stream, "Left operand of || expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_node_get_return_type (node)));
-          node = operation->right;
-          gsk_sl_node_ref (node);
-          gsk_sl_node_unref ((GskSlNode *) operation);
-        }
-      else
-        {
-          node = (GskSlNode *) operation;
-        }
-    }
-
-  return node;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_conditional_expression (GskSlScope        *scope,
-                                          GskSlPreprocessor *stream)
-{
-  /* XXX: support conditionals */
-  return gsk_sl_node_parse_logical_or_expression (scope, stream);
-}
-
-static GskSlNode *
-gsk_sl_node_parse_assignment_expression (GskSlScope        *scope,
-                                         GskSlPreprocessor *stream)
-{
-  const GskSlToken *token;
-  GskSlNode *lvalue;
-  GskSlNodeAssignment *assign;
-
-  lvalue = gsk_sl_node_parse_conditional_expression (scope, stream);
-  if (lvalue == NULL)
-    return NULL;
-
-  token = gsk_sl_preprocessor_get (stream);
-  switch ((guint) token->type)
-  {
-      case GSK_SL_TOKEN_EQUAL:
-      case GSK_SL_TOKEN_MUL_ASSIGN:
-      case GSK_SL_TOKEN_DIV_ASSIGN:
-      case GSK_SL_TOKEN_MOD_ASSIGN:
-      case GSK_SL_TOKEN_ADD_ASSIGN:
-      case GSK_SL_TOKEN_SUB_ASSIGN:
-      case GSK_SL_TOKEN_LEFT_ASSIGN:
-      case GSK_SL_TOKEN_RIGHT_ASSIGN:
-      case GSK_SL_TOKEN_AND_ASSIGN:
-      case GSK_SL_TOKEN_XOR_ASSIGN:
-      case GSK_SL_TOKEN_OR_ASSIGN:
-        break;
-
-      default:
-        return lvalue;
-  }
-
-  if (gsk_sl_node_is_constant (lvalue))
-    {
-      gsk_sl_preprocessor_error (stream, "Cannot assign to a return lvalue.");
-
-      /* Continue parsing like normal here to get more errors */
-      gsk_sl_preprocessor_consume (stream, lvalue);
-      gsk_sl_node_unref (lvalue);
-
-      return gsk_sl_node_parse_assignment_expression (scope, stream);
-    }
-
-  assign = gsk_sl_node_new (GskSlNodeAssignment, &GSK_SL_NODE_ASSIGNMENT);
-  assign->lvalue = lvalue;
-  assign->op = token->type;
-
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) assign);
-
-  assign->rvalue = gsk_sl_node_parse_assignment_expression (scope, stream);
-  if (assign->rvalue == NULL)
-    {
-      gsk_sl_node_unref ((GskSlNode *) assign);
-      return lvalue;
-    }
-
-  return (GskSlNode *) assign;
-}
-
-static GskSlNode *
-gsk_sl_node_parse_expression (GskSlScope        *scope,
-                              GskSlPreprocessor *stream)
-{
-  /* XXX: Allow comma here */
-  return gsk_sl_node_parse_assignment_expression (scope, stream);
-}
-
-static GskSlNode *
 gsk_sl_node_parse_declaration (GskSlScope        *scope,
                                GskSlPreprocessor *stream,
                                GskSlPointerType  *type)
@@ -2110,7 +382,7 @@ gsk_sl_node_parse_declaration (GskSlScope        *scope,
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
     {
       gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
-      declaration->initial = gsk_sl_node_parse_assignment_expression (scope, stream);
+      declaration->initial = gsk_sl_expression_parse_assignment (scope, stream);
     }
 
   gsk_sl_scope_add_variable (scope, declaration->variable);
@@ -2124,7 +396,6 @@ gsk_sl_node_parse_function_definition (GskSlScope        *scope,
 {
   GskSlNodeFunction *function;
   const GskSlToken *token;
-  GskSlNode *node;
   gboolean result = TRUE;
 
   function = gsk_sl_node_parse_function_prototype (scope, stream);
@@ -2223,6 +494,7 @@ gsk_sl_node_parse_function_definition (GskSlScope        *scope,
           GskSlType *type;
           GskSlPointerTypeFlags flags;
           gboolean success;
+          GskSlNode *node = NULL;
 
           success = gsk_sl_type_qualifier_parse (stream,
                                                  GSK_SL_POINTER_TYPE_PARAMETER_QUALIFIER 
@@ -2237,7 +509,21 @@ gsk_sl_node_parse_function_definition (GskSlScope        *scope,
 
           if (token->type == GSK_SL_TOKEN_LEFT_BRACE)
             {
-              node = gsk_sl_node_parse_constructor_call (function->scope, stream, type);
+              GskSlExpression *expression = gsk_sl_expression_parse_constructor_call (function->scope, stream, type);
+
+              if (expression)
+                {
+                  GskSlNodeExpression *node;
+                  
+                  node = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
+                  node->expression = expression;
+
+                  function->statements = g_slist_append (function->statements, node);
+                }
+              else
+                {
+                  node = NULL;
+                }
             }
           else
             {
@@ -2249,7 +535,7 @@ gsk_sl_node_parse_function_definition (GskSlScope        *scope,
             }
 
           gsk_sl_type_unref (type);
-
+          
           if (!success)
             {
               gsk_sl_node_unref (node);
@@ -2270,7 +556,7 @@ gsk_sl_node_parse_function_definition (GskSlScope        *scope,
           token = gsk_sl_preprocessor_get (stream);
           if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
             {
-              return_node->value = gsk_sl_node_parse_expression (function->scope, stream);
+              return_node->value = gsk_sl_expression_parse (function->scope, stream);
               if (return_node->value == NULL)
                 {
                   gsk_sl_node_unref ((GskSlNode *) return_node);
@@ -2282,10 +568,10 @@ gsk_sl_node_parse_function_definition (GskSlScope        *scope,
                   gsk_sl_node_unref ((GskSlNode *) return_node);
                   break;
                 }
-              else if (!gsk_sl_type_can_convert (function->return_type, gsk_sl_node_get_return_type (return_node->value)))
+              else if (!gsk_sl_type_can_convert (function->return_type, gsk_sl_expression_get_return_type (return_node->value)))
                 {
                   gsk_sl_preprocessor_error (stream, "Cannot convert return type %s to function type %s.",
-                                                     gsk_sl_type_get_name (gsk_sl_node_get_return_type (return_node->value)),
+                                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (return_node->value)),
                                                      gsk_sl_type_get_name (function->return_type));
                   gsk_sl_node_unref ((GskSlNode *) return_node);
                   break;
@@ -2305,11 +591,23 @@ gsk_sl_node_parse_function_definition (GskSlScope        *scope,
         break;
 
       default:
-        node = gsk_sl_node_parse_expression (function->scope, stream);
-        if (node)
-          function->statements = g_slist_append (function->statements, node);
-        else
-          result = FALSE;
+        {
+          GskSlExpression * expression = gsk_sl_expression_parse (function->scope, stream);
+
+          if (expression)
+            {
+              GskSlNodeExpression *node;
+              
+              node = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
+              node->expression = expression;
+
+              function->statements = g_slist_append (function->statements, node);
+            }
+          else
+            {
+              result = FALSE;
+            }
+        }
         break;
       }
     }
@@ -2356,18 +654,6 @@ gsk_sl_node_print (GskSlNode *node,
                    GString   *string)
 {
   node->class->print (node, string);
-}
-
-GskSlType *
-gsk_sl_node_get_return_type (GskSlNode *node)
-{
-  return node->class->get_return_type (node);
-}
-
-gboolean
-gsk_sl_node_is_constant (GskSlNode *node)
-{
-  return node->class->is_constant (node);
 }
 
 guint32

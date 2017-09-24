@@ -37,8 +37,6 @@ struct _GskSlNodeClass {
 
   void                  (* print)                               (GskSlNode           *node,
                                                                  GString             *string);
-  GskSlType *           (* get_return_type)                     (GskSlNode           *node);
-  gboolean              (* is_constant)                         (GskSlNode           *node);
   guint32               (* write_spv)                           (const GskSlNode     *node,
                                                                  GskSpvWriter        *writer);
 };
@@ -51,8 +49,6 @@ void                    gsk_sl_node_unref                       (GskSlNode      
 
 void                    gsk_sl_node_print                       (GskSlNode           *node,
                                                                  GString             *string);
-GskSlType *             gsk_sl_node_get_return_type             (GskSlNode           *node);
-gboolean                gsk_sl_node_is_constant                 (GskSlNode           *node);
 
 guint32                 gsk_sl_node_write_spv                   (const GskSlNode     *node,
                                                                  GskSpvWriter        *writer);

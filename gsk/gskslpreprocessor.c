@@ -365,7 +365,7 @@ gsk_sl_preprocessor_get_location (GskSlPreprocessor *preproc)
 
 void
 gsk_sl_preprocessor_consume (GskSlPreprocessor *preproc,
-                             GskSlNode         *consumer)
+                             gpointer           consumer)
 {
   gsk_sl_preprocessor_ensure (preproc);
 

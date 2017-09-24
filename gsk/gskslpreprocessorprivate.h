@@ -35,7 +35,7 @@ void                    gsk_sl_preprocessor_unref               (GskSlPreprocess
 const GskSlToken *      gsk_sl_preprocessor_get                 (GskSlPreprocessor   *preproc);
 const GskCodeLocation * gsk_sl_preprocessor_get_location        (GskSlPreprocessor   *preproc);
 void                    gsk_sl_preprocessor_consume             (GskSlPreprocessor   *preproc,
-                                                                 GskSlNode           *consumer);
+                                                                 gpointer             consumer);
 
 void                    gsk_sl_preprocessor_error               (GskSlPreprocessor   *preproc,
                                                                  const char          *format,

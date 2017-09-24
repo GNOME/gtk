@@ -121,7 +121,7 @@ gsk_sl_program_write_spv (GskSlProgram *program,
 #if 0
   for (l = program->functions; l; l = l->next)
     {
-      guint32 id = gsk_sl_node_write_spv (l->data, writer);
+      guint32 id = gsk_sl_function_write_spv (l->data, writer);
 
       if (g_str_equal (((GskSlNodeFunction *) l->data)->name, "main"))
         gsk_spv_writer_set_entry_point (writer, id);

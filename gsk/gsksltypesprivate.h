@@ -21,6 +21,7 @@
 
 #include <gsk/gsktypes.h>
 
+typedef struct _GskSlExpression         GskSlExpression;
 typedef struct _GskSlFunction           GskSlFunction;
 typedef struct _GskSlNode               GskSlNode;
 typedef struct _GskSlPreprocessor       GskSlPreprocessor;
