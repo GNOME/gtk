@@ -265,11 +265,14 @@ struct _GskSlToken {
 };
 
 void                    gsk_sl_token_clear                      (GskSlToken            *token);
+void                    gsk_sl_token_copy                       (GskSlToken            *dest,
+                                                                 const GskSlToken      *src);
 
+gboolean                gsk_sl_string_is_valid_identifier       (const char            *ident);
 void                    gsk_sl_token_init_from_identifier       (GskSlToken            *token,
                                                                  const char            *ident);
 
-gboolean                gsk_sl_token_is_finite                  (const GskSlToken      *token);
+gboolean                gsk_sl_token_is_skipped                 (const GskSlToken      *token);
 #define gsk_sl_token_is(token, _type) ((token)->type == (_type))
 gboolean                gsk_sl_token_is_ident                   (const GskSlToken      *token,
                                                                  const char            *ident);

@@ -314,6 +314,256 @@ gsk_sl_token_clear (GskSlToken *token)
   token->type = GSK_SL_TOKEN_EOF;
 }
 
+void
+gsk_sl_token_copy (GskSlToken       *dest,
+                   const GskSlToken *src)
+{
+  dest->type = src->type;
+
+  switch (src->type)
+    {
+    case GSK_SL_TOKEN_IDENTIFIER:
+      dest->str = g_strdup (src->str);
+      break;
+
+    case GSK_SL_TOKEN_BOOLCONSTANT:
+      dest->b = src->b;
+      break;
+
+    case GSK_SL_TOKEN_FLOATCONSTANT:
+      dest->f = src->f;
+      break;
+
+    case GSK_SL_TOKEN_DOUBLECONSTANT:
+      dest->d = src->d;
+      break;
+
+    case GSK_SL_TOKEN_INTCONSTANT:
+      dest->i32 = src->i32;
+      break;
+
+    case GSK_SL_TOKEN_UINTCONSTANT:
+      dest->u32 = src->u32;
+      break;
+
+    case GSK_SL_TOKEN_EOF:
+    case GSK_SL_TOKEN_ERROR:
+    case GSK_SL_TOKEN_NEWLINE:
+    case GSK_SL_TOKEN_WHITESPACE:
+    case GSK_SL_TOKEN_COMMENT:
+    case GSK_SL_TOKEN_SINGLE_LINE_COMMENT:
+    case GSK_SL_TOKEN_CONST:
+    case GSK_SL_TOKEN_BREAK:
+    case GSK_SL_TOKEN_CONTINUE:
+    case GSK_SL_TOKEN_DO:
+    case GSK_SL_TOKEN_ELSE:
+    case GSK_SL_TOKEN_FOR:
+    case GSK_SL_TOKEN_IF:
+    case GSK_SL_TOKEN_DISCARD:
+    case GSK_SL_TOKEN_RETURN:
+    case GSK_SL_TOKEN_SWITCH:
+    case GSK_SL_TOKEN_CASE:
+    case GSK_SL_TOKEN_DEFAULT:
+    case GSK_SL_TOKEN_SUBROUTINE:
+    case GSK_SL_TOKEN_BVEC2:
+    case GSK_SL_TOKEN_BVEC3:
+    case GSK_SL_TOKEN_BVEC4:
+    case GSK_SL_TOKEN_IVEC2:
+    case GSK_SL_TOKEN_IVEC3:
+    case GSK_SL_TOKEN_IVEC4:
+    case GSK_SL_TOKEN_UVEC2:
+    case GSK_SL_TOKEN_UVEC3:
+    case GSK_SL_TOKEN_UVEC4:
+    case GSK_SL_TOKEN_VEC2:
+    case GSK_SL_TOKEN_VEC3:
+    case GSK_SL_TOKEN_VEC4:
+    case GSK_SL_TOKEN_MAT2:
+    case GSK_SL_TOKEN_MAT3:
+    case GSK_SL_TOKEN_MAT4:
+    case GSK_SL_TOKEN_CENTROID:
+    case GSK_SL_TOKEN_IN:
+    case GSK_SL_TOKEN_OUT:
+    case GSK_SL_TOKEN_INOUT:
+    case GSK_SL_TOKEN_UNIFORM:
+    case GSK_SL_TOKEN_PATCH:
+    case GSK_SL_TOKEN_SAMPLE:
+    case GSK_SL_TOKEN_BUFFER:
+    case GSK_SL_TOKEN_SHARED:
+    case GSK_SL_TOKEN_COHERENT:
+    case GSK_SL_TOKEN_VOLATILE:
+    case GSK_SL_TOKEN_RESTRICT:
+    case GSK_SL_TOKEN_READONLY:
+    case GSK_SL_TOKEN_WRITEONLY:
+    case GSK_SL_TOKEN_DVEC2:
+    case GSK_SL_TOKEN_DVEC3:
+    case GSK_SL_TOKEN_DVEC4:
+    case GSK_SL_TOKEN_DMAT2:
+    case GSK_SL_TOKEN_DMAT3:
+    case GSK_SL_TOKEN_DMAT4:
+    case GSK_SL_TOKEN_NOPERSPECTIVE:
+    case GSK_SL_TOKEN_FLAT:
+    case GSK_SL_TOKEN_SMOOTH:
+    case GSK_SL_TOKEN_LAYOUT:
+    case GSK_SL_TOKEN_MAT2X2:
+    case GSK_SL_TOKEN_MAT2X3:
+    case GSK_SL_TOKEN_MAT2X4:
+    case GSK_SL_TOKEN_MAT3X2:
+    case GSK_SL_TOKEN_MAT3X3:
+    case GSK_SL_TOKEN_MAT3X4:
+    case GSK_SL_TOKEN_MAT4X2:
+    case GSK_SL_TOKEN_MAT4X3:
+    case GSK_SL_TOKEN_MAT4X4:
+    case GSK_SL_TOKEN_DMAT2X2:
+    case GSK_SL_TOKEN_DMAT2X3:
+    case GSK_SL_TOKEN_DMAT2X4:
+    case GSK_SL_TOKEN_DMAT3X2:
+    case GSK_SL_TOKEN_DMAT3X3:
+    case GSK_SL_TOKEN_DMAT3X4:
+    case GSK_SL_TOKEN_DMAT4X2:
+    case GSK_SL_TOKEN_DMAT4X3:
+    case GSK_SL_TOKEN_DMAT4X4:
+    case GSK_SL_TOKEN_ATOMIC_UINT:
+    case GSK_SL_TOKEN_SAMPLER1D:
+    case GSK_SL_TOKEN_SAMPLER2D:
+    case GSK_SL_TOKEN_SAMPLER3D:
+    case GSK_SL_TOKEN_SAMPLERCUBE:
+    case GSK_SL_TOKEN_SAMPLER1DSHADOW:
+    case GSK_SL_TOKEN_SAMPLER2DSHADOW:
+    case GSK_SL_TOKEN_SAMPLERCUBESHADOW:
+    case GSK_SL_TOKEN_SAMPLER1DARRAY:
+    case GSK_SL_TOKEN_SAMPLER2DARRAY:
+    case GSK_SL_TOKEN_SAMPLER1DARRAYSHADOW:
+    case GSK_SL_TOKEN_SAMPLER2DARRAYSHADOW:
+    case GSK_SL_TOKEN_ISAMPLER1D:
+    case GSK_SL_TOKEN_ISAMPLER2D:
+    case GSK_SL_TOKEN_ISAMPLER3D:
+    case GSK_SL_TOKEN_ISAMPLERCUBE:
+    case GSK_SL_TOKEN_ISAMPLER1DARRAY:
+    case GSK_SL_TOKEN_ISAMPLER2DARRAY:
+    case GSK_SL_TOKEN_USAMPLER1D:
+    case GSK_SL_TOKEN_USAMPLER2D:
+    case GSK_SL_TOKEN_USAMPLER3D:
+    case GSK_SL_TOKEN_USAMPLERCUBE:
+    case GSK_SL_TOKEN_USAMPLER1DARRAY:
+    case GSK_SL_TOKEN_USAMPLER2DARRAY:
+    case GSK_SL_TOKEN_SAMPLER2DRECT:
+    case GSK_SL_TOKEN_SAMPLER2DRECTSHADOW:
+    case GSK_SL_TOKEN_ISAMPLER2DRECT:
+    case GSK_SL_TOKEN_USAMPLER2DRECT:
+    case GSK_SL_TOKEN_SAMPLERBUFFER:
+    case GSK_SL_TOKEN_ISAMPLERBUFFER:
+    case GSK_SL_TOKEN_USAMPLERBUFFER:
+    case GSK_SL_TOKEN_SAMPLERCUBEARRAY:
+    case GSK_SL_TOKEN_SAMPLERCUBEARRAYSHADOW:
+    case GSK_SL_TOKEN_ISAMPLERCUBEARRAY:
+    case GSK_SL_TOKEN_USAMPLERCUBEARRAY:
+    case GSK_SL_TOKEN_SAMPLER2DMS:
+    case GSK_SL_TOKEN_ISAMPLER2DMS:
+    case GSK_SL_TOKEN_USAMPLER2DMS:
+    case GSK_SL_TOKEN_SAMPLER2DMSARRAY:
+    case GSK_SL_TOKEN_ISAMPLER2DMSARRAY:
+    case GSK_SL_TOKEN_USAMPLER2DMSARRAY:
+    case GSK_SL_TOKEN_IMAGE1D:
+    case GSK_SL_TOKEN_IIMAGE1D:
+    case GSK_SL_TOKEN_UIMAGE1D:
+    case GSK_SL_TOKEN_IMAGE2D:
+    case GSK_SL_TOKEN_IIMAGE2D:
+    case GSK_SL_TOKEN_UIMAGE2D:
+    case GSK_SL_TOKEN_IMAGE3D:
+    case GSK_SL_TOKEN_IIMAGE3D:
+    case GSK_SL_TOKEN_UIMAGE3D:
+    case GSK_SL_TOKEN_IMAGE2DRECT:
+    case GSK_SL_TOKEN_IIMAGE2DRECT:
+    case GSK_SL_TOKEN_UIMAGE2DRECT:
+    case GSK_SL_TOKEN_IMAGECUBE:
+    case GSK_SL_TOKEN_IIMAGECUBE:
+    case GSK_SL_TOKEN_UIMAGECUBE:
+    case GSK_SL_TOKEN_IMAGEBUFFER:
+    case GSK_SL_TOKEN_IIMAGEBUFFER:
+    case GSK_SL_TOKEN_UIMAGEBUFFER:
+    case GSK_SL_TOKEN_IMAGE1DARRAY:
+    case GSK_SL_TOKEN_IIMAGE1DARRAY:
+    case GSK_SL_TOKEN_UIMAGE1DARRAY:
+    case GSK_SL_TOKEN_IMAGE2DARRAY:
+    case GSK_SL_TOKEN_IIMAGE2DARRAY:
+    case GSK_SL_TOKEN_UIMAGE2DARRAY:
+    case GSK_SL_TOKEN_IMAGECUBEARRAY:
+    case GSK_SL_TOKEN_IIMAGECUBEARRAY:
+    case GSK_SL_TOKEN_UIMAGECUBEARRAY:
+    case GSK_SL_TOKEN_IMAGE2DMS:
+    case GSK_SL_TOKEN_IIMAGE2DMS:
+    case GSK_SL_TOKEN_UIMAGE2DMS:
+    case GSK_SL_TOKEN_IMAGE2DMSARRAY:
+    case GSK_SL_TOKEN_IIMAGE2DMSARRAY:
+    case GSK_SL_TOKEN_UIMAGE2DMSARRAY:
+    case GSK_SL_TOKEN_STRUCT:
+    case GSK_SL_TOKEN_VOID:
+    case GSK_SL_TOKEN_WHILE:
+    case GSK_SL_TOKEN_FLOAT:
+    case GSK_SL_TOKEN_DOUBLE:
+    case GSK_SL_TOKEN_INT:
+    case GSK_SL_TOKEN_UINT:
+    case GSK_SL_TOKEN_BOOL:
+    case GSK_SL_TOKEN_LEFT_OP:
+    case GSK_SL_TOKEN_RIGHT_OP:
+    case GSK_SL_TOKEN_INC_OP:
+    case GSK_SL_TOKEN_DEC_OP:
+    case GSK_SL_TOKEN_LE_OP:
+    case GSK_SL_TOKEN_GE_OP:
+    case GSK_SL_TOKEN_EQ_OP:
+    case GSK_SL_TOKEN_NE_OP:
+    case GSK_SL_TOKEN_AND_OP:
+    case GSK_SL_TOKEN_OR_OP:
+    case GSK_SL_TOKEN_XOR_OP:
+    case GSK_SL_TOKEN_MUL_ASSIGN:
+    case GSK_SL_TOKEN_DIV_ASSIGN:
+    case GSK_SL_TOKEN_ADD_ASSIGN:
+    case GSK_SL_TOKEN_MOD_ASSIGN:
+    case GSK_SL_TOKEN_LEFT_ASSIGN:
+    case GSK_SL_TOKEN_RIGHT_ASSIGN:
+    case GSK_SL_TOKEN_AND_ASSIGN:
+    case GSK_SL_TOKEN_XOR_ASSIGN:
+    case GSK_SL_TOKEN_OR_ASSIGN:
+    case GSK_SL_TOKEN_SUB_ASSIGN:
+    case GSK_SL_TOKEN_LEFT_PAREN:
+    case GSK_SL_TOKEN_RIGHT_PAREN:
+    case GSK_SL_TOKEN_LEFT_BRACKET:
+    case GSK_SL_TOKEN_RIGHT_BRACKET:
+    case GSK_SL_TOKEN_LEFT_BRACE:
+    case GSK_SL_TOKEN_RIGHT_BRACE:
+    case GSK_SL_TOKEN_DOT:
+    case GSK_SL_TOKEN_COMMA:
+    case GSK_SL_TOKEN_COLON:
+    case GSK_SL_TOKEN_EQUAL:
+    case GSK_SL_TOKEN_SEMICOLON:
+    case GSK_SL_TOKEN_BANG:
+    case GSK_SL_TOKEN_DASH:
+    case GSK_SL_TOKEN_TILDE:
+    case GSK_SL_TOKEN_PLUS:
+    case GSK_SL_TOKEN_STAR:
+    case GSK_SL_TOKEN_SLASH:
+    case GSK_SL_TOKEN_PERCENT:
+    case GSK_SL_TOKEN_LEFT_ANGLE:
+    case GSK_SL_TOKEN_RIGHT_ANGLE:
+    case GSK_SL_TOKEN_VERTICAL_BAR:
+    case GSK_SL_TOKEN_CARET:
+    case GSK_SL_TOKEN_AMPERSAND:
+    case GSK_SL_TOKEN_QUESTION:
+    case GSK_SL_TOKEN_HASH:
+    case GSK_SL_TOKEN_INVARIANT:
+    case GSK_SL_TOKEN_PRECISE:
+    case GSK_SL_TOKEN_HIGH_PRECISION:
+    case GSK_SL_TOKEN_MEDIUM_PRECISION:
+    case GSK_SL_TOKEN_LOW_PRECISION:
+    case GSK_SL_TOKEN_PRECISION:
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+
 static const char *keywords[] = {
   [GSK_SL_TOKEN_CONST] = "const",
   [GSK_SL_TOKEN_BOOL] = "bool",
@@ -1484,6 +1734,23 @@ gsk_sl_token_reader_read_identifier (GskSlTokenReader  *reader,
   token->str = g_string_free (string, FALSE);
 }
 
+gboolean
+gsk_sl_string_is_valid_identifier (const char *ident)
+{
+  guint i;
+
+  if (!is_identifier_start (ident[0]))
+    return FALSE;
+
+  for (i = 1; ident[i]; i++)
+    {
+      if (!is_identifier (ident[i]))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 void
 gsk_sl_token_init_from_identifier (GskSlToken *token,
                                    const char *ident)
@@ -1516,6 +1783,16 @@ gsk_sl_token_init_from_identifier (GskSlToken *token,
 
   gsk_sl_token_init (token, GSK_SL_TOKEN_IDENTIFIER);
   token->str = g_strdup (ident);
+}
+
+gboolean
+gsk_sl_token_is_skipped (const GskSlToken *token)
+{
+  return gsk_sl_token_is (token, GSK_SL_TOKEN_ERROR)
+      || gsk_sl_token_is (token, GSK_SL_TOKEN_NEWLINE)
+      || gsk_sl_token_is (token, GSK_SL_TOKEN_WHITESPACE)
+      || gsk_sl_token_is (token, GSK_SL_TOKEN_COMMENT)
+      || gsk_sl_token_is (token, GSK_SL_TOKEN_SINGLE_LINE_COMMENT);
 }
 
 void

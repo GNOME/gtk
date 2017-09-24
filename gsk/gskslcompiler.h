@@ -35,6 +35,15 @@ GDK_AVAILABLE_IN_3_92
 GskSlCompiler *         gsk_sl_compiler_new                     (void);
 
 GDK_AVAILABLE_IN_3_92
+gboolean                gsk_sl_compiler_add_define              (GskSlCompiler       *compiler,
+                                                                 const char          *name,
+                                                                 const char          *definition,
+                                                                 GError             **error);
+GDK_AVAILABLE_IN_3_92
+void                    gsk_sl_compiler_remove_define           (GskSlCompiler       *compiler,
+                                                                 const char          *name);
+
+GDK_AVAILABLE_IN_3_92
 GskSlProgram *          gsk_sl_compiler_compile                 (GskSlCompiler       *compiler,
                                                                  GBytes              *source);
 

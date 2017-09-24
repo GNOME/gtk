@@ -132,6 +132,41 @@ usage (GOptionContext *ctx)
   exit (EXIT_FAILURE);
 }
 
+static gboolean
+define (const gchar *option_name,
+        const gchar *value,
+        gpointer data,
+        GError **error)
+{
+  GskSlCompiler *compiler = data;
+  char **tokens;
+  gboolean result;
+
+  tokens = g_strsplit (value, "=", 2);
+
+  result = gsk_sl_compiler_add_define (compiler,
+                                       tokens[0],
+                                       tokens[1],
+                                       error);
+
+  g_strfreev (tokens);
+
+  return result;
+}
+
+static gboolean
+undefine (const gchar *option_name,
+          const gchar *value,
+          gpointer data,
+          GError **error)
+{
+  GskSlCompiler *compiler = data;
+
+  gsk_sl_compiler_remove_define (compiler, value);
+
+  return TRUE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -139,13 +174,16 @@ main (int argc, char *argv[])
   char **filenames = NULL;
   char *output_file = NULL;
   gboolean print = FALSE;
-  GskSlCompiler *compiler;
   const GOptionEntry entries[] = {
+    { "define", 'D', 0, G_OPTION_ARG_CALLBACK, define, "Add a preprocssor definition", "NAME[=VALUE]" },
+    { "undef", 'U', 0, G_OPTION_ARG_CALLBACK, undefine, "Cancel previous preprocessor definition", "NAME" },
     { "print", 'p', 0, G_OPTION_ARG_NONE, &print, "Print instead of compiling", NULL },
     { "output", 'o', 0, G_OPTION_ARG_FILENAME, &output_file, "Output filename", "FILE" },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, "List of input files", "FILE [FILE...]" },
     { NULL, }
   };
+  GskSlCompiler *compiler;
+  GOptionGroup *group;
   GError *error = NULL;
   GOutputStream *output;
   gboolean success = TRUE;
@@ -157,7 +195,9 @@ main (int argc, char *argv[])
 
   compiler = gsk_sl_compiler_new ();
   ctx = g_option_context_new (NULL);
-  g_option_context_add_main_entries (ctx, entries, NULL);
+  group = g_option_group_new (NULL, NULL, NULL, g_object_ref (compiler), g_object_unref);
+  g_option_group_add_entries (group, entries);
+  g_option_context_set_main_group (ctx, group);
 
   if (!g_option_context_parse (ctx, &argc, &argv, &error))
     {
