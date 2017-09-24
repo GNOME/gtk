@@ -189,6 +189,8 @@ node_type_name (GskRenderNodeType type)
       return "Text";
     case GSK_BLUR_NODE:
       return "Blur";
+    case GSK_PIXEL_SHADER_NODE:
+      return "Pixel Shader";
     }
 }
 
