@@ -77,6 +77,115 @@ gsk_sl_decoration_list_add_simple (GskSlPreprocessor *preproc,
   return gsk_sl_decoration_list_set (preproc, list, decoration, 1);
 }
 
+static gboolean
+gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
+                                         GskSlDecorations  *list,
+                                         GskSlDecoration    decoration)
+{
+  const GskSlToken *token;
+  gboolean success = TRUE;
+
+  gsk_sl_preprocessor_consume (preproc, NULL);
+  
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
+    {
+      gsk_sl_preprocessor_error (preproc, "Expected \"=\" sign to assign a value.");
+      return FALSE;
+    }
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  /* XXX: This should be a constant expression */
+  token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_INTCONSTANT))
+    {
+      success = gsk_sl_decoration_list_set (preproc, list, decoration, token->i32);
+      gsk_sl_preprocessor_consume (preproc, NULL);
+    }
+  else if (gsk_sl_token_is (token, GSK_SL_TOKEN_UINTCONSTANT))
+    {
+      success = gsk_sl_decoration_list_set (preproc, list, decoration, token->u32);
+      gsk_sl_preprocessor_consume (preproc, NULL);
+    }
+  else
+    {
+      gsk_sl_preprocessor_error (preproc, "Assignment is not an integer.");
+      return FALSE;
+    }
+
+  return success;
+}
+
+static gboolean
+gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
+                                     GskSlDecorations  *list)
+{
+  const GskSlToken *token;
+  gboolean success = TRUE;
+
+  memset (list, 0, sizeof (GskSlDecorations));
+
+  while (TRUE)
+    {
+      token = gsk_sl_preprocessor_get (preproc);
+
+      if (gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+        {
+          gsk_sl_preprocessor_error (preproc, "Expected layout identifier.");
+          success = FALSE;
+          break;
+        }
+      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+        {
+          if (g_str_equal (token->str, "location"))
+            {
+              success &= gsk_sl_decoration_list_parse_assignment (preproc,
+                                                                  list, 
+                                                                  GSK_SL_DECORATION_LAYOUT_LOCATION);
+            }
+          else if (g_str_equal (token->str, "component"))
+            {
+              success &= gsk_sl_decoration_list_parse_assignment (preproc,
+                                                                  list, 
+                                                                  GSK_SL_DECORATION_LAYOUT_COMPONENT);
+            }
+          else if (g_str_equal (token->str, "binding"))
+            {
+              success &= gsk_sl_decoration_list_parse_assignment (preproc,
+                                                                  list, 
+                                                                  GSK_SL_DECORATION_LAYOUT_BINDING);
+            }
+          else if (g_str_equal (token->str, "set"))
+            {
+              success &= gsk_sl_decoration_list_parse_assignment (preproc,
+                                                                  list, 
+                                                                  GSK_SL_DECORATION_LAYOUT_SET);
+            }
+          else
+            {
+              gsk_sl_preprocessor_error (preproc, "Unknown layout identifier.");
+              gsk_sl_preprocessor_consume (preproc, NULL);
+              success = FALSE;
+            }
+        }
+      else
+        {
+          gsk_sl_preprocessor_error (preproc, "Expected layout identifier.");
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          success = FALSE;
+          continue;
+        }
+
+      token = gsk_sl_preprocessor_get (preproc);
+      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
+        break;
+
+      gsk_sl_preprocessor_consume (preproc, NULL);
+    }
+
+  return success;
+}
+
 gboolean
 gsk_sl_decoration_list_parse (GskSlPreprocessor *preproc,
                               GskSlDecorations  *list)
@@ -203,6 +312,28 @@ gsk_sl_decoration_list_parse (GskSlPreprocessor *preproc,
               success &= gsk_sl_decoration_list_set (preproc, list,
                                                      GSK_SL_DECORATION_ACCESS,
                                                      GSK_SL_DECORATION_ACCESS_WRITE);
+            }
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          break;
+
+        case GSK_SL_TOKEN_LAYOUT:
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          token = gsk_sl_preprocessor_get (preproc);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+            {
+              gsk_sl_preprocessor_error (preproc, "Expected opening \"(\" after layout specifier");
+              success = FALSE;
+              break;
+            }
+          gsk_sl_preprocessor_consume (preproc, NULL);
+
+          success &= gsk_sl_decoration_list_parse_layout (preproc, list);
+
+          token = gsk_sl_preprocessor_get (preproc);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+            {
+              gsk_sl_preprocessor_error (preproc, "Expected opening \"(\" after layout specifier");
+              success = FALSE;
             }
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
