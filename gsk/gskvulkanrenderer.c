@@ -25,6 +25,10 @@ struct _GskVulkanTextureData {
 
 #ifdef G_ENABLE_DEBUG
 typedef struct {
+  GQuark frames;
+} ProfileCounters;
+
+typedef struct {
   GQuark cpu_time;
   GQuark gpu_time;
 } ProfileTimers;
@@ -48,6 +52,7 @@ struct _GskVulkanRenderer
   GskVulkanGlyphCache *glyph_cache;
 
 #ifdef G_ENABLE_DEBUG
+  ProfileCounters profile_counters;
   ProfileTimers profile_timers;
 #endif
 };
@@ -253,6 +258,8 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
   gsk_vulkan_render_draw (render, self->sampler);
 
 #ifdef G_ENABLE_DEBUG
+  gsk_profiler_counter_inc (profiler, self->profile_counters.frames);
+
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
   gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
 
@@ -296,6 +303,7 @@ gsk_vulkan_renderer_init (GskVulkanRenderer *self)
   gsk_ensure_resources ();
 
 #ifdef G_ENABLE_DEBUG
+  self->profile_counters.frames = gsk_profiler_add_counter (profiler, "frames", "Frames", FALSE);
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
 #endif
 }
