@@ -23,6 +23,7 @@
 #include "gskslnodeprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
 
 struct _GskSpvWriter
@@ -35,6 +36,7 @@ struct _GskSpvWriter
   guint32 entry_point;
   GHashTable *types;
   GHashTable *pointer_types;
+  GHashTable *values;
   GHashTable *variables;
 };
 
@@ -56,6 +58,8 @@ gsk_spv_writer_new (void)
                                          (GDestroyNotify) gsk_sl_type_unref, NULL);
   writer->pointer_types = g_hash_table_new_full (gsk_sl_pointer_type_hash, gsk_sl_pointer_type_equal,
                                                  (GDestroyNotify) gsk_sl_pointer_type_unref, NULL);
+  writer->values = g_hash_table_new_full (gsk_sl_value_hash, gsk_sl_value_equal,
+                                          (GDestroyNotify) gsk_sl_value_free, NULL);
   writer->variables = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                              (GDestroyNotify) gsk_sl_variable_unref, NULL);
   /* the ID 1 is reserved for the GLSL instruction set (for now) */
@@ -93,6 +97,7 @@ gsk_spv_writer_unref (GskSpvWriter *writer)
 
   g_hash_table_destroy (writer->pointer_types);
   g_hash_table_destroy (writer->types);
+  g_hash_table_destroy (writer->values);
   g_hash_table_destroy (writer->variables);
 
   g_slice_free (GskSpvWriter, writer);
@@ -193,6 +198,21 @@ gsk_spv_writer_get_id_for_pointer_type (GskSpvWriter       *writer,
 
   result = gsk_sl_pointer_type_write_spv (type, writer);
   g_hash_table_insert (writer->pointer_types, gsk_sl_pointer_type_ref (type), GUINT_TO_POINTER (result));
+  return result;
+}
+
+guint32
+gsk_spv_writer_get_id_for_value (GskSpvWriter *writer,
+                                 GskSlValue   *value)
+{
+  guint32 result;
+
+  result = GPOINTER_TO_UINT (g_hash_table_lookup (writer->values, value));
+  if (result != 0)
+    return result;
+
+  result = gsk_sl_value_write_spv (value, writer);
+  g_hash_table_insert (writer->values, gsk_sl_value_copy (value), GUINT_TO_POINTER (result));
   return result;
 }
 

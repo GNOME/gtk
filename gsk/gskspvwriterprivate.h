@@ -182,6 +182,8 @@ guint32                 gsk_spv_writer_get_id_for_type          (GskSpvWriter   
                                                                  GskSlType              *type);
 guint32                 gsk_spv_writer_get_id_for_pointer_type  (GskSpvWriter           *writer,
                                                                  GskSlPointerType       *type);
+guint32                 gsk_spv_writer_get_id_for_value         (GskSpvWriter           *writer,
+                                                                 GskSlValue             *value);
 guint32                 gsk_spv_writer_get_id_for_variable      (GskSpvWriter           *writer,
                                                                  GskSlVariable          *variable);
 

@@ -392,6 +392,12 @@ gsk_sl_pointer_type_get_storage_class (const GskSlPointerType *type)
   if (type->flags & GSK_SL_POINTER_TYPE_LOCAL)
     return GSK_SPV_STORAGE_CLASS_FUNCTION;
 
+  if (type->flags & GSK_SL_POINTER_TYPE_OUT)
+    return GSK_SPV_STORAGE_CLASS_OUTPUT;
+
+  if (type->flags & GSK_SL_POINTER_TYPE_IN)
+    return GSK_SPV_STORAGE_CLASS_INPUT;
+
   return GSK_SPV_STORAGE_CLASS_PRIVATE;
 }
 

@@ -53,6 +53,7 @@ const char *            gsk_sl_type_get_name                    (const GskSlType
 GskSlScalarType         gsk_sl_type_get_scalar_type             (const GskSlType     *type);
 GskSlType *             gsk_sl_type_get_index_type              (const GskSlType     *type);
 guint                   gsk_sl_type_get_length                  (const GskSlType     *type);
+gsize                   gsk_sl_type_get_size                    (const GskSlType     *type);
 gboolean                gsk_sl_scalar_type_can_convert          (GskSlScalarType      target,
                                                                  GskSlScalarType      source);
 gboolean                gsk_sl_type_can_convert                 (const GskSlType     *target,
@@ -62,8 +63,15 @@ gboolean                gsk_sl_type_equal                       (gconstpointer  
                                                                  gconstpointer        b);
 guint                   gsk_sl_type_hash                        (gconstpointer        type);
 
-guint32                 gsk_sl_type_write_spv                   (const GskSlType     *type,
+guint32                 gsk_sl_type_write_spv                   (GskSlType           *type,
                                                                  GskSpvWriter        *writer);
+
+void                    gsk_sl_type_print_value                 (const GskSlType     *type,
+                                                                 GString             *string,
+                                                                 gconstpointer        value);
+guint32                 gsk_sl_type_write_value_spv             (GskSlType           *type,
+                                                                 GskSpvWriter        *writer,
+                                                                 gconstpointer        value);
 
 G_END_DECLS
 

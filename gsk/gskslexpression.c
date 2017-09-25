@@ -27,6 +27,7 @@
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
 
@@ -779,14 +780,7 @@ typedef struct _GskSlExpressionConstant GskSlExpressionConstant;
 struct _GskSlExpressionConstant {
   GskSlExpression parent;
 
-  GskSlScalarType type;
-  union {
-    gint32       i32;
-    guint32      u32;
-    float        f;
-    double       d;
-    gboolean     b;
-  };
+  GskSlValue *value;
 };
 
 static void
@@ -794,7 +788,7 @@ gsk_sl_expression_constant_free (GskSlExpression *expression)
 {
   GskSlExpressionConstant *constant = (GskSlExpressionConstant *) expression;
 
-  g_slice_free (GskSlExpressionConstant, constant);
+  gsk_sl_value_free (constant->value);
 }
 
 static void
@@ -802,42 +796,8 @@ gsk_sl_expression_constant_print (const GskSlExpression *expression,
                                   GString               *string)
 {
   const GskSlExpressionConstant *constant = (const GskSlExpressionConstant *) expression;
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
-  switch (constant->type)
-  {
-    case GSK_SL_FLOAT:
-      g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, constant->f);
-      g_string_append (string, buf);
-      if (strchr (buf, '.') == NULL)
-        g_string_append (string, ".0");
-      break;
-
-    case GSK_SL_DOUBLE:
-      g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, constant->d);
-      g_string_append (string, buf);
-      if (strchr (buf, '.') == NULL)
-        g_string_append (string, ".0");
-      g_string_append (string, "lf");
-      break;
-
-    case GSK_SL_INT:
-      g_string_append_printf (string, "%i", (gint) constant->i32);
-      break;
-
-    case GSK_SL_UINT:
-      g_string_append_printf (string, "%uu", (guint) constant->u32);
-      break;
-
-    case GSK_SL_BOOL:
-      g_string_append (string, constant->b ? "true" : "false");
-      break;
-
-    case GSK_SL_VOID:
-    default:
-      g_assert_not_reached ();
-      break;
-  }
+  gsk_sl_value_print (constant->value, string);
 }
 
 static GskSlType *
@@ -845,7 +805,7 @@ gsk_sl_expression_constant_get_return_type (const GskSlExpression *expression)
 {
   const GskSlExpressionConstant *constant = (const GskSlExpressionConstant *) expression;
 
-  return gsk_sl_type_get_scalar (constant->type);
+  return gsk_sl_value_get_type (constant->value);
 }
 
 static gboolean
@@ -859,72 +819,8 @@ gsk_sl_expression_constant_write_spv (const GskSlExpression *expression,
                                       GskSpvWriter          *writer)
 {
   const GskSlExpressionConstant *constant = (const GskSlExpressionConstant *) expression;
-  guint32 type_id, result_id;
 
-  switch (constant->type)
-  {
-    case GSK_SL_FLOAT:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_FLOAT));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          4, GSK_SPV_OP_CONSTANT,
-                          (guint32[3]) { type_id,
-                                         result_id,
-                                         *(guint32 *) &constant->f });
-      break;
-
-    case GSK_SL_DOUBLE:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_DOUBLE));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          5, GSK_SPV_OP_CONSTANT,
-                          (guint32[4]) { type_id,
-                                         result_id,
-                                         *(guint32 *) &constant->d,
-                                         *(((guint32 *) &constant->d) + 1) });
-      break;
-
-    case GSK_SL_INT:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_INT));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          4, GSK_SPV_OP_CONSTANT,
-                          (guint32[3]) { type_id,
-                                         result_id,
-                                         constant->i32 });
-      break;
-
-    case GSK_SL_UINT:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_UINT));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          4, GSK_SPV_OP_CONSTANT,
-                          (guint32[3]) { type_id,
-                                         result_id,
-                                         constant->u32 });
-      break;
-
-    case GSK_SL_BOOL:
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (GSK_SL_BOOL));
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_DECLARE,
-                          3, constant->b ? GSK_SPV_OP_CONSTANT_TRUE : GSK_SPV_OP_CONSTANT_FALSE,
-                          (guint32[2]) { type_id,
-                                         result_id });
-      break;
-
-    case GSK_SL_VOID:
-    default:
-      g_assert_not_reached ();
-      break;
-  }
-
-  return result_id;
+  return gsk_spv_writer_get_id_for_value (writer, constant->value);
 }
 
 static const GskSlExpressionClass GSK_SL_EXPRESSION_CONSTANT = {
@@ -1043,36 +939,36 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
 
     case GSK_SL_TOKEN_INTCONSTANT:
       constant = gsk_sl_expression_new (GskSlExpressionConstant, &GSK_SL_EXPRESSION_CONSTANT);
-      constant->type = GSK_SL_INT;
-      constant->i32 = token->i32;
+      constant->value = gsk_sl_value_new (gsk_sl_type_get_scalar (GSK_SL_INT));
+      *(gint32 *) gsk_sl_value_get_data (constant->value) = token->i32;
       gsk_sl_preprocessor_consume (stream, (GskSlExpression *) constant);
       return (GskSlExpression *) constant;
 
     case GSK_SL_TOKEN_UINTCONSTANT:
       constant = gsk_sl_expression_new (GskSlExpressionConstant, &GSK_SL_EXPRESSION_CONSTANT);
-      constant->type = GSK_SL_UINT;
-      constant->u32 = token->u32;
+      constant->value = gsk_sl_value_new (gsk_sl_type_get_scalar (GSK_SL_UINT));
+      *(guint32 *) gsk_sl_value_get_data (constant->value) = token->u32;
       gsk_sl_preprocessor_consume (stream, (GskSlExpression *) constant);
       return (GskSlExpression *) constant;
 
     case GSK_SL_TOKEN_FLOATCONSTANT:
       constant = gsk_sl_expression_new (GskSlExpressionConstant, &GSK_SL_EXPRESSION_CONSTANT);
-      constant->type = GSK_SL_FLOAT;
-      constant->f = token->f;
+      constant->value = gsk_sl_value_new (gsk_sl_type_get_scalar (GSK_SL_FLOAT));
+      *(float *) gsk_sl_value_get_data (constant->value) = token->f;
       gsk_sl_preprocessor_consume (stream, (GskSlExpression *) constant);
       return (GskSlExpression *) constant;
 
     case GSK_SL_TOKEN_BOOLCONSTANT:
       constant = gsk_sl_expression_new (GskSlExpressionConstant, &GSK_SL_EXPRESSION_CONSTANT);
-      constant->type = GSK_SL_BOOL;
-      constant->b = token->b;
+      constant->value = gsk_sl_value_new (gsk_sl_type_get_scalar (GSK_SL_BOOL));
+      *(guint32 *) gsk_sl_value_get_data (constant->value) = token->b;
       gsk_sl_preprocessor_consume (stream, (GskSlExpression *) constant);
       return (GskSlExpression *) constant;
 
     case GSK_SL_TOKEN_DOUBLECONSTANT:
       constant = gsk_sl_expression_new (GskSlExpressionConstant, &GSK_SL_EXPRESSION_CONSTANT);
-      constant->type = GSK_SL_DOUBLE;
-      constant->d = token->d;
+      constant->value = gsk_sl_value_new (gsk_sl_type_get_scalar (GSK_SL_DOUBLE));
+      *(double *) gsk_sl_value_get_data (constant->value) = token->f;
       gsk_sl_preprocessor_consume (stream, (GskSlExpression *) constant);
       return (GskSlExpression *) constant;
 
