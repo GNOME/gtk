@@ -281,7 +281,7 @@ gsk_cairo_texture_init (GskCairoTexture *self)
 
 /**
  * gsk_texture_new_for_data:
- * @data: the pixel data
+ * @data: (array): the pixel data
  * @width: the number of pixels in each row
  * @height: the number of rows
  * @stride: the distance from the beginning of one row to the next, in bytes

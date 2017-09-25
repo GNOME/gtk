@@ -306,7 +306,7 @@ static const GskRenderNodeClass GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS = {
  * @bounds: the rectangle to render the linear gradient into
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
- * @color_stops: a pointer to an array of #GskColorStop defining the gradient
+ * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
  * @n_color_stops: the number of elements in @color_stops
  *
  * Creates a #GskRenderNode that will create a linear gradient from the given
@@ -353,7 +353,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
  * @bounds: the rectangle to render the linear gradient into
  * @start: the point at which the linear gradient will begin
  * @end: the point at which the linear gradient will finish
- * @color_stops: a pointer to an array of #GskColorStop defining the gradient
+ * @color_stops: (array length=n_color_stops): a pointer to an array of #GskColorStop defining the gradient
  * @n_color_stops: the number of elements in @color_stops
  *
  * Creates a #GskRenderNode that will create a repeating linear gradient
