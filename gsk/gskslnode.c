@@ -353,13 +353,11 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
     case GSK_SL_TOKEN_DMAT4X4:
       {
         GskSlType *type;
-        GskSlPointerTypeFlags flags;
+        GskSlDecorations decoration;
         gboolean success;
 
-        success = gsk_sl_type_qualifier_parse (preproc,
-                                               GSK_SL_POINTER_TYPE_PARAMETER_QUALIFIER 
-                                               | GSK_SL_POINTER_TYPE_MEMORY_QUALIFIER,
-                                               &flags);
+        success = gsk_sl_decoration_list_parse (preproc,
+                                                &decoration);
 
         type = gsk_sl_type_new_parse (preproc);
         if (type == NULL)
@@ -391,7 +389,7 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
           {
             GskSlPointerType *pointer_type;
         
-            pointer_type = gsk_sl_pointer_type_new (type, flags | GSK_SL_POINTER_TYPE_LOCAL);
+            pointer_type = gsk_sl_pointer_type_new (type, TRUE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
             node = gsk_sl_node_parse_declaration (scope, preproc, pointer_type);
             gsk_sl_pointer_type_unref (pointer_type);
           }

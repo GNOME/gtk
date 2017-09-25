@@ -30,12 +30,14 @@ struct _GskSlPointerType {
 
   GskSlType *type;
 
-  GskSlPointerTypeFlags flags;
+  gboolean local;
+  GskSlDecorationAccess access;
 };
 
 GskSlPointerType *
 gsk_sl_pointer_type_new (GskSlType             *type,
-                         GskSlPointerTypeFlags  flags)
+                         gboolean               local,
+                         GskSlDecorationAccess  access)
 {
   GskSlPointerType *result;
 
@@ -43,227 +45,170 @@ gsk_sl_pointer_type_new (GskSlType             *type,
 
   result->ref_count = 1;
   result->type = gsk_sl_type_ref (type);
-  result->flags = flags;
+  result->local = local;
+  result->access = access;
 
   return result;
 }
 
+static gboolean
+gsk_sl_decoration_list_set (GskSlPreprocessor *preproc,
+                            GskSlDecorations  *list,
+                            GskSlDecoration    decoration,
+                            gint               value)
+{
+  list->values[decoration].set = TRUE;
+  list->values[decoration].value = value;
+
+  return TRUE;
+}
+
+static gboolean
+gsk_sl_decoration_list_add_simple (GskSlPreprocessor *preproc,
+                                   GskSlDecorations  *list,
+                                   GskSlDecoration    decoration)
+{
+  if (list->values[decoration].set)
+    {
+      gsk_sl_preprocessor_error (preproc, "Duplicate qualifier.");
+      return FALSE;
+    }
+
+  return gsk_sl_decoration_list_set (preproc, list, decoration, 1);
+}
+
 gboolean
-gsk_sl_type_qualifier_parse (GskSlPreprocessor     *stream,
-                             GskSlPointerTypeFlags  allowed_flags,
-                             GskSlPointerTypeFlags *parsed_flags)
+gsk_sl_decoration_list_parse (GskSlPreprocessor *preproc,
+                              GskSlDecorations  *list)
 {
   const GskSlToken *token;
-  guint flags = 0;
   gboolean success = TRUE;
+
+  memset (list, 0, sizeof (GskSlDecorations));
 
   while (TRUE)
     {
-      token = gsk_sl_preprocessor_get (stream);
+      token = gsk_sl_preprocessor_get (preproc);
       switch ((guint) token->type)
       {
         case GSK_SL_TOKEN_CONST:
-          if (!(allowed_flags & GSK_SL_POINTER_TYPE_CONST))
-            {
-              gsk_sl_preprocessor_error (stream, "\"const\" qualifier not allowed here.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_CONST)
-            {
-              gsk_sl_preprocessor_error (stream, "\"const\" qualifier specified twice.");
-              success = FALSE;
-            }
-          else
-            {
-              flags |=  GSK_SL_POINTER_TYPE_CONST;
-            }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_CONST);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_IN:
-          if (!(allowed_flags & GSK_SL_POINTER_TYPE_IN))
+          if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
-              gsk_sl_preprocessor_error (stream, "\"in\" qualifier not allowed here.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_IN)
-            {
-              gsk_sl_preprocessor_error (stream, "\"in\" qualifier specified twice.");
+              gsk_sl_preprocessor_error (preproc, "\"in\" qualifier specified twice.");
               success = FALSE;
             }
           else
             {
-              flags |= GSK_SL_POINTER_TYPE_IN;
+              success &= gsk_sl_decoration_list_set (preproc, list,
+                                                     GSK_SL_DECORATION_CALLER_ACCESS,
+                                                     list->values[GSK_SL_DECORATION_CALLER_ACCESS].value | GSK_SL_DECORATION_ACCESS_READ);
             }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_OUT:
-          if (!(allowed_flags & GSK_SL_POINTER_TYPE_OUT))
+          if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
-              gsk_sl_preprocessor_error (stream, "\"out\" qualifier not allowed here.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_OUT)
-            {
-              gsk_sl_preprocessor_error (stream, "\"out\" qualifier specified twice.");
+              gsk_sl_preprocessor_error (preproc, "\"out\" qualifier specified twice.");
               success = FALSE;
             }
           else
             {
-              flags |= GSK_SL_POINTER_TYPE_OUT;
+              success &= gsk_sl_decoration_list_set (preproc, list,
+                                                     GSK_SL_DECORATION_CALLER_ACCESS,
+                                                     list->values[GSK_SL_DECORATION_CALLER_ACCESS].value | GSK_SL_DECORATION_ACCESS_WRITE);
             }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_INOUT:
-          if ((allowed_flags & (GSK_SL_POINTER_TYPE_IN | GSK_SL_POINTER_TYPE_OUT)) != (GSK_SL_POINTER_TYPE_IN | GSK_SL_POINTER_TYPE_OUT))
+          if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
-              gsk_sl_preprocessor_error (stream, "\"inout\" qualifier not allowed here.");
+              gsk_sl_preprocessor_error (preproc, "\"in\" qualifier already used.");
               success = FALSE;
             }
-          else if (flags & GSK_SL_POINTER_TYPE_IN)
+          else if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
-              gsk_sl_preprocessor_error (stream, "\"in\" qualifier already used.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_OUT)
-            {
-              gsk_sl_preprocessor_error (stream, "\"out\" qualifier already used.");
+              gsk_sl_preprocessor_error (preproc, "\"out\" qualifier already used.");
               success = FALSE;
             }
           else
             {
-              flags |= GSK_SL_POINTER_TYPE_IN | GSK_SL_POINTER_TYPE_OUT;
+              success &= gsk_sl_decoration_list_set (preproc, list,
+                                                     GSK_SL_DECORATION_CALLER_ACCESS,
+                                                     GSK_SL_DECORATION_ACCESS_READWRITE);
             }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_INVARIANT:
-          if (!(allowed_flags & GSK_SL_POINTER_TYPE_INVARIANT))
-            {
-              gsk_sl_preprocessor_error (stream, "\"invariant\" qualifier not allowed here.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_INVARIANT)
-            {
-              gsk_sl_preprocessor_error (stream, "\"invariant\" qualifier specified twice.");
-              success = FALSE;
-            }
-          else
-            {
-              flags |= GSK_SL_POINTER_TYPE_INVARIANT;
-            }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_INVARIANT);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_COHERENT:
-          if (!(allowed_flags & GSK_SL_POINTER_TYPE_COHERENT))
-            {
-              gsk_sl_preprocessor_error (stream, "\"coherent\" qualifier not allowed here.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_COHERENT)
-            {
-              gsk_sl_preprocessor_error (stream, "\"coherent\" qualifier specified twice.");
-              success = FALSE;
-            }
-          else
-            {
-              flags |= GSK_SL_POINTER_TYPE_COHERENT;
-            }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_COHERENT);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_VOLATILE:
-          if (!(allowed_flags & GSK_SL_POINTER_TYPE_VOLATILE))
-            {
-              gsk_sl_preprocessor_error (stream, "\"volatile\" qualifier not allowed here.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_VOLATILE)
-            {
-              gsk_sl_preprocessor_error (stream, "\"volatile\" qualifier specified twice.");
-              success = FALSE;
-            }
-          else
-            {
-              flags |= GSK_SL_POINTER_TYPE_VOLATILE;
-            }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_VOLATILE);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_RESTRICT:
-          if (!(allowed_flags & GSK_SL_POINTER_TYPE_RESTRICT))
-            {
-              gsk_sl_preprocessor_error (stream, "\"restrict\" qualifier not allowed here.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_RESTRICT)
-            {
-              gsk_sl_preprocessor_error (stream, "\"restrict\" qualifier specified twice.");
-              success = FALSE;
-            }
-          else
-            {
-              flags |= GSK_SL_POINTER_TYPE_RESTRICT;
-            }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_RESTRICT);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
 
         case GSK_SL_TOKEN_READONLY:
-          if (!(allowed_flags & GSK_SL_POINTER_TYPE_READONLY))
+          if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
-              gsk_sl_preprocessor_error (stream, "\"readonly\" qualifier not allowed here.");
+              gsk_sl_preprocessor_error (preproc, "\"readonly\" qualifier specified twice.");
               success = FALSE;
             }
-          else if (flags & GSK_SL_POINTER_TYPE_READONLY)
+          else if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
-              gsk_sl_preprocessor_error (stream, "\"readonly\" qualifier specified twice.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_WRITEONLY)
-            {
-              gsk_sl_preprocessor_error (stream, "\"writeonly\" qualifier already used.");
+              gsk_sl_preprocessor_error (preproc, "\"writeonly\" qualifier already used.");
               success = FALSE;
             }
           else
             {
-              flags |= GSK_SL_POINTER_TYPE_READONLY;
+              success &= gsk_sl_decoration_list_set (preproc, list,
+                                                     GSK_SL_DECORATION_ACCESS,
+                                                     GSK_SL_DECORATION_ACCESS_READ);
             }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_WRITEONLY:
-          if (!(allowed_flags & GSK_SL_POINTER_TYPE_WRITEONLY))
+          if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
-              gsk_sl_preprocessor_error (stream, "\"writeonly\" qualifier not allowed here.");
+              gsk_sl_preprocessor_error (preproc, "\"readonly\" qualifier already used.");
               success = FALSE;
             }
-          else if (flags & GSK_SL_POINTER_TYPE_READONLY)
+          else if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
-              gsk_sl_preprocessor_error (stream, "\"readonly\" qualifier already used.");
-              success = FALSE;
-            }
-          else if (flags & GSK_SL_POINTER_TYPE_WRITEONLY)
-            {
-              gsk_sl_preprocessor_error (stream, "\"writeonly\" qualifier specified twice.");
+              gsk_sl_preprocessor_error (preproc, "\"writeonly\" qualifier specified twice.");
               success = FALSE;
             }
           else
             {
-              flags |= GSK_SL_POINTER_TYPE_WRITEONLY;
+              success &= gsk_sl_decoration_list_set (preproc, list,
+                                                     GSK_SL_DECORATION_ACCESS,
+                                                     GSK_SL_DECORATION_ACCESS_WRITE);
             }
-          gsk_sl_preprocessor_consume (stream, NULL);
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         default:
-          {
-            *parsed_flags = flags;
-
-            return success;
-          }
+          return success;
       }
     }
 }
@@ -297,31 +242,12 @@ void
 gsk_sl_pointer_type_print (const GskSlPointerType *type,
                            GString                *string)
 {
-  if (type->flags & GSK_SL_POINTER_TYPE_CONST)
-    g_string_append (string, "const ");
-  if (type->flags & GSK_SL_POINTER_TYPE_OUT)
-    {
-      if (type->flags & GSK_SL_POINTER_TYPE_IN)
-        g_string_append (string, "inout ");
-      else
-        g_string_append (string, "out ");
-    }
-  else if (type->flags & GSK_SL_POINTER_TYPE_IN)
-    {
-      g_string_append (string, "out ");
-    }
-  if (type->flags & GSK_SL_POINTER_TYPE_INVARIANT)
-    g_string_append (string, "invariant ");
-  if (type->flags & GSK_SL_POINTER_TYPE_COHERENT)
-    g_string_append (string, "coherent ");
-  if (type->flags & GSK_SL_POINTER_TYPE_VOLATILE)
-    g_string_append (string, "volatile ");
-  if (type->flags & GSK_SL_POINTER_TYPE_RESTRICT)
-    g_string_append (string, "restrict ");
-  if (type->flags & GSK_SL_POINTER_TYPE_READONLY)
-    g_string_append (string, "readonly ");
-  if (type->flags & GSK_SL_POINTER_TYPE_WRITEONLY)
-    g_string_append (string, "writeonly ");
+  if (type->access == GSK_SL_DECORATION_ACCESS_READWRITE)
+    g_string_append (string, "inout ");
+  else if (type->access == GSK_SL_DECORATION_ACCESS_READ)
+    g_string_append (string, "in ");
+  else if (type->access == GSK_SL_DECORATION_ACCESS_WRITE)
+    g_string_append (string, "out ");
 
   g_string_append (string, gsk_sl_type_get_name (type->type));
 }
@@ -332,70 +258,16 @@ gsk_sl_pointer_type_get_type (const GskSlPointerType *type)
   return type->type;
 }
 
-gboolean
-gsk_sl_pointer_type_is_const (const GskSlPointerType *type)
-{
-  return type->flags & GSK_SL_POINTER_TYPE_CONST ? TRUE : FALSE;
-}
-
-gboolean
-gsk_sl_pointer_type_is_in (const GskSlPointerType *type)
-{
-  return type->flags & GSK_SL_POINTER_TYPE_IN ? TRUE : FALSE;
-}
-
-gboolean
-gsk_sl_pointer_type_is_out (const GskSlPointerType *type)
-{
-  return type->flags & GSK_SL_POINTER_TYPE_OUT ? TRUE : FALSE;
-}
-
-gboolean
-gsk_sl_pointer_type_is_invariant (const GskSlPointerType *type)
-{
-  return type->flags & GSK_SL_POINTER_TYPE_INVARIANT ? TRUE : FALSE;
-}
-
-gboolean
-gsk_sl_pointer_type_is_coherent (const GskSlPointerType *type)
-{
-  return type->flags & GSK_SL_POINTER_TYPE_COHERENT ? TRUE : FALSE;
-}
-
-gboolean
-gsk_sl_pointer_type_is_volatile (const GskSlPointerType *type)
-{
-  return type->flags & GSK_SL_POINTER_TYPE_VOLATILE ? TRUE : FALSE;
-}
-
-gboolean
-gsk_sl_pointer_type_is_restrict (const GskSlPointerType *type)
-{
-  return type->flags & GSK_SL_POINTER_TYPE_RESTRICT ? TRUE : FALSE;
-}
-
-gboolean
-gsk_sl_pointer_type_is_readonly (const GskSlPointerType *type)
-{
-  return type->flags & GSK_SL_POINTER_TYPE_READONLY ? TRUE : FALSE;
-}
-
-gboolean
-gsk_sl_pointer_type_is_writeonly (const GskSlPointerType *type)
-{
-  return type->flags & GSK_SL_POINTER_TYPE_WRITEONLY ? TRUE : FALSE;
-}
-
 GskSpvStorageClass
 gsk_sl_pointer_type_get_storage_class (const GskSlPointerType *type)
 {
-  if (type->flags & GSK_SL_POINTER_TYPE_LOCAL)
+  if (type->local)
     return GSK_SPV_STORAGE_CLASS_FUNCTION;
 
-  if (type->flags & GSK_SL_POINTER_TYPE_OUT)
+  if (type->access & GSK_SL_DECORATION_ACCESS_WRITE)
     return GSK_SPV_STORAGE_CLASS_OUTPUT;
 
-  if (type->flags & GSK_SL_POINTER_TYPE_IN)
+  if (type->access & GSK_SL_DECORATION_ACCESS_READ)
     return GSK_SPV_STORAGE_CLASS_INPUT;
 
   return GSK_SPV_STORAGE_CLASS_PRIVATE;

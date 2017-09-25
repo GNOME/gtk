@@ -27,33 +27,39 @@
 G_BEGIN_DECLS
 
 typedef enum {
-  GSK_SL_POINTER_TYPE_LOCAL = (1 << 0),
-  GSK_SL_POINTER_TYPE_CONST = (1 << 1),
-  GSK_SL_POINTER_TYPE_IN = (1 << 2),
-  GSK_SL_POINTER_TYPE_OUT = (1 << 3),
-  GSK_SL_POINTER_TYPE_INVARIANT = (1 << 4),
-  GSK_SL_POINTER_TYPE_COHERENT = (1 << 5),
-  GSK_SL_POINTER_TYPE_VOLATILE = (1 << 6),
-  GSK_SL_POINTER_TYPE_RESTRICT = (1 << 7),
-  GSK_SL_POINTER_TYPE_READONLY = (1 << 8),
-  GSK_SL_POINTER_TYPE_WRITEONLY = (1 << 9)
-} GskSlPointerTypeFlags;
+  GSK_SL_DECORATION_CONST,
+  GSK_SL_DECORATION_CALLER_ACCESS,
+  GSK_SL_DECORATION_INVARIANT,
+  GSK_SL_DECORATION_COHERENT,
+  GSK_SL_DECORATION_VOLATILE,
+  GSK_SL_DECORATION_RESTRICT,
+  GSK_SL_DECORATION_ACCESS,
+  /* add */
+  GSK_SL_N_DECORATIONS
+} GskSlDecoration;
 
-#define GSK_SL_POINTER_TYPE_PARAMETER_QUALIFIER (GSK_SL_POINTER_TYPE_CONST \
-                                               | GSK_SL_POINTER_TYPE_IN \
-                                               | GSK_SL_POINTER_TYPE_OUT)
-#define GSK_SL_POINTER_TYPE_MEMORY_QUALIFIER (GSK_SL_POINTER_TYPE_COHERENT \
-                                            | GSK_SL_POINTER_TYPE_VOLATILE \
-                                            | GSK_SL_POINTER_TYPE_RESTRICT \
-                                            | GSK_SL_POINTER_TYPE_READONLY \
-                                            | GSK_SL_POINTER_TYPE_WRITEONLY)
+typedef enum {
+  GSK_SL_DECORATION_ACCESS_READ = (1 << 0),
+  GSK_SL_DECORATION_ACCESS_WRITE = (2 << 0),
+  GSK_SL_DECORATION_ACCESS_READWRITE = GSK_SL_DECORATION_ACCESS_READ | GSK_SL_DECORATION_ACCESS_WRITE,
+} GskSlDecorationAccess;
 
-gboolean                gsk_sl_type_qualifier_parse                     (GskSlPreprocessor          *stream,
-                                                                         GskSlPointerTypeFlags       allowed_flags,
-                                                                         GskSlPointerTypeFlags      *parsed_flags);
+typedef struct _GskSlDecorations GskSlDecorations;
+
+struct _GskSlDecorations
+{
+  struct {
+    gboolean set;
+    gint value;
+  } values[GSK_SL_N_DECORATIONS];
+};
+
+gboolean                gsk_sl_decoration_list_parse                    (GskSlPreprocessor          *stream,
+                                                                         GskSlDecorations           *list);
 
 GskSlPointerType *      gsk_sl_pointer_type_new                         (GskSlType                  *type,
-                                                                         GskSlPointerTypeFlags       flags);
+                                                                         gboolean                    local,
+                                                                         GskSlDecorationAccess       access);
 
 GskSlPointerType *      gsk_sl_pointer_type_ref                         (GskSlPointerType           *type);
 void                    gsk_sl_pointer_type_unref                       (GskSlPointerType           *type);
@@ -62,15 +68,6 @@ void                    gsk_sl_pointer_type_print                       (const G
                                                                          GString                    *string);
 
 GskSlType *             gsk_sl_pointer_type_get_type                    (const GskSlPointerType     *type);
-gboolean                gsk_sl_pointer_type_is_const                    (const GskSlPointerType     *type);
-gboolean                gsk_sl_pointer_type_is_in                       (const GskSlPointerType     *type);
-gboolean                gsk_sl_pointer_type_is_out                      (const GskSlPointerType     *type);
-gboolean                gsk_sl_pointer_type_is_invariant                (const GskSlPointerType     *type);
-gboolean                gsk_sl_pointer_type_is_coherent                 (const GskSlPointerType     *type);
-gboolean                gsk_sl_pointer_type_is_volatile                 (const GskSlPointerType     *type);
-gboolean                gsk_sl_pointer_type_is_restrict                 (const GskSlPointerType     *type);
-gboolean                gsk_sl_pointer_type_is_readonly                 (const GskSlPointerType     *type);
-gboolean                gsk_sl_pointer_type_is_writeonly                (const GskSlPointerType     *type);
 
 gboolean                gsk_sl_pointer_type_equal                       (gconstpointer               a,
                                                                          gconstpointer               b);

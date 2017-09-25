@@ -96,14 +96,12 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
 {
   GskSlType *type;
   const GskSlToken *token;
-  GskSlPointerTypeFlags flags;
+  GskSlDecorations decoration;
   gboolean success;
   char *name;
 
-  success = gsk_sl_type_qualifier_parse (preproc,
-                                         GSK_SL_POINTER_TYPE_PARAMETER_QUALIFIER 
-                                         | GSK_SL_POINTER_TYPE_MEMORY_QUALIFIER,
-                                         &flags);
+  success = gsk_sl_decoration_list_parse (preproc,
+                                          &decoration);
 
   type = gsk_sl_type_new_parse (preproc);
   if (type == NULL)
@@ -117,7 +115,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
     {
       if (success)
         {
-          GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, flags);
+          GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, FALSE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
           GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL);
           gsk_sl_pointer_type_unref (ptype);
           program->variables = g_slist_append (program->variables, variable);
@@ -155,7 +153,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
     {
       GskSlPointerType *pointer_type;
 
-      pointer_type = gsk_sl_pointer_type_new (type, flags);
+      pointer_type = gsk_sl_pointer_type_new (type, FALSE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
       success &= gsk_sl_program_parse_variable (program, scope, preproc, pointer_type, name);
       gsk_sl_pointer_type_unref (pointer_type);
     }
