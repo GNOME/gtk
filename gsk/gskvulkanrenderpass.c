@@ -104,6 +104,8 @@ struct _GskVulkanRenderPass
   GdkVulkanContext *vulkan;
 
   GArray *render_ops;
+
+  gsize fallback_pixels;
 };
 
 GskVulkanRenderPass *
@@ -121,6 +123,9 @@ gsk_vulkan_render_pass_new (GdkVulkanContext *context)
 void
 gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 {
+  GSK_NOTE (FALLBACK,
+            g_print ("Uploaded %ld fallback pixels\n", self->fallback_pixels));
+
   g_array_unref (self->render_ops);
   g_object_unref (self->vulkan);
 
@@ -566,7 +571,8 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
 
   GSK_NOTE (FALLBACK, g_print ("Node as texture not implemented. Using %gx%g fallback surface\n",
                                ceil (bounds->size.width),
-                               ceil (bounds->size.height)));
+                               ceil (bounds->size.height));
+                      self->fallback_pixels += ceil (bounds->size.width) * ceil (bounds->size.height));
 
   /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
@@ -611,7 +617,8 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
                      (op->type == GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP ? "fallback-rounded-clip" : "fallback"),
                      node->name ? node->name : node->node_class->type_name, node,
                      ceil (node->bounds.size.width),
-                     ceil (node->bounds.size.height)));
+                     ceil (node->bounds.size.height));
+             self->fallback_pixels += ceil (node->bounds.size.width) * ceil (node->bounds.size.height));
 
   /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
