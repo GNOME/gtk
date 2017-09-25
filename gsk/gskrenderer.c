@@ -967,6 +967,19 @@ gsk_renderer_begin_draw_frame (GskRenderer          *renderer,
   return priv->drawing_context;
 }
 
+/**
+ * gsk_renderer_end_draw_frame:
+ * @renderer: a #GskRenderer
+ * @context: the drawing context returned by the matching call to
+ *     gsk_renderer_begin_draw_frame()
+ *
+ * Release the drawning context returned by gsk_renderer_begin_draw_frame().
+ *
+ * Calls to gsk_renderer_begin_draw_frame() and gsk_renderer_end_draw_frame()
+ * must be paired.
+ *
+ * Since: 3.90
+ */
 void
 gsk_renderer_end_draw_frame (GskRenderer       *renderer,
                              GdkDrawingContext *context)

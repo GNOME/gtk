@@ -181,6 +181,17 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
   graphene_rect_init_from_rect (bounds, &node->bounds);
 }
 
+/**
+ * gsk_render_node_set_scaling_filters:
+ * @node: a #GskRenderNode
+ * @min_filter: the filter for scaling down
+ * @mag_filter: the filter for scaling up
+ *
+ * Sets filters to be used when a node must be scaled up
+ * or down.
+ *
+ * Since: 3.90
+ */
 void
 gsk_render_node_set_scaling_filters (GskRenderNode    *node,
                                      GskScalingFilter  min_filter,

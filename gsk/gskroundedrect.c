@@ -500,7 +500,7 @@ gsk_rounded_rect_path (const GskRoundedRect *self,
   cairo_close_path (cr);
 }
 
-/*
+/*< private >
  * Converts to the format we use in our shaders:
  * vec4 rect;
  * vec4 corner_widths;

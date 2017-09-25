@@ -333,10 +333,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
   for (i = 1; i < n_color_stops; i++)
-    {
-      g_return_val_if_fail (color_stops[i].offset >= color_stops[i-1].offset, NULL);
-
-    }
+    g_return_val_if_fail (color_stops[i].offset >= color_stops[i-1].offset, NULL);
   g_return_val_if_fail (color_stops[n_color_stops - 1].offset <= 1, NULL);
 
   self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_LINEAR_GRADIENT_NODE_CLASS, sizeof (GskColorStop) * n_color_stops);
@@ -351,6 +348,22 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   return &self->render_node;
 }
 
+/**
+ * gsk_repeating_linear_gradient_node_new:
+ * @bounds: the rectangle to render the linear gradient into
+ * @start: the point at which the linear gradient will begin
+ * @end: the point at which the linear gradient will finish
+ * @color_stops: a pointer to an array of #GskColorStop defining the gradient
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a #GskRenderNode that will create a repeating linear gradient
+ * from the given points and color stops, and render that into the area
+ * given by @bounds.
+ *
+ * Returns: A new #GskRenderNode
+ *
+ * Since: 3.90
+ */
 GskRenderNode *
 gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
                                         const graphene_point_t *start,
@@ -368,10 +381,7 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
   for (i = 1; i < n_color_stops; i++)
-    {
-      g_return_val_if_fail (color_stops[i].offset >= color_stops[i-1].offset, NULL);
-
-    }
+    g_return_val_if_fail (color_stops[i].offset >= color_stops[i-1].offset, NULL);
   g_return_val_if_fail (color_stops[n_color_stops - 1].offset <= 1, NULL);
 
   self = (GskLinearGradientNode *) gsk_render_node_new (&GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS, sizeof (GskColorStop) * n_color_stops);
@@ -2112,6 +2122,17 @@ gsk_container_node_get_n_children (GskRenderNode *node)
   return container->n_children;
 }
 
+/**
+ * gsk_container_node_get_child:
+ * @node: a container #GskRenderNode
+ * @idx: the position of the child to get
+ *
+ * Gets one of the children of @container.
+ *
+ * Returns: the @idx'th child of @container
+ *
+ * Since: 3.90
+ */
 GskRenderNode *
 gsk_container_node_get_child (GskRenderNode *node,
                               guint          idx)
@@ -2221,7 +2242,7 @@ gsk_transform_node_deserialize (GVariant  *variant,
                                        mat[8], mat[9], mat[10], mat[11],
                                        mat[12], mat[13], mat[14], mat[15]
                                    });
-                                    
+
   result = gsk_transform_node_new (child, &transform);
 
   gsk_render_node_unref (child);
@@ -2614,7 +2635,7 @@ gsk_color_matrix_node_deserialize (GVariant  *variant,
                                        mat[12], mat[13], mat[14], mat[15]
                                    });
   graphene_vec4_init (&offset, vec[0], vec[1], vec[2], vec[3]);
-                                    
+
   result = gsk_color_matrix_node_new (child, &matrix, &offset);
 
   gsk_render_node_unref (child);
@@ -2641,7 +2662,7 @@ static const GskRenderNodeClass GSK_COLOR_MATRIX_NODE_CLASS = {
  * Creates a #GskRenderNode that will drawn the @child with reduced
  * @color_matrix.
  *
- * In particular, the node will transform the operation  
+ * In particular, the node will transform the operation
  *   pixel = color_matrix * pixel + color_offset
  * for every pixel.
  *
@@ -2669,6 +2690,14 @@ gsk_color_matrix_node_new (GskRenderNode           *child,
   return &self->render_node;
 }
 
+/**
+ * gsk_color_matrix_node_get_child:
+ * @node: a color matrix @GskRenderNode
+ *
+ * Gets the child node that is getting its colors modified by the given @node.
+ *
+ * Returns: (transfer none): The child that is getting its colors modified
+ **/
 GskRenderNode *
 gsk_color_matrix_node_get_child (GskRenderNode *node)
 {
@@ -3994,6 +4023,20 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
   gsk_text_node_deserialize
 };
 
+/**
+ * gsk_text_node_new:
+ * @font: the #PangoFont containing the glyphs
+ * @glyphs: the #PangoGlyphString to render
+ * @color: the foreground color to render with
+ * @x: the x coordinate at which to put the baseline
+ * @y: the y coordinate at wihch to put the baseline
+ *
+ * Creates a render node that renders the given glyphs,
+ * Note that @color may not be used if the font contains
+ * color glyphs.
+ *
+ * Since: 3.92
+ */
 GskRenderNode *
 gsk_text_node_new (PangoFont        *font,
                    PangoGlyphString *glyphs,
@@ -4322,6 +4365,15 @@ static const GskRenderNodeClass GSK_BLUR_NODE_CLASS = {
   gsk_blur_node_deserialize
 };
 
+/**
+ * gsk_blur_node_new:
+ * @child: the child node to blur
+ * @radius: the blur radius
+ *
+ * Creates a render node that blurs the child.
+ *
+ * Since: 3.92
+ */
 GskRenderNode *
 gsk_blur_node_new (GskRenderNode *child,
                    double         radius)

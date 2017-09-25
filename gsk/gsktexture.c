@@ -22,6 +22,8 @@
  * @Short_description: Pixel data uploaded to a #GskRenderer
  *
  * #GskTexture is the basic element used to refer to pixel data.
+ * It is primarily mean for pixel data that will not change over
+ * multiple frames, and will be used for a long time.
  *
  * You cannot get your pixel data back once you've uploaded it.
  *
@@ -135,7 +137,7 @@ gsk_texture_get_property (GObject    *gobject,
 
 static void
 gsk_texture_dispose (GObject *object)
-{    
+{
   GskTexture *self = GSK_TEXTURE (object);
 
   gsk_texture_clear_render_data (self);
@@ -277,6 +279,18 @@ gsk_cairo_texture_init (GskCairoTexture *self)
 {
 }
 
+/**
+ * gsk_texture_new_for_data:
+ * @data: the pixel data
+ * @width: the number of pixels in each row
+ * @height: the number of rows
+ * @stride: the distance from the beginning of one row to the next, in bytes
+ *
+ * Creates a new texture object holding the given data.
+ * The data is assumed to be in CAIRO_FORMAT_ARGB32 format.
+ *
+ * Returns: a new #GskTexture
+ */
 GskTexture *
 gsk_texture_new_for_data (const guchar *data,
                           int           width,
@@ -304,6 +318,15 @@ gsk_texture_new_for_data (const guchar *data,
   return texture;
 }
 
+/**
+ * gsk_texture_new_for_surface:
+ * @surface: a cairo image surface
+ *
+ * Creates a new texture object representing the surface.
+ * @surface must be an image surface with format CAIRO_FORMAT_ARGB32.
+ *
+ * Returns: a new #GskTexture
+ */
 GskTexture *
 gsk_texture_new_for_surface (cairo_surface_t *surface)
 {
@@ -391,6 +414,14 @@ gsk_pixbuf_texture_init (GskPixbufTexture *self)
 {
 }
 
+/**
+ * gsk_texture_new_for_pixbuf:
+ * @pixbuf: a #GdkPixbuf
+ *
+ * Creates a new texture object representing the GdkPixbuf.
+ *
+ * Returns: a new #GskTexture
+ */
 GskTexture *
 gsk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
 {
