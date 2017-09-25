@@ -22,6 +22,9 @@ GQuark          gsk_profiler_add_timer          (GskProfiler *profiler,
 
 void            gsk_profiler_counter_inc        (GskProfiler *profiler,
                                                  GQuark       counter_id);
+void            gsk_profiler_counter_add        (GskProfiler *profiler,
+                                                 GQuark       counter_id,
+                                                 gint64       increment);
 void            gsk_profiler_timer_begin        (GskProfiler *profiler,
                                                  GQuark       timer_id);
 gint64          gsk_profiler_timer_end          (GskProfiler *profiler,

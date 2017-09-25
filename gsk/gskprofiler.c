@@ -203,6 +203,14 @@ void
 gsk_profiler_counter_inc (GskProfiler *profiler,
                           GQuark       counter_id)
 {
+  gsk_profiler_counter_add (profiler, counter_id, 1);
+}
+
+void
+gsk_profiler_counter_add (GskProfiler *profiler,
+                          GQuark       counter_id,
+                          gint64       increment)
+{
   NamedCounter *counter;
 
   g_return_if_fail (GSK_IS_PROFILER (profiler));
@@ -211,8 +219,7 @@ gsk_profiler_counter_inc (GskProfiler *profiler,
   if (counter == NULL)
     return;
 
-  counter->value += 1;
-
+  counter->value += increment;
 }
 
 void
