@@ -299,7 +299,8 @@ static void
 gsk_vulkan_image_ensure_view (GskVulkanImage *self,
                               VkFormat        format)
 {
-  GSK_VK_CHECK (vkCreateImageView, gdk_vulkan_context_get_device (self->vulkan),
+  if (self->vk_image_view == VK_NULL_HANDLE)
+    GSK_VK_CHECK (vkCreateImageView, gdk_vulkan_context_get_device (self->vulkan),
                                    &(VkImageViewCreateInfo) {
                                        .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                        .image = self->vk_image,
