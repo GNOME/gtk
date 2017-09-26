@@ -148,7 +148,7 @@ gsk_vulkan_uploader_upload (GskVulkanUploader *self)
 
       command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
       vkCmdPipelineBarrier (command_buffer,
-                            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                             VK_PIPELINE_STAGE_HOST_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT,
                             0,
                             0, NULL,
@@ -604,6 +604,29 @@ gsk_vulkan_image_new_for_atlas (GdkVulkanContext *context,
   return self;
 }
 
+GskVulkanImage *
+gsk_vulkan_image_new_for_texture (GdkVulkanContext *context,
+                                  gsize             width,
+                                  gsize             height)
+{
+  GskVulkanImage *self;
+
+  self = gsk_vulkan_image_new (context,
+                               width,
+                               height,
+                               VK_IMAGE_TILING_OPTIMAL,
+                               VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                               VK_IMAGE_USAGE_SAMPLED_BIT |
+                               VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
+                               VK_IMAGE_LAYOUT_UNDEFINED,
+                               0,
+                               VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+  gsk_vulkan_image_ensure_view (self, VK_FORMAT_B8G8R8A8_UNORM);
+
+  return self;
+}
+
 GskTexture *
 gsk_vulkan_image_download (GskVulkanImage    *self,
                            GskVulkanUploader *uploader)
@@ -615,14 +638,14 @@ gsk_vulkan_image_download (GskVulkanImage    *self,
   gsk_vulkan_uploader_add_image_barrier (uploader,
                                          FALSE,
                                          self,
-                                         VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                                         VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                          VK_ACCESS_TRANSFER_READ_BIT);
 
   buffer = gsk_vulkan_buffer_new_download (self->vulkan, self->width * self->height * 4);
 
   vkCmdCopyImageToBuffer (gsk_vulkan_uploader_get_copy_buffer (uploader),
                           self->vk_image,
-                          VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                           gsk_vulkan_buffer_get_buffer (buffer),
                           1,
                           (VkBufferImageCopy[1]) {
