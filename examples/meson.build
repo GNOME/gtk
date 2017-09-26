@@ -1,4 +1,5 @@
 examples = [
+  'action-namespace',
   'builder',
   'drawing',
   'grid-packing',
