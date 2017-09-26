@@ -833,7 +833,7 @@ gtk_menu_item_destroy (GtkWidget *widget)
   GtkMenuItemPrivate *priv = menu_item->priv;
 
   if (priv->submenu)
-    gtk_widget_destroy (priv->submenu);
+    g_object_unref (G_OBJECT (priv->submenu));
 
   GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->destroy (widget);
 }
@@ -1006,7 +1006,7 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
 
       if (submenu)
         {
-          priv->submenu = submenu;
+          priv->submenu = g_object_ref (submenu);
           gtk_menu_attach_to_widget (GTK_MENU (submenu),
                                      widget,
                                      gtk_menu_item_detacher);

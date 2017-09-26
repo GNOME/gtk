@@ -662,7 +662,7 @@ handle_print_response (GtkWidget *dialog,
   if (settings)
     g_object_unref (settings);
     
-  gtk_widget_destroy (GTK_WIDGET (pd));
+  gtk_window_destroy (GTK_WINDOW (pd));
  
 }
 
@@ -929,7 +929,7 @@ handle_page_setup_response (GtkWidget *dialog,
   if (response == GTK_RESPONSE_OK)
     rdata->page_setup = gtk_page_setup_unix_dialog_get_page_setup (psd);
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   if (rdata->done_cb)
     rdata->done_cb (rdata->page_setup, rdata->data);

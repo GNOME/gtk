@@ -1866,7 +1866,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
           if (vc->anchor)
             {
-              gtk_widget_destroy (vc->widget);
+              gtk_widget_unparent (vc->widget);
               /* vc may now be invalid! */
             }
 
@@ -3669,10 +3669,11 @@ gtk_text_view_finalize (GObject *object)
     text_window_free (priv->bottom_window);
 
   if (priv->selection_bubble)
-    gtk_widget_destroy (priv->selection_bubble);
+    g_object_unref (G_OBJECT (priv->selection_bubble));
 
   if (priv->magnifier_popover)
-    gtk_widget_destroy (priv->magnifier_popover);
+    g_object_unref (G_OBJECT (priv->magnifier_popover));
+
   if (priv->text_handle)
     g_object_unref (priv->text_handle);
   g_object_unref (priv->im_context);
@@ -4669,7 +4670,7 @@ gtk_text_view_unrealize (GtkWidget *widget)
 
   if (priv->popup_menu)
     {
-      gtk_widget_destroy (priv->popup_menu);
+      gtk_menu_detach (GTK_MENU (priv->popup_menu));
       priv->popup_menu = NULL;
     }
 
@@ -9264,7 +9265,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       clipboard_contains_text = gtk_selection_data_targets_include_text (data);
 
       if (priv->popup_menu)
-	gtk_widget_destroy (priv->popup_menu);
+        g_object_unref (G_OBJECT (priv->popup_menu));
 
       priv->popup_menu = gtk_menu_new ();
       gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_menu),
@@ -9507,7 +9508,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
     }
 
   if (priv->selection_bubble)
-    gtk_widget_destroy (priv->selection_bubble);
+    g_object_unref (G_OBJECT (priv->selection_bubble));
 
   priv->selection_bubble = gtk_popover_new (GTK_WIDGET (text_view));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),

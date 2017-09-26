@@ -232,13 +232,13 @@ other_application_dialog_response_cb (GtkDialog *dialog,
        * 'Other application…'
        */
       gtk_combo_box_set_active (GTK_COMBO_BOX (self), self->priv->last_active);
-      gtk_widget_destroy (GTK_WIDGET (dialog));
+      gtk_window_destroy (GTK_WINDOW (dialog));
       return;
     }
 
   info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (dialog));
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   /* refresh the combobox to get the new application */
   gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));

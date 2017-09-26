@@ -4171,7 +4171,7 @@ gtk_label_unmap (GtkWidget *widget)
     {
       if (priv->select_info->popup_menu)
         {
-          gtk_widget_destroy (priv->select_info->popup_menu);
+          g_object_unref (G_OBJECT (priv->select_info->popup_menu));
           priv->select_info->popup_menu = NULL;
         }
     }
@@ -6049,7 +6049,7 @@ gtk_label_do_popup (GtkLabel       *label,
     return;
 
   if (priv->select_info->popup_menu)
-    gtk_widget_destroy (priv->select_info->popup_menu);
+    g_object_unref (G_OBJECT (priv->select_info->popup_menu));
 
   priv->select_info->popup_menu = menu = gtk_menu_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (menu),

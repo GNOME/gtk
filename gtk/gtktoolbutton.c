@@ -345,7 +345,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       /* Note: we are not destroying the label_widget or icon_widget
        * here because they were removed from their containers above
        */
-      gtk_widget_destroy (child);
+      gtk_container_remove (GTK_CONTAINER (button->priv->button), child);
     }
 
   style = gtk_tool_item_get_toolbar_style (GTK_TOOL_ITEM (button));

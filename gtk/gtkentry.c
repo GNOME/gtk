@@ -2691,10 +2691,10 @@ gtk_entry_finalize (GObject *object)
     g_source_remove (priv->blink_timeout);
 
   if (priv->selection_bubble)
-    gtk_widget_destroy (priv->selection_bubble);
+    g_object_unref (G_OBJECT (priv->selection_bubble));
 
   if (priv->magnifier_popover)
-    gtk_widget_destroy (priv->magnifier_popover);
+    g_object_unref (G_OBJECT (priv->magnifier_popover));
 
   if (priv->text_handle)
     g_object_unref (priv->text_handle);
@@ -3012,7 +3012,7 @@ gtk_entry_unrealize (GtkWidget *widget)
 
   if (priv->popup_menu)
     {
-      gtk_widget_destroy (priv->popup_menu);
+      g_object_unref (G_OBJECT (priv->popup_menu));
       priv->popup_menu = NULL;
     }
 
@@ -8498,7 +8498,7 @@ popup_targets_received (GtkClipboard     *clipboard,
 
       clipboard_contains_text = gtk_selection_data_targets_include_text (data);
       if (info_entry_priv->popup_menu)
-	gtk_widget_destroy (info_entry_priv->popup_menu);
+        g_object_unref (G_OBJECT (info_entry_priv->popup_menu));
 
       info_entry_priv->popup_menu = menu = gtk_menu_new ();
       gtk_style_context_add_class (gtk_widget_get_style_context (menu),
@@ -8691,7 +8691,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
     }
 
   if (priv->selection_bubble)
-    gtk_widget_destroy (priv->selection_bubble);
+    g_object_unref (G_OBJECT (priv->selection_bubble));
 
   priv->selection_bubble = gtk_popover_new (GTK_WIDGET (entry));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),

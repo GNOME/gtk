@@ -519,7 +519,6 @@ populate_servers (GtkPlacesView *view)
 {
   GtkPlacesViewPrivate *priv;
   GBookmarkFile *server_list;
-  GList *children;
   gchar **uris;
   gsize num_uris;
   gint i;
@@ -542,8 +541,9 @@ populate_servers (GtkPlacesView *view)
     }
 
   /* clear previous items */
-  children = gtk_container_get_children (GTK_CONTAINER (priv->recent_servers_listbox));
-  g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
+  gtk_container_foreach (GTK_CONTAINER (priv->recent_servers_listbox),
+                         (GtkCallback)gtk_container_remove_callback,
+                         priv->recent_servers_listbox);
 
   gtk_list_store_clear (priv->completion_store);
 
@@ -1091,7 +1091,6 @@ static void
 update_places (GtkPlacesView *view)
 {
   GtkPlacesViewPrivate *priv;
-  GList *children;
   GList *mounts;
   GList *volumes;
   GList *drives;
@@ -1102,8 +1101,10 @@ update_places (GtkPlacesView *view)
   priv = gtk_places_view_get_instance_private (view);
 
   /* Clear all previously added items */
-  children = gtk_container_get_children (GTK_CONTAINER (priv->listbox));
-  g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
+  gtk_container_foreach (GTK_CONTAINER (priv->listbox),
+                         (GtkCallback)gtk_container_remove_callback,
+                         priv->listbox);
+
   priv->network_placeholder = NULL;
   /* Inform clients that we started loading */
   gtk_places_view_set_loading (view, TRUE);
@@ -1693,7 +1694,7 @@ popup_menu (GtkPlacesViewRow *row,
   view = gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_PLACES_VIEW);
   priv = gtk_places_view_get_instance_private (GTK_PLACES_VIEW (view));
 
-  g_clear_pointer (&priv->popup_menu, gtk_widget_destroy);
+  g_clear_pointer (&priv->popup_menu, gtk_window_destroy);
 
   build_popup_menu (GTK_PLACES_VIEW (view), row);
 

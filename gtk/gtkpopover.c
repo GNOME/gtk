@@ -2323,7 +2323,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
 
   child = gtk_bin_get_child (GTK_BIN (popover));
   if (child)
-    gtk_widget_destroy (child);
+    gtk_container_remove (GTK_CONTAINER (popover), child);
 
   style_context = gtk_widget_get_style_context (popover->priv->contents_widget);
 

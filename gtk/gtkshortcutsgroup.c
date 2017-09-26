@@ -273,7 +273,7 @@ gtk_shortcuts_group_dispose (GObject *object)
    */
   if (self->title)
     {
-      gtk_widget_destroy (GTK_WIDGET (self->title));
+      gtk_container_remove (GTK_CONTAINER (self), GTK_WIDGET (self->title));
       self->title = NULL;
     }
 

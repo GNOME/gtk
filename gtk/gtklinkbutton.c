@@ -355,7 +355,7 @@ gtk_link_button_do_popup (GtkLinkButton  *link_button,
       GtkWidget *menu_item;
 
       if (priv->popup_menu)
-	gtk_widget_destroy (priv->popup_menu);
+        g_object_unref (G_OBJECT (priv->popup_menu));
 
       priv->popup_menu = gtk_menu_new ();
       gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_menu),

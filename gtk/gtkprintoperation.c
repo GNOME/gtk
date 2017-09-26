@@ -2335,7 +2335,7 @@ print_pages_idle_done (gpointer user_data)
     }
  
   if (data->progress)
-    gtk_widget_destroy (data->progress);
+    gtk_window_destroy (GTK_WINDOW (data->progress));
 
   if (priv->rloop && !data->is_preview) 
     g_main_loop_quit (priv->rloop);
@@ -3044,7 +3044,7 @@ print_pages (GtkPrintOperation       *op,
                                          GTK_WINDOW (error_dialog));
 
           g_signal_connect (error_dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
 
           gtk_widget_show (error_dialog);
 
@@ -3170,7 +3170,7 @@ gtk_print_operation_get_error (GtkPrintOperation  *op,
  * 					     "Error printing file:\n%s",
  * 					     error->message);
  *    g_signal_connect (error_dialog, "response", 
- *                      G_CALLBACK (gtk_widget_destroy), NULL);
+ *                      G_CALLBACK (gtk_window_destroy), NULL);
  *    gtk_widget_show (error_dialog);
  *    g_error_free (error);
  *  }

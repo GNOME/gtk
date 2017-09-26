@@ -1592,7 +1592,7 @@ gtk_container_destroy (GtkWidget *widget)
   if (priv->has_focus_chain)
     gtk_container_unset_focus_chain (container);
 
-  gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
+  gtk_container_foreach (container, (GtkCallback) gtk_container_remove_callback, container);
 
   GTK_WIDGET_CLASS (parent_class)->destroy (widget);
 }
@@ -1652,10 +1652,7 @@ gtk_container_add (GtkContainer *container,
  * may be the last reference held; so removing a widget from its
  * container can destroy that widget. If you want to use @widget
  * again, you need to add a reference to it before removing it from
- * a container, using g_object_ref(). If you don’t want to use @widget
- * again it’s usually more efficient to simply destroy it directly
- * using gtk_widget_destroy() since this will remove it from the
- * container and help break any circular reference count cycles.
+ * a container, using g_object_ref().
  **/
 void
 gtk_container_remove (GtkContainer *container,

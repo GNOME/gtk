@@ -848,7 +848,7 @@ row_deleted_cb (GtkTreeModel     *model,
       else
         {
           /* Get rid of the deleted item */
-          gtk_widget_destroy (item);
+          gtk_container_remove (GTK_CONTAINER (menu), item);
 
           /* Resize everything */
           gtk_cell_area_context_reset (menu->priv->context);
@@ -860,7 +860,7 @@ row_deleted_cb (GtkTreeModel     *model,
        * since the topmost menu belongs to the user and is allowed to have no contents */
       GtkWidget *submenu = find_empty_submenu (menu);
       if (submenu)
-        gtk_widget_destroy (submenu);
+        g_object_unref (submenu);
     }
 }
 
@@ -934,8 +934,8 @@ row_changed_cb (GtkTreeModel         *model,
           if (item)
             {
               /* Destroy the header item and then the following separator */
-              gtk_widget_destroy (item);
-              gtk_widget_destroy (GTK_MENU_SHELL (menu)->priv->children->data);
+              gtk_container_remove (GTK_CONTAINER (menu), item);
+              gtk_container_remove (GTK_CONTAINER (menu), GTK_MENU_SHELL (menu)->priv->children->data);
 
               priv->menu_with_header = FALSE;
             }
@@ -963,7 +963,7 @@ row_changed_cb (GtkTreeModel         *model,
             {
               gint position = menu_item_position (menu, item);
 
-              gtk_widget_destroy (item);
+              gtk_widget_unparent (item);
               item = gtk_tree_menu_create_item (menu, iter, FALSE);
               gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item, position);
             }
@@ -1253,7 +1253,7 @@ rebuild_menu (GtkTreeMenu *menu)
 
   /* Destroy all the menu items */
   gtk_container_foreach (GTK_CONTAINER (menu),
-                         (GtkCallback) gtk_widget_destroy, NULL);
+                         (GtkCallback) gtk_container_remove_callback, menu);
 
   /* Populate */
   if (priv->model)

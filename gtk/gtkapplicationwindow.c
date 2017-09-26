@@ -758,7 +758,7 @@ gtk_application_window_dispose (GObject *object)
 
   if (window->priv->help_overlay)
     {
-      gtk_widget_destroy (GTK_WIDGET (window->priv->help_overlay));
+      gtk_window_destroy (GTK_WINDOW (window->priv->help_overlay));
       g_clear_object (&window->priv->help_overlay);
     }
 
@@ -961,7 +961,7 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
   g_return_if_fail (help_overlay == NULL || GTK_IS_SHORTCUTS_WINDOW (help_overlay));
 
   if (window->priv->help_overlay)
-    gtk_widget_destroy (GTK_WIDGET (window->priv->help_overlay));
+    gtk_window_destroy (GTK_WINDOW (window->priv->help_overlay));
   g_set_object (&window->priv->help_overlay, help_overlay);
 
   if (!window->priv->help_overlay)

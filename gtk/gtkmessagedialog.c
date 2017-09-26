@@ -69,7 +69,7 @@
  *                                   filename,
  *                                   g_strerror (errno));
  *  gtk_dialog_run (GTK_DIALOG (dialog));
- *  gtk_widget_destroy (dialog);
+ *  gtk_window_destroy (GTK_WINDOW (dialog));
  * ]|
  *
  * You might do a non-modal #GtkMessageDialog as follows:
@@ -89,7 +89,7 @@
  *  // (e.g. clicks a button)
  *
  *  g_signal_connect_swapped (dialog, "response",
- *                            G_CALLBACK (gtk_widget_destroy),
+ *                            G_CALLBACK (gtk_window_destroy),
  *                            dialog);
  * ]|
  *

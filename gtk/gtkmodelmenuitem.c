@@ -153,7 +153,7 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
       while (children)
         {
           if (GTK_IS_IMAGE (children->data))
-            gtk_widget_destroy (children->data);
+            gtk_container_remove (GTK_CONTAINER (child), GTK_WIDGET (children->data));
 
           children = g_list_delete_link (children, children);
         }

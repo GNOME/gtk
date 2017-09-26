@@ -1803,11 +1803,7 @@ gtk_menu_shell_tracker_remove_func (gint     position,
   GtkWidget *child;
 
   child = g_list_nth_data (menu_shell->priv->children, position);
-  /* We use destroy here because in the case of an item with a submenu,
-   * the attached-to from the submenu holds a ref on the item and a
-   * simple gtk_container_remove() isn't good enough to break that.
-   */
-  gtk_widget_destroy (child);
+  gtk_container_remove (GTK_CONTAINER (menu_shell), child);
 }
 
 static void

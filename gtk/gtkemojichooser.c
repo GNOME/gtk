@@ -170,13 +170,13 @@ add_recent_item (GtkEmojiChooser *chooser,
 
       if (modifier == modifier2 && g_variant_equal (item, item2))
         {
-          gtk_widget_destroy (GTK_WIDGET (l->data));
+          gtk_container_remove (GTK_CONTAINER (chooser->recent.box), GTK_WIDGET (l->data));
           i--;
           continue;
         }
       if (i >= MAX_RECENT)
         {
-          gtk_widget_destroy (GTK_WIDGET (l->data));
+          gtk_container_remove (GTK_CONTAINER (chooser->recent.box), GTK_WIDGET (l->data));
           continue;
         }
 

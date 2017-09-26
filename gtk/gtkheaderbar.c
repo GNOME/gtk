@@ -355,7 +355,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     {
-                      gtk_widget_destroy (button);
+                      g_object_unref (G_OBJECT (button));
                       priv->titlebar_icon = NULL;
                       button = NULL;
                     }
@@ -1389,10 +1389,7 @@ gtk_header_bar_destroy (GtkWidget *widget)
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
 
   if (priv->label_sizing_box)
-    {
-      gtk_widget_destroy (priv->label_sizing_box);
-      g_clear_object (&priv->label_sizing_box);
-    }
+    g_clear_object (&priv->label_sizing_box);
 
   if (priv->custom_title)
     {

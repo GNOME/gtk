@@ -371,7 +371,9 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
   gchar **accels;
   gint k;
 
-  gtk_container_foreach (GTK_CONTAINER (self), (GtkCallback)gtk_widget_destroy, NULL);
+  gtk_container_foreach (GTK_CONTAINER (self),
+                         (GtkCallback)gtk_container_remove_callback,
+                         self);
 
   if (self->accelerator == NULL || self->accelerator[0] == '\0')
     {

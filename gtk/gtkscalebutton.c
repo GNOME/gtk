@@ -362,6 +362,7 @@ gtk_scale_button_init (GtkScaleButton *button)
 
   gtk_widget_init_template (GTK_WIDGET (button));
   gtk_popover_set_relative_to (GTK_POPOVER (priv->dock), GTK_WIDGET (button));
+  g_object_ref (G_OBJECT (priv->dock));
 
   /* Need a local reference to the adjustment */
   priv->adjustment = gtk_adjustment_new (0, 0, 100, 2, 20, 0);
@@ -490,11 +491,7 @@ gtk_scale_button_dispose (GObject *object)
   GtkScaleButton *button = GTK_SCALE_BUTTON (object);
   GtkScaleButtonPrivate *priv = button->priv;
 
-  if (priv->dock)
-    {
-      gtk_widget_destroy (priv->dock);
-      priv->dock = NULL;
-    }
+  g_clear_object (&priv->dock);
 
   if (priv->click_id != 0)
     {

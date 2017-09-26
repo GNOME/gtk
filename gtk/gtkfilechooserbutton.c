@@ -1098,7 +1098,7 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
 
   if (priv->dialog != NULL)
     {
-      gtk_widget_destroy (priv->dialog);
+      gtk_window_destroy (GTK_WINDOW (priv->dialog));
       priv->dialog = NULL;
     }
 

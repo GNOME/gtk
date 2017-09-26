@@ -2019,7 +2019,7 @@ gtk_tree_view_free_rbtree (GtkTreeView *tree_view)
 static void
 gtk_tree_view_destroy_search_window (GtkTreeView *tree_view)
 {
-  gtk_widget_destroy (tree_view->priv->search_window);
+  gtk_window_destroy (GTK_WINDOW (tree_view->priv->search_window));
 
   tree_view->priv->search_window = NULL;
   tree_view->priv->search_entry = NULL;

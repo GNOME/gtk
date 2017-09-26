@@ -120,7 +120,7 @@
  *
  *  g_signal_connect_swapped (dialog,
  *                            "response",
- *                            G_CALLBACK (gtk_widget_destroy),
+ *                            G_CALLBACK (gtk_window_destroy),
  *                            dialog);
  *
  *  // Add the label, and show everything we’ve added
@@ -1178,7 +1178,7 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  *          do_nothing_since_dialog_was_cancelled ();
  *          break;
  *     }
- *   gtk_widget_destroy (dialog);
+ *   gtk_window_destory (GTK_WINDOW (dialog));
  * ]|
  *
  * Note that even though the recursive main loop gives the effect of a

@@ -2946,7 +2946,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *                                            GTK_BUTTONS_YES_NO,
    *                                            "Move the data ?\n");
    *           response = gtk_dialog_run (GTK_DIALOG (dialog));
-   *           gtk_widget_destroy (dialog);
+   *           gtk_window_destroy (GTK_WINDOW (dialog));
    *
    *           if (response == GTK_RESPONSE_YES)
    *             action = GDK_ACTION_MOVE;

@@ -748,7 +748,7 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
   /* Update printer page list */
   printer_changed_callback (GTK_COMBO_BOX (priv->printer_combo), page_setup_dialog);
 
-  gtk_widget_destroy (GTK_WIDGET (custom_paper_dialog));
+  gtk_window_destroy (GTK_WINDOW (custom_paper_dialog));
 }
 
 static void

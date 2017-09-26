@@ -514,7 +514,7 @@ gtk_file_chooser_native_finalize (GObject *object)
 
   g_clear_pointer (&self->accept_label, g_free);
   g_clear_pointer (&self->cancel_label, g_free);
-  gtk_widget_destroy (self->dialog);
+  gtk_window_destroy (GTK_WINDOW (self->dialog));
 
   g_slist_free_full (self->custom_files, g_object_unref);
   g_slist_free_full (self->choices, (GDestroyNotify)gtk_file_chooser_native_choice_free);

@@ -1000,8 +1000,8 @@ update_places (GtkPlacesSidebar *sidebar)
    * ending a drag */
   stop_drop_feedback (sidebar);
   gtk_container_foreach (GTK_CONTAINER (sidebar->list_box),
-                         (GtkCallback) gtk_widget_destroy,
-                         NULL);
+                         (GtkCallback) gtk_container_remove_callback,
+                         sidebar->list_box);
 
   network_mounts = network_volumes = NULL;
 
@@ -1656,7 +1656,11 @@ stop_drop_feedback (GtkPlacesSidebar *sidebar)
 
   if (sidebar->row_placeholder != NULL)
     {
-      gtk_widget_destroy (sidebar->row_placeholder);
+      /* Can be a child of the listbox, or not */
+      if (gtk_widget_get_parent (sidebar->row_placeholder) != NULL)
+        gtk_container_remove (GTK_CONTAINER (sidebar->list_box), sidebar->row_placeholder);
+
+      g_object_unref (sidebar->row_placeholder);
       sidebar->row_placeholder = NULL;
     }
 
@@ -3542,7 +3546,7 @@ build_popup_menu_using_gmenu (GtkSidebarRow *row)
                                       G_ACTION_GROUP (cloud_provider_action_group));
       add_actions (sidebar);
       if (sidebar->popover)
-        gtk_widget_destroy (sidebar->popover);
+        g_object_unref (G_OBJECT (sidebar->popover));
 
       sidebar->popover = gtk_popover_new_from_model (GTK_WIDGET (sidebar),
                                                      G_MENU_MODEL (menu));
@@ -3645,7 +3649,7 @@ show_row_popover (GtkSidebarRow *row)
   g_object_get (row, "sidebar", &sidebar, NULL);
 
   if (sidebar->popover)
-    gtk_widget_destroy (sidebar->popover);
+    gtk_popover_set_relative_to (GTK_POPOVER (sidebar->popover), NULL);
 
   create_row_popover (sidebar, row);
 
@@ -4222,15 +4226,8 @@ gtk_places_sidebar_dispose (GObject *object)
       sidebar->bookmarks_manager = NULL;
     }
 
-  if (sidebar->popover)
-    {
-      gtk_widget_destroy (sidebar->popover);
-      sidebar->popover = NULL;
-    }
-
   if (sidebar->rename_popover)
     {
-      gtk_widget_destroy (sidebar->rename_popover);
       sidebar->rename_popover = NULL;
       sidebar->rename_entry = NULL;
       sidebar->rename_button = NULL;

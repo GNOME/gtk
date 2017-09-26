@@ -1386,7 +1386,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
       op_win32 = op->priv->platform_data;
       
       g_signal_emit_by_name (op, "custom-widget-apply", op->priv->custom_widget);
-      gtk_widget_destroy (op_win32->embed_widget);
+      g_object_unref (G_OBJECT (op_win32->embed_widget));
       op_win32->embed_widget = NULL;
       op->priv->custom_widget = NULL;
     }
@@ -1911,7 +1911,7 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
     GlobalFree (printdlgex);
 
   if (invisible)
-    gtk_widget_destroy (invisible);
+    g_object_unref (G_OBJECT (invisible));
 
   return result;
 }

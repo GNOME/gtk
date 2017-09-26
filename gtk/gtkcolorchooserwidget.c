@@ -739,7 +739,7 @@ add_custom_color (GtkColorChooserWidget *cc,
       if (last == GTK_WIDGET (cc->priv->current))
         cc->priv->current = NULL;
 
-      gtk_widget_destroy (last);
+      gtk_container_remove (GTK_CONTAINER (cc->priv->custom), last);
     }
 
   g_list_free (children);

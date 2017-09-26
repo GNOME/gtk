@@ -3760,7 +3760,7 @@ gtk_flow_box_bound_model_changed (GListModel *list,
       GtkFlowBoxChild *child;
 
       child = gtk_flow_box_get_child_at_index (box, position);
-      gtk_widget_destroy (GTK_WIDGET (child));
+      gtk_container_remove (GTK_CONTAINER (box), GTK_WIDGET (child));
     }
 
   for (i = 0; i < added; i++)
@@ -4088,7 +4088,8 @@ gtk_flow_box_bind_model (GtkFlowBox                 *box,
       g_clear_object (&priv->bound_model);
     }
 
-  gtk_flow_box_forall (GTK_CONTAINER (box), (GtkCallback) gtk_widget_destroy, NULL);
+  gtk_flow_box_forall (GTK_CONTAINER (box),
+                       (GtkCallback) gtk_container_remove_callback, box);
 
   if (model == NULL)
     return;

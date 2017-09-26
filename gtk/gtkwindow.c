@@ -2493,7 +2493,7 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
  * the window internally, gtk_window_new() does not return a reference
  * to the caller.
  *
- * To delete a #GtkWindow, call gtk_widget_destroy().
+ * To delete a #GtkWindow, call gtk_window_destroy().
  * 
  * Returns: a new #GtkWindow.
  **/
@@ -3307,7 +3307,7 @@ gtk_window_dispose (GObject *object)
 static void
 parent_destroyed_callback (GtkWindow *parent, GtkWindow *child)
 {
-  gtk_widget_destroy (GTK_WIDGET (child));
+  gtk_window_destroy (child);
 }
 
 static void
@@ -6929,7 +6929,7 @@ gtk_window_unrealize (GtkWidget *widget)
 
   if (priv->popup_menu)
     {
-      gtk_widget_destroy (priv->popup_menu);
+      gtk_window_destroy (GTK_WINDOW (priv->popup_menu));
       priv->popup_menu = NULL;
     }
 
@@ -8105,7 +8105,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   gboolean maximized, iconified;
 
   if (priv->popup_menu)
-    gtk_widget_destroy (priv->popup_menu);
+    gtk_window_destroy (GTK_WINDOW (priv->popup_menu));
 
   state = gtk_window_get_state (window);
 
@@ -10614,7 +10614,7 @@ gtk_window_set_focus_visible (GtkWindow *window,
  * @setting: the new value
  *
  * Tells GTK+ whether to drop its extra reference to the window
- * when gtk_widget_destroy() is called.
+ * when gtk_window_destroy() is called.
  *
  * This function is only exported for the benefit of language
  * bindings which may need to keep the window alive until their
@@ -10857,7 +10857,7 @@ warn_response (GtkDialog *dialog,
   check = g_object_get_data (G_OBJECT (dialog), "check");
   remember = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", NULL);
   if (response == GTK_RESPONSE_NO)
     {
@@ -10870,11 +10870,11 @@ warn_response (GtkDialog *dialog,
         }
 
       /* Steal reference into temp variable, so not to mess up with
-       * inspector_window during gtk_widget_destroy().
+       * inspector_window during gtk_window_destroy().
        */
       window = inspector_window;
       inspector_window = NULL;
-      gtk_widget_destroy (window);
+      gtk_window_destroy (GTK_WINDOW (window));
     }
   else
     {

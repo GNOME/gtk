@@ -74,7 +74,7 @@ filechooser_portal_data_free (FilechooserPortalData *data)
   if (data->grab_widget)
     {
       gtk_grab_remove (data->grab_widget);
-      gtk_widget_destroy (data->grab_widget);
+      g_object_unref (G_OBJECT (data->grab_widget));
     }
 
   g_clear_object (&data->self);

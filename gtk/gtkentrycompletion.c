@@ -790,7 +790,7 @@ gtk_entry_completion_dispose (GObject *object)
 
   if (priv->tree_view)
     {
-      gtk_widget_destroy (priv->tree_view);
+      gtk_container_remove (GTK_CONTAINER (priv->scrolled_window), priv->tree_view);
       priv->tree_view = NULL;
     }
 
@@ -811,7 +811,7 @@ gtk_entry_completion_dispose (GObject *object)
 
   if (priv->popup_window)
     {
-      gtk_widget_destroy (priv->popup_window);
+      gtk_window_destroy (GTK_WINDOW (priv->popup_window));
       priv->popup_window = NULL;
     }
 

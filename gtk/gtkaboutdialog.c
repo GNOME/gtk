@@ -1060,7 +1060,7 @@ gtk_about_dialog_activate_link (GtkAboutDialog *about,
       g_error_free (error);
 
       g_signal_connect (dialog, "response",
-                        G_CALLBACK (gtk_widget_destroy), NULL);
+                        G_CALLBACK (gtk_window_destroy), NULL);
 
       gtk_window_present (GTK_WINDOW (dialog));
     }

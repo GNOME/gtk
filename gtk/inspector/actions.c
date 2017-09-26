@@ -265,7 +265,7 @@ row_activated (GtkTreeView         *tv,
   gtk_container_add (GTK_CONTAINER (popover), editor);
   gtk_popover_popup (GTK_POPOVER (popover));
 
-  g_signal_connect (popover, "hide", G_CALLBACK (gtk_widget_destroy), NULL);
+  g_signal_connect (popover, "hide", G_CALLBACK (g_object_unref), NULL);
 
   g_free (name);
   g_free (prefix);

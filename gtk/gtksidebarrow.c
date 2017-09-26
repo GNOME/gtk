@@ -294,8 +294,8 @@ gtk_sidebar_row_set_property (GObject      *object,
             g_clear_object (&self->cloud_provider);
 
             gtk_container_foreach (GTK_CONTAINER (self),
-                                   (GtkCallback) gtk_widget_destroy,
-                                   NULL);
+                                   (GtkCallback) gtk_container_remove_callback,
+                                   self);
 
             context = gtk_widget_get_style_context (GTK_WIDGET (self));
             gtk_style_context_add_class (context, "sidebar-placeholder-row");

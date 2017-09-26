@@ -1150,7 +1150,7 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
                                             menu_deactivate_cb,
                                             menu_button);
 
-      gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), NULL);
+      g_object_unref (priv->popover);
     }
 
   priv->popover = popover;
@@ -1162,6 +1162,8 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
                                 G_CALLBACK (menu_deactivate_cb), menu_button);
       update_popover_direction (menu_button);
       gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (menu_button)), "menu-button");
+
+      g_object_ref (popover);
     }
 
   if (popover && priv->menu)

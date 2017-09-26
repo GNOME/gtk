@@ -668,7 +668,7 @@ gtk_font_button_finalize (GObject *object)
   GtkFontButtonPrivate *priv = font_button->priv;
 
   if (priv->font_dialog != NULL) 
-    gtk_widget_destroy (priv->font_dialog);
+    gtk_window_destroy (GTK_WINDOW (priv->font_dialog));
 
   g_free (priv->title);
 

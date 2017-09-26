@@ -180,7 +180,7 @@ child_segment_delete_func (GtkTextLineSegment *seg,
     {
       GtkWidget *child = tmp_list->data;
 
-      gtk_widget_destroy (child);
+      g_object_unref (G_OBJECT (child));
       
       tmp_list = tmp_list->next;
     }

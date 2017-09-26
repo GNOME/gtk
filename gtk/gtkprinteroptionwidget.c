@@ -432,38 +432,35 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
 
   if (priv->check)
     {
-      gtk_widget_destroy (priv->check);
+      gtk_container_remove (GTK_CONTAINER (widget), priv->check);
       priv->check = NULL;
     }
   
   if (priv->combo)
     {
-      gtk_widget_destroy (priv->combo);
+      gtk_container_remove (GTK_CONTAINER (widget), priv->combo);
       priv->combo = NULL;
     }
   
   if (priv->entry)
     {
-      gtk_widget_destroy (priv->entry);
+      gtk_container_remove (GTK_CONTAINER (widget), priv->entry);
       priv->entry = NULL;
     }
 
   if (priv->image)
     {
-      gtk_widget_destroy (priv->image);
+      gtk_container_remove (GTK_CONTAINER (widget), priv->image);
       priv->image = NULL;
     }
 
-  if (priv->label)
-    {
-      gtk_widget_destroy (priv->label);
-      priv->label = NULL;
-    }
   if (priv->info_label)
     {
-      gtk_widget_destroy (priv->info_label);
+      gtk_container_remove (GTK_CONTAINER (widget), priv->info_label);
       priv->info_label = NULL;
     }
+
+  /* Ownership of priv->label transferred to someone else by _get_external_label */
 }
 
 static void
@@ -505,7 +502,7 @@ dialog_response_callback (GtkDialog              *dialog,
       g_free (filename);
     }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   if (new_location)
     uri = new_location;

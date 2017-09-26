@@ -526,7 +526,7 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
           gtk_widget_is_ancestor (gen->priv->display_composited, child))
         continue;
 
-      gtk_widget_destroy (child);
+      gtk_container_remove (GTK_CONTAINER (list), child);
     }
   g_list_free (children);
 
@@ -754,10 +754,9 @@ populate_seats (GtkInspectorGeneral *gen)
   GList *list, *l;
   int i;
 
-  list = gtk_container_get_children (GTK_CONTAINER (gen->priv->device_box));
-  for (l = list; l; l = l->next)
-    gtk_widget_destroy (GTK_WIDGET (l->data));
-  g_list_free (list);
+  gtk_container_foreach (GTK_CONTAINER (gen->priv->device_box),
+                         (GtkCallback)gtk_container_remove_callback,
+                         gen->priv->device_box);
 
   list = gdk_display_list_seats (display);
 

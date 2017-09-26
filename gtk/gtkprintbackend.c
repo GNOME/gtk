@@ -728,7 +728,7 @@ password_dialog_response (GtkWidget       *dialog,
   g_clear_pointer (&priv->auth_info, g_free);
   g_clear_pointer (&priv->auth_info_required, g_strfreev);
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   g_object_unref (backend);
 }

@@ -183,17 +183,17 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_transient_for        (GtkWindow           *window, 
+void       gtk_window_set_transient_for        (GtkWindow           *window,
 						GtkWindow           *parent);
 GDK_AVAILABLE_IN_ALL
 GtkWindow *gtk_window_get_transient_for        (GtkWindow           *window);
 GDK_AVAILABLE_IN_3_4
-void       gtk_window_set_attached_to          (GtkWindow           *window, 
+void       gtk_window_set_attached_to          (GtkWindow           *window,
                                                 GtkWidget           *attach_widget);
 GDK_AVAILABLE_IN_3_4
 GtkWidget *gtk_window_get_attached_to          (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_type_hint            (GtkWindow           *window, 
+void       gtk_window_set_type_hint            (GtkWindow           *window,
 						GdkWindowTypeHint    hint);
 GDK_AVAILABLE_IN_ALL
 GdkWindowTypeHint gtk_window_get_type_hint     (GtkWindow           *window);

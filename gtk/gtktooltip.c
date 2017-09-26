@@ -224,7 +224,8 @@ gtk_tooltip_dispose (GObject *object)
       g_signal_handlers_disconnect_by_func (display,
 					    gtk_tooltip_display_closed,
 					    tooltip);
-      gtk_widget_destroy (tooltip->window);
+
+      gtk_window_destroy (GTK_WINDOW (tooltip->window));
       tooltip->window = NULL;
     }
 

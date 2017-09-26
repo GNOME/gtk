@@ -745,7 +745,7 @@ error_message_with_parent (GtkWindow  *parent,
                                  GTK_WINDOW (dialog));
 
   gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 /* Returns a toplevel GtkWindow, or NULL if none */
@@ -936,7 +936,7 @@ update_preview_widget_visibility (GtkFileChooserWidget *impl)
     {
       if (priv->preview_label)
         {
-          gtk_widget_destroy (priv->preview_label);
+          gtk_container_remove (GTK_CONTAINER (priv->preview_box), priv->preview_label);
           priv->preview_label = NULL;
         }
     }
@@ -1489,7 +1489,7 @@ confirm_delete (GtkFileChooserWidget *impl,
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   return (response == GTK_RESPONSE_ACCEPT);
 }
@@ -2741,7 +2741,7 @@ save_widgets_destroy (GtkFileChooserWidget *impl)
   if (priv->save_widgets == NULL)
     return;
 
-  gtk_widget_destroy (priv->save_widgets);
+  gtk_container_remove (GTK_CONTAINER (priv->box), priv->save_widgets);
   priv->save_widgets = NULL;
   priv->save_widgets_table = NULL;
   priv->location_entry = NULL;
@@ -3636,15 +3636,6 @@ gtk_file_chooser_widget_dispose (GObject *object)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   cancel_all_operations (impl);
-
-  if (priv->rename_file_popover)
-    gtk_popover_set_relative_to (GTK_POPOVER (priv->rename_file_popover), NULL);
-
-  if (priv->browse_files_popover)
-    {
-      gtk_widget_destroy (priv->browse_files_popover);
-      priv->browse_files_popover = NULL;
-    }
 
   if (priv->extra_widget)
     {
@@ -6372,7 +6363,7 @@ confirm_dialog_should_accept_filename (GtkFileChooserWidget *impl,
 
   response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   return (response == GTK_RESPONSE_ACCEPT);
 }

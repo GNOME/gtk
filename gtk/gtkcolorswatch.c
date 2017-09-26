@@ -509,7 +509,7 @@ swatch_dispose (GObject *object)
 
   if (swatch->priv->popover)
     {
-      gtk_widget_destroy (swatch->priv->popover);
+      g_object_unref (G_OBJECT (swatch->priv->popover));
       swatch->priv->popover = NULL;
     }
 

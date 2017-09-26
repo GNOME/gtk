@@ -162,7 +162,7 @@ save_to_file (GtkInspectorCssEditor *ce,
                                        _("Saving CSS failed"));
       gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                                 "%s", error->message);
-      g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
       gtk_widget_show (dialog);
       g_error_free (error);
     }
@@ -186,7 +186,7 @@ save_response (GtkWidget             *dialog,
       g_free (filename);
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void

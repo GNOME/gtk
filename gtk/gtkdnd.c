@@ -1604,7 +1604,7 @@ set_icon_helper (GdkDragContext     *context,
   GtkWidget *widget;
 
   widget = gtk_image_new ();
-  gtk_widget_show (widget);
+  g_object_ref_sink (widget);
 
   gtk_image_set_from_definition (GTK_IMAGE (widget), def, GTK_ICON_SIZE_DND);
 
@@ -1679,6 +1679,7 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   cairo_surface_set_device_offset (surface, 0, 0);
 
   widget = gtk_image_new_from_surface (surface);
+  g_object_ref_sink (widget);
 
   gtk_drag_set_icon_widget_internal (context, widget, (int)hot_x, (int)hot_y, TRUE);
 }

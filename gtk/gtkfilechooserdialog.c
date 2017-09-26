@@ -92,7 +92,7 @@
  *     g_free (filename);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_window_destroy (GTK_WINDOW (dialog));
  * ]|
  *
  * To use a dialog for saving, you can use this:
@@ -132,7 +132,7 @@
  *     g_free (filename);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_window_destroy (GTK_WINDOW (dialog));
  * ]|
  *
  * ## Setting up a file chooser dialog ## {#gtkfilechooserdialog-setting-up}

@@ -430,7 +430,7 @@ show_error_dialog (const gchar *primary,
   gtk_widget_show (message_dialog);
 
   g_signal_connect (message_dialog, "response",
-                    G_CALLBACK (gtk_widget_destroy), NULL);
+                    G_CALLBACK (gtk_window_destroy), NULL);
 }
 
 static void

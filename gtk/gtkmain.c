@@ -1736,7 +1736,7 @@ gtk_main_do_event (GdkEvent *event)
       g_object_ref (event_widget);
       if ((!gtk_window_group_get_current_grab (window_group) || gtk_widget_get_toplevel (gtk_window_group_get_current_grab (window_group)) == event_widget) &&
           !gtk_widget_event (event_widget, event))
-        gtk_widget_destroy (event_widget);
+        gtk_window_destroy (GTK_WINDOW (event_widget));
       g_object_unref (event_widget);
       break;
 
@@ -1744,12 +1744,13 @@ gtk_main_do_event (GdkEvent *event)
       /* Unexpected GDK_DESTROY from the outside, ignore for
        * child windows, handle like a GDK_DELETE for toplevels
        */
-      if (!gtk_widget_get_parent (event_widget))
+      if (!gtk_widget_get_parent (event_widget) &&
+          GTK_IS_WINDOW (event_widget))
         {
           g_object_ref (event_widget);
           if (!gtk_widget_event (event_widget, event) &&
               gtk_widget_get_realized (event_widget))
-            gtk_widget_destroy (event_widget);
+            gtk_window_destroy (GTK_WINDOW (event_widget));
           g_object_unref (event_widget);
         }
       break;

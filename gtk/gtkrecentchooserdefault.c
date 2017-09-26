@@ -596,7 +596,7 @@ error_message_with_parent (GtkWindow   *parent,
                                  GTK_WINDOW (dialog));
 
   gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 /* Returns a toplevel GtkWindow, or NULL if none */

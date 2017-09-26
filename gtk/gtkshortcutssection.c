@@ -208,13 +208,13 @@ gtk_shortcuts_section_destroy (GtkWidget *widget)
 
   if (self->stack)
     {
-      gtk_widget_destroy (GTK_WIDGET (self->stack));
+      gtk_container_remove (GTK_CONTAINER (self), GTK_WIDGET (self->stack));
       self->stack = NULL;
     }
 
   if (self->footer)
     {
-      gtk_widget_destroy (GTK_WIDGET (self->footer));
+      gtk_container_remove (GTK_CONTAINER (self), GTK_WIDGET (self->footer));
       self->footer = NULL;
     }
 
@@ -736,8 +736,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
     }
 
   /* replace the current pages with the new pages */
-  children = gtk_container_get_children (GTK_CONTAINER (self->stack));
-  g_list_free_full (children, (GDestroyNotify)gtk_widget_destroy);
+  gtk_container_foreach (GTK_CONTAINER (self->stack), (GtkCallback)gtk_container_remove_callback, self->stack);
 
   for (p = pages, n_pages = 0; p; p = p->next, n_pages++)
     {

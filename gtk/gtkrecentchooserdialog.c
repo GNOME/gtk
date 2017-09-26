@@ -73,7 +73,7 @@
  *     gtk_recent_info_unref (info);
  *   }
  *
- * gtk_widget_destroy (dialog);
+ * gtk_window_destroy (GTK_WINDOW (dialog));
  * ]|
  *
  * Recently used files are supported since GTK+ 2.10.

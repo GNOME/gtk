@@ -160,7 +160,7 @@ gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
       /* Note: we are not destroying the button and the arrow_button
        * here because they were removed from their container above
        */
-      gtk_widget_destroy (priv->box);
+      gtk_container_remove (GTK_CONTAINER (button), priv->box);
     }
 
   priv->box = box;

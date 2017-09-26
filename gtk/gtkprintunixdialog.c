@@ -685,7 +685,7 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
 
                       response = gtk_dialog_run (GTK_DIALOG (dialog));
 
-                      gtk_widget_destroy (dialog);
+                      gtk_window_destroy (GTK_WINDOW (dialog));
 
                       g_free (dirname);
                       g_free (basename);
@@ -1636,7 +1636,7 @@ update_dialog_from_settings (GtkPrintUnixDialog *dialog)
 
       nrows = grid_rows (GTK_GRID (table));
       if (nrows == 0)
-        gtk_widget_destroy (table);
+        g_object_unref (G_OBJECT (table));
       else
         {
           has_advanced = TRUE;
@@ -1989,13 +1989,13 @@ clear_per_printer_ui (GtkPrintUnixDialog *dialog)
     return;
 
   gtk_container_foreach (GTK_CONTAINER (priv->finishing_table),
-                         (GtkCallback)gtk_widget_destroy, NULL);
+                         (GtkCallback)gtk_container_remove_callback, priv->finishing_table);
   gtk_container_foreach (GTK_CONTAINER (priv->image_quality_table),
-                         (GtkCallback)gtk_widget_destroy, NULL);
+                         (GtkCallback)gtk_container_remove_callback, priv->image_quality_table);
   gtk_container_foreach (GTK_CONTAINER (priv->color_table),
-                         (GtkCallback)gtk_widget_destroy, NULL);
+                         (GtkCallback)gtk_container_remove_callback, priv->color_table);
   gtk_container_foreach (GTK_CONTAINER (priv->advanced_vbox),
-                         (GtkCallback)gtk_widget_destroy, NULL);
+                         (GtkCallback)gtk_container_remove_callback, priv->advanced_vbox);
   extension_point_clear_children (GTK_CONTAINER (priv->extension_point));
 }
 
@@ -3283,7 +3283,7 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
         }
     }
 
-  gtk_widget_destroy (GTK_WIDGET (custom_paper_dialog));
+  gtk_window_destroy (GTK_WINDOW (custom_paper_dialog));
 }
 
 static void

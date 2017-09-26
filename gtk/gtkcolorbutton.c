@@ -443,7 +443,7 @@ gtk_color_button_finalize (GObject *object)
   GtkColorButtonPrivate *priv = button->priv;
 
   if (priv->cs_dialog != NULL)
-    gtk_widget_destroy (priv->cs_dialog);
+    gtk_window_destroy (GTK_WINDOW (priv->cs_dialog));
 
   g_free (priv->title);
   gtk_widget_unparent (priv->button);

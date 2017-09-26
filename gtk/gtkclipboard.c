@@ -437,6 +437,7 @@ make_clipboard_widget (GdkDisplay *display,
 		       gboolean    provider)
 {
   GtkWidget *widget = gtk_invisible_new_for_screen (gdk_display_get_default_screen (display));
+  g_object_ref_sink (widget);
 
   g_signal_connect (widget, "selection-received",
 		    G_CALLBACK (selection_received), NULL);
@@ -964,7 +965,7 @@ selection_received (GtkWidget            *widget,
   g_free (request_info);
 
   if (widget != get_clipboard_widget (gtk_widget_get_display (widget)))
-    gtk_widget_destroy (widget);
+    g_object_unref (G_OBJECT (widget));
 }
 
 /**
