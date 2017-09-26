@@ -840,13 +840,16 @@ gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
     {
       if (impl->staging_cairo_surface &&
           _gdk_wayland_is_shm_surface (impl->staging_cairo_surface))
-        cairo_surface_destroy (impl->staging_cairo_surface);
+        g_clear_pointer (&impl->staging_cairo_surface, cairo_surface_destroy);
 
-      impl->staging_cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                                impl->scale,
-                                                                impl->scale);
-      cairo_surface_set_device_scale (impl->staging_cairo_surface,
-                                      impl->scale, impl->scale);
+      if (!impl->staging_cairo_surface)
+        {
+          impl->staging_cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                                    impl->scale,
+                                                                    impl->scale);
+          cairo_surface_set_device_scale (impl->staging_cairo_surface,
+                                          impl->scale, impl->scale);
+        }
     }
   else if (!impl->staging_cairo_surface)
     {
