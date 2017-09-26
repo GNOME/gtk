@@ -207,6 +207,26 @@ gsk_profiler_counter_inc (GskProfiler *profiler,
 }
 
 void
+gsk_profiler_counter_set (GskProfiler *profiler,
+                          GQuark       counter_id,
+                          gint64       value)
+{
+  NamedCounter *counter;
+
+  g_return_if_fail (GSK_IS_PROFILER (profiler));
+
+  counter = gsk_profiler_get_counter (profiler, counter_id);
+  if (counter == NULL)
+    {
+      g_critical ("No counter '%s' (id:%d) found; did you forget to call gsk_profiler_add_counter()?",
+                  g_quark_to_string (counter_id), counter_id);
+      return;
+    }
+
+  counter->value = value;
+}
+
+void
 gsk_profiler_counter_add (GskProfiler *profiler,
                           GQuark       counter_id,
                           gint64       increment)
@@ -217,7 +237,11 @@ gsk_profiler_counter_add (GskProfiler *profiler,
 
   counter = gsk_profiler_get_counter (profiler, counter_id);
   if (counter == NULL)
-    return;
+    {
+      g_critical ("No counter '%s' (id:%d) found; did you forget to call gsk_profiler_add_counter()?",
+                  g_quark_to_string (counter_id), counter_id);
+      return;
+    }
 
   counter->value += increment;
 }
