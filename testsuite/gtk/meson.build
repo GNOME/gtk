@@ -66,6 +66,7 @@ tests = [
   ['displayclose'],
   ['revealer-size'],
   ['widgetorder'],
+  ['widget-refcount'],
 ]
 
 # Tests that are expected to fail
