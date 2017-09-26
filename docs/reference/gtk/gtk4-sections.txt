@@ -4485,7 +4485,6 @@ GtkCallback
 GtkRequisition
 GtkAllocation
 gtk_widget_new
-gtk_widget_destroy
 gtk_widget_in_destruction
 gtk_widget_destroyed
 gtk_widget_unparent
