@@ -662,8 +662,17 @@ gsk_sl_expression_reference_get_return_type (const GskSlExpression *expression)
 static GskSlValue *
 gsk_sl_expression_reference_get_constant (const GskSlExpression *expression)
 {
-  /* FIXME: values for constant variables need to be returned here */
-  return NULL;
+  GskSlExpressionReference *reference = (GskSlExpressionReference *) expression;
+  const GskSlValue *initial_value;
+
+  if (!gsk_sl_variable_is_constant (reference->variable))
+    return NULL;
+
+  initial_value = gsk_sl_variable_get_initial_value (reference->variable);
+  if (initial_value == NULL)
+    return NULL;
+
+  return gsk_sl_value_copy (initial_value);
 }
 
 static guint32
