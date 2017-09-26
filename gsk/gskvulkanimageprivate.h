@@ -51,6 +51,9 @@ GskVulkanImage *        gsk_vulkan_image_new_for_framebuffer            (GdkVulk
 GskVulkanImage *        gsk_vulkan_image_new_for_atlas                  (GdkVulkanContext       *context,
                                                                          gsize                   width,
                                                                          gsize                   height);
+GskVulkanImage *        gsk_vulkan_image_new_for_texture                (GdkVulkanContext       *context,
+                                                                         gsize                   width,
+                                                                         gsize                   height);
 
 GskTexture *            gsk_vulkan_image_download                       (GskVulkanImage         *self,
                                                                          GskVulkanUploader      *uploader);
