@@ -20,9 +20,11 @@
 
 #include "gskslpointertypeprivate.h"
 
+#include "gskslexpressionprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvalueprivate.h"
 #include "gskspvwriterprivate.h"
 
 struct _GskSlPointerType {
@@ -79,10 +81,14 @@ gsk_sl_decoration_list_add_simple (GskSlPreprocessor *preproc,
 
 static gboolean
 gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
+                                         GskSlScope        *scope,
                                          GskSlDecorations  *list,
                                          GskSlDecoration    decoration)
 {
+  GskSlExpression *expression;
   const GskSlToken *token;
+  GskSlValue *value;
+  GskSlType *type;
   gboolean success = TRUE;
 
   gsk_sl_preprocessor_consume (preproc, NULL);
@@ -95,29 +101,41 @@ gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
     }
   gsk_sl_preprocessor_consume (preproc, NULL);
 
-  /* XXX: This should be a constant expression */
-  token = gsk_sl_preprocessor_get (preproc);
-  if (gsk_sl_token_is (token, GSK_SL_TOKEN_INTCONSTANT))
+  expression = gsk_sl_expression_parse_constant (scope, preproc);
+  if (expression == NULL)
+    return FALSE;
+
+  value = gsk_sl_expression_get_constant (expression);
+  gsk_sl_expression_unref (expression);
+
+  if (value == NULL)
     {
-      success = gsk_sl_decoration_list_set (preproc, list, decoration, token->i32);
-      gsk_sl_preprocessor_consume (preproc, NULL);
+      gsk_sl_preprocessor_error (preproc, "Expression is not constant.");
+      return FALSE;
     }
-  else if (gsk_sl_token_is (token, GSK_SL_TOKEN_UINTCONSTANT))
+
+  type = gsk_sl_value_get_type (value);
+  if (gsk_sl_type_is_scalar (type) && gsk_sl_type_get_scalar_type (type) == GSK_SL_INT)
     {
-      success = gsk_sl_decoration_list_set (preproc, list, decoration, token->u32);
-      gsk_sl_preprocessor_consume (preproc, NULL);
+      success = gsk_sl_decoration_list_set (preproc, list, decoration, *(gint32 *) gsk_sl_value_get_data (value));
+    }
+  else if (gsk_sl_type_is_scalar (type) && gsk_sl_type_get_scalar_type (type) == GSK_SL_UINT)
+    {
+      success = gsk_sl_decoration_list_set (preproc, list, decoration, *(guint32 *) gsk_sl_value_get_data (value));
     }
   else
     {
-      gsk_sl_preprocessor_error (preproc, "Assignment is not an integer.");
-      return FALSE;
+      gsk_sl_preprocessor_error (preproc, "Type of expression is not an integer type, but %s", gsk_sl_type_get_name (type));
+      success = FALSE;
     }
+  gsk_sl_value_free (value);
 
   return success;
 }
 
 static gboolean
 gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
+                                     GskSlScope        *scope,
                                      GskSlDecorations  *list)
 {
   const GskSlToken *token;
@@ -140,24 +158,28 @@ gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
           if (g_str_equal (token->str, "location"))
             {
               success &= gsk_sl_decoration_list_parse_assignment (preproc,
+                                                                  scope,
                                                                   list, 
                                                                   GSK_SL_DECORATION_LAYOUT_LOCATION);
             }
           else if (g_str_equal (token->str, "component"))
             {
               success &= gsk_sl_decoration_list_parse_assignment (preproc,
+                                                                  scope,
                                                                   list, 
                                                                   GSK_SL_DECORATION_LAYOUT_COMPONENT);
             }
           else if (g_str_equal (token->str, "binding"))
             {
               success &= gsk_sl_decoration_list_parse_assignment (preproc,
+                                                                  scope,
                                                                   list, 
                                                                   GSK_SL_DECORATION_LAYOUT_BINDING);
             }
           else if (g_str_equal (token->str, "set"))
             {
               success &= gsk_sl_decoration_list_parse_assignment (preproc,
+                                                                  scope,
                                                                   list, 
                                                                   GSK_SL_DECORATION_LAYOUT_SET);
             }
@@ -187,7 +209,8 @@ gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
 }
 
 gboolean
-gsk_sl_decoration_list_parse (GskSlPreprocessor *preproc,
+gsk_sl_decoration_list_parse (GskSlScope        *scope,
+                              GskSlPreprocessor *preproc,
                               GskSlDecorations  *list)
 {
   const GskSlToken *token;
@@ -327,7 +350,7 @@ gsk_sl_decoration_list_parse (GskSlPreprocessor *preproc,
             }
           gsk_sl_preprocessor_consume (preproc, NULL);
 
-          success &= gsk_sl_decoration_list_parse_layout (preproc, list);
+          success &= gsk_sl_decoration_list_parse_layout (preproc, scope, list);
 
           token = gsk_sl_preprocessor_get (preproc);
           if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))

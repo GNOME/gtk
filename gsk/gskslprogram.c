@@ -100,7 +100,8 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
   gboolean success;
   char *name;
 
-  success = gsk_sl_decoration_list_parse (preproc,
+  success = gsk_sl_decoration_list_parse (scope,
+                                          preproc,
                                           &decoration);
 
   type = gsk_sl_type_new_parse (preproc);

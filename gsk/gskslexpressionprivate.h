@@ -27,6 +27,8 @@ GskSlExpression *       gsk_sl_expression_parse                 (GskSlScope     
                                                                  GskSlPreprocessor      *stream);
 GskSlExpression *       gsk_sl_expression_parse_assignment      (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *stream);
+GskSlExpression *       gsk_sl_expression_parse_constant        (GskSlScope             *scope,
+                                                                 GskSlPreprocessor      *stream);
 GskSlExpression *       gsk_sl_expression_parse_constructor_call (GskSlScope            *scope,
                                                                  GskSlPreprocessor      *stream,
                                                                  GskSlType              *type);
@@ -37,7 +39,7 @@ void                    gsk_sl_expression_unref                 (GskSlExpression
 void                    gsk_sl_expression_print                 (const GskSlExpression  *expression,
                                                                  GString                *string);
 GskSlType *             gsk_sl_expression_get_return_type       (const GskSlExpression  *expression);
-gboolean                gsk_sl_expression_is_constant           (const GskSlExpression  *expression);
+GskSlValue *            gsk_sl_expression_get_constant          (const GskSlExpression  *expression);
 
 guint32                 gsk_sl_expression_write_spv             (const GskSlExpression  *expression,
                                                                  GskSpvWriter           *writer);

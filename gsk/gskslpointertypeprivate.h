@@ -58,7 +58,8 @@ struct _GskSlDecorations
   } values[GSK_SL_N_DECORATIONS];
 };
 
-gboolean                gsk_sl_decoration_list_parse                    (GskSlPreprocessor          *stream,
+gboolean                gsk_sl_decoration_list_parse                    (GskSlScope                 *scope,
+                                                                         GskSlPreprocessor          *stream,
                                                                          GskSlDecorations           *list);
 
 GskSlPointerType *      gsk_sl_pointer_type_new                         (GskSlType                  *type,

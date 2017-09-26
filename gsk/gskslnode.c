@@ -356,7 +356,8 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
         GskSlDecorations decoration;
         gboolean success;
 
-        success = gsk_sl_decoration_list_parse (preproc,
+        success = gsk_sl_decoration_list_parse (scope,
+                                                preproc,
                                                 &decoration);
 
         type = gsk_sl_type_new_parse (preproc);
