@@ -400,7 +400,7 @@ struct _GtkWindowGeometryInfo
 static void gtk_window_constructed        (GObject           *object);
 static void gtk_window_dispose            (GObject           *object);
 static void gtk_window_finalize           (GObject           *object);
-static void gtk_window_destroy            (GtkWidget         *widget);
+static void gtk_window_real_destroy       (GtkWidget         *widget);
 static void gtk_window_show               (GtkWidget         *widget);
 static void gtk_window_hide               (GtkWidget         *widget);
 static void gtk_window_map                (GtkWidget         *widget);
@@ -804,7 +804,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   gobject_class->set_property = gtk_window_set_property;
   gobject_class->get_property = gtk_window_get_property;
 
-  widget_class->destroy = gtk_window_destroy;
+  widget_class->destroy = gtk_window_real_destroy;
   widget_class->show = gtk_window_show;
   widget_class->hide = gtk_window_hide;
   widget_class->map = gtk_window_map;
@@ -5793,14 +5793,13 @@ gtk_window_get_position (GtkWindow *window,
 }
 
 static void
-gtk_window_destroy (GtkWidget *widget)
+gtk_window_real_destroy (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
   gtk_window_release_application (window);
 
-  toplevel_list = g_slist_remove (toplevel_list, window);
   gtk_window_update_debugging ();
 
   if (priv->transient_parent)
@@ -5810,12 +5809,6 @@ gtk_window_destroy (GtkWidget *widget)
 
   /* frees the icons */
   gtk_window_set_icon_list (window, NULL);
-
-  if (priv->has_user_ref_count)
-    {
-      priv->has_user_ref_count = FALSE;
-      g_object_unref (window);
-    }
 
   if (priv->group)
     gtk_window_group_remove_window (priv->group, window);
@@ -11440,4 +11433,21 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
       if (device)
         break;
     }
+}
+
+/**
+ * gtk_window_destroy:
+ * @window: The window to destroy
+ *
+ * Drop the internal reference GTK+ holds on toplevel windows.
+ */
+void
+gtk_window_destroy (GtkWindow *window)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  toplevel_list = g_slist_remove (toplevel_list, window);
+
+  gtk_widget_hide (GTK_WIDGET (window));
+  g_object_unref (window);
 }

@@ -444,6 +444,9 @@ gboolean gtk_window_is_maximized           (GtkWindow    *window);
 GDK_AVAILABLE_IN_3_14
 void     gtk_window_set_interactive_debugging (gboolean enable);
 
+GDK_AVAILABLE_IN_3_92
+void     gtk_window_destroy                (GtkWindow *window);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindow, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindowGroup, g_object_unref)
 
