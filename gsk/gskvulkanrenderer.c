@@ -26,6 +26,7 @@ struct _GskVulkanTextureData {
 #ifdef G_ENABLE_DEBUG
 typedef struct {
   GQuark frames;
+  GQuark fallback_pixels;
 } ProfileCounters;
 
 typedef struct {
@@ -199,6 +200,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
 
 #ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
+  gsk_profiler_counter_set (profiler, self->profile_counters.fallback_pixels, 0);
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
@@ -304,6 +306,8 @@ gsk_vulkan_renderer_init (GskVulkanRenderer *self)
 
 #ifdef G_ENABLE_DEBUG
   self->profile_counters.frames = gsk_profiler_add_counter (profiler, "frames", "Frames", FALSE);
+  self->profile_counters.fallback_pixels = gsk_profiler_add_counter (profiler, "fallback-pixels", "Fallback pixels", TRUE);
+
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
 #endif
 }
