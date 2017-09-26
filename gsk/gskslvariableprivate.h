@@ -26,7 +26,8 @@
 G_BEGIN_DECLS
 
 GskSlVariable *         gsk_sl_variable_new                     (GskSlPointerType       *type,
-                                                                 const char             *name);
+                                                                 const char             *name,
+                                                                 gboolean                constant);
 
 GskSlVariable *         gsk_sl_variable_ref                     (GskSlVariable          *variable);
 void                    gsk_sl_variable_unref                   (GskSlVariable          *variable);
@@ -36,6 +37,7 @@ void                    gsk_sl_variable_print                   (const GskSlVari
 
 GskSlPointerType *      gsk_sl_variable_get_type                (const GskSlVariable    *variable);
 const char *            gsk_sl_variable_get_name                (const GskSlVariable    *variable);
+gboolean                gsk_sl_variable_is_constant             (const GskSlVariable    *variable);
 
 guint32                 gsk_sl_variable_write_spv               (const GskSlVariable    *variable,
                                                                  GskSpvWriter           *writer);

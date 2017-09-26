@@ -70,18 +70,22 @@ static gboolean
 gsk_sl_program_parse_variable (GskSlProgram      *program,
                                GskSlScope        *scope,
                                GskSlPreprocessor *preproc,
-                               GskSlPointerType  *type,
+                               GskSlDecorations  *decoration,
+                               GskSlType         *type,
                                const char        *name)
 {
   GskSlVariable *variable;
   const GskSlToken *token;
+  GskSlPointerType *pointer_type;
 
   token = gsk_sl_preprocessor_get (preproc);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     return FALSE;
   gsk_sl_preprocessor_consume (preproc, NULL);
 
-  variable = gsk_sl_variable_new (type, name);
+  pointer_type = gsk_sl_pointer_type_new (type, FALSE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
+  variable = gsk_sl_variable_new (pointer_type, name, decoration->values[GSK_SL_DECORATION_CONST].set);
+  gsk_sl_pointer_type_unref (pointer_type);
       
   program->variables = g_slist_append (program->variables, variable);
   gsk_sl_scope_add_variable (scope, variable);
@@ -117,7 +121,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
       if (success)
         {
           GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, FALSE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-          GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL);
+          GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL, decoration.values[GSK_SL_DECORATION_CONST].set);
           gsk_sl_pointer_type_unref (ptype);
           program->variables = g_slist_append (program->variables, variable);
           gsk_sl_preprocessor_consume (preproc, program);
@@ -152,11 +156,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
     }
   else
     {
-      GskSlPointerType *pointer_type;
-
-      pointer_type = gsk_sl_pointer_type_new (type, FALSE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-      success &= gsk_sl_program_parse_variable (program, scope, preproc, pointer_type, name);
-      gsk_sl_pointer_type_unref (pointer_type);
+      success &= gsk_sl_program_parse_variable (program, scope, preproc, &decoration, type, name);
     }
 
   return success;

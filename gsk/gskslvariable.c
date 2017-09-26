@@ -28,11 +28,13 @@ struct _GskSlVariable {
 
   GskSlPointerType *type;
   char *name;
+  gboolean constant;
 };
 
 GskSlVariable *
 gsk_sl_variable_new (GskSlPointerType *type,
-                     const char       *name)
+                     const char       *name,
+                     gboolean          constant)
 {
   GskSlVariable *variable;
 
@@ -41,6 +43,7 @@ gsk_sl_variable_new (GskSlPointerType *type,
   variable->ref_count = 1;
   variable->type = gsk_sl_pointer_type_ref (type);
   variable->name = g_strdup (name);
+  variable->constant = constant;
 
   return variable;
 }
@@ -75,6 +78,8 @@ void
 gsk_sl_variable_print (const GskSlVariable *variable,
                        GString             *string)
 {
+  if (variable->constant)
+    g_string_append (string, "const ");
   gsk_sl_pointer_type_print (variable->type, string);
   if (variable->name)
     {
@@ -93,6 +98,12 @@ const char *
 gsk_sl_variable_get_name (const GskSlVariable *variable)
 {
   return variable->name;
+}
+
+gboolean
+gsk_sl_variable_is_constant (const GskSlVariable *variable)
+{
+  return variable->constant;
 }
 
 guint32

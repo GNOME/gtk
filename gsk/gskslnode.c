@@ -248,22 +248,27 @@ static const GskSlNodeClass GSK_SL_NODE_EXPRESSION = {
 static GskSlNode *
 gsk_sl_node_parse_declaration (GskSlScope        *scope,
                                GskSlPreprocessor *stream,
-                               GskSlPointerType  *type)
+                               GskSlDecorations  *decoration,
+                               GskSlType         *type)
 {
   GskSlNodeDeclaration *declaration;
+  GskSlPointerType *pointer_type;
   const GskSlToken *token;
 
   declaration = gsk_sl_node_new (GskSlNodeDeclaration, &GSK_SL_NODE_DECLARATION);
   
+  pointer_type = gsk_sl_pointer_type_new (type, TRUE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
   token = gsk_sl_preprocessor_get (stream);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
     {
-      declaration->variable = gsk_sl_variable_new (type, NULL);
+      declaration->variable = gsk_sl_variable_new (pointer_type, NULL, decoration->values[GSK_SL_DECORATION_CONST].set);
+      gsk_sl_pointer_type_unref (pointer_type);
       return (GskSlNode *) declaration;
     }
 
-  declaration->variable = gsk_sl_variable_new (type, token->str);
+  declaration->variable = gsk_sl_variable_new (pointer_type, token->str, decoration->values[GSK_SL_DECORATION_CONST].set);
   gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
+  gsk_sl_pointer_type_unref (pointer_type);
 
   token = gsk_sl_preprocessor_get (stream);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
@@ -388,11 +393,7 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
           }
         else
           {
-            GskSlPointerType *pointer_type;
-        
-            pointer_type = gsk_sl_pointer_type_new (type, TRUE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-            node = gsk_sl_node_parse_declaration (scope, preproc, pointer_type);
-            gsk_sl_pointer_type_unref (pointer_type);
+            node = gsk_sl_node_parse_declaration (scope, preproc, &decoration, type);
           }
 
         gsk_sl_type_unref (type);
