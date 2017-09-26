@@ -1790,12 +1790,15 @@ gtk_combo_box_detacher (GtkWidget *widget,
 
   g_return_if_fail (priv->popup_widget == (GtkWidget *) menu);
 
-  g_signal_handlers_disconnect_by_func (menu->priv->toplevel,
-                                        gtk_combo_box_menu_show,
-                                        combo_box);
-  g_signal_handlers_disconnect_by_func (menu->priv->toplevel,
-                                        gtk_combo_box_menu_hide,
-                                        combo_box);
+  if (menu->priv->toplevel)
+    {
+      g_signal_handlers_disconnect_by_func (menu->priv->toplevel,
+                                            gtk_combo_box_menu_show,
+                                            combo_box);
+      g_signal_handlers_disconnect_by_func (menu->priv->toplevel,
+                                            gtk_combo_box_menu_hide,
+                                            combo_box);
+    }
 
   priv->popup_widget = NULL;
 }

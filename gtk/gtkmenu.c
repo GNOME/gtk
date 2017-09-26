@@ -1625,11 +1625,14 @@ gtk_menu_detach (GtkMenu *menu)
   g_object_set_data (G_OBJECT (menu), I_(attach_data_key), NULL);
 
   /* Detach the toplevel window. */
-  g_signal_handlers_disconnect_by_func (toplevel,
-                                        (gpointer) menu_toplevel_attached_to,
-                                        menu);
-  if (gtk_window_get_attached_to (toplevel) == data->attach_widget)
-    gtk_window_set_attached_to (toplevel, NULL);
+  if (toplevel)
+    {
+      g_signal_handlers_disconnect_by_func (toplevel,
+                                            (gpointer) menu_toplevel_attached_to,
+                                            menu);
+      if (gtk_window_get_attached_to (toplevel) == data->attach_widget)
+        gtk_window_set_attached_to (toplevel, NULL);
+    }
 
   g_signal_handlers_disconnect_by_func (data->attach_widget,
                                         (gpointer) attach_widget_screen_changed,
