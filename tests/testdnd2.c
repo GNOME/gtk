@@ -76,17 +76,16 @@ drag_widget_destroyed (GtkWidget *image, gpointer data)
   GtkWidget *widget = data;
 
   g_print ("drag widget destroyed\n");
-  g_object_unref (image);
   g_object_set_data (G_OBJECT (widget), "drag widget", NULL);
 }
 
 static void
 window_drag_end (GtkWidget *widget, GdkDragContext *context, gpointer data)
 {
-  GtkWidget *window = data;
+  GtkWidget *image = data;
 
-  gtk_window_destroy (GTK_WINDOW (window));
   g_signal_handlers_disconnect_by_func (widget, window_drag_end, data);
+  g_object_unref (G_OBJECT (image));
 }
 
 static void
@@ -106,8 +105,8 @@ window_drag_begin (GtkWidget      *widget,
       g_print ("creating new drag widget\n");
       pixbuf = get_image_pixbuf (GTK_IMAGE (data));
       image = gtk_image_new_from_pixbuf (pixbuf);
+      g_object_ref_sink (image);
       g_object_unref (pixbuf);
-      g_object_ref (image);
       g_object_set_data (G_OBJECT (widget), "drag widget", image);
       g_signal_connect (image, "destroy", G_CALLBACK (drag_widget_destroyed), widget);
     }
@@ -368,8 +367,11 @@ main (int argc, char *Argv[])
 
   gtk_grid_attach (GTK_GRID (grid), make_image2 ("dialog-information", CENTER), 1, 3, 1, 1);
 
+  g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
   gtk_widget_show (window);
   gtk_main ();
+
+  gtk_window_destroy (GTK_WINDOW (window));
 
   return 0;
 }
