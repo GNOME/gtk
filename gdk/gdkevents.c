@@ -3008,7 +3008,8 @@ gdk_event_get_selection (const GdkEvent   *event,
 
   if (event->type == GDK_SELECTION_CLEAR ||
       event->type == GDK_SELECTION_NOTIFY ||
-      event->type == GDK_SELECTION_REQUEST)
+      event->type == GDK_SELECTION_REQUEST ||
+      event->type == GDK_OWNER_CHANGE)
     {
       *selection = event->selection.selection;
       return TRUE;
