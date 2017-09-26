@@ -2945,3 +2945,24 @@ gtk_container_get_path_for_child (GtkContainer *container,
   return path;
 }
 
+/**
+ * gtk_container_remove_callback:
+ * @child: child widget of @container. Does not have to be a direct child.
+ * @container: The #GtkContainer to remove @child from.
+ *
+ * Removes @child from @container. This function can be used as a callback
+ * passed to gtk_container_forall().
+ *
+ * Note that this does explicitly *not* check that @child's parent is @container,
+ * but @child must have been added to @container using gtk_container_add, otherwise
+ * this function will fail.
+ */
+void
+gtk_container_remove_callback (GtkWidget    *child,
+                               GtkContainer *container)
+{
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+
+  gtk_container_remove (container, child);
+}

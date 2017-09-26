@@ -767,6 +767,7 @@ gtk_container_class_find_child_property
 gtk_container_class_install_child_property
 gtk_container_class_install_child_properties
 gtk_container_class_list_child_properties
+gtk_container_remove_callback
 
 <SUBSECTION Standard>
 GTK_CONTAINER

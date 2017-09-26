@@ -242,6 +242,10 @@ GDK_AVAILABLE_IN_ALL
 GtkWidgetPath * gtk_container_get_path_for_child (GtkContainer      *container,
                                                   GtkWidget         *child);
 
+GDK_AVAILABLE_IN_3_92
+void gtk_container_remove_callback (GtkWidget    *child,
+                                    GtkContainer *container);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkContainer, g_object_unref)
 
 G_END_DECLS
