@@ -86,7 +86,7 @@ do_revealer (GtkWidget *do_widget)
     }
   else
     {
-      gtk_widget_destroy (window);
+      gtk_window_destroy (GTK_WINDOW (window));
     }
 
 

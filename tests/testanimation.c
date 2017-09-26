@@ -162,7 +162,7 @@ progressive_timeout (gpointer data)
                                            g_strerror (errno));
 
           g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
+			    G_CALLBACK (gtk_window_destroy), NULL);
 
           fclose (lc->image_stream);
           lc->image_stream = NULL;
@@ -190,7 +190,7 @@ progressive_timeout (gpointer data)
           g_error_free (error);
           
           g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
+			    G_CALLBACK (gtk_window_destroy), NULL);
 
           fclose (lc->image_stream);
           lc->image_stream = NULL;
@@ -227,7 +227,7 @@ progressive_timeout (gpointer data)
               g_error_free (error);
               
               g_signal_connect (dialog, "response",
-				G_CALLBACK (gtk_widget_destroy), NULL);
+				G_CALLBACK (gtk_window_destroy), NULL);
               
               gtk_widget_show (dialog);
 
@@ -260,7 +260,7 @@ progressive_timeout (gpointer data)
                                            g_strerror (errno));
 
           g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
+			    G_CALLBACK (gtk_window_destroy), NULL);
           
           gtk_widget_show (dialog);
 

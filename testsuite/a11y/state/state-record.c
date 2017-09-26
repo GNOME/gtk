@@ -101,7 +101,8 @@ do_action (GtkBuilder *builder, const gchar *action, GString *string)
               GObject *o;
 
               o = gtk_builder_get_object (builder, parts[i]);
-              gtk_widget_destroy (GTK_WIDGET (o));
+              g_object_ref_sink (o);
+              g_object_unref (o);
             }
         }
       else if (strcmp (parts[0], "show") == 0)

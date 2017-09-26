@@ -1523,7 +1523,7 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
   if (info == NULL)
     {
       if (destroy_on_release)
-        gtk_widget_destroy (widget);
+        g_object_unref (widget);
       return;
     }
 
@@ -1532,7 +1532,7 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
   if (widget)
     g_object_ref (widget);
 
-  info->icon_widget = widget;
+  info->icon_widget = g_object_ref (widget);
   info->hot_x = hot_x;
   info->hot_y = hot_y;
   info->destroy_icon = destroy_on_release;
@@ -2016,7 +2016,7 @@ gtk_drag_remove_icon (GtkDragSourceInfo *info)
       gtk_widget_set_opacity (widget, 1.0);
 
       if (info->destroy_icon)
-        gtk_widget_destroy (widget);
+        g_object_unref (widget);
       else
         gtk_container_remove (GTK_CONTAINER (info->icon_window), widget);
 
@@ -2028,7 +2028,7 @@ static void
 gtk_drag_source_info_free (GtkDragSourceInfo *info)
 {
   gtk_drag_remove_icon (info);
-  gtk_widget_destroy (info->icon_window);
+  gtk_window_destroy (GTK_WINDOW (info->icon_window));
   g_free (info);
 }
 

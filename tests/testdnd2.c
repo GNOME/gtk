@@ -85,7 +85,7 @@ window_drag_end (GtkWidget *widget, GdkDragContext *context, gpointer data)
 {
   GtkWidget *window = data;
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
   g_signal_handlers_disconnect_by_func (widget, window_drag_end, data);
 }
 
@@ -284,7 +284,7 @@ spinner_drag_end (GtkWidget      *widget,
 
   g_print ("GtkWidget::drag-end\n");
   spinner = g_object_get_data (G_OBJECT (context), "spinner");
-  gtk_widget_destroy (spinner);
+  g_object_unref (spinner);
 }
 
 static gboolean

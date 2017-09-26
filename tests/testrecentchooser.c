@@ -95,7 +95,7 @@ static void
 kill_dependent (GtkWindow *win,
 		GtkWidget *dep)
 {
-  gtk_widget_destroy (dep);
+  gtk_window_destroy (GTK_WINDOW (dep));
   g_object_unref (dep);
 }
 
@@ -193,7 +193,8 @@ main (int   argc,
   
   g_object_ref (dialog);
   gtk_main ();
-  gtk_widget_destroy (dialog);
+
+  gtk_window_destroy (GTK_WINDOW (dialog));
   g_object_unref (dialog);
 
   return 0;

@@ -12,7 +12,7 @@ response_cb (GtkWidget *dialog,
              gint       response_id,
              gpointer   data)
 {
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static gboolean
@@ -78,7 +78,7 @@ do_links (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

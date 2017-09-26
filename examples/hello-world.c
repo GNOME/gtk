@@ -24,7 +24,7 @@ activate (GtkApplication *app,
 
   button = gtk_button_new_with_label ("Hello World");
   g_signal_connect (button, "clicked", G_CALLBACK (print_hello), NULL);
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_destroy), window);
   gtk_container_add (GTK_CONTAINER (button_box), button);
 
   gtk_widget_show (window);

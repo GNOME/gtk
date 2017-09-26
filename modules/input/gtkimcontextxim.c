@@ -1682,7 +1682,7 @@ status_window_free (StatusWindow *status_window)
 					status_window);
 
   if (status_window->window)
-    gtk_widget_destroy (status_window->window);
+    gtk_window_destroy (GTK_WINDOW (status_window->window));
   
   g_object_set_data (G_OBJECT (status_window->toplevel), "gtk-im-xim-status-window", NULL);
  

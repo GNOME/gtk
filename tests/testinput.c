@@ -308,7 +308,7 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox), button);
 
   g_signal_connect_swapped (button, "clicked",
-			    G_CALLBACK (gtk_widget_destroy),
+			    G_CALLBACK (gtk_window_destroy),
 			    window);
   gtk_widget_show (button);
 

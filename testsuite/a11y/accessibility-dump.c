@@ -727,7 +727,7 @@ dump_ui_file (const char *ui_file,
   gtk_widget_show (window);
 
   dump_accessible (gtk_widget_get_accessible (window), 0, string);
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void

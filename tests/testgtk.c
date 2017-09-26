@@ -283,14 +283,14 @@ create_alpha_window (GtkWidget *widget)
 			&window);
 
       g_signal_connect (window, "response",
-                        G_CALLBACK (gtk_widget_destroy),
+                        G_CALLBACK (gtk_window_destroy),
                         NULL);
     }
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -370,7 +370,7 @@ create_buttons (GtkWidget *widget)
 
       button[9] = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button[9], "clicked",
-				G_CALLBACK (gtk_widget_destroy),
+				G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button[9]);
       gtk_widget_set_can_default (button[9], TRUE);
@@ -380,7 +380,7 @@ create_buttons (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -431,7 +431,7 @@ create_toggle_buttons (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button);
       gtk_widget_set_can_default (button, TRUE);
@@ -441,7 +441,7 @@ create_toggle_buttons (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static GtkWidget *
@@ -526,7 +526,7 @@ create_check_buttons (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
       g_signal_connect (window, "response",
-                        G_CALLBACK (gtk_widget_destroy),
+                        G_CALLBACK (gtk_window_destroy),
                         NULL);
 
       box1 = gtk_dialog_get_content_area (GTK_DIALOG (window));
@@ -557,7 +557,7 @@ create_check_buttons (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -589,7 +589,7 @@ create_radio_buttons (GtkWidget *widget)
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
       g_signal_connect (window, "response",
-                        G_CALLBACK (gtk_widget_destroy),
+                        G_CALLBACK (gtk_window_destroy),
                         NULL);
 
       box1 = gtk_dialog_get_content_area (GTK_DIALOG (window));
@@ -650,7 +650,7 @@ create_radio_buttons (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -766,7 +766,7 @@ create_button_box (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -961,7 +961,7 @@ create_statusbar (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button);
       gtk_widget_set_can_default (button, TRUE);
@@ -971,7 +971,7 @@ create_statusbar (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /* Alpha demo */
@@ -1074,7 +1074,7 @@ create_alpha_widgets (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 
@@ -1167,7 +1167,7 @@ dialog_response (GtkWidget *dialog, gint response_id, GtkLabel *label)
 {
   const gchar *text;
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   text = "Some <a href=\"http://en.wikipedia.org/wiki/Text\" title=\"plain text\">text</a> may be marked up\n"
          "as hyperlinks, which can be clicked\n"
@@ -1363,7 +1363,7 @@ void create_labels (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 #define DEFAULT_TEXT_RADIUS 200
@@ -1462,7 +1462,7 @@ create_rotated_text (GtkWidget *widget)
 			     gtk_widget_get_screen (widget));
 
       g_signal_connect (window, "response",
-			G_CALLBACK (gtk_widget_destroy), NULL);
+			G_CALLBACK (gtk_window_destroy), NULL);
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
@@ -1490,7 +1490,7 @@ create_rotated_text (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 
@@ -1618,7 +1618,7 @@ create_saved_position (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (hbox), button);
       gtk_widget_set_can_default (button, TRUE);
@@ -1627,7 +1627,7 @@ create_saved_position (GtkWidget *widget)
       gtk_widget_show (window);
     }
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -1701,7 +1701,7 @@ create_pixbuf (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button);
       gtk_widget_set_can_default (button, TRUE);
@@ -1711,7 +1711,7 @@ create_pixbuf (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
@@ -1796,7 +1796,7 @@ create_tooltips (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button);
       gtk_widget_set_can_default (button, TRUE);
@@ -1808,7 +1808,7 @@ create_tooltips (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -1870,7 +1870,7 @@ create_image (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -2038,7 +2038,7 @@ create_listbox (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 
@@ -2442,7 +2442,7 @@ create_menus (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button);
       gtk_widget_set_can_default (button, TRUE);
@@ -2453,7 +2453,7 @@ create_menus (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 
@@ -2541,12 +2541,12 @@ create_key_lookup (GtkWidget *widget)
 
       window_ptr = &window;
       g_object_add_weak_pointer (G_OBJECT (window), window_ptr);
-      g_signal_connect (window, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect (window, "response", G_CALLBACK (gtk_window_destroy), NULL);
 
       gtk_widget_show (window);
     }
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 
@@ -2576,7 +2576,7 @@ cmw_color (GtkWidget *widget, GtkWidget *parent)
     g_signal_connect (csd, "destroy",
 		      G_CALLBACK (cmw_destroy_cb), NULL);
     g_signal_connect (csd, "response",
-                      G_CALLBACK (gtk_widget_destroy), NULL);
+                      G_CALLBACK (gtk_window_destroy), NULL);
     
     /* wait until destroy calls gtk_main_quit */
     gtk_widget_show (csd);    
@@ -2600,7 +2600,7 @@ cmw_file (GtkWidget *widget, GtkWidget *parent)
     g_signal_connect (fs, "destroy",
                       G_CALLBACK (cmw_destroy_cb), NULL);
     g_signal_connect_swapped (fs, "response",
-                      G_CALLBACK (gtk_widget_destroy), fs);
+                      G_CALLBACK (gtk_window_destroy), fs);
 
     /* wait until destroy calls gtk_main_quit */
     gtk_widget_show (fs);
@@ -2646,7 +2646,7 @@ create_modal_window (GtkWidget *widget)
 
   /* connect signals */
   g_signal_connect_swapped (btnClose, "clicked",
-			    G_CALLBACK (gtk_widget_destroy), window);
+			    G_CALLBACK (gtk_window_destroy), window);
 
   g_signal_connect (window, "destroy",
                     G_CALLBACK (cmw_destroy_cb), NULL);
@@ -2676,7 +2676,7 @@ make_message_dialog (GdkScreen *screen,
 {
   if (*dialog)
     {
-      gtk_widget_destroy (*dialog);
+      gtk_window_destroy (GTK_WINDOW (*dialog));
 
       return;
     }
@@ -2688,7 +2688,7 @@ make_message_dialog (GdkScreen *screen,
 
   g_signal_connect_swapped (*dialog,
 			    "response",
-			    G_CALLBACK (gtk_widget_destroy),
+			    G_CALLBACK (gtk_window_destroy),
 			    *dialog);
   
   g_signal_connect (*dialog,
@@ -2743,7 +2743,7 @@ scrolled_windows_delete_cb (GtkWidget *widget, GdkEventAny *event, GtkWidget *sc
 static void
 scrolled_windows_destroy_cb (GtkWidget *widget, GtkWidget *scrollwin)
 {
-  gtk_widget_destroy (sw_float_parent);
+  gtk_window_destroy (GTK_WINDOW (sw_float_parent));
 
   sw_float_parent = NULL;
   sw_parent = NULL;
@@ -2755,7 +2755,7 @@ scrolled_windows_remove (GtkWidget *dialog, gint response, GtkWidget *scrollwin)
 {
   if (response != GTK_RESPONSE_APPLY)
     {
-      gtk_widget_destroy (dialog);
+      gtk_window_destroy (GTK_WINDOW (dialog));
       return;
     }
 
@@ -2766,8 +2766,7 @@ scrolled_windows_remove (GtkWidget *dialog, gint response, GtkWidget *scrollwin)
       gtk_container_add (GTK_CONTAINER (sw_parent), scrollwin);
       g_object_unref (scrollwin);
 
-
-      gtk_widget_destroy (sw_float_parent);
+      gtk_window_destroy (GTK_WINDOW (sw_float_parent));
 
       g_signal_handler_disconnect (sw_parent, sw_destroyed_handler);
       sw_float_parent = NULL;
@@ -2869,7 +2868,7 @@ create_scrolled_windows (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -3044,7 +3043,7 @@ create_entry (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button);
       gtk_widget_set_can_default (button, TRUE);
@@ -3054,7 +3053,7 @@ create_entry (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
@@ -3092,7 +3091,7 @@ create_expander (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 
@@ -3147,7 +3146,7 @@ create_size_group_window (GdkScreen    *screen,
   gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
 
   g_signal_connect (window, "response",
-		    G_CALLBACK (gtk_widget_destroy),
+		    G_CALLBACK (gtk_window_destroy),
 		    NULL);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
@@ -3263,8 +3262,8 @@ create_size_groups (GtkWidget *widget)
 
   if (gtk_widget_get_visible (window1) && gtk_widget_get_visible (window2))
     {
-      gtk_widget_destroy (window1);
-      gtk_widget_destroy (window2);
+      gtk_window_destroy (GTK_WINDOW (window1));
+      gtk_window_destroy (GTK_WINDOW (window2));
     }
   else
     {
@@ -3649,7 +3648,7 @@ create_spins (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (hbox), button);
     }
@@ -3657,7 +3656,7 @@ create_spins (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 
@@ -4029,7 +4028,7 @@ create_cursors (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (hbox), button);
 
@@ -4038,7 +4037,7 @@ create_cursors (GtkWidget *widget)
       gtk_entry_set_text (GTK_ENTRY (entry), "arrow");
     }
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -4080,7 +4079,7 @@ create_color_selection (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 void
@@ -4209,13 +4208,13 @@ create_flipping (GtkWidget *widget)
 			  create_forward_back ("Right-to-Left", GTK_TEXT_DIR_RTL));
 
       gtk_dialog_add_button (GTK_DIALOG (window), "Close", GTK_RESPONSE_CLOSE);
-      g_signal_connect (window, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect (window, "response", G_CALLBACK (gtk_window_destroy), NULL);
     }
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -4284,7 +4283,7 @@ create_focus (GtkWidget *widget)
 			&window);
 
       g_signal_connect (window, "response",
-                        G_CALLBACK (gtk_widget_destroy),
+                        G_CALLBACK (gtk_window_destroy),
                         NULL);
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
@@ -4319,7 +4318,7 @@ create_focus (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -4361,7 +4360,7 @@ create_font_selection (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -4443,7 +4442,7 @@ create_dialog (GtkWidget *widget)
   if (!gtk_widget_get_visible (dialog_window))
     gtk_widget_show (dialog_window);
   else
-    gtk_widget_destroy (dialog_window);
+    gtk_window_destroy (GTK_WINDOW (dialog_window));
 }
 
 /* Display & Screen test 
@@ -4480,7 +4479,7 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
       gtk_window_set_screen (GTK_WINDOW (dialog), current_screen);
       gtk_widget_show (dialog);
       g_signal_connect (dialog, "response",
-                        G_CALLBACK (gtk_widget_destroy),
+                        G_CALLBACK (gtk_window_destroy),
                         NULL);
     }
   else
@@ -4504,14 +4503,14 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
       new_screen = gdk_display_get_default_screen (display);
 
       gtk_window_set_screen (GTK_WINDOW (data->toplevel), new_screen);
-      gtk_widget_destroy (data->dialog_window);
+      gtk_window_destroy (GTK_WINDOW (data->dialog_window));
     }
 }
 
 void
 screen_display_destroy_diag (GtkWidget *widget, GtkWidget *data)
 {
-  gtk_widget_destroy (data);
+  gtk_window_destroy (GTK_WINDOW (data));
 }
 
 void
@@ -4529,7 +4528,7 @@ create_display_screen (GtkWidget *widget)
 			 "title", "Screen or Display selection",
                          10, NULL);
   g_signal_connect (window, "destroy", 
-		    G_CALLBACK (gtk_widget_destroy), NULL);
+		    G_CALLBACK (gtk_window_destroy), NULL);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_container_add (GTK_CONTAINER (window), vbox);
@@ -4657,13 +4656,13 @@ create_event_watcher (GtkWidget *widget)
       gtk_widget_show (button);
 
       gtk_dialog_add_button (GTK_DIALOG (dialog_window), "Close", GTK_RESPONSE_CLOSE);
-      g_signal_connect (dialog_window, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect (dialog_window, "response", G_CALLBACK (gtk_window_destroy), NULL);
     }
 
   if (!gtk_widget_get_visible (dialog_window))
     gtk_widget_show (dialog_window);
   else
-    gtk_widget_destroy (dialog_window);
+    gtk_window_destroy (GTK_WINDOW (dialog_window));
 }
 
 /*
@@ -4779,7 +4778,7 @@ create_range_controls (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box2), button);
       gtk_widget_set_can_default (button, TRUE);
@@ -4790,7 +4789,7 @@ create_range_controls (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -5160,7 +5159,7 @@ create_notebook (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
+			        G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_box_pack_start (GTK_BOX (box1), button);
       gtk_widget_set_can_default (button, TRUE);
@@ -5170,7 +5169,7 @@ create_notebook (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -5328,7 +5327,7 @@ create_panes (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -5647,10 +5646,10 @@ create_paned_keyboard_navigation (GtkWidget *widget)
   if (window1 && 
      (gtk_widget_get_screen (window1) != gtk_widget_get_screen (widget)))
     {
-      gtk_widget_destroy (window1);
-      gtk_widget_destroy (window2);
-      gtk_widget_destroy (window3);
-      gtk_widget_destroy (window4);
+    gtk_window_destroy (GTK_WINDOW (window1));
+    gtk_window_destroy (GTK_WINDOW (window2));
+    gtk_window_destroy (GTK_WINDOW (window3));
+    gtk_window_destroy (GTK_WINDOW (window4));
     }
   
   if (!window1)
@@ -5686,22 +5685,22 @@ create_paned_keyboard_navigation (GtkWidget *widget)
     }
 
   if (gtk_widget_get_visible (window1))
-    gtk_widget_destroy (GTK_WIDGET (window1));
+    gtk_window_destroy (GTK_WINDOW (window1));
   else
     gtk_widget_show (GTK_WIDGET (window1));
 
   if (gtk_widget_get_visible (window2))
-    gtk_widget_destroy (GTK_WIDGET (window2));
+    gtk_window_destroy (GTK_WINDOW (window2));
   else
     gtk_widget_show (GTK_WIDGET (window2));
 
   if (gtk_widget_get_visible (window3))
-    gtk_widget_destroy (GTK_WIDGET (window3));
+    gtk_window_destroy (GTK_WINDOW (window3));
   else
     gtk_widget_show (GTK_WIDGET (window3));
 
   if (gtk_widget_get_visible (window4))
-    gtk_widget_destroy (GTK_WIDGET (window4));
+    gtk_window_destroy (GTK_WINDOW (window4));
   else
     gtk_widget_show (GTK_WIDGET (window4));
 }
@@ -5776,7 +5775,7 @@ create_wmhints (GtkWidget *widget)
       button = gtk_button_new_with_label ("close");
 
       g_signal_connect_swapped (button, "clicked",
-				G_CALLBACK (gtk_widget_destroy),
+				G_CALLBACK (gtk_window_destroy),
 				window);
 
       gtk_box_pack_start (GTK_BOX (box2), button);
@@ -5788,7 +5787,7 @@ create_wmhints (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 
@@ -5841,7 +5840,7 @@ tracking_label (GtkWidget *window)
 
   g_signal_connect_object (hbox,
 			   "destroy",
-			   G_CALLBACK (gtk_widget_destroy),
+			   G_CALLBACK (gtk_window_destroy),
 			   window,
 			   G_CONNECT_SWAPPED);
 
@@ -6059,7 +6058,7 @@ create_window_states (GtkWidget *widget)
 			     gtk_widget_get_screen (widget));
       
       g_signal_connect_object (iconified, "destroy",
-			       G_CALLBACK (gtk_widget_destroy),
+			       G_CALLBACK (gtk_window_destroy),
 			       window,
 			       G_CONNECT_SWAPPED);
       gtk_window_iconify (GTK_WINDOW (iconified));
@@ -6073,7 +6072,7 @@ create_window_states (GtkWidget *widget)
 			     gtk_widget_get_screen (widget));
       
       g_signal_connect_object (normal, "destroy",
-			       G_CALLBACK (gtk_widget_destroy),
+			       G_CALLBACK (gtk_window_destroy),
 			       window,
 			       G_CONNECT_SWAPPED);
       
@@ -6095,7 +6094,7 @@ create_window_states (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -6266,7 +6265,7 @@ window_controls (GtkWidget *window)
   
   g_signal_connect_object (control_window,
 			   "destroy",
-			   G_CALLBACK (gtk_widget_destroy),
+			   G_CALLBACK (gtk_window_destroy),
                            window,
 			   G_CONNECT_SWAPPED);
 
@@ -6478,7 +6477,7 @@ create_window_sizing (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -6762,14 +6761,14 @@ create_progress_bar (GtkWidget *widget)
 
       gtk_dialog_add_button (GTK_DIALOG (pdata->window), "Close", GTK_RESPONSE_CLOSE);
       g_signal_connect (pdata->window, "response",
-			G_CALLBACK (gtk_widget_destroy),
+			G_CALLBACK (gtk_window_destroy),
 			NULL);
     }
 
   if (!gtk_widget_get_visible (pdata->window))
     gtk_widget_show (pdata->window);
   else
-    gtk_widget_destroy (pdata->window);
+    gtk_window_destroy (GTK_WINDOW (pdata->window));
 }
 
 /*
@@ -7079,7 +7078,7 @@ create_snapshot (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
   
 }
 
@@ -7143,7 +7142,7 @@ selection_test_get_targets (GtkWidget *dialog, gint response, GtkWidget *tree_vi
 
   if (response != GTK_RESPONSE_APPLY)
     {
-      gtk_widget_destroy (dialog);
+      gtk_window_destroy (GTK_WINDOW (dialog));
       return;
     }
 
@@ -7225,7 +7224,7 @@ create_selection_test (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -7369,14 +7368,14 @@ create_scroll_test (GtkWidget *widget)
                              "Quit",
                              GTK_RESPONSE_CLOSE);
       g_signal_connect_swapped (window, "response",
-				G_CALLBACK (gtk_widget_destroy),
+				G_CALLBACK (gtk_window_destroy),
 				window);
     }
 
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -7458,7 +7457,7 @@ create_timeout_test (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
-				G_CALLBACK (gtk_widget_destroy),
+				G_CALLBACK (gtk_window_destroy),
 				window);
       gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (action_area), button);
@@ -7485,7 +7484,7 @@ create_timeout_test (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -7531,7 +7530,7 @@ create_mainloop (GtkWidget *widget)
                              "Leave",
                              GTK_RESPONSE_OK);
       g_signal_connect_swapped (window, "response",
-				G_CALLBACK (gtk_widget_destroy),
+				G_CALLBACK (gtk_window_destroy),
 				window);
     }
 
@@ -7544,7 +7543,7 @@ create_mainloop (GtkWidget *widget)
       g_print ("create_mainloop: done\n");
     }
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static gboolean
@@ -7654,7 +7653,7 @@ void create_layout (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
@@ -8032,7 +8031,7 @@ create_native_dialogs (GtkWidget *widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 }
 
 /*
@@ -8042,7 +8041,7 @@ create_native_dialogs (GtkWidget *widget)
 void
 do_exit (GtkWidget *widget, GtkWidget *window)
 {
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
   gtk_main_quit ();
 }
 

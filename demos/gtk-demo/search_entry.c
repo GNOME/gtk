@@ -291,8 +291,8 @@ do_search_entry (GtkWidget *do_widget)
     gtk_widget_show (window);
   else
     {
-      gtk_widget_destroy (menu);
-      gtk_widget_destroy (window);
+      gtk_menu_detach (GTK_MENU (menu));
+      gtk_window_destroy (GTK_WINDOW (window));
     }
 
   return window;

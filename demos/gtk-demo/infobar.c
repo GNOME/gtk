@@ -31,7 +31,7 @@ on_bar_response (GtkInfoBar *info_bar,
 
   g_signal_connect_swapped (dialog,
                             "response",
-                            G_CALLBACK (gtk_widget_destroy),
+                            G_CALLBACK (gtk_window_destroy),
                             dialog);
 
   gtk_widget_show (dialog);
@@ -146,7 +146,7 @@ do_infobar (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

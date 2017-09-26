@@ -99,7 +99,7 @@ monitor_added (GdkDisplay *display,
   g_signal_connect (monitor, "notify",
                     G_CALLBACK (monitor_changed_cb), label);
   g_signal_connect_swapped (monitor, "invalidate",
-                            G_CALLBACK (gtk_widget_destroy), window);
+                            G_CALLBACK (gtk_window_destroy), window);
 }
 
 int

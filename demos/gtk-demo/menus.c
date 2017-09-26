@@ -147,7 +147,7 @@ do_menus (GtkWidget *do_widget)
 
       button = gtk_button_new_with_label ("Close");
       g_signal_connect_swapped (button, "clicked",
-                                G_CALLBACK(gtk_widget_destroy), window);
+                                G_CALLBACK(gtk_window_destroy), window);
       gtk_box_pack_start (GTK_BOX (box2), button);
       gtk_widget_set_can_default (button, TRUE);
       gtk_widget_grab_default (button);
@@ -157,7 +157,7 @@ do_menus (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

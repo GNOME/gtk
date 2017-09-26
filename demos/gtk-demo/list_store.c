@@ -310,7 +310,7 @@ do_list_store (GtkWidget *do_widget)
     }
   else
     {
-      gtk_widget_destroy (window);
+      gtk_window_destroy (GTK_WINDOW (window));
       window = NULL;
       if (timeout != 0)
         {

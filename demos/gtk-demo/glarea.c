@@ -424,7 +424,7 @@ create_glarea_window (GtkWidget *do_widget)
   button = gtk_button_new_with_label ("Quit");
   gtk_widget_set_hexpand (button, TRUE);
   gtk_container_add (GTK_CONTAINER (box), button);
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_destroy), window);
 
   return window;
 }
@@ -438,7 +438,7 @@ do_glarea (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (demo_window))
     gtk_widget_show (demo_window);
   else
-    gtk_widget_destroy (demo_window);
+    gtk_window_destroy (GTK_WINDOW (demo_window));
 
   return demo_window;
 }

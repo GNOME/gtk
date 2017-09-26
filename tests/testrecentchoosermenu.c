@@ -188,7 +188,7 @@ main (int argc, char *argv[])
 
   button = gtk_button_new_with_label ("Close");
   g_signal_connect_swapped (button, "clicked",
-                            G_CALLBACK (gtk_widget_destroy),
+                            G_CALLBACK (gtk_window_destroy),
                             window);
   gtk_box_pack_end (GTK_BOX (box), button);
   gtk_widget_set_can_default (button, TRUE);

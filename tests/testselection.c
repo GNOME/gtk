@@ -361,7 +361,7 @@ paste (GtkWidget *dialog, gint response, GtkWidget *entry)
 
   if (response != GTK_RESPONSE_APPLY)
     {
-      gtk_widget_destroy (dialog);
+      gtk_window_destroy (GTK_WINDOW (dialog));
       return;
     }
 

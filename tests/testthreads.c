@@ -100,7 +100,7 @@ counter (void *data)
       gdk_threads_enter();
     }
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 
   pthread_mutex_lock (&nthreads_mutex);
   nthreads--;

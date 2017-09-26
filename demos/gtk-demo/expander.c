@@ -15,7 +15,7 @@ static GtkWidget *window = NULL;
 static void
 response_cb (GtkDialog *dialog, gint response_id)
 {
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
   window = NULL;
 }
 
@@ -83,7 +83,7 @@ do_expander (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

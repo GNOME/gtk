@@ -27,7 +27,7 @@ apply_changes_gradually (gpointer data)
   else
     {
       /* Close automatically once changes are fully applied. */
-      gtk_widget_destroy (assistant);
+      gtk_window_destroy (GTK_WINDOW (assistant));
       assistant = NULL;
       return G_SOURCE_REMOVE;
     }
@@ -45,7 +45,7 @@ on_assistant_close_cancel (GtkWidget *widget, gpointer data)
 {
   GtkWidget **assistant = (GtkWidget **) data;
 
-  gtk_widget_destroy (*assistant);
+  gtk_window_destroy (GTK_WINDOW (*assistant));
   *assistant = NULL;
 }
 
@@ -192,7 +192,7 @@ do_assistant (GtkWidget *do_widget)
     gtk_widget_show (assistant);
   else
     {
-      gtk_widget_destroy (assistant);
+      gtk_window_destroy (GTK_WINDOW (assistant));
       assistant = NULL;
     }
 

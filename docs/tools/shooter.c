@@ -252,7 +252,7 @@ shoot_one (WidgetInfo *info)
     {
       g_warning ("unable to save shot of %s", info->name);
     }
-  gtk_widget_destroy (info->window);
+  gtk_window_destroy (GTK_WINDOW (info->window));
 
   shot_id = 0;
 

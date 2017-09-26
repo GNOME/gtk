@@ -45,7 +45,7 @@ show_action_dialog (GSimpleAction *action)
                                     name);
 
   g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_widget_destroy), NULL);
+                    G_CALLBACK (gtk_window_destroy), NULL);
 
   gtk_widget_show (dialog);
 }
@@ -118,7 +118,7 @@ open_response_cb (GtkNativeDialog *dialog,
                                                    "Error loading file: \"%s\"",
                                                    error->message);
           g_signal_connect (message_dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+                            G_CALLBACK (gtk_window_destroy), NULL);
           gtk_widget_show (message_dialog);
           g_error_free (error);
         }
@@ -232,7 +232,7 @@ activate_quit (GSimpleAction *action,
       win = list->data;
       next = list->next;
 
-      gtk_widget_destroy (GTK_WIDGET (win));
+      gtk_window_destroy (GTK_WINDOW (win));
 
       list = next;
     }

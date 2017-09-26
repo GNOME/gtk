@@ -178,7 +178,7 @@ quit_app (GSimpleAction *action,
       win = list->data;
       next = list->next;
 
-      gtk_widget_destroy (GTK_WIDGET (win));
+      gtk_window_destroy (win);
 
       list = next;
     }
@@ -387,7 +387,7 @@ configure_plugins (GSimpleAction *action,
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), plugin_enabled ("black"));
   g_signal_connect (check, "toggled", G_CALLBACK (enable_or_disable_plugin), "black");
 
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
 
   gtk_window_present (GTK_WINDOW (dialog));
 

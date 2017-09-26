@@ -160,7 +160,7 @@ main (int argc, char *argv[])
 	gtk_dialog_run (GTK_DIALOG (dialog));
     }
   
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 
   entry = g_object_new (GTK_TYPE_ENTRY,
 			  "activates_default", TRUE,

@@ -148,7 +148,7 @@ main (gint argc, gchar **argv)
   
   gtk_main ();
 
-  gtk_widget_destroy (GTK_WIDGET (info.window));
+  gtk_window_destroy (GTK_WINDOW (info.window));
 
   info.toolbar = NULL;
   info.window = NULL;

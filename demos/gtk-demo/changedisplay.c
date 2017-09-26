@@ -150,7 +150,7 @@ query_for_toplevel (GdkScreen  *screen,
     }
 
   g_object_unref (cursor);
-  gtk_widget_destroy (popup);
+  gtk_window_destroy (GTK_WINDOW (popup));
   gdk_flush ();                 /* Really release the grab */
 
   return toplevel;
@@ -187,7 +187,7 @@ response_cb (GtkDialog         *dialog,
   if (response_id == GTK_RESPONSE_OK)
     query_change_display (info);
   else
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+    gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 /* Called when the user clicks on "Open..." in the display
@@ -250,7 +250,7 @@ open_display_cb (GtkWidget         *button,
         }
     }
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 /* Called when the user clicks on the "Close" button in the
@@ -551,7 +551,7 @@ do_changedisplay (GtkWidget *do_widget)
     }
   else
     {
-      gtk_widget_destroy (info->window);
+      gtk_window_destroy (GTK_WINDOW (info->window));
       return NULL;
     }
 }

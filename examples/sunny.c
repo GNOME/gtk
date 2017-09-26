@@ -102,7 +102,7 @@ quit_app (GSimpleAction *action,
       win = list->data;
       next = list->next;
 
-      gtk_widget_destroy (GTK_WIDGET (win));
+      gtk_window_destroy (win);
 
       list = next;
     }

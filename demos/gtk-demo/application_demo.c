@@ -33,7 +33,6 @@ on_name_vanished (GDBusConnection *connection,
 
   if (placeholder)
     {
-      gtk_widget_destroy (placeholder);
       g_object_unref (placeholder);
       placeholder = NULL;
     }

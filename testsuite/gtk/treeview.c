@@ -30,6 +30,7 @@ test_bug_546005 (void)
 
   /* Tests provided by Bjorn Lindqvist, Paul Pogonyshev */
   view = gtk_tree_view_new ();
+  g_object_ref_sink (view);
 
   /* Invalid path on tree view without model */
   path = gtk_tree_path_new_from_indices (1, -1);
@@ -68,7 +69,7 @@ test_bug_546005 (void)
                             NULL, FALSE);
   gtk_tree_path_free (path);
 
-  gtk_widget_destroy (view);
+  g_object_unref (view);
 }
 
 static void
@@ -84,6 +85,7 @@ test_bug_539377 (void)
 
   /* Non-realized view, no model */
   view = gtk_tree_view_new ();
+  g_object_ref_sink (view);
   g_assert (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (view), 10, 10, &path,
                                            NULL, NULL, NULL) == FALSE);
   g_assert (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view), 10, 10,
@@ -98,8 +100,7 @@ test_bug_539377 (void)
                                            NULL, NULL, NULL) == FALSE);
   g_assert (gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view), 10, 10,
                                                &path, NULL) == FALSE);
-
-  gtk_widget_destroy (view);
+  g_object_unref (view);
 }
 
 static void
@@ -114,6 +115,7 @@ test_select_collapsed_row (void)
   /* Reported by Michael Natterer */
   tree_store = gtk_tree_store_new (1, G_TYPE_STRING);
   view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (tree_store));
+  g_object_ref_sink (view);
 
   gtk_tree_store_insert_with_values (tree_store, &parent, NULL, 0,
                                      0, "Parent",
@@ -155,7 +157,7 @@ test_select_collapsed_row (void)
 
   gtk_tree_path_free (path);
 
-  gtk_widget_destroy (view);
+  g_object_unref (view);
 }
 
 static gboolean
@@ -225,7 +227,7 @@ test_row_separator_height (void)
   g_assert_cmpint (rect.height, ==, height);
   g_assert_cmpint (cell_rect.height, ==, height);
 
-  gtk_widget_destroy (tree_view);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 static void
@@ -240,6 +242,7 @@ test_selection_count (void)
 
   list_store = gtk_list_store_new (1, G_TYPE_STRING);
   view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
+  g_object_ref_sink (view);
 
   gtk_list_store_insert_with_values (list_store, NULL, 0, 0, "One", -1);
   gtk_list_store_insert_with_values (list_store, NULL, 1, 0, "Two", -1);
@@ -278,7 +281,7 @@ test_selection_count (void)
 
   g_assert_cmpint (gtk_tree_selection_count_selected_rows (selection), ==, 0);
 
-  gtk_widget_destroy (view);
+  g_object_unref (view);
 }
 
 static void
@@ -303,6 +306,7 @@ test_selection_empty (void)
 
   list_store = gtk_list_store_new (1, G_TYPE_STRING);
   view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (list_store));
+  g_object_ref_sink (view);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 
   g_assert_false (gtk_tree_selection_get_selected (selection, NULL, &iter));
@@ -332,7 +336,7 @@ test_selection_empty (void)
 
   gtk_tree_path_free (path);
 
-  gtk_widget_destroy (view);
+  g_object_unref (view);
 }
 
 int

@@ -313,7 +313,6 @@ widget_property_tests (gconstpointer test_data)
   widget_test_properties (widget,   1); /* test maximum */
   widget_test_properties (widget,  -1); /* test random value */
   /* cleanup */
-  gtk_widget_destroy (widget);
   g_object_unref (widget);
 }
 

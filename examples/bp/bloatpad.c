@@ -386,7 +386,7 @@ response (GtkDialog *dialog,
 
   if (response_id == GTK_RESPONSE_CLOSE)
     {
-      gtk_widget_destroy (GTK_WIDGET (dialog));
+      gtk_window_destroy (GTK_WINDOW (dialog));
       return;
     }
 

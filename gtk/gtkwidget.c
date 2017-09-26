@@ -10192,7 +10192,7 @@ gtk_widget_real_destroy (GtkWidget *object)
 	  FinalizeAssertion *assertion = l->data;
 
 	  if (!assertion->did_finalize)
-	    g_critical ("Automated component '%s' of class '%s' did not finalize in gtk_widget_destroy(). "
+	    g_critical ("Automated component '%s' of class '%s' did not finalize in GtkWidget::destroy. "
 			"Current reference count is %d",
 			assertion->child_class->name,
 			g_type_name (assertion->widget_type),

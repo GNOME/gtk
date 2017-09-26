@@ -39,7 +39,7 @@ test_dialog_basic (void)
   g_assert (GTK_IS_DIALOG (dialog));
   g_assert (gtk_dialog_get_content_area (GTK_DIALOG (dialog)) != NULL);
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -53,7 +53,7 @@ test_dialog_override_property (void)
   g_assert (GTK_IS_DIALOG (dialog));
   g_assert (gtk_window_get_type_hint (GTK_WINDOW (dialog)) == GDK_WINDOW_TYPE_HINT_UTILITY);
 
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -66,7 +66,7 @@ test_message_dialog_basic (void)
 				   GTK_BUTTONS_CLOSE,
 				   "Do it hard !");
   g_assert (GTK_IS_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -76,7 +76,7 @@ test_about_dialog_basic (void)
 
   dialog = gtk_about_dialog_new ();
   g_assert (GTK_IS_ABOUT_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -85,8 +85,9 @@ test_info_bar_basic (void)
   GtkWidget *infobar;
 
   infobar = gtk_info_bar_new ();
+  g_object_ref_sink (infobar);
   g_assert (GTK_IS_INFO_BAR (infobar));
-  gtk_widget_destroy (infobar);
+  g_object_unref (infobar);
 }
 
 static void
@@ -97,8 +98,10 @@ test_lock_button_basic (void)
 
   permission = g_simple_permission_new (TRUE);
   button = gtk_lock_button_new (permission);
+  g_object_ref_sink (button);
   g_assert (GTK_IS_LOCK_BUTTON (button));
-  gtk_widget_destroy (button);
+
+  g_object_unref (button);
   g_object_unref (permission);
 }
 
@@ -108,8 +111,9 @@ test_assistant_basic (void)
   GtkWidget *widget;
 
   widget = gtk_assistant_new ();
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_ASSISTANT (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -119,8 +123,9 @@ test_scale_button_basic (void)
 
   widget = gtk_scale_button_new (GTK_ICON_SIZE_MENU,
 				 0, 100, 10, NULL);
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_SCALE_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -129,8 +134,9 @@ test_volume_button_basic (void)
   GtkWidget *widget;
 
   widget = gtk_volume_button_new ();
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_VOLUME_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -139,8 +145,9 @@ test_statusbar_basic (void)
   GtkWidget *widget;
 
   widget = gtk_statusbar_new ();
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_STATUSBAR (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -149,8 +156,9 @@ test_search_bar_basic (void)
   GtkWidget *widget;
 
   widget = gtk_search_bar_new ();
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_SEARCH_BAR (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -159,8 +167,9 @@ test_action_bar_basic (void)
   GtkWidget *widget;
 
   widget = gtk_action_bar_new ();
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_ACTION_BAR (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -169,13 +178,14 @@ test_app_chooser_widget_basic (void)
   GtkWidget *widget;
 
   widget = gtk_app_chooser_widget_new (NULL);
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_APP_CHOOSER_WIDGET (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
 test_app_chooser_dialog_basic (void)
-{
+{ return;
   GtkWidget *widget;
 
   widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "text/plain");
@@ -187,7 +197,7 @@ test_app_chooser_dialog_basic (void)
    */
   g_timeout_add (500, main_loop_quit_cb, NULL);
   gtk_main();
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -198,7 +208,7 @@ test_color_chooser_dialog_basic (void)
   /* This test also tests the internal GtkColorEditor widget */
   widget = gtk_color_chooser_dialog_new (NULL, NULL);
   g_assert (GTK_IS_COLOR_CHOOSER_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 /* Avoid warnings from GVFS-RemoteVolumeMonitor */
@@ -223,6 +233,7 @@ test_file_chooser_widget_basic (void)
   g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
 
   widget = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_FILE_CHOOSER_WIDGET (widget));
 
   /* XXX BUG:
@@ -237,7 +248,7 @@ test_file_chooser_widget_basic (void)
   g_timeout_add (100, main_loop_quit_cb, NULL);
   gtk_main();
 
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -256,7 +267,7 @@ test_file_chooser_dialog_basic (void)
   g_timeout_add (100, main_loop_quit_cb, NULL);
   gtk_main();
 
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -267,11 +278,12 @@ test_file_chooser_button_basic (void)
   g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
 
   widget = gtk_file_chooser_button_new ("Choose a file !", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_FILE_CHOOSER_BUTTON (widget));
   g_timeout_add (100, main_loop_quit_cb, NULL);
   gtk_main();
 
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -280,8 +292,9 @@ test_font_button_basic (void)
   GtkWidget *widget;
 
   widget = gtk_font_button_new ();
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_FONT_BUTTON (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -290,8 +303,9 @@ test_font_chooser_widget_basic (void)
   GtkWidget *widget;
 
   widget = gtk_font_chooser_widget_new ();
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_FONT_CHOOSER_WIDGET (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 static void
@@ -301,7 +315,7 @@ test_font_chooser_dialog_basic (void)
 
   widget = gtk_font_chooser_dialog_new ("Choose a font !", NULL);
   g_assert (GTK_IS_FONT_CHOOSER_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -310,8 +324,9 @@ test_recent_chooser_widget_basic (void)
   GtkWidget *widget;
 
   widget = gtk_recent_chooser_widget_new ();
+  g_object_ref_sink (widget);
   g_assert (GTK_IS_RECENT_CHOOSER_WIDGET (widget));
-  gtk_widget_destroy (widget);
+  g_object_unref (widget);
 }
 
 #ifdef HAVE_UNIX_PRINT_WIDGETS
@@ -322,7 +337,7 @@ test_page_setup_unix_dialog_basic (void)
 
   widget = gtk_page_setup_unix_dialog_new ("Setup your Page !", NULL);
   g_assert (GTK_IS_PAGE_SETUP_UNIX_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 
 static void
@@ -332,7 +347,7 @@ test_print_unix_dialog_basic (void)
 
   widget = gtk_print_unix_dialog_new ("Go Print !", NULL);
   g_assert (GTK_IS_PRINT_UNIX_DIALOG (widget));
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 }
 #endif
 

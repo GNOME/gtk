@@ -963,10 +963,10 @@ main_window_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer user_data)
   for (i = 0; i < G_N_ELEMENTS (interfaces); ++i)
     {
       if (interfaces[i].window)
-        gtk_widget_destroy (interfaces[i].window);
+        gtk_window_destroy (GTK_WINDOW (interfaces[i].window));
     }
 
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 
   gtk_main_quit ();
 

@@ -78,7 +78,7 @@ activate_quit (GSimpleAction *action,
       win = list->data;
       next = list->next;
 
-      gtk_widget_destroy (GTK_WIDGET (win));
+      gtk_window_destroy (GTK_WINDOW (win));
 
       list = next;
     }

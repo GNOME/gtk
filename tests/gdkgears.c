@@ -236,7 +236,7 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Quit");
   gtk_widget_set_hexpand (button, TRUE);
   gtk_container_add (GTK_CONTAINER (bbox), button);
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_destroy), window);
   gtk_widget_show (button);
 
   gtk_widget_show (window);

@@ -43,10 +43,11 @@ ref_count_single_level (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
 
   assert_entire_model_referenced (ref_model, 1);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
 
   assert_entire_model_unreferenced (ref_model);
 
@@ -76,6 +77,7 @@ ref_count_two_levels (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
 
   assert_root_level_referenced (ref_model, 1);
   assert_node_ref_count (ref_model, &iter, 0);
@@ -97,7 +99,7 @@ ref_count_two_levels (void)
   assert_root_level_referenced (ref_model, 1);
   assert_node_ref_count (ref_model, &iter, 0);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
 
   assert_entire_model_unreferenced (ref_model);
 
@@ -140,6 +142,7 @@ ref_count_three_levels (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
 
   assert_root_level_referenced (ref_model, 1);
   assert_node_ref_count (ref_model, &parent1, 0);
@@ -238,7 +241,7 @@ ref_count_three_levels (void)
   assert_node_ref_count (ref_model, &iter_parent1, 0);
   assert_node_ref_count (ref_model, &iter_parent2, 0);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
 
   assert_entire_model_unreferenced (ref_model);
 
@@ -281,6 +284,7 @@ ref_count_delete_row (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
 
   assert_root_level_referenced (ref_model, 1);
   assert_node_ref_count (ref_model, &parent1, 0);
@@ -323,7 +327,7 @@ ref_count_delete_row (void)
 
   assert_node_ref_count (ref_model, &grandparent1, 1);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
 
   assert_entire_model_unreferenced (ref_model);
 
@@ -363,10 +367,11 @@ ref_count_cleanup (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
 
   assert_node_ref_count (ref_model, &grandparent1, 0);
   assert_node_ref_count (ref_model, &grandparent2, 1);
@@ -417,6 +422,7 @@ ref_count_row_ref (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
 
   path = gtk_tree_path_new_from_indices (1, 1, 1, -1);
   row_ref = gtk_tree_row_reference_new (sort_model, path);
@@ -471,7 +477,7 @@ ref_count_row_ref (void)
   assert_node_ref_count (ref_model, &parent1, 0);
   assert_node_ref_count (ref_model, &iter_parent1, 0);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
   g_object_unref (sort_model);
 
   assert_entire_model_unreferenced (ref_model);
@@ -511,6 +517,7 @@ ref_count_reorder_single (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
 
   assert_entire_model_referenced (ref_model, 1);
 
@@ -563,7 +570,7 @@ ref_count_reorder_single (void)
 
   assert_entire_model_referenced (ref_model, 1);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
   g_object_unref (sort_model);
 
   assert_entire_model_unreferenced (ref_model);
@@ -617,6 +624,7 @@ ref_count_reorder_two (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
   assert_node_ref_count (ref_model, &iter1, 2);
@@ -724,7 +732,7 @@ ref_count_reorder_two (void)
 
   assert_level_referenced (ref_model, 1, &iter1);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
   g_object_unref (sort_model);
 
   assert_entire_model_unreferenced (ref_model);
@@ -811,6 +819,7 @@ rows_reordered_single_level (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
 
   monitor = signal_monitor_new (sort_model);
 
@@ -843,7 +852,7 @@ rows_reordered_single_level (void)
   gtk_tree_path_free (path);
   signal_monitor_free (monitor);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
   g_object_unref (sort_model);
 
   assert_entire_model_unreferenced (ref_model);
@@ -901,6 +910,7 @@ rows_reordered_two_levels (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
   monitor = signal_monitor_new (sort_model);
@@ -951,7 +961,7 @@ rows_reordered_two_levels (void)
   gtk_tree_path_free (child_path);
   signal_monitor_free (monitor);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
   g_object_unref (sort_model);
 
   g_object_unref (ref_model);
@@ -989,6 +999,7 @@ sorted_insert (void)
 
   sort_model = gtk_tree_model_sort_new_with_model (model);
   tree_view = gtk_tree_view_new_with_model (sort_model);
+  g_object_ref_sink (tree_view);
 
   /* Sort */
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model),
@@ -1023,7 +1034,7 @@ sorted_insert (void)
   gtk_tree_path_free (path);
   signal_monitor_free (monitor);
 
-  gtk_widget_destroy (tree_view);
+  g_object_unref (tree_view);
   g_object_unref (sort_model);
 
   g_object_unref (ref_model);

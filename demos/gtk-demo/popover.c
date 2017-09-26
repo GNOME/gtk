@@ -45,7 +45,7 @@ create_complex_popover (GtkWidget       *parent,
   g_object_ref (content);
   gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (content)),
                         content);
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
   g_object_unref (builder);
 
   popover = create_popover (parent, content, GTK_POS_BOTTOM);
@@ -174,7 +174,7 @@ do_popover (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show (window);
   else
-    gtk_widget_destroy (window);
+    gtk_window_destroy (GTK_WINDOW (window));
 
   return window;
 }

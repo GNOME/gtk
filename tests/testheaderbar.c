@@ -33,7 +33,7 @@ on_bookmark_clicked (GtkButton *button, gpointer data)
                                          NULL);
 
   g_signal_connect (chooser, "response",
-                    G_CALLBACK (gtk_widget_destroy), NULL);
+                    G_CALLBACK (gtk_window_destroy), NULL);
 
   gtk_widget_show (chooser);
 }
@@ -168,7 +168,7 @@ main (int argc, char *argv[])
 
   gtk_main ();
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 
   return 0;
 }

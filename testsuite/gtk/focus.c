@@ -40,7 +40,7 @@ test_window_focus (void)
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry1);
 
-  gtk_widget_destroy (window);
+  gtk_window_destroy (GTK_WINDOW (window));
 }
 
 int

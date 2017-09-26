@@ -742,7 +742,7 @@ node_property_activated (GtkTreeView *tv,
   gtk_container_add (GTK_CONTAINER (popover), image);
   gtk_popover_popup (GTK_POPOVER (popover));
 
-  g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
+  g_signal_connect (popover, "unmap", G_CALLBACK (gtk_popover_set_pointing_to), NULL);
 
   cairo_surface_destroy (surface);
 }

@@ -143,6 +143,7 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
   cairo_t *cr;
 
   g_assert (gtk_widget_get_realized (widget));
+  g_assert (GTK_IS_WINDOW (widget));
 
   loop = g_main_loop_new (NULL, FALSE);
 
@@ -181,7 +182,7 @@ snapshot_widget (GtkWidget *widget, SnapshotMode mode)
 
   cairo_destroy (cr);
   g_main_loop_unref (loop);
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (widget));
 
   return surface;
 }
