@@ -902,8 +902,7 @@ gdk_screen_get_monitor_workarea (GdkScreen    *screen,
 
   g_return_if_fail (monitor != NULL);
 
-  /* FIXME */
-  gdk_monitor_get_geometry (monitor, dest);
+  gdk_monitor_get_workarea (monitor, dest);
 }
 
 /**
