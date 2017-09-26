@@ -132,7 +132,7 @@ gsk_sl_node_declaration_write_spv (const GskSlNode *node,
 
   variable_id = gsk_spv_writer_get_id_for_variable (writer, declaration->variable);
   
-  if (declaration->initial)
+  if (declaration->initial && ! gsk_sl_variable_get_initial_value (declaration->variable))
     {
       gsk_spv_writer_add (writer,
                           GSK_SPV_WRITER_SECTION_CODE,

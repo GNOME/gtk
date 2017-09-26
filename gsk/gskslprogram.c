@@ -20,6 +20,7 @@
 
 #include "gskslprogramprivate.h"
 
+#include "gskslexpressionprivate.h"
 #include "gskslfunctionprivate.h"
 #include "gskslnodeprivate.h"
 #include "gskslpointertypeprivate.h"
@@ -27,6 +28,7 @@
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
 
@@ -76,15 +78,55 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
 {
   GskSlVariable *variable;
   const GskSlToken *token;
+  GskSlValue *value = NULL;
   GskSlPointerType *pointer_type;
 
   token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
+    {
+      GskSlValue *unconverted;
+      GskSlExpression *initial;
+
+      gsk_sl_preprocessor_consume (preproc, program);
+
+      initial = gsk_sl_expression_parse_assignment (scope, preproc);
+      if (initial == NULL)
+        return FALSE;
+
+      if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (initial)))
+        {
+          gsk_sl_preprocessor_error (preproc, "Cannot convert from initializer type %s to variable type %s",
+                                              gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initial)),
+                                              gsk_sl_type_get_name (type));
+          gsk_sl_expression_unref (initial);
+          return FALSE;
+        }
+
+      unconverted = gsk_sl_expression_get_constant (initial);
+      gsk_sl_expression_unref (initial);
+      if (unconverted)
+        {
+          value = gsk_sl_value_new_convert (unconverted, type);
+          gsk_sl_value_free (unconverted);
+        }
+      else 
+        {
+          gsk_sl_preprocessor_error (preproc, "Initializer is not constant.");
+          return FALSE;
+        }
+
+      token = gsk_sl_preprocessor_get (preproc);
+    }
+
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-    return FALSE;
+    {
+      gsk_sl_preprocessor_error (preproc, "No semicolon at end of variable declaration.");
+      return FALSE;
+    }
   gsk_sl_preprocessor_consume (preproc, NULL);
 
   pointer_type = gsk_sl_pointer_type_new (type, FALSE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-  variable = gsk_sl_variable_new (pointer_type, g_strdup (name), NULL, decoration->values[GSK_SL_DECORATION_CONST].set);
+  variable = gsk_sl_variable_new (pointer_type, g_strdup (name), value, decoration->values[GSK_SL_DECORATION_CONST].set);
   gsk_sl_pointer_type_unref (pointer_type);
       
   program->variables = g_slist_append (program->variables, variable);
@@ -192,7 +234,14 @@ gsk_sl_program_print (GskSlProgram *program,
 
   for (l = program->variables; l; l = l->next)
     {
+      const GskSlValue *value;
       gsk_sl_variable_print (l->data, string);
+      value = gsk_sl_variable_get_initial_value (l->data);
+      if (value)
+        {
+          g_string_append (string, " = ");
+          gsk_sl_value_print (value, string);
+        }
       g_string_append (string, ";\n");
     }
 

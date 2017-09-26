@@ -124,16 +124,21 @@ guint32
 gsk_sl_variable_write_spv (const GskSlVariable *variable,
                            GskSpvWriter        *writer)
 {
-  guint32 pointer_type_id, variable_id;
+  guint32 pointer_type_id, variable_id, value_id;
 
   pointer_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, variable->type);
   variable_id = gsk_spv_writer_next_id (writer);
+  if (variable->initial_value)
+    value_id = gsk_spv_writer_get_id_for_value (writer, variable->initial_value);
+  else
+    value_id = 0;
   gsk_spv_writer_add (writer,
                       GSK_SPV_WRITER_SECTION_CODE,
-                      4, GSK_SPV_OP_VARIABLE,
-                      (guint32[3]) { pointer_type_id,
+                      variable->initial_value ? 5 : 4, GSK_SPV_OP_VARIABLE,
+                      (guint32[4]) { pointer_type_id,
                                      variable_id,
-                                     gsk_sl_pointer_type_get_storage_class (variable->type)});
+                                     gsk_sl_pointer_type_get_storage_class (variable->type),
+                                     value_id });
 
   return variable_id;
 }
