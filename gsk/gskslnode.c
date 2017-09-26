@@ -275,6 +275,14 @@ gsk_sl_node_parse_declaration (GskSlScope        *scope,
     {
       gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
       declaration->initial = gsk_sl_expression_parse_assignment (scope, stream);
+      if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (declaration->initial)))
+        {
+          gsk_sl_preprocessor_error (stream, "Cannot convert from initializer type %s to variable type %s",
+                                             gsk_sl_type_get_name (gsk_sl_expression_get_return_type (declaration->initial)),
+                                             gsk_sl_type_get_name (type));
+          gsk_sl_node_unref ((GskSlNode *) declaration);
+          return NULL;
+        }
     }
 
   gsk_sl_scope_add_variable (scope, declaration->variable);
