@@ -766,6 +766,7 @@ gdk_event_free (GdkEvent *event)
       private = (GdkEventPrivate *) event;
       g_clear_object (&private->device);
       g_clear_object (&private->source_device);
+      g_clear_object (&private->user_data);
     }
 
   switch (event->any.type)
