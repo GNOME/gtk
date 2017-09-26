@@ -216,19 +216,100 @@ write_bool_spv (GskSpvWriter  *writer,
   return result_id;
 }
 
+#define SIMPLE_CONVERSION(source_name, target_name, source_type, target_type) \
+static void \
+source_name ## _to_ ## target_name (gpointer target, gconstpointer source) \
+{ \
+  *(target_type *) target = *(const source_type *) source; \
+}
+
+SIMPLE_CONVERSION(float, float, float, float);
+SIMPLE_CONVERSION(float, double, float, double);
+SIMPLE_CONVERSION(float, int, float, gint32);
+SIMPLE_CONVERSION(float, uint, float, guint32);
+static void
+float_to_bool (gpointer target, gconstpointer source)
+{
+  *(guint32 *) target = *(const float *) source ? TRUE : FALSE;
+}
+
+SIMPLE_CONVERSION(double, float, double, float);
+SIMPLE_CONVERSION(double, double, double, double);
+SIMPLE_CONVERSION(double, int, double, gint32);
+SIMPLE_CONVERSION(double, uint, double, guint32);
+static void
+double_to_bool (gpointer target, gconstpointer source)
+{
+  *(guint32 *) target = *(const double *) source ? TRUE : FALSE;
+}
+
+SIMPLE_CONVERSION(int, float, gint32, float);
+SIMPLE_CONVERSION(int, double, gint32, double);
+SIMPLE_CONVERSION(int, int, gint32, gint32);
+SIMPLE_CONVERSION(int, uint, gint32, guint32);
+static void
+int_to_bool (gpointer target, gconstpointer source)
+{
+  *(guint32 *) target = *(const gint32 *) source ? TRUE : FALSE;
+}
+
+SIMPLE_CONVERSION(uint, float, guint32, float);
+SIMPLE_CONVERSION(uint, double, guint32, double);
+SIMPLE_CONVERSION(uint, int, guint32, gint32);
+SIMPLE_CONVERSION(uint, uint, guint32, guint32);
+static void
+uint_to_bool (gpointer target, gconstpointer source)
+{
+  *(guint32 *) target = *(const guint32 *) source ? TRUE : FALSE;
+}
+
+static void
+bool_to_float (gpointer target, gconstpointer source)
+{
+  *(float *) target = *(const guint32 *) source ? 1.0 : 0.0;
+}
+
+static void
+bool_to_double (gpointer target, gconstpointer source)
+{
+  *(double *) target = *(const guint32 *) source ? 1.0 : 0.0;
+}
+
+static void
+bool_to_int (gpointer target, gconstpointer source)
+{
+  *(gint32 *) target = *(const guint32 *) source ? 1 : 0;
+}
+
+static void
+bool_to_uint (gpointer target, gconstpointer source)
+{
+  *(guint32 *) target = *(const guint32 *) source ? 1 : 0;
+}
+
+static void
+bool_to_bool (gpointer target, gconstpointer source)
+{
+  *(guint32 *) target = *(const guint32 *) source;
+}
+
+#define CONVERSIONS(name) { NULL, name ## _to_float, name ## _to_double, name ## _to_int, name ## _to_uint, name ## _to_bool }
 struct {
   const char *name;
   gsize size;
   void (* print_value) (GString *string, gconstpointer value);
+  void (* convert_value[N_SCALAR_TYPES]) (gpointer target, gconstpointer source);
   guint32 (* write_value_spv) (GskSpvWriter *writer, gconstpointer value);
 } scalar_infos[] = {
-  [GSK_SL_VOID] =   { "void",   0, print_void,   write_void_spv, },
-  [GSK_SL_FLOAT] =  { "float",  4, print_float,  write_float_spv },
-  [GSK_SL_DOUBLE] = { "double", 8, print_double, write_double_spv },
-  [GSK_SL_INT] =    { "int",    4, print_int,    write_int_spv },
-  [GSK_SL_UINT] =   { "uint",   4, print_uint,   write_uint_spv },
-  [GSK_SL_BOOL] =   { "bool",   4, print_bool,   write_bool_spv }
+  [GSK_SL_VOID] =   { "void",   0, print_void,   { NULL, },            write_void_spv, },
+  [GSK_SL_FLOAT] =  { "float",  4, print_float,  CONVERSIONS (float),  write_float_spv },
+  [GSK_SL_DOUBLE] = { "double", 8, print_double, CONVERSIONS (double), write_double_spv },
+  [GSK_SL_INT] =    { "int",    4, print_int,    CONVERSIONS (int),    write_int_spv },
+  [GSK_SL_UINT] =   { "uint",   4, print_uint,   CONVERSIONS (uint),   write_uint_spv },
+  [GSK_SL_BOOL] =   { "bool",   4, print_bool,   CONVERSIONS (bool),   write_bool_spv }
 };
+#undef SIMPLE_CONVERSION
+#undef CONVERSIONS
 
 /* SCALAR */
 
@@ -1079,6 +1160,15 @@ gsk_sl_scalar_type_can_convert (GskSlScalarType target,
     default:
       return FALSE;
   }
+}
+
+void
+gsk_sl_scalar_type_convert_value (GskSlScalarType target_type,
+                                  gpointer        target_value,
+                                  GskSlScalarType source_type,
+                                  gconstpointer   source_value)
+{
+  scalar_infos[source_type].convert_value[target_type] (target_value, source_value);
 }
 
 gboolean

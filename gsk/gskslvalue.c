@@ -64,6 +64,100 @@ gsk_sl_value_new_for_data (GskSlType      *type,
   return value;
 }
 
+/**
+ * gsk_sl_value_new_convert:
+ * @source: value to convert
+ * @new_type: type to convert to
+ *
+ * Converts @source into the @new_type. This function uses the extended
+ * conversion rules for constructors. If you want to restrict yourself
+ * to the usual conversion rules, call this function after checking
+ * for compatibility via gsk_sl_type_can_convert().
+ *
+ * Returns: a new value containing the converted @source or %NULL
+ *     if the source cannot be converted to @type.
+ **/
+GskSlValue *
+gsk_sl_value_new_convert (GskSlValue *source,
+                          GskSlType  *new_type)
+{
+  GskSlValue *result;
+
+  if (gsk_sl_type_equal (source->type, new_type))
+    {
+      return gsk_sl_value_copy (source);
+    }
+  else if (gsk_sl_type_is_scalar (source->type))
+    {
+      if (!gsk_sl_type_is_scalar (new_type))
+        return NULL;
+
+      result = gsk_sl_value_new (new_type);
+      gsk_sl_scalar_type_convert_value (gsk_sl_type_get_scalar_type (new_type),
+                                        result->data,
+                                        gsk_sl_type_get_scalar_type (source->type),
+                                        source->data);
+      return result;
+    }
+  else if (gsk_sl_type_is_vector (source->type))
+    {
+      guchar *sdata, *ddata;
+      gsize sstride, dstride;
+      guint i, n;
+
+      if (!gsk_sl_type_is_vector (new_type) || 
+          gsk_sl_type_get_length (new_type) != gsk_sl_type_get_length (source->type))
+        return NULL;
+
+      n = gsk_sl_type_get_length (new_type);
+      result = gsk_sl_value_new (new_type);
+      sdata = source->data;
+      ddata = result->data;
+      sstride = gsk_sl_type_get_size (source->type) / n;
+      dstride = gsk_sl_type_get_size (new_type) / n;
+      for (i = 0; i < n; i++)
+        {
+          gsk_sl_scalar_type_convert_value (gsk_sl_type_get_scalar_type (new_type),
+                                            ddata + i * dstride,
+                                            gsk_sl_type_get_scalar_type (source->type),
+                                            sdata + i * sstride);
+        }
+
+      return result;
+    }
+  else if (gsk_sl_type_is_matrix (source->type))
+    {
+      guchar *sdata, *ddata;
+      gsize sstride, dstride;
+      guint i, n;
+
+      if (!gsk_sl_type_is_matrix (new_type) ||
+          gsk_sl_type_get_length (new_type) != gsk_sl_type_get_length (source->type) ||
+          gsk_sl_type_get_length (gsk_sl_type_get_index_type (new_type)) != gsk_sl_type_get_length (gsk_sl_type_get_index_type (source->type)))
+        return NULL;
+
+      n = gsk_sl_type_get_length (new_type) * gsk_sl_type_get_length (gsk_sl_type_get_index_type (source->type));
+      result = gsk_sl_value_new (new_type);
+      sdata = source->data;
+      ddata = result->data;
+      sstride = gsk_sl_type_get_size (source->type) / n;
+      dstride = gsk_sl_type_get_size (new_type) / n;
+      for (i = 0; i < n; i++)
+        {
+          gsk_sl_scalar_type_convert_value (gsk_sl_type_get_scalar_type (new_type),
+                                            ddata + i * dstride,
+                                            gsk_sl_type_get_scalar_type (source->type),
+                                            sdata + i * sstride);
+        }
+
+      return result;
+    }
+  else
+    {
+      return NULL;
+    }
+}
+
 GskSlValue *
 gsk_sl_value_copy (const GskSlValue *source)
 {

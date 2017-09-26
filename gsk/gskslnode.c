@@ -27,6 +27,7 @@
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
 
@@ -253,38 +254,51 @@ gsk_sl_node_parse_declaration (GskSlScope        *scope,
 {
   GskSlNodeDeclaration *declaration;
   GskSlPointerType *pointer_type;
+  GskSlValue *value = NULL;
   const GskSlToken *token;
+  char *name;
 
   declaration = gsk_sl_node_new (GskSlNodeDeclaration, &GSK_SL_NODE_DECLARATION);
   
-  pointer_type = gsk_sl_pointer_type_new (type, TRUE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
   token = gsk_sl_preprocessor_get (stream);
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
     {
-      declaration->variable = gsk_sl_variable_new (pointer_type, NULL, decoration->values[GSK_SL_DECORATION_CONST].set);
-      gsk_sl_pointer_type_unref (pointer_type);
-      return (GskSlNode *) declaration;
-    }
-
-  declaration->variable = gsk_sl_variable_new (pointer_type, token->str, decoration->values[GSK_SL_DECORATION_CONST].set);
-  gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
-  gsk_sl_pointer_type_unref (pointer_type);
-
-  token = gsk_sl_preprocessor_get (stream);
-  if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
-    {
+      name = g_strdup (token->str);
       gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
-      declaration->initial = gsk_sl_expression_parse_assignment (scope, stream);
-      if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (declaration->initial)))
+
+      token = gsk_sl_preprocessor_get (stream);
+      if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
         {
-          gsk_sl_preprocessor_error (stream, "Cannot convert from initializer type %s to variable type %s",
-                                             gsk_sl_type_get_name (gsk_sl_expression_get_return_type (declaration->initial)),
-                                             gsk_sl_type_get_name (type));
-          gsk_sl_node_unref ((GskSlNode *) declaration);
-          return NULL;
+          GskSlValue *unconverted;
+
+          gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
+          declaration->initial = gsk_sl_expression_parse_assignment (scope, stream);
+          if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (declaration->initial)))
+            {
+              gsk_sl_preprocessor_error (stream, "Cannot convert from initializer type %s to variable type %s",
+                                                 gsk_sl_type_get_name (gsk_sl_expression_get_return_type (declaration->initial)),
+                                                 gsk_sl_type_get_name (type));
+              gsk_sl_node_unref ((GskSlNode *) declaration);
+              return NULL;
+            }
+
+          unconverted = gsk_sl_expression_get_constant (declaration->initial);
+          if (unconverted)
+            {
+              value = gsk_sl_value_new_convert (unconverted, type);
+              gsk_sl_value_free (unconverted);
+            }
         }
     }
+  else
+    {
+      name = NULL;
+      value = NULL;
+    }
 
+  pointer_type = gsk_sl_pointer_type_new (type, TRUE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
+  declaration->variable = gsk_sl_variable_new (pointer_type, name, value, decoration->values[GSK_SL_DECORATION_CONST].set);
+  gsk_sl_pointer_type_unref (pointer_type);
   gsk_sl_scope_add_variable (scope, declaration->variable);
 
   return (GskSlNode *) declaration;

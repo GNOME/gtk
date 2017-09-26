@@ -84,7 +84,7 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
   gsk_sl_preprocessor_consume (preproc, NULL);
 
   pointer_type = gsk_sl_pointer_type_new (type, FALSE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-  variable = gsk_sl_variable_new (pointer_type, name, decoration->values[GSK_SL_DECORATION_CONST].set);
+  variable = gsk_sl_variable_new (pointer_type, g_strdup (name), NULL, decoration->values[GSK_SL_DECORATION_CONST].set);
   gsk_sl_pointer_type_unref (pointer_type);
       
   program->variables = g_slist_append (program->variables, variable);
@@ -121,7 +121,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
       if (success)
         {
           GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, FALSE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-          GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL, decoration.values[GSK_SL_DECORATION_CONST].set);
+          GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL, NULL, decoration.values[GSK_SL_DECORATION_CONST].set);
           gsk_sl_pointer_type_unref (ptype);
           program->variables = g_slist_append (program->variables, variable);
           gsk_sl_preprocessor_consume (preproc, program);
@@ -158,6 +158,8 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
     {
       success &= gsk_sl_program_parse_variable (program, scope, preproc, &decoration, type, name);
     }
+
+  g_free (name);
 
   return success;
 }

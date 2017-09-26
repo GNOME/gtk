@@ -28,6 +28,8 @@ GskSlValue *            gsk_sl_value_new_for_data               (GskSlType      
                                                                  gpointer             data,
                                                                  GDestroyNotify       free_func,
                                                                  gpointer             user_data);
+GskSlValue *            gsk_sl_value_new_convert                (GskSlValue          *source,
+                                                                 GskSlType           *new_type);
 GskSlValue *            gsk_sl_value_copy                       (const GskSlValue    *source);
 void                    gsk_sl_value_free                       (GskSlValue          *value);
 

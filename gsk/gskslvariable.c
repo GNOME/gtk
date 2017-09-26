@@ -21,6 +21,8 @@
 #include "gskslvariableprivate.h"
 
 #include "gskslpointertypeprivate.h"
+#include "gsksltypeprivate.h"
+#include "gskslvalueprivate.h"
 #include "gskspvwriterprivate.h"
 
 struct _GskSlVariable {
@@ -28,21 +30,25 @@ struct _GskSlVariable {
 
   GskSlPointerType *type;
   char *name;
+  GskSlValue *initial_value;
   gboolean constant;
 };
 
 GskSlVariable *
 gsk_sl_variable_new (GskSlPointerType *type,
-                     const char       *name,
+                     char             *name,
+                     GskSlValue       *initial_value,
                      gboolean          constant)
 {
   GskSlVariable *variable;
 
+  g_return_val_if_fail (initial_value == NULL || gsk_sl_type_equal (gsk_sl_pointer_type_get_type (type), gsk_sl_value_get_type (initial_value)), NULL);
   variable = g_slice_new0 (GskSlVariable);
 
   variable->ref_count = 1;
   variable->type = gsk_sl_pointer_type_ref (type);
-  variable->name = g_strdup (name);
+  variable->name = name;
+  variable->initial_value = initial_value;
   variable->constant = constant;
 
   return variable;
@@ -68,6 +74,8 @@ gsk_sl_variable_unref (GskSlVariable *variable)
   if (variable->ref_count > 0)
     return;
 
+  if (variable->initial_value)
+    gsk_sl_value_free (variable->initial_value);
   gsk_sl_pointer_type_unref (variable->type);
   g_free (variable->name);
 
@@ -98,6 +106,12 @@ const char *
 gsk_sl_variable_get_name (const GskSlVariable *variable)
 {
   return variable->name;
+}
+
+const GskSlValue *
+gsk_sl_variable_get_initial_value (const GskSlVariable *variable)
+{
+  return variable->initial_value;
 }
 
 gboolean

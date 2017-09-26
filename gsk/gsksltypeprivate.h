@@ -72,6 +72,10 @@ void                    gsk_sl_type_print_value                 (const GskSlType
 guint32                 gsk_sl_type_write_value_spv             (GskSlType           *type,
                                                                  GskSpvWriter        *writer,
                                                                  gconstpointer        value);
+void                    gsk_sl_scalar_type_convert_value        (GskSlScalarType      target_type,
+                                                                 gpointer             target_value,
+                                                                 GskSlScalarType      source_type,
+                                                                 gconstpointer        source_value);
 
 G_END_DECLS
 
