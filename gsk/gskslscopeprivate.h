@@ -37,6 +37,10 @@ void                    gsk_sl_scope_add_variable               (GskSlScope     
                                                                  GskSlVariable        *variable);
 GskSlVariable *         gsk_sl_scope_lookup_variable            (GskSlScope           *scope,
                                                                  const char           *name);
+void                    gsk_sl_scope_add_function               (GskSlScope           *scope,
+                                                                 GskSlFunction        *function);
+GskSlFunction *         gsk_sl_scope_lookup_function            (GskSlScope           *scope,
+                                                                 const char           *name);
 
 G_END_DECLS
 

@@ -179,6 +179,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
                                             preproc,
                                             type,
                                             name);
+      gsk_sl_scope_add_function (scope, function);
       program->functions = g_slist_append (program->functions, function);
     }
   else
