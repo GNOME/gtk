@@ -37,14 +37,28 @@ const GskCodeLocation * gsk_sl_preprocessor_get_location        (GskSlPreprocess
 void                    gsk_sl_preprocessor_consume             (GskSlPreprocessor   *preproc,
                                                                  gpointer             consumer);
 
-void                    gsk_sl_preprocessor_error               (GskSlPreprocessor   *preproc,
-                                                                 const char          *format,
-                                                                 ...) G_GNUC_PRINTF(2, 3);
-void                    gsk_sl_preprocessor_error_full          (GskSlPreprocessor   *preproc,
+void                    gsk_sl_preprocessor_emit_error          (GskSlPreprocessor   *preproc,
+                                                                 gboolean             fatal,
                                                                  const GskCodeLocation *location,
-                                                                 const GskSlToken    *token,
-                                                                 const char          *format,
-                                                                 ...) G_GNUC_PRINTF(4, 5);
+                                                                 const GError        *error);
+
+#define gsk_sl_preprocessor_error(preproc, ...) \
+  gsk_sl_preprocessor_error_full (preproc, gsk_sl_preprocessor_get_location (preproc), __VA_ARGS__)
+
+#define gsk_sl_preprocessor_error_full(preproc, location, ...) G_STMT_START{\
+  GError *error; \
+\
+  error = g_error_new (G_FILE_ERROR, \
+                       G_FILE_ERROR_FAILED, \
+                       __VA_ARGS__); \
+\
+  gsk_sl_preprocessor_emit_error (preproc, \
+                                  TRUE, \
+                                  location, \
+                                  error); \
+\
+  g_error_free (error);\
+}G_STMT_END
 
 G_END_DECLS
 

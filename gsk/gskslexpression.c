@@ -1023,7 +1023,7 @@ gsk_sl_expression_parse_constructor_call (GskSlScope        *scope,
   GskSlExpressionFunctionCall *call;
   const GskSlToken *token;
   GskSlType **types;
-  GError *error = NULL;
+  GError *err = NULL;
   gboolean fail = FALSE;
   guint i;
 
@@ -1068,10 +1068,10 @@ gsk_sl_expression_parse_constructor_call (GskSlScope        *scope,
   types = g_newa (GskSlType *, call->n_arguments);
   for (i = 0; i < call->n_arguments; i++)
     types[i] = gsk_sl_expression_get_return_type (call->arguments[i]);
-  if (!gsk_sl_function_matches (call->function, types, call->n_arguments, &error))
+  if (!gsk_sl_function_matches (call->function, types, call->n_arguments, &err))
     {
-      gsk_sl_preprocessor_error (stream, "%s", error->message);
-      g_clear_error (&error);
+      gsk_sl_preprocessor_error (stream, "%s", err->message);
+      g_clear_error (&err);
       fail = TRUE;
     }
 
