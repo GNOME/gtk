@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-gboolean                gsk_sl_program_parse                    (GskSlProgram           *program,
+void                    gsk_sl_program_parse                    (GskSlProgram           *program,
                                                                  GskSlPreprocessor      *preproc);
 
 G_END_DECLS

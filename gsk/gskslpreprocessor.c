@@ -39,6 +39,7 @@ struct _GskSlPreprocessor
   GskSlTokenizer *tokenizer;
   GArray *tokens;
   GHashTable *defines;
+  gboolean fatal_error;
 };
 
 /* API */
@@ -109,6 +110,12 @@ gsk_sl_preprocessor_unref (GskSlPreprocessor *preproc)
   g_array_free (preproc->tokens, TRUE);
 
   g_slice_free (GskSlPreprocessor, preproc);
+}
+
+gboolean
+gsk_sl_preprocessor_has_fatal_error (GskSlPreprocessor *preproc)
+{
+  return preproc->fatal_error;
 }
 
 static gboolean
@@ -375,6 +382,8 @@ gsk_sl_preprocessor_emit_error (GskSlPreprocessor     *preproc,
                                 const GskCodeLocation *location,
                                 const GError          *error)
 {
+  preproc->fatal_error |= fatal;
+
   g_printerr ("%3zu:%2zu: %s: %s\n",
               location->lines + 1, location->line_bytes,
               fatal ? "error" : "warn",

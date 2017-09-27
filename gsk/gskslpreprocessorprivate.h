@@ -31,6 +31,7 @@ GskSlPreprocessor *     gsk_sl_preprocessor_new                 (GskSlCompiler  
 GskSlPreprocessor *     gsk_sl_preprocessor_ref                 (GskSlPreprocessor   *preproc);
 void                    gsk_sl_preprocessor_unref               (GskSlPreprocessor   *preproc);
 
+gboolean                gsk_sl_preprocessor_has_fatal_error     (GskSlPreprocessor   *preproc);
 const GskSlToken *      gsk_sl_preprocessor_get                 (GskSlPreprocessor   *preproc);
 const GskCodeLocation * gsk_sl_preprocessor_get_location        (GskSlPreprocessor   *preproc);
 void                    gsk_sl_preprocessor_consume             (GskSlPreprocessor   *preproc,

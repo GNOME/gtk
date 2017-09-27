@@ -196,7 +196,9 @@ gsk_sl_compiler_compile (GskSlCompiler *compiler,
 
   preproc = gsk_sl_preprocessor_new (compiler, source);
 
-  if (!gsk_sl_program_parse (program, preproc))
+  gsk_sl_program_parse (program, preproc);
+
+  if (gsk_sl_preprocessor_has_fatal_error (preproc))
     {
       g_object_unref (program);
       program = NULL;

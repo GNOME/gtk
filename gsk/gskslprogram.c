@@ -136,7 +136,7 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
   return TRUE;
 }
 
-static gboolean
+static void
 gsk_sl_program_parse_declaration (GskSlProgram      *program,
                                   GskSlScope        *scope,
                                   GskSlPreprocessor *preproc)
@@ -155,7 +155,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
   if (type == NULL)
     {
       gsk_sl_preprocessor_consume (preproc, program);
-      return FALSE;
+      return;
     }
 
   token = gsk_sl_preprocessor_get (preproc);
@@ -170,13 +170,13 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
           gsk_sl_preprocessor_consume (preproc, program);
         }
       gsk_sl_type_unref (type);
-      return success;
+      return;
     }
   else if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a variable name");
       gsk_sl_type_unref (type);
-      return FALSE;
+      return;
     }
 
   name = g_strdup (token->str);
@@ -204,24 +204,21 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
 
   g_free (name);
 
-  return success;
+  return;
 }
 
-gboolean
+void
 gsk_sl_program_parse (GskSlProgram      *program,
                       GskSlPreprocessor *preproc)
 {
   const GskSlToken *token;
-  gboolean success = TRUE;
 
   for (token = gsk_sl_preprocessor_get (preproc);
        !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
        token = gsk_sl_preprocessor_get (preproc))
     {
-      success &= gsk_sl_program_parse_declaration (program, program->scope, preproc);
+      gsk_sl_program_parse_declaration (program, program->scope, preproc);
     }
-
-  return success;
 }
 
 void
