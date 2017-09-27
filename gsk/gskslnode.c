@@ -279,15 +279,17 @@ gsk_sl_node_parse_declaration (GskSlScope        *scope,
                                          "Cannot convert from initializer type %s to variable type %s",
                                          gsk_sl_type_get_name (gsk_sl_expression_get_return_type (declaration->initial)),
                                          gsk_sl_type_get_name (type));
-              gsk_sl_node_unref ((GskSlNode *) declaration);
-              return NULL;
+              gsk_sl_expression_unref (declaration->initial);
+              declaration->initial = NULL;
             }
-
-          unconverted = gsk_sl_expression_get_constant (declaration->initial);
-          if (unconverted)
+          else
             {
-              value = gsk_sl_value_new_convert (unconverted, type);
-              gsk_sl_value_free (unconverted);
+              unconverted = gsk_sl_expression_get_constant (declaration->initial);
+              if (unconverted)
+                {
+                  value = gsk_sl_value_new_convert (unconverted, type);
+                  gsk_sl_value_free (unconverted);
+                }
             }
         }
     }
@@ -322,7 +324,7 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
 
     case GSK_SL_TOKEN_EOF:
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Unexpected end of document");
-      return NULL;
+      return (GskSlNode *) gsk_sl_node_new (GskSlNodeEmpty, &GSK_SL_NODE_EMPTY);
 
     case GSK_SL_TOKEN_CONST:
     case GSK_SL_TOKEN_IN:
@@ -382,37 +384,22 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
       {
         GskSlType *type;
         GskSlDecorations decoration;
-        gboolean success;
 
-        success = gsk_sl_decoration_list_parse (scope,
-                                                preproc,
-                                                &decoration);
+        gsk_sl_decoration_list_parse (scope,
+                                      preproc,
+                                      &decoration);
 
         type = gsk_sl_type_new_parse (preproc);
-        if (type == NULL)
-          {
-            node = NULL;
-            break;
-          }
 
         token = gsk_sl_preprocessor_get (preproc);
 
         if (token->type == GSK_SL_TOKEN_LEFT_PAREN)
           {
-            GskSlExpression *expression = gsk_sl_expression_parse_constructor_call (scope, preproc, type);
-
-            if (expression)
-              {
-                GskSlNodeExpression *node_expression;
+            GskSlNodeExpression *node_expression;
                 
-                node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
-                node_expression->expression = expression;
-                node = (GskSlNode *) node_expression;
-              }
-            else
-              {
-                node = NULL;
-              }
+            node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
+            node_expression->expression = gsk_sl_expression_parse_constructor_call (scope, preproc, type);
+            node = (GskSlNode *) node_expression;
           }
         else
           {
@@ -420,12 +407,6 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
           }
 
         gsk_sl_type_unref (type);
-        
-        if (!success)
-          {
-            gsk_sl_node_unref (node);
-            node = NULL;
-          }
       }
       break;
 
@@ -438,16 +419,7 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
         gsk_sl_preprocessor_consume (preproc, (GskSlNode *) return_node);
         token = gsk_sl_preprocessor_get (preproc);
         if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-          {
-            return_node->value = gsk_sl_expression_parse (scope, preproc);
-
-            if (return_node->value == NULL)
-              {
-                gsk_sl_node_unref ((GskSlNode *) return_node);
-                node = NULL;
-                break;
-              }
-          }
+          return_node->value = gsk_sl_expression_parse (scope, preproc);
 
         return_type = gsk_sl_scope_get_return_type (scope);
         node = (GskSlNode *) return_node;
@@ -455,16 +427,12 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
         if (return_type == NULL)
           {
             gsk_sl_preprocessor_error (preproc, SCOPE, "Cannot return from here.");
-            gsk_sl_node_unref (node);
-            node = NULL;
           }
         else if (return_node->value == NULL)
           {
             if (!gsk_sl_type_equal (return_type, gsk_sl_type_get_scalar (GSK_SL_VOID)))
               {
                 gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,"Functions expectes a return value of type %s", gsk_sl_type_get_name (return_type));
-                gsk_sl_node_unref (node);
-                node = NULL;
               }
           }
         else
@@ -472,8 +440,6 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
             if (gsk_sl_type_equal (return_type, gsk_sl_type_get_scalar (GSK_SL_VOID)))
               {
                 gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot return a value from a void function.");
-                gsk_sl_node_unref (node);
-                node = NULL;
               }
             else if (!gsk_sl_type_can_convert (return_type, gsk_sl_expression_get_return_type (return_node->value)))
               {
@@ -481,8 +447,6 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
                                            "Cannot convert type %s to return type %s.",
                                            gsk_sl_type_get_name (gsk_sl_expression_get_return_type (return_node->value)),
                                            gsk_sl_type_get_name (return_type));
-                gsk_sl_node_unref (node);
-                node = NULL;
                 break;
               }
             }
@@ -491,36 +455,21 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
 
     default:
       {
-        GskSlExpression * expression = gsk_sl_expression_parse (scope, preproc);
-
-        if (expression)
-          {
-            GskSlNodeExpression *node_expression;
+        GskSlNodeExpression *node_expression;
             
-            node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
-            node_expression->expression = expression;
+        node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
+        node_expression->expression = gsk_sl_expression_parse (scope, preproc);
 
-            node = (GskSlNode *) node_expression;
-          }
-        else
-          {
-            return NULL;
-          }
+        node = (GskSlNode *) node_expression;
       }
       break;
   }
 
-  if (node == NULL)
-    return NULL;
-
   token = gsk_sl_preprocessor_get (preproc);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of statement.");
-      gsk_sl_node_unref (node);
-      return NULL;
-    }
-  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) node);
+    gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of statement.");
+  else
+    gsk_sl_preprocessor_consume (preproc, (GskSlNode *) node);
 
   return node;
 }

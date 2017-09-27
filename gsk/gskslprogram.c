@@ -68,7 +68,7 @@ gsk_sl_program_init (GskSlProgram *program)
   program->scope = gsk_sl_scope_new (NULL, NULL);
 }
 
-static gboolean
+static void
 gsk_sl_program_parse_variable (GskSlProgram      *program,
                                GskSlScope        *scope,
                                GskSlPreprocessor *preproc,
@@ -90,8 +90,6 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
       gsk_sl_preprocessor_consume (preproc, program);
 
       initial = gsk_sl_expression_parse_assignment (scope, preproc);
-      if (initial == NULL)
-        return FALSE;
 
       if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (initial)))
         {
@@ -100,31 +98,30 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
                                      gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initial)),
                                      gsk_sl_type_get_name (type));
           gsk_sl_expression_unref (initial);
-          return FALSE;
         }
-
-      unconverted = gsk_sl_expression_get_constant (initial);
-      gsk_sl_expression_unref (initial);
-      if (unconverted)
+      else
         {
-          value = gsk_sl_value_new_convert (unconverted, type);
-          gsk_sl_value_free (unconverted);
-        }
-      else 
-        {
-          gsk_sl_preprocessor_error (preproc, UNSUPPORTED, "Non-constant initializer are not supported yet.");
-          return FALSE;
+          unconverted = gsk_sl_expression_get_constant (initial);
+          gsk_sl_expression_unref (initial);
+          if (unconverted)
+            {
+              value = gsk_sl_value_new_convert (unconverted, type);
+              gsk_sl_value_free (unconverted);
+            }
+          else 
+            {
+              gsk_sl_preprocessor_error (preproc, UNSUPPORTED, "Non-constant initializer are not supported yet.");
+              value = NULL;
+            }
         }
 
       token = gsk_sl_preprocessor_get (preproc);
     }
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of variable declaration.");
-      return FALSE;
-    }
-  gsk_sl_preprocessor_consume (preproc, NULL);
+    gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of variable declaration.");
+  else
+    gsk_sl_preprocessor_consume (preproc, NULL);
 
   pointer_type = gsk_sl_pointer_type_new (type, FALSE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
   variable = gsk_sl_variable_new (pointer_type, g_strdup (name), value, decoration->values[GSK_SL_DECORATION_CONST].set);
@@ -132,8 +129,6 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
       
   program->variables = g_slist_append (program->variables, variable);
   gsk_sl_scope_add_variable (scope, variable);
-
-  return TRUE;
 }
 
 static void
@@ -144,37 +139,29 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
   GskSlType *type;
   const GskSlToken *token;
   GskSlDecorations decoration;
-  gboolean success;
   char *name;
 
-  success = gsk_sl_decoration_list_parse (scope,
-                                          preproc,
-                                          &decoration);
+  gsk_sl_decoration_list_parse (scope,
+                                preproc,
+                                &decoration);
 
   type = gsk_sl_type_new_parse (preproc);
-  if (type == NULL)
-    {
-      gsk_sl_preprocessor_consume (preproc, program);
-      return;
-    }
 
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     {
-      if (success)
-        {
-          GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, FALSE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-          GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL, NULL, decoration.values[GSK_SL_DECORATION_CONST].set);
-          gsk_sl_pointer_type_unref (ptype);
-          program->variables = g_slist_append (program->variables, variable);
-          gsk_sl_preprocessor_consume (preproc, program);
-        }
+      GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, FALSE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
+      GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL, NULL, decoration.values[GSK_SL_DECORATION_CONST].set);
+      gsk_sl_pointer_type_unref (ptype);
+      program->variables = g_slist_append (program->variables, variable);
+      gsk_sl_preprocessor_consume (preproc, program);
       gsk_sl_type_unref (type);
       return;
     }
   else if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a variable name");
+      gsk_sl_preprocessor_consume (preproc, program);
       gsk_sl_type_unref (type);
       return;
     }
@@ -192,14 +179,11 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
                                             preproc,
                                             type,
                                             name);
-      if (function)
-        program->functions = g_slist_append (program->functions, function);
-      else
-        success = FALSE;
+      program->functions = g_slist_append (program->functions, function);
     }
   else
     {
-      success &= gsk_sl_program_parse_variable (program, scope, preproc, &decoration, type, name);
+      gsk_sl_program_parse_variable (program, scope, preproc, &decoration, type, name);
     }
 
   g_free (name);

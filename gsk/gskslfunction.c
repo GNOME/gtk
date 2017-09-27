@@ -314,7 +314,6 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
 {
   GskSlFunctionDeclared *function;
   const GskSlToken *token;
-  gboolean success = TRUE;
 
   function = gsk_sl_function_new (GskSlFunctionDeclared, &GSK_SL_FUNCTION_DECLARED);
   function->return_type = gsk_sl_type_ref (return_type);
@@ -324,8 +323,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an openening \"(\"");
-      gsk_sl_function_unref ((GskSlFunction *) function);
-      return NULL;
+      return (GskSlFunction *) function;
     }
   gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
 
@@ -333,8 +331,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a closing \")\"");
-      gsk_sl_function_unref ((GskSlFunction *) function);
-      return NULL;
+      return (GskSlFunction *) function;
     }
   gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
 
@@ -348,8 +345,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an opening \"{\"");
-      gsk_sl_function_unref ((GskSlFunction *) function);
-      return NULL;
+      return (GskSlFunction *) function;
     }
   gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
 
@@ -362,25 +358,15 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
       GskSlNode *statement;
 
       statement = gsk_sl_node_parse_statement (function->scope, preproc);
-      if (statement)
-        function->statements = g_slist_append (function->statements, statement);
-      else
-        success = FALSE;
+      function->statements = g_slist_append (function->statements, statement);
     }
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Missing closing \"}\" at end.");
-      gsk_sl_function_unref ((GskSlFunction *) function);
-      return NULL;
+      return (GskSlFunction *) function;
     }
   gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
-
-  if (!success)
-    {
-      gsk_sl_function_unref ((GskSlFunction *) function);
-      return NULL;
-    }
 
   return (GskSlFunction *) function;
 }

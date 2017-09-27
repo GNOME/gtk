@@ -53,7 +53,7 @@ gsk_sl_pointer_type_new (GskSlType             *type,
   return result;
 }
 
-static gboolean
+static void
 gsk_sl_decoration_list_set (GskSlPreprocessor *preproc,
                             GskSlDecorations  *list,
                             GskSlDecoration    decoration,
@@ -61,11 +61,9 @@ gsk_sl_decoration_list_set (GskSlPreprocessor *preproc,
 {
   list->values[decoration].set = TRUE;
   list->values[decoration].value = value;
-
-  return TRUE;
 }
 
-static gboolean
+static void
 gsk_sl_decoration_list_add_simple (GskSlPreprocessor *preproc,
                                    GskSlDecorations  *list,
                                    GskSlDecoration    decoration)
@@ -73,13 +71,13 @@ gsk_sl_decoration_list_add_simple (GskSlPreprocessor *preproc,
   if (list->values[decoration].set)
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Duplicate qualifier.");
-      return FALSE;
+      return;
     }
 
-  return gsk_sl_decoration_list_set (preproc, list, decoration, 1);
+  gsk_sl_decoration_list_set (preproc, list, decoration, 1);
 }
 
-static gboolean
+static void
 gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
                                          GskSlScope        *scope,
                                          GskSlDecorations  *list,
@@ -89,7 +87,6 @@ gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
   const GskSlToken *token;
   GskSlValue *value;
   GskSlType *type;
-  gboolean success = TRUE;
 
   gsk_sl_preprocessor_consume (preproc, NULL);
   
@@ -97,13 +94,13 @@ gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected \"=\" sign to assign a value.");
-      return FALSE;
+      return;
     }
   gsk_sl_preprocessor_consume (preproc, NULL);
 
   expression = gsk_sl_expression_parse_constant (scope, preproc);
   if (expression == NULL)
-    return FALSE;
+    return;
 
   value = gsk_sl_expression_get_constant (expression);
   gsk_sl_expression_unref (expression);
@@ -111,35 +108,31 @@ gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
   if (value == NULL)
     {
       gsk_sl_preprocessor_error (preproc, CONSTANT, "Expression is not constant.");
-      return FALSE;
+      return;
     }
 
   type = gsk_sl_value_get_type (value);
   if (gsk_sl_type_is_scalar (type) && gsk_sl_type_get_scalar_type (type) == GSK_SL_INT)
     {
-      success = gsk_sl_decoration_list_set (preproc, list, decoration, *(gint32 *) gsk_sl_value_get_data (value));
+      gsk_sl_decoration_list_set (preproc, list, decoration, *(gint32 *) gsk_sl_value_get_data (value));
     }
   else if (gsk_sl_type_is_scalar (type) && gsk_sl_type_get_scalar_type (type) == GSK_SL_UINT)
     {
-      success = gsk_sl_decoration_list_set (preproc, list, decoration, *(guint32 *) gsk_sl_value_get_data (value));
+      gsk_sl_decoration_list_set (preproc, list, decoration, *(guint32 *) gsk_sl_value_get_data (value));
     }
   else
     {
       gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Type of expression is not an integer type, but %s", gsk_sl_type_get_name (type));
-      success = FALSE;
     }
   gsk_sl_value_free (value);
-
-  return success;
 }
 
-static gboolean
+static void
 gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
                                      GskSlScope        *scope,
                                      GskSlDecorations  *list)
 {
   const GskSlToken *token;
-  gboolean success = TRUE;
 
   memset (list, 0, sizeof (GskSlDecorations));
 
@@ -150,51 +143,48 @@ gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
       if (gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
         {
           gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected layout identifier.");
-          success = FALSE;
           break;
         }
       else if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
         {
           if (g_str_equal (token->str, "location"))
             {
-              success &= gsk_sl_decoration_list_parse_assignment (preproc,
-                                                                  scope,
-                                                                  list, 
-                                                                  GSK_SL_DECORATION_LAYOUT_LOCATION);
+              gsk_sl_decoration_list_parse_assignment (preproc,
+                                                       scope,
+                                                       list, 
+                                                       GSK_SL_DECORATION_LAYOUT_LOCATION);
             }
           else if (g_str_equal (token->str, "component"))
             {
-              success &= gsk_sl_decoration_list_parse_assignment (preproc,
-                                                                  scope,
-                                                                  list, 
-                                                                  GSK_SL_DECORATION_LAYOUT_COMPONENT);
+              gsk_sl_decoration_list_parse_assignment (preproc,
+                                                       scope,
+                                                       list, 
+                                                       GSK_SL_DECORATION_LAYOUT_COMPONENT);
             }
           else if (g_str_equal (token->str, "binding"))
             {
-              success &= gsk_sl_decoration_list_parse_assignment (preproc,
-                                                                  scope,
-                                                                  list, 
-                                                                  GSK_SL_DECORATION_LAYOUT_BINDING);
+              gsk_sl_decoration_list_parse_assignment (preproc,
+                                                       scope,
+                                                       list, 
+                                                       GSK_SL_DECORATION_LAYOUT_BINDING);
             }
           else if (g_str_equal (token->str, "set"))
             {
-              success &= gsk_sl_decoration_list_parse_assignment (preproc,
-                                                                  scope,
-                                                                  list, 
-                                                                  GSK_SL_DECORATION_LAYOUT_SET);
+              gsk_sl_decoration_list_parse_assignment (preproc,
+                                                       scope,
+                                                       list, 
+                                                       GSK_SL_DECORATION_LAYOUT_SET);
             }
           else
             {
               gsk_sl_preprocessor_error (preproc, UNSUPPORTED, "Unknown layout identifier.");
               gsk_sl_preprocessor_consume (preproc, NULL);
-              success = FALSE;
             }
         }
       else
         {
           gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected layout identifier.");
           gsk_sl_preprocessor_consume (preproc, NULL);
-          success = FALSE;
           continue;
         }
 
@@ -204,17 +194,14 @@ gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
 
       gsk_sl_preprocessor_consume (preproc, NULL);
     }
-
-  return success;
 }
 
-gboolean
+void
 gsk_sl_decoration_list_parse (GskSlScope        *scope,
                               GskSlPreprocessor *preproc,
                               GskSlDecorations  *list)
 {
   const GskSlToken *token;
-  gboolean success = TRUE;
 
   memset (list, 0, sizeof (GskSlDecorations));
 
@@ -224,7 +211,7 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
       switch ((guint) token->type)
       {
         case GSK_SL_TOKEN_CONST:
-          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_CONST);
+          gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_CONST);
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
@@ -232,13 +219,12 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
           if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "\"in\" qualifier specified twice.");
-              success = FALSE;
             }
           else
             {
-              success &= gsk_sl_decoration_list_set (preproc, list,
-                                                     GSK_SL_DECORATION_CALLER_ACCESS,
-                                                     list->values[GSK_SL_DECORATION_CALLER_ACCESS].value | GSK_SL_DECORATION_ACCESS_READ);
+              gsk_sl_decoration_list_set (preproc, list,
+                                          GSK_SL_DECORATION_CALLER_ACCESS,
+                                          list->values[GSK_SL_DECORATION_CALLER_ACCESS].value | GSK_SL_DECORATION_ACCESS_READ);
             }
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
@@ -247,13 +233,12 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
           if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "\"out\" qualifier specified twice.");
-              success = FALSE;
             }
           else
             {
-              success &= gsk_sl_decoration_list_set (preproc, list,
-                                                     GSK_SL_DECORATION_CALLER_ACCESS,
-                                                     list->values[GSK_SL_DECORATION_CALLER_ACCESS].value | GSK_SL_DECORATION_ACCESS_WRITE);
+              gsk_sl_decoration_list_set (preproc, list,
+                                          GSK_SL_DECORATION_CALLER_ACCESS,
+                                          list->values[GSK_SL_DECORATION_CALLER_ACCESS].value | GSK_SL_DECORATION_ACCESS_WRITE);
             }
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
@@ -262,39 +247,37 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
           if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "\"in\" qualifier already used.");
-              success = FALSE;
             }
           else if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "\"out\" qualifier already used.");
-              success = FALSE;
             }
           else
             {
-              success &= gsk_sl_decoration_list_set (preproc, list,
-                                                     GSK_SL_DECORATION_CALLER_ACCESS,
-                                                     GSK_SL_DECORATION_ACCESS_READWRITE);
+              gsk_sl_decoration_list_set (preproc, list,
+                                          GSK_SL_DECORATION_CALLER_ACCESS,
+                                          GSK_SL_DECORATION_ACCESS_READWRITE);
             }
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_INVARIANT:
-          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_INVARIANT);
+          gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_INVARIANT);
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_COHERENT:
-          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_COHERENT);
+          gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_COHERENT);
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_VOLATILE:
-          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_VOLATILE);
+          gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_VOLATILE);
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         case GSK_SL_TOKEN_RESTRICT:
-          success &= gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_RESTRICT);
+          gsk_sl_decoration_list_add_simple (preproc, list, GSK_SL_DECORATION_RESTRICT);
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
@@ -303,18 +286,16 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
           if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "\"readonly\" qualifier specified twice.");
-              success = FALSE;
             }
           else if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "\"writeonly\" qualifier already used.");
-              success = FALSE;
             }
           else
             {
-              success &= gsk_sl_decoration_list_set (preproc, list,
-                                                     GSK_SL_DECORATION_ACCESS,
-                                                     GSK_SL_DECORATION_ACCESS_READ);
+              gsk_sl_decoration_list_set (preproc, list,
+                                          GSK_SL_DECORATION_ACCESS,
+                                          GSK_SL_DECORATION_ACCESS_READ);
             }
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
@@ -323,18 +304,16 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
           if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "\"readonly\" qualifier already used.");
-              success = FALSE;
             }
           else if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "\"writeonly\" qualifier specified twice.");
-              success = FALSE;
             }
           else
             {
-              success &= gsk_sl_decoration_list_set (preproc, list,
-                                                     GSK_SL_DECORATION_ACCESS,
-                                                     GSK_SL_DECORATION_ACCESS_WRITE);
+              gsk_sl_decoration_list_set (preproc, list,
+                                          GSK_SL_DECORATION_ACCESS,
+                                          GSK_SL_DECORATION_ACCESS_WRITE);
             }
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
@@ -345,24 +324,21 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
           if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected opening \"(\" after layout specifier");
-              success = FALSE;
               break;
             }
           gsk_sl_preprocessor_consume (preproc, NULL);
 
-          success &= gsk_sl_decoration_list_parse_layout (preproc, scope, list);
+          gsk_sl_decoration_list_parse_layout (preproc, scope, list);
 
           token = gsk_sl_preprocessor_get (preproc);
-          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
-            {
-              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected opening \"(\" after layout specifier");
-              success = FALSE;
-            }
-          gsk_sl_preprocessor_consume (preproc, NULL);
+          if (gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+            gsk_sl_preprocessor_consume (preproc, NULL);
+          else
+            gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \")\" at end of layout specifier");
           break;
 
         default:
-          return success;
+          return;
       }
     }
 }
