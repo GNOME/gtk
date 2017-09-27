@@ -784,6 +784,177 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_FUNCTION_CALL = {
   gsk_sl_expression_function_call_write_spv
 };
 
+/* SWIZZLE */
+
+typedef enum {
+  GSK_SL_SWIZZLE_POINT,
+  GSK_SL_SWIZZLE_COLOR,
+  GSK_SL_SWIZZLE_TEXCOORD
+} GskSlSwizzleName;
+
+static const char *swizzle_options[] = { "xyzw", "rgba", "stpq" };
+
+typedef struct _GskSlExpressionSwizzle GskSlExpressionSwizzle;
+
+struct _GskSlExpressionSwizzle {
+  GskSlExpression parent;
+
+  GskSlExpression *expr;
+  GskSlSwizzleName name;
+  guint length;
+  guint indexes[4];
+};
+
+static void
+gsk_sl_expression_swizzle_free (GskSlExpression *expression)
+{
+  GskSlExpressionSwizzle *swizzle = (GskSlExpressionSwizzle *) expression;
+
+  gsk_sl_expression_unref (swizzle->expr);
+
+  g_slice_free (GskSlExpressionSwizzle, swizzle);
+}
+
+static void
+gsk_sl_expression_swizzle_print (const GskSlExpression *expression,
+                                 GString               *string)
+{
+  const GskSlExpressionSwizzle *swizzle = (const GskSlExpressionSwizzle *) expression;
+  guint i;
+
+  gsk_sl_expression_print (swizzle->expr, string);
+  g_string_append (string, ".");
+  for (i = 0; i < swizzle->length; i++)
+    {
+      g_string_append_c (string, swizzle_options[swizzle->name][swizzle->indexes[i]]);
+    }
+}
+
+static GskSlType *
+gsk_sl_expression_swizzle_get_return_type (const GskSlExpression *expression)
+{
+  const GskSlExpressionSwizzle *swizzle = (const GskSlExpressionSwizzle *) expression;
+  GskSlType *type;
+
+  type = gsk_sl_expression_get_return_type (swizzle->expr);
+
+  if (swizzle->length == 1)
+    return gsk_sl_type_get_scalar (gsk_sl_type_get_scalar_type (type));
+  else
+    return gsk_sl_type_get_vector (gsk_sl_type_get_scalar_type (type), swizzle->length);
+}
+
+static GskSlValue *
+gsk_sl_expression_swizzle_get_constant (const GskSlExpression *expression)
+{
+  const GskSlExpressionSwizzle *swizzle = (const GskSlExpressionSwizzle *) expression;
+  GskSlValue *result, *value;
+  guchar *sdata, *ddata;
+  gsize sstride, dstride;
+  GskSlScalarType scalar_type;
+  guint i;
+
+  value = gsk_sl_expression_get_constant (swizzle->expr);
+  if (value == NULL)
+    return NULL;
+
+  scalar_type = gsk_sl_type_get_scalar_type (gsk_sl_value_get_type (value));
+  sdata = gsk_sl_value_get_data (value);
+  sstride = gsk_sl_type_get_index_stride (gsk_sl_value_get_type (value));
+  result = gsk_sl_value_new (gsk_sl_expression_get_return_type (expression));
+  ddata = gsk_sl_value_get_data (result);
+  dstride = gsk_sl_type_get_index_stride (gsk_sl_value_get_type (result));
+
+  for (i = 0; i < swizzle->length; i++)
+    {
+      gsk_sl_scalar_type_convert_value (scalar_type,
+                                        ddata + dstride * i,
+                                        scalar_type,
+                                        sdata + sstride * swizzle->indexes[i]);
+    }
+
+  gsk_sl_value_free (value);
+
+  return result;
+}
+
+static guint32
+gsk_sl_expression_swizzle_write_spv (const GskSlExpression *expression,
+                                     GskSpvWriter          *writer)
+{
+  const GskSlExpressionSwizzle *swizzle = (const GskSlExpressionSwizzle *) expression;
+  GskSlType *type;
+  guint32 expr_id, type_id, result_id;
+
+  type = gsk_sl_expression_get_return_type (swizzle->expr);
+  expr_id = gsk_sl_expression_write_spv (swizzle->expr, writer);
+
+  if (gsk_sl_type_is_scalar (type))
+    {
+      if (swizzle->length == 1)
+        return expr_id;
+
+      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_expression_get_return_type (expression));
+      result_id = gsk_spv_writer_next_id (writer);
+
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          3 + swizzle->length, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
+                          (guint32[6]) { type_id,
+                                         result_id,
+                                         expr_id,
+                                         expr_id,
+                                         expr_id,
+                                         expr_id });
+
+      return result_id;
+    }
+  else if (gsk_sl_type_is_vector (type))
+    {
+      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_expression_get_return_type (expression));
+      result_id = gsk_spv_writer_next_id (writer);
+
+      if (swizzle->length == 1)
+        {
+          gsk_spv_writer_add (writer,
+                              GSK_SPV_WRITER_SECTION_CODE,
+                              4, GSK_SPV_OP_COMPOSITE_EXTRACT,
+                              (guint32[6]) { type_id,
+                                             result_id,
+                                             swizzle->indexes[0] });
+        }
+      else
+        {
+          gsk_spv_writer_add (writer,
+                              GSK_SPV_WRITER_SECTION_CODE,
+                              5 + swizzle->length, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
+                              (guint32[8]) { type_id,
+                                             result_id,
+                                             expr_id,
+                                             expr_id,
+                                             swizzle->indexes[0],
+                                             swizzle->indexes[1],
+                                             swizzle->indexes[2],
+                                             swizzle->indexes[3] });
+        }
+
+      return result_id;
+    }
+  else
+    {
+      g_assert_not_reached ();
+      return 0;
+    }
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_SWIZZLE = {
+  gsk_sl_expression_swizzle_free,
+  gsk_sl_expression_swizzle_print,
+  gsk_sl_expression_swizzle_get_return_type,
+  gsk_sl_expression_swizzle_get_constant,
+  gsk_sl_expression_swizzle_write_spv
+};
+
 /* CONSTANT */
 
 typedef struct _GskSlExpressionConstant GskSlExpressionConstant;
@@ -1048,10 +1219,125 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
 }
 
 static GskSlExpression *
+gsk_sl_expression_parse_field_selection (GskSlScope        *scope,
+                                         GskSlPreprocessor *stream,
+                                         GskSlExpression   *expr,
+                                         const char        *name,
+                                         gboolean          *success)
+{
+  GskSlType *type;
+
+  if (g_str_equal (name, "length"))
+    {
+       gsk_sl_preprocessor_error (stream, ".length() is not implemented yet.");
+       *success = FALSE;
+       return expr;
+    }
+
+  type = gsk_sl_expression_get_return_type (expr);
+
+  if (gsk_sl_type_is_scalar (type) || gsk_sl_type_is_vector (type))
+    {
+      GskSlExpressionSwizzle *swizzle;
+      guint type_length = MAX (1, gsk_sl_type_get_length (type));
+      
+      swizzle = gsk_sl_expression_new (GskSlExpressionSwizzle, &GSK_SL_EXPRESSION_SWIZZLE);
+
+      for (swizzle->name = 0; swizzle->name < G_N_ELEMENTS(swizzle_options); swizzle->name++)
+        {
+          const char *found = strchr (swizzle_options[swizzle->name], name[0]);
+          if (found)
+            break;
+        }
+      if (swizzle->name == G_N_ELEMENTS(swizzle_options))
+        {
+          gsk_sl_preprocessor_error (stream, "Type %s has no member named \"%s\".", gsk_sl_type_get_name (type), name);
+          gsk_sl_expression_unref ((GskSlExpression *) swizzle);
+          *success = FALSE;
+          return expr;
+        }
+      swizzle->expr = expr;
+
+      for (swizzle->length = 0; swizzle->length < 4 && name[swizzle->length]; swizzle->length++)
+        {
+          const char *found = strchr (swizzle_options[swizzle->name], name[swizzle->length]);
+          if (found == NULL)
+            {
+              gsk_sl_preprocessor_error (stream, "Character '%c' is not valid for swizzle. Must be one of \"%s\".",
+                                                 name[swizzle->length], swizzle_options[swizzle->name]);
+              *success = FALSE;
+              return (GskSlExpression *) swizzle;
+            }
+          swizzle->indexes[swizzle->length] = found - swizzle_options[swizzle->name];
+          if (swizzle->indexes[swizzle->length] >= type_length)
+            {
+              gsk_sl_preprocessor_error (stream, "Swizzle index '%c' not allowed for type %s",
+                                                 name[swizzle->length], gsk_sl_type_get_name (type));
+              *success = FALSE;
+              return (GskSlExpression *) swizzle;
+            }
+        }
+      if (name[swizzle->length])
+        {
+          gsk_sl_preprocessor_error (stream, "Too many swizzle options. A maximum of 4 characters are allowed.");
+          *success = FALSE;
+          return (GskSlExpression *) swizzle;
+        }
+  
+      return (GskSlExpression *) swizzle;
+    }
+  else
+    {
+      gsk_sl_preprocessor_error (stream, "Cannot select fields of type %s.", gsk_sl_type_get_name (type));
+      *success = FALSE;
+      return expr;
+    }
+}
+
+static GskSlExpression *
 gsk_sl_expression_parse_postfix (GskSlScope        *scope,
                                  GskSlPreprocessor *stream)
 {
-  return gsk_sl_expression_parse_primary (scope, stream);
+  GskSlExpression *expr;
+  const GskSlToken *token;
+  gboolean success = TRUE;
+  
+  expr = gsk_sl_expression_parse_primary (scope, stream);
+
+  while (TRUE)
+    {
+      token = gsk_sl_preprocessor_get (stream);
+      if (gsk_sl_token_is (token, GSK_SL_TOKEN_DOT))
+        {
+          gsk_sl_preprocessor_consume (stream, NULL);
+          token = gsk_sl_preprocessor_get (stream);
+          if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+            {
+              char *field = g_strdup (token->str);
+              gsk_sl_preprocessor_consume (stream, NULL);
+              expr = gsk_sl_expression_parse_field_selection (scope, stream, expr, field, &success);
+              g_free (field);
+            }
+          else
+            {
+              gsk_sl_preprocessor_error (stream, "Expected an identifier to select a field.");
+              success = FALSE;
+              continue;
+            }
+        }
+      else 
+        {
+          break;
+        }
+    }
+
+  if (!success)
+    {
+      gsk_sl_expression_unref (expr);
+      return NULL;
+    }
+
+  return expr;
 }
 
 static GskSlExpression *
