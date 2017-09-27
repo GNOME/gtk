@@ -535,8 +535,20 @@ gtk_native_dialog_set_transient_for (GtkNativeDialog *self,
 
   g_return_if_fail (GTK_IS_NATIVE_DIALOG (self));
 
-  if (g_set_object (&priv->transient_for, parent))
-    g_object_notify_by_pspec (G_OBJECT (self), native_props[PROP_TRANSIENT_FOR]);
+  if (parent == priv->transient_for)
+    return;
+
+  if (parent)
+    {
+      g_signal_connect (parent, "destroy", G_CALLBACK (gtk_widget_destroyed), &priv->transient_for);
+      priv->transient_for = parent;
+    }
+  else
+    {
+      g_clear_object (&priv->transient_for);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), native_props[PROP_TRANSIENT_FOR]);
 }
 
 /**
