@@ -970,7 +970,7 @@ gsk_sl_type_new_parse (GskSlPreprocessor *stream)
       type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 4, 4));
       break;
     default:
-      gsk_sl_preprocessor_error (stream, "Expected type specifier");
+      gsk_sl_preprocessor_error (stream, SYNTAX, "Expected type specifier");
       return NULL;
   }
 

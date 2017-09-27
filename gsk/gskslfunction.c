@@ -323,7 +323,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
   token = gsk_sl_preprocessor_get (preproc);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
     {
-      gsk_sl_preprocessor_error (preproc, "Expected an openening \"(\"");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an openening \"(\"");
       gsk_sl_function_unref ((GskSlFunction *) function);
       return NULL;
     }
@@ -332,7 +332,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
   token = gsk_sl_preprocessor_get (preproc);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
     {
-      gsk_sl_preprocessor_error (preproc, "Expected a closing \")\"");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a closing \")\"");
       gsk_sl_function_unref ((GskSlFunction *) function);
       return NULL;
     }
@@ -347,7 +347,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
     {
-      gsk_sl_preprocessor_error (preproc, "Expected an opening \"{\"");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an opening \"{\"");
       gsk_sl_function_unref ((GskSlFunction *) function);
       return NULL;
     }
@@ -370,7 +370,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
     {
-      gsk_sl_preprocessor_error (preproc, "Missing closing \"}\" at end.");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Missing closing \"}\" at end.");
       gsk_sl_function_unref ((GskSlFunction *) function);
       return NULL;
     }

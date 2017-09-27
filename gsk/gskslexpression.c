@@ -269,8 +269,9 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
     {
       if (stream)
         {
-          gsk_sl_preprocessor_error (stream, "Operand types %s and %s do not share compatible scalar types.",
-                                             gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                     "Operand types %s and %s do not share compatible scalar types.",
+                                     gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
         }
       return NULL;
     }
@@ -284,7 +285,8 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
               if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (gsk_sl_type_get_index_type (rtype)))
                 {
                   if (stream)
-                    gsk_sl_preprocessor_error (stream, "Matrices to multiplication have incompatible dimensions.");
+                    gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                               "Matrices to multiplication have incompatible dimensions.");
                   return NULL;
                 }
               return gsk_sl_type_get_matrix (scalar,
@@ -304,7 +306,8 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
               else
                 {
                   if (stream)
-                    gsk_sl_preprocessor_error (stream, "Matrix types %s and %s have different size.",
+                    gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                               "Matrix types %s and %s have different size.",
                                                gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
                   return NULL;
                 }
@@ -317,7 +320,8 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
               if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
                 {
                   if (stream)
-                    gsk_sl_preprocessor_error (stream, "Matrix column count doesn't match vector length.");
+                    gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                               "Matrix column count doesn't match vector length.");
                   return NULL;
                 }
               return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (gsk_sl_type_get_index_type (ltype)));
@@ -325,7 +329,8 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
           else
             {
               if (stream)
-                gsk_sl_preprocessor_error (stream, "Cannot perform arithmetic operation between matrix and vector.");
+                gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                           "Cannot perform arithmetic operation between matrix and vector.");
               return NULL;
             }
         }
@@ -338,7 +343,8 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
       else
         {
           if (stream)
-            gsk_sl_preprocessor_error (stream, "Right operand is incompatible type for arithemtic operation.");
+            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                       "Right operand is incompatible type for arithemtic operation.");
           return NULL;
         }
     }
@@ -351,8 +357,9 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
               if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (gsk_sl_type_get_index_type (rtype)))
                 {
                   if (stream)
-                    gsk_sl_preprocessor_error (stream, "Vector length for %s doesn't match row count for %s",
-                                                       gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+                    gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                               "Vector length for %s doesn't match row count for %s",
+                                               gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
                   return NULL;
                 }
               return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (rtype));
@@ -360,7 +367,7 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
           else
             {
               if (stream)
-                gsk_sl_preprocessor_error (stream, "Cannot perform arithmetic operation between vector and matrix.");
+                gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Cannot perform arithmetic operation between vector and matrix.");
               return NULL;
             }
         }
@@ -369,8 +376,9 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
           if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
             {
               if (stream)
-                gsk_sl_preprocessor_error (stream, "Vector operands %s and %s to arithmetic operation have different length.",
-                                                   gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+                gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                           "Vector operands %s and %s to arithmetic operation have different length.",
+                                           gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
               return NULL;
             }
           return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (ltype));
@@ -383,7 +391,8 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
       else
         {
           if (stream)
-            gsk_sl_preprocessor_error (stream, "Right operand is incompatible type for arithemtic operation.");
+            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                       "Right operand is incompatible type for arithemtic operation.");
           return NULL;
         }
     }
@@ -407,14 +416,14 @@ gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
       else
         {
           if (stream)
-            gsk_sl_preprocessor_error (stream, "Right operand is incompatible type for arithemtic operation.");
+            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Right operand is incompatible type for arithemtic operation.");
           return NULL;
         }
     }
   else
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand is incompatible type for arithemtic operation.");
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Left operand is incompatible type for arithemtic operation.");
       return NULL;
     }
 }
@@ -430,34 +439,35 @@ gsk_sl_expression_bitwise_type_check (GskSlPreprocessor *stream,
   if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
       return NULL;
     }
   rscalar = gsk_sl_type_get_scalar_type (ltype);
   if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
       return NULL;
     }
   if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
       return NULL;
     }
   if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
       return NULL;
     }
   if (gsk_sl_type_is_vector (ltype) && gsk_sl_type_is_vector (rtype) &&
       gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Vector operands %s and %s do not have the same length.",
-                                           gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                   "Vector operands %s and %s do not have the same length.",
+                                   gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
       return NULL;
     }
 
@@ -479,39 +489,39 @@ gsk_sl_expression_shift_type_check (GskSlPreprocessor *stream,
   if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
       return FALSE;
     }
   rscalar = gsk_sl_type_get_scalar_type (ltype);
   if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
       return FALSE;
     }
   if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
       return FALSE;
     }
   if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
       return FALSE;
     }
   if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_vector (rtype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand to shift cannot be a vector if left operand is a scalar.");
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Right operand to shift cannot be a vector if left operand is a scalar.");
       return FALSE;
     }
   if (gsk_sl_type_is_vector (ltype) && gsk_sl_type_is_vector (rtype) &&
       gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Vector operands do not have the same length.");
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Vector operands do not have the same length.");
       return FALSE;
     }
 
@@ -526,25 +536,25 @@ gsk_sl_expression_relational_type_check (GskSlPreprocessor *stream,
   if (!gsk_sl_type_is_scalar (ltype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand to relational operator is not a scalar.");
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Left operand to relational operator is not a scalar.");
       return FALSE;
     }
   if (gsk_sl_type_get_scalar_type (ltype) == GSK_SL_BOOL)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Left operand to relational operator must not be bool.");
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Left operand to relational operator must not be bool.");
       return FALSE;
     }
   if (!gsk_sl_type_is_scalar (rtype))
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand to relational operator is not a scalar.");
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Right operand to relational operator is not a scalar.");
       return FALSE;
     }
   if (gsk_sl_type_get_scalar_type (rtype) == GSK_SL_BOOL)
     {
       if (stream)
-        gsk_sl_preprocessor_error (stream, "Right operand to relational operator must not be bool.");
+        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Right operand to relational operator must not be bool.");
       return FALSE;
     }
 
@@ -1034,7 +1044,7 @@ gsk_sl_expression_parse_constructor_call (GskSlScope        *scope,
   token = gsk_sl_preprocessor_get (stream);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
     {
-      gsk_sl_preprocessor_error (stream, "Expected opening \"(\" when calling constructor");
+      gsk_sl_preprocessor_error (stream, SYNTAX, "Expected opening \"(\" when calling constructor");
       gsk_sl_expression_unref ((GskSlExpression *) call);
       return NULL;
     }
@@ -1070,14 +1080,14 @@ gsk_sl_expression_parse_constructor_call (GskSlScope        *scope,
     types[i] = gsk_sl_expression_get_return_type (call->arguments[i]);
   if (!gsk_sl_function_matches (call->function, types, call->n_arguments, &err))
     {
-      gsk_sl_preprocessor_error (stream, "%s", err->message);
+      gsk_sl_preprocessor_emit_error (stream, TRUE, gsk_sl_preprocessor_get_location (stream), err);
       g_clear_error (&err);
       fail = TRUE;
     }
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
     {
-      gsk_sl_preprocessor_error (stream, "Expected closing \")\" after arguments.");
+      gsk_sl_preprocessor_error (stream, SYNTAX, "Expected closing \")\" after arguments.");
       gsk_sl_expression_unref ((GskSlExpression *) call);
       return NULL;
     }
@@ -1110,7 +1120,7 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
         variable = gsk_sl_scope_lookup_variable (scope, token->str);
         if (variable == NULL)
           {
-            gsk_sl_preprocessor_error (stream, "No variable named \"%s\".", token->str);
+            gsk_sl_preprocessor_error (stream, DECLARATION, "No variable named \"%s\".", token->str);
             gsk_sl_preprocessor_consume (stream, NULL);
             return NULL;
           }
@@ -1212,7 +1222,7 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
       }
 
     default:
-      gsk_sl_preprocessor_error (stream, "Expected an expression.");
+      gsk_sl_preprocessor_error (stream, SYNTAX, "Expected an expression.");
       gsk_sl_preprocessor_consume (stream, NULL);
       return NULL;
   }
@@ -1229,7 +1239,7 @@ gsk_sl_expression_parse_field_selection (GskSlScope        *scope,
 
   if (g_str_equal (name, "length"))
     {
-       gsk_sl_preprocessor_error (stream, ".length() is not implemented yet.");
+       gsk_sl_preprocessor_error (stream, UNSUPPORTED, ".length() is not implemented yet.");
        *success = FALSE;
        return expr;
     }
@@ -1251,7 +1261,7 @@ gsk_sl_expression_parse_field_selection (GskSlScope        *scope,
         }
       if (swizzle->name == G_N_ELEMENTS(swizzle_options))
         {
-          gsk_sl_preprocessor_error (stream, "Type %s has no member named \"%s\".", gsk_sl_type_get_name (type), name);
+          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Type %s has no member named \"%s\".", gsk_sl_type_get_name (type), name);
           gsk_sl_expression_unref ((GskSlExpression *) swizzle);
           *success = FALSE;
           return expr;
@@ -1263,23 +1273,25 @@ gsk_sl_expression_parse_field_selection (GskSlScope        *scope,
           const char *found = strchr (swizzle_options[swizzle->name], name[swizzle->length]);
           if (found == NULL)
             {
-              gsk_sl_preprocessor_error (stream, "Character '%c' is not valid for swizzle. Must be one of \"%s\".",
-                                                 name[swizzle->length], swizzle_options[swizzle->name]);
+              gsk_sl_preprocessor_error (stream, SYNTAX,
+                                         "Character '%c' is not valid for swizzle. Must be one of \"%s\".",
+                                         name[swizzle->length], swizzle_options[swizzle->name]);
               *success = FALSE;
               return (GskSlExpression *) swizzle;
             }
           swizzle->indexes[swizzle->length] = found - swizzle_options[swizzle->name];
           if (swizzle->indexes[swizzle->length] >= type_length)
             {
-              gsk_sl_preprocessor_error (stream, "Swizzle index '%c' not allowed for type %s",
-                                                 name[swizzle->length], gsk_sl_type_get_name (type));
+              gsk_sl_preprocessor_error (stream, SYNTAX,
+                                         "Swizzle index '%c' not allowed for type %s",
+                                         name[swizzle->length], gsk_sl_type_get_name (type));
               *success = FALSE;
               return (GskSlExpression *) swizzle;
             }
         }
       if (name[swizzle->length])
         {
-          gsk_sl_preprocessor_error (stream, "Too many swizzle options. A maximum of 4 characters are allowed.");
+          gsk_sl_preprocessor_error (stream, SYNTAX, "Too many swizzle options. A maximum of 4 characters are allowed.");
           *success = FALSE;
           return (GskSlExpression *) swizzle;
         }
@@ -1288,7 +1300,7 @@ gsk_sl_expression_parse_field_selection (GskSlScope        *scope,
     }
   else
     {
-      gsk_sl_preprocessor_error (stream, "Cannot select fields of type %s.", gsk_sl_type_get_name (type));
+      gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Type %s has no fields to select.", gsk_sl_type_get_name (type));
       *success = FALSE;
       return expr;
     }
@@ -1320,7 +1332,7 @@ gsk_sl_expression_parse_postfix (GskSlScope        *scope,
             }
           else
             {
-              gsk_sl_preprocessor_error (stream, "Expected an identifier to select a field.");
+              gsk_sl_preprocessor_error (stream, SYNTAX, "Expected an identifier to select a field.");
               success = FALSE;
               continue;
             }
@@ -1761,16 +1773,18 @@ gsk_sl_expression_parse_logical_and (GskSlScope        *scope,
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_expression_get_return_type (operation->right)))
         {
-          gsk_sl_preprocessor_error (stream, "Right operand of && expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_expression_get_return_type (operation->right)));
+          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                     "Right operand of && expression is not bool but %s",
+                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (operation->right)));
           gsk_sl_expression_ref (expression);
           gsk_sl_expression_unref ((GskSlExpression *) operation);
         }
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_expression_get_return_type (expression)))
         {
-          gsk_sl_preprocessor_error (stream, "Left operand of && expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_expression_get_return_type (expression)));
+          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                     "Left operand of && expression is not bool but %s",
+                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (expression)));
           expression = operation->right;
           gsk_sl_expression_ref (expression);
           gsk_sl_expression_unref ((GskSlExpression *) operation);
@@ -1815,16 +1829,18 @@ gsk_sl_expression_parse_logical_xor (GskSlScope        *scope,
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_expression_get_return_type (operation->right)))
         {
-          gsk_sl_preprocessor_error (stream, "Right operand of ^^ expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_expression_get_return_type (operation->right)));
+          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                     "Right operand of ^^ expression is not bool but %s",
+                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (operation->right)));
           gsk_sl_expression_ref (expression);
           gsk_sl_expression_unref ((GskSlExpression *) operation);
         }
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_expression_get_return_type (expression)))
         {
-          gsk_sl_preprocessor_error (stream, "Left operand of ^^ expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_expression_get_return_type (expression)));
+          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                     "Left operand of ^^ expression is not bool but %s",
+                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (expression)));
           expression = operation->right;
           gsk_sl_expression_ref (expression);
           gsk_sl_expression_unref ((GskSlExpression *) operation);
@@ -1869,16 +1885,18 @@ gsk_sl_expression_parse_logical_or (GskSlScope        *scope,
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_expression_get_return_type (operation->right)))
         {
-          gsk_sl_preprocessor_error (stream, "Right operand of || expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_expression_get_return_type (operation->right)));
+          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                     "Right operand of || expression is not bool but %s",
+                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (operation->right)));
           gsk_sl_expression_ref (expression);
           gsk_sl_expression_unref ((GskSlExpression *) operation);
         }
       else if (!gsk_sl_type_can_convert (gsk_sl_type_get_scalar (GSK_SL_BOOL),
                                          gsk_sl_expression_get_return_type (expression)))
         {
-          gsk_sl_preprocessor_error (stream, "Left operand of || expression is not bool but %s",
-                                             gsk_sl_type_get_name (gsk_sl_expression_get_return_type (expression)));
+          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                     "Left operand of || expression is not bool but %s",
+                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (expression)));
           expression = operation->right;
           gsk_sl_expression_ref (expression);
           gsk_sl_expression_unref ((GskSlExpression *) operation);

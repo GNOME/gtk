@@ -31,6 +31,9 @@ struct _GskSlCompiler {
   GHashTable *defines;
 };
 
+G_DEFINE_QUARK (gsk-sl-compiler-error-quark, gsk_sl_compiler_error)
+G_DEFINE_QUARK (gsk-sl-compiler-warning-quark, gsk_sl_compiler_warning)
+
 G_DEFINE_TYPE (GskSlCompiler, gsk_sl_compiler, G_TYPE_OBJECT)
 
 static void

@@ -19,7 +19,7 @@
 
 #include "gsksltokenizerprivate.h"
 
-#include "gskpixelshader.h"
+#include "gskslcompiler.h"
 
 #include <math.h>
 #include <string.h>
@@ -1378,8 +1378,8 @@ set_parse_error (GError     **error,
   g_assert (*error == NULL);
 
   va_start (args, format); 
-  *error = g_error_new_valist (G_FILE_ERROR,
-                               G_FILE_ERROR_FAILED,
+  *error = g_error_new_valist (GSK_SL_COMPILER_ERROR,
+                               GSK_SL_COMPILER_ERROR_TOKENIZER,
                                format,
                                args);
   va_end (args);

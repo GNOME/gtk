@@ -27,9 +27,32 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GSK_SL_COMPILER_ERROR_CONSTANT,
+  GSK_SL_COMPILER_ERROR_DECLARATION,
+  GSK_SL_COMPILER_ERROR_PREPROCESSOR,
+  GSK_SL_COMPILER_ERROR_SCOPE,
+  GSK_SL_COMPILER_ERROR_SYNTAX,
+  GSK_SL_COMPILER_ERROR_TOKENIZER,
+  GSK_SL_COMPILER_ERROR_TYPE_MISMATCH,
+  GSK_SL_COMPILER_ERROR_UNSUPPORTED,
+} GskSlCompilerError;
+
+typedef enum {
+  GSK_SL_COMPILER_WARNING_SHADOW
+} GskSlCompilerWarning;
+
+#define GSK_SL_COMPILER_ERROR (gsk_sl_compiler_error_quark ())
+#define GSK_SL_COMPILER_WARNING (gsk_sl_compiler_warning_quark ())
+
 #define GSK_TYPE_SL_COMPILER (gsk_sl_compiler_get_type ())
 
 G_DECLARE_FINAL_TYPE (GskSlCompiler, gsk_sl_compiler, GSK, SL_COMPILER, GObject)
+
+GDK_AVAILABLE_IN_3_92
+GQuark                  gsk_sl_compiler_error_quark             (void);
+GDK_AVAILABLE_IN_3_92
+GQuark                  gsk_sl_compiler_warning_quark           (void);
 
 GDK_AVAILABLE_IN_3_92
 GskSlCompiler *         gsk_sl_compiler_new                     (void);

@@ -95,9 +95,10 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
 
       if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (initial)))
         {
-          gsk_sl_preprocessor_error (preproc, "Cannot convert from initializer type %s to variable type %s",
-                                              gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initial)),
-                                              gsk_sl_type_get_name (type));
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                     "Cannot convert from initializer type %s to variable type %s",
+                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initial)),
+                                     gsk_sl_type_get_name (type));
           gsk_sl_expression_unref (initial);
           return FALSE;
         }
@@ -111,7 +112,7 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
         }
       else 
         {
-          gsk_sl_preprocessor_error (preproc, "Initializer is not constant.");
+          gsk_sl_preprocessor_error (preproc, UNSUPPORTED, "Non-constant initializer are not supported yet.");
           return FALSE;
         }
 
@@ -120,7 +121,7 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     {
-      gsk_sl_preprocessor_error (preproc, "No semicolon at end of variable declaration.");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of variable declaration.");
       return FALSE;
     }
   gsk_sl_preprocessor_consume (preproc, NULL);
@@ -173,7 +174,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
     }
   else if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
     {
-      gsk_sl_preprocessor_error (preproc, "Expected a variable name");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a variable name");
       gsk_sl_type_unref (type);
       return FALSE;
     }

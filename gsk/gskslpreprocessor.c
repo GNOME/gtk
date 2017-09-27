@@ -192,13 +192,13 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc)
           gsk_sl_preprocessor_clear_token (&pp);
           if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
             {
-              gsk_sl_preprocessor_error_full (preproc, &pp.location, "No variable after #define.");
+              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "No variable after #define.");
               gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline);
               return;
             }
           if (!gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_IDENTIFIER))
             {
-              gsk_sl_preprocessor_error_full (preproc, &pp.location, "Expected identifier after #define.");
+              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected identifier after #define.");
               gsk_sl_preprocessor_clear_token (&pp);
             }
           else
@@ -206,7 +206,7 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc)
               GskSlDefine *define;
 
               if (g_hash_table_lookup (preproc->defines, pp.token.str))
-                gsk_sl_preprocessor_error_full (preproc, &pp.location, "\"%s\" redefined.", pp.token.str);
+                gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "\"%s\" redefined.", pp.token.str);
               
               define = gsk_sl_define_new (pp.token.str, NULL);
               gsk_sl_preprocessor_clear_token (&pp);
@@ -258,13 +258,13 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc)
           gsk_sl_preprocessor_clear_token (&pp);
           if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
             {
-              gsk_sl_preprocessor_error_full (preproc, &pp.location, "No variable after #undef.");
+              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "No variable after #undef.");
               gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline);
               return;
             }
           if (!gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_IDENTIFIER))
             {
-              gsk_sl_preprocessor_error_full (preproc, &pp.location, "Expected identifier after #undef.");
+              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected identifier after #undef.");
               gsk_sl_preprocessor_clear_token (&pp);
             }
           else
@@ -273,7 +273,7 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc)
               
               if (!gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
                 {
-                  gsk_sl_preprocessor_error_full (preproc, &pp.location, "Expected newline after #undef.");
+                  gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected newline after #undef.");
                   gsk_sl_preprocessor_clear_token (&pp);
                 }
               else
@@ -290,13 +290,13 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc)
 #endif
       else
         {
-          gsk_sl_preprocessor_error_full (preproc, &pp.location, "Unknown preprocessor directive #%s.", pp.token.str);
+          gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Unknown preprocessor directive #%s.", pp.token.str);
           gsk_sl_preprocessor_clear_token (&pp);
         }
     }
   else
     {
-      gsk_sl_preprocessor_error_full (preproc, &pp.location, "Missing identifier for preprocessor directive.");
+      gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Missing identifier for preprocessor directive.");
       gsk_sl_preprocessor_clear_token (&pp);
     }
   
@@ -315,7 +315,7 @@ gsk_sl_preprocessor_handle_token (GskSlPreprocessor *preproc,
     {
       if (!was_newline)
         {
-          gsk_sl_preprocessor_error (preproc, "Unexpected \"#\" - preprocessor directives must be at start of line.");
+          gsk_sl_preprocessor_error (preproc, SYNTAX, "Unexpected \"#\" - preprocessor directives must be at start of line.");
           gsk_sl_preprocessor_clear_token (pp);
         }
       else

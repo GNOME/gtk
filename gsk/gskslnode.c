@@ -275,9 +275,10 @@ gsk_sl_node_parse_declaration (GskSlScope        *scope,
           declaration->initial = gsk_sl_expression_parse_assignment (scope, stream);
           if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (declaration->initial)))
             {
-              gsk_sl_preprocessor_error (stream, "Cannot convert from initializer type %s to variable type %s",
-                                                 gsk_sl_type_get_name (gsk_sl_expression_get_return_type (declaration->initial)),
-                                                 gsk_sl_type_get_name (type));
+              gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                         "Cannot convert from initializer type %s to variable type %s",
+                                         gsk_sl_type_get_name (gsk_sl_expression_get_return_type (declaration->initial)),
+                                         gsk_sl_type_get_name (type));
               gsk_sl_node_unref ((GskSlNode *) declaration);
               return NULL;
             }
@@ -320,7 +321,7 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
       break;
 
     case GSK_SL_TOKEN_EOF:
-      gsk_sl_preprocessor_error (preproc, "Unexpected end of document");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Unexpected end of document");
       return NULL;
 
     case GSK_SL_TOKEN_CONST:
@@ -453,7 +454,7 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
 
         if (return_type == NULL)
           {
-            gsk_sl_preprocessor_error (preproc, "Cannot return from here.");
+            gsk_sl_preprocessor_error (preproc, SCOPE, "Cannot return from here.");
             gsk_sl_node_unref (node);
             node = NULL;
           }
@@ -461,7 +462,7 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
           {
             if (!gsk_sl_type_equal (return_type, gsk_sl_type_get_scalar (GSK_SL_VOID)))
               {
-                gsk_sl_preprocessor_error (preproc, "Functions expectes a return value of type %s", gsk_sl_type_get_name (return_type));
+                gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,"Functions expectes a return value of type %s", gsk_sl_type_get_name (return_type));
                 gsk_sl_node_unref (node);
                 node = NULL;
               }
@@ -470,13 +471,13 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
           {
             if (gsk_sl_type_equal (return_type, gsk_sl_type_get_scalar (GSK_SL_VOID)))
               {
-                gsk_sl_preprocessor_error (preproc, "Cannot return a value from a void function.");
+                gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot return a value from a void function.");
                 gsk_sl_node_unref (node);
                 node = NULL;
               }
             else if (!gsk_sl_type_can_convert (return_type, gsk_sl_expression_get_return_type (return_node->value)))
               {
-                gsk_sl_preprocessor_error (preproc,
+                gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
                                            "Cannot convert type %s to return type %s.",
                                            gsk_sl_type_get_name (gsk_sl_expression_get_return_type (return_node->value)),
                                            gsk_sl_type_get_name (return_type));
@@ -515,7 +516,7 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
   token = gsk_sl_preprocessor_get (preproc);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     {
-      gsk_sl_preprocessor_error (preproc, "No semicolon at end of statement.");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of statement.");
       gsk_sl_node_unref (node);
       return NULL;
     }

@@ -19,8 +19,7 @@
 #ifndef __GSK_SL_PREPROCESSOR_PRIVATE_H__
 #define __GSK_SL_PREPROCESSOR_PRIVATE_H__
 
-#include <glib.h>
-
+#include "gskslcompilerprivate.h"
 #include "gsksltypesprivate.h"
 #include "gsksltokenizerprivate.h"
 
@@ -42,18 +41,36 @@ void                    gsk_sl_preprocessor_emit_error          (GskSlPreprocess
                                                                  const GskCodeLocation *location,
                                                                  const GError        *error);
 
-#define gsk_sl_preprocessor_error(preproc, ...) \
-  gsk_sl_preprocessor_error_full (preproc, gsk_sl_preprocessor_get_location (preproc), __VA_ARGS__)
+#define gsk_sl_preprocessor_error(preproc, type, ...) \
+  gsk_sl_preprocessor_error_full (preproc, type, gsk_sl_preprocessor_get_location (preproc), __VA_ARGS__)
 
-#define gsk_sl_preprocessor_error_full(preproc, location, ...) G_STMT_START{\
+#define gsk_sl_preprocessor_error_full(preproc, type, location, ...) G_STMT_START{\
   GError *error; \
 \
-  error = g_error_new (G_FILE_ERROR, \
-                       G_FILE_ERROR_FAILED, \
+  error = g_error_new (GSK_SL_COMPILER_ERROR, \
+                       GSK_SL_COMPILER_ERROR_ ## type, \
                        __VA_ARGS__); \
 \
   gsk_sl_preprocessor_emit_error (preproc, \
                                   TRUE, \
+                                  location, \
+                                  error); \
+\
+  g_error_free (error);\
+}G_STMT_END
+
+#define gsk_sl_preprocessor_warn(preproc, type, ...) \
+  gsk_sl_preprocessor_warn_full (preproc, type, gsk_sl_preprocessor_get_location (preproc), __VA_ARGS__)
+
+#define gsk_sl_preprocessor_warn_full(preproc, type, location, ...) G_STMT_START{\
+  GError *error; \
+\
+  error = g_error_new (GSK_SL_COMPILER_WARNING, \
+                       GSK_SL_COMPILER_WARNING_ ## type, \
+                       __VA_ARGS__); \
+\
+  gsk_sl_preprocessor_emit_error (preproc, \
+                                  FALSE, \
                                   location, \
                                   error); \
 \

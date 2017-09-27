@@ -72,7 +72,7 @@ gsk_sl_decoration_list_add_simple (GskSlPreprocessor *preproc,
 {
   if (list->values[decoration].set)
     {
-      gsk_sl_preprocessor_error (preproc, "Duplicate qualifier.");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Duplicate qualifier.");
       return FALSE;
     }
 
@@ -96,7 +96,7 @@ gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
   token = gsk_sl_preprocessor_get (preproc);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
     {
-      gsk_sl_preprocessor_error (preproc, "Expected \"=\" sign to assign a value.");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected \"=\" sign to assign a value.");
       return FALSE;
     }
   gsk_sl_preprocessor_consume (preproc, NULL);
@@ -110,7 +110,7 @@ gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
 
   if (value == NULL)
     {
-      gsk_sl_preprocessor_error (preproc, "Expression is not constant.");
+      gsk_sl_preprocessor_error (preproc, CONSTANT, "Expression is not constant.");
       return FALSE;
     }
 
@@ -125,7 +125,7 @@ gsk_sl_decoration_list_parse_assignment (GskSlPreprocessor *preproc,
     }
   else
     {
-      gsk_sl_preprocessor_error (preproc, "Type of expression is not an integer type, but %s", gsk_sl_type_get_name (type));
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Type of expression is not an integer type, but %s", gsk_sl_type_get_name (type));
       success = FALSE;
     }
   gsk_sl_value_free (value);
@@ -149,7 +149,7 @@ gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
 
       if (gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
         {
-          gsk_sl_preprocessor_error (preproc, "Expected layout identifier.");
+          gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected layout identifier.");
           success = FALSE;
           break;
         }
@@ -185,14 +185,14 @@ gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
             }
           else
             {
-              gsk_sl_preprocessor_error (preproc, "Unknown layout identifier.");
+              gsk_sl_preprocessor_error (preproc, UNSUPPORTED, "Unknown layout identifier.");
               gsk_sl_preprocessor_consume (preproc, NULL);
               success = FALSE;
             }
         }
       else
         {
-          gsk_sl_preprocessor_error (preproc, "Expected layout identifier.");
+          gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected layout identifier.");
           gsk_sl_preprocessor_consume (preproc, NULL);
           success = FALSE;
           continue;
@@ -231,7 +231,7 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
         case GSK_SL_TOKEN_IN:
           if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
-              gsk_sl_preprocessor_error (preproc, "\"in\" qualifier specified twice.");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "\"in\" qualifier specified twice.");
               success = FALSE;
             }
           else
@@ -246,7 +246,7 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
         case GSK_SL_TOKEN_OUT:
           if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
-              gsk_sl_preprocessor_error (preproc, "\"out\" qualifier specified twice.");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "\"out\" qualifier specified twice.");
               success = FALSE;
             }
           else
@@ -261,12 +261,12 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
         case GSK_SL_TOKEN_INOUT:
           if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
-              gsk_sl_preprocessor_error (preproc, "\"in\" qualifier already used.");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "\"in\" qualifier already used.");
               success = FALSE;
             }
           else if (list->values[GSK_SL_DECORATION_CALLER_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
-              gsk_sl_preprocessor_error (preproc, "\"out\" qualifier already used.");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "\"out\" qualifier already used.");
               success = FALSE;
             }
           else
@@ -302,12 +302,12 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
         case GSK_SL_TOKEN_READONLY:
           if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
-              gsk_sl_preprocessor_error (preproc, "\"readonly\" qualifier specified twice.");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "\"readonly\" qualifier specified twice.");
               success = FALSE;
             }
           else if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
-              gsk_sl_preprocessor_error (preproc, "\"writeonly\" qualifier already used.");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "\"writeonly\" qualifier already used.");
               success = FALSE;
             }
           else
@@ -322,12 +322,12 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
         case GSK_SL_TOKEN_WRITEONLY:
           if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_READ)
             {
-              gsk_sl_preprocessor_error (preproc, "\"readonly\" qualifier already used.");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "\"readonly\" qualifier already used.");
               success = FALSE;
             }
           else if (list->values[GSK_SL_DECORATION_ACCESS].value & GSK_SL_DECORATION_ACCESS_WRITE)
             {
-              gsk_sl_preprocessor_error (preproc, "\"writeonly\" qualifier specified twice.");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "\"writeonly\" qualifier specified twice.");
               success = FALSE;
             }
           else
@@ -344,7 +344,7 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
           token = gsk_sl_preprocessor_get (preproc);
           if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
             {
-              gsk_sl_preprocessor_error (preproc, "Expected opening \"(\" after layout specifier");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected opening \"(\" after layout specifier");
               success = FALSE;
               break;
             }
@@ -355,7 +355,7 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
           token = gsk_sl_preprocessor_get (preproc);
           if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
             {
-              gsk_sl_preprocessor_error (preproc, "Expected opening \"(\" after layout specifier");
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected opening \"(\" after layout specifier");
               success = FALSE;
             }
           gsk_sl_preprocessor_consume (preproc, NULL);
