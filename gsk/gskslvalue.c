@@ -113,8 +113,8 @@ gsk_sl_value_new_convert (GskSlValue *source,
       result = gsk_sl_value_new (new_type);
       sdata = source->data;
       ddata = result->data;
-      sstride = gsk_sl_type_get_size (source->type) / n;
-      dstride = gsk_sl_type_get_size (new_type) / n;
+      sstride = gsk_sl_type_get_index_stride (source->type);
+      dstride = gsk_sl_type_get_index_stride (new_type);
       for (i = 0; i < n; i++)
         {
           gsk_sl_scalar_type_convert_value (gsk_sl_type_get_scalar_type (new_type),

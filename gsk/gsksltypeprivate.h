@@ -52,6 +52,7 @@ gboolean                gsk_sl_type_is_matrix                   (const GskSlType
 const char *            gsk_sl_type_get_name                    (const GskSlType     *type);
 GskSlScalarType         gsk_sl_type_get_scalar_type             (const GskSlType     *type);
 GskSlType *             gsk_sl_type_get_index_type              (const GskSlType     *type);
+gsize                   gsk_sl_type_get_index_stride            (const GskSlType     *type);
 guint                   gsk_sl_type_get_length                  (const GskSlType     *type);
 gsize                   gsk_sl_type_get_size                    (const GskSlType     *type);
 gboolean                gsk_sl_scalar_type_can_convert          (GskSlScalarType      target,
