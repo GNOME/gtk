@@ -12,7 +12,7 @@ project('gtk+-4.0', 'c',
 
 glib_major_req = 2
 glib_minor_req = 53
-glib_micro_req = 1
+glib_micro_req = 7
 
 if glib_minor_req.is_odd()
   glib_min_required = 'GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req - 1)
