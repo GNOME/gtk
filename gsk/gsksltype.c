@@ -971,7 +971,7 @@ gsk_sl_type_new_parse (GskSlPreprocessor *stream)
       break;
     default:
       gsk_sl_preprocessor_error (stream, SYNTAX, "Expected type specifier");
-      return NULL;
+      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_FLOAT));
   }
 
   gsk_sl_preprocessor_consume (stream, NULL);
