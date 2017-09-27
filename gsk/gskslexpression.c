@@ -1038,9 +1038,9 @@ gsk_sl_expression_error_new (void)
 }
 
 GskSlExpression *
-gsk_sl_expression_parse_constructor_call (GskSlScope        *scope,
-                                          GskSlPreprocessor *stream,
-                                          GskSlType         *type)
+gsk_sl_expression_parse_function_call (GskSlScope        *scope,
+                                       GskSlPreprocessor *stream,
+                                       GskSlFunction     *function)
 {
   GskSlExpressionFunctionCall *call;
   const GskSlToken *token;
@@ -1049,13 +1049,12 @@ gsk_sl_expression_parse_constructor_call (GskSlScope        *scope,
   guint i;
 
   call = gsk_sl_expression_new (GskSlExpressionFunctionCall, &GSK_SL_EXPRESSION_FUNCTION_CALL);
-  call->function = gsk_sl_function_new_constructor (type);
-  g_assert (call->function);
+  call->function = gsk_sl_function_ref (function);
 
   token = gsk_sl_preprocessor_get (stream);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
     {
-      gsk_sl_preprocessor_error (stream, SYNTAX, "Expected opening \"(\" when calling constructor");
+      gsk_sl_preprocessor_error (stream, SYNTAX, "Expected opening \"(\" when calling function.");
       return (GskSlExpression *) call;
     }
   gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
@@ -1113,21 +1112,47 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
   {
     case GSK_SL_TOKEN_IDENTIFIER:
       {
-        GskSlExpressionReference *reference;
+        GskSlExpression *expr;
         GskSlVariable *variable;
+        char *name;
+        
+        name = g_strdup (token->str);
+        gsk_sl_preprocessor_consume (stream, NULL);
 
-        variable = gsk_sl_scope_lookup_variable (scope, token->str);
-        if (variable == NULL)
+        token = gsk_sl_preprocessor_get (stream);
+        if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
           {
-            gsk_sl_preprocessor_error (stream, DECLARATION, "No variable named \"%s\".", token->str);
-            gsk_sl_preprocessor_consume (stream, NULL);
-            return gsk_sl_expression_error_new ();
+            GskSlFunction *function = gsk_sl_scope_lookup_function (scope, name);
+            
+            if (function == NULL)
+              {
+                gsk_sl_preprocessor_error (stream, DECLARATION, "No function named \"%s\".", name);
+                expr = gsk_sl_expression_error_new ();
+              }
+            else
+              {
+                expr = gsk_sl_expression_parse_function_call (scope, stream, function);
+              }
+          }
+        else
+          {
+            GskSlExpressionReference *reference;
+            variable = gsk_sl_scope_lookup_variable (scope, name);
+            if (variable == NULL)
+              {
+                gsk_sl_preprocessor_error (stream, DECLARATION, "No variable named \"%s\".", name);
+                expr = gsk_sl_expression_error_new ();
+              }
+            else
+              {
+                reference = gsk_sl_expression_new (GskSlExpressionReference, &GSK_SL_EXPRESSION_REFERENCE);
+                reference->variable = gsk_sl_variable_ref (variable);
+                expr = (GskSlExpression *) reference;
+              }
           }
 
-        reference = gsk_sl_expression_new (GskSlExpressionReference, &GSK_SL_EXPRESSION_REFERENCE);
-        reference->variable = gsk_sl_variable_ref (variable);
-        gsk_sl_preprocessor_consume (stream, (GskSlExpression *) reference);
-        return (GskSlExpression *) reference;
+        g_free (name);
+        return expr;
       }
 
     case GSK_SL_TOKEN_INTCONSTANT:
@@ -1211,11 +1236,17 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
     case GSK_SL_TOKEN_DMAT4X3:
     case GSK_SL_TOKEN_DMAT4X4:
       {
+        GskSlFunction *constructor;
+        GskSlExpression *expression;
         GskSlType *type;
 
         type = gsk_sl_type_new_parse (stream);
+        constructor = gsk_sl_function_new_constructor (type);
+        expression = gsk_sl_expression_parse_function_call (scope, stream, constructor);
+        gsk_sl_function_unref (constructor);
+        gsk_sl_type_unref (type);
 
-        return gsk_sl_expression_parse_constructor_call (scope, stream, type);
+        return expression;
       }
 
     default:

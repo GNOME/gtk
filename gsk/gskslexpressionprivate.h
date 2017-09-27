@@ -29,9 +29,9 @@ GskSlExpression *       gsk_sl_expression_parse_assignment      (GskSlScope     
                                                                  GskSlPreprocessor      *stream);
 GskSlExpression *       gsk_sl_expression_parse_constant        (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *stream);
-GskSlExpression *       gsk_sl_expression_parse_constructor_call (GskSlScope            *scope,
+GskSlExpression *       gsk_sl_expression_parse_function_call   (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *stream,
-                                                                 GskSlType              *type);
+                                                                 GskSlFunction          *function);
 
 GskSlExpression *       gsk_sl_expression_ref                   (GskSlExpression        *expression);
 void                    gsk_sl_expression_unref                 (GskSlExpression        *expression);

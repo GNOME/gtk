@@ -396,10 +396,13 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
         if (token->type == GSK_SL_TOKEN_LEFT_PAREN)
           {
             GskSlNodeExpression *node_expression;
+            GskSlFunction *constructor;
                 
+            constructor = gsk_sl_function_new_constructor (type);
             node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
-            node_expression->expression = gsk_sl_expression_parse_constructor_call (scope, preproc, type);
+            node_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, constructor);
             node = (GskSlNode *) node_expression;
+            gsk_sl_function_unref (constructor);
           }
         else
           {
