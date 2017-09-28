@@ -377,6 +377,22 @@ populate_render_node_properties (GtkListStore  *store,
       }
       break;
 
+    case GSK_OPACITY_NODE:
+      {
+        double opacity = gsk_opacity_node_get_opacity (node);
+        const char *text;
+
+        text = g_strdup_printf ("%.2f", opacity);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Opacity",
+                                           1, text,
+                                           2, FALSE,
+                                           3, NULL,
+                                           -1);
+        g_free (text);
+      }
+      break;
+
     default: ;
     }
 }
