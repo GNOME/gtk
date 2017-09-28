@@ -2803,6 +2803,8 @@ gtk_combo_box_dispose (GObject* object)
   GtkComboBox *combo_box = GTK_COMBO_BOX (object);
   GtkComboBoxPrivate *priv = combo_box->priv;
 
+  g_clear_object (&priv->scroll_controller);
+
   if (priv->popup_widget)
     {
       /* Stop menu destruction triggering toggle on a now-invalid button */

@@ -2642,6 +2642,8 @@ gtk_scrolled_window_finalize (GObject *object)
   g_clear_object (&priv->swipe_gesture);
   g_clear_object (&priv->long_press_gesture);
   g_clear_object (&priv->pan_gesture);
+  g_clear_object (&priv->scroll_controller);
+
 
   G_OBJECT_CLASS (gtk_scrolled_window_parent_class)->finalize (object);
 }
