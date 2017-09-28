@@ -118,6 +118,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext *context)
   self = g_slice_new0 (GskVulkanRenderPass);
   self->vulkan = g_object_ref (context);
   self->render_ops = g_array_new (FALSE, FALSE, sizeof (GskVulkanOp));
+
 #ifdef G_ENABLE_DEBUG
   self->fallback_pixels = g_quark_from_static_string ("fallback-pixels");
 #endif
@@ -566,8 +567,12 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
           surface = cairo_surface_reference (gsk_cairo_node_get_surface (node));
           goto got_surface;
 
-        default:
-          break;
+        default: ;
+          result = gsk_vulkan_image_new_for_texture (self->vulkan,
+                                                     ceil (bounds->size.width),
+                                                     ceil (bounds->size.height));
+          gsk_vulkan_render_add_node_for_texture (render, self, node, bounds, result);
+          return result;
         }
     }
 
@@ -756,7 +761,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           {
             GskRenderNode *child = gsk_color_matrix_node_get_child (op->render.node);
 
-            op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self, 
+            op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
                                                                             uploader,
                                                                             child,
@@ -892,6 +897,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
 
         default:
           g_assert_not_reached ();
+
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:
           continue;
         }
@@ -1180,6 +1186,7 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
 
         default:
           g_assert_not_reached ();
+
         case GSK_VULKAN_OP_COLOR:
         case GSK_VULKAN_OP_LINEAR_GRADIENT:
         case GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS:

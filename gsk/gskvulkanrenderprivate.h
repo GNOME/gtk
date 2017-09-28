@@ -69,6 +69,13 @@ void                    gsk_vulkan_render_add_cleanup_image             (GskVulk
 void                    gsk_vulkan_render_add_node                      (GskVulkanRender        *self,
                                                                          GskRenderNode          *node);
 
+void                    gsk_vulkan_render_add_node_for_texture          (GskVulkanRender        *self,
+                                                                         GskVulkanRenderPass    *pass,
+                                                                         GskRenderNode          *node,
+                                                                         const graphene_rect_t *bounds,
+                                                                         GskVulkanImage         *target);
+
+
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 
 GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulkanRender        *self,
