@@ -191,6 +191,21 @@ node_type_name (GskRenderNodeType type)
     }
 }
 
+static cairo_surface_t *
+get_color_surface (const GdkRGBA *color)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 30, 30);
+  cr = cairo_create (surface);
+  gdk_cairo_set_source_rgba (cr, color);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  return surface;
+}
+
 static void
 populate_render_node_properties (GtkListStore  *store,
                                  GskRenderNode *node)
@@ -260,16 +275,11 @@ populate_render_node_properties (GtkListStore  *store,
     case GSK_COLOR_NODE:
       {
         const GdkRGBA *color = gsk_color_node_peek_color (node);
-        char *text = gdk_rgba_to_string (color);
+        char *text;
         cairo_surface_t *surface;
-        cairo_t *cr;
 
-        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 30, 30);
-        cr = cairo_create (surface);
-        gdk_cairo_set_source_rgba (cr, color);
-        cairo_paint (cr);
-        cairo_destroy (cr);
-
+        text = gdk_rgba_to_string (color);
+        surface = get_color_surface (color);
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Color",
                                            1, text,
@@ -288,21 +298,24 @@ populate_render_node_properties (GtkListStore  *store,
         const GdkRGBA *color = gsk_text_node_get_color (node);
         float x = gsk_text_node_get_x (node);
         float y = gsk_text_node_get_y (node);
+        cairo_surface_t *surface;
         PangoFontDescription *desc;
         char *text;
         GString *s;
         int i;
 
+        surface = get_color_surface (color);
         desc = pango_font_describe (font);
         text = pango_font_description_to_string (desc);
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Font",
                                            1, text,
-                                           2, FALSE,
-                                           3, NULL,
+                                           2, TRUE,
+                                           3, surface,
                                            -1);
         g_free (text);
         pango_font_description_free (desc);
+        cairo_surface_destroy (surface);
 
         s = g_string_sized_new (6 * glyphs->num_glyphs);
         for (i = 0; i < glyphs->num_glyphs; i++)
@@ -315,7 +328,7 @@ populate_render_node_properties (GtkListStore  *store,
                                            -1);
         g_string_free (s, TRUE);
 
-        text = g_strdup_printf ("%.2g %.g", x, y);
+        text = g_strdup_printf ("%.2f %.2f", x, y);
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Position",
                                            1, text,
