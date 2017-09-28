@@ -56,6 +56,7 @@ struct _GskVulkanRender
   GSList *cleanup_images;
 
   GQuark render_pass_counter;
+  GQuark gpu_time_timer;
 };
 
 static void
@@ -208,6 +209,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
 
 #ifdef G_ENABLE_DEBUG
   self->render_pass_counter = g_quark_from_static_string ("render-passes");
+  self->gpu_time_timer = g_quark_from_static_string ("gpu-time");
 #endif
 
   return self;
@@ -537,6 +539,11 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 {
   GList *l;
 
+#ifdef G_ENABLE_DEBUG
+  if (GSK_RENDER_MODE_CHECK (SYNC))
+    gsk_profiler_timer_begin (gsk_renderer_get_profiler (self->renderer), self->gpu_time_timer);
+#endif
+
   gsk_vulkan_render_prepare_descriptor_sets (self, sampler);
 
   for (l = self->render_passes; l; l = l->next)
@@ -566,11 +573,18 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   if (GSK_RENDER_MODE_CHECK (SYNC))
     {
+      GskProfiler *profiler;
+      gint64 gpu_time;
+
       GSK_VK_CHECK (vkWaitForFences, gdk_vulkan_context_get_device (self->vulkan),
                                      1,
                                      &self->fence,
                                      VK_TRUE,
                                      INT64_MAX);
+
+      profiler = gsk_renderer_get_profiler (self->renderer);
+      gpu_time = gsk_profiler_timer_end (profiler, self->gpu_time_timer);
+      gsk_profiler_timer_set (profiler, self->gpu_time_timer, gpu_time);
     }
 }
 
