@@ -657,10 +657,6 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
       viewport = &real_viewport;
     }
 
-#ifdef G_ENABLE_DEBUG
-  gsk_profiler_reset (priv->profiler);
-#endif
-
   texture = GSK_RENDERER_GET_CLASS (renderer)->render_texture (renderer, root, viewport);
 
 #ifdef G_ENABLE_DEBUG
@@ -714,10 +710,6 @@ gsk_renderer_render (GskRenderer       *renderer,
   g_return_if_fail (context == priv->drawing_context);
 
   priv->root_node = gsk_render_node_ref (root);
-
-#ifdef G_ENABLE_DEBUG
-  gsk_profiler_reset (priv->profiler);
-#endif
 
   GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root);
 
