@@ -393,6 +393,22 @@ populate_render_node_properties (GtkListStore  *store,
       }
       break;
 
+    case GSK_CROSS_FADE_NODE:
+      {
+        double progress = gsk_cross_fade_node_get_progress (node);
+        const char *text;
+
+        text = g_strdup_printf ("%.2f", progress);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Progress",
+                                           1, text,
+                                           2, FALSE,
+                                           3, NULL,
+                                           -1);
+        g_free (text);
+      }
+      break;
+
     default: ;
     }
 }
