@@ -98,10 +98,10 @@ gsk_sl_function_builtin_get_args_by_type (const GskSlType *type)
 }
 
 static gboolean
-gsk_sl_function_constructor_matches (const GskSlFunction  *function,
-                                     GskSlType           **arguments,
-                                     gsize                 n_arguments,
-                                     GError              **error)
+gsk_sl_function_constructor_matches_builtin (const GskSlFunction  *function,
+                                             GskSlType           **arguments,
+                                             gsize                 n_arguments,
+                                             GError              **error)
 {
   const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
   guint needed, provided;
@@ -134,6 +134,64 @@ gsk_sl_function_constructor_matches (const GskSlFunction  *function,
     }
 
   return TRUE;
+}
+
+static gboolean
+gsk_sl_function_constructor_matches_struct (const GskSlFunction  *function,
+                                            GskSlType           **arguments,
+                                            gsize                 n_arguments,
+                                            GError              **error)
+{
+  const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
+  guint i;
+
+  if (n_arguments != gsk_sl_type_get_n_members (constructor->type))
+    {
+      g_set_error (error,
+                   GSK_SL_COMPILER_ERROR, GSK_SL_COMPILER_ERROR_TYPE_MISMATCH,
+                   "Constructor for %s needs %u arguments, but %"G_GSIZE_FORMAT" given.",
+                   gsk_sl_type_get_name (constructor->type),
+                   gsk_sl_type_get_n_members (constructor->type),
+                   n_arguments);
+      return FALSE;
+    }
+
+  for (i = 0; i < n_arguments; i++)
+    {
+      if (!gsk_sl_type_can_convert (gsk_sl_type_get_member_type (constructor->type, i), arguments[i]))
+        {
+          g_set_error (error,
+                       GSK_SL_COMPILER_ERROR, GSK_SL_COMPILER_ERROR_TYPE_MISMATCH,
+                       "Cannot convert argument %u from %s to %s.",
+                       i,
+                       gsk_sl_type_get_name (arguments[i]),
+                       gsk_sl_type_get_name (gsk_sl_type_get_member_type (constructor->type, i)));
+          return FALSE;
+        }
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gsk_sl_function_constructor_matches (const GskSlFunction  *function,
+                                     GskSlType           **arguments,
+                                     gsize                 n_arguments,
+                                     GError              **error)
+{
+  const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
+
+  if (gsk_sl_type_is_scalar (constructor->type) ||
+      gsk_sl_type_is_vector (constructor->type) ||
+      gsk_sl_type_is_matrix (constructor->type))
+    return gsk_sl_function_constructor_matches_builtin (function, arguments, n_arguments, error);
+  else if (gsk_sl_type_is_struct (constructor->type))
+    return gsk_sl_function_constructor_matches_struct (function, arguments, n_arguments, error);
+  else
+    {
+      g_assert_not_reached ();
+    }
+
 }
 
 static guint32
