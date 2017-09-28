@@ -224,6 +224,18 @@ populate_render_node_properties (GtkListStore  *store,
                                      0, "Has Texture",
                                      1, gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE ? "TRUE" : "FALSE",
                                      -1);
+
+  if (gsk_render_node_get_node_type (node) == GSK_COLOR_NODE)
+    {
+      const GdkRGBA *color = gsk_color_node_peek_color (node);
+      char *text = gdk_rgba_to_string (color);
+
+      gtk_list_store_insert_with_values (store, NULL, -1,
+                                         0, "Color",
+                                         1, text,
+                                         -1);
+      g_free (text);
+    }
 }
 
 static void
