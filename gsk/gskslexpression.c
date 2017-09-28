@@ -1282,6 +1282,23 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
       gsk_sl_preprocessor_consume (stream, (GskSlExpression *) constant);
       return (GskSlExpression *) constant;
 
+    case GSK_SL_TOKEN_LEFT_PAREN:
+      {
+        GskSlExpression *expr;
+
+        gsk_sl_preprocessor_consume (stream, NULL);
+        expr = gsk_sl_expression_parse (scope, stream);
+
+        token = gsk_sl_preprocessor_get (stream);
+        if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+          {
+            gsk_sl_preprocessor_error (stream, SYNTAX, "Expected closing \")\".");
+            gsk_sl_preprocessor_sync (stream, GSK_SL_TOKEN_RIGHT_PAREN);
+          }
+        gsk_sl_preprocessor_consume (stream, NULL);
+
+        return expr;
+      }
     case GSK_SL_TOKEN_VOID:
     case GSK_SL_TOKEN_FLOAT:
     case GSK_SL_TOKEN_DOUBLE:
