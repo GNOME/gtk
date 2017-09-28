@@ -39,14 +39,6 @@
               </object>
             </child>
             <child>
-              <object class="GtkStackSwitcher">
-                <property name="visible">1</property>
-                <property name="stack">render_stack</property>
-                <property name="hexpand">1</property>
-                <property name="halign">center</property>
-              </object>
-            </child>
-            <child>
               <object class="GtkButton" id="render_node_save_button">
                 <property name="visible">1</property>
                 <property name="relief">none</property>
@@ -131,66 +123,67 @@
             </child>
             <child>
               <object class="GtkFrame">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <child>
-                  <object class="GtkStack" id="render_stack">
-                    <property name="visible">True</property>
+                  <object class="GtkPaned" id="render_paned">
+                    <property name="visible">1</property>
+                    <property name="orientation">vertical</property>
+                    <property name="position">300</property>
+                    <property name="wide-handle">1</property>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="visible">1</property>
+                        <child>
+                          <object class="GtkTreeView" id="node_property_tree">
+                            <property name="visible">1</property>
+                            <property name="activate-on-single-click">1</property>
+                            <signal name="row-activated" handler="node_property_activated"/>
+                            <child>
+                              <object class="GtkTreeViewColumn">
+                                <property name="title" translatable="yes">Property</property>
+                                <child>
+                                  <object class="GtkCellRendererText">
+                                    <property name="yalign">0</property>
+                                  </object>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn">
+                                <property name="title" translatable="yes">Value</property>
+                                <child>
+                                  <object class="GtkCellRendererText">
+                                    <property name="yalign">0</property>
+                                    <property name="wrap-mode">word</property>
+                                    <property name="max-width-chars">50</property>
+                                  </object>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                                <child>
+                                  <object class="GtkCellRendererPixbuf">
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <attributes>
+                                    <attribute name="visible">2</attribute>
+                                    <attribute name="surface">3</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                     <child>
                       <object class="GtkRenderNodeView" id="render_node_view">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
                       </object>
-                      <packing>
-                        <property name="name">render</property>
-                        <property name="title" translatable="yes">Render</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkTreeView" id="node_property_tree">
-                        <property name="visible">True</property>
-                        <signal name="row-activated" handler="node_property_activated"/>
-                        <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Property</property>
-                            <child>
-                              <object class="GtkCellRendererText">
-                                <property name="yalign">0</property>
-                              </object>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Value</property>
-                            <child>
-                              <object class="GtkCellRendererText">
-                                <property name="yalign">0</property>
-                                <property name="wrap-mode">word</property>
-                                <property name="max-width-chars">50</property>
-                              </object>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                            <child>
-                              <object class="GtkCellRendererPixbuf">
-                                <property name="xalign">0</property>
-                              </object>
-                              <attributes>
-                                <attribute name="visible">2</attribute>
-                                <attribute name="surface">3</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="name">properties</property>
-                        <property name="title" translatable="yes">Properties</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
