@@ -462,6 +462,17 @@ gsk_profiler_append_timers (GskProfiler *profiler,
   g_return_if_fail (GSK_IS_PROFILER (profiler));
   g_return_if_fail (buffer != NULL);
 
+  g_hash_table_iter_init (&iter, profiler->timers);
+  while (g_hash_table_iter_next (&iter, NULL, &value_p))
+    {
+      NamedTimer *timer = value_p;
+
+      timer->min_value = G_MAXINT64;
+      timer->max_value = G_MININT64;
+      timer->avg_value = 0;
+      timer->n_samples = 0;
+    }
+
   for (i = 0; i < profiler->last_sample; i++)
     {
       Sample *s = &(profiler->timer_samples[i]);
@@ -484,18 +495,21 @@ gsk_profiler_append_timers (GskProfiler *profiler,
       const char *unit = timer->invert ? "" : "usec";
       double scale = timer->invert ? 1.0 : 1000.0;
 
-      if (timer->n_samples != 0)
-        timer->avg_value = timer->avg_value / timer->n_samples;
-
-      g_string_append_printf (buffer,
-                              "%s %s: "
-                              "Min:%.2f, "
-                              "Avg:%.2f, "
-                              "Max:%.2f\n",
+      g_string_append_printf (buffer, "%s (%s): %.2f",
                               timer->description,
                               unit,
-                              (double) timer->min_value / scale,
-                              (double) timer->avg_value / scale,
-                              (double) timer->max_value / scale);
+                              (double) timer->value / scale);
+
+      if (timer->n_samples > 1)
+        {
+          timer->avg_value = timer->avg_value / timer->n_samples;
+          g_string_append_printf (buffer, " Min: %.2f Avg: %.2f Max: %.2f (%ld samples)",
+                                  (double) timer->min_value / scale,
+                                  (double) timer->avg_value / scale,
+                                  (double) timer->max_value / scale,
+                                  timer->n_samples);
+        }
+
+      g_string_append (buffer, "\n");
     }
 }
