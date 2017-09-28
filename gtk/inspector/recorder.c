@@ -425,6 +425,21 @@ populate_render_node_properties (GtkListStore  *store,
       }
       break;
 
+    case GSK_BLUR_NODE:
+      {
+        double radius = gsk_blur_node_get_radius (node);
+        const char *text;
+
+        text = g_strdup_printf ("%.2f", radius);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Radius",
+                                           1, text,
+                                           2, FALSE,
+                                           3, NULL,
+                                           -1);
+        g_free (text);
+      }
+      break;
     default: ;
     }
 }
