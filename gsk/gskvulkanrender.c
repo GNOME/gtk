@@ -34,7 +34,6 @@ struct _GskVulkanRender
   GskRenderer *renderer;
   GdkVulkanContext *vulkan;
 
-  graphene_matrix_t mvp;
   int scale_factor;
   VkRect2D viewport;
   cairo_region_t *clip;
@@ -62,52 +61,12 @@ struct _GskVulkanRender
   GQuark render_pass_counter;
 };
 
-typedef struct {
-  GskVulkanRender *render;
-  GskVulkanRenderPass *pass;
-  GskVulkanImage *target;
-
-  graphene_matrix_t mvp;
-  int scale_factor;
-  VkRect2D viewport;
-  cairo_region_t *clip;
-
-  VkRenderPass render_pass;
-  GskVulkanBuffer *vertex_data;
-  GArray *wait_semaphores;
-  VkSemaphore signal_semaphore;
-} RenderPassData;
-
-static void
-render_pass_data_free (gpointer v)
-{
-  RenderPassData *data = v;
-
-  gsk_vulkan_render_pass_free (data->pass);
-  g_object_unref (data->target);
-  cairo_region_destroy (data->clip);
-  if (data->render_pass != data->render->render_pass)
-    vkDestroyRenderPass (gdk_vulkan_context_get_device (data->render->vulkan),
-                         data->render_pass,
-                         NULL);
-  if (data->vertex_data)
-    gsk_vulkan_buffer_free (data->vertex_data);
-  if (data->signal_semaphore != VK_NULL_HANDLE)
-    vkDestroySemaphore (gdk_vulkan_context_get_device (data->render->vulkan),
-                        data->signal_semaphore,
-                        NULL);
-  if (data->wait_semaphores)
-    g_array_unref (data->wait_semaphores);
-  g_free (data);
-}
-
 static void
 gsk_vulkan_render_setup (GskVulkanRender       *self,
                          GskVulkanImage        *target,
                          const graphene_rect_t *rect)
 {
   GdkWindow *window = gsk_renderer_get_window (self->renderer);
-  graphene_matrix_t modelview, projection;
 
   self->target = g_object_ref (target);
 
@@ -128,15 +87,6 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
       self->viewport.extent.height = gdk_window_get_height (window) * self->scale_factor;
       self->clip = gdk_drawing_context_get_clip (gsk_renderer_get_drawing_context (self->renderer));
     }
-
-  graphene_matrix_init_scale (&modelview, self->scale_factor, self->scale_factor, 1.0);
-  graphene_matrix_init_ortho (&projection,
-                              self->viewport.offset.x, self->viewport.offset.x + self->viewport.extent.width,
-                              self->viewport.offset.y, self->viewport.offset.y + self->viewport.extent.height,
-                              ORTHO_NEAR_PLANE,
-                              ORTHO_FAR_PLANE);
-
-  graphene_matrix_multiply (&modelview, &projection, &self->mvp);
 }
 
 GskVulkanRender *
@@ -287,7 +237,7 @@ gsk_vulkan_render_remove_framebuffer_from_image (gpointer  data,
   g_slice_free (HashFramebufferEntry, fb);
 }
 
-static VkFramebuffer
+VkFramebuffer
 gsk_vulkan_render_get_framebuffer (GskVulkanRender *self,
                                    GskVulkanImage  *image)
 {
@@ -329,153 +279,58 @@ void
 gsk_vulkan_render_add_node (GskVulkanRender *self,
                             GskRenderNode   *node)
 {
-  RenderPassData *data;
+  GskVulkanRenderPass *pass;
 
-  data = g_new0 (RenderPassData, 1);
-  data->pass = gsk_vulkan_render_pass_new (self->vulkan);
-  data->target = g_object_ref (self->target);
-  data->render = self;
-  data->scale_factor = self->scale_factor;
-  data->clip = cairo_region_copy (self->clip);
-  data->render_pass = self->render_pass;
-  data->signal_semaphore = VK_NULL_HANDLE;
-  data->wait_semaphores = NULL;
-  data->viewport = self->viewport;
-  data->mvp = self->mvp;
+  pass = gsk_vulkan_render_pass_new (self->vulkan,
+                                     self->target,
+                                     self->scale_factor,
+                                     &GRAPHENE_RECT_INIT (
+                                         self->viewport.offset.x, self->viewport.offset.y,
+                                         self->viewport.extent.width, self->viewport.extent.height
+                                     ),
+                                     self->clip,
+                                     VK_NULL_HANDLE);
 
-  self->render_passes = g_list_prepend (self->render_passes, data);
+  self->render_passes = g_list_prepend (self->render_passes, pass);
 
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (gsk_renderer_get_profiler (self->renderer), self->render_pass_counter);
 #endif
 
-  gsk_vulkan_render_pass_add (data->pass,
-                              self,
-                              &data->mvp,
-                              &GRAPHENE_RECT_INIT (
-                                  data->viewport.offset.x, data->viewport.offset.y,
-                                  data->viewport.extent.width, data->viewport.extent.height
-                              ),
-                              node);
-}
-
-static void
-add_wait_semaphore (GskVulkanRender     *self,
-                    GskVulkanRenderPass *pass,
-                    VkSemaphore          semaphore)
-{
-  GList *l;
-
-  if (semaphore == VK_NULL_HANDLE)
-    return;
-
-  for (l = self->render_passes; l; l = l->next)
-    {
-      RenderPassData *data = l->data;
-      if (data->pass == pass)
-        {
-          if (data->wait_semaphores == NULL)
-            data->wait_semaphores = g_array_new (FALSE, FALSE, sizeof (VkSemaphore));
-
-          g_array_append_val (data->wait_semaphores, semaphore);
-          return;
-        }
-    }
+  gsk_vulkan_render_pass_add (pass, self, node);
 }
 
 void
-gsk_vulkan_render_add_node_for_texture (GskVulkanRender     *self,
-                                        GskVulkanRenderPass *pass,
-                                        GskRenderNode       *node,
+gsk_vulkan_render_add_node_for_texture (GskVulkanRender       *self,
+                                        GskRenderNode         *node,
                                         const graphene_rect_t *bounds,
-                                        GskVulkanImage      *target)
+                                        GskVulkanImage        *target,
+                                        VkSemaphore            semaphore)
 {
-  RenderPassData *data;
+  GskVulkanRenderPass *pass;
 
-  data = g_new0 (RenderPassData, 1);
-  data->pass = gsk_vulkan_render_pass_new (self->vulkan);
-  data->target = g_object_ref (target);
-  data->render = self;
-  data->scale_factor = 1;
-  data->clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                                0, 0,
-                                                gsk_vulkan_image_get_width (target),
-                                                gsk_vulkan_image_get_height (target)
-                                                });
-  data->viewport.offset = (VkOffset2D) { 0, 0 };
-  data->viewport.extent.width = gsk_vulkan_image_get_width (target);
-  data->viewport.extent.height = gsk_vulkan_image_get_height (target);
+  pass = gsk_vulkan_render_pass_new (self->vulkan,
+                                     target,
+                                     1,
+                                     &GRAPHENE_RECT_INIT (
+                                         0, 0,
+                                         gsk_vulkan_image_get_width (target),
+                                         gsk_vulkan_image_get_height (target)
+                                     ),
+                                     cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                         0, 0,
+                                         gsk_vulkan_image_get_width (target),
+                                         gsk_vulkan_image_get_height (target)
+                                     }),
+                                     semaphore);
 
-  graphene_matrix_init_ortho (&data->mvp,
-                              bounds->origin.x, bounds->origin.x + bounds->size.width,
-                              bounds->origin.y, bounds->origin.y + bounds->size.height,
-                              ORTHO_NEAR_PLANE,
-                              ORTHO_FAR_PLANE);
-
-  vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
-                     &(VkSemaphoreCreateInfo) {
-                        VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
-                        NULL,
-                        0
-                     },
-                     NULL,
-                     &data->signal_semaphore);
-  add_wait_semaphore (self, pass, data->signal_semaphore);
-
-  GSK_VK_CHECK (vkCreateRenderPass, gdk_vulkan_context_get_device (self->vulkan),
-                                    &(VkRenderPassCreateInfo) {
-                                        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO,
-                                        .attachmentCount = 1,
-                                        .pAttachments = (VkAttachmentDescription[]) {
-                                           {
-                                              .format = gdk_vulkan_context_get_image_format (self->vulkan),
-                                              .samples = VK_SAMPLE_COUNT_1_BIT,
-                                              .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                                              .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
-                                              .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                                              .finalLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-                                           }
-                                        },
-                                        .subpassCount = 1,
-                                        .pSubpasses = (VkSubpassDescription []) {
-                                           {
-                                              .pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                              .inputAttachmentCount = 0,
-                                              .colorAttachmentCount = 1,
-                                              .pColorAttachments = (VkAttachmentReference []) {
-                                                 {
-                                                    .attachment = 0,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pResolveAttachments = (VkAttachmentReference []) {
-                                                  {
-                                                     .attachment = VK_ATTACHMENT_UNUSED,
-                                                     .layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-                                                  }
-                                               },
-                                               .pDepthStencilAttachment = NULL,
-                                            }
-                                         },
-                                         .dependencyCount = 0
-                                      },
-                                      NULL,
-                                      &data->render_pass);
-
-  self->render_passes = g_list_prepend (self->render_passes, data);
+  self->render_passes = g_list_prepend (self->render_passes, pass);
 
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (gsk_renderer_get_profiler (self->renderer), self->render_pass_counter);
 #endif
 
-  gsk_vulkan_render_pass_add (data->pass,
-                              self,
-                              &data->mvp,
-                              &GRAPHENE_RECT_INIT (
-                                  data->viewport.offset.x, data->viewport.offset.y,
-                                  data->viewport.extent.width, data->viewport.extent.height
-                              ),
-                              node);
+  gsk_vulkan_render_pass_add (pass, self, node);
 }
 
 void
@@ -488,10 +343,9 @@ gsk_vulkan_render_upload (GskVulkanRender *self)
    * the end.
    */
   for (l = g_list_last (self->render_passes); l; l = l->prev)
-
     {
-      RenderPassData *data = l->data;
-      gsk_vulkan_render_pass_upload (data->pass, self, self->uploader);
+      GskVulkanRenderPass *pass = l->data;
+      gsk_vulkan_render_pass_upload (pass, self, self->uploader);
     }
 
   gsk_vulkan_uploader_upload (self->uploader);
@@ -596,8 +450,8 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
 
   for (l = self->render_passes; l; l = l->next)
     {
-      RenderPassData *data = l->data;
-      gsk_vulkan_render_pass_reserve_descriptor_sets (data->pass, self);
+      GskVulkanRenderPass *pass = l->data;
+      gsk_vulkan_render_pass_reserve_descriptor_sets (pass, self);
     }
   
   needed_sets = g_hash_table_size (self->descriptor_set_indexes);
@@ -689,67 +543,26 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
 
   for (l = self->render_passes; l; l = l->next)
     {
-      RenderPassData *pass = l->data;
+      GskVulkanRenderPass *pass = l->data;
       VkCommandBuffer command_buffer;
-      guint i;
+      gsize wait_semaphore_count;
+      gsize signal_semaphore_count;
+      VkSemaphore *wait_semaphores;
+      VkSemaphore *signal_semaphores;
 
-      pass->vertex_data = gsk_vulkan_render_pass_get_vertex_data (pass->pass, self);
+      wait_semaphore_count = gsk_vulkan_render_pass_get_wait_semaphores (pass, &wait_semaphores);
+      signal_semaphore_count = gsk_vulkan_render_pass_get_signal_semaphores (pass, &signal_semaphores);
 
       command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
 
-      vkCmdSetViewport (command_buffer,
-                        0,
-                        1,
-                        &(VkViewport) {
-                          .x = 0,
-                          .y = 0,
-                          .width = pass->viewport.extent.width,
-                          .height = pass->viewport.extent.height,
-                          .minDepth = 0,
-                           .maxDepth = 1
-                       });
-
-      for (i = 0; i < cairo_region_num_rectangles (pass->clip); i++)
-        {
-          cairo_rectangle_int_t rect;
-
-          cairo_region_get_rectangle (pass->clip, i, &rect);
-
-          vkCmdSetScissor (command_buffer,
-                           0,
-                           1,
-                           &(VkRect2D) {
-                               { rect.x * pass->scale_factor, rect.y * pass->scale_factor },
-                               { rect.width * pass->scale_factor, rect.height * pass->scale_factor }
-                           });
-
-          vkCmdBeginRenderPass (command_buffer,
-                                &(VkRenderPassBeginInfo) {
-                                    .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                                    .renderPass = pass->render_pass,
-                                    .framebuffer = gsk_vulkan_render_get_framebuffer (self, pass->target),
-                                    .renderArea = { 
-                                      { rect.x * pass->scale_factor, rect.y * pass->scale_factor },
-                                      { rect.width * pass->scale_factor, rect.height * pass->scale_factor }
-                                    },
-                                    .clearValueCount = 1,
-                                    .pClearValues = (VkClearValue [1]) {
-                                        { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
-                                    }
-                                },
-                                VK_SUBPASS_CONTENTS_INLINE);
-
-          gsk_vulkan_render_pass_draw (pass->pass, self, pass->vertex_data, 3, self->pipeline_layout, command_buffer);
-
-          vkCmdEndRenderPass (command_buffer);
-        }
+      gsk_vulkan_render_pass_draw (pass, self, 3, self->pipeline_layout, command_buffer);
 
       gsk_vulkan_command_pool_submit_buffer (self->command_pool,
                                              command_buffer,
-                                             pass->wait_semaphores ? pass->wait_semaphores->len : 0,
-                                             (VkSemaphore*)(pass->wait_semaphores ? pass->wait_semaphores->data : NULL),
-                                             pass->signal_semaphore != VK_NULL_HANDLE ? 1 : 0,
-                                             (VkSemaphore*)&pass->signal_semaphore,
+                                             wait_semaphore_count,
+                                             wait_semaphores,
+                                             signal_semaphore_count,
+                                             signal_semaphores,
                                              l->next != NULL ? VK_NULL_HANDLE : self->fence);
     }
 
@@ -796,7 +609,7 @@ gsk_vulkan_render_cleanup (GskVulkanRender *self)
                                        self->descriptor_pool,
                                        0);
 
-  g_list_free_full (self->render_passes, (GDestroyNotify) render_pass_data_free);
+  g_list_free_full (self->render_passes, (GDestroyNotify) gsk_vulkan_render_pass_free);
   self->render_passes = NULL;
   g_slist_free_full (self->cleanup_images, g_object_unref);
   self->cleanup_images = NULL;

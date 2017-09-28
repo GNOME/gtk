@@ -11,36 +11,33 @@
 G_BEGIN_DECLS
 
 
-GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulkanContext       *context);
+GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulkanContext       *context,
+                                                                         GskVulkanImage         *target,
+                                                                         int                     scale_factor,
+                                                                         graphene_rect_t        *viewport,
+                                                                         cairo_region_t         *clip,
+                                                                         VkSemaphore             signal_semaphore);
+
 void                    gsk_vulkan_render_pass_free                     (GskVulkanRenderPass    *self);
 
 void                    gsk_vulkan_render_pass_add                      (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
-                                                                         const graphene_matrix_t*mvp,
-                                                                         const graphene_rect_t  *viewport,
                                                                          GskRenderNode          *node);
 
 void                    gsk_vulkan_render_pass_upload                   (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
                                                                          GskVulkanUploader      *uploader);
-
-gsize                   gsk_vulkan_render_pass_count_vertex_data        (GskVulkanRenderPass    *self);
-gsize                   gsk_vulkan_render_pass_collect_vertex_data      (GskVulkanRenderPass    *self,
-                                                                         GskVulkanRender        *render,
-                                                                         guchar                 *data,
-                                                                         gsize                   offset,
-                                                                         gsize                   total);
-GskVulkanBuffer *       gsk_vulkan_render_pass_get_vertex_data          (GskVulkanRenderPass    *self,
-                                                                         GskVulkanRender        *render);
-
 void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render);
 void                    gsk_vulkan_render_pass_draw                     (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render,
-                                                                         GskVulkanBuffer        *vertex_buffer,
                                                                          guint                   layout_count,
                                                                          VkPipelineLayout       *pipeline_layout,
                                                                          VkCommandBuffer         command_buffer);
+gsize                   gsk_vulkan_render_pass_get_wait_semaphores      (GskVulkanRenderPass    *self,
+                                                                         VkSemaphore           **semaphores);
+gsize                   gsk_vulkan_render_pass_get_signal_semaphores    (GskVulkanRenderPass    *self,
+                                                                         VkSemaphore           **semaphores);
 
 G_END_DECLS
 

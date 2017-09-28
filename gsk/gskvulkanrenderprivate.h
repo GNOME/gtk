@@ -70,10 +70,10 @@ void                    gsk_vulkan_render_add_node                      (GskVulk
                                                                          GskRenderNode          *node);
 
 void                    gsk_vulkan_render_add_node_for_texture          (GskVulkanRender        *self,
-                                                                         GskVulkanRenderPass    *pass,
                                                                          GskRenderNode          *node,
                                                                          const graphene_rect_t *bounds,
-                                                                         GskVulkanImage         *target);
+                                                                         GskVulkanImage        *target,
+                                                                         VkSemaphore            semaphore);
 
 
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
@@ -90,6 +90,8 @@ void                    gsk_vulkan_render_draw                          (GskVulk
 void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);
 
 GskTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
+VkFramebuffer           gsk_vulkan_render_get_framebuffer               (GskVulkanRender        *self,
+                                                                         GskVulkanImage         *image);
 
 G_END_DECLS
 
