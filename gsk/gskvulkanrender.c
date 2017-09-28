@@ -58,6 +58,8 @@ struct _GskVulkanRender
 
   GList *render_passes;
   GSList *cleanup_images;
+
+  GQuark render_pass_counter;
 };
 
 typedef struct {
@@ -257,6 +259,10 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
 
   self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
 
+#ifdef G_ENABLE_DEBUG
+  self->render_pass_counter = g_quark_from_static_string ("render-passes");
+#endif
+
   return self;
 }
 
@@ -338,6 +344,10 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
   data->mvp = self->mvp;
 
   self->render_passes = g_list_prepend (self->render_passes, data);
+
+#ifdef G_ENABLE_DEBUG
+  gsk_profiler_counter_inc (gsk_renderer_get_profiler (self->renderer), self->render_pass_counter);
+#endif
 
   gsk_vulkan_render_pass_add (data->pass,
                               self,
@@ -453,6 +463,10 @@ gsk_vulkan_render_add_node_for_texture (GskVulkanRender     *self,
                                       &data->render_pass);
 
   self->render_passes = g_list_prepend (self->render_passes, data);
+
+#ifdef G_ENABLE_DEBUG
+  gsk_profiler_counter_inc (gsk_renderer_get_profiler (self->renderer), self->render_pass_counter);
+#endif
 
   gsk_vulkan_render_pass_add (data->pass,
                               self,
