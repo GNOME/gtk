@@ -15,6 +15,10 @@ void                    gsk_vulkan_command_pool_reset                   (GskVulk
 VkCommandBuffer         gsk_vulkan_command_pool_get_buffer              (GskVulkanCommandPool   *self);
 void                    gsk_vulkan_command_pool_submit_buffer           (GskVulkanCommandPool   *self,
                                                                          VkCommandBuffer         buffer,
+                                                                         gsize                   wait_semaphore_count,
+                                                                         VkSemaphore            *wait_semaphores,
+                                                                         gsize                   signal_semaphores_count,
+                                                                         VkSemaphore            *signal_semaphores,
                                                                          VkFence                 fence);
 
 G_END_DECLS

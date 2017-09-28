@@ -75,33 +75,36 @@ gsk_vulkan_command_pool_get_buffer (GskVulkanCommandPool *self)
 void
 gsk_vulkan_command_pool_submit_buffer (GskVulkanCommandPool *self,
                                        VkCommandBuffer       command_buffer,
+                                       gsize                 wait_semaphore_count,
+                                       VkSemaphore          *wait_semaphores,
+                                       gsize                 signal_semaphore_count,
+                                       VkSemaphore          *signal_semaphores,
                                        VkFence               fence)
 {
+  VkPipelineStageFlags *wait_semaphore_flags = NULL;
+
   GSK_VK_CHECK (vkEndCommandBuffer, command_buffer);
+
+  if (wait_semaphore_count > 0)
+    {
+      wait_semaphore_flags = alloca (sizeof (VkPipelineStageFlags) * wait_semaphore_count);
+      for (int i = 0; i < wait_semaphore_count; i++)
+        wait_semaphore_flags[i] = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    }
 
   GSK_VK_CHECK (vkQueueSubmit, gdk_vulkan_context_get_queue (self->vulkan),
                                1,
                                &(VkSubmitInfo) {
                                   .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
-/*
-                                  .waitSemaphoreCount = 1,
-                                  .pWaitSemaphores = (VkSemaphore[1]) {
-                                      gdk_vulkan_context_get_draw_semaphore (self->vulkan)
-                                  },
-*/
-                                  .pWaitDstStageMask = (VkPipelineStageFlags []) {
-                                      VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                                  },
+                                  .waitSemaphoreCount = wait_semaphore_count,
+                                  .pWaitSemaphores = wait_semaphores,
+                                  .pWaitDstStageMask = wait_semaphore_flags,
                                   .commandBufferCount = 1,
                                   .pCommandBuffers = (VkCommandBuffer[1]) {
                                       command_buffer
                                   },
-/*
-                                  .signalSemaphoreCount = 1,
-                                  .pSignalSemaphores = (VkSemaphore[1]) {
-                                      gdk_vulkan_context_get_draw_semaphore (self->vulkan)
-                                  }
-*/
+                                  .signalSemaphoreCount = signal_semaphore_count,
+                                  .pSignalSemaphores = signal_semaphores,
                                },
                                fence);
 }

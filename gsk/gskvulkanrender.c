@@ -594,7 +594,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
       vkCmdEndRenderPass (command_buffer);
     }
 
-  gsk_vulkan_command_pool_submit_buffer (self->command_pool, command_buffer, self->fence);
+  gsk_vulkan_command_pool_submit_buffer (self->command_pool, command_buffer, 0, NULL, 0, NULL, self->fence);
 
   if (GSK_RENDER_MODE_CHECK (SYNC))
     {
