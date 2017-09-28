@@ -166,9 +166,6 @@ GskRenderNode *         gsk_blend_node_new                      (GskRenderNode  
                                                                  GskRenderNode            *top,
                                                                  GskBlendMode              blend_mode);
 
-GDK_AVAILABLE_IN_3_92
-GskBlendMode            gsk_blend_node_get_blend_mode           (GskRenderNode            *node);
-
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_cross_fade_node_new                 (GskRenderNode            *start,
                                                                  GskRenderNode            *end,

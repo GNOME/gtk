@@ -101,7 +101,7 @@ void gsk_transform_node_get_transform (GskRenderNode *node, graphene_matrix_t *t
 
 GskRenderNode * gsk_blend_node_get_bottom_child (GskRenderNode *node);
 GskRenderNode * gsk_blend_node_get_top_child (GskRenderNode *node);
-GskBlendMode gsk_blend_node_get_blend_node (GskRenderNode *node);
+GskBlendMode gsk_blend_node_get_blend_mode (GskRenderNode *node);
 
 GskRenderNode * gsk_cross_fade_node_get_start_child (GskRenderNode *node);
 GskRenderNode * gsk_cross_fade_node_get_end_child (GskRenderNode *node);
