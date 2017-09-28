@@ -9265,7 +9265,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       clipboard_contains_text = gtk_selection_data_targets_include_text (data);
 
       if (priv->popup_menu)
-        g_object_unref (G_OBJECT (priv->popup_menu));
+        gtk_menu_detach (GTK_MENU (priv->popup_menu));
 
       priv->popup_menu = gtk_menu_new ();
       gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_menu),
