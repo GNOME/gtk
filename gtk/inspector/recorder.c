@@ -409,6 +409,22 @@ populate_render_node_properties (GtkListStore  *store,
       }
       break;
 
+    case GSK_BLEND_NODE:
+      {
+        GskBlendMode mode = gsk_blend_node_get_blend_mode (node);
+        const char *text;
+
+        text = g_enum_to_string (GSK_TYPE_BLEND_MODE, mode);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Blendmode",
+                                           1, text,
+                                           2, FALSE,
+                                           3, NULL,
+                                           -1);
+        g_free (text);
+      }
+      break;
+
     default: ;
     }
 }
