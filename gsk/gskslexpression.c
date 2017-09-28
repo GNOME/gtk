@@ -737,7 +737,8 @@ gsk_sl_expression_function_call_free (GskSlExpression *expression)
     }
   g_free (function_call->arguments);
 
-  gsk_sl_function_unref (function_call->function);
+  if (function_call->function)
+    gsk_sl_function_unref (function_call->function);
 
   g_slice_free (GskSlExpressionFunctionCall, function_call);
 }
@@ -1138,13 +1139,13 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
   guint i;
 
   call = gsk_sl_expression_new (GskSlExpressionFunctionCall, &GSK_SL_EXPRESSION_FUNCTION_CALL);
-  call->function = gsk_sl_function_ref (function);
 
   token = gsk_sl_preprocessor_get (stream);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
     {
       gsk_sl_preprocessor_error (stream, SYNTAX, "Expected opening \"(\" when calling function.");
-      return (GskSlExpression *) call;
+      gsk_sl_expression_unref ((GskSlExpression *) call);
+      return gsk_sl_expression_error_new ();
     }
   gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
 
@@ -1173,19 +1174,28 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
   types = g_newa (GskSlType *, call->n_arguments);
   for (i = 0; i < call->n_arguments; i++)
     types[i] = gsk_sl_expression_get_return_type (call->arguments[i]);
-  if (!gsk_sl_function_matches (call->function, types, call->n_arguments, &error))
+  if (function && !gsk_sl_function_matches (function, types, call->n_arguments, &error))
     {
       gsk_sl_preprocessor_emit_error (stream, TRUE, gsk_sl_preprocessor_get_location (stream), error);
       g_clear_error (&error);
+      function = NULL;
     }
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
     {
       gsk_sl_preprocessor_error (stream, SYNTAX, "Expected closing \")\" after arguments.");
-      return (GskSlExpression *) call;
+      gsk_sl_preprocessor_sync (stream, GSK_SL_TOKEN_RIGHT_PAREN);
     }
   gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
 
+  if (function == NULL)
+    {
+      gsk_sl_expression_unref ((GskSlExpression *) call);
+      return gsk_sl_expression_error_new ();
+    }
+  else
+
+  call->function = gsk_sl_function_ref (function);
   return (GskSlExpression *) call;
 }
 
@@ -1217,14 +1227,9 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
             GskSlFunction *function = gsk_sl_scope_lookup_function (scope, name);
             
             if (function == NULL)
-              {
-                gsk_sl_preprocessor_error (stream, DECLARATION, "No function named \"%s\".", name);
-                expr = gsk_sl_expression_error_new ();
-              }
-            else
-              {
-                expr = gsk_sl_expression_parse_function_call (scope, stream, function);
-              }
+              gsk_sl_preprocessor_error (stream, DECLARATION, "No function named \"%s\".", name);
+            
+            expr = gsk_sl_expression_parse_function_call (scope, stream, function);
           }
         else
           {
