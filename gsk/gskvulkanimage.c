@@ -154,7 +154,7 @@ gsk_vulkan_uploader_upload (GskVulkanUploader *self)
                             0, NULL,
                             self->before_buffer_barriers->len, (VkBufferMemoryBarrier *) self->before_buffer_barriers->data,
                             self->before_image_barriers->len, (VkImageMemoryBarrier *) self->before_image_barriers->data);
-      gsk_vulkan_command_pool_submit_buffer (self->command_pool, command_buffer, VK_NULL_HANDLE);
+      gsk_vulkan_command_pool_submit_buffer (self->command_pool, command_buffer, 0, NULL, 0, NULL, VK_NULL_HANDLE);
       g_array_set_size (self->before_buffer_barriers, 0);
       g_array_set_size (self->before_image_barriers, 0);
     }
@@ -176,7 +176,7 @@ gsk_vulkan_uploader_upload (GskVulkanUploader *self)
 
   if (self->copy_buffer != VK_NULL_HANDLE)
     {
-      gsk_vulkan_command_pool_submit_buffer (self->command_pool, self->copy_buffer, VK_NULL_HANDLE);
+      gsk_vulkan_command_pool_submit_buffer (self->command_pool, self->copy_buffer, 0, NULL, 0, NULL, VK_NULL_HANDLE);
       self->copy_buffer = VK_NULL_HANDLE;
     }
 }
