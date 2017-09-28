@@ -17,6 +17,7 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+#include <cairo-gobject.h>
 
 #include "recorder.h"
 
@@ -25,11 +26,13 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtkmessagedialog.h>
+#include <gtk/gtkpopover.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtktreeview.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
+#include <gsk/gsktextureprivate.h>
 
 #include "gtk/gtkdebug.h"
 
@@ -202,9 +205,11 @@ populate_render_node_properties (GtkListStore  *store,
   gtk_list_store_insert_with_values (store, NULL, -1,
                                      0, "Type",
                                      1, node_type_name (gsk_render_node_get_node_type (node)),
+                                     2, FALSE,
+                                     3, NULL,
                                      -1);
 
-  tmp = g_strdup_printf ("%.6f x %.6f + %.6f + %.6f",
+  tmp = g_strdup_printf ("%.2f x %.2f + %.2f + %.2f",
                          bounds.size.width,
                          bounds.size.height,
                          bounds.origin.x,
@@ -212,31 +217,67 @@ populate_render_node_properties (GtkListStore  *store,
   gtk_list_store_insert_with_values (store, NULL, -1,
                                      0, "Bounds",
                                      1, tmp,
+                                     2, FALSE,
+                                     3, NULL,
                                      -1);
   g_free (tmp);
 
-  gtk_list_store_insert_with_values (store, NULL, -1,
-                                     0, "Has Surface",
-                                     1, gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE ? "TRUE" : "FALSE",
-                                     -1);
-
-  gtk_list_store_insert_with_values (store, NULL, -1,
-                                     0, "Has Texture",
-                                     1, gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE ? "TRUE" : "FALSE",
-                                     -1);
-
   switch (gsk_render_node_get_node_type (node))
     {
+    case GSK_TEXTURE_NODE:
+    case GSK_CAIRO_NODE:
+      {
+        cairo_surface_t *surface;
+        const char *text;
+        gboolean show_inline;
+
+        if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
+          {
+            GskTexture *texture;
+
+            text = "Texture";
+            texture = gsk_texture_node_get_texture (node);
+            surface = gsk_texture_download_surface (texture);
+          }
+        else
+          {
+            text = "Surface";
+            surface = gsk_cairo_node_get_surface (node);
+          }
+
+        show_inline = cairo_image_surface_get_height (surface) <= 40 &&
+                      cairo_image_surface_get_width (surface) <= 100;
+
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                             0, text,
+                                             1, show_inline ? "" : "Yes (click to show)",
+                                             2, show_inline,
+                                             3, surface,
+                                             -1);
+      }
+      break;
+
     case GSK_COLOR_NODE:
       {
         const GdkRGBA *color = gsk_color_node_peek_color (node);
         char *text = gdk_rgba_to_string (color);
+        cairo_surface_t *surface;
+        cairo_t *cr;
+
+        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 30, 30);
+        cr = cairo_create (surface);
+        gdk_cairo_set_source_rgba (cr, color);
+        cairo_paint (cr);
+        cairo_destroy (cr);
 
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Color",
                                            1, text,
+                                           2, TRUE,
+                                           3, surface,
                                            -1);
         g_free (text);
+        cairo_surface_destroy (surface);
       }
       break;
 
@@ -257,6 +298,8 @@ populate_render_node_properties (GtkListStore  *store,
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Font",
                                            1, text,
+                                           2, FALSE,
+                                           3, NULL,
                                            -1);
         g_free (text);
         pango_font_description_free (desc);
@@ -267,6 +310,8 @@ populate_render_node_properties (GtkListStore  *store,
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Glyphs",
                                            1, s->str,
+                                           2, FALSE,
+                                           3, NULL,
                                            -1);
         g_string_free (s, TRUE);
 
@@ -274,6 +319,8 @@ populate_render_node_properties (GtkListStore  *store,
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Position",
                                            1, text,
+                                           2, FALSE,
+                                           3, NULL,
                                            -1);
         g_free (text);
 
@@ -281,6 +328,8 @@ populate_render_node_properties (GtkListStore  *store,
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Color",
                                            1, text,
+                                           2, FALSE,
+                                           3, NULL,
                                            -1);
         g_free (text);
 
@@ -486,6 +535,44 @@ gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
 }
 
 static void
+node_property_activated (GtkTreeView *tv,
+                         GtkTreePath *path,
+                         GtkTreeViewColumn *col,
+                         GtkInspectorRecorder *recorder)
+{
+  GtkInspectorRecorderPrivate *priv = gtk_inspector_recorder_get_instance_private (recorder);
+  GtkTreeIter iter;
+  GdkRectangle rect;
+  cairo_surface_t *surface;
+  gboolean visible;
+  GtkWidget *popover;
+  GtkWidget *image;
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->render_node_properties), &iter, path);
+  gtk_tree_model_get (GTK_TREE_MODEL (priv->render_node_properties), &iter,
+                      2, &visible,
+                      3, &surface,
+                      -1);
+  gtk_tree_view_get_cell_area (tv, path, col, &rect);
+  gtk_tree_view_convert_bin_window_to_widget_coords (tv, rect.x, rect.y, &rect.x, &rect.y);
+
+  if (surface == NULL || visible)
+    return;
+
+  popover = gtk_popover_new (GTK_WIDGET (tv));
+  gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
+
+  image = gtk_image_new_from_surface (surface);
+  g_object_set (image, "margin", 20, NULL);
+  gtk_container_add (GTK_CONTAINER (popover), image);
+  gtk_popover_popup (GTK_POPOVER (popover));
+
+  g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
+
+  cairo_surface_destroy (surface);
+}
+
+static void
 gtk_inspector_recorder_get_property (GObject    *object,
                                      guint       param_id,
                                      GValue     *value,
@@ -571,6 +658,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, recordings_list_row_selected);
   gtk_widget_class_bind_template_callback (widget_class, render_node_list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, render_node_save);
+  gtk_widget_class_bind_template_callback (widget_class, node_property_activated);
 }
 
 static void
@@ -592,7 +680,7 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->render_node_tree), priv->render_node_model);
   g_object_unref (priv->render_node_model);
 
-  priv->render_node_properties = GTK_TREE_MODEL (gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING));
+  priv->render_node_properties = GTK_TREE_MODEL (gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, CAIRO_GOBJECT_TYPE_SURFACE));
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->node_property_tree), priv->render_node_properties);
   g_object_unref (priv->render_node_properties);
 }
