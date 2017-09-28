@@ -1116,6 +1116,9 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
         GskSlVariable *variable;
         char *name;
         
+        if (gsk_sl_scope_lookup_type (scope, token->str))
+          goto its_a_type;
+
         name = g_strdup (token->str);
         gsk_sl_preprocessor_consume (stream, NULL);
 
@@ -1235,12 +1238,14 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
     case GSK_SL_TOKEN_DMAT4X2:
     case GSK_SL_TOKEN_DMAT4X3:
     case GSK_SL_TOKEN_DMAT4X4:
+    case GSK_SL_TOKEN_STRUCT:
       {
         GskSlFunction *constructor;
         GskSlExpression *expression;
         GskSlType *type;
 
-        type = gsk_sl_type_new_parse (stream);
+its_a_type:
+        type = gsk_sl_type_new_parse (scope, stream);
         constructor = gsk_sl_function_new_constructor (type);
         expression = gsk_sl_expression_parse_function_call (scope, stream, constructor);
         gsk_sl_function_unref (constructor);

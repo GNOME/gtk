@@ -145,7 +145,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
                                 preproc,
                                 &decoration);
 
-  type = gsk_sl_type_new_parse (preproc);
+  type = gsk_sl_type_new_parse (scope, preproc);
 
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))

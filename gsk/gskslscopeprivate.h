@@ -32,6 +32,7 @@ GskSlScope *            gsk_sl_scope_ref                        (GskSlScope     
 void                    gsk_sl_scope_unref                      (GskSlScope           *scope);
 
 GskSlType *             gsk_sl_scope_get_return_type            (const GskSlScope     *scope);
+gboolean                gsk_sl_scope_is_global                  (const GskSlScope     *scope);
 
 void                    gsk_sl_scope_add_variable               (GskSlScope           *scope,
                                                                  GskSlVariable        *variable);
@@ -40,6 +41,10 @@ GskSlVariable *         gsk_sl_scope_lookup_variable            (GskSlScope     
 void                    gsk_sl_scope_add_function               (GskSlScope           *scope,
                                                                  GskSlFunction        *function);
 GskSlFunction *         gsk_sl_scope_lookup_function            (GskSlScope           *scope,
+                                                                 const char           *name);
+void                    gsk_sl_scope_add_type                   (GskSlScope           *scope,
+                                                                 GskSlType            *type);
+GskSlType *             gsk_sl_scope_lookup_type                (GskSlScope           *scope,
                                                                  const char           *name);
 
 G_END_DECLS

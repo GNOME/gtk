@@ -34,7 +34,10 @@ typedef enum {
   GSK_SL_BOOL
 } GskSlScalarType;
 
-GskSlType *             gsk_sl_type_new_parse                   (GskSlPreprocessor   *stream);
+typedef struct _GskSlTypeBuilder GskSlTypeBuilder;
+
+GskSlType *             gsk_sl_type_new_parse                   (GskSlScope          *scope,
+                                                                 GskSlPreprocessor   *preproc);
 GskSlType *             gsk_sl_type_get_scalar                  (GskSlScalarType      scalar);
 GskSlType *             gsk_sl_type_get_vector                  (GskSlScalarType      scalar,
                                                                  guint                length);
@@ -48,6 +51,7 @@ void                    gsk_sl_type_unref                       (GskSlType      
 gboolean                gsk_sl_type_is_scalar                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_vector                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_matrix                   (const GskSlType     *type);
+gboolean                gsk_sl_type_is_struct                   (const GskSlType     *type);
 
 const char *            gsk_sl_type_get_name                    (const GskSlType     *type);
 GskSlScalarType         gsk_sl_type_get_scalar_type             (const GskSlType     *type);
@@ -77,6 +81,14 @@ void                    gsk_sl_scalar_type_convert_value        (GskSlScalarType
                                                                  gpointer             target_value,
                                                                  GskSlScalarType      source_type,
                                                                  gconstpointer        source_value);
+
+GskSlTypeBuilder *      gsk_sl_type_builder_new_struct          (const char          *name);
+GskSlType *             gsk_sl_type_builder_free                (GskSlTypeBuilder    *builder);
+void                    gsk_sl_type_builder_add_member          (GskSlTypeBuilder    *builder,
+                                                                 GskSlType           *type,
+                                                                 const char          *name);
+gboolean                gsk_sl_type_builder_has_member          (GskSlTypeBuilder    *builder,
+                                                                 const char          *name);
 
 G_END_DECLS
 

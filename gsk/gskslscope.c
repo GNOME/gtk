@@ -36,6 +36,7 @@ struct _GskSlScope
   
   GHashTable *variables;
   GHashTable *functions;
+  GHashTable *types;
 };
 
 GskSlScope *
@@ -56,6 +57,7 @@ gsk_sl_scope_new (GskSlScope *parent,
     scope->return_type = gsk_sl_type_ref (return_type);
   scope->variables = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_variable_unref);
   scope->functions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_function_unref);
+  scope->types = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_type_unref);
 
   return scope;
 }
@@ -84,6 +86,7 @@ gsk_sl_scope_unref (GskSlScope *scope)
 
   g_hash_table_unref (scope->variables);
   g_hash_table_unref (scope->functions);
+  g_hash_table_unref (scope->types);
 
   if (scope->parent)
     scope->parent->children = g_slist_remove (scope->parent->children, scope);
@@ -100,6 +103,12 @@ GskSlType *
 gsk_sl_scope_get_return_type (const GskSlScope *scope)
 {
   return scope->return_type;
+}
+
+gboolean
+gsk_sl_scope_is_global (const GskSlScope *scope)
+{
+  return scope->parent == NULL;
 }
 
 void
@@ -145,6 +154,31 @@ gsk_sl_scope_lookup_function (GskSlScope *scope,
        scope = scope->parent)
     {
       result = g_hash_table_lookup (scope->functions, name);
+      if (result)
+        return result;
+    }
+
+  return NULL;
+}
+
+void
+gsk_sl_scope_add_type (GskSlScope *scope,
+                       GskSlType  *type)
+{
+  g_hash_table_replace (scope->types, (gpointer) gsk_sl_type_get_name (type), gsk_sl_type_ref (type));
+}
+
+GskSlType *
+gsk_sl_scope_lookup_type (GskSlScope *scope,
+                          const char *name)
+{
+  GskSlType *result;
+
+  for (;
+       scope != NULL;
+       scope = scope->parent)
+    {
+      result = g_hash_table_lookup (scope->types, name);
       if (result)
         return result;
     }

@@ -22,6 +22,8 @@
 
 #include "gsksltokenizerprivate.h"
 #include "gskslpreprocessorprivate.h"
+#include "gskslpreprocessorprivate.h"
+#include "gskslscopeprivate.h"
 #include "gskslvalueprivate.h"
 #include "gskspvwriterprivate.h"
 
@@ -311,6 +313,21 @@ struct {
 };
 #undef SIMPLE_CONVERSION
 #undef CONVERSIONS
+
+static GskSlType *
+gsk_sl_type_alloc (const GskSlTypeClass *klass,
+                   gsize                 size)
+{
+  GskSlType *type;
+
+  type = g_slice_alloc0 (size);
+
+  type->class = klass;
+  type->ref_count = 1;
+
+  return type;
+}
+#define gsk_sl_type_new(_name, _klass) ((_name *) gsk_sl_type_alloc ((_klass), sizeof (_name)))
 
 /* SCALAR */
 
@@ -836,13 +853,291 @@ static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_write_value_spv
 };
 
+/* STRUCT */
+
+typedef struct _GskSlTypeMember GskSlTypeMember;
+typedef struct _GskSlTypeStruct GskSlTypeStruct;
+
+struct _GskSlTypeMember {
+  GskSlType *type;
+  char *name;
+  gsize offset;
+};
+
+struct _GskSlTypeStruct {
+  GskSlType parent;
+
+  char *name;
+  gsize size;
+
+  GskSlTypeMember *members;
+  guint n_members;
+};
+
+static void
+gsk_sl_type_struct_free (GskSlType *type)
+{
+  GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
+  guint i;
+
+  for (i = 0; i < struc->n_members; i++)
+    {
+      gsk_sl_type_unref (struc->members[i].type);
+      g_free (struc->members[i].name);
+    }
+
+  g_free (struc->members);
+  g_free (struc->name);
+
+  g_slice_free (GskSlTypeStruct, struc);
+}
+
+static const char *
+gsk_sl_type_struct_get_name (GskSlType *type)
+{
+  GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
+
+  return struc->name;
+}
+
+static GskSlScalarType
+gsk_sl_type_struct_get_scalar_type (GskSlType *type)
+{
+  return GSK_SL_VOID;
+}
+
+static GskSlType *
+gsk_sl_type_struct_get_index_type (GskSlType *type)
+{
+  return NULL;
+}
+
+static gsize
+gsk_sl_type_struct_get_index_stride (GskSlType *type)
+{
+  return 0;
+}
+
+static guint
+gsk_sl_type_struct_get_length (GskSlType *type)
+{
+  return 0;
+}
+
+static gsize
+gsk_sl_type_struct_get_size (GskSlType *type)
+{
+  GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
+
+  return struc->size;
+}
+
+static gboolean
+gsk_sl_type_struct_can_convert (GskSlType *target,
+                                GskSlType *source)
+{
+  return gsk_sl_type_equal (target, source);
+}
+
+static guint32
+gsk_sl_type_struct_write_spv (const GskSlType *type,
+                              GskSpvWriter    *writer)
+{
+  GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
+  guint32 ids[struc->n_members + 1];
+  guint i;
+
+  ids[0] = gsk_spv_writer_next_id (writer);
+
+  for (i = 0; i < struc->n_members; i++)
+    {
+      ids[i + 1] = gsk_spv_writer_get_id_for_type (writer, struc->members[i].type);
+    }
+
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_DECLARE,
+                      2 + struc->n_members, GSK_SPV_OP_TYPE_STRUCT,
+                      ids);
+  
+  return ids[0];
+}
+
+static void
+gsk_sl_type_struct_print_value (const GskSlType *type,
+                                GString         *string,
+                                gpointer         value)
+{
+  GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
+  guint i;
+
+  g_string_append (string, struc->name);
+  g_string_append (string, "(");
+
+  for (i = 0; i < struc->n_members; i++)
+    {
+      if (i > 0)
+        g_string_append (string, ", ");
+      gsk_sl_type_print_value (struc->members[i].type,
+                               string,
+                               (guchar *) value + struc->members[i].offset);
+    }
+
+  g_string_append (string, ")");
+}
+
+static guint32
+gsk_sl_type_struct_write_value_spv (GskSlType    *type,
+                                    GskSpvWriter *writer,
+                                    gpointer      value)
+{
+  GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
+  guint32 ids[struc->n_members + 2];
+  GskSlType *vector_type;
+  GskSlValue *v;
+  guchar *data;
+  guint i;
+
+  data = value;
+  vector_type = gsk_sl_type_get_index_type (type);
+
+  ids[0] = gsk_spv_writer_get_id_for_type (writer, type);
+  for (i = 0; i < struc->n_members; i++)
+    {
+      v = gsk_sl_value_new_for_data (struc->members[i].type,
+                                     (guchar *) value + struc->members[i].offset,
+                                     NULL, NULL);
+      ids[2 + i] = gsk_spv_writer_get_id_for_value (writer, v);
+      gsk_sl_value_free (v);
+      data += gsk_sl_type_get_size (vector_type);
+    }
+
+  ids[1] = gsk_spv_writer_next_id (writer);
+
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_DECLARE,
+                      3 + struc->n_members,
+                      GSK_SPV_OP_CONSTANT_COMPOSITE,
+                      ids);
+  
+  return ids[1];
+}
+
+static const GskSlTypeClass GSK_SL_TYPE_STRUCT = {
+  gsk_sl_type_struct_free,
+  gsk_sl_type_struct_get_name,
+  gsk_sl_type_struct_get_scalar_type,
+  gsk_sl_type_struct_get_index_type,
+  gsk_sl_type_struct_get_index_stride,
+  gsk_sl_type_struct_get_length,
+  gsk_sl_type_struct_get_size,
+  gsk_sl_type_struct_can_convert,
+  gsk_sl_type_struct_write_spv,
+  gsk_sl_type_struct_print_value,
+  gsk_sl_type_struct_write_value_spv
+};
+
+/* API */
+
+static GskSlType *
+gsk_sl_type_parse_struct (GskSlScope        *scope,
+                          GskSlPreprocessor *preproc)
+{
+  GskSlType *type;
+  const GskSlToken *token;
+  GskSlTypeBuilder *builder;
+  gboolean add_type = FALSE;
+
+  /* the struct token */
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+    {    
+      if (gsk_sl_scope_is_global (scope))
+        {
+          add_type = TRUE;
+          builder = gsk_sl_type_builder_new_struct (token->str);
+        }
+      else
+        {
+          builder = gsk_sl_type_builder_new_struct (NULL);
+        }
+      gsk_sl_preprocessor_consume (preproc, NULL);
+    }
+  else
+    {
+      builder = gsk_sl_type_builder_new_struct (NULL);
+    }
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected opening \"{\" after struct declaration.");
+      goto out;
+    }
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  for (token = gsk_sl_preprocessor_get (preproc);
+       !gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE) && !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
+       token = gsk_sl_preprocessor_get (preproc))
+    {
+      type = gsk_sl_type_new_parse (scope, preproc);
+
+      while (TRUE)
+        {
+          token = gsk_sl_preprocessor_get (preproc);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+            {
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected identifier for type name.");
+              break;
+            }
+          if (gsk_sl_type_builder_has_member (builder, token->str))
+            gsk_sl_preprocessor_error (preproc, DECLARATION, "struct already has a member named \"%s\".", token->str);
+          else
+            gsk_sl_type_builder_add_member (builder, type, token->str);
+          gsk_sl_preprocessor_consume (preproc, NULL);
+
+          token = gsk_sl_preprocessor_get (preproc);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
+            break;
+
+          gsk_sl_preprocessor_consume (preproc, NULL);
+        }
+      gsk_sl_type_unref (type);
+
+      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
+        gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected semicolon after struct member declaration.");
+      else
+        gsk_sl_preprocessor_consume (preproc, NULL);
+    }
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
+    gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \"}\" after struct declaration.");
+  else
+    gsk_sl_preprocessor_consume (preproc, NULL);
+  
+out:
+  type = gsk_sl_type_builder_free (builder);
+  if (add_type)
+    {
+      if (gsk_sl_scope_lookup_type (scope, gsk_sl_type_get_name (type)))
+        gsk_sl_preprocessor_error (preproc, DECLARATION, "Redefinition of struct \"%s\".", gsk_sl_type_get_name (type));
+      else if (gsk_sl_scope_lookup_function (scope, gsk_sl_type_get_name (type)))
+        gsk_sl_preprocessor_error (preproc, DECLARATION, "Constructor name \"%s\" would override function of same name.", gsk_sl_type_get_name (type));
+      else
+        gsk_sl_scope_add_type (scope, type);
+    }
+  return type;
+}
+
 GskSlType *
-gsk_sl_type_new_parse (GskSlPreprocessor *stream)
+gsk_sl_type_new_parse (GskSlScope        *scope,
+                       GskSlPreprocessor *preproc)
 {
   GskSlType *type;
   const GskSlToken *token;
 
-  token = gsk_sl_preprocessor_get (stream);
+  token = gsk_sl_preprocessor_get (preproc);
 
   switch ((guint) token->type)
   {
@@ -969,12 +1264,25 @@ gsk_sl_type_new_parse (GskSlPreprocessor *stream)
     case GSK_SL_TOKEN_DMAT4X4:
       type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 4, 4));
       break;
+    case GSK_SL_TOKEN_STRUCT:
+      return gsk_sl_type_parse_struct (scope, preproc);
+    case GSK_SL_TOKEN_IDENTIFIER:
+      {
+        type = gsk_sl_scope_lookup_type (scope, token->str);
+
+        if (type)
+          {
+            type = gsk_sl_type_ref (type);
+            break;
+          }
+      }
+      /* fall through */
     default:
-      gsk_sl_preprocessor_error (stream, SYNTAX, "Expected type specifier");
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected type specifier");
       return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_FLOAT));
   }
 
-  gsk_sl_preprocessor_consume (stream, NULL);
+  gsk_sl_preprocessor_consume (preproc, NULL);
 
   return type;
 }
@@ -1138,6 +1446,12 @@ gsk_sl_type_is_matrix (const GskSlType *type)
   return type->class == &GSK_SL_TYPE_MATRIX;
 }
 
+gboolean
+gsk_sl_type_is_struct (const GskSlType *type)
+{
+  return type->class == &GSK_SL_TYPE_STRUCT;
+}
+
 GskSlScalarType
 gsk_sl_type_get_scalar_type (const GskSlType *type)
 {
@@ -1245,3 +1559,90 @@ gsk_sl_type_write_value_spv (GskSlType     *type,
 {
   return type->class->write_value_spv (type, writer, value);
 }
+
+struct _GskSlTypeBuilder {
+  char *name;
+  gsize size;
+  GArray *members;
+};
+
+GskSlTypeBuilder *
+gsk_sl_type_builder_new_struct (const char *name)
+{
+  GskSlTypeBuilder *builder;
+
+  builder = g_slice_new0 (GskSlTypeBuilder);
+
+  builder->name = g_strdup (name);
+  builder->members = g_array_new (FALSE, FALSE, sizeof (GskSlTypeMember));
+
+  return builder;
+}
+
+static char *
+gsk_sl_type_builder_generate_name (GskSlTypeBuilder *builder)
+{
+  GString *string = g_string_new ("struct { ");
+  guint i;
+
+  for (i = 0; i < builder->members->len; i++)
+    {
+      GskSlTypeMember *m = &g_array_index (builder->members, GskSlTypeMember, i);
+      g_string_append (string, gsk_sl_type_get_name (m->type));
+      g_string_append (string, " ");
+      g_string_append (string, m->name);
+      g_string_append (string, "; ");
+    }
+  g_string_append (string, "}");
+
+  return g_string_free (string, FALSE);
+}
+
+GskSlType *
+gsk_sl_type_builder_free (GskSlTypeBuilder *builder)
+{
+  GskSlTypeStruct *result;
+
+  result = gsk_sl_type_new (GskSlTypeStruct, &GSK_SL_TYPE_STRUCT);
+
+  if (builder->name)
+    result->name = builder->name;
+  else
+    result->name = gsk_sl_type_builder_generate_name (builder);
+  result->size = builder->size;
+  result->n_members = builder->members->len;
+  result->members = (GskSlTypeMember *) g_array_free (builder->members, FALSE);
+
+  g_slice_free (GskSlTypeBuilder, builder);
+
+  return &result->parent;
+}
+
+void
+gsk_sl_type_builder_add_member (GskSlTypeBuilder *builder,
+                                GskSlType        *type,
+                                const char       *name)
+{
+  g_array_append_vals (builder->members,
+                       &(GskSlTypeMember) {
+                           gsk_sl_type_ref (type),
+                           g_strdup (name),
+                           builder->size }, 1);
+  builder->size += gsk_sl_type_get_size (type);
+}
+
+gboolean
+gsk_sl_type_builder_has_member (GskSlTypeBuilder *builder,
+                                const char       *name)
+{
+  guint i;
+
+  for (i = 0; i < builder->members->len; i++)
+    {
+      if (g_str_equal (g_array_index (builder->members, GskSlTypeMember, i).name, name))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+

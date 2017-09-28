@@ -381,6 +381,8 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
     case GSK_SL_TOKEN_DMAT4X2:
     case GSK_SL_TOKEN_DMAT4X3:
     case GSK_SL_TOKEN_DMAT4X4:
+    case GSK_SL_TOKEN_STRUCT:
+    case GSK_SL_TOKEN_IDENTIFIER:
       {
         GskSlType *type;
         GskSlDecorations decoration;
@@ -389,7 +391,7 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
                                       preproc,
                                       &decoration);
 
-        type = gsk_sl_type_new_parse (preproc);
+        type = gsk_sl_type_new_parse (scope, preproc);
 
         token = gsk_sl_preprocessor_get (preproc);
 
