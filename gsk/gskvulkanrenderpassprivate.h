@@ -6,10 +6,10 @@
 
 #include "gsk/gskvulkanbufferprivate.h"
 #include "gsk/gskvulkanrenderprivate.h"
+#include "gsk/gskprivate.h"
 
 G_BEGIN_DECLS
 
-typedef struct _GskVulkanRenderPass GskVulkanRenderPass;
 
 GskVulkanRenderPass *   gsk_vulkan_render_pass_new                      (GdkVulkanContext       *context);
 void                    gsk_vulkan_render_pass_free                     (GskVulkanRenderPass    *self);
@@ -30,6 +30,8 @@ gsize                   gsk_vulkan_render_pass_collect_vertex_data      (GskVulk
                                                                          guchar                 *data,
                                                                          gsize                   offset,
                                                                          gsize                   total);
+GskVulkanBuffer *       gsk_vulkan_render_pass_get_vertex_data          (GskVulkanRenderPass    *self,
+                                                                         GskVulkanRender        *render);
 
 void                    gsk_vulkan_render_pass_reserve_descriptor_sets  (GskVulkanRenderPass    *self,
                                                                          GskVulkanRender        *render);

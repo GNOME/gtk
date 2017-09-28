@@ -1124,6 +1124,25 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
   return n_bytes;
 }
 
+GskVulkanBuffer *
+gsk_vulkan_render_pass_get_vertex_data (GskVulkanRenderPass *self,
+                                        GskVulkanRender     *render)
+{
+  gsize n_bytes;
+  GskVulkanBuffer *buffer;
+  guchar *data;
+
+  n_bytes = gsk_vulkan_render_pass_count_vertex_data (self);
+  buffer = gsk_vulkan_buffer_new (self->vulkan, n_bytes);
+  data = gsk_vulkan_buffer_map (buffer);
+
+  gsk_vulkan_render_pass_collect_vertex_data (self, render, data, 0, n_bytes);
+
+  gsk_vulkan_buffer_unmap (buffer);
+
+  return buffer;
+}
+
 void
 gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
                                                 GskVulkanRender     *render)

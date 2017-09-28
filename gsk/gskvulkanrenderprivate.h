@@ -6,6 +6,8 @@
 
 #include "gsk/gskvulkanimageprivate.h"
 #include "gsk/gskvulkanpipelineprivate.h"
+#include "gsk/gskvulkanrenderpassprivate.h"
+#include "gsk/gskprivate.h"
 
 G_BEGIN_DECLS
 
@@ -49,8 +51,6 @@ typedef enum {
   /* add more */
   GSK_VULKAN_N_PIPELINES
 } GskVulkanPipelineType;
-
-typedef struct _GskVulkanRender GskVulkanRender;
 
 GskVulkanRender *       gsk_vulkan_render_new                           (GskRenderer            *renderer,
                                                                          GdkVulkanContext       *context);
