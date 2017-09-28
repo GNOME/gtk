@@ -225,16 +225,69 @@ populate_render_node_properties (GtkListStore  *store,
                                      1, gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE ? "TRUE" : "FALSE",
                                      -1);
 
-  if (gsk_render_node_get_node_type (node) == GSK_COLOR_NODE)
+  switch (gsk_render_node_get_node_type (node))
     {
-      const GdkRGBA *color = gsk_color_node_peek_color (node);
-      char *text = gdk_rgba_to_string (color);
+    case GSK_COLOR_NODE:
+      {
+        const GdkRGBA *color = gsk_color_node_peek_color (node);
+        char *text = gdk_rgba_to_string (color);
 
-      gtk_list_store_insert_with_values (store, NULL, -1,
-                                         0, "Color",
-                                         1, text,
-                                         -1);
-      g_free (text);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Color",
+                                           1, text,
+                                           -1);
+        g_free (text);
+      }
+      break;
+
+    case GSK_TEXT_NODE:
+      {
+        PangoFont *font = gsk_text_node_get_font (node);
+        PangoGlyphString *glyphs = gsk_text_node_get_glyphs (node);
+        const GdkRGBA *color = gsk_text_node_get_color (node);
+        float x = gsk_text_node_get_x (node);
+        float y = gsk_text_node_get_y (node);
+        PangoFontDescription *desc;
+        char *text;
+        GString *s;
+        int i;
+
+        desc = pango_font_describe (font);
+        text = pango_font_description_to_string (desc);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Font",
+                                           1, text,
+                                           -1);
+        g_free (text);
+        pango_font_description_free (desc);
+
+        s = g_string_sized_new (6 * glyphs->num_glyphs);
+        for (i = 0; i < glyphs->num_glyphs; i++)
+          g_string_append_printf (s, "%x ", glyphs->glyphs[i].glyph);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Glyphs",
+                                           1, s->str,
+                                           -1);
+        g_string_free (s, TRUE);
+
+        text = g_strdup_printf ("%.2g %.g", x, y);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Position",
+                                           1, text,
+                                           -1);
+        g_free (text);
+
+        text = gdk_rgba_to_string (color);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Color",
+                                           1, text,
+                                           -1);
+        g_free (text);
+
+      }
+      break;
+
+    default: ;
     }
 }
 
