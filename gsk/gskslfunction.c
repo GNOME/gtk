@@ -389,7 +389,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a closing \")\"");
-      return (GskSlFunction *) function;
+      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_PAREN);
     }
   gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
 
@@ -421,8 +421,8 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
     {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "Missing closing \"}\" at end.");
-      return (GskSlFunction *) function;
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \"}\" at end of function.");
+      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
     }
   gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
 

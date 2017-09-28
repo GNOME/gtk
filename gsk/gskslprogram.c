@@ -119,9 +119,11 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
     }
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-    gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of variable declaration.");
-  else
-    gsk_sl_preprocessor_consume (preproc, NULL);
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of variable declaration.");
+      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_SEMICOLON);
+    }
+  gsk_sl_preprocessor_consume (preproc, NULL);
 
   pointer_type = gsk_sl_pointer_type_new (type, FALSE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
   variable = gsk_sl_variable_new (pointer_type, g_strdup (name), value, decoration->values[GSK_SL_DECORATION_CONST].set);

@@ -377,6 +377,38 @@ gsk_sl_preprocessor_consume (GskSlPreprocessor *preproc,
 }
 
 void
+gsk_sl_preprocessor_sync (GskSlPreprocessor *preproc,
+                          GskSlTokenType     token_type)
+{
+  const GskSlToken *token;
+
+  for (token = gsk_sl_preprocessor_get (preproc);
+       !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF) && !gsk_sl_token_is (token, token_type);
+       token = gsk_sl_preprocessor_get (preproc))
+    {
+      if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
+        {
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
+        }
+      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACKET))
+        {
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACKET);
+        }
+      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+        {
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_PAREN);
+        }
+      else
+        {
+          gsk_sl_preprocessor_consume (preproc, NULL);
+        }
+    }
+}
+
+void
 gsk_sl_preprocessor_emit_error (GskSlPreprocessor     *preproc,
                                 gboolean               fatal,
                                 const GskCodeLocation *location,

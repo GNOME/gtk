@@ -37,6 +37,8 @@ const GskCodeLocation * gsk_sl_preprocessor_get_location        (GskSlPreprocess
 void                    gsk_sl_preprocessor_consume             (GskSlPreprocessor   *preproc,
                                                                  gpointer             consumer);
 
+void                    gsk_sl_preprocessor_sync                (GskSlPreprocessor   *preproc,
+                                                                 GskSlTokenType       token);
 void                    gsk_sl_preprocessor_emit_error          (GskSlPreprocessor   *preproc,
                                                                  gboolean             fatal,
                                                                  const GskCodeLocation *location,

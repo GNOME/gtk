@@ -472,9 +472,11 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
 
   token = gsk_sl_preprocessor_get (preproc);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-    gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of statement.");
-  else
-    gsk_sl_preprocessor_consume (preproc, (GskSlNode *) node);
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of statement.");
+      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_SEMICOLON);
+    }
+  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) node);
 
   return node;
 }

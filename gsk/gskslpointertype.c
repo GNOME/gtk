@@ -332,9 +332,11 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
 
           token = gsk_sl_preprocessor_get (preproc);
           if (gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
-            gsk_sl_preprocessor_consume (preproc, NULL);
-          else
-            gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \")\" at end of layout specifier");
+            {
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \")\" at end of layout specifier");
+              gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_PAREN);
+            }
+          gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
         default:
