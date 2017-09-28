@@ -246,6 +246,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
 
 #ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
+  gsk_profiler_counter_set (profiler, self->profile_counters.fallback_pixels, 0);
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
