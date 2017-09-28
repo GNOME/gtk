@@ -304,18 +304,16 @@ populate_render_node_properties (GtkListStore  *store,
         GString *s;
         int i;
 
-        surface = get_color_surface (color);
         desc = pango_font_describe (font);
         text = pango_font_description_to_string (desc);
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Font",
                                            1, text,
-                                           2, TRUE,
-                                           3, surface,
+                                           2, FALSE,
+                                           3, NULL,
                                            -1);
         g_free (text);
         pango_font_description_free (desc);
-        cairo_surface_destroy (surface);
 
         s = g_string_sized_new (6 * glyphs->num_glyphs);
         for (i = 0; i < glyphs->num_glyphs; i++)
@@ -337,14 +335,16 @@ populate_render_node_properties (GtkListStore  *store,
                                            -1);
         g_free (text);
 
+        surface = get_color_surface (color);
         text = gdk_rgba_to_string (color);
         gtk_list_store_insert_with_values (store, NULL, -1,
                                            0, "Color",
                                            1, text,
-                                           2, FALSE,
-                                           3, NULL,
+                                           2, TRUE,
+                                           3, surface,
                                            -1);
         g_free (text);
+        cairo_surface_destroy (surface);
 
       }
       break;
