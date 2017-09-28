@@ -1719,7 +1719,7 @@ static char *
 gsk_sl_type_builder_generate_name (GskSlTypeBuilder *builder)
 {
   GString *string = g_string_new ("struct { ");
-  guint i;
+  guint i, j;
 
   for (i = 0; i < builder->members->len; i++)
     {
@@ -1727,6 +1727,15 @@ gsk_sl_type_builder_generate_name (GskSlTypeBuilder *builder)
       g_string_append (string, gsk_sl_type_get_name (m->type));
       g_string_append (string, " ");
       g_string_append (string, m->name);
+      for (j = i + 1; j < builder->members->len; j++)
+        {
+          GskSlTypeMember *n = &g_array_index (builder->members, GskSlTypeMember, j);
+          if (!gsk_sl_type_equal (m->type, n->type))
+            break;
+          g_string_append (string, ", ");
+          g_string_append (string, n->name);
+        }
+      i = j - 1;
       g_string_append (string, "; ");
     }
   g_string_append (string, "}");
