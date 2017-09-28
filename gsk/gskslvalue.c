@@ -159,6 +159,18 @@ gsk_sl_value_new_convert (GskSlValue *source,
 }
 
 GskSlValue *
+gsk_sl_value_new_member (GskSlValue *value,
+                         guint       n)
+{
+  gpointer data;
+
+  data = g_memdup ((guchar *) value->data + gsk_sl_type_get_member_offset (value->type, n),
+                   gsk_sl_type_get_size (gsk_sl_type_get_member_type (value->type, n)));
+
+  return gsk_sl_value_new_for_data (value->type, data, g_free, data);
+}
+
+GskSlValue *
 gsk_sl_value_copy (const GskSlValue *source)
 {
   gpointer data;

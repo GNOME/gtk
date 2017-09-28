@@ -794,6 +794,95 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_FUNCTION_CALL = {
   gsk_sl_expression_function_call_write_spv
 };
 
+/* MEMBER */
+
+typedef struct _GskSlExpressionMember GskSlExpressionMember;
+
+struct _GskSlExpressionMember {
+  GskSlExpression parent;
+
+  GskSlExpression *expr;
+  guint id;
+};
+
+static void
+gsk_sl_expression_member_free (GskSlExpression *expression)
+{
+  GskSlExpressionMember *member = (GskSlExpressionMember *) expression;
+
+  gsk_sl_expression_unref (member->expr);
+
+  g_slice_free (GskSlExpressionMember, member);
+}
+
+static void
+gsk_sl_expression_member_print (const GskSlExpression *expression,
+                                GString               *string)
+{
+  const GskSlExpressionMember *member = (const GskSlExpressionMember *) expression;
+
+  gsk_sl_expression_print (member->expr, string);
+  g_string_append (string, ".");
+  g_string_append (string, gsk_sl_type_get_member_name (gsk_sl_expression_get_return_type (member->expr), member->id));
+}
+
+static GskSlType *
+gsk_sl_expression_member_get_return_type (const GskSlExpression *expression)
+{
+  const GskSlExpressionMember *member = (const GskSlExpressionMember *) expression;
+
+  return gsk_sl_type_get_member_type (gsk_sl_expression_get_return_type (member->expr), member->id);
+}
+
+static GskSlValue *
+gsk_sl_expression_member_get_constant (const GskSlExpression *expression)
+{
+  const GskSlExpressionMember *member = (const GskSlExpressionMember *) expression;
+  GskSlValue *result, *value;
+
+  value = gsk_sl_expression_get_constant (member->expr);
+  if (value == NULL)
+    return NULL;
+
+  result = gsk_sl_value_new_member (value, member->id);
+
+  gsk_sl_value_free (value);
+
+  return result;
+}
+
+static guint32
+gsk_sl_expression_member_write_spv (const GskSlExpression *expression,
+                                    GskSpvWriter          *writer)
+{
+  const GskSlExpressionMember *member = (const GskSlExpressionMember *) expression;
+  GskSlType *type;
+  guint32 expr_id, type_id, result_id;
+
+  type = gsk_sl_expression_get_return_type (member->expr);
+  type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_member_type (type, member->id));
+  expr_id = gsk_sl_expression_write_spv (member->expr, writer);
+  result_id = gsk_spv_writer_next_id (writer);
+
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      5, GSK_SPV_OP_ACCESS_CHAIN,
+                      (guint32[4]) { type_id,
+                                     result_id,
+                                     expr_id,
+                                     member->id });
+
+  return result_id;
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_MEMBER = {
+  gsk_sl_expression_member_free,
+  gsk_sl_expression_member_print,
+  gsk_sl_expression_member_get_return_type,
+  gsk_sl_expression_member_get_constant,
+  gsk_sl_expression_member_write_spv
+};
+
 /* SWIZZLE */
 
 typedef enum {
@@ -1268,6 +1357,7 @@ gsk_sl_expression_parse_field_selection (GskSlScope        *scope,
                                          const char        *name)
 {
   GskSlType *type;
+  guint n;
 
   if (g_str_equal (name, "length"))
     {
@@ -1326,6 +1416,16 @@ gsk_sl_expression_parse_field_selection (GskSlScope        *scope,
         }
   
       return (GskSlExpression *) swizzle;
+    }
+  else if (gsk_sl_type_find_member (type, name, &n, NULL, NULL))
+    {
+      GskSlExpressionMember *member;
+      
+      member = gsk_sl_expression_new (GskSlExpressionMember, &GSK_SL_EXPRESSION_MEMBER);
+      member->expr = expr;
+      member->id = n;
+  
+      return (GskSlExpression *) member;
     }
   else
     {

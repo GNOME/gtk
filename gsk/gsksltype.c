@@ -31,7 +31,15 @@
 
 #define N_SCALAR_TYPES 6
 
+typedef struct _GskSlTypeMember GskSlTypeMember;
 typedef struct _GskSlTypeClass GskSlTypeClass;
+
+struct _GskSlTypeMember {
+  GskSlType *type;
+  char *name;
+  gsize offset;
+};
+
 
 struct _GskSlType
 {
@@ -42,13 +50,15 @@ struct _GskSlType
 
 struct _GskSlTypeClass {
   void                  (* free)                                (GskSlType           *type);
-
   const char *          (* get_name)                            (const GskSlType     *type);
   GskSlScalarType       (* get_scalar_type)                     (const GskSlType     *type);
   GskSlType *           (* get_index_type)                      (const GskSlType     *type);
   gsize                 (* get_index_stride)                    (const GskSlType     *type);
   guint                 (* get_length)                          (const GskSlType     *type);
   gsize                 (* get_size)                            (const GskSlType     *type);
+  guint                 (* get_n_members)                       (const GskSlType     *type);
+  const GskSlTypeMember * (* get_member)                        (const GskSlType     *type,
+                                                                 guint                i);
   gboolean              (* can_convert)                         (const GskSlType     *target,
                                                                  const GskSlType     *source);
   guint32               (* write_spv)                           (GskSlType           *type,
@@ -387,6 +397,19 @@ gsk_sl_type_scalar_get_size (const GskSlType *type)
   return scalar_infos[scalar->scalar].size;
 }
 
+static guint
+gsk_sl_type_scalar_get_n_members (const GskSlType *type)
+{
+  return 0;
+}
+
+static const GskSlTypeMember *
+gsk_sl_type_scalar_get_member (const GskSlType *type,
+                               guint            n)
+{
+  return NULL;
+}
+
 static gboolean
 gsk_sl_type_scalar_can_convert (const GskSlType *target,
                                 const GskSlType *source)
@@ -499,6 +522,8 @@ static const GskSlTypeClass GSK_SL_TYPE_SCALAR = {
   gsk_sl_type_scalar_get_index_stride,
   gsk_sl_type_scalar_get_length,
   gsk_sl_type_scalar_get_size,
+  gsk_sl_type_scalar_get_n_members,
+  gsk_sl_type_scalar_get_member,
   gsk_sl_type_scalar_can_convert,
   gsk_sl_type_scalar_write_spv,
   gsk_sl_type_scalar_print_value,
@@ -569,6 +594,19 @@ gsk_sl_type_vector_get_size (const GskSlType *type)
   const GskSlTypeVector *vector = (const GskSlTypeVector *) type;
 
   return vector->length * scalar_infos[vector->scalar].size;
+}
+
+static guint
+gsk_sl_type_vector_get_n_members (const GskSlType *type)
+{
+  return 0;
+}
+
+static const GskSlTypeMember *
+gsk_sl_type_vector_get_member (const GskSlType *type,
+                               guint            n)
+{
+  return NULL;
 }
 
 static gboolean
@@ -672,6 +710,8 @@ static const GskSlTypeClass GSK_SL_TYPE_VECTOR = {
   gsk_sl_type_vector_get_index_stride,
   gsk_sl_type_vector_get_length,
   gsk_sl_type_vector_get_size,
+  gsk_sl_type_vector_get_n_members,
+  gsk_sl_type_vector_get_member,
   gsk_sl_type_vector_can_convert,
   gsk_sl_type_vector_write_spv,
   gsk_sl_type_vector_print_value,
@@ -743,6 +783,19 @@ gsk_sl_type_matrix_get_size (const GskSlType *type)
   const GskSlTypeMatrix *matrix = (const GskSlTypeMatrix *) type;
 
   return matrix->columns * matrix->rows * scalar_infos[matrix->scalar].size;
+}
+
+static guint
+gsk_sl_type_matrix_get_n_members (const GskSlType *type)
+{
+  return 0;
+}
+
+static const GskSlTypeMember *
+gsk_sl_type_matrix_get_member (const GskSlType *type,
+                               guint            n)
+{
+  return NULL;
 }
 
 static gboolean
@@ -847,6 +900,8 @@ static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_get_index_stride,
   gsk_sl_type_matrix_get_length,
   gsk_sl_type_matrix_get_size,
+  gsk_sl_type_matrix_get_n_members,
+  gsk_sl_type_matrix_get_member,
   gsk_sl_type_matrix_can_convert,
   gsk_sl_type_matrix_write_spv,
   gsk_sl_type_matrix_print_value,
@@ -855,14 +910,7 @@ static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
 
 /* STRUCT */
 
-typedef struct _GskSlTypeMember GskSlTypeMember;
 typedef struct _GskSlTypeStruct GskSlTypeStruct;
-
-struct _GskSlTypeMember {
-  GskSlType *type;
-  char *name;
-  gsize offset;
-};
 
 struct _GskSlTypeStruct {
   GskSlType parent;
@@ -893,55 +941,72 @@ gsk_sl_type_struct_free (GskSlType *type)
 }
 
 static const char *
-gsk_sl_type_struct_get_name (GskSlType *type)
+gsk_sl_type_struct_get_name (const GskSlType *type)
 {
-  GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
+  const GskSlTypeStruct *struc = (const GskSlTypeStruct *) type;
 
   return struc->name;
 }
 
 static GskSlScalarType
-gsk_sl_type_struct_get_scalar_type (GskSlType *type)
+gsk_sl_type_struct_get_scalar_type (const GskSlType *type)
 {
   return GSK_SL_VOID;
 }
 
 static GskSlType *
-gsk_sl_type_struct_get_index_type (GskSlType *type)
+gsk_sl_type_struct_get_index_type (const GskSlType *type)
 {
   return NULL;
 }
 
 static gsize
-gsk_sl_type_struct_get_index_stride (GskSlType *type)
+gsk_sl_type_struct_get_index_stride (const GskSlType *type)
 {
   return 0;
 }
 
 static guint
-gsk_sl_type_struct_get_length (GskSlType *type)
+gsk_sl_type_struct_get_length (const GskSlType *type)
 {
   return 0;
 }
 
 static gsize
-gsk_sl_type_struct_get_size (GskSlType *type)
+gsk_sl_type_struct_get_size (const GskSlType *type)
 {
-  GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
+  const GskSlTypeStruct *struc = (const GskSlTypeStruct *) type;
 
   return struc->size;
 }
 
+static guint
+gsk_sl_type_struct_get_n_members (const GskSlType *type)
+{
+  const GskSlTypeStruct *struc = (const GskSlTypeStruct *) type;
+
+  return struc->n_members;
+}
+
+static const GskSlTypeMember *
+gsk_sl_type_struct_get_member (const GskSlType *type,
+                               guint            n)
+{
+  const GskSlTypeStruct *struc = (const GskSlTypeStruct *) type;
+
+  return &struc->members[n];
+}
+
 static gboolean
-gsk_sl_type_struct_can_convert (GskSlType *target,
-                                GskSlType *source)
+gsk_sl_type_struct_can_convert (const GskSlType *target,
+                                const GskSlType *source)
 {
   return gsk_sl_type_equal (target, source);
 }
 
 static guint32
-gsk_sl_type_struct_write_spv (const GskSlType *type,
-                              GskSpvWriter    *writer)
+gsk_sl_type_struct_write_spv (GskSlType    *type,
+                              GskSpvWriter *writer)
 {
   GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
   guint32 ids[struc->n_members + 1];
@@ -965,9 +1030,9 @@ gsk_sl_type_struct_write_spv (const GskSlType *type,
 static void
 gsk_sl_type_struct_print_value (const GskSlType *type,
                                 GString         *string,
-                                gpointer         value)
+                                gconstpointer    value)
 {
-  GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
+  const GskSlTypeStruct *struc = (const GskSlTypeStruct *) type;
   guint i;
 
   g_string_append (string, struc->name);
@@ -986,19 +1051,14 @@ gsk_sl_type_struct_print_value (const GskSlType *type,
 }
 
 static guint32
-gsk_sl_type_struct_write_value_spv (GskSlType    *type,
-                                    GskSpvWriter *writer,
-                                    gpointer      value)
+gsk_sl_type_struct_write_value_spv (GskSlType     *type,
+                                    GskSpvWriter  *writer,
+                                    gconstpointer  value)
 {
   GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
   guint32 ids[struc->n_members + 2];
-  GskSlType *vector_type;
   GskSlValue *v;
-  guchar *data;
   guint i;
-
-  data = value;
-  vector_type = gsk_sl_type_get_index_type (type);
 
   ids[0] = gsk_spv_writer_get_id_for_type (writer, type);
   for (i = 0; i < struc->n_members; i++)
@@ -1008,7 +1068,6 @@ gsk_sl_type_struct_write_value_spv (GskSlType    *type,
                                      NULL, NULL);
       ids[2 + i] = gsk_spv_writer_get_id_for_value (writer, v);
       gsk_sl_value_free (v);
-      data += gsk_sl_type_get_size (vector_type);
     }
 
   ids[1] = gsk_spv_writer_next_id (writer);
@@ -1030,6 +1089,8 @@ static const GskSlTypeClass GSK_SL_TYPE_STRUCT = {
   gsk_sl_type_struct_get_index_stride,
   gsk_sl_type_struct_get_length,
   gsk_sl_type_struct_get_size,
+  gsk_sl_type_struct_get_n_members,
+  gsk_sl_type_struct_get_member,
   gsk_sl_type_struct_can_convert,
   gsk_sl_type_struct_write_spv,
   gsk_sl_type_struct_print_value,
@@ -1480,6 +1541,81 @@ gsize
 gsk_sl_type_get_size (const GskSlType *type)
 {
   return type->class->get_size (type);
+}
+
+guint
+gsk_sl_type_get_n_members (const GskSlType *type)
+{
+  return type->class->get_n_members (type);
+}
+
+static const GskSlTypeMember *
+gsk_sl_type_get_member (const GskSlType *type,
+                        guint            n)
+{
+  return type->class->get_member (type, n);
+}
+
+GskSlType *
+gsk_sl_type_get_member_type (const GskSlType *type,
+                             guint            n)
+{
+  const GskSlTypeMember *member;
+
+  member = gsk_sl_type_get_member (type, n);
+
+  return member->type;
+}
+
+const char *
+gsk_sl_type_get_member_name (const GskSlType *type,
+                             guint            n)
+{
+  const GskSlTypeMember *member;
+
+  member = gsk_sl_type_get_member (type, n);
+
+  return member->name;
+}
+
+gsize
+gsk_sl_type_get_member_offset (const GskSlType *type,
+                               guint            n)
+{
+  const GskSlTypeMember *member;
+
+  member = gsk_sl_type_get_member (type, n);
+
+  return member->offset;
+}
+
+gboolean
+gsk_sl_type_find_member (const GskSlType *type,
+                         const char      *name,
+                         guint           *out_index,
+                         GskSlType      **out_type,
+                         gsize           *out_offset)
+{
+  const GskSlTypeMember *member;
+  guint i, n;
+  
+  n = gsk_sl_type_get_n_members (type);
+  for (i = 0; i < n; i++)
+    {
+      member = gsk_sl_type_get_member (type, i);
+      if (g_str_equal (member->name, name))
+        {
+          if (out_index)
+            *out_index = i;
+          if (out_type)
+            *out_type = member->type;
+          if (out_offset)
+            *out_offset = member->offset;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
 }
 
 gboolean

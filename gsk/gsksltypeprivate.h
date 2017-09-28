@@ -59,6 +59,18 @@ GskSlType *             gsk_sl_type_get_index_type              (const GskSlType
 gsize                   gsk_sl_type_get_index_stride            (const GskSlType     *type);
 guint                   gsk_sl_type_get_length                  (const GskSlType     *type);
 gsize                   gsk_sl_type_get_size                    (const GskSlType     *type);
+guint                   gsk_sl_type_get_n_members               (const GskSlType     *type);
+GskSlType *             gsk_sl_type_get_member_type             (const GskSlType     *type,
+                                                                 guint                n);
+const char *            gsk_sl_type_get_member_name             (const GskSlType     *type,
+                                                                 guint                n);
+gsize                   gsk_sl_type_get_member_offset           (const GskSlType     *type,
+                                                                 guint                n);
+gboolean                gsk_sl_type_find_member                 (const GskSlType     *type,
+                                                                 const char          *name,
+                                                                 guint               *out_index,
+                                                                 GskSlType          **out_type,
+                                                                 gsize               *out_offset);
 gboolean                gsk_sl_scalar_type_can_convert          (GskSlScalarType      target,
                                                                  GskSlScalarType      source);
 gboolean                gsk_sl_type_can_convert                 (const GskSlType     *target,
