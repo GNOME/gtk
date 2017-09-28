@@ -21,10 +21,12 @@
 #include "gskslfunctionprivate.h"
 
 #include "gskslnodeprivate.h"
+#include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
 
 static GskSlFunction *
@@ -220,6 +222,8 @@ struct _GskSlFunctionDeclared {
   GskSlScope *scope;
   GskSlType *return_type;
   char *name;
+  GskSlVariable **arguments;
+  gsize n_arguments;
   GSList *statements;
 };
 
@@ -227,7 +231,11 @@ static void
 gsk_sl_function_declared_free (GskSlFunction *function)
 {
   GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
+  guint i;
 
+  for (i = 0; i < declared->n_arguments; i++)
+    gsk_sl_variable_unref (declared->arguments[i]);
+  g_free (declared->arguments);
   if (declared->scope)
     gsk_sl_scope_unref (declared->scope);
   if (declared->return_type)
@@ -260,12 +268,19 @@ gsk_sl_function_declared_print (const GskSlFunction *function,
 {
   const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
   GSList *l;
+  guint i;
 
   g_string_append (string, gsk_sl_type_get_name (declared->return_type));
   g_string_append (string, "\n");
 
   g_string_append (string, declared->name);
   g_string_append (string, " (");
+  for (i = 0; i < declared->n_arguments; i++)
+    {
+      if (i > 0)
+        g_string_append (string, ", ");
+      gsk_sl_variable_print (declared->arguments[i], string);
+    }
   g_string_append (string, ")\n");
 
   g_string_append (string, "{\n");
@@ -284,10 +299,34 @@ gsk_sl_function_declared_matches (const GskSlFunction  *function,
                                   gsize                 n_arguments,
                                   GError              **error)
 {
-  if (n_arguments > 0)
+  const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
+  guint i;
+
+  if (n_arguments != declared->n_arguments)
     {
-       g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "Function only takes %u arguments.", 0);
-       return FALSE;
+      g_set_error (error,
+                   GSK_SL_COMPILER_ERROR, GSK_SL_COMPILER_ERROR_TYPE_MISMATCH,
+                   "Function %s needs %"G_GSIZE_FORMAT" arguments, but %"G_GSIZE_FORMAT" given.",
+                   declared->name, 
+                   declared->n_arguments,
+                   n_arguments);
+      return FALSE;
+    }
+
+  for (i = 0; i < n_arguments; i++)
+    {
+      GskSlType *type = gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (declared->arguments[i]));
+
+      if (!gsk_sl_type_can_convert (type, arguments[i]))
+        {
+          g_set_error (error,
+                       GSK_SL_COMPILER_ERROR, GSK_SL_COMPILER_ERROR_TYPE_MISMATCH,
+                       "Cannot convert argument %u from %s to %s.",
+                       i,
+                       gsk_sl_type_get_name (arguments[i]),
+                       gsk_sl_type_get_name (type));
+          return FALSE;
+        }
     }
 
   return TRUE;
@@ -385,7 +424,71 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
     }
   gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
 
+  function->scope = gsk_sl_scope_new (scope, function->return_type);
+
   token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+    {
+      GPtrArray *arguments = g_ptr_array_new ();
+
+      while (TRUE)
+        {
+          GskSlDecorations decoration;
+          GskSlType *type;
+          GskSlVariable *variable;
+
+          gsk_sl_decoration_list_parse (scope,
+                                        preproc,
+                                        &decoration);
+
+          type = gsk_sl_type_new_parse (scope, preproc);
+
+          token = gsk_sl_preprocessor_get (preproc);
+          if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+            {
+              GskSlPointerType *pointer_type;
+              guint i;
+
+              if (gsk_sl_scope_lookup_variable (function->scope, token->str))
+                {
+                  for (i = 0; i < function->n_arguments; i++)
+                    {
+                      if (g_str_equal (gsk_sl_variable_get_name (g_ptr_array_index (arguments, i)), token->str))
+                        {
+                          gsk_sl_preprocessor_error (preproc, DECLARATION, "Duplicate argument name \"%s\".", token->str);
+                          break;
+                        }
+                    }
+                  if (i == arguments->len)
+                    gsk_sl_preprocessor_warn (preproc, SHADOW, "Function argument \"%s\" shadows global variable of same name.", token->str);
+                }
+
+              pointer_type = gsk_sl_pointer_type_new (type, TRUE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
+              variable = gsk_sl_variable_new (pointer_type, g_strdup (token->str), NULL, decoration.values[GSK_SL_DECORATION_CONST].set);
+              gsk_sl_pointer_type_unref (pointer_type);
+              g_ptr_array_add (arguments, variable);
+              
+              gsk_sl_scope_add_variable (function->scope, variable);
+              gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+            }
+          else
+            {
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an identifier as the variable name.");
+            }
+
+          gsk_sl_type_unref (type);
+
+          token = gsk_sl_preprocessor_get (preproc);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
+            break;
+
+          gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+        }
+
+      function->n_arguments = arguments->len;
+      function->arguments = (GskSlVariable **) g_ptr_array_free (arguments, FALSE);
+    }
+
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a closing \")\"");
@@ -406,8 +509,6 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
       return (GskSlFunction *) function;
     }
   gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
-
-  function->scope = gsk_sl_scope_new (scope, function->return_type);
 
   for (token = gsk_sl_preprocessor_get (preproc);
        !gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE) && !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);

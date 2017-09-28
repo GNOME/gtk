@@ -382,11 +382,11 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
     case GSK_SL_TOKEN_DMAT4X3:
     case GSK_SL_TOKEN_DMAT4X4:
     case GSK_SL_TOKEN_STRUCT:
-    case GSK_SL_TOKEN_IDENTIFIER:
       {
         GskSlType *type;
         GskSlDecorations decoration;
 
+its_a_type:
         gsk_sl_decoration_list_parse (scope,
                                       preproc,
                                       &decoration);
@@ -458,10 +458,15 @@ gsk_sl_node_parse_statement (GskSlScope        *scope,
         }
       break;
 
+    case GSK_SL_TOKEN_IDENTIFIER:
+      if (gsk_sl_scope_lookup_type (scope, token->str))
+        goto its_a_type;
+      /* else fall through*/
+
     default:
       {
         GskSlNodeExpression *node_expression;
-            
+
         node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
         node_expression->expression = gsk_sl_expression_parse (scope, preproc);
 
