@@ -349,6 +349,34 @@ populate_render_node_properties (GtkListStore  *store,
       }
       break;
 
+    case GSK_BORDER_NODE:
+      {
+        const char *name[4] = { "Top", "Right", "Bottom", "Left" };
+        const float *widths = gsk_border_node_peek_widths (node);
+        const GdkRGBA *colors = gsk_border_node_peek_colors (node);
+        int i;
+
+        for (i = 0; i < 4; i++)
+          {
+            cairo_surface_t *surface;
+            char *text, *text2;
+
+            surface = get_color_surface (&colors[i]);
+            text = gdk_rgba_to_string (&colors[i]);
+            text2 = g_strdup_printf ("%.2f, %s", widths[i], text);
+            gtk_list_store_insert_with_values (store, NULL, -1,
+                                               0, name[i],
+                                               1, text2,
+                                               2, TRUE,
+                                               3, surface,
+                                               -1);
+            g_free (text);
+            g_free (text2);
+            cairo_surface_destroy (surface);
+          }
+      }
+      break;
+
     default: ;
     }
 }
