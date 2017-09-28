@@ -142,7 +142,7 @@
                       </object>
                       <packing>
                         <property name="name">render</property>
-                        <property name="title">Render</property>
+                        <property name="title" translatable="yes">Render</property>
                       </packing>
                     </child>
                     <child>
@@ -150,7 +150,7 @@
                         <property name="visible">True</property>
                         <child>
                           <object class="GtkTreeViewColumn">
-                            <property name="title">Property</property>
+                            <property name="title" translatable="yes">Property</property>
                             <child>
                               <object class="GtkCellRendererText">
                                 <property name="yalign">0</property>
@@ -163,7 +163,7 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn">
-                            <property name="title">Value</property>
+                            <property name="title" translatable="yes">Value</property>
                             <child>
                               <object class="GtkCellRendererText">
                                 <property name="yalign">0</property>
@@ -177,7 +177,7 @@
                       </object>
                       <packing>
                         <property name="name">properties</property>
-                        <property name="title">Properties</property>
+                        <property name="title" translatable="yes">Properties</property>
                       </packing>
                     </child>
                   </object>
