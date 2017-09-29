@@ -879,7 +879,7 @@ gtk_box_direction_changed (GtkWidget        *widget,
     gtk_css_node_reverse_children (gtk_widget_get_css_node (widget));
 }
 
-static GtkBoxChild *
+static void
 gtk_box_pack (GtkBox      *box,
               GtkWidget   *child,
               GtkPackType  pack_type)
@@ -888,9 +888,9 @@ gtk_box_pack (GtkBox      *box,
   GtkBoxPrivate *private = box->priv;
   GtkBoxChild *child_info;
 
-  g_return_val_if_fail (GTK_IS_BOX (box), NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
-  g_return_val_if_fail (_gtk_widget_get_parent (child) == NULL, NULL);
+  g_return_if_fail (GTK_IS_BOX (box));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (_gtk_widget_get_parent (child) == NULL);
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
@@ -908,8 +908,6 @@ gtk_box_pack (GtkBox      *box,
   gtk_container_child_notify_by_pspec (container, child, child_props[CHILD_PROP_POSITION]);
 
   gtk_widget_thaw_child_notify (child);
-
-  return child_info;
 }
 
 static void
