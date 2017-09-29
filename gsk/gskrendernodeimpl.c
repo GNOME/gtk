@@ -294,7 +294,7 @@ static const GskRenderNodeClass GSK_LINEAR_GRADIENT_NODE_CLASS = {
 static const GskRenderNodeClass GSK_REPEATING_LINEAR_GRADIENT_NODE_CLASS = {
   GSK_REPEATING_LINEAR_GRADIENT_NODE,
   sizeof (GskLinearGradientNode),
-  "GskLinearGradientNode",
+  "GskRepeatingLinearGradientNode",
   gsk_linear_gradient_node_finalize,
   gsk_linear_gradient_node_draw,
   gsk_linear_gradient_node_serialize,
