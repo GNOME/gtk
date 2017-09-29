@@ -46,6 +46,116 @@ gsk_sl_function_alloc (const GskSlFunctionClass *klass,
 
 /* BUILTIN CONSTRUCTOR */
 
+typedef struct _GskSlFunctionBuiltinConstructor GskSlFunctionBuiltinConstructor;
+
+struct _GskSlFunctionBuiltinConstructor {
+  GskSlFunction parent;
+
+  GskSlType *type;
+};
+
+static void
+gsk_sl_function_builtin_constructor_free (GskSlFunction *function)
+{
+  GskSlFunctionBuiltinConstructor *builtin_constructor = (GskSlFunctionBuiltinConstructor *) function;
+
+  gsk_sl_type_unref (builtin_constructor->type);
+
+  g_slice_free (GskSlFunctionBuiltinConstructor, builtin_constructor);
+}
+
+static GskSlType *
+gsk_sl_function_builtin_constructor_get_return_type (const GskSlFunction *function)
+{
+  const GskSlFunctionBuiltinConstructor *builtin_constructor = (const GskSlFunctionBuiltinConstructor *) function;
+
+  return builtin_constructor->type;
+}
+
+static const char *
+gsk_sl_function_builtin_constructor_get_name (const GskSlFunction *function)
+{
+  const GskSlFunctionBuiltinConstructor *builtin_constructor = (const GskSlFunctionBuiltinConstructor *) function;
+
+  return gsk_sl_type_get_name (builtin_constructor->type);
+}
+
+static void
+gsk_sl_function_builtin_constructor_print (const GskSlFunction *function,
+                                           GString             *string)
+{
+}
+
+static guint
+gsk_sl_function_builtin_get_args_by_type (const GskSlType *type)
+{
+  if (gsk_sl_type_is_scalar (type))
+    return 1;
+  else if (gsk_sl_type_is_vector (type))
+    return gsk_sl_type_get_length (type);
+  else if (gsk_sl_type_is_matrix (type))
+    return gsk_sl_type_get_length (type) * gsk_sl_function_builtin_get_args_by_type (gsk_sl_type_get_index_type (type));
+  else
+    return 0;
+}
+
+static gboolean
+gsk_sl_function_builtin_constructor_matches (const GskSlFunction  *function,
+                                             GskSlType           **arguments,
+                                             gsize                 n_arguments,
+                                             GError              **error)
+{
+  const GskSlFunctionBuiltinConstructor *builtin_constructor = (const GskSlFunctionBuiltinConstructor *) function;
+  guint needed, provided;
+  gsize i;
+
+  if (n_arguments == 1 && gsk_sl_type_is_scalar (arguments[0]))
+    return TRUE;
+
+  needed = gsk_sl_function_builtin_get_args_by_type (builtin_constructor->type);
+
+  for (i = 0; i < n_arguments; i++)
+    {
+      if (needed == 0)
+        {
+          g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "Too many arguments given to builtin_constructor, only the first %"G_GSIZE_FORMAT" are necessary.", i);
+          return FALSE;
+        }
+
+      provided = gsk_sl_function_builtin_get_args_by_type (arguments[i]);
+      if (provided == 0)
+        {
+          g_set_error (error,
+                       G_FILE_ERROR, G_FILE_ERROR_FAILED,
+                       "Invalid type %s for builtin_constructor in argument %"G_GSIZE_FORMAT,
+                       gsk_sl_type_get_name (arguments[i]), i + 1);
+          return FALSE;
+        }
+
+      needed -= MIN (needed, provided);
+    }
+
+  return TRUE;
+}
+
+static guint32
+gsk_sl_function_builtin_constructor_write_spv (const GskSlFunction *function,
+                                               GskSpvWriter        *writer)
+{
+  return 0;
+}
+
+static const GskSlFunctionClass GSK_SL_FUNCTION_BUILTIN_CONSTRUCTOR = {
+  gsk_sl_function_builtin_constructor_free,
+  gsk_sl_function_builtin_constructor_get_return_type,
+  gsk_sl_function_builtin_constructor_get_name,
+  gsk_sl_function_builtin_constructor_print,
+  gsk_sl_function_builtin_constructor_matches,
+  gsk_sl_function_builtin_constructor_write_spv,
+};
+
+/* CONSTRUCTOR */
+
 typedef struct _GskSlFunctionConstructor GskSlFunctionConstructor;
 
 struct _GskSlFunctionConstructor {
@@ -86,63 +196,11 @@ gsk_sl_function_constructor_print (const GskSlFunction *function,
 {
 }
 
-static guint
-gsk_sl_function_builtin_get_args_by_type (const GskSlType *type)
-{
-  if (gsk_sl_type_is_scalar (type))
-    return 1;
-  else if (gsk_sl_type_is_vector (type))
-    return gsk_sl_type_get_length (type);
-  else if (gsk_sl_type_is_matrix (type))
-    return gsk_sl_type_get_length (type) * gsk_sl_function_builtin_get_args_by_type (gsk_sl_type_get_index_type (type));
-  else
-    return 0;
-}
-
 static gboolean
-gsk_sl_function_constructor_matches_builtin (const GskSlFunction  *function,
-                                             GskSlType           **arguments,
-                                             gsize                 n_arguments,
-                                             GError              **error)
-{
-  const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
-  guint needed, provided;
-  gsize i;
-
-  if (n_arguments == 1 && gsk_sl_type_is_scalar (arguments[0]))
-    return TRUE;
-
-  needed = gsk_sl_function_builtin_get_args_by_type (constructor->type);
-
-  for (i = 0; i < n_arguments; i++)
-    {
-      if (needed == 0)
-        {
-          g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_FAILED, "Too many arguments given to constructor, only the first %"G_GSIZE_FORMAT" are necessary.", i);
-          return FALSE;
-        }
-
-      provided = gsk_sl_function_builtin_get_args_by_type (arguments[i]);
-      if (provided == 0)
-        {
-          g_set_error (error,
-                       G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                       "Invalid type %s for constructor in argument %"G_GSIZE_FORMAT,
-                       gsk_sl_type_get_name (arguments[i]), i + 1);
-          return FALSE;
-        }
-
-      needed -= MIN (needed, provided);
-    }
-
-  return TRUE;
-}
-
-static gboolean
-gsk_sl_function_constructor_matches_struct (const GskSlFunction  *function,
-                                            GskSlType           **arguments,
-                                            gsize                 n_arguments,
-                                            GError              **error)
+gsk_sl_function_constructor_matches (const GskSlFunction  *function,
+                                     GskSlType           **arguments,
+                                     gsize                 n_arguments,
+                                     GError              **error)
 {
   const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
   guint i;
@@ -173,27 +231,6 @@ gsk_sl_function_constructor_matches_struct (const GskSlFunction  *function,
     }
 
   return TRUE;
-}
-
-static gboolean
-gsk_sl_function_constructor_matches (const GskSlFunction  *function,
-                                     GskSlType           **arguments,
-                                     gsize                 n_arguments,
-                                     GError              **error)
-{
-  const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
-
-  if (gsk_sl_type_is_scalar (constructor->type) ||
-      gsk_sl_type_is_vector (constructor->type) ||
-      gsk_sl_type_is_matrix (constructor->type))
-    return gsk_sl_function_constructor_matches_builtin (function, arguments, n_arguments, error);
-  else if (gsk_sl_type_is_struct (constructor->type))
-    return gsk_sl_function_constructor_matches_struct (function, arguments, n_arguments, error);
-  else
-    {
-      g_assert_not_reached ();
-    }
-
 }
 
 static guint32
@@ -394,13 +431,32 @@ static const GskSlFunctionClass GSK_SL_FUNCTION_DECLARED = {
 GskSlFunction *
 gsk_sl_function_new_constructor (GskSlType *type)
 {
-  GskSlFunctionConstructor *constructor;
+  if (gsk_sl_type_is_scalar (type) ||
+      gsk_sl_type_is_vector (type) ||
+      gsk_sl_type_is_matrix (type))
+    {
+      GskSlFunctionBuiltinConstructor *constructor;
 
-  constructor = gsk_sl_function_new (GskSlFunctionConstructor, &GSK_SL_FUNCTION_CONSTRUCTOR);
+      constructor = gsk_sl_function_new (GskSlFunctionBuiltinConstructor, &GSK_SL_FUNCTION_BUILTIN_CONSTRUCTOR);
+      constructor->type = gsk_sl_type_ref (type);
 
-  constructor->type = gsk_sl_type_ref (type);
+      return &constructor->parent;
+    }
+  else if (gsk_sl_type_is_struct (type))
+    {
+      GskSlFunctionConstructor *constructor;
 
-  return &constructor->parent;
+      constructor = gsk_sl_function_new (GskSlFunctionConstructor, &GSK_SL_FUNCTION_CONSTRUCTOR);
+      constructor->type = gsk_sl_type_ref (type);
+
+      return &constructor->parent;
+    }
+  else
+    {
+      g_assert_not_reached ();
+
+      return NULL;
+    }
 }
 
 GskSlFunction *
