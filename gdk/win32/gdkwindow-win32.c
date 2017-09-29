@@ -2389,16 +2389,25 @@ gdk_win32_window_get_frame_extents (GdkWindow    *window,
   hwnd = GDK_WINDOW_HWND (window);
   API_CALL (GetWindowRect, (hwnd, &r));
 
-  rect->x = r.left + _gdk_offset_x;
-  rect->y = r.top + _gdk_offset_y;
-  rect->width = (r.right - r.left) / impl->window_scale;
-  rect->height = (r.bottom - r.top) / impl->window_scale;
+  /* Initialize to real, unscaled size */
+  rect->x = r.left + _gdk_offset_x * impl->window_scale;
+  rect->y = r.top + _gdk_offset_y * impl->window_scale;
+  rect->width = (r.right - r.left);
+  rect->height = (r.bottom - r.top);
+
+  /* Extend width and height to ensure that they cover the real size when de-scaled,
+   * and replace everyting with scaled values
+   */
+  rect->width = (rect->width + rect->x % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
+  rect->height = (rect->height + rect->y % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
+  rect->x = r.left / impl->window_scale + _gdk_offset_x;
+  rect->y = r.top / impl->window_scale + _gdk_offset_y;
 
   GDK_NOTE (MISC, g_print ("gdk_window_get_frame_extents: %p: %ldx%ld@%+ld%+ld\n",
-			   GDK_WINDOW_HWND (window),
-			   (r.right - r.left) / impl->window_scale,
-         (r.bottom - r.top) / impl->window_scale,
-			   r.left, r.top));
+                           GDK_WINDOW_HWND (window),
+                           rect->width,
+                           rect->height,
+                           rect->x, rect->y));
 }
 
 static gboolean
