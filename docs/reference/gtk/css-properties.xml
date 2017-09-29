@@ -509,7 +509,7 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
         icons. The recognized names for colors in symbolic icons are error,
         warning and success. The default palette maps these three names to
         symbolic colors with the names @error_color, @warning_color and
-        @error_color.
+        @success_color respectively.
       </para>
 
       <table pgwide="1">
