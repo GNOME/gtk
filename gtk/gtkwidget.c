@@ -8310,6 +8310,11 @@ gtk_widget_reposition_after (GtkWidget *widget,
           if (priv->prev_sibling)
             priv->prev_sibling->priv->next_sibling = NULL;
         }
+      if (priv->prev_sibling)
+        priv->prev_sibling->priv->next_sibling = priv->next_sibling;
+
+      if (priv->next_sibling)
+        priv->next_sibling->priv->prev_sibling = priv->prev_sibling;
 
       priv->prev_sibling = NULL;
       priv->next_sibling = parent->priv->first_child;
