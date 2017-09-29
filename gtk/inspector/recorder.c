@@ -33,6 +33,7 @@
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gsktextureprivate.h>
+#include <gsk/gskroundedrectprivate.h>
 
 #include "gtk/gtkdebug.h"
 
@@ -238,6 +239,49 @@ get_linear_gradient_surface (gsize n_stops, GskColorStop *stops)
 }
 
 static void
+add_text_row (GtkListStore *store,
+              const char   *name,
+              const char   *text)
+{
+  gtk_list_store_insert_with_values (store, NULL, -1,
+                                     0, name,
+                                     1, text,
+                                     2, FALSE,
+                                     3, NULL,
+                                     -1);
+}
+
+static void
+add_color_row (GtkListStore  *store,
+               const char    *name,
+               const GdkRGBA *color)
+{
+  char *text;
+  cairo_surface_t *surface;
+
+  text = gdk_rgba_to_string (color);
+  surface = get_color_surface (color);
+  gtk_list_store_insert_with_values (store, NULL, -1,
+                                     0, name,
+                                     1, text,
+                                     2, TRUE,
+                                     3, surface,
+                                     -1);
+  g_free (text);
+  cairo_surface_destroy (surface);
+}
+
+static void
+add_float_row (GtkListStore  *store,
+               const char    *name,
+               float          value)
+{
+  char *text = g_strdup_printf ("%.2f", value);
+  add_text_row (store, name, text);
+  g_free (text);
+}
+
+static void
 populate_render_node_properties (GtkListStore  *store,
                                  GskRenderNode *node)
 {
@@ -248,24 +292,14 @@ populate_render_node_properties (GtkListStore  *store,
 
   gsk_render_node_get_bounds (node, &bounds);
 
-  gtk_list_store_insert_with_values (store, NULL, -1,
-                                     0, "Type",
-                                     1, node_type_name (gsk_render_node_get_node_type (node)),
-                                     2, FALSE,
-                                     3, NULL,
-                                     -1);
+  add_text_row (store, "Type", node_type_name (gsk_render_node_get_node_type (node)));
 
   tmp = g_strdup_printf ("%.2f x %.2f + %.2f + %.2f",
                          bounds.size.width,
                          bounds.size.height,
                          bounds.origin.x,
                          bounds.origin.y);
-  gtk_list_store_insert_with_values (store, NULL, -1,
-                                     0, "Bounds",
-                                     1, tmp,
-                                     2, FALSE,
-                                     3, NULL,
-                                     -1);
+  add_text_row (store, "Bounds", tmp);
   g_free (tmp);
 
   switch (gsk_render_node_get_node_type (node))
@@ -273,8 +307,8 @@ populate_render_node_properties (GtkListStore  *store,
     case GSK_TEXTURE_NODE:
     case GSK_CAIRO_NODE:
       {
-        cairo_surface_t *surface;
         const char *text;
+        cairo_surface_t *surface;
         gboolean show_inline;
 
         if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
@@ -304,22 +338,7 @@ populate_render_node_properties (GtkListStore  *store,
       break;
 
     case GSK_COLOR_NODE:
-      {
-        const GdkRGBA *color = gsk_color_node_peek_color (node);
-        char *text;
-        cairo_surface_t *surface;
-
-        text = gdk_rgba_to_string (color);
-        surface = get_color_surface (color);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Color",
-                                           1, text,
-                                           2, TRUE,
-                                           3, surface,
-                                           -1);
-        g_free (text);
-        cairo_surface_destroy (surface);
-      }
+      add_color_row (store, "Color", gsk_color_node_peek_color (node));
       break;
 
     case GSK_LINEAR_GRADIENT_NODE:
@@ -329,24 +348,18 @@ populate_render_node_properties (GtkListStore  *store,
         const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
         const gsize n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
         const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
-        char *text;
         int i;
         GString *s;
         cairo_surface_t *surface;
 
-        text = g_strdup_printf ("%.2f %.2f ⟶ %.2f %.2f", start->x, start->y, end->x, end->y);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Direction",
-                                           1, text,
-                                           2, FALSE,
-                                           3, NULL,
-                                           -1);
-        g_free (text);
+        tmp = g_strdup_printf ("%.2f %.2f ⟶ %.2f %.2f", start->x, start->y, end->x, end->y);
+        add_text_row (store, "Direction", tmp);
+        g_free (tmp);
 
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)
           {
-            char *tmp = gdk_rgba_to_string (&stops[i].color);
+            tmp = gdk_rgba_to_string (&stops[i].color);
             g_string_append_printf (s, "%.2f, %s\n", stops[i].offset, tmp);
             g_free (tmp);
           }
@@ -370,54 +383,27 @@ populate_render_node_properties (GtkListStore  *store,
         const GdkRGBA *color = gsk_text_node_get_color (node);
         float x = gsk_text_node_get_x (node);
         float y = gsk_text_node_get_y (node);
-        cairo_surface_t *surface;
         PangoFontDescription *desc;
-        char *text;
         GString *s;
         int i;
 
         desc = pango_font_describe (font);
-        text = pango_font_description_to_string (desc);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Font",
-                                           1, text,
-                                           2, FALSE,
-                                           3, NULL,
-                                           -1);
-        g_free (text);
+        tmp = pango_font_description_to_string (desc);
+        add_text_row (store, "Font", tmp);
+        g_free (tmp);
         pango_font_description_free (desc);
 
         s = g_string_sized_new (6 * glyphs->num_glyphs);
         for (i = 0; i < glyphs->num_glyphs; i++)
           g_string_append_printf (s, "%x ", glyphs->glyphs[i].glyph);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Glyphs",
-                                           1, s->str,
-                                           2, FALSE,
-                                           3, NULL,
-                                           -1);
+        add_text_row (store, "Glyphs", s->str);
         g_string_free (s, TRUE);
 
-        text = g_strdup_printf ("%.2f %.2f", x, y);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Position",
-                                           1, text,
-                                           2, FALSE,
-                                           3, NULL,
-                                           -1);
-        g_free (text);
+        tmp = g_strdup_printf ("%.2f %.2f", x, y);
+        add_text_row (store, "Position", tmp);
+        g_free (tmp);
 
-        surface = get_color_surface (color);
-        text = gdk_rgba_to_string (color);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Color",
-                                           1, text,
-                                           2, TRUE,
-                                           3, surface,
-                                           -1);
-        g_free (text);
-        cairo_surface_destroy (surface);
-
+        add_color_row (store, "Color", color);
       }
       break;
 
@@ -431,87 +417,91 @@ populate_render_node_properties (GtkListStore  *store,
         for (i = 0; i < 4; i++)
           {
             cairo_surface_t *surface;
-            char *text, *text2;
+            char *text;
 
             surface = get_color_surface (&colors[i]);
             text = gdk_rgba_to_string (&colors[i]);
-            text2 = g_strdup_printf ("%.2f, %s", widths[i], text);
+            tmp = g_strdup_printf ("%.2f, %s", widths[i], text);
             gtk_list_store_insert_with_values (store, NULL, -1,
                                                0, name[i],
-                                               1, text2,
+                                               1, tmp,
                                                2, TRUE,
                                                3, surface,
                                                -1);
             g_free (text);
-            g_free (text2);
+            g_free (tmp);
             cairo_surface_destroy (surface);
           }
       }
       break;
 
     case GSK_OPACITY_NODE:
-      {
-        double opacity = gsk_opacity_node_get_opacity (node);
-        const char *text;
-
-        text = g_strdup_printf ("%.2f", opacity);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Opacity",
-                                           1, text,
-                                           2, FALSE,
-                                           3, NULL,
-                                           -1);
-        g_free (text);
-      }
+      add_float_row (store, "Opacity", gsk_opacity_node_get_opacity (node));
       break;
 
     case GSK_CROSS_FADE_NODE:
-      {
-        double progress = gsk_cross_fade_node_get_progress (node);
-        const char *text;
-
-        text = g_strdup_printf ("%.2f", progress);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Progress",
-                                           1, text,
-                                           2, FALSE,
-                                           3, NULL,
-                                           -1);
-        g_free (text);
-      }
+      add_float_row (store, "Progress", gsk_cross_fade_node_get_progress (node));
       break;
 
     case GSK_BLEND_NODE:
       {
         GskBlendMode mode = gsk_blend_node_get_blend_mode (node);
-        const char *text;
-
-        text = g_enum_to_string (GSK_TYPE_BLEND_MODE, mode);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Blendmode",
-                                           1, text,
-                                           2, FALSE,
-                                           3, NULL,
-                                           -1);
-        g_free (text);
+        tmp = g_enum_to_string (GSK_TYPE_BLEND_MODE, mode);
+        add_text_row (store, "Blendmode", tmp);
+        g_free (tmp);
       }
       break;
 
     case GSK_BLUR_NODE:
-      {
-        double radius = gsk_blur_node_get_radius (node);
-        const char *text;
+      add_float_row (store, "Radius", gsk_blur_node_get_radius (node));
+      break;
 
-        text = g_strdup_printf ("%.2f", radius);
-        gtk_list_store_insert_with_values (store, NULL, -1,
-                                           0, "Radius",
-                                           1, text,
-                                           2, FALSE,
-                                           3, NULL,
-                                           -1);
-        g_free (text);
+    case GSK_INSET_SHADOW_NODE:
+      {
+        const GdkRGBA *color = gsk_inset_shadow_node_peek_color (node);
+        float dx = gsk_inset_shadow_node_get_dx (node);
+        float dy = gsk_inset_shadow_node_get_dy (node);
+        float spread = gsk_inset_shadow_node_get_spread (node);
+        float radius = gsk_inset_shadow_node_get_blur_radius (node);
+
+        add_color_row (store, "Color", color);
+
+        tmp = g_strdup_printf ("%.2f %.2f", dx, dy);
+        add_text_row (store, "Offset", tmp);
+        g_free (tmp);
+
+        add_float_row (store, "Spread", spread);
+        add_float_row (store, "Radius", radius);
       }
       break;
+
+    case GSK_OUTSET_SHADOW_NODE:
+      {
+        const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
+        const GdkRGBA *color = gsk_outset_shadow_node_peek_color (node);
+        float dx = gsk_outset_shadow_node_get_dx (node);
+        float dy = gsk_outset_shadow_node_get_dy (node);
+        float spread = gsk_outset_shadow_node_get_spread (node);
+        float radius = gsk_outset_shadow_node_get_blur_radius (node);
+        float rect[12];
+
+        gsk_rounded_rect_to_float (outline, rect);
+        tmp = g_strdup_printf ("%.2f x %.2f + %.2f + %.2f",
+                               rect[2], rect[3], rect[0], rect[1]);
+        add_text_row (store, "Outline", tmp);
+        g_free (tmp);
+
+        add_color_row (store, "Color", color);
+
+        tmp = g_strdup_printf ("%.2f %.2f", dx, dy);
+        add_text_row (store, "Offset", tmp);
+        g_free (tmp);
+
+        add_float_row (store, "Spread", spread);
+        add_float_row (store, "Radius", radius);
+      }
+      break;
+
     default: ;
     }
 }
