@@ -369,10 +369,10 @@ get_spacing (GtkBox *box)
 }
 
 static void
-gtk_box_size_allocate_no_center (GtkWidget           *widget,
-                                 const GtkAllocation *allocation,
-                                 int                  baseline,
-                                 GdkRectangle        *out_clip)
+gtk_box_size_allocate (GtkWidget           *widget,
+                       const GtkAllocation *allocation,
+                       int                  baseline,
+                       GdkRectangle        *out_clip)
 {
   GtkBox *box = GTK_BOX (widget);
   GtkBoxPrivate *private = box->priv;
@@ -664,15 +664,6 @@ gtk_box_size_allocate_no_center (GtkWidget           *widget,
 	  i++;
 	}
     }
-}
-
-static void
-gtk_box_size_allocate (GtkWidget           *widget,
-                       const GtkAllocation *allocation,
-                       int                  baseline,
-                       GtkAllocation       *out_clip)
-{
-  gtk_box_size_allocate_no_center (widget, allocation, baseline, out_clip);
 }
 
 static GType
