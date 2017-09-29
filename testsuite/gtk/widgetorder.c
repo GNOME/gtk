@@ -504,6 +504,47 @@ same_before (void)
   g_assert (gtk_widget_get_last_child (p) == l2);
 }
 
+static void
+no_loop (void)
+{
+  GtkWidget *p = gtk_label_new ("");
+  GtkWidget *l1 = gtk_label_new ("");
+  GtkWidget *l2 = gtk_label_new ("");
+  GtkWidget *l3 = gtk_label_new ("");
+
+  gtk_widget_set_parent (l1, p);
+  gtk_widget_set_parent (l2, p);
+  gtk_widget_set_parent (l3, p);
+
+  /* l1 -> l2 -> l3 */
+
+  gtk_widget_insert_after (l1, p, l3);
+  /* Now: l2 -> l3 -> l1 */
+  g_assert (gtk_widget_get_prev_sibling (l2) == NULL);
+  g_assert (gtk_widget_get_next_sibling (l2) == l3);
+  g_assert (gtk_widget_get_next_sibling (l3) == l1);
+  g_assert (gtk_widget_get_next_sibling (l1) == NULL);
+  g_assert (gtk_widget_get_prev_sibling (l1) == l3);
+
+  gtk_widget_insert_after (l2, p, l1);
+  /* Now: l3 -> l1 -> l2 */
+  g_assert (gtk_widget_get_prev_sibling (l3) == NULL);
+  g_assert (gtk_widget_get_next_sibling (l3) == l1);
+  g_assert (gtk_widget_get_next_sibling (l1) == l2);
+  g_assert (gtk_widget_get_prev_sibling (l1) == l3);
+  g_assert (gtk_widget_get_prev_sibling (l2) == l1);
+  g_assert (gtk_widget_get_next_sibling (l2) == NULL);
+
+  gtk_widget_insert_after (l1, p, NULL);
+  /* Now: l1 -> l3 -> l2 */
+  g_assert (gtk_widget_get_prev_sibling (l1) == NULL);
+  g_assert (gtk_widget_get_next_sibling (l1) == l3);
+  g_assert (gtk_widget_get_next_sibling (l3) == l2);
+  g_assert (gtk_widget_get_prev_sibling (l3) == l1);
+  g_assert (gtk_widget_get_prev_sibling (l2) == l3);
+  g_assert (gtk_widget_get_next_sibling (l2) == NULL);
+}
+
 int main (int argc, char **argv)
 {
   gtk_init ();
@@ -523,7 +564,7 @@ int main (int argc, char **argv)
   g_test_add_func ("/widgetorder/reorder-end", reorder_end);
   g_test_add_func ("/widgetorder/same-after", same_after);
   g_test_add_func ("/widgetorder/same-before", same_before);
-
+  g_test_add_func ("/widgetorder/no-loop", no_loop);
 
   return g_test_run ();
 }
