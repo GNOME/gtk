@@ -40,7 +40,8 @@ GskSlVariable *         gsk_sl_scope_lookup_variable            (GskSlScope     
                                                                  const char           *name);
 void                    gsk_sl_scope_add_function               (GskSlScope           *scope,
                                                                  GskSlFunction        *function);
-GskSlFunction *         gsk_sl_scope_lookup_function            (GskSlScope           *scope,
+void                    gsk_sl_scope_match_function             (GskSlScope           *scope,
+                                                                 GskSlFunctionMatcher *matcher,
                                                                  const char           *name);
 void                    gsk_sl_scope_add_type                   (GskSlScope           *scope,
                                                                  GskSlType            *type);

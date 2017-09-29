@@ -20,8 +20,8 @@
 
 #include "gskslscopeprivate.h"
 
-#include "gsksltypeprivate.h"
 #include "gskslfunctionprivate.h"
+#include "gsksltypeprivate.h"
 #include "gskslvariableprivate.h"
 
 #include <string.h>
@@ -38,6 +38,12 @@ struct _GskSlScope
   GHashTable *functions;
   GHashTable *types;
 };
+
+static void
+free_function_list (gpointer data)
+{
+  g_list_free_full (data, (GDestroyNotify) gsk_sl_function_unref);
+}
 
 GskSlScope *
 gsk_sl_scope_new (GskSlScope *parent,
@@ -56,7 +62,7 @@ gsk_sl_scope_new (GskSlScope *parent,
   if (return_type)
     scope->return_type = gsk_sl_type_ref (return_type);
   scope->variables = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_variable_unref);
-  scope->functions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_function_unref);
+  scope->functions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) free_function_list);
   scope->types = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_type_unref);
 
   return scope;
@@ -140,25 +146,35 @@ void
 gsk_sl_scope_add_function (GskSlScope    *scope,
                            GskSlFunction *function)
 {
-  g_hash_table_replace (scope->functions, (gpointer) gsk_sl_function_get_name (function), gsk_sl_function_ref (function));
+  GList *functions;
+  const char *name;
+
+  name = gsk_sl_function_get_name (function);
+
+  functions = g_hash_table_lookup (scope->functions, name);
+  gsk_sl_function_ref (function);
+  if (functions)
+    functions = g_list_append (functions, function);
+  else
+    g_hash_table_insert (scope->functions, (gpointer) name, g_list_prepend (NULL, function));
 }
 
-GskSlFunction *
-gsk_sl_scope_lookup_function (GskSlScope *scope,
-                              const char *name)
+void
+gsk_sl_scope_match_function (GskSlScope           *scope,
+                             GskSlFunctionMatcher *matcher,
+                             const char           *name)
 {
-  GskSlFunction *result;
+  GList *result = NULL, *lookup;
 
   for (;
        scope != NULL;
        scope = scope->parent)
     {
-      result = g_hash_table_lookup (scope->functions, name);
-      if (result)
-        return result;
+      lookup = g_hash_table_lookup (scope->functions, name);
+      result = g_list_concat (result, g_list_copy (lookup));
     }
 
-  return NULL;
+  gsk_sl_function_matcher_init (matcher, result);
 }
 
 void

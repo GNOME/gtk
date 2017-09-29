@@ -23,6 +23,7 @@
 
 typedef struct _GskSlExpression         GskSlExpression;
 typedef struct _GskSlFunction           GskSlFunction;
+typedef struct _GskSlFunctionMatcher    GskSlFunctionMatcher;
 typedef struct _GskSlNode               GskSlNode;
 typedef struct _GskSlPreprocessor       GskSlPreprocessor;
 typedef struct _GskSlPointerType        GskSlPointerType;

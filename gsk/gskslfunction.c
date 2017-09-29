@@ -568,42 +568,6 @@ gsk_sl_function_print (const GskSlFunction *function,
   function->class->print (function, string);
 }
 
-gboolean
-gsk_sl_function_matches (const GskSlFunction  *function,
-                         GskSlType           **arguments,
-                         gsize                 n_arguments,
-                         GError              **error)
-{
-  guint i;
-
-  if (n_arguments != gsk_sl_function_get_n_arguments (function))
-    {
-      g_set_error (error,
-                   GSK_SL_COMPILER_ERROR, GSK_SL_COMPILER_ERROR_TYPE_MISMATCH,
-                   "Function %s needs %"G_GSIZE_FORMAT" arguments, but %"G_GSIZE_FORMAT" given.",
-                   gsk_sl_function_get_name (function),
-                   gsk_sl_function_get_n_arguments (function),
-                   n_arguments);
-      return FALSE;
-    }
-
-  for (i = 0; i < n_arguments; i++)
-    {
-      if (!gsk_sl_type_can_convert (gsk_sl_function_get_argument_type (function, i), arguments[i]))
-        {
-          g_set_error (error,
-                       GSK_SL_COMPILER_ERROR, GSK_SL_COMPILER_ERROR_TYPE_MISMATCH,
-                       "Cannot convert argument %u from %s to %s.",
-                       i + 1,
-                       gsk_sl_type_get_name (arguments[i]),
-                       gsk_sl_type_get_name (gsk_sl_function_get_argument_type (function, i)));
-          return FALSE;
-        }
-    }
-
-  return TRUE;
-}
-
 guint32
 gsk_sl_function_write_spv (const GskSlFunction *function,
                            GskSpvWriter        *writer)
@@ -611,3 +575,179 @@ gsk_sl_function_write_spv (const GskSlFunction *function,
   return function->class->write_spv (function, writer);
 }
 
+void
+gsk_sl_function_matcher_init (GskSlFunctionMatcher *matcher,
+                              GList                *list)
+{
+  matcher->best_matches = list;
+  matcher->matches = NULL;
+}
+
+void
+gsk_sl_function_matcher_finish (GskSlFunctionMatcher *matcher)
+{
+  g_list_free (matcher->best_matches);
+  g_list_free (matcher->matches);
+}
+
+gboolean
+gsk_sl_function_matcher_has_matches (GskSlFunctionMatcher *matcher)
+{
+  return matcher->best_matches || matcher->matches;
+}
+
+GskSlFunction *
+gsk_sl_function_matcher_get_match (GskSlFunctionMatcher *matcher)
+{
+  if (matcher->best_matches == NULL)
+    return NULL;
+
+  if (matcher->best_matches->next != NULL)
+    return NULL;
+
+  return matcher->best_matches->data;
+}
+
+void
+gsk_sl_function_matcher_match_n_arguments (GskSlFunctionMatcher *matcher,
+                                           gsize                 n_arguments)
+{
+  GList *l;
+
+  for (l = matcher->best_matches; l; l = l->next)
+    {
+      if (gsk_sl_function_get_n_arguments (l->data) != n_arguments)
+        matcher->best_matches = g_list_delete_link (matcher->best_matches, l);
+    }
+  for (l = matcher->matches; l; l = l->next)
+    {
+      if (gsk_sl_function_get_n_arguments (l->data) != n_arguments)
+        matcher->matches = g_list_delete_link (matcher->matches, l);
+    }
+}
+
+typedef enum {
+  MATCH_NONE,
+  MATCH_CONVERT_TO_DOUBLE,
+  MATCH_CONVERT,
+  MATCH_EXACT
+} GskSlFunctionMatch;
+
+static GskSlFunctionMatch
+gsk_sl_function_matcher_match_types (const GskSlType *function_type,
+                                     const GskSlType *argument_type)
+{
+  if (!gsk_sl_type_can_convert (function_type, argument_type))
+    return MATCH_NONE;
+
+  if (gsk_sl_type_equal (function_type, argument_type))
+    return MATCH_EXACT;
+
+  if (gsk_sl_type_get_scalar_type (function_type))
+    return MATCH_CONVERT_TO_DOUBLE;
+  
+  return MATCH_CONVERT;
+}
+
+void
+gsk_sl_function_matcher_match_argument (GskSlFunctionMatcher *matcher,
+                                        gsize                 n,
+                                        const GskSlType      *argument_type)
+{
+  GList *best_matches = NULL, *matches = NULL, *l;
+  GskSlFunctionMatch best = MATCH_NONE, function_match;
+
+  for (l = matcher->best_matches; l; l = l->next)
+    {
+      GskSlType *function_type;
+      GskSlFunctionMatch function_match;
+      
+      if (gsk_sl_function_get_n_arguments (l->data) <= n)
+        continue;
+
+      function_type = gsk_sl_function_get_argument_type (l->data, n);
+      function_match = gsk_sl_function_matcher_match_types (function_type, argument_type);
+      if (function_match == MATCH_NONE)
+        continue;
+
+      if (function_match == best)
+        {
+          best_matches = g_list_prepend (best_matches, l->data);
+          best = function_match;
+        }
+      else if (function_match > best)
+        {
+          matches = g_list_concat (matches, best_matches);
+          best_matches = g_list_prepend (NULL, l->data);
+          best = function_match;
+        }
+      else 
+        {
+          matches = g_list_prepend (matches, l->data);
+        }
+    }
+
+  for (l = matcher->matches; l; l = l->next)
+    {
+      GskSlType *function_type;
+      
+      if (gsk_sl_function_get_n_arguments (l->data) <= n)
+        continue;
+
+      function_type = gsk_sl_function_get_argument_type (l->data, n);
+      function_match = gsk_sl_function_matcher_match_types (function_type, argument_type);
+      if (function_match == MATCH_NONE)
+        continue;
+
+      if (function_match > best)
+        {
+          matches = g_list_concat (matches, best_matches);
+          best_matches = NULL;
+          best = function_match;
+        }
+      matches = g_list_prepend (matches, l->data);
+    }
+
+  g_list_free (matcher->best_matches);
+  g_list_free (matcher->matches);
+  matcher->best_matches = best_matches;
+  matcher->matches = matches;
+}
+
+void
+gsk_sl_function_matcher_match_function (GskSlFunctionMatcher *matcher,
+                                        const GskSlFunction  *function)
+{
+  GList *l;
+  gsize i, n;
+
+  n = gsk_sl_function_get_n_arguments (function);
+
+  for (l = matcher->best_matches; l; l = l->next)
+    {
+      GskSlFunction *f = l->data;
+
+      if (gsk_sl_function_get_n_arguments (f) != n)
+        continue;
+
+      for (i = 0; i < n; i++)
+        {
+          if (!gsk_sl_type_equal (gsk_sl_function_get_argument_type (f, i),
+                                  gsk_sl_function_get_argument_type (function, i)))
+            break;
+        }
+      if (i == n)
+        {
+          g_list_free (matcher->best_matches);
+          g_list_free (matcher->matches);
+          matcher->best_matches = g_list_prepend (NULL, f);
+          matcher->matches = NULL;
+          return;
+        }
+    }
+
+  g_list_free (matcher->best_matches);
+  g_list_free (matcher->matches);
+  matcher->best_matches = NULL;
+  matcher->matches = NULL;
+}

@@ -67,12 +67,29 @@ GskSlType *             gsk_sl_function_get_return_type         (const GskSlFunc
 gsize                   gsk_sl_function_get_n_arguments         (const GskSlFunction    *function);
 GskSlType *             gsk_sl_function_get_argument_type       (const GskSlFunction    *function,
                                                                  gsize                   i);
-gboolean                gsk_sl_function_matches                 (const GskSlFunction    *function,
-                                                                 GskSlType             **arguments,
-                                                                 gsize                   n_arguments,
-                                                                 GError                **error);
 guint32                 gsk_sl_function_write_spv               (const GskSlFunction    *function,
                                                                  GskSpvWriter           *writer);
+
+struct _GskSlFunctionMatcher
+{
+  GList *best_matches;
+  GList *matches;
+};
+
+void                    gsk_sl_function_matcher_init            (GskSlFunctionMatcher   *matcher,
+                                                                 GList                  *list);
+void                    gsk_sl_function_matcher_finish          (GskSlFunctionMatcher   *matcher);
+
+gboolean                gsk_sl_function_matcher_has_matches     (GskSlFunctionMatcher   *matcher);
+GskSlFunction *         gsk_sl_function_matcher_get_match       (GskSlFunctionMatcher   *matcher);
+
+void                    gsk_sl_function_matcher_match_n_arguments (GskSlFunctionMatcher *matcher,
+                                                                 gsize                   n_arguments);
+void                    gsk_sl_function_matcher_match_argument  (GskSlFunctionMatcher   *matcher,
+                                                                 gsize                   n,
+                                                                 const GskSlType        *argument_type);
+void                    gsk_sl_function_matcher_match_function  (GskSlFunctionMatcher   *matcher,
+                                                                 const GskSlFunction    *function);
 
 G_END_DECLS
 

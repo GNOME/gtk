@@ -402,7 +402,17 @@ its_a_type:
                 
             constructor = gsk_sl_function_new_constructor (type);
             node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
-            node_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, constructor);
+            if (gsk_sl_function_is_builtin_constructor (constructor))
+              {
+                node_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, NULL, constructor);
+              }
+            else
+              {
+                GskSlFunctionMatcher matcher;
+                gsk_sl_function_matcher_init (&matcher, g_list_prepend (NULL, constructor));
+                node_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, &matcher, constructor);
+                gsk_sl_function_matcher_finish (&matcher);
+              }
             node = (GskSlNode *) node_expression;
             gsk_sl_function_unref (constructor);
           }

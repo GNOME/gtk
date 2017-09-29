@@ -1279,16 +1279,14 @@ gsk_sl_constructor_get_args_by_type (const GskSlType *type)
 }
 
 GskSlExpression *
-gsk_sl_expression_parse_function_call (GskSlScope        *scope,
-                                       GskSlPreprocessor *stream,
-                                       GskSlFunction     *function)
+gsk_sl_expression_parse_function_call (GskSlScope           *scope,
+                                       GskSlPreprocessor    *stream,
+                                       GskSlFunctionMatcher *matcher,
+                                       GskSlFunction        *function)
 {
   GskSlExpressionFunctionCall *call;
   const GskSlToken *token;
-  GskSlType **types;
-  GError *error = NULL;
   gssize missing_args; /* only used for builtin constructors */
-  guint i;
 
   call = gsk_sl_expression_new (GskSlExpressionFunctionCall, &GSK_SL_EXPRESSION_FUNCTION_CALL);
 
@@ -1316,13 +1314,33 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
         {
           GskSlExpression *expression = gsk_sl_expression_parse_assignment (scope, stream);
 
-          g_ptr_array_add (arguments, expression);
-          
-          if (function == NULL)
+          if (function == NULL && matcher == NULL)
             {
               /* no checking necessary */
             }
-          if (missing_args == 0)
+          else if (matcher)
+            {
+              GskSlType *type = gsk_sl_expression_get_return_type (expression);
+
+              gsk_sl_function_matcher_match_argument (matcher, arguments->len, type);
+              if (!gsk_sl_function_matcher_has_matches (matcher))
+                {
+                  if (function)
+                    gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                               "Cannot convert argument %u from %s to %s.",
+                                               arguments->len + 1,
+                                               gsk_sl_type_get_name (type),
+                                               gsk_sl_type_get_name (gsk_sl_function_get_argument_type (function, arguments->len)));
+                  else
+                    gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                               "No overloaded function available that matches the first %u arguments",
+                                               arguments->len + 1);
+
+                  matcher = NULL;
+                  function = NULL;
+                }
+            }
+          else if (missing_args == 0)
             {
               gsk_sl_preprocessor_error (stream, ARGUMENT_COUNT,
                                          "Too many arguments given to builtin constructor, only the first %u are necessary.",
@@ -1347,6 +1365,8 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
                 }
             }
 
+          g_ptr_array_add (arguments, expression);
+          
           token = gsk_sl_preprocessor_get (stream);
           if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
             break;
@@ -1365,14 +1385,29 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
       call->arguments = (GskSlExpression **) g_ptr_array_free (arguments, FALSE);
     }
 
-  types = g_newa (GskSlType *, call->n_arguments);
-  for (i = 0; i < call->n_arguments; i++)
-    types[i] = gsk_sl_expression_get_return_type (call->arguments[i]);
-  if (function && missing_args < 0 && !gsk_sl_function_matches (function, types, call->n_arguments, &error))
+  if (matcher)
     {
-      gsk_sl_preprocessor_emit_error (stream, TRUE, gsk_sl_preprocessor_get_location (stream), error);
-      g_clear_error (&error);
-      function = NULL;
+      gsk_sl_function_matcher_match_n_arguments (matcher, call->n_arguments);
+      if (!gsk_sl_function_matcher_has_matches (matcher))
+        {
+          if (function)
+            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                       "Function %s needs %"G_GSIZE_FORMAT" arguments, but %u given.",
+                                       gsk_sl_function_get_name (function),
+                                       gsk_sl_function_get_n_arguments (function),
+                                       call->n_arguments);
+          else
+            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                       "No overloaded function available that matches this call");
+          function = NULL;
+        }
+      else
+        {
+          function = gsk_sl_function_matcher_get_match (matcher);
+          if (function == NULL)
+            gsk_sl_preprocessor_error (stream, UNIQUENESS,
+                                       "Cannot find unique match for overloaded function.");
+        }           
     }
 
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
@@ -1387,8 +1422,7 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
       gsk_sl_expression_unref ((GskSlExpression *) call);
       return gsk_sl_expression_error_new ();
     }
-  else
-
+  
   call->function = gsk_sl_function_ref (function);
   return (GskSlExpression *) call;
 }
@@ -1407,10 +1441,23 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
       {
         GskSlExpression *expr;
         GskSlVariable *variable;
+        GskSlType *type;
         char *name;
         
-        if (gsk_sl_scope_lookup_type (scope, token->str))
-          goto its_a_type;
+        type = gsk_sl_scope_lookup_type (scope, token->str);
+        if (type)
+          {
+            GskSlFunctionMatcher matcher;
+            GskSlFunction *constructor;
+
+            constructor = gsk_sl_function_new_constructor (type);
+            gsk_sl_function_matcher_init (&matcher, g_list_prepend (NULL, constructor));
+            expr = gsk_sl_expression_parse_function_call (scope, stream, &matcher, constructor);
+            gsk_sl_function_matcher_finish (&matcher);
+            gsk_sl_function_unref (constructor);
+
+            return expr;
+          }
 
         name = g_strdup (token->str);
         gsk_sl_preprocessor_consume (stream, NULL);
@@ -1418,12 +1465,18 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
         token = gsk_sl_preprocessor_get (stream);
         if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
           {
-            GskSlFunction *function = gsk_sl_scope_lookup_function (scope, name);
+            GskSlFunctionMatcher matcher;
             
-            if (function == NULL)
+            gsk_sl_scope_match_function (scope, &matcher, name);
+            
+            if (!gsk_sl_function_matcher_has_matches (&matcher))
               gsk_sl_preprocessor_error (stream, DECLARATION, "No function named \"%s\".", name);
             
-            expr = gsk_sl_expression_parse_function_call (scope, stream, function);
+            expr = gsk_sl_expression_parse_function_call (scope, stream,
+                                                          &matcher,
+                                                          gsk_sl_function_matcher_get_match (&matcher));
+
+            gsk_sl_function_matcher_finish (&matcher);
           }
         else
           {
@@ -1549,10 +1602,9 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
         GskSlExpression *expression;
         GskSlType *type;
 
-its_a_type:
         type = gsk_sl_type_new_parse (scope, stream);
         constructor = gsk_sl_function_new_constructor (type);
-        expression = gsk_sl_expression_parse_function_call (scope, stream, constructor);
+        expression = gsk_sl_expression_parse_function_call (scope, stream, NULL, constructor);
         gsk_sl_function_unref (constructor);
         gsk_sl_type_unref (type);
 

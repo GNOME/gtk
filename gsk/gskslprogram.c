@@ -175,13 +175,20 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
 
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
     {
+      GskSlFunctionMatcher matcher;
       GskSlFunction *function;
 
       function = gsk_sl_function_new_parse (scope,
                                             preproc,
                                             type,
                                             name);
-      gsk_sl_scope_add_function (scope, function);
+      gsk_sl_scope_match_function (scope, &matcher, gsk_sl_function_get_name (function));
+      gsk_sl_function_matcher_match_function (&matcher, function);
+      if (gsk_sl_function_matcher_has_matches (&matcher))
+        gsk_sl_preprocessor_error (preproc, DECLARATION, "A function with the same prototype has already been defined.");
+      else
+        gsk_sl_scope_add_function (scope, function);
+      gsk_sl_function_matcher_finish (&matcher);
       program->functions = g_slist_append (program->functions, function);
     }
   else

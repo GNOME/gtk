@@ -20,10 +20,10 @@
 
 #include "gsksltypeprivate.h"
 
-#include "gsksltokenizerprivate.h"
-#include "gskslpreprocessorprivate.h"
+#include "gskslfunctionprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslscopeprivate.h"
+#include "gsksltokenizerprivate.h"
 #include "gskslvalueprivate.h"
 #include "gskspvwriterprivate.h"
 
@@ -1183,10 +1183,17 @@ out:
     {
       if (gsk_sl_scope_lookup_type (scope, gsk_sl_type_get_name (type)))
         gsk_sl_preprocessor_error (preproc, DECLARATION, "Redefinition of struct \"%s\".", gsk_sl_type_get_name (type));
-      else if (gsk_sl_scope_lookup_function (scope, gsk_sl_type_get_name (type)))
-        gsk_sl_preprocessor_error (preproc, DECLARATION, "Constructor name \"%s\" would override function of same name.", gsk_sl_type_get_name (type));
       else
-        gsk_sl_scope_add_type (scope, type);
+        {
+          GskSlFunctionMatcher matcher;
+          
+          gsk_sl_scope_match_function (scope, &matcher, gsk_sl_type_get_name (type));
+          if (gsk_sl_function_matcher_has_matches (&matcher))
+            gsk_sl_preprocessor_error (preproc, DECLARATION, "Constructor name \"%s\" would override function of same name.", gsk_sl_type_get_name (type));
+          else
+            gsk_sl_scope_add_type (scope, type);
+          gsk_sl_function_matcher_finish (&matcher);
+        }
     }
   return type;
 }
