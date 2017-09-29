@@ -195,6 +195,25 @@ gsk_sl_value_free (GskSlValue *value)
 }
 
 void
+gsk_sl_value_componentwise (GskSlValue    *value,
+                            void (* func) (gpointer, gpointer),
+                            gpointer       user_data)
+{
+  gsize stride;
+  gsize i, n;
+
+  g_return_if_fail (gsk_sl_type_is_scalar (value->type) || gsk_sl_type_is_vector (value->type) || gsk_sl_type_is_matrix (value->type));
+
+  stride = gsk_sl_type_get_size (gsk_sl_type_get_scalar (gsk_sl_type_get_scalar_type (value->type)));
+  n = gsk_sl_type_get_size (value->type) / stride;
+
+  for (i = 0; i < n; i++)
+    {
+      func ((guchar *) value->data + stride * i, user_data);
+    }
+}
+
+void
 gsk_sl_value_print (const GskSlValue *value,
                     GString          *string)
 {

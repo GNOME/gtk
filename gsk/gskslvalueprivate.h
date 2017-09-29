@@ -35,6 +35,9 @@ GskSlValue *            gsk_sl_value_new_member                 (GskSlValue     
 GskSlValue *            gsk_sl_value_copy                       (const GskSlValue    *source);
 void                    gsk_sl_value_free                       (GskSlValue          *value);
 
+void                    gsk_sl_value_componentwise              (GskSlValue          *value,
+                                                                 void (* func)       (gpointer, gpointer),
+                                                                 gpointer             user_data);
 void                    gsk_sl_value_print                      (const GskSlValue    *value,
                                                                  GString             *string);
 

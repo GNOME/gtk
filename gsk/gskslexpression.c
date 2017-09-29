@@ -1055,6 +1055,142 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_SWIZZLE = {
   gsk_sl_expression_swizzle_write_spv
 };
 
+/* NEGATION */
+
+typedef struct _GskSlExpressionNegation GskSlExpressionNegation;
+
+struct _GskSlExpressionNegation {
+  GskSlExpression parent;
+
+  GskSlExpression *expr;
+};
+
+static void
+gsk_sl_expression_negation_free (GskSlExpression *expression)
+{
+  GskSlExpressionNegation *negation = (GskSlExpressionNegation *) expression;
+
+  gsk_sl_expression_unref (negation->expr);
+
+  g_slice_free (GskSlExpressionNegation, negation);
+}
+
+static void
+gsk_sl_expression_negation_print (const GskSlExpression *expression,
+                                  GString               *string)
+{
+  const GskSlExpressionNegation *negation = (const GskSlExpressionNegation *) expression;
+
+  g_string_append (string, "-");
+  gsk_sl_expression_print (negation->expr, string);
+}
+
+static GskSlType *
+gsk_sl_expression_negation_get_return_type (const GskSlExpression *expression)
+{
+  const GskSlExpressionNegation *negation = (const GskSlExpressionNegation *) expression;
+
+  return gsk_sl_expression_get_return_type (negation->expr);
+}
+
+#define GSK_SL_OPERATION_FUNC(func,type,...) \
+static void \
+func (gpointer value, gpointer unused) \
+{ \
+  type x = *(type *) value; \
+  __VA_ARGS__ \
+  *(type *) value = x; \
+}
+GSK_SL_OPERATION_FUNC(gsk_sl_expression_negation_int, gint32, x = -x;)
+GSK_SL_OPERATION_FUNC(gsk_sl_expression_negation_uint, guint32, x = -x;)
+GSK_SL_OPERATION_FUNC(gsk_sl_expression_negation_float, float, x = -x;)
+GSK_SL_OPERATION_FUNC(gsk_sl_expression_negation_double, double, x = -x;)
+
+static GskSlValue *
+gsk_sl_expression_negation_get_constant (const GskSlExpression *expression)
+{
+  const GskSlExpressionNegation *negation = (const GskSlExpressionNegation *) expression;
+  GskSlValue *value;
+
+  value = gsk_sl_expression_get_constant (negation->expr);
+  if (value == NULL)
+    return NULL;
+
+  switch (gsk_sl_type_get_scalar_type (gsk_sl_value_get_type (value)))
+    {
+    case GSK_SL_INT:
+      gsk_sl_value_componentwise (value, gsk_sl_expression_negation_int, NULL);
+      break;
+    case GSK_SL_UINT:
+      gsk_sl_value_componentwise (value, gsk_sl_expression_negation_uint, NULL);
+      break;
+    case GSK_SL_FLOAT:
+      gsk_sl_value_componentwise (value, gsk_sl_expression_negation_float, NULL);
+      break;
+    case GSK_SL_DOUBLE:
+      gsk_sl_value_componentwise (value, gsk_sl_expression_negation_double, NULL);
+      break;
+    case GSK_SL_VOID:
+    case GSK_SL_BOOL:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  return value;
+}
+
+static guint32
+gsk_sl_expression_negation_write_spv (const GskSlExpression *expression,
+                                      GskSpvWriter          *writer)
+{
+  const GskSlExpressionNegation *negation = (const GskSlExpressionNegation *) expression;
+  guint type_id, expr_id, result_id;
+  GskSlType *type;
+
+  type = gsk_sl_expression_get_return_type (negation->expr);
+  type_id = gsk_spv_writer_get_id_for_type (writer, type);
+  expr_id = gsk_sl_expression_write_spv (negation->expr, writer);
+  result_id = gsk_spv_writer_next_id (writer);
+
+  switch (gsk_sl_type_get_scalar_type (type))
+    {
+    case GSK_SL_INT:
+    case GSK_SL_UINT:
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          4, GSK_SPV_OP_S_NEGATE,
+                          (guint32[3]) { type_id,
+                                         result_id,
+                                         expr_id });
+      break;
+    case GSK_SL_FLOAT:
+    case GSK_SL_DOUBLE:
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          4, GSK_SPV_OP_F_NEGATE,
+                          (guint32[3]) { type_id,
+                                         result_id,
+                                         expr_id });
+      break;
+    case GSK_SL_VOID:
+    case GSK_SL_BOOL:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  return result_id;
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_NEGATION = {
+  gsk_sl_expression_negation_free,
+  gsk_sl_expression_negation_print,
+  gsk_sl_expression_negation_get_return_type,
+  gsk_sl_expression_negation_get_constant,
+  gsk_sl_expression_negation_write_spv
+};
+
 /* CONSTANT */
 
 typedef struct _GskSlExpressionConstant GskSlExpressionConstant;
@@ -1071,6 +1207,8 @@ gsk_sl_expression_constant_free (GskSlExpression *expression)
   GskSlExpressionConstant *constant = (GskSlExpressionConstant *) expression;
 
   gsk_sl_value_free (constant->value);
+
+  g_slice_free (GskSlExpressionConstant, constant);
 }
 
 static void
@@ -1496,9 +1634,48 @@ gsk_sl_expression_parse_postfix (GskSlScope        *scope,
 
 static GskSlExpression *
 gsk_sl_expression_parse_unary (GskSlScope        *scope,
-                               GskSlPreprocessor *stream)
+                               GskSlPreprocessor *preproc)
 {
-  return gsk_sl_expression_parse_postfix (scope, stream);
+  const GskSlToken *token;
+  GskSlType *type;
+
+  token = gsk_sl_preprocessor_get (preproc);
+
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_DASH))
+    {
+      GskSlExpressionNegation *negation = gsk_sl_expression_new (GskSlExpressionNegation, &GSK_SL_EXPRESSION_NEGATION); 
+      GskSlExpression *expr;
+
+      gsk_sl_preprocessor_consume (preproc, negation);
+      negation->expr = gsk_sl_expression_parse_unary (scope, preproc);
+      type = gsk_sl_expression_get_return_type (negation->expr);
+      if (!gsk_sl_type_is_scalar (type) && !gsk_sl_type_is_vector (type) && !gsk_sl_type_is_matrix (type))
+        {
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                     "Negation only works on scalars, vectors and matrices, not on %s.",
+                                     gsk_sl_type_get_name (type));
+          expr = gsk_sl_expression_ref (negation->expr);
+          gsk_sl_expression_unref ((GskSlExpression *) negation);
+          return expr;
+        }
+      else if (gsk_sl_type_get_scalar_type (type) == GSK_SL_BOOL)
+        {
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                     "Negation does not work on boolean types like %s.",
+                                     gsk_sl_type_get_name (type));
+          expr = gsk_sl_expression_ref (negation->expr);
+          gsk_sl_expression_unref ((GskSlExpression *) negation);
+          return expr;
+        }
+      else
+        {
+          return (GskSlExpression *) negation;
+        }
+    }
+  else
+    {
+      return gsk_sl_expression_parse_postfix (scope, preproc);
+    }
 }
 
 static GskSlExpression *
