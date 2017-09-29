@@ -206,6 +206,37 @@ get_color_surface (const GdkRGBA *color)
   return surface;
 }
 
+static cairo_surface_t *
+get_linear_gradient_surface (gsize n_stops, GskColorStop *stops)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  cairo_pattern_t *pattern;
+  int i;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 90, 30);
+  cr = cairo_create (surface);
+
+  pattern = cairo_pattern_create_linear (0, 0, 90, 0);
+  for (i = 0; i < n_stops; i++)
+    {
+      cairo_pattern_add_color_stop_rgba (pattern,
+                                         stops[i].offset,
+                                         stops[i].color.red,
+                                         stops[i].color.green,
+                                         stops[i].color.blue,
+                                         stops[i].color.alpha);
+    }
+
+  cairo_set_source (cr, pattern);
+  cairo_pattern_destroy (pattern);
+  cairo_rectangle (cr, 0, 0, 90, 30);
+  cairo_fill (cr);
+  cairo_destroy (cr);
+
+  return surface;
+}
+
 static void
 populate_render_node_properties (GtkListStore  *store,
                                  GskRenderNode *node)
@@ -287,6 +318,47 @@ populate_render_node_properties (GtkListStore  *store,
                                            3, surface,
                                            -1);
         g_free (text);
+        cairo_surface_destroy (surface);
+      }
+      break;
+
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+      {
+        const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
+        const graphene_point_t *end = gsk_linear_gradient_node_peek_end (node);
+        const gsize n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
+        const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
+        char *text;
+        int i;
+        GString *s;
+        cairo_surface_t *surface;
+
+        text = g_strdup_printf ("%.2f %.2f ⟶ %.2f %.2f", start->x, start->y, end->x, end->y);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Direction",
+                                           1, text,
+                                           2, FALSE,
+                                           3, NULL,
+                                           -1);
+        g_free (text);
+
+        s = g_string_new ("");
+        for (i = 0; i < n_stops; i++)
+          {
+            char *tmp = gdk_rgba_to_string (&stops[i].color);
+            g_string_append_printf (s, "%.2f, %s\n", stops[i].offset, tmp);
+            g_free (tmp);
+          }
+
+        surface = get_linear_gradient_surface (n_stops, stops);
+        gtk_list_store_insert_with_values (store, NULL, -1,
+                                           0, "Color Stops",
+                                           1, s->str,
+                                           2, TRUE,
+                                           3, surface,
+                                           -1);
+        g_string_free (s, TRUE);
         cairo_surface_destroy (surface);
       }
       break;
