@@ -279,10 +279,14 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
                             GskRenderNode   *node)
 {
   GskVulkanRenderPass *pass;
+  graphene_matrix_t mv;
+
+  graphene_matrix_init_scale (&mv, self->scale_factor, self->scale_factor, 1.0);
 
   pass = gsk_vulkan_render_pass_new (self->vulkan,
                                      self->target,
                                      self->scale_factor,
+                                     &mv,
                                      &GRAPHENE_RECT_INIT (
                                          self->viewport.offset.x, self->viewport.offset.y,
                                          self->viewport.extent.width, self->viewport.extent.height
@@ -302,6 +306,7 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
 void
 gsk_vulkan_render_add_node_for_texture (GskVulkanRender       *self,
                                         GskRenderNode         *node,
+                                        const graphene_matrix_t *mv,
                                         const graphene_rect_t *bounds,
                                         GskVulkanImage        *target,
                                         VkSemaphore            semaphore)
@@ -318,6 +323,7 @@ gsk_vulkan_render_add_node_for_texture (GskVulkanRender       *self,
   pass = gsk_vulkan_render_pass_new (self->vulkan,
                                      target,
                                      1,
+                                     mv,
                                      bounds,
                                      clip,
                                      semaphore);

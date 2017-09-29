@@ -71,6 +71,7 @@ void                    gsk_vulkan_render_add_node                      (GskVulk
 
 void                    gsk_vulkan_render_add_node_for_texture          (GskVulkanRender        *self,
                                                                          GskRenderNode          *node,
+                                                                         const graphene_matrix_t *mv,
                                                                          const graphene_rect_t *bounds,
                                                                          GskVulkanImage        *target,
                                                                          VkSemaphore            semaphore);

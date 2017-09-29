@@ -114,7 +114,8 @@ struct _GskVulkanRenderPass
   int scale_factor;
   graphene_rect_t viewport;
   cairo_region_t *clip;
-  graphene_matrix_t mvp;
+  graphene_matrix_t mv;
+  graphene_matrix_t p;
 
   VkRenderPass render_pass;
   VkSemaphore signal_semaphore;
@@ -128,12 +129,12 @@ GskVulkanRenderPass *
 gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
                             GskVulkanImage    *target,
                             int                scale_factor,
+                            graphene_matrix_t *mv,
                             graphene_rect_t   *viewport,
                             cairo_region_t    *clip,
                             VkSemaphore        signal_semaphore)
 {
   GskVulkanRenderPass *self;
-  graphene_matrix_t modelview, projection;
   VkImageLayout final_layout;
 
   self = g_slice_new0 (GskVulkanRenderPass);
@@ -143,15 +144,14 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
   self->target = g_object_ref (target);
   self->scale_factor = scale_factor;
   self->clip = cairo_region_copy (clip);
-  self->viewport = GRAPHENE_RECT_INIT (0, 0, viewport->size.width, viewport->size.height);
+  self->viewport = *viewport;
 
-  graphene_matrix_init_scale (&modelview, self->scale_factor, self->scale_factor, 1.0);
-  graphene_matrix_init_ortho (&projection,
+  self->mv = *mv;
+  graphene_matrix_init_ortho (&self->p,
                               viewport->origin.x, viewport->origin.x + viewport->size.width,
                               viewport->origin.y, viewport->origin.y + viewport->size.height,
                               ORTHO_NEAR_PLANE,
                               ORTHO_FAR_PLANE);
-  graphene_matrix_multiply (&modelview, &projection, &self->mvp);
 
   if (signal_semaphore != VK_NULL_HANDLE) // this is a dependent pass
     final_layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
@@ -538,14 +538,17 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
     case GSK_TRANSFORM_NODE:
       {
         graphene_matrix_t transform;
+        graphene_matrix_t mv;
         GskRenderNode *child;
 
 #if 0
-        if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
+       if (!gsk_vulkan_clip_contains_rect (clip, &node->bounds))
           FALLBACK ("Transform nodes can't deal with clip type %u\n", clip->type);
 #endif
 
         gsk_transform_node_get_transform (node, &transform);
+        mv = self->mv;
+        graphene_matrix_multiply (&transform, &mv, &self->mv);
         child = gsk_transform_node_get_child (node);
         if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, &transform, &child->bounds))
           FALLBACK ("Transform nodes can't deal with clip type %u\n", constants->clip.type);
@@ -554,6 +557,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
         gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, child);
         gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
+        self->mv = mv;
         g_array_append_val (self->render_ops, op);
       }
       return;
@@ -629,9 +633,11 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
                             GskRenderNode           *node)
 {
   GskVulkanOp op = { 0, };
+  graphene_matrix_t mvp;
 
+  graphene_matrix_multiply (&self->mv, &self->p, &mvp);
   op.type = GSK_VULKAN_OP_PUSH_VERTEX_CONSTANTS;
-  gsk_vulkan_push_constants_init (&op.constants.constants, &self->mvp, &self->viewport);
+  gsk_vulkan_push_constants_init (&op.constants.constants, &mvp, &self->viewport);
   g_array_append_val (self->render_ops, op);
 
   gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, node);
@@ -666,10 +672,13 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
         default: ;
           {
             VkSemaphore semaphore;
+            graphene_rect_t view;
+
+            graphene_matrix_transform_bounds (&self->mv, bounds, &view);
 
             result = gsk_vulkan_image_new_for_texture (self->vulkan,
-                                                       ceil (bounds->size.width),
-                                                       ceil (bounds->size.height));
+                                                       ceil (view.size.width),
+                                                       ceil (view.size.height));
 
             vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
                                &(VkSemaphoreCreateInfo) {
@@ -681,7 +690,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
                                &semaphore);
 
             g_array_append_val (self->wait_semaphores, semaphore);
-            gsk_vulkan_render_add_node_for_texture (render, node, bounds, result, semaphore);
+            gsk_vulkan_render_add_node_for_texture (render, node, &self->mv, &view, result, semaphore);
             gsk_vulkan_render_add_cleanup_image (render, result);
 
             return result;
@@ -689,7 +698,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
         }
     }
 
-  GSK_NOTE (FALLBACK, g_print ("Node as texture not implemented. Using %gx%g fallback surface\n",
+  GSK_NOTE (FALLBACK, g_print ("Node as texture not implemented for this case. Using %gx%g fallback surface\n",
                                ceil (bounds->size.width),
                                ceil (bounds->size.height)));
 #ifdef G_ENABLE_DEBUG
