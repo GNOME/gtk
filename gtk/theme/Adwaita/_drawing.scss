@@ -55,6 +55,7 @@
   @if $t==focus {
     @include _shadows(entry_focus_shadow($fc), $_entry_edge);
     border-color: entry_focus_border($fc);
+    outline: none;
   }
   @if $t==insensitive {
     color: $insensitive_fg_color;
