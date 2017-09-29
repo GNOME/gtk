@@ -39,12 +39,11 @@ struct _GskSlFunctionClass {
 
   GskSlType *           (* get_return_type)                     (const GskSlFunction    *function);
   const char *          (* get_name)                            (const GskSlFunction    *function);
+  gsize                 (* get_n_arguments)                     (const GskSlFunction    *function);
+  GskSlType *           (* get_argument_type)                   (const GskSlFunction    *function,
+                                                                 gsize                   i);
   void                  (* print)                               (const GskSlFunction    *function,
                                                                  GString                *string);
-  gboolean              (* matches)                             (const GskSlFunction    *function,
-                                                                 GskSlType             **arguments,
-                                                                 gsize                   n_arguments,
-                                                                 GError                **error);
   guint32               (* write_spv)                           (const GskSlFunction    *function,
                                                                  GskSpvWriter           *writer);
 };
@@ -58,11 +57,16 @@ GskSlFunction *         gsk_sl_function_new_parse               (GskSlScope     
 GskSlFunction *         gsk_sl_function_ref                     (GskSlFunction          *function);
 void                    gsk_sl_function_unref                   (GskSlFunction          *function);
 
+gboolean                gsk_sl_function_is_builtin_constructor  (const GskSlFunction    *function);
+
 void                    gsk_sl_function_print                   (const GskSlFunction    *function,
                                                                  GString                *string);
 
 const char *            gsk_sl_function_get_name                (const GskSlFunction    *function);
 GskSlType *             gsk_sl_function_get_return_type         (const GskSlFunction    *function);
+gsize                   gsk_sl_function_get_n_arguments         (const GskSlFunction    *function);
+GskSlType *             gsk_sl_function_get_argument_type       (const GskSlFunction    *function,
+                                                                 gsize                   i);
 gboolean                gsk_sl_function_matches                 (const GskSlFunction    *function,
                                                                  GskSlType             **arguments,
                                                                  gsize                   n_arguments,

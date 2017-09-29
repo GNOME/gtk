@@ -1265,6 +1265,19 @@ gsk_sl_expression_error_new (void)
   return (GskSlExpression *) constant;
 }
 
+static gsize
+gsk_sl_constructor_get_args_by_type (const GskSlType *type)
+{
+  if (gsk_sl_type_is_scalar (type))
+    return 1;
+  else if (gsk_sl_type_is_vector (type))
+    return gsk_sl_type_get_length (type);
+  else if (gsk_sl_type_is_matrix (type))
+    return gsk_sl_type_get_length (type) * gsk_sl_constructor_get_args_by_type (gsk_sl_type_get_index_type (type));
+  else
+    return 0;
+}
+
 GskSlExpression *
 gsk_sl_expression_parse_function_call (GskSlScope        *scope,
                                        GskSlPreprocessor *stream,
@@ -1274,6 +1287,7 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
   const GskSlToken *token;
   GskSlType **types;
   GError *error = NULL;
+  gssize missing_args; /* only used for builtin constructors */
   guint i;
 
   call = gsk_sl_expression_new (GskSlExpressionFunctionCall, &GSK_SL_EXPRESSION_FUNCTION_CALL);
@@ -1287,6 +1301,11 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
     }
   gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
 
+  if (function && gsk_sl_function_is_builtin_constructor (function))
+    missing_args = gsk_sl_constructor_get_args_by_type (gsk_sl_function_get_return_type (function));
+  else
+    missing_args = -1;
+
   token = gsk_sl_preprocessor_get (stream);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
     {
@@ -1299,10 +1318,47 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
 
           g_ptr_array_add (arguments, expression);
           
+          if (function == NULL)
+            {
+              /* no checking necessary */
+            }
+          if (missing_args == 0)
+            {
+              gsk_sl_preprocessor_error (stream, ARGUMENT_COUNT,
+                                         "Too many arguments given to builtin constructor, only the first %u are necessary.",
+                                         arguments->len);
+              function = NULL;
+            }
+          else if (missing_args > 0)
+            {
+              GskSlType *type = gsk_sl_expression_get_return_type (expression);
+              gsize provided = gsk_sl_constructor_get_args_by_type (type);
+
+              if (provided == 0)
+                {
+                  gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                             "Invalid type %s for builtin constructor",
+                                             gsk_sl_type_get_name (type));
+                  function = NULL;
+                }
+              else
+                {
+                  missing_args -= MIN (missing_args, provided);
+                }
+            }
+
           token = gsk_sl_preprocessor_get (stream);
           if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
             break;
           gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
+        }
+
+      if (missing_args > 0)
+        {
+          gsk_sl_preprocessor_error (stream, ARGUMENT_COUNT,
+                                     "Not enough arguments given to builtin constructor, %"G_GSIZE_FORMAT" are missing.",
+                                     missing_args);
+          function = NULL;
         }
 
       call->n_arguments = arguments->len;
@@ -1312,7 +1368,7 @@ gsk_sl_expression_parse_function_call (GskSlScope        *scope,
   types = g_newa (GskSlType *, call->n_arguments);
   for (i = 0; i < call->n_arguments; i++)
     types[i] = gsk_sl_expression_get_return_type (call->arguments[i]);
-  if (function && !gsk_sl_function_matches (function, types, call->n_arguments, &error))
+  if (function && missing_args < 0 && !gsk_sl_function_matches (function, types, call->n_arguments, &error))
     {
       gsk_sl_preprocessor_emit_error (stream, TRUE, gsk_sl_preprocessor_get_location (stream), error);
       g_clear_error (&error);
