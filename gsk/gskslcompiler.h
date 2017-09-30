@@ -41,6 +41,7 @@ typedef enum {
 } GskSlCompilerError;
 
 typedef enum {
+  GSK_SL_COMPILER_WARNING_CONSTANT,
   GSK_SL_COMPILER_WARNING_SHADOW
 } GskSlCompilerWarning;
 

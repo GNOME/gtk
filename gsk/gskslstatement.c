@@ -273,6 +273,124 @@ static const GskSlStatementClass GSK_SL_STATEMENT_RETURN = {
   gsk_sl_statement_return_write_spv
 };
 
+/* IF */
+ 
+typedef struct _GskSlStatementIf GskSlStatementIf;
+
+struct _GskSlStatementIf {
+  GskSlStatement parent;
+
+  GskSlExpression *condition;
+  GskSlStatement *if_part;
+  GskSlScope *if_scope;
+  GskSlStatement *else_part;
+  GskSlScope *else_scope;
+};
+
+static void
+gsk_sl_statement_if_free (GskSlStatement *statement)
+{
+  GskSlStatementIf *if_stmt = (GskSlStatementIf *) statement;
+ 
+  gsk_sl_expression_unref (if_stmt->condition);
+  gsk_sl_scope_unref (if_stmt->if_scope);
+ 
+  if (if_stmt->else_part)
+    {
+      gsk_sl_statement_unref (if_stmt->else_part);
+      gsk_sl_scope_unref (if_stmt->else_scope);
+    }
+
+  g_slice_free (GskSlStatementIf, if_stmt);
+}
+ 
+static void
+gsk_sl_statement_if_print (const GskSlStatement *statement,
+                           GskSlPrinter         *printer)
+{
+  GskSlStatementIf *if_stmt = (GskSlStatementIf *) statement;
+
+  gsk_sl_printer_append (printer, "if (");
+  gsk_sl_expression_print (if_stmt->condition, printer);
+  gsk_sl_printer_append (printer, ")");
+  gsk_sl_printer_push_indentation (printer);
+  gsk_sl_printer_newline (printer);
+  gsk_sl_statement_print (if_stmt->if_part, printer);
+  gsk_sl_printer_pop_indentation (printer);
+
+  if (if_stmt->else_part)
+    {
+      gsk_sl_printer_newline (printer);
+      gsk_sl_printer_append (printer, "else");
+      gsk_sl_printer_push_indentation (printer);
+      gsk_sl_printer_newline (printer);
+      gsk_sl_statement_print (if_stmt->else_part, printer);
+      gsk_sl_printer_pop_indentation (printer);
+    }
+}
+ 
+static void
+gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
+                               GskSpvWriter         *writer)
+{
+  GskSlStatementIf *if_stmt = (GskSlStatementIf *) statement;
+  guint32 label_id, if_id, else_id, condition_id;
+
+  condition_id = gsk_sl_expression_write_spv (if_stmt->condition, writer);
+  if_id = gsk_spv_writer_next_id (writer);
+  else_id = gsk_spv_writer_next_id (writer);
+  /* We compute the labels in this funny order to match what glslang does */
+  if (if_stmt->else_part)
+    label_id = gsk_spv_writer_next_id (writer);
+  else
+    label_id = else_id;
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      3, GSK_SPV_OP_SELECTION_MERGE,
+                      (guint32[2]) { label_id,
+                                     0});
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      4, GSK_SPV_OP_BRANCH_CONDITIONAL,
+                      (guint32[3]) { condition_id,
+                                     if_id,
+                                     else_id });
+
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      2, GSK_SPV_OP_LABEL,
+                      (guint32[1]) { if_id });
+  gsk_sl_statement_write_spv (if_stmt->if_part, writer);
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      2, GSK_SPV_OP_BRANCH,
+                      (guint32[1]) { label_id });
+
+  if (if_stmt->else_part)
+    {
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          2, GSK_SPV_OP_LABEL,
+                          (guint32[1]) { else_id });
+      gsk_sl_statement_write_spv (if_stmt->else_part, writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          2, GSK_SPV_OP_BRANCH,
+                          (guint32[1]) { label_id });
+    }
+
+  gsk_spv_writer_add (writer,
+                      GSK_SPV_WRITER_SECTION_CODE,
+                      2, GSK_SPV_OP_LABEL,
+                      (guint32[1]) { label_id });
+}
+
+static const GskSlStatementClass GSK_SL_STATEMENT_IF = {
+  gsk_sl_statement_if_free,
+  gsk_sl_statement_if_print,
+  gsk_sl_statement_if_write_spv
+};
+
 /* EXPRESSION */
  
 typedef struct _GskSlStatementExpression GskSlStatementExpression;
@@ -381,6 +499,62 @@ gsk_sl_statement_parse_declaration (GskSlScope        *scope,
   return (GskSlStatement *) declaration;
 }
 
+static GskSlStatement *
+gsk_sl_statement_parse_if (GskSlScope        *scope,
+                           GskSlPreprocessor *preproc)
+{
+  GskSlStatementIf *if_stmt;
+  const GskSlToken *token;
+  GskSlValue *value;
+
+  if_stmt = gsk_sl_statement_new (GskSlStatementIf, &GSK_SL_STATEMENT_IF);
+
+  /* GSK_SL_TOKEN_IF */
+  gsk_sl_preprocessor_consume (preproc, if_stmt);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an opening \"(\"");
+      return (GskSlStatement *) if_stmt;
+    }
+  gsk_sl_preprocessor_consume (preproc, if_stmt);
+
+  if_stmt->condition = gsk_sl_expression_parse (scope, preproc);
+  if (!gsk_sl_type_equal (gsk_sl_expression_get_return_type (if_stmt->condition), gsk_sl_type_get_scalar (GSK_SL_BOOL)))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                 "Condition in if statment returns %s, not a bool",
+                                 gsk_sl_type_get_name (gsk_sl_expression_get_return_type (if_stmt->condition)));
+    }
+  value = gsk_sl_expression_get_constant (if_stmt->condition);
+  if (value)
+    {
+      gsk_sl_preprocessor_warn (preproc, CONSTANT,
+                                "Condition in if statement is always %s",
+                                *(guint32 *) gsk_sl_value_get_data (value) ? "true" : "false");
+      gsk_sl_value_free (value);
+    }
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+    gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a closing \")\" after statement");
+  else
+    gsk_sl_preprocessor_consume (preproc, if_stmt);
+
+  if_stmt->if_scope = gsk_sl_scope_new (scope, gsk_sl_scope_get_return_type (scope));
+  if_stmt->if_part = gsk_sl_statement_parse (if_stmt->if_scope, preproc);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_ELSE))
+    {
+      gsk_sl_preprocessor_consume (preproc, if_stmt);
+      if_stmt->else_scope = gsk_sl_scope_new (scope, gsk_sl_scope_get_return_type (scope));
+      if_stmt->else_part = gsk_sl_statement_parse (if_stmt->else_scope, preproc);
+    }
+
+  return (GskSlStatement *) if_stmt;
+}
+
 GskSlStatement *
 gsk_sl_statement_parse_compound (GskSlScope        *scope,
                                  GskSlPreprocessor *preproc,
@@ -446,6 +620,9 @@ gsk_sl_statement_parse (GskSlScope        *scope,
 
     case GSK_SL_TOKEN_LEFT_BRACE:
       return gsk_sl_statement_parse_compound (scope, preproc, TRUE);
+
+    case GSK_SL_TOKEN_IF:
+      return gsk_sl_statement_parse_if (scope, preproc);
 
     case GSK_SL_TOKEN_CONST:
     case GSK_SL_TOKEN_IN:
