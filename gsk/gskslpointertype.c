@@ -22,6 +22,7 @@
 
 #include "gskslexpressionprivate.h"
 #include "gskslpreprocessorprivate.h"
+#include "gskslprinterprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
@@ -372,16 +373,16 @@ gsk_sl_pointer_type_unref (GskSlPointerType *type)
 
 void
 gsk_sl_pointer_type_print (const GskSlPointerType *type,
-                           GString                *string)
+                           GskSlPrinter           *printer)
 {
   if (type->access == GSK_SL_DECORATION_ACCESS_READWRITE)
-    g_string_append (string, "inout ");
+    gsk_sl_printer_append (printer, "inout ");
   else if (type->access == GSK_SL_DECORATION_ACCESS_READ)
-    g_string_append (string, "in ");
+    gsk_sl_printer_append (printer, "in ");
   else if (type->access == GSK_SL_DECORATION_ACCESS_WRITE)
-    g_string_append (string, "out ");
+    gsk_sl_printer_append (printer, "out ");
 
-  g_string_append (string, gsk_sl_type_get_name (type->type));
+  gsk_sl_printer_append (printer, gsk_sl_type_get_name (type->type));
 }
 
 GskSlType *

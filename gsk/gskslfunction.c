@@ -23,6 +23,7 @@
 #include "gskslnodeprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
+#include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
@@ -44,7 +45,7 @@ gsk_sl_function_alloc (const GskSlFunctionClass *klass,
 }
 #define gsk_sl_function_new(_name, _klass) ((_name *) gsk_sl_function_alloc ((_klass), sizeof (_name)))
 
-/* BUILTIN CONSTRUCTOR */
+/* CONSTRUCTOR */
 
 typedef struct _GskSlFunctionBuiltinConstructor GskSlFunctionBuiltinConstructor;
 
@@ -95,7 +96,7 @@ gsk_sl_function_builtin_constructor_get_argument_type (const GskSlFunction *func
 
 static void
 gsk_sl_function_builtin_constructor_print (const GskSlFunction *function,
-                                           GString             *string)
+                                           GskSlPrinter        *printer)
 {
 }
 
@@ -171,7 +172,7 @@ gsk_sl_function_constructor_get_argument_type (const GskSlFunction *function,
 
 static void
 gsk_sl_function_constructor_print (const GskSlFunction *function,
-                                   GString             *string)
+                                   GskSlPrinter        *printer)
 {
 }
 
@@ -260,33 +261,38 @@ gsk_sl_function_declared_get_argument_type (const GskSlFunction *function,
 }
 static void
 gsk_sl_function_declared_print (const GskSlFunction *function,
-                                GString             *string)
+                                GskSlPrinter        *printer)
 {
   const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
   GSList *l;
   guint i;
 
-  g_string_append (string, gsk_sl_type_get_name (declared->return_type));
-  g_string_append (string, "\n");
+  gsk_sl_printer_append (printer, gsk_sl_type_get_name (declared->return_type));
+  gsk_sl_printer_newline (printer);
 
-  g_string_append (string, declared->name);
-  g_string_append (string, " (");
+  gsk_sl_printer_append (printer, declared->name);
+  gsk_sl_printer_append (printer, " (");
   for (i = 0; i < declared->n_arguments; i++)
     {
       if (i > 0)
-        g_string_append (string, ", ");
-      gsk_sl_variable_print (declared->arguments[i], string);
+        gsk_sl_printer_append (printer, ", ");
+      gsk_sl_variable_print (declared->arguments[i], printer);
     }
-  g_string_append (string, ")\n");
+  gsk_sl_printer_append (printer, ")");
+  gsk_sl_printer_newline (printer);
 
-  g_string_append (string, "{\n");
+  gsk_sl_printer_append (printer, "{");
+  gsk_sl_printer_push_indentation (printer);
   for (l = declared->statements; l; l = l->next)
     {
-      g_string_append (string, "  ");
-      gsk_sl_node_print (l->data, string);
-      g_string_append (string, ";\n");
+      gsk_sl_printer_newline (printer);
+      gsk_sl_node_print (l->data, printer);
+      gsk_sl_printer_append (printer, ";");
     }
-  g_string_append (string, "}\n");
+  gsk_sl_printer_pop_indentation (printer);
+  gsk_sl_printer_newline (printer);
+  gsk_sl_printer_append (printer, "}");
+  gsk_sl_printer_newline (printer);
 }
 
 static guint32
@@ -563,9 +569,9 @@ gsk_sl_function_get_argument_type (const GskSlFunction *function,
 
 void
 gsk_sl_function_print (const GskSlFunction *function,
-                       GString             *string)
+                       GskSlPrinter        *printer)
 {
-  function->class->print (function, string);
+  function->class->print (function, printer);
 }
 
 guint32

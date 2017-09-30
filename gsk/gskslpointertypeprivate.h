@@ -70,7 +70,7 @@ GskSlPointerType *      gsk_sl_pointer_type_ref                         (GskSlPo
 void                    gsk_sl_pointer_type_unref                       (GskSlPointerType           *type);
 
 void                    gsk_sl_pointer_type_print                       (const GskSlPointerType     *type,
-                                                                         GString                    *string);
+                                                                         GskSlPrinter               *printer);
 
 GskSlType *             gsk_sl_pointer_type_get_type                    (const GskSlPointerType     *type);
 

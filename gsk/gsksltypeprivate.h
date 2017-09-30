@@ -25,15 +25,6 @@
 
 G_BEGIN_DECLS
 
-typedef enum {
-  GSK_SL_VOID,
-  GSK_SL_FLOAT,
-  GSK_SL_DOUBLE,
-  GSK_SL_INT,
-  GSK_SL_UINT,
-  GSK_SL_BOOL
-} GskSlScalarType;
-
 typedef struct _GskSlTypeBuilder GskSlTypeBuilder;
 
 GskSlType *             gsk_sl_type_new_parse                   (GskSlScope          *scope,
@@ -44,6 +35,7 @@ GskSlType *             gsk_sl_type_get_vector                  (GskSlScalarType
 GskSlType *             gsk_sl_type_get_matrix                  (GskSlScalarType      scalar,
                                                                  guint                columns,
                                                                  guint                rows);
+GskSlType *             gsk_sl_type_get_builtin                 (GskSlBuiltinType     builtin);
 
 GskSlType *             gsk_sl_type_ref                         (GskSlType           *type);
 void                    gsk_sl_type_unref                       (GskSlType           *type);
@@ -84,7 +76,7 @@ guint32                 gsk_sl_type_write_spv                   (GskSlType      
                                                                  GskSpvWriter        *writer);
 
 void                    gsk_sl_type_print_value                 (const GskSlType     *type,
-                                                                 GString             *string,
+                                                                 GskSlPrinter        *printer,
                                                                  gconstpointer        value);
 guint32                 gsk_sl_type_write_value_spv             (GskSlType           *type,
                                                                  GskSpvWriter        *writer,

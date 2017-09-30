@@ -22,6 +22,7 @@
 
 #include "gskslfunctionprivate.h"
 #include "gskslpreprocessorprivate.h"
+#include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gskslvalueprivate.h"
@@ -64,7 +65,7 @@ struct _GskSlTypeClass {
   guint32               (* write_spv)                           (GskSlType           *type,
                                                                  GskSpvWriter        *writer);
   void                  (* print_value)                         (const GskSlType     *type,
-                                                                 GString             *string,
+                                                                 GskSlPrinter        *printer,
                                                                  gconstpointer        value);
   guint32               (* write_value_spv)                     (GskSlType           *type,
                                                                  GskSpvWriter        *writer,
@@ -72,7 +73,7 @@ struct _GskSlTypeClass {
 };
 
 static void
-print_void (GString       *string,
+print_void (GskSlPrinter  *printer,
             gconstpointer  value)
 {
   g_assert_not_reached ();
@@ -86,16 +87,12 @@ write_void_spv (GskSpvWriter  *writer,
 }
 
 static void
-print_float (GString       *string,
+print_float (GskSlPrinter  *printer,
              gconstpointer  value)
 {
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
   const gfloat *f = value;
       
-  g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, *f);
-  g_string_append (string, buf);
-  if (strchr (buf, '.') == NULL)
-    g_string_append (string, ".0");
+  gsk_sl_printer_append_double (printer, *f, TRUE);
 }
 
 static guint32
@@ -117,17 +114,13 @@ write_float_spv (GskSpvWriter  *writer,
 }
 
 static void
-print_double (GString       *string,
+print_double (GskSlPrinter  *printer,
               gconstpointer  value)
 {
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
   const gdouble *d = value;
       
-  g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, *d);
-  g_string_append (string, buf);
-  if (strchr (buf, '.') == NULL)
-    g_string_append (string, ".0");
-  g_string_append (string, "lf");
+  gsk_sl_printer_append_double (printer, *d, TRUE);
+  gsk_sl_printer_append (printer, "lf");
 }
 
 static guint32
@@ -150,12 +143,12 @@ write_double_spv (GskSpvWriter  *writer,
 }
 
 static void
-print_int (GString       *string,
+print_int (GskSlPrinter  *printer,
            gconstpointer  value)
 {
   const gint32 *i = value;
 
-  g_string_append_printf (string, "%i", (gint) *i);
+  gsk_sl_printer_append_int (printer, *i);
 }
 
 static guint32
@@ -177,12 +170,13 @@ write_int_spv (GskSpvWriter  *writer,
 }
 
 static void
-print_uint (GString       *string,
+print_uint (GskSlPrinter  *printer,
             gconstpointer  value)
 {
   const guint32 *u = value;
   
-  g_string_append_printf (string, "%uu", (guint) *u);
+  gsk_sl_printer_append_uint (printer, *u);
+  gsk_sl_printer_append_c (printer, 'u');
 }
 
 static guint32
@@ -204,12 +198,12 @@ write_uint_spv (GskSpvWriter  *writer,
 }
 
 static void
-print_bool (GString       *string,
+print_bool (GskSlPrinter  *printer,
             gconstpointer  value)
 {
   const guint32 *u = value;
   
-  g_string_append_printf (string, *u ? "true" : "false");
+  gsk_sl_printer_append (printer, *u ? "true" : "false");
 }
 
 static guint32
@@ -310,7 +304,7 @@ bool_to_bool (gpointer target, gconstpointer source)
 struct {
   const char *name;
   gsize size;
-  void (* print_value) (GString *string, gconstpointer value);
+  void (* print_value) (GskSlPrinter *printer, gconstpointer value);
   void (* convert_value[N_SCALAR_TYPES]) (gpointer target, gconstpointer source);
   guint32 (* write_value_spv) (GskSpvWriter *writer, gconstpointer value);
 } scalar_infos[] = {
@@ -496,12 +490,12 @@ gsk_sl_type_scalar_write_spv (GskSlType    *type,
 
 static void
 gsk_sl_type_scalar_print_value (const GskSlType *type,
-                                GString         *string,
+                                GskSlPrinter    *printer,
                                 gconstpointer    value)
 {
   const GskSlTypeScalar *scalar = (const GskSlTypeScalar *) type;
 
-  scalar_infos[scalar->scalar].print_value (string, value);
+  scalar_infos[scalar->scalar].print_value (printer, value);
 }
 
 static guint32
@@ -646,7 +640,7 @@ gsk_sl_type_vector_write_spv (GskSlType    *type,
 
 static void
 gsk_sl_type_vector_print_value (const GskSlType *type,
-                                GString         *string,
+                                GskSlPrinter    *printer,
                                 gconstpointer    value)
 {
   const GskSlTypeVector *vector = (const GskSlTypeVector *) type;
@@ -655,17 +649,17 @@ gsk_sl_type_vector_print_value (const GskSlType *type,
 
   data = value;
 
-  g_string_append (string, vector->name);
-  g_string_append (string, "(");
+  gsk_sl_printer_append (printer, vector->name);
+  gsk_sl_printer_append (printer, "(");
   for (i = 0; i < vector->length; i++)
     {
       if (i > 0)
-        g_string_append (string, ", ");
-      scalar_infos[vector->scalar].print_value (string, data);
+        gsk_sl_printer_append (printer, ", ");
+      scalar_infos[vector->scalar].print_value (printer, data);
       data += scalar_infos[vector->scalar].size;
     }
 
-  g_string_append (string, ")");
+  gsk_sl_printer_append (printer, ")");
 }
 
 static guint32
@@ -836,7 +830,7 @@ gsk_sl_type_matrix_write_spv (GskSlType    *type,
 
 static void
 gsk_sl_type_matrix_print_value (const GskSlType *type,
-                                GString         *string,
+                                GskSlPrinter    *printer,
                                 gconstpointer    value)
 {
   const GskSlTypeMatrix *matrix = (const GskSlTypeMatrix *) type;
@@ -845,17 +839,17 @@ gsk_sl_type_matrix_print_value (const GskSlType *type,
 
   data = value;
 
-  g_string_append (string, matrix->name);
-  g_string_append (string, "(");
+  gsk_sl_printer_append (printer, matrix->name);
+  gsk_sl_printer_append (printer, "(");
   for (i = 0; i < matrix->rows * matrix->columns; i++)
     {
       if (i > 0)
-        g_string_append (string, ", ");
-      scalar_infos[matrix->scalar].print_value (string, data);
+        gsk_sl_printer_append (printer, ", ");
+      scalar_infos[matrix->scalar].print_value (printer, data);
       data += scalar_infos[matrix->scalar].size;
     }
 
-  g_string_append (string, ")");
+  gsk_sl_printer_append (printer, ")");
 }
 
 static guint32
@@ -1029,25 +1023,25 @@ gsk_sl_type_struct_write_spv (GskSlType    *type,
 
 static void
 gsk_sl_type_struct_print_value (const GskSlType *type,
-                                GString         *string,
+                                GskSlPrinter    *printer,
                                 gconstpointer    value)
 {
   const GskSlTypeStruct *struc = (const GskSlTypeStruct *) type;
   guint i;
 
-  g_string_append (string, struc->name);
-  g_string_append (string, "(");
+  gsk_sl_printer_append (printer, struc->name);
+  gsk_sl_printer_append (printer, "(");
 
   for (i = 0; i < struc->n_members; i++)
     {
       if (i > 0)
-        g_string_append (string, ", ");
+        gsk_sl_printer_append (printer, ", ");
       gsk_sl_type_print_value (struc->members[i].type,
-                               string,
+                               printer,
                                (guchar *) value + struc->members[i].offset);
     }
 
-  g_string_append (string, ")");
+  gsk_sl_printer_append (printer, ")");
 }
 
 static guint32
@@ -1196,6 +1190,95 @@ out:
         }
     }
   return type;
+}
+
+GskSlType *
+gsk_sl_type_get_builtin (GskSlBuiltinType builtin)
+{
+  switch (builtin)
+    {
+    case GSK_SL_BUILTIN_VOID:
+      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_VOID));
+    case GSK_SL_BUILTIN_FLOAT:
+      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_FLOAT));
+    case GSK_SL_BUILTIN_DOUBLE:
+      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_DOUBLE));
+    case GSK_SL_BUILTIN_INT:
+      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_INT));
+    case GSK_SL_BUILTIN_UINT:
+      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_UINT));
+    case GSK_SL_BUILTIN_BOOL:
+      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_BOOL));
+    case GSK_SL_BUILTIN_BVEC2:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_BOOL, 2));
+    case GSK_SL_BUILTIN_BVEC3:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_BOOL, 3));
+    case GSK_SL_BUILTIN_BVEC4:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_BOOL, 4));
+    case GSK_SL_BUILTIN_IVEC2:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_INT, 2));
+    case GSK_SL_BUILTIN_IVEC3:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_INT, 3));
+    case GSK_SL_BUILTIN_IVEC4:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_INT, 4));
+    case GSK_SL_BUILTIN_UVEC2:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_UINT, 2));
+    case GSK_SL_BUILTIN_UVEC3:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_UINT, 3));
+    case GSK_SL_BUILTIN_UVEC4:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_UINT, 4));
+    case GSK_SL_BUILTIN_VEC2:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_FLOAT, 2));
+    case GSK_SL_BUILTIN_VEC3:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_FLOAT, 3));
+    case GSK_SL_BUILTIN_VEC4:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_FLOAT, 4));
+    case GSK_SL_BUILTIN_DVEC2:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_DOUBLE, 2));
+    case GSK_SL_BUILTIN_DVEC3:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_DOUBLE, 3));
+    case GSK_SL_BUILTIN_DVEC4:
+      return gsk_sl_type_ref (gsk_sl_type_get_vector (GSK_SL_DOUBLE, 4));
+    case GSK_SL_BUILTIN_MAT2:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 2, 2));
+    case GSK_SL_BUILTIN_MAT2X3:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 2, 3));
+    case GSK_SL_BUILTIN_MAT2X4:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 2, 4));
+    case GSK_SL_BUILTIN_MAT3X2:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 3, 2));
+    case GSK_SL_BUILTIN_MAT3:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 3, 3));
+    case GSK_SL_BUILTIN_MAT3X4:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 3, 4));
+    case GSK_SL_BUILTIN_MAT4X2:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 4, 2));
+    case GSK_SL_BUILTIN_MAT4X3:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 4, 3));
+    case GSK_SL_BUILTIN_MAT4:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_FLOAT, 4, 4));
+    case GSK_SL_BUILTIN_DMAT2:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 2, 2));
+    case GSK_SL_BUILTIN_DMAT2X3:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 2, 3));
+    case GSK_SL_BUILTIN_DMAT2X4:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 2, 4));
+    case GSK_SL_BUILTIN_DMAT3X2:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 3, 2));
+    case GSK_SL_BUILTIN_DMAT3:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 3, 3));
+    case GSK_SL_BUILTIN_DMAT3X4:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 3, 4));
+    case GSK_SL_BUILTIN_DMAT4X2:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 4, 2));
+    case GSK_SL_BUILTIN_DMAT4X3:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 4, 3));
+    case GSK_SL_BUILTIN_DMAT4:
+      return gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 4, 4));
+    default:
+      g_assert_not_reached ();
+      return gsk_sl_type_get_scalar (GSK_SL_VOID);
+    }
 }
 
 GskSlType *
@@ -1689,10 +1772,10 @@ gsk_sl_type_write_spv (GskSlType    *type,
 
 void
 gsk_sl_type_print_value (const GskSlType *type,
-                         GString         *string,
+                         GskSlPrinter    *printer,
                          gconstpointer    value)
 {
-  type->class->print_value (type, string, value);
+  type->class->print_value (type, printer, value);
 }
 
 guint32

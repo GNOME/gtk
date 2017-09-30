@@ -215,9 +215,9 @@ gsk_sl_value_componentwise (GskSlValue    *value,
 
 void
 gsk_sl_value_print (const GskSlValue *value,
-                    GString          *string)
+                    GskSlPrinter     *printer)
 {
-  gsk_sl_type_print_value (value->type, string, value->data);
+  gsk_sl_type_print_value (value->type, printer, value->data);
 }
 
 GskSlType *

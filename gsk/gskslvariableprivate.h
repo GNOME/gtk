@@ -34,7 +34,7 @@ GskSlVariable *         gsk_sl_variable_ref                     (GskSlVariable  
 void                    gsk_sl_variable_unref                   (GskSlVariable          *variable);
 
 void                    gsk_sl_variable_print                   (const GskSlVariable    *variable,
-                                                                 GString                *string);
+                                                                 GskSlPrinter           *printer);
 
 GskSlPointerType *      gsk_sl_variable_get_type                (const GskSlVariable    *variable);
 const char *            gsk_sl_variable_get_name                (const GskSlVariable    *variable);

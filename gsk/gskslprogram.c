@@ -25,6 +25,7 @@
 #include "gskslnodeprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
+#include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
@@ -219,30 +220,41 @@ void
 gsk_sl_program_print (GskSlProgram *program,
                       GString      *string)
 {
+  GskSlPrinter *printer;
   GSList *l;
+  char *str;
 
   g_return_if_fail (GSK_IS_SL_PROGRAM (program));
   g_return_if_fail (string != NULL);
 
+  printer = gsk_sl_printer_new ();
+
   for (l = program->variables; l; l = l->next)
     {
       const GskSlValue *value;
-      gsk_sl_variable_print (l->data, string);
+      gsk_sl_variable_print (l->data, printer);
       value = gsk_sl_variable_get_initial_value (l->data);
       if (value)
         {
-          g_string_append (string, " = ");
-          gsk_sl_value_print (value, string);
+          gsk_sl_printer_append (printer, " = ");
+          gsk_sl_value_print (value, printer);
         }
-      g_string_append (string, ";\n");
+      gsk_sl_printer_append (printer, ";");
+      gsk_sl_printer_newline (printer);
     }
 
   for (l = program->functions; l; l = l->next)
     {
       if (l != program->functions || program->variables != NULL)
-        g_string_append (string, "\n");
-      gsk_sl_function_print (l->data, string);
+        gsk_sl_printer_newline (printer);
+      gsk_sl_function_print (l->data, printer);
     }
+
+  str = gsk_sl_printer_write_to_string (printer);
+  g_string_append (string, str);
+  g_free (str);
+
+  gsk_sl_printer_unref (printer);
 }
 
 static void

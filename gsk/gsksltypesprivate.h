@@ -24,9 +24,11 @@
 typedef struct _GskSlExpression         GskSlExpression;
 typedef struct _GskSlFunction           GskSlFunction;
 typedef struct _GskSlFunctionMatcher    GskSlFunctionMatcher;
+typedef struct _GskSlNativeFunction     GskSlNativeFunction;
 typedef struct _GskSlNode               GskSlNode;
 typedef struct _GskSlPreprocessor       GskSlPreprocessor;
 typedef struct _GskSlPointerType        GskSlPointerType;
+typedef struct _GskSlPrinter            GskSlPrinter;
 typedef struct _GskSlScope              GskSlScope;
 typedef struct _GskSlToken              GskSlToken;
 typedef struct _GskSlType               GskSlType;
@@ -34,5 +36,56 @@ typedef struct _GskSlValue              GskSlValue;
 typedef struct _GskSlVariable           GskSlVariable;
 
 typedef struct _GskSpvWriter            GskSpvWriter;
+
+typedef enum {
+  GSK_SL_VOID,
+  GSK_SL_FLOAT,
+  GSK_SL_DOUBLE,
+  GSK_SL_INT,
+  GSK_SL_UINT,
+  GSK_SL_BOOL
+} GskSlScalarType;
+
+typedef enum {
+  GSK_SL_BUILTIN_VOID,
+  GSK_SL_BUILTIN_FLOAT,
+  GSK_SL_BUILTIN_DOUBLE,
+  GSK_SL_BUILTIN_INT,
+  GSK_SL_BUILTIN_UINT,
+  GSK_SL_BUILTIN_BOOL,
+  GSK_SL_BUILTIN_BVEC2,
+  GSK_SL_BUILTIN_BVEC3,
+  GSK_SL_BUILTIN_BVEC4,
+  GSK_SL_BUILTIN_IVEC2,
+  GSK_SL_BUILTIN_IVEC3,
+  GSK_SL_BUILTIN_IVEC4,
+  GSK_SL_BUILTIN_UVEC2,
+  GSK_SL_BUILTIN_UVEC3,
+  GSK_SL_BUILTIN_UVEC4,
+  GSK_SL_BUILTIN_VEC2,
+  GSK_SL_BUILTIN_VEC3,
+  GSK_SL_BUILTIN_VEC4,
+  GSK_SL_BUILTIN_DVEC2,
+  GSK_SL_BUILTIN_DVEC3,
+  GSK_SL_BUILTIN_DVEC4,
+  GSK_SL_BUILTIN_MAT2,
+  GSK_SL_BUILTIN_MAT2X3,
+  GSK_SL_BUILTIN_MAT2X4,
+  GSK_SL_BUILTIN_MAT3X2,
+  GSK_SL_BUILTIN_MAT3,
+  GSK_SL_BUILTIN_MAT3X4,
+  GSK_SL_BUILTIN_MAT4X2,
+  GSK_SL_BUILTIN_MAT4X3,
+  GSK_SL_BUILTIN_MAT4,
+  GSK_SL_BUILTIN_DMAT2,
+  GSK_SL_BUILTIN_DMAT2X3,
+  GSK_SL_BUILTIN_DMAT2X4,
+  GSK_SL_BUILTIN_DMAT3X2,
+  GSK_SL_BUILTIN_DMAT3,
+  GSK_SL_BUILTIN_DMAT3X4,
+  GSK_SL_BUILTIN_DMAT4X2,
+  GSK_SL_BUILTIN_DMAT4X3,
+  GSK_SL_BUILTIN_DMAT4
+} GskSlBuiltinType;
 
 #endif /* __GSK_SL_TYPES_H__ */

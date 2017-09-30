@@ -35,8 +35,8 @@ struct _GskSlNode {
 struct _GskSlNodeClass {
   void                  (* free)                                (GskSlNode           *node);
 
-  void                  (* print)                               (GskSlNode           *node,
-                                                                 GString             *string);
+  void                  (* print)                               (const GskSlNode     *node,
+                                                                 GskSlPrinter        *printer);
   guint32               (* write_spv)                           (const GskSlNode     *node,
                                                                  GskSpvWriter        *writer);
 };
@@ -47,8 +47,8 @@ GskSlNode *             gsk_sl_node_parse_statement             (GskSlScope     
 GskSlNode *             gsk_sl_node_ref                         (GskSlNode           *node);
 void                    gsk_sl_node_unref                       (GskSlNode           *node);
 
-void                    gsk_sl_node_print                       (GskSlNode           *node,
-                                                                 GString             *string);
+void                    gsk_sl_node_print                       (const GskSlNode     *node,
+                                                                 GskSlPrinter        *printer);
 
 guint32                 gsk_sl_node_write_spv                   (const GskSlNode     *node,
                                                                  GskSpvWriter        *writer);

@@ -38,7 +38,7 @@ GskSlExpression *       gsk_sl_expression_ref                   (GskSlExpression
 void                    gsk_sl_expression_unref                 (GskSlExpression        *expression);
 
 void                    gsk_sl_expression_print                 (const GskSlExpression  *expression,
-                                                                 GString                *string);
+                                                                 GskSlPrinter           *printer);
 GskSlType *             gsk_sl_expression_get_return_type       (const GskSlExpression  *expression);
 GskSlValue *            gsk_sl_expression_get_constant          (const GskSlExpression  *expression);
 

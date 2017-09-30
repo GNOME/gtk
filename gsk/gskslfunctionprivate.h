@@ -43,7 +43,7 @@ struct _GskSlFunctionClass {
   GskSlType *           (* get_argument_type)                   (const GskSlFunction    *function,
                                                                  gsize                   i);
   void                  (* print)                               (const GskSlFunction    *function,
-                                                                 GString                *string);
+                                                                 GskSlPrinter           *printer);
   guint32               (* write_spv)                           (const GskSlFunction    *function,
                                                                  GskSpvWriter           *writer);
 };
@@ -60,7 +60,7 @@ void                    gsk_sl_function_unref                   (GskSlFunction  
 gboolean                gsk_sl_function_is_builtin_constructor  (const GskSlFunction    *function);
 
 void                    gsk_sl_function_print                   (const GskSlFunction    *function,
-                                                                 GString                *string);
+                                                                 GskSlPrinter           *printer);
 
 const char *            gsk_sl_function_get_name                (const GskSlFunction    *function);
 GskSlType *             gsk_sl_function_get_return_type         (const GskSlFunction    *function);

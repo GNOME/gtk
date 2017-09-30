@@ -39,7 +39,7 @@ void                    gsk_sl_value_componentwise              (GskSlValue     
                                                                  void (* func)       (gpointer, gpointer),
                                                                  gpointer             user_data);
 void                    gsk_sl_value_print                      (const GskSlValue    *value,
-                                                                 GString             *string);
+                                                                 GskSlPrinter        *printer);
 
 GskSlType *             gsk_sl_value_get_type                   (const GskSlValue    *value);
 gpointer                gsk_sl_value_get_data                   (const GskSlValue    *value);

@@ -21,6 +21,7 @@
 #include "gskslvariableprivate.h"
 
 #include "gskslpointertypeprivate.h"
+#include "gskslprinterprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
 #include "gskspvwriterprivate.h"
@@ -84,15 +85,15 @@ gsk_sl_variable_unref (GskSlVariable *variable)
 
 void
 gsk_sl_variable_print (const GskSlVariable *variable,
-                       GString             *string)
+                       GskSlPrinter        *printer)
 {
   if (variable->constant)
-    g_string_append (string, "const ");
-  gsk_sl_pointer_type_print (variable->type, string);
+    gsk_sl_printer_append (printer, "const ");
+  gsk_sl_pointer_type_print (variable->type, printer);
   if (variable->name)
     {
-      g_string_append (string, " ");
-      g_string_append (string, variable->name);
+      gsk_sl_printer_append (printer, " ");
+      gsk_sl_printer_append (printer, variable->name);
     }
 }
 

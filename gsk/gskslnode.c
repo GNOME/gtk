@@ -24,6 +24,7 @@
 #include "gskslfunctionprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
+#include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
@@ -68,8 +69,8 @@ gsk_sl_node_empty_free (GskSlNode *node)
 }
 
 static void
-gsk_sl_node_empty_print (GskSlNode *node,
-                         GString   *string)
+gsk_sl_node_empty_print (const GskSlNode *node,
+                         GskSlPrinter    *printer)
 {
 }
 
@@ -110,16 +111,16 @@ gsk_sl_node_declaration_free (GskSlNode *node)
 }
 
 static void
-gsk_sl_node_declaration_print (GskSlNode *node,
-                               GString   *string)
+gsk_sl_node_declaration_print (const GskSlNode *node,
+                               GskSlPrinter    *printer)
 {
   GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
 
-  gsk_sl_variable_print (declaration->variable, string);
+  gsk_sl_variable_print (declaration->variable, printer);
   if (declaration->initial)
     {
-      g_string_append (string, " = ");
-      gsk_sl_expression_print (declaration->initial, string);
+      gsk_sl_printer_append (printer, " = ");
+      gsk_sl_expression_print (declaration->initial, printer);
     }
 }
 
@@ -172,16 +173,16 @@ gsk_sl_node_return_free (GskSlNode *node)
 }
 
 static void
-gsk_sl_node_return_print (GskSlNode *node,
-                          GString   *string)
+gsk_sl_node_return_print (const GskSlNode *node,
+                          GskSlPrinter    *printer)
 {
   GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
 
-  g_string_append (string, "return");
+  gsk_sl_printer_append (printer, "return");
   if (return_node->value)
     {
-      g_string_append (string, " ");
-      gsk_sl_expression_print (return_node->value, string);
+      gsk_sl_printer_append (printer, " ");
+      gsk_sl_expression_print (return_node->value, printer);
     }
 }
 
@@ -221,12 +222,12 @@ gsk_sl_node_expression_free (GskSlNode *node)
 }
  
 static void
-gsk_sl_node_expression_print (GskSlNode *node,
-                              GString   *string)
+gsk_sl_node_expression_print (const GskSlNode *node,
+                              GskSlPrinter    *printer)
 {
   GskSlNodeExpression *expression_node = (GskSlNodeExpression *) node;
 
-  gsk_sl_expression_print (expression_node->expression, string);
+  gsk_sl_expression_print (expression_node->expression, printer);
 }
  
 static guint32
@@ -520,10 +521,10 @@ gsk_sl_node_unref (GskSlNode *node)
 }
 
 void
-gsk_sl_node_print (GskSlNode *node,
-                   GString   *string)
+gsk_sl_node_print (const GskSlNode *node,
+                   GskSlPrinter    *printer)
 {
-  node->class->print (node, string);
+  node->class->print (node, printer);
 }
 
 guint32

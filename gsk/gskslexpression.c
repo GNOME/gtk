@@ -24,6 +24,7 @@
 #include "gskslfunctionprivate.h"
 #include "gskslnodeprivate.h"
 #include "gskslpointertypeprivate.h"
+#include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
@@ -44,7 +45,7 @@ struct _GskSlExpressionClass {
   void                  (* free)                                (GskSlExpression        *expression);
 
   void                  (* print)                               (const GskSlExpression  *expression,
-                                                                 GString                *string);
+                                                                 GskSlPrinter           *printer);
   GskSlType *           (* get_return_type)                     (const GskSlExpression  *expression);
   GskSlValue *          (* get_constant)                        (const GskSlExpression  *expression);
   guint32               (* write_spv)                           (const GskSlExpression  *expression,
@@ -92,52 +93,52 @@ gsk_sl_expression_assignment_free (GskSlExpression *expression)
 
 static void
 gsk_sl_expression_assignment_print (const GskSlExpression *expression,
-                                    GString               *string)
+                                    GskSlPrinter          *printer)
 {
   const GskSlExpressionAssignment *assignment = (const GskSlExpressionAssignment *) expression;
 
-  gsk_sl_expression_print (assignment->lvalue, string);
+  gsk_sl_expression_print (assignment->lvalue, printer);
 
   switch ((guint) assignment->op)
   {
     case GSK_SL_TOKEN_EQUAL:
-      g_string_append (string, " = ");
+      gsk_sl_printer_append (printer, " = ");
       break;
     case GSK_SL_TOKEN_MUL_ASSIGN:
-      g_string_append (string, " *= ");
+      gsk_sl_printer_append (printer, " *= ");
       break;
     case GSK_SL_TOKEN_DIV_ASSIGN:
-      g_string_append (string, " /= ");
+      gsk_sl_printer_append (printer, " /= ");
       break;
     case GSK_SL_TOKEN_MOD_ASSIGN:
-      g_string_append (string, " %= ");
+      gsk_sl_printer_append (printer, " %= ");
       break;
     case GSK_SL_TOKEN_ADD_ASSIGN:
-      g_string_append (string, " += ");
+      gsk_sl_printer_append (printer, " += ");
       break;
     case GSK_SL_TOKEN_SUB_ASSIGN:
-      g_string_append (string, " -= ");
+      gsk_sl_printer_append (printer, " -= ");
       break;
     case GSK_SL_TOKEN_LEFT_ASSIGN:
-      g_string_append (string, " <<= ");
+      gsk_sl_printer_append (printer, " <<= ");
       break;
     case GSK_SL_TOKEN_RIGHT_ASSIGN:
-      g_string_append (string, " >>= ");
+      gsk_sl_printer_append (printer, " >>= ");
       break;
     case GSK_SL_TOKEN_AND_ASSIGN:
-      g_string_append (string, " &= ");
+      gsk_sl_printer_append (printer, " &= ");
       break;
     case GSK_SL_TOKEN_XOR_ASSIGN:
-      g_string_append (string, " ^= ");
+      gsk_sl_printer_append (printer, " ^= ");
       break;
     case GSK_SL_TOKEN_OR_ASSIGN:
-      g_string_append (string, " |= ");
+      gsk_sl_printer_append (printer, " |= ");
       break;
     default:
       g_assert_not_reached ();
       break;
   }
-  gsk_sl_expression_print (assignment->rvalue, string);
+  gsk_sl_expression_print (assignment->rvalue, printer);
 }
 
 static GskSlType *
@@ -219,7 +220,7 @@ gsk_sl_expression_operation_free (GskSlExpression *expression)
 
 static void
 gsk_sl_expression_operation_print (const GskSlExpression *expression,
-                                   GString               *string)
+                                   GskSlPrinter          *printer)
 {
   const char *op_str[] = {
     [GSK_SL_OPERATION_MUL] = " * ",
@@ -246,9 +247,9 @@ gsk_sl_expression_operation_print (const GskSlExpression *expression,
 
   /* XXX: figure out the need for bracketing here */
 
-  gsk_sl_expression_print (operation->left, string);
-  g_string_append (string, op_str[operation->op]);
-  gsk_sl_expression_print (operation->right, string);
+  gsk_sl_expression_print (operation->left, printer);
+  gsk_sl_printer_append (printer, op_str[operation->op]);
+  gsk_sl_expression_print (operation->right, printer);
 }
 
 static GskSlType *
@@ -654,11 +655,11 @@ gsk_sl_expression_reference_free (GskSlExpression *expression)
 
 static void
 gsk_sl_expression_reference_print (const GskSlExpression *expression,
-                                   GString               *string)
+                                   GskSlPrinter          *printer)
 {
   const GskSlExpressionReference *reference = (const GskSlExpressionReference *) expression;
 
-  g_string_append (string, gsk_sl_variable_get_name (reference->variable));
+  gsk_sl_printer_append (printer, gsk_sl_variable_get_name (reference->variable));
 }
 
 static GskSlType *
@@ -745,22 +746,22 @@ gsk_sl_expression_function_call_free (GskSlExpression *expression)
 
 static void
 gsk_sl_expression_function_call_print (const GskSlExpression *expression,
-                                       GString               *string)
+                                       GskSlPrinter          *printer)
 {
   const GskSlExpressionFunctionCall *function_call = (const GskSlExpressionFunctionCall *) expression;
   guint i;
 
-  g_string_append (string, gsk_sl_function_get_name (function_call->function));
-  g_string_append (string, " (");
+  gsk_sl_printer_append (printer, gsk_sl_function_get_name (function_call->function));
+  gsk_sl_printer_append (printer, " (");
   
   for (i = 0; i < function_call->n_arguments; i++)
     {
       if (i > 0)
-        g_string_append (string, ", ");
-      gsk_sl_expression_print (function_call->arguments[i], string);
+        gsk_sl_printer_append (printer, ", ");
+      gsk_sl_expression_print (function_call->arguments[i], printer);
     }
 
-  g_string_append (string, ")");
+  gsk_sl_printer_append (printer, ")");
 }
 
 static GskSlType *
@@ -818,13 +819,13 @@ gsk_sl_expression_member_free (GskSlExpression *expression)
 
 static void
 gsk_sl_expression_member_print (const GskSlExpression *expression,
-                                GString               *string)
+                                GskSlPrinter          *printer)
 {
   const GskSlExpressionMember *member = (const GskSlExpressionMember *) expression;
 
-  gsk_sl_expression_print (member->expr, string);
-  g_string_append (string, ".");
-  g_string_append (string, gsk_sl_type_get_member_name (gsk_sl_expression_get_return_type (member->expr), member->id));
+  gsk_sl_expression_print (member->expr, printer);
+  gsk_sl_printer_append (printer, ".");
+  gsk_sl_printer_append (printer, gsk_sl_type_get_member_name (gsk_sl_expression_get_return_type (member->expr), member->id));
 }
 
 static GskSlType *
@@ -917,16 +918,16 @@ gsk_sl_expression_swizzle_free (GskSlExpression *expression)
 
 static void
 gsk_sl_expression_swizzle_print (const GskSlExpression *expression,
-                                 GString               *string)
+                                 GskSlPrinter          *printer)
 {
   const GskSlExpressionSwizzle *swizzle = (const GskSlExpressionSwizzle *) expression;
   guint i;
 
-  gsk_sl_expression_print (swizzle->expr, string);
-  g_string_append (string, ".");
+  gsk_sl_expression_print (swizzle->expr, printer);
+  gsk_sl_printer_append (printer, ".");
   for (i = 0; i < swizzle->length; i++)
     {
-      g_string_append_c (string, swizzle_options[swizzle->name][swizzle->indexes[i]]);
+      gsk_sl_printer_append_c (printer, swizzle_options[swizzle->name][swizzle->indexes[i]]);
     }
 }
 
@@ -1077,12 +1078,12 @@ gsk_sl_expression_negation_free (GskSlExpression *expression)
 
 static void
 gsk_sl_expression_negation_print (const GskSlExpression *expression,
-                                  GString               *string)
+                                  GskSlPrinter          *printer)
 {
   const GskSlExpressionNegation *negation = (const GskSlExpressionNegation *) expression;
 
-  g_string_append (string, "-");
-  gsk_sl_expression_print (negation->expr, string);
+  gsk_sl_printer_append (printer, "-");
+  gsk_sl_expression_print (negation->expr, printer);
 }
 
 static GskSlType *
@@ -1213,11 +1214,11 @@ gsk_sl_expression_constant_free (GskSlExpression *expression)
 
 static void
 gsk_sl_expression_constant_print (const GskSlExpression *expression,
-                                  GString               *string)
+                                  GskSlPrinter          *printer)
 {
   const GskSlExpressionConstant *constant = (const GskSlExpressionConstant *) expression;
 
-  gsk_sl_value_print (constant->value, string);
+  gsk_sl_value_print (constant->value, printer);
 }
 
 static GskSlType *
@@ -1450,6 +1451,7 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
             GskSlFunctionMatcher matcher;
             GskSlFunction *constructor;
 
+            gsk_sl_preprocessor_consume (stream, NULL);
             constructor = gsk_sl_function_new_constructor (type);
             gsk_sl_function_matcher_init (&matcher, g_list_prepend (NULL, constructor));
             expr = gsk_sl_expression_parse_function_call (scope, stream, &matcher, constructor);
@@ -2361,9 +2363,9 @@ gsk_sl_expression_unref (GskSlExpression *expression)
 
 void
 gsk_sl_expression_print (const GskSlExpression *expression,
-                         GString               *string)
+                         GskSlPrinter          *printer)
 {
-  expression->class->print (expression, string);
+  expression->class->print (expression, printer);
 }
 
 GskSlType *
