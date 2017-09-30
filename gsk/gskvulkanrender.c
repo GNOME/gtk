@@ -11,7 +11,6 @@
 #include "gskvulkanrenderpassprivate.h"
 
 #include "gskvulkanblendmodepipelineprivate.h"
-#include "gskvulkanblendpipelineprivate.h"
 #include "gskvulkanblurpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanboxshadowpipelineprivate.h"
@@ -21,6 +20,7 @@
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkantextpipelineprivate.h"
+#include "gskvulkantexturepipelineprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 
 #define DESCRIPTOR_POOL_MAXSETS 128
@@ -366,9 +366,9 @@ gsk_vulkan_render_get_pipeline (GskVulkanRender       *self,
     guint num_textures;
     GskVulkanPipeline * (* create_func) (GdkVulkanContext *context, VkPipelineLayout layout, const char *name, VkRenderPass render_pass);
   } pipeline_info[GSK_VULKAN_N_PIPELINES] = {
-    { "blend",                      1, gsk_vulkan_blend_pipeline_new },
-    { "blend-clip",                 1, gsk_vulkan_blend_pipeline_new },
-    { "blend-clip-rounded",         1, gsk_vulkan_blend_pipeline_new },
+    { "texture",                    1, gsk_vulkan_texture_pipeline_new },
+    { "texture-clip",               1, gsk_vulkan_texture_pipeline_new },
+    { "texture-clip-rounded",       1, gsk_vulkan_texture_pipeline_new },
     { "color",                      0, gsk_vulkan_color_pipeline_new },
     { "color-clip",                 0, gsk_vulkan_color_pipeline_new },
     { "color-clip-rounded",         0, gsk_vulkan_color_pipeline_new },

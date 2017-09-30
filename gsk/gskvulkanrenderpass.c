@@ -9,7 +9,6 @@
 #include "gskrendererprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskvulkanblendmodepipelineprivate.h"
-#include "gskvulkanblendpipelineprivate.h"
 #include "gskvulkanblurpipelineprivate.h"
 #include "gskvulkanborderpipelineprivate.h"
 #include "gskvulkanboxshadowpipelineprivate.h"
@@ -20,6 +19,7 @@
 #include "gskvulkaneffectpipelineprivate.h"
 #include "gskvulkanlineargradientpipelineprivate.h"
 #include "gskvulkantextpipelineprivate.h"
+#include "gskvulkantexturepipelineprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanpushconstantsprivate.h"
 #include "gskvulkanrendererprivate.h"
@@ -338,11 +338,11 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       if (gsk_cairo_node_get_surface (node) == NULL)
         return;
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
-        pipeline_type = GSK_VULKAN_PIPELINE_BLEND;
+        pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
       else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
-        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP;
+        pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
       else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
-        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP_ROUNDED;
+        pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
       else
         FALLBACK ("Cairo nodes can't deal with clip type %u\n", constants->clip.type);
       op.type = GSK_VULKAN_OP_SURFACE;
@@ -423,11 +423,11 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
     case GSK_TEXTURE_NODE:
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
-        pipeline_type = GSK_VULKAN_PIPELINE_BLEND;
+        pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
       else if (constants->clip.type == GSK_VULKAN_CLIP_RECT)
-        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP;
+        pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP;
       else if (constants->clip.type == GSK_VULKAN_CLIP_ROUNDED_CIRCULAR)
-        pipeline_type = GSK_VULKAN_PIPELINE_BLEND_CLIP_ROUNDED;
+        pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE_CLIP_ROUNDED;
       else
         FALLBACK ("Texture nodes can't deal with clip type %u\n", constants->clip.type);
       op.type = GSK_VULKAN_OP_TEXTURE;
@@ -622,7 +622,7 @@ fallback:
         g_assert_not_reached ();
         return;
     }
-  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_BLEND);
+  op.render.pipeline = gsk_vulkan_render_get_pipeline (render, GSK_VULKAN_PIPELINE_TEXTURE);
   g_array_append_val (self->render_ops, op);
 }
 #undef FALLBACK
@@ -959,7 +959,7 @@ gsk_vulkan_render_pass_count_vertex_data (GskVulkanRenderPass *self)
         case GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP:
         case GSK_VULKAN_OP_SURFACE:
         case GSK_VULKAN_OP_TEXTURE:
-          op->render.vertex_count = gsk_vulkan_blend_pipeline_count_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline));
+          op->render.vertex_count = gsk_vulkan_texture_pipeline_count_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline));
           n_bytes += op->render.vertex_count;
           break;
 
@@ -1053,7 +1053,7 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_TEXTURE:
           {
             op->render.vertex_offset = offset + n_bytes;
-            gsk_vulkan_blend_pipeline_collect_vertex_data (GSK_VULKAN_BLEND_PIPELINE (op->render.pipeline),
+            gsk_vulkan_texture_pipeline_collect_vertex_data (GSK_VULKAN_TEXTURE_PIPELINE (op->render.pipeline),
                                                            data + n_bytes + offset,
                                                            &op->render.node->bounds,
                                                            &op->render.node->bounds);
@@ -1391,9 +1391,9 @@ gsk_vulkan_render_pass_draw_rect (GskVulkanRenderPass     *self,
                                    0,
                                    NULL);
 
-          current_draw_index += gsk_vulkan_blend_pipeline_draw (GSK_VULKAN_BLEND_PIPELINE (current_pipeline),
-                                                                command_buffer,
-                                                                current_draw_index, 1);
+          current_draw_index += gsk_vulkan_texture_pipeline_draw (GSK_VULKAN_TEXTURE_PIPELINE (current_pipeline),
+                                                                  command_buffer,
+                                                                  current_draw_index, 1);
           break;
 
         case GSK_VULKAN_OP_TEXT:
