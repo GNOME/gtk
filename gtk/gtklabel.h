@@ -52,9 +52,6 @@ typedef struct _GtkLabelSelectionInfo GtkLabelSelectionInfo;
 struct _GtkLabel
 {
   GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkLabelPrivate *priv;
 };
 
 struct _GtkLabelClass
