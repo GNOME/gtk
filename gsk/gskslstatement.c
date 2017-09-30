@@ -46,7 +46,7 @@ struct _GskSlStatementClass {
 
   void                  (* print)                               (const GskSlStatement   *statement,
                                                                  GskSlPrinter           *printer);
-  guint32               (* write_spv)                           (const GskSlStatement   *statement,
+  void                  (* write_spv)                           (const GskSlStatement   *statement,
                                                                  GskSpvWriter           *writer);
 };
 
@@ -88,11 +88,10 @@ gsk_sl_statement_empty_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, ";");
 }
 
-static guint32
+static void
 gsk_sl_statement_empty_write_spv (const GskSlStatement *statement,
                                   GskSpvWriter         *writer)
 {
-  return 0;
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_EMPTY = {
@@ -143,7 +142,7 @@ gsk_sl_statement_compound_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, "}");
 }
 
-static guint32
+static void
 gsk_sl_statement_compound_write_spv (const GskSlStatement *statement,
                                      GskSpvWriter         *writer)
 {
@@ -154,8 +153,6 @@ gsk_sl_statement_compound_write_spv (const GskSlStatement *statement,
     {
       gsk_sl_statement_write_spv (l->data, writer);
     }
-
-  return 0;
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_COMPOUND = {
@@ -202,7 +199,7 @@ gsk_sl_statement_declaration_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, ";");
 }
 
-static guint32
+static void
 gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
                                         GskSpvWriter         *writer)
 {
@@ -219,8 +216,6 @@ gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
                           (guint32[2]) { variable_id,
                                          gsk_sl_expression_write_spv (declaration->initial, writer)});
     }
-
-  return variable_id;
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_DECLARATION = {
@@ -265,13 +260,11 @@ gsk_sl_statement_return_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, ";");
 }
 
-static guint32
+static void
 gsk_sl_statement_return_write_spv (const GskSlStatement *statement,
                                    GskSpvWriter         *writer)
 {
   g_assert_not_reached ();
-
-  return 0;
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_RETURN = {
@@ -310,13 +303,13 @@ gsk_sl_statement_expression_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, ";");
 }
  
-static guint32
+static void
 gsk_sl_statement_expression_write_spv (const GskSlStatement *statement,
                                        GskSpvWriter         *writer)
 {
   GskSlStatementExpression *expression_statement = (GskSlStatementExpression *) statement;
 
-  return gsk_sl_expression_write_spv (expression_statement->expression, writer);
+  gsk_sl_expression_write_spv (expression_statement->expression, writer);
 }
  
 static const GskSlStatementClass GSK_SL_STATEMENT_EXPRESSION = {
@@ -654,10 +647,10 @@ gsk_sl_statement_print (const GskSlStatement *statement,
   statement->class->print (statement, printer);
 }
 
-guint32
+void
 gsk_sl_statement_write_spv (const GskSlStatement *statement,
                             GskSpvWriter         *writer)
 {
-  return statement->class->write_spv (statement, writer);
+  statement->class->write_spv (statement, writer);
 }
 

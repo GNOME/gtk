@@ -37,7 +37,7 @@ void                    gsk_sl_statement_unref                  (GskSlStatement 
 void                    gsk_sl_statement_print                  (const GskSlStatement   *statement,
                                                                  GskSlPrinter           *printer);
 
-guint32                 gsk_sl_statement_write_spv              (const GskSlStatement   *statement,
+void                    gsk_sl_statement_write_spv              (const GskSlStatement   *statement,
                                                                  GskSpvWriter           *writer);
 
 G_END_DECLS
