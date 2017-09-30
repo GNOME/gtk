@@ -28,48 +28,32 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ICON_HELPER gtk_icon_helper_get_type()
-
-#define GTK_ICON_HELPER(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), \
-   GTK_TYPE_ICON_HELPER, GtkIconHelper))
-
-#define GTK_ICON_HELPER_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST ((klass), \
-   GTK_TYPE_ICON_HELPER, GtkIconHelperClass))
-
-#define GTK_IS_ICON_HELPER(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), \
-   GTK_TYPE_ICON_HELPER))
-
-#define GTK_IS_ICON_HELPER_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE ((klass), \
-   GTK_TYPE_ICON_HELPER))
-
-#define GTK_ICON_HELPER_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), \
-   GTK_TYPE_ICON_HELPER, GtkIconHelperClass))
-
 typedef struct _GtkIconHelper GtkIconHelper;
-typedef struct _GtkIconHelperClass GtkIconHelperClass;
-typedef struct _GtkIconHelperPrivate GtkIconHelperPrivate;
 
 struct _GtkIconHelper
 {
   GObject parent_instance;
 
-  GtkIconHelperPrivate *priv;
+  GtkImageDefinition *def;
+
+  GtkIconSize icon_size;
+  gint pixel_size;
+
+  guint use_fallback : 1;
+  guint force_scale_pixbuf : 1;
+  guint rendered_surface_is_symbolic : 1;
+
+  GtkWidget *owner;
+  GtkCssNode *node;
+  cairo_surface_t *rendered_surface;
+  GskTexture *texture;
 };
 
-struct _GtkIconHelperClass
-{
-  GObjectClass parent_class;
-};
+void gtk_icon_helper_init (GtkIconHelper *self,
+                           GtkCssNode    *css_node,
+                           GtkWidget     *owner);
 
-GType gtk_icon_helper_get_type (void) G_GNUC_CONST;
-
-GtkIconHelper *gtk_icon_helper_new (GtkCssNode *node,
-                                    GtkWidget  *owner);
+void gtk_icon_helper_destroy (GtkIconHelper *self);
 
 void _gtk_icon_helper_clear (GtkIconHelper *self);
 
