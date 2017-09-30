@@ -384,7 +384,6 @@ gsk_sl_function_declared_print (const GskSlFunction *function,
     {
       gsk_sl_printer_newline (printer);
       gsk_sl_statement_print (l->data, printer);
-      gsk_sl_printer_append (printer, ";");
     }
   gsk_sl_printer_pop_indentation (printer);
   gsk_sl_printer_newline (printer);

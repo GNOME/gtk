@@ -88,6 +88,7 @@ static void
 gsk_sl_statement_empty_print (const GskSlStatement *statement,
                               GskSlPrinter         *printer)
 {
+  gsk_sl_printer_append (printer, ";");
 }
 
 static guint32
@@ -138,6 +139,7 @@ gsk_sl_statement_declaration_print (const GskSlStatement *statement,
       gsk_sl_printer_append (printer, " = ");
       gsk_sl_expression_print (declaration->initial, printer);
     }
+  gsk_sl_printer_append (printer, ";");
 }
 
 static guint32
@@ -200,6 +202,7 @@ gsk_sl_statement_return_print (const GskSlStatement *statement,
       gsk_sl_printer_append (printer, " ");
       gsk_sl_expression_print (return_statement->value, printer);
     }
+  gsk_sl_printer_append (printer, ";");
 }
 
 static guint32
@@ -244,6 +247,7 @@ gsk_sl_statement_expression_print (const GskSlStatement *statement,
   GskSlStatementExpression *expression_statement = (GskSlStatementExpression *) statement;
 
   gsk_sl_expression_print (expression_statement->expression, printer);
+  gsk_sl_printer_append (printer, ";");
 }
  
 static guint32
