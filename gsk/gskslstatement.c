@@ -67,9 +67,6 @@ gsk_sl_statement_alloc (const GskSlStatementClass *klass,
 
 /* EMPTY */
 
-/* FIXME: This exists only so we dont return NULL from empty statements (ie just a semicolon)
- */
-
 typedef struct _GskSlStatementEmpty GskSlStatementEmpty;
 
 struct _GskSlStatementEmpty {
@@ -102,6 +99,69 @@ static const GskSlStatementClass GSK_SL_STATEMENT_EMPTY = {
   gsk_sl_statement_empty_free,
   gsk_sl_statement_empty_print,
   gsk_sl_statement_empty_write_spv
+};
+
+/* COMPOUND */
+
+typedef struct _GskSlStatementCompound GskSlStatementCompound;
+
+struct _GskSlStatementCompound {
+  GskSlStatement parent;
+
+  GskSlScope *scope;
+  GSList *statements;
+};
+
+static void
+gsk_sl_statement_compound_free (GskSlStatement *statement)
+{
+  GskSlStatementCompound *compound = (GskSlStatementCompound *) statement;
+
+  g_slist_free_full (compound->statements, (GDestroyNotify) gsk_sl_statement_unref);
+  if (compound->scope)
+    gsk_sl_scope_unref (compound->scope);
+
+  g_slice_free (GskSlStatementCompound, compound);
+}
+
+static void
+gsk_sl_statement_compound_print (const GskSlStatement *statement,
+                                 GskSlPrinter         *printer)
+{
+  GskSlStatementCompound *compound = (GskSlStatementCompound *) statement;
+  GSList *l;
+
+  gsk_sl_printer_append (printer, "{");
+  gsk_sl_printer_push_indentation (printer);
+  for (l = compound->statements; l; l = l->next)
+    {
+      gsk_sl_printer_newline (printer);
+      gsk_sl_statement_print (l->data, printer);
+    }
+  gsk_sl_printer_pop_indentation (printer);
+  gsk_sl_printer_newline (printer);
+  gsk_sl_printer_append (printer, "}");
+}
+
+static guint32
+gsk_sl_statement_compound_write_spv (const GskSlStatement *statement,
+                                     GskSpvWriter         *writer)
+{
+  GskSlStatementCompound *compound = (GskSlStatementCompound *) statement;
+  GSList *l;
+
+  for (l = compound->statements; l; l = l->next)
+    {
+      gsk_sl_statement_write_spv (l->data, writer);
+    }
+
+  return 0;
+}
+
+static const GskSlStatementClass GSK_SL_STATEMENT_COMPOUND = {
+  gsk_sl_statement_compound_free,
+  gsk_sl_statement_compound_print,
+  gsk_sl_statement_compound_write_spv
 };
 
 /* DECLARATION */
@@ -329,6 +389,50 @@ gsk_sl_statement_parse_declaration (GskSlScope        *scope,
 }
 
 GskSlStatement *
+gsk_sl_statement_parse_compound (GskSlScope        *scope,
+                                 GskSlPreprocessor *preproc,
+                                 gboolean           new_scope)
+{
+  GskSlStatementCompound *compound;
+  const GskSlToken *token;
+
+  compound = gsk_sl_statement_new (GskSlStatementCompound, &GSK_SL_STATEMENT_COMPOUND);
+  if (new_scope)
+    {
+      compound->scope = gsk_sl_scope_new (scope, gsk_sl_scope_get_return_type (scope));
+      scope = compound->scope;
+    }
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an opening \"{\"");
+      return (GskSlStatement *) compound;
+    }
+  gsk_sl_preprocessor_consume (preproc, compound);
+
+  for (token = gsk_sl_preprocessor_get (preproc);
+       !gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE) && !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
+       token = gsk_sl_preprocessor_get (preproc))
+    {
+      GskSlStatement *statement;
+
+      statement = gsk_sl_statement_parse (scope, preproc);
+      compound->statements = g_slist_prepend (compound->statements, statement);
+    }
+  compound->statements = g_slist_reverse (compound->statements);
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \"}\" at end of block.");
+      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
+    }
+  gsk_sl_preprocessor_consume (preproc, compound);
+  
+  return (GskSlStatement *) compound;
+}
+
+GskSlStatement *
 gsk_sl_statement_parse (GskSlScope        *scope,
                         GskSlPreprocessor *preproc)
 {
@@ -346,6 +450,9 @@ gsk_sl_statement_parse (GskSlScope        *scope,
     case GSK_SL_TOKEN_EOF:
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Unexpected end of document");
       return (GskSlStatement *) gsk_sl_statement_new (GskSlStatementEmpty, &GSK_SL_STATEMENT_EMPTY);
+
+    case GSK_SL_TOKEN_LEFT_BRACE:
+      return gsk_sl_statement_parse_compound (scope, preproc, TRUE);
 
     case GSK_SL_TOKEN_CONST:
     case GSK_SL_TOKEN_IN:

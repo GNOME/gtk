@@ -27,6 +27,9 @@ G_BEGIN_DECLS
 
 GskSlStatement *        gsk_sl_statement_parse                  (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *preproc);
+GskSlStatement *        gsk_sl_statement_parse_compound         (GskSlScope             *scope,
+                                                                 GskSlPreprocessor      *preproc,
+                                                                 gboolean                new_scope);
 
 GskSlStatement *        gsk_sl_statement_ref                    (GskSlStatement         *statement);
 void                    gsk_sl_statement_unref                  (GskSlStatement         *statement);
