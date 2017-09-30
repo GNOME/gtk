@@ -84,7 +84,8 @@ GskVulkanPipeline *     gsk_vulkan_render_get_pipeline                  (GskVulk
 VkDescriptorSet         gsk_vulkan_render_get_descriptor_set            (GskVulkanRender        *self,
                                                                          gsize                   id);
 gsize                   gsk_vulkan_render_reserve_descriptor_set        (GskVulkanRender        *self,
-                                                                         GskVulkanImage         *source);
+                                                                         GskVulkanImage         *source,
+                                                                         gboolean                repeat);
 void                    gsk_vulkan_render_draw                          (GskVulkanRender        *self);
 
 void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);

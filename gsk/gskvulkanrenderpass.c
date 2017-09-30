@@ -1309,18 +1309,18 @@ gsk_vulkan_render_pass_reserve_descriptor_sets (GskVulkanRenderPass *self,
         case GSK_VULKAN_OP_OPACITY:
         case GSK_VULKAN_OP_BLUR:
         case GSK_VULKAN_OP_COLOR_MATRIX:
-          op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source);
+          op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source, FALSE);
           break;
 
         case GSK_VULKAN_OP_TEXT:
         case GSK_VULKAN_OP_COLOR_TEXT:
-          op->text.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->text.source);
+          op->text.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->text.source, FALSE);
           break;
 
         case GSK_VULKAN_OP_CROSS_FADE:
         case GSK_VULKAN_OP_BLEND_MODE:
-          op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source);
-          op->render.descriptor_set_index2 = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source2);
+          op->render.descriptor_set_index = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source, FALSE);
+          op->render.descriptor_set_index2 = gsk_vulkan_render_reserve_descriptor_set (render, op->render.source2, FALSE);
           break;
 
         default:

@@ -53,6 +53,7 @@ struct _GskVulkanRender
   GskVulkanImage *target;
 
   VkSampler sampler;
+  VkSampler repeating_sampler;
 
   GList *render_passes;
   GSList *cleanup_images;
@@ -223,6 +224,21 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                  },
                                  NULL,
                                  &self->sampler);
+
+  GSK_VK_CHECK (vkCreateSampler, device,
+                                 &(VkSamplerCreateInfo) {
+                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+                                     .magFilter = VK_FILTER_LINEAR,
+                                     .minFilter = VK_FILTER_LINEAR,
+                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
+                                     .unnormalizedCoordinates = VK_FALSE,
+                                     .maxAnisotropy = 1.0,
+                                 },
+                                 NULL,
+                                 &self->repeating_sampler);
 
   self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
 
@@ -446,6 +462,7 @@ gsk_vulkan_render_get_descriptor_set (GskVulkanRender *self,
 typedef struct {
   gsize index;
   GskVulkanImage *image;
+  gboolean repeat;
 } HashDescriptorSetIndexEntry;
 
 static guint
@@ -453,7 +470,7 @@ desc_set_index_hash (gconstpointer v)
 {
   const HashDescriptorSetIndexEntry *e = v;
 
-  return GPOINTER_TO_UINT (e->image);
+  return GPOINTER_TO_UINT (e->image) + e->repeat;
 }
 
 static gboolean
@@ -462,12 +479,13 @@ desc_set_index_equal (gconstpointer v1, gconstpointer v2)
   const HashDescriptorSetIndexEntry *e1 = v1;
   const HashDescriptorSetIndexEntry *e2 = v2;
 
-  return e1->image == e2->image;
+  return e1->image == e2->image && e1->repeat == e2->repeat;
 }
 
 gsize
 gsk_vulkan_render_reserve_descriptor_set (GskVulkanRender *self,
-                                          GskVulkanImage  *source)
+                                          GskVulkanImage  *source,
+                                          gboolean         repeat)
 {
   HashDescriptorSetIndexEntry lookup;
   HashDescriptorSetIndexEntry *entry;
@@ -475,6 +493,7 @@ gsk_vulkan_render_reserve_descriptor_set (GskVulkanRender *self,
   g_assert (source != NULL);
 
   lookup.image = source;
+  lookup.repeat = repeat;
 
   entry = g_hash_table_lookup (self->descriptor_set_indexes, &lookup);
   if (entry)
@@ -482,6 +501,7 @@ gsk_vulkan_render_reserve_descriptor_set (GskVulkanRender *self,
 
   entry = g_new (HashDescriptorSetIndexEntry, 1);
   entry->image = source;
+  entry->repeat = repeat;
   entry->index = g_hash_table_size (self->descriptor_set_indexes);
   g_hash_table_add (self->descriptor_set_indexes, entry);
 
@@ -563,6 +583,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
       HashDescriptorSetIndexEntry *entry = key;
       GskVulkanImage *image = entry->image;
       gsize id = entry->index;
+      gboolean repeat = entry->repeat;
 
       vkUpdateDescriptorSets (device,
                               1,
@@ -575,7 +596,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
                                       .descriptorCount = 1,
                                       .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                       .pImageInfo = &(VkDescriptorImageInfo) {
-                                          .sampler = self->sampler,
+                                          .sampler = repeat ? self->repeating_sampler : self->sampler,
                                           .imageView = gsk_vulkan_image_get_image_view (image),
                                           .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
                                       }
@@ -737,6 +758,10 @@ gsk_vulkan_render_free (GskVulkanRender *self)
 
   vkDestroySampler (device,
                     self->sampler,
+                    NULL);
+
+  vkDestroySampler (device,
+                    self->repeating_sampler,
                     NULL);
 
   gsk_vulkan_command_pool_free (self->command_pool);
