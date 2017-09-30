@@ -77,7 +77,8 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
       self->scale_factor = 1;
       self->clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                       0, 0,
-                                                      gsk_vulkan_image_get_width (target), gsk_vulkan_image_get_height (target)
+                                                      gsk_vulkan_image_get_width (target),
+                                                      gsk_vulkan_image_get_height (target)
                                                   });
     }
   else
@@ -309,6 +310,17 @@ gsk_vulkan_render_add_cleanup_image (GskVulkanRender *self,
   self->cleanup_images = g_slist_prepend (self->cleanup_images, image);
 }
 
+static void
+gsk_vulkan_render_add_render_pass (GskVulkanRender     *self,
+                                   GskVulkanRenderPass *pass)
+{
+  self->render_passes = g_list_prepend (self->render_passes, pass);
+
+#ifdef G_ENABLE_DEBUG
+  gsk_profiler_counter_inc (gsk_renderer_get_profiler (self->renderer), self->render_pass_counter);
+#endif
+}
+
 void
 gsk_vulkan_render_add_node (GskVulkanRender *self,
                             GskRenderNode   *node)
@@ -329,11 +341,7 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
                                      self->clip,
                                      VK_NULL_HANDLE);
 
-  self->render_passes = g_list_prepend (self->render_passes, pass);
-
-#ifdef G_ENABLE_DEBUG
-  gsk_profiler_counter_inc (gsk_renderer_get_profiler (self->renderer), self->render_pass_counter);
-#endif
+  gsk_vulkan_render_add_render_pass (self, pass);
 
   gsk_vulkan_render_pass_add (pass, self, node);
 }
@@ -365,11 +373,7 @@ gsk_vulkan_render_add_node_for_texture (GskVulkanRender       *self,
 
   cairo_region_destroy (clip);
 
-  self->render_passes = g_list_prepend (self->render_passes, pass);
-
-#ifdef G_ENABLE_DEBUG
-  gsk_profiler_counter_inc (gsk_renderer_get_profiler (self->renderer), self->render_pass_counter);
-#endif
+  gsk_vulkan_render_add_render_pass (self, pass);
 
   gsk_vulkan_render_pass_add (pass, self, node);
 }
