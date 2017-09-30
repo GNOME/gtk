@@ -124,6 +124,7 @@ struct _GskVulkanRenderPass
   GskVulkanBuffer *vertex_data;
 
   GQuark fallback_pixels;
+  GQuark texture_pixels;
 };
 
 GskVulkanRenderPass *
@@ -204,6 +205,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
 
 #ifdef G_ENABLE_DEBUG
   self->fallback_pixels = g_quark_from_static_string ("fallback-pixels");
+  self->texture_pixels = g_quark_from_static_string ("texture-pixels");
 #endif
 
   return self;
@@ -693,6 +695,15 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
             result = gsk_vulkan_image_new_for_texture (self->vulkan,
                                                        ceil (view.size.width),
                                                        ceil (view.size.height));
+
+#ifdef G_ENABLE_DEBUG
+            {
+              GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
+              gsk_profiler_counter_add (profiler,
+                                        self->texture_pixels,
+                                        ceil (view.size.width) * ceil (view.size.height));
+            }
+#endif
 
             vkCreateSemaphore (gdk_vulkan_context_get_device (self->vulkan),
                                &(VkSemaphoreCreateInfo) {
