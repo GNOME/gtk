@@ -36,8 +36,10 @@ GtkCssValue *   _gtk_css_shadows_value_parse          (GtkCssParser             
 
 gboolean        _gtk_css_shadows_value_is_none        (const GtkCssValue        *shadows);
 
-GskShadow *     gtk_css_shadows_value_get_shadows     (const GtkCssValue        *shadows,
-                                                       gsize                    *n_shadows);
+gsize           gtk_css_shadows_value_get_n_shadows   (const GtkCssValue        *shadows);
+
+void            gtk_css_shadows_value_get_shadows    (const GtkCssValue        *shadows,
+                                                      GskShadow                *out_shadows);
 
 void            _gtk_css_shadows_value_paint_layout   (const GtkCssValue        *shadows,
                                                        cairo_t                  *cr,

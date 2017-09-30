@@ -118,9 +118,13 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
 
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
-  shadows = gtk_css_shadows_value_get_shadows (shadows_value, &n_shadows);
-  if (shadows)
-    gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
+  n_shadows = gtk_css_shadows_value_get_n_shadows (shadows_value);
+  if (n_shadows > 0)
+    {
+      shadows = g_newa (GskShadow, n_shadows);
+      gtk_css_shadows_value_get_shadows (shadows_value, shadows);
+      gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
+    }
 
   if (graphene_matrix_is_identity (&transform_matrix))
     {
@@ -143,11 +147,8 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
       gtk_snapshot_pop (snapshot);
     }
 
-  if (shadows)
-    {
-      gtk_snapshot_pop (snapshot);
-      g_free (shadows);
-    }
+  if (n_shadows > 0)
+    gtk_snapshot_pop (snapshot);
   
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 }
@@ -295,9 +296,13 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
 
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
-  shadows = gtk_css_shadows_value_get_shadows (shadows_value, &n_shadows);
-  if (shadows)
-    gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
+  n_shadows = gtk_css_shadows_value_get_n_shadows (shadows_value);
+  if (n_shadows > 0)
+    {
+      shadows = g_newa (GskShadow, n_shadows);
+      gtk_css_shadows_value_get_shadows (shadows_value, shadows);
+      gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
+    }
 
   if (graphene_matrix_is_identity (&transform_matrix))
     {
@@ -322,11 +327,8 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
       gtk_snapshot_pop (snapshot);
     }
 
-  if (shadows)
-    {
-      gtk_snapshot_pop (snapshot);
-      g_free (shadows);
-    }
+  if (n_shadows > 0)
+    gtk_snapshot_pop (snapshot);
   
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 }

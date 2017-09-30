@@ -268,23 +268,20 @@ _gtk_css_shadows_value_is_none (const GtkCssValue *shadows)
   return shadows->len == 0;
 }
 
-GskShadow *
-gtk_css_shadows_value_get_shadows (const GtkCssValue *shadows,
-                                   gsize             *n_shadows)
+gsize
+gtk_css_shadows_value_get_n_shadows (const GtkCssValue *shadows)
 {
-  GskShadow *result;
+  return shadows->len;
+}
+
+void
+gtk_css_shadows_value_get_shadows (const GtkCssValue  *shadows,
+                                   GskShadow          *out_shadows)
+{
   guint i;
 
-  result = g_new (GskShadow, shadows->len);
-
   for (i = 0; i < shadows->len; i++)
-    {
-      gtk_css_shadow_value_get_shadow (shadows->values[i], &result[i]);
-    }
-
-  *n_shadows = shadows->len;
-
-  return result;
+    gtk_css_shadow_value_get_shadow (shadows->values[i], &out_shadows[i]);
 }
 
 void
