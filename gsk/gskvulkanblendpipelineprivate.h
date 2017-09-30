@@ -21,7 +21,8 @@ GskVulkanPipeline *     gsk_vulkan_blend_pipeline_new                   (GdkVulk
 gsize                   gsk_vulkan_blend_pipeline_count_vertex_data     (GskVulkanBlendPipeline         *pipeline);
 void                    gsk_vulkan_blend_pipeline_collect_vertex_data   (GskVulkanBlendPipeline         *pipeline,
                                                                          guchar                         *data,
-                                                                         const graphene_rect_t          *rect);
+                                                                         const graphene_rect_t          *rect,
+                                                                         const graphene_rect_t          *tex_rect);
 gsize                   gsk_vulkan_blend_pipeline_draw                  (GskVulkanBlendPipeline         *pipeline,
                                                                          VkCommandBuffer                 command_buffer,
                                                                          gsize                           offset,

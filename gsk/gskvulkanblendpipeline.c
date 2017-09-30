@@ -93,7 +93,8 @@ gsk_vulkan_blend_pipeline_count_vertex_data (GskVulkanBlendPipeline *pipeline)
 void
 gsk_vulkan_blend_pipeline_collect_vertex_data (GskVulkanBlendPipeline *pipeline,
                                                guchar                 *data,
-                                               const graphene_rect_t  *rect)
+                                               const graphene_rect_t  *rect,
+                                               const graphene_rect_t  *tex_rect)
 {
   GskVulkanBlendInstance *instance = (GskVulkanBlendInstance *) data;
 
@@ -101,10 +102,10 @@ gsk_vulkan_blend_pipeline_collect_vertex_data (GskVulkanBlendPipeline *pipeline,
   instance->rect[1] = rect->origin.y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
-  instance->tex_rect[0] = 0.0;
-  instance->tex_rect[1] = 0.0;
-  instance->tex_rect[2] = 1.0;
-  instance->tex_rect[3] = 1.0;
+  instance->tex_rect[0] = (rect->origin.x - tex_rect->origin.x)/tex_rect->size.width;
+  instance->tex_rect[1] = (rect->origin.y - tex_rect->origin.y)/tex_rect->size.height;
+  instance->tex_rect[2] = (rect->size.width + rect->origin.x - tex_rect->origin.x)/tex_rect->size.width;
+  instance->tex_rect[3] = (rect->size.height + rect->origin.y - tex_rect->origin.y)/tex_rect->size.height;
 }
 
 gsize
