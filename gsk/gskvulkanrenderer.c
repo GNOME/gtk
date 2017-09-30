@@ -45,8 +45,6 @@ struct _GskVulkanRenderer
   guint n_targets;
   GskVulkanImage **targets;
 
-  VkSampler sampler;
-
   GskVulkanRender *render;
 
   GSList *textures;
@@ -114,28 +112,10 @@ gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                              GError      **error)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
-  VkDevice device;
 
   self->vulkan = gdk_window_create_vulkan_context (window, error);
   if (self->vulkan == NULL)
     return FALSE;
-
-  device = gdk_vulkan_context_get_device (self->vulkan);
-
-  GSK_VK_CHECK (vkCreateSampler, device,
-                                 &(VkSamplerCreateInfo) {
-                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                                     .magFilter = VK_FILTER_LINEAR,
-                                     .minFilter = VK_FILTER_LINEAR,
-                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
-                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
-                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
-                                     .unnormalizedCoordinates = VK_FALSE,
-                                     .maxAnisotropy = 1.0,
-                                 },
-                                 NULL,
-                                 &self->sampler);
 
   g_signal_connect (self->vulkan,
                     "images-updated",
@@ -154,7 +134,6 @@ static void
 gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
-  VkDevice device;
   GSList *l;
 
   g_clear_object (&self->glyph_cache);
@@ -170,17 +149,10 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 
   g_clear_pointer (&self->render, gsk_vulkan_render_free);
 
-  device = gdk_vulkan_context_get_device (self->vulkan);
-
   gsk_vulkan_renderer_free_targets (self);
   g_signal_handlers_disconnect_by_func(self->vulkan,
                                        gsk_vulkan_renderer_update_images_cb,
                                        self);
-
-  vkDestroySampler (device,
-                    self->sampler,
-                    NULL);
-  self->sampler = VK_NULL_HANDLE;
 
   g_clear_object (&self->vulkan);
 }
@@ -218,7 +190,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
 
   gsk_vulkan_render_upload (render);
 
-  gsk_vulkan_render_draw (render, self->sampler);
+  gsk_vulkan_render_draw (render);
 
   texture = gsk_vulkan_render_download_target (render);
 
@@ -261,7 +233,7 @@ gsk_vulkan_renderer_render (GskRenderer   *renderer,
 
   gsk_vulkan_render_upload (render);
 
-  gsk_vulkan_render_draw (render, self->sampler);
+  gsk_vulkan_render_draw (render);
 
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (profiler, self->profile_counters.frames);

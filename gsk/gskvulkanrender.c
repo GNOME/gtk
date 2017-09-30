@@ -52,6 +52,8 @@ struct _GskVulkanRender
 
   GskVulkanImage *target;
 
+  VkSampler sampler;
+
   GList *render_passes;
   GSList *cleanup_images;
 
@@ -87,6 +89,9 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
     }
 }
 
+static guint desc_set_index_hash (gconstpointer v);
+static gboolean desc_set_index_equal (gconstpointer v1, gconstpointer v2);
+
 GskVulkanRender *
 gsk_vulkan_render_new (GskRenderer      *renderer,
                        GdkVulkanContext *context)
@@ -99,7 +104,7 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
   self->vulkan = context;
   self->renderer = renderer;
   self->framebuffers = g_hash_table_new (g_direct_hash, g_direct_equal);
-  self->descriptor_set_indexes = g_hash_table_new (g_direct_hash, g_direct_equal);
+  self->descriptor_set_indexes = g_hash_table_new_full (desc_set_index_hash, desc_set_index_equal, NULL, g_free);
 
   device = gdk_vulkan_context_get_device (self->vulkan);
 
@@ -184,7 +189,6 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                              NULL,
                                              &self->descriptor_set_layout);
 
-
   for (guint i = 0; i < 3; i++)
     {
       VkDescriptorSetLayout layouts[3] = {
@@ -204,6 +208,21 @@ gsk_vulkan_render_new (GskRenderer      *renderer,
                                             NULL,
                                             &self->pipeline_layout[i]);
     }
+
+  GSK_VK_CHECK (vkCreateSampler, device,
+                                 &(VkSamplerCreateInfo) {
+                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+                                     .magFilter = VK_FILTER_LINEAR,
+                                     .minFilter = VK_FILTER_LINEAR,
+                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
+                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
+                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
+                                     .unnormalizedCoordinates = VK_FALSE,
+                                     .maxAnisotropy = 1.0,
+                                 },
+                                 NULL,
+                                 &self->sampler);
 
   self->uploader = gsk_vulkan_uploader_new (self->vulkan, self->command_pool);
 
@@ -424,30 +443,56 @@ gsk_vulkan_render_get_descriptor_set (GskVulkanRender *self,
   return self->descriptor_sets[id];
 }
 
+typedef struct {
+  gsize index;
+  GskVulkanImage *image;
+} HashDescriptorSetIndexEntry;
+
+static guint
+desc_set_index_hash (gconstpointer v)
+{
+  const HashDescriptorSetIndexEntry *e = v;
+
+  return GPOINTER_TO_UINT (e->image);
+}
+
+static gboolean
+desc_set_index_equal (gconstpointer v1, gconstpointer v2)
+{
+  const HashDescriptorSetIndexEntry *e1 = v1;
+  const HashDescriptorSetIndexEntry *e2 = v2;
+
+  return e1->image == e2->image;
+}
+
 gsize
 gsk_vulkan_render_reserve_descriptor_set (GskVulkanRender *self,
                                           GskVulkanImage  *source)
 {
-  gpointer id_plus_one;
+  HashDescriptorSetIndexEntry lookup;
+  HashDescriptorSetIndexEntry *entry;
 
   g_assert (source != NULL);
 
-  id_plus_one = g_hash_table_lookup (self->descriptor_set_indexes, source);
-  if (id_plus_one)
-    return GPOINTER_TO_SIZE (id_plus_one) - 1;
+  lookup.image = source;
 
-  id_plus_one = GSIZE_TO_POINTER (g_hash_table_size (self->descriptor_set_indexes) + 1);
-  g_hash_table_insert (self->descriptor_set_indexes, source, id_plus_one);
-  
-  return GPOINTER_TO_SIZE (id_plus_one) - 1;
+  entry = g_hash_table_lookup (self->descriptor_set_indexes, &lookup);
+  if (entry)
+    return entry->index;
+
+  entry = g_new (HashDescriptorSetIndexEntry, 1);
+  entry->image = source;
+  entry->index = g_hash_table_size (self->descriptor_set_indexes);
+  g_hash_table_add (self->descriptor_set_indexes, entry);
+
+  return entry->index;
 }
 
 static void
-gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
-                                           VkSampler        sampler)
+gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self)
 {
   GHashTableIter iter;
-  gpointer key, value;
+  gpointer key;
   VkDevice device;
   GList *l;
   guint i, needed_sets;
@@ -513,10 +558,11 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
                                           self->descriptor_sets);
 
   g_hash_table_iter_init (&iter, self->descriptor_set_indexes);
-  while (g_hash_table_iter_next (&iter, &key, &value))
+  while (g_hash_table_iter_next (&iter, &key, NULL))
     {
-      GskVulkanImage *image = key;
-      gsize id = GPOINTER_TO_SIZE (value) - 1;
+      HashDescriptorSetIndexEntry *entry = key;
+      GskVulkanImage *image = entry->image;
+      gsize id = entry->index;
 
       vkUpdateDescriptorSets (device,
                               1,
@@ -529,7 +575,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
                                       .descriptorCount = 1,
                                       .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                       .pImageInfo = &(VkDescriptorImageInfo) {
-                                          .sampler = sampler,
+                                          .sampler = self->sampler,
                                           .imageView = gsk_vulkan_image_get_image_view (image),
                                           .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
                                       }
@@ -540,8 +586,7 @@ gsk_vulkan_render_prepare_descriptor_sets (GskVulkanRender *self,
 }
 
 void
-gsk_vulkan_render_draw (GskVulkanRender   *self,
-                        VkSampler          sampler)
+gsk_vulkan_render_draw (GskVulkanRender *self)
 {
   GList *l;
 
@@ -550,7 +595,7 @@ gsk_vulkan_render_draw (GskVulkanRender   *self,
     gsk_profiler_timer_begin (gsk_renderer_get_profiler (self->renderer), self->gpu_time_timer);
 #endif
 
-  gsk_vulkan_render_prepare_descriptor_sets (self, sampler);
+  gsk_vulkan_render_prepare_descriptor_sets (self);
 
   for (l = self->render_passes; l; l = l->next)
     {
@@ -689,6 +734,10 @@ gsk_vulkan_render_free (GskVulkanRender *self)
   vkDestroyFence (device,
                   self->fence,
                   NULL);
+
+  vkDestroySampler (device,
+                    self->sampler,
+                    NULL);
 
   gsk_vulkan_command_pool_free (self->command_pool);
 
