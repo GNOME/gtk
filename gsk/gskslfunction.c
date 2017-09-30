@@ -21,7 +21,7 @@
 #include "gskslfunctionprivate.h"
 
 #include "gskslnativefunctionprivate.h"
-#include "gskslnodeprivate.h"
+#include "gskslstatementprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
@@ -319,7 +319,7 @@ gsk_sl_function_declared_free (GskSlFunction *function)
   if (declared->return_type)
     gsk_sl_type_unref (declared->return_type);
   g_free (declared->name);
-  g_slist_free_full (declared->statements, (GDestroyNotify) gsk_sl_node_unref);
+  g_slist_free_full (declared->statements, (GDestroyNotify) gsk_sl_statement_unref);
 
   g_slice_free (GskSlFunctionDeclared, declared);
 }
@@ -383,7 +383,7 @@ gsk_sl_function_declared_print (const GskSlFunction *function,
   for (l = declared->statements; l; l = l->next)
     {
       gsk_sl_printer_newline (printer);
-      gsk_sl_node_print (l->data, printer);
+      gsk_sl_statement_print (l->data, printer);
       gsk_sl_printer_append (printer, ";");
     }
   gsk_sl_printer_pop_indentation (printer);
@@ -429,7 +429,7 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
 
   for (l = declared->statements; l; l = l->next)
     {
-      gsk_sl_node_write_spv (l->data, writer);
+      gsk_sl_statement_write_spv (l->data, writer);
     }
 
   gsk_spv_writer_add (writer,
@@ -514,7 +514,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an openening \"(\"");
       return (GskSlFunction *) function;
     }
-  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+  gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
 
   function->scope = gsk_sl_scope_new (scope, function->return_type);
 
@@ -561,7 +561,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
               g_ptr_array_add (arguments, variable);
               
               gsk_sl_scope_add_variable (function->scope, variable);
-              gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+              gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
             }
           else
             {
@@ -574,7 +574,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
           if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
             break;
 
-          gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+          gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
         }
 
       function->n_arguments = arguments->len;
@@ -586,12 +586,12 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a closing \")\"");
       gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_PAREN);
     }
-  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+  gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
 
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     {
-      gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+      gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
       return (GskSlFunction *) function;
     }
 
@@ -600,15 +600,15 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an opening \"{\"");
       return (GskSlFunction *) function;
     }
-  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+  gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
 
   for (token = gsk_sl_preprocessor_get (preproc);
        !gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE) && !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
        token = gsk_sl_preprocessor_get (preproc))
     {
-      GskSlNode *statement;
+      GskSlStatement *statement;
 
-      statement = gsk_sl_node_parse_statement (function->scope, preproc);
+      statement = gsk_sl_statement_parse (function->scope, preproc);
       function->statements = g_slist_append (function->statements, statement);
     }
 
@@ -617,7 +617,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \"}\" at end of function.");
       gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
     }
-  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) function);
+  gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
 
   return (GskSlFunction *) function;
 }

@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "gskslnodeprivate.h"
+#include "gskslstatementprivate.h"
 
 #include "gskslexpressionprivate.h"
 #include "gskslfunctionprivate.h"
@@ -34,87 +34,103 @@
 
 #include <string.h>
 
-static GskSlNode *
-gsk_sl_node_alloc (const GskSlNodeClass *klass,
-                   gsize                 size)
+typedef struct _GskSlStatementClass GskSlStatementClass;
+
+struct _GskSlStatement {
+  const GskSlStatementClass *class;
+  guint ref_count;
+};
+
+struct _GskSlStatementClass {
+  void                  (* free)                                (GskSlStatement         *statement);
+
+  void                  (* print)                               (const GskSlStatement   *statement,
+                                                                 GskSlPrinter           *printer);
+  guint32               (* write_spv)                           (const GskSlStatement   *statement,
+                                                                 GskSpvWriter           *writer);
+};
+
+static GskSlStatement *
+gsk_sl_statement_alloc (const GskSlStatementClass *klass,
+                        gsize                      size)
 {
-  GskSlNode *node;
+  GskSlStatement *statement;
 
-  node = g_slice_alloc0 (size);
+  statement = g_slice_alloc0 (size);
 
-  node->class = klass;
-  node->ref_count = 1;
+  statement->class = klass;
+  statement->ref_count = 1;
 
-  return node;
+  return statement;
 }
-#define gsk_sl_node_new(_name, _klass) ((_name *) gsk_sl_node_alloc ((_klass), sizeof (_name)))
+#define gsk_sl_statement_new(_name, _klass) ((_name *) gsk_sl_statement_alloc ((_klass), sizeof (_name)))
 
 /* EMPTY */
 
 /* FIXME: This exists only so we dont return NULL from empty statements (ie just a semicolon)
  */
 
-typedef struct _GskSlNodeEmpty GskSlNodeEmpty;
+typedef struct _GskSlStatementEmpty GskSlStatementEmpty;
 
-struct _GskSlNodeEmpty {
-  GskSlNode parent;
+struct _GskSlStatementEmpty {
+  GskSlStatement parent;
 };
 
 static void
-gsk_sl_node_empty_free (GskSlNode *node)
+gsk_sl_statement_empty_free (GskSlStatement *statement)
 {
-  GskSlNodeEmpty *empty = (GskSlNodeEmpty *) node;
+  GskSlStatementEmpty *empty = (GskSlStatementEmpty *) statement;
 
-  g_slice_free (GskSlNodeEmpty, empty);
+  g_slice_free (GskSlStatementEmpty, empty);
 }
 
 static void
-gsk_sl_node_empty_print (const GskSlNode *node,
-                         GskSlPrinter    *printer)
+gsk_sl_statement_empty_print (const GskSlStatement *statement,
+                              GskSlPrinter         *printer)
 {
 }
 
 static guint32
-gsk_sl_node_empty_write_spv (const GskSlNode *node,
-                             GskSpvWriter    *writer)
+gsk_sl_statement_empty_write_spv (const GskSlStatement *statement,
+                                  GskSpvWriter         *writer)
 {
   return 0;
 }
 
-static const GskSlNodeClass GSK_SL_NODE_EMPTY = {
-  gsk_sl_node_empty_free,
-  gsk_sl_node_empty_print,
-  gsk_sl_node_empty_write_spv
+static const GskSlStatementClass GSK_SL_STATEMENT_EMPTY = {
+  gsk_sl_statement_empty_free,
+  gsk_sl_statement_empty_print,
+  gsk_sl_statement_empty_write_spv
 };
 
 /* DECLARATION */
 
-typedef struct _GskSlNodeDeclaration GskSlNodeDeclaration;
+typedef struct _GskSlStatementDeclaration GskSlStatementDeclaration;
 
-struct _GskSlNodeDeclaration {
-  GskSlNode parent;
+struct _GskSlStatementDeclaration {
+  GskSlStatement parent;
 
   GskSlVariable *variable;
   GskSlExpression *initial;
 };
 
 static void
-gsk_sl_node_declaration_free (GskSlNode *node)
+gsk_sl_statement_declaration_free (GskSlStatement *statement)
 {
-  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
+  GskSlStatementDeclaration *declaration = (GskSlStatementDeclaration *) statement;
 
   gsk_sl_variable_unref (declaration->variable);
   if (declaration->initial)
     gsk_sl_expression_unref (declaration->initial);
 
-  g_slice_free (GskSlNodeDeclaration, declaration);
+  g_slice_free (GskSlStatementDeclaration, declaration);
 }
 
 static void
-gsk_sl_node_declaration_print (const GskSlNode *node,
-                               GskSlPrinter    *printer)
+gsk_sl_statement_declaration_print (const GskSlStatement *statement,
+                                    GskSlPrinter         *printer)
 {
-  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
+  GskSlStatementDeclaration *declaration = (GskSlStatementDeclaration *) statement;
 
   gsk_sl_variable_print (declaration->variable, printer);
   if (declaration->initial)
@@ -125,10 +141,10 @@ gsk_sl_node_declaration_print (const GskSlNode *node,
 }
 
 static guint32
-gsk_sl_node_declaration_write_spv (const GskSlNode *node,
-                                   GskSpvWriter    *writer)
+gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
+                                        GskSpvWriter         *writer)
 {
-  GskSlNodeDeclaration *declaration = (GskSlNodeDeclaration *) node;
+  GskSlStatementDeclaration *declaration = (GskSlStatementDeclaration *) statement;
   guint32 variable_id;
 
   variable_id = gsk_spv_writer_get_id_for_variable (writer, declaration->variable);
@@ -145,134 +161,134 @@ gsk_sl_node_declaration_write_spv (const GskSlNode *node,
   return variable_id;
 }
 
-static const GskSlNodeClass GSK_SL_NODE_DECLARATION = {
-  gsk_sl_node_declaration_free,
-  gsk_sl_node_declaration_print,
-  gsk_sl_node_declaration_write_spv
+static const GskSlStatementClass GSK_SL_STATEMENT_DECLARATION = {
+  gsk_sl_statement_declaration_free,
+  gsk_sl_statement_declaration_print,
+  gsk_sl_statement_declaration_write_spv
 };
 
 /* RETURN */
 
-typedef struct _GskSlNodeReturn GskSlNodeReturn;
+typedef struct _GskSlStatementReturn GskSlStatementReturn;
 
-struct _GskSlNodeReturn {
-  GskSlNode parent;
+struct _GskSlStatementReturn {
+  GskSlStatement parent;
 
   GskSlExpression *value;
 };
 
 static void
-gsk_sl_node_return_free (GskSlNode *node)
+gsk_sl_statement_return_free (GskSlStatement *statement)
 {
-  GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
+  GskSlStatementReturn *return_statement = (GskSlStatementReturn *) statement;
 
-  if (return_node->value)
-    gsk_sl_expression_unref (return_node->value);
+  if (return_statement->value)
+    gsk_sl_expression_unref (return_statement->value);
 
-  g_slice_free (GskSlNodeReturn, return_node);
+  g_slice_free (GskSlStatementReturn, return_statement);
 }
 
 static void
-gsk_sl_node_return_print (const GskSlNode *node,
-                          GskSlPrinter    *printer)
+gsk_sl_statement_return_print (const GskSlStatement *statement,
+                               GskSlPrinter         *printer)
 {
-  GskSlNodeReturn *return_node = (GskSlNodeReturn *) node;
+  GskSlStatementReturn *return_statement = (GskSlStatementReturn *) statement;
 
   gsk_sl_printer_append (printer, "return");
-  if (return_node->value)
+  if (return_statement->value)
     {
       gsk_sl_printer_append (printer, " ");
-      gsk_sl_expression_print (return_node->value, printer);
+      gsk_sl_expression_print (return_statement->value, printer);
     }
 }
 
 static guint32
-gsk_sl_node_return_write_spv (const GskSlNode *node,
-                              GskSpvWriter    *writer)
+gsk_sl_statement_return_write_spv (const GskSlStatement *statement,
+                                   GskSpvWriter         *writer)
 {
   g_assert_not_reached ();
 
   return 0;
 }
 
-static const GskSlNodeClass GSK_SL_NODE_RETURN = {
-  gsk_sl_node_return_free,
-  gsk_sl_node_return_print,
-  gsk_sl_node_return_write_spv
+static const GskSlStatementClass GSK_SL_STATEMENT_RETURN = {
+  gsk_sl_statement_return_free,
+  gsk_sl_statement_return_print,
+  gsk_sl_statement_return_write_spv
 };
 
 /* EXPRESSION */
  
-typedef struct _GskSlNodeExpression GskSlNodeExpression;
+typedef struct _GskSlStatementExpression GskSlStatementExpression;
 
-struct _GskSlNodeExpression {
-  GskSlNode parent;
+struct _GskSlStatementExpression {
+  GskSlStatement parent;
 
   GskSlExpression *expression;
 };
 
 static void
-gsk_sl_node_expression_free (GskSlNode *node)
+gsk_sl_statement_expression_free (GskSlStatement *statement)
 {
-  GskSlNodeExpression *expression_node = (GskSlNodeExpression *) node;
+  GskSlStatementExpression *expression_statement = (GskSlStatementExpression *) statement;
  
-  gsk_sl_expression_unref (expression_node->expression);
+  gsk_sl_expression_unref (expression_statement->expression);
  
-  g_slice_free (GskSlNodeExpression, expression_node);
+  g_slice_free (GskSlStatementExpression, expression_statement);
 }
  
 static void
-gsk_sl_node_expression_print (const GskSlNode *node,
-                              GskSlPrinter    *printer)
+gsk_sl_statement_expression_print (const GskSlStatement *statement,
+                                   GskSlPrinter         *printer)
 {
-  GskSlNodeExpression *expression_node = (GskSlNodeExpression *) node;
+  GskSlStatementExpression *expression_statement = (GskSlStatementExpression *) statement;
 
-  gsk_sl_expression_print (expression_node->expression, printer);
+  gsk_sl_expression_print (expression_statement->expression, printer);
 }
  
 static guint32
-gsk_sl_node_expression_write_spv (const GskSlNode *node,
-                                  GskSpvWriter    *writer)
+gsk_sl_statement_expression_write_spv (const GskSlStatement *statement,
+                                       GskSpvWriter         *writer)
 {
-  GskSlNodeExpression *expression_node = (GskSlNodeExpression *) node;
+  GskSlStatementExpression *expression_statement = (GskSlStatementExpression *) statement;
 
-  return gsk_sl_expression_write_spv (expression_node->expression, writer);
+  return gsk_sl_expression_write_spv (expression_statement->expression, writer);
 }
  
-static const GskSlNodeClass GSK_SL_NODE_EXPRESSION = {
-  gsk_sl_node_expression_free,
-  gsk_sl_node_expression_print,
-  gsk_sl_node_expression_write_spv
+static const GskSlStatementClass GSK_SL_STATEMENT_EXPRESSION = {
+  gsk_sl_statement_expression_free,
+  gsk_sl_statement_expression_print,
+  gsk_sl_statement_expression_write_spv
 };
 
 /* API */
 
-static GskSlNode *
-gsk_sl_node_parse_declaration (GskSlScope        *scope,
-                               GskSlPreprocessor *stream,
-                               GskSlDecorations  *decoration,
-                               GskSlType         *type)
+static GskSlStatement *
+gsk_sl_statement_parse_declaration (GskSlScope        *scope,
+                                    GskSlPreprocessor *stream,
+                                    GskSlDecorations  *decoration,
+                                    GskSlType         *type)
 {
-  GskSlNodeDeclaration *declaration;
+  GskSlStatementDeclaration *declaration;
   GskSlPointerType *pointer_type;
   GskSlValue *value = NULL;
   const GskSlToken *token;
   char *name;
 
-  declaration = gsk_sl_node_new (GskSlNodeDeclaration, &GSK_SL_NODE_DECLARATION);
+  declaration = gsk_sl_statement_new (GskSlStatementDeclaration, &GSK_SL_STATEMENT_DECLARATION);
   
   token = gsk_sl_preprocessor_get (stream);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
     {
       name = g_strdup (token->str);
-      gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
+      gsk_sl_preprocessor_consume (stream, (GskSlStatement *) declaration);
 
       token = gsk_sl_preprocessor_get (stream);
       if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
         {
           GskSlValue *unconverted;
 
-          gsk_sl_preprocessor_consume (stream, (GskSlNode *) declaration);
+          gsk_sl_preprocessor_consume (stream, (GskSlStatement *) declaration);
           declaration->initial = gsk_sl_expression_parse_assignment (scope, stream);
           if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (declaration->initial)))
             {
@@ -305,27 +321,27 @@ gsk_sl_node_parse_declaration (GskSlScope        *scope,
   gsk_sl_pointer_type_unref (pointer_type);
   gsk_sl_scope_add_variable (scope, declaration->variable);
 
-  return (GskSlNode *) declaration;
+  return (GskSlStatement *) declaration;
 }
 
-GskSlNode *
-gsk_sl_node_parse_statement (GskSlScope        *scope,
-                             GskSlPreprocessor *preproc)
+GskSlStatement *
+gsk_sl_statement_parse (GskSlScope        *scope,
+                        GskSlPreprocessor *preproc)
 {
   const GskSlToken *token;
-  GskSlNode *node;
+  GskSlStatement *statement;
 
   token = gsk_sl_preprocessor_get (preproc);
 
   switch ((guint) token->type)
   {
     case GSK_SL_TOKEN_SEMICOLON:
-      node = (GskSlNode *) gsk_sl_node_new (GskSlNodeEmpty, &GSK_SL_NODE_EMPTY);
+      statement = (GskSlStatement *) gsk_sl_statement_new (GskSlStatementEmpty, &GSK_SL_STATEMENT_EMPTY);
       break;
 
     case GSK_SL_TOKEN_EOF:
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Unexpected end of document");
-      return (GskSlNode *) gsk_sl_node_new (GskSlNodeEmpty, &GSK_SL_NODE_EMPTY);
+      return (GskSlStatement *) gsk_sl_statement_new (GskSlStatementEmpty, &GSK_SL_STATEMENT_EMPTY);
 
     case GSK_SL_TOKEN_CONST:
     case GSK_SL_TOKEN_IN:
@@ -398,28 +414,28 @@ its_a_type:
 
         if (token->type == GSK_SL_TOKEN_LEFT_PAREN)
           {
-            GskSlNodeExpression *node_expression;
+            GskSlStatementExpression *statement_expression;
             GskSlFunction *constructor;
                 
             constructor = gsk_sl_function_new_constructor (type);
-            node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
+            statement_expression = gsk_sl_statement_new (GskSlStatementExpression, &GSK_SL_STATEMENT_EXPRESSION);
             if (gsk_sl_function_is_builtin_constructor (constructor))
               {
-                node_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, NULL, constructor);
+                statement_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, NULL, constructor);
               }
             else
               {
                 GskSlFunctionMatcher matcher;
                 gsk_sl_function_matcher_init (&matcher, g_list_prepend (NULL, constructor));
-                node_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, &matcher, constructor);
+                statement_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, &matcher, constructor);
                 gsk_sl_function_matcher_finish (&matcher);
               }
-            node = (GskSlNode *) node_expression;
+            statement = (GskSlStatement *) statement_expression;
             gsk_sl_function_unref (constructor);
           }
         else
           {
-            node = gsk_sl_node_parse_declaration (scope, preproc, &decoration, type);
+            statement = gsk_sl_statement_parse_declaration (scope, preproc, &decoration, type);
           }
 
         gsk_sl_type_unref (type);
@@ -428,23 +444,23 @@ its_a_type:
 
     case GSK_SL_TOKEN_RETURN:
       {
-        GskSlNodeReturn *return_node;
+        GskSlStatementReturn *return_statement;
         GskSlType *return_type;
 
-        return_node = gsk_sl_node_new (GskSlNodeReturn, &GSK_SL_NODE_RETURN);
-        gsk_sl_preprocessor_consume (preproc, (GskSlNode *) return_node);
+        return_statement = gsk_sl_statement_new (GskSlStatementReturn, &GSK_SL_STATEMENT_RETURN);
+        gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) return_statement);
         token = gsk_sl_preprocessor_get (preproc);
         if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-          return_node->value = gsk_sl_expression_parse (scope, preproc);
+          return_statement->value = gsk_sl_expression_parse (scope, preproc);
 
         return_type = gsk_sl_scope_get_return_type (scope);
-        node = (GskSlNode *) return_node;
+        statement = (GskSlStatement *) return_statement;
 
         if (return_type == NULL)
           {
             gsk_sl_preprocessor_error (preproc, SCOPE, "Cannot return from here.");
           }
-        else if (return_node->value == NULL)
+        else if (return_statement->value == NULL)
           {
             if (!gsk_sl_type_equal (return_type, gsk_sl_type_get_scalar (GSK_SL_VOID)))
               {
@@ -457,11 +473,11 @@ its_a_type:
               {
                 gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot return a value from a void function.");
               }
-            else if (!gsk_sl_type_can_convert (return_type, gsk_sl_expression_get_return_type (return_node->value)))
+            else if (!gsk_sl_type_can_convert (return_type, gsk_sl_expression_get_return_type (return_statement->value)))
               {
                 gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
                                            "Cannot convert type %s to return type %s.",
-                                           gsk_sl_type_get_name (gsk_sl_expression_get_return_type (return_node->value)),
+                                           gsk_sl_type_get_name (gsk_sl_expression_get_return_type (return_statement->value)),
                                            gsk_sl_type_get_name (return_type));
                 break;
               }
@@ -476,12 +492,12 @@ its_a_type:
 
     default:
       {
-        GskSlNodeExpression *node_expression;
+        GskSlStatementExpression *statement_expression;
 
-        node_expression = gsk_sl_node_new (GskSlNodeExpression, &GSK_SL_NODE_EXPRESSION);
-        node_expression->expression = gsk_sl_expression_parse (scope, preproc);
+        statement_expression = gsk_sl_statement_new (GskSlStatementExpression, &GSK_SL_STATEMENT_EXPRESSION);
+        statement_expression->expression = gsk_sl_expression_parse (scope, preproc);
 
-        node = (GskSlNode *) node_expression;
+        statement = (GskSlStatement *) statement_expression;
       }
       break;
   }
@@ -492,45 +508,45 @@ its_a_type:
       gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of statement.");
       gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_SEMICOLON);
     }
-  gsk_sl_preprocessor_consume (preproc, (GskSlNode *) node);
+  gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) statement);
 
-  return node;
+  return statement;
 }
 
-GskSlNode *
-gsk_sl_node_ref (GskSlNode *node)
+GskSlStatement *
+gsk_sl_statement_ref (GskSlStatement *statement)
 {
-  g_return_val_if_fail (node != NULL, NULL);
+  g_return_val_if_fail (statement != NULL, NULL);
 
-  node->ref_count += 1;
+  statement->ref_count += 1;
 
-  return node;
-}
-
-void
-gsk_sl_node_unref (GskSlNode *node)
-{
-  if (node == NULL)
-    return;
-
-  node->ref_count -= 1;
-  if (node->ref_count > 0)
-    return;
-
-  node->class->free (node);
+  return statement;
 }
 
 void
-gsk_sl_node_print (const GskSlNode *node,
-                   GskSlPrinter    *printer)
+gsk_sl_statement_unref (GskSlStatement *statement)
 {
-  node->class->print (node, printer);
+  if (statement == NULL)
+    return;
+
+  statement->ref_count -= 1;
+  if (statement->ref_count > 0)
+    return;
+
+  statement->class->free (statement);
+}
+
+void
+gsk_sl_statement_print (const GskSlStatement *statement,
+                        GskSlPrinter         *printer)
+{
+  statement->class->print (statement, printer);
 }
 
 guint32
-gsk_sl_node_write_spv (const GskSlNode *node,
-                       GskSpvWriter    *writer)
+gsk_sl_statement_write_spv (const GskSlStatement *statement,
+                            GskSpvWriter         *writer)
 {
-  return node->class->write_spv (node, writer);
+  return statement->class->write_spv (statement, writer);
 }
 

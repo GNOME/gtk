@@ -22,7 +22,6 @@
 
 #include "gskslpreprocessorprivate.h"
 #include "gskslfunctionprivate.h"
-#include "gskslnodeprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"

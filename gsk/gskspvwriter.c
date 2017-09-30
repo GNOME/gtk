@@ -20,7 +20,6 @@
 
 #include "gskspvwriterprivate.h"
 
-#include "gskslnodeprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
