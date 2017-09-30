@@ -607,7 +607,7 @@ gtk_tree_model_render_node_set_root_node (GtkTreeModelRenderNode *model,
   GtkTreePath *path;
 
   g_return_if_fail (GTK_IS_TREE_MODEL_RENDER_NODE (model));
-  g_return_if_fail (node == NULL || GSK_IS_RENDER_NODE (node));
+  g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
   priv = model->priv;
 
