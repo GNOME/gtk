@@ -40,14 +40,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkSpinner      GtkSpinner;
 typedef struct _GtkSpinnerClass GtkSpinnerClass;
-typedef struct _GtkSpinnerPrivate  GtkSpinnerPrivate;
 
 struct _GtkSpinner
 {
   GtkWidget parent;
-
-  /*< private >*/
-  GtkSpinnerPrivate *priv;
 };
 
 struct _GtkSpinnerClass

@@ -71,6 +71,7 @@ struct _GtkSpinnerPrivate
 {
   guint active : 1;
 };
+typedef struct _GtkSpinnerPrivate GtkSpinnerPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 
@@ -123,7 +124,7 @@ static void
 gtk_spinner_set_active (GtkSpinner *spinner,
                         gboolean    active)
 {
-  GtkSpinnerPrivate *priv = spinner->priv;
+  GtkSpinnerPrivate *priv = gtk_spinner_get_instance_private (spinner);
 
   active = !!active;
 
@@ -148,9 +149,7 @@ gtk_spinner_get_property (GObject    *object,
                           GValue     *value,
                           GParamSpec *pspec)
 {
-  GtkSpinnerPrivate *priv;
-
-  priv = GTK_SPINNER (object)->priv;
+  GtkSpinnerPrivate *priv = gtk_spinner_get_instance_private (GTK_SPINNER (object));
 
   switch (param_id)
     {
@@ -213,8 +212,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
 static void
 gtk_spinner_init (GtkSpinner *spinner)
 {
-  spinner->priv = gtk_spinner_get_instance_private (spinner);
-
   gtk_widget_set_has_window (GTK_WIDGET (spinner), FALSE);
 }
 
