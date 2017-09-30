@@ -85,6 +85,7 @@ struct _GtkSwitchPrivate
   GtkWidget *off_label;
   GtkWidget *slider;
 };
+typedef struct _GtkSwitchPrivate GtkSwitchPrivate;
 
 enum
 {
@@ -117,7 +118,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkSwitch, gtk_switch, GTK_TYPE_WIDGET,
 static void
 gtk_switch_end_toggle_animation (GtkSwitch *sw)
 {
-  GtkSwitchPrivate *priv = sw->priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
 
   if (priv->tick_id != 0)
     {
@@ -132,7 +133,7 @@ gtk_switch_on_frame_clock_update (GtkWidget     *widget,
                                   gpointer       user_data)
 {
   GtkSwitch *sw = GTK_SWITCH (widget);
-  GtkSwitchPrivate *priv = sw->priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
 
   gtk_progress_tracker_advance_frame (&priv->tracker,
                                       gdk_frame_clock_get_frame_time (clock));
@@ -159,7 +160,7 @@ gtk_switch_on_frame_clock_update (GtkWidget     *widget,
 static void
 gtk_switch_begin_toggle_animation (GtkSwitch *sw)
 {
-  GtkSwitchPrivate *priv = sw->priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
 
   if (gtk_settings_get_enable_animations (gtk_widget_get_settings (GTK_WIDGET (sw))))
     {
@@ -182,7 +183,7 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                        gdouble               y,
                                        GtkSwitch            *sw)
 {
-  GtkSwitchPrivate *priv = sw->priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
   GtkAllocation allocation;
 
   gtk_widget_get_outer_allocation (GTK_WIDGET (sw), &allocation);
@@ -222,7 +223,7 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
                             GtkSwitch       *sw)
 {
   GtkWidget *widget = GTK_WIDGET (sw);
-  GtkSwitchPrivate *priv = sw->priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
   gint width;
   int height;
 
@@ -250,7 +251,7 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
                                  gdouble         y,
                                  GtkSwitch      *sw)
 {
-  GtkSwitchPrivate *priv = sw->priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
   GdkEventSequence *sequence;
   gboolean active;
 
@@ -288,13 +289,10 @@ gtk_switch_measure (GtkWidget      *widget,
                     int            *minimum_baseline,
                     int            *natural_baseline)
 {
-  GtkSwitch *self;
-  GtkSwitchPrivate *priv;
+  GtkSwitch *self = GTK_SWITCH (widget);
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
   gint slider_minimum, slider_natural;
   int on_nat, off_nat;
-
-  self = GTK_SWITCH (widget);
-  priv = self->priv;
 
   gtk_widget_measure (priv->slider, orientation, -1,
                       &slider_minimum, &slider_natural,
@@ -366,11 +364,12 @@ gtk_switch_set_action_name (GtkActionable *actionable,
                             const gchar   *action_name)
 {
   GtkSwitch *sw = GTK_SWITCH (actionable);
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
 
-  if (!sw->priv->action_helper)
-    sw->priv->action_helper = gtk_action_helper_new (actionable);
+  if (!priv->action_helper)
+    priv->action_helper = gtk_action_helper_new (actionable);
 
-  gtk_action_helper_set_action_name (sw->priv->action_helper, action_name);
+  gtk_action_helper_set_action_name (priv->action_helper, action_name);
 }
 
 static void
@@ -378,27 +377,30 @@ gtk_switch_set_action_target_value (GtkActionable *actionable,
                                     GVariant      *action_target)
 {
   GtkSwitch *sw = GTK_SWITCH (actionable);
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
 
-  if (!sw->priv->action_helper)
-    sw->priv->action_helper = gtk_action_helper_new (actionable);
+  if (!priv->action_helper)
+    priv->action_helper = gtk_action_helper_new (actionable);
 
-  gtk_action_helper_set_action_target_value (sw->priv->action_helper, action_target);
+  gtk_action_helper_set_action_target_value (priv->action_helper, action_target);
 }
 
 static const gchar *
 gtk_switch_get_action_name (GtkActionable *actionable)
 {
   GtkSwitch *sw = GTK_SWITCH (actionable);
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
 
-  return gtk_action_helper_get_action_name (sw->priv->action_helper);
+  return gtk_action_helper_get_action_name (priv->action_helper);
 }
 
 static GVariant *
 gtk_switch_get_action_target_value (GtkActionable *actionable)
 {
   GtkSwitch *sw = GTK_SWITCH (actionable);
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
 
-  return gtk_action_helper_get_action_target_value (sw->priv->action_helper);
+  return gtk_action_helper_get_action_target_value (priv->action_helper);
 }
 
 static void
@@ -447,7 +449,7 @@ gtk_switch_get_property (GObject    *gobject,
                          GValue     *value,
                          GParamSpec *pspec)
 {
-  GtkSwitchPrivate *priv = GTK_SWITCH (gobject)->priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (GTK_SWITCH (gobject));
 
   switch (prop_id)
     {
@@ -475,7 +477,7 @@ gtk_switch_get_property (GObject    *gobject,
 static void
 gtk_switch_dispose (GObject *object)
 {
-  GtkSwitchPrivate *priv = GTK_SWITCH (object)->priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (GTK_SWITCH (object));
 
   g_clear_object (&priv->action_helper);
 
@@ -488,7 +490,7 @@ gtk_switch_dispose (GObject *object)
 static void
 gtk_switch_finalize (GObject *object)
 {
-  GtkSwitchPrivate *priv = GTK_SWITCH (object)->priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (GTK_SWITCH (object));
 
   gtk_switch_end_toggle_animation (GTK_SWITCH (object));
 
@@ -502,8 +504,10 @@ gtk_switch_finalize (GObject *object)
 static gboolean
 state_set (GtkSwitch *sw, gboolean state)
 {
-  if (sw->priv->action_helper)
-    gtk_action_helper_activate (sw->priv->action_helper);
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
+
+  if (priv->action_helper)
+    gtk_action_helper_activate (priv->action_helper);
 
   gtk_switch_set_state (sw, state);
 
@@ -620,10 +624,8 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 static void
 gtk_switch_init (GtkSwitch *self)
 {
-  GtkSwitchPrivate *priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (self);
   GtkGesture *gesture;
-
-  priv = self->priv = gtk_switch_get_instance_private (self);
 
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
@@ -696,15 +698,13 @@ void
 gtk_switch_set_active (GtkSwitch *sw,
                        gboolean   is_active)
 {
-  GtkSwitchPrivate *priv;
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
 
   g_return_if_fail (GTK_IS_SWITCH (sw));
 
   gtk_switch_end_toggle_animation (sw);
 
   is_active = !!is_active;
-
-  priv = sw->priv;
 
   if (priv->is_active != is_active)
     {
@@ -742,9 +742,11 @@ gtk_switch_set_active (GtkSwitch *sw,
 gboolean
 gtk_switch_get_active (GtkSwitch *sw)
 {
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
+
   g_return_val_if_fail (GTK_IS_SWITCH (sw), FALSE);
 
-  return sw->priv->is_active;
+  return priv->is_active;
 }
 
 /**
@@ -766,14 +768,15 @@ void
 gtk_switch_set_state (GtkSwitch *sw,
                       gboolean   state)
 {
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
   g_return_if_fail (GTK_IS_SWITCH (sw));
 
   state = state != FALSE;
 
-  if (sw->priv->state == state)
+  if (priv->state == state)
     return;
 
-  sw->priv->state = state;
+  priv->state = state;
 
   /* This will be a no-op if we're switching the state in response
    * to a UI change. We're setting active anyway, to catch 'spontaneous'
@@ -802,7 +805,9 @@ gtk_switch_set_state (GtkSwitch *sw,
 gboolean
 gtk_switch_get_state (GtkSwitch *sw)
 {
+  GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
+
   g_return_val_if_fail (GTK_IS_SWITCH (sw), FALSE);
 
-  return sw->priv->state;
+  return priv->state;
 }

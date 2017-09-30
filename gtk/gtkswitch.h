@@ -42,7 +42,6 @@ G_BEGIN_DECLS
 #define GTK_SWITCH_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SWITCH, GtkSwitchClass))
 
 typedef struct _GtkSwitch               GtkSwitch;
-typedef struct _GtkSwitchPrivate        GtkSwitchPrivate;
 typedef struct _GtkSwitchClass          GtkSwitchClass;
 
 /**
@@ -55,8 +54,6 @@ struct _GtkSwitch
 {
   /*< private >*/
   GtkWidget parent_instance;
-
-  GtkSwitchPrivate *priv;
 };
 
 /**
