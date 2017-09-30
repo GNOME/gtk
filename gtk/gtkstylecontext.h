@@ -38,12 +38,10 @@ G_BEGIN_DECLS
 #define GTK_STYLE_CONTEXT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_STYLE_CONTEXT, GtkStyleContextClass))
 
 typedef struct _GtkStyleContextClass GtkStyleContextClass;
-typedef struct _GtkStyleContextPrivate GtkStyleContextPrivate;
 
 struct _GtkStyleContext
 {
   GObject parent_object;
-  GtkStyleContextPrivate *priv;
 };
 
 struct _GtkStyleContextClass
