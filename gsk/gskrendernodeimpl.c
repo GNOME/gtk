@@ -4003,7 +4003,7 @@ gsk_text_node_deserialize (GVariant  *variant,
     }
   g_variant_iter_free (iter);
 
-  result = gsk_text_node_new (font, glyphs, &color, x, y); /* FIXME: Avoid copying glyphs */
+  result = gsk_text_node_new (font, glyphs, &color, x, y);
 
   pango_glyph_string_free (glyphs);
   pango_font_description_free (desc);
@@ -4034,6 +4034,8 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
  * Creates a render node that renders the given glyphs,
  * Note that @color may not be used if the font contains
  * color glyphs.
+ *
+ * Returns: a new text node, or %NULL
  *
  * Since: 3.92
  */
