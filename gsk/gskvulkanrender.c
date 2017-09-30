@@ -32,7 +32,7 @@ struct _GskVulkanRender
   GdkVulkanContext *vulkan;
 
   int scale_factor;
-  VkRect2D viewport;
+  graphene_rect_t viewport;
   cairo_region_t *clip;
 
   GHashTable *framebuffers;
@@ -73,7 +73,7 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
 
   if (rect)
     {
-      self->viewport = (VkRect2D) { { rect->origin.x, rect->origin.y }, { rect->size.width, rect->size.height } };
+      self->viewport = *rect;
       self->scale_factor = 1;
       self->clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                       0, 0,
@@ -84,9 +84,9 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
   else
     {
       self->scale_factor = gsk_renderer_get_scale_factor (self->renderer);
-      self->viewport.offset = (VkOffset2D) { 0, 0 };
-      self->viewport.extent.width = gdk_window_get_width (window) * self->scale_factor;
-      self->viewport.extent.height = gdk_window_get_height (window) * self->scale_factor;
+      self->viewport = GRAPHENE_RECT_INIT (0, 0,
+                                           gdk_window_get_width (window) * self->scale_factor,
+                                           gdk_window_get_height (window) * self->scale_factor);
       self->clip = gdk_drawing_context_get_clip (gsk_renderer_get_drawing_context (self->renderer));
     }
 }
@@ -334,10 +334,7 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
                                      self->target,
                                      self->scale_factor,
                                      &mv,
-                                     &GRAPHENE_RECT_INIT (
-                                         self->viewport.offset.x, self->viewport.offset.y,
-                                         self->viewport.extent.width, self->viewport.extent.height
-                                     ),
+                                     &self->viewport,
                                      self->clip,
                                      VK_NULL_HANDLE);
 
