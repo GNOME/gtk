@@ -302,7 +302,7 @@ struct _GskSlFunctionDeclared {
   char *name;
   GskSlVariable **arguments;
   gsize n_arguments;
-  GSList *statements;
+  GskSlStatement *statement;
 };
 
 static void
@@ -319,7 +319,8 @@ gsk_sl_function_declared_free (GskSlFunction *function)
   if (declared->return_type)
     gsk_sl_type_unref (declared->return_type);
   g_free (declared->name);
-  g_slist_free_full (declared->statements, (GDestroyNotify) gsk_sl_statement_unref);
+  if (declared->statement)
+    gsk_sl_statement_unref (declared->statement);
 
   g_slice_free (GskSlFunctionDeclared, declared);
 }
@@ -361,7 +362,6 @@ gsk_sl_function_declared_print (const GskSlFunction *function,
                                 GskSlPrinter        *printer)
 {
   const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
-  GSList *l;
   guint i;
 
   gsk_sl_printer_append (printer, gsk_sl_type_get_name (declared->return_type));
@@ -376,18 +376,17 @@ gsk_sl_function_declared_print (const GskSlFunction *function,
       gsk_sl_variable_print (declared->arguments[i], printer);
     }
   gsk_sl_printer_append (printer, ")");
-  gsk_sl_printer_newline (printer);
 
-  gsk_sl_printer_append (printer, "{");
-  gsk_sl_printer_push_indentation (printer);
-  for (l = declared->statements; l; l = l->next)
+  if (declared->statement)
     {
       gsk_sl_printer_newline (printer);
-      gsk_sl_statement_print (l->data, printer);
+      gsk_sl_statement_print (declared->statement, printer);
     }
-  gsk_sl_printer_pop_indentation (printer);
-  gsk_sl_printer_newline (printer);
-  gsk_sl_printer_append (printer, "}");
+  else
+    {
+      gsk_sl_printer_append (printer, ";");
+    }
+
   gsk_sl_printer_newline (printer);
 }
 
@@ -397,7 +396,9 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
 {
   GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
   guint32 return_type_id, function_type_id, function_id, label_id;
-  GSList *l;
+
+  if (declared->statement == NULL)
+    return 0;
 
   /* declare type of function */
   return_type_id = gsk_spv_writer_get_id_for_type (writer, declared->return_type);
@@ -426,10 +427,7 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
                       2, GSK_SPV_OP_LABEL,
                       (guint32[1]) { label_id });
 
-  for (l = declared->statements; l; l = l->next)
-    {
-      gsk_sl_statement_write_spv (l->data, writer);
-    }
+  gsk_sl_statement_write_spv (declared->statement, writer);
 
   gsk_spv_writer_add (writer,
                       GSK_SPV_WRITER_SECTION_CODE,
@@ -594,29 +592,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
       return (GskSlFunction *) function;
     }
 
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an opening \"{\"");
-      return (GskSlFunction *) function;
-    }
-  gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
-
-  for (token = gsk_sl_preprocessor_get (preproc);
-       !gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE) && !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
-       token = gsk_sl_preprocessor_get (preproc))
-    {
-      GskSlStatement *statement;
-
-      statement = gsk_sl_statement_parse (function->scope, preproc);
-      function->statements = g_slist_append (function->statements, statement);
-    }
-
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \"}\" at end of function.");
-      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
-    }
-  gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
+  function->statement = gsk_sl_statement_parse_compound (function->scope, preproc, FALSE);
 
   return (GskSlFunction *) function;
 }
