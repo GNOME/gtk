@@ -87,9 +87,6 @@ typedef enum
 struct _GtkImage
 {
   GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkImagePrivate *priv;
 };
 
 struct _GtkImageClass
