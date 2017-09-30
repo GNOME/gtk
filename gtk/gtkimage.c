@@ -28,17 +28,13 @@
 #include <string.h>
 #include <cairo-gobject.h>
 
-#include "gtkcontainer.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkimageprivate.h"
 #include "gtkicontheme.h"
-#include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkcssshadowsvalueprivate.h"
-#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
 #include "a11y/gtkimageaccessible.h"
