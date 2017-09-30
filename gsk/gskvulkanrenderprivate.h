@@ -69,13 +69,8 @@ void                    gsk_vulkan_render_add_cleanup_image             (GskVulk
 void                    gsk_vulkan_render_add_node                      (GskVulkanRender        *self,
                                                                          GskRenderNode          *node);
 
-void                    gsk_vulkan_render_add_node_for_texture          (GskVulkanRender        *self,
-                                                                         GskRenderNode          *node,
-                                                                         const graphene_matrix_t *mv,
-                                                                         const graphene_rect_t *bounds,
-                                                                         GskVulkanImage        *target,
-                                                                         VkSemaphore            semaphore);
-
+void                    gsk_vulkan_render_add_render_pass               (GskVulkanRender        *self,
+                                                                         GskVulkanRenderPass    *pass);
 
 void                    gsk_vulkan_render_upload                        (GskVulkanRender        *self);
 

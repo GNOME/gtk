@@ -310,7 +310,7 @@ gsk_vulkan_render_add_cleanup_image (GskVulkanRender *self,
   self->cleanup_images = g_slist_prepend (self->cleanup_images, image);
 }
 
-static void
+void
 gsk_vulkan_render_add_render_pass (GskVulkanRender     *self,
                                    GskVulkanRenderPass *pass)
 {
@@ -337,38 +337,6 @@ gsk_vulkan_render_add_node (GskVulkanRender *self,
                                      &self->viewport,
                                      self->clip,
                                      VK_NULL_HANDLE);
-
-  gsk_vulkan_render_add_render_pass (self, pass);
-
-  gsk_vulkan_render_pass_add (pass, self, node);
-}
-
-void
-gsk_vulkan_render_add_node_for_texture (GskVulkanRender       *self,
-                                        GskRenderNode         *node,
-                                        const graphene_matrix_t *mv,
-                                        const graphene_rect_t *bounds,
-                                        GskVulkanImage        *target,
-                                        VkSemaphore            semaphore)
-{
-  GskVulkanRenderPass *pass;
-  cairo_region_t *clip;
-
-  clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
-                                         0, 0,
-                                         gsk_vulkan_image_get_width (target),
-                                         gsk_vulkan_image_get_height (target)
-                                     });
-
-  pass = gsk_vulkan_render_pass_new (self->vulkan,
-                                     target,
-                                     1,
-                                     mv,
-                                     bounds,
-                                     clip,
-                                     semaphore);
-
-  cairo_region_destroy (clip);
 
   gsk_vulkan_render_add_render_pass (self, pass);
 

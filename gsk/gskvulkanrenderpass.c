@@ -689,6 +689,8 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
           {
             VkSemaphore semaphore;
             graphene_rect_t view;
+            cairo_region_t *clip;
+            GskVulkanRenderPass *pass;
 
             graphene_matrix_transform_bounds (&self->mv, bounds, &view);
 
@@ -715,7 +717,25 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
                                &semaphore);
 
             g_array_append_val (self->wait_semaphores, semaphore);
-            gsk_vulkan_render_add_node_for_texture (render, node, &self->mv, &view, result, semaphore);
+
+            clip = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                  0, 0,
+                                                  gsk_vulkan_image_get_width (result),
+                                                  gsk_vulkan_image_get_height (result)
+                                                  });
+
+            pass = gsk_vulkan_render_pass_new (self->vulkan,
+                                               result,
+                                               1,
+                                               &self->mv,
+                                               &view,
+                                               clip,
+                                               semaphore);
+
+            cairo_region_destroy (clip);
+
+            gsk_vulkan_render_add_render_pass (render, pass);
+            gsk_vulkan_render_pass_add (pass, render, node);
             gsk_vulkan_render_add_cleanup_image (render, result);
 
             return result;
