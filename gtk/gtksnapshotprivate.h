@@ -32,7 +32,8 @@ typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshot      *snapshot,
 
 struct _GtkSnapshotState {
   char                  *name;
-  GPtrArray             *nodes;
+  guint                  start_node_index;
+  guint                  n_nodes;
 
   cairo_region_t        *clip_region;
   int                    translate_x;
@@ -83,6 +84,7 @@ struct _GtkSnapshot {
   gboolean               record_names;
   GskRenderer           *renderer;
   GArray                *state_stack;
+  GPtrArray             *nodes;
 };
 
 void            gtk_snapshot_init               (GtkSnapshot             *state,
