@@ -24,15 +24,13 @@ G_BEGIN_DECLS
 
 typedef struct _GtkSnapshotState GtkSnapshotState;
 
-typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshotState *state,
+typedef GskRenderNode * (* GtkSnapshotCollectFunc) (GtkSnapshot      *snapshot,
+                                                    GtkSnapshotState *state,
                                                     GskRenderNode   **nodes,
                                                     guint             n_nodes,
                                                     const char       *name);
 
 struct _GtkSnapshotState {
-  GtkSnapshotState      *parent;
-  GtkSnapshotState      *cached_state; /* A cleared state object we can (re)use */
-
   char                  *name;
   GPtrArray             *nodes;
 
@@ -82,9 +80,9 @@ struct _GtkSnapshotState {
 };
 
 struct _GtkSnapshot {
-  GtkSnapshotState      *state;
   gboolean               record_names;
   GskRenderer           *renderer;
+  GArray                *state_stack;
 };
 
 void            gtk_snapshot_init               (GtkSnapshot             *state,

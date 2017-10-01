@@ -51,7 +51,8 @@
  */
 
 static GskRenderNode *
-gtk_snapshot_collect_default (GtkSnapshotState *state,
+gtk_snapshot_collect_default (GtkSnapshot      *snapshot,
+                              GtkSnapshotState *state,
                               GskRenderNode **nodes,
                               guint           n_nodes,
                               const char     *name)
@@ -77,26 +78,19 @@ gtk_snapshot_collect_default (GtkSnapshotState *state,
 }
 
 static GtkSnapshotState *
-gtk_snapshot_state_new (GtkSnapshotState       *parent,
-                        char                   *name,
-                        cairo_region_t         *clip,
-                        int                     translate_x,
-                        int                     translate_y,
-                        GtkSnapshotCollectFunc  collect_func)
+gtk_snapshot_push_state (GtkSnapshot            *snapshot,
+                         char                   *name,
+                         cairo_region_t         *clip,
+                         int                     translate_x,
+                         int                     translate_y,
+                         GtkSnapshotCollectFunc  collect_func)
 {
   GtkSnapshotState *state;
 
-  if (parent != NULL && parent->cached_state != NULL)
-    {
-      state = parent->cached_state;
-      parent->cached_state = NULL;
-    }
-  else
-    {
-      state = g_slice_new0 (GtkSnapshotState);
-      state->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
-      state->parent = parent;
-    }
+  g_array_set_size (snapshot->state_stack, snapshot->state_stack->len + 1);
+  state = &g_array_index (snapshot->state_stack, GtkSnapshotState, snapshot->state_stack->len - 1);
+
+  state->nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
 
   state->name = name;
   if (clip)
@@ -108,22 +102,28 @@ gtk_snapshot_state_new (GtkSnapshotState       *parent,
   return state;
 }
 
-static void
-gtk_snapshot_state_clear (GtkSnapshotState *state)
+static GtkSnapshotState *
+gtk_snapshot_get_current_state (const GtkSnapshot *snapshot)
 {
-  g_ptr_array_set_size (state->nodes, 0);
-  g_clear_pointer (&state->clip_region, cairo_region_destroy);
-  g_clear_pointer (&state->name, g_free);
+  g_assert (snapshot->state_stack->len > 0);
+
+  return &g_array_index (snapshot->state_stack, GtkSnapshotState, snapshot->state_stack->len - 1);
+}
+
+static GtkSnapshotState *
+gtk_snapshot_get_previous_state (const GtkSnapshot *snapshot)
+{
+  g_assert (snapshot->state_stack->len > 1);
+
+  return &g_array_index (snapshot->state_stack, GtkSnapshotState, snapshot->state_stack->len - 2);
 }
 
 static void
-gtk_snapshot_state_free (GtkSnapshotState *state)
+gtk_snapshot_state_clear (GtkSnapshotState *state)
 {
-  if (state->cached_state)
-    gtk_snapshot_state_free (state->cached_state);
-  gtk_snapshot_state_clear (state);
   g_ptr_array_unref (state->nodes);
-  g_slice_free (GtkSnapshotState, state);
+  g_clear_pointer (&state->clip_region, cairo_region_destroy);
+  g_clear_pointer (&state->name, g_free);
 }
 
 void
@@ -136,9 +136,10 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
 {
   char *str;
 
-  snapshot->state = NULL;
   snapshot->record_names = record_names;
   snapshot->renderer = renderer;
+  snapshot->state_stack = g_array_new (FALSE, TRUE, sizeof (GtkSnapshotState));
+  g_array_set_clear_func (snapshot->state_stack, (GDestroyNotify)gtk_snapshot_state_clear);
 
   if (name && record_names)
     {
@@ -151,11 +152,11 @@ gtk_snapshot_init (GtkSnapshot          *snapshot,
   else
     str = NULL;
 
-  snapshot->state = gtk_snapshot_state_new (NULL,
-                                            str,
-                                            (cairo_region_t *) clip,
-                                            0, 0,
-                                            gtk_snapshot_collect_default);
+  gtk_snapshot_push_state (snapshot,
+                           str,
+                           (cairo_region_t *) clip,
+                           0, 0,
+                           gtk_snapshot_collect_default);
 }
 
 /**
@@ -193,32 +194,35 @@ gtk_snapshot_push (GtkSnapshot           *snapshot,
 
   if (keep_coordinates)
     {
-      snapshot->state = gtk_snapshot_state_new (snapshot->state,
-                                                str,
-                                                snapshot->state->clip_region,
-                                                snapshot->state->translate_x,
-                                                snapshot->state->translate_y,
-                                                gtk_snapshot_collect_default);
+      GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
+
+      gtk_snapshot_push_state (snapshot,
+                               g_strdup (str),
+                               state->clip_region,
+                               state->translate_x,
+                               state->translate_y,
+                               gtk_snapshot_collect_default);
+
     }
   else
     {
-      snapshot->state = gtk_snapshot_state_new (snapshot->state,
-                                                str,
-                                                NULL,
-                                                0, 0,
-                                                gtk_snapshot_collect_default);
+      gtk_snapshot_push_state (snapshot,
+                               g_strdup (str),
+                               NULL, 0, 0,
+                               gtk_snapshot_collect_default);
     }
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_transform (GtkSnapshotState *state,
+gtk_snapshot_collect_transform (GtkSnapshot      *snapshot,
+                                GtkSnapshotState *state,
                                 GskRenderNode **nodes,
                                 guint           n_nodes,
                                 const char     *name)
 {
   GskRenderNode *node, *transform_node;
 
-  node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   if (node == NULL)
     return NULL;
 
@@ -237,6 +241,7 @@ gtk_snapshot_push_transform (GtkSnapshot             *snapshot,
                              const char              *name,
                              ...)
 {
+  GtkSnapshotState *previous_state;
   GtkSnapshotState *state;
   graphene_matrix_t offset;
   char *str;
@@ -252,33 +257,34 @@ gtk_snapshot_push_transform (GtkSnapshot             *snapshot,
   else
     str = NULL;
 
-  state = gtk_snapshot_state_new (snapshot->state,
-                                  str,
-                                  NULL,
-                                  0, 0,
-                                  gtk_snapshot_collect_transform);
+  state = gtk_snapshot_push_state (snapshot,
+                                   str,
+                                   NULL,
+                                   0, 0,
+                                   gtk_snapshot_collect_transform);
+
+  previous_state = gtk_snapshot_get_previous_state (snapshot);
 
   graphene_matrix_init_translate (&offset,
                                   &GRAPHENE_POINT3D_INIT(
-                                      snapshot->state->translate_x,
-                                      snapshot->state->translate_y,
+                                      previous_state->translate_x,
+                                      previous_state->translate_y,
                                       0
                                   ));
 
   graphene_matrix_multiply (transform, &offset, &state->data.transform.transform);
-
-  snapshot->state = state;
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_opacity (GtkSnapshotState *state,
+gtk_snapshot_collect_opacity (GtkSnapshot      *snapshot,
+                              GtkSnapshotState *state,
                               GskRenderNode **nodes,
                               guint           n_nodes,
                               const char     *name)
 {
   GskRenderNode *node, *opacity_node;
 
-  node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   if (node == NULL)
     return NULL;
 
@@ -297,6 +303,7 @@ gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
                            const char  *name,
                            ...)
 {
+  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   char *str;
 
@@ -311,25 +318,25 @@ gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
   else
     str = NULL;
 
-  state = gtk_snapshot_state_new (snapshot->state,
-                                  str,
-                                  snapshot->state->clip_region,
-                                  snapshot->state->translate_x,
-                                  snapshot->state->translate_y,
-                                  gtk_snapshot_collect_opacity);
+  state = gtk_snapshot_push_state (snapshot,
+                                   str,
+                                   current_state->clip_region,
+                                   current_state->translate_x,
+                                   current_state->translate_y,
+                                   gtk_snapshot_collect_opacity);
   state->data.opacity.opacity = opacity;
-  snapshot->state = state;
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_blur (GtkSnapshotState *state,
+gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
+                           GtkSnapshotState *state,
                            GskRenderNode **nodes,
                            guint           n_nodes,
                            const char     *name)
 {
   GskRenderNode *node, *blur_node;
 
-  node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   if (node == NULL)
     return NULL;
 
@@ -348,6 +355,7 @@ gtk_snapshot_push_blur (GtkSnapshot *snapshot,
                         const char  *name,
                         ...)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   char *str;
 
@@ -362,25 +370,26 @@ gtk_snapshot_push_blur (GtkSnapshot *snapshot,
   else
     str = NULL;
 
-  state = gtk_snapshot_state_new (snapshot->state,
-                                  str,
-                                  snapshot->state->clip_region,
-                                  snapshot->state->translate_x,
-                                  snapshot->state->translate_y,
-                                  gtk_snapshot_collect_blur);
+  state = gtk_snapshot_push_state (snapshot,
+                                   str,
+                                   current_state->clip_region,
+                                   current_state->translate_x,
+                                   current_state->translate_y,
+                                   gtk_snapshot_collect_blur);
   state->data.blur.radius = radius;
-  snapshot->state = state;
+  current_state = state;
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_color_matrix (GtkSnapshotState *state,
+gtk_snapshot_collect_color_matrix (GtkSnapshot      *snapshot,
+                                   GtkSnapshotState *state,
                                    GskRenderNode   **nodes,
                                    guint             n_nodes,
                                    const char       *name)
 {
   GskRenderNode *node, *color_matrix_node;
 
-  node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   if (node == NULL)
     return NULL;
 
@@ -402,6 +411,7 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
                                 const char              *name,
                                 ...)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   char *str;
 
@@ -416,16 +426,16 @@ gtk_snapshot_push_color_matrix (GtkSnapshot             *snapshot,
   else
     str = NULL;
 
-  state = gtk_snapshot_state_new (snapshot->state,
+  state = gtk_snapshot_push_state (snapshot,
                                   str,
-                                  snapshot->state->clip_region,
-                                  snapshot->state->translate_x,
-                                  snapshot->state->translate_y,
+                                  current_state->clip_region,
+                                  current_state->translate_x,
+                                  current_state->translate_y,
                                   gtk_snapshot_collect_color_matrix);
 
   graphene_matrix_init_from_matrix (&state->data.color_matrix.matrix, color_matrix);
   graphene_vec4_init_from_vec4 (&state->data.color_matrix.offset, color_offset);
-  snapshot->state = state;
+  current_state = state;
 }
 
 static void
@@ -439,7 +449,8 @@ rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_repeat (GtkSnapshotState *state,
+gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
+                             GtkSnapshotState *state,
                              GskRenderNode   **nodes,
                              guint             n_nodes,
                              const char       *name)
@@ -448,7 +459,7 @@ gtk_snapshot_collect_repeat (GtkSnapshotState *state,
   graphene_rect_t *bounds = &state->data.repeat.bounds;
   graphene_rect_t *child_bounds = &state->data.repeat.child_bounds;
 
-  node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   if (node == NULL)
     return NULL;
 
@@ -470,6 +481,7 @@ gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
                           const char            *name,
                           ...)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   cairo_region_t *clip = NULL;
   graphene_rect_t real_child_bounds = { { 0 } };
@@ -489,36 +501,39 @@ gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
   if (child_bounds)
     {
       cairo_rectangle_int_t rect;
-      graphene_rect_offset_r (child_bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_child_bounds);
+      graphene_rect_offset_r (child_bounds, current_state->translate_x, current_state->translate_y, &real_child_bounds);
       rectangle_init_from_graphene (&rect, &real_child_bounds);
       clip = cairo_region_create_rectangle (&rect);
     }
 
-  state = gtk_snapshot_state_new (snapshot->state,
-                                  str,
-                                  clip,
-                                  snapshot->state->translate_x,
-                                  snapshot->state->translate_y,
-                                  gtk_snapshot_collect_repeat);
+  state = gtk_snapshot_push_state (snapshot,
+                                   str,
+                                   clip,
+                                   current_state->translate_x,
+                                   current_state->translate_y,
+                                   gtk_snapshot_collect_repeat);
 
-  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &state->data.repeat.bounds);
+  current_state = gtk_snapshot_get_previous_state (snapshot);
+
+  graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &state->data.repeat.bounds);
   state->data.repeat.child_bounds = real_child_bounds;
 
-  snapshot->state = state;
+  current_state = state;
 
   if (clip)
     cairo_region_destroy (clip);
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_clip (GtkSnapshotState *state,
+gtk_snapshot_collect_clip (GtkSnapshot      *snapshot,
+                           GtkSnapshotState *state,
                            GskRenderNode   **nodes,
                            guint             n_nodes,
                            const char       *name)
 {
   GskRenderNode *node, *clip_node;
 
-  node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   if (node == NULL)
     return NULL;
 
@@ -537,13 +552,14 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
                         const char            *name,
                         ...)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   graphene_rect_t real_bounds;
   cairo_region_t *clip;
   cairo_rectangle_int_t rect;
   char *str;
 
-  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
+  graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
 
   if (name && snapshot->record_names)
     {
@@ -557,38 +573,37 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
     str = NULL;
 
   rectangle_init_from_graphene (&rect, &real_bounds);
-  if (snapshot->state->clip_region)
+  if (current_state->clip_region)
     {
-      clip = cairo_region_copy (snapshot->state->clip_region);
+      clip = cairo_region_copy (current_state->clip_region);
       cairo_region_intersect_rectangle (clip, &rect);
     }
   else
     {
       clip = cairo_region_create_rectangle (&rect);
     }
-  state = gtk_snapshot_state_new (snapshot->state,
+  state = gtk_snapshot_push_state (snapshot,
                                   str,
                                   clip,
-                                  snapshot->state->translate_x,
-                                  snapshot->state->translate_y,
+                                  current_state->translate_x,
+                                  current_state->translate_y,
                                   gtk_snapshot_collect_clip);
 
   state->data.clip.bounds = real_bounds;
-
-  snapshot->state = state;
 
   cairo_region_destroy (clip);
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_rounded_clip (GtkSnapshotState *state,
+gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
+                                   GtkSnapshotState *state,
                                    GskRenderNode   **nodes,
                                    guint             n_nodes,
                                    const char       *name)
 {
   GskRenderNode *node, *clip_node;
 
-  node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   if (node == NULL)
     return NULL;
 
@@ -607,6 +622,7 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
                                 const char           *name,
                                 ...)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   GskRoundedRect real_bounds;
   cairo_region_t *clip;
@@ -614,7 +630,7 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
   char *str;
 
   gsk_rounded_rect_init_copy (&real_bounds, bounds);
-  gsk_rounded_rect_offset (&real_bounds, snapshot->state->translate_x, snapshot->state->translate_y);
+  gsk_rounded_rect_offset (&real_bounds, current_state->translate_x, current_state->translate_y);
 
   if (name && snapshot->record_names)
     {
@@ -628,9 +644,9 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
     str = NULL;
 
   rectangle_init_from_graphene (&rect, &real_bounds.bounds);
-  if (snapshot->state->clip_region)
+  if (current_state->clip_region)
     {
-      clip = cairo_region_copy (snapshot->state->clip_region);
+      clip = cairo_region_copy (current_state->clip_region);
       cairo_region_intersect_rectangle (clip, &rect);
     }
   else
@@ -638,39 +654,43 @@ gtk_snapshot_push_rounded_clip (GtkSnapshot          *snapshot,
       clip = cairo_region_create_rectangle (&rect);
     }
 
-  state = gtk_snapshot_state_new (snapshot->state,
+  state = gtk_snapshot_push_state (snapshot,
                                   str,
                                   clip,
-                                  snapshot->state->translate_x,
-                                  snapshot->state->translate_y,
+                                  current_state->translate_x,
+                                  current_state->translate_y,
                                   gtk_snapshot_collect_rounded_clip);
 
 
   state->data.rounded_clip.bounds = real_bounds;
 
-  snapshot->state = state;
+  current_state = state;
   cairo_region_destroy (clip);
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_shadow (GtkSnapshotState *state,
+gtk_snapshot_collect_shadow (GtkSnapshot      *snapshot,
+                             GtkSnapshotState *state,
                              GskRenderNode   **nodes,
                              guint             n_nodes,
                              const char       *name)
 {
   GskRenderNode *node, *shadow_node;
 
-  node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   if (node == NULL)
     return NULL;
 
-  shadow_node = gsk_shadow_node_new (node, state->data.shadow.shadows, state->data.shadow.n_shadows);
+  shadow_node = gsk_shadow_node_new (node,
+                                     state->data.shadow.shadows != NULL ?
+                                     state->data.shadow.shadows :
+                                     &state->data.shadow.a_shadow,
+                                     state->data.shadow.n_shadows);
   if (name)
     gsk_render_node_set_name (shadow_node, name);
 
   gsk_render_node_unref (node);
-  if (state->data.shadow.shadows != &state->data.shadow.a_shadow)
-    g_free (state->data.shadow.shadows);
+  g_free (state->data.shadow.shadows);
 
   return shadow_node;
 }
@@ -682,6 +702,7 @@ gtk_snapshot_push_shadow (GtkSnapshot            *snapshot,
                           const char             *name,
                           ...)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GtkSnapshotState *state;
   char *str;
 
@@ -696,32 +717,37 @@ gtk_snapshot_push_shadow (GtkSnapshot            *snapshot,
   else
     str = NULL;
 
-  state = gtk_snapshot_state_new (snapshot->state,
-                                  str,
-                                  snapshot->state->clip_region,
-                                  snapshot->state->translate_x,
-                                  snapshot->state->translate_y,
-                                  gtk_snapshot_collect_shadow);
+  state = gtk_snapshot_push_state (snapshot,
+                                   str,
+                                   current_state->clip_region,
+                                   current_state->translate_x,
+                                   current_state->translate_y,
+                                   gtk_snapshot_collect_shadow);
 
   state->data.shadow.n_shadows = n_shadows;
   if (n_shadows == 1)
-    state->data.shadow.shadows = &state->data.shadow.a_shadow;
+    {
+      state->data.shadow.shadows = NULL;
+      memcpy (&state->data.shadow.a_shadow, shadow, sizeof (GskShadow));
+    }
   else
-    state->data.shadow.shadows = g_malloc (sizeof (GskShadow) * n_shadows);
-  memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadow) * n_shadows);
+    {
+      state->data.shadow.shadows = g_malloc (sizeof (GskShadow) * n_shadows);
+      memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadow) * n_shadows);
+    }
 
-  snapshot->state = state;
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_blend_top (GtkSnapshotState *state,
+gtk_snapshot_collect_blend_top (GtkSnapshot      *snapshot,
+                                GtkSnapshotState *state,
                                 GskRenderNode   **nodes,
                                 guint             n_nodes,
                                 const char       *name)
 {
   GskRenderNode *bottom_node, *top_node, *blend_node;
 
-  top_node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  top_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   bottom_node = state->data.blend.bottom_node;
 
   /* XXX: Is this necessary? Do we need a NULL node? */
@@ -740,13 +766,18 @@ gtk_snapshot_collect_blend_top (GtkSnapshotState *state,
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_blend_bottom (GtkSnapshotState *state,
+gtk_snapshot_collect_blend_bottom (GtkSnapshot      *snapshot,
+                                   GtkSnapshotState *state,
                                    GskRenderNode   **nodes,
                                    guint             n_nodes,
                                    const char       *name)
 {
-  state->parent->data.blend.bottom_node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
-  
+  GtkSnapshotState *prev_state = gtk_snapshot_get_current_state (snapshot);
+
+  g_assert (prev_state->collect_func == gtk_snapshot_collect_blend_top);
+
+  prev_state->data.blend.bottom_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
+
   return NULL;
 }
 
@@ -771,7 +802,9 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
                          const char   *name,
                          ...)
 {
-  GtkSnapshotState *state;
+  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *bottom_state;
+  GtkSnapshotState *top_state;
   char *str;
 
   if (name && snapshot->record_names)
@@ -785,34 +818,32 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
   else
     str = NULL;
 
-  state = gtk_snapshot_state_new (snapshot->state,
-                                  str,
-                                  snapshot->state->clip_region,
-                                  snapshot->state->translate_x,
-                                  snapshot->state->translate_y,
-                                  gtk_snapshot_collect_blend_top);
-  state->data.blend.blend_mode = blend_mode;
-  state->data.blend.bottom_node = NULL;
+  bottom_state = gtk_snapshot_push_state (snapshot,
+                                          str,
+                                          current_state->clip_region,
+                                          current_state->translate_x,
+                                          current_state->translate_y,
+                                          gtk_snapshot_collect_blend_top);
 
-  state = gtk_snapshot_state_new (state,
-                                  g_strdup (str),
-                                  state->clip_region,
-                                  state->translate_x,
-                                  state->translate_y,
-                                  gtk_snapshot_collect_blend_bottom);
-
-  snapshot->state = state;
+  top_state = gtk_snapshot_push_state (snapshot,
+                                       g_strdup (str),
+                                       bottom_state->clip_region,
+                                       bottom_state->translate_x,
+                                       bottom_state->translate_y,
+                                       gtk_snapshot_collect_blend_bottom);
+  top_state->data.blend.blend_mode = blend_mode;
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_cross_fade_end (GtkSnapshotState *state,
+gtk_snapshot_collect_cross_fade_end (GtkSnapshot      *snapshot,
+                                     GtkSnapshotState *state,
                                      GskRenderNode   **nodes,
                                      guint             n_nodes,
                                      const char       *name)
 {
   GskRenderNode *start_node, *end_node, *node;
 
-  end_node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
+  end_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   start_node = state->data.cross_fade.start_node;
 
   if (state->data.cross_fade.progress <= 0.0)
@@ -860,13 +891,18 @@ gtk_snapshot_collect_cross_fade_end (GtkSnapshotState *state,
 }
 
 static GskRenderNode *
-gtk_snapshot_collect_cross_fade_start (GtkSnapshotState *state,
+gtk_snapshot_collect_cross_fade_start (GtkSnapshot      *snapshot,
+                                       GtkSnapshotState *state,
                                        GskRenderNode   **nodes,
                                        guint             n_nodes,
                                        const char       *name)
 {
-  state->parent->data.cross_fade.start_node = gtk_snapshot_collect_default (state, nodes, n_nodes, name);
-  
+  GtkSnapshotState *prev_state = gtk_snapshot_get_previous_state (snapshot);
+
+  g_assert (prev_state->collect_func == gtk_snapshot_collect_cross_fade_end);
+
+  prev_state->data.cross_fade.start_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
+
   return NULL;
 }
 
@@ -892,7 +928,9 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
                               const char  *name,
                               ...)
 {
-  GtkSnapshotState *state;
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *start_state;
+  GtkSnapshotState *end_state;
   char *str;
 
   if (name && snapshot->record_names)
@@ -906,52 +944,45 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
   else
     str = NULL;
 
-  state = gtk_snapshot_state_new (snapshot->state,
-                                  str,
-                                  snapshot->state->clip_region,
-                                  snapshot->state->translate_x,
-                                  snapshot->state->translate_y,
-                                  gtk_snapshot_collect_cross_fade_end);
-  state->data.cross_fade.progress = progress;
-  state->data.cross_fade.start_node = NULL;
+  start_state = gtk_snapshot_push_state (snapshot,
+                                         str,
+                                         current_state->clip_region,
+                                         current_state->translate_x,
+                                         current_state->translate_y,
+                                         gtk_snapshot_collect_cross_fade_end);
 
-  state = gtk_snapshot_state_new (state,
-                                  g_strdup (str),
-                                  state->clip_region,
-                                  state->translate_x,
-                                  state->translate_y,
-                                  gtk_snapshot_collect_cross_fade_start);
-
-  snapshot->state = state;
+  end_state = gtk_snapshot_push_state (snapshot,
+                                       g_strdup (str),
+                                       start_state->clip_region,
+                                       start_state->translate_x,
+                                       start_state->translate_y,
+                                       gtk_snapshot_collect_cross_fade_start);
+  end_state->data.cross_fade.progress = progress;
 }
 
 static GskRenderNode *
 gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
 {
   GtkSnapshotState *state;
+  guint state_index;
   GskRenderNode *node;
 
-  if (snapshot->state == NULL)
+  if (snapshot->state_stack->len == 0)
     {
       g_warning ("Too many gtk_snapshot_pop() calls.");
       return NULL;
     }
 
-  state = snapshot->state;
-  snapshot->state = state->parent;
+  state = gtk_snapshot_get_current_state (snapshot);
+  state_index = snapshot->state_stack->len - 1;
 
-  node = state->collect_func (state,
+  node = state->collect_func (snapshot,
+                              state,
                               (GskRenderNode **) state->nodes->pdata,
                               state->nodes->len,
                               state->name);
 
-  if (snapshot->state == NULL)
-    gtk_snapshot_state_free (state);
-  else
-    {
-      gtk_snapshot_state_clear (state);
-      snapshot->state->cached_state = state;
-    }
+  g_array_remove_index (snapshot->state_stack, state_index);
 
   return node;
 }
@@ -960,14 +991,24 @@ GskRenderNode *
 gtk_snapshot_finish (GtkSnapshot *snapshot)
 {
   GskRenderNode *result;
+
+  /* We should have exactly our initial state */
+  if (snapshot->state_stack->len > 1)
+    {
+      gint i;
+
+      g_warning ("Too many gtk_snapshot_push() calls. Still there:");
+      for (i = snapshot->state_stack->len - 1; i >= 0; i --)
+        {
+          const GtkSnapshotState *s = &g_array_index (snapshot->state_stack, GtkSnapshotState, i);
+
+          g_warning ("%s", s->name);
+        }
+    }
   
   result = gtk_snapshot_pop_internal (snapshot);
 
-  if (snapshot->state != NULL)
-    {
-      g_warning ("Too many gtk_snapshot_push() calls.");
-    }
-
+  g_array_free (snapshot->state_stack, TRUE);
   return result;
 }
 
@@ -1025,8 +1066,10 @@ gtk_snapshot_offset (GtkSnapshot *snapshot,
                      int          x,
                      int          y)
 {
-  snapshot->state->translate_x += x;
-  snapshot->state->translate_y += y;
+  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+
+  current_state->translate_x += x;
+  current_state->translate_y += y;
 }
 
 /**
@@ -1051,11 +1094,13 @@ gtk_snapshot_get_offset (GtkSnapshot *snapshot,
                          int         *x,
                          int         *y)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+
   if (x)
-    *x = snapshot->state->translate_x;
+    *x = current_state->translate_x;
 
   if (y)
-    *y = snapshot->state->translate_y;
+    *y = current_state->translate_y;
 }
 
 /**
@@ -1072,12 +1117,15 @@ void
 gtk_snapshot_append_node (GtkSnapshot   *snapshot,
                           GskRenderNode *node)
 {
+  GtkSnapshotState *current_state;
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
-  if (snapshot->state)
+  current_state = gtk_snapshot_get_current_state (snapshot);
+
+  if (current_state)
     {
-      g_ptr_array_add (snapshot->state->nodes, gsk_render_node_ref (node));
+      g_ptr_array_add (current_state->nodes, gsk_render_node_ref (node));
     }
   else
     {
@@ -1106,6 +1154,7 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
                            const char            *name,
                            ...)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
   graphene_rect_t real_bounds;
   cairo_t *cr;
@@ -1113,7 +1162,7 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
   g_return_val_if_fail (snapshot != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
-  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
+  graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
   node = gsk_cairo_node_new (&real_bounds);
 
   if (name && snapshot->record_names)
@@ -1135,7 +1184,7 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
 
   cr = gsk_cairo_node_get_draw_context (node, snapshot->renderer);
 
-  cairo_translate (cr, snapshot->state->translate_x, snapshot->state->translate_y);
+  cairo_translate (cr, current_state->translate_x, current_state->translate_y);
 
   return cr;
 }
@@ -1158,6 +1207,7 @@ gtk_snapshot_append_texture (GtkSnapshot            *snapshot,
                              const char             *name,
                              ...)
 {
+  GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
   graphene_rect_t real_bounds;
 
@@ -1165,7 +1215,7 @@ gtk_snapshot_append_texture (GtkSnapshot            *snapshot,
   g_return_if_fail (GSK_IS_TEXTURE (texture));
   g_return_if_fail (bounds != NULL);
 
-  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
+  graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
   node = gsk_texture_node_new (texture, &real_bounds);
 
   if (name && snapshot->record_names)
@@ -1206,6 +1256,7 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
                            const char            *name,
                            ...)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   GskRenderNode *node;
   graphene_rect_t real_bounds;
 
@@ -1213,7 +1264,7 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
   g_return_if_fail (color != NULL);
   g_return_if_fail (bounds != NULL);
 
-  graphene_rect_offset_r (bounds, snapshot->state->translate_x, snapshot->state->translate_y, &real_bounds);
+  graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
   node = gsk_color_node_new (color, &real_bounds);
 
   if (name && snapshot->record_names)
@@ -1249,17 +1300,18 @@ gboolean
 gtk_snapshot_clips_rect (GtkSnapshot                 *snapshot,
                          const cairo_rectangle_int_t *rect)
 {
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
   cairo_rectangle_int_t offset_rect;
 
-  if (snapshot->state->clip_region == NULL)
+  if (current_state->clip_region == NULL)
     return FALSE;
 
-  offset_rect.x = rect->x + snapshot->state->translate_x;
-  offset_rect.y = rect->y + snapshot->state->translate_y;
+  offset_rect.x = rect->x + current_state->translate_x;
+  offset_rect.y = rect->y + current_state->translate_y;
   offset_rect.width = rect->width;
   offset_rect.height = rect->height;
 
-  return cairo_region_contains_rectangle (snapshot->state->clip_region, &offset_rect) == CAIRO_REGION_OVERLAP_OUT;
+  return cairo_region_contains_rectangle (current_state->clip_region, &offset_rect) == CAIRO_REGION_OVERLAP_OUT;
 }
 
 /**
