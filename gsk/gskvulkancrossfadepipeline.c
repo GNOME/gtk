@@ -108,8 +108,8 @@ void
 gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *pipeline,
                                                     guchar                *data,
                                                     const graphene_rect_t *bounds,
-                                                    const graphene_rect_t *start_bounds,
-                                                    const graphene_rect_t *end_bounds,
+                                                    const graphene_rect_t *start_tex_rect,
+                                                    const graphene_rect_t *end_tex_rect,
                                                     double                 progress)
 {
   GskVulkanCrossFadeInstance *instance = (GskVulkanCrossFadeInstance *) data;
@@ -119,15 +119,15 @@ gsk_vulkan_cross_fade_pipeline_collect_vertex_data (GskVulkanCrossFadePipeline *
   instance->rect[2] = bounds->size.width;
   instance->rect[3] = bounds->size.height;
 
-  instance->start_tex_rect[0] = (bounds->origin.x - start_bounds->origin.x)/start_bounds->size.width;
-  instance->start_tex_rect[1] = (bounds->origin.y - start_bounds->origin.y)/start_bounds->size.height;
-  instance->start_tex_rect[2] = (bounds->size.width + bounds->origin.x - start_bounds->origin.x)/start_bounds->size.width;
-  instance->start_tex_rect[3] = (bounds->size.height + bounds->origin.y - start_bounds->origin.y)/start_bounds->size.height;
+  instance->start_tex_rect[0] = start_tex_rect->origin.x;
+  instance->start_tex_rect[1] = start_tex_rect->origin.y;
+  instance->start_tex_rect[2] = start_tex_rect->size.width;
+  instance->start_tex_rect[3] = start_tex_rect->size.height;
 
-  instance->end_tex_rect[0] = (bounds->origin.x - end_bounds->origin.x)/end_bounds->size.width;
-  instance->end_tex_rect[1] = (bounds->origin.y - end_bounds->origin.y)/end_bounds->size.height;
-  instance->end_tex_rect[2] = (bounds->size.width + bounds->origin.x - end_bounds->origin.x)/end_bounds->size.width;
-  instance->end_tex_rect[3] = (bounds->size.height + bounds->origin.y - end_bounds->origin.y)/end_bounds->size.height;
+  instance->end_tex_rect[0] = end_tex_rect->origin.x;
+  instance->end_tex_rect[1] = end_tex_rect->origin.y;
+  instance->end_tex_rect[2] = end_tex_rect->size.width;
+  instance->end_tex_rect[3] = end_tex_rect->size.height;
 
   instance->progress = progress;
 }

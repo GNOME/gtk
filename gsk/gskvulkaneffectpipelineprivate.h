@@ -22,6 +22,7 @@ gsize                   gsk_vulkan_effect_pipeline_count_vertex_data    (GskVulk
 void                    gsk_vulkan_effect_pipeline_collect_vertex_data  (GskVulkanEffectPipeline        *pipeline,
                                                                          guchar                         *data,
                                                                          const graphene_rect_t          *rect,
+                                                                         const graphene_rect_t          *tex_rect,
                                                                          const graphene_matrix_t        *color_matrix,
                                                                          const graphene_vec4_t          *color_offset);
 gsize                   gsk_vulkan_effect_pipeline_draw                 (GskVulkanEffectPipeline        *pipeline,

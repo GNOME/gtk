@@ -102,10 +102,10 @@ gsk_vulkan_texture_pipeline_collect_vertex_data (GskVulkanTexturePipeline *pipel
   instance->rect[1] = rect->origin.y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
-  instance->tex_rect[0] = (rect->origin.x - tex_rect->origin.x)/tex_rect->size.width;
-  instance->tex_rect[1] = (rect->origin.y - tex_rect->origin.y)/tex_rect->size.height;
-  instance->tex_rect[2] = (rect->size.width + rect->origin.x - tex_rect->origin.x)/tex_rect->size.width;
-  instance->tex_rect[3] = (rect->size.height + rect->origin.y - tex_rect->origin.y)/tex_rect->size.height;
+  instance->tex_rect[0] = tex_rect->origin.x;
+  instance->tex_rect[1] = tex_rect->origin.y;
+  instance->tex_rect[2] = tex_rect->size.width;
+  instance->tex_rect[3] = tex_rect->size.height;
 }
 
 gsize

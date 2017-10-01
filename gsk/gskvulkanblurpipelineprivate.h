@@ -22,6 +22,7 @@ gsize                   gsk_vulkan_blur_pipeline_count_vertex_data     (GskVulka
 void                    gsk_vulkan_blur_pipeline_collect_vertex_data   (GskVulkanBlurPipeline   *pipeline,
                                                                         guchar                  *data,
                                                                         const graphene_rect_t   *rect,
+                                                                        const graphene_rect_t   *tex_rect,
                                                                         double                   radius);
 gsize                   gsk_vulkan_blur_pipeline_draw                  (GskVulkanBlurPipeline   *pipeline,
                                                                         VkCommandBuffer          command_buffer,

@@ -101,6 +101,7 @@ void
 gsk_vulkan_blur_pipeline_collect_vertex_data (GskVulkanBlurPipeline *pipeline,
                                               guchar                *data,
                                               const graphene_rect_t *rect,
+                                              const graphene_rect_t *tex_rect,
                                               double                 blur_radius)
 {
   GskVulkanBlurInstance *instance = (GskVulkanBlurInstance *) data;
@@ -109,10 +110,10 @@ gsk_vulkan_blur_pipeline_collect_vertex_data (GskVulkanBlurPipeline *pipeline,
   instance->rect[1] = rect->origin.y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
-  instance->tex_rect[0] = 0.0;
-  instance->tex_rect[1] = 0.0;
-  instance->tex_rect[2] = 1.0;
-  instance->tex_rect[3] = 1.0;
+  instance->tex_rect[0] = tex_rect->origin.x;
+  instance->tex_rect[1] = tex_rect->origin.y;
+  instance->tex_rect[2] = tex_rect->size.width;
+  instance->tex_rect[3] = tex_rect->size.height;
   instance->blur_radius = blur_radius;
 }
 

@@ -126,6 +126,7 @@ void
 gsk_vulkan_effect_pipeline_collect_vertex_data (GskVulkanEffectPipeline *pipeline,
                                                 guchar                  *data,
                                                 const graphene_rect_t   *rect,
+                                                const graphene_rect_t   *tex_rect,
                                                 const graphene_matrix_t *color_matrix,
                                                 const graphene_vec4_t   *color_offset)
 {
@@ -135,10 +136,10 @@ gsk_vulkan_effect_pipeline_collect_vertex_data (GskVulkanEffectPipeline *pipelin
   instance->rect[1] = rect->origin.y;
   instance->rect[2] = rect->size.width;
   instance->rect[3] = rect->size.height;
-  instance->tex_rect[0] = 0.0;
-  instance->tex_rect[1] = 0.0;
-  instance->tex_rect[2] = 1.0;
-  instance->tex_rect[3] = 1.0;
+  instance->tex_rect[0] = tex_rect->origin.x;
+  instance->tex_rect[1] = tex_rect->origin.y;
+  instance->tex_rect[2] = tex_rect->size.width;
+  instance->tex_rect[3] = tex_rect->size.height;
   graphene_matrix_to_float (color_matrix, instance->color_matrix);
   graphene_vec4_to_float (color_offset, instance->color_offset);
 }
