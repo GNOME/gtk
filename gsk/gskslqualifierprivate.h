@@ -60,6 +60,7 @@ struct _GskSlQualifier
     gint binding;
     gint location;
     gint component;
+    guint push_constant :1;
   } layout;
 
   guint invariant :1;

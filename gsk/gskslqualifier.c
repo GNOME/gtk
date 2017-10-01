@@ -115,6 +115,11 @@ gsk_sl_qualifier_parse_layout (GskSlQualifier    *qualifier,
             gsk_sl_qualifier_parse_layout_assignment (preproc, scope, &qualifier->layout.binding);
           else if (g_str_equal (token->str, "set"))
             gsk_sl_qualifier_parse_layout_assignment (preproc, scope, &qualifier->layout.set);
+          else if (g_str_equal (token->str, "push_constant"))
+            {
+              qualifier->layout.push_constant = TRUE;
+              gsk_sl_preprocessor_consume (preproc, NULL);
+            }
           else
             {
               gsk_sl_preprocessor_error (preproc, UNSUPPORTED, "Unknown layout identifier.");
@@ -402,7 +407,8 @@ gsk_sl_qualifier_has_layout (const GskSlQualifier *qualifier)
   return qualifier->layout.set >= 0
       || qualifier->layout.binding >= 0
       || qualifier->layout.location >= 0
-      || qualifier->layout.component >= 0;
+      || qualifier->layout.component >= 0
+      || qualifier->layout.push_constant;
 }
 
 static gboolean
@@ -464,6 +470,12 @@ gsk_sl_qualifier_print (const GskSlQualifier *qualifier,
       had_value = print_qualifier (printer, "binding", qualifier->layout.binding, had_value);
       had_value = print_qualifier (printer, "location", qualifier->layout.location, had_value);
       had_value = print_qualifier (printer, "component", qualifier->layout.component, had_value);
+      if (qualifier->layout.push_constant)
+        {
+          if (had_value)
+            gsk_sl_printer_append (printer, ", ");
+          gsk_sl_printer_append (printer, "push_constant");
+        }
       gsk_sl_printer_append (printer, ")");
       need_space = TRUE;
     }
@@ -525,7 +537,10 @@ gsk_sl_qualifier_get_storage_class (const GskSlQualifier *qualifier)
       return GSK_SPV_STORAGE_CLASS_OUTPUT;
 
     case GSK_SL_STORAGE_GLOBAL_UNIFORM:
-      return GSK_SPV_STORAGE_CLASS_UNIFORM;
+      if (qualifier->layout.push_constant)
+        return GSK_SPV_STORAGE_CLASS_PUSH_CONSTANT;
+      else
+        return GSK_SPV_STORAGE_CLASS_UNIFORM;
 
     case GSK_SL_STORAGE_LOCAL:
     case GSK_SL_STORAGE_LOCAL_CONST:
