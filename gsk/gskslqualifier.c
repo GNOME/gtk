@@ -159,6 +159,8 @@ gsk_sl_storage_get_name (GskSlStorage storage)
       return "out";
     case GSK_SL_STORAGE_PARAMETER_INOUT:
       return "inout";
+    case GSK_SL_STORAGE_GLOBAL_UNIFORM:
+      return "uniform";
     }
 }
 
@@ -173,6 +175,7 @@ gsk_sl_storage_allows_const (GskSlStorage storage)
     default:
       g_assert_not_reached ();
     case GSK_SL_STORAGE_GLOBAL_OUT:
+    case GSK_SL_STORAGE_GLOBAL_UNIFORM:
     case GSK_SL_STORAGE_PARAMETER_OUT:
     case GSK_SL_STORAGE_PARAMETER_INOUT:
       return FALSE;
@@ -257,6 +260,21 @@ gsk_sl_qualifier_parse (GskSlQualifier         *qualifier,
             }
           else
             gsk_sl_preprocessor_error (preproc, SYNTAX, "Qualifiers \"%s\" and \"inout\" cannot be combined.", gsk_sl_storage_get_name (qualifier->storage));
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          break;
+
+        case GSK_SL_TOKEN_UNIFORM:
+          if (seen_const)
+            gsk_sl_preprocessor_error (preproc, SYNTAX, "Const variables cannot have \"uniform\" qualifier.");
+          else if (qualifier->storage == GSK_SL_STORAGE_DEFAULT)
+            {
+              if (location != GSK_SL_QUALIFIER_GLOBAL)
+                gsk_sl_preprocessor_error (preproc, SYNTAX, "\"uniform\" can only be used on globals.");
+              else
+                qualifier->storage = GSK_SL_STORAGE_GLOBAL_UNIFORM;
+            }
+          else
+            gsk_sl_preprocessor_error (preproc, SYNTAX, "Qualifiers \"%s\" and \"uniform\" cannot be combined.", gsk_sl_storage_get_name (qualifier->storage));
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
@@ -363,6 +381,7 @@ out:
 
     case GSK_SL_STORAGE_GLOBAL_IN:
     case GSK_SL_STORAGE_GLOBAL_OUT:
+    case GSK_SL_STORAGE_GLOBAL_UNIFORM:
     case GSK_SL_STORAGE_PARAMETER_OUT:
     case GSK_SL_STORAGE_PARAMETER_INOUT:
       g_assert (!seen_const);
@@ -464,6 +483,7 @@ gsk_sl_qualifier_is_constant (const GskSlQualifier *qualifier)
       g_assert_not_reached ();
       return TRUE;
 
+    case GSK_SL_STORAGE_GLOBAL_UNIFORM:
     case GSK_SL_STORAGE_GLOBAL_CONST:
     case GSK_SL_STORAGE_LOCAL_CONST:
     case GSK_SL_STORAGE_PARAMETER_CONST:
@@ -503,6 +523,9 @@ gsk_sl_qualifier_get_storage_class (const GskSlQualifier *qualifier)
 
     case GSK_SL_STORAGE_GLOBAL_OUT:
       return GSK_SPV_STORAGE_CLASS_OUTPUT;
+
+    case GSK_SL_STORAGE_GLOBAL_UNIFORM:
+      return GSK_SPV_STORAGE_CLASS_UNIFORM;
 
     case GSK_SL_STORAGE_LOCAL:
     case GSK_SL_STORAGE_LOCAL_CONST:
