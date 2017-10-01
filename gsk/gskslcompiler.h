@@ -42,6 +42,7 @@ typedef enum {
 
 typedef enum {
   GSK_SL_COMPILER_WARNING_CONSTANT,
+  GSK_SL_COMPILER_WARNING_DEAD_CODE,
   GSK_SL_COMPILER_WARNING_SHADOW
 } GskSlCompilerWarning;
 

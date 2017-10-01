@@ -429,6 +429,14 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
 
   gsk_sl_statement_write_spv (declared->statement, writer);
 
+  if (gsk_sl_type_is_void (declared->return_type) &&
+      gsk_sl_statement_get_jump (declared->statement) < GSK_SL_JUMP_RETURN)
+    {
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          1, GSK_SPV_OP_RETURN,
+                          NULL);
+    }
   gsk_spv_writer_add (writer,
                       GSK_SPV_WRITER_SECTION_CODE,
                       1, GSK_SPV_OP_FUNCTION_END,
@@ -593,6 +601,12 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
     }
 
   function->statement = gsk_sl_statement_parse_compound (function->scope, preproc, FALSE);
+
+  if (!gsk_sl_type_is_void (function->return_type) &&
+      gsk_sl_statement_get_jump (function->statement) < GSK_SL_JUMP_RETURN)
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Function does not return a value.");
+    }
 
   return (GskSlFunction *) function;
 }

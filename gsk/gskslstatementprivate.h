@@ -25,6 +25,14 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GSK_SL_JUMP_NONE,
+  GSK_SL_JUMP_BREAK,
+  GSK_SL_JUMP_CONTINUE,
+  GSK_SL_JUMP_RETURN,
+  GSK_SL_JUMP_DISCARD
+} GskSlJump;
+
 GskSlStatement *        gsk_sl_statement_parse                  (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *preproc);
 GskSlStatement *        gsk_sl_statement_parse_compound         (GskSlScope             *scope,
@@ -36,6 +44,8 @@ void                    gsk_sl_statement_unref                  (GskSlStatement 
 
 void                    gsk_sl_statement_print                  (const GskSlStatement   *statement,
                                                                  GskSlPrinter           *printer);
+
+GskSlJump               gsk_sl_statement_get_jump               (const GskSlStatement   *statement);
 
 void                    gsk_sl_statement_write_spv              (const GskSlStatement   *statement,
                                                                  GskSpvWriter           *writer);

@@ -46,6 +46,7 @@ struct _GskSlStatementClass {
 
   void                  (* print)                               (const GskSlStatement   *statement,
                                                                  GskSlPrinter           *printer);
+  GskSlJump             (* get_jump)                            (const GskSlStatement   *statement);
   void                  (* write_spv)                           (const GskSlStatement   *statement,
                                                                  GskSpvWriter           *writer);
 };
@@ -88,6 +89,12 @@ gsk_sl_statement_empty_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, ";");
 }
 
+static GskSlJump
+gsk_sl_statement_empty_get_jump (const GskSlStatement *statement)
+{
+  return GSK_SL_JUMP_NONE;
+}
+
 static void
 gsk_sl_statement_empty_write_spv (const GskSlStatement *statement,
                                   GskSpvWriter         *writer)
@@ -97,6 +104,7 @@ gsk_sl_statement_empty_write_spv (const GskSlStatement *statement,
 static const GskSlStatementClass GSK_SL_STATEMENT_EMPTY = {
   gsk_sl_statement_empty_free,
   gsk_sl_statement_empty_print,
+  gsk_sl_statement_empty_get_jump,
   gsk_sl_statement_empty_write_spv
 };
 
@@ -142,6 +150,20 @@ gsk_sl_statement_compound_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, "}");
 }
 
+static GskSlJump
+gsk_sl_statement_compound_get_jump (const GskSlStatement *statement)
+{
+  GskSlStatementCompound *compound = (GskSlStatementCompound *) statement;
+  GSList *last;
+
+  if (compound->statements == NULL)
+    return GSK_SL_JUMP_NONE;
+
+  last = g_slist_last (compound->statements);
+
+  return gsk_sl_statement_get_jump (last->data);
+}
+
 static void
 gsk_sl_statement_compound_write_spv (const GskSlStatement *statement,
                                      GskSpvWriter         *writer)
@@ -158,6 +180,7 @@ gsk_sl_statement_compound_write_spv (const GskSlStatement *statement,
 static const GskSlStatementClass GSK_SL_STATEMENT_COMPOUND = {
   gsk_sl_statement_compound_free,
   gsk_sl_statement_compound_print,
+  gsk_sl_statement_compound_get_jump,
   gsk_sl_statement_compound_write_spv
 };
 
@@ -199,6 +222,12 @@ gsk_sl_statement_declaration_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, ";");
 }
 
+static GskSlJump
+gsk_sl_statement_declaration_get_jump (const GskSlStatement *statement)
+{
+  return GSK_SL_JUMP_NONE;
+}
+
 static void
 gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
                                         GskSpvWriter         *writer)
@@ -221,6 +250,7 @@ gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
 static const GskSlStatementClass GSK_SL_STATEMENT_DECLARATION = {
   gsk_sl_statement_declaration_free,
   gsk_sl_statement_declaration_print,
+  gsk_sl_statement_declaration_get_jump,
   gsk_sl_statement_declaration_write_spv
 };
 
@@ -260,6 +290,12 @@ gsk_sl_statement_return_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, ";");
 }
 
+static GskSlJump
+gsk_sl_statement_return_get_jump (const GskSlStatement *statement)
+{
+  return GSK_SL_JUMP_RETURN;
+}
+
 static void
 gsk_sl_statement_return_write_spv (const GskSlStatement *statement,
                                    GskSpvWriter         *writer)
@@ -270,6 +306,7 @@ gsk_sl_statement_return_write_spv (const GskSlStatement *statement,
 static const GskSlStatementClass GSK_SL_STATEMENT_RETURN = {
   gsk_sl_statement_return_free,
   gsk_sl_statement_return_print,
+  gsk_sl_statement_return_get_jump,
   gsk_sl_statement_return_write_spv
 };
 
@@ -329,6 +366,18 @@ gsk_sl_statement_if_print (const GskSlStatement *statement,
     }
 }
  
+static GskSlJump
+gsk_sl_statement_if_get_jump (const GskSlStatement *statement)
+{
+  GskSlStatementIf *if_stmt = (GskSlStatementIf *) statement;
+
+  if (if_stmt->else_part == NULL)
+    return GSK_SL_JUMP_NONE;
+
+  return MIN (gsk_sl_statement_get_jump (if_stmt->if_part),
+              gsk_sl_statement_get_jump (if_stmt->else_part));
+}
+
 static void
 gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
                                GskSpvWriter         *writer)
@@ -388,6 +437,7 @@ gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
 static const GskSlStatementClass GSK_SL_STATEMENT_IF = {
   gsk_sl_statement_if_free,
   gsk_sl_statement_if_print,
+  gsk_sl_statement_if_get_jump,
   gsk_sl_statement_if_write_spv
 };
 
@@ -421,6 +471,12 @@ gsk_sl_statement_expression_print (const GskSlStatement *statement,
   gsk_sl_printer_append (printer, ";");
 }
  
+static GskSlJump
+gsk_sl_statement_expression_get_jump (const GskSlStatement *statement)
+{
+  return GSK_SL_JUMP_NONE;
+}
+
 static void
 gsk_sl_statement_expression_write_spv (const GskSlStatement *statement,
                                        GskSpvWriter         *writer)
@@ -433,6 +489,7 @@ gsk_sl_statement_expression_write_spv (const GskSlStatement *statement,
 static const GskSlStatementClass GSK_SL_STATEMENT_EXPRESSION = {
   gsk_sl_statement_expression_free,
   gsk_sl_statement_expression_print,
+  gsk_sl_statement_expression_get_jump,
   gsk_sl_statement_expression_write_spv
 };
 
@@ -562,6 +619,7 @@ gsk_sl_statement_parse_compound (GskSlScope        *scope,
 {
   GskSlStatementCompound *compound;
   const GskSlToken *token;
+  GskSlJump jump = GSK_SL_JUMP_NONE;
 
   compound = gsk_sl_statement_new (GskSlStatementCompound, &GSK_SL_STATEMENT_COMPOUND);
   if (new_scope)
@@ -584,8 +642,12 @@ gsk_sl_statement_parse_compound (GskSlScope        *scope,
     {
       GskSlStatement *statement;
 
+      if (jump != GSK_SL_JUMP_NONE)
+        gsk_sl_preprocessor_warn (preproc, DEAD_CODE, "Statement cannot be reached.");
+
       statement = gsk_sl_statement_parse (scope, preproc);
       compound->statements = g_slist_prepend (compound->statements, statement);
+      jump = gsk_sl_statement_get_jump (statement);
     }
   compound->statements = g_slist_reverse (compound->statements);
 
@@ -822,6 +884,12 @@ gsk_sl_statement_print (const GskSlStatement *statement,
                         GskSlPrinter         *printer)
 {
   statement->class->print (statement, printer);
+}
+
+GskSlJump
+gsk_sl_statement_get_jump (const GskSlStatement *statement)
+{
+  return statement->class->get_jump (statement);
 }
 
 void
