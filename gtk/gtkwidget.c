@@ -9231,7 +9231,7 @@ gtk_widget_get_mapped (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @mapped: %TRUE to mark the widget as mapped
  *
- * Marks the widget as being realized.
+ * Marks the widget as being mapped.
  *
  * This function should only ever be called in a derived widget's
  * “map” or “unmap” implementation.
