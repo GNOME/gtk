@@ -22,6 +22,7 @@
 
 #include "gskslpointertypeprivate.h"
 #include "gskslprinterprivate.h"
+#include "gskslqualifierprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
 #include "gskspvwriterprivate.h"
@@ -32,14 +33,12 @@ struct _GskSlVariable {
   GskSlPointerType *type;
   char *name;
   GskSlValue *initial_value;
-  gboolean constant;
 };
 
 GskSlVariable *
 gsk_sl_variable_new (GskSlPointerType *type,
                      char             *name,
-                     GskSlValue       *initial_value,
-                     gboolean          constant)
+                     GskSlValue       *initial_value)
 {
   GskSlVariable *variable;
 
@@ -50,7 +49,6 @@ gsk_sl_variable_new (GskSlPointerType *type,
   variable->type = gsk_sl_pointer_type_ref (type);
   variable->name = name;
   variable->initial_value = initial_value;
-  variable->constant = constant;
 
   return variable;
 }
@@ -87,8 +85,6 @@ void
 gsk_sl_variable_print (const GskSlVariable *variable,
                        GskSlPrinter        *printer)
 {
-  if (variable->constant)
-    gsk_sl_printer_append (printer, "const ");
   gsk_sl_pointer_type_print (variable->type, printer);
   if (variable->name)
     {
@@ -118,7 +114,7 @@ gsk_sl_variable_get_initial_value (const GskSlVariable *variable)
 gboolean
 gsk_sl_variable_is_constant (const GskSlVariable *variable)
 {
-  return variable->constant;
+  return gsk_sl_qualifier_is_constant (gsk_sl_pointer_type_get_qualifier (variable->type));
 }
 
 guint32
@@ -138,7 +134,7 @@ gsk_sl_variable_write_spv (const GskSlVariable *variable,
                       variable->initial_value ? 5 : 4, GSK_SPV_OP_VARIABLE,
                       (guint32[4]) { pointer_type_id,
                                      variable_id,
-                                     gsk_sl_pointer_type_get_storage_class (variable->type),
+                                     gsk_sl_qualifier_get_storage_class (gsk_sl_pointer_type_get_qualifier (variable->type)),
                                      value_id });
 
   return variable_id;

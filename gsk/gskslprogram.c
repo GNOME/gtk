@@ -26,6 +26,7 @@
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
+#include "gskslqualifierprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
@@ -69,12 +70,12 @@ gsk_sl_program_init (GskSlProgram *program)
 }
 
 static void
-gsk_sl_program_parse_variable (GskSlProgram      *program,
-                               GskSlScope        *scope,
-                               GskSlPreprocessor *preproc,
-                               GskSlDecorations  *decoration,
-                               GskSlType         *type,
-                               const char        *name)
+gsk_sl_program_parse_variable (GskSlProgram         *program,
+                               GskSlScope           *scope,
+                               GskSlPreprocessor    *preproc,
+                               const GskSlQualifier *qualifier,
+                               GskSlType            *type,
+                               const char           *name)
 {
   GskSlVariable *variable;
   const GskSlToken *token;
@@ -125,8 +126,8 @@ gsk_sl_program_parse_variable (GskSlProgram      *program,
     }
   gsk_sl_preprocessor_consume (preproc, NULL);
 
-  pointer_type = gsk_sl_pointer_type_new (type, FALSE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-  variable = gsk_sl_variable_new (pointer_type, g_strdup (name), value, decoration->values[GSK_SL_DECORATION_CONST].set);
+  pointer_type = gsk_sl_pointer_type_new (type, qualifier);
+  variable = gsk_sl_variable_new (pointer_type, g_strdup (name), value);
   gsk_sl_pointer_type_unref (pointer_type);
       
   program->variables = g_slist_append (program->variables, variable);
@@ -140,20 +141,18 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
 {
   GskSlType *type;
   const GskSlToken *token;
-  GskSlDecorations decoration;
+  GskSlQualifier qualifier;
   char *name;
 
-  gsk_sl_decoration_list_parse (scope,
-                                preproc,
-                                &decoration);
+  gsk_sl_qualifier_parse (&qualifier, scope, preproc, GSK_SL_QUALIFIER_GLOBAL);
 
   type = gsk_sl_type_new_parse (scope, preproc);
 
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     {
-      GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, FALSE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-      GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL, NULL, decoration.values[GSK_SL_DECORATION_CONST].set);
+      GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, &qualifier);
+      GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL, NULL);
       gsk_sl_pointer_type_unref (ptype);
       program->variables = g_slist_append (program->variables, variable);
       gsk_sl_preprocessor_consume (preproc, program);
@@ -193,7 +192,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
     }
   else
     {
-      gsk_sl_program_parse_variable (program, scope, preproc, &decoration, type, name);
+      gsk_sl_program_parse_variable (program, scope, preproc, &qualifier, type, name);
     }
 
   g_free (name);

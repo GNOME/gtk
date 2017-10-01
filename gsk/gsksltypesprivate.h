@@ -28,6 +28,7 @@ typedef struct _GskSlNativeFunction     GskSlNativeFunction;
 typedef struct _GskSlPreprocessor       GskSlPreprocessor;
 typedef struct _GskSlPointerType        GskSlPointerType;
 typedef struct _GskSlPrinter            GskSlPrinter;
+typedef struct _GskSlQualifier          GskSlQualifier;
 typedef struct _GskSlScope              GskSlScope;
 typedef struct _GskSlStatement          GskSlStatement;
 typedef struct _GskSlToken              GskSlToken;

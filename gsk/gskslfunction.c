@@ -25,6 +25,7 @@
 #include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
+#include "gskslqualifierprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
@@ -530,13 +531,11 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
 
       while (TRUE)
         {
-          GskSlDecorations decoration;
+          GskSlQualifier qualifier;
           GskSlType *type;
           GskSlVariable *variable;
 
-          gsk_sl_decoration_list_parse (scope,
-                                        preproc,
-                                        &decoration);
+          gsk_sl_qualifier_parse (&qualifier, scope, preproc, GSK_SL_QUALIFIER_PARAMETER);
 
           type = gsk_sl_type_new_parse (scope, preproc);
 
@@ -560,8 +559,8 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
                     gsk_sl_preprocessor_warn (preproc, SHADOW, "Function argument \"%s\" shadows global variable of same name.", token->str);
                 }
 
-              pointer_type = gsk_sl_pointer_type_new (type, TRUE, decoration.values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-              variable = gsk_sl_variable_new (pointer_type, g_strdup (token->str), NULL, decoration.values[GSK_SL_DECORATION_CONST].set);
+              pointer_type = gsk_sl_pointer_type_new (type, &qualifier);
+              variable = gsk_sl_variable_new (pointer_type, g_strdup (token->str), NULL);
               gsk_sl_pointer_type_unref (pointer_type);
               g_ptr_array_add (arguments, variable);
               

@@ -28,6 +28,7 @@
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslqualifierprivate.h"
 #include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
@@ -496,10 +497,10 @@ static const GskSlStatementClass GSK_SL_STATEMENT_EXPRESSION = {
 /* API */
 
 static GskSlStatement *
-gsk_sl_statement_parse_declaration (GskSlScope        *scope,
-                                    GskSlPreprocessor *stream,
-                                    GskSlDecorations  *decoration,
-                                    GskSlType         *type)
+gsk_sl_statement_parse_declaration (GskSlScope           *scope,
+                                    GskSlPreprocessor    *stream,
+                                    const GskSlQualifier *qualifier,
+                                    GskSlType            *type)
 {
   GskSlStatementDeclaration *declaration;
   GskSlPointerType *pointer_type;
@@ -548,8 +549,8 @@ gsk_sl_statement_parse_declaration (GskSlScope        *scope,
       value = NULL;
     }
 
-  pointer_type = gsk_sl_pointer_type_new (type, TRUE, decoration->values[GSK_SL_DECORATION_CALLER_ACCESS].value);
-  declaration->variable = gsk_sl_variable_new (pointer_type, name, value, decoration->values[GSK_SL_DECORATION_CONST].set);
+  pointer_type = gsk_sl_pointer_type_new (type, qualifier);
+  declaration->variable = gsk_sl_variable_new (pointer_type, name, value);
   gsk_sl_pointer_type_unref (pointer_type);
   gsk_sl_scope_add_variable (scope, declaration->variable);
 
@@ -744,12 +745,10 @@ gsk_sl_statement_parse (GskSlScope        *scope,
     case GSK_SL_TOKEN_STRUCT:
       {
         GskSlType *type;
-        GskSlDecorations decoration;
+        GskSlQualifier qualifier;
 
 its_a_type:
-        gsk_sl_decoration_list_parse (scope,
-                                      preproc,
-                                      &decoration);
+        gsk_sl_qualifier_parse (&qualifier, scope, preproc, GSK_SL_QUALIFIER_LOCAL);
 
         type = gsk_sl_type_new_parse (scope, preproc);
 
@@ -778,7 +777,7 @@ its_a_type:
           }
         else
           {
-            statement = gsk_sl_statement_parse_declaration (scope, preproc, &decoration, type);
+            statement = gsk_sl_statement_parse_declaration (scope, preproc, &qualifier, type);
           }
 
         gsk_sl_type_unref (type);

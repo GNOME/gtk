@@ -27,8 +27,7 @@ G_BEGIN_DECLS
 
 GskSlVariable *         gsk_sl_variable_new                     (GskSlPointerType       *type,
                                                                  char                   *name,
-                                                                 GskSlValue             *initial_value,
-                                                                 gboolean                constant);
+                                                                 GskSlValue             *initial_value);
 
 GskSlVariable *         gsk_sl_variable_ref                     (GskSlVariable          *variable);
 void                    gsk_sl_variable_unref                   (GskSlVariable          *variable);
