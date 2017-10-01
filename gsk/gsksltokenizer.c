@@ -85,6 +85,7 @@ gsk_sl_token_clear (GskSlToken *token)
   switch (token->type)
     {
     case GSK_SL_TOKEN_IDENTIFIER:
+    case GSK_SL_TOKEN_STRING:
       g_free (token->str);
       break;
 
@@ -323,6 +324,7 @@ gsk_sl_token_copy (GskSlToken       *dest,
   switch (src->type)
     {
     case GSK_SL_TOKEN_IDENTIFIER:
+    case GSK_SL_TOKEN_STRING:
       dest->str = g_strdup (src->str);
       break;
 
@@ -908,6 +910,12 @@ gsk_sl_token_print (const GskSlToken *token,
 
     case GSK_SL_TOKEN_IDENTIFIER:
       g_string_append (string, token->str);
+      break;
+
+    case GSK_SL_TOKEN_STRING:
+      g_string_append_c (string, '"');
+      g_string_append (string, token->str);
+      g_string_append_c (string, '"');
       break;
 
     case GSK_SL_TOKEN_FLOATCONSTANT:
@@ -1734,6 +1742,36 @@ gsk_sl_token_reader_read_identifier (GskSlTokenReader  *reader,
   token->str = g_string_free (string, FALSE);
 }
 
+static void
+gsk_sl_token_reader_read_string (GskSlTokenReader  *reader,
+                                 GskSlToken        *token,
+                                 GError           **error)
+{
+  GString *string;
+  char c;
+
+  g_assert (gsk_sl_token_reader_get (reader, 0) == '"');
+  gsk_sl_token_reader_consume (reader, 1);
+
+  string = g_string_new ("");
+
+  for (c = gsk_sl_token_reader_get (reader, 0);
+       c != '"' && c != 0;
+       c = gsk_sl_token_reader_get (reader, 0))
+    {
+      g_string_append_c (string, c);
+      gsk_sl_token_reader_consume (reader, 1);
+    }
+
+  if (c == 0)
+    set_parse_error (error, "Unterminated string literal.");
+  else
+    gsk_sl_token_reader_consume (reader, 1);
+
+  gsk_sl_token_init (token, GSK_SL_TOKEN_STRING);
+  token->str = g_string_free (string, FALSE);
+}
+
 gboolean
 gsk_sl_string_is_valid_identifier (const char *ident)
 {
@@ -1838,6 +1876,10 @@ gsk_sl_tokenizer_read_token (GskSlTokenizer *tokenizer,
           gsk_sl_token_reader_consume (&reader, 1);
           break;
         }
+      break;
+
+    case '"':
+      gsk_sl_token_reader_read_string (&reader, token, &error);
       break;
 
     case '<':

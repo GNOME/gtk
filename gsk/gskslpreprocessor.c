@@ -224,6 +224,12 @@ gsk_sl_preprocessor_append_token (GskSlPreprocessor *preproc,
       gsk_sl_token_init_from_identifier (&pp->token, ident);
       g_free (ident);
     }
+  else if (gsk_sl_token_is (&pp->token, GSK_SL_TOKEN_STRING))
+    {
+      gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp->location, "Unexpected string.");
+      gsk_sl_preprocessor_clear_token (pp);
+      return;
+    }
 
   g_array_append_val (preproc->tokens, *pp);
 }
