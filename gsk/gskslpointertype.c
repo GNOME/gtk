@@ -186,7 +186,6 @@ gsk_sl_decoration_list_parse_layout (GskSlPreprocessor *preproc,
         {
           gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected layout identifier.");
           gsk_sl_preprocessor_consume (preproc, NULL);
-          continue;
         }
 
       token = gsk_sl_preprocessor_get (preproc);
@@ -332,7 +331,7 @@ gsk_sl_decoration_list_parse (GskSlScope        *scope,
           gsk_sl_decoration_list_parse_layout (preproc, scope, list);
 
           token = gsk_sl_preprocessor_get (preproc);
-          if (gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
             {
               gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \")\" at end of layout specifier");
               gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_PAREN);

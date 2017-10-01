@@ -29,6 +29,7 @@ typedef struct _GskSlTypeBuilder GskSlTypeBuilder;
 
 GskSlType *             gsk_sl_type_new_parse                   (GskSlScope          *scope,
                                                                  GskSlPreprocessor   *preproc);
+GskSlType *             gsk_sl_type_get_void                    (void);
 GskSlType *             gsk_sl_type_get_scalar                  (GskSlScalarType      scalar);
 GskSlType *             gsk_sl_type_get_vector                  (GskSlScalarType      scalar,
                                                                  guint                length);
@@ -40,6 +41,7 @@ GskSlType *             gsk_sl_type_get_builtin                 (GskSlBuiltinTyp
 GskSlType *             gsk_sl_type_ref                         (GskSlType           *type);
 void                    gsk_sl_type_unref                       (GskSlType           *type);
 
+gboolean                gsk_sl_type_is_void                     (const GskSlType     *type);
 gboolean                gsk_sl_type_is_scalar                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_vector                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_matrix                   (const GskSlType     *type);

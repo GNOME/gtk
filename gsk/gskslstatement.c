@@ -743,14 +743,14 @@ its_a_type:
           }
         else if (return_statement->value == NULL)
           {
-            if (!gsk_sl_type_equal (return_type, gsk_sl_type_get_scalar (GSK_SL_VOID)))
+            if (!gsk_sl_type_is_void (return_type))
               {
                 gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,"Functions expectes a return value of type %s", gsk_sl_type_get_name (return_type));
               }
           }
         else
           {
-            if (gsk_sl_type_equal (return_type, gsk_sl_type_get_scalar (GSK_SL_VOID)))
+            if (gsk_sl_type_is_void (return_type))
               {
                 gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot return a value from a void function.");
               }
