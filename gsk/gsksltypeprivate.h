@@ -46,6 +46,7 @@ gboolean                gsk_sl_type_is_scalar                   (const GskSlType
 gboolean                gsk_sl_type_is_vector                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_matrix                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_struct                   (const GskSlType     *type);
+gboolean                gsk_sl_type_is_block                    (const GskSlType     *type);
 
 const char *            gsk_sl_type_get_name                    (const GskSlType     *type);
 GskSlScalarType         gsk_sl_type_get_scalar_type             (const GskSlType     *type);
@@ -89,6 +90,7 @@ void                    gsk_sl_scalar_type_convert_value        (GskSlScalarType
                                                                  gconstpointer        source_value);
 
 GskSlTypeBuilder *      gsk_sl_type_builder_new_struct          (const char          *name);
+GskSlTypeBuilder *      gsk_sl_type_builder_new_block           (const char          *name);
 GskSlType *             gsk_sl_type_builder_free                (GskSlTypeBuilder    *builder);
 void                    gsk_sl_type_builder_add_member          (GskSlTypeBuilder    *builder,
                                                                  GskSlType           *type,

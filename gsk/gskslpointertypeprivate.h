@@ -32,9 +32,6 @@ GskSlPointerType *      gsk_sl_pointer_type_new                         (GskSlTy
 GskSlPointerType *      gsk_sl_pointer_type_ref                         (GskSlPointerType           *type);
 void                    gsk_sl_pointer_type_unref                       (GskSlPointerType           *type);
 
-void                    gsk_sl_pointer_type_print                       (const GskSlPointerType     *type,
-                                                                         GskSlPrinter               *printer);
-
 GskSlType *             gsk_sl_pointer_type_get_type                    (const GskSlPointerType     *type);
 const GskSlQualifier *  gsk_sl_pointer_type_get_qualifier               (const GskSlPointerType     *type);
 

@@ -76,15 +76,6 @@ gsk_sl_pointer_type_unref (GskSlPointerType *type)
   g_slice_free (GskSlPointerType, type);
 }
 
-void
-gsk_sl_pointer_type_print (const GskSlPointerType *type,
-                           GskSlPrinter           *printer)
-{
-  if (gsk_sl_qualifier_print (&type->qualifier, printer))
-    gsk_sl_printer_append (printer, " ");
-  gsk_sl_printer_append (printer, gsk_sl_type_get_name (type->type));
-}
-
 GskSlType *
 gsk_sl_pointer_type_get_type (const GskSlPointerType *type)
 {

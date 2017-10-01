@@ -85,7 +85,31 @@ void
 gsk_sl_variable_print (const GskSlVariable *variable,
                        GskSlPrinter        *printer)
 {
-  gsk_sl_pointer_type_print (variable->type, printer);
+  GskSlType *type;
+
+  if (gsk_sl_qualifier_print (gsk_sl_pointer_type_get_qualifier (variable->type), printer))
+    gsk_sl_printer_append (printer, " ");
+  type = gsk_sl_pointer_type_get_type (variable->type);
+  gsk_sl_printer_append (printer, gsk_sl_type_get_name (type));
+  if (gsk_sl_type_is_block (type))
+    {
+      guint i, n;
+
+      gsk_sl_printer_append (printer, " {");
+      gsk_sl_printer_push_indentation (printer);
+      n = gsk_sl_type_get_n_members (type);
+      for (i = 0; i < n; i++)
+        {
+          gsk_sl_printer_newline (printer);
+          gsk_sl_printer_append (printer, gsk_sl_type_get_name (gsk_sl_type_get_member_type (type, i)));
+          gsk_sl_printer_append (printer, " ");
+          gsk_sl_printer_append (printer, gsk_sl_type_get_member_name (type, i));
+          gsk_sl_printer_append (printer, ";");
+        }
+      gsk_sl_printer_pop_indentation (printer);
+      gsk_sl_printer_newline (printer);
+      gsk_sl_printer_append (printer, "}");
+    }
   if (variable->name)
     {
       gsk_sl_printer_append (printer, " ");
