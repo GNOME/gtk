@@ -29,21 +29,6 @@
 #include <unistd.h>
 #endif
 
-static GBytes *
-bytes_new_from_file (const char  *filename,
-                     GError     **error)
-{
-  gchar *data;
-  gsize length;
-
-  if (!g_file_get_contents (filename,
-                            &data, &length,
-                            error))
-    return FALSE;
-
-  return g_bytes_new_take (data, length);
-}
-
 static gboolean
 compile (GskSlCompiler *compiler,
          GOutputStream *output,
@@ -52,17 +37,12 @@ compile (GskSlCompiler *compiler,
   GBytes *bytes;
   GskSlProgram *program;
   GError *error = NULL;
+  GFile *file;
 
-  bytes = bytes_new_from_file (filename, &error);
-  if (bytes == NULL)
-    {
-      g_print (error->message);
-      g_error_free (error);
-      return FALSE;
-    }
+  file = g_file_new_for_commandline_arg (filename);
 
-  program = gsk_sl_compiler_compile (compiler, bytes);
-  g_bytes_unref (bytes);
+  program = gsk_sl_compiler_compile_file (compiler, file);
+  g_object_unref (file);
   if (program == NULL)
     return FALSE;
 
@@ -87,21 +67,15 @@ dump (GskSlCompiler *compiler,
       GOutputStream *output,
       const char    *filename)
 {
-  GBytes *bytes;
   GString *string;
   GskSlProgram *program;
   GError *error = NULL;
+  GFile *file;
 
-  bytes = bytes_new_from_file (filename, &error);
-  if (bytes == NULL)
-    {
-      g_print (error->message);
-      g_error_free (error);
-      return FALSE;
-    }
+  file = g_file_new_for_commandline_arg (filename);
 
-  program = gsk_sl_compiler_compile (compiler, bytes);
-  g_bytes_unref (bytes);
+  program = gsk_sl_compiler_compile_file (compiler, file);
+  g_object_unref (file);
   if (program == NULL)
     return FALSE;
 

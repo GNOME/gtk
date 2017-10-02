@@ -189,16 +189,14 @@ gsk_sl_compiler_copy_defines (GskSlCompiler *compiler)
   return copy;
 }
 
-GskSlProgram *
+static GskSlProgram *
 gsk_sl_compiler_compile (GskSlCompiler *compiler,
-                         GBytes        *bytes)
+                         GskCodeSource *source)
 {
   GskSlPreprocessor *preproc;
-  GskCodeSource *source;
   GskSlProgram *program;
 
   program = g_object_new (GSK_TYPE_SL_PROGRAM, NULL);
-  source = gsk_code_source_new_for_bytes ("<program>", bytes);
 
   preproc = gsk_sl_preprocessor_new (compiler, source);
 
@@ -211,8 +209,44 @@ gsk_sl_compiler_compile (GskSlCompiler *compiler,
     }
 
   gsk_sl_preprocessor_unref (preproc);
+
+  return program;
+}
+
+GskSlProgram *
+gsk_sl_compiler_compile_file (GskSlCompiler *compiler,
+                              GFile         *file)
+{
+  GskSlProgram *program;
+  GskCodeSource *source;
+
+  g_return_val_if_fail (GSK_IS_SL_COMPILER (compiler), NULL);
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  source = gsk_code_source_new_for_file (file);
+
+  program = gsk_sl_compiler_compile (compiler, source);
+
   g_object_unref (source);
 
   return program;
 }
 
+GskSlProgram *
+gsk_sl_compiler_compile_bytes (GskSlCompiler *compiler,
+                               GBytes        *bytes)
+{
+  GskSlProgram *program;
+  GskCodeSource *source;
+
+  g_return_val_if_fail (GSK_IS_SL_COMPILER (compiler), NULL);
+  g_return_val_if_fail (bytes != NULL, NULL);
+
+  source = gsk_code_source_new_for_bytes ("<program>", bytes);
+
+  program = gsk_sl_compiler_compile (compiler, source);
+
+  g_object_unref (source);
+
+  return program;
+}

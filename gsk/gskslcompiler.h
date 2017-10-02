@@ -71,8 +71,11 @@ void                    gsk_sl_compiler_remove_define           (GskSlCompiler  
                                                                  const char          *name);
 
 GDK_AVAILABLE_IN_3_92
-GskSlProgram *          gsk_sl_compiler_compile                 (GskSlCompiler       *compiler,
-                                                                 GBytes              *source);
+GskSlProgram *          gsk_sl_compiler_compile_file            (GskSlCompiler       *compiler,
+                                                                 GFile               *file);
+GDK_AVAILABLE_IN_3_92
+GskSlProgram *          gsk_sl_compiler_compile_bytes           (GskSlCompiler       *compiler,
+                                                                 GBytes              *bytes);
 
 G_END_DECLS
 
