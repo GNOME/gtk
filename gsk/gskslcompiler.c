@@ -20,6 +20,7 @@
 
 #include "gskslcompilerprivate.h"
 
+#include "gskcodesourceprivate.h"
 #include "gsksldefineprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprogramprivate.h"
@@ -101,6 +102,7 @@ gsk_sl_compiler_add_define (GskSlCompiler  *compiler,
   GskCodeLocation location;
   GskSlToken token = { 0, };
   GError *real_error = NULL;
+  GskCodeSource *source;
   GBytes *bytes;
 
   g_return_val_if_fail (GSK_IS_SL_COMPILER (compiler), FALSE);
@@ -118,7 +120,8 @@ gsk_sl_compiler_add_define (GskSlCompiler  *compiler,
 
   define = gsk_sl_define_new (name, NULL);
   bytes = g_bytes_new_static (definition, strlen (definition));
-  tokenizer = gsk_sl_tokenizer_new (bytes,
+  source = gsk_code_source_new_for_bytes ("<define>", bytes);
+  tokenizer = gsk_sl_tokenizer_new (source,
                                     gsk_sl_compiler_add_define_error_func,
                                     &real_error,
                                     NULL);
@@ -142,6 +145,7 @@ gsk_sl_compiler_add_define (GskSlCompiler  *compiler,
   gsk_sl_token_clear (&token);
   gsk_sl_tokenizer_unref (tokenizer);
   g_bytes_unref (bytes);
+  g_object_unref (source);
 
   if (real_error == NULL)
     {
@@ -187,12 +191,14 @@ gsk_sl_compiler_copy_defines (GskSlCompiler *compiler)
 
 GskSlProgram *
 gsk_sl_compiler_compile (GskSlCompiler *compiler,
-                         GBytes        *source)
+                         GBytes        *bytes)
 {
   GskSlPreprocessor *preproc;
+  GskCodeSource *source;
   GskSlProgram *program;
 
   program = g_object_new (GSK_TYPE_SL_PROGRAM, NULL);
+  source = gsk_code_source_new_for_bytes ("<program>", bytes);
 
   preproc = gsk_sl_preprocessor_new (compiler, source);
 
@@ -205,6 +211,7 @@ gsk_sl_compiler_compile (GskSlCompiler *compiler,
     }
 
   gsk_sl_preprocessor_unref (preproc);
+  g_object_unref (source);
 
   return program;
 }

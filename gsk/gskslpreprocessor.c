@@ -20,6 +20,7 @@
 
 #include "gskslpreprocessorprivate.h"
 
+#include "gskcodesource.h"
 #include "gskslcompilerprivate.h"
 #include "gsksldefineprivate.h"
 #include "gsksltokenizerprivate.h"
@@ -75,7 +76,7 @@ gsk_sl_preprocessor_clear_token (gpointer data)
 
 GskSlPreprocessor *
 gsk_sl_preprocessor_new (GskSlCompiler *compiler,
-                         GBytes        *source)
+                         GskCodeSource *source)
 {
   GskSlPreprocessor *preproc;
 
@@ -609,7 +610,8 @@ gsk_sl_preprocessor_emit_error (GskSlPreprocessor     *preproc,
 {
   preproc->fatal_error |= fatal;
 
-  g_printerr ("%3zu:%2zu: %s: %s\n",
+  g_printerr ("%s:%zu:%zu: %s: %s\n",
+              gsk_code_source_get_name (location->source),
               location->lines + 1, location->line_bytes,
               fatal ? "error" : "warn",
               error->message);

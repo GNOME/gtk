@@ -284,10 +284,10 @@ void                    gsk_sl_token_print                      (const GskSlToke
                                                                  GString               *string);
 char *                  gsk_sl_token_to_string                  (const GskSlToken      *token);
 
-GskSlTokenizer *        gsk_sl_tokenizer_new                    (GBytes                 *bytes,
+GskSlTokenizer *        gsk_sl_tokenizer_new                    (GskCodeSource         *source,
                                                                  GskSlTokenizerErrorFunc func,
-                                                                 gpointer                user_data,
-                                                                 GDestroyNotify          user_destroy);
+                                                                 gpointer               user_data,
+                                                                 GDestroyNotify         user_destroy);
 
 GskSlTokenizer *        gsk_sl_tokenizer_ref                    (GskSlTokenizer        *tokenizer);
 void                    gsk_sl_tokenizer_unref                  (GskSlTokenizer        *tokenizer);

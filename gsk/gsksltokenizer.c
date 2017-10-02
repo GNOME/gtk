@@ -20,6 +20,7 @@
 #include "gsksltokenizerprivate.h"
 
 #include "gskslcompiler.h"
+#include "gskcodesourceprivate.h"
 
 #include <math.h>
 #include <string.h>
@@ -36,6 +37,7 @@ struct _GskSlTokenReader {
 struct _GskSlTokenizer
 {
   gint                   ref_count;
+  GskCodeSource         *source;
   GBytes                *bytes;
   GskSlTokenizerErrorFunc error_func;
   gpointer               user_data;
@@ -45,9 +47,10 @@ struct _GskSlTokenizer
 };
 
 static void
-gsk_code_location_init (GskCodeLocation *location)
+gsk_code_location_init (GskCodeLocation *location,
+                        GskCodeSource   *source)
 {
-  memset (location, 0, sizeof (GskCodeLocation));
+  *location = (GskCodeLocation) { source, };
 }
 
 static void
@@ -1196,12 +1199,13 @@ gsk_sl_token_init_number (GskSlToken     *token,
 
 static void
 gsk_sl_token_reader_init (GskSlTokenReader *reader,
+                          GskCodeSource    *source,
                           GBytes           *bytes)
 {
   reader->data = g_bytes_get_data (bytes, NULL);
   reader->end = reader->data + g_bytes_get_size (bytes);
 
-  gsk_code_location_init (&reader->position);
+  gsk_code_location_init (&reader->position, source);
 }
 
 static void
@@ -1321,22 +1325,48 @@ gsk_sl_token_reader_consume (GskSlTokenReader *reader,
   reader->data += offset;
 }
 
+static void
+gsk_sl_tokenizer_emit_error (GskSlTokenizer        *tokenizer,
+                             const GskCodeLocation *location,
+                             const GskSlToken      *token,
+                             const GError          *error)
+{
+  if (tokenizer->error_func)
+    tokenizer->error_func (tokenizer, TRUE, location, token, error, tokenizer->user_data);
+  else
+    g_warning ("Unhandled GLSL error: %zu:%zu: %s", location->lines + 1, location->line_chars + 1, error->message);
+}
+
 GskSlTokenizer *
-gsk_sl_tokenizer_new (GBytes                  *bytes,
+gsk_sl_tokenizer_new (GskCodeSource           *source,
                       GskSlTokenizerErrorFunc  func,
                       gpointer                 user_data,
                       GDestroyNotify           user_destroy)
 {
   GskSlTokenizer *tokenizer;
+  GError *error = NULL;
 
   tokenizer = g_slice_new0 (GskSlTokenizer);
   tokenizer->ref_count = 1;
-  tokenizer->bytes = g_bytes_ref (bytes);
+  tokenizer->source = g_object_ref (source);
   tokenizer->error_func = func;
   tokenizer->user_data = user_data;
   tokenizer->user_destroy = user_destroy;
 
-  gsk_sl_token_reader_init (&tokenizer->reader, bytes);
+  tokenizer->bytes = gsk_code_source_load (source, &error);
+  if (tokenizer->bytes == NULL)
+    {
+      GskCodeLocation location;
+      GskSlToken token;
+
+      gsk_code_location_init (&location, tokenizer->source);
+      gsk_sl_token_init (&token, GSK_SL_TOKEN_EOF);
+      gsk_sl_tokenizer_emit_error (tokenizer, &location, &token, error);
+      g_error_free (error);
+      tokenizer->bytes = g_bytes_new (NULL, 0);
+    }
+
+  gsk_sl_token_reader_init (&tokenizer->reader, source, tokenizer->bytes);
 
   return tokenizer;
 }
@@ -1360,6 +1390,8 @@ gsk_sl_tokenizer_unref (GskSlTokenizer *tokenizer)
     tokenizer->user_destroy (tokenizer->user_data);
 
   g_bytes_unref (tokenizer->bytes);
+  g_object_unref (tokenizer->source);
+
   g_slice_free (GskSlTokenizer, tokenizer);
 }
 
@@ -1391,18 +1423,6 @@ set_parse_error (GError     **error,
                                format,
                                args);
   va_end (args);
-}
-
-static void
-gsk_sl_tokenizer_emit_error (GskSlTokenizer        *tokenizer,
-                             const GskCodeLocation *location,
-                             const GskSlToken      *token,
-                             const GError          *error)
-{
-  if (tokenizer->error_func)
-    tokenizer->error_func (tokenizer, TRUE, location, token, error, tokenizer->user_data);
-  else
-    g_warning ("Unhandled GLSL error: %zu:%zu: %s", location->lines + 1, location->line_chars + 1, error->message);
 }
 
 static void

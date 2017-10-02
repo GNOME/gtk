@@ -14,6 +14,7 @@ gsk_private_source_shaders = [
 ]
 
 gsk_public_sources = files([
+  'gskcodesource.c',
   'gskpixelshader.c',
   'gskrenderer.c',
   'gskrendernode.c',

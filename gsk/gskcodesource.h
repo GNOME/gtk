@@ -1,5 +1,6 @@
-/* GSK - The GTK Scene Kit
- * Copyright 2016  Endless 
+/* GTK - The GIMP Toolkit
+ *
+ * Copyright © 2017 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,24 +16,26 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_H__
-#define __GSK_H__
+#ifndef __GSK_CODE_SOURCE_H__
+#define __GSK_CODE_SOURCE_H__
 
-#define __GSK_H_INSIDE__
-
-#include <gsk/gskcodesource.h>
-#include <gsk/gskenums.h>
-#include <gsk/gskpixelshader.h>
-#include <gsk/gskrenderer.h>
-#include <gsk/gskrendernode.h>
-#include <gsk/gskroundedrect.h>
-#include <gsk/gskslcompiler.h>
-#include <gsk/gskslprogram.h>
-#include <gsk/gsktexture.h>
+#if !defined (__GSK_H_INSIDE__) && !defined (GSK_COMPILATION)
+#error "Only <gsk/gsk.h> can be included directly."
+#endif
 
 #include <gsk/gsktypes.h>
-#include <gsk/gskenumtypes.h>
 
-#undef __GSK_H_INSIDE__
+G_BEGIN_DECLS
 
-#endif /* __GSK_H__ */
+#define GSK_TYPE_CODE_SOURCE (gsk_code_source_get_type ())
+
+G_DECLARE_FINAL_TYPE (GskCodeSource, gsk_code_source, GSK, CODE_SOURCE, GObject)
+
+GDK_AVAILABLE_IN_3_92
+const char *            gsk_code_source_get_name                (GskCodeSource       *source);
+GDK_AVAILABLE_IN_3_92
+GFile *                 gsk_code_source_get_file                (GskCodeSource       *source);
+
+G_END_DECLS
+
+#endif /* __GSK_CODE_SOURCE_H__ */
