@@ -343,6 +343,88 @@ borders (guint n)
   return container;
 }
 
+const char *example =
+"'Twas brillig, and the slithy toves\n"
+"Did gyre and gimble in the wabe;\n"
+"All mimsy were the borogoves,\n"
+"And the mome raths outgrabe.\n"
+"\n"
+"'Beware the Jabberwock, my son!\n"
+"The jaws that bite, the claws that catch!\n"
+"Beware the Jubjub bird, and shun\n"
+"The frumious Bandersnatch!'";
+
+GskRenderNode *
+text (guint n)
+{
+  GskRenderNode **nodes = g_newa (GskRenderNode *, n);
+  GskRenderNode *container;
+  PangoFontDescription *desc;
+  PangoContext *context;
+  PangoLayout *layout;
+  int i;
+
+  context = gdk_pango_context_get ();
+
+  desc = pango_font_description_new ();
+  pango_font_description_set_family (desc, "Cantarell");
+  layout = pango_layout_new (context);
+  pango_layout_set_text (layout, example, -1);
+
+  for (i = 0; i < n; i++)
+    {
+      PangoFont *font;
+      PangoLayoutIter *iter;
+      PangoGlyphString *glyphs;
+      PangoLayoutRun *run;
+      GdkRGBA color;
+      int x, y;
+
+      if (g_random_boolean ())
+        pango_font_description_set_style (desc, PANGO_STYLE_ITALIC);
+      else
+        pango_font_description_set_style (desc, PANGO_STYLE_NORMAL);
+
+      pango_font_description_set_weight (desc, 100 * g_random_int_range (1, 10));
+      pango_font_description_set_size (desc, PANGO_SCALE * g_random_int_range (8,32));
+
+      font = pango_context_load_font (context, desc);
+
+      pango_layout_set_font_description (layout, desc);
+      iter = pango_layout_get_iter (layout);
+      do
+        {
+          if (g_random_boolean ())
+            pango_layout_iter_next_run (iter);
+          if (g_random_boolean ())
+            pango_layout_iter_next_run (iter);
+          run = pango_layout_iter_get_run (iter);
+        }
+      while (run == NULL);
+
+      glyphs = run->glyphs;
+
+      x = g_random_int_range (0, 1000);
+      y = g_random_int_range (0, 1000);
+
+      hsv_to_rgb (&color, g_random_double (), g_random_double_range (0.15, 0.4), g_random_double_range (0.6, 0.85));
+
+      nodes[i] = gsk_text_node_new (font, glyphs, &color, x, y);
+
+      pango_layout_iter_free (iter);
+      g_object_unref (font);
+    }
+
+  pango_font_description_free (desc);
+
+   container = gsk_container_node_new (nodes, n);
+
+  for (i = 0; i < n; i++)
+    gsk_render_node_unref (nodes[i]);
+
+  return container;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -356,6 +438,7 @@ main (int argc, char **argv)
     { "rounded-backgrounds.node", rounded_backgrounds },
     { "linear-gradient.node", linear_gradient },
     { "borders.node", borders },
+    { "text.node", text },
   };
   GError *error = NULL;
   GskRenderNode *node;
