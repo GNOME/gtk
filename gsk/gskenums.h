@@ -175,4 +175,21 @@ typedef enum {
   GSK_SERIALIZATION_INVALID_DATA
 } GskSerializationError;
 
+/**
+ * GskSlProfile:
+ * @GSK_SL_PROFILE_NONE: No profile has been selected. Behaves the same
+ *     as @GSK_SL_PROFILE_CORE.
+ * @GSK_SL_PROFILE_CORE: The OpenGL core profile
+ * @GSK_SL_PROFILE_COMPATIBILITY: The OpenGL compatibility profile
+ * @GSK_SL_PROFILE_ES: The OpenGL-ES profile
+ *
+ * Profile to use for GLSL compilation.
+ **/
+typedef enum {
+  GSK_SL_PROFILE_NONE,
+  GSK_SL_PROFILE_CORE,
+  GSK_SL_PROFILE_COMPATIBILITY,
+  GSK_SL_PROFILE_ES,
+} GskSlProfile;
+
 #endif /* __GSK_TYPES_H__ */
