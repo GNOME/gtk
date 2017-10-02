@@ -77,10 +77,14 @@
  * ╰── <child>
  * ]|
  *
- * GtkFrame has a main CSS node with name frame. This node can be given the
- * style class .flat, which is used by themes to disable drawing of the border.
- * To do this from code, call gtk_frame_set_shadow_type() with %GTK_SHADOW_NONE
- * to add the .flat class or any other shadow type to remove it.
+ * GtkFrame has a main CSS node with name “frame”, which is used to draw the
+ * visible border. You can set the appearance of the border using CSS properties
+ * like “border-style” on this node.
+ *
+ * The node can be given the style class “.flat”, which is used by themes to
+ * disable drawing of the border. To do this from code, call
+ * gtk_frame_set_shadow_type() with %GTK_SHADOW_NONE to add the “.flat” class or
+ * any other shadow type to remove it.
  */
 
 struct _GtkFramePrivate
