@@ -1102,7 +1102,7 @@ canonical_hex_keyval (GdkEventKey *event)
   gint n_vals = 0;
   gint i;
 
-  if (gdk_event_get_keyval ((GdkEvent *) event, &event_keyval))
+  if (!gdk_event_get_keyval ((GdkEvent *) event, &event_keyval))
     return 0;
 
   /* See if the keyval is already a hex digit */
