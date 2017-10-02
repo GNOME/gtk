@@ -10,6 +10,7 @@ installed_test_env = [
   'G_ENABLE_DIAGNOSTIC=0',
 ]
 
+subdir('gsk')
 subdir('tools')
 subdir('gtk')
 subdir('gdk')
