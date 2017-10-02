@@ -1,3 +1,30 @@
+Overview of Changes in GTK+ 3.22.22
+===================================
+
+* Bugs fixed:
+ 639931 gtk_application_add_window() docs should mention window destruction
+ 644248 stylecontext: add a raised style class
+ 775126 memory leak in gdk_wayland_window_ensure_cairo_surface
+ 780758 flowbox: bind_model passes wrong reference to create_widget_func in bindings
+ 781757 gdk_seat_grab() not working for touchscreen events
+ 787021 GtkFlowBox: the orthogonal orientation always requests the most size it could...
+ 787302 gtk+-3.22.20/gtk/gtkmountoperation-x11.c:669:sanity check after use ?
+ 787303 gtk+-3.22.20/gtk/gtknotebook.c: 2 * redundant conditions ?
+ 787444 The color-selection dialog which is opened by a GtkColorButton should not be...
+ 787531 The tick button is not/barely visible on light colors with Dark theme
+ 787600 PlacesSidebar/SidebarRow: CloudProvider singleton/accounts are never unrefd
+ 787757 Focus outline easily disappears around color chooser swatches
+
+* Translation updates:
+ Chinese (Taiwan)
+ Dutch
+ Greek
+ Persian
+ Polish
+ Russian
+ Swedish
+
+
 Overview of Changes in GTK+ 3.22.21
 ===================================
 
