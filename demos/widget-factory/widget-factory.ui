@@ -1301,11 +1301,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkFrame" id="frame1">
                             <property name="visible">1</property>
-                            <property name="shadow_type">in</property>
+                            <style>
+                              <class name="border-inset"/>
+                            </style>
                             <child type="label">
                               <object class="GtkLabel" id="label1">
                                 <property name="visible">1</property>
-                                <property name="label" translatable="yes">&lt;b&gt;In&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Inset&lt;/b&gt;</property>
                                 <property name="use_markup">1</property>
                               </object>
                             </child>
@@ -1317,11 +1319,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkFrame" id="frame2">
                             <property name="visible">1</property>
-                            <property name="shadow_type">out</property>
+                            <style>
+                              <class name="border-outset"/>
+                            </style>
                             <child type="label">
                               <object class="GtkLabel" id="label2">
                                 <property name="visible">1</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Out&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Outset&lt;/b&gt;</property>
                                 <property name="use_markup">1</property>
                               </object>
                             </child>
@@ -1334,10 +1338,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkFrame" id="frame3">
                             <property name="visible">1</property>
+                            <style>
+                              <class name="border-groove"/>
+                            </style>
                             <child type="label">
                               <object class="GtkLabel" id="label17">
                                 <property name="visible">1</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Etched in&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Groove&lt;/b&gt;</property>
                                 <property name="use_markup">1</property>
                               </object>
                             </child>
@@ -1350,11 +1357,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <child>
                           <object class="GtkFrame" id="frame4">
                             <property name="visible">1</property>
-                            <property name="shadow_type">etched-out</property>
+                            <style>
+                              <class name="border-ridge"/>
+                            </style>
                             <child type="label">
                               <object class="GtkLabel" id="label18">
                                 <property name="visible">1</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Etched out&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Ridge&lt;/b&gt;</property>
                                 <property name="use_markup">1</property>
                               </object>
                             </child>

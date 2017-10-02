@@ -2,3 +2,25 @@
   padding: 0;
   outline-width: 0;
 }
+
+frame.border-inset > border {
+  border-style: inset;
+}
+
+frame.border-outset > border {
+  border-style: outset;
+}
+
+frame.border-groove > border {
+  border-style: groove;
+}
+
+frame.border-ridge > border {
+  border-style: ridge;
+}
+
+/* These effects use 2 lines, so show them */
+frame.border-groove > border,
+frame.border-ridge > border {
+  border-width: 2px;
+}
