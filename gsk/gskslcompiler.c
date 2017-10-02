@@ -189,6 +189,47 @@ gsk_sl_compiler_copy_defines (GskSlCompiler *compiler)
   return copy;
 }
 
+GskCodeSource *
+gsk_sl_compiler_resolve_include (GskSlCompiler  *compiler,
+                                 GskCodeSource  *source,
+                                 gboolean        local,
+                                 const char     *name,
+                                 GError        **error)
+{
+  GskCodeSource *result;
+  GBytes *bytes;
+
+  if (local)
+    {
+      GFile *source_file = gsk_code_source_get_file (source);
+      if (source_file)
+        {
+          GFile *parent, *file;
+
+          parent = g_file_get_parent (source_file);
+          file = g_file_resolve_relative_path (parent, name);
+          result = gsk_code_source_new_for_file (file);
+          g_object_unref (parent);
+          g_object_unref (file);
+          bytes = gsk_code_source_load (result, error);
+          if (bytes)
+            {
+              g_bytes_unref (bytes);
+              return result;
+            }
+
+          g_object_unref (result);
+        }
+    }
+  else
+    {
+      g_set_error (error, G_FILE_ERROR, G_FILE_ERROR_EXIST,
+                   "Could not resolve \"%s\" in search path.", name);
+    }
+
+  return NULL;
+}
+
 static GskSlProgram *
 gsk_sl_compiler_compile (GskSlCompiler *compiler,
                          GskCodeSource *source)

@@ -25,6 +25,12 @@ G_BEGIN_DECLS
 
 GHashTable *            gsk_sl_compiler_copy_defines            (GskSlCompiler          *compiler);
 
+GskCodeSource *         gsk_sl_compiler_resolve_include         (GskSlCompiler          *compiler,
+                                                                 GskCodeSource          *source,
+                                                                 gboolean                local,
+                                                                 const char             *name,
+                                                                 GError                **error);
+
 G_END_DECLS
 
 #endif /* __GSK_SL_COMPILER_PRIVATE_H__ */

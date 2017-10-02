@@ -38,6 +38,7 @@ struct _GskSlPreprocessor
 
   GskSlCompiler *compiler;
   GskSlTokenizer *tokenizer;
+  GSList *pending_tokenizers;
   GArray *tokens;
   GHashTable *defines;
   gboolean fatal_error;
@@ -117,6 +118,7 @@ gsk_sl_preprocessor_unref (GskSlPreprocessor *preproc)
 
   g_slist_free (preproc->conditionals);
   g_hash_table_destroy (preproc->defines);
+  g_slist_free_full (preproc->pending_tokenizers, (GDestroyNotify) gsk_sl_tokenizer_unref);
   gsk_sl_tokenizer_unref (preproc->tokenizer);
   g_object_unref (preproc->compiler);
   g_array_free (preproc->tokens, TRUE);
@@ -168,6 +170,54 @@ gsk_sl_preprocessor_in_ignored_conditional (GskSlPreprocessor *preproc)
 }
 
 static gboolean
+gsk_sl_preprocessor_include (GskSlPreprocessor *preproc,
+                             GskSlPpToken      *pp,
+                             gboolean           include_local)
+{
+  GskCodeSource *source;
+  GError *error = NULL;
+    
+  source = gsk_sl_compiler_resolve_include (preproc->compiler,
+                                            gsk_sl_tokenizer_get_location (preproc->tokenizer)->source,
+                                            include_local,
+                                            pp->token.str,
+                                            &error);
+  if (source == NULL)
+    {
+      gsk_sl_preprocessor_emit_error (preproc, TRUE, &pp->location, error);
+      gsk_sl_preprocessor_clear_token (pp);
+      g_error_free (error);
+      return FALSE;
+    }
+
+  if (g_slist_length (preproc->pending_tokenizers) > 20)
+    {
+      gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp->location, "#include nested too deeply.");
+      gsk_sl_preprocessor_clear_token (pp);
+      return FALSE;
+    }
+
+  gsk_sl_preprocessor_clear_token (pp);
+  pp->location = *gsk_sl_tokenizer_get_location (preproc->tokenizer);
+  gsk_sl_tokenizer_read_token (preproc->tokenizer, &pp->token);
+  if (!gsk_sl_token_is (&pp->token, GSK_SL_TOKEN_NEWLINE) &&
+      !gsk_sl_token_is (&pp->token, GSK_SL_TOKEN_EOF))
+    {
+      gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp->location, "Extra content after #include directive");
+      gsk_sl_preprocessor_clear_token (pp);
+      return FALSE;
+    }
+
+  gsk_sl_preprocessor_clear_token (pp);
+  preproc->pending_tokenizers = g_slist_prepend (preproc->pending_tokenizers, preproc->tokenizer);
+  preproc->tokenizer = gsk_sl_tokenizer_new (source, 
+                                             gsk_sl_preprocessor_error_func,
+                                             preproc,
+                                             NULL);
+  return TRUE;
+}
+
+static gboolean
 gsk_sl_preprocessor_next_token (GskSlPreprocessor *preproc,
                                 GskSlPpToken      *pp,
                                 gboolean          *last_was_newline)
@@ -189,10 +239,28 @@ gsk_sl_preprocessor_next_token (GskSlPreprocessor *preproc,
 }
 
 static void
+gsk_sl_preprocessor_handle_token (GskSlPreprocessor *preproc,
+                                  GskSlPpToken      *pp,
+                                  gboolean           was_newline);
+
+static void
 gsk_sl_preprocessor_append_token (GskSlPreprocessor *preproc,
                                   GskSlPpToken      *pp,
                                   GSList            *used_defines)
 {
+  if (gsk_sl_token_is (&pp->token, GSK_SL_TOKEN_EOF) &&
+      preproc->pending_tokenizers)
+    {
+      gboolean was_newline;
+      gsk_sl_tokenizer_unref (preproc->tokenizer);
+      preproc->tokenizer = preproc->pending_tokenizers->data;
+      preproc->pending_tokenizers = g_slist_remove (preproc->pending_tokenizers, preproc->tokenizer);
+      gsk_sl_preprocessor_clear_token (pp);
+      gsk_sl_preprocessor_next_token (preproc, pp, &was_newline);
+      gsk_sl_preprocessor_handle_token (preproc, pp, TRUE);
+      return;
+    }
+
   if (gsk_sl_preprocessor_in_ignored_conditional (preproc))
     {
       gsk_sl_preprocessor_clear_token (pp);
@@ -234,11 +302,6 @@ gsk_sl_preprocessor_append_token (GskSlPreprocessor *preproc,
 
   g_array_append_val (preproc->tokens, *pp);
 }
-
-static void
-gsk_sl_preprocessor_handle_token (GskSlPreprocessor *preproc,
-                                  GskSlPpToken      *pp,
-                                  gboolean           was_newline);
 
 static void
 gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc)
@@ -438,6 +501,26 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc)
               g_hash_table_replace (preproc->defines, (gpointer) gsk_sl_define_get_name (define), define);
               gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline);
               return;
+            }
+        }
+      else if (g_str_equal (pp.token.str, "include"))
+        {
+          gsk_sl_preprocessor_clear_token (&pp);
+          if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
+            {
+              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "No filename after #include.");
+              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline);
+              return;
+            }
+          if (gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_STRING))
+            {
+              if (gsk_sl_preprocessor_include (preproc, &pp, TRUE))
+                return;
+            }
+          else
+            {
+              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected filename after #include.");
+              gsk_sl_preprocessor_clear_token (&pp);
             }
         }
 #if 0

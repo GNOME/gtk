@@ -146,6 +146,7 @@ gsk_code_source_load (GskCodeSource  *source,
                              error))
     return NULL;
 
-  return g_bytes_new_take (data, length);
+  source->bytes = g_bytes_new_take (data, length);
+  return g_bytes_ref (source->bytes);
 }
 
