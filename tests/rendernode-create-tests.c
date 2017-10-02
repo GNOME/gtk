@@ -417,7 +417,55 @@ text (guint n)
 
   pango_font_description_free (desc);
 
-   container = gsk_container_node_new (nodes, n);
+  container = gsk_container_node_new (nodes, n);
+
+  for (i = 0; i < n; i++)
+    gsk_render_node_unref (nodes[i]);
+
+  return container;
+}
+
+GskRenderNode *
+box_shadows (guint n)
+{
+  GskRenderNode **nodes = g_newa (GskRenderNode *, n);
+  GskRenderNode *container;
+  int i, j;
+  GskRoundedRect outline;
+  GdkRGBA color;
+  float dx, dy;
+  float spread;
+  float blur;
+
+  for (i = 0; i < n; i++)
+    {
+      outline.bounds.size.width = g_random_int_range (20, 100);
+      outline.bounds.origin.x = g_random_int_range (0, 1000 - outline.bounds.size.width);
+      outline.bounds.size.height = g_random_int_range (20, 100);
+      outline.bounds.origin.y = g_random_int_range (0, 1000 - outline.bounds.size.height);
+      outline.corner[1].width = outline.corner[1].height = 10 - (int) sqrt (g_random_int_range (0, 100));
+      outline.corner[2].width = outline.corner[2].height = 10 - (int) sqrt (g_random_int_range (0, 100));
+      outline.corner[3].width = outline.corner[3].height = 10 - (int) sqrt (g_random_int_range (0, 100));
+      for (j = 0; j < 4; j++)
+        {
+          outline.corner[0].width = 10 - (int) sqrt (g_random_int_range (0, 100));
+          outline.corner[0].height = 10 - (int) sqrt (g_random_int_range (0, 100));
+        }
+
+      hsv_to_rgb (&color, g_random_double (), g_random_double_range (0.15, 0.4), g_random_double_range (0.6, 0.85));
+
+      dx = g_random_double_range (0.0, 5.0);
+      dy = g_random_double_range (0.0, 5.0);
+      spread = g_random_double_range (0.0, 10.0);
+      blur = g_random_double_range (0.0, 10.0);
+
+      if (g_random_boolean ())
+        nodes[i] = gsk_inset_shadow_node_new (&outline, &color, dx, dy, spread, blur);
+      else
+        nodes[i] = gsk_outset_shadow_node_new (&outline, &color, dx, dy, spread, blur);
+    }
+
+  container = gsk_container_node_new (nodes, n);
 
   for (i = 0; i < n; i++)
     gsk_render_node_unref (nodes[i]);
@@ -439,6 +487,7 @@ main (int argc, char **argv)
     { "linear-gradient.node", linear_gradient },
     { "borders.node", borders },
     { "text.node", text },
+    { "box-shadows.node", box_shadows },
   };
   GError *error = NULL;
   GskRenderNode *node;
