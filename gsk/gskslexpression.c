@@ -1265,19 +1265,6 @@ gsk_sl_expression_error_new (void)
   return (GskSlExpression *) constant;
 }
 
-static gsize
-gsk_sl_constructor_get_args_by_type (const GskSlType *type)
-{
-  if (gsk_sl_type_is_scalar (type))
-    return 1;
-  else if (gsk_sl_type_is_vector (type))
-    return gsk_sl_type_get_length (type);
-  else if (gsk_sl_type_is_matrix (type))
-    return gsk_sl_type_get_length (type) * gsk_sl_constructor_get_args_by_type (gsk_sl_type_get_index_type (type));
-  else
-    return 0;
-}
-
 GskSlExpression *
 gsk_sl_expression_parse_function_call (GskSlScope           *scope,
                                        GskSlPreprocessor    *stream,
@@ -1300,7 +1287,7 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
   gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
 
   if (function && gsk_sl_function_is_builtin_constructor (function))
-    missing_args = gsk_sl_constructor_get_args_by_type (gsk_sl_function_get_return_type (function));
+    missing_args = gsk_sl_type_get_n_components (gsk_sl_function_get_return_type (function));
   else
     missing_args = -1;
 
@@ -1350,7 +1337,7 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
           else if (missing_args > 0)
             {
               GskSlType *type = gsk_sl_expression_get_return_type (expression);
-              gsize provided = gsk_sl_constructor_get_args_by_type (type);
+              gsize provided = gsk_sl_type_get_n_components (type);
 
               if (provided == 0)
                 {

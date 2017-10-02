@@ -41,7 +41,6 @@ struct _GskSlTypeMember {
   gsize offset;
 };
 
-
 struct _GskSlType
 {
   const GskSlTypeClass *class;
@@ -57,6 +56,7 @@ struct _GskSlTypeClass {
   gsize                 (* get_index_stride)                    (const GskSlType     *type);
   guint                 (* get_length)                          (const GskSlType     *type);
   gsize                 (* get_size)                            (const GskSlType     *type);
+  gsize                 (* get_n_components)                    (const GskSlType     *type);
   guint                 (* get_n_members)                       (const GskSlType     *type);
   const GskSlTypeMember * (* get_member)                        (const GskSlType     *type,
                                                                  guint                i);
@@ -383,6 +383,12 @@ gsk_sl_type_void_get_size (const GskSlType *type)
   return 0;
 }
 
+static gsize
+gsk_sl_type_void_get_n_components (const GskSlType *type)
+{
+  return 0;
+}
+
 static guint
 gsk_sl_type_void_get_n_members (const GskSlType *type)
 {
@@ -444,6 +450,7 @@ static const GskSlTypeClass GSK_SL_TYPE_VOID = {
   gsk_sl_type_void_get_index_stride,
   gsk_sl_type_void_get_length,
   gsk_sl_type_void_get_size,
+  gsk_sl_type_void_get_n_components,
   gsk_sl_type_void_get_n_members,
   gsk_sl_type_void_get_member,
   gsk_sl_type_void_can_convert,
@@ -508,6 +515,12 @@ gsk_sl_type_scalar_get_size (const GskSlType *type)
   const GskSlTypeScalar *scalar = (const GskSlTypeScalar *) type;
 
   return scalar_infos[scalar->scalar].size;
+}
+
+static gsize
+gsk_sl_type_scalar_get_n_components (const GskSlType *type)
+{
+  return 1;
 }
 
 static guint
@@ -635,6 +648,7 @@ static const GskSlTypeClass GSK_SL_TYPE_SCALAR = {
   gsk_sl_type_scalar_get_index_stride,
   gsk_sl_type_scalar_get_length,
   gsk_sl_type_scalar_get_size,
+  gsk_sl_type_scalar_get_n_components,
   gsk_sl_type_scalar_get_n_members,
   gsk_sl_type_scalar_get_member,
   gsk_sl_type_scalar_can_convert,
@@ -707,6 +721,14 @@ gsk_sl_type_vector_get_size (const GskSlType *type)
   const GskSlTypeVector *vector = (const GskSlTypeVector *) type;
 
   return vector->length * scalar_infos[vector->scalar].size;
+}
+
+static gsize
+gsk_sl_type_vector_get_n_components (const GskSlType *type)
+{
+  const GskSlTypeVector *vector = (const GskSlTypeVector *) type;
+
+  return vector->length;
 }
 
 static guint
@@ -823,6 +845,7 @@ static const GskSlTypeClass GSK_SL_TYPE_VECTOR = {
   gsk_sl_type_vector_get_index_stride,
   gsk_sl_type_vector_get_length,
   gsk_sl_type_vector_get_size,
+  gsk_sl_type_vector_get_n_components,
   gsk_sl_type_vector_get_n_members,
   gsk_sl_type_vector_get_member,
   gsk_sl_type_vector_can_convert,
@@ -896,6 +919,14 @@ gsk_sl_type_matrix_get_size (const GskSlType *type)
   const GskSlTypeMatrix *matrix = (const GskSlTypeMatrix *) type;
 
   return matrix->columns * matrix->rows * scalar_infos[matrix->scalar].size;
+}
+
+static gsize
+gsk_sl_type_matrix_get_n_components (const GskSlType *type)
+{
+  const GskSlTypeMatrix *matrix = (const GskSlTypeMatrix *) type;
+
+  return matrix->columns * matrix->rows;
 }
 
 static guint
@@ -1013,6 +1044,7 @@ static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_get_index_stride,
   gsk_sl_type_matrix_get_length,
   gsk_sl_type_matrix_get_size,
+  gsk_sl_type_matrix_get_n_components,
   gsk_sl_type_matrix_get_n_members,
   gsk_sl_type_matrix_get_member,
   gsk_sl_type_matrix_can_convert,
@@ -1091,6 +1123,12 @@ gsk_sl_type_struct_get_size (const GskSlType *type)
   const GskSlTypeStruct *struc = (const GskSlTypeStruct *) type;
 
   return struc->size;
+}
+
+static gsize
+gsk_sl_type_struct_get_n_components (const GskSlType *type)
+{
+  return 0;
 }
 
 static guint
@@ -1202,6 +1240,7 @@ static const GskSlTypeClass GSK_SL_TYPE_STRUCT = {
   gsk_sl_type_struct_get_index_stride,
   gsk_sl_type_struct_get_length,
   gsk_sl_type_struct_get_size,
+  gsk_sl_type_struct_get_n_components,
   gsk_sl_type_struct_get_n_members,
   gsk_sl_type_struct_get_member,
   gsk_sl_type_struct_can_convert,
@@ -1280,6 +1319,12 @@ gsk_sl_type_block_get_size (const GskSlType *type)
   const GskSlTypeBlock *block = (const GskSlTypeBlock *) type;
 
   return block->size;
+}
+
+static gsize
+gsk_sl_type_block_get_n_components (const GskSlType *type)
+{
+  return 0;
 }
 
 static guint
@@ -1397,6 +1442,7 @@ static const GskSlTypeClass GSK_SL_TYPE_BLOCK = {
   gsk_sl_type_block_get_index_stride,
   gsk_sl_type_block_get_length,
   gsk_sl_type_block_get_size,
+  gsk_sl_type_block_get_n_components,
   gsk_sl_type_block_get_n_members,
   gsk_sl_type_block_get_member,
   gsk_sl_type_block_can_convert,
@@ -1406,6 +1452,12 @@ static const GskSlTypeClass GSK_SL_TYPE_BLOCK = {
 };
 
 /* API */
+
+gsize
+gsk_sl_scalar_type_get_size (GskSlScalarType type)
+{
+  return scalar_infos[type].size;
+}
 
 static GskSlType *
 gsk_sl_type_parse_struct (GskSlScope        *scope,
@@ -2045,6 +2097,12 @@ gsize
 gsk_sl_type_get_size (const GskSlType *type)
 {
   return type->class->get_size (type);
+}
+
+gsize
+gsk_sl_type_get_n_components (const GskSlType *type)
+{
+  return type->class->get_n_components (type);
 }
 
 guint

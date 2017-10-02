@@ -170,6 +170,65 @@ gsk_sl_value_new_member (GskSlValue *value,
   return gsk_sl_value_new_for_data (value->type, data, g_free, data);
 }
 
+/**
+ * gsk_sl_value_convert_components:
+ * @source: (transfer full): value to convert
+ * @scalar: new scalar type to convert to
+ *
+ * Converts the scalar components of @source into the @scalar.
+ * This function uses the extended conversion rules for constructors.
+ *
+ * Returns: A value containing the converted values. This may or may not
+ *     be the original @source.
+ **/
+GskSlValue *
+gsk_sl_value_convert_components (GskSlValue      *source,
+                                 GskSlScalarType  scalar)
+{
+  GskSlValue *result;
+  GskSlType *result_type;
+  guchar *sdata, *ddata;
+  gsize sstride, dstride;
+  gsize i, n;
+  GskSlScalarType sscalar;
+
+  sscalar = gsk_sl_type_get_scalar_type (source->type);
+  if (sscalar == scalar)
+    return source;
+
+  if (gsk_sl_type_is_scalar (source->type))
+    result_type = gsk_sl_type_get_scalar (scalar);
+  else if (gsk_sl_type_is_vector (source->type))
+    result_type = gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (source->type));
+  else if (gsk_sl_type_is_matrix (source->type))
+    result_type = gsk_sl_type_get_matrix (scalar,
+                                          gsk_sl_type_get_length (source->type),
+                                          gsk_sl_type_get_length (gsk_sl_type_get_index_type (source->type)));
+  else
+    {
+      g_return_val_if_reached (NULL);
+    }
+
+  result = gsk_sl_value_new (result_type);
+
+  n = gsk_sl_type_get_n_components (result_type);
+  sdata = gsk_sl_value_get_data (source);
+  sstride = gsk_sl_scalar_type_get_size (sscalar);
+  ddata = gsk_sl_value_get_data (result);
+  dstride = gsk_sl_scalar_type_get_size (scalar);
+  for (i = 0; i < n; i++)
+    {
+      gsk_sl_scalar_type_convert_value (scalar,
+                                        ddata + i * dstride,
+                                        sscalar,
+                                        sdata + i * sstride);
+    }
+
+  gsk_sl_value_free (source);
+
+  return result;
+}
+
 GskSlValue *
 gsk_sl_value_copy (const GskSlValue *source)
 {
@@ -202,10 +261,10 @@ gsk_sl_value_componentwise (GskSlValue    *value,
   gsize stride;
   gsize i, n;
 
-  g_return_if_fail (gsk_sl_type_is_scalar (value->type) || gsk_sl_type_is_vector (value->type) || gsk_sl_type_is_matrix (value->type));
+  g_return_if_fail (gsk_sl_type_get_n_components (value->type) > 0);
 
-  stride = gsk_sl_type_get_size (gsk_sl_type_get_scalar (gsk_sl_type_get_scalar_type (value->type)));
-  n = gsk_sl_type_get_size (value->type) / stride;
+  stride = gsk_sl_scalar_type_get_size (gsk_sl_type_get_scalar_type (value->type));
+  n = gsk_sl_type_get_n_components (value->type);
 
   for (i = 0; i < n; i++)
     {

@@ -27,6 +27,8 @@ G_BEGIN_DECLS
 
 typedef struct _GskSlTypeBuilder GskSlTypeBuilder;
 
+gsize                   gsk_sl_scalar_type_get_size             (GskSlScalarType      type);
+
 GskSlType *             gsk_sl_type_new_parse                   (GskSlScope          *scope,
                                                                  GskSlPreprocessor   *preproc);
 GskSlType *             gsk_sl_type_get_void                    (void);
@@ -54,6 +56,7 @@ GskSlType *             gsk_sl_type_get_index_type              (const GskSlType
 gsize                   gsk_sl_type_get_index_stride            (const GskSlType     *type);
 guint                   gsk_sl_type_get_length                  (const GskSlType     *type);
 gsize                   gsk_sl_type_get_size                    (const GskSlType     *type);
+gsize                   gsk_sl_type_get_n_components            (const GskSlType     *type);
 guint                   gsk_sl_type_get_n_members               (const GskSlType     *type);
 GskSlType *             gsk_sl_type_get_member_type             (const GskSlType     *type,
                                                                  guint                n);
