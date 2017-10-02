@@ -929,7 +929,6 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
                               ...)
 {
   const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
-  GtkSnapshotState *start_state;
   GtkSnapshotState *end_state;
   char *str;
 
@@ -944,20 +943,20 @@ gtk_snapshot_push_cross_fade (GtkSnapshot *snapshot,
   else
     str = NULL;
 
-  start_state = gtk_snapshot_push_state (snapshot,
-                                         str,
-                                         current_state->clip_region,
-                                         current_state->translate_x,
-                                         current_state->translate_y,
-                                         gtk_snapshot_collect_cross_fade_end);
-
   end_state = gtk_snapshot_push_state (snapshot,
-                                       g_strdup (str),
-                                       start_state->clip_region,
-                                       start_state->translate_x,
-                                       start_state->translate_y,
-                                       gtk_snapshot_collect_cross_fade_start);
+                                       str,
+                                       current_state->clip_region,
+                                       current_state->translate_x,
+                                       current_state->translate_y,
+                                       gtk_snapshot_collect_cross_fade_end);
   end_state->data.cross_fade.progress = progress;
+
+  gtk_snapshot_push_state (snapshot,
+                           g_strdup (str),
+                           end_state->clip_region,
+                           end_state->translate_x,
+                           end_state->translate_y,
+                           gtk_snapshot_collect_cross_fade_start);
 }
 
 static GskRenderNode *
