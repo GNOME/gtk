@@ -35,8 +35,6 @@ GskSlFunction *         gsk_sl_function_new_parse               (GskSlScope     
 GskSlFunction *         gsk_sl_function_ref                     (GskSlFunction          *function);
 void                    gsk_sl_function_unref                   (GskSlFunction          *function);
 
-gboolean                gsk_sl_function_is_builtin_constructor  (const GskSlFunction    *function);
-
 void                    gsk_sl_function_print                   (const GskSlFunction    *function,
                                                                  GskSlPrinter           *printer);
 

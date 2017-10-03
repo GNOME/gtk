@@ -757,23 +757,24 @@ its_a_type:
         if (token->type == GSK_SL_TOKEN_LEFT_PAREN)
           {
             GskSlStatementExpression *statement_expression;
-            GskSlFunction *constructor;
                 
-            constructor = gsk_sl_function_new_constructor (type);
             statement_expression = gsk_sl_statement_new (GskSlStatementExpression, &GSK_SL_STATEMENT_EXPRESSION);
-            if (gsk_sl_function_is_builtin_constructor (constructor))
+            if (gsk_sl_type_is_scalar (type) || gsk_sl_type_is_vector (type) || gsk_sl_type_is_matrix (type))
               {
-                statement_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, NULL, constructor);
+                statement_expression->expression = gsk_sl_expression_parse_constructor (scope, preproc, type);
               }
             else
               {
+                GskSlFunction *constructor;
                 GskSlFunctionMatcher matcher;
+
+                constructor = gsk_sl_function_new_constructor (type);
                 gsk_sl_function_matcher_init (&matcher, g_list_prepend (NULL, constructor));
-                statement_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, &matcher, constructor);
+                statement_expression->expression = gsk_sl_expression_parse_function_call (scope, preproc, &matcher);
                 gsk_sl_function_matcher_finish (&matcher);
+                gsk_sl_function_unref (constructor);
               }
             statement = (GskSlStatement *) statement_expression;
-            gsk_sl_function_unref (constructor);
           }
         else
           {

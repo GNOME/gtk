@@ -713,6 +713,227 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_REFERENCE = {
   gsk_sl_expression_reference_write_spv
 };
 
+/* CONSTRUCTOR CALL */
+
+typedef struct _GskSlExpressionConstructor GskSlExpressionConstructor;
+
+struct _GskSlExpressionConstructor {
+  GskSlExpression parent;
+
+  GskSlType *type;
+  GskSlExpression **arguments;
+  guint n_arguments;
+};
+
+static void
+gsk_sl_expression_constructor_free (GskSlExpression *expression)
+{
+  GskSlExpressionConstructor *constructor = (GskSlExpressionConstructor *) expression;
+  guint i;
+
+  for (i = 0; i < constructor->n_arguments; i++)
+    {
+      gsk_sl_expression_unref (constructor->arguments[i]);
+    }
+  g_free (constructor->arguments);
+
+  gsk_sl_type_unref (constructor->type);
+
+  g_slice_free (GskSlExpressionConstructor, constructor);
+}
+
+static void
+gsk_sl_expression_constructor_print (const GskSlExpression *expression,
+                                       GskSlPrinter          *printer)
+{
+  const GskSlExpressionConstructor *constructor = (const GskSlExpressionConstructor *) expression;
+  guint i;
+
+  gsk_sl_printer_append (printer, gsk_sl_type_get_name (constructor->type));
+  gsk_sl_printer_append (printer, " (");
+  
+  for (i = 0; i < constructor->n_arguments; i++)
+    {
+      if (i > 0)
+        gsk_sl_printer_append (printer, ", ");
+      gsk_sl_expression_print (constructor->arguments[i], printer);
+    }
+
+  gsk_sl_printer_append (printer, ")");
+}
+
+static GskSlType *
+gsk_sl_expression_constructor_get_return_type (const GskSlExpression *expression)
+{
+  const GskSlExpressionConstructor *constructor = (const GskSlExpressionConstructor *) expression;
+
+  return constructor->type;
+}
+
+static GskSlValue *
+gsk_sl_expression_constructor_get_constant (const GskSlExpression *expression)
+{
+  const GskSlExpressionConstructor *constructor = (const GskSlExpressionConstructor *) expression;
+  GskSlType *type = constructor->type;
+  GskSlValue *values[constructor->n_arguments];
+  GskSlValue *result;
+  guint i;
+
+  for (i = 0; i < constructor->n_arguments; i++)
+    {
+      values[i] = gsk_sl_expression_get_constant (constructor->arguments[i]);
+      if (values[i] == NULL)
+        {
+          guint j;
+          for (j = 0; j < i; j++)
+            gsk_sl_value_free (values[j]);
+          return NULL;
+        }
+    }
+
+  result = gsk_sl_value_new (type);
+
+  if (constructor->n_arguments == 1 && gsk_sl_type_is_scalar (gsk_sl_value_get_type (values[0])))
+    {
+      GskSlScalarType sscalar, dscalar;
+      guchar *sdata, *ddata;
+      gsize dstride;
+      
+      sscalar = gsk_sl_type_get_scalar_type (gsk_sl_value_get_type (values[0]));
+      sdata = gsk_sl_value_get_data (values[0]);
+      dscalar = gsk_sl_type_get_scalar_type (type);
+      ddata = gsk_sl_value_get_data (result);
+      dstride = gsk_sl_scalar_type_get_size (dscalar);
+
+      if (gsk_sl_type_is_scalar (type))
+        {
+          gsk_sl_scalar_type_convert_value (dscalar, ddata, sscalar, sdata);
+        }
+      else if (gsk_sl_type_is_vector (type))
+        {
+          gsize i;
+          for (i = 0; i < gsk_sl_type_get_n_components (type); i++)
+            {
+              gsk_sl_scalar_type_convert_value (dscalar, ddata + i * dstride, sscalar, sdata);
+            }
+        }
+      else if (gsk_sl_type_is_matrix (type))
+        {
+          gsize i, n, step;
+
+          n = gsk_sl_type_get_n_components (type);
+          step = n / gsk_sl_type_get_length (type) + 1;
+          for (i = 0; i < n; i += step)
+            {
+              gsk_sl_scalar_type_convert_value (dscalar, ddata + i * dstride, sscalar, sdata);
+            }
+        }
+    }
+  else if (constructor->n_arguments == 1 && gsk_sl_type_is_matrix (gsk_sl_value_get_type (values[0])) && gsk_sl_type_is_matrix (type))
+    {
+      GskSlScalarType sscalar, dscalar;
+      guchar *sdata, *ddata;
+      gsize drows, dcols, srows, scols, r, c, sstride, dstride;
+      
+      sscalar = gsk_sl_type_get_scalar_type (gsk_sl_value_get_type (values[0]));
+      sstride = gsk_sl_scalar_type_get_size (sscalar);
+      sdata = gsk_sl_value_get_data (values[0]);
+      scols = gsk_sl_type_get_length (gsk_sl_value_get_type (values[0]));
+      srows = gsk_sl_type_get_length (gsk_sl_value_get_type (values[0]));
+      dscalar = gsk_sl_type_get_scalar_type (type);
+      dstride = gsk_sl_scalar_type_get_size (dscalar);
+      ddata = gsk_sl_value_get_data (result);
+      dcols = gsk_sl_type_get_length (type);
+      drows = gsk_sl_type_get_length (gsk_sl_type_get_index_type (type));
+
+      for (c = 0; c < scols; c++)
+        {
+          for (r = 0; r < srows; r++)
+            {
+              gsk_sl_scalar_type_convert_value (dscalar,
+                                                ddata + dstride * (c * drows + r),
+                                                sscalar,
+                                                sdata + sstride * (c * srows + r));
+            }
+          for (; r < drows; r++)
+            {
+              gsk_sl_scalar_type_convert_value (dscalar,
+                                                ddata + dstride * (c * drows + r),
+                                                GSK_SL_FLOAT,
+                                                &(float) { c == r ? 1 : 0 });
+            }
+        }
+      for (; c < dcols; c++)
+        {
+          for (r = 0; r < drows; r++)
+            {
+              gsk_sl_scalar_type_convert_value (dscalar,
+                                                ddata + dstride * (c * drows + r),
+                                                GSK_SL_FLOAT,
+                                                &(float) { c == r ? 1 : 0 });
+            }
+        }
+    }
+  else
+    {
+      GskSlScalarType sscalar, dscalar;
+      guchar *sdata, *ddata;
+      gsize i, n, j, si, sn, sstride, dstride;
+      
+      dscalar = gsk_sl_type_get_scalar_type (type);
+      dstride = gsk_sl_scalar_type_get_size (dscalar);
+      n = gsk_sl_type_get_n_components (type);
+      ddata = gsk_sl_value_get_data (result);
+      sscalar = GSK_SL_VOID;
+      sdata = NULL;
+      sstride = 0;
+
+      j = 0;
+      sn = 0;
+      si = 0;
+      for (i = 0; i < n; i++)
+        {
+          if (si == sn)
+            {
+              sscalar = gsk_sl_type_get_scalar_type (gsk_sl_value_get_type (values[j]));
+              sstride = gsk_sl_scalar_type_get_size (sscalar);
+              sdata = gsk_sl_value_get_data (values[j]);
+              si = 0;
+              sn = gsk_sl_type_get_n_components (gsk_sl_value_get_type (values[j]));
+              j++;
+            }
+
+          gsk_sl_scalar_type_convert_value (dscalar,
+                                            ddata + dstride * i,
+                                            sscalar,
+                                            sdata + sstride * si);
+          si++;
+        }
+    }
+
+  for (i = 0; i < constructor->n_arguments; i++)
+    gsk_sl_value_free (values[i]);
+
+  return result;
+}
+
+static guint32
+gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
+                                         GskSpvWriter          *writer)
+{
+  g_assert_not_reached ();
+
+  return 0;
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_CONSTRUCTOR = {
+  gsk_sl_expression_constructor_free,
+  gsk_sl_expression_constructor_print,
+  gsk_sl_expression_constructor_get_return_type,
+  gsk_sl_expression_constructor_get_constant,
+  gsk_sl_expression_constructor_write_spv
+};
+
 /* FUNCTION_CALL */
 
 typedef struct _GskSlExpressionFunctionCall GskSlExpressionFunctionCall;
@@ -1266,14 +1487,122 @@ gsk_sl_expression_error_new (void)
 }
 
 GskSlExpression *
+gsk_sl_expression_parse_constructor (GskSlScope        *scope,
+                                     GskSlPreprocessor *stream,
+                                     GskSlType         *type)
+{
+  GskSlExpressionConstructor *call;
+  const GskSlToken *token;
+  gssize missing_args;
+  GPtrArray *arguments;
+
+  call = gsk_sl_expression_new (GskSlExpressionConstructor, &GSK_SL_EXPRESSION_CONSTRUCTOR);
+  call->type = gsk_sl_type_ref (type);
+
+  token = gsk_sl_preprocessor_get (stream);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+    {
+      gsk_sl_preprocessor_error (stream, SYNTAX, "Expected opening \"(\" when calling function.");
+      gsk_sl_expression_unref ((GskSlExpression *) call);
+      return gsk_sl_expression_error_new ();
+    }
+  gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
+
+  missing_args = gsk_sl_type_get_n_components (type);
+  arguments = g_ptr_array_new ();
+
+  token = gsk_sl_preprocessor_get (stream);
+  
+  while (TRUE)
+    {
+      GskSlExpression *expression = gsk_sl_expression_parse_assignment (scope, stream);
+
+      if (missing_args == 0)
+        {
+          gsk_sl_preprocessor_error (stream, ARGUMENT_COUNT,
+                                     "Too many arguments given to builtin constructor, need only %u.",
+                                     arguments->len);
+          missing_args = -1;
+        }
+      else if (missing_args > 0)
+        {
+          GskSlType *return_type = gsk_sl_expression_get_return_type (expression);
+          gsize provided = gsk_sl_type_get_n_components (return_type);
+
+          if (provided == 0)
+            {
+              gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                         "Invalid type %s for builtin constructor",
+                                         gsk_sl_type_get_name (return_type));
+              missing_args = -1;
+            }
+          else if (gsk_sl_type_is_matrix (return_type) && 
+                   gsk_sl_type_is_matrix (type))
+            {
+              if (arguments->len == 0)
+                {
+                  missing_args = 0;
+                }
+              else
+                {
+                  gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                             "Matrix type %s only valid as first argument for %s",
+                                             gsk_sl_type_get_name (return_type),
+                                             gsk_sl_type_get_name (type));
+                  missing_args = -1;
+                }
+            }
+          else
+            {
+              missing_args -= MIN (missing_args, provided);
+            }
+        }
+
+      g_ptr_array_add (arguments, expression);
+      
+      token = gsk_sl_preprocessor_get (stream);
+      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
+        break;
+      gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
+    }
+
+  if (missing_args > 0)
+    {
+      if (arguments->len != 1 || !gsk_sl_type_is_scalar (gsk_sl_expression_get_return_type (g_ptr_array_index (arguments, 0))))
+        {
+          gsk_sl_preprocessor_error (stream, ARGUMENT_COUNT,
+                                     "Not enough arguments given to builtin constructor, %"G_GSIZE_FORMAT" are missing.",
+                                     missing_args);
+          missing_args = -1;
+        }
+    }
+
+  call->n_arguments = arguments->len;
+  call->arguments = (GskSlExpression **) g_ptr_array_free (arguments, FALSE);
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+    {
+      gsk_sl_preprocessor_error (stream, SYNTAX, "Expected closing \")\" after arguments.");
+      gsk_sl_preprocessor_sync (stream, GSK_SL_TOKEN_RIGHT_PAREN);
+    }
+  gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
+
+  if (missing_args < 0)
+    {
+      gsk_sl_expression_unref ((GskSlExpression *) call);
+      return gsk_sl_expression_error_new ();
+    }
+  
+  return (GskSlExpression *) call;
+}
+
+GskSlExpression *
 gsk_sl_expression_parse_function_call (GskSlScope           *scope,
                                        GskSlPreprocessor    *stream,
-                                       GskSlFunctionMatcher *matcher,
-                                       GskSlFunction        *function)
+                                       GskSlFunctionMatcher *matcher)
 {
   GskSlExpressionFunctionCall *call;
   const GskSlToken *token;
-  gssize missing_args; /* only used for builtin constructors */
 
   call = gsk_sl_expression_new (GskSlExpressionFunctionCall, &GSK_SL_EXPRESSION_FUNCTION_CALL);
 
@@ -1286,11 +1615,6 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
     }
   gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
 
-  if (function && gsk_sl_function_is_builtin_constructor (function))
-    missing_args = gsk_sl_type_get_n_components (gsk_sl_function_get_return_type (function));
-  else
-    missing_args = -1;
-
   token = gsk_sl_preprocessor_get (stream);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
     {
@@ -1301,7 +1625,7 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
         {
           GskSlExpression *expression = gsk_sl_expression_parse_assignment (scope, stream);
 
-          if (function == NULL && matcher == NULL)
+          if (matcher == NULL)
             {
               /* no checking necessary */
             }
@@ -1312,43 +1636,10 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
               gsk_sl_function_matcher_match_argument (matcher, arguments->len, type);
               if (!gsk_sl_function_matcher_has_matches (matcher))
                 {
-                  if (function)
-                    gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                               "Cannot convert argument %u from %s to %s.",
-                                               arguments->len + 1,
-                                               gsk_sl_type_get_name (type),
-                                               gsk_sl_type_get_name (gsk_sl_function_get_argument_type (function, arguments->len)));
-                  else
-                    gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                               "No overloaded function available that matches the first %u arguments",
-                                               arguments->len + 1);
-
-                  matcher = NULL;
-                  function = NULL;
-                }
-            }
-          else if (missing_args == 0)
-            {
-              gsk_sl_preprocessor_error (stream, ARGUMENT_COUNT,
-                                         "Too many arguments given to builtin constructor, only the first %u are necessary.",
-                                         arguments->len);
-              function = NULL;
-            }
-          else if (missing_args > 0)
-            {
-              GskSlType *type = gsk_sl_expression_get_return_type (expression);
-              gsize provided = gsk_sl_type_get_n_components (type);
-
-              if (provided == 0)
-                {
                   gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                             "Invalid type %s for builtin constructor",
-                                             gsk_sl_type_get_name (type));
-                  function = NULL;
-                }
-              else
-                {
-                  missing_args -= MIN (missing_args, provided);
+                                             "No overloaded function available that matches the first %u arguments",
+                                             arguments->len + 1);
+                  matcher = NULL;
                 }
             }
 
@@ -1360,14 +1651,6 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
           gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
         }
 
-      if (missing_args > 0)
-        {
-          gsk_sl_preprocessor_error (stream, ARGUMENT_COUNT,
-                                     "Not enough arguments given to builtin constructor, %"G_GSIZE_FORMAT" are missing.",
-                                     missing_args);
-          function = NULL;
-        }
-
       call->n_arguments = arguments->len;
       call->arguments = (GskSlExpression **) g_ptr_array_free (arguments, FALSE);
     }
@@ -1377,23 +1660,22 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
       gsk_sl_function_matcher_match_n_arguments (matcher, call->n_arguments);
       if (!gsk_sl_function_matcher_has_matches (matcher))
         {
-          if (function)
-            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                       "Function %s needs %"G_GSIZE_FORMAT" arguments, but %u given.",
-                                       gsk_sl_function_get_name (function),
-                                       gsk_sl_function_get_n_arguments (function),
-                                       call->n_arguments);
-          else
-            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                       "No overloaded function available that matches this call");
-          function = NULL;
+          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
+                                     "No overloaded function available with %u arguments.",
+                                     call->n_arguments);
+          matcher = NULL;
         }
       else
         {
-          function = gsk_sl_function_matcher_get_match (matcher);
-          if (function == NULL)
-            gsk_sl_preprocessor_error (stream, UNIQUENESS,
-                                       "Cannot find unique match for overloaded function.");
+          call->function = gsk_sl_function_matcher_get_match (matcher);
+          if (call->function)
+            gsk_sl_function_ref (call->function);
+          else
+            {
+              gsk_sl_preprocessor_error (stream, UNIQUENESS,
+                                         "Cannot find unique match for overloaded function.");
+              matcher = NULL;
+            }
         }           
     }
 
@@ -1401,16 +1683,16 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
     {
       gsk_sl_preprocessor_error (stream, SYNTAX, "Expected closing \")\" after arguments.");
       gsk_sl_preprocessor_sync (stream, GSK_SL_TOKEN_RIGHT_PAREN);
+      matcher = NULL;
     }
   gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
 
-  if (function == NULL)
+  if (matcher == NULL)
     {
       gsk_sl_expression_unref ((GskSlExpression *) call);
       return gsk_sl_expression_error_new ();
     }
   
-  call->function = gsk_sl_function_ref (function);
   return (GskSlExpression *) call;
 }
 
@@ -1440,7 +1722,7 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
             gsk_sl_preprocessor_consume (stream, NULL);
             constructor = gsk_sl_function_new_constructor (type);
             gsk_sl_function_matcher_init (&matcher, g_list_prepend (NULL, constructor));
-            expr = gsk_sl_expression_parse_function_call (scope, stream, &matcher, constructor);
+            expr = gsk_sl_expression_parse_function_call (scope, stream, &matcher);
             gsk_sl_function_matcher_finish (&matcher);
             gsk_sl_function_unref (constructor);
 
@@ -1460,9 +1742,7 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
             if (!gsk_sl_function_matcher_has_matches (&matcher))
               gsk_sl_preprocessor_error (stream, DECLARATION, "No function named \"%s\".", name);
             
-            expr = gsk_sl_expression_parse_function_call (scope, stream,
-                                                          &matcher,
-                                                          gsk_sl_function_matcher_get_match (&matcher));
+            expr = gsk_sl_expression_parse_function_call (scope, stream, &matcher);
 
             gsk_sl_function_matcher_finish (&matcher);
           }
@@ -1584,15 +1864,28 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
     case GSK_SL_TOKEN_DMAT4X2:
     case GSK_SL_TOKEN_DMAT4X3:
     case GSK_SL_TOKEN_DMAT4X4:
+      {
+        GskSlExpression *expression;
+        GskSlType *type;
+
+        type = gsk_sl_type_new_parse (scope, stream);
+        expression = gsk_sl_expression_parse_constructor (scope, stream, type);
+        gsk_sl_type_unref (type);
+
+        return expression;
+      }
     case GSK_SL_TOKEN_STRUCT:
       {
+        GskSlFunctionMatcher matcher;
         GskSlFunction *constructor;
         GskSlExpression *expression;
         GskSlType *type;
 
         type = gsk_sl_type_new_parse (scope, stream);
         constructor = gsk_sl_function_new_constructor (type);
-        expression = gsk_sl_expression_parse_function_call (scope, stream, NULL, constructor);
+        gsk_sl_function_matcher_init (&matcher, g_list_prepend (NULL, constructor));
+        expression = gsk_sl_expression_parse_function_call (scope, stream, &matcher);
+        gsk_sl_function_matcher_finish (&matcher);
         gsk_sl_function_unref (constructor);
         gsk_sl_type_unref (type);
 
