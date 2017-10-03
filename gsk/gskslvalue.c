@@ -20,6 +20,7 @@
 
 #include "gskslvalueprivate.h"
 
+#include "gskslprinterprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskspvwriterprivate.h"
 
@@ -277,6 +278,22 @@ gsk_sl_value_print (const GskSlValue *value,
                     GskSlPrinter     *printer)
 {
   gsk_sl_type_print_value (value->type, printer, value->data);
+}
+
+char *
+gsk_sl_value_to_string (const GskSlValue *value)
+{
+  GskSlPrinter *printer;
+  char *s;
+
+  printer = gsk_sl_printer_new ();
+
+  gsk_sl_value_print (value, printer);
+
+  s = gsk_sl_printer_write_to_string (printer);
+  gsk_sl_printer_unref (printer);
+
+  return s;
 }
 
 GskSlType *
