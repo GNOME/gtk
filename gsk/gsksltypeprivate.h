@@ -84,6 +84,9 @@ guint32                 gsk_sl_type_write_spv                   (GskSlType      
 void                    gsk_sl_type_print_value                 (const GskSlType     *type,
                                                                  GskSlPrinter        *printer,
                                                                  gconstpointer        value);
+gboolean                gsk_sl_type_value_equal                 (const GskSlType     *type,
+                                                                 gconstpointer        a,
+                                                                 gconstpointer        b);
 guint32                 gsk_sl_type_write_value_spv             (GskSlType           *type,
                                                                  GskSpvWriter        *writer,
                                                                  gconstpointer        value);

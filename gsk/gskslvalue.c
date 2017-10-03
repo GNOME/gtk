@@ -318,8 +318,7 @@ gsk_sl_value_equal (gconstpointer a_,
   if (!gsk_sl_type_equal (a->type, b->type))
     return FALSE;
 
-  /* XXX: This is wrong */
-  return memcmp (a->data, b->data, gsk_sl_type_get_size (a->type)) == 0;
+  return gsk_sl_type_value_equal (a->type, a->data, b->data);
 }
 
 guint
