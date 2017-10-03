@@ -1228,7 +1228,6 @@ gtk_combo_box_add (GtkContainer *container,
       gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (priv->cell_view)),
                             priv->cell_view);
       _gtk_bin_set_child (GTK_BIN (container), NULL);
-      gtk_widget_queue_resize (GTK_WIDGET (container));
       priv->cell_view = NULL;
     }
 
