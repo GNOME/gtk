@@ -43,6 +43,9 @@ GskSlType *             gsk_sl_function_get_return_type         (const GskSlFunc
 gsize                   gsk_sl_function_get_n_arguments         (const GskSlFunction    *function);
 GskSlType *             gsk_sl_function_get_argument_type       (const GskSlFunction    *function,
                                                                  gsize                   i);
+GskSlValue *            gsk_sl_function_get_constant            (const GskSlFunction    *function,
+                                                                 GskSlValue            **values,
+                                                                 gsize                   n_values);
 guint32                 gsk_sl_function_write_spv               (const GskSlFunction    *function,
                                                                  GskSpvWriter           *writer);
 

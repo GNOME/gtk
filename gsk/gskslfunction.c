@@ -29,6 +29,7 @@
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
+#include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
 
@@ -49,6 +50,9 @@ struct _GskSlFunctionClass {
   gsize                 (* get_n_arguments)                     (const GskSlFunction    *function);
   GskSlType *           (* get_argument_type)                   (const GskSlFunction    *function,
                                                                  gsize                   i);
+  GskSlValue *          (* get_constant)                        (const GskSlFunction    *function,
+                                                                 GskSlValue            **values,
+                                                                 gsize                   n_values);
   void                  (* print)                               (const GskSlFunction    *function,
                                                                  GskSlPrinter           *printer);
   guint32               (* write_spv)                           (const GskSlFunction    *function,
@@ -123,6 +127,14 @@ gsk_sl_function_constructor_get_argument_type (const GskSlFunction *function,
   return gsk_sl_type_get_member_type (constructor->type, i);
 }
 
+static GskSlValue *
+gsk_sl_function_constructor_get_constant (const GskSlFunction  *function,
+                                          GskSlValue          **values,
+                                          gsize                 n_values)
+{
+  return NULL;
+}
+
 static void
 gsk_sl_function_constructor_print (const GskSlFunction *function,
                                    GskSlPrinter        *printer)
@@ -142,6 +154,7 @@ static const GskSlFunctionClass GSK_SL_FUNCTION_CONSTRUCTOR = {
   gsk_sl_function_constructor_get_name,
   gsk_sl_function_constructor_get_n_arguments,
   gsk_sl_function_constructor_get_argument_type,
+  gsk_sl_function_constructor_get_constant,
   gsk_sl_function_constructor_print,
   gsk_sl_function_constructor_write_spv,
 };
@@ -196,6 +209,15 @@ gsk_sl_function_native_get_argument_type (const GskSlFunction *function,
 
   return gsk_sl_type_get_builtin (native->native->argument_types[i]);
 }
+
+static GskSlValue *
+gsk_sl_function_native_get_constant (const GskSlFunction  *function,
+                                     GskSlValue          **values,
+                                     gsize                 n_values)
+{
+  return NULL;
+}
+
 static void
 gsk_sl_function_native_print (const GskSlFunction *function,
                               GskSlPrinter        *printer)
@@ -215,6 +237,7 @@ static const GskSlFunctionClass GSK_SL_FUNCTION_NATIVE = {
   gsk_sl_function_native_get_name,
   gsk_sl_function_native_get_n_arguments,
   gsk_sl_function_native_get_argument_type,
+  gsk_sl_function_native_get_constant,
   gsk_sl_function_native_print,
   gsk_sl_function_native_write_spv
 };
@@ -286,6 +309,15 @@ gsk_sl_function_declared_get_argument_type (const GskSlFunction *function,
 
   return gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (declared->arguments[i]));
 }
+
+static GskSlValue *
+gsk_sl_function_declared_get_constant (const GskSlFunction  *function,
+                                       GskSlValue          **values,
+                                       gsize                 n_values)
+{
+  return NULL;
+}
+
 static void
 gsk_sl_function_declared_print (const GskSlFunction *function,
                                 GskSlPrinter        *printer)
@@ -380,6 +412,7 @@ static const GskSlFunctionClass GSK_SL_FUNCTION_DECLARED = {
   gsk_sl_function_declared_get_name,
   gsk_sl_function_declared_get_n_arguments,
   gsk_sl_function_declared_get_argument_type,
+  gsk_sl_function_declared_get_constant,
   gsk_sl_function_declared_print,
   gsk_sl_function_declared_write_spv,
 };
@@ -573,6 +606,14 @@ gsk_sl_function_get_argument_type (const GskSlFunction *function,
                                    gsize                i)
 {
   return function->class->get_argument_type (function, i);
+}
+
+GskSlValue *
+gsk_sl_function_get_constant (const GskSlFunction  *function,
+                              GskSlValue          **values,
+                              gsize                 n_values)
+{
+  return function->class->get_constant (function, values, n_values);
 }
 
 void
