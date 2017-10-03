@@ -63,8 +63,6 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
-#define sure_string(s) ((const char *) ((s) != NULL ? (s) : ""))
-
 struct _GtkAppChooserDialogPrivate {
   char *content_type;
   GFile *gfile;
