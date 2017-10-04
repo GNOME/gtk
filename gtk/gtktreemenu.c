@@ -318,11 +318,9 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    * GtkTreeMenu:row-span-column:
    *
    * If this is set to a non-negative value, it must be the index of a column
-   * of type %G_TYPE_INT in the model.
-   *
-   * The values of that column are used to determine how many rows a value in
-   * the list will span. Therefore, the values in the model column pointed to
-   * by this property must be greater than zero and not larger than wrap-width.
+   * of type %G_TYPE_INT in the model. The value in that column for each item
+   * will determine how many rows that item will span in the popup. Therefore,
+   * values in this column must be greater than zero.
    *
    * Since: 3.0
    */
@@ -342,8 +340,11 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    * If this is set to a non-negative value, it must be the index of a column
    * of type %G_TYPE_INT in the model.
    *
-   * The values of that column are used to determine how many columns a value
-   * in the list will span.
+   * If this is set to a non-negative value, it must be the index of a column
+   * of type %G_TYPE_INT in the model. The value in that column for each item
+   * will determine how many columns that item will span in the popup.
+   * Therefore, values in this column must be greater than zero, and the sum of
+   * an item’s column position + span should not exceed #GtkTreeMenu:wrap-width.
    *
    * Since: 3.0
    */
