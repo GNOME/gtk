@@ -1746,9 +1746,31 @@ gsk_cairo_node_serialize (GskRenderNode *node)
     }
   else
     {
-      /* FIXME: implement! */
-      g_assert_not_reached ();
-      return NULL;
+      int width, height;
+      int stride, i;
+      guchar *mem_surface, *data;
+
+      width = cairo_image_surface_get_width (self->surface);
+      height = cairo_image_surface_get_height (self->surface);
+      stride = cairo_image_surface_get_stride (self->surface);
+      data = cairo_image_surface_get_data (self->surface);
+
+      mem_surface = (guchar *) g_malloc (width * height * 4);
+
+      for (i = 0; i < height; i++)
+        memcpy (mem_surface + i * width * 4, data + i * stride, width * 4);
+
+      return g_variant_new ("(dddduu@au)",
+                            (double) node->bounds.origin.x, (double) node->bounds.origin.y,
+                            (double) node->bounds.size.width, (double) node->bounds.size.height,
+                            (guint32) width,
+                            (guint32) height,
+                            g_variant_new_fixed_array (G_VARIANT_TYPE ("u"),
+                                                       mem_surface,
+                                                       width * height,
+                                                       sizeof (guint32)));
+
+      g_free (mem_surface);
     }
 }
 
