@@ -932,7 +932,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    *
    * If this is set to a non-negative value, it must be the index of a column
    * of type %G_TYPE_INT in the model. The value in that column for each item
-   * will determine how many rows the item will span in the popup. Therefore,
+   * will determine how many rows that item will span in the popup. Therefore,
    * values in this column must be greater than zero.
    *
    * Since: 2.4

@@ -366,9 +366,6 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
    * GtkTreeMenu:column-span-column:
    *
    * If this is set to a non-negative value, it must be the index of a column
-   * of type %G_TYPE_INT in the model.
-   *
-   * If this is set to a non-negative value, it must be the index of a column
    * of type %G_TYPE_INT in the model. The value in that column for each item
    * will determine how many columns that item will span in the popup.
    * Therefore, values in this column must be greater than zero, and the sum of
