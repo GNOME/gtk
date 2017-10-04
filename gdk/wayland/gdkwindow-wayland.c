@@ -3004,7 +3004,7 @@ gtk_surface_configure_edges (void                *data,
           new_state |= GDK_WINDOW_STATE_TOP_RESIZABLE;
           break;
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_RIGHT:
-          new_state |= GDK_WINDOW_STATE_TOP_TILED;
+          new_state |= GDK_WINDOW_STATE_RIGHT_RESIZABLE;
           break;
         case GTK_SURFACE1_EDGE_CONSTRAINT_RESIZABLE_BOTTOM:
           new_state |= GDK_WINDOW_STATE_BOTTOM_RESIZABLE;
