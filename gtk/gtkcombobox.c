@@ -666,9 +666,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   /**
    * GtkComboBox:wrap-width:
    *
-   * If wrap-width is set to a positive value, the list will be
-   * displayed in multiple columns, the number of columns is
-   * determined by wrap-width.
+   * If wrap-width is set to a positive value, items in the popup will be laid
+   * out along multiple columns, starting a new row on reaching the wrap width.
    *
    * Since: 2.4
    */
