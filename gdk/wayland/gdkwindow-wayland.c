@@ -3644,8 +3644,12 @@ static gboolean
 gdk_wayland_window_supports_edge_constraints (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
 
-  return gtk_surface1_get_version (impl->display_server.gtk_surface) > GTK_SURFACE1_CONFIGURE_EDGES_SINCE_VERSION;
+  if (!gtk_surface)
+    return FALSE;
+
+  return gtk_surface1_get_version (gtk_surface) >= GTK_SURFACE1_CONFIGURE_EDGES_SINCE_VERSION;
 }
 
 static void
