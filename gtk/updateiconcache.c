@@ -283,8 +283,7 @@ load_icon_data (const char *path)
       data->n_attach_points = g_strv_length (split);
       data->attach_points = g_new (int, 2 * data->n_attach_points);
 
-      i = 0;
-      while (split[i] != NULL && i < data->n_attach_points)
+      for (i = 0; i < data->n_attach_points; ++i)
 	{
 	  split_point = strchr (split[i], ',');
 	  if (split_point)
@@ -294,7 +293,6 @@ load_icon_data (const char *path)
 	      data->attach_points[2 * i] = atoi (split[i]);
 	      data->attach_points[2 * i + 1] = atoi (split_point);
 	    }
-	  i++;
 	}
 
       g_strfreev (split);
