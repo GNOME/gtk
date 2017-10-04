@@ -365,6 +365,28 @@ static void (* mult_funcs[]) (gpointer, gpointer) = {
   [GSK_SL_DOUBLE] = gsk_sl_expression_multiplication_double,
 };
 
+GSK_SL_OPERATION_FUNC_SCALAR(gsk_sl_expression_division_int, gint32, x = y == 0 ? G_MAXINT32 : x / y;)
+GSK_SL_OPERATION_FUNC_SCALAR(gsk_sl_expression_division_uint, guint32, x = y == 0 ? G_MAXUINT32 : x / y;)
+GSK_SL_OPERATION_FUNC_SCALAR(gsk_sl_expression_division_float, float, x /= y;)
+GSK_SL_OPERATION_FUNC_SCALAR(gsk_sl_expression_division_double, double, x /= y;)
+GSK_SL_OPERATION_FUNC_SCALAR(gsk_sl_expression_division_int_inv, gint32, x = x == 0 ? G_MAXINT32 : y / x;)
+GSK_SL_OPERATION_FUNC_SCALAR(gsk_sl_expression_division_uint_inv, guint32, x = x == 0 ? G_MAXUINT32 : y / x;)
+GSK_SL_OPERATION_FUNC_SCALAR(gsk_sl_expression_division_float_inv, float, x = y / x;)
+GSK_SL_OPERATION_FUNC_SCALAR(gsk_sl_expression_division_double_inv, double, x = y / x;)
+static void (* div_funcs[]) (gpointer, gpointer) = {
+  [GSK_SL_INT] = gsk_sl_expression_division_int,
+  [GSK_SL_UINT] = gsk_sl_expression_division_uint,
+  [GSK_SL_FLOAT] = gsk_sl_expression_division_float,
+  [GSK_SL_DOUBLE] = gsk_sl_expression_division_double,
+};
+static void (* div_inv_funcs[]) (gpointer, gpointer) = {
+  [GSK_SL_INT] = gsk_sl_expression_division_int_inv,
+  [GSK_SL_UINT] = gsk_sl_expression_division_uint_inv,
+  [GSK_SL_FLOAT] = gsk_sl_expression_division_float_inv,
+  [GSK_SL_DOUBLE] = gsk_sl_expression_division_double_inv,
+};
+
+
 static GskSlValue *
 gsk_sl_expression_multiplication_get_constant (const GskSlExpression *expression)
 {
@@ -684,13 +706,497 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_MULTIPLICATION = {
   gsk_sl_expression_multiplication_write_spv
 };
 
+/* ARITHMETIC */
+
+static GskSlType *
+gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *preproc,
+                                         GskSlType         *ltype,
+                                         GskSlType         *rtype)
+{
+  GskSlScalarType scalar;
+
+  if (gsk_sl_scalar_type_can_convert (gsk_sl_type_get_scalar_type (ltype),
+                                      gsk_sl_type_get_scalar_type (rtype)))
+    scalar = gsk_sl_type_get_scalar_type (ltype);
+  else if (gsk_sl_scalar_type_can_convert (gsk_sl_type_get_scalar_type (rtype),
+                                           gsk_sl_type_get_scalar_type (ltype)))
+    scalar = gsk_sl_type_get_scalar_type (rtype);
+  else
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                 "Operand types %s and %s do not share compatible scalar types.",
+                                 gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+
+  if (gsk_sl_type_is_matrix (ltype))
+    {
+      if (gsk_sl_type_is_matrix (rtype))
+        {
+          if (gsk_sl_type_can_convert (ltype, rtype))
+            {
+              return ltype;
+            }
+          else if (gsk_sl_type_can_convert (rtype, ltype))
+            {
+              return rtype;
+            }
+          else
+            {
+              gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                         "Matrix types %s and %s have different size.",
+                                         gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+              return NULL;
+            }
+        }
+      else if (gsk_sl_type_is_vector (rtype))
+        {
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                     "Cannot perform arithmetic arithmetic between matrix and vector.");
+          return NULL;
+        }
+      else if (gsk_sl_type_is_scalar (rtype))
+        {
+          return gsk_sl_type_get_matrix (scalar,
+                                         gsk_sl_type_get_length (ltype),
+                                         gsk_sl_type_get_length (gsk_sl_type_get_index_type (ltype)));
+        }
+      else
+        {
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                     "Right operand is incompatible type for arithemtic arithmetic.");
+          return NULL;
+        }
+    }
+  else if (gsk_sl_type_is_vector (ltype))
+    {
+      if (gsk_sl_type_is_matrix (rtype))
+        {
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot perform arithmetic arithmetic between vector and matrix.");
+          return NULL;
+        }
+      else if (gsk_sl_type_is_vector (rtype))
+        {
+          if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
+            {
+              gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                         "Vector operands %s and %s to arithmetic arithmetic have different length.",
+                                         gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+              return NULL;
+            }
+          return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (ltype));
+        }
+      else if (gsk_sl_type_is_scalar (rtype))
+        {
+          return gsk_sl_type_get_vector (scalar,
+                                         gsk_sl_type_get_length (ltype));
+        }
+      else
+        {
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                     "Right operand is incompatible type for arithemtic arithmetic.");
+          return NULL;
+        }
+    }
+  else if (gsk_sl_type_is_scalar (ltype))
+    {
+      if (gsk_sl_type_is_matrix (rtype))
+        {
+          return gsk_sl_type_get_matrix (scalar,
+                                         gsk_sl_type_get_length (rtype),
+                                         gsk_sl_type_get_length (gsk_sl_type_get_index_type (rtype)));
+        }
+      else if (gsk_sl_type_is_vector (rtype))
+        {
+          return gsk_sl_type_get_vector (scalar,
+                                         gsk_sl_type_get_length (rtype));
+        }
+      else if (gsk_sl_type_is_scalar (rtype))
+        {
+          return gsk_sl_type_get_scalar (scalar);
+        }
+      else
+        {
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand is incompatible type for arithemtic arithmetic.");
+          return NULL;
+        }
+    }
+  else
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand is incompatible type for arithemtic arithmetic.");
+      return NULL;
+    }
+}
+
+typedef struct _GskSlExpressionArithmetic GskSlExpressionArithmetic;
+
+struct _GskSlExpressionArithmetic {
+  GskSlExpression parent;
+
+  GskSlType *type;
+  GskSlExpression *left;
+  GskSlExpression *right;
+};
+
+static void
+gsk_sl_expression_arithmetic_free (GskSlExpression *expression)
+{
+  GskSlExpressionArithmetic *arithmetic = (GskSlExpressionArithmetic *) expression;
+
+  gsk_sl_type_unref (arithmetic->type);
+  gsk_sl_expression_unref (arithmetic->left);
+  gsk_sl_expression_unref (arithmetic->right);
+
+  g_slice_free (GskSlExpressionArithmetic, arithmetic);
+}
+
+static void
+gsk_sl_expression_division_print (const GskSlExpression *expression,
+                                  GskSlPrinter          *printer)
+{
+  GskSlExpressionArithmetic *arithmetic = (GskSlExpressionArithmetic *) expression;
+
+  gsk_sl_expression_print (arithmetic->left, printer);
+  gsk_sl_printer_append (printer, " / ");
+  gsk_sl_expression_print (arithmetic->right, printer);
+}
+
+static void
+gsk_sl_expression_addition_print (const GskSlExpression *expression,
+                                  GskSlPrinter          *printer)
+{
+  GskSlExpressionArithmetic *arithmetic = (GskSlExpressionArithmetic *) expression;
+
+  gsk_sl_expression_print (arithmetic->left, printer);
+  gsk_sl_printer_append (printer, " + ");
+  gsk_sl_expression_print (arithmetic->right, printer);
+}
+
+static void
+gsk_sl_expression_subtraction_print (const GskSlExpression *expression,
+                                     GskSlPrinter          *printer)
+{
+  GskSlExpressionArithmetic *arithmetic = (GskSlExpressionArithmetic *) expression;
+
+  gsk_sl_expression_print (arithmetic->left, printer);
+  gsk_sl_printer_append (printer, " - ");
+  gsk_sl_expression_print (arithmetic->right, printer);
+}
+
+static GskSlType *
+gsk_sl_expression_arithmetic_get_return_type (const GskSlExpression *expression)
+{
+  GskSlExpressionArithmetic *arithmetic = (GskSlExpressionArithmetic *) expression;
+
+  return arithmetic->type;
+}
+
+static GskSlValue *
+gsk_sl_expression_division_get_constant (const GskSlExpression *expression)
+{
+  const GskSlExpressionArithmetic *arithmetic = (const GskSlExpressionArithmetic *) expression;
+  GskSlValue *result, *lvalue, *rvalue;
+  GskSlType *ltype, *rtype;
+  GskSlScalarType scalar;
+  gsize ln, rn;
+
+  scalar = gsk_sl_type_get_scalar_type (arithmetic->type);
+  lvalue = gsk_sl_expression_get_constant (arithmetic->left);
+  if (lvalue == NULL)
+    return NULL;
+  rvalue = gsk_sl_expression_get_constant (arithmetic->right);
+  if (rvalue == NULL)
+    {
+      gsk_sl_value_free (lvalue);
+      return NULL;
+    }
+  lvalue = gsk_sl_value_convert_components (lvalue, scalar);
+  rvalue = gsk_sl_value_convert_components (rvalue, scalar);
+  ltype = gsk_sl_value_get_type (lvalue);
+  rtype = gsk_sl_value_get_type (rvalue);
+
+  ln = gsk_sl_type_get_n_components (ltype);
+  rn = gsk_sl_type_get_n_components (rtype);
+  if (ln == 1)
+    {
+      gsk_sl_value_componentwise (rvalue, div_inv_funcs[scalar], gsk_sl_value_get_data (lvalue));
+      gsk_sl_value_free (lvalue);
+      result = rvalue;
+    }
+  else if (rn == 1)
+    {
+      gsk_sl_value_componentwise (lvalue, div_funcs[scalar], gsk_sl_value_get_data (rvalue));
+      gsk_sl_value_free (rvalue);
+      result = lvalue;
+    }
+  else
+    {
+      guchar *ldata, *rdata;
+      gsize i, stride;
+
+      stride = gsk_sl_scalar_type_get_size (scalar);
+      ldata = gsk_sl_value_get_data (lvalue);
+      rdata = gsk_sl_value_get_data (rvalue);
+      for (i = 0; i < ln; i++)
+        {
+          div_funcs[scalar] (ldata + i * stride, rdata + i * stride);
+        }
+      gsk_sl_value_free (rvalue);
+      result = lvalue;
+    }
+
+  return result;
+}
+
+static guint32
+gsk_sl_expression_division_write_spv (const GskSlExpression *expression,
+                                      GskSpvWriter          *writer)
+{
+  const GskSlExpressionArithmetic *arithmetic = (const GskSlExpressionArithmetic *) expression;
+  GskSlType *ltype, *rtype;
+  guint32 left_id, right_id, result_id, result_type_id;
+
+  ltype = gsk_sl_expression_get_return_type (arithmetic->left);
+  rtype = gsk_sl_expression_get_return_type (arithmetic->right);
+
+  left_id = gsk_sl_expression_write_spv (arithmetic->left, writer);
+  if (gsk_sl_type_get_scalar_type (ltype) != gsk_sl_type_get_scalar_type (arithmetic->type))
+    {
+      GskSlType *new_type = gsk_sl_type_get_matching (ltype, gsk_sl_type_get_scalar_type (arithmetic->type));
+      left_id = gsk_spv_writer_add_conversion (writer, left_id, ltype, new_type);
+      ltype = new_type;
+    }
+  right_id = gsk_sl_expression_write_spv (arithmetic->right, writer);
+  if (gsk_sl_type_get_scalar_type (rtype) != gsk_sl_type_get_scalar_type (arithmetic->type))
+    {
+      GskSlType *new_type = gsk_sl_type_get_matching (rtype, gsk_sl_type_get_scalar_type (arithmetic->type));
+      right_id = gsk_spv_writer_add_conversion (writer, right_id, rtype, new_type);
+      rtype = new_type;
+    }
+
+  result_type_id = gsk_spv_writer_get_id_for_type (writer, arithmetic->type);
+
+  if (gsk_sl_type_is_matrix (ltype))
+    {
+      if (gsk_sl_type_is_matrix (rtype))
+        {
+          gsize cols = gsk_sl_type_get_length (ltype);
+          gsize c;
+          guint32 col_type_id, left_part_id, right_part_id, ids[cols + 2];
+
+          col_type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_index_type (ltype));
+          for (c = 0; c < cols; c++)
+            {
+              left_part_id = gsk_spv_writer_next_id (writer);
+              gsk_spv_writer_add (writer,
+                                  GSK_SPV_WRITER_SECTION_CODE,
+                                  5, GSK_SPV_OP_COMPOSITE_EXTRACT,
+                                  (guint32[4]) { col_type_id,
+                                                 left_part_id,
+                                                 left_id,
+                                                 c });
+              right_part_id = gsk_spv_writer_next_id (writer);
+              gsk_spv_writer_add (writer,
+                                  GSK_SPV_WRITER_SECTION_CODE,
+                                  5, GSK_SPV_OP_COMPOSITE_EXTRACT,
+                                  (guint32[4]) { col_type_id,
+                                                 right_part_id,
+                                                 right_id,
+                                                 c });
+              ids[2 + c] = gsk_spv_writer_next_id (writer);
+              gsk_spv_writer_add (writer,
+                                  GSK_SPV_WRITER_SECTION_CODE,
+                                  5, GSK_SPV_OP_F_DIV,
+                                  (guint32[4]) { col_type_id,
+                                                 ids[2 + c],
+                                                 left_part_id,
+                                                 right_part_id });
+            }
+
+          ids[0] = result_type_id;
+          ids[1] = gsk_spv_writer_next_id (writer);
+          gsk_spv_writer_add (writer,
+                              GSK_SPV_WRITER_SECTION_CODE,
+                              3 + cols, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
+                              ids);
+
+          return ids[1];
+        }
+      else if (gsk_sl_type_is_scalar (rtype))
+        {
+          guint32 tmp_id, one_id, rtype_id;
+
+          rtype_id = gsk_spv_writer_get_id_for_type (writer, rtype);
+          one_id = gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (arithmetic->type));
+          tmp_id = gsk_spv_writer_next_id (writer);
+          gsk_spv_writer_add (writer,
+                              GSK_SPV_WRITER_SECTION_CODE,
+                              5, GSK_SPV_OP_F_DIV,
+                              (guint32[4]) { rtype_id,
+                                             tmp_id,
+                                             one_id,
+                                             right_id });
+
+          result_id = gsk_spv_writer_next_id (writer);
+          gsk_spv_writer_add (writer,
+                              GSK_SPV_WRITER_SECTION_CODE,
+                              5, GSK_SPV_OP_MATRIX_TIMES_SCALAR,
+                              (guint32[4]) { result_type_id,
+                                             result_id,
+                                             left_id,
+                                             tmp_id });
+
+          return result_id;
+        }
+      else
+        {
+          g_assert_not_reached ();
+          return 0;
+        }
+    }
+  else if (gsk_sl_type_is_matrix (rtype))
+    {
+      guint32 tmp_id, one_id, ltype_id;
+
+      ltype_id = gsk_spv_writer_get_id_for_type (writer, ltype);
+      one_id = gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (arithmetic->type));
+      tmp_id = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          5, GSK_SPV_OP_F_DIV,
+                          (guint32[4]) { ltype_id,
+                                         tmp_id,
+                                         one_id,
+                                         left_id });
+
+      result_id = gsk_spv_writer_next_id (writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          5, GSK_SPV_OP_MATRIX_TIMES_SCALAR,
+                          (guint32[4]) { result_type_id,
+                                         result_id,
+                                         right_id,
+                                         tmp_id });
+
+      return result_id;
+    }
+  else
+    {
+      /* ltype and rtype are not matices */
+
+      if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_vector (rtype))
+        {
+           guint32 tmp_id = gsk_spv_writer_next_id (writer);
+           gsk_spv_writer_add (writer,
+                               GSK_SPV_WRITER_SECTION_CODE,
+                               3 + gsk_sl_type_get_length (rtype), GSK_SPV_OP_COMPOSITE_CONSTRUCT,
+                              (guint32[6]) { result_type_id,
+                                             tmp_id,
+                                             left_id, left_id, left_id, left_id });
+           left_id = tmp_id;
+        }
+      else if (gsk_sl_type_is_scalar (rtype) && gsk_sl_type_is_vector (ltype))
+        {
+           guint32 tmp_id = gsk_spv_writer_next_id (writer);
+           gsk_spv_writer_add (writer,
+                               GSK_SPV_WRITER_SECTION_CODE,
+                               3 + gsk_sl_type_get_length (ltype), GSK_SPV_OP_COMPOSITE_CONSTRUCT,
+                              (guint32[6]) { result_type_id,
+                                             tmp_id,
+                                             right_id, right_id, right_id, right_id });
+           right_id = tmp_id;
+        }
+
+      /* ltype and rtype have the same number of components now */
+
+      result_id = gsk_spv_writer_next_id (writer);
+      switch (gsk_sl_type_get_scalar_type (arithmetic->type))
+        {
+        case GSK_SL_FLOAT:
+        case GSK_SL_DOUBLE:
+          gsk_spv_writer_add (writer,
+                              GSK_SPV_WRITER_SECTION_CODE,
+                              5, GSK_SPV_OP_F_DIV,
+                              (guint32[4]) { result_type_id,
+                                             result_id,
+                                             left_id,
+                                             right_id });
+          break;
+        case GSK_SL_INT:
+          gsk_spv_writer_add (writer,
+                              GSK_SPV_WRITER_SECTION_CODE,
+                              5, GSK_SPV_OP_S_DIV,
+                              (guint32[4]) { result_type_id,
+                                             result_id,
+                                             left_id,
+                                             right_id });
+          break;
+        case GSK_SL_UINT:
+          gsk_spv_writer_add (writer,
+                              GSK_SPV_WRITER_SECTION_CODE,
+                              5, GSK_SPV_OP_U_DIV,
+                              (guint32[4]) { result_type_id,
+                                             result_id,
+                                             left_id,
+                                             right_id });
+          break;
+        case GSK_SL_VOID:
+        case GSK_SL_BOOL:
+        default:
+          g_assert_not_reached ();
+          break;
+        }
+
+      return result_id;
+    }
+}
+
+static GskSlValue *
+gsk_sl_expression_arithmetic_get_constant (const GskSlExpression *expression)
+{
+  //GskSlExpressionArithmetic *arithmetic = (const GskSlExpressionArithmetic *) expression;
+
+  /* FIXME: These need constant evaluations */
+  return NULL;
+}
+
+static guint32
+gsk_sl_expression_arithmetic_write_spv (const GskSlExpression *expression,
+                                        GskSpvWriter          *writer)
+{
+  g_assert_not_reached ();
+
+  return 0;
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_DIVISION = {
+  gsk_sl_expression_arithmetic_free,
+  gsk_sl_expression_division_print,
+  gsk_sl_expression_arithmetic_get_return_type,
+  gsk_sl_expression_division_get_constant,
+  gsk_sl_expression_division_write_spv
+};
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_ADDITION = {
+  gsk_sl_expression_arithmetic_free,
+  gsk_sl_expression_addition_print,
+  gsk_sl_expression_arithmetic_get_return_type,
+  gsk_sl_expression_arithmetic_get_constant,
+  gsk_sl_expression_arithmetic_write_spv
+};
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_SUBTRACTION = {
+  gsk_sl_expression_arithmetic_free,
+  gsk_sl_expression_subtraction_print,
+  gsk_sl_expression_arithmetic_get_return_type,
+  gsk_sl_expression_arithmetic_get_constant,
+  gsk_sl_expression_arithmetic_write_spv
+};
+
 /* OPERATION */
 
 typedef enum {
-  GSK_SL_OPERATION_DIV,
   GSK_SL_OPERATION_MOD,
-  GSK_SL_OPERATION_ADD,
-  GSK_SL_OPERATION_SUB,
   GSK_SL_OPERATION_LSHIFT,
   GSK_SL_OPERATION_RSHIFT,
   GSK_SL_OPERATION_LESS,
@@ -734,10 +1240,7 @@ gsk_sl_expression_operation_print (const GskSlExpression *expression,
                                    GskSlPrinter          *printer)
 {
   const char *op_str[] = {
-    [GSK_SL_OPERATION_DIV] = " / ",
     [GSK_SL_OPERATION_MOD] = " % ",
-    [GSK_SL_OPERATION_ADD] = " + ",
-    [GSK_SL_OPERATION_SUB] = " - ",
     [GSK_SL_OPERATION_LSHIFT] = " << ",
     [GSK_SL_OPERATION_RSHIFT] = " >> ",
     [GSK_SL_OPERATION_LESS] = " < ",
@@ -760,137 +1263,6 @@ gsk_sl_expression_operation_print (const GskSlExpression *expression,
   gsk_sl_expression_print (operation->left, printer);
   gsk_sl_printer_append (printer, op_str[operation->op]);
   gsk_sl_expression_print (operation->right, printer);
-}
-
-static GskSlType *
-gsk_sl_expression_arithmetic_type_check (GskSlPreprocessor *stream,
-                                         GskSlType         *ltype,
-                                         GskSlType         *rtype)
-{
-  GskSlScalarType scalar;
-
-  if (gsk_sl_scalar_type_can_convert (gsk_sl_type_get_scalar_type (ltype),
-                                      gsk_sl_type_get_scalar_type (rtype)))
-    scalar = gsk_sl_type_get_scalar_type (ltype);
-  else if (gsk_sl_scalar_type_can_convert (gsk_sl_type_get_scalar_type (rtype),
-                                           gsk_sl_type_get_scalar_type (ltype)))
-    scalar = gsk_sl_type_get_scalar_type (rtype);
-  else
-    {
-      if (stream)
-        {
-          gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                     "Operand types %s and %s do not share compatible scalar types.",
-                                     gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-        }
-      return NULL;
-    }
-
-  if (gsk_sl_type_is_matrix (ltype))
-    {
-      if (gsk_sl_type_is_matrix (rtype))
-        {
-          if (gsk_sl_type_can_convert (ltype, rtype))
-            {
-              return ltype;
-            }
-          else if (gsk_sl_type_can_convert (rtype, ltype))
-            {
-              return rtype;
-            }
-          else
-            {
-              if (stream)
-                gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                           "Matrix types %s and %s have different size.",
-                                           gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-              return NULL;
-            }
-        }
-      else if (gsk_sl_type_is_vector (rtype))
-        {
-          if (stream)
-            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                       "Cannot perform arithmetic operation between matrix and vector.");
-          return NULL;
-        }
-      else if (gsk_sl_type_is_scalar (rtype))
-        {
-          return gsk_sl_type_get_matrix (scalar,
-                                         gsk_sl_type_get_length (ltype),
-                                         gsk_sl_type_get_length (gsk_sl_type_get_index_type (ltype)));
-        }
-      else
-        {
-          if (stream)
-            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                       "Right operand is incompatible type for arithemtic operation.");
-          return NULL;
-        }
-    }
-  else if (gsk_sl_type_is_vector (ltype))
-    {
-      if (gsk_sl_type_is_matrix (rtype))
-        {
-          if (stream)
-            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Cannot perform arithmetic operation between vector and matrix.");
-          return NULL;
-        }
-      else if (gsk_sl_type_is_vector (rtype))
-        {
-          if (gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
-            {
-              if (stream)
-                gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                           "Vector operands %s and %s to arithmetic operation have different length.",
-                                           gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-              return NULL;
-            }
-          return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (ltype));
-        }
-      else if (gsk_sl_type_is_scalar (rtype))
-        {
-          return gsk_sl_type_get_vector (scalar,
-                                         gsk_sl_type_get_length (ltype));
-        }
-      else
-        {
-          if (stream)
-            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,
-                                       "Right operand is incompatible type for arithemtic operation.");
-          return NULL;
-        }
-    }
-  else if (gsk_sl_type_is_scalar (ltype))
-    {
-      if (gsk_sl_type_is_matrix (rtype))
-        {
-          return gsk_sl_type_get_matrix (scalar,
-                                         gsk_sl_type_get_length (rtype),
-                                         gsk_sl_type_get_length (gsk_sl_type_get_index_type (rtype)));
-        }
-      else if (gsk_sl_type_is_vector (rtype))
-        {
-          return gsk_sl_type_get_vector (scalar,
-                                         gsk_sl_type_get_length (rtype));
-        }
-      else if (gsk_sl_type_is_scalar (rtype))
-        {
-          return gsk_sl_type_get_scalar (scalar);
-        }
-      else
-        {
-          if (stream)
-            gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Right operand is incompatible type for arithemtic operation.");
-          return NULL;
-        }
-    }
-  else
-    {
-      if (stream)
-        gsk_sl_preprocessor_error (stream, TYPE_MISMATCH, "Left operand is incompatible type for arithemtic operation.");
-      return NULL;
-    }
 }
 
 static GskSlType *
@@ -1033,12 +1405,6 @@ gsk_sl_expression_operation_get_return_type (const GskSlExpression *expression)
 
   switch (operation->op)
   {
-    case GSK_SL_OPERATION_DIV:
-    case GSK_SL_OPERATION_ADD:
-    case GSK_SL_OPERATION_SUB:
-      return gsk_sl_expression_arithmetic_type_check (NULL,
-                                                      gsk_sl_expression_get_return_type (operation->left),
-                                                      gsk_sl_expression_get_return_type (operation->right));
     case GSK_SL_OPERATION_LSHIFT:
     case GSK_SL_OPERATION_RSHIFT:
       return gsk_sl_expression_get_return_type (operation->left);
@@ -1428,9 +1794,7 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
       value_id = gsk_sl_expression_write_spv (constructor->arguments[0], writer);
       if (gsk_sl_type_get_scalar_type (value_type) != gsk_sl_type_get_scalar_type (type))
         {
-          GskSlType *new_value_type = gsk_sl_type_get_matrix (gsk_sl_type_get_scalar_type (type),
-                                                              gsk_sl_type_get_length (value_type),
-                                                              gsk_sl_type_get_length (value_col_type));
+          GskSlType *new_value_type = gsk_sl_type_get_matching (value_type, gsk_sl_type_get_scalar_type (type));
           value_id = gsk_spv_writer_add_conversion (writer, value_id, value_type, new_value_type);
           value_type = new_value_type;
         }
@@ -2816,16 +3180,19 @@ gsk_sl_expression_parse_multiplicative (GskSlScope        *scope,
         }
       else if (op == DIV)
         {
-          if (gsk_sl_expression_arithmetic_type_check (stream,
-                                                       gsk_sl_expression_get_return_type (expression),
-                                                       gsk_sl_expression_get_return_type (right)))
+          GskSlType *result_type;
+
+          result_type = gsk_sl_expression_arithmetic_type_check (stream,
+                                                                 gsk_sl_expression_get_return_type (expression),
+                                                                 gsk_sl_expression_get_return_type (right));
+          if (result_type)
             {
-              GskSlExpressionOperation *operation;
-              operation = gsk_sl_expression_new (GskSlExpressionOperation, &GSK_SL_EXPRESSION_OPERATION);
-              operation->op = GSK_SL_OPERATION_DIV;
-              operation->left = expression;
-              operation->right = right;
-              expression = (GskSlExpression *) operation;
+              GskSlExpressionArithmetic *division;
+              division = gsk_sl_expression_new (GskSlExpressionArithmetic, &GSK_SL_EXPRESSION_DIVISION);
+              division->type = gsk_sl_type_ref (result_type);
+              division->left = expression;
+              division->right = right;
+              expression = (GskSlExpression *) division;
             }
           else
             {
@@ -2860,39 +3227,40 @@ gsk_sl_expression_parse_additive (GskSlScope        *scope,
                                   GskSlPreprocessor *stream)
 {
   const GskSlToken *token;
-  GskSlExpression *expression;
-  GskSlExpressionOperation *operation;
-  GskSlOperation op;
+  GskSlExpression *expression, *right;
+  GskSlType *result_type;
+  enum { ADD, SUB } op;
 
   expression = gsk_sl_expression_parse_multiplicative (scope, stream);
-  if (expression == NULL)
-    return NULL;
 
   while (TRUE)
     {
       token = gsk_sl_preprocessor_get (stream);
       if (gsk_sl_token_is (token, GSK_SL_TOKEN_PLUS))
-        op = GSK_SL_OPERATION_ADD;
+        op = ADD;
       else if (gsk_sl_token_is (token, GSK_SL_TOKEN_DASH))
-        op = GSK_SL_OPERATION_SUB;
+        op = SUB;
       else
         return expression;
 
-      operation = gsk_sl_expression_new (GskSlExpressionOperation, &GSK_SL_EXPRESSION_OPERATION);
-      operation->left = expression;
-      operation->op = op;
-      gsk_sl_preprocessor_consume (stream, (GskSlExpression *) operation);
-      operation->right = gsk_sl_expression_parse_additive (scope, stream);
-      if (!gsk_sl_expression_arithmetic_type_check (stream,
-                                                    gsk_sl_expression_get_return_type (operation->left),
-                                                    gsk_sl_expression_get_return_type (operation->right)))
+      gsk_sl_preprocessor_consume (stream, NULL);
+      right = gsk_sl_expression_parse_additive (scope, stream);
+      result_type = gsk_sl_expression_arithmetic_type_check (stream,
+                                                             gsk_sl_expression_get_return_type (expression),
+                                                             gsk_sl_expression_get_return_type (right));
+      if (result_type)
         {
-          gsk_sl_expression_ref (expression);
-          gsk_sl_expression_unref ((GskSlExpression *) operation);
+          GskSlExpressionArithmetic *arithmetic;
+
+          arithmetic = gsk_sl_expression_new (GskSlExpressionArithmetic, op == ADD ? &GSK_SL_EXPRESSION_ADDITION : &GSK_SL_EXPRESSION_SUBTRACTION);
+          arithmetic->type = gsk_sl_type_ref (result_type);
+          arithmetic->left = expression;
+          arithmetic->right = right;
+          expression = (GskSlExpression *) arithmetic;
         }
       else
         {
-          expression = (GskSlExpression *) operation;
+          gsk_sl_expression_unref ((GskSlExpression *) right);
         }
     }
 
