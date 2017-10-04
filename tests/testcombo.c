@@ -68,21 +68,15 @@ create_combo_box_grid_demo (void)
         GtkCellRenderer *cell = gtk_cell_renderer_pixbuf_new ();
         GtkListStore *store;
 
-        store = gtk_list_store_new (1, GDK_TYPE_PIXBUF);
-
-        combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
-        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo),
-                                    cell, TRUE);
-        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo),
-                                        cell, "pixbuf", 0, NULL);
-        gtk_combo_box_set_wrap_width (GTK_COMBO_BOX (combo),
-                                      3);
+        store = gtk_list_store_new (3, GDK_TYPE_PIXBUF, G_TYPE_INT, G_TYPE_INT);
 
         /* first row */
         pixbuf = create_color_pixbuf ("red");
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
+                            1, 1, /* row span */
+                            2, 1, /* column span */
                             -1);
         g_object_unref (pixbuf);
 
@@ -90,6 +84,8 @@ create_combo_box_grid_demo (void)
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
+                            1, 1,
+                            2, 1,
                             -1);
         g_object_unref (pixbuf);
 
@@ -97,6 +93,8 @@ create_combo_box_grid_demo (void)
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
+                            1, 1,
+                            2, 1,
                             -1);
         g_object_unref (pixbuf);
 
@@ -105,6 +103,8 @@ create_combo_box_grid_demo (void)
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
+                            1, 1,
+                            2, 2, /* Span 2 columns */
                             -1);
         g_object_unref (pixbuf);
 
@@ -112,13 +112,8 @@ create_combo_box_grid_demo (void)
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
-                            -1);
-        g_object_unref (pixbuf);
-
-        pixbuf = create_color_pixbuf ("white");
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter,
-                            0, pixbuf,
+                            1, 2, /* Span 2 rows */
+                            2, 1,
                             -1);
         g_object_unref (pixbuf);
 
@@ -127,13 +122,8 @@ create_combo_box_grid_demo (void)
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
-                            -1);
-        g_object_unref (pixbuf);
-
-        pixbuf = create_color_pixbuf ("snow");
-        gtk_list_store_append (store, &iter);
-        gtk_list_store_set (store, &iter,
-                            0, pixbuf,
+                            1, 1,
+                            2, 1,
                             -1);
         g_object_unref (pixbuf);
 
@@ -141,10 +131,24 @@ create_combo_box_grid_demo (void)
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
                             0, pixbuf,
+                            1, 1,
+                            2, 1,
                             -1);
         g_object_unref (pixbuf);
 
+        /* Create ComboBox after model to avoid gtk_menu_attach() warnings(?) */
+        combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
         g_object_unref (store);
+
+        gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo),
+                                    cell, TRUE);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo),
+                                        cell, "pixbuf", 0, NULL);
+
+        /* Set wrap-width != 0 to enforce grid mode */
+        gtk_combo_box_set_wrap_width (GTK_COMBO_BOX (combo), 3);
+        gtk_combo_box_set_row_span_column (GTK_COMBO_BOX (combo), 1);
+        gtk_combo_box_set_column_span_column (GTK_COMBO_BOX (combo), 2);
 
         gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
