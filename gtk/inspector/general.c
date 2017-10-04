@@ -31,6 +31,7 @@
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 
+
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #include <epoxy/glx.h>
@@ -53,17 +54,26 @@
 #include "broadway/gdkbroadway.h"
 #endif
 
+#ifdef GDK_RENDERING_VULKAN
+#include <vulkan/vulkan.h>
+#endif
+
 struct _GtkInspectorGeneralPrivate
 {
   GtkWidget *version_box;
   GtkWidget *env_box;
   GtkWidget *display_box;
   GtkWidget *gl_box;
+  GtkWidget *vulkan_box;
   GtkWidget *device_box;
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
+  GtkWidget *gsk_renderer;
   GtkWidget *gl_version;
   GtkWidget *gl_vendor;
+  GtkWidget *vk_device;
+  GtkWidget *vk_api_version;
+  GtkWidget *vk_driver_version;
   GtkWidget *prefix;
   GtkWidget *xdg_data_home;
   GtkWidget *xdg_data_dirs;
@@ -83,8 +93,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE
 static void
 init_version (GtkInspectorGeneral *gen)
 {
-  const gchar *backend;
+  const char *backend;
   GdkDisplay *display;
+  GdkWindow *window;
+  GskRenderer *gsk_renderer;
+  const char *renderer;
 
   display = gdk_display_get_default ();
 
@@ -115,8 +128,23 @@ init_version (GtkInspectorGeneral *gen)
 #endif
     backend = "Unknown";
 
+  window = gdk_window_new_toplevel (display, 0, 10, 10);
+  gsk_renderer = gsk_renderer_new_for_window (window);
+  if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVulkanRenderer") == 0)
+    renderer = "Vulkan";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskGLRenderer") == 0)
+    renderer = "GL";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskCairoRenderer") == 0)
+    renderer = "Cairo";
+  else
+    renderer = "Unknown";
+
+  g_object_unref (gsk_renderer);
+  gdk_window_destroy (window);
+
   gtk_label_set_text (GTK_LABEL (gen->priv->gtk_version), GTK_VERSION);
   gtk_label_set_text (GTK_LABEL (gen->priv->gdk_backend), backend);
+  gtk_label_set_text (GTK_LABEL (gen->priv->gsk_renderer), renderer);
 }
 
 static G_GNUC_UNUSED void
@@ -313,6 +341,110 @@ init_gl (GtkInspectorGeneral *gen)
     }
 }
 
+#ifdef GDK_RENDERING_VULKAN
+static gboolean
+has_debug_extension (GdkVulkanContext *context)
+{
+  uint32_t i;
+  uint32_t n_extensions;
+  vkEnumerateInstanceExtensionProperties (NULL, &n_extensions, NULL);
+  VkExtensionProperties *extensions = g_newa (VkExtensionProperties, n_extensions);
+  vkEnumerateInstanceExtensionProperties (NULL, &n_extensions, extensions);
+
+  for (i = 0; i < n_extensions; i++)
+    {
+      if (g_str_equal (extensions[i].extensionName, VK_EXT_DEBUG_REPORT_EXTENSION_NAME))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+has_validation_layer (GdkVulkanContext *context)
+{
+  uint32_t i;
+  uint32_t n_layers;
+  vkEnumerateInstanceLayerProperties (&n_layers, NULL);
+  VkLayerProperties *layers = g_newa (VkLayerProperties, n_layers);
+  vkEnumerateInstanceLayerProperties (&n_layers, layers);
+
+  for (i = 0; i < n_layers; i++)
+    {
+      if (g_str_equal (layers[i].layerName, "VK_LAYER_LUNARG_standard_validation"))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+#endif
+
+static void
+init_vulkan (GtkInspectorGeneral *gen)
+{
+#ifdef GDK_RENDERING_VULKAN
+  GdkWindow *window;
+  GdkVulkanContext *context;
+  GdkDisplay *display = gdk_display_get_default ();
+
+  window = gdk_window_new_toplevel (display, 0, 10, 10);
+  context = gdk_window_create_vulkan_context (window, NULL);
+  gdk_window_destroy (window);
+
+  if (context)
+    {
+      VkPhysicalDevice vk_device;
+      VkPhysicalDeviceProperties props;
+      char *device_name;
+      char *api_version;
+      char *driver_version;
+
+      vk_device = gdk_vulkan_context_get_physical_device (context);
+      vkGetPhysicalDeviceProperties (vk_device, &props);
+
+      device_name = g_strdup_printf ("%s (%d)", props.deviceName, props.deviceType);
+      api_version = g_strdup_printf ("%d.%d.%d",
+                                     VK_VERSION_MAJOR (props.apiVersion),
+                                     VK_VERSION_MINOR (props.apiVersion),
+                                     VK_VERSION_PATCH (props.apiVersion));
+      driver_version = g_strdup_printf ("%d.%d.%d",
+                                        VK_VERSION_MAJOR (props.driverVersion),
+                                        VK_VERSION_MINOR (props.driverVersion),
+                                        VK_VERSION_PATCH (props.driverVersion));
+
+      gtk_label_set_text (GTK_LABEL (gen->priv->vk_device), device_name);
+      gtk_label_set_text (GTK_LABEL (gen->priv->vk_api_version), api_version);
+      gtk_label_set_text (GTK_LABEL (gen->priv->vk_driver_version), driver_version);
+
+      g_free (device_name);
+      g_free (api_version);
+      g_free (driver_version);
+
+      add_check_row (gen, GTK_LIST_BOX (gen->priv->vulkan_box), VK_KHR_SURFACE_EXTENSION_NAME, TRUE, 0);
+#ifdef GDK_WINDOWING_X11
+      if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
+        add_check_row (gen, GTK_LIST_BOX (gen->priv->vulkan_box), "VK_KHR_xlib_surface", TRUE, 0);
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+      if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
+        add_check_row (gen, GTK_LIST_BOX (gen->priv->vulkan_box), "VK_KHR_wayland_surface", TRUE, 0);
+#endif
+      add_check_row (gen, GTK_LIST_BOX (gen->priv->vulkan_box), VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
+                     has_debug_extension (context), 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->priv->vulkan_box), "VK_LAYER_LUNARG_standard_validation",
+                     has_validation_layer (context), 0);
+
+      g_object_unref (context);
+    }
+  else
+#endif
+    {
+      gtk_label_set_text (GTK_LABEL (gen->priv->vk_device), C_("Vulkan device", "None"));
+      gtk_label_set_text (GTK_LABEL (gen->priv->vk_api_version), C_("Vulkan version", "None"));
+      gtk_label_set_text (GTK_LABEL (gen->priv->vk_driver_version), C_("Vulkan version", "None"));
+    }
+}
+
 static void
 set_monospace_font (GtkWidget *w)
 {
@@ -383,7 +515,7 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
   int n_monitors;
   GtkListBox *list;
 
-    gtk_widget_show (gen->priv->display_composited);
+  gtk_widget_show (gen->priv->display_composited);
   list = GTK_LIST_BOX (gen->priv->display_box);
   children = gtk_container_get_children (GTK_CONTAINER (list));
   for (l = children; l; l = l->next)
@@ -655,6 +787,7 @@ gtk_inspector_general_init (GtkInspectorGeneral *gen)
   init_env (gen);
   init_display (gen);
   init_gl (gen);
+  init_vulkan (gen);
   init_device (gen);
 }
 
@@ -671,8 +804,12 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorGenera
   else if (direction == GTK_DIR_DOWN && widget == gen->priv->display_box)
     next = gen->priv->gl_box;
   else if (direction == GTK_DIR_DOWN && widget == gen->priv->gl_box)
+    next = gen->priv->vulkan_box;
+  else if (direction == GTK_DIR_DOWN && widget == gen->priv->vulkan_box)
     next = gen->priv->device_box;
   else if (direction == GTK_DIR_UP && widget == gen->priv->device_box)
+    next = gen->priv->vulkan_box;
+  else if (direction == GTK_DIR_UP && widget == gen->priv->vulkan_box)
     next = gen->priv->gl_box;
   else if (direction == GTK_DIR_UP && widget == gen->priv->gl_box)
     next = gen->priv->display_box;
@@ -723,6 +860,7 @@ gtk_inspector_general_constructed (GObject *object)
    g_signal_connect (gen->priv->env_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->display_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->gl_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
+   g_signal_connect (gen->priv->vulkan_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->device_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
 }
 
@@ -739,10 +877,15 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, env_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, vulkan_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gdk_backend);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gsk_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_vendor);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, vk_device);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, vk_api_version);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, vk_driver_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, prefix);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, xdg_data_home);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, xdg_data_dirs);

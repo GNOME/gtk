@@ -83,6 +83,38 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="gsk_renderer_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">GSK Renderer</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="gsk_renderer">
+                            <property name="visible">True</property>
+                            <property name="selectable">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -522,6 +554,118 @@
         </child>
 
         <child>
+          <object class="GtkFrame" id="vulkan_frame">
+            <property name="visible">True</property>
+            <property name="halign">center</property>
+            <child>
+              <object class="GtkListBox" id="vulkan_box">
+                <property name="visible">True</property>
+                <property name="selection-mode">none</property>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="vk_device_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Vulkan Device</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="vk_device">
+                            <property name="visible">True</property>
+                            <property name="selectable">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="vk_api_version_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Vulkan API version</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="vk_api_version">
+                            <property name="visible">True</property>
+                            <property name="selectable">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="vk_driver_version_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Vulkan driver version</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="vk_driver_version">
+                            <property name="visible">True</property>
+                            <property name="selectable">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
           <object class="GtkFrame" id="device_frame">
             <property name="visible">True</property>
             <property name="halign">center</property>
@@ -542,8 +686,12 @@
     <widgets>
       <widget name="gtk_version_label"/>
       <widget name="gdk_backend_label"/>
+      <widget name="gsk_renderer_label"/>
       <widget name="gl_version_label"/>
       <widget name="gl_vendor_label"/>
+      <widget name="vk_device_label"/>
+      <widget name="vk_api_version_label"/>
+      <widget name="vk_driver_version_label"/>
       <widget name="prefix_label"/>
       <widget name="xdg_data_home_label"/>
       <widget name="xdg_data_dirs_label"/>
@@ -561,6 +709,7 @@
     <widgets>
       <widget name="version_frame"/>
       <widget name="gl_frame"/>
+      <widget name="vulkan_frame"/>
       <widget name="env_frame"/>
       <widget name="display_frame"/>
       <widget name="device_frame"/>
