@@ -496,18 +496,16 @@ gsk_sl_expression_multiplication_write_spv (const GskSlExpression *expression,
   left_id = gsk_sl_expression_write_spv (multiplication->left, writer);
   if (gsk_sl_type_get_scalar_type (ltype) != gsk_sl_type_get_scalar_type (multiplication->type))
     {
-      GskSlType *new_type = gsk_sl_type_get_matrix (gsk_sl_type_get_scalar_type (multiplication->type),
-                                                    gsk_sl_type_get_length (ltype),
-                                                    gsk_sl_type_get_length (gsk_sl_type_get_index_type (ltype)));
+      GskSlType *new_type = gsk_sl_type_get_matching (ltype, gsk_sl_type_get_scalar_type (multiplication->type));
       left_id = gsk_spv_writer_add_conversion (writer, left_id, ltype, new_type);
+      ltype = new_type;
     }
   right_id = gsk_sl_expression_write_spv (multiplication->right, writer);
   if (gsk_sl_type_get_scalar_type (rtype) != gsk_sl_type_get_scalar_type (multiplication->type))
     {
-      GskSlType *new_type = gsk_sl_type_get_matrix (gsk_sl_type_get_scalar_type (multiplication->type),
-                                                    gsk_sl_type_get_length (rtype),
-                                                    gsk_sl_type_get_length (gsk_sl_type_get_index_type (rtype)));
+      GskSlType *new_type = gsk_sl_type_get_matching (rtype, gsk_sl_type_get_scalar_type (multiplication->type));
       right_id = gsk_spv_writer_add_conversion (writer, right_id, rtype, new_type);
+      rtype = new_type;
     }
 
   result_type_id = gsk_spv_writer_get_id_for_type (writer, multiplication->type);

@@ -1882,6 +1882,24 @@ gsk_sl_type_get_builtin (GskSlBuiltinType builtin)
 }
 
 GskSlType *
+gsk_sl_type_get_matching (GskSlType       *type,
+                          GskSlScalarType  scalar)
+{
+  if (gsk_sl_type_is_scalar (type))
+    return gsk_sl_type_get_scalar (scalar);
+  else if (gsk_sl_type_is_vector (type))
+    return gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (type));
+  else if (gsk_sl_type_is_matrix (type))
+    return gsk_sl_type_get_matrix (scalar,
+                                   gsk_sl_type_get_length (type),
+                                   gsk_sl_type_get_length (gsk_sl_type_get_index_type (type)));
+  else
+    {
+      g_return_val_if_reached (gsk_sl_type_get_void ());
+    }
+}
+
+GskSlType *
 gsk_sl_type_new_parse (GskSlScope        *scope,
                        GskSlPreprocessor *preproc)
 {

@@ -197,18 +197,7 @@ gsk_sl_value_convert_components (GskSlValue      *source,
   if (sscalar == scalar)
     return source;
 
-  if (gsk_sl_type_is_scalar (source->type))
-    result_type = gsk_sl_type_get_scalar (scalar);
-  else if (gsk_sl_type_is_vector (source->type))
-    result_type = gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (source->type));
-  else if (gsk_sl_type_is_matrix (source->type))
-    result_type = gsk_sl_type_get_matrix (scalar,
-                                          gsk_sl_type_get_length (source->type),
-                                          gsk_sl_type_get_length (gsk_sl_type_get_index_type (source->type)));
-  else
-    {
-      g_return_val_if_reached (NULL);
-    }
+  result_type = gsk_sl_type_get_matching (source->type, scalar);
 
   result = gsk_sl_value_new (result_type);
 
