@@ -6855,7 +6855,7 @@ update_corner_windows (GtkWindow *window,
                                        region, 0, 0);
       cairo_region_destroy (region);
 
-      gdk_window_hide (priv->border_window[GDK_WINDOW_EDGE_NORTH_EAST]);
+      gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_NORTH_EAST]);
     }
   else
     {
@@ -7065,13 +7065,13 @@ update_border_windows (GtkWindow *window)
 
   if (resize_n)
     {
-      y += window_border.top;
+      y += window_border.top + handle_v;
       h -= window_border.top + handle_v;
     }
 
   if (resize_w)
     {
-      x += window_border.left;
+      x += window_border.left + handle_h;
       w -= window_border.left + handle_h;
     }
 
@@ -7084,9 +7084,9 @@ update_border_windows (GtkWindow *window)
   /* North */
   if (resize_n)
     {
-      gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH],
-                              x, window_border.top + height,
-                              w, border.bottom);
+      gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_NORTH],
+                              x, window_border.top - border.top,
+                              w, border.top);
 
       gdk_window_show_unraised (priv->border_window[GDK_WINDOW_EDGE_NORTH]);
     }
@@ -7096,7 +7096,7 @@ update_border_windows (GtkWindow *window)
     }
 
   /* South */
-  if (resize_n)
+  if (resize_s)
     {
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH],
                               x, window_border.top + height,
@@ -7108,13 +7108,6 @@ update_border_windows (GtkWindow *window)
     {
       gdk_window_hide (priv->border_window[GDK_WINDOW_EDGE_SOUTH]);
     }
-
-  /*
-   * Horizontal edges
-   */
-
-  y = (resize_n || resize_s) ? window_border.top + handle_v : 0;
-  h = (resize_n || resize_s) ? height - 2 * handle_v : height + window_border.top + window_border.bottom;
 
   /* East */
   if (resize_e)
