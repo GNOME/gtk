@@ -43,9 +43,10 @@ void                    gsk_sl_printer_append_int               (GskSlPrinter   
                                                                  int                    i);
 void                    gsk_sl_printer_append_uint              (GskSlPrinter          *printer,
                                                                  guint                  u);
+void                    gsk_sl_printer_append_float             (GskSlPrinter          *printer,
+                                                                 float                  f);
 void                    gsk_sl_printer_append_double            (GskSlPrinter          *printer,
-                                                                 double                 d,
-                                                                 gboolean               with_dot);
+                                                                 double                 d);
 void                    gsk_sl_printer_newline                  (GskSlPrinter          *printer);
 
 G_END_DECLS

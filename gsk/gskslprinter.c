@@ -127,16 +127,47 @@ gsk_sl_printer_append_uint (GskSlPrinter *printer,
 }
 
 void
-gsk_sl_printer_append_double (GskSlPrinter *printer,
-                              double        d,
-                              gboolean      with_dot)
+gsk_sl_printer_append_float (GskSlPrinter *printer,
+                             float         f)
 {
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
-  g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, d);
-  g_string_append (printer->string, buf);
-  if (with_dot && strchr (buf, '.') == NULL)
-    g_string_append (printer->string, ".0");
+  if (isnanf (f))
+    g_string_append (printer->string, "(0.0 / 0.0)");
+  else if (isinff (f) > 0)
+    g_string_append (printer->string, "(1.0 / 0.0)");
+  else if (isinff (f) < 0)
+    g_string_append (printer->string, "(-1.0 / 0.0)");
+  else
+    {
+      g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, f);
+      g_string_append (printer->string, buf);
+      if (strchr (buf, '.') == NULL)
+        g_string_append (printer->string, ".0");
+    }
+}
+
+void
+gsk_sl_printer_append_double (GskSlPrinter *printer,
+                              double        d)
+{
+  char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+  if (isnan (d))
+    g_string_append (printer->string, "(0.0lf / 0.0lf)");
+  else if (isinf (d) > 0)
+    g_string_append (printer->string, "(1.0lf / 0.0lf)");
+  else if (isinf (d) < 0)
+    g_string_append (printer->string, "(-1.0lf / 0.0lf)");
+  else
+    {
+      g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, d);
+      g_string_append (printer->string, buf);
+      if (strchr (buf, '.') == NULL)
+        g_string_append (printer->string, ".0lf");
+      else
+        g_string_append (printer->string, "lf");
+    }
 }
 
 void

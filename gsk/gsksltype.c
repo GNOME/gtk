@@ -95,7 +95,7 @@ print_float (GskSlPrinter  *printer,
 {
   const gfloat *f = value;
       
-  gsk_sl_printer_append_double (printer, *f, TRUE);
+  gsk_sl_printer_append_float (printer, *f);
 }
 
 static guint32
@@ -122,8 +122,7 @@ print_double (GskSlPrinter  *printer,
 {
   const gdouble *d = value;
       
-  gsk_sl_printer_append_double (printer, *d, TRUE);
-  gsk_sl_printer_append (printer, "lf");
+  gsk_sl_printer_append_double (printer, *d);
 }
 
 static guint32
