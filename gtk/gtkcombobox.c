@@ -1801,6 +1801,19 @@ gtk_combo_box_detacher (GtkWidget *widget,
   priv->popup_widget = NULL;
 }
 
+static gboolean
+gtk_combo_box_grab_broken_event (GtkWidget          *widget,
+                                 GdkEventGrabBroken *event,
+                                 gpointer            user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+
+  if (event->grab_window == NULL)
+    gtk_combo_box_popdown (combo_box);
+
+  return TRUE;
+}
+
 static void
 gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
                                 GtkWidget   *popup)
@@ -1860,6 +1873,9 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
                             combo_box);
           g_signal_connect (priv->popup_window, "hide",
                             G_CALLBACK (gtk_combo_box_child_hide),
+                            combo_box);
+          g_signal_connect (priv->popup_window, "grab-broken-event",
+                            G_CALLBACK (gtk_combo_box_grab_broken_event),
                             combo_box);
 
           gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
@@ -2229,19 +2245,6 @@ popup_grab_on_window (GdkWindow *window,
   return status == GDK_GRAB_SUCCESS;
 }
 
-static gboolean
-gtk_combo_box_grab_broken_event (GtkWidget          *widget,
-                                 GdkEventGrabBroken *event,
-                                 gpointer            user_data)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
-
-  if (event->grab_window == NULL)
-    gtk_combo_box_popdown (combo_box);
-
-  return TRUE;
-}
-
 /**
  * gtk_combo_box_popup:
  * @combo_box: a #GtkComboBox
@@ -2362,11 +2365,6 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
     }
 
   priv->grab_pointer = pointer;
-
-  g_signal_connect (priv->popup_window,
-                    "grab-broken-event",
-                    G_CALLBACK (gtk_combo_box_grab_broken_event),
-                    combo_box);
 }
 
 static void
