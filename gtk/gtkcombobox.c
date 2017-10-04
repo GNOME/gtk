@@ -1937,13 +1937,7 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
       gtk_widget_get_preferred_size (priv->scrolled_window, NULL, &popup_req);
 
       if (popup_req.width > *width)
-        {
-          hpolicy = GTK_POLICY_NEVER;
-          gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
-                                          hpolicy, vpolicy);
-
-          *width = popup_req.width;
-        }
+        *width = popup_req.width;
     }
 
   *height = popup_req.height;
