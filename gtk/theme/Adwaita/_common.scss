@@ -1590,19 +1590,14 @@ headerbar {
   // squared corners when the window is maximized, tiled, or fullscreen
   .tiled &,
   .tiled-top &,
+  .tiled-right &,
+  .tiled-bottom &,
+  .tiled-left &,
   .maximized &,
   .fullscreen & {
     &:backdrop, & {
       border-radius: 0;
     }
-  }
-
-  .tiled-left & {
-    border-top-left-radius: 0;
-  }
-
-  .tiled-right & {
-    border-top-right-radius: 0;
   }
 
   &.default-decoration {
@@ -1668,9 +1663,10 @@ headerbar {
 headerbar { // headerbar border rounding
 
   window separator:first-child + &,
-  window stack &,
-  &:first-child,
-  &:last-child {
+  window &:first-child { &:backdrop, & { border-top-left-radius: 7px; }}
+  window &:last-child { &:backdrop, & { border-top-right-radius: 7px; }}
+
+  window stack & { // tackles the stacked headerbars case
     &:first-child, &:last-child {
       &:backdrop, & {
         border-top-left-radius: 7px;
@@ -1685,9 +1681,17 @@ headerbar { // headerbar border rounding
   window.tiled-bottom &,
   window.tiled-left &,
   window.maximized &,
-  window.fullscreen & {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+  window.fullscreen &,
+  window.solid-csd & {
+    &, &:backdrop {
+      &,
+      &:first-child,
+      &:last-child,
+      &:only-child {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+    }
   }
 }
 
