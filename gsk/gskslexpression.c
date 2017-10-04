@@ -1381,12 +1381,10 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
           gsize rows = gsk_sl_type_get_length (col_type);
           guint32 ids[2 + gsk_sl_type_get_length (type)];
           guint32 scalar_id, zero_id, col_type_id;
-          GskSlValue *value;
           gsize c;
 
           scalar_id = gsk_spv_writer_add_conversion (writer, value_id, value_type, scalar_type);
-          value = gsk_sl_value_new (scalar_type);
-          zero_id = gsk_spv_writer_get_id_for_value (writer, value);
+          zero_id = gsk_spv_writer_get_id_for_zero (writer, gsk_sl_type_get_scalar_type (scalar_type));
           col_type_id = gsk_spv_writer_get_id_for_type (writer, col_type);
 
           for (c = 0; c < cols; c++)
@@ -1440,12 +1438,8 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
         }
       
       value = gsk_sl_value_new (scalar_type);
-      zero_id = gsk_spv_writer_get_id_for_value (writer, value);
-      if (gsk_sl_type_get_scalar_type (scalar_type) == GSK_SL_DOUBLE)
-        *(double *) gsk_sl_value_get_data (value) = 1.0;
-      else
-        *(float *) gsk_sl_value_get_data (value) = 1.0;
-      one_id = gsk_spv_writer_get_id_for_value (writer, value);
+      zero_id = gsk_spv_writer_get_id_for_zero (writer, gsk_sl_type_get_scalar_type (scalar_type));
+      one_id = gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (scalar_type));
       gsk_sl_value_free (value);
 
       scalar_type_id = gsk_spv_writer_get_id_for_type (writer, scalar_type);
