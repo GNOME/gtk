@@ -301,7 +301,25 @@ static void
 gsk_sl_statement_return_write_spv (const GskSlStatement *statement,
                                    GskSpvWriter         *writer)
 {
-  g_assert_not_reached ();
+  GskSlStatementReturn *return_statement = (GskSlStatementReturn *) statement;
+
+  if (return_statement->value)
+    {
+      guint32 value_id;
+      
+      value_id = gsk_sl_expression_write_spv (return_statement->value, writer);
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          2, GSK_SPV_OP_RETURN_VALUE,
+                          (guint32[1]) { value_id });
+    }
+  else
+    {
+      gsk_spv_writer_add (writer,
+                          GSK_SPV_WRITER_SECTION_CODE,
+                          1, GSK_SPV_OP_RETURN,
+                          NULL);
+    }
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_RETURN = {
