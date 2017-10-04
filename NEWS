@@ -1,3 +1,10 @@
+Overview of Changes in GTK+ 3.22.23
+===================================
+
+* Bugs fixed:
+ 783669 Allow resizing tiled windows
+ 784562 "Printer Details" dialog has no title bar...
+
 Overview of Changes in GTK+ 3.22.22
 ===================================
 
