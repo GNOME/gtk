@@ -3129,6 +3129,9 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
   gboolean ret;
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
+  GtkTreeViewColumn *column;
+  gint x;
+  GdkRectangle cell_area;
 
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
   GtkComboBoxPrivate *priv = combo_box->priv;
@@ -3177,14 +3180,20 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
       return FALSE;
     }
 
-  /* select something cool */
+  /* Determine which row was clicked and which column therein */
   ret = gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (priv->tree_view),
                                        event->x, event->y,
-                                       &path,
-                                       NULL, NULL, NULL);
+                                       &path, &column,
+                                       &x, NULL);
 
   if (!ret)
     return TRUE; /* clicked outside window? */
+
+  /* Don’t select/close after clicking row’s expander. cell_area excludes that */
+  gtk_tree_view_get_cell_area (GTK_TREE_VIEW (priv->tree_view),
+                               path, column, &cell_area);
+  if (x < cell_area.x || x >= cell_area.x + cell_area.width)
+    return TRUE;
 
   gtk_tree_model_get_iter (priv->model, &iter, path);
 
