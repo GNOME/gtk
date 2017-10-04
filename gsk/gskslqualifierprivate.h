@@ -81,6 +81,7 @@ gboolean                gsk_sl_qualifier_print                          (const G
                                                                          GskSlPrinter               *printer);
 
 gboolean                gsk_sl_qualifier_is_constant                    (const GskSlQualifier       *qualifier);
+GskSlQualifierLocation  gsk_sl_qualifier_get_location                   (const GskSlQualifier       *qualifier);
 GskSpvStorageClass      gsk_sl_qualifier_get_storage_class              (const GskSlQualifier       *qualifier);
 
 G_END_DECLS

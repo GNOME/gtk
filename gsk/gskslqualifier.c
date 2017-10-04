@@ -512,6 +512,35 @@ gsk_sl_qualifier_is_constant (const GskSlQualifier *qualifier)
     }
 }
 
+GskSlQualifierLocation
+gsk_sl_qualifier_get_location (const GskSlQualifier *qualifier)
+{
+  switch (qualifier->storage)
+    {
+    case GSK_SL_STORAGE_DEFAULT:
+    default:
+      g_assert_not_reached ();
+      return GSK_SL_QUALIFIER_GLOBAL;
+
+    case GSK_SL_STORAGE_GLOBAL_UNIFORM:
+    case GSK_SL_STORAGE_GLOBAL:
+    case GSK_SL_STORAGE_GLOBAL_IN:
+    case GSK_SL_STORAGE_GLOBAL_OUT:
+    case GSK_SL_STORAGE_GLOBAL_CONST:
+      return GSK_SL_QUALIFIER_GLOBAL;
+
+    case GSK_SL_STORAGE_LOCAL:
+    case GSK_SL_STORAGE_LOCAL_CONST:
+      return GSK_SL_QUALIFIER_LOCAL;
+
+    case GSK_SL_STORAGE_PARAMETER_IN:
+    case GSK_SL_STORAGE_PARAMETER_OUT:
+    case GSK_SL_STORAGE_PARAMETER_INOUT:
+    case GSK_SL_STORAGE_PARAMETER_CONST:
+      return GSK_SL_QUALIFIER_PARAMETER;
+    }
+}
+
 GskSpvStorageClass
 gsk_sl_qualifier_get_storage_class (const GskSlQualifier *qualifier)
 {
