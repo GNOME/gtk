@@ -1853,6 +1853,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 
           gtk_window_set_type_hint (GTK_WINDOW (priv->popup_window),
                                     GDK_WINDOW_TYPE_HINT_COMBO);
+          gtk_window_set_modal (GTK_WINDOW (priv->popup_window), TRUE);
 
           g_signal_connect (priv->popup_window, "show",
                             G_CALLBACK (gtk_combo_box_child_show),
