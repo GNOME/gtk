@@ -228,10 +228,8 @@ do_edge_constraint_state_check (GdkWindow      *window,
     }
   else
     {
-      if (!(old_state & GDK_WINDOW_STATE_TILED))
-        {
-          local_set |= GDK_WINDOW_STATE_TILED;
-        }
+      if (old_state & GDK_WINDOW_STATE_TILED)
+        local_unset |= GDK_WINDOW_STATE_TILED;
     }
 
   /* Top edge */
