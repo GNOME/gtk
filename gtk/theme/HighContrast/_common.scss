@@ -1195,7 +1195,7 @@ searchbar {
  * Header bars *
  ***************/
 
-.titlebar:not(headerbar),
+%titlebar,
 headerbar {
   min-height: 46px;
   border-width: 0 0 1px;
@@ -1280,6 +1280,21 @@ headerbar {
     }
   }
 }
+
+.titlebar:not(headerbar) {
+  window.csd > & {
+    // in csd we assume every titlebar is a headerbar so reset anything, this is needed for split toolbars cases
+    padding: 0;
+    background-color: transparent;
+    background-image: none;
+    border-style: none;
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  @extend %titlebar;
+}
+
 
 /************
  * Pathbars *
