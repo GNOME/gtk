@@ -3286,8 +3286,8 @@ decoration {
 
   // this needs to be transparent
   // see bug #722563
-  $_wm_border: transparentize(black, 0.77);
-  $_wm_border_backdrop: transparentize(black, 0.82);
+  $_wm_border: transparentize($fg_color, 0.77);
+  $_wm_border_backdrop: transparentize($fg_color, 0.82);
 
   box-shadow: 0 3px 9px 1px transparentize(black, 0.5),
               0 0 0 1px $_wm_border; //doing borders with box-shadow

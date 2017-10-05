@@ -1469,17 +1469,17 @@ colorswatch#add-color-button:backdrop { border-width: 2px; border-style: solid; 
 colorswatch#add-color-button overlay { border-width: 0; background: none; }
 
 /********************** Window Decorations * */
-decoration { border-radius: 7px 7px 0 0; border-width: 0px; box-shadow: 0 3px 9px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.23); /* this is used for the resize cursor area */ margin: 10px; }
+decoration { border-radius: 7px 7px 0 0; border-width: 0px; box-shadow: 0 3px 9px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.23); /* this is used for the resize cursor area */ margin: 10px; }
 
-decoration:backdrop { box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 3px 9px 1px transparent, 0 0 0 1px rgba(0, 0, 0, 0.18); }
+decoration:backdrop { box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 3px 9px 1px transparent, 0 0 0 1px rgba(255, 255, 255, 0.18); }
 
 .tiled decoration { border-radius: 0; }
 
-.csd.popup decoration { border-radius: 0; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.13); }
+.csd.popup decoration { border-radius: 0; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.13); }
 
 tooltip.csd decoration { border-radius: 5px; box-shadow: none; }
 
-messagedialog.csd decoration { border-radius: 7px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.13); }
+messagedialog.csd decoration { border-radius: 7px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.13); }
 
 .solid-csd decoration { border-radius: 0; margin: 4px; background-color: #000; border: solid 1px #737373; box-shadow: none; }
 
