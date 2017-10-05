@@ -3092,7 +3092,7 @@ tooltip,
   border-radius: 5px;
   background-color: transparentize(black,0.2);  //FIXME proper color
   text-shadow: 0 1px black;
-//  border: 2px solid $borders_color; gnome shell style?
+  border: 1px solid $borders_color;
 }
 
 tooltip *,
