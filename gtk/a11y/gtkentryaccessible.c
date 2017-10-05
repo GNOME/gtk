@@ -973,11 +973,14 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
   pango_layout_index_to_pos (gtk_entry_get_layout (entry), index, &char_rect);
   pango_extents_to_pixels (&char_rect, NULL);
 
+  GtkAllocation allocation;
+  gtk_widget_get_allocation (widget, &allocation);
+
   window = gtk_widget_get_window (widget);
   gdk_window_get_origin (window, &x_window, &y_window);
 
-  *x = x_window + x_layout + char_rect.x;
-  *y = y_window + y_layout + char_rect.y;
+  *x = x_window + allocation.x + x_layout + char_rect.x;
+  *y = y_window + allocation.y + y_layout + char_rect.y;
   *width = char_rect.width;
   *height = char_rect.height;
 
