@@ -1399,9 +1399,9 @@ infobar { border-width: 0; border-style: none; }
 .info label:selected, .info label:selected:focus, .info label:selected:hover, .question label:selected, .question label:selected:focus, .question label:selected:hover, .warning label:selected, .warning label:selected:focus, .warning label:selected:hover, .error label:selected, .error label:selected:focus, .error label:selected:hover { background-color: white; }
 
 /************ Tooltips * */
-.tooltip { color: white; padding: 4px; /* not working */ border-radius: 5px; background-color: rgba(0, 0, 0, 0.8); text-shadow: 0 1px black; }
+tooltip, .tooltip { color: white; padding: 4px; /* not working */ border-radius: 5px; background-color: rgba(0, 0, 0, 0.8); text-shadow: 0 1px black; }
 
-.tooltip * { padding: 4px; background-color: transparent; color: inherit; }
+tooltip *, .tooltip * { padding: 4px; background-color: transparent; color: inherit; }
 
 /***************** Color Chooser * */
 colorswatch { box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px #000; }

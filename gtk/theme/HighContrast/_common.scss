@@ -3085,6 +3085,7 @@ infobar {
  * Tooltips *
  ************/
 
+tooltip,
 .tooltip {
   color: white;
   padding: 4px; /* not working */
@@ -3094,6 +3095,7 @@ infobar {
 //  border: 2px solid $borders_color; gnome shell style?
 }
 
+tooltip *,
 .tooltip * { //Yeah this is ugly
   padding: 4px;
   background-color: transparent;
