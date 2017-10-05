@@ -1,3 +1,150 @@
+Overview of Changes in GTK+ 3.92.0
+==================================
+
+* Drop autotools support. Meson 0.42.1 is now required
+
+* Removed apis
+ - gdk_window_new_input
+ - gtk_widget_set_redraw_on_alloc
+ - gtk_widget_get_{border,content,margin}_allocation
+ - gtk_container_propagate_draw
+ - deprecated CSS properties and syntaxes
+
+* Implement most of CSS3 font-variant
+
+* Add an Emoji chooser to GtkEntry
+
+* Add new input hints for Emoji input
+
+* Remaining widgets have been ported to GtkSnapshot
+
+* Non-windowed widgets are now allowed to have a size of 0x0
+
+* Add support for native file choosers on older OS X versions
+
+* Convert GtkLabel and GtkEntry to use GSK, introducing a new
+  block-cursor css subnode for GtkEntry
+
+* Add support for libcloudproviders in GtkPlacesSidebar
+
+* Add a way for GtkOverlay to blur behind children
+
+* Input handling changes
+ - GdkEvent has new accessors for fields
+ - Traditional event signals (eg ::key-press-event) are now
+   emitted from a legacy event controller
+ - Most widgets inside gtk have stopped using traditional event signals
+ - Seat.grab(GDK_SEAT_CAPABILITY_ALL_POINTING) now includes touch events
+
+* Allow tiled windows to be resized. Under wayland, this uses version 2
+  of the gtk-shell protocol. Under X, it uses the _GTK_EDGE_CONSTRAINTS
+  property
+
+* GSK:
+ - Add gsk_text_node_new
+ - Add a glyph cache for the Vulkan backend
+ - Add gsk_blur_node_new
+ - Add gsk_cross_fade_node_new
+ - Implement blur for Vulkan
+ - Implement repeat nodes for Vulkan
+ - Add gsk_blend_mode_new
+ - the vulkan backend now uses multiple render passes, avoiding many
+   fallbacks to cairo rendering
+ - The profiling output for vulkan is now more useful, showing how many
+   pixels of fallback rendering and intermediate textures we consume
+
+* Inspector:
+ - The recorder shows more useful information about render nodes
+ - Show gsk and vulkan information in the general tab
+
+* Bugs fixed:
+ 639931 gtk_application_add_window() docs should mention window destruction
+ 644248 stylecontext: add a raised style class
+ 705640 GtkWindow incorrectly requires a default screen
+ 766909 Tooltip of the eject button is a bit confusing - or just missing
+ 773299 Ensure GTK+-4.x builds and works on Windows (MSVC in particular)
+ 775074 GtkScrolledWindow does not disconnect all GtkAdjustment signal handl...
+ 775126 memory leak in gdk_wayland_window_ensure_cairo_surface
+ 778382 gtk_css_static_style_get_default doesn't check for a null setting
+ 778811 Enter submenus when activating their parent item
+ 780750 Shift + click in GtkEntry doesn't select
+ 780758 flowbox: bind_model passes wrong reference to create_widget_func in...
+ 781757 gdk_seat_grab() not working for touchscreen events
+ 782981 meson fixes
+ 783649 negative content width warning in GtkLevelbar
+ 783669 Allow resizing tiled windows
+ 784016 Crash in gnome-terminal due to calling a GdkDisplayClass vfunc on a...
+ 784421 Tooltips: Fix docs/theming for custom tooltip windows
+ 785210 meson: Support build on Windows (using Visual Studio at least)
+ 785306 FileChooserNativeQuartz: two fixes
+ 785736 textview: fix bug on DnD displaced limits of selection
+ 786144 GtkInfoBar Example - Wrong at developer.gnome.org (looks like typo/...
+ 786209 X11: GtkPopover positioning doesn't "avoid" CSD window shadows
+ 786400 "Art pen" named "Grip pen" in the Gnome Control Center
+ 786469 gdkwindow: Avoid re-setting the opaque region if it doesn't change
+ 786485 Image upload broken on vulkan
+ 786492 Incorrect scaling factor with Vulkan on Wayland
+ 786553 Wrong example number in Gtk Tutorial
+ 786613 Adwaita: provide a generic sidebar icon and label styling
+ 786673 Wayland: Crash in GtkEntryCompletion
+ 786885 Add explanatory tooltip to emoji icon
+ 786931 rnc/rng files specify "class" as mandatory for objects, but the par...
+ 786932 Let the "type-func" override the object's "class" attribute when ge...
+ 786938 Emoji picker wrongly opens when clicking on primary icon too
+ 786940 ::icon-pressed handler stays connected when setting :show-emoji-ico...
+ 786956 EmojiChooser: Fix theming on Adwaita:dark, HighContrast, etc.
+ 786960 Emoji chooser: don't show 'insert Emoji' item in emoji chooser cont...
+ 786964 Emoji Chooser: Can't scroll clicking on the scroll bar
+ 786966 Emoji chooser: unnecessary spacing b/w some rows in search result
+ 787021 GtkFlowBox: the orthogonal orientation always requests the most siz...
+ 787103 gtk3-widget-factory crashes on exit after inserting an emote on page3
+ 787172 EmojiChooser: Improve selection of section buttons
+ 787279 EmojiChooser: Hovered emoji become impossible to see in HighContras...
+ 787302 gtk+-3.22.20/gtk/gtkmountoperation-x11.c:669:sanity check after use ?
+ 787303 gtk+-3.22.20/gtk/gtknotebook.c: 2 * redundant conditions ?
+ 787410 entry: fix memory leak
+ 787416 build: Improve subproject support for builds
+ 787444 The color-selection dialog which is opened by a GtkColorButton shou...
+ 787531 The tick button is not/barely visible on light colors with Dark theme
+ 787600 PlacesSidebar/SidebarRow: CloudProvider singleton/accounts are neve...
+ 787757 Focus outline easily disappears around color chooser swatches
+ 788230 Bump GLib version to 2.53.7
+ 788458 (style) Array index 'i' is used before limits check.
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Chinese (Taiwan)
+ Croatian
+ Czech
+ Danish
+ French
+ Friulian
+ Galician
+ German
+ Hungarian
+ Indonesian
+ Italian
+ Kazakh
+ Korean
+ Latvian
+ Lithuanian
+ Malayalam
+ Nepali
+ Persian
+ Polish
+ Romanian
+ Russian
+ Serbian
+ Serbian Latin
+ Slovak
+ Slovenian
+ Spanish
+ Swedish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.91.2
 ==================================
 
