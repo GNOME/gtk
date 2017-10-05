@@ -2831,6 +2831,7 @@ calendar {
   &.highlight, &.highlight:backdrop { color: $fg_color; }
 }
 
+
 /***********
  * Dialogs *
  ***********/
@@ -2844,27 +2845,36 @@ messagedialog { // Message Dialog styling
     border-style: none;
     box-shadow: inset 0 1px $borders_edge;
   }
+
   &.csd { // rounded bottom border styling for csd version
-    // bigger radius for better antialiasing
-    border-bottom-left-radius: 9px;
-    border-bottom-right-radius: 9px;
+    &.background {
+      // bigger radius for better antialiasing
+      border-bottom-left-radius: 9px;
+      border-bottom-right-radius: 9px;
+    }
+
     .dialog-action-area button {
       padding: 12px;
       border-radius: 0;
+
       @include button(normal, $edge: none);
       @extend %middle_button;
+
       &:hover {
         @include button(hover, $edge: none);
         @extend %middle_button;
       }
+
       &:active {
         @include button(active, $edge: none);
         @extend %middle_button;
       }
+
       &:disabled {
         @include button(insensitive, $edge: none);
         @extend %middle_button;
       }
+
       &:backdrop {
         @include button(backdrop, $edge: none);
         @extend %middle_button;
@@ -2873,44 +2883,58 @@ messagedialog { // Message Dialog styling
         @include button(backdrop-insensitive, $edge: none);
         @extend %middle_button;
       }
+
       @each $b_type, $b_color in (suggested-action, $suggested_color),
                                  (destructive-action, $destructive_color) {
         &.#{$b_type} {
           @include button(normal, $b_color, white, $edge: none);
           @extend %middle_button;
+
           &:hover {
             @include button(hover, $b_color, white, $edge: none);
             @extend %middle_button;
           }
+
           &:active {
             @include button(active, $b_color, white, $edge: none);
             @extend %middle_button;
           }
+
           &:backdrop {
             @include button(backdrop, $b_color, white);
             @extend %middle_button;
+
             &:disabled {
               @include button(backdrop-insensitive);
               @extend %middle_button;
             }
           }
+
           &:disabled {
             @include button(insensitive);
             @extend %middle_button;
           }
         }
       }
+
       &:first-child{ @extend %first_button; }
       &:last-child { @extend %last_button; }
     }
+
     %middle_button {
       border-right-style: none;
       border-bottom-style: none;
     }
-    %last_button { border-bottom-right-radius: 7px; }
+
+    %last_button {
+      border-bottom-right-radius: 7px;
+      -gtk-outline-bottom-right-radius: 5px;
+    }
+
     %first_button {
       border-left-style: none;
       border-bottom-left-radius: 7px;
+      -gtk-outline-bottom-left-radius: 5px;
     }
   }
 }
@@ -2929,6 +2953,7 @@ filechooserbutton:drop(active) {
   box-shadow: none;
   border-color: transparent;
 }
+
 
 /***********
  * Sidebar *
@@ -3305,6 +3330,12 @@ decoration {
   tooltip.csd & {
     border-radius: 5px;
     box-shadow: none;
+  }
+
+  messagedialog.csd & {
+    border-radius: 7px;
+    box-shadow: 0 1px 2px transparentize(black, 0.8),
+                0 0 0 1px transparentize($_wm_border, 0.1);
   }
 
   .solid-csd & {
