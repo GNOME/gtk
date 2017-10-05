@@ -1314,7 +1314,9 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
   gboolean shifted;
   GdkModifierType state;
 
-  gtk_get_current_event_state (&state);
+  if (!gtk_get_current_event_state (&state))
+    return;
+
   shifted = (state & GDK_SHIFT_MASK) != 0;
 
   priv = scrolled_window->priv;
