@@ -3187,20 +3187,20 @@ gtk_combo_box_list_button_released (GtkWidget      *widget,
   /* Don’t select/close after clicking row’s expander. cell_area excludes that */
   gtk_tree_view_get_cell_area (GTK_TREE_VIEW (priv->tree_view),
                                path, column, &cell_area);
-  if (x < cell_area.x || x >= cell_area.x + cell_area.width)
-    return TRUE;
+  if (x >= cell_area.x && x < cell_area.x + cell_area.width)
+    {
+      gtk_tree_model_get_iter (priv->model, &iter, path);
 
-  gtk_tree_model_get_iter (priv->model, &iter, path);
+      /* Use iter before popdown, as mis-users like GtkFileChooserButton alter the
+       * model during notify::popped-up, which means the iterator becomes invalid.
+       */
+      if (tree_column_row_is_sensitive (combo_box, &iter))
+        gtk_combo_box_set_active_internal (combo_box, path);
 
-  /* Use iter before popdown, as mis-users like GtkFileChooserButton alter the
-   * model during notify::popped-up, which means the iterator becomes invalid.
-   */
-  if (tree_column_row_is_sensitive (combo_box, &iter))
-    gtk_combo_box_set_active_internal (combo_box, path);
+      gtk_combo_box_popdown (combo_box);
+    }
 
   gtk_tree_path_free (path);
-
-  gtk_combo_box_popdown (combo_box);
 
   return TRUE;
 }
