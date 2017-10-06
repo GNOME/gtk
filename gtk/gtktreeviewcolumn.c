@@ -1412,10 +1412,11 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
 {
   GtkTreeViewColumnPrivate *priv = column->priv;
 
-  if (priv->tree_view)
-    {
-      gtk_container_remove (GTK_CONTAINER (priv->tree_view), priv->button);
-    }
+  if (priv->tree_view == NULL)
+    return;
+
+  gtk_container_remove (GTK_CONTAINER (priv->tree_view), priv->button);
+
   if (priv->property_changed_signal)
     {
       g_signal_handler_disconnect (priv->tree_view, priv->property_changed_signal);
@@ -1425,7 +1426,7 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
   if (priv->sort_column_changed_signal)
     {
       g_signal_handler_disconnect (gtk_tree_view_get_model (GTK_TREE_VIEW (priv->tree_view)),
-				   priv->sort_column_changed_signal);
+                                   priv->sort_column_changed_signal);
       priv->sort_column_changed_signal = 0;
     }
 
