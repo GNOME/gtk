@@ -2900,6 +2900,12 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   background_area.height = gtk_tree_view_get_row_height (tree_view, node);
   background_area.x = 0;
 
+  gtk_tree_view_convert_bin_window_to_widget_coords (tree_view,
+                                                     background_area.x,
+                                                     background_area.y,
+                                                     &background_area.x,
+                                                     &background_area.y);
+
   /* Let the column have a chance at selecting it. */
   rtl = (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
