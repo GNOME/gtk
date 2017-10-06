@@ -1431,7 +1431,6 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
     }
 
   priv->tree_view = NULL;
-  priv->button = NULL;
 }
 
 gboolean
