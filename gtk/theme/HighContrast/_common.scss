@@ -421,7 +421,8 @@ button {
       }
     }
 
-    &:hover {
+    &:hover,
+    &.flat:hover {
       @include button(hover);
       -gtk-icon-effect: highlight;
     }
