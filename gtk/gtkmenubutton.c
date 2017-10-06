@@ -1038,7 +1038,7 @@ gtk_menu_button_dispose (GObject *object)
 
   if (priv->popover)
     {
-      gtk_widget_destroy (priv->popover);
+      gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), NULL);
       priv->popover = NULL;
     }
 
