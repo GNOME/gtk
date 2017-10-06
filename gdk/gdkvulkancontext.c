@@ -122,6 +122,8 @@ gdk_vulkan_strerror (VkResult result)
       return "The application caused the validation layer to fail.";
     case VK_ERROR_INVALID_SHADER_NV:
       return "One or more shaders failed to compile or link.";
+    case VK_ERROR_OUT_OF_POOL_MEMORY_KHR:
+    case VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR:
     case VK_RESULT_RANGE_SIZE:
     case VK_RESULT_MAX_ENUM:
     default:
