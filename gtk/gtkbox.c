@@ -123,6 +123,7 @@ struct _GtkBoxPrivate
   guint           homogeneous    : 1;
   guint           baseline_pos   : 2;
 };
+typedef struct _GtkBoxPrivate GtkBoxPrivate;
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 static GParamSpec *child_props[LAST_CHILD_PROP] = { NULL, };
@@ -268,7 +269,7 @@ gtk_box_set_property (GObject      *object,
                       GParamSpec   *pspec)
 {
   GtkBox *box = GTK_BOX (object);
-  GtkBoxPrivate *private = box->priv;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
 
   switch (prop_id)
     {
@@ -306,7 +307,7 @@ gtk_box_get_property (GObject    *object,
                       GParamSpec *pspec)
 {
   GtkBox *box = GTK_BOX (object);
-  GtkBoxPrivate *private = box->priv;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
 
   switch (prop_id)
     {
@@ -333,7 +334,7 @@ count_expand_children (GtkBox *box,
                        gint *visible_children,
                        gint *expand_children)
 {
-  GtkBoxPrivate  *private = box->priv;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
   GtkWidget *child;
 
   *visible_children = *expand_children = 0;
@@ -355,7 +356,7 @@ count_expand_children (GtkBox *box,
 static gint
 get_spacing (GtkBox *box)
 {
-  GtkBoxPrivate *priv = box->priv;
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
   GtkCssValue *border_spacing;
   gint css_spacing;
 
@@ -375,7 +376,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
                        GdkRectangle        *out_clip)
 {
   GtkBox *box = GTK_BOX (widget);
-  GtkBoxPrivate *private = box->priv;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
   GtkBoxChild *child;
   GList *children;
   gint nvis_children;
@@ -705,6 +706,7 @@ gtk_box_get_child_property (GtkContainer *container,
 			    GParamSpec   *pspec)
 {
   GtkPackType pack_type = 0;
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (GTK_BOX (container));
   GList *list;
 
   switch (property_id)
@@ -718,7 +720,7 @@ gtk_box_get_child_property (GtkContainer *container,
       break;
     case CHILD_PROP_POSITION:
       i = 0;
-      for (list = GTK_BOX (container)->priv->children; list; list = list->next)
+      for (list = priv->children; list; list = list->next)
 	{
 	  GtkBoxChild *child_entry;
 
@@ -765,6 +767,7 @@ gtk_box_get_visible_position (GtkBox    *box,
                               GtkWidget *child)
 {
   CountingData count = { child, FALSE, 0, 0 };
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
 
   /* foreach iterates in visible order */
   gtk_container_foreach (GTK_CONTAINER (box),
@@ -778,7 +781,7 @@ gtk_box_get_visible_position (GtkBox    *box,
   if (!count.found)
     return -1;
 
-  if (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
       gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
     return count.after;
   else
@@ -790,12 +793,9 @@ gtk_box_get_path_for_child (GtkContainer *container,
                             GtkWidget    *child)
 {
   GtkWidgetPath *path, *sibling_path;
-  GtkBox *box;
-  GtkBoxPrivate *private;
+  GtkBox *box = GTK_BOX (container);
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
   GList *list, *children;
-
-  box = GTK_BOX (container);
-  private = box->priv;
 
   path = _gtk_widget_create_path (GTK_WIDGET (container));
 
@@ -840,7 +840,7 @@ static void
 gtk_box_update_child_css_position (GtkBox      *box,
                                    GtkBoxChild *child_info)
 {
-  GtkBoxPrivate *priv = box->priv;
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
   GtkBoxChild *prev;
   gboolean reverse;
   GList *l;
@@ -855,7 +855,7 @@ gtk_box_update_child_css_position (GtkBox      *box,
     }
 
   reverse = child_info->pack == GTK_PACK_END;
-  if (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
       _gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
     reverse = !reverse;
 
@@ -874,8 +874,9 @@ gtk_box_direction_changed (GtkWidget        *widget,
                            GtkTextDirection  previous_direction)
 {
   GtkBox *box = GTK_BOX (widget);
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
 
-  if (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_css_node_reverse_children (gtk_widget_get_css_node (widget));
 }
 
@@ -885,7 +886,7 @@ gtk_box_pack (GtkBox      *box,
               GtkPackType  pack_type)
 {
   GtkContainer *container = GTK_CONTAINER (box);
-  GtkBoxPrivate *private = box->priv;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
   GtkBoxChild *child_info;
 
   g_return_if_fail (GTK_IS_BOX (box));
@@ -918,8 +919,8 @@ gtk_box_get_size (GtkWidget      *widget,
 		  gint           *minimum_baseline,
 		  gint           *natural_baseline)
 {
-  GtkBox *box;
-  GtkBoxPrivate *private;
+  GtkBox *box = GTK_BOX (widget);
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
   GList *children;
   gint nvis_children;
   gint minimum, natural;
@@ -928,8 +929,6 @@ gtk_box_get_size (GtkWidget      *widget,
   gboolean have_baseline;
   gint min_baseline, nat_baseline;
 
-  box = GTK_BOX (widget);
-  private = box->priv;
 
   have_baseline = FALSE;
   minimum = natural = 0;
@@ -1050,7 +1049,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 					       gint   *minimum_baseline,
 					       gint   *natural_baseline)
 {
-  GtkBoxPrivate    *private = box->priv;
+  GtkBoxPrivate    *private = gtk_box_get_instance_private (box);
   GtkBoxChild      *child;
   GList            *children;
   gint              nvis_children;
@@ -1248,7 +1247,7 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
 				      gint   *minimum_size,
 				      gint   *natural_size)
 {
-  GtkBoxPrivate    *private = box->priv;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
   GList         *children;
   gint           nvis_children = 0;
   gint           required_size = 0, required_natural = 0, child_size, child_natural;
@@ -1312,7 +1311,7 @@ gtk_box_measure (GtkWidget      *widget,
                  int            *natural_baseline)
 {
   GtkBox        *box     = GTK_BOX (widget);
-  GtkBoxPrivate *private = box->priv;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
 
   if (for_size < 0)
     gtk_box_get_size (widget, orientation, minimum, natural, minimum_baseline, natural_baseline);
@@ -1334,10 +1333,7 @@ gtk_box_measure (GtkWidget      *widget,
 static void
 gtk_box_init (GtkBox *box)
 {
-  GtkBoxPrivate *private;
-
-  box->priv = gtk_box_get_instance_private (box);
-  private = box->priv;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
 
   gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);
 
@@ -1418,11 +1414,9 @@ void
 gtk_box_set_homogeneous (GtkBox  *box,
 			 gboolean homogeneous)
 {
-  GtkBoxPrivate *private;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
 
   g_return_if_fail (GTK_IS_BOX (box));
-
-  private = box->priv;
 
   homogeneous = homogeneous != FALSE;
 
@@ -1446,9 +1440,11 @@ gtk_box_set_homogeneous (GtkBox  *box,
 gboolean
 gtk_box_get_homogeneous (GtkBox *box)
 {
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
+
   g_return_val_if_fail (GTK_IS_BOX (box), FALSE);
 
-  return box->priv->homogeneous;
+  return priv->homogeneous;
 }
 
 /**
@@ -1463,11 +1459,9 @@ void
 gtk_box_set_spacing (GtkBox *box,
 		     gint    spacing)
 {
-  GtkBoxPrivate *private;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
 
   g_return_if_fail (GTK_IS_BOX (box));
-
-  private = box->priv;
 
   if (private->spacing != spacing)
     {
@@ -1490,9 +1484,10 @@ gtk_box_set_spacing (GtkBox *box,
 gint
 gtk_box_get_spacing (GtkBox *box)
 {
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
   g_return_val_if_fail (GTK_IS_BOX (box), 0);
 
-  return box->priv->spacing;
+  return priv->spacing;
 }
 
 /**
@@ -1513,11 +1508,9 @@ void
 gtk_box_set_baseline_position (GtkBox             *box,
 			       GtkBaselinePosition position)
 {
-  GtkBoxPrivate *private;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
 
   g_return_if_fail (GTK_IS_BOX (box));
-
-  private = box->priv;
 
   if (private->baseline_pos != position)
     {
@@ -1542,9 +1535,11 @@ gtk_box_set_baseline_position (GtkBox             *box,
 GtkBaselinePosition
 gtk_box_get_baseline_position (GtkBox *box)
 {
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
+
   g_return_val_if_fail (GTK_IS_BOX (box), GTK_BASELINE_POSITION_CENTER);
 
-  return box->priv->baseline_pos;
+  return priv->baseline_pos;
 }
 
 /**
@@ -1570,7 +1565,7 @@ gtk_box_reorder_child (GtkBox    *box,
 		       GtkWidget *child,
 		       gint       position)
 {
-  GtkBoxPrivate *priv;
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
   GList *old_link;
   GList *new_link;
   GtkBoxChild *child_info = NULL;
@@ -1578,8 +1573,6 @@ gtk_box_reorder_child (GtkBox    *box,
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
-
-  priv = box->priv;
 
   old_link = priv->children;
   old_position = 0;
@@ -1630,14 +1623,12 @@ gtk_box_query_child_packing (GtkBox      *box,
 			     GtkWidget   *child,
 			     GtkPackType *pack_type)
 {
-  GtkBoxPrivate *private;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
   GList *list;
   GtkBoxChild *child_info = NULL;
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
-
-  private = box->priv;
 
   list = private->children;
   while (list)
@@ -1669,14 +1660,12 @@ gtk_box_set_child_packing (GtkBox      *box,
 			   GtkWidget   *child,
 			   GtkPackType  pack_type)
 {
-  GtkBoxPrivate *private;
+  GtkBoxPrivate *private = gtk_box_get_instance_private (box);
   GList *list;
   GtkBoxChild *child_info = NULL;
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
-
-  private = box->priv;
 
   list = private->children;
   while (list)
@@ -1719,7 +1708,7 @@ gtk_box_remove (GtkContainer *container,
 		GtkWidget    *widget)
 {
   GtkBox *box = GTK_BOX (container);
-  GtkBoxPrivate *priv = box->priv;
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
   GtkBoxChild *child;
   GList *children;
 
@@ -1760,7 +1749,7 @@ gtk_box_forall (GtkContainer *container,
 		gpointer      callback_data)
 {
   GtkBox *box = GTK_BOX (container);
-  GtkBoxPrivate *priv = box->priv;
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
   GtkBoxChild *child;
   GList *children;
 
@@ -1789,14 +1778,12 @@ gtk_box_forall (GtkContainer *container,
 GList *
 _gtk_box_get_children (GtkBox *box)
 {
-  GtkBoxPrivate *priv;
+  GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
   GtkBoxChild *child;
   GList *children;
   GList *retval = NULL;
 
   g_return_val_if_fail (GTK_IS_BOX (box), NULL);
-
-  priv = box->priv;
 
   children = priv->children;
   while (children)

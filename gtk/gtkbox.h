@@ -45,15 +45,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkBox              GtkBox;
-typedef struct _GtkBoxPrivate       GtkBoxPrivate;
 typedef struct _GtkBoxClass         GtkBoxClass;
 
 struct _GtkBox
 {
-  GtkContainer container;
-
-  /*< private >*/
-  GtkBoxPrivate *priv;
+  GtkContainer parent_instance;
 };
 
 /**
