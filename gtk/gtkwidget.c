@@ -5490,6 +5490,12 @@ gtk_widget_size_allocate (GtkWidget           *widget,
       real_allocation.height = 0;
     }
 
+  if (G_UNLIKELY (_gtk_widget_get_has_window (widget)))
+    {
+      real_allocation.width = MAX (1, real_allocation.width);
+      real_allocation.height = MAX (1, real_allocation.height);
+    }
+
   baseline_changed = priv->allocated_baseline != baseline;
   size_changed = (priv->allocation.width != real_allocation.width ||
                   priv->allocation.height != real_allocation.height);
@@ -8012,6 +8018,10 @@ gtk_widget_set_has_window (GtkWidget *widget,
 
   widget->priv->no_window = !has_window;
   widget->priv->no_window_set = TRUE;
+
+  /* GdkWindow has a min size of 1×1 */
+  widget->priv->allocation.width = 1;
+  widget->priv->allocation.height = 1;
 }
 
 /**
