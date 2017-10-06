@@ -65,11 +65,9 @@
  * display an animation (#GdkPixbufAnimation) instead of a static image.
  *
  * Sometimes an application will want to avoid depending on external data
- * files, such as image files. GTK+ comes with a program to avoid this,
- * called “gdk-pixbuf-csource”. This library
- * allows you to convert an image into a C variable declaration, which
- * can then be loaded into a #GdkPixbuf using
- * gdk_pixbuf_new_from_inline().
+ * files, such as image files. See the documentation of #GResource for details.
+ * In this case, the #GtkImage:resource, gtk_image_new_from_resource() and
+ * gtk_image_set_from_resource() should be used.
  *
  * # CSS nodes
  *
