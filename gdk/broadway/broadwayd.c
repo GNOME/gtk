@@ -421,7 +421,7 @@ main (int argc, char *argv[])
   int http_port = 0;
   char *ssl_cert = NULL;
   char *ssl_key = NULL;
-  char *display;
+  const char *display;
   int port = 0;
   const GOptionEntry entries[] = {
     { "port", 'p', 0, G_OPTION_ARG_INT, &http_port, "Httpd port", "PORT" },

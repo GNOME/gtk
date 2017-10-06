@@ -2270,7 +2270,7 @@ gtk_icon_view_button_press (GtkGestureMultiPress *gesture,
 }
 
 static gboolean
-button_event_modifies_selection (GdkEventButton *event)
+button_event_modifies_selection (const GdkEventButton *event)
 {
   guint state;
 

@@ -249,8 +249,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wlogical-op',
     '-Wno-uninitialized',
     '-Wno-shadow',
-    '-Wno-int-conversion',
-    '-Wno-discarded-qualifiers',
     '-Werror=redundant-decls',
     '-Werror=implicit',
     '-Werror=nonnull',

@@ -35,7 +35,7 @@ translate_buttons (char *layout, int *len_p)
 
   while ((button = strsep (&strp, ",")))
     {
-      char *gtkbutton;
+      const char *gtkbutton;
 
       if (strcmp (button, "menu") == 0)
         gtkbutton = "icon";

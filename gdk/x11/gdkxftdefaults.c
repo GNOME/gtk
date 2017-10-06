@@ -81,9 +81,9 @@ parse_boolean (char *v)
 }
 
 static gboolean
-get_boolean_default (Display *dpy,
-		     gchar   *option,
-		     gboolean *value)
+get_boolean_default (Display     *dpy,
+		     const gchar *option,
+		     gboolean    *value)
 {
   gchar *v;
   gint i;
@@ -103,9 +103,9 @@ get_boolean_default (Display *dpy,
 }
 
 static gboolean
-get_double_default (Display *dpy,
-		    gchar   *option,
-		    gdouble *value)
+get_double_default (Display     *dpy,
+		    const gchar *option,
+		    gdouble     *value)
 {
   gchar    *v, *e;
   
@@ -126,9 +126,9 @@ get_double_default (Display *dpy,
 }
 
 static gboolean
-get_integer_default (Display *dpy,
-		     gchar   *option,
-		     gint    *value)
+get_integer_default (Display     *dpy,
+		     const gchar *option,
+		     gint        *value)
 {
   gchar *v, *e;
   

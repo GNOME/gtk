@@ -662,13 +662,13 @@ gsk_vulkan_render_pass_add (GskVulkanRenderPass     *self,
 }
 
 static GskVulkanImage *
-gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass *self,
-                                            GskVulkanRender     *render,
-                                            GskVulkanUploader   *uploader,
-                                            GskRenderNode       *node,
-                                            graphene_rect_t     *bounds,
-                                            GskVulkanClip       *current_clip,
-                                            graphene_rect_t     *tex_rect)
+gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
+                                            GskVulkanRender       *render,
+                                            GskVulkanUploader     *uploader,
+                                            GskRenderNode         *node,
+                                            const graphene_rect_t *bounds,
+                                            GskVulkanClip         *current_clip,
+                                            graphene_rect_t       *tex_rect)
 {
   GskVulkanImage *result;
   cairo_surface_t *surface;
@@ -889,7 +889,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
 {
   GskVulkanOp *op;
   guint i;
-  const GskVulkanClip *clip = NULL;
+  GskVulkanClip *clip = NULL;
 
   for (i = 0; i < self->render_ops->len; i++)
     {

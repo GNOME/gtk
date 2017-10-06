@@ -901,10 +901,10 @@ map_named_shm (char *name, gsize size)
 #endif
 }
 
-static char *
-parse_line (char *line, char *key)
+static const char *
+parse_line (const char *line, const char *key)
 {
-  char *p;
+  const char *p;
 
   if (!g_str_has_prefix (line, key))
     return NULL;
@@ -970,15 +970,15 @@ static void
 start_input (HttpRequest *request)
 {
   char **lines;
-  char *p;
+  const char *p;
   int i;
   char *res;
-  char *origin, *host;
+  const char *origin, *host;
   BroadwayInput *input;
   const void *data_buffer;
   gsize data_buffer_size;
   GInputStream *in;
-  char *key;
+  const char *key;
   GSocket *socket;
   int flag = 1;
 

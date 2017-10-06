@@ -458,7 +458,7 @@ read_settings (GdkX11Screen *x11_screen,
 	  g_value_init (copy, G_VALUE_TYPE (setting));
 	  g_value_copy (setting, copy);
 	  g_hash_table_insert (x11_screen->xsettings, 
-			       "gtk-xft-dpi", copy);
+			       (gpointer) "gtk-xft-dpi", copy);
 	}
     }
 

@@ -136,7 +136,7 @@ atk_key_event_from_gdk_event_key (GdkEventKey       *key,
   if (string && string[0] &&
       (state & GDK_CONTROL_MASK ||
        g_unichar_isgraph (g_utf8_get_char (string))))
-    event->string = string;
+    event->string = (char *) string;
   else
     event->string = gdk_keyval_name (keyval);
 

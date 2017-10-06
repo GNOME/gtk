@@ -208,7 +208,7 @@ get_color_surface (const GdkRGBA *color)
 }
 
 static cairo_surface_t *
-get_linear_gradient_surface (gsize n_stops, GskColorStop *stops)
+get_linear_gradient_surface (gsize n_stops, const GskColorStop *stops)
 {
   cairo_surface_t *surface;
   cairo_t *cr;
