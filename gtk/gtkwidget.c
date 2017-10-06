@@ -3786,8 +3786,8 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->name = NULL;
   priv->allocation.x = -1;
   priv->allocation.y = -1;
-  priv->allocation.width = 1;
-  priv->allocation.height = 1;
+  priv->allocation.width = 0;
+  priv->allocation.height = 0;
   priv->clip = priv->allocation;
   priv->user_alpha = 255;
   priv->alpha = 255;
@@ -4021,12 +4021,10 @@ gtk_widget_unparent (GtkWidget *widget)
     gtk_widget_queue_resize (priv->parent);
 
   /* Reset the width and height here, to force reallocation if we
-   * get added back to a new parent. This won't work if our new
-   * allocation is smaller than 1x1 and we actually want a size of 1x1...
-   * (would 0x0 be OK here?)
+   * get added back to a new parent.
    */
-  priv->allocation.width = 1;
-  priv->allocation.height = 1;
+  priv->allocation.width = 0;
+  priv->allocation.height = 0;
 
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
@@ -5322,7 +5320,7 @@ invalidate:
  *
  * In this function, the allocation and baseline may be adjusted. The given
  * allocation will be forced to be bigger than the widget's minimum size,
- * as well as at least 1×1 in size.
+ * as well as at least 0×0 in size.
  *
  * Since: 3.10
  **/
@@ -5487,10 +5485,10 @@ gtk_widget_size_allocate (GtkWidget           *widget,
       g_warning ("gtk_widget_size_allocate(): attempt to allocate widget with width %d and height %d",
                  real_allocation.width,
                  real_allocation.height);
-    }
 
-  real_allocation.width = MAX (real_allocation.width, 1);
-  real_allocation.height = MAX (real_allocation.height, 1);
+      real_allocation.width = 0;
+      real_allocation.height = 0;
+    }
 
   baseline_changed = priv->allocated_baseline != baseline;
   size_changed = (priv->allocation.width != real_allocation.width ||
@@ -7923,8 +7921,8 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
     {
       priv->allocation.x = -1;
       priv->allocation.y = -1;
-      priv->allocation.width = 1;
-      priv->allocation.height = 1;
+      priv->allocation.width = 0;
+      priv->allocation.height = 0;
       memset (&priv->clip, 0, sizeof (priv->clip));
       memset (&priv->allocated_size, 0, sizeof (priv->allocated_size));
       priv->allocated_size_baseline = 0;
@@ -9603,11 +9601,6 @@ gtk_widget_set_size_request (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (width >= -1);
   g_return_if_fail (height >= -1);
-
-  if (width == 0)
-    width = 1;
-  if (height == 0)
-    height = 1;
 
   gtk_widget_set_usize_internal (widget, width, height);
 }

@@ -530,7 +530,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
 	      int child_allocation_width;
 	      int child_minimum_height, child_natural_height;
 
-              child_allocation_width = MAX (1, child_size);
+              child_allocation_width = child_size;
 
 	      child_minimum_baseline = -1;
 	      child_natural_baseline = -1;
@@ -560,7 +560,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
    * and any of the child widgets explicitly request one */
   if (baseline == -1 && have_baseline)
     {
-      gint height = MAX (1, allocation->height);
+      gint height = allocation->height;
 
       /* TODO: This is purely based on the minimum baseline, when things fit we should
 	 use the natural one? */
@@ -585,7 +585,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
       if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  child_allocation.y = allocation->y;
-	  child_allocation.height = MAX (1, allocation->height);
+	  child_allocation.height = allocation->height;
 	  if (packing == GTK_PACK_START)
 	    x = allocation->x;
 	  else
@@ -594,7 +594,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
       else
 	{
 	  child_allocation.x = allocation->x;
-	  child_allocation.width = MAX (1, allocation->width);
+	  child_allocation.width = allocation->width;
 	  if (packing == GTK_PACK_START)
 	    y = allocation->y;
 	  else
@@ -625,7 +625,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
 	  /* Assign the child's position. */
 	  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {
-              child_allocation.width = MAX (1, child_size);
+              child_allocation.width = child_size;
               child_allocation.x = x;
 
 	      if (packing == GTK_PACK_START)
@@ -645,7 +645,7 @@ gtk_box_size_allocate (GtkWidget           *widget,
 	    }
 	  else /* (private->orientation == GTK_ORIENTATION_VERTICAL) */
 	    {
-              child_allocation.height = MAX (1, child_size);
+              child_allocation.height = child_size;
               child_allocation.y = y;
 
 	      if (packing == GTK_PACK_START)
@@ -1180,7 +1180,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 		    }
 		}
 
-              child_size = MAX (1, child_size);
+              child_size = child_size;
 
 
 	      child_minimum_baseline = child_natural_baseline = -1;
