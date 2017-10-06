@@ -110,6 +110,9 @@ GskRenderNode *         gsk_outset_shadow_node_new              (const GskRounde
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_cairo_node_new                      (const graphene_rect_t    *bounds);
 GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_cairo_node_new_for_surface          (const graphene_rect_t    *bounds,
+                                                                 cairo_surface_t          *surface);
+GDK_AVAILABLE_IN_3_90
 cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode            *node,
                                                                  GskRenderer              *renderer);
 

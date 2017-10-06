@@ -76,7 +76,6 @@ float gsk_outset_shadow_node_get_dy (GskRenderNode *node);
 float gsk_outset_shadow_node_get_spread (GskRenderNode *node);
 float gsk_outset_shadow_node_get_blur_radius (GskRenderNode *node);
 
-GskRenderNode *gsk_cairo_node_new_for_surface (const graphene_rect_t *bounds, cairo_surface_t *surface);
 cairo_surface_t *gsk_cairo_node_get_surface (GskRenderNode *node);
 
 GskTexture *gsk_texture_node_get_texture (GskRenderNode *node);
