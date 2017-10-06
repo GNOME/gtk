@@ -417,6 +417,7 @@ do_tree_store (GtkWidget *do_widget)
 
       /* create tree view */
       treeview = gtk_tree_view_new_with_model (model);
+      gtk_widget_set_vexpand (treeview, TRUE);
       g_object_unref (model);
       gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview)),
                                    GTK_SELECTION_MULTIPLE);
