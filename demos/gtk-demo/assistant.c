@@ -144,8 +144,11 @@ static void
 create_page4 (GtkWidget *assistant)
 {
   progress_bar = gtk_progress_bar_new ();
-  gtk_widget_set_halign (progress_bar, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (progress_bar, GTK_ALIGN_FILL);
   gtk_widget_set_valign (progress_bar, GTK_ALIGN_CENTER);
+  gtk_widget_set_hexpand (progress_bar, TRUE);
+  gtk_widget_set_margin_start (progress_bar, 40);
+  gtk_widget_set_margin_end (progress_bar, 40);
 
   gtk_widget_show (progress_bar);
   gtk_assistant_append_page (GTK_ASSISTANT (assistant), progress_bar);
