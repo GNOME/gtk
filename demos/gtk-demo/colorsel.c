@@ -73,6 +73,7 @@ do_colorsel (GtkWidget *do_widget)
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Color Chooser");
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
