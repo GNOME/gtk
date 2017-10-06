@@ -1336,6 +1336,7 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
   if (priv->tree_view)
     {
       gtk_container_remove (GTK_CONTAINER (priv->tree_view), priv->button);
+      g_clear_object (&priv->button);
     }
   if (priv->property_changed_signal)
     {
