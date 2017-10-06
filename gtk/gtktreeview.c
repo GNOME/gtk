@@ -4477,18 +4477,22 @@ gtk_tree_view_motion (GtkWidget      *widget,
 
   if (tree_view->priv->tree)
     {
+      gint bin_x, bin_y;
+
       /* If we are currently pressing down a button, we don't want to prelight anything else. */
       if (gtk_gesture_is_active (tree_view->priv->drag_gesture) ||
           gtk_gesture_is_active (tree_view->priv->multipress_gesture))
         node = NULL;
 
-      new_y = MAX (0, TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, y));
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+                                                         &bin_x, &bin_y);
+      new_y = MAX (0, TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, bin_y));
 
       _gtk_rbtree_find_offset (tree_view->priv->tree, new_y, &tree, &node);
 
-      tree_view->priv->event_last_x = x;
-      tree_view->priv->event_last_y = y;
-      prelight_or_select (tree_view, tree, node, x, y);
+      tree_view->priv->event_last_x = bin_x;
+      tree_view->priv->event_last_y = bin_y;
+      prelight_or_select (tree_view, tree, node, bin_x, bin_y);
     }
 
   for (list = tree_view->priv->columns; list; list = list->next)
