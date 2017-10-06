@@ -375,38 +375,11 @@ button {
 
     @include button(normal);
 
-    &.flat {
-      @include button(undecorated);
-      // to avoid adiacent buttons borders clashing when transitioning, the transition on the normal state is set
-      // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
-      // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
-      // in this case the duration is increased.
-      transition: none;
+    &:disabled {
+      @include button(insensitive);
 
-      &:hover {
-        transition: $_button_transition;
-        transition-duration: 500ms;
-
-        &:active { transition: $_button_transition; }
-      }
-      
-      &:backdrop, 
-      &:disabled, 
-      &:backdrop:disabled {
-        @include button(undecorated-insensitive);
-      }
-    }
-
-    &:hover {
-      @include button(hover);
-      -gtk-icon-effect: highlight;
-    }
-
-    &:active,
-    &:checked {
-      @include button(active);
-
-      transition-duration: 50ms;
+      &:active,
+      &:checked { @include button(insensitive-active); }
     }
 
     &:backdrop {
@@ -425,11 +398,39 @@ button {
       }
     }
 
-    &:disabled {
-      @include button(insensitive);
+    &.flat {
+      @include button(undecorated);
 
-      &:active,
-      &:checked { @include button(insensitive-active); }
+      // to avoid adiacent buttons borders clashing when transitioning, the transition on the normal state is set
+      // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
+      // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
+      // in this case the duration is increased.
+      transition: none;
+
+      &:hover {
+        transition: $_button_transition;
+        transition-duration: 500ms;
+
+        &:active { transition: $_button_transition; }
+      }
+
+      &:backdrop,
+      &:disabled,
+      &:backdrop:disabled {
+        @include button(undecorated-insensitive);
+      }
+    }
+
+    &:hover {
+      @include button(hover);
+      -gtk-icon-effect: highlight;
+    }
+
+    &:active,
+    &:checked {
+      @include button(active);
+
+      transition-duration: 50ms;
     }
 
     &.image-button {
