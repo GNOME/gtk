@@ -247,8 +247,6 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wmissing-format-attribute',
     '-Wmissing-include-dirs',
     '-Wlogical-op',
-    '-Wno-uninitialized',
-    '-Wno-shadow',
     '-Werror=redundant-decls',
     '-Werror=implicit',
     '-Werror=nonnull',
