@@ -1728,12 +1728,14 @@ activate (GApplication *app)
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "statusbar");
   gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "All systems are operating normally.");
-  g_action_map_add_action (G_ACTION_MAP (window),
-                           G_ACTION (g_property_action_new ("statusbar", widget, "visible")));
+  action = G_ACTION (g_property_action_new ("statusbar", widget, "visible"));
+  g_action_map_add_action (G_ACTION_MAP (window), action);
+  g_object_unref (G_OBJECT (action));
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbar");
-  g_action_map_add_action (G_ACTION_MAP (window),
-                           G_ACTION (g_property_action_new ("toolbar", widget, "visible")));
+  action = G_ACTION (g_property_action_new ("toolbar", widget, "visible"));
+  g_action_map_add_action (G_ACTION_MAP (window), action);
+  g_object_unref (G_OBJECT (action));
 
   adj = (GtkAdjustment *)gtk_builder_get_object (builder, "adjustment1");
 
