@@ -287,7 +287,6 @@ emblem-system=The icon used as an emblem for directories that contain system lib
 avatar-default=The generic avatar icon, which is used to represent a user that doesn't have a personalized avatar
 emblem-synchronizing=The icon used as an emblem to indicate that a a synchronizing operation is in process
 emblem-shared=The icon used as an emblem for files and directories that are shared to other users
-folder-download=The icon representing the location in the file system where downloaded files are stored
 help-browser=The icon used for the desktop's help browsing application
 
 [other]
@@ -429,7 +428,7 @@ emblem-urgent=
 emblem-videos=
 emblem-web=
 folder-documents=
-folder-download=
+folder-download=The icon representing the location in the file system where downloaded files are stored
 folder-music=
 folder-pictures=
 folder-documents=
