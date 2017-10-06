@@ -115,17 +115,7 @@ guint32
 gsk_sl_pointer_type_write_spv (const GskSlPointerType *type,
                                GskSpvWriter           *writer)
 {
-  guint32 type_id, result_id;
-
-  type_id = gsk_spv_writer_get_id_for_type (writer, type->type);
-  result_id = gsk_spv_writer_next_id (writer);
-
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_DECLARE,
-                      4, GSK_SPV_OP_TYPE_POINTER,
-                      (guint32[3]) { result_id,
-                                     gsk_sl_qualifier_get_storage_class (&type->qualifier),
-                                     type_id });
-
-  return result_id;
+  return gsk_spv_writer_type_pointer (writer, 
+                                      gsk_sl_qualifier_get_storage_class (&type->qualifier),
+                                      gsk_spv_writer_get_id_for_type (writer, type->type));
 }

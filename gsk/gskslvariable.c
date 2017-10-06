@@ -117,8 +117,14 @@ gsk_sl_variable_print (const GskSlVariable *variable,
     }
 }
 
-GskSlPointerType *
+GskSlType *
 gsk_sl_variable_get_type (const GskSlVariable *variable)
+{
+  return gsk_sl_pointer_type_get_type (variable->type);
+}
+
+GskSlPointerType *
+gsk_sl_variable_get_pointer_type (const GskSlVariable *variable)
 {
   return variable->type;
 }
@@ -147,36 +153,21 @@ gsk_sl_variable_write_spv (const GskSlVariable *variable,
 {
   if (gsk_sl_qualifier_get_location (gsk_sl_pointer_type_get_qualifier (variable->type)) == GSK_SL_QUALIFIER_PARAMETER)
     {
-      guint32 type_id, variable_id;
-
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_pointer_type_get_type (variable->type));
-      variable_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          3, GSK_SPV_OP_FUNCTION_PARAMETER,
-                          (guint32[2]) { type_id,
-                                         variable_id });
-
-      return variable_id;
+      return gsk_spv_writer_function_parameter (writer,
+                                                gsk_sl_pointer_type_get_type (variable->type));
     }
   else
     {
-      guint32 pointer_type_id, variable_id, value_id;
+      guint32 value_id;
 
-      pointer_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, variable->type);
-      variable_id = gsk_spv_writer_next_id (writer);
       if (variable->initial_value)
         value_id = gsk_spv_writer_get_id_for_value (writer, variable->initial_value);
       else
         value_id = 0;
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          variable->initial_value ? 5 : 4, GSK_SPV_OP_VARIABLE,
-                          (guint32[4]) { pointer_type_id,
-                                         variable_id,
-                                         gsk_sl_qualifier_get_storage_class (gsk_sl_pointer_type_get_qualifier (variable->type)),
-                                         value_id });
 
-      return variable_id;
+      return gsk_spv_writer_variable (writer,
+                                      variable->type,
+                                      gsk_sl_qualifier_get_storage_class (gsk_sl_pointer_type_get_qualifier (variable->type)),
+                                      value_id);
     }
 }

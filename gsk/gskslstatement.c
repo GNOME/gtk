@@ -234,17 +234,16 @@ gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
                                         GskSpvWriter         *writer)
 {
   GskSlStatementDeclaration *declaration = (GskSlStatementDeclaration *) statement;
-  guint32 variable_id;
-
-  variable_id = gsk_spv_writer_get_id_for_variable (writer, declaration->variable);
   
+  /* make sure it's written */
+  gsk_spv_writer_get_id_for_variable (writer, declaration->variable);
+
   if (declaration->initial && ! gsk_sl_variable_get_initial_value (declaration->variable))
     {
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          3, GSK_SPV_OP_STORE,
-                          (guint32[2]) { variable_id,
-                                         gsk_sl_expression_write_spv (declaration->initial, writer)});
+      gsk_spv_writer_store (writer,
+                            gsk_spv_writer_get_id_for_variable (writer, declaration->variable),
+                            gsk_sl_expression_write_spv (declaration->initial, writer),
+                            0);
     }
 }
 
@@ -305,20 +304,12 @@ gsk_sl_statement_return_write_spv (const GskSlStatement *statement,
 
   if (return_statement->value)
     {
-      guint32 value_id;
-      
-      value_id = gsk_sl_expression_write_spv (return_statement->value, writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          2, GSK_SPV_OP_RETURN_VALUE,
-                          (guint32[1]) { value_id });
+      gsk_spv_writer_return_value (writer,
+                                   gsk_sl_expression_write_spv (return_statement->value, writer));
     }
   else
     {
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          1, GSK_SPV_OP_RETURN,
-                          NULL);
+      gsk_spv_writer_return (writer);
     }
 }
 
@@ -401,6 +392,7 @@ static void
 gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
                                GskSpvWriter         *writer)
 {
+#if 0 
   GskSlStatementIf *if_stmt = (GskSlStatementIf *) statement;
   guint32 label_id, if_id, else_id, condition_id;
 
@@ -451,6 +443,8 @@ gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
                       GSK_SPV_WRITER_SECTION_CODE,
                       2, GSK_SPV_OP_LABEL,
                       (guint32[1]) { label_id });
+#endif
+  g_assert_not_reached ();
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_IF = {

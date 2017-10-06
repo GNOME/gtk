@@ -106,34 +106,21 @@ gsk_spv_writer_unref (GskSpvWriter *writer)
 static void
 gsk_spv_writer_write_header (GskSpvWriter *writer)
 {
-  guchar instruction_set[] = "\0\0\0\0GLSL.std.450\0\0\0\0";
-
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_HEADER,
-                      2, GSK_SPV_OP_CAPABILITY,
-                      (guint32[1]) { GSK_SPV_CAPABILITY_SHADER });
-  *(guint32 *) instruction_set = 1;
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_HEADER,
-                      1 + sizeof (instruction_set) / 4, GSK_SPV_OP_EXT_INST_IMPORT,
-                      (guint32 *) instruction_set);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_HEADER,
-                      3, GSK_SPV_OP_MEMORY_MODEL,
-                      (guint32[2]) { GSK_SPV_ADDRESSING_LOGICAL,
-                                     GSK_SPV_MEMORY_GLSL450 });
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_HEADER,
-                      5, GSK_SPV_OP_ENTRY_POINT,
-                      (guint32[4]) { GSK_SPV_EXECUTION_MODEL_FRAGMENT,
-                                     writer->entry_point,
-                                     STRING ("main", 0),
-                                     0 });
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_HEADER,
-                      3, GSK_SPV_OP_EXECUTION_MODE,
-                      (guint32[4]) { writer->entry_point,
-                                     GSK_SPV_EXECUTION_MODE_ORIGIN_UPPER_LEFT });
+  gsk_spv_writer_capability (writer, GSK_SPV_CAPABILITY_SHADER);
+  gsk_spv_writer_ext_inst_import (writer,
+                                  "GLSL.std.450");
+  gsk_spv_writer_memory_model (writer,
+                               GSK_SPV_ADDRESSING_MODEL_LOGICAL,
+                               GSK_SPV_MEMORY_MODEL_GLSL450);
+  gsk_spv_writer_entry_point (writer,
+                              GSK_SPV_EXECUTION_MODEL_FRAGMENT,
+                              writer->entry_point,
+                              "main",
+                              NULL,
+                              0);
+  gsk_spv_writer_execution_mode (writer,
+                                 writer->entry_point,
+                                 GSK_SPV_EXECUTION_MODE_ORIGIN_UPPER_LEFT);
 }
 
 static void
@@ -288,7 +275,7 @@ gsk_spv_writer_get_id_for_variable (GskSpvWriter  *writer,
 }
 
 guint32
-gsk_spv_writer_next_id (GskSpvWriter *writer)
+gsk_spv_writer_make_id (GskSpvWriter *writer)
 {
   writer->last_id++;
 
@@ -302,18 +289,11 @@ gsk_spv_writer_set_entry_point (GskSpvWriter *writer,
   writer->entry_point = entry_point;
 }
 
-void
-gsk_spv_writer_add (GskSpvWriter        *writer,
-                    GskSpvWriterSection  section,
-                    guint16              word_count,
-                    guint16              opcode,
-                    guint32             *words)
+GArray *
+gsk_spv_writer_get_bytes (GskSpvWriter        *writer,
+                          GskSpvWriterSection  section)
 {
-  guint32 word;
-
-  word = word_count << 16 | opcode;
-  g_array_append_val (writer->code[section], word);
-  g_array_append_vals (writer->code[section], words, word_count - 1);
+  return writer->code[section];
 }
 
 static void
@@ -329,10 +309,10 @@ copy_8_bytes (gpointer dest, gpointer src)
 }
 
 guint32
-gsk_spv_writer_add_conversion (GskSpvWriter    *writer,
-                               guint32          id,
-                               GskSlType       *type,
-                               GskSlType       *new_type)
+gsk_spv_writer_convert (GskSpvWriter *writer,
+                        guint32       id,
+                        GskSlType    *type,
+                        GskSlType    *new_type)
 {
   GskSlScalarType scalar = gsk_sl_type_get_scalar_type (type);
   GskSlScalarType new_scalar = gsk_sl_type_get_scalar_type (new_type);
@@ -344,7 +324,6 @@ gsk_spv_writer_add_conversion (GskSpvWriter    *writer,
       gsk_sl_type_is_vector (type))
     {
       GskSlValue *value;
-      guint32 result_type_id, result_id;
       guint32 true_id, false_id, zero_id;
 
       switch (new_scalar)
@@ -360,27 +339,14 @@ gsk_spv_writer_add_conversion (GskSpvWriter    *writer,
             {
             case GSK_SL_INT:
             case GSK_SL_UINT:
-              result_type_id = gsk_spv_writer_get_id_for_type (writer, new_type);
-              result_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  4, GSK_SPV_OP_BITCAST,
-                                  (guint32[3]) { result_type_id,
-                                                 result_id,
-                                                 id });
-              return result_id;
+              return gsk_spv_writer_bitcast (writer, new_type, id);
 
             case GSK_SL_FLOAT:
             case GSK_SL_DOUBLE:
-              result_type_id = gsk_spv_writer_get_id_for_type (writer, new_type);
-              result_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  4, new_scalar == GSK_SL_UINT ? GSK_SPV_OP_CONVERT_F_TO_U : GSK_SPV_OP_CONVERT_F_TO_S,
-                                  (guint32[3]) { result_type_id,
-                                                 result_id,
-                                                 id });
-              return result_id;
+              if (new_scalar == GSK_SL_UINT)
+                return gsk_spv_writer_convert_f_to_u (writer, new_type, id);
+              else
+                return gsk_spv_writer_convert_f_to_s (writer, new_type, id);
 
             case GSK_SL_BOOL:
               value = gsk_sl_value_new (new_type);
@@ -388,17 +354,7 @@ gsk_spv_writer_add_conversion (GskSpvWriter    *writer,
               gsk_sl_value_componentwise (value, copy_4_bytes, &(gint32) { 1 });
               true_id = gsk_spv_writer_get_id_for_value (writer, value);
               gsk_sl_value_free (value);
-              result_type_id = gsk_spv_writer_get_id_for_type (writer, new_type);
-              result_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  6, GSK_SPV_OP_SELECT,
-                                  (guint32[5]) { result_type_id,
-                                                 result_id,
-                                                 id,
-                                                 true_id,
-                                                 false_id });
-              return result_id;
+              return gsk_spv_writer_select (writer, new_type, id, true_id, false_id);
 
             case GSK_SL_VOID:
             default:
@@ -412,38 +368,14 @@ gsk_spv_writer_add_conversion (GskSpvWriter    *writer,
           switch (scalar)
             {
             case GSK_SL_INT:
-              result_type_id = gsk_spv_writer_get_id_for_type (writer, new_type);
-              result_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  4, GSK_SPV_OP_CONVERT_S_TO_F,
-                                  (guint32[3]) { result_type_id,
-                                                 result_id,
-                                                 id });
-              return result_id;
+              return gsk_spv_writer_convert_s_to_f (writer, new_type, id);
 
             case GSK_SL_UINT:
-              result_type_id = gsk_spv_writer_get_id_for_type (writer, new_type);
-              result_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  4, GSK_SPV_OP_CONVERT_U_TO_F,
-                                  (guint32[3]) { result_type_id,
-                                                 result_id,
-                                                 id });
-              return result_id;
+              return gsk_spv_writer_convert_u_to_f (writer, new_type, id);
 
             case GSK_SL_FLOAT:
             case GSK_SL_DOUBLE:
-              result_type_id = gsk_spv_writer_get_id_for_type (writer, new_type);
-              result_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  4, GSK_SPV_OP_F_CONVERT,
-                                  (guint32[3]) { result_type_id,
-                                                 result_id,
-                                                 id });
-              return result_id;
+              return gsk_spv_writer_f_convert (writer, new_type, id);
 
             case GSK_SL_BOOL:
               value = gsk_sl_value_new (new_type);
@@ -454,17 +386,11 @@ gsk_spv_writer_add_conversion (GskSpvWriter    *writer,
                 gsk_sl_value_componentwise (value, copy_4_bytes, &(float) { 1 });
               true_id = gsk_spv_writer_get_id_for_value (writer, value);
               gsk_sl_value_free (value);
-              result_type_id = gsk_spv_writer_get_id_for_type (writer, new_type);
-              result_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  6, GSK_SPV_OP_SELECT,
-                                  (guint32[5]) { result_type_id,
-                                                 result_id,
-                                                 id,
-                                                 true_id,
-                                                 false_id });
-              return result_id;
+              return gsk_spv_writer_select (writer,
+                                            new_type,
+                                            id,
+                                            true_id,
+                                            false_id);
 
             case GSK_SL_VOID:
             default:
@@ -481,32 +407,14 @@ gsk_spv_writer_add_conversion (GskSpvWriter    *writer,
               value = gsk_sl_value_new (new_type);
               zero_id = gsk_spv_writer_get_id_for_value (writer, value);
               gsk_sl_value_free (value);
-              result_type_id = gsk_spv_writer_get_id_for_type (writer, new_type);
-              result_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  5, GSK_SPV_OP_I_NOT_EQUAL,
-                                  (guint32[4]) { result_type_id,
-                                                 result_id,
-                                                 id,
-                                                 zero_id });
-              return result_id;
+              return gsk_spv_writer_i_not_equal (writer, new_type, id, zero_id);
 
             case GSK_SL_FLOAT:
             case GSK_SL_DOUBLE:
               value = gsk_sl_value_new (new_type);
               zero_id = gsk_spv_writer_get_id_for_value (writer, value);
               gsk_sl_value_free (value);
-              result_type_id = gsk_spv_writer_get_id_for_type (writer, new_type);
-              result_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  5, GSK_SPV_OP_F_ORD_NOT_EQUAL,
-                                  (guint32[4]) { result_type_id,
-                                                 result_id,
-                                                 id,
-                                                 zero_id });
-              return result_id;
+              return gsk_spv_writer_f_ord_not_equal (writer, new_type, id, zero_id);
 
             case GSK_SL_BOOL:
             case GSK_SL_VOID:
@@ -522,32 +430,17 @@ gsk_spv_writer_add_conversion (GskSpvWriter    *writer,
     {
       GskSlType *row_type, *new_row_type;
       guint i, n = gsk_sl_type_get_length (type);
-      guint32 ids[n + 2], row_id;
+      guint32 ids[n];
 
       row_type = gsk_sl_type_get_index_type (type);
       new_row_type = gsk_sl_type_get_index_type (new_type);
-      row_id = gsk_spv_writer_get_id_for_type (writer, row_type);
       for (i = 0; i < n; i++)
         {
-          guint tmp_id = gsk_spv_writer_next_id (writer);
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_COMPOSITE_EXTRACT,
-                              (guint32[4]) { row_id,
-                                             tmp_id,
-                                             id,
-                                             i });
-          ids[i + 2] = gsk_spv_writer_add_conversion (writer, tmp_id, row_type, new_row_type);
+          ids[i] = gsk_spv_writer_composite_extract (writer, row_type, id, (guint32[1]) { i }, 1);
+          ids[i] = gsk_spv_writer_convert (writer, ids[i], row_type, new_row_type);
         }
 
-      ids[0] = gsk_spv_writer_get_id_for_type (writer, new_type);
-      ids[1] = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          3 + n, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                          ids);
-
-      return ids[1];
+      return gsk_spv_writer_composite_construct (writer, new_type, ids, n);
     }
   else
     {

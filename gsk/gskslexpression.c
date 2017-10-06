@@ -509,9 +509,10 @@ gsk_sl_expression_multiplication_write_spv (const GskSlExpression *expression,
                                             GskSpvWriter          *writer)
 {
   const GskSlExpressionMultiplication *multiplication = (const GskSlExpressionMultiplication *) expression;
-  GskSlType *ltype, *rtype;
-  guint32 left_id, right_id, result_id, result_type_id;
+  GskSlType *ltype, *rtype, *type;
+  guint32 left_id, right_id;
 
+  type = multiplication->type;
   ltype = gsk_sl_expression_get_return_type (multiplication->left);
   rtype = gsk_sl_expression_get_return_type (multiplication->right);
 
@@ -519,72 +520,37 @@ gsk_sl_expression_multiplication_write_spv (const GskSlExpression *expression,
   if (gsk_sl_type_get_scalar_type (ltype) != gsk_sl_type_get_scalar_type (multiplication->type))
     {
       GskSlType *new_type = gsk_sl_type_get_matching (ltype, gsk_sl_type_get_scalar_type (multiplication->type));
-      left_id = gsk_spv_writer_add_conversion (writer, left_id, ltype, new_type);
+      left_id = gsk_spv_writer_convert (writer, left_id, ltype, new_type);
       ltype = new_type;
     }
   right_id = gsk_sl_expression_write_spv (multiplication->right, writer);
   if (gsk_sl_type_get_scalar_type (rtype) != gsk_sl_type_get_scalar_type (multiplication->type))
     {
       GskSlType *new_type = gsk_sl_type_get_matching (rtype, gsk_sl_type_get_scalar_type (multiplication->type));
-      right_id = gsk_spv_writer_add_conversion (writer, right_id, rtype, new_type);
+      right_id = gsk_spv_writer_convert (writer, right_id, rtype, new_type);
       rtype = new_type;
     }
-
-  result_type_id = gsk_spv_writer_get_id_for_type (writer, multiplication->type);
-  result_id = gsk_spv_writer_next_id (writer);
 
   if (gsk_sl_type_is_matrix (ltype))
     {
       if (gsk_sl_type_is_matrix (rtype))
         {
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_MATRIX_TIMES_MATRIX,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             left_id,
-                                             right_id });
-
-          return result_id;
+          return gsk_spv_writer_matrix_times_matrix (writer, type, left_id, right_id);
         }
       else if (gsk_sl_type_is_vector (rtype))
         {
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_VECTOR_TIMES_MATRIX,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             right_id,
-                                             left_id });
-
-          return result_id;
+          return gsk_spv_writer_vector_times_matrix (writer, type, right_id, left_id);
         }
       else if (gsk_sl_type_is_scalar (rtype))
         {
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_MATRIX_TIMES_SCALAR,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             left_id,
-                                             right_id });
-
-          return result_id;
+          return gsk_spv_writer_matrix_times_scalar (writer, type, left_id, right_id);
         }
     }
   else if (gsk_sl_type_is_vector (ltype))
     {
       if (gsk_sl_type_is_matrix (rtype))
         {
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_MATRIX_TIMES_VECTOR,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             right_id,
-                                             left_id });
-
-          return result_id;
+          return gsk_spv_writer_matrix_times_vector (writer, type, right_id, left_id);
         }
       else if (gsk_sl_type_is_vector (rtype))
         {
@@ -592,71 +558,31 @@ gsk_sl_expression_multiplication_write_spv (const GskSlExpression *expression,
             {
             case GSK_SL_FLOAT:
             case GSK_SL_DOUBLE:
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  5, GSK_SPV_OP_F_MUL,
-                                  (guint32[4]) { result_type_id,
-                                                 result_id,
-                                                 left_id,
-                                                 right_id });
-              break;
+              return gsk_spv_writer_f_mul (writer, type, left_id, right_id);
             case GSK_SL_INT:
             case GSK_SL_UINT:
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  5, GSK_SPV_OP_I_MUL,
-                                  (guint32[4]) { result_type_id,
-                                                 result_id,
-                                                 left_id,
-                                                 right_id });
-              break;
+              return gsk_spv_writer_i_mul (writer, type, left_id, right_id);
             case GSK_SL_VOID:
             case GSK_SL_BOOL:
             default:
               g_assert_not_reached ();
               break;
             }
-
-          return result_id;
         }
       else if (gsk_sl_type_is_scalar (rtype))
         {
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_VECTOR_TIMES_SCALAR,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             left_id,
-                                             right_id });
-
-          return result_id;
+          return gsk_spv_writer_vector_times_scalar (writer, type, left_id, right_id);
         }
     }
   else if (gsk_sl_type_is_scalar (ltype))
     {
       if (gsk_sl_type_is_matrix (rtype))
         {
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_MATRIX_TIMES_SCALAR,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             right_id,
-                                             left_id });
-
-          return result_id;
+          return gsk_spv_writer_matrix_times_scalar (writer, type, right_id, left_id);
         }
       else if (gsk_sl_type_is_vector (rtype))
         {
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_VECTOR_TIMES_SCALAR,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             right_id,
-                                             left_id });
-
-          return result_id;
+          return gsk_spv_writer_vector_times_scalar (writer, type, right_id, left_id);
         }
       else if (gsk_sl_type_is_scalar (rtype))
         {
@@ -664,32 +590,18 @@ gsk_sl_expression_multiplication_write_spv (const GskSlExpression *expression,
             {
             case GSK_SL_FLOAT:
             case GSK_SL_DOUBLE:
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  5, GSK_SPV_OP_F_MUL,
-                                  (guint32[4]) { result_type_id,
-                                                 result_id,
-                                                 left_id,
-                                                 right_id });
-              break;
+              return gsk_spv_writer_f_mul (writer, type, left_id, right_id);
+
             case GSK_SL_INT:
             case GSK_SL_UINT:
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  5, GSK_SPV_OP_I_MUL,
-                                  (guint32[4]) { result_type_id,
-                                                 result_id,
-                                                 left_id,
-                                                 right_id });
-              break;
+              return gsk_spv_writer_i_mul (writer, type, left_id, right_id);
+
             case GSK_SL_VOID:
             case GSK_SL_BOOL:
             default:
               g_assert_not_reached ();
               break;
             }
-
-          return result_id;
         }
     }
 
@@ -954,7 +866,7 @@ gsk_sl_expression_division_write_spv (const GskSlExpression *expression,
 {
   const GskSlExpressionArithmetic *arithmetic = (const GskSlExpressionArithmetic *) expression;
   GskSlType *ltype, *rtype;
-  guint32 left_id, right_id, result_id, result_type_id;
+  guint32 left_id, right_id;
 
   ltype = gsk_sl_expression_get_return_type (arithmetic->left);
   rtype = gsk_sl_expression_get_return_type (arithmetic->right);
@@ -963,90 +875,60 @@ gsk_sl_expression_division_write_spv (const GskSlExpression *expression,
   if (gsk_sl_type_get_scalar_type (ltype) != gsk_sl_type_get_scalar_type (arithmetic->type))
     {
       GskSlType *new_type = gsk_sl_type_get_matching (ltype, gsk_sl_type_get_scalar_type (arithmetic->type));
-      left_id = gsk_spv_writer_add_conversion (writer, left_id, ltype, new_type);
+      left_id = gsk_spv_writer_convert (writer, left_id, ltype, new_type);
       ltype = new_type;
     }
   right_id = gsk_sl_expression_write_spv (arithmetic->right, writer);
   if (gsk_sl_type_get_scalar_type (rtype) != gsk_sl_type_get_scalar_type (arithmetic->type))
     {
       GskSlType *new_type = gsk_sl_type_get_matching (rtype, gsk_sl_type_get_scalar_type (arithmetic->type));
-      right_id = gsk_spv_writer_add_conversion (writer, right_id, rtype, new_type);
+      right_id = gsk_spv_writer_convert (writer, right_id, rtype, new_type);
       rtype = new_type;
     }
-
-  result_type_id = gsk_spv_writer_get_id_for_type (writer, arithmetic->type);
 
   if (gsk_sl_type_is_matrix (ltype))
     {
       if (gsk_sl_type_is_matrix (rtype))
         {
+          GskSlType *col_type = gsk_sl_type_get_index_type (ltype);
           gsize cols = gsk_sl_type_get_length (ltype);
           gsize c;
-          guint32 col_type_id, left_part_id, right_part_id, ids[cols + 2];
+          guint32 left_part_id, right_part_id, ids[cols];
 
-          col_type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_index_type (ltype));
           for (c = 0; c < cols; c++)
             {
-              left_part_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  5, GSK_SPV_OP_COMPOSITE_EXTRACT,
-                                  (guint32[4]) { col_type_id,
-                                                 left_part_id,
-                                                 left_id,
-                                                 c });
-              right_part_id = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  5, GSK_SPV_OP_COMPOSITE_EXTRACT,
-                                  (guint32[4]) { col_type_id,
-                                                 right_part_id,
-                                                 right_id,
-                                                 c });
-              ids[2 + c] = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  5, GSK_SPV_OP_F_DIV,
-                                  (guint32[4]) { col_type_id,
-                                                 ids[2 + c],
-                                                 left_part_id,
-                                                 right_part_id });
+              left_part_id = gsk_spv_writer_composite_extract (writer, 
+                                                               col_type,
+                                                               left_id,
+                                                               (guint32[1]) { 1 }, c);
+              right_part_id = gsk_spv_writer_composite_extract (writer, 
+                                                                col_type,
+                                                                right_id,
+                                                                (guint32[1]) { 1 }, c);
+              ids[c] = gsk_spv_writer_f_div (writer,
+                                             col_type,
+                                             left_part_id,
+                                             right_part_id);
             }
 
-          ids[0] = result_type_id;
-          ids[1] = gsk_spv_writer_next_id (writer);
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              3 + cols, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                              ids);
-
-          return ids[1];
+          return gsk_spv_writer_composite_construct (writer, 
+                                                     arithmetic->type,
+                                                     ids,
+                                                     cols);
         }
       else if (gsk_sl_type_is_scalar (rtype))
         {
-          guint32 tmp_id, one_id, rtype_id;
+          guint32 tmp_id;
 
-          rtype_id = gsk_spv_writer_get_id_for_type (writer, rtype);
-          one_id = gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (arithmetic->type));
-          tmp_id = gsk_spv_writer_next_id (writer);
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_F_DIV,
-                              (guint32[4]) { rtype_id,
-                                             tmp_id,
-                                             one_id,
-                                             right_id });
+          tmp_id = gsk_spv_writer_f_div (writer,
+                                         rtype,
+                                         gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (arithmetic->type)),
+                                         right_id);
 
-          result_id = gsk_spv_writer_next_id (writer);
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_MATRIX_TIMES_SCALAR,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             left_id,
-                                             tmp_id });
-
-          return result_id;
+          return gsk_spv_writer_matrix_times_scalar (writer,
+                                                     arithmetic->type,
+                                                     left_id,
+                                                     tmp_id);
         }
       else
         {
@@ -1056,98 +938,58 @@ gsk_sl_expression_division_write_spv (const GskSlExpression *expression,
     }
   else if (gsk_sl_type_is_matrix (rtype))
     {
-      guint32 tmp_id, one_id, ltype_id;
+      guint32 tmp_id;
 
-      ltype_id = gsk_spv_writer_get_id_for_type (writer, ltype);
-      one_id = gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (arithmetic->type));
-      tmp_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          5, GSK_SPV_OP_F_DIV,
-                          (guint32[4]) { ltype_id,
-                                         tmp_id,
-                                         one_id,
-                                         left_id });
-
-      result_id = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          5, GSK_SPV_OP_MATRIX_TIMES_SCALAR,
-                          (guint32[4]) { result_type_id,
-                                         result_id,
-                                         right_id,
-                                         tmp_id });
-
-      return result_id;
+      tmp_id = gsk_spv_writer_f_div (writer,
+                                     ltype,
+                                     gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (arithmetic->type)),
+                                     left_id);
+      return gsk_spv_writer_matrix_times_scalar (writer,
+                                                 arithmetic->type,
+                                                 right_id,
+                                                 tmp_id);
     }
   else
     {
-      /* ltype and rtype are not matices */
+      /* ltype and rtype are not matrices */
 
       if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_vector (rtype))
         {
-           guint32 tmp_id = gsk_spv_writer_next_id (writer);
-           gsk_spv_writer_add (writer,
-                               GSK_SPV_WRITER_SECTION_CODE,
-                               3 + gsk_sl_type_get_length (rtype), GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                              (guint32[6]) { result_type_id,
-                                             tmp_id,
-                                             left_id, left_id, left_id, left_id });
+           guint32 tmp_id = gsk_spv_writer_composite_construct (writer,
+                                                                arithmetic->type,
+                                                                (guint32[4]) { left_id, left_id, left_id, left_id },
+                                                                gsk_sl_type_get_length (rtype));
            left_id = tmp_id;
         }
       else if (gsk_sl_type_is_scalar (rtype) && gsk_sl_type_is_vector (ltype))
         {
-           guint32 tmp_id = gsk_spv_writer_next_id (writer);
-           gsk_spv_writer_add (writer,
-                               GSK_SPV_WRITER_SECTION_CODE,
-                               3 + gsk_sl_type_get_length (ltype), GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                              (guint32[6]) { result_type_id,
-                                             tmp_id,
-                                             right_id, right_id, right_id, right_id });
+           guint32 tmp_id = gsk_spv_writer_composite_construct (writer,
+                                                                arithmetic->type,
+                                                                (guint32[4]) { right_id, right_id, right_id, right_id },
+                                                                gsk_sl_type_get_length (ltype));
            right_id = tmp_id;
         }
 
       /* ltype and rtype have the same number of components now */
 
-      result_id = gsk_spv_writer_next_id (writer);
       switch (gsk_sl_type_get_scalar_type (arithmetic->type))
         {
         case GSK_SL_FLOAT:
         case GSK_SL_DOUBLE:
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_F_DIV,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             left_id,
-                                             right_id });
-          break;
+          return gsk_spv_writer_f_div (writer, arithmetic->type, left_id, right_id);
+
         case GSK_SL_INT:
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_S_DIV,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             left_id,
-                                             right_id });
-          break;
+          return gsk_spv_writer_s_div (writer, arithmetic->type, left_id, right_id);
+
         case GSK_SL_UINT:
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5, GSK_SPV_OP_U_DIV,
-                              (guint32[4]) { result_type_id,
-                                             result_id,
-                                             left_id,
-                                             right_id });
-          break;
+          return gsk_spv_writer_u_div (writer, arithmetic->type, left_id, right_id);
+
         case GSK_SL_VOID:
         case GSK_SL_BOOL:
         default:
           g_assert_not_reached ();
-          break;
+          return 0;
         }
-
-      return result_id;
     }
 }
 
@@ -1491,7 +1333,7 @@ gsk_sl_expression_reference_get_return_type (const GskSlExpression *expression)
 {
   const GskSlExpressionReference *reference = (const GskSlExpressionReference *) expression;
 
-  return gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (reference->variable));
+  return gsk_sl_variable_get_type (reference->variable);
 }
 
 static GskSlValue *
@@ -1515,19 +1357,11 @@ gsk_sl_expression_reference_write_spv (const GskSlExpression *expression,
                                        GskSpvWriter          *writer)
 {
   GskSlExpressionReference *reference = (GskSlExpressionReference *) expression;
-  guint32 declaration_id, result_id, type_id;
 
-  type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (reference->variable)));
-  declaration_id = gsk_spv_writer_get_id_for_variable (writer, reference->variable);
-  result_id = gsk_spv_writer_next_id (writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      4, GSK_SPV_OP_LOAD,
-                      (guint32[3]) { type_id,
-                                     result_id,
-                                     declaration_id });
-
-  return result_id;
+  return gsk_spv_writer_load (writer,
+                              gsk_sl_variable_get_type (reference->variable),
+                              gsk_spv_writer_get_id_for_variable (writer, reference->variable),
+                              0);
 }
 
 static const GskSlExpressionClass GSK_SL_EXPRESSION_REFERENCE = {
@@ -1717,25 +1551,19 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
 
       if (gsk_sl_type_is_scalar (type))
         {
-          return gsk_spv_writer_add_conversion (writer, value_id, value_type, type);
+          return gsk_spv_writer_convert (writer, value_id, value_type, type);
         }
       else if (gsk_sl_type_is_vector (type))
         {
           GskSlType *scalar_type = gsk_sl_type_get_scalar (gsk_sl_type_get_scalar_type (type));
-          guint32 scalar_id, result_type_id, result_id;
+          guint32 scalar_id;
 
-          scalar_id = gsk_spv_writer_add_conversion (writer, value_id, value_type, scalar_type);
-          result_type_id = gsk_spv_writer_get_id_for_type (writer, type);
-          result_id = gsk_spv_writer_next_id (writer);
+          scalar_id = gsk_spv_writer_convert (writer, value_id, value_type, scalar_type);
 
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              3 + gsk_sl_type_get_n_components (type), GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                              (guint32[6]) { result_type_id,
-                                             result_id,
-                                             scalar_id, scalar_id, scalar_id, scalar_id });
-
-          return result_id;
+          return gsk_spv_writer_composite_construct (writer,
+                                                     type,
+                                                     (guint[4]) { scalar_id, scalar_id, scalar_id, scalar_id },
+                                                     gsk_sl_type_get_n_components (type));
         }
       else if (gsk_sl_type_is_matrix (type))
         {
@@ -1743,34 +1571,26 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
           GskSlType *col_type = gsk_sl_type_get_index_type (type);
           gsize cols = gsk_sl_type_get_length (type);
           gsize rows = gsk_sl_type_get_length (col_type);
-          guint32 ids[2 + gsk_sl_type_get_length (type)];
-          guint32 scalar_id, zero_id, col_type_id;
+          guint32 ids[gsk_sl_type_get_length (type)];
+          guint32 scalar_id, zero_id;
           gsize c;
 
-          scalar_id = gsk_spv_writer_add_conversion (writer, value_id, value_type, scalar_type);
+          scalar_id = gsk_spv_writer_convert (writer, value_id, value_type, scalar_type);
           zero_id = gsk_spv_writer_get_id_for_zero (writer, gsk_sl_type_get_scalar_type (scalar_type));
-          col_type_id = gsk_spv_writer_get_id_for_type (writer, col_type);
 
           for (c = 0; c < cols; c++)
             {
-              ids[2 + c] = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  3 + rows, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                                  (guint32[6]) { col_type_id,
-                                                 ids[2 + c],
-                                                 c == 0 ? scalar_id : zero_id,
-                                                 c == 1 ? scalar_id : zero_id,
-                                                 c == 2 ? scalar_id : zero_id,
-                                                 c == 3 ? scalar_id : zero_id });
+              ids[c] = gsk_spv_writer_composite_construct (writer,
+                                                           type,
+                                                           (guint32[4]) {
+                                                               c == 0 ? scalar_id : zero_id,
+                                                               c == 1 ? scalar_id : zero_id,
+                                                               c == 2 ? scalar_id : zero_id,
+                                                               c == 3 ? scalar_id : zero_id
+                                                           },
+                                                           rows);
             }
-          ids[0] = gsk_spv_writer_get_id_for_type (writer, type);
-          ids[1] = gsk_spv_writer_next_id (writer);
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              3 + cols, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                              ids);
-          return ids[1];
+          return gsk_spv_writer_composite_construct (writer, type, ids, cols);
         }
       else
         {
@@ -1788,14 +1608,15 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
       gsize value_cols = gsk_sl_type_get_length (type);
       gsize value_rows = gsk_sl_type_get_length (value_col_type);
       gsize c, r;
-      guint32 col_ids[6], ids[6], one_id, zero_id, scalar_type_id;
+      guint32 col_ids[4], ids[4], one_id, zero_id;
       GskSlValue *value;
 
       value_id = gsk_sl_expression_write_spv (constructor->arguments[0], writer);
+
       if (gsk_sl_type_get_scalar_type (value_type) != gsk_sl_type_get_scalar_type (type))
         {
           GskSlType *new_value_type = gsk_sl_type_get_matching (value_type, gsk_sl_type_get_scalar_type (type));
-          value_id = gsk_spv_writer_add_conversion (writer, value_id, value_type, new_value_type);
+          value_id = gsk_spv_writer_convert (writer, value_id, value_type, new_value_type);
           value_type = new_value_type;
         }
       
@@ -1804,79 +1625,64 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
       one_id = gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (scalar_type));
       gsk_sl_value_free (value);
 
-      scalar_type_id = gsk_spv_writer_get_id_for_type (writer, scalar_type);
-      col_ids[0] = gsk_spv_writer_get_id_for_type (writer, col_type);
       for (c = 0; c < cols; c++)
         {
           for (r = 0; r < rows; r++)
             {
               if (c < value_cols && r < value_rows)
                 {
-                  col_ids[2 + r] = gsk_spv_writer_next_id (writer);
-                  gsk_spv_writer_add (writer,
-                                      GSK_SPV_WRITER_SECTION_CODE,
-                                      6, GSK_SPV_OP_COMPOSITE_EXTRACT,
-                                      (guint32[5]) { scalar_type_id,
-                                                     col_ids[2 + r],
-                                                     value_id,
-                                                     c,
-                                                     r });
+                  col_ids[r] = gsk_spv_writer_composite_extract (writer,
+                                                                 scalar_type,
+                                                                 value_id,
+                                                                 (guint32[2]) { c, r },
+                                                                 2);
                 }
               else if (c == r)
-                col_ids[2 + r] = one_id;
+                col_ids[r] = one_id;
               else
-                col_ids[2 + r] = zero_id;
+                col_ids[r] = zero_id;
             }
-          col_ids[1] = gsk_spv_writer_next_id (writer);
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              3 + rows, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                              col_ids);
-          ids[c + 2] = col_ids[1];
+          ids[c] = gsk_spv_writer_composite_construct (writer, col_type, col_ids, rows);
         }
-      ids[0] = gsk_spv_writer_get_id_for_type (writer, type);
-      ids[1] = gsk_spv_writer_next_id (writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          3 + cols, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                          ids);
-      return ids[1];
+      return gsk_spv_writer_composite_construct (writer, type, ids, cols);
     }
   else
     {
       gsize n_components = gsk_sl_type_get_n_components (type);
       GskSlScalarType scalar = gsk_sl_type_get_scalar_type (type);
-      guint32 component_ids[16], component_type_id;
+      GskSlType *component_type;
+      guint32 component_ids[16];
       gsize component = 0, arg, i;
 
-      component_type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_scalar (scalar));
+      component_type = gsk_sl_type_get_scalar (scalar);
       for (arg = 0; arg < constructor->n_arguments; arg++)
         {
           value_type = gsk_sl_expression_get_return_type (constructor->arguments[arg]);
           value_id = gsk_sl_expression_write_spv (constructor->arguments[arg], writer);
+          if (gsk_sl_type_get_scalar_type (value_type) != scalar)
+            {
+              GskSlType *new_type = gsk_sl_type_get_matching (value_type, scalar);
+              value_id = gsk_spv_writer_convert (writer,
+                                                 value_id,
+                                                 value_type,
+                                                 new_type);
+              value_type = new_type;
+            }
+
           if (gsk_sl_type_is_scalar (value_type))
             {
-              component_ids[component] = gsk_spv_writer_add_conversion (writer,
-                                                                        value_id,
-                                                                        value_type,
-                                                                        gsk_sl_type_get_scalar (scalar));
+              component_ids[component] = value_id;
               component++;
             }
           else if (gsk_sl_type_is_vector (value_type))
             {
-              GskSlType *converted_type = gsk_sl_type_get_vector (scalar, gsk_sl_type_get_length (value_type));
-              value_id = gsk_spv_writer_add_conversion (writer, value_id, value_type, converted_type);
-
               for (i = 0; component < n_components && i < gsk_sl_type_get_length (value_type); i++)
                 {
-                  component_ids[component] = gsk_spv_writer_next_id (writer);
-                  gsk_spv_writer_add (writer,
-                                      GSK_SPV_WRITER_SECTION_CODE,
-                                      5, GSK_SPV_OP_COMPOSITE_EXTRACT,
-                                      (guint32[4]) { component_type_id,
-                                                     component_ids[component],
-                                                     value_id,
-                                                     i });
+                  component_ids[component] = gsk_spv_writer_composite_extract (writer,
+                                                                               component_type,
+                                                                               value_id,
+                                                                               (guint32[1]) { i },
+                                                                               1);
                   component++;
                 }
             }
@@ -1890,19 +1696,11 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
                 {
                   for (r = 0; r < rows && component < n_components; r++)
                     {
-                      component_ids[component] = gsk_spv_writer_next_id (writer);
-                      gsk_spv_writer_add (writer,
-                                          GSK_SPV_WRITER_SECTION_CODE,
-                                          6, GSK_SPV_OP_COMPOSITE_EXTRACT,
-                                          (guint32[5]) { component_type_id,
-                                                         component_ids[component],
-                                                         value_id,
-                                                         c,
-                                                         r });
-                      component_ids[component] = gsk_spv_writer_add_conversion (writer,
-                                                                                component_ids[component],
-                                                                                gsk_sl_type_get_scalar (gsk_sl_type_get_scalar_type (value_type)),
-                                                                                gsk_sl_type_get_scalar (scalar));
+                      component_ids[component] = gsk_spv_writer_composite_extract (writer,
+                                                                                   component_type,
+                                                                                   value_id,
+                                                                                   (guint32[2]) { c, r },
+                                                                                   2);
                       component++;
                     }
                 }
@@ -1919,47 +1717,20 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
         }
       else if (gsk_sl_type_is_vector (type))
         {
-          guint32 ids[2 + gsk_sl_type_get_length (type)];
-          guint i;
-
-          ids[0] = gsk_spv_writer_get_id_for_type (writer, type);
-          ids[1] = gsk_spv_writer_next_id (writer);
-          for (i = 0; i < gsk_sl_type_get_length (type); i++)
-            ids[2 + i] = component_ids[i];
-
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              2 + gsk_sl_type_get_length (type), GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                              ids);
-          return ids[1];
+          return gsk_spv_writer_composite_construct (writer, type, component_ids, gsk_sl_type_get_length (type));
         }
       else if (gsk_sl_type_is_matrix (type))
         {
           GskSlType *col_type = gsk_sl_type_get_index_type (type);
           gsize c, cols = gsk_sl_type_get_length (type);
-          gsize r, rows = gsk_sl_type_get_length (col_type);
-          guint32 ids[cols + 2], col_ids[rows + 2];
+          gsize rows = gsk_sl_type_get_length (col_type);
+          guint32 ids[cols];
 
-          col_ids[1] = gsk_spv_writer_get_id_for_type (writer, col_type);
           for (c = 0; c < cols; c++)
             {
-              for (r = 0; r < rows; r++)
-                {
-                }
-              col_ids[1] = gsk_spv_writer_next_id (writer);
-              gsk_spv_writer_add (writer,
-                                  GSK_SPV_WRITER_SECTION_CODE,
-                                  3 + rows, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                                  col_ids);
-              ids[c + 2] = col_ids[1];
+              ids[c] = gsk_spv_writer_composite_construct (writer, col_type, &component_ids[c * rows], rows);
             }
-          ids[0] = gsk_spv_writer_get_id_for_type (writer, type);
-          ids[1] = gsk_spv_writer_next_id (writer);
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              3 + cols, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                              ids);
-          return ids[1];
+          return gsk_spv_writer_composite_construct (writer, type, ids, cols);
         }
       else
         {
@@ -2145,22 +1916,14 @@ gsk_sl_expression_member_write_spv (const GskSlExpression *expression,
 {
   const GskSlExpressionMember *member = (const GskSlExpressionMember *) expression;
   GskSlType *type;
-  guint32 expr_id, type_id, result_id;
 
   type = gsk_sl_expression_get_return_type (member->expr);
-  type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_type_get_member_type (type, member->id));
-  expr_id = gsk_sl_expression_write_spv (member->expr, writer);
-  result_id = gsk_spv_writer_next_id (writer);
 
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      5, GSK_SPV_OP_ACCESS_CHAIN,
-                      (guint32[4]) { type_id,
-                                     result_id,
-                                     expr_id,
-                                     member->id });
-
-  return result_id;
+  return gsk_spv_writer_composite_extract (writer,
+                                           gsk_sl_type_get_member_type (type, member->id),
+                                           gsk_sl_expression_write_spv (member->expr, writer),
+                                           (guint32[1]) { member->id },
+                                           1);
 }
 
 static const GskSlExpressionClass GSK_SL_EXPRESSION_MEMBER = {
@@ -2271,7 +2034,7 @@ gsk_sl_expression_swizzle_write_spv (const GskSlExpression *expression,
 {
   const GskSlExpressionSwizzle *swizzle = (const GskSlExpressionSwizzle *) expression;
   GskSlType *type;
-  guint32 expr_id, type_id, result_id;
+  guint32 expr_id;
 
   type = gsk_sl_expression_get_return_type (swizzle->expr);
   expr_id = gsk_sl_expression_write_spv (swizzle->expr, writer);
@@ -2281,51 +2044,35 @@ gsk_sl_expression_swizzle_write_spv (const GskSlExpression *expression,
       if (swizzle->length == 1)
         return expr_id;
 
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_expression_get_return_type (expression));
-      result_id = gsk_spv_writer_next_id (writer);
-
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          3 + swizzle->length, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                          (guint32[6]) { type_id,
-                                         result_id,
-                                         expr_id,
-                                         expr_id,
-                                         expr_id,
-                                         expr_id });
-
-      return result_id;
+      return gsk_spv_writer_composite_construct (writer,
+                                                 gsk_sl_expression_get_return_type (expression),
+                                                 (guint32[4]) { expr_id, expr_id, expr_id, expr_id },
+                                                 swizzle->length);
     }
   else if (gsk_sl_type_is_vector (type))
     {
-      type_id = gsk_spv_writer_get_id_for_type (writer, gsk_sl_expression_get_return_type (expression));
-      result_id = gsk_spv_writer_next_id (writer);
-
       if (swizzle->length == 1)
         {
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              4, GSK_SPV_OP_COMPOSITE_EXTRACT,
-                              (guint32[6]) { type_id,
-                                             result_id,
-                                             swizzle->indexes[0] });
+          return gsk_spv_writer_composite_extract (writer,
+                                                   type,
+                                                   expr_id,
+                                                   (guint32[1]) { swizzle->indexes[0] },
+                                                   1);
         }
       else
         {
-          gsk_spv_writer_add (writer,
-                              GSK_SPV_WRITER_SECTION_CODE,
-                              5 + swizzle->length, GSK_SPV_OP_COMPOSITE_CONSTRUCT,
-                              (guint32[8]) { type_id,
-                                             result_id,
-                                             expr_id,
-                                             expr_id,
-                                             swizzle->indexes[0],
-                                             swizzle->indexes[1],
-                                             swizzle->indexes[2],
-                                             swizzle->indexes[3] });
+          return gsk_spv_writer_vector_shuffle (writer,
+                                                type,
+                                                expr_id,
+                                                expr_id,
+                                                (guint32[4]) {
+                                                    swizzle->indexes[0],
+                                                    swizzle->indexes[1],
+                                                    swizzle->indexes[2],
+                                                    swizzle->indexes[3]
+                                                },
+                                                swizzle->length);
         }
-
-      return result_id;
     }
   else
     {
@@ -2432,42 +2179,28 @@ gsk_sl_expression_negation_write_spv (const GskSlExpression *expression,
                                       GskSpvWriter          *writer)
 {
   const GskSlExpressionNegation *negation = (const GskSlExpressionNegation *) expression;
-  guint type_id, expr_id, result_id;
-  GskSlType *type;
-
-  type = gsk_sl_expression_get_return_type (negation->expr);
-  type_id = gsk_spv_writer_get_id_for_type (writer, type);
-  expr_id = gsk_sl_expression_write_spv (negation->expr, writer);
-  result_id = gsk_spv_writer_next_id (writer);
+  GskSlType *type = gsk_sl_expression_get_return_type (negation->expr);
 
   switch (gsk_sl_type_get_scalar_type (type))
     {
     case GSK_SL_INT:
     case GSK_SL_UINT:
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          4, GSK_SPV_OP_S_NEGATE,
-                          (guint32[3]) { type_id,
-                                         result_id,
-                                         expr_id });
-      break;
+      return gsk_spv_writer_s_negate (writer,
+                                      type,
+                                      gsk_sl_expression_write_spv (negation->expr, writer));
+
     case GSK_SL_FLOAT:
     case GSK_SL_DOUBLE:
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          4, GSK_SPV_OP_F_NEGATE,
-                          (guint32[3]) { type_id,
-                                         result_id,
-                                         expr_id });
-      break;
+      return gsk_spv_writer_f_negate (writer,
+                                      type,
+                                      gsk_sl_expression_write_spv (negation->expr, writer));
+
     case GSK_SL_VOID:
     case GSK_SL_BOOL:
     default:
       g_assert_not_reached ();
-      break;
+      return 0;
     }
-
-  return result_id;
 }
 
 static const GskSlExpressionClass GSK_SL_EXPRESSION_NEGATION = {

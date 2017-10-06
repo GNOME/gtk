@@ -307,7 +307,7 @@ gsk_sl_function_declared_get_argument_type (const GskSlFunction *function,
 {
   const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
 
-  return gsk_sl_pointer_type_get_type (gsk_sl_variable_get_type (declared->arguments[i]));
+  return gsk_sl_variable_get_type (declared->arguments[i]);
 }
 
 static GskSlValue *
@@ -356,7 +356,8 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
                                     GskSpvWriter        *writer)
 {
   GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
-  guint32 return_type_id, function_type_id, function_id, label_id;
+  guint32 return_type_id, function_type_id, function_id;
+  guint32 argument_types[declared->n_arguments];
   gsize i;
 
   if (declared->statement == NULL)
@@ -364,24 +365,16 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
 
   /* declare type of function */
   return_type_id = gsk_spv_writer_get_id_for_type (writer, declared->return_type);
-  function_type_id = gsk_spv_writer_next_id (writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_DECLARE,
-                      3, GSK_SPV_OP_TYPE_FUNCTION,
-                      (guint32[2]) { function_type_id,
-                                     return_type_id });
+  for (i = 0; i < declared->n_arguments; i++)
+    {
+      argument_types[i] = gsk_spv_writer_get_id_for_type (writer, gsk_sl_variable_get_type (declared->arguments[i]));
+    }
+  function_type_id = gsk_spv_writer_type_function (writer, return_type_id, argument_types, declared->n_arguments);
 
   /* add debug info */
   /* FIXME */
 
-  function_id = gsk_spv_writer_next_id (writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      5, GSK_SPV_OP_FUNCTION,
-                      (guint32[4]) { return_type_id,
-                                     function_id,
-                                     0,
-                                     function_type_id });
+  function_id = gsk_spv_writer_function (writer, declared->return_type, 0, function_type_id);
   /* add function header */
   for (i = 0; i < declared->n_arguments; i++)
     {
@@ -389,26 +382,15 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
     }
 
   /* add function body */
-  label_id = gsk_spv_writer_next_id (writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      2, GSK_SPV_OP_LABEL,
-                      (guint32[1]) { label_id });
+  gsk_spv_writer_label (writer);
 
   gsk_sl_statement_write_spv (declared->statement, writer);
 
   if (gsk_sl_type_is_void (declared->return_type) &&
       gsk_sl_statement_get_jump (declared->statement) < GSK_SL_JUMP_RETURN)
-    {
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          1, GSK_SPV_OP_RETURN,
-                          NULL);
-    }
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      1, GSK_SPV_OP_FUNCTION_END,
-                      NULL);
+    gsk_spv_writer_return (writer);
+
+  gsk_spv_writer_function_end (writer);
 
   return function_id;
 }

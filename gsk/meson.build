@@ -62,6 +62,11 @@ gsk_public_headers = files([
   'gsktypes.h',
 ])
 
+gsk_private_headers = files([
+  'gskspvenumsprivate.h',
+  'gskspvwritergeneratedprivate.h'
+])
+
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
 
 gsk_private_vulkan_shaders = []
