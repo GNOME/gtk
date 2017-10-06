@@ -1056,16 +1056,14 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
       switch (event_type)
 	{
 	case GDK_BUTTON_PRESS:
-	case GDK_MOTION_NOTIFY:
 	case GDK_BUTTON_RELEASE:
-	case GDK_ENTER_NOTIFY:
-	case GDK_LEAVE_NOTIFY:
-	  return TRUE;
+          return GDK_EVENT_STOP;
 	default:
-	  return FALSE;
+          return GDK_EVENT_PROPAGATE;
 	}
     }
-  return FALSE;
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 
