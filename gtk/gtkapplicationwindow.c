@@ -982,6 +982,7 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
       g_signal_connect (action, "activate", G_CALLBACK (show_help_overlay), window);
 
       g_action_map_add_action (G_ACTION_MAP (window->priv->actions), G_ACTION (action));
+      g_object_unref (G_OBJECT (action));
     }
 }
 
