@@ -6883,6 +6883,7 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
         case SAVE_ENTRY:
           goto save_entry;
 
+        case NOT_REACHED: 
         default:
           g_assert_not_reached ();
         }

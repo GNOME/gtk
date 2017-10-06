@@ -47,8 +47,9 @@ get_vertex_type_name (int type)
       return "geometry";
     case GL_FRAGMENT_SHADER:
       return "fragment";
+    default:
+      return "unknown";
     }
-  return "unknown";
 }
 
 static guint

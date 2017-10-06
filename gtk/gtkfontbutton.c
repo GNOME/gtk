@@ -1239,6 +1239,8 @@ pango_font_description_to_css (PangoFontDescription *desc)
         case PANGO_STYLE_ITALIC:
           g_string_append (s, "font-style: italic; ");
           break;
+        default:
+          break;
         }
     }
   if (set & PANGO_FONT_MASK_VARIANT)
@@ -1250,6 +1252,8 @@ pango_font_description_to_css (PangoFontDescription *desc)
           break;
         case PANGO_VARIANT_SMALL_CAPS:
           g_string_append (s, "font-variant: small-caps; ");
+          break;
+        default:
           break;
         }
     }
@@ -1287,6 +1291,8 @@ pango_font_description_to_css (PangoFontDescription *desc)
         case PANGO_WEIGHT_ULTRAHEAVY:
           g_string_append (s, "font-weight: 900; ");
           break;
+        default:
+          break;
         }
     }
   if (set & PANGO_FONT_MASK_STRETCH)
@@ -1319,6 +1325,8 @@ pango_font_description_to_css (PangoFontDescription *desc)
           break;
         case PANGO_STRETCH_ULTRA_EXPANDED:
           g_string_append (s, "font-stretch: ultra-expanded; ");
+          break;
+        default:
           break;
         }
     }

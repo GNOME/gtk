@@ -447,6 +447,7 @@ gdk_frame_clock_paint_idle (void *data)
             }
           /* fallthrough */
         case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
+        default:
           ;
         }
     }

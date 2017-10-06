@@ -5153,6 +5153,9 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
             case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
               gtk_style_context_add_class (context, "into");
               break;
+
+            default:
+              break;
             }
 
           _gtk_tree_view_find_node (tree_view, drag_dest_path, &drag_tree, &drag_node);
@@ -5586,9 +5589,11 @@ gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 	else
 	  return (GtkTreeViewColumn *)0x1;
 	break;
-    }
 
-  return (GtkTreeViewColumn *)0x1;
+      default:
+        return (GtkTreeViewColumn *)0x1;
+        break;
+    }
 }
 
 static gboolean
@@ -8541,6 +8546,11 @@ gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
     case GTK_MOVEMENT_BUFFER_ENDS:
       gtk_tree_view_move_cursor_start_end (tree_view, count);
       break;
+    case GTK_MOVEMENT_WORDS:
+    case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+    case GTK_MOVEMENT_PARAGRAPHS:
+    case GTK_MOVEMENT_PARAGRAPH_ENDS:
+    case GTK_MOVEMENT_HORIZONTAL_PAGES:
     default:
       g_assert_not_reached ();
     }

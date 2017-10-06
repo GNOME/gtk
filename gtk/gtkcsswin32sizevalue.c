@@ -145,6 +145,10 @@ gtk_css_value_win32_size_equal (const GtkCssValue *value1,
       return value1->val.part.part == value2->val.part.part
           && value1->val.part.state == value2->val.part.state;
 
+    case GTK_WIN32_PART_BORDER_TOP:
+    case GTK_WIN32_PART_BORDER_RIGHT:
+    case GTK_WIN32_PART_BORDER_BOTTOM:
+    case GTK_WIN32_PART_BORDER_LEFT:
     default:
       g_assert_not_reached ();
       return FALSE;

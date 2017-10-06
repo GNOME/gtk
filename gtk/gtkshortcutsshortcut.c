@@ -240,7 +240,9 @@ update_icon_from_type (GtkShortcutsShortcut *self)
       icon = g_themed_icon_new ("gesture-swipe-right-symbolic");
       break;
 
-    default: ;
+    case GTK_SHORTCUT_ACCELERATOR:
+    case GTK_SHORTCUT_GESTURE:
+    default:
       icon = NULL;
       break;
     }

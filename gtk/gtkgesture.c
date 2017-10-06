@@ -1664,7 +1664,7 @@ _gtk_gesture_get_pointer_emulating_sequence (GtkGesture        *gesture,
 
   while (g_hash_table_iter_next (&iter, (gpointer*) &seq, (gpointer*) &data))
     {
-      switch (gdk_event_get_event_type (data->event))
+      switch ((guint) gdk_event_get_event_type (data->event))
         {
         case GDK_TOUCH_BEGIN:
         case GDK_TOUCH_UPDATE:

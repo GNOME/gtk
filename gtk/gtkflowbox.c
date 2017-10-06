@@ -1371,6 +1371,7 @@ get_offset_pixels (GtkAlign align,
   case GTK_ALIGN_END:
     offset = pixels;
     break;
+  case GTK_ALIGN_BASELINE:
   default:
     g_assert_not_reached ();
     break;
@@ -2486,8 +2487,21 @@ autoscroll_cb (GtkWidget     *widget,
     case GTK_SCROLL_PAGE_BACKWARD:
       factor = - AUTOSCROLL_FACTOR_FAST;
       break;
+    case GTK_SCROLL_NONE:
+    case GTK_SCROLL_JUMP:
+    case GTK_SCROLL_STEP_UP:
+    case GTK_SCROLL_STEP_DOWN:
+    case GTK_SCROLL_STEP_LEFT:
+    case GTK_SCROLL_STEP_RIGHT:
+    case GTK_SCROLL_PAGE_UP:
+    case GTK_SCROLL_PAGE_DOWN:
+    case GTK_SCROLL_PAGE_LEFT:
+    case GTK_SCROLL_PAGE_RIGHT:
+    case GTK_SCROLL_START:
+    case GTK_SCROLL_END:
     default:
       g_assert_not_reached ();
+      break;
     }
 
   increment = gtk_adjustment_get_step_increment (adjustment) / factor;
@@ -3058,7 +3072,7 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
 
   if (vertical)
     {
-       switch (step)
+       switch ((guint) step)
          {
          case GTK_MOVEMENT_VISUAL_POSITIONS:
            step = GTK_MOVEMENT_DISPLAY_LINES;
@@ -3066,12 +3080,13 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
          case GTK_MOVEMENT_DISPLAY_LINES:
            step = GTK_MOVEMENT_VISUAL_POSITIONS;
            break;
-         default: ;
+         default:
+           break;
          }
     }
 
   child = NULL;
-  switch (step)
+  switch ((guint) step)
     {
     case GTK_MOVEMENT_VISUAL_POSITIONS:
       if (priv->cursor_child != NULL)

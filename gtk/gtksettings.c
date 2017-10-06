@@ -1402,6 +1402,9 @@ gtk_settings_notify (GObject    *object,
     case PROP_CURSOR_THEME_SIZE:
       settings_update_cursor_theme (settings);
       break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 

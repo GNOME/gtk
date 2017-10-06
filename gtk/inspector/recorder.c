@@ -502,7 +502,16 @@ populate_render_node_properties (GtkListStore  *store,
       }
       break;
 
-    default: ;
+    case GSK_NOT_A_RENDER_NODE:
+    case GSK_CONTAINER_NODE:
+    case GSK_TRANSFORM_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_SHADOW_NODE:
+    default:
+      break;
     }
 }
 

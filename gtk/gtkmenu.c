@@ -1128,7 +1128,7 @@ gtk_menu_window_event (GtkWidget *window,
   g_object_ref (window);
   g_object_ref (menu);
 
-  switch (gdk_event_get_event_type (event))
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_WINDOW_STATE:
       /* Window for the menu has been closed by the display server or by GDK.
@@ -3609,7 +3609,7 @@ gtk_menu_captured_event (GtkWidget *widget,
   source_device = gdk_event_get_source_device (event);
   gdk_event_get_root_coords (event, &x_root, &y_root);
 
-  switch (gdk_event_get_event_type (event))
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_TOUCH_BEGIN:
     case GDK_BUTTON_PRESS:
@@ -4035,10 +4035,10 @@ get_horizontally_flipped_anchor (GdkGravity anchor)
       return GDK_GRAVITY_SOUTH;
     case GDK_GRAVITY_SOUTH_EAST:
       return GDK_GRAVITY_SOUTH_WEST;
+    default:
+      g_warning ("unknown GdkGravity: %d", anchor);
+      return anchor;
     }
-
-  g_warning ("unknown GdkGravity: %d", anchor);
-  return anchor;
 }
 
 static void
@@ -4450,7 +4450,10 @@ gtk_menu_move_current (GtkMenuShell         *menu_shell,
         case GTK_MENU_DIR_PARENT:
           direction = GTK_MENU_DIR_CHILD;
           break;
-        default: ;
+        case GTK_MENU_DIR_NEXT:
+        case GTK_MENU_DIR_PREV:
+        default:
+          break;
         }
     }
 
@@ -4634,7 +4637,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
   gint end_position = get_menu_height (menu);
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
 
-  switch (type)
+  switch ((guint) type)
     {
     case GTK_SCROLL_PAGE_UP:
     case GTK_SCROLL_PAGE_DOWN:

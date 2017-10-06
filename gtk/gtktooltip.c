@@ -1442,7 +1442,7 @@ gtk_tooltip_handle_event_internal (GdkEventType  event_type,
       return;
     }
 
-  switch (event_type)
+  switch ((guint) event_type)
     {
       case GDK_BUTTON_PRESS:
       case GDK_KEY_PRESS:

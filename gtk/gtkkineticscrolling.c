@@ -208,6 +208,7 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
       }
 
     case GTK_KINETIC_SCROLLING_PHASE_FINISHED:
+    default:
       break;
     }
 

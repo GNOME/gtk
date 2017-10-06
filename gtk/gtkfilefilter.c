@@ -710,6 +710,8 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter)
 	      }
 	    break;
 	  }
+        default:
+          break;
 	}
     }
 
@@ -804,6 +806,9 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 	  if (rule->u.custom.func (filter_info, rule->u.custom.data))
 	    return TRUE;
 	  break;
+
+        default:
+          break;
 	}
     }
 

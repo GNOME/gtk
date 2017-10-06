@@ -501,6 +501,8 @@ pattern_value_print (const GValue *value,
       break;
     case CAIRO_PATTERN_TYPE_LINEAR:
     case CAIRO_PATTERN_TYPE_RADIAL:
+    case CAIRO_PATTERN_TYPE_MESH:
+    case CAIRO_PATTERN_TYPE_RASTER_SOURCE:
       g_string_append (string, "none /* FIXME: add support for printing gradients */");
       break;
     case CAIRO_PATTERN_TYPE_SOLID:

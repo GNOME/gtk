@@ -270,6 +270,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
         case GDK_SCROLL_RIGHT:
           dx += 1;
           break;
+        case GDK_SCROLL_SMOOTH:
         default:
           g_assert_not_reached ();
           break;

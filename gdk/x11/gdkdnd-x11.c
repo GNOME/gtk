@@ -1978,6 +1978,11 @@ gdk_drag_do_leave (GdkX11DragContext *context_x11,
           xdnd_send_leave (context_x11);
           break;
         case GDK_DRAG_PROTO_ROOTWIN:
+        case GDK_DRAG_PROTO_MOTIF:
+        case GDK_DRAG_PROTO_WIN32_DROPFILES:
+        case GDK_DRAG_PROTO_OLE2:
+        case GDK_DRAG_PROTO_LOCAL:
+        case GDK_DRAG_PROTO_WAYLAND:
         case GDK_DRAG_PROTO_NONE:
         default:
           break;
@@ -2277,6 +2282,11 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
               break;
 
             case GDK_DRAG_PROTO_ROOTWIN:
+            case GDK_DRAG_PROTO_MOTIF:
+            case GDK_DRAG_PROTO_WIN32_DROPFILES:
+            case GDK_DRAG_PROTO_OLE2:
+            case GDK_DRAG_PROTO_LOCAL:
+            case GDK_DRAG_PROTO_WAYLAND:
             case GDK_DRAG_PROTO_NONE:
             default:
               break;
@@ -2360,8 +2370,13 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
                 gdk_event_free (temp_event);
               }
               break;
+            case GDK_DRAG_PROTO_MOTIF:
+            case GDK_DRAG_PROTO_WIN32_DROPFILES:
+            case GDK_DRAG_PROTO_OLE2:
+            case GDK_DRAG_PROTO_LOCAL:
+            case GDK_DRAG_PROTO_WAYLAND:
             case GDK_DRAG_PROTO_NONE:
-              g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_motion()");
+              g_warning ("Invalid drag protocol %u in gdk_drag_motion()", context->protocol);
               break;
             default:
               break;
@@ -2401,7 +2416,13 @@ gdk_x11_drag_context_drag_drop (GdkDragContext *context,
         case GDK_DRAG_PROTO_NONE:
           g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_drop()");
           break;
+        case GDK_DRAG_PROTO_MOTIF:
+        case GDK_DRAG_PROTO_WIN32_DROPFILES:
+        case GDK_DRAG_PROTO_OLE2:
+        case GDK_DRAG_PROTO_LOCAL:
+        case GDK_DRAG_PROTO_WAYLAND:
         default:
+          g_warning ("Drag protocol %u is not valid in gdk_drag_drop()", context->protocol);
           break;
         }
     }
@@ -3014,6 +3035,9 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
         case GDK_KEY_KP_Right:
           dx = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
           break;
+
+        default:
+          break;
         }
     }
 
@@ -3130,7 +3154,7 @@ gdk_x11_drag_context_handle_event (GdkDragContext *context,
   if (!x11_context->grab_seat && event->type != GDK_DROP_FINISHED)
     return FALSE;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_MOTION_NOTIFY:
       return gdk_dnd_handle_motion_event (context, &event->motion);

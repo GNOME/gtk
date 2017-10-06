@@ -712,9 +712,23 @@ get_simple_transition_type (gboolean               new_child_first,
       return new_child_first ? GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT : GTK_STACK_TRANSITION_TYPE_OVER_LEFT;
     case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT:
       return new_child_first ? GTK_STACK_TRANSITION_TYPE_UNDER_LEFT : GTK_STACK_TRANSITION_TYPE_OVER_RIGHT;
-    default: ;
+    case GTK_STACK_TRANSITION_TYPE_SLIDE_UP:
+    case GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN:
+    case GTK_STACK_TRANSITION_TYPE_OVER_UP:
+    case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
+    case GTK_STACK_TRANSITION_TYPE_UNDER_UP:
+    case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
+    case GTK_STACK_TRANSITION_TYPE_NONE:
+    case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
+    case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
+    case GTK_STACK_TRANSITION_TYPE_OVER_LEFT:
+    case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT:
+    case GTK_STACK_TRANSITION_TYPE_UNDER_LEFT:
+    case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
+    case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
+    default:
+      return transition_type;
     }
-  return transition_type;
 }
 
 static gint
@@ -858,11 +872,28 @@ effective_transition_type (GtkStack               *stack,
           return GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT;
         case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
           return GTK_STACK_TRANSITION_TYPE_UNDER_LEFT;
-        default: ;
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_UP:
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN:
+        case GTK_STACK_TRANSITION_TYPE_OVER_UP:
+        case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
+        case GTK_STACK_TRANSITION_TYPE_UNDER_UP:
+        case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
+        case GTK_STACK_TRANSITION_TYPE_NONE:
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT:
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN:
+        case GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN:
+        case GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP:
+        case GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT:
+        case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT:
+        case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
+        default:
+          return transition_type;
         }
     }
-
-  return transition_type;
+  else
+    {
+      return transition_type;
+    }
 }
 
 static void
@@ -1847,7 +1878,7 @@ gtk_stack_snapshot_under (GtkWidget   *widget,
 
   pos_x = pos_y = 0;
 
-  switch (priv->active_transition_type)
+  switch ((guint) priv->active_transition_type)
     {
     case GTK_STACK_TRANSITION_TYPE_UNDER_DOWN:
       y = 0;
@@ -1913,7 +1944,7 @@ gtk_stack_snapshot_slide (GtkWidget   *widget,
       x = get_bin_window_x (stack);
       y = get_bin_window_y (stack);
 
-      switch (priv->active_transition_type)
+      switch ((guint) priv->active_transition_type)
         {
         case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
           x -= width;
@@ -2015,6 +2046,13 @@ gtk_stack_snapshot (GtkWidget   *widget,
             case GTK_STACK_TRANSITION_TYPE_UNDER_RIGHT:
 	      gtk_stack_snapshot_under (widget, snapshot);
               break;
+            case GTK_STACK_TRANSITION_TYPE_NONE:
+            case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT:
+            case GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN:
+            case GTK_STACK_TRANSITION_TYPE_OVER_UP_DOWN:
+            case GTK_STACK_TRANSITION_TYPE_OVER_DOWN_UP:
+            case GTK_STACK_TRANSITION_TYPE_OVER_LEFT_RIGHT:
+            case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT_LEFT:
             default:
               g_assert_not_reached ();
             }

@@ -124,6 +124,9 @@ effective_align (GtkAlign         align,
       return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_END : GTK_ALIGN_START;
     case GTK_ALIGN_END:
       return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_START : GTK_ALIGN_END;
+    case GTK_ALIGN_FILL:
+    case GTK_ALIGN_CENTER:
+    case GTK_ALIGN_BASELINE:
     default:
       return align;
     }

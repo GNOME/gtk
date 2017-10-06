@@ -1904,6 +1904,10 @@ gtk_list_box_focus (GtkWidget        *widget,
           if (next_focus_row == NULL)
             next_focus_row = gtk_list_box_get_last_focusable (box);
           break;
+        case GTK_DIR_DOWN:
+        case GTK_DIR_TAB_FORWARD:
+        case GTK_DIR_LEFT:
+        case GTK_DIR_RIGHT:
         default:
           next_focus_row = priv->selected_row;
           if (next_focus_row == NULL)
@@ -2722,7 +2726,7 @@ gtk_list_box_move_cursor (GtkListBox      *box,
   int height;
 
   row = NULL;
-  switch (step)
+  switch ((guint) step)
     {
     case GTK_MOVEMENT_BUFFER_ENDS:
       if (count < 0)

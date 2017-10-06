@@ -2593,11 +2593,10 @@ _gtk_container_focus_sort (GtkContainer     *container,
     case GTK_DIR_LEFT:
     case GTK_DIR_RIGHT:
       return gtk_container_focus_sort_left_right (container, visible_children, direction, old_focus);
+    default:
+      g_assert_not_reached ();
+      return NULL;
     }
-
-  g_assert_not_reached ();
-
-  return NULL;
 }
 
 static gboolean

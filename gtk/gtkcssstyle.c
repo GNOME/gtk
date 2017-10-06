@@ -286,7 +286,9 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     case GTK_CSS_FONT_KERNING_NONE:
       append_separated (s, "kern 0");
       break;
-    default: ;
+    case GTK_CSS_FONT_KERNING_AUTO:
+    default:
+      break;
     }
 
   value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES);
@@ -326,7 +328,9 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     case GTK_CSS_FONT_VARIANT_POSITION_SUPER:
       append_separated (s, "sups 1");
       break;
-    default: ;
+    case GTK_CSS_FONT_VARIANT_POSITION_NORMAL:
+    default:
+      break;
     }
 
   value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_CAPS);
@@ -349,8 +353,10 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
       break;
     case GTK_CSS_FONT_VARIANT_CAPS_TITLING_CAPS:
       append_separated (s, "titl 1");
-    break;
-    default: ;
+      break;
+    case GTK_CSS_FONT_VARIANT_CAPS_NORMAL:
+    default:
+      break;
     }
 
   value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC);
@@ -385,7 +391,9 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     case GTK_CSS_FONT_VARIANT_ALTERNATE_HISTORICAL_FORMS:
       append_separated (s, "hist 1");
       break;
-    default: ;
+    case GTK_CSS_FONT_VARIANT_ALTERNATE_NORMAL:
+    default:
+      break;
     }
 
   value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN);

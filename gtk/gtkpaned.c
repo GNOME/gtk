@@ -2346,6 +2346,8 @@ gtk_paned_move_handle (GtkPaned      *paned,
 	  new_position = priv->max_position;
 	  break;
 
+	case GTK_SCROLL_NONE:
+	case GTK_SCROLL_JUMP:
 	default:
 	  break;
 	}

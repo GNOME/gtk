@@ -648,6 +648,14 @@ combo_changed_cb (GtkWidget              *combo,
         case GTK_PRINTER_OPTION_TYPE_PICKONE_REAL:
           filtered_val = filter_numeric (value, TRUE, TRUE, &changed);
           break;
+        case GTK_PRINTER_OPTION_TYPE_BOOLEAN:
+        case GTK_PRINTER_OPTION_TYPE_PICKONE:
+        case GTK_PRINTER_OPTION_TYPE_PICKONE_PASSWORD:
+        case GTK_PRINTER_OPTION_TYPE_PICKONE_STRING:
+        case GTK_PRINTER_OPTION_TYPE_ALTERNATIVE:
+        case GTK_PRINTER_OPTION_TYPE_STRING:
+        case GTK_PRINTER_OPTION_TYPE_FILESAVE:
+        case GTK_PRINTER_OPTION_TYPE_INFO:
         default:
           break;
         }

@@ -248,7 +248,7 @@ gtk_pad_controller_handle_event (GtkEventController *controller,
       return GDK_EVENT_PROPAGATE;
     }
 
-  switch (event_type)
+  switch ((guint) event_type)
     {
     case GDK_PAD_BUTTON_PRESS:
       type = GTK_PAD_ACTION_BUTTON;

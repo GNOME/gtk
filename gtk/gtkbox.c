@@ -576,6 +576,8 @@ gtk_box_size_allocate (GtkWidget           *widget,
 	case GTK_BASELINE_POSITION_BOTTOM:
 	  baseline = height - minimum_below;
 	  break;
+        default:
+          break;
 	}
     }
 
@@ -1025,6 +1027,8 @@ gtk_box_get_size (GtkWidget      *widget,
 	  min_baseline = minimum - minimum_below;
 	  nat_baseline = natural - natural_below;
 	  break;
+        default:
+          break;
 	}
     }
 
@@ -1227,6 +1231,8 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 	  computed_minimum_baseline = computed_minimum - computed_minimum_below;
 	  computed_natural_baseline = computed_natural - computed_natural_below;
 	  break;
+        default:
+          break;
 	}
     }
 

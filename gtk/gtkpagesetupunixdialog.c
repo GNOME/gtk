@@ -936,6 +936,8 @@ set_orientation (GtkPageSetupUnixDialog *dialog,
     case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->reverse_landscape_radio), TRUE);
       break;
+    default:
+      break;
     }
 }
 

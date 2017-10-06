@@ -2872,6 +2872,8 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
     case GTK_SCROLL_START:
     case GTK_SCROLL_END:
       break;
+    case GTK_SCROLL_NONE:
+    case GTK_SCROLL_JUMP:
     default:
       g_warning ("Invalid scroll type %u for GtkScrolledWindow::scroll-child", scroll);
       return FALSE;
@@ -2916,6 +2918,16 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
 	case GTK_SCROLL_END:
 	  value = gtk_adjustment_get_upper (adjustment);
 	  break;
+        case GTK_SCROLL_STEP_UP:
+        case GTK_SCROLL_STEP_DOWN:
+        case GTK_SCROLL_STEP_LEFT:
+        case GTK_SCROLL_STEP_RIGHT:
+        case GTK_SCROLL_PAGE_UP:
+        case GTK_SCROLL_PAGE_DOWN:
+        case GTK_SCROLL_PAGE_LEFT:
+        case GTK_SCROLL_PAGE_RIGHT:
+        case GTK_SCROLL_NONE:
+        case GTK_SCROLL_JUMP:
 	default:
 	  g_assert_not_reached ();
 	  break;

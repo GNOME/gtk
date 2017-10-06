@@ -508,6 +508,11 @@ update_direction (GdkWaylandKeymap *keymap)
                  case PANGO_DIRECTION_LTR:
                    rtl[layout]--;
                    break;
+                 case PANGO_DIRECTION_TTB_LTR:
+                 case PANGO_DIRECTION_TTB_RTL:
+                 case PANGO_DIRECTION_WEAK_LTR:
+                 case PANGO_DIRECTION_WEAK_RTL:
+                 case PANGO_DIRECTION_NEUTRAL:
                  default:
                    break;
                  }

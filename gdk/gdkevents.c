@@ -520,7 +520,7 @@ gdk_event_new (GdkEventType type)
    * since I trust bytewise 0 == 0. less than for integers
    * or pointers.
    */
-  switch (type)
+  switch ((guint) type)
     {
     case GDK_MOTION_NOTIFY:
       new_event->motion.x = 0.;
@@ -666,7 +666,7 @@ gdk_event_copy (const GdkEvent *event)
       g_set_object (&new_private->user_data, private->user_data);
     }
 
-  switch (event->any.type)
+  switch ((guint) event->any.type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -769,7 +769,7 @@ gdk_event_free (GdkEvent *event)
       g_clear_object (&private->user_data);
     }
 
-  switch (event->any.type)
+  switch ((guint) event->any.type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -940,6 +940,7 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
       case GDK_EVENT_LAST:
+      default:
         /* return current time */
         break;
       }
@@ -1031,6 +1032,7 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_PAD_STRIP:
       case GDK_PAD_GROUP_MODE:
       case GDK_EVENT_LAST:
+      default:
         /* no state field */
         break;
       }
@@ -1059,7 +1061,7 @@ gdk_event_get_coords (const GdkEvent *event,
   
   g_return_val_if_fail (event != NULL, FALSE);
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_CONFIGURE:
       x = event->configure.x;
@@ -1131,7 +1133,7 @@ gdk_event_get_root_coords (const GdkEvent *event,
   
   g_return_val_if_fail (event != NULL, FALSE);
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_MOTION_NOTIFY:
       x = event->motion.x_root;
@@ -1195,7 +1197,7 @@ gdk_event_set_coords (GdkEvent *event,
 {
   g_return_if_fail (event != NULL);
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_CONFIGURE:
       event->configure.x = x;
@@ -1259,7 +1261,7 @@ gdk_event_get_button (const GdkEvent *event,
 
   g_return_val_if_fail (event != NULL, FALSE);
   
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
@@ -1300,7 +1302,7 @@ gdk_event_get_click_count (const GdkEvent *event,
 
   g_return_val_if_fail (event != NULL, FALSE);
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
@@ -1335,7 +1337,7 @@ gdk_event_get_keyval (const GdkEvent *event,
   gboolean fetched = TRUE;
   guint number = 0;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1381,7 +1383,7 @@ gdk_event_get_keycode (const GdkEvent *event,
   gboolean fetched = TRUE;
   guint16 number = 0;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1411,7 +1413,7 @@ gdk_event_get_key_group (const GdkEvent *event,
 {
   gboolean fetched = TRUE;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1439,7 +1441,7 @@ gdk_event_get_string (const GdkEvent  *event,
 {
   gboolean fetched = TRUE;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1467,7 +1469,7 @@ gdk_event_get_key_is_modifier (const GdkEvent *event,
 {
   gboolean fetched = TRUE;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1500,7 +1502,7 @@ gdk_event_get_scroll_direction (const GdkEvent *event,
   gboolean fetched = TRUE;
   GdkScrollDirection dir = 0;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_SCROLL:
       if (event->scroll.direction == GDK_SCROLL_SMOOTH)
@@ -1540,7 +1542,7 @@ gdk_event_get_scroll_deltas (const GdkEvent *event,
   gdouble dx = 0.0;
   gdouble dy = 0.0;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_SCROLL:
       if (event->scroll.direction == GDK_SCROLL_SMOOTH)
@@ -1612,7 +1614,7 @@ gdk_event_get_axis (const GdkEvent *event,
     {
       gdouble x, y;
       
-      switch (event->type)
+      switch ((guint) event->type)
 	{
         case GDK_MOTION_NOTIFY:
 	  x = event->motion.x;
@@ -1699,7 +1701,7 @@ gdk_event_set_device (GdkEvent  *event,
 
   g_set_object (&private->device, device);
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_MOTION_NOTIFY:
       event->motion.device = device;
@@ -1750,7 +1752,7 @@ gdk_event_get_device (const GdkEvent *event)
         return private->device;
     }
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_MOTION_NOTIFY:
       return event->motion.device;
@@ -1767,32 +1769,15 @@ gdk_event_get_device (const GdkEvent *event)
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
       return event->proximity.device;
-    default:
-      break;
-    }
-
-  /* Fallback if event has no device set */
-  switch (event->type)
-    {
-    case GDK_MOTION_NOTIFY:
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
     case GDK_FOCUS_CHANGE:
-    case GDK_PROXIMITY_IN:
-    case GDK_PROXIMITY_OUT:
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DRAG_STATUS:
     case GDK_DROP_START:
     case GDK_DROP_FINISHED:
-    case GDK_SCROLL:
     case GDK_GRAB_BROKEN:
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -2255,6 +2240,7 @@ _gdk_set_window_state (GdkWindow      *window,
     case GDK_WINDOW_FOREIGN:
     case GDK_WINDOW_ROOT:
     case GDK_WINDOW_CHILD:
+    default:
       break;
     }
 }

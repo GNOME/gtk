@@ -1753,6 +1753,8 @@ get_axis_source_name (enum wl_pointer_axis_source source)
       return "finger";
     case WL_POINTER_AXIS_SOURCE_CONTINUOUS:
       return "continuous";
+    case WL_POINTER_AXIS_SOURCE_WHEEL_TILT:
+      return "wheel-tilt";
     default:
       return "unknown";
     }
@@ -3288,6 +3290,7 @@ get_scroll_device (GdkWaylandSeat              *seat,
         }
       return seat->continuous_scrolling;
 
+    case WL_POINTER_AXIS_SOURCE_WHEEL_TILT:
     default:
       return seat->pointer;
     }
@@ -3390,6 +3393,8 @@ tablet_tool_handle_capability (void                      *data,
     case ZWP_TABLET_TOOL_V2_CAPABILITY_SLIDER:
       tool->axes |= GDK_AXIS_FLAG_SLIDER;
       break;
+    default:
+      break;
     }
 }
 
@@ -3426,7 +3431,7 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
   if (!event)
     return;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_MOTION_NOTIFY:
       event->motion.time = time;

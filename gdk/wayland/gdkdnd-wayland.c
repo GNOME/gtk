@@ -107,7 +107,7 @@ _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
   GdkWindow *window;
   GdkEvent *event;
 
-  switch (type)
+  switch ((guint) type)
     {
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:

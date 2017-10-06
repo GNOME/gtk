@@ -2797,14 +2797,14 @@ theme_dir_size_difference (IconThemeDir *dir,
     {
     case ICON_THEME_DIR_FIXED:
       return abs (scaled_size - scaled_dir_size);
-      break;
+
     case ICON_THEME_DIR_SCALABLE:
       if (scaled_size < (dir->min_size * dir->scale))
         return (dir->min_size * dir->scale) - scaled_size;
       if (size > (dir->max_size * dir->scale))
         return scaled_size - (dir->max_size * dir->scale);
       return 0;
-      break;
+
     case ICON_THEME_DIR_THRESHOLD:
       min = (dir->size - dir->threshold) * dir->scale;
       max = (dir->size + dir->threshold) * dir->scale;
@@ -2813,13 +2813,12 @@ theme_dir_size_difference (IconThemeDir *dir,
       if (scaled_size > max)
         return scaled_size - max;
       return 0;
-      break;
+
     case ICON_THEME_DIR_UNTHEMED:
+    default:
       g_assert_not_reached ();
-      break;
+      return 1000;
     }
-  g_assert_not_reached ();
-  return 1000;
 }
 
 static const gchar *
@@ -2835,10 +2834,12 @@ string_from_suffix (IconSuffix suffix)
       return ".png";
     case ICON_SUFFIX_SYMBOLIC_PNG:
       return ".symbolic.png";
+    case ICON_SUFFIX_NONE:
+    case HAS_ICON_FILE:
     default:
       g_assert_not_reached();
+      return NULL;
     }
-  return NULL;
 }
 
 static IconSuffix
@@ -3664,6 +3665,8 @@ apply_emblems_to_pixbuf (GdkPixbuf   *pixbuf,
             case 3:
               x = 0;
               y = 0;
+              break;
+            default:
               break;
             }
 

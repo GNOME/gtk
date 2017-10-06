@@ -1180,6 +1180,8 @@ gtk_popover_update_position (GtkPopover *popover)
     case GTK_POS_RIGHT:
       rect.x -= priv->transition_diff;
       break;
+    default:
+      break;
     }
 
   _gtk_window_set_popover_position (priv->window, widget,
@@ -1362,6 +1364,8 @@ gtk_popover_size_allocate (GtkWidget           *widget,
     case GTK_POS_RIGHT:
       child_alloc.x += TAIL_HEIGHT;
       child_alloc.y += TAIL_HEIGHT / 2;
+      break;
+    default:
       break;
     }
 

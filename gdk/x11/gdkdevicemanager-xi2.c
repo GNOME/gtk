@@ -1158,7 +1158,7 @@ translate_axes (GdkDevice       *device,
       use = gdk_device_get_axis_use (device, i);
       val = *vals++;
 
-      switch (use)
+      switch ((guint) use)
         {
         case GDK_AXIS_X:
         case GDK_AXIS_Y:

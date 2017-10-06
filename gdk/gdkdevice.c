@@ -1051,7 +1051,7 @@ gdk_device_set_axis_use (GdkDevice   *device,
   info = &g_array_index (device->axes, GdkAxisInfo, index_);
   info->use = use;
 
-  switch (use)
+  switch ((guint) use)
     {
     case GDK_AXIS_X:
     case GDK_AXIS_Y:
@@ -1574,7 +1574,7 @@ _gdk_device_add_axis (GdkDevice   *device,
   axis_info.max_value = max_value;
   axis_info.resolution = resolution;
 
-  switch (use)
+  switch ((guint) use)
     {
     case GDK_AXIS_X:
     case GDK_AXIS_Y:

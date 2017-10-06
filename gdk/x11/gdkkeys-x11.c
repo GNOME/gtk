@@ -490,6 +490,11 @@ get_direction (XkbDescRec *xkb,
         case PANGO_DIRECTION_LTR:
           rtl_minus_ltr--;
           break;
+        case PANGO_DIRECTION_TTB_LTR:
+        case PANGO_DIRECTION_TTB_RTL:
+        case PANGO_DIRECTION_WEAK_LTR:
+        case PANGO_DIRECTION_WEAK_RTL:
+        case PANGO_DIRECTION_NEUTRAL:
         default:
           break;
         }
@@ -1560,15 +1565,11 @@ gdk_x11_keymap_get_modifier_mask (GdkKeymap         *keymap,
 {
   GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
 
-  switch (intent)
-    {
-    case GDK_MODIFIER_INTENT_SHIFT_GROUP:
-      return keymap_x11->group_switch_mask;
+  if (intent == GDK_MODIFIER_INTENT_SHIFT_GROUP)
+    return keymap_x11->group_switch_mask;
 
-    default:
-      return GDK_KEYMAP_CLASS (gdk_x11_keymap_parent_class)->get_modifier_mask (keymap,
-                                                                                intent);
-    }
+  return GDK_KEYMAP_CLASS (gdk_x11_keymap_parent_class)->get_modifier_mask (keymap,
+                                                                            intent);
 }
 
 static void

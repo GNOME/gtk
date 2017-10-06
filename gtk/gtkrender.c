@@ -682,6 +682,10 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 
   cairo_clip_extents (cr, &x0, &y0, &x1, &y1);

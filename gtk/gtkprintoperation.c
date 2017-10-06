@@ -324,8 +324,9 @@ preview_iface_is_selected (GtkPrintOperationPreview *preview,
 	    return TRUE;
 	}
       return FALSE;
+    default:
+      return FALSE;
     }
-  return FALSE;
 }
 
 static void

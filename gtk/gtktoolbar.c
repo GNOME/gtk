@@ -2337,6 +2337,10 @@ show_menu (GtkToolbar     *toolbar,
                                 (GdkEvent *) event);
 
       break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 

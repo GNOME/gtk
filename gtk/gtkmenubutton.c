@@ -264,6 +264,7 @@ popup_menu (GtkMenuButton *menu_button,
 
       switch (gtk_widget_get_halign (priv->menu))
         {
+        default:
         case GTK_ALIGN_FILL:
         case GTK_ALIGN_START:
         case GTK_ALIGN_BASELINE:
@@ -298,6 +299,7 @@ popup_menu (GtkMenuButton *menu_button,
 
       switch (gtk_widget_get_halign (priv->menu))
         {
+        default:
         case GTK_ALIGN_FILL:
         case GTK_ALIGN_START:
         case GTK_ALIGN_BASELINE:
@@ -327,6 +329,7 @@ popup_menu (GtkMenuButton *menu_button,
 
       switch (gtk_widget_get_valign (priv->menu))
         {
+        default:
         case GTK_ALIGN_FILL:
         case GTK_ALIGN_START:
         case GTK_ALIGN_BASELINE:
@@ -356,6 +359,7 @@ popup_menu (GtkMenuButton *menu_button,
 
       switch (gtk_widget_get_valign (priv->menu))
         {
+        default:
         case GTK_ALIGN_FILL:
         case GTK_ALIGN_START:
         case GTK_ALIGN_BASELINE:
@@ -383,6 +387,9 @@ popup_menu (GtkMenuButton *menu_button,
                                      GDK_ANCHOR_RESIZE),
                     NULL);
 
+      break;
+
+    default:
       break;
     }
 
@@ -592,6 +599,8 @@ set_arrow_type (GtkImage     *image,
       break;
     case GTK_ARROW_RIGHT:
       gtk_image_set_from_icon_name (image, "pan-end-symbolic", GTK_ICON_SIZE_BUTTON);
+      break;
+    default:
       break;
     }
 }
@@ -959,6 +968,8 @@ update_popover_direction (GtkMenuButton *menu_button)
       break;
     case GTK_ARROW_RIGHT:
       gtk_popover_set_position (GTK_POPOVER (priv->popover), GTK_POS_RIGHT);
+      break;
+    default:
       break;
     }
 }

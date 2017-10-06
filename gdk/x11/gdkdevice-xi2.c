@@ -233,7 +233,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
           value = ((XIValuatorClassInfo *) class_info)->value;
           use = gdk_device_get_axis_use (device, j);
 
-          switch (use)
+          switch ((guint) use)
             {
             case GDK_AXIS_X:
             case GDK_AXIS_Y:

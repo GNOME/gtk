@@ -647,6 +647,7 @@ gtk_button_box_size_request (GtkWidget      *widget,
 
   switch (gtk_box_get_baseline_position (GTK_BOX (widget)))
     {
+    default:
     case GTK_BASELINE_POSITION_TOP:
       break;
     case GTK_BASELINE_POSITION_CENTER:
@@ -800,6 +801,7 @@ gtk_button_box_size_allocate (GtkWidget           *widget,
       switch (gtk_box_get_baseline_position (GTK_BOX (widget)))
 	{
 	case GTK_BASELINE_POSITION_TOP:
+        default:
           /* keep baseline as is */
 	  break;
 	case GTK_BASELINE_POSITION_CENTER:
@@ -973,6 +975,7 @@ gtk_button_box_size_allocate (GtkWidget           *widget,
 
         break;
 
+      case GTK_BUTTONBOX_EXPAND:
       default:
         g_assert_not_reached ();
         break;

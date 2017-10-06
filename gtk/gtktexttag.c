@@ -1044,9 +1044,9 @@ get_property_font_set_mask (guint prop_id)
       return PANGO_FONT_MASK_STRETCH;
     case PROP_SIZE_SET:
       return PANGO_FONT_MASK_SIZE;
+    default:
+      return 0;
     }
-
-  return 0;
 }
 
 static PangoFontMask
@@ -1322,6 +1322,9 @@ gtk_text_tag_set_property (GObject      *object,
 					     g_value_get_double (value) * PANGO_SCALE);
 	    g_object_notify (object, "size");
 	    break;
+
+          default:
+            break;
 	  }
 
 	size_changed = TRUE;
@@ -1708,45 +1711,40 @@ gtk_text_tag_get_property (GObject      *object,
       break;
 
     case PROP_FAMILY:
-    case PROP_STYLE:
-    case PROP_VARIANT:
-    case PROP_WEIGHT:
-    case PROP_STRETCH:
-    case PROP_SIZE:
-    case PROP_SIZE_POINTS:
       gtk_text_tag_ensure_font (tag);
-      switch (prop_id)
-	{
-	case PROP_FAMILY:
-	  g_value_set_string (value, pango_font_description_get_family (priv->values->font));
-	  break;
-	  
-	case PROP_STYLE:
-	  g_value_set_enum (value, pango_font_description_get_style (priv->values->font));
-	  break;
-	  
-	case PROP_VARIANT:
-	  g_value_set_enum (value, pango_font_description_get_variant (priv->values->font));
-	  break;
-	  
-	case PROP_WEIGHT:
-	  g_value_set_int (value, pango_font_description_get_weight (priv->values->font));
-	  break;
-	  
-	case PROP_STRETCH:
-	  g_value_set_enum (value, pango_font_description_get_stretch (priv->values->font));
-	  break;
-	  
-	case PROP_SIZE:
-	  g_value_set_int (value, pango_font_description_get_size (priv->values->font));
-	  break;
-	  
-	case PROP_SIZE_POINTS:
-	  g_value_set_double (value, ((double)pango_font_description_get_size (priv->values->font)) / (double)PANGO_SCALE);
-	  break;
-	}
+      g_value_set_string (value, pango_font_description_get_family (priv->values->font));
       break;
       
+    case PROP_STYLE:
+      gtk_text_tag_ensure_font (tag);
+      g_value_set_enum (value, pango_font_description_get_style (priv->values->font));
+      break;
+      
+    case PROP_VARIANT:
+      gtk_text_tag_ensure_font (tag);
+      g_value_set_enum (value, pango_font_description_get_variant (priv->values->font));
+      break;
+      
+    case PROP_WEIGHT:
+      gtk_text_tag_ensure_font (tag);
+      g_value_set_int (value, pango_font_description_get_weight (priv->values->font));
+      break;
+      
+    case PROP_STRETCH:
+      gtk_text_tag_ensure_font (tag);
+      g_value_set_enum (value, pango_font_description_get_stretch (priv->values->font));
+      break;
+      
+    case PROP_SIZE:
+      gtk_text_tag_ensure_font (tag);
+      g_value_set_int (value, pango_font_description_get_size (priv->values->font));
+      break;
+      
+    case PROP_SIZE_POINTS:
+      gtk_text_tag_ensure_font (tag);
+      g_value_set_double (value, ((double)pango_font_description_get_size (priv->values->font)) / (double)PANGO_SCALE);
+      break;
+  
     case PROP_SCALE:
       g_value_set_double (value, priv->values->font_scale);
       break;

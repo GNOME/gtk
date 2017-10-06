@@ -1053,7 +1053,7 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 
   if (priv->clickable == FALSE)
     {
-      switch (event_type)
+      switch ((guint) event_type)
 	{
 	case GDK_BUTTON_PRESS:
 	case GDK_BUTTON_RELEASE:

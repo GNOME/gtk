@@ -41,6 +41,8 @@ _gtk_css_blend_mode_get_operator (GskBlendMode mode)
       return CAIRO_OPERATOR_EXCLUSION;
     case GSK_BLEND_MODE_HARD_LIGHT:
       return CAIRO_OPERATOR_HARD_LIGHT;
+    case GSK_BLEND_MODE_SOFT_LIGHT:
+      return CAIRO_OPERATOR_SOFT_LIGHT;
     case GSK_BLEND_MODE_HUE:
       return CAIRO_OPERATOR_HSL_HUE;
     case GSK_BLEND_MODE_LIGHTEN:

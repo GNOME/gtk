@@ -768,6 +768,10 @@ _gtk_icon_helper_set_pixbuf_scale (GtkIconHelper *self,
                                                                           scale));
       break;
 
+    case GTK_IMAGE_EMPTY:
+    case GTK_IMAGE_ICON_NAME:
+    case GTK_IMAGE_GICON:
+    case GTK_IMAGE_SURFACE:
     default:
       break;
   }

@@ -784,6 +784,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    g_message ("visibility notify:\twindow: %ld	 full",
 		       xevent->xvisibility.window);
 	    break;
+          default:
+            break;
 	  }
 #endif /* G_ENABLE_DEBUG */
 
@@ -806,6 +808,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	  event->visibility.state = GDK_VISIBILITY_PARTIAL;
 	  break;
 
+        default:
 	case VisibilityUnobscured:
 	  event->visibility.state = GDK_VISIBILITY_UNOBSCURED;
 	  break;
@@ -1217,6 +1220,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    case XkbStateNotify:
 	      _gdk_x11_keymap_state_changed (display, xevent);
 	      break;
+            default:
+              break;
 	    }
 	}
       else
@@ -2363,6 +2368,8 @@ gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
 	    case '\\':
 	      g_string_append_c (message, '\\');
 	      break;
+            default:
+              break;
 	    }
 
 	  g_string_append_c (message, *p);

@@ -1757,7 +1757,8 @@ gtk_icon_view_snapshot (GtkWidget   *widget,
           rect.y = dest_item->cell_area.y;
           rect.width = 2;
           rect.height = dest_item->cell_area.height;
-	case GTK_ICON_VIEW_NO_DROP: ;
+	case GTK_ICON_VIEW_NO_DROP:
+        default:
 	  break;
         }
 
@@ -2590,6 +2591,7 @@ gtk_icon_view_real_toggle_cursor_item (GtkIconView *icon_view)
   switch (icon_view->priv->selection_mode)
     {
     case GTK_SELECTION_NONE:
+    default:
       break;
     case GTK_SELECTION_BROWSE:
       _gtk_icon_view_select_item (icon_view, icon_view->priv->cursor_item);
@@ -3506,8 +3508,14 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
     case GTK_MOVEMENT_BUFFER_ENDS:
       gtk_icon_view_move_cursor_start_end (icon_view, count);
       break;
+    case GTK_MOVEMENT_WORDS:
+    case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+    case GTK_MOVEMENT_PARAGRAPHS:
+    case GTK_MOVEMENT_PARAGRAPH_ENDS:
+    case GTK_MOVEMENT_HORIZONTAL_PAGES:
     default:
       g_assert_not_reached ();
+      break;
     }
 
   icon_view->priv->modify_selection_pressed = FALSE;

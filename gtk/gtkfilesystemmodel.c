@@ -1264,6 +1264,10 @@ gtk_file_system_model_monitor_change (GFileMonitor *      monitor,
         /* FIXME: use freeze/thaw with this somehow? */
       case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
       case G_FILE_MONITOR_EVENT_UNMOUNTED:
+      case G_FILE_MONITOR_EVENT_MOVED:
+      case G_FILE_MONITOR_EVENT_RENAMED:
+      case G_FILE_MONITOR_EVENT_MOVED_IN:
+      case G_FILE_MONITOR_EVENT_MOVED_OUT:
       default:
         /* ignore these */
         break;

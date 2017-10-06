@@ -1384,6 +1384,10 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
   switch (window->window_type)
     {
+    default:
+      g_assert_not_reached ();
+      break;
+
     case GDK_WINDOW_ROOT:
       if (!screen->closed)
 	{
@@ -5626,7 +5630,7 @@ _gdk_make_event (GdkWindow    *window,
   if (event_in_queue && event_in_queue->any.send_event)
     event->any.send_event = TRUE;
 
-  switch (type)
+  switch ((guint) type)
     {
     case GDK_MOTION_NOTIFY:
       event->motion.time = the_time;

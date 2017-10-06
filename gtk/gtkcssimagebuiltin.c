@@ -177,7 +177,7 @@ gtk_css_image_builtin_draw_arrow (GtkCssImage            *image,
   size = MIN (width, height);
 
   cairo_translate (cr, width / 2.0, height / 2.0);
-  switch (image_type)
+  switch ((guint) image_type)
   {
     case GTK_CSS_IMAGE_BUILTIN_ARROW_UP:
       break;

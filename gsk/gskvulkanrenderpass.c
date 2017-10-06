@@ -674,7 +674,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
   cairo_surface_t *surface;
   cairo_t *cr;
 
-  switch (gsk_render_node_get_node_type (node))
+  switch ((guint) gsk_render_node_get_node_type (node))
     {
     case GSK_TEXTURE_NODE:
       if (graphene_rect_equal (bounds, &node->bounds))
@@ -696,7 +696,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
         }
       break;
 
-    default: ;
+    default:
       {
         VkSemaphore semaphore;
         graphene_rect_t view;

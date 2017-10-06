@@ -827,6 +827,9 @@ gtk_recent_filter_filter (GtkRecentFilter           *filter,
           if (rule->u.custom.func (filter_info, rule->u.custom.data))
             return TRUE;
           break;
+        default:
+          g_assert_not_reached ();
+          break;
         }
     }
   

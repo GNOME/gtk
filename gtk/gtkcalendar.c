@@ -2858,6 +2858,8 @@ gtk_calendar_key_press (GtkWidget   *widget,
 
           calendar_select_and_focus_day (calendar, day);
         }
+    default:
+      break;
     }
 
   return return_val;

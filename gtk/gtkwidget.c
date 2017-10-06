@@ -5777,6 +5777,9 @@ effective_align (GtkAlign         align,
       return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_END : GTK_ALIGN_START;
     case GTK_ALIGN_END:
       return direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_START : GTK_ALIGN_END;
+    case GTK_ALIGN_FILL:
+    case GTK_ALIGN_CENTER:
+    case GTK_ALIGN_BASELINE:
     default:
       return align;
     }
@@ -5792,6 +5795,7 @@ adjust_for_align (GtkAlign  align,
     {
     case GTK_ALIGN_BASELINE:
     case GTK_ALIGN_FILL:
+    default:
       /* change nothing */
       break;
     case GTK_ALIGN_START:
@@ -6695,7 +6699,7 @@ event_window_is_still_viewable (const GdkEvent *event)
    * at the last moment, since the event may have been queued
    * up behind other events, held over a recursive main loop, etc.
    */
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_EXPOSE:
     case GDK_MOTION_NOTIFY:
@@ -6762,7 +6766,7 @@ gtk_widget_event_internal (GtkWidget      *widget,
     return TRUE;
 
   /* Non input events get handled right away */
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_VISIBILITY_NOTIFY:
     case GDK_EXPOSE:
@@ -6820,6 +6824,17 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 
       switch (event->type)
 	{
+        case GDK_DRAG_ENTER:
+        case GDK_DRAG_LEAVE:
+        case GDK_DRAG_MOTION:
+        case GDK_DRAG_STATUS:
+        case GDK_DROP_START:
+        case GDK_DROP_FINISHED:
+        case GDK_CLIENT_EVENT:
+        case GDK_SETTING:
+        case GDK_OWNER_CHANGE:
+        case GDK_DAMAGE:
+        case GDK_EVENT_LAST:
         case GDK_TOUCHPAD_SWIPE:
         case GDK_TOUCHPAD_PINCH:
         case GDK_PAD_BUTTON_PRESS:
@@ -7267,6 +7282,7 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
     case GTK_DIR_DOWN:
     case GTK_DIR_LEFT:
     case GTK_DIR_RIGHT:
+    default:
       break;
     }
 

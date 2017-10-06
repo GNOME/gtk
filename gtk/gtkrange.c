@@ -2219,7 +2219,7 @@ autoscroll_cb (GtkWidget     *widget,
   step = gtk_adjustment_get_step_increment (adj);
   page = gtk_adjustment_get_page_increment (adj);
 
-  switch (priv->autoscroll_mode)
+  switch ((guint) priv->autoscroll_mode)
     {
     case GTK_SCROLL_STEP_FORWARD:
       increment = step / AUTOSCROLL_FACTOR;
@@ -2655,6 +2655,7 @@ gtk_range_scroll (GtkRange     *range,
       break;
 
     case GTK_SCROLL_NONE:
+    default:
       break;
     }
 

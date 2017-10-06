@@ -1349,6 +1349,11 @@ set_para_values (GtkTextLayout      *layout,
     case PANGO_DIRECTION_RTL :
       display->direction = GTK_TEXT_DIR_RTL;
       break;
+    case PANGO_DIRECTION_LTR:
+    case PANGO_DIRECTION_TTB_LTR:
+    case PANGO_DIRECTION_TTB_RTL:
+    case PANGO_DIRECTION_WEAK_LTR:
+    case PANGO_DIRECTION_WEAK_RTL:
     default:
       display->direction = GTK_TEXT_DIR_LTR;
       break;
@@ -1411,6 +1416,7 @@ set_para_values (GtkTextLayout      *layout,
       break;
 
     case GTK_WRAP_NONE:
+    default:
       break;
     }
 
@@ -1998,7 +2004,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	  PangoAttribute *attr = tmp_list->data;
 	  GdkRGBA rgba;
 	  
-	  switch (attr->klass->type)
+	  switch ((guint) attr->klass->type)
 	    {
 	    case PANGO_ATTR_FOREGROUND:
 	      convert_color (&rgba, (PangoAttrColor *)attr);
@@ -2583,6 +2589,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       switch (pango_layout_get_alignment (display->layout))
 	{
 	case PANGO_ALIGN_LEFT:
+        default:
 	  break;
 	case PANGO_ALIGN_CENTER:
 	  display->x_offset += excess / 2;

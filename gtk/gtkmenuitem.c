@@ -1351,6 +1351,7 @@ popped_up_cb (GtkMenu            *menu,
           break;
 
         case GTK_DIRECTION_RIGHT:
+        default:
           menu_item->priv->submenu_direction = GTK_DIRECTION_LEFT;
           break;
         }
@@ -1425,6 +1426,7 @@ gtk_menu_item_real_popup_submenu (GtkWidget      *widget,
               break;
 
             case GTK_LEFT_RIGHT:
+            default:
               if (parent_menu && GTK_IS_MENU_ITEM (parent_menu->priv->parent_menu_item))
                 submenu_direction = GTK_MENU_ITEM (parent_menu->priv->parent_menu_item)->priv->submenu_direction;
               else
@@ -1451,6 +1453,7 @@ gtk_menu_item_real_popup_submenu (GtkWidget      *widget,
               switch (submenu_direction)
                 {
                 case GTK_DIRECTION_RIGHT:
+                default:
                   g_object_set (priv->submenu,
                                 "rect-anchor-dx", horizontal_offset + parent_padding.right + menu_padding.left,
                                 NULL);

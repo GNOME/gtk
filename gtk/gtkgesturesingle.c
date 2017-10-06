@@ -155,7 +155,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
 
   event_type = gdk_event_get_event_type (event);
 
-  switch (event_type)
+  switch ((guint) event_type)
     {
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_END:

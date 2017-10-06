@@ -4939,7 +4939,7 @@ get_event_coordinates (GdkEvent *event, gint *x, gint *y)
   gdouble event_x, event_y;
 
   if (event)
-    switch (gdk_event_get_event_type (event))
+    switch ((guint) gdk_event_get_event_type (event))
       {
       case GDK_MOTION_NOTIFY:
       case GDK_BUTTON_PRESS:
@@ -6558,6 +6558,8 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
         gtk_text_buffer_get_iter_at_offset (get_buffer (text_view), &newplace, 0);
      break;
       
+    case GTK_MOVEMENT_PAGES:
+    case GTK_MOVEMENT_HORIZONTAL_PAGES:
     default:
       break;
     }
@@ -9700,7 +9702,12 @@ text_window_new (GtkTextWindowType  type,
         case GTK_TEXT_WINDOW_BOTTOM:
           gtk_css_node_add_class (win->css_node, g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM));
           break;
-        default: /* no extra style class */ ;
+        case GTK_TEXT_WINDOW_PRIVATE:
+        case GTK_TEXT_WINDOW_WIDGET:
+        case GTK_TEXT_WINDOW_TEXT:
+        default:
+          /* no extra style class */
+          break;
         }
     }
   g_object_unref (win->css_node);
@@ -9762,22 +9769,16 @@ text_window_realize (GtkTextWindow *win,
 
   gdk_window_show (win->bin_window);
 
-  switch (win->type)
+  if (win->type == GTK_TEXT_WINDOW_TEXT &&
+      gtk_widget_is_sensitive (widget))
     {
-    case GTK_TEXT_WINDOW_TEXT:
-      if (gtk_widget_is_sensitive (widget))
-        {
-          display = gdk_window_get_display (window);
-          cursor = gdk_cursor_new_from_name (display, "text");
-          gdk_window_set_cursor (win->bin_window, cursor);
-          g_clear_object (&cursor);
-        }
+      display = gdk_window_get_display (window);
+      cursor = gdk_cursor_new_from_name (display, "text");
+      gdk_window_set_cursor (win->bin_window, cursor);
+      g_clear_object (&cursor);
 
       gtk_im_context_set_client_widget (GTK_TEXT_VIEW (widget)->priv->im_context,
                                         widget);
-      break;
-    default:
-      break;
     }
 
   g_object_set_qdata (G_OBJECT (win->window),
@@ -9900,6 +9901,8 @@ text_window_invalidate_rect (GtkTextWindow *win,
       window_rect.height = win->allocation.height;
       break;
 
+    case GTK_TEXT_WINDOW_PRIVATE:
+    case GTK_TEXT_WINDOW_WIDGET:
     default:
       g_warning ("%s: bug!", G_STRFUNC);
       return;
@@ -10066,6 +10069,7 @@ gtk_text_view_get_window (GtkTextView *text_view,
       break;
 
     case GTK_TEXT_WINDOW_PRIVATE:
+    default:
       g_warning ("%s: You can't get GTK_TEXT_WINDOW_PRIVATE, it has \"PRIVATE\" in the name because it is private.", G_STRFUNC);
       return NULL;
       break;
@@ -10109,6 +10113,7 @@ gtk_text_view_get_css_node (GtkTextView       *text_view,
         return priv->bottom_window->css_node;
       break;
 
+    case GTK_TEXT_WINDOW_PRIVATE:
     default:
       break;
     }
@@ -10563,6 +10568,9 @@ gtk_text_view_set_border_window_size (GtkTextView      *text_view,
                          &priv->bottom_window);
       break;
 
+    case GTK_TEXT_WINDOW_PRIVATE:
+    case GTK_TEXT_WINDOW_WIDGET:
+    case GTK_TEXT_WINDOW_TEXT:
     default:
       g_warning ("Can only set size of left/right/top/bottom border windows with gtk_text_view_set_border_window_size()");
       break;
@@ -10609,6 +10617,9 @@ gtk_text_view_get_border_window_size (GtkTextView       *text_view,
         return priv->bottom_window->requisition.height;
       break;
       
+    case GTK_TEXT_WINDOW_PRIVATE:
+    case GTK_TEXT_WINDOW_WIDGET:
+    case GTK_TEXT_WINDOW_TEXT:
     default:
       g_warning ("Can only get size of left/right/top/bottom border windows with gtk_text_view_get_border_window_size()");
       break;

@@ -1214,6 +1214,9 @@ gtk_notebook_focus_tab (GtkNotebook       *notebook,
           if (list)
             gtk_notebook_switch_focus_tab (notebook, list);
           break;
+
+        default:
+          break;
         }
 
       return TRUE;
@@ -1869,6 +1872,9 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
               tab_width = MAX (tab_width, page->requisition.width);
               tab_max = MAX (tab_max, page->requisition.height);
               break;
+            default:
+              g_assert_not_reached ();
+              break;
             }
         }
       else if (gtk_widget_get_visible (page->tab_label))
@@ -2428,13 +2434,16 @@ get_drop_position (GtkNotebook *notebook)
                   if (allocation.x + allocation.width / 2 < x)
                     return children;
                 }
-
               break;
+
             case GTK_POS_LEFT:
             case GTK_POS_RIGHT:
               if (allocation.y + allocation.height / 2 > y)
                 return children;
+              break;
 
+            default:
+              g_assert_not_reached ();
               break;
             }
 
@@ -3608,7 +3617,7 @@ gtk_notebook_focus (GtkWidget        *widget,
 
       if (old_focus_child == priv->action_widget[ACTION_WIDGET_START])
         {
-          switch (effective_direction)
+          switch ((guint) effective_direction)
             {
             case GTK_DIR_DOWN:
               return focus_child_in (notebook, GTK_DIR_TAB_FORWARD);
@@ -3619,7 +3628,7 @@ gtk_notebook_focus (GtkWidget        *widget,
             case GTK_DIR_UP:
               return FALSE;
             default:
-              switch (direction)
+              switch ((guint) direction)
                 {
                 case GTK_DIR_TAB_FORWARD:
                   if ((priv->tab_pos == GTK_POS_RIGHT || priv->tab_pos == GTK_POS_BOTTOM) &&
@@ -3630,12 +3639,13 @@ gtk_notebook_focus (GtkWidget        *widget,
                   return FALSE;
                 default:
                   g_assert_not_reached ();
+                  break;
                 }
             }
         }
       else if (old_focus_child == priv->action_widget[ACTION_WIDGET_END])
         {
-          switch (effective_direction)
+          switch ((guint) effective_direction)
             {
             case GTK_DIR_DOWN:
               return focus_child_in (notebook, GTK_DIR_TAB_FORWARD);
@@ -3646,7 +3656,7 @@ gtk_notebook_focus (GtkWidget        *widget,
             case GTK_DIR_UP:
               return FALSE;
             default:
-              switch (direction)
+              switch ((guint) direction)
                 {
                 case GTK_DIR_TAB_FORWARD:
                   return FALSE;
@@ -3657,12 +3667,13 @@ gtk_notebook_focus (GtkWidget        *widget,
                   return focus_tabs_in (notebook);
                 default:
                   g_assert_not_reached ();
+                  break;
                 }
             }
         }
       else
         {
-          switch (effective_direction)
+          switch ((guint) effective_direction)
             {
             case GTK_DIR_TAB_BACKWARD:
             case GTK_DIR_UP:
@@ -3674,12 +3685,14 @@ gtk_notebook_focus (GtkWidget        *widget,
               return FALSE;
             case GTK_DIR_TAB_FORWARD:
               return focus_action_in (notebook, last_action, direction);
+            default:
+              break;
             }
         }
     }
   else if (widget_is_focus)     /* Focus was on tabs */
     {
-      switch (effective_direction)
+      switch ((guint) effective_direction)
         {
         case GTK_DIR_TAB_BACKWARD:
               return focus_action_in (notebook, first_action, direction);
@@ -3699,11 +3712,13 @@ gtk_notebook_focus (GtkWidget        *widget,
           return focus_tabs_move (notebook, direction, STEP_PREV);
         case GTK_DIR_RIGHT:
           return focus_tabs_move (notebook, direction, STEP_NEXT);
+        default:
+          break;
         }
     }
   else /* Focus was not on widget */
     {
-      switch (effective_direction)
+      switch ((guint) effective_direction)
         {
         case GTK_DIR_TAB_FORWARD:
         case GTK_DIR_DOWN:
@@ -3729,6 +3744,8 @@ gtk_notebook_focus (GtkWidget        *widget,
         case GTK_DIR_LEFT:
         case GTK_DIR_RIGHT:
           return focus_child_in (notebook, direction);
+        default:
+          break;
         }
     }
 
@@ -4420,6 +4437,9 @@ gtk_notebook_snapshot_tabs (GtkGizmo    *gizmo,
         case GTK_POS_RIGHT:
           step = STEP_PREV;
           break;
+        default:
+          g_assert_not_reached ();
+          break;
         }
     }
 
@@ -4601,6 +4621,9 @@ gtk_notebook_allocate_arrows (GtkNotebook   *notebook,
         }
       break;
 
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 
@@ -4650,6 +4673,10 @@ gtk_notebook_tab_space (GtkNotebook         *notebook,
             *tab_space += page->requisition.height;
         }
       break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 
   if (!priv->scrollable)
@@ -4679,6 +4706,10 @@ gtk_notebook_tab_space (GtkNotebook         *notebook,
 
               *tab_space = tabs_allocation->height;
             }
+          break;
+
+        default:
+          g_assert_not_reached ();
           break;
         }
     }
@@ -4903,14 +4934,14 @@ get_allocate_at_bottom (GtkWidget *widget,
       else
         return (search_direction == STEP_NEXT);
 
-      break;
     case GTK_POS_RIGHT:
     case GTK_POS_LEFT:
       return (search_direction == STEP_PREV);
-      break;
-    }
 
-  return FALSE;
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
 }
 
 static void
@@ -4939,7 +4970,6 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
   widget = GTK_WIDGET (notebook);
   tab_pos = get_effective_tab_pos (notebook);
   allocate_at_bottom = get_allocate_at_bottom (widget, direction);
-  anchor = 0;
 
   child_allocation = *allocation;
 
@@ -4957,6 +4987,11 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
       if (allocate_at_bottom)
         child_allocation.y += allocation->height;
       anchor = child_allocation.y;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      anchor = 0;
       break;
     }
 
@@ -5094,7 +5129,10 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
 
               child_allocation.y = anchor;
             }
+          break;
 
+        default:
+          g_assert_not_reached ();
           break;
         }
 
@@ -5165,6 +5203,9 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
             }
 
           break;
+        default:
+          g_assert_not_reached ();
+      break;
         }
     }
 
@@ -5191,6 +5232,9 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook          *notebook,
           if ((!allocate_at_bottom && priv->drag_window_y > anchor) ||
               (allocate_at_bottom && priv->drag_window_y < anchor))
             priv->drag_window_y = anchor;
+          break;
+        default:
+          g_assert_not_reached ();
           break;
         }
     }
@@ -5319,6 +5363,9 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
             children = children->prev;
         }
       break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 
@@ -5409,7 +5456,7 @@ gtk_notebook_page_select (GtkNotebook *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page;
-  GtkDirectionType dir = GTK_DIR_DOWN; /* Quiet GCC */
+  GtkDirectionType dir;
   GtkPositionType tab_pos = get_effective_tab_pos (notebook);
 
   if (!priv->focus_tab)
@@ -5433,6 +5480,10 @@ gtk_notebook_page_select (GtkNotebook *notebook,
           break;
         case GTK_POS_RIGHT:
           dir = GTK_DIR_LEFT;
+          break;
+        default:
+          g_assert_not_reached ();
+          dir = GTK_DIR_DOWN;
           break;
         }
 
@@ -6241,6 +6292,9 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), GTK_ORIENTATION_HORIZONTAL);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->header_widget), GTK_ORIENTATION_VERTICAL);
+      break;
+    default:
+      g_assert_not_reached ();
       break;
     }
 

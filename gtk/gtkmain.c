@@ -1140,7 +1140,7 @@ rewrite_event_for_window (GdkEvent  *event,
 {
   event = gdk_event_copy (event);
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_SCROLL:
       rewrite_events_translate (event->any.window,
@@ -1211,7 +1211,7 @@ rewrite_event_for_grabs (GdkEvent *event)
   GdkDisplay *display;
   GdkDevice *device;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_SCROLL:
     case GDK_BUTTON_PRESS:
@@ -1307,6 +1307,9 @@ get_virtual_notify_type (GdkNotifyType notify_type)
       return GDK_NOTIFY_VIRTUAL;
     case GDK_NOTIFY_NONLINEAR:
       return GDK_NOTIFY_NONLINEAR_VIRTUAL;
+    case GDK_NOTIFY_VIRTUAL:
+    case GDK_NOTIFY_NONLINEAR_VIRTUAL:
+    case GDK_NOTIFY_UNKNOWN:
     default:
       g_assert_not_reached ();
       return GDK_NOTIFY_UNKNOWN;
@@ -1441,7 +1444,7 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
 static gboolean
 is_pointing_event (GdkEvent *event)
 {
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_MOTION_NOTIFY:
     case GDK_ENTER_NOTIFY:
@@ -1485,7 +1488,7 @@ handle_pointing_event (GdkEvent *event)
 
   sequence = gdk_event_get_event_sequence (event);
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_LEAVE_NOTIFY:
       if (event->crossing.mode == GDK_CROSSING_GRAB ||
@@ -1842,6 +1845,9 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_DROP_START:
       _gtk_drag_dest_handle_event (event_widget, event);
       break;
+    case GDK_SETTING:
+    case GDK_OWNER_CHANGE:
+    case GDK_EVENT_LAST:
     default:
       g_assert_not_reached ();
       break;

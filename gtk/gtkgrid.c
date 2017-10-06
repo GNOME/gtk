@@ -777,6 +777,8 @@ gtk_grid_request_non_spanning (GtkGridRequest *request,
 	      line->natural_above += line->natural - (line->natural_above + line->natural_below);
 	      line->natural_below += 0;
 	      break;
+            default:
+              break;
 	    }
 	}
     }
@@ -1357,6 +1359,8 @@ gtk_grid_request_allocate (GtkGridRequest *request,
 	      line->allocated_baseline =
 		line->allocation - line->minimum_below;
 	      break;
+            default:
+              break;
 	    }
 	}
       else

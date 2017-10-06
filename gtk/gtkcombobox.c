@@ -2583,6 +2583,8 @@ gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
       found = tree_first (combo_box, priv->model, &new_iter);
       break;
 
+    case GTK_SCROLL_NONE:
+    case GTK_SCROLL_JUMP:
     default:
       return;
     }

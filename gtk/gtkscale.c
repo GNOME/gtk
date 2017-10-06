@@ -1316,6 +1316,9 @@ gtk_scale_get_range_border (GtkRange  *range,
         case GTK_POS_BOTTOM:
           border->bottom += value_size;
           break;
+        default:
+          g_assert_not_reached ();
+          break;
         }
     }
 

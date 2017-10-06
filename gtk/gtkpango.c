@@ -761,8 +761,14 @@ pango_layout_get_line_before (PangoLayout     *layout,
                     start_index = 0;
                   end_index = prev_line->start_index + prev_line->length;
                   break;
+                case ATK_TEXT_BOUNDARY_CHAR:
+                case ATK_TEXT_BOUNDARY_WORD_START:
+                case ATK_TEXT_BOUNDARY_WORD_END:
+                case ATK_TEXT_BOUNDARY_SENTENCE_START:
+                case ATK_TEXT_BOUNDARY_SENTENCE_END:
                 default:
                   g_assert_not_reached();
+                  break;
                 }
             }
           else
@@ -823,8 +829,14 @@ pango_layout_get_line_at (PangoLayout     *layout,
               if (prev_line)
                 start_index = prev_line->start_index + prev_line->length;
               break;
+            case ATK_TEXT_BOUNDARY_CHAR:
+            case ATK_TEXT_BOUNDARY_WORD_START:
+            case ATK_TEXT_BOUNDARY_WORD_END:
+            case ATK_TEXT_BOUNDARY_SENTENCE_START:
+            case ATK_TEXT_BOUNDARY_SENTENCE_END:
             default:
               g_assert_not_reached();
+              break;
             }
 
           found = TRUE;
@@ -887,8 +899,14 @@ pango_layout_get_line_after (PangoLayout     *layout,
                   start_index = end_index;
                   end_index = line->start_index + line->length;
                   break;
+                case ATK_TEXT_BOUNDARY_CHAR:
+                case ATK_TEXT_BOUNDARY_WORD_START:
+                case ATK_TEXT_BOUNDARY_WORD_END:
+                case ATK_TEXT_BOUNDARY_SENTENCE_START:
+                case ATK_TEXT_BOUNDARY_SENTENCE_END:
                 default:
                   g_assert_not_reached();
+                  break;
                 }
             }
           else
@@ -1004,6 +1022,10 @@ _gtk_pango_get_text_before (PangoLayout     *layout,
     case ATK_TEXT_BOUNDARY_LINE_END:
       pango_layout_get_line_before (layout, boundary_type, offset, &start, &end);
       break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 
   *start_offset = start;
@@ -1111,6 +1133,10 @@ _gtk_pango_get_text_after (PangoLayout     *layout,
     case ATK_TEXT_BOUNDARY_LINE_END:
       pango_layout_get_line_after (layout, boundary_type, offset, &start, &end);
       break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 
   *start_offset = start;
@@ -1209,6 +1235,10 @@ _gtk_pango_get_text_at (PangoLayout     *layout,
     case ATK_TEXT_BOUNDARY_LINE_START:
     case ATK_TEXT_BOUNDARY_LINE_END:
       pango_layout_get_line_at (layout, boundary_type, offset, &start, &end);
+      break;
+
+    default:
+      g_assert_not_reached ();
       break;
     }
 

@@ -297,6 +297,8 @@ gtk_image_accessible_get_image_size (AtkImage *image,
         *width = gdk_pixbuf_animation_get_width (animation);
         break;
       }
+    case GTK_IMAGE_EMPTY:
+    case GTK_IMAGE_SURFACE:
     default:
       {
         *height = -1;

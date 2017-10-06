@@ -350,6 +350,8 @@ gtk_center_box_measure_opposite (GtkWidget      *widget,
           min_baseline = total_min - below_min;
           nat_baseline = total_nat - below_nat;
           break;
+        default:
+          break;
         }
 
       if (minimum_baseline)
@@ -476,6 +478,7 @@ gtk_center_box_size_allocate (GtkWidget           *widget,
            */
           switch (self->baseline_pos)
             {
+            default:
             case GTK_BASELINE_POSITION_TOP:
               baseline = min_above;
               break;

@@ -732,7 +732,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
   info = gtk_drag_get_dest_info (context, TRUE);
 
   /* Find the widget for the event */
-  switch (event_type)
+  switch ((guint) event_type)
     {
     case GDK_DRAG_ENTER:
       break;
@@ -1789,7 +1789,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
   if (!info)
     return;
 
-  switch (gdk_event_get_event_type (event))
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_DRAG_STATUS:
       {
@@ -2351,6 +2351,9 @@ gtk_drag_key_cb (GtkWidget   *widget,
             {
               gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_NO_TARGET, time);
             }
+          break;
+        
+        default:
           break;
        }
     }

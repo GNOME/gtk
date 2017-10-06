@@ -1411,6 +1411,8 @@ gtk_window_titlebar_action (GtkWindow      *window,
     case GDK_BUTTON_SECONDARY:
       g_object_get (settings, "gtk-titlebar-right-click", &action, NULL);
       break;
+    default:
+      break;
     }
 
   if (action == NULL)
@@ -1531,6 +1533,14 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
         gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
                                         sequence, GTK_EVENT_SEQUENCE_CLAIMED);
       break;
+    case GTK_WINDOW_REGION_EDGE_NW:
+    case GTK_WINDOW_REGION_EDGE_N:
+    case GTK_WINDOW_REGION_EDGE_NE:
+    case GTK_WINDOW_REGION_EDGE_W:
+    case GTK_WINDOW_REGION_EDGE_E:
+    case GTK_WINDOW_REGION_EDGE_SW:
+    case GTK_WINDOW_REGION_EDGE_S:
+    case GTK_WINDOW_REGION_EDGE_SE:
     default:
       if (!priv->maximized)
         {
@@ -1585,6 +1595,15 @@ drag_gesture_begin_cb (GtkGestureDrag *gesture,
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
 
         break;
+
+      case GTK_WINDOW_REGION_EDGE_NW:
+      case GTK_WINDOW_REGION_EDGE_N:
+      case GTK_WINDOW_REGION_EDGE_NE:
+      case GTK_WINDOW_REGION_EDGE_W:
+      case GTK_WINDOW_REGION_EDGE_E:
+      case GTK_WINDOW_REGION_EDGE_SW:
+      case GTK_WINDOW_REGION_EDGE_S:
+      case GTK_WINDOW_REGION_EDGE_SE:
       default:
         gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
     }
@@ -8502,6 +8521,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
           }
           break;
 
+        case GTK_WIN_POS_NONE:
         default:
           break;
         }

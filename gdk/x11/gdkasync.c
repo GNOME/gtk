@@ -526,6 +526,8 @@ get_child_info_handler (Display *dpy,
 	    handle_get_geometry_reply (dpy, state, repl);
 	  }
 	  break;
+        default:
+          break;
 	}
     }
 

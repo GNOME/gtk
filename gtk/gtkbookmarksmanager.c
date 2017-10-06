@@ -207,6 +207,13 @@ bookmarks_file_changed (GFileMonitor      *monitor,
       gdk_threads_leave ();
       break;
 
+    case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
+    case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
+    case G_FILE_MONITOR_EVENT_UNMOUNTED:
+    case G_FILE_MONITOR_EVENT_MOVED:
+    case G_FILE_MONITOR_EVENT_RENAMED:
+    case G_FILE_MONITOR_EVENT_MOVED_IN:
+    case G_FILE_MONITOR_EVENT_MOVED_OUT:
     default:
       /* ignore at the moment */
       break;

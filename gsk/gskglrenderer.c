@@ -662,6 +662,9 @@ get_gl_scaling_filters (GskRenderNode *node,
     case GSK_SCALING_FILTER_TRILINEAR:
       *min_filter_r = GL_LINEAR_MIPMAP_LINEAR;
       break;
+
+    default:
+      break;
     }
 
   switch (node->mag_filter)
@@ -675,6 +678,7 @@ get_gl_scaling_filters (GskRenderNode *node,
      */
     case GSK_SCALING_FILTER_LINEAR:
     case GSK_SCALING_FILTER_TRILINEAR:
+    default:
       *mag_filter_r = GL_LINEAR;
       break;
     }
@@ -917,6 +921,16 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       g_assert_not_reached ();
       return;
 
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_OPACITY_NODE:
+    case GSK_CLIP_NODE:
+    case GSK_ROUNDED_CLIP_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_BLUR_NODE:
     default:
       {
         cairo_surface_t *surface;

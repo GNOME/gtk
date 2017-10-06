@@ -118,6 +118,12 @@ gdk_vulkan_strerror (VkResult result)
       return "A surface has changed in such a way that it is no longer compatible with the swapchain.";
     case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
       return "The display used by a swapchain does not use the same presentable image layout, or is incompatible in a way that prevents sharing an image.";
+    case VK_ERROR_VALIDATION_FAILED_EXT:
+      return "The application caused the validation layer to fail.";
+    case VK_ERROR_INVALID_SHADER_NV:
+      return "One or more shaders failed to compile or link.";
+    case VK_RESULT_RANGE_SIZE:
+    case VK_RESULT_MAX_ENUM:
     default:
       return "Unknown Vulkan error.";
   }

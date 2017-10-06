@@ -698,9 +698,9 @@ get_property_font_set_mask (guint prop_id)
       return PANGO_FONT_MASK_STRETCH;
     case PROP_SIZE_SET:
       return PANGO_FONT_MASK_SIZE;
+    default:
+      return 0;
     }
-
-  return 0;
 }
 
 static void
@@ -1222,6 +1222,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 					     g_value_get_double (value) * PANGO_SCALE);
 	    g_object_notify_by_pspec (object, pspec);
 	    break;
+          default:
+            break;
 	  }
 
 	if (priv->fixed_height_rows != -1)
@@ -1539,6 +1541,9 @@ get_layout (GtkCellRendererText *celltext,
           uline = PANGO_UNDERLINE_DOUBLE;
           break;
 
+        case PANGO_UNDERLINE_DOUBLE:
+        case PANGO_UNDERLINE_LOW:
+        case PANGO_UNDERLINE_ERROR:
         default:
           break;
         }

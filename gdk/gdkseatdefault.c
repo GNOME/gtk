@@ -194,7 +194,7 @@ gdk_seat_default_get_master (GdkSeat             *seat,
   priv = gdk_seat_default_get_instance_private (GDK_SEAT_DEFAULT (seat));
 
   /* There must be only one flag set */
-  switch (capability)
+  switch ((guint) capability)
     {
     case GDK_SEAT_CAPABILITY_POINTER:
     case GDK_SEAT_CAPABILITY_TOUCH:
@@ -224,6 +224,11 @@ device_get_capability (GdkDevice *device)
       return GDK_SEAT_CAPABILITY_TOUCH;
     case GDK_SOURCE_MOUSE:
     case GDK_SOURCE_TOUCHPAD:
+    case GDK_SOURCE_PEN:
+    case GDK_SOURCE_ERASER:
+    case GDK_SOURCE_CURSOR:
+    case GDK_SOURCE_TRACKPOINT:
+    case GDK_SOURCE_TABLET_PAD:
     default:
       return GDK_SEAT_CAPABILITY_POINTER;
     }

@@ -1413,6 +1413,9 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
       if (!had_selection && !priv->active_menu_item && priv->children)
         gtk_menu_shell_select_first (menu_shell, TRUE);
       break;
+
+    default:
+      break;
     }
 }
 

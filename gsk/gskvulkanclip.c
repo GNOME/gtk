@@ -72,6 +72,10 @@ gsk_vulkan_clip_intersect_rect (GskVulkanClip         *dest,
            */
           return FALSE;
         }
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
     }
 
   return TRUE;
@@ -121,6 +125,10 @@ gsk_vulkan_clip_intersect_rounded_rect (GskVulkanClip        *dest,
     case GSK_VULKAN_CLIP_ROUNDED_CIRCULAR:
     case GSK_VULKAN_CLIP_ROUNDED:
       /* XXX: improve */
+      return FALSE;
+
+    default:
+      g_assert_not_reached ();
       return FALSE;
     }
 

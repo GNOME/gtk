@@ -333,14 +333,19 @@ gtk_revealer_get_child_allocation (GtkRevealer         *revealer,
 
       switch (transition)
         {
-          case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT:
             child_allocation->x = - child_allocation->width * (1 - priv->current_pos);
           break;
-          case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
             child_allocation->y = - child_allocation->height * (1 - priv->current_pos);
           break;
 
-          default: {}
+        case GTK_REVEALER_TRANSITION_TYPE_NONE:
+        case GTK_REVEALER_TRANSITION_TYPE_CROSSFADE:
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT:
+        case GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP:
+        default:
+          break;
         }
     }
 

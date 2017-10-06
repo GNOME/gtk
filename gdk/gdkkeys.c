@@ -859,6 +859,9 @@ gdk_keyval_convert_case (guint symbol,
                symbol != GDK_KEY_Greek_finalsmallsigma)
         xupper -= (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
       break;
+
+    default:
+      break;
     }
 
   if (lower)

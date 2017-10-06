@@ -953,6 +953,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       break;
 
     case GDK_WINDOW_CHILD:
+    default:
       g_assert_not_reached ();
       break;
     }
@@ -1519,6 +1520,7 @@ gdk_window_x11_hide (GdkWindow *window)
     case GDK_WINDOW_FOREIGN:
     case GDK_WINDOW_ROOT:
     case GDK_WINDOW_CHILD:
+    default:
       break;
     }
   
@@ -4300,6 +4302,8 @@ update_pos (MoveResizeData *mv_resize,
 	  x += dx;
 	  w -= dx;
 	  break;
+        default:
+          break;
 	}
 
       x = MAX (x, 0);
@@ -4486,10 +4490,15 @@ _gdk_x11_moveresize_handle_event (XEvent *event)
                 finish_drag (mv_resize);
               }
             break;
+          default:
+            break;
           }
       }
       break;
 #endif
+
+    default:
+      break;
 
     }
   return TRUE;
@@ -4607,6 +4616,7 @@ calculate_unmoving_origin (MoveResizeData *mv_resize)
 	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
 	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
 	  break;
+	case GDK_GRAVITY_STATIC:
 	default:
 	  mv_resize->moveresize_orig_x = rect.x;
 	  mv_resize->moveresize_orig_y = rect.y;
@@ -4963,7 +4973,7 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
   double x_root, y_root;
   XClientMessageEvent xclient = { 0 };
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:

@@ -93,6 +93,8 @@ gtk_css_value_color_free (GtkCssValue *color)
     case COLOR_TYPE_WIN32:
       gtk_win32_theme_unref (color->sym_col.win32.theme);
       break;
+    case COLOR_TYPE_LITERAL:
+    case COLOR_TYPE_CURRENT_COLOR:
     default:
       break;
     }
@@ -770,6 +772,9 @@ _gtk_css_color_value_parse_function (GtkCssParser   *parser,
         case COLOR_MIX:
           value = _gtk_css_color_value_new_mix (child1, child2, d);
           break;
+        case COLOR_RGB:
+        case COLOR_RGBA:
+        case COLOR_WIN32:
         default:
           g_assert_not_reached ();
           value = NULL;

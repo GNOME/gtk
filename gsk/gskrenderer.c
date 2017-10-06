@@ -205,6 +205,10 @@ gsk_renderer_set_property (GObject      *gobject,
       /* Construct-only */
       priv->display = g_value_dup_object (value);
       break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
     }
 }
 
@@ -237,6 +241,10 @@ gsk_renderer_get_property (GObject    *gobject,
 
     case PROP_DISPLAY:
       g_value_set_object (value, priv->display);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
     }
 }

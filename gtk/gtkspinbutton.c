@@ -1274,6 +1274,8 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
         break;
       }
 
+    case GTK_SCROLL_NONE:
+    case GTK_SCROLL_JUMP:
     default:
       g_warning ("Invalid scroll type %d for GtkSpinButton::change-value", scroll);
       break;

@@ -1101,6 +1101,8 @@ update_pos (MoveResizeData *mv_resize,
 	  x += dx;
 	  w -= dx;
 	  break;
+        default:
+          break;
 	}
 
       x = MAX (x, 0);
@@ -1228,6 +1230,8 @@ _gdk_broadway_moveresize_handle_event (GdkDisplay *display,
       if (event->button.button == mv_resize->moveresize_button)
 	finish_drag (mv_resize);
       break;
+    default:
+      break;
     }
   return TRUE;
 }
@@ -1349,6 +1353,7 @@ calculate_unmoving_origin (MoveResizeData *mv_resize)
 	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
 	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
 	  break;
+        case GDK_GRAVITY_STATIC:
 	default:
 	  mv_resize->moveresize_orig_x = rect.x;
 	  mv_resize->moveresize_orig_y = rect.y;

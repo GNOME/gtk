@@ -124,6 +124,9 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
 	    case DirectColor:
 	      visuals[nvisuals]->type = GDK_VISUAL_DIRECT_COLOR;
 	      break;
+            default:
+              g_warn_if_reached ();
+              break;
 	    }
 
 	  visuals[nvisuals]->depth = visual_list[i].depth;

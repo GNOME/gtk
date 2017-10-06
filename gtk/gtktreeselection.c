@@ -1333,6 +1333,9 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
 				&end_node);
       anchor_path = start_path;
       break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
 
   /* Invalid start or end node? */

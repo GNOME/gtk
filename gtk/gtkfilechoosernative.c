@@ -780,6 +780,8 @@ gtk_file_chooser_native_hide (GtkNativeDialog *native)
     case MODE_PORTAL:
       gtk_file_chooser_native_portal_hide (self);
       break;
+    default:
+      break;
     }
 }
 

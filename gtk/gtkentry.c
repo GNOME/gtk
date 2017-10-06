@@ -3536,7 +3536,7 @@ gtk_entry_event (GtkWidget *widget,
   sequence = gdk_event_get_event_sequence (event);
   device = gdk_event_get_device (event);
 
-  switch (gdk_event_get_event_type (event))
+  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_TOUCH_BEGIN:
       if (icon_info->current_sequence)
@@ -4816,6 +4816,7 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 	case GTK_MOVEMENT_PARAGRAPHS:
 	case GTK_MOVEMENT_PAGES:
 	case GTK_MOVEMENT_HORIZONTAL_PAGES:
+        default:
 	  break;
 	}
     }
@@ -4888,6 +4889,7 @@ gtk_entry_move_cursor (GtkEntry       *entry,
 	case GTK_MOVEMENT_PARAGRAPHS:
 	case GTK_MOVEMENT_PAGES:
 	case GTK_MOVEMENT_HORIZONTAL_PAGES:
+        default:
 	  break;
 	}
     }
@@ -4995,6 +4997,9 @@ gtk_entry_delete_from_cursor (GtkEntry       *entry,
 
     case GTK_DELETE_WHITESPACE:
       gtk_entry_delete_whitespace (entry);
+      break;
+
+    default:
       break;
     }
 
@@ -6634,6 +6639,9 @@ gtk_entry_clear_icon (GtkEntry             *entry,
                                             : PROP_GICON_SECONDARY]);
       break;
 
+    case GTK_IMAGE_EMPTY:
+    case GTK_IMAGE_ANIMATION:
+    case GTK_IMAGE_SURFACE:
     default:
       g_assert_not_reached ();
       break;

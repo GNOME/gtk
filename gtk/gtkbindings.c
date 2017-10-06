@@ -1320,17 +1320,17 @@ gtk_binding_parse_bind (GScanner       *scanner,
     {
       guint expected_token;
 
-      switch (scanner->next_token)
+      if (scanner->next_token == G_TOKEN_STRING)
         {
-        case G_TOKEN_STRING:
           expected_token = gtk_binding_parse_signal (scanner,
                                                      binding_set,
                                                      keyval,
                                                      modifiers);
           if (expected_token != G_TOKEN_NONE)
             return expected_token;
-          break;
-        default:
+        }
+      else
+        {
           g_scanner_get_next_token (scanner);
           return '}';
         }

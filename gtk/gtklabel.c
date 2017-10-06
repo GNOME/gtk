@@ -4466,6 +4466,10 @@ gtk_label_focus (GtkWidget        *widget,
           break;
 
         default:
+        case GTK_DIR_UP:
+        case GTK_DIR_DOWN:
+        case GTK_DIR_LEFT:
+        case GTK_DIR_RIGHT:
           goto out;
         }
 
@@ -5840,6 +5844,7 @@ gtk_label_move_cursor (GtkLabel       *label,
         case GTK_MOVEMENT_PARAGRAPHS:
         case GTK_MOVEMENT_PAGES:
         case GTK_MOVEMENT_HORIZONTAL_PAGES:
+        default:
           break;
         }
     }
@@ -5900,6 +5905,7 @@ gtk_label_move_cursor (GtkLabel       *label,
         case GTK_MOVEMENT_PARAGRAPHS:
         case GTK_MOVEMENT_PAGES:
         case GTK_MOVEMENT_HORIZONTAL_PAGES:
+        default:
           break;
         }
     }

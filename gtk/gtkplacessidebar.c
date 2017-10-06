@@ -516,6 +516,7 @@ special_directory_get_gicon (GUserDirectory directory)
     ICON_CASE (TEMPLATES);
     ICON_CASE (VIDEOS);
 
+    case G_USER_N_DIRECTORIES:
     default:
       return g_themed_icon_new_with_default_fallbacks (ICON_NAME_FOLDER);
     }

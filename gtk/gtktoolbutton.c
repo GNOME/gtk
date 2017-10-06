@@ -500,6 +500,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 
   switch (style)
     {
+    default:
     case GTK_TOOLBAR_ICONS:
       if (icon)
         gtk_container_add (GTK_CONTAINER (button->priv->button), icon);

@@ -129,6 +129,9 @@ portal_start_page (GtkPrintOperation *op,
               case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
                 cairo_ps_surface_dsc_comment (op_portal->surface, "%%PageOrientation: Landscape");
                 break;
+
+              default:
+                break;
             }
          }
       else if (type == CAIRO_SURFACE_TYPE_PDF)

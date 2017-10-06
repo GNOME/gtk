@@ -632,7 +632,10 @@ gtk_menu_bar_move_current (GtkMenuShell         *menu_shell,
 	    case GTK_MENU_DIR_NEXT:
 	      direction = GTK_MENU_DIR_PREV;
 	      break;
-	    default: ;
+	    case GTK_MENU_DIR_PARENT:
+	    case GTK_MENU_DIR_CHILD:
+	    default:
+              break;
 	    }
 	}
     }

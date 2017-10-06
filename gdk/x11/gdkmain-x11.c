@@ -130,11 +130,10 @@ _gdk_x11_convert_grab_status (gint status)
       return GDK_GRAB_NOT_VIEWABLE;
     case GrabFrozen:
       return GDK_GRAB_FROZEN;
+    default:
+      g_assert_not_reached();
+      return 0;
     }
-
-  g_assert_not_reached();
-
-  return 0;
 }
 
 /*

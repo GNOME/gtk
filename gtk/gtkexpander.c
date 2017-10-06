@@ -739,6 +739,7 @@ focus_in_site (GtkExpander      *expander,
           return FALSE;
       }
     case FOCUS_NONE:
+    default:
       break;
     }
 
@@ -767,6 +768,7 @@ get_next_site (GtkExpander      *expander,
         case GTK_DIR_TAB_FORWARD:
         case GTK_DIR_DOWN:
         case GTK_DIR_RIGHT:
+        default:
           return FOCUS_WIDGET;
         }
       break;
@@ -780,6 +782,7 @@ get_next_site (GtkExpander      *expander,
           return ltr ? FOCUS_NONE : FOCUS_LABEL;
         case GTK_DIR_TAB_FORWARD:
         case GTK_DIR_DOWN:
+        default:
           return FOCUS_LABEL;
         case GTK_DIR_RIGHT:
           return ltr ? FOCUS_LABEL : FOCUS_NONE;
@@ -795,6 +798,7 @@ get_next_site (GtkExpander      *expander,
           return ltr ? FOCUS_WIDGET : FOCUS_CHILD;
         case GTK_DIR_TAB_FORWARD:
         case GTK_DIR_DOWN:
+        default:
           return FOCUS_CHILD;
         case GTK_DIR_RIGHT:
           return ltr ? FOCUS_CHILD : FOCUS_WIDGET;
@@ -810,12 +814,15 @@ get_next_site (GtkExpander      *expander,
         case GTK_DIR_TAB_FORWARD:
         case GTK_DIR_DOWN:
         case GTK_DIR_RIGHT:
+        default:
           return FOCUS_NONE;
         }
       break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
-
-  g_assert_not_reached ();
+  
   return FOCUS_NONE;
 }
 

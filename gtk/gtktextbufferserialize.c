@@ -1334,6 +1334,8 @@ start_element_handler (GMarkupParseContext  *context,
 			       attribute_names, attribute_values,
 			       info, error);
       break;
+    case STATE_ATTR:
+    case STATE_PIXBUF:
     default:
       g_assert_not_reached ();
       break;
@@ -1451,6 +1453,7 @@ end_element_handler (GMarkupParseContext  *context,
       g_assert (peek_state (info) == STATE_APPLY_TAG ||
 		peek_state (info) == STATE_TEXT);
       break;
+    case STATE_START:
     default:
       g_assert_not_reached ();
       break;
@@ -1493,13 +1496,9 @@ text_handler (GMarkupParseContext  *context,
       peek_state (info) != STATE_APPLY_TAG)
     return;
 
-  switch (peek_state (info))
+  if (peek_state (info) == STATE_TEXT ||
+      peek_state (info) == STATE_APPLY_TAG)
     {
-    case STATE_START:
-      g_assert_not_reached (); /* gmarkup shouldn't do this */
-      break;
-    case STATE_TEXT:
-    case STATE_APPLY_TAG:
       if (text_len == 0)
 	return;
 
@@ -1508,10 +1507,6 @@ text_handler (GMarkupParseContext  *context,
       span->tags = g_slist_copy (info->tag_stack);
 
       info->spans = g_list_prepend (info->spans, span);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
     }
 }
 

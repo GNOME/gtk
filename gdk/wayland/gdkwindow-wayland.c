@@ -1738,6 +1738,7 @@ calculate_popup_rect (GdkWindow    *window,
 
   switch (rect_anchor)
     {
+    default:
     case GDK_GRAVITY_STATIC:
     case GDK_GRAVITY_NORTH_WEST:
       x = anchor_rect.x;
@@ -1779,6 +1780,7 @@ calculate_popup_rect (GdkWindow    *window,
 
   switch (window_anchor)
     {
+    default:
     case GDK_GRAVITY_STATIC:
     case GDK_GRAVITY_NORTH_WEST:
       break;
@@ -1825,6 +1827,7 @@ flip_anchor_horizontally (GdkGravity anchor)
 {
   switch (anchor)
     {
+    default:
     case GDK_GRAVITY_STATIC:
     case GDK_GRAVITY_NORTH_WEST:
       return GDK_GRAVITY_NORTH_EAST;
@@ -1854,6 +1857,7 @@ flip_anchor_vertically (GdkGravity anchor)
 {
   switch (anchor)
     {
+    default:
     case GDK_GRAVITY_STATIC:
     case GDK_GRAVITY_NORTH_WEST:
       return GDK_GRAVITY_SOUTH_WEST;
@@ -2211,7 +2215,7 @@ should_map_as_popup (GdkWindow *window)
     }
 
   /* Yet we need to keep the window type hint tests for compatibility */
-  switch (impl->hint)
+  switch ((guint) impl->hint)
     {
     case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
     case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
@@ -3616,7 +3620,7 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
   double x, y;
   uint32_t serial;
 
-  switch (event->type)
+  switch ((guint) event->type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:

@@ -4577,6 +4577,10 @@ _gtk_text_buffer_get_text_before (GtkTextBuffer   *buffer,
           gtk_text_iter_forward_to_line_end (end);
         }
       break;
+
+    default:
+      g_assert_not_reached ();
+      break;
     }
 }
 
@@ -4678,6 +4682,10 @@ _gtk_text_buffer_get_text_at (GtkTextBuffer   *buffer,
         }
       gtk_text_iter_forward_to_line_end (end);
       break;
+
+    default:
+      g_assert_not_reached ();
+      break;
    }
 }
 
@@ -4770,6 +4778,9 @@ _gtk_text_buffer_get_text_after (GtkTextBuffer   *buffer,
             }
           gtk_text_iter_forward_to_line_end (end);
         }
+      break;
+    default:
+      g_assert_not_reached ();
       break;
     }
 }

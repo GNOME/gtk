@@ -357,6 +357,10 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
             gtk_label_set_ellipsize (GTK_LABEL (label_widget), priv->ellipsize);
           }
         break;
+
+      default:
+        g_assert_not_reached ();
+        break;
     }
 
   gtk_widget_set_margin_start (frame, dx);

@@ -1230,6 +1230,8 @@ set_button_image_get_info_cb (GCancellable *cancellable,
         g_set_object (&data->path_bar->priv->desktop_icon, icon);
 	break;
 
+      case NORMAL_BUTTON:
+      case ROOT_BUTTON:
       default:
 	break;
     };
@@ -1309,6 +1311,8 @@ set_button_image (GtkPathBar *path_bar,
 				   set_button_image_get_info_cb,
 				   data);
       break;
+
+    case NORMAL_BUTTON:
     default:
       break;
     }

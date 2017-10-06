@@ -191,11 +191,8 @@ update_xft_settings (GdkScreen *screen)
       order = GSD_FONT_RGBA_ORDER_RGB;
     }
 
-  xft_settings.antialias = (antialiasing != GSD_FONT_ANTIALIASING_MODE_NONE);
   xft_settings.hinting = (hinting != GSD_FONT_HINTING_NONE);
   xft_settings.dpi = get_dpi_from_gsettings (screen_wayland) * 1024; /* Xft wants 1/1024ths of an inch */
-  xft_settings.rgba = "rgb";
-  xft_settings.hintstyle = "hintfull";
 
   switch (hinting)
     {
@@ -209,6 +206,7 @@ update_xft_settings (GdkScreen *screen)
       xft_settings.hintstyle = "hintmedium";
       break;
     case GSD_FONT_HINTING_FULL:
+    default:
       xft_settings.hintstyle = "hintfull";
       break;
     }
@@ -218,6 +216,7 @@ update_xft_settings (GdkScreen *screen)
     case GSD_FONT_RGBA_ORDER_RGBA:
       xft_settings.rgba = "rgba";
       break;
+    default:
     case GSD_FONT_RGBA_ORDER_RGB:
       xft_settings.rgba = "rgb";
       break;
@@ -234,6 +233,7 @@ update_xft_settings (GdkScreen *screen)
 
   switch (antialiasing)
    {
+   default:
    case GSD_FONT_ANTIALIASING_MODE_NONE:
      xft_settings.antialias = FALSE;
      break;
