@@ -409,7 +409,8 @@ button {
       }
     }
 
-    &:hover {
+    &:hover,
+    &.flat:hover {
       @include button(hover);
       -gtk-icon-filter: brightness(1.2);
     }

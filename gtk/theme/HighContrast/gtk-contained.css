@@ -178,7 +178,7 @@ button.sidebar-button:hover:active, button.titlebutton:hover:active, button.flat
 
 button.sidebar-button:backdrop, button.titlebutton:backdrop, button.sidebar-button:disabled, button.titlebutton:disabled, button.sidebar-button:backdrop:disabled, button.titlebutton:backdrop:disabled, button.flat:backdrop, button.flat:disabled, button.flat:backdrop:disabled { border-width: 2px; border-style: solid; color: gray; background-color: transparent; background-image: none; border-color: transparent; }
 
-button.titlebutton:hover, button:hover { border-width: 2px; border-style: solid; color: #000; background-color: #fff; border-color: gray; background-image: none; -gtk-icon-filter: brightness(1.2); }
+button.titlebutton:hover, button.sidebar-button:hover, button.titlebutton:hover, button:hover, button.flat:hover { border-width: 2px; border-style: solid; color: #000; background-color: #fff; border-color: gray; background-image: none; -gtk-icon-filter: brightness(1.2); }
 
 button.titlebutton:active, button.titlebutton:checked, button:active, button:checked { border-width: 2px; border-style: solid; background-image: none; color: white; background-color: black; border-color: gray; transition-duration: 50ms; }
 
