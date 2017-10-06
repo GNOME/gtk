@@ -321,8 +321,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
                          "Window",
                          "The window associated to the renderer",
                          GDK_TYPE_WINDOW,
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS);
 
   /**
