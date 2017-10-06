@@ -1061,7 +1061,8 @@ gtk_file_chooser_button_finalize (GObject *object)
   if (priv->current_folder_while_inactive)
     g_object_unref (priv->current_folder_while_inactive);
 
-  g_object_unref (priv->model);
+  if (priv->model)
+    g_object_unref (priv->model);
 
   gtk_widget_unparent (priv->button);
   gtk_widget_unparent (priv->combo_box);
