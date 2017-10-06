@@ -1403,7 +1403,6 @@ gtk_settings_notify (GObject    *object,
       settings_update_cursor_theme (settings);
       break;
     default:
-      g_assert_not_reached ();
       break;
     }
 }
