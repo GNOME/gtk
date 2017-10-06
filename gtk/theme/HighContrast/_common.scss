@@ -363,8 +363,32 @@ button {
 
     @include button(normal);
 
+    &:disabled {
+      @include button(insensitive);
+
+      &:active,
+      &:checked { @include button(insensitive-active); }
+    }
+
+    &:backdrop {
+      @include button(backdrop);
+
+      -gtk-icon-effect: none;
+
+      &:active,
+      &:checked { @include button(backdrop-active); }
+
+      &:disabled {
+        @include button(backdrop-insensitive);
+
+        &:active,
+        &:checked { @include button(backdrop-insensitive-active); }
+      }
+    }
+
     &.flat {
       @include button(undecorated);
+
       // to avoid adiacent buttons borders clashing when transitioning, the transition on the normal state is set
       // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
       // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
@@ -377,9 +401,9 @@ button {
 
         &:active { transition: $_button_transition; }
       }
-      
-      &:backdrop, 
-      &:disabled, 
+
+      &:backdrop,
+      &:disabled,
       &:backdrop:disabled {
         @include button(undecorated-insensitive);
       }
@@ -395,29 +419,6 @@ button {
       @include button(active);
 
       transition-duration: 50ms;
-    }
-
-    &:backdrop {
-      @include button(backdrop);
-
-      -gtk-icon-filter: none;
-
-      &:active,
-      &:checked { @include button(backdrop-active); }
-
-      &:disabled {
-        @include button(backdrop-insensitive);
-
-        &:active,
-        &:checked { @include button(backdrop-insensitive-active); }
-      }
-    }
-
-    &:disabled {
-      @include button(insensitive);
-
-      &:active,
-      &:checked { @include button(insensitive-active); }
     }
 
     &.image-button {

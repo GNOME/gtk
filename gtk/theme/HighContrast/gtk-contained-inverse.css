@@ -158,6 +158,18 @@ spinbutton:not(.vertical) progress:backdrop, entry progress:backdrop { backgroun
 
 button.titlebutton, button { min-height: 24px; min-width: 16px; padding: 4px 8px; border: 1px solid; border-radius: 3px; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); border-width: 2px; border-style: solid; color: #fff; background-image: none; background-color: #000; border-color: gray; }
 
+button.titlebutton:disabled, button:disabled { border-width: 2px; border-style: solid; color: gray; background-color: #070707; border-color: #494949; background-image: none; }
+
+button.titlebutton:disabled:active, button.titlebutton:disabled:checked, button:disabled:active, button:disabled:checked { border-width: 2px; border-style: solid; color: gray; border-color: #494949; background-image: none; background-color: #070707; }
+
+button.titlebutton:backdrop, button:backdrop { border-width: 2px; border-style: solid; color: #fff; background-color: #000; border-color: #737373; background-image: none; -gtk-icon-effect: none; }
+
+button.titlebutton:backdrop:active, button.titlebutton:backdrop:checked, button:backdrop:active, button:backdrop:checked { border-width: 2px; border-style: solid; color: black; background-color: #737373; border-color: #737373; background-image: none; }
+
+button.titlebutton:backdrop:disabled, button:backdrop:disabled { border-width: 2px; border-style: solid; color: gray; background-color: #070707; border-color: #494949; background-image: none; }
+
+button.titlebutton:backdrop:disabled:active, button.titlebutton:backdrop:disabled:checked, button:backdrop:disabled:active, button:backdrop:disabled:checked { border-width: 2px; border-style: solid; color: gray; border-color: #494949; background-image: none; background-color: #090909; }
+
 button.sidebar-button, button.titlebutton, button.flat { border-width: 2px; border-style: solid; color: #fff; background-color: transparent; background-image: none; border-color: transparent; transition: none; }
 
 button.sidebar-button:hover, button.titlebutton:hover, button.flat:hover { transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); transition-duration: 500ms; }
@@ -169,18 +181,6 @@ button.sidebar-button:backdrop, button.titlebutton:backdrop, button.sidebar-butt
 button.titlebutton:hover, button:hover { border-width: 2px; border-style: solid; color: #fff; background-color: #000; border-color: gray; background-image: none; -gtk-icon-filter: brightness(1.2); }
 
 button.titlebutton:active, button.titlebutton:checked, button:active, button:checked { border-width: 2px; border-style: solid; background-image: none; color: black; background-color: white; border-color: gray; transition-duration: 50ms; }
-
-button.titlebutton:backdrop, button:backdrop { border-width: 2px; border-style: solid; color: #fff; background-color: #000; border-color: #737373; background-image: none; -gtk-icon-filter: none; }
-
-button.titlebutton:backdrop:active, button.titlebutton:backdrop:checked, button:backdrop:active, button:backdrop:checked { border-width: 2px; border-style: solid; color: black; background-color: #737373; border-color: #737373; background-image: none; }
-
-button.titlebutton:backdrop:disabled, button:backdrop:disabled { border-width: 2px; border-style: solid; color: gray; background-color: #070707; border-color: #494949; background-image: none; }
-
-button.titlebutton:backdrop:disabled:active, button.titlebutton:backdrop:disabled:checked, button:backdrop:disabled:active, button:backdrop:disabled:checked { border-width: 2px; border-style: solid; color: gray; border-color: #494949; background-image: none; background-color: #090909; }
-
-button.titlebutton:disabled, button:disabled { border-width: 2px; border-style: solid; color: gray; background-color: #070707; border-color: #494949; background-image: none; }
-
-button.titlebutton:disabled:active, button.titlebutton:disabled:checked, button:disabled:active, button:disabled:checked { border-width: 2px; border-style: solid; color: gray; border-color: #494949; background-image: none; background-color: #070707; }
 
 button.image-button.titlebutton, button.image-button { min-width: 24px; padding-left: 4px; padding-right: 4px; }
 
