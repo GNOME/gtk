@@ -426,12 +426,17 @@ gsk_sl_function_declared_write_call_spv (GskSlFunction *function,
                                          guint32       *arguments)
 {
   GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
+  guint32 result;
 
-  return gsk_spv_writer_function_call (writer,
-                                       declared->return_type,
-                                       gsk_spv_writer_get_id_for_function (writer, function),
-                                       arguments,
-                                       declared->n_arguments);
+  result = gsk_spv_writer_function_call (writer,
+                                         declared->return_type,
+                                         gsk_spv_writer_get_id_for_function (writer, function),
+                                         arguments,
+                                         declared->n_arguments);
+
+  gsk_spv_writer_name (writer, result, declared->name);
+
+  return result;
 }
 
 static const GskSlFunctionClass GSK_SL_FUNCTION_DECLARED = {

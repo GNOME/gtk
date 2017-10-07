@@ -152,6 +152,11 @@ gsk_spv_writer_write_header (GskSpvWriter *writer)
   gsk_spv_writer_execution_mode (writer,
                                  entry_point,
                                  GSK_SPV_EXECUTION_MODE_ORIGIN_UPPER_LEFT);
+  gsk_spv_writer_source (writer,
+                         GSK_SPV_SOURCE_LANGUAGE_GLSL,
+                         440,
+                         0,
+                         NULL);
 }
 
 static void

@@ -1149,12 +1149,19 @@ gsk_sl_type_struct_can_convert (const GskSlType *target,
   return gsk_sl_type_equal (target, source);
 }
 
+static gboolean
+gsk_sl_type_struct_has_name (const GskSlTypeStruct *struc)
+{
+  return !g_str_has_prefix (struc->name, "struct { ");
+}
+
 static guint32
 gsk_sl_type_struct_write_spv (GskSlType    *type,
                               GskSpvWriter *writer)
 {
   GskSlTypeStruct *struc = (GskSlTypeStruct *) type;
   guint32 ids[struc->n_members];
+  guint32 result_id;
   guint i;
 
   for (i = 0; i < struc->n_members; i++)
@@ -1162,9 +1169,22 @@ gsk_sl_type_struct_write_spv (GskSlType    *type,
       ids[i] = gsk_spv_writer_get_id_for_type (writer, struc->members[i].type);
     }
 
-  return gsk_spv_writer_type_struct (writer,
-                                     ids,
-                                     struc->n_members);
+  result_id = gsk_spv_writer_type_struct (writer,
+                                          ids,
+                                          struc->n_members);
+
+  
+  if (gsk_sl_type_struct_has_name (struc))
+    gsk_spv_writer_name (writer, result_id, struc->name);
+  else
+    gsk_spv_writer_name (writer, result_id, "");
+
+  for (i = 0; i < struc->n_members; i++)
+    {
+      gsk_spv_writer_member_name (writer, result_id, i, struc->members[i].name);
+    }
+
+  return result_id;
 }
 
 static void
