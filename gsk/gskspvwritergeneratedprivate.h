@@ -914,11 +914,12 @@ gsk_spv_writer_function_call (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_variable (GskSpvWriter *writer,
+                         GskSpvWriterSection section,
                          GskSlPointerType * result_type,
                          GskSpvStorageClass storage_class,
                          guint32 opt_initializer)
 {
-  GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DECLARE);
+  GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;

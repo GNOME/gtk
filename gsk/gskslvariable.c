@@ -152,8 +152,11 @@ gsk_sl_variable_write_spv (const GskSlVariable *variable,
                            GskSpvWriter        *writer)
 {
   guint32 result_id;
+  GskSlQualifierLocation location;
+  
+  location = gsk_sl_qualifier_get_location (gsk_sl_pointer_type_get_qualifier (variable->type));
 
-  if (gsk_sl_qualifier_get_location (gsk_sl_pointer_type_get_qualifier (variable->type)) == GSK_SL_QUALIFIER_PARAMETER)
+  if (location == GSK_SL_QUALIFIER_PARAMETER)
     {
       result_id = gsk_spv_writer_function_parameter (writer,
                                                      gsk_sl_pointer_type_get_type (variable->type));
@@ -168,6 +171,7 @@ gsk_sl_variable_write_spv (const GskSlVariable *variable,
         value_id = 0;
 
       result_id = gsk_spv_writer_variable (writer,
+                                           location == GSK_SL_QUALIFIER_GLOBAL ? GSK_SPV_WRITER_SECTION_DEFINE : GSK_SPV_WRITER_SECTION_DECLARE,
                                            variable->type,
                                            gsk_sl_qualifier_get_storage_class (gsk_sl_pointer_type_get_qualifier (variable->type)),
                                            value_id);

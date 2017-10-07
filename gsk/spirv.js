@@ -139,7 +139,7 @@ var Sections = {
   "OpFunctionParameter": "declare",
   "OpFunctionEnd": "code",
   "OpFunctionCall": "code",
-  "OpVariable": "declare",
+  "OpVariable": "",
   "OpImageTexelPointer": "code",
   "OpLoad": "code",
   "OpStore": "code",
