@@ -15,8 +15,11 @@ static GtkWidget *window = NULL;
 static void
 response_cb (GtkDialog *dialog, gint response_id)
 {
-  gtk_window_destroy (GTK_WINDOW (window));
-  window = NULL;
+  if (response_id != GTK_RESPONSE_DELETE_EVENT)
+    {
+      gtk_window_destroy (GTK_WINDOW (window));
+      window = NULL;
+    }
 }
 
 static void
