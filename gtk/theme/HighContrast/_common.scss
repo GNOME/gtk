@@ -3088,30 +3088,35 @@ placesview {
 
 
 paned {
-  separator {
+  > separator {
     min-width: 1px;
     min-height: 1px;
     background-image: _solid($borders_color);
+
     &:backdrop {
       background-image: _solid($backdrop_borders_color);
     }
   }
-   &:dir(ltr).horizontal separator {
+
+  &:dir(ltr).horizontal > separator {
     margin: 0 -8px 0 0;
     padding: 0 8px 0 0;
   }
-  &:dir(rtl).horizontal separator {
+  &:dir(rtl).horizontal > separator {
     margin: 0 0 0 -8px;
     padding: 0 0 0 8px;
   }
-  &.vertical separator {
+
+  &.vertical > separator {
     margin: 0 0 -8px 0;
     padding: 0 0 8px 0;
   }
-  separator:selected {
+
+  > separator:selected {
     background-color: $selected_bg_color;
   }
-  separator.wide {
+
+  > separator.wide {
     min-width: 5px;
     min-height: 5px;
     background-color: transparent;
