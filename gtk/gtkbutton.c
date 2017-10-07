@@ -921,6 +921,10 @@ gtk_button_set_label (GtkButton   *button,
           gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
           gtk_label_set_mnemonic_widget (GTK_LABEL (child), GTK_WIDGET (button));
         }
+      if (GTK_IS_CHECK_BUTTON (button))
+        {
+          gtk_label_set_xalign (GTK_LABEL (child), 0.0);
+        }
       gtk_container_add (GTK_CONTAINER (button), child);
       gtk_style_context_remove_class (context, "image-button");
       gtk_style_context_add_class (context, "text-button");
