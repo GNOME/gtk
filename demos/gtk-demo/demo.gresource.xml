@@ -232,6 +232,9 @@
     <file>decor1.png</file>
     <file>decor2.png</file>
   </gresource>
+  <gresource prefix="/transparent">
+    <file>portland-rose.jpg</file>
+  </gresource>
   <gresource prefix="/markup">
     <file>markup.txt</file>
   </gresource>
