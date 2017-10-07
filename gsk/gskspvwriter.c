@@ -181,6 +181,8 @@ gsk_spv_writer_do_write (GskSpvWriter     *writer,
                          440,
                          0,
                          NULL);
+  gsk_spv_writer_source_extension (writer, "GL_GOOGLE_cpp_style_line_directive");
+  gsk_spv_writer_source_extension (writer, "GL_GOOGLE_include_directive");
   gsk_spv_writer_memory_model (writer,
                                GSK_SPV_ADDRESSING_MODEL_LOGICAL,
                                GSK_SPV_MEMORY_MODEL_GLSL450);
