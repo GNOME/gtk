@@ -2398,7 +2398,7 @@ scrollbar {
     &:disabled { background-color: transparent; }
   }
 
-  &.fine-tune {
+  & range.fine-tune {
     slider {
       min-width: 4px;
       min-height: 4px;
