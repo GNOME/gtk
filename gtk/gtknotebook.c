@@ -2222,6 +2222,20 @@ gtk_notebook_page_tab_label_is_visible (GtkNotebookPage *page)
          gtk_widget_get_child_visible (page->tab_label);
 }
 
+static gboolean
+in_tabs (GtkNotebook *notebook,
+         gdouble      x,
+         gdouble      y)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+  GtkAllocation allocation;
+
+  gtk_widget_get_own_allocation (priv->tabs_widget, &allocation);
+  gtk_widget_translate_coordinates (priv->tabs_widget, GTK_WIDGET (notebook),
+                                    allocation.x, allocation.y, &allocation.x, &allocation.y);
+  return gdk_rectangle_contains_point (&allocation, x, y);
+}
+
 static GList*
 get_tab_at_pos (GtkNotebook *notebook,
                 gdouble      x,
@@ -2281,7 +2295,7 @@ gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
       return;
     }
 
-  if (priv->menu && gdk_event_triggers_context_menu (event))
+  if (in_tabs (notebook, x, y) && priv->menu && gdk_event_triggers_context_menu (event))
     {
       gtk_menu_popup_at_pointer (GTK_MENU (priv->menu), event);
       return;
