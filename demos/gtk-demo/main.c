@@ -592,6 +592,17 @@ add_data_tab (const gchar *demoname)
           g_bytes_unref (bytes);
         }
 
+      if (GTK_IS_IMAGE (widget))
+        {
+          GtkWidget *sw;
+
+          gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+          gtk_widget_set_valign (widget, GTK_ALIGN_CENTER);
+          sw = gtk_scrolled_window_new (NULL, NULL);
+          gtk_container_add (GTK_CONTAINER (sw), widget);
+          widget = sw;
+        }
+
       label = gtk_label_new (resources[i]);
       gtk_widget_show (label);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
