@@ -37,6 +37,7 @@ typedef struct _GskSlValue              GskSlValue;
 typedef struct _GskSlVariable           GskSlVariable;
 
 typedef struct _GskSpvWriter            GskSpvWriter;
+typedef void (* GskSpvWriterFunc)       (GskSpvWriter *, gpointer);
 
 typedef enum {
   GSK_SL_VOID,

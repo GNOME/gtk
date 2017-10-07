@@ -325,15 +325,28 @@ guint32
 gsk_spv_writer_get_id_for_function (GskSpvWriter  *writer,
                                     GskSlFunction *function)
 {
-  GskSpvCodeBlock *block;
   guint32 result;
 
   result = GPOINTER_TO_UINT (g_hash_table_lookup (writer->functions, function));
   if (result != 0)
     return result;
+  
+  return gsk_spv_writer_write_function (writer, function, NULL, NULL);
+}
+
+guint32
+gsk_spv_writer_write_function (GskSpvWriter     *writer,
+                               GskSlFunction    *function,
+                               GskSpvWriterFunc  initializer,
+                               gpointer          initializer_data)
+{
+  GskSpvCodeBlock *block;
+  guint32 result;
+
+  g_assert (g_hash_table_lookup (writer->functions, function) == NULL);
 
   gsk_spv_writer_push_new_code_block (writer);
-  result = gsk_sl_function_write_spv (function, writer);
+  result = gsk_sl_function_write_spv (function, writer, initializer, initializer_data);
   g_hash_table_insert (writer->functions, gsk_sl_function_ref (function), GUINT_TO_POINTER (result));
   block = gsk_spv_writer_pop_code_block (writer);
   writer->pending_blocks = g_slist_prepend (writer->pending_blocks, block);

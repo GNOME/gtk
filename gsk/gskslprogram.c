@@ -256,20 +256,32 @@ gsk_sl_program_print (GskSlProgram *program,
 }
 
 static void
+gsk_sl_program_write_spv_initializer (GskSpvWriter *writer,
+                                      gpointer      data)
+{
+  GskSlProgram *program = data;
+  GSList *l;
+
+  for (l = program->variables; l; l = l->next)
+    gsk_spv_writer_get_id_for_variable (writer, l->data);
+}
+
+static void
 gsk_sl_program_write_spv (GskSlProgram *program,
                           GskSpvWriter *writer)
 {
   GSList *l;
 
-  for (l = program->variables; l; l = l->next)
-    gsk_spv_writer_get_id_for_variable (writer, l->data);
-
   for (l = program->functions; l; l = l->next)
     {
-      gsk_spv_writer_get_id_for_function (writer, l->data);
-
       if (g_str_equal (gsk_sl_function_get_name (l->data), "main"))
-        gsk_spv_writer_set_entry_point (writer, l->data);
+        {
+          gsk_spv_writer_write_function (writer,
+                                         l->data,
+                                         gsk_sl_program_write_spv_initializer,
+                                         program);
+          gsk_spv_writer_set_entry_point (writer, l->data);
+        }
     }
 }
 

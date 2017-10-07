@@ -56,7 +56,9 @@ struct _GskSlFunctionClass {
   void                  (* print)                               (const GskSlFunction    *function,
                                                                  GskSlPrinter           *printer);
   guint32               (* write_spv)                           (const GskSlFunction    *function,
-                                                                 GskSpvWriter           *writer);
+                                                                 GskSpvWriter           *writer,
+                                                                 GskSpvWriterFunc        initializer,
+                                                                 gpointer                initializer_data);
   guint32               (* write_call_spv)                      (GskSlFunction          *function,
                                                                  GskSpvWriter           *writer,
                                                                  guint32                *arguments);
@@ -146,8 +148,12 @@ gsk_sl_function_constructor_print (const GskSlFunction *function,
 
 static guint32
 gsk_sl_function_constructor_write_spv (const GskSlFunction *function,
-                                       GskSpvWriter        *writer)
+                                       GskSpvWriter        *writer,
+                                       GskSpvWriterFunc     initializer,
+                                       gpointer             initializer_data)
 {
+  g_assert (initializer == NULL);
+
   return 0;
 }
 
@@ -240,8 +246,12 @@ gsk_sl_function_native_print (const GskSlFunction *function,
 
 static guint32
 gsk_sl_function_native_write_spv (const GskSlFunction *function,
-                                  GskSpvWriter        *writer)
+                                  GskSpvWriter        *writer,
+                                  GskSpvWriterFunc     initializer,
+                                  gpointer             initializer_data)
 {
+  g_assert (initializer != NULL);
+
   return 0;
 }
 
@@ -378,7 +388,9 @@ gsk_sl_function_declared_print (const GskSlFunction *function,
 
 static guint32
 gsk_sl_function_declared_write_spv (const GskSlFunction *function,
-                                    GskSpvWriter        *writer)
+                                    GskSpvWriter        *writer,
+                                    GskSpvWriterFunc     initializer,
+                                    gpointer             initializer_data)
 {
   GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
   guint32 return_type_id, function_type_id, function_id;
@@ -407,7 +419,8 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
     }
 
   /* add function body */
-  gsk_spv_writer_label (writer);
+  if (initializer)
+    initializer (writer, initializer_data);
 
   gsk_sl_statement_write_spv (declared->statement, writer);
 
@@ -659,9 +672,11 @@ gsk_sl_function_print (const GskSlFunction *function,
 
 guint32
 gsk_sl_function_write_spv (const GskSlFunction *function,
-                           GskSpvWriter        *writer)
+                           GskSpvWriter        *writer,
+                           GskSpvWriterFunc     initializer,
+                           gpointer             initializer_data)
 {
-  return function->class->write_spv (function, writer);
+  return function->class->write_spv (function, writer, initializer, initializer_data);
 }
 
 guint32
