@@ -20,10 +20,8 @@ static GtkWidget *window = NULL;
 static cairo_surface_t *surface = NULL;
 
 /* Create a new surface of the appropriate size to store our scribbles */
-static gboolean
-scribble_configure_event (GtkWidget         *widget,
-                          GdkEventConfigure *event,
-                          gpointer           data)
+static void
+create_surface (GtkWidget *widget)
 {
   GtkAllocation allocation;
   cairo_t *cr;
@@ -32,10 +30,9 @@ scribble_configure_event (GtkWidget         *widget,
     cairo_surface_destroy (surface);
 
   gtk_widget_get_allocation (widget, &allocation);
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               allocation.width,
-                                               allocation.height);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        allocation.width,
+                                        allocation.height);
 
   /* Initialize the surface to white */
   cr = cairo_create (surface);
@@ -44,9 +41,12 @@ scribble_configure_event (GtkWidget         *widget,
   cairo_paint (cr);
 
   cairo_destroy (cr);
+}
 
-  /* We've handled the configure event, no need for further processing. */
-  return TRUE;
+static void
+scribble_size_allocate (GtkWidget *widget)
+{
+  create_surface (widget);
 }
 
 /* Redraw the screen from the surface */
@@ -70,6 +70,11 @@ draw_brush (GtkWidget *widget,
   GdkRectangle update_rect;
   cairo_t *cr;
 
+  if (surface == NULL ||
+      cairo_image_surface_get_width (surface) != gtk_widget_get_allocated_width (widget) ||
+      cairo_image_surface_get_height (surface) != gtk_widget_get_allocated_height (widget))
+    create_surface (widget);
+
   update_rect.x = x - 3;
   update_rect.y = y - 3;
   update_rect.width = 6;
@@ -83,10 +88,7 @@ draw_brush (GtkWidget *widget,
 
   cairo_destroy (cr);
 
-  /* Now invalidate the affected region of the drawing area. */
-  gdk_window_invalidate_rect (gtk_widget_get_window (widget),
-                              &update_rect,
-                              FALSE);
+  gtk_widget_queue_draw_area (widget, update_rect.x, update_rect.y, update_rect.width, update_rect.height);
 }
 
 static gboolean
@@ -96,9 +98,6 @@ scribble_button_press_event (GtkWidget      *widget,
 {
   double x, y;
   guint button;
-
-  if (surface == NULL)
-    return FALSE; /* paranoia check, in case we haven't gotten a configure event */
 
   gdk_event_get_button ((GdkEvent *)event, &button);
   gdk_event_get_coords ((GdkEvent *)event, &x, &y);
@@ -115,26 +114,11 @@ scribble_motion_notify_event (GtkWidget      *widget,
                               GdkEventMotion *event,
                               gpointer        data)
 {
-  int x, y;
+  double x, y;
   GdkModifierType state;
 
-  if (surface == NULL)
-    return FALSE; /* paranoia check, in case we haven't gotten a configure event */
-
-  /* This call is very important; it requests the next motion event.
-   * If you don't call gdk_window_get_pointer() you'll only get
-   * a single motion event. The reason is that we specified
-   * GDK_POINTER_MOTION_HINT_MASK to gtk_widget_set_events().
-   * If we hadn't specified that, we could just use event->x, event->y
-   * as the pointer location. But we'd also get deluged in events.
-   * By requesting the next event as we handle the current one,
-   * we avoid getting a huge number of events faster than we
-   * can cope.
-   */
-
-  gdk_window_get_device_position (gdk_event_get_window ((GdkEvent *) event),
-                                  gdk_event_get_device ((GdkEvent *) event),
-                                  &x, &y, &state);
+  gdk_event_get_state ((GdkEvent *)event, &state);
+  gdk_event_get_coords ((GdkEvent *)event, &x, &y);
 
   if (state & GDK_BUTTON1_MASK)
     draw_brush (widget, x, y);
@@ -233,6 +217,7 @@ do_drawingarea (GtkWidget *do_widget)
 
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
+      gtk_widget_set_vexpand (frame, TRUE);
       gtk_box_pack_start (GTK_BOX (vbox), frame);
 
       da = gtk_drawing_area_new ();
@@ -251,6 +236,7 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), label);
 
       frame = gtk_frame_new (NULL);
+      gtk_widget_set_vexpand (frame, TRUE);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (vbox), frame);
 
@@ -260,13 +246,10 @@ do_drawingarea (GtkWidget *do_widget)
       gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), scribble_draw, NULL, NULL);
       gtk_container_add (GTK_CONTAINER (frame), da);
 
-      /* Signals used to handle backing surface */
-
-      g_signal_connect (da,"configure-event",
-                        G_CALLBACK (scribble_configure_event), NULL);
+      g_signal_connect (da, "size-allocate",
+                        G_CALLBACK (scribble_size_allocate), NULL);
 
       /* Event signals */
-
       g_signal_connect (da, "motion-notify-event",
                         G_CALLBACK (scribble_motion_notify_event), NULL);
       g_signal_connect (da, "button-press-event",
