@@ -958,7 +958,7 @@ start_cb (GtkMenuItem *item, GtkWidget *scrollbar)
 {
   GtkAdjustment *adj;
 
-  adj = gtk_range_get_adjustment (GTK_RANGE (scrollbar));
+  adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (scrollbar));
   gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
 }
 
@@ -967,7 +967,7 @@ end_cb (GtkMenuItem *item, GtkWidget *scrollbar)
 {
   GtkAdjustment *adj;
 
-  adj = gtk_range_get_adjustment (GTK_RANGE (scrollbar));
+  adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (scrollbar));
   gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj));
 }
 
