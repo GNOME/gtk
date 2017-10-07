@@ -745,6 +745,9 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   widget = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_widget_set_sensitive (widget, FALSE);
 
+  gtk_widget_set_visible (priv->selection_radio, FALSE);
+  gtk_widget_set_visible (priv->conflicts_widget, FALSE);
+
   /* Treeview auxiliary functions need to be setup here */
   gtk_tree_model_filter_set_visible_func (priv->printer_list_filter,
                                           (GtkTreeModelFilterVisibleFunc) is_printer_active,
@@ -1663,7 +1666,7 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
   const gchar *copies;
   GtkWidget *button;
 
-  copies = gtk_entry_get_text (GTK_ENTRY (priv->copies_spin));
+  copies = gtk_spin_button_get_text (GTK_SPIN_BUTTON (priv->copies_spin));
   can_collate = (*copies != '\0' && atoi (copies) > 1);
 
   caps = priv->manual_capabilities | priv->printer_capabilities;
@@ -2558,7 +2561,7 @@ dialog_get_n_copies (GtkPrintUnixDialog *dialog)
 
   adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->copies_spin));
 
-  text = gtk_entry_get_text (GTK_ENTRY (priv->copies_spin));
+  text = gtk_spin_button_get_text (GTK_SPIN_BUTTON (priv->copies_spin));
   n_copies = g_ascii_strtoull (text, &endptr, 0);
 
   if (gtk_widget_is_sensitive (dialog->priv->copies_spin))

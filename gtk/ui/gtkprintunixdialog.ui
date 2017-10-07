@@ -330,7 +330,6 @@
                                     <property name="visible">1</property>
                                     <property name="can-focus">1</property>
                                     <property name="valign">baseline</property>
-                                    <property name="activates-default">1</property>
                                     <property name="adjustment">copies_spin_adjustment</property>
                                     <signal name="changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <signal name="value-changed" handler="update_dialog_from_capabilities" object="GtkPrintUnixDialog" swapped="yes"/>
