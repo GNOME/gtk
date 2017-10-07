@@ -28,7 +28,7 @@
 
 struct _GskSpvCodeBlock
 {
-  GArray *code;
+  GArray *code[GSK_SPV_WRITER_N_BLOCK_SECTIONS];
 
   guint32 label;
 };
@@ -38,7 +38,7 @@ struct _GskSpvWriter
   int ref_count;
 
   guint32 last_id;
-  GArray *code[GSK_SPV_WRITER_N_SECTIONS];
+  GArray *code[GSK_SPV_WRITER_N_GLOBAL_SECTIONS];
   GSList *blocks;
   GSList *pending_blocks;
 
@@ -54,7 +54,10 @@ struct _GskSpvWriter
 static void
 gsk_spv_code_block_free (GskSpvCodeBlock *block)
 {
-  g_array_free (block->code, TRUE);
+  guint i;
+
+  for (i = 0; i < GSK_SPV_WRITER_N_BLOCK_SECTIONS; i++)
+    g_array_free (block->code[i], TRUE);
 
   g_slice_free (GskSpvCodeBlock, block);
 }
@@ -68,7 +71,7 @@ gsk_spv_writer_new (void)
   writer = g_slice_new0 (GskSpvWriter);
   writer->ref_count = 1;
 
-  for (i = 0; i < GSK_SPV_WRITER_N_SECTIONS; i++)
+  for (i = 0; i < GSK_SPV_WRITER_N_GLOBAL_SECTIONS; i++)
     {
       writer->code[i] = g_array_new (FALSE, TRUE, sizeof (guint32));
     }
@@ -113,7 +116,7 @@ gsk_spv_writer_unref (GskSpvWriter *writer)
 
   g_slist_free_full (writer->pending_blocks, (GDestroyNotify) gsk_spv_code_block_free);
 
-  for (i = 0; i < GSK_SPV_WRITER_N_SECTIONS; i++)
+  for (i = 0; i < GSK_SPV_WRITER_N_GLOBAL_SECTIONS; i++)
     {
       g_array_free (writer->code[i], TRUE);
     }
@@ -175,7 +178,7 @@ gsk_spv_writer_write (GskSpvWriter *writer)
   g_array_append_val (array, (guint32) { writer->last_id + 1 });
   g_array_append_val (array, (guint32) { 0 });
   
-  for (i = 0; i < GSK_SPV_WRITER_N_SECTIONS; i++)
+  for (i = 0; i < GSK_SPV_WRITER_N_GLOBAL_SECTIONS; i++)
     {
       g_array_append_vals (array, writer->code[i]->data, writer->code[i]->len);
     }
@@ -184,7 +187,10 @@ gsk_spv_writer_write (GskSpvWriter *writer)
     {
       GskSpvCodeBlock *block = l->data;
 
-      g_array_append_vals (array, block->code->data, block->code->len);
+      for (i = 0; i < GSK_SPV_WRITER_N_BLOCK_SECTIONS; i++)
+        {
+          g_array_append_vals (array, block->code[i]->data, block->code[i]->len);
+        }
     }
 
   gsk_spv_writer_clear_header (writer);
@@ -349,18 +355,23 @@ GArray *
 gsk_spv_writer_get_bytes (GskSpvWriter        *writer,
                           GskSpvWriterSection  section)
 {
-  if (section == GSK_SPV_WRITER_SECTION_CODE && writer->blocks)
-    return ((GskSpvCodeBlock *) writer->blocks->data)->code;
-  return writer->code[section];
+  if (section < GSK_SPV_WRITER_SECTION_BLOCK_FIRST)
+    return writer->code[section];
+  
+  return ((GskSpvCodeBlock *) writer->blocks->data)->code[section - GSK_SPV_WRITER_SECTION_BLOCK_FIRST];
 }
 
 guint32
 gsk_spv_writer_push_new_code_block (GskSpvWriter *writer)
 {
   GskSpvCodeBlock *block;
+  guint i;
 
   block = g_slice_new0 (GskSpvCodeBlock);
-  block->code = g_array_new (FALSE, TRUE, sizeof (guint32));
+  for (i = 0; i < GSK_SPV_WRITER_N_BLOCK_SECTIONS; i++)
+    {
+      block->code[i] = g_array_new (FALSE, TRUE, sizeof (guint32));
+    }
 
   gsk_spv_writer_push_code_block (writer, block);
 
@@ -392,13 +403,14 @@ gsk_spv_writer_pop_code_block (GskSpvWriter *writer)
 void
 gsk_spv_writer_commit_code_block (GskSpvWriter *writer)
 {
-  GskSpvCodeBlock *block;
-  GArray *commit_target;
+  GskSpvCodeBlock *block, *target;
+  guint i;
 
   block = gsk_spv_writer_pop_code_block (writer);
+  target = writer->blocks->data;
 
-  commit_target = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
-  g_array_append_vals (commit_target, block->code->data, block->code->len);
+  for (i = 0; i < GSK_SPV_WRITER_N_BLOCK_SECTIONS; i++)
+    g_array_append_vals (target->code[i], block->code[i]->data, block->code[i]->len);
 
   gsk_spv_code_block_free (block);
 }

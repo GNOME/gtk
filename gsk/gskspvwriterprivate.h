@@ -44,6 +44,10 @@ typedef enum {
   GSK_SPV_WRITER_N_SECTIONS
 } GskSpvWriterSection;
 
+#define GSK_SPV_WRITER_SECTION_BLOCK_FIRST GSK_SPV_WRITER_SECTION_DECLARE
+#define GSK_SPV_WRITER_N_GLOBAL_SECTIONS GSK_SPV_WRITER_SECTION_BLOCK_FIRST
+#define GSK_SPV_WRITER_N_BLOCK_SECTIONS (GSK_SPV_WRITER_N_SECTIONS - GSK_SPV_WRITER_N_GLOBAL_SECTIONS)
+
 GskSpvWriter *          gsk_spv_writer_new                      (void);
 
 GskSpvWriter *          gsk_spv_writer_ref                      (GskSpvWriter           *writer);
