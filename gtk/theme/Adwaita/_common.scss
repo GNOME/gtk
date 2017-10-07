@@ -3412,16 +3412,21 @@ levelbar {
  * Print dialog *
 *****************/
 printdialog {
-  paper {
+  drawing {
     color: $fg_color;
-    border: 1px solid $borders_color;
     background: white;
+    border: none;
     padding: 0;
 
     &:backdrop {
       color: $backdrop_fg_color;
       border-color: $backdrop_borders_color;
     }
+
+    paper {
+      border: 1px solid $borders_color;
+    }
+
   }
 
   .dialog-action-box { margin: 12px; }

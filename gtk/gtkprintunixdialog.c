@@ -807,8 +807,8 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
                                   draw_page,
                                   dialog, NULL);
 
-  gtk_css_node_set_name (gtk_widget_get_css_node (priv->collate_image), I_("paper"));
-  gtk_css_node_set_name (gtk_widget_get_css_node (priv->page_layout_preview), I_("paper"));
+  gtk_css_node_set_name (gtk_widget_get_css_node (priv->collate_image), I_("drawing"));
+  gtk_css_node_set_name (gtk_widget_get_css_node (priv->page_layout_preview), I_("drawing"));
 }
 
 static void
@@ -2243,6 +2243,7 @@ paint_page (GtkWidget  *widget,
   text_y = 21;
 
   context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save_named (context, "paper");
 
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
@@ -2253,6 +2254,8 @@ paint_page (GtkWidget  *widget,
   cairo_set_font_size (cr, 9);
   cairo_move_to (cr, x + text_x, y + text_y);
   cairo_show_text (cr, text);
+
+  gtk_style_context_restore (context);
 }
 
 static void
@@ -2324,9 +2327,8 @@ gtk_print_unix_dialog_style_updated (GtkWidget *widget)
       gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
       scale = size / 48.0;
 
-      gtk_widget_set_size_request (priv->collate_image,
-                                   (50 + 20) * scale,
-                                   (15 + 26) * scale);
+      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (priv->collate_image), (50 + 20) * scale);
+      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (priv->collate_image), (15 + 26) * scale);
     }
 }
 
@@ -2798,6 +2800,7 @@ draw_page (GtkDrawingArea *da,
     }
 
   context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save_named (context, "paper");
   gtk_style_context_get_color (context, &color);
 
   pos_x = (width - w) / 2;
@@ -3085,6 +3088,8 @@ draw_page (GtkDrawingArea *da,
       cairo_line_to (cr, pos_x + w + 0.5, pos_y + h + shadow_offset + RULER_DISTANCE + RULER_RADIUS);
       cairo_stroke (cr);
     }
+
+  gtk_style_context_restore (context);
 }
 
 static void
