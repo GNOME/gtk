@@ -1377,19 +1377,19 @@ placesview .server-list-button:checked > image { transition: 200ms cubic-bezier(
 placesview row.activatable:hover { background-color: transparent; }
 
 /********* Paned * */
-paned separator { min-width: 1px; min-height: 1px; background-image: linear-gradient(to bottom, gray, gray); }
+paned > separator { min-width: 1px; min-height: 1px; background-image: linear-gradient(to bottom, gray, gray); }
 
-paned separator:backdrop { background-image: linear-gradient(to bottom, #8d8d8d, #8d8d8d); }
+paned > separator:backdrop { background-image: linear-gradient(to bottom, #8d8d8d, #8d8d8d); }
 
-paned:dir(ltr).horizontal separator { margin: 0 -8px 0 0; padding: 0 8px 0 0; }
+paned:dir(ltr).horizontal > separator { margin: 0 -8px 0 0; padding: 0 8px 0 0; }
 
-paned:dir(rtl).horizontal separator { margin: 0 0 0 -8px; padding: 0 0 0 8px; }
+paned:dir(rtl).horizontal > separator { margin: 0 0 0 -8px; padding: 0 0 0 8px; }
 
-paned.vertical separator { margin: 0 0 -8px 0; padding: 0 0 8px 0; }
+paned.vertical > separator { margin: 0 0 -8px 0; padding: 0 0 8px 0; }
 
-paned separator:selected { background-color: #000; }
+paned > separator:selected { background-color: #000; }
 
-paned separator.wide { min-width: 5px; min-height: 5px; background-color: transparent; border-style: none solid; border-color: gray; border-width: 1px; }
+paned > separator.wide { min-width: 5px; min-height: 5px; background-color: transparent; border-style: none solid; border-color: gray; border-width: 1px; }
 
 /************** GtkInfoBar * */
 infobar { border-width: 0; border-style: none; }
