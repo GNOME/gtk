@@ -266,23 +266,18 @@ gsk_sl_program_write_spv_initializer (GskSpvWriter *writer,
     gsk_spv_writer_get_id_for_variable (writer, l->data);
 }
 
-static void
-gsk_sl_program_write_spv (GskSlProgram *program,
-                          GskSpvWriter *writer)
+static GskSlFunction *
+gsk_sl_program_get_entry_point (GskSlProgram *program)
 {
   GSList *l;
 
   for (l = program->functions; l; l = l->next)
     {
       if (g_str_equal (gsk_sl_function_get_name (l->data), "main"))
-        {
-          gsk_spv_writer_write_function (writer,
-                                         l->data,
-                                         gsk_sl_program_write_spv_initializer,
-                                         program);
-          gsk_spv_writer_set_entry_point (writer, l->data);
-        }
+        return l->data;
     }
+
+  return NULL;
 }
 
 GBytes *
@@ -295,8 +290,10 @@ gsk_sl_program_to_spirv (GskSlProgram *program)
 
   writer = gsk_spv_writer_new ();
 
-  gsk_sl_program_write_spv (program, writer);
-  bytes = gsk_spv_writer_write (writer);
+  bytes = gsk_spv_writer_write (writer,
+                                gsk_sl_program_get_entry_point (program),
+                                gsk_sl_program_write_spv_initializer,
+                                program);
 
   gsk_spv_writer_unref (writer);
 

@@ -53,9 +53,10 @@ GskSpvWriter *          gsk_spv_writer_new                      (void);
 GskSpvWriter *          gsk_spv_writer_ref                      (GskSpvWriter           *writer);
 void                    gsk_spv_writer_unref                    (GskSpvWriter           *writer);
 
-GBytes *                gsk_spv_writer_write                    (GskSpvWriter           *writer);
-void                    gsk_spv_writer_set_entry_point          (GskSpvWriter           *writer,
-                                                                 GskSlFunction          *function);
+GBytes *                gsk_spv_writer_write                    (GskSpvWriter           *writer,
+                                                                 GskSlFunction          *entry_point,
+                                                                 GskSpvWriterFunc        initializer,
+                                                                 gpointer                initializer_data);
 
 guint32                 gsk_spv_writer_get_id_for_type          (GskSpvWriter           *writer,
                                                                  GskSlType              *type);
@@ -71,10 +72,6 @@ guint32                 gsk_spv_writer_get_id_for_variable      (GskSpvWriter   
                                                                  GskSlVariable          *variable);
 guint32                 gsk_spv_writer_get_id_for_function      (GskSpvWriter           *writer,
                                                                  GskSlFunction          *function);
-guint32                 gsk_spv_writer_write_function           (GskSpvWriter           *writer,
-                                                                 GskSlFunction          *function,
-                                                                 GskSpvWriterFunc        initializer,
-                                                                 gpointer                intializer_data);
 
 guint32                 gsk_spv_writer_make_id                  (GskSpvWriter           *writer);
 GArray *                gsk_spv_writer_get_bytes                (GskSpvWriter           *writer,
