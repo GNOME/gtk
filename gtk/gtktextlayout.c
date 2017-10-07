@@ -1549,6 +1549,9 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
   if (appearance->underline_rgba)
     result->appearance.underline_rgba = gdk_rgba_copy (appearance->underline_rgba);
 
+  if (appearance->strikethrough_rgba)
+    result->appearance.strikethrough_rgba = gdk_rgba_copy (appearance->strikethrough_rgba);
+
   return (PangoAttribute *)result;
 }
 
