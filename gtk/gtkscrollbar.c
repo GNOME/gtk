@@ -58,9 +58,9 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * scrollbar[.fine-tune]
+ * scrollbar
  * ╰── box
- *     ╰── range
+ *     ╰── range[.fine-tune]
  *         ╰── trough
  *             ╰── slider
  * ]|
@@ -69,7 +69,7 @@
  * contents. Both the main node and the box subnode get the .horizontal or .vertical
  * style classes applied, depending on the scrollbar's orientation.
  *
- * The main node gets the style class .fine-tune added when the scrollbar is
+ * The range node gets the style class .fine-tune added when the scrollbar is
  * in 'fine-tuning' mode.
  *
  * If steppers are enabled, they are represented by up to four additional
