@@ -20,6 +20,7 @@
 
 #include "gskspvwriterprivate.h"
 
+#include "gskslfunctionprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
@@ -39,13 +40,24 @@ struct _GskSpvWriter
   guint32 last_id;
   GArray *code[GSK_SPV_WRITER_N_SECTIONS];
   GSList *blocks;
+  GSList *pending_blocks;
 
-  guint32 entry_point;
+  GskSlFunction *entry_point;
+
   GHashTable *types;
   GHashTable *pointer_types;
   GHashTable *values;
   GHashTable *variables;
+  GHashTable *functions;
 };
+
+static void
+gsk_spv_code_block_free (GskSpvCodeBlock *block)
+{
+  g_array_free (block->code, TRUE);
+
+  g_slice_free (GskSpvCodeBlock, block);
+}
 
 GskSpvWriter *
 gsk_spv_writer_new (void)
@@ -69,6 +81,8 @@ gsk_spv_writer_new (void)
                                           (GDestroyNotify) gsk_sl_value_free, NULL);
   writer->variables = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                              (GDestroyNotify) gsk_sl_variable_unref, NULL);
+  writer->functions = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                             (GDestroyNotify) gsk_sl_function_unref, NULL);
   /* the ID 1 is reserved for the GLSL instruction set (for now) */
   writer->last_id = 1;
 
@@ -97,6 +111,8 @@ gsk_spv_writer_unref (GskSpvWriter *writer)
   if (writer->ref_count > 0)
     return;
 
+  g_slist_free_full (writer->pending_blocks, (GDestroyNotify) gsk_spv_code_block_free);
+
   for (i = 0; i < GSK_SPV_WRITER_N_SECTIONS; i++)
     {
       g_array_free (writer->code[i], TRUE);
@@ -106,6 +122,7 @@ gsk_spv_writer_unref (GskSpvWriter *writer)
   g_hash_table_destroy (writer->types);
   g_hash_table_destroy (writer->values);
   g_hash_table_destroy (writer->variables);
+  g_hash_table_destroy (writer->functions);
 
   g_slice_free (GskSpvWriter, writer);
 }
@@ -114,20 +131,23 @@ gsk_spv_writer_unref (GskSpvWriter *writer)
 static void
 gsk_spv_writer_write_header (GskSpvWriter *writer)
 {
+  guint32 entry_point;
+
   gsk_spv_writer_capability (writer, GSK_SPV_CAPABILITY_SHADER);
   gsk_spv_writer_ext_inst_import (writer,
                                   "GLSL.std.450");
   gsk_spv_writer_memory_model (writer,
                                GSK_SPV_ADDRESSING_MODEL_LOGICAL,
                                GSK_SPV_MEMORY_MODEL_GLSL450);
+  entry_point = gsk_spv_writer_get_id_for_function (writer, writer->entry_point);
   gsk_spv_writer_entry_point (writer,
                               GSK_SPV_EXECUTION_MODEL_FRAGMENT,
-                              writer->entry_point,
+                              entry_point,
                               "main",
                               NULL,
                               0);
   gsk_spv_writer_execution_mode (writer,
-                                 writer->entry_point,
+                                 entry_point,
                                  GSK_SPV_EXECUTION_MODE_ORIGIN_UPPER_LEFT);
 }
 
@@ -142,6 +162,7 @@ gsk_spv_writer_write (GskSpvWriter *writer)
 {
   GArray *array;
   gsize size;
+  GSList *l;
   guint i;
 
   gsk_spv_writer_write_header (writer);
@@ -157,6 +178,13 @@ gsk_spv_writer_write (GskSpvWriter *writer)
   for (i = 0; i < GSK_SPV_WRITER_N_SECTIONS; i++)
     {
       g_array_append_vals (array, writer->code[i]->data, writer->code[i]->len);
+    }
+
+  for (l = writer->pending_blocks; l; l = l->next)
+    {
+      GskSpvCodeBlock *block = l->data;
+
+      g_array_append_vals (array, block->code->data, block->code->len);
     }
 
   gsk_spv_writer_clear_header (writer);
@@ -283,6 +311,26 @@ gsk_spv_writer_get_id_for_variable (GskSpvWriter  *writer,
 }
 
 guint32
+gsk_spv_writer_get_id_for_function (GskSpvWriter  *writer,
+                                    GskSlFunction *function)
+{
+  GskSpvCodeBlock *block;
+  guint32 result;
+
+  result = GPOINTER_TO_UINT (g_hash_table_lookup (writer->functions, function));
+  if (result != 0)
+    return result;
+
+  gsk_spv_writer_push_new_code_block (writer);
+  result = gsk_sl_function_write_spv (function, writer);
+  g_hash_table_insert (writer->functions, gsk_sl_function_ref (function), GUINT_TO_POINTER (result));
+  block = gsk_spv_writer_pop_code_block (writer);
+  writer->pending_blocks = g_slist_prepend (writer->pending_blocks, block);
+
+  return result;
+}
+
+guint32
 gsk_spv_writer_make_id (GskSpvWriter *writer)
 {
   writer->last_id++;
@@ -291,10 +339,10 @@ gsk_spv_writer_make_id (GskSpvWriter *writer)
 }
 
 void
-gsk_spv_writer_set_entry_point (GskSpvWriter *writer,
-                                guint32       entry_point)
+gsk_spv_writer_set_entry_point (GskSpvWriter  *writer,
+                                GskSlFunction *function)
 {
-  writer->entry_point = entry_point;
+  writer->entry_point = gsk_sl_function_ref (function);
 }
 
 GArray *
@@ -352,9 +400,7 @@ gsk_spv_writer_commit_code_block (GskSpvWriter *writer)
   commit_target = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   g_array_append_vals (commit_target, block->code->data, block->code->len);
 
-  g_array_free (block->code, TRUE);
-
-  g_slice_free (GskSpvCodeBlock, block);
+  gsk_spv_code_block_free (block);
 }
 
 guint32

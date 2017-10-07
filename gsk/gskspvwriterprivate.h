@@ -51,7 +51,7 @@ void                    gsk_spv_writer_unref                    (GskSpvWriter   
 
 GBytes *                gsk_spv_writer_write                    (GskSpvWriter           *writer);
 void                    gsk_spv_writer_set_entry_point          (GskSpvWriter           *writer,
-                                                                 guint32                 entry_point);
+                                                                 GskSlFunction          *function);
 
 guint32                 gsk_spv_writer_get_id_for_type          (GskSpvWriter           *writer,
                                                                  GskSlType              *type);
@@ -65,6 +65,8 @@ guint32                 gsk_spv_writer_get_id_for_one           (GskSpvWriter   
                                                                  GskSlScalarType         scalar);
 guint32                 gsk_spv_writer_get_id_for_variable      (GskSpvWriter           *writer,
                                                                  GskSlVariable          *variable);
+guint32                 gsk_spv_writer_get_id_for_function      (GskSpvWriter           *writer,
+                                                                 GskSlFunction          *function);
 
 guint32                 gsk_spv_writer_make_id                  (GskSpvWriter           *writer);
 GArray *                gsk_spv_writer_get_bytes                (GskSpvWriter           *writer,

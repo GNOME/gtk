@@ -48,6 +48,9 @@ GskSlValue *            gsk_sl_function_get_constant            (const GskSlFunc
                                                                  gsize                   n_values);
 guint32                 gsk_sl_function_write_spv               (const GskSlFunction    *function,
                                                                  GskSpvWriter           *writer);
+guint32                 gsk_sl_function_write_call_spv          (GskSlFunction          *function,
+                                                                 GskSpvWriter           *writer,
+                                                                 guint32                *arguments);
 
 struct _GskSlFunctionMatcher
 {

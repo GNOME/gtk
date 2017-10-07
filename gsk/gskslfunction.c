@@ -57,6 +57,9 @@ struct _GskSlFunctionClass {
                                                                  GskSlPrinter           *printer);
   guint32               (* write_spv)                           (const GskSlFunction    *function,
                                                                  GskSpvWriter           *writer);
+  guint32               (* write_call_spv)                      (GskSlFunction          *function,
+                                                                 GskSpvWriter           *writer,
+                                                                 guint32                *arguments);
 };
 
 static GskSlFunction *
@@ -148,6 +151,16 @@ gsk_sl_function_constructor_write_spv (const GskSlFunction *function,
   return 0;
 }
 
+static guint32
+gsk_sl_function_constructor_write_call_spv (GskSlFunction *function,
+                                            GskSpvWriter  *writer,
+                                            guint32       *arguments)
+{
+  g_assert_not_reached ();
+
+  return 0;
+}
+
 static const GskSlFunctionClass GSK_SL_FUNCTION_CONSTRUCTOR = {
   gsk_sl_function_constructor_free,
   gsk_sl_function_constructor_get_return_type,
@@ -157,6 +170,7 @@ static const GskSlFunctionClass GSK_SL_FUNCTION_CONSTRUCTOR = {
   gsk_sl_function_constructor_get_constant,
   gsk_sl_function_constructor_print,
   gsk_sl_function_constructor_write_spv,
+  gsk_sl_function_constructor_write_call_spv
 };
 
 /* NATIVE */
@@ -231,6 +245,16 @@ gsk_sl_function_native_write_spv (const GskSlFunction *function,
   return 0;
 }
 
+static guint32
+gsk_sl_function_native_write_call_spv (GskSlFunction *function,
+                                       GskSpvWriter  *writer,
+                                       guint32       *arguments)
+{
+  g_assert_not_reached ();
+
+  return 0;
+}
+
 static const GskSlFunctionClass GSK_SL_FUNCTION_NATIVE = {
   gsk_sl_function_native_free,
   gsk_sl_function_native_get_return_type,
@@ -239,7 +263,8 @@ static const GskSlFunctionClass GSK_SL_FUNCTION_NATIVE = {
   gsk_sl_function_native_get_argument_type,
   gsk_sl_function_native_get_constant,
   gsk_sl_function_native_print,
-  gsk_sl_function_native_write_spv
+  gsk_sl_function_native_write_spv,
+  gsk_sl_function_native_write_call_spv
 };
 
 /* DECLARED */
@@ -395,6 +420,20 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
   return function_id;
 }
 
+static guint32
+gsk_sl_function_declared_write_call_spv (GskSlFunction *function,
+                                         GskSpvWriter  *writer,
+                                         guint32       *arguments)
+{
+  GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
+
+  return gsk_spv_writer_function_call (writer,
+                                       declared->return_type,
+                                       gsk_spv_writer_get_id_for_function (writer, function),
+                                       arguments,
+                                       declared->n_arguments);
+}
+
 static const GskSlFunctionClass GSK_SL_FUNCTION_DECLARED = {
   gsk_sl_function_declared_free,
   gsk_sl_function_declared_get_return_type,
@@ -404,6 +443,7 @@ static const GskSlFunctionClass GSK_SL_FUNCTION_DECLARED = {
   gsk_sl_function_declared_get_constant,
   gsk_sl_function_declared_print,
   gsk_sl_function_declared_write_spv,
+  gsk_sl_function_declared_write_call_spv
 };
 
 /* API */
@@ -617,6 +657,14 @@ gsk_sl_function_write_spv (const GskSlFunction *function,
                            GskSpvWriter        *writer)
 {
   return function->class->write_spv (function, writer);
+}
+
+guint32
+gsk_sl_function_write_call_spv (GskSlFunction *function,
+                                GskSpvWriter  *writer,
+                                guint32       *arguments)
+{
+  return function->class->write_call_spv (function, writer, arguments);
 }
 
 void

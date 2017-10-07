@@ -266,10 +266,10 @@ gsk_sl_program_write_spv (GskSlProgram *program,
 
   for (l = program->functions; l; l = l->next)
     {
-      guint32 id = gsk_sl_function_write_spv (l->data, writer);
+      gsk_spv_writer_get_id_for_function (writer, l->data);
 
       if (g_str_equal (gsk_sl_function_get_name (l->data), "main"))
-        gsk_spv_writer_set_entry_point (writer, id);
+        gsk_spv_writer_set_entry_point (writer, l->data);
     }
 }
 

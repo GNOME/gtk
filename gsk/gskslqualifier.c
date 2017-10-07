@@ -547,10 +547,6 @@ gsk_sl_qualifier_get_storage_class (const GskSlQualifier *qualifier)
   switch (qualifier->storage)
     {
     case GSK_SL_STORAGE_DEFAULT:
-    case GSK_SL_STORAGE_PARAMETER_IN:
-    case GSK_SL_STORAGE_PARAMETER_OUT:
-    case GSK_SL_STORAGE_PARAMETER_INOUT:
-    case GSK_SL_STORAGE_PARAMETER_CONST:
     default:
       g_assert_not_reached ();
       return GSK_SPV_STORAGE_CLASS_FUNCTION;
@@ -573,6 +569,10 @@ gsk_sl_qualifier_get_storage_class (const GskSlQualifier *qualifier)
 
     case GSK_SL_STORAGE_LOCAL:
     case GSK_SL_STORAGE_LOCAL_CONST:
+    case GSK_SL_STORAGE_PARAMETER_IN:
+    case GSK_SL_STORAGE_PARAMETER_OUT:
+    case GSK_SL_STORAGE_PARAMETER_INOUT:
+    case GSK_SL_STORAGE_PARAMETER_CONST:
       return GSK_SPV_STORAGE_CLASS_FUNCTION;
     }
 }

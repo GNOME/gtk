@@ -1840,9 +1840,20 @@ static guint32
 gsk_sl_expression_function_call_write_spv (const GskSlExpression *expression,
                                            GskSpvWriter          *writer)
 {
-  g_assert_not_reached ();
+  const GskSlExpressionFunctionCall *function_call = (const GskSlExpressionFunctionCall *) expression;
+  guint arguments[function_call->n_arguments];
+  gsize i;
 
-  return 0;
+  for (i = 0; i < function_call->n_arguments; i++)
+    {
+      arguments[i] = gsk_sl_expression_write_spv (function_call->arguments[i], writer);
+      arguments[i] = gsk_spv_writer_convert (writer, 
+                                             arguments[i],
+                                             gsk_sl_expression_get_return_type (function_call->arguments[i]),
+                                             gsk_sl_function_get_argument_type (function_call->function, i));
+    }
+
+  return gsk_sl_function_write_call_spv (function_call->function, writer, arguments);
 }
 
 static const GskSlExpressionClass GSK_SL_EXPRESSION_FUNCTION_CALL = {
