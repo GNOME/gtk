@@ -50,14 +50,6 @@
  */
 
 
-typedef struct _GdkIOClosure GdkIOClosure;
-
-struct _GdkIOClosure
-{
-  GDestroyNotify notify;
-  gpointer data;
-};
-
 /* Private variable declarations
  */
 
