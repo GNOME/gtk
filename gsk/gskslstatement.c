@@ -392,59 +392,54 @@ static void
 gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
                                GskSpvWriter         *writer)
 {
-#if 0 
   GskSlStatementIf *if_stmt = (GskSlStatementIf *) statement;
-  guint32 label_id, if_id, else_id, condition_id;
+  guint32 if_id, else_id, condition_id;
+  GskSpvCodeBlock *if_block, *else_block, *after_block;
 
   condition_id = gsk_sl_expression_write_spv (if_stmt->condition, writer);
-  if_id = gsk_spv_writer_next_id (writer);
-  else_id = gsk_spv_writer_next_id (writer);
-  /* We compute the labels in this funny order to match what glslang does */
-  if (if_stmt->else_part)
-    label_id = gsk_spv_writer_next_id (writer);
-  else
-    label_id = else_id;
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      3, GSK_SPV_OP_SELECTION_MERGE,
-                      (guint32[2]) { label_id,
-                                     0});
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      4, GSK_SPV_OP_BRANCH_CONDITIONAL,
-                      (guint32[3]) { condition_id,
-                                     if_id,
-                                     else_id });
 
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      2, GSK_SPV_OP_LABEL,
-                      (guint32[1]) { if_id });
+  gsk_spv_writer_push_new_code_block (writer);
+  if_block  = gsk_spv_writer_pop_code_block (writer);
+  if_id = gsk_spv_code_block_get_label (if_block);
+  gsk_spv_writer_push_new_code_block (writer);
+  after_block = gsk_spv_writer_pop_code_block (writer);
+
+  gsk_spv_writer_push_code_block (writer, if_block);
   gsk_sl_statement_write_spv (if_stmt->if_part, writer);
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      2, GSK_SPV_OP_BRANCH,
-                      (guint32[1]) { label_id });
+  gsk_spv_writer_branch (writer,
+                         gsk_spv_code_block_get_label (after_block));
+  gsk_spv_writer_pop_code_block (writer);
 
   if (if_stmt->else_part)
     {
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          2, GSK_SPV_OP_LABEL,
-                          (guint32[1]) { else_id });
+      else_id = gsk_spv_writer_push_new_code_block (writer);
       gsk_sl_statement_write_spv (if_stmt->else_part, writer);
-      gsk_spv_writer_add (writer,
-                          GSK_SPV_WRITER_SECTION_CODE,
-                          2, GSK_SPV_OP_BRANCH,
-                          (guint32[1]) { label_id });
+      gsk_spv_writer_branch (writer, 
+                             gsk_spv_code_block_get_label (after_block));
+      else_block = gsk_spv_writer_pop_code_block (writer);
+    }
+  else
+    {
+      else_id = gsk_spv_code_block_get_label (after_block);
+      else_block = NULL;
     }
 
-  gsk_spv_writer_add (writer,
-                      GSK_SPV_WRITER_SECTION_CODE,
-                      2, GSK_SPV_OP_LABEL,
-                      (guint32[1]) { label_id });
-#endif
-  g_assert_not_reached ();
+  gsk_spv_writer_selection_merge (writer,
+                                  gsk_spv_code_block_get_label (after_block),
+                                  0);
+  gsk_spv_writer_branch_conditional (writer, condition_id, if_id, else_id, NULL, 0);
+
+  gsk_spv_writer_push_code_block (writer, if_block);
+  gsk_spv_writer_commit_code_block (writer);
+
+  if (else_block)
+    {
+      gsk_spv_writer_push_code_block (writer, else_block);
+      gsk_spv_writer_commit_code_block (writer);
+    }
+
+  gsk_spv_writer_push_code_block (writer, after_block);
+  gsk_spv_writer_commit_code_block (writer);
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_IF = {

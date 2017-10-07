@@ -25,12 +25,20 @@
 #include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
 
+struct _GskSpvCodeBlock
+{
+  GArray *code;
+
+  guint32 label;
+};
+
 struct _GskSpvWriter
 {
   int ref_count;
 
   guint32 last_id;
   GArray *code[GSK_SPV_WRITER_N_SECTIONS];
+  GSList *blocks;
 
   guint32 entry_point;
   GHashTable *types;
@@ -50,7 +58,7 @@ gsk_spv_writer_new (void)
 
   for (i = 0; i < GSK_SPV_WRITER_N_SECTIONS; i++)
     {
-      writer->code[i] = g_array_new (FALSE, FALSE, sizeof (guint32));
+      writer->code[i] = g_array_new (FALSE, TRUE, sizeof (guint32));
     }
 
   writer->types = g_hash_table_new_full (gsk_sl_type_hash, gsk_sl_type_equal,
@@ -293,7 +301,66 @@ GArray *
 gsk_spv_writer_get_bytes (GskSpvWriter        *writer,
                           GskSpvWriterSection  section)
 {
+  if (section == GSK_SPV_WRITER_SECTION_CODE && writer->blocks)
+    return ((GskSpvCodeBlock *) writer->blocks->data)->code;
   return writer->code[section];
+}
+
+guint32
+gsk_spv_writer_push_new_code_block (GskSpvWriter *writer)
+{
+  GskSpvCodeBlock *block;
+
+  block = g_slice_new0 (GskSpvCodeBlock);
+  block->code = g_array_new (FALSE, TRUE, sizeof (guint32));
+
+  gsk_spv_writer_push_code_block (writer, block);
+
+  block->label = gsk_spv_writer_label (writer);
+
+  return block->label;
+}
+
+void
+gsk_spv_writer_push_code_block (GskSpvWriter    *writer,
+                                GskSpvCodeBlock *block)
+{
+  writer->blocks = g_slist_prepend (writer->blocks, block);
+}
+
+GskSpvCodeBlock *
+gsk_spv_writer_pop_code_block (GskSpvWriter *writer)
+{
+  GskSpvCodeBlock *result;
+
+  result = writer->blocks->data;
+  g_assert (result);
+
+  writer->blocks = g_slist_remove (writer->blocks, result);
+
+  return result;
+}
+
+void
+gsk_spv_writer_commit_code_block (GskSpvWriter *writer)
+{
+  GskSpvCodeBlock *block;
+  GArray *commit_target;
+
+  block = gsk_spv_writer_pop_code_block (writer);
+
+  commit_target = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
+  g_array_append_vals (commit_target, block->code->data, block->code->len);
+
+  g_array_free (block->code, TRUE);
+
+  g_slice_free (GskSpvCodeBlock, block);
+}
+
+guint32
+gsk_spv_code_block_get_label (GskSpvCodeBlock *block)
+{
+  return block->label;
 }
 
 static void
