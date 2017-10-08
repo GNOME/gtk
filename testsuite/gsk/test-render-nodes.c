@@ -180,6 +180,7 @@ load_node_file (GFile *file, gboolean generate)
   char *png_file;
   cairo_surface_t *ref_surface;
   cairo_surface_t *diff_surface;
+  const char *ext;
 
   node_file = g_file_get_path (file);
 
@@ -214,26 +215,45 @@ load_node_file (GFile *file, gboolean generate)
                         cairo_image_surface_get_stride (surface));
   cairo_surface_mark_dirty (surface);
 
+  if (strcmp (G_OBJECT_TYPE_NAME (renderer), "GskVulkanRenderer") == 0)
+    ext = ".vulkan.png";
+  else if (strcmp (G_OBJECT_TYPE_NAME (renderer), "GskGLRenderer") == 0)
+    ext = ".gl.png";
+  else if (strcmp (G_OBJECT_TYPE_NAME (renderer), "GskCairoRenderer") == 0)
+    ext = ".cairo.png";
+  else
+    ext = ".png";
+
   g_object_unref (texture);
   g_object_unref (window);
   g_object_unref (renderer);
+  gdk_window_destroy (window);
 
   gsk_render_node_unref (node);
-
-  png_file = file_replace_extension (node_file, ".node", ".png");
 
   if (generate)
     {
       cairo_status_t status;
+      char *out_file;
 
-      status = cairo_surface_write_to_png (surface, png_file);
+      out_file = file_replace_extension (node_file, ".node", ".png");
+
+      status = cairo_surface_write_to_png (surface, out_file);
       cairo_surface_destroy (surface);
       if (status != CAIRO_STATUS_SUCCESS)
         {
-          g_print ("Failed to safe png file: %s\n", cairo_status_to_string (status));
+          g_print ("Failed to save png file %s: %s\n", out_file, cairo_status_to_string (status));
           exit (1);
         }
+      g_free (out_file);
       return;
+    }
+
+  png_file = file_replace_extension (node_file, ".node", ext);
+  if (!g_file_test (png_file, G_FILE_TEST_EXISTS))
+    {
+      g_free (png_file);
+      png_file = file_replace_extension (node_file, ".node", ".png");
     }
 
   ref_surface = cairo_image_surface_create_from_png (png_file);
