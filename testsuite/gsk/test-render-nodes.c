@@ -155,6 +155,34 @@ cairo (void)
 }
 
 static GskRenderNode *
+cairo2 (void)
+{
+  GskRenderNode *node;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  int i, j;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 200, 200);
+  cr = cairo_create (surface);
+
+  cairo_set_source_rgb (cr, 1, 1, 1);
+
+  for (i = 0; i < 10; i++)
+    for (j = 0; j < 10; j++)
+      {
+        cairo_rectangle (cr, i*20, j*20, 10, 10);
+        cairo_fill (cr);
+      }
+
+  node = gsk_cairo_node_new_for_surface (&GRAPHENE_RECT_INIT (0, 0, 200, 200), surface);
+
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+
+  return node;
+}
+
+static GskRenderNode *
 repeat (void)
 {
   GskRenderNode *repeat[4];
@@ -205,6 +233,31 @@ repeat (void)
   return container;
 }
 
+static GskRenderNode *
+blendmode (void)
+{
+  GskRenderNode *child1;
+  GskRenderNode *child2;
+  GskRenderNode *transform;
+  GskRenderNode *container;
+  graphene_matrix_t matrix;
+
+  child1 = cairo ();
+  child2 = cairo2 ();
+
+  graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { 50, 50, 0 });
+  transform = gsk_transform_node_new (child2, &matrix);
+  gsk_render_node_unref (child2);
+  child2 = transform;
+
+  container = gsk_blend_node_new (child1, child2, GSK_BLEND_MODE_HUE);
+
+  gsk_render_node_unref (child1);
+  gsk_render_node_unref (child2);
+
+  return container;
+}
+
 static const struct {
   const char *name;
   GskRenderNode * (* func) (void);
@@ -212,6 +265,7 @@ static const struct {
   { "colors.node", colors },
   { "cairo.node", cairo },
   { "repeat.node", repeat },
+  { "blendmode.node", blendmode },
 };
 
 /*** test setup ***/
