@@ -411,6 +411,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
                                 GDK_KEY_Page_Down, GDK_CONTROL_MASK,
                                 "change-current-page", 1,
                                 G_TYPE_INT, 1);
+  gtk_widget_class_set_css_name (widget_class, "shortcuts-section");
 }
 
 static void

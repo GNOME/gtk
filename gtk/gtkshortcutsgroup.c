@@ -361,6 +361,8 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  gtk_widget_class_set_css_name (widget_class, "shortcuts-group");
 }
 
 static void
