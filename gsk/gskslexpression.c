@@ -74,7 +74,7 @@ typedef struct _GskSlExpressionAssignment GskSlExpressionAssignment;
 struct _GskSlExpressionAssignment {
   GskSlExpression parent;
 
-  GskSlTokenType op;
+  const GskSlBinary *binary;
   GskSlExpression *lvalue;
   GskSlExpression *rvalue;
 };
@@ -85,8 +85,7 @@ gsk_sl_expression_assignment_free (GskSlExpression *expression)
   GskSlExpressionAssignment *assignment = (GskSlExpressionAssignment *) expression;
 
   gsk_sl_expression_unref (assignment->lvalue);
-  if (assignment->rvalue)
-    gsk_sl_expression_unref (assignment->rvalue);
+  gsk_sl_expression_unref (assignment->rvalue);
 
   g_slice_free (GskSlExpressionAssignment, assignment);
 }
@@ -98,46 +97,10 @@ gsk_sl_expression_assignment_print (const GskSlExpression *expression,
   const GskSlExpressionAssignment *assignment = (const GskSlExpressionAssignment *) expression;
 
   gsk_sl_expression_print (assignment->lvalue, printer);
-
-  switch ((guint) assignment->op)
-  {
-    case GSK_SL_TOKEN_EQUAL:
-      gsk_sl_printer_append (printer, " = ");
-      break;
-    case GSK_SL_TOKEN_MUL_ASSIGN:
-      gsk_sl_printer_append (printer, " *= ");
-      break;
-    case GSK_SL_TOKEN_DIV_ASSIGN:
-      gsk_sl_printer_append (printer, " /= ");
-      break;
-    case GSK_SL_TOKEN_MOD_ASSIGN:
-      gsk_sl_printer_append (printer, " %= ");
-      break;
-    case GSK_SL_TOKEN_ADD_ASSIGN:
-      gsk_sl_printer_append (printer, " += ");
-      break;
-    case GSK_SL_TOKEN_SUB_ASSIGN:
-      gsk_sl_printer_append (printer, " -= ");
-      break;
-    case GSK_SL_TOKEN_LEFT_ASSIGN:
-      gsk_sl_printer_append (printer, " <<= ");
-      break;
-    case GSK_SL_TOKEN_RIGHT_ASSIGN:
-      gsk_sl_printer_append (printer, " >>= ");
-      break;
-    case GSK_SL_TOKEN_AND_ASSIGN:
-      gsk_sl_printer_append (printer, " &= ");
-      break;
-    case GSK_SL_TOKEN_XOR_ASSIGN:
-      gsk_sl_printer_append (printer, " ^= ");
-      break;
-    case GSK_SL_TOKEN_OR_ASSIGN:
-      gsk_sl_printer_append (printer, " |= ");
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-  }
+  gsk_sl_printer_append (printer, " ");
+  if (assignment->binary)
+    gsk_sl_printer_append (printer, gsk_sl_binary_get_sign (assignment->binary));
+  gsk_sl_printer_append (printer, "= ");
   gsk_sl_expression_print (assignment->rvalue, printer);
 }
 
@@ -157,7 +120,7 @@ gsk_sl_expression_assignment_get_constant (const GskSlExpression *expression)
 
 static guint32
 gsk_sl_expression_assignment_write_spv (const GskSlExpression *expression,
-                                        GskSpvWriter    *writer)
+                                        GskSpvWriter          *writer)
 {
   g_assert_not_reached ();
 
@@ -2361,15 +2324,17 @@ gsk_sl_expression_parse_constant (GskSlScope        *scope,
 
 GskSlExpression *
 gsk_sl_expression_parse_assignment (GskSlScope        *scope,
-                                    GskSlPreprocessor *stream)
+                                    GskSlPreprocessor *preproc)
 {
+  const GskSlBinary *binary;
   const GskSlToken *token;
-  GskSlExpression *lvalue;
+  GskSlExpression *lvalue, *rvalue;
   GskSlExpressionAssignment *assign;
+  GskSlType *result_type;
 
-  lvalue = gsk_sl_expression_parse_conditional (scope, stream);
+  lvalue = gsk_sl_expression_parse_conditional (scope, preproc);
 
-  token = gsk_sl_preprocessor_get (stream);
+  token = gsk_sl_preprocessor_get (preproc);
   switch ((guint) token->type)
   {
       case GSK_SL_TOKEN_EQUAL:
@@ -2402,13 +2367,39 @@ gsk_sl_expression_parse_assignment (GskSlScope        *scope,
     }
 #endif
 
+  binary = gsk_sl_binary_get_for_token (token->type);
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  rvalue = gsk_sl_expression_parse_assignment (scope, preproc);
+  if (binary)
+    {
+      result_type = gsk_sl_binary_check_type (binary,
+                                              preproc,
+                                              gsk_sl_expression_get_return_type (lvalue),
+                                              gsk_sl_expression_get_return_type (rvalue));
+      if (result_type == NULL)
+        {
+          gsk_sl_expression_unref (rvalue);
+          return lvalue;
+        }
+    }
+  else
+    {
+      result_type = gsk_sl_expression_get_return_type (rvalue);
+    }
+  if (!gsk_sl_type_can_convert (gsk_sl_expression_get_return_type (lvalue), result_type))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot assign value of type %s to variable of type %s",
+                                 gsk_sl_type_get_name (result_type),
+                                 gsk_sl_type_get_name (gsk_sl_expression_get_return_type (lvalue)));
+      gsk_sl_expression_unref (rvalue);
+      return lvalue;
+    }
+
   assign = gsk_sl_expression_new (GskSlExpressionAssignment, &GSK_SL_EXPRESSION_ASSIGNMENT);
+  assign->binary = binary;
   assign->lvalue = lvalue;
-  assign->op = token->type;
-
-  gsk_sl_preprocessor_consume (stream, (GskSlExpression *) assign);
-
-  assign->rvalue = gsk_sl_expression_parse_assignment (scope, stream);
+  assign->rvalue = rvalue;
 
   return (GskSlExpression *) assign;
 }
