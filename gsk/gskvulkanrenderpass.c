@@ -1009,21 +1009,31 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           {
             GskRenderNode *start = gsk_cross_fade_node_get_start_child (op->render.node);
             GskRenderNode *end = gsk_cross_fade_node_get_end_child (op->render.node);
+            const graphene_rect_t *bounds = &op->render.node->bounds;
 
             op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
                                                                             uploader,
                                                                             start,
-                                                                            &op->render.node->bounds,
+                                                                            &start->bounds,
                                                                             clip,
                                                                             &op->render.source_rect);
+            op->render.source_rect.origin.x = (bounds->origin.x - start->bounds.origin.x)/start->bounds.size.width;
+            op->render.source_rect.origin.y = (bounds->origin.y - start->bounds.origin.y)/start->bounds.size.height;
+            op->render.source_rect.size.width = bounds->size.width / start->bounds.size.width;
+            op->render.source_rect.size.height = bounds->size.height / start->bounds.size.height;
+
             op->render.source2 = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                              render,
                                                                              uploader,
                                                                              end,
-                                                                             &op->render.node->bounds,
+                                                                             &end->bounds,
                                                                              clip,
                                                                              &op->render.source2_rect);
+            op->render.source2_rect.origin.x = (bounds->origin.x - end->bounds.origin.x)/end->bounds.size.width;
+            op->render.source2_rect.origin.y = (bounds->origin.y - end->bounds.origin.y)/end->bounds.size.height;
+            op->render.source2_rect.size.width = bounds->size.width / end->bounds.size.width;
+            op->render.source2_rect.size.height = bounds->size.height / end->bounds.size.height;
           }
           break;
 
