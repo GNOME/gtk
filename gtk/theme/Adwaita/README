@@ -1,11 +1,11 @@
 Summary
 -------
 
-* Do not edit the CSS directly, edit the source SCSS files and process them with SASS (run 
-  `./parse-sass.sh` when you have the required software installed, as described below)
-* To be able to use the latest/adequate version of sass, install ruby, gem, sass & bundle.
-  On Fedora F20, this is done with `sudo dnf install rubygems && gem install bundle && bundle install`
-  from the same directory this README resides in.
+* Do not edit the CSS directly, edit the source SCSS files
+* To be able to use the latest/adequate version of SASS, install sassc
+* The configure script will detect whether or not you have sassc installed;
+  if you do, it will regenerate the CSS every time you modify the SCSS files
+  and rebuild GTK+. To rebuild the CSS only, run the script ./parse-sass.sh
 
 How to tweak the theme
 ----------------------
@@ -30,7 +30,6 @@ _drawing.scss       - drawing helper mixings/functions to allow easier definitio
 _common.scss        - actual definitions of style for each widget. This is where you are likely to add/remove
                       your changes.
                       
-You can read about SASS at http://sass-lang.com/documentation/. Once you make your changes to the
-_common.scss file, you can either run the ./parse-sass.sh script or keep SASS watching for changes as you
-edit. This is done by running `bundle exec sass --watch --sourcemap=none .` If sass is out of date, or is
-missing, you can install it with `bundle install`.
+You can read about SASS at http://sass-lang.com/documentation/. Once you make
+your changes to the _common.scss file, GTK+ will rebuild the CSS files. If you
+want to build only the CSS files, not all of GTK+, simply run ./parse-sass.sh
