@@ -808,7 +808,10 @@ got_surface:
 
   gsk_vulkan_render_add_cleanup_image (render, result);
 
-  *tex_rect = GRAPHENE_RECT_INIT(0, 0, 1, 1);
+  tex_rect->origin.x = (node->bounds.origin.x - bounds->origin.x)/bounds->size.width;
+  tex_rect->origin.y = (node->bounds.origin.y - bounds->origin.y)/bounds->size.height;
+  tex_rect->size.width = node->bounds.size.width/bounds->size.width;
+  tex_rect->size.height = node->bounds.size.height/bounds->size.height;
 
   return result;
 }
@@ -956,15 +959,21 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
         case GSK_VULKAN_OP_REPEAT:
           {
             GskRenderNode *child = gsk_repeat_node_get_child (op->render.node);
-            const graphene_rect_t *bounds = gsk_repeat_node_peek_child_bounds (op->render.node);
+            const graphene_rect_t *bounds = &op->render.node->bounds;
+            const graphene_rect_t *child_bounds = gsk_repeat_node_peek_child_bounds (op->render.node);
 
             op->render.source = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                             render,
                                                                             uploader,
                                                                             child,
-                                                                            bounds,
+                                                                            child_bounds,
                                                                             NULL,
                                                                             &op->render.source_rect);
+
+            op->render.source_rect.origin.x = (bounds->origin.x - child_bounds->origin.x)/child_bounds->size.width;
+            op->render.source_rect.origin.y = (bounds->origin.y - child_bounds->origin.y)/child_bounds->size.height;
+            op->render.source_rect.size.width = bounds->size.width / child_bounds->size.width;
+            op->render.source_rect.size.height = bounds->size.height / child_bounds->size.height;
           }
           break;
 
