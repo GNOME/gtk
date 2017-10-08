@@ -154,12 +154,30 @@ cairo (void)
   return node;
 }
 
+static GskRenderNode *
+repeat (void)
+{
+  GskRenderNode *repeat;
+  GskRenderNode *child;
+
+  child = cairo ();
+
+  repeat = gsk_repeat_node_new (&GRAPHENE_RECT_INIT (0, 0, 200, 200),
+                                child,
+                                &GRAPHENE_RECT_INIT (0, 0, 200, 600));
+
+  gsk_render_node_unref (child);
+
+  return repeat;
+}
+
 static const struct {
   const char *name;
   GskRenderNode * (* func) (void);
 } functions[] = {
   { "colors.node", colors },
   { "cairo.node", cairo },
+  { "repeat.node", repeat },
 };
 
 /*** test setup ***/
