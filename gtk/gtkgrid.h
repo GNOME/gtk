@@ -38,15 +38,12 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkGrid              GtkGrid;
-typedef struct _GtkGridPrivate       GtkGridPrivate;
 typedef struct _GtkGridClass         GtkGridClass;
 
 struct _GtkGrid
 {
   /*< private >*/
-  GtkContainer container;
-
-  GtkGridPrivate *priv;
+  GtkContainer parent_instance;
 };
 
 /**
