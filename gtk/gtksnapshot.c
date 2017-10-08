@@ -772,7 +772,7 @@ gtk_snapshot_collect_blend_bottom (GtkSnapshot      *snapshot,
                                    guint             n_nodes,
                                    const char       *name)
 {
-  GtkSnapshotState *prev_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *prev_state = gtk_snapshot_get_previous_state (snapshot);
 
   g_assert (prev_state->collect_func == gtk_snapshot_collect_blend_top);
 
@@ -803,7 +803,6 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
                          ...)
 {
   GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
-  GtkSnapshotState *bottom_state;
   GtkSnapshotState *top_state;
   char *str;
 
@@ -818,19 +817,19 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
   else
     str = NULL;
 
-  bottom_state = gtk_snapshot_push_state (snapshot,
-                                          str,
-                                          current_state->clip_region,
-                                          current_state->translate_x,
-                                          current_state->translate_y,
-                                          gtk_snapshot_collect_blend_top);
-
   top_state = gtk_snapshot_push_state (snapshot,
-                                       g_strdup (str),
-                                       bottom_state->clip_region,
-                                       bottom_state->translate_x,
-                                       bottom_state->translate_y,
-                                       gtk_snapshot_collect_blend_bottom);
+                                       str,
+                                       current_state->clip_region,
+                                       current_state->translate_x,
+                                       current_state->translate_y,
+                                       gtk_snapshot_collect_blend_top);
+
+  gtk_snapshot_push_state (snapshot,
+                           g_strdup (str),
+                           top_state->clip_region,
+                           top_state->translate_x,
+                           top_state->translate_y,
+                           gtk_snapshot_collect_blend_bottom);
   top_state->data.blend.blend_mode = blend_mode;
 }
 
