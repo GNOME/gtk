@@ -1761,6 +1761,10 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * Whether show/hide transitions are enabled for this popover.
    *
    * Since: 3.16
+   *
+   * Deprecated: 3.22: You can show or hide the popover without transitions
+   *   using gtk_widget_show() and gtk_widget_hide() while gtk_popover_popup()
+   *   and gtk_popover_popdown() will use transitions.
    */
   properties[PROP_TRANSITIONS_ENABLED] =
       g_param_spec_boolean ("transitions-enabled",
