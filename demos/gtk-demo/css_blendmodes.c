@@ -28,7 +28,7 @@ struct {
   { "Multiply", "multiply" },
   { "Normal", "normal" },
   { "Overlay", "overlay" },
-  { "Saturate", "saturate" },
+  { "Saturate", "saturation" },
   { "Screen", "screen" },
   { "Soft Light", "soft-light" },
   { NULL }
