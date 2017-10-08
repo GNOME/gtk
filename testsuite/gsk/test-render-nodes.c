@@ -259,6 +259,75 @@ blendmode (void)
 }
 
 static GskRenderNode *
+ducky (void)
+{
+  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
+  GskRenderNode *node;
+
+  pixbuf = gdk_pixbuf_new_from_file_at_size ("ducky.png", 100, 100, NULL);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+  node = gsk_cairo_node_new_for_surface (&GRAPHENE_RECT_INIT (0, 0,
+                                                              cairo_image_surface_get_width (surface),
+                                                              cairo_image_surface_get_height (surface)),
+                                         surface);
+  g_object_unref (pixbuf);
+  cairo_surface_destroy (surface);
+
+  return node;
+}
+
+static GskRenderNode *
+gradient (void)
+{
+  return gsk_linear_gradient_node_new (&GRAPHENE_RECT_INIT (0, 0, 100, 100),
+                                       &GRAPHENE_POINT_INIT (0, 0),
+                                       &GRAPHENE_POINT_INIT (0, 100),
+                                       (const GskColorStop[3]) {
+                                         { .offset = 0.0, .color = { 1.0, 0.0, 0.0, 1.0 } },
+                                         { .offset = 0.5, .color = { 0.0, 1.0, 0.0, 1.0 } },
+                                         { .offset = 1.0, .color = { 0.0, 0.0, 1.0, 1.0 } }
+                                       },
+                                       3);
+}
+
+static GskRenderNode *
+blendmodes (void)
+{
+  GskRenderNode *child1;
+  GskRenderNode *child2;
+  GskRenderNode *container;
+  GskRenderNode *blend[16];
+  GskBlendMode mode;
+  int i, j;
+
+  child1 = gradient ();
+  child2 = ducky ();
+
+  for (i = 0, mode = GSK_BLEND_MODE_DEFAULT; i < 4; i++)
+    for (j = 0; j < 4; j++, mode++)
+      {
+        GskRenderNode *b;
+        graphene_matrix_t matrix;
+
+        b = gsk_blend_node_new (child1, child2, mode);
+        graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { i * 110, j * 110, 0 });
+        blend[mode] = gsk_transform_node_new (b, &matrix);
+        gsk_render_node_unref (b);
+      }
+
+  gsk_render_node_unref (child1);
+  gsk_render_node_unref (child2);
+
+  container = gsk_container_node_new (blend, 16);
+
+  for (i = 0; i < 16; i++)
+    gsk_render_node_unref (blend[i]);
+
+  return container;
+}
+
+static GskRenderNode *
 cross_fade (void)
 {
   GskRenderNode *child1;
@@ -292,6 +361,7 @@ static const struct {
   { "repeat.node", repeat },
   { "blendmode.node", blendmode },
   { "cross-fade.node", cross_fade },
+  { "blendmodes.node", blendmodes },
 };
 
 /*** test setup ***/
