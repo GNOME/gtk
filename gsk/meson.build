@@ -35,6 +35,7 @@ gsk_private_sources = files([
   'gskprivate.c',
   'gskprofiler.c',
   'gskshaderbuilder.c',
+  'gskslbinary.c',
   'gsksldefine.c',
   'gskslexpression.c',
   'gskslfunction.c',
