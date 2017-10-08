@@ -1955,7 +1955,7 @@ gtk_render_insertion_cursor (GtkStyleContext *context,
  * @index: the index in the #PangoLayout
  * @direction: the #PangoDirection of the text
  *
- * Draws a text caret on @cr at the specified index of @layout.
+ * Draws a text caret using @snapshot at the specified index of @layout.
  *
  * Since: 3.90
  **/
