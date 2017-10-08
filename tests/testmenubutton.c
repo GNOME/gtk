@@ -105,23 +105,21 @@ int main (int argc, char **argv)
 
 	/* Button with GtkMenu */
 	menu_widget = gtk_menu_new ();
-	for (i = 5; i > 0; i--) {
+	for (i = 0; i < 5; ++i) {
 		GtkWidget *item;
 
-		if (i == 3) {
+		if (i == 2) {
 			item = gtk_menu_item_new_with_mnemonic ("_Copy");
 		} else {
 			char *label;
 
-			label = g_strdup_printf ("Item _%d", i);
+			label = g_strdup_printf ("Item _%d", i + 1);
 			item = gtk_menu_item_new_with_mnemonic (label);
 			g_free (label);
 		}
+
 		gtk_menu_item_set_use_underline (GTK_MENU_ITEM (item), TRUE);
-		gtk_menu_attach (GTK_MENU (menu_widget),
-				 item,
-				 0, 1,
-				 i - 1, i);
+		gtk_container_add (GTK_CONTAINER (menu_widget), item);
 	}
 	gtk_widget_show_all (menu_widget);
 
