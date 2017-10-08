@@ -823,6 +823,7 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
                                        current_state->translate_x,
                                        current_state->translate_y,
                                        gtk_snapshot_collect_blend_top);
+  top_state->data.blend.blend_mode = blend_mode;
 
   gtk_snapshot_push_state (snapshot,
                            g_strdup (str),
@@ -830,7 +831,6 @@ gtk_snapshot_push_blend (GtkSnapshot  *snapshot,
                            top_state->translate_x,
                            top_state->translate_y,
                            gtk_snapshot_collect_blend_bottom);
-  top_state->data.blend.blend_mode = blend_mode;
 }
 
 static GskRenderNode *
