@@ -1014,14 +1014,14 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
                                                                             render,
                                                                             uploader,
                                                                             start,
-                                                                            &start->bounds,
+                                                                            &op->render.node->bounds,
                                                                             clip,
                                                                             &op->render.source_rect);
             op->render.source2 = gsk_vulkan_render_pass_get_node_as_texture (self,
                                                                              render,
                                                                              uploader,
                                                                              end,
-                                                                             &end->bounds,
+                                                                             &op->render.node->bounds,
                                                                              clip,
                                                                              &op->render.source2_rect);
           }
