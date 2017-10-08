@@ -46,6 +46,8 @@ struct _GskSlExpressionClass {
 
   void                  (* print)                               (const GskSlExpression  *expression,
                                                                  GskSlPrinter           *printer);
+  gboolean              (* is_assignable)                       (const GskSlExpression  *expression,
+                                                                 GError                **error);
   GskSlType *           (* get_return_type)                     (const GskSlExpression  *expression);
   GskSlValue *          (* get_constant)                        (const GskSlExpression  *expression);
   guint32               (* write_spv)                           (const GskSlExpression  *expression,
@@ -66,6 +68,18 @@ gsk_sl_expression_alloc (const GskSlExpressionClass *klass,
   return expression;
 }
 #define gsk_sl_expression_new(_name, _klass) ((_name *) gsk_sl_expression_alloc ((_klass), sizeof (_name)))
+
+static gboolean
+gsk_sl_expression_default_is_assignable (const GskSlExpression  *expression,
+                                         GError                **error)
+{
+  g_set_error (error,
+               GSK_SL_COMPILER_ERROR,
+               GSK_SL_COMPILER_ERROR_SYNTAX,
+               "Assignment requires l-value.");
+                   
+  return FALSE;
+}
 
 /* ASSIGNMENT */
 
@@ -130,6 +144,7 @@ gsk_sl_expression_assignment_write_spv (const GskSlExpression *expression,
 static const GskSlExpressionClass GSK_SL_EXPRESSION_ASSIGNMENT = {
   gsk_sl_expression_assignment_free,
   gsk_sl_expression_assignment_print,
+  gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_assignment_get_return_type,
   gsk_sl_expression_assignment_get_constant,
   gsk_sl_expression_assignment_write_spv
@@ -221,6 +236,7 @@ gsk_sl_expression_binary_write_spv (const GskSlExpression *expression,
 static const GskSlExpressionClass GSK_SL_EXPRESSION_BINARY = {
   gsk_sl_expression_binary_free,
   gsk_sl_expression_binary_print,
+  gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_binary_get_return_type,
   gsk_sl_expression_binary_get_constant,
   gsk_sl_expression_binary_write_spv
@@ -253,6 +269,24 @@ gsk_sl_expression_reference_print (const GskSlExpression *expression,
   const GskSlExpressionReference *reference = (const GskSlExpressionReference *) expression;
 
   gsk_sl_printer_append (printer, gsk_sl_variable_get_name (reference->variable));
+}
+
+static gboolean
+gsk_sl_expression_reference_is_assignable (const GskSlExpression  *expression,
+                                           GError                **error)
+{
+  const GskSlExpressionReference *reference = (const GskSlExpressionReference *) expression;
+
+  if (gsk_sl_variable_is_constant (reference->variable))
+    {
+      g_set_error (error,
+                   GSK_SL_COMPILER_ERROR,
+                   GSK_SL_COMPILER_ERROR_CONSTANT,
+                   "Cannot assign constant \"%s\".", gsk_sl_variable_get_name (reference->variable));
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 static GskSlType *
@@ -294,6 +328,7 @@ gsk_sl_expression_reference_write_spv (const GskSlExpression *expression,
 static const GskSlExpressionClass GSK_SL_EXPRESSION_REFERENCE = {
   gsk_sl_expression_reference_free,
   gsk_sl_expression_reference_print,
+  gsk_sl_expression_reference_is_assignable,
   gsk_sl_expression_reference_get_return_type,
   gsk_sl_expression_reference_get_constant,
   gsk_sl_expression_reference_write_spv
@@ -670,6 +705,7 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
 static const GskSlExpressionClass GSK_SL_EXPRESSION_CONSTRUCTOR = {
   gsk_sl_expression_constructor_free,
   gsk_sl_expression_constructor_print,
+  gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_constructor_get_return_type,
   gsk_sl_expression_constructor_get_constant,
   gsk_sl_expression_constructor_write_spv
@@ -786,6 +822,7 @@ gsk_sl_expression_function_call_write_spv (const GskSlExpression *expression,
 static const GskSlExpressionClass GSK_SL_EXPRESSION_FUNCTION_CALL = {
   gsk_sl_expression_function_call_free,
   gsk_sl_expression_function_call_print,
+  gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_function_call_get_return_type,
   gsk_sl_expression_function_call_get_constant,
   gsk_sl_expression_function_call_write_spv
@@ -821,6 +858,15 @@ gsk_sl_expression_member_print (const GskSlExpression *expression,
   gsk_sl_expression_print (member->expr, printer);
   gsk_sl_printer_append (printer, ".");
   gsk_sl_printer_append (printer, gsk_sl_type_get_member_name (gsk_sl_expression_get_return_type (member->expr), member->id));
+}
+
+static gboolean
+gsk_sl_expression_member_is_assignable (const GskSlExpression  *expression,
+                                        GError                **error)
+{
+  const GskSlExpressionMember *member = (const GskSlExpressionMember *) expression;
+
+  return gsk_sl_expression_is_assignable (member->expr, error);
 }
 
 static GskSlType *
@@ -867,6 +913,7 @@ gsk_sl_expression_member_write_spv (const GskSlExpression *expression,
 static const GskSlExpressionClass GSK_SL_EXPRESSION_MEMBER = {
   gsk_sl_expression_member_free,
   gsk_sl_expression_member_print,
+  gsk_sl_expression_member_is_assignable,
   gsk_sl_expression_member_get_return_type,
   gsk_sl_expression_member_get_constant,
   gsk_sl_expression_member_write_spv
@@ -916,6 +963,42 @@ gsk_sl_expression_swizzle_print (const GskSlExpression *expression,
     {
       gsk_sl_printer_append_c (printer, swizzle_options[swizzle->name][swizzle->indexes[i]]);
     }
+}
+
+static gboolean
+gsk_sl_expression_swizzle_is_assignable (const GskSlExpression  *expression,
+                                         GError                **error)
+{
+  const GskSlExpressionSwizzle *swizzle = (const GskSlExpressionSwizzle *) expression;
+
+  if (!gsk_sl_expression_is_assignable (swizzle->expr, error))
+    return FALSE;
+
+  switch (swizzle->length)
+  {
+    default:
+      g_assert_not_reached ();
+    case 4:
+      if (swizzle->indexes[0] == swizzle->indexes[3] ||
+          swizzle->indexes[1] == swizzle->indexes[3] ||
+          swizzle->indexes[2] == swizzle->indexes[3])
+        break;
+    case 3:
+      if (swizzle->indexes[0] == swizzle->indexes[2] ||
+          swizzle->indexes[1] == swizzle->indexes[2])
+        break;
+    case 2:
+      if (swizzle->indexes[0] == swizzle->indexes[1])
+        break;
+    case 1:
+      return TRUE;
+  }
+  
+  g_set_error (error,
+               GSK_SL_COMPILER_ERROR,
+               GSK_SL_COMPILER_ERROR_SYNTAX,
+               "Cannot assign to swizzle with duplicate components.");
+  return FALSE;
 }
 
 static GskSlType *
@@ -1022,6 +1105,7 @@ gsk_sl_expression_swizzle_write_spv (const GskSlExpression *expression,
 static const GskSlExpressionClass GSK_SL_EXPRESSION_SWIZZLE = {
   gsk_sl_expression_swizzle_free,
   gsk_sl_expression_swizzle_print,
+  gsk_sl_expression_swizzle_is_assignable,
   gsk_sl_expression_swizzle_get_return_type,
   gsk_sl_expression_swizzle_get_constant,
   gsk_sl_expression_swizzle_write_spv
@@ -1144,6 +1228,7 @@ gsk_sl_expression_negation_write_spv (const GskSlExpression *expression,
 static const GskSlExpressionClass GSK_SL_EXPRESSION_NEGATION = {
   gsk_sl_expression_negation_free,
   gsk_sl_expression_negation_print,
+  gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_negation_get_return_type,
   gsk_sl_expression_negation_get_constant,
   gsk_sl_expression_negation_write_spv
@@ -1206,6 +1291,7 @@ gsk_sl_expression_constant_write_spv (const GskSlExpression *expression,
 static const GskSlExpressionClass GSK_SL_EXPRESSION_CONSTANT = {
   gsk_sl_expression_constant_free,
   gsk_sl_expression_constant_print,
+  gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_constant_get_return_type,
   gsk_sl_expression_constant_get_constant,
   gsk_sl_expression_constant_write_spv
@@ -2331,6 +2417,7 @@ gsk_sl_expression_parse_assignment (GskSlScope        *scope,
   GskSlExpression *lvalue, *rvalue;
   GskSlExpressionAssignment *assign;
   GskSlType *result_type;
+  GError *error = NULL;
 
   lvalue = gsk_sl_expression_parse_conditional (scope, preproc);
 
@@ -2354,18 +2441,21 @@ gsk_sl_expression_parse_assignment (GskSlScope        *scope,
         return lvalue;
   }
 
-#if 0
-  if (gsk_sl_expression_is_constant (lvalue))
+  if (!gsk_sl_expression_is_assignable (lvalue, &error))
     {
-      gsk_sl_preprocessor_error (stream, "Cannot assign to a return lvalue.");
+      gsk_sl_preprocessor_emit_error (preproc,
+                                      TRUE,
+                                      gsk_sl_preprocessor_get_location (preproc),
+                                      error);
+
+      g_clear_error (&error);
 
       /* Continue parsing like normal here to get more errors */
-      gsk_sl_preprocessor_consume (stream, lvalue);
+      gsk_sl_preprocessor_consume (preproc, lvalue);
       gsk_sl_expression_unref (lvalue);
 
-      return gsk_sl_expression_parse_assignment (scope, stream);
+      return gsk_sl_expression_parse_assignment (scope, preproc);
     }
-#endif
 
   binary = gsk_sl_binary_get_for_token (token->type);
   gsk_sl_preprocessor_consume (preproc, NULL);
@@ -2440,6 +2530,13 @@ gsk_sl_expression_print (const GskSlExpression *expression,
                          GskSlPrinter          *printer)
 {
   expression->class->print (expression, printer);
+}
+
+gboolean
+gsk_sl_expression_is_assignable (const GskSlExpression  *expression,
+                                 GError                **error)
+{
+  return expression->class->is_assignable (expression, error);
 }
 
 GskSlType *

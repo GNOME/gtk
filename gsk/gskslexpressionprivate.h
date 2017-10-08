@@ -41,6 +41,8 @@ void                    gsk_sl_expression_unref                 (GskSlExpression
 
 void                    gsk_sl_expression_print                 (const GskSlExpression  *expression,
                                                                  GskSlPrinter           *printer);
+gboolean                gsk_sl_expression_is_assignable         (const GskSlExpression  *expression,
+                                                                 GError                **error);
 GskSlType *             gsk_sl_expression_get_return_type       (const GskSlExpression  *expression);
 GskSlValue *            gsk_sl_expression_get_constant          (const GskSlExpression  *expression);
 
