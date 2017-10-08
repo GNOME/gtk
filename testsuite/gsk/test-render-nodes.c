@@ -157,18 +157,52 @@ cairo (void)
 static GskRenderNode *
 repeat (void)
 {
-  GskRenderNode *repeat;
+  GskRenderNode *repeat[4];
   GskRenderNode *child;
+  GskRenderNode *transform;
+  GskRenderNode *container;
+  graphene_matrix_t matrix;
 
   child = cairo ();
 
-  repeat = gsk_repeat_node_new (&GRAPHENE_RECT_INIT (0, 0, 200, 200),
-                                child,
-                                &GRAPHENE_RECT_INIT (0, 0, 200, 600));
+  repeat[0] = gsk_repeat_node_new (&GRAPHENE_RECT_INIT (0, 0, 200, 200),
+                                   child,
+                                   &GRAPHENE_RECT_INIT (0, 0, 200, 600));
+  repeat[1] = gsk_repeat_node_new (&GRAPHENE_RECT_INIT (0, 200, 200, 200),
+                                   child,
+                                   &GRAPHENE_RECT_INIT (0, 0, 200, 600));
+  repeat[2] = gsk_repeat_node_new (&GRAPHENE_RECT_INIT (0, 400, 200, 200),
+                                   child,
+                                   &GRAPHENE_RECT_INIT (0, 0, 200, 600));
+  repeat[3] = gsk_repeat_node_new (&GRAPHENE_RECT_INIT (0, 100, 200, 640),
+                                   child,
+                                   &GRAPHENE_RECT_INIT (0, 100, 200, 400));
 
   gsk_render_node_unref (child);
 
-  return repeat;
+  graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { 0, 20, 0 });
+  transform = gsk_transform_node_new (repeat[1], &matrix);
+  gsk_render_node_unref (repeat[1]);
+  repeat[1] = transform;
+
+  graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { 0, 40, 0 });
+  transform = gsk_transform_node_new (repeat[2], &matrix);
+  gsk_render_node_unref (repeat[2]);
+  repeat[2] = transform;
+
+  graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { 220, -100, 0 });
+  transform = gsk_transform_node_new (repeat[3], &matrix);
+  gsk_render_node_unref (repeat[3]);
+  repeat[3] = transform;
+
+  container = gsk_container_node_new (repeat, 4);
+
+  gsk_render_node_unref (repeat[0]);
+  gsk_render_node_unref (repeat[1]);
+  gsk_render_node_unref (repeat[2]);
+  gsk_render_node_unref (repeat[3]);
+
+  return container;
 }
 
 static const struct {
