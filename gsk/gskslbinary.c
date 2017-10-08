@@ -742,6 +742,169 @@ static const GskSlBinary GSK_SL_BINARY_DIVISION = {
 
 /* UNIMPLEMENTED */
 
+static GskSlType *
+gsk_sl_bitwise_check_type (GskSlPreprocessor *preproc,
+                           GskSlType         *ltype,
+                           GskSlType         *rtype)
+{
+  GskSlScalarType lscalar, rscalar;
+
+  lscalar = gsk_sl_type_get_scalar_type (ltype);
+  if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
+      return NULL;
+    }
+  rscalar = gsk_sl_type_get_scalar_type (ltype);
+  if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+  if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
+      return NULL;
+    }
+  if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+  if (gsk_sl_type_is_vector (ltype) && gsk_sl_type_is_vector (rtype) &&
+      gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                 "Vector operands %s and %s do not have the same length.",
+                                 gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+
+  rscalar = lscalar == GSK_SL_UINT ? GSK_SL_UINT : rscalar;
+  if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_scalar (rtype))
+    return gsk_sl_type_get_scalar (rscalar);
+  else
+    return gsk_sl_type_get_vector (rscalar, gsk_sl_type_get_length (ltype));
+}
+
+static GskSlType *
+gsk_sl_shift_check_type (GskSlPreprocessor *preproc,
+                         GskSlType         *ltype,
+                         GskSlType         *rtype)
+{
+  GskSlScalarType lscalar, rscalar;
+
+  lscalar = gsk_sl_type_get_scalar_type (ltype);
+  if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
+      return NULL;
+    }
+  rscalar = gsk_sl_type_get_scalar_type (ltype);
+  if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+  if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
+      return NULL;
+    }
+  if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+  if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_vector (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand to shift cannot be a vector if left operand is a scalar.");
+      return NULL;
+    }
+  if (gsk_sl_type_is_vector (ltype) && gsk_sl_type_is_vector (rtype) &&
+      gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Vector operands do not have the same length.");
+      return NULL;
+    }
+
+  if (gsk_sl_type_is_vector (ltype))
+    return ltype;
+  else if (gsk_sl_type_is_vector (rtype))
+    return gsk_sl_type_get_vector (gsk_sl_type_get_scalar_type (ltype), gsk_sl_type_get_length (rtype));
+  else
+    return ltype;
+}
+
+static GskSlType *
+gsk_sl_relational_check_type (GskSlPreprocessor *preproc,
+                              GskSlType         *ltype,
+                              GskSlType         *rtype)
+{
+  if (!gsk_sl_type_is_scalar (ltype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand to relational operator is not a scalar.");
+      return NULL;
+    }
+  if (gsk_sl_type_get_scalar_type (ltype) == GSK_SL_BOOL)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand to relational operator must not be bool.");
+      return NULL;
+    }
+  if (!gsk_sl_type_is_scalar (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand to relational operator is not a scalar.");
+      return NULL;
+    }
+  if (gsk_sl_type_get_scalar_type (rtype) == GSK_SL_BOOL)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand to relational operator must not be bool.");
+      return NULL;
+    }
+
+  return gsk_sl_type_get_scalar (GSK_SL_BOOL);
+}
+
+static GskSlType *
+gsk_sl_equal_check_type (GskSlPreprocessor *preproc,
+                         GskSlType         *ltype,
+                         GskSlType         *rtype)
+{
+  if (gsk_sl_type_can_convert (ltype, rtype))
+    return gsk_sl_type_get_scalar (GSK_SL_BOOL);
+  if (gsk_sl_type_can_convert (rtype, ltype))
+    return gsk_sl_type_get_scalar (GSK_SL_BOOL);
+
+  gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot convert %s and %s to the same type for comparison.",
+                             gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+  return NULL;
+}
+
+static GskSlType *
+gsk_sl_logical_check_type (GskSlPreprocessor *preproc,
+                           GskSlType         *ltype,
+                           GskSlType         *rtype)
+{
+  GskSlType *bool_type = gsk_sl_type_get_scalar (GSK_SL_BOOL);
+
+  if (!gsk_sl_type_equal (bool_type, ltype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand of logical operation is not bool, but %s",
+                                 gsk_sl_type_get_name (ltype));
+      return NULL;
+    }
+  if (!gsk_sl_type_equal (bool_type, rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand of logical operation is not bool, but %s",
+                                 gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+
+  return bool_type;
+}
+
+/* UNIMPLEMENTED */
+
 static GskSlValue *
 gsk_sl_unimplemented_get_constant (GskSlType  *type,
                                    GskSlValue *lvalue,
@@ -765,6 +928,13 @@ gsk_sl_unimplemented_write_spv (GskSpvWriter *writer,
   return 0;
 }
 
+static const GskSlBinary GSK_SL_BINARY_MODULO = {
+  "%",
+  gsk_sl_bitwise_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
 static const GskSlBinary GSK_SL_BINARY_ADDITION = {
   "+",
   gsk_sl_arithmetic_check_type,
@@ -779,6 +949,104 @@ static const GskSlBinary GSK_SL_BINARY_SUBTRACTION = {
   gsk_sl_unimplemented_write_spv
 };
 
+static const GskSlBinary GSK_SL_BINARY_LSHIFT = {
+  "<<",
+  gsk_sl_shift_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_RSHIFT = {
+  ">>",
+  gsk_sl_shift_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_LESS = {
+  "<",
+  gsk_sl_relational_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_GREATER = {
+  ">",
+  gsk_sl_relational_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_LESS_EQUAL = {
+  "<=",
+  gsk_sl_relational_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_GREATER_EQUAL = {
+  ">=",
+  gsk_sl_relational_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_EQUAL = {
+  "==",
+  gsk_sl_equal_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_NOT_EQUAL = {
+  "!=",
+  gsk_sl_equal_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_AND = {
+  "&",
+  gsk_sl_bitwise_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_XOR = {
+  "^",
+  gsk_sl_bitwise_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_OR = {
+  "|",
+  gsk_sl_bitwise_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_LOGICAL_AND = {
+  "&&",
+  gsk_sl_logical_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_LOGICAL_XOR = {
+  "^^",
+  gsk_sl_logical_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_LOGICAL_OR = {
+  "||",
+  gsk_sl_logical_check_type,
+  gsk_sl_unimplemented_get_constant,
+  gsk_sl_unimplemented_write_spv
+};
+
 /* API */
 
 const char *
@@ -789,11 +1057,11 @@ gsk_sl_binary_get_sign (const GskSlBinary *binary)
 
 GskSlType *
 gsk_sl_binary_check_type (const GskSlBinary *binary,
-                          GskSlPreprocessor *stream,
+                          GskSlPreprocessor *preproc,
                           GskSlType         *ltype,
                           GskSlType         *rtype)
 {
-  return binary->check_type (stream, ltype, rtype);
+  return binary->check_type (preproc, ltype, rtype);
 }
 
 GskSlValue *
@@ -832,7 +1100,7 @@ gsk_sl_binary_get_for_token (GskSlTokenType token)
 
     case GSK_SL_TOKEN_PERCENT:
     case GSK_SL_TOKEN_MOD_ASSIGN:
-      return NULL;
+      return &GSK_SL_BINARY_MODULO;
 
     case GSK_SL_TOKEN_PLUS:
     case GSK_SL_TOKEN_ADD_ASSIGN:
@@ -842,11 +1110,53 @@ gsk_sl_binary_get_for_token (GskSlTokenType token)
     case GSK_SL_TOKEN_SUB_ASSIGN:
       return &GSK_SL_BINARY_SUBTRACTION;
 
+    case GSK_SL_TOKEN_LEFT_OP:
     case GSK_SL_TOKEN_LEFT_ASSIGN:
+      return &GSK_SL_BINARY_LSHIFT;
+
+    case GSK_SL_TOKEN_RIGHT_OP:
     case GSK_SL_TOKEN_RIGHT_ASSIGN:
+      return &GSK_SL_BINARY_RSHIFT;
+
+    case GSK_SL_TOKEN_LEFT_ANGLE:
+      return &GSK_SL_BINARY_LESS;
+
+    case GSK_SL_TOKEN_RIGHT_ANGLE:
+      return &GSK_SL_BINARY_GREATER;
+
+    case GSK_SL_TOKEN_LE_OP:
+      return &GSK_SL_BINARY_LESS_EQUAL;
+
+    case GSK_SL_TOKEN_GE_OP:
+      return &GSK_SL_BINARY_GREATER_EQUAL;
+
+    case GSK_SL_TOKEN_EQ_OP:
+      return &GSK_SL_BINARY_EQUAL;
+
+    case GSK_SL_TOKEN_NE_OP:
+      return &GSK_SL_BINARY_NOT_EQUAL;
+
+    case GSK_SL_TOKEN_AMPERSAND:
     case GSK_SL_TOKEN_AND_ASSIGN:
+      return &GSK_SL_BINARY_AND;
+
+    case GSK_SL_TOKEN_CARET:
     case GSK_SL_TOKEN_XOR_ASSIGN:
+      return &GSK_SL_BINARY_XOR;
+
+    case GSK_SL_TOKEN_VERTICAL_BAR:
     case GSK_SL_TOKEN_OR_ASSIGN:
+      return &GSK_SL_BINARY_OR;
+
+    case GSK_SL_TOKEN_AND_OP:
+      return &GSK_SL_BINARY_LOGICAL_AND;
+
+    case GSK_SL_TOKEN_XOR_OP:
+      return &GSK_SL_BINARY_LOGICAL_XOR;
+
+    case GSK_SL_TOKEN_OR_OP:
+      return &GSK_SL_BINARY_LOGICAL_OR;
+
     default:
       return NULL;
   }
