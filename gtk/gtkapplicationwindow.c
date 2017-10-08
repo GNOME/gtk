@@ -799,18 +799,6 @@ gtk_application_window_init (GtkApplicationWindow *window)
 }
 
 static void
-gtk_application_window_snapshot (GtkWidget   *widget,
-                                 GtkSnapshot *snapshot)
-{
-  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
-
-  GTK_WIDGET_CLASS (gtk_application_window_parent_class)->snapshot (widget, snapshot);
-
-  if (window->priv->menubar)
-    gtk_widget_snapshot_child (widget, window->priv->menubar, snapshot);
-}
-
-static void
 gtk_application_window_class_init (GtkApplicationWindowClass *class)
 {
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
@@ -825,7 +813,6 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   widget_class->unrealize = gtk_application_window_real_unrealize;
   widget_class->map = gtk_application_window_real_map;
   widget_class->unmap = gtk_application_window_real_unmap;
-  widget_class->snapshot = gtk_application_window_snapshot;
 
   object_class->get_property = gtk_application_window_get_property;
   object_class->set_property = gtk_application_window_set_property;

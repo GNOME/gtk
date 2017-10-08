@@ -9152,6 +9152,7 @@ gtk_window_snapshot (GtkWidget   *widget,
   gint title_height;
   GList *l;
   int width, height;
+  GtkWidget *child;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -9219,11 +9220,14 @@ gtk_window_snapshot (GtkWidget   *widget,
                              height -
                                (window_border.top + window_border.bottom + title_height));
 
-  if (priv->title_box != NULL)
-    gtk_widget_snapshot_child (widget, priv->title_box, snapshot);
-
-  if (gtk_bin_get_child (GTK_BIN (widget)))
-    gtk_widget_snapshot_child (widget, gtk_bin_get_child (GTK_BIN (widget)), snapshot);
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      /* Handle popovers separately until their stacking order is fixed */
+      if (!GTK_IS_POPOVER (child))
+        gtk_widget_snapshot_child (widget, child, snapshot);
+    }
 
   for (l = priv->popovers.head; l; l = l->next)
     {
