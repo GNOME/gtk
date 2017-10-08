@@ -301,6 +301,7 @@ void                gdk_display_monitor_added         (GdkDisplay       *display
                                                        GdkMonitor       *monitor);
 void                gdk_display_monitor_removed       (GdkDisplay       *display,
                                                        GdkMonitor       *monitor);
+void                gdk_display_emit_opened           (GdkDisplay       *display);
 
 G_END_DECLS
 

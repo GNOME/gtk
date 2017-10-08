@@ -584,7 +584,7 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   display_wayland->selection = gdk_wayland_selection_new ();
 
-  g_signal_emit_by_name (display, "opened");
+  gdk_display_emit_opened (display);
 
   return display;
 }

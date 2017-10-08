@@ -2217,3 +2217,9 @@ gdk_display_monitor_removed (GdkDisplay *display,
   g_signal_emit (display, signals[MONITOR_REMOVED], 0, monitor);
   gdk_monitor_invalidate (monitor);
 }
+
+void
+gdk_display_emit_opened (GdkDisplay *display)
+{
+  g_signal_emit (display, signals[OPENED], 0);
+}

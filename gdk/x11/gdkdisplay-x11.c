@@ -42,6 +42,7 @@
 #include "gdkglcontext-x11.h"
 #include "gdkvulkancontext-x11.h"
 #include "gdk-private.h"
+#include "gdkdisplayprivate.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -1780,7 +1781,7 @@ _gdk_x11_display_open (const gchar *display_name)
   gdk_display_set_composited (GDK_DISPLAY (display),
                               XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), get_cm_atom (display)) != None);
 
-  g_signal_emit_by_name (display, "opened");
+  gdk_display_emit_opened (display);
 
   return display;
 }
