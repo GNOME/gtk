@@ -502,11 +502,24 @@ populate_render_node_properties (GtkListStore  *store,
       }
       break;
 
+    case GSK_REPEAT_NODE:
+      {
+        const graphene_rect_t *child_bounds = gsk_repeat_node_peek_child_bounds (node);
+
+        tmp = g_strdup_printf ("%.2f x %.2f + %.2f + %.2f",
+                               child_bounds->size.width,
+                               child_bounds->size.height,
+                               child_bounds->origin.x,
+                               child_bounds->origin.y);
+        add_text_row (store, "Child Bounds", tmp);
+        g_free (tmp);
+     }
+      break;
+
     case GSK_NOT_A_RENDER_NODE:
     case GSK_CONTAINER_NODE:
     case GSK_TRANSFORM_NODE:
     case GSK_COLOR_MATRIX_NODE:
-    case GSK_REPEAT_NODE:
     case GSK_CLIP_NODE:
     case GSK_ROUNDED_CLIP_NODE:
     case GSK_SHADOW_NODE:
