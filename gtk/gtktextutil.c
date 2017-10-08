@@ -350,7 +350,7 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
 
   cr = cairo_create (surface);
 
-  gtk_text_layout_draw (layout, widget, cr, NULL);
+  gtk_text_layout_draw (layout, widget, cr);
 
   cairo_destroy (cr);
   g_object_unref (layout);

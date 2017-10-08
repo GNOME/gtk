@@ -88,13 +88,11 @@ G_BEGIN_DECLS
  * widget            - Widget to grab some style info from
  * cr                - Context to render to, matrix set so that (0, 0)
  *                     is the top left of the layout
- * widgets           - list of widgets that need exposing
  */
 GDK_AVAILABLE_IN_ALL
 void gtk_text_layout_draw (GtkTextLayout        *layout,
                            GtkWidget            *widget,
-                           cairo_t              *cr,
-                           GList               **widgets);
+                           cairo_t              *cr);
 
 
 G_END_DECLS
