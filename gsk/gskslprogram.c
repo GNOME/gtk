@@ -22,7 +22,6 @@
 
 #include "gskslexpressionprivate.h"
 #include "gskslfunctionprivate.h"
-#include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
@@ -80,7 +79,6 @@ gsk_sl_program_parse_variable (GskSlProgram         *program,
   GskSlVariable *variable;
   const GskSlToken *token;
   GskSlValue *value = NULL;
-  GskSlPointerType *pointer_type;
 
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
@@ -126,9 +124,7 @@ gsk_sl_program_parse_variable (GskSlProgram         *program,
     }
   gsk_sl_preprocessor_consume (preproc, NULL);
 
-  pointer_type = gsk_sl_pointer_type_new (type, qualifier);
-  variable = gsk_sl_variable_new (pointer_type, g_strdup (name), value);
-  gsk_sl_pointer_type_unref (pointer_type);
+  variable = gsk_sl_variable_new (name, type, qualifier, value);
       
   program->variables = g_slist_append (program->variables, variable);
   gsk_sl_scope_add_variable (scope, variable);
@@ -151,9 +147,7 @@ gsk_sl_program_parse_declaration (GskSlProgram      *program,
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     {
-      GskSlPointerType *ptype = gsk_sl_pointer_type_new (type, &qualifier);
-      GskSlVariable *variable = gsk_sl_variable_new (ptype, NULL, NULL);
-      gsk_sl_pointer_type_unref (ptype);
+      GskSlVariable *variable = gsk_sl_variable_new (NULL, type, &qualifier, NULL);
       program->variables = g_slist_append (program->variables, variable);
       gsk_sl_preprocessor_consume (preproc, program);
       gsk_sl_type_unref (type);

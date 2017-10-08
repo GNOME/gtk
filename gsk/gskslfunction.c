@@ -22,7 +22,6 @@
 
 #include "gskslnativefunctionprivate.h"
 #include "gskslstatementprivate.h"
-#include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslqualifierprivate.h"
@@ -541,7 +540,6 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
           token = gsk_sl_preprocessor_get (preproc);
           if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
             {
-              GskSlPointerType *pointer_type;
               guint i;
 
               if (gsk_sl_scope_lookup_variable (function->scope, token->str))
@@ -558,9 +556,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
                     gsk_sl_preprocessor_warn (preproc, SHADOW, "Function argument \"%s\" shadows global variable of same name.", token->str);
                 }
 
-              pointer_type = gsk_sl_pointer_type_new (type, &qualifier);
-              variable = gsk_sl_variable_new (pointer_type, g_strdup (token->str), NULL);
-              gsk_sl_pointer_type_unref (pointer_type);
+              variable = gsk_sl_variable_new (token->str, type, &qualifier, NULL);
               g_ptr_array_add (arguments, variable);
               
               gsk_sl_scope_add_variable (function->scope, variable);

@@ -21,10 +21,17 @@
 #include "gskspvwriterprivate.h"
 
 #include "gskslfunctionprivate.h"
-#include "gskslpointertypeprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
+
+typedef struct _GskSpvPointerType GskSpvPointerType;
+
+struct _GskSpvPointerType
+{
+  GskSlType *type;
+  GskSpvStorageClass storage;
+};
 
 struct _GskSpvCodeBlock
 {
@@ -75,6 +82,38 @@ gsk_spv_code_block_free (GskSpvCodeBlock *block)
   g_slice_free (GskSpvCodeBlock, block);
 }
 
+static gboolean
+pointer_type_equal (gconstpointer a,
+                    gconstpointer b)
+{
+  const GskSpvPointerType *typea = a;
+  const GskSpvPointerType *typeb = b;
+
+  if (!gsk_sl_type_equal (typea->type, typeb->type))
+    return FALSE;
+
+  return typea->storage == typeb->storage;
+}
+
+static guint
+pointer_type_hash (gconstpointer t)
+{
+  const GskSpvPointerType *type = t;
+
+  return gsk_sl_type_hash (type->type)
+       ^ type->storage;
+}
+
+static void
+pointer_type_free (gpointer data)
+{
+  GskSpvPointerType *pointer_type = data;
+
+  gsk_sl_type_unref (pointer_type->type);
+
+  g_free (pointer_type);
+}
+
 GskSpvWriter *
 gsk_spv_writer_new (void)
 {
@@ -91,8 +130,8 @@ gsk_spv_writer_new (void)
 
   writer->types = g_hash_table_new_full (gsk_sl_type_hash, gsk_sl_type_equal,
                                          (GDestroyNotify) gsk_sl_type_unref, NULL);
-  writer->pointer_types = g_hash_table_new_full (gsk_sl_pointer_type_hash, gsk_sl_pointer_type_equal,
-                                                 (GDestroyNotify) gsk_sl_pointer_type_unref, NULL);
+  writer->pointer_types = g_hash_table_new_full (pointer_type_hash, pointer_type_equal,
+                                                 pointer_type_free, NULL);
   writer->values = g_hash_table_new_full (gsk_sl_value_hash, gsk_sl_value_equal,
                                           (GDestroyNotify) gsk_sl_value_free, NULL);
   writer->variables = g_hash_table_new_full (g_direct_hash, g_direct_equal,
@@ -280,16 +319,21 @@ gsk_spv_writer_get_id_for_type (GskSpvWriter *writer,
 
 guint32
 gsk_spv_writer_get_id_for_pointer_type (GskSpvWriter       *writer,
-                                        GskSlPointerType   *type)
+                                        GskSlType          *type,
+                                        GskSpvStorageClass  storage)
 {
+  GskSpvPointerType pointer_type = { type, storage };
   guint32 result;
 
-  result = GPOINTER_TO_UINT (g_hash_table_lookup (writer->pointer_types, type));
+  result = GPOINTER_TO_UINT (g_hash_table_lookup (writer->pointer_types, &pointer_type));
   if (result != 0)
     return result;
 
-  result = gsk_sl_pointer_type_write_spv (type, writer);
-  g_hash_table_insert (writer->pointer_types, gsk_sl_pointer_type_ref (type), GUINT_TO_POINTER (result));
+  result = gsk_spv_writer_type_pointer (writer, 
+                                        storage,
+                                        gsk_spv_writer_get_id_for_type (writer, type));
+  gsk_sl_type_ref (type);
+  g_hash_table_insert (writer->pointer_types, g_memdup (&pointer_type, sizeof (GskSpvPointerType)), GUINT_TO_POINTER (result));
   return result;
 }
 

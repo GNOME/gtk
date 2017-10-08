@@ -400,52 +400,52 @@ var Sections = {
 };
 
 var Operands = {
-  "IdMemorySemantics": { ctype: "guint32", ctype_suffix: "",
+  "IdMemorySemantics": { ctype: "guint32 {0}",
                          optional_unset: "0",
                          append_many: "g_array_append_vals ({0}, {1}, {2})",
                          append_one: "g_array_append_val ({0}, {1})" },
-  "IdRef": { ctype: "guint32", ctype_suffix: "",
+  "IdRef": { ctype: "guint32 {0}",
              optional_unset: "0",
              append_many: "g_array_append_vals ({0}, {1}, {2})",
              append_one: "g_array_append_val ({0}, {1})" },
-  "IdResult": { ctype: "guint32", ctype_suffix: "",
+  "IdResult": { ctype: "guint32 {0}",
                 optional_unset: "0",
                 declare_local: "guint32 {0}_id = gsk_spv_writer_make_id (writer);",
                 append_one: "g_array_append_val ({0}, {1}_id)" },
-  "IdResultType": { ctype: "GskSlType *", ctype_suffix: "",
+  "IdResultType": { ctype: "GskSlType *{0}",
                     optional_unset: "NULL",
                     declare_local: "guint32 {0}_id = gsk_spv_writer_get_id_for_type (writer, {0});",
                     append_one: "g_array_append_val ({0}, {1}_id)" },
-  "IdResultPointerType" : { ctype: "GskSlPointerType *", ctype_suffix: "",
+  "IdResultPointerType" : { ctype: "GskSlType *{0}, GskSpvStorageClass {0}_storage",
                             optional_unset: "NULL",
-                            declare_local: "guint32 {0}_id = gsk_spv_writer_get_id_for_pointer_type (writer, {0});",
+                            declare_local: "guint32 {0}_id = gsk_spv_writer_get_id_for_pointer_type (writer, {0}, {0}_storage);",
                             append_one: "g_array_append_val ({0}, {1}_id)" },
-  "IdScope": { ctype: "guint32", ctype_suffix: "",
+  "IdScope": { ctype: "guint32 {0}",
                optional_unset: "0",
                append_many: "g_array_append_vals ({0}, {1}, {2})",
                append_one: "g_array_append_val ({0}, {1})" },
-  "LiteralContextDependentNumber": { ctype: "guint32", ctype_suffix: "",
+  "LiteralContextDependentNumber": { ctype: "guint32 {0}",
                                      is_many: true,
                                      append_many: "g_array_append_vals ({0}, {1}, {2})" },
-  "LiteralExtInstInteger": { ctype: "guint32", ctype_suffix: "",
+  "LiteralExtInstInteger": { ctype: "guint32 {0}",
                              append_many: "g_array_append_vals ({0}, {1}, {2})",
                              append_one: "g_array_append_val ({0}, {1})" },
-  "LiteralInteger": { ctype: "guint32", ctype_suffix: "",
+  "LiteralInteger": { ctype: "guint32 {0}",
                       append_many: "g_array_append_vals ({0}, {1}, {2})",
                       append_one: "g_array_append_val ({0}, {1})" },
-  "LiteralString": { ctype: "const char *", ctype_suffix: "",
+  "LiteralString": { ctype: "const char *{0}",
                      optional_unset: "NULL",
                      append_one: "append_string ({0}, {1})" },
-  "LiteralSpecConstantOpInteger": { ctype: "guint32", ctype_suffix: "",
+  "LiteralSpecConstantOpInteger": { ctype: "guint32 {0}",
                                     is_many: true,
                                     append_many: "g_array_append_vals ({0}, {1}, {2})" },
-  "PairIdRefLiteralInteger": { ctype: "guint32", ctype_suffix: "[2]",
+  "PairIdRefLiteralInteger": { ctype: "guint32 {0}[2]",
                                append_many: "g_array_append_vals ({0}, {1}, 2 * {2})",
                                append_one: "g_array_append_vals ({0}, {1}, 2)" },
-  "PairIdRefIdRef": { ctype: "guint32", ctype_suffix: "[2]",
+  "PairIdRefIdRef": { ctype: "guint32 {0}[2]",
                       append_many: "g_array_append_vals ({0}, {1}, 2 * {2})",
                       append_one: "g_array_append_vals ({0}, {1}, 2)" },
-  "PairLiteralIntegerIdRef": { ctype: "guint32", ctype_suffix: "[2]",
+  "PairLiteralIntegerIdRef": { ctype: "guint32 {0}[2]",
                                append_many: "g_array_append_vals ({0}, {1}, 2 * {2})",
                                append_one: "g_array_append_vals ({0}, {1}, 2)" }
 };
@@ -456,7 +456,7 @@ for (let kind in spirv.operand_kinds)
     if (kind.category == "BitEnum" ||
         kind.category == "ValueEnum")
       {
-        Operands[kind.kind] = { ctype: "GskSpv" + kind.kind, ctype_suffix: "",
+        Operands[kind.kind] = { ctype: "GskSpv" + kind.kind + " {0}",
                                 append_one: "g_array_append_val ({0}, (guint32) { {1} })" };
         if (kind.category == "BitEnum")
           Operands[kind.kind].optional_unset = "0";
@@ -496,7 +496,6 @@ function fix_operand (ins, o)
     operand = Operands[o.kind];
 
   o.ctype = operand.ctype;
-  o.ctype_suffix = operand.ctype_suffix;
   if (operand.append_one)
     o.append_one = operand.append_one;
   if (operand.append_many)
@@ -655,12 +654,12 @@ else if (ARGV[0] == "functions")
                   }
                 if (o.quantifier == "*")
                   {
-                    print (Array(len+1).join(" ") + o.ctype + " *" + o.varname + o.ctype_suffix + ",")
+                    print (Array(len+1).join(" ") + o.ctype.format ("*" + o.varname) + ",");
                     print (Array(len+1).join(" ") + "gsize n_" + o.varname + (i + 2 - seen_result < ins.operands.length ? "," : ")"));
                   }
                 else
                   {
-                    print (Array(len+1).join(" ") + o.ctype + " " + o.varname +  o.ctype_suffix + (i + 2 - seen_result < ins.operands.length ? "," : ")"));
+                    print (Array(len+1).join(" ") + o.ctype.format (o.varname) + (i + 2 - seen_result < ins.operands.length ? "," : ")"));
                   }
               }
           }

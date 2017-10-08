@@ -20,7 +20,6 @@
 
 #include "gskslvariableprivate.h"
 
-#include "gskslpointertypeprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslqualifierprivate.h"
 #include "gsksltypeprivate.h"
@@ -30,24 +29,27 @@
 struct _GskSlVariable {
   guint ref_count;
 
-  GskSlPointerType *type;
   char *name;
+  GskSlType *type;
+  GskSlQualifier qualifier;
   GskSlValue *initial_value;
 };
 
 GskSlVariable *
-gsk_sl_variable_new (GskSlPointerType *type,
-                     char             *name,
-                     GskSlValue       *initial_value)
+gsk_sl_variable_new (const char           *name,
+                     GskSlType            *type,
+                     const GskSlQualifier *qualifier,
+                     GskSlValue           *initial_value)
 {
   GskSlVariable *variable;
 
-  g_return_val_if_fail (initial_value == NULL || gsk_sl_type_equal (gsk_sl_pointer_type_get_type (type), gsk_sl_value_get_type (initial_value)), NULL);
+  g_return_val_if_fail (initial_value == NULL || gsk_sl_type_equal (type, gsk_sl_value_get_type (initial_value)), NULL);
   variable = g_slice_new0 (GskSlVariable);
 
   variable->ref_count = 1;
-  variable->type = gsk_sl_pointer_type_ref (type);
-  variable->name = name;
+  variable->type = gsk_sl_type_ref (type);
+  variable->qualifier = *qualifier;
+  variable->name = g_strdup (name);
   variable->initial_value = initial_value;
 
   return variable;
@@ -75,7 +77,7 @@ gsk_sl_variable_unref (GskSlVariable *variable)
 
   if (variable->initial_value)
     gsk_sl_value_free (variable->initial_value);
-  gsk_sl_pointer_type_unref (variable->type);
+  gsk_sl_type_unref (variable->type);
   g_free (variable->name);
 
   g_slice_free (GskSlVariable, variable);
@@ -85,25 +87,22 @@ void
 gsk_sl_variable_print (const GskSlVariable *variable,
                        GskSlPrinter        *printer)
 {
-  GskSlType *type;
-
-  if (gsk_sl_qualifier_print (gsk_sl_pointer_type_get_qualifier (variable->type), printer))
+  if (gsk_sl_qualifier_print (&variable->qualifier, printer))
     gsk_sl_printer_append (printer, " ");
-  type = gsk_sl_pointer_type_get_type (variable->type);
-  gsk_sl_printer_append (printer, gsk_sl_type_get_name (type));
-  if (gsk_sl_type_is_block (type))
+  gsk_sl_printer_append (printer, gsk_sl_type_get_name (variable->type));
+  if (gsk_sl_type_is_block (variable->type))
     {
       guint i, n;
 
       gsk_sl_printer_append (printer, " {");
       gsk_sl_printer_push_indentation (printer);
-      n = gsk_sl_type_get_n_members (type);
+      n = gsk_sl_type_get_n_members (variable->type);
       for (i = 0; i < n; i++)
         {
           gsk_sl_printer_newline (printer);
-          gsk_sl_printer_append (printer, gsk_sl_type_get_name (gsk_sl_type_get_member_type (type, i)));
+          gsk_sl_printer_append (printer, gsk_sl_type_get_name (gsk_sl_type_get_member_type (variable->type, i)));
           gsk_sl_printer_append (printer, " ");
-          gsk_sl_printer_append (printer, gsk_sl_type_get_member_name (type, i));
+          gsk_sl_printer_append (printer, gsk_sl_type_get_member_name (variable->type, i));
           gsk_sl_printer_append (printer, ";");
         }
       gsk_sl_printer_pop_indentation (printer);
@@ -119,12 +118,6 @@ gsk_sl_variable_print (const GskSlVariable *variable,
 
 GskSlType *
 gsk_sl_variable_get_type (const GskSlVariable *variable)
-{
-  return gsk_sl_pointer_type_get_type (variable->type);
-}
-
-GskSlPointerType *
-gsk_sl_variable_get_pointer_type (const GskSlVariable *variable)
 {
   return variable->type;
 }
@@ -144,7 +137,7 @@ gsk_sl_variable_get_initial_value (const GskSlVariable *variable)
 gboolean
 gsk_sl_variable_is_constant (const GskSlVariable *variable)
 {
-  return gsk_sl_qualifier_is_constant (gsk_sl_pointer_type_get_qualifier (variable->type));
+  return gsk_sl_qualifier_is_constant (&variable->qualifier);
 }
 
 guint32
@@ -154,12 +147,12 @@ gsk_sl_variable_write_spv (const GskSlVariable *variable,
   guint32 result_id;
   GskSlQualifierLocation location;
   
-  location = gsk_sl_qualifier_get_location (gsk_sl_pointer_type_get_qualifier (variable->type));
+  location = gsk_sl_qualifier_get_location (&variable->qualifier);
 
   if (location == GSK_SL_QUALIFIER_PARAMETER)
     {
       result_id = gsk_spv_writer_function_parameter (writer,
-                                                     gsk_sl_pointer_type_get_type (variable->type));
+                                                     variable->type);
     }
   else
     {
@@ -173,7 +166,8 @@ gsk_sl_variable_write_spv (const GskSlVariable *variable,
       result_id = gsk_spv_writer_variable (writer,
                                            location == GSK_SL_QUALIFIER_GLOBAL ? GSK_SPV_WRITER_SECTION_DEFINE : GSK_SPV_WRITER_SECTION_DECLARE,
                                            variable->type,
-                                           gsk_sl_qualifier_get_storage_class (gsk_sl_pointer_type_get_qualifier (variable->type)),
+                                           gsk_sl_qualifier_get_storage_class (&variable->qualifier),
+                                           gsk_sl_qualifier_get_storage_class (&variable->qualifier),
                                            value_id);
     }
 

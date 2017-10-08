@@ -22,7 +22,6 @@
 
 #include "gskslexpressionprivate.h"
 #include "gskslfunctionprivate.h"
-#include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
@@ -510,7 +509,6 @@ gsk_sl_statement_parse_declaration (GskSlScope           *scope,
                                     GskSlType            *type)
 {
   GskSlStatementDeclaration *declaration;
-  GskSlPointerType *pointer_type;
   GskSlValue *value = NULL;
   const GskSlToken *token;
   char *name;
@@ -556,9 +554,8 @@ gsk_sl_statement_parse_declaration (GskSlScope           *scope,
       value = NULL;
     }
 
-  pointer_type = gsk_sl_pointer_type_new (type, qualifier);
-  declaration->variable = gsk_sl_variable_new (pointer_type, name, value);
-  gsk_sl_pointer_type_unref (pointer_type);
+  declaration->variable = gsk_sl_variable_new (name, type, qualifier, value);
+  g_free (name);
   gsk_sl_scope_add_variable (scope, declaration->variable);
 
   return (GskSlStatement *) declaration;

@@ -50,7 +50,7 @@ gsk_spv_writer_nop (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_undef (GskSpvWriter *writer,
                       GskSpvWriterSection section,
-                      GskSlType * result_type)
+                      GskSlType *result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -68,7 +68,7 @@ gsk_spv_writer_undef (GskSpvWriter *writer,
 static inline void
 gsk_spv_writer_source_continued (GskSpvWriter *writer,
                                  GskSpvWriterSection section,
-                                 const char * continued_source)
+                                 const char *continued_source)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint start_index = bytes->len;
@@ -83,7 +83,7 @@ gsk_spv_writer_source (GskSpvWriter *writer,
                        GskSpvSourceLanguage source_language,
                        guint32 version,
                        guint32 opt_file,
-                       const char * opt_source)
+                       const char *opt_source)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEBUG);
   guint start_index = bytes->len;
@@ -100,7 +100,7 @@ gsk_spv_writer_source (GskSpvWriter *writer,
 
 static inline void
 gsk_spv_writer_source_extension (GskSpvWriter *writer,
-                                 const char * extension)
+                                 const char *extension)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEBUG);
   guint start_index = bytes->len;
@@ -113,7 +113,7 @@ gsk_spv_writer_source_extension (GskSpvWriter *writer,
 static inline void
 gsk_spv_writer_name (GskSpvWriter *writer,
                      guint32 target,
-                     const char * name)
+                     const char *name)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEBUG);
   guint start_index = bytes->len;
@@ -128,7 +128,7 @@ static inline void
 gsk_spv_writer_member_name (GskSpvWriter *writer,
                             guint32 type,
                             guint32 member,
-                            const char * name)
+                            const char *name)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEBUG);
   guint start_index = bytes->len;
@@ -143,7 +143,7 @@ gsk_spv_writer_member_name (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_string (GskSpvWriter *writer,
                        GskSpvWriterSection section,
-                       const char * string)
+                       const char *string)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_id = gsk_spv_writer_make_id (writer);
@@ -176,7 +176,7 @@ gsk_spv_writer_line (GskSpvWriter *writer,
 
 static inline void
 gsk_spv_writer_extension (GskSpvWriter *writer,
-                          const char * name)
+                          const char *name)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_HEADER);
   guint start_index = bytes->len;
@@ -188,7 +188,7 @@ gsk_spv_writer_extension (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_ext_inst_import (GskSpvWriter *writer,
-                                const char * name)
+                                const char *name)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_HEADER);
   guint32 result_id = gsk_spv_writer_make_id (writer);
@@ -205,7 +205,7 @@ gsk_spv_writer_ext_inst_import (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_ext_inst (GskSpvWriter *writer,
                          GskSpvWriterSection section,
-                         GskSlType * result_type,
+                         GskSlType *result_type,
                          guint32 set,
                          guint32 instruction,
                          guint32 *operands,
@@ -245,7 +245,7 @@ static inline void
 gsk_spv_writer_entry_point (GskSpvWriter *writer,
                             GskSpvExecutionModel execution_model,
                             guint32 entry_point,
-                            const char * name,
+                            const char *name,
                             guint32 *interfaces,
                             gsize n_interfaces)
 {
@@ -497,7 +497,7 @@ gsk_spv_writer_type_struct (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_type_opaque (GskSpvWriter *writer,
-                            const char * name)
+                            const char *name)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEFINE);
   guint32 result_id = gsk_spv_writer_make_id (writer);
@@ -636,7 +636,7 @@ gsk_spv_writer_type_forward_pointer (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_constant_true (GskSpvWriter *writer,
-                              GskSlType * result_type)
+                              GskSlType *result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEFINE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -653,7 +653,7 @@ gsk_spv_writer_constant_true (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_constant_false (GskSpvWriter *writer,
-                               GskSlType * result_type)
+                               GskSlType *result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEFINE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -670,7 +670,7 @@ gsk_spv_writer_constant_false (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_constant (GskSpvWriter *writer,
-                         GskSlType * result_type,
+                         GskSlType *result_type,
                          guint32 *values,
                          gsize n_values)
 {
@@ -690,7 +690,7 @@ gsk_spv_writer_constant (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_constant_composite (GskSpvWriter *writer,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 *constituents,
                                    gsize n_constituents)
 {
@@ -710,7 +710,7 @@ gsk_spv_writer_constant_composite (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_constant_sampler (GskSpvWriter *writer,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  GskSpvSamplerAddressingMode sampler_addressing_mode,
                                  guint32 param,
                                  GskSpvSamplerFilterMode sampler_filter_mode)
@@ -733,7 +733,7 @@ gsk_spv_writer_constant_sampler (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_constant_null (GskSpvWriter *writer,
-                              GskSlType * result_type)
+                              GskSlType *result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEFINE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -750,7 +750,7 @@ gsk_spv_writer_constant_null (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_spec_constant_true (GskSpvWriter *writer,
-                                   GskSlType * result_type)
+                                   GskSlType *result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEFINE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -767,7 +767,7 @@ gsk_spv_writer_spec_constant_true (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_spec_constant_false (GskSpvWriter *writer,
-                                    GskSlType * result_type)
+                                    GskSlType *result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DEFINE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -784,7 +784,7 @@ gsk_spv_writer_spec_constant_false (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_spec_constant (GskSpvWriter *writer,
-                              GskSlType * result_type,
+                              GskSlType *result_type,
                               guint32 *values,
                               gsize n_values)
 {
@@ -804,7 +804,7 @@ gsk_spv_writer_spec_constant (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_spec_constant_composite (GskSpvWriter *writer,
-                                        GskSlType * result_type,
+                                        GskSlType *result_type,
                                         guint32 *constituents,
                                         gsize n_constituents)
 {
@@ -824,7 +824,7 @@ gsk_spv_writer_spec_constant_composite (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_spec_constant_op (GskSpvWriter *writer,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  guint32 *opcodes,
                                  gsize n_opcodes)
 {
@@ -844,7 +844,7 @@ gsk_spv_writer_spec_constant_op (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_function (GskSpvWriter *writer,
-                         GskSlType * result_type,
+                         GskSlType *result_type,
                          GskSpvFunctionControl function_control,
                          guint32 function_type)
 {
@@ -865,7 +865,7 @@ gsk_spv_writer_function (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_function_parameter (GskSpvWriter *writer,
-                                   GskSlType * result_type)
+                                   GskSlType *result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DECLARE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -892,7 +892,7 @@ gsk_spv_writer_function_end (GskSpvWriter *writer)
 
 static inline guint32
 gsk_spv_writer_function_call (GskSpvWriter *writer,
-                              GskSlType * result_type,
+                              GskSlType *result_type,
                               guint32 function,
                               guint32 *argument_0s,
                               gsize n_argument_0s)
@@ -915,12 +915,12 @@ gsk_spv_writer_function_call (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_variable (GskSpvWriter *writer,
                          GskSpvWriterSection section,
-                         GskSlPointerType * result_type,
+                         GskSlType *result_type, GskSpvStorageClass result_type_storage,
                          GskSpvStorageClass storage_class,
                          guint32 opt_initializer)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type);
+  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type, result_type_storage);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
@@ -937,13 +937,13 @@ gsk_spv_writer_variable (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_texel_pointer (GskSpvWriter *writer,
-                                    GskSlPointerType * result_type,
+                                    GskSlType *result_type, GskSpvStorageClass result_type_storage,
                                     guint32 image,
                                     guint32 coordinate,
                                     guint32 sample)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type);
+  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type, result_type_storage);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
@@ -960,7 +960,7 @@ gsk_spv_writer_image_texel_pointer (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_load (GskSpvWriter *writer,
-                     GskSlType * result_type,
+                     GskSlType *result_type,
                      guint32 pointer,
                      GskSpvMemoryAccess opt_memory_access)
 {
@@ -1035,13 +1035,13 @@ gsk_spv_writer_copy_memory_sized (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_access_chain (GskSpvWriter *writer,
-                             GskSlPointerType * result_type,
+                             GskSlType *result_type, GskSpvStorageClass result_type_storage,
                              guint32 base,
                              guint32 *indexes,
                              gsize n_indexes)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type);
+  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type, result_type_storage);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
@@ -1057,13 +1057,13 @@ gsk_spv_writer_access_chain (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_in_bounds_access_chain (GskSpvWriter *writer,
-                                       GskSlPointerType * result_type,
+                                       GskSlType *result_type, GskSpvStorageClass result_type_storage,
                                        guint32 base,
                                        guint32 *indexes,
                                        gsize n_indexes)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type);
+  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type, result_type_storage);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
@@ -1079,7 +1079,7 @@ gsk_spv_writer_in_bounds_access_chain (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_ptr_access_chain (GskSpvWriter *writer,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  guint32 base,
                                  guint32 element,
                                  guint32 *indexes,
@@ -1103,7 +1103,7 @@ gsk_spv_writer_ptr_access_chain (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_array_length (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 structure,
                              guint32 array_member)
 {
@@ -1125,7 +1125,7 @@ gsk_spv_writer_array_length (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_generic_ptr_mem_semantics (GskSpvWriter *writer,
                                           GskSpvWriterSection section,
-                                          GskSlType * result_type,
+                                          GskSlType *result_type,
                                           guint32 pointer)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -1144,7 +1144,7 @@ gsk_spv_writer_generic_ptr_mem_semantics (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_in_bounds_ptr_access_chain (GskSpvWriter *writer,
-                                           GskSlType * result_type,
+                                           GskSlType *result_type,
                                            guint32 base,
                                            guint32 element,
                                            guint32 *indexes,
@@ -1242,7 +1242,7 @@ gsk_spv_writer_group_member_decorate (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_vector_extract_dynamic (GskSpvWriter *writer,
-                                       GskSlType * result_type,
+                                       GskSlType *result_type,
                                        guint32 vector,
                                        guint32 index)
 {
@@ -1263,7 +1263,7 @@ gsk_spv_writer_vector_extract_dynamic (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_vector_insert_dynamic (GskSpvWriter *writer,
-                                      GskSlType * result_type,
+                                      GskSlType *result_type,
                                       guint32 vector,
                                       guint32 component,
                                       guint32 index)
@@ -1286,7 +1286,7 @@ gsk_spv_writer_vector_insert_dynamic (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_vector_shuffle (GskSpvWriter *writer,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 vector_1,
                                guint32 vector_2,
                                guint32 *components,
@@ -1310,7 +1310,7 @@ gsk_spv_writer_vector_shuffle (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_composite_construct (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 *constituents,
                                     gsize n_constituents)
 {
@@ -1330,7 +1330,7 @@ gsk_spv_writer_composite_construct (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_composite_extract (GskSpvWriter *writer,
-                                  GskSlType * result_type,
+                                  GskSlType *result_type,
                                   guint32 composite,
                                   guint32 *indexes,
                                   gsize n_indexes)
@@ -1352,7 +1352,7 @@ gsk_spv_writer_composite_extract (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_composite_insert (GskSpvWriter *writer,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  guint32 object,
                                  guint32 composite,
                                  guint32 *indexes,
@@ -1377,7 +1377,7 @@ gsk_spv_writer_composite_insert (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_copy_object (GskSpvWriter *writer,
                             GskSpvWriterSection section,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -1396,7 +1396,7 @@ gsk_spv_writer_copy_object (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_transpose (GskSpvWriter *writer,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 matrix)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1416,7 +1416,7 @@ gsk_spv_writer_transpose (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_sampled_image (GskSpvWriter *writer,
                               GskSpvWriterSection section,
-                              GskSlType * result_type,
+                              GskSlType *result_type,
                               guint32 image,
                               guint32 sampler)
 {
@@ -1437,7 +1437,7 @@ gsk_spv_writer_sampled_image (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_sample_implicit_lod (GskSpvWriter *writer,
-                                          GskSlType * result_type,
+                                          GskSlType *result_type,
                                           guint32 sampled_image,
                                           guint32 coordinate,
                                           GskSpvImageOperands opt_image_operands)
@@ -1461,7 +1461,7 @@ gsk_spv_writer_image_sample_implicit_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_sample_explicit_lod (GskSpvWriter *writer,
-                                          GskSlType * result_type,
+                                          GskSlType *result_type,
                                           guint32 sampled_image,
                                           guint32 coordinate,
                                           GskSpvImageOperands image_operands)
@@ -1484,7 +1484,7 @@ gsk_spv_writer_image_sample_explicit_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_sample_dref_implicit_lod (GskSpvWriter *writer,
-                                               GskSlType * result_type,
+                                               GskSlType *result_type,
                                                guint32 sampled_image,
                                                guint32 coordinate,
                                                guint32 d_ref_,
@@ -1510,7 +1510,7 @@ gsk_spv_writer_image_sample_dref_implicit_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_sample_dref_explicit_lod (GskSpvWriter *writer,
-                                               GskSlType * result_type,
+                                               GskSlType *result_type,
                                                guint32 sampled_image,
                                                guint32 coordinate,
                                                guint32 d_ref_,
@@ -1535,7 +1535,7 @@ gsk_spv_writer_image_sample_dref_explicit_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_sample_proj_implicit_lod (GskSpvWriter *writer,
-                                               GskSlType * result_type,
+                                               GskSlType *result_type,
                                                guint32 sampled_image,
                                                guint32 coordinate,
                                                GskSpvImageOperands opt_image_operands)
@@ -1559,7 +1559,7 @@ gsk_spv_writer_image_sample_proj_implicit_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_sample_proj_explicit_lod (GskSpvWriter *writer,
-                                               GskSlType * result_type,
+                                               GskSlType *result_type,
                                                guint32 sampled_image,
                                                guint32 coordinate,
                                                GskSpvImageOperands image_operands)
@@ -1582,7 +1582,7 @@ gsk_spv_writer_image_sample_proj_explicit_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_sample_proj_dref_implicit_lod (GskSpvWriter *writer,
-                                                    GskSlType * result_type,
+                                                    GskSlType *result_type,
                                                     guint32 sampled_image,
                                                     guint32 coordinate,
                                                     guint32 d_ref_,
@@ -1608,7 +1608,7 @@ gsk_spv_writer_image_sample_proj_dref_implicit_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_sample_proj_dref_explicit_lod (GskSpvWriter *writer,
-                                                    GskSlType * result_type,
+                                                    GskSlType *result_type,
                                                     guint32 sampled_image,
                                                     guint32 coordinate,
                                                     guint32 d_ref_,
@@ -1633,7 +1633,7 @@ gsk_spv_writer_image_sample_proj_dref_explicit_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_fetch (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 image,
                             guint32 coordinate,
                             GskSpvImageOperands opt_image_operands)
@@ -1657,7 +1657,7 @@ gsk_spv_writer_image_fetch (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_gather (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 sampled_image,
                              guint32 coordinate,
                              guint32 component,
@@ -1683,7 +1683,7 @@ gsk_spv_writer_image_gather (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_dref_gather (GskSpvWriter *writer,
-                                  GskSlType * result_type,
+                                  GskSlType *result_type,
                                   guint32 sampled_image,
                                   guint32 coordinate,
                                   guint32 d_ref_,
@@ -1709,7 +1709,7 @@ gsk_spv_writer_image_dref_gather (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_read (GskSpvWriter *writer,
-                           GskSlType * result_type,
+                           GskSlType *result_type,
                            guint32 image,
                            guint32 coordinate,
                            GskSpvImageOperands opt_image_operands)
@@ -1752,7 +1752,7 @@ gsk_spv_writer_image_write (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 sampled_image)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1771,7 +1771,7 @@ gsk_spv_writer_image (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_query_format (GskSpvWriter *writer,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 image)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1790,7 +1790,7 @@ gsk_spv_writer_image_query_format (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_query_order (GskSpvWriter *writer,
-                                  GskSlType * result_type,
+                                  GskSlType *result_type,
                                   guint32 image)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1809,7 +1809,7 @@ gsk_spv_writer_image_query_order (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_query_size_lod (GskSpvWriter *writer,
-                                     GskSlType * result_type,
+                                     GskSlType *result_type,
                                      guint32 image,
                                      guint32 level_of_detail)
 {
@@ -1830,7 +1830,7 @@ gsk_spv_writer_image_query_size_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_query_size (GskSpvWriter *writer,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  guint32 image)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1849,7 +1849,7 @@ gsk_spv_writer_image_query_size (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_query_lod (GskSpvWriter *writer,
-                                GskSlType * result_type,
+                                GskSlType *result_type,
                                 guint32 sampled_image,
                                 guint32 coordinate)
 {
@@ -1870,7 +1870,7 @@ gsk_spv_writer_image_query_lod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_query_levels (GskSpvWriter *writer,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 image)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1889,7 +1889,7 @@ gsk_spv_writer_image_query_levels (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_image_query_samples (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 image)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1908,7 +1908,7 @@ gsk_spv_writer_image_query_samples (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_convert_f_to_u (GskSpvWriter *writer,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 float_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1927,7 +1927,7 @@ gsk_spv_writer_convert_f_to_u (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_convert_f_to_s (GskSpvWriter *writer,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 float_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1946,7 +1946,7 @@ gsk_spv_writer_convert_f_to_s (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_convert_s_to_f (GskSpvWriter *writer,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 signed_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1965,7 +1965,7 @@ gsk_spv_writer_convert_s_to_f (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_convert_u_to_f (GskSpvWriter *writer,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 unsigned_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -1984,7 +1984,7 @@ gsk_spv_writer_convert_u_to_f (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_u_convert (GskSpvWriter *writer,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 unsigned_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2003,7 +2003,7 @@ gsk_spv_writer_u_convert (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_convert (GskSpvWriter *writer,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 signed_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2022,7 +2022,7 @@ gsk_spv_writer_s_convert (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_convert (GskSpvWriter *writer,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 float_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2041,7 +2041,7 @@ gsk_spv_writer_f_convert (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_quantize_to_f16 (GskSpvWriter *writer,
-                                GskSlType * result_type,
+                                GskSlType *result_type,
                                 guint32 value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2060,7 +2060,7 @@ gsk_spv_writer_quantize_to_f16 (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_convert_ptr_to_u (GskSpvWriter *writer,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  guint32 pointer)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2079,7 +2079,7 @@ gsk_spv_writer_convert_ptr_to_u (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_sat_convert_s_to_u (GskSpvWriter *writer,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 signed_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2098,7 +2098,7 @@ gsk_spv_writer_sat_convert_s_to_u (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_sat_convert_u_to_s (GskSpvWriter *writer,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 unsigned_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2117,11 +2117,11 @@ gsk_spv_writer_sat_convert_u_to_s (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_convert_u_to_ptr (GskSpvWriter *writer,
-                                 GskSlPointerType * result_type,
+                                 GskSlType *result_type, GskSpvStorageClass result_type_storage,
                                  guint32 integer_value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type);
+  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type, result_type_storage);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
@@ -2136,11 +2136,11 @@ gsk_spv_writer_convert_u_to_ptr (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_ptr_cast_to_generic (GskSpvWriter *writer,
-                                    GskSlPointerType * result_type,
+                                    GskSlType *result_type, GskSpvStorageClass result_type_storage,
                                     guint32 pointer)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type);
+  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type, result_type_storage);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
@@ -2155,11 +2155,11 @@ gsk_spv_writer_ptr_cast_to_generic (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_generic_cast_to_ptr (GskSpvWriter *writer,
-                                    GskSlPointerType * result_type,
+                                    GskSlType *result_type, GskSpvStorageClass result_type_storage,
                                     guint32 pointer)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type);
+  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type, result_type_storage);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
@@ -2174,12 +2174,12 @@ gsk_spv_writer_generic_cast_to_ptr (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_generic_cast_to_ptr_explicit (GskSpvWriter *writer,
-                                             GskSlPointerType * result_type,
+                                             GskSlType *result_type, GskSpvStorageClass result_type_storage,
                                              guint32 pointer,
                                              GskSpvStorageClass storage)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type);
+  guint32 result_type_id = gsk_spv_writer_get_id_for_pointer_type (writer, result_type, result_type_storage);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
@@ -2195,7 +2195,7 @@ gsk_spv_writer_generic_cast_to_ptr_explicit (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_bitcast (GskSpvWriter *writer,
-                        GskSlType * result_type,
+                        GskSlType *result_type,
                         guint32 operand)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2214,7 +2214,7 @@ gsk_spv_writer_bitcast (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_negate (GskSpvWriter *writer,
-                         GskSlType * result_type,
+                         GskSlType *result_type,
                          guint32 operand)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2233,7 +2233,7 @@ gsk_spv_writer_s_negate (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_negate (GskSpvWriter *writer,
-                         GskSlType * result_type,
+                         GskSlType *result_type,
                          guint32 operand)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2252,7 +2252,7 @@ gsk_spv_writer_f_negate (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_i_add (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2273,7 +2273,7 @@ gsk_spv_writer_i_add (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_add (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2294,7 +2294,7 @@ gsk_spv_writer_f_add (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_i_sub (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2315,7 +2315,7 @@ gsk_spv_writer_i_sub (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_sub (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2336,7 +2336,7 @@ gsk_spv_writer_f_sub (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_i_mul (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2357,7 +2357,7 @@ gsk_spv_writer_i_mul (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_mul (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2378,7 +2378,7 @@ gsk_spv_writer_f_mul (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_u_div (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2399,7 +2399,7 @@ gsk_spv_writer_u_div (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_div (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2420,7 +2420,7 @@ gsk_spv_writer_s_div (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_div (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2441,7 +2441,7 @@ gsk_spv_writer_f_div (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_u_mod (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2462,7 +2462,7 @@ gsk_spv_writer_u_mod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_rem (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2483,7 +2483,7 @@ gsk_spv_writer_s_rem (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_mod (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2504,7 +2504,7 @@ gsk_spv_writer_s_mod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_rem (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2525,7 +2525,7 @@ gsk_spv_writer_f_rem (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_mod (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 operand_1,
                       guint32 operand_2)
 {
@@ -2546,7 +2546,7 @@ gsk_spv_writer_f_mod (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_vector_times_scalar (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 vector,
                                     guint32 scalar)
 {
@@ -2567,7 +2567,7 @@ gsk_spv_writer_vector_times_scalar (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_matrix_times_scalar (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 matrix,
                                     guint32 scalar)
 {
@@ -2588,7 +2588,7 @@ gsk_spv_writer_matrix_times_scalar (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_vector_times_matrix (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 vector,
                                     guint32 matrix)
 {
@@ -2609,7 +2609,7 @@ gsk_spv_writer_vector_times_matrix (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_matrix_times_vector (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 matrix,
                                     guint32 vector)
 {
@@ -2630,7 +2630,7 @@ gsk_spv_writer_matrix_times_vector (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_matrix_times_matrix (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 left_matrix,
                                     guint32 right_matrix)
 {
@@ -2651,7 +2651,7 @@ gsk_spv_writer_matrix_times_matrix (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_outer_product (GskSpvWriter *writer,
-                              GskSlType * result_type,
+                              GskSlType *result_type,
                               guint32 vector_1,
                               guint32 vector_2)
 {
@@ -2672,7 +2672,7 @@ gsk_spv_writer_outer_product (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_dot (GskSpvWriter *writer,
-                    GskSlType * result_type,
+                    GskSlType *result_type,
                     guint32 vector_1,
                     guint32 vector_2)
 {
@@ -2693,7 +2693,7 @@ gsk_spv_writer_dot (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_i_add_carry (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand_1,
                             guint32 operand_2)
 {
@@ -2714,7 +2714,7 @@ gsk_spv_writer_i_add_carry (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_i_sub_borrow (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 operand_1,
                              guint32 operand_2)
 {
@@ -2735,7 +2735,7 @@ gsk_spv_writer_i_sub_borrow (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_u_mul_extended (GskSpvWriter *writer,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 operand_1,
                                guint32 operand_2)
 {
@@ -2756,7 +2756,7 @@ gsk_spv_writer_u_mul_extended (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_mul_extended (GskSpvWriter *writer,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 operand_1,
                                guint32 operand_2)
 {
@@ -2777,7 +2777,7 @@ gsk_spv_writer_s_mul_extended (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_any (GskSpvWriter *writer,
-                    GskSlType * result_type,
+                    GskSlType *result_type,
                     guint32 vector)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2796,7 +2796,7 @@ gsk_spv_writer_any (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_all (GskSpvWriter *writer,
-                    GskSlType * result_type,
+                    GskSlType *result_type,
                     guint32 vector)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2815,7 +2815,7 @@ gsk_spv_writer_all (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_is_nan (GskSpvWriter *writer,
-                       GskSlType * result_type,
+                       GskSlType *result_type,
                        guint32 x)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2834,7 +2834,7 @@ gsk_spv_writer_is_nan (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_is_inf (GskSpvWriter *writer,
-                       GskSlType * result_type,
+                       GskSlType *result_type,
                        guint32 x)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2853,7 +2853,7 @@ gsk_spv_writer_is_inf (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_is_finite (GskSpvWriter *writer,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 x)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2872,7 +2872,7 @@ gsk_spv_writer_is_finite (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_is_normal (GskSpvWriter *writer,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 x)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2891,7 +2891,7 @@ gsk_spv_writer_is_normal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_sign_bit_set (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 x)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -2910,7 +2910,7 @@ gsk_spv_writer_sign_bit_set (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_less_or_greater (GskSpvWriter *writer,
-                                GskSlType * result_type,
+                                GskSlType *result_type,
                                 guint32 x,
                                 guint32 y)
 {
@@ -2931,7 +2931,7 @@ gsk_spv_writer_less_or_greater (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_ordered (GskSpvWriter *writer,
-                        GskSlType * result_type,
+                        GskSlType *result_type,
                         guint32 x,
                         guint32 y)
 {
@@ -2952,7 +2952,7 @@ gsk_spv_writer_ordered (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_unordered (GskSpvWriter *writer,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 x,
                           guint32 y)
 {
@@ -2973,7 +2973,7 @@ gsk_spv_writer_unordered (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_logical_equal (GskSpvWriter *writer,
-                              GskSlType * result_type,
+                              GskSlType *result_type,
                               guint32 operand_1,
                               guint32 operand_2)
 {
@@ -2994,7 +2994,7 @@ gsk_spv_writer_logical_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_logical_not_equal (GskSpvWriter *writer,
-                                  GskSlType * result_type,
+                                  GskSlType *result_type,
                                   guint32 operand_1,
                                   guint32 operand_2)
 {
@@ -3015,7 +3015,7 @@ gsk_spv_writer_logical_not_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_logical_or (GskSpvWriter *writer,
-                           GskSlType * result_type,
+                           GskSlType *result_type,
                            guint32 operand_1,
                            guint32 operand_2)
 {
@@ -3036,7 +3036,7 @@ gsk_spv_writer_logical_or (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_logical_and (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand_1,
                             guint32 operand_2)
 {
@@ -3057,7 +3057,7 @@ gsk_spv_writer_logical_and (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_logical_not (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3076,7 +3076,7 @@ gsk_spv_writer_logical_not (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_select (GskSpvWriter *writer,
-                       GskSlType * result_type,
+                       GskSlType *result_type,
                        guint32 condition,
                        guint32 object_1,
                        guint32 object_2)
@@ -3099,7 +3099,7 @@ gsk_spv_writer_select (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_i_equal (GskSpvWriter *writer,
-                        GskSlType * result_type,
+                        GskSlType *result_type,
                         guint32 operand_1,
                         guint32 operand_2)
 {
@@ -3120,7 +3120,7 @@ gsk_spv_writer_i_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_i_not_equal (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand_1,
                             guint32 operand_2)
 {
@@ -3141,7 +3141,7 @@ gsk_spv_writer_i_not_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_u_greater_than (GskSpvWriter *writer,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 operand_1,
                                guint32 operand_2)
 {
@@ -3162,7 +3162,7 @@ gsk_spv_writer_u_greater_than (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_greater_than (GskSpvWriter *writer,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 operand_1,
                                guint32 operand_2)
 {
@@ -3183,7 +3183,7 @@ gsk_spv_writer_s_greater_than (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_u_greater_than_equal (GskSpvWriter *writer,
-                                     GskSlType * result_type,
+                                     GskSlType *result_type,
                                      guint32 operand_1,
                                      guint32 operand_2)
 {
@@ -3204,7 +3204,7 @@ gsk_spv_writer_u_greater_than_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_greater_than_equal (GskSpvWriter *writer,
-                                     GskSlType * result_type,
+                                     GskSlType *result_type,
                                      guint32 operand_1,
                                      guint32 operand_2)
 {
@@ -3225,7 +3225,7 @@ gsk_spv_writer_s_greater_than_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_u_less_than (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand_1,
                             guint32 operand_2)
 {
@@ -3246,7 +3246,7 @@ gsk_spv_writer_u_less_than (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_less_than (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand_1,
                             guint32 operand_2)
 {
@@ -3267,7 +3267,7 @@ gsk_spv_writer_s_less_than (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_u_less_than_equal (GskSpvWriter *writer,
-                                  GskSlType * result_type,
+                                  GskSlType *result_type,
                                   guint32 operand_1,
                                   guint32 operand_2)
 {
@@ -3288,7 +3288,7 @@ gsk_spv_writer_u_less_than_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_s_less_than_equal (GskSpvWriter *writer,
-                                  GskSlType * result_type,
+                                  GskSlType *result_type,
                                   guint32 operand_1,
                                   guint32 operand_2)
 {
@@ -3309,7 +3309,7 @@ gsk_spv_writer_s_less_than_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_ord_equal (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand_1,
                             guint32 operand_2)
 {
@@ -3330,7 +3330,7 @@ gsk_spv_writer_f_ord_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_unord_equal (GskSpvWriter *writer,
-                              GskSlType * result_type,
+                              GskSlType *result_type,
                               guint32 operand_1,
                               guint32 operand_2)
 {
@@ -3351,7 +3351,7 @@ gsk_spv_writer_f_unord_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_ord_not_equal (GskSpvWriter *writer,
-                                GskSlType * result_type,
+                                GskSlType *result_type,
                                 guint32 operand_1,
                                 guint32 operand_2)
 {
@@ -3372,7 +3372,7 @@ gsk_spv_writer_f_ord_not_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_unord_not_equal (GskSpvWriter *writer,
-                                  GskSlType * result_type,
+                                  GskSlType *result_type,
                                   guint32 operand_1,
                                   guint32 operand_2)
 {
@@ -3393,7 +3393,7 @@ gsk_spv_writer_f_unord_not_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_ord_less_than (GskSpvWriter *writer,
-                                GskSlType * result_type,
+                                GskSlType *result_type,
                                 guint32 operand_1,
                                 guint32 operand_2)
 {
@@ -3414,7 +3414,7 @@ gsk_spv_writer_f_ord_less_than (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_unord_less_than (GskSpvWriter *writer,
-                                  GskSlType * result_type,
+                                  GskSlType *result_type,
                                   guint32 operand_1,
                                   guint32 operand_2)
 {
@@ -3435,7 +3435,7 @@ gsk_spv_writer_f_unord_less_than (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_ord_greater_than (GskSpvWriter *writer,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 operand_1,
                                    guint32 operand_2)
 {
@@ -3456,7 +3456,7 @@ gsk_spv_writer_f_ord_greater_than (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_unord_greater_than (GskSpvWriter *writer,
-                                     GskSlType * result_type,
+                                     GskSlType *result_type,
                                      guint32 operand_1,
                                      guint32 operand_2)
 {
@@ -3477,7 +3477,7 @@ gsk_spv_writer_f_unord_greater_than (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_ord_less_than_equal (GskSpvWriter *writer,
-                                      GskSlType * result_type,
+                                      GskSlType *result_type,
                                       guint32 operand_1,
                                       guint32 operand_2)
 {
@@ -3498,7 +3498,7 @@ gsk_spv_writer_f_ord_less_than_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_unord_less_than_equal (GskSpvWriter *writer,
-                                        GskSlType * result_type,
+                                        GskSlType *result_type,
                                         guint32 operand_1,
                                         guint32 operand_2)
 {
@@ -3519,7 +3519,7 @@ gsk_spv_writer_f_unord_less_than_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_ord_greater_than_equal (GskSpvWriter *writer,
-                                         GskSlType * result_type,
+                                         GskSlType *result_type,
                                          guint32 operand_1,
                                          guint32 operand_2)
 {
@@ -3540,7 +3540,7 @@ gsk_spv_writer_f_ord_greater_than_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_f_unord_greater_than_equal (GskSpvWriter *writer,
-                                           GskSlType * result_type,
+                                           GskSlType *result_type,
                                            guint32 operand_1,
                                            guint32 operand_2)
 {
@@ -3561,7 +3561,7 @@ gsk_spv_writer_f_unord_greater_than_equal (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_shift_right_logical (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 base,
                                     guint32 shift)
 {
@@ -3582,7 +3582,7 @@ gsk_spv_writer_shift_right_logical (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_shift_right_arithmetic (GskSpvWriter *writer,
-                                       GskSlType * result_type,
+                                       GskSlType *result_type,
                                        guint32 base,
                                        guint32 shift)
 {
@@ -3603,7 +3603,7 @@ gsk_spv_writer_shift_right_arithmetic (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_shift_left_logical (GskSpvWriter *writer,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 base,
                                    guint32 shift)
 {
@@ -3624,7 +3624,7 @@ gsk_spv_writer_shift_left_logical (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_bitwise_or (GskSpvWriter *writer,
-                           GskSlType * result_type,
+                           GskSlType *result_type,
                            guint32 operand_1,
                            guint32 operand_2)
 {
@@ -3645,7 +3645,7 @@ gsk_spv_writer_bitwise_or (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_bitwise_xor (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand_1,
                             guint32 operand_2)
 {
@@ -3666,7 +3666,7 @@ gsk_spv_writer_bitwise_xor (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_bitwise_and (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 operand_1,
                             guint32 operand_2)
 {
@@ -3687,7 +3687,7 @@ gsk_spv_writer_bitwise_and (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_not (GskSpvWriter *writer,
-                    GskSlType * result_type,
+                    GskSlType *result_type,
                     guint32 operand)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3706,7 +3706,7 @@ gsk_spv_writer_not (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_bit_field_insert (GskSpvWriter *writer,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  guint32 base,
                                  guint32 insert,
                                  guint32 offset,
@@ -3731,7 +3731,7 @@ gsk_spv_writer_bit_field_insert (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_bit_field_s_extract (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 base,
                                     guint32 offset,
                                     guint32 count)
@@ -3754,7 +3754,7 @@ gsk_spv_writer_bit_field_s_extract (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_bit_field_u_extract (GskSpvWriter *writer,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 base,
                                     guint32 offset,
                                     guint32 count)
@@ -3777,7 +3777,7 @@ gsk_spv_writer_bit_field_u_extract (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_bit_reverse (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 base)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3796,7 +3796,7 @@ gsk_spv_writer_bit_reverse (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_bit_count (GskSpvWriter *writer,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 base)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3815,7 +3815,7 @@ gsk_spv_writer_bit_count (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_d_pdx (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 p)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3834,7 +3834,7 @@ gsk_spv_writer_d_pdx (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_d_pdy (GskSpvWriter *writer,
-                      GskSlType * result_type,
+                      GskSlType *result_type,
                       guint32 p)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3853,7 +3853,7 @@ gsk_spv_writer_d_pdy (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_fwidth (GskSpvWriter *writer,
-                       GskSlType * result_type,
+                       GskSlType *result_type,
                        guint32 p)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3872,7 +3872,7 @@ gsk_spv_writer_fwidth (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_d_pdx_fine (GskSpvWriter *writer,
-                           GskSlType * result_type,
+                           GskSlType *result_type,
                            guint32 p)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3891,7 +3891,7 @@ gsk_spv_writer_d_pdx_fine (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_d_pdy_fine (GskSpvWriter *writer,
-                           GskSlType * result_type,
+                           GskSlType *result_type,
                            guint32 p)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3910,7 +3910,7 @@ gsk_spv_writer_d_pdy_fine (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_fwidth_fine (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 p)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3929,7 +3929,7 @@ gsk_spv_writer_fwidth_fine (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_d_pdx_coarse (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 p)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3948,7 +3948,7 @@ gsk_spv_writer_d_pdx_coarse (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_d_pdy_coarse (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 p)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -3967,7 +3967,7 @@ gsk_spv_writer_d_pdy_coarse (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_fwidth_coarse (GskSpvWriter *writer,
-                              GskSlType * result_type,
+                              GskSlType *result_type,
                               guint32 p)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
@@ -4060,7 +4060,7 @@ gsk_spv_writer_memory_barrier (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_load (GskSpvWriter *writer,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 pointer,
                             guint32 scope,
                             guint32 semantics)
@@ -4101,7 +4101,7 @@ gsk_spv_writer_atomic_store (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_exchange (GskSpvWriter *writer,
-                                GskSlType * result_type,
+                                GskSlType *result_type,
                                 guint32 pointer,
                                 guint32 scope,
                                 guint32 semantics,
@@ -4126,7 +4126,7 @@ gsk_spv_writer_atomic_exchange (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_compare_exchange (GskSpvWriter *writer,
-                                        GskSlType * result_type,
+                                        GskSlType *result_type,
                                         guint32 pointer,
                                         guint32 scope,
                                         guint32 equal,
@@ -4155,7 +4155,7 @@ gsk_spv_writer_atomic_compare_exchange (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_compare_exchange_weak (GskSpvWriter *writer,
-                                             GskSlType * result_type,
+                                             GskSlType *result_type,
                                              guint32 pointer,
                                              guint32 scope,
                                              guint32 equal,
@@ -4184,7 +4184,7 @@ gsk_spv_writer_atomic_compare_exchange_weak (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_i_increment (GskSpvWriter *writer,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 pointer,
                                    guint32 scope,
                                    guint32 semantics)
@@ -4207,7 +4207,7 @@ gsk_spv_writer_atomic_i_increment (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_i_decrement (GskSpvWriter *writer,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 pointer,
                                    guint32 scope,
                                    guint32 semantics)
@@ -4230,7 +4230,7 @@ gsk_spv_writer_atomic_i_decrement (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_i_add (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 pointer,
                              guint32 scope,
                              guint32 semantics,
@@ -4255,7 +4255,7 @@ gsk_spv_writer_atomic_i_add (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_i_sub (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 pointer,
                              guint32 scope,
                              guint32 semantics,
@@ -4280,7 +4280,7 @@ gsk_spv_writer_atomic_i_sub (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_s_min (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 pointer,
                              guint32 scope,
                              guint32 semantics,
@@ -4305,7 +4305,7 @@ gsk_spv_writer_atomic_s_min (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_u_min (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 pointer,
                              guint32 scope,
                              guint32 semantics,
@@ -4330,7 +4330,7 @@ gsk_spv_writer_atomic_u_min (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_s_max (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 pointer,
                              guint32 scope,
                              guint32 semantics,
@@ -4355,7 +4355,7 @@ gsk_spv_writer_atomic_s_max (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_u_max (GskSpvWriter *writer,
-                             GskSlType * result_type,
+                             GskSlType *result_type,
                              guint32 pointer,
                              guint32 scope,
                              guint32 semantics,
@@ -4380,7 +4380,7 @@ gsk_spv_writer_atomic_u_max (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_and (GskSpvWriter *writer,
-                           GskSlType * result_type,
+                           GskSlType *result_type,
                            guint32 pointer,
                            guint32 scope,
                            guint32 semantics,
@@ -4405,7 +4405,7 @@ gsk_spv_writer_atomic_and (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_or (GskSpvWriter *writer,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 pointer,
                           guint32 scope,
                           guint32 semantics,
@@ -4430,7 +4430,7 @@ gsk_spv_writer_atomic_or (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_atomic_xor (GskSpvWriter *writer,
-                           GskSlType * result_type,
+                           GskSlType *result_type,
                            guint32 pointer,
                            guint32 scope,
                            guint32 semantics,
@@ -4455,7 +4455,7 @@ gsk_spv_writer_atomic_xor (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_phi (GskSpvWriter *writer,
-                    GskSlType * result_type,
+                    GskSlType *result_type,
                     guint32 *variable__parent_____s[2],
                     gsize n_variable__parent_____s)
 {
@@ -4641,7 +4641,7 @@ gsk_spv_writer_lifetime_stop (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_async_copy (GskSpvWriter *writer,
                                  GskSpvWriterSection section,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  guint32 execution,
                                  guint32 destination,
                                  guint32 source,
@@ -4688,7 +4688,7 @@ gsk_spv_writer_group_wait_events (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_all (GskSpvWriter *writer,
                           GskSpvWriterSection section,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 execution,
                           guint32 predicate)
 {
@@ -4710,7 +4710,7 @@ gsk_spv_writer_group_all (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_any (GskSpvWriter *writer,
                           GskSpvWriterSection section,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 execution,
                           guint32 predicate)
 {
@@ -4732,7 +4732,7 @@ gsk_spv_writer_group_any (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_broadcast (GskSpvWriter *writer,
                                 GskSpvWriterSection section,
-                                GskSlType * result_type,
+                                GskSlType *result_type,
                                 guint32 execution,
                                 guint32 value,
                                 guint32 local_id)
@@ -4756,7 +4756,7 @@ gsk_spv_writer_group_broadcast (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_i_add (GskSpvWriter *writer,
                             GskSpvWriterSection section,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 execution,
                             GskSpvGroupOperation operation,
                             guint32 x)
@@ -4780,7 +4780,7 @@ gsk_spv_writer_group_i_add (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_f_add (GskSpvWriter *writer,
                             GskSpvWriterSection section,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 execution,
                             GskSpvGroupOperation operation,
                             guint32 x)
@@ -4804,7 +4804,7 @@ gsk_spv_writer_group_f_add (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_f_min (GskSpvWriter *writer,
                             GskSpvWriterSection section,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 execution,
                             GskSpvGroupOperation operation,
                             guint32 x)
@@ -4828,7 +4828,7 @@ gsk_spv_writer_group_f_min (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_u_min (GskSpvWriter *writer,
                             GskSpvWriterSection section,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 execution,
                             GskSpvGroupOperation operation,
                             guint32 x)
@@ -4852,7 +4852,7 @@ gsk_spv_writer_group_u_min (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_s_min (GskSpvWriter *writer,
                             GskSpvWriterSection section,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 execution,
                             GskSpvGroupOperation operation,
                             guint32 x)
@@ -4876,7 +4876,7 @@ gsk_spv_writer_group_s_min (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_f_max (GskSpvWriter *writer,
                             GskSpvWriterSection section,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 execution,
                             GskSpvGroupOperation operation,
                             guint32 x)
@@ -4900,7 +4900,7 @@ gsk_spv_writer_group_f_max (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_u_max (GskSpvWriter *writer,
                             GskSpvWriterSection section,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 execution,
                             GskSpvGroupOperation operation,
                             guint32 x)
@@ -4924,7 +4924,7 @@ gsk_spv_writer_group_u_max (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_s_max (GskSpvWriter *writer,
                             GskSpvWriterSection section,
-                            GskSlType * result_type,
+                            GskSlType *result_type,
                             guint32 execution,
                             GskSpvGroupOperation operation,
                             guint32 x)
@@ -4948,7 +4948,7 @@ gsk_spv_writer_group_s_max (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_read_pipe (GskSpvWriter *writer,
                           GskSpvWriterSection section,
-                          GskSlType * result_type,
+                          GskSlType *result_type,
                           guint32 pipe,
                           guint32 pointer,
                           guint32 packet_size,
@@ -4974,7 +4974,7 @@ gsk_spv_writer_read_pipe (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_write_pipe (GskSpvWriter *writer,
                            GskSpvWriterSection section,
-                           GskSlType * result_type,
+                           GskSlType *result_type,
                            guint32 pipe,
                            guint32 pointer,
                            guint32 packet_size,
@@ -5000,7 +5000,7 @@ gsk_spv_writer_write_pipe (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_reserved_read_pipe (GskSpvWriter *writer,
                                    GskSpvWriterSection section,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 pipe,
                                    guint32 reserve_id,
                                    guint32 index,
@@ -5030,7 +5030,7 @@ gsk_spv_writer_reserved_read_pipe (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_reserved_write_pipe (GskSpvWriter *writer,
                                     GskSpvWriterSection section,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 pipe,
                                     guint32 reserve_id,
                                     guint32 index,
@@ -5060,7 +5060,7 @@ gsk_spv_writer_reserved_write_pipe (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_reserve_read_pipe_packets (GskSpvWriter *writer,
                                           GskSpvWriterSection section,
-                                          GskSlType * result_type,
+                                          GskSlType *result_type,
                                           guint32 pipe,
                                           guint32 num_packets,
                                           guint32 packet_size,
@@ -5086,7 +5086,7 @@ gsk_spv_writer_reserve_read_pipe_packets (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_reserve_write_pipe_packets (GskSpvWriter *writer,
                                            GskSpvWriterSection section,
-                                           GskSlType * result_type,
+                                           GskSlType *result_type,
                                            guint32 pipe,
                                            guint32 num_packets,
                                            guint32 packet_size,
@@ -5150,7 +5150,7 @@ gsk_spv_writer_commit_write_pipe (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_is_valid_reserve_id (GskSpvWriter *writer,
                                     GskSpvWriterSection section,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 reserve_id)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -5170,7 +5170,7 @@ gsk_spv_writer_is_valid_reserve_id (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_get_num_pipe_packets (GskSpvWriter *writer,
                                      GskSpvWriterSection section,
-                                     GskSlType * result_type,
+                                     GskSlType *result_type,
                                      guint32 pipe,
                                      guint32 packet_size,
                                      guint32 packet_alignment)
@@ -5194,7 +5194,7 @@ gsk_spv_writer_get_num_pipe_packets (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_get_max_pipe_packets (GskSpvWriter *writer,
                                      GskSpvWriterSection section,
-                                     GskSlType * result_type,
+                                     GskSlType *result_type,
                                      guint32 pipe,
                                      guint32 packet_size,
                                      guint32 packet_alignment)
@@ -5218,7 +5218,7 @@ gsk_spv_writer_get_max_pipe_packets (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_reserve_read_pipe_packets (GskSpvWriter *writer,
                                                 GskSpvWriterSection section,
-                                                GskSlType * result_type,
+                                                GskSlType *result_type,
                                                 guint32 execution,
                                                 guint32 pipe,
                                                 guint32 num_packets,
@@ -5246,7 +5246,7 @@ gsk_spv_writer_group_reserve_read_pipe_packets (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_reserve_write_pipe_packets (GskSpvWriter *writer,
                                                  GskSpvWriterSection section,
-                                                 GskSlType * result_type,
+                                                 GskSlType *result_type,
                                                  guint32 execution,
                                                  guint32 pipe,
                                                  guint32 num_packets,
@@ -5316,7 +5316,7 @@ gsk_spv_writer_group_commit_write_pipe (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_enqueue_marker (GskSpvWriter *writer,
                                GskSpvWriterSection section,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 queue,
                                guint32 num_events,
                                guint32 wait_events,
@@ -5342,7 +5342,7 @@ gsk_spv_writer_enqueue_marker (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_enqueue_kernel (GskSpvWriter *writer,
                                GskSpvWriterSection section,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 queue,
                                guint32 flags,
                                guint32 nd_range,
@@ -5383,7 +5383,7 @@ gsk_spv_writer_enqueue_kernel (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_get_kernel_n_drange_sub_group_count (GskSpvWriter *writer,
                                                     GskSpvWriterSection section,
-                                                    GskSlType * result_type,
+                                                    GskSlType *result_type,
                                                     guint32 nd_range,
                                                     guint32 invoke,
                                                     guint32 param,
@@ -5411,7 +5411,7 @@ gsk_spv_writer_get_kernel_n_drange_sub_group_count (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_get_kernel_n_drange_max_sub_group_size (GskSpvWriter *writer,
                                                        GskSpvWriterSection section,
-                                                       GskSlType * result_type,
+                                                       GskSlType *result_type,
                                                        guint32 nd_range,
                                                        guint32 invoke,
                                                        guint32 param,
@@ -5439,7 +5439,7 @@ gsk_spv_writer_get_kernel_n_drange_max_sub_group_size (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_get_kernel_work_group_size (GskSpvWriter *writer,
                                            GskSpvWriterSection section,
-                                           GskSlType * result_type,
+                                           GskSlType *result_type,
                                            guint32 invoke,
                                            guint32 param,
                                            guint32 param_size,
@@ -5465,7 +5465,7 @@ gsk_spv_writer_get_kernel_work_group_size (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_get_kernel_preferred_work_group_size_multiple (GskSpvWriter *writer,
                                                               GskSpvWriterSection section,
-                                                              GskSlType * result_type,
+                                                              GskSlType *result_type,
                                                               guint32 invoke,
                                                               guint32 param,
                                                               guint32 param_size,
@@ -5517,7 +5517,7 @@ gsk_spv_writer_release_event (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_create_user_event (GskSpvWriter *writer,
                                   GskSpvWriterSection section,
-                                  GskSlType * result_type)
+                                  GskSlType *result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5535,7 +5535,7 @@ gsk_spv_writer_create_user_event (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_is_valid_event (GskSpvWriter *writer,
                                GskSpvWriterSection section,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 event)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -5587,7 +5587,7 @@ gsk_spv_writer_capture_event_profiling_info (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_get_default_queue (GskSpvWriter *writer,
                                   GskSpvWriterSection section,
-                                  GskSlType * result_type)
+                                  GskSlType *result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5605,7 +5605,7 @@ gsk_spv_writer_get_default_queue (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_build_nd_range (GskSpvWriter *writer,
                                GskSpvWriterSection section,
-                               GskSlType * result_type,
+                               GskSlType *result_type,
                                guint32 global_work_size,
                                guint32 local_work_size,
                                guint32 global_work_offset)
@@ -5629,7 +5629,7 @@ gsk_spv_writer_build_nd_range (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_sample_implicit_lod (GskSpvWriter *writer,
                                                  GskSpvWriterSection section,
-                                                 GskSlType * result_type,
+                                                 GskSlType *result_type,
                                                  guint32 sampled_image,
                                                  guint32 coordinate,
                                                  GskSpvImageOperands opt_image_operands)
@@ -5654,7 +5654,7 @@ gsk_spv_writer_image_sparse_sample_implicit_lod (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_sample_explicit_lod (GskSpvWriter *writer,
                                                  GskSpvWriterSection section,
-                                                 GskSlType * result_type,
+                                                 GskSlType *result_type,
                                                  guint32 sampled_image,
                                                  guint32 coordinate,
                                                  GskSpvImageOperands image_operands)
@@ -5678,7 +5678,7 @@ gsk_spv_writer_image_sparse_sample_explicit_lod (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_sample_dref_implicit_lod (GskSpvWriter *writer,
                                                       GskSpvWriterSection section,
-                                                      GskSlType * result_type,
+                                                      GskSlType *result_type,
                                                       guint32 sampled_image,
                                                       guint32 coordinate,
                                                       guint32 d_ref_,
@@ -5705,7 +5705,7 @@ gsk_spv_writer_image_sparse_sample_dref_implicit_lod (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_sample_dref_explicit_lod (GskSpvWriter *writer,
                                                       GskSpvWriterSection section,
-                                                      GskSlType * result_type,
+                                                      GskSlType *result_type,
                                                       guint32 sampled_image,
                                                       guint32 coordinate,
                                                       guint32 d_ref_,
@@ -5731,7 +5731,7 @@ gsk_spv_writer_image_sparse_sample_dref_explicit_lod (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_sample_proj_implicit_lod (GskSpvWriter *writer,
                                                       GskSpvWriterSection section,
-                                                      GskSlType * result_type,
+                                                      GskSlType *result_type,
                                                       guint32 sampled_image,
                                                       guint32 coordinate,
                                                       GskSpvImageOperands opt_image_operands)
@@ -5756,7 +5756,7 @@ gsk_spv_writer_image_sparse_sample_proj_implicit_lod (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_sample_proj_explicit_lod (GskSpvWriter *writer,
                                                       GskSpvWriterSection section,
-                                                      GskSlType * result_type,
+                                                      GskSlType *result_type,
                                                       guint32 sampled_image,
                                                       guint32 coordinate,
                                                       GskSpvImageOperands image_operands)
@@ -5780,7 +5780,7 @@ gsk_spv_writer_image_sparse_sample_proj_explicit_lod (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_sample_proj_dref_implicit_lod (GskSpvWriter *writer,
                                                            GskSpvWriterSection section,
-                                                           GskSlType * result_type,
+                                                           GskSlType *result_type,
                                                            guint32 sampled_image,
                                                            guint32 coordinate,
                                                            guint32 d_ref_,
@@ -5807,7 +5807,7 @@ gsk_spv_writer_image_sparse_sample_proj_dref_implicit_lod (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_sample_proj_dref_explicit_lod (GskSpvWriter *writer,
                                                            GskSpvWriterSection section,
-                                                           GskSlType * result_type,
+                                                           GskSlType *result_type,
                                                            guint32 sampled_image,
                                                            guint32 coordinate,
                                                            guint32 d_ref_,
@@ -5833,7 +5833,7 @@ gsk_spv_writer_image_sparse_sample_proj_dref_explicit_lod (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_fetch (GskSpvWriter *writer,
                                    GskSpvWriterSection section,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 image,
                                    guint32 coordinate,
                                    GskSpvImageOperands opt_image_operands)
@@ -5858,7 +5858,7 @@ gsk_spv_writer_image_sparse_fetch (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_gather (GskSpvWriter *writer,
                                     GskSpvWriterSection section,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 sampled_image,
                                     guint32 coordinate,
                                     guint32 component,
@@ -5885,7 +5885,7 @@ gsk_spv_writer_image_sparse_gather (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_dref_gather (GskSpvWriter *writer,
                                          GskSpvWriterSection section,
-                                         GskSlType * result_type,
+                                         GskSlType *result_type,
                                          guint32 sampled_image,
                                          guint32 coordinate,
                                          guint32 d_ref_,
@@ -5912,7 +5912,7 @@ gsk_spv_writer_image_sparse_dref_gather (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_texels_resident (GskSpvWriter *writer,
                                              GskSpvWriterSection section,
-                                             GskSlType * result_type,
+                                             GskSlType *result_type,
                                              guint32 resident_code)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -5943,7 +5943,7 @@ gsk_spv_writer_no_line (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_atomic_flag_test_and_set (GskSpvWriter *writer,
                                          GskSpvWriterSection section,
-                                         GskSlType * result_type,
+                                         GskSlType *result_type,
                                          guint32 pointer,
                                          guint32 scope,
                                          guint32 semantics)
@@ -5984,7 +5984,7 @@ gsk_spv_writer_atomic_flag_clear (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_image_sparse_read (GskSpvWriter *writer,
                                   GskSpvWriterSection section,
-                                  GskSlType * result_type,
+                                  GskSlType *result_type,
                                   guint32 image,
                                   guint32 coordinate,
                                   GskSpvImageOperands opt_image_operands)
@@ -6009,7 +6009,7 @@ gsk_spv_writer_image_sparse_read (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_subgroup_ballot_khr (GskSpvWriter *writer,
                                     GskSpvWriterSection section,
-                                    GskSlType * result_type,
+                                    GskSlType *result_type,
                                     guint32 predicate)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -6029,7 +6029,7 @@ gsk_spv_writer_subgroup_ballot_khr (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_subgroup_first_invocation_khr (GskSpvWriter *writer,
                                               GskSpvWriterSection section,
-                                              GskSlType * result_type,
+                                              GskSlType *result_type,
                                               guint32 value)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -6049,7 +6049,7 @@ gsk_spv_writer_subgroup_first_invocation_khr (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_subgroup_all_khr (GskSpvWriter *writer,
                                  GskSpvWriterSection section,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  guint32 predicate)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -6069,7 +6069,7 @@ gsk_spv_writer_subgroup_all_khr (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_subgroup_any_khr (GskSpvWriter *writer,
                                  GskSpvWriterSection section,
-                                 GskSlType * result_type,
+                                 GskSlType *result_type,
                                  guint32 predicate)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -6089,7 +6089,7 @@ gsk_spv_writer_subgroup_any_khr (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_subgroup_all_equal_khr (GskSpvWriter *writer,
                                        GskSpvWriterSection section,
-                                       GskSlType * result_type,
+                                       GskSlType *result_type,
                                        guint32 predicate)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
@@ -6109,7 +6109,7 @@ gsk_spv_writer_subgroup_all_equal_khr (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_subgroup_read_invocation_khr (GskSpvWriter *writer,
                                              GskSpvWriterSection section,
-                                             GskSlType * result_type,
+                                             GskSlType *result_type,
                                              guint32 value,
                                              guint32 index)
 {
@@ -6131,7 +6131,7 @@ gsk_spv_writer_subgroup_read_invocation_khr (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_i_add_non_uniform_amd (GskSpvWriter *writer,
                                             GskSpvWriterSection section,
-                                            GskSlType * result_type,
+                                            GskSlType *result_type,
                                             guint32 execution,
                                             GskSpvGroupOperation operation,
                                             guint32 x)
@@ -6155,7 +6155,7 @@ gsk_spv_writer_group_i_add_non_uniform_amd (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_f_add_non_uniform_amd (GskSpvWriter *writer,
                                             GskSpvWriterSection section,
-                                            GskSlType * result_type,
+                                            GskSlType *result_type,
                                             guint32 execution,
                                             GskSpvGroupOperation operation,
                                             guint32 x)
@@ -6179,7 +6179,7 @@ gsk_spv_writer_group_f_add_non_uniform_amd (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_f_min_non_uniform_amd (GskSpvWriter *writer,
                                             GskSpvWriterSection section,
-                                            GskSlType * result_type,
+                                            GskSlType *result_type,
                                             guint32 execution,
                                             GskSpvGroupOperation operation,
                                             guint32 x)
@@ -6203,7 +6203,7 @@ gsk_spv_writer_group_f_min_non_uniform_amd (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_u_min_non_uniform_amd (GskSpvWriter *writer,
                                             GskSpvWriterSection section,
-                                            GskSlType * result_type,
+                                            GskSlType *result_type,
                                             guint32 execution,
                                             GskSpvGroupOperation operation,
                                             guint32 x)
@@ -6227,7 +6227,7 @@ gsk_spv_writer_group_u_min_non_uniform_amd (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_s_min_non_uniform_amd (GskSpvWriter *writer,
                                             GskSpvWriterSection section,
-                                            GskSlType * result_type,
+                                            GskSlType *result_type,
                                             guint32 execution,
                                             GskSpvGroupOperation operation,
                                             guint32 x)
@@ -6251,7 +6251,7 @@ gsk_spv_writer_group_s_min_non_uniform_amd (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_f_max_non_uniform_amd (GskSpvWriter *writer,
                                             GskSpvWriterSection section,
-                                            GskSlType * result_type,
+                                            GskSlType *result_type,
                                             guint32 execution,
                                             GskSpvGroupOperation operation,
                                             guint32 x)
@@ -6275,7 +6275,7 @@ gsk_spv_writer_group_f_max_non_uniform_amd (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_u_max_non_uniform_amd (GskSpvWriter *writer,
                                             GskSpvWriterSection section,
-                                            GskSlType * result_type,
+                                            GskSlType *result_type,
                                             guint32 execution,
                                             GskSpvGroupOperation operation,
                                             guint32 x)
@@ -6299,7 +6299,7 @@ gsk_spv_writer_group_u_max_non_uniform_amd (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_group_s_max_non_uniform_amd (GskSpvWriter *writer,
                                             GskSpvWriterSection section,
-                                            GskSlType * result_type,
+                                            GskSlType *result_type,
                                             guint32 execution,
                                             GskSpvGroupOperation operation,
                                             guint32 x)
@@ -6323,7 +6323,7 @@ gsk_spv_writer_group_s_max_non_uniform_amd (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_fragment_mask_fetch_amd (GskSpvWriter *writer,
                                         GskSpvWriterSection section,
-                                        GskSlType * result_type,
+                                        GskSlType *result_type,
                                         guint32 image,
                                         guint32 coordinate)
 {
@@ -6345,7 +6345,7 @@ gsk_spv_writer_fragment_mask_fetch_amd (GskSpvWriter *writer,
 static inline guint32
 gsk_spv_writer_fragment_fetch_amd (GskSpvWriter *writer,
                                    GskSpvWriterSection section,
-                                   GskSlType * result_type,
+                                   GskSlType *result_type,
                                    guint32 image,
                                    guint32 coordinate,
                                    guint32 fragment_index)

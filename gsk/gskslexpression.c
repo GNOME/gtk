@@ -21,9 +21,8 @@
 #include "gskslexpressionprivate.h"
 
 #include "gskslbinaryprivate.h"
-#include "gskslpreprocessorprivate.h"
 #include "gskslfunctionprivate.h"
-#include "gskslpointertypeprivate.h"
+#include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
 #include "gsksltokenizerprivate.h"

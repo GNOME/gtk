@@ -61,7 +61,8 @@ GBytes *                gsk_spv_writer_write                    (GskSpvWriter   
 guint32                 gsk_spv_writer_get_id_for_type          (GskSpvWriter           *writer,
                                                                  GskSlType              *type);
 guint32                 gsk_spv_writer_get_id_for_pointer_type  (GskSpvWriter           *writer,
-                                                                 GskSlPointerType       *type);
+                                                                 GskSlType              *type,
+                                                                 GskSpvStorageClass      storage);
 guint32                 gsk_spv_writer_get_id_for_value         (GskSpvWriter           *writer,
                                                                  GskSlValue             *value);
 guint32                 gsk_spv_writer_get_id_for_zero          (GskSpvWriter           *writer,
