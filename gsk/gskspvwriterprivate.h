@@ -73,6 +73,8 @@ guint32                 gsk_spv_writer_get_id_for_variable      (GskSpvWriter   
                                                                  GskSlVariable          *variable);
 guint32                 gsk_spv_writer_get_id_for_function      (GskSpvWriter           *writer,
                                                                  GskSlFunction          *function);
+guint32                 gsk_spv_writer_get_id_for_function_type (GskSpvWriter           *writer,
+                                                                 GskSlFunctionType      *function_type);
 
 guint32                 gsk_spv_writer_make_id                  (GskSpvWriter           *writer);
 GArray *                gsk_spv_writer_get_bytes                (GskSpvWriter           *writer,

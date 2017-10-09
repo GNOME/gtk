@@ -21,6 +21,7 @@
 #include "gskspvwriterprivate.h"
 
 #include "gskslfunctionprivate.h"
+#include "gskslfunctiontypeprivate.h"
 #include "gskslqualifierprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
@@ -55,6 +56,7 @@ struct _GskSpvWriter
   GHashTable *values;
   GHashTable *variables;
   GHashTable *functions;
+  GHashTable *function_types;
 };
 
 static GskSpvCodeBlock *
@@ -139,6 +141,8 @@ gsk_spv_writer_new (void)
                                              (GDestroyNotify) gsk_sl_variable_unref, NULL);
   writer->functions = g_hash_table_new_full (g_direct_hash, g_direct_equal,
                                              (GDestroyNotify) gsk_sl_function_unref, NULL);
+  writer->function_types = g_hash_table_new_full (gsk_sl_function_type_hash, gsk_sl_function_type_equal,
+                                                  (GDestroyNotify) gsk_sl_function_type_unref, NULL);
 
   return writer;
 }
@@ -177,6 +181,7 @@ gsk_spv_writer_unref (GskSpvWriter *writer)
   g_hash_table_destroy (writer->values);
   g_hash_table_destroy (writer->variables);
   g_hash_table_destroy (writer->functions);
+  g_hash_table_destroy (writer->function_types);
 
   g_slice_free (GskSpvWriter, writer);
 }
@@ -258,7 +263,7 @@ gsk_spv_writer_clear (GskSpvWriter *writer)
   g_hash_table_remove_all (writer->values);
   g_hash_table_remove_all (writer->variables);
   g_hash_table_remove_all (writer->functions);
-
+  g_hash_table_remove_all (writer->function_types);
 }
 
 GBytes *
@@ -436,6 +441,21 @@ gsk_spv_writer_get_id_for_function (GskSpvWriter  *writer,
     return result;
   
   return gsk_spv_writer_write_function (writer, function, NULL, NULL);
+}
+
+guint32
+gsk_spv_writer_get_id_for_function_type (GskSpvWriter      *writer,
+                                         GskSlFunctionType *function_type)
+{
+  guint32 result;
+
+  result = GPOINTER_TO_UINT (g_hash_table_lookup (writer->function_types, function_type));
+  if (result != 0)
+    return result;
+  
+  result = gsk_sl_function_type_write_spv (function_type, writer);
+  g_hash_table_insert (writer->function_types, gsk_sl_function_type_ref (function_type), GUINT_TO_POINTER (result));
+  return result;
 }
 
 guint32

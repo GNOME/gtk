@@ -20,12 +20,13 @@
 
 #include "gskslfunctionprivate.h"
 
+#include "gskslfunctiontypeprivate.h"
 #include "gskslnativefunctionprivate.h"
-#include "gskslstatementprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslqualifierprivate.h"
 #include "gskslscopeprivate.h"
+#include "gskslstatementprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
@@ -284,10 +285,9 @@ struct _GskSlFunctionDeclared {
   GskSlFunction parent;
 
   GskSlScope *scope;
-  GskSlType *return_type;
   char *name;
+  GskSlFunctionType *function_type;
   GskSlVariable **arguments;
-  gsize n_arguments;
   GskSlStatement *statement;
 };
 
@@ -297,13 +297,12 @@ gsk_sl_function_declared_free (GskSlFunction *function)
   GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
   guint i;
 
-  for (i = 0; i < declared->n_arguments; i++)
+  for (i = 0; i < gsk_sl_function_type_get_n_arguments (declared->function_type); i++)
     gsk_sl_variable_unref (declared->arguments[i]);
   g_free (declared->arguments);
   if (declared->scope)
     gsk_sl_scope_unref (declared->scope);
-  if (declared->return_type)
-    gsk_sl_type_unref (declared->return_type);
+  gsk_sl_function_type_unref (declared->function_type);
   g_free (declared->name);
   if (declared->statement)
     gsk_sl_statement_unref (declared->statement);
@@ -316,7 +315,7 @@ gsk_sl_function_declared_get_return_type (const GskSlFunction *function)
 {
   const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
 
-  return declared->return_type;
+  return gsk_sl_function_type_get_return_type (declared->function_type);
 }
 
 static const char *
@@ -332,7 +331,7 @@ gsk_sl_function_declared_get_n_arguments (const GskSlFunction *function)
 {
   const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
 
-  return declared->n_arguments;
+  return gsk_sl_function_type_get_n_arguments (declared->function_type);
 }
 
 static GskSlType *
@@ -341,7 +340,7 @@ gsk_sl_function_declared_get_argument_type (const GskSlFunction *function,
 {
   const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
 
-  return gsk_sl_variable_get_type (declared->arguments[i]);
+  return gsk_sl_function_type_get_argument_type (declared->function_type, i);
 }
 
 static GskSlValue *
@@ -359,12 +358,12 @@ gsk_sl_function_declared_print (const GskSlFunction *function,
   const GskSlFunctionDeclared *declared = (const GskSlFunctionDeclared *) function;
   guint i;
 
-  gsk_sl_printer_append (printer, gsk_sl_type_get_name (declared->return_type));
+  gsk_sl_printer_append (printer, gsk_sl_type_get_name (gsk_sl_function_type_get_return_type (declared->function_type)));
   gsk_sl_printer_newline (printer);
 
   gsk_sl_printer_append (printer, declared->name);
   gsk_sl_printer_append (printer, " (");
-  for (i = 0; i < declared->n_arguments; i++)
+  for (i = 0; i < gsk_sl_function_type_get_n_arguments (declared->function_type); i++)
     {
       if (i > 0)
         gsk_sl_printer_append (printer, ", ");
@@ -392,24 +391,21 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
                                     gpointer             initializer_data)
 {
   GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
-  guint32 return_type_id, function_type_id, function_id;
-  guint32 argument_types[declared->n_arguments];
+  guint32 function_type_id, function_id;
+  GskSlType *return_type;
   gsize i;
 
   if (declared->statement == NULL)
     return 0;
 
-  /* declare type of function */
-  return_type_id = gsk_spv_writer_get_id_for_type (writer, declared->return_type);
-  for (i = 0; i < declared->n_arguments; i++)
-    {
-      argument_types[i] = gsk_spv_writer_get_id_for_type (writer, gsk_sl_variable_get_type (declared->arguments[i]));
-    }
-  function_type_id = gsk_spv_writer_type_function (writer, return_type_id, argument_types, declared->n_arguments);
+  return_type = gsk_sl_function_type_get_return_type (declared->function_type);
 
-  function_id = gsk_spv_writer_function (writer, declared->return_type, 0, function_type_id);
+  /* declare type of function */
+  function_type_id = gsk_spv_writer_get_id_for_function_type (writer, declared->function_type);
+
+  function_id = gsk_spv_writer_function (writer, return_type, 0, function_type_id);
   /* add function header */
-  for (i = 0; i < declared->n_arguments; i++)
+  for (i = 0; i < gsk_sl_function_type_get_n_arguments (declared->function_type); i++)
     {
       gsk_spv_writer_get_id_for_variable (writer, declared->arguments[i]);
     }
@@ -425,7 +421,7 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
 
   gsk_sl_statement_write_spv (declared->statement, writer);
 
-  if (gsk_sl_type_is_void (declared->return_type) &&
+  if (gsk_sl_type_is_void (return_type) &&
       gsk_sl_statement_get_jump (declared->statement) < GSK_SL_JUMP_RETURN)
     gsk_spv_writer_return (writer);
 
@@ -445,10 +441,10 @@ gsk_sl_function_declared_write_call_spv (GskSlFunction *function,
   guint32 result;
 
   result = gsk_spv_writer_function_call (writer,
-                                         declared->return_type,
+                                         gsk_sl_function_type_get_return_type (declared->function_type),
                                          gsk_spv_writer_get_id_for_function (writer, function),
                                          arguments,
-                                         declared->n_arguments);
+                                         gsk_sl_function_type_get_n_arguments (declared->function_type));
 
   return result;
 }
@@ -509,7 +505,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
   const GskSlToken *token;
 
   function = gsk_sl_function_new (GskSlFunctionDeclared, &GSK_SL_FUNCTION_DECLARED);
-  function->return_type = gsk_sl_type_ref (return_type);
+  function->function_type = gsk_sl_function_type_new (return_type);
   function->name = g_strdup (name);
 
   token = gsk_sl_preprocessor_get (preproc);
@@ -520,7 +516,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
     }
   gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
 
-  function->scope = gsk_sl_scope_new (scope, function->return_type);
+  function->scope = gsk_sl_scope_new (scope, return_type);
 
   token = gsk_sl_preprocessor_get (preproc);
   if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
@@ -544,7 +540,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
 
               if (gsk_sl_scope_lookup_variable (function->scope, token->str))
                 {
-                  for (i = 0; i < function->n_arguments; i++)
+                  for (i = 0; i < arguments->len; i++)
                     {
                       if (g_str_equal (gsk_sl_variable_get_name (g_ptr_array_index (arguments, i)), token->str))
                         {
@@ -557,6 +553,9 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
                 }
 
               variable = gsk_sl_variable_new (token->str, type, &qualifier, NULL);
+              function->function_type = gsk_sl_function_type_add_argument (function->function_type,
+                                                                           qualifier.storage,
+                                                                           type);
               g_ptr_array_add (arguments, variable);
               
               gsk_sl_scope_add_variable (function->scope, variable);
@@ -576,7 +575,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
           gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
         }
 
-      function->n_arguments = arguments->len;
+      g_assert (gsk_sl_function_type_get_n_arguments (function->function_type) == arguments->len);
       function->arguments = (GskSlVariable **) g_ptr_array_free (arguments, FALSE);
     }
 
@@ -596,7 +595,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
 
   function->statement = gsk_sl_statement_parse_compound (function->scope, preproc, FALSE);
 
-  if (!gsk_sl_type_is_void (function->return_type) &&
+  if (!gsk_sl_type_is_void (return_type) &&
       gsk_sl_statement_get_jump (function->statement) < GSK_SL_JUMP_RETURN)
     {
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Function does not return a value.");

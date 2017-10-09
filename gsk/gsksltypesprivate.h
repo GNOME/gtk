@@ -24,6 +24,7 @@
 typedef struct _GskSlExpression         GskSlExpression;
 typedef struct _GskSlFunction           GskSlFunction;
 typedef struct _GskSlFunctionMatcher    GskSlFunctionMatcher;
+typedef struct _GskSlFunctionType       GskSlFunctionType;
 typedef struct _GskSlNativeFunction     GskSlNativeFunction;
 typedef struct _GskSlPreprocessor       GskSlPreprocessor;
 typedef struct _GskSlPointerType        GskSlPointerType;
@@ -90,5 +91,23 @@ typedef enum {
   GSK_SL_BUILTIN_DMAT4X3,
   GSK_SL_BUILTIN_DMAT4
 } GskSlBuiltinType;
+
+typedef enum {
+  GSK_SL_STORAGE_DEFAULT,
+
+  GSK_SL_STORAGE_GLOBAL,
+  GSK_SL_STORAGE_GLOBAL_CONST,
+  GSK_SL_STORAGE_GLOBAL_IN,
+  GSK_SL_STORAGE_GLOBAL_OUT,
+  GSK_SL_STORAGE_GLOBAL_UNIFORM,
+
+  GSK_SL_STORAGE_LOCAL,
+  GSK_SL_STORAGE_LOCAL_CONST,
+
+  GSK_SL_STORAGE_PARAMETER_IN,
+  GSK_SL_STORAGE_PARAMETER_OUT,
+  GSK_SL_STORAGE_PARAMETER_INOUT,
+  GSK_SL_STORAGE_PARAMETER_CONST
+} GskSlStorage;
 
 #endif /* __GSK_SL_TYPES_H__ */
