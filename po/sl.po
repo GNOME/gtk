@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-27 22:34+0200\n"
-"PO-Revision-Date: 2017-08-27 22:35+0200\n"
+"PO-Revision-Date: 2017-10-08 20:47+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -1208,23 +1208,23 @@ msgstr "Izbor programa"
 #: gtk/gtkappchooserdialog.c:208
 #, c-format
 msgid "Opening “%s”."
-msgstr "Odpiranje datoteke “%s”."
+msgstr "Odpiranje datoteke »%s«."
 
 #: gtk/gtkappchooserdialog.c:209
 #, c-format
 msgid "No applications found for “%s”"
-msgstr "Ni mogoče najti programa za “%s”"
+msgstr "Ni mogoče najti programa za »%s«"
 
 #. Translators: %s is a file type description
 #: gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "Opening “%s” files."
-msgstr "Odpiranje datotek “%s”."
+msgstr "Odpiranje datotek »%s«."
 
 #: gtk/gtkappchooserdialog.c:217
 #, c-format
 msgid "No applications found for “%s” files"
-msgstr "Ni mogoče najti programa za datoteke “%s”"
+msgstr "Ni mogoče najti programa za datoteke »%s«"
 
 #: gtk/gtkappchooserdialog.c:310
 msgid "Forget association"
@@ -1241,7 +1241,7 @@ msgstr "Privzeti program"
 #: gtk/gtkappchooserwidget.c:677
 #, c-format
 msgid "No applications found for “%s”."
-msgstr "Ni mogoče najti programa za “%s”"
+msgstr "Ni mogoče najti programa za »%s«"
 
 #: gtk/gtkappchooserwidget.c:760
 msgid "Recommended Applications"
@@ -2112,13 +2112,13 @@ msgstr "Mape ni mogoče spremeniti, ker ni krajevna"
 #: gtk/gtkfilechooserwidget.c:6333 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "Datoteka z imenom “%s” že obstaja. Ali jo želite zamenjati?"
+msgstr "Datoteka z imenom »%s« že obstaja. Ali jo želite zamenjati?"
 
 #: gtk/gtkfilechooserwidget.c:6336 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "Datoteka že obstaja v “%s”. Z zamenjavo bo njena vsebina izgubljena."
+msgstr "Datoteka že obstaja v »%s«. Z zamenjavo bo njena vsebina izgubljena."
 
 #: gtk/gtkfilechooserwidget.c:6341 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
@@ -2509,7 +2509,7 @@ msgstr "Odpri smeti"
 #: gtk/gtkplacessidebar.c:1283
 #, c-format
 msgid "Mount and open “%s”"
-msgstr "Priklopi in odpri “%s”"
+msgstr "Priklopi in odpri »%s«"
 
 #: gtk/gtkplacessidebar.c:1172
 msgid "Open the contents of the file system"
@@ -2577,12 +2577,12 @@ msgstr "_Zakleni napravo"
 #: gtk/gtkplacessidebar.c:2182 gtk/gtkplacessidebar.c:3148
 #, c-format
 msgid "Unable to start “%s”"
-msgstr "Ni mogoče začeti “%s”"
+msgstr "Ni mogoče začeti »%s«"
 
 #: gtk/gtkplacessidebar.c:2212
 #, c-format
 msgid "Unable to access “%s”"
-msgstr "Ni mogoč dostop do “%s”"
+msgstr "Ni mogoč dostop do »%s«"
 
 #: gtk/gtkplacessidebar.c:2421
 msgid "This name is already taken"
@@ -2597,17 +2597,17 @@ msgstr "Ime"
 #: gtk/gtkplacessidebar.c:2689
 #, c-format
 msgid "Unable to unmount “%s”"
-msgstr "Ni mogoče odstraniti “%s”"
+msgstr "Ni mogoče odstraniti »%s«"
 
 #: gtk/gtkplacessidebar.c:2865
 #, c-format
 msgid "Unable to stop “%s”"
-msgstr "Ni mogoče zaustaviti “%s”"
+msgstr "Ni mogoče zaustaviti »%s«"
 
 #: gtk/gtkplacessidebar.c:2894
 #, c-format
 msgid "Unable to eject “%s”"
-msgstr "Ni mogoče izvreči “%s”"
+msgstr "Ni mogoče izvreči »%s«"
 
 #: gtk/gtkplacessidebar.c:2923 gtk/gtkplacessidebar.c:2952
 #, c-format
@@ -3170,7 +3170,7 @@ msgstr "Poskusite drugačno iskanje"
 #: gtk/gtkswitch.c:663
 msgctxt "switch"
 msgid "ON"
-msgstr "VKLJUČENO"
+msgstr "❙"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -3178,7 +3178,7 @@ msgstr "VKLJUČENO"
 #: gtk/gtkswitch.c:669
 msgctxt "switch"
 msgid "OFF"
-msgstr "IZKLJUČENO"
+msgstr "○"
 
 #: gtk/gtktextbufferrichtext.c:658
 #, c-format
@@ -5759,7 +5759,7 @@ msgstr "Geslo:"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1437
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
-msgstr "Za tiskanje dokumenta “%s” na tiskalniku %s je zahtevana overitev"
+msgstr "Za tiskanje dokumenta »%s« na tiskalniku %s je zahtevana overitev"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1148
 #, c-format
@@ -5769,7 +5769,7 @@ msgstr "Za tiskanje dokumenta na %s je zahtevana overitev"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1152
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
-msgstr "Za pridobitev atributov posla “%s” je zahtevana overitev"
+msgstr "Za pridobitev atributov posla »%s« je zahtevana overitev"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1154
 msgid "Authentication is required to get attributes of a job"
@@ -5811,7 +5811,7 @@ msgstr "Domena:"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1439
 #, c-format
 msgid "Authentication is required to print document “%s”"
-msgstr "Za tiskanje dokumenta “%s” je zahtevana overitev."
+msgstr "Za tiskanje dokumenta »%s« je zahtevana overitev."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1444
 #, c-format
@@ -5825,61 +5825,61 @@ msgstr "Za tiskanje tega dokumenta je zahtevana overitev"
 #: modules/printbackends/cups/gtkprintbackendcups.c:2517
 #, c-format
 msgid "Printer “%s” is low on toner."
-msgstr "V tiskalniku “%s” je skoraj prazen toner."
+msgstr "V tiskalniku »%s« je skoraj prazen toner."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2521
 #, c-format
 msgid "Printer “%s” has no toner left."
-msgstr "V tiskalniku “%s” je prazen toner."
+msgstr "V tiskalniku »%s« je prazen toner."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2526
 #, c-format
 msgid "Printer “%s” is low on developer."
-msgstr "V tiskalniku “%s” je skoraj zmanjkalo razvijalca."
+msgstr "V tiskalniku »%s« je skoraj zmanjkalo razvijalca."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2531
 #, c-format
 msgid "Printer “%s” is out of developer."
-msgstr "V tiskalniku “%s” je zmanjkalo razvijalca."
+msgstr "V tiskalniku »%s« je zmanjkalo razvijalca."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2536
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
-msgstr "V tiskalniku “%s” je skoraj prazna vsaj ena kartuša."
+msgstr "V tiskalniku »%s« je skoraj prazna vsaj ena kartuša."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2541
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
-msgstr "V tiskalniku “%s” je prazna vsaj ena kartuša."
+msgstr "V tiskalniku »%s« je prazna vsaj ena kartuša."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2545
 #, c-format
 msgid "The cover is open on printer “%s”."
-msgstr "Tiskalnik “%s” ima odprt pokrov."
+msgstr "Tiskalnik »%s« ima odprt pokrov."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2549
 #, c-format
 msgid "The door is open on printer “%s”."
-msgstr "Tiskalnik “%s” ima odprta vratca."
+msgstr "Tiskalnik »%s« ima odprta vratca."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2553
 #, c-format
 msgid "Printer “%s” is low on paper."
-msgstr "V tiskalniku “%s” je skoraj zmanjkalo papirja."
+msgstr "V tiskalniku »%s« je skoraj zmanjkalo papirja."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2557
 #, c-format
 msgid "Printer “%s” is out of paper."
-msgstr "V tiskalniku “%s” je zmanjkalo papirja."
+msgstr "V tiskalniku »%s« je zmanjkalo papirja."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2561
 #, c-format
 msgid "Printer “%s” is currently offline."
-msgstr "Tiskalnik “%s” trenutno ni povezan."
+msgstr "Tiskalnik »%s« trenutno ni povezan."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2565
 #, c-format
