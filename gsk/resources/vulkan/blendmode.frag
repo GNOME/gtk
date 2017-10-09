@@ -12,25 +12,42 @@ layout(set = 1, binding = 0) uniform sampler2D endTexture;
 
 layout(location = 0) out vec4 outColor;
 
-vec3
-multiply (vec3 source, vec3 backdrop, float opacity)
+float
+combine (float source, float backdrop)
 {
-  vec3 result = source * backdrop;
-  return mix (source, result, opacity);
+  return source + backdrop * (1 - source);
 }
 
-vec3
-difference (vec3 source, vec3 backdrop, float opacity)
+vec4
+composite (vec4 Cs, vec4 Cb, vec3 B)
 {
-  vec3 result = abs (source - backdrop);
-  return mix (source, result, opacity);
+  float ao = Cs.a + Cb.a * (1 - Cs.a);
+  vec3 Co = (Cs.a*(1 - Cb.a)*Cs.rgb + Cs.a*Cb.a*B + (1 - Cs.a)*Cb.a*Cb.rgb) / ao;
+  return vec4(Co, ao);
 }
 
-vec3
-screen (vec3 source, vec3 backdrop, float opacity)
+vec4
+normal (vec4 Cs, vec4 Cb)
 {
-  vec3 result = source + backdrop - source * backdrop;
-  return mix (source, result, opacity);
+  return composite (Cs, Cb, Cs.rgb);
+}
+
+vec4
+multiply (vec4 Cs, vec4 Cb)
+{
+  return composite (Cs, Cb, Cs.rgb * Cb.rgb);
+}
+
+vec4
+difference (vec4 Cs, vec4 Cb)
+{
+  return composite (Cs, Cb, abs(Cs.rgb - Cb.rgb));
+}
+
+vec4
+screen (vec4 Cs, vec4 Cb)
+{
+  return composite (Cs, Cb, Cs.rgb + Cb.rgb - Cs.rgb * Cb.rgb);
 }
 
 float
@@ -42,13 +59,13 @@ hard_light (float source, float backdrop)
     return 2 * (backdrop + source - backdrop * source) - 1;
 }
 
-vec3
-hard_light (vec3 source, vec3 backdrop, float opacity)
+vec4
+hard_light (vec4 Cs, vec4 Cb)
 {
-  vec3 result = vec3 (hard_light (source.r, backdrop.r),
-                      hard_light (source.g, backdrop.g),
-                      hard_light (source.b, backdrop.b));
-  return mix (source, result, opacity);
+  vec3 B = vec3 (hard_light (Cs.r, Cb.r),
+                 hard_light (Cs.g, Cb.g),
+                 hard_light (Cs.b, Cb.b));
+  return composite (Cs, Cb, B);
 }
 
 float
@@ -67,33 +84,36 @@ soft_light (float source, float backdrop)
     return backdrop + (2 * source - 1) * (db - backdrop);
 }
 
-vec3
-soft_light (vec3 source, vec3 backdrop, float opacity)
+vec4
+soft_light (vec4 Cs, vec4 Cb)
 {
-  vec3 result = vec3 (soft_light (source.r, backdrop.r),
-                      soft_light (source.g, backdrop.g),
-                      soft_light (source.b, backdrop.b));
-  return mix (source, result, opacity);
+  vec3 B = vec3 (soft_light (Cs.r, Cb.r),
+                 soft_light (Cs.g, Cb.g),
+                 soft_light (Cs.b, Cb.b));
+  return composite (Cs, Cb, B);
 }
 
-vec3
-overlay (vec3 source, vec3 backdrop, float opacity)
+vec4
+overlay (vec4 Cs, vec4 Cb)
 {
-  return hard_light (backdrop, source, opacity);
+  vec3 B = vec3 (hard_light (Cb.r, Cs.r),
+                 hard_light (Cb.g, Cs.g),
+                 hard_light (Cb.b, Cs.b));
+  return composite (Cs, Cb, B);
 }
 
-vec3
-darken (vec3 source, vec3 backdrop, float opacity)
+vec4
+darken (vec4 Cs, vec4 Cb)
 {
-  vec3 result = min (source, backdrop);
-  return mix (source, result, opacity);
+  vec3 B = min (Cs.rgb, Cb.rgb);
+  return composite (Cs, Cb, B);
 }
 
-vec3
-lighten (vec3 source, vec3 backdrop, float opacity)
+vec4
+lighten (vec4 Cs, vec4 Cb)
 {
-  vec3 result = max (source, backdrop);
-  return mix (source, result, opacity);
+  vec3 B = max (Cs.rgb, Cb.rgb);
+  return composite (Cs, Cb, B);
 }
 
 float
@@ -102,13 +122,13 @@ color_dodge (float source, float backdrop)
   return (source == 1.0) ? source : min (backdrop / (1.0 - source), 1.0);
 }
 
-vec3
-color_dodge (vec3 source, vec3 backdrop, float opacity)
+vec4
+color_dodge (vec4 Cs, vec4 Cb)
 {
-  vec3 result = vec3 (color_dodge (source.r, backdrop.r),
-                      color_dodge (source.g, backdrop.g),
-                      color_dodge (source.b, backdrop.b));
-  return mix (source, result, opacity);
+  vec3 B = vec3 (color_dodge (Cs.r, Cb.r),
+                 color_dodge (Cs.g, Cb.g),
+                 color_dodge (Cs.b, Cb.b));
+  return composite (Cs, Cb, B);
 }
 
 
@@ -118,20 +138,20 @@ color_burn (float source, float backdrop)
   return (source == 0.0) ? source : max ((1.0 - ((1.0 - backdrop) / source)), 0.0);
 }
 
-vec3
-color_burn (vec3 source, vec3 backdrop, float opacity)
+vec4
+color_burn (vec4 Cs, vec4 Cb)
 {
-  vec3 result = vec3 (color_burn (source.r, backdrop.r),
-                      color_burn (source.g, backdrop.g),
-                      color_burn (source.b, backdrop.b));
-  return mix (source, result, opacity);
+  vec3 B = vec3 (color_burn (Cs.r, Cb.r),
+                 color_burn (Cs.g, Cb.g),
+                 color_burn (Cs.b, Cb.b));
+  return composite (Cs, Cb, B);
 }
 
-vec3
-exclusion (vec3 source, vec3 backdrop, float opacity)
+vec4
+exclusion (vec4 Cs, vec4 Cb)
 {
-  vec3 result = backdrop + source - 2.0 * backdrop * source;
-  return mix (source, result, opacity);
+  vec3 B = Cb.rgb + Cs.rgb - 2.0 * Cb.rgb * Cs.rgb;
+  return composite (Cs, Cb, B);
 }
 
 float
@@ -221,86 +241,74 @@ set_sat (vec3 c, float s)
   return res;
 }
 
-vec3
-color (vec3 source, vec3 backdrop, float opacity)
+vec4
+color (vec4 Cs, vec4 Cb)
 {
-  vec3 result = set_lum (source, lum (backdrop));
-  return mix (source, result, opacity);
+  vec3 B = set_lum (Cs.rgb, lum (Cb.rgb));
+  return composite (Cs, Cb, B);
 }
 
-vec3
-hue (vec3 source, vec3 backdrop, float opacity)
+vec4
+hue (vec4 Cs, vec4 Cb)
 {
-  vec3 result = set_lum (set_sat (source, sat (backdrop)), lum (backdrop));
-  return mix (source, result, opacity);
+  vec3 B = set_lum (set_sat (Cs.rgb, sat (Cb.rgb)), lum (Cb.rgb));
+  return composite (Cs, Cb, B);
 }
 
-vec3
-saturation (vec3 source, vec3 backdrop, float opacity)
+vec4
+saturation (vec4 Cs, vec4 Cb)
 {
-  vec3 result = set_lum (set_sat (backdrop, sat (source)), lum (backdrop));
-  return mix (source, result, opacity);
+  vec3 B = set_lum (set_sat (Cb.rgb, sat (Cs.rgb)), lum (Cb.rgb));
+  return composite (Cs, Cb, B);
 }
 
-vec3
-luminosity (vec3 source, vec3 backdrop, float opacity)
+vec4
+luminosity (vec4 Cs, vec4 Cb)
 {
-  vec3 result = set_lum (backdrop, lum (source));
-  return mix (source, result, opacity);
-}
-
-float
-combine (float source, float backdrop)
-{
-  return source + backdrop * (1 - source);
+  vec3 B = set_lum (Cb.rgb, lum (Cs.rgb));
+  return composite (Cs, Cb, B);
 }
 
 void main()
 {
   vec4 source = texture (startTexture, inStartTexCoord);
   vec4 backdrop = texture (endTexture, inEndTexCoord);
-  vec3 rgb = vec3(1,0,0);
-  float a = 1;
+  vec4 result;
 
-  a = combine (source.a, backdrop.a);
-
-  if (inBlendMode == 0) // default
-    {
-      rgb = source.rgb;
-      a = source.a;
-    }
+  if (inBlendMode == 0)
+    result = normal (source, backdrop);
   else if (inBlendMode == 1)
-    rgb = multiply (source.rgb, backdrop.rgb, backdrop.a);
+    result = multiply (source, backdrop);
   else if (inBlendMode == 2)
-    rgb = screen (source.rgb, backdrop.rgb, backdrop.a);
+    result = screen (source, backdrop);
   else if (inBlendMode == 3)
-    rgb = overlay (source.rgb, backdrop.rgb, backdrop.a);
+    result = overlay (source, backdrop);
   else if (inBlendMode == 4)
-    rgb = darken (source.rgb, backdrop.rgb, backdrop.a);
+    result = darken (source, backdrop);
   else if (inBlendMode == 5)
-    rgb = lighten (source.rgb, backdrop.rgb, backdrop.a);
+    result = lighten (source, backdrop);
   else if (inBlendMode == 6)
-    rgb = color_dodge (source.rgb, backdrop.rgb, backdrop.a);
+    result = color_dodge (source, backdrop);
   else if (inBlendMode == 7)
-    rgb = color_burn (source.rgb, backdrop.rgb, backdrop.a);
+    result = color_burn (source, backdrop);
   else if (inBlendMode == 8)
-    rgb = hard_light (source.rgb, backdrop.rgb, backdrop.a);
+    result = hard_light (source, backdrop);
   else if (inBlendMode == 9)
-    rgb = soft_light (source.rgb, backdrop.rgb, backdrop.a);
+    result = soft_light (source, backdrop);
   else if (inBlendMode == 10)
-    rgb = difference (source.rgb, backdrop.rgb, backdrop.a);
+    result = difference (source, backdrop);
   else if (inBlendMode == 11)
-    rgb = exclusion (source.rgb, backdrop.rgb, backdrop.a);
+    result = exclusion (source, backdrop);
   else if (inBlendMode == 12)
-    rgb = color (source.rgb, backdrop.rgb, backdrop.a);
+    result = color (source, backdrop);
   else if (inBlendMode == 13)
-    rgb = hue (source.rgb, backdrop.rgb, backdrop.a);
+    result = hue (source, backdrop);
   else if (inBlendMode == 14)
-    rgb = saturation (source.rgb, backdrop.rgb, backdrop.a);
+    result = saturation (source, backdrop);
   else if (inBlendMode == 15)
-    rgb = luminosity (source.rgb, backdrop.rgb, backdrop.a);
+    result = luminosity (source, backdrop);
   else
     discard;
 
-  outColor = clip (inPos, vec4 (rgb, a));
+  outColor = clip (inPos, result);
 }
