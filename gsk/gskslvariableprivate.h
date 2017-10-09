@@ -44,6 +44,11 @@ gboolean                gsk_sl_variable_is_constant             (const GskSlVari
 
 guint32                 gsk_sl_variable_write_spv               (const GskSlVariable    *variable,
                                                                  GskSpvWriter           *writer);
+guint32                 gsk_sl_variable_load_spv                (GskSlVariable          *variable,
+                                                                 GskSpvWriter           *writer);
+void                    gsk_sl_variable_store_spv               (GskSlVariable          *variable,
+                                                                 GskSpvWriter           *writer,
+                                                                 guint32                 value);
 
 G_END_DECLS
 

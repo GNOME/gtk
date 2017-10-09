@@ -239,10 +239,9 @@ gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
 
   if (declaration->initial && ! gsk_sl_variable_get_initial_value (declaration->variable))
     {
-      gsk_spv_writer_store (writer,
-                            gsk_spv_writer_get_id_for_variable (writer, declaration->variable),
-                            gsk_sl_expression_write_spv (declaration->initial, writer),
-                            0);
+      gsk_sl_variable_store_spv (declaration->variable,
+                                 writer,
+                                 gsk_sl_expression_write_spv (declaration->initial, writer));
     }
 }
 

@@ -182,3 +182,26 @@ gsk_sl_variable_write_spv (const GskSlVariable *variable,
 
   return result_id;
 }
+
+guint32
+gsk_sl_variable_load_spv (GskSlVariable *variable,
+                          GskSpvWriter  *writer)
+{
+  return gsk_spv_writer_load (writer,
+                              gsk_sl_variable_get_type (variable),
+                              gsk_spv_writer_get_id_for_variable (writer, variable),
+                              0);
+}
+
+void
+gsk_sl_variable_store_spv (GskSlVariable *variable,
+                           GskSpvWriter  *writer,
+                           guint32        value)
+{
+  gsk_spv_writer_store (writer,
+                        gsk_spv_writer_get_id_for_variable (writer, variable),
+                        value,
+                        0);
+
+}
+

@@ -363,10 +363,7 @@ gsk_sl_expression_reference_write_spv (const GskSlExpression *expression,
 {
   GskSlExpressionReference *reference = (GskSlExpressionReference *) expression;
 
-  return gsk_spv_writer_load (writer,
-                              gsk_sl_variable_get_type (reference->variable),
-                              gsk_spv_writer_get_id_for_variable (writer, reference->variable),
-                              0);
+  return gsk_sl_variable_load_spv (reference->variable, writer);
 }
 
 static GskSpvAccessChain *
