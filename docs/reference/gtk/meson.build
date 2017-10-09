@@ -22,6 +22,7 @@ endif
 configure_file(input: 'gtk4.types.in', output: 'gtk4.types', configuration: types_conf)
 
 gnome.gtkdoc('gtk4',
+             mode: 'none',
              main_xml: 'gtk4-docs.xml',
              src_dir: [
 	       join_paths(meson.source_root(), 'gtk'),

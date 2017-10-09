@@ -150,6 +150,7 @@ images = [
 configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
 
 gnome.gtkdoc('gdk4',
+             mode: 'none',
              main_xml: 'gdk4-docs.xml',
              src_dir: [
 	       join_paths(meson.source_root(), 'gdk'),
