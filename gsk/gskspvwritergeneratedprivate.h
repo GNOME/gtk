@@ -4504,9 +4504,10 @@ gsk_spv_writer_selection_merge (GskSpvWriter *writer,
 }
 
 static inline guint32
-gsk_spv_writer_label (GskSpvWriter *writer)
+gsk_spv_writer_label (GskSpvWriter *writer,
+                      GskSpvWriterSection section)
 {
-  GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
+  GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 

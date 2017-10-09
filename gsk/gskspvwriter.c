@@ -460,12 +460,20 @@ guint32
 gsk_spv_writer_push_new_code_block (GskSpvWriter *writer)
 {
   GskSpvCodeBlock *block;
+  GskSpvWriterSection label_section;
 
   block = gsk_spv_code_block_new ();
+  /* This is ugly code that ensures the function block label
+   * goes before variables but subblock labels do not.
+   */
+  if (writer->blocks && writer->blocks->next)
+    label_section = GSK_SPV_WRITER_SECTION_CODE;
+  else
+    label_section = GSK_SPV_WRITER_SECTION_DECLARE;
 
   gsk_spv_writer_push_code_block (writer, block);
 
-  block->label = gsk_spv_writer_label (writer);
+  block->label = gsk_spv_writer_label (writer, label_section);
 
   return block->label;
 }

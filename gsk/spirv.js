@@ -313,7 +313,7 @@ var Sections = {
   "OpPhi": "code",
   "OpLoopMerge": "code",
   "OpSelectionMerge": "code",
-  "OpLabel": "code",
+  "OpLabel": "",
   "OpBranch": "code",
   "OpBranchConditional": "code",
   "OpSwitch": "code",
