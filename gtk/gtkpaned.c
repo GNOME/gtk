@@ -1476,10 +1476,11 @@ gtk_paned_render_handle (GtkGizmo    *gizmo,
 
   gtk_widget_get_content_size (widget, &width, &height);
 
-  gtk_css_style_snapshot_icon (style,
-                               snapshot,
-                               width, height,
-                               GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR);
+  if (width > 0 && height > 0)
+    gtk_css_style_snapshot_icon (style,
+                                 snapshot,
+                                 width, height,
+                                 GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR);
 
   return FALSE;
 }

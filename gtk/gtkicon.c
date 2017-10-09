@@ -43,10 +43,11 @@ gtk_icon_snapshot (GtkWidget   *widget,
 
   gtk_widget_get_content_size (widget, &width, &height);
 
-  gtk_css_style_snapshot_icon (style,
-                               snapshot,
-                               width, height,
-                               self->image);
+  if (width > 0 && height > 0)
+    gtk_css_style_snapshot_icon (style,
+                                 snapshot,
+                                 width, height,
+                                 self->image);
 }
 
 static void

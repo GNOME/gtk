@@ -105,6 +105,9 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
 
+  if (width == 0.0 || height == 0.0)
+    return;
+
   image = _gtk_css_image_value_get_image (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SOURCE));
   if (image == NULL)
     return;
