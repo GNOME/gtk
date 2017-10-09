@@ -130,11 +130,10 @@ static GskRenderNode *
 cairo (void)
 {
   GskRenderNode *node;
-  cairo_surface_t *surface;
   cairo_t *cr;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 200, 600);
-  cr = cairo_create (surface);
+  node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0, 200, 600));
+  cr = gsk_cairo_node_get_draw_context (node, NULL);
 
   cairo_set_source_rgb (cr, 1, 0, 0);
   cairo_rectangle (cr, 0, 0, 200, 200);
@@ -146,10 +145,7 @@ cairo (void)
   cairo_rectangle (cr, 0, 400, 200, 200);
   cairo_fill (cr);
 
-  node = gsk_cairo_node_new_for_surface (&GRAPHENE_RECT_INIT (0, 0, 200, 600), surface);
-
   cairo_destroy (cr);
-  cairo_surface_destroy (surface);
 
   return node;
 }
@@ -158,12 +154,11 @@ static GskRenderNode *
 cairo2 (void)
 {
   GskRenderNode *node;
-  cairo_surface_t *surface;
   cairo_t *cr;
   int i, j;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 200, 200);
-  cr = cairo_create (surface);
+  node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0, 200, 200));
+  cr = gsk_cairo_node_get_draw_context (node, NULL);
 
   cairo_set_source_rgb (cr, 1, 1, 1);
 
@@ -174,10 +169,8 @@ cairo2 (void)
         cairo_fill (cr);
       }
 
-  node = gsk_cairo_node_new_for_surface (&GRAPHENE_RECT_INIT (0, 0, 200, 200), surface);
 
   cairo_destroy (cr);
-  cairo_surface_destroy (surface);
 
   return node;
 }
