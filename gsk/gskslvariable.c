@@ -85,31 +85,22 @@ gsk_sl_variable_standard_write_spv (const GskSlVariable *variable,
                                     GskSpvWriter        *writer)
 {
   guint32 result_id;
+  guint32 value_id;
   GskSlQualifierLocation location;
-  
+
   location = gsk_sl_qualifier_get_location (&variable->qualifier);
 
-  if (location == GSK_SL_QUALIFIER_PARAMETER)
-    {
-      result_id = gsk_spv_writer_function_parameter (writer,
-                                                     variable->type);
-    }
+  if (variable->initial_value)
+    value_id = gsk_spv_writer_get_id_for_value (writer, variable->initial_value);
   else
-    {
-      guint32 value_id;
+    value_id = 0;
 
-      if (variable->initial_value)
-        value_id = gsk_spv_writer_get_id_for_value (writer, variable->initial_value);
-      else
-        value_id = 0;
-
-      result_id = gsk_spv_writer_variable (writer,
-                                           location == GSK_SL_QUALIFIER_GLOBAL ? GSK_SPV_WRITER_SECTION_DEFINE : GSK_SPV_WRITER_SECTION_DECLARE,
-                                           variable->type,
-                                           gsk_sl_qualifier_get_storage_class (&variable->qualifier),
-                                           gsk_sl_qualifier_get_storage_class (&variable->qualifier),
-                                           value_id);
-    }
+  result_id = gsk_spv_writer_variable (writer,
+                                       location == GSK_SL_QUALIFIER_GLOBAL ? GSK_SPV_WRITER_SECTION_DEFINE : GSK_SPV_WRITER_SECTION_DECLARE,
+                                       variable->type,
+                                       gsk_sl_qualifier_get_storage_class (&variable->qualifier),
+                                       gsk_sl_qualifier_get_storage_class (&variable->qualifier),
+                                       value_id);
 
   if (variable->name)
     gsk_spv_writer_name (writer, result_id, variable->name);
@@ -138,6 +129,7 @@ gsk_sl_variable_standard_store_spv (GskSlVariable *variable,
                         0);
 
 }
+
 static const GskSlVariableClass GSK_SL_VARIABLE_STANDARD = {
   sizeof (GskSlVariable),
   gsk_sl_variable_free,
@@ -146,7 +138,81 @@ static const GskSlVariableClass GSK_SL_VARIABLE_STANDARD = {
   gsk_sl_variable_standard_store_spv,
 };
 
+/* PARAMETER */
+
+static guint32
+gsk_sl_variable_parameter_write_spv (const GskSlVariable *variable,
+                                     GskSpvWriter        *writer)
+{
+  guint32 result_id;
+  
+  result_id = gsk_spv_writer_function_parameter (writer,
+                                                 variable->type);
+
+  if (variable->name)
+    gsk_spv_writer_name (writer, result_id, variable->name);
+
+  return result_id;
+}
+
+static guint32
+gsk_sl_variable_parameter_load_spv (GskSlVariable *variable,
+                                    GskSpvWriter  *writer)
+{
+  return gsk_spv_writer_load (writer,
+                              gsk_sl_variable_get_type (variable),
+                              gsk_spv_writer_get_id_for_variable (writer, variable),
+                              0);
+}
+
+static void
+gsk_sl_variable_parameter_store_spv (GskSlVariable *variable,
+                                     GskSpvWriter  *writer,
+                                     guint32        value)
+{
+  gsk_spv_writer_store (writer,
+                        gsk_spv_writer_get_id_for_variable (writer, variable),
+                        value,
+                        0);
+
+}
+static const GskSlVariableClass GSK_SL_VARIABLE_PARAMETER = {
+  sizeof (GskSlVariable),
+  gsk_sl_variable_free,
+  gsk_sl_variable_parameter_write_spv,
+  gsk_sl_variable_parameter_load_spv,
+  gsk_sl_variable_parameter_store_spv,
+};
+
 /* API */
+
+static const GskSlVariableClass *
+gsk_sl_variable_select_class (const GskSlQualifier *qualifier,
+                              gboolean              has_initial_value)
+{
+  switch (qualifier->storage)
+  {
+    case GSK_SL_STORAGE_GLOBAL:
+    case GSK_SL_STORAGE_GLOBAL_CONST:
+    case GSK_SL_STORAGE_GLOBAL_IN:
+    case GSK_SL_STORAGE_GLOBAL_OUT:
+    case GSK_SL_STORAGE_GLOBAL_UNIFORM:
+    case GSK_SL_STORAGE_LOCAL:
+    case GSK_SL_STORAGE_LOCAL_CONST:
+      return &GSK_SL_VARIABLE_STANDARD;
+
+    case GSK_SL_STORAGE_PARAMETER_IN:
+    case GSK_SL_STORAGE_PARAMETER_OUT:
+    case GSK_SL_STORAGE_PARAMETER_INOUT:
+    case GSK_SL_STORAGE_PARAMETER_CONST:
+      return &GSK_SL_VARIABLE_PARAMETER;
+
+    case GSK_SL_STORAGE_DEFAULT:
+    default:
+      g_assert_not_reached ();
+      return &GSK_SL_VARIABLE_STANDARD;
+  }
+}
 
 GskSlVariable *
 gsk_sl_variable_new (const char           *name,
@@ -158,7 +224,7 @@ gsk_sl_variable_new (const char           *name,
 
   g_return_val_if_fail (initial_value == NULL || gsk_sl_type_equal (type, gsk_sl_value_get_type (initial_value)), NULL);
 
-  variable = gsk_sl_variable_alloc (&GSK_SL_VARIABLE_STANDARD);
+  variable = gsk_sl_variable_alloc (gsk_sl_variable_select_class (qualifier, initial_value != NULL));
 
   variable->type = gsk_sl_type_ref (type);
   variable->qualifier = *qualifier;
