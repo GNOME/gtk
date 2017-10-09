@@ -746,15 +746,18 @@ gtk_snapshot_collect_blend_top (GtkSnapshot      *snapshot,
                                 const char       *name)
 {
   GskRenderNode *bottom_node, *top_node, *blend_node;
+  GdkRGBA transparent = { 0, 0, 0, 0 };
 
   top_node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes, name);
   bottom_node = state->data.blend.bottom_node;
 
+  g_assert (top_node != NULL || bottom_node != NULL);
+
   /* XXX: Is this necessary? Do we need a NULL node? */
   if (top_node == NULL)
-    top_node = gsk_container_node_new (NULL, 0);
+    top_node = gsk_color_node_new (&transparent, &bottom_node->bounds);
   if (bottom_node == NULL)
-    bottom_node = gsk_container_node_new (NULL, 0);
+    bottom_node = gsk_color_node_new (&transparent, &top_node->bounds);
 
   blend_node = gsk_blend_node_new (bottom_node, top_node, state->data.blend.blend_mode);
   gsk_render_node_set_name (blend_node, name);
