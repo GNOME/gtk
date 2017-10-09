@@ -345,6 +345,39 @@ cross_fade (void)
   return container;
 }
 
+static GskRenderNode *
+cross_fades (void)
+{
+  GskRenderNode *child1;
+  GskRenderNode *child2;
+  GskRenderNode *node;
+  GskRenderNode *nodes[5];
+  GskRenderNode *container;
+  graphene_matrix_t matrix;
+  int i;
+
+  child1 = cairo2 ();
+  child2 = ducky ();
+
+  for (i = 0; i < 5; i++)
+    {
+      node = gsk_cross_fade_node_new (child1, child2, i / 4.0);
+      graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { i* 210, 0, 0 });
+      nodes[i] = gsk_transform_node_new (node, &matrix);
+      gsk_render_node_unref (node);
+    }
+
+  gsk_render_node_unref (child1);
+  gsk_render_node_unref (child2);
+
+  container = gsk_container_node_new (nodes, 5);
+
+  for (i = 0; i < 5; i++)
+    gsk_render_node_unref (nodes[i]);
+
+  return container;
+}
+
 static const struct {
   const char *name;
   GskRenderNode * (* func) (void);
@@ -355,6 +388,7 @@ static const struct {
   { "blendmode.node", blendmode },
   { "cross-fade.node", cross_fade },
   { "blendmodes.node", blendmodes },
+  { "cross-fades.node", cross_fades },
 };
 
 /*** test setup ***/
