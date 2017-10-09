@@ -26,7 +26,11 @@
 #include "gskslvalueprivate.h"
 #include "gskspvwriterprivate.h"
 
+typedef struct _GskSlVariableClass GskSlVariableClass;
+
 struct _GskSlVariable {
+  const GskSlVariableClass *class;
+
   guint ref_count;
 
   char *name;
@@ -34,6 +38,115 @@ struct _GskSlVariable {
   GskSlQualifier qualifier;
   GskSlValue *initial_value;
 };
+
+struct _GskSlVariableClass
+{
+  gsize                 size;
+
+  void                  (* free)                                (GskSlVariable          *variable);
+
+  guint32               (* write_spv)                           (const GskSlVariable    *variable,
+                                                                 GskSpvWriter           *writer);
+  guint32               (* load_spv)                            (GskSlVariable          *variable,
+                                                                 GskSpvWriter           *writer);
+  void                  (* store_spv)                           (GskSlVariable          *variable,
+                                                                 GskSpvWriter           *writer,
+                                                                 guint32                 value);
+};
+
+static GskSlVariable *
+gsk_sl_variable_alloc (const GskSlVariableClass *klass)
+{
+  GskSlVariable *variable;
+
+  variable = g_slice_alloc0 (klass->size);
+
+  variable->class = klass;
+  variable->ref_count = 1;
+
+  return variable;
+}
+
+static void
+gsk_sl_variable_free (GskSlVariable *variable)
+{
+  if (variable->initial_value)
+    gsk_sl_value_free (variable->initial_value);
+  gsk_sl_type_unref (variable->type);
+  g_free (variable->name);
+
+  g_slice_free1 (variable->class->size, variable);
+}
+
+/* STANDARD */
+
+static guint32
+gsk_sl_variable_standard_write_spv (const GskSlVariable *variable,
+                                    GskSpvWriter        *writer)
+{
+  guint32 result_id;
+  GskSlQualifierLocation location;
+  
+  location = gsk_sl_qualifier_get_location (&variable->qualifier);
+
+  if (location == GSK_SL_QUALIFIER_PARAMETER)
+    {
+      result_id = gsk_spv_writer_function_parameter (writer,
+                                                     variable->type);
+    }
+  else
+    {
+      guint32 value_id;
+
+      if (variable->initial_value)
+        value_id = gsk_spv_writer_get_id_for_value (writer, variable->initial_value);
+      else
+        value_id = 0;
+
+      result_id = gsk_spv_writer_variable (writer,
+                                           location == GSK_SL_QUALIFIER_GLOBAL ? GSK_SPV_WRITER_SECTION_DEFINE : GSK_SPV_WRITER_SECTION_DECLARE,
+                                           variable->type,
+                                           gsk_sl_qualifier_get_storage_class (&variable->qualifier),
+                                           gsk_sl_qualifier_get_storage_class (&variable->qualifier),
+                                           value_id);
+    }
+
+  if (variable->name)
+    gsk_spv_writer_name (writer, result_id, variable->name);
+
+  return result_id;
+}
+
+static guint32
+gsk_sl_variable_standard_load_spv (GskSlVariable *variable,
+                                   GskSpvWriter  *writer)
+{
+  return gsk_spv_writer_load (writer,
+                              gsk_sl_variable_get_type (variable),
+                              gsk_spv_writer_get_id_for_variable (writer, variable),
+                              0);
+}
+
+static void
+gsk_sl_variable_standard_store_spv (GskSlVariable *variable,
+                                    GskSpvWriter  *writer,
+                                    guint32        value)
+{
+  gsk_spv_writer_store (writer,
+                        gsk_spv_writer_get_id_for_variable (writer, variable),
+                        value,
+                        0);
+
+}
+static const GskSlVariableClass GSK_SL_VARIABLE_STANDARD = {
+  sizeof (GskSlVariable),
+  gsk_sl_variable_free,
+  gsk_sl_variable_standard_write_spv,
+  gsk_sl_variable_standard_load_spv,
+  gsk_sl_variable_standard_store_spv,
+};
+
+/* API */
 
 GskSlVariable *
 gsk_sl_variable_new (const char           *name,
@@ -44,9 +157,9 @@ gsk_sl_variable_new (const char           *name,
   GskSlVariable *variable;
 
   g_return_val_if_fail (initial_value == NULL || gsk_sl_type_equal (type, gsk_sl_value_get_type (initial_value)), NULL);
-  variable = g_slice_new0 (GskSlVariable);
 
-  variable->ref_count = 1;
+  variable = gsk_sl_variable_alloc (&GSK_SL_VARIABLE_STANDARD);
+
   variable->type = gsk_sl_type_ref (type);
   variable->qualifier = *qualifier;
   variable->name = g_strdup (name);
@@ -75,12 +188,7 @@ gsk_sl_variable_unref (GskSlVariable *variable)
   if (variable->ref_count > 0)
     return;
 
-  if (variable->initial_value)
-    gsk_sl_value_free (variable->initial_value);
-  gsk_sl_type_unref (variable->type);
-  g_free (variable->name);
-
-  g_slice_free (GskSlVariable, variable);
+  variable->class->free (variable);
 }
 
 void
@@ -150,47 +258,14 @@ guint32
 gsk_sl_variable_write_spv (const GskSlVariable *variable,
                            GskSpvWriter        *writer)
 {
-  guint32 result_id;
-  GskSlQualifierLocation location;
-  
-  location = gsk_sl_qualifier_get_location (&variable->qualifier);
-
-  if (location == GSK_SL_QUALIFIER_PARAMETER)
-    {
-      result_id = gsk_spv_writer_function_parameter (writer,
-                                                     variable->type);
-    }
-  else
-    {
-      guint32 value_id;
-
-      if (variable->initial_value)
-        value_id = gsk_spv_writer_get_id_for_value (writer, variable->initial_value);
-      else
-        value_id = 0;
-
-      result_id = gsk_spv_writer_variable (writer,
-                                           location == GSK_SL_QUALIFIER_GLOBAL ? GSK_SPV_WRITER_SECTION_DEFINE : GSK_SPV_WRITER_SECTION_DECLARE,
-                                           variable->type,
-                                           gsk_sl_qualifier_get_storage_class (&variable->qualifier),
-                                           gsk_sl_qualifier_get_storage_class (&variable->qualifier),
-                                           value_id);
-    }
-
-  if (variable->name)
-    gsk_spv_writer_name (writer, result_id, variable->name);
-
-  return result_id;
+  return variable->class->write_spv (variable, writer);
 }
 
 guint32
 gsk_sl_variable_load_spv (GskSlVariable *variable,
                           GskSpvWriter  *writer)
 {
-  return gsk_spv_writer_load (writer,
-                              gsk_sl_variable_get_type (variable),
-                              gsk_spv_writer_get_id_for_variable (writer, variable),
-                              0);
+  return variable->class->load_spv (variable, writer);
 }
 
 void
@@ -198,10 +273,6 @@ gsk_sl_variable_store_spv (GskSlVariable *variable,
                            GskSpvWriter  *writer,
                            guint32        value)
 {
-  gsk_spv_writer_store (writer,
-                        gsk_spv_writer_get_id_for_variable (writer, variable),
-                        value,
-                        0);
-
+  variable->class->store_spv (variable, writer, value);
 }
 
