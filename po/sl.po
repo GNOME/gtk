@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-09 18:39+0000\n"
-"PO-Revision-Date: 2017-10-09 20:45+0200\n"
+"POT-Creation-Date: 2017-10-09 18:54+0000\n"
+"PO-Revision-Date: 2017-10-09 20:55+0200\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -5577,9 +5577,6 @@ msgid "Animals & Nature"
 msgstr "Živali in Narava"
 
 #: gtk/ui/gtkemojichooser.ui:97
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Food & Drink"
 msgid "Food & Drink"
 msgstr "Hrana in Pijača"
 
