@@ -91,6 +91,19 @@ void                    gsk_spv_writer_commit_code_block        (GskSpvWriter   
 
 guint32                 gsk_spv_code_block_get_label            (GskSpvCodeBlock        *block);
 
+GskSpvAccessChain *     gsk_spv_access_chain_new                (GskSpvWriter           *writer,
+                                                                 GskSlVariable          *variable);
+void                    gsk_spv_access_chain_free               (GskSpvAccessChain      *chain);
+void                    gsk_spv_access_chain_add_index          (GskSpvAccessChain      *chain,
+                                                                 GskSlType              *type,
+                                                                 guint32                 index_id);
+void                    gsk_spv_access_chain_swizzle            (GskSpvAccessChain      *chain,
+                                                                 const guint            *indexes,
+                                                                 guint                   n_indexes);
+guint32                 gsk_spv_access_chain_load               (GskSpvAccessChain      *chain);
+void                    gsk_spv_access_chain_store              (GskSpvAccessChain      *chain,
+                                                                 guint32                 value);
+
 #include "gskspvwritergeneratedprivate.h"
 
 G_END_DECLS

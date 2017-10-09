@@ -37,6 +37,7 @@ void                    gsk_sl_variable_print                   (const GskSlVari
                                                                  GskSlPrinter           *printer);
 
 GskSlType *             gsk_sl_variable_get_type                (const GskSlVariable    *variable);
+const GskSlQualifier *  gsk_sl_variable_get_qualifier           (const GskSlVariable    *variable);
 const char *            gsk_sl_variable_get_name                (const GskSlVariable    *variable);
 const GskSlValue *      gsk_sl_variable_get_initial_value       (const GskSlVariable    *variable);
 gboolean                gsk_sl_variable_is_constant             (const GskSlVariable    *variable);

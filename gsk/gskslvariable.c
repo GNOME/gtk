@@ -122,6 +122,12 @@ gsk_sl_variable_get_type (const GskSlVariable *variable)
   return variable->type;
 }
 
+const GskSlQualifier *
+gsk_sl_variable_get_qualifier (const GskSlVariable *variable)
+{
+  return &variable->qualifier;
+}
+
 const char *
 gsk_sl_variable_get_name (const GskSlVariable *variable)
 {

@@ -36,6 +36,7 @@ typedef struct _GskSlType               GskSlType;
 typedef struct _GskSlValue              GskSlValue;
 typedef struct _GskSlVariable           GskSlVariable;
 
+typedef struct _GskSpvAccessChain       GskSpvAccessChain;
 typedef struct _GskSpvWriter            GskSpvWriter;
 typedef void (* GskSpvWriterFunc)       (GskSpvWriter *, gpointer);
 

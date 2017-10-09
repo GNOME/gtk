@@ -51,6 +51,8 @@ struct _GskSlExpressionClass {
   GskSlValue *          (* get_constant)                        (const GskSlExpression  *expression);
   guint32               (* write_spv)                           (const GskSlExpression  *expression,
                                                                  GskSpvWriter           *writer);
+  GskSpvAccessChain *   (* get_spv_access_chain)                (const GskSlExpression  *expression,
+                                                                 GskSpvWriter           *writer);
 };
 
 static GskSlExpression *
@@ -68,6 +70,13 @@ gsk_sl_expression_alloc (const GskSlExpressionClass *klass,
 }
 #define gsk_sl_expression_new(_name, _klass) ((_name *) gsk_sl_expression_alloc ((_klass), sizeof (_name)))
 
+static GskSpvAccessChain *
+gsk_sl_expression_get_spv_access_chain (const GskSlExpression *expression,
+                                        GskSpvWriter          *writer)
+{
+  return expression->class->get_spv_access_chain (expression, writer);
+}
+
 static gboolean
 gsk_sl_expression_default_is_assignable (const GskSlExpression  *expression,
                                          GError                **error)
@@ -80,6 +89,13 @@ gsk_sl_expression_default_is_assignable (const GskSlExpression  *expression,
   return FALSE;
 }
 
+static GskSpvAccessChain *
+gsk_sl_expression_default_get_spv_access_chain (const GskSlExpression *expression,
+                                                GskSpvWriter          *writer)
+{
+  return NULL;
+}
+
 /* ASSIGNMENT */
 
 typedef struct _GskSlExpressionAssignment GskSlExpressionAssignment;
@@ -88,6 +104,7 @@ struct _GskSlExpressionAssignment {
   GskSlExpression parent;
 
   const GskSlBinary *binary;
+  GskSlType *type;
   GskSlExpression *lvalue;
   GskSlExpression *rvalue;
 };
@@ -99,6 +116,7 @@ gsk_sl_expression_assignment_free (GskSlExpression *expression)
 
   gsk_sl_expression_unref (assignment->lvalue);
   gsk_sl_expression_unref (assignment->rvalue);
+  gsk_sl_type_unref (assignment->type);
 
   g_slice_free (GskSlExpressionAssignment, assignment);
 }
@@ -135,9 +153,34 @@ static guint32
 gsk_sl_expression_assignment_write_spv (const GskSlExpression *expression,
                                         GskSpvWriter          *writer)
 {
-  g_assert_not_reached ();
+  const GskSlExpressionAssignment *assignment = (const GskSlExpressionAssignment *) expression;
+  GskSpvAccessChain *chain;
+  GskSlType *rtype, *ltype;
+  guint32 rvalue;
 
-  return 0;
+  chain = gsk_sl_expression_get_spv_access_chain (assignment->lvalue, writer);
+  g_assert (chain);
+  ltype = gsk_sl_expression_get_return_type (assignment->lvalue),
+  rtype = gsk_sl_expression_get_return_type (assignment->rvalue),
+  rvalue = gsk_sl_expression_write_spv (assignment->rvalue, writer);
+
+  if (assignment->binary)
+    {
+      rvalue = gsk_sl_binary_write_spv (assignment->binary,
+                                        writer,
+                                        assignment->type,
+                                        ltype,
+                                        gsk_spv_access_chain_load (chain),
+                                        rtype,
+                                        rvalue);
+      rtype = assignment->type;
+    }
+
+  rvalue = gsk_spv_writer_convert (writer, rvalue, ltype, rtype);
+  gsk_spv_access_chain_store (chain, rvalue);
+  gsk_spv_access_chain_free (chain);
+
+  return rvalue;
 }
 
 static const GskSlExpressionClass GSK_SL_EXPRESSION_ASSIGNMENT = {
@@ -146,7 +189,8 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_ASSIGNMENT = {
   gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_assignment_get_return_type,
   gsk_sl_expression_assignment_get_constant,
-  gsk_sl_expression_assignment_write_spv
+  gsk_sl_expression_assignment_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
 };
 
 /* BINARY */
@@ -219,7 +263,7 @@ gsk_sl_expression_binary_get_constant (const GskSlExpression *expression)
 
 static guint32
 gsk_sl_expression_binary_write_spv (const GskSlExpression *expression,
-                                            GskSpvWriter          *writer)
+                                    GskSpvWriter          *writer)
 {
   const GskSlExpressionBinary *binary = (const GskSlExpressionBinary *) expression;
 
@@ -238,7 +282,8 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_BINARY = {
   gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_binary_get_return_type,
   gsk_sl_expression_binary_get_constant,
-  gsk_sl_expression_binary_write_spv
+  gsk_sl_expression_binary_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
 };
 
 /* REFERENCE */
@@ -324,13 +369,23 @@ gsk_sl_expression_reference_write_spv (const GskSlExpression *expression,
                               0);
 }
 
+static GskSpvAccessChain *
+gsk_sl_expression_reference_get_spv_access_chain (const GskSlExpression *expression,
+                                                  GskSpvWriter          *writer)
+{
+  GskSlExpressionReference *reference = (GskSlExpressionReference *) expression;
+
+  return gsk_spv_access_chain_new (writer, reference->variable);
+}
+
 static const GskSlExpressionClass GSK_SL_EXPRESSION_REFERENCE = {
   gsk_sl_expression_reference_free,
   gsk_sl_expression_reference_print,
   gsk_sl_expression_reference_is_assignable,
   gsk_sl_expression_reference_get_return_type,
   gsk_sl_expression_reference_get_constant,
-  gsk_sl_expression_reference_write_spv
+  gsk_sl_expression_reference_write_spv,
+  gsk_sl_expression_reference_get_spv_access_chain
 };
 
 /* CONSTRUCTOR CALL */
@@ -707,7 +762,8 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_CONSTRUCTOR = {
   gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_constructor_get_return_type,
   gsk_sl_expression_constructor_get_constant,
-  gsk_sl_expression_constructor_write_spv
+  gsk_sl_expression_constructor_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
 };
 
 /* FUNCTION_CALL */
@@ -824,7 +880,8 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_FUNCTION_CALL = {
   gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_function_call_get_return_type,
   gsk_sl_expression_function_call_get_constant,
-  gsk_sl_expression_function_call_write_spv
+  gsk_sl_expression_function_call_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
 };
 
 /* MEMBER */
@@ -909,13 +966,37 @@ gsk_sl_expression_member_write_spv (const GskSlExpression *expression,
                                            1);
 }
 
+static GskSpvAccessChain *
+gsk_sl_expression_member_get_spv_access_chain (const GskSlExpression *expression,
+                                               GskSpvWriter          *writer)
+{
+  const GskSlExpressionMember *member = (const GskSlExpressionMember *) expression;
+  GskSpvAccessChain *chain;
+  GskSlValue *value;
+  GskSlType *type;
+
+  chain = gsk_sl_expression_get_spv_access_chain (member->expr, writer);
+  if (chain == NULL)
+    return NULL;
+
+  value = gsk_sl_value_new_for_data (gsk_sl_type_get_scalar (GSK_SL_INT), &(gint32) { member->id }, NULL, NULL);
+  type = gsk_sl_expression_get_return_type (member->expr);
+  gsk_spv_access_chain_add_index (chain, 
+                                  gsk_sl_type_get_member_type (type, member->id),
+                                  gsk_spv_writer_get_id_for_value (writer, value));
+  gsk_sl_value_free (value);
+
+  return chain;
+}
+
 static const GskSlExpressionClass GSK_SL_EXPRESSION_MEMBER = {
   gsk_sl_expression_member_free,
   gsk_sl_expression_member_print,
   gsk_sl_expression_member_is_assignable,
   gsk_sl_expression_member_get_return_type,
   gsk_sl_expression_member_get_constant,
-  gsk_sl_expression_member_write_spv
+  gsk_sl_expression_member_write_spv,
+  gsk_sl_expression_member_get_spv_access_chain
 };
 
 /* SWIZZLE */
@@ -1101,13 +1182,32 @@ gsk_sl_expression_swizzle_write_spv (const GskSlExpression *expression,
     }
 }
 
+static GskSpvAccessChain *
+gsk_sl_expression_swizzle_get_spv_access_chain (const GskSlExpression *expression,
+                                                GskSpvWriter          *writer)
+{
+  const GskSlExpressionSwizzle *swizzle = (const GskSlExpressionSwizzle *) expression;
+  GskSpvAccessChain *chain;
+
+  chain = gsk_sl_expression_get_spv_access_chain (swizzle->expr, writer);
+  if (chain == NULL)
+    return NULL;
+
+  gsk_spv_access_chain_swizzle (chain, 
+                                swizzle->indexes,
+                                swizzle->length);
+
+  return chain;
+}
+
 static const GskSlExpressionClass GSK_SL_EXPRESSION_SWIZZLE = {
   gsk_sl_expression_swizzle_free,
   gsk_sl_expression_swizzle_print,
   gsk_sl_expression_swizzle_is_assignable,
   gsk_sl_expression_swizzle_get_return_type,
   gsk_sl_expression_swizzle_get_constant,
-  gsk_sl_expression_swizzle_write_spv
+  gsk_sl_expression_swizzle_write_spv,
+  gsk_sl_expression_swizzle_get_spv_access_chain
 };
 
 /* NEGATION */
@@ -1230,7 +1330,8 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_NEGATION = {
   gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_negation_get_return_type,
   gsk_sl_expression_negation_get_constant,
-  gsk_sl_expression_negation_write_spv
+  gsk_sl_expression_negation_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
 };
 
 /* CONSTANT */
@@ -1293,7 +1394,8 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_CONSTANT = {
   gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_constant_get_return_type,
   gsk_sl_expression_constant_get_constant,
-  gsk_sl_expression_constant_write_spv
+  gsk_sl_expression_constant_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
 };
 
 /* If parsing fails completely, just assume 1.0 */
@@ -2487,6 +2589,7 @@ gsk_sl_expression_parse_assignment (GskSlScope        *scope,
 
   assign = gsk_sl_expression_new (GskSlExpressionAssignment, &GSK_SL_EXPRESSION_ASSIGNMENT);
   assign->binary = binary;
+  assign->type = gsk_sl_type_ref (result_type);
   assign->lvalue = lvalue;
   assign->rvalue = rvalue;
 
@@ -2556,4 +2659,3 @@ gsk_sl_expression_write_spv (const GskSlExpression *expression,
 {
   return expression->class->write_spv (expression, writer);
 }
-
