@@ -39,10 +39,12 @@
  * the various pages of the associated stack widget.
  *
  * All the content for the buttons comes from the child properties
- * of the #GtkStack.
+ * of the #GtkStack; the button visibility in a #GtkStackSwitcher
+ * widget is controlled by the visibility of the child in the
+ * #GtkStack.
  *
  * It is possible to associate multiple #GtkStackSwitcher widgets
- * with the same stack widget.
+ * with the same #GtkStack widget.
  *
  * The GtkStackSwitcher widget was added in 3.10.
  *
