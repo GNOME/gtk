@@ -671,15 +671,11 @@ if not (x11_enabled or win32_enabled or quartz_enabled)
 endif
 
 gen_gtk_gresources_xml = find_program('gen-gtk-gresources-xml.py')
-# FIXME: absolute path to work around meson bug with @OUTPUT@ etc. not being
-# handled here, and also with the working dir from which the script is called.
-# Hopefully all to be fixed in Meson 0.39
-outfile = '@0@/gtk.gresources.xml'.format(meson.current_build_dir())
 gtk_gresources_xml = configure_file(output: 'gtk.gresources.xml',
                                     command: [
                                       gen_gtk_gresources_xml,
                                       meson.current_source_dir(),
-                                      outfile
+                                      '@OUTPUT@'
                                     ])
 
 # Re-build the theme files if sassc is available
