@@ -46,6 +46,10 @@
 
 #define BUTTON_BASE (BTN_LEFT - 1) /* Used to translate to 1-indexed buttons */
 
+#ifndef BTN_STYLUS3
+#define BTN_STYLUS3 0x149 /* Linux 4.15 */
+#endif
+
 typedef struct _GdkWaylandDevicePad GdkWaylandDevicePad;
 typedef struct _GdkWaylandDevicePadClass GdkWaylandDevicePadClass;
 
@@ -3819,6 +3823,8 @@ tablet_tool_handle_button (void                      *data,
     n_button = GDK_BUTTON_SECONDARY;
   else if (button == BTN_STYLUS2)
     n_button = GDK_BUTTON_MIDDLE;
+  else if (button == BTN_STYLUS3)
+    n_button = 8; /* Back */
   else
     return;
 
