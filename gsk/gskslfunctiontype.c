@@ -148,6 +148,29 @@ gsk_sl_function_type_get_argument_storage (const GskSlFunctionType *function_typ
   return function_type->arguments[i].storage;
 }
 
+gboolean
+gsk_sl_function_type_is_argument_const (const GskSlFunctionType *function_type,
+                                        gsize                    i)
+{
+  return function_type->arguments[i].storage == GSK_SL_STORAGE_PARAMETER_CONST;
+}
+
+gboolean
+gsk_sl_function_type_is_argument_in (const GskSlFunctionType *function_type,
+                                     gsize                    i)
+{
+  return function_type->arguments[i].storage == GSK_SL_STORAGE_PARAMETER_IN
+      || function_type->arguments[i].storage == GSK_SL_STORAGE_PARAMETER_INOUT;
+}
+
+gboolean
+gsk_sl_function_type_is_argument_out (const GskSlFunctionType *function_type,
+                                      gsize                    i)
+{
+  return function_type->arguments[i].storage == GSK_SL_STORAGE_PARAMETER_OUT
+      || function_type->arguments[i].storage == GSK_SL_STORAGE_PARAMETER_INOUT;
+}
+
 guint32
 gsk_sl_function_type_write_spv (const GskSlFunctionType *function_type,
                                 GskSpvWriter            *writer)
@@ -158,7 +181,17 @@ gsk_sl_function_type_write_spv (const GskSlFunctionType *function_type,
   return_type_id = gsk_spv_writer_get_id_for_type (writer, function_type->return_type);
   for (i = 0; i < function_type->n_arguments; i++)
     {
-      argument_types[i] = gsk_spv_writer_get_id_for_type (writer, function_type->arguments[i].type);
+      if (function_type->arguments[i].storage == GSK_SL_STORAGE_PARAMETER_CONST)
+        {
+          argument_types[i] = gsk_spv_writer_get_id_for_type (writer,
+                                                              function_type->arguments[i].type);
+        }
+      else
+        {
+          argument_types[i] = gsk_spv_writer_get_id_for_pointer_type (writer,
+                                                                      function_type->arguments[i].type,
+                                                                      GSK_SPV_STORAGE_CLASS_FUNCTION);
+        }
     }
 
   return gsk_spv_writer_type_function (writer, return_type_id, argument_types, function_type->n_arguments);

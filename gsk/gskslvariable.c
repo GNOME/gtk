@@ -176,10 +176,12 @@ static guint32
 gsk_sl_variable_parameter_write_spv (const GskSlVariable *variable,
                                      GskSpvWriter        *writer)
 {
-  guint32 result_id;
+  guint32 type_id, result_id;
   
-  result_id = gsk_spv_writer_function_parameter (writer,
-                                                 variable->type);
+  type_id = gsk_spv_writer_get_id_for_pointer_type (writer,
+                                                    variable->type,
+                                                    GSK_SPV_STORAGE_CLASS_FUNCTION);
+  result_id = gsk_spv_writer_function_parameter (writer, type_id);
 
   if (variable->name)
     gsk_spv_writer_name (writer, result_id, variable->name);
@@ -217,6 +219,46 @@ static const GskSlVariableClass GSK_SL_VARIABLE_PARAMETER = {
   gsk_sl_variable_parameter_store_spv,
 };
 
+/* CONST_PARAMETER */
+
+static guint32
+gsk_sl_variable_const_parameter_write_spv (const GskSlVariable *variable,
+                                           GskSpvWriter        *writer)
+{
+  guint32 result_id, type_id;
+  
+  type_id = gsk_spv_writer_get_id_for_type (writer, variable->type);
+  result_id = gsk_spv_writer_function_parameter (writer, type_id);
+
+  if (variable->name)
+    gsk_spv_writer_name (writer, result_id, variable->name);
+
+  return result_id;
+}
+
+static guint32
+gsk_sl_variable_const_parameter_load_spv (GskSlVariable *variable,
+                                          GskSpvWriter  *writer)
+{
+  return gsk_spv_writer_get_id_for_variable (writer, variable);
+}
+
+static void
+gsk_sl_variable_const_parameter_store_spv (GskSlVariable *variable,
+                                           GskSpvWriter  *writer,
+                                           guint32        value)
+{
+  g_assert_not_reached ();
+}
+
+static const GskSlVariableClass GSK_SL_VARIABLE_CONST_PARAMETER = {
+  sizeof (GskSlVariable),
+  gsk_sl_variable_free,
+  gsk_sl_variable_const_parameter_write_spv,
+  gsk_sl_variable_const_parameter_load_spv,
+  gsk_sl_variable_const_parameter_store_spv,
+};
+
 /* API */
 
 static const GskSlVariableClass *
@@ -243,8 +285,10 @@ gsk_sl_variable_select_class (const GskSlQualifier *qualifier,
     case GSK_SL_STORAGE_PARAMETER_IN:
     case GSK_SL_STORAGE_PARAMETER_OUT:
     case GSK_SL_STORAGE_PARAMETER_INOUT:
-    case GSK_SL_STORAGE_PARAMETER_CONST:
       return &GSK_SL_VARIABLE_PARAMETER;
+
+    case GSK_SL_STORAGE_PARAMETER_CONST:
+      return &GSK_SL_VARIABLE_CONST_PARAMETER;
 
     case GSK_SL_STORAGE_DEFAULT:
     default:

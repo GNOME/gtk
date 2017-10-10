@@ -865,15 +865,14 @@ gsk_spv_writer_function (GskSpvWriter *writer,
 
 static inline guint32
 gsk_spv_writer_function_parameter (GskSpvWriter *writer,
-                                   GskSlType *result_type)
+                                   guint32 result_type)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DECLARE);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
   g_array_append_val (bytes, (guint32) { 0 });
-  g_array_append_val (bytes, result_type_id);
+  g_array_append_val (bytes, result_type);
   g_array_append_val (bytes, result_id);
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_FUNCTION_PARAMETER;
 

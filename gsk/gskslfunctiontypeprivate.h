@@ -39,6 +39,12 @@ GskSlType *             gsk_sl_function_type_get_argument_type  (const GskSlFunc
                                                                  gsize                   i);
 GskSlStorage            gsk_sl_function_type_get_argument_storage (const GskSlFunctionType*function_type,
                                                                  gsize                   i);
+gboolean                gsk_sl_function_type_is_argument_const  (const GskSlFunctionType*function_type,
+                                                                 gsize                   i);
+gboolean                gsk_sl_function_type_is_argument_in     (const GskSlFunctionType*function_type,
+                                                                 gsize                   i);
+gboolean                gsk_sl_function_type_is_argument_out    (const GskSlFunctionType*function_type,
+                                                                 gsize                   i);
 
 guint32                 gsk_sl_function_type_write_spv          (const GskSlFunctionType*function_type,
                                                                  GskSpvWriter           *writer);

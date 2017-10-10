@@ -438,12 +438,36 @@ gsk_sl_function_declared_write_call_spv (GskSlFunction *function,
                                          guint32       *arguments)
 {
   GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
+  gsize n = gsk_sl_function_type_get_n_arguments (declared->function_type);
+  guint32 real_args[n];
   guint32 result;
+  gsize i;
+
+  for (i = 0; i < gsk_sl_function_type_get_n_arguments (declared->function_type); i++)
+    {
+      if (gsk_sl_function_type_is_argument_const (declared->function_type, i))
+        {
+          real_args[i] = arguments[i];
+        }
+      else
+        {
+          real_args[i] = gsk_spv_writer_variable (writer,
+                                                  GSK_SPV_WRITER_SECTION_DECLARE,
+                                                  gsk_sl_function_type_get_argument_type (declared->function_type, i),
+                                                  GSK_SPV_STORAGE_CLASS_FUNCTION,
+                                                  GSK_SPV_STORAGE_CLASS_FUNCTION,
+                                                  0);
+          if (gsk_sl_function_type_is_argument_in (declared->function_type, i))
+            {
+              gsk_spv_writer_store (writer, real_args[i], arguments[i], 0);
+            }
+        }
+    }
 
   result = gsk_spv_writer_function_call (writer,
                                          gsk_sl_function_type_get_return_type (declared->function_type),
                                          gsk_spv_writer_get_id_for_function (writer, function),
-                                         arguments,
+                                         real_args,
                                          gsk_sl_function_type_get_n_arguments (declared->function_type));
 
   return result;

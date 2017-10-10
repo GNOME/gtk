@@ -82,7 +82,8 @@ var SpecialTypes = {
   "OpConvertUToPtr": { "result_type": "IdResultPointerType" },
   "OpPtrCastToGeneric": { "result_type": "IdResultPointerType" },
   "OpGenericCastToPtr": { "result_type": "IdResultPointerType" },
-  "OpGenericCastToPtrExplicit": { "result_type": "IdResultPointerType" }
+  "OpGenericCastToPtrExplicit": { "result_type": "IdResultPointerType" },
+  "OpFunctionParameter": { "result_type": "IdRef" }
 };
 
 /* maps opcodes to section in file they appear in */
