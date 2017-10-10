@@ -10,12 +10,15 @@ a11y_tests = [
   'util',
 ]
 
+testexecdir = join_paths(installed_test_bindir, 'a11y')
+
 foreach t: a11y_tests
   test_prefix = 'a11y'
 
-  test ('@0@/@1@'.format(test_prefix, t),
-        executable ('@0@_@1@'.format(test_prefix, t.underscorify()),
-                    '@0@.c'.format(t),
+  test (t,
+        executable (t, '@0@.c'.format(t),
+                    install: get_option('install-tests'),
+                    install_dir: testexecdir,
                     dependencies: libgtk_dep),
         args: [ '--tap', '-k', ],
         env: installed_test_env)
@@ -31,17 +34,6 @@ a11y_installed_tests = [
   'a11yutil.test',
   'a11ymisc.test',
 ]
-
-test_cdata = configuration_data()
-test_cdata.set('libexecdir', get_option('libexecdir'))
-
-foreach t: a11y_installed_tests
-  configure_file(input: '@0@.in'.format(t),
-                 output: t,
-                 configuration: test_cdata,
-                 install: true,
-                 install_dir: installed_test_datadir)
-endforeach
 
 installed_test_data = [
   'hello-world.ui',
@@ -120,4 +112,17 @@ installed_test_data = [
   'tooltips.txt',
 ]
 
-install_data(installed_test_data, install_dir: join_paths(installed_test_bindir, 'a11ytests'))
+if get_option('install-tests')
+  test_cdata = configuration_data()
+  test_cdata.set('libexecdir', gtk_libexecdir)
+
+  foreach t: a11y_installed_tests
+    configure_file(input: '@0@.in'.format(t),
+                   output: t,
+                   configuration: test_cdata,
+                   install: true,
+                   install_dir: installed_test_datadir)
+  endforeach
+
+  install_data(installed_test_data, install_dir: testexecdir)
+endif
