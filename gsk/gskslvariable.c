@@ -138,6 +138,38 @@ static const GskSlVariableClass GSK_SL_VARIABLE_STANDARD = {
   gsk_sl_variable_standard_store_spv,
 };
 
+/* CONSTANT */
+
+static guint32
+gsk_sl_variable_constant_write_spv (const GskSlVariable *variable,
+                                    GskSpvWriter        *writer)
+{
+  return 0;
+}
+
+static guint32
+gsk_sl_variable_constant_load_spv (GskSlVariable *variable,
+                                   GskSpvWriter  *writer)
+{
+  return gsk_spv_writer_get_id_for_value (writer, variable->initial_value);
+}
+
+static void
+gsk_sl_variable_constant_store_spv (GskSlVariable *variable,
+                                     GskSpvWriter  *writer,
+                                     guint32        value)
+{
+  g_assert_not_reached ();
+}
+
+static const GskSlVariableClass GSK_SL_VARIABLE_CONSTANT = {
+  sizeof (GskSlVariable),
+  gsk_sl_variable_free,
+  gsk_sl_variable_constant_write_spv,
+  gsk_sl_variable_constant_load_spv,
+  gsk_sl_variable_constant_store_spv,
+};
+
 /* PARAMETER */
 
 static guint32
@@ -176,6 +208,7 @@ gsk_sl_variable_parameter_store_spv (GskSlVariable *variable,
                         0);
 
 }
+
 static const GskSlVariableClass GSK_SL_VARIABLE_PARAMETER = {
   sizeof (GskSlVariable),
   gsk_sl_variable_free,
@@ -192,13 +225,19 @@ gsk_sl_variable_select_class (const GskSlQualifier *qualifier,
 {
   switch (qualifier->storage)
   {
-    case GSK_SL_STORAGE_GLOBAL:
     case GSK_SL_STORAGE_GLOBAL_CONST:
+      g_assert (has_initial_value);
+    case GSK_SL_STORAGE_LOCAL_CONST:
+      if (has_initial_value)
+        return &GSK_SL_VARIABLE_CONSTANT;
+      else
+        return &GSK_SL_VARIABLE_STANDARD;
+
+    case GSK_SL_STORAGE_GLOBAL:
     case GSK_SL_STORAGE_GLOBAL_IN:
     case GSK_SL_STORAGE_GLOBAL_OUT:
     case GSK_SL_STORAGE_GLOBAL_UNIFORM:
     case GSK_SL_STORAGE_LOCAL:
-    case GSK_SL_STORAGE_LOCAL_CONST:
       return &GSK_SL_VARIABLE_STANDARD;
 
     case GSK_SL_STORAGE_PARAMETER_IN:
