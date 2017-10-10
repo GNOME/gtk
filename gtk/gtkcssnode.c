@@ -434,6 +434,10 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
                                               timestamp,
                                               gtk_css_node_get_style_provider (cssnode),
                                               should_create_transitions (change) ? style : NULL);
+
+      /* Clear the cache again, the static style we looked up above
+       * may have populated it. */
+      g_clear_pointer (&cssnode->cache, gtk_css_node_style_cache_unref);
     }
   else if (static_style != style && (change & GTK_CSS_CHANGE_TIMESTAMP))
     {
