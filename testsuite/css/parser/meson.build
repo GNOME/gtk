@@ -1,6 +1,4 @@
-gtk_libexecdir = join_paths(gtk_prefix, get_option('libexecdir'))
-testdatadir = join_paths(gtk_datadir, 'installed-tests/gtk4')
-testexecdir = join_paths(gtk_libexecdir, 'installed-tests/gtk4/css/parser')
+testexecdir = join_paths(installed_test_bindir, 'css', 'parser')
 
 test_parser = executable('test-css-parser', 'test-css-parser.c',
                         install: get_option('install-tests'),
@@ -457,7 +455,7 @@ if get_option('install-tests')
   configure_file(input: 'test-css-parser.test.in',
                  output: 'test-css-parser.test',
                  configuration: conf,
-                 install_dir: testdatadir)
+                 install_dir: installed_test_datadir)
 
   install_data(test_data, install_dir: testexecdir)
 

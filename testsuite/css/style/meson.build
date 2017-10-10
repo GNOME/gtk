@@ -1,6 +1,4 @@
-gtk_libexecdir = join_paths(gtk_prefix, get_option('libexecdir'))
-testdatadir = join_paths(gtk_datadir, 'installed-tests/gtk4')
-testexecdir = join_paths(gtk_libexecdir, 'installed-tests/gtk4/css/style')
+testexecdir = join_paths(installed_test_bindir, 'css', 'style')
 
 cssresources = gnome.compile_resources(
   'cssresources',
@@ -52,7 +50,7 @@ if get_option('install-tests')
   configure_file(input: 'test-css-style.test.in',
                  output: 'test-css-style.test',
                  configuration: conf,
-                 install_dir: testdatadir)
+                 install_dir: installed_test_datadir)
 
   install_data(test_data, install_dir: testexecdir)
 
