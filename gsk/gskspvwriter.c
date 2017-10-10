@@ -749,6 +749,27 @@ gsk_spv_access_chain_swizzle (GskSpvAccessChain *chain,
   guint tmp[4];
   guint i;
 
+  if (length == 1)
+    {
+      GskSlValue *value;
+      guint32 new_index;
+
+      if (chain->swizzle_length != 0)
+        new_index = chain->swizzle[indexes[0]];
+      else
+        new_index = indexes[0];
+      chain->swizzle_length = 0;
+
+      value = gsk_sl_value_new_for_data (gsk_sl_type_get_scalar (GSK_SL_UINT),
+                                         &new_index,
+                                         NULL, NULL);
+      gsk_spv_access_chain_add_index (chain,
+                                      gsk_sl_type_get_index_type (chain->type),
+                                      gsk_spv_writer_get_id_for_value (chain->writer, value));
+      gsk_sl_value_free (value);
+      return;
+    }
+
   if (chain->swizzle_length != 0)
     {
       g_assert (length <= chain->swizzle_length);
