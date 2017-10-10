@@ -2654,5 +2654,16 @@ guint32
 gsk_sl_expression_write_spv (const GskSlExpression *expression,
                              GskSpvWriter          *writer)
 {
+  GskSpvAccessChain *chain;
+  guint32 result_id;
+
+  chain = gsk_sl_expression_get_spv_access_chain (expression, writer);
+  if (chain)
+    {
+      result_id = gsk_spv_access_chain_load (chain);
+      gsk_spv_access_chain_free (chain);
+      return result_id;
+    }
+
   return expression->class->write_spv (expression, writer);
 }
