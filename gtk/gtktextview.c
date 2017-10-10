@@ -6559,7 +6559,9 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
       
     case GTK_MOVEMENT_PAGES:
     case GTK_MOVEMENT_HORIZONTAL_PAGES:
+      /* We handle these cases above and return early from them. */
     default:
+      g_assert_not_reached ();
       break;
     }
 
