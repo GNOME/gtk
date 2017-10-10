@@ -478,3 +478,13 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
         }
     }
 }
+
+char *
+gtk_css_node_declaration_to_string (const GtkCssNodeDeclaration *decl)
+{
+  GString *s = g_string_new (NULL);
+
+  gtk_css_node_declaration_print (decl, s);
+
+  return g_string_free (s, FALSE);
+}

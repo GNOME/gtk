@@ -62,6 +62,8 @@ void                    gtk_css_node_declaration_add_to_widget_path     (const G
 void                    gtk_css_node_declaration_print                  (const GtkCssNodeDeclaration   *decl,
                                                                          GString                       *string);
 
+char *                  gtk_css_node_declaration_to_string              (const GtkCssNodeDeclaration   *decl);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_NODE_DECLARATION_PRIVATE_H__ */
