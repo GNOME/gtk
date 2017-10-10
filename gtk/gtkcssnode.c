@@ -361,11 +361,12 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
   GtkCssStyle *style;
 
   decl = gtk_css_node_get_declaration (cssnode);
-  parent = cssnode->parent ? cssnode->parent->style : NULL;
 
   style = lookup_in_global_parent_cache (cssnode, decl);
   if (style)
     return g_object_ref (style);
+
+  parent = cssnode->parent ? cssnode->parent->style : NULL;
 
   if (gtk_css_node_init_matcher (cssnode, &matcher))
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
