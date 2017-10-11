@@ -239,14 +239,14 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
           scroll->cur_dy += dy;
           dx = dy = 0;
 
-          if (ABS (scroll->cur_dx) > 1)
+          if (ABS (scroll->cur_dx) >= 1)
             {
               steps = trunc (scroll->cur_dx);
               scroll->cur_dx -= steps;
               dx = steps;
             }
 
-          if (ABS (scroll->cur_dy) > 1)
+          if (ABS (scroll->cur_dy) >= 1)
             {
               steps = trunc (scroll->cur_dy);
               scroll->cur_dy -= steps;
