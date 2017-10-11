@@ -1005,9 +1005,14 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
  * ## Adding a Key Binding
  *
  * |[<!-- language="C" -->
- * gtk_binding_entry_add_signal (binding_set, keyval, modmask,
- *                               "move-cursor", 3,
- *                               G_TYPE_ENUM, step,
+ * GtkBindingSet *binding_set;
+ * GdkModifierType modmask = GDK_CONTROL_MASK;
+ * int count = 1;
+ * gtk_binding_entry_add_signal (binding_set,
+ *                               GDK_KEY_space,
+ *                               modmask,
+ *                               "move-cursor", 2,
+ *                               GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_PAGES,
  *                               G_TYPE_INT, count,
  *                               G_TYPE_BOOLEAN, FALSE);
  * ]|
