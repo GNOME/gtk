@@ -210,12 +210,68 @@ gsk_spv_writer_write_function (GskSpvWriter     *writer,
   return result;
 }
 
+static gint
+compare_guint32 (gconstpointer a,
+                 gconstpointer b)
+{
+  guint32 ua = *(const guint32 *) a;
+  guint32 ub = *(const guint32 *) b;
+
+  return ua - ub;
+}
+
+static guint32 *
+gsk_spv_writer_collect_entry_point_interfaces (GskSpvWriter *writer,
+                                               gsize        *n_interfaces)
+{
+  GHashTableIter iter;
+  GArray *interfaces;
+  gpointer variable, id;
+
+  interfaces = g_array_new (FALSE, FALSE, sizeof (guint32));
+
+  g_hash_table_iter_init (&iter, writer->variables);
+  while (g_hash_table_iter_next (&iter, &variable, &id))
+    {
+      switch (gsk_sl_variable_get_qualifier (variable)->storage)
+      {
+        case GSK_SL_STORAGE_DEFAULT:
+        default:
+          g_assert_not_reached();
+        case GSK_SL_STORAGE_GLOBAL:
+        case GSK_SL_STORAGE_GLOBAL_CONST:
+        case GSK_SL_STORAGE_LOCAL:
+        case GSK_SL_STORAGE_LOCAL_CONST:
+        case GSK_SL_STORAGE_PARAMETER_IN:
+        case GSK_SL_STORAGE_PARAMETER_OUT:
+        case GSK_SL_STORAGE_PARAMETER_INOUT:
+        case GSK_SL_STORAGE_PARAMETER_CONST:
+        case GSK_SL_STORAGE_GLOBAL_UNIFORM:
+          continue;
+
+        case GSK_SL_STORAGE_GLOBAL_IN:
+        case GSK_SL_STORAGE_GLOBAL_OUT:
+          break;
+      }
+      
+      g_array_append_val (interfaces, (guint32) { GPOINTER_TO_UINT (id) });
+    }
+
+  /* Try to be like glslang */
+  g_array_sort (interfaces, compare_guint32);
+
+  *n_interfaces = interfaces->len;
+  return (guint32 *) g_array_free (interfaces, FALSE);
+}
+
 static void
 gsk_spv_writer_do_write (GskSpvWriter     *writer,
                          GskSlFunction    *entry_point,
                          GskSpvWriterFunc  initializer,
                          gpointer          initializer_data)
 {
+  guint32 *interfaces;
+  gsize n_interfaces;
   guint32 entry_point_id;
 
   gsk_spv_writer_capability (writer, GSK_SPV_CAPABILITY_SHADER);
@@ -234,12 +290,16 @@ gsk_spv_writer_do_write (GskSpvWriter     *writer,
 
   entry_point_id = gsk_spv_writer_write_function (writer, entry_point, initializer, initializer_data);
 
+  interfaces = gsk_spv_writer_collect_entry_point_interfaces (writer,
+                                                              &n_interfaces);
   gsk_spv_writer_entry_point (writer,
                               GSK_SPV_EXECUTION_MODEL_FRAGMENT,
                               entry_point_id,
                               "main",
-                              NULL,
-                              0);
+                              interfaces,
+                              n_interfaces);
+  g_free (interfaces);
+
   gsk_spv_writer_execution_mode (writer,
                                  entry_point_id,
                                  GSK_SPV_EXECUTION_MODE_ORIGIN_UPPER_LEFT);
