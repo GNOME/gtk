@@ -2023,9 +2023,9 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
     }
   else if (priv->mouse_location == priv->trough_widget &&
            (source == GDK_SOURCE_TOUCHSCREEN ||
-            (button == GDK_BUTTON_PRIMARY &&
-             ((primary_warps && !shift_pressed) ||
-              (!primary_warps && shift_pressed)))))
+            (primary_warps && !shift_pressed && button == GDK_BUTTON_PRIMARY) ||
+            (!primary_warps && shift_pressed && button == GDK_BUTTON_PRIMARY) ||
+            (!primary_warps && button == GDK_BUTTON_MIDDLE)))
     {
       /* warp to location */
       GdkRectangle slider;
@@ -2054,9 +2054,9 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       update_slider_position (range, x, y);
     }
   else if (priv->mouse_location == priv->trough_widget &&
-           button == GDK_BUTTON_PRIMARY &&
-           ((primary_warps && shift_pressed) ||
-            (!primary_warps && !shift_pressed)))
+           ((primary_warps && shift_pressed && button == GDK_BUTTON_PRIMARY) ||
+            (!primary_warps && !shift_pressed && button == GDK_BUTTON_PRIMARY) ||
+            (primary_warps && button == GDK_BUTTON_MIDDLE)))
     {
       /* jump by pages */
       GtkScrollType scroll;
