@@ -44,7 +44,10 @@ struct _GdkEventAny
 {
   GdkEventType type;
   GdkWindow *window;
+  guint16 flags;
   gint8 send_event;
+  GdkDevice *device;
+  GdkDevice *source_device;
 };
 
 /**
@@ -103,7 +106,7 @@ struct _GdkEventMotion
   gdouble *axes;
   guint state;
   gint16 is_hint;
-  GdkDevice *device;
+  GdkDeviceTool *tool;
   gdouble x_root, y_root;
 };
 
@@ -143,7 +146,7 @@ struct _GdkEventButton
   gdouble *axes;
   guint state;
   guint button;
-  GdkDevice *device;
+  GdkDeviceTool *tool;
   gdouble x_root, y_root;
 };
 
@@ -192,7 +195,6 @@ struct _GdkEventTouch
   guint state;
   GdkEventSequence *sequence;
   gboolean emulating_pointer;
-  GdkDevice *device;
   gdouble x_root, y_root;
 };
 
@@ -236,7 +238,6 @@ struct _GdkEventScroll
   gdouble y;
   guint state;
   GdkScrollDirection direction;
-  GdkDevice *device;
   gdouble x_root, y_root;
   gdouble delta_x;
   gdouble delta_y;
@@ -283,6 +284,7 @@ struct _GdkEventKey
   gint length;
   gchar *string;
   guint16 hardware_keycode;
+  guint16 key_scancode;
   guint8 group;
   guint is_modifier : 1;
 };
@@ -407,7 +409,6 @@ struct _GdkEventProximity
 {
   GdkEventAny any;
   guint32 time;
-  GdkDevice *device;
 };
 
 /**

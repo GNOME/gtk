@@ -103,15 +103,15 @@ _gdk_event_queue_find_first (GdkDisplay *display)
   tmp_list = display->queued_events;
   while (tmp_list)
     {
-      GdkEventPrivate *event = tmp_list->data;
+      GdkEvent *event = tmp_list->data;
 
-      if ((event->flags & GDK_EVENT_PENDING) == 0 &&
-	  (!paused || (event->flags & GDK_EVENT_FLUSHED) != 0))
+      if ((event->any.flags & GDK_EVENT_PENDING) == 0 &&
+	  (!paused || (event->any.flags & GDK_EVENT_FLUSHED) != 0))
         {
           if (pending_motion)
             return pending_motion;
 
-          if (event->event.any.type == GDK_MOTION_NOTIFY && (event->flags & GDK_EVENT_FLUSHED) == 0)
+          if (event->any.type == GDK_MOTION_NOTIFY && (event->any.flags & GDK_EVENT_FLUSHED) == 0)
             pending_motion = tmp_list;
           else
             return tmp_list;
@@ -268,27 +268,27 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
 
   while (tmp_list)
     {
-      GdkEventPrivate *event = tmp_list->data;
+      GdkEvent *event = tmp_list->data;
 
-      if (event->flags & GDK_EVENT_PENDING)
+      if (event->any.flags & GDK_EVENT_PENDING)
         break;
 
-      if (event->event.any.type != GDK_MOTION_NOTIFY)
+      if (event->any.type != GDK_MOTION_NOTIFY)
         break;
 
       if (pending_motion_window != NULL &&
-          pending_motion_window != event->event.any.window)
+          pending_motion_window != event->any.window)
         break;
 
       if (pending_motion_device != NULL &&
-          pending_motion_device != event->event.motion.device)
+          pending_motion_device != event->any.device)
         break;
 
-      if (!event->event.any.window->event_compression)
+      if (!event->any.window->event_compression)
         break;
 
-      pending_motion_window = event->event.any.window;
-      pending_motion_device = event->event.motion.device;
+      pending_motion_window = event->any.window;
+      pending_motion_device = event->any.device;
       pending_motions = tmp_list;
 
       tmp_list = tmp_list->prev;
@@ -320,8 +320,8 @@ _gdk_event_queue_flush (GdkDisplay *display)
 
   for (tmp_list = display->queued_events; tmp_list; tmp_list = tmp_list->next)
     {
-      GdkEventPrivate *event = tmp_list->data;
-      event->flags |= GDK_EVENT_FLUSHED;
+      GdkEvent *event = tmp_list->data;
+      event->any.flags |= GDK_EVENT_FLUSHED;
     }
 }
 
@@ -376,7 +376,6 @@ gdk_event_new (GdkEventType type)
 
   new_private = g_slice_new0 (GdkEventPrivate);
   
-  new_private->flags = 0;
   new_private->display = NULL;
 
   g_hash_table_insert (event_hash, new_private, GUINT_TO_POINTER (1));
@@ -469,15 +468,10 @@ void
 gdk_event_set_pointer_emulated (GdkEvent *event,
                                 gboolean  emulated)
 {
-  if (gdk_event_is_allocated (event))
-    {
-      GdkEventPrivate *private = (GdkEventPrivate *) event;
-
-      if (emulated)
-        private->flags |= GDK_EVENT_POINTER_EMULATED;
-      else
-        private->flags &= ~(GDK_EVENT_POINTER_EMULATED);
-    }
+  if (emulated)
+    event->any.flags |= GDK_EVENT_POINTER_EMULATED;
+  else
+    event->any.flags &= ~(GDK_EVENT_POINTER_EMULATED);
 }
 
 /**
@@ -494,10 +488,7 @@ gdk_event_set_pointer_emulated (GdkEvent *event,
 gboolean
 gdk_event_get_pointer_emulated (GdkEvent *event)
 {
-  if (gdk_event_is_allocated (event))
-    return (((GdkEventPrivate *) event)->flags & GDK_EVENT_POINTER_EMULATED) != 0;
-
-  return FALSE;
+  return (event->any.flags & GDK_EVENT_POINTER_EMULATED) != 0;
 }
 
 /**
@@ -524,16 +515,17 @@ gdk_event_copy (const GdkEvent *event)
   *new_event = *event;
   if (new_event->any.window)
     g_object_ref (new_event->any.window);
+  if (new_event->any.device)
+    g_object_ref (new_event->any.device);
+  if (new_event->any.source_device)
+    g_object_ref (new_event->any.source_device);
 
   if (gdk_event_is_allocated (event))
     {
       GdkEventPrivate *private = (GdkEventPrivate *)event;
 
       new_private->display = private->display;
-      new_private->device = private->device ? g_object_ref (private->device) : NULL;
-      new_private->source_device = private->source_device ? g_object_ref (private->source_device) : NULL;
       new_private->seat = private->seat;
-      new_private->tool = private->tool;
       g_set_object (&new_private->user_data, private->user_data);
     }
 
@@ -569,7 +561,7 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_BUTTON_RELEASE:
       if (event->button.axes)
         new_event->button.axes = g_memdup (event->button.axes,
-                                           sizeof (gdouble) * gdk_device_get_n_axes (event->button.device));
+                                           sizeof (gdouble) * gdk_device_get_n_axes (event->any.device));
       break;
 
     case GDK_TOUCH_BEGIN:
@@ -578,13 +570,13 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_TOUCH_CANCEL:
       if (event->touch.axes)
         new_event->touch.axes = g_memdup (event->touch.axes,
-                                           sizeof (gdouble) * gdk_device_get_n_axes (event->touch.device));
+                                           sizeof (gdouble) * gdk_device_get_n_axes (event->any.device));
       break;
 
     case GDK_MOTION_NOTIFY:
       if (event->motion.axes)
         new_event->motion.axes = g_memdup (event->motion.axes,
-                                           sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
+                                           sizeof (gdouble) * gdk_device_get_n_axes (event->any.device));
       break;
 
     default:
@@ -617,8 +609,6 @@ gdk_event_free (GdkEvent *event)
   if (gdk_event_is_allocated (event))
     {
       private = (GdkEventPrivate *) event;
-      g_clear_object (&private->device);
-      g_clear_object (&private->source_device);
       g_clear_object (&private->user_data);
     }
 
@@ -628,13 +618,12 @@ gdk_event_free (GdkEvent *event)
     case GDK_KEY_RELEASE:
       g_free (event->key.string);
       break;
-      
+
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
-      if (event->crossing.subwindow != NULL)
-	g_object_unref (event->crossing.subwindow);
+      g_clear_object (&event->crossing.subwindow);
       break;
-      
+
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
@@ -647,6 +636,7 @@ gdk_event_free (GdkEvent *event)
 
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
+      g_clear_object (&event->button.tool);
       g_free (event->button.axes);
       break;
 
@@ -664,6 +654,7 @@ gdk_event_free (GdkEvent *event)
       break;
       
     case GDK_MOTION_NOTIFY:
+      g_clear_object (&event->motion.tool);
       g_free (event->motion.axes);
       break;
 
@@ -677,6 +668,9 @@ gdk_event_free (GdkEvent *event)
 
   if (event->any.window)
     g_object_unref (event->any.window);
+
+  g_clear_object (&event->any.device);
+  g_clear_object (&event->any.source_device);
 
   g_hash_table_remove (event_hash, event);
   g_slice_free (GdkEventPrivate, (GdkEventPrivate*) event);
@@ -1430,8 +1424,7 @@ gdk_event_get_axis (const GdkEvent *event,
 		    gdouble        *value)
 {
   gdouble *axes;
-  GdkDevice *device;
-  
+
   g_return_val_if_fail (event != NULL, FALSE);
   
   if (axis_use == GDK_AXIS_X || axis_use == GDK_AXIS_Y)
@@ -1465,7 +1458,6 @@ gdk_event_get_axis (const GdkEvent *event,
 	  x = event->crossing.x;
 	  y = event->crossing.y;
 	  break;
-	  
 	default:
 	  return FALSE;
 	}
@@ -1480,7 +1472,6 @@ gdk_event_get_axis (const GdkEvent *event,
   else if (event->any.type == GDK_BUTTON_PRESS ||
 	   event->any.type == GDK_BUTTON_RELEASE)
     {
-      device = event->button.device;
       axes = event->button.axes;
     }
   else if (event->any.type == GDK_TOUCH_BEGIN ||
@@ -1488,18 +1479,16 @@ gdk_event_get_axis (const GdkEvent *event,
            event->any.type == GDK_TOUCH_END ||
            event->any.type == GDK_TOUCH_CANCEL)
     {
-      device = event->touch.device;
       axes = event->touch.axes;
     }
   else if (event->any.type == GDK_MOTION_NOTIFY)
     {
-      device = event->motion.device;
       axes = event->motion.axes;
     }
   else
     return FALSE;
 
-  return gdk_device_get_axis (device, axes, axis_use, value);
+  return gdk_device_get_axis (event->any.device, axes, axis_use, value);
 }
 
 /**
@@ -1517,39 +1506,7 @@ void
 gdk_event_set_device (GdkEvent  *event,
                       GdkDevice *device)
 {
-  GdkEventPrivate *private;
-
-  g_return_if_fail (gdk_event_is_allocated (event));
-
-  private = (GdkEventPrivate *) event;
-
-  g_set_object (&private->device, device);
-
-  switch ((guint) event->any.type)
-    {
-    case GDK_MOTION_NOTIFY:
-      event->motion.device = device;
-      break;
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      event->button.device = device;
-      break;
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-      event->touch.device = device;
-      break;
-    case GDK_SCROLL:
-      event->scroll.device = device;
-      break;
-    case GDK_PROXIMITY_IN:
-    case GDK_PROXIMITY_OUT:
-      event->proximity.device = device;
-      break;
-    default:
-      break;
-    }
+  g_set_object (&event->any.device, device);
 }
 
 /**
@@ -1568,78 +1525,7 @@ gdk_event_get_device (const GdkEvent *event)
 {
   g_return_val_if_fail (event != NULL, NULL);
 
-  if (gdk_event_is_allocated (event))
-    {
-      GdkEventPrivate *private = (GdkEventPrivate *) event;
-
-      if (private->device)
-        return private->device;
-    }
-
-  switch ((guint) event->any.type)
-    {
-    case GDK_MOTION_NOTIFY:
-      return event->motion.device;
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-      return event->button.device;
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-      return event->touch.device;
-    case GDK_SCROLL:
-      return event->scroll.device;
-    case GDK_PROXIMITY_IN:
-    case GDK_PROXIMITY_OUT:
-      return event->proximity.device;
-    default:
-      break;
-    }
-
-  /* Fallback if event has no device set */
-  switch (event->any.type)
-    {
-    case GDK_MOTION_NOTIFY:
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-    case GDK_ENTER_NOTIFY:
-    case GDK_LEAVE_NOTIFY:
-    case GDK_FOCUS_CHANGE:
-    case GDK_DRAG_ENTER:
-    case GDK_DRAG_LEAVE:
-    case GDK_DRAG_MOTION:
-    case GDK_DRAG_STATUS:
-    case GDK_DROP_START:
-    case GDK_DROP_FINISHED:
-    case GDK_GRAB_BROKEN:
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-      {
-        GdkDisplay *display;
-        GdkSeat *seat;
-
-        g_warning ("Event with type %d not holding a GdkDevice. "
-                   "It is most likely synthesized outside Gdk/GTK+",
-                   event->any.type);
-
-        display = gdk_window_get_display (event->any.window);
-        seat = gdk_display_get_default_seat (display);
-
-        if (event->any.type == GDK_KEY_PRESS ||
-            event->any.type == GDK_KEY_RELEASE)
-          return gdk_seat_get_keyboard (seat);
-        else
-          return gdk_seat_get_pointer (seat);
-      }
-      break;
-    default:
-      return NULL;
-    }
+  return event->any.device;
 }
 
 /**
@@ -1658,14 +1544,7 @@ void
 gdk_event_set_source_device (GdkEvent  *event,
                              GdkDevice *device)
 {
-  GdkEventPrivate *private;
-
-  g_return_if_fail (gdk_event_is_allocated (event));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  private = (GdkEventPrivate *) event;
-
-  g_set_object (&private->source_device, device);
+  g_set_object (&event->any.source_device, device);
 }
 
 /**
@@ -1689,17 +1568,10 @@ gdk_event_set_source_device (GdkEvent  *event,
 GdkDevice *
 gdk_event_get_source_device (const GdkEvent *event)
 {
-  GdkEventPrivate *private;
-
   g_return_val_if_fail (event != NULL, NULL);
 
-  if (!gdk_event_is_allocated (event))
-    return NULL;
-
-  private = (GdkEventPrivate *) event;
-
-  if (private->source_device)
-    return private->source_device;
+  if (event->any.source_device)
+    return event->any.source_device;
 
   /* Fallback to event device */
   return gdk_event_get_device (event);
@@ -1982,10 +1854,10 @@ gdk_get_pending_window_state_event_link (GdkWindow *window)
 
   for (tmp_list = display->queued_events; tmp_list; tmp_list = tmp_list->next)
     {
-      GdkEventPrivate *event = tmp_list->data;
+      GdkEvent *event = tmp_list->data;
 
-      if (event->event.any.type == GDK_WINDOW_STATE &&
-          event->event.any.window == window)
+      if (event->any.type == GDK_WINDOW_STATE &&
+          event->any.window == window)
         return tmp_list;
     }
 
@@ -2173,13 +2045,13 @@ gdk_event_set_seat (GdkEvent *event,
 GdkDeviceTool *
 gdk_event_get_device_tool (const GdkEvent *event)
 {
-  GdkEventPrivate *private;
+  if (event->any.type == GDK_BUTTON_PRESS ||
+      event->any.type == GDK_BUTTON_RELEASE)
+    return event->button.tool;
+  else if (event->any.type == GDK_MOTION_NOTIFY)
+    return event->motion.tool;
 
-  if (!gdk_event_is_allocated (event))
-    return NULL;
-
-  private = (GdkEventPrivate *) event;
-  return private->tool;
+  return NULL;
 }
 
 /**
@@ -2195,22 +2067,20 @@ void
 gdk_event_set_device_tool (GdkEvent      *event,
                            GdkDeviceTool *tool)
 {
-  GdkEventPrivate *private;
-
-  if (!gdk_event_is_allocated (event))
-    return;
-
-  private = (GdkEventPrivate *) event;
-  private->tool = tool;
+  if (event->any.type == GDK_BUTTON_PRESS ||
+      event->any.type == GDK_BUTTON_RELEASE)
+    event->button.tool = tool;
+  else if (event->any.type == GDK_MOTION_NOTIFY)
+    event->motion.tool = tool;
 }
 
 void
 gdk_event_set_scancode (GdkEvent *event,
                         guint16 scancode)
 {
-  GdkEventPrivate *private = (GdkEventPrivate *) event;
-
-  private->key_scancode = scancode;
+  if (event->any.type == GDK_KEY_PRESS ||
+      event->any.type == GDK_KEY_RELEASE)
+    event->key.key_scancode = scancode;
 }
 
 /**
@@ -2230,13 +2100,11 @@ gdk_event_set_scancode (GdkEvent *event,
 int
 gdk_event_get_scancode (GdkEvent *event)
 {
-  GdkEventPrivate *private;
+  if (event->any.type == GDK_KEY_PRESS ||
+      event->any.type == GDK_KEY_RELEASE)
+    return event->key.key_scancode;
 
-  if (!gdk_event_is_allocated (event))
-    return 0;
-
-  private = (GdkEventPrivate *) event;
-  return private->key_scancode;
+  return 0;
 }
 
 void
