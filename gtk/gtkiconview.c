@@ -2360,9 +2360,6 @@ gtk_icon_view_update_rubberband (GtkIconView *icon_view)
   x = MAX (icon_view->priv->mouse_x, 0);
   y = MAX (icon_view->priv->mouse_y, 0);
 
-  x = MAX (x, 0);
-  y = MAX (y, 0);
-
   icon_view->priv->rubberband_x2 = x;
   icon_view->priv->rubberband_y2 = y;  
 
