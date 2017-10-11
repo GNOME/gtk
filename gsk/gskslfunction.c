@@ -162,9 +162,12 @@ gsk_sl_function_constructor_write_call_spv (GskSlFunction *function,
                                             GskSpvWriter  *writer,
                                             guint32       *arguments)
 {
-  g_assert_not_reached ();
+  const GskSlFunctionConstructor *constructor = (const GskSlFunctionConstructor *) function;
 
-  return 0;
+  return gsk_spv_writer_composite_construct (writer,
+                                             constructor->type,
+                                             arguments,
+                                             gsk_sl_type_get_n_members (constructor->type));
 }
 
 static const GskSlFunctionClass GSK_SL_FUNCTION_CONSTRUCTOR = {
