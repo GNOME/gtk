@@ -1279,7 +1279,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * slider/value to move by the range’s page-size towards the point clicked.
    *
    * Whichever action you choose for the primary button, the other action will
-   * be available by clicking the middle mouse button (since GTK+ 3.22.25).
+   * be available by holding Shift and primary-clicking, or (since GTK+ 3.22.25)
+   * clicking the middle mouse button.
    *
    * Since: 3.6
    */
