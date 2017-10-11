@@ -56,11 +56,7 @@
  * create a widget instance and connect to the #GtkGLArea::render signal:
  *
  * |[<!-- language="C" -->
- *   // create a GtkGLArea instance
- *   GtkWidget *gl_area = gtk_gl_area_new ();
- *
- *   // connect to the "render" signal
- *   g_signal_connect (gl_area, "render", G_CALLBACK (render), NULL);
+
  * ]|
  *
  * The `render()` function will be called when the #GtkGLArea is ready
@@ -80,12 +76,21 @@
  *     glClear (GL_COLOR_BUFFER_BIT);
  *
  *     // draw your object
- *     draw_an_object ();
+ *     // draw_an_object ();
  *
  *     // we completed our drawing; the draw commands will be
  *     // flushed at the end of the signal emission chain, and
  *     // the buffers will be drawn on the window
  *     return TRUE;
+ *   }
+ *
+ *   void setup_glarea (void)
+ *   {
+ *     // create a GtkGLArea instance
+ *     GtkWidget *gl_area = gtk_gl_area_new ();
+ *
+ *     // connect to the "render" signal
+ *     g_signal_connect (gl_area, "render", G_CALLBACK (render), NULL);
  *   }
  * ]|
  *
