@@ -314,15 +314,16 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
     }
   else
     {
-      graphene_matrix_t translate, matrix;
+      graphene_matrix_t m1, m2, m3;
 
       /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
-      graphene_matrix_init_translate (&translate, &GRAPHENE_POINT3D_INIT (width / 2.0, height / 2.0, 0));
-      graphene_matrix_multiply (&transform_matrix, &translate, &matrix);
-      graphene_matrix_translate (&matrix, &GRAPHENE_POINT3D_INIT(- width / 2.0, - height / 2.0, 0));
-      graphene_matrix_scale (&matrix, 1.0 / texture_scale, 1.0 / texture_scale, 1);
+      graphene_matrix_init_translate (&m1, &GRAPHENE_POINT3D_INIT (width / 2.0, height / 2.0, 0));
+      graphene_matrix_multiply (&transform_matrix, &m1, &m3);
+      graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT (- width / 2.0, - height / 2.0, 0));
+      graphene_matrix_multiply (&m2, &m3, &m1);
+      graphene_matrix_scale (&m1, 1.0 / texture_scale, 1.0 / texture_scale, 1);
 
-      gtk_snapshot_push_transform (snapshot, &matrix, "Icon Transform");
+      gtk_snapshot_push_transform (snapshot, &m1, "Icon Transform");
 
       graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
       gtk_snapshot_append_texture (snapshot, texture, &bounds, "Icon");
