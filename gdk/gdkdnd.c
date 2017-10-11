@@ -1033,7 +1033,7 @@ gdk_drag_context_handle_dest_event (GdkEvent *event)
 {
   GdkDragContext *context = NULL;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:

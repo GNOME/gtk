@@ -357,8 +357,8 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
     }
 
   if (event &&
-      (event->type == GDK_ENTER_NOTIFY ||
-       event->type == GDK_LEAVE_NOTIFY) &&
+      (event->any.type == GDK_ENTER_NOTIFY ||
+       event->any.type == GDK_LEAVE_NOTIFY) &&
       event->any.window != NULL)
     {
       /* Handle focusing (in the case where no window manager is running */
@@ -366,11 +366,11 @@ gdk_event_source_translate_event (GdkX11Display  *x11_display,
     }
 
   if (event &&
-      (event->type == GDK_TOUCH_BEGIN ||
-       event->type == GDK_TOUCH_END ||
-       event->type == GDK_MOTION_NOTIFY ||
-       event->type == GDK_ENTER_NOTIFY ||
-       event->type == GDK_LEAVE_NOTIFY))
+      (event->any.type == GDK_TOUCH_BEGIN ||
+       event->any.type == GDK_TOUCH_END ||
+       event->any.type == GDK_MOTION_NOTIFY ||
+       event->any.type == GDK_ENTER_NOTIFY ||
+       event->any.type == GDK_LEAVE_NOTIFY))
     {
       handle_touch_synthetic_crossing (event);
     }

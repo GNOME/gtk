@@ -3602,7 +3602,7 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
   double x, y;
   uint32_t serial;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:

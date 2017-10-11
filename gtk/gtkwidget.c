@@ -3390,20 +3390,20 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   if (event_widget == widget)
     return;
 
-  if (event->type == GDK_TOUCH_BEGIN ||
-      event->type == GDK_TOUCH_UPDATE ||
-      event->type == GDK_TOUCH_END)
+  if (event->any.type == GDK_TOUCH_BEGIN ||
+      event->any.type == GDK_TOUCH_UPDATE ||
+      event->any.type == GDK_TOUCH_END)
     {
       press = gdk_event_copy (event);
-      press->type = GDK_TOUCH_BEGIN;
+      press->any.type = GDK_TOUCH_BEGIN;
     }
-  else if (event->type == GDK_BUTTON_PRESS ||
-           event->type == GDK_BUTTON_RELEASE)
+  else if (event->any.type == GDK_BUTTON_PRESS ||
+           event->any.type == GDK_BUTTON_RELEASE)
     {
       press = gdk_event_copy (event);
-      press->type = GDK_BUTTON_PRESS;
+      press->any.type = GDK_BUTTON_PRESS;
     }
-  else if (event->type == GDK_MOTION_NOTIFY)
+  else if (event->any.type == GDK_MOTION_NOTIFY)
     {
       press = gdk_event_new (GDK_BUTTON_PRESS);
       press->any.window = g_object_ref (event->any.window);
@@ -3493,9 +3493,9 @@ _gtk_widget_get_emulating_sequence (GtkWidget         *widget,
       last_event = _gtk_widget_get_last_event (widget, sequence);
 
       if (last_event &&
-          (last_event->type == GDK_TOUCH_BEGIN ||
-           last_event->type == GDK_TOUCH_UPDATE ||
-           last_event->type == GDK_TOUCH_END) &&
+          (last_event->any.type == GDK_TOUCH_BEGIN ||
+           last_event->any.type == GDK_TOUCH_UPDATE ||
+           last_event->any.type == GDK_TOUCH_END) &&
           last_event->touch.emulating_pointer)
         return TRUE;
     }
@@ -6357,7 +6357,7 @@ gtk_widget_real_grab_broken_event (GtkWidget          *widget,
 }
 
 #define WIDGET_REALIZED_FOR_EVENT(widget, event) \
-     (event->type == GDK_FOCUS_CHANGE || _gtk_widget_get_realized(widget))
+     (event->any.type == GDK_FOCUS_CHANGE || _gtk_widget_get_realized(widget))
 
 /**
  * gtk_widget_event:
@@ -6383,7 +6383,7 @@ gtk_widget_event (GtkWidget       *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
 
-  if (event->type == GDK_EXPOSE)
+  if (event->any.type == GDK_EXPOSE)
     {
       g_warning ("Events of type GDK_EXPOSE cannot be synthesized. To get "
 		 "the same effect, call gdk_window_invalidate_rect/region(), "
@@ -6483,7 +6483,7 @@ _gtk_widget_captured_event (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
 
-  if (event->type == GDK_EXPOSE)
+  if (event->any.type == GDK_EXPOSE)
     {
       g_warning ("Events of type GDK_EXPOSE cannot be synthesized. To get "
 		 "the same effect, call gdk_window_invalidate_rect/region(), "
@@ -6524,7 +6524,7 @@ event_window_is_still_viewable (const GdkEvent *event)
    * at the last moment, since the event may have been queued
    * up behind other events, held over a recursive main loop, etc.
    */
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_EXPOSE:
     case GDK_MOTION_NOTIFY:
@@ -6591,7 +6591,7 @@ gtk_widget_event_internal (GtkWidget      *widget,
     return TRUE;
 
   /* Non input events get handled right away */
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_EXPOSE:
     case GDK_NOTHING:
@@ -6615,7 +6615,7 @@ gtk_widget_event_internal (GtkWidget      *widget,
     return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
 
   /* XXX: Tooltips should be handled through captured events in the toplevel */
-  if (event_copy->type == GDK_FOCUS_CHANGE)
+  if (event_copy->any.type == GDK_FOCUS_CHANGE)
     {
       if (event_copy->focus_change.in)
         _gtk_tooltip_focus_in (widget);
@@ -6644,7 +6644,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
     {
       gint signal_num;
 
-      switch (event->type)
+      switch (event->any.type)
 	{
         case GDK_DRAG_ENTER:
         case GDK_DRAG_LEAVE:
@@ -6731,7 +6731,7 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
 	  signal_num = GRAB_BROKEN_EVENT;
 	  break;
 	default:
-	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->type);
+	  g_warning ("gtk_widget_event(): unhandled event type: %d", event->any.type);
 	  signal_num = -1;
 	  break;
 	}
@@ -13336,7 +13336,7 @@ gtk_widget_send_focus_change (GtkWidget *widget,
   gboolean res;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (event != NULL && event->type == GDK_FOCUS_CHANGE, FALSE);
+  g_return_val_if_fail (event != NULL && event->any.type == GDK_FOCUS_CHANGE, FALSE);
 
   g_object_ref (widget);
 

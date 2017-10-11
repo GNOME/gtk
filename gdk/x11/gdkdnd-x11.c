@@ -3369,10 +3369,10 @@ gdk_x11_drag_context_handle_event (GdkDragContext *context,
 
   if (!context->is_source)
     return FALSE;
-  if (!x11_context->grab_seat && event->type != GDK_DROP_FINISHED)
+  if (!x11_context->grab_seat && event->any.type != GDK_DROP_FINISHED)
     return FALSE;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_MOTION_NOTIFY:
       return gdk_dnd_handle_motion_event (context, &event->motion);
