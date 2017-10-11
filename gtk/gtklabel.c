@@ -136,8 +136,8 @@
  *
  * |[<!-- language="C" -->
  *   // Pressing Alt+H will activate this button
- *   button = gtk_button_new ();
- *   label = gtk_label_new_with_mnemonic ("_Hello");
+ *   GtkWidget *button = gtk_button_new ();
+ *   GtkWidget *label = gtk_label_new_with_mnemonic ("_Hello");
  *   gtk_container_add (GTK_CONTAINER (button), label);
  * ]|
  *
@@ -146,7 +146,7 @@
  *
  * |[<!-- language="C" -->
  *   // Pressing Alt+H will activate this button
- *   button = gtk_button_new_with_mnemonic ("_Hello");
+ *   GtkWidget *button = gtk_button_new_with_mnemonic ("_Hello");
  * ]|
  *
  * To create a mnemonic for a widget alongside the label, such as a
@@ -155,8 +155,8 @@
  *
  * |[<!-- language="C" -->
  *   // Pressing Alt+H will focus the entry
- *   entry = gtk_entry_new ();
- *   label = gtk_label_new_with_mnemonic ("_Hello");
+ *   GtkWidget *entry = gtk_entry_new ();
+ *   GtkWidget *label = gtk_label_new_with_mnemonic ("_Hello");
  *   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
  * ]|
  *
@@ -168,7 +168,7 @@
  *
  * Here’s how to create a label with a small font:
  * |[<!-- language="C" -->
- *   label = gtk_label_new (NULL);
+ *   GtkWidget *label = gtk_label_new (NULL);
  *   gtk_label_set_markup (GTK_LABEL (label), "<small>Small text</small>");
  * ]|
  *
@@ -238,9 +238,10 @@
  * |[<!-- language="C" -->
  * const gchar *text =
  * "Go to the"
- * "<a href=\"http://www.gtk.org title="&lt;i&gt;Our&lt;/i&gt; website\">"
+ * "<a href=\"http://www.gtk.org title=\"&lt;i&gt;Our&lt;/i&gt; website\">"
  * "GTK+ website</a> for more...";
- * gtk_label_set_markup (label, text);
+ * GtkWidget *label = gtk_label_new (NULL);
+ * gtk_label_set_markup (GTK_LABEL (label), text);
  * ]|
  *
  * It is possible to implement custom handling for links and their tooltips with
@@ -2776,6 +2777,8 @@ gtk_label_set_markup_internal (GtkLabel    *label,
  * g_markup_escape_text() or g_markup_printf_escaped():
  *
  * |[<!-- language="C" -->
+ * GtkWidget *label = gtk_label_new (NULL);
+ * const char *str = "some text";
  * const char *format = "<span style=\"italic\">\%s</span>";
  * char *markup;
  *
