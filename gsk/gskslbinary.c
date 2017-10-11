@@ -53,6 +53,15 @@ func (gpointer value, gpointer scalar) \
   *(type *) value = x; \
 }
 
+#define GSK_SL_COMPARISON_FUNC_SCALAR(func,type,...) \
+static gboolean \
+func (gpointer value, gpointer scalar) \
+{ \
+  type x = *(type *) value; \
+  type y = *(type *) scalar; \
+  return __VA_ARGS__; \
+}
+
 /* MULTIPLICATION */
 
 static GskSlType *
@@ -1196,6 +1205,298 @@ static const GskSlBinary GSK_SL_BINARY_SUBTRACTION = {
   gsk_sl_subtraction_write_spv
 };
 
+/* LESS */
+
+static GskSlType *
+gsk_sl_relational_check_type (GskSlPreprocessor *preproc,
+                              GskSlType         *ltype,
+                              GskSlType         *rtype)
+{
+  if (!gsk_sl_type_is_scalar (ltype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand to relational operator is not a scalar.");
+      return NULL;
+    }
+  if (gsk_sl_type_get_scalar_type (ltype) == GSK_SL_BOOL)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand to relational operator must not be bool.");
+      return NULL;
+    }
+  if (!gsk_sl_type_is_scalar (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand to relational operator is not a scalar.");
+      return NULL;
+    }
+  if (gsk_sl_type_get_scalar_type (rtype) == GSK_SL_BOOL)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand to relational operator must not be bool.");
+      return NULL;
+    }
+
+  return gsk_sl_type_get_scalar (GSK_SL_BOOL);
+}
+
+static GskSlValue *
+gsk_sl_relational_get_constant (GskSlType  *type,
+                                gboolean    (* compare_funcs[]) (gpointer, gpointer),
+                                GskSlValue *lvalue,
+                                GskSlValue *rvalue)
+{
+  GskSlScalarType scalar;
+  GskSlValue *result;
+
+  if (gsk_sl_type_equal (gsk_sl_value_get_type (lvalue), gsk_sl_value_get_type (rvalue)))
+    {
+      /* weee.... */
+    }
+  else if (gsk_sl_type_can_convert (gsk_sl_value_get_type (lvalue), gsk_sl_value_get_type (rvalue)))
+    {
+      GskSlValue *tmp = gsk_sl_value_new_convert (lvalue, gsk_sl_value_get_type (rvalue));
+      gsk_sl_value_free (lvalue);
+      lvalue = tmp;
+    }
+  else
+    {
+      GskSlValue *tmp = gsk_sl_value_new_convert (rvalue, gsk_sl_value_get_type (lvalue));
+      gsk_sl_value_free (rvalue);
+      rvalue = tmp;
+    }
+
+  scalar = gsk_sl_type_get_scalar_type (gsk_sl_value_get_type (lvalue));
+  result = gsk_sl_value_new (type);
+  *(guint32 *) gsk_sl_value_get_data (result) = compare_funcs[scalar](gsk_sl_value_get_data (lvalue),
+                                                                      gsk_sl_value_get_data (rvalue));
+  return result;
+}
+
+static guint32
+gsk_sl_relational_write_spv (GskSpvWriter *writer,
+                             guint32       (* float_func) (GskSpvWriter *, GskSlType *, guint32, guint32),
+                             guint32       (* int_func) (GskSpvWriter *, GskSlType *, guint32, guint32),
+                             guint32       (* uint_func) (GskSpvWriter *, GskSlType *, guint32, guint32),
+                             GskSlType    *type,
+                             GskSlType    *ltype,
+                             guint32       left_id,
+                             GskSlType    *rtype,
+                             guint32       right_id)
+{
+  if (gsk_sl_type_can_convert (ltype, rtype))
+    {
+      right_id = gsk_spv_writer_convert (writer, right_id, rtype, ltype);
+      rtype = ltype;
+    }
+  else
+    {
+      left_id = gsk_spv_writer_convert (writer, left_id, ltype, rtype);
+      ltype = rtype;
+    }
+
+  switch (gsk_sl_type_get_scalar_type (ltype))
+    {
+    case GSK_SL_FLOAT:
+    case GSK_SL_DOUBLE:
+      return float_func (writer, type, left_id, right_id);
+
+    case GSK_SL_INT:
+      return int_func (writer, type, left_id, right_id);
+
+    case GSK_SL_UINT:
+      return uint_func (writer, type, left_id, right_id);
+
+    case GSK_SL_VOID:
+    case GSK_SL_BOOL:
+    default:
+      g_assert_not_reached ();
+      return 0;
+    }
+}
+
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_less_int, gint32, x < y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_less_uint, guint32, x < y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_less_float, float, x < y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_less_double, double, x < y)
+static gboolean (* less_funcs[]) (gpointer, gpointer) = {
+  [GSK_SL_INT] = gsk_sl_expression_less_int,
+  [GSK_SL_UINT] = gsk_sl_expression_less_uint,
+  [GSK_SL_FLOAT] = gsk_sl_expression_less_float,
+  [GSK_SL_DOUBLE] = gsk_sl_expression_less_double,
+};
+
+static GskSlValue *
+gsk_sl_less_get_constant (GskSlType  *type,
+                          GskSlValue *lvalue,
+                          GskSlValue *rvalue)
+{
+  return gsk_sl_relational_get_constant (type, less_funcs, lvalue, rvalue);
+}
+
+static guint32
+gsk_sl_less_write_spv (GskSpvWriter *writer,
+                       GskSlType    *type,
+                       GskSlType    *ltype,
+                       guint32       left_id,
+                       GskSlType    *rtype,
+                       guint32       right_id)
+{
+  return gsk_sl_relational_write_spv (writer,
+                                      gsk_spv_writer_f_ord_less_than,
+                                      gsk_spv_writer_s_less_than,
+                                      gsk_spv_writer_u_less_than,
+                                      type,
+                                      ltype,
+                                      left_id,
+                                      rtype,
+                                      right_id);
+}
+
+static const GskSlBinary GSK_SL_BINARY_LESS = {
+  "<",
+  gsk_sl_relational_check_type,
+  gsk_sl_less_get_constant,
+  gsk_sl_less_write_spv
+};
+
+/* GREATER */
+
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_greater_int, gint32, x > y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_greater_uint, guint32, x > y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_greater_float, float, x > y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_greater_double, double, x > y)
+static gboolean (* greater_funcs[]) (gpointer, gpointer) = {
+  [GSK_SL_INT] = gsk_sl_expression_greater_int,
+  [GSK_SL_UINT] = gsk_sl_expression_greater_uint,
+  [GSK_SL_FLOAT] = gsk_sl_expression_greater_float,
+  [GSK_SL_DOUBLE] = gsk_sl_expression_greater_double,
+};
+
+static GskSlValue *
+gsk_sl_greater_get_constant (GskSlType  *type,
+                             GskSlValue *lvalue,
+                             GskSlValue *rvalue)
+{
+  return gsk_sl_relational_get_constant (type, greater_funcs, lvalue, rvalue);
+}
+
+static guint32
+gsk_sl_greater_write_spv (GskSpvWriter *writer,
+                          GskSlType    *type,
+                          GskSlType    *ltype,
+                          guint32       left_id,
+                          GskSlType    *rtype,
+                          guint32       right_id)
+{
+  return gsk_sl_relational_write_spv (writer,
+                                      gsk_spv_writer_f_ord_greater_than,
+                                      gsk_spv_writer_s_greater_than,
+                                      gsk_spv_writer_u_greater_than,
+                                      type,
+                                      ltype,
+                                      left_id,
+                                      rtype,
+                                      right_id);
+}
+
+static const GskSlBinary GSK_SL_BINARY_GREATER = {
+  ">",
+  gsk_sl_relational_check_type,
+  gsk_sl_greater_get_constant,
+  gsk_sl_greater_write_spv
+};
+
+/* LESS EQUAL */
+
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_less_equal_int, gint32, x <= y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_less_equal_uint, guint32, x <= y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_less_equal_float, float, x <= y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_less_equal_double, double, x <= y)
+static gboolean (* less_equal_funcs[]) (gpointer, gpointer) = {
+  [GSK_SL_INT] = gsk_sl_expression_less_equal_int,
+  [GSK_SL_UINT] = gsk_sl_expression_less_equal_uint,
+  [GSK_SL_FLOAT] = gsk_sl_expression_less_equal_float,
+  [GSK_SL_DOUBLE] = gsk_sl_expression_less_equal_double,
+};
+
+static GskSlValue *
+gsk_sl_less_equal_get_constant (GskSlType  *type,
+                                GskSlValue *lvalue,
+                                GskSlValue *rvalue)
+{
+  return gsk_sl_relational_get_constant (type, less_equal_funcs, lvalue, rvalue);
+}
+
+static guint32
+gsk_sl_less_equal_write_spv (GskSpvWriter *writer,
+                             GskSlType    *type,
+                             GskSlType    *ltype,
+                             guint32       left_id,
+                             GskSlType    *rtype,
+                             guint32       right_id)
+{
+  return gsk_sl_relational_write_spv (writer,
+                                      gsk_spv_writer_f_ord_less_than_equal,
+                                      gsk_spv_writer_s_less_than_equal,
+                                      gsk_spv_writer_u_less_than_equal,
+                                      type,
+                                      ltype,
+                                      left_id,
+                                      rtype,
+                                      right_id);
+}
+
+static const GskSlBinary GSK_SL_BINARY_LESS_EQUAL = {
+  "<=",
+  gsk_sl_relational_check_type,
+  gsk_sl_less_equal_get_constant,
+  gsk_sl_less_equal_write_spv
+};
+
+/* GREATER EQUAL */
+
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_greater_equal_int, gint32, x >= y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_greater_equal_uint, guint32, x >= y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_greater_equal_float, float, x >= y)
+GSK_SL_COMPARISON_FUNC_SCALAR(gsk_sl_expression_greater_equal_double, double, x >= y)
+static gboolean (* greater_equal_funcs[]) (gpointer, gpointer) = {
+  [GSK_SL_INT] = gsk_sl_expression_greater_equal_int,
+  [GSK_SL_UINT] = gsk_sl_expression_greater_equal_uint,
+  [GSK_SL_FLOAT] = gsk_sl_expression_greater_equal_float,
+  [GSK_SL_DOUBLE] = gsk_sl_expression_greater_equal_double,
+};
+
+static GskSlValue *
+gsk_sl_greater_equal_get_constant (GskSlType  *type,
+                                   GskSlValue *lvalue,
+                                   GskSlValue *rvalue)
+{
+  return gsk_sl_relational_get_constant (type, greater_equal_funcs, lvalue, rvalue);
+}
+
+static guint32
+gsk_sl_greater_equal_write_spv (GskSpvWriter *writer,
+                                GskSlType    *type,
+                                GskSlType    *ltype,
+                                guint32       left_id,
+                                GskSlType    *rtype,
+                                guint32       right_id)
+{
+  return gsk_sl_relational_write_spv (writer,
+                                      gsk_spv_writer_f_ord_greater_than_equal,
+                                      gsk_spv_writer_s_greater_than_equal,
+                                      gsk_spv_writer_u_greater_than_equal,
+                                      type,
+                                      ltype,
+                                      left_id,
+                                      rtype,
+                                      right_id);
+}
+
+static const GskSlBinary GSK_SL_BINARY_GREATER_EQUAL = {
+  ">=",
+  gsk_sl_relational_check_type,
+  gsk_sl_greater_equal_get_constant,
+  gsk_sl_greater_equal_write_spv
+};
+
 /* UNIMPLEMENTED */
 
 static GskSlType *
@@ -1293,35 +1594,6 @@ gsk_sl_shift_check_type (GskSlPreprocessor *preproc,
 }
 
 static GskSlType *
-gsk_sl_relational_check_type (GskSlPreprocessor *preproc,
-                              GskSlType         *ltype,
-                              GskSlType         *rtype)
-{
-  if (!gsk_sl_type_is_scalar (ltype))
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand to relational operator is not a scalar.");
-      return NULL;
-    }
-  if (gsk_sl_type_get_scalar_type (ltype) == GSK_SL_BOOL)
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand to relational operator must not be bool.");
-      return NULL;
-    }
-  if (!gsk_sl_type_is_scalar (rtype))
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand to relational operator is not a scalar.");
-      return NULL;
-    }
-  if (gsk_sl_type_get_scalar_type (rtype) == GSK_SL_BOOL)
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand to relational operator must not be bool.");
-      return NULL;
-    }
-
-  return gsk_sl_type_get_scalar (GSK_SL_BOOL);
-}
-
-static GskSlType *
 gsk_sl_equal_check_type (GskSlPreprocessor *preproc,
                          GskSlType         *ltype,
                          GskSlType         *rtype)
@@ -1401,34 +1673,6 @@ static const GskSlBinary GSK_SL_BINARY_LSHIFT = {
 static const GskSlBinary GSK_SL_BINARY_RSHIFT = {
   ">>",
   gsk_sl_shift_check_type,
-  gsk_sl_unimplemented_get_constant,
-  gsk_sl_unimplemented_write_spv
-};
-
-static const GskSlBinary GSK_SL_BINARY_LESS = {
-  "<",
-  gsk_sl_relational_check_type,
-  gsk_sl_unimplemented_get_constant,
-  gsk_sl_unimplemented_write_spv
-};
-
-static const GskSlBinary GSK_SL_BINARY_GREATER = {
-  ">",
-  gsk_sl_relational_check_type,
-  gsk_sl_unimplemented_get_constant,
-  gsk_sl_unimplemented_write_spv
-};
-
-static const GskSlBinary GSK_SL_BINARY_LESS_EQUAL = {
-  "<=",
-  gsk_sl_relational_check_type,
-  gsk_sl_unimplemented_get_constant,
-  gsk_sl_unimplemented_write_spv
-};
-
-static const GskSlBinary GSK_SL_BINARY_GREATER_EQUAL = {
-  ">=",
-  gsk_sl_relational_check_type,
   gsk_sl_unimplemented_get_constant,
   gsk_sl_unimplemented_write_spv
 };
