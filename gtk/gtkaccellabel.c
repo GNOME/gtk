@@ -85,7 +85,6 @@
  *
  *   // Create the menu item using the convenience function.
  *   save_item = gtk_menu_item_new_with_label ("Save");
- *   gtk_widget_show (save_item);
  *   gtk_container_add (GTK_CONTAINER (menu), save_item);
  *
  *   // Now add the accelerator to the GtkMenuItem. Note that since we
@@ -107,7 +106,8 @@
  * ]|
  *
  * #GtkAccelLabel has a main CSS node with the name accellabel.
- * It adds a subnode with name label and another one with name accelerator.
+ * It adds a subnode with name box, containing two child nodes with
+ * name label and accelerator.
  */
 
 enum {
@@ -999,6 +999,14 @@ gtk_accel_label_get_accel (GtkAccelLabel   *accel_label,
   *accelerator_mods = accel_label->priv->accel_mods;
 }
 
+/**
+ * gtk_accel_label_set_label:
+ * @accel_label: a #GtkAccelLabel
+ * @text: The new label text
+ *
+ * Sets the label part of the accel label.
+ *
+ */
 void
 gtk_accel_label_set_label (GtkAccelLabel *accel_label,
                            const char    *text)
@@ -1010,8 +1018,17 @@ gtk_accel_label_set_label (GtkAccelLabel *accel_label,
   gtk_label_set_text_with_mnemonic (GTK_LABEL (priv->text_label), text);
 }
 
+/**
+ * gtk_accel_label_get_label:
+ * @accel_label: a #GtkAccelLabel
+ *
+ * Returns the current label, set via gtk_accel_label_set_label()
+ *
+ * Returns: (transfer none): @accel_label's label
+ *
+ */
 const char *
-gtk_accel_label_get_label (GtkAccelLabel   *accel_label)
+gtk_accel_label_get_label (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
 
@@ -1020,7 +1037,14 @@ gtk_accel_label_get_label (GtkAccelLabel   *accel_label)
   return gtk_label_get_label (GTK_LABEL (priv->text_label));
 }
 
-
+/**
+ * gtk_accel_label_set_use_underline:
+ * @accel_label: a #GtkAccelLabel
+ * @setting: Whether to use underlines in the label or not
+ *
+ * Controls whether to interpret underscores in the text label of @accel_label
+ * as mnemonic indicators. See also gtk_label_set_use_underline()
+ */
 void
 gtk_accel_label_set_use_underline (GtkAccelLabel *accel_label,
                                    gboolean       setting)
@@ -1039,6 +1063,14 @@ gtk_accel_label_set_use_underline (GtkAccelLabel *accel_label,
     }
 }
 
+/**
+ * gtk_accel_label_get_use_underline:
+ * @accel_label: a #GtkAccelLabel
+ *
+ * Returns: Whether the accel label interprets underscores in it's
+ * GtkAccelLabel:label property as mnemonic indicators.
+ * See gtk_accel_label_set_use_underline() and gtk_label_set_use_underline();
+ */
 gboolean
 gtk_accel_label_get_use_underline (GtkAccelLabel *accel_label)
 {
