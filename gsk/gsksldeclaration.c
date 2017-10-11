@@ -124,6 +124,52 @@ static const GskSlDeclarationClass GSK_SL_DECLARATION_VARIABLE = {
   gsk_sl_declaration_variable_write_initializer_spv
 };
 
+/* TYPE */
+
+typedef struct _GskSlDeclarationType GskSlDeclarationType;
+
+struct _GskSlDeclarationType {
+  GskSlDeclaration parent;
+
+  GskSlQualifier qualifier;
+  GskSlType *type;
+};
+
+static void
+gsk_sl_declaration_type_finalize (GskSlDeclaration *declaration)
+{
+  GskSlDeclarationType *type = (GskSlDeclarationType *) declaration;
+
+  gsk_sl_type_unref (type->type);
+}
+
+static void
+gsk_sl_declaration_type_print (const GskSlDeclaration *declaration,
+                               GskSlPrinter           *printer)
+{
+  GskSlDeclarationType *type = (GskSlDeclarationType *) declaration;
+
+  if (gsk_sl_qualifier_print (&type->qualifier, printer))
+    gsk_sl_printer_append (printer, " ");
+  gsk_sl_printer_append (printer, gsk_sl_type_get_name (type->type));
+  gsk_sl_printer_append (printer, ";");
+  gsk_sl_printer_newline (printer);
+}
+
+static void
+gsk_sl_declaration_type_write_initializer_spv (const GskSlDeclaration *declaration,
+                                               GskSpvWriter           *writer)
+{
+  /* This declaration is only relevant for printing as it just declares a type */
+}
+
+static const GskSlDeclarationClass GSK_SL_DECLARATION_TYPE = {
+  sizeof (GskSlDeclarationType),
+  gsk_sl_declaration_type_finalize,
+  gsk_sl_declaration_type_print,
+  gsk_sl_declaration_type_write_initializer_spv
+};
+
 /* FUNCTION */
  
 typedef struct _GskSlDeclarationFunction GskSlDeclarationFunction;
@@ -229,10 +275,12 @@ gsk_sl_declaration_parse (GskSlScope        *scope,
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
     {
-      result = gsk_sl_declaration_parse_variable (scope, preproc, &qualifier, type, NULL);
-      gsk_sl_preprocessor_consume (preproc, NULL);
-      gsk_sl_type_unref (type);
-      return result;
+      GskSlDeclarationType *type_decl = gsk_sl_declaration_new (&GSK_SL_DECLARATION_TYPE);
+
+      type_decl->qualifier = qualifier;
+      type_decl->type = type;
+      gsk_sl_preprocessor_consume (preproc, type_decl);
+      return &type_decl->parent;
     }
   else if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
     {
