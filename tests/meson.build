@@ -129,6 +129,7 @@ gtk_tests = [
   ['testgaction'],
   ['testwidgetfocus'],
   ['testcenterbox'],
+  ['testgridbaseline']
 ]
 
 if os_linux
