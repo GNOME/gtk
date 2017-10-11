@@ -70,29 +70,30 @@
  * }
  *
  * void make_toggles (void) {
- *    GtkWidget *dialog, *toggle1, *toggle2;
- *    GtkWidget *content_area;
- *    const char *text;
+ *   GtkWidget *window, *toggle1, *toggle2;
+ *   GtkWidget *box;
+ *   const char *text;
  *
- *    dialog = gtk_dialog_new ();
- *    content_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
+ *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+ *   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
  *
- *    text = "Hi, i’m a toggle button.";
- *    toggle1 = gtk_toggle_button_new_with_label (text);
+ *   text = "Hi, I’m a toggle button.";
+ *   toggle1 = gtk_toggle_button_new_with_label (text);
  *
- *    g_signal_connect (toggle1, "toggled",
- *                      G_CALLBACK (output_state),
- *                      NULL);
- *    gtk_container_add (GTK_CONTAINER (content_area), toggle1);
+ *   g_signal_connect (toggle1, "toggled",
+ *                     G_CALLBACK (output_state),
+ *                     NULL);
+ *   gtk_container_add (GTK_CONTAINER (box), toggle1);
  *
- *    text = "Hi, i’m a toggle button.";
- *    toggle2 = gtk_toggle_button_new_with_label (text);
- *    g_signal_connect (toggle2, "toggled",
- *                      G_CALLBACK (output_state),
- *                      NULL);
- *    gtk_container_add (GTK_CONTAINER (content_area), toggle2);
+ *   text = "Hi, I’m a toggle button.";
+ *   toggle2 = gtk_toggle_button_new_with_label (text);
+ *   g_signal_connect (toggle2, "toggled",
+ *                     G_CALLBACK (output_state),
+ *                     NULL);
+ *   gtk_container_add (GTK_CONTAINER (box), toggle2);
  *
- *    gtk_widget_show (dialog);
+ *   gtk_container_add (GTK_CONTAINER (window), box);
+ *   gtk_widget_show (window);
  * }
  * ]|
  */
