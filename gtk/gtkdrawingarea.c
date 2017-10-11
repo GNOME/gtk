@@ -100,19 +100,24 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  *              0, 2 * G_PI);
  *
  *   gtk_style_context_get_color (context,
- *                                gtk_style_context_get_state (context),
  *                                &color);
  *   gdk_cairo_set_source_rgba (cr, &color);
  *
  *   cairo_fill (cr);
  * }
- * [...]
+ *
+ * void main (int argc, char **argv)
+ * {
+ *   gtk_init ();
+ *
  *   GtkWidget *area = gtk_drawing_area_new ();
  *   gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (area), 100);
  *   gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (area), 100);
  *   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (area),
  *                                   draw_function,
  *                                   NULL, NULL);
+ *
+ * }
  * ]|
  *
  * The draw function is normally called when a drawing area first comes
