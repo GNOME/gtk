@@ -20,24 +20,21 @@
 
 #include "gskslprogramprivate.h"
 
+#include "gsksldeclarationprivate.h"
 #include "gskslexpressionprivate.h"
 #include "gskslfunctionprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
-#include "gskslqualifierprivate.h"
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
-#include "gskslvalueprivate.h"
-#include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
 
 struct _GskSlProgram {
   GObject parent_instance;
 
   GskSlScope *scope;
-  GSList *variables;
-  GSList *functions;
+  GSList *declarations;
 };
 
 G_DEFINE_TYPE (GskSlProgram, gsk_sl_program, G_TYPE_OBJECT)
@@ -47,8 +44,7 @@ gsk_sl_program_dispose (GObject *object)
 {
   GskSlProgram *program = GSK_SL_PROGRAM (object);
 
-  g_slist_free_full (program->variables, (GDestroyNotify) gsk_sl_variable_unref);
-  g_slist_free_full (program->functions, (GDestroyNotify) gsk_sl_function_unref);
+  g_slist_free_full (program->declarations, (GDestroyNotify) gsk_sl_declaration_unref);
   gsk_sl_scope_unref (program->scope);
 
   G_OBJECT_CLASS (gsk_sl_program_parent_class)->dispose (object);
@@ -68,144 +64,23 @@ gsk_sl_program_init (GskSlProgram *program)
   program->scope = gsk_sl_scope_new (NULL, NULL);
 }
 
-static void
-gsk_sl_program_parse_variable (GskSlProgram         *program,
-                               GskSlScope           *scope,
-                               GskSlPreprocessor    *preproc,
-                               const GskSlQualifier *qualifier,
-                               GskSlType            *type,
-                               const char           *name)
-{
-  GskSlVariable *variable;
-  const GskSlToken *token;
-  GskSlValue *value = NULL;
-
-  token = gsk_sl_preprocessor_get (preproc);
-  if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
-    {
-      GskSlValue *unconverted;
-      GskSlExpression *initial;
-
-      gsk_sl_preprocessor_consume (preproc, program);
-
-      initial = gsk_sl_expression_parse_assignment (scope, preproc);
-
-      if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (initial)))
-        {
-          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
-                                     "Cannot convert from initializer type %s to variable type %s",
-                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initial)),
-                                     gsk_sl_type_get_name (type));
-          gsk_sl_expression_unref (initial);
-        }
-      else
-        {
-          unconverted = gsk_sl_expression_get_constant (initial);
-          gsk_sl_expression_unref (initial);
-          if (unconverted)
-            {
-              value = gsk_sl_value_new_convert (unconverted, type);
-              gsk_sl_value_free (unconverted);
-            }
-          else 
-            {
-              gsk_sl_preprocessor_error (preproc, UNSUPPORTED, "Non-constant initializer are not supported yet.");
-              value = NULL;
-            }
-        }
-
-      token = gsk_sl_preprocessor_get (preproc);
-    }
-
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of variable declaration.");
-      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_SEMICOLON);
-    }
-  gsk_sl_preprocessor_consume (preproc, NULL);
-
-  variable = gsk_sl_variable_new (name, type, qualifier, value);
-      
-  program->variables = g_slist_append (program->variables, variable);
-  gsk_sl_scope_add_variable (scope, variable);
-}
-
-static void
-gsk_sl_program_parse_declaration (GskSlProgram      *program,
-                                  GskSlScope        *scope,
-                                  GskSlPreprocessor *preproc)
-{
-  GskSlType *type;
-  const GskSlToken *token;
-  GskSlQualifier qualifier;
-  char *name;
-
-  gsk_sl_qualifier_parse (&qualifier, scope, preproc, GSK_SL_QUALIFIER_GLOBAL);
-
-  type = gsk_sl_type_new_parse (scope, preproc);
-
-  token = gsk_sl_preprocessor_get (preproc);
-  if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-    {
-      GskSlVariable *variable = gsk_sl_variable_new (NULL, type, &qualifier, NULL);
-      program->variables = g_slist_append (program->variables, variable);
-      gsk_sl_preprocessor_consume (preproc, program);
-      gsk_sl_type_unref (type);
-      return;
-    }
-  else if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a variable name");
-      gsk_sl_preprocessor_consume (preproc, program);
-      gsk_sl_type_unref (type);
-      return;
-    }
-
-  name = g_strdup (token->str);
-  gsk_sl_preprocessor_consume (preproc, program);
-
-  token = gsk_sl_preprocessor_get (preproc);
-
-  if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
-    {
-      GskSlFunctionMatcher matcher;
-      GskSlFunction *function;
-
-      function = gsk_sl_function_new_parse (scope,
-                                            preproc,
-                                            type,
-                                            name);
-      gsk_sl_scope_match_function (scope, &matcher, gsk_sl_function_get_name (function));
-      gsk_sl_function_matcher_match_function (&matcher, function);
-      if (gsk_sl_function_matcher_has_matches (&matcher))
-        gsk_sl_preprocessor_error (preproc, DECLARATION, "A function with the same prototype has already been defined.");
-      else
-        gsk_sl_scope_add_function (scope, function);
-      gsk_sl_function_matcher_finish (&matcher);
-      program->functions = g_slist_append (program->functions, function);
-    }
-  else
-    {
-      gsk_sl_program_parse_variable (program, scope, preproc, &qualifier, type, name);
-    }
-
-  g_free (name);
-
-  return;
-}
-
 void
 gsk_sl_program_parse (GskSlProgram      *program,
                       GskSlPreprocessor *preproc)
 {
+  GskSlDeclaration *declaration;
   const GskSlToken *token;
 
   for (token = gsk_sl_preprocessor_get (preproc);
        !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
        token = gsk_sl_preprocessor_get (preproc))
     {
-      gsk_sl_program_parse_declaration (program, program->scope, preproc);
+      declaration = gsk_sl_declaration_parse (program->scope, preproc);
+      if (declaration)
+        program->declarations = g_slist_prepend (program->declarations, declaration);
     }
+
+  program->declarations = g_slist_reverse (program->declarations);
 }
 
 void
@@ -213,6 +88,8 @@ gsk_sl_program_print (GskSlProgram *program,
                       GString      *string)
 {
   GskSlPrinter *printer;
+  GskSlFunction *function;
+  gboolean need_newline = FALSE;
   GSList *l;
   char *str;
 
@@ -221,25 +98,16 @@ gsk_sl_program_print (GskSlProgram *program,
 
   printer = gsk_sl_printer_new ();
 
-  for (l = program->variables; l; l = l->next)
+  for (l = program->declarations; l; l = l->next)
     {
-      const GskSlValue *value;
-      gsk_sl_variable_print (l->data, printer);
-      value = gsk_sl_variable_get_initial_value (l->data);
-      if (value)
-        {
-          gsk_sl_printer_append (printer, " = ");
-          gsk_sl_value_print (value, printer);
-        }
-      gsk_sl_printer_append (printer, ";");
-      gsk_sl_printer_newline (printer);
-    }
+      function = gsk_sl_declaration_get_function (l->data);
 
-  for (l = program->functions; l; l = l->next)
-    {
-      if (l != program->functions || program->variables != NULL)
+      if ((function || need_newline) && l != program->declarations)
         gsk_sl_printer_newline (printer);
-      gsk_sl_function_print (l->data, printer);
+
+      gsk_sl_declaration_print (l->data, printer);
+
+      need_newline = function != NULL;
     }
 
   str = gsk_sl_printer_write_to_string (printer);
@@ -256,8 +124,8 @@ gsk_sl_program_write_spv_initializer (GskSpvWriter *writer,
   GskSlProgram *program = data;
   GSList *l;
 
-  for (l = program->variables; l; l = l->next)
-    gsk_spv_writer_get_id_for_variable (writer, l->data);
+  for (l = program->declarations; l; l = l->next)
+    gsk_sl_declaration_write_initializer_spv (l->data, writer);
 }
 
 static GskSlFunction *
@@ -265,10 +133,12 @@ gsk_sl_program_get_entry_point (GskSlProgram *program)
 {
   GSList *l;
 
-  for (l = program->functions; l; l = l->next)
+  for (l = program->declarations; l; l = l->next)
     {
-      if (g_str_equal (gsk_sl_function_get_name (l->data), "main"))
-        return l->data;
+      GskSlFunction *function = gsk_sl_declaration_get_function (l->data);
+
+      if (function && g_str_equal (gsk_sl_function_get_name (function), "main"))
+        return function;
     }
 
   return NULL;
