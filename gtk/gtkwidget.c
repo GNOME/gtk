@@ -3490,7 +3490,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
 
       press->button.axes = g_memdup (event->motion.axes,
                                      sizeof (gdouble) *
-                                     gdk_device_get_n_axes (event->motion.device));
+                                     gdk_device_get_n_axes (event->any.device));
 
       if (event->motion.state & GDK_BUTTON3_MASK)
         press->button.button = 3;

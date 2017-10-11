@@ -1547,16 +1547,14 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             gdk_event_set_seat (event, gdk_device_get_seat (device));
             gdk_event_set_device_tool (event, source_device->last_tool);
 
-            event->button.axes = translate_axes (event->button.device,
+            event->button.axes = translate_axes (device,
                                                  event->button.x,
                                                  event->button.y,
                                                  event->any.window,
                                                  &xev->valuators);
 
-            if (gdk_device_get_mode (event->button.device) == GDK_MODE_WINDOW)
+            if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
               {
-                GdkDevice *device = event->button.device;
-
                 /* Update event coordinates from axes */
                 gdk_device_get_axis (device, event->button.axes, GDK_AXIS_X, &event->button.x);
                 gdk_device_get_axis (device, event->button.axes, GDK_AXIS_Y, &event->button.y);
@@ -1626,7 +1624,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.delta_x = delta_x;
             event->scroll.delta_y = delta_y;
 
-            event->scroll.device = device;
+            gdk_event_set_device (event, device);
             gdk_event_set_source_device (event, source_device);
             gdk_event_set_seat (event, gdk_device_get_seat (device));
 
@@ -1642,7 +1640,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->motion.x_root = (gdouble) xev->root_x / scale;
         event->motion.y_root = (gdouble) xev->root_y / scale;
 
-        event->motion.device = device;
+        gdk_event_set_device (event, device);
         gdk_event_set_source_device (event, source_device);
         gdk_event_set_seat (event, gdk_device_get_seat (device));
         gdk_event_set_device_tool (event, source_device->last_tool);
@@ -1652,17 +1650,17 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         /* There doesn't seem to be motion hints in XI */
         event->motion.is_hint = FALSE;
 
-        event->motion.axes = translate_axes (event->motion.device,
+        event->motion.axes = translate_axes (device,
                                              event->motion.x,
                                              event->motion.y,
                                              event->any.window,
                                              &xev->valuators);
 
-        if (gdk_device_get_mode (event->motion.device) == GDK_MODE_WINDOW)
+        if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
           {
             /* Update event coordinates from axes */
-            gdk_device_get_axis (event->motion.device, event->motion.axes, GDK_AXIS_X, &event->motion.x);
-            gdk_device_get_axis (event->motion.device, event->motion.axes, GDK_AXIS_Y, &event->motion.y);
+            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_X, &event->motion.x);
+            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_Y, &event->motion.y);
           }
       }
       break;
@@ -1701,16 +1699,14 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         gdk_event_set_source_device (event, source_device);
         gdk_event_set_seat (event, gdk_device_get_seat (device));
 
-        event->touch.axes = translate_axes (event->touch.device,
+        event->touch.axes = translate_axes (device,
                                             event->touch.x,
                                             event->touch.y,
                                             event->any.window,
                                             &xev->valuators);
 
-        if (gdk_device_get_mode (event->touch.device) == GDK_MODE_WINDOW)
+        if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
           {
-            GdkDevice *device = event->touch.device;
-
             /* Update event coordinates from axes */
             gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
             gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &event->touch.y);
@@ -1777,16 +1773,14 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             gdk_event_set_pointer_emulated (event, TRUE);
           }
 
-        event->touch.axes = translate_axes (event->touch.device,
+        event->touch.axes = translate_axes (device,
                                             event->touch.x,
                                             event->touch.y,
                                             event->any.window,
                                             &xev->valuators);
 
-        if (gdk_device_get_mode (event->touch.device) == GDK_MODE_WINDOW)
+        if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
           {
-            GdkDevice *device = event->touch.device;
-
             /* Update event coordinates from axes */
             gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_X, &event->touch.x);
             gdk_device_get_axis (device, event->touch.axes, GDK_AXIS_Y, &event->touch.y);
