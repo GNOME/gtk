@@ -1395,7 +1395,7 @@ gsk_sl_type_block_write_spv (GskSlType    *type,
                                           ids, 
                                           block->n_members);
   
-  gsk_spv_writer_decorate (writer, result_id, GSK_SPV_DECORATION_BLOCK);
+  gsk_spv_writer_decorate (writer, result_id, GSK_SPV_DECORATION_BLOCK, NULL, 0);
 
   return result_id;
 }

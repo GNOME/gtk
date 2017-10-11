@@ -1168,7 +1168,9 @@ gsk_spv_writer_in_bounds_ptr_access_chain (GskSpvWriter *writer,
 static inline void
 gsk_spv_writer_decorate (GskSpvWriter *writer,
                          guint32 target,
-                         GskSpvDecoration decoration)
+                         GskSpvDecoration decoration,
+                         guint32 *values,
+                         gsize n_values)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DECORATE);
   guint start_index = bytes->len;
@@ -1176,6 +1178,7 @@ gsk_spv_writer_decorate (GskSpvWriter *writer,
   g_array_append_val (bytes, (guint32) { 0 });
   g_array_append_val (bytes, target);
   g_array_append_val (bytes, (guint32) { decoration });
+  g_array_append_vals (bytes, values, n_values);
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_DECORATE;
 }
 
@@ -1183,7 +1186,9 @@ static inline void
 gsk_spv_writer_member_decorate (GskSpvWriter *writer,
                                 guint32 structure_type,
                                 guint32 member,
-                                GskSpvDecoration decoration)
+                                GskSpvDecoration decoration,
+                                guint32 *values,
+                                gsize n_values)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_DECORATE);
   guint start_index = bytes->len;
@@ -1192,6 +1197,7 @@ gsk_spv_writer_member_decorate (GskSpvWriter *writer,
   g_array_append_val (bytes, structure_type);
   g_array_append_val (bytes, member);
   g_array_append_val (bytes, (guint32) { decoration });
+  g_array_append_vals (bytes, values, n_values);
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_MEMBER_DECORATE;
 }
 

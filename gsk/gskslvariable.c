@@ -105,6 +105,8 @@ gsk_sl_variable_standard_write_spv (const GskSlVariable *variable,
   if (variable->name)
     gsk_spv_writer_name (writer, result_id, variable->name);
 
+  gsk_sl_qualifier_write_spv_decorations (&variable->qualifier, writer, result_id);
+
   return result_id;
 }
 

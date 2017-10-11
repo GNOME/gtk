@@ -86,6 +86,11 @@ var SpecialTypes = {
   "OpFunctionParameter": { "result_type": "IdRef" }
 };
 
+var ExtraOperands = {
+  "OpDecorate": [ { "kind" : "LiteralContextDependentNumber", "name" : "'Value'" } ],
+  "OpMemberDecorate": [ { "kind" : "LiteralContextDependentNumber", "name" : "'Value'" } ]
+};
+
 /* maps opcodes to section in file they appear in */
 var Sections = {
   "OpNop": "",
@@ -532,16 +537,15 @@ for (let i in spirv.instructions)
     let ins = spirv.instructions[i];
     ins.result = false;
     ins.enum_value = "GSK_SPV_OP_" + all_upper (ins.opname.substr(2));
-    if (ins.operands)
-      {
-        for (let o in ins.operands)
-          {
-            o = ins.operands[o];
-            fix_operand (ins, o);
-          }
-      }
-    else
+    if (!ins.operands)
       ins.operands = [];
+    if (ExtraOperands[ins.opname])
+      ins.operands = ins.operands.concat (ExtraOperands[ins.opname]);
+    for (let o in ins.operands)
+      {
+        o = ins.operands[o];
+        fix_operand (ins, o);
+      }
     if (Sections[ins.opname])
       {
         ins.section = Sections[ins.opname];

@@ -576,3 +576,47 @@ gsk_sl_qualifier_get_storage_class (const GskSlQualifier *qualifier)
       return GSK_SPV_STORAGE_CLASS_FUNCTION;
     }
 }
+
+static void
+gsk_sl_qualifier_write_inout_decorations (const GskSlQualifier *qualifier,
+                                          GskSpvWriter         *writer,
+                                          guint32               value_id)
+{
+  if (qualifier->layout.set >= 0)
+    gsk_spv_writer_decorate (writer, value_id, GSK_SPV_DECORATION_LOCATION, (guint32[1]) { qualifier->layout.set }, 1);
+  if (qualifier->layout.binding >= 0)
+    gsk_spv_writer_decorate (writer, value_id, GSK_SPV_DECORATION_LOCATION, (guint32[1]) { qualifier->layout.binding }, 1);
+  if (qualifier->layout.location >= 0)
+    gsk_spv_writer_decorate (writer, value_id, GSK_SPV_DECORATION_LOCATION, (guint32[1]) { qualifier->layout.location }, 1);
+  if (qualifier->layout.component >= 0)
+    gsk_spv_writer_decorate (writer, value_id, GSK_SPV_DECORATION_LOCATION, (guint32[1]) { qualifier->layout.component }, 1);
+}
+
+void
+gsk_sl_qualifier_write_spv_decorations (const GskSlQualifier *qualifier,
+                                        GskSpvWriter         *writer,
+                                        guint32               value_id)
+{
+  switch (qualifier->storage)
+    {
+    case GSK_SL_STORAGE_DEFAULT:
+    default:
+      g_assert_not_reached ();
+    case GSK_SL_STORAGE_LOCAL:
+    case GSK_SL_STORAGE_LOCAL_CONST:
+    case GSK_SL_STORAGE_PARAMETER_IN:
+    case GSK_SL_STORAGE_PARAMETER_OUT:
+    case GSK_SL_STORAGE_PARAMETER_INOUT:
+    case GSK_SL_STORAGE_PARAMETER_CONST:
+    case GSK_SL_STORAGE_GLOBAL:
+    case GSK_SL_STORAGE_GLOBAL_CONST:
+      return;
+
+    case GSK_SL_STORAGE_GLOBAL_IN:
+    case GSK_SL_STORAGE_GLOBAL_OUT:
+    case GSK_SL_STORAGE_GLOBAL_UNIFORM:
+      gsk_sl_qualifier_write_inout_decorations (qualifier, writer, value_id);
+    }
+
+}
+

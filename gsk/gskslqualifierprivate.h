@@ -66,6 +66,10 @@ gboolean                gsk_sl_qualifier_is_constant                    (const G
 GskSlQualifierLocation  gsk_sl_qualifier_get_location                   (const GskSlQualifier       *qualifier);
 GskSpvStorageClass      gsk_sl_qualifier_get_storage_class              (const GskSlQualifier       *qualifier);
 
+void                    gsk_sl_qualifier_write_spv_decorations          (const GskSlQualifier       *qualifier,
+                                                                         GskSpvWriter               *writer,
+                                                                         guint32                     value_id);
+
 G_END_DECLS
 
 #endif /* __GSK_SL_QUALIFIER_PRIVATE_H__ */
