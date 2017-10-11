@@ -2360,8 +2360,8 @@ gtk_icon_view_update_rubberband (GtkIconView *icon_view)
   x = MAX (icon_view->priv->mouse_x, 0);
   y = MAX (icon_view->priv->mouse_y, 0);
 
-  icon_view->priv->rubberband_x2 = x;
-  icon_view->priv->rubberband_y2 = y;  
+  icon_view->priv->rubberband_x2 = x + gtk_adjustment_get_value (icon_view->priv->hadjustment);
+  icon_view->priv->rubberband_y2 = y + gtk_adjustment_get_value (icon_view->priv->vadjustment);
 
   gtk_icon_view_update_rubberband_selection (icon_view);
   gtk_widget_queue_draw (GTK_WIDGET (icon_view));
@@ -2387,10 +2387,10 @@ gtk_icon_view_start_rubberbanding (GtkIconView  *icon_view,
       item->selected_before_rubberbanding = item->selected;
     }
 
-  priv->rubberband_x1 = x;
-  priv->rubberband_y1 = y;
-  priv->rubberband_x2 = x;
-  priv->rubberband_y2 = y;
+  priv->rubberband_x1 = x + gtk_adjustment_get_value (priv->hadjustment);
+  priv->rubberband_y1 = y + gtk_adjustment_get_value (priv->vadjustment);
+  priv->rubberband_x2 = priv->rubberband_x1;
+  priv->rubberband_y2 = priv->rubberband_y1;
 
   priv->doing_rubberband = TRUE;
   priv->rubberband_device = device;
@@ -2990,9 +2990,6 @@ gtk_icon_view_snapshot_rubberband (GtkIconView *icon_view,
   gtk_snapshot_render_frame (snapshot, context,
                              rect.x, rect.y,
                              rect.width, rect.height);
-
-  /*g_message ("%s: %d, %d, %d, %d", __FUNCTION__, rect.x, rect.y, rect.width, rect.height);*/
-  /*g_message ("%d, %d, %d, %d", priv->rubberband_x1, priv->rubberband_y1, priv->rubberband_x2, priv->rubberband_y2);*/
 
   gtk_style_context_restore (context);
 }
