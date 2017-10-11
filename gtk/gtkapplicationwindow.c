@@ -79,9 +79,9 @@
  * ## A GtkApplicationWindow with a menubar
  *
  * |[<!-- language="C" -->
- * app = gtk_application_new ();
+ * GtkApplication *app = gtk_application_new ("org.gtk.test", 0);
  *
- * builder = gtk_builder_new_from_string (
+ * GtkBuilder *builder = gtk_builder_new_from_string (
  *     "<interface>"
  *     "  <menu id='menubar'>"
  *     "    <submenu label='_Edit'>"
@@ -92,14 +92,14 @@
  *     "</interface>",
  *     -1);
  *
- * menubar = G_MENU_MODEL (gtk_builder_get_object (builder,
- *                                                 "menubar"));
- * gtk_application_set_menubar (G_APPLICATION (app), menubar);
+ * GMenuModel *menubar = G_MENU_MODEL (gtk_builder_get_object (builder,
+ *                                                             "menubar"));
+ * gtk_application_set_menubar (GTK_APPLICATION (app), menubar);
  * g_object_unref (builder);
  *
- * ...
+ * // ...
  *
- * window = gtk_application_window_new (app);
+ * GtkWidget *window = gtk_application_window_new (app);
  * ]|
  *
  * ## Handling fallback yourself
