@@ -130,7 +130,7 @@ _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
     window = gdk_drag_context_get_dest_window (context);
 
   event = gdk_event_new (type);
-  event->dnd.window = g_object_ref (window);
+  event->any.window = g_object_ref (window);
   event->dnd.context = g_object_ref (context);
   event->dnd.time = time_;
   event->dnd.x_root = GDK_WAYLAND_DRAG_CONTEXT (context)->x;

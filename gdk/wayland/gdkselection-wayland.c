@@ -124,8 +124,8 @@ selection_buffer_notify (SelectionBuffer *buffer)
   for (l = buffer->requestors; l; l = l->next)
     {
       event = gdk_event_new (GDK_SELECTION_NOTIFY);
-      event->selection.window = g_object_ref (l->data);
-      event->selection.send_event = FALSE;
+      event->any.window = g_object_ref (l->data);
+      event->any.send_event = FALSE;
       event->selection.selection = buffer->selection;
       event->selection.target = buffer->target;
       event->selection.property = gdk_atom_intern_static_string ("GDK_SELECTION");
@@ -563,8 +563,8 @@ gdk_wayland_selection_emit_request (GdkWindow *window,
   GdkEvent *event;
 
   event = gdk_event_new (GDK_SELECTION_REQUEST);
-  event->selection.window = g_object_ref (window);
-  event->selection.send_event = FALSE;
+  event->any.window = g_object_ref (window);
+  event->any.send_event = FALSE;
   event->selection.selection = selection;
   event->selection.target = target;
   event->selection.property = gdk_atom_intern_static_string ("GDK_SELECTION");
@@ -1096,8 +1096,8 @@ emit_empty_selection_notify (GdkWindow *requestor,
   GdkEvent *event;
 
   event = gdk_event_new (GDK_SELECTION_NOTIFY);
-  event->selection.window = g_object_ref (requestor);
-  event->selection.send_event = FALSE;
+  event->any.window = g_object_ref (requestor);
+  event->any.send_event = FALSE;
   event->selection.selection = selection;
   event->selection.target = target;
   event->selection.property = NULL;
@@ -1122,7 +1122,7 @@ emit_selection_clear (GdkDisplay *display,
   window = _gdk_wayland_display_get_selection_owner (display, selection);
   if (window != NULL)
     {
-      event->selection.window = g_object_ref (window);
+      event->any.window = g_object_ref (window);
       event->selection.requestor = g_object_ref (window);
     }
 

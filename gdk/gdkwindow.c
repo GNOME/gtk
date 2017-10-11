@@ -2539,9 +2539,9 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 
   /* Paint the window before the children, clipped to the window region */
 
-  event.expose.type = GDK_EXPOSE;
-  event.expose.window = window; /* we already hold a ref */
-  event.expose.send_event = FALSE;
+  event.any.type = GDK_EXPOSE;
+  event.any.window = window; /* we already hold a ref */
+  event.any.send_event = FALSE;
   event.expose.count = 0;
   event.expose.region = clipped_expose_region;
   cairo_region_get_extents (clipped_expose_region, &event.expose.area);

@@ -277,18 +277,18 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
         break;
 
       if (pending_motion_window != NULL &&
-          pending_motion_window != event->event.motion.window)
+          pending_motion_window != event->event.any.window)
         break;
 
       if (pending_motion_device != NULL &&
           pending_motion_device != event->event.motion.device)
         break;
 
-      if (!event->event.motion.window->event_compression)
+      if (!event->event.any.window->event_compression)
         break;
 
-      pending_motion_window = event->event.motion.window;
-      pending_motion_device = event->event.motion.device;
+      pending_motion_window = event->event.any.window;
+      pending_motion_device = event->motion.device;
       pending_motions = tmp_list;
 
       tmp_list = tmp_list->prev;
@@ -1742,13 +1742,13 @@ gdk_event_triggers_context_menu (const GdkEvent *event)
       GdkDisplay *display;
       GdkModifierType modifier;
 
-      g_return_val_if_fail (GDK_IS_WINDOW (bevent->window), FALSE);
+      g_return_val_if_fail (GDK_IS_WINDOW (bevent->any.window), FALSE);
 
       if (bevent->button == GDK_BUTTON_SECONDARY &&
           ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
         return TRUE;
 
-      display = gdk_window_get_display (bevent->window);
+      display = gdk_window_get_display (bevent->any.window);
 
       modifier = gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
                                                GDK_MODIFIER_INTENT_CONTEXT_MENU);
@@ -1992,8 +1992,8 @@ gdk_get_pending_window_state_event_link (GdkWindow *window)
     {
       GdkEventPrivate *event = tmp_list->data;
 
-      if (event->event.type == GDK_WINDOW_STATE &&
-          event->event.window_state.window == window)
+      if (event->event.any.type == GDK_WINDOW_STATE &&
+          event->event.any.window == window)
         return tmp_list;
     }
 
@@ -2011,9 +2011,9 @@ _gdk_set_window_state (GdkWindow      *window,
 
   g_return_if_fail (window != NULL);
 
-  temp_event.window_state.window = window;
-  temp_event.window_state.type = GDK_WINDOW_STATE;
-  temp_event.window_state.send_event = FALSE;
+  temp_event.any.window = window;
+  temp_event.any.type = GDK_WINDOW_STATE;
+  temp_event.any.send_event = FALSE;
   temp_event.window_state.new_window_state = new_state;
 
   if (temp_event.window_state.new_window_state == window->state)
@@ -2771,7 +2771,7 @@ gdk_event_set_selection (GdkEvent  *event,
                          GdkAtom    selection,
                          guint32    time)
 {
-  event->selection.window = g_object_ref (window);
+  event->any.window = g_object_ref (window);
   event->selection.selection = selection;
   event->selection.time = time;
 }

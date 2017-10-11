@@ -196,7 +196,7 @@ translate_key_event (GdkDisplay              *display,
   GdkKeymap *keymap = gdk_keymap_get_for_display (display);
   GdkModifierType consumed, state;
 
-  event->key.type = xevent->xany.type == KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
+  event->any.type = xevent->xany.type == KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
   event->key.time = xevent->xkey.time;
   gdk_event_set_device (event, device_manager->core_keyboard);
 
@@ -487,7 +487,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
         case 5: /* down */
         case 6: /* left */
         case 7: /* right */
-          event->scroll.type = GDK_SCROLL;
+          event->any.type = GDK_SCROLL;
 
           if (xevent->xbutton.button == 4)
             event->scroll.direction = GDK_SCROLL_UP;
@@ -498,7 +498,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           else
             event->scroll.direction = GDK_SCROLL_RIGHT;
 
-          event->scroll.window = window;
+          event->any.window = window;
           event->scroll.time = xevent->xbutton.time;
           event->scroll.x = (gdouble) xevent->xbutton.x / scale;
           event->scroll.y = (gdouble) xevent->xbutton.y / scale;
@@ -515,8 +515,8 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           break;
 
         default:
-          event->button.type = GDK_BUTTON_PRESS;
-          event->button.window = window;
+          event->any.type = GDK_BUTTON_PRESS;
+          event->any.window = window;
           event->button.time = xevent->xbutton.time;
           event->button.x = (gdouble) xevent->xbutton.x / scale;
           event->button.y = (gdouble) xevent->xbutton.y / scale;
@@ -557,8 +557,8 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           break;
         }
 
-      event->button.type = GDK_BUTTON_RELEASE;
-      event->button.window = window;
+      event->any.type = GDK_BUTTON_RELEASE;
+      event->any.window = window;
       event->button.time = xevent->xbutton.time;
       event->button.x = (gdouble) xevent->xbutton.x / scale;
       event->button.y = (gdouble) xevent->xbutton.y / scale;
@@ -586,8 +586,8 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           break;
         }
 
-      event->motion.type = GDK_MOTION_NOTIFY;
-      event->motion.window = window;
+      event->any.type = GDK_MOTION_NOTIFY;
+      event->any.window = window;
       event->motion.time = xevent->xmotion.time;
       event->motion.x = (gdouble) xevent->xmotion.x / scale;
       event->motion.y = (gdouble) xevent->xmotion.y / scale;
@@ -617,8 +617,8 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 
       gdk_event_set_display (event, display);
 
-      event->crossing.type = GDK_ENTER_NOTIFY;
-      event->crossing.window = window;
+      event->any.type = GDK_ENTER_NOTIFY;
+      event->any.window = window;
       gdk_event_set_device (event, device_manager->core_pointer);
 
       /* If the subwindow field of the XEvent is non-NULL, then
@@ -657,8 +657,8 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 
       gdk_event_set_display (event, display);
 
-      event->crossing.type = GDK_LEAVE_NOTIFY;
-      event->crossing.window = window;
+      event->any.type = GDK_LEAVE_NOTIFY;
+      event->any.window = window;
       gdk_event_set_device (event, device_manager->core_pointer);
 
       /* If the subwindow field of the XEvent is non-NULL, then
@@ -889,8 +889,8 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
       GdkEvent *event;
 
       event = gdk_event_new (GDK_FOCUS_CHANGE);
-      event->focus_change.window = g_object_ref (window);
-      event->focus_change.send_event = FALSE;
+      event->any.window = g_object_ref (window);
+      event->any.send_event = FALSE;
       event->focus_change.in = focus_in;
       gdk_event_set_device (event, device);
       if (source_device)

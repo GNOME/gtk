@@ -543,8 +543,8 @@ generate_grab_broken_event (GdkDisplay *display,
       GdkEvent *event;
 
       event = gdk_event_new (GDK_GRAB_BROKEN);
-      event->grab_broken.window = g_object_ref (window);
-      event->grab_broken.send_event = FALSE;
+      event->any.window = g_object_ref (window);
+      event->any.send_event = FALSE;
       event->grab_broken.implicit = implicit;
       event->grab_broken.grab_window = grab_window;
       gdk_event_set_device (event, device);

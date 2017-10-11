@@ -5731,8 +5731,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
           gulong popup_menu_id;
 
           new_event = gdk_event_copy ((GdkEvent *) event);
-          g_object_unref (((GdkEventKey *) new_event)->window);
-          ((GdkEventKey *) new_event)->window =
+          g_object_unref (((GdkEventKey *) new_event)->any.window);
+          ((GdkEventKey *) new_event)->any.window =
             g_object_ref (gtk_widget_get_window (search_window));
           gtk_widget_realize (search_window);
 
@@ -10645,8 +10645,8 @@ send_focus_change (GtkWidget *widget,
 
       fevent = gdk_event_new (GDK_FOCUS_CHANGE);
 
-      fevent->focus_change.type = GDK_FOCUS_CHANGE;
-      fevent->focus_change.window = g_object_ref (window);
+      fevent->any.type = GDK_FOCUS_CHANGE;
+      fevent->any.window = g_object_ref (window);
       fevent->focus_change.in = in;
       gdk_event_set_device (fevent, device);
 
