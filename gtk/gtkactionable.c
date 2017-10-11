@@ -224,14 +224,14 @@ gtk_actionable_set_action_target (GtkActionable *actionable,
  * Sets the action-name and associated string target value of an
  * actionable widget.
  *
- * This allows for the effect of both gtk_actionable_set_action_name()
- * and gtk_actionable_set_action_target_value() in the common case that
- * the target is string-valued.
+ * @detailed_action_name is a string in the format accepted by
+ * g_action_parse_detailed_name().
  *
- * @detailed_action_name is a string of the form
- * `"action::target"` where `action`
- * is the action name and `target` is the string to use
- * as the target.
+ * (Note that prior to version 3.22.25,
+ * this function is only usable for actions with a simple "s" target, and
+ * @detailed_action_name must be of the form `"action::target"` where
+ * `action` is the action name and `target` is the string to use
+ * as the target.)
  *
  * Since: 3.4
  **/
@@ -239,9 +239,9 @@ void
 gtk_actionable_set_detailed_action_name (GtkActionable *actionable,
                                          const gchar   *detailed_action_name)
 {
-  gchar **parts;
-
-  g_return_if_fail (GTK_IS_ACTIONABLE (actionable));
+  GError *error = NULL;
+  GVariant *target;
+  gchar *name;
 
   if (detailed_action_name == NULL)
     {
@@ -250,12 +250,14 @@ gtk_actionable_set_detailed_action_name (GtkActionable *actionable,
       return;
     }
 
-  parts = g_strsplit (detailed_action_name, "::", 2);
-  gtk_actionable_set_action_name (actionable, parts[0]);
-  if (parts[0] && parts[1])
-    gtk_actionable_set_action_target (actionable, "s", parts[1]);
-  else
-    gtk_actionable_set_action_target_value (actionable, NULL);
-  g_strfreev (parts);
+  if (!g_action_parse_detailed_name (detailed_action_name, &name, &target, &error))
+    g_error ("gtk_actionable_set_detailed_action_name: %s", error->message);
+
+  gtk_actionable_set_action_name (actionable, name);
+  gtk_actionable_set_action_target_value (actionable, target);
+
+  if (target)
+    g_variant_unref (target);
+  g_free (name);
 }
 
