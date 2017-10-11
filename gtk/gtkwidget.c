@@ -3406,7 +3406,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   else if (event->type == GDK_MOTION_NOTIFY)
     {
       press = gdk_event_new (GDK_BUTTON_PRESS);
-      press->button.window = g_object_ref (event->motion.window);
+      press->any.window = g_object_ref (event->any.window);
       press->button.time = event->motion.time;
       press->button.x = event->motion.x;
       press->button.y = event->motion.y;
@@ -10267,8 +10267,8 @@ synth_crossing (GtkWidget       *widget,
 
   event = gdk_event_new (type);
 
-  event->crossing.window = g_object_ref (window);
-  event->crossing.send_event = TRUE;
+  event->any.window = g_object_ref (window);
+  event->any.send_event = TRUE;
   event->crossing.subwindow = g_object_ref (window);
   event->crossing.time = GDK_CURRENT_TIME;
   gdk_device_get_position_double (device,

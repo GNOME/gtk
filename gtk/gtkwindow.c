@@ -7209,7 +7209,7 @@ gtk_window_configure_event (GtkWidget         *widget,
   if (!_gtk_widget_is_toplevel (widget))
     return FALSE;
 
-  if (_gtk_widget_get_window (widget) != event->window)
+  if (_gtk_widget_get_window (widget) != event->any.window)
     return TRUE;
 
   /* If this is a gratuitous ConfigureNotify that's already
@@ -7628,8 +7628,8 @@ do_focus_change (GtkWidget *widget,
 
       fevent = gdk_event_new (GDK_FOCUS_CHANGE);
 
-      fevent->focus_change.type = GDK_FOCUS_CHANGE;
-      fevent->focus_change.window = window;
+      fevent->any.type = GDK_FOCUS_CHANGE;
+      fevent->any.window = window;
       if (window)
         g_object_ref (window);
       fevent->focus_change.in = in;

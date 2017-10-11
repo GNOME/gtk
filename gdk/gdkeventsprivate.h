@@ -64,9 +64,7 @@ struct _GdkEventAny
  */
 struct _GdkEventExpose
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   GdkRectangle area;
   cairo_region_t *region;
   gint count; /* If non-zero, how many more events follow. */
@@ -98,9 +96,7 @@ struct _GdkEventExpose
  */
 struct _GdkEventMotion
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   guint32 time;
   gdouble x;
   gdouble y;
@@ -140,9 +136,7 @@ struct _GdkEventMotion
  */
 struct _GdkEventButton
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   guint32 time;
   gdouble x;
   gdouble y;
@@ -190,9 +184,7 @@ struct _GdkEventButton
  */
 struct _GdkEventTouch
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   guint32 time;
   gdouble x;
   gdouble y;
@@ -238,9 +230,7 @@ struct _GdkEventTouch
  */
 struct _GdkEventScroll
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   guint32 time;
   gdouble x;
   gdouble y;
@@ -286,9 +276,7 @@ struct _GdkEventScroll
  */
 struct _GdkEventKey
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   guint32 time;
   guint state;
   guint keyval;
@@ -327,9 +315,7 @@ struct _GdkEventKey
  */
 struct _GdkEventCrossing
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   GdkWindow *subwindow;
   guint32 time;
   gdouble x;
@@ -354,9 +340,7 @@ struct _GdkEventCrossing
  */
 struct _GdkEventFocus
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   gint16 in;
 };
 
@@ -374,9 +358,7 @@ struct _GdkEventFocus
  */
 struct _GdkEventConfigure
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   gint x, y;
   gint width;
   gint height;
@@ -396,9 +378,7 @@ struct _GdkEventConfigure
  */
 struct _GdkEventProperty
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   GdkAtom atom;
   guint32 time;
   guint state;
@@ -425,9 +405,7 @@ struct _GdkEventProperty
  */
 struct _GdkEventProximity
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   guint32 time;
   GdkDevice *device;
 };
@@ -445,9 +423,7 @@ struct _GdkEventProximity
  */
 struct _GdkEventWindowState
 {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   GdkWindowState changed_mask;
   GdkWindowState new_window_state;
 };
@@ -474,9 +450,7 @@ struct _GdkEventWindowState
  * Since: 2.8
  */
 struct _GdkEventGrabBroken {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   gboolean keyboard;
   gboolean implicit;
   GdkWindow *grab_window;
@@ -499,9 +473,7 @@ struct _GdkEventGrabBroken {
  * Generated during DND operations.
  */
 struct _GdkEventDND {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   GdkDragContext *context;
 
   guint32 time;
@@ -531,9 +503,7 @@ struct _GdkEventDND {
  * Generated during touchpad swipe gestures.
  */
 struct _GdkEventTouchpadSwipe {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   gint8 phase;
   gint8 n_fingers;
   guint32 time;
@@ -572,9 +542,7 @@ struct _GdkEventTouchpadSwipe {
  * Generated during touchpad swipe gestures.
  */
 struct _GdkEventTouchpadPinch {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   gint8 phase;
   gint8 n_fingers;
   guint32 time;
@@ -605,9 +573,7 @@ struct _GdkEventTouchpadPinch {
  * Since: 3.22
  */
 struct _GdkEventPadButton {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   guint32 time;
   guint group;
   guint button;
@@ -633,9 +599,7 @@ struct _GdkEventPadButton {
  * Since: 3.22
  */
 struct _GdkEventPadAxis {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   guint32 time;
   guint group;
   guint index;
@@ -660,9 +624,7 @@ struct _GdkEventPadAxis {
  * Since: 3.22
  */
 struct _GdkEventPadGroupMode {
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
+  GdkEventAny any;
   guint32 time;
   guint group;
   guint mode;
