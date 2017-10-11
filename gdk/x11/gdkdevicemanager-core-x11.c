@@ -226,7 +226,7 @@ translate_key_event (GdkDisplay              *display,
   if (GDK_DEBUG_CHECK (EVENTS))
     {
       g_message ("%s:\t\twindow: %ld     key: %12s  %d",
-                 event->type == GDK_KEY_PRESS ? "key press  " : "key release",
+                 event->any.type == GDK_KEY_PRESS ? "key press  " : "key release",
                  xevent->xkey.window,
                  event->key.keyval ? gdk_keyval_name (event->key.keyval) : "(none)",
                  event->key.keyval);

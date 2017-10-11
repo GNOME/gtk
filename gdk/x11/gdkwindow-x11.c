@@ -4865,7 +4865,7 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
   double x_root, y_root;
   XClientMessageEvent xclient = { 0 };
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:

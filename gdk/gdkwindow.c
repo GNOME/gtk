@@ -5676,7 +5676,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
     goto out;
 
 #ifdef DEBUG_WINDOW_PRINTING
-  if (event->type == GDK_KEY_PRESS &&
+  if (event->any.type == GDK_KEY_PRESS &&
       (event->key.keyval == 0xa7 ||
        event->key.keyval == 0xbd))
     {
@@ -5687,17 +5687,17 @@ _gdk_windowing_got_event (GdkDisplay *display,
   if (event_window->window_type == GDK_WINDOW_ROOT)
     goto out;
 
-  if (event->type == GDK_ENTER_NOTIFY)
+  if (event->any.type == GDK_ENTER_NOTIFY)
     _gdk_display_set_window_under_pointer (display, device, event_window);
-  else if (event->type == GDK_LEAVE_NOTIFY)
+  else if (event->any.type == GDK_LEAVE_NOTIFY)
     _gdk_display_set_window_under_pointer (display, device, NULL);
 
-  if ((event->type == GDK_BUTTON_RELEASE ||
-       event->type == GDK_TOUCH_CANCEL ||
-       event->type == GDK_TOUCH_END) &&
+  if ((event->any.type == GDK_BUTTON_RELEASE ||
+       event->any.type == GDK_TOUCH_CANCEL ||
+       event->any.type == GDK_TOUCH_END) &&
       !event->any.send_event)
     {
-      if (event->type == GDK_BUTTON_RELEASE ||
+      if (event->any.type == GDK_BUTTON_RELEASE ||
           gdk_event_get_pointer_emulated (event))
         {
           button_release_grab =

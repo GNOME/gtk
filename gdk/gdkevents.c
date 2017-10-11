@@ -111,7 +111,7 @@ _gdk_event_queue_find_first (GdkDisplay *display)
           if (pending_motion)
             return pending_motion;
 
-          if (event->event.type == GDK_MOTION_NOTIFY && (event->flags & GDK_EVENT_FLUSHED) == 0)
+          if (event->event.any.type == GDK_MOTION_NOTIFY && (event->flags & GDK_EVENT_FLUSHED) == 0)
             pending_motion = tmp_list;
           else
             return tmp_list;
@@ -273,7 +273,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       if (event->flags & GDK_EVENT_PENDING)
         break;
 
-      if (event->event.type != GDK_MOTION_NOTIFY)
+      if (event->event.any.type != GDK_MOTION_NOTIFY)
         break;
 
       if (pending_motion_window != NULL &&
@@ -288,7 +288,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
         break;
 
       pending_motion_window = event->event.any.window;
-      pending_motion_device = event->motion.device;
+      pending_motion_device = event->event.motion.device;
       pending_motions = tmp_list;
 
       tmp_list = tmp_list->prev;
@@ -728,7 +728,7 @@ guint32
 gdk_event_get_time (const GdkEvent *event)
 {
   if (event)
-    switch (event->type)
+    switch (event->any.type)
       {
       case GDK_MOTION_NOTIFY:
 	return event->motion.time;
@@ -816,7 +816,7 @@ gdk_event_get_state (const GdkEvent        *event,
   g_return_val_if_fail (state != NULL, FALSE);
   
   if (event)
-    switch (event->type)
+    switch (event->any.type)
       {
       case GDK_MOTION_NOTIFY:
 	*state = event->motion.state;
@@ -907,7 +907,7 @@ gdk_event_get_coords (const GdkEvent *event,
   
   g_return_val_if_fail (event != NULL, FALSE);
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_CONFIGURE:
       x = event->configure.x;
@@ -979,7 +979,7 @@ gdk_event_get_root_coords (const GdkEvent *event,
   
   g_return_val_if_fail (event != NULL, FALSE);
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_MOTION_NOTIFY:
       x = event->motion.x_root;
@@ -1043,7 +1043,7 @@ gdk_event_set_coords (GdkEvent *event,
 {
   g_return_if_fail (event != NULL);
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_CONFIGURE:
       event->configure.x = x;
@@ -1107,7 +1107,7 @@ gdk_event_get_button (const GdkEvent *event,
 
   g_return_val_if_fail (event != NULL, FALSE);
   
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
@@ -1148,7 +1148,7 @@ gdk_event_get_click_count (const GdkEvent *event,
 
   g_return_val_if_fail (event != NULL, FALSE);
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
@@ -1183,7 +1183,7 @@ gdk_event_get_keyval (const GdkEvent *event,
   gboolean fetched = TRUE;
   guint number = 0;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1204,8 +1204,8 @@ void
 gdk_event_set_keyval (GdkEvent *event,
                       guint     keyval)
 {
-  if (event->type == GDK_KEY_PRESS ||
-      event->type == GDK_KEY_RELEASE)
+  if (event->any.type == GDK_KEY_PRESS ||
+      event->any.type == GDK_KEY_RELEASE)
     event->key.keyval = keyval;
 }
 
@@ -1229,7 +1229,7 @@ gdk_event_get_keycode (const GdkEvent *event,
   gboolean fetched = TRUE;
   guint16 number = 0;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1259,7 +1259,7 @@ gdk_event_get_key_group (const GdkEvent *event,
 {
   gboolean fetched = TRUE;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1287,7 +1287,7 @@ gdk_event_get_string (const GdkEvent  *event,
 {
   gboolean fetched = TRUE;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1315,7 +1315,7 @@ gdk_event_get_key_is_modifier (const GdkEvent *event,
 {
   gboolean fetched = TRUE;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
@@ -1348,7 +1348,7 @@ gdk_event_get_scroll_direction (const GdkEvent *event,
   gboolean fetched = TRUE;
   GdkScrollDirection dir = 0;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_SCROLL:
       if (event->scroll.direction == GDK_SCROLL_SMOOTH)
@@ -1388,7 +1388,7 @@ gdk_event_get_scroll_deltas (const GdkEvent *event,
   gdouble dx = 0.0;
   gdouble dy = 0.0;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_SCROLL:
       if (event->scroll.direction == GDK_SCROLL_SMOOTH)
@@ -1460,7 +1460,7 @@ gdk_event_get_axis (const GdkEvent *event,
     {
       gdouble x, y;
       
-      switch ((guint) event->type)
+      switch ((guint) event->any.type)
 	{
         case GDK_MOTION_NOTIFY:
 	  x = event->motion.x;
@@ -1499,21 +1499,21 @@ gdk_event_get_axis (const GdkEvent *event,
 
       return TRUE;
     }
-  else if (event->type == GDK_BUTTON_PRESS ||
-	   event->type == GDK_BUTTON_RELEASE)
+  else if (event->any.type == GDK_BUTTON_PRESS ||
+	   event->any.type == GDK_BUTTON_RELEASE)
     {
       device = event->button.device;
       axes = event->button.axes;
     }
-  else if (event->type == GDK_TOUCH_BEGIN ||
-           event->type == GDK_TOUCH_UPDATE ||
-           event->type == GDK_TOUCH_END ||
-           event->type == GDK_TOUCH_CANCEL)
+  else if (event->any.type == GDK_TOUCH_BEGIN ||
+           event->any.type == GDK_TOUCH_UPDATE ||
+           event->any.type == GDK_TOUCH_END ||
+           event->any.type == GDK_TOUCH_CANCEL)
     {
       device = event->touch.device;
       axes = event->touch.axes;
     }
-  else if (event->type == GDK_MOTION_NOTIFY)
+  else if (event->any.type == GDK_MOTION_NOTIFY)
     {
       device = event->motion.device;
       axes = event->motion.axes;
@@ -1547,7 +1547,7 @@ gdk_event_set_device (GdkEvent  *event,
 
   g_set_object (&private->device, device);
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_MOTION_NOTIFY:
       event->motion.device = device;
@@ -1598,7 +1598,7 @@ gdk_event_get_device (const GdkEvent *event)
         return private->device;
     }
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_MOTION_NOTIFY:
       return event->motion.device;
@@ -1615,6 +1615,20 @@ gdk_event_get_device (const GdkEvent *event)
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
       return event->proximity.device;
+    default:
+      break;
+    }
+
+  /* Fallback if event has no device set */
+  switch (event->any.type)
+    {
+    case GDK_MOTION_NOTIFY:
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
     case GDK_FOCUS_CHANGE:
@@ -1633,13 +1647,13 @@ gdk_event_get_device (const GdkEvent *event)
 
         g_warning ("Event with type %d not holding a GdkDevice. "
                    "It is most likely synthesized outside Gdk/GTK+",
-                   event->type);
+                   event->any.type);
 
         display = gdk_window_get_display (event->any.window);
         seat = gdk_display_get_default_seat (display);
 
-        if (event->type == GDK_KEY_PRESS ||
-            event->type == GDK_KEY_RELEASE)
+        if (event->any.type == GDK_KEY_PRESS ||
+            event->any.type == GDK_KEY_RELEASE)
           return gdk_seat_get_keyboard (seat);
         else
           return gdk_seat_get_pointer (seat);
@@ -1736,7 +1750,7 @@ gdk_event_triggers_context_menu (const GdkEvent *event)
 {
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (event->type == GDK_BUTTON_PRESS)
+  if (event->any.type == GDK_BUTTON_PRESS)
     {
       const GdkEventButton *bevent = (const GdkEventButton *) event;
       GdkDisplay *display;
@@ -1942,10 +1956,10 @@ gdk_event_get_event_sequence (const GdkEvent *event)
   if (!event)
     return NULL;
 
-  if (event->type == GDK_TOUCH_BEGIN ||
-      event->type == GDK_TOUCH_UPDATE ||
-      event->type == GDK_TOUCH_END ||
-      event->type == GDK_TOUCH_CANCEL)
+  if (event->any.type == GDK_TOUCH_BEGIN ||
+      event->any.type == GDK_TOUCH_UPDATE ||
+      event->any.type == GDK_TOUCH_END ||
+      event->any.type == GDK_TOUCH_CANCEL)
     return event->touch.sequence;
 
   return NULL;
@@ -2109,7 +2123,7 @@ gdk_event_get_event_type (const GdkEvent *event)
 {
   g_return_val_if_fail (event != NULL, GDK_NOTHING);
 
-  return event->type;
+  return event->any.type;
 }
 
 /**
@@ -2138,7 +2152,7 @@ gdk_event_get_seat (const GdkEvent *event)
 
       g_warning ("Event with type %d not holding a GdkSeat. "
                  "It is most likely synthesized outside Gdk/GTK+",
-                 event->type);
+                 event->any.type);
 
       device = gdk_event_get_device (event);
 
@@ -2295,12 +2309,12 @@ gdk_event_get_drag_context (const GdkEvent  *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_DRAG_ENTER ||
-      event->type == GDK_DRAG_LEAVE ||
-      event->type == GDK_DRAG_MOTION ||
-      event->type == GDK_DRAG_STATUS ||
-      event->type == GDK_DROP_START ||
-      event->type == GDK_DROP_FINISHED)
+  if (event->any.type == GDK_DRAG_ENTER ||
+      event->any.type == GDK_DRAG_LEAVE ||
+      event->any.type == GDK_DRAG_MOTION ||
+      event->any.type == GDK_DRAG_STATUS ||
+      event->any.type == GDK_DROP_START ||
+      event->any.type == GDK_DROP_FINISHED)
     {
       *context = event->dnd.context;
       return TRUE;
@@ -2323,8 +2337,8 @@ gdk_event_get_crossing_mode (const GdkEvent  *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_ENTER_NOTIFY ||
-      event->type == GDK_LEAVE_NOTIFY)
+  if (event->any.type == GDK_ENTER_NOTIFY ||
+      event->any.type == GDK_LEAVE_NOTIFY)
     {
       *mode = event->crossing.mode;
       return TRUE;
@@ -2347,8 +2361,8 @@ gdk_event_get_crossing_detail (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_ENTER_NOTIFY ||
-      event->type == GDK_LEAVE_NOTIFY)
+  if (event->any.type == GDK_ENTER_NOTIFY ||
+      event->any.type == GDK_LEAVE_NOTIFY)
     {
       *detail = event->crossing.detail;
       return TRUE;
@@ -2371,12 +2385,12 @@ gdk_event_get_touchpad_gesture_phase (const GdkEvent          *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_TOUCHPAD_PINCH)
+  if (event->any.type == GDK_TOUCHPAD_PINCH)
     {
       *phase = event->touchpad_pinch.phase;
       return TRUE;
     }
-  else if (event->type == GDK_TOUCHPAD_SWIPE)
+  else if (event->any.type == GDK_TOUCHPAD_SWIPE)
     {
       *phase = event->touchpad_swipe.phase;
       return TRUE;
@@ -2399,12 +2413,12 @@ gdk_event_get_touchpad_gesture_n_fingers (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_TOUCHPAD_PINCH)
+  if (event->any.type == GDK_TOUCHPAD_PINCH)
     {
       *n_fingers = event->touchpad_pinch.n_fingers;
       return TRUE;
     }
-  else if (event->type == GDK_TOUCHPAD_SWIPE)
+  else if (event->any.type == GDK_TOUCHPAD_SWIPE)
     {
       *n_fingers = event->touchpad_swipe.n_fingers;
       return TRUE;
@@ -2429,13 +2443,13 @@ gdk_event_get_touchpad_deltas (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_TOUCHPAD_PINCH)
+  if (event->any.type == GDK_TOUCHPAD_PINCH)
     {
       *dx = event->touchpad_pinch.dx;
       *dy = event->touchpad_pinch.dy;
       return TRUE;
     }
-  else if (event->type == GDK_TOUCHPAD_SWIPE)
+  else if (event->any.type == GDK_TOUCHPAD_SWIPE)
     {
       *dx = event->touchpad_swipe.dx;
       *dy = event->touchpad_swipe.dy;
@@ -2459,7 +2473,7 @@ gdk_event_get_touchpad_angle_delta (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_TOUCHPAD_PINCH)
+  if (event->any.type == GDK_TOUCHPAD_PINCH)
     {
       *delta = event->touchpad_pinch.angle_delta;
       return TRUE;
@@ -2482,7 +2496,7 @@ gdk_event_get_touchpad_scale (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_TOUCHPAD_PINCH)
+  if (event->any.type == GDK_TOUCHPAD_PINCH)
     {
       *scale = event->touchpad_pinch.scale;
       return TRUE;
@@ -2505,9 +2519,9 @@ gdk_event_get_touch_emulating_pointer (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_TOUCH_BEGIN ||
-      event->type == GDK_TOUCH_UPDATE ||
-      event->type == GDK_TOUCH_END)
+  if (event->any.type == GDK_TOUCH_BEGIN ||
+      event->any.type == GDK_TOUCH_UPDATE ||
+      event->any.type == GDK_TOUCH_END)
     {
       *emulating = event->touch.emulating_pointer;
       return TRUE;
@@ -2530,7 +2544,7 @@ gdk_event_get_grab_window (const GdkEvent  *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_GRAB_BROKEN)
+  if (event->any.type == GDK_GRAB_BROKEN)
     {
       *window = event->grab_broken.grab_window;
       return TRUE;
@@ -2556,7 +2570,7 @@ gdk_event_get_window_state (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_WINDOW_STATE)
+  if (event->any.type == GDK_WINDOW_STATE)
     {
       *changed = event->window_state.changed_mask;
       *new_state = event->window_state.new_window_state;
@@ -2580,7 +2594,7 @@ gdk_event_get_focus_in (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_FOCUS_CHANGE)
+  if (event->any.type == GDK_FOCUS_CHANGE)
     {
       *focus_in = event->focus_change.in;
       return TRUE;
@@ -2605,21 +2619,21 @@ gdk_event_get_pad_group_mode (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_PAD_GROUP_MODE)
+  if (event->any.type == GDK_PAD_GROUP_MODE)
     {
       *group = event->pad_group_mode.group;
       *mode = event->pad_group_mode.mode;
       return TRUE;
     }
-  else if (event->type == GDK_PAD_BUTTON_PRESS ||
-           event->type == GDK_PAD_BUTTON_RELEASE)
+  else if (event->any.type == GDK_PAD_BUTTON_PRESS ||
+           event->any.type == GDK_PAD_BUTTON_RELEASE)
     {
       *group = event->pad_button.group;
       *mode = event->pad_button.mode;
       return TRUE;
     }
-  else if (event->type == GDK_PAD_RING ||
-           event->type == GDK_PAD_STRIP)
+  else if (event->any.type == GDK_PAD_RING ||
+           event->any.type == GDK_PAD_STRIP)
     {
       *group = event->pad_axis.group;
       *mode = event->pad_axis.mode;
@@ -2643,8 +2657,8 @@ gdk_event_get_pad_button (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_PAD_BUTTON_PRESS ||
-      event->type == GDK_PAD_BUTTON_RELEASE)
+  if (event->any.type == GDK_PAD_BUTTON_PRESS ||
+      event->any.type == GDK_PAD_BUTTON_RELEASE)
     {
       *button = event->pad_button.button;
       return TRUE;
@@ -2669,8 +2683,8 @@ gdk_event_get_pad_axis_value (const GdkEvent *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_PAD_RING ||
-      event->type == GDK_PAD_STRIP)
+  if (event->any.type == GDK_PAD_RING ||
+      event->any.type == GDK_PAD_STRIP)
     {
       *index = event->pad_axis.index;
       *value = event->pad_axis.value;
@@ -2696,7 +2710,7 @@ gdk_event_get_property (const GdkEvent   *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_PROPERTY_NOTIFY)
+  if (event->any.type == GDK_PROPERTY_NOTIFY)
     {
       *property = event->property.atom;
       *state = event->property.state;
@@ -2720,9 +2734,9 @@ gdk_event_get_selection (const GdkEvent   *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_SELECTION_CLEAR ||
-      event->type == GDK_SELECTION_NOTIFY ||
-      event->type == GDK_SELECTION_REQUEST)
+  if (event->any.type == GDK_SELECTION_CLEAR ||
+      event->any.type == GDK_SELECTION_NOTIFY ||
+      event->any.type == GDK_SELECTION_REQUEST)
     {
       *selection = event->selection.selection;
       return TRUE;
@@ -2749,9 +2763,9 @@ gdk_event_get_selection_property (const GdkEvent  *event,
   if (!event)
     return FALSE;
 
-  if (event->type == GDK_SELECTION_CLEAR ||
-      event->type == GDK_SELECTION_NOTIFY ||
-      event->type == GDK_SELECTION_REQUEST)
+  if (event->any.type == GDK_SELECTION_CLEAR ||
+      event->any.type == GDK_SELECTION_NOTIFY ||
+      event->any.type == GDK_SELECTION_REQUEST)
     {
       if (property)
         *property = event->selection.property;
@@ -2799,14 +2813,14 @@ gdk_event_get_axes (GdkEvent  *event,
   if (!source_device)
     return FALSE;
 
-  if (event->type == GDK_MOTION_NOTIFY)
+  if (event->any.type == GDK_MOTION_NOTIFY)
     {
       *axes = event->motion.axes;
       *n_axes = gdk_device_get_n_axes (source_device);
       return TRUE;
     }
-  else if (event->type == GDK_BUTTON_PRESS ||
-           event->type == GDK_BUTTON_RELEASE)
+  else if (event->any.type == GDK_BUTTON_PRESS ||
+           event->any.type == GDK_BUTTON_RELEASE)
     {
       *axes = event->button.axes;
       *n_axes = gdk_device_get_n_axes (source_device);

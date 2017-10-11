@@ -1207,7 +1207,7 @@ rewrite_event_for_window (GdkEvent  *event,
 {
   event = gdk_event_copy (event);
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_SCROLL:
       rewrite_events_translate (event->any.window,
@@ -1278,7 +1278,7 @@ rewrite_event_for_grabs (GdkEvent *event)
   GdkDisplay *display;
   GdkDevice *device;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_SCROLL:
     case GDK_BUTTON_PRESS:
@@ -1511,7 +1511,7 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
 static gboolean
 is_pointing_event (GdkEvent *event)
 {
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_MOTION_NOTIFY:
     case GDK_ENTER_NOTIFY:
@@ -1555,7 +1555,7 @@ handle_pointing_event (GdkEvent *event)
 
   sequence = gdk_event_get_event_sequence (event);
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_LEAVE_NOTIFY:
       if (event->crossing.mode == GDK_CROSSING_GRAB ||
@@ -1565,7 +1565,7 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
 
-      if (event->type == GDK_LEAVE_NOTIFY)
+      if (event->any.type == GDK_LEAVE_NOTIFY)
         gtk_synthesize_crossing_events (toplevel, old_target, NULL,
                                         event, event->crossing.mode);
       break;
@@ -1581,7 +1581,7 @@ handle_pointing_event (GdkEvent *event)
         target = GTK_WIDGET (toplevel);
       old_target = update_pointer_focus_state (toplevel, event, target);
 
-      if (event->type == GDK_MOTION_NOTIFY || event->type == GDK_ENTER_NOTIFY)
+      if (event->any.type == GDK_MOTION_NOTIFY || event->any.type == GDK_ENTER_NOTIFY)
         {
           if (!gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device,
                                                               sequence))
@@ -1593,7 +1593,7 @@ handle_pointing_event (GdkEvent *event)
           gtk_window_maybe_update_cursor (toplevel, NULL, device);
         }
 
-      if (event->type == GDK_TOUCH_BEGIN)
+      if (event->any.type == GDK_TOUCH_BEGIN)
         gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
 
       /* Let it take the effective pointer focus anyway, as it may change due
@@ -1607,10 +1607,10 @@ handle_pointing_event (GdkEvent *event)
                                                                  device,
                                                                  sequence);
       gtk_window_set_pointer_focus_grab (toplevel, device, sequence,
-                                         event->type == GDK_BUTTON_PRESS ?
+                                         event->any.type == GDK_BUTTON_PRESS ?
                                          target : NULL);
 
-      if (event->type == GDK_BUTTON_RELEASE)
+      if (event->any.type == GDK_BUTTON_RELEASE)
         {
           old_target = target;
           target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
@@ -1699,7 +1699,7 @@ gtk_main_do_event (GdkEvent *event)
        * There won't be a widget though, so we have to handle
        * them specially
        */
-      if (event->type == GDK_PROPERTY_NOTIFY)
+      if (event->any.type == GDK_PROPERTY_NOTIFY)
         _gtk_selection_incr_event (event->any.window,
                                    &event->property);
 
@@ -1755,7 +1755,7 @@ gtk_main_do_event (GdkEvent *event)
    * This is the key to implementing modality.
    */
   if (!grab_widget ||
-      ((gtk_widget_is_sensitive (event_widget) || event->type == GDK_SCROLL) &&
+      ((gtk_widget_is_sensitive (event_widget) || event->any.type == GDK_SCROLL) &&
        gtk_widget_is_ancestor (event_widget, grab_widget)))
     grab_widget = event_widget;
 
@@ -1786,7 +1786,7 @@ gtk_main_do_event (GdkEvent *event)
    * Drag events are also not redirected, since it isn't
    * clear what the semantics of that would be.
    */
-  switch (event->type)
+  switch (event->any.type)
     {
     case GDK_NOTHING:
       break;
@@ -1856,7 +1856,7 @@ gtk_main_do_event (GdkEvent *event)
           gboolean mnemonics_visible;
           GtkWidget *window;
 
-          mnemonics_visible = (event->type == GDK_KEY_PRESS);
+          mnemonics_visible = (event->any.type == GDK_KEY_PRESS);
 
           window = gtk_widget_get_toplevel (grab_widget);
           if (GTK_IS_WINDOW (window))
@@ -1908,15 +1908,15 @@ gtk_main_do_event (GdkEvent *event)
       break;
     }
 
-  if (event->type == GDK_ENTER_NOTIFY
-      || event->type == GDK_LEAVE_NOTIFY
-      || event->type == GDK_BUTTON_PRESS
-      || event->type == GDK_KEY_PRESS
-      || event->type == GDK_DRAG_ENTER
-      || event->type == GDK_GRAB_BROKEN
-      || event->type == GDK_MOTION_NOTIFY
-      || event->type == GDK_TOUCH_UPDATE
-      || event->type == GDK_SCROLL)
+  if (event->any.type == GDK_ENTER_NOTIFY
+      || event->any.type == GDK_LEAVE_NOTIFY
+      || event->any.type == GDK_BUTTON_PRESS
+      || event->any.type == GDK_KEY_PRESS
+      || event->any.type == GDK_DRAG_ENTER
+      || event->any.type == GDK_GRAB_BROKEN
+      || event->any.type == GDK_MOTION_NOTIFY
+      || event->any.type == GDK_TOUCH_UPDATE
+      || event->any.type == GDK_SCROLL)
     {
       _gtk_tooltip_handle_event (event);
     }
@@ -2437,7 +2437,7 @@ gtk_get_event_widget (const GdkEvent *event)
 
   widget = NULL;
   if (event && event->any.window &&
-      (event->type == GDK_DESTROY || !gdk_window_is_destroyed (event->any.window)))
+      (event->any.type == GDK_DESTROY || !gdk_window_is_destroyed (event->any.window)))
     {
       gdk_window_get_user_data (event->any.window, &widget_ptr);
       widget = widget_ptr;
@@ -2514,7 +2514,7 @@ propagate_event_up (GtkWidget *widget,
        * event
        */
       if (!gtk_widget_is_sensitive (widget))
-        handled_event = event->type != GDK_SCROLL;
+        handled_event = event->any.type != GDK_SCROLL;
       else
         handled_event = gtk_widget_event (widget, event);
 
@@ -2564,7 +2564,7 @@ propagate_event_down (GtkWidget *widget,
           /* stop propagating on SCROLL, but don't handle the event, so it
            * can propagate up again and reach its handling widget
            */
-          if (event->type == GDK_SCROLL)
+          if (event->any.type == GDK_SCROLL)
             break;
           else
             handled_event = TRUE;
@@ -2588,7 +2588,7 @@ propagate_event (GtkWidget *widget,
 
   propagate_func = captured ? _gtk_widget_captured_event : gtk_widget_event;
 
-  if (event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)
+  if (event->any.type == GDK_KEY_PRESS || event->any.type == GDK_KEY_RELEASE)
     {
       /* Only send key events within Window widgets to the Window
        * The Window widget will in turn pass the

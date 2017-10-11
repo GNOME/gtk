@@ -1346,7 +1346,7 @@ gdk_wayland_seat_get_frame_event (GdkWaylandSeat *seat,
                                   GdkEventType    evtype)
 {
   if (seat->pointer_info.frame.event &&
-      seat->pointer_info.frame.event->type != evtype)
+      seat->pointer_info.frame.event->any.type != evtype)
     gdk_wayland_seat_flush_frame_event (seat);
 
   seat->pointer_info.frame.event = gdk_event_new (evtype);
@@ -2463,7 +2463,7 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
 
   GDK_NOTE (EVENTS,
             g_message ("swipe event %d, coords: %f %f, seat %p state %d",
-                       event->type, event->touchpad_swipe.x,
+                       event->any.type, event->touchpad_swipe.x,
                        event->touchpad_swipe.y, seat,
                        event->touchpad_swipe.state));
 
@@ -2567,7 +2567,7 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
 
   GDK_NOTE (EVENTS,
             g_message ("pinch event %d, coords: %f %f, seat %p state %d",
-                       event->type, event->touchpad_pinch.x,
+                       event->any.type, event->touchpad_pinch.x,
                        event->touchpad_pinch.y, seat,
                        event->touchpad_pinch.state));
 
@@ -3246,7 +3246,7 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
   if (!event)
     return;
 
-  switch ((guint) event->type)
+  switch ((guint) event->any.type)
     {
     case GDK_MOTION_NOTIFY:
       event->motion.time = time;
@@ -3274,7 +3274,7 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
       return;
     }
 
-  if (event->type == GDK_PROXIMITY_OUT)
+  if (event->any.type == GDK_PROXIMITY_OUT)
     emulate_crossing (event->any.window, NULL,
                       tablet->master, GDK_LEAVE_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
@@ -3282,7 +3282,7 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
   _gdk_wayland_display_deliver_event (gdk_seat_get_display (tablet->seat),
                                       event);
 
-  if (event->type == GDK_PROXIMITY_IN)
+  if (event->any.type == GDK_PROXIMITY_IN)
     emulate_crossing (event->any.window, NULL,
                       tablet->master, GDK_ENTER_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
@@ -3293,7 +3293,7 @@ gdk_wayland_tablet_get_frame_event (GdkWaylandTabletData *tablet,
                                     GdkEventType          evtype)
 {
   if (tablet->pointer_info.frame.event &&
-      tablet->pointer_info.frame.event->type != evtype)
+      tablet->pointer_info.frame.event->any.type != evtype)
     gdk_wayland_tablet_flush_frame_event (tablet, GDK_CURRENT_TIME);
 
   tablet->pointer_info.frame.event = gdk_event_new (evtype);
@@ -3728,7 +3728,7 @@ tablet_tool_handle_frame (void                      *data,
 
   frame_event = tablet->pointer_info.frame.event;
 
-  if (frame_event && frame_event->type == GDK_PROXIMITY_OUT)
+  if (frame_event && frame_event->any.type == GDK_PROXIMITY_OUT)
     {
       tool->current_tablet = NULL;
       tablet->current_tool = NULL;
