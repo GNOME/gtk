@@ -780,8 +780,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
   /**
    * GtkSettings:gtk-primary-button-warps-slider:
    *
-   * Whether a click in a #GtkRange trough should scroll to the click position or
-   * scroll by a single page in the respective direction.
+   * If the value of this setting is %TRUE, clicking the primary button in a
+   * #GtkRange trough will move the slider, and hence set the range’s value, to
+   * the point that you clicked. If it is %FALSE, a primary click will cause the
+   * slider/value to move by the range’s page-size towards the point clicked.
+   *
+   * Whichever action you choose for the primary button, the other action will
+   * be available by clicking the middle mouse button (since GTK+ 3.22.25).
    *
    * Since: 3.6
    */
