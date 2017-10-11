@@ -5339,7 +5339,9 @@ gtk_window_resize (GtkWindow *window,
  * way that this code:
  *
  * |[<!-- language="C" -->
- *   // width and height are set elsewhere
+ *   GtkWindow *window = GTK_WINDOW (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+ *   int width = 500;
+ *   int height = 300;
  *   gtk_window_resize (window, width, height);
  *
  *   int new_width, new_height;
@@ -5367,13 +5369,16 @@ gtk_window_resize (GtkWindow *window,
  *
  * |[<!-- language="C" -->
  * static void
- * on_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
+ * on_size_allocate (GtkWidget *widget,
+ *                   const GtkAllocation *allocation,
+ *                   int baseline,
+ *                   GtkAllocation *out_clip)
  * {
  *   int new_width, new_height;
  *
  *   gtk_window_get_size (GTK_WINDOW (widget), &new_width, &new_height);
  *
- *   ...
+ *   // ...
  * }
  * ]|
  *
