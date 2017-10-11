@@ -1538,7 +1538,7 @@ allocate_child (GtkGridRequest *request,
   attach = &child->attach[orientation];
 
   *position = lines->lines[attach->pos - lines->min].position;
-  if (attach->span == 1)
+  if (attach->span == 1 && gtk_widget_get_valign (child->widget) == GTK_ALIGN_BASELINE)
     *baseline = lines->lines[attach->pos - lines->min].allocated_baseline;
   else
     *baseline = -1;
