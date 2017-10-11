@@ -92,10 +92,10 @@
  * widget type has been realized at least once. The following example
  * demonstrates a way to do this:
  * |[<!-- language="C" -->
- *   gtk_init (&argc, &argv);
+ *   gtk_init ();
  *
  *   // make sure the type is realized
- *   g_type_class_unref (g_type_class_ref (GTK_TYPE_IMAGE_MENU_ITEM));
+ *   g_type_class_unref (g_type_class_ref (GTK_TYPE_BUTTON));
  *
  *   g_object_set (gtk_settings_get_default (), "gtk-enable-animations", FALSE, NULL);
  * ]|
