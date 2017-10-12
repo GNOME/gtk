@@ -22,6 +22,7 @@
 #include <gsk/gsktypes.h>
 
 typedef struct _GskSlDeclaration        GskSlDeclaration;
+typedef struct _GskSlEnvironment        GskSlEnvironment;
 typedef struct _GskSlExpression         GskSlExpression;
 typedef struct _GskSlFunction           GskSlFunction;
 typedef struct _GskSlFunctionMatcher    GskSlFunctionMatcher;

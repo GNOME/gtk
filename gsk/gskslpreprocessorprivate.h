@@ -26,12 +26,14 @@
 G_BEGIN_DECLS
 
 GskSlPreprocessor *     gsk_sl_preprocessor_new                 (GskSlCompiler       *compiler,
+                                                                 GskSlEnvironment    *environment,
                                                                  GskCodeSource       *source);
 
 GskSlPreprocessor *     gsk_sl_preprocessor_ref                 (GskSlPreprocessor   *preproc);
 void                    gsk_sl_preprocessor_unref               (GskSlPreprocessor   *preproc);
 
 gboolean                gsk_sl_preprocessor_has_fatal_error     (GskSlPreprocessor   *preproc);
+GskSlEnvironment *      gsk_sl_preprocessor_get_environment     (GskSlPreprocessor   *preproc);
 const GskSlToken *      gsk_sl_preprocessor_get                 (GskSlPreprocessor   *preproc);
 const GskCodeLocation * gsk_sl_preprocessor_get_location        (GskSlPreprocessor   *preproc);
 void                    gsk_sl_preprocessor_consume             (GskSlPreprocessor   *preproc,

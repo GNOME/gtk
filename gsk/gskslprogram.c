@@ -21,7 +21,7 @@
 #include "gskslprogramprivate.h"
 
 #include "gsksldeclarationprivate.h"
-#include "gskslexpressionprivate.h"
+#include "gskslenvironmentprivate.h"
 #include "gskslfunctionprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
@@ -45,7 +45,7 @@ gsk_sl_program_dispose (GObject *object)
   GskSlProgram *program = GSK_SL_PROGRAM (object);
 
   g_slist_free_full (program->declarations, (GDestroyNotify) gsk_sl_declaration_unref);
-  gsk_sl_scope_unref (program->scope);
+  g_clear_pointer (&program->scope, gsk_sl_scope_unref);
 
   G_OBJECT_CLASS (gsk_sl_program_parent_class)->dispose (object);
 }
@@ -61,7 +61,6 @@ gsk_sl_program_class_init (GskSlProgramClass *klass)
 static void
 gsk_sl_program_init (GskSlProgram *program)
 {
-  program->scope = gsk_sl_scope_new (NULL, NULL);
 }
 
 void
@@ -70,6 +69,8 @@ gsk_sl_program_parse (GskSlProgram      *program,
 {
   GskSlDeclaration *declaration;
   const GskSlToken *token;
+
+  program->scope = gsk_sl_environment_create_scope (gsk_sl_preprocessor_get_environment (preproc));
 
   for (token = gsk_sl_preprocessor_get (preproc);
        !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);

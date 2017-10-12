@@ -20,13 +20,17 @@
 
 #include "gskslnativefunctionprivate.h"
 
+#include "gskslenvironmentprivate.h"
+#include "gskslfunctionprivate.h"
+#include "gskslscopeprivate.h"
+
 #define NATIVE1(type, name, arg1) \
   { name, GSK_SL_BUILTIN_ ## type, 1, (GskSlBuiltinType[1]) { GSK_SL_BUILTIN_ ## arg1 } }
 #define NATIVE2(type, name, arg1, arg2) \
   { name, GSK_SL_BUILTIN_ ## type, 2, (GskSlBuiltinType[2]) { GSK_SL_BUILTIN_ ## arg1, GSK_SL_BUILTIN_ ## arg2 } }
 #define NATIVE3(type, name, arg1, arg2, arg3) \
   { name, GSK_SL_BUILTIN_ ## type, 3, (GskSlBuiltinType[3]) { GSK_SL_BUILTIN_ ## arg1, GSK_SL_BUILTIN_ ## arg2, GSK_SL_BUILTIN_ ## arg3, } }
-const GskSlNativeFunction gsk_glsl_functions[] = {
+static const GskSlNativeFunction gsk_glsl_functions[] = {
   NATIVE1 (FLOAT, "radians", FLOAT),
   NATIVE1 (VEC2, "radians", VEC2),
   NATIVE1 (VEC3, "radians", VEC3),
@@ -248,12 +252,10 @@ const GskSlNativeFunction gsk_glsl_functions[] = {
   NATIVE1 (BVEC2, "not", BVEC2),
   NATIVE1 (BVEC3, "not", BVEC3),
   NATIVE1 (BVEC4, "not", BVEC4),
-#if 0
   { NULL }
 };
 
 static const GskSlNativeFunction gsk_glsl_functions_120[] = {
-#endif
   NATIVE2 (MAT2, "outerProduct", VEC2, VEC2),
   NATIVE2 (MAT3, "outerProduct", VEC3, VEC3),
   NATIVE2 (MAT4, "outerProduct", VEC4, VEC4),
@@ -278,12 +280,10 @@ static const GskSlNativeFunction gsk_glsl_functions_120[] = {
   NATIVE2 (MAT3X4, "matrixCompMult", MAT3X4, MAT3X4),
   NATIVE2 (MAT4X2, "matrixCompMult", MAT4X2, MAT4X2),
   NATIVE2 (MAT4X3, "matrixCompMult", MAT4X3, MAT4X3),
-#if 0
   { NULL }
 };
 
 static const GskSlNativeFunction gsk_glsl_functions_130[] = {
-#endif
   NATIVE1 (FLOAT, "sinh", FLOAT),
   NATIVE1 (VEC2, "sinh", VEC2),
   NATIVE1 (VEC3, "sinh", VEC3),
@@ -406,12 +406,10 @@ static const GskSlNativeFunction gsk_glsl_functions_130[] = {
   NATIVE2 (BVEC2, "notEqual", UVEC2, UVEC2),
   NATIVE2 (BVEC3, "notEqual", UVEC3, UVEC3),
   NATIVE2 (BVEC4, "notEqual", UVEC4, UVEC4),
-#if 0
   { NULL }
 };
 
 static const GskSlNativeFunction gsk_glsl_functions_150[] = {
-#endif
   NATIVE1 (FLOAT, "determinant", MAT2),
   NATIVE1 (FLOAT, "determinant", MAT3),
   NATIVE1 (FLOAT, "determinant", MAT4),
@@ -420,4 +418,39 @@ static const GskSlNativeFunction gsk_glsl_functions_150[] = {
   NATIVE1 (MAT4, "inverse", MAT4),
   { NULL }
 };
+
+static void
+gsk_sl_native_functions_add_list (GskSlScope                *scope,
+                                  const GskSlNativeFunction *functions)
+{
+  guint i;
+
+  for (i = 0; functions[i].name; i++)
+    {
+      GskSlFunction *function = gsk_sl_function_new_native (&functions[i]);
+      gsk_sl_scope_add_function (scope, function);
+      gsk_sl_function_unref (function);
+    }
+}
+
+void
+gsk_sl_native_functions_add (GskSlScope       *scope,
+                             GskSlEnvironment *environment)
+{
+  guint version = gsk_sl_environment_get_version (environment);
+
+  gsk_sl_native_functions_add_list (scope, gsk_glsl_functions);
+
+  if (version < 120)
+    return;
+  gsk_sl_native_functions_add_list (scope, gsk_glsl_functions_120);
+
+  if (version < 130)
+    return;
+  gsk_sl_native_functions_add_list (scope, gsk_glsl_functions_130);
+
+  if (version < 150)
+    return;
+  gsk_sl_native_functions_add_list (scope, gsk_glsl_functions_150);
+}
 

@@ -239,7 +239,7 @@ gsk_sl_compiler_compile (GskSlCompiler *compiler,
 
   program = g_object_new (GSK_TYPE_SL_PROGRAM, NULL);
 
-  preproc = gsk_sl_preprocessor_new (compiler, source);
+  preproc = gsk_sl_preprocessor_new (compiler, NULL, source);
 
   gsk_sl_program_parse (program, preproc);
 

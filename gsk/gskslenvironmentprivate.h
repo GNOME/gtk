@@ -16,8 +16,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GSK_SL_NATIVE_FUNCTION_PRIVATE_H__
-#define __GSK_SL_NATIVE_FUNCTION_PRIVATE_H__
+#ifndef __GSK_SL_ENVIRONMENT_PRIVATE_H__
+#define __GSK_SL_ENVIRONMENT_PRIVATE_H__
 
 #include <glib.h>
 
@@ -25,17 +25,17 @@
 
 G_BEGIN_DECLS
 
-struct _GskSlNativeFunction
-{
-  const char *name;
-  GskSlBuiltinType return_type;
-  gsize n_arguments;
-  const GskSlBuiltinType *argument_types;
-};
- 
-void                    gsk_sl_native_functions_add             (GskSlScope           *scope,
-                                                                 GskSlEnvironment     *environment);
- 
+GskSlEnvironment *      gsk_sl_environment_new                  (GskSlProfile          profile,
+                                                                 guint                 version);
+
+GskSlEnvironment *      gsk_sl_environment_ref                  (GskSlEnvironment     *environment);
+void                    gsk_sl_environment_unref                (GskSlEnvironment     *environment);
+
+GskSlProfile            gsk_sl_environment_get_profile          (GskSlEnvironment     *environment);
+guint                   gsk_sl_environment_get_version          (GskSlEnvironment     *environment);
+
+GskSlScope *            gsk_sl_environment_create_scope         (GskSlEnvironment     *environment);
+
 G_END_DECLS
 
-#endif /* __GSK_SL_NATIVE_FUNCTION_PRIVATE_H__ */
+#endif /* __GSK_SL_ENVIRONMENT_PRIVATE_H__ */

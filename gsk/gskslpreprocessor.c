@@ -23,6 +23,7 @@
 #include "gskcodesource.h"
 #include "gskslcompilerprivate.h"
 #include "gsksldefineprivate.h"
+#include "gskslenvironmentprivate.h"
 #include "gsksltokenizerprivate.h"
 
 typedef struct _GskSlPpToken GskSlPpToken;
@@ -37,6 +38,7 @@ struct _GskSlPreprocessor
   int ref_count;
 
   GskSlCompiler *compiler;
+  GskSlEnvironment *environment;
   GskSlTokenizer *tokenizer;
   GSList *pending_tokenizers;
   GArray *tokens;
@@ -99,6 +101,7 @@ gsk_sl_preprocessor_unref (GskSlPreprocessor *preproc)
   g_hash_table_destroy (preproc->defines);
   g_slist_free_full (preproc->pending_tokenizers, (GDestroyNotify) gsk_sl_tokenizer_unref);
   gsk_sl_tokenizer_unref (preproc->tokenizer);
+  gsk_sl_environment_unref (preproc->environment);
   g_object_unref (preproc->compiler);
   g_array_free (preproc->tokens, TRUE);
 
@@ -109,6 +112,12 @@ gboolean
 gsk_sl_preprocessor_has_fatal_error (GskSlPreprocessor *preproc)
 {
   return preproc->fatal_error;
+}
+
+GskSlEnvironment *
+gsk_sl_preprocessor_get_environment (GskSlPreprocessor *preproc)
+{
+  return preproc->environment;
 }
 
 static void
@@ -180,8 +189,29 @@ gsk_sl_preprocessor_handle_version (GskSlPreprocessor *preproc,
       gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, location, "#version directive must be first in compilation.");
       return;
     }
-  
-  gsk_sl_preprocessor_warn_full (preproc, UNIMPLEMENTED, location, "#version directive not supported.");
+  if (preproc->environment)
+    {
+      if (gsk_sl_environment_get_profile (preproc->environment) == profile &&
+          gsk_sl_environment_get_version (preproc->environment) == version)
+        {
+          gsk_sl_preprocessor_warn_full (preproc, VERSION, location,
+                                         "#version directive should not be used, but it matches predefined version.");
+          return;
+        }
+      else
+        {
+          GskSlProfile env_profile = gsk_sl_environment_get_profile (preproc->environment);
+          gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, location,
+                                          "#version directive not allowed. This compilation uses %u %s.",
+                                          gsk_sl_environment_get_version (preproc->environment),
+                                          env_profile == GSK_SL_PROFILE_ES ? "es" :
+                                          env_profile == GSK_SL_PROFILE_COMPATIBILITY ? "compatibility" :
+                                          "core");
+          return;
+        }
+    }
+
+  preproc->environment = gsk_sl_environment_new (profile, version);
 }
 
 static gboolean
@@ -675,8 +705,9 @@ gsk_sl_preprocessor_handle_token (GskSlPreprocessor *preproc,
 }
 
 GskSlPreprocessor *
-gsk_sl_preprocessor_new (GskSlCompiler *compiler,
-                         GskCodeSource *source)
+gsk_sl_preprocessor_new (GskSlCompiler    *compiler,
+                         GskSlEnvironment *environment,
+                         GskCodeSource    *source)
 {
   GskSlPreprocessor *preproc;
   GskSlPpToken pp;
@@ -685,6 +716,8 @@ gsk_sl_preprocessor_new (GskSlCompiler *compiler,
 
   preproc->ref_count = 1;
   preproc->compiler = g_object_ref (compiler);
+  if (environment)
+    preproc->environment = gsk_sl_environment_ref (environment);
   preproc->tokenizer = gsk_sl_tokenizer_new (source, 
                                              gsk_sl_preprocessor_error_func,
                                              preproc,
@@ -704,6 +737,8 @@ gsk_sl_preprocessor_new (GskSlCompiler *compiler,
       gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline);
       gsk_sl_preprocessor_handle_token (preproc, &pp, TRUE, FALSE);
     }
+  if (preproc->environment == NULL)
+    preproc->environment = gsk_sl_environment_new (GSK_SL_PROFILE_CORE, 150);
 
   return preproc;
 }
