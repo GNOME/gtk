@@ -15021,7 +15021,7 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget             *widget,
   if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE) &&
       priv->highlight_resize)
     {
-      GdkRGBA red = {1, 0, 0, 0.2};
+      GdkRGBA red = {0, 0, 1, 0.2};
       graphene_rect_t bounds;
 
       graphene_rect_init (&bounds,
