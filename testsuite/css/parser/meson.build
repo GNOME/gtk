@@ -1,10 +1,16 @@
+test_env = environment()
+test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
+test_env.set('GSETTINGS_BACKEND', 'memory')
+test_env.set('G_ENABLE_DIAGNOSTIC', '0')
+
 testexecdir = join_paths(installed_test_bindir, 'css', 'parser')
 
 test_parser = executable('test-css-parser', 'test-css-parser.c',
-                        install: get_option('install-tests'),
-                        install_dir: testexecdir,
+                         install: get_option('install-tests'),
+                         install_dir: testexecdir,
                          dependencies: libgtk_dep)
-test('css-parser', test_parser, suite: 'css')
+test('css-parser', test_parser, suite: 'css', env: test_env)
 
 test_data = [
   'animation-crash-3.12.css',
