@@ -4,9 +4,9 @@
     font-size: 10px; /* font.css:2:25 */
     font-family: "Comic Sans"; /* font.css:2:25 */
     font-style: normal; /* font.css:2:25 */
-    font-variant: normal; /* font.css:2:25 */
     font-weight: normal; /* font.css:2:25 */
     font-stretch: normal; /* font.css:2:25 */
+    font-variant-caps: normal; /* font.css:2:25 */
 
     label#label1:dir(ltr)
       font-size: 8.3333333333333339px; /* font.css:6:20 */
@@ -14,27 +14,27 @@
       font-size: 13.333333333333334px; /* font.css:10:34 */
       font-family: "Cantarell", "sans-serif"; /* font.css:10:34 */
       font-style: normal; /* font.css:10:34 */
-      font-variant: normal; /* font.css:10:34 */
       font-weight: normal; /* font.css:10:34 */
       font-stretch: normal; /* font.css:10:34 */
+      font-variant-caps: normal; /* font.css:10:34 */
     label#label3:dir(ltr)
       font-size: 8px; /* font.css:14:33 */
       font-family: "monospace"; /* font.css:14:33 */
       font-style: italic; /* font.css:14:33 */
-      font-variant: normal; /* font.css:14:33 */
       font-weight: bold; /* font.css:14:33 */
       font-stretch: normal; /* font.css:14:33 */
+      font-variant-caps: normal; /* font.css:14:33 */
     label#label4:dir(ltr)
       font-size: 8px; /* font.css:18:39 */
       font-family: "serif"; /* font.css:18:39 */
       font-style: oblique; /* font.css:18:39 */
-      font-variant: normal; /* font.css:18:39 */
       font-weight: normal; /* font.css:18:39 */
       font-stretch: expanded; /* font.css:18:39 */
+      font-variant-caps: normal; /* font.css:18:39 */
     label#label5:dir(ltr)
       font-size: 75.590551181102356px; /* font.css:22:27 */
       font-family: "21st Century"; /* font.css:22:27 */
       font-style: normal; /* font.css:22:27 */
-      font-variant: normal; /* font.css:22:27 */
       font-weight: normal; /* font.css:22:27 */
       font-stretch: normal; /* font.css:22:27 */
+      font-variant-caps: normal; /* font.css:22:27 */
