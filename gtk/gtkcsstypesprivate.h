@@ -101,7 +101,6 @@ typedef guint64 GtkCssChange;
  *   see @GTK_CSS_AFFECTS_FONT.
  * @GTK_CSS_AFFECTS_BACKGROUND: The background rendering is affected.
  * @GTK_CSS_AFFECTS_BORDER: The border styling is affected.
- * @GTK_CSS_AFFECTS_PANGO_LAYOUT: Font rendering is affected.
  * @GTK_CSS_AFFECTS_FONT: The font is affected and should be reloaded
  *   if it was cached.
  * @GTK_CSS_AFFECTS_TEXT: Text rendering is affected.
