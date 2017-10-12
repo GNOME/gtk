@@ -126,6 +126,10 @@ gtk_css_style_change_print (GtkCssStyleChange *change,
           GtkCssValue *value;
           const char *name;
 
+          if (_gtk_css_value_equal (gtk_css_style_get_value (change->old_style, i),
+                                     gtk_css_style_get_value (change->new_style, i)))
+            continue;
+
           prop = _gtk_css_style_property_lookup_by_id (i);
           name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
 
