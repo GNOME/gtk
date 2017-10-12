@@ -6802,7 +6802,8 @@ gtk_widget_event_internal (GtkWidget      *widget,
         _gtk_tooltip_focus_out (widget);
     }
 
-  return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
+  if (return_val == FALSE)
+    return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
   gdk_event_free (event_copy);
 
   return return_val;
