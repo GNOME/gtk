@@ -474,12 +474,12 @@ test_mixed (void)
                    "capture b1, "
                    "capture c1, "
                    "target c2, "
-                   "legacy C, "
                    "bubble c3, "
-                   "legacy B, "
+                   "legacy C, "
                    "bubble b3, "
-                   "legacy A, "
-                   "bubble a3");
+                   "legacy B, "
+                   "bubble a3, "
+                   "legacy A");
 
   g_string_free (str, TRUE);
 
@@ -531,8 +531,9 @@ test_early_exit (void)
                    "capture b1, "
                    "capture c1, "
                    "target c2, "
-                   "legacy C, "
                    "bubble c3, "
+                   "legacy C, "
+                   "bubble b3, "
                    "legacy B");
 
   g_string_free (str, TRUE);
