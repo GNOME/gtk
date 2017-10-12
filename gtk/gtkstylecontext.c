@@ -1202,13 +1202,13 @@ gtk_style_context_restore (GtkStyleContext *context)
  * In the CSS file format, a #GtkEntry defining a “search”
  * class, would be matched by:
  *
- * |[
+ * |[ <!-- language="CSS" -->
  * entry.search { ... }
  * ]|
  *
  * While any widget defining a “search” class would be
  * matched by:
- * |[
+ * |[ <!-- language="CSS" -->
  * .search { ... }
  * ]|
  *
