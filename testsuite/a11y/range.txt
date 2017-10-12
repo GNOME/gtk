@@ -25,10 +25,6 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkValue>
-      minimum value: 0.500000
-      maximum value: 99.500000
-      current value: 45.500000
     scale1
       "slider"
       parent: grid1

@@ -1,7 +1,7 @@
 window1
   "window"
   index: 0
-  name: Page 1
+  name: 
   state: enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
@@ -12,7 +12,7 @@ window1
     "push button"
     parent: unnamed-GtkContainerAccessible-0
     index: 0
-    name: Page 1
+    name: Button 1
     state: enabled focusable sensitive showing visible
     toolkit: gtk
     <AtkComponent>
@@ -28,7 +28,7 @@ window1
     "push button"
     parent: unnamed-GtkContainerAccessible-1
     index: 0
-    name: Page 2
+    name: Button 2
     state: enabled focusable sensitive visible
     toolkit: gtk
     <AtkComponent>

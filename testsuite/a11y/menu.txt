@@ -29,7 +29,6 @@ window1
       "menu"
       parent: menubar1
       index: 0
-      name: File
       state: enabled selectable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
@@ -38,7 +37,6 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 description: Clicks the menuitem
-      action 0 keybinding: <Alt>f;<Alt>f;
       <AtkSelection>
       separatormenuitem1
         "separator"
@@ -55,7 +53,6 @@ window1
         "check menu item"
         parent: menuitem1
         index: 1
-        name: awesome
         state: selectable sensitive visible indeterminate
         toolkit: gtk
         <AtkComponent>
@@ -80,7 +77,6 @@ window1
         "menu item"
         parent: menuitem1
         index: 3
-        name: Quit
         state: enabled selectable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -89,13 +85,11 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the menuitem
-        action 0 keybinding: q;<Alt>f:q;
         <AtkSelection>
     menuitem2
       "menu"
       parent: menubar1
       index: 1
-      name: Edit
       state: enabled selectable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
@@ -104,13 +98,11 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 description: Clicks the menuitem
-      action 0 keybinding: <Alt>e;<Alt>e;
       <AtkSelection>
       imagemenuitem6
         "menu item"
         parent: menuitem2
         index: 0
-        name: Cut
         state: enabled selectable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -119,13 +111,11 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the menuitem
-        action 0 keybinding: t;<Alt>e:t;
         <AtkSelection>
       imagemenuitem7
         "menu item"
         parent: menuitem2
         index: 1
-        name: Copy
         state: enabled selectable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -134,13 +124,11 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the menuitem
-        action 0 keybinding: c;<Alt>e:c;
         <AtkSelection>
       imagemenuitem8
         "menu item"
         parent: menuitem2
         index: 2
-        name: Paste
         state: enabled selectable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -149,13 +137,11 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the menuitem
-        action 0 keybinding: p;<Alt>e:p;
         <AtkSelection>
       imagemenuitem9
         "menu item"
         parent: menuitem2
         index: 3
-        name: Delete
         state: enabled selectable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -164,13 +150,11 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the menuitem
-        action 0 keybinding: d;<Alt>e:d;
         <AtkSelection>
     menuitem3
       "menu item"
       parent: menubar1
       index: 2
-      name: View
       state: enabled selectable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
@@ -179,13 +163,11 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 description: Clicks the menuitem
-      action 0 keybinding: <Alt>v;<Alt>v;
       <AtkSelection>
     menuitem4
       "menu"
       parent: menubar1
       index: 3
-      name: Help
       state: enabled selectable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
@@ -194,13 +176,11 @@ window1
       <AtkAction>
       action 0 name: click
       action 0 description: Clicks the menuitem
-      action 0 keybinding: <Alt>h;<Alt>h;
       <AtkSelection>
       imagemenuitem10
         "menu item"
         parent: menuitem4
         index: 0
-        name: About
         state: enabled selectable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -209,5 +189,4 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the menuitem
-        action 0 keybinding: a;<Alt>h:a;
         <AtkSelection>

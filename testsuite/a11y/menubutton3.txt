@@ -26,14 +26,13 @@ window1
     alpha: 1
     unnamed-GtkStackAccessible-2
       "panel"
-      parent: unnamed-GtkPopoverAccessible-1
-      index: 0
+      parent: unnamed-GtkWidgetAccessible-3
       state: enabled sensitive visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkContainerAccessible-3
+      unnamed-GtkContainerAccessible-4
         "filler"
         parent: unnamed-GtkStackAccessible-2
         index: 0
@@ -42,36 +41,36 @@ window1
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkContainerAccessible-4
+        unnamed-GtkContainerAccessible-5
           "filler"
-          parent: unnamed-GtkContainerAccessible-3
+          parent: unnamed-GtkContainerAccessible-4
           index: 0
           state: enabled sensitive vertical visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GtkContainerAccessible-5
+          unnamed-GtkContainerAccessible-6
             "filler"
-            parent: unnamed-GtkContainerAccessible-4
+            parent: unnamed-GtkContainerAccessible-5
             index: 0
             state: enabled sensitive vertical visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            unnamed-GtkContainerAccessible-6
+            unnamed-GtkContainerAccessible-7
               "filler"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: unnamed-GtkContainerAccessible-6
               index: 0
               state: enabled sensitive vertical visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              unnamed-GtkButtonAccessible-7
+              unnamed-GtkButtonAccessible-8
                 "push button"
-                parent: unnamed-GtkContainerAccessible-6
+                parent: unnamed-GtkContainerAccessible-7
                 index: 0
                 name: New
                 state: enabled focusable sensitive visible
