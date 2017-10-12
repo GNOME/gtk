@@ -2774,7 +2774,17 @@ gsk_sl_expression_write_spv (const GskSlExpression *expression,
                              GskSpvWriter          *writer)
 {
   GskSpvAccessChain *chain;
+  GskSlValue *constant;
   guint32 result_id;
+
+  constant = gsk_sl_expression_get_constant (expression);
+  if (constant)
+    {
+      result_id = gsk_spv_writer_get_id_for_value (writer, constant);
+      gsk_sl_value_free (constant);
+
+      return result_id;
+    }
 
   chain = gsk_sl_expression_get_spv_access_chain (expression, writer);
   if (chain)
