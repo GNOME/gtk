@@ -21,7 +21,8 @@ foreach t: a11y_tests
                     install_dir: testexecdir,
                     dependencies: libgtk_dep),
         args: [ '--tap', '-k', ],
-        env: installed_test_env)
+        env: installed_test_env,
+        suite: 'a11y')
 endforeach
 
 a11y_installed_tests = [

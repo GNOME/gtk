@@ -12,7 +12,8 @@ if bash.found()
     test('test-@0@'.format(t), bash,
       args : 'test-@0@'.format(t),
       workdir : meson.current_build_dir(),
-      env : test_env)
+      env : test_env,
+      suite: 'tools')
   endforeach
 endif # bash found
 
