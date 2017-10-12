@@ -286,6 +286,126 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_BINARY = {
   gsk_sl_expression_default_get_spv_access_chain
 };
 
+/* LOGICAL_AND */
+
+typedef struct _GskSlExpressionLogicalAnd GskSlExpressionLogicalAnd;
+
+struct _GskSlExpressionLogicalAnd {
+  GskSlExpression parent;
+
+  GskSlExpression *left;
+  GskSlExpression *right;
+};
+
+static void
+gsk_sl_expression_logical_and_free (GskSlExpression *expression)
+{
+  GskSlExpressionLogicalAnd *logical_and = (GskSlExpressionLogicalAnd *) expression;
+
+  gsk_sl_expression_unref (logical_and->left);
+  gsk_sl_expression_unref (logical_and->right);
+
+  g_slice_free (GskSlExpressionLogicalAnd, logical_and);
+}
+
+static void
+gsk_sl_expression_logical_and_print (const GskSlExpression *expression,
+                                    GskSlPrinter          *printer)
+{
+  GskSlExpressionLogicalAnd *logical_and = (GskSlExpressionLogicalAnd *) expression;
+
+  gsk_sl_expression_print (logical_and->left, printer);
+  gsk_sl_printer_append (printer, " && ");
+  gsk_sl_expression_print (logical_and->right, printer);
+}
+
+static GskSlType *
+gsk_sl_expression_logical_and_get_return_type (const GskSlExpression *expression)
+{
+  return gsk_sl_type_get_scalar (GSK_SL_BOOL);
+}
+
+static GskSlValue *
+gsk_sl_expression_logical_and_get_constant (const GskSlExpression *expression)
+{
+  const GskSlExpressionLogicalAnd *logical_and = (const GskSlExpressionLogicalAnd *) expression;
+  GskSlValue *lvalue, *rvalue;
+
+  lvalue = gsk_sl_expression_get_constant (logical_and->left);
+  if (lvalue == NULL)
+    return NULL;
+  rvalue = gsk_sl_expression_get_constant (logical_and->right);
+  if (rvalue == NULL)
+    {
+      gsk_sl_value_free (lvalue);
+      return NULL;
+    }
+
+  if (!(*(guint32 *) gsk_sl_value_get_data (lvalue)))
+    {
+      gsk_sl_value_free (rvalue);
+      return lvalue;
+    }
+  else
+    {
+      gsk_sl_value_free (lvalue);
+      return rvalue;
+    }
+}
+
+static guint32
+gsk_sl_expression_logical_and_write_spv (const GskSlExpression *expression,
+                                        GskSpvWriter          *writer)
+{
+  const GskSlExpressionLogicalAnd *logical_and = (const GskSlExpressionLogicalAnd *) expression;
+  GskSpvCodeBlock *current_block, *after_block, *and_block;
+  guint32 current_id, after_id, and_id, left_id, right_id, result_id;
+
+  left_id = gsk_sl_expression_write_spv (logical_and->left, writer);
+
+  current_block = gsk_spv_writer_pop_code_block (writer);
+  current_id = gsk_spv_code_block_get_label (current_block);
+  gsk_spv_writer_push_code_block (writer, current_block);
+
+  and_id = gsk_spv_writer_push_new_code_block (writer);
+  and_block = gsk_spv_writer_pop_code_block (writer);
+
+  after_id = gsk_spv_writer_push_new_code_block (writer);
+  after_block = gsk_spv_writer_pop_code_block (writer);
+
+  /* mirror glslang */
+  gsk_spv_writer_selection_merge (writer, after_id, 0);
+  gsk_spv_writer_branch_conditional (writer, left_id, and_id, after_id, NULL, 0);
+
+  gsk_spv_writer_push_code_block (writer, and_block);
+  right_id = gsk_sl_expression_write_spv (logical_and->right, writer);
+  gsk_spv_writer_branch (writer, after_id);
+  gsk_spv_writer_commit_code_block (writer);
+
+  gsk_spv_writer_push_code_block (writer, after_block);
+  gsk_spv_writer_commit_code_block (writer);
+
+  result_id = gsk_spv_writer_phi (writer, 
+                                  gsk_sl_type_get_scalar (GSK_SL_BOOL),
+                                  (guint32 **) (guint32[4][2]) {
+                                      { left_id, current_id },
+                                      { right_id, and_id }
+                                  },
+                                  2);
+
+  return result_id;
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_LOGICAL_AND = {
+  gsk_sl_expression_logical_and_free,
+  gsk_sl_expression_logical_and_print,
+  gsk_sl_expression_default_is_assignable,
+  gsk_sl_expression_logical_and_get_return_type,
+  gsk_sl_expression_logical_and_get_constant,
+  gsk_sl_expression_logical_and_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
+};
+
 /* LOGICAL_OR */
 
 typedef struct _GskSlExpressionLogicalOr GskSlExpressionLogicalOr;
@@ -2505,13 +2625,11 @@ gsk_sl_expression_parse_logical_and (GskSlScope        *scope,
                                               gsk_sl_expression_get_return_type (right));
       if (result_type)
         {
-          GskSlExpressionBinary *binary_expr;
-          binary_expr = gsk_sl_expression_new (GskSlExpressionBinary, &GSK_SL_EXPRESSION_BINARY);
-          binary_expr->binary = binary;
-          binary_expr->type = gsk_sl_type_ref (result_type);
-          binary_expr->left = expression;
-          binary_expr->right = right;
-          expression = (GskSlExpression *) binary_expr;
+          GskSlExpressionLogicalAnd *logical_expr;
+          logical_expr = gsk_sl_expression_new (GskSlExpressionLogicalAnd, &GSK_SL_EXPRESSION_LOGICAL_AND);
+          logical_expr->left = expression;
+          logical_expr->right = right;
+          expression = (GskSlExpression *) logical_expr;
         }
       else
         {
