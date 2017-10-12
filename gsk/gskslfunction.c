@@ -20,6 +20,7 @@
 
 #include "gskslfunctionprivate.h"
 
+#include "gskslnativefunctionprivate.h"
 #include "gskslnodeprivate.h"
 #include "gskslpointertypeprivate.h"
 #include "gskslpreprocessorprivate.h"
@@ -29,6 +30,29 @@
 #include "gsksltypeprivate.h"
 #include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
+
+typedef struct _GskSlFunctionClass GskSlFunctionClass;
+
+struct _GskSlFunction
+{
+  const GskSlFunctionClass *class;
+
+  int ref_count;
+};
+
+struct _GskSlFunctionClass {
+  void                  (* free)                                (GskSlFunction          *function);
+
+  GskSlType *           (* get_return_type)                     (const GskSlFunction    *function);
+  const char *          (* get_name)                            (const GskSlFunction    *function);
+  gsize                 (* get_n_arguments)                     (const GskSlFunction    *function);
+  GskSlType *           (* get_argument_type)                   (const GskSlFunction    *function,
+                                                                 gsize                   i);
+  void                  (* print)                               (const GskSlFunction    *function,
+                                                                 GskSlPrinter           *printer);
+  guint32               (* write_spv)                           (const GskSlFunction    *function,
+                                                                 GskSpvWriter           *writer);
+};
 
 static GskSlFunction *
 gsk_sl_function_alloc (const GskSlFunctionClass *klass,
@@ -191,6 +215,79 @@ static const GskSlFunctionClass GSK_SL_FUNCTION_CONSTRUCTOR = {
   gsk_sl_function_constructor_get_argument_type,
   gsk_sl_function_constructor_print,
   gsk_sl_function_constructor_write_spv,
+};
+
+/* NATIVE */
+
+typedef struct _GskSlFunctionNative GskSlFunctionNative;
+
+struct _GskSlFunctionNative {
+  GskSlFunction parent;
+
+  const GskSlNativeFunction *native;
+};
+
+static void
+gsk_sl_function_native_free (GskSlFunction *function)
+{
+  GskSlFunctionNative *native = (GskSlFunctionNative *) function;
+
+  g_slice_free (GskSlFunctionNative, native);
+}
+
+static GskSlType *
+gsk_sl_function_native_get_return_type (const GskSlFunction *function)
+{
+  const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
+
+  return gsk_sl_type_get_builtin (native->native->return_type);
+}
+
+static const char *
+gsk_sl_function_native_get_name (const GskSlFunction *function)
+{
+  const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
+
+  return native->native->name;
+}
+
+static gsize
+gsk_sl_function_native_get_n_arguments (const GskSlFunction *function)
+{
+  const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
+
+  return native->native->n_arguments;
+}
+
+static GskSlType *
+gsk_sl_function_native_get_argument_type (const GskSlFunction *function,
+                                          gsize                i)
+{
+  const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
+
+  return gsk_sl_type_get_builtin (native->native->argument_types[i]);
+}
+static void
+gsk_sl_function_native_print (const GskSlFunction *function,
+                              GskSlPrinter        *printer)
+{
+}
+
+static guint32
+gsk_sl_function_native_write_spv (const GskSlFunction *function,
+                                  GskSpvWriter        *writer)
+{
+  return 0;
+}
+
+static const GskSlFunctionClass GSK_SL_FUNCTION_NATIVE = {
+  gsk_sl_function_native_free,
+  gsk_sl_function_native_get_return_type,
+  gsk_sl_function_native_get_name,
+  gsk_sl_function_native_get_n_arguments,
+  gsk_sl_function_native_get_argument_type,
+  gsk_sl_function_native_print,
+  gsk_sl_function_native_write_spv
 };
 
 /* DECLARED */
@@ -384,6 +481,18 @@ gsk_sl_function_new_constructor (GskSlType *type)
 
       return NULL;
     }
+}
+
+GskSlFunction *
+gsk_sl_function_new_native (const GskSlNativeFunction *native)
+{
+  GskSlFunctionNative *function;
+
+  function = gsk_sl_function_new (GskSlFunctionNative, &GSK_SL_FUNCTION_NATIVE);
+
+  function->native = native;
+
+  return &function->parent;
 }
 
 GskSlFunction *

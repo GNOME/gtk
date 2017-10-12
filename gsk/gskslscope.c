@@ -21,6 +21,7 @@
 #include "gskslscopeprivate.h"
 
 #include "gskslfunctionprivate.h"
+#include "gskslnativefunctionprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvariableprivate.h"
 
@@ -45,6 +46,19 @@ free_function_list (gpointer data)
   g_list_free_full (data, (GDestroyNotify) gsk_sl_function_unref);
 }
 
+static void
+gsk_sl_scope_add_native_functions (GskSlScope *scope)
+{
+  guint i;
+
+  for (i = 0; gsk_glsl_functions[i].name; i++)
+    {
+      GskSlFunction *function = gsk_sl_function_new_native (&gsk_glsl_functions[i]);
+      gsk_sl_scope_add_function (scope, function);
+      gsk_sl_function_unref (function);
+    }
+}
+
 GskSlScope *
 gsk_sl_scope_new (GskSlScope *parent,
                   GskSlType  *return_type)
@@ -64,6 +78,9 @@ gsk_sl_scope_new (GskSlScope *parent,
   scope->variables = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_variable_unref);
   scope->functions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) free_function_list);
   scope->types = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify) gsk_sl_type_unref);
+
+  if (!parent)
+    gsk_sl_scope_add_native_functions (scope);
 
   return scope;
 }

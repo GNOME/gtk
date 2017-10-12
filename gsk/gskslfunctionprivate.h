@@ -25,30 +25,8 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GskSlFunctionClass GskSlFunctionClass;
-
-struct _GskSlFunction
-{
-  const GskSlFunctionClass *class;
-
-  int ref_count;
-};
-
-struct _GskSlFunctionClass {
-  void                  (* free)                                (GskSlFunction  *function);
-
-  GskSlType *           (* get_return_type)                     (const GskSlFunction    *function);
-  const char *          (* get_name)                            (const GskSlFunction    *function);
-  gsize                 (* get_n_arguments)                     (const GskSlFunction    *function);
-  GskSlType *           (* get_argument_type)                   (const GskSlFunction    *function,
-                                                                 gsize                   i);
-  void                  (* print)                               (const GskSlFunction    *function,
-                                                                 GskSlPrinter           *printer);
-  guint32               (* write_spv)                           (const GskSlFunction    *function,
-                                                                 GskSpvWriter           *writer);
-};
-
 GskSlFunction *         gsk_sl_function_new_constructor         (GskSlType              *type);
+GskSlFunction *         gsk_sl_function_new_native              (const GskSlNativeFunction *native);
 GskSlFunction *         gsk_sl_function_new_parse               (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *stream,
                                                                  GskSlType              *return_type,
