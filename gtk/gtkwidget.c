@@ -3475,7 +3475,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
   GtkWidget *event_widget, *next_child, *parent;
   GdkEvent *press;
 
-  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+  event_widget = gtk_get_event_target ((GdkEvent *) event);
 
   if (event_widget == widget)
     return;
