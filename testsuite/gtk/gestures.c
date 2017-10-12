@@ -967,8 +967,8 @@ test_gestures_inside_grab (void)
 
   /* Update with the grab under effect */
   g_string_erase (str, 0, str->len);
-  point_update (&mouse_state, A, (allocation.width / 2) + 20,
-                (allocation.height / 2) + 20);
+  point_update (&mouse_state, A, (allocation.width / 2),
+                (allocation.height / 2));
   g_assert_cmpstr (str->str, ==,
                    "b1 updated, "
                    "c1 updated, "
@@ -1018,8 +1018,8 @@ test_multitouch_on_single (void)
 
   /* Second touch down */
   g_string_erase (str, 0, str->len);
-  point_update (&touch_state[1], A, (allocation.width / 2) + 20,
-                (allocation.height / 2) + 20);
+  point_update (&touch_state[1], A, (allocation.width / 2),
+                (allocation.height / 2));
   point_press (&touch_state[1], A, 1);
 
   g_assert_cmpstr (str->str, ==,
@@ -1064,8 +1064,8 @@ test_multitouch_activation (void)
   g_assert_cmpstr (str->str, ==, "");
 
   /* Second touch down */
-  point_update (&touch_state[1], A, (allocation.width / 2) + 20,
-                (allocation.height / 2) + 20);
+  point_update (&touch_state[1], A, (allocation.width / 2),
+                (allocation.height / 2));
   point_press (&touch_state[1], A, 1);
 
   g_assert_cmpstr (str->str, ==,
@@ -1082,8 +1082,8 @@ test_multitouch_activation (void)
 
   /* A third touch down triggering again action */
   g_string_erase (str, 0, str->len);
-  point_update (&touch_state[2], A, (allocation.width / 2) + 20,
-                (allocation.height / 2) + 20);
+  point_update (&touch_state[2], A, (allocation.width / 2),
+                (allocation.height / 2));
   point_press (&touch_state[2], A, 1);
 
   g_assert_cmpstr (str->str, ==,
@@ -1146,8 +1146,8 @@ test_multitouch_interaction (void)
 
   /* Second touch down, a1 denies and c1 takes over */
   g_string_erase (str, 0, str->len);
-  point_update (&touch_state[1], A, (allocation.width / 2) + 20,
-                (allocation.height / 2) + 20);
+  point_update (&touch_state[1], A, (allocation.width / 2),
+                (allocation.height / 2));
   point_press (&touch_state[1], A, 1);
 
   /* Denying sequences in touch-excess situation is a responsibility of the caller */
@@ -1162,8 +1162,8 @@ test_multitouch_interaction (void)
 
   /* Move first point, only c1 should update */
   g_string_erase (str, 0, str->len);
-  point_update (&touch_state[0], A, (allocation.width / 2) + 30,
-                (allocation.height / 2) + 30);
+  point_update (&touch_state[0], A, (allocation.width / 2),
+                (allocation.height / 2));
 
   g_assert_cmpstr (str->str, ==,
                    "c1 updated");
@@ -1177,8 +1177,8 @@ test_multitouch_interaction (void)
 
   /* A third touch down triggering again action on c1 */
   g_string_erase (str, 0, str->len);
-  point_update (&touch_state[2], A, (allocation.width / 2) + 20,
-                (allocation.height / 2) + 20);
+  point_update (&touch_state[2], A, (allocation.width / 2),
+                (allocation.height / 2));
   point_press (&touch_state[2], A, 1);
 
   g_assert_cmpstr (str->str, ==,
