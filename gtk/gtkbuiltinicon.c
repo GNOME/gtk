@@ -167,7 +167,7 @@ gtk_builtin_icon_style_changed (GtkCssGadget      *gadget,
 {
   GtkBuiltinIconPrivate *priv = gtk_builtin_icon_get_instance_private (GTK_BUILTIN_ICON (gadget));
 
-  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
     priv->strikethrough_valid = FALSE;
 
   GTK_CSS_GADGET_CLASS (gtk_builtin_icon_parent_class)->style_changed (gadget, change);

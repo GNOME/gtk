@@ -332,7 +332,7 @@ gtk_switch_style_updated (GtkWidget *widget)
   context = gtk_widget_get_style_context (widget);
   change = gtk_style_context_get_change (context);
 
-  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT))
+  if (change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
     gtk_switch_create_pango_layouts (self);
 }
 
