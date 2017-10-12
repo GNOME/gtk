@@ -15,7 +15,7 @@
         <property name="visible">1</property>
         <property name="wide-handle">1</property>
         <property name="orientation">horizontal</property>
-        <property name="position">300</property>
+        <property name="position">400</property>
         <child>
           <object class="GtkScrolledWindow">
             <property name="visible">1</property>
