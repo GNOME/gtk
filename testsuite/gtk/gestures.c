@@ -1071,7 +1071,7 @@ test_multitouch_activation (void)
   g_assert_cmpstr (str->str, ==,
                    "c1 began, "
                    "c1 state claimed (2), "
-                   "c1 state claimed");
+                   "c1 state claimed (1)");
 
   /* First touch up */
   g_string_erase (str, 0, str->len);
@@ -1156,7 +1156,7 @@ test_multitouch_interaction (void)
   g_assert_cmpstr (str->str, ==,
                    "a1 state denied (2), "
                    "c1 began, "
-                   "c1 state claimed, "
+                   "c1 state claimed (1), "
                    "c1 state claimed (2), "
                    "a1 state denied (1)");
 
