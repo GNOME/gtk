@@ -1009,7 +1009,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_COLOR,
                                           GDK_TYPE_RGBA,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_CONTENT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
+                                          GTK_CSS_AFFECTS_CONTENT | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
                                           color_parse,
                                           color_query,
                                           _gtk_css_color_value_new_rgba (1, 1, 1, 1));
@@ -1017,7 +1017,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_DPI,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SIZE,
+                                          GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           dpi_parse,
                                           NULL,
                                           _gtk_css_number_value_new (96.0, GTK_CSS_NUMBER));
@@ -1025,7 +1025,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_SIZE,
                                           G_TYPE_DOUBLE,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SIZE,
+                                          GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_size_parse,
                                           query_font_size,
                                           _gtk_css_font_size_value_new (GTK_CSS_FONT_SIZE_MEDIUM));
@@ -1062,7 +1062,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_FAMILY,
                                           G_TYPE_STRV,
                                           GTK_STYLE_PROPERTY_INHERIT,
-                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
+                                          GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_family_parse,
                                           font_family_query,
                                           _gtk_css_array_value_new (_gtk_css_string_value_new ("Sans")));
@@ -1070,7 +1070,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_STYLE,
                                           PANGO_TYPE_STYLE,
                                           GTK_STYLE_PROPERTY_INHERIT,
-                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
+                                          GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_style_parse,
                                           font_style_query,
                                           _gtk_css_font_style_value_new (PANGO_STYLE_NORMAL));
@@ -1078,7 +1078,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_WEIGHT,
                                           PANGO_TYPE_WEIGHT,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
+                                          GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_weight_parse,
                                           font_weight_query,
                                           _gtk_css_font_weight_value_new (PANGO_WEIGHT_NORMAL));
@@ -1086,7 +1086,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_STRETCH,
                                           PANGO_TYPE_STRETCH,
                                           GTK_STYLE_PROPERTY_INHERIT,
-                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
+                                          GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_stretch_parse,
                                           font_stretch_query,
                                           _gtk_css_font_stretch_value_new (PANGO_STRETCH_NORMAL));
@@ -1095,7 +1095,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_LETTER_SPACING,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_letter_spacing,
                                           NULL,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
@@ -1104,7 +1104,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_TEXT_DECORATION_LINE,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_text_decoration_line,
                                           NULL,
                                           _gtk_css_text_decoration_line_value_new (GTK_CSS_TEXT_DECORATION_LINE_NONE));
@@ -1112,7 +1112,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           color_parse,
                                           NULL,
                                           _gtk_css_color_value_new_current_color ());
@@ -1120,7 +1120,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_text_decoration_style,
                                           NULL,
                                           _gtk_css_text_decoration_style_value_new (GTK_CSS_TEXT_DECORATION_STYLE_SOLID));
@@ -1128,7 +1128,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_KERNING,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_kerning,
                                           NULL,
                                           _gtk_css_font_kerning_value_new (GTK_CSS_FONT_KERNING_AUTO));
@@ -1136,7 +1136,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_ligatures,
                                           NULL,
                                           _gtk_css_font_variant_ligature_value_new (GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL));
@@ -1144,7 +1144,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_VARIANT_POSITION,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_position,
                                           NULL,
                                           _gtk_css_font_variant_position_value_new (GTK_CSS_FONT_VARIANT_POSITION_NORMAL));
@@ -1152,7 +1152,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_VARIANT_CAPS,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_caps,
                                           NULL,
                                           _gtk_css_font_variant_caps_value_new (GTK_CSS_FONT_VARIANT_CAPS_NORMAL));
@@ -1160,7 +1160,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_numeric,
                                           NULL,
                                           _gtk_css_font_variant_numeric_value_new (GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL));
@@ -1168,7 +1168,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_alternates,
                                           NULL,
                                           _gtk_css_font_variant_alternate_value_new (GTK_CSS_FONT_VARIANT_ALTERNATE_NORMAL));
@@ -1176,7 +1176,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_font_variant_east_asian,
                                           NULL,
                                           _gtk_css_font_variant_east_asian_value_new (GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL));
@@ -1184,7 +1184,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_CLIP,
+                                          GTK_CSS_AFFECTS_TEXT_CLIP,
                                           shadow_value_parse,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
@@ -1771,7 +1771,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_CARET_COLOR,
                                           GDK_TYPE_RGBA,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_TEXT,
+                                          GTK_CSS_AFFECTS_CONTENT,
                                           color_parse,
                                           color_query,
                                           _gtk_css_color_value_new_current_color ());
@@ -1779,7 +1779,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR,
                                           GDK_TYPE_RGBA,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_TEXT,
+                                          GTK_CSS_AFFECTS_CONTENT,
                                           color_parse,
                                           color_query,
                                           _gtk_css_color_value_new_current_color ());

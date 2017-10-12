@@ -124,18 +124,18 @@ typedef guint64 GtkCssChange;
  * Note that multiple values can be set.
  */
 typedef enum {
-  GTK_CSS_AFFECTS_CONTENT = (1 << 0),
-  GTK_CSS_AFFECTS_BACKGROUND = (1 << 1),
-  GTK_CSS_AFFECTS_BORDER = (1 << 2),
-  GTK_CSS_AFFECTS_FONT = (1 << 3),
-  GTK_CSS_AFFECTS_TEXT = (1 << 4),
-  GTK_CSS_AFFECTS_TEXT_ATTRS = (1 << 5),
-  GTK_CSS_AFFECTS_ICON = (1 << 6),
-  GTK_CSS_AFFECTS_SYMBOLIC_ICON = (1 << 7),
-  GTK_CSS_AFFECTS_OUTLINE = (1 << 8),
-  GTK_CSS_AFFECTS_CLIP = (1 << 9),
-  GTK_CSS_AFFECTS_SIZE = (1 << 10),
-  GTK_CSS_AFFECTS_POSTEFFECT = (1 << 11)
+  GTK_CSS_AFFECTS_CONTENT       = (1 << 0),
+  GTK_CSS_AFFECTS_BACKGROUND    = (1 << 1),
+  GTK_CSS_AFFECTS_BORDER        = (1 << 2),
+  GTK_CSS_AFFECTS_TEXT_ATTRS    = (1 << 4),
+  GTK_CSS_AFFECTS_TEXT_SIZE     = (1 << 5),
+  GTK_CSS_AFFECTS_TEXT_CLIP     = (1 << 6),
+  GTK_CSS_AFFECTS_ICON          = (1 << 7),
+  GTK_CSS_AFFECTS_SYMBOLIC_ICON = (1 << 8),
+  GTK_CSS_AFFECTS_OUTLINE       = (1 << 9),
+  GTK_CSS_AFFECTS_CLIP          = (1 << 10),
+  GTK_CSS_AFFECTS_SIZE          = (1 << 11),
+  GTK_CSS_AFFECTS_POSTEFFECT    = (1 << 12)
 } GtkCssAffects;
 
 #define GTK_CSS_AFFECTS_REDRAW (GTK_CSS_AFFECTS_CONTENT |       \
@@ -145,6 +145,10 @@ typedef enum {
                                 GTK_CSS_AFFECTS_SYMBOLIC_ICON | \
                                 GTK_CSS_AFFECTS_OUTLINE |       \
                                 GTK_CSS_AFFECTS_POSTEFFECT)
+
+#define GTK_CSS_AFFECTS_TEXT (GTK_CSS_AFFECTS_TEXT_SIZE | \
+                              GTK_CSS_AFFECTS_TEXT_CLIP)
+
 
 enum { /*< skip >*/
   GTK_CSS_PROPERTY_COLOR,

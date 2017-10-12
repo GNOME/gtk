@@ -7193,22 +7193,29 @@ gtk_widget_real_style_updated (GtkWidget *widget)
   if (widget->priv->context)
     {
       GtkCssStyleChange *change = gtk_style_context_get_change (widget->priv->context);
-      gboolean has_text = gtk_widget_peek_pango_context (widget) != NULL;
+      const gboolean has_text = gtk_widget_peek_pango_context (widget) != NULL;
 
-      if (change == NULL ||
-          (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_FONT)))
+      if (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
         gtk_widget_update_pango_context (widget);
 
       if (widget->priv->anchored)
         {
           if (change == NULL ||
               gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE) ||
-              (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT)))
-            gtk_widget_queue_resize (widget);
-          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_CLIP))
-            gtk_widget_queue_allocate (widget);
+              (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_SIZE)))
+            {
+              gtk_widget_queue_resize (widget);
+            }
+          else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_CLIP) ||
+                   (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_CLIP)))
+            {
+              gtk_widget_queue_allocate (widget);
+            }
           else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
-            gtk_widget_queue_draw (widget);
+
+            {
+                gtk_widget_queue_draw (widget);
+            }
         }
     }
   else
