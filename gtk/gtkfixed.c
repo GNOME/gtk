@@ -156,6 +156,7 @@ gtk_fixed_put (GtkFixed       *fixed,
 
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
 
   child_info = g_new (GtkFixedChild, 1);
   child_info->widget = widget;
