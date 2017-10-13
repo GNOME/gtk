@@ -38,7 +38,6 @@ GskSlType *             gsk_sl_type_get_vector                  (GskSlScalarType
 GskSlType *             gsk_sl_type_get_matrix                  (GskSlScalarType      scalar,
                                                                  guint                columns,
                                                                  guint                rows);
-GskSlType *             gsk_sl_type_get_builtin                 (GskSlBuiltinType     builtin);
 GskSlType *             gsk_sl_type_get_matching                (GskSlType           *type,
                                                                  GskSlScalarType      scalar);
 
