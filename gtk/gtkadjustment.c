@@ -62,6 +62,7 @@ struct _GtkAdjustmentPrivate {
   guint tick_id;
   GdkFrameClock *clock;
 };
+typedef struct _GtkAdjustmentPrivate GtkAdjustmentPrivate;
 
 enum
 {
@@ -107,7 +108,7 @@ static void
 gtk_adjustment_finalize (GObject *object)
 {
   GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
-  GtkAdjustmentPrivate *priv = adjustment->priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   if (priv->tick_id)
     g_signal_handler_disconnect (priv->clock, priv->tick_id);
@@ -263,7 +264,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 static void
 gtk_adjustment_init (GtkAdjustment *adjustment)
 {
-  adjustment->priv = gtk_adjustment_get_instance_private (adjustment);
 }
 
 static void
@@ -273,7 +273,7 @@ gtk_adjustment_get_property (GObject    *object,
                              GParamSpec *pspec)
 {
   GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
-  GtkAdjustmentPrivate *priv = adjustment->priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   switch (prop_id)
     {
@@ -309,7 +309,7 @@ gtk_adjustment_set_property (GObject      *object,
 {
   GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
   gdouble double_value = g_value_get_double (value);
-  GtkAdjustmentPrivate *priv = adjustment->priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   switch (prop_id)
     {
@@ -424,29 +424,34 @@ gtk_adjustment_new (gdouble value,
 gdouble
 gtk_adjustment_get_value (GtkAdjustment *adjustment)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->priv->value;
+  return priv->value;
 }
 
 gdouble
 gtk_adjustment_get_target_value (GtkAdjustment *adjustment)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  if (adjustment->priv->tick_id)
-    return adjustment->priv->target;
+  if (priv->tick_id)
+    return priv->target;
   else
-    return adjustment->priv->value;
+    return priv->value;
 }
 
 static void
 adjustment_set_value (GtkAdjustment *adjustment,
                       gdouble        value)
 {
-  if (adjustment->priv->value != value)
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
+  if (priv->value != value)
     {
-      adjustment->priv->value = value;
+      priv->value = value;
       emit_value_changed (adjustment);
     }
 }
@@ -457,7 +462,7 @@ static void gtk_adjustment_on_frame_clock_update (GdkFrameClock *clock,
 static void
 gtk_adjustment_begin_updating (GtkAdjustment *adjustment)
 {
-  GtkAdjustmentPrivate *priv = adjustment->priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   if (priv->tick_id == 0)
     {
@@ -470,7 +475,7 @@ gtk_adjustment_begin_updating (GtkAdjustment *adjustment)
 static void
 gtk_adjustment_end_updating (GtkAdjustment *adjustment)
 {
-  GtkAdjustmentPrivate *priv = adjustment->priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   if (priv->tick_id != 0)
     {
@@ -495,7 +500,7 @@ static void
 gtk_adjustment_on_frame_clock_update (GdkFrameClock *clock,
                                       GtkAdjustment *adjustment)
 {
-  GtkAdjustmentPrivate *priv = adjustment->priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
   gint64 now;
 
   now = gdk_frame_clock_get_frame_time (clock);
@@ -520,7 +525,7 @@ gtk_adjustment_set_value_internal (GtkAdjustment *adjustment,
                                    gdouble        value,
                                    gboolean       animate)
 {
-  GtkAdjustmentPrivate *priv = adjustment->priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   /* don't use CLAMP() so we don't end up below lower if upper - page_size
    * is smaller than lower
@@ -589,9 +594,11 @@ gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
 gdouble
 gtk_adjustment_get_lower (GtkAdjustment *adjustment)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->priv->lower;
+  return priv->lower;
 }
 
 /**
@@ -619,9 +626,11 @@ void
 gtk_adjustment_set_lower (GtkAdjustment *adjustment,
                           gdouble        lower)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (lower != adjustment->priv->lower)
+  if (lower != priv->lower)
     g_object_set (adjustment, "lower", lower, NULL);
 }
 
@@ -638,9 +647,11 @@ gtk_adjustment_set_lower (GtkAdjustment *adjustment,
 gdouble
 gtk_adjustment_get_upper (GtkAdjustment *adjustment)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->priv->upper;
+  return priv->upper;
 }
 
 /**
@@ -663,9 +674,11 @@ void
 gtk_adjustment_set_upper (GtkAdjustment *adjustment,
                           gdouble        upper)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (upper != adjustment->priv->upper)
+  if (upper != priv->upper)
     g_object_set (adjustment, "upper", upper, NULL);
 }
 
@@ -682,9 +695,11 @@ gtk_adjustment_set_upper (GtkAdjustment *adjustment,
 gdouble
 gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->priv->step_increment;
+  return priv->step_increment;
 }
 
 /**
@@ -704,9 +719,11 @@ void
 gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
                                    gdouble        step_increment)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (step_increment != adjustment->priv->step_increment)
+  if (step_increment != priv->step_increment)
     g_object_set (adjustment, "step-increment", step_increment, NULL);
 }
 
@@ -723,9 +740,11 @@ gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
 gdouble
 gtk_adjustment_get_page_increment (GtkAdjustment *adjustment)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->priv->page_increment;
+  return priv->page_increment;
 }
 
 /**
@@ -745,9 +764,11 @@ void
 gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
                                    gdouble        page_increment)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (page_increment != adjustment->priv->page_increment)
+  if (page_increment != priv->page_increment)
     g_object_set (adjustment, "page-increment", page_increment, NULL);
 }
 
@@ -764,9 +785,11 @@ gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
 gdouble
 gtk_adjustment_get_page_size (GtkAdjustment *adjustment)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->priv->page_size;
+  return priv->page_size;
 }
 
 /**
@@ -786,9 +809,11 @@ void
 gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
                               gdouble        page_size)
 {
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (page_size != adjustment->priv->page_size)
+  if (page_size != priv->page_size)
     g_object_set (adjustment, "page-size", page_size, NULL);
 }
 
@@ -820,13 +845,11 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
                           gdouble        page_increment,
                           gdouble        page_size)
 {
-  GtkAdjustmentPrivate *priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
   gboolean value_changed = FALSE;
   guint64 old_stamp = adjustment_changed_stamp;
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  priv = adjustment->priv;
 
   g_object_freeze_notify (G_OBJECT (adjustment));
 
@@ -881,12 +904,10 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
 			   gdouble        lower,
 			   gdouble        upper)
 {
-  GtkAdjustmentPrivate *priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
   gboolean need_emission;
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  priv = adjustment->priv;
 
   lower = CLAMP (lower, priv->lower, priv->upper);
   upper = CLAMP (upper, priv->lower, priv->upper);
@@ -921,12 +942,10 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
 gdouble
 gtk_adjustment_get_minimum_increment (GtkAdjustment *adjustment)
 {
-  GtkAdjustmentPrivate *priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
   gdouble minimum_increment;
 
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0);
-
-  priv = adjustment->priv;
 
     if (priv->step_increment != 0 && priv->page_increment != 0)
     {
@@ -956,7 +975,7 @@ gtk_adjustment_enable_animation (GtkAdjustment *adjustment,
                                  GdkFrameClock *clock,
                                  guint          duration)
 {
-  GtkAdjustmentPrivate *priv = adjustment->priv;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   if (priv->clock != clock)
     {
@@ -984,11 +1003,15 @@ gtk_adjustment_enable_animation (GtkAdjustment *adjustment,
 guint
 gtk_adjustment_get_animation_duration (GtkAdjustment *adjustment)
 {
-  return adjustment->priv->duration;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
+  return priv->duration;
 }
 
 gboolean
 gtk_adjustment_is_animating (GtkAdjustment *adjustment)
 {
-  return adjustment->priv->tick_id != 0;
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
+
+  return priv->tick_id != 0;
 }

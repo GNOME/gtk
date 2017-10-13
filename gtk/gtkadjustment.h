@@ -42,7 +42,6 @@ G_BEGIN_DECLS
 #define GTK_ADJUSTMENT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ADJUSTMENT, GtkAdjustmentClass))
 
 
-typedef struct _GtkAdjustmentPrivate  GtkAdjustmentPrivate;
 typedef struct _GtkAdjustmentClass    GtkAdjustmentClass;
 
 /**
@@ -54,8 +53,6 @@ typedef struct _GtkAdjustmentClass    GtkAdjustmentClass;
 struct _GtkAdjustment
 {
   GInitiallyUnowned parent_instance;
-
-  GtkAdjustmentPrivate *priv;
 };
 
 struct _GtkAdjustmentClass
