@@ -230,11 +230,13 @@ gtk_fixed_put (GtkFixed  *fixed,
                gint       x,
                gint       y)
 {
-  GtkFixedPrivate *priv = fixed->priv;
+  GtkFixedPrivate *priv;
   GtkFixedChild *child_info;
 
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = fixed->priv;
 
   child_info = g_new (GtkFixedChild, 1);
   child_info->widget = widget;
