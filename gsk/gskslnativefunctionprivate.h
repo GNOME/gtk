@@ -25,14 +25,6 @@
 
 G_BEGIN_DECLS
 
-struct _GskSlNativeFunction
-{
-  const char *name;
-  GskSlBuiltinType return_type;
-  gsize n_arguments;
-  const GskSlBuiltinType *argument_types;
-};
- 
 void                    gsk_sl_native_functions_add             (GskSlScope           *scope,
                                                                  GskSlEnvironment     *environment);
  

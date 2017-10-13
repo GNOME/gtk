@@ -26,7 +26,12 @@
 G_BEGIN_DECLS
 
 GskSlFunction *         gsk_sl_function_new_constructor         (GskSlType              *type);
-GskSlFunction *         gsk_sl_function_new_native              (const GskSlNativeFunction *native);
+GskSlFunction *         gsk_sl_function_new_native              (const char             *name,
+                                                                 GskSlFunctionType      *type,
+                                                                 void                    (* get_constant) (gpointer *retval, gpointer *arguments, gpointer user_data),
+                                                                 guint32                 (* write_spv) (GskSpvWriter *writer, guint32 *arguments, gpointer user_data),
+                                                                 gpointer                user_data,
+                                                                 GDestroyNotify          destroy);
 GskSlFunction *         gsk_sl_function_new_parse               (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *stream,
                                                                  GskSlType              *return_type,

@@ -22,8 +22,18 @@
 
 #include "gskslenvironmentprivate.h"
 #include "gskslfunctionprivate.h"
+#include "gskslfunctiontypeprivate.h"
 #include "gskslscopeprivate.h"
+#include "gsksltypeprivate.h"
 
+struct _GskSlNativeFunction
+{
+  const char *name;
+  GskSlBuiltinType return_type;
+  gsize n_arguments;
+  const GskSlBuiltinType *argument_types;
+};
+ 
 #define NATIVE1(type, name, arg1) \
   { name, GSK_SL_BUILTIN_ ## type, 1, (GskSlBuiltinType[1]) { GSK_SL_BUILTIN_ ## arg1 } }
 #define NATIVE2(type, name, arg1, arg2) \
@@ -419,6 +429,33 @@ static const GskSlNativeFunction gsk_glsl_functions_150[] = {
   { NULL }
 };
 
+static GskSlFunctionType *
+gsk_sl_native_functions_construct_type (const GskSlNativeFunction *native)
+{
+  GskSlFunctionType *type;
+  gsize i;
+
+  type = gsk_sl_function_type_new (gsk_sl_type_get_builtin (native->return_type));
+  for (i = 0; i < native->n_arguments; i++)
+    {
+      type = gsk_sl_function_type_add_argument (type,
+                                                GSK_SL_STORAGE_PARAMETER_IN,
+                                                gsk_sl_type_get_builtin (native->argument_types[i]));
+    }
+
+  return type;
+}
+
+static guint32
+gsk_sl_native_functions_write_spv_unimplemented (GskSpvWriter *writer,
+                                                 guint32      *arguments,
+                                                 gpointer      user_data)
+{
+  g_assert_not_reached ();
+
+  return 0;
+}
+
 static void
 gsk_sl_native_functions_add_list (GskSlScope                *scope,
                                   const GskSlNativeFunction *functions)
@@ -427,9 +464,21 @@ gsk_sl_native_functions_add_list (GskSlScope                *scope,
 
   for (i = 0; functions[i].name; i++)
     {
-      GskSlFunction *function = gsk_sl_function_new_native (&functions[i]);
+      GskSlFunctionType *type;
+      GskSlFunction *function;
+
+      type = gsk_sl_native_functions_construct_type (&functions[i]);
+
+      function = gsk_sl_function_new_native (functions[i].name,
+                                             type,
+                                             NULL,
+                                             gsk_sl_native_functions_write_spv_unimplemented,
+                                             (gpointer) &functions[i],
+                                             NULL);
       gsk_sl_scope_add_function (scope, function);
+
       gsk_sl_function_unref (function);
+      gsk_sl_function_type_unref (type);
     }
 }
 

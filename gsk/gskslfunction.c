@@ -189,13 +189,24 @@ typedef struct _GskSlFunctionNative GskSlFunctionNative;
 struct _GskSlFunctionNative {
   GskSlFunction parent;
 
-  const GskSlNativeFunction *native;
+  char *name;
+  GskSlFunctionType *type;
+  void (* get_constant) (gpointer *retval, gpointer *arguments, gpointer user_data);
+  guint32 (* write_spv) (GskSpvWriter *writer, guint32 *arguments, gpointer user_data);
+  gpointer user_data;
+  GDestroyNotify destroy;
 };
 
 static void
 gsk_sl_function_native_free (GskSlFunction *function)
 {
   GskSlFunctionNative *native = (GskSlFunctionNative *) function;
+
+  if (native->destroy)
+    native->destroy (native->user_data);
+
+  gsk_sl_function_type_unref (native->type);
+  g_free (native->name);
 
   g_slice_free (GskSlFunctionNative, native);
 }
@@ -205,7 +216,7 @@ gsk_sl_function_native_get_return_type (const GskSlFunction *function)
 {
   const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
 
-  return gsk_sl_type_get_builtin (native->native->return_type);
+  return gsk_sl_function_type_get_return_type (native->type);
 }
 
 static const char *
@@ -213,7 +224,7 @@ gsk_sl_function_native_get_name (const GskSlFunction *function)
 {
   const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
 
-  return native->native->name;
+  return native->name;
 }
 
 static gsize
@@ -221,7 +232,7 @@ gsk_sl_function_native_get_n_arguments (const GskSlFunction *function)
 {
   const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
 
-  return native->native->n_arguments;
+  return gsk_sl_function_type_get_n_arguments (native->type);
 }
 
 static GskSlType *
@@ -230,7 +241,7 @@ gsk_sl_function_native_get_argument_type (const GskSlFunction *function,
 {
   const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
 
-  return gsk_sl_type_get_builtin (native->native->argument_types[i]);
+  return gsk_sl_function_type_get_argument_type (native->type, i);
 }
 
 static GskSlValue *
@@ -238,7 +249,26 @@ gsk_sl_function_native_get_constant (const GskSlFunction  *function,
                                      GskSlValue          **values,
                                      gsize                 n_values)
 {
-  return NULL;
+  const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
+  gpointer data[gsk_sl_function_type_get_n_arguments (native->type)];
+  GskSlValue *result;
+  gsize i;
+
+  if (native->get_constant == NULL)
+    return NULL;
+
+  result = gsk_sl_value_new (gsk_sl_function_type_get_return_type (native->type));
+
+  for (i = 0; i < n_values; i++)
+    {
+      data[i] = gsk_sl_value_get_data (values[i]);
+    }
+  
+  native->get_constant (gsk_sl_value_get_data (result),
+                        data,
+                        native->user_data);
+
+  return result;
 }
 
 static void
@@ -253,7 +283,7 @@ gsk_sl_function_native_write_spv (const GskSlFunction *function,
                                   GskSpvWriterFunc     initializer,
                                   gpointer             initializer_data)
 {
-  g_assert (initializer != NULL);
+  g_assert (initializer == NULL);
 
   return 0;
 }
@@ -263,9 +293,9 @@ gsk_sl_function_native_write_call_spv (GskSlFunction *function,
                                        GskSpvWriter  *writer,
                                        guint32       *arguments)
 {
-  g_assert_not_reached ();
+  const GskSlFunctionNative *native = (const GskSlFunctionNative *) function;
 
-  return 0;
+  return native->write_spv (writer, arguments, native->user_data);
 }
 
 static const GskSlFunctionClass GSK_SL_FUNCTION_NATIVE = {
@@ -511,13 +541,26 @@ gsk_sl_function_new_constructor (GskSlType *type)
 }
 
 GskSlFunction *
-gsk_sl_function_new_native (const GskSlNativeFunction *native)
+gsk_sl_function_new_native (const char        *name,
+                            GskSlFunctionType *type,
+                            void               (* get_constant) (gpointer *retval, gpointer *arguments, gpointer user_data),
+                            guint32            (* write_spv) (GskSpvWriter *writer, guint32 *arguments, gpointer user_data),
+                            gpointer           user_data,
+                            GDestroyNotify     destroy)
 {
   GskSlFunctionNative *function;
 
+  g_return_val_if_fail (name != NULL, NULL);
+  g_return_val_if_fail (write_spv != NULL, NULL);
+
   function = gsk_sl_function_new (GskSlFunctionNative, &GSK_SL_FUNCTION_NATIVE);
 
-  function->native = native;
+  function->name = g_strdup (name);
+  function->type = gsk_sl_function_type_ref (type);
+  function->get_constant = get_constant;
+  function->write_spv = write_spv;
+  function->user_data = user_data;
+  function->destroy = destroy;
 
   return &function->parent;
 }
