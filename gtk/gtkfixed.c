@@ -75,6 +75,7 @@
 
 #include "gtkfixed.h"
 
+#include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
