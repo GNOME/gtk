@@ -3053,7 +3053,7 @@ _gtk_range_get_wheel_delta (GtkRange       *range,
 #endif
 
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
-        delta = - (dx ? dx : dy) * scroll_unit;
+        delta = (dx ? dx : -dy) * scroll_unit;
       else
         delta = dy * scroll_unit;
     }
