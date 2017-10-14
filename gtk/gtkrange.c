@@ -2313,7 +2313,7 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
 #endif
 
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
-    delta = - (dx ? dx : dy) * scroll_unit;
+    delta = (dx ? dx : -dy) * scroll_unit;
   else
     delta = dy * scroll_unit;
 
