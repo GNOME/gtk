@@ -5267,7 +5267,7 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
 
   /* Look for the parent with a window and invalidate @region in there. */
   parent = widget;
-  while (parent != NULL && !gtk_widget_get_has_window (parent))
+  while (parent != NULL && !_gtk_widget_get_has_window (parent))
     parent = _gtk_widget_get_parent (parent);
 
   g_assert (parent != NULL);
