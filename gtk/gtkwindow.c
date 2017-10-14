@@ -7012,8 +7012,7 @@ update_window_style_classes (GtkWindow *window)
 }
 
 static void
-popover_size_allocate (GtkWidget        *widget,
-                       GtkWindowPopover *popover,
+popover_size_allocate (GtkWindowPopover *popover,
                        GtkWindow        *window)
 {
   cairo_rectangle_int_t rect;
@@ -7023,7 +7022,7 @@ popover_size_allocate (GtkWidget        *widget,
     gtk_popover_update_position (GTK_POPOVER (popover->widget));
 
   popover_get_rect (popover, window, &rect);
-  gtk_widget_size_allocate (widget, &rect, -1, &clip);
+  gtk_widget_size_allocate (popover->widget, &rect, -1, &clip);
 }
 
 /* _gtk_window_set_allocation:
@@ -7130,7 +7129,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
   for (link = priv->popovers.head; link; link = link->next)
     {
       GtkWindowPopover *popover = link->data;
-      popover_size_allocate (popover->widget, popover, window);
+      popover_size_allocate (popover, window);
     }
 
 }
