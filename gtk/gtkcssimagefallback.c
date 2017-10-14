@@ -234,6 +234,28 @@ gtk_css_image_fallback_parse (GtkCssImage  *image,
   return TRUE;
 }
 
+static gboolean
+gtk_css_image_fallback_equal (GtkCssImage *image1,
+                              GtkCssImage *image2)
+{
+  GtkCssImageFallback *fallback1 = GTK_CSS_IMAGE_FALLBACK (image1);
+  GtkCssImageFallback *fallback2 = GTK_CSS_IMAGE_FALLBACK (image2);
+
+  if (fallback1->used < 0)
+    {
+      if (fallback2->used >= 0)
+        return FALSE;
+
+      return _gtk_css_value_equal (fallback1->color, fallback2->color);
+    }
+
+  if (fallback2->used < 0)
+    return FALSE;
+
+  return _gtk_css_image_equal (fallback1->images[fallback1->used],
+                               fallback2->images[fallback2->used]);
+}
+
 static void
 _gtk_css_image_fallback_class_init (GtkCssImageFallbackClass *klass)
 {
@@ -247,6 +269,7 @@ _gtk_css_image_fallback_class_init (GtkCssImageFallbackClass *klass)
   image_class->parse = gtk_css_image_fallback_parse;
   image_class->compute = gtk_css_image_fallback_compute;
   image_class->print = gtk_css_image_fallback_print;
+  image_class->equal = gtk_css_image_fallback_equal;
 
   object_class->dispose = gtk_css_image_fallback_dispose;
 }
