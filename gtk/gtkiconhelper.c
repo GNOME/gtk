@@ -85,12 +85,13 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
   g_clear_object (&self->texture);
   g_clear_pointer (&self->rendered_surface, cairo_surface_destroy);
 
-  gtk_image_definition_unref (self->def);
-  self->def = gtk_image_definition_new_empty ();
-
+  if (gtk_image_definition_get_storage_type (self->def) != GTK_IMAGE_EMPTY)
+    {
+      gtk_image_definition_unref (self->def);
+      self->def = gtk_image_definition_new_empty ();
+      gtk_icon_helper_invalidate (self);
+    }
   self->icon_size = GTK_ICON_SIZE_INVALID;
-
-  gtk_icon_helper_invalidate (self);
 }
 
 void
