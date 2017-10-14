@@ -5358,7 +5358,8 @@ gtk_widget_size_allocate (GtkWidget           *widget,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), RESIZE))
+  if (GTK_DEBUG_CHECK (RESIZE) &&
+      GTK_DISPLAY_DEBUG_CHECK (gtk_widget_get_display (widget), RESIZE))
     {
       priv->highlight_resize = TRUE;
       gtk_widget_queue_draw (widget);
