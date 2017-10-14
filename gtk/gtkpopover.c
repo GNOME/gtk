@@ -670,6 +670,7 @@ show_animate_cb (GtkWidget     *widget,
     }
 
   gtk_popover_update_position (popover);
+  gtk_widget_queue_allocate (GTK_WIDGET (priv->window));
 
   if (gtk_progress_tracker_get_state (&priv->tracker) == GTK_PROGRESS_STATE_AFTER)
     {
