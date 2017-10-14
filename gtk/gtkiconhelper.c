@@ -60,7 +60,20 @@ gtk_icon_helper_invalidate_for_change (GtkIconHelper     *self,
        (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON) &&
         !self->rendered_surface_is_symbolic)))
     {
-      gtk_icon_helper_invalidate (self);
+      /* Avoid the queue_resize in gtk_icon_helper_invalidate */
+      g_clear_object (&self->texture);
+
+      if (self->rendered_surface != NULL)
+        {
+          cairo_surface_destroy (self->rendered_surface);
+          self->rendered_surface = NULL;
+          self->rendered_surface_is_symbolic = FALSE;
+        }
+
+      if (change == NULL ||
+          (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_ICON_SIZE) &&
+          !GTK_IS_CSS_TRANSIENT_NODE (self->node)))
+        gtk_widget_queue_resize (self->owner);
     }
 }
 

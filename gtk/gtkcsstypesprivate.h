@@ -127,6 +127,7 @@ typedef enum {
   GTK_CSS_AFFECTS_CONTENT       = (1 << 0),
   GTK_CSS_AFFECTS_BACKGROUND    = (1 << 1),
   GTK_CSS_AFFECTS_BORDER        = (1 << 2),
+  GTK_CSS_AFFECTS_ICON_SIZE     = (1 << 3),
   GTK_CSS_AFFECTS_TEXT_ATTRS    = (1 << 4),
   GTK_CSS_AFFECTS_TEXT_SIZE     = (1 << 5),
   GTK_CSS_AFFECTS_TEXT_CLIP     = (1 << 6),

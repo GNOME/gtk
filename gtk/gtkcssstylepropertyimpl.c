@@ -1033,7 +1033,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_ICON_THEME,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT,
-                                          GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
+                                          GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON | GTK_CSS_AFFECTS_ICON_SIZE,
                                           icon_theme_value_parse,
                                           NULL,
                                           gtk_css_icon_theme_value_new (NULL));
@@ -1592,7 +1592,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_ICON_STYLE,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT,
-                                          GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
+                                          GTK_CSS_AFFECTS_ICON | GTK_CSS_AFFECTS_SYMBOLIC_ICON | GTK_CSS_AFFECTS_ICON_SIZE,
                                           icon_style_parse,
                                           NULL,
                                           _gtk_css_icon_style_value_new (GTK_CSS_ICON_STYLE_REQUESTED));
