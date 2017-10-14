@@ -47,7 +47,7 @@ struct _GskSlStatementClass {
   void                  (* print)                               (const GskSlStatement   *statement,
                                                                  GskSlPrinter           *printer);
   GskSlJump             (* get_jump)                            (const GskSlStatement   *statement);
-  void                  (* write_spv)                           (const GskSlStatement   *statement,
+  gboolean              (* write_spv)                           (const GskSlStatement   *statement,
                                                                  GskSpvWriter           *writer);
 };
 
@@ -95,10 +95,11 @@ gsk_sl_statement_empty_get_jump (const GskSlStatement *statement)
   return GSK_SL_JUMP_NONE;
 }
 
-static void
+static gboolean
 gsk_sl_statement_empty_write_spv (const GskSlStatement *statement,
                                   GskSpvWriter         *writer)
 {
+  return FALSE;
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_EMPTY = {
@@ -164,7 +165,7 @@ gsk_sl_statement_compound_get_jump (const GskSlStatement *statement)
   return gsk_sl_statement_get_jump (last->data);
 }
 
-static void
+static gboolean
 gsk_sl_statement_compound_write_spv (const GskSlStatement *statement,
                                      GskSpvWriter         *writer)
 {
@@ -173,8 +174,15 @@ gsk_sl_statement_compound_write_spv (const GskSlStatement *statement,
 
   for (l = compound->statements; l; l = l->next)
     {
-      gsk_sl_statement_write_spv (l->data, writer);
+      if (gsk_sl_statement_write_spv (l->data, writer))
+        {
+          /* If this happens, the rest of the code is unreachable and
+           * we don't need to emit it. */
+          return TRUE;
+        }
     }
+
+  return FALSE;
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_COMPOUND = {
@@ -228,7 +236,7 @@ gsk_sl_statement_declaration_get_jump (const GskSlStatement *statement)
   return GSK_SL_JUMP_NONE;
 }
 
-static void
+static gboolean
 gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
                                         GskSpvWriter         *writer)
 {
@@ -243,6 +251,8 @@ gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
                                  writer,
                                  gsk_sl_expression_write_spv (declaration->initial, writer));
     }
+
+  return FALSE;
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_DECLARATION = {
@@ -294,7 +304,7 @@ gsk_sl_statement_return_get_jump (const GskSlStatement *statement)
   return GSK_SL_JUMP_RETURN;
 }
 
-static void
+static gboolean
 gsk_sl_statement_return_write_spv (const GskSlStatement *statement,
                                    GskSpvWriter         *writer)
 {
@@ -309,6 +319,8 @@ gsk_sl_statement_return_write_spv (const GskSlStatement *statement,
     {
       gsk_spv_writer_return (writer);
     }
+
+  return TRUE;
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_RETURN = {
@@ -386,7 +398,7 @@ gsk_sl_statement_if_get_jump (const GskSlStatement *statement)
               gsk_sl_statement_get_jump (if_stmt->else_part));
 }
 
-static void
+static gboolean
 gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
                                GskSpvWriter         *writer)
 {
@@ -403,17 +415,17 @@ gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
   after_block = gsk_spv_writer_pop_code_block (writer);
 
   gsk_spv_writer_push_code_block (writer, if_block);
-  gsk_sl_statement_write_spv (if_stmt->if_part, writer);
-  gsk_spv_writer_branch (writer,
-                         gsk_spv_code_block_get_label (after_block));
+  if (!gsk_sl_statement_write_spv (if_stmt->if_part, writer))
+    gsk_spv_writer_branch (writer,
+                           gsk_spv_code_block_get_label (after_block));
   gsk_spv_writer_pop_code_block (writer);
 
   if (if_stmt->else_part)
     {
       else_id = gsk_spv_writer_push_new_code_block (writer);
-      gsk_sl_statement_write_spv (if_stmt->else_part, writer);
-      gsk_spv_writer_branch (writer, 
-                             gsk_spv_code_block_get_label (after_block));
+      if (!gsk_sl_statement_write_spv (if_stmt->else_part, writer))
+        gsk_spv_writer_branch (writer, 
+                               gsk_spv_code_block_get_label (after_block));
       else_block = gsk_spv_writer_pop_code_block (writer);
     }
   else
@@ -438,6 +450,8 @@ gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
 
   gsk_spv_writer_push_code_block (writer, after_block);
   gsk_spv_writer_commit_code_block (writer);
+
+  return FALSE;
 }
 
 static const GskSlStatementClass GSK_SL_STATEMENT_IF = {
@@ -483,13 +497,15 @@ gsk_sl_statement_expression_get_jump (const GskSlStatement *statement)
   return GSK_SL_JUMP_NONE;
 }
 
-static void
+static gboolean
 gsk_sl_statement_expression_write_spv (const GskSlStatement *statement,
                                        GskSpvWriter         *writer)
 {
   GskSlStatementExpression *expression_statement = (GskSlStatementExpression *) statement;
 
   gsk_sl_expression_write_spv (expression_statement->expression, writer);
+
+  return FALSE;
 }
  
 static const GskSlStatementClass GSK_SL_STATEMENT_EXPRESSION = {
@@ -895,10 +911,22 @@ gsk_sl_statement_get_jump (const GskSlStatement *statement)
   return statement->class->get_jump (statement);
 }
 
-void
+/**
+ * gsk_sl_statement_write_spv:
+ * @statement: The statement to write
+ * @writer: The writer to write to
+ *
+ * Writes the statement into the current code block. The @writer must
+ * have created a current code block before this function can be called.
+ *
+ * Returns: %TRUE if this statement terminated the block it was in.
+ *     This happens usually when gsk_sl_statement_get_jump() for
+ *     @statement indicates that it causes a jump.
+ **/
+gboolean
 gsk_sl_statement_write_spv (const GskSlStatement *statement,
                             GskSpvWriter         *writer)
 {
-  statement->class->write_spv (statement, writer);
+  return statement->class->write_spv (statement, writer);
 }
 

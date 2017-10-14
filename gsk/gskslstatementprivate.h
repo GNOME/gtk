@@ -47,7 +47,7 @@ void                    gsk_sl_statement_print                  (const GskSlStat
 
 GskSlJump               gsk_sl_statement_get_jump               (const GskSlStatement   *statement);
 
-void                    gsk_sl_statement_write_spv              (const GskSlStatement   *statement,
+gboolean                gsk_sl_statement_write_spv              (const GskSlStatement   *statement,
                                                                  GskSpvWriter           *writer);
 
 G_END_DECLS

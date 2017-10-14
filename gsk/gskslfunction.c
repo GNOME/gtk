@@ -452,10 +452,7 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
   if (initializer)
     initializer (writer, initializer_data);
 
-  gsk_sl_statement_write_spv (declared->statement, writer);
-
-  if (gsk_sl_type_is_void (return_type) &&
-      gsk_sl_statement_get_jump (declared->statement) < GSK_SL_JUMP_RETURN)
+  if (!gsk_sl_statement_write_spv (declared->statement, writer))
     gsk_spv_writer_return (writer);
 
   gsk_spv_writer_function_end (writer);
