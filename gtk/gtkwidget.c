@@ -7213,9 +7213,8 @@ gtk_widget_real_style_updated (GtkWidget *widget)
               gtk_widget_queue_allocate (widget);
             }
           else if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
-
             {
-                gtk_widget_queue_draw (widget);
+              gtk_widget_queue_draw (widget);
             }
         }
     }
