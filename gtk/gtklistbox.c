@@ -2962,50 +2962,6 @@ gtk_list_box_row_hide (GtkWidget *widget)
     gtk_list_box_row_visibility_changed (box, row);
 }
 
-static void
-gtk_list_box_row_measure (GtkWidget     *widget,
-                          GtkOrientation  orientation,
-                          int             for_size,
-                          int            *minimum,
-                          int            *natural,
-                          int            *minimum_baseline,
-                          int            *natural_baseline)
-{
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      if (child && gtk_widget_get_visible (child))
-        gtk_widget_measure (child, orientation, for_size, minimum, natural, NULL, NULL);
-      else
-        *minimum = *natural = 0;
-    }
-  else
-    {
-      if (child && gtk_widget_get_visible (child))
-        gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1,
-                            minimum, natural,
-                            NULL, NULL);
-      else
-        *minimum = *natural = 0;
-    }
-}
-
-static void
-gtk_list_box_row_size_allocate (GtkWidget           *widget,
-                                const GtkAllocation *allocation,
-                                int                  baseline,
-                                GtkAllocation       *out_clip)
-{
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (widget));
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, allocation, baseline, out_clip);
-}
-
 /**
  * gtk_list_box_row_changed:
  * @row: a #GtkListBoxRow
@@ -3344,8 +3300,6 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   widget_class->show = gtk_list_box_row_show;
   widget_class->hide = gtk_list_box_row_hide;
-  widget_class->measure = gtk_list_box_row_measure;
-  widget_class->size_allocate = gtk_list_box_row_size_allocate;
   widget_class->focus = gtk_list_box_row_focus;
   widget_class->grab_focus = gtk_list_box_row_grab_focus;
 
