@@ -1,19 +1,44 @@
 a {
-  font-variant: initial;
+  font-variant-alternates: initial;
+  font-variant-caps: initial;
+  font-variant-east-asian: initial;
+  font-variant-ligatures: initial;
+  font-variant-numeric: initial;
+  font-variant-position: initial;
 }
 
 b {
-  font-variant: inherit;
+  font-variant-alternates: inherit;
+  font-variant-caps: inherit;
+  font-variant-east-asian: inherit;
+  font-variant-ligatures: inherit;
+  font-variant-numeric: inherit;
+  font-variant-position: inherit;
 }
 
 c {
-  font-variant: unset;
+  font-variant-alternates: unset;
+  font-variant-caps: unset;
+  font-variant-east-asian: unset;
+  font-variant-ligatures: unset;
+  font-variant-numeric: unset;
+  font-variant-position: unset;
 }
 
 d {
-  font-variant: normal;
+  font-variant-alternates: initial;
+  font-variant-caps: initial;
+  font-variant-east-asian: initial;
+  font-variant-ligatures: initial;
+  font-variant-numeric: initial;
+  font-variant-position: initial;
 }
 
 e {
-  font-variant: small-caps;
+  font-variant-alternates: initial;
+  font-variant-caps: small-caps;
+  font-variant-east-asian: initial;
+  font-variant-ligatures: initial;
+  font-variant-numeric: initial;
+  font-variant-position: initial;
 }

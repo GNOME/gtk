@@ -1,1 +1,1 @@
-does-not-exist.css:2: error: GTK_CSS_PROVIDER_ERROR_NAME
+does-not-exist.css:2: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
