@@ -3,13 +3,6 @@ Overview of Changes in GTK+ 3.92.0
 
 * Drop autotools support. Meson 0.42.1 is now required
 
-* Removed apis
- - gdk_window_new_input
- - gtk_widget_set_redraw_on_alloc
- - gtk_widget_get_{border,content,margin}_allocation
- - gtk_container_propagate_draw
- - deprecated CSS properties and syntaxes
-
 * Implement most of CSS3 font-variant
 
 * Add an Emoji chooser to GtkEntry
@@ -18,29 +11,31 @@ Overview of Changes in GTK+ 3.92.0
 
 * Remaining widgets have been ported to GtkSnapshot
 
-* Non-windowed widgets are now allowed to have a size of 0x0
+* GtkLabel and GtkEntry have been ported to use GSK
+
+* Add a way for GtkOverlay to blur behind children. This is has a
+  demo in gtk4-demo
 
 * Add support for native file choosers on older OS X versions
 
-* Convert GtkLabel and GtkEntry to use GSK, introducing a new
-  block-cursor css subnode for GtkEntry
-
 * Add support for libcloudproviders in GtkPlacesSidebar
 
-* Add a way for GtkOverlay to blur behind children
-
-* Input handling changes
- - GdkEvent has new accessors for fields
- - Traditional event signals (eg ::key-press-event) are now
-   emitted from a legacy event controller
- - Most widgets inside gtk have stopped using traditional event signals
- - Seat.grab(GDK_SEAT_CAPABILITY_ALL_POINTING) now includes touch events
+* Non-windowed widgets are now allowed to have a size of 0x0
 
 * Allow tiled windows to be resized. Under wayland, this uses version 2
   of the gtk-shell protocol. Under X, it uses the _GTK_EDGE_CONSTRAINTS
   property
 
-* GSK:
+* Input handling changes
+ - GdkEvent has new accessors for fields
+ - Traditional event signals (eg ::key-press-event) are now emitted from
+   an event controller
+ - Most widgets inside gtk have stopped using traditional event signals
+ - GDK_SEAT_CAPABILITY_ALL_POINTING now includes touch events
+
+* Scrollbars allow middle-click to jump to a position again
+
+* GSK changes:
  - Add gsk_text_node_new
  - Add a glyph cache for the Vulkan backend
  - Add gsk_blur_node_new
@@ -55,7 +50,14 @@ Overview of Changes in GTK+ 3.92.0
 
 * Inspector:
  - The recorder shows more useful information about render nodes
- - Show gsk and vulkan information in the general tab
+ - The general tab shows gsk and vulkan information
+
+* Removed apis
+ - gdk_window_new_input
+ - gtk_widget_set_redraw_on_alloc
+ - gtk_widget_get_{border,content,margin}_allocation
+ - gtk_container_propagate_draw
+ - deprecated CSS properties and syntaxes
 
 * Bugs fixed:
  639931 gtk_application_add_window() docs should mention window destruction
@@ -110,6 +112,17 @@ Overview of Changes in GTK+ 3.92.0
  787757 Focus outline easily disappears around color chooser swatches
  788230 Bump GLib version to 2.53.7
  788458 (style) Array index 'i' is used before limits check.
+ 701296 gtkfixed accepts toplevel windows into its children list after gtk_...
+ 728452 gtk_tree_view_column_create_button creates button which is leaked
+ 763517 Selected then unselected Label in ListBox gets wrong colour until h...
+ 786794 Print dialogue has a printer called "printer"
+ 787669 Middle mouse click on scrollbar is ignored
+ 787866 Untranslated key labels in the Keyboard panel of Settings
+ 788534 cairo-node-serialization: Adjust bytes when width bytes != stride
+ 788573 HighContrast: titlebar separator is too wide and joined to buttons,...
+ 788614 Trying to reuse a TreeViewColumn causes criticals and a segfault (e...
+ 788787 gtktextview: Add a missing g_assert_not_reached() for switch defaul...
+ 788905 GtkRange horizontal scrolling causes movement in the wrong direction
 
 * Translation updates:
  Basque
