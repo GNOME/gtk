@@ -25,6 +25,7 @@
 #include "gtkentryprivate.h"
 #include "gtkcomboboxaccessible.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkwidgetprivate.h"
 
 #define GTK_TYPE_ENTRY_ICON_ACCESSIBLE      (gtk_entry_icon_accessible_get_type ())
 #define GTK_ENTRY_ICON_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY_ICON_ACCESSIBLE, GtkEntryIconAccessible))
@@ -958,6 +959,7 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
   gint index, x_layout, y_layout;
   GdkWindow *window;
   gint x_window, y_window;
+  GtkAllocation allocation;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -973,8 +975,7 @@ gtk_entry_accessible_get_character_extents (AtkText      *text,
   pango_layout_index_to_pos (gtk_entry_get_layout (entry), index, &char_rect);
   pango_extents_to_pixels (&char_rect, NULL);
 
-  GtkAllocation allocation;
-  gtk_widget_get_allocation (widget, &allocation);
+  _gtk_widget_get_allocation (widget, &allocation);
 
   window = gtk_widget_get_window (widget);
   gdk_window_get_origin (window, &x_window, &y_window);
