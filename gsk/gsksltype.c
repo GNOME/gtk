@@ -1155,6 +1155,31 @@ gsk_sl_type_struct_has_name (const GskSlTypeStruct *struc)
   return !g_str_has_prefix (struc->name, "struct { ");
 }
 
+static void
+gsk_sl_type_write_member_decoration (GskSpvWriter *writer,
+                                     guint32       type_id,
+                                     gsize         index,
+                                     GskSlType    *member_type,
+                                     const char   *member_name,
+                                     gsize         member_offset)
+{
+  gsk_spv_writer_member_name (writer, type_id, index, member_name);
+
+  gsk_spv_writer_member_decorate (writer, type_id, index,
+                                  GSK_SPV_DECORATION_OFFSET,
+                                  (guint32[1]) { member_offset }, 1);
+
+  if (gsk_sl_type_is_matrix (member_type))
+    {
+      gsk_spv_writer_member_decorate (writer, type_id, index,
+                                      GSK_SPV_DECORATION_COL_MAJOR,
+                                      NULL, 0);
+      gsk_spv_writer_member_decorate (writer, type_id, index,
+                                      GSK_SPV_DECORATION_MATRIX_STRIDE,
+                                      (guint32[1]) { gsk_sl_type_get_size (gsk_sl_type_get_index_type (member_type)) }, 1);
+    }
+}
+
 static guint32
 gsk_sl_type_struct_write_spv (GskSlType    *type,
                               GskSpvWriter *writer)
@@ -1181,7 +1206,8 @@ gsk_sl_type_struct_write_spv (GskSlType    *type,
 
   for (i = 0; i < struc->n_members; i++)
     {
-      gsk_spv_writer_member_name (writer, result_id, i, struc->members[i].name);
+      gsk_sl_type_write_member_decoration (writer, result_id, i, struc->members[i].type,
+          struc->members[i].name, struc->members[i].offset);
     }
 
   return result_id;
@@ -1396,6 +1422,12 @@ gsk_sl_type_block_write_spv (GskSlType    *type,
                                           block->n_members);
   
   gsk_spv_writer_decorate (writer, result_id, GSK_SPV_DECORATION_BLOCK, NULL, 0);
+
+  for (i = 0; i < block->n_members; i++)
+    {
+      gsk_sl_type_write_member_decoration (writer, result_id, i, block->members[i].type,
+          block->members[i].name, block->members[i].offset);
+    }
 
   return result_id;
 }
