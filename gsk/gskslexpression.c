@@ -266,14 +266,18 @@ gsk_sl_expression_binary_write_spv (const GskSlExpression *expression,
                                     GskSpvWriter          *writer)
 {
   const GskSlExpressionBinary *binary = (const GskSlExpressionBinary *) expression;
+  guint left_id, right_id;
+
+  left_id = gsk_sl_expression_write_spv (binary->left, writer);
+  right_id = gsk_sl_expression_write_spv (binary->right, writer);
 
   return gsk_sl_binary_write_spv (binary->binary,
                                   writer,
                                   binary->type,
                                   gsk_sl_expression_get_return_type (binary->left),
-                                  gsk_sl_expression_write_spv (binary->left, writer),
+                                  left_id,
                                   gsk_sl_expression_get_return_type (binary->right),
-                                  gsk_sl_expression_write_spv (binary->right, writer));
+                                  right_id);
 }
 
 static const GskSlExpressionClass GSK_SL_EXPRESSION_BINARY = {
