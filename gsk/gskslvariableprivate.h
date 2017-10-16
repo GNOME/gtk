@@ -42,6 +42,7 @@ const char *            gsk_sl_variable_get_name                (const GskSlVari
 const GskSlValue *      gsk_sl_variable_get_initial_value       (const GskSlVariable    *variable);
 gboolean                gsk_sl_variable_is_constant             (const GskSlVariable    *variable);
 
+gboolean                gsk_sl_variable_is_direct_access_spv    (const GskSlVariable    *variable);
 guint32                 gsk_sl_variable_write_spv               (const GskSlVariable    *variable,
                                                                  GskSpvWriter           *writer);
 guint32                 gsk_sl_variable_load_spv                (GskSlVariable          *variable,

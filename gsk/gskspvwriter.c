@@ -754,6 +754,9 @@ gsk_spv_access_chain_new (GskSpvWriter  *writer,
 {
   GskSpvAccessChain *chain;
 
+  if (!gsk_sl_variable_is_direct_access_spv (variable))
+    return NULL;
+
   chain = g_slice_new0 (GskSpvAccessChain);
 
   chain->writer = gsk_spv_writer_ref (writer);
