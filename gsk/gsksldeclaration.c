@@ -28,6 +28,7 @@
 #include "gsksltokenizerprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslqualifierprivate.h"
+#include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
 #include "gskspvwriterprivate.h"
 
@@ -221,13 +222,13 @@ gsk_sl_declaration_parse_variable (GskSlScope           *scope,
                                    const char           *name)
 {
   GskSlDeclarationVariable *variable;
+  GskSlValue *initial_value = NULL;
+  GskSlExpression *initial = NULL;
   const GskSlToken *token;
 
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
     {
-      GskSlExpression *initial;
-
       gsk_sl_preprocessor_consume (preproc, NULL);
 
       initial = gsk_sl_expression_parse_assignment (scope, preproc);
@@ -239,6 +240,16 @@ gsk_sl_declaration_parse_variable (GskSlScope           *scope,
                                      gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initial)),
                                      gsk_sl_type_get_name (type));
           gsk_sl_expression_unref (initial);
+          initial = NULL;
+        }
+      else
+        {
+          GskSlValue *unconverted = gsk_sl_expression_get_constant (initial);
+          if (unconverted)
+            {
+              initial_value = gsk_sl_value_new_convert (unconverted, type);
+              gsk_sl_value_free (unconverted);
+            }
         }
 
       token = gsk_sl_preprocessor_get (preproc);
@@ -259,7 +270,8 @@ gsk_sl_declaration_parse_variable (GskSlScope           *scope,
     }
 
   variable = gsk_sl_declaration_new (&GSK_SL_DECLARATION_VARIABLE);
-  variable->variable = gsk_sl_variable_new (name, type, qualifier, NULL);
+  variable->variable = gsk_sl_variable_new (name, type, qualifier, initial_value);
+  variable->initial = initial;
   gsk_sl_scope_add_variable (scope, variable->variable);
 
   return &variable->parent;
