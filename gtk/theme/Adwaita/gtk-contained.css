@@ -1946,6 +1946,17 @@ button.emoji-section:checked label { opacity: 1; }
 
 .emoji :hover { background: #4a90d9; }
 
+/******** ListBox Drag and Drop * */
+row.drag-icon { background: @theme_base_color; border: 1px solid @borders; }
+
+row.drag-row { color: gray; background: alpha(gray,0.2); }
+
+row.drag-hover image, row.drag-hover label { color: @theme_text_color; }
+
+row.drag-hover-top { border-top: 48px solid @theme_bg_color; }
+
+row.drag-hover-bottom { border-bottom: 1px solid @theme_bg_color; }
+
 /* GTK NAMED COLORS ---------------- use responsibly! */
 /*
 widget text/foreground color */
