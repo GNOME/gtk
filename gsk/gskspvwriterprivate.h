@@ -32,8 +32,6 @@ G_BEGIN_DECLS
 #define GSK_SPV_VERSION_MINOR 0
 #define GSK_SPV_GENERATOR 0
 
-typedef struct _GskSpvCodeBlock GskSpvCodeBlock;
-
 typedef enum {
   GSK_SPV_WRITER_SECTION_HEADER,
   GSK_SPV_WRITER_SECTION_DEBUG,
@@ -88,13 +86,13 @@ guint32                 gsk_spv_writer_convert                  (GskSpvWriter   
                                                                  GskSlType              *type,
                                                                  GskSlType              *new_type);
 
-guint32                 gsk_spv_writer_push_new_code_block      (GskSpvWriter           *writer);
-void                    gsk_spv_writer_push_code_block          (GskSpvWriter           *writer,
-                                                                 GskSpvCodeBlock        *block);
-GskSpvCodeBlock *       gsk_spv_writer_pop_code_block           (GskSpvWriter           *writer);
-void                    gsk_spv_writer_commit_code_block        (GskSpvWriter           *writer);
-
-guint32                 gsk_spv_code_block_get_label            (GskSpvCodeBlock        *block);
+guint32                 gsk_spv_writer_get_label_id             (GskSpvWriter           *writer);
+guint32                 gsk_spv_writer_get_continue_id          (GskSpvWriter           *writer);
+guint32                 gsk_spv_writer_get_break_id             (GskSpvWriter           *writer);
+void                    gsk_spv_writer_start_code_block         (GskSpvWriter           *writer,
+                                                                 guint32                 label_id,
+                                                                 guint32                 continue_id,
+                                                                 guint32                 break_id);
 
 GskSpvAccessChain *     gsk_spv_access_chain_new                (GskSpvWriter           *writer,
                                                                  GskSlVariable          *variable);

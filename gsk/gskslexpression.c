@@ -362,32 +362,25 @@ gsk_sl_expression_logical_and_write_spv (const GskSlExpression *expression,
                                         GskSpvWriter          *writer)
 {
   const GskSlExpressionLogicalAnd *logical_and = (const GskSlExpressionLogicalAnd *) expression;
-  GskSpvCodeBlock *current_block, *after_block, *and_block;
   guint32 current_id, after_id, and_id, left_id, right_id, result_id;
 
   left_id = gsk_sl_expression_write_spv (logical_and->left, writer);
 
-  current_block = gsk_spv_writer_pop_code_block (writer);
-  current_id = gsk_spv_code_block_get_label (current_block);
-  gsk_spv_writer_push_code_block (writer, current_block);
-
-  and_id = gsk_spv_writer_push_new_code_block (writer);
-  and_block = gsk_spv_writer_pop_code_block (writer);
-
-  after_id = gsk_spv_writer_push_new_code_block (writer);
-  after_block = gsk_spv_writer_pop_code_block (writer);
+  current_id = gsk_spv_writer_get_label_id (writer);
+  and_id = gsk_spv_writer_make_id (writer);
+  after_id = gsk_spv_writer_make_id (writer);
 
   /* mirror glslang */
   gsk_spv_writer_selection_merge (writer, after_id, 0);
   gsk_spv_writer_branch_conditional (writer, left_id, and_id, after_id, NULL, 0);
 
-  gsk_spv_writer_push_code_block (writer, and_block);
+  gsk_spv_writer_start_code_block (writer, and_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, and_id);
   right_id = gsk_sl_expression_write_spv (logical_and->right, writer);
   gsk_spv_writer_branch (writer, after_id);
-  gsk_spv_writer_commit_code_block (writer);
 
-  gsk_spv_writer_push_code_block (writer, after_block);
-  gsk_spv_writer_commit_code_block (writer);
+  gsk_spv_writer_start_code_block (writer, after_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, after_id);
 
   result_id = gsk_spv_writer_phi (writer, 
                                   gsk_sl_type_get_scalar (GSK_SL_BOOL),
@@ -482,33 +475,26 @@ gsk_sl_expression_logical_or_write_spv (const GskSlExpression *expression,
                                         GskSpvWriter          *writer)
 {
   const GskSlExpressionLogicalOr *logical_or = (const GskSlExpressionLogicalOr *) expression;
-  GskSpvCodeBlock *current_block, *after_block, *or_block;
   guint32 current_id, condition_id, after_id, or_id, left_id, right_id, result_id;
 
   left_id = gsk_sl_expression_write_spv (logical_or->left, writer);
 
-  current_block = gsk_spv_writer_pop_code_block (writer);
-  current_id = gsk_spv_code_block_get_label (current_block);
-  gsk_spv_writer_push_code_block (writer, current_block);
-
-  or_id = gsk_spv_writer_push_new_code_block (writer);
-  or_block = gsk_spv_writer_pop_code_block (writer);
-
-  after_id = gsk_spv_writer_push_new_code_block (writer);
-  after_block = gsk_spv_writer_pop_code_block (writer);
+  current_id = gsk_spv_writer_get_label_id (writer);
+  or_id = gsk_spv_writer_make_id (writer);
+  after_id = gsk_spv_writer_make_id (writer);
 
   /* mirror glslang */
   condition_id = gsk_spv_writer_logical_not (writer, gsk_sl_type_get_scalar (GSK_SL_BOOL), left_id);
   gsk_spv_writer_selection_merge (writer, after_id, 0);
   gsk_spv_writer_branch_conditional (writer, condition_id, or_id, after_id, NULL, 0);
 
-  gsk_spv_writer_push_code_block (writer, or_block);
+  gsk_spv_writer_start_code_block (writer, or_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, or_id);
   right_id = gsk_sl_expression_write_spv (logical_or->right, writer);
   gsk_spv_writer_branch (writer, after_id);
-  gsk_spv_writer_commit_code_block (writer);
 
-  gsk_spv_writer_push_code_block (writer, after_block);
-  gsk_spv_writer_commit_code_block (writer);
+  gsk_spv_writer_start_code_block (writer, after_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, after_id);
 
   result_id = gsk_spv_writer_phi (writer, 
                                   gsk_sl_type_get_scalar (GSK_SL_BOOL),

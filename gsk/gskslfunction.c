@@ -424,7 +424,7 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
                                     gpointer             initializer_data)
 {
   GskSlFunctionDeclared *declared = (GskSlFunctionDeclared *) function;
-  guint32 function_type_id, function_id;
+  guint32 function_type_id, function_id, label_id;
   GskSlType *return_type;
   gsize i;
 
@@ -447,7 +447,9 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
   gsk_spv_writer_name (writer, function_id, declared->name);
 
   /* add function body */
-  gsk_spv_writer_push_new_code_block (writer);
+  label_id = gsk_spv_writer_make_id (writer);
+  gsk_spv_writer_start_code_block (writer, label_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_DECLARE, label_id);
 
   if (initializer)
     initializer (writer, initializer_data);
@@ -456,8 +458,6 @@ gsk_sl_function_declared_write_spv (const GskSlFunction *function,
     gsk_spv_writer_return (writer);
 
   gsk_spv_writer_function_end (writer);
-
-  gsk_spv_writer_commit_code_block (writer);
 
   return function_id;
 }

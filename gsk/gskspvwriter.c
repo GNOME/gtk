@@ -27,6 +27,7 @@
 #include "gskslvalueprivate.h"
 #include "gskslvariableprivate.h"
 
+typedef struct _GskSpvCodeBlock GskSpvCodeBlock;
 typedef struct _GskSpvPointerType GskSpvPointerType;
 
 struct _GskSpvPointerType
@@ -39,7 +40,9 @@ struct _GskSpvCodeBlock
 {
   GArray *code[GSK_SPV_WRITER_N_BLOCK_SECTIONS];
 
-  guint32 label;
+  guint32 label_id;
+  guint32 continue_id;
+  guint32 break_id;
 };
 
 struct _GskSpvWriter
@@ -199,13 +202,11 @@ gsk_spv_writer_write_function (GskSpvWriter     *writer,
   g_assert (g_hash_table_lookup (writer->functions, function) == NULL);
 
   block = gsk_spv_code_block_new ();
-  gsk_spv_writer_push_code_block (writer, block);
+  writer->blocks = g_slist_prepend (writer->blocks, block);
   result = gsk_sl_function_write_spv (function, writer, initializer, initializer_data);
   g_hash_table_insert (writer->functions, gsk_sl_function_ref (function), GUINT_TO_POINTER (result));
-  if (block != gsk_spv_writer_pop_code_block (writer))
-    {
-      g_assert_not_reached ();
-    }
+  g_assert (writer->blocks->data == block);
+  writer->blocks = g_slist_remove (writer->blocks, block);
   writer->pending_blocks = g_slist_prepend (writer->pending_blocks, block);
 
   return result;
@@ -544,67 +545,45 @@ gsk_spv_writer_get_bytes (GskSpvWriter        *writer,
   return ((GskSpvCodeBlock *) writer->blocks->data)->code[section - GSK_SPV_WRITER_SECTION_BLOCK_FIRST];
 }
 
-guint32
-gsk_spv_writer_push_new_code_block (GskSpvWriter *writer)
+void
+gsk_spv_writer_start_code_block (GskSpvWriter *writer,
+                                 guint32       label_id,
+                                 guint32       continue_id,
+                                 guint32       break_id)
 {
   GskSpvCodeBlock *block;
-  GskSpvWriterSection label_section;
 
-  block = gsk_spv_code_block_new ();
-  /* This is ugly code that ensures the function block label
-   * goes before variables but subblock labels do not.
-   */
-  if (writer->blocks && writer->blocks->next)
-    label_section = GSK_SPV_WRITER_SECTION_CODE;
-  else
-    label_section = GSK_SPV_WRITER_SECTION_DECLARE;
+  block = writer->blocks->data;
 
-  gsk_spv_writer_push_code_block (writer, block);
-
-  block->label = gsk_spv_writer_label (writer, label_section);
-
-  return block->label;
-}
-
-void
-gsk_spv_writer_push_code_block (GskSpvWriter    *writer,
-                                GskSpvCodeBlock *block)
-{
-  writer->blocks = g_slist_prepend (writer->blocks, block);
-}
-
-GskSpvCodeBlock *
-gsk_spv_writer_pop_code_block (GskSpvWriter *writer)
-{
-  GskSpvCodeBlock *result;
-
-  result = writer->blocks->data;
-  g_assert (result);
-
-  writer->blocks = g_slist_remove (writer->blocks, result);
-
-  return result;
-}
-
-void
-gsk_spv_writer_commit_code_block (GskSpvWriter *writer)
-{
-  GskSpvCodeBlock *block, *target;
-  guint i;
-
-  block = gsk_spv_writer_pop_code_block (writer);
-  target = writer->blocks->data;
-
-  for (i = 0; i < GSK_SPV_WRITER_N_BLOCK_SECTIONS; i++)
-    g_array_append_vals (target->code[i], block->code[i]->data, block->code[i]->len);
-
-  gsk_spv_code_block_free (block);
+  block->label_id = label_id;
+  if (continue_id != 0)
+    block->continue_id = continue_id;
+  if (break_id != 0)
+    block->break_id = break_id;
 }
 
 guint32
-gsk_spv_code_block_get_label (GskSpvCodeBlock *block)
+gsk_spv_writer_get_label_id (GskSpvWriter *writer)
 {
-  return block->label;
+  GskSpvCodeBlock *block = writer->blocks->data;
+
+  return block->label_id;
+}
+
+guint32
+gsk_spv_writer_get_continue_id (GskSpvWriter *writer)
+{
+  GskSpvCodeBlock *block = writer->blocks->data;
+
+  return block->continue_id;
+}
+
+guint32
+gsk_spv_writer_get_break_id (GskSpvWriter *writer)
+{
+  GskSpvCodeBlock *block = writer->blocks->data;
+
+  return block->break_id;
 }
 
 static void

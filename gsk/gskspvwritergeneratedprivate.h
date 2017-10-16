@@ -4511,19 +4511,17 @@ gsk_spv_writer_selection_merge (GskSpvWriter *writer,
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_SELECTION_MERGE;
 }
 
-static inline guint32
+static inline void
 gsk_spv_writer_label (GskSpvWriter *writer,
-                      GskSpvWriterSection section)
+                      GskSpvWriterSection section,
+                      guint32 result)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
-  guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
   g_array_append_val (bytes, (guint32) { 0 });
-  g_array_append_val (bytes, result_id);
+  g_array_append_val (bytes, result);
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_LABEL;
-
-  return result_id;
 }
 
 static inline void

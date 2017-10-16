@@ -91,7 +91,8 @@ var SpecialTypes = {
   "OpPtrCastToGeneric": { "result_type": "IdResultPointerType" },
   "OpGenericCastToPtr": { "result_type": "IdResultPointerType" },
   "OpGenericCastToPtrExplicit": { "result_type": "IdResultPointerType" },
-  "OpFunctionParameter": { "result_type": "IdRef" }
+  "OpFunctionParameter": { "result_type": "IdRef" },
+  "OpLabel": { "result": "IdRef" }
 };
 
 var ExtraOperands = {
@@ -497,17 +498,16 @@ function fix_operand (ins, o)
     }
   if (!o.varname)
     throw new TypeError (o.name + " of type " + o.kind + " has no variable name");
+  let operand;
+  if (SpecialTypes[ins.opname] &&
+      SpecialTypes[ins.opname][o.varname])
+    o.kind = SpecialTypes[ins.opname][o.varname];
+  operand = Operands[o.kind];
+
   if (o.varname == "default")
     o.varname += "_";
   if (o.kind == "IdResult")
     ins.result = true;
-
-  let operand;
-  if (SpecialTypes[ins.opname] &&
-      SpecialTypes[ins.opname][o.varname])
-    operand = Operands[SpecialTypes[ins.opname][o.varname]];
-  else
-    operand = Operands[o.kind];
 
   o.ctype = operand.ctype;
   if (operand.append_one)

@@ -403,53 +403,35 @@ gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
                                GskSpvWriter         *writer)
 {
   GskSlStatementIf *if_stmt = (GskSlStatementIf *) statement;
-  guint32 if_id, else_id, condition_id;
-  GskSpvCodeBlock *if_block, *else_block, *after_block;
+  guint32 if_id, else_id, after_id, condition_id;
 
   condition_id = gsk_sl_expression_write_spv (if_stmt->condition, writer);
 
-  gsk_spv_writer_push_new_code_block (writer);
-  if_block  = gsk_spv_writer_pop_code_block (writer);
-  if_id = gsk_spv_code_block_get_label (if_block);
-  gsk_spv_writer_push_new_code_block (writer);
-  after_block = gsk_spv_writer_pop_code_block (writer);
+  if_id = gsk_spv_writer_make_id (writer);
+  after_id = gsk_spv_writer_make_id (writer);
+  if (if_stmt->else_part)
+    else_id = gsk_spv_writer_make_id (writer);
+  else
+    else_id = after_id;
 
-  gsk_spv_writer_push_code_block (writer, if_block);
+  gsk_spv_writer_selection_merge (writer, after_id, 0);
+  gsk_spv_writer_branch_conditional (writer, condition_id, if_id, else_id, NULL, 0);
+
+  gsk_spv_writer_start_code_block (writer, if_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, if_id);
   if (!gsk_sl_statement_write_spv (if_stmt->if_part, writer))
-    gsk_spv_writer_branch (writer,
-                           gsk_spv_code_block_get_label (after_block));
-  gsk_spv_writer_pop_code_block (writer);
+    gsk_spv_writer_branch (writer, after_id);
 
   if (if_stmt->else_part)
     {
-      else_id = gsk_spv_writer_push_new_code_block (writer);
+      gsk_spv_writer_start_code_block (writer, else_id, 0, 0);
+      gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, else_id);
       if (!gsk_sl_statement_write_spv (if_stmt->else_part, writer))
-        gsk_spv_writer_branch (writer, 
-                               gsk_spv_code_block_get_label (after_block));
-      else_block = gsk_spv_writer_pop_code_block (writer);
-    }
-  else
-    {
-      else_id = gsk_spv_code_block_get_label (after_block);
-      else_block = NULL;
+        gsk_spv_writer_branch (writer, after_id);
     }
 
-  gsk_spv_writer_selection_merge (writer,
-                                  gsk_spv_code_block_get_label (after_block),
-                                  0);
-  gsk_spv_writer_branch_conditional (writer, condition_id, if_id, else_id, NULL, 0);
-
-  gsk_spv_writer_push_code_block (writer, if_block);
-  gsk_spv_writer_commit_code_block (writer);
-
-  if (else_block)
-    {
-      gsk_spv_writer_push_code_block (writer, else_block);
-      gsk_spv_writer_commit_code_block (writer);
-    }
-
-  gsk_spv_writer_push_code_block (writer, after_block);
-  gsk_spv_writer_commit_code_block (writer);
+  gsk_spv_writer_start_code_block (writer, after_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, after_id);
 
   return FALSE;
 }
