@@ -47,6 +47,7 @@ struct _GskSpvWriter
   int ref_count;
 
   guint32 last_id;
+  guint extended_instructions_id;
   GArray *code[GSK_SPV_WRITER_N_GLOBAL_SECTIONS];
   GSList *blocks;
   GSList *pending_blocks;
@@ -275,8 +276,8 @@ gsk_spv_writer_do_write (GskSpvWriter     *writer,
   guint32 entry_point_id;
 
   gsk_spv_writer_capability (writer, GSK_SPV_CAPABILITY_SHADER);
-  gsk_spv_writer_ext_inst_import (writer,
-                                  "GLSL.std.450");
+  writer->extended_instructions_id = gsk_spv_writer_ext_inst_import (writer,
+                                                                     "GLSL.std.450");
   gsk_spv_writer_source (writer,
                          GSK_SPV_SOURCE_LANGUAGE_GLSL,
                          440,
@@ -312,6 +313,7 @@ gsk_spv_writer_clear (GskSpvWriter *writer)
 
   g_slist_free_full (writer->pending_blocks, (GDestroyNotify) gsk_spv_code_block_free);
   writer->pending_blocks = NULL;
+  writer->extended_instructions_id = 0;
 
   for (i = 0; i < GSK_SPV_WRITER_N_GLOBAL_SECTIONS; i++)
     {
@@ -366,6 +368,12 @@ gsk_spv_writer_write (GskSpvWriter     *writer,
 
   size = array->len * sizeof (guint32);
   return g_bytes_new_take (g_array_free (array, FALSE), size);
+}
+
+guint32
+gsk_spv_writer_get_id_for_extended_instructions (GskSpvWriter *writer)
+{
+  return writer->extended_instructions_id;
 }
 
 guint32

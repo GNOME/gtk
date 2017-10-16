@@ -23,6 +23,7 @@
 
 #include "gsksltypesprivate.h"
 #include "gskspvenumsprivate.h"
+#include "gskspvenumsglslprivate.h"
 
 G_BEGIN_DECLS
 
@@ -58,6 +59,8 @@ GBytes *                gsk_spv_writer_write                    (GskSpvWriter   
                                                                  GskSpvWriterFunc        initializer,
                                                                  gpointer                initializer_data);
 
+guint32                 gsk_spv_writer_get_id_for_extended_instructions
+                                                                (GskSpvWriter           *writer);
 guint32                 gsk_spv_writer_get_id_for_type          (GskSpvWriter           *writer,
                                                                  GskSlType              *type);
 guint32                 gsk_spv_writer_get_id_for_pointer_type  (GskSpvWriter           *writer,
@@ -107,6 +110,7 @@ void                    gsk_spv_access_chain_store              (GskSpvAccessCha
                                                                  guint32                 value);
 
 #include "gskspvwritergeneratedprivate.h"
+#include "gskspvwritergeneratedglslprivate.h"
 
 G_END_DECLS
 
