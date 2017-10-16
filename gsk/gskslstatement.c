@@ -506,7 +506,7 @@ gsk_sl_statement_parse_declaration (GskSlScope           *scope,
                                     GskSlType            *type)
 {
   GskSlStatementDeclaration *declaration;
-  GskSlValue *value = NULL;
+  GskSlValue *initial_value = NULL;
   const GskSlToken *token;
   char *name;
 
@@ -539,7 +539,7 @@ gsk_sl_statement_parse_declaration (GskSlScope           *scope,
               unconverted = gsk_sl_expression_get_constant (declaration->initial);
               if (unconverted)
                 {
-                  value = gsk_sl_value_new_convert (unconverted, type);
+                  initial_value = gsk_sl_value_new_convert (unconverted, type);
                   gsk_sl_value_free (unconverted);
                 }
             }
@@ -548,10 +548,16 @@ gsk_sl_statement_parse_declaration (GskSlScope           *scope,
   else
     {
       name = NULL;
-      value = NULL;
     }
 
-  declaration->variable = gsk_sl_variable_new (name, type, qualifier, value);
+  if (qualifier->storage == GSK_SL_STORAGE_LOCAL_CONST &&
+      initial_value == NULL)
+    {
+      gsk_sl_preprocessor_error (stream, DECLARATION, "Variables with \"const\" qualifier must be initialized with a value.");
+      initial_value = gsk_sl_value_new (type);
+    }
+
+  declaration->variable = gsk_sl_variable_new (name, type, qualifier, initial_value);
   g_free (name);
   gsk_sl_scope_add_variable (scope, declaration->variable);
 

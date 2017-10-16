@@ -251,6 +251,13 @@ gsk_sl_declaration_parse_variable (GskSlScope           *scope,
     }
   gsk_sl_preprocessor_consume (preproc, NULL);
 
+  if (qualifier->storage == GSK_SL_STORAGE_GLOBAL_CONST &&
+      initial_value == NULL)
+    {
+      gsk_sl_preprocessor_error (preproc, DECLARATION, "Variables with \"const\" qualifier must be initialized with a constant value.");
+      initial_value = gsk_sl_value_new (type);
+    }
+
   variable = gsk_sl_declaration_new (&GSK_SL_DECLARATION_VARIABLE);
   variable->variable = gsk_sl_variable_new (name, type, qualifier, NULL);
   gsk_sl_scope_add_variable (scope, variable->variable);
