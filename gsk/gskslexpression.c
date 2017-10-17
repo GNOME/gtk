@@ -1980,9 +1980,12 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
             gsk_sl_scope_match_function (scope, &matcher, name);
             
             if (!gsk_sl_function_matcher_has_matches (&matcher))
-              gsk_sl_preprocessor_error (stream, DECLARATION, "No function named \"%s\".", name);
-            
-            expr = gsk_sl_expression_parse_function_call (scope, stream, &matcher);
+              {
+                gsk_sl_preprocessor_error (stream, DECLARATION, "No function named \"%s\".", name);
+                expr = gsk_sl_expression_parse_function_call (scope, stream, NULL);
+              }
+            else
+              expr = gsk_sl_expression_parse_function_call (scope, stream, &matcher);
 
             gsk_sl_function_matcher_finish (&matcher);
           }
