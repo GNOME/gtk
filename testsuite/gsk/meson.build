@@ -26,8 +26,10 @@ test('nodes (vulkan)', test_render_nodes, suite: 'gsk', env: vulkan_test_env)
 test_data = [
   'blendmode.node',
   'blendmode.png',
+  'blendmode.vulkan.png',
   'blendmodes.node',
   'blendmodes.png',
+  'blendmodes.vulkan.png',
   'cairo.node',
   'cairo.png',
   'colors.cairo.png',
@@ -37,11 +39,13 @@ test_data = [
   'cross-fade.png',
   'cross-fades.node',
   'cross-fades.png',
+  'cross-fades.vulkan.png',
   'ducky.png',
   'repeat.node',
   'repeat.png',
   'transform.node',
   'transform.png',
+  'transform.vulkan.png',
 ]
 
 if get_option('install-tests')
