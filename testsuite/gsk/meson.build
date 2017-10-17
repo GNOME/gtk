@@ -1,9 +1,3 @@
-test_env = environment()
-test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
-test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
-test_env.set('GSETTINGS_BACKEND', 'memory')
-test_env.set('G_ENABLE_DIAGNOSTIC', '0')
-
 test_render_nodes = executable(
   'test-render-nodes',
   ['test-render-nodes.c',
@@ -11,7 +5,23 @@ test_render_nodes = executable(
   dependencies: libgtk_dep,
 )
 
-test('test-render-nodes', test_render_nodes, suite: 'gsk', env: test_env)
+cairo_test_env = environment()
+cairo_test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+cairo_test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
+cairo_test_env.set('GSETTINGS_BACKEND', 'memory')
+cairo_test_env.set('G_ENABLE_DIAGNOSTIC', '0')
+cairo_test_env.set('GSK_RENDERER', 'cairo')
+
+test('nodes (cairo)', test_render_nodes, suite: 'gsk', env: cairo_test_env)
+
+vulkan_test_env = environment()
+vulkan_test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
+vulkan_test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
+vulkan_test_env.set('GSETTINGS_BACKEND', 'memory')
+vulkan_test_env.set('G_ENABLE_DIAGNOSTIC', '0')
+vulkan_test_env.set('GSK_RENDERER', 'vulkan')
+
+test('nodes (vulkan)', test_render_nodes, suite: 'gsk', env: vulkan_test_env)
 
 test_data = [
   'blendmode.node',
