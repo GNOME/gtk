@@ -65,6 +65,9 @@ test_data = [
   'transform.node',
   'transform.png',
   'transform.vulkan.png',
+  'opacity.node',
+  'opacity.png',
+  'opacity.vulkan.png',
 ]
 
 if get_option('install-tests')

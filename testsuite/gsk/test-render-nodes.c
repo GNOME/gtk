@@ -411,6 +411,36 @@ transform (void)
   return container;
 }
 
+static GskRenderNode *
+opacity (void)
+{
+  GskRenderNode *child;
+  GskRenderNode *node;
+  GskRenderNode *nodes[5];
+  GskRenderNode *container;
+  graphene_matrix_t matrix;
+  int i;
+
+  child = ducky ();
+
+  for (i = 0; i < 5; i++)
+    {
+      node = gsk_opacity_node_new (child, i / 4.0);
+      graphene_matrix_init_translate (&matrix, &(const graphene_point3d_t) { i* 210, 0, 0 });
+      nodes[i] = gsk_transform_node_new (node, &matrix);
+      gsk_render_node_unref (node);
+    }
+
+  gsk_render_node_unref (child);
+
+  container = gsk_container_node_new (nodes, 5);
+
+  for (i = 0; i < 5; i++)
+    gsk_render_node_unref (nodes[i]);
+
+  return container;
+}
+
 static const struct {
   const char *name;
   GskRenderNode * (* func) (void);
@@ -423,6 +453,7 @@ static const struct {
   { "blendmodes.node", blendmodes },
   { "cross-fades.node", cross_fades },
   { "transform.node", transform },
+  { "opacity.node", opacity },
 };
 
 /*** test setup ***/
