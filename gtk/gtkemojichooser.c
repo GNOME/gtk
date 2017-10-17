@@ -362,6 +362,7 @@ populate_emoji_chooser (GtkEmojiChooser *chooser)
         box = chooser->flags.box;
 
       add_emoji (box, FALSE, item, 0);
+      g_variant_unref (item);
     }
 
   g_bytes_unref (bytes);
