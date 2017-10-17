@@ -34,7 +34,8 @@ typedef enum {
 } GskSlJump;
 
 GskSlStatement *        gsk_sl_statement_parse                  (GskSlScope             *scope,
-                                                                 GskSlPreprocessor      *preproc);
+                                                                 GskSlPreprocessor      *preproc,
+                                                                 gboolean                parse_everything);
 GskSlStatement *        gsk_sl_statement_parse_compound         (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *preproc,
                                                                  gboolean                new_scope);

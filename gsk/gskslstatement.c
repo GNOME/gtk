@@ -443,6 +443,125 @@ static const GskSlStatementClass GSK_SL_STATEMENT_IF = {
   gsk_sl_statement_if_write_spv
 };
 
+/* FOR */
+ 
+typedef struct _GskSlStatementFor GskSlStatementFor;
+
+struct _GskSlStatementFor {
+  GskSlStatement parent;
+
+  GskSlScope *scope;
+
+  GskSlStatement *init;
+  GskSlExpression *condition;
+  GskSlExpression *loop;
+  GskSlStatement *body;
+};
+
+static void
+gsk_sl_statement_for_free (GskSlStatement *statement)
+{
+  GskSlStatementFor *for_stmt = (GskSlStatementFor *) statement;
+ 
+  gsk_sl_scope_unref (for_stmt->scope);
+
+  gsk_sl_statement_unref (for_stmt->init);
+  if (for_stmt->condition)
+    gsk_sl_expression_unref (for_stmt->condition);
+  if (for_stmt->loop)
+    gsk_sl_expression_unref (for_stmt->loop);
+  gsk_sl_statement_unref (for_stmt->body);
+ 
+  g_slice_free (GskSlStatementFor, for_stmt);
+}
+ 
+static void
+gsk_sl_statement_for_print (const GskSlStatement *statement,
+                            GskSlPrinter         *printer)
+{
+  GskSlStatementFor *for_stmt = (GskSlStatementFor *) statement;
+  
+  gsk_sl_printer_append (printer, "for (");
+  gsk_sl_statement_print (for_stmt->init, printer);
+  if (for_stmt->condition)
+    gsk_sl_expression_print (for_stmt->condition, printer);
+  gsk_sl_printer_append (printer, "; ");
+  if (for_stmt->loop)
+    gsk_sl_expression_print (for_stmt->loop, printer);
+  gsk_sl_printer_append (printer, ")");
+  gsk_sl_printer_push_indentation (printer);
+  gsk_sl_printer_newline (printer);
+  gsk_sl_statement_print (for_stmt->body, printer);
+  gsk_sl_printer_pop_indentation (printer);
+}
+ 
+static GskSlJump
+gsk_sl_statement_for_get_jump (const GskSlStatement *statement)
+{
+  /* If the condition is FALSE before entering the body, it
+   * doesn't matter what the body does */
+  return GSK_SL_JUMP_NONE;
+}
+
+static gboolean
+gsk_sl_statement_for_write_spv (const GskSlStatement *statement,
+                                GskSpvWriter         *writer)
+{
+  GskSlStatementFor *for_stmt = (GskSlStatementFor *) statement;
+  guint32 loop_id, continue_id, after_id, condition_id, body_id;
+  guint32 old_break_id, old_continue_id;
+
+  if (gsk_sl_statement_write_spv (for_stmt->init, writer))
+    g_assert_not_reached ();
+
+  loop_id = gsk_spv_writer_make_id (writer);
+  body_id = gsk_spv_writer_make_id (writer);
+  after_id = gsk_spv_writer_make_id (writer);
+  continue_id = gsk_spv_writer_make_id (writer);
+  if (for_stmt->condition)
+    condition_id = gsk_spv_writer_make_id (writer);
+  old_break_id = gsk_spv_writer_get_break_id (writer);
+  old_continue_id = gsk_spv_writer_get_continue_id (writer);
+
+  gsk_spv_writer_branch (writer, loop_id);
+
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, loop_id);
+  gsk_spv_writer_loop_merge (writer, after_id, continue_id, 0);
+
+  if (for_stmt->condition)
+    {
+      guint32 test_id;
+
+      gsk_spv_writer_branch (writer, condition_id);
+      gsk_spv_writer_start_code_block (writer, condition_id, continue_id, after_id);
+      gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, condition_id);
+      test_id = gsk_sl_expression_write_spv (for_stmt->condition, writer);
+      gsk_spv_writer_branch_conditional (writer, test_id, body_id, after_id, NULL, 0);
+    }
+
+  gsk_spv_writer_start_code_block (writer, body_id, continue_id, after_id);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, body_id);
+  if (!gsk_sl_statement_write_spv (for_stmt->body, writer))
+    gsk_spv_writer_branch (writer, continue_id);
+
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, continue_id);
+  if (for_stmt->loop)
+    gsk_sl_expression_write_spv (for_stmt->loop, writer);
+  gsk_spv_writer_branch (writer, loop_id);
+
+  gsk_spv_writer_start_code_block (writer, after_id, old_continue_id, old_break_id);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, after_id);
+
+  return FALSE;
+}
+
+static const GskSlStatementClass GSK_SL_STATEMENT_FOR = {
+  gsk_sl_statement_for_free,
+  gsk_sl_statement_for_print,
+  gsk_sl_statement_for_get_jump,
+  gsk_sl_statement_for_write_spv
+};
+
 /* EXPRESSION */
  
 typedef struct _GskSlStatementExpression GskSlStatementExpression;
@@ -498,6 +617,12 @@ static const GskSlStatementClass GSK_SL_STATEMENT_EXPRESSION = {
 };
 
 /* API */
+
+static GskSlStatement *
+gsk_sl_statement_new_error (void)
+{
+  return (GskSlStatement *) gsk_sl_statement_new (GskSlStatementEmpty, &GSK_SL_STATEMENT_EMPTY);
+}
 
 static GskSlStatement *
 gsk_sl_statement_parse_declaration (GskSlScope           *scope,
@@ -607,17 +732,103 @@ gsk_sl_statement_parse_if (GskSlScope        *scope,
     gsk_sl_preprocessor_consume (preproc, if_stmt);
 
   if_stmt->if_scope = gsk_sl_scope_new (scope, gsk_sl_scope_get_return_type (scope));
-  if_stmt->if_part = gsk_sl_statement_parse (if_stmt->if_scope, preproc);
+  if_stmt->if_part = gsk_sl_statement_parse (if_stmt->if_scope, preproc, TRUE);
 
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_ELSE))
     {
       gsk_sl_preprocessor_consume (preproc, if_stmt);
       if_stmt->else_scope = gsk_sl_scope_new (scope, gsk_sl_scope_get_return_type (scope));
-      if_stmt->else_part = gsk_sl_statement_parse (if_stmt->else_scope, preproc);
+      if_stmt->else_part = gsk_sl_statement_parse (if_stmt->else_scope, preproc, TRUE);
     }
 
   return (GskSlStatement *) if_stmt;
+}
+
+static GskSlExpression *
+gsk_sl_statement_parse_condition_expression (GskSlScope        *scope,
+                                             GskSlPreprocessor *preproc)
+{
+  GskSlExpression *expression;
+  GskSlValue *value;
+  
+  /* XXX: implement */
+  expression = gsk_sl_expression_parse (scope, preproc);
+
+  if (!gsk_sl_type_equal (gsk_sl_expression_get_return_type (expression), gsk_sl_type_get_scalar (GSK_SL_BOOL)))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX,
+                                 "Condition in for statment returns %s, not a bool",
+                                 gsk_sl_type_get_name (gsk_sl_expression_get_return_type (expression)));
+    }
+  value = gsk_sl_expression_get_constant (expression);
+  if (value)
+    {
+      gsk_sl_preprocessor_warn (preproc, CONSTANT,
+                                "Condition is always %s",
+                                *(guint32 *) gsk_sl_value_get_data (value) ? "true" : "false");
+      gsk_sl_value_free (value);
+    }
+
+  return expression;
+}
+
+static GskSlStatement *
+gsk_sl_statement_parse_for (GskSlScope        *scope,
+                            GskSlPreprocessor *preproc)
+{
+  GskSlStatementFor *for_stmt;
+  const GskSlToken *token;
+
+  for_stmt = gsk_sl_statement_new (GskSlStatementFor, &GSK_SL_STATEMENT_FOR);
+
+  for_stmt->scope = gsk_sl_scope_new_full (scope,
+                                           gsk_sl_scope_get_return_type (scope),
+                                           TRUE, TRUE);
+
+  /* GSK_SL_TOKEN_FOR */
+  gsk_sl_preprocessor_consume (preproc, for_stmt);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an opening \"(\"");
+      gsk_sl_statement_unref ((GskSlStatement *) for_stmt);
+      return gsk_sl_statement_new_error ();
+    }
+  gsk_sl_preprocessor_consume (preproc, for_stmt);
+
+  for_stmt->init = gsk_sl_statement_parse (for_stmt->scope, preproc, FALSE);
+  token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
+    {
+      gsk_sl_preprocessor_consume (preproc, for_stmt);
+    }
+  else
+    {
+      for_stmt->condition = gsk_sl_statement_parse_condition_expression (for_stmt->scope, preproc);
+      token = gsk_sl_preprocessor_get (preproc);
+      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
+        gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected \";\" after condition");
+      else
+        gsk_sl_preprocessor_consume (preproc, for_stmt);
+    }
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+    {
+      for_stmt->loop = gsk_sl_expression_parse (for_stmt->scope, preproc);
+      token = gsk_sl_preprocessor_get (preproc);
+    }
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+    gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a closing \")\" at end of for statement");
+  else
+    gsk_sl_preprocessor_consume (preproc, for_stmt);
+
+  for_stmt->body = gsk_sl_statement_parse (for_stmt->scope, preproc, TRUE);
+
+  return (GskSlStatement *) for_stmt;
 }
 
 GskSlStatement *
@@ -653,7 +864,7 @@ gsk_sl_statement_parse_compound (GskSlScope        *scope,
       if (jump != GSK_SL_JUMP_NONE)
         gsk_sl_preprocessor_warn (preproc, DEAD_CODE, "Statement cannot be reached.");
 
-      statement = gsk_sl_statement_parse (scope, preproc);
+      statement = gsk_sl_statement_parse (scope, preproc, TRUE);
       compound->statements = g_slist_prepend (compound->statements, statement);
       jump = gsk_sl_statement_get_jump (statement);
     }
@@ -671,7 +882,8 @@ gsk_sl_statement_parse_compound (GskSlScope        *scope,
 
 GskSlStatement *
 gsk_sl_statement_parse (GskSlScope        *scope,
-                        GskSlPreprocessor *preproc)
+                        GskSlPreprocessor *preproc,
+                        gboolean           parse_everything)
 {
   const GskSlToken *token;
   GskSlStatement *statement;
@@ -686,13 +898,22 @@ gsk_sl_statement_parse (GskSlScope        *scope,
 
     case GSK_SL_TOKEN_EOF:
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Unexpected end of document");
-      return (GskSlStatement *) gsk_sl_statement_new (GskSlStatementEmpty, &GSK_SL_STATEMENT_EMPTY);
+      return gsk_sl_statement_new_error ();
 
     case GSK_SL_TOKEN_LEFT_BRACE:
+      if (!parse_everything)
+        goto only_expression_and_declaration;
       return gsk_sl_statement_parse_compound (scope, preproc, TRUE);
 
     case GSK_SL_TOKEN_IF:
+      if (!parse_everything)
+        goto only_expression_and_declaration;
       return gsk_sl_statement_parse_if (scope, preproc);
+
+    case GSK_SL_TOKEN_FOR:
+      if (!parse_everything)
+        goto only_expression_and_declaration;
+      return gsk_sl_statement_parse_for (scope, preproc);
 
     case GSK_SL_TOKEN_CONST:
     case GSK_SL_TOKEN_IN:
@@ -800,6 +1021,9 @@ its_a_type:
         GskSlStatementReturn *return_statement;
         GskSlType *return_type;
 
+        if (!parse_everything)
+          goto only_expression_and_declaration;
+
         return_statement = gsk_sl_statement_new (GskSlStatementReturn, &GSK_SL_STATEMENT_RETURN);
         gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) return_statement);
         token = gsk_sl_preprocessor_get (preproc);
@@ -864,6 +1088,11 @@ its_a_type:
   gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) statement);
 
   return statement;
+
+only_expression_and_declaration:
+  gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of statement.");
+  gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_SEMICOLON);
+  return gsk_sl_statement_new_error ();
 }
 
 GskSlStatement *

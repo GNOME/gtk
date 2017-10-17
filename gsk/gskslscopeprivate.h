@@ -27,11 +27,17 @@ G_BEGIN_DECLS
 
 GskSlScope *            gsk_sl_scope_new                        (GskSlScope           *parent,
                                                                  GskSlType            *return_type);
+GskSlScope *            gsk_sl_scope_new_full                   (GskSlScope           *parent,
+                                                                 GskSlType            *return_type,
+                                                                 gboolean              can_break,
+                                                                 gboolean              can_continue);
 
 GskSlScope *            gsk_sl_scope_ref                        (GskSlScope           *scope);
 void                    gsk_sl_scope_unref                      (GskSlScope           *scope);
 
 GskSlType *             gsk_sl_scope_get_return_type            (const GskSlScope     *scope);
+gboolean                gsk_sl_scope_can_break                  (const GskSlScope     *scope);
+gboolean                gsk_sl_scope_can_continue               (const GskSlScope     *scope);
 gboolean                gsk_sl_scope_is_global                  (const GskSlScope     *scope);
 
 void                    gsk_sl_scope_add_variable               (GskSlScope           *scope,
