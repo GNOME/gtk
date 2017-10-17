@@ -151,7 +151,7 @@ gsk_pixel_shader_new_for_data (GBytes             *source,
   g_return_val_if_fail (source != NULL, NULL);
 
   compiler = gsk_sl_compiler_new ();
-  program = gsk_sl_compiler_compile_bytes (compiler, source);
+  program = gsk_sl_compiler_compile_bytes (compiler, GSK_SL_SHADER_FRAGMENT, source);
   g_object_unref (compiler);
   if (program == NULL)
     return NULL;

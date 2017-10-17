@@ -25,12 +25,18 @@
 
 G_BEGIN_DECLS
 
-GskSlEnvironment *      gsk_sl_environment_new                  (GskSlProfile          profile,
+GskSlEnvironment *      gsk_sl_environment_new                  (GskSlShaderStage      stage,
+                                                                 GskSlProfile          profile,
                                                                  guint                 version);
+GskSlEnvironment *      gsk_sl_environment_new_similar          (GskSlEnvironment     *environment,
+                                                                 GskSlProfile          profile,
+                                                                 guint                 version,
+                                                                 GError              **error);
 
 GskSlEnvironment *      gsk_sl_environment_ref                  (GskSlEnvironment     *environment);
 void                    gsk_sl_environment_unref                (GskSlEnvironment     *environment);
 
+GskSlShaderStage        gsk_sl_environment_get_stage            (GskSlEnvironment     *environment);
 GskSlProfile            gsk_sl_environment_get_profile          (GskSlEnvironment     *environment);
 guint                   gsk_sl_environment_get_version          (GskSlEnvironment     *environment);
 

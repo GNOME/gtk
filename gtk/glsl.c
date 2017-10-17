@@ -41,7 +41,9 @@ compile (GskSlCompiler *compiler,
 
   file = g_file_new_for_commandline_arg (filename);
 
-  program = gsk_sl_compiler_compile_file (compiler, file);
+  program = gsk_sl_compiler_compile_file (compiler,
+                                          GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (compiler), "shader-stage")),
+                                          file);
   g_object_unref (file);
   if (program == NULL)
     return FALSE;
@@ -74,7 +76,9 @@ dump (GskSlCompiler *compiler,
 
   file = g_file_new_for_commandline_arg (filename);
 
-  program = gsk_sl_compiler_compile_file (compiler, file);
+  program = gsk_sl_compiler_compile_file (compiler,
+                                          GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (compiler), "shader-stage")),
+                                          file);
   g_object_unref (file);
   if (program == NULL)
     return FALSE;
@@ -141,6 +145,50 @@ undefine (const gchar *option_name,
   return TRUE;
 }
 
+static gboolean
+stage (const gchar *option_name,
+       const gchar *value,
+       gpointer data,
+       GError **error)
+{
+  static const struct {
+    const char *name;
+    GskSlShaderStage stage;
+  } stage_names[] = {
+    { "f", GSK_SL_SHADER_FRAGMENT },
+    { "frag", GSK_SL_SHADER_FRAGMENT },
+    { "fragment", GSK_SL_SHADER_FRAGMENT },
+    { "v", GSK_SL_SHADER_VERTEX },
+    { "vert", GSK_SL_SHADER_VERTEX },
+    { "vertex", GSK_SL_SHADER_VERTEX }
+  };
+  GskSlCompiler *compiler = data;
+  GString *str;
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (stage_names); i++)
+    {
+      if (g_ascii_strcasecmp (stage_names[i].name, value) == 0)
+        {
+          g_object_set_data (G_OBJECT (compiler), "shader-stage", GUINT_TO_POINTER (stage_names[i].stage));
+          return TRUE;
+        }
+    }
+
+  str = g_string_new ("");
+  for (i = 0; i < G_N_ELEMENTS (stage_names); i++)
+    {
+      if (i > 0)
+        g_string_append (str, ", ");
+      g_string_append (str, stage_names[i].name);
+    }
+  g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+               "Unknown value given for shader stage. Valid options are: %s",
+               str->str);
+  g_string_free (str, TRUE);
+  return FALSE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -152,6 +200,7 @@ main (int argc, char *argv[])
     { "define", 'D', 0, G_OPTION_ARG_CALLBACK, define, "Add a preprocssor definition", "NAME[=VALUE]" },
     { "undef", 'U', 0, G_OPTION_ARG_CALLBACK, undefine, "Cancel previous preprocessor definition", "NAME" },
     { "print", 'p', 0, G_OPTION_ARG_NONE, &print, "Print instead of compiling", NULL },
+    { "stage", 's', 0, G_OPTION_ARG_CALLBACK, stage, "Set the shader stage", "STAGE" },
     { "output", 'o', 0, G_OPTION_ARG_FILENAME, &output_file, "Output filename", "FILE" },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, "List of input files", "FILE [FILE...]" },
     { NULL, }
@@ -168,6 +217,7 @@ main (int argc, char *argv[])
   gtk_init ();
 
   compiler = gsk_sl_compiler_new ();
+  g_object_set_data (G_OBJECT (compiler), "shader-stage", GUINT_TO_POINTER (GSK_SL_SHADER_FRAGMENT));
   ctx = g_option_context_new (NULL);
   group = g_option_group_new (NULL, NULL, NULL, g_object_ref (compiler), g_object_unref);
   g_option_group_add_entries (group, entries);

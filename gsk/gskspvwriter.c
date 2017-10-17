@@ -49,6 +49,8 @@ struct _GskSpvWriter
 {
   int ref_count;
 
+  GskSlShaderStage stage;
+
   guint32 last_id;
   guint extended_instructions_id;
   GArray *code[GSK_SPV_WRITER_N_GLOBAL_SECTIONS];
@@ -122,13 +124,14 @@ pointer_type_free (gpointer data)
 }
 
 GskSpvWriter *
-gsk_spv_writer_new (void)
+gsk_spv_writer_new (GskSlShaderStage stage)
 {
   GskSpvWriter *writer;
   guint i;
   
   writer = g_slice_new0 (GskSpvWriter);
   writer->ref_count = 1;
+  writer->stage = stage;
 
   for (i = 0; i < GSK_SPV_WRITER_N_GLOBAL_SECTIONS; i++)
     {
@@ -266,6 +269,21 @@ gsk_spv_writer_collect_entry_point_interfaces (GskSpvWriter *writer,
   return (guint32 *) g_array_free (interfaces, FALSE);
 }
 
+static GskSpvExecutionModel
+gsk_spv_writer_get_execution_model (GskSpvWriter *writer)
+{
+  switch (writer->stage)
+  {
+    case GSK_SL_SHADER_VERTEX:
+      return GSK_SPV_EXECUTION_MODEL_VERTEX;
+    case GSK_SL_SHADER_FRAGMENT:
+      return GSK_SPV_EXECUTION_MODEL_FRAGMENT;
+    default:
+      g_assert_not_reached ();
+      return GSK_SPV_EXECUTION_MODEL_FRAGMENT;
+  }
+}
+
 static void
 gsk_spv_writer_do_write (GskSpvWriter     *writer,
                          GskSlFunction    *entry_point,
@@ -295,16 +313,17 @@ gsk_spv_writer_do_write (GskSpvWriter     *writer,
   interfaces = gsk_spv_writer_collect_entry_point_interfaces (writer,
                                                               &n_interfaces);
   gsk_spv_writer_entry_point (writer,
-                              GSK_SPV_EXECUTION_MODEL_FRAGMENT,
+                              gsk_spv_writer_get_execution_model (writer),
                               entry_point_id,
                               "main",
                               interfaces,
                               n_interfaces);
   g_free (interfaces);
 
-  gsk_spv_writer_execution_mode (writer,
-                                 entry_point_id,
-                                 GSK_SPV_EXECUTION_MODE_ORIGIN_UPPER_LEFT);
+  if (writer->stage == GSK_SL_SHADER_FRAGMENT)
+    gsk_spv_writer_execution_mode (writer,
+                                   entry_point_id,
+                                   GSK_SPV_EXECUTION_MODE_ORIGIN_UPPER_LEFT);
 }
 
 static void

@@ -192,4 +192,16 @@ typedef enum {
   GSK_SL_PROFILE_ES,
 } GskSlProfile;
 
+/**
+ * GskSlShaderStage:
+ * @GSK_SL_SHADER_VERTEX: The vertex shader stage
+ * @GSK_SL_SHADER_FRAGMENT: The fragment shader stage
+ *
+ * The shader stage associated with a GLSL program.
+ */
+typedef enum {
+  GSK_SL_SHADER_VERTEX,
+  GSK_SL_SHADER_FRAGMENT
+} GskSlShaderStage;
+
 #endif /* __GSK_TYPES_H__ */

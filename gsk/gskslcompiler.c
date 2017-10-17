@@ -22,6 +22,7 @@
 
 #include "gskcodesourceprivate.h"
 #include "gsksldefineprivate.h"
+#include "gskslenvironmentprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprogramprivate.h"
 #include "gsksltokenizerprivate.h"
@@ -231,15 +232,19 @@ gsk_sl_compiler_resolve_include (GskSlCompiler  *compiler,
 }
 
 static GskSlProgram *
-gsk_sl_compiler_compile (GskSlCompiler *compiler,
-                         GskCodeSource *source)
+gsk_sl_compiler_compile (GskSlCompiler    *compiler,
+                         GskSlShaderStage  stage,
+                         GskCodeSource    *source)
 {
   GskSlPreprocessor *preproc;
+  GskSlEnvironment *environment;
   GskSlProgram *program;
 
   program = g_object_new (GSK_TYPE_SL_PROGRAM, NULL);
 
-  preproc = gsk_sl_preprocessor_new (compiler, NULL, source);
+  environment = gsk_sl_environment_new (stage, GSK_SL_PROFILE_CORE, 150);
+  preproc = gsk_sl_preprocessor_new (compiler, environment, source);
+  gsk_sl_environment_unref (environment);
 
   gsk_sl_program_parse (program, preproc);
 
@@ -255,8 +260,9 @@ gsk_sl_compiler_compile (GskSlCompiler *compiler,
 }
 
 GskSlProgram *
-gsk_sl_compiler_compile_file (GskSlCompiler *compiler,
-                              GFile         *file)
+gsk_sl_compiler_compile_file (GskSlCompiler    *compiler,
+                              GskSlShaderStage  stage,
+                              GFile            *file)
 {
   GskSlProgram *program;
   GskCodeSource *source;
@@ -266,7 +272,7 @@ gsk_sl_compiler_compile_file (GskSlCompiler *compiler,
 
   source = gsk_code_source_new_for_file (file);
 
-  program = gsk_sl_compiler_compile (compiler, source);
+  program = gsk_sl_compiler_compile (compiler, stage, source);
 
   g_object_unref (source);
 
@@ -274,8 +280,9 @@ gsk_sl_compiler_compile_file (GskSlCompiler *compiler,
 }
 
 GskSlProgram *
-gsk_sl_compiler_compile_bytes (GskSlCompiler *compiler,
-                               GBytes        *bytes)
+gsk_sl_compiler_compile_bytes (GskSlCompiler    *compiler,
+                               GskSlShaderStage  stage,
+                               GBytes           *bytes)
 {
   GskSlProgram *program;
   GskCodeSource *source;
@@ -285,7 +292,7 @@ gsk_sl_compiler_compile_bytes (GskSlCompiler *compiler,
 
   source = gsk_code_source_new_for_bytes ("<program>", bytes);
 
-  program = gsk_sl_compiler_compile (compiler, source);
+  program = gsk_sl_compiler_compile (compiler, stage, source);
 
   g_object_unref (source);
 

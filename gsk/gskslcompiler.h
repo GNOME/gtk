@@ -74,9 +74,11 @@ void                    gsk_sl_compiler_remove_define           (GskSlCompiler  
 
 GDK_AVAILABLE_IN_3_92
 GskSlProgram *          gsk_sl_compiler_compile_file            (GskSlCompiler       *compiler,
+                                                                 GskSlShaderStage     stage,
                                                                  GFile               *file);
 GDK_AVAILABLE_IN_3_92
 GskSlProgram *          gsk_sl_compiler_compile_bytes           (GskSlCompiler       *compiler,
+                                                                 GskSlShaderStage     stage,
                                                                  GBytes              *bytes);
 
 G_END_DECLS

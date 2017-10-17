@@ -27,12 +27,34 @@
 
 static GskSlCompiler *compiler;
 
+static GskSlShaderStage
+shader_stage_from_filename (GFile *file)
+{
+  GskSlShaderStage stage;
+  char *base;
+
+  base = g_file_get_basename (file);
+
+  if (g_str_has_suffix (base, ".vert"))
+    stage = GSK_SL_SHADER_VERTEX;
+  else if (g_str_has_suffix (base, ".frag"))
+    stage = GSK_SL_SHADER_FRAGMENT;
+  else
+    stage = GSK_SL_SHADER_FRAGMENT;
+
+  g_free (base);
+
+  return stage;
+}
+
 static void
 test_glsl_file (GFile *file)
 {
   GskSlProgram *program;
 
-  program = gsk_sl_compiler_compile_file (compiler, file);
+  program = gsk_sl_compiler_compile_file (compiler,
+                                          shader_stage_from_filename (file),
+                                          file);
   if (program != NULL)
     {
       g_object_unref (program);

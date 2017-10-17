@@ -33,6 +33,7 @@
 struct _GskSlProgram {
   GObject parent_instance;
 
+  GskSlShaderStage stage;
   GskSlScope *scope;
   GSList *declarations;
 };
@@ -70,6 +71,7 @@ gsk_sl_program_parse (GskSlProgram      *program,
   GskSlDeclaration *declaration;
   const GskSlToken *token;
 
+  program->stage = gsk_sl_environment_get_stage (gsk_sl_preprocessor_get_environment (preproc));
   program->scope = gsk_sl_environment_create_scope (gsk_sl_preprocessor_get_environment (preproc));
 
   for (token = gsk_sl_preprocessor_get (preproc);
@@ -153,7 +155,7 @@ gsk_sl_program_to_spirv (GskSlProgram *program)
 
   g_return_val_if_fail (GSK_IS_SL_PROGRAM (program), NULL);
 
-  writer = gsk_spv_writer_new ();
+  writer = gsk_spv_writer_new (program->stage);
 
   bytes = gsk_spv_writer_write (writer,
                                 gsk_sl_program_get_entry_point (program),

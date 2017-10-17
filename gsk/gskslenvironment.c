@@ -29,23 +29,37 @@ struct _GskSlEnvironment
 {
   int ref_count;
 
+  GskSlShaderStage stage;
   GskSlProfile profile;
   guint version;
 };
 
 GskSlEnvironment *
-gsk_sl_environment_new (GskSlProfile profile,
-                        guint        version)
+gsk_sl_environment_new (GskSlShaderStage stage,
+                        GskSlProfile     profile,
+                        guint            version)
 {
   GskSlEnvironment *environment;
   
   environment = g_slice_new0 (GskSlEnvironment);
   environment->ref_count = 1;
 
+  environment->stage = stage;
   environment->profile = profile;
   environment->version = version;
 
   return environment;
+}
+
+GskSlEnvironment *
+gsk_sl_environment_new_similar (GskSlEnvironment  *environment,
+                                GskSlProfile       profile,
+                                guint              version,
+                                GError           **error)
+{
+  return gsk_sl_environment_new (environment->stage,
+                                 profile == GSK_SL_PROFILE_NONE ? environment->profile : profile,
+                                 version);
 }
 
 GskSlEnvironment *
@@ -71,6 +85,11 @@ gsk_sl_environment_unref (GskSlEnvironment *environment)
   g_slice_free (GskSlEnvironment, environment);
 }
 
+GskSlShaderStage
+gsk_sl_environment_get_stage (GskSlEnvironment *environment)
+{
+  return environment->stage;
+}
 
 GskSlProfile
 gsk_sl_environment_get_profile (GskSlEnvironment *environment)

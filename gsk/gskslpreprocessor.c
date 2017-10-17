@@ -164,7 +164,9 @@ gsk_sl_preprocessor_handle_version (GskSlPreprocessor *preproc,
                                     const char        *profile_name,
                                     gboolean           first_token_ever)
 {
-  G_GNUC_UNUSED GskSlProfile profile;
+  GskSlEnvironment *new_environment;
+  GskSlProfile profile;
+  GError *error = NULL;
 
   if (version <= 0)
     {
@@ -189,29 +191,18 @@ gsk_sl_preprocessor_handle_version (GskSlPreprocessor *preproc,
       gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, location, "#version directive must be first in compilation.");
       return;
     }
-  if (preproc->environment)
-    {
-      if (gsk_sl_environment_get_profile (preproc->environment) == profile &&
-          gsk_sl_environment_get_version (preproc->environment) == version)
-        {
-          gsk_sl_preprocessor_warn_full (preproc, VERSION, location,
-                                         "#version directive should not be used, but it matches predefined version.");
-          return;
-        }
-      else
-        {
-          GskSlProfile env_profile = gsk_sl_environment_get_profile (preproc->environment);
-          gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, location,
-                                          "#version directive not allowed. This compilation uses %u %s.",
-                                          gsk_sl_environment_get_version (preproc->environment),
-                                          env_profile == GSK_SL_PROFILE_ES ? "es" :
-                                          env_profile == GSK_SL_PROFILE_COMPATIBILITY ? "compatibility" :
-                                          "core");
-          return;
-        }
-    }
 
-  preproc->environment = gsk_sl_environment_new (profile, version);
+  new_environment = gsk_sl_environment_new_similar (preproc->environment, profile, version, &error);
+  if (new_environment == NULL)
+    {
+      gsk_sl_preprocessor_emit_error (preproc, TRUE, location, error);
+      g_clear_error (&error);
+    }
+  else
+    {
+      gsk_sl_environment_unref (preproc->environment);
+      preproc->environment = new_environment;
+    }
 }
 
 static gboolean
@@ -737,8 +728,6 @@ gsk_sl_preprocessor_new (GskSlCompiler    *compiler,
       gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline);
       gsk_sl_preprocessor_handle_token (preproc, &pp, TRUE, FALSE);
     }
-  if (preproc->environment == NULL)
-    preproc->environment = gsk_sl_environment_new (GSK_SL_PROFILE_CORE, 150);
 
   return preproc;
 }
