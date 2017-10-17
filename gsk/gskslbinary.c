@@ -671,7 +671,7 @@ gsk_sl_division_write_spv (GskSpvWriter *writer,
 
           tmp_id = gsk_spv_writer_f_div (writer,
                                          rtype,
-                                         gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (type)),
+                                         gsk_spv_writer_get_id_for_one (writer, ltype),
                                          right_id);
 
           return gsk_spv_writer_matrix_times_scalar (writer,
@@ -691,7 +691,7 @@ gsk_sl_division_write_spv (GskSpvWriter *writer,
 
       tmp_id = gsk_spv_writer_f_div (writer,
                                      ltype,
-                                     gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (type)),
+                                     gsk_spv_writer_get_id_for_one (writer, ltype),
                                      left_id);
       return gsk_spv_writer_matrix_times_scalar (writer,
                                                  type,

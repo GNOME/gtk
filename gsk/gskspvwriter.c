@@ -447,13 +447,15 @@ gsk_spv_writer_get_id_for_value (GskSpvWriter *writer,
 }
 
 guint32
-gsk_spv_writer_get_id_for_zero (GskSpvWriter    *writer,
-                                GskSlScalarType  scalar)
+gsk_spv_writer_get_id_for_zero (GskSpvWriter *writer,
+                                GskSlType    *type)
 {
   GskSlValue *value;
   guint32 result_id;
 
-  value = gsk_sl_value_new (gsk_sl_type_get_scalar (scalar));
+  g_return_val_if_fail (gsk_sl_type_is_basic (type), 0);
+
+  value = gsk_sl_value_new (type);
   result_id = gsk_spv_writer_get_id_for_value (writer, value);
   gsk_sl_value_free (value);
 
@@ -461,42 +463,52 @@ gsk_spv_writer_get_id_for_zero (GskSpvWriter    *writer,
 }
 
 guint32
-gsk_spv_writer_get_id_for_one (GskSpvWriter    *writer,
-                               GskSlScalarType  scalar)
+gsk_spv_writer_get_id_for_one (GskSpvWriter *writer,
+                               GskSlType    *type)
 {
   GskSlValue *value;
   guint32 result_id;
+  gpointer data;
+  gsize i;
 
-  value = gsk_sl_value_new (gsk_sl_type_get_scalar (scalar));
-  switch (scalar)
+  g_return_val_if_fail (gsk_sl_type_is_basic (type), 0);
+
+  value = gsk_sl_value_new (type);
+  data = gsk_sl_value_get_data (value);
+
+  for (i = 0; i < gsk_sl_type_get_n_components (type); i++)
     {
-    case GSK_SL_INT:
-      *(gint32 *) gsk_sl_value_get_data (value) = 1;
-      break;
+      switch (gsk_sl_type_get_scalar_type (type))
+        {
+        case GSK_SL_INT:
+          ((gint32 *) data)[i] = 1;
+          break;
 
-    case GSK_SL_UINT:
-      *(guint32 *) gsk_sl_value_get_data (value) = 1;
-      break;
+        case GSK_SL_UINT:
+          ((guint32 *) data)[i] = 1;
+          break;
 
-    case GSK_SL_FLOAT:
-      *(float *) gsk_sl_value_get_data (value) = 1;
-      break;
+        case GSK_SL_FLOAT:
+          ((float *) data)[i] = 1;
+          break;
 
-    case GSK_SL_DOUBLE:
-      *(double *) gsk_sl_value_get_data (value) = 1;
-      break;
+        case GSK_SL_DOUBLE:
+          ((double *) data)[i] = 1;
+          break;
 
-    case GSK_SL_BOOL:
-      *(guint32 *) gsk_sl_value_get_data (value) = TRUE;
-      break;
+        case GSK_SL_BOOL:
+          ((guint32 *) data)[i] = 1;
+          break;
 
-    case GSK_SL_VOID:
-      break;
+        case GSK_SL_VOID:
+          break;
 
-    default:
-      g_assert_not_reached ();
-      break;
+        default:
+          g_assert_not_reached ();
+          break;
+        }
     }
+
   result_id = gsk_spv_writer_get_id_for_value (writer, value);
   gsk_sl_value_free (value);
 

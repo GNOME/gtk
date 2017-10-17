@@ -908,7 +908,7 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
           gsize c;
 
           scalar_id = gsk_spv_writer_convert (writer, value_id, value_type, scalar_type);
-          zero_id = gsk_spv_writer_get_id_for_zero (writer, gsk_sl_type_get_scalar_type (scalar_type));
+          zero_id = gsk_spv_writer_get_id_for_zero (writer, scalar_type);
 
           for (c = 0; c < cols; c++)
             {
@@ -953,8 +953,8 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
         }
       
       value = gsk_sl_value_new (scalar_type);
-      zero_id = gsk_spv_writer_get_id_for_zero (writer, gsk_sl_type_get_scalar_type (scalar_type));
-      one_id = gsk_spv_writer_get_id_for_one (writer, gsk_sl_type_get_scalar_type (scalar_type));
+      zero_id = gsk_spv_writer_get_id_for_zero (writer, scalar_type);
+      one_id = gsk_spv_writer_get_id_for_one (writer, scalar_type);
       gsk_sl_value_free (value);
 
       for (c = 0; c < cols; c++)
