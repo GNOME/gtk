@@ -2057,6 +2057,14 @@ gsk_sl_type_is_matrix (const GskSlType *type)
 }
 
 gboolean
+gsk_sl_type_is_basic (const GskSlType *type)
+{
+  return gsk_sl_type_is_scalar (type)
+      || gsk_sl_type_is_vector (type)
+      || gsk_sl_type_is_matrix (type);
+}
+
+gboolean
 gsk_sl_type_is_struct (const GskSlType *type)
 {
   return type->class == &GSK_SL_TYPE_STRUCT;

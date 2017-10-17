@@ -769,7 +769,7 @@ its_a_type:
             GskSlStatementExpression *statement_expression;
                 
             statement_expression = gsk_sl_statement_new (GskSlStatementExpression, &GSK_SL_STATEMENT_EXPRESSION);
-            if (gsk_sl_type_is_scalar (type) || gsk_sl_type_is_vector (type) || gsk_sl_type_is_matrix (type))
+            if (gsk_sl_type_is_basic (type))
               {
                 statement_expression->expression = gsk_sl_expression_parse_constructor (scope, preproc, type);
               }

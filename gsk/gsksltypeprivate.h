@@ -48,6 +48,7 @@ gboolean                gsk_sl_type_is_void                     (const GskSlType
 gboolean                gsk_sl_type_is_scalar                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_vector                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_matrix                   (const GskSlType     *type);
+gboolean                gsk_sl_type_is_basic                    (const GskSlType     *type);
 gboolean                gsk_sl_type_is_struct                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_block                    (const GskSlType     *type);
 gboolean                gsk_sl_type_is_opaque                   (const GskSlType     *type);

@@ -2330,7 +2330,7 @@ gsk_sl_expression_parse_unary (GskSlScope        *scope,
       gsk_sl_preprocessor_consume (preproc, negation);
       negation->expr = gsk_sl_expression_parse_unary (scope, preproc);
       type = gsk_sl_expression_get_return_type (negation->expr);
-      if (!gsk_sl_type_is_scalar (type) && !gsk_sl_type_is_vector (type) && !gsk_sl_type_is_matrix (type))
+      if (!gsk_sl_type_is_basic (type))
         {
           gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
                                      "Negation only works on scalars, vectors and matrices, not on %s.",
