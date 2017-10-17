@@ -193,6 +193,94 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_ASSIGNMENT = {
   gsk_sl_expression_default_get_spv_access_chain
 };
 
+/* INC_DEC */
+
+typedef struct _GskSlExpressionIncDec GskSlExpressionIncDec;
+
+struct _GskSlExpressionIncDec {
+  GskSlExpression parent;
+
+  GskSlExpression *expr;
+
+  guint post :1;
+  guint decrement :1;
+};
+
+static void
+gsk_sl_expression_inc_dec_free (GskSlExpression *expression)
+{
+  GskSlExpressionIncDec *inc_dec = (GskSlExpressionIncDec *) expression;
+
+  gsk_sl_expression_unref (inc_dec->expr);
+
+  g_slice_free (GskSlExpressionIncDec, inc_dec);
+}
+
+static void
+gsk_sl_expression_inc_dec_print (const GskSlExpression *expression,
+                                 GskSlPrinter          *printer)
+{
+  const GskSlExpressionIncDec *inc_dec = (const GskSlExpressionIncDec *) expression;
+
+  if (!inc_dec->post)
+    gsk_sl_printer_append (printer, inc_dec->decrement ? "--" : "++");
+  gsk_sl_expression_print (inc_dec->expr, printer);
+  if (inc_dec->post)
+    gsk_sl_printer_append (printer, inc_dec->decrement ? "--" : "++");
+}
+
+static GskSlType *
+gsk_sl_expression_inc_dec_get_return_type (const GskSlExpression *expression)
+{
+  const GskSlExpressionIncDec *inc_dec = (const GskSlExpressionIncDec *) expression;
+
+  return gsk_sl_expression_get_return_type (inc_dec->expr);
+}
+
+static GskSlValue *
+gsk_sl_expression_inc_dec_get_constant (const GskSlExpression *expression)
+{
+  return NULL;
+}
+
+static guint32
+gsk_sl_expression_inc_dec_write_spv (const GskSlExpression *expression,
+                                     GskSpvWriter          *writer)
+{
+  const GskSlExpressionIncDec *inc_dec = (const GskSlExpressionIncDec *) expression;
+  GskSpvAccessChain *chain;
+  GskSlType *type;
+  guint32 expr_id, changed_id;
+
+  chain = gsk_sl_expression_get_spv_access_chain (inc_dec->expr, writer);
+  g_assert (chain);
+  type = gsk_sl_expression_get_return_type (inc_dec->expr),
+  expr_id = gsk_spv_access_chain_load (chain);
+
+  changed_id = gsk_sl_binary_write_spv (gsk_sl_binary_get_for_token (inc_dec->decrement ? GSK_SL_TOKEN_DASH : GSK_SL_TOKEN_PLUS),
+                                        writer,
+                                        type,
+                                        type,
+                                        expr_id,
+                                        type,
+                                        gsk_spv_writer_get_id_for_one (writer, type));
+
+  gsk_spv_access_chain_store (chain, changed_id);
+  gsk_spv_access_chain_free (chain);
+
+  return inc_dec->post ? expr_id : changed_id;
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_INC_DEC = {
+  gsk_sl_expression_inc_dec_free,
+  gsk_sl_expression_inc_dec_print,
+  gsk_sl_expression_default_is_assignable,
+  gsk_sl_expression_inc_dec_get_return_type,
+  gsk_sl_expression_inc_dec_get_constant,
+  gsk_sl_expression_inc_dec_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
+};
+
 /* BINARY */
 
 typedef struct _GskSlExpressionBinary GskSlExpressionBinary;
@@ -2136,6 +2224,49 @@ gsk_sl_expression_parse_field_selection (GskSlScope        *scope,
 }
 
 static GskSlExpression *
+gsk_sl_expression_create_inc_dec (GskSlPreprocessor *preproc,
+                                  GskSlExpression   *expr,
+                                  gboolean           post,
+                                  gboolean           decrement)
+{
+  GskSlExpressionIncDec *inc_dec;
+  GError *error = NULL;
+  GskSlType *type;
+
+  if (!gsk_sl_expression_is_assignable (expr, &error))
+    {
+      gsk_sl_preprocessor_emit_error (preproc,
+                                      TRUE,
+                                      gsk_sl_preprocessor_get_location (preproc),
+                                      error);
+      g_clear_error (&error);
+      return expr;
+    }
+
+  type = gsk_sl_expression_get_return_type (expr);
+
+  if (!gsk_sl_type_is_basic (type))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "\"%s\" does not work on %s.",
+                                 decrement ? "--" : "++", gsk_sl_type_get_name (type));
+      return expr;
+    }
+  if (gsk_sl_type_get_scalar_type (type) == GSK_SL_BOOL)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "\"%s\" does not work on bool types.",
+                                 decrement ? "--" : "++");
+      return expr;
+    }
+
+  inc_dec = gsk_sl_expression_new (GskSlExpressionIncDec, &GSK_SL_EXPRESSION_INC_DEC);
+  inc_dec->expr = expr;
+  inc_dec->post = post;
+  inc_dec->decrement = decrement;
+
+  return (GskSlExpression *) inc_dec;
+}
+
+static GskSlExpression *
 gsk_sl_expression_parse_postfix (GskSlScope        *scope,
                                  GskSlPreprocessor *stream)
 {
@@ -2163,6 +2294,15 @@ gsk_sl_expression_parse_postfix (GskSlScope        *scope,
               gsk_sl_preprocessor_error (stream, SYNTAX, "Expected an identifier to select a field.");
               continue;
             }
+        }
+      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_INC_OP) ||
+               gsk_sl_token_is (token, GSK_SL_TOKEN_DEC_OP))
+        {
+          expr = gsk_sl_expression_create_inc_dec (stream,
+                                                   expr,
+                                                   TRUE,
+                                                   gsk_sl_token_is (token, GSK_SL_TOKEN_DEC_OP));
+          gsk_sl_preprocessor_consume (stream, expr);
         }
       else 
         {
@@ -2212,6 +2352,20 @@ gsk_sl_expression_parse_unary (GskSlScope        *scope,
         {
           return (GskSlExpression *) negation;
         }
+    }
+  else if (gsk_sl_token_is (token, GSK_SL_TOKEN_INC_OP) ||
+           gsk_sl_token_is (token, GSK_SL_TOKEN_DEC_OP))
+    {
+      GskSlExpression *expr;
+
+      gsk_sl_preprocessor_consume (preproc, NULL);
+
+      expr = gsk_sl_expression_parse_unary (scope, preproc);
+      expr = gsk_sl_expression_create_inc_dec (preproc,
+                                               expr,
+                                               FALSE,
+                                               gsk_sl_token_is (token, GSK_SL_TOKEN_DEC_OP));
+      return expr;
     }
   else
     {
