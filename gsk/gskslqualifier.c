@@ -577,6 +577,67 @@ gsk_sl_qualifier_get_storage_class (const GskSlQualifier *qualifier)
     }
 }
 
+#define ERROR(...) G_STMT_START{\
+  gsk_sl_preprocessor_error (preproc, DECLARATION, __VA_ARGS__); \
+  result = FALSE; \
+}G_STMT_END
+
+static gboolean
+gsk_sl_qualifier_check_type_for_input (const GskSlQualifier *qualifier,
+                                       GskSlPreprocessor    *preproc,
+                                       GskSlType            *type)
+{
+  gboolean result = TRUE;
+  gsize i;
+
+  if (gsk_sl_type_is_struct (type) && gsk_sl_preprocessor_is_stage (preproc, GSK_SL_SHADER_VERTEX))
+    ERROR ("In variables in vertex shaders must not contain structs");
+  if (gsk_sl_type_is_opaque (type))
+    ERROR ("In variables must not contain opaque types");
+  if (gsk_sl_type_get_scalar_type (type) == GSK_SL_BOOL)
+    ERROR ("In variables must not contain boolean types");
+
+  for (i = 0; i < gsk_sl_type_get_n_members (type); i++)
+    {
+      result &= gsk_sl_qualifier_check_type_for_input (qualifier,
+                                                       preproc,
+                                                       gsk_sl_type_get_member_type (type, i));
+    }
+
+  return result;
+}
+
+gboolean
+gsk_sl_qualifier_check_type (const GskSlQualifier *qualifier,
+                             GskSlPreprocessor    *preproc,
+                             GskSlType            *type)
+{
+  switch (qualifier->storage)
+    {
+    case GSK_SL_STORAGE_DEFAULT:
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+
+    case GSK_SL_STORAGE_GLOBAL:
+    case GSK_SL_STORAGE_GLOBAL_CONST:
+      return TRUE;
+
+    case GSK_SL_STORAGE_GLOBAL_IN:
+      return gsk_sl_qualifier_check_type_for_input (qualifier, preproc, type);
+
+    case GSK_SL_STORAGE_GLOBAL_OUT:
+    case GSK_SL_STORAGE_GLOBAL_UNIFORM:
+    case GSK_SL_STORAGE_LOCAL:
+    case GSK_SL_STORAGE_LOCAL_CONST:
+    case GSK_SL_STORAGE_PARAMETER_IN:
+    case GSK_SL_STORAGE_PARAMETER_OUT:
+    case GSK_SL_STORAGE_PARAMETER_INOUT:
+    case GSK_SL_STORAGE_PARAMETER_CONST:
+      return TRUE;
+    }
+}
+
 static void
 gsk_sl_qualifier_write_inout_decorations (const GskSlQualifier *qualifier,
                                           GskSpvWriter         *writer,

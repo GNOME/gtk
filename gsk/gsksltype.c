@@ -2068,6 +2068,12 @@ gsk_sl_type_is_block (const GskSlType *type)
   return type->class == &GSK_SL_TYPE_BLOCK;
 }
 
+gboolean
+gsk_sl_type_is_opaque (const GskSlType *type)
+{
+  return FALSE;
+}
+
 GskSlScalarType
 gsk_sl_type_get_scalar_type (const GskSlType *type)
 {

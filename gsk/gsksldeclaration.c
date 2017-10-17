@@ -226,6 +226,8 @@ gsk_sl_declaration_parse_variable (GskSlScope           *scope,
   GskSlExpression *initial = NULL;
   const GskSlToken *token;
 
+  gsk_sl_qualifier_check_type (qualifier, preproc, type);
+
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
     {

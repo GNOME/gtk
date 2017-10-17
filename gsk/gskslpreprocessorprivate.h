@@ -20,6 +20,7 @@
 #define __GSK_SL_PREPROCESSOR_PRIVATE_H__
 
 #include "gskslcompilerprivate.h"
+#include "gskslenvironmentprivate.h"
 #include "gsksltypesprivate.h"
 #include "gsksltokenizerprivate.h"
 
@@ -38,6 +39,7 @@ const GskSlToken *      gsk_sl_preprocessor_get                 (GskSlPreprocess
 const GskCodeLocation * gsk_sl_preprocessor_get_location        (GskSlPreprocessor   *preproc);
 void                    gsk_sl_preprocessor_consume             (GskSlPreprocessor   *preproc,
                                                                  gpointer             consumer);
+#define gsk_sl_preprocessor_is_stage(preproc,stage) (gsk_sl_environment_get_stage (gsk_sl_preprocessor_get_environment (preproc)) == (stage))
 
 void                    gsk_sl_preprocessor_sync                (GskSlPreprocessor   *preproc,
                                                                  GskSlTokenType       token);
