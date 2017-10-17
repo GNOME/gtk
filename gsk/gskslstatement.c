@@ -704,6 +704,9 @@ gsk_sl_statement_parse (GskSlScope        *scope,
     case GSK_SL_TOKEN_RESTRICT:
     case GSK_SL_TOKEN_READONLY:
     case GSK_SL_TOKEN_WRITEONLY:
+    case GSK_SL_TOKEN_SMOOTH:
+    case GSK_SL_TOKEN_FLAT:
+    case GSK_SL_TOKEN_NOPERSPECTIVE:
     case GSK_SL_TOKEN_VOID:
     case GSK_SL_TOKEN_FLOAT:
     case GSK_SL_TOKEN_DOUBLE:

@@ -169,6 +169,24 @@ gsk_sl_storage_get_name (GskSlStorage storage)
     }
 }
 
+static const char *
+gsk_sl_interpolation_get_name (GskSlInterpolation interp)
+{
+  switch (interp)
+    {
+      default:
+        g_assert_not_reached ();
+      case GSK_SL_INTERPOLATE_DEFAULT:
+        return "";
+      case GSK_SL_INTERPOLATE_SMOOTH:
+        return "smooth";
+      case GSK_SL_INTERPOLATE_FLAT:
+        return "flat";
+      case GSK_SL_INTERPOLATE_NO_PERSPECTIVE:
+        return "noperspective";
+    }
+}
+
 static gboolean
 gsk_sl_storage_allows_const (GskSlStorage storage)
 {
@@ -280,6 +298,36 @@ gsk_sl_qualifier_parse (GskSlQualifier         *qualifier,
             }
           else
             gsk_sl_preprocessor_error (preproc, SYNTAX, "Qualifiers \"%s\" and \"uniform\" cannot be combined.", gsk_sl_storage_get_name (qualifier->storage));
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          break;
+
+        case GSK_SL_TOKEN_SMOOTH:
+          if (qualifier->interpolation != GSK_SL_INTERPOLATE_DEFAULT)
+            gsk_sl_preprocessor_error (preproc, SYNTAX,
+                                       "Duplicate interpolation qualifiers: \"%s\" and \"smooth\".",
+                                       gsk_sl_interpolation_get_name (qualifier->interpolation));
+          else
+            qualifier->interpolation = GSK_SL_INTERPOLATE_SMOOTH;
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          break;
+
+        case GSK_SL_TOKEN_FLAT:
+          if (qualifier->interpolation != GSK_SL_INTERPOLATE_DEFAULT)
+            gsk_sl_preprocessor_error (preproc, SYNTAX,
+                                       "Duplicate interpolation qualifiers: \"%s\" and \"flat\".",
+                                       gsk_sl_interpolation_get_name (qualifier->interpolation));
+          else
+            qualifier->interpolation = GSK_SL_INTERPOLATE_FLAT;
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          break;
+
+        case GSK_SL_TOKEN_NOPERSPECTIVE:
+          if (qualifier->interpolation != GSK_SL_INTERPOLATE_DEFAULT)
+            gsk_sl_preprocessor_error (preproc, SYNTAX,
+                                       "Duplicate interpolation qualifiers: \"%s\" and \"noperspective\".",
+                                       gsk_sl_interpolation_get_name (qualifier->interpolation));
+          else
+            qualifier->interpolation = GSK_SL_INTERPOLATE_NO_PERSPECTIVE;
           gsk_sl_preprocessor_consume (preproc, NULL);
           break;
 
@@ -480,6 +528,7 @@ gsk_sl_qualifier_print (const GskSlQualifier *qualifier,
       need_space = TRUE;
     }
 
+  need_space = append_with_space (printer, gsk_sl_interpolation_get_name (qualifier->interpolation), need_space);
   need_space = append_with_space (printer, gsk_sl_storage_get_name (qualifier->storage), need_space);
 
   return need_space;
@@ -590,12 +639,18 @@ gsk_sl_qualifier_check_type_for_input (const GskSlQualifier *qualifier,
   gboolean result = TRUE;
   gsize i;
 
-  if (gsk_sl_type_is_struct (type) && gsk_sl_preprocessor_is_stage (preproc, GSK_SL_SHADER_VERTEX))
+  if (gsk_sl_type_is_struct (type) &&
+      gsk_sl_preprocessor_is_stage (preproc, GSK_SL_SHADER_VERTEX))
     ERROR ("In variables in vertex shaders must not contain structs");
-  if (gsk_sl_type_is_opaque (type))
+  if (gsk_sl_type_is_opaque (type) &&
+      gsk_sl_preprocessor_is_stage (preproc, GSK_SL_SHADER_VERTEX))
     ERROR ("In variables must not contain opaque types");
   if (gsk_sl_type_get_scalar_type (type) == GSK_SL_BOOL)
     ERROR ("In variables must not contain boolean types");
+  if (gsk_sl_type_get_scalar_type (type) != GSK_SL_FLOAT &&
+      gsk_sl_preprocessor_is_stage (preproc, GSK_SL_SHADER_FRAGMENT) &&
+      qualifier->interpolation != GSK_SL_INTERPOLATE_FLAT)
+    ERROR ("Non-float in variables in fragment shader must be qualified as \"flat\".");
 
   for (i = 0; i < gsk_sl_type_get_n_members (type); i++)
     {
@@ -643,6 +698,22 @@ gsk_sl_qualifier_write_inout_decorations (const GskSlQualifier *qualifier,
                                           GskSpvWriter         *writer,
                                           guint32               value_id)
 {
+  switch (qualifier->interpolation)
+    {
+      case GSK_SL_INTERPOLATE_FLAT:
+        gsk_spv_writer_decorate (writer, value_id, GSK_SPV_DECORATION_FLAT, NULL, 0);
+        break;
+
+      case GSK_SL_INTERPOLATE_NO_PERSPECTIVE:
+        gsk_spv_writer_decorate (writer, value_id, GSK_SPV_DECORATION_NO_PERSPECTIVE, NULL, 0);
+        break;
+
+      case GSK_SL_INTERPOLATE_DEFAULT:
+      case GSK_SL_INTERPOLATE_SMOOTH:
+      default:
+        break;
+    }
+
   if (qualifier->layout.set >= 0)
     gsk_spv_writer_decorate (writer, value_id, GSK_SPV_DECORATION_LOCATION, (guint32[1]) { qualifier->layout.set }, 1);
   if (qualifier->layout.binding >= 0)

@@ -33,9 +33,17 @@ typedef enum {
   GSK_SL_QUALIFIER_LOCAL
 } GskSlQualifierLocation;
 
+typedef enum {
+  GSK_SL_INTERPOLATE_DEFAULT,
+  GSK_SL_INTERPOLATE_SMOOTH,
+  GSK_SL_INTERPOLATE_FLAT,
+  GSK_SL_INTERPOLATE_NO_PERSPECTIVE
+} GskSlInterpolation;
+
 struct _GskSlQualifier
 {
   GskSlStorage storage;
+  GskSlInterpolation interpolation;
 
   struct {
     gint set;
