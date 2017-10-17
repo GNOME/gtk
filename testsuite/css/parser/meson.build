@@ -10,7 +10,7 @@ test_parser = executable('test-css-parser', 'test-css-parser.c',
                          install: get_option('install-tests'),
                          install_dir: testexecdir,
                          dependencies: libgtk_dep)
-test('css-parser', test_parser, suite: 'css', env: test_env)
+test('parser', test_parser, suite: 'css', env: test_env)
 
 test_data = [
   'animation-crash-3.12.css',

@@ -77,7 +77,7 @@ foreach t : tests
     link_args : test_extra_ldflags,
     dependencies : libgtk_dep)
 
-  test('@0@ test'.format(test_name), test_exe, suite : 'gtk', env : test_env)
+  test(test_name, test_exe, suite : 'gtk', env : test_env)
 endforeach
 
 # FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
@@ -86,7 +86,7 @@ if add_languages('cpp')
     'autotestkeywords.cc',
     c_args : test_cargs + ['-Idummy-headers'],
     dependencies : libgtk_dep)
-  test('autotestkeywords test', test_exe, suite : 'gtk', env : test_env)
+  test('c++ keywords', test_exe, suite : 'gtk', env : test_env)
 endif
 
 # FIXME: schemas from gtk+ dir?

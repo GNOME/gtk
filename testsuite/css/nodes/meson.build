@@ -9,7 +9,7 @@ test_nodes = executable('test-css-nodes', 'test-css-nodes.c',
                         install: get_option('install-tests'),
                         install_dir: testexecdir,
                         dependencies: libgtk_dep)
-test('test-nodes', test_nodes, suite: 'css', env: test_env)
+test('nodes', test_nodes, suite: 'css', env: test_env)
 
 test_data = [
   'box.ltr.nodes',

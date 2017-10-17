@@ -17,7 +17,7 @@ test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
 foreach t : tests
   test_exe = executable(t, '@0@.c'.format(t), dependencies : libgtk_dep)
 
-  test('@0@ test'.format(t), test_exe, suite : 'gdk', env : test_env)
+  test(t, test_exe, suite : 'gdk', env : test_env)
 endforeach
 
 # TODO: installed tests + .test files

@@ -9,7 +9,7 @@ if bash.found()
       input : 'test-@0@.in'.format(t),
       configuration : configuration_data())
 
-    test('test-@0@'.format(t), bash,
+    test(t, bash,
       args : 'test-@0@'.format(t),
       workdir : meson.current_build_dir(),
       env : test_env,

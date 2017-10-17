@@ -20,7 +20,7 @@ test_style = executable(
   install_dir: testexecdir,
   dependencies: libgtk_dep,
 )
-test('test-style', test_style, suite: 'css', env: test_env)
+test('style', test_style, suite: 'css', env: test_env)
 
 test_data = [
   'adjacent-states.css',
