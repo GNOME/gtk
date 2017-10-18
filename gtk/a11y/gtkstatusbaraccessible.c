@@ -22,7 +22,7 @@
 #include "gtkstatusbaraccessible.h"
 
 
-G_DEFINE_TYPE (GtkStatusbarAccessible, gtk_statusbar_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkStatusbarAccessible, gtk_statusbar_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static void
 text_changed (GtkStatusbar *statusbar,
@@ -128,18 +128,11 @@ static void
 gtk_statusbar_accessible_class_init (GtkStatusbarAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
-  GtkContainerAccessibleClass *container_class = (GtkContainerAccessibleClass*)klass;
 
   class->get_name = gtk_statusbar_accessible_get_name;
   class->get_n_children = gtk_statusbar_accessible_get_n_children;
   class->ref_child = gtk_statusbar_accessible_ref_child;
   class->initialize = gtk_statusbar_accessible_initialize;
-  /*
-   * As we report the statusbar as having no children
-   * we are not interested in add and remove signals
-   */
-  container_class->add_gtk = NULL;
-  container_class->remove_gtk = NULL;
 }
 
 static void
