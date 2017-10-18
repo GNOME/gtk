@@ -23,18 +23,14 @@ foreach t : tests
        env: installed_test_env,
        suite: 'gdk')
 
-endforeach
-
-if get_option('install-tests')
-  test_cdata = configuration_data()
-  test_cdata.set('libexecdir', gtk_libexecdir)
-
-  foreach t : tests
-    configure_file(input: '@0@.test.in'.format(t),
+  if get_option('install-tests')
+    test_cdata = configuration_data()
+    test_cdata.set('testexecdir', testexecdir)
+    test_cdata.set('test', t)
+    configure_file(input: 'gdk.test.in',
                    output: '@0@.test'.format(t),
                    configuration: test_cdata,
                    install: true,
                    install_dir: testdatadir)
-  endforeach
-
-endif
+  endif
+endforeach
