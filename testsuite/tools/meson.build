@@ -12,7 +12,7 @@ if bash.found()
                    install: get_option('install-tests'),
                    install_dir: testexecdir)
     test(t, bash,
-         args: 'test-@0@'.format(t),
+         args: t,
          workdir: meson.current_build_dir(),
          env: [ 'GIO_USE_VOLUME_MONITOR=unix',
                 'GSETTINGS_BACKEND=memory',
