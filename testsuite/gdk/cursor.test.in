@@ -1,4 +1,0 @@
-[Test]
-Exec=@libexecdir@/installed-tests/gtk-4.0/gdk/cursor --tap -k
-Type=session
-Output=TAP

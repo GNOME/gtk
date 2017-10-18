@@ -1,4 +1,0 @@
-[Test]
-Exec=@libexecdir@/installed-tests/gtk-4.0/gdk/rgba --tap -k
-Type=session
-Output=TAP
