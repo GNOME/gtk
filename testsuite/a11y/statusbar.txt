@@ -12,7 +12,7 @@ window1
     parent: window1
     index: 0
     name: 
-    state: enabled horizontal sensitive showing visible
+    state: enabled sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
