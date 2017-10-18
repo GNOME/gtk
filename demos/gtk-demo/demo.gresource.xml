@@ -100,8 +100,8 @@
     <file>gtkfishbowl.h</file>
   </gresource>
   <gresource prefix="/iconview">
-    <file preprocess="to-pixdata">gnome-fs-directory.png</file>
-    <file preprocess="to-pixdata">gnome-fs-regular.png</file>
+    <file>gnome-fs-directory.png</file>
+    <file>gnome-fs-regular.png</file>
   </gresource>
   <gresource prefix="/stack">
     <file>stack.ui</file>
