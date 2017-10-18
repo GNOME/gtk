@@ -21,6 +21,7 @@
 #include "gsksltypeprivate.h"
 
 #include "gskslfunctionprivate.h"
+#include "gskslimagetypeprivate.h"
 #include "gskslpreprocessorprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslscopeprivate.h"
@@ -52,6 +53,7 @@ struct _GskSlTypeClass {
   void                  (* free)                                (GskSlType           *type);
   const char *          (* get_name)                            (const GskSlType     *type);
   GskSlScalarType       (* get_scalar_type)                     (const GskSlType     *type);
+  const GskSlImageType *(* get_image_type)                      (const GskSlType     *type);
   GskSlType *           (* get_index_type)                      (const GskSlType     *type);
   gsize                 (* get_index_stride)                    (const GskSlType     *type);
   guint                 (* get_length)                          (const GskSlType     *type);
@@ -360,6 +362,12 @@ gsk_sl_type_void_get_scalar_type (const GskSlType *type)
   return GSK_SL_VOID;
 }
 
+static const GskSlImageType *
+gsk_sl_type_void_get_image_type (const GskSlType *type)
+{
+  return NULL;
+}
+
 static GskSlType *
 gsk_sl_type_void_get_index_type (const GskSlType *type)
 {
@@ -447,6 +455,7 @@ static const GskSlTypeClass GSK_SL_TYPE_VOID = {
   gsk_sl_type_void_free,
   gsk_sl_type_void_get_name,
   gsk_sl_type_void_get_scalar_type,
+  gsk_sl_type_void_get_image_type,
   gsk_sl_type_void_get_index_type,
   gsk_sl_type_void_get_index_stride,
   gsk_sl_type_void_get_length,
@@ -491,6 +500,12 @@ gsk_sl_type_scalar_get_scalar_type (const GskSlType *type)
   GskSlTypeScalar *scalar = (GskSlTypeScalar *) type;
 
   return scalar->scalar;
+}
+
+static const GskSlImageType *
+gsk_sl_type_scalar_get_image_type (const GskSlType *type)
+{
+  return NULL;
 }
 
 static GskSlType *
@@ -615,6 +630,7 @@ static const GskSlTypeClass GSK_SL_TYPE_SCALAR = {
   gsk_sl_type_scalar_free,
   gsk_sl_type_scalar_get_name,
   gsk_sl_type_scalar_get_scalar_type,
+  gsk_sl_type_scalar_get_image_type,
   gsk_sl_type_scalar_get_index_type,
   gsk_sl_type_scalar_get_index_stride,
   gsk_sl_type_scalar_get_length,
@@ -661,6 +677,12 @@ gsk_sl_type_vector_get_scalar_type (const GskSlType *type)
   const GskSlTypeVector *vector = (const GskSlTypeVector *) type;
 
   return vector->scalar;
+}
+
+static const GskSlImageType *
+gsk_sl_type_vector_get_image_type (const GskSlType *type)
+{
+  return NULL;
 }
 
 static GskSlType *
@@ -823,6 +845,7 @@ static const GskSlTypeClass GSK_SL_TYPE_VECTOR = {
   gsk_sl_type_vector_free,
   gsk_sl_type_vector_get_name,
   gsk_sl_type_vector_get_scalar_type,
+  gsk_sl_type_vector_get_image_type,
   gsk_sl_type_vector_get_index_type,
   gsk_sl_type_vector_get_index_stride,
   gsk_sl_type_vector_get_length,
@@ -870,6 +893,12 @@ gsk_sl_type_matrix_get_scalar_type (const GskSlType *type)
   const GskSlTypeMatrix *matrix = (const GskSlTypeMatrix *) type;
 
   return matrix->scalar;
+}
+
+static const GskSlImageType *
+gsk_sl_type_matrix_get_image_type (const GskSlType *type)
+{
+  return NULL;
 }
 
 static GskSlType *
@@ -1033,6 +1062,7 @@ static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_free,
   gsk_sl_type_matrix_get_name,
   gsk_sl_type_matrix_get_scalar_type,
+  gsk_sl_type_matrix_get_image_type,
   gsk_sl_type_matrix_get_index_type,
   gsk_sl_type_matrix_get_index_stride,
   gsk_sl_type_matrix_get_length,
@@ -1045,6 +1075,153 @@ static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_print_value,
   gsk_sl_type_matrix_value_equal,
   gsk_sl_type_matrix_write_value_spv
+};
+
+/* SAMPLER */
+
+typedef struct _GskSlTypeSampler GskSlTypeSampler;
+
+struct _GskSlTypeSampler {
+  GskSlType parent;
+
+  const char *name;
+  GskSlSamplerType sampler;
+
+  GskSlImageType image_type;
+};
+
+static void
+gsk_sl_type_sampler_free (GskSlType *type)
+{
+  g_assert_not_reached ();
+}
+
+static const char *
+gsk_sl_type_sampler_get_name (const GskSlType *type)
+{
+  const GskSlTypeSampler *sampler = (const GskSlTypeSampler *) type;
+
+  return sampler->name;
+}
+
+static GskSlScalarType
+gsk_sl_type_sampler_get_scalar_type (const GskSlType *type)
+{
+  return GSK_SL_VOID;
+}
+
+static const GskSlImageType *
+gsk_sl_type_sampler_get_image_type (const GskSlType *type)
+{
+  const GskSlTypeSampler *sampler = (const GskSlTypeSampler *) type;
+
+  return &sampler->image_type;
+}
+
+static GskSlType *
+gsk_sl_type_sampler_get_index_type (const GskSlType *type)
+{
+  return NULL;
+}
+
+static gsize
+gsk_sl_type_sampler_get_index_stride (const GskSlType *type)
+{
+  return 0;
+}
+
+static guint
+gsk_sl_type_sampler_get_length (const GskSlType *type)
+{
+  return 0;
+}
+
+static gsize
+gsk_sl_type_sampler_get_size (const GskSlType *type)
+{
+  /* XXX: setting this to 0 would make it not work in GskSlValue */
+  return sizeof (gpointer);
+}
+
+static gsize
+gsk_sl_type_sampler_get_n_components (const GskSlType *type)
+{
+  return 1;
+}
+
+static guint
+gsk_sl_type_sampler_get_n_members (const GskSlType *type)
+{
+  return 0;
+}
+
+static const GskSlTypeMember *
+gsk_sl_type_sampler_get_member (const GskSlType *type,
+                               guint            n)
+{
+  return NULL;
+}
+
+static gboolean
+gsk_sl_type_sampler_can_convert (const GskSlType *target,
+                                 const GskSlType *source)
+{
+  return gsk_sl_type_equal (target, source);
+}
+
+static guint32
+gsk_sl_type_sampler_write_spv (GskSlType    *type,
+                               GskSpvWriter *writer)
+{
+  GskSlTypeSampler *sampler = (GskSlTypeSampler *) type;
+  guint32 image_id;
+
+  image_id = gsk_spv_writer_get_id_for_image_type (writer, &sampler->image_type);
+
+  return gsk_spv_writer_type_sampled_image (writer, image_id);
+}
+
+static void
+gsk_sl_type_sampler_print_value (const GskSlType *type,
+                                 GskSlPrinter    *printer,
+                                 gconstpointer    value)
+{
+  g_assert_not_reached ();
+}
+
+static gboolean
+gsk_sl_type_sampler_value_equal (const GskSlType *type,
+                                 gconstpointer    a,
+                                 gconstpointer    b)
+{
+  return *(gconstpointer *) a == *(gconstpointer *) b;
+}
+
+static guint32
+gsk_sl_type_sampler_write_value_spv (GskSlType     *type,
+                                     GskSpvWriter  *writer,
+                                     gconstpointer  value)
+{
+  g_assert_not_reached ();
+}
+
+static const GskSlTypeClass GSK_SL_TYPE_SAMPLER = {
+  gsk_sl_type_sampler_free,
+  gsk_sl_type_sampler_get_name,
+  gsk_sl_type_sampler_get_scalar_type,
+  gsk_sl_type_sampler_get_image_type,
+  gsk_sl_type_sampler_get_index_type,
+  gsk_sl_type_sampler_get_index_stride,
+  gsk_sl_type_sampler_get_length,
+  gsk_sl_type_sampler_get_size,
+  gsk_sl_type_sampler_get_n_components,
+  gsk_sl_type_sampler_get_n_members,
+  gsk_sl_type_sampler_get_member,
+  gsk_sl_type_sampler_can_convert,
+  gsk_sl_type_sampler_write_spv,
+  gsk_sl_type_sampler_print_value,
+  gsk_sl_type_sampler_value_equal,
+  gsk_sl_type_sampler_write_value_spv
 };
 
 /* STRUCT */
@@ -1091,6 +1268,12 @@ static GskSlScalarType
 gsk_sl_type_struct_get_scalar_type (const GskSlType *type)
 {
   return GSK_SL_VOID;
+}
+
+static const GskSlImageType *
+gsk_sl_type_struct_get_image_type (const GskSlType *type)
+{
+  return NULL;
 }
 
 static GskSlType *
@@ -1288,6 +1471,7 @@ static const GskSlTypeClass GSK_SL_TYPE_STRUCT = {
   gsk_sl_type_struct_free,
   gsk_sl_type_struct_get_name,
   gsk_sl_type_struct_get_scalar_type,
+  gsk_sl_type_struct_get_image_type,
   gsk_sl_type_struct_get_index_type,
   gsk_sl_type_struct_get_index_stride,
   gsk_sl_type_struct_get_length,
@@ -1346,6 +1530,12 @@ static GskSlScalarType
 gsk_sl_type_block_get_scalar_type (const GskSlType *type)
 {
   return GSK_SL_VOID;
+}
+
+static const GskSlImageType *
+gsk_sl_type_block_get_image_type (const GskSlType *type)
+{
+  return NULL;
 }
 
 static GskSlType *
@@ -1507,6 +1697,7 @@ static const GskSlTypeClass GSK_SL_TYPE_BLOCK = {
   gsk_sl_type_block_free,
   gsk_sl_type_block_get_name,
   gsk_sl_type_block_get_scalar_type,
+  gsk_sl_type_block_get_image_type,
   gsk_sl_type_block_get_index_type,
   gsk_sl_type_block_get_index_stride,
   gsk_sl_type_block_get_length,
@@ -1859,6 +2050,126 @@ gsk_sl_type_new_parse (GskSlScope        *scope,
     case GSK_SL_TOKEN_DMAT4X4:
       type = gsk_sl_type_ref (gsk_sl_type_get_matrix (GSK_SL_DOUBLE, 4, 4));
       break;
+    case GSK_SL_TOKEN_SAMPLER1D:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_1D));
+      break;
+    case GSK_SL_TOKEN_SAMPLER2D:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D));
+      break;
+    case GSK_SL_TOKEN_SAMPLER3D:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_3D));
+      break;
+    case GSK_SL_TOKEN_SAMPLERCUBE:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_CUBE));
+      break;
+    case GSK_SL_TOKEN_SAMPLER1DSHADOW:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_1D_SHADOW));
+      break;
+    case GSK_SL_TOKEN_SAMPLER2DSHADOW:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_SHADOW));
+      break;
+    case GSK_SL_TOKEN_SAMPLERCUBESHADOW:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_CUBE_SHADOW));
+      break;
+    case GSK_SL_TOKEN_SAMPLER1DARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_1D_ARRAY));
+      break;
+    case GSK_SL_TOKEN_SAMPLER2DARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_ARRAY));
+      break;
+    case GSK_SL_TOKEN_SAMPLER1DARRAYSHADOW:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_1D_ARRAY_SHADOW));
+      break;
+    case GSK_SL_TOKEN_SAMPLER2DARRAYSHADOW:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_ARRAY_SHADOW));
+      break;
+    case GSK_SL_TOKEN_ISAMPLER1D:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_1D_INT));
+      break;
+    case GSK_SL_TOKEN_ISAMPLER2D:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_INT));
+      break;
+    case GSK_SL_TOKEN_ISAMPLER3D:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_3D_INT));
+      break;
+    case GSK_SL_TOKEN_ISAMPLERCUBE:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_CUBE_INT));
+      break;
+    case GSK_SL_TOKEN_ISAMPLER1DARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_1D_ARRAY_INT));
+      break;
+    case GSK_SL_TOKEN_ISAMPLER2DARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_ARRAY_INT));
+      break;
+    case GSK_SL_TOKEN_USAMPLER1D:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_1D_UINT));
+      break;
+    case GSK_SL_TOKEN_USAMPLER2D:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_UINT));
+      break;
+    case GSK_SL_TOKEN_USAMPLER3D:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_3D_UINT));
+      break;
+    case GSK_SL_TOKEN_USAMPLERCUBE:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_CUBE_UINT));
+      break;
+    case GSK_SL_TOKEN_USAMPLER1DARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_1D_ARRAY_UINT));
+      break;
+    case GSK_SL_TOKEN_USAMPLER2DARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_ARRAY_UINT));
+      break;
+    case GSK_SL_TOKEN_SAMPLER2DRECT:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_RECT));
+      break;
+    case GSK_SL_TOKEN_SAMPLER2DRECTSHADOW:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_RECT_SHADOW));
+      break;
+    case GSK_SL_TOKEN_ISAMPLER2DRECT:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_RECT_INT));
+      break;
+    case GSK_SL_TOKEN_USAMPLER2DRECT:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2D_RECT_UINT));
+      break;
+    case GSK_SL_TOKEN_SAMPLERBUFFER:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_BUFFER));
+      break;
+    case GSK_SL_TOKEN_ISAMPLERBUFFER:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_BUFFER_INT));
+      break;
+    case GSK_SL_TOKEN_USAMPLERBUFFER:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_BUFFER_UINT));
+      break;
+    case GSK_SL_TOKEN_SAMPLERCUBEARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_CUBE_ARRAY));
+      break;
+    case GSK_SL_TOKEN_SAMPLERCUBEARRAYSHADOW:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_CUBE_ARRAY_SHADOW));
+      break;
+    case GSK_SL_TOKEN_ISAMPLERCUBEARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_CUBE_ARRAY_INT));
+      break;
+    case GSK_SL_TOKEN_USAMPLERCUBEARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_CUBE_ARRAY_UINT));
+      break;
+    case GSK_SL_TOKEN_SAMPLER2DMS:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2DMS));
+      break;
+    case GSK_SL_TOKEN_ISAMPLER2DMS:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2DMS_INT));
+      break;
+    case GSK_SL_TOKEN_USAMPLER2DMS:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2DMS_UINT));
+      break;
+    case GSK_SL_TOKEN_SAMPLER2DMSARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2DMS_ARRAY));
+      break;
+    case GSK_SL_TOKEN_ISAMPLER2DMSARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2DMS_ARRAY_INT));
+      break;
+    case GSK_SL_TOKEN_USAMPLER2DMSARRAY:
+      type = gsk_sl_type_ref (gsk_sl_type_get_sampler (GSK_SL_SAMPLER_2DMS_ARRAY_UINT));
+      break;
     case GSK_SL_TOKEN_STRUCT:
       return gsk_sl_type_parse_struct (scope, preproc);
     case GSK_SL_TOKEN_IDENTIFIER:
@@ -2003,6 +2314,56 @@ gsk_sl_type_get_matrix (GskSlScalarType      scalar,
   return &builtin_matrix_types[columns - 2][rows - 2][scalar == GSK_SL_FLOAT ? 0 : 1].parent;
 }
 
+static GskSlTypeSampler
+builtin_sampler_types[] = {
+  [GSK_SL_SAMPLER_1D] =                { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler1D",              GSK_SL_SAMPLER_1D,                { GSK_SL_FLOAT, GSK_SPV_DIM_1_D,    0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_1D_INT] =            { { &GSK_SL_TYPE_SAMPLER, 1 }, "isampler1D",             GSK_SL_SAMPLER_1D_INT,            { GSK_SL_INT,   GSK_SPV_DIM_1_D,    0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_1D_UINT] =           { { &GSK_SL_TYPE_SAMPLER, 1 }, "usampler1D",             GSK_SL_SAMPLER_1D_UINT,           { GSK_SL_UINT,  GSK_SPV_DIM_1_D,    0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_1D_SHADOW] =         { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler1DShadow",        GSK_SL_SAMPLER_1D_SHADOW,         { GSK_SL_FLOAT, GSK_SPV_DIM_1_D,    1, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_2D] =                { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler2D",              GSK_SL_SAMPLER_2D,                { GSK_SL_FLOAT, GSK_SPV_DIM_2_D,    0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_INT] =            { { &GSK_SL_TYPE_SAMPLER, 1 }, "isampler2D",             GSK_SL_SAMPLER_2D_INT,            { GSK_SL_INT,   GSK_SPV_DIM_2_D,    0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_UINT] =           { { &GSK_SL_TYPE_SAMPLER, 1 }, "usampler2D",             GSK_SL_SAMPLER_2D_UINT,           { GSK_SL_UINT,  GSK_SPV_DIM_2_D,    0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_SHADOW] =         { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler2DShadow",        GSK_SL_SAMPLER_2D_SHADOW,         { GSK_SL_FLOAT, GSK_SPV_DIM_2_D,    1, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_3D] =                { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler3D",              GSK_SL_SAMPLER_3D,                { GSK_SL_FLOAT, GSK_SPV_DIM_3_D,    0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_3D_INT] =            { { &GSK_SL_TYPE_SAMPLER, 1 }, "isampler3D",             GSK_SL_SAMPLER_3D_INT,            { GSK_SL_INT,   GSK_SPV_DIM_3_D,    0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_3D_UINT] =           { { &GSK_SL_TYPE_SAMPLER, 1 }, "usampler3D",             GSK_SL_SAMPLER_3D_UINT,           { GSK_SL_UINT,  GSK_SPV_DIM_3_D,    0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_CUBE] =              { { &GSK_SL_TYPE_SAMPLER, 1 }, "samplerCube",            GSK_SL_SAMPLER_CUBE,              { GSK_SL_FLOAT, GSK_SPV_DIM_CUBE,   0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_CUBE_INT] =          { { &GSK_SL_TYPE_SAMPLER, 1 }, "isamplerCube",           GSK_SL_SAMPLER_CUBE_INT,          { GSK_SL_INT,   GSK_SPV_DIM_CUBE,   0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_CUBE_UINT] =         { { &GSK_SL_TYPE_SAMPLER, 1 }, "usamplerCube",           GSK_SL_SAMPLER_CUBE_UINT,         { GSK_SL_UINT,  GSK_SPV_DIM_CUBE,   0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_CUBE_SHADOW] =       { { &GSK_SL_TYPE_SAMPLER, 1 }, "samplerCubeShadow",      GSK_SL_SAMPLER_CUBE_SHADOW,       { GSK_SL_FLOAT, GSK_SPV_DIM_CUBE,   1, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_RECT] =           { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler2DRect",          GSK_SL_SAMPLER_2D_RECT,           { GSK_SL_FLOAT, GSK_SPV_DIM_RECT,   0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_RECT_INT] =       { { &GSK_SL_TYPE_SAMPLER, 1 }, "isampler2DRect",         GSK_SL_SAMPLER_2D_RECT_INT,       { GSK_SL_INT,   GSK_SPV_DIM_RECT,   0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_RECT_UINT] =      { { &GSK_SL_TYPE_SAMPLER, 1 }, "usampler2DRect",         GSK_SL_SAMPLER_2D_RECT_UINT,      { GSK_SL_UINT,  GSK_SPV_DIM_RECT,   0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_RECT_SHADOW] =    { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler2DRectShadow",    GSK_SL_SAMPLER_2D_RECT_SHADOW,    { GSK_SL_FLOAT, GSK_SPV_DIM_RECT,   1, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_1D_ARRAY] =          { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler1DArray",         GSK_SL_SAMPLER_1D_ARRAY,          { GSK_SL_FLOAT, GSK_SPV_DIM_1_D,    0, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_1D_ARRAY_INT] =      { { &GSK_SL_TYPE_SAMPLER, 1 }, "isampler1DArray",        GSK_SL_SAMPLER_1D_ARRAY_INT,      { GSK_SL_INT,   GSK_SPV_DIM_1_D,    0, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_1D_ARRAY_UINT] =     { { &GSK_SL_TYPE_SAMPLER, 1 }, "usampler1DArray",        GSK_SL_SAMPLER_1D_ARRAY_UINT,     { GSK_SL_UINT,  GSK_SPV_DIM_1_D,    0, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_1D_ARRAY_SHADOW] =   { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler1DArrayShadow",   GSK_SL_SAMPLER_1D_ARRAY_SHADOW,   { GSK_SL_FLOAT, GSK_SPV_DIM_1_D,    1, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_ARRAY] =          { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler2DArray",         GSK_SL_SAMPLER_2D_ARRAY,          { GSK_SL_FLOAT, GSK_SPV_DIM_2_D,    0, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_ARRAY_INT] =      { { &GSK_SL_TYPE_SAMPLER, 1 }, "isampler2DArray",        GSK_SL_SAMPLER_2D_ARRAY_INT,      { GSK_SL_INT,   GSK_SPV_DIM_2_D,    0, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_ARRAY_UINT] =     { { &GSK_SL_TYPE_SAMPLER, 1 }, "usampler2DArray",        GSK_SL_SAMPLER_2D_ARRAY_UINT,     { GSK_SL_UINT,  GSK_SPV_DIM_2_D,    0, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_2D_ARRAY_SHADOW] =   { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler2DArrayShadow",   GSK_SL_SAMPLER_2D_ARRAY_SHADOW,   { GSK_SL_FLOAT, GSK_SPV_DIM_2_D,    1, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_CUBE_ARRAY] =        { { &GSK_SL_TYPE_SAMPLER, 1 }, "samplerCubeArray",       GSK_SL_SAMPLER_CUBE_ARRAY,        { GSK_SL_FLOAT, GSK_SPV_DIM_CUBE,   0, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_CUBE_ARRAY_INT] =    { { &GSK_SL_TYPE_SAMPLER, 1 }, "isamplerCubeArray",      GSK_SL_SAMPLER_CUBE_ARRAY_INT,    { GSK_SL_INT,   GSK_SPV_DIM_CUBE,   0, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_CUBE_ARRAY_UINT] =   { { &GSK_SL_TYPE_SAMPLER, 1 }, "usamplerCubeArray",      GSK_SL_SAMPLER_CUBE_ARRAY_UINT,   { GSK_SL_UINT,  GSK_SPV_DIM_CUBE,   0, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_CUBE_ARRAY_SHADOW] = { { &GSK_SL_TYPE_SAMPLER, 1 }, "samplerCubeArrayShadow", GSK_SL_SAMPLER_CUBE_ARRAY_SHADOW, { GSK_SL_FLOAT, GSK_SPV_DIM_CUBE,   1, 1, 0, 1 } },
+  [GSK_SL_SAMPLER_BUFFER] =            { { &GSK_SL_TYPE_SAMPLER, 1 }, "samplerBuffer",          GSK_SL_SAMPLER_BUFFER,            { GSK_SL_FLOAT, GSK_SPV_DIM_BUFFER, 0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_BUFFER_INT] =        { { &GSK_SL_TYPE_SAMPLER, 1 }, "isamplerBuffer",         GSK_SL_SAMPLER_BUFFER_INT,        { GSK_SL_INT,   GSK_SPV_DIM_BUFFER, 0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_BUFFER_UINT] =       { { &GSK_SL_TYPE_SAMPLER, 1 }, "usamplerBuffer",         GSK_SL_SAMPLER_BUFFER_UINT,       { GSK_SL_UINT,  GSK_SPV_DIM_BUFFER, 0, 0, 0, 1 } },
+  [GSK_SL_SAMPLER_2DMS] =              { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler2DMS",            GSK_SL_SAMPLER_2DMS,              { GSK_SL_FLOAT, GSK_SPV_DIM_2_D,    0, 0, 1, 1 } },
+  [GSK_SL_SAMPLER_2DMS_INT] =          { { &GSK_SL_TYPE_SAMPLER, 1 }, "isampler2DMS",           GSK_SL_SAMPLER_2DMS_INT,          { GSK_SL_INT,   GSK_SPV_DIM_2_D,    0, 0, 1, 1 } },
+  [GSK_SL_SAMPLER_2DMS_UINT] =         { { &GSK_SL_TYPE_SAMPLER, 1 }, "usampler2DMS",           GSK_SL_SAMPLER_2DMS_UINT,         { GSK_SL_UINT,  GSK_SPV_DIM_2_D,    0, 0, 1, 1 } },
+  [GSK_SL_SAMPLER_2DMS_ARRAY] =        { { &GSK_SL_TYPE_SAMPLER, 1 }, "sampler2DMSArray",       GSK_SL_SAMPLER_2DMS_ARRAY,        { GSK_SL_FLOAT, GSK_SPV_DIM_2_D,    0, 1, 1, 1 } },
+  [GSK_SL_SAMPLER_2DMS_ARRAY_INT] =    { { &GSK_SL_TYPE_SAMPLER, 1 }, "isampler2DMSArray",      GSK_SL_SAMPLER_2DMS_ARRAY_INT,    { GSK_SL_INT,   GSK_SPV_DIM_2_D,    0, 1, 1, 1 } },
+  [GSK_SL_SAMPLER_2DMS_ARRAY_UINT] =   { { &GSK_SL_TYPE_SAMPLER, 1 }, "usampler2DMSArray",      GSK_SL_SAMPLER_2DMS_ARRAY_UINT,   { GSK_SL_UINT,  GSK_SPV_DIM_2_D,    0, 1, 1, 1 } }
+};
+
+GskSlType *
+gsk_sl_type_get_sampler (GskSlSamplerType sampler)
+{
+  return &builtin_sampler_types[sampler].parent;
+}
+
 GskSlType *
 gsk_sl_type_ref (GskSlType *type)
 {
@@ -2077,15 +2438,27 @@ gsk_sl_type_is_block (const GskSlType *type)
 }
 
 gboolean
+gsk_sl_type_is_sampler (const GskSlType *type)
+{
+  return type->class == &GSK_SL_TYPE_SAMPLER;
+}
+
+gboolean
 gsk_sl_type_is_opaque (const GskSlType *type)
 {
-  return FALSE;
+  return gsk_sl_type_is_sampler (type);
 }
 
 GskSlScalarType
 gsk_sl_type_get_scalar_type (const GskSlType *type)
 {
   return type->class->get_scalar_type (type);
+}
+
+const GskSlImageType *
+gsk_sl_type_get_image_type (const GskSlType *type)
+{
+  return type->class->get_image_type (type);
 }
 
 GskSlType *

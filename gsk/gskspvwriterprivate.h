@@ -61,11 +61,15 @@ guint32                 gsk_spv_writer_get_id_for_extended_instructions
                                                                 (GskSpvWriter           *writer);
 guint32                 gsk_spv_writer_get_id_for_type          (GskSpvWriter           *writer,
                                                                  GskSlType              *type);
+guint32                 gsk_spv_writer_get_id_for_image_type    (GskSpvWriter           *writer,
+                                                                 const GskSlImageType   *type);
 guint32                 gsk_spv_writer_get_id_for_pointer_type  (GskSpvWriter           *writer,
                                                                  GskSlType              *type,
                                                                  GskSpvStorageClass      storage);
 guint32                 gsk_spv_writer_get_id_for_value         (GskSpvWriter           *writer,
                                                                  GskSlValue             *value);
+GskSlValue *            gsk_spv_writer_get_value_for_id         (GskSpvWriter           *writer,
+                                                                 guint32                 id);
 guint32                 gsk_spv_writer_get_id_for_zero          (GskSpvWriter           *writer,
                                                                  GskSlType              *type);
 guint32                 gsk_spv_writer_get_id_for_one           (GskSpvWriter           *writer,

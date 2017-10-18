@@ -38,6 +38,7 @@ GskSlType *             gsk_sl_type_get_vector                  (GskSlScalarType
 GskSlType *             gsk_sl_type_get_matrix                  (GskSlScalarType      scalar,
                                                                  guint                columns,
                                                                  guint                rows);
+GskSlType *             gsk_sl_type_get_sampler                 (GskSlSamplerType     sampler);
 GskSlType *             gsk_sl_type_get_matching                (GskSlType           *type,
                                                                  GskSlScalarType      scalar);
 
@@ -51,10 +52,12 @@ gboolean                gsk_sl_type_is_matrix                   (const GskSlType
 gboolean                gsk_sl_type_is_basic                    (const GskSlType     *type);
 gboolean                gsk_sl_type_is_struct                   (const GskSlType     *type);
 gboolean                gsk_sl_type_is_block                    (const GskSlType     *type);
+gboolean                gsk_sl_type_is_sampler                  (const GskSlType     *type);
 gboolean                gsk_sl_type_is_opaque                   (const GskSlType     *type);
 
 const char *            gsk_sl_type_get_name                    (const GskSlType     *type);
 GskSlScalarType         gsk_sl_type_get_scalar_type             (const GskSlType     *type);
+const GskSlImageType *  gsk_sl_type_get_image_type              (const GskSlType     *type);
 GskSlType *             gsk_sl_type_get_index_type              (const GskSlType     *type);
 gsize                   gsk_sl_type_get_index_stride            (const GskSlType     *type);
 guint                   gsk_sl_type_get_length                  (const GskSlType     *type);

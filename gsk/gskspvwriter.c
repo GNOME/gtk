@@ -22,6 +22,7 @@
 
 #include "gskslfunctionprivate.h"
 #include "gskslfunctiontypeprivate.h"
+#include "gskslimagetypeprivate.h"
 #include "gskslqualifierprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvalueprivate.h"
@@ -58,6 +59,7 @@ struct _GskSpvWriter
   GSList *pending_blocks;
 
   GHashTable *types;
+  GHashTable *image_types;
   GHashTable *pointer_types;
   GHashTable *values;
   GHashTable *variables;
@@ -140,6 +142,8 @@ gsk_spv_writer_new (GskSlShaderStage stage)
 
   writer->types = g_hash_table_new_full (gsk_sl_type_hash, gsk_sl_type_equal,
                                          (GDestroyNotify) gsk_sl_type_unref, NULL);
+  writer->image_types = g_hash_table_new_full (gsk_sl_image_type_hash, gsk_sl_image_type_equal,
+                                               NULL, NULL);
   writer->pointer_types = g_hash_table_new_full (pointer_type_hash, pointer_type_equal,
                                                  pointer_type_free, NULL);
   writer->values = g_hash_table_new_full (gsk_sl_value_hash, gsk_sl_value_equal,
@@ -185,6 +189,7 @@ gsk_spv_writer_unref (GskSpvWriter *writer)
 
   g_hash_table_destroy (writer->pointer_types);
   g_hash_table_destroy (writer->types);
+  g_hash_table_destroy (writer->image_types);
   g_hash_table_destroy (writer->values);
   g_hash_table_destroy (writer->variables);
   g_hash_table_destroy (writer->functions);
@@ -342,6 +347,7 @@ gsk_spv_writer_clear (GskSpvWriter *writer)
 
   g_hash_table_remove_all (writer->pointer_types);
   g_hash_table_remove_all (writer->types);
+  g_hash_table_remove_all (writer->image_types);
   g_hash_table_remove_all (writer->values);
   g_hash_table_remove_all (writer->variables);
   g_hash_table_remove_all (writer->functions);
@@ -412,6 +418,21 @@ gsk_spv_writer_get_id_for_type (GskSpvWriter *writer,
 }
 
 guint32
+gsk_spv_writer_get_id_for_image_type (GskSpvWriter         *writer,
+                                      const GskSlImageType *type)
+{
+  guint32 result;
+
+  result = GPOINTER_TO_UINT (g_hash_table_lookup (writer->image_types, type));
+  if (result != 0)
+    return result;
+
+  result = gsk_sl_image_type_write_spv (type, writer);
+  g_hash_table_insert (writer->image_types, (gpointer) type, GUINT_TO_POINTER (result));
+  return result;
+}
+
+guint32
 gsk_spv_writer_get_id_for_pointer_type (GskSpvWriter       *writer,
                                         GskSlType          *type,
                                         GskSpvStorageClass  storage)
@@ -444,6 +465,23 @@ gsk_spv_writer_get_id_for_value (GskSpvWriter *writer,
   result = gsk_sl_value_write_spv (value, writer);
   g_hash_table_insert (writer->values, gsk_sl_value_copy (value), GUINT_TO_POINTER (result));
   return result;
+}
+
+GskSlValue *
+gsk_spv_writer_get_value_for_id (GskSpvWriter *writer,
+                                 guint32       id)
+{
+  GHashTableIter iter;
+  gpointer value, value_id;
+
+  g_hash_table_iter_init (&iter, writer->values);
+  while (g_hash_table_iter_next (&iter, &value, &value_id))
+    {
+      if (GPOINTER_TO_UINT (value_id) == id)
+        return value;
+    }
+
+  return NULL;
 }
 
 guint32

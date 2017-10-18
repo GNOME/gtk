@@ -42,6 +42,7 @@ gsk_private_sources = files([
   'gskslexpression.c',
   'gskslfunction.c',
   'gskslfunctiontype.c',
+  'gskslimagetype.c',
   'gskslnativefunction.c',
   'gskslpreprocessor.c',
   'gskslprinter.c',

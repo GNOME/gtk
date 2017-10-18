@@ -21,6 +21,7 @@
 #include "gskslnativefunctionprivate.h"
 
 #include "gskslenvironmentprivate.h"
+#include "gskslimagetypeprivate.h"
 #include "gskslfunctionprivate.h"
 #include "gskslfunctiontypeprivate.h"
 #include "gskslscopeprivate.h"
@@ -1355,6 +1356,455 @@ gsk_sl_native_functions_add_150 (GskSlScope       *scope,
   UNIMPLEMENTED_NATIVE1 (MAT4, inverse, MAT4);
 }
 
+#define PACK_TEXTURE_CALL_INFO(types, proj, lod, bias, offset, fetch, grad) \
+  GUINT_TO_POINTER(((types) & 0xFF) | ((proj) << 16) | ((lod) << 18) | ((bias) << 19) | ((offset) << 20) | ((fetch) << 21) | ((grad) << 22))
+#define UNPACK_TEXTURE_CALL_INFO(_info, type, proj, lod, bias, offset, fetch, grad) G_STMT_START{\
+  guint info = GPOINTER_TO_UINT(_info); \
+\
+  type = info & 0xFF; \
+  proj = (info >> 16) & 0x3; \
+  lod = (info >> 18) & 0x1; \
+  bias = (info >> 19) & 0x1; \
+  offset = (info >> 20) & 0x1; \
+  fetch = (info >> 21) & 0x1; \
+  grad = (info >> 22) & 0x1; \
+}G_STMT_END
+
+static guint32
+gsk_sl_native_texture_write_spv (GskSpvWriter *writer,
+                                 guint32      *arguments,
+                                 gpointer      user_data)
+{
+  guint types, proj, lod, bias, offset, fetch, grad, dref, min_lod;
+  const GskSlImageType *image;
+  GskSlType *type;
+  guint32 extra_args[9], n_extra_args;
+  guint32 mask;
+  guint length;
+  gboolean explicit_lod = FALSE;
+  gsize i;
+
+  UNPACK_TEXTURE_CALL_INFO(user_data, types, proj, lod, bias, offset, fetch, grad);
+  type = gsk_sl_type_get_sampler (types);
+  image = gsk_sl_type_get_image_type (type);
+  length = gsk_sl_image_type_get_lookup_dimensions (image, proj > 0);
+  mask = 0;
+  n_extra_args = 0;
+  i = 2;
+
+  if (fetch && gsk_sl_image_type_needs_lod_argument (image, fetch))
+    min_lod = i++;
+  else
+    min_lod = 0;
+
+  /* match used flags to their argument number */
+  if (lod)
+    lod = i++;
+  if (grad)
+    {
+      grad = i;
+      i += 2;
+    }
+  if (offset)
+    offset = i++;
+  if (length > 4)
+    dref = arguments[i++];
+  else if (image->shadow)
+    {
+      dref = gsk_spv_writer_composite_extract (writer,
+                                               gsk_sl_type_get_scalar (GSK_SL_FLOAT),
+                                               arguments[1],
+                                               (guint32[1]) { length - 1 - (proj ? 1 : 0) },
+                                               1);
+    }
+  else
+    dref = 0;
+  if (proj)
+    {
+      guint real_length = (proj == 2 ? 4 : MIN (4, length));
+
+      if (real_length != gsk_sl_image_type_get_dimensions (image) + 1)
+        {
+          guint32 tmp_id;
+
+          tmp_id = gsk_spv_writer_composite_extract (writer,
+                                                     gsk_sl_type_get_scalar (GSK_SL_FLOAT),
+                                                     arguments[1],
+                                                     (guint32[1]) { real_length - 1 },
+                                                     1);
+          arguments[1] = gsk_spv_writer_composite_insert (writer,
+                                                          gsk_sl_type_get_vector (GSK_SL_FLOAT, real_length),
+                                                          tmp_id,
+                                                          arguments[1],
+                                                          (guint32[1]) { gsk_sl_image_type_get_dimensions (image) },
+                                                          1);
+        }
+    }
+
+  if (bias)
+    bias = i++;
+
+  if (bias)
+    {
+      mask |= GSK_SPV_IMAGE_OPERANDS_BIAS;
+      extra_args[n_extra_args++] = arguments[bias];
+    }
+  if (lod)
+    {
+      mask |= GSK_SPV_IMAGE_OPERANDS_LOD;
+      extra_args[n_extra_args++] = arguments[lod];
+      explicit_lod = TRUE;
+    }
+  if (min_lod && !image->multisampled)
+    {
+      g_assert (!lod);
+      mask |= GSK_SPV_IMAGE_OPERANDS_LOD;
+      extra_args[n_extra_args++] = arguments[min_lod];
+    }
+
+  if (grad)
+    {
+      mask |= GSK_SPV_IMAGE_OPERANDS_GRAD;
+      extra_args[n_extra_args++] = arguments[grad];
+      extra_args[n_extra_args++] = arguments[grad + 1];
+      explicit_lod = TRUE;
+    }
+  if (offset)
+    {
+      if (gsk_spv_writer_get_value_for_id (writer, arguments[offset]))
+        mask |= GSK_SPV_IMAGE_OPERANDS_CONST_OFFSET;
+      else
+        mask |= GSK_SPV_IMAGE_OPERANDS_OFFSET;
+      extra_args[n_extra_args++] = arguments[offset];
+    }
+  if (min_lod && image->multisampled)
+    {
+      mask |= GSK_SPV_IMAGE_OPERANDS_SAMPLE;
+      extra_args[n_extra_args++] = arguments[min_lod];
+    }
+
+  if (fetch)
+    {
+      guint32 image_id;
+
+      image_id = gsk_spv_writer_image (writer,
+                                       gsk_spv_writer_get_id_for_image_type (writer, image),
+                                       arguments[0]);
+                                       
+      return gsk_spv_writer_image_fetch (writer,
+                                         gsk_sl_image_type_get_pixel_type (image),
+                                         image_id,
+                                         arguments[1],
+                                         mask,
+                                         extra_args,
+                                         n_extra_args);
+    }
+  else if (explicit_lod)
+    {
+      if (dref)
+        {
+          if (proj)
+            {
+              return gsk_spv_writer_image_sample_proj_dref_explicit_lod (writer,
+                                                                         gsk_sl_image_type_get_pixel_type (image),
+                                                                         arguments[0],
+                                                                         arguments[1],
+                                                                         dref,
+                                                                         mask,
+                                                                         extra_args,
+                                                                         n_extra_args);
+            }
+          else
+            {
+              return gsk_spv_writer_image_sample_dref_explicit_lod (writer,
+                                                                    gsk_sl_image_type_get_pixel_type (image),
+                                                                    arguments[0],
+                                                                    arguments[1],
+                                                                    dref,
+                                                                    mask,
+                                                                    extra_args,
+                                                                    n_extra_args);
+            }
+        }
+      else
+        {
+          if (proj)
+            {
+              return gsk_spv_writer_image_sample_proj_explicit_lod (writer,
+                                                                    gsk_sl_image_type_get_pixel_type (image),
+                                                                    arguments[0],
+                                                                    arguments[1],
+                                                                    mask,
+                                                                    extra_args,
+                                                                    n_extra_args);
+            }
+          else
+            {
+              return gsk_spv_writer_image_sample_explicit_lod (writer,
+                                                               gsk_sl_image_type_get_pixel_type (image),
+                                                               arguments[0],
+                                                               arguments[1],
+                                                               mask,
+                                                               extra_args,
+                                                               n_extra_args);
+            }
+        }
+    }
+  else
+    {
+      if (dref)
+        {
+          if (proj)
+            {
+              return gsk_spv_writer_image_sample_proj_dref_implicit_lod (writer,
+                                                                         gsk_sl_image_type_get_pixel_type (image),
+                                                                         arguments[0],
+                                                                         arguments[1],
+                                                                         dref,
+                                                                         mask,
+                                                                         extra_args,
+                                                                         n_extra_args);
+            }
+          else
+            {
+              return gsk_spv_writer_image_sample_dref_implicit_lod (writer,
+                                                                    gsk_sl_image_type_get_pixel_type (image),
+                                                                    arguments[0],
+                                                                    arguments[1],
+                                                                    dref,
+                                                                    mask,
+                                                                    extra_args,
+                                                                    n_extra_args);
+            }
+        }
+      else
+        {
+          if (proj)
+            {
+              return gsk_spv_writer_image_sample_proj_implicit_lod (writer,
+                                                                    gsk_sl_image_type_get_pixel_type (image),
+                                                                    arguments[0],
+                                                                    arguments[1],
+                                                                    mask,
+                                                                    extra_args,
+                                                                    n_extra_args);
+            }
+          else
+            {
+              return gsk_spv_writer_image_sample_implicit_lod (writer,
+                                                               gsk_sl_image_type_get_pixel_type (image),
+                                                               arguments[0],
+                                                               arguments[1],
+                                                               mask,
+                                                               extra_args,
+                                                               n_extra_args);
+            }
+        }
+    }
+}
+
+static void
+gsk_sl_native_functions_add_texture (GskSlScope       *scope,
+                                     GskSlEnvironment *environment)
+{
+  GskSlType *type;
+  const GskSlImageType *image;
+  guint types, proj, lod, bias, offset, fetch, grad;
+
+  for (types = 0; types < GSK_SL_N_SAMPLER_TYPES; types++)
+    {
+      type = gsk_sl_type_get_sampler (types);
+      image = gsk_sl_type_get_image_type (type);
+
+      for (proj = 0; proj < 3; proj++)
+        {
+          if (proj && !gsk_sl_image_type_supports_projection (image, proj == 2))
+            continue;
+
+          for (lod = 0; lod < 2; lod++)
+            {
+              if (lod && !gsk_sl_image_type_supports_lod (image))
+                continue;
+
+              for (bias = 0; bias < 2; bias++)
+                {
+                  if (bias && lod)
+                    continue;
+
+                  if (bias && gsk_sl_environment_get_stage (environment) != GSK_SL_SHADER_FRAGMENT)
+                    continue;
+
+                  if (bias && !gsk_sl_image_type_supports_bias (image))
+                    continue;
+
+                  for (offset = 0; offset < 2; offset++)
+                    {
+                      if (offset && !gsk_sl_image_type_supports_offset (image))
+                        continue;
+
+                      for (fetch = 0; fetch < 2; fetch++)
+                        {
+                          if ((proj > 0) + offset + fetch + bias + lod > 3)
+                              continue;
+                          if (fetch && (lod || bias))
+                              continue;
+                          if (fetch && !gsk_sl_image_type_supports_texel_fetch (image))
+                              continue;
+                          if (!fetch && !gsk_sl_image_type_supports_texture (image))
+                              continue;
+
+                          for (grad = 0; grad < 2; grad++) 
+                            {
+                              GskSlFunction *function;
+                              GskSlFunctionType *function_type;
+                              char *function_name;
+                              guint length;
+
+                              if ((proj > 0) + offset + fetch + grad + bias + lod > 3)
+                                continue;
+
+                              if (grad && (lod || bias))
+                                continue;
+                            
+                              if (grad && !gsk_sl_image_type_supports_gradient (image))
+                                continue;
+
+                              length = gsk_sl_image_type_get_lookup_dimensions (image, proj > 0);
+                              if (length > 4 && bias)
+                                continue;
+
+                              function_type = gsk_sl_function_type_new (gsk_sl_image_type_get_pixel_type (image));
+                              function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                 GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                 type);
+
+                              /* P */
+                              if (proj == 2)
+                                {
+                                  function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                     GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                     gsk_sl_type_get_vector (GSK_SL_FLOAT, 4));
+                                }
+                              else
+                                {
+                                  GskSlScalarType scalar;
+                                  GskSlType *arg_type;
+
+                                  scalar = fetch ? GSK_SL_INT : GSK_SL_FLOAT;
+                                  if (length == 1)
+                                    arg_type = gsk_sl_type_get_scalar (scalar);
+                                  else
+                                    arg_type = gsk_sl_type_get_vector (scalar, MIN (length, 4));
+                                  function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                     GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                     arg_type);
+                                }
+
+                              /* non-optional lod */
+                              if (fetch && gsk_sl_image_type_needs_lod_argument (image, fetch))
+                                function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                   GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                   gsk_sl_type_get_scalar (GSK_SL_INT));
+
+                              if (lod)
+                                function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                   GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                   gsk_sl_type_get_scalar (GSK_SL_FLOAT));
+
+                              if (grad)
+                                {
+                                  GskSlType *arg_type;
+                                  guint dims = gsk_sl_image_type_get_dimensions (image);
+
+                                  if (dims ==1)
+                                    arg_type = gsk_sl_type_get_scalar (GSK_SL_FLOAT);
+                                  else
+                                    arg_type = gsk_sl_type_get_vector (GSK_SL_FLOAT, dims);
+
+                                  function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                     GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                     arg_type);
+                                  function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                     GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                     arg_type);
+                                }
+
+                              if (offset)
+                                {
+                                  GskSlType *arg_type;
+                                  guint dims = gsk_sl_image_type_get_dimensions (image);
+
+                                  if (dims ==1)
+                                    arg_type = gsk_sl_type_get_scalar (GSK_SL_INT);
+                                  else
+                                    arg_type = gsk_sl_type_get_vector (GSK_SL_INT, dims);
+
+                                  function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                     GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                     arg_type);
+                                }
+
+                              /* compare */
+                              if (length > 4)
+                                function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                   GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                   gsk_sl_type_get_scalar (GSK_SL_FLOAT));
+
+                              if (bias)
+                                function_type = gsk_sl_function_type_add_argument (function_type,
+                                                                                   GSK_SL_STORAGE_PARAMETER_IN,
+                                                                                   gsk_sl_type_get_scalar (GSK_SL_FLOAT));
+
+                              function_name = g_strconcat (fetch ? "texel" : "texture",
+                                                           proj ? "Proj" : "",
+                                                           lod ? "Lod" : "",
+                                                           grad ? "Grad" : "",
+                                                           fetch ? "Fetch" : "",
+                                                           offset ? "Offset" : "",
+                                                           NULL);
+
+                              function = gsk_sl_function_new_native (function_name,
+                                                                     function_type,
+                                                                     NULL,
+                                                                     gsk_sl_native_texture_write_spv,
+                                                                     PACK_TEXTURE_CALL_INFO (types, proj, lod, bias, offset, fetch, grad),
+                                                                     NULL);
+                              gsk_sl_scope_add_function (scope, function);
+#if 0
+                              g_print ("%p %p %p %p %p %p %p %u %u\n", PACK_TEXTURE_CALL_INFO (types, proj, lod, bias, offset, fetch, grad),
+                                                  GUINT_TO_POINTER(((types) & 0xFF) | ((proj) << 16) | ((lod) << 18) | ((bias) < 19) | ((offset) << 20) | ((fetch) << 21)),
+                                                  GUINT_TO_POINTER(((types) & 0xFF) | ((proj) << 16) | ((lod) << 18) | ((bias) < 19) | ((offset) << 20)),
+                                                  GUINT_TO_POINTER(((types) & 0xFF) | ((proj) << 16) | ((lod) << 18) | ((bias) < 19)),
+                                                  GUINT_TO_POINTER(((types) & 0xFF) | ((proj) << 16) | ((lod) << 18)),
+                                                  GUINT_TO_POINTER(((types) & 0xFF) | ((proj) << 16)),
+                                                  GUINT_TO_POINTER(((types) & 0xFF) ), types, (types) & 0xFF);
+                              g_print ("%u %u %u %u %u %u %u\n", types, proj, lod, bias, offset, fetch, grad);
+                              {
+                                guint i;
+                                g_print ("%s", gsk_sl_type_get_name (gsk_sl_function_type_get_return_type (function_type)));
+                                g_print (" %s(", function_name);
+                                for (i = 0; i < gsk_sl_function_type_get_n_arguments (function_type); i++)
+                                  {
+                                    if (i > 0)
+                                      g_print (",");
+                                    g_print ("%s", gsk_sl_type_get_name (gsk_sl_function_type_get_argument_type (function_type, i)));
+                                  }
+                                g_print (");\n");
+                              }
+#endif
+
+                              g_free (function_name);
+                              gsk_sl_function_unref (function);
+                              gsk_sl_function_type_unref (function_type);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void
 gsk_sl_native_functions_add (GskSlScope       *scope,
                              GskSlEnvironment *environment)
@@ -1374,5 +1824,7 @@ gsk_sl_native_functions_add (GskSlScope       *scope,
   if (version < 150)
     return;
   gsk_sl_native_functions_add_150 (scope, environment);
+
+  gsk_sl_native_functions_add_texture (scope, environment);
 }
 
