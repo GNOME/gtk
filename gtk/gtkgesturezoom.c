@@ -79,18 +79,19 @@ _gtk_gesture_zoom_get_distance (GtkGestureZoom *zoom,
   const GdkEvent *last_event;
   gdouble x1, y1, x2, y2;
   GtkGesture *gesture;
-  GList *sequences;
+  GList *sequences = NULL;
   gdouble dx, dy;
   GdkTouchpadGesturePhase phase;
+  gboolean retval = FALSE;
 
   gesture = GTK_GESTURE (zoom);
 
   if (!gtk_gesture_is_recognized (gesture))
-    return FALSE;
+    goto out;
 
   sequences = gtk_gesture_get_sequences (gesture);
   if (!sequences)
-    return FALSE;
+    goto out;
 
   last_event = gtk_gesture_get_last_event (gesture, sequences->data);
   gdk_event_get_touchpad_gesture_phase (last_event, &phase);
@@ -109,18 +110,21 @@ _gtk_gesture_zoom_get_distance (GtkGestureZoom *zoom,
   else
     {
       if (!sequences->next)
-        return FALSE;
+        goto out;
 
       gtk_gesture_get_point (gesture, sequences->data, &x1, &y1);
       gtk_gesture_get_point (gesture, sequences->next->data, &x2, &y2);
-      g_list_free (sequences);
 
       dx = x1 - x2;
       dy = y1 - y2;;
       *distance = sqrt ((dx * dx) + (dy * dy));
     }
 
-  return TRUE;
+  retval = TRUE;
+
+ out:
+  g_list_free (sequences);
+  return retval;
 }
 
 static gboolean
