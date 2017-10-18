@@ -791,7 +791,7 @@ window1
                 <AtkValue>
                 minimum value: 0.000000
                 maximum value: 1.000000
-                current value: 1.000000
+                current value: 0.000000
               h_slider
                 "color chooser"
                 parent: grid
@@ -817,8 +817,8 @@ window1
                 layer: widget
                 alpha: 1
                 <AtkText>
-                text: #FFFFFF
-                character count: 7
+                text: 
+                character count: 0
                 caret offset: 0
                 default attributes: bg-color: <omitted>
                                     bg-full-height: 0
@@ -895,7 +895,7 @@ window1
                   <AtkValue>
                   minimum value: 0.000000
                   maximum value: 100.000000
-                  current value: 100.000000
+                  current value: 0.000000
                 s_entry
                   "spin button"
                   parent: grid2
@@ -1093,7 +1093,7 @@ window1
                   <AtkValue>
                   minimum value: 0.000000
                   maximum value: 100.000000
-                  current value: 100.000000
+                  current value: 0.000000
                 label4
                   "label"
                   parent: grid4
