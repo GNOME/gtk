@@ -475,6 +475,8 @@ for (let kind in spirv.operand_kinds)
                                 append_one: "g_array_append_val ({0}, (guint32) { {1} })" };
         if (kind.category == "BitEnum")
           Operands[kind.kind].optional_unset = "0";
+        if (kind.kind == "AccessQualifier")
+          Operands[kind.kind].optional_unset = "-1";
       }
   }
 

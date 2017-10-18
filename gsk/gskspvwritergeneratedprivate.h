@@ -411,7 +411,8 @@ gsk_spv_writer_type_image (GskSpvWriter *writer,
   g_array_append_val (bytes, ms);
   g_array_append_val (bytes, sampled);
   g_array_append_val (bytes, (guint32) { image_format });
-  g_array_append_val (bytes, (guint32) { opt_access_qualifier });
+  if (opt_access_qualifier != -1)
+    g_array_append_val (bytes, (guint32) { opt_access_qualifier });
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_TYPE_IMAGE;
 
   return result_id;
