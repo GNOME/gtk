@@ -444,12 +444,33 @@ file_replace_extension (const char *old_file,
   return g_string_free (file, FALSE);
 }
 
+static char *
+get_output_file (const char *file,
+                 const char *orig_ext,
+                 const char *new_ext)
+{
+  const char *dir;
+  char *result, *base;
+  char *name;
+
+  dir = g_get_tmp_dir ();
+  base = g_path_get_basename (file);
+  name = file_replace_extension (base, orig_ext, new_ext);
+
+  result = g_strconcat (dir, G_DIR_SEPARATOR_S, name, NULL);
+
+  g_free (base);
+  g_free (name);
+
+  return result;
+}
+
 static void
 save_image (cairo_surface_t *surface,
             const char      *test_name,
             const char      *extension)
 {
-  char *filename = file_replace_extension (test_name, ".node", extension);
+  char *filename = get_output_file (test_name, ".node", extension);
 
   g_test_message ("Storing test result image at %s", filename);
   g_assert (cairo_surface_write_to_png (surface, filename) == CAIRO_STATUS_SUCCESS);
