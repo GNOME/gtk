@@ -1,4 +1,4 @@
 [Test]
-Exec=/bin/sh -c "env GSK_RENDERER=vulkan @libexecdir@/installed-tests/gtk-4.0/gsk/test-render-nodes --tap -k"
+Exec=/bin/sh -c "env GSK_RENDERER=vulkan @libexecdir@/installed-tests/gtk-4.0/gsk/test-render-nodes --tap -k --verbose"
 Type=session
 Output=TAP

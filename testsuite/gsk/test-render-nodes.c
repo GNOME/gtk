@@ -569,6 +569,7 @@ load_node_file (GFile *file, gboolean generate)
       png_file = file_replace_extension (node_file, ".node", ".png");
     }
 
+  g_test_message ("using reference image %s", png_file);
   ref_surface = cairo_image_surface_create_from_png (png_file);
   diff_surface = reftest_compare_surfaces (surface, ref_surface);
 
