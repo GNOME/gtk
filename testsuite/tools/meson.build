@@ -4,8 +4,6 @@ testdatadir = join_paths(installed_test_datadir, 'tools')
 bash = find_program('bash', required : false)
 if bash.found()
   test_env = environment()
-  test_env.set('GTK_BUILDER_TOOL', get_variable('gtk4_builder_tool').full_path())
-  test_env.set('GTK_QUERY_SETTINGS', get_variable('gtk4_query_settings').full_path())
 
   foreach t : ['simplify', 'settings']
     configure_file(output: t,
@@ -16,7 +14,15 @@ if bash.found()
     test(t, bash,
          args: 'test-@0@'.format(t),
          workdir: meson.current_build_dir(),
-         env: test_env,
+         env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+                'GSETTINGS_BACKEND=memory',
+                'GTK_CSD=1',
+                'G_ENABLE_DIAGNOSTIC=0',
+                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+                'GTK_BUILDER_TOOL=@0@'.format(get_variable('gtk4_builder_tool').full_path()),
+                'GTK_QUERY_SETTINGS=@0@'.format(get_variable('gtk4_query_settings').full_path())
+              ],
          suite: 'tools')
   endforeach
 endif

@@ -10,28 +10,36 @@ test_render_nodes = executable(
   install_dir: testexecdir
 )
 
-cairo_test_env = environment()
-cairo_test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
-cairo_test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
-cairo_test_env.set('GSETTINGS_BACKEND', 'memory')
-cairo_test_env.set('G_ENABLE_DIAGNOSTIC', '0')
-cairo_test_env.set('GSK_RENDERER', 'cairo')
-
 test('nodes (cairo)', test_render_nodes,
-             args: [ '--tap', '-k' ],
-             env: cairo_test_env,
-             suite: 'gsk')
+     args: [ '--tap', '-k' ],
+     env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+            'GSETTINGS_BACKEND=memory',
+            'GTK_CSD=1',
+            'G_ENABLE_DIAGNOSTIC=0',
+            'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+            'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+            'GSK_RENDERER=cairo'
+          ],
+     suite: 'gsk')
 
 vulkan_test_env = environment()
 vulkan_test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
 vulkan_test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
 vulkan_test_env.set('GSETTINGS_BACKEND', 'memory')
+vulkan_test_env.set('GTK_CSD', '1')
 vulkan_test_env.set('G_ENABLE_DIAGNOSTIC', '0')
 vulkan_test_env.set('GSK_RENDERER', 'vulkan')
 
 test('nodes (vulkan)', test_render_nodes,
      args: [ '--tap', '-k' ],
-     env: vulkan_test_env,
+     env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+            'GSETTINGS_BACKEND=memory',
+            'GTK_CSD=1',
+            'G_ENABLE_DIAGNOSTIC=0',
+            'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+            'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+            'GSK_RENDERER=vulkan'
+          ],
      suite: 'gsk')
 
 test_data = [

@@ -17,7 +17,13 @@ test_style = executable(
 )
 test('style', test_style,
      args: [ '--tap', '-k' ],
-     env: installed_test_env,
+     env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+            'GSETTINGS_BACKEND=memory',
+            'GTK_CSD=1',
+            'G_ENABLE_DIAGNOSTIC=0',
+            'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+            'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+          ],
      suite: 'css')
 
 test_data = [

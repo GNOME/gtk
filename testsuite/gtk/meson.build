@@ -76,7 +76,13 @@ foreach t : tests
 
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
-       env: installed_test_env,
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+            ],
        suite: 'gtk')
 endforeach
 
@@ -90,7 +96,13 @@ if add_languages('cpp')
                         install_dir: testexecdir)
   test('c++ keywords', test_exe,
        args: [ '--tap', '-k' ],
-       env: installed_test_env,
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+            ],
        suite: 'gtk')
   if get_option('install-tests')
     conf = configuration_data()
