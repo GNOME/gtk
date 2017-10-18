@@ -890,7 +890,8 @@ gsk_spv_access_get_variable (GskSpvAccessChain *chain)
   if (chain->chain)
     variable_id = gsk_spv_writer_access_chain (chain->writer,
                                                chain->type,
-                                               gsk_sl_qualifier_get_storage_class (gsk_sl_variable_get_qualifier (chain->variable)),
+                                               gsk_sl_qualifier_get_storage_class (gsk_sl_variable_get_qualifier (chain->variable),
+                                                                                   gsk_sl_variable_get_type (chain->variable)),
                                                variable_id,
                                                (guint32 *) chain->chain->data,
                                                chain->chain->len);

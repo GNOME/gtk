@@ -94,6 +94,7 @@ gsk_sl_variable_standard_write_spv (const GskSlVariable *variable,
   guint32 result_id;
   guint32 value_id;
   GskSlQualifierLocation location;
+  GskSpvStorageClass storage_class;
 
   location = gsk_sl_qualifier_get_location (&variable->qualifier);
 
@@ -102,11 +103,12 @@ gsk_sl_variable_standard_write_spv (const GskSlVariable *variable,
   else
     value_id = 0;
 
+  storage_class = gsk_sl_qualifier_get_storage_class (&variable->qualifier, variable->type);
   result_id = gsk_spv_writer_variable (writer,
                                        location == GSK_SL_QUALIFIER_GLOBAL ? GSK_SPV_WRITER_SECTION_DEFINE : GSK_SPV_WRITER_SECTION_DECLARE,
                                        variable->type,
-                                       gsk_sl_qualifier_get_storage_class (&variable->qualifier),
-                                       gsk_sl_qualifier_get_storage_class (&variable->qualifier),
+                                       storage_class,
+                                       storage_class,
                                        value_id);
 
   if (variable->name)

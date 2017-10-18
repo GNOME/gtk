@@ -72,7 +72,8 @@ gboolean                gsk_sl_qualifier_print                          (const G
 
 gboolean                gsk_sl_qualifier_is_constant                    (const GskSlQualifier       *qualifier);
 GskSlQualifierLocation  gsk_sl_qualifier_get_location                   (const GskSlQualifier       *qualifier);
-GskSpvStorageClass      gsk_sl_qualifier_get_storage_class              (const GskSlQualifier       *qualifier);
+GskSpvStorageClass      gsk_sl_qualifier_get_storage_class              (const GskSlQualifier       *qualifier,
+                                                                         const GskSlType            *type);
 
 gboolean                gsk_sl_qualifier_check_type                     (const GskSlQualifier       *qualifier,
                                                                          GskSlPreprocessor          *preproc,
