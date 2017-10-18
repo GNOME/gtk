@@ -4,7 +4,7 @@
     <child>
       <object class="GtkLabel"/>
       <packing>
-        <property name="expand">True</property>
+        <property name="expand">1</property>
       </packing>
     </child>
   </object>
