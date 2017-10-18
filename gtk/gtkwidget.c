@@ -13167,9 +13167,6 @@ gtk_widget_get_allocated_size (GtkWidget     *widget,
  * gtk_widget_size_allocate() allocation, however. So a #GtkContainer
  * is guaranteed that its children stay inside the assigned bounds,
  * but not that they have exactly the bounds the container assigned.
- * There is no way to get the original allocation assigned by
- * gtk_widget_size_allocate(), since it isn’t stored; if a container
- * implementation needs that information it will have to track it itself.
  *
  * Since: 2.18
  */
