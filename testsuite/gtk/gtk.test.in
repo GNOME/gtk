@@ -1,0 +1,4 @@
+[Test]
+Exec=@testexecdir@/@test@ --tap -k --verbose
+Type=session
+Output=TAP
