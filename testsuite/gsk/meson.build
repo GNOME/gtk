@@ -62,8 +62,12 @@ test_data = [
 if get_option('install-tests')
   conf = configuration_data()
   conf.set('libexecdir', gtk_libexecdir)
-  configure_file(input: 'render-nodes.test.in',
-                 output: 'render-nodes.test',
+  configure_file(input: 'render-nodes-cairo.test.in',
+                 output: 'render-nodes-cairo.test',
+                 configuration: conf,
+                 install_dir: testdatadir)
+  configure_file(input: 'render-nodes-vulkan.test.in',
+                 output: 'render-nodes-vulkan.test',
                  configuration: conf,
                  install_dir: testdatadir)
 
