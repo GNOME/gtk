@@ -1,4 +1,0 @@
-[Test]
-Exec=/bin/sh -c "cd @libexecdir@/installed-tests/gtk-4.0/css/style && @libexecdir@/installed-tests/gtk-4.0/css/style/test-css-style --tap"
-Type=session
-Output=TAP

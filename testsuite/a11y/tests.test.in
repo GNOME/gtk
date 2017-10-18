@@ -1,0 +1,4 @@
+[Test]
+Exec=@libexecdir@/installed-tests/gtk-4.0/a11y/accessibility-dump --tap -k --verbose --directory @libexecdir@/installed-tests/gtk-4.0/a11y
+Type=session
+Output=TAP

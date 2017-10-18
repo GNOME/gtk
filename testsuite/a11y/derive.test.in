@@ -1,0 +1,4 @@
+[Test]
+Exec=@libexecdir@/installed-tests/gtk-4.0/a11y/derive -k --tap
+Type=session
+Output=TAP

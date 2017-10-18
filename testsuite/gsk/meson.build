@@ -1,8 +1,13 @@
+testexecdir = join_paths(installed_test_bindir, 'gsk')
+testdatadir = join_paths(installed_test_datadir, 'gsk')
+
 test_render_nodes = executable(
   'test-render-nodes',
   ['test-render-nodes.c',
    'reftest-compare.c'],
   dependencies: libgtk_dep,
+  install: get_option('install-tests'),
+  install_dir: testexecdir
 )
 
 cairo_test_env = environment()
@@ -12,7 +17,10 @@ cairo_test_env.set('GSETTINGS_BACKEND', 'memory')
 cairo_test_env.set('G_ENABLE_DIAGNOSTIC', '0')
 cairo_test_env.set('GSK_RENDERER', 'cairo')
 
-test('nodes (cairo)', test_render_nodes, suite: 'gsk', env: cairo_test_env)
+test('nodes (cairo)', test_render_nodes,
+             args: [ '--tap', '-k' ],
+             env: cairo_test_env,
+             suite: 'gsk')
 
 vulkan_test_env = environment()
 vulkan_test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
@@ -21,7 +29,10 @@ vulkan_test_env.set('GSETTINGS_BACKEND', 'memory')
 vulkan_test_env.set('G_ENABLE_DIAGNOSTIC', '0')
 vulkan_test_env.set('GSK_RENDERER', 'vulkan')
 
-test('nodes (vulkan)', test_render_nodes, suite: 'gsk', env: vulkan_test_env)
+test('nodes (vulkan)', test_render_nodes,
+     args: [ '--tap', '-k' ],
+     env: vulkan_test_env,
+     suite: 'gsk')
 
 test_data = [
   'blendmode.node',
@@ -51,10 +62,10 @@ test_data = [
 if get_option('install-tests')
   conf = configuration_data()
   conf.set('libexecdir', gtk_libexecdir)
-  configure_file(input: 'test-render-nodes.test.in',
-                 output: 'test-render-nodes.test',
+  configure_file(input: 'render-nodes.test.in',
+                 output: 'render-nodes.test',
                  configuration: conf,
-                 install_dir: installed_test_datadir)
+                 install_dir: testdatadir)
 
   install_data(test_data, install_dir: testexecdir)
 

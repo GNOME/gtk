@@ -1,4 +1,0 @@
-[Test]
-Exec=/bin/sh -c "env G_ENABLE_DIAGNOSTIC=0 @libexecdir@/installed-tests/gtk-4.0/a11y/tree-relationships --tap"
-Type=session
-Output=TAP

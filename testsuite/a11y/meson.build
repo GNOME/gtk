@@ -11,6 +11,7 @@ a11y_tests = [
 ]
 
 testexecdir = join_paths(installed_test_bindir, 'a11y')
+testdatadir = join_paths(installed_test_datadir, 'a11y')
 
 foreach t: a11y_tests
   test_prefix = 'a11y'
@@ -26,14 +27,14 @@ foreach t: a11y_tests
 endforeach
 
 a11y_installed_tests = [
-  'a11ytests.test',
-  'a11ychildren.test',
-  'a11ytree.test',
-  'a11yvalue.test',
-  'a11yderive.test',
-  'a11ytext.test',
-  'a11yutil.test',
-  'a11ymisc.test',
+  'tests.test',
+  'children.test',
+  'tree.test',
+  'value.test',
+  'derive.test',
+  'text.test',
+  'util.test',
+  'misc.test',
 ]
 
 installed_test_data = [
@@ -122,7 +123,7 @@ if get_option('install-tests')
                    output: t,
                    configuration: test_cdata,
                    install: true,
-                   install_dir: installed_test_datadir)
+                   install_dir: testdatadir)
   endforeach
 
   install_data(installed_test_data, install_dir: testexecdir)

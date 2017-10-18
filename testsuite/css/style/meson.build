@@ -1,10 +1,5 @@
-test_env = environment()
-test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
-test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
-test_env.set('GSETTINGS_BACKEND', 'memory')
-test_env.set('G_ENABLE_DIAGNOSTIC', '0')
-
 testexecdir = join_paths(installed_test_bindir, 'css', 'style')
+testdatadir = join_paths(installed_test_datadir, 'css')
 
 cssresources = gnome.compile_resources(
   'cssresources',
@@ -16,11 +11,14 @@ test_style = executable(
   'test-css-style',
   'test-css-style.c',
   cssresources,
+  dependencies: libgtk_dep,
   install: get_option('install-tests'),
   install_dir: testexecdir,
-  dependencies: libgtk_dep,
 )
-test('style', test_style, suite: 'css', env: test_env)
+test('style', test_style,
+     args: [ '--tap', '-k' ],
+     env: installed_test_env,
+     suite: 'css')
 
 test_data = [
   'adjacent-states.css',
@@ -53,12 +51,11 @@ test_data = [
 if get_option('install-tests')
   conf = configuration_data()
   conf.set('libexecdir', gtk_libexecdir)
-  configure_file(input: 'test-css-style.test.in',
-                 output: 'test-css-style.test',
+  configure_file(input: 'style.test.in',
+                 output: 'style.test',
                  configuration: conf,
-                 install_dir: installed_test_datadir)
+                 install_dir: testdatadir)
 
   install_data(test_data, install_dir: testexecdir)
 
 endif
-
