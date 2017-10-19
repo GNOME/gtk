@@ -192,6 +192,16 @@
  */
 #define GDK_VERSION_3_92        (G_ENCODE_VERSION (3, 92))
 
+/**
+ * GDK_VERSION_3_94:
+ *
+ * A macro that evaluates to the 3.94 version of GDK, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 3.94
+ */
+#define GDK_VERSION_3_94        (G_ENCODE_VERSION (3, 94))
+
 
 /* evaluates to the current stable version; for development cycles,
  * this means the next stable target
@@ -443,6 +453,12 @@
 # define GDK_AVAILABLE_IN_3_92                GDK_UNAVAILABLE(3, 92)
 #else
 # define GDK_AVAILABLE_IN_3_92                _GDK_EXTERN
+#endif
+
+#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_3_94
+# define GDK_AVAILABLE_IN_3_94                GDK_UNAVAILABLE(3, 94)
+#else
+# define GDK_AVAILABLE_IN_3_94                _GDK_EXTERN
 #endif
 
 
