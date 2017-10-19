@@ -7,4 +7,5 @@ shared_module('printbackend-cloudprint',
                 '-DGTK_DISABLE_DEPRECATION_WARNINGS',
               ],
               dependencies: [ libgtk_dep, rest_dep, json_glib_dep ],
-              install_dir: printbackends_install_dir)
+              install_dir: printbackends_install_dir,
+              install : true)
