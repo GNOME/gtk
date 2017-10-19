@@ -334,9 +334,9 @@ gtk_theming_background_paint_layer (GtkThemingBackground *bg,
 }
 
 static void
-gtk_theming_background_snapshot_layer (GtkThemingBackground *bg,
-                                       guint                 idx,
-                                       GtkSnapshot          *snapshot)
+gtk_theming_background_snapshot_layer (const GtkThemingBackground *bg,
+                                       guint                       idx,
+                                       GtkSnapshot                *snapshot)
 {
   GtkCssRepeatStyle hrepeat, vrepeat;
   const GtkCssValue *pos, *repeat;
@@ -345,31 +345,37 @@ gtk_theming_background_snapshot_layer (GtkThemingBackground *bg,
   double image_width, image_height;
   double width, height;
 
-  pos = _gtk_css_array_value_get_nth (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_POSITION), idx);
-  repeat = _gtk_css_array_value_get_nth (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), idx);
-  hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
-  vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
   image = _gtk_css_image_value_get_image (
               _gtk_css_array_value_get_nth (
                   gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_IMAGE),
                   idx));
+
+  if (image == NULL)
+    return;
+
+  pos = _gtk_css_array_value_get_nth (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_POSITION), idx);
+  repeat = _gtk_css_array_value_get_nth (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_REPEAT), idx);
+  hrepeat = _gtk_css_background_repeat_value_get_x (repeat);
+  vrepeat = _gtk_css_background_repeat_value_get_y (repeat);
+
 
   origin = &bg->boxes[
                _gtk_css_area_value_get (
                    _gtk_css_array_value_get_nth (
                        gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN),
                        idx))];
+
+  width = origin->bounds.size.width;
+  height = origin->bounds.size.height;
+
+  if (width <= 0 || height <= 0)
+    return;
+
   clip = &bg->boxes[
               _gtk_css_area_value_get (
                                 _gtk_css_array_value_get_nth (
                                                     gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_CLIP),
                                                                       idx))];
-
-  width = origin->bounds.size.width;
-  height = origin->bounds.size.height;
-
-  if (image == NULL || width <= 0 || height <= 0)
-    return;
 
   _gtk_css_bg_size_value_compute_size (_gtk_css_array_value_get_nth (gtk_css_style_get_value (bg->style, GTK_CSS_PROPERTY_BACKGROUND_SIZE), idx),
                                        image,
