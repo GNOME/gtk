@@ -3005,6 +3005,29 @@ gdk_event_get_selection (const GdkEvent   *event,
 }
 
 /**
+ * gdk_event_get_owner_change_reason:
+ * @event: a #GdkEvent
+ * @reason: (out):
+ *
+ * Returns: %TRUE on success, otherwise %FALSE
+ **/
+gboolean
+gdk_event_get_owner_change_reason (const GdkEvent *event,
+                                   GdkOwnerChange *reason)
+{
+  if (!event)
+    return FALSE;
+
+  if (event->type == GDK_OWNER_CHANGE)
+    {
+      *reason = event->owner_change.reason;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+/**
  * gdk_event_get_selection_property:
  * @event: a #GdkEvent
  * @property: (out) (optional):

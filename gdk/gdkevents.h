@@ -791,6 +791,9 @@ gboolean       gdk_event_get_property (const GdkEvent   *event,
 GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_selection (const GdkEvent   *event,
                                         GdkAtom          *selection);
+GDK_AVAILABLE_IN_3_94
+gboolean       gdk_event_get_owner_change_reason (const GdkEvent *event,
+                                                  GdkOwnerChange *reason);
 GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_selection_property (const GdkEvent  *event,
                                                  GdkAtom         *property,
