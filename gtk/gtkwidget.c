@@ -6281,8 +6281,8 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 				  gint       *dest_x,
 				  gint       *dest_y)
 {
-  GtkWidgetPrivate *src_priv = src_widget->priv;
-  GtkWidgetPrivate *dest_priv = dest_widget->priv;
+  GtkWidgetPrivate *src_priv;
+  GtkWidgetPrivate *dest_priv;
   GtkWidget *ancestor;
   GdkWindow *window;
   GList *dest_list = NULL;
@@ -6293,6 +6293,9 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
   ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
   if (!ancestor || !_gtk_widget_get_realized (src_widget) || !_gtk_widget_get_realized (dest_widget))
     return FALSE;
+
+  src_priv = src_widget->priv;
+  dest_priv = dest_widget->priv;
 
   /* Translate from allocation relative to window relative */
   if (_gtk_widget_get_has_window (src_widget) && src_priv->parent)
