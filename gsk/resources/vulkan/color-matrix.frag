@@ -22,8 +22,7 @@ color_matrix (vec4 color, mat4 color_matrix, vec4 color_offset)
   color = clamp(color, 0.0, 1.0);
 
   /* premultiply */
-  if (color.a != 0.0)
-    color.rgb *= color.a;
+  color.rgb *= color.a;
 
   return color;
 }
