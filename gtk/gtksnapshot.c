@@ -288,11 +288,22 @@ gtk_snapshot_collect_opacity (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  opacity_node = gsk_opacity_node_new (node, state->data.opacity.opacity);
-  if (name)
-    gsk_render_node_set_name (opacity_node, name);
-
-  gsk_render_node_unref (node);
+  if (state->data.opacity.opacity == 1.0)
+    {
+      opacity_node = node;
+    }
+  else if (state->data.opacity.opacity == 0.0)
+    {
+      gsk_render_node_unref (node);
+      opacity_node = NULL;
+    }
+  else
+    {
+      opacity_node = gsk_opacity_node_new (node, state->data.opacity.opacity);
+      if (name)
+        gsk_render_node_set_name (opacity_node, name);
+      gsk_render_node_unref (node);
+    }
 
   return opacity_node;
 }
@@ -324,7 +335,7 @@ gtk_snapshot_push_opacity (GtkSnapshot *snapshot,
                                    current_state->translate_x,
                                    current_state->translate_y,
                                    gtk_snapshot_collect_opacity);
-  state->data.opacity.opacity = opacity;
+  state->data.opacity.opacity = CLAMP (opacity, 0.0, 1.0);
 }
 
 static GskRenderNode *
