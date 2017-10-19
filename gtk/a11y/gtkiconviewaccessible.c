@@ -1226,18 +1226,18 @@ gtk_icon_view_accessible_connect_model_signals (GtkIconView *icon_view)
   GObject *obj;
 
   obj = G_OBJECT (icon_view->priv->model);
-  g_signal_connect_data (obj, "row-changed",
-                         (GCallback) gtk_icon_view_accessible_model_row_changed,
-                         icon_view, NULL, 0);
-  g_signal_connect_data (obj, "row-inserted",
-                         (GCallback) gtk_icon_view_accessible_model_row_inserted,
-                         icon_view, NULL, G_CONNECT_AFTER);
-  g_signal_connect_data (obj, "row-deleted",
-                         (GCallback) gtk_icon_view_accessible_model_row_deleted,
-                         icon_view, NULL, G_CONNECT_AFTER);
-  g_signal_connect_data (obj, "rows-reordered",
-                         (GCallback) gtk_icon_view_accessible_model_rows_reordered,
-                         icon_view, NULL, G_CONNECT_AFTER);
+  g_signal_connect_object (obj, "row-changed",
+                           G_CALLBACK (gtk_icon_view_accessible_model_row_changed),
+                           icon_view, 0);
+  g_signal_connect_object (obj, "row-inserted",
+                           G_CALLBACK (gtk_icon_view_accessible_model_row_inserted),
+                           icon_view, G_CONNECT_AFTER);
+  g_signal_connect_object (obj, "row-deleted",
+                           G_CALLBACK (gtk_icon_view_accessible_model_row_deleted),
+                           icon_view, G_CONNECT_AFTER);
+  g_signal_connect_object (obj, "rows-reordered",
+                           G_CALLBACK (gtk_icon_view_accessible_model_rows_reordered),
+                           icon_view, G_CONNECT_AFTER);
 }
 
 static void
