@@ -207,15 +207,10 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEventBox">
+              <object class="GtkImage" id="image6">
                 <property name="visible">True</property>
-                <child>
-                  <object class="GtkImage" id="image6">
-                    <property name="visible">True</property>
-                    <property name="halign">center</property>
-                    <property name="valign">end</property>
-                  </object>
-                </child>
+                <property name="halign">center</property>
+                <property name="valign">end</property>
               </object>
               <packing>
                 <property name="left-attach">5</property>
