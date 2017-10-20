@@ -67,125 +67,6 @@ GDK_AVAILABLE_IN_3_90
 GskRenderNodeType       gsk_render_node_get_node_type           (GskRenderNode *node);
 
 GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_color_node_new                      (const GdkRGBA            *rgba,
-                                                                 const graphene_rect_t    *bounds);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_texture_node_new                    (GskTexture               *texture,
-                                                                 const graphene_rect_t    *bounds);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_linear_gradient_node_new            (const graphene_rect_t    *bounds,
-                                                                 const graphene_point_t   *start,
-                                                                 const graphene_point_t   *end,
-                                                                 const GskColorStop       *color_stops,
-                                                                 gsize                     n_color_stops);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_repeating_linear_gradient_node_new  (const graphene_rect_t    *bounds,
-                                                                 const graphene_point_t   *start,
-                                                                 const graphene_point_t   *end,
-                                                                 const GskColorStop       *color_stops,
-                                                                 gsize                     n_color_stops);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_border_node_new                     (const GskRoundedRect     *outline,
-                                                                 const float               border_width[4],
-                                                                 const GdkRGBA             border_color[4]);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_inset_shadow_node_new               (const GskRoundedRect     *outline,
-                                                                 const GdkRGBA            *color,
-                                                                 float                     dx,
-                                                                 float                     dy,
-                                                                 float                     spread,
-                                                                 float                     blur_radius);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_outset_shadow_node_new              (const GskRoundedRect     *outline,
-                                                                 const GdkRGBA            *color,
-                                                                 float                     dx,
-                                                                 float                     dy,
-                                                                 float                     spread,
-                                                                 float                     blur_radius);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_cairo_node_new                      (const graphene_rect_t    *bounds);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_cairo_node_new_for_surface          (const graphene_rect_t    *bounds,
-                                                                 cairo_surface_t          *surface);
-GDK_AVAILABLE_IN_3_90
-cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode            *node,
-                                                                 GskRenderer              *renderer);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_container_node_new                  (GskRenderNode           **children,
-                                                                 guint                     n_children);
-GDK_AVAILABLE_IN_3_90
-guint                   gsk_container_node_get_n_children       (GskRenderNode            *node);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_container_node_get_child            (GskRenderNode            *node,
-                                                                 guint                     idx);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_transform_node_new                  (GskRenderNode            *child,
-                                                                 const graphene_matrix_t  *transform);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_transform_node_get_child            (GskRenderNode            *node);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_opacity_node_new                    (GskRenderNode            *child,
-                                                                 double                    opacity);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_opacity_node_get_child              (GskRenderNode            *node);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_color_matrix_node_new               (GskRenderNode            *child,
-                                                                 const graphene_matrix_t  *color_matrix,
-                                                                 const graphene_vec4_t    *color_offset);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_repeat_node_new                     (const graphene_rect_t    *bounds,
-                                                                 GskRenderNode            *child,
-                                                                 const graphene_rect_t    *child_bounds);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_clip_node_new                       (GskRenderNode            *child,
-                                                                 const graphene_rect_t    *clip);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_clip_node_get_child                 (GskRenderNode            *node);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_rounded_clip_node_new               (GskRenderNode            *child,
-                                                                 const GskRoundedRect     *clip);
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_rounded_clip_node_get_child         (GskRenderNode            *node);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_shadow_node_new                     (GskRenderNode            *child,
-                                                                 const GskShadow          *shadows,
-                                                                 gsize                     n_shadows);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_blend_node_new                      (GskRenderNode            *bottom,
-                                                                 GskRenderNode            *top,
-                                                                 GskBlendMode              blend_mode);
-
-GDK_AVAILABLE_IN_3_90
-GskRenderNode *         gsk_cross_fade_node_new                 (GskRenderNode            *start,
-                                                                 GskRenderNode            *end,
-                                                                 double                    progress);
-
-GDK_AVAILABLE_IN_3_92
-GskRenderNode *         gsk_text_node_new                       (PangoFont        *font,
-                                                                 PangoGlyphString *glyphs,
-                                                                 const GdkRGBA    *color,
-                                                                 double            x,
-                                                                 double            y);
-
-GDK_AVAILABLE_IN_3_92
-GskRenderNode *         gsk_blur_node_new                       (GskRenderNode *child,
-                                                                 double         radius);
-
-GDK_AVAILABLE_IN_3_90
 void                    gsk_render_node_set_scaling_filters     (GskRenderNode *node,
                                                                  GskScalingFilter min_filter,
                                                                  GskScalingFilter mag_filter);
@@ -212,6 +93,226 @@ gboolean                gsk_render_node_write_to_file           (GskRenderNode *
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_render_node_deserialize             (GBytes        *bytes,
                                                                  GError       **error);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_color_node_new                      (const GdkRGBA            *rgba,
+                                                                 const graphene_rect_t    *bounds);
+GDK_AVAILABLE_IN_3_94
+const GdkRGBA *         gsk_color_node_peek_color               (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_texture_node_new                    (GskTexture               *texture,
+                                                                 const graphene_rect_t    *bounds);
+GDK_AVAILABLE_IN_3_94
+GskTexture *            gsk_texture_node_get_texture            (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_linear_gradient_node_new                (const graphene_rect_t    *bounds,
+                                                                     const graphene_point_t   *start,
+                                                                     const graphene_point_t   *end,
+                                                                     const GskColorStop       *color_stops,
+                                                                     gsize                     n_color_stops);
+GDK_AVAILABLE_IN_3_94
+const graphene_point_t * gsk_linear_gradient_node_peek_start        (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const graphene_point_t * gsk_linear_gradient_node_peek_end          (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const gsize              gsk_linear_gradient_node_get_n_color_stops (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const GskColorStop *     gsk_linear_gradient_node_peek_color_stops  (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_repeating_linear_gradient_node_new      (const graphene_rect_t    *bounds,
+                                                                     const graphene_point_t   *start,
+                                                                     const graphene_point_t   *end,
+                                                                     const GskColorStop       *color_stops,
+                                                                     gsize                     n_color_stops);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_border_node_new                     (const GskRoundedRect     *outline,
+                                                                 const float               border_width[4],
+                                                                 const GdkRGBA             border_color[4]);
+GDK_AVAILABLE_IN_3_94
+const GskRoundedRect *  gsk_border_node_peek_outline            (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const float *           gsk_border_node_peek_widths             (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const GdkRGBA *         gsk_border_node_peek_colors             (GskRenderNode            *node);
+
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_inset_shadow_node_new               (const GskRoundedRect     *outline,
+                                                                 const GdkRGBA            *color,
+                                                                 float                     dx,
+                                                                 float                     dy,
+                                                                 float                     spread,
+                                                                 float                     blur_radius);
+GDK_AVAILABLE_IN_3_94
+const GskRoundedRect *  gsk_inset_shadow_node_peek_outline      (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const GdkRGBA *         gsk_inset_shadow_node_peek_color        (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_inset_shadow_node_get_dx            (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_inset_shadow_node_get_dy            (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_inset_shadow_node_get_spread        (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_inset_shadow_node_get_blur_radius   (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_outset_shadow_node_new              (const GskRoundedRect     *outline,
+                                                                 const GdkRGBA            *color,
+                                                                 float                     dx,
+                                                                 float                     dy,
+                                                                 float                     spread,
+                                                                 float                     blur_radius);
+GDK_AVAILABLE_IN_3_94
+const GskRoundedRect *  gsk_outset_shadow_node_peek_outline     (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const GdkRGBA *         gsk_outset_shadow_node_peek_color       (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_outset_shadow_node_get_dx           (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_outset_shadow_node_get_dy           (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_outset_shadow_node_get_spread       (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_outset_shadow_node_get_blur_radius  (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_cairo_node_new                      (const graphene_rect_t    *bounds);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_cairo_node_new_for_surface          (const graphene_rect_t    *bounds,
+                                                                 cairo_surface_t          *surface);
+GDK_AVAILABLE_IN_3_90
+cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode            *node,
+                                                                 GskRenderer              *renderer);
+GDK_AVAILABLE_IN_3_94
+cairo_surface_t *       gsk_cairo_node_get_surface              (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_container_node_new                  (GskRenderNode           **children,
+                                                                 guint                     n_children);
+GDK_AVAILABLE_IN_3_90
+guint                   gsk_container_node_get_n_children       (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_container_node_get_child            (GskRenderNode            *node,
+                                                                 guint                     idx);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_transform_node_new                  (GskRenderNode            *child,
+                                                                 const graphene_matrix_t  *transform);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_transform_node_get_child            (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+void                    gsk_transform_node_get_transform        (GskRenderNode            *node,
+                                                                 graphene_matrix_t        *transform);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_opacity_node_new                    (GskRenderNode            *child,
+                                                                 double                    opacity);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_opacity_node_get_child              (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+double                  gsk_opacity_node_get_opacity            (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_color_matrix_node_new               (GskRenderNode            *child,
+                                                                 const graphene_matrix_t  *color_matrix,
+                                                                 const graphene_vec4_t    *color_offset);
+GDK_AVAILABLE_IN_3_94
+GskRenderNode *         gsk_color_matrix_node_get_child         (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const graphene_matrix_t *
+                        gsk_color_matrix_node_peek_color_matrix (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const graphene_vec4_t * gsk_color_matrix_node_peek_color_offset (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_repeat_node_new                     (const graphene_rect_t    *bounds,
+                                                                 GskRenderNode            *child,
+                                                                 const graphene_rect_t    *child_bounds);
+GDK_AVAILABLE_IN_3_94
+GskRenderNode *         gsk_repeat_node_get_child               (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const graphene_rect_t * gsk_repeat_node_peek_child_bounds       (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_clip_node_new                       (GskRenderNode            *child,
+                                                                 const graphene_rect_t    *clip);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_clip_node_get_child                 (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const graphene_rect_t * gsk_clip_node_peek_clip                 (GskRenderNode            *node);
+
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_rounded_clip_node_new               (GskRenderNode            *child,
+                                                                 const GskRoundedRect     *clip);
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_rounded_clip_node_get_child         (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const GskRoundedRect *  gsk_rounded_clip_node_peek_clip         (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_shadow_node_new                     (GskRenderNode            *child,
+                                                                 const GskShadow          *shadows,
+                                                                 gsize                     n_shadows);
+GDK_AVAILABLE_IN_3_94
+GskRenderNode *         gsk_shadow_node_get_child               (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const GskShadow *       gsk_shadow_node_peek_shadow             (GskRenderNode            *node,
+                                                                 gsize                     i);
+GDK_AVAILABLE_IN_3_94
+gsize                   gsk_shadow_node_get_n_shadows           (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_blend_node_new                      (GskRenderNode            *bottom,
+                                                                 GskRenderNode            *top,
+                                                                 GskBlendMode              blend_mode);
+GDK_AVAILABLE_IN_3_94
+GskRenderNode *         gsk_blend_node_get_bottom_child         (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+GskRenderNode *         gsk_blend_node_get_top_child            (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+GskBlendMode            gsk_blend_node_get_blend_mode           (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_90
+GskRenderNode *         gsk_cross_fade_node_new                 (GskRenderNode            *start,
+                                                                 GskRenderNode            *end,
+                                                                 double                    progress);
+GDK_AVAILABLE_IN_3_94
+GskRenderNode *         gsk_cross_fade_node_get_start_child     (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+GskRenderNode *         gsk_cross_fade_node_get_end_child       (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+double                  gsk_cross_fade_node_get_progress        (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_92
+GskRenderNode *         gsk_text_node_new                       (PangoFont                *font,
+                                                                 PangoGlyphString         *glyphs,
+                                                                 const GdkRGBA            *color,
+                                                                 double                    x,
+                                                                 double                    y);
+GDK_AVAILABLE_IN_3_94
+PangoFont *             gsk_text_node_get_font                  (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+PangoGlyphString *      gsk_text_node_get_glyphs                (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+const GdkRGBA *         gsk_text_node_get_color                 (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_text_node_get_x                     (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+float                   gsk_text_node_get_y                     (GskRenderNode            *node);
+
+GDK_AVAILABLE_IN_3_92
+GskRenderNode *         gsk_blur_node_new                       (GskRenderNode            *child,
+                                                                 double                    radius);
+GDK_AVAILABLE_IN_3_94
+GskRenderNode *         gsk_blur_node_get_child                 (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94
+double                  gsk_blur_node_get_radius                (GskRenderNode            *node);
 
 G_END_DECLS
 
