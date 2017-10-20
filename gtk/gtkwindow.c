@@ -6744,21 +6744,6 @@ gtk_window_realize (GtkWidget *widget)
 
   _gtk_widget_get_allocation (widget, &allocation);
 
-  if (gtk_widget_get_parent_window (widget))
-    {
-      gdk_window = gdk_window_new_child (gtk_widget_get_parent_window (widget),
-                                         GDK_ALL_EVENTS_MASK,
-                                         &allocation);
-      gtk_widget_set_window (widget, gdk_window);
-      gtk_widget_register_window (widget, gdk_window);
-      gtk_widget_set_realized (widget, TRUE);
-
-      priv->renderer = gsk_renderer_new_for_window (gdk_window);
-      gsk_renderer_set_scale_factor (priv->renderer, gtk_widget_get_scale_factor (widget));
-
-      return;
-    }
-
   /* ensure widget tree is properly size allocated */
   if (allocation.x == -1 &&
       allocation.y == -1 &&
