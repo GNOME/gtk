@@ -28,10 +28,7 @@
  * children nodes.
  *
  * Each node has an associated drawing surface, which has the size of
- * the rectangle set using gsk_render_node_set_bounds(). Nodes have an
- * associated transformation matrix, which is used to position and
- * transform the node on the scene graph; additionally, they also have
- * a child transformation matrix, which will be applied to each child.
+ * the rectangle set using gsk_render_node_set_bounds().
  *
  * Render nodes are meant to be transient; once they have been associated
  * to a #GskRenderer it's safe to release any reference you have on them.
