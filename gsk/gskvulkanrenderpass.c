@@ -555,8 +555,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
     case GSK_TRANSFORM_NODE:
       {
-        graphene_matrix_t transform;
-        graphene_matrix_t mv;
+        graphene_matrix_t transform, mv;
         GskRenderNode *child;
 
 #if 0
@@ -564,8 +563,8 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
           FALLBACK ("Transform nodes can't deal with clip type %u\n", clip->type);
 #endif
 
-        gsk_transform_node_get_transform (node, &transform);
-        mv = self->mv;
+        graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
+        graphene_matrix_init_from_matrix (&mv, &self->mv);
         graphene_matrix_multiply (&transform, &mv, &self->mv);
         child = gsk_transform_node_get_child (node);
         if (!gsk_vulkan_push_constants_transform (&op.constants.constants, constants, &transform, &child->bounds))
@@ -575,7 +574,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
         gsk_vulkan_render_pass_add_node (self, render, &op.constants.constants, child);
         gsk_vulkan_push_constants_init_copy (&op.constants.constants, constants);
-        self->mv = mv;
+        graphene_matrix_init_from_matrix (&self->mv, &mv);
         g_array_append_val (self->render_ops, op);
       }
       return;

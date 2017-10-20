@@ -203,8 +203,8 @@ GskRenderNode *         gsk_transform_node_new                  (GskRenderNode  
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_transform_node_get_child            (GskRenderNode            *node);
 GDK_AVAILABLE_IN_3_94
-void                    gsk_transform_node_get_transform        (GskRenderNode            *node,
-                                                                 graphene_matrix_t        *transform);
+const graphene_matrix_t *
+                        gsk_transform_node_peek_transform       (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_3_90
 GskRenderNode *         gsk_opacity_node_new                    (GskRenderNode            *child,

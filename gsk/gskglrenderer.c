@@ -907,7 +907,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
       {
         graphene_matrix_t transform, transformed_mv;
 
-        gsk_transform_node_get_transform (node, &transform);
+        graphene_matrix_init_from_matrix (&transform, gsk_transform_node_peek_transform (node));
         graphene_matrix_multiply (&transform, modelview, &transformed_mv);
         gsk_gl_renderer_add_render_item (self,
                                          projection, &transformed_mv,

@@ -2326,15 +2326,14 @@ gsk_transform_node_get_child (GskRenderNode *node)
   return self->child;
 }
 
-void
-gsk_transform_node_get_transform (GskRenderNode     *node,
-                                  graphene_matrix_t *transform)
+const graphene_matrix_t *
+gsk_transform_node_peek_transform (GskRenderNode *node)
 {
   GskTransformNode *self = (GskTransformNode *) node;
 
-  g_return_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TRANSFORM_NODE));
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TRANSFORM_NODE), NULL);
 
-  graphene_matrix_init_from_matrix (transform, &self->transform);
+  return &self->transform;
 }
 
 /*** GSK_OPACITY_NODE ***/
