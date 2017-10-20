@@ -1027,7 +1027,7 @@ gtk_tools = [
 ]
 
 if os_unix
-  gtk_tools += ['gtk4-launch', ['gtk-launch.c']]
+  gtk_tools += [['gtk4-launch', ['gtk-launch.c']]]
 endif
 
 foreach tool: gtk_tools
