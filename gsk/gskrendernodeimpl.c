@@ -4090,7 +4090,7 @@ gsk_text_node_new (PangoFont        *font,
 }
 
 const GdkRGBA *
-gsk_text_node_get_color (GskRenderNode *node)
+gsk_text_node_peek_color (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
@@ -4099,8 +4099,8 @@ gsk_text_node_get_color (GskRenderNode *node)
   return &self->color;
 }
 
-PangoFont *
-gsk_text_node_get_font (GskRenderNode *node)
+const PangoFont *
+gsk_text_node_peek_font (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
@@ -4109,8 +4109,8 @@ gsk_text_node_get_font (GskRenderNode *node)
   return self->font;
 }
 
-PangoGlyphString *
-gsk_text_node_get_glyphs (GskRenderNode *node)
+const PangoGlyphString *
+gsk_text_node_peek_glyphs (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 

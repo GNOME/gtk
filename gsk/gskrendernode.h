@@ -293,11 +293,11 @@ GskRenderNode *         gsk_text_node_new                       (PangoFont      
                                                                  double                    x,
                                                                  double                    y);
 GDK_AVAILABLE_IN_3_94
-PangoFont *             gsk_text_node_get_font                  (GskRenderNode            *node);
+const PangoFont *       gsk_text_node_peek_font                 (GskRenderNode            *node);
+GDK_AVAILABLE_IN_3_94 
+const PangoGlyphString *gsk_text_node_peek_glyphs               (GskRenderNode            *node);
 GDK_AVAILABLE_IN_3_94
-PangoGlyphString *      gsk_text_node_get_glyphs                (GskRenderNode            *node);
-GDK_AVAILABLE_IN_3_94
-const GdkRGBA *         gsk_text_node_get_color                 (GskRenderNode            *node);
+const GdkRGBA *         gsk_text_node_peek_color                (GskRenderNode            *node);
 GDK_AVAILABLE_IN_3_94
 float                   gsk_text_node_get_x                     (GskRenderNode            *node);
 GDK_AVAILABLE_IN_3_94

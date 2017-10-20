@@ -236,7 +236,7 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 }
 
 static gboolean
-font_has_color_glyphs (PangoFont *font)
+font_has_color_glyphs (const PangoFont *font)
 {
   cairo_scaled_font_t *scaled_font;
   gboolean has_color = FALSE;
@@ -370,8 +370,8 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
     case GSK_TEXT_NODE:
       {
-        PangoFont *font = gsk_text_node_get_font (node);
-        PangoGlyphString *glyphs = gsk_text_node_get_glyphs (node);
+        const PangoFont *font = gsk_text_node_peek_font (node);
+        const PangoGlyphString *glyphs = gsk_text_node_peek_glyphs (node);
         int i;
         guint count;
         guint texture_index;
@@ -412,7 +412,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
             if (gi->glyph != PANGO_GLYPH_EMPTY && !(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
               {
-                texture_index = gsk_vulkan_renderer_cache_glyph (renderer, font, gi->glyph);
+                texture_index = gsk_vulkan_renderer_cache_glyph (renderer, (PangoFont *)font, gi->glyph);
                 if (op.text.texture_index == G_MAXUINT)
                   op.text.texture_index = texture_index;
                 if (texture_index != op.text.texture_index)
@@ -1225,9 +1225,9 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                           data + n_bytes + offset,
                                                           GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
                                                           &op->text.node->bounds,
-                                                          gsk_text_node_get_font (op->text.node),
-                                                          gsk_text_node_get_glyphs (op->text.node),
-                                                          gsk_text_node_get_color (op->text.node),
+                                                          gsk_text_node_peek_font (op->text.node),
+                                                          gsk_text_node_peek_glyphs (op->text.node),
+                                                          gsk_text_node_peek_color (op->text.node),
                                                           gsk_text_node_get_x (op->text.node),
                                                           gsk_text_node_get_y (op->text.node),
                                                           op->text.start_glyph,
@@ -1243,8 +1243,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                                 data + n_bytes + offset,
                                                                 GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render)),
                                                                 &op->text.node->bounds,
-                                                                gsk_text_node_get_font (op->text.node),
-                                                                gsk_text_node_get_glyphs (op->text.node),
+                                                                gsk_text_node_peek_font (op->text.node),
+                                                                gsk_text_node_peek_glyphs (op->text.node),
                                                                 gsk_text_node_get_x (op->text.node),
                                                                 gsk_text_node_get_y (op->text.node),
                                                                 op->text.start_glyph,

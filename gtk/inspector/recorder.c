@@ -378,16 +378,16 @@ populate_render_node_properties (GtkListStore  *store,
 
     case GSK_TEXT_NODE:
       {
-        PangoFont *font = gsk_text_node_get_font (node);
-        PangoGlyphString *glyphs = gsk_text_node_get_glyphs (node);
-        const GdkRGBA *color = gsk_text_node_get_color (node);
+        const PangoFont *font = gsk_text_node_peek_font (node);
+        const PangoGlyphString *glyphs = gsk_text_node_peek_glyphs (node);
+        const GdkRGBA *color = gsk_text_node_peek_color (node);
         float x = gsk_text_node_get_x (node);
         float y = gsk_text_node_get_y (node);
         PangoFontDescription *desc;
         GString *s;
         int i;
 
-        desc = pango_font_describe (font);
+        desc = pango_font_describe ((PangoFont *)font);
         tmp = pango_font_description_to_string (desc);
         add_text_row (store, "Font", tmp);
         g_free (tmp);
