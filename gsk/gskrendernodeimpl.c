@@ -1829,16 +1829,8 @@ static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   gsk_cairo_node_deserialize
 };
 
-/*< private >
- * gsk_cairo_node_get_surface:
- * @node: a #GskRenderNode
- *
- * Retrieves the surface set using gsk_render_node_set_surface().
- *
- * Returns: (transfer none) (nullable): a Cairo surface
- */
-cairo_surface_t *
-gsk_cairo_node_get_surface (GskRenderNode *node)
+const cairo_surface_t *
+gsk_cairo_node_peek_surface (GskRenderNode *node)
 {
   GskCairoNode *self = (GskCairoNode *) node;
 

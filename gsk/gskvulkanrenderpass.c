@@ -353,7 +353,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
       return;
 
     case GSK_CAIRO_NODE:
-      if (gsk_cairo_node_get_surface (node) == NULL)
+      if (gsk_cairo_node_peek_surface (node) == NULL)
         return;
       if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
         pipeline_type = GSK_VULKAN_PIPELINE_TEXTURE;
@@ -691,7 +691,7 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
     case GSK_CAIRO_NODE:
       if (graphene_rect_equal (bounds, &node->bounds))
         {
-          surface = cairo_surface_reference (gsk_cairo_node_get_surface (node));
+          surface = cairo_surface_reference ((cairo_surface_t *)gsk_cairo_node_peek_surface (node));
           goto got_surface;
         }
       break;
@@ -910,7 +910,7 @@ gsk_vulkan_render_pass_upload (GskVulkanRenderPass  *self,
           {
             cairo_surface_t *surface;
 
-            surface = gsk_cairo_node_get_surface (op->render.node);
+            surface = gsk_cairo_node_peek_surface (op->render.node);
             op->render.source = gsk_vulkan_image_new_from_data (uploader,
                                                                 cairo_image_surface_get_data (surface),
                                                                 cairo_image_surface_get_width (surface),

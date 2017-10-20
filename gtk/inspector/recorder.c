@@ -322,7 +322,7 @@ populate_render_node_properties (GtkListStore  *store,
         else
           {
             text = "Surface";
-            surface = gsk_cairo_node_get_surface (node);
+            surface = (cairo_surface_t *)gsk_cairo_node_peek_surface (node);
           }
 
         show_inline = cairo_image_surface_get_height (surface) <= 40 &&

@@ -813,7 +813,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
     case GSK_CAIRO_NODE:
       {
-        cairo_surface_t *surface = gsk_cairo_node_get_surface (node);
+        const cairo_surface_t *surface = gsk_cairo_node_peek_surface (node);
         int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
 
         if (surface == NULL)
@@ -828,7 +828,7 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
         gsk_gl_driver_bind_source_texture (self->gl_driver, item.render_data.texture_id);
         gsk_gl_driver_init_texture_with_surface (self->gl_driver,
                                                  item.render_data.texture_id,
-                                                 surface,
+                                                 (cairo_surface_t *)surface,
                                                  gl_min_filter,
                                                  gl_mag_filter);
         item.mode = MODE_TEXTURE;

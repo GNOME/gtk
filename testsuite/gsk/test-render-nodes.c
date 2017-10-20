@@ -255,17 +255,18 @@ static GskRenderNode *
 ducky (void)
 {
   GdkPixbuf *pixbuf;
-  cairo_surface_t *surface;
   GskRenderNode *node;
+  cairo_t *cr;
 
   pixbuf = gdk_pixbuf_new_from_file_at_size ("ducky.png", 100, 100, NULL);
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
-  node = gsk_cairo_node_new_for_surface (&GRAPHENE_RECT_INIT (0, 0,
-                                                              cairo_image_surface_get_width (surface),
-                                                              cairo_image_surface_get_height (surface)),
-                                         surface);
+  node = gsk_cairo_node_new (&GRAPHENE_RECT_INIT (0, 0,
+                                                  gdk_pixbuf_get_width (pixbuf),
+                                                  gdk_pixbuf_get_height (pixbuf)));
+  cr = gsk_cairo_node_get_draw_context (node, NULL);
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
   g_object_unref (pixbuf);
-  cairo_surface_destroy (surface);
 
   return node;
 }

@@ -48,6 +48,9 @@ GskRenderNode * gsk_render_node_deserialize_node (GskRenderNodeType          typ
                                                   GVariant                  *variant,
                                                   GError                   **error);
 
+GskRenderNode * gsk_cairo_node_new_for_surface   (const graphene_rect_t    *bounds,
+                                                  cairo_surface_t          *surface);
+
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_PRIVATE_H__ */
