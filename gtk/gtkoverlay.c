@@ -173,8 +173,7 @@ gtk_overlay_get_main_widget_allocation (GtkOverlay *overlay,
       main_alloc.height = gtk_widget_get_allocated_height (GTK_WIDGET (overlay));
     }
 
-  if (main_alloc_out)
-    *main_alloc_out = main_alloc;
+  *main_alloc_out = main_alloc;
 }
 
 static void
