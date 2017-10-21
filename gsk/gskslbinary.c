@@ -1497,6 +1497,296 @@ static const GskSlBinary GSK_SL_BINARY_GREATER_EQUAL = {
   gsk_sl_greater_equal_write_spv
 };
 
+/* EQUAL */
+
+static GskSlType *
+gsk_sl_equal_check_type (GskSlPreprocessor *preproc,
+                         GskSlType         *ltype,
+                         GskSlType         *rtype)
+{
+  if (gsk_sl_type_contains_opaque (ltype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot do equality conversion with opaque type %s.",
+                                 gsk_sl_type_get_name (ltype));
+      return NULL;
+    }
+  if (gsk_sl_type_contains_opaque (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot do equality conversion with opaque type %s.",
+                                 gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+
+  if (gsk_sl_type_can_convert (ltype, rtype))
+    return gsk_sl_type_get_scalar (GSK_SL_BOOL);
+  if (gsk_sl_type_can_convert (rtype, ltype))
+    return gsk_sl_type_get_scalar (GSK_SL_BOOL);
+
+  gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot convert %s and %s to the same type for comparison.",
+                             gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+  return NULL;
+}
+
+static guint32
+gsk_sl_equal_generic_scalar_write_spv (GskSpvWriter    *writer,
+                                       gboolean         equality,
+                                       GskSlType       *result_type,
+                                       GskSlScalarType  scalar,
+                                       guint32          left_id,
+                                       guint32          right_id)
+{
+  switch (scalar)
+    {
+    case GSK_SL_FLOAT:
+    case GSK_SL_DOUBLE:
+      if (equality)
+        return gsk_spv_writer_f_ord_equal (writer, result_type, left_id, right_id);
+      else
+        return gsk_spv_writer_f_ord_not_equal (writer, result_type, left_id, right_id);
+
+    case GSK_SL_INT:
+    case GSK_SL_UINT:
+      if (equality)
+        return gsk_spv_writer_i_equal (writer, result_type, left_id, right_id);
+      else
+        return gsk_spv_writer_i_not_equal (writer, result_type, left_id, right_id);
+
+    case GSK_SL_BOOL:
+      if (equality)
+        return gsk_spv_writer_logical_equal (writer, result_type, left_id, right_id);
+      else
+        return gsk_spv_writer_logical_not_equal (writer, result_type, left_id, right_id);
+
+    case GSK_SL_VOID:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+                                       
+static guint32
+gsk_sl_equal_generic_write_spv (GskSpvWriter *writer,
+                                gboolean      equality,
+                                GskSlType    *type,
+                                guint32       left_id,
+                                guint32       right_id)
+{
+  GskSlType *bool_type = gsk_sl_type_get_scalar (GSK_SL_BOOL);
+
+  if (gsk_sl_type_is_scalar (type))
+    {
+      return gsk_sl_equal_generic_scalar_write_spv (writer,
+                                                    equality,
+                                                    bool_type,
+                                                    gsk_sl_type_get_scalar_type (type),
+                                                    left_id,
+                                                    right_id);
+    }
+  else if (gsk_sl_type_is_vector (type))
+    {
+      guint tmp_id;
+
+      tmp_id = gsk_sl_equal_generic_scalar_write_spv (writer,
+                                                      equality,
+                                                      gsk_sl_type_get_vector (GSK_SL_BOOL,
+                                                                              gsk_sl_type_get_length (type)),
+                                                      gsk_sl_type_get_scalar_type (type),
+                                                      left_id,
+                                                      right_id);
+      if (equality)
+        return gsk_spv_writer_all (writer, bool_type, tmp_id);
+      else
+        return gsk_spv_writer_any (writer, bool_type, tmp_id);
+    }
+  else if (gsk_sl_type_get_length (type))
+    {
+      /* matrices and arrays */
+      GskSlType *index_type;
+      guint32 left_part_id, right_part_id, tmp_id, result_id;
+      gsize i, n;
+
+      n = gsk_sl_type_get_length (type);
+      index_type = gsk_sl_type_get_index_type (type);
+
+      for (i = 0; i < n; i++)
+        {
+          left_part_id = gsk_spv_writer_composite_extract (writer,
+                                                           index_type,
+                                                           left_id,
+                                                           (guint32[1]) { i }, 1);
+          right_part_id = gsk_spv_writer_composite_extract (writer,
+                                                            index_type,
+                                                            right_id,
+                                                            (guint32[1]) { i }, 1);
+          tmp_id = gsk_sl_equal_generic_write_spv (writer,
+                                                   equality,
+                                                   index_type,
+                                                   left_part_id,
+                                                   right_part_id);
+          if (i == 0)
+            result_id = tmp_id;
+          else if (equality)
+            result_id = gsk_spv_writer_logical_and (writer, bool_type, result_id, tmp_id);
+          else
+            result_id = gsk_spv_writer_logical_or (writer, bool_type, result_id, tmp_id);
+        }
+
+      return result_id;
+    }
+  else
+    {
+      /* structs and blocks */
+      guint32 left_part_id, right_part_id, tmp_id, result_id;
+      gsize n_members, i;
+
+      n_members = gsk_sl_type_get_n_members (type);
+      g_assert (n_members > 0);
+
+      for (i = 0; i < n_members; i++)
+        {
+          GskSlType *member_type = gsk_sl_type_get_member_type (type, i);
+
+          left_part_id = gsk_spv_writer_composite_extract (writer,
+                                                           member_type,
+                                                           left_id,
+                                                           (guint32[1]) { i }, 1);
+          right_part_id = gsk_spv_writer_composite_extract (writer,
+                                                            member_type,
+                                                            right_id,
+                                                            (guint32[1]) { i }, 1);
+          tmp_id = gsk_sl_equal_generic_write_spv (writer,
+                                                   equality,
+                                                   member_type,
+                                                   left_part_id,
+                                                   right_part_id);
+          if (i == 0)
+            result_id = tmp_id;
+          else if (equality)
+            result_id = gsk_spv_writer_logical_and (writer, bool_type, result_id, tmp_id);
+          else
+            result_id = gsk_spv_writer_logical_or (writer, bool_type, result_id, tmp_id);
+        }
+
+      return result_id;
+    }
+}
+
+static GskSlValue *
+gsk_sl_equal_get_constant (GskSlType  *type,
+                           GskSlValue *lvalue,
+                           GskSlValue *rvalue)
+{
+  GskSlValue *result;
+
+  if (gsk_sl_type_equal (gsk_sl_value_get_type (lvalue), gsk_sl_value_get_type (rvalue)))
+    {
+      /* weee.... */
+    }
+  else if (gsk_sl_type_can_convert (gsk_sl_value_get_type (lvalue), gsk_sl_value_get_type (rvalue)))
+    {
+      GskSlValue *tmp = gsk_sl_value_new_convert (lvalue, gsk_sl_value_get_type (rvalue));
+      gsk_sl_value_free (lvalue);
+      lvalue = tmp;
+    }
+  else
+    {
+      GskSlValue *tmp = gsk_sl_value_new_convert (rvalue, gsk_sl_value_get_type (lvalue));
+      gsk_sl_value_free (rvalue);
+      rvalue = tmp;
+    }
+
+  result = gsk_sl_value_new (type);
+  *(guint32 *) gsk_sl_value_get_data (result) = gsk_sl_value_equal (lvalue, rvalue);
+  return result;
+}
+
+static guint32
+gsk_sl_equal_write_spv (GskSpvWriter *writer,
+                        GskSlType    *type,
+                        GskSlType    *ltype,
+                        guint32       left_id,
+                        GskSlType    *rtype,
+                        guint32       right_id)
+{
+  if (gsk_sl_type_can_convert (ltype, rtype))
+    {
+      right_id = gsk_spv_writer_convert (writer, right_id, rtype, ltype);
+      rtype = ltype;
+    }
+  else
+    {
+      left_id = gsk_spv_writer_convert (writer, left_id, ltype, rtype);
+      ltype = rtype;
+    }
+
+  return gsk_sl_equal_generic_write_spv (writer, TRUE, ltype, left_id, right_id);
+}
+
+static GskSlValue *
+gsk_sl_not_equal_get_constant (GskSlType  *type,
+                               GskSlValue *lvalue,
+                               GskSlValue *rvalue)
+{
+  GskSlValue *result;
+
+  if (gsk_sl_type_equal (gsk_sl_value_get_type (lvalue), gsk_sl_value_get_type (rvalue)))
+    {
+      /* weee.... */
+    }
+  else if (gsk_sl_type_can_convert (gsk_sl_value_get_type (lvalue), gsk_sl_value_get_type (rvalue)))
+    {
+      GskSlValue *tmp = gsk_sl_value_new_convert (lvalue, gsk_sl_value_get_type (rvalue));
+      gsk_sl_value_free (lvalue);
+      lvalue = tmp;
+    }
+  else
+    {
+      GskSlValue *tmp = gsk_sl_value_new_convert (rvalue, gsk_sl_value_get_type (lvalue));
+      gsk_sl_value_free (rvalue);
+      rvalue = tmp;
+    }
+
+  result = gsk_sl_value_new (type);
+  *(guint32 *) gsk_sl_value_get_data (result) = !gsk_sl_value_equal (lvalue, rvalue);
+  return result;
+}
+
+static guint32
+gsk_sl_not_equal_write_spv (GskSpvWriter *writer,
+                            GskSlType    *type,
+                            GskSlType    *ltype,
+                            guint32       left_id,
+                            GskSlType    *rtype,
+                            guint32       right_id)
+{
+  if (gsk_sl_type_can_convert (ltype, rtype))
+    {
+      right_id = gsk_spv_writer_convert (writer, right_id, rtype, ltype);
+      rtype = ltype;
+    }
+  else
+    {
+      left_id = gsk_spv_writer_convert (writer, left_id, ltype, rtype);
+      ltype = rtype;
+    }
+
+  return gsk_sl_equal_generic_write_spv (writer, FALSE, ltype, left_id, right_id);
+}
+
+static const GskSlBinary GSK_SL_BINARY_EQUAL = {
+  "==",
+  gsk_sl_equal_check_type,
+  gsk_sl_equal_get_constant,
+  gsk_sl_equal_write_spv
+};
+
+static const GskSlBinary GSK_SL_BINARY_NOT_EQUAL = {
+  "!=",
+  gsk_sl_equal_check_type,
+  gsk_sl_not_equal_get_constant,
+  gsk_sl_not_equal_write_spv
+};
+
 /* UNIMPLEMENTED */
 
 static GskSlType *
@@ -1594,34 +1884,6 @@ gsk_sl_shift_check_type (GskSlPreprocessor *preproc,
 }
 
 static GskSlType *
-gsk_sl_equal_check_type (GskSlPreprocessor *preproc,
-                         GskSlType         *ltype,
-                         GskSlType         *rtype)
-{
-  if (gsk_sl_type_contains_opaque (ltype))
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot do equality conversion with opaque type %s.",
-                                 gsk_sl_type_get_name (ltype));
-      return NULL;
-    }
-  if (gsk_sl_type_contains_opaque (rtype))
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot do equality conversion with opaque type %s.",
-                                 gsk_sl_type_get_name (rtype));
-      return NULL;
-    }
-
-  if (gsk_sl_type_can_convert (ltype, rtype))
-    return gsk_sl_type_get_scalar (GSK_SL_BOOL);
-  if (gsk_sl_type_can_convert (rtype, ltype))
-    return gsk_sl_type_get_scalar (GSK_SL_BOOL);
-
-  gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot convert %s and %s to the same type for comparison.",
-                             gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-  return NULL;
-}
-
-static GskSlType *
 gsk_sl_logical_check_type (GskSlPreprocessor *preproc,
                            GskSlType         *ltype,
                            GskSlType         *rtype)
@@ -1686,20 +1948,6 @@ static const GskSlBinary GSK_SL_BINARY_LSHIFT = {
 static const GskSlBinary GSK_SL_BINARY_RSHIFT = {
   ">>",
   gsk_sl_shift_check_type,
-  gsk_sl_unimplemented_get_constant,
-  gsk_sl_unimplemented_write_spv
-};
-
-static const GskSlBinary GSK_SL_BINARY_EQUAL = {
-  "==",
-  gsk_sl_equal_check_type,
-  gsk_sl_unimplemented_get_constant,
-  gsk_sl_unimplemented_write_spv
-};
-
-static const GskSlBinary GSK_SL_BINARY_NOT_EQUAL = {
-  "!=",
-  gsk_sl_equal_check_type,
   gsk_sl_unimplemented_get_constant,
   gsk_sl_unimplemented_write_spv
 };
