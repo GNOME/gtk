@@ -2449,6 +2449,23 @@ gsk_sl_type_is_opaque (const GskSlType *type)
   return gsk_sl_type_is_sampler (type);
 }
 
+gboolean
+gsk_sl_type_contains_opaque (const GskSlType *type)
+{
+  gsize i;
+
+  if (gsk_sl_type_is_opaque (type))
+    return TRUE;
+
+  for (i = 0; i < gsk_sl_type_get_n_members (type); i++)
+    {
+      if (gsk_sl_type_contains_opaque (gsk_sl_type_get_member_type (type, i)))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 GskSlScalarType
 gsk_sl_type_get_scalar_type (const GskSlType *type)
 {

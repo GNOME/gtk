@@ -590,23 +590,6 @@ gsk_sl_qualifier_get_location (const GskSlQualifier *qualifier)
     }
 }
 
-static gboolean
-type_contains_opaque (const GskSlType *type)
-{
-  gsize i;
-
-  if (gsk_sl_type_is_opaque (type))
-    return TRUE;
-
-  for (i = 0; i < gsk_sl_type_get_n_members (type); i++)
-    {
-      if (type_contains_opaque (gsk_sl_type_get_member_type (type, i)))
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
 GskSpvStorageClass
 gsk_sl_qualifier_get_storage_class (const GskSlQualifier *qualifier,
                                     const GskSlType      *type)
@@ -631,7 +614,7 @@ gsk_sl_qualifier_get_storage_class (const GskSlQualifier *qualifier,
     case GSK_SL_STORAGE_GLOBAL_UNIFORM:
       if (qualifier->layout.push_constant)
         return GSK_SPV_STORAGE_CLASS_PUSH_CONSTANT;
-      else if (type_contains_opaque (type))
+      else if (gsk_sl_type_contains_opaque (type))
         return GSK_SPV_STORAGE_CLASS_UNIFORM_CONSTANT;
       else
         return GSK_SPV_STORAGE_CLASS_UNIFORM;

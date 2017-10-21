@@ -1598,6 +1598,19 @@ gsk_sl_equal_check_type (GskSlPreprocessor *preproc,
                          GskSlType         *ltype,
                          GskSlType         *rtype)
 {
+  if (gsk_sl_type_contains_opaque (ltype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot do equality conversion with opaque type %s.",
+                                 gsk_sl_type_get_name (ltype));
+      return NULL;
+    }
+  if (gsk_sl_type_contains_opaque (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot do equality conversion with opaque type %s.",
+                                 gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+
   if (gsk_sl_type_can_convert (ltype, rtype))
     return gsk_sl_type_get_scalar (GSK_SL_BOOL);
   if (gsk_sl_type_can_convert (rtype, ltype))
