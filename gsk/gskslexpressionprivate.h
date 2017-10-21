@@ -29,6 +29,10 @@ GskSlExpression *       gsk_sl_expression_parse_assignment      (GskSlScope     
                                                                  GskSlPreprocessor      *stream);
 GskSlExpression *       gsk_sl_expression_parse_constant        (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *stream);
+gint32                  gsk_sl_expression_parse_integral_constant (GskSlScope           *scope,
+                                                                 GskSlPreprocessor      *preproc,
+                                                                 gint32                  minimum,
+                                                                 guint32                 maximum);
 GskSlExpression *       gsk_sl_expression_parse_constructor     (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *stream,
                                                                  GskSlType              *type);

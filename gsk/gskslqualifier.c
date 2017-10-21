@@ -40,10 +40,7 @@ gsk_sl_qualifier_parse_layout_assignment (GskSlPreprocessor *preproc,
                                           GskSlScope        *scope,
                                           int               *target)
 {
-  GskSlExpression *expression;
   const GskSlToken *token;
-  GskSlValue *value;
-  GskSlType *type;
 
   gsk_sl_preprocessor_consume (preproc, NULL);
   
@@ -55,38 +52,7 @@ gsk_sl_qualifier_parse_layout_assignment (GskSlPreprocessor *preproc,
     }
   gsk_sl_preprocessor_consume (preproc, NULL);
 
-  expression = gsk_sl_expression_parse_constant (scope, preproc);
-  if (expression == NULL)
-    return;
-
-  value = gsk_sl_expression_get_constant (expression);
-  gsk_sl_expression_unref (expression);
-
-  if (value == NULL)
-    {
-      gsk_sl_preprocessor_error (preproc, CONSTANT, "Expression is not constant.");
-      return;
-    }
-
-  type = gsk_sl_value_get_type (value);
-  if (gsk_sl_type_is_scalar (type) && gsk_sl_type_get_scalar_type (type) == GSK_SL_INT)
-    {
-      gint32 i = *(gint32 *) gsk_sl_value_get_data (value);
-
-      if (i < 0)
-        gsk_sl_preprocessor_error (preproc, CONSTANT, "Expression may not be negative.");
-      else
-        *target = i;
-    }
-  else if (gsk_sl_type_is_scalar (type) && gsk_sl_type_get_scalar_type (type) == GSK_SL_UINT)
-    {
-      *target = *(guint32 *) gsk_sl_value_get_data (value);
-    }
-  else
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Type of expression is not an integer type, but %s", gsk_sl_type_get_name (type));
-    }
-  gsk_sl_value_free (value);
+  *target = gsk_sl_expression_parse_integral_constant (scope, preproc, 0, G_MAXINT);
 }
 
 static void

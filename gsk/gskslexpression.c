@@ -2890,6 +2890,80 @@ gsk_sl_expression_parse_constant (GskSlScope        *scope,
   return gsk_sl_expression_parse_conditional (scope, stream);
 }
 
+gint32
+gsk_sl_expression_parse_integral_constant (GskSlScope        *scope,
+                                           GskSlPreprocessor *preproc,
+                                           gint32             minimum,
+                                           guint32            maximum)
+{
+  GskSlExpression *expression;
+  GskSlValue *value;
+  GskSlType *type;
+
+  g_return_val_if_fail (minimum < maximum, minimum);
+
+  expression = gsk_sl_expression_parse_constant (scope, preproc);
+  value = gsk_sl_expression_get_constant (expression);
+  gsk_sl_expression_unref (expression);
+
+  if (value == NULL)
+    {
+      gsk_sl_preprocessor_error (preproc, CONSTANT, "Expression is not constant.");
+      return minimum;
+    }
+
+  type = gsk_sl_value_get_type (value);
+  if (gsk_sl_type_is_scalar (type) && gsk_sl_type_get_scalar_type (type) == GSK_SL_INT)
+    {
+      gint32 i = *(gint32 *) gsk_sl_value_get_data (value);
+
+      if (i < minimum)
+        {
+          gsk_sl_preprocessor_error (preproc, CONSTANT,
+                                     "Constant expression evaluates to %d, but must be at least %d.",
+                                     i, minimum);
+          i = minimum;
+        }
+      else if (i > 0 && i > maximum)
+        {
+          gsk_sl_preprocessor_error (preproc, CONSTANT,
+                                     "Constant expression evaluates to %d, but must be at most %d.",
+                                     i, maximum);
+          i = maximum;
+        }
+
+      return i;
+    }
+  else if (gsk_sl_type_is_scalar (type) && gsk_sl_type_get_scalar_type (type) == GSK_SL_UINT)
+    {
+      guint32 u;
+
+      u = *(guint32 *) gsk_sl_value_get_data (value);
+
+      if (minimum >= 0 && u < minimum)
+        {
+          gsk_sl_preprocessor_error (preproc, CONSTANT,
+                                     "Constant expression evaluates to %u, but must be at least %d.",
+                                     u, minimum);
+          u = minimum;
+        }
+      else if (u > maximum)
+        {
+          gsk_sl_preprocessor_error (preproc, CONSTANT,
+                                     "Constant expression evaluates to %u, but must be at most %d.",
+                                     u, maximum);
+          u = maximum;
+        }
+
+      return u;
+    }
+  else
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Type of expression is not an integer type, but %s", gsk_sl_type_get_name (type));
+      return minimum;
+    }
+}
+
 GskSlExpression *
 gsk_sl_expression_parse_assignment (GskSlScope        *scope,
                                     GskSlPreprocessor *preproc)
