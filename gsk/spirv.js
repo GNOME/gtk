@@ -92,7 +92,8 @@ var SpecialTypes = {
   "OpGenericCastToPtr": { "result_type": "IdResultPointerType" },
   "OpGenericCastToPtrExplicit": { "result_type": "IdResultPointerType" },
   "OpFunctionParameter": { "result_type": "IdRef" },
-  "OpLabel": { "result": "IdRef" }
+  "OpLabel": { "result": "IdRef" },
+  "OpImage": { "result_type": "IdRef" }
 };
 
 var ExtraOperands = {
@@ -462,14 +463,19 @@ var Operands = {
                       append_one: "g_array_append_vals ({0}, {1}, 2)" },
   "PairLiteralIntegerIdRef": { ctype: "guint32 {0}[2]",
                                append_many: "g_array_append_vals ({0}, {1}, 2 * {2})",
-                               append_one: "g_array_append_vals ({0}, {1}, 2)" }
+                               append_one: "g_array_append_vals ({0}, {1}, 2)" },
+  "ImageOperands" : { ctype: "GskSpvImageOperands {0}, guint32 *{0}_args, gsize n_{0}_args",
+                      optional_unset: "0",
+                      append_one: "G_STMT_START{ g_array_append_val ({0}, (guint32) { {1} }); g_array_append_vals ({0}, {1}_args, n_{1}_args); }G_STMT_END" }
+                 
 };
 
 for (let kind in spirv.operand_kinds)
   {
     kind = spirv.operand_kinds[kind];
-    if (kind.category == "BitEnum" ||
-        kind.category == "ValueEnum")
+    if ((kind.category == "BitEnum" ||
+         kind.category == "ValueEnum") &&
+        !Operands[kind.kind])
       {
         Operands[kind.kind] = { ctype: "GskSpv" + kind.kind + " {0}",
                                 append_one: "g_array_append_val ({0}, (guint32) { {1} })" };

@@ -1449,7 +1449,7 @@ gsk_spv_writer_image_sample_implicit_lod (GskSpvWriter *writer,
                                           GskSlType *result_type,
                                           guint32 sampled_image,
                                           guint32 coordinate,
-                                          GskSpvImageOperands opt_image_operands)
+                                          GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1462,7 +1462,7 @@ gsk_spv_writer_image_sample_implicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SAMPLE_IMPLICIT_LOD;
 
   return result_id;
@@ -1473,7 +1473,7 @@ gsk_spv_writer_image_sample_explicit_lod (GskSpvWriter *writer,
                                           GskSlType *result_type,
                                           guint32 sampled_image,
                                           guint32 coordinate,
-                                          GskSpvImageOperands image_operands)
+                                          GskSpvImageOperands image_operands, guint32 *image_operands_args, gsize n_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1485,7 +1485,7 @@ gsk_spv_writer_image_sample_explicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, result_id);
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
-  g_array_append_val (bytes, (guint32) { image_operands });
+  G_STMT_START{ g_array_append_val (bytes, (guint32) { image_operands }); g_array_append_vals (bytes, image_operands_args, n_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SAMPLE_EXPLICIT_LOD;
 
   return result_id;
@@ -1497,7 +1497,7 @@ gsk_spv_writer_image_sample_dref_implicit_lod (GskSpvWriter *writer,
                                                guint32 sampled_image,
                                                guint32 coordinate,
                                                guint32 d_ref_,
-                                               GskSpvImageOperands opt_image_operands)
+                                               GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1511,7 +1511,7 @@ gsk_spv_writer_image_sample_dref_implicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SAMPLE_DREF_IMPLICIT_LOD;
 
   return result_id;
@@ -1523,7 +1523,7 @@ gsk_spv_writer_image_sample_dref_explicit_lod (GskSpvWriter *writer,
                                                guint32 sampled_image,
                                                guint32 coordinate,
                                                guint32 d_ref_,
-                                               GskSpvImageOperands image_operands)
+                                               GskSpvImageOperands image_operands, guint32 *image_operands_args, gsize n_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1536,7 +1536,7 @@ gsk_spv_writer_image_sample_dref_explicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
-  g_array_append_val (bytes, (guint32) { image_operands });
+  G_STMT_START{ g_array_append_val (bytes, (guint32) { image_operands }); g_array_append_vals (bytes, image_operands_args, n_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SAMPLE_DREF_EXPLICIT_LOD;
 
   return result_id;
@@ -1547,7 +1547,7 @@ gsk_spv_writer_image_sample_proj_implicit_lod (GskSpvWriter *writer,
                                                GskSlType *result_type,
                                                guint32 sampled_image,
                                                guint32 coordinate,
-                                               GskSpvImageOperands opt_image_operands)
+                                               GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1560,7 +1560,7 @@ gsk_spv_writer_image_sample_proj_implicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SAMPLE_PROJ_IMPLICIT_LOD;
 
   return result_id;
@@ -1571,7 +1571,7 @@ gsk_spv_writer_image_sample_proj_explicit_lod (GskSpvWriter *writer,
                                                GskSlType *result_type,
                                                guint32 sampled_image,
                                                guint32 coordinate,
-                                               GskSpvImageOperands image_operands)
+                                               GskSpvImageOperands image_operands, guint32 *image_operands_args, gsize n_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1583,7 +1583,7 @@ gsk_spv_writer_image_sample_proj_explicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, result_id);
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
-  g_array_append_val (bytes, (guint32) { image_operands });
+  G_STMT_START{ g_array_append_val (bytes, (guint32) { image_operands }); g_array_append_vals (bytes, image_operands_args, n_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SAMPLE_PROJ_EXPLICIT_LOD;
 
   return result_id;
@@ -1595,7 +1595,7 @@ gsk_spv_writer_image_sample_proj_dref_implicit_lod (GskSpvWriter *writer,
                                                     guint32 sampled_image,
                                                     guint32 coordinate,
                                                     guint32 d_ref_,
-                                                    GskSpvImageOperands opt_image_operands)
+                                                    GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1609,7 +1609,7 @@ gsk_spv_writer_image_sample_proj_dref_implicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SAMPLE_PROJ_DREF_IMPLICIT_LOD;
 
   return result_id;
@@ -1621,7 +1621,7 @@ gsk_spv_writer_image_sample_proj_dref_explicit_lod (GskSpvWriter *writer,
                                                     guint32 sampled_image,
                                                     guint32 coordinate,
                                                     guint32 d_ref_,
-                                                    GskSpvImageOperands image_operands)
+                                                    GskSpvImageOperands image_operands, guint32 *image_operands_args, gsize n_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1634,7 +1634,7 @@ gsk_spv_writer_image_sample_proj_dref_explicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
-  g_array_append_val (bytes, (guint32) { image_operands });
+  G_STMT_START{ g_array_append_val (bytes, (guint32) { image_operands }); g_array_append_vals (bytes, image_operands_args, n_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SAMPLE_PROJ_DREF_EXPLICIT_LOD;
 
   return result_id;
@@ -1645,7 +1645,7 @@ gsk_spv_writer_image_fetch (GskSpvWriter *writer,
                             GskSlType *result_type,
                             guint32 image,
                             guint32 coordinate,
-                            GskSpvImageOperands opt_image_operands)
+                            GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1658,7 +1658,7 @@ gsk_spv_writer_image_fetch (GskSpvWriter *writer,
   g_array_append_val (bytes, image);
   g_array_append_val (bytes, coordinate);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_FETCH;
 
   return result_id;
@@ -1670,7 +1670,7 @@ gsk_spv_writer_image_gather (GskSpvWriter *writer,
                              guint32 sampled_image,
                              guint32 coordinate,
                              guint32 component,
-                             GskSpvImageOperands opt_image_operands)
+                             GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1684,7 +1684,7 @@ gsk_spv_writer_image_gather (GskSpvWriter *writer,
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, component);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_GATHER;
 
   return result_id;
@@ -1696,7 +1696,7 @@ gsk_spv_writer_image_dref_gather (GskSpvWriter *writer,
                                   guint32 sampled_image,
                                   guint32 coordinate,
                                   guint32 d_ref_,
-                                  GskSpvImageOperands opt_image_operands)
+                                  GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1710,7 +1710,7 @@ gsk_spv_writer_image_dref_gather (GskSpvWriter *writer,
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_DREF_GATHER;
 
   return result_id;
@@ -1721,7 +1721,7 @@ gsk_spv_writer_image_read (GskSpvWriter *writer,
                            GskSlType *result_type,
                            guint32 image,
                            guint32 coordinate,
-                           GskSpvImageOperands opt_image_operands)
+                           GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -1734,7 +1734,7 @@ gsk_spv_writer_image_read (GskSpvWriter *writer,
   g_array_append_val (bytes, image);
   g_array_append_val (bytes, coordinate);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_READ;
 
   return result_id;
@@ -1745,7 +1745,7 @@ gsk_spv_writer_image_write (GskSpvWriter *writer,
                             guint32 image,
                             guint32 coordinate,
                             guint32 texel,
-                            GskSpvImageOperands opt_image_operands)
+                            GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
   guint start_index = bytes->len;
@@ -1755,22 +1755,21 @@ gsk_spv_writer_image_write (GskSpvWriter *writer,
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, texel);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_WRITE;
 }
 
 static inline guint32
 gsk_spv_writer_image (GskSpvWriter *writer,
-                      GskSlType *result_type,
+                      guint32 result_type,
                       guint32 sampled_image)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, GSK_SPV_WRITER_SECTION_CODE);
-  guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
   guint32 result_id = gsk_spv_writer_make_id (writer);
   guint start_index = bytes->len;
 
   g_array_append_val (bytes, (guint32) { 0 });
-  g_array_append_val (bytes, result_type_id);
+  g_array_append_val (bytes, result_type);
   g_array_append_val (bytes, result_id);
   g_array_append_val (bytes, sampled_image);
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE;
@@ -5640,7 +5639,7 @@ gsk_spv_writer_image_sparse_sample_implicit_lod (GskSpvWriter *writer,
                                                  GskSlType *result_type,
                                                  guint32 sampled_image,
                                                  guint32 coordinate,
-                                                 GskSpvImageOperands opt_image_operands)
+                                                 GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5653,7 +5652,7 @@ gsk_spv_writer_image_sparse_sample_implicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_SAMPLE_IMPLICIT_LOD;
 
   return result_id;
@@ -5665,7 +5664,7 @@ gsk_spv_writer_image_sparse_sample_explicit_lod (GskSpvWriter *writer,
                                                  GskSlType *result_type,
                                                  guint32 sampled_image,
                                                  guint32 coordinate,
-                                                 GskSpvImageOperands image_operands)
+                                                 GskSpvImageOperands image_operands, guint32 *image_operands_args, gsize n_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5677,7 +5676,7 @@ gsk_spv_writer_image_sparse_sample_explicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, result_id);
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
-  g_array_append_val (bytes, (guint32) { image_operands });
+  G_STMT_START{ g_array_append_val (bytes, (guint32) { image_operands }); g_array_append_vals (bytes, image_operands_args, n_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_SAMPLE_EXPLICIT_LOD;
 
   return result_id;
@@ -5690,7 +5689,7 @@ gsk_spv_writer_image_sparse_sample_dref_implicit_lod (GskSpvWriter *writer,
                                                       guint32 sampled_image,
                                                       guint32 coordinate,
                                                       guint32 d_ref_,
-                                                      GskSpvImageOperands opt_image_operands)
+                                                      GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5704,7 +5703,7 @@ gsk_spv_writer_image_sparse_sample_dref_implicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_SAMPLE_DREF_IMPLICIT_LOD;
 
   return result_id;
@@ -5717,7 +5716,7 @@ gsk_spv_writer_image_sparse_sample_dref_explicit_lod (GskSpvWriter *writer,
                                                       guint32 sampled_image,
                                                       guint32 coordinate,
                                                       guint32 d_ref_,
-                                                      GskSpvImageOperands image_operands)
+                                                      GskSpvImageOperands image_operands, guint32 *image_operands_args, gsize n_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5730,7 +5729,7 @@ gsk_spv_writer_image_sparse_sample_dref_explicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
-  g_array_append_val (bytes, (guint32) { image_operands });
+  G_STMT_START{ g_array_append_val (bytes, (guint32) { image_operands }); g_array_append_vals (bytes, image_operands_args, n_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_SAMPLE_DREF_EXPLICIT_LOD;
 
   return result_id;
@@ -5742,7 +5741,7 @@ gsk_spv_writer_image_sparse_sample_proj_implicit_lod (GskSpvWriter *writer,
                                                       GskSlType *result_type,
                                                       guint32 sampled_image,
                                                       guint32 coordinate,
-                                                      GskSpvImageOperands opt_image_operands)
+                                                      GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5755,7 +5754,7 @@ gsk_spv_writer_image_sparse_sample_proj_implicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_SAMPLE_PROJ_IMPLICIT_LOD;
 
   return result_id;
@@ -5767,7 +5766,7 @@ gsk_spv_writer_image_sparse_sample_proj_explicit_lod (GskSpvWriter *writer,
                                                       GskSlType *result_type,
                                                       guint32 sampled_image,
                                                       guint32 coordinate,
-                                                      GskSpvImageOperands image_operands)
+                                                      GskSpvImageOperands image_operands, guint32 *image_operands_args, gsize n_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5779,7 +5778,7 @@ gsk_spv_writer_image_sparse_sample_proj_explicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, result_id);
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
-  g_array_append_val (bytes, (guint32) { image_operands });
+  G_STMT_START{ g_array_append_val (bytes, (guint32) { image_operands }); g_array_append_vals (bytes, image_operands_args, n_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_SAMPLE_PROJ_EXPLICIT_LOD;
 
   return result_id;
@@ -5792,7 +5791,7 @@ gsk_spv_writer_image_sparse_sample_proj_dref_implicit_lod (GskSpvWriter *writer,
                                                            guint32 sampled_image,
                                                            guint32 coordinate,
                                                            guint32 d_ref_,
-                                                           GskSpvImageOperands opt_image_operands)
+                                                           GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5806,7 +5805,7 @@ gsk_spv_writer_image_sparse_sample_proj_dref_implicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_SAMPLE_PROJ_DREF_IMPLICIT_LOD;
 
   return result_id;
@@ -5819,7 +5818,7 @@ gsk_spv_writer_image_sparse_sample_proj_dref_explicit_lod (GskSpvWriter *writer,
                                                            guint32 sampled_image,
                                                            guint32 coordinate,
                                                            guint32 d_ref_,
-                                                           GskSpvImageOperands image_operands)
+                                                           GskSpvImageOperands image_operands, guint32 *image_operands_args, gsize n_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5832,7 +5831,7 @@ gsk_spv_writer_image_sparse_sample_proj_dref_explicit_lod (GskSpvWriter *writer,
   g_array_append_val (bytes, sampled_image);
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
-  g_array_append_val (bytes, (guint32) { image_operands });
+  G_STMT_START{ g_array_append_val (bytes, (guint32) { image_operands }); g_array_append_vals (bytes, image_operands_args, n_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_SAMPLE_PROJ_DREF_EXPLICIT_LOD;
 
   return result_id;
@@ -5844,7 +5843,7 @@ gsk_spv_writer_image_sparse_fetch (GskSpvWriter *writer,
                                    GskSlType *result_type,
                                    guint32 image,
                                    guint32 coordinate,
-                                   GskSpvImageOperands opt_image_operands)
+                                   GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5857,7 +5856,7 @@ gsk_spv_writer_image_sparse_fetch (GskSpvWriter *writer,
   g_array_append_val (bytes, image);
   g_array_append_val (bytes, coordinate);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_FETCH;
 
   return result_id;
@@ -5870,7 +5869,7 @@ gsk_spv_writer_image_sparse_gather (GskSpvWriter *writer,
                                     guint32 sampled_image,
                                     guint32 coordinate,
                                     guint32 component,
-                                    GskSpvImageOperands opt_image_operands)
+                                    GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5884,7 +5883,7 @@ gsk_spv_writer_image_sparse_gather (GskSpvWriter *writer,
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, component);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_GATHER;
 
   return result_id;
@@ -5897,7 +5896,7 @@ gsk_spv_writer_image_sparse_dref_gather (GskSpvWriter *writer,
                                          guint32 sampled_image,
                                          guint32 coordinate,
                                          guint32 d_ref_,
-                                         GskSpvImageOperands opt_image_operands)
+                                         GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -5911,7 +5910,7 @@ gsk_spv_writer_image_sparse_dref_gather (GskSpvWriter *writer,
   g_array_append_val (bytes, coordinate);
   g_array_append_val (bytes, d_ref_);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_DREF_GATHER;
 
   return result_id;
@@ -5995,7 +5994,7 @@ gsk_spv_writer_image_sparse_read (GskSpvWriter *writer,
                                   GskSlType *result_type,
                                   guint32 image,
                                   guint32 coordinate,
-                                  GskSpvImageOperands opt_image_operands)
+                                  GskSpvImageOperands opt_image_operands, guint32 *opt_image_operands_args, gsize n_opt_image_operands_args)
 {
   GArray *bytes = gsk_spv_writer_get_bytes (writer, section);
   guint32 result_type_id = gsk_spv_writer_get_id_for_type (writer, result_type);
@@ -6008,7 +6007,7 @@ gsk_spv_writer_image_sparse_read (GskSpvWriter *writer,
   g_array_append_val (bytes, image);
   g_array_append_val (bytes, coordinate);
   if (opt_image_operands != 0)
-    g_array_append_val (bytes, (guint32) { opt_image_operands });
+    G_STMT_START{ g_array_append_val (bytes, (guint32) { opt_image_operands }); g_array_append_vals (bytes, opt_image_operands_args, n_opt_image_operands_args); }G_STMT_END;
   g_array_index (bytes, guint32, start_index) = (bytes->len - start_index) << 16 | GSK_SPV_OP_IMAGE_SPARSE_READ;
 
   return result_id;
