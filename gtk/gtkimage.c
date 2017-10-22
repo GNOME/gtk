@@ -1087,6 +1087,20 @@ gtk_image_get_pixbuf (GtkImage *image)
   return _gtk_icon_helper_peek_pixbuf (&priv->icon_helper);
 }
 
+/**
+ * gtk_image_get_surface:
+ * @image: a #GtkImage
+ *
+ * Gets the image #cairo_surface_t being displayed by the #GtkImage.
+ * The storage type of the image must be %GTK_IMAGE_EMPTY or
+ * %GTK_IMAGE_SURFACE (see gtk_image_get_storage_type()).
+ * The caller of this function does not own a reference to the
+ * returned surface.
+ * 
+ * Returns: (nullable) (transfer none): the displayed surface, or %NULL if
+ *   the image is empty
+ * Since: 3.94.0
+ **/
 cairo_surface_t *
 gtk_image_get_surface (GtkImage *image)
 {
