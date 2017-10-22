@@ -1200,6 +1200,154 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_FUNCTION_CALL = {
   gsk_sl_expression_default_get_spv_access_chain
 };
 
+/* INDEX */
+
+typedef struct _GskSlExpressionIndex GskSlExpressionIndex;
+
+struct _GskSlExpressionIndex {
+  GskSlExpression parent;
+
+  GskSlExpression *expr;
+  GskSlExpression *index_expr;
+};
+
+static void
+gsk_sl_expression_index_free (GskSlExpression *expression)
+{
+  GskSlExpressionIndex *index = (GskSlExpressionIndex *) expression;
+
+  gsk_sl_expression_unref (index->expr);
+  gsk_sl_expression_unref (index->index_expr);
+
+  g_slice_free (GskSlExpressionIndex, index);
+}
+
+static void
+gsk_sl_expression_index_print (const GskSlExpression *expression,
+                               GskSlPrinter          *printer)
+{
+  const GskSlExpressionIndex *index = (const GskSlExpressionIndex *) expression;
+
+  gsk_sl_expression_print (index->expr, printer);
+  gsk_sl_printer_append (printer, "[");
+  gsk_sl_expression_print (index->index_expr, printer);
+  gsk_sl_printer_append (printer, "]");
+}
+
+static gboolean
+gsk_sl_expression_index_is_assignable (const GskSlExpression  *expression,
+                                       GError                **error)
+{
+  const GskSlExpressionIndex *index = (const GskSlExpressionIndex *) expression;
+
+  return gsk_sl_expression_is_assignable (index->expr, error);
+}
+
+static GskSlType *
+gsk_sl_expression_index_get_return_type (const GskSlExpression *expression)
+{
+  const GskSlExpressionIndex *index = (const GskSlExpressionIndex *) expression;
+
+  return gsk_sl_type_get_index_type (gsk_sl_expression_get_return_type (index->expr));
+}
+
+static GskSlValue *
+gsk_sl_expression_index_get_constant (const GskSlExpression *expression)
+{
+  const GskSlExpressionIndex *index = (const GskSlExpressionIndex *) expression;
+  GskSlValue *result, *value, *index_value;
+
+  value = gsk_sl_expression_get_constant (index->expr);
+  if (value == NULL)
+    return NULL;
+
+  index_value = gsk_sl_expression_get_constant (index->index_expr);
+  if (index_value == NULL)
+    {
+      gsk_sl_value_free (value);
+      return NULL;
+    }
+
+  result = gsk_sl_value_new_index (value, *(guint32 *) gsk_sl_value_get_data (index_value));
+
+  gsk_sl_value_free (index_value);
+  gsk_sl_value_free (value);
+
+  return result;
+}
+
+static guint32
+gsk_sl_expression_index_write_spv (const GskSlExpression *expression,
+                                   GskSpvWriter          *writer)
+{
+  const GskSlExpressionIndex *index = (const GskSlExpressionIndex *) expression;
+  guint32 value_id, index_id, variable_id;
+  GskSlType *type;
+
+  type = gsk_sl_expression_get_return_type (index->expr);
+  index_id = gsk_sl_expression_write_spv (index->index_expr, writer);
+  value_id = gsk_sl_expression_write_spv (index->expr, writer);
+  if (gsk_sl_type_is_vector (type))
+    {
+      return gsk_spv_writer_vector_extract_dynamic (writer,
+                                                    gsk_sl_type_get_index_type (type),
+                                                    value_id,
+                                                    index_id);
+    }
+
+  /* we get here when we can't use an access chain on index->expr.
+   * So we create a temporary variable and use an access chain on that one */
+  variable_id = gsk_spv_writer_variable (writer,
+                                         GSK_SPV_WRITER_SECTION_DECLARE,
+                                         type,
+                                         GSK_SPV_STORAGE_CLASS_FUNCTION,
+                                         GSK_SPV_STORAGE_CLASS_FUNCTION,
+                                         value_id);
+  variable_id = gsk_spv_writer_access_chain (writer,
+                                             gsk_sl_type_get_index_type (type),
+                                             GSK_SPV_STORAGE_CLASS_FUNCTION,
+                                             variable_id,
+                                             (guint32[1]) { index_id },
+                                             1);
+  return gsk_spv_writer_load (writer,
+                              gsk_sl_type_get_index_type (type),
+                              variable_id,
+                              0);
+}
+
+static GskSpvAccessChain *
+gsk_sl_expression_index_get_spv_access_chain (const GskSlExpression *expression,
+                                              GskSpvWriter          *writer)
+{
+  const GskSlExpressionIndex *index = (const GskSlExpressionIndex *) expression;
+  GskSpvAccessChain *chain;
+
+  chain = gsk_sl_expression_get_spv_access_chain (index->expr, writer);
+  if (chain == NULL)
+    return NULL;
+  if (gsk_spv_access_chain_has_swizzle (chain))
+    {
+      gsk_spv_access_chain_free (chain);
+      return NULL;
+    }
+
+  gsk_spv_access_chain_add_dynamic_index (chain,
+                                          gsk_sl_type_get_index_type (gsk_sl_expression_get_return_type (index->expr)),
+                                          index->index_expr);
+
+  return chain;
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_INDEX = {
+  gsk_sl_expression_index_free,
+  gsk_sl_expression_index_print,
+  gsk_sl_expression_index_is_assignable,
+  gsk_sl_expression_index_get_return_type,
+  gsk_sl_expression_index_get_constant,
+  gsk_sl_expression_index_write_spv,
+  gsk_sl_expression_index_get_spv_access_chain
+};
+
 /* MEMBER */
 
 typedef struct _GskSlExpressionMember GskSlExpressionMember;
@@ -2297,6 +2445,49 @@ gsk_sl_expression_parse_postfix (GskSlScope        *scope,
               gsk_sl_preprocessor_error (stream, SYNTAX, "Expected an identifier to select a field.");
               continue;
             }
+        }
+      else if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACKET))
+        {
+          GskSlExpressionIndex *index;
+          GskSlExpression *index_expr;
+          GskSlType *type;
+
+          gsk_sl_preprocessor_consume (stream, NULL);
+
+          index_expr = gsk_sl_expression_parse (scope, stream);
+
+          token = gsk_sl_preprocessor_get (stream);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACKET))
+            {
+              gsk_sl_preprocessor_error (stream, SYNTAX, "Expected closing \"]\" after array index.");
+              gsk_sl_expression_unref (index_expr);
+              continue;
+            }
+          gsk_sl_preprocessor_consume (stream, NULL);
+
+          type = gsk_sl_expression_get_return_type (index_expr);
+          if (!gsk_sl_type_equal (type, gsk_sl_type_get_scalar (GSK_SL_INT)) &&
+              !gsk_sl_type_equal (type, gsk_sl_type_get_scalar (GSK_SL_UINT)))
+            {
+              gsk_sl_preprocessor_error (stream, SYNTAX, "Array index must be an integer type, not %s.", gsk_sl_type_get_name (type));
+              gsk_sl_expression_unref (index_expr);
+              continue;
+            }
+
+          type = gsk_sl_expression_get_return_type (expr);
+          if (gsk_sl_type_get_length (type) == 0)
+            {
+              gsk_sl_preprocessor_error (stream, SYNTAX, "Cannot index values of type %s.", gsk_sl_type_get_name (type));
+              gsk_sl_expression_unref (index_expr);
+              continue;
+            }
+          /* XXX: do range check for constants here */
+
+          index = gsk_sl_expression_new (GskSlExpressionIndex, &GSK_SL_EXPRESSION_INDEX);
+          index->expr = expr;
+          index->index_expr = index_expr;
+
+          expr = (GskSlExpression *) index;
         }
       else if (gsk_sl_token_is (token, GSK_SL_TOKEN_INC_OP) ||
                gsk_sl_token_is (token, GSK_SL_TOKEN_DEC_OP))

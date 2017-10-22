@@ -20,6 +20,7 @@
 
 #include "gskspvwriterprivate.h"
 
+#include "gskslexpressionprivate.h"
 #include "gskslfunctionprivate.h"
 #include "gskslfunctiontypeprivate.h"
 #include "gskslimagetypeprivate.h"
@@ -813,6 +814,7 @@ struct _GskSpvAccessChain
   GskSlVariable *variable;
   GskSlType *type;
   GArray *chain;
+  GSList *pending_indexes;
   guint32 swizzle[4];
   guint swizzle_length;
 };
@@ -840,6 +842,7 @@ gsk_spv_access_chain_free (GskSpvAccessChain *chain)
 {
   if (chain->chain)
     g_array_free (chain->chain, TRUE);
+  g_slist_free_full (chain->pending_indexes, (GDestroyNotify) gsk_sl_expression_unref);
   gsk_sl_type_unref (chain->type);
   gsk_sl_variable_unref (chain->variable);
   gsk_spv_writer_unref (chain->writer);
@@ -852,12 +855,30 @@ gsk_spv_access_chain_add_index (GskSpvAccessChain *chain,
                                 GskSlType         *type,
                                 guint32            index_id)
 {
+  g_assert (!gsk_spv_access_chain_has_swizzle (chain));
+
   if (chain->chain == NULL)
     chain->chain = g_array_new (FALSE, FALSE, sizeof (guint32));
   gsk_sl_type_unref (chain->type);
   chain->type = gsk_sl_type_ref (type);
 
   g_array_append_val (chain->chain, index_id);
+}
+
+void
+gsk_spv_access_chain_add_dynamic_index (GskSpvAccessChain *chain,
+                                        GskSlType         *type,
+                                        GskSlExpression   *expr)
+{
+  gsk_spv_access_chain_add_index (chain, type, 0);
+
+  chain->pending_indexes = g_slist_prepend (chain->pending_indexes, gsk_sl_expression_ref (expr));
+}
+
+gboolean
+gsk_spv_access_chain_has_swizzle (GskSpvAccessChain *chain)
+{
+  return chain->swizzle_length > 0;
 }
 
 void
@@ -917,11 +938,37 @@ gsk_spv_access_chain_swizzle (GskSpvAccessChain *chain,
     }
 }
 
+static void
+gsk_spv_access_resolve_pending (GskSpvAccessChain *chain)
+{
+  GSList *l;
+  guint i;
+
+  if (chain->pending_indexes == NULL)
+    return;
+  
+  i = chain->chain->len;
+  l = chain->pending_indexes;
+  while (i-- > 0)
+    {
+      if (g_array_index (chain->chain, guint32, i) != 0)
+        continue;
+
+      g_array_index (chain->chain, guint32, i) = gsk_sl_expression_write_spv (l->data, chain->writer);
+      l = l->next;
+    }
+
+  g_slist_free_full (chain->pending_indexes, (GDestroyNotify) gsk_sl_expression_unref);
+  chain->pending_indexes = NULL;
+}
+
 static guint32
 gsk_spv_access_get_variable (GskSpvAccessChain *chain)
 {
   guint32 variable_id;
     
+  gsk_spv_access_resolve_pending (chain);
+
   variable_id = gsk_spv_writer_get_id_for_variable (chain->writer,
                                                     chain->variable);
 

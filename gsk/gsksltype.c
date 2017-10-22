@@ -20,6 +20,7 @@
 
 #include "gsksltypeprivate.h"
 
+#include "gskslexpressionprivate.h"
 #include "gskslfunctionprivate.h"
 #include "gskslimagetypeprivate.h"
 #include "gskslpreprocessorprivate.h"
@@ -1077,6 +1078,219 @@ static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_write_value_spv
 };
 
+/* ARRAY */
+
+typedef struct _GskSlTypeArray GskSlTypeArray;
+
+struct _GskSlTypeArray {
+  GskSlType parent;
+
+  char *name;
+  GskSlType *type;
+  gsize length;
+};
+
+static void
+gsk_sl_type_array_free (GskSlType *type)
+{
+  GskSlTypeArray *array = (GskSlTypeArray *) type;
+
+  gsk_sl_type_unref (array->type);
+  g_free (array->name);
+
+  g_slice_free (GskSlTypeArray, array);
+}
+
+static const char *
+gsk_sl_type_array_get_name (const GskSlType *type)
+{
+  const GskSlTypeArray *array = (const GskSlTypeArray *) type;
+
+  return array->name;
+}
+
+static GskSlScalarType
+gsk_sl_type_array_get_scalar_type (const GskSlType *type)
+{
+  const GskSlTypeArray *array = (const GskSlTypeArray *) type;
+
+  return gsk_sl_type_get_scalar_type (array->type);
+}
+
+static const GskSlImageType *
+gsk_sl_type_array_get_image_type (const GskSlType *type)
+{
+  return NULL;
+}
+
+static GskSlType *
+gsk_sl_type_array_get_index_type (const GskSlType *type)
+{
+  const GskSlTypeArray *array = (const GskSlTypeArray *) type;
+
+  return array->type;
+}
+
+static gsize
+gsk_sl_type_array_get_index_stride (const GskSlType *type)
+{
+  const GskSlTypeArray *array = (const GskSlTypeArray *) type;
+
+  return gsk_sl_type_get_size (array->type);
+}
+
+static guint
+gsk_sl_type_array_get_length (const GskSlType *type)
+{
+  const GskSlTypeArray *array = (const GskSlTypeArray *) type;
+
+  return array->length;
+}
+
+static gsize
+gsk_sl_type_array_get_size (const GskSlType *type)
+{
+  const GskSlTypeArray *array = (const GskSlTypeArray *) type;
+
+  return array->length * gsk_sl_type_get_size (array->type);
+}
+
+static gsize
+gsk_sl_type_array_get_n_components (const GskSlType *type)
+{
+  const GskSlTypeArray *array = (const GskSlTypeArray *) type;
+
+  return gsk_sl_type_array_get_n_components (array->type) * array->length;
+}
+
+static guint
+gsk_sl_type_array_get_n_members (const GskSlType *type)
+{
+  return 0;
+}
+
+static const GskSlTypeMember *
+gsk_sl_type_array_get_member (const GskSlType *type,
+                               guint            n)
+{
+  return NULL;
+}
+
+static gboolean
+gsk_sl_type_array_can_convert (const GskSlType *target,
+                               const GskSlType *source)
+{
+  return gsk_sl_type_equal (target, source);
+}
+
+static guint32
+gsk_sl_type_array_write_spv (GskSlType    *type,
+                             GskSpvWriter *writer)
+{
+  GskSlTypeArray *array = (GskSlTypeArray *) type;
+  GskSlValue *value;
+  guint32 type_id, length_id;
+
+  type_id = gsk_spv_writer_get_id_for_type (writer, array->type);
+  value = gsk_sl_value_new (gsk_sl_type_get_scalar (GSK_SL_INT));
+  *(gint32 *) gsk_sl_value_get_data (value) = array->length;
+  length_id = gsk_spv_writer_get_id_for_value (writer, value);
+  gsk_sl_value_free (value);
+
+  return gsk_spv_writer_type_array (writer,
+                                    type_id,
+                                    length_id);
+}
+
+static void
+gsk_sl_type_array_print_value (const GskSlType *type,
+                               GskSlPrinter    *printer,
+                               gconstpointer    value)
+{
+  GskSlTypeArray *array = (GskSlTypeArray *) type;
+  gsize i, stride;
+  const guchar *data;
+
+  data = value;
+  stride = gsk_sl_type_array_get_index_stride (type);
+  gsk_sl_printer_append (printer, array->name);
+  gsk_sl_printer_append (printer, " (");
+
+  for (i = 0; i < array->length; i++)
+    {
+      if (i > 0)
+        gsk_sl_printer_append (printer, ", ");
+      gsk_sl_type_print_value (array->type, printer, data + i * stride);
+    }
+
+  gsk_sl_printer_append (printer, ")");
+}
+
+static gboolean
+gsk_sl_type_array_value_equal (const GskSlType *type,
+                               gconstpointer    a,
+                               gconstpointer    b)
+{
+  GskSlTypeArray *array = (GskSlTypeArray *) type;
+  gsize i, stride;
+  const guchar *adata;
+  const guchar *bdata;
+
+  adata = a;
+  bdata = b;
+  stride = gsk_sl_type_array_get_index_stride (type);
+  for (i = 0; i < array->length; i++)
+    {
+      if (!gsk_sl_type_value_equal (array->type, adata + i * stride, bdata + i * stride))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static guint32
+gsk_sl_type_array_write_value_spv (GskSlType     *type,
+                                   GskSpvWriter  *writer,
+                                   gconstpointer  value)
+{
+  GskSlTypeArray *array = (GskSlTypeArray *) type;
+  guint32 value_ids[array->length];
+  gsize i, stride;
+  const guchar *data;
+
+  data = value;
+  stride = gsk_sl_type_array_get_index_stride (type);
+
+  for (i = 0; i < array->length; i++)
+    {
+      value_ids[i] = gsk_sl_type_write_value_spv (array->type, writer, data + i * stride);
+    }
+
+  return gsk_spv_writer_constant_composite (writer,
+                                            type,
+                                            value_ids,
+                                            array->length);
+}
+
+static const GskSlTypeClass GSK_SL_TYPE_ARRAY = {
+  gsk_sl_type_array_free,
+  gsk_sl_type_array_get_name,
+  gsk_sl_type_array_get_scalar_type,
+  gsk_sl_type_array_get_image_type,
+  gsk_sl_type_array_get_index_type,
+  gsk_sl_type_array_get_index_stride,
+  gsk_sl_type_array_get_length,
+  gsk_sl_type_array_get_size,
+  gsk_sl_type_array_get_n_components,
+  gsk_sl_type_array_get_n_members,
+  gsk_sl_type_array_get_member,
+  gsk_sl_type_array_can_convert,
+  gsk_sl_type_array_write_spv,
+  gsk_sl_type_array_print_value,
+  gsk_sl_type_array_value_equal,
+  gsk_sl_type_array_write_value_spv
+};
+
 /* SAMPLER */
 
 typedef struct _GskSlTypeSampler GskSlTypeSampler;
@@ -1916,6 +2130,70 @@ gsk_sl_type_get_matching (GskSlType       *type,
     }
 }
 
+static char *
+gsk_sl_array_type_generate_name (GskSlType *type)
+{
+  GString *string = g_string_new (NULL);
+
+  for (; gsk_sl_type_is_array (type); type = gsk_sl_type_get_index_type (type))
+    {
+      g_string_append_printf (string, "[%u]", gsk_sl_type_get_length (type));
+    }
+
+  g_string_prepend (string, gsk_sl_type_get_name (type));
+
+  return g_string_free (string, FALSE);
+}
+
+GskSlType *
+gsk_sl_type_new_array (GskSlType *type,
+                       gsize      length)
+{
+  GskSlTypeArray *result;
+
+  result = gsk_sl_type_new (GskSlTypeArray, &GSK_SL_TYPE_ARRAY);
+
+  result->type = gsk_sl_type_ref (type);
+  result->length = length;
+
+  result->name = gsk_sl_array_type_generate_name (&result->parent);
+
+  return &result->parent;
+}
+
+GskSlType *
+gsk_sl_type_parse_array (GskSlType         *type,
+                         GskSlScope        *scope,
+                         GskSlPreprocessor *preproc)
+{
+  GskSlType *array;
+  const GskSlToken *token;
+  gsize length;
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACKET))
+    return type;
+
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  length = gsk_sl_expression_parse_integral_constant (scope, preproc, 1, G_MAXINT);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACKET))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \"]\"");
+      return type;
+    }
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  type = gsk_sl_type_parse_array (type, scope, preproc);
+
+  array = gsk_sl_type_new_array (type, length);
+  gsk_sl_type_unref (type);
+
+  return array;
+}
+
 GskSlType *
 gsk_sl_type_new_parse (GskSlScope        *scope,
                        GskSlPreprocessor *preproc)
@@ -2191,6 +2469,8 @@ gsk_sl_type_new_parse (GskSlScope        *scope,
 
   gsk_sl_preprocessor_consume (preproc, NULL);
 
+  type = gsk_sl_type_parse_array (type, scope, preproc);
+
   return type;
 }
 
@@ -2423,6 +2703,12 @@ gsk_sl_type_is_basic (const GskSlType *type)
   return gsk_sl_type_is_scalar (type)
       || gsk_sl_type_is_vector (type)
       || gsk_sl_type_is_matrix (type);
+}
+
+gboolean
+gsk_sl_type_is_array (const GskSlType *type)
+{
+  return type->class == &GSK_SL_TYPE_ARRAY;
 }
 
 gboolean

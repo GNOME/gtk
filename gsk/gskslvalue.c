@@ -160,15 +160,36 @@ gsk_sl_value_new_convert (GskSlValue *source,
 }
 
 GskSlValue *
+gsk_sl_value_new_index (GskSlValue *value,
+                        gsize       n)
+{
+  GskSlType *index_type;
+  gpointer data;
+
+  if (n >= gsk_sl_type_get_length (value->type))
+    return NULL;
+
+  index_type = gsk_sl_type_get_index_type (value->type);
+
+  data = g_memdup ((guchar *) value->data + gsk_sl_type_get_index_stride (value->type) * n,
+                   gsk_sl_type_get_size (index_type));
+
+  return gsk_sl_value_new_for_data (index_type, data, g_free, data);
+}
+
+GskSlValue *
 gsk_sl_value_new_member (GskSlValue *value,
                          guint       n)
 {
+  GskSlType *member_type;
   gpointer data;
 
-  data = g_memdup ((guchar *) value->data + gsk_sl_type_get_member_offset (value->type, n),
-                   gsk_sl_type_get_size (gsk_sl_type_get_member_type (value->type, n)));
+  member_type = gsk_sl_type_get_member_type (value->type, n);
 
-  return gsk_sl_value_new_for_data (value->type, data, g_free, data);
+  data = g_memdup ((guchar *) value->data + gsk_sl_type_get_member_offset (value->type, n),
+                   gsk_sl_type_get_size (member_type));
+
+  return gsk_sl_value_new_for_data (member_type, data, g_free, data);
 }
 
 /**

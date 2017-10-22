@@ -104,9 +104,13 @@ void                    gsk_spv_access_chain_free               (GskSpvAccessCha
 void                    gsk_spv_access_chain_add_index          (GskSpvAccessChain      *chain,
                                                                  GskSlType              *type,
                                                                  guint32                 index_id);
+void                    gsk_spv_access_chain_add_dynamic_index  (GskSpvAccessChain      *chain,
+                                                                 GskSlType              *type,
+                                                                 GskSlExpression        *expr);
 void                    gsk_spv_access_chain_swizzle            (GskSpvAccessChain      *chain,
                                                                  const guint            *indexes,
                                                                  guint                   n_indexes);
+gboolean                gsk_spv_access_chain_has_swizzle        (GskSpvAccessChain      *chain);
 guint32                 gsk_spv_access_chain_load               (GskSpvAccessChain      *chain);
 void                    gsk_spv_access_chain_store              (GskSpvAccessChain      *chain,
                                                                  guint32                 value);
