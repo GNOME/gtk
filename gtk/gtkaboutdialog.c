@@ -30,6 +30,8 @@
 
 #include <string.h>
 
+#include <cairo-gobject.h>
+
 #include "gtkaboutdialog.h"
 #include "gtkbutton.h"
 #include "gtkbbox.h"
@@ -91,9 +93,10 @@
  * as shown in the following example:
  * |[<!-- language="C" -->
  * GdkPixbuf *example_logo = gdk_pixbuf_new_from_file ("./logo.png", NULL);
+ * cairo_surface_t *example_surface = gdk_cairo_surface_create_from_pixbuf (example_logo, 1, NULL);
  * gtk_show_about_dialog (NULL,
  *                        "program-name", "ExampleCode",
- *                        "logo", example_logo,
+ *                        "logo", example_surface,
  *                        "title", _("About ExampleCode"),
  *                        NULL);
  * ]|
@@ -583,7 +586,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
     g_param_spec_object ("logo",
                          P_("Logo"),
                          P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
-                         GDK_TYPE_PIXBUF,
+                         CAIRO_GOBJECT_TYPE_SURFACE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -908,7 +911,7 @@ gtk_about_dialog_set_property (GObject      *object,
       gtk_about_dialog_set_copyright (about, g_value_get_string (value));
       break;
     case PROP_LOGO:
-      gtk_about_dialog_set_logo (about, g_value_get_object (value));
+      gtk_about_dialog_set_logo (about, g_value_get_boxed (value));
       break;
     case PROP_AUTHORS:
       gtk_about_dialog_set_authors (about, (const gchar**)g_value_get_boxed (value));
@@ -985,8 +988,8 @@ gtk_about_dialog_get_property (GObject    *object,
       g_value_set_boxed (value, priv->artists);
       break;
     case PROP_LOGO:
-      if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_PIXBUF)
-        g_value_set_object (value, gtk_image_get_pixbuf (GTK_IMAGE (priv->logo_image)));
+      if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_SURFACE)
+        g_value_set_object (value, gtk_image_get_surface (GTK_IMAGE (priv->logo_image)));
       else
         g_value_set_object (value, NULL);
       break;
@@ -1807,15 +1810,15 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
  * gtk_about_dialog_get_logo:
  * @about: a #GtkAboutDialog
  *
- * Returns the pixbuf displayed as logo in the about dialog.
+ * Returns the surface displayed as logo in the about dialog.
  *
- * Returns: (transfer none): the pixbuf displayed as logo. The
- *   pixbuf is owned by the about dialog. If you want to keep a
- *   reference to it, you have to call g_object_ref() on it.
+ * Returns: (transfer none): the surface displayed as logo. The
+ *   surface is owned by the about dialog. If you want to keep a
+ *   reference to it, you have to call cairo_surface_reference() on it.
  *
  * Since: 2.6
  */
-GdkPixbuf *
+cairo_surface_t *
 gtk_about_dialog_get_logo (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
@@ -1824,8 +1827,8 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
 
   priv = about->priv;
 
-  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_PIXBUF)
-    return gtk_image_get_pixbuf (GTK_IMAGE (priv->logo_image));
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_SURFACE)
+    return gtk_image_get_surface (GTK_IMAGE (priv->logo_image));
   else
     return NULL;
 }
@@ -1833,9 +1836,9 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_logo:
  * @about: a #GtkAboutDialog
- * @logo: (allow-none): a #GdkPixbuf, or %NULL
+ * @logo: (allow-none): a #cairo_surface_t, or %NULL
  *
- * Sets the pixbuf to be displayed as logo in the about dialog.
+ * Sets the surface to be displayed as logo in the about dialog.
  * If it is %NULL, the default window icon set with
  * gtk_window_set_default_icon() will be used.
  *
@@ -1843,7 +1846,7 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
  */
 void
 gtk_about_dialog_set_logo (GtkAboutDialog *about,
-                           GdkPixbuf      *logo)
+                           cairo_surface_t *logo)
 {
   GtkAboutDialogPrivate *priv;
 
@@ -1857,17 +1860,17 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
     g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO_ICON_NAME]);
 
   if (logo != NULL)
-    gtk_image_set_from_pixbuf (GTK_IMAGE (priv->logo_image), logo);
+    gtk_image_set_from_surface (GTK_IMAGE (priv->logo_image), logo);
   else
     {
-      GList *pixbufs = gtk_window_get_default_icon_list ();
+      GList *surfaces = gtk_window_get_default_icon_list ();
 
-      if (pixbufs != NULL)
+      if (surfaces != NULL)
         {
-          gtk_image_set_from_pixbuf (GTK_IMAGE (priv->logo_image),
-                                     GDK_PIXBUF (pixbufs->data));
+          gtk_image_set_from_surface (GTK_IMAGE (priv->logo_image),
+				      (cairo_surface_t *) (surfaces->data));
 
-          g_list_free (pixbufs);
+          g_list_free (surfaces);
         }
     }
 
@@ -1909,7 +1912,7 @@ gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
  * @about: a #GtkAboutDialog
  * @icon_name: (allow-none): an icon name, or %NULL
  *
- * Sets the pixbuf to be displayed as logo in the about dialog.
+ * Sets the surface to be displayed as logo in the about dialog.
  * If it is %NULL, the default window icon set with
  * gtk_window_set_default_icon() will be used.
  *
@@ -1928,7 +1931,7 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
 
   g_object_freeze_notify (G_OBJECT (about));
 
-  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_PIXBUF)
+  if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_SURFACE)
     g_object_notify_by_pspec (G_OBJECT (about), props[PROP_LOGO]);
 
   if (icon_name)
@@ -1965,7 +1968,7 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
     }
   else if ((icons = gtk_window_get_default_icon_list ()))
     {
-      gtk_image_set_from_pixbuf (GTK_IMAGE (priv->logo_image), icons->data);
+      gtk_image_set_from_surface (GTK_IMAGE (priv->logo_image), icons->data);
       g_list_free (icons);
     }
   else
