@@ -221,6 +221,9 @@ void     gtk_clipboard_set_text       (GtkClipboard          *clipboard,
 GDK_AVAILABLE_IN_ALL
 void     gtk_clipboard_set_image      (GtkClipboard          *clipboard,
 				       GdkPixbuf             *pixbuf);
+GDK_AVAILABLE_IN_3_94
+void     gtk_clipboard_set_surface    (GtkClipboard    *clipboard,
+                                       cairo_surface_t *surface);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_clipboard_request_contents  (GtkClipboard                     *clipboard,
@@ -268,6 +271,8 @@ gboolean          gtk_clipboard_wait_for_targets   (GtkClipboard  *clipboard,
                                                     GdkAtom      **targets,
                                                     gint          *n_targets);
 
+GDK_AVAILABLE_IN_3_94
+cairo_surface_t * gtk_clipboard_wait_for_surface   (GtkClipboard  *clipboard);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_clipboard_wait_is_text_available      (GtkClipboard  *clipboard);
 GDK_AVAILABLE_IN_ALL

@@ -930,6 +930,21 @@ gtk_clipboard_set_image (GtkClipboard *clipboard,
   gtk_target_list_unref (list);
 }
 
+void
+gtk_clipboard_set_surface (GtkClipboard    *clipboard,
+                           cairo_surface_t *surface)
+{
+  GdkPixbuf *pixbuf;
+
+  pixbuf = gdk_pixbuf_get_from_surface (surface,
+                                        0, 0,
+                                        cairo_image_surface_get_width (surface),
+                                        cairo_image_surface_get_height (surface));
+  gtk_clipboard_set_image (clipboard, pixbuf);
+  g_object_unref (pixbuf);
+
+}
+
 static void
 set_request_contents_info (GtkWidget           *widget,
 			   RequestContentsInfo *info)
@@ -1579,6 +1594,19 @@ clipboard_image_received_func (GtkClipboard *clipboard,
   g_main_loop_quit (results->loop);
 }
 
+static void
+clipboard_surface_received_func (GtkClipboard *clipboard,
+                                 GdkPixbuf    *pixbuf,
+			         gpointer      data)
+{
+  WaitResults *results = data;
+
+  if (pixbuf)
+    results->data = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+
+  g_main_loop_quit (results->loop);
+}
+
 /**
  * gtk_clipboard_wait_for_image:
  * @clipboard: a #GtkClipboard
@@ -1623,6 +1651,31 @@ gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
   return results.data;
 }
 
+cairo_surface_t *
+gtk_clipboard_wait_for_surface (GtkClipboard *clipboard)
+{
+  WaitResults results;
+
+  g_return_val_if_fail (clipboard != NULL, NULL);
+  
+  results.data = NULL;
+  results.loop = g_main_loop_new (NULL, TRUE);
+
+  gtk_clipboard_request_image (clipboard,
+			       clipboard_surface_received_func,
+			       &results);
+
+  if (g_main_loop_is_running (results.loop))
+    {
+      gdk_threads_leave ();
+      g_main_loop_run (results.loop);
+      gdk_threads_enter ();
+    }
+
+  g_main_loop_unref (results.loop);
+
+  return results.data;
+}
 static void 
 clipboard_uris_received_func (GtkClipboard *clipboard,
 			      gchar       **uris,
