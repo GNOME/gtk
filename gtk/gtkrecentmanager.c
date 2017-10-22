@@ -2071,6 +2071,14 @@ gtk_recent_info_get_gicon (GtkRecentInfo *info)
       icon = g_content_type_get_icon (content_type);
       g_free (content_type);
     }
+  else
+    {
+      if (info->mime_type &&
+          strcmp (info->mime_type, "x-directory/normal") == 0)
+        icon = g_themed_icon_new ("folder");
+      else
+        icon = g_themed_icon_new ("text-x-generic");
+    }
 
   return icon;
 }
