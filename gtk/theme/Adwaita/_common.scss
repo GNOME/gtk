@@ -102,6 +102,7 @@ $button_transition: all 200ms $ease-out-quad;
 
 .view,
 textview {
+  outline: none;
   text {
     @extend %view;
 
