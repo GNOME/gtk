@@ -200,7 +200,7 @@ _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
                                     GtkWindow    *window)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
   gint scale;
 
   if (priv->titlebar_icon == NULL)
@@ -208,19 +208,14 @@ _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
 
   scale = gtk_widget_get_scale_factor (priv->titlebar_icon);
   if (GTK_IS_BUTTON (gtk_widget_get_parent (priv->titlebar_icon)))
-    pixbuf = gtk_window_get_icon_for_size (window, scale * 16);
+    surface = gtk_window_get_icon_for_size (window, 16, scale);
   else
-    pixbuf = gtk_window_get_icon_for_size (window, scale * 20);
+    surface = gtk_window_get_icon_for_size (window, 20, scale);
 
-  if (pixbuf)
+  if (surface)
     {
-      cairo_surface_t *surface;
-
-      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, gtk_widget_get_window (priv->titlebar_icon));
-
       gtk_image_set_from_surface (GTK_IMAGE (priv->titlebar_icon), surface);
       cairo_surface_destroy (surface);
-      g_object_unref (pixbuf);
       gtk_widget_show (priv->titlebar_icon);
 
       return TRUE;

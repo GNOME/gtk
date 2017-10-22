@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include <cairo-gobject.h>
+
 #include "gtkwindow.h"
 
 #include <string.h>
@@ -927,7 +929,7 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_object ("icon",
                            P_("Icon"),
                            P_("Icon for this window"),
-                           GDK_TYPE_PIXBUF,
+			   CAIRO_GOBJECT_TYPE_SURFACE,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -4415,10 +4417,11 @@ static GList *
 icon_list_from_theme (GtkWindow   *window,
 		      const gchar *name)
 {
+  GtkWindowPrivate *priv = window->priv;
   GList *list;
 
   GtkIconTheme *icon_theme;
-  GdkPixbuf *icon;
+  cairo_surface_t *icon;
   gint *sizes;
   gint i;
 
@@ -4437,11 +4440,15 @@ icon_list_from_theme (GtkWindow   *window,
        * fixed size of 48.
        */ 
       if (sizes[i] == -1)
-	icon = gtk_icon_theme_load_icon (icon_theme, name,
-					 48, 0, NULL);
+	icon = gtk_icon_theme_load_surface (icon_theme, name,
+					    48, priv->scale,
+					    _gtk_widget_get_window (GTK_WIDGET (window)),
+					    0, NULL);
       else
-	icon = gtk_icon_theme_load_icon (icon_theme, name,
-					 sizes[i], 0, NULL);
+	icon = gtk_icon_theme_load_surface (icon_theme, name,
+					    sizes[i], priv->scale,
+					    _gtk_widget_get_window (GTK_WIDGET (window)),
+					    0, NULL);
       if (icon)
 	list = g_list_append (list, icon);
     }
@@ -4526,43 +4533,90 @@ gtk_window_realize_icon (GtkWindow *window)
     }
 }
 
-static GdkPixbuf *
-icon_from_list (GList *list,
-                gint   size)
+static cairo_surface_t *
+icon_from_list (GtkWindow *window,
+		GList *list,
+                gint   size,
+		gint   scale)
 {
-  GdkPixbuf *best;
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *best;
+  cairo_surface_t *surface;
   GList *l;
 
   best = NULL;
+  /* Look for exact match */
   for (l = list; l; l = l->next)
     {
-      pixbuf = list->data;
-      if (gdk_pixbuf_get_width (pixbuf) <= size)
-        {
-          best = g_object_ref (pixbuf);
+      surface = list->data;
+      double x_scale;
+
+      cairo_surface_get_device_scale (surface, &x_scale, NULL);
+      
+      if (cairo_image_surface_get_width (surface) == size &&
+	  x_scale == scale)
+	{
+          best = cairo_surface_reference (surface);
           break;
-        }
+	}
     }
 
-  if (best == NULL)
-    best = gdk_pixbuf_scale_simple (GDK_PIXBUF (list->data), size, size, GDK_INTERP_BILINEAR);
+  if (best != NULL)
+    return best;
+    
+  /* Ignore scale */
+  for (l = list; l; l = l->next)
+    {
+      surface = list->data;
+      double x_scale;
+
+      cairo_surface_get_device_scale (surface, &x_scale, NULL);
+      
+      if (cairo_image_surface_get_width (surface) * x_scale <= size)
+	{
+	  best = cairo_surface_reference (surface);
+	  break;
+	}
+    }
+
+  if (best == NULL && list != NULL)
+    best = (cairo_surface_t *)list->data;
+
+  
+  if (best)
+    {
+      cairo_t *cr;
+      surface =
+	gdk_window_create_similar_image_surface (_gtk_widget_get_window (GTK_WIDGET(window)),
+						 CAIRO_FORMAT_ARGB32,
+						 size, size, scale);
+      cr = cairo_create (surface);
+      cairo_set_source_surface (cr, best, 0, 0);
+      cairo_scale (cr,
+		   size / cairo_image_surface_get_width (best),
+		   size / cairo_image_surface_get_height (best));
+      cairo_paint (cr);
+      cairo_destroy (cr);
+    }
 
   return best;
 }
 
-static GdkPixbuf *
-icon_from_name (const gchar *name,
-                gint         size)
+static cairo_surface_t *
+icon_from_name (GtkWindow *window,
+		const gchar *name,
+                gint         size,
+		gint         scale)
 {
-  return gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
-                                   name, size,
-                                   GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+  return gtk_icon_theme_load_surface (gtk_icon_theme_get_default (),
+				      name, size, scale,
+				      _gtk_widget_get_window (GTK_WIDGET(window)),
+				      GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
 }
 
-GdkPixbuf *
+cairo_surface_t *
 gtk_window_get_icon_for_size (GtkWindow *window,
-                              gint       size)
+                              int        size,
+			      int        scale)
 {
   GtkWindowPrivate *priv = window->priv;
   GtkWindowIconInfo *info;
@@ -4571,24 +4625,24 @@ gtk_window_get_icon_for_size (GtkWindow *window,
   info = ensure_icon_info (window);
 
   if (info->icon_list != NULL)
-    return icon_from_list (info->icon_list, size);
+    return icon_from_list (window, info->icon_list, size, scale);
 
   name = gtk_window_get_icon_name (window);
   if (name != NULL)
-    return icon_from_name (name, size);
+    return icon_from_name (window, name, size, scale);
 
   if (priv->transient_parent != NULL)
     {
       info = ensure_icon_info (priv->transient_parent);
       if (info->icon_list)
-        return icon_from_list (info->icon_list, size);
+        return icon_from_list (window, info->icon_list, size, scale);
     }
 
   if (default_icon_list != NULL)
-    return icon_from_list (default_icon_list, size);
+    return icon_from_list (window, default_icon_list, size, scale);
 
   if (default_icon_name != NULL)
-    return icon_from_name (default_icon_name, size);
+    return icon_from_name (window, default_icon_name, size, scale);
 
   return NULL;
 }
@@ -4614,7 +4668,7 @@ gtk_window_unrealize_icon (GtkWindow *window)
 /**
  * gtk_window_set_icon_list:
  * @window: a #GtkWindow
- * @list: (element-type GdkPixbuf): list of #GdkPixbuf
+ * @list: (element-type cairo_surface_t): list of image surfaces
  *
  * Sets up the icon representing a #GtkWindow. The icon is used when
  * the window is minimized (also known as iconified).  Some window
@@ -4683,7 +4737,7 @@ gtk_window_set_icon_list (GtkWindow  *window,
  * The list is copied, but the reference count on each
  * member won’t be incremented.
  *
- * Returns: (element-type GdkPixbuf) (transfer container): copy of window’s icon list
+ * Returns: (element-type cairo_surface_t) (transfer container): copy of window’s icon list
  **/
 GList*
 gtk_window_get_icon_list (GtkWindow  *window)
@@ -4727,12 +4781,12 @@ gtk_window_get_icon_list (GtkWindow  *window)
  **/
 void
 gtk_window_set_icon (GtkWindow  *window,
-                     GdkPixbuf  *icon)
+                     cairo_surface_t *icon)
 {
   GList *list;
   
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (icon == NULL || GDK_IS_PIXBUF (icon));
+  g_return_if_fail (icon == NULL);
 
   list = NULL;
 
@@ -4829,7 +4883,7 @@ gtk_window_get_icon_name (GtkWindow *window)
  *
  * Returns: (transfer none): icon for window
  **/
-GdkPixbuf*
+cairo_surface_t *
 gtk_window_get_icon (GtkWindow  *window)
 {
   GtkWindowIconInfo *info;
@@ -4838,19 +4892,21 @@ gtk_window_get_icon (GtkWindow  *window)
 
   info = get_icon_info (window);
   if (info && info->icon_list)
-    return GDK_PIXBUF (info->icon_list->data);
+    return (cairo_surface_t *) (info->icon_list->data);
   else
     return NULL;
 }
 
-/* Load pixbuf, printing warning on failure if error == NULL
+/* Load surface, printing warning on failure if error == NULL
  */
-static GdkPixbuf *
-load_pixbuf_verbosely (const char *filename,
-		       GError    **err)
+static cairo_surface_t *
+load_surface_verbosely (GdkWindow *window,
+			const char *filename,
+			GError    **err)
 {
   GError *local_err = NULL;
   GdkPixbuf *pixbuf;
+  cairo_surface_t *surface = NULL;
 
   pixbuf = gdk_pixbuf_new_from_file (filename, &local_err);
 
@@ -4865,8 +4921,13 @@ load_pixbuf_verbosely (const char *filename,
 	  g_error_free (local_err);
 	}
     }
+  else
+    {
+      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, window);
+      g_object_unref (pixbuf);
+    }
 
-  return pixbuf;
+  return surface;
 }
 
 /**
@@ -4879,7 +4940,7 @@ load_pixbuf_verbosely (const char *filename,
  * Warns on failure if @err is %NULL.
  *
  * This function is equivalent to calling gtk_window_set_icon()
- * with a pixbuf created by loading the image from @filename.
+ * with a surface created by loading the image from @filename.
  *
  * Returns: %TRUE if setting the icon succeeded.
  *
@@ -4890,12 +4951,12 @@ gtk_window_set_icon_from_file (GtkWindow   *window,
 			       const gchar *filename,
 			       GError     **err)
 {
-  GdkPixbuf *pixbuf = load_pixbuf_verbosely (filename, err);
+  cairo_surface_t *surface = load_surface_verbosely (_gtk_widget_get_window (GTK_WIDGET (window)), filename, err);
 
-  if (pixbuf)
+  if (surface)
     {
-      gtk_window_set_icon (window, pixbuf);
-      g_object_unref (pixbuf);
+      gtk_window_set_icon (window, surface);
+      cairo_surface_destroy (surface);
       
       return TRUE;
     }
@@ -4905,7 +4966,7 @@ gtk_window_set_icon_from_file (GtkWindow   *window,
 
 /**
  * gtk_window_set_default_icon_list:
- * @list: (element-type GdkPixbuf) (transfer container): a list of #GdkPixbuf
+ * @list: (element-type cairo_surface_t) (transfer container): a list of #cairo_surface_t image surfaces
  *
  * Sets an icon list to be used as fallback for windows that haven't
  * had gtk_window_set_icon_list() called on them to set up a
@@ -4928,9 +4989,9 @@ gtk_window_set_default_icon_list (GList *list)
   default_icon_serial++;
   
   g_list_foreach (list,
-                  (GFunc) g_object_ref, NULL);
+                  (GFunc) cairo_surface_reference, NULL);
 
-  g_list_free_full (default_icon_list, g_object_unref);
+  g_list_free_full (default_icon_list, (GDestroyNotify)cairo_surface_destroy);
 
   default_icon_list = g_list_copy (list);
   
@@ -4960,16 +5021,16 @@ gtk_window_set_default_icon_list (GList *list)
  * @icon: the icon
  *
  * Sets an icon to be used as fallback for windows that haven't
- * had gtk_window_set_icon() called on them from a pixbuf.
+ * had gtk_window_set_icon() called on them from a surface.
  *
  * Since: 2.4
  **/
 void
-gtk_window_set_default_icon (GdkPixbuf *icon)
+gtk_window_set_default_icon (cairo_surface_t *icon)
 {
   GList *list;
   
-  g_return_if_fail (GDK_IS_PIXBUF (icon));
+  g_return_if_fail (cairo_surface_get_type (icon) == CAIRO_SURFACE_TYPE_IMAGE);
 
   list = g_list_prepend (NULL, icon);
   gtk_window_set_default_icon_list (list);
@@ -5059,12 +5120,12 @@ gboolean
 gtk_window_set_default_icon_from_file (const gchar *filename,
 				       GError     **err)
 {
-  GdkPixbuf *pixbuf = load_pixbuf_verbosely (filename, err);
+  cairo_surface_t *surface = load_surface_verbosely (NULL, filename, err);
 
-  if (pixbuf)
+  if (surface)
     {
-      gtk_window_set_default_icon (pixbuf);
-      g_object_unref (pixbuf);
+      gtk_window_set_default_icon (surface);
+      cairo_surface_destroy (surface);
       
       return TRUE;
     }
@@ -5077,10 +5138,10 @@ gtk_window_set_default_icon_from_file (const gchar *filename,
  * 
  * Gets the value set by gtk_window_set_default_icon_list().
  * The list is a copy and should be freed with g_list_free(),
- * but the pixbufs in the list have not had their reference count
+ * but the surfaces in the list have not had their reference count
  * incremented.
  * 
- * Returns: (element-type GdkPixbuf) (transfer container): copy of default icon list 
+ * Returns: (element-type cairo_surface_t) (transfer container): copy of default icon list 
  **/
 GList*
 gtk_window_get_default_icon_list (void)

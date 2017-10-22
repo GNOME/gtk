@@ -110,8 +110,9 @@ GtkWidget * _gtk_window_get_popover_parent (GtkWindow *window,
 gboolean    _gtk_window_is_popover_widget  (GtkWindow *window,
                                             GtkWidget *popover);
 
-GdkPixbuf *gtk_window_get_icon_for_size (GtkWindow *window,
-                                         gint       size);
+cairo_surface_t *gtk_window_get_icon_for_size (GtkWindow *window,
+					       int        size,
+					       int        scale);
 
 void       gtk_window_set_use_subsurface (GtkWindow *window,
                                           gboolean   use_subsurface);
