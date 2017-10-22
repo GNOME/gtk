@@ -218,13 +218,17 @@ static GskSlDeclaration *
 gsk_sl_declaration_parse_variable (GskSlScope           *scope,
                                    GskSlPreprocessor    *preproc,
                                    const GskSlQualifier *qualifier,
-                                   GskSlType            *type,
+                                   GskSlType            *base_type,
                                    const char           *name)
 {
   GskSlDeclarationVariable *variable;
   GskSlValue *initial_value = NULL;
   GskSlExpression *initial = NULL;
+  GskSlType *type;
   const GskSlToken *token;
+
+  type = gsk_sl_type_ref (base_type);
+  type = gsk_sl_type_parse_array (type, scope, preproc);
 
   gsk_sl_qualifier_check_type (qualifier, preproc, type);
 
@@ -275,6 +279,8 @@ gsk_sl_declaration_parse_variable (GskSlScope           *scope,
   variable->variable = gsk_sl_variable_new (name, type, qualifier, initial_value);
   variable->initial = initial;
   gsk_sl_scope_add_variable (scope, variable->variable);
+
+  gsk_sl_type_unref (type);
 
   return &variable->parent;
 }

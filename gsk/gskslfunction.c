@@ -603,6 +603,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
           token = gsk_sl_preprocessor_get (preproc);
           if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
             {
+              char *name;
               guint i;
 
               if (gsk_sl_scope_lookup_variable (function->scope, token->str))
@@ -619,14 +620,20 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
                     gsk_sl_preprocessor_warn (preproc, SHADOW, "Function argument \"%s\" shadows global variable of same name.", token->str);
                 }
 
-              variable = gsk_sl_variable_new (token->str, type, &qualifier, NULL);
+              name = g_strdup (token->str);
+              gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
+
+              type = gsk_sl_type_parse_array (type, scope, preproc);
+
+              variable = gsk_sl_variable_new (name, type, &qualifier, NULL);
               function->function_type = gsk_sl_function_type_add_argument (function->function_type,
                                                                            qualifier.storage,
                                                                            type);
               g_ptr_array_add (arguments, variable);
               
               gsk_sl_scope_add_variable (function->scope, variable);
-              gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
+
+              g_free (name);
             }
           else
             {

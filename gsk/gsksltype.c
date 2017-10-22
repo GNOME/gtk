@@ -2227,6 +2227,9 @@ gsk_sl_type_parse_array (GskSlType         *type,
 
   gsk_sl_preprocessor_consume (preproc, NULL);
 
+  if (gsk_sl_type_is_array (type))
+    gsk_sl_preprocessor_warn (preproc, ARRAY_OF_ARRAY, "Declaring array of %s which is already an array.", gsk_sl_type_get_name (type));
+
   length = gsk_sl_expression_parse_integral_constant (scope, preproc, 1, G_MAXINT);
 
   token = gsk_sl_preprocessor_get (preproc);

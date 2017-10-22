@@ -628,13 +628,15 @@ static GskSlStatement *
 gsk_sl_statement_parse_declaration (GskSlScope           *scope,
                                     GskSlPreprocessor    *stream,
                                     const GskSlQualifier *qualifier,
-                                    GskSlType            *type)
+                                    GskSlType            *base_type)
 {
   GskSlStatementDeclaration *declaration;
   GskSlValue *initial_value = NULL;
   const GskSlToken *token;
+  GskSlType *type;
   char *name;
 
+  type = gsk_sl_type_ref (base_type);
   declaration = gsk_sl_statement_new (GskSlStatementDeclaration, &GSK_SL_STATEMENT_DECLARATION);
   
   token = gsk_sl_preprocessor_get (stream);
@@ -642,6 +644,8 @@ gsk_sl_statement_parse_declaration (GskSlScope           *scope,
     {
       name = g_strdup (token->str);
       gsk_sl_preprocessor_consume (stream, (GskSlStatement *) declaration);
+
+      type = gsk_sl_type_parse_array (type, scope, stream);
 
       token = gsk_sl_preprocessor_get (stream);
       if (gsk_sl_token_is (token, GSK_SL_TOKEN_EQUAL))
@@ -685,6 +689,7 @@ gsk_sl_statement_parse_declaration (GskSlScope           *scope,
   declaration->variable = gsk_sl_variable_new (name, type, qualifier, initial_value);
   g_free (name);
   gsk_sl_scope_add_variable (scope, declaration->variable);
+  gsk_sl_type_unref (type);
 
   return (GskSlStatement *) declaration;
 }
