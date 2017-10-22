@@ -563,7 +563,8 @@ gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
     {
       app = l->data;
 
-      if (!g_app_info_supports_uris (app) &&
+      if (self->priv->content_type != NULL &&
+          !g_app_info_supports_uris (app) &&
           !g_app_info_supports_files (app))
         continue;
 
