@@ -65,6 +65,9 @@ struct _GskSlTypeClass {
                                                                  guint                i);
   gboolean              (* can_convert)                         (const GskSlType     *target,
                                                                  const GskSlType     *source);
+  guint                 (* hash)                                (const GskSlType     *type);
+  gboolean              (* equal)                               (const GskSlType     *a,
+                                                                 const GskSlType     *b);
   guint32               (* write_spv)                           (GskSlType           *type,
                                                                  GskSpvWriter        *writer);
   void                  (* print_value)                         (const GskSlType     *type,
@@ -77,6 +80,19 @@ struct _GskSlTypeClass {
                                                                  GskSpvWriter        *writer,
                                                                  gconstpointer        value);
 };
+
+static gboolean
+gsk_sl_type_default_equal (const GskSlType *a,
+                           const GskSlType *b)
+{
+  return a == b;
+}
+
+static guint
+gsk_sl_type_default_hash (const GskSlType *type)
+{
+  return GPOINTER_TO_UINT (type);
+}
 
 static void
 print_void (GskSlPrinter  *printer,
@@ -465,6 +481,8 @@ static const GskSlTypeClass GSK_SL_TYPE_VOID = {
   gsk_sl_type_void_get_n_members,
   gsk_sl_type_void_get_member,
   gsk_sl_type_void_can_convert,
+  gsk_sl_type_default_hash,
+  gsk_sl_type_default_equal,
   gsk_sl_type_void_write_spv,
   gsk_sl_type_void_print_value,
   gsk_sl_type_void_value_equal,
@@ -640,6 +658,8 @@ static const GskSlTypeClass GSK_SL_TYPE_SCALAR = {
   gsk_sl_type_scalar_get_n_members,
   gsk_sl_type_scalar_get_member,
   gsk_sl_type_scalar_can_convert,
+  gsk_sl_type_default_hash,
+  gsk_sl_type_default_equal,
   gsk_sl_type_scalar_write_spv,
   gsk_sl_type_scalar_print_value,
   gsk_sl_type_scalar_value_equal,
@@ -855,6 +875,8 @@ static const GskSlTypeClass GSK_SL_TYPE_VECTOR = {
   gsk_sl_type_vector_get_n_members,
   gsk_sl_type_vector_get_member,
   gsk_sl_type_vector_can_convert,
+  gsk_sl_type_default_hash,
+  gsk_sl_type_default_equal,
   gsk_sl_type_vector_write_spv,
   gsk_sl_type_vector_print_value,
   gsk_sl_type_vector_value_equal,
@@ -1072,6 +1094,8 @@ static const GskSlTypeClass GSK_SL_TYPE_MATRIX = {
   gsk_sl_type_matrix_get_n_members,
   gsk_sl_type_matrix_get_member,
   gsk_sl_type_matrix_can_convert,
+  gsk_sl_type_default_hash,
+  gsk_sl_type_default_equal,
   gsk_sl_type_matrix_write_spv,
   gsk_sl_type_matrix_print_value,
   gsk_sl_type_matrix_value_equal,
@@ -1183,6 +1207,25 @@ gsk_sl_type_array_can_convert (const GskSlType *target,
   return gsk_sl_type_equal (target, source);
 }
 
+static gboolean
+gsk_sl_type_array_equal (const GskSlType *a,
+                         const GskSlType *b)
+{
+  const GskSlTypeArray *array = (const GskSlTypeArray *) a;
+  const GskSlTypeArray *brray = (const GskSlTypeArray *) b;
+
+  return gsk_sl_type_equal (array->type, brray->type)
+      && array->length == brray->length;
+}
+
+static guint
+gsk_sl_type_array_hash (const GskSlType *type)
+{
+  const GskSlTypeArray *array = (const GskSlTypeArray *) type;
+
+  return gsk_sl_type_hash (array->type) ^ array->length;
+}
+
 static guint32
 gsk_sl_type_array_write_spv (GskSlType    *type,
                              GskSpvWriter *writer)
@@ -1285,6 +1328,8 @@ static const GskSlTypeClass GSK_SL_TYPE_ARRAY = {
   gsk_sl_type_array_get_n_members,
   gsk_sl_type_array_get_member,
   gsk_sl_type_array_can_convert,
+  gsk_sl_type_array_hash,
+  gsk_sl_type_array_equal,
   gsk_sl_type_array_write_spv,
   gsk_sl_type_array_print_value,
   gsk_sl_type_array_value_equal,
@@ -1432,6 +1477,8 @@ static const GskSlTypeClass GSK_SL_TYPE_SAMPLER = {
   gsk_sl_type_sampler_get_n_members,
   gsk_sl_type_sampler_get_member,
   gsk_sl_type_sampler_can_convert,
+  gsk_sl_type_default_hash,
+  gsk_sl_type_default_equal,
   gsk_sl_type_sampler_write_spv,
   gsk_sl_type_sampler_print_value,
   gsk_sl_type_sampler_value_equal,
@@ -1694,6 +1741,8 @@ static const GskSlTypeClass GSK_SL_TYPE_STRUCT = {
   gsk_sl_type_struct_get_n_members,
   gsk_sl_type_struct_get_member,
   gsk_sl_type_struct_can_convert,
+  gsk_sl_type_default_hash,
+  gsk_sl_type_default_equal,
   gsk_sl_type_struct_write_spv,
   gsk_sl_type_struct_print_value,
   gsk_sl_type_struct_value_equal,
@@ -1920,6 +1969,8 @@ static const GskSlTypeClass GSK_SL_TYPE_BLOCK = {
   gsk_sl_type_block_get_n_members,
   gsk_sl_type_block_get_member,
   gsk_sl_type_block_can_convert,
+  gsk_sl_type_default_hash,
+  gsk_sl_type_default_equal,
   gsk_sl_type_block_write_spv,
   gsk_sl_type_block_print_value,
   gsk_sl_type_block_value_equal,
@@ -2915,13 +2966,21 @@ gboolean
 gsk_sl_type_equal (gconstpointer a,
                    gconstpointer b)
 {
-  return a == b;
+  const GskSlType *typea = a;
+  const GskSlType *typeb = b;
+
+  if (typea->class != typeb->class)
+    return FALSE;
+
+  return typea->class->equal (typea, typeb);
 }
 
 guint
 gsk_sl_type_hash (gconstpointer type)
 {
-  return GPOINTER_TO_UINT (type);
+  const GskSlType *type_ = type;
+
+  return type_->class->hash (type_);
 }
 
 guint32
