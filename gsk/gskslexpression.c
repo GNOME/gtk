@@ -978,6 +978,12 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
         }
       return gsk_spv_writer_composite_construct (writer, type, ids, cols);
     }
+  else if (constructor->n_arguments == 1 && gsk_sl_type_is_vector (type) && gsk_sl_type_is_vector (value_type)
+      && gsk_sl_type_get_length (type) == gsk_sl_type_get_length (value_type))
+    {
+      value_id = gsk_sl_expression_write_spv (constructor->arguments[0], writer);
+      return gsk_spv_writer_convert (writer, value_id, value_type, type);
+    }
   else
     {
       gsize n_components = gsk_sl_type_get_n_components (type);
