@@ -150,6 +150,79 @@ static const GskSlVariableClass GSK_SL_VARIABLE_STANDARD = {
   gsk_sl_variable_standard_store_spv,
 };
 
+/* BUILTIN */
+
+typedef struct _GskSlVariableBuiltin GskSlVariableBuiltin;
+
+struct _GskSlVariableBuiltin {
+  GskSlVariable parent;
+
+  GskSpvBuiltIn builtin;
+};
+
+static gboolean
+gsk_sl_variable_builtin_is_direct_access_spv (const GskSlVariable *variable)
+{
+  return TRUE;
+}
+
+static guint32
+gsk_sl_variable_builtin_write_spv (const GskSlVariable *variable,
+                                   GskSpvWriter        *writer)
+{
+  const GskSlVariableBuiltin *builtin = (const GskSlVariableBuiltin *) variable;
+  guint32 result_id;
+  GskSpvStorageClass storage_class;
+
+  storage_class = gsk_sl_qualifier_get_storage_class (&variable->qualifier, variable->type);
+  result_id = gsk_spv_writer_variable (writer,
+                                       GSK_SPV_WRITER_SECTION_DEFINE,
+                                       variable->type,
+                                       storage_class,
+                                       storage_class,
+                                       0);
+
+  if (variable->name)
+    gsk_spv_writer_name (writer, result_id, variable->name);
+
+  gsk_sl_qualifier_write_spv_decorations (&variable->qualifier, writer, result_id);
+
+  gsk_spv_writer_decorate (writer, result_id, GSK_SPV_DECORATION_BUILT_IN, (guint32[1]) { builtin->builtin }, 1);
+
+  return result_id;
+}
+
+static guint32
+gsk_sl_variable_builtin_load_spv (GskSlVariable *variable,
+                                   GskSpvWriter  *writer)
+{
+  return gsk_spv_writer_load (writer,
+                              gsk_sl_variable_get_type (variable),
+                              gsk_spv_writer_get_id_for_variable (writer, variable),
+                              0);
+}
+
+static void
+gsk_sl_variable_builtin_store_spv (GskSlVariable *variable,
+                                    GskSpvWriter  *writer,
+                                    guint32        value)
+{
+  gsk_spv_writer_store (writer,
+                        gsk_spv_writer_get_id_for_variable (writer, variable),
+                        value,
+                        0);
+
+}
+
+static const GskSlVariableClass GSK_SL_VARIABLE_BUILTIN = {
+  sizeof (GskSlVariableBuiltin),
+  gsk_sl_variable_free,
+  gsk_sl_variable_builtin_is_direct_access_spv,
+  gsk_sl_variable_builtin_write_spv,
+  gsk_sl_variable_builtin_load_spv,
+  gsk_sl_variable_builtin_store_spv,
+};
+
 /* CONSTANT */
 
 static gboolean
@@ -346,6 +419,24 @@ gsk_sl_variable_new (const char           *name,
   variable->qualifier = *qualifier;
   variable->name = g_strdup (name);
   variable->initial_value = initial_value;
+
+  return variable;
+}
+
+GskSlVariable *
+gsk_sl_variable_new_builtin (const char           *name,
+                             GskSlType            *type,
+                             const GskSlQualifier *qualifier,
+                             GskSpvBuiltIn         builtin)
+{
+  GskSlVariable *variable;
+
+  variable = gsk_sl_variable_alloc (&GSK_SL_VARIABLE_BUILTIN);
+
+  variable->type = gsk_sl_type_ref (type);
+  variable->qualifier = *qualifier;
+  variable->name = g_strdup (name);
+  ((GskSlVariableBuiltin *) variable)->builtin = builtin;
 
   return variable;
 }

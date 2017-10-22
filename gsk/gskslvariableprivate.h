@@ -22,6 +22,7 @@
 #include <glib.h>
 
 #include "gsk/gsksltypesprivate.h"
+#include "gsk/gskspvenumsprivate.h"
 
 G_BEGIN_DECLS
 
@@ -29,6 +30,10 @@ GskSlVariable *         gsk_sl_variable_new                     (const char     
                                                                  GskSlType              *type,
                                                                  const GskSlQualifier   *qualifier,
                                                                  GskSlValue             *initial_value);
+GskSlVariable *         gsk_sl_variable_new_builtin             (const char             *name,
+                                                                 GskSlType              *type,
+                                                                 const GskSlQualifier   *qualifier,
+                                                                 GskSpvBuiltIn           builtin);
 
 GskSlVariable *         gsk_sl_variable_ref                     (GskSlVariable          *variable);
 void                    gsk_sl_variable_unref                   (GskSlVariable          *variable);

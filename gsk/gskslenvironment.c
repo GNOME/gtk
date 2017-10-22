@@ -21,6 +21,7 @@
 #include "gskslenvironmentprivate.h"
 
 #include "gskslnativefunctionprivate.h"
+#include "gskslnativevariableprivate.h"
 #include "gskslscopeprivate.h"
 
 #include <string.h>
@@ -111,6 +112,7 @@ gsk_sl_environment_create_scope (GskSlEnvironment *environment)
   scope = gsk_sl_scope_new (NULL, NULL);
 
   gsk_sl_native_functions_add (scope, environment);
+  gsk_sl_native_variables_add (scope, environment);
 
   return scope;
 }
