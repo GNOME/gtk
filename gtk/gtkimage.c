@@ -1087,6 +1087,16 @@ gtk_image_get_pixbuf (GtkImage *image)
   return _gtk_icon_helper_peek_pixbuf (&priv->icon_helper);
 }
 
+cairo_surface_t *
+gtk_image_get_surface (GtkImage *image)
+{
+  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+
+  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
+
+  return _gtk_icon_helper_peek_surface (&priv->icon_helper);
+}
+
 /**
  * gtk_image_get_animation:
  * @image: a #GtkImage

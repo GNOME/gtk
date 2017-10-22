@@ -156,6 +156,10 @@ GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf* gtk_image_get_pixbuf   (GtkImage         *image);
+
+GDK_AVAILABLE_IN_3_94
+cairo_surface_t *gtk_image_get_surface (GtkImage *image);
+
 GDK_AVAILABLE_IN_ALL
 GdkPixbufAnimation* gtk_image_get_animation (GtkImage *image);
 GDK_AVAILABLE_IN_ALL
