@@ -1335,22 +1335,33 @@ filter_combo_changed_cb (GtkComboBox *combo_box,
   set_current_filter (impl, filter);
 }
 
-static GdkPixbuf *
-get_drag_pixbuf (GtkRecentChooserDefault *impl)
+static cairo_surface_t *
+get_drag_surface (GtkRecentChooserDefault *impl)
 {
   GtkRecentInfo *info;
-  GdkPixbuf *retval;
+  cairo_surface_t *retval;
   gint size;
-  
+  GIcon *gicon;
+  GtkIconInfo *icon_info;
+
   g_assert (GTK_IS_RECENT_CHOOSER_DEFAULT (impl));
 
+  size = get_icon_size_for_widget (GTK_WIDGET (impl), GTK_ICON_SIZE_DND);
   info = gtk_recent_chooser_get_current_item (GTK_RECENT_CHOOSER (impl));
   if (!info)
     return NULL;
 
-  size = get_icon_size_for_widget (GTK_WIDGET (impl), GTK_ICON_SIZE_DND);
+  gicon = gtk_recent_info_get_gicon (info);
+  if (!gicon)
+    return NULL;
 
-  retval = gtk_recent_info_get_icon (info, size);
+  icon_info = gtk_icon_theme_lookup_by_gicon (gtk_icon_theme_get_default (),
+                                              gicon,
+                                              size,
+                                              GTK_ICON_LOOKUP_USE_BUILTIN);
+  retval = gtk_icon_info_load_surface (icon_info, NULL, NULL);
+  g_object_unref (gicon);
+  g_object_unref (icon_info);
   gtk_recent_info_unref (info);
 
   return retval;
@@ -1362,13 +1373,13 @@ recent_view_drag_begin_cb (GtkWidget      *widget,
 			   gpointer        user_data)
 {
   GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
 
-  pixbuf = get_drag_pixbuf (impl);
-  if (pixbuf)
+  surface = get_drag_surface (impl);
+  if (surface)
     {
-      gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
-      g_object_unref (pixbuf);
+      gtk_drag_set_icon_surface (context, surface);
+      cairo_surface_destroy (surface);
     }
   else
     gtk_drag_set_icon_default (context);
