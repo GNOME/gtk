@@ -114,7 +114,9 @@ gsk_sl_declaration_variable_write_initializer_spv (const GskSlDeclaration *decla
     {
       gsk_sl_variable_store_spv (variable->variable,
                                  writer,
-                                 gsk_sl_expression_write_spv (variable->initial, writer));
+                                 gsk_sl_expression_write_spv (variable->initial,
+                                                              writer,
+                                                              gsk_sl_variable_get_type (variable->variable)));
     }
 }
 

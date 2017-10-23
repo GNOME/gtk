@@ -51,7 +51,8 @@ GskSlType *             gsk_sl_expression_get_return_type       (const GskSlExpr
 GskSlValue *            gsk_sl_expression_get_constant          (const GskSlExpression  *expression);
 
 guint32                 gsk_sl_expression_write_spv             (const GskSlExpression  *expression,
-                                                                 GskSpvWriter           *writer);
+                                                                 GskSpvWriter           *writer,
+                                                                 GskSlType              *result_type);
 
 G_END_DECLS
 

@@ -954,7 +954,7 @@ gsk_spv_access_resolve_pending (GskSpvAccessChain *chain)
       if (g_array_index (chain->chain, guint32, i) != 0)
         continue;
 
-      g_array_index (chain->chain, guint32, i) = gsk_sl_expression_write_spv (l->data, chain->writer);
+      g_array_index (chain->chain, guint32, i) = gsk_sl_expression_write_spv (l->data, chain->writer, NULL);
       l = l->next;
     }
 

@@ -162,7 +162,7 @@ gsk_sl_expression_assignment_write_spv (const GskSlExpression *expression,
   g_assert (chain);
   ltype = gsk_sl_expression_get_return_type (assignment->lvalue),
   rtype = gsk_sl_expression_get_return_type (assignment->rvalue),
-  rvalue = gsk_sl_expression_write_spv (assignment->rvalue, writer);
+  rvalue = gsk_sl_expression_write_spv (assignment->rvalue, writer, NULL);
 
   if (assignment->binary)
     {
@@ -354,17 +354,20 @@ gsk_sl_expression_binary_write_spv (const GskSlExpression *expression,
                                     GskSpvWriter          *writer)
 {
   const GskSlExpressionBinary *binary = (const GskSlExpressionBinary *) expression;
+  GskSlType *ltype, *rtype;
   guint left_id, right_id;
 
-  left_id = gsk_sl_expression_write_spv (binary->left, writer);
-  right_id = gsk_sl_expression_write_spv (binary->right, writer);
+  ltype = gsk_sl_expression_get_return_type (binary->left);
+  rtype = gsk_sl_expression_get_return_type (binary->right);
+  left_id = gsk_sl_expression_write_spv (binary->left, writer, NULL);
+  right_id = gsk_sl_expression_write_spv (binary->right, writer, NULL);
 
   return gsk_sl_binary_write_spv (binary->binary,
                                   writer,
                                   binary->type,
-                                  gsk_sl_expression_get_return_type (binary->left),
+                                  ltype,
                                   left_id,
-                                  gsk_sl_expression_get_return_type (binary->right),
+                                  rtype,
                                   right_id);
 }
 
@@ -452,7 +455,7 @@ gsk_sl_expression_logical_and_write_spv (const GskSlExpression *expression,
   const GskSlExpressionLogicalAnd *logical_and = (const GskSlExpressionLogicalAnd *) expression;
   guint32 current_id, after_id, and_id, left_id, right_id, result_id;
 
-  left_id = gsk_sl_expression_write_spv (logical_and->left, writer);
+  left_id = gsk_sl_expression_write_spv (logical_and->left, writer, NULL);
 
   current_id = gsk_spv_writer_get_label_id (writer);
   and_id = gsk_spv_writer_make_id (writer);
@@ -464,7 +467,7 @@ gsk_sl_expression_logical_and_write_spv (const GskSlExpression *expression,
 
   gsk_spv_writer_start_code_block (writer, and_id, 0, 0);
   gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, and_id);
-  right_id = gsk_sl_expression_write_spv (logical_and->right, writer);
+  right_id = gsk_sl_expression_write_spv (logical_and->right, writer, NULL);
   gsk_spv_writer_branch (writer, after_id);
 
   gsk_spv_writer_start_code_block (writer, after_id, 0, 0);
@@ -565,7 +568,7 @@ gsk_sl_expression_logical_or_write_spv (const GskSlExpression *expression,
   const GskSlExpressionLogicalOr *logical_or = (const GskSlExpressionLogicalOr *) expression;
   guint32 current_id, condition_id, after_id, or_id, left_id, right_id, result_id;
 
-  left_id = gsk_sl_expression_write_spv (logical_or->left, writer);
+  left_id = gsk_sl_expression_write_spv (logical_or->left, writer, NULL);
 
   current_id = gsk_spv_writer_get_label_id (writer);
   or_id = gsk_spv_writer_make_id (writer);
@@ -578,7 +581,7 @@ gsk_sl_expression_logical_or_write_spv (const GskSlExpression *expression,
 
   gsk_spv_writer_start_code_block (writer, or_id, 0, 0);
   gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, or_id);
-  right_id = gsk_sl_expression_write_spv (logical_or->right, writer);
+  right_id = gsk_sl_expression_write_spv (logical_or->right, writer, NULL);
   gsk_spv_writer_branch (writer, after_id);
 
   gsk_spv_writer_start_code_block (writer, after_id, 0, 0);
@@ -697,7 +700,7 @@ gsk_sl_expression_conditional_write_spv (const GskSlExpression *expression,
   guint32 true_id, false_id, after_id; 
   guint32 condition_id, left_id, right_id, result_id;
 
-  condition_id = gsk_sl_expression_write_spv (conditional->condition, writer);
+  condition_id = gsk_sl_expression_write_spv (conditional->condition, writer, NULL);
 
   true_id = gsk_spv_writer_make_id (writer);
   false_id = gsk_spv_writer_make_id (writer);
@@ -708,20 +711,12 @@ gsk_sl_expression_conditional_write_spv (const GskSlExpression *expression,
 
   gsk_spv_writer_start_code_block (writer, true_id, 0, 0);
   gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, true_id);
-  left_id = gsk_sl_expression_write_spv (conditional->left, writer);
-  left_id = gsk_spv_writer_convert (writer,
-                                    left_id,
-                                    gsk_sl_expression_get_return_type (conditional->left),
-                                    conditional->type);
+  left_id = gsk_sl_expression_write_spv (conditional->left, writer, conditional->type);
   gsk_spv_writer_branch (writer, after_id);
 
   gsk_spv_writer_start_code_block (writer, false_id, 0, 0);
   gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, false_id);
-  right_id = gsk_sl_expression_write_spv (conditional->right, writer);
-  right_id = gsk_spv_writer_convert (writer,
-                                     right_id,
-                                     gsk_sl_expression_get_return_type (conditional->right),
-                                     conditional->type);
+  right_id = gsk_sl_expression_write_spv (conditional->right, writer, conditional->type);
   gsk_spv_writer_branch (writer, after_id);
 
   gsk_spv_writer_start_code_block (writer, after_id, 0, 0);
@@ -1022,7 +1017,7 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
 
   if (constructor->n_arguments == 1 && gsk_sl_type_is_scalar (value_type))
     {
-      value_id = gsk_sl_expression_write_spv (constructor->arguments[0], writer);
+      value_id = gsk_sl_expression_write_spv (constructor->arguments[0], writer, NULL);
 
       if (gsk_sl_type_is_scalar (type))
         {
@@ -1086,15 +1081,10 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
       guint32 col_ids[4], ids[4], one_id, zero_id;
       GskSlValue *value;
 
-      value_id = gsk_sl_expression_write_spv (constructor->arguments[0], writer);
+      value_id = gsk_sl_expression_write_spv (constructor->arguments[0],
+                                              writer,
+                                              gsk_sl_type_get_matching (value_type, gsk_sl_type_get_scalar_type (type)));
 
-      if (gsk_sl_type_get_scalar_type (value_type) != gsk_sl_type_get_scalar_type (type))
-        {
-          GskSlType *new_value_type = gsk_sl_type_get_matching (value_type, gsk_sl_type_get_scalar_type (type));
-          value_id = gsk_spv_writer_convert (writer, value_id, value_type, new_value_type);
-          value_type = new_value_type;
-        }
-      
       value = gsk_sl_value_new (scalar_type);
       zero_id = gsk_spv_writer_get_id_for_zero (writer, scalar_type);
       one_id = gsk_spv_writer_get_id_for_one (writer, scalar_type);
@@ -1124,8 +1114,7 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
   else if (constructor->n_arguments == 1 && gsk_sl_type_is_vector (type) && gsk_sl_type_is_vector (value_type)
       && gsk_sl_type_get_length (type) == gsk_sl_type_get_length (value_type))
     {
-      value_id = gsk_sl_expression_write_spv (constructor->arguments[0], writer);
-      return gsk_spv_writer_convert (writer, value_id, value_type, type);
+      return gsk_sl_expression_write_spv (constructor->arguments[0], writer, type);
     }
   else
     {
@@ -1139,16 +1128,9 @@ gsk_sl_expression_constructor_write_spv (const GskSlExpression *expression,
       for (arg = 0; arg < constructor->n_arguments; arg++)
         {
           value_type = gsk_sl_expression_get_return_type (constructor->arguments[arg]);
-          value_id = gsk_sl_expression_write_spv (constructor->arguments[arg], writer);
-          if (gsk_sl_type_get_scalar_type (value_type) != scalar)
-            {
-              GskSlType *new_type = gsk_sl_type_get_matching (value_type, scalar);
-              value_id = gsk_spv_writer_convert (writer,
-                                                 value_id,
-                                                 value_type,
-                                                 new_type);
-              value_type = new_type;
-            }
+          value_id = gsk_sl_expression_write_spv (constructor->arguments[arg],
+                                                  writer,
+                                                  gsk_sl_type_get_matching (value_type, scalar));
 
           if (gsk_sl_type_is_scalar (value_type))
             {
@@ -1329,11 +1311,9 @@ gsk_sl_expression_function_call_write_spv (const GskSlExpression *expression,
 
   for (i = 0; i < function_call->n_arguments; i++)
     {
-      arguments[i] = gsk_sl_expression_write_spv (function_call->arguments[i], writer);
-      arguments[i] = gsk_spv_writer_convert (writer, 
-                                             arguments[i],
-                                             gsk_sl_expression_get_return_type (function_call->arguments[i]),
-                                             gsk_sl_function_get_argument_type (function_call->function, i));
+      arguments[i] = gsk_sl_expression_write_spv (function_call->arguments[i],
+                                                  writer,
+                                                  gsk_sl_function_get_argument_type (function_call->function, i));
     }
 
   return gsk_sl_function_write_call_spv (function_call->function, writer, arguments);
@@ -1434,8 +1414,8 @@ gsk_sl_expression_index_write_spv (const GskSlExpression *expression,
   GskSlType *type;
 
   type = gsk_sl_expression_get_return_type (index->expr);
-  index_id = gsk_sl_expression_write_spv (index->index_expr, writer);
-  value_id = gsk_sl_expression_write_spv (index->expr, writer);
+  index_id = gsk_sl_expression_write_spv (index->index_expr, writer, NULL);
+  value_id = gsk_sl_expression_write_spv (index->expr, writer, type);
   if (gsk_sl_type_is_vector (type))
     {
       return gsk_spv_writer_vector_extract_dynamic (writer,
@@ -1574,7 +1554,7 @@ gsk_sl_expression_member_write_spv (const GskSlExpression *expression,
 
   return gsk_spv_writer_composite_extract (writer,
                                            gsk_sl_type_get_member_type (type, member->id),
-                                           gsk_sl_expression_write_spv (member->expr, writer),
+                                           gsk_sl_expression_write_spv (member->expr, writer, NULL),
                                            (guint32[1]) { member->id },
                                            1);
 }
@@ -1751,7 +1731,7 @@ gsk_sl_expression_swizzle_write_spv (const GskSlExpression *expression,
   guint32 expr_id;
 
   type = gsk_sl_expression_get_return_type (swizzle->expr);
-  expr_id = gsk_sl_expression_write_spv (swizzle->expr, writer);
+  expr_id = gsk_sl_expression_write_spv (swizzle->expr, writer, NULL);
 
   if (gsk_sl_type_is_scalar (type))
     {
@@ -1921,13 +1901,13 @@ gsk_sl_expression_negation_write_spv (const GskSlExpression *expression,
     case GSK_SL_UINT:
       return gsk_spv_writer_s_negate (writer,
                                       type,
-                                      gsk_sl_expression_write_spv (negation->expr, writer));
+                                      gsk_sl_expression_write_spv (negation->expr, writer, NULL));
 
     case GSK_SL_FLOAT:
     case GSK_SL_DOUBLE:
       return gsk_spv_writer_f_negate (writer,
                                       type,
-                                      gsk_sl_expression_write_spv (negation->expr, writer));
+                                      gsk_sl_expression_write_spv (negation->expr, writer, NULL));
 
     case GSK_SL_VOID:
     case GSK_SL_BOOL:
@@ -3548,7 +3528,8 @@ gsk_sl_expression_get_constant (const GskSlExpression *expression)
 
 guint32
 gsk_sl_expression_write_spv (const GskSlExpression *expression,
-                             GskSpvWriter          *writer)
+                             GskSpvWriter          *writer,
+                             GskSlType             *result_type)
 {
   GskSpvAccessChain *chain;
   GskSlValue *constant;
@@ -3557,6 +3538,12 @@ gsk_sl_expression_write_spv (const GskSlExpression *expression,
   constant = gsk_sl_expression_get_constant (expression);
   if (constant)
     {
+      if (result_type != NULL && !gsk_sl_type_equal (gsk_sl_value_get_type (constant), result_type))
+        {
+          GskSlValue *tmp = gsk_sl_value_new_convert (constant, result_type);
+          gsk_sl_value_free (constant);
+          constant = tmp;
+        }
       result_id = gsk_spv_writer_get_id_for_value (writer, constant);
       gsk_sl_value_free (constant);
 
@@ -3568,8 +3555,20 @@ gsk_sl_expression_write_spv (const GskSlExpression *expression,
     {
       result_id = gsk_spv_access_chain_load (chain);
       gsk_spv_access_chain_free (chain);
-      return result_id;
+    }
+  else
+    {
+      result_id = expression->class->write_spv (expression, writer);
     }
 
-  return expression->class->write_spv (expression, writer);
+  if (result_type)
+    {
+      GskSlType *expr_type;
+
+      expr_type = gsk_sl_expression_get_return_type (expression);
+      if (!gsk_sl_type_equal (expr_type, result_type))
+        result_id = gsk_spv_writer_convert (writer, result_id, expr_type, result_type);
+    }
+
+  return result_id;
 }

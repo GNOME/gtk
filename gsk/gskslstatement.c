@@ -249,7 +249,9 @@ gsk_sl_statement_declaration_write_spv (const GskSlStatement *statement,
     {
       gsk_sl_variable_store_spv (declaration->variable,
                                  writer,
-                                 gsk_sl_expression_write_spv (declaration->initial, writer));
+                                 gsk_sl_expression_write_spv (declaration->initial,
+                                                              writer,
+                                                              gsk_sl_variable_get_type (declaration->variable)));
     }
 
   return FALSE;
@@ -269,6 +271,7 @@ typedef struct _GskSlStatementReturn GskSlStatementReturn;
 struct _GskSlStatementReturn {
   GskSlStatement parent;
 
+  GskSlType *return_type;
   GskSlExpression *value;
 };
 
@@ -279,6 +282,7 @@ gsk_sl_statement_return_free (GskSlStatement *statement)
 
   if (return_statement->value)
     gsk_sl_expression_unref (return_statement->value);
+  gsk_sl_type_unref (return_statement->return_type);
 
   g_slice_free (GskSlStatementReturn, return_statement);
 }
@@ -313,7 +317,9 @@ gsk_sl_statement_return_write_spv (const GskSlStatement *statement,
   if (return_statement->value)
     {
       gsk_spv_writer_return_value (writer,
-                                   gsk_sl_expression_write_spv (return_statement->value, writer));
+                                   gsk_sl_expression_write_spv (return_statement->value,
+                                                                writer,
+                                                                return_statement->return_type));
     }
   else
     {
@@ -451,7 +457,7 @@ gsk_sl_statement_if_write_spv (const GskSlStatement *statement,
   GskSlStatementIf *if_stmt = (GskSlStatementIf *) statement;
   guint32 if_id, else_id, after_id, condition_id;
 
-  condition_id = gsk_sl_expression_write_spv (if_stmt->condition, writer);
+  condition_id = gsk_sl_expression_write_spv (if_stmt->condition, writer, NULL);
 
   if_id = gsk_spv_writer_make_id (writer);
   after_id = gsk_spv_writer_make_id (writer);
@@ -581,7 +587,7 @@ gsk_sl_statement_for_write_spv (const GskSlStatement *statement,
       gsk_spv_writer_branch (writer, condition_id);
       gsk_spv_writer_start_code_block (writer, condition_id, continue_id, after_id);
       gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, condition_id);
-      test_id = gsk_sl_expression_write_spv (for_stmt->condition, writer);
+      test_id = gsk_sl_expression_write_spv (for_stmt->condition, writer, NULL);
       gsk_spv_writer_branch_conditional (writer, test_id, body_id, after_id, NULL, 0);
     }
 
@@ -592,7 +598,7 @@ gsk_sl_statement_for_write_spv (const GskSlStatement *statement,
 
   gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, continue_id);
   if (for_stmt->loop)
-    gsk_sl_expression_write_spv (for_stmt->loop, writer);
+    gsk_sl_expression_write_spv (for_stmt->loop, writer, NULL);
   gsk_spv_writer_branch (writer, loop_id);
 
   gsk_spv_writer_start_code_block (writer, after_id, old_continue_id, old_break_id);
@@ -650,7 +656,7 @@ gsk_sl_statement_expression_write_spv (const GskSlStatement *statement,
 {
   GskSlStatementExpression *expression_statement = (GskSlStatementExpression *) statement;
 
-  gsk_sl_expression_write_spv (expression_statement->expression, writer);
+  gsk_sl_expression_write_spv (expression_statement->expression, writer, NULL);
 
   return FALSE;
 }
@@ -1126,7 +1132,6 @@ its_a_type:
     case GSK_SL_TOKEN_RETURN:
       {
         GskSlStatementReturn *return_statement;
-        GskSlType *return_type;
 
         if (!parse_everything)
           goto only_expression_and_declaration;
@@ -1137,34 +1142,43 @@ its_a_type:
         if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
           return_statement->value = gsk_sl_expression_parse (scope, preproc);
 
-        return_type = gsk_sl_scope_get_return_type (scope);
+        return_statement->return_type = gsk_sl_scope_get_return_type (scope);
         statement = (GskSlStatement *) return_statement;
 
-        if (return_type == NULL)
+        if (return_statement->return_type == NULL)
           {
             gsk_sl_preprocessor_error (preproc, SCOPE, "Cannot return from here.");
+            gsk_sl_statement_unref (statement);
+            statement = gsk_sl_statement_new_error ();
           }
-        else if (return_statement->value == NULL)
-          {
-            if (!gsk_sl_type_is_void (return_type))
+        else 
+          { 
+            gsk_sl_type_ref (return_statement->return_type);
+
+            if (return_statement->value == NULL)
               {
-                gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Functions expectes a return value of type %s", gsk_sl_type_get_name (return_type));
+                if (!gsk_sl_type_is_void (return_statement->return_type))
+                  {
+                    gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                               "Functions expectes a return value of type %s",
+                                               gsk_sl_type_get_name (return_statement->return_type));
+                  }
               }
-          }
-        else
-          {
-            if (gsk_sl_type_is_void (return_type))
+            else
               {
-                gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot return a value from a void function.");
-              }
-            else if (!gsk_sl_type_can_convert (return_type, gsk_sl_expression_get_return_type (return_statement->value)))
-              {
-                gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
-                                           "Cannot convert type %s to return type %s.",
-                                           gsk_sl_type_get_name (gsk_sl_expression_get_return_type (return_statement->value)),
-                                           gsk_sl_type_get_name (return_type));
-                break;
-              }
+                if (gsk_sl_type_is_void (return_statement->return_type))
+                  {
+                    gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot return a value from a void function.");
+                  }
+                else if (!gsk_sl_type_can_convert (return_statement->return_type, gsk_sl_expression_get_return_type (return_statement->value)))
+                  {
+                    gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                               "Cannot convert type %s to return type %s.",
+                                               gsk_sl_type_get_name (gsk_sl_expression_get_return_type (return_statement->value)),
+                                               gsk_sl_type_get_name (return_statement->return_type));
+                    break;
+                  }
+               }
             }
         }
       break;
