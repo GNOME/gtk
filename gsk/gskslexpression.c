@@ -2456,7 +2456,7 @@ gsk_sl_expression_parse_postfix (GskSlScope        *scope,
         {
           GskSlExpressionIndex *index;
           GskSlExpression *index_expr;
-          GskSlType *type;
+          GskSlType *type, *index_type;
 
           gsk_sl_preprocessor_consume (stream, NULL);
 
@@ -2471,15 +2471,6 @@ gsk_sl_expression_parse_postfix (GskSlScope        *scope,
             }
           gsk_sl_preprocessor_consume (stream, NULL);
 
-          type = gsk_sl_expression_get_return_type (index_expr);
-          if (!gsk_sl_type_equal (type, gsk_sl_type_get_scalar (GSK_SL_INT)) &&
-              !gsk_sl_type_equal (type, gsk_sl_type_get_scalar (GSK_SL_UINT)))
-            {
-              gsk_sl_preprocessor_error (stream, SYNTAX, "Array index must be an integer type, not %s.", gsk_sl_type_get_name (type));
-              gsk_sl_expression_unref (index_expr);
-              continue;
-            }
-
           type = gsk_sl_expression_get_return_type (expr);
           if (gsk_sl_type_get_length (type) == 0)
             {
@@ -2487,7 +2478,41 @@ gsk_sl_expression_parse_postfix (GskSlScope        *scope,
               gsk_sl_expression_unref (index_expr);
               continue;
             }
-          /* XXX: do range check for constants here */
+
+          index_type = gsk_sl_expression_get_return_type (index_expr);
+          if (!gsk_sl_type_equal (index_type, gsk_sl_type_get_scalar (GSK_SL_INT)) &&
+              !gsk_sl_type_equal (index_type, gsk_sl_type_get_scalar (GSK_SL_UINT)))
+            {
+              gsk_sl_preprocessor_error (stream, SYNTAX, "Array index must be an integer type, not %s.", gsk_sl_type_get_name (index_type));
+              gsk_sl_expression_unref (index_expr);
+              continue;
+            }
+          else
+            {
+              GskSlValue *constant;
+
+              constant = gsk_sl_expression_get_constant (index_expr);
+              if (constant)
+                {
+                  guint32 u = *(guint32 *) gsk_sl_value_get_data (constant);
+
+                  gsk_sl_value_free (constant);
+
+                  if (gsk_sl_type_equal (index_type, gsk_sl_type_get_scalar (GSK_SL_INT)) &&
+                      (gint32) u < 0)
+                    {
+                      gsk_sl_preprocessor_error (stream, RANGE, "Negative index %d not allowed for %s.", (int) (gint32) u, gsk_sl_type_get_name (type));
+                      gsk_sl_expression_unref (index_expr);
+                      continue;
+                    }
+                  if (u >= gsk_sl_type_get_length (type))
+                    {
+                      gsk_sl_preprocessor_error (stream, RANGE, "Index %u is out of range for %s.", (guint) u, gsk_sl_type_get_name (type));
+                      gsk_sl_expression_unref (index_expr);
+                      continue;
+                    }
+                }
+            }
 
           index = gsk_sl_expression_new (GskSlExpressionIndex, &GSK_SL_EXPRESSION_INDEX);
           index->expr = expr;
@@ -3116,14 +3141,14 @@ gsk_sl_expression_parse_integral_constant (GskSlScope        *scope,
 
       if (i < minimum)
         {
-          gsk_sl_preprocessor_error (preproc, CONSTANT,
+          gsk_sl_preprocessor_error (preproc, RANGE,
                                      "Constant expression evaluates to %d, but must be at least %d.",
                                      i, minimum);
           i = minimum;
         }
       else if (i > 0 && i > maximum)
         {
-          gsk_sl_preprocessor_error (preproc, CONSTANT,
+          gsk_sl_preprocessor_error (preproc, RANGE,
                                      "Constant expression evaluates to %d, but must be at most %d.",
                                      i, maximum);
           i = maximum;
@@ -3139,14 +3164,14 @@ gsk_sl_expression_parse_integral_constant (GskSlScope        *scope,
 
       if (minimum >= 0 && u < minimum)
         {
-          gsk_sl_preprocessor_error (preproc, CONSTANT,
+          gsk_sl_preprocessor_error (preproc, RANGE,
                                      "Constant expression evaluates to %u, but must be at least %d.",
                                      u, minimum);
           u = minimum;
         }
       else if (u > maximum)
         {
-          gsk_sl_preprocessor_error (preproc, CONSTANT,
+          gsk_sl_preprocessor_error (preproc, RANGE,
                                      "Constant expression evaluates to %u, but must be at most %d.",
                                      u, maximum);
           u = maximum;
