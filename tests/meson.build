@@ -109,7 +109,6 @@ gtk_tests = [
   ['testtreepos'],
   ['testsensitive'],
   ['testtextview'],
-  ['testanimation'],
   ['testpixbuf-scale'],
   ['testgmenu'],
   ['testlogout'],

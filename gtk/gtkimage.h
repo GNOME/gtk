@@ -51,7 +51,6 @@ typedef struct _GtkImageClass         GtkImageClass;
 /**
  * GtkImageType:
  * @GTK_IMAGE_EMPTY: there is no image displayed by the widget
- * @GTK_IMAGE_ANIMATION: the widget contains a #GdkPixbufAnimation
  * @GTK_IMAGE_ICON_NAME: the widget contains a named icon.
  *  This image type was added in GTK+ 2.6
  * @GTK_IMAGE_GICON: the widget contains a #GIcon.
@@ -70,7 +69,6 @@ typedef struct _GtkImageClass         GtkImageClass;
 typedef enum
 {
   GTK_IMAGE_EMPTY,
-  GTK_IMAGE_ANIMATION,
   GTK_IMAGE_ICON_NAME,
   GTK_IMAGE_GICON,
   GTK_IMAGE_SURFACE
@@ -110,8 +108,6 @@ GtkWidget* gtk_image_new_from_resource  (const gchar     *resource_path);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_image_new_from_animation (GdkPixbufAnimation *animation);
-GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name,
 					 GtkIconSize      size);
 GDK_AVAILABLE_IN_ALL
@@ -131,9 +127,6 @@ void gtk_image_set_from_resource  (GtkImage        *image,
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_pixbuf    (GtkImage        *image,
                                    GdkPixbuf       *pixbuf);
-GDK_AVAILABLE_IN_ALL
-void gtk_image_set_from_animation (GtkImage           *image,
-                                   GdkPixbufAnimation *animation);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_icon_name (GtkImage        *image,
 				   const gchar     *icon_name,
@@ -155,8 +148,6 @@ GtkImageType gtk_image_get_storage_type (GtkImage   *image);
 GDK_AVAILABLE_IN_3_94
 cairo_surface_t *gtk_image_get_surface (GtkImage *image);
 
-GDK_AVAILABLE_IN_ALL
-GdkPixbufAnimation* gtk_image_get_animation (GtkImage *image);
 GDK_AVAILABLE_IN_ALL
 void       gtk_image_get_icon_name (GtkImage     *image,
 				    const gchar **icon_name,

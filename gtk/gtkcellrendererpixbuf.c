@@ -302,7 +302,6 @@ notify_storage_type (GtkCellRendererPixbuf *cellpixbuf,
       g_object_notify (G_OBJECT (cellpixbuf), "gicon");
       break;
     default:
-    case GTK_IMAGE_ANIMATION:
       g_assert_not_reached ();
     case GTK_IMAGE_EMPTY:
       break;

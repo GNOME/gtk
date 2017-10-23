@@ -288,15 +288,6 @@ gtk_image_accessible_get_image_size (AtkImage *image,
         gtk_icon_size_lookup (size, width, height);
         break;
       }
-    case GTK_IMAGE_ANIMATION:
-      {
-        GdkPixbufAnimation *animation;
-
-        animation = gtk_image_get_animation (gtk_image);
-        *height = gdk_pixbuf_animation_get_height (animation);
-        *width = gdk_pixbuf_animation_get_width (animation);
-        break;
-      }
     case GTK_IMAGE_EMPTY:
     default:
       {

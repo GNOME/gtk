@@ -348,7 +348,6 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
                                           gtk_image_definition_get_gicon (self->def));
       break;
 
-    case GTK_IMAGE_ANIMATION:
     case GTK_IMAGE_EMPTY:
     default:
       surface = NULL;
@@ -405,7 +404,6 @@ find_cached_texture (GtkIconHelper *self)
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
       break;
     case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_ANIMATION:
     case GTK_IMAGE_SURFACE:
     default:
       return NULL;
@@ -495,14 +493,6 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
                         &height);
       break;
 
-    case GTK_IMAGE_ANIMATION:
-      {
-        GdkPixbufAnimation *animation = gtk_image_definition_get_animation (self->def);
-        width = gdk_pixbuf_animation_get_width (animation);
-        height = gdk_pixbuf_animation_get_height (animation);
-        break;
-      }
-
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       if (self->pixel_size != -1 || self->force_scale_pixbuf)
@@ -562,13 +552,6 @@ _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_name (icon_name));
   _gtk_icon_helper_set_icon_size (self, icon_size);
-}
-
-void
-_gtk_icon_helper_set_animation (GtkIconHelper *self,
-                                GdkPixbufAnimation *animation)
-{
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_animation (animation, 1));
 }
 
 void
@@ -653,12 +636,6 @@ _gtk_icon_helper_peek_gicon (GtkIconHelper *self)
   return gtk_image_definition_get_gicon (self->def);
 }
 
-GdkPixbufAnimation *
-_gtk_icon_helper_peek_animation (GtkIconHelper *self)
-{
-  return gtk_image_definition_get_animation (self->def);
-}
-
 cairo_surface_t *
 _gtk_icon_helper_peek_surface (GtkIconHelper *self)
 {
@@ -731,25 +708,4 @@ _gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,
       self->force_scale_pixbuf = force_scale;
       gtk_icon_helper_invalidate (self);
     }
-}
-
-void 
-_gtk_icon_helper_set_pixbuf_scale (GtkIconHelper *self,
-				   int scale)
-{
-  switch (gtk_image_definition_get_storage_type (self->def))
-  {
-    case GTK_IMAGE_ANIMATION:
-      gtk_icon_helper_take_definition (self,
-                                      gtk_image_definition_new_animation (gtk_image_definition_get_animation (self->def),
-                                                                          scale));
-      break;
-
-    case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_ICON_NAME:
-    case GTK_IMAGE_GICON:
-    case GTK_IMAGE_SURFACE:
-    default:
-      break;
-  }
 }

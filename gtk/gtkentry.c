@@ -6642,7 +6642,6 @@ gtk_entry_clear_icon (GtkEntry             *entry,
       break;
 
     case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_ANIMATION:
     default:
       g_assert_not_reached ();
       break;

@@ -556,8 +556,7 @@ add_data_tab (const gchar *demoname)
       resource_name = g_strconcat (resource_dir, "/", resources[i], NULL);
 
       widget = gtk_image_new_from_resource (resource_name);
-      if (gtk_image_get_surface (GTK_IMAGE (widget)) == NULL &&
-          gtk_image_get_animation (GTK_IMAGE (widget)) == NULL)
+      if (gtk_image_get_surface (GTK_IMAGE (widget)) == NULL)
         {
           GBytes *bytes;
 

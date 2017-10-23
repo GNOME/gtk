@@ -21,7 +21,6 @@
 
 typedef struct _GtkImageDefinitionEmpty GtkImageDefinitionEmpty;
 typedef struct _GtkImageDefinitionStock GtkImageDefinitionStock;
-typedef struct _GtkImageDefinitionAnimation GtkImageDefinitionAnimation;
 typedef struct _GtkImageDefinitionIconName GtkImageDefinitionIconName;
 typedef struct _GtkImageDefinitionGIcon GtkImageDefinitionGIcon;
 typedef struct _GtkImageDefinitionSurface GtkImageDefinitionSurface;
@@ -36,14 +35,6 @@ struct _GtkImageDefinitionStock {
   gint ref_count;
 
   char *id;
-};
-
-struct _GtkImageDefinitionAnimation {
-  GtkImageType type;
-  gint ref_count;
-
-  GdkPixbufAnimation *animation;
-  int scale;
 };
 
 struct _GtkImageDefinitionIconName {
@@ -72,7 +63,6 @@ union _GtkImageDefinition
   GtkImageType type;
   GtkImageDefinitionEmpty empty;
   GtkImageDefinitionStock stock;
-  GtkImageDefinitionAnimation animation;
   GtkImageDefinitionIconName icon_name;
   GtkImageDefinitionGIcon gicon;
   GtkImageDefinitionSurface surface;
@@ -92,7 +82,6 @@ gtk_image_definition_alloc (GtkImageType type)
   static gsize sizes[] = {
     sizeof (GtkImageDefinitionEmpty),
     sizeof (GtkImageDefinitionStock),
-    sizeof (GtkImageDefinitionAnimation),
     sizeof (GtkImageDefinitionIconName),
     sizeof (GtkImageDefinitionGIcon),
     sizeof (GtkImageDefinitionSurface)
@@ -104,22 +93,6 @@ gtk_image_definition_alloc (GtkImageType type)
   def = g_malloc0 (sizes[type]);
   def->type = type;
   def->empty.ref_count = 1;
-
-  return def;
-}
-
-GtkImageDefinition *
-gtk_image_definition_new_animation (GdkPixbufAnimation *animation,
-                                    int                 scale)
-{
-  GtkImageDefinition *def;
-
-  if (animation == NULL || scale <= 0)
-    return NULL;
-
-  def = gtk_image_definition_alloc (GTK_IMAGE_ANIMATION);
-  def->animation.animation = g_object_ref (animation);
-  def->animation.scale = scale;
 
   return def;
 }
@@ -188,9 +161,6 @@ gtk_image_definition_unref (GtkImageDefinition *def)
     case GTK_IMAGE_EMPTY:
       g_assert_not_reached ();
       break;
-    case GTK_IMAGE_ANIMATION:
-      g_object_unref (def->animation.animation);
-      break;
     case GTK_IMAGE_SURFACE:
       cairo_surface_destroy (def->surface.surface);
       break;
@@ -223,18 +193,7 @@ gtk_image_definition_get_scale (const GtkImageDefinition *def)
     case GTK_IMAGE_ICON_NAME:
     case GTK_IMAGE_GICON:
       return 1;
-    case GTK_IMAGE_ANIMATION:
-      return def->animation.scale;
     }
-}
-
-GdkPixbufAnimation *
-gtk_image_definition_get_animation (const GtkImageDefinition *def)
-{
-  if (def->type != GTK_IMAGE_ANIMATION)
-    return NULL;
-
-  return def->animation.animation;
 }
 
 const gchar *

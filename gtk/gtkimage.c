@@ -61,9 +61,6 @@
  * gdk_pixbuf_new_from_file(), then create the #GtkImage with
  * gtk_image_new_from_pixbuf().
  *
- * The image file may contain an animation, if so the #GtkImage will
- * display an animation (#GdkPixbufAnimation) instead of a static image.
- *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. See the documentation of #GResource for details.
  * In this case, the #GtkImage:resource, gtk_image_new_from_resource() and
@@ -79,12 +76,9 @@ struct _GtkImagePrivate
 {
   GtkIconHelper icon_helper;
 
-  GdkPixbufAnimationIter *animation_iter;
-  gint animation_timeout;
-
   float baseline_align;
 
-  gchar                *filename;       /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_SURFACE */
+  gchar                *filename;       /* Only used with GTK_IMAGE_SURFACE */
   gchar                *resource_path;  /* Only used with GTK_IMAGE_SURFACE */
 };
 
@@ -96,7 +90,6 @@ static void gtk_image_size_allocate        (GtkWidget           *widget,
                                             const GtkAllocation *allocation,
                                             int                  baseline,
                                             GtkAllocation       *out_clip);
-static void gtk_image_unmap                (GtkWidget    *widget);
 static void gtk_image_unrealize            (GtkWidget    *widget);
 static void gtk_image_measure (GtkWidget      *widget,
                                GtkOrientation  orientation,
@@ -125,7 +118,6 @@ enum
   PROP_FILE,
   PROP_ICON_SIZE,
   PROP_PIXEL_SIZE,
-  PROP_PIXBUF_ANIMATION,
   PROP_ICON_NAME,
   PROP_STORAGE_TYPE,
   PROP_GICON,
@@ -154,7 +146,6 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->snapshot = gtk_image_snapshot;
   widget_class->measure = gtk_image_measure;
   widget_class->size_allocate = gtk_image_size_allocate;
-  widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_updated = gtk_image_style_updated;
 
@@ -196,13 +187,6 @@ gtk_image_class_init (GtkImageClass *class)
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  image_props[PROP_PIXBUF_ANIMATION] =
-      g_param_spec_object ("pixbuf-animation",
-                           P_("Animation"),
-                           P_("GdkPixbufAnimation to display"),
-                           GDK_TYPE_PIXBUF_ANIMATION,
-                           GTK_PARAM_READWRITE);
 
   /**
    * GtkImage:icon-name:
@@ -338,9 +322,6 @@ gtk_image_set_property (GObject      *object,
     case PROP_PIXEL_SIZE:
       gtk_image_set_pixel_size (image, g_value_get_int (value));
       break;
-    case PROP_PIXBUF_ANIMATION:
-      gtk_image_set_from_animation (image, g_value_get_object (value));
-      break;
     case PROP_ICON_NAME:
       gtk_image_set_from_icon_name (image, g_value_get_string (value), icon_size);
       break;
@@ -385,9 +366,6 @@ gtk_image_get_property (GObject     *object,
     case PROP_PIXEL_SIZE:
       g_value_set_int (value, _gtk_icon_helper_get_pixel_size (&priv->icon_helper));
       break;
-    case PROP_PIXBUF_ANIMATION:
-      g_value_set_object (value, _gtk_icon_helper_peek_animation (&priv->icon_helper));
-      break;
     case PROP_ICON_NAME:
       g_value_set_string (value, _gtk_icon_helper_get_icon_name (&priv->icon_helper));
       break;
@@ -419,13 +397,9 @@ gtk_image_get_property (GObject     *object,
  * display a “broken image” icon. This function never returns %NULL,
  * it always returns a valid #GtkImage widget.
  *
- * If the file contains an animation, the image will contain an
- * animation.
- *
  * If you need to detect failures to load the file, use
  * gdk_pixbuf_new_from_file() to load the file yourself, then create
- * the #GtkImage from the surface. (Or for animations, use
- * gdk_pixbuf_animation_new_from_file()).
+ * the #GtkImage from the surface.
  *
  * The storage type (gtk_image_get_storage_type()) of the returned
  * image is not defined, it will be whatever is appropriate for
@@ -454,13 +428,9 @@ gtk_image_new_from_file   (const gchar *filename)
  * display a “broken image” icon. This function never returns %NULL,
  * it always returns a valid #GtkImage widget.
  *
- * If the file contains an animation, the image will contain an
- * animation.
- *
  * If you need to detect failures to load the file, use
  * gdk_pixbuf_new_from_file() to load the file yourself, then create
- * the #GtkImage from the pixbuf. (Or for animations, use
- * gdk_pixbuf_animation_new_from_file()).
+ * the #GtkImage from the pixbuf.
  *
  * The storage type (gtk_image_get_storage_type()) of the returned
  * image is not defined, it will be whatever is appropriate for
@@ -533,36 +503,6 @@ gtk_image_new_from_surface (cairo_surface_t *surface)
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
   gtk_image_set_from_surface (image, surface);
-
-  return GTK_WIDGET (image);
-}
-
-/**
- * gtk_image_new_from_animation:
- * @animation: an animation
- * 
- * Creates a #GtkImage displaying the given animation.
- * The #GtkImage does not assume a reference to the
- * animation; you still need to unref it if you own references.
- * #GtkImage will add its own reference rather than adopting yours.
- *
- * Note that the animation frames are shown using a timeout with
- * #G_PRIORITY_DEFAULT. When using animations to indicate busyness,
- * keep in mind that the animation will only be shown if the main loop
- * is not busy with something that has a higher priority.
- *
- * Returns: a new #GtkImage widget
- **/
-GtkWidget*
-gtk_image_new_from_animation (GdkPixbufAnimation *animation)
-{
-  GtkImage *image;
-
-  g_return_val_if_fail (GDK_IS_PIXBUF_ANIMATION (animation), NULL);
-  
-  image = g_object_new (GTK_TYPE_IMAGE, NULL);
-
-  gtk_image_set_from_animation (image, animation);
 
   return GTK_WIDGET (image);
 }
@@ -725,7 +665,8 @@ gtk_image_set_from_file   (GtkImage    *image,
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
   GdkPixbufAnimation *anim;
   gint scale_factor;
-  
+  cairo_surface_t *surface;
+
   g_return_if_fail (GTK_IS_IMAGE (image));
 
   g_object_freeze_notify (G_OBJECT (image));
@@ -750,23 +691,10 @@ gtk_image_set_from_file   (GtkImage    *image,
       return;
     }
 
-  /* We could just unconditionally set_from_animation,
-   * but it's nicer for memory if we toss the animation
-   * if it's just a single pixbuf
-   */
-
-  if (gdk_pixbuf_animation_is_static_image (anim))
-    {
-      cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (gdk_pixbuf_animation_get_static_image (anim),
-                                                                       scale_factor, _gtk_widget_get_window (GTK_WIDGET (image)));
-      gtk_image_set_from_surface (image, surface);
-      cairo_surface_destroy (surface);
-    }
-  else
-    {
-      gtk_image_set_from_animation (image, anim);
-      _gtk_icon_helper_set_pixbuf_scale (&priv->icon_helper, scale_factor);
-    }
+  surface = gdk_cairo_surface_create_from_pixbuf (gdk_pixbuf_animation_get_static_image (anim),
+                                                  scale_factor, _gtk_widget_get_window (GTK_WIDGET (image)));
+  gtk_image_set_from_surface (image, surface);
+  cairo_surface_destroy (surface);
 
   g_object_unref (anim);
 
@@ -819,6 +747,7 @@ gtk_image_set_from_resource (GtkImage    *image,
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
   GdkPixbufAnimation *animation;
   gint scale_factor = 1;
+  cairo_surface_t *surface;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -851,18 +780,10 @@ gtk_image_set_from_resource (GtkImage    *image,
       return;
     }
 
-  if (gdk_pixbuf_animation_is_static_image (animation))
-    {
-      cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (gdk_pixbuf_animation_get_static_image (animation),
-                                                                       scale_factor, _gtk_widget_get_window (GTK_WIDGET (image)));
-      gtk_image_set_from_surface (image, surface);
-      cairo_surface_destroy (surface);
-    }
-  else
-    {
-      gtk_image_set_from_animation (image, animation);
-      _gtk_icon_helper_set_pixbuf_scale (&priv->icon_helper, scale_factor);
-    }
+  surface = gdk_cairo_surface_create_from_pixbuf (gdk_pixbuf_animation_get_static_image (animation),
+                                                  scale_factor, _gtk_widget_get_window (GTK_WIDGET (image)));
+  gtk_image_set_from_surface (image, surface);
+  cairo_surface_destroy (surface);
 
   priv->resource_path = g_strdup (resource_path);
 
@@ -903,42 +824,6 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
 
   if (surface)
     cairo_surface_destroy (surface);
-}
-
-/**
- * gtk_image_set_from_animation:
- * @image: a #GtkImage
- * @animation: the #GdkPixbufAnimation
- * 
- * Causes the #GtkImage to display the given animation (or display
- * nothing, if you set the animation to %NULL).
- **/
-void
-gtk_image_set_from_animation (GtkImage           *image,
-                              GdkPixbufAnimation *animation)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_if_fail (GTK_IS_IMAGE (image));
-  g_return_if_fail (animation == NULL ||
-                    GDK_IS_PIXBUF_ANIMATION (animation));
-
-  g_object_freeze_notify (G_OBJECT (image));
-  
-  if (animation)
-    g_object_ref (animation);
-
-  gtk_image_clear (image);
-
-  if (animation != NULL)
-    {
-      _gtk_icon_helper_set_animation (&priv->icon_helper, animation);
-      g_object_unref (animation);
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF_ANIMATION]);
-
-  g_object_thaw_notify (G_OBJECT (image));
 }
 
 /**
@@ -1091,29 +976,6 @@ gtk_image_get_surface (GtkImage *image)
 }
 
 /**
- * gtk_image_get_animation:
- * @image: a #GtkImage
- *
- * Gets the #GdkPixbufAnimation being displayed by the #GtkImage.
- * The storage type of the image must be %GTK_IMAGE_EMPTY or
- * %GTK_IMAGE_ANIMATION (see gtk_image_get_storage_type()).
- * The caller of this function does not own a reference to the
- * returned animation.
- * 
- * Returns: (nullable) (transfer none): the displayed animation, or %NULL if
- * the image is empty
- **/
-GdkPixbufAnimation*
-gtk_image_get_animation (GtkImage *image)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
-
-  return _gtk_icon_helper_peek_animation (&priv->icon_helper);
-}
-
-/**
  * gtk_image_get_icon_name:
  * @image: a #GtkImage
  * @icon_name: (out) (transfer none) (allow-none): place to store an
@@ -1191,24 +1053,6 @@ gtk_image_new (void)
 }
 
 static void
-gtk_image_reset_anim_iter (GtkImage *image)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
-    {
-      /* Reset the animation */
-      if (priv->animation_timeout)
-        {
-          g_source_remove (priv->animation_timeout);
-          priv->animation_timeout = 0;
-        }
-
-      g_clear_object (&priv->animation_iter);
-    }
-}
-
-static void
 gtk_image_size_allocate (GtkWidget           *widget,
                          const GtkAllocation *allocation,
                          int                  baseline,
@@ -1223,76 +1067,14 @@ gtk_image_size_allocate (GtkWidget           *widget,
 }
 
 static void
-gtk_image_unmap (GtkWidget *widget)
-{
-  gtk_image_reset_anim_iter (GTK_IMAGE (widget));
-
-  GTK_WIDGET_CLASS (gtk_image_parent_class)->unmap (widget);
-}
-
-static void
 gtk_image_unrealize (GtkWidget *widget)
 {
   GtkImage *image = GTK_IMAGE (widget);
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
 
-  gtk_image_reset_anim_iter (image);
-
   gtk_icon_helper_invalidate (&priv->icon_helper);
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->unrealize (widget);
-}
-
-static gint
-animation_timeout (gpointer data)
-{
-  GtkImage *image = GTK_IMAGE (data);
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-  int delay;
-
-  priv->animation_timeout = 0;
-
-  gdk_pixbuf_animation_iter_advance (priv->animation_iter, NULL);
-
-  delay = gdk_pixbuf_animation_iter_get_delay_time (priv->animation_iter);
-  if (delay >= 0)
-    {
-      GtkWidget *widget = GTK_WIDGET (image);
-
-      priv->animation_timeout =
-        gdk_threads_add_timeout (delay, animation_timeout, image);
-      g_source_set_name_by_id (priv->animation_timeout, "[gtk+] animation_timeout");
-
-      gtk_widget_queue_draw (widget);
-    }
-
-  return FALSE;
-}
-
-static GdkPixbuf *
-get_animation_frame (GtkImage *image)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  if (priv->animation_iter == NULL)
-    {
-      int delay;
-
-      priv->animation_iter = 
-        gdk_pixbuf_animation_get_iter (_gtk_icon_helper_peek_animation (&priv->icon_helper), NULL);
-
-      delay = gdk_pixbuf_animation_iter_get_delay_time (priv->animation_iter);
-      if (delay >= 0) {
-        priv->animation_timeout =
-          gdk_threads_add_timeout (delay, animation_timeout, image);
-        g_source_set_name_by_id (priv->animation_timeout, "[gtk+] animation_timeout");
-      }
-    }
-
-  /* don't advance the anim iter here, or we could get frame changes between two
-   * exposes of different areas.
-   */
-  return g_object_ref (gdk_pixbuf_animation_iter_get_pixbuf (priv->animation_iter));
 }
 
 static float
@@ -1343,21 +1125,9 @@ gtk_image_snapshot (GtkWidget   *widget,
 
   x += (width - w) / 2;
 
-  if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
-    {
-      GtkStyleContext *context = gtk_widget_get_style_context (widget);
-      GdkPixbuf *pixbuf = get_animation_frame (image);
-
-      gtk_snapshot_render_icon (snapshot, context, pixbuf, x, y);
-
-      g_object_unref (pixbuf);
-    }
-  else
-    {
-      gtk_snapshot_offset (snapshot, x, y);
-      gtk_icon_helper_snapshot (&priv->icon_helper, snapshot);
-      gtk_snapshot_offset (snapshot, -x, -y);
-    }
+  gtk_snapshot_offset (snapshot, x, y);
+  gtk_icon_helper_snapshot (&priv->icon_helper, snapshot);
+  gtk_snapshot_offset (snapshot, -x, -y);
 }
 
 static void
@@ -1366,9 +1136,6 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
 {
   switch (storage_type)
     {
-    case GTK_IMAGE_ANIMATION:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF_ANIMATION]);
-      break;
     case GTK_IMAGE_ICON_NAME:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_NAME]);
       break;
@@ -1438,8 +1205,6 @@ gtk_image_clear (GtkImage *image)
     g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STORAGE_TYPE]);
 
   g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
-
-  gtk_image_reset_anim_iter (image);
 
   gtk_image_notify_for_storage_type (image, storage_type);
 

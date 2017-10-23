@@ -363,8 +363,6 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_create_child_anchor (buffer, &iter);
   gtk_text_buffer_insert (buffer, &iter, " and a scale: ", -1);
   gtk_text_buffer_create_child_anchor (buffer, &iter);
-  gtk_text_buffer_insert (buffer, &iter, " and an animation: ", -1);
-  gtk_text_buffer_create_child_anchor (buffer, &iter);
   gtk_text_buffer_insert (buffer, &iter, " finally a text entry: ", -1);
   gtk_text_buffer_create_child_anchor (buffer, &iter);
   gtk_text_buffer_insert (buffer, &iter, ".\n", -1);
@@ -435,10 +433,6 @@ attach_widgets (GtkTextView *text_view)
           gtk_widget_set_size_request (widget, 70, -1);
         }
       else if (i == 3)
-        {
-          widget = gtk_image_new_from_resource ("/textview/floppybuddy.gif");
-        }
-      else if (i == 4)
         {
           widget = gtk_entry_new ();
         }
