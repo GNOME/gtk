@@ -513,13 +513,49 @@ populate_render_node_properties (GtkListStore  *store,
                                child_bounds->origin.y);
         add_text_row (store, "Child Bounds", tmp);
         g_free (tmp);
-     }
+      }
+      break;
+
+    case GSK_COLOR_MATRIX_NODE:
+      {
+        const graphene_matrix_t *matrix = gsk_color_matrix_node_peek_color_matrix (node);
+        const graphene_vec4_t *offset = gsk_color_matrix_node_peek_color_offset (node);
+
+        tmp = g_strdup_printf ("% .2f % .2f % .2f % .2f\n"
+                               "% .2f % .2f % .2f % .2f\n"
+                               "% .2f % .2f % .2f % .2f\n"
+                               "% .2f % .2f % .2f % .2f",
+                               graphene_matrix_get_value (matrix, 0, 0),
+                               graphene_matrix_get_value (matrix, 0, 1),
+                               graphene_matrix_get_value (matrix, 0, 2),
+                               graphene_matrix_get_value (matrix, 0, 3),
+                               graphene_matrix_get_value (matrix, 1, 0),
+                               graphene_matrix_get_value (matrix, 1, 1),
+                               graphene_matrix_get_value (matrix, 1, 2),
+                               graphene_matrix_get_value (matrix, 1, 3),
+                               graphene_matrix_get_value (matrix, 2, 0),
+                               graphene_matrix_get_value (matrix, 2, 1),
+                               graphene_matrix_get_value (matrix, 2, 2),
+                               graphene_matrix_get_value (matrix, 2, 3),
+                               graphene_matrix_get_value (matrix, 3, 0),
+                               graphene_matrix_get_value (matrix, 3, 1),
+                               graphene_matrix_get_value (matrix, 3, 2),
+                               graphene_matrix_get_value (matrix, 3, 3));
+        add_text_row (store, "Matrix", tmp);
+        g_free (tmp);
+        tmp = g_strdup_printf ("%.2f %.2f %.2f %.2f",
+                               graphene_vec4_get_x (offset),
+                               graphene_vec4_get_y (offset),
+                               graphene_vec4_get_z (offset),
+                               graphene_vec4_get_w (offset));
+        add_text_row (store, "Offset", tmp);
+        g_free (tmp);
+      }
       break;
 
     case GSK_NOT_A_RENDER_NODE:
     case GSK_CONTAINER_NODE:
     case GSK_TRANSFORM_NODE:
-    case GSK_COLOR_MATRIX_NODE:
     case GSK_CLIP_NODE:
     case GSK_ROUNDED_CLIP_NODE:
     case GSK_SHADOW_NODE:
