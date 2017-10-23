@@ -4030,7 +4030,7 @@ gtk_icon_info_load_texture (GtkIconInfo *icon_info)
       icon_info->texture = gsk_texture_new_for_pixbuf (pixbuf);
       g_object_unref (pixbuf);
 
-      g_object_add_weak_pointer (icon_info->texture, &icon_info->texture);
+      g_object_add_weak_pointer (G_OBJECT (icon_info->texture), (void **)&icon_info->texture);
     }
 
   if (icon_info->in_cache != NULL)
