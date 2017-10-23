@@ -803,9 +803,9 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
 
       gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
 
-      graphene_vec4_init (&r0, sc.red   - fg.red,   wc.red   - fg.red,   ec.red   - fg.red,   0);
-      graphene_vec4_init (&r1, sc.green - fg.green, wc.green - fg.green, ec.green - fg.green, 0);
-      graphene_vec4_init (&r2, sc.blue  - fg.blue,  wc.blue  - fg.blue,  ec.blue  - fg.blue,  0);
+      graphene_vec4_init (&r0, sc.red - fg.red,  sc.green - fg.green, sc.blue - fg.blue, 0);
+      graphene_vec4_init (&r1, wc.red - fg.red,  wc.green - fg.green, wc.blue - fg.blue, 0);
+      graphene_vec4_init (&r2, ec.red - fg.red,  ec.green - fg.green, ec.blue - fg.blue, 0);
       graphene_vec4_init (&r3, 0, 0, 0, fg.alpha);
       graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
       graphene_matrix_init_from_vec4 (&matrix, &r0, &r1, &r2, &r3);
