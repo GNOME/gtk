@@ -29,10 +29,6 @@ layout(location = 2) out flat int outRepeating;
 layout(location = 3) out flat int outStopCount;
 layout(location = 4) out flat ColorStop outStops[8];
 
-out gl_PerVertex {
-  vec4 gl_Position;
-};
-
 vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 0.0),
                     vec2(0.0, 1.0),

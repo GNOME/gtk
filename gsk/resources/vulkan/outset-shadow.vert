@@ -19,10 +19,6 @@ layout(location = 5) out flat vec2 outOffset;
 layout(location = 6) out flat float outSpread;
 layout(location = 7) out flat float outBlurRadius;
 
-out gl_PerVertex {
-  vec4 gl_Position;
-};
-
 vec2 offsets[6] = { vec2(0.0, 0.0),
                     vec2(1.0, 0.0),
                     vec2(0.0, 1.0),
