@@ -5358,7 +5358,6 @@ gtk_drag_unhighlight
 gtk_drag_begin_with_coordinates
 gtk_drag_cancel
 gtk_drag_set_icon_widget
-gtk_drag_set_icon_pixbuf
 gtk_drag_set_icon_surface
 gtk_drag_set_icon_name
 gtk_drag_set_icon_gicon
