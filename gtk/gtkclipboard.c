@@ -930,6 +930,17 @@ gtk_clipboard_set_image (GtkClipboard *clipboard,
   gtk_target_list_unref (list);
 }
 
+/**
+ * gtk_clipboard_set_surface:
+ * @clipboard: a #GtkClipboard object
+ * @surface: a cairo image surface
+ *
+ * Sets the contents of the clipboard to the given cairo image surface.
+ * GTK+ will take responsibility for responding for requests for the
+ * image, and for converting the image into the requested format.
+ * 
+ * Since: 3.94
+ **/
 void
 gtk_clipboard_set_surface (GtkClipboard    *clipboard,
                            cairo_surface_t *surface)
@@ -1651,6 +1662,24 @@ gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
   return results.data;
 }
 
+/**
+ * gtk_clipboard_wait_for_surface:
+ * @clipboard: a #GtkClipboard
+ *
+ * Requests the contents of the clipboard as image and converts
+ * the result to a cairo surface. This function waits for
+ * the data to be received using the main loop, so events,
+ * timeouts, etc, may be dispatched during the wait.
+ *
+ * Returns: (nullable) (transfer full): a newly-allocated cairo surface
+ *     object which must be disposed with cairo_surface_destroy(), or
+ *     %NULL if retrieving the selection data failed. (This could
+ *     happen for various reasons, in particular if the clipboard
+ *     was empty or if the contents of the clipboard could not be
+ *     converted into an image.)
+ *
+ * Since: 2.6
+ **/
 cairo_surface_t *
 gtk_clipboard_wait_for_surface (GtkClipboard *clipboard)
 {
@@ -1676,6 +1705,7 @@ gtk_clipboard_wait_for_surface (GtkClipboard *clipboard)
 
   return results.data;
 }
+
 static void 
 clipboard_uris_received_func (GtkClipboard *clipboard,
 			      gchar       **uris,

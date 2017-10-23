@@ -5302,6 +5302,7 @@ gtk_clipboard_get_owner
 gtk_clipboard_clear
 gtk_clipboard_set_text
 gtk_clipboard_set_image
+gtk_clipboard_set_surface
 gtk_clipboard_request_contents
 gtk_clipboard_request_text
 gtk_clipboard_request_image
@@ -5311,6 +5312,7 @@ gtk_clipboard_request_uris
 gtk_clipboard_wait_for_contents
 gtk_clipboard_wait_for_text
 gtk_clipboard_wait_for_image
+gtk_clipboard_wait_for_surface
 gtk_clipboard_wait_for_rich_text
 gtk_clipboard_wait_for_uris
 gtk_clipboard_wait_is_text_available
