@@ -285,34 +285,6 @@ get_pixbuf_size (GtkIconHelper   *self,
 }
 
 static cairo_surface_t *
-ensure_surface_from_pixbuf (GtkIconHelper *self,
-                            GtkCssStyle   *style,
-                            gint           scale,
-                            GdkPixbuf     *orig_pixbuf,
-                            gint           orig_scale)
-{
-  gint width, height;
-  cairo_surface_t *surface;
-  GdkPixbuf *pixbuf;
-
-  if (get_pixbuf_size (self,
-                       scale,
-                       orig_pixbuf,
-                       orig_scale,
-                       &width, &height, &scale))
-    pixbuf = gdk_pixbuf_scale_simple (orig_pixbuf,
-                                      width, height,
-                                      GDK_INTERP_BILINEAR);
-  else
-    pixbuf = g_object_ref (orig_pixbuf);
-
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, _gtk_widget_get_window (self->owner));
-  g_object_unref (pixbuf);
-
-  return surface;
-}
-
-static cairo_surface_t *
 ensure_surface_for_gicon (GtkIconHelper    *self,
                           GtkCssStyle      *style,
                           GtkTextDirection  dir,
@@ -405,14 +377,6 @@ gtk_icon_helper_load_surface (GtkIconHelper   *self,
       surface = ensure_surface_from_surface (self, gtk_image_definition_get_surface (self->def));
       break;
 
-    case GTK_IMAGE_PIXBUF:
-      surface = ensure_surface_from_pixbuf (self,
-                                            gtk_css_node_get_style (self->node),
-                                            scale,
-                                            gtk_image_definition_get_pixbuf (self->def),
-                                            gtk_image_definition_get_scale (self->def));
-      break;
-
     case GTK_IMAGE_ICON_NAME:
       if (self->use_fallback)
         gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
@@ -491,7 +455,6 @@ find_cached_texture (GtkIconHelper *self)
         gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
       break;
     case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_PIXBUF:
     case GTK_IMAGE_ANIMATION:
     case GTK_IMAGE_SURFACE:
     default:
@@ -566,7 +529,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
                            gint *width_out,
                            gint *height_out)
 {
-  gint width, height, scale;
+  gint width, height;
 
   width = height = 0;
 
@@ -580,16 +543,6 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
                         gtk_image_definition_get_surface (self->def),
                         &width,
                         &height);
-      break;
-
-    case GTK_IMAGE_PIXBUF:
-      get_pixbuf_size (self,
-                       gtk_widget_get_scale_factor (self->owner),
-                       gtk_image_definition_get_pixbuf (self->def),
-                       gtk_image_definition_get_scale (self->def),
-                       &width, &height, &scale);
-      width = (width + scale - 1) / scale;
-      height = (height + scale - 1) / scale;
       break;
 
     case GTK_IMAGE_ANIMATION:
@@ -659,13 +612,6 @@ _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
 {
   gtk_icon_helper_take_definition (self, gtk_image_definition_new_icon_name (icon_name));
   _gtk_icon_helper_set_icon_size (self, icon_size);
-}
-
-void
-_gtk_icon_helper_set_pixbuf (GtkIconHelper *self,
-                             GdkPixbuf *pixbuf)
-{
-  gtk_icon_helper_take_definition (self, gtk_image_definition_new_pixbuf (pixbuf, 1));
 }
 
 void
@@ -749,12 +695,6 @@ GtkImageDefinition *
 gtk_icon_helper_get_definition (GtkIconHelper *self)
 {
   return self->def;
-}
-
-GdkPixbuf *
-_gtk_icon_helper_peek_pixbuf (GtkIconHelper *self)
-{
-  return gtk_image_definition_get_pixbuf (self->def);
 }
 
 GIcon *
@@ -849,12 +789,6 @@ _gtk_icon_helper_set_pixbuf_scale (GtkIconHelper *self,
 {
   switch (gtk_image_definition_get_storage_type (self->def))
   {
-    case GTK_IMAGE_PIXBUF:
-      gtk_icon_helper_take_definition (self,
-                                      gtk_image_definition_new_pixbuf (gtk_image_definition_get_pixbuf (self->def),
-                                                                       scale));
-      break;
-
     case GTK_IMAGE_ANIMATION:
       gtk_icon_helper_take_definition (self,
                                       gtk_image_definition_new_animation (gtk_image_definition_get_animation (self->def),

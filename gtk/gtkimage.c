@@ -1378,9 +1378,6 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
     case GTK_IMAGE_SURFACE:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_SURFACE]);
       break;
-    case GTK_IMAGE_PIXBUF:
-      g_warning ("pixbuf not supported");
-      break;
     case GTK_IMAGE_EMPTY:
     default:
       break;

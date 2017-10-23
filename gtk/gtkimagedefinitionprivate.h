@@ -26,8 +26,6 @@ G_BEGIN_DECLS
 typedef union _GtkImageDefinition GtkImageDefinition;
 
 GtkImageDefinition *    gtk_image_definition_new_empty          (void);
-GtkImageDefinition *    gtk_image_definition_new_pixbuf         (GdkPixbuf                      *pixbuf,
-                                                                 int                             scale);
 GtkImageDefinition *    gtk_image_definition_new_animation      (GdkPixbufAnimation             *animation,
                                                                  int                             scale);
 GtkImageDefinition *    gtk_image_definition_new_icon_name      (const char                     *icon_name);
@@ -39,7 +37,6 @@ void                    gtk_image_definition_unref              (GtkImageDefinit
 
 GtkImageType            gtk_image_definition_get_storage_type   (const GtkImageDefinition       *def);
 gint                    gtk_image_definition_get_scale          (const GtkImageDefinition       *def);
-GdkPixbuf *             gtk_image_definition_get_pixbuf         (const GtkImageDefinition       *def);
 GdkPixbufAnimation *    gtk_image_definition_get_animation      (const GtkImageDefinition       *def);
 const gchar *           gtk_image_definition_get_icon_name      (const GtkImageDefinition       *def);
 GIcon *                 gtk_image_definition_get_gicon          (const GtkImageDefinition       *def);

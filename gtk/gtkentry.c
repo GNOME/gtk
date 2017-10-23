@@ -6643,7 +6643,6 @@ gtk_entry_clear_icon (GtkEntry             *entry,
 
     case GTK_IMAGE_EMPTY:
     case GTK_IMAGE_ANIMATION:
-    case GTK_IMAGE_PIXBUF:
     default:
       g_assert_not_reached ();
       break;

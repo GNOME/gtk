@@ -295,9 +295,6 @@ notify_storage_type (GtkCellRendererPixbuf *cellpixbuf,
     case GTK_IMAGE_SURFACE:
       g_object_notify (G_OBJECT (cellpixbuf), "surface");
       break;
-    case GTK_IMAGE_PIXBUF:
-      g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
-      break;
     case GTK_IMAGE_ICON_NAME:
       g_object_notify (G_OBJECT (cellpixbuf), "icon-name");
       break;
@@ -416,7 +413,7 @@ create_icon_helper (GtkIconHelper         *icon_helper,
                         widget);
   _gtk_icon_helper_set_force_scale_pixbuf (icon_helper, TRUE);
   _gtk_icon_helper_set_definition (icon_helper, priv->image_def);
-  if (gtk_image_definition_get_storage_type (priv->image_def) != GTK_IMAGE_PIXBUF)
+  if (gtk_image_definition_get_storage_type (priv->image_def) != GTK_IMAGE_SURFACE)
     _gtk_icon_helper_set_icon_size (icon_helper, priv->icon_size);
 }
 

@@ -298,7 +298,6 @@ gtk_image_accessible_get_image_size (AtkImage *image,
         break;
       }
     case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_PIXBUF:
     default:
       {
         *height = -1;

@@ -51,7 +51,6 @@ typedef struct _GtkImageClass         GtkImageClass;
 /**
  * GtkImageType:
  * @GTK_IMAGE_EMPTY: there is no image displayed by the widget
- * @GTK_IMAGE_PIXBUF: the widget contains a #GdkPixbuf
  * @GTK_IMAGE_ANIMATION: the widget contains a #GdkPixbufAnimation
  * @GTK_IMAGE_ICON_NAME: the widget contains a named icon.
  *  This image type was added in GTK+ 2.6
@@ -63,19 +62,14 @@ typedef struct _GtkImageClass         GtkImageClass;
  * Describes the image data representation used by a #GtkImage. If you
  * want to get the image from the widget, you can only get the
  * currently-stored representation. e.g.  if the
- * gtk_image_get_storage_type() returns #GTK_IMAGE_PIXBUF, then you can
- * call gtk_image_get_pixbuf().  For empty images, you can request any
+ * gtk_image_get_storage_type() returns #GTK_IMAGE_SURFACE, then you can
+ * call gtk_image_get_surface().  For empty images, you can request any
  * storage type (call any of the "get" functions), but they will all
  * return %NULL values.
- *
- * Note: GTK_IMAGE_PIXBUF is not not supported as storage by GtkImage. Any
- * pixbuf set on the GtkImage will be converted to a surface and can only
- * be read back as a GTK_IMAGE_SURFACE.
  */
 typedef enum
 {
   GTK_IMAGE_EMPTY,
-  GTK_IMAGE_PIXBUF,
   GTK_IMAGE_ANIMATION,
   GTK_IMAGE_ICON_NAME,
   GTK_IMAGE_GICON,
