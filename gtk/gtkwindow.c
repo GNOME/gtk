@@ -4529,7 +4529,7 @@ gtk_window_realize_icon (GtkWindow *window)
 
   if (info->using_themed_icon) 
     {
-      g_list_free_full (icon_list, g_object_unref);
+      g_list_free_full (icon_list, (GDestroyNotify)cairo_surface_destroy);
     }
 }
 
