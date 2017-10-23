@@ -605,6 +605,149 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_LOGICAL_OR = {
   gsk_sl_expression_default_get_spv_access_chain
 };
 
+/* CONDITIONAL */
+
+typedef struct _GskSlExpressionConditional GskSlExpressionConditional;
+
+struct _GskSlExpressionConditional {
+  GskSlExpression parent;
+
+  GskSlExpression *condition;
+  GskSlType *type;
+  GskSlExpression *left;
+  GskSlExpression *right;
+};
+
+static void
+gsk_sl_expression_conditional_free (GskSlExpression *expression)
+{
+  GskSlExpressionConditional *conditional = (GskSlExpressionConditional *) expression;
+
+  gsk_sl_expression_unref (conditional->condition);
+  gsk_sl_type_unref (conditional->type);
+  gsk_sl_expression_unref (conditional->left);
+  gsk_sl_expression_unref (conditional->right);
+
+  g_slice_free (GskSlExpressionConditional, conditional);
+}
+
+static void
+gsk_sl_expression_conditional_print (const GskSlExpression *expression,
+                                     GskSlPrinter          *printer)
+{
+  GskSlExpressionConditional *conditional = (GskSlExpressionConditional *) expression;
+
+  gsk_sl_expression_print (conditional->condition, printer);
+  gsk_sl_printer_append (printer, " ? ");
+  gsk_sl_expression_print (conditional->left, printer);
+  gsk_sl_printer_append (printer, " : ");
+  gsk_sl_expression_print (conditional->right, printer);
+}
+
+static GskSlType *
+gsk_sl_expression_conditional_get_return_type (const GskSlExpression *expression)
+{
+  GskSlExpressionConditional *conditional = (GskSlExpressionConditional *) expression;
+
+  return conditional->type;
+}
+
+static GskSlValue *
+gsk_sl_expression_conditional_get_constant (const GskSlExpression *expression)
+{
+  const GskSlExpressionConditional *conditional = (const GskSlExpressionConditional *) expression;
+  GskSlValue *cond, *lvalue, *rvalue;
+
+  cond = gsk_sl_expression_get_constant (conditional->condition);
+  if (cond == NULL)
+    return NULL;
+  lvalue = gsk_sl_expression_get_constant (conditional->left);
+  if (lvalue == NULL)
+    {
+      gsk_sl_value_free (cond);
+      return NULL;
+    }
+  rvalue = gsk_sl_expression_get_constant (conditional->right);
+  if (rvalue == NULL)
+    {
+      gsk_sl_value_free (cond);
+      gsk_sl_value_free (lvalue);
+      return NULL;
+    }
+
+  if (*(guint32 *) gsk_sl_value_get_data (cond))
+    {
+      gsk_sl_value_free (cond);
+      gsk_sl_value_free (rvalue);
+      return lvalue;
+    }
+  else
+    {
+      gsk_sl_value_free (cond);
+      gsk_sl_value_free (lvalue);
+      return rvalue;
+    }
+}
+
+static guint32
+gsk_sl_expression_conditional_write_spv (const GskSlExpression *expression,
+                                         GskSpvWriter          *writer)
+{
+  const GskSlExpressionConditional *conditional = (const GskSlExpressionConditional *) expression;
+  guint32 true_id, false_id, after_id; 
+  guint32 condition_id, left_id, right_id, result_id;
+
+  condition_id = gsk_sl_expression_write_spv (conditional->condition, writer);
+
+  true_id = gsk_spv_writer_make_id (writer);
+  false_id = gsk_spv_writer_make_id (writer);
+  after_id = gsk_spv_writer_make_id (writer);
+
+  gsk_spv_writer_selection_merge (writer, after_id, 0);
+  gsk_spv_writer_branch_conditional (writer, condition_id, true_id, false_id, NULL, 0);
+
+  gsk_spv_writer_start_code_block (writer, true_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, true_id);
+  left_id = gsk_sl_expression_write_spv (conditional->left, writer);
+  left_id = gsk_spv_writer_convert (writer,
+                                    left_id,
+                                    gsk_sl_expression_get_return_type (conditional->left),
+                                    conditional->type);
+  gsk_spv_writer_branch (writer, after_id);
+
+  gsk_spv_writer_start_code_block (writer, false_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, false_id);
+  right_id = gsk_sl_expression_write_spv (conditional->right, writer);
+  right_id = gsk_spv_writer_convert (writer,
+                                     right_id,
+                                     gsk_sl_expression_get_return_type (conditional->right),
+                                     conditional->type);
+  gsk_spv_writer_branch (writer, after_id);
+
+  gsk_spv_writer_start_code_block (writer, after_id, 0, 0);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, after_id);
+
+  result_id = gsk_spv_writer_phi (writer, 
+                                  conditional->type,
+                                  (guint32 **) (guint32[4][2]) {
+                                      { left_id, true_id },
+                                      { right_id, false_id }
+                                  },
+                                  2);
+
+  return result_id;
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_CONDITIONAL = {
+  gsk_sl_expression_conditional_free,
+  gsk_sl_expression_conditional_print,
+  gsk_sl_expression_default_is_assignable,
+  gsk_sl_expression_conditional_get_return_type,
+  gsk_sl_expression_conditional_get_constant,
+  gsk_sl_expression_conditional_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
+};
+
 /* REFERENCE */
 
 typedef struct _GskSlExpressionReference GskSlExpressionReference;
@@ -3099,10 +3242,83 @@ gsk_sl_expression_parse_logical_or (GskSlScope        *scope,
 
 static GskSlExpression *
 gsk_sl_expression_parse_conditional (GskSlScope        *scope,
-                                     GskSlPreprocessor *stream)
+                                     GskSlPreprocessor *preproc)
 {
-  /* XXX: support conditionals */
-  return gsk_sl_expression_parse_logical_or (scope, stream);
+  GskSlExpressionConditional *conditional;
+  GskSlExpression *expr, *left, *right;
+  GskSlType *type, *expr_type, *left_type, *right_type;
+  const GskSlToken *token;
+  gboolean success = TRUE;
+
+  expr = gsk_sl_expression_parse_logical_or (scope, preproc);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_QUESTION))
+    return expr;
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  expr_type = gsk_sl_expression_get_return_type (expr);
+  if (!gsk_sl_type_equal (expr_type, gsk_sl_type_get_scalar (GSK_SL_BOOL)))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                 "Condition in conditional expression returns %s, not bool",
+                                 gsk_sl_type_get_name (expr_type));
+      success = FALSE;
+    }
+  else
+    {
+      GskSlValue *value = gsk_sl_expression_get_constant (expr);
+
+      if (value)
+        {
+          gsk_sl_preprocessor_warn (preproc, CONSTANT,
+                                    "Conditional expression is always %s",
+                                    *(guint32 *) gsk_sl_value_get_data (value) ? "true" : "false");
+          gsk_sl_value_free (value);
+        }
+    }
+
+  left = gsk_sl_expression_parse (scope, preproc);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COLON))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected \":\" while parsing conditional expression");
+      gsk_sl_expression_unref (expr);
+      return left;
+    }
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  right = gsk_sl_expression_parse_assignment (scope, preproc);
+
+  left_type = gsk_sl_expression_get_return_type (left);
+  right_type = gsk_sl_expression_get_return_type (right);
+  if (gsk_sl_type_can_convert (left_type, right_type))
+    type = left_type;
+  else if (gsk_sl_type_can_convert (right_type, left_type))
+    type = right_type;
+  else
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                 "Types %s and %s in conditional expression are not compatible.",
+                                 gsk_sl_type_get_name (left_type), gsk_sl_type_get_name (right_type));
+      success = FALSE;
+    }
+
+  if (!success)
+    {
+      gsk_sl_expression_unref (expr);
+      gsk_sl_expression_unref (right);
+      return left;
+    }
+
+  conditional = gsk_sl_expression_new (GskSlExpressionConditional, &GSK_SL_EXPRESSION_CONDITIONAL);
+  conditional->condition = expr;
+  conditional->type = gsk_sl_type_ref (type);
+  conditional->left = left;
+  conditional->right = right;
+
+  return (GskSlExpression *) conditional;
 }
 
 GskSlExpression *
