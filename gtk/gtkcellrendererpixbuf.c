@@ -242,11 +242,22 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
 {
   GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  cairo_surface_t *surface;
+  GdkPixbuf *pixbuf;
 
   switch (param_id)
     {
     case PROP_PIXBUF:
-      g_value_set_object (value, gtk_image_definition_get_pixbuf (priv->image_def));
+      pixbuf = NULL;
+      surface = gtk_image_definition_get_surface (priv->image_def);
+      if (surface)
+        {
+          pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0,
+                                                cairo_image_surface_get_width (surface),
+                                                cairo_image_surface_get_height (surface));
+          cairo_surface_destroy (surface);
+        }
+      g_value_take_object (value, pixbuf);
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
       g_value_set_object (value, priv->pixbuf_expander_open);
@@ -330,11 +341,17 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 {
   GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  cairo_surface_t *surface;
+  GdkPixbuf *pixbuf;
 
   switch (param_id)
     {
     case PROP_PIXBUF:
-      take_image_definition (cellpixbuf, gtk_image_definition_new_pixbuf (g_value_get_object (value), 1));
+      surface = NULL;
+      pixbuf = g_value_get_object (value);
+      if (pixbuf)
+        surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+      take_image_definition (cellpixbuf, gtk_image_definition_new_surface (surface));
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
       if (priv->pixbuf_expander_open)
@@ -498,6 +515,7 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
   gboolean is_expander;
   gint xpad, ypad;
   GtkIconHelper icon_helper;
+  cairo_surface_t *surface;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, (GdkRectangle *) cell_area,
 				     &pix_rect.x, 
@@ -529,12 +547,16 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
       if (is_expanded && priv->pixbuf_expander_open != NULL)
         {
           gtk_icon_helper_init (&icon_helper, gtk_style_context_get_node (context), widget);
-          _gtk_icon_helper_set_pixbuf (&icon_helper, priv->pixbuf_expander_open);
+          surface = gdk_cairo_surface_create_from_pixbuf (priv->pixbuf_expander_open, 1, NULL);
+          _gtk_icon_helper_set_surface (&icon_helper, surface);
+          cairo_surface_destroy (surface);
         }
       else if (!is_expanded && priv->pixbuf_expander_closed != NULL)
         {
           gtk_icon_helper_init (&icon_helper, gtk_style_context_get_node (context), widget);
-          _gtk_icon_helper_set_pixbuf (&icon_helper, priv->pixbuf_expander_closed);
+          surface = gdk_cairo_surface_create_from_pixbuf (priv->pixbuf_expander_closed, 1, NULL);
+          _gtk_icon_helper_set_surface (&icon_helper, surface);
+          cairo_surface_destroy (surface);
         }
       else
         {
