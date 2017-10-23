@@ -926,11 +926,11 @@ gtk_window_class_init (GtkWindowClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   window_props[PROP_ICON] =
-      g_param_spec_object ("icon",
-                           P_("Icon"),
-                           P_("Icon for this window"),
-			   CAIRO_GOBJECT_TYPE_SURFACE,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+      g_param_spec_boxed ("icon",
+                          P_("Icon"),
+                          P_("Icon for this window"),
+			  CAIRO_GOBJECT_TYPE_SURFACE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:mnemonics-visible:
