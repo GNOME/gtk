@@ -25,9 +25,9 @@ drag_begin (GtkWidget      *widget,
 {
   GtkWidget *image = GTK_WIDGET (data);
 
-  GdkPixbuf *pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (image));
-
-  gtk_drag_set_icon_pixbuf (context, pixbuf, -2, -2);
+  cairo_surface_t *surface = gtk_image_get_surface (GTK_IMAGE (image));
+  cairo_surface_set_device_offset (surface, -2, -2);
+  gtk_drag_set_icon_surface (context, surface);
 }
 
 void  
@@ -82,7 +82,7 @@ main (int argc, char **argv)
   GtkWidget *label, *image;
   GtkIconTheme *theme;
   GdkPixbuf *pixbuf;
-  gchar *icon_name = "gnome-terminal";
+  gchar *icon_name = "help-browser";
   gchar *anim_filename = NULL;
   GIcon *icon;
   GFile *file;
@@ -98,6 +98,8 @@ main (int argc, char **argv)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   grid = gtk_grid_new ();
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
   gtk_container_add (GTK_CONTAINER (window), grid);
 
   label = gtk_label_new ("symbolic size");
@@ -150,7 +152,6 @@ main (int argc, char **argv)
   gtk_image_set_pixel_size (GTK_IMAGE (image), 30);
   gtk_grid_attach (GTK_GRID (grid), image, 2, 5, 1, 1);
 
-  
   if (anim_filename)
     {
       label = gtk_label_new ("GTK_IMAGE_ANIMATION (from file)");
