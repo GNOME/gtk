@@ -234,56 +234,6 @@ ensure_surface_from_surface (GtkIconHelper   *self,
   return cairo_surface_reference (orig_surface);
 }
 
-static gboolean
-get_pixbuf_size (GtkIconHelper   *self,
-                 gint             scale,
-                 GdkPixbuf       *orig_pixbuf,
-                 gint             orig_scale,
-                 gint *width_out,
-                 gint *height_out,
-                 gint *scale_out)
-{
-  gboolean scale_pixmap;
-  gint width, height;
-
-  scale_pixmap = FALSE;
-
-  if (self->force_scale_pixbuf &&
-      (self->pixel_size != -1 ||
-       self->icon_size != GTK_ICON_SIZE_INVALID))
-    {
-      ensure_icon_size (self, &width, &height);
-
-      if (scale != orig_scale ||
-	  width < gdk_pixbuf_get_width (orig_pixbuf) / orig_scale ||
-          height < gdk_pixbuf_get_height (orig_pixbuf) / orig_scale)
-	{
-	  width = MIN (width * scale, gdk_pixbuf_get_width (orig_pixbuf) * scale / orig_scale);
-	  height = MIN (height * scale, gdk_pixbuf_get_height (orig_pixbuf) * scale / orig_scale);
-
-          scale_pixmap = TRUE;
-	}
-      else
-	{
-	  width = gdk_pixbuf_get_width (orig_pixbuf);
-	  height = gdk_pixbuf_get_height (orig_pixbuf);
-	  scale = orig_scale;
-	}
-    }
-  else
-    {
-      width = gdk_pixbuf_get_width (orig_pixbuf);
-      height = gdk_pixbuf_get_height (orig_pixbuf);
-      scale = orig_scale;
-    }
-
-  *width_out = width;
-  *height_out = height;
-  *scale_out = scale;
-
-  return scale_pixmap;
-}
-
 static cairo_surface_t *
 ensure_surface_for_gicon (GtkIconHelper    *self,
                           GtkCssStyle      *style,
