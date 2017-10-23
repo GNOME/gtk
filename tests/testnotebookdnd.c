@@ -96,7 +96,7 @@ on_notebook_drag_begin (GtkWidget      *widget,
                         GdkDragContext *context,
                         gpointer        data)
 {
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
   guint page_num;
 
   page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (widget));
@@ -108,14 +108,15 @@ on_notebook_drag_begin (GtkWidget      *widget,
 
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
       gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &width, NULL);
-      pixbuf = gtk_icon_theme_load_icon (icon_theme,
-                                         (page_num % 2) ? "help-browser" : "process-stop",
-                                         width,
-                                         GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-                                         NULL);
+      surface = gtk_icon_theme_load_surface (icon_theme,
+                                             (page_num % 2) ? "help-browser" : "process-stop",
+                                             width,
+                                             1, NULL,
+                                             GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                             NULL);
 
-      gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
-      g_object_unref (pixbuf);
+      gtk_drag_set_icon_surface (context, surface);
+      cairo_surface_destroy (surface);
     }
 }
 
