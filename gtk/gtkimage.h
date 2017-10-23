@@ -67,6 +67,10 @@ typedef struct _GtkImageClass         GtkImageClass;
  * call gtk_image_get_pixbuf().  For empty images, you can request any
  * storage type (call any of the "get" functions), but they will all
  * return %NULL values.
+ *
+ * Note: GTK_IMAGE_PIXBUF is not not supported as storage by GtkImage. Any
+ * pixbuf set on the GtkImage will be converted to a surface and can only
+ * be read back as a GTK_IMAGE_SURFACE.
  */
 typedef enum
 {
@@ -153,9 +157,6 @@ void gtk_image_set_pixel_size     (GtkImage        *image,
 
 GDK_AVAILABLE_IN_ALL
 GtkImageType gtk_image_get_storage_type (GtkImage   *image);
-
-GDK_AVAILABLE_IN_ALL
-GdkPixbuf* gtk_image_get_pixbuf   (GtkImage         *image);
 
 GDK_AVAILABLE_IN_3_94
 cairo_surface_t *gtk_image_get_surface (GtkImage *image);

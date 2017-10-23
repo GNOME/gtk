@@ -84,8 +84,8 @@ struct _GtkImagePrivate
 
   float baseline_align;
 
-  gchar                *filename;       /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_PIXBUF */
-  gchar                *resource_path;  /* Only used with GTK_IMAGE_PIXBUF */
+  gchar                *filename;       /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_SURFACE */
+  gchar                *resource_path;  /* Only used with GTK_IMAGE_SURFACE */
 };
 
 
@@ -121,7 +121,6 @@ static void gtk_image_get_property         (GObject      *object,
 enum
 {
   PROP_0,
-  PROP_PIXBUF,
   PROP_SURFACE,
   PROP_FILE,
   PROP_ICON_SIZE,
@@ -146,7 +145,7 @@ gtk_image_class_init (GtkImageClass *class)
   GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS (class);
-  
+
   gobject_class->set_property = gtk_image_set_property;
   gobject_class->get_property = gtk_image_get_property;
   gobject_class->finalize = gtk_image_finalize;
@@ -158,13 +157,6 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_updated = gtk_image_style_updated;
-
-  image_props[PROP_PIXBUF] =
-      g_param_spec_object ("pixbuf",
-                           P_("Pixbuf"),
-                           P_("A GdkPixbuf to display"),
-                           GDK_TYPE_PIXBUF,
-                           GTK_PARAM_READWRITE);
 
   image_props[PROP_SURFACE] =
       g_param_spec_boxed ("surface",
@@ -330,9 +322,6 @@ gtk_image_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_PIXBUF:
-      gtk_image_set_from_pixbuf (image, g_value_get_object (value));
-      break;
     case PROP_SURFACE:
       gtk_image_set_from_surface (image, g_value_get_boxed (value));
       break;
@@ -384,9 +373,6 @@ gtk_image_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_PIXBUF:
-      g_value_set_object (value, _gtk_icon_helper_peek_pixbuf (&priv->icon_helper));
-      break;
     case PROP_SURFACE:
       g_value_set_boxed (value, _gtk_icon_helper_peek_surface (&priv->icon_helper));
       break;
@@ -438,7 +424,7 @@ gtk_image_get_property (GObject     *object,
  *
  * If you need to detect failures to load the file, use
  * gdk_pixbuf_new_from_file() to load the file yourself, then create
- * the #GtkImage from the pixbuf. (Or for animations, use
+ * the #GtkImage from the surface. (Or for animations, use
  * gdk_pixbuf_animation_new_from_file()).
  *
  * The storage type (gtk_image_get_storage_type()) of the returned
@@ -504,7 +490,10 @@ gtk_image_new_from_resource (const gchar *resource_path)
  * The #GtkImage does not assume a reference to the
  * pixbuf; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
- * 
+ *
+ * This is a helper for gtk_image_new_from_surface, and you can't
+ * get back the exact pixbuf once this is called, only a surface.
+ *
  * Note that this function just creates an #GtkImage from the pixbuf. The
  * #GtkImage created will not react to state changes. Should you want that, 
  * you should use gtk_image_new_from_icon_name().
@@ -767,17 +756,22 @@ gtk_image_set_from_file   (GtkImage    *image,
    */
 
   if (gdk_pixbuf_animation_is_static_image (anim))
-    gtk_image_set_from_pixbuf (image,
-			       gdk_pixbuf_animation_get_static_image (anim));
+    {
+      cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (gdk_pixbuf_animation_get_static_image (anim),
+                                                                       scale_factor, _gtk_widget_get_window (GTK_WIDGET (image)));
+      gtk_image_set_from_surface (image, surface);
+      cairo_surface_destroy (surface);
+    }
   else
-    gtk_image_set_from_animation (image, anim);
-
-  _gtk_icon_helper_set_pixbuf_scale (&priv->icon_helper, scale_factor);
+    {
+      gtk_image_set_from_animation (image, anim);
+      _gtk_icon_helper_set_pixbuf_scale (&priv->icon_helper, scale_factor);
+    }
 
   g_object_unref (anim);
 
   priv->filename = g_strdup (filename);
-  
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -858,11 +852,17 @@ gtk_image_set_from_resource (GtkImage    *image,
     }
 
   if (gdk_pixbuf_animation_is_static_image (animation))
-    gtk_image_set_from_pixbuf (image, gdk_pixbuf_animation_get_static_image (animation));
+    {
+      cairo_surface_t *surface = gdk_cairo_surface_create_from_pixbuf (gdk_pixbuf_animation_get_static_image (animation),
+                                                                       scale_factor, _gtk_widget_get_window (GTK_WIDGET (image)));
+      gtk_image_set_from_surface (image, surface);
+      cairo_surface_destroy (surface);
+    }
   else
-    gtk_image_set_from_animation (image, animation);
-
-  _gtk_icon_helper_set_pixbuf_scale (&priv->icon_helper, scale_factor);
+    {
+      gtk_image_set_from_animation (image, animation);
+      _gtk_icon_helper_set_pixbuf_scale (&priv->icon_helper, scale_factor);
+    }
 
   priv->resource_path = g_strdup (resource_path);
 
@@ -880,27 +880,29 @@ gtk_image_set_from_resource (GtkImage    *image,
  * @pixbuf: (allow-none): a #GdkPixbuf or %NULL
  *
  * See gtk_image_new_from_pixbuf() for details.
+ *
+ * Note: This is a helper for gtk_image_new_from_surface, and you can't
+ * get back the exact pixbuf once this is called, only a surface.
+ *
  **/
 void
 gtk_image_set_from_pixbuf (GtkImage  *image,
                            GdkPixbuf *pixbuf)
 {
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
+  cairo_surface_t *surface = NULL;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
   g_return_if_fail (pixbuf == NULL ||
                     GDK_IS_PIXBUF (pixbuf));
 
-  g_object_freeze_notify (G_OBJECT (image));
 
-  gtk_image_clear (image);
+  if (pixbuf)
+    surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, gtk_widget_get_window (GTK_WIDGET (image)));
 
-  if (pixbuf != NULL)
-    _gtk_icon_helper_set_pixbuf (&priv->icon_helper, pixbuf);
+  gtk_image_set_from_surface (image, surface);
 
-  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF]);
-
-  g_object_thaw_notify (G_OBJECT (image));
+  if (surface)
+    cairo_surface_destroy (surface);
 }
 
 /**
@@ -1062,29 +1064,6 @@ gtk_image_get_storage_type (GtkImage *image)
   g_return_val_if_fail (GTK_IS_IMAGE (image), GTK_IMAGE_EMPTY);
 
   return _gtk_icon_helper_get_storage_type (&priv->icon_helper);
-}
-
-/**
- * gtk_image_get_pixbuf:
- * @image: a #GtkImage
- *
- * Gets the #GdkPixbuf being displayed by the #GtkImage.
- * The storage type of the image must be %GTK_IMAGE_EMPTY or
- * %GTK_IMAGE_PIXBUF (see gtk_image_get_storage_type()).
- * The caller of this function does not own a reference to the
- * returned pixbuf.
- * 
- * Returns: (nullable) (transfer none): the displayed pixbuf, or %NULL if
- * the image is empty
- **/
-GdkPixbuf*
-gtk_image_get_pixbuf (GtkImage *image)
-{
-  GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-
-  g_return_val_if_fail (GTK_IS_IMAGE (image), NULL);
-
-  return _gtk_icon_helper_peek_pixbuf (&priv->icon_helper);
 }
 
 /**
@@ -1387,9 +1366,6 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
 {
   switch (storage_type)
     {
-    case GTK_IMAGE_PIXBUF:
-      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF]);
-      break;
     case GTK_IMAGE_ANIMATION:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF_ANIMATION]);
       break;
@@ -1401,6 +1377,9 @@ gtk_image_notify_for_storage_type (GtkImage     *image,
       break;
     case GTK_IMAGE_SURFACE:
       g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_SURFACE]);
+      break;
+    case GTK_IMAGE_PIXBUF:
+      g_warning ("pixbuf not supported");
       break;
     case GTK_IMAGE_EMPTY:
     default:

@@ -270,13 +270,13 @@ gtk_image_accessible_get_image_size (AtkImage *image,
   image_type = gtk_image_get_storage_type (gtk_image);
   switch (image_type)
     {
-    case GTK_IMAGE_PIXBUF:
+    case GTK_IMAGE_SURFACE:
       {
-        GdkPixbuf *pixbuf;
+        cairo_surface_t *surface;
 
-        pixbuf = gtk_image_get_pixbuf (gtk_image);
-        *height = gdk_pixbuf_get_height (pixbuf);
-        *width = gdk_pixbuf_get_width (pixbuf);
+        surface = gtk_image_get_surface (gtk_image);
+        *height = cairo_image_surface_get_height (surface);
+        *width = cairo_image_surface_get_width (surface);
         break;
       }
     case GTK_IMAGE_ICON_NAME:
@@ -298,7 +298,7 @@ gtk_image_accessible_get_image_size (AtkImage *image,
         break;
       }
     case GTK_IMAGE_EMPTY:
-    case GTK_IMAGE_SURFACE:
+    case GTK_IMAGE_PIXBUF:
     default:
       {
         *height = -1;

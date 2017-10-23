@@ -723,21 +723,32 @@ clone_image_menu_size (GtkImage *image)
       gtk_image_get_gicon (image, &icon, NULL);
       return gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
     }
-  else if (storage_type == GTK_IMAGE_PIXBUF)
+  else if (storage_type == GTK_IMAGE_SURFACE)
     {
       gint width, height;
-      
+
       if (gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height))
-	{
-	  GdkPixbuf *src_pixbuf, *dest_pixbuf;
-	  GtkWidget *cloned_image;
+        {
+          cairo_surface_t *src_surface, *dest_surface;
+          GtkWidget *cloned_image;
+          gint scale = gtk_widget_get_scale_factor (GTK_WIDGET (image));
+          cairo_t *cr;
 
-	  src_pixbuf = gtk_image_get_pixbuf (image);
-	  dest_pixbuf = gdk_pixbuf_scale_simple (src_pixbuf, width, height,
-						 GDK_INTERP_BILINEAR);
+          src_surface = gtk_image_get_surface (image);
+          dest_surface =
+            gdk_window_create_similar_image_surface (gtk_widget_get_window (GTK_WIDGET(image)),
+                                                     CAIRO_FORMAT_ARGB32,
+                                                     width * scale, height * scale, scale);
+          cr = cairo_create (dest_surface);
+          cairo_set_source_surface (cr, src_surface, 0, 0);
+          cairo_scale (cr,
+                       width / cairo_image_surface_get_width (src_surface),
+                       height / cairo_image_surface_get_height (src_surface));
+          cairo_paint (cr);
+          cairo_destroy (cr);
 
-	  cloned_image = gtk_image_new_from_pixbuf (dest_pixbuf);
-	  g_object_unref (dest_pixbuf);
+          cloned_image = gtk_image_new_from_surface (dest_surface);
+          cairo_surface_destroy (dest_surface);
 
 	  return cloned_image;
 	}

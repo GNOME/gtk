@@ -54,17 +54,8 @@ progressive_updated_callback (GdkPixbufLoader *loader,
 
   image = GTK_WIDGET (data);
 
-  /* We know the pixbuf inside the GtkImage has changed, but the image
-   * itself doesn't know this; so give it a hint by setting the pixbuf
-   * again. Queuing a redraw used to be sufficient, but nowadays GtkImage
-   * uses GtkIconHelper which caches the pixbuf state and will just redraw
-   * from the cache.
-   */
-
-  pixbuf = gtk_image_get_pixbuf (GTK_IMAGE (image));
-  g_object_ref (pixbuf);
+  pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
   gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-  g_object_unref (pixbuf);
 }
 
 static gint

@@ -1486,7 +1486,6 @@ GtkIconViewPrivate
 <TITLE>GtkImage</TITLE>
 GtkImage
 GtkImageType
-gtk_image_get_pixbuf
 gtk_image_get_surface
 gtk_image_get_animation
 gtk_image_get_icon_name
