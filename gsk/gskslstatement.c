@@ -330,6 +330,52 @@ static const GskSlStatementClass GSK_SL_STATEMENT_RETURN = {
   gsk_sl_statement_return_write_spv
 };
 
+/* DISCARD */
+
+typedef struct _GskSlStatementDiscard GskSlStatementDiscard;
+
+struct _GskSlStatementDiscard {
+  GskSlStatement parent;
+};
+
+static void
+gsk_sl_statement_discard_free (GskSlStatement *statement)
+{
+  GskSlStatementDiscard *discard_statement = (GskSlStatementDiscard *) statement;
+
+  g_slice_free (GskSlStatementDiscard, discard_statement);
+}
+
+static void
+gsk_sl_statement_discard_print (const GskSlStatement *statement,
+                               GskSlPrinter         *printer)
+{
+  gsk_sl_printer_append (printer, "discard");
+  gsk_sl_printer_append (printer, ";");
+}
+
+static GskSlJump
+gsk_sl_statement_discard_get_jump (const GskSlStatement *statement)
+{
+  return GSK_SL_JUMP_DISCARD;
+}
+
+static gboolean
+gsk_sl_statement_discard_write_spv (const GskSlStatement *statement,
+                                   GskSpvWriter         *writer)
+{
+  gsk_spv_writer_kill (writer);
+
+  return TRUE;
+}
+
+static const GskSlStatementClass GSK_SL_STATEMENT_DISCARD = {
+  gsk_sl_statement_discard_free,
+  gsk_sl_statement_discard_print,
+  gsk_sl_statement_discard_get_jump,
+  gsk_sl_statement_discard_write_spv
+};
+
 /* IF */
  
 typedef struct _GskSlStatementIf GskSlStatementIf;
@@ -1061,6 +1107,22 @@ its_a_type:
       }
       break;
 
+    case GSK_SL_TOKEN_DISCARD:
+      if (!parse_everything)
+        goto only_expression_and_declaration;
+
+      if (gsk_sl_preprocessor_is_stage (preproc, GSK_SL_SHADER_FRAGMENT))
+        {
+          statement = (GskSlStatement *) gsk_sl_statement_new (GskSlStatementDiscard, &GSK_SL_STATEMENT_DISCARD);
+        }
+      else
+        {
+          gsk_sl_preprocessor_error (preproc, SYNTAX, "\"discard\" only allowed in fragment shader.");
+          statement = gsk_sl_statement_new_error ();
+        }
+      gsk_sl_preprocessor_consume (preproc, statement);
+      break;
+
     case GSK_SL_TOKEN_RETURN:
       {
         GskSlStatementReturn *return_statement;
@@ -1086,7 +1148,7 @@ its_a_type:
           {
             if (!gsk_sl_type_is_void (return_type))
               {
-                gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,"Functions expectes a return value of type %s", gsk_sl_type_get_name (return_type));
+                gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Functions expectes a return value of type %s", gsk_sl_type_get_name (return_type));
               }
           }
         else
