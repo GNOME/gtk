@@ -1517,7 +1517,8 @@ gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
   gtk_css_style_snapshot_icon_texture (gtk_style_context_lookup_style (context),
                                        snapshot,
                                        texture,
-                                       1);
+                                       1,
+                                       NULL, NULL);
   gtk_snapshot_offset (snapshot, -x, -y);
   g_object_unref (texture);
 }

@@ -802,7 +802,8 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
   gtk_css_style_snapshot_icon_texture (style,
                                        snapshot,
                                        texture,
-                                       gtk_widget_get_scale_factor (self->owner));
+                                       gtk_widget_get_scale_factor (self->owner),
+                                       NULL, NULL);
 }
 
 gboolean

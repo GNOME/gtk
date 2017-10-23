@@ -271,10 +271,12 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
 }
 
 void
-gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
-                                     GtkSnapshot *snapshot,
-                                     GskTexture  *texture,
-                                     double       texture_scale)
+gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
+                                     GtkSnapshot       *snapshot,
+                                     GskTexture        *texture,
+                                     double             texture_scale,
+                                     graphene_matrix_t *color_matrix,
+                                     graphene_vec4_t *  color_offset)
 {
   const GtkCssValue *shadows_value, *transform_value, *filter_value;
   graphene_matrix_t transform_matrix;
@@ -307,6 +309,9 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
       gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
     }
 
+  if (color_matrix)
+    gtk_snapshot_push_color_matrix (snapshot, color_matrix, color_offset, "Recoloring Icon");
+
   if (graphene_matrix_is_identity (&transform_matrix))
     {
       graphene_rect_init (&bounds, 0, 0, width, height);
@@ -330,6 +335,9 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
 
       gtk_snapshot_pop (snapshot);
     }
+
+  if (color_matrix)
+    gtk_snapshot_pop (snapshot);
 
   if (n_shadows > 0)
     gtk_snapshot_pop (snapshot);
