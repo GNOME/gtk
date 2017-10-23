@@ -225,6 +225,7 @@ struct _GtkIconInfo
    */
   GdkPixbuf *pixbuf;
   GdkPixbuf *proxy_pixbuf;
+  GskTexture *texture;
   GError *load_error;
   gdouble unscaled_scale;
   gdouble scale;
@@ -4002,6 +4003,40 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
                               g_object_ref (icon_info));
 
   return icon_info->proxy_pixbuf;
+}
+
+/**
+ * gtk_icon_info_load_texture:
+ * @icon_info: a #GtkIconInfo
+ *
+ * Returns a texture object that can be used to render the icon
+ * with GSK.
+ *
+ * Returns: (transfer full): the icon texture; this may be a newly
+ *     created texture or a new reference to an exiting texture, so you must
+ *     not modify the icon. Use g_object_unref() to release your
+ *     reference.
+ *
+ * Since: 3.94
+ */
+GskTexture *
+gtk_icon_info_load_texture (GtkIconInfo *icon_info)
+{
+  if (!icon_info->texture)
+    {
+      GdkPixbuf *pixbuf;
+
+      pixbuf = gtk_icon_info_load_icon (icon_info, NULL);
+      icon_info->texture = gsk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+
+      g_object_add_weak_pointer (icon_info->texture, &icon_info->texture);
+    }
+
+  if (icon_info->in_cache != NULL)
+    ensure_in_lru_cache (icon_info->in_cache, icon_info);
+
+  return g_object_ref (icon_info->texture);
 }
 
 /**

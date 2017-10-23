@@ -25,6 +25,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
 #include <gtk/gtkstylecontext.h>
+#include <gsk/gsk.h>
 
 G_BEGIN_DECLS
 
@@ -293,6 +294,9 @@ GDK_AVAILABLE_IN_3_10
 cairo_surface_t *     gtk_icon_info_load_surface       (GtkIconInfo   *icon_info,
 							GdkWindow     *for_window,
 							GError       **error);
+GDK_AVAILABLE_IN_3_94
+GskTexture *          gtk_icon_info_load_texture       (GtkIconInfo   *icon_info);
+
 GDK_AVAILABLE_IN_3_8
 void                  gtk_icon_info_load_icon_async   (GtkIconInfo          *icon_info,
 						       GCancellable         *cancellable,
