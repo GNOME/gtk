@@ -1750,6 +1750,19 @@ gtk_selection_data_set_surface (GtkSelectionData *selection_data,
   return retval;
 }
 
+cairo_surface_t *
+gtk_selection_data_get_surface (GtkSelectionData *selection_data)
+{
+  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
+
+  pixbuf = gtk_selection_data_get_pixbuf (selection_data);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+  g_object_unref (pixbuf);
+
+  return surface;
+}
+
 /**
  * gtk_selection_data_get_pixbuf:
  * @selection_data: a #GtkSelectionData
