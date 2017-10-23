@@ -362,6 +362,7 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget *widget,
                                  GdkPixbuf *pixbuf)
 {
   GtkDragSourceSite *site;
+  cairo_surface_t *surface = NULL;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
@@ -370,7 +371,9 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget *widget,
   g_return_if_fail (site != NULL); 
 
   g_clear_pointer (&site->image_def, gtk_image_definition_unref);
-  site->image_def = gtk_image_definition_new_pixbuf (pixbuf, 1);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, gtk_widget_get_window (widget));
+  site->image_def = gtk_image_definition_new_surface (surface);
+  cairo_surface_destroy (surface);
 }
 
 /**
