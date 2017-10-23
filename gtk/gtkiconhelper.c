@@ -458,12 +458,76 @@ gtk_icon_helper_ensure_surface (GtkIconHelper *self)
   self->rendered_surface = gtk_icon_helper_load_surface (self, scale);
 }
 
+static GskTexture *
+find_cached_texture (GtkIconHelper *self)
+{
+  GtkIconTheme *icon_theme;
+  int width, height;
+  GtkIconLookupFlags flags;
+  GtkCssStyle *style;
+  GtkTextDirection dir;
+  int scale;
+  GIcon *gicon;
+  GtkIconInfo *info;
+  GskTexture *texture;
+
+  style = gtk_css_node_get_style (self->node);
+  dir = gtk_widget_get_direction (self->owner);
+  scale = gtk_widget_get_scale_factor (self->owner);
+
+  icon_theme = gtk_css_icon_theme_value_get_icon_theme (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_THEME));
+  flags = get_icon_lookup_flags (self, style, dir);
+  ensure_icon_size (self, &width, &height);
+
+  switch (gtk_image_definition_get_storage_type (self->def))
+    {
+    case GTK_IMAGE_GICON:
+      gicon = g_object_ref (gtk_image_definition_get_gicon (self->def));
+      break;
+    case GTK_IMAGE_ICON_NAME:
+      if (self->use_fallback)
+        gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
+      else
+        gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
+      break;
+    case GTK_IMAGE_EMPTY:
+    case GTK_IMAGE_PIXBUF:
+    case GTK_IMAGE_ANIMATION:
+    case GTK_IMAGE_SURFACE:
+    default:
+      return NULL;
+    }
+
+  info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme, gicon, MIN (width, height), scale, flags);
+  g_object_unref (gicon);
+
+  if (!info)
+    return NULL;
+
+  if (gtk_icon_info_is_symbolic (info))
+    {
+      // FIXME
+      g_object_unref (info);
+      return NULL;
+    }
+
+  texture = gtk_icon_info_load_texture (info);
+
+  g_object_unref (info);
+
+  return texture;
+}
+
 static void
 gtk_icon_helper_ensure_texture (GtkIconHelper *self)
 {
   cairo_surface_t *map;
   int width, height, scale;
 
+  if (self->texture)
+    return;
+
+  self->texture = find_cached_texture (self);
   if (self->texture)
     return;
 
