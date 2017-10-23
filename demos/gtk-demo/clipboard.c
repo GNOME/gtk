@@ -64,8 +64,8 @@ paste_button_clicked (GtkWidget *button,
                               paste_received, entry);
 }
 
-static GdkPixbuf *
-get_image_pixbuf (GtkImage *image)
+static cairo_surface_t *
+get_image_surface (GtkImage *image)
 {
   const gchar *icon_name;
   GtkIconSize size;
@@ -74,17 +74,13 @@ get_image_pixbuf (GtkImage *image)
 
   switch (gtk_image_get_storage_type (image))
     {
-    case GTK_IMAGE_PIXBUF:
-      return g_object_ref (gtk_image_get_pixbuf (image));
+    case GTK_IMAGE_SURFACE:
+      return cairo_surface_reference (gtk_image_get_surface (image));
     case GTK_IMAGE_ICON_NAME:
       gtk_image_get_icon_name (image, &icon_name, &size);
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (image)));
       gtk_icon_size_lookup (size, &width, NULL);
-      return gtk_icon_theme_load_icon (icon_theme,
-                                       icon_name,
-                                       width,
-                                       GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-                                       NULL);
+      return gtk_icon_theme_load_surface (icon_theme, icon_name, width, 1, NULL, GTK_ICON_LOOKUP_GENERIC_FALLBACK, NULL);
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
@@ -97,11 +93,14 @@ drag_begin (GtkWidget      *widget,
             GdkDragContext *context,
             gpointer        data)
 {
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
 
-  pixbuf = get_image_pixbuf (GTK_IMAGE (data));
-  gtk_drag_set_icon_pixbuf (context, pixbuf, -2, -2);
-  g_object_unref (pixbuf);
+  surface = get_image_surface (GTK_IMAGE (widget));
+  if (surface)
+    {
+      cairo_surface_set_device_offset (surface, -2, -2);
+      gtk_drag_set_icon_surface (context, surface);
+    }
 }
 
 void
@@ -112,11 +111,11 @@ drag_data_get (GtkWidget        *widget,
                guint             time,
                gpointer          data)
 {
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
 
-  pixbuf = get_image_pixbuf (GTK_IMAGE (data));
-  gtk_selection_data_set_pixbuf (selection_data, pixbuf);
-  g_object_unref (pixbuf);
+  surface = get_image_surface (GTK_IMAGE (data));
+  if (surface)
+    gtk_selection_data_set_surface (selection_data, surface);
 }
 
 static void
@@ -129,13 +128,13 @@ drag_data_received (GtkWidget        *widget,
                     guint32           time,
                     gpointer          data)
 {
-  GdkPixbuf *pixbuf;
-
   if (gtk_selection_data_get_length (selection_data) > 0)
     {
-      pixbuf = gtk_selection_data_get_pixbuf (selection_data);
-      gtk_image_set_from_pixbuf (GTK_IMAGE (data), pixbuf);
-      g_object_unref (pixbuf);
+      cairo_surface_t *surface;
+
+      surface = gtk_selection_data_get_surface (selection_data);
+      gtk_image_set_from_surface (GTK_IMAGE (data), surface);
+      cairo_surface_destroy (surface);
     }
 }
 
@@ -144,13 +143,16 @@ copy_image (GtkMenuItem *item,
             gpointer     data)
 {
   GtkClipboard *clipboard;
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
 
   clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-  pixbuf = get_image_pixbuf (GTK_IMAGE (data));
+  surface = get_image_surface (GTK_IMAGE (data));
 
-  gtk_clipboard_set_image (clipboard, pixbuf);
-  g_object_unref (pixbuf);
+  if (surface)
+    {
+      gtk_clipboard_set_surface (clipboard, surface);
+      cairo_surface_destroy (surface);
+    }
 }
 
 static void
@@ -158,15 +160,15 @@ paste_image (GtkMenuItem *item,
              gpointer     data)
 {
   GtkClipboard *clipboard;
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
 
   clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-  pixbuf = gtk_clipboard_wait_for_image (clipboard);
+  surface = gtk_clipboard_wait_for_surface (clipboard);
 
-  if (pixbuf)
+  if (surface)
     {
-      gtk_image_set_from_pixbuf (GTK_IMAGE (data), pixbuf);
-      g_object_unref (pixbuf);
+      gtk_image_set_from_surface (GTK_IMAGE (data), surface);
+      cairo_surface_destroy (surface);
     }
 }
 
