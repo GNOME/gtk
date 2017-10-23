@@ -236,6 +236,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wlogical-op',
     '-Wswitch-default',
     '-Wswitch-enum',
+    '-Wignored-qualifiers',
     '-Werror=redundant-decls',
     '-Werror=implicit',
     '-Werror=nonnull',
