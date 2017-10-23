@@ -30,6 +30,8 @@
 
 #include <string.h>
 
+#include <cairo-gobject.h>
+
 #include "gtkbindings.h"
 #include "gtkcelleditable.h"
 #include "gtkclipboard.h"
@@ -104,7 +106,7 @@
  * icons can be activatable by clicking, can be set up as drag source and
  * can have tooltips. To add an icon, use gtk_entry_set_icon_from_gicon() or
  * one of the various other functions that set an icon from a stock id, an
- * icon name or a pixbuf. To trigger an action when the user clicks an icon,
+ * icon name, or a surface. To trigger an action when the user clicks an icon,
  * connect to the #GtkEntry::icon-press signal. To allow DND operations
  * from an icon, use gtk_entry_set_icon_drag_source(). To set a tooltip on
  * an icon, use gtk_entry_set_icon_tooltip_text() or the corresponding function
@@ -337,8 +339,8 @@ enum {
   PROP_CAPS_LOCK_WARNING,
   PROP_PROGRESS_FRACTION,
   PROP_PROGRESS_PULSE_STEP,
-  PROP_PIXBUF_PRIMARY,
-  PROP_PIXBUF_SECONDARY,
+  PROP_SURFACE_PRIMARY,
+  PROP_SURFACE_SECONDARY,
   PROP_ICON_NAME_PRIMARY,
   PROP_ICON_NAME_SECONDARY,
   PROP_GICON_PRIMARY,
@@ -1005,32 +1007,32 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
    /**
-   * GtkEntry:primary-icon-pixbuf:
+   * GtkEntry:primary-icon-surface:
    *
-   * A pixbuf to use as the primary icon for the entry.
+   * A surface to use as the primary icon for the entry.
    *
    * Since: 2.16
    */
-  entry_props[PROP_PIXBUF_PRIMARY] =
-      g_param_spec_object ("primary-icon-pixbuf",
-                           P_("Primary pixbuf"),
-                           P_("Primary pixbuf for the entry"),
-                           GDK_TYPE_PIXBUF,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  entry_props[PROP_SURFACE_PRIMARY] =
+      g_param_spec_boxed ("primary-icon-surface",
+                          P_("Primary surface"),
+                          P_("Primary surface for the entry"),
+                          CAIRO_GOBJECT_TYPE_SURFACE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:secondary-icon-pixbuf:
+   * GtkEntry:secondary-icon-surface:
    *
-   * An pixbuf to use as the secondary icon for the entry.
+   * An surface to use as the secondary icon for the entry.
    *
    * Since: 2.16
    */
-  entry_props[PROP_PIXBUF_SECONDARY] =
-      g_param_spec_object ("secondary-icon-pixbuf",
-                           P_("Secondary pixbuf"),
-                           P_("Secondary pixbuf for the entry"),
-                           GDK_TYPE_PIXBUF,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  entry_props[PROP_SURFACE_SECONDARY] =
+      g_param_spec_boxed ("secondary-icon-surface",
+                          P_("Secondary surface"),
+                          P_("Secondary surface for the entry"),
+                          CAIRO_GOBJECT_TYPE_SURFACE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkEntry:primary-icon-name:
@@ -2027,16 +2029,16 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_placeholder_text (entry, g_value_get_string (value));
       break;
 
-    case PROP_PIXBUF_PRIMARY:
-      gtk_entry_set_icon_from_pixbuf (entry,
-                                      GTK_ENTRY_ICON_PRIMARY,
-                                      g_value_get_object (value));
+    case PROP_SURFACE_PRIMARY:
+      gtk_entry_set_icon_from_surface (entry,
+                                       GTK_ENTRY_ICON_PRIMARY,
+                                       g_value_get_boxed (value));
       break;
 
-    case PROP_PIXBUF_SECONDARY:
-      gtk_entry_set_icon_from_pixbuf (entry,
-                                      GTK_ENTRY_ICON_SECONDARY,
-                                      g_value_get_object (value));
+    case PROP_SURFACE_SECONDARY:
+      gtk_entry_set_icon_from_surface (entry,
+                                       GTK_ENTRY_ICON_SECONDARY,
+                                       g_value_get_boxed (value));
       break;
 
     case PROP_ICON_NAME_PRIMARY:
@@ -2270,15 +2272,15 @@ gtk_entry_get_property (GObject         *object,
       g_value_set_string (value, gtk_entry_get_placeholder_text (entry));
       break;
 
-    case PROP_PIXBUF_PRIMARY:
-      g_value_set_object (value,
-                          gtk_entry_get_icon_pixbuf (entry,
+    case PROP_SURFACE_PRIMARY:
+      g_value_set_boxed (value,
+                         gtk_entry_get_icon_surface (entry,
                                                      GTK_ENTRY_ICON_PRIMARY));
       break;
 
-    case PROP_PIXBUF_SECONDARY:
-      g_value_set_object (value,
-                          gtk_entry_get_icon_pixbuf (entry,
+    case PROP_SURFACE_SECONDARY:
+      g_value_set_boxed (value,
+                         gtk_entry_get_icon_surface (entry,
                                                      GTK_ENTRY_ICON_SECONDARY));
       break;
 
@@ -2639,9 +2641,9 @@ gtk_entry_dispose (GObject *object)
   GtkEntryPrivate *priv = entry->priv;
   GdkKeymap *keymap;
 
-  gtk_entry_set_icon_from_pixbuf (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
+  gtk_entry_set_icon_from_surface (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
-  gtk_entry_set_icon_from_pixbuf (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+  gtk_entry_set_icon_from_surface (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
   gtk_entry_set_completion (entry, NULL);
 
@@ -6618,11 +6620,11 @@ gtk_entry_clear_icon (GtkEntry             *entry,
 
   switch (storage_type)
     {
-    case GTK_IMAGE_PIXBUF:
+    case GTK_IMAGE_SURFACE:
       g_object_notify_by_pspec (G_OBJECT (entry),
                                 entry_props[icon_pos == GTK_ENTRY_ICON_PRIMARY
-                                            ? PROP_PIXBUF_PRIMARY
-                                            : PROP_PIXBUF_SECONDARY]);
+                                            ? PROP_SURFACE_PRIMARY
+                                            : PROP_SURFACE_SECONDARY]);
       break;
 
     case GTK_IMAGE_ICON_NAME:
@@ -6641,7 +6643,7 @@ gtk_entry_clear_icon (GtkEntry             *entry,
 
     case GTK_IMAGE_EMPTY:
     case GTK_IMAGE_ANIMATION:
-    case GTK_IMAGE_SURFACE:
+    case GTK_IMAGE_PIXBUF:
     default:
       g_assert_not_reached ();
       break;
@@ -7508,21 +7510,21 @@ gtk_entry_get_alignment (GtkEntry *entry)
 }
 
 /**
- * gtk_entry_set_icon_from_pixbuf:
+ * gtk_entry_set_icon_from_surface:
  * @entry: a #GtkEntry
  * @icon_pos: Icon position
- * @pixbuf: (allow-none): A #GdkPixbuf, or %NULL
+ * @surface: (allow-none): An image #cairo_surface, or %NULL
  *
- * Sets the icon shown in the specified position using a pixbuf.
+ * Sets the icon shown in the specified position using a image surface.
  *
- * If @pixbuf is %NULL, no icon will be shown in the specified position.
+ * If @surface is %NULL, no icon will be shown in the specified position.
  *
- * Since: 2.16
+ * Since: 3.94
  */
 void
-gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
-                                GtkEntryIconPosition  icon_pos,
-                                GdkPixbuf            *pixbuf)
+gtk_entry_set_icon_from_surface (GtkEntry             *entry,
+                                 GtkEntryIconPosition  icon_pos,
+                                 cairo_surface_t      *surface)
 {
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
@@ -7537,25 +7539,25 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
 
   g_object_freeze_notify (G_OBJECT (entry));
 
-  if (pixbuf)
-    g_object_ref (pixbuf);
+  if (surface)
+    cairo_surface_reference (surface);
 
-  if (pixbuf)
+  if (surface)
     {
-      gtk_image_set_from_pixbuf (GTK_IMAGE (icon_info->widget), pixbuf);
+      gtk_image_set_from_surface (GTK_IMAGE (icon_info->widget), surface);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_PIXBUF_PRIMARY]);
+          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SURFACE_PRIMARY]);
           g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STORAGE_TYPE_PRIMARY]);
         }
       else
         {
-          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_PIXBUF_SECONDARY]);
+          g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SURFACE_SECONDARY]);
           g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_STORAGE_TYPE_SECONDARY]);
         }
 
-      g_object_unref (pixbuf);
+      cairo_surface_destroy (surface);
     }
   else
     gtk_entry_clear_icon (entry, icon_pos);
@@ -7752,7 +7754,7 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
 }
 
 /**
- * gtk_entry_get_icon_pixbuf:
+ * gtk_entry_get_icon_surface:
  * @entry: A #GtkEntry
  * @icon_pos: Icon position
  *
@@ -7760,16 +7762,16 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
  *
  * Unlike the other methods of setting and getting icon data, this
  * method will work regardless of whether the icon was set using a
- * #GdkPixbuf, a #GIcon or an icon name.
+ * #cairo_surface_t, a #GIcon or an icon name.
  *
- * Returns: (transfer none) (nullable): A #GdkPixbuf, or %NULL if no icon is
+ * Returns: (transfer none) (nullable): A #cairo_surface_t, or %NULL if no icon is
  *     set for this position.
  *
- * Since: 2.16
+ * Since: 3.94
  */
-GdkPixbuf *
-gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
-                           GtkEntryIconPosition  icon_pos)
+cairo_surface_t *
+gtk_entry_get_icon_surface (GtkEntry             *entry,
+                            GtkEntryIconPosition  icon_pos)
 {
   GtkEntryPrivate *priv;
   EntryIconInfo *icon_info;
@@ -7784,7 +7786,7 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
   if (!icon_info)
     return NULL;
 
-  return gtk_image_get_pixbuf (GTK_IMAGE (icon_info->widget));
+  return gtk_image_get_surface (GTK_IMAGE (icon_info->widget));
 }
 
 /**
@@ -7794,7 +7796,7 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
  *
  * Retrieves the #GIcon used for the icon, or %NULL if there is
  * no icon or if the icon was set by some other method (e.g., by
- * stock, pixbuf, or icon name).
+ * stock, surface, or icon name).
  *
  * Returns: (transfer none) (nullable): A #GIcon, or %NULL if no icon is set
  *     or if the icon is not a #GIcon
@@ -7831,7 +7833,7 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
  *
  * Retrieves the icon name used for the icon, or %NULL if there is
  * no icon or if the icon was set by some other method (e.g., by
- * pixbuf, stock or gicon).
+ * surface, stock or gicon).
  *
  * Returns: (nullable): An icon name, or %NULL if no icon is set or if the icon
  *          wasn’t set from an icon name
