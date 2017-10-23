@@ -117,7 +117,7 @@ const graphene_point_t * gsk_linear_gradient_node_peek_start        (GskRenderNo
 GDK_AVAILABLE_IN_3_94
 const graphene_point_t * gsk_linear_gradient_node_peek_end          (GskRenderNode            *node);
 GDK_AVAILABLE_IN_3_94
-const gsize              gsk_linear_gradient_node_get_n_color_stops (GskRenderNode            *node);
+gsize                    gsk_linear_gradient_node_get_n_color_stops (GskRenderNode            *node);
 GDK_AVAILABLE_IN_3_94
 const GskColorStop *     gsk_linear_gradient_node_peek_color_stops  (GskRenderNode            *node);
 

@@ -412,7 +412,7 @@ gsk_linear_gradient_node_peek_end (GskRenderNode *node)
   return &self->end;
 }
 
-const gsize
+gsize
 gsk_linear_gradient_node_get_n_color_stops (GskRenderNode *node)
 {
   GskLinearGradientNode *self = (GskLinearGradientNode *) node;
