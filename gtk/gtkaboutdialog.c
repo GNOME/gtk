@@ -989,9 +989,9 @@ gtk_about_dialog_get_property (GObject    *object,
       break;
     case PROP_LOGO:
       if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_SURFACE)
-        g_value_set_object (value, gtk_image_get_surface (GTK_IMAGE (priv->logo_image)));
+        g_value_set_boxed (value, gtk_image_get_surface (GTK_IMAGE (priv->logo_image)));
       else
-        g_value_set_object (value, NULL);
+        g_value_set_boxed (value, NULL);
       break;
     case PROP_LOGO_ICON_NAME:
       if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_ICON_NAME)
