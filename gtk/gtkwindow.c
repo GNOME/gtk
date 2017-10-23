@@ -4588,7 +4588,7 @@ icon_from_list (GtkWindow *window,
       surface =
 	gdk_window_create_similar_image_surface (_gtk_widget_get_window (GTK_WIDGET(window)),
 						 CAIRO_FORMAT_ARGB32,
-						 size, size, scale);
+						 size * scale, size * scale, scale);
       cr = cairo_create (surface);
       cairo_set_source_surface (cr, best, 0, 0);
       cairo_scale (cr,
@@ -4710,9 +4710,9 @@ gtk_window_set_icon_list (GtkWindow  *window,
     return;
 
   g_list_foreach (list,
-                  (GFunc) g_object_ref, NULL);
+                  (GFunc) cairo_surface_reference, NULL);
 
-  g_list_free_full (info->icon_list, g_object_unref);
+  g_list_free_full (info->icon_list, (GDestroyNotify)cairo_surface_destroy);
 
   info->icon_list = g_list_copy (list);
 

@@ -5721,6 +5721,7 @@ create_wmhints (GtkWidget *widget)
   GtkWidget *box2;
   GdkWindow *gdk_window;
   GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
   GList *list;
 
   if (!window)
@@ -5741,11 +5742,14 @@ create_wmhints (GtkWidget *widget)
       gdk_window = gtk_widget_get_window (window);
 
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
-      list = g_list_prepend (NULL, pixbuf);
+      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
 
-      gdk_window_set_icon_list (gdk_window, list);
+      list = g_list_prepend (NULL, surface);
+
+      gtk_window_set_icon_list (GTK_WINDOW (window), list);
 
       g_list_free (list);
+      cairo_surface_destroy (surface);
       g_object_unref (pixbuf);
 
       gdk_window_set_icon_name (gdk_window, "WMHints Test Icon");

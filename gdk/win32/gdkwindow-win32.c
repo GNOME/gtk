@@ -2315,9 +2315,10 @@ gdk_win32_window_set_focus_on_map (GdkWindow *window,
 
 static void
 gdk_win32_window_set_icon_list (GdkWindow *window,
-			  GList     *pixbufs)
+                                GList     *surfaces)
 {
-  GdkPixbuf *pixbuf, *big_pixbuf, *small_pixbuf;
+  cairo_surface_t *surface, *big_surface, *small_surface;
+  GdkPixbuf *big_pixbuf, *small_pixbuf;
   gint big_diff, small_diff;
   gint big_w, big_h, small_w, small_h;
   gint w, h;
@@ -2339,40 +2340,48 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
   small_h = GetSystemMetrics (SM_CYSMICON);
 
   /* find closest sized icons in the list */
-  big_pixbuf = NULL;
-  small_pixbuf = NULL;
+  big_surface = NULL;
+  small_surface = NULL;
   big_diff = 0;
   small_diff = 0;
-  while (pixbufs)
+  while (surfaces)
     {
-      pixbuf = (GdkPixbuf*) pixbufs->data;
-      w = gdk_pixbuf_get_width (pixbuf);
-      h = gdk_pixbuf_get_height (pixbuf);
+      surface = (GdkPixbuf*) surfaces->data;
+      w = cairo_image_surface_get_width (surface);
+      h = cairo_image_surface_get_height (surface);
 
       dw = ABS (w - big_w);
       dh = ABS (h - big_h);
       diff = dw*dw + dh*dh;
-      if (big_pixbuf == NULL || diff < big_diff)
-	{
-	  big_pixbuf = pixbuf;
-	  big_diff = diff;
-	}
+      if (big_surface == NULL || diff < big_diff)
+        {
+          big_surface = surface;
+          big_diff = diff;
+        }
 
       dw = ABS (w - small_w);
       dh = ABS (h - small_h);
       diff = dw*dw + dh*dh;
-      if (small_pixbuf == NULL || diff < small_diff)
-	{
-	  small_pixbuf = pixbuf;
-	  small_diff = diff;
-	}
+      if (small_surface == NULL || diff < small_diff)
+        {
+          small_surface = surface;
+          small_diff = diff;
+        }
 
-      pixbufs = pixbufs->next;
+      surfaces = surfaces->next;
     }
 
   /* Create the icons */
+  big_pixbuf = gdk_pixbuf_get_from_surface (big_surface, 0, 0,
+                                            cairo_image_surface_get_width (big_surface)
+                                            cairo_image_surface_get_height (big_surface));
   big_hicon = _gdk_win32_pixbuf_to_hicon (big_pixbuf);
+  g_object_unref (big_pixbuf);
+  small_pixbuf = gdk_pixbuf_get_from_surface (small_surface, 0, 0,
+                                              cairo_image_surface_get_width (small_surface)
+                                              cairo_image_surface_get_height (small_surface));
   small_hicon = _gdk_win32_pixbuf_to_hicon (small_pixbuf);
+  g_object_unref (small_pixbuf);
 
   /* Set the icons */
   SendMessageW (GDK_WINDOW_HWND (window), WM_SETICON, ICON_BIG,

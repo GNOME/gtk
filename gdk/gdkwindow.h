@@ -728,7 +728,7 @@ GdkEventMask  gdk_window_get_source_events (GdkWindow      *window,
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_set_icon_list   (GdkWindow       *window,
-					  GList           *pixbufs);
+					  GList           *surfaces);
 GDK_AVAILABLE_IN_ALL
 void	      gdk_window_set_icon_name	 (GdkWindow	  *window, 
 					  const gchar	  *name);

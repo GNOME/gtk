@@ -3145,10 +3145,10 @@ gdk_window_update_icon (GdkWindow *window,
                         GList     *icon_list)
 {
   GdkToplevelX11 *toplevel;
-  GdkPixbuf *best_icon;
+  cairo_surface_t *best_icon;
   GList *tmp_list;
   int best_size;
-  
+
   toplevel = _gdk_x11_window_get_toplevel (window);
 
   if (toplevel->icon_pixmap != NULL)
@@ -3156,31 +3156,31 @@ gdk_window_update_icon (GdkWindow *window,
       cairo_surface_destroy (toplevel->icon_pixmap);
       toplevel->icon_pixmap = NULL;
     }
-  
+
   if (toplevel->icon_mask != NULL)
     {
       cairo_surface_destroy (toplevel->icon_mask);
       toplevel->icon_mask = NULL;
     }
-  
+
 #define IDEAL_SIZE 48
-  
+
   best_size = G_MAXINT;
   best_icon = NULL;
   for (tmp_list = icon_list; tmp_list; tmp_list = tmp_list->next)
     {
-      GdkPixbuf *pixbuf = tmp_list->data;
+      cairo_surface_t *surface = tmp_list->data;
       int this;
-  
+
       /* average width and height - if someone passes in a rectangular
        * icon they deserve what they get.
        */
-      this = gdk_pixbuf_get_width (pixbuf) + gdk_pixbuf_get_height (pixbuf);
+      this = cairo_image_surface_get_width (surface) + cairo_image_surface_get_height (surface);
       this /= 2;
-  
+
       if (best_icon == NULL)
         {
-          best_icon = pixbuf;
+          best_icon = surface;
           best_size = this;
         }
       else
@@ -3192,7 +3192,7 @@ gdk_window_update_icon (GdkWindow *window,
               (ABS (best_size - IDEAL_SIZE) <
                ABS (this - IDEAL_SIZE)))
             {
-              best_icon = pixbuf;
+              best_icon = surface;
               best_size = this;
             }
         }
@@ -3200,8 +3200,8 @@ gdk_window_update_icon (GdkWindow *window,
 
   if (best_icon)
     {
-      int width = gdk_pixbuf_get_width (best_icon);
-      int height = gdk_pixbuf_get_height (best_icon);
+      int width = cairo_image_surface_get_width (best_icon);
+      int height = cairo_image_surface_get_height (best_icon);
       cairo_t *cr;
 
       toplevel->icon_pixmap = gdk_x11_window_create_pixmap_surface (window,
@@ -3210,8 +3210,8 @@ gdk_window_update_icon (GdkWindow *window,
 
       cr = cairo_create (toplevel->icon_pixmap);
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      gdk_cairo_set_source_pixbuf (cr, best_icon, 0, 0);
-      if (gdk_pixbuf_get_has_alpha (best_icon))
+      cairo_set_source_surface (cr, best_icon, 0, 0);
+      if (cairo_surface_get_content (best_icon) == CAIRO_CONTENT_COLOR_ALPHA)
         {
           /* Saturate the image, so it has bilevel alpha */
           cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
@@ -3223,14 +3223,14 @@ gdk_window_update_icon (GdkWindow *window,
       cairo_paint (cr);
       cairo_destroy (cr);
 
-      if (gdk_pixbuf_get_has_alpha (best_icon))
+      if (cairo_surface_get_content (best_icon) == CAIRO_CONTENT_COLOR_ALPHA)
         {
           toplevel->icon_mask = _gdk_x11_window_create_bitmap_surface (window,
                                                                        width,
                                                                        height);
 
           cr = cairo_create (toplevel->icon_mask);
-          gdk_cairo_set_source_pixbuf (cr, best_icon, 0, 0);
+          cairo_set_source_surface (cr, best_icon, 0, 0);
           cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
           cairo_paint (cr);
           cairo_destroy (cr);
@@ -3242,84 +3242,91 @@ gdk_window_update_icon (GdkWindow *window,
 
 static void
 gdk_x11_window_set_icon_list (GdkWindow *window,
-			      GList     *pixbufs)
+			      GList     *surfaces)
 {
   gulong *data;
   guchar *pixels;
   gulong *p;
   gint size;
   GList *l;
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
   gint width, height, stride;
   gint x, y;
-  gint n_channels;
   GdkDisplay *display;
   gint n;
-  
+  cairo_format_t format;
+
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
   display = gdk_window_get_display (window);
-  
-  l = pixbufs;
+
   size = 0;
   n = 0;
-  while (l)
+  for (l = surfaces; l != NULL; l = l->next)
     {
-      pixbuf = l->data;
-      g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+      surface = l->data;
 
-      width = gdk_pixbuf_get_width (pixbuf);
-      height = gdk_pixbuf_get_height (pixbuf);
-      
+      width = cairo_image_surface_get_width (surface);
+      height = cairo_image_surface_get_height (surface);
+      format = cairo_image_surface_get_format (surface);
+
+      if (format != CAIRO_FORMAT_ARGB32 && format != CAIRO_FORMAT_RGB24)
+        continue;
+
       /* silently ignore overlarge icons */
       if (size + 2 + width * height > GDK_SELECTION_MAX_SIZE(display))
-	break;
-     
+        break;
+
       n++;
       size += 2 + width * height;
-      
-      l = l->next;
     }
 
   data = g_malloc (size * sizeof (gulong));
 
-  l = pixbufs;
   p = data;
-  while (l && n > 0)
+  for (l = surfaces; l != NULL && n > 0; l = l->next)
     {
-      pixbuf = l->data;
-      
-      width = gdk_pixbuf_get_width (pixbuf);
-      height = gdk_pixbuf_get_height (pixbuf);
-      stride = gdk_pixbuf_get_rowstride (pixbuf);
-      n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-      
+      surface = l->data;
+
+      width = cairo_image_surface_get_width (surface);
+      height = cairo_image_surface_get_height (surface);
+      stride = cairo_image_surface_get_stride (surface);
+      format = cairo_image_surface_get_format (surface);
+
+      if (format != CAIRO_FORMAT_ARGB32 && format != CAIRO_FORMAT_RGB24)
+        continue;
+
       *p++ = width;
       *p++ = height;
 
-      pixels = gdk_pixbuf_get_pixels (pixbuf);
+      pixels = cairo_image_surface_get_data (surface);
 
       for (y = 0; y < height; y++)
 	{
 	  for (x = 0; x < width; x++)
 	    {
 	      guchar r, g, b, a;
-	      
-	      r = pixels[y*stride + x*n_channels + 0];
-	      g = pixels[y*stride + x*n_channels + 1];
-	      b = pixels[y*stride + x*n_channels + 2];
-	      if (n_channels >= 4)
-		a = pixels[y*stride + x*n_channels + 3];
-	      else
-		a = 255;
-	      
+              a = 255;
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+              if (format == CAIRO_FORMAT_ARGB32)
+                a = pixels[y*stride + x*4 + 3];
+              r = pixels[y*stride + x*4 + 2];
+              g = pixels[y*stride + x*4 + 1];
+              b = pixels[y*stride + x*4 + 0];
+#else
+              if (format == CAIRO_FORMAT_ARGB32)
+                a = pixels[y*stride + x*4 + 0];
+              r = pixels[y*stride + x*4 + 1];
+              g = pixels[y*stride + x*4 + 2];
+              b = pixels[y*stride + x*4 + 3];
+#endif
+
 	      *p++ = a << 24 | r << 16 | g << 8 | b ;
 	    }
 	}
 
-      l = l->next;
       n--;
     }
 
@@ -3341,7 +3348,7 @@ gdk_x11_window_set_icon_list (GdkWindow *window,
   
   g_free (data);
 
-  gdk_window_update_icon (window, pixbufs);
+  gdk_window_update_icon (window, surfaces);
 }
 
 static gboolean

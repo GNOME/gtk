@@ -6643,8 +6643,8 @@ gdk_window_get_event_compression (GdkWindow *window)
 /**
  * gdk_window_set_icon_list:
  * @window: The #GdkWindow toplevel window to set the icon of.
- * @pixbufs: (transfer none) (element-type GdkPixbuf):
- *     A list of pixbufs, of different sizes.
+ * @surfaces: (transfer none) (element-type cairo_surface_t):
+ *     A list of image surfaces, of different sizes.
  *
  * Sets a list of icons for the window. One of these will be used
  * to represent the window when it has been iconified. The icon is
@@ -6658,9 +6658,9 @@ gdk_window_get_event_compression (GdkWindow *window)
  */
 void
 gdk_window_set_icon_list (GdkWindow *window,
-			  GList     *pixbufs)
+                          GList     *surfaces)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_icon_list (window, pixbufs);
+  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_icon_list (window, surfaces);
 }
 
 /**

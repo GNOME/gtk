@@ -2126,7 +2126,7 @@ gdk_quartz_window_begin_move_drag (GdkWindow *window,
 
 static void
 gdk_quartz_window_set_icon_list (GdkWindow *window,
-                                 GList     *pixbufs)
+                                 GList     *surfaces)
 {
   /* FIXME: Implement */
 }

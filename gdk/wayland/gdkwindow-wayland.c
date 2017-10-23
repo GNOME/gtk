@@ -3215,7 +3215,7 @@ gdk_wayland_window_set_focus_on_map (GdkWindow *window,
 
 static void
 gdk_wayland_window_set_icon_list (GdkWindow *window,
-                                  GList     *pixbufs)
+                                  GList     *surfaces)
 {
 }
 
