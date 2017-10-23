@@ -78,11 +78,6 @@ void gtk_drag_set_icon_widget (GdkDragContext *context,
 			       gint            hot_x,
 			       gint            hot_y);
 GDK_AVAILABLE_IN_ALL
-void gtk_drag_set_icon_pixbuf (GdkDragContext *context,
-			       GdkPixbuf      *pixbuf,
-			       gint            hot_x,
-			       gint            hot_y);
-GDK_AVAILABLE_IN_ALL
 void gtk_drag_set_icon_surface(GdkDragContext *context,
 			       cairo_surface_t *surface);
 GDK_AVAILABLE_IN_ALL

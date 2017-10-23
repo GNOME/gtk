@@ -1624,33 +1624,6 @@ gtk_drag_set_icon_definition (GdkDragContext     *context,
 }
 
 /**
- * gtk_drag_set_icon_pixbuf: (method)
- * @context: the context for a drag (This must be called 
- *            with a  context for the source side of a drag)
- * @pixbuf: the #GdkPixbuf to use as the drag icon
- * @hot_x: the X offset within @widget of the hotspot
- * @hot_y: the Y offset within @widget of the hotspot
- * 
- * Sets @pixbuf as the icon for a given drag.
- */
-void 
-gtk_drag_set_icon_pixbuf (GdkDragContext *context,
-                          GdkPixbuf      *pixbuf,
-                          gint            hot_x,
-                          gint            hot_y)
-{
-  GtkImageDefinition *def;
-
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
-
-  def = gtk_image_definition_new_pixbuf (pixbuf, 1);
-  set_icon_helper (context, def, hot_x, hot_y);
-
-  gtk_image_definition_unref (def);
-}
-
-/**
  * gtk_drag_set_icon_surface: (method)
  * @context: the context for a drag (This must be called
  *     with a context for the source side of a drag)
