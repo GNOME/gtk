@@ -583,11 +583,11 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * Since: 2.6
    */
   props[PROP_LOGO] =
-    g_param_spec_object ("logo",
-                         P_("Logo"),
-                         P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
-                         CAIRO_GOBJECT_TYPE_SURFACE,
-                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+    g_param_spec_boxed ("logo",
+                        P_("Logo"),
+                        P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
+                        CAIRO_GOBJECT_TYPE_SURFACE,
+                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkAboutDialog:logo-icon-name:
