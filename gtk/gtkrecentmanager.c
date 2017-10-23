@@ -1958,58 +1958,6 @@ gtk_recent_info_last_application (GtkRecentInfo *info)
   return g_strdup (name);
 }
 
-static GdkPixbuf *
-get_icon_for_mime_type (const gchar *mime_type,
-                        gint         pixel_size)
-{
-  GtkIconTheme *icon_theme;
-  char *content_type;
-  GIcon *icon;
-  GtkIconInfo *info;
-  GdkPixbuf *pixbuf;
-
-  icon_theme = gtk_icon_theme_get_default ();
-
-  content_type = g_content_type_from_mime_type (mime_type);
-
-  if (!content_type)
-    return NULL;
-
-  icon = g_content_type_get_icon (content_type);
-  info = gtk_icon_theme_lookup_by_gicon (icon_theme,
-                                         icon,
-                                         pixel_size,
-                                         GTK_ICON_LOOKUP_USE_BUILTIN);
-  g_free (content_type);
-  g_object_unref (icon);
-
-  if (!info)
-    return NULL;
-
-  pixbuf = gtk_icon_info_load_icon (info, NULL);
-  g_object_unref (info);
-
-  return pixbuf;
-}
-
-static GdkPixbuf *
-get_icon_fallback (const gchar *icon_name,
-                   gint         size)
-{
-  GtkIconTheme *icon_theme;
-  GdkPixbuf *retval;
-
-  icon_theme = gtk_icon_theme_get_default ();
-
-  retval = gtk_icon_theme_load_icon (icon_theme, icon_name,
-                                     size,
-                                     GTK_ICON_LOOKUP_USE_BUILTIN,
-                                     NULL);
-  g_assert (retval != NULL);
-
-  return retval;
-}
-
 /**
  * gtk_recent_info_get_gicon:
  * @info: a #GtkRecentInfo
