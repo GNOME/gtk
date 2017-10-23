@@ -505,11 +505,7 @@ find_cached_texture (GtkIconHelper *self)
     return NULL;
 
   if (gtk_icon_info_is_symbolic (info))
-    {
-      // FIXME
-      g_object_unref (info);
-      return NULL;
-    }
+      self->rendered_surface_is_symbolic = TRUE;
 
   texture = gtk_icon_info_load_texture (info);
 
@@ -791,6 +787,8 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
 {
   GtkCssStyle *style;
   GskTexture *texture;
+  graphene_matrix_t matrix;
+  graphene_vec4_t offset;
 
   style = gtk_css_node_get_style (self->node);
 
@@ -798,12 +796,28 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
   texture = self->texture;
   if (texture == NULL)
     return;
- 
+
+  if (self->rendered_surface_is_symbolic)
+    {
+      GdkRGBA fg, sc, wc, ec;
+
+      gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
+
+      graphene_matrix_init_from_float (&matrix, (float[16]) {
+                                         sc.red - fg.red, sc.green - fg.green, sc.blue - fg.blue, 0,
+                                         wc.red - fg.red, wc.green - fg.green, wc.blue - fg.blue, 0,
+                                         ec.red - fg.red, ec.green - fg.green, ec.blue - fg.blue, 0,
+                                         0, 0, 0, fg.alpha
+                                       });
+      graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
+    }
+
   gtk_css_style_snapshot_icon_texture (style,
                                        snapshot,
                                        texture,
                                        gtk_widget_get_scale_factor (self->owner),
-                                       NULL, NULL);
+                                       self->rendered_surface_is_symbolic ? &matrix : NULL,
+                                       self->rendered_surface_is_symbolic ? &offset : NULL);
 }
 
 gboolean
