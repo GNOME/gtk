@@ -239,7 +239,7 @@ gsk_sl_declaration_parse_variable (GskSlScope           *scope,
     {
       gsk_sl_preprocessor_consume (preproc, NULL);
 
-      initial = gsk_sl_expression_parse_assignment (scope, preproc);
+      initial = gsk_sl_expression_parse_initializer (scope, preproc, type);
 
       if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (initial)))
         {

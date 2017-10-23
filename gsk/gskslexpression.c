@@ -1213,6 +1213,177 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_CONSTRUCTOR = {
   gsk_sl_expression_default_get_spv_access_chain
 };
 
+/* INITIALIZER */
+
+typedef struct _GskSlExpressionInitializer GskSlExpressionInitializer;
+
+struct _GskSlExpressionInitializer {
+  GskSlExpression parent;
+
+  GskSlType *type;
+  GskSlExpression **arguments;
+  guint n_arguments;
+};
+
+static void
+gsk_sl_expression_initializer_free (GskSlExpression *expression)
+{
+  GskSlExpressionInitializer *initializer = (GskSlExpressionInitializer *) expression;
+  guint i;
+
+  for (i = 0; i < initializer->n_arguments; i++)
+    {
+      gsk_sl_expression_unref (initializer->arguments[i]);
+    }
+  g_free (initializer->arguments);
+
+  gsk_sl_type_unref (initializer->type);
+
+  g_slice_free (GskSlExpressionInitializer, initializer);
+}
+
+static void
+gsk_sl_expression_initializer_print (const GskSlExpression *expression,
+                                     GskSlPrinter          *printer)
+{
+  const GskSlExpressionInitializer *initializer = (const GskSlExpressionInitializer *) expression;
+  guint i;
+
+  gsk_sl_printer_append (printer, "{");
+  
+  for (i = 0; i < initializer->n_arguments; i++)
+    {
+      if (i > 0)
+        gsk_sl_printer_append (printer, ", ");
+      gsk_sl_expression_print (initializer->arguments[i], printer);
+    }
+
+  gsk_sl_printer_append (printer, "}");
+}
+
+static GskSlType *
+gsk_sl_expression_initializer_get_return_type (const GskSlExpression *expression)
+{
+  const GskSlExpressionInitializer *initializer = (const GskSlExpressionInitializer *) expression;
+
+  return initializer->type;
+}
+
+static GskSlValue *
+gsk_sl_expression_initializer_get_constant (const GskSlExpression *expression)
+{
+  const GskSlExpressionInitializer *initializer = (const GskSlExpressionInitializer *) expression;
+  GskSlType *type = initializer->type;
+  GskSlValue *values[initializer->n_arguments];
+  GskSlValue *result;
+  gsize i;
+
+  for (i = 0; i < initializer->n_arguments; i++)
+    {
+      values[i] = gsk_sl_expression_get_constant (initializer->arguments[i]);
+      if (values[i] == NULL)
+        {
+          guint j;
+          for (j = 0; j < i; j++)
+            gsk_sl_value_free (values[j]);
+          return NULL;
+        }
+    }
+
+  result = gsk_sl_value_new (type);
+
+  if (gsk_sl_type_get_length (type))
+    {
+      GskSlType *index_type = gsk_sl_type_get_index_type (type);
+      gsize stride = gsk_sl_type_get_index_stride (type);
+      gsize size = gsk_sl_type_get_size (index_type);
+      guchar *data = gsk_sl_value_get_data (result);
+
+      for (i = 0; i < gsk_sl_type_get_length (type); i++)
+        {
+          if (!gsk_sl_type_equal (gsk_sl_value_get_type (values[i]), index_type))
+            {
+              GskSlValue *tmp = gsk_sl_value_new_convert (values[i], index_type);
+              gsk_sl_value_free (values[i]);
+              values[i] = tmp;
+            }
+          memcpy (data + i * stride, gsk_sl_value_get_data (values[i]), size);
+          gsk_sl_value_free (values[i]);
+        }
+    }
+  else
+    {
+      guchar *data = gsk_sl_value_get_data (result);
+
+      for (i = 0; i < gsk_sl_type_get_n_members (type); i++)
+        {
+          GskSlType *member_type = gsk_sl_type_get_member_type (type, i);
+
+          if (!gsk_sl_type_equal (gsk_sl_value_get_type (values[i]), member_type))
+            {
+              GskSlValue *tmp = gsk_sl_value_new_convert (values[i], member_type);
+              gsk_sl_value_free (values[i]);
+              values[i] = tmp;
+            }
+          memcpy (data + gsk_sl_type_get_member_offset (type, i),
+                         gsk_sl_value_get_data (values[i]),
+                         gsk_sl_type_get_size (member_type));
+          gsk_sl_value_free (values[i]);
+        }
+    }
+
+  return result;
+}
+
+static guint32
+gsk_sl_expression_initializer_write_spv (const GskSlExpression *expression,
+                                         GskSpvWriter          *writer)
+{
+  const GskSlExpressionInitializer *initializer = (const GskSlExpressionInitializer *) expression;
+  GskSlType *type = initializer->type;
+  guint32 ids[initializer->n_arguments];
+  gsize i;
+
+  if (gsk_sl_type_get_length (type))
+    {
+      GskSlType *index_type = gsk_sl_type_get_index_type (type);
+
+      for (i = 0; i < gsk_sl_type_get_length (type); i++)
+        {
+          ids[i] = gsk_sl_expression_write_spv (initializer->arguments[i], writer, index_type);
+        }
+
+      return gsk_spv_writer_composite_construct (writer,
+                                                 type,
+                                                 ids,
+                                                 gsk_sl_type_get_length (type));
+    }
+  else
+    {
+      for (i = 0; i < gsk_sl_type_get_n_members (type); i++)
+        {
+          ids[i] = gsk_sl_expression_write_spv (initializer->arguments[i],
+                                                writer,
+                                                gsk_sl_type_get_member_type (type, i));
+        }
+
+      return gsk_spv_writer_composite_construct (writer,
+                                                 type,
+                                                 ids,
+                                                 gsk_sl_type_get_n_members (type));
+    }
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_INITIALIZER = {
+  gsk_sl_expression_initializer_free,
+  gsk_sl_expression_initializer_print,
+  gsk_sl_expression_default_is_assignable,
+  gsk_sl_expression_initializer_get_return_type,
+  gsk_sl_expression_initializer_get_constant,
+  gsk_sl_expression_initializer_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
+};
+
 /* FUNCTION_CALL */
 
 typedef struct _GskSlExpressionFunctionCall GskSlExpressionFunctionCall;
@@ -2002,6 +2173,10 @@ gsk_sl_expression_error_new (void)
 
   return (GskSlExpression *) constant;
 }
+
+static GskSlExpression *
+gsk_sl_expression_parse_assignment (GskSlScope        *scope,
+                                    GskSlPreprocessor *preproc);
 
 GskSlExpression *
 gsk_sl_expression_parse_constructor (GskSlScope        *scope,
@@ -3382,7 +3557,7 @@ gsk_sl_expression_parse_integral_constant (GskSlScope        *scope,
     }
 }
 
-GskSlExpression *
+static GskSlExpression *
 gsk_sl_expression_parse_assignment (GskSlScope        *scope,
                                     GskSlPreprocessor *preproc)
 {
@@ -3467,6 +3642,140 @@ gsk_sl_expression_parse_assignment (GskSlScope        *scope,
   assign->rvalue = rvalue;
 
   return (GskSlExpression *) assign;
+}
+
+static GskSlExpression *
+gsk_sl_expression_parse_initializer_array (GskSlScope        *scope,
+                                           GskSlPreprocessor *preproc,
+                                           GskSlType         *type)
+{
+  GskSlExpressionInitializer *initializer;
+  GskSlType *index_type = gsk_sl_type_get_index_type (type);
+  const GskSlToken *token;
+  gsize i;
+
+  initializer = gsk_sl_expression_new (GskSlExpressionInitializer, &GSK_SL_EXPRESSION_INITIALIZER);
+  initializer->type = gsk_sl_type_ref (type);
+  initializer->n_arguments = gsk_sl_type_get_length (type);
+  initializer->arguments = g_new0 (GskSlExpression *, initializer->n_arguments);
+
+  for (i = 0; i < initializer->n_arguments; i++)
+    {
+      if (i > 0)
+        {
+          token = gsk_sl_preprocessor_get (preproc);
+          if (gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
+            gsk_sl_preprocessor_consume (preproc, NULL);
+          else
+            {
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected \",\" and next initializer");
+              break;
+            }
+        }
+
+      initializer->arguments[i] = gsk_sl_expression_parse_initializer (scope, preproc, index_type);
+
+      if (!gsk_sl_type_can_convert (index_type, gsk_sl_expression_get_return_type (initializer->arguments[i])))
+        {
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot convert from %s to %s.",
+                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initializer->arguments[i])),
+                                     gsk_sl_type_get_name (index_type));
+        }
+    }
+
+  return (GskSlExpression *) initializer;
+}
+
+static GskSlExpression *
+gsk_sl_expression_parse_initializer_members (GskSlScope        *scope,
+                                             GskSlPreprocessor *preproc,
+                                             GskSlType         *type)
+{
+  GskSlExpressionInitializer *initializer;
+  const GskSlToken *token;
+  gsize i;
+
+  initializer = gsk_sl_expression_new (GskSlExpressionInitializer, &GSK_SL_EXPRESSION_INITIALIZER);
+  initializer->type = gsk_sl_type_ref (type);
+  initializer->n_arguments = gsk_sl_type_get_n_members (type);
+  initializer->arguments = g_new0 (GskSlExpression *, initializer->n_arguments);
+
+  for (i = 0; i < initializer->n_arguments; i++)
+    {
+      GskSlType *member_type = gsk_sl_type_get_member_type (type, i);
+
+      if (i > 0)
+        {
+          token = gsk_sl_preprocessor_get (preproc);
+          if (gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
+            gsk_sl_preprocessor_consume (preproc, NULL);
+          else
+            {
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected \",\" and next initializer");
+              break;
+            }
+        }
+
+      initializer->arguments[i] = gsk_sl_expression_parse_initializer (scope, preproc, member_type);
+
+      if (!gsk_sl_type_can_convert (member_type, gsk_sl_expression_get_return_type (initializer->arguments[i])))
+        {
+          gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot convert from %s to %s.",
+                                     gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initializer->arguments[i])),
+                                     gsk_sl_type_get_name (member_type));
+        }
+    }
+
+  return (GskSlExpression *) initializer;
+}
+
+GskSlExpression *
+gsk_sl_expression_parse_initializer (GskSlScope        *scope,
+                                     GskSlPreprocessor *preproc,
+                                     GskSlType         *type)
+{
+  const GskSlToken *token;
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
+    {
+      GskSlExpression *expression;
+
+      gsk_sl_preprocessor_consume (preproc, NULL);
+
+      if (gsk_sl_type_get_length (type))
+        {
+          expression = gsk_sl_expression_parse_initializer_array (scope, preproc, type);
+        }
+      else if (gsk_sl_type_get_n_members (type))
+        {
+          expression = gsk_sl_expression_parse_initializer_members (scope, preproc, type);
+        }
+      else
+        {
+          gsk_sl_preprocessor_error (preproc, SYNTAX, "Cannot use initializer on %s", gsk_sl_type_get_name (type));
+          gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
+          expression = gsk_sl_expression_error_new ();
+        }
+
+      token = gsk_sl_preprocessor_get (preproc);
+      if (gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
+        {
+          gsk_sl_preprocessor_consume (preproc, NULL);
+          token = gsk_sl_preprocessor_get (preproc);
+        }
+
+      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
+        {
+          gsk_sl_preprocessor_error (preproc, SYNTAX, "Too many elements in initializer for %s", gsk_sl_type_get_name (type));
+          gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
+        }
+      gsk_sl_preprocessor_consume (preproc, NULL);
+
+      return expression;
+    }
+
+  return gsk_sl_expression_parse_assignment (scope, preproc);
 }
 
 GskSlExpression *

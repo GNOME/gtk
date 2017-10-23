@@ -705,7 +705,7 @@ gsk_sl_statement_parse_declaration (GskSlScope           *scope,
           GskSlValue *unconverted;
 
           gsk_sl_preprocessor_consume (stream, (GskSlStatement *) declaration);
-          declaration->initial = gsk_sl_expression_parse_assignment (scope, stream);
+          declaration->initial = gsk_sl_expression_parse_initializer (scope, stream, type);
           if (!gsk_sl_type_can_convert (type, gsk_sl_expression_get_return_type (declaration->initial)))
             {
               gsk_sl_preprocessor_error (stream, TYPE_MISMATCH,

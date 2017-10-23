@@ -25,8 +25,9 @@ G_BEGIN_DECLS
 
 GskSlExpression *       gsk_sl_expression_parse                 (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *stream);
-GskSlExpression *       gsk_sl_expression_parse_assignment      (GskSlScope             *scope,
-                                                                 GskSlPreprocessor      *stream);
+GskSlExpression *       gsk_sl_expression_parse_initializer     (GskSlScope             *scope,
+                                                                 GskSlPreprocessor      *preproc,
+                                                                 GskSlType              *type);
 GskSlExpression *       gsk_sl_expression_parse_constant        (GskSlScope             *scope,
                                                                  GskSlPreprocessor      *stream);
 gint32                  gsk_sl_expression_parse_integral_constant (GskSlScope           *scope,
