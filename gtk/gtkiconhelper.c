@@ -796,32 +796,15 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
     return;
 
   if (self->rendered_surface_is_symbolic)
-    {
-      GdkRGBA fg, sc, wc, ec;
-      graphene_matrix_t matrix;
-      graphene_vec4_t offset, r0, r1, r2, r3;
-
-      gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
-
-      graphene_vec4_init (&r0, sc.red - fg.red,  sc.green - fg.green, sc.blue - fg.blue, 0);
-      graphene_vec4_init (&r1, wc.red - fg.red,  wc.green - fg.green, wc.blue - fg.blue, 0);
-      graphene_vec4_init (&r2, ec.red - fg.red,  ec.green - fg.green, ec.blue - fg.blue, 0);
-      graphene_vec4_init (&r3, 0, 0, 0, fg.alpha);
-      graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
-      graphene_matrix_init_from_vec4 (&matrix, &r0, &r1, &r2, &r3);
-
-      gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset, "Symbolic Icon");
-    }
-
-  gtk_css_style_snapshot_icon_texture (style,
-                                       snapshot,
-                                       texture,
-                                       gtk_widget_get_scale_factor (self->owner));
-
-  if (self->rendered_surface_is_symbolic)
-    {
-      gtk_snapshot_pop (snapshot);
-    }
+    gtk_css_style_snapshot_symbolic_icon_texture (style,
+                                                  snapshot,
+                                                  texture,
+                                                  gtk_widget_get_scale_factor (self->owner));
+  else
+    gtk_css_style_snapshot_icon_texture (style,
+                                         snapshot,
+                                         texture,
+                                         gtk_widget_get_scale_factor (self->owner));
 }
 
 gboolean

@@ -28,6 +28,7 @@
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtksnapshotprivate.h"
+#include "gtkiconthemeprivate.h"
 
 #include <math.h>
 
@@ -334,5 +335,88 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle *style,
   if (n_shadows > 0)
     gtk_snapshot_pop (snapshot);
   
+  gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
+}
+
+void
+gtk_css_style_snapshot_symbolic_icon_texture (GtkCssStyle *style,
+                                              GtkSnapshot *snapshot,
+                                              GskTexture  *texture,
+                                              double       texture_scale)
+{
+  const GtkCssValue *shadows_value, *transform_value, *filter_value;
+  graphene_matrix_t transform_matrix;
+  graphene_rect_t bounds;
+  double width, height;
+  GskShadow *shadows;
+  gsize n_shadows;
+  GdkRGBA fg, sc, wc, ec;
+  graphene_matrix_t matrix;
+  graphene_vec4_t offset, r0, r1, r2, r3;
+
+  g_return_if_fail (GTK_IS_CSS_STYLE (style));
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (GSK_IS_TEXTURE (texture));
+  g_return_if_fail (texture_scale > 0);
+
+  shadows_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
+  transform_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
+  filter_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_FILTER);
+  width = gsk_texture_get_width (texture) / texture_scale;
+  height = gsk_texture_get_height (texture) / texture_scale;
+
+  if (!gtk_css_transform_value_get_matrix (transform_value, &transform_matrix))
+    return;
+
+  gtk_css_filter_value_push_snapshot (filter_value, snapshot);
+
+  n_shadows = gtk_css_shadows_value_get_n_shadows (shadows_value);
+  if (n_shadows > 0)
+    {
+      shadows = g_newa (GskShadow, n_shadows);
+      gtk_css_shadows_value_get_shadows (shadows_value, shadows);
+      gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
+    }
+
+  gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
+
+  graphene_vec4_init (&r0, sc.red - fg.red,  sc.green - fg.green, sc.blue - fg.blue, 0);
+  graphene_vec4_init (&r1, wc.red - fg.red,  wc.green - fg.green, wc.blue - fg.blue, 0);
+  graphene_vec4_init (&r2, ec.red - fg.red,  ec.green - fg.green, ec.blue - fg.blue, 0);
+  graphene_vec4_init (&r3, 0, 0, 0, fg.alpha);
+  graphene_vec4_init (&offset, fg.red, fg.green, fg.blue, 0);
+  graphene_matrix_init_from_vec4 (&matrix, &r0, &r1, &r2, &r3);
+  gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset, "Symbolic Icon");
+
+  if (graphene_matrix_is_identity (&transform_matrix))
+    {
+      graphene_rect_init (&bounds, 0, 0, width, height);
+      gtk_snapshot_append_texture (snapshot, texture, &bounds, "Icon");
+    }
+  else
+    {
+      graphene_matrix_t m1, m2, m3;
+
+      /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
+      graphene_matrix_init_translate (&m1, &GRAPHENE_POINT3D_INIT (width / 2.0, height / 2.0, 0));
+      graphene_matrix_multiply (&transform_matrix, &m1, &m3);
+      graphene_matrix_init_translate (&m2, &GRAPHENE_POINT3D_INIT (- width / 2.0, - height / 2.0, 0));
+      graphene_matrix_multiply (&m2, &m3, &m1);
+      graphene_matrix_scale (&m1, 1.0 / texture_scale, 1.0 / texture_scale, 1);
+
+      gtk_snapshot_push_transform (snapshot, &m1, "Icon Transform");
+
+      graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
+      gtk_snapshot_append_texture (snapshot, texture, &bounds, "Icon");
+
+      gtk_snapshot_pop (snapshot);
+    }
+
+  /* Color matrix */
+  gtk_snapshot_pop (snapshot);
+
+  if (n_shadows > 0)
+    gtk_snapshot_pop (snapshot);
+
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 }
