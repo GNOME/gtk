@@ -295,6 +295,14 @@
         that you are affected by that.
       </para>
     </section>
+
+    <section>
+      <title>GdkPixbuf is deemphasized</title>
+      <para>
+        A number of GdkPixbuf-based APIs have been removed. Use the available
+        surface-based replacements instead.
+      </para>
+    </section>
   </section>
 
 </chapter>
