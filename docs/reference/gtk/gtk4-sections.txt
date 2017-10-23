@@ -2391,7 +2391,6 @@ gtk_recent_info_has_application
 gtk_recent_info_create_app_info
 gtk_recent_info_get_groups
 gtk_recent_info_has_group
-gtk_recent_info_get_icon
 gtk_recent_info_get_gicon
 gtk_recent_info_get_short_name
 gtk_recent_info_get_uri_display

@@ -247,9 +247,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_recent_info_has_group            (GtkRecentInfo  *info,
 							    const gchar    *group_name);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_recent_info_get_icon             (GtkRecentInfo  *info,
-							    gint            size);
-GDK_AVAILABLE_IN_ALL
 GIcon *               gtk_recent_info_get_gicon            (GtkRecentInfo  *info);
 GDK_AVAILABLE_IN_ALL
 gchar *               gtk_recent_info_get_short_name       (GtkRecentInfo  *info) G_GNUC_MALLOC;

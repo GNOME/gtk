@@ -2011,42 +2011,6 @@ get_icon_fallback (const gchar *icon_name,
 }
 
 /**
- * gtk_recent_info_get_icon:
- * @info: a #GtkRecentInfo
- * @size: the size of the icon in pixels
- *
- * Retrieves the icon of size @size associated to the resource MIME type.
- *
- * Returns: (nullable) (transfer full): a #GdkPixbuf containing the icon,
- *     or %NULL. Use g_object_unref() when finished using the icon.
- *
- * Since: 2.10
- */
-GdkPixbuf *
-gtk_recent_info_get_icon (GtkRecentInfo *info,
-                          gint           size)
-{
-  GdkPixbuf *retval = NULL;
-
-  g_return_val_if_fail (info != NULL, NULL);
-
-  if (info->mime_type)
-    retval = get_icon_for_mime_type (info->mime_type, size);
-
-  /* this function should never fail */
-  if (!retval)
-    {
-      if (info->mime_type &&
-          strcmp (info->mime_type, "x-directory/normal") == 0)
-        retval = get_icon_fallback ("folder", size);
-      else
-        retval = get_icon_fallback ("text-x-generic", size);
-    }
-
-  return retval;
-}
-
-/**
  * gtk_recent_info_get_gicon:
  * @info: a #GtkRecentInfo
  *
