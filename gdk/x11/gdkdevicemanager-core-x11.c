@@ -286,7 +286,7 @@ translate_notify_type (int detail)
       return GDK_NOTIFY_NONLINEAR_VIRTUAL;
     default:
       g_assert_not_reached ();
-      return GDK_NOTIFY_UNKONWN;
+      return GDK_NOTIFY_UNKNOWN;
     }
 }
 
