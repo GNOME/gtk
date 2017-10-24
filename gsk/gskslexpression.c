@@ -829,7 +829,7 @@ gsk_sl_expression_reference_get_spv_access_chain (const GskSlExpression *express
 {
   GskSlExpressionReference *reference = (GskSlExpressionReference *) expression;
 
-  return gsk_spv_access_chain_new (writer, reference->variable);
+  return gsk_sl_variable_get_access_chain (reference->variable, writer);
 }
 
 static const GskSlExpressionClass GSK_SL_EXPRESSION_REFERENCE = {

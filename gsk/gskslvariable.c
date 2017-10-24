@@ -20,6 +20,7 @@
 
 #include "gskslvariableprivate.h"
 
+#include "gskslexpressionprivate.h"
 #include "gskslprinterprivate.h"
 #include "gskslqualifierprivate.h"
 #include "gsksltypeprivate.h"
@@ -527,7 +528,7 @@ gsk_sl_variable_is_constant (const GskSlVariable *variable)
   return gsk_sl_qualifier_is_constant (&variable->qualifier);
 }
 
-gboolean
+static gboolean
 gsk_sl_variable_is_direct_access_spv (const GskSlVariable *variable)
 {
   return variable->class->is_direct_access_spv (variable);
@@ -553,5 +554,257 @@ gsk_sl_variable_store_spv (GskSlVariable *variable,
                            guint32        value)
 {
   variable->class->store_spv (variable, writer, value);
+}
+
+/* ACCESS CHAIN */
+
+struct _GskSpvAccessChain
+{
+  GskSpvWriter *writer;
+  GskSlVariable *variable;
+  GskSlType *type;
+  GArray *chain;
+  GSList *pending_indexes;
+  guint32 swizzle[4];
+  guint swizzle_length;
+};
+
+GskSpvAccessChain *
+gsk_sl_variable_get_access_chain (GskSlVariable *variable,
+                                  GskSpvWriter  *writer)
+{
+  GskSpvAccessChain *chain;
+
+  if (!gsk_sl_variable_is_direct_access_spv (variable))
+    return NULL;
+
+  chain = g_slice_new0 (GskSpvAccessChain);
+
+  chain->writer = gsk_spv_writer_ref (writer);
+  chain->variable = gsk_sl_variable_ref (variable);
+  chain->type = gsk_sl_type_ref (gsk_sl_variable_get_type (variable));
+
+  return chain;
+}
+
+void
+gsk_spv_access_chain_free (GskSpvAccessChain *chain)
+{
+  if (chain->chain)
+    g_array_free (chain->chain, TRUE);
+  g_slist_free_full (chain->pending_indexes, (GDestroyNotify) gsk_sl_expression_unref);
+  gsk_sl_type_unref (chain->type);
+  gsk_sl_variable_unref (chain->variable);
+  gsk_spv_writer_unref (chain->writer);
+
+  g_slice_free (GskSpvAccessChain, chain);
+}
+
+void
+gsk_spv_access_chain_add_index (GskSpvAccessChain *chain,
+                                GskSlType         *type,
+                                guint32            index_id)
+{
+  g_assert (!gsk_spv_access_chain_has_swizzle (chain));
+
+  if (chain->chain == NULL)
+    chain->chain = g_array_new (FALSE, FALSE, sizeof (guint32));
+  gsk_sl_type_unref (chain->type);
+  chain->type = gsk_sl_type_ref (type);
+
+  g_array_append_val (chain->chain, index_id);
+}
+
+void
+gsk_spv_access_chain_add_dynamic_index (GskSpvAccessChain *chain,
+                                        GskSlType         *type,
+                                        GskSlExpression   *expr)
+{
+  gsk_spv_access_chain_add_index (chain, type, 0);
+
+  chain->pending_indexes = g_slist_prepend (chain->pending_indexes, gsk_sl_expression_ref (expr));
+}
+
+gboolean
+gsk_spv_access_chain_has_swizzle (GskSpvAccessChain *chain)
+{
+  return chain->swizzle_length > 0;
+}
+
+void
+gsk_spv_access_chain_swizzle (GskSpvAccessChain *chain,
+                              const guint       *indexes,
+                              guint              length)
+{
+  guint tmp[4];
+  guint i;
+
+  if (length == 1)
+    {
+      GskSlValue *value;
+      guint32 new_index;
+
+      if (chain->swizzle_length != 0)
+        new_index = chain->swizzle[indexes[0]];
+      else
+        new_index = indexes[0];
+      chain->swizzle_length = 0;
+
+      value = gsk_sl_value_new_for_data (gsk_sl_type_get_scalar (GSK_SL_UINT),
+                                         &new_index,
+                                         NULL, NULL);
+      gsk_spv_access_chain_add_index (chain,
+                                      gsk_sl_type_get_index_type (chain->type),
+                                      gsk_spv_writer_get_id_for_value (chain->writer, value));
+      gsk_sl_value_free (value);
+      return;
+    }
+
+  if (chain->swizzle_length != 0)
+    {
+      g_assert (length <= chain->swizzle_length);
+
+      for (i = 0; i < length; i++)
+        {
+          tmp[i] = chain->swizzle[indexes[i]];
+        }
+      indexes = tmp;
+    }
+
+  /* Mean trick to do optimization: We only assign a swizzle_length
+   * If something is actually swizzled. If we're doing an identity
+   * swizzle, ignore it.
+   */
+  if (length < gsk_sl_type_get_n_components (chain->type))
+    chain->swizzle_length = length;
+  else
+    chain->swizzle_length = 0;
+
+  for (i = 0; i < length; i++)
+    {
+      chain->swizzle[i] = indexes[i];
+      if (indexes[i] != i)
+        chain->swizzle_length = length;
+    }
+}
+
+static void
+gsk_spv_access_resolve_pending (GskSpvAccessChain *chain)
+{
+  GSList *l;
+  guint i;
+
+  if (chain->pending_indexes == NULL)
+    return;
+  
+  i = chain->chain->len;
+  l = chain->pending_indexes;
+  while (i-- > 0)
+    {
+      if (g_array_index (chain->chain, guint32, i) != 0)
+        continue;
+
+      g_array_index (chain->chain, guint32, i) = gsk_sl_expression_write_spv (l->data, chain->writer, NULL);
+      l = l->next;
+    }
+
+  g_slist_free_full (chain->pending_indexes, (GDestroyNotify) gsk_sl_expression_unref);
+  chain->pending_indexes = NULL;
+}
+
+static guint32
+gsk_spv_access_get_variable (GskSpvAccessChain *chain)
+{
+  guint32 variable_id;
+    
+  gsk_spv_access_resolve_pending (chain);
+
+  variable_id = gsk_spv_writer_get_id_for_variable (chain->writer,
+                                                    chain->variable);
+
+  if (chain->chain)
+    variable_id = gsk_spv_writer_access_chain (chain->writer,
+                                               chain->type,
+                                               gsk_sl_qualifier_get_storage_class (gsk_sl_variable_get_qualifier (chain->variable),
+                                                                                   gsk_sl_variable_get_type (chain->variable)),
+                                               variable_id,
+                                               (guint32 *) chain->chain->data,
+                                               chain->chain->len);
+
+  return variable_id;
+}
+
+static GskSlType *
+gsk_spv_access_chain_get_swizzle_type (GskSpvAccessChain *chain)
+{
+  g_assert (chain->swizzle_length != 0);
+
+  if (chain->swizzle_length == 1)
+    return gsk_sl_type_get_scalar (gsk_sl_type_get_scalar_type (chain->type));
+  else
+    return gsk_sl_type_get_vector (gsk_sl_type_get_scalar_type (chain->type), chain->swizzle_length);
+}
+
+guint32
+gsk_spv_access_chain_load (GskSpvAccessChain *chain)
+{
+  guint result_id;
+  
+  result_id = gsk_spv_writer_load (chain->writer,
+                                   chain->type,
+                                   gsk_spv_access_get_variable (chain),
+                                   0);
+
+  if (chain->swizzle_length)
+    result_id = gsk_spv_writer_vector_shuffle (chain->writer,
+                                               gsk_spv_access_chain_get_swizzle_type (chain),
+                                               result_id,
+                                               result_id,
+                                               chain->swizzle,
+                                               chain->swizzle_length);
+
+  return result_id;
+}
+
+void
+gsk_spv_access_chain_store (GskSpvAccessChain *chain,
+                            guint32            value)
+{
+  guint32 chain_id;
+  
+  chain_id = gsk_spv_access_get_variable (chain);
+
+  if (chain->swizzle_length)
+    {
+      guint32 indexes[4] = { 0, };
+      guint32 merge;
+      guint i, n;
+      
+      merge = gsk_spv_writer_load (chain->writer,
+                                   chain->type,
+                                   chain_id,
+                                   0);
+
+      n = gsk_sl_type_get_n_components (chain->type);
+      for (i = 0; i < n; i++)
+        {
+          if (i < chain->swizzle_length)
+            indexes[chain->swizzle[i]] = n + i;
+          if (indexes[i] == 0)
+            indexes[i] = i;
+        }
+
+      value = gsk_spv_writer_vector_shuffle (chain->writer,
+                                             chain->type,
+                                             merge,
+                                             value,
+                                             indexes,
+                                             n);
+    }
+
+  gsk_spv_writer_store (chain->writer,
+                        chain_id,
+                        value,
+                        0);
 }
 

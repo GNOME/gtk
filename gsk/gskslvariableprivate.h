@@ -47,13 +47,30 @@ const char *            gsk_sl_variable_get_name                (const GskSlVari
 const GskSlValue *      gsk_sl_variable_get_initial_value       (const GskSlVariable    *variable);
 gboolean                gsk_sl_variable_is_constant             (const GskSlVariable    *variable);
 
-gboolean                gsk_sl_variable_is_direct_access_spv    (const GskSlVariable    *variable);
+GskSpvAccessChain *     gsk_sl_variable_get_access_chain        (GskSlVariable          *variable,
+                                                                 GskSpvWriter           *writer);
+                                                                 
 guint32                 gsk_sl_variable_write_spv               (const GskSlVariable    *variable,
                                                                  GskSpvWriter           *writer);
 guint32                 gsk_sl_variable_load_spv                (GskSlVariable          *variable,
                                                                  GskSpvWriter           *writer);
 void                    gsk_sl_variable_store_spv               (GskSlVariable          *variable,
                                                                  GskSpvWriter           *writer,
+                                                                 guint32                 value);
+
+void                    gsk_spv_access_chain_free               (GskSpvAccessChain      *chain);
+void                    gsk_spv_access_chain_add_index          (GskSpvAccessChain      *chain,
+                                                                 GskSlType              *type,
+                                                                 guint32                 index_id);
+void                    gsk_spv_access_chain_add_dynamic_index  (GskSpvAccessChain      *chain,
+                                                                 GskSlType              *type,
+                                                                 GskSlExpression        *expr);
+void                    gsk_spv_access_chain_swizzle            (GskSpvAccessChain      *chain,
+                                                                 const guint            *indexes,
+                                                                 guint                   n_indexes);
+gboolean                gsk_spv_access_chain_has_swizzle        (GskSpvAccessChain      *chain);
+guint32                 gsk_spv_access_chain_load               (GskSpvAccessChain      *chain);
+void                    gsk_spv_access_chain_store              (GskSpvAccessChain      *chain,
                                                                  guint32                 value);
 
 G_END_DECLS
