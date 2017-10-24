@@ -46,7 +46,8 @@ struct _GskSlVariableClass
   void                  (* free)                                (GskSlVariable          *variable);
 
   GskSlValue *          (* get_initial_value)                   (const GskSlVariable    *variable);
-  gboolean              (* is_direct_access_spv)                (const GskSlVariable    *variable);
+  GskSpvAccessChain *   (* get_access_chain)                    (GskSlVariable          *variable,
+                                                                 GskSpvWriter           *writer);
   guint32               (* write_spv)                           (const GskSlVariable    *variable,
                                                                  GskSpvWriter           *writer);
   guint32               (* load_spv)                            (GskSlVariable          *variable,
@@ -88,6 +89,34 @@ gsk_sl_variable_default_get_initial_value (const GskSlVariable *variable)
   return NULL;
 }
 
+static GskSpvAccessChain *
+gsk_spv_access_chain_new (GskSlVariable *variable,
+                          GskSpvWriter  *writer);
+
+static GskSpvAccessChain *
+gsk_sl_variable_default_get_access_chain (GskSlVariable *variable,
+                                          GskSpvWriter  *writer)
+{
+  return gsk_spv_access_chain_new (variable, writer);
+}
+
+static GskSpvAccessChain *
+gsk_sl_variable_default_get_no_access_chain (GskSlVariable *variable,
+                                             GskSpvWriter  *writer)
+{
+  return NULL;
+}
+
+static guint32
+gsk_sl_variable_default_load_spv (GskSlVariable *variable,
+                                  GskSpvWriter  *writer)
+{
+  return gsk_spv_writer_load (writer,
+                              variable->type,
+                              gsk_spv_writer_get_id_for_variable (writer, variable),
+                              0);
+}
+
 /* STANDARD */
 
 typedef struct _GskSlVariableStandard GskSlVariableStandard;
@@ -115,12 +144,6 @@ gsk_sl_variable_standard_get_initial_value (const GskSlVariable *variable)
   const GskSlVariableStandard *standard = (const GskSlVariableStandard *) variable;
 
   return standard->initial_value;
-}
-
-static gboolean
-gsk_sl_variable_standard_is_direct_access_spv (const GskSlVariable *variable)
-{
-  return TRUE;
 }
 
 static guint32
@@ -155,23 +178,13 @@ gsk_sl_variable_standard_write_spv (const GskSlVariable *variable,
   return result_id;
 }
 
-static guint32
-gsk_sl_variable_standard_load_spv (GskSlVariable *variable,
-                                   GskSpvWriter  *writer)
-{
-  return gsk_spv_writer_load (writer,
-                              gsk_sl_variable_get_type (variable),
-                              gsk_spv_writer_get_id_for_variable (writer, variable),
-                              0);
-}
-
 static const GskSlVariableClass GSK_SL_VARIABLE_STANDARD = {
   sizeof (GskSlVariableStandard),
   gsk_sl_variable_standard_free,
   gsk_sl_variable_standard_get_initial_value,
-  gsk_sl_variable_standard_is_direct_access_spv,
+  gsk_sl_variable_default_get_access_chain,
   gsk_sl_variable_standard_write_spv,
-  gsk_sl_variable_standard_load_spv
+  gsk_sl_variable_default_load_spv
 };
 
 /* BUILTIN */
@@ -183,12 +196,6 @@ struct _GskSlVariableBuiltin {
 
   GskSpvBuiltIn builtin;
 };
-
-static gboolean
-gsk_sl_variable_builtin_is_direct_access_spv (const GskSlVariable *variable)
-{
-  return TRUE;
-}
 
 static guint32
 gsk_sl_variable_builtin_write_spv (const GskSlVariable *variable,
@@ -216,23 +223,13 @@ gsk_sl_variable_builtin_write_spv (const GskSlVariable *variable,
   return result_id;
 }
 
-static guint32
-gsk_sl_variable_builtin_load_spv (GskSlVariable *variable,
-                                   GskSpvWriter  *writer)
-{
-  return gsk_spv_writer_load (writer,
-                              gsk_sl_variable_get_type (variable),
-                              gsk_spv_writer_get_id_for_variable (writer, variable),
-                              0);
-}
-
 static const GskSlVariableClass GSK_SL_VARIABLE_BUILTIN = {
   sizeof (GskSlVariableBuiltin),
   gsk_sl_variable_free,
   gsk_sl_variable_default_get_initial_value,
-  gsk_sl_variable_builtin_is_direct_access_spv,
+  gsk_sl_variable_default_get_access_chain,
   gsk_sl_variable_builtin_write_spv,
-  gsk_sl_variable_builtin_load_spv
+  gsk_sl_variable_default_load_spv
 };
 
 /* CONSTANT */
@@ -263,12 +260,6 @@ gsk_sl_variable_constant_get_initial_value (const GskSlVariable *variable)
   return constant->value;
 }
 
-static gboolean
-gsk_sl_variable_constant_is_direct_access_spv (const GskSlVariable *variable)
-{
-  return FALSE;
-}
-
 static guint32
 gsk_sl_variable_constant_write_spv (const GskSlVariable *variable,
                                     GskSpvWriter        *writer)
@@ -289,18 +280,12 @@ static const GskSlVariableClass GSK_SL_VARIABLE_CONSTANT = {
   sizeof (GskSlVariableConstant),
   gsk_sl_variable_constant_free,
   gsk_sl_variable_constant_get_initial_value,
-  gsk_sl_variable_constant_is_direct_access_spv,
+  gsk_sl_variable_default_get_no_access_chain,
   gsk_sl_variable_constant_write_spv,
   gsk_sl_variable_constant_load_spv
 };
 
 /* PARAMETER */
-
-static gboolean
-gsk_sl_variable_parameter_is_direct_access_spv (const GskSlVariable *variable)
-{
-  return TRUE;
-}
 
 static guint32
 gsk_sl_variable_parameter_write_spv (const GskSlVariable *variable,
@@ -318,32 +303,16 @@ gsk_sl_variable_parameter_write_spv (const GskSlVariable *variable,
   return result_id;
 }
 
-static guint32
-gsk_sl_variable_parameter_load_spv (GskSlVariable *variable,
-                                    GskSpvWriter  *writer)
-{
-  return gsk_spv_writer_load (writer,
-                              gsk_sl_variable_get_type (variable),
-                              gsk_spv_writer_get_id_for_variable (writer, variable),
-                              0);
-}
-
 static const GskSlVariableClass GSK_SL_VARIABLE_PARAMETER = {
   sizeof (GskSlVariable),
   gsk_sl_variable_free,
   gsk_sl_variable_default_get_initial_value,
-  gsk_sl_variable_parameter_is_direct_access_spv,
+  gsk_sl_variable_default_get_access_chain,
   gsk_sl_variable_parameter_write_spv,
-  gsk_sl_variable_parameter_load_spv
+  gsk_sl_variable_default_load_spv
 };
 
 /* CONST_PARAMETER */
-
-static gboolean
-gsk_sl_variable_const_parameter_is_direct_access_spv (const GskSlVariable *variable)
-{
-  return FALSE;
-}
 
 static guint32
 gsk_sl_variable_const_parameter_write_spv (const GskSlVariable *variable,
@@ -370,7 +339,7 @@ static const GskSlVariableClass GSK_SL_VARIABLE_CONST_PARAMETER = {
   sizeof (GskSlVariable),
   gsk_sl_variable_free,
   gsk_sl_variable_default_get_initial_value,
-  gsk_sl_variable_const_parameter_is_direct_access_spv,
+  gsk_sl_variable_default_get_no_access_chain,
   gsk_sl_variable_const_parameter_write_spv,
   gsk_sl_variable_const_parameter_load_spv
 };
@@ -525,10 +494,11 @@ gsk_sl_variable_is_constant (const GskSlVariable *variable)
   return gsk_sl_qualifier_is_constant (&variable->qualifier);
 }
 
-static gboolean
-gsk_sl_variable_is_direct_access_spv (const GskSlVariable *variable)
+GskSpvAccessChain *
+gsk_sl_variable_get_access_chain (GskSlVariable *variable,
+                                  GskSpvWriter  *writer)
 {
-  return variable->class->is_direct_access_spv (variable);
+  return variable->class->get_access_chain (variable, writer);
 }
 
 guint32
@@ -558,14 +528,11 @@ struct _GskSpvAccessChain
   guint swizzle_length;
 };
 
-GskSpvAccessChain *
-gsk_sl_variable_get_access_chain (GskSlVariable *variable,
-                                  GskSpvWriter  *writer)
+static GskSpvAccessChain *
+gsk_spv_access_chain_new (GskSlVariable *variable,
+                          GskSpvWriter  *writer)
 {
   GskSpvAccessChain *chain;
-
-  if (!gsk_sl_variable_is_direct_access_spv (variable))
-    return NULL;
 
   chain = g_slice_new0 (GskSpvAccessChain);
 
