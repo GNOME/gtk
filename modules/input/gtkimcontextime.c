@@ -374,14 +374,18 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   GtkIMContextIME *context_ime;
   gboolean retval = FALSE;
   guint32 c;
+  GdkModifierType state;
+  guint keyval;
 
   g_return_val_if_fail (GTK_IS_IM_CONTEXT_IME (context), FALSE);
   g_return_val_if_fail (event, FALSE);
 
-  if (event->type == GDK_KEY_RELEASE)
+  if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE)
     return FALSE;
 
-  if (event->state & GDK_CONTROL_MASK)
+  gdk_event_get_state ((GdkEvent *) event, &state);
+
+  if (state & GDK_CONTROL_MASK)
     return FALSE;
 
   context_ime = GTK_IM_CONTEXT_IME (context);
@@ -392,7 +396,9 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return FALSE;
 
-  if (event->keyval == GDK_KEY_space &&
+  gdk_event_get_keyval ((GdkEvent *) event, &keyval);
+
+  if (keyval == GDK_KEY_space &&
       context_ime->priv->dead_key_keyval != 0)
     {
       c = _gtk_im_context_ime_dead_key_unichar (context_ime->priv->dead_key_keyval, TRUE);
@@ -401,21 +407,21 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
       return TRUE;
     }
 
-  c = gdk_keyval_to_unicode (event->keyval);
+  c = gdk_keyval_to_unicode (keyval);
 
   if (c)
     {
       _gtk_im_context_ime_commit_unichar (context_ime, c);
       retval = TRUE;
     }
-  else if (IS_DEAD_KEY (event->keyval))
+  else if (IS_DEAD_KEY (keyval))
     {
       gunichar dead_key;
 
-      dead_key = _gtk_im_context_ime_dead_key_unichar (event->keyval, FALSE);
+      dead_key = _gtk_im_context_ime_dead_key_unichar (keyval, FALSE);
 
       /* Emulate double input of dead keys */
-      if (dead_key && event->keyval == context_ime->priv->dead_key_keyval)
+      if (dead_key && keyval == context_ime->priv->dead_key_keyval)
         {
           c = _gtk_im_context_ime_dead_key_unichar (context_ime->priv->dead_key_keyval, TRUE);
           context_ime->priv->dead_key_keyval = 0;
@@ -423,7 +429,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
           _gtk_im_context_ime_commit_unichar (context_ime, c);
         }
       else
-        context_ime->priv->dead_key_keyval = event->keyval;
+        context_ime->priv->dead_key_keyval = keyval;
     }
 
   return retval;
