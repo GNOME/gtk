@@ -25,6 +25,8 @@
 
 #include "gtkwin32drawprivate.h"
 
+#include "gdk/gdk-private.h"
+
 #ifdef G_OS_WIN32
 
 #include <windows.h>
