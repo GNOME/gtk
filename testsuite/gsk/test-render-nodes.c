@@ -21,6 +21,7 @@
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
+#include <stdlib.h>
 #include "reftest-compare.h"
 
 static void
