@@ -1195,7 +1195,7 @@ gsk_sl_type_array_get_n_members (const GskSlType *type)
 
 static const GskSlTypeMember *
 gsk_sl_type_array_get_member (const GskSlType *type,
-                               guint            n)
+                              guint            n)
 {
   return NULL;
 }
@@ -1204,7 +1204,13 @@ static gboolean
 gsk_sl_type_array_can_convert (const GskSlType *target,
                                const GskSlType *source)
 {
-  return gsk_sl_type_equal (target, source);
+  const GskSlTypeArray *target_array = (const GskSlTypeArray *) target;
+  const GskSlTypeArray *source_array = (const GskSlTypeArray *) source;
+
+  /* Blocks are equal but cannot be converted to each other.
+   * So arrays (of arrays) of blocks... */
+  return gsk_sl_type_equal (target, source)
+      && gsk_sl_type_can_convert (target_array->type, source_array->type);
 }
 
 static gboolean
@@ -1854,7 +1860,7 @@ static gboolean
 gsk_sl_type_block_can_convert (const GskSlType *target,
                                const GskSlType *source)
 {
-  return gsk_sl_type_equal (target, source);
+  return FALSE;
 }
 
 static guint32
