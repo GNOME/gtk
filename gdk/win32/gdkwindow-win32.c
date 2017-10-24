@@ -2328,7 +2328,7 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) || surfaces == NULL)
     return;
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
@@ -2344,9 +2344,10 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
   small_surface = NULL;
   big_diff = 0;
   small_diff = 0;
+
   while (surfaces)
     {
-      surface = (GdkPixbuf*) surfaces->data;
+      surface = surfaces->data;
       w = cairo_image_surface_get_width (surface);
       h = cairo_image_surface_get_height (surface);
 
