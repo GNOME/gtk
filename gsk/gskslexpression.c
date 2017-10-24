@@ -89,6 +89,12 @@ gsk_sl_expression_default_is_assignable (const GskSlExpression  *expression,
   return FALSE;
 }
 
+static GskSlValue *
+gsk_sl_expression_default_get_constant (const GskSlExpression *expression)
+{
+  return NULL;
+}
+
 static GskSpvAccessChain *
 gsk_sl_expression_default_get_spv_access_chain (const GskSlExpression *expression,
                                                 GskSpvWriter          *writer)
@@ -143,12 +149,6 @@ gsk_sl_expression_assignment_get_return_type (const GskSlExpression *expression)
   return gsk_sl_expression_get_return_type (assignment->lvalue);
 }
 
-static GskSlValue *
-gsk_sl_expression_assignment_get_constant (const GskSlExpression *expression)
-{
-  return NULL;
-}
-
 static guint32
 gsk_sl_expression_assignment_write_spv (const GskSlExpression *expression,
                                         GskSpvWriter          *writer)
@@ -188,7 +188,7 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_ASSIGNMENT = {
   gsk_sl_expression_assignment_print,
   gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_assignment_get_return_type,
-  gsk_sl_expression_assignment_get_constant,
+  gsk_sl_expression_default_get_constant,
   gsk_sl_expression_assignment_write_spv,
   gsk_sl_expression_default_get_spv_access_chain
 };
@@ -237,12 +237,6 @@ gsk_sl_expression_inc_dec_get_return_type (const GskSlExpression *expression)
   return gsk_sl_expression_get_return_type (inc_dec->expr);
 }
 
-static GskSlValue *
-gsk_sl_expression_inc_dec_get_constant (const GskSlExpression *expression)
-{
-  return NULL;
-}
-
 static guint32
 gsk_sl_expression_inc_dec_write_spv (const GskSlExpression *expression,
                                      GskSpvWriter          *writer)
@@ -276,7 +270,7 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_INC_DEC = {
   gsk_sl_expression_inc_dec_print,
   gsk_sl_expression_default_is_assignable,
   gsk_sl_expression_inc_dec_get_return_type,
-  gsk_sl_expression_inc_dec_get_constant,
+  gsk_sl_expression_default_get_constant,
   gsk_sl_expression_inc_dec_write_spv,
   gsk_sl_expression_default_get_spv_access_chain
 };
@@ -2162,16 +2156,85 @@ static const GskSlExpressionClass GSK_SL_EXPRESSION_CONSTANT = {
   gsk_sl_expression_default_get_spv_access_chain
 };
 
-/* If parsing fails completely, just assume 1.0 */
-static GskSlExpression *
-gsk_sl_expression_error_new (void)
+/* ERROR */
+
+typedef struct _GskSlExpressionError GskSlExpressionError;
+
+struct _GskSlExpressionError {
+  GskSlExpression parent;
+
+  GskSlType *type;
+};
+
+static void
+gsk_sl_expression_error_free (GskSlExpression *expression)
 {
-  GskSlExpressionConstant *constant;
+  GskSlExpressionError *error = (GskSlExpressionError *) expression;
 
-  constant = gsk_sl_expression_new (GskSlExpressionConstant, &GSK_SL_EXPRESSION_CONSTANT);
-  constant->value = gsk_sl_value_new (gsk_sl_type_get_scalar (GSK_SL_FLOAT));
+  gsk_sl_type_unref (error->type);
 
-  return (GskSlExpression *) constant;
+  g_slice_free (GskSlExpressionError, error);
+}
+
+static void
+gsk_sl_expression_error_print (const GskSlExpression *expression,
+                                  GskSlPrinter          *printer)
+{
+  const GskSlExpressionError *error = (const GskSlExpressionError *) expression;
+  GskSlValue *value;
+
+  value = gsk_sl_value_new (error->type);
+  gsk_sl_value_print (value, printer);
+  gsk_sl_value_free (value);
+}
+
+static GskSlType *
+gsk_sl_expression_error_get_return_type (const GskSlExpression *expression)
+{
+  const GskSlExpressionError *error = (const GskSlExpressionError *) expression;
+
+  return error->type;
+}
+
+static guint32
+gsk_sl_expression_error_write_spv (const GskSlExpression *expression,
+                                   GskSpvWriter          *writer)
+{
+  const GskSlExpressionError *error = (const GskSlExpressionError *) expression;
+  GskSlValue *value;
+  guint32 result_id;
+
+  value = gsk_sl_value_new (error->type);
+  result_id = gsk_spv_writer_get_id_for_value (writer, value);
+  gsk_sl_value_free (value);
+
+  return result_id;
+}
+
+static const GskSlExpressionClass GSK_SL_EXPRESSION_ERROR = {
+  gsk_sl_expression_error_free,
+  gsk_sl_expression_error_print,
+  gsk_sl_expression_default_is_assignable,
+  gsk_sl_expression_error_get_return_type,
+  gsk_sl_expression_default_get_constant,
+  gsk_sl_expression_error_write_spv,
+  gsk_sl_expression_default_get_spv_access_chain
+};
+
+/* If parsing fails, do not crash but behave as sanely as possible.
+ * This expression represents that case: It just has a type */
+static GskSlExpression *
+gsk_sl_expression_error_new (GskSlType *type)
+{
+  GskSlExpressionError *error;
+
+  if (type == NULL)
+    type = gsk_sl_type_get_scalar (GSK_SL_FLOAT);
+
+  error = gsk_sl_expression_new (GskSlExpressionError, &GSK_SL_EXPRESSION_ERROR);
+  error->type = gsk_sl_type_ref (type);
+
+  return (GskSlExpression *) error;
 }
 
 static GskSlExpression *
@@ -2196,7 +2259,7 @@ gsk_sl_expression_parse_constructor (GskSlScope        *scope,
     {
       gsk_sl_preprocessor_error (stream, SYNTAX, "Expected opening \"(\" when calling function.");
       gsk_sl_expression_unref ((GskSlExpression *) call);
-      return gsk_sl_expression_error_new ();
+      return gsk_sl_expression_error_new (type);
     }
   gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
 
@@ -2282,7 +2345,7 @@ gsk_sl_expression_parse_constructor (GskSlScope        *scope,
   if (missing_args < 0)
     {
       gsk_sl_expression_unref ((GskSlExpression *) call);
-      return gsk_sl_expression_error_new ();
+      return gsk_sl_expression_error_new (type);
     }
   
   return (GskSlExpression *) call;
@@ -2303,7 +2366,7 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
     {
       gsk_sl_preprocessor_error (stream, SYNTAX, "Expected opening \"(\" when calling function.");
       gsk_sl_expression_unref ((GskSlExpression *) call);
-      return gsk_sl_expression_error_new ();
+      return gsk_sl_expression_error_new (NULL);
     }
   gsk_sl_preprocessor_consume (stream, (GskSlExpression *) call);
 
@@ -2382,7 +2445,7 @@ gsk_sl_expression_parse_function_call (GskSlScope           *scope,
   if (matcher == NULL)
     {
       gsk_sl_expression_unref ((GskSlExpression *) call);
-      return gsk_sl_expression_error_new ();
+      return gsk_sl_expression_error_new (NULL);
     }
   
   return (GskSlExpression *) call;
@@ -2448,7 +2511,7 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
             if (variable == NULL)
               {
                 gsk_sl_preprocessor_error (stream, DECLARATION, "No variable named \"%s\".", name);
-                expr = gsk_sl_expression_error_new ();
+                expr = gsk_sl_expression_error_new (NULL);
               }
             else
               {
@@ -2590,7 +2653,7 @@ gsk_sl_expression_parse_primary (GskSlScope        *scope,
     default:
       gsk_sl_preprocessor_error (stream, SYNTAX, "Expected an expression.");
       gsk_sl_preprocessor_consume (stream, NULL);
-      return gsk_sl_expression_error_new ();
+      return gsk_sl_expression_error_new (NULL);
   }
 }
 
@@ -3680,8 +3743,13 @@ gsk_sl_expression_parse_initializer_array (GskSlScope        *scope,
           gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot convert from %s to %s.",
                                      gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initializer->arguments[i])),
                                      gsk_sl_type_get_name (index_type));
+          gsk_sl_expression_unref (initializer->arguments[i]);
+          initializer->arguments[i] = gsk_sl_expression_error_new (index_type);
         }
     }
+  /* in error case, sanitize this struct */
+  for (; i < initializer->n_arguments; i++)
+    initializer->arguments[i] = gsk_sl_expression_error_new (index_type);
 
   return (GskSlExpression *) initializer;
 }
@@ -3723,8 +3791,12 @@ gsk_sl_expression_parse_initializer_members (GskSlScope        *scope,
           gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Cannot convert from %s to %s.",
                                      gsk_sl_type_get_name (gsk_sl_expression_get_return_type (initializer->arguments[i])),
                                      gsk_sl_type_get_name (member_type));
+          gsk_sl_expression_unref (initializer->arguments[i]);
+          initializer->arguments[i] = gsk_sl_expression_error_new (gsk_sl_type_get_member_type (type, i));
         }
     }
+  for (; i < initializer->n_arguments; i++)
+    initializer->arguments[i] = gsk_sl_expression_error_new (gsk_sl_type_get_member_type (type, i));
 
   return (GskSlExpression *) initializer;
 }
@@ -3755,7 +3827,7 @@ gsk_sl_expression_parse_initializer (GskSlScope        *scope,
         {
           gsk_sl_preprocessor_error (preproc, SYNTAX, "Cannot use initializer on %s", gsk_sl_type_get_name (type));
           gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
-          expression = gsk_sl_expression_error_new ();
+          expression = gsk_sl_expression_error_new (type);
         }
 
       token = gsk_sl_preprocessor_get (preproc);
