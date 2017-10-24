@@ -876,6 +876,7 @@ change_pseudoclass_position (const GtkCssSelector *selector)
       return GTK_CSS_CHANGE_FIRST_CHILD | GTK_CSS_CHANGE_LAST_CHILD;
     default:
       g_assert_not_reached ();
+      return 0;
     }
 }
 

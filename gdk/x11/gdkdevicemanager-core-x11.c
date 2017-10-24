@@ -265,6 +265,7 @@ translate_crossing_mode (int mode)
       return GDK_CROSSING_UNGRAB;
     default:
       g_assert_not_reached ();
+      return GDK_CROSSING_NORMAL;
     }
 }
 
@@ -285,6 +286,7 @@ translate_notify_type (int detail)
       return GDK_NOTIFY_NONLINEAR_VIRTUAL;
     default:
       g_assert_not_reached ();
+      return GDK_NOTIFY_UNKONWN;
     }
 }
 

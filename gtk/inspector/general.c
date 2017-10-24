@@ -501,7 +501,7 @@ translate_subpixel_layout (GdkSubpixelLayout subpixel)
     case GDK_SUBPIXEL_LAYOUT_HORIZONTAL_BGR: return "horizontal bgr";
     case GDK_SUBPIXEL_LAYOUT_VERTICAL_RGB: return "vertical rgb";
     case GDK_SUBPIXEL_LAYOUT_VERTICAL_BGR: return "vertical bgr";
-    default: g_assert_not_reached ();
+    default: g_assert_not_reached (); return "none;
     }
 }
 

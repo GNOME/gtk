@@ -1068,6 +1068,7 @@ translate_crossing_mode (gint mode)
       /* Fall through, unexpected in pointer crossing events */
     default:
       g_assert_not_reached ();
+      return GDK_CROSSING_NORMAL;
     }
 }
 
@@ -1088,6 +1089,7 @@ translate_notify_type (gint detail)
       return GDK_NOTIFY_NONLINEAR_VIRTUAL;
     default:
       g_assert_not_reached ();
+      return GDK_NOTIFY_UNKONWN;
     }
 }
 
