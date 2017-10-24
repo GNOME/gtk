@@ -2373,12 +2373,12 @@ gdk_win32_window_set_icon_list (GdkWindow *window,
 
   /* Create the icons */
   big_pixbuf = gdk_pixbuf_get_from_surface (big_surface, 0, 0,
-                                            cairo_image_surface_get_width (big_surface)
+                                            cairo_image_surface_get_width (big_surface),
                                             cairo_image_surface_get_height (big_surface));
   big_hicon = _gdk_win32_pixbuf_to_hicon (big_pixbuf);
   g_object_unref (big_pixbuf);
   small_pixbuf = gdk_pixbuf_get_from_surface (small_surface, 0, 0,
-                                              cairo_image_surface_get_width (small_surface)
+                                              cairo_image_surface_get_width (small_surface),
                                               cairo_image_surface_get_height (small_surface));
   small_hicon = _gdk_win32_pixbuf_to_hicon (small_pixbuf);
   g_object_unref (small_pixbuf);
