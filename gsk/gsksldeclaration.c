@@ -112,11 +112,14 @@ gsk_sl_declaration_variable_write_initializer_spv (const GskSlDeclaration *decla
 
   if (variable->initial && ! gsk_sl_variable_get_initial_value (variable->variable))
     {
-      gsk_sl_variable_store_spv (variable->variable,
-                                 writer,
-                                 gsk_sl_expression_write_spv (variable->initial,
-                                                              writer,
-                                                              gsk_sl_variable_get_type (variable->variable)));
+      GskSpvAccessChain *chain = gsk_sl_variable_get_access_chain (variable->variable, writer);
+
+      g_assert (chain); /* code further up should make sure this never happens */
+      gsk_spv_access_chain_store (chain, 
+                                  gsk_sl_expression_write_spv (variable->initial,
+                                                               writer,
+                                                               gsk_sl_variable_get_type (variable->variable)));
+      gsk_spv_access_chain_free (chain);
     }
 }
 

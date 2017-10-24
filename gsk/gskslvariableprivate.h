@@ -54,9 +54,6 @@ guint32                 gsk_sl_variable_write_spv               (const GskSlVari
                                                                  GskSpvWriter           *writer);
 guint32                 gsk_sl_variable_load_spv                (GskSlVariable          *variable,
                                                                  GskSpvWriter           *writer);
-void                    gsk_sl_variable_store_spv               (GskSlVariable          *variable,
-                                                                 GskSpvWriter           *writer,
-                                                                 guint32                 value);
 
 void                    gsk_spv_access_chain_free               (GskSpvAccessChain      *chain);
 void                    gsk_spv_access_chain_add_index          (GskSpvAccessChain      *chain,

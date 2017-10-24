@@ -51,9 +51,6 @@ struct _GskSlVariableClass
                                                                  GskSpvWriter           *writer);
   guint32               (* load_spv)                            (GskSlVariable          *variable,
                                                                  GskSpvWriter           *writer);
-  void                  (* store_spv)                           (GskSlVariable          *variable,
-                                                                 GskSpvWriter           *writer,
-                                                                 guint32                 value);
 };
 
 static gpointer
@@ -168,26 +165,13 @@ gsk_sl_variable_standard_load_spv (GskSlVariable *variable,
                               0);
 }
 
-static void
-gsk_sl_variable_standard_store_spv (GskSlVariable *variable,
-                                    GskSpvWriter  *writer,
-                                    guint32        value)
-{
-  gsk_spv_writer_store (writer,
-                        gsk_spv_writer_get_id_for_variable (writer, variable),
-                        value,
-                        0);
-
-}
-
 static const GskSlVariableClass GSK_SL_VARIABLE_STANDARD = {
   sizeof (GskSlVariableStandard),
   gsk_sl_variable_standard_free,
   gsk_sl_variable_standard_get_initial_value,
   gsk_sl_variable_standard_is_direct_access_spv,
   gsk_sl_variable_standard_write_spv,
-  gsk_sl_variable_standard_load_spv,
-  gsk_sl_variable_standard_store_spv,
+  gsk_sl_variable_standard_load_spv
 };
 
 /* BUILTIN */
@@ -242,26 +226,13 @@ gsk_sl_variable_builtin_load_spv (GskSlVariable *variable,
                               0);
 }
 
-static void
-gsk_sl_variable_builtin_store_spv (GskSlVariable *variable,
-                                    GskSpvWriter  *writer,
-                                    guint32        value)
-{
-  gsk_spv_writer_store (writer,
-                        gsk_spv_writer_get_id_for_variable (writer, variable),
-                        value,
-                        0);
-
-}
-
 static const GskSlVariableClass GSK_SL_VARIABLE_BUILTIN = {
   sizeof (GskSlVariableBuiltin),
   gsk_sl_variable_free,
   gsk_sl_variable_default_get_initial_value,
   gsk_sl_variable_builtin_is_direct_access_spv,
   gsk_sl_variable_builtin_write_spv,
-  gsk_sl_variable_builtin_load_spv,
-  gsk_sl_variable_builtin_store_spv,
+  gsk_sl_variable_builtin_load_spv
 };
 
 /* CONSTANT */
@@ -314,22 +285,13 @@ gsk_sl_variable_constant_load_spv (GskSlVariable *variable,
   return gsk_spv_writer_get_id_for_value (writer, constant->value);
 }
 
-static void
-gsk_sl_variable_constant_store_spv (GskSlVariable *variable,
-                                    GskSpvWriter  *writer,
-                                    guint32        value)
-{
-  g_assert_not_reached ();
-}
-
 static const GskSlVariableClass GSK_SL_VARIABLE_CONSTANT = {
   sizeof (GskSlVariableConstant),
   gsk_sl_variable_constant_free,
   gsk_sl_variable_constant_get_initial_value,
   gsk_sl_variable_constant_is_direct_access_spv,
   gsk_sl_variable_constant_write_spv,
-  gsk_sl_variable_constant_load_spv,
-  gsk_sl_variable_constant_store_spv,
+  gsk_sl_variable_constant_load_spv
 };
 
 /* PARAMETER */
@@ -366,26 +328,13 @@ gsk_sl_variable_parameter_load_spv (GskSlVariable *variable,
                               0);
 }
 
-static void
-gsk_sl_variable_parameter_store_spv (GskSlVariable *variable,
-                                     GskSpvWriter  *writer,
-                                     guint32        value)
-{
-  gsk_spv_writer_store (writer,
-                        gsk_spv_writer_get_id_for_variable (writer, variable),
-                        value,
-                        0);
-
-}
-
 static const GskSlVariableClass GSK_SL_VARIABLE_PARAMETER = {
   sizeof (GskSlVariable),
   gsk_sl_variable_free,
   gsk_sl_variable_default_get_initial_value,
   gsk_sl_variable_parameter_is_direct_access_spv,
   gsk_sl_variable_parameter_write_spv,
-  gsk_sl_variable_parameter_load_spv,
-  gsk_sl_variable_parameter_store_spv,
+  gsk_sl_variable_parameter_load_spv
 };
 
 /* CONST_PARAMETER */
@@ -417,22 +366,13 @@ gsk_sl_variable_const_parameter_load_spv (GskSlVariable *variable,
   return gsk_spv_writer_get_id_for_variable (writer, variable);
 }
 
-static void
-gsk_sl_variable_const_parameter_store_spv (GskSlVariable *variable,
-                                           GskSpvWriter  *writer,
-                                           guint32        value)
-{
-  g_assert_not_reached ();
-}
-
 static const GskSlVariableClass GSK_SL_VARIABLE_CONST_PARAMETER = {
   sizeof (GskSlVariable),
   gsk_sl_variable_free,
   gsk_sl_variable_default_get_initial_value,
   gsk_sl_variable_const_parameter_is_direct_access_spv,
   gsk_sl_variable_const_parameter_write_spv,
-  gsk_sl_variable_const_parameter_load_spv,
-  gsk_sl_variable_const_parameter_store_spv,
+  gsk_sl_variable_const_parameter_load_spv
 };
 
 /* API */
@@ -603,14 +543,6 @@ gsk_sl_variable_load_spv (GskSlVariable *variable,
                           GskSpvWriter  *writer)
 {
   return variable->class->load_spv (variable, writer);
-}
-
-void
-gsk_sl_variable_store_spv (GskSlVariable *variable,
-                           GskSpvWriter  *writer,
-                           guint32        value)
-{
-  variable->class->store_spv (variable, writer, value);
 }
 
 /* ACCESS CHAIN */
