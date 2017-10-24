@@ -1617,6 +1617,9 @@ rect_anchor_to_anchor (GdkGravity rect_anchor)
     default:
       g_assert_not_reached ();
     }
+
+  return (ZXDG_POSITIONER_V6_ANCHOR_TOP |
+          ZXDG_POSITIONER_V6_ANCHOR_LEFT);
 }
 
 static enum zxdg_positioner_v6_gravity
@@ -1650,6 +1653,9 @@ window_anchor_to_gravity (GdkGravity rect_anchor)
     default:
       g_assert_not_reached ();
     }
+
+  return (ZXDG_POSITIONER_V6_GRAVITY_BOTTOM |
+          ZXDG_POSITIONER_V6_GRAVITY_RIGHT);
 }
 
 static GdkWindow *
