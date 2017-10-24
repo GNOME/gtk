@@ -553,11 +553,40 @@ populate_render_node_properties (GtkListStore  *store,
       }
       break;
 
-    case GSK_NOT_A_RENDER_NODE:
-    case GSK_CONTAINER_NODE:
-    case GSK_TRANSFORM_NODE:
     case GSK_CLIP_NODE:
+      {
+        const graphene_rect_t *clip = gsk_clip_node_peek_clip (node);
+        tmp = g_strdup_printf ("%.2f x %.2f + %.2f + %.2f",
+                               clip->size.width,
+                               clip->size.height,
+                               clip->origin.x,
+                               clip->origin.y);
+        add_text_row (store, "Clip", tmp);
+        g_free (tmp);
+      }
+      break;
+
     case GSK_ROUNDED_CLIP_NODE:
+      {
+        const GskRoundedRect *clip = gsk_rounded_clip_node_peek_clip (node);
+        tmp = g_strdup_printf ("%.2f x %.2f + %.2f + %.2f",
+                               clip->bounds.size.width,
+                               clip->bounds.size.height,
+                               clip->bounds.origin.x,
+                               clip->bounds.origin.y);
+        add_text_row (store, "Clip", tmp);
+        g_free (tmp);
+      }
+      break;
+
+    case GSK_CONTAINER_NODE:
+      tmp = g_strdup_printf ("%d", gsk_container_node_get_n_children (node));
+      add_text_row (store, "Children", tmp);
+      g_free (tmp);
+      break;
+
+    case GSK_NOT_A_RENDER_NODE:
+    case GSK_TRANSFORM_NODE:
     case GSK_SHADOW_NODE:
     default:
       break;
