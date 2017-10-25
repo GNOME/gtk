@@ -21,6 +21,8 @@
 #include "gskslscopeprivate.h"
 
 #include "gskslfunctionprivate.h"
+#include "gskslpreprocessorprivate.h"
+#include "gskslqualifierprivate.h"
 #include "gsksltypeprivate.h"
 #include "gskslvariableprivate.h"
 
@@ -151,6 +153,55 @@ gsk_sl_scope_add_variable (GskSlScope    *scope,
                            GskSlVariable *variable)
 {
   g_hash_table_replace (scope->variables, (gpointer) gsk_sl_variable_get_name (variable), gsk_sl_variable_ref (variable));
+}
+
+static const char *
+gsk_sl_scope_describe_variable (GskSlVariable *variable)
+{
+  switch (gsk_sl_qualifier_get_location (gsk_sl_variable_get_qualifier (variable)))
+  {
+    default:
+      g_assert_not_reached ();
+    case GSK_SL_QUALIFIER_GLOBAL:
+      return "global variable";
+    case GSK_SL_QUALIFIER_PARAMETER:
+      return "function parameter";
+    case GSK_SL_QUALIFIER_LOCAL:
+      return "local variable";
+    }
+}
+
+void
+gsk_sl_scope_try_add_variable (GskSlScope        *scope,
+                               GskSlPreprocessor *preproc,
+                               GskSlVariable     *variable)
+{
+  GskSlVariable *shadow;
+
+  /* only look in current scope for error */
+  shadow = g_hash_table_lookup (scope->variables, gsk_sl_variable_get_name (variable));
+  if (shadow)
+    {
+      gsk_sl_preprocessor_error (preproc, DECLARATION,
+                                 "Redefinition of %s \"%s\".",
+                                 gsk_sl_scope_describe_variable (shadow),
+                                 gsk_sl_variable_get_name (variable));
+      return;
+    }
+
+  if (scope->parent)
+    {
+      shadow = gsk_sl_scope_lookup_variable (scope->parent, gsk_sl_variable_get_name (variable));
+      if (shadow)
+        {
+          gsk_sl_preprocessor_warn (preproc, SHADOW,
+                                    "Name \"%s\" shadows %s of same name.",
+                                    gsk_sl_variable_get_name (variable),
+                                    gsk_sl_scope_describe_variable (shadow));
+        }
+    }
+
+  gsk_sl_scope_add_variable (scope, variable);
 }
 
 GskSlVariable *

@@ -604,21 +604,6 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
           if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
             {
               char *name;
-              guint i;
-
-              if (gsk_sl_scope_lookup_variable (function->scope, token->str))
-                {
-                  for (i = 0; i < arguments->len; i++)
-                    {
-                      if (g_str_equal (gsk_sl_variable_get_name (g_ptr_array_index (arguments, i)), token->str))
-                        {
-                          gsk_sl_preprocessor_error (preproc, DECLARATION, "Duplicate argument name \"%s\".", token->str);
-                          break;
-                        }
-                    }
-                  if (i == arguments->len)
-                    gsk_sl_preprocessor_warn (preproc, SHADOW, "Function argument \"%s\" shadows global variable of same name.", token->str);
-                }
 
               name = g_strdup (token->str);
               gsk_sl_preprocessor_consume (preproc, (GskSlStatement *) function);
@@ -631,7 +616,7 @@ gsk_sl_function_new_parse (GskSlScope        *scope,
                                                                            type);
               g_ptr_array_add (arguments, variable);
               
-              gsk_sl_scope_add_variable (function->scope, variable);
+              gsk_sl_scope_try_add_variable (function->scope, preproc, variable);
 
               g_free (name);
             }

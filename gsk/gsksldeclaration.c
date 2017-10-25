@@ -316,7 +316,7 @@ gsk_sl_declaration_parse_block (GskSlScope           *scope,
       
       variable = gsk_sl_declaration_new (&GSK_SL_DECLARATION_VARIABLE);
       variable->variable = gsk_sl_variable_new (name, type, qualifier, NULL);
-      gsk_sl_scope_add_variable (scope, variable->variable);
+      gsk_sl_scope_try_add_variable (scope, preproc, variable->variable);
 
       token = gsk_sl_preprocessor_get (preproc);
     }
@@ -334,7 +334,7 @@ gsk_sl_declaration_parse_block (GskSlScope           *scope,
           GskSlVariable *sub;
 
           sub = gsk_sl_variable_new_block_member (variable->variable, i);
-          gsk_sl_scope_add_variable (scope, sub);
+          gsk_sl_scope_try_add_variable (scope, preproc, sub);
           gsk_sl_variable_unref (sub);
         }
     }
@@ -413,7 +413,7 @@ gsk_sl_declaration_parse_variable (GskSlScope           *scope,
   variable = gsk_sl_declaration_new (&GSK_SL_DECLARATION_VARIABLE);
   variable->variable = gsk_sl_variable_new (name, type, qualifier, initial_value);
   variable->initial = initial;
-  gsk_sl_scope_add_variable (scope, variable->variable);
+  gsk_sl_scope_try_add_variable (scope, preproc, variable->variable);
 
   gsk_sl_type_unref (type);
 

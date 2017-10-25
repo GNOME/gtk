@@ -743,7 +743,7 @@ gsk_sl_statement_parse_declaration (GskSlScope           *scope,
 
   declaration->variable = gsk_sl_variable_new (name, type, qualifier, initial_value);
   g_free (name);
-  gsk_sl_scope_add_variable (scope, declaration->variable);
+  gsk_sl_scope_try_add_variable (scope, stream, declaration->variable);
   gsk_sl_type_unref (type);
 
   return (GskSlStatement *) declaration;
