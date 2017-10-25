@@ -30,6 +30,17 @@
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicetool.h>
 
+#define GDK_EVENT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_EVENT, GdkEventClass))
+#define GDK_IS_EVENT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_EVENT))
+#define GDK_EVENT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_EVENT, GdkEventClass))
+
+typedef struct _GdkEventClass GdkEventClass;
+
+struct _GdkEventClass
+{
+  GObjectClass object_class;
+};
+
 /**
  * GdkEventAny:
  * @type: the type of the event.
@@ -42,6 +53,7 @@
  */
 struct _GdkEventAny
 {
+  GObject parent_instance;
   GdkEventType type;
   GdkWindow *window;
   guint16 flags;

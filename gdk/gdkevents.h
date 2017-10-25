@@ -53,6 +53,10 @@ G_BEGIN_DECLS
 #define GDK_TYPE_EVENT          (gdk_event_get_type ())
 #define GDK_TYPE_EVENT_SEQUENCE (gdk_event_sequence_get_type ())
 
+#define GDK_EVENT(object)       (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_EVENT, GdkEvent))
+#define GDK_IS_EVENT(object)    (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_EVENT))
+
+
 /**
  * GDK_PRIORITY_EVENTS:
  *
@@ -145,7 +149,6 @@ typedef struct _GdkEventPadAxis     GdkEventPadAxis;
 typedef struct _GdkEventPadGroupMode GdkEventPadGroupMode;
 
 typedef struct _GdkEventSequence    GdkEventSequence;
-
 typedef union  _GdkEvent	    GdkEvent;
 
 /**
