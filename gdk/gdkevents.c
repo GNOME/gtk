@@ -68,6 +68,7 @@ static GDestroyNotify _gdk_event_notify = NULL;
 
 static GQuark quark_event_user_data = 0;
 
+static void gdk_event_constructed (GObject *object);
 static void gdk_event_finalize (GObject *object);
 
 G_DEFINE_TYPE (GdkEvent, gdk_event, G_TYPE_OBJECT)
@@ -133,6 +134,7 @@ gdk_event_class_init (GdkEventClass *klass)
 
   object_class->get_property = gdk_event_real_get_property;
   object_class->set_property = gdk_event_real_set_property;
+  object_class->constructed = gdk_event_constructed;
   object_class->finalize = gdk_event_finalize;
 
   event_props[PROP_EVENT_TYPE] =
@@ -448,11 +450,15 @@ gdk_event_handler_set (GdkEventFunc   func,
 GdkEvent*
 gdk_event_new (GdkEventType type)
 {
-  GdkEvent *new_event;
+  return g_object_new (GDK_TYPE_EVENT,
+                       "event-type", type,
+                       NULL);
+}
 
-  new_event = g_object_new (GDK_TYPE_EVENT,
-                            "event-type", type,
-                            NULL);
+static void
+gdk_event_constructed (GObject *object)
+{
+  GdkEvent *new_event = GDK_EVENT (object);
 
   /*
    * Bytewise 0 initialization is reasonable for most of the 
@@ -460,7 +466,7 @@ gdk_event_new (GdkEventType type)
    * since I trust bytewise 0 == 0. less than for integers
    * or pointers.
    */
-  switch ((guint) type)
+  switch ((guint) new_event->any.type)
     {
     case GDK_MOTION_NOTIFY:
       new_event->motion.x = 0.;
@@ -521,8 +527,8 @@ gdk_event_new (GdkEventType type)
     default:
       break;
     }
-  
-  return new_event;
+
+  G_OBJECT_CLASS (gdk_event_parent_class)->constructed (object);
 }
 
 void
