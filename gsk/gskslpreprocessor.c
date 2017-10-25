@@ -295,6 +295,15 @@ gsk_sl_preprocessor_append_token (GskSlPreprocessor *preproc,
       return;
     }
 
+  if (gsk_sl_token_is (&pp->token, GSK_SL_TOKEN_EOF))
+    {
+      while (gsk_sl_preprocessor_has_conditional (preproc))
+        {
+          gsk_sl_preprocessor_pop_conditional (preproc);
+          gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp->location, "Missing #endif.");
+        }
+    }
+
   if (gsk_sl_preprocessor_in_ignored_conditional (preproc))
     {
       gsk_sl_preprocessor_clear_token (pp);
