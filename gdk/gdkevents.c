@@ -375,8 +375,6 @@ gdk_event_new (GdkEventType type)
     event_hash = g_hash_table_new (g_direct_hash, NULL);
 
   new_private = g_slice_new0 (GdkEventPrivate);
-  
-  new_private->display = NULL;
 
   g_hash_table_insert (event_hash, new_private, GUINT_TO_POINTER (1));
 
@@ -524,7 +522,6 @@ gdk_event_copy (const GdkEvent *event)
     {
       GdkEventPrivate *private = (GdkEventPrivate *)event;
 
-      new_private->display = private->display;
       g_set_object (&new_private->user_data, private->user_data);
     }
 
@@ -1761,25 +1758,14 @@ void
 gdk_event_set_display (GdkEvent   *event,
                        GdkDisplay *display)
 {
-  GdkEventPrivate *private;
-
-  g_return_if_fail (gdk_event_is_allocated (event));
-
-  private = (GdkEventPrivate *)event;
-
-  private->display = display;
+  event->any.display = display;
 }
 
 GdkDisplay *
 gdk_event_get_display (const GdkEvent *event)
 {
-  if (gdk_event_is_allocated (event))
-    {
-      GdkEventPrivate *private = (GdkEventPrivate *)event;
-
-      if (private->display)
-	return private->display;
-    }
+  if (event->any.display)
+    return event->any.display;
 
   if (event->any.window)
     return gdk_window_get_display (event->any.window);
