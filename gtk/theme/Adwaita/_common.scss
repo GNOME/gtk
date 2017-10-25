@@ -13,7 +13,12 @@ $button_transition: all 200ms $ease-out-quad;
   -gtk-secondary-caret-color: $selected_bg_color
 }
 
-*:focus {
+button:focus(visible),
+checkbutton:focus(visible),
+radiobutton:focus(visible),
+switch:focus(visible),
+scale:focus(visible),
+label:focus(visible) {
   // We use the outline properties to signal the focus properties
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
