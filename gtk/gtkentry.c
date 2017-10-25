@@ -1744,10 +1744,10 @@ gtk_entry_class_init (GtkEntryClass *class)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_BOXED,
+                  _gtk_marshal_VOID__ENUM_OBJECT,
                   G_TYPE_NONE, 2,
                   GTK_TYPE_ENTRY_ICON_POSITION,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+                  GDK_TYPE_EVENT);
   
   /**
    * GtkEntry::icon-release:
@@ -1766,10 +1766,10 @@ gtk_entry_class_init (GtkEntryClass *class)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_BOXED,
+                  _gtk_marshal_VOID__ENUM_OBJECT,
                   G_TYPE_NONE, 2,
                   GTK_TYPE_ENTRY_ICON_POSITION,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+                  GDK_TYPE_EVENT);
 
   /**
    * GtkEntry::preedit-changed:
