@@ -24,6 +24,7 @@
 
 #include "config.h"
 
+#include "gdkintl.h"
 #include "gdkeventsprivate.h"
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
@@ -71,6 +72,14 @@ static void gdk_event_finalize (GObject *object);
 
 G_DEFINE_TYPE (GdkEvent, gdk_event, G_TYPE_OBJECT)
 
+enum {
+  PROP_0,
+  PROP_EVENT_TYPE,
+  N_PROPS
+};
+
+static GParamSpec *event_props[N_PROPS] = { NULL, };
+
 #define EVENT_PAYLOAD(ev) (&(ev)->any.type)
 #define EVENT_PAYLOAD_SIZE (sizeof (GdkEvent) - sizeof (GObject))
 
@@ -80,11 +89,60 @@ gdk_event_init (GdkEvent *event)
 }
 
 static void
+gdk_event_real_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GdkEvent *event = GDK_EVENT (object);
+
+  switch (prop_id)
+    {
+    case PROP_EVENT_TYPE:
+      g_value_set_enum (value, event->any.type);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_event_real_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GdkEvent *event = GDK_EVENT (object);
+
+  switch (prop_id)
+    {
+    case PROP_EVENT_TYPE:
+      event->any.type = g_value_get_enum (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gdk_event_class_init (GdkEventClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->get_property = gdk_event_real_get_property;
+  object_class->set_property = gdk_event_real_set_property;
   object_class->finalize = gdk_event_finalize;
+
+  event_props[PROP_EVENT_TYPE] =
+    g_param_spec_enum ("event-type",
+                       P_("Event type"),
+                       P_("Event type"),
+                       GDK_TYPE_EVENT_TYPE, GDK_NOTHING,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY);
+  g_object_class_install_properties (object_class, N_PROPS, event_props);
 
   quark_event_user_data = g_quark_from_static_string ("gdk-event-user-data");
 }
@@ -392,9 +450,9 @@ gdk_event_new (GdkEventType type)
 {
   GdkEvent *new_event;
 
-  new_event = g_object_new (GDK_TYPE_EVENT, NULL);
-
-  new_event->any.type = type;
+  new_event = g_object_new (GDK_TYPE_EVENT,
+                            "event-type", type,
+                            NULL);
 
   /*
    * Bytewise 0 initialization is reasonable for most of the 
@@ -511,7 +569,7 @@ gdk_event_copy (const GdkEvent *event)
 
   g_return_val_if_fail (event != NULL, NULL);
 
-  new_event = gdk_event_new (GDK_NOTHING);
+  new_event = gdk_event_new (event->any.type);
 
   memcpy (EVENT_PAYLOAD (new_event),
           EVENT_PAYLOAD (event),
