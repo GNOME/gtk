@@ -30,6 +30,8 @@ GskSlVariable *         gsk_sl_variable_new                     (const char     
                                                                  GskSlType              *type,
                                                                  const GskSlQualifier   *qualifier,
                                                                  GskSlValue             *initial_value);
+GskSlVariable *         gsk_sl_variable_new_block_member        (GskSlVariable          *block,
+                                                                 guint                   member_id);
 GskSlVariable *         gsk_sl_variable_new_builtin             (const char             *name,
                                                                  GskSlType              *type,
                                                                  const GskSlQualifier   *qualifier,

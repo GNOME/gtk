@@ -171,7 +171,8 @@ gsk_sl_variable_standard_write_spv (const GskSlVariable *variable,
                                        storage_class,
                                        value_id);
 
-  gsk_spv_writer_name (writer, result_id, variable->name);
+  if (variable->name)
+    gsk_spv_writer_name (writer, result_id, variable->name);
 
   gsk_sl_qualifier_write_spv_decorations (&variable->qualifier, writer, result_id);
 
@@ -344,6 +345,63 @@ static const GskSlVariableClass GSK_SL_VARIABLE_CONST_PARAMETER = {
   gsk_sl_variable_const_parameter_load_spv
 };
 
+/* MEMBER */
+
+typedef struct _GskSlVariableMember GskSlVariableMember;
+
+struct _GskSlVariableMember {
+  GskSlVariable parent;
+
+  GskSlVariable *block;
+  gsize member_id;
+};
+
+static void
+gsk_sl_variable_member_free (GskSlVariable *variable)
+{
+  const GskSlVariableMember *member = (const GskSlVariableMember *) variable;
+
+  gsk_sl_variable_unref (member->block);
+
+  gsk_sl_variable_free (variable);
+}
+
+static GskSpvAccessChain *
+gsk_sl_variable_member_get_access_chain (GskSlVariable *variable,
+                                         GskSpvWriter  *writer)
+{
+  const GskSlVariableMember *member = (const GskSlVariableMember *) variable;
+  GskSpvAccessChain *chain;
+  GskSlValue *value;
+
+  chain = gsk_sl_variable_get_access_chain (member->block, writer);
+  value = gsk_sl_value_new_for_data (gsk_sl_type_get_scalar (GSK_SL_INT), &(gint32) { member->member_id }, NULL, NULL);
+  gsk_spv_access_chain_add_index (chain,
+                                  variable->type,
+                                  gsk_spv_writer_get_id_for_value (writer, value));
+  gsk_sl_value_free (value);
+
+  return chain;
+}
+
+static guint32
+gsk_sl_variable_member_write_spv (const GskSlVariable *variable,
+                                  GskSpvWriter        *writer)
+{
+  const GskSlVariableMember *member = (const GskSlVariableMember *) variable;
+
+  return gsk_spv_writer_get_id_for_variable (writer, member->block);
+}
+
+static const GskSlVariableClass GSK_SL_VARIABLE_MEMBER = {
+  sizeof (GskSlVariableMember),
+  gsk_sl_variable_member_free,
+  gsk_sl_variable_default_get_initial_value,
+  gsk_sl_variable_member_get_access_chain,
+  gsk_sl_variable_member_write_spv,
+  gsk_sl_variable_default_load_spv
+};
+
 /* API */
 
 GskSlVariable *
@@ -391,6 +449,26 @@ gsk_sl_variable_new (const char           *name,
       g_assert_not_reached ();
       return NULL;
   }
+}
+
+GskSlVariable *
+gsk_sl_variable_new_block_member (GskSlVariable *block,
+                                  guint          member_id)
+{
+  GskSlVariableMember *member;
+
+  g_return_val_if_fail (block != NULL, NULL);
+  g_return_val_if_fail (gsk_sl_type_is_block (block->type), NULL);
+  g_return_val_if_fail (member_id < gsk_sl_type_get_n_members (block->type), NULL);
+
+  member = gsk_sl_variable_alloc (&GSK_SL_VARIABLE_MEMBER,
+                                  gsk_sl_type_get_member_name (block->type, member_id),
+                                  &block->qualifier,
+                                  gsk_sl_type_get_member_type (block->type, member_id));
+  member->block = gsk_sl_variable_ref (block);
+  member->member_id = member_id;
+
+  return &member->parent;
 }
 
 GskSlVariable *

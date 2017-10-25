@@ -1880,6 +1880,7 @@ gsk_sl_type_block_write_spv (GskSlType    *type,
                                           ids, 
                                           block->n_members);
   
+  gsk_spv_writer_name (writer, result_id, block->name);
   gsk_spv_writer_decorate (writer, result_id, GSK_SPV_DECORATION_BLOCK, NULL, 0);
 
   for (i = 0; i < block->n_members; i++)
@@ -2088,85 +2089,6 @@ out:
         }
     }
   return type;
-}
-
-static GskSlType *
-gsk_sl_type_parse_block (GskSlScope        *scope,
-                         GskSlPreprocessor *preproc)
-{
-  GskSlType *type;
-  const GskSlToken *token;
-  GskSlTypeBuilder *builder;
-
-  if (!gsk_sl_scope_is_global (scope))
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "Blocks are only allowed in global scope.");
-      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_FLOAT));
-    }
-
-  token = gsk_sl_preprocessor_get (preproc);
-  if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
-    {    
-      builder = gsk_sl_type_builder_new_block (token->str);
-      gsk_sl_preprocessor_consume (preproc, NULL);
-    }
-  else
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected block name.");
-      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_FLOAT));
-    }
-
-  token = gsk_sl_preprocessor_get (preproc);
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected opening \"{\" after block declaration.");
-      goto out;
-    }
-  gsk_sl_preprocessor_consume (preproc, NULL);
-
-  for (token = gsk_sl_preprocessor_get (preproc);
-       !gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE) && !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
-       token = gsk_sl_preprocessor_get (preproc))
-    {
-      type = gsk_sl_type_new_parse (scope, preproc);
-
-      while (TRUE)
-        {
-          token = gsk_sl_preprocessor_get (preproc);
-          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
-            {
-              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected identifier for type name.");
-              break;
-            }
-          if (gsk_sl_type_builder_has_member (builder, token->str))
-            gsk_sl_preprocessor_error (preproc, DECLARATION, "struct already has a member named \"%s\".", token->str);
-          else
-            gsk_sl_type_builder_add_member (builder, type, token->str);
-          gsk_sl_preprocessor_consume (preproc, NULL);
-
-          token = gsk_sl_preprocessor_get (preproc);
-          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
-            break;
-
-          gsk_sl_preprocessor_consume (preproc, NULL);
-        }
-      gsk_sl_type_unref (type);
-
-      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
-        gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected semicolon after block member declaration.");
-      else
-        gsk_sl_preprocessor_consume (preproc, NULL);
-    }
-
-  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
-    {
-      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \"}\" after block declaration.");
-      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
-    }
-  gsk_sl_preprocessor_consume (preproc, NULL);
-  
-out:
-  return gsk_sl_type_builder_free (builder);
 }
 
 GskSlType *
@@ -2510,18 +2432,6 @@ gsk_sl_type_new_parse (GskSlScope        *scope,
       break;
     case GSK_SL_TOKEN_STRUCT:
       return gsk_sl_type_parse_struct (scope, preproc);
-    case GSK_SL_TOKEN_IDENTIFIER:
-      {
-        type = gsk_sl_scope_lookup_type (scope, token->str);
-
-        if (type)
-          {
-            type = gsk_sl_type_ref (type);
-            break;
-          }
-  
-        return gsk_sl_type_parse_block (scope, preproc);
-      }
     default:
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected type specifier");
       return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_FLOAT));

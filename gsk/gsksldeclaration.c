@@ -219,6 +219,136 @@ static const GskSlDeclarationClass GSK_SL_DECLARATION_FUNCTION = {
 
 /* API */
 
+static GskSlType *
+gsk_sl_declaration_parse_block_type (GskSlScope         *scope,
+                                     GskSlPreprocessor  *preproc)
+{
+  GskSlType *type;
+  const GskSlToken *token;
+  GskSlTypeBuilder *builder;
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+    {    
+      builder = gsk_sl_type_builder_new_block (token->str);
+      gsk_sl_preprocessor_consume (preproc, NULL);
+    }
+  else
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected block name.");
+      return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_FLOAT));
+    }
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected opening \"{\" after block declaration.");
+      goto out;
+    }
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  for (token = gsk_sl_preprocessor_get (preproc);
+       !gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE) && !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF);
+       token = gsk_sl_preprocessor_get (preproc))
+    {
+      type = gsk_sl_type_new_parse (scope, preproc);
+
+      while (TRUE)
+        {
+          token = gsk_sl_preprocessor_get (preproc);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+            {
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected identifier for type name.");
+              break;
+            }
+          if (gsk_sl_type_builder_has_member (builder, token->str))
+            gsk_sl_preprocessor_error (preproc, DECLARATION, "Duplicate block member name \"%s\".", token->str);
+          else
+            gsk_sl_type_builder_add_member (builder, type, token->str);
+          gsk_sl_preprocessor_consume (preproc, NULL);
+
+          token = gsk_sl_preprocessor_get (preproc);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COMMA))
+            break;
+
+          gsk_sl_preprocessor_consume (preproc, NULL);
+        }
+      gsk_sl_type_unref (type);
+
+      if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
+        gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected semicolon after block member declaration.");
+      else
+        gsk_sl_preprocessor_consume (preproc, NULL);
+    }
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \"}\" after block declaration.");
+      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
+    }
+  gsk_sl_preprocessor_consume (preproc, NULL);
+  
+out:
+  return gsk_sl_type_builder_free (builder);
+}
+
+static GskSlDeclaration *
+gsk_sl_declaration_parse_block (GskSlScope           *scope,
+                                GskSlPreprocessor    *preproc,
+                                const GskSlQualifier *qualifier)
+{
+  GskSlDeclarationVariable *variable;
+  const GskSlToken *token;
+  GskSlType *type;
+
+  type = gsk_sl_declaration_parse_block_type (scope, preproc);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+    {
+      char *name;
+      
+      name = g_strdup (token->str);
+      gsk_sl_preprocessor_consume (preproc, NULL);
+
+      type = gsk_sl_type_parse_array (type, scope, preproc);
+      gsk_sl_qualifier_check_type (qualifier, preproc, type);
+      
+      variable = gsk_sl_declaration_new (&GSK_SL_DECLARATION_VARIABLE);
+      variable->variable = gsk_sl_variable_new (name, type, qualifier, NULL);
+      gsk_sl_scope_add_variable (scope, variable->variable);
+
+      token = gsk_sl_preprocessor_get (preproc);
+    }
+  else
+    {
+      gsize i;
+
+      gsk_sl_qualifier_check_type (qualifier, preproc, type);
+
+      variable = gsk_sl_declaration_new (&GSK_SL_DECLARATION_VARIABLE);
+      variable->variable = gsk_sl_variable_new (NULL, type, qualifier, NULL);
+
+      for (i = 0; i < gsk_sl_type_get_n_members (type); i++)
+        {
+          GskSlVariable *sub;
+
+          sub = gsk_sl_variable_new_block_member (variable->variable, i);
+          gsk_sl_scope_add_variable (scope, sub);
+          gsk_sl_variable_unref (sub);
+        }
+    }
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "No semicolon at end of variable declaration.");
+      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_SEMICOLON);
+    }
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  return &variable->parent;
+}
+
 static GskSlDeclaration *
 gsk_sl_declaration_parse_variable (GskSlScope           *scope,
                                    GskSlPreprocessor    *preproc,
@@ -302,7 +432,19 @@ gsk_sl_declaration_parse (GskSlScope        *scope,
 
   gsk_sl_qualifier_parse (&qualifier, scope, preproc, GSK_SL_QUALIFIER_GLOBAL);
 
-  type = gsk_sl_type_new_parse (scope, preproc);
+  token = gsk_sl_preprocessor_get (preproc);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+    {
+      type = gsk_sl_scope_lookup_type (scope, token->str);
+      if (type == NULL)
+        return gsk_sl_declaration_parse_block (scope, preproc, &qualifier);
+      gsk_sl_type_ref (type);
+      gsk_sl_preprocessor_consume (preproc, NULL);
+    }
+  else
+    {
+      type = gsk_sl_type_new_parse (scope, preproc);
+    }
 
   token = gsk_sl_preprocessor_get (preproc);
   if (gsk_sl_token_is (token, GSK_SL_TOKEN_SEMICOLON))
