@@ -15466,9 +15466,6 @@ gtk_widget_set_focus_child (GtkWidget *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (child == priv->focus_child)
-    return;
-
   if (child != NULL)
     {
       g_return_if_fail (GTK_IS_WIDGET (child));
