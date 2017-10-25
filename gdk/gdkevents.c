@@ -525,7 +525,6 @@ gdk_event_copy (const GdkEvent *event)
       GdkEventPrivate *private = (GdkEventPrivate *)event;
 
       new_private->display = private->display;
-      new_private->seat = private->seat;
       g_set_object (&new_private->user_data, private->user_data);
     }
 
@@ -1992,40 +1991,11 @@ gdk_event_get_event_type (const GdkEvent *event)
 GdkSeat *
 gdk_event_get_seat (const GdkEvent *event)
 {
-  const GdkEventPrivate *priv;
+  GdkDevice *device;
 
-  if (!gdk_event_is_allocated (event))
-    return NULL;
+  device = gdk_event_get_device (event);
 
-  priv = (const GdkEventPrivate *) event;
-
-  if (!priv->seat)
-    {
-      GdkDevice *device;
-
-      g_warning ("Event with type %d not holding a GdkSeat. "
-                 "It is most likely synthesized outside Gdk/GTK+",
-                 event->any.type);
-
-      device = gdk_event_get_device (event);
-
-      return device ? gdk_device_get_seat (device) : NULL;
-    }
-
-  return priv->seat;
-}
-
-void
-gdk_event_set_seat (GdkEvent *event,
-                    GdkSeat  *seat)
-{
-  GdkEventPrivate *priv;
-
-  if (gdk_event_is_allocated (event))
-    {
-      priv = (GdkEventPrivate *) event;
-      priv->seat = seat;
-    }
+  return device ? gdk_device_get_seat (device) : NULL;
 }
 
 /**

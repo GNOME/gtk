@@ -147,7 +147,6 @@ struct _GdkEventPrivate
 {
   GdkEvent   event;
   GdkDisplay *display;
-  GdkSeat   *seat;
   GObject *user_data;
 };
 
@@ -296,9 +295,6 @@ void     gdk_event_set_pointer_emulated (GdkEvent *event,
 
 void     gdk_event_set_scancode        (GdkEvent *event,
                                         guint16 scancode);
-
-void     gdk_event_set_seat              (GdkEvent *event,
-                                          GdkSeat  *seat);
 
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
