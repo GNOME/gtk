@@ -232,56 +232,47 @@ gsk_sl_preprocessor_handle_token (GskSlPreprocessor *preproc,
                                   gboolean           was_newline,
                                   gboolean           was_start_of_document);
 
+#define token_array_get_token(array, i) (&g_array_index ((array), GskSlPpToken, (i)).token)
+#define token_array_get_location(array, i) (&g_array_index ((array), GskSlPpToken, (i)).location)
+#define token_array_error(preproc, array, i, ...) gsk_sl_preprocessor_error_full ((preproc), PREPROCESSOR, token_array_get_location (array, i), __VA_ARGS__)
+
 static gboolean
 gsk_sl_preprocessor_include (GskSlPreprocessor *preproc,
-                             GskSlPpToken      *pp,
+                             GArray            *tokens,
                              gboolean           include_local)
 {
   GskCodeSource *source;
   GError *error = NULL;
-  gboolean was_newline;
     
   source = gsk_sl_compiler_resolve_include (preproc->compiler,
                                             gsk_sl_tokenizer_get_location (preproc->tokenizer)->source,
                                             include_local,
-                                            pp->token.str,
+                                            token_array_get_token (tokens, 1)->str,
                                             &error);
   if (source == NULL)
     {
-      gsk_sl_preprocessor_emit_error (preproc, TRUE, &pp->location, error);
-      gsk_sl_preprocessor_clear_token (pp);
+      gsk_sl_preprocessor_emit_error (preproc, TRUE, token_array_get_location (tokens, 1), error);
       g_error_free (error);
       return FALSE;
     }
 
   if (g_slist_length (preproc->pending_tokenizers) > 20)
     {
-      gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp->location, "#include nested too deeply.");
-      gsk_sl_preprocessor_clear_token (pp);
+      token_array_error (preproc, tokens, 1, "#include nested too deeply.");
       return FALSE;
     }
 
-  gsk_sl_preprocessor_clear_token (pp);
-  pp->location = *gsk_sl_tokenizer_get_location (preproc->tokenizer);
-  gsk_sl_tokenizer_read_token (preproc->tokenizer, &pp->token);
-  if (!gsk_sl_token_is (&pp->token, GSK_SL_TOKEN_NEWLINE) &&
-      !gsk_sl_token_is (&pp->token, GSK_SL_TOKEN_EOF))
+  if (tokens->len > 2)
     {
-      gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp->location, "Extra content after #include directive");
-      gsk_sl_preprocessor_clear_token (pp);
+      token_array_error (preproc, tokens, 2, "Extra content after #include directive");
       return FALSE;
     }
 
-  gsk_sl_preprocessor_clear_token (pp);
   preproc->pending_tokenizers = g_slist_prepend (preproc->pending_tokenizers, preproc->tokenizer);
   preproc->tokenizer = gsk_sl_tokenizer_new (source, 
                                              gsk_sl_preprocessor_error_func,
                                              preproc,
                                              NULL);
-
-  /* process first token, so we can ensure it assumes a newline */
-  gsk_sl_preprocessor_next_token (preproc, pp, &was_newline);
-  gsk_sl_preprocessor_handle_token (preproc, pp, TRUE, FALSE);
 
   return TRUE;
 }
@@ -346,109 +337,119 @@ gsk_sl_preprocessor_append_token (GskSlPreprocessor *preproc,
   g_array_append_val (preproc->tokens, *pp);
 }
 
+static GArray *
+gsk_sl_preprocessor_read_line (GskSlPreprocessor *preproc)
+{
+  GskSlPpToken pp;
+  GArray *tokens;
+
+  tokens = g_array_new (FALSE, FALSE, sizeof (GskSlPpToken));
+  g_array_set_clear_func (tokens, gsk_sl_preprocessor_clear_token);
+
+  while (TRUE)
+    {
+      pp.location = *gsk_sl_tokenizer_get_location (preproc->tokenizer);
+      gsk_sl_tokenizer_read_token (preproc->tokenizer, &pp.token);
+      if (gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_EOF) ||
+          gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_NEWLINE))
+        break;
+      if (!gsk_sl_token_is_skipped (&pp.token))
+        g_array_append_val (tokens, pp);
+    }
+
+  return tokens;
+}
+
 static void
 gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc,
                                                    gboolean           first_token_ever)
 {
   GskSlPpToken pp;
+  const GskSlToken *token;
   gboolean was_newline;
+  GArray *tokens;
+
+  tokens = gsk_sl_preprocessor_read_line (preproc);
   
-  if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
+  if (tokens->len == 0)
+    /* empty # line */
+    goto out;
+
+  token = &g_array_index (tokens, GskSlPpToken, 0).token;
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
     {
-      /* empty # line */
-      gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-      return;
+      token_array_error (preproc, tokens, 0, "Missing identifier for preprocessor directive.");
+      goto out;
     }
 
-  if (gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_IDENTIFIER))
+  if (g_str_equal (token->str, "else"))
     {
-      if (g_str_equal (pp.token.str, "else"))
+      if (gsk_sl_preprocessor_has_conditional (preproc))
         {
-          if (gsk_sl_preprocessor_has_conditional (preproc))
+          GskConditional cond = gsk_sl_preprocessor_pop_conditional (preproc);
+
+          if (cond & GSK_COND_ELSE)
             {
-              GskConditional cond = gsk_sl_preprocessor_pop_conditional (preproc);
-
-              if (cond & GSK_COND_ELSE)
-                {
-                  gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "#else after #else.");
-                  cond |= GSK_COND_IGNORE;
-                }
-              else if (cond & GSK_COND_MATCH)
-                cond |= GSK_COND_IGNORE;
-              else
-                cond &= ~GSK_COND_IGNORE;
-
-              cond |= GSK_COND_ELSE | GSK_COND_MATCH;
-
-              gsk_sl_preprocessor_push_conditional (preproc, cond);
+              token_array_error (preproc, tokens, 0, "#else after #else.");
+              cond |= GSK_COND_IGNORE;
             }
+          else if (cond & GSK_COND_MATCH)
+            cond |= GSK_COND_IGNORE;
           else
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "#else without #if.");
-            }
-          gsk_sl_preprocessor_clear_token (&pp);
+            cond &= ~GSK_COND_IGNORE;
 
-          if (!gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected newline after #else.");
-              gsk_sl_preprocessor_clear_token (&pp);
-            }
-          else
-            {
-              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-            }
-          return;
+          cond |= GSK_COND_ELSE | GSK_COND_MATCH;
+
+          gsk_sl_preprocessor_push_conditional (preproc, cond);
         }
+      else
+        {
+          token_array_error (preproc, tokens, 0, "#else without #if.");
+        }
+
+      if (tokens->len > 1)
+        token_array_error (preproc, tokens, 1, "Expected newline after #else.");
+    }
 #if 0
-      else if (g_str_equal (pp.token.str, "elif"))
-        {
-        }
+  else if (g_str_equal (token->str, "elif"))
+    {
+    }
 #endif
-      else if (g_str_equal (pp.token.str, "endif"))
+  else if (g_str_equal (token->str, "endif"))
+    {
+      if (gsk_sl_preprocessor_has_conditional (preproc))
         {
-          if (gsk_sl_preprocessor_has_conditional (preproc))
-            {
-              gsk_sl_preprocessor_pop_conditional (preproc);
-            }
-          else
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "#endif without #if.");
-            }
-          gsk_sl_preprocessor_clear_token (&pp);
+          gsk_sl_preprocessor_pop_conditional (preproc);
+        }
+      else
+        {
+          token_array_error (preproc, tokens, 0, "#endif without #if.");
+        }
 
-          if (!gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected newline after #endif.");
-              gsk_sl_preprocessor_clear_token (&pp);
-            }
-          else
-            {
-              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-            }
-          return;
-        }
+      if (tokens->len > 1)
+          token_array_error (preproc, tokens, 1, "Expected newline after #endif.");
+    }
 #if 0
-      else if (g_str_equal (pp.token.str, "if"))
-        {
-        }
+  else if (g_str_equal (token->str, "if"))
+    {
+    }
 #endif
-      else if (g_str_equal (pp.token.str, "ifdef"))
+  else if (g_str_equal (token->str, "ifdef"))
+    {
+      if (tokens->len == 1)
         {
-          gsk_sl_preprocessor_clear_token (&pp);
-          if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
+          token_array_error (preproc, tokens, 0, "No variable after #ifdef.");
+        }
+      else
+        {
+          token = token_array_get_token (tokens, 1);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
             {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "No variable after #ifdef.");
-              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-              return;
-            }
-          if (!gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_IDENTIFIER))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected identifier after #ifdef.");
-              gsk_sl_preprocessor_clear_token (&pp);
+              token_array_error (preproc, tokens, 1, "Expected identifier after #ifdef.");
             }
           else
             {
-              if (g_hash_table_lookup (preproc->defines, pp.token.str))
+              if (g_hash_table_lookup (preproc->defines, token->str))
                 {
                   gsk_sl_preprocessor_push_conditional (preproc, GSK_COND_MATCH);
                 }
@@ -456,36 +457,28 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc,
                 {
                   gsk_sl_preprocessor_push_conditional (preproc, GSK_COND_IGNORE);
                 }
-              
-              if (!gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-                {
-                  gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected newline after #ifdef.");
-                  gsk_sl_preprocessor_clear_token (&pp);
-                }
-              else
-                {
-                  gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-                }
-              return;
             }
+
+          if (tokens->len > 2)
+            token_array_error (preproc, tokens, 2, "Expected newline after #ifdef.");
         }
-      else if (g_str_equal (pp.token.str, "ifndef"))
+    }
+  else if (g_str_equal (token->str, "ifndef"))
+    {
+      if (tokens->len == 1)
         {
-          gsk_sl_preprocessor_clear_token (&pp);
-          if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
+          token_array_error (preproc, tokens, 0, "No variable after #ifdef.");
+        }
+      else
+        {
+          token = token_array_get_token (tokens, 1);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
             {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "No variable after #ifndef.");
-              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-              return;
-            }
-          if (!gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_IDENTIFIER))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected identifier after #ifndef.");
-              gsk_sl_preprocessor_clear_token (&pp);
+              token_array_error (preproc, tokens, 1, "Expected identifier after #ifndef.");
             }
           else
             {
-              if (g_hash_table_lookup (preproc->defines, pp.token.str))
+              if (g_hash_table_lookup (preproc->defines, token->str))
                 {
                   gsk_sl_preprocessor_push_conditional (preproc, GSK_COND_IGNORE);
                 }
@@ -493,181 +486,152 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc,
                 {
                   gsk_sl_preprocessor_push_conditional (preproc, GSK_COND_MATCH);
                 }
-              
-              if (!gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-                {
-                  gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected newline after #ifndef.");
-                  gsk_sl_preprocessor_clear_token (&pp);
-                }
-              else
-                {
-                  gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-                }
-              return;
             }
+
+          if (tokens->len > 2)
+            token_array_error (preproc, tokens, 2, "Expected newline after #ifndef.");
         }
-      else if (gsk_sl_preprocessor_in_ignored_conditional (preproc))
+    }
+  else if (gsk_sl_preprocessor_in_ignored_conditional (preproc))
+    {
+      /* All checks above are for preprocessor directives that are checked even in
+       * ignored parts of code */
+
+      /* Everything below has no effect in ignored parts of the code */
+    }
+  else if (g_str_equal (token->str, "define"))
+    {
+      if (tokens->len == 1)
         {
-          /* All checks above are for preprocessor directives that are checked even in
-           * ignored parts of code */
-          gsk_sl_preprocessor_clear_token (&pp);
-          /* Everything below has no effect in ignored parts of the code */
+          token_array_error (preproc, tokens, 0, "No variable after #define.");
         }
-      else if (g_str_equal (pp.token.str, "define"))
+      else
         {
-          gsk_sl_preprocessor_clear_token (&pp);
-          if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
+          token = token_array_get_token (tokens, 1);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
             {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "No variable after #define.");
-              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-              return;
-            }
-          if (!gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_IDENTIFIER))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected identifier after #define.");
-              gsk_sl_preprocessor_clear_token (&pp);
+              token_array_error (preproc, tokens, 1, "Expected identifier after #define.");
             }
           else
             {
               GskSlDefine *define;
+              guint i;
 
-              if (g_hash_table_lookup (preproc->defines, pp.token.str))
-                gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "\"%s\" redefined.", pp.token.str);
-              
-              define = gsk_sl_define_new (pp.token.str, NULL);
-              gsk_sl_preprocessor_clear_token (&pp);
+              if (g_hash_table_lookup (preproc->defines, token->str))
+                token_array_error (preproc, tokens, 1, "\"%s\" redefined.", token->str);
+          
+              define = gsk_sl_define_new (token->str, NULL);
 
-              while (!gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
+              for (i = 2; i < tokens->len; i++)
                 {
-                  gsk_sl_define_add_token (define, &pp.location, &pp.token);
-                  gsk_sl_preprocessor_clear_token (&pp);
+                  gsk_sl_define_add_token (define,
+                                           token_array_get_location (tokens, i),
+                                           token_array_get_token (tokens, i));
                 }
+
               g_hash_table_replace (preproc->defines, (gpointer) gsk_sl_define_get_name (define), define);
-              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-              return;
             }
         }
-      else if (g_str_equal (pp.token.str, "include"))
+    }
+  else if (g_str_equal (token->str, "include"))
+    {
+      if (tokens->len == 1)
         {
-          gsk_sl_preprocessor_clear_token (&pp);
-          if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "No filename after #include.");
-              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-              return;
-            }
-          if (gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_STRING))
-            {
-              if (gsk_sl_preprocessor_include (preproc, &pp, TRUE))
-                return;
-            }
-          else
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected filename after #include.");
-              gsk_sl_preprocessor_clear_token (&pp);
-            }
-        }
-#if 0
-      else if (g_str_equal (pp.token.str, "line"))
-        {
-        }
-      else if (g_str_equal (pp.token.str, "pragma"))
-        {
-        }
-      else if (g_str_equal (pp.token.str, "error"))
-        {
-        }
-      else if (g_str_equal (pp.token.str, "extension"))
-        {
-        }
-#endif
-      else if (g_str_equal (pp.token.str, "undef"))
-        {
-          gsk_sl_preprocessor_clear_token (&pp);
-          if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "No variable after #undef.");
-              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-              return;
-            }
-          if (!gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_IDENTIFIER))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected identifier after #undef.");
-              gsk_sl_preprocessor_clear_token (&pp);
-            }
-          else
-            {
-              g_hash_table_remove (preproc->defines, pp.token.str);
-              
-              if (!gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-                {
-                  gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected newline after #undef.");
-                  gsk_sl_preprocessor_clear_token (&pp);
-                }
-              else
-                {
-                  gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-                }
-              return;
-            }
-        }
-      else if (g_str_equal (pp.token.str, "version"))
-        {
-          gsk_sl_preprocessor_clear_token (&pp);
-          if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "No version specified after #version.");
-              gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-              return;
-            }
-          if (!gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_INTCONSTANT))
-            {
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected version number.");
-              gsk_sl_preprocessor_clear_token (&pp);
-            }
-          else
-            {
-              GskCodeLocation location = pp.location;
-              gint version = pp.token.i32;
-
-              gsk_sl_preprocessor_clear_token (&pp);
-              if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-                {
-                  gsk_sl_preprocessor_handle_version (preproc, &location, version, NULL, first_token_ever);
-                  gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-                  return;
-                }
-              else if (gsk_sl_token_is (&pp.token, GSK_SL_TOKEN_IDENTIFIER))
-                {
-                  gsk_sl_preprocessor_handle_version (preproc, &pp.location, version, pp.token.str, first_token_ever);
-                  gsk_sl_preprocessor_clear_token (&pp);
-                  if (gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-                    {
-                      gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
-                      return;
-                    }
-                }
-
-              gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Expected newline #version.");
-              gsk_sl_preprocessor_clear_token (&pp);
-            }
+          token_array_error (preproc, tokens, 0, "No filename after #include.");
         }
       else
         {
-          gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Unknown preprocessor directive #%s.", pp.token.str);
-          gsk_sl_preprocessor_clear_token (&pp);
+          token = token_array_get_token (tokens, 1);
+          if (gsk_sl_token_is (token, GSK_SL_TOKEN_STRING))
+            {
+              gsk_sl_preprocessor_include (preproc, tokens, TRUE);
+            }
+          else
+            {
+              token_array_error (preproc, tokens, 1, "Expected filename after #include.");
+            }
+        }
+    }
+#if 0
+  else if (g_str_equal (token->str, "line"))
+    {
+    }
+  else if (g_str_equal (token->str, "pragma"))
+    {
+    }
+  else if (g_str_equal (token->str, "error"))
+    {
+    }
+  else if (g_str_equal (token->str, "extension"))
+    {
+    }
+#endif
+  else if (g_str_equal (token->str, "undef"))
+    {
+      if (tokens->len == 1)
+        {
+          token_array_error (preproc, tokens, 0, "No variable after #undef.");
+        }
+      else
+        {
+          token = token_array_get_token (tokens, 1);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+            {
+              token_array_error (preproc, tokens, 1, "Expected identifier after #undef.");
+            }
+          else
+            {
+              g_hash_table_remove (preproc->defines, token->str);
+            }
+          
+          if (tokens->len > 2)
+            token_array_error (preproc, tokens, 2, "Expected newline after #undef.");
+        }
+    }
+  else if (g_str_equal (token->str, "version"))
+    {
+      if (tokens->len == 1)
+        {
+          token_array_error (preproc, tokens, 0, "No version specified after #version.");
+        }
+      else
+        {
+          token = token_array_get_token (tokens, 1);
+
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_INTCONSTANT))
+            {
+              token_array_error (preproc, tokens, 1, "Expected version number.");
+            }
+          else
+            {
+              gint version = token->i32;
+
+              if (tokens->len == 2)
+                {
+                  gsk_sl_preprocessor_handle_version (preproc, token_array_get_location (tokens, 1), version, NULL, first_token_ever);
+                }
+              else
+                {
+                  token = token_array_get_token (tokens, 2);
+                  if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+                    gsk_sl_preprocessor_handle_version (preproc, token_array_get_location (tokens, 1), version, token->str, first_token_ever);
+                  else
+                    token_array_error (preproc, tokens, 2, "Expected newline after #version.");
+                }
+            }
         }
     }
   else
     {
-      gsk_sl_preprocessor_error_full (preproc, PREPROCESSOR, &pp.location, "Missing identifier for preprocessor directive.");
-      gsk_sl_preprocessor_clear_token (&pp);
+      token_array_error (preproc, tokens, 0, "Unknown preprocessor directive #%s.", token->str);
     }
   
-  while (!gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline))
-    gsk_sl_preprocessor_clear_token (&pp);
+out:
+  g_array_free (tokens, TRUE);
 
-  gsk_sl_preprocessor_handle_token (preproc, &pp, was_newline, FALSE);
+  /* process first token, so we can ensure it assumes a newline */
+  gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline);
+  gsk_sl_preprocessor_handle_token (preproc, &pp, TRUE, FALSE);
 }
 
 static void
@@ -702,6 +666,7 @@ gsk_sl_preprocessor_new (GskSlCompiler    *compiler,
 {
   GskSlPreprocessor *preproc;
   GskSlPpToken pp;
+  gboolean was_newline;
 
   preproc = g_slice_new0 (GskSlPreprocessor);
 
@@ -718,16 +683,8 @@ gsk_sl_preprocessor_new (GskSlCompiler    *compiler,
   preproc->defines = gsk_sl_compiler_copy_defines (compiler);
 
   /* process the first token, so we can parse #version */
-  pp.location = *gsk_sl_tokenizer_get_location (preproc->tokenizer);
-  gsk_sl_tokenizer_read_token (preproc->tokenizer, &pp.token);
-  if (!gsk_sl_token_is_skipped (&pp.token))
-    gsk_sl_preprocessor_handle_token (preproc, &pp, TRUE, TRUE);
-  else
-    {
-      gboolean was_newline;
-      gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline);
-      gsk_sl_preprocessor_handle_token (preproc, &pp, TRUE, FALSE);
-    }
+  gsk_sl_preprocessor_next_token (preproc, &pp, &was_newline);
+  gsk_sl_preprocessor_handle_token (preproc, &pp, TRUE, TRUE);
 
   return preproc;
 }
