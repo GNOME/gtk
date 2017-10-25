@@ -1891,19 +1891,20 @@ _gdk_set_window_state (GdkWindow      *window,
                        GdkWindowState  new_state)
 {
   GdkDisplay *display = gdk_window_get_display (window);
-  GdkEvent temp_event;
+  GdkEvent *temp_event;
   GdkWindowState old;
   GList *pending_event_link;
 
   g_return_if_fail (window != NULL);
 
-  temp_event.any.window = window;
-  temp_event.any.type = GDK_WINDOW_STATE;
-  temp_event.any.send_event = FALSE;
-  temp_event.window_state.new_window_state = new_state;
-
-  if (temp_event.window_state.new_window_state == window->state)
+  if (new_state == window->state)
     return; /* No actual work to do, nothing changed. */
+
+  temp_event = gdk_event_new (GDK_WINDOW_STATE);
+
+  temp_event->any.window = g_object_ref (window);
+  temp_event->any.send_event = FALSE;
+  temp_event->window_state.new_window_state = new_state;
 
   pending_event_link = gdk_get_pending_window_state_event_link (window);
   if (pending_event_link)
@@ -1919,7 +1920,7 @@ _gdk_set_window_state (GdkWindow      *window,
       window->old_state = old;
     }
 
-  temp_event.window_state.changed_mask = new_state ^ old;
+  temp_event->window_state.changed_mask = new_state ^ old;
 
   /* Actually update the field in GdkWindow, this is sort of an odd
    * place to do it, but seems like the safest since it ensures we expose no
@@ -1928,7 +1929,7 @@ _gdk_set_window_state (GdkWindow      *window,
 
   window->state = new_state;
 
-  if (temp_event.window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
+  if (temp_event->window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
     _gdk_window_update_viewable (window);
 
   /* We only really send the event to toplevels, since
@@ -1940,7 +1941,7 @@ _gdk_set_window_state (GdkWindow      *window,
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP: /* ? */
-      gdk_display_put_event (display, &temp_event);
+      gdk_display_put_event (display, temp_event);
       break;
     case GDK_WINDOW_FOREIGN:
     case GDK_WINDOW_ROOT:
@@ -1948,6 +1949,8 @@ _gdk_set_window_state (GdkWindow      *window,
     default:
       break;
     }
+
+  gdk_event_free (temp_event);
 }
 
 void

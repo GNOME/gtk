@@ -2525,7 +2525,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
                                      cairo_region_t *expose_region)
 {
   cairo_region_t *clipped_expose_region;
-  GdkEvent event;
+  GdkEvent *event;
 
   if (window->destroyed)
     return;
@@ -2539,14 +2539,15 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 
   /* Paint the window before the children, clipped to the window region */
 
-  event.any.type = GDK_EXPOSE;
-  event.any.window = window; /* we already hold a ref */
-  event.any.send_event = FALSE;
-  event.expose.count = 0;
-  event.expose.region = clipped_expose_region;
-  cairo_region_get_extents (clipped_expose_region, &event.expose.area);
+  event = gdk_event_new (GDK_EXPOSE);
+  event->any.window = g_object_ref (window);
+  event->any.send_event = FALSE;
+  event->expose.count = 0;
+  event->expose.region = cairo_region_reference (clipped_expose_region);
+  cairo_region_get_extents (clipped_expose_region, &event->expose.area);
 
-  _gdk_event_emit (&event);
+  _gdk_event_emit (event);
+  gdk_event_free (event);
 
  out:
   cairo_region_destroy (clipped_expose_region);
