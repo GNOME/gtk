@@ -5744,6 +5744,7 @@ gdk_window_withdraw (GdkWindow *window)
 {
   GdkWindowImplClass *impl_class;
   gboolean was_mapped;
+  GdkGLContext *current_context;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -5767,6 +5768,10 @@ gdk_window_withdraw (GdkWindow *window)
 
 	  _gdk_synthesize_crossing_events_for_geometry_change (window->parent);
 	}
+
+      current_context = gdk_gl_context_get_current ();
+      if (current_context != NULL && gdk_gl_context_get_window (current_context) == window)
+        gdk_gl_context_clear_current ();
 
       recompute_visible_regions (window, FALSE);
       gdk_window_clear_old_updated_area (window);
