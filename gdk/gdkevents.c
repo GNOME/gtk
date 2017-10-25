@@ -65,6 +65,30 @@ static GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
 static gpointer       _gdk_event_data = NULL;
 static GDestroyNotify _gdk_event_notify = NULL;
 
+static GQuark quark_event_user_data = 0;
+
+static void gdk_event_finalize (GObject *object);
+
+G_DEFINE_TYPE (GdkEvent, gdk_event, G_TYPE_OBJECT)
+
+#define EVENT_PAYLOAD(ev) (&(ev)->any.type)
+#define EVENT_PAYLOAD_SIZE (sizeof (GdkEvent) - sizeof (GObject))
+
+static void
+gdk_event_init (GdkEvent *event)
+{
+}
+
+static void
+gdk_event_class_init (GdkEventClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gdk_event_finalize;
+
+  quark_event_user_data = g_quark_from_static_string ("gdk-event-user-data");
+}
+
 void
 _gdk_event_emit (GdkEvent *event)
 {
@@ -368,17 +392,14 @@ static GHashTable *event_hash = NULL;
 GdkEvent*
 gdk_event_new (GdkEventType type)
 {
-  GdkEventPrivate *new_private;
   GdkEvent *new_event;
   
   if (!event_hash)
     event_hash = g_hash_table_new (g_direct_hash, NULL);
 
-  new_private = g_slice_new0 (GdkEventPrivate);
+  new_event = g_object_new (GDK_TYPE_EVENT, NULL);
 
-  g_hash_table_insert (event_hash, new_private, GUINT_TO_POINTER (1));
-
-  new_event = (GdkEvent *) new_private;
+  g_hash_table_insert (event_hash, new_event, GUINT_TO_POINTER (1));
 
   new_event->any.type = type;
 
@@ -502,15 +523,16 @@ gdk_event_get_pointer_emulated (GdkEvent *event)
 GdkEvent*
 gdk_event_copy (const GdkEvent *event)
 {
-  GdkEventPrivate *new_private;
   GdkEvent *new_event;
 
   g_return_val_if_fail (event != NULL, NULL);
 
   new_event = gdk_event_new (GDK_NOTHING);
-  new_private = (GdkEventPrivate *)new_event;
 
-  *new_event = *event;
+  memcpy (EVENT_PAYLOAD (new_event),
+          EVENT_PAYLOAD (event),
+          EVENT_PAYLOAD_SIZE);
+
   if (new_event->any.window)
     g_object_ref (new_event->any.window);
   if (new_event->any.device)
@@ -518,12 +540,7 @@ gdk_event_copy (const GdkEvent *event)
   if (new_event->any.source_device)
     g_object_ref (new_event->any.source_device);
 
-  if (gdk_event_is_allocated (event))
-    {
-      GdkEventPrivate *private = (GdkEventPrivate *)event;
-
-      g_set_object (&new_private->user_data, private->user_data);
-    }
+  gdk_event_set_user_data (new_event, gdk_event_get_user_data (event));
 
   switch ((guint) event->any.type)
     {
@@ -605,16 +622,14 @@ gdk_event_copy (const GdkEvent *event)
 void
 gdk_event_free (GdkEvent *event)
 {
-  GdkEventPrivate *private;
+  g_object_unref (event);
+}
+
+void
+gdk_event_finalize (GObject *object)
+{
+  GdkEvent *event = GDK_EVENT (object);
   GdkDisplay *display;
-
-  g_return_if_fail (event != NULL);
-
-  if (gdk_event_is_allocated (event))
-    {
-      private = (GdkEventPrivate *) event;
-      g_clear_object (&private->user_data);
-    }
 
   switch ((guint) event->any.type)
     {
@@ -684,7 +699,8 @@ gdk_event_free (GdkEvent *event)
   g_clear_object (&event->any.source_device);
 
   g_hash_table_remove (event_hash, event);
-  g_slice_free (GdkEventPrivate, (GdkEventPrivate*) event);
+
+  G_OBJECT_CLASS (gdk_event_parent_class)->finalize (object);
 }
 
 /**
@@ -1948,10 +1964,6 @@ gdk_synthesize_window_state (GdkWindow     *window,
   _gdk_set_window_state (window, (window->state | set_flags) & ~unset_flags);
 }
 
-G_DEFINE_BOXED_TYPE (GdkEvent, gdk_event,
-                     gdk_event_copy,
-                     gdk_event_free)
-
 static GdkEventSequence *
 gdk_event_sequence_copy (GdkEventSequence *sequence)
 {
@@ -2092,25 +2104,22 @@ void
 gdk_event_set_user_data (GdkEvent *event,
                          GObject  *user_data)
 {
-  GdkEventPrivate *private;
-
-  if (!gdk_event_is_allocated (event))
-    return;
-
-  private = (GdkEventPrivate *) event;
-  g_set_object (&private->user_data, user_data);
+  if (user_data)
+    {
+      g_object_set_qdata_full (G_OBJECT (event), quark_event_user_data,
+                               g_object_ref (user_data),
+                               g_object_unref);
+    }
+  else
+    {
+      g_object_steal_qdata (G_OBJECT (event), quark_event_user_data);
+    }
 }
 
 GObject *
 gdk_event_get_user_data (const GdkEvent *event)
 {
-  GdkEventPrivate *private;
-
-  if (!gdk_event_is_allocated (event))
-    return NULL;
-
-  private = (GdkEventPrivate *) event;
-  return private->user_data;
+  return g_object_get_qdata (G_OBJECT (event), quark_event_user_data);
 }
 
 gboolean
