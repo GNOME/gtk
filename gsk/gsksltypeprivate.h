@@ -22,6 +22,7 @@
 #include <glib.h>
 
 #include "gsksltypesprivate.h"
+#include "gskspvenumsprivate.h"
 
 G_BEGIN_DECLS
 
@@ -115,6 +116,10 @@ GskSlType *             gsk_sl_type_builder_free                (GskSlTypeBuilde
 void                    gsk_sl_type_builder_add_member          (GskSlTypeBuilder    *builder,
                                                                  GskSlType           *type,
                                                                  const char          *name);
+void                    gsk_sl_type_builder_add_builtin_member  (GskSlTypeBuilder    *builder,
+                                                                 GskSlType           *type,
+                                                                 const char          *name,
+                                                                 GskSpvBuiltIn        builtin);
 gboolean                gsk_sl_type_builder_has_member          (GskSlTypeBuilder    *builder,
                                                                  const char          *name);
 

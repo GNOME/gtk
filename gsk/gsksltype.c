@@ -40,6 +40,7 @@ typedef struct _GskSlTypeClass GskSlTypeClass;
 struct _GskSlTypeMember {
   GskSlType *type;
   char *name;
+  GskSpvBuiltIn builtin;
   gsize offset;
 };
 
@@ -1606,27 +1607,30 @@ gsk_sl_type_struct_has_name (const GskSlTypeStruct *struc)
 }
 
 static void
-gsk_sl_type_write_member_decoration (GskSpvWriter *writer,
-                                     guint32       type_id,
-                                     gsize         index,
-                                     GskSlType    *member_type,
-                                     const char   *member_name,
-                                     gsize         member_offset)
+gsk_sl_type_write_member_decoration (GskSpvWriter          *writer,
+                                     guint32                type_id,
+                                     gsize                  index,
+                                     const GskSlTypeMember *member)
 {
-  gsk_spv_writer_member_name (writer, type_id, index, member_name);
+  gsk_spv_writer_member_name (writer, type_id, index, member->name);
 
-  gsk_spv_writer_member_decorate (writer, type_id, index,
-                                  GSK_SPV_DECORATION_OFFSET,
-                                  (guint32[1]) { member_offset }, 1);
+  if (member->builtin != -1)
+    gsk_spv_writer_member_decorate (writer, type_id, index,
+                                    GSK_SPV_DECORATION_BUILT_IN,
+                                    (guint32[1]) { member->builtin }, 1);
+  else
+    gsk_spv_writer_member_decorate (writer, type_id, index,
+                                    GSK_SPV_DECORATION_OFFSET,
+                                    (guint32[1]) { member->offset }, 1);
 
-  if (gsk_sl_type_is_matrix (member_type))
+  if (gsk_sl_type_is_matrix (member->type))
     {
       gsk_spv_writer_member_decorate (writer, type_id, index,
                                       GSK_SPV_DECORATION_COL_MAJOR,
                                       NULL, 0);
       gsk_spv_writer_member_decorate (writer, type_id, index,
                                       GSK_SPV_DECORATION_MATRIX_STRIDE,
-                                      (guint32[1]) { gsk_sl_type_get_size (gsk_sl_type_get_index_type (member_type)) }, 1);
+                                      (guint32[1]) { gsk_sl_type_get_size (gsk_sl_type_get_index_type (member->type)) }, 1);
     }
 }
 
@@ -1656,8 +1660,7 @@ gsk_sl_type_struct_write_spv (GskSlType    *type,
 
   for (i = 0; i < struc->n_members; i++)
     {
-      gsk_sl_type_write_member_decoration (writer, result_id, i, struc->members[i].type,
-          struc->members[i].name, struc->members[i].offset);
+      gsk_sl_type_write_member_decoration (writer, result_id, i, &struc->members[i]);
     }
 
   return result_id;
@@ -1885,8 +1888,7 @@ gsk_sl_type_block_write_spv (GskSlType    *type,
 
   for (i = 0; i < block->n_members; i++)
     {
-      gsk_sl_type_write_member_decoration (writer, result_id, i, block->members[i].type,
-          block->members[i].name, block->members[i].offset);
+      gsk_sl_type_write_member_decoration (writer, result_id, i, &block->members[i]);
     }
 
   return result_id;
@@ -2432,6 +2434,14 @@ gsk_sl_type_new_parse (GskSlScope        *scope,
       break;
     case GSK_SL_TOKEN_STRUCT:
       return gsk_sl_type_parse_struct (scope, preproc);
+    case GSK_SL_TOKEN_IDENTIFIER:
+      type = gsk_sl_scope_lookup_type (scope, token->str);
+      if (type)
+        {
+          type = gsk_sl_type_ref (type);
+          break;
+        }
+      /* fall through */
     default:
       gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected type specifier");
       return gsk_sl_type_ref (gsk_sl_type_get_scalar (GSK_SL_FLOAT));
@@ -3044,16 +3054,26 @@ gsk_sl_type_builder_free (GskSlTypeBuilder *builder)
 }
 
 void
-gsk_sl_type_builder_add_member (GskSlTypeBuilder *builder,
-                                GskSlType        *type,
-                                const char       *name)
+gsk_sl_type_builder_add_builtin_member (GskSlTypeBuilder *builder,
+                                        GskSlType        *type,
+                                        const char       *name,
+                                        GskSpvBuiltIn     builtin)
 {
   g_array_append_vals (builder->members,
                        &(GskSlTypeMember) {
                            gsk_sl_type_ref (type),
                            g_strdup (name),
+                           builtin,
                            builder->size }, 1);
   builder->size += gsk_sl_type_get_size (type);
+}
+
+void
+gsk_sl_type_builder_add_member (GskSlTypeBuilder *builder,
+                                GskSlType        *type,
+                                const char       *name)
+{
+  gsk_sl_type_builder_add_builtin_member (builder, type, name, -1);
 }
 
 gboolean
