@@ -1,0 +1,6 @@
+#if defined
+
+void
+main ()
+{
+}

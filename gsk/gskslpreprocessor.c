@@ -205,6 +205,130 @@ gsk_sl_preprocessor_handle_version (GskSlPreprocessor *preproc,
     }
 }
 
+#define token_array_get_token(array, i) (&g_array_index ((array), GskSlPpToken, (i)).token)
+#define token_array_get_location(array, i) (&g_array_index ((array), GskSlPpToken, (i)).location)
+#define token_array_error(preproc, array, i, ...) gsk_sl_preprocessor_error_full ((preproc), PREPROCESSOR, token_array_get_location (array, i), __VA_ARGS__)
+
+static int
+gsk_sl_preprocessor_handle_defined_expression (GskSlPreprocessor *preproc,
+                                               GArray            *tokens,
+                                               gint              *index)
+{
+  const GskSlToken *token;
+  gboolean paren = FALSE;
+  int result;
+
+  (*index)++;
+
+  if (*index >= tokens->len)
+    {
+      token_array_error (preproc, tokens, tokens->len - 1, "\"defined\" without argument.");
+      return 0;
+    }
+
+  token = token_array_get_token (tokens, *index);
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+    {
+      paren = TRUE;
+      (*index)++;
+      if (*index >= tokens->len)
+        {
+          token_array_error (preproc, tokens, tokens->len - 1, "\"defined()\" without argument.");
+          return 0;
+        }
+      token = token_array_get_token (tokens, *index);
+    }
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+    {
+      (*index)++;
+      if (g_hash_table_lookup (preproc->defines, token->str))
+        result = 1;
+      else
+        result = 0;
+    }
+  else
+    {
+      token_array_error (preproc, tokens, *index, "Expected identifier after \"defined\".");
+    }
+  if (paren)
+    {
+      if (*index >= tokens->len ||
+          !gsk_sl_token_is (token_array_get_token (tokens, *index), GSK_SL_TOKEN_RIGHT_PAREN))
+        {
+          token_array_error (preproc, tokens, *index, "Expected closing \")\" for \"defined()\".");
+          return 0;
+        }
+      else
+        {
+          (*index)++;
+        }
+    }
+  return result;
+}
+
+static int
+gsk_sl_preprocessor_handle_primary_expression (GskSlPreprocessor *preproc,
+                                               GArray            *tokens,
+                                               gint              *index)
+{
+  const GskSlToken *token;
+
+  if (*index >= tokens->len)
+    {
+      token_array_error (preproc, tokens, tokens->len - 1, "Expected value.");
+      return 0;
+    }
+
+  token = token_array_get_token (tokens, (*index));
+
+  if (gsk_sl_token_is (token, GSK_SL_TOKEN_IDENTIFIER))
+    {
+      if (g_str_equal (token->str, "defined"))
+        {
+          return gsk_sl_preprocessor_handle_defined_expression (preproc, tokens, index);
+        }
+      else
+        {
+          token_array_error (preproc, tokens, *index, "Unexpected identifier \"%s\".", token->str);
+          (*index)++;
+          return 0;
+        }
+    }
+  else if (gsk_sl_token_is (token, GSK_SL_TOKEN_INTCONSTANT))
+    {
+      (*index)++;
+      return token->i32;
+    }
+  else if (gsk_sl_token_is (token, GSK_SL_TOKEN_UINTCONSTANT))
+    {
+      (*index)++;
+      return token->u32;
+    }
+  else
+    {
+      token_array_error (preproc, tokens, *index, "Unexpected token in #if statement.");
+      (*index)++;
+      return 0;
+    }
+}
+
+static int
+gsk_sl_preprocessor_handle_expression (GskSlPreprocessor *preproc,
+                                       GArray            *tokens,
+                                       gint              *index)
+{
+  int result;
+
+  result = gsk_sl_preprocessor_handle_primary_expression (preproc, tokens, index);
+
+  if (*index < tokens->len)
+    {
+      token_array_error (preproc, tokens, *index, "Expected newline after expression.");
+    }
+
+  return result;
+}
+
 static gboolean
 gsk_sl_preprocessor_next_token (GskSlPreprocessor *preproc,
                                 GskSlPpToken      *pp,
@@ -231,10 +355,6 @@ gsk_sl_preprocessor_handle_token (GskSlPreprocessor *preproc,
                                   GskSlPpToken      *pp,
                                   gboolean           was_newline,
                                   gboolean           was_start_of_document);
-
-#define token_array_get_token(array, i) (&g_array_index ((array), GskSlPpToken, (i)).token)
-#define token_array_get_location(array, i) (&g_array_index ((array), GskSlPpToken, (i)).location)
-#define token_array_error(preproc, array, i, ...) gsk_sl_preprocessor_error_full ((preproc), PREPROCESSOR, token_array_get_location (array, i), __VA_ARGS__)
 
 static gboolean
 gsk_sl_preprocessor_include (GskSlPreprocessor *preproc,
@@ -419,11 +539,47 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc,
       if (tokens->len > 1)
         token_array_error (preproc, tokens, 1, "Expected newline after #else.");
     }
-#if 0
   else if (g_str_equal (token->str, "elif"))
     {
+      if (gsk_sl_preprocessor_has_conditional (preproc))
+        {
+          GskConditional cond = gsk_sl_preprocessor_pop_conditional (preproc);
+
+          if (cond & GSK_COND_ELSE)
+            {
+              token_array_error (preproc, tokens, 0, "#elif after #else.");
+              cond |= GSK_COND_IGNORE;
+            }
+          else
+            {
+              int expr, index;
+              
+              index = 1;
+              expr = gsk_sl_preprocessor_handle_expression (preproc, tokens, &index);
+            
+              if (cond & GSK_COND_MATCH)
+                {
+                  cond |= GSK_COND_IGNORE;
+                }
+              else if (expr)
+                {
+                  cond &= ~GSK_COND_IGNORE;
+                  cond |= GSK_COND_MATCH;
+                }
+              else
+                {
+                  cond |= GSK_COND_IGNORE;
+                }
+            }
+
+          gsk_sl_preprocessor_push_conditional (preproc, cond);
+        }
+      else
+        {
+          token_array_error (preproc, tokens, 0, "#elif without #if.");
+        }
+
     }
-#endif
   else if (g_str_equal (token->str, "endif"))
     {
       if (gsk_sl_preprocessor_has_conditional (preproc))
@@ -438,11 +594,17 @@ gsk_sl_preprocessor_handle_preprocessor_directive (GskSlPreprocessor *preproc,
       if (tokens->len > 1)
           token_array_error (preproc, tokens, 1, "Expected newline after #endif.");
     }
-#if 0
   else if (g_str_equal (token->str, "if"))
     {
+      int expr, index;
+      
+      index = 1;
+      expr = gsk_sl_preprocessor_handle_expression (preproc, tokens, &index);
+      if (expr)
+        gsk_sl_preprocessor_push_conditional (preproc, GSK_COND_MATCH);
+      else
+        gsk_sl_preprocessor_push_conditional (preproc, GSK_COND_IGNORE);
     }
-#endif
   else if (g_str_equal (token->str, "ifdef"))
     {
       if (tokens->len == 1)
