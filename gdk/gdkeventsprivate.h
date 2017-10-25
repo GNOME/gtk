@@ -48,6 +48,7 @@ struct _GdkEventAny
   gint8 send_event;
   GdkDevice *device;
   GdkDevice *source_device;
+  GdkDisplay *display;
 };
 
 /**
