@@ -2374,6 +2374,11 @@ scrollbar {
   &.left { border-right: 1px solid $borders_color; }
   &.right { border-left: 1px solid $borders_color; }
 
+  &:focus,
+  &:focus>box:focus,
+  &:focus>box:focus>range:focus,
+  &:focus>box:focus>range:focus>trough:focus{ outline: none };
+
   &:backdrop {
     background-color: $backdrop_scrollbar_bg_color;
     border-color: $backdrop_borders_color;
@@ -2879,6 +2884,8 @@ scale {
     min-width: 18px;
     margin: -9px;
   }
+
+  &:focus { outline: none; }
 
   // click-and-hold the slider to activate
   &.fine-tune {
