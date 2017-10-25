@@ -376,8 +376,6 @@ gdk_event_handler_set (GdkEventFunc   func,
   _gdk_event_notify = notify;
 }
 
-static GHashTable *event_hash = NULL;
-
 /**
  * gdk_event_new:
  * @type: a #GdkEventType 
@@ -393,13 +391,8 @@ GdkEvent*
 gdk_event_new (GdkEventType type)
 {
   GdkEvent *new_event;
-  
-  if (!event_hash)
-    event_hash = g_hash_table_new (g_direct_hash, NULL);
 
   new_event = g_object_new (GDK_TYPE_EVENT, NULL);
-
-  g_hash_table_insert (event_hash, new_event, GUINT_TO_POINTER (1));
 
   new_event->any.type = type;
 
@@ -472,15 +465,6 @@ gdk_event_new (GdkEventType type)
     }
   
   return new_event;
-}
-
-static gboolean
-gdk_event_is_allocated (const GdkEvent *event)
-{
-  if (event_hash)
-    return g_hash_table_lookup (event_hash, event) != NULL;
-
-  return FALSE;
 }
 
 void
@@ -604,8 +588,7 @@ gdk_event_copy (const GdkEvent *event)
       break;
     }
 
-  if (gdk_event_is_allocated (event))
-    _gdk_display_event_data_copy (gdk_event_get_display (event), event, new_event);
+  _gdk_display_event_data_copy (gdk_event_get_display (event), event, new_event);
 
   return new_event;
 }
@@ -697,8 +680,6 @@ gdk_event_finalize (GObject *object)
 
   g_clear_object (&event->any.device);
   g_clear_object (&event->any.source_device);
-
-  g_hash_table_remove (event_hash, event);
 
   G_OBJECT_CLASS (gdk_event_parent_class)->finalize (object);
 }
