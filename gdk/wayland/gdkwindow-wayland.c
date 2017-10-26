@@ -2985,16 +2985,16 @@ gtk_surface_configure (void                *data,
 
         /* Since v2 */
         case GTK_SURFACE1_STATE_TILED_TOP:
-          new_state |= GDK_WINDOW_STATE_TOP_TILED;
+          new_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_TOP_TILED);
           break;
         case GTK_SURFACE1_STATE_TILED_RIGHT:
-          new_state |= GDK_WINDOW_STATE_RIGHT_TILED;
+          new_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_RIGHT_TILED);
           break;
         case GTK_SURFACE1_STATE_TILED_BOTTOM:
-          new_state |= GDK_WINDOW_STATE_BOTTOM_TILED;
+          new_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_BOTTOM_TILED);
           break;
         case GTK_SURFACE1_STATE_TILED_LEFT:
-          new_state |= GDK_WINDOW_STATE_LEFT_TILED;
+          new_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_LEFT_TILED);
           break;
         default:
           /* Unknown state */

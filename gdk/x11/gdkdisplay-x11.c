@@ -189,6 +189,11 @@ gdk_x11_display_event_translator_init (GdkEventTranslatorIface *iface)
   iface->translate_event = gdk_x11_display_translate_event;
 }
 
+#define ANY_EDGE_TILED (GDK_WINDOW_STATE_LEFT_TILED | \
+                        GDK_WINDOW_STATE_RIGHT_TILED | \
+                        GDK_WINDOW_STATE_TOP_TILED | \
+                        GDK_WINDOW_STATE_BOTTOM_TILED)
+
 static void
 do_edge_constraint_state_check (GdkWindow      *window,
                                 GdkWindowState  old_state,
@@ -205,8 +210,9 @@ do_edge_constraint_state_check (GdkWindow      *window,
   edge_constraints = toplevel->edge_constraints;
 
   /* If the WM doesn't support _GTK_EDGE_CONSTRAINTS, rely on the fallback
-   * implementation. If it supports _GTK_EDGE_CONSTRAINTS, however, remove
-   * the GDK_WINDOW_STATE_TILED flag explicitly.
+   * implementation. If it supports _GTK_EDGE_CONSTRAINTS, arrange for
+   * GDK_WINDOW_STATE_TILED to be set if any edge is tiled, and cleared
+   * if no edge is tiled.
    */
   if (!gdk_x11_screen_supports_net_wm_hint (screen,
                                             gdk_atom_intern_static_string ("_GTK_EDGE_CONSTRAINTS")))
@@ -229,7 +235,15 @@ do_edge_constraint_state_check (GdkWindow      *window,
   else
     {
       if (old_state & GDK_WINDOW_STATE_TILED)
-        local_unset |= GDK_WINDOW_STATE_TILED;
+        {
+          if (!(edge_constraints & ANY_EDGE_TILED))
+            local_unset |= GDK_WINDOW_STATE_TILED;
+        }
+      else
+        {
+          if (edge_constraints & ANY_EDGE_TILED)
+            local_set |= GDK_WINDOW_STATE_TILED;
+        }
     }
 
   /* Top edge */
