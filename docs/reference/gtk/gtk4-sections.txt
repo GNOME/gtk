@@ -4163,7 +4163,6 @@ GtkCellRenderer
 GtkCellRendererClass
 gtk_cell_renderer_class_set_accessible_type
 gtk_cell_renderer_get_aligned_area
-gtk_cell_renderer_get_size
 gtk_cell_renderer_snapshot
 gtk_cell_renderer_activate
 gtk_cell_renderer_start_editing

@@ -220,15 +220,6 @@ void               gtk_cell_renderer_get_aligned_area               (GtkCellRend
 								     GtkCellRendererState flags,
 								     const GdkRectangle *cell_area,
 								     GdkRectangle       *aligned_area);
-
-GDK_DEPRECATED_IN_3_0_FOR(gtk_cell_renderer_get_preferred_size)
-void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
-                                                   GtkWidget            *widget,
-                                                   const GdkRectangle   *cell_area,
-                                                   gint                 *x_offset,
-                                                   gint                 *y_offset,
-                                                   gint                 *width,
-                                                   gint                 *height);
 GDK_AVAILABLE_IN_3_90
 void             gtk_cell_renderer_snapshot       (GtkCellRenderer      *cell,
                                                    GtkSnapshot          *snapshot,

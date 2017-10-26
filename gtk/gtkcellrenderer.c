@@ -42,7 +42,7 @@
  * draw many cells on the screen.  To this extent, it isn’t expected that a
  * CellRenderer keep any permanent state around.  Instead, any state is set
  * just prior to use using #GObjects property system.  Then, the
- * cell is measured using gtk_cell_renderer_get_size(). Finally, the cell
+ * cell is measured using gtk_cell_renderer_get_preferred_size(). Finally, the cell
  * is rendered in the correct location using gtk_cell_renderer_snapshot().
  *
  * There are a number of rules that must be followed when writing a new
@@ -666,53 +666,6 @@ set_cell_bg_color (GtkCellRenderer *cell,
 	}
     }
   g_object_notify (G_OBJECT (cell), "cell-background-rgba");
-}
-
-/**
- * gtk_cell_renderer_get_size:
- * @cell: a #GtkCellRenderer
- * @widget: the widget the renderer is rendering to
- * @cell_area: (allow-none): The area a cell will be allocated, or %NULL
- * @x_offset: (out) (allow-none): location to return x offset of cell relative to @cell_area, or %NULL
- * @y_offset: (out) (allow-none): location to return y offset of cell relative to @cell_area, or %NULL
- * @width: (out) (allow-none): location to return width needed to render a cell, or %NULL
- * @height: (out) (allow-none): location to return height needed to render a cell, or %NULL
- *
- * Obtains the width and height needed to render the cell. Used by view 
- * widgets to determine the appropriate size for the cell_area passed to
- * gtk_cell_renderer_snapshot().  If @cell_area is not %NULL, fills in the
- * x and y offsets (if set) of the cell relative to this location. 
- *
- * Please note that the values set in @width and @height, as well as those 
- * in @x_offset and @y_offset are inclusive of the xpad and ypad properties.
- *
- *
- * Deprecated: 3.0: Use gtk_cell_renderer_get_preferred_size() instead.
- **/
-void
-gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
-			    GtkWidget          *widget,
-			    const GdkRectangle *cell_area,
-			    gint               *x_offset,
-			    gint               *y_offset,
-			    gint               *width,
-			    gint               *height)
-{
-  GtkRequisition request;
-
-  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-
-  gtk_cell_renderer_get_preferred_size (cell, widget, &request, NULL);
-
-  if (width)
-    *width = request.width;
-  
-  if (height)
-    *height = request.height;
-
-  if (cell_area)
-    _gtk_cell_renderer_calc_offset (cell, cell_area, gtk_widget_get_direction (widget),
-                                    request.width, request.height, x_offset, y_offset);
 }
 
 /**
