@@ -31,7 +31,6 @@
 #include "gtkentryprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkrender.h"
 #include "gtksearchbar.h"
 #include "gtksearchentryprivate.h"
 #include "gtksnapshot.h"

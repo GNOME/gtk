@@ -33,7 +33,6 @@
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
-#include "gtkrender.h"
 #include "gtksizerequest.h"
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"

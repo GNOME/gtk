@@ -56,7 +56,6 @@
 #include "gtkmain.h"
 #include "gtktooltipprivate.h"
 #include "gtkwindow.h"
-#include "gtkrender.h"
 #include "gtkselectionprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"

@@ -51,7 +51,6 @@
 #include "gtkprivate.h"
 #include "gtkradiobutton.h"
 #include "gtkradiotoolbutton.h"
-#include "gtkrender.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
 #include "gtktoolshell.h"

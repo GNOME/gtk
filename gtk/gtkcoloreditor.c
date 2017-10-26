@@ -31,7 +31,6 @@
 #include "gtkoverlay.h"
 #include "gtkadjustment.h"
 #include "gtklabel.h"
-#include "gtkrender.h"
 #include "gtkspinbutton.h"
 #include "gtkstylecontext.h"
 

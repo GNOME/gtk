@@ -28,7 +28,6 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkbox.h"
-#include "gtkrender.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkstack.h"
