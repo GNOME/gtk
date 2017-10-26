@@ -1799,7 +1799,13 @@ window_state_changed (GtkWidget           *window,
   GdkWindowState changed, new_state;
 
   gdk_event_get_window_state ((GdkEvent *)event, &changed, &new_state);
-  if (changed & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
+  if (changed & (GDK_WINDOW_STATE_FULLSCREEN |
+                 GDK_WINDOW_STATE_MAXIMIZED |
+                 GDK_WINDOW_STATE_TILED |
+                 GDK_WINDOW_STATE_TOP_TILED |
+                 GDK_WINDOW_STATE_RIGHT_TILED |
+                 GDK_WINDOW_STATE_BOTTOM_TILED |
+                 GDK_WINDOW_STATE_LEFT_TILED))
     _gtk_header_bar_update_window_buttons (bar);
 
   return FALSE;
