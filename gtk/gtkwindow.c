@@ -7644,14 +7644,12 @@ update_window_style_classes (GtkWindow *window)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (window));
 
-  if (priv->edge_constraints == 0)
-    {
-      if (priv->tiled)
-        gtk_style_context_add_class (context, "tiled");
-      else
-        gtk_style_context_remove_class (context, "tiled");
-    }
+  if (priv->tiled)
+    gtk_style_context_add_class (context, "tiled");
   else
+    gtk_style_context_remove_class (context, "tiled");
+
+  if (priv->edge_constraints != 0)
     {
       guint edge_constraints = priv->edge_constraints;
 
