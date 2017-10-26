@@ -756,8 +756,12 @@ gdk_wayland_device_grab (GdkDevice    *device,
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       /* Device is a keyboard */
-      gdk_wayland_window_inhibit_shortcuts (window,
-                                            gdk_device_get_seat (device));
+      if (gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL)
+        {
+          gdk_wayland_window_inhibit_shortcuts (window,
+                                                gdk_device_get_seat (device));
+        }
+
       return GDK_GRAB_SUCCESS;
     }
   else
@@ -4787,8 +4791,9 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
                                     evtime,
                                     FALSE);
 
-      /* Inhibit shortcuts if the seat grab is for the keyboard only */
-      if (capabilities == GDK_SEAT_CAPABILITY_KEYBOARD)
+      /* Inhibit shortcuts on toplevels if the seat grab is for the keyboard only */
+      if (capabilities == GDK_SEAT_CAPABILITY_KEYBOARD &&
+          native->window_type == GDK_WINDOW_TOPLEVEL)
         gdk_wayland_window_inhibit_shortcuts (window, seat);
     }
 
