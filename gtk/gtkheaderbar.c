@@ -1931,7 +1931,13 @@ window_state_changed (GtkWidget           *window,
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (data);
 
-  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
+  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN |
+                             GDK_WINDOW_STATE_MAXIMIZED |
+                             GDK_WINDOW_STATE_TILED |
+                             GDK_WINDOW_STATE_TOP_TILED |
+                             GDK_WINDOW_STATE_RIGHT_TILED |
+                             GDK_WINDOW_STATE_BOTTOM_TILED |
+                             GDK_WINDOW_STATE_LEFT_TILED))
     _gtk_header_bar_update_window_buttons (bar);
 
   return FALSE;
