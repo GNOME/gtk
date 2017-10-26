@@ -1205,6 +1205,178 @@ static const GskSlBinary GSK_SL_BINARY_SUBTRACTION = {
   gsk_sl_subtraction_write_spv
 };
 
+/* MODULO */
+
+static GskSlType *
+gsk_sl_bitwise_check_type (GskSlPreprocessor *preproc,
+                           GskSlType         *ltype,
+                           GskSlType         *rtype)
+{
+  GskSlScalarType lscalar, rscalar;
+
+  lscalar = gsk_sl_type_get_scalar_type (ltype);
+  if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
+      return NULL;
+    }
+  rscalar = gsk_sl_type_get_scalar_type (ltype);
+  if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+  if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
+      return NULL;
+    }
+  if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+  if (gsk_sl_type_is_vector (ltype) && gsk_sl_type_is_vector (rtype) &&
+      gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
+    {
+      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
+                                 "Vector operands %s and %s do not have the same length.",
+                                 gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
+      return NULL;
+    }
+
+  rscalar = lscalar == GSK_SL_UINT ? GSK_SL_UINT : rscalar;
+  if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_scalar (rtype))
+    return gsk_sl_type_get_scalar (rscalar);
+  else
+    return gsk_sl_type_get_vector (rscalar, gsk_sl_type_get_length (ltype));
+}
+
+GSK_SL_BINARY_FUNC_SCALAR(gsk_sl_expression_modulo_int, gint32, x = y ? x % y : x;)
+GSK_SL_BINARY_FUNC_SCALAR(gsk_sl_expression_modulo_uint, guint32, x = y ? x % y : x;)
+GSK_SL_BINARY_FUNC_SCALAR(gsk_sl_expression_modulo_int_inv, gint32, x = x ? y % x : y;)
+GSK_SL_BINARY_FUNC_SCALAR(gsk_sl_expression_modulo_uint_inv, guint32, x = x ? y % x : y;)
+static void (* modulo_funcs[]) (gpointer, gpointer) = {
+  [GSK_SL_INT] = gsk_sl_expression_modulo_int,
+  [GSK_SL_UINT] = gsk_sl_expression_modulo_uint,
+};
+static void (* modulo_inv_funcs[]) (gpointer, gpointer) = {
+  [GSK_SL_INT] = gsk_sl_expression_modulo_int_inv,
+  [GSK_SL_UINT] = gsk_sl_expression_modulo_uint_inv,
+};
+
+static GskSlValue *
+gsk_sl_modulo_get_constant (GskSlType  *type,
+                            GskSlValue *lvalue,
+                            GskSlValue *rvalue)
+{
+  GskSlValue *result;
+  GskSlType *ltype, *rtype;
+  GskSlScalarType scalar;
+  gsize ln, rn;
+
+  scalar = gsk_sl_type_get_scalar_type (type);
+  lvalue = gsk_sl_value_convert_components (lvalue, scalar);
+  rvalue = gsk_sl_value_convert_components (rvalue, scalar);
+  ltype = gsk_sl_value_get_type (lvalue);
+  rtype = gsk_sl_value_get_type (rvalue);
+
+  ln = gsk_sl_type_get_n_components (ltype);
+  rn = gsk_sl_type_get_n_components (rtype);
+  if (ln == 1)
+    {
+      gsk_sl_value_componentwise (rvalue, modulo_inv_funcs[scalar], gsk_sl_value_get_data (lvalue));
+      gsk_sl_value_free (lvalue);
+      result = rvalue;
+    }
+  else if (rn == 1)
+    {
+      gsk_sl_value_componentwise (lvalue, modulo_funcs[scalar], gsk_sl_value_get_data (rvalue));
+      gsk_sl_value_free (rvalue);
+      result = lvalue;
+    }
+  else
+    {
+      guchar *ldata, *rdata;
+      gsize i, stride;
+
+      stride = gsk_sl_scalar_type_get_size (scalar);
+      ldata = gsk_sl_value_get_data (lvalue);
+      rdata = gsk_sl_value_get_data (rvalue);
+      for (i = 0; i < ln; i++)
+        {
+          modulo_funcs[scalar] (ldata + i * stride, rdata + i * stride);
+        }
+      gsk_sl_value_free (rvalue);
+      result = lvalue;
+    }
+
+  return result;
+}
+
+static guint32
+gsk_sl_modulo_write_spv (GskSpvWriter *writer,
+                         GskSlType    *type,
+                         GskSlType    *ltype,
+                         guint32       left_id,
+                         GskSlType    *rtype,
+                         guint32       right_id)
+{
+  if (gsk_sl_type_get_scalar_type (ltype) != gsk_sl_type_get_scalar_type (type))
+    {
+      GskSlType *new_type = gsk_sl_type_get_matching (ltype, gsk_sl_type_get_scalar_type (type));
+      left_id = gsk_spv_writer_convert (writer, left_id, ltype, new_type);
+      ltype = new_type;
+    }
+  if (gsk_sl_type_get_scalar_type (rtype) != gsk_sl_type_get_scalar_type (type))
+    {
+      GskSlType *new_type = gsk_sl_type_get_matching (rtype, gsk_sl_type_get_scalar_type (type));
+      right_id = gsk_spv_writer_convert (writer, right_id, rtype, new_type);
+      rtype = new_type;
+    }
+
+  if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_vector (rtype))
+    {
+       guint32 tmp_id = gsk_spv_writer_composite_construct (writer,
+                                                            type,
+                                                            (guint32[4]) { left_id, left_id, left_id, left_id },
+                                                            gsk_sl_type_get_length (rtype));
+       left_id = tmp_id;
+    }
+  else if (gsk_sl_type_is_scalar (rtype) && gsk_sl_type_is_vector (ltype))
+    {
+       guint32 tmp_id = gsk_spv_writer_composite_construct (writer,
+                                                            type,
+                                                            (guint32[4]) { right_id, right_id, right_id, right_id },
+                                                            gsk_sl_type_get_length (ltype));
+       right_id = tmp_id;
+    }
+
+  switch (gsk_sl_type_get_scalar_type (type))
+    {
+    case GSK_SL_INT:
+      return gsk_spv_writer_s_mod (writer, type, left_id, right_id);
+
+    case GSK_SL_UINT:
+      return gsk_spv_writer_u_mod (writer, type, left_id, right_id);
+
+    case GSK_SL_FLOAT:
+    case GSK_SL_DOUBLE:
+    case GSK_SL_VOID:
+    case GSK_SL_BOOL:
+    default:
+      g_assert_not_reached ();
+      return 0;
+    }
+}
+
+static const GskSlBinary GSK_SL_BINARY_MODULO = {
+  "%",
+  gsk_sl_bitwise_check_type,
+  gsk_sl_modulo_get_constant,
+  gsk_sl_modulo_write_spv
+};
+
 /* LESS */
 
 static GskSlType *
@@ -1790,51 +1962,6 @@ static const GskSlBinary GSK_SL_BINARY_NOT_EQUAL = {
 /* UNIMPLEMENTED */
 
 static GskSlType *
-gsk_sl_bitwise_check_type (GskSlPreprocessor *preproc,
-                           GskSlType         *ltype,
-                           GskSlType         *rtype)
-{
-  GskSlScalarType lscalar, rscalar;
-
-  lscalar = gsk_sl_type_get_scalar_type (ltype);
-  if (lscalar != GSK_SL_INT && lscalar != GSK_SL_UINT)
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand %s is not an integer type.", gsk_sl_type_get_name (ltype));
-      return NULL;
-    }
-  rscalar = gsk_sl_type_get_scalar_type (ltype);
-  if (rscalar != GSK_SL_INT && rscalar != GSK_SL_UINT)
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand %s is not an integer type.", gsk_sl_type_get_name (rtype));
-      return NULL;
-    }
-  if (!gsk_sl_type_is_scalar (ltype) && !gsk_sl_type_is_vector (ltype))
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Left operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (ltype));
-      return NULL;
-    }
-  if (!gsk_sl_type_is_scalar (rtype) && !gsk_sl_type_is_vector (rtype))
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH, "Right operand %s is neither a scalar nor a vector.", gsk_sl_type_get_name (rtype));
-      return NULL;
-    }
-  if (gsk_sl_type_is_vector (ltype) && gsk_sl_type_is_vector (rtype) &&
-      gsk_sl_type_get_length (ltype) != gsk_sl_type_get_length (rtype))
-    {
-      gsk_sl_preprocessor_error (preproc, TYPE_MISMATCH,
-                                 "Vector operands %s and %s do not have the same length.",
-                                 gsk_sl_type_get_name (ltype), gsk_sl_type_get_name (rtype));
-      return NULL;
-    }
-
-  rscalar = lscalar == GSK_SL_UINT ? GSK_SL_UINT : rscalar;
-  if (gsk_sl_type_is_scalar (ltype) && gsk_sl_type_is_scalar (rtype))
-    return gsk_sl_type_get_scalar (rscalar);
-  else
-    return gsk_sl_type_get_vector (rscalar, gsk_sl_type_get_length (ltype));
-}
-
-static GskSlType *
 gsk_sl_shift_check_type (GskSlPreprocessor *preproc,
                          GskSlType         *ltype,
                          GskSlType         *rtype)
@@ -1930,13 +2057,6 @@ gsk_sl_unimplemented_write_spv (GskSpvWriter *writer,
 
   return 0;
 }
-
-static const GskSlBinary GSK_SL_BINARY_MODULO = {
-  "%",
-  gsk_sl_bitwise_check_type,
-  gsk_sl_unimplemented_get_constant,
-  gsk_sl_unimplemented_write_spv
-};
 
 static const GskSlBinary GSK_SL_BINARY_LSHIFT = {
   "<<",
