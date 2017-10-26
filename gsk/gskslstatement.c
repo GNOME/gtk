@@ -339,6 +339,57 @@ static const GskSlStatementClass GSK_SL_STATEMENT_RETURN = {
   gsk_sl_statement_return_write_spv
 };
 
+/* BREAK */
+
+typedef struct _GskSlStatementBreak GskSlStatementBreak;
+
+struct _GskSlStatementBreak {
+  GskSlStatement parent;
+};
+
+static void
+gsk_sl_statement_break_free (GskSlStatement *statement)
+{
+  GskSlStatementBreak *break_statement = (GskSlStatementBreak *) statement;
+
+  g_slice_free (GskSlStatementBreak, break_statement);
+}
+
+static void
+gsk_sl_statement_break_print (const GskSlStatement *statement,
+                               GskSlPrinter         *printer)
+{
+  gsk_sl_printer_append (printer, "break");
+  gsk_sl_printer_append (printer, ";");
+}
+
+static GskSlJump
+gsk_sl_statement_break_get_jump (const GskSlStatement *statement)
+{
+  return GSK_SL_JUMP_BREAK;
+}
+
+static gboolean
+gsk_sl_statement_break_write_spv (const GskSlStatement *statement,
+                                  GskSpvWriter         *writer)
+{
+  guint32 break_id;
+
+  break_id = gsk_spv_writer_get_break_id (writer);
+  g_assert (break_id != 0);
+
+  gsk_spv_writer_branch (writer, break_id);
+
+  return TRUE;
+}
+
+static const GskSlStatementClass GSK_SL_STATEMENT_BREAK = {
+  gsk_sl_statement_break_free,
+  gsk_sl_statement_break_print,
+  gsk_sl_statement_break_get_jump,
+  gsk_sl_statement_break_write_spv
+};
+
 /* DISCARD */
 
 typedef struct _GskSlStatementDiscard GskSlStatementDiscard;
@@ -1114,6 +1165,22 @@ its_a_type:
 
         gsk_sl_type_unref (type);
       }
+      break;
+
+    case GSK_SL_TOKEN_BREAK:
+      if (!parse_everything)
+        goto only_expression_and_declaration;
+
+      if (gsk_sl_scope_can_break (scope))
+        {
+          statement = (GskSlStatement *) gsk_sl_statement_new (GskSlStatementBreak, &GSK_SL_STATEMENT_BREAK);
+        }
+      else
+        {
+          gsk_sl_preprocessor_error (preproc, SYNTAX, "\"break\" not allowed here.");
+          statement = gsk_sl_statement_new_error ();
+        }
+      gsk_sl_preprocessor_consume (preproc, statement);
       break;
 
     case GSK_SL_TOKEN_DISCARD:
