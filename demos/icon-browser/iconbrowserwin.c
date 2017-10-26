@@ -138,14 +138,12 @@ item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *wi
     {
       gtk_widget_show (win->image6);
       gtk_widget_show (win->label6);
-      gtk_widget_show (gtk_widget_get_parent (win->image6));
       set_image (win->image6, name, 64);
     }
   else
     {
       gtk_widget_hide (win->image6);
       gtk_widget_hide (win->label6);
-      gtk_widget_hide (gtk_widget_get_parent (win->image6));
     }
   if (description && description[0])
     {
