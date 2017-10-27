@@ -3854,11 +3854,13 @@ struct _GskTextNode
   GskRenderNode render_node;
 
   PangoFont *font;
-  PangoGlyphString *glyphs;
 
   GdkRGBA color;
   double x;
   double y;
+
+  guint num_glyphs;
+  PangoGlyphInfo glyphs[];
 };
 
 static void
@@ -3867,7 +3869,6 @@ gsk_text_node_finalize (GskRenderNode *node)
   GskTextNode *self = (GskTextNode *) node;
 
   g_object_unref (self->font);
-  pango_glyph_string_free (self->glyphs);
 }
 
 #ifndef STACK_BUFFER_SIZE
@@ -3897,15 +3898,15 @@ gsk_text_node_draw (GskRenderNode *node,
   cairo_set_scaled_font (cr, scaled_font);
   gdk_cairo_set_source_rgba (cr, &self->color);
 
-  if (self->glyphs->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
-    cairo_glyphs = g_new (cairo_glyph_t, self->glyphs->num_glyphs);
+  if (self->num_glyphs > (int) G_N_ELEMENTS (stack_glyphs))
+    cairo_glyphs = g_new (cairo_glyph_t, self->num_glyphs);
   else
     cairo_glyphs = stack_glyphs;
 
   count = 0;
-  for (i = 0; i < self->glyphs->num_glyphs; i++)
+  for (i = 0; i < self->num_glyphs; i++)
     {
-      PangoGlyphInfo *gi = &self->glyphs->glyphs[i];
+      PangoGlyphInfo *gi = &self->glyphs[i];
 
       if (gi->glyph != PANGO_GLYPH_EMPTY)
         {
@@ -3947,9 +3948,9 @@ gsk_text_node_serialize (GskRenderNode *node)
   s = pango_font_description_to_string (desc);
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(uiiii)"));
-  for (i = 0; i < self->glyphs->num_glyphs; i++)
+  for (i = 0; i < self->num_glyphs; i++)
     {
-      PangoGlyphInfo *glyph = &self->glyphs->glyphs[i];
+      PangoGlyphInfo *glyph = &self->glyphs[i];
       g_variant_builder_add (&builder, "(uiiii)",
                              glyph->glyph,
                              glyph->geometry.width,
@@ -4071,13 +4072,14 @@ gsk_text_node_new (PangoFont        *font,
   if (ink_rect.width == 0 || ink_rect.height == 0)
     return NULL;
 
-  self = (GskTextNode *) gsk_render_node_new (&GSK_TEXT_NODE_CLASS, 0);
+  self = (GskTextNode *) gsk_render_node_new (&GSK_TEXT_NODE_CLASS, sizeof (PangoGlyphInfo) * glyphs->num_glyphs);
 
   self->font = g_object_ref (font);
-  self->glyphs = pango_glyph_string_copy (glyphs);
   self->color = *color;
   self->x = x;
   self->y = y;
+  self->num_glyphs = glyphs->num_glyphs;
+  memcpy (self->glyphs, glyphs->glyphs, sizeof (PangoGlyphInfo) * glyphs->num_glyphs);
 
   graphene_rect_init (&self->render_node.bounds,
                       x,
@@ -4108,7 +4110,17 @@ gsk_text_node_peek_font (GskRenderNode *node)
   return self->font;
 }
 
-const PangoGlyphString *
+guint
+gsk_text_node_get_num_glyphs (GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), 0);
+
+  return self->num_glyphs;
+}
+
+const PangoGlyphInfo *
 gsk_text_node_peek_glyphs (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;

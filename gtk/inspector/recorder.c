@@ -379,8 +379,9 @@ populate_render_node_properties (GtkListStore  *store,
     case GSK_TEXT_NODE:
       {
         const PangoFont *font = gsk_text_node_peek_font (node);
-        const PangoGlyphString *glyphs = gsk_text_node_peek_glyphs (node);
+        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
         const GdkRGBA *color = gsk_text_node_peek_color (node);
+        guint num_glyphs = gsk_text_node_get_num_glyphs (node);
         float x = gsk_text_node_get_x (node);
         float y = gsk_text_node_get_y (node);
         PangoFontDescription *desc;
@@ -393,9 +394,9 @@ populate_render_node_properties (GtkListStore  *store,
         g_free (tmp);
         pango_font_description_free (desc);
 
-        s = g_string_sized_new (6 * glyphs->num_glyphs);
-        for (i = 0; i < glyphs->num_glyphs; i++)
-          g_string_append_printf (s, "%x ", glyphs->glyphs[i].glyph);
+        s = g_string_sized_new (6 * num_glyphs);
+        for (i = 0; i < num_glyphs; i++)
+          g_string_append_printf (s, "%x ", glyphs[i].glyph);
         add_text_row (store, "Glyphs", s->str);
         g_string_free (s, TRUE);
 
