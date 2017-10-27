@@ -44,6 +44,30 @@ struct _GtkPathBarPrivate
   GFile *home_file;
   GFile *desktop_file;
 
+  /* List of running GCancellable.  When we cancel one, we remove it from this list.
+   * The pathbar cancels all outstanding cancellables when it is disposed.
+   *
+   * In code that queues async I/O operations:
+   *
+   *   - Obtain a cancellable from the async I/O APIs, and call add_cancellable().
+   *
+   * To cancel a cancellable:
+   *
+   *   - Call cancel_cancellable().
+   *
+   * In async I/O callbacks:
+   *
+   *   - Check right away if g_cancellable_is_cancelled():  if true, just
+   *     g_object_unref() the cancellable and return early (also free your
+   *     closure data if you have one).
+   *
+   *   - If it was not cancelled, call cancellable_async_done().  This will
+   *     unref the cancellable and unqueue it from the pathbar's outstanding
+   *     cancellables.  Do your normal work to process the async result and free
+   *     your closure data if you have one.
+   */
+  GList *cancellables;
+
   GCancellable *get_info_cancellable;
 
   GIcon *root_icon;
@@ -165,6 +189,52 @@ static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   gboolean          current_dir);
 
 static void
+add_cancellable (GtkPathBar   *path_bar,
+		 GCancellable *cancellable)
+{
+  g_assert (g_list_find (path_bar->priv->cancellables, cancellable) == NULL);
+  path_bar->priv->cancellables = g_list_prepend (path_bar->priv->cancellables, cancellable);
+}
+
+static void
+drop_node_for_cancellable (GtkPathBar *path_bar,
+			   GCancellable *cancellable)
+{
+  GList *node;
+
+  node = g_list_find (path_bar->priv->cancellables, cancellable);
+  g_assert (node != NULL);
+  node->data = NULL;
+  path_bar->priv->cancellables = g_list_delete_link (path_bar->priv->cancellables, node);
+}
+
+static void
+cancel_cancellable (GtkPathBar   *path_bar,
+		    GCancellable *cancellable)
+{
+  drop_node_for_cancellable (path_bar, cancellable);
+  g_cancellable_cancel (cancellable);
+}
+
+static void
+cancellable_async_done (GtkPathBar   *path_bar,
+			GCancellable *cancellable)
+{
+  drop_node_for_cancellable (path_bar, cancellable);
+  g_object_unref (cancellable);
+}
+
+static void
+cancel_all_cancellables (GtkPathBar *path_bar)
+{
+  while (path_bar->priv->cancellables)
+    {
+      GCancellable *cancellable = path_bar->priv->cancellables->data;
+      cancel_cancellable (path_bar, cancellable);
+    }
+}
+
+static void
 on_slider_unmap (GtkWidget  *widget,
 		 GtkPathBar *path_bar)
 {
@@ -205,6 +275,7 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
   path_bar->priv->get_info_cancellable = NULL;
+  path_bar->priv->cancellables = NULL;
 }
 
 static void
@@ -278,6 +349,7 @@ gtk_path_bar_finalize (GObject *object)
 
   path_bar = GTK_PATH_BAR (object);
 
+  cancel_all_cancellables (path_bar);
   gtk_path_bar_stop_scrolling (path_bar);
 
   g_list_free (path_bar->priv->button_list);
@@ -317,9 +389,8 @@ gtk_path_bar_dispose (GObject *object)
 
   remove_settings_signal (path_bar, gtk_widget_get_screen (GTK_WIDGET (object)));
 
-  if (path_bar->priv->get_info_cancellable)
-    g_cancellable_cancel (path_bar->priv->get_info_cancellable);
   path_bar->priv->get_info_cancellable = NULL;
+  cancel_all_cancellables (path_bar);
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->dispose (object);
 }
@@ -1259,18 +1330,21 @@ set_button_image_get_info_cb (GCancellable *cancellable,
   GIcon *icon;
   struct SetButtonImageData *data = user_data;
 
-  if (cancellable != data->button_data->cancellable)
-    goto out;
-
-  data->button_data->cancellable = NULL;
-
-  if (!data->button_data->button)
+  if (cancelled)
     {
-      g_free (data->button_data);
-      goto out;
+      g_free (data);
+      g_object_unref (cancellable);
+      return;
     }
 
-  if (cancelled || error)
+  g_assert (GTK_IS_PATH_BAR (data->path_bar));
+  g_assert (G_OBJECT (data->path_bar)->ref_count > 0);
+
+  g_assert (cancellable == data->button_data->cancellable);
+  cancellable_async_done (data->path_bar, cancellable);
+  data->button_data->cancellable = NULL;
+
+  if (error)
     goto out;
 
   icon = g_file_info_get_symbolic_icon (info);
@@ -1292,7 +1366,6 @@ set_button_image_get_info_cb (GCancellable *cancellable,
 
 out:
   g_free (data);
-  g_object_unref (cancellable);
 }
 
 static void
@@ -1334,7 +1407,9 @@ set_button_image (GtkPathBar *path_bar,
       data->button_data = button_data;
 
       if (button_data->cancellable)
-	g_cancellable_cancel (button_data->cancellable);
+	{
+	  cancel_cancellable (path_bar, button_data->cancellable);
+	}
 
       button_data->cancellable =
         _gtk_file_system_get_info (path_bar->priv->file_system,
@@ -1342,6 +1417,7 @@ set_button_image (GtkPathBar *path_bar,
 				   "standard::symbolic-icon",
 				   set_button_image_get_info_cb,
 				   data);
+      add_cancellable (path_bar, button_data->cancellable);
       break;
 
     case DESKTOP_BUTTON:
@@ -1356,7 +1432,9 @@ set_button_image (GtkPathBar *path_bar,
       data->button_data = button_data;
 
       if (button_data->cancellable)
-	g_cancellable_cancel (button_data->cancellable);
+	{
+	  cancel_cancellable (path_bar, button_data->cancellable);
+	}
 
       button_data->cancellable =
         _gtk_file_system_get_info (path_bar->priv->file_system,
@@ -1364,6 +1442,7 @@ set_button_image (GtkPathBar *path_bar,
 				   "standard::symbolic-icon",
 				   set_button_image_get_info_cb,
 				   data);
+      add_cancellable (path_bar, button_data->cancellable);
       break;
     default:
       break;
@@ -1382,10 +1461,7 @@ button_data_free (ButtonData *button_data)
 
   button_data->button = NULL;
 
-  if (button_data->cancellable)
-    g_cancellable_cancel (button_data->cancellable);
-  else
-    g_free (button_data);
+  g_free (button_data);
 }
 
 static const char *
@@ -1481,7 +1557,6 @@ make_directory_button (GtkPathBar  *path_bar,
   file_is_hidden = !! file_is_hidden;
   /* Is it a special button? */
   button_data = g_new0 (ButtonData, 1);
-
   button_data->type = find_button_type (path_bar, file);
   button_data->button = gtk_toggle_button_new ();
   atk_obj = gtk_widget_get_accessible (button_data->button);
@@ -1667,20 +1742,21 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
   const gchar *display_name;
   gboolean is_hidden;
 
-  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    return;
-
-  if (cancellable != file_info->path_bar->priv->get_info_cancellable)
+  if (cancelled)
     {
       gtk_path_bar_set_file_finish (file_info, FALSE);
       g_object_unref (cancellable);
       return;
     }
 
-  g_object_unref (cancellable);
+  g_assert (GTK_IS_PATH_BAR (file_info->path_bar));
+  g_assert (G_OBJECT (file_info->path_bar)->ref_count > 0);
+
+  g_assert (cancellable == file_info->path_bar->priv->get_info_cancellable);
+  cancellable_async_done (file_info->path_bar, cancellable);
   file_info->path_bar->priv->get_info_cancellable = NULL;
 
-  if (cancelled || !info)
+  if (!info)
     {
       gtk_path_bar_set_file_finish (file_info, FALSE);
       return;
@@ -1692,7 +1768,7 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
   button_data = make_directory_button (file_info->path_bar, display_name,
                                        file_info->file,
 				       file_info->first_directory, is_hidden);
-  g_object_unref (file_info->file);
+  g_clear_object (&file_info->file);
 
   file_info->new_buttons = g_list_prepend (file_info->new_buttons, button_data);
 
@@ -1722,6 +1798,7 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
 			       "standard::display-name,standard::is-hidden,standard::is-backup",
 			       gtk_path_bar_get_info_callback,
 			       file_info);
+  add_cancellable (file_info->path_bar, file_info->path_bar->priv->get_info_cancellable);
 }
 
 void
@@ -1747,7 +1824,9 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
   info->parent_file = g_file_get_parent (info->file);
 
   if (path_bar->priv->get_info_cancellable)
-    g_cancellable_cancel (path_bar->priv->get_info_cancellable);
+    {
+      cancel_cancellable (path_bar, path_bar->priv->get_info_cancellable);
+    }
 
   path_bar->priv->get_info_cancellable =
     _gtk_file_system_get_info (path_bar->priv->file_system,
@@ -1755,7 +1834,7 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
                                "standard::display-name,standard::is-hidden,standard::is-backup",
                                gtk_path_bar_get_info_callback,
                                info);
-
+  add_cancellable (path_bar, path_bar->priv->get_info_cancellable);
 }
 
 /* FIXME: This should be a construct-only property */
