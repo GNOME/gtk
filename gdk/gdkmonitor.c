@@ -404,7 +404,7 @@ gdk_monitor_get_model (GdkMonitor *monitor)
 int
 gdk_monitor_get_scale_factor (GdkMonitor *monitor)
 {
-  g_return_val_if_fail (GDK_IS_MONITOR (monitor), 0);
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), 1);
 
   return monitor->scale_factor;
 }
