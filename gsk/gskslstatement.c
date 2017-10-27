@@ -668,6 +668,192 @@ static const GskSlStatementClass GSK_SL_STATEMENT_FOR = {
   gsk_sl_statement_for_write_spv
 };
 
+/* SWITCH */
+ 
+typedef struct _GskSlStatementSwitch GskSlStatementSwitch;
+typedef struct _GskSlStatementCase GskSlStatementCase;
+
+struct _GskSlStatementCase {
+  guint32 value;
+  GSList *statements;
+};
+
+struct _GskSlStatementSwitch
+{
+  GskSlStatement parent;
+
+  GskSlScope *scope;
+
+  GskSlExpression *condition;
+  GArray *cases;
+  gssize default_case;
+};
+
+static void
+gsk_sl_statement_case_clear (GskSlStatementCase *case_stmt)
+{
+  g_slist_free_full (case_stmt->statements, (GDestroyNotify) gsk_sl_statement_unref);
+}
+
+static void
+gsk_sl_statement_switch_free (GskSlStatement *statement)
+{
+  GskSlStatementSwitch *switch_stmt = (GskSlStatementSwitch *) statement;
+ 
+  gsk_sl_scope_unref (switch_stmt->scope);
+  gsk_sl_expression_unref (switch_stmt->condition);
+  g_array_free (switch_stmt->cases, TRUE);
+ 
+  g_slice_free (GskSlStatementSwitch, switch_stmt);
+}
+ 
+static void
+gsk_sl_statement_switch_print (const GskSlStatement *statement,
+                               GskSlPrinter         *printer)
+{
+  GskSlStatementSwitch *switch_stmt = (GskSlStatementSwitch *) statement;
+  guint i;
+  
+  gsk_sl_printer_append (printer, "switch (");
+  gsk_sl_expression_print (switch_stmt->condition, printer);
+  gsk_sl_printer_append (printer, ")");
+  gsk_sl_printer_push_indentation (printer);
+  gsk_sl_printer_newline (printer);
+  gsk_sl_printer_append (printer, "{");
+  gsk_sl_printer_newline (printer);
+
+  for (i = 0; i < switch_stmt->cases->len; i++)
+    {
+      GskSlStatementCase *case_stmt = &g_array_index (switch_stmt->cases, GskSlStatementCase, i);
+      GSList *l;
+
+      if (i == switch_stmt->default_case)
+        {
+          gsk_sl_printer_append (printer, "default:");
+        }
+      else
+        {
+          gsk_sl_printer_append (printer, "case ");
+          gsk_sl_printer_append_int (printer, case_stmt->value);
+          gsk_sl_printer_append (printer, ":");
+        }
+      gsk_sl_printer_push_indentation (printer);
+      for (l = case_stmt->statements; l; l = l->next)
+        {
+          gsk_sl_printer_newline (printer);
+          gsk_sl_statement_print (l->data, printer);
+        }
+      gsk_sl_printer_pop_indentation (printer);
+      gsk_sl_printer_newline (printer);
+    }
+  gsk_sl_printer_append (printer, "}");
+  gsk_sl_printer_pop_indentation (printer);
+}
+ 
+static GskSlJump
+gsk_sl_statement_switch_get_jump (const GskSlStatement *statement)
+{
+  return GSK_SL_JUMP_NONE;
+}
+
+static gboolean
+gsk_sl_statement_switch_write_spv (const GskSlStatement *statement,
+                                   GskSpvWriter         *writer)
+{
+  GskSlStatementSwitch *switch_stmt = (GskSlStatementSwitch *) statement;
+  guint32 condition_id;
+  guint32 default_id, next_id, old_break_id, old_continue_id;
+  guint32 ids[switch_stmt->cases->len][2];
+  gsize i, n_cases;
+
+  n_cases = switch_stmt->cases->len;
+
+  n_cases = 0;
+  next_id = 0;
+  default_id = 0;
+  condition_id = gsk_sl_expression_write_spv (switch_stmt->condition, writer, NULL);
+
+  for (i = 0; i < switch_stmt->cases->len; i++)
+    {
+      GskSlStatementCase *case_stmt = &g_array_index (switch_stmt->cases, GskSlStatementCase, i);
+
+      if (next_id == 0)
+        next_id = gsk_spv_writer_make_id (writer);
+
+      if (i == switch_stmt->default_case)
+        {
+          default_id = next_id;
+        }
+      else
+        {
+          ids[n_cases][0] = case_stmt->value;
+          ids[n_cases][1] = next_id;
+          n_cases++;
+        }
+
+      if (case_stmt->statements)
+        next_id = 0;
+    }
+  
+  if (next_id == 0)
+    next_id = gsk_spv_writer_make_id (writer);
+  if (default_id == 0)
+    default_id = next_id;
+  old_continue_id = gsk_spv_writer_get_continue_id (writer);
+  old_break_id = gsk_spv_writer_get_break_id (writer);
+
+  gsk_spv_writer_selection_merge (writer, next_id, 0);
+  gsk_spv_writer_switch (writer, condition_id, default_id, (guint32 **) ids, n_cases);
+
+  n_cases = 0;
+  for (i = 0; i < switch_stmt->cases->len; i++)
+    {
+      GskSlStatementCase *case_stmt = &g_array_index (switch_stmt->cases, GskSlStatementCase, i);
+
+      if (case_stmt->statements)
+        {
+          GSList *l;
+          guint32 label_id;
+
+          if (i == switch_stmt->default_case)
+            label_id = default_id;
+          else
+            label_id = ids[n_cases][1];
+          gsk_spv_writer_start_code_block (writer, label_id, old_continue_id, next_id);
+          gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, ids[n_cases][1]);
+
+          for (l = case_stmt->statements; l; l = l->next)
+            {
+              if (gsk_sl_statement_write_spv (l->data, writer))
+                break;
+            }
+          if (l == NULL)
+            {
+              if (i + 1 >= switch_stmt->cases->len)
+                gsk_spv_writer_branch (writer, next_id);
+              else if (i + 1 == switch_stmt->default_case)
+                gsk_spv_writer_branch (writer, default_id);
+              else
+                gsk_spv_writer_branch (writer, ids[n_cases + 1][1]);
+            }
+        }
+      if (i != switch_stmt->default_case)
+        n_cases++;
+    }
+  
+  gsk_spv_writer_start_code_block (writer, next_id, old_continue_id, old_break_id);
+  gsk_spv_writer_label (writer, GSK_SPV_WRITER_SECTION_CODE, next_id);
+
+  return FALSE;
+}
+
+static const GskSlStatementClass GSK_SL_STATEMENT_SWITCH = {
+  gsk_sl_statement_switch_free,
+  gsk_sl_statement_switch_print,
+  gsk_sl_statement_switch_get_jump,
+  gsk_sl_statement_switch_write_spv
+};
+
 /* EXPRESSION */
  
 typedef struct _GskSlStatementExpression GskSlStatementExpression;
@@ -942,6 +1128,147 @@ gsk_sl_statement_parse_for (GskSlScope        *scope,
   return (GskSlStatement *) for_stmt;
 }
 
+static void
+gsk_sl_statement_switch_check_duplicate (GskSlStatementSwitch *switch_stmt,
+                                         GskSlPreprocessor    *preproc)
+{
+  guint32 value;
+  guint i;
+
+  value = g_array_index (switch_stmt->cases, GskSlStatementCase, switch_stmt->cases->len - 1).value;
+  for (i = 0; i < switch_stmt->cases->len - 1; i++)
+    {
+      if (i == switch_stmt->default_case)
+        continue;
+
+      if (value == g_array_index (switch_stmt->cases, GskSlStatementCase, i).value)
+        {
+          GskSlType *type = gsk_sl_expression_get_return_type (switch_stmt->condition);
+          if (gsk_sl_type_equal (type, gsk_sl_type_get_scalar (GSK_SL_INT)))
+            gsk_sl_preprocessor_error (preproc, DECLARATION, "Duplicate case value %d.", (gint) value);
+          else
+            gsk_sl_preprocessor_error (preproc, DECLARATION, "Duplicate case value %u.", (guint) value);
+          return;
+        }
+    }
+}
+
+static GskSlStatement *
+gsk_sl_statement_parse_switch (GskSlScope        *scope,
+                               GskSlPreprocessor *preproc)
+{
+  GskSlStatementSwitch *switch_stmt;
+  const GskSlToken *token;
+  GskSlStatementCase *case_stmt = NULL;
+  GskSlJump jump = GSK_SL_JUMP_NONE;
+
+  /* GSK_SL_TOKEN_SWITCH */
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_PAREN))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an opening \"(\"");
+      return (GskSlStatement *) gsk_sl_statement_new_error ();
+    }
+  gsk_sl_preprocessor_consume (preproc, NULL);
+
+  switch_stmt = gsk_sl_statement_new (GskSlStatementSwitch, &GSK_SL_STATEMENT_SWITCH);
+  switch_stmt->scope = gsk_sl_scope_new_full (scope,
+                                              gsk_sl_scope_get_return_type (scope),
+                                              TRUE,
+                                              gsk_sl_scope_can_continue (scope));
+  switch_stmt->cases = g_array_new (TRUE, FALSE, sizeof (GskSlStatementCase));
+  g_array_set_clear_func (switch_stmt->cases, (GDestroyNotify) gsk_sl_statement_case_clear);
+  switch_stmt->condition = gsk_sl_expression_parse (scope, preproc);
+  switch_stmt->default_case = -1;
+
+  scope = switch_stmt->scope;
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_PAREN))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected a closing \")\" after switch");
+      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_PAREN);
+    }
+  gsk_sl_preprocessor_consume (preproc, switch_stmt);
+
+  token = gsk_sl_preprocessor_get (preproc);
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_LEFT_BRACE))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected an opening \"{\"");
+      return (GskSlStatement *) switch_stmt;
+    }
+  gsk_sl_preprocessor_consume (preproc, switch_stmt);
+
+  token = gsk_sl_preprocessor_get (preproc);
+
+  while (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE) &&
+         !gsk_sl_token_is (token, GSK_SL_TOKEN_EOF))
+    {
+      if (gsk_sl_token_is (token, GSK_SL_TOKEN_DEFAULT) ||
+          gsk_sl_token_is (token, GSK_SL_TOKEN_CASE))
+        {
+          jump = GSK_SL_JUMP_NONE;
+          if (case_stmt)
+            case_stmt->statements = g_slist_reverse (case_stmt->statements);
+
+          g_array_set_size (switch_stmt->cases, switch_stmt->cases->len + 1);
+          case_stmt = &g_array_index (switch_stmt->cases, GskSlStatementCase, switch_stmt->cases->len - 1);
+
+          if (gsk_sl_token_is (token, GSK_SL_TOKEN_CASE))
+            {
+              gsk_sl_preprocessor_consume (preproc, switch_stmt);
+              case_stmt->value = gsk_sl_expression_parse_integral_constant (scope, preproc, G_MININT32, G_MAXUINT32);
+              gsk_sl_statement_switch_check_duplicate (switch_stmt, preproc);
+            }
+          else
+            {
+              if (switch_stmt->default_case >= 0)
+                gsk_sl_preprocessor_error (preproc, DECLARATION, "Duplicate \"default\" label.");
+              gsk_sl_preprocessor_consume (preproc, switch_stmt);
+              switch_stmt->default_case = switch_stmt->cases->len - 1;
+            }
+
+          token = gsk_sl_preprocessor_get (preproc);
+          if (!gsk_sl_token_is (token, GSK_SL_TOKEN_COLON))
+            gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected \":\" after label.");
+          else
+            gsk_sl_preprocessor_consume (preproc, switch_stmt);
+        }
+      else 
+        {
+          GskSlStatement *statement;
+
+          statement = gsk_sl_statement_parse (scope, preproc, TRUE);
+          if (case_stmt == NULL)
+            {
+              gsk_sl_preprocessor_error (preproc, SYNTAX, "Statement in switch body without previous \"case\" or \"default\".");
+              gsk_sl_statement_unref (statement);
+              continue;
+            }
+
+          if (jump != GSK_SL_JUMP_NONE)
+            gsk_sl_preprocessor_warn (preproc, DEAD_CODE, "Statement cannot be reached.");
+          case_stmt->statements = g_slist_prepend (case_stmt->statements, statement);
+          jump = gsk_sl_statement_get_jump (statement);
+        }
+
+      token = gsk_sl_preprocessor_get (preproc);
+    }
+  if (case_stmt)
+    case_stmt->statements = g_slist_reverse (case_stmt->statements);
+
+  if (!gsk_sl_token_is (token, GSK_SL_TOKEN_RIGHT_BRACE))
+    {
+      gsk_sl_preprocessor_error (preproc, SYNTAX, "Expected closing \"}\" at end of block.");
+      gsk_sl_preprocessor_sync (preproc, GSK_SL_TOKEN_RIGHT_BRACE);
+    }
+  gsk_sl_preprocessor_consume (preproc, switch_stmt);
+  
+  return (GskSlStatement *) switch_stmt;
+}
+
 GskSlStatement *
 gsk_sl_statement_parse_compound (GskSlScope        *scope,
                                  GskSlPreprocessor *preproc,
@@ -1025,6 +1352,11 @@ gsk_sl_statement_parse (GskSlScope        *scope,
       if (!parse_everything)
         goto only_expression_and_declaration;
       return gsk_sl_statement_parse_for (scope, preproc);
+
+    case GSK_SL_TOKEN_SWITCH:
+      if (!parse_everything)
+        goto only_expression_and_declaration;
+      return gsk_sl_statement_parse_switch (scope, preproc);
 
     case GSK_SL_TOKEN_CONST:
     case GSK_SL_TOKEN_IN:
