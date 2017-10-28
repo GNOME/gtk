@@ -407,7 +407,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
         op.text.start_glyph = 0;
         op.text.texture_index = G_MAXUINT;
-        op.text.scale = gdk_window_get_scale_factor (gsk_renderer_get_window (GSK_RENDERER (renderer)));
+        op.text.scale = self->scale_factor;
 
         for (i = 0, count = 0; i < num_glyphs; i++)
           {
