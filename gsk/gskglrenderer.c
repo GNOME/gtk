@@ -731,8 +731,9 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   memset (&item, 0, sizeof (RenderItem));
 
-  scale_factor = gsk_renderer_get_scale_factor (GSK_RENDERER (self));
-  if (scale_factor < 1)
+  if (gsk_renderer_get_window (GSK_RENDERER (self)))
+    scale_factor = gdk_window_get_scale_factor (gsk_renderer_get_window (GSK_RENDERER (self)));
+  else
     scale_factor = 1;
 
   item.node = node;
@@ -1067,7 +1068,7 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
         GdkDrawingContext *context = gsk_renderer_get_drawing_context (GSK_RENDERER (self));
         GdkWindow *window = gsk_renderer_get_window (GSK_RENDERER (self));
         GdkRectangle extents;
-        int scale_factor = gsk_renderer_get_scale_factor (GSK_RENDERER (self));
+        int scale_factor = gdk_window_get_scale_factor (window);
 
         cairo_region_get_extents (gdk_drawing_context_get_clip (context), &extents);
 
@@ -1221,7 +1222,7 @@ gsk_gl_renderer_render (GskRenderer   *renderer,
   gdk_gl_context_make_current (self->gl_context);
 
   gsk_renderer_get_viewport (renderer, &viewport);
-  scale_factor = gsk_renderer_get_scale_factor (renderer);
+  scale_factor = gdk_window_get_scale_factor (gsk_renderer_get_window (renderer));
 
   gsk_gl_renderer_do_render (renderer, root, &viewport, scale_factor);
 

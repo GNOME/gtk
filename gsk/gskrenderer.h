@@ -48,11 +48,6 @@ GDK_AVAILABLE_IN_3_90
 void                    gsk_renderer_get_viewport               (GskRenderer             *renderer,
                                                                  graphene_rect_t         *viewport);
 GDK_AVAILABLE_IN_3_90
-void                    gsk_renderer_set_scale_factor           (GskRenderer             *renderer,
-                                                                 int                      scale_factor);
-GDK_AVAILABLE_IN_3_90
-int                     gsk_renderer_get_scale_factor           (GskRenderer             *renderer);
-GDK_AVAILABLE_IN_3_90
 GdkWindow *             gsk_renderer_get_window                 (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_3_90

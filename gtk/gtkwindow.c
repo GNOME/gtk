@@ -6876,10 +6876,7 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_set_realized (widget, TRUE);
 
   if (priv->renderer == NULL)
-    {
-      priv->renderer = gsk_renderer_new_for_window (gdk_window);
-      gsk_renderer_set_scale_factor (priv->renderer, gtk_widget_get_scale_factor (widget));
-    }
+    priv->renderer = gsk_renderer_new_for_window (gdk_window);
 
   if (priv->transient_parent &&
       _gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
@@ -7120,10 +7117,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
   if (priv->renderer != NULL)
     {
       graphene_rect_t viewport;
-      int scale;
-
-      scale = gtk_widget_get_scale_factor (widget);
-      gsk_renderer_set_scale_factor (priv->renderer, scale);
 
       graphene_rect_init (&viewport, 0, 0, allocation->width, allocation->height);
       gsk_renderer_set_viewport (priv->renderer, &viewport);

@@ -83,7 +83,7 @@ gsk_vulkan_render_setup (GskVulkanRender       *self,
     }
   else
     {
-      self->scale_factor = gsk_renderer_get_scale_factor (self->renderer);
+      self->scale_factor = gdk_window_get_scale_factor (gsk_renderer_get_window (self->renderer));
       self->viewport = GRAPHENE_RECT_INIT (0, 0,
                                            gdk_window_get_width (window) * self->scale_factor,
                                            gdk_window_get_height (window) * self->scale_factor);

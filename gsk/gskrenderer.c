@@ -76,8 +76,6 @@ typedef struct
 
   GskProfiler *profiler;
 
-  int scale_factor;
-
   gboolean is_realized : 1;
 } GskRendererPrivate;
 
@@ -85,7 +83,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 
 enum {
   PROP_VIEWPORT = 1,
-  PROP_SCALE_FACTOR,
   PROP_WINDOW,
   PROP_DISPLAY,
   PROP_DRAWING_CONTEXT,
@@ -157,7 +154,7 @@ gsk_renderer_real_create_cairo_surface (GskRenderer    *self,
                                         int             height)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
-  int scale_factor = priv->scale_factor > 0 ? priv->scale_factor : 1;
+  int scale_factor = priv->window ? gdk_window_get_scale_factor (priv->window) : 1;
   int real_width = width * scale_factor;
   int real_height = height * scale_factor;
 
@@ -197,10 +194,6 @@ gsk_renderer_set_property (GObject      *gobject,
       gsk_renderer_set_viewport (self, g_value_get_boxed (value));
       break;
 
-    case PROP_SCALE_FACTOR:
-      gsk_renderer_set_scale_factor (self, g_value_get_int (value));
-      break;
-
     case PROP_DISPLAY:
       /* Construct-only */
       priv->display = g_value_dup_object (value);
@@ -225,10 +218,6 @@ gsk_renderer_get_property (GObject    *gobject,
     {
     case PROP_VIEWPORT:
       g_value_set_boxed (value, &priv->viewport);
-      break;
-
-    case PROP_SCALE_FACTOR:
-      g_value_set_int (value, priv->scale_factor);
       break;
 
     case PROP_WINDOW:
@@ -325,23 +314,6 @@ gsk_renderer_class_init (GskRendererClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GskRenderer:scale-factor:
-   *
-   * The scale factor used when rendering.
-   *
-   * Since: 3.90
-   */
-  gsk_renderer_properties[PROP_SCALE_FACTOR] =
-    g_param_spec_int ("scale-factor",
-                      "Scale Factor",
-                      "The scaling factor of the renderer",
-                      1, G_MAXINT,
-                      1,
-                      G_PARAM_READWRITE |
-                      G_PARAM_STATIC_STRINGS |
-                      G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GskRenderer:drawing-context:
    *
    * The drawing context used when rendering.
@@ -365,8 +337,6 @@ gsk_renderer_init (GskRenderer *self)
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
   priv->profiler = gsk_profiler_new ();
-
-  priv->scale_factor = 1;
 }
 
 /**
@@ -421,51 +391,6 @@ gsk_renderer_get_viewport (GskRenderer     *renderer,
   g_return_if_fail (viewport != NULL);
 
   graphene_rect_init_from_rect (viewport, &priv->viewport);
-}
-
-/**
- * gsk_renderer_set_scale_factor:
- * @renderer: a #GskRenderer
- * @scale_factor: the new scale factor
- *
- * Sets the scale factor for the renderer.
- *
- * Since: 3.90
- */
-void
-gsk_renderer_set_scale_factor (GskRenderer *renderer,
-                               int          scale_factor)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_if_fail (GSK_IS_RENDERER (renderer));
-
-  if (priv->scale_factor != scale_factor)
-    {
-      priv->scale_factor = scale_factor;
-
-      g_object_notify_by_pspec (G_OBJECT (renderer), gsk_renderer_properties[PROP_SCALE_FACTOR]);
-    }
-}
-
-/**
- * gsk_renderer_get_scale_factor:
- * @renderer: a #GskRenderer
- *
- * Gets the scale factor for the @renderer.
- *
- * Returns: the scale factor
- *
- * Since: 3.90
- */
-int
-gsk_renderer_get_scale_factor (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), 1);
-
-  return priv->scale_factor;
 }
 
 /**
