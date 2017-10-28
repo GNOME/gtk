@@ -408,6 +408,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
   RROutput primary_output = None;
   RROutput first_output = None;
   int i;
+  gboolean randr12_compat = FALSE;
   XRRMonitorInfo *rr_monitors;
   int num_rr_monitors;
   int old_primary;
@@ -451,6 +452,9 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
 
       if (output_info == NULL)
         continue;
+
+      /* Non RandR1.2+ X driver have output name "default" */
+      randr12_compat |= !g_strcmp0 (output_info->name, "default");
 
       if (output_info->connection == RR_Disconnected)
         {
@@ -531,6 +535,19 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
   XRRFreeMonitors (rr_monitors);
   XRRFreeScreenResources (resources);
 
+  /* non RandR 1.2+ X driver doesn't return any usable multihead data */
+  if (randr12_compat)
+    {
+      for (i = 0; i < x11_display->monitors->len; i++)
+        {
+          GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+          if (monitor->remove)
+            gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
+        }
+      g_ptr_array_remove_range (x11_display->monitors, 0, x11_display->monitors->len);
+      return FALSE;
+    }
+
   for (i = x11_display->monitors->len - 1; i >= 0; i--)
     {
       GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
@@ -593,6 +610,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
   RROutput primary_output = None;
   RROutput first_output = None;
   int i;
+  gboolean randr12_compat = FALSE;
   int old_primary;
 
   if (!x11_display->have_randr13)
@@ -615,6 +633,9 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
       RROutput output = resources->outputs[i];
       XRROutputInfo *output_info =
         XRRGetOutputInfo (x11_screen->xdisplay, resources, output);
+
+      /* Non RandR1.2+ X driver have output name "default" */
+      randr12_compat |= !g_strcmp0 (output_info->name, "default");
 
       if (output_info->connection == RR_Disconnected)
         {
@@ -696,7 +717,17 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
 
   XRRFreeScreenResources (resources);
 
-  /* Which usable multihead data is not returned in non RandR 1.2+ X driver? */
+  if (randr12_compat)
+    {
+      for (i = 0; i < x11_display->monitors->len; i++)
+        {
+          GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
+          if (monitor->remove)
+            gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
+        }
+      g_ptr_array_remove_range (x11_display->monitors, 0, x11_display->monitors->len);
+      return FALSE;
+    }
 
   for (i = x11_display->monitors->len - 1; i >= 0; i--)
     {
