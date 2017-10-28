@@ -586,9 +586,35 @@ populate_render_node_properties (GtkListStore  *store,
       g_free (tmp);
       break;
 
+    case GSK_SHADOW_NODE:
+      {
+        int i;
+
+        for (i = 0; i < gsk_shadow_node_get_n_shadows (node); i++)
+          {
+            char *label;
+            char *value;
+            const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
+
+            label = g_strdup_printf ("Color %d", i);
+            add_color_row (store, label, &shadow->color);
+            g_free (label);
+
+            label = g_strdup_printf ("Offset %d", i);
+            value = g_strdup_printf ("%.2f %.2f", shadow->dx, shadow->dy);
+            add_text_row (store, label, value);
+            g_free (value);
+            g_free (label);
+
+            label = g_strdup_printf ("Radius %d", i);
+            add_float_row (store, label, shadow->radius);
+            g_free (label);
+          }
+      }
+      break;
+
     case GSK_NOT_A_RENDER_NODE:
     case GSK_TRANSFORM_NODE:
-    case GSK_SHADOW_NODE:
     default:
       break;
     }
