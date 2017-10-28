@@ -195,8 +195,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   VkDevice device;
   guint i;
 
-  if (gdk_window_get_width (window) == priv->swapchain_width &&
-      gdk_window_get_height (window) == priv->swapchain_height)
+  if (gdk_window_get_width (window) * gdk_window_get_scale_factor (window) == priv->swapchain_width &&
+      gdk_window_get_height (window) * gdk_window_get_scale_factor (window) == priv->swapchain_height)
     return TRUE;
 
   device = gdk_vulkan_context_get_device (context);
