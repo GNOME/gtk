@@ -24,6 +24,7 @@
 #include <math.h>
 
 #include "gtkcssshadowvalueprivate.h"
+#include "gtksnapshot.h"
 
 #include <string.h>
 
@@ -392,4 +393,30 @@ _gtk_css_shadows_value_get_extents (const GtkCssValue *shadows,
     }
 
   *border = b;
+}
+
+gboolean
+gtk_css_shadows_value_push_snapshot (const GtkCssValue *value,
+                                     GtkSnapshot       *snapshot)
+{
+  gboolean need_shadow = FALSE;
+  int i;
+
+  for (i = 0; i < value->len; i++)
+    {
+      if (!gtk_css_shadow_value_is_clear (value->values[i]))
+        {
+          need_shadow = TRUE;
+          break;
+        }
+    }
+
+  if (need_shadow)
+    {
+      GskShadow *shadows = g_newa (GskShadow, value->len);
+      gtk_css_shadows_value_get_shadows (value, shadows);
+      gtk_snapshot_push_shadow (snapshot, shadows, value->len, "Shadow<%u>", value->len);
+    }
+
+  return need_shadow;
 }

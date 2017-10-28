@@ -1090,3 +1090,9 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue   *shadow,
   gsk_render_node_unref (node);
 }
 
+gboolean
+gtk_css_shadow_value_is_clear (const GtkCssValue *shadow)
+{
+  return gdk_rgba_is_clear (_gtk_css_rgba_value_get_rgba (shadow->color));
+}
+

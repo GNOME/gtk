@@ -61,6 +61,8 @@ void            gtk_css_shadows_value_snapshot_inset  (const GtkCssValue        
 
 void            _gtk_css_shadows_value_get_extents    (const GtkCssValue        *shadows,
                                                        GtkBorder                *border);
+gboolean        gtk_css_shadows_value_push_snapshot   (const GtkCssValue        *shadows,
+                                                       GtkSnapshot              *snapshot);
 
 G_END_DECLS
 

@@ -59,6 +59,8 @@ void            gtk_css_shadow_value_snapshot_inset   (const GtkCssValue        
                                                        GtkSnapshot              *snapshot,
                                                        const GskRoundedRect     *padding_box);
 
+gboolean        gtk_css_shadow_value_is_clear         (const GtkCssValue        *shadow);
+
 G_END_DECLS
 
 #endif /* __GTK_SHADOW_H__ */

@@ -1460,8 +1460,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
 {
   const GdkRGBA *fg_color;
   GtkCssValue *shadows_value;
-  GskShadow *shadows;
-  gsize n_shadows;
+  gboolean has_shadow;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -1472,18 +1471,11 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
   fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
   shadows_value = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW);
-  n_shadows = gtk_css_shadows_value_get_n_shadows (shadows_value);
-
-  if (n_shadows > 0)
-    {
-      shadows = g_newa (GskShadow, n_shadows);
-      gtk_css_shadows_value_get_shadows (shadows_value, shadows);
-      gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "TextShadow<%zu>", n_shadows);
-    }
+  has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
 
   gsk_pango_show_layout (snapshot, fg_color, layout);
 
-  if (n_shadows > 0)
+  if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
   gtk_snapshot_offset (snapshot, -x, -y);

@@ -99,8 +99,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
   const GtkCssValue *shadows_value, *transform_value, *filter_value;
   graphene_matrix_t transform_matrix;
   GtkCssImage *image;
-  GskShadow *shadows;
-  gsize n_shadows;
+  gboolean has_shadow;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
@@ -121,13 +120,7 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
 
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
-  n_shadows = gtk_css_shadows_value_get_n_shadows (shadows_value);
-  if (n_shadows > 0)
-    {
-      shadows = g_newa (GskShadow, n_shadows);
-      gtk_css_shadows_value_get_shadows (shadows_value, shadows);
-      gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
-    }
+  has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
 
   if (graphene_matrix_is_identity (&transform_matrix))
     {
@@ -150,9 +143,9 @@ gtk_css_style_snapshot_icon (GtkCssStyle            *style,
       gtk_snapshot_pop (snapshot);
     }
 
-  if (n_shadows > 0)
+  if (has_shadow)
     gtk_snapshot_pop (snapshot);
-  
+
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 }
 
@@ -282,8 +275,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
   graphene_matrix_t transform_matrix;
   graphene_rect_t bounds;
   double width, height;
-  GskShadow *shadows;
-  gsize n_shadows;
+  gboolean has_shadow;
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
@@ -301,13 +293,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
 
   gtk_css_filter_value_push_snapshot (filter_value, snapshot);
 
-  n_shadows = gtk_css_shadows_value_get_n_shadows (shadows_value);
-  if (n_shadows > 0)
-    {
-      shadows = g_newa (GskShadow, n_shadows);
-      gtk_css_shadows_value_get_shadows (shadows_value, shadows);
-      gtk_snapshot_push_shadow (snapshot, shadows, n_shadows, "IconShadow<%zu>", n_shadows);
-    }
+  has_shadow = gtk_css_shadows_value_push_snapshot (shadows_value, snapshot);
 
   if (color_matrix)
     gtk_snapshot_push_color_matrix (snapshot, color_matrix, color_offset, "Recoloring Icon");
@@ -339,8 +325,8 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
   if (color_matrix)
     gtk_snapshot_pop (snapshot);
 
-  if (n_shadows > 0)
+  if (has_shadow)
     gtk_snapshot_pop (snapshot);
-  
+
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 }
