@@ -107,6 +107,9 @@ gtk_check_button_update_node_state (GtkWidget *widget)
   GtkCssImageBuiltinType image_type;
   GtkStateFlags state;
 
+  if (!priv->indicator_widget)
+    return;
+
   state = gtk_widget_get_state_flags (widget);
 
   /* XXX: This is somewhat awkward here, but there's no better
@@ -138,7 +141,8 @@ gtk_check_button_finalize (GObject *object)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (GTK_CHECK_BUTTON (object));
 
-  gtk_widget_unparent (priv->indicator_widget);
+  if (priv->indicator_widget)
+    gtk_widget_unparent (priv->indicator_widget);
 
   G_OBJECT_CLASS (gtk_check_button_parent_class)->finalize (object);
 }
@@ -337,7 +341,10 @@ draw_indicator_changed (GtkCheckButton *check_button)
 
   if (priv->draw_indicator)
     {
-      gtk_widget_show (priv->indicator_widget);
+      priv->indicator_widget = gtk_icon_new ("check");
+      gtk_widget_set_halign (priv->indicator_widget, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (priv->indicator_widget, GTK_ALIGN_CENTER);
+      gtk_widget_set_parent (priv->indicator_widget, GTK_WIDGET (check_button));
       if (GTK_IS_RADIO_BUTTON (check_button))
         {
           gtk_css_node_remove_class (widget_node, g_quark_from_static_string ("radio"));
@@ -351,7 +358,8 @@ draw_indicator_changed (GtkCheckButton *check_button)
     }
   else
     {
-      gtk_widget_hide (priv->indicator_widget);
+      gtk_widget_unparent (priv->indicator_widget);
+      priv->indicator_widget = NULL;
       if (GTK_IS_RADIO_BUTTON (check_button))
         {
           gtk_css_node_add_class (widget_node, g_quark_from_static_string ("radio"));
@@ -370,17 +378,13 @@ gtk_check_button_init (GtkCheckButton *check_button)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (check_button);
 
-  priv->draw_indicator = TRUE;
 
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
 
   gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (check_button)), "toggle");
 
-  priv->indicator_widget = gtk_icon_new ("check");
-  gtk_widget_set_halign (priv->indicator_widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (priv->indicator_widget, GTK_ALIGN_CENTER);
-  gtk_widget_set_parent (priv->indicator_widget, GTK_WIDGET (check_button));
-
+  priv->draw_indicator = TRUE;
+  draw_indicator_changed (check_button);
   gtk_check_button_update_node_state (GTK_WIDGET (check_button));
 }
 
