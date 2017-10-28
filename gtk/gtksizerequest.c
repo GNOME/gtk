@@ -189,8 +189,8 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
       else
         {
           int dummy = 0;
-          int minimum_for_size;
-          int natural_for_size;
+          int minimum_for_size = 0;
+          int natural_for_size = 0;
 
           /* Pull the base natural size from the cache as it's needed to adjust
            * the proposed 'for_size' */
