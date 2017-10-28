@@ -9,13 +9,14 @@
 # Anas Afif Emad <anas.e87@gmail.com>, 2008.
 # Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 # Abderrahim Kitouni <a.kitouni@gmail.com>, 2012.
+# Ahmad Nourallah <ahmadnurallah@gmail.com>, urukproject mail list <>, 2017.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-09-11 15:26+0000\n"
-"PO-Revision-Date: 2016-09-21 09:05+0200\n"
-"Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
+"PO-Revision-Date: 2017-10-28 04:41+0200\n"
+"Last-Translator: Ahmad Nourallah <ahmadnurallah@gmail.com>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -576,7 +577,7 @@ msgstr ""
 #: gtk/a11y/gtkcellaccessible.c:274
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
-msgstr ""
+msgstr "إنشاء ودجة والتي محتويات الخليّة يمكن تحريرها"
 
 #: gtk/a11y/gtkcellaccessible.c:276
 msgctxt "Action description"
@@ -1047,12 +1048,12 @@ msgstr "ينقر على عنصر القائمة"
 #: gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
 msgid "Pops up the slider"
-msgstr ""
+msgstr "انبثاق شريط التمرير"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:142
 msgctxt "Action description"
 msgid "Dismisses the slider"
-msgstr ""
+msgstr "إخفاء شريط التمرير"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action name"
@@ -1076,7 +1077,7 @@ msgstr "يوفر إشارة مرئية على التقدم"
 #: gtk/a11y/gtkswitchaccessible.c:98
 msgctxt "Action description"
 msgid "Toggles the switch"
-msgstr ""
+msgstr "تبديل المفتاح"
 
 #: gtk/deprecated/gtkcolorsel.c:425
 msgid ""
@@ -1405,27 +1406,27 @@ msgstr "فارغ"
 
 #: gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
-msgstr ""
+msgstr "إخراج إلى الدليل بدلاً من مكان العمل الحالي"
 
 #: gtk/encodesymbolic.c:266
 #, c-format
 msgid "Invalid size %s\n"
-msgstr ""
+msgstr "حجم خاطئ %s\n"
 
 #: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:618
 #, c-format
 msgid "Can't load file: %s\n"
-msgstr ""
+msgstr "لا يمكن تحميل الملف: %s\n"
 
 #: gtk/encodesymbolic.c:307 gtk/encodesymbolic.c:313
 #, c-format
 msgid "Can't save file %s: %s\n"
-msgstr ""
+msgstr "لا يمكن حفظ الملف %s: %s\n"
 
 #: gtk/encodesymbolic.c:319
 #, c-format
 msgid "Can't close stream"
-msgstr ""
+msgstr "لا يمكن إغلاق المجرى"
 
 #: gtk/gtkaboutdialog.c:113 gtk/ui/gtkaboutdialog.ui:221
 msgid "License"
@@ -1707,27 +1708,27 @@ msgstr "لا يسمح بالنص داخل <%s>"
 #: gtk/gtk-builder-tool.c:119
 #, c-format
 msgid "Packing property %s::%s not found\n"
-msgstr ""
+msgstr "خاصيّة التعبئة %s::%s لم يتم العثور عليها\n"
 
 #: gtk/gtk-builder-tool.c:121
 #, c-format
 msgid "Cell property %s::%s not found\n"
-msgstr ""
+msgstr "خاصيّة الخلية %s::%ss لم يتم العثور عليها\n"
 
 #: gtk/gtk-builder-tool.c:123
 #, c-format
 msgid "Property %s::%s not found\n"
-msgstr ""
+msgstr "الخاصيّة %s::%s لم يتم العثور عليها\n"
 
 #: gtk/gtk-builder-tool.c:131
 #, c-format
 msgid "Couldn't parse value for %s::%s: %s\n"
-msgstr ""
+msgstr "لا يمكن تحليل القيم من أجل %s::%s: %s\n"
 
 #: gtk/gtk-builder-tool.c:639
 #, c-format
 msgid "Can't parse file: %s\n"
-msgstr ""
+msgstr "لا يمكن تحليل الملف: %s\n"
 
 #: gtk/gtk-builder-tool.c:982
 #, c-format
@@ -2547,7 +2548,7 @@ msgstr "لا شيء"
 
 #: gtk/gtkglarea.c:313
 msgid "OpenGL context creation failed"
-msgstr ""
+msgstr "أخفق إنشاء سياق برنامج أوبنغل"
 
 #: gtk/gtkheaderbar.c:387
 msgid "Application menu"
@@ -2615,7 +2616,7 @@ msgstr "ا_نسخ عنوان الوصلة"
 
 #: gtk/gtk-launch.c:40
 msgid "Show program version"
-msgstr ""
+msgstr "إظهار إصدار البرنامج"
 
 #: gtk/gtk-launch.c:74
 msgid "APPLICATION [URI...] — launch an APPLICATION"
@@ -2628,6 +2629,9 @@ msgid ""
 "Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
 msgstr ""
+"تشغيل تطبيق (محدد بملف desktop خاصته),\n"
+"اختيارياً بتمرير URIs واحد أو أكثر كوسيط"
+""
 
 #: gtk/gtk-launch.c:90
 #, c-format
@@ -2644,26 +2648,26 @@ msgstr "جرّب ‪\"%s --help\"‬ لمزيد من المعلومات."
 #: gtk/gtk-launch.c:111
 #, c-format
 msgid "%s: missing application name"
-msgstr ""
+msgstr "%s: اسم التطبيق مفقود"
 
 #: gtk/gtk-launch.c:140
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr ""
+msgstr "إنشاء AppInfo من المعرف المميز غير مدعوم في الأنظمة الغير شبيهة بيونكس"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
 #: gtk/gtk-launch.c:148
 #, c-format
 msgid "%s: no such application %s"
-msgstr ""
+msgstr "%s: لا يوجد تطبيق من هذا القبيل %s"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
 #: gtk/gtk-launch.c:166
 #, c-format
 msgid "%s: error launching application: %s\n"
-msgstr ""
+msgstr "%s: خطأ في تشغيل التطبيق: %s\n"
 
 #: gtk/gtklinkbutton.c:370
 msgid "Copy URL"
@@ -3826,10 +3830,13 @@ msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
+"يمكنك تعطيل السي اس اس المخصص مؤقتاً بالضغط على الزر"
+""توقف" في الأعلى"
+""
 
 #: gtk/inspector/css-editor.c:120
 msgid "Changes are applied instantly and globally, for the whole application."
-msgstr ""
+msgstr "يتم تطبيق التغييرات على الفور وعلى الصعيد الشامل، للتطبيق كله"
 
 #: gtk/inspector/css-editor.c:169
 #, c-format
@@ -3838,11 +3845,11 @@ msgstr "فشل حفظ الطرز المتراصة"
 
 #: gtk/inspector/css-editor.ui:34
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "تعطيل السي اس اس المخصص هذا"
 
 #: gtk/inspector/css-editor.ui:55
 msgid "Save the current CSS"
-msgstr ""
+msgstr "حفظ السي اس اس الحالي"
 
 #: gtk/inspector/css-node-tree.ui:52
 msgid "ID"
@@ -3850,11 +3857,11 @@ msgstr "المعرّف"
 
 #: gtk/inspector/css-node-tree.ui:65 gtk/inspector/object-tree.ui:142
 msgid "Style Classes"
-msgstr ""
+msgstr "فئات النمط"
 
 #: gtk/inspector/css-node-tree.ui:110
 msgid "CSS Property"
-msgstr ""
+msgstr "خاصيّة سي اس اس"
 
 #: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
 #: gtk/ui/gtkcoloreditor.ui:295
@@ -3891,7 +3898,7 @@ msgstr "العرض"
 
 #: gtk/inspector/general.ui:408
 msgid "RGBA visual"
-msgstr ""
+msgstr "RGBA visual"
 
 #: gtk/inspector/general.ui:442
 msgid "Composited"
@@ -3903,7 +3910,7 @@ msgstr "إصدارة GL"
 
 #: gtk/inspector/general.ui:524
 msgid "GL Vendor"
-msgstr ""
+msgstr "نوع GL"
 
 #: gtk/inspector/gestures.c:129
 #, fuzzy
@@ -3914,21 +3921,21 @@ msgstr "لا شيء"
 #: gtk/inspector/gestures.c:130
 msgctxt "event phase"
 msgid "Capture"
-msgstr ""
+msgstr "إلتقاط"
 
 #: gtk/inspector/gestures.c:131
 msgctxt "event phase"
 msgid "Bubble"
-msgstr ""
+msgstr "فقاعة"
 
 #: gtk/inspector/gestures.c:132
 msgctxt "event phase"
 msgid "Target"
-msgstr ""
+msgstr "الهدف"
 
 #: gtk/inspector/menu.c:92
 msgid "Unnamed section"
-msgstr ""
+msgstr "قسم غير مسمى"
 
 #: gtk/inspector/menu.ui:26 gtk/inspector/object-tree.ui:125
 msgid "Label"
@@ -3940,7 +3947,7 @@ msgstr "إجراء"
 
 #: gtk/inspector/menu.ui:52
 msgid "Target"
-msgstr ""
+msgstr "الهدف"
 
 #: gtk/inspector/menu.ui:65
 msgid "Icon"
@@ -3952,11 +3959,11 @@ msgstr "عنوان"
 
 #: gtk/inspector/misc-info.ui:68
 msgid "Reference count"
-msgstr ""
+msgstr "عدد المراجع"
 
 #: gtk/inspector/misc-info.ui:136
 msgid "Buildable ID"
-msgstr ""
+msgstr "معرف قابل للبناء"
 
 #: gtk/inspector/misc-info.ui:170
 msgid "Default Widget"
@@ -3971,15 +3978,15 @@ msgstr "الخصائص"
 
 #: gtk/inspector/misc-info.ui:214
 msgid "Focus Widget"
-msgstr ""
+msgstr "تركيز الودجة"
 
 #: gtk/inspector/misc-info.ui:259
 msgid "Mnemonic Label"
-msgstr ""
+msgstr "علامة الذاكرة"
 
 #: gtk/inspector/misc-info.ui:294
 msgid "Request mode"
-msgstr ""
+msgstr "وضع الطلب"
 
 #: gtk/inspector/misc-info.ui:328
 #, fuzzy
@@ -3988,11 +3995,11 @@ msgstr "الموقع"
 
 #: gtk/inspector/misc-info.ui:362
 msgid "Baseline"
-msgstr ""
+msgstr "خط الأساس"
 
 #: gtk/inspector/misc-info.ui:396
 msgid "Clip area"
-msgstr ""
+msgstr "منطقة الإقتصاص"
 
 #: gtk/inspector/misc-info.ui:430
 #, fuzzy
@@ -4001,7 +4008,7 @@ msgstr "عدد الإطارات"
 
 #: gtk/inspector/misc-info.ui:475
 msgid "Tick callback"
-msgstr ""
+msgstr "ضع علامة على رد الاتصال"
 
 #: gtk/inspector/misc-info.ui:511
 msgid "Frame count"
@@ -4013,40 +4020,40 @@ msgstr "معدل الإطارات"
 
 #: gtk/inspector/misc-info.ui:579
 msgid "Accessible role"
-msgstr ""
+msgstr "دور متاح"
 
 #: gtk/inspector/misc-info.ui:613
 msgid "Accessible name"
-msgstr ""
+msgstr "اسم المتاح"
 
 #: gtk/inspector/misc-info.ui:649
 msgid "Accessible description"
-msgstr ""
+msgstr "وصف المتاح"
 
 #: gtk/inspector/misc-info.ui:685
 msgid "Mapped"
-msgstr ""
+msgstr "معينة"
 
 #: gtk/inspector/misc-info.ui:721
 msgid "Realized"
-msgstr ""
+msgstr "مدرك"
 
 #: gtk/inspector/misc-info.ui:757
 msgid "Is Toplevel"
-msgstr ""
+msgstr "هو أعلى المستوى"
 
 #: gtk/inspector/misc-info.ui:793
 msgid "Child Visible"
-msgstr ""
+msgstr "بنويى مرئي"
 
 #: gtk/inspector/object-tree.ui:95
 msgid "Object"
-msgstr ""
+msgstr "كائن"
 
 #: gtk/inspector/prop-editor.c:679
 #, c-format
 msgid "Pointer: %p"
-msgstr ""
+msgstr "مؤشر: %p"
 
 #: gtk/inspector/prop-editor.c:694
 msgctxt "type name"
@@ -4056,29 +4063,29 @@ msgstr "مجهول"
 #: gtk/inspector/prop-editor.c:695
 #, c-format
 msgid "Object: %p (%s)"
-msgstr ""
+msgstr "كائن: %p (%s)"
 
 #: gtk/inspector/prop-editor.c:1141
 #, c-format
 msgid "Uneditable property type: %s"
-msgstr ""
+msgstr "نوع خاصيّة غير قابل للتحرير: %s"
 
 #: gtk/inspector/prop-editor.c:1259
 msgid "Attribute mapping"
-msgstr ""
+msgstr "تعيين السمة"
 
 #: gtk/inspector/prop-editor.c:1264
 msgid "Model:"
-msgstr ""
+msgstr "نموذج:"
 
 #: gtk/inspector/prop-editor.c:1265
 #, c-format
 msgid "%p (%s)"
-msgstr ""
+msgstr "%p (%s)"
 
 #: gtk/inspector/prop-editor.c:1275
 msgid "Column:"
-msgstr ""
+msgstr "عمود:"
 
 #: gtk/inspector/prop-editor.c:1285
 #, fuzzy
@@ -4089,71 +4096,71 @@ msgstr "لا شيء"
 #: gtk/inspector/prop-editor.c:1389
 #, c-format
 msgid "Defined at: %p (%s)"
-msgstr ""
+msgstr "معرّف على: %p (%s)"
 
 #: gtk/inspector/prop-editor.c:1453 gtk/inspector/prop-editor.c:1469
 msgid "inverted"
-msgstr ""
+msgstr "معكوس"
 
 #: gtk/inspector/prop-editor.c:1485
 msgid "bidirectional, inverted"
-msgstr ""
+msgstr "ثنائي الأبعاد, معكوس"
 
 #: gtk/inspector/prop-editor.c:1490 gtk/inspector/prop-editor.c:1604
 msgid "bidirectional"
-msgstr ""
+msgstr "ثنائي الأبعاد"
 
 #: gtk/inspector/prop-editor.c:1495
 msgid "Binding:"
-msgstr ""
+msgstr "إلحاق:"
 
 #: gtk/inspector/prop-editor.c:1623
 msgid "Setting:"
-msgstr ""
+msgstr "إعداد:"
 
 #: gtk/inspector/prop-editor.c:1663
 msgid "Source:"
-msgstr ""
+msgstr "مصدر:"
 
 #: gtk/inspector/prop-editor.c:1665
 msgid "Reset"
-msgstr ""
+msgstr "إعادة تعيين"
 
 #: gtk/inspector/prop-editor.c:1676
 msgid "Default"
-msgstr ""
+msgstr "إفتراضي"
 
 #: gtk/inspector/prop-editor.c:1679
 msgid "Theme"
-msgstr ""
+msgstr "سِمة"
 
 #: gtk/inspector/prop-editor.c:1682
 msgid "XSettings"
-msgstr ""
+msgstr "XSettings"
 
 #: gtk/inspector/prop-list.ui:34
 msgid "Property"
-msgstr ""
+msgstr "خاصيّة"
 
 #: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
 msgid "Type"
-msgstr ""
+msgstr "نوع"
 
 #: gtk/inspector/prop-list.ui:86
 msgid "Attribute"
-msgstr ""
+msgstr "صفة"
 
 #: gtk/inspector/prop-list.ui:102 gtk/inspector/signals-list.ui:73
 msgid "Defined At"
-msgstr ""
+msgstr "معرف على"
 
 #: gtk/inspector/resource-list.ui:100
 msgid "Path"
-msgstr ""
+msgstr "مسار"
 
 #: gtk/inspector/resource-list.ui:118 gtk/inspector/signals-list.ui:63
 msgid "Count"
-msgstr ""
+msgstr "عدد"
 
 #: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:223
 msgid "Size"
@@ -4161,39 +4168,39 @@ msgstr "الحجم"
 
 #: gtk/inspector/resource-list.ui:163
 msgid "Name:"
-msgstr ""
+msgstr "الاسم:"
 
 #: gtk/inspector/resource-list.ui:187
 msgid "Type:"
-msgstr ""
+msgstr "النوع:"
 
 #: gtk/inspector/resource-list.ui:210
 msgid "Size:"
-msgstr ""
+msgstr "الحجم:"
 
 #: gtk/inspector/selector.ui:31
 msgid "Selector"
-msgstr ""
+msgstr "مُنتقي"
 
 #: gtk/inspector/signals-list.c:117
 msgid "Yes"
-msgstr ""
+msgstr "نعم"
 
 #: gtk/inspector/signals-list.ui:36
 msgid "Signal"
-msgstr ""
+msgstr "إشارة"
 
 #: gtk/inspector/signals-list.ui:50
 msgid "Connected"
-msgstr ""
+msgstr "مُتصِل"
 
 #: gtk/inspector/size-groups.c:224
 msgid "Ignore hidden"
-msgstr ""
+msgstr "تجاهل مخفي"
 
 #: gtk/inspector/size-groups.c:242
 msgid "Mode"
-msgstr ""
+msgstr "وضع"
 
 #: gtk/inspector/size-groups.c:252
 #, fuzzy
@@ -4204,72 +4211,75 @@ msgstr "لا شيء"
 #: gtk/inspector/size-groups.c:253
 msgctxt "sizegroup mode"
 msgid "Horizontal"
-msgstr ""
+msgstr "أفقي"
 
 #: gtk/inspector/size-groups.c:254
 msgctxt "sizegroup mode"
 msgid "Vertical"
-msgstr ""
+msgstr "عامودي"
 
 #: gtk/inspector/size-groups.c:255
 msgctxt "sizegroup mode"
 msgid "Both"
-msgstr ""
+msgstr "كلاهما"
 
 #: gtk/inspector/statistics.c:377
 msgid "GLib must be configured with --enable-debug"
-msgstr ""
+msgstr "GLib يجب ان يتم إعداده مع --enable-debug"
 
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
-msgstr ""
+msgstr "الذات 1"
 
 #: gtk/inspector/statistics.ui:80
 msgid "Cumulative 1"
-msgstr ""
+msgstr "تراكمي 1"
 
 #: gtk/inspector/statistics.ui:92
 msgid "Self 2"
-msgstr ""
+msgstr "الذات 2"
 
 #: gtk/inspector/statistics.ui:104
 msgid "Cumulative 2"
-msgstr ""
+msgstr "تراكمي 2"
 
 #: gtk/inspector/statistics.ui:116
 msgid "Self"
-msgstr ""
+msgstr "ذات"
 
 #: gtk/inspector/statistics.ui:133
 msgid "Cumulative"
-msgstr ""
+msgstr "تراكمي"
 
 #: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr ""
+msgstr "تمكين الإحصاءات باستخدام GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/visual.c:371 gtk/inspector/visual.c:386
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr ""
+msgstr "السمة مضمنة مع GTK_THEME"
 
 #: gtk/inspector/visual.c:592
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "الخلفية لا تدعم تحجيم النافذة"
 
 #: gtk/inspector/visual.c:687
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "الإعدادات مضمنة مع GTK_TEST_TOUCHSCREEN"
 
 #: gtk/inspector/visual.c:752
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
+"غير قابل للاستقرار في وقت التشغيل.\n"
+"استخدم GDK_GL=always أو GDK_GL=disable instead"
+""
 
 #: gtk/inspector/visual.c:766 gtk/inspector/visual.c:767
 #: gtk/inspector/visual.c:768
 msgid "GL rendering is disabled"
-msgstr ""
+msgstr "GL تم تعطيل العرض"
 
 #: gtk/inspector/visual.ui:61
 msgid "GTK+ Theme"
@@ -4277,7 +4287,7 @@ msgstr "سِمة ج‌ت‌ك+"
 
 #: gtk/inspector/visual.ui:94
 msgid "Dark Variant"
-msgstr ""
+msgstr "متغير داكن"
 
 #: gtk/inspector/visual.ui:127
 msgid "Cursor Theme"
@@ -4314,47 +4324,47 @@ msgstr "من اليمين لليسار"
 
 #: gtk/inspector/visual.ui:347
 msgid "Window scaling"
-msgstr ""
+msgstr "تحجيم النافذة"
 
 #: gtk/inspector/visual.ui:382
 msgid "Animations"
-msgstr ""
+msgstr "رسوم متحركة"
 
 #: gtk/inspector/visual.ui:415
 msgid "Slowdown"
-msgstr ""
+msgstr "إبطاء"
 
 #: gtk/inspector/visual.ui:474
 msgid "Rendering Mode"
-msgstr ""
+msgstr "وضع العرض"
 
 #: gtk/inspector/visual.ui:487
 msgid "Similar"
-msgstr ""
+msgstr "مماثل"
 
 #: gtk/inspector/visual.ui:488
 msgid "Image"
-msgstr ""
+msgstr "صورة"
 
 #: gtk/inspector/visual.ui:489
 msgid "Recording"
-msgstr ""
+msgstr "تسجيل"
 
 #: gtk/inspector/visual.ui:513
 msgid "Show Graphic Updates"
-msgstr ""
+msgstr "إظهار التحديثات البيانية"
 
 #: gtk/inspector/visual.ui:547
 msgid "Show Baselines"
-msgstr ""
+msgstr "عرض خط الأساس"
 
 #: gtk/inspector/visual.ui:581
 msgid "Show Layout Borders"
-msgstr ""
+msgstr "عرض حدود التخطيط"
 
 #: gtk/inspector/visual.ui:615
 msgid "Show Pixel Cache"
-msgstr ""
+msgstr "عرض ذاكرة التخزين المؤقت للبيكسل"
 
 #: gtk/inspector/visual.ui:649
 #, fuzzy
@@ -4363,63 +4373,63 @@ msgstr "أظهر الملفات ال_مخفيّة"
 
 #: gtk/inspector/visual.ui:683
 msgid "Simulate touchscreen"
-msgstr ""
+msgstr "محاكاة لمس الشاشة"
 
 #: gtk/inspector/visual.ui:728
 msgid "GL Rendering"
-msgstr ""
+msgstr "عرض GL"
 
 #: gtk/inspector/visual.ui:740
 msgid "When needed"
-msgstr ""
+msgstr "عند الأحتياج"
 
 #: gtk/inspector/visual.ui:741
 msgid "Always"
-msgstr ""
+msgstr "دائماً"
 
 #: gtk/inspector/visual.ui:742
 msgid "Disabled"
-msgstr ""
+msgstr "مُعطَل"
 
 #: gtk/inspector/visual.ui:766
 msgid "Software GL"
-msgstr ""
+msgstr "برمجيات GL"
 
 #: gtk/inspector/visual.ui:800
 msgid "Software Surfaces"
-msgstr ""
+msgstr "أسطح البرمجيات"
 
 #: gtk/inspector/visual.ui:834
 msgid "Texture Rectangle Extension"
-msgstr ""
+msgstr "نسيج مستطيل التمديد"
 
 #: gtk/inspector/window.ui:31
 msgid "Select an Object"
-msgstr ""
+msgstr "اختيار كائن"
 
 #: gtk/inspector/window.ui:54 gtk/inspector/window.ui:134
 msgid "Show Details"
-msgstr ""
+msgstr "إظهار التفاصيل"
 
 #: gtk/inspector/window.ui:77
 msgid "Show all Objects"
-msgstr ""
+msgstr "إظهار جميع الكائنات"
 
 #: gtk/inspector/window.ui:107
 msgid "Collect Statistics"
-msgstr ""
+msgstr "جمع الإحصاءات"
 
 #: gtk/inspector/window.ui:156
 msgid "Show all Resources"
-msgstr ""
+msgstr "إظهار جميع الموارد"
 
 #: gtk/inspector/window.ui:267
 msgid "Trace signal emissions on this object"
-msgstr ""
+msgstr "تتبع انبعاثات الإشارة على هذا الكائن"
 
 #: gtk/inspector/window.ui:284
 msgid "Clear log"
-msgstr ""
+msgstr "مسح السجل"
 
 #: gtk/inspector/window.ui:370
 msgid "Miscellaneous"
@@ -4427,15 +4437,15 @@ msgstr "متفرقات"
 
 #: gtk/inspector/window.ui:393
 msgid "Signals"
-msgstr ""
+msgstr "الإشارات"
 
 #: gtk/inspector/window.ui:404
 msgid "Child Properties"
-msgstr ""
+msgstr "خصائص بنويى"
 
 #: gtk/inspector/window.ui:413
 msgid "Class Hierarchy"
-msgstr ""
+msgstr "التسلسل الهرمي للفئة"
 
 #: gtk/inspector/window.ui:422
 #, fuzzy
@@ -4444,47 +4454,47 @@ msgstr "اختيار اللون"
 
 #: gtk/inspector/window.ui:431
 msgid "CSS nodes"
-msgstr ""
+msgstr "عقد السي اس اس"
 
 #: gtk/inspector/window.ui:438
 msgid "Size Groups"
-msgstr ""
+msgstr "حجم المجموعات"
 
 #: gtk/inspector/window.ui:445
 msgid "Data"
-msgstr ""
+msgstr "البيانات"
 
 #: gtk/inspector/window.ui:452
 msgid "Actions"
-msgstr ""
+msgstr "أنشطة"
 
 #: gtk/inspector/window.ui:468
 msgid "Gestures"
-msgstr ""
+msgstr "إيماءات"
 
 #: gtk/inspector/window.ui:477
 msgid "Magnifier"
-msgstr ""
+msgstr "المكبر"
 
 #: gtk/inspector/window.ui:490
 msgid "Objects"
-msgstr ""
+msgstr "الكائنات"
 
 #: gtk/inspector/window.ui:500
 msgid "Statistics"
-msgstr ""
+msgstr "الإحصاءات"
 
 #: gtk/inspector/window.ui:510
 msgid "Resources"
-msgstr ""
+msgstr "الموارد"
 
 #: gtk/inspector/window.ui:519
 msgid "CSS"
-msgstr ""
+msgstr "سي اس اس"
 
 #: gtk/inspector/window.ui:528
 msgid "Visual"
-msgstr ""
+msgstr "مرئي"
 
 #: gtk/inspector/window.ui:537 gtk/ui/gtkprintunixdialog.ui:426
 msgid "General"
@@ -6116,7 +6126,7 @@ msgstr "اسم المستخدم:"
 #: modules/printbackends/cups/gtkprintbackendcups.c:1091
 #: modules/printbackends/cups/gtkprintbackendcups.c:1408
 msgid "Password:"
-msgstr "كلمة السر:"
+msgstr "كلمة المرور:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1130
 #: modules/printbackends/cups/gtkprintbackendcups.c:1421
