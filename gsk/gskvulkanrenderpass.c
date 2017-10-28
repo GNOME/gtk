@@ -848,8 +848,9 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
 
   /* XXX: We could intersect bounds with clip bounds here */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        ceil (node->bounds.size.width),
-                                        ceil (node->bounds.size.height));
+                                        ceil (node->bounds.size.width * self->scale_factor),
+                                        ceil (node->bounds.size.height * self->scale_factor));
+  cairo_surface_set_device_scale (surface, self->scale_factor, self->scale_factor);
   cr = cairo_create (surface);
   cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
 
