@@ -32,7 +32,8 @@ void                    gsk_vulkan_text_pipeline_collect_vertex_data   (GskVulka
                                                                         float                           x,
                                                                         float                           y,
                                                                         guint                           start_glyph,
-                                                                        guint                           num_glyphs);
+                                                                        guint                           num_glyphs,
+                                                                        float                           scale);
 gsize                   gsk_vulkan_text_pipeline_draw                  (GskVulkanTextPipeline         *pipeline,
                                                                         VkCommandBuffer                 command_buffer,
                                                                         gsize                           offset,

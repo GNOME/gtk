@@ -20,7 +20,8 @@ GskVulkanImage *     gsk_vulkan_glyph_cache_get_glyph_image (GskVulkanGlyphCache
 GskVulkanCachedGlyph *gsk_vulkan_glyph_cache_lookup         (GskVulkanGlyphCache *cache,
                                                              gboolean             create,
                                                              PangoFont           *font,
-                                                             PangoGlyph           glyph);
+                                                             PangoGlyph           glyph,
+                                                             float                scale);
 
 void                  gsk_vulkan_glyph_cache_begin_frame    (GskVulkanGlyphCache *cache);
 

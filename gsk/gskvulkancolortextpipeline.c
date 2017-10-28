@@ -103,7 +103,8 @@ gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *
                                                     float                       x,
                                                     float                       y,
                                                     guint                       start_glyph,
-                                                    guint                       num_glyphs)
+                                                    guint                       num_glyphs,
+                                                    float                       scale)
 {
   GskVulkanColorTextInstance *instances = (GskVulkanColorTextInstance *) data;
   int i;
@@ -127,7 +128,7 @@ gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *
               GskVulkanColorTextInstance *instance = &instances[count];
               GskVulkanCachedGlyph *glyph;
 
-              glyph = gsk_vulkan_renderer_get_cached_glyph (renderer, font, gi->glyph);
+              glyph = gsk_vulkan_renderer_get_cached_glyph (renderer, font, gi->glyph, scale);
 
               instance->tex_rect[0] = glyph->tx;
               instance->tex_rect[1] = glyph->ty;

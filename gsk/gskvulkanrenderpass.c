@@ -90,6 +90,7 @@ struct _GskVulkanOpText
   guint                texture_index; /* index of the texture in the glyph cache */
   guint                start_glyph; /* the first glyph in nodes glyphstring that we render */
   guint                num_glyphs; /* number of *non-empty* glyphs (== instances) we render */
+  float                scale;
 };
 
 struct _GskVulkanOpPushConstants
@@ -406,6 +407,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
         op.text.start_glyph = 0;
         op.text.texture_index = G_MAXUINT;
+        op.text.scale = gdk_window_get_scale_factor (gsk_renderer_get_window (GSK_RENDERER (renderer)));
 
         for (i = 0, count = 0; i < num_glyphs; i++)
           {
@@ -413,7 +415,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
 
             if (gi->glyph != PANGO_GLYPH_EMPTY && !(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
               {
-                texture_index = gsk_vulkan_renderer_cache_glyph (renderer, (PangoFont *)font, gi->glyph);
+                texture_index = gsk_vulkan_renderer_cache_glyph (renderer, (PangoFont *)font, gi->glyph, op.text.scale);
                 if (op.text.texture_index == G_MAXUINT)
                   op.text.texture_index = texture_index;
                 if (texture_index != op.text.texture_index)
@@ -1232,7 +1234,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                           gsk_text_node_get_x (op->text.node),
                                                           gsk_text_node_get_y (op->text.node),
                                                           op->text.start_glyph,
-                                                          op->text.num_glyphs);
+                                                          op->text.num_glyphs,
+                                                          op->text.scale);
             n_bytes += op->text.vertex_count;
           }
           break;
@@ -1250,7 +1253,8 @@ gsk_vulkan_render_pass_collect_vertex_data (GskVulkanRenderPass *self,
                                                                 gsk_text_node_get_x (op->text.node),
                                                                 gsk_text_node_get_y (op->text.node),
                                                                 op->text.start_glyph,
-                                                                op->text.num_glyphs);
+                                                                op->text.num_glyphs,
+                                                                op->text.scale);
             n_bytes += op->text.vertex_count;
           }
           break;

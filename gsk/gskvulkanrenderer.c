@@ -350,9 +350,10 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
 guint
 gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
                                  PangoFont         *font,
-                                 PangoGlyph         glyph)
+                                 PangoGlyph         glyph,
+                                 float              scale)
 {
-  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph)->texture_index;
+  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph, scale)->texture_index;
 }
 
 GskVulkanImage *
@@ -366,7 +367,8 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
 GskVulkanCachedGlyph *
 gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
                                       PangoFont         *font,
-                                      PangoGlyph         glyph)
+                                      PangoGlyph         glyph,
+                                      float              scale)
 {
-  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, FALSE, font, glyph);
+  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, FALSE, font, glyph, scale);
 }

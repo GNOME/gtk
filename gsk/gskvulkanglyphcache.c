@@ -116,6 +116,7 @@ gsk_vulkan_glyph_cache_class_init (GskVulkanGlyphCacheClass *klass)
 typedef struct {
   PangoFont *font;
   PangoGlyph glyph;
+  guint scale; /* times 1024 */
 } GlyphCacheKey;
 
 static gboolean
@@ -125,7 +126,8 @@ glyph_cache_equal (gconstpointer v1, gconstpointer v2)
   const GlyphCacheKey *key2 = v2;
 
   return key1->font == key2->font &&
-         key1->glyph == key2->glyph;
+         key1->glyph == key2->glyph &&
+         key1->scale == key2->scale;
 }
 
 static guint
@@ -133,7 +135,7 @@ glyph_cache_hash (gconstpointer v)
 {
   const GlyphCacheKey *key = v;
 
-  return GPOINTER_TO_UINT (key->font) ^ key->glyph;
+  return GPOINTER_TO_UINT (key->font) ^ key->glyph ^ key->scale;
 }
 
 static void
@@ -175,6 +177,8 @@ add_to_cache (GskVulkanGlyphCache  *cache,
   Atlas *atlas;
   int i;
   DirtyGlyph *dirty;
+  int width = value->draw_width * key->scale / 1024;
+  int height = value->draw_height * key->scale / 1024;
 
   for (i = 0; i < cache->atlases->len; i++)
     {
@@ -185,14 +189,14 @@ add_to_cache (GskVulkanGlyphCache  *cache,
       y = atlas->y;
       y0 = atlas->y0;
 
-      if (atlas->x + value->draw_width + 1 >= atlas->width)
+      if (atlas->x + width + 1 >= atlas->width)
         {
           /* start a new row */
           y0 = y + 1;
           x = 1;
         }
 
-      if (y0 + value->draw_height + 1 >= atlas->height)
+      if (y0 + height + 1 >= atlas->height)
         continue;
 
       atlas->y0 = y0;
@@ -209,8 +213,8 @@ add_to_cache (GskVulkanGlyphCache  *cache,
 
   value->tx = (float)atlas->x / atlas->width;
   value->ty = (float)atlas->y0 / atlas->height;
-  value->tw = (float)value->draw_width / atlas->width;
-  value->th = (float)value->draw_height / atlas->height;
+  value->tw = (float)width / atlas->width;
+  value->th = (float)height / atlas->height;
 
   value->texture_index = i;
 
@@ -219,8 +223,8 @@ add_to_cache (GskVulkanGlyphCache  *cache,
   dirty->value = value;
   atlas->dirty_glyphs = g_list_prepend (atlas->dirty_glyphs, dirty);
 
-  atlas->x = atlas->x + value->draw_width + 1;
-  atlas->y = MAX (atlas->y, atlas->y0 + value->draw_height + 1);
+  atlas->x = atlas->x + width + 1;
+  atlas->y = MAX (atlas->y, atlas->y0 + height + 1);
 
   atlas->num_glyphs++;
 
@@ -254,8 +258,9 @@ render_glyph (Atlas          *atlas,
   cairo_glyph_t cg;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        value->draw_width,
-                                        value->draw_height);
+                                        value->draw_width * key->scale / 1024,
+                                        value->draw_height * key->scale / 1024);
+  cairo_surface_set_device_scale (surface, key->scale / 1024.0, key->scale / 1024.0);
 
   cr = cairo_create (surface);
 
@@ -324,13 +329,15 @@ GskVulkanCachedGlyph *
 gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
                                gboolean             create,
                                PangoFont           *font,
-                               PangoGlyph           glyph)
+                               PangoGlyph           glyph,
+                               float                scale)
 {
   GlyphCacheKey lookup_key;
   GskVulkanCachedGlyph *value;
 
   lookup_key.font = font;
   lookup_key.glyph = glyph;
+  lookup_key.scale = (guint)(scale * 1024);
 
   value = g_hash_table_lookup (cache->hash_table, &lookup_key);
 
@@ -364,6 +371,7 @@ gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
 
       key->font = g_object_ref (font);
       key->glyph = glyph;
+      key->scale = (guint)(scale * 1024);
 
       if (ink_rect.width > 0 && ink_rect.height > 0)
         add_to_cache (cache, key, value);

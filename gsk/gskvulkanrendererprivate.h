@@ -44,7 +44,8 @@ typedef struct
 
 guint                  gsk_vulkan_renderer_cache_glyph      (GskVulkanRenderer *renderer,
                                                              PangoFont         *font,
-                                                             PangoGlyph         glyph);
+                                                             PangoGlyph         glyph,
+                                                             float              scale);
 
 GskVulkanImage *       gsk_vulkan_renderer_ref_glyph_image  (GskVulkanRenderer *self,
                                                              GskVulkanUploader *uploader,
@@ -52,7 +53,8 @@ GskVulkanImage *       gsk_vulkan_renderer_ref_glyph_image  (GskVulkanRenderer *
 
 GskVulkanCachedGlyph * gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
                                                              PangoFont         *font,
-                                                             PangoGlyph         glyph);
+                                                             PangoGlyph         glyph,
+                                                             float              scale);
 
 
 G_END_DECLS
