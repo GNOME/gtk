@@ -429,10 +429,10 @@ _gdk_win32_display_init_gl (GdkDisplay *display)
             g_print ("WGL API version %d.%d found\n"
                      " - Vendor: %s\n"
                      " - Checked extensions:\n"
-                     "\t* WGL_ARB_pixel_format: %s\n",
+                     "\t* WGL_ARB_pixel_format: %s\n"
                      "\t* WGL_ARB_create_context: %s\n"
                      "\t* WGL_EXT_swap_control: %s\n"
-                     "\t* WGL_OML_sync_control: %s\n",
+                     "\t* WGL_OML_sync_control: %s\n"
                      "\t* WGL_ARB_multisample: %s\n",
                      display_win32->gl_version / 10,
                      display_win32->gl_version % 10,
