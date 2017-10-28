@@ -1,6 +1,6 @@
 * { padding: 0; -gtk-secondary-caret-color: #215d9c; }
 
-*:focus { outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 2px; }
+button:focus(visible), checkbutton:focus(visible), radiobutton:focus(visible), switch:focus(visible), scale:focus(visible), label:focus(visible), row:focus(visible) { outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 2px; }
 
 /*************** Base States * */
 .background { color: #eeeeec; background-color: #33393b; }
@@ -985,8 +985,6 @@ scrollbar.bottom { border-top: 1px solid #1b1f20; }
 scrollbar.left { border-right: 1px solid #1b1f20; }
 
 scrollbar.right { border-left: 1px solid #1b1f20; }
-
-scrollbar:focus, scrollbar:focus > box:focus, scrollbar:focus > box:focus > range:focus, scrollbar:focus > box:focus > range:focus > trough:focus { outline: none; }
 
 scrollbar:backdrop { background-color: #2c3133; border-color: #202425; transition: 200ms ease-out; }
 

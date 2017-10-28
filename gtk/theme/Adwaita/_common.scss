@@ -18,7 +18,8 @@ checkbutton:focus(visible),
 radiobutton:focus(visible),
 switch:focus(visible),
 scale:focus(visible),
-label:focus(visible) {
+label:focus(visible),
+row:focus(visible) {
   // We use the outline properties to signal the focus properties
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
@@ -2378,11 +2379,6 @@ scrollbar {
   &.bottom { border-top: 1px solid $borders_color; }
   &.left { border-right: 1px solid $borders_color; }
   &.right { border-left: 1px solid $borders_color; }
-
-  &:focus,
-  &:focus>box:focus,
-  &:focus>box:focus>range:focus,
-  &:focus>box:focus>range:focus>trough:focus{ outline: none };
 
   &:backdrop {
     background-color: $backdrop_scrollbar_bg_color;
