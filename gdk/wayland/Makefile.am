@@ -104,6 +104,7 @@ endef
 
 EXTRA_DIST += 					\
 	protocol/gtk-primary-selection.xml	\
-	protocol/gtk-shell.xml
+	protocol/gtk-shell.xml			\
+	protocol/server-decoration.xml
 
 -include $(top_srcdir)/git.mk
