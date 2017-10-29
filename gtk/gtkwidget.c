@@ -1091,7 +1091,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            P_("Parent widget"),
                            P_("The parent widget of this widget."),
                            GTK_TYPE_WIDGET,
-                           GTK_PARAM_READWRITE);
+                           GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_WIDTH_REQUEST] =
       g_param_spec_int ("width-request",
@@ -3165,9 +3165,6 @@ gtk_widget_set_property (GObject         *object,
 
     case PROP_NAME:
       gtk_widget_set_name (widget, g_value_get_string (value));
-      break;
-    case PROP_PARENT:
-      gtk_container_add (GTK_CONTAINER (g_value_get_object (value)), widget);
       break;
     case PROP_WIDTH_REQUEST:
       gtk_widget_set_usize_internal (widget, g_value_get_int (value), -2);
