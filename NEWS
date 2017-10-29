@@ -1,3 +1,75 @@
+Overview of Changes in GTK+ 3.22.25
+===================================
+
+* The HighContrast theme has received numerous improvements
+
+* Middle-click on scrollbars jumps to the position again
+
+* Wayland:
+ - Terminal sizing problems are fixed
+ - The Wayland backend now implemented the KDE server-side decorations protocol
+
+* X11:
+ - Problems with menus on several X servers are fixed
+
+* Bugs fixed:
+ 701296 gtkfixed accepts toplevel windows into its children list after gtk_w...
+ 728452 gtk_tree_view_column_create_button creates button which is leaked
+ 738387 ComboBox in appears-as-list-mode: popup is not hidden when focus is ...
+ 763517 Selected then unselected Label in ListBox gets wrong colour until ho...
+ 769877 [HighContrast(|Inverse)] dual-headerbars broken
+ 769879 [HighContrast(|Inverse)] tooltips problems
+ 771279 Segfault due to gtk_event_controller_get_widget() returning NULL but...
+ 775217 Warning message "gdkcursor-wayland.c:170: Unable to load blank_curso...
+ 776793 GtkComboBox with appears-as-list doesn't receive mouse events from a...
+ 777072 window shrinks when restored from maximized
+ 778811 Enter submenus when activating their parent item
+ 778930 gtk3-icon-browser: Add scalable icons to icon detail modal window
+ 780101 Menus do not display over remote X11
+ 781909 Implement KDE's server-decoration protocol
+ 782396 Inconsistent deprecation documentation for gtk_paint_spinner
+ 783995 Monitor API inconsistencies across X11 & Wayland
+ 784314 entry completion regression on wayland
+ 784509 wrong coordinates given to at-spi layer from GTK3 entries
+ 786220 Sometimes the volume icon is replaced with image-missing
+ 786794 Print dialogue has a printer called "printer"
+ 787274 ComboBox in appears-as-list-mode: Gtk-CRITICAL when popping down wit...
+ 787669 Middle mouse click on scrollbar is ignored
+ 787866 Untranslated key labels in the Keyboard panel of Settings
+ 788053 Window position wrong in HiDPI mode
+ 788458 (style) Array index 'i' is used before limits check.
+ 788496 HighContrast/win32: CSD Windows have missing border and shadows floa...
+ 788505 ComboBox in appears-as-list mode: Clicking a TreeView expander also ...
+ 788516 dialogs in gtk+ 3.22.24 have square borders.
+ 788573 HighContrast: titlebar separator is too wide and joined to buttons, ...
+ 788574 HighContrast: Ugly solid black corners at bottom of MessageDialog
+ 788575 HighContrastInverse: Windows lack visible borders, merge into each o...
+ 788577 Global -GtkComboBox-appears-as-list breaks opening menu-mode CBs by ...
+ 788580 HighContrast: .flat buttons become non-flat when their window is :ba...
+ 788614 Trying to reuse a TreeViewColumn causes criticals and a segfault (e....
+ 788841 Fix gtk_actionable_set_detailed_action_name API inconsistency
+ 788905 GtkRange horizontal scrolling causes movement in the wrong direction
+ 789141 Segmentation fault when adding Google online account
+ 789149 GtkGestureZoom leaks the list of sequences while calculating the dis...
+ 789327 appchooserwidget: Don't limit application list unconditionally
+ 789357 Regression in 3.22.23: GDK_WINDOW_STATE_TILED flag is never set
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan (Valencian)
+ Croatian
+ Czech
+ German
+ Hungarian
+ Italian
+ Indonesian
+ Lithuanian
+ Polish
+ Slovak
+ Slovenian
+ Swedish
+
+
 Overview of Changes in GTK+ 3.22.24
 ===================================
 
