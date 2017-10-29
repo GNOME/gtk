@@ -30,7 +30,7 @@ gtk_css_image_scaled_get_width (GtkCssImage *image)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
 
-  return _gtk_css_image_get_width (scaled->images[scaled->scale - 1]) / scaled->scale;
+  return _gtk_css_image_get_width (scaled->images[0]);
 }
 
 static int
@@ -38,7 +38,7 @@ gtk_css_image_scaled_get_height (GtkCssImage *image)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
 
-  return _gtk_css_image_get_height (scaled->images[scaled->scale - 1]) / scaled->scale;
+  return _gtk_css_image_get_height (scaled->images[0]);
 }
 
 static double
@@ -46,7 +46,7 @@ gtk_css_image_scaled_get_aspect_ratio (GtkCssImage *image)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
 
-  return _gtk_css_image_get_aspect_ratio (scaled->images[scaled->scale - 1]);
+  return _gtk_css_image_get_aspect_ratio (scaled->images[0]);
 }
 
 static void
@@ -57,7 +57,7 @@ gtk_css_image_scaled_snapshot (GtkCssImage *image,
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
 
-  gtk_css_image_snapshot (scaled->images[scaled->scale - 1], snapshot, width, height);
+  gtk_css_image_snapshot (scaled->images[0], snapshot, width, height);
 }
 
 static void
@@ -100,34 +100,16 @@ gtk_css_image_scaled_compute (GtkCssImage             *image,
 			      GtkCssStyle             *parent_style)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
-  GtkCssImageScaled *copy;
-  int i, scale;
+  int scale;
 
   scale = _gtk_style_provider_private_get_scale (provider);
   scale = MAX(MIN (scale, scaled->n_images), 1);
 
-  if (scaled->scale == scale)
-    return g_object_ref (scaled);
-  else
-    {
-      copy = g_object_new (_gtk_css_image_scaled_get_type (), NULL);
-      copy->scale = scale;
-      copy->n_images = scaled->n_images;
-      copy->images = g_new (GtkCssImage *, scaled->n_images);
-      for (i = 0; i < scaled->n_images; i++)
-        {
-          if (i == scale - 1)
-            copy->images[i] = _gtk_css_image_compute (scaled->images[i],
-                                                      property_id,
-                                                      provider,
-                                                      style,
-                                                      parent_style);
-          else
-            copy->images[i] = g_object_ref (scaled->images[i]);
-        }
-
-      return GTK_CSS_IMAGE (copy);
-    }
+  return _gtk_css_image_compute (scaled->images[scale - 1],
+                                                property_id,
+                                                provider,
+                                                style,
+                                                parent_style);
 }
 
 static gboolean
@@ -200,5 +182,4 @@ _gtk_css_image_scaled_class_init (GtkCssImageScaledClass *klass)
 static void
 _gtk_css_image_scaled_init (GtkCssImageScaled *image_scaled)
 {
-  image_scaled->scale = 1;
 }
