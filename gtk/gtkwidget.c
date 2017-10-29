@@ -494,7 +494,6 @@ enum {
   UNREALIZE,
   SIZE_ALLOCATE,
   STATE_FLAGS_CHANGED,
-  PARENT_SET,
   HIERARCHY_CHANGED,
   DIRECTION_CHANGED,
   GRAB_NOTIFY,
@@ -1025,7 +1024,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_request_mode = gtk_widget_real_get_request_mode;
   klass->measure = gtk_widget_real_measure;
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
-  klass->parent_set = NULL;
   klass->hierarchy_changed = NULL;
   klass->direction_changed = gtk_widget_real_direction_changed;
   klass->grab_notify = NULL;
@@ -1682,25 +1680,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_STATE_FLAGS);
-
-  /**
-   * GtkWidget::parent-set:
-   * @widget: the object on which the signal is emitted
-   * @old_parent: (allow-none): the previous parent, or %NULL if the widget
-   *   just got its initial parent.
-   *
-   * The ::parent-set signal is emitted when a new parent
-   * has been set on a widget.
-   */
-  widget_signals[PARENT_SET] =
-    g_signal_new (I_("parent-set"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, parent_set),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_WIDGET);
 
   /**
    * GtkWidget::hierarchy-changed:
@@ -4081,7 +4060,6 @@ gtk_widget_unparent (GtkWidget *widget)
 
   _gtk_widget_update_parent_muxer (widget);
 
-  g_signal_emit (widget, widget_signals[PARENT_SET], 0, old_parent);
   if (toplevel)
     {
       _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
@@ -8380,7 +8358,6 @@ gtk_widget_reposition_after (GtkWidget *widget,
 
   _gtk_widget_update_parent_muxer (widget);
 
-  g_signal_emit (widget, widget_signals[PARENT_SET], 0, NULL);
   if (priv->parent->priv->anchored && prev_parent == NULL)
     _gtk_widget_propagate_hierarchy_changed (widget, NULL);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);

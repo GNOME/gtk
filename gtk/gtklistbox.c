@@ -100,6 +100,8 @@ typedef struct
 
   GtkSelectionMode selection_mode;
 
+  gulong adjustment_changed_id;
+  GtkWidget *scrollable_parent;
   GtkAdjustment *adjustment;
   gboolean activate_single_click;
 
@@ -217,8 +219,9 @@ static void                 gtk_list_box_move_cursor                  (GtkListBo
                                                                        GtkMovementStep      step,
                                                                        gint                 count);
 static void                 gtk_list_box_finalize                     (GObject             *obj);
-static void                 gtk_list_box_parent_set                   (GtkWidget           *widget,
-                                                                       GtkWidget           *prev_parent);
+static void                 gtk_list_box_parent_cb                    (GObject             *object,
+                                                                       GParamSpec          *pspec,
+                                                                       gpointer             user_data);
 static void                 gtk_list_box_select_row_internal            (GtkListBox          *box,
                                                                          GtkListBoxRow       *row);
 static void                 gtk_list_box_unselect_row_internal          (GtkListBox          *box,
@@ -378,7 +381,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->measure = gtk_list_box_measure;
   widget_class->size_allocate = gtk_list_box_size_allocate;
   widget_class->drag_leave = gtk_list_box_drag_leave;
-  widget_class->parent_set = gtk_list_box_parent_set;
   container_class->add = gtk_list_box_add;
   container_class->remove = gtk_list_box_remove;
   container_class->forall = gtk_list_box_forall;
@@ -597,6 +599,9 @@ gtk_list_box_init (GtkListBox *box)
                     G_CALLBACK (gtk_list_box_multipress_gesture_pressed), box);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
+
+
+  g_signal_connect (box, "notify::parent", G_CALLBACK (gtk_list_box_parent_cb), NULL);
 }
 
 /**
@@ -977,25 +982,35 @@ adjustment_changed (GObject    *object,
 }
 
 static void
-gtk_list_box_parent_set (GtkWidget *widget,
-                         GtkWidget *prev_parent)
+gtk_list_box_parent_cb (GObject    *object,
+                        GParamSpec *pspec,
+                        gpointer    user_data)
 {
+  GtkListBoxPrivate *priv = BOX_PRIV (object);
   GtkWidget *parent;
 
-  parent = gtk_widget_get_parent (widget);
+  parent = gtk_widget_get_parent (GTK_WIDGET (object));
 
-  if (prev_parent && GTK_IS_SCROLLABLE (prev_parent))
-    g_signal_handlers_disconnect_by_func (prev_parent,
-                                          G_CALLBACK (adjustment_changed), widget);
+  if (priv->adjustment_changed_id != 0 &&
+      priv->scrollable_parent != NULL)
+    {
+      g_signal_handler_disconnect (priv->scrollable_parent,
+                                   priv->adjustment_changed_id);
+    }
 
   if (parent && GTK_IS_SCROLLABLE (parent))
     {
-      adjustment_changed (G_OBJECT (parent), NULL, widget);
-      g_signal_connect (parent, "notify::vadjustment",
-                        G_CALLBACK (adjustment_changed), widget);
+      adjustment_changed (G_OBJECT (parent), NULL, object);
+      priv->scrollable_parent = parent;
+      priv->adjustment_changed_id = g_signal_connect (parent, "notify::vadjustment",
+                                                      G_CALLBACK (adjustment_changed), object);
     }
   else
-    gtk_list_box_set_adjustment (GTK_LIST_BOX (widget), NULL);
+    {
+      gtk_list_box_set_adjustment (GTK_LIST_BOX (object), NULL);
+      priv->adjustment_changed_id = 0;
+      priv->scrollable_parent = NULL;
+    }
 }
 
 /**

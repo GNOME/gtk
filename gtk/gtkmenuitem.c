@@ -140,8 +140,9 @@ static gboolean gtk_menu_item_enter      (GtkWidget        *widget,
                                           GdkEventCrossing *event);
 static gboolean gtk_menu_item_leave      (GtkWidget        *widget,
                                           GdkEventCrossing *event);
-static void gtk_menu_item_parent_set     (GtkWidget        *widget,
-                                          GtkWidget        *previous_parent);
+static void gtk_menu_item_parent_cb      (GObject          *object,
+                                          GParamSpec       *pspec,
+                                          gpointer          user_data);
 static void gtk_menu_item_direction_changed (GtkWidget        *widget,
                                              GtkTextDirection  previous_dir);
 
@@ -510,7 +511,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->enter_notify_event = gtk_menu_item_enter;
   widget_class->leave_notify_event = gtk_menu_item_leave;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
-  widget_class->parent_set = gtk_menu_item_parent_set;
   widget_class->can_activate_accel = gtk_menu_item_can_activate_accel;
   widget_class->measure = gtk_menu_item_measure;
   widget_class->direction_changed = gtk_menu_item_direction_changed;
@@ -677,6 +677,8 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   menu_item->priv = priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (menu_item), FALSE);
+
+  g_signal_connect (menu_item, "notify::parent", G_CALLBACK (gtk_menu_item_parent_cb), NULL);
 
   priv->submenu = NULL;
   priv->toggle_size = 0;
@@ -1627,14 +1629,15 @@ gtk_menu_item_accel_name_foreach (GtkWidget *widget,
 }
 
 static void
-gtk_menu_item_parent_set (GtkWidget *widget,
-                          GtkWidget *previous_parent)
+gtk_menu_item_parent_cb (GObject    *object,
+                         GParamSpec *pspec,
+                         gpointer    user_data)
 {
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
   GtkMenu *menu;
   GtkWidget *parent;
 
-  parent = gtk_widget_get_parent (widget);
+  parent = gtk_widget_get_parent (GTK_WIDGET (object));
   menu = GTK_IS_MENU (parent) ? GTK_MENU (parent) : NULL;
 
   if (menu)
@@ -1644,9 +1647,6 @@ gtk_menu_item_parent_set (GtkWidget *widget,
                                        TRUE);
 
   update_arrow_widget (menu_item);
-
-  if (GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->parent_set)
-    GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->parent_set (widget, previous_parent);
 }
 
 static void

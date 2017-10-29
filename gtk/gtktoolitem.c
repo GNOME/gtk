@@ -87,8 +87,9 @@ struct _GtkToolItemPrivate
 };
 
 static void gtk_tool_item_finalize     (GObject         *object);
-static void gtk_tool_item_parent_set   (GtkWidget       *toolitem,
-				        GtkWidget       *parent);
+static void gtk_tool_item_parent_cb    (GObject         *object,
+                                        GParamSpec      *pspec,
+                                        gpointer         user_data);
 static void gtk_tool_item_set_property (GObject         *object,
 					guint            prop_id,
 					const GValue    *value,
@@ -118,8 +119,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   object_class->get_property = gtk_tool_item_get_property;
   object_class->finalize     = gtk_tool_item_finalize;
   object_class->notify       = gtk_tool_item_property_notify;
-
-  widget_class->parent_set    = gtk_tool_item_parent_set;
 
   klass->create_menu_proxy = _gtk_tool_item_create_menu_proxy;
   
@@ -215,6 +214,8 @@ gtk_tool_item_init (GtkToolItem *toolitem)
   toolitem->priv->visible_vertical = TRUE;
   toolitem->priv->homogeneous = FALSE;
   toolitem->priv->expand = FALSE;
+
+  g_signal_connect (toolitem, "notify::parent", G_CALLBACK (gtk_tool_item_parent_cb), NULL);
 }
 
 static void
@@ -231,11 +232,14 @@ gtk_tool_item_finalize (GObject *object)
 }
 
 static void
-gtk_tool_item_parent_set (GtkWidget   *toolitem,
-			  GtkWidget   *prev_parent)
+gtk_tool_item_parent_cb (GObject    *object,
+                         GParamSpec *pspec,
+                         gpointer    user_data)
 {
+  GtkToolItem *toolitem = GTK_TOOL_ITEM (object);
+
   if (gtk_widget_get_parent (GTK_WIDGET (toolitem)) != NULL)
-    gtk_tool_item_toolbar_reconfigured (GTK_TOOL_ITEM (toolitem));
+    gtk_tool_item_toolbar_reconfigured (toolitem);
 }
 
 static void
