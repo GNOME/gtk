@@ -8360,7 +8360,9 @@ gtk_widget_reposition_after (GtkWidget *widget,
 
   if (priv->parent->priv->anchored && prev_parent == NULL)
     _gtk_widget_propagate_hierarchy_changed (widget, NULL);
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
+
+  if (prev_parent == NULL)
+    g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
 
   /* Enforce realized/mapped invariants
    */
