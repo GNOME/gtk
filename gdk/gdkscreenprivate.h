@@ -44,25 +44,9 @@ struct _GdkScreenClass
 
   GdkDisplay * (* get_display)           (GdkScreen *screen);
   GdkWindow *  (* get_root_window)       (GdkScreen *screen);
-  gint         (* get_n_monitors)        (GdkScreen *screen);
-  gint         (* get_primary_monitor)   (GdkScreen *screen);
-  gint         (* get_monitor_width_mm)  (GdkScreen *screen,
-                                          gint       monitor_num);
-  gint         (* get_monitor_height_mm) (GdkScreen *screen,
-                                          gint       monitor_num);
-  gchar *      (* get_monitor_plug_name) (GdkScreen *screen,
-                                          gint       monitor_num);
-  void         (* get_monitor_geometry)  (GdkScreen    *screen,
-                                          gint          monitor_num,
-                                          GdkRectangle *dest);
-  void         (* get_monitor_workarea)  (GdkScreen    *screen,
-                                          gint          monitor_num,
-                                          GdkRectangle *dest);
   gboolean     (* get_setting)           (GdkScreen   *screen,
                                           const gchar *name,
                                           GValue      *value);
-  gint         (* get_monitor_scale_factor) (GdkScreen *screen,
-                                             gint       monitor_num);
 
   /* Signals: */
   void (*size_changed) (GdkScreen *screen);

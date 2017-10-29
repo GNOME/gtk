@@ -169,33 +169,6 @@ gdk_mir_screen_get_display (GdkScreen *screen)
   return GDK_DISPLAY (GDK_MIR_SCREEN (screen)->display);
 }
 
-static const MirOutput *
-get_output (GdkScreen *screen,
-            gint       monitor_num)
-{
-  MirDisplayConfig *config;
-  const MirOutput *output;
-  gint i;
-  gint j;
-
-  config = GDK_MIR_SCREEN (screen)->display_config;
-
-  for (i = 0, j = 0; i < mir_display_config_get_num_outputs (config); i++)
-    {
-      output = mir_display_config_get_output (config, i);
-
-      if (!mir_output_is_enabled (output))
-        continue;
-
-      if (j == monitor_num)
-        return output;
-
-      j++;
-    }
-
-  return NULL;
-}
-
 static GdkWindow *
 gdk_mir_screen_get_root_window (GdkScreen *screen)
 {
@@ -220,131 +193,6 @@ gdk_mir_screen_get_root_window (GdkScreen *screen)
   s->root_window->impl = _gdk_mir_window_impl_new (s->display, s->root_window);
 
   return s->root_window;
-}
-
-static gint
-gdk_mir_screen_get_n_monitors (GdkScreen *screen)
-{
-  MirDisplayConfig *config;
-  gint count = 0;
-  gint i;
-
-  config = GDK_MIR_SCREEN (screen)->display_config;
-
-  for (i = 0; i < mir_display_config_get_num_outputs (config); i++)
-    if (mir_output_is_enabled (mir_display_config_get_output (config, i)))
-      count++;
-
-  return count;
-}
-
-static gint
-gdk_mir_screen_get_primary_monitor (GdkScreen *screen)
-{
-  return 0; //?
-}
-
-static gint
-gdk_mir_screen_get_monitor_width_mm	(GdkScreen *screen,
-                                     gint       monitor_num)
-{
-  const MirOutput *output = get_output (screen, monitor_num);
-
-  return output ? mir_output_get_physical_width_mm (output) : 0;
-}
-
-static gint
-gdk_mir_screen_get_monitor_height_mm (GdkScreen *screen,
-                                      gint       monitor_num)
-{
-  const MirOutput *output = get_output (screen, monitor_num);
-
-  return output ? mir_output_get_physical_height_mm (output) : 0;
-}
-
-static gchar *
-gdk_mir_screen_get_monitor_plug_name (GdkScreen *screen,
-                                      gint       monitor_num)
-{
-  const MirOutput *output = get_output (screen, monitor_num);
-
-  if (output)
-    {
-      switch (mir_output_get_type (output))
-        {
-          case mir_output_type_unknown:
-            return g_strdup_printf ("None-%u", mir_output_get_id (output));
-          case mir_output_type_vga:
-            return g_strdup_printf ("VGA-%u", mir_output_get_id (output));
-          case mir_output_type_dvii:
-          case mir_output_type_dvid:
-          case mir_output_type_dvia:
-            return g_strdup_printf ("DVI-%u", mir_output_get_id (output));
-          case mir_output_type_composite:
-            return g_strdup_printf ("Composite-%u", mir_output_get_id (output));
-          case mir_output_type_lvds:
-            return g_strdup_printf ("LVDS-%u", mir_output_get_id (output));
-          case mir_output_type_component:
-            return g_strdup_printf ("CTV-%u", mir_output_get_id (output));
-          case mir_output_type_ninepindin:
-            return g_strdup_printf ("DIN-%u", mir_output_get_id (output));
-          case mir_output_type_displayport:
-            return g_strdup_printf ("DP-%u", mir_output_get_id (output));
-          case mir_output_type_hdmia:
-          case mir_output_type_hdmib:
-            return g_strdup_printf ("HDMI-%u", mir_output_get_id (output));
-          case mir_output_type_svideo:
-          case mir_output_type_tv:
-            return g_strdup_printf ("TV-%u", mir_output_get_id (output));
-          case mir_output_type_edp:
-            return g_strdup_printf ("eDP-%u", mir_output_get_id (output));
-          case mir_output_type_virtual:
-            return g_strdup_printf ("Virtual-%u", mir_output_get_id (output));
-          case mir_output_type_dsi:
-            return g_strdup_printf ("DSI-%u", mir_output_get_id (output));
-          case mir_output_type_dpi:
-            return g_strdup_printf ("DPI-%u", mir_output_get_id (output));
-        }
-    }
-
-  return NULL;
-}
-
-static void
-gdk_mir_screen_get_monitor_geometry (GdkScreen    *screen,
-                                     gint          monitor_num,
-                                     GdkRectangle *dest)
-{
-  const MirOutput *output;
-  const MirOutputMode *mode;
-
-  output = get_output (screen, monitor_num);
-
-  if (output)
-    {
-      mode = mir_output_get_current_mode (output);
-
-      dest->x = mir_output_get_position_x (output);
-      dest->y = mir_output_get_position_y (output);
-      dest->width = mir_output_mode_get_width (mode);
-      dest->height = mir_output_mode_get_height (mode);
-    }
-  else
-    {
-      dest->x = 0;
-      dest->y = 0;
-      dest->width = 0;
-      dest->height = 0;
-    }
-}
-
-static void
-gdk_mir_screen_get_monitor_workarea (GdkScreen    *screen,
-                                     gint          monitor_num,
-                                     GdkRectangle *dest)
-{
-  // FIXME: Don't know what this is
-  gdk_mir_screen_get_monitor_geometry (screen, monitor_num, dest);
 }
 
 static void setting_changed (GSettings    *settings,
@@ -860,14 +708,6 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
   return TRUE;
 }
 
-static gint
-gdk_mir_screen_get_monitor_scale_factor (GdkScreen *screen,
-                                         gint       monitor_num)
-{
-  /* Don't support monitor scaling */
-  return 1;
-}
-
 static void
 gdk_mir_screen_init (GdkMirScreen *screen)
 {
@@ -886,13 +726,5 @@ gdk_mir_screen_class_init (GdkMirScreenClass *klass)
 
   screen_class->get_display = gdk_mir_screen_get_display;
   screen_class->get_root_window = gdk_mir_screen_get_root_window;
-  screen_class->get_n_monitors = gdk_mir_screen_get_n_monitors;
-  screen_class->get_primary_monitor = gdk_mir_screen_get_primary_monitor;
-  screen_class->get_monitor_width_mm = gdk_mir_screen_get_monitor_width_mm;
-  screen_class->get_monitor_height_mm = gdk_mir_screen_get_monitor_height_mm;
-  screen_class->get_monitor_plug_name = gdk_mir_screen_get_monitor_plug_name;
-  screen_class->get_monitor_geometry = gdk_mir_screen_get_monitor_geometry;
-  screen_class->get_monitor_workarea = gdk_mir_screen_get_monitor_workarea;
   screen_class->get_setting = gdk_mir_screen_get_setting;
-  screen_class->get_monitor_scale_factor = gdk_mir_screen_get_monitor_scale_factor;
 }
