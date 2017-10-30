@@ -44,9 +44,6 @@ struct _GdkScreenClass
 
   GdkDisplay * (* get_display)           (GdkScreen *screen);
   GdkWindow *  (* get_root_window)       (GdkScreen *screen);
-  gboolean     (* get_setting)           (GdkScreen   *screen,
-                                          const gchar *name,
-                                          GValue      *value);
 
   /* Signals: */
   void (*monitors_changed) (GdkScreen *screen);
@@ -54,4 +51,4 @@ struct _GdkScreenClass
 
 G_END_DECLS
 
-#endif /* __GDK_SCREEN_PRIVATE_H__ */
+#endif
