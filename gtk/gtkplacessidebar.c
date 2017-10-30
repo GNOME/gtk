@@ -25,8 +25,9 @@
 
 #include <gio/gio.h>
 #ifdef HAVE_CLOUDPROVIDERS
-#include <cloudproviders/cloudproviders.h>
-#include <cloudproviders/cloudprovideraccount.h>
+#include <cloudproviders/cloudproviderscollector.h>
+#include <cloudproviders/cloudprovidersaccount.h>
+#include <cloudproviders/cloudprovidersprovider.h>
 #endif
 
 #include "gtkplacessidebarprivate.h"
@@ -127,8 +128,8 @@ struct _GtkPlacesSidebar {
   GtkBookmarksManager     *bookmarks_manager;
 
 #ifdef HAVE_CLOUDPROVIDERS
-  CloudProviders *cloud_manager;
-  GList *cloud_rows;
+  CloudProvidersCollector *cloud_manager;
+  GList *unready_accounts;
 #endif
 
   GVolumeMonitor    *volume_monitor;
@@ -458,7 +459,7 @@ add_place (GtkPlacesSidebar            *sidebar,
            GVolume                     *volume,
            GMount                      *mount,
 #ifdef HAVE_CLOUDPROVIDERS
-           CloudProviderAccount        *cloud_provider_account,
+           CloudProvidersAccount       *cloud_provider_account,
 #else
            gpointer                    *cloud_provider_account,
 #endif
@@ -493,7 +494,7 @@ add_place (GtkPlacesSidebar            *sidebar,
                       "volume", volume,
                       "mount", mount,
 #ifdef HAVE_CLOUDPROVIDERS
-                      "cloud-provider", cloud_provider_account,
+                      "cloud-provider-account", cloud_provider_account,
 #endif
                       NULL);
 
@@ -914,61 +915,80 @@ update_trash_icon (GtkPlacesSidebar *sidebar)
 }
 
 #ifdef HAVE_CLOUDPROVIDERS
-static void
-cloud_row_update (CloudProviderAccount *cloud_provider_account,
-                  GtkWidget          *cloud_row)
+
+static gboolean
+create_cloud_provider_account_row (GtkPlacesSidebar      *sidebar,
+                                   CloudProvidersAccount *account)
 {
   GIcon *end_icon;
-  gint provider_status;
-  provider_status = cloud_provider_account_get_status (cloud_provider_account);
-  switch (provider_status)
+  GIcon *start_icon;
+  gchar *mount_uri;
+  gchar *name;
+  gchar *tooltip;
+  guint provider_account_status;
+
+  start_icon = cloud_providers_account_get_icon (account);
+  name = cloud_providers_account_get_name (account);
+  provider_account_status = cloud_providers_account_get_status (account);
+  mount_uri = cloud_providers_account_get_path (account);
+  if (start_icon != NULL
+      && name != NULL
+      && provider_account_status != CLOUD_PROVIDERS_ACCOUNT_STATUS_INVALID
+      && mount_uri != NULL)
     {
-      case CLOUD_PROVIDER_STATUS_IDLE:
-        end_icon = NULL;
-        break;
+      switch (provider_account_status)
+        {
+          case CLOUD_PROVIDERS_ACCOUNT_STATUS_IDLE:
+            end_icon = NULL;
+          break;
 
-      case CLOUD_PROVIDER_STATUS_SYNCING:
-        end_icon = g_themed_icon_new ("emblem-synchronizing-symbolic");
-        break;
+          case CLOUD_PROVIDERS_ACCOUNT_STATUS_SYNCING:
+            end_icon = g_themed_icon_new ("emblem-synchronizing-symbolic");
+          break;
 
-      case CLOUD_PROVIDER_STATUS_ERROR:
-        end_icon = g_themed_icon_new ("dialog-warning-symbolic");
-        break;
+          case CLOUD_PROVIDERS_ACCOUNT_STATUS_ERROR:
+            end_icon = g_themed_icon_new ("dialog-warning-symbolic");
+          break;
 
-      default:
-        return;
+          default:
+            return FALSE;
+        }
+
+      mount_uri = g_strconcat ("file://", mount_uri, NULL);
+
+      /* translators: %s is the name of a cloud provider for files */
+      tooltip = g_strdup_printf (_("Open %s"), name);
+
+      add_place (sidebar, PLACES_BUILT_IN,
+                 SECTION_CLOUD,
+                 name, start_icon, end_icon, mount_uri,
+                 NULL, NULL, NULL, account, 0,
+                 tooltip);
+
+      return TRUE;
     }
-
-  gtk_sidebar_row_set_end_icon (GTK_SIDEBAR_ROW (cloud_row), end_icon);
-  if (end_icon != NULL)
-    g_object_unref (end_icon);
-
-  g_object_set (cloud_row,
-                "label", cloud_provider_account_get_name (cloud_provider_account),
-                NULL);
-  g_object_set (cloud_row,
-                "tooltip", cloud_provider_account_get_status_details (cloud_provider_account),
-                NULL);
-
+  else
+    {
+      return FALSE;
+    }
 }
 
-void
-cloud_row_destroy (GtkWidget *object,
-                   gpointer   user_data)
+static void
+on_account_updated (GObject    *object,
+                    GParamSpec *pspec,
+                    gpointer    user_data)
 {
-  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
-  CloudProviderAccount *cloud_provider_account = NULL;
-  g_object_get (GTK_SIDEBAR_ROW (object), "cloud-provider", &cloud_provider_account, NULL);
-  if (cloud_provider_account != NULL)
-    {
-      g_signal_handlers_disconnect_matched (cloud_provider_account,
-                                            G_SIGNAL_MATCH_DATA,
-                                            0, 0, 0, cloud_row_update, object);
-      g_object_unref (object);
-      g_object_unref (cloud_provider_account);
-    }
-  sidebar->cloud_rows = g_list_remove (sidebar->cloud_rows, object);
+    CloudProvidersAccount *account = CLOUD_PROVIDERS_ACCOUNT (object);
+    GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
+
+    if (create_cloud_provider_account_row (sidebar, account))
+      {
+          g_signal_handlers_disconnect_by_data (account, sidebar);
+          sidebar->unready_accounts = g_list_remove (sidebar->unready_accounts, account);
+          g_object_unref (account);
+      }
 }
+
 #endif
 
 static void
@@ -991,10 +1011,10 @@ update_places (GtkPlacesSidebar *sidebar)
   GList *network_mounts, *network_volumes;
   GIcon *new_bookmark_icon;
 #ifdef HAVE_CLOUDPROVIDERS
-  GIcon *end_icon;
-  GList *cloud_provider_proxies;
-  guint provider_status;
-  gchar *cloudprovider_path;
+  GList *cloud_providers;
+  GList *cloud_providers_accounts;
+  CloudProvidersAccount *cloud_provider_account;
+  CloudProvidersProvider *cloud_provider;
 #endif
   GtkStyleContext *context;
 
@@ -1103,52 +1123,39 @@ update_places (GtkPlacesSidebar *sidebar)
 
   /* Cloud providers */
 #ifdef HAVE_CLOUDPROVIDERS
-  cloud_provider_proxies = cloud_providers_get_providers (sidebar->cloud_manager);
-  for (l = cloud_provider_proxies; l != NULL; l = l->next)
+  cloud_providers = cloud_providers_collector_get_providers (sidebar->cloud_manager);
+  for (l = sidebar->unready_accounts; l != NULL; l = l->next)
     {
-      start_icon = cloud_provider_account_get_icon (l->data);
-      name = cloud_provider_account_get_name (l->data);
-      provider_status = cloud_provider_account_get_status (l->data);
-      cloudprovider_path = cloud_provider_account_get_path (l->data);
-      if (start_icon == NULL
-          || name == NULL
-          || provider_status == CLOUD_PROVIDER_STATUS_INVALID
-          || cloudprovider_path == NULL)
-        continue;
-      cloudprovider_path = g_strconcat ("file://", cloud_provider_account_get_path (l->data), NULL);
-      switch (provider_status)
+        g_signal_handlers_disconnect_by_data (l->data, sidebar);
+    }
+  g_list_free_full (sidebar->unready_accounts, g_object_unref);
+  sidebar->unready_accounts = NULL;
+  for (l = cloud_providers; l != NULL; l = l->next)
+    {
+      cloud_provider = CLOUD_PROVIDERS_PROVIDER (l->data);
+      g_signal_connect_swapped (cloud_provider, "accounts-changed",
+                                G_CALLBACK (update_places), sidebar);
+      cloud_providers_accounts = cloud_providers_provider_get_accounts (cloud_provider);
+      for (ll = cloud_providers_accounts; ll != NULL; ll = ll->next)
         {
-        case CLOUD_PROVIDER_STATUS_IDLE:
-          end_icon = NULL;
-          break;
+          cloud_provider_account = CLOUD_PROVIDERS_ACCOUNT (ll->data);
+          if (!create_cloud_provider_account_row (sidebar, cloud_provider_account))
+            {
 
-        case CLOUD_PROVIDER_STATUS_SYNCING:
-          end_icon = g_themed_icon_new ("emblem-synchronizing-symbolic");
-          break;
+              g_signal_connect (cloud_provider_account, "notify::name",
+                                G_CALLBACK (on_account_updated), sidebar);
+              g_signal_connect (cloud_provider_account, "notify::status",
+                                G_CALLBACK (on_account_updated), sidebar);
+              g_signal_connect (cloud_provider_account, "notify::status-details",
+                                G_CALLBACK (on_account_updated), sidebar);
+              g_signal_connect (cloud_provider_account, "notify::path",
+                                G_CALLBACK (on_account_updated), sidebar);
+              sidebar->unready_accounts = g_list_append (sidebar->unready_accounts,
+                                                         g_object_ref (cloud_provider_account));
+              continue;
+            }
 
-        case CLOUD_PROVIDER_STATUS_ERROR:
-          end_icon = g_themed_icon_new ("dialog-warning-symbolic");
-          break;
-
-        default:
-          continue;
         }
-
-      /* translators: %s is the name of a cloud provider for files */
-      tooltip = g_strdup_printf (_("Open %s"), name);
-
-      GtkWidget *cloud_row = NULL;
-      cloud_row = add_place (sidebar, PLACES_BUILT_IN,
-                               SECTION_CLOUD,
-                               name, start_icon, end_icon, cloudprovider_path,
-                               NULL, NULL, NULL, l->data, 0,
-                               tooltip);
-
-      g_signal_connect (l->data, "changed", G_CALLBACK (cloud_row_update), cloud_row);
-      g_signal_connect (cloud_row, "destroy", G_CALLBACK (cloud_row_destroy), sidebar);
-      g_object_ref (cloud_row);
-      g_object_ref (l->data);
-      sidebar->cloud_rows = g_list_append (sidebar->cloud_rows, cloud_row);
     }
 #endif
 
@@ -3542,17 +3549,17 @@ on_row_popover_destroy (GtkWidget        *row_popover,
 static void
 build_popup_menu_using_gmenu (GtkSidebarRow *row)
 {
-  CloudProviderAccount *cloud_provider_account;
+  CloudProvidersAccount *cloud_provider_account;
   GtkPlacesSidebar *sidebar;
   GMenuModel *cloud_provider_menu;
   GActionGroup *cloud_provider_action_group;
 
   g_object_get (row,
                 "sidebar", &sidebar,
-                "cloud-provider", &cloud_provider_account,
+                "cloud-provider-account", &cloud_provider_account,
                 NULL);
 
-  /* Cloud provider */
+  /* Cloud provider account */
   if (cloud_provider_account)
     {
       GMenu *menu = g_menu_new ();
@@ -3569,19 +3576,23 @@ build_popup_menu_using_gmenu (GtkSidebarRow *row)
       g_menu_item_set_action_and_target_value (item, "row.open-other",
                                                g_variant_new_int32 (GTK_PLACES_OPEN_NEW_WINDOW));
       g_menu_append_item (menu, item);
-      cloud_provider_menu = cloud_provider_account_get_menu_model (cloud_provider_account);
-      g_menu_append_section (menu, NULL, cloud_provider_menu);
-      cloud_provider_action_group = cloud_provider_account_get_action_group (cloud_provider_account);
-      gtk_widget_insert_action_group (GTK_WIDGET (sidebar),
-                                      "cloudprovider",
-                                      G_ACTION_GROUP (cloud_provider_action_group));
+      cloud_provider_menu = cloud_providers_account_get_menu_model (cloud_provider_account);
+      cloud_provider_action_group = cloud_providers_account_get_action_group (cloud_provider_account);
+      if (cloud_provider_menu != NULL && cloud_provider_action_group != NULL)
+        {
+          g_menu_append_section (menu, NULL, cloud_provider_menu);
+          gtk_widget_insert_action_group (GTK_WIDGET (sidebar),
+                                          "cloudprovider",
+                                          G_ACTION_GROUP (cloud_provider_action_group));
+        }
       add_actions (sidebar);
       if (sidebar->popover)
         gtk_widget_destroy (sidebar->popover);
 
       sidebar->popover = gtk_popover_new_from_model (GTK_WIDGET (sidebar),
                                                      G_MENU_MODEL (menu));
-      g_signal_connect (sidebar->popover, "destroy", G_CALLBACK (on_row_popover_destroy), sidebar);
+      g_signal_connect (sidebar->popover, "destroy",
+                        G_CALLBACK (on_row_popover_destroy), sidebar);
       g_object_unref (sidebar);
       g_object_unref (cloud_provider_account);
     }
@@ -3597,15 +3608,15 @@ create_row_popover (GtkPlacesSidebar *sidebar,
   GtkWidget *box;
 
 #ifdef HAVE_CLOUDPROVIDERS
-  CloudProviderAccount *cloud_provider_account;
+  CloudProvidersAccount *cloud_provider_account;
 
-  g_object_get (row, "cloud-provider", &cloud_provider_account, NULL);
+  g_object_get (row, "cloud-provider-account", &cloud_provider_account, NULL);
 
   if (cloud_provider_account)
-  {
-    build_popup_menu_using_gmenu (row);
-    return;
-  }
+    {
+      build_popup_menu_using_gmenu (row);
+       return;
+    }
 #endif
 
   sidebar->popover = gtk_popover_new (GTK_WIDGET (sidebar));
@@ -4112,13 +4123,11 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   /* Cloud providers */
 #ifdef HAVE_CLOUDPROVIDERS
-  sidebar->cloud_rows = NULL;
-  sidebar->cloud_manager = cloud_providers_dup_singleton ();
+  sidebar->cloud_manager = cloud_providers_collector_dup_singleton ();
   g_signal_connect_swapped (sidebar->cloud_manager,
-                            "owners-changed",
+                            "providers-changed",
                             G_CALLBACK (update_places),
                             sidebar);
-  cloud_providers_update (sidebar->cloud_manager);
 #endif
 
   /* populate the sidebar */
@@ -4247,6 +4256,9 @@ static void
 gtk_places_sidebar_dispose (GObject *object)
 {
   GtkPlacesSidebar *sidebar;
+#ifdef HAVE_CLOUDPROVIDERS
+  GList *l;
+#endif
 
   sidebar = GTK_PLACES_SIDEBAR (object);
 
@@ -4332,10 +4344,33 @@ gtk_places_sidebar_dispose (GObject *object)
   sidebar->shortcuts = NULL;
 
 #ifdef HAVE_CLOUDPROVIDERS
-  g_clear_object (&sidebar->cloud_manager);
+  for (l = cloud_providers_collector_get_providers (sidebar->cloud_manager);
+       l != NULL; l = l->next)
+    {
+      g_signal_handlers_disconnect_by_data (l->data, sidebar);
+    }
+  for (l = sidebar->unready_accounts; l != NULL; l = l->next)
+    {
+        g_signal_handlers_disconnect_by_data (l->data, sidebar);
+    }
+  g_list_free_full (sidebar->unready_accounts, g_object_unref);
+  sidebar->unready_accounts = NULL;
 #endif
 
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
+}
+
+static void
+gtk_places_sidebar_finalize (GObject *object)
+{
+  GtkPlacesSidebar *sidebar;
+
+  sidebar = GTK_PLACES_SIDEBAR (object);
+#ifdef HAVE_CLOUDPROVIDERS
+  g_clear_object (&sidebar->cloud_manager);
+#endif
+
+  G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->finalize (object);
 }
 
 static void
@@ -4346,6 +4381,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 
 
   gobject_class->dispose = gtk_places_sidebar_dispose;
+  gobject_class->finalize = gtk_places_sidebar_finalize;
   gobject_class->set_property = gtk_places_sidebar_set_property;
   gobject_class->get_property = gtk_places_sidebar_get_property;
 
