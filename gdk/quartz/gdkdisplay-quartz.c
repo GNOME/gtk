@@ -209,6 +209,15 @@ gdk_quartz_display_get_primary_monitor (GdkDisplay *display)
   return quartz_display->monitors->pdata[0];
 }
 
+static gboolean
+gdk_quartz_display_get_setting (GdkDisplay  *display,
+                                const gchar *name,
+                                GValue      *value)
+{
+  return _gdk_quartz_screen_get_setting (_gdk_screen, name, value);
+}
+
+
 G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
 
 static void
@@ -287,6 +296,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->get_n_monitors = gdk_quartz_display_get_n_monitors;
   display_class->get_monitor = gdk_quartz_display_get_monitor;
   display_class->get_primary_monitor = gdk_quartz_display_get_primary_monitor;
+  display_class->get_setting = gdk_quartz_display_get_setting;
 
   ProcessSerialNumber psn = { 0, kCurrentProcess };
 
