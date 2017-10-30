@@ -2035,29 +2035,6 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
   return success;
 }
 
-void
-_gtk_settings_handle_event (GdkEvent *event)
-{
-  GdkScreen *screen;
-  GtkSettings *settings;
-  GParamSpec *pspec;
-  const char *name;
-
-  screen = gdk_window_get_screen (gdk_event_get_window (event));
-  settings = gtk_settings_get_for_screen (screen);
-
-  if (!gdk_event_get_setting (event, &name))
-    return;
-
-  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), name);
-
-  if (!pspec)
-    return;
-
-  if (settings_update_xsetting (settings, pspec, TRUE))
-    g_object_notify_by_pspec (G_OBJECT (settings), pspec);
-}
-
 static void
 reset_rc_values_foreach (GQuark   key_id,
                          gpointer data,

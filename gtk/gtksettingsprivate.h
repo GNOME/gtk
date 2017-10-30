@@ -31,7 +31,6 @@ void                _gtk_settings_set_property_value_from_rc (GtkSettings       
                                                               const GtkSettingsValue *svalue);
 void                _gtk_settings_reset_rc_values            (GtkSettings            *settings);
 
-void                _gtk_settings_handle_event               (GdkEvent               *event);
 GtkRcPropertyParser _gtk_rc_property_parser_from_type        (GType                   type);
 gboolean            _gtk_settings_parse_convert              (GtkRcPropertyParser     parser,
                                                               const GValue           *src_value,

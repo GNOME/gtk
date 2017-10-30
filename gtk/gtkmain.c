@@ -1613,12 +1613,6 @@ gtk_main_do_event (GdkEvent *event)
   GdkDevice *device;
   GList *tmp_list;
 
-  if (event->type == GDK_SETTING)
-    {
-      _gtk_settings_handle_event (event);
-      return;
-    }
-
   if (event->type == GDK_OWNER_CHANGE)
     {
       _gtk_clipboard_handle_event (&event->owner_change);
@@ -1845,7 +1839,6 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_DROP_START:
       _gtk_drag_dest_handle_event (event_widget, event);
       break;
-    case GDK_SETTING:
     case GDK_OWNER_CHANGE:
     case GDK_EVENT_LAST:
     default:
