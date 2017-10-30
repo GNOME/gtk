@@ -708,5 +708,4 @@ gdk_mir_screen_class_init (GdkMirScreenClass *klass)
 
   screen_class->get_display = gdk_mir_screen_get_display;
   screen_class->get_root_window = gdk_mir_screen_get_root_window;
-  screen_class->get_setting = gdk_mir_screen_get_setting;
 }
