@@ -541,7 +541,7 @@ enum {
   DRAG_DATA_RECEIVED,
   POPUP_MENU,
   ACCEL_CLOSURES_CHANGED,
-  SCREEN_CHANGED,
+  DISPLAY_CHANGED,
   CAN_ACTIVATE_ACCEL,
   QUERY_TOOLTIP,
   DRAG_FAILED,
@@ -1066,7 +1066,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_motion = NULL;
   klass->drag_drop = NULL;
   klass->drag_data_received = NULL;
-  klass->screen_changed = NULL;
+  klass->display_changed = NULL;
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
   klass->grab_broken_event = gtk_widget_real_grab_broken_event;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
@@ -3092,23 +3092,23 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_NONE, 0);
 
   /**
-   * GtkWidget::screen-changed:
+   * GtkWidget::display-changed:
    * @widget: the object on which the signal is emitted
-   * @previous_screen: (allow-none): the previous screen, or %NULL if the
+   * @previous_display: (allow-none): the previous screen, or %NULL if the
    *   widget was not associated with a screen before
    *
-   * The ::screen-changed signal gets emitted when the
-   * screen of a widget has changed.
+   * The ::display-changed signal gets emitted when the
+   * display of a widget has changed.
    */
-  widget_signals[SCREEN_CHANGED] =
-    g_signal_new (I_("screen-changed"),
+  widget_signals[DISPLAY_CHANGED] =
+    g_signal_new (I_("display-changed"),
 		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, screen_changed),
+		  G_STRUCT_OFFSET (GtkWidgetClass, display_changed),
 		  NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 1,
-		  GDK_TYPE_SCREEN);
+		  GDK_TYPE_DISPLAY);
 
   /**
    * GtkWidget::can-activate-accel:
@@ -8446,20 +8446,20 @@ gtk_widget_real_direction_changed (GtkWidget        *widget,
 
 typedef struct {
   GtkWidget *previous_toplevel;
-  GdkScreen *previous_screen;
-  GdkScreen *new_screen;
+  GdkDisplay *previous_display;
+  GdkDisplay *new_display;
 } HierarchyChangedInfo;
 
 static void
-do_screen_change (GtkWidget *widget,
-		  GdkScreen *old_screen,
-		  GdkScreen *new_screen)
+do_display_change (GtkWidget  *widget,
+	           GdkDisplay *old_display,
+                   GdkDisplay *new_display)
 {
-  if (old_screen != new_screen)
+  if (old_display != new_display)
     {
       GtkWidgetPrivate *priv = widget->priv;
 
-      if (old_screen)
+      if (old_display)
 	{
 	  PangoContext *context = g_object_get_qdata (G_OBJECT (widget), quark_pango_context);
 	  if (context)
@@ -8468,10 +8468,10 @@ do_screen_change (GtkWidget *widget,
 
       _gtk_tooltip_hide (widget);
 
-      if (new_screen && priv->context)
-        gtk_style_context_set_screen (priv->context, new_screen);
+      if (new_display && priv->context)
+        gtk_style_context_set_screen (priv->context, gdk_display_get_default_screen (new_display));
 
-      g_signal_emit (widget, widget_signals[SCREEN_CHANGED], 0, old_screen);
+      g_signal_emit (widget, widget_signals[DISPLAY_CHANGED], 0, old_display);
     }
 }
 
@@ -8502,7 +8502,7 @@ gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
         }
 
       g_signal_emit (widget, widget_signals[HIERARCHY_CHANGED], 0, info->previous_toplevel);
-      do_screen_change (widget, info->previous_screen, info->new_screen);
+      do_display_change (widget, info->previous_display, info->new_display);
 
       gtk_widget_forall (widget, gtk_widget_propagate_hierarchy_changed_recurse, client_data);
 
@@ -8527,16 +8527,16 @@ _gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
   HierarchyChangedInfo info;
 
   info.previous_toplevel = previous_toplevel;
-  info.previous_screen = previous_toplevel ? gtk_widget_get_screen (previous_toplevel) : NULL;
+  info.previous_display = previous_toplevel ? gtk_widget_get_display (previous_toplevel) : NULL;
 
   if (_gtk_widget_is_toplevel (widget) ||
       (priv->parent && priv->parent->priv->anchored))
-    info.new_screen = gtk_widget_get_screen (widget);
+    info.new_display = gtk_widget_get_display (widget);
   else
-    info.new_screen = NULL;
+    info.new_display = NULL;
 
-  if (info.previous_screen)
-    g_object_ref (info.previous_screen);
+  if (info.previous_display)
+    g_object_ref (info.previous_display);
   if (previous_toplevel)
     g_object_ref (previous_toplevel);
 
@@ -8544,55 +8544,55 @@ _gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
 
   if (previous_toplevel)
     g_object_unref (previous_toplevel);
-  if (info.previous_screen)
-    g_object_unref (info.previous_screen);
+  if (info.previous_display)
+    g_object_unref (info.previous_display);
 }
 
 static void
-gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
-					     gpointer   client_data)
+gtk_widget_propagate_display_changed_recurse (GtkWidget *widget,
+	                  		      gpointer   client_data)
 {
   HierarchyChangedInfo *info = client_data;
   GtkWidget *child;
 
   g_object_ref (widget);
 
-  do_screen_change (widget, info->previous_screen, info->new_screen);
+  do_display_change (widget, info->previous_display, info->new_display);
 
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
     {
-      gtk_widget_propagate_screen_changed_recurse (child, client_data);
+      gtk_widget_propagate_display_changed_recurse (child, client_data);
     }
 
   g_object_unref (widget);
 }
 
 /**
- * _gtk_widget_propagate_screen_changed:
+ * _gtk_widget_propagate_display_changed:
  * @widget: a #GtkWidget
- * @previous_screen: Previous screen
+ * @previous_display: Previous display
  *
- * Propagates changes in the screen for a widget to all
- * children, emitting #GtkWidget::screen-changed.
+ * Propagates changes in the display for a widget to all
+ * children, emitting #GtkWidget::display-changed.
  **/
 void
-_gtk_widget_propagate_screen_changed (GtkWidget    *widget,
-				      GdkScreen    *previous_screen)
+_gtk_widget_propagate_display_changed (GtkWidget  *widget,
+                                       GdkDisplay *previous_display)
 {
   HierarchyChangedInfo info;
 
-  info.previous_screen = previous_screen;
-  info.new_screen = gtk_widget_get_screen (widget);
+  info.previous_display = previous_display;
+  info.new_display = gtk_widget_get_display (widget);
 
-  if (previous_screen)
-    g_object_ref (previous_screen);
+  if (previous_display)
+    g_object_ref (previous_display);
 
-  gtk_widget_propagate_screen_changed_recurse (widget, &info);
+  gtk_widget_propagate_display_changed_recurse (widget, &info);
 
-  if (previous_screen)
-    g_object_unref (previous_screen);
+  if (previous_display)
+    g_object_unref (previous_display);
 }
 
 static void
@@ -8823,7 +8823,7 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  * the widget (it can be used until the screen for the widget changes
  * or the widget is removed from its toplevel), and will be updated to
  * match any changes to the widget’s attributes. This can be tracked
- * by using the #GtkWidget::screen-changed signal on the widget.
+ * by using the #GtkWidget::display-changed signal on the widget.
  *
  * Returns: (transfer none): the #PangoContext for the widget.
  **/
@@ -9067,7 +9067,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  *
  * If you keep a #PangoLayout created in this way around, you need
  * to re-create it when the widget #PangoContext is replaced.
- * This can be tracked by using the #GtkWidget::screen-changed signal
+ * This can be tracked by using the #GtkWidget::display-changed signal
  * on the widget.
  *
  * Returns: (transfer full): the new #PangoLayout

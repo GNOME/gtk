@@ -446,8 +446,8 @@ static void gtk_label_set_markup_internal        (GtkLabel      *label,
 static void gtk_label_recalculate                (GtkLabel      *label);
 static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
 						  GtkWidget     *old_toplevel);
-static void gtk_label_screen_changed             (GtkWidget     *widget,
-						  GdkScreen     *old_screen);
+static void gtk_label_display_changed            (GtkWidget     *widget,
+						  GdkDisplay    *old_display);
 static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
 
 static void gtk_label_set_selectable_hint (GtkLabel *label);
@@ -600,7 +600,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->motion_notify_event = gtk_label_motion;
   widget_class->leave_notify_event = gtk_label_leave_notify;
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
-  widget_class->screen_changed = gtk_label_screen_changed;
+  widget_class->display_changed = gtk_label_display_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
@@ -1916,17 +1916,14 @@ label_mnemonics_visible_changed (GtkWindow  *window,
 }
 
 static void
-gtk_label_screen_changed (GtkWidget *widget,
-			  GdkScreen *old_screen)
+gtk_label_display_changed (GtkWidget  *widget,
+			   GdkDisplay *old_display)
 {
   GtkSettings *settings;
   gboolean shortcuts_connected;
 
-  /* The PangoContext is replaced when the screen changes, so clear the layouts */
+  /* The PangoContext is replaced when the display changes, so clear the layouts */
   gtk_label_clear_layout (GTK_LABEL (widget));
-
-  if (!gtk_widget_has_screen (widget))
-    return;
 
   settings = gtk_widget_get_settings (widget);
 

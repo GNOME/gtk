@@ -839,8 +839,8 @@ gtk_tool_palette_get_child_property (GtkContainer *container,
 }
 
 static void
-gtk_tool_palette_screen_changed (GtkWidget *widget,
-                                 GdkScreen *previous_screen)
+gtk_tool_palette_display_changed (GtkWidget  *widget,
+                                  GdkDisplay *previous_display)
 {
   GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
 
@@ -886,9 +886,9 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
   cclass->set_child_property  = gtk_tool_palette_set_child_property;
   cclass->get_child_property  = gtk_tool_palette_get_child_property;
 
-  /* Handle screen-changed so we can update our configuration.
+  /* Handle display-changed so we can update our configuration.
    */
-  wclass->screen_changed      = gtk_tool_palette_screen_changed;
+  wclass->display_changed      = gtk_tool_palette_display_changed;
 
   g_object_class_override_property (oclass, PROP_ORIENTATION,    "orientation");
 

@@ -277,8 +277,8 @@ static void     gtk_file_chooser_button_map                (GtkWidget        *wi
 static gboolean gtk_file_chooser_button_mnemonic_activate  (GtkWidget        *widget,
 							    gboolean          group_cycling);
 static void     gtk_file_chooser_button_style_updated      (GtkWidget        *widget);
-static void     gtk_file_chooser_button_screen_changed     (GtkWidget        *widget,
-							    GdkScreen        *old_screen);
+static void     gtk_file_chooser_button_display_changed    (GtkWidget        *widget,
+							    GdkDisplay       *old_display);
 static void     gtk_file_chooser_button_state_flags_changed (GtkWidget       *widget,
                                                              GtkStateFlags    previous_state);
 
@@ -412,7 +412,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->hide = gtk_file_chooser_button_hide;
   widget_class->map = gtk_file_chooser_button_map;
   widget_class->style_updated = gtk_file_chooser_button_style_updated;
-  widget_class->screen_changed = gtk_file_chooser_button_screen_changed;
+  widget_class->display_changed = gtk_file_chooser_button_display_changed;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
   widget_class->state_flags_changed = gtk_file_chooser_button_state_flags_changed;
   widget_class->measure = gtk_file_chooser_button_measure;
@@ -1553,12 +1553,11 @@ gtk_file_chooser_button_style_updated (GtkWidget *widget)
 }
 
 static void
-gtk_file_chooser_button_screen_changed (GtkWidget *widget,
-					GdkScreen *old_screen)
+gtk_file_chooser_button_display_changed (GtkWidget  *widget,
+					 GdkDisplay *old_display)
 {
-  if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->screen_changed)
-    GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->screen_changed (widget,
-									     old_screen);
+  if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->display_changed)
+    GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->display_changed (widget, old_display);
 
   change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));
 }

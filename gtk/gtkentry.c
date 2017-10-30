@@ -433,8 +433,8 @@ static void   gtk_entry_direction_changed    (GtkWidget        *widget,
 					      GtkTextDirection  previous_dir);
 static void   gtk_entry_state_flags_changed  (GtkWidget        *widget,
 					      GtkStateFlags     previous_state);
-static void   gtk_entry_screen_changed       (GtkWidget        *widget,
-					      GdkScreen        *old_screen);
+static void   gtk_entry_display_changed      (GtkWidget        *widget,
+					      GdkDisplay       *old_display);
 
 static gboolean gtk_entry_drag_drop          (GtkWidget        *widget,
                                               GdkDragContext   *context,
@@ -730,7 +730,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->drag_end = gtk_entry_drag_end;
   widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->state_flags_changed = gtk_entry_state_flags_changed;
-  widget_class->screen_changed = gtk_entry_screen_changed;
+  widget_class->display_changed = gtk_entry_display_changed;
   widget_class->mnemonic_activate = gtk_entry_mnemonic_activate;
   widget_class->grab_notify = gtk_entry_grab_notify;
 
@@ -4315,8 +4315,8 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
-gtk_entry_screen_changed (GtkWidget *widget,
-			  GdkScreen *old_screen)
+gtk_entry_display_changed (GtkWidget  *widget,
+                           GdkDisplay *old_display)
 {
   gtk_entry_recompute (GTK_ENTRY (widget));
 }

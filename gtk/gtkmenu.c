@@ -1293,20 +1293,17 @@ menu_change_screen (GtkMenu   *menu,
 {
   GtkMenuPrivate *priv = menu->priv;
 
-  if (gtk_widget_has_screen (GTK_WIDGET (menu)))
-    {
-      if (new_screen == gtk_widget_get_screen (GTK_WIDGET (menu)))
-        return;
-    }
+  if (new_screen == gtk_widget_get_screen (GTK_WIDGET (menu)))
+    return;
 
   gtk_window_set_screen (GTK_WINDOW (priv->toplevel), new_screen);
   priv->monitor_num = -1;
 }
 
 static void
-attach_widget_screen_changed (GtkWidget *attach_widget,
-                              GdkScreen *previous_screen,
-                              GtkMenu   *menu)
+attach_widget_display_changed (GtkWidget  *attach_widget,
+                               GdkDisplay *previous_display,
+                               GtkMenu    *menu)
 {
   if (gtk_widget_has_screen (attach_widget) &&
       !g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
@@ -1366,9 +1363,9 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
   data = g_slice_new (GtkMenuAttachData);
   data->attach_widget = attach_widget;
 
-  g_signal_connect (attach_widget, "screen-changed",
-                    G_CALLBACK (attach_widget_screen_changed), menu);
-  attach_widget_screen_changed (attach_widget, NULL, menu);
+  g_signal_connect (attach_widget, "display-changed",
+                    G_CALLBACK (attach_widget_display_changed), menu);
+  attach_widget_display_changed (attach_widget, NULL, menu);
 
   data->detacher = detacher;
   g_object_set_data (G_OBJECT (menu), I_(attach_data_key), data);
@@ -1445,7 +1442,7 @@ gtk_menu_detach (GtkMenu *menu)
     gtk_window_set_attached_to (toplevel, NULL);
 
   g_signal_handlers_disconnect_by_func (data->attach_widget,
-                                        (gpointer) attach_widget_screen_changed,
+                                        (gpointer) attach_widget_display_changed,
                                         menu);
 
   if (data->detacher)
@@ -4329,7 +4326,7 @@ gtk_menu_set_screen (GtkMenu   *menu,
     {
       GtkWidget *attach_widget = gtk_menu_get_attach_widget (menu);
       if (attach_widget)
-        attach_widget_screen_changed (attach_widget, NULL, menu);
+        attach_widget_display_changed (attach_widget, NULL, menu);
     }
 }
 

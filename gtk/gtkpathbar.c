@@ -179,8 +179,8 @@ static void gtk_path_bar_grab_notify              (GtkWidget        *widget,
 static void gtk_path_bar_state_flags_changed      (GtkWidget        *widget,
                                                    GtkStateFlags     previous_state);
 static void gtk_path_bar_style_updated            (GtkWidget        *widget);
-static void gtk_path_bar_screen_changed           (GtkWidget        *widget,
-						   GdkScreen        *previous_screen);
+static void gtk_path_bar_display_changed          (GtkWidget        *widget,
+						   GdkDisplay       *previous_display);
 static void gtk_path_bar_check_icon_theme         (GtkPathBar       *path_bar);
 static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
@@ -306,7 +306,7 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   widget_class->unmap = gtk_path_bar_unmap;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
   widget_class->style_updated = gtk_path_bar_style_updated;
-  widget_class->screen_changed = gtk_path_bar_screen_changed;
+  widget_class->display_changed = gtk_path_bar_display_changed;
   widget_class->grab_notify = gtk_path_bar_grab_notify;
   widget_class->state_flags_changed = gtk_path_bar_state_flags_changed;
 
@@ -375,13 +375,13 @@ gtk_path_bar_finalize (GObject *object)
 /* Removes the settings signal handler.  It's safe to call multiple times */
 static void
 remove_settings_signal (GtkPathBar *path_bar,
-			GdkScreen  *screen)
+			GdkDisplay *display)
 {
   if (path_bar->priv->settings_signal_id)
     {
       GtkSettings *settings;
 
-      settings = gtk_settings_get_for_screen (screen);
+      settings = gtk_settings_get_for_display (display);
       g_signal_handler_disconnect (settings,
 				   path_bar->priv->settings_signal_id);
       path_bar->priv->settings_signal_id = 0;
@@ -393,7 +393,7 @@ gtk_path_bar_dispose (GObject *object)
 {
   GtkPathBar *path_bar = GTK_PATH_BAR (object);
 
-  remove_settings_signal (path_bar, gtk_widget_get_screen (GTK_WIDGET (object)));
+  remove_settings_signal (path_bar, gtk_widget_get_display (GTK_WIDGET (object)));
 
   path_bar->priv->get_info_cancellable = NULL;
   cancel_all_cancellables (path_bar);
@@ -782,15 +782,15 @@ gtk_path_bar_style_updated (GtkWidget *widget)
 }
 
 static void
-gtk_path_bar_screen_changed (GtkWidget *widget,
-			     GdkScreen *previous_screen)
+gtk_path_bar_display_changed (GtkWidget  *widget,
+			      GdkDisplay *previous_display)
 {
-  if (GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->screen_changed)
-    GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->screen_changed (widget, previous_screen);
+  if (GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->display_changed)
+    GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->display_changed (widget, previous_display);
 
   /* We might nave a new settings, so we remove the old one */
-  if (previous_screen)
-    remove_settings_signal (GTK_PATH_BAR (widget), previous_screen);
+  if (previous_display)
+    remove_settings_signal (GTK_PATH_BAR (widget), previous_display);
 
   gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
 }

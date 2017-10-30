@@ -9997,7 +9997,7 @@ gtk_window_set_screen (GtkWindow *window,
                         G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
-      _gtk_widget_propagate_screen_changed (widget, previous_screen);
+      _gtk_widget_propagate_display_changed (widget, gdk_screen_get_display (previous_screen));
     }
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SCREEN]);
 

@@ -116,8 +116,8 @@ static void gtk_button_get_property   (GObject            *object,
                                        guint               prop_id,
                                        GValue             *value,
                                        GParamSpec         *pspec);
-static void gtk_button_screen_changed (GtkWidget          *widget,
-				       GdkScreen          *previous_screen);
+static void gtk_button_display_changed (GtkWidget         *widget,
+				        GdkDisplay        *previous_display);
 static void gtk_button_unrealize (GtkWidget * widget);
 static gint gtk_button_grab_broken (GtkWidget * widget,
 				    GdkEventGrabBroken * event);
@@ -200,7 +200,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   gobject_class->get_property = gtk_button_get_property;
 
   widget_class->measure = gtk_button_measure_;
-  widget_class->screen_changed = gtk_button_screen_changed;
+  widget_class->display_changed = gtk_button_display_changed;
   widget_class->unrealize = gtk_button_unrealize;
   widget_class->grab_broken_event = gtk_button_grab_broken;
   widget_class->key_release_event = gtk_button_key_release;
@@ -1039,19 +1039,16 @@ gtk_button_update_state (GtkButton *button)
 }
 
 static void
-gtk_button_screen_changed (GtkWidget *widget,
-			   GdkScreen *previous_screen)
+gtk_button_display_changed (GtkWidget  *widget,
+                            GdkDisplay *previous_display)
 {
   GtkButton *button;
   GtkButtonPrivate *priv;
 
-  if (!gtk_widget_has_screen (widget))
-    return;
-
   button = GTK_BUTTON (widget);
   priv = button->priv;
 
-  /* If the button is being pressed while the screen changes the
+  /* If the button is being pressed while the display changes the
     release might never occur, so we reset the state. */
   if (priv->button_down)
     {

@@ -198,7 +198,7 @@ gtk_invisible_set_screen (GtkInvisible *invisible,
 
   priv->screen = screen;
   if (screen != previous_screen)
-    _gtk_widget_propagate_screen_changed (widget, previous_screen);
+    _gtk_widget_propagate_display_changed (widget, gdk_screen_get_display (previous_screen));
   g_object_notify (G_OBJECT (invisible), "screen");
   
   if (was_realized)

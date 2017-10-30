@@ -128,8 +128,8 @@ static void gtk_font_chooser_widget_get_property         (GObject         *objec
                                                           GParamSpec      *pspec);
 static void gtk_font_chooser_widget_finalize             (GObject         *object);
 
-static void gtk_font_chooser_widget_screen_changed       (GtkWidget       *widget,
-                                                          GdkScreen       *previous_screen);
+static void gtk_font_chooser_widget_display_changed      (GtkWidget       *widget,
+                                                          GdkDisplay      *previous_display);
 
 static void gtk_font_chooser_widget_style_updated        (GtkWidget       *widget);
 
@@ -637,7 +637,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   g_type_ensure (GTK_TYPE_DELAYED_FONT_DESCRIPTION);
   g_type_ensure (G_TYPE_THEMED_ICON);
 
-  widget_class->screen_changed = gtk_font_chooser_widget_screen_changed;
+  widget_class->display_changed = gtk_font_chooser_widget_display_changed;
   widget_class->style_updated = gtk_font_chooser_widget_style_updated;
   widget_class->measure = gtk_font_chooser_widget_measure;
   widget_class->size_allocate = gtk_font_chooser_widget_size_allocate;
@@ -1111,28 +1111,28 @@ fontconfig_changed (GtkFontChooserWidget *fontchooser)
 }
 
 static void
-gtk_font_chooser_widget_screen_changed (GtkWidget *widget,
-                                        GdkScreen *previous_screen)
+gtk_font_chooser_widget_display_changed (GtkWidget  *widget,
+                                         GdkDisplay *previous_display)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
   GtkSettings *settings;
 
-  if (GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->screen_changed)
-    GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->screen_changed (widget, previous_screen);
+  if (GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->display_changed)
+    GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->display_changed (widget, previous_display);
 
-  if (previous_screen)
+  if (previous_display)
     {
-      settings = gtk_settings_get_for_screen (previous_screen);
+      settings = gtk_settings_get_for_display (previous_display);
       g_signal_handlers_disconnect_by_func (settings, fontconfig_changed, widget);
     }
   settings = gtk_widget_get_settings (widget);
   g_signal_connect_object (settings, "notify::gtk-fontconfig-timestamp",
                            G_CALLBACK (fontconfig_changed), widget, G_CONNECT_SWAPPED);
 
-  if (previous_screen == NULL)
-    previous_screen = gdk_screen_get_default ();
+  if (previous_display == NULL)
+    previous_display = gdk_display_get_default ();
 
-  if (previous_screen == gtk_widget_get_screen (widget))
+  if (previous_display == gtk_widget_get_display (widget))
     return;
 
   gtk_font_chooser_widget_load_fonts (fontchooser, FALSE);

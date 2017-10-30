@@ -206,8 +206,8 @@ static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
 						    GtkDirectionType     dir);
 static void       gtk_toolbar_move_focus           (GtkWidget           *widget,
 						    GtkDirectionType     dir);
-static void       gtk_toolbar_screen_changed       (GtkWidget           *widget,
-						    GdkScreen           *previous_screen);
+static void       gtk_toolbar_display_changed      (GtkWidget           *widget,
+						    GdkDisplay          *previous_display);
 static void       gtk_toolbar_set_child_property   (GtkContainer        *container,
 						    GtkWidget           *child,
 						    guint                property_id,
@@ -392,7 +392,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                    GTK_TYPE_TOOLBAR,
                                    G_CALLBACK (gtk_toolbar_move_focus));
 
-  widget_class->screen_changed = gtk_toolbar_screen_changed;
+  widget_class->display_changed = gtk_toolbar_display_changed;
   widget_class->popup_menu = gtk_toolbar_popup_menu;
   widget_class->direction_changed = gtk_toolbar_direction_changed;
   
@@ -1785,18 +1785,15 @@ settings_change_notify (GtkSettings      *settings,
 }
 
 static void
-gtk_toolbar_screen_changed (GtkWidget *widget,
-			    GdkScreen *previous_screen)
+gtk_toolbar_display_changed (GtkWidget *widget,
+			     GdkDisplay *previous_display)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
   GtkSettings *old_settings = toolbar_get_settings (toolbar);
   GtkSettings *settings;
   
-  if (gtk_widget_has_screen (GTK_WIDGET (toolbar)))
-    settings = gtk_widget_get_settings (GTK_WIDGET (toolbar));
-  else
-    settings = NULL;
+  settings = gtk_widget_get_settings (GTK_WIDGET (toolbar));
   
   if (settings == old_settings)
     return;

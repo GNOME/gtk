@@ -261,7 +261,7 @@ struct _GtkWidget
  *   context menu.
  * @get_accessible: Returns the accessible object that describes the
  *   widget to an assistive technology.
- * @screen_changed: Signal emitted when the screen of a widget has
+ * @display_changed: Signal emitted when the #GdkDisplay of a widget has
  *   changed.
  * @can_activate_accel: Signal allows applications and derived widgets
  *   to override the default GtkWidget handling for determining whether
@@ -442,10 +442,10 @@ struct _GtkWidgetClass
 
   /* accessibility support
    */
-  AtkObject *  (* get_accessible)     (GtkWidget *widget);
+  AtkObject *  (* get_accessible)     (GtkWidget       *widget);
 
-  void         (* screen_changed)     (GtkWidget *widget,
-                                       GdkScreen *previous_screen);
+  void         (* display_changed)     (GtkWidget      *widget,
+                                        GdkDisplay     *previous_display);
   gboolean     (* can_activate_accel) (GtkWidget *widget,
                                        guint      signal_id);
 

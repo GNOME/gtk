@@ -122,8 +122,8 @@ static gint gtk_menu_shell_button_release    (GtkWidget         *widget,
                                               GdkEventButton    *event);
 static gint gtk_menu_shell_key_press         (GtkWidget         *widget,
                                               GdkEventKey       *event);
-static void gtk_menu_shell_screen_changed    (GtkWidget         *widget,
-                                              GdkScreen         *previous_screen);
+static void gtk_menu_shell_display_changed   (GtkWidget         *widget,
+                                              GdkDisplay        *previous_display);
 static gboolean gtk_menu_shell_grab_broken       (GtkWidget         *widget,
                                               GdkEventGrabBroken *event);
 static void gtk_menu_shell_add               (GtkContainer      *container,
@@ -182,7 +182,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   widget_class->button_release_event = gtk_menu_shell_button_release;
   widget_class->grab_broken_event = gtk_menu_shell_grab_broken;
   widget_class->key_press_event = gtk_menu_shell_key_press;
-  widget_class->screen_changed = gtk_menu_shell_screen_changed;
+  widget_class->display_changed = gtk_menu_shell_display_changed;
 
   container_class->add = gtk_menu_shell_add;
   container_class->remove = gtk_menu_shell_remove;
@@ -915,8 +915,8 @@ gtk_menu_shell_key_press (GtkWidget   *widget,
 }
 
 static void
-gtk_menu_shell_screen_changed (GtkWidget *widget,
-                               GdkScreen *previous_screen)
+gtk_menu_shell_display_changed (GtkWidget  *widget,
+                                GdkDisplay *previous_display)
 {
   gtk_menu_shell_reset_key_hash (GTK_MENU_SHELL (widget));
 }

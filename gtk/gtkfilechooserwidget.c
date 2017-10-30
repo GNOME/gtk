@@ -462,9 +462,9 @@ static void     gtk_file_chooser_widget_map            (GtkWidget             *w
 static void     gtk_file_chooser_widget_unmap          (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_hierarchy_changed (GtkWidget          *widget,
                                                             GtkWidget          *previous_toplevel);
-static void     gtk_file_chooser_widget_style_updated  (GtkWidget             *widget);
-static void     gtk_file_chooser_widget_screen_changed (GtkWidget             *widget,
-                                                        GdkScreen             *previous_screen);
+static void     gtk_file_chooser_widget_style_updated   (GtkWidget             *widget);
+static void     gtk_file_chooser_widget_display_changed (GtkWidget            *widget,
+                                                         GdkDisplay           *previous_display);
 static gboolean gtk_file_chooser_widget_key_press_event (GtkWidget            *widget,
                                                          GdkEventKey          *event);
 
@@ -3614,7 +3614,7 @@ cancel_all_operations (GtkFileChooserWidget *impl)
 /* Removes the settings signal handler.  It's safe to call multiple times */
 static void
 remove_settings_signal (GtkFileChooserWidget *impl,
-                        GdkScreen             *screen)
+                        GdkDisplay           *display)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
@@ -3622,7 +3622,7 @@ remove_settings_signal (GtkFileChooserWidget *impl,
     {
       GtkSettings *settings;
 
-      settings = gtk_settings_get_for_screen (screen);
+      settings = gtk_settings_get_for_display (display);
       g_signal_handler_disconnect (settings,
                                    priv->settings_signal_id);
       priv->settings_signal_id = 0;
@@ -3652,7 +3652,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
       priv->extra_widget = NULL;
     }
 
-  remove_settings_signal (impl, gtk_widget_get_screen (GTK_WIDGET (impl)));
+  remove_settings_signal (impl, gtk_widget_get_display (GTK_WIDGET (impl)));
 
   if (priv->bookmarks_manager)
     {
@@ -3813,8 +3813,8 @@ gtk_file_chooser_widget_style_updated (GtkWidget *widget)
 }
 
 static void
-gtk_file_chooser_widget_screen_changed (GtkWidget *widget,
-                                         GdkScreen *previous_screen)
+gtk_file_chooser_widget_display_changed (GtkWidget  *widget,
+                                         GdkDisplay *previous_display)
 {
   GtkFileChooserWidget *impl;
 
@@ -3822,10 +3822,10 @@ gtk_file_chooser_widget_screen_changed (GtkWidget *widget,
 
   impl = GTK_FILE_CHOOSER_WIDGET (widget);
 
-  if (GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->screen_changed)
-    GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->screen_changed (widget, previous_screen);
+  if (GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->display_changed)
+    GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->display_changed (widget, previous_display);
 
-  remove_settings_signal (impl, previous_screen);
+  remove_settings_signal (impl, previous_display);
   check_icon_theme (impl);
 
   emit_default_size_changed (impl);
@@ -8127,7 +8127,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->unmap = gtk_file_chooser_widget_unmap;
   widget_class->hierarchy_changed = gtk_file_chooser_widget_hierarchy_changed;
   widget_class->style_updated = gtk_file_chooser_widget_style_updated;
-  widget_class->screen_changed = gtk_file_chooser_widget_screen_changed;
+  widget_class->display_changed = gtk_file_chooser_widget_display_changed;
   widget_class->key_press_event = gtk_file_chooser_widget_key_press_event;
   widget_class->measure = gtk_file_chooser_widget_measure;
   widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;

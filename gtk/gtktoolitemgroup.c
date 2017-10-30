@@ -220,18 +220,15 @@ gtk_tool_item_group_settings_change_notify (GtkSettings      *settings,
 }
 
 static void
-gtk_tool_item_group_screen_changed (GtkWidget *widget,
-                                    GdkScreen *previous_screen)
+gtk_tool_item_group_display_changed (GtkWidget  *widget,
+                                     GdkDisplay *previous_display)
 {
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (widget);
   GtkToolItemGroupPrivate* priv = group->priv;
   GtkSettings *old_settings = priv->settings;
   GtkSettings *settings;
 
-  if (gtk_widget_has_screen (GTK_WIDGET (group)))
-    settings = gtk_widget_get_settings (GTK_WIDGET (group));
-  else
-    settings = NULL;
+  settings = gtk_widget_get_settings (GTK_WIDGET (group));
 
   if (settings == old_settings)
     return;
@@ -1544,7 +1541,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
   wclass->realize              = gtk_tool_item_group_realize;
   wclass->unrealize            = gtk_tool_item_group_unrealize;
   wclass->style_updated        = gtk_tool_item_group_style_updated;
-  wclass->screen_changed       = gtk_tool_item_group_screen_changed;
+  wclass->display_changed      = gtk_tool_item_group_display_changed;
   wclass->state_flags_changed  = gtk_tool_item_group_state_flags_changed;
 
   cclass->add                = gtk_tool_item_group_add;
