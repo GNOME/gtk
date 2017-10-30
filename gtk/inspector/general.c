@@ -506,12 +506,11 @@ translate_subpixel_layout (GdkSubpixelLayout subpixel)
 }
 
 static void
-populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
+populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
 {
   gint i;
   GList *children, *l;
   GtkWidget *child;
-  GdkDisplay *display;
   int n_monitors;
   GtkListBox *list;
 
@@ -529,8 +528,6 @@ populate_display (GdkScreen *screen, GtkInspectorGeneral *gen)
       gtk_widget_destroy (child);
     }
   g_list_free (children);
-
-  display = gdk_screen_get_display (screen);
 
   gtk_label_set_label (GTK_LABEL (gen->priv->display_name), gdk_display_get_name (display));
 
@@ -600,22 +597,29 @@ populate_display_notify_cb (GdkDisplay          *display,
                             GParamSpec          *pspec,
                             GtkInspectorGeneral *gen)
 {
-  populate_display (gdk_display_get_default_screen (display), gen);
+  populate_display (display, gen);
+}
+
+static void
+populate_display_monitor_cb (GdkDisplay          *display,
+                             GdkMonitor          *monitor,
+                             GtkInspectorGeneral *gen)
+{
+  populate_display (display, gen);
 }
 
 static void
 init_display (GtkInspectorGeneral *gen)
 {
-  GdkScreen *screen;
   GdkDisplay *display;
 
   display = gdk_display_get_default ();
-  screen = gdk_screen_get_default ();
 
   g_signal_connect (display, "notify", G_CALLBACK (populate_display_notify_cb), gen);
-  g_signal_connect (screen, "monitors-changed", G_CALLBACK (populate_display), gen);
+  g_signal_connect (display, "monitor-added", G_CALLBACK (populate_display_monitor_cb), gen);
+  g_signal_connect (display, "monitor-removed", G_CALLBACK (populate_display_monitor_cb), gen);
 
-  populate_display (screen, gen);
+  populate_display (display, gen);
 }
 
 static void populate_seats (GtkInspectorGeneral *gen);
