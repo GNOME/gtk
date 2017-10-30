@@ -51,11 +51,6 @@ GDK_AVAILABLE_IN_ALL
 GdkScreen *gdk_screen_get_default (void);
 
 GDK_AVAILABLE_IN_ALL
-gboolean   gdk_screen_get_setting (GdkScreen   *screen,
-                                   const gchar *name,
-                                   GValue      *value);
-
-GDK_AVAILABLE_IN_ALL
 void    gdk_screen_set_resolution (GdkScreen *screen,
                                    gdouble    dpi);
 GDK_AVAILABLE_IN_ALL

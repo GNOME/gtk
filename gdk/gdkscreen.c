@@ -268,28 +268,3 @@ gdk_screen_get_root_window (GdkScreen *screen)
 
   return GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
 }
-
-/**
- * gdk_screen_get_setting:
- * @screen: the #GdkScreen where the setting is located
- * @name: the name of the setting
- * @value: location to store the value of the setting
- *
- * Retrieves a desktop-wide setting such as double-click time
- * for the #GdkScreen @screen.
- *
- * FIXME needs a list of valid settings here, or a link to
- * more information.
- *
- * Returns: %TRUE if the setting existed and a value was stored
- *   in @value, %FALSE otherwise.
- *
- * Since: 2.2
- **/
-gboolean
-gdk_screen_get_setting (GdkScreen   *screen,
-			const gchar *name,
-			GValue      *value)
-{
-  return gdk_display_get_setting (gdk_screen_get_display (screen), name, value);
-}
