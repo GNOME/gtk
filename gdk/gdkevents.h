@@ -709,10 +709,6 @@ void           gdk_event_set_user_data (GdkEvent *event,
                                         GObject  *user_data);
 
 GDK_AVAILABLE_IN_3_92
-gboolean       gdk_event_get_setting   (const GdkEvent  *event,
-                                        const char     **setting);
-
-GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_is_sent       (const GdkEvent *event);
 
 GDK_AVAILABLE_IN_3_92

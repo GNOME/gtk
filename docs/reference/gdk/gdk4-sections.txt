@@ -839,7 +839,6 @@ GdkEventSelection
 GdkEventDND
 GdkEventProximity
 GdkEventWindowState
-GdkEventSetting
 GdkEventOwnerChange
 GdkEventGrabBroken
 GdkEventTouchpadSwipe
@@ -855,7 +854,6 @@ GdkCrossingMode
 GdkNotifyType
 GdkPropertyState
 GdkWindowState
-GdkSettingAction
 GdkOwnerChange
 
 <SUBSECTION Standard>
@@ -864,7 +862,6 @@ GDK_TYPE_EVENT
 GDK_TYPE_NOTIFY_TYPE
 GDK_TYPE_PROPERTY_STATE
 GDK_TYPE_SCROLL_DIRECTION
-GDK_TYPE_SETTING_ACTION
 GDK_TYPE_VISIBILITY_STATE
 GDK_TYPE_WINDOW_STATE
 GDK_TYPE_OWNER_CHANGE
