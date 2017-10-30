@@ -119,7 +119,6 @@ struct _GtkSettingsPrivate
   GData *queued_settings;      /* of type GtkSettingsValue* */
   GtkSettingsPropertyValue *property_values;
   GdkDisplay *display;
-  GdkScreen *screen;
   GSList *style_cascades;
   GtkCssProvider *theme_provider;
   GtkCssProvider *key_theme_provider;
@@ -230,7 +229,7 @@ static void    settings_update_xsettings         (GtkSettings           *setting
 static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
                                                   const gchar           *path,
                                                   GtkSettingsSource      source);
-static void settings_update_provider             (GdkScreen             *screen,
+static void settings_update_provider             (GdkDisplay            *display,
                                                   GtkCssProvider       **old,
                                                   GtkCssProvider        *new);
 
@@ -1105,8 +1104,8 @@ gtk_settings_finalize (GObject *object)
 
   g_datalist_clear (&priv->queued_settings);
 
-  settings_update_provider (priv->screen, &priv->theme_provider, NULL);
-  settings_update_provider (priv->screen, &priv->key_theme_provider, NULL);
+  settings_update_provider (priv->display, &priv->theme_provider, NULL);
+  settings_update_provider (priv->display, &priv->key_theme_provider, NULL);
   g_slist_free_full (priv->style_cascades, g_object_unref);
 
   if (priv->font_options)
@@ -1229,7 +1228,6 @@ gtk_settings_create_for_display (GdkDisplay *display)
     settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
 
   settings->priv->display = display;
-  settings->priv->screen = gdk_display_get_default_screen (display);
 
   g_signal_connect_object (display, "setting-changed", G_CALLBACK (setting_changed), settings, 0);
 
@@ -1249,7 +1247,7 @@ gtk_settings_create_for_display (GdkDisplay *display)
 
 /**
  * gtk_settings_get_for_display:
- * @screen: a #GdkDisplay
+ * @screen: a #GdkDisplay.
  *
  * Gets the #GtkSettings object for @display, creating it if necessary.
  *
@@ -1382,7 +1380,7 @@ gtk_settings_notify (GObject    *object,
   GtkSettingsPrivate *priv = settings->priv;
   guint property_id = pspec->param_id;
 
-  if (priv->screen == NULL) /* initialization */
+  if (priv->display == NULL) /* initialization */
     return;
 
   switch (property_id)
@@ -1397,7 +1395,7 @@ gtk_settings_notify (GObject    *object,
     case PROP_FONT_NAME:
       settings_update_font_values (settings);
       settings_invalidate_style (settings);
-      gtk_style_context_reset_widgets (priv->screen);
+      gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
       break;
     case PROP_KEY_THEME_NAME:
       settings_update_key_theme (settings);
@@ -1412,21 +1410,21 @@ gtk_settings_notify (GObject    *object,
        * widgets with gtk_widget_style_set(), and also causes more
        * recomputation than necessary.
        */
-      gtk_style_context_reset_widgets (priv->screen);
+      gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
       break;
     case PROP_XFT_ANTIALIAS:
     case PROP_XFT_HINTING:
     case PROP_XFT_HINTSTYLE:
     case PROP_XFT_RGBA:
       settings_update_font_options (settings);
-      gtk_style_context_reset_widgets (priv->screen);
+      gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
       break;
     case PROP_FONTCONFIG_TIMESTAMP:
       if (settings_update_fontconfig (settings))
-        gtk_style_context_reset_widgets (priv->screen);
+        gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
       break;
     case PROP_ENABLE_ANIMATIONS:
-      gtk_style_context_reset_widgets (priv->screen);
+      gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
       break;
     case PROP_CURSOR_THEME_NAME:
     case PROP_CURSOR_THEME_SIZE:
@@ -2128,11 +2126,9 @@ settings_update_modules (GtkSettings *settings)
 static void
 settings_update_cursor_theme (GtkSettings *settings)
 {
+  GtkSettingsPrivate *priv = settings->priv;
   gchar *theme = NULL;
   gint size = 0;
-#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_WIN32)
-  GdkDisplay *display = settings->priv->display;
-#endif
 
   g_object_get (settings,
                 "gtk-cursor-theme-name", &theme,
@@ -2141,18 +2137,18 @@ settings_update_cursor_theme (GtkSettings *settings)
   if (theme == NULL)
     return;
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (display))
-    gdk_x11_display_set_cursor_theme (display, theme, size);
+  if (GDK_IS_X11_DISPLAY (priv->display))
+    gdk_x11_display_set_cursor_theme (priv->display, theme, size);
   else
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (display))
-    gdk_wayland_display_set_cursor_theme (display, theme, size);
+  if (GDK_IS_WAYLAND_DISPLAY (priv->display))
+    gdk_wayland_display_set_cursor_theme (priv->display, theme, size);
   else
 #endif
 #ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_DISPLAY (display))
-    gdk_win32_display_set_cursor_theme (display, theme, size);
+  if (GDK_IS_WIN32_DISPLAY (priv->display))
+    gdk_win32_display_set_cursor_theme (priv->display, theme, size);
   else
 #endif
     g_warning ("GtkSettings Cursor Theme: Unsupported GDK backend");
@@ -2314,17 +2310,19 @@ settings_update_resolution (GtkSettings *settings)
             dpi *= scale;
         }
 
-      gdk_screen_set_resolution (priv->screen, dpi);
+      gdk_screen_set_resolution (gdk_display_get_default_screen (priv->display), dpi);
     }
 }
 
 static void
-settings_update_provider (GdkScreen       *screen,
+settings_update_provider (GdkDisplay      *display,
                           GtkCssProvider **old,
                           GtkCssProvider  *new)
 {
-  if (screen != NULL && *old != new)
+  if (display != NULL && *old != new)
     {
+      GdkScreen *screen = gdk_display_get_default_screen (display);
+
       if (*old)
         {
           gtk_style_context_remove_provider_for_screen (screen,
@@ -2428,7 +2426,7 @@ settings_update_key_theme (GtkSettings *settings)
   if (key_theme_name && *key_theme_name)
     provider = gtk_css_provider_get_named (key_theme_name, "keys");
 
-  settings_update_provider (priv->screen, &priv->key_theme_provider, provider);
+  settings_update_provider (priv->display, &priv->key_theme_provider, provider);
   g_free (key_theme_name);
 }
 
@@ -2441,7 +2439,7 @@ gtk_settings_get_font_options (GtkSettings *settings)
 GdkScreen *
 _gtk_settings_get_screen (GtkSettings *settings)
 {
-  return settings->priv->screen;
+  return gdk_display_get_default_screen (settings->priv->display);
 }
 
 static void
