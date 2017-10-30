@@ -3127,6 +3127,14 @@ gdk_x11_display_get_window_colormap (GdkX11Display *display)
   return display->window_colormap;
 }
 
+static gboolean
+gdk_x11_display_get_setting (GdkDisplay  *display,
+                             const gchar *name,
+                             GValue      *value)
+{
+  return gdk_x11_screen_get_setting (GDK_X11_DISPLAY (display)->screen, name, value);
+}
+
 static void
 gdk_x11_display_class_init (GdkX11DisplayClass * class)
 {
@@ -3187,6 +3195,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_n_monitors = gdk_x11_display_get_n_monitors;
   display_class->get_monitor = gdk_x11_display_get_monitor;
   display_class->get_primary_monitor = gdk_x11_display_get_primary_monitor;
+  display_class->get_setting = gdk_x11_display_get_setting;
 
   _gdk_x11_windowing_init ();
 }

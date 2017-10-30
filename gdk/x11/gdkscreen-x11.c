@@ -980,7 +980,7 @@ _gdk_x11_screen_window_manager_changed (GdkScreen *screen)
   g_signal_emit (screen, signals[WINDOW_MANAGER_CHANGED], 0);
 }
 
-static gboolean
+gboolean
 gdk_x11_screen_get_setting (GdkScreen   *screen,
 			    const gchar *name,
 			    GValue      *value)
