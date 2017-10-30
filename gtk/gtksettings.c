@@ -1192,6 +1192,23 @@ settings_init_style (GtkSettings *settings)
   settings_update_key_theme (settings);
 }
 
+static void
+setting_changed (GdkDisplay       *display,
+                 const char       *name,
+                 gpointer          data)
+{
+  GtkSettings *settings = data;
+  GParamSpec *pspec;
+
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), name);
+
+  if (!pspec)
+    return;
+
+  if (settings_update_xsetting (settings, pspec, TRUE))
+    g_object_notify_by_pspec (G_OBJECT (settings), pspec);
+}
+
 static GtkSettings *
 gtk_settings_create_for_display (GdkDisplay *display)
 {
@@ -1217,6 +1234,8 @@ gtk_settings_create_for_display (GdkDisplay *display)
     settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
 
   settings->priv->screen = gdk_display_get_default_screen (display);
+
+  g_signal_connect_object (display, "setting-changed", G_CALLBACK (setting_changed), settings, 0);
 
   v.display = display;
   v.settings = settings;
