@@ -284,7 +284,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
       GValue value = G_VALUE_INIT;
 
       g_value_init (&value, G_TYPE_STRING);
-      gdk_screen_get_setting (gdk_screen_get_default (), "gtk-session-bus-id", &value);
+      gdk_display_get_setting (gdk_display_get_default (), "gtk-session-bus-id", &value);
       id = g_value_get_string (&value);
 
       if (id && id[0])
