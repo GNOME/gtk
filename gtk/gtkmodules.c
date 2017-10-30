@@ -458,17 +458,12 @@ static void
 display_closed_cb (GdkDisplay *display,
 		   gboolean    is_error)
 {
-  GdkScreen *screen;
   GtkSettings *settings;
 
-  screen = gdk_display_get_default_screen (display);
-  settings = gtk_settings_get_for_screen (screen);
+  settings = gtk_settings_get_for_display (display);
 
-  g_object_set_data_full (G_OBJECT (settings),
-			  I_("gtk-modules"),
-			  NULL, NULL);
+  g_object_set_data_full (G_OBJECT (settings), I_("gtk-modules"), NULL, NULL);
 }
-		   
 
 static void
 display_opened_cb (GdkDisplayManager *display_manager,
