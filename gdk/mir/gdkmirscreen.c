@@ -254,7 +254,6 @@ change_setting (GdkMirScreen *screen,
                 GVariant     *variant)
 {
   GVariant *old_variant;
-  GdkEventSetting event;
 
   old_variant = g_hash_table_lookup (screen->current_settings, name);
 
@@ -264,25 +263,10 @@ change_setting (GdkMirScreen *screen,
   if (variant && old_variant && g_variant_equal (variant, old_variant))
     return;
 
-  event.type = GDK_SETTING;
-  event.window = gdk_screen_get_root_window (GDK_SCREEN (screen));
-  event.send_event = FALSE;
-  event.name = g_strdup (name);
-
   if (variant)
-    {
-      event.action = old_variant ? GDK_SETTING_ACTION_CHANGED : GDK_SETTING_ACTION_NEW;
-      g_hash_table_insert (screen->current_settings, g_strdup (name), g_variant_ref_sink (variant));
-    }
+    g_hash_table_insert (screen->current_settings, g_strdup (name), g_variant_ref_sink (variant));
   else
-    {
-      event.action = GDK_SETTING_ACTION_DELETED;
-      g_hash_table_remove (screen->current_settings, name);
-    }
-
-  gdk_event_put ((const GdkEvent *) &event);
-
-  g_free (event.name);
+    g_hash_table_remove (screen->current_settings, name);
 
   gdk_display_setting_changed (gdk_screen_get_display (screen), name);
 }
