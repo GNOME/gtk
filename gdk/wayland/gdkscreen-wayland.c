@@ -560,7 +560,7 @@ set_capability_setting (GdkScreen                 *screen,
   return TRUE;
 }
 
-static gboolean
+gboolean
 gdk_wayland_screen_get_setting (GdkScreen   *screen,
                                 const gchar *name,
                                 GValue      *value)
