@@ -115,15 +115,6 @@ static void
 notify_setting (GdkScreen   *screen,
                 const gchar *setting)
 {
-  GdkEvent event;
-
-  event.type = GDK_SETTING;
-  event.setting.window = gdk_screen_get_root_window (screen);
-  event.setting.send_event = FALSE;
-  event.setting.action = GDK_SETTING_ACTION_CHANGED;
-  event.setting.name = (gchar *)setting;
-  gdk_event_put (&event);
-
   gdk_display_setting_changed (gdk_screen_get_display (screen), setting);
 }
 
