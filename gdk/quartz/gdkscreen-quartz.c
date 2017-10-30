@@ -319,5 +319,4 @@ gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
 
   screen_class->get_display = gdk_quartz_screen_get_display;
   screen_class->get_root_window = gdk_quartz_screen_get_root_window;
-  screen_class->get_setting = _gdk_quartz_screen_get_setting;
 }
