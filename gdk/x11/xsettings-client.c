@@ -66,19 +66,6 @@ gdk_xsettings_notify (GdkX11Screen     *x11_screen,
                       const char       *name,
 		      GdkSettingAction  action)
 {
-  GdkEvent new_event;
-
-  if (!g_str_has_prefix (name, "gtk-"))
-    return;
-
-  new_event.type = GDK_SETTING;
-  new_event.setting.window = gdk_screen_get_root_window (GDK_SCREEN (x11_screen));
-  new_event.setting.send_event = FALSE;
-  new_event.setting.action = action;
-  new_event.setting.name = (char*) name;
-
-  gdk_event_put (&new_event);
-
   gdk_display_setting_changed (gdk_screen_get_display (GDK_SCREEN (x11_screen)), name);
 }
 
