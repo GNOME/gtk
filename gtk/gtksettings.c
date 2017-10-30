@@ -2087,7 +2087,6 @@ static void
 settings_update_double_click (GtkSettings *settings)
 {
   GtkSettingsPrivate *priv = settings->priv;
-  GdkDisplay *display = gdk_screen_get_display (priv->screen);
   gint double_click_time;
   gint double_click_distance;
 
@@ -2096,8 +2095,8 @@ settings_update_double_click (GtkSettings *settings)
                 "gtk-double-click-distance", &double_click_distance,
                 NULL);
 
-  gdk_display_set_double_click_time (display, double_click_time);
-  gdk_display_set_double_click_distance (display, double_click_distance);
+  gdk_display_set_double_click_time (priv->display, double_click_time);
+  gdk_display_set_double_click_distance (priv->display, double_click_distance);
 }
 
 static void
@@ -2120,7 +2119,7 @@ settings_update_cursor_theme (GtkSettings *settings)
   gchar *theme = NULL;
   gint size = 0;
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_WIN32)
-  GdkDisplay *display = gdk_screen_get_display (settings->priv->screen);
+  GdkDisplay *display = settings->priv->display;
 #endif
 
   g_object_get (settings,
@@ -2599,7 +2598,7 @@ settings_update_xsetting (GtkSettings *settings,
 
       g_value_init (&val, value_type);
 
-      if (!gdk_screen_get_setting (priv->screen, pspec->name, &val))
+      if (!gdk_display_get_setting (priv->display, pspec->name, &val))
         return FALSE;
 
       g_param_value_validate (pspec, &val);
@@ -2619,7 +2618,7 @@ settings_update_xsetting (GtkSettings *settings,
 
       g_value_init (&val, G_TYPE_STRING);
 
-      if (!gdk_screen_get_setting (priv->screen, pspec->name, &val))
+      if (!gdk_display_get_setting (priv->display, pspec->name, &val))
         return FALSE;
 
       g_value_init (&gstring_value, G_TYPE_GSTRING);
