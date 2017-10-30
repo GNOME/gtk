@@ -526,8 +526,8 @@ gtk_viewport_size_allocate (GtkWidget           *widget,
     {
       GtkAllocation child_allocation, child_clip;
 
-      child_allocation.x = allocation->x - gtk_adjustment_get_value (hadjustment);
-      child_allocation.y = allocation->y - gtk_adjustment_get_value (vadjustment);
+      child_allocation.x = - gtk_adjustment_get_value (hadjustment);
+      child_allocation.y = - gtk_adjustment_get_value (vadjustment);
       child_allocation.width = gtk_adjustment_get_upper (hadjustment);
       child_allocation.height = gtk_adjustment_get_upper (vadjustment);
 
