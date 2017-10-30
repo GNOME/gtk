@@ -2238,7 +2238,11 @@ gdk_display_get_setting (GdkDisplay *display,
                          const char *name,
                          GValue     *value)
 {
-  return gdk_screen_get_setting (gdk_display_get_default_screen (display), name, value);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+  g_return_val_if_fail (value != NULL, FALSE);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_setting (display, name, value);
 }
 
 void
