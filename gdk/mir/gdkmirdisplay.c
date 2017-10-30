@@ -1178,6 +1178,14 @@ gdk_mir_display_get_monitor (GdkDisplay *display,
   return g_list_nth_data (GDK_MIR_DISPLAY (display)->monitors, index);
 }
 
+static gboolean
+gdk_mir_display_get_setting (GdkDisplay *display,
+                             const char *name,
+                             GValue     *value)
+{
+  return gdk_mir_screen_get_setting (GDK_MIR_DISPLAY (display)->screen, name, value);
+}
+
 static void
 gdk_mir_display_init (GdkMirDisplay *display)
 {
@@ -1235,4 +1243,5 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->make_gl_context_current = gdk_mir_display_make_gl_context_current;
   display_class->get_n_monitors = gdk_mir_display_get_n_monitors;
   display_class->get_monitor = gdk_mir_display_get_monitor;
+  display_class->get_setting = gdk_mir_display_get_setting;
 }

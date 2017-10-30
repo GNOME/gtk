@@ -138,4 +138,10 @@ EGLSurface _gdk_mir_window_get_dummy_egl_surface (GdkWindow *window, EGLConfig c
 
 void _gdk_mir_print_event (const MirEvent *event);
 
+gboolean gdk_mir_screen_get_setting (GdkScreen   *screen,
+                                     const gchar *name,
+                                     GValue      *value);
+
+
+
 #endif /* __GDK_PRIVATE_MIR_H__ */

@@ -662,7 +662,7 @@ static const gchar * const KNOWN_SETTINGS[] =
   NULL
 };
 
-static gboolean
+gboolean
 gdk_mir_screen_get_setting (GdkScreen   *screen,
                             const gchar *name,
                             GValue      *value)
