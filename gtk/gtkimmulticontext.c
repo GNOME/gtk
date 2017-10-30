@@ -306,8 +306,7 @@ gtk_im_multicontext_set_client_widget (GtkIMContext *context,
 
   if (widget)
     {
-      screen = gtk_widget_get_screen (widget);
-      settings = gtk_settings_get_for_screen (screen);
+      settings = gtk_widget_get_settings (widget);
 
       connected = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings),
                                                       "gtk-im-module-connected"));
