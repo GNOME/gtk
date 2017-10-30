@@ -399,6 +399,7 @@ read_settings (GdkX11Screen *x11_screen,
                gboolean      do_notify)
 {
   GdkScreen *screen = GDK_SCREEN (x11_screen);
+  GdkDisplay *display = x11_screen->display;
 
   Atom type;
   int format;
@@ -415,7 +416,6 @@ read_settings (GdkX11Screen *x11_screen,
 
   if (x11_screen->xsettings_manager_window)
     {
-      GdkDisplay *display = x11_screen->display;
       Atom xsettings_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XSETTINGS_SETTINGS");
 
       gdk_x11_display_error_trap_push (display);
@@ -479,8 +479,7 @@ read_settings (GdkX11Screen *x11_screen,
       const char *scale_env;
       double scale;
 
-      if (gdk_screen_get_setting (GDK_SCREEN (x11_screen),
-                                  "gtk-xft-dpi", &value))
+      if (gdk_display_get_setting (display, "gtk-xft-dpi", &value))
         dpi_int = g_value_get_int (&value);
 
       if (dpi_int > 0)
@@ -500,10 +499,8 @@ read_settings (GdkX11Screen *x11_screen,
     }
 
   if (!x11_screen->fixed_window_scale &&
-      gdk_screen_get_setting (GDK_SCREEN (x11_screen),
-			      "gdk-window-scaling-factor", &value))
-    _gdk_x11_screen_set_window_scale (x11_screen,
-				      g_value_get_int (&value));
+      gdk_display_get_setting (display, "gdk-window-scaling-factor", &value))
+    _gdk_x11_screen_set_window_scale (x11_screen, g_value_get_int (&value));
 }
 
 static Atom
