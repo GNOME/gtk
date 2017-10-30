@@ -308,6 +308,14 @@ gdk_broadway_display_get_primary_monitor (GdkDisplay *display)
   return broadway_display->monitor;
 }
 
+static gboolean
+gdk_broadway_display_get_setting (GdkDisplay *display,
+                                  const char *name,
+                                  GValue     *value)
+{
+  return FALSE;
+}
+
 static void
 gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 {
@@ -356,5 +364,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->get_n_monitors = gdk_broadway_display_get_n_monitors;
   display_class->get_monitor = gdk_broadway_display_get_monitor;
   display_class->get_primary_monitor = gdk_broadway_display_get_primary_monitor;
+  display_class->get_setting = gdk_broadway_display_get_setting;
 }
 
