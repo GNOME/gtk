@@ -39,6 +39,13 @@
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>		/* For CARD16 */
 
+typedef enum
+{
+  GDK_SETTING_ACTION_NEW,
+  GDK_SETTING_ACTION_CHANGED,
+  GDK_SETTING_ACTION_DELETED
+} GdkSettingAction;
+
 #include "gdksettings.c"
 
 /* Types of settings possible. Enum values correspond to

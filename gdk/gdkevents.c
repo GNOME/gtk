@@ -694,10 +694,6 @@ gdk_event_copy (const GdkEvent *event)
         new_event->expose.region = cairo_region_copy (event->expose.region);
       break;
 
-    case GDK_SETTING:
-      new_event->setting.name = g_strdup (new_event->setting.name);
-      break;
-
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       if (event->button.axes)
@@ -812,10 +808,6 @@ gdk_event_free (GdkEvent *event)
       
     case GDK_MOTION_NOTIFY:
       g_free (event->motion.axes);
-      break;
-      
-    case GDK_SETTING:
-      g_free (event->setting.name);
       break;
       
     case GDK_OWNER_CHANGE:
@@ -936,7 +928,6 @@ gdk_event_get_time (const GdkEvent *event)
       case GDK_MAP:
       case GDK_UNMAP:
       case GDK_WINDOW_STATE:
-      case GDK_SETTING:
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
       case GDK_EVENT_LAST:
@@ -1023,7 +1014,6 @@ gdk_event_get_state (const GdkEvent        *event,
       case GDK_MAP:
       case GDK_UNMAP:
       case GDK_WINDOW_STATE:
-      case GDK_SETTING:
       case GDK_OWNER_CHANGE:
       case GDK_GRAB_BROKEN:
       case GDK_PAD_BUTTON_PRESS:
@@ -2522,26 +2512,6 @@ gdk_event_get_user_data (const GdkEvent *event)
 
   private = (GdkEventPrivate *) event;
   return private->user_data;
-}
-
-/**
- * gdk_event_get_setting:
- * @event: a #GdkEvent
- * @setting: (out) (transfer none):
- * 
- * Returns: %TRUE on success, otherwise %FALSE
- **/
-gboolean
-gdk_event_get_setting (const GdkEvent  *event,
-                       const char     **setting)
-{
-  if (event && event->type == GDK_SETTING)
-    {
-      *setting = event->setting.name;
-      return TRUE;
-    }
-
-  return FALSE;
 }
 
 gboolean

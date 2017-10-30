@@ -513,26 +513,6 @@ struct _GdkEventProximity
 };
 
 /**
- * GdkEventSetting:
- * @type: the type of the event (%GDK_SETTING).
- * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @action: what happened to the setting (%GDK_SETTING_ACTION_NEW,
- *   %GDK_SETTING_ACTION_CHANGED or %GDK_SETTING_ACTION_DELETED).
- * @name: the name of the setting.
- *
- * Generated when a setting is modified.
- */
-struct _GdkEventSetting
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkSettingAction action;
-  char *name;
-};
-
-/**
  * GdkEventWindowState:
  * @type: the type of the event (%GDK_WINDOW_STATE).
  * @window: the window which received the event.
@@ -788,7 +768,6 @@ struct _GdkEventPadGroupMode {
  * @proximity: a #GdkEventProximity
  * @dnd: a #GdkEventDND
  * @window_state: a #GdkEventWindowState
- * @setting: a #GdkEventSetting
  * @grab_broken: a #GdkEventGrabBroken
  * @touchpad_swipe: a #GdkEventTouchpadSwipe
  * @touchpad_pinch: a #GdkEventTouchpadPinch
@@ -847,7 +826,6 @@ union _GdkEvent
   GdkEventProximity	    proximity;
   GdkEventDND               dnd;
   GdkEventWindowState       window_state;
-  GdkEventSetting           setting;
   GdkEventGrabBroken        grab_broken;
   GdkEventTouchpadSwipe     touchpad_swipe;
   GdkEventTouchpadPinch     touchpad_pinch;

@@ -254,7 +254,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_SCROLL: the scroll wheel was turned
  * @GDK_WINDOW_STATE: the state of a window has changed. See #GdkWindowState
  *   for the possible window states
- * @GDK_SETTING: a setting has been modified.
  * @GDK_OWNER_CHANGE: the owner of a selection has changed. This event type
  *   was added in 2.6
  * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
@@ -324,7 +323,6 @@ typedef enum
   GDK_VISIBILITY_NOTIFY = 29,
   GDK_SCROLL            = 31,
   GDK_WINDOW_STATE      = 32,
-  GDK_SETTING           = 33,
   GDK_OWNER_CHANGE      = 34,
   GDK_GRAB_BROKEN       = 35,
   GDK_DAMAGE            = 36,
@@ -534,22 +532,6 @@ typedef enum
   GDK_WINDOW_STATE_LEFT_TILED       = 1 << 15,
   GDK_WINDOW_STATE_LEFT_RESIZABLE   = 1 << 16
 } GdkWindowState;
-
-/**
- * GdkSettingAction:
- * @GDK_SETTING_ACTION_NEW: a setting was added.
- * @GDK_SETTING_ACTION_CHANGED: a setting was changed.
- * @GDK_SETTING_ACTION_DELETED: a setting was deleted.
- *
- * Specifies the kind of modification applied to a setting in a
- * #GdkEventSetting.
- */
-typedef enum
-{
-  GDK_SETTING_ACTION_NEW,
-  GDK_SETTING_ACTION_CHANGED,
-  GDK_SETTING_ACTION_DELETED
-} GdkSettingAction;
 
 /**
  * GdkOwnerChange:
