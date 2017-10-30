@@ -73,7 +73,6 @@ struct _GdkWin32Display
   /* WGL/OpenGL Items */
   guint have_wgl : 1;
   guint gl_version;
-  HDC gl_hdc;
   HWND gl_hwnd;
 
   GPtrArray *monitors;
