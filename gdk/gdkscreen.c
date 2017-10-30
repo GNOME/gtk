@@ -291,9 +291,5 @@ gdk_screen_get_setting (GdkScreen   *screen,
 			const gchar *name,
 			GValue      *value)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-  g_return_val_if_fail (name != NULL, FALSE);
-  g_return_val_if_fail (value != NULL, FALSE);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_setting (screen, name, value);
+  return gdk_display_get_setting (gdk_screen_get_display (screen), name, value);
 }
