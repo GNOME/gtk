@@ -281,7 +281,10 @@ change_setting (GdkMirScreen *screen,
     }
 
   gdk_event_put ((const GdkEvent *) &event);
+
   g_free (event.name);
+
+  gdk_display_setting_changed (gdk_screen_get_display (screen), name);
 }
 
 static const struct
