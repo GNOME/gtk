@@ -122,14 +122,6 @@ _gdk_broadway_screen_new (GdkDisplay *display,
   return screen;
 }
 
-static gboolean
-gdk_broadway_screen_get_setting (GdkScreen   *screen,
-				 const gchar *name,
-				 GValue      *value)
-{
-  return FALSE;
-}
-
 void
 _gdk_broadway_screen_events_init (GdkScreen *screen)
 {
@@ -146,6 +138,5 @@ gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
 
   screen_class->get_display = gdk_broadway_screen_get_display;
   screen_class->get_root_window = gdk_broadway_screen_get_root_window;
-  screen_class->get_setting = gdk_broadway_screen_get_setting;
 }
 
