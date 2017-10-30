@@ -154,6 +154,12 @@ GDK_AVAILABLE_IN_3_22
 GdkMonitor * gdk_display_get_monitor_at_window (GdkDisplay *display,
                                                 GdkWindow  *window);
 
+GDK_AVAILABLE_IN_3_94
+gboolean     gdk_display_get_setting (GdkDisplay *display,
+                                      const char *name,
+                                      GValue     *value);
+
+
 
 G_END_DECLS
 

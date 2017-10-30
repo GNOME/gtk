@@ -225,8 +225,8 @@ struct _GdkDisplayClass
 
   /* Signals */
   void                   (*opened)                     (GdkDisplay     *display);
-  void (*closed) (GdkDisplay *display,
-                  gboolean    is_error);
+  void                   (*closed)                     (GdkDisplay     *display,
+                                                        gboolean        is_error);
 };
 
 
@@ -302,6 +302,9 @@ void                gdk_display_monitor_added         (GdkDisplay       *display
 void                gdk_display_monitor_removed       (GdkDisplay       *display,
                                                        GdkMonitor       *monitor);
 void                gdk_display_emit_opened           (GdkDisplay       *display);
+
+void                gdk_display_setting_changed       (GdkDisplay       *display,
+                                                       const char       *name);
 
 G_END_DECLS
 

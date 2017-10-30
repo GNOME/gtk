@@ -84,6 +84,7 @@ enum {
   SEAT_REMOVED,
   MONITOR_ADDED,
   MONITOR_REMOVED,
+  SETTING_CHANGED,
   LAST_SIGNAL
 };
 
@@ -341,6 +342,14 @@ gdk_display_class_init (GdkDisplayClass *class)
 		  0, NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GDK_TYPE_MONITOR);
+
+  signals[SETTING_CHANGED] =
+    g_signal_new (g_intern_static_string ("setting-changed"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0, NULL, NULL,
+                  NULL,
+		  G_TYPE_NONE, 1, G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
@@ -2222,4 +2231,19 @@ void
 gdk_display_emit_opened (GdkDisplay *display)
 {
   g_signal_emit (display, signals[OPENED], 0);
+}
+
+gboolean
+gdk_display_get_setting (GdkDisplay *display,
+                         const char *name,
+                         GValue     *value)
+{
+  return gdk_screen_get_setting (gdk_display_get_default_screen (display), name, value);
+}
+
+void
+gdk_display_setting_changed (GdkDisplay       *display,
+                             const char       *name)
+{
+  g_signal_emit (display, signals[SETTING_CHANGED], 0, name);
 }
