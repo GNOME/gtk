@@ -100,10 +100,10 @@
  *   g_object_set (gtk_settings_get_default (), "gtk-enable-animations", FALSE, NULL);
  * ]|
  *
- * There is one GtkSettings instance per screen. It can be obtained with
- * gtk_settings_get_for_screen(), but in many cases, it is more convenient
+ * There is one GtkSettings instance per display. It can be obtained with
+ * gtk_settings_get_for_display(), but in many cases, it is more convenient
  * to use gtk_widget_get_settings(). gtk_settings_get_default() returns the
- * GtkSettings instance for the default screen.
+ * GtkSettings instance for the default display.
  */
 
 
@@ -1247,6 +1247,16 @@ gtk_settings_create_for_display (GdkDisplay *display)
   return settings;
 }
 
+/**
+ * gtk_settings_get_for_display:
+ * @screen: a #GdkDisplay
+ *
+ * Gets the #GtkSettings object for @display, creating it if necessary.
+ *
+ * Returns: (transfer none): a #GtkSettings object.
+ *
+ * Since: 3.94
+ */
 GtkSettings *
 gtk_settings_get_for_display (GdkDisplay *display)
 {
@@ -1288,11 +1298,11 @@ gtk_settings_get_for_screen (GdkScreen *screen)
 /**
  * gtk_settings_get_default:
  *
- * Gets the #GtkSettings object for the default GDK screen, creating
- * it if necessary. See gtk_settings_get_for_screen().
+ * Gets the #GtkSettings object for the default display, creating
+ * it if necessary. See gtk_settings_get_for_display().
  *
  * Returns: (nullable) (transfer none): a #GtkSettings object. If there is
- * no default screen, then returns %NULL.
+ * no default display, then returns %NULL.
  **/
 GtkSettings*
 gtk_settings_get_default (void)
