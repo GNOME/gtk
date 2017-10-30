@@ -1247,10 +1247,12 @@ gtk_settings_create_for_display (GdkDisplay *display)
   return settings;
 }
 
-static GtkSettings *
+GtkSettings *
 gtk_settings_get_for_display (GdkDisplay *display)
 {
   int i;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   if G_UNLIKELY (display_settings == NULL)
     display_settings = g_ptr_array_new ();

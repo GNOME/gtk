@@ -91,6 +91,8 @@ GDK_AVAILABLE_IN_ALL
 GtkSettings*    gtk_settings_get_default             (void);
 GDK_AVAILABLE_IN_ALL
 GtkSettings*    gtk_settings_get_for_screen          (GdkScreen *screen);
+GDK_AVAILABLE_IN_3_94
+GtkSettings*    gtk_settings_get_for_display         (GdkDisplay *display);
 
 /* --- precoded parsing functions --- */
 GDK_AVAILABLE_IN_ALL
