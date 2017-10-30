@@ -2319,24 +2319,6 @@ G_DEFINE_BOXED_TYPE (GdkEventSequence, gdk_event_sequence,
                      gdk_event_sequence_free)
 
 /**
- * gdk_setting_get:
- * @name: the name of the setting.
- * @value: location to store the value of the setting.
- *
- * Obtains a desktop-wide setting, such as the double-click time,
- * for the default screen. See gdk_screen_get_setting().
- *
- * Returns: %TRUE if the setting existed and a value was stored
- *   in @value, %FALSE otherwise.
- **/
-gboolean
-gdk_setting_get (const gchar *name,
-		 GValue      *value)
-{
-  return gdk_screen_get_setting (gdk_screen_get_default (), name, value);
-}
-
-/**
  * gdk_event_get_event_type:
  * @event: a #GdkEvent
  *

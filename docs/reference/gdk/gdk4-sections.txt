@@ -809,9 +809,6 @@ gdk_event_set_source_device
 gdk_event_get_device_tool
 gdk_event_set_device_tool
 
-<SUBSECTION>
-gdk_setting_get
-
 <SUBSECTION Standard>
 GDK_TYPE_EVENT_MASK
 GDK_TYPE_EVENT_TYPE
