@@ -78,6 +78,8 @@ gdk_xsettings_notify (GdkX11Screen     *x11_screen,
   new_event.setting.name = (char*) name;
 
   gdk_event_put (&new_event);
+
+  gdk_display_setting_changed (gdk_screen_get_display (GDK_SCREEN (x11_screen)), name);
 }
 
 static gboolean
