@@ -82,6 +82,8 @@ gdk_quartz_ns_notification_callback (CFNotificationCenterRef  center,
     return;
 
   gdk_event_put (&new_event);
+
+  gdk_display_setting_changed (_gdk_display, new_event.setting.name);
 }
 
 static void
