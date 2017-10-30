@@ -118,6 +118,7 @@ struct _GtkSettingsPrivate
 {
   GData *queued_settings;      /* of type GtkSettingsValue* */
   GtkSettingsPropertyValue *property_values;
+  GdkDisplay *display;
   GdkScreen *screen;
   GSList *style_cascades;
   GtkCssProvider *theme_provider;
@@ -239,12 +240,7 @@ static GQuark            quark_gtk_settings = 0;
 static GSList           *object_list = NULL;
 static guint             class_n_properties = 0;
 
-typedef struct {
-  GdkDisplay *display;
-  GtkSettings *settings;
-} DisplaySettings;
-
-static GArray *display_settings;
+static GPtrArray *display_settings;
 
 
 G_DEFINE_TYPE_EXTENDED (GtkSettings, gtk_settings, G_TYPE_OBJECT, 0,
@@ -1213,7 +1209,6 @@ static GtkSettings *
 gtk_settings_create_for_display (GdkDisplay *display)
 {
   GtkSettings *settings;
-  DisplaySettings v;
 
 #ifdef GDK_WINDOWING_QUARTZ
   if (GDK_IS_QUARTZ_DISPLAY (display))
@@ -1233,13 +1228,12 @@ gtk_settings_create_for_display (GdkDisplay *display)
 #endif
     settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
 
+  settings->priv->display = display;
   settings->priv->screen = gdk_display_get_default_screen (display);
 
   g_signal_connect_object (display, "setting-changed", G_CALLBACK (setting_changed), settings, 0);
 
-  v.display = display;
-  v.settings = settings;
-  g_array_append_val (display_settings, v);
+  g_ptr_array_add (display_settings, settings);
 
   settings_init_style (settings);
   settings_update_xsettings (settings);
@@ -1256,17 +1250,16 @@ gtk_settings_create_for_display (GdkDisplay *display)
 static GtkSettings *
 gtk_settings_get_for_display (GdkDisplay *display)
 {
-  DisplaySettings *ds;
   int i;
 
   if G_UNLIKELY (display_settings == NULL)
-    display_settings = g_array_new (FALSE, TRUE, sizeof (DisplaySettings));
+    display_settings = g_ptr_array_new ();
 
-  ds = (DisplaySettings *)display_settings->data;
   for (i = 0; i < display_settings->len; i++)
     {
-      if (ds[i].display == display)
-        return ds[i].settings;
+      GtkSettings *settings = g_ptr_array_index (display_settings, i);
+      if (settings->priv->display == display)
+        return settings;
     }
 
   return gtk_settings_create_for_display (display);
