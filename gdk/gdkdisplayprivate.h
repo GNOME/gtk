@@ -222,6 +222,9 @@ struct _GdkDisplayClass
   GdkMonitor *           (*get_primary_monitor)        (GdkDisplay     *display);
   GdkMonitor *           (*get_monitor_at_window)      (GdkDisplay     *display,
                                                         GdkWindow      *window);
+  gboolean               (*get_setting)                (GdkDisplay     *display,
+                                                        const char     *name,
+                                                        GValue         *value);
 
   /* Signals */
   void                   (*opened)                     (GdkDisplay     *display);
