@@ -298,7 +298,6 @@ gtk_im_multicontext_set_client_widget (GtkIMContext *context,
   GtkIMMulticontext *multicontext = GTK_IM_MULTICONTEXT (context);
   GtkIMMulticontextPrivate *priv = multicontext->priv;
   GtkIMContext *slave;
-  GdkScreen *screen;
   GtkSettings *settings;
   gboolean connected;
 
