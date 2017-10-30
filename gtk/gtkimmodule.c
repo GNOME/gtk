@@ -874,7 +874,6 @@ _gtk_im_module_get_default_context_id (void)
   gint i;
   gchar *tmp_locale, *tmp, **immodules;
   const gchar *envvar;
-  GdkScreen *screen;
   GtkSettings *settings;
 
   if (!contexts_hash)
@@ -891,10 +890,8 @@ _gtk_im_module_get_default_context_id (void)
           return context_id;
     }
 
-  /* Check if the certain immodule is set in XSETTINGS.
-   */
-  screen = gdk_screen_get_default ();
-  settings = gtk_settings_get_for_screen (screen);
+  /* Check if the certain immodule is set in XSETTINGS. */
+  settings = gtk_settings_get_default ();
   g_object_get (G_OBJECT (settings), "gtk-im-module", &tmp, NULL);
   if (tmp)
     {
