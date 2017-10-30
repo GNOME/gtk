@@ -198,8 +198,6 @@ _destroy_dummy_gl_context (GdkWGLDummy dummy)
 {
   if (dummy.hglrc != NULL)
     {
-      if (wglGetCurrentContext () == dummy.hglrc)
-        wglMakeCurrent (NULL, NULL);
       wglDeleteContext (dummy.hglrc);
       dummy.hglrc = NULL;
     }
@@ -282,6 +280,10 @@ _get_wgl_pfd (HDC                    hdc,
       gint i = 0;
       int pixelAttribs[PIXEL_ATTRIBUTES];
 
+      /* Save up the HDC and HGLRC that we are currently using, to restore back to it when we are done here */
+      HDC hdc_current = wglGetCurrentDC ();
+      HGLRC hglrc_current = wglGetCurrentContext ();
+
       if (display->hasWglARBmultisample)
         {
           /* 2 pairs of values needed for multisampling/AA support */
@@ -329,7 +331,10 @@ _get_wgl_pfd (HDC                    hdc,
       best_pf = _gdk_init_dummy_context (&dummy);
 
       if (best_pf == 0 || !wglMakeCurrent (dummy.hdc, dummy.hglrc))
-        return 0;
+        {
+          wglMakeCurrent (hdc_current, hglrc_current);
+          return 0;
+        }
 
       wglChoosePixelFormatARB (hdc,
                                pixelAttribs,
@@ -338,7 +343,8 @@ _get_wgl_pfd (HDC                    hdc,
                                &best_pf,
                                &num_formats);
 
-      wglMakeCurrent (NULL, NULL);
+      /* Go back to the HDC that we were using, since we are done with the dummy HDC and GL Context */
+      wglMakeCurrent (hdc_current, hglrc_current);
       _destroy_dummy_gl_context (dummy);
     }
   else
@@ -390,7 +396,7 @@ _gdk_init_dummy_context (GdkWGLDummy *dummy)
   return best_idx;
 }
 
-gboolean
+static gboolean
 _gdk_win32_display_init_gl (GdkDisplay *display)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
@@ -520,11 +526,18 @@ _create_gl_context (HDC           hdc,
   HGLRC hglrc_base = wglCreateContext (hdc);
   gboolean success = TRUE;
 
+  /* Save up the HDC and HGLRC that we are currently using, to restore back to it when we are done here  */
+  HDC hdc_current = wglGetCurrentDC ();
+  HGLRC hglrc_current = wglGetCurrentContext ();
+
   /* if we have no wglCreateContextAttribsARB(), return the legacy context when all is set */
   if (*is_legacy && !hasWglARBCreateContext)
     {
       if (_ensure_legacy_gl_context (hdc, hglrc_base, share))
-        return hglrc_base;
+        {
+          wglMakeCurrent (hdc_current, hglrc_current);
+          return hglrc_base;
+        }
 
       success = FALSE;
       goto gl_fail;
@@ -574,17 +587,21 @@ _create_gl_context (HDC           hdc,
         }
 
 gl_fail:
-      if (!success || hglrc != NULL)
+
+      if (!success)
         {
           wglMakeCurrent (NULL, NULL);
           wglDeleteContext (hglrc_base);
+          return NULL;
         }
 
-      if (!success)
-        return NULL;
+      wglMakeCurrent (hdc_current, hglrc_current);
 
       if (hglrc != NULL)
-        return hglrc;
+        {
+          wglDeleteContext (hglrc_base);
+          return hglrc;
+        }
 
       return hglrc_base;
   }
@@ -641,6 +658,7 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_FORMAT,
                            _("No available configurations for the given pixel format"));
+
       return FALSE;
     }
 
@@ -758,7 +776,6 @@ _gdk_win32_window_create_gl_context (GdkWindow *window,
   hwnd = GDK_WINDOW_HWND (window);
   hdc = GetDC (hwnd);
 
-  display_win32->gl_hdc = hdc;
   display_win32->gl_hwnd = hwnd;
 
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT,
@@ -790,14 +807,12 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
 
   context_win32 = GDK_WIN32_GL_CONTEXT (context);
 
-  if (!wglMakeCurrent (display_win32->gl_hdc, context_win32->hglrc))
+  if (!wglMakeCurrent (context_win32->gl_hdc, context_win32->hglrc))
     {
       GDK_NOTE (OPENGL,
                 g_print ("Making WGL context current failed\n"));
       return FALSE;
     }
-
-  context_win32->gl_hdc = display_win32->gl_hdc;
 
   if (context_win32->is_attached && display_win32->hasWglEXTSwapControl)
     {
