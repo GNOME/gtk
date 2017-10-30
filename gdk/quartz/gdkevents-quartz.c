@@ -64,26 +64,18 @@ gdk_quartz_ns_notification_callback (CFNotificationCenterRef  center,
                                      const void              *object,
                                      CFDictionaryRef          userInfo)
 {
-  GdkEvent new_event;
-
-  new_event.type = GDK_SETTING;
-  new_event.setting.window = gdk_screen_get_root_window (_gdk_screen);
-  new_event.setting.send_event = FALSE;
-  new_event.setting.action = GDK_SETTING_ACTION_CHANGED;
-  new_event.setting.name = NULL;
+  const char *setting = NULL;
 
   /* Translate name */
   if (CFStringCompare (name,
                        CFSTR("AppleNoRedisplayAppearancePreferenceChanged"),
                        0) == kCFCompareEqualTo)
-    new_event.setting.name = "gtk-primary-button-warps-slider";
+    setting = "gtk-primary-button-warps-slider";
 
-  if (!new_event.setting.name)
+  if (!setting)
     return;
 
-  gdk_event_put (&new_event);
-
-  gdk_display_setting_changed (_gdk_display, new_event.setting.name);
+  gdk_display_setting_changed (_gdk_display, setting);
 }
 
 static void
