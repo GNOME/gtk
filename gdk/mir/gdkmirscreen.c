@@ -116,15 +116,10 @@ static void
 config_changed_cb (MirConnection *connection, void *data)
 {
   GdkMirScreen *screen = data;
-  gint old_width, old_height, new_width, new_height;
 
-  get_screen_size (screen->display_config, &old_width, &old_height);
   update_display_config (screen);
-  get_screen_size (screen->display_config, &new_width, &new_height);
 
   g_signal_emit_by_name (screen, "monitors-changed");
-  if (old_width > 0 && (old_width != new_width || old_height != new_height))
-    g_signal_emit_by_name (screen, "size-changed");
 }
 
 GdkScreen *

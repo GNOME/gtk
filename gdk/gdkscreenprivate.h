@@ -49,8 +49,6 @@ struct _GdkScreenClass
                                           GValue      *value);
 
   /* Signals: */
-  void (*size_changed) (GdkScreen *screen);
-  void (*composited_changed) (GdkScreen *screen);
   void (*monitors_changed) (GdkScreen *screen);
 };
 

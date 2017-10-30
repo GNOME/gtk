@@ -43,7 +43,7 @@ struct _GdkWin32ScreenClass
 
 G_DEFINE_TYPE (GdkWin32Screen, gdk_win32_screen, GDK_TYPE_SCREEN)
 
-static gboolean
+static void
 init_root_window_size (GdkWin32Screen *screen)
 {
   GdkRectangle result;
@@ -51,7 +51,6 @@ init_root_window_size (GdkWin32Screen *screen)
   GdkDisplay *display = _gdk_display;
   int monitor_count;
   GdkMonitor *monitor;
-  gboolean changed;
   GdkWindowImplWin32 *root_impl;
 
   monitor_count = gdk_display_get_n_monitors (display);
@@ -67,25 +66,20 @@ init_root_window_size (GdkWin32Screen *screen)
     gdk_rectangle_union (&result, &rect, &result);
   }
 
-  changed = screen->root_window->width != result.width ||
-            screen->root_window->height != result.height;
   screen->root_window->width = result.width;
   screen->root_window->height = result.height;
   root_impl = GDK_WINDOW_IMPL_WIN32 (screen->root_window->impl);
 
   root_impl->unscaled_width = result.width * root_impl->window_scale;
   root_impl->unscaled_height = result.height * root_impl->window_scale;
-
-  return changed;
 }
 
-static gboolean
+static void
 init_root_window (GdkWin32Screen *screen_win32)
 {
   GdkScreen *screen;
   GdkWindow *window;
   GdkWindowImplWin32 *impl_win32;
-  gboolean changed;
   GdkWin32Display *win32_display;
 
   screen = GDK_SCREEN (screen_win32);
@@ -103,7 +97,7 @@ init_root_window (GdkWin32Screen *screen_win32)
 
   screen_win32->root_window = window;
 
-  changed = init_root_window_size (screen_win32);
+  init_root_window_size (screen_win32);
 
   window->x = 0;
   window->y = 0;
@@ -127,8 +121,6 @@ init_root_window (GdkWin32Screen *screen_win32)
   gdk_win32_handle_table_insert ((HANDLE *) &impl_win32->handle, window);
 
   GDK_NOTE (MISC, g_print ("screen->root_window=%p\n", window));
-
-  return changed;
 }
 
 static void
@@ -148,8 +140,7 @@ _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen)
 
   monitors_changed = _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
 
-  if (init_root_window_size (screen))
-    g_signal_emit_by_name (screen, "size-changed");
+  init_root_window_size (screen);
 
   if (monitors_changed)
     g_signal_emit_by_name (screen, "monitors-changed");
