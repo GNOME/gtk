@@ -4923,7 +4923,7 @@ gtk_widget_get_window_allocation (GtkWidget     *widget,
  * Convenience function that calls gtk_widget_queue_draw_region() on
  * the region created from the given coordinates.
  *
- * The region here is specified in widget coordinates.
+ * The region here is specified in widget coordinates of @widget.
  *
  * @width or @height may be 0, in this case this function does
  * nothing. Negative values for @width and @height are not allowed.
@@ -4965,14 +4965,16 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
 void
 gtk_widget_queue_draw (GtkWidget *widget)
 {
+  GtkWidget *parent;
   GdkRectangle *rect;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  parent = _gtk_widget_get_parent (widget);
   rect = &widget->priv->clip;
 
   if (!_gtk_widget_get_has_window (widget))
-    gtk_widget_queue_draw_area (widget,
+    gtk_widget_queue_draw_area (parent ? parent : widget,
                                 rect->x, rect->y, rect->width, rect->height);
   else
     gtk_widget_queue_draw_area (widget,
@@ -5196,14 +5198,11 @@ get_box_padding (GtkCssStyle *style,
 /**
  * gtk_widget_queue_draw_region:
  * @widget: a #GtkWidget
- * @region: region to draw
+ * @region: region to draw, in @widget's coordinates
  *
- * Invalidates the area of @widget defined by @region by notifying
- * the parent via its GtkWidgetClass::queue_draw_child() function.
- * Once the main loop becomes idle (after the current batch of
- * events has been processed, roughly), the window will receive
- * expose events for the union of all regions that have been
- * invalidated.
+ * Invalidates the area of @widget defined by @region. Makes sure
+ * that the compositor updates the speicifed region of the toplevel
+ * window.
  *
  * Normally you would only use this function in widget
  * implementations. You might also use it to schedule a redraw of a
@@ -5215,7 +5214,7 @@ void
 gtk_widget_queue_draw_region (GtkWidget            *widget,
                               const cairo_region_t *region)
 {
-  GtkWidget *parent;
+  GtkWidget *windowed_parent;
   cairo_region_t *region2;
   int x, y;
   GtkCssStyle *parent_style;
@@ -5235,21 +5234,21 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
     {
       g_assert (_gtk_widget_get_has_window (widget));
       region2 = cairo_region_copy (region);
-      parent = widget;
+      windowed_parent = widget;
       goto invalidate;
     }
 
   /* Look for the parent with a window and invalidate @region in there. */
-  parent = widget;
-  while (parent != NULL && !_gtk_widget_get_has_window (parent))
-    parent = _gtk_widget_get_parent (parent);
+  windowed_parent = widget;
+  while (windowed_parent != NULL && !_gtk_widget_get_has_window (windowed_parent))
+    windowed_parent = _gtk_widget_get_parent (windowed_parent);
 
-  g_assert (parent != NULL);
+  g_assert (windowed_parent != NULL);
 
   /* @region's coordinates are originally relative to @widget's origin */
-  if (widget != parent)
-    gtk_widget_translate_coordinates (_gtk_widget_get_parent (widget),
-                                      parent,
+  if (widget != windowed_parent)
+    gtk_widget_translate_coordinates (widget,
+                                      windowed_parent,
                                       0, 0,
                                       &x, &y);
   else
@@ -5261,7 +5260,7 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
    * gtk_widget_get_window_allocation, which should've been used to size and position
    * @parent's window, do not include widget margins nor css margins.
    */
-  parent_style = gtk_css_node_get_style (parent->priv->cssnode);
+  parent_style = gtk_css_node_get_style (windowed_parent->priv->cssnode);
   get_box_border (parent_style, &border);
   get_box_padding (parent_style, &padding);
 
@@ -5272,7 +5271,7 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
   cairo_region_translate (region2, x, y);
 
 invalidate:
-  gtk_debug_updates_add (parent, region2);
+  gtk_debug_updates_add (windowed_parent, region2);
   gdk_window_invalidate_region (_gtk_widget_get_window (widget), region2, TRUE);
 
   cairo_region_destroy (region2);
@@ -5551,10 +5550,13 @@ check_clip:
         {
           /* Invalidate union(old_clip,priv->clip) in the toplevel's window
            */
+          GtkWidget *parent = _gtk_widget_get_parent (widget);
           cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->clip);
           cairo_region_union_rectangle (invalidate, &old_clip);
 
-          gtk_widget_queue_draw_region (widget, invalidate);
+          /* Use the parent here since that's what priv->allocation and priv->clip
+           * are relative to */
+          gtk_widget_queue_draw_region (parent ? parent : widget, invalidate);
           cairo_region_destroy (invalidate);
         }
     }
