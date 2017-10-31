@@ -1883,7 +1883,6 @@ get_device_for_event (const GdkEvent *event)
 {
   GdkDevice *device = NULL;
   GdkSeat *seat = NULL;
-  GdkScreen *screen = NULL;
   GdkDisplay *display = NULL;
 
   device = gdk_event_get_device (event);
@@ -1895,10 +1894,7 @@ get_device_for_event (const GdkEvent *event)
 
   if (!seat)
     {
-      screen = gdk_event_get_screen (event);
-
-      if (screen)
-        display = gdk_screen_get_display (screen);
+      display = gdk_event_get_display (event);
 
       if (!display)
         {

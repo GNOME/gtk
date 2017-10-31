@@ -1348,7 +1348,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   info->destroy_icon = FALSE;
 
   if (event)
-    info->cur_screen = gdk_event_get_screen (event);
+    info->cur_screen = gdk_display_get_default_screen (gdk_event_get_display (event));
   else
     gdk_device_get_position (pointer, &info->cur_screen, NULL, NULL);
 
@@ -2279,7 +2279,7 @@ gtk_drag_motion_cb (GtkWidget      *widget,
   double x_root, y_root;
 
   gdk_event_get_root_coords ((GdkEvent *)event, &x_root, &y_root);
-  screen = gdk_event_get_screen ((GdkEvent *)event);
+  screen = gdk_display_get_default_screen (gdk_event_get_display ((GdkEvent *)event));
 
   gtk_drag_update (info, screen, (int)x_root, (int)y_root, (GdkEvent *) event);
 
