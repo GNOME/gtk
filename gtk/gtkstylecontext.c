@@ -562,10 +562,10 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
 
 /**
  * gtk_style_context_reset_widgets:
- * @display: a #GdkScreen
+ * @display: a #GdkDisplay
  *
  * This function recomputes the styles for all widgets under a particular
- * #GdkScreen. This is useful when some global parameter has changed that
+ * #GdkDisplay. This is useful when some global parameter has changed that
  * affects the appearance of all widgets, because when a widget gets a new
  * style, it will both redraw and recompute any cached information about
  * its appearance. As an example, it is used when the color scheme changes
@@ -631,7 +631,7 @@ gtk_style_context_add_provider_for_display (GdkDisplay       *display,
 
 /**
  * gtk_style_context_remove_provider_for_display:
- * @display: a #GdkScreen
+ * @display: a #GdkDisplay
  * @provider: a #GtkStyleProvider
  *
  * Removes @provider from the global style providers list in @display.

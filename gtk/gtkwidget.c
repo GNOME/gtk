@@ -8924,7 +8924,7 @@ gtk_widget_update_pango_context (GtkWidget *widget)
  *   previously set default font options.
  *
  * Sets the #cairo_font_options_t used for Pango rendering in this widget.
- * When not set, the default font options for the #GdkScreen will be used.
+ * When not set, the default font options for the #GdkDisplay will be used.
  *
  * Since: 3.18
  **/
@@ -8953,7 +8953,7 @@ gtk_widget_set_font_options (GtkWidget                  *widget,
  * @widget: a #GtkWidget
  *
  * Returns the #cairo_font_options_t used for Pango rendering. When not set,
- * the defaults font options for the #GdkScreen will be used.
+ * the defaults font options for the #GdkDisplay will be used.
  *
  * Returns: (transfer none) (nullable): the #cairo_font_options_t or %NULL if not set
  *
@@ -9737,7 +9737,7 @@ gtk_widget_get_ancestor (GtkWidget *widget,
  *
  * Note that this function can only be called when the #GtkWidget
  * is attached to a toplevel, since the settings object is specific
- * to a particular #GdkScreen.
+ * to a particular #GdkDisplay.
  *
  * Returns: (transfer none): the relevant #GtkSettings object
  */

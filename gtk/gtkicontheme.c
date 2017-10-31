@@ -74,7 +74,7 @@
  * directly is also simple. The #GtkIconTheme object acts
  * as a database of all the icons in the current theme. You
  * can create new #GtkIconTheme objects, but it’s much more
- * efficient to use the standard icon theme for the #GdkScreen
+ * efficient to use the standard icon theme for the #GdkDisplay
  * so that the icon information is shared with other people
  * looking up icons.
  * |[<!-- language="C" -->
