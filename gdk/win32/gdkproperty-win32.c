@@ -361,45 +361,45 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
   if (strcmp ("gtk-double-click-time", name) == 0)
     {
       gint i = GetDoubleClickTime ();
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %d\n", name, i));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
       g_value_set_int (value, i);
       return TRUE;
     }
   else if (strcmp ("gtk-double-click-distance", name) == 0)
     {
       gint i = MAX(GetSystemMetrics (SM_CXDOUBLECLK), GetSystemMetrics (SM_CYDOUBLECLK));
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %d\n", name, i));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
       g_value_set_int (value, i);
       return TRUE;
     }
   else if (strcmp ("gtk-dnd-drag-threshold", name) == 0)
     {
       gint i = MAX(GetSystemMetrics (SM_CXDRAG), GetSystemMetrics (SM_CYDRAG));
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %d\n", name, i));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : %d\n", name, i));
       g_value_set_int (value, i);
       return TRUE;
     }
   else if (strcmp ("gtk-split-cursor", name) == 0)
     {
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : FALSE\n", name));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : FALSE\n", name));
       g_value_set_boolean (value, FALSE);
       return TRUE;
     }
   else if (strcmp ("gtk-alternative-button-order", name) == 0)
     {
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : TRUE\n", name));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
   else if (strcmp ("gtk-alternative-sort-arrows", name) == 0)
     {
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : TRUE\n", name));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
   else if (strcmp ("gtk-shell-shows-desktop", name) == 0)
     {
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : TRUE\n", name));
+      GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
       g_value_set_boolean (value, TRUE);
       return TRUE;
     }
@@ -444,14 +444,14 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
 	   */
           int nHeight = (0 > ncm.lfMenuFont.lfHeight ? - 3 * ncm.lfMenuFont.lfHeight / 4 : 10);
           if (OUT_STRING_PRECIS == ncm.lfMenuFont.lfOutPrecision)
-            GDK_NOTE(MISC, g_print("gdk_screen_get_setting(%s) : ignoring bitmap font '%s'\n",
+            GDK_NOTE(MISC, g_print("gdk_display_get_setting(%s) : ignoring bitmap font '%s'\n",
                                    name, ncm.lfMenuFont.lfFaceName));
           else if (ncm.lfMenuFont.lfFaceName && strlen(ncm.lfMenuFont.lfFaceName) > 0 &&
                    /* Avoid issues like those described in bug #135098 */
                    g_utf8_validate (ncm.lfMenuFont.lfFaceName, -1, NULL))
             {
               char *s = g_strdup_printf ("%s %d", ncm.lfMenuFont.lfFaceName, nHeight);
-              GDK_NOTE(MISC, g_print("gdk_screen_get_setting(%s) : %s\n", name, s));
+              GDK_NOTE(MISC, g_print("gdk_display_get_setting(%s) : %s\n", name, s));
               g_value_set_string (value, s);
 
               g_free(s);

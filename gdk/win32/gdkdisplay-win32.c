@@ -1228,6 +1228,16 @@ _gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *win32_display,
   }
 }
 
+static gboolean
+gdk_win32_display_get_setting (GdkDisplay  *display,
+                               const gchar *name,
+                               GValue      *value)
+{
+  return _gdk_win32_screen_get_setting (GDK_WIN32_DISPLAY (display)->screen,
+                                        name,
+                                        value);
+}
+
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 {
@@ -1288,6 +1298,8 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->vk_context_type = GDK_TYPE_WIN32_VULKAN_CONTEXT;
   display_class->vk_extension_name = VK_KHR_WIN32_SURFACE_EXTENSION_NAME;
 #endif
+
+  display_class->get_setting = gdk_win32_display_get_setting;
 
   _gdk_win32_windowing_init ();
 }

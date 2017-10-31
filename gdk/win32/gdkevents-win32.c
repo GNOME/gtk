@@ -676,7 +676,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_VISIBILITY_NOTIFY);
     CASE (GDK_SCROLL);
     CASE (GDK_WINDOW_STATE);
-    CASE (GDK_SETTING);
     CASE (GDK_OWNER_CHANGE);
     CASE (GDK_GRAB_BROKEN);
 #undef CASE
@@ -796,13 +795,6 @@ _gdk_win32_print_event (const GdkEvent *event)
       g_print ("%s: %s",
 	       _gdk_win32_window_state_to_string (event->window_state.changed_mask),
 	       _gdk_win32_window_state_to_string (event->window_state.new_window_state));
-    case GDK_SETTING:
-      g_print ("%s: %s",
-	       (event->setting.action == GDK_SETTING_ACTION_NEW ? "NEW" :
-		(event->setting.action == GDK_SETTING_ACTION_CHANGED ? "CHANGED" :
-		 (event->setting.action == GDK_SETTING_ACTION_DELETED ? "DELETED" :
-		  "???"))),
-	       (event->setting.name ? event->setting.name : "NULL"));
     case GDK_GRAB_BROKEN:
       g_print ("%s %s %p",
 	       (event->grab_broken.keyboard ? "KEYBOARD" : "POINTER"),
