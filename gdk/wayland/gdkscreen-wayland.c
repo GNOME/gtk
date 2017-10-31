@@ -267,12 +267,7 @@ update_xft_settings (GdkScreen *screen)
 
   if (screen_wayland->xft_settings.dpi != xft_settings.dpi)
     {
-      double dpi = xft_settings.dpi / 1024.;
-
       screen_wayland->xft_settings.dpi = xft_settings.dpi;
-
-      _gdk_screen_set_resolution (screen, dpi);
-
       notify_setting (screen, "gtk-xft-dpi");
     }
 }

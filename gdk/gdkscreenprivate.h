@@ -33,8 +33,6 @@ struct _GdkScreen
 {
   GObject parent_instance;
 
-  gdouble resolution; /* pixels/points scale factor for fonts */
-  guint resolution_set : 1; /* resolution set through public API */
   guint closed : 1;
 };
 

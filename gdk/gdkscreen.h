@@ -50,12 +50,6 @@ GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
 GDK_AVAILABLE_IN_ALL
 GdkScreen *gdk_screen_get_default (void);
 
-GDK_AVAILABLE_IN_ALL
-void    gdk_screen_set_resolution (GdkScreen *screen,
-                                   gdouble    dpi);
-GDK_AVAILABLE_IN_ALL
-gdouble gdk_screen_get_resolution (GdkScreen *screen);
-
 G_END_DECLS
 
 #endif  /* __GDK_SCREEN_H__ */

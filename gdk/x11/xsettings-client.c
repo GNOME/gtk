@@ -398,7 +398,6 @@ static void
 read_settings (GdkX11Screen *x11_screen,
                gboolean      do_notify)
 {
-  GdkScreen *screen = GDK_SCREEN (x11_screen);
   GdkDisplay *display = x11_screen->display;
 
   Atom type;

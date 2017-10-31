@@ -44,21 +44,6 @@
  */
 
 
-static void gdk_screen_set_property (GObject        *object,
-				     guint           prop_id,
-				     const GValue   *value,
-				     GParamSpec     *pspec);
-static void gdk_screen_get_property (GObject        *object,
-				     guint           prop_id,
-				     GValue         *value,
-				     GParamSpec     *pspec);
-
-enum
-{
-  PROP_0,
-  PROP_RESOLUTION
-};
-
 enum
 {
   SIZE_CHANGED,
@@ -74,20 +59,6 @@ static void
 gdk_screen_class_init (GdkScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->set_property = gdk_screen_set_property;
-  object_class->get_property = gdk_screen_get_property;
-
-  g_object_class_install_property (object_class,
-				   PROP_RESOLUTION,
-				   g_param_spec_double ("resolution",
-							P_("Font resolution"),
-							P_("The resolution for fonts on the screen"),
-							-1.0,
-							10000.0,
-							-1.0,
-							G_PARAM_READWRITE|G_PARAM_STATIC_NAME|
-							G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
 
   /**
    * GdkScreen::monitors-changed:
@@ -115,7 +86,6 @@ gdk_screen_class_init (GdkScreenClass *klass)
 static void
 gdk_screen_init (GdkScreen *screen)
 {
-  screen->resolution = -1.;
 }
 
 void 
@@ -127,119 +97,6 @@ _gdk_screen_close (GdkScreen *screen)
     {
       screen->closed = TRUE;
       g_object_run_dispose (G_OBJECT (screen));
-    }
-}
-
-/**
- * gdk_screen_set_resolution:
- * @screen: a #GdkScreen
- * @dpi: the resolution in “dots per inch”. (Physical inches aren’t actually
- *   involved; the terminology is conventional.)
- 
- * Sets the resolution for font handling on the screen. This is a
- * scale factor between points specified in a #PangoFontDescription
- * and cairo units. The default value is 96, meaning that a 10 point
- * font will be 13 units high. (10 * 96. / 72. = 13.3).
- *
- * Since: 2.10
- **/
-void
-gdk_screen_set_resolution (GdkScreen *screen,
-			   gdouble    dpi)
-{
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-
-  if (dpi < 0)
-    dpi = -1.0;
-
-  screen->resolution_set = TRUE;
-
-  if (screen->resolution != dpi)
-    {
-      screen->resolution = dpi;
-
-      g_object_notify (G_OBJECT (screen), "resolution");
-    }
-}
-
-/* Just like gdk_screen_set_resolution(), but doesn't change
- * screen->resolution. This is us to allow us to distinguish
- * resolution changes that the backend picks up from resolution
- * changes made through the public API - perhaps using
- * g_object_set(<GtkSetting>, "gtk-xft-dpi", ...);
- */
-void
-_gdk_screen_set_resolution (GdkScreen *screen,
-                            gdouble    dpi)
-{
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-
-  if (dpi < 0)
-    dpi = -1.0;
-
-  if (screen->resolution != dpi)
-    {
-      screen->resolution = dpi;
-
-      g_object_notify (G_OBJECT (screen), "resolution");
-    }
-}
-
-/**
- * gdk_screen_get_resolution:
- * @screen: a #GdkScreen
- * 
- * Gets the resolution for font handling on the screen; see
- * gdk_screen_set_resolution() for full details.
- * 
- * Returns: the current resolution, or -1 if no resolution
- * has been set.
- *
- * Since: 2.10
- **/
-gdouble
-gdk_screen_get_resolution (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), -1.0);
-
-  return screen->resolution;
-}
-
-static void
-gdk_screen_get_property (GObject      *object,
-			 guint         prop_id,
-			 GValue       *value,
-			 GParamSpec   *pspec)
-{
-  GdkScreen *screen = GDK_SCREEN (object);
-
-  switch (prop_id)
-    {
-    case PROP_RESOLUTION:
-      g_value_set_double (value, gdk_screen_get_resolution (screen));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gdk_screen_set_property (GObject      *object,
-			 guint         prop_id,
-			 const GValue *value,
-			 GParamSpec   *pspec)
-{
-  GdkScreen *screen = GDK_SCREEN (object);
-
-  switch (prop_id)
-    {
-    case PROP_RESOLUTION:
-      gdk_screen_set_resolution (screen, g_value_get_double (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
     }
 }
 
