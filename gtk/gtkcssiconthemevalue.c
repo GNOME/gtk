@@ -81,7 +81,7 @@ gtk_css_value_icon_theme_compute (GtkCssValue             *icon_theme,
   if (icon_theme->icontheme)
     icontheme = icon_theme->icontheme;
   else
-    icontheme = gtk_icon_theme_get_for_screen (gdk_display_get_default_screen (_gtk_settings_get_display (_gtk_style_provider_private_get_settings (provider))));
+    icontheme = gtk_icon_theme_get_for_display (_gtk_settings_get_display (_gtk_style_provider_private_get_settings (provider)));
 
   return gtk_css_icon_theme_value_new (icontheme);
 }

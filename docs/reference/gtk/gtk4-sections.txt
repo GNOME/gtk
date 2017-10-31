@@ -5425,8 +5425,8 @@ GTK_ICON_THEME_ERROR
 GtkIconThemeError
 gtk_icon_theme_new
 gtk_icon_theme_get_default
-gtk_icon_theme_get_for_screen
-gtk_icon_theme_set_screen
+gtk_icon_theme_get_for_display
+gtk_icon_theme_set_display
 gtk_icon_theme_set_search_path
 gtk_icon_theme_get_search_path
 gtk_icon_theme_append_search_path

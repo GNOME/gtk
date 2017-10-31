@@ -60,9 +60,9 @@ typedef struct _GtkIconThemePrivate GtkIconThemePrivate;
  *
  * Acts as a database of information about an icon theme.
  * Normally, you retrieve the icon theme for a particular
- * screen using gtk_icon_theme_get_for_screen() and it
+ * display using gtk_icon_theme_get_for_display() and it
  * will contain information about current icon theme for
- * that screen, but you can also create a new #GtkIconTheme
+ * that display, but you can also create a new #GtkIconTheme
  * object and set the icon theme name explicitly using
  * gtk_icon_theme_set_custom_theme().
  */
@@ -168,11 +168,11 @@ GDK_AVAILABLE_IN_ALL
 GtkIconTheme *gtk_icon_theme_new                   (void);
 GDK_AVAILABLE_IN_ALL
 GtkIconTheme *gtk_icon_theme_get_default           (void);
-GDK_AVAILABLE_IN_ALL
-GtkIconTheme *gtk_icon_theme_get_for_screen        (GdkScreen                   *screen);
-GDK_AVAILABLE_IN_ALL
-void          gtk_icon_theme_set_screen            (GtkIconTheme                *icon_theme,
-						    GdkScreen                   *screen);
+GDK_AVAILABLE_IN_3_94
+GtkIconTheme *gtk_icon_theme_get_for_display       (GdkDisplay                  *display);
+GDK_AVAILABLE_IN_3_94
+void          gtk_icon_theme_set_display           (GtkIconTheme                *icon_theme,
+						    GdkDisplay                  *display);
 
 GDK_AVAILABLE_IN_ALL
 void          gtk_icon_theme_set_search_path       (GtkIconTheme                *icon_theme,

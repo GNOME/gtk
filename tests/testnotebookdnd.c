@@ -106,7 +106,7 @@ on_notebook_drag_begin (GtkWidget      *widget,
       GtkIconTheme *icon_theme;
       int width;
 
-      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+      icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
       gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &width, NULL);
       surface = gtk_icon_theme_load_surface (icon_theme,
                                              (page_num % 2) ? "help-browser" : "process-stop",

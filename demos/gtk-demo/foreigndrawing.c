@@ -850,7 +850,7 @@ draw_spinbutton (GtkWidget *widget,
   draw_style_common (spin_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
   draw_style_common (entry_context, cr, x, y, width, *height, NULL, NULL, NULL, NULL);
 
-  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+  icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
 
   gtk_style_context_get (up_context,
                          "min-width", &icon_width, "min-height", &icon_height, NULL);

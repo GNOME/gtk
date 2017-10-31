@@ -18,7 +18,7 @@ get_image_surface (GtkImage *image,
       return cairo_surface_reference (surface);
     case GTK_IMAGE_ICON_NAME:
       gtk_image_get_icon_name (image, &icon_name, &size);
-      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (image)));
+      icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       gtk_icon_size_lookup (size, &width, NULL);
       *out_size = width;
       return gtk_icon_theme_load_surface (icon_theme, icon_name, width, 1, NULL, GTK_ICON_LOOKUP_GENERIC_FALLBACK, NULL);
