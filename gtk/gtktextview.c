@@ -257,10 +257,6 @@ struct _GtkTextViewPrivate
   gint right_padding;
   gint top_padding;
   gint bottom_padding;
-  gint top_border;
-  gint bottom_border;
-  gint left_border;
-  gint right_border;
 
   gint indent;
   gint64 handle_place_time;
@@ -2275,7 +2271,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   /* In each direction, *_border are the addition of *_padding and *_margin
    *
    * Vadjustment value:
-   * (-priv->top_border) [top padding][top margin] (0) [text][bottom margin][bottom padding]
+   * (-priv->top_margin) [top padding][top margin] (0) [text][bottom margin][bottom padding]
    *
    * Hadjustment value:
    * (-priv->left_padding) [left padding] (0) [left margin][text][right margin][right padding]
@@ -2292,7 +2288,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
    * (the canvas is the virtual window where the content of the buffer is drawn )
    *
    * on x: (-priv->left_padding) [left padding] (0) [left margin][text][right margin][right padding]
-   * on y: (-priv->top_border) [top margin][top padding] (0) [text][bottom margin][bottom padding]
+   * on y: (-priv->top_margin) [top margin][top padding] (0) [text][bottom margin][bottom padding]
    *
    * (priv->xoffset, priv->yoffset) is the origin of the view (visible part of the canvas)
    *  in canvas coordinates.
@@ -2317,7 +2313,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   screen_inner_right = screen.x + screen.width - within_margin_xoffset;
   screen_inner_bottom = screen.y + screen.height - within_margin_yoffset;
 
-  buffer_bottom = priv->height - priv->bottom_border;
+  buffer_bottom = priv->height - priv->bottom_margin;
   buffer_right = priv->width - priv->right_margin - priv->left_padding - 1;
 
   screen_dest.x = screen.x;
@@ -2355,7 +2351,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   else
     {
       /* move minimum to get onscreen, showing the
-       * top_border or bottom_border when necessary
+       * top_margin or bottom_margin when necessary
        */
       if (cursor.y < screen_inner_top)
         {
@@ -2366,7 +2362,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
         }
       else if (cursor_bottom > screen_inner_bottom)
         {
-          if (cursor_bottom == buffer_bottom - priv->top_border)
+          if (cursor_bottom == buffer_bottom - priv->top_margin)
             border_yoffset = (with_border) ? priv->bottom_padding : 0;
 
           screen_dest.y = cursor_bottom - screen_dest.height +
@@ -2376,7 +2372,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
 
   if (screen_dest.y != screen.y)
     {
-      gtk_adjustment_animate_to_value (priv->vadjustment, screen_dest.y  + priv->top_border);
+      gtk_adjustment_animate_to_value (priv->vadjustment, screen_dest.y  + priv->top_margin);
 
       DV (g_print (" vert increment %d\n", screen_dest.y - screen.y));
     }
@@ -2393,7 +2389,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   else
     {
       /* move minimum to get onscreen, showing the
-       * left_border or right_border when necessary
+       * left_margin or right_margin when necessary
        */
       if (cursor.x < screen_inner_left)
         {
@@ -2600,7 +2596,7 @@ gtk_text_view_update_adjustments (GtkTextView *text_view)
 
   /* Make room for the cursor after the last character in the widest line */
   width += SPACE_FOR_CURSOR;
-  height += priv->top_border + priv->bottom_border;
+  height += priv->top_margin + priv->bottom_margin;
 
   if (priv->width != width || priv->height != height)
     {
@@ -3171,7 +3167,7 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
   if (priv->left_margin != left_margin)
     {
       priv->left_margin = left_margin;
-      priv->left_border = left_margin + priv->left_padding;
+      priv->left_margin = left_margin + priv->left_padding;
 
       if (priv->layout && priv->layout->default_style)
         {
@@ -3222,7 +3218,7 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
   if (priv->right_margin != right_margin)
     {
       priv->right_margin = right_margin;
-      priv->right_border = right_margin + priv->right_padding;
+      priv->right_margin = right_margin + priv->right_padding;
 
       if (priv->layout && priv->layout->default_style)
         {
@@ -3276,7 +3272,7 @@ gtk_text_view_set_top_margin (GtkTextView *text_view,
       priv->yoffset += priv->top_margin - top_margin;
 
       priv->top_margin = top_margin;
-      priv->top_border = top_margin + priv->top_padding;
+      priv->top_margin = top_margin + priv->top_padding;
 
       if (priv->layout && priv->layout->default_style)
         gtk_text_layout_default_style_changed (priv->layout);
@@ -3328,7 +3324,7 @@ gtk_text_view_set_bottom_margin (GtkTextView *text_view,
   if (priv->bottom_margin != bottom_margin)
     {
       priv->bottom_margin = bottom_margin;
-      priv->bottom_border = bottom_margin + priv->bottom_padding;
+      priv->bottom_margin = bottom_margin + priv->bottom_padding;
 
       if (priv->layout && priv->layout->default_style)
         gtk_text_layout_default_style_changed (priv->layout);
@@ -3975,8 +3971,8 @@ gtk_text_view_size_request (GtkWidget      *widget,
   if (priv->bottom_window)
     requisition->height += priv->bottom_window->requisition.height;
 
-  requisition->height += priv->top_border + priv->bottom_border;
-  requisition->width += priv->left_border + priv->right_border;
+  requisition->height += priv->top_margin + priv->bottom_margin;
+  requisition->width += priv->left_margin + priv->right_margin;
 
   tmp_list = priv->children;
   while (tmp_list != NULL)
@@ -4558,7 +4554,7 @@ changed_handler (GtkTextLayout     *layout,
 
       gtk_text_layout_get_line_yrange (layout, &first, &new_first_para_top, NULL);
 
-      old_first_para_top = priv->yoffset - priv->first_para_pixels + priv->top_border;
+      old_first_para_top = priv->yoffset - priv->first_para_pixels + priv->top_margin;
 
       if (new_first_para_top != old_first_para_top)
         {
@@ -4771,10 +4767,10 @@ text_window_set_padding (GtkTextView     *text_view,
       priv->xoffset += priv->left_padding;
       priv->yoffset += priv->top_padding;
 
-      priv->top_border = priv->top_margin;
-      priv->bottom_border = priv->bottom_margin;
-      priv->left_border = priv->left_margin;
-      priv->right_border = priv->right_margin;
+      priv->top_margin = priv->top_margin;
+      priv->bottom_margin = priv->bottom_margin;
+      priv->left_margin = priv->left_margin;
+      priv->right_margin = priv->right_margin;
 
       if (priv->layout && priv->layout->default_style)
         {
@@ -5773,7 +5769,7 @@ gtk_text_view_paint (GtkWidget      *widget,
 
   g_return_if_fail (priv->layout != NULL);
   g_return_if_fail (priv->xoffset >= - priv->left_padding);
-  g_return_if_fail (priv->yoffset >= - priv->top_border);
+  g_return_if_fail (priv->yoffset >= - priv->top_margin);
 
   while (priv->first_validate_idle != 0)
     {
@@ -5815,11 +5811,11 @@ draw_text (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, text_view->priv->text_window->css_node);
   gtk_render_background (context, cr,
-                         -priv->xoffset, -priv->yoffset - priv->top_border,
+                         -priv->xoffset, -priv->yoffset - priv->top_margin,
                          MAX (SCREEN_WIDTH (text_view), priv->width),
                          MAX (SCREEN_HEIGHT (text_view), priv->height));
   gtk_render_frame (context, cr,
-                    -priv->xoffset, -priv->yoffset - priv->top_border,
+                    -priv->xoffset, -priv->yoffset - priv->top_margin,
                     MAX (SCREEN_WIDTH (text_view), priv->width),
                     MAX (SCREEN_HEIGHT (text_view), priv->height));
   gtk_style_context_restore (context);
@@ -8719,7 +8715,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
     }
   else if (adjustment == priv->vadjustment)
     {
-      dy = priv->yoffset - (gint)gtk_adjustment_get_value (adjustment) + priv->top_border ;
+      dy = priv->yoffset - (gint)gtk_adjustment_get_value (adjustment) + priv->top_margin ;
       priv->yoffset -= dy;
 
       if (priv->layout)
@@ -9732,7 +9728,7 @@ gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
   window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
 
   rect->x = gtk_adjustment_get_value (priv->hadjustment);
-  rect->y = gtk_adjustment_get_value (priv->vadjustment) - priv->top_border;
+  rect->y = gtk_adjustment_get_value (priv->vadjustment) - priv->top_margin;
 
   rect->height = gdk_window_get_height (window);
   rect->width = gdk_window_get_width (window);
