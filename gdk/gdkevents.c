@@ -2038,53 +2038,6 @@ gdk_events_get_center (GdkEvent *event1,
   return TRUE;
 }
 
-/**
- * gdk_event_set_screen:
- * @event: a #GdkEvent
- * @screen: a #GdkScreen
- *
- * Sets the screen for @event to @screen. The event must
- * have been allocated by GTK+, for instance, by
- * gdk_event_copy().
- *
- * Since: 2.2
- **/
-void
-gdk_event_set_screen (GdkEvent  *event,
-		      GdkScreen *screen)
-{
-  gdk_event_set_display (event, gdk_screen_get_display (screen));
-}
-
-/**
- * gdk_event_get_screen:
- * @event: a #GdkEvent
- * 
- * Returns the screen for the event. The screen is
- * typically the screen for `event->any.window`, but
- * for events such as mouse events, it is the screen
- * where the pointer was when the event occurs -
- * that is, the screen which has the root window 
- * to which `event->motion.x_root` and
- * `event->motion.y_root` are relative.
- * 
- * Returns: (transfer none): the screen for the event
- *
- * Since: 2.2
- **/
-GdkScreen *
-gdk_event_get_screen (const GdkEvent *event)
-{
-  GdkDisplay *display;
-
-  display = gdk_event_get_display (event);
-
-  if (display)
-    return gdk_display_get_default_screen (display);
-
-  return NULL;
-}
-
 void
 gdk_event_set_display (GdkEvent   *event,
                        GdkDisplay *display)

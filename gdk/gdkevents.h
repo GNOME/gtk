@@ -667,12 +667,6 @@ void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);
 
-GDK_AVAILABLE_IN_ALL
-void       gdk_event_set_screen         (GdkEvent        *event,
-                                         GdkScreen       *screen);
-GDK_AVAILABLE_IN_ALL
-GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
-
 GDK_AVAILABLE_IN_3_94
 void       gdk_event_set_display        (GdkEvent        *event,
                                          GdkDisplay      *display);

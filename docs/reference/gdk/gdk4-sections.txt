@@ -797,8 +797,8 @@ GdkEventFunc
 <SUBSECTION>
 gdk_get_show_events
 gdk_set_show_events
-gdk_event_set_screen
-gdk_event_get_screen
+gdk_event_set_display
+gdk_event_get_display
 gdk_event_get_device
 gdk_event_set_device
 gdk_event_get_source_device
