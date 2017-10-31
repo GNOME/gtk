@@ -140,7 +140,6 @@ _gdk_wayland_drag_context_emit_event (GdkDragContext *context,
 static GdkWindow *
 gdk_wayland_drag_context_find_window (GdkDragContext  *context,
 				      GdkWindow       *drag_window,
-				      GdkScreen       *screen,
 				      gint             x_root,
 				      gint             y_root,
 				      GdkDragProtocol *protocol)

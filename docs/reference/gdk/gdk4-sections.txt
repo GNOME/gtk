@@ -898,7 +898,7 @@ gdk_drag_abort
 gdk_drop_reply
 gdk_drag_drop
 gdk_drag_drop_done
-gdk_drag_find_window_for_screen
+gdk_drag_find_window
 gdk_drag_begin
 gdk_drag_begin_for_device
 gdk_drag_begin_from_point

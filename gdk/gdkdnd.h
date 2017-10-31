@@ -168,13 +168,12 @@ GdkDragContext * gdk_drag_begin_from_point  (GdkWindow      *window,
                                              gint            y_root);
 
 GDK_AVAILABLE_IN_ALL
-void    gdk_drag_find_window_for_screen   (GdkDragContext   *context,
-                                           GdkWindow        *drag_window,
-                                           GdkScreen        *screen,
-                                           gint              x_root,
-                                           gint              y_root,
-                                           GdkWindow       **dest_window,
-                                           GdkDragProtocol  *protocol);
+void    gdk_drag_find_window (GdkDragContext   *context,
+                              GdkWindow        *drag_window,
+                              gint              x_root,
+                              gint              y_root,
+                              GdkWindow       **dest_window,
+                              GdkDragProtocol  *protocol);
 
 GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drag_motion      (GdkDragContext *context,

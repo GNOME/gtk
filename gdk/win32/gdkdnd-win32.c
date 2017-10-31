@@ -2013,7 +2013,6 @@ find_window_enum_proc (HWND   hwnd,
 static GdkWindow *
 gdk_win32_drag_context_find_window (GdkDragContext  *context,
 				    GdkWindow       *drag_window,
-				    GdkScreen       *screen,
 				    gint             x_root,
 				    gint             y_root,
 				    GdkDragProtocol *protocol)
@@ -2039,7 +2038,7 @@ gdk_win32_drag_context_find_window (GdkDragContext  *context,
           g_object_ref (dest_window);
         }
       else
-        dest_window = gdk_win32_window_foreign_new_for_display (gdk_screen_get_display (screen), a.result);
+        dest_window = gdk_win32_window_foreign_new_for_display (context->display, a.result);
 
       if (use_ole2_dnd)
         *protocol = GDK_DRAG_PROTO_OLE2;

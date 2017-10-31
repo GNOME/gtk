@@ -362,11 +362,10 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
 }
 
 /**
- * gdk_drag_find_window_for_screen:
+ * gdk_drag_find_window:
  * @context: a #GdkDragContext
  * @drag_window: a window which may be at the pointer position, but
  *     should be ignored, since it is put up by the drag source as an icon
- * @screen: the screen where the destination window is sought
  * @x_root: the x position of the pointer in root coordinates
  * @y_root: the y position of the pointer in root coordinates
  * @dest_window: (out): location to store the destination window in
@@ -381,18 +380,17 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
  * Since: 2.2
  */
 void
-gdk_drag_find_window_for_screen (GdkDragContext  *context,
-                                 GdkWindow       *drag_window,
-                                 GdkScreen       *screen,
-                                 gint             x_root,
-                                 gint             y_root,
-                                 GdkWindow      **dest_window,
-                                 GdkDragProtocol *protocol)
+gdk_drag_find_window (GdkDragContext  *context,
+                      GdkWindow       *drag_window,
+                      gint             x_root,
+                      gint             y_root,
+                      GdkWindow      **dest_window,
+                      GdkDragProtocol *protocol)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
   *dest_window = GDK_DRAG_CONTEXT_GET_CLASS (context)
-      ->find_window (context, drag_window, screen, x_root, y_root, protocol);
+      ->find_window (context, drag_window, x_root, y_root, protocol);
 }
 
 /**

@@ -74,7 +74,6 @@ gdk_quartz_drag_context_drag_motion (GdkDragContext  *context,
 static GdkWindow *
 gdk_quartz_drag_context_find_window (GdkDragContext  *context,
                                      GdkWindow       *drag_window,
-                                     GdkScreen       *screen,
                                      gint             x_root,
                                      gint             y_root,
                                      GdkDragProtocol *protocol)

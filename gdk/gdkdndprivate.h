@@ -35,7 +35,6 @@ struct _GdkDragContextClass {
 
   GdkWindow * (*find_window)   (GdkDragContext  *context,
                                 GdkWindow       *drag_window,
-                                GdkScreen       *screen,
                                 gint             x_root,
                                 gint             y_root,
                                 GdkDragProtocol *protocol);

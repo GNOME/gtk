@@ -113,7 +113,6 @@ _gdk_broadway_window_get_drag_protocol (GdkWindow *window,
 static GdkWindow *
 gdk_broadway_drag_context_find_window (GdkDragContext  *context,
 				       GdkWindow       *drag_window,
-				       GdkScreen       *screen,
 				       gint             x_root,
 				       gint             y_root,
 				       GdkDragProtocol *protocol)

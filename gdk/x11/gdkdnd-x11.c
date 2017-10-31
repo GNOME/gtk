@@ -65,7 +65,7 @@ typedef struct {
   GList *children;
   GHashTable *child_hash;
   guint old_event_mask;
-  GdkScreen *screen;
+  GdkDisplay *display;
   gint ref_count;
 } GdkWindowCache;
 
@@ -83,7 +83,7 @@ struct _GdkX11DragContext
   GdkDragAction xdnd_actions;  /* What is currently set in XdndActionList */
   guint version;               /* Xdnd protocol version */
 
-  GSList *window_caches;
+  GdkWindowCache *cache;
 
   GdkWindow *drag_window;
 
@@ -141,7 +141,7 @@ static GrabKey grab_keys[] = {
 
 /* Forward declarations */
 
-static GdkWindowCache *gdk_window_cache_get   (GdkScreen      *screen);
+static GdkWindowCache *gdk_window_cache_get   (GdkDisplay *display);
 static GdkWindowCache *gdk_window_cache_ref   (GdkWindowCache *cache);
 static void            gdk_window_cache_unref (GdkWindowCache *cache);
 
@@ -200,7 +200,6 @@ gdk_x11_drag_context_init (GdkX11DragContext *context)
 static void        gdk_x11_drag_context_finalize (GObject *object);
 static GdkWindow * gdk_x11_drag_context_find_window (GdkDragContext  *context,
                                                      GdkWindow       *drag_window,
-                                                     GdkScreen       *screen,
                                                      gint             x_root,
                                                      gint             y_root,
                                                      GdkDragProtocol *protocol);
@@ -284,8 +283,8 @@ gdk_x11_drag_context_finalize (GObject *object)
         xdnd_manage_source_filter (context, context->source_window, FALSE);
     }
 
-  g_slist_free_full (x11_context->window_caches, (GDestroyNotify)gdk_window_cache_unref);
-  x11_context->window_caches = NULL;
+  if (x11_context->cache)
+    gdk_window_cache_unref (x11_context->cache);
 
   contexts = g_list_remove (contexts, context);
 
@@ -411,7 +410,7 @@ gdk_window_cache_shape_filter (GdkXEvent *xev,
   XEvent *xevent = (XEvent *)xev;
   GdkWindowCache *cache = data;
 
-  GdkX11Display *display = GDK_X11_DISPLAY (gdk_screen_get_display (cache->screen));
+  GdkX11Display *display = GDK_X11_DISPLAY (cache->display);
 
   if (display->have_shapes &&
       xevent->type == display->shape_event_base + ShapeNotify)
@@ -560,9 +559,10 @@ gdk_window_cache_filter (GdkXEvent *xev,
 }
 
 static GdkWindowCache *
-gdk_window_cache_new (GdkScreen *screen)
+gdk_window_cache_new (GdkDisplay *display)
 {
   XWindowAttributes xwa;
+  GdkScreen *screen = gdk_display_get_default_screen (display);
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
   GdkWindow *root_window = gdk_screen_get_root_window (screen);
   GdkChildInfoX11 *children;
@@ -575,7 +575,7 @@ gdk_window_cache_new (GdkScreen *screen)
 
   result->children = NULL;
   result->child_hash = g_hash_table_new (g_direct_hash, NULL);
-  result->screen = screen;
+  result->display = display;
   result->ref_count = 1;
 
   XGetWindowAttributes (xdisplay, GDK_WINDOW_XID (root_window), &xwa);
@@ -649,8 +649,7 @@ gdk_window_cache_new (GdkScreen *screen)
 static void
 gdk_window_cache_destroy (GdkWindowCache *cache)
 {
-  GdkWindow *root_window = gdk_screen_get_root_window (cache->screen);
-  GdkDisplay *display;
+  GdkWindow *root_window = gdk_screen_get_root_window (gdk_display_get_default_screen (cache->display));
 
   XSelectInput (GDK_WINDOW_XDISPLAY (root_window),
                 GDK_WINDOW_XID (root_window),
@@ -658,11 +657,9 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
   gdk_window_remove_filter (root_window, gdk_window_cache_filter, cache);
   gdk_window_remove_filter (NULL, gdk_window_cache_shape_filter, cache);
 
-  display = gdk_screen_get_display (cache->screen);
-
-  gdk_x11_display_error_trap_push (display);
-  g_list_foreach (cache->children, (GFunc)free_cache_child, display);
-  gdk_x11_display_error_trap_pop_ignored (display);
+  gdk_x11_display_error_trap_push (cache->display);
+  g_list_foreach (cache->children, (GFunc)free_cache_child, cache->display);
+  gdk_x11_display_error_trap_pop_ignored (cache->display);
 
   g_list_free (cache->children);
   g_hash_table_destroy (cache->child_hash);
@@ -693,7 +690,7 @@ gdk_window_cache_unref (GdkWindowCache *cache)
 }
 
 GdkWindowCache *
-gdk_window_cache_get (GdkScreen *screen)
+gdk_window_cache_get (GdkDisplay *display)
 {
   GSList *list;
   GdkWindowCache *cache;
@@ -701,11 +698,11 @@ gdk_window_cache_get (GdkScreen *screen)
   for (list = window_caches; list; list = list->next)
     {
       cache = list->data;
-      if (cache->screen == screen)
+      if (cache->display == display)
         return gdk_window_cache_ref (cache);
     }
 
-  cache = gdk_window_cache_new (screen);
+  cache = gdk_window_cache_new (display);
 
   window_caches = g_slist_prepend (window_caches, cache);
 
@@ -822,7 +819,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
   Window retval = None;
   GdkDisplay *display;
 
-  display = gdk_screen_get_display (cache->screen);
+  display = cache->display;
 
   gdk_x11_display_error_trap_push (display);
 
@@ -861,7 +858,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
   if (retval)
     return retval;
   else
-    return GDK_WINDOW_XID (gdk_screen_get_root_window (cache->screen));
+    return GDK_WINDOW_XID (gdk_screen_get_root_window (gdk_display_get_default_screen (cache->display)));
 }
 
 #ifdef G_ENABLE_DEBUG
@@ -2099,33 +2096,22 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
 
 static GdkWindowCache *
 drag_context_find_window_cache (GdkX11DragContext *context_x11,
-                                GdkScreen         *screen)
+                                GdkDisplay        *display)
 {
-  GSList *list;
-  GdkWindowCache *cache;
+  if (!context_x11->cache)
+    context_x11->cache = gdk_window_cache_get (display);
 
-  for (list = context_x11->window_caches; list; list = list->next)
-    {
-      cache = list->data;
-      if (cache->screen == screen)
-        return cache;
-    }
-
-  cache = gdk_window_cache_get (screen);
-  context_x11->window_caches = g_slist_prepend (context_x11->window_caches, cache);
-
-  return cache;
+  return context_x11->cache;
 }
 
 static GdkWindow *
 gdk_x11_drag_context_find_window (GdkDragContext  *context,
                                   GdkWindow       *drag_window,
-                                  GdkScreen       *screen,
                                   gint             x_root,
                                   gint             y_root,
                                   GdkDragProtocol *protocol)
 {
-  GdkX11Screen *screen_x11 = GDK_X11_SCREEN(screen);
+  GdkX11Screen *screen_x11 = GDK_X11_SCREEN(gdk_display_get_default_screen (context->display));
   GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
   GdkWindowCache *window_cache;
   GdkDisplay *display;
@@ -2134,7 +2120,7 @@ gdk_x11_drag_context_find_window (GdkDragContext  *context,
 
   display = GDK_WINDOW_DISPLAY (context->source_window);
 
-  window_cache = drag_context_find_window_cache (context_x11, screen);
+  window_cache = drag_context_find_window_cache (context_x11, display);
 
   dest = get_client_window_at_coords (window_cache,
                                       drag_window && GDK_WINDOW_IS_X11 (drag_window) ?
@@ -2215,10 +2201,10 @@ gdk_x11_drag_context_drag_motion (GdkDragContext *context,
     {
       /* This ugly hack is necessary since GTK+ doesn't know about
        * the XDND protocol version, and in particular doesn't know
-       * that gdk_drag_find_window_for_screen() has the side-effect
+       * that gdk_drag_find_window() has the side-effect
        * of setting context_x11->version, and therefore sometimes call
        * gdk_drag_motion() without a prior call to
-       * gdk_drag_find_window_for_screen(). This happens, e.g.
+       * gdk_drag_find_window(). This happens, e.g.
        * when GTK+ is proxying DND events to embedded windows.
        */
       if (dest_window)
@@ -2955,10 +2941,9 @@ gdk_drag_update (GdkDragContext  *context,
   gdk_drag_get_current_actions (mods, GDK_BUTTON_PRIMARY, x11_context->actions,
                                 &action, &possible_actions);
 
-  gdk_drag_find_window_for_screen (context,
-                                   x11_context->drag_window,
-                                   gdk_display_get_default_screen (gdk_display_get_default ()),
-                                   x_root, y_root, &dest_window, &protocol);
+  gdk_drag_find_window (context,
+                        x11_context->drag_window,
+                        x_root, y_root, &dest_window, &protocol);
 
   gdk_drag_motion (context, dest_window, protocol, x_root, y_root,
                    action, possible_actions, evtime);

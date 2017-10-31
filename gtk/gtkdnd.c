@@ -2077,15 +2077,15 @@ gtk_drag_update_idle (gpointer data)
     {
       time = gdk_event_get_time (info->last_event);
       gtk_drag_get_event_actions (info->last_event,
-                                  info->button, 
+                                  info->button,
                                   info->possible_actions,
                                   &action, &possible_actions);
 
       gtk_drag_update_icon_window (info);
-      gdk_drag_find_window_for_screen (info->context,
-                                       info->icon_window ? gtk_widget_get_window (info->icon_window) : NULL,
-                                       info->cur_screen, info->cur_x, info->cur_y,
-                                       &dest_window, &protocol);
+      gdk_drag_find_window (info->context,
+                            info->icon_window ? gtk_widget_get_window (info->icon_window) : NULL,
+                            info->cur_x, info->cur_y,
+                            &dest_window, &protocol);
       
       if (!gdk_drag_motion (info->context, dest_window, protocol,
                             info->cur_x, info->cur_y, action, 
