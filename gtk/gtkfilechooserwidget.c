@@ -3779,7 +3779,7 @@ check_icon_theme (GtkFileChooserWidget *impl)
       return;
     }
 
-  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
+  settings = gtk_widget_get_settings (GTK_WIDGET (impl));
   priv->settings_signal_id = g_signal_connect (settings, "notify",
                                                G_CALLBACK (settings_notify_cb), impl);
 

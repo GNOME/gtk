@@ -782,8 +782,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GType		 widget_type);
 
-GDK_AVAILABLE_IN_ALL
-GdkScreen *   gtk_widget_get_screen      (GtkWidget *widget);
 GDK_AVAILABLE_IN_3_10
 gint          gtk_widget_get_scale_factor (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL

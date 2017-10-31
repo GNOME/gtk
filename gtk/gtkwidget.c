@@ -9237,43 +9237,6 @@ gtk_widget_get_child_visible (GtkWidget *widget)
   return widget->priv->child_visible;
 }
 
-/**
- * gtk_widget_get_screen:
- * @widget: a #GtkWidget
- *
- * Get the #GdkScreen from the toplevel window associated with
- * this widget. This function can only be called after the widget
- * has been added to a widget hierarchy with a #GtkWindow
- * at the top.
- *
- * In general, you should only create screen specific
- * resources when a widget has been realized, and you should
- * free those resources when the widget is unrealized.
- *
- * Returns: (transfer none): the #GdkScreen for the toplevel for this widget.
- *
- * Since: 2.2
- **/
-GdkScreen*
-gtk_widget_get_screen (GtkWidget *widget)
-{
-  GtkWidget *toplevel;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  toplevel = _gtk_widget_get_toplevel (widget);
-
-  if (_gtk_widget_is_toplevel (toplevel))
-    {
-      if (GTK_IS_WINDOW (toplevel))
-	return gdk_display_get_default_screen (gtk_window_get_display (GTK_WINDOW (toplevel)));
-      else if (GTK_IS_INVISIBLE (toplevel))
-	return gdk_display_get_default_screen (gtk_invisible_get_display (GTK_INVISIBLE (widget)));
-    }
-  
-  return gdk_screen_get_default ();
-}
-
 void
 _gtk_widget_scale_changed (GtkWidget *widget)
 {
@@ -9351,9 +9314,21 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
 GdkDisplay*
 gtk_widget_get_display (GtkWidget *widget)
 {
+  GtkWidget *toplevel;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gdk_screen_get_display (gtk_widget_get_screen (widget));
+  toplevel = _gtk_widget_get_toplevel (widget);
+
+  if (_gtk_widget_is_toplevel (toplevel))
+    {
+      if (GTK_IS_WINDOW (toplevel))
+	return gtk_window_get_display (GTK_WINDOW (toplevel));
+      else if (GTK_IS_INVISIBLE (toplevel))
+	return gtk_invisible_get_display (GTK_INVISIBLE (widget));
+    }
+  
+  return gdk_display_get_default ();
 }
 
 /**
@@ -9771,7 +9746,7 @@ gtk_widget_get_settings (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
+  return gtk_settings_get_for_display (gtk_widget_get_display (widget));
 }
 
 /**

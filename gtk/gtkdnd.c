@@ -153,7 +153,7 @@ static GdkCursor *   gtk_drag_get_cursor         (GtkWidget      *widget,
                                                   GtkDragSourceInfo *info);
 static void          gtk_drag_update_cursor      (GtkDragSourceInfo *info);
 static GtkWidget    *gtk_drag_get_ipc_widget            (GtkWidget *widget);
-static GtkWidget    *gtk_drag_get_ipc_widget_for_screen (GdkScreen *screen);
+static GtkWidget    *gtk_drag_get_ipc_widget_for_display(GdkDisplay*display);
 static void          gtk_drag_release_ipc_widget (GtkWidget      *widget);
 
 static void     gtk_drag_selection_received     (GtkWidget        *widget,
@@ -268,10 +268,10 @@ static struct {
  *********************/
 
 static GtkWidget *
-gtk_drag_get_ipc_widget_for_screen (GdkScreen *screen)
+gtk_drag_get_ipc_widget_for_display (GdkDisplay *display)
 {
   GtkWidget *result;
-  GSList *drag_widgets = g_object_get_data (G_OBJECT (screen), 
+  GSList *drag_widgets = g_object_get_data (G_OBJECT (display), 
                                             "gtk-dnd-ipc-widgets");
   
   if (drag_widgets)
@@ -279,7 +279,7 @@ gtk_drag_get_ipc_widget_for_screen (GdkScreen *screen)
       GSList *tmp = drag_widgets;
       result = drag_widgets->data;
       drag_widgets = drag_widgets->next;
-      g_object_set_data (G_OBJECT (screen),
+      g_object_set_data (G_OBJECT (display),
                          I_("gtk-dnd-ipc-widgets"),
                          drag_widgets);
       g_slist_free_1 (tmp);
@@ -287,7 +287,7 @@ gtk_drag_get_ipc_widget_for_screen (GdkScreen *screen)
   else
     {
       result = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_window_set_display (GTK_WINDOW (result), gdk_screen_get_display (screen));
+      gtk_window_set_display (GTK_WINDOW (result), display);
       gtk_window_resize (GTK_WINDOW (result), 1, 1);
       gtk_window_move (GTK_WINDOW (result), -99, -99);
       gtk_widget_show (result);
@@ -302,7 +302,7 @@ gtk_drag_get_ipc_widget (GtkWidget *widget)
   GtkWidget *result;
   GtkWidget *toplevel;
 
-  result = gtk_drag_get_ipc_widget_for_screen (gtk_widget_get_screen (widget));
+  result = gtk_drag_get_ipc_widget_for_display (gtk_widget_get_display (widget));
   
   toplevel = gtk_widget_get_toplevel (widget);
   
@@ -350,9 +350,9 @@ static void
 gtk_drag_release_ipc_widget (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  GdkScreen *screen = gtk_widget_get_screen (widget);
+  GdkDisplay *display = gtk_widget_get_display (widget);
   GdkDragContext *context = g_object_get_data (G_OBJECT (widget), "drag-context");
-  GSList *drag_widgets = g_object_get_data (G_OBJECT (screen),
+  GSList *drag_widgets = g_object_get_data (G_OBJECT (display),
                                             "gtk-dnd-ipc-widgets");
   GdkDevice *pointer, *keyboard;
 
@@ -369,7 +369,7 @@ gtk_drag_release_ipc_widget (GtkWidget *widget)
     gtk_window_group_remove_window (gtk_window_get_group (window),
                                     window);
   drag_widgets = g_slist_prepend (drag_widgets, widget);
-  g_object_set_data (G_OBJECT (screen),
+  g_object_set_data (G_OBJECT (display),
                      I_("gtk-dnd-ipc-widgets"),
                      drag_widgets);
 }
@@ -654,7 +654,7 @@ gtk_drag_finish (GdkDragContext *context,
 
   if (target != GDK_NONE)
     {
-      GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_screen (gdk_window_get_screen (gdk_drag_context_get_source_window (context)));
+      GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_display (gdk_window_get_display (gdk_drag_context_get_source_window (context)));
 
       g_object_ref (context);
       

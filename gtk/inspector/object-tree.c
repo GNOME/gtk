@@ -1182,7 +1182,7 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
 {
   GtkWidget *inspector_win;
   GList *toplevels, *l;
-  GdkScreen *screen;
+  GdkDisplay *display;
   GObject *selected;
 
   block_selection_changed (wt);
@@ -1197,7 +1197,7 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
   if (window)
     gtk_inspector_object_tree_append_object (wt, G_OBJECT (window), NULL, NULL);
 
-  screen = gdk_screen_get_default ();
+  display = gdk_display_get_default ();
 
   inspector_win = gtk_widget_get_toplevel (GTK_WIDGET (wt));
   toplevels = gtk_window_list_toplevels ();
@@ -1205,7 +1205,7 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
     {
       if (GTK_IS_WINDOW (l->data) &&
           gtk_window_get_window_type (l->data) == GTK_WINDOW_TOPLEVEL &&
-          gtk_widget_get_screen (l->data) == screen &&
+          gtk_widget_get_display (l->data) == display &&
           l->data != window &&
           l->data != inspector_win)
         gtk_inspector_object_tree_append_object (wt, G_OBJECT (l->data), NULL, NULL);
