@@ -476,8 +476,6 @@ read_settings (GdkX11Screen *x11_screen,
        */
       int dpi_int = 0;
       double dpi;
-      const char *scale_env;
-      double scale;
 
       if (gdk_display_get_setting (display, "gtk-xft-dpi", &value))
         dpi_int = g_value_get_int (&value);
@@ -486,14 +484,6 @@ read_settings (GdkX11Screen *x11_screen,
         dpi = dpi_int / 1024.;
       else
         dpi = -1.;
-
-      scale_env = g_getenv ("GDK_DPI_SCALE");
-      if (scale_env)
-        {
-          scale = g_ascii_strtod (scale_env, NULL);
-          if (scale != 0 && dpi > 0)
-            dpi *= scale;
-        }
 
       _gdk_screen_set_resolution (screen, dpi);
     }
