@@ -4768,18 +4768,13 @@ text_window_set_padding (GtkTextView     *text_view,
       padding.top != priv->top_padding ||
       padding.bottom != priv->bottom_padding)
     {
-      priv->xoffset += priv->left_padding - padding.left;
-      priv->yoffset += priv->top_padding - padding.top;
+      priv->xoffset += priv->left_padding;
+      priv->yoffset += priv->top_padding;
 
-      priv->left_padding = padding.left;
-      priv->right_padding = padding.right;
-      priv->top_padding = padding.top;
-      priv->bottom_padding = padding.bottom;
-
-      priv->top_border = padding.top + priv->top_margin;
-      priv->bottom_border = padding.bottom + priv->bottom_margin;
-      priv->left_border = padding.left + priv->left_margin;
-      priv->right_border = padding.right + priv->right_margin;
+      priv->top_border = priv->top_margin;
+      priv->bottom_border = priv->bottom_margin;
+      priv->left_border = priv->left_margin;
+      priv->right_border = priv->right_margin;
 
       if (priv->layout && priv->layout->default_style)
         {
