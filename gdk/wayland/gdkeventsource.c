@@ -123,7 +123,7 @@ gdk_event_source_dispatch (GSource     *base,
     {
       _gdk_event_emit (event);
 
-      gdk_event_free (event);
+      g_object_unref (event);
     }
 
   gdk_threads_leave ();
