@@ -716,6 +716,7 @@ GDK_AVAILABLE_IN_3_92
 gboolean       gdk_event_get_axes      (GdkEvent  *event,
                                         gdouble  **axes,
                                         guint     *n_axes);
+GList        * gdk_event_get_history   (const GdkEvent  *event);
 
 G_END_DECLS
 

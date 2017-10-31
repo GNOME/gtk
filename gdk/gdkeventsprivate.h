@@ -121,6 +121,7 @@ struct _GdkEventMotion
   gint16 is_hint;
   GdkDeviceTool *tool;
   gdouble x_root, y_root;
+  GList *history;
 };
 
 /**

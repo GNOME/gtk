@@ -337,13 +337,37 @@ _gdk_event_unqueue (GdkDisplay *display)
   return event;
 }
 
+static void
+gdk_event_push_history (GdkEvent       *event,
+                        const GdkEvent *history_event)
+{
+  GdkTimeCoord *hist;
+  GdkDevice *device;
+  gint i, n_axes;
+
+  g_assert (event->any.type == GDK_MOTION_NOTIFY);
+  g_assert (history_event->any.type == GDK_MOTION_NOTIFY);
+
+  hist = g_new0 (GdkTimeCoord, 1);
+
+  device = gdk_event_get_device (history_event);
+  n_axes = gdk_device_get_n_axes (device);
+
+  for (i = 0; i <= MIN (n_axes, GDK_MAX_TIMECOORD_AXES); i++)
+    gdk_event_get_axis (history_event, i, &hist->axes[i]);
+
+  event->motion.history = g_list_prepend (event->motion.history, hist);
+}
+
 void
 _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
 {
   GList *tmp_list;
   GList *pending_motions = NULL;
+  GList *history = NULL;
   GdkWindow *pending_motion_window = NULL;
   GdkDevice *pending_motion_device = NULL;
+  GdkEvent *last_motion = NULL;
 
   /* If the last N events in the event queue are motion notify
    * events for the same window, drop all but the last */
@@ -371,6 +395,9 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       if (!event->any.window->event_compression)
         break;
 
+      if (!last_motion)
+        last_motion = event;
+
       pending_motion_window = event->any.window;
       pending_motion_device = event->any.device;
       pending_motions = tmp_list;
@@ -381,6 +408,15 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
   while (pending_motions && pending_motions->next != NULL)
     {
       GList *next = pending_motions->next;
+
+      history = g_list_prepend (history, pending_motions->data);
+
+      if (last_motion &&
+          (last_motion->motion.state &
+           (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
+            GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)))
+        gdk_event_push_history (last_motion, pending_motions->data);
+
       gdk_event_free (pending_motions->data);
       display->queued_events = g_list_delete_link (display->queued_events,
                                                    pending_motions);
@@ -558,6 +594,12 @@ gdk_event_get_pointer_emulated (GdkEvent *event)
   return (event->any.flags & GDK_EVENT_POINTER_EMULATED) != 0;
 }
 
+static GdkTimeCoord *
+copy_time_coord (const GdkTimeCoord *coord)
+{
+  return g_memdup (coord, sizeof (GdkTimeCoord));
+}
+
 /**
  * gdk_event_copy:
  * @event: a #GdkEvent
@@ -642,6 +684,12 @@ gdk_event_copy (const GdkEvent *event)
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->any.device));
       if (event->motion.tool)
         g_object_ref (new_event->motion.tool);
+
+      if (event->motion.history)
+        {
+          new_event->motion.history = g_list_copy_deep (event->motion.history,
+                                                        (GCopyFunc) copy_time_coord, NULL);
+        }
       break;
 
     default:
@@ -718,6 +766,7 @@ gdk_event_finalize (GObject *object)
     case GDK_MOTION_NOTIFY:
       g_clear_object (&event->motion.tool);
       g_free (event->motion.axes);
+      g_list_free_full (event->motion.history, g_free);
       break;
 
     default:
@@ -2623,3 +2672,10 @@ gdk_event_get_axes (GdkEvent  *event,
   return FALSE;
 }
 
+GList *
+gdk_event_get_history (const GdkEvent *event)
+{
+  if (event->any.type != GDK_MOTION_NOTIFY)
+    return NULL;
+  return g_list_reverse (g_list_copy (event->motion.history));
+}
