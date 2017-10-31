@@ -37,7 +37,6 @@ static void gdk_broadway_device_set_window_cursor (GdkDevice *device,
 						   GdkWindow *window,
 						   GdkCursor *cursor);
 static void gdk_broadway_device_warp (GdkDevice *device,
-				      GdkScreen *screen,
 				      gdouble    x,
 				      gdouble    y);
 static void gdk_broadway_device_query_state (GdkDevice        *device,
@@ -133,7 +132,6 @@ gdk_broadway_device_set_window_cursor (GdkDevice *device,
 
 static void
 gdk_broadway_device_warp (GdkDevice *device,
-			  GdkScreen *screen,
 			  gdouble    x,
 			  gdouble    y)
 {

@@ -51,7 +51,6 @@ static void gdk_quartz_device_core_set_window_cursor (GdkDevice *device,
                                                       GdkWindow *window,
                                                       GdkCursor *cursor);
 static void gdk_quartz_device_core_warp (GdkDevice *device,
-                                         GdkScreen *screen,
                                          gdouble    x,
                                          gdouble    y);
 static void gdk_quartz_device_core_query_state (GdkDevice        *device,

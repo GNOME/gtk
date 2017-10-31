@@ -3799,7 +3799,7 @@ gtk_menu_position_legacy (GtkMenu  *menu,
 
   display = gtk_widget_get_display (widget);
   pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
-  gdk_device_get_position (pointer, NULL, &x, &y);
+  gdk_device_get_position (pointer, &x, &y);
 
   /* Realize so we have the proper width and height to figure out
    * the right place to popup the menu.

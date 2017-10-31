@@ -55,7 +55,6 @@ static void     gdk_x11_device_core_set_window_cursor (GdkDevice *device,
                                                        GdkWindow *window,
                                                        GdkCursor *cursor);
 static void     gdk_x11_device_core_warp (GdkDevice *device,
-                                          GdkScreen *screen,
                                           gdouble    x,
                                           gdouble    y);
 static void gdk_x11_device_core_query_state (GdkDevice        *device,
@@ -231,14 +230,15 @@ gdk_x11_device_core_set_window_cursor (GdkDevice *device,
 
 static void
 gdk_x11_device_core_warp (GdkDevice *device,
-                          GdkScreen *screen,
                           gdouble    x,
                           gdouble    y)
 {
   Display *xdisplay;
   Window dest;
+  GdkScreen *screen;
 
   xdisplay = GDK_DISPLAY_XDISPLAY (gdk_device_get_display (device));
+  screen = gdk_display_get_default_screen (gdk_device_get_display (device));
   dest = GDK_WINDOW_XID (gdk_screen_get_root_window (screen));
 
   XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0,

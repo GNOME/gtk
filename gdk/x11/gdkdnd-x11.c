@@ -3037,9 +3037,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
     {
       x11_context->last_x += dx;
       x11_context->last_y += dy;
-      gdk_device_warp (pointer,
-                       gdk_window_get_screen (x11_context->ipc_window),
-                       x11_context->last_x, x11_context->last_y);
+      gdk_device_warp (pointer, x11_context->last_x, x11_context->last_y);
     }
 
   gdk_drag_update (context, x11_context->last_x, x11_context->last_y, state,

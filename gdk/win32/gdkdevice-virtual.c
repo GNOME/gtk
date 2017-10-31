@@ -123,7 +123,6 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
 
 static void
 gdk_device_virtual_warp (GdkDevice *device,
-			 GdkScreen *screen,
 			 gdouble   x,
 			 gdouble   y)
 {

@@ -84,7 +84,6 @@ gdk_mir_keyboard_set_window_cursor (GdkDevice *device,
 
 static void
 gdk_mir_keyboard_warp (GdkDevice *device,
-                       GdkScreen *screen,
                        gdouble    x,
                        gdouble    y)
 {

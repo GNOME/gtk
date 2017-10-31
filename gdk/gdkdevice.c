@@ -565,8 +565,6 @@ gdk_device_get_state (GdkDevice       *device,
 /**
  * gdk_device_get_position_double:
  * @device: pointer device to query status about.
- * @screen: (out) (transfer none) (allow-none): location to store the #GdkScreen
- *          the @device is on, or %NULL.
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
  *
@@ -579,13 +577,11 @@ gdk_device_get_state (GdkDevice       *device,
  **/
 void
 gdk_device_get_position_double (GdkDevice        *device,
-                                GdkScreen       **screen,
                                 gdouble          *x,
                                 gdouble          *y)
 {
   GdkDisplay *display;
   gdouble tmp_x, tmp_y;
-  GdkScreen *default_screen;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
@@ -595,16 +591,12 @@ gdk_device_get_position_double (GdkDevice        *device,
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                     gdk_display_device_is_grabbed (display, device));
 
-  default_screen = gdk_display_get_default_screen (display);
-
   _gdk_device_query_state (device,
                            NULL,
                            NULL,
                            &tmp_x, &tmp_y,
                            NULL, NULL, NULL);
 
-  if (screen)
-    *screen = default_screen;
   if (x)
     *x = tmp_x;
   if (y)
@@ -614,8 +606,6 @@ gdk_device_get_position_double (GdkDevice        *device,
 /**
  * gdk_device_get_position:
  * @device: pointer device to query status about.
- * @screen: (out) (transfer none) (allow-none): location to store the #GdkScreen
- *          the @device is on, or %NULL.
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
  *
@@ -627,14 +617,13 @@ gdk_device_get_position_double (GdkDevice        *device,
  * Since: 3.0
  **/
 void
-gdk_device_get_position (GdkDevice        *device,
-                         GdkScreen       **screen,
-                         gint             *x,
-                         gint             *y)
+gdk_device_get_position (GdkDevice *device,
+                         gint      *x,
+                         gint      *y)
 {
   gdouble tmp_x, tmp_y;
 
-  gdk_device_get_position_double (device, screen, &tmp_x, &tmp_y);
+  gdk_device_get_position_double (device, &tmp_x, &tmp_y);
   if (x)
     *x = round (tmp_x);
   if (y)
@@ -1511,13 +1500,12 @@ gdk_device_ungrab (GdkDevice  *device,
 /**
  * gdk_device_warp:
  * @device: the device to warp.
- * @screen: the screen to warp @device to.
  * @x: the X coordinate of the destination.
  * @y: the Y coordinate of the destination.
  *
- * Warps @device in @display to the point @x,@y on
- * the screen @screen, unless the device is confined
- * to a window by a grab, in which case it will be moved
+ * Warps @device in @display to the point @x,@y,
+ * unless the device is confined to a window by a grab,
+ * in which case it will be moved
  * as far as allowed by the grab. Warping the pointer
  * creates events as if the user had moved the mouse
  * instantaneously to the destination.
@@ -1531,15 +1519,12 @@ gdk_device_ungrab (GdkDevice  *device,
  **/
 void
 gdk_device_warp (GdkDevice  *device,
-                 GdkScreen  *screen,
                  gint        x,
                  gint        y)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (gdk_device_get_display (device) == gdk_screen_get_display (screen));
 
-  GDK_DEVICE_GET_CLASS (device)->warp (device, screen, x, y);
+  GDK_DEVICE_GET_CLASS (device)->warp (device, x, y);
 }
 
 /* Private API */

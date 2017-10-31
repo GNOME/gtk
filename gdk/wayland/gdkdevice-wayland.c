@@ -525,7 +525,6 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
 
 static void
 gdk_wayland_device_warp (GdkDevice *device,
-                         GdkScreen *screen,
                          gdouble    x,
                          gdouble    y)
 {

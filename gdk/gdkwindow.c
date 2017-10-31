@@ -7358,7 +7358,7 @@ gdk_drag_begin_for_device (GdkWindow *window,
 {
   gint x, y;
 
-  gdk_device_get_position (device, NULL, &x, &y);
+  gdk_device_get_position (device, &x, &y);
 
   return gdk_drag_begin_from_point (window, device, targets, x, y);
 }

@@ -2223,16 +2223,14 @@ gdk_window_win32_get_device_state (GdkWindow       *window,
 void
 gdk_display_warp_device (GdkDisplay *display,
                          GdkDevice  *device,
-                         GdkScreen  *screen,
                          gint        x,
                          gint        y)
 {
   g_return_if_fail (display == gdk_display_get_default ());
-  g_return_if_fail (screen == gdk_display_get_default_screen (display));
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (display == gdk_device_get_display (device));
 
-  GDK_DEVICE_GET_CLASS (device)->warp (device, screen, x, y);
+  GDK_DEVICE_GET_CLASS (device)->warp (device, x, y);
 }
 
 static GdkEventMask
@@ -4471,8 +4469,7 @@ setup_drag_move_resize_context (GdkWindow                   *window,
            * the titlebar is, if any.
            */
           root_y = wy + wheight / 2;
-          gdk_device_warp (device, screen,
-                           root_x, root_y);
+          gdk_device_warp (device, root_x, root_y);
         }
     }
 

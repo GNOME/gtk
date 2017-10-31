@@ -80,7 +80,6 @@ static void gdk_x11_device_xi2_set_window_cursor (GdkDevice *device,
                                                   GdkWindow *window,
                                                   GdkCursor *cursor);
 static void gdk_x11_device_xi2_warp (GdkDevice *device,
-                                     GdkScreen *screen,
                                      gdouble    x,
                                      gdouble    y);
 static void gdk_x11_device_xi2_query_state (GdkDevice        *device,
@@ -300,12 +299,12 @@ gdk_x11_device_xi2_set_window_cursor (GdkDevice *device,
 
 static void
 gdk_x11_device_xi2_warp (GdkDevice *device,
-                         GdkScreen *screen,
                          gdouble    x,
                          gdouble    y)
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   Window dest;
+  GdkScreen *screen = gdk_screen_get_default ();
 
   dest = GDK_WINDOW_XID (gdk_screen_get_root_window (screen));
 

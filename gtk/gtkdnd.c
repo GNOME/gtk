@@ -1311,7 +1311,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
       start_y = (int)y;
     }
   else
-    gdk_device_get_position (pointer, NULL, &start_x, &start_y);
+    gdk_device_get_position (pointer, &start_x, &start_y);
 
   context = gdk_drag_begin_from_point (ipc_window, pointer, targets, start_x, start_y);
 
@@ -1347,10 +1347,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   info->icon_widget = NULL;
   info->destroy_icon = FALSE;
 
-  if (event)
-    info->cur_screen = gdk_display_get_default_screen (gdk_event_get_display (event));
-  else
-    gdk_device_get_position (pointer, &info->cur_screen, NULL, NULL);
+  info->cur_screen = gdk_display_get_default_screen (gdk_event_get_display (event));
 
   info->start_x = start_x;
   info->start_y = start_y;

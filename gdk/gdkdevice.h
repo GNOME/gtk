@@ -169,7 +169,6 @@ void     gdk_device_get_state    (GdkDevice         *device,
                                   GdkModifierType   *mask);
 GDK_AVAILABLE_IN_ALL
 void     gdk_device_get_position (GdkDevice         *device,
-                                  GdkScreen        **screen,
                                   gint              *x,
                                   gint              *y);
 GDK_AVAILABLE_IN_ALL
@@ -180,7 +179,6 @@ GdkWindow *
                                   gint              *win_y);
 GDK_AVAILABLE_IN_3_10
 void     gdk_device_get_position_double (GdkDevice         *device,
-                                         GdkScreen        **screen,
                                          gdouble           *x,
                                          gdouble           *y);
 GDK_AVAILABLE_IN_3_10
@@ -241,7 +239,6 @@ void          gdk_device_ungrab      (GdkDevice        *device,
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_device_warp        (GdkDevice        *device,
-                                      GdkScreen        *screen,
                                       gint              x,
                                       gint              y);
 

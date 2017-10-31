@@ -123,7 +123,6 @@ gdk_mir_pointer_set_window_cursor (GdkDevice *device,
 
 static void
 gdk_mir_pointer_warp (GdkDevice *device,
-                      GdkScreen *screen,
                       gdouble    x,
                       gdouble    y)
 {
