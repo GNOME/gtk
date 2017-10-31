@@ -2324,13 +2324,13 @@ gtk_device_grab_remove (GtkWidget *widget,
 /**
  * gtk_get_current_event:
  *
- * Obtains a copy of the event currently being processed by GTK+.
+ * Obtains a reference of the event currently being processed by GTK+.
  *
  * For example, if you are handling a #GtkButton::clicked signal,
  * the current event will be the #GdkEventButton that triggered
  * the ::clicked signal.
  *
- * Returns: (transfer full) (nullable): a copy of the current event, or
+ * Returns: (transfer full) (nullable): a reference of the current event, or
  *     %NULL if there is no current event. The returned event must be
  *     freed with g_object_unref().
  */
@@ -2338,7 +2338,7 @@ GdkEvent*
 gtk_get_current_event (void)
 {
   if (current_events)
-    return gdk_event_copy (current_events->data);
+    return g_object_ref (current_events->data);
   else
     return NULL;
 }
