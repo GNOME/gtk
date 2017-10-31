@@ -83,11 +83,11 @@ void             gtk_mount_operation_set_parent (GtkMountOperation *op,
                                                  GtkWindow         *parent);
 GDK_AVAILABLE_IN_ALL
 GtkWindow *      gtk_mount_operation_get_parent (GtkMountOperation *op);
-GDK_AVAILABLE_IN_ALL
-void             gtk_mount_operation_set_screen (GtkMountOperation *op,
-                                                 GdkScreen         *screen);
-GDK_AVAILABLE_IN_ALL
-GdkScreen       *gtk_mount_operation_get_screen (GtkMountOperation *op);
+GDK_AVAILABLE_IN_3_94
+void             gtk_mount_operation_set_display(GtkMountOperation *op,
+                                                 GdkDisplay        *display);
+GDK_AVAILABLE_IN_3_94
+GdkDisplay *     gtk_mount_operation_get_display(GtkMountOperation *op);
 
 G_END_DECLS
 
