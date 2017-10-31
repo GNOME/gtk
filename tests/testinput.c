@@ -256,7 +256,6 @@ main (int argc, char *argv[])
   GtkWidget *drawing_area;
   GtkWidget *vbox;
   GtkWidget *button;
-  GdkWindow *gdk_win;
 
   gtk_init ();
 
@@ -313,10 +312,6 @@ main (int argc, char *argv[])
   gtk_widget_show (button);
 
   gtk_widget_show (window);
-
-  /* request all motion events */
-  gdk_win = gtk_widget_get_window (drawing_area);
-  gdk_window_set_event_compression (gdk_win, FALSE);
 
   gtk_main ();
 

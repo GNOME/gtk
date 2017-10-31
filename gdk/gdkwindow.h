@@ -878,12 +878,6 @@ void       gdk_window_set_opaque_region        (GdkWindow      *window,
                                                 cairo_region_t *region);
 
 GDK_AVAILABLE_IN_3_12
-void       gdk_window_set_event_compression    (GdkWindow      *window,
-                                                gboolean        event_compression);
-GDK_AVAILABLE_IN_3_12
-gboolean   gdk_window_get_event_compression    (GdkWindow      *window);
-
-GDK_AVAILABLE_IN_3_12
 void       gdk_window_set_shadow_width         (GdkWindow      *window,
                                                 gint            left,
                                                 gint            right,
