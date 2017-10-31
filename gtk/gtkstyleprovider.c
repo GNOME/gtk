@@ -38,7 +38,7 @@ enum {
   LAST_SIGNAL
 };
 
-G_DEFINE_INTERFACE (GtkStyleProvider, gtk_style_provider, GTK_TYPE_STYLE_PROVIDER)
+G_DEFINE_INTERFACE (GtkStyleProvider, gtk_style_provider, G_TYPE_OBJECT)
 
 static guint signals[LAST_SIGNAL];
 
