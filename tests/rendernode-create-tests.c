@@ -362,9 +362,16 @@ text (guint n)
   PangoFontDescription *desc;
   PangoContext *context;
   PangoLayout *layout;
+  GtkSettings *settings;
+  int dpi_int;
   int i;
 
-  context = gdk_pango_context_get_for_display (gdk_display_get_default ());
+  context = pango_font_map_create_context (pango_cairo_font_map_get_default ());
+
+  settings = gtk_settings_get_default ();
+  g_object_get (settings, "gtk-xft-dpi", &dpi_int, NULL);
+  if (dpi_int > 0)
+    pango_cairo_context_set_resolution (context, dpi_int / 1024.);
 
   desc = pango_font_description_new ();
   pango_font_description_set_family (desc, "Cantarell");
