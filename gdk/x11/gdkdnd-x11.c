@@ -2678,7 +2678,7 @@ drag_context_grab (GdkDragContext *context)
   if (!x11_context->ipc_window)
     return FALSE;
 
-  root = gdk_screen_get_root_window (gdk_window_get_screen (x11_context->ipc_window));
+  root = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (x11_context->ipc_window));
   seat = gdk_device_get_seat (gdk_drag_context_get_device (context));
 
 #ifdef XINPUT_2
@@ -2767,7 +2767,7 @@ drag_context_ungrab (GdkDragContext *context)
   gdk_seat_ungrab (x11_context->grab_seat);
 
   keyboard = gdk_seat_get_keyboard (x11_context->grab_seat);
-  root = gdk_screen_get_root_window (gdk_window_get_screen (x11_context->ipc_window));
+  root = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (x11_context->ipc_window));
   g_clear_object (&x11_context->grab_seat);
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
@@ -3030,7 +3030,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
    * to query it here. We could use XGetModifierMapping, but
    * that would be overkill.
    */
-  root_window = gdk_screen_get_root_window (gdk_window_get_screen (x11_context->ipc_window));
+  root_window = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (x11_context->ipc_window));
   gdk_window_get_device_position (root_window, pointer, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)

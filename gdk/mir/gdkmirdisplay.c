@@ -474,7 +474,6 @@ static void
 gdk_mir_display_create_window_impl (GdkDisplay    *display,
                                     GdkWindow     *window,
                                     GdkWindow     *real_parent,
-                                    GdkScreen     *screen,
                                     GdkEventMask   event_mask,
                                     GdkWindowAttr *attributes)
 {

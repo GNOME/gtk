@@ -808,7 +808,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
     return;
 
   had_focus = HAS_FOCUS (toplevel);
-  x11_screen = GDK_X11_SCREEN (gdk_window_get_screen (window));
+  x11_screen = GDK_X11_SCREEN (GDK_WINDOW_SCREEN (window));
 
   switch (detail)
     {

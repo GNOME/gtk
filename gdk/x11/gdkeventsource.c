@@ -136,7 +136,7 @@ handle_focus_change (GdkEventCrossing *event)
   gboolean focus_in, had_focus;
 
   toplevel = _gdk_x11_window_get_toplevel (event->window);
-  x11_screen = GDK_X11_SCREEN (gdk_window_get_screen (event->window));
+  x11_screen = GDK_X11_SCREEN (GDK_WINDOW_SCREEN (event->window));
   focus_in = (event->type == GDK_ENTER_NOTIFY);
 
   if (x11_screen->wmspec_check_window)

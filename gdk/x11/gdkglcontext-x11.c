@@ -1209,7 +1209,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 
   display = gdk_window_get_display (window);
 
-  if (!gdk_x11_screen_init_gl (gdk_window_get_screen (window)))
+  if (!gdk_x11_screen_init_gl (GDK_WINDOW_SCREEN (window)))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,

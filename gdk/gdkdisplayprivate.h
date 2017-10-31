@@ -169,7 +169,6 @@ struct _GdkDisplayClass
   void                       (*create_window_impl) (GdkDisplay    *display,
                                                     GdkWindow     *window,
                                                     GdkWindow     *real_parent,
-                                                    GdkScreen     *screen,
                                                     GdkEventMask   event_mask,
                                                     GdkWindowAttr *attributes);
 
@@ -283,7 +282,6 @@ void                _gdk_display_event_data_free      (GdkDisplay       *display
 void                _gdk_display_create_window_impl   (GdkDisplay       *display,
                                                        GdkWindow        *window,
                                                        GdkWindow        *real_parent,
-                                                       GdkScreen        *screen,
                                                        GdkEventMask      event_mask,
                                                        GdkWindowAttr    *attributes);
 GdkWindow *         _gdk_display_create_window        (GdkDisplay       *display);

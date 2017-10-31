@@ -250,7 +250,6 @@ void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
 void       _gdk_x11_display_create_window_impl     (GdkDisplay    *display,
                                                     GdkWindow     *window,
                                                     GdkWindow     *real_parent,
-                                                    GdkScreen     *screen,
                                                     GdkEventMask   event_mask,
                                                     GdkWindowAttr *attributes);
 
@@ -297,7 +296,7 @@ extern const gint        _gdk_x11_event_mask_table_size;
 
 #define GDK_SCREEN_DISPLAY(screen)    (GDK_X11_SCREEN (screen)->display)
 #define GDK_SCREEN_XROOTWIN(screen)   (GDK_X11_SCREEN (screen)->xroot_window)
-#define GDK_WINDOW_SCREEN(win)        (gdk_window_get_screen (win))
+#define GDK_WINDOW_SCREEN(win)        (gdk_display_get_default_screen (gdk_window_get_display (win)))
 #define GDK_WINDOW_DISPLAY(win)       (GDK_X11_SCREEN (GDK_WINDOW_SCREEN (win))->display)
 #define GDK_WINDOW_XROOTWIN(win)      (GDK_X11_SCREEN (GDK_WINDOW_SCREEN (win))->xroot_window)
 #define GDK_GC_DISPLAY(gc)            (GDK_SCREEN_DISPLAY (GDK_GC_X11(gc)->screen))

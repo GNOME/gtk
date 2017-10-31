@@ -139,7 +139,6 @@ void gdk_wayland_drop_context_update_targets (GdkDragContext *context);
 void _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					      GdkWindow     *window,
 					      GdkWindow     *real_parent,
-					      GdkScreen     *screen,
 					      GdkEventMask   event_mask,
 					      GdkWindowAttr *attributes);
 

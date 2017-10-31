@@ -655,7 +655,6 @@ void
 _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
                                          GdkWindow     *window,
                                          GdkWindow     *real_parent,
-                                         GdkScreen     *screen,
                                          GdkEventMask   event_mask,
                                          GdkWindowAttr *attributes)
 {
@@ -709,7 +708,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   g_signal_connect (frame_clock, "after-paint",
                     G_CALLBACK (on_frame_clock_after_paint), window);
 
-  g_signal_connect (screen, "monitors-changed",
+  g_signal_connect (gdk_display_get_default_screen (display), "monitors-changed",
                     G_CALLBACK (on_monitors_changed), window);
 }
 
@@ -1501,7 +1500,7 @@ gdk_wayland_window_create_xdg_toplevel (GdkWindow *window)
   struct wl_output *fullscreen_output = NULL;
   if (impl->initial_fullscreen_monitor >= 0 &&
       impl->initial_fullscreen_monitor < gdk_display_get_n_monitors (display))
-      fullscreen_output = _gdk_wayland_screen_get_wl_output (gdk_window_get_screen (window), impl->initial_fullscreen_monitor);
+      fullscreen_output = _gdk_wayland_screen_get_wl_output (gdk_display_get_default_screen (gdk_window_get_display (window)), impl->initial_fullscreen_monitor);
 
   impl->display_server.xdg_surface =
     zxdg_shell_v6_get_xdg_surface (display_wayland->xdg_shell,
@@ -3326,7 +3325,8 @@ static void
 gdk_wayland_window_fullscreen_on_monitor (GdkWindow *window, gint monitor)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkScreen *screen = gdk_window_get_screen (window);
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkScreen *screen = gdk_display_get_default_screen (display);
   struct wl_output *fullscreen_output =
     _gdk_wayland_screen_get_wl_output (screen, monitor);
 

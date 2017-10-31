@@ -74,7 +74,7 @@ struct _GtkIMContextXIM
 
 struct _GtkXIMInfo
 {
-  GdkScreen *screen;
+  GdkDisplay *display;
   XIM im;
   char *locale;
   XIMStyle preedit_style_setting;
@@ -310,7 +310,7 @@ setup_im (GtkXIMInfo *info)
   setup_styles (info);
   reinitialize_all_ics (info);
 
-  display = gdk_screen_get_display (info->screen);
+  display = info->display;
   info->display_closed_cb = g_signal_connect (display, "closed",
 	                                      G_CALLBACK (xim_info_display_closed), info);
 }
@@ -374,8 +374,7 @@ xim_instantiate_callback (Display *display, XPointer client_data,
 static void
 xim_info_try_im (GtkXIMInfo *info)
 {
-  GdkScreen *screen = info->screen;
-  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkDisplay *display = info->display;
 
   g_assert (info->im == NULL);
   if (info->reconnecting)
@@ -424,14 +423,14 @@ get_im (GdkWindow *client_window,
 {
   GSList *tmp_list;
   GtkXIMInfo *info;
-  GdkScreen *screen = gdk_window_get_screen (client_window);
+  GdkDisplay *display = gdk_window_get_display (client_window);
 
   info = NULL;
   tmp_list = open_ims;
   while (tmp_list)
     {
       GtkXIMInfo *tmp_info = tmp_list->data;
-      if (tmp_info->screen == screen &&
+      if (tmp_info->display == display &&
 	  strcmp (tmp_info->locale, locale) == 0)
 	{
 	  if (tmp_info->im)
@@ -452,7 +451,7 @@ get_im (GdkWindow *client_window,
       info = g_new (GtkXIMInfo, 1);
       open_ims = g_slist_prepend (open_ims, info);
 
-      info->screen = screen;
+      info->display = display;
       info->locale = g_strdup (locale);
       info->xim_styles = NULL;
       info->preedit_style_setting = 0;
@@ -512,7 +511,7 @@ gtk_im_context_xim_finalize (GObject *obj)
 	{
 	  GdkDisplay *display;
 
-	  display = gdk_screen_get_display (context_xim->im_info->screen);
+	  display = context_xim->im_info->display;
 	  XUnregisterIMInstantiateCallback (GDK_DISPLAY_XDISPLAY (display),
 					    NULL, NULL, NULL,
 					    xim_instantiate_callback,
@@ -1787,7 +1786,7 @@ gtk_im_context_xim_shutdown (void)
   while (open_ims)
     {
       GtkXIMInfo *info = open_ims->data;
-      GdkDisplay *display = gdk_screen_get_display (info->screen);
+      GdkDisplay *display = info->display;
 
       xim_info_display_closed (display, FALSE, info);
       open_ims = g_slist_remove_link (open_ims, open_ims);

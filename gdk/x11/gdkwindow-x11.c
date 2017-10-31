@@ -437,7 +437,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
 		       impl->toplevel->current_counter_value);
 
       if (impl->frame_sync_enabled &&
-          gdk_x11_screen_supports_net_wm_hint (gdk_window_get_screen (window),
+          gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
 					       gdk_atom_intern_static_string ("_NET_WM_FRAME_DRAWN")))
         {
           impl->toplevel->frame_pending = TRUE;
@@ -904,7 +904,6 @@ void
 _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                                      GdkWindow     *window,
                                      GdkWindow     *real_parent,
-                                     GdkScreen     *screen,
                                      GdkEventMask   event_mask,
                                      GdkWindowAttr *attributes)
 {
@@ -925,7 +924,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   display_x11 = GDK_X11_DISPLAY (display);
   xparent = GDK_WINDOW_XID (real_parent);
-  x11_screen = GDK_X11_SCREEN (screen);
+  x11_screen = GDK_X11_SCREEN (gdk_display_get_default_screen (display));
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);
@@ -948,7 +947,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       if (GDK_WINDOW_TYPE (window->parent) != GDK_WINDOW_ROOT)
         {
           /* The common code warns for this case */
-          xparent = GDK_SCREEN_XROOTWIN (screen);
+          xparent = GDK_SCREEN_XROOTWIN (x11_screen);
         }
       break;
 

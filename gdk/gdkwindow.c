@@ -977,19 +977,13 @@ gdk_window_new (GdkDisplay    *display,
 		GdkWindowAttr *attributes)
 {
   GdkWindow *window;
-  GdkScreen *screen;
   gboolean native;
   GdkEventMask event_mask;
 
   g_return_val_if_fail (attributes != NULL, NULL);
 
   if (!parent)
-    {
-      screen = gdk_display_get_default_screen (display);
-      parent = gdk_screen_get_root_window (screen);
-    }
-  else
-    screen = gdk_window_get_screen (parent);
+    parent = gdk_screen_get_root_window (gdk_display_get_default_screen (display));
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
 
@@ -1093,7 +1087,7 @@ gdk_window_new (GdkDisplay    *display,
       event_mask = get_native_event_mask (window);
 
       /* Create the impl */
-      _gdk_display_create_window_impl (display, window, parent, screen, event_mask, attributes);
+      _gdk_display_create_window_impl (display, window, parent, event_mask, attributes);
       window->impl_window = window;
     }
   else
@@ -1377,7 +1371,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
     return;
 
   display = gdk_window_get_display (window);
-  screen = gdk_window_get_screen (window);
+  screen = gdk_display_get_default_screen (display);
   temp_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
   if (temp_window == window)
     g_object_set_qdata (G_OBJECT (screen), quark_pointer_window, NULL);
@@ -1581,24 +1575,6 @@ gdk_window_get_window_type (GdkWindow *window)
   g_return_val_if_fail (GDK_IS_WINDOW (window), (GdkWindowType) -1);
 
   return GDK_WINDOW_TYPE (window);
-}
-
-/**
- * gdk_window_get_screen:
- * @window: a #GdkWindow
- * 
- * Gets the #GdkScreen associated with a #GdkWindow.
- * 
- * Returns: (transfer none): the #GdkScreen associated with @window
- *
- * Since: 2.24
- **/
-GdkScreen*
-gdk_window_get_screen (GdkWindow *window)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-
-  return gdk_display_get_default_screen (window->display);
 }
 
 /**

@@ -422,8 +422,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean      gdk_window_is_destroyed          (GdkWindow     *window);
 
 GDK_AVAILABLE_IN_ALL
-GdkScreen *   gdk_window_get_screen            (GdkWindow     *window);
-GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gdk_window_get_display           (GdkWindow     *window);
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_show                  (GdkWindow     *window);
