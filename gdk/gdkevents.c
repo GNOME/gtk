@@ -506,7 +506,7 @@ gdk_event_new (GdkEventType type)
   new_private = g_slice_new0 (GdkEventPrivate);
   
   new_private->flags = 0;
-  new_private->screen = NULL;
+  new_private->display = NULL;
 
   g_hash_table_insert (event_hash, new_private, GUINT_TO_POINTER (1));
 
@@ -658,7 +658,7 @@ gdk_event_copy (const GdkEvent *event)
     {
       GdkEventPrivate *private = (GdkEventPrivate *)event;
 
-      new_private->screen = private->screen;
+      new_private->display = private->display;
       new_private->device = private->device ? g_object_ref (private->device) : NULL;
       new_private->source_device = private->source_device ? g_object_ref (private->source_device) : NULL;
       new_private->seat = private->seat;
@@ -2042,7 +2042,7 @@ gdk_events_get_center (GdkEvent *event1,
  * gdk_event_set_screen:
  * @event: a #GdkEvent
  * @screen: a #GdkScreen
- * 
+ *
  * Sets the screen for @event to @screen. The event must
  * have been allocated by GTK+, for instance, by
  * gdk_event_copy().
@@ -2053,13 +2053,7 @@ void
 gdk_event_set_screen (GdkEvent  *event,
 		      GdkScreen *screen)
 {
-  GdkEventPrivate *private;
-  
-  g_return_if_fail (gdk_event_is_allocated (event));
-
-  private = (GdkEventPrivate *)event;
-  
-  private->screen = screen;
+  gdk_event_set_display (event, gdk_screen_get_display (screen));
 }
 
 /**
@@ -2081,16 +2075,42 @@ gdk_event_set_screen (GdkEvent  *event,
 GdkScreen *
 gdk_event_get_screen (const GdkEvent *event)
 {
+  GdkDisplay *display;
+
+  display = gdk_event_get_display (event);
+
+  if (display)
+    return gdk_display_get_default_screen (display);
+
+  return NULL;
+}
+
+void
+gdk_event_set_display (GdkEvent   *event,
+                       GdkDisplay *display)
+{
+  GdkEventPrivate *private;
+
+  g_return_if_fail (gdk_event_is_allocated (event));
+
+  private = (GdkEventPrivate *)event;
+
+  private->display = display;
+}
+
+GdkDisplay *
+gdk_event_get_display (const GdkEvent *event)
+{
   if (gdk_event_is_allocated (event))
     {
       GdkEventPrivate *private = (GdkEventPrivate *)event;
 
-      if (private->screen)
-	return private->screen;
+      if (private->display)
+	return private->display;
     }
 
   if (event->any.window)
-    return gdk_window_get_screen (event->any.window);
+    return gdk_window_get_display (event->any.window);
 
   return NULL;
 }

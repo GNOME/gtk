@@ -144,7 +144,7 @@ struct _GdkEventPrivate
 {
   GdkEvent   event;
   guint      flags;
-  GdkScreen *screen;
+  GdkDisplay *display;
   gpointer   windowing_data;
   GdkDevice *device;
   GdkDevice *source_device;

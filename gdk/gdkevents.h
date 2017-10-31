@@ -673,6 +673,12 @@ void       gdk_event_set_screen         (GdkEvent        *event,
 GDK_AVAILABLE_IN_ALL
 GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
 
+GDK_AVAILABLE_IN_3_94
+void       gdk_event_set_display        (GdkEvent        *event,
+                                         GdkDisplay      *display);
+GDK_AVAILABLE_IN_3_94
+GdkDisplay *gdk_event_get_display       (const GdkEvent  *event);
+
 GDK_AVAILABLE_IN_3_4
 GdkEventSequence *gdk_event_get_event_sequence (const GdkEvent *event);
 
