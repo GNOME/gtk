@@ -299,31 +299,6 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
 }
 
 /**
- * gdk_pango_context_get:
- * 
- * Creates a #PangoContext for the default GDK screen.
- *
- * The context must be freed when you’re finished with it.
- * 
- * When using GTK+, normally you should use gtk_widget_get_pango_context()
- * instead of this function, to get the appropriate context for
- * the widget you intend to render text onto.
- * 
- * The newly created context will have the default font options (see
- * #cairo_font_options_t) for the default screen; if these options
- * change it will not be updated. Using gtk_widget_get_pango_context()
- * is more convenient if you want to keep a context around and track
- * changes to the screen’s font rendering settings.
- *
- * Returns: (transfer full): a new #PangoContext for the default display
- **/
-PangoContext *
-gdk_pango_context_get (void)
-{
-  return gdk_pango_context_get_for_display (gdk_display_get_default ());
-}
-
-/**
  * gdk_pango_context_get_for_display:
  * @display: the #GdkDisplay for which the context is to be created
  *
