@@ -1178,7 +1178,7 @@ gtk_real_menu_item_select (GtkMenuItem *menu_item)
   if (current_event)
     {
       source_device = gdk_event_get_source_device (current_event);
-      gdk_event_free (current_event);
+      g_object_unref (current_event);
     }
 
   if ((!source_device ||
@@ -1516,7 +1516,7 @@ gtk_menu_item_popup_timeout (gpointer data)
 
   priv->timer = 0;
 
-  g_clear_pointer (&info->trigger_event, gdk_event_free);
+  g_clear_object (&info->trigger_event);
   g_slice_free (PopupInfo, info);
 
   return FALSE;

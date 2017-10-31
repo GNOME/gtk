@@ -472,7 +472,7 @@ gtk_selection_owner_set_for_display (GdkDisplay   *display,
           gdk_event_set_selection (event, gtk_widget_get_window (old_owner), selection, time);
 	  gtk_widget_event (old_owner, event);
 
-	  gdk_event_free (event);
+	  g_object_unref (event);
 	}
       return TRUE;
     }

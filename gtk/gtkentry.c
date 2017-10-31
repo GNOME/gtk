@@ -8622,7 +8622,7 @@ gtk_entry_do_popup (GtkEntry       *entry,
         }
     }
 
-  g_clear_pointer (&trigger_event, gdk_event_free);
+  g_clear_object (&trigger_event);
 }
 
 static gboolean

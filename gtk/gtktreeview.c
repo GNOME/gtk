@@ -5743,7 +5743,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
           /* Because we keep the focus on the treeview, we need to forward the
            * key events to the entry, when it is visible. */
           gtk_widget_event (search_window, new_event);
-          gdk_event_free (new_event);
+          g_object_unref (new_event);
 
           g_signal_handler_disconnect (tree_view->priv->search_entry,
                                        popup_menu_id);
@@ -10652,7 +10652,7 @@ send_focus_change (GtkWidget *widget,
 
       gtk_widget_send_focus_change (widget, fevent);
 
-      gdk_event_free (fevent);
+      g_object_unref (fevent);
     }
 
   g_list_free (devices);

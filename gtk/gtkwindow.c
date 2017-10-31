@@ -1337,7 +1337,7 @@ send_delete_event (gpointer data)
   priv->delete_event_handler = 0;
 
   gtk_main_do_event (event);
-  gdk_event_free (event);
+  g_object_unref (event);
 
   return G_SOURCE_REMOVE;
 }
@@ -7637,7 +7637,7 @@ do_focus_change (GtkWidget *widget,
 
       gtk_widget_send_focus_change (widget, fevent);
 
-      gdk_event_free (fevent);
+      g_object_unref (fevent);
     }
 
   g_list_free (devices);
