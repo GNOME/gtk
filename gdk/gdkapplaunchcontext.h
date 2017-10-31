@@ -41,9 +41,6 @@ GDK_AVAILABLE_IN_ALL
 GType                gdk_app_launch_context_get_type      (void);
 
 GDK_AVAILABLE_IN_ALL
-void                 gdk_app_launch_context_set_screen    (GdkAppLaunchContext *context,
-                                                           GdkScreen           *screen);
-GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_desktop   (GdkAppLaunchContext *context,
                                                            gint                 desktop);
 GDK_AVAILABLE_IN_ALL
