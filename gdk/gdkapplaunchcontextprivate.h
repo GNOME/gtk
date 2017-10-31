@@ -36,7 +36,6 @@ struct _GdkAppLaunchContext
   GAppLaunchContext parent_instance;
 
   GdkDisplay *display;
-  GdkScreen *screen;
   gint workspace;
   guint32 timestamp;
   GIcon *icon;

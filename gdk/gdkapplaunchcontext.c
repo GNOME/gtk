@@ -42,7 +42,7 @@
  *
  * context = gdk_display_get_app_launch_context (display);
  *
- * gdk_app_launch_context_set_screen (screen);
+ * gdk_app_launch_context_set_display (display);
  * gdk_app_launch_context_set_timestamp (event->time);
  *
  * if (!g_app_info_launch_default_for_uri ("http://www.gtk.org", context, &error))
@@ -143,9 +143,6 @@ gdk_app_launch_context_finalize (GObject *object)
   if (context->display)
     g_object_unref (context->display);
 
-  if (context->screen)
-    g_object_unref (context->screen);
-
   if (context->icon)
     g_object_unref (context->icon);
 
@@ -168,39 +165,6 @@ gdk_app_launch_context_get_display (GAppLaunchContext *context,
     display = gdk_display_get_default ();
 
   return g_strdup (gdk_display_get_name (display));
-}
-
-/**
- * gdk_app_launch_context_set_screen:
- * @context: a #GdkAppLaunchContext
- * @screen: a #GdkScreen
- *
- * Sets the screen on which applications will be launched when
- * using this context. See also gdk_app_launch_context_set_display().
- *
- * If both @screen and @display are set, the @screen takes priority.
- * If neither @screen or @display are set, the default screen and
- * display are used.
- *
- * Since: 2.14
- */
-void
-gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
-                                   GdkScreen           *screen)
-{
-  g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
-  g_return_if_fail (screen == NULL || GDK_IS_SCREEN (screen));
-
-  g_return_if_fail (screen == NULL || gdk_screen_get_display (screen) == context->display);
-
-  if (context->screen)
-    {
-      g_object_unref (context->screen);
-      context->screen = NULL;
-    }
-
-  if (screen)
-    context->screen = g_object_ref (screen);
 }
 
 /**
