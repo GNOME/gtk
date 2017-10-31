@@ -497,7 +497,6 @@ GDK_TYPE_PROP_MODE
 <FILE>pango_interaction</FILE>
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
-gdk_pango_context_get_for_display
 </SECTION>
 
 <SECTION>
