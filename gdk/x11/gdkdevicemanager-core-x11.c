@@ -897,7 +897,7 @@ _gdk_device_manager_core_handle_focus (GdkWindow *window,
         gdk_event_set_source_device (event, source_device);
 
       gdk_display_put_event (gdk_window_get_display (window), event);
-      gdk_event_free (event);
+      g_object_unref (event);
     }
 }
 
