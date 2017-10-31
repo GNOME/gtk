@@ -108,7 +108,6 @@ struct _GtkDragSourceInfo
 
   gint               start_x, start_y; /* Initial position */
   gint               cur_x, cur_y;     /* Current Position */
-  GdkScreen         *cur_screen;       /* Current screen for pointer */
 
   guint32            grab_time;   /* timestamp for initial grab */
   GList             *selections;  /* selections we've claimed */
@@ -222,7 +221,6 @@ static void gtk_drag_context_dnd_finished_cb   (GdkDragContext    *context,
 static void gtk_drag_add_update_idle           (GtkDragSourceInfo *info);
 
 static void gtk_drag_update                    (GtkDragSourceInfo *info,
-                                                GdkScreen         *screen,
                                                 gint               x_root,
                                                 gint               y_root,
                                                 const GdkEvent    *event);
@@ -1347,8 +1345,6 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   info->icon_widget = NULL;
   info->destroy_icon = FALSE;
 
-  info->cur_screen = gdk_display_get_default_screen (gdk_event_get_display (event));
-
   info->start_x = start_x;
   info->start_y = start_y;
 
@@ -1395,7 +1391,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
       if (event && gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
         gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
       else
-        gtk_drag_update (info, info->cur_screen, info->cur_x, info->cur_y, event);
+        gtk_drag_update (info, info->cur_x, info->cur_y, event);
 
       g_signal_connect (info->ipc_widget, "grab-notify",
                         G_CALLBACK (gtk_drag_grab_notify_cb), info);
@@ -2124,7 +2120,6 @@ gtk_drag_add_update_idle (GtkDragSourceInfo *info)
 /*
  * gtk_drag_update:
  * @info: DragSourceInfo for the drag
- * @screen: new screen
  * @x_root: new X position 
  * @y_root: new y position
  * @event: event received requiring update
@@ -2134,12 +2129,10 @@ gtk_drag_add_update_idle (GtkDragSourceInfo *info)
  */
 static void
 gtk_drag_update (GtkDragSourceInfo *info,
-                 GdkScreen         *screen,
                  gint               x_root,
                  gint               y_root,
                  const GdkEvent    *event)
 {
-  info->cur_screen = screen;
   info->cur_x = x_root;
   info->cur_y = y_root;
   if (info->last_event)
@@ -2272,13 +2265,11 @@ gtk_drag_motion_cb (GtkWidget      *widget,
                     gpointer        data)
 {
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
-  GdkScreen *screen;
   double x_root, y_root;
 
   gdk_event_get_root_coords ((GdkEvent *)event, &x_root, &y_root);
-  screen = gdk_display_get_default_screen (gdk_event_get_display ((GdkEvent *)event));
 
-  gtk_drag_update (info, screen, (int)x_root, (int)y_root, (GdkEvent *) event);
+  gtk_drag_update (info, (int)x_root, (int)y_root, (GdkEvent *) event);
 
   return TRUE;
 }
