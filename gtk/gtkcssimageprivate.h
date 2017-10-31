@@ -58,7 +58,7 @@ struct _GtkCssImageClass
   /* create "computed value" in CSS terms, returns a new reference */
   GtkCssImage *(* compute)                         (GtkCssImage                *image,
                                                     guint                       property_id,
-                                                    GtkStyleProviderPrivate    *provider,
+                                                    GtkStyleProvider           *provider,
                                                     GtkCssStyle                *style,
                                                     GtkCssStyle                *parent_style);
   /* compare two images for equality */
@@ -98,7 +98,7 @@ double         _gtk_css_image_get_aspect_ratio     (GtkCssImage                *
 
 GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *image,
                                                     guint                       property_id,
-                                                    GtkStyleProviderPrivate    *provider,
+                                                    GtkStyleProvider           *provider,
                                                     GtkCssStyle                *style,
                                                     GtkCssStyle                *parent_style);
 gboolean       _gtk_css_image_equal                (GtkCssImage                *image1,

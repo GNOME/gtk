@@ -49,7 +49,7 @@ void                    _gtk_css_lookup_set                     (GtkCssLookup   
                                                                  GtkCssSection              *section,
                                                                  GtkCssValue                *value);
 void                    _gtk_css_lookup_resolve                 (GtkCssLookup               *lookup,
-                                                                 GtkStyleProviderPrivate    *provider,
+                                                                 GtkStyleProvider           *provider,
                                                                  GtkCssStaticStyle          *style,
                                                                  GtkCssStyle                *parent_style);
 

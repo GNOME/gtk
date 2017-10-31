@@ -37,11 +37,11 @@ gtk_css_value_position_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_position_compute (GtkCssValue             *position,
-                                guint                    property_id,
-                                GtkStyleProviderPrivate *provider,
-                                GtkCssStyle             *style,
-                                GtkCssStyle             *parent_style)
+gtk_css_value_position_compute (GtkCssValue      *position,
+                                guint             property_id,
+                                GtkStyleProvider *provider,
+                                GtkCssStyle      *style,
+                                GtkCssStyle      *parent_style)
 {
   GtkCssValue *x, *y;
 

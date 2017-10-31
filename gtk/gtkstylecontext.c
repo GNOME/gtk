@@ -409,12 +409,12 @@ gtk_style_context_get_root (GtkStyleContext *context)
     return priv->cssnode;
 }
 
-GtkStyleProviderPrivate *
+GtkStyleProvider *
 gtk_style_context_get_style_provider (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
 
-  return GTK_STYLE_PROVIDER_PRIVATE (priv->cascade);
+  return GTK_STYLE_PROVIDER (priv->cascade);
 }
 
 static gboolean
@@ -1451,7 +1451,7 @@ _gtk_style_context_resolve_color (GtkStyleContext    *context,
   g_return_val_if_fail (result != NULL, FALSE);
 
   val = _gtk_css_color_value_resolve (color,
-                                      GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                      GTK_STYLE_PROVIDER (priv->cascade),
                                       _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR),
                                       NULL);
   if (val == NULL)
@@ -1484,7 +1484,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   g_return_val_if_fail (color_name != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
 
-  value = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade), color_name);
+  value = gtk_style_provider_get_color (GTK_STYLE_PROVIDER (priv->cascade), color_name);
   if (value == NULL)
     return FALSE;
 

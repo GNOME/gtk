@@ -256,12 +256,12 @@ gtk_css_value_transform_free (GtkCssValue *value)
 
 /* returns TRUE if dest == src */
 static gboolean
-gtk_css_transform_compute (GtkCssTransform         *dest,
-                           GtkCssTransform         *src,
-                           guint                    property_id,
-                           GtkStyleProviderPrivate *provider,
-                           GtkCssStyle             *style,
-                           GtkCssStyle             *parent_style)
+gtk_css_transform_compute (GtkCssTransform  *dest,
+                           GtkCssTransform  *src,
+                           guint             property_id,
+                           GtkStyleProvider *provider,
+                           GtkCssStyle      *style,
+                           GtkCssStyle      *parent_style)
 {
   dest->type = src->type;
 
@@ -311,11 +311,11 @@ gtk_css_transform_compute (GtkCssTransform         *dest,
 }
 
 static GtkCssValue *
-gtk_css_value_transform_compute (GtkCssValue             *value,
-                                 guint                    property_id,
-                                 GtkStyleProviderPrivate *provider,
-                                 GtkCssStyle             *style,
-                                 GtkCssStyle             *parent_style)
+gtk_css_value_transform_compute (GtkCssValue      *value,
+                                 guint             property_id,
+                                 GtkStyleProvider *provider,
+                                 GtkCssStyle      *style,
+                                 GtkCssStyle      *parent_style)
 {
   GtkCssValue *result;
   gboolean changes;

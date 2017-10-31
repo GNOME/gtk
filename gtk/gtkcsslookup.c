@@ -103,10 +103,10 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
  * an issue, go fix it.
  **/
 void
-_gtk_css_lookup_resolve (GtkCssLookup            *lookup,
-                         GtkStyleProviderPrivate *provider,
-                         GtkCssStaticStyle       *style,
-                         GtkCssStyle             *parent_style)
+_gtk_css_lookup_resolve (GtkCssLookup      *lookup,
+                         GtkStyleProvider  *provider,
+                         GtkCssStaticStyle *style,
+                         GtkCssStyle       *parent_style)
 {
   guint i;
 

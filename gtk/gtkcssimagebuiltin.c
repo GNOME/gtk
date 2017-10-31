@@ -474,11 +474,11 @@ gtk_css_image_builtin_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_builtin_compute (GtkCssImage             *image,
-                               guint                    property_id,
-                               GtkStyleProviderPrivate *provider,
-                               GtkCssStyle             *style,
-                               GtkCssStyle             *parent_style)
+gtk_css_image_builtin_compute (GtkCssImage      *image,
+                               guint             property_id,
+                               GtkStyleProvider *provider,
+                               GtkCssStyle      *style,
+                               GtkCssStyle      *parent_style)
 {
   GtkCssImageBuiltin *result;
 

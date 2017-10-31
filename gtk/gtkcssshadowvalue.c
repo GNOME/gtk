@@ -65,11 +65,11 @@ gtk_css_value_shadow_free (GtkCssValue *shadow)
 }
 
 static GtkCssValue *
-gtk_css_value_shadow_compute (GtkCssValue             *shadow,
-                              guint                    property_id,
-                              GtkStyleProviderPrivate *provider,
-                              GtkCssStyle             *style,
-                              GtkCssStyle             *parent_style)
+gtk_css_value_shadow_compute (GtkCssValue      *shadow,
+                              guint             property_id,
+                              GtkStyleProvider *provider,
+                              GtkCssStyle      *style,
+                              GtkCssStyle      *parent_style)
 {
   GtkCssValue *hoffset, *voffset, *radius, *spread, *color;
 

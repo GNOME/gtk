@@ -42,11 +42,11 @@ gtk_css_value_border_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_border_compute (GtkCssValue             *value,
-                              guint                    property_id,
-                              GtkStyleProviderPrivate *provider,
-                              GtkCssStyle             *style,
-                              GtkCssStyle             *parent_style)
+gtk_css_value_border_compute (GtkCssValue      *value,
+                              guint             property_id,
+                              GtkStyleProvider *provider,
+                              GtkCssStyle      *style,
+                              GtkCssStyle      *parent_style)
 {
   GtkCssValue *values[4];
   GtkCssValue *computed;

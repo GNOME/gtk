@@ -324,12 +324,12 @@ gtk_css_animated_style_find_animation (GSList     *animations,
 }
 
 static GSList *
-gtk_css_animated_style_create_css_animations (GSList                  *animations,
-                                              GtkCssStyle             *base_style,
-                                              GtkCssStyle             *parent_style,
-                                              gint64                   timestamp,
-                                              GtkStyleProviderPrivate *provider,
-                                              GtkCssStyle             *source)
+gtk_css_animated_style_create_css_animations (GSList           *animations,
+                                              GtkCssStyle      *base_style,
+                                              GtkCssStyle      *parent_style,
+                                              gint64            timestamp,
+                                              GtkStyleProvider *provider,
+                                              GtkCssStyle      *source)
 {
   GtkCssValue *durations, *delays, *timing_functions, *animation_names;
   GtkCssValue *iteration_counts, *directions, *play_states, *fill_modes;
@@ -369,7 +369,7 @@ gtk_css_animated_style_create_css_animations (GSList                  *animation
         }
       else
         {
-          keyframes = _gtk_style_provider_private_get_keyframes (provider, name);
+          keyframes = gtk_style_provider_get_keyframes (provider, name);
           if (keyframes == NULL)
             continue;
 
@@ -410,11 +410,11 @@ gtk_css_animated_style_apply_animations (GtkCssAnimatedStyle *style)
 }
 
 GtkCssStyle *
-gtk_css_animated_style_new (GtkCssStyle             *base_style,
-                            GtkCssStyle             *parent_style,
-                            gint64                   timestamp,
-                            GtkStyleProviderPrivate *provider,
-                            GtkCssStyle             *previous_style)
+gtk_css_animated_style_new (GtkCssStyle      *base_style,
+                            GtkCssStyle      *parent_style,
+                            gint64            timestamp,
+                            GtkStyleProvider *provider,
+                            GtkCssStyle      *previous_style)
 {
   GtkCssAnimatedStyle *result;
   GSList *animations;

@@ -162,7 +162,7 @@ gtk_css_widget_node_get_widget_path (GtkCssNode *node)
   return gtk_widget_get_path (widget_node->widget);
 }
 
-static GtkStyleProviderPrivate *
+static GtkStyleProvider *
 gtk_css_widget_node_get_style_provider (GtkCssNode *node)
 {
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
@@ -178,7 +178,7 @@ gtk_css_widget_node_get_style_provider (GtkCssNode *node)
 
   cascade = _gtk_settings_get_style_cascade (gtk_widget_get_settings (widget_node->widget),
                                              gtk_widget_get_scale_factor (widget_node->widget));
-  return GTK_STYLE_PROVIDER_PRIVATE (cascade);
+  return GTK_STYLE_PROVIDER (cascade);
 }
 
 static GdkFrameClock *

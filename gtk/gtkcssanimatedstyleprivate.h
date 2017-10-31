@@ -55,7 +55,7 @@ GType                   gtk_css_animated_style_get_type         (void) G_GNUC_CO
 GtkCssStyle *           gtk_css_animated_style_new              (GtkCssStyle            *base_style,
                                                                  GtkCssStyle            *parent_style,
                                                                  gint64                  timestamp,
-                                                                 GtkStyleProviderPrivate *provider,
+                                                                 GtkStyleProvider       *provider,
                                                                  GtkCssStyle            *previous_style);
 GtkCssStyle *           gtk_css_animated_style_new_advance      (GtkCssAnimatedStyle    *source,
                                                                  GtkCssStyle            *base,

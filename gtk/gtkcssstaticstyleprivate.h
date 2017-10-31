@@ -53,12 +53,12 @@ struct _GtkCssStaticStyleClass
 GType                   gtk_css_static_style_get_type           (void) G_GNUC_CONST;
 
 GtkCssStyle *           gtk_css_static_style_get_default        (void);
-GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProviderPrivate *provider,
+GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProvider       *provider,
                                                                  const GtkCssMatcher    *matcher,
                                                                  GtkCssStyle            *parent);
 
 void                    gtk_css_static_style_compute_value      (GtkCssStaticStyle      *style,
-                                                                 GtkStyleProviderPrivate*provider,
+                                                                 GtkStyleProvider       *provider,
                                                                  GtkCssStyle            *parent_style,
                                                                  guint                   id,
                                                                  GtkCssValue            *specified,

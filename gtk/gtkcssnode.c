@@ -115,7 +115,7 @@ struct _GtkCssNodeStyleChange {
 static guint cssnode_signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *cssnode_properties[NUM_PROPERTIES];
 
-static GtkStyleProviderPrivate *
+static GtkStyleProvider *
 gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
 {
   return GTK_CSS_NODE_GET_CLASS (cssnode)->get_style_provider (cssnode);
@@ -287,7 +287,7 @@ gtk_css_node_is_last_child (GtkCssNode *node)
 static gboolean
 may_use_global_parent_cache (GtkCssNode *node)
 {
-  GtkStyleProviderPrivate *provider;
+  GtkStyleProvider *provider;
   GtkCssNode *parent;
   
   parent = gtk_css_node_get_parent (node);
@@ -500,7 +500,7 @@ gtk_css_node_real_get_widget_path (GtkCssNode *cssnode)
   return NULL;
 }
 
-static GtkStyleProviderPrivate *
+static GtkStyleProvider *
 gtk_css_node_real_get_style_provider (GtkCssNode *cssnode)
 {
   return NULL;
@@ -1386,10 +1386,10 @@ gtk_css_node_get_widget_path (GtkCssNode *cssnode)
   return GTK_CSS_NODE_GET_CLASS (cssnode)->get_widget_path (cssnode);
 }
 
-GtkStyleProviderPrivate *
+GtkStyleProvider *
 gtk_css_node_get_style_provider (GtkCssNode *cssnode)
 {
-  GtkStyleProviderPrivate *result;
+  GtkStyleProvider *result;
 
   result = gtk_css_node_get_style_provider_or_null (cssnode);
   if (result)
@@ -1398,7 +1398,7 @@ gtk_css_node_get_style_provider (GtkCssNode *cssnode)
   if (cssnode->parent)
     return gtk_css_node_get_style_provider (cssnode->parent);
 
-  return GTK_STYLE_PROVIDER_PRIVATE (_gtk_settings_get_style_cascade (gtk_settings_get_default (), 1));
+  return GTK_STYLE_PROVIDER (_gtk_settings_get_style_cascade (gtk_settings_get_default (), 1));
 }
 
 void

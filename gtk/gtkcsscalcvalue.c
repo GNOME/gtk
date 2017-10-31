@@ -98,11 +98,11 @@ gtk_css_calc_array_add (GPtrArray *array, GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_calc_compute (GtkCssValue             *value,
-                            guint                    property_id,
-                            GtkStyleProviderPrivate *provider,
-                            GtkCssStyle             *style,
-                            GtkCssStyle             *parent_style)
+gtk_css_value_calc_compute (GtkCssValue      *value,
+                            guint             property_id,
+                            GtkStyleProvider *provider,
+                            GtkCssStyle      *style,
+                            GtkCssStyle      *parent_style)
 {
   GtkCssValue *result;
   GPtrArray *array;

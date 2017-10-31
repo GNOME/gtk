@@ -70,18 +70,18 @@ gtk_css_value_icon_theme_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_icon_theme_compute (GtkCssValue             *icon_theme,
-                                  guint                    property_id,
-                                  GtkStyleProviderPrivate *provider,
-                                  GtkCssStyle             *style,
-                                  GtkCssStyle             *parent_style)
+gtk_css_value_icon_theme_compute (GtkCssValue      *icon_theme,
+                                  guint             property_id,
+                                  GtkStyleProvider *provider,
+                                  GtkCssStyle      *style,
+                                  GtkCssStyle      *parent_style)
 {
   GtkIconTheme *icontheme;
 
   if (icon_theme->icontheme)
     icontheme = icon_theme->icontheme;
   else
-    icontheme = gtk_icon_theme_get_for_display (_gtk_settings_get_display (_gtk_style_provider_private_get_settings (provider)));
+    icontheme = gtk_icon_theme_get_for_display (_gtk_settings_get_display (gtk_style_provider_get_settings (provider)));
 
   return gtk_css_icon_theme_value_new (icontheme);
 }

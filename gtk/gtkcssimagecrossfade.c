@@ -193,11 +193,11 @@ gtk_css_image_cross_fade_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_cross_fade_compute (GtkCssImage             *image,
-                                  guint                    property_id,
-                                  GtkStyleProviderPrivate *provider,
-                                  GtkCssStyle             *style,
-                                  GtkCssStyle             *parent_style)
+gtk_css_image_cross_fade_compute (GtkCssImage      *image,
+                                  guint             property_id,
+                                  GtkStyleProvider *provider,
+                                  GtkCssStyle      *style,
+                                  GtkCssStyle      *parent_style)
 {
   GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
   GtkCssImage *start, *end, *computed;

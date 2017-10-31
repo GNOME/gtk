@@ -125,11 +125,11 @@ gtk_css_image_url_snapshot (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_url_compute (GtkCssImage             *image,
-                           guint                    property_id,
-                           GtkStyleProviderPrivate *provider,
-                           GtkCssStyle             *style,
-                           GtkCssStyle             *parent_style)
+gtk_css_image_url_compute (GtkCssImage      *image,
+                           guint             property_id,
+                           GtkStyleProvider *provider,
+                           GtkCssStyle      *style,
+                           GtkCssStyle      *parent_style)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
   GtkCssImage *copy;
@@ -139,7 +139,7 @@ gtk_css_image_url_compute (GtkCssImage             *image,
   if (error)
     {
       GtkCssSection *section = gtk_css_style_get_section (style, property_id);
-      _gtk_style_provider_private_emit_error (provider, section, error);
+      gtk_style_provider_emit_error (provider, section, error);
       g_error_free (error);
     }
 

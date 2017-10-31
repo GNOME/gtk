@@ -37,10 +37,10 @@ gtk_css_value_dimension_free (GtkCssValue *value)
 }
 
 static double
-get_base_font_size_px (guint                    property_id,
-                       GtkStyleProviderPrivate *provider,
-                       GtkCssStyle             *style,
-                       GtkCssStyle             *parent_style)
+get_base_font_size_px (guint             property_id,
+                       GtkStyleProvider *provider,
+                       GtkCssStyle      *style,
+                       GtkCssStyle      *parent_style)
 {
   if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
     {
@@ -60,11 +60,11 @@ get_dpi (GtkCssStyle *style)
 }
 
 static GtkCssValue *
-gtk_css_value_dimension_compute (GtkCssValue             *number,
-                              guint                    property_id,
-                              GtkStyleProviderPrivate *provider,
-                              GtkCssStyle             *style,
-                              GtkCssStyle             *parent_style)
+gtk_css_value_dimension_compute (GtkCssValue      *number,
+                                 guint             property_id,
+                                 GtkStyleProvider *provider,
+                                 GtkCssStyle      *style,
+                                 GtkCssStyle      *parent_style)
 {
   GtkBorderStyle border_style;
 

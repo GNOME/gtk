@@ -37,7 +37,7 @@ void                _gtk_css_keyframes_print                  (GtkCssKeyframes  
                                                                GString                *string);
 
 GtkCssKeyframes *   _gtk_css_keyframes_compute                (GtkCssKeyframes         *keyframes,
-                                                               GtkStyleProviderPrivate *provider,
+                                                               GtkStyleProvider        *provider,
                                                                GtkCssStyle             *style,
                                                                GtkCssStyle             *parent_style);
 

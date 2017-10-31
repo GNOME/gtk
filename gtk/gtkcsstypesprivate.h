@@ -28,7 +28,6 @@ typedef union _GtkCssMatcher GtkCssMatcher;
 typedef struct _GtkCssNode GtkCssNode;
 typedef struct _GtkCssNodeDeclaration GtkCssNodeDeclaration;
 typedef struct _GtkCssStyle GtkCssStyle;
-typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; /* dummy typedef */
 
 #define GTK_CSS_CHANGE_CLASS                          (1ULL <<  0)
 #define GTK_CSS_CHANGE_NAME                           (1ULL <<  1)

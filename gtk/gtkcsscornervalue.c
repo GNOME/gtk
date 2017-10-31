@@ -37,11 +37,11 @@ gtk_css_value_corner_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_corner_compute (GtkCssValue             *corner,
-                              guint                    property_id,
-                              GtkStyleProviderPrivate *provider,
-                              GtkCssStyle             *style,
-                              GtkCssStyle             *parent_style)
+gtk_css_value_corner_compute (GtkCssValue      *corner,
+                              guint             property_id,
+                              GtkStyleProvider *provider,
+                              GtkCssStyle      *style,
+                              GtkCssStyle      *parent_style)
 {
   GtkCssValue *x, *y;
 

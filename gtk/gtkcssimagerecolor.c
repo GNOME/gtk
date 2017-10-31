@@ -144,11 +144,11 @@ gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
 }
 
 static GtkCssImage *
-gtk_css_image_recolor_compute (GtkCssImage             *image,
-                               guint                    property_id,
-                               GtkStyleProviderPrivate *provider,
-                               GtkCssStyle             *style,
-                               GtkCssStyle             *parent_style)
+gtk_css_image_recolor_compute (GtkCssImage      *image,
+                               guint             property_id,
+                               GtkStyleProvider *provider,
+                               GtkCssStyle      *style,
+                               GtkCssStyle      *parent_style)
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
   GtkCssValue *palette;
@@ -156,7 +156,7 @@ gtk_css_image_recolor_compute (GtkCssImage             *image,
   int scale;
   GError *error = NULL;
 
-  scale = _gtk_style_provider_private_get_scale (provider);
+  scale = gtk_style_provider_get_scale (provider);
 
   if (recolor->palette)
     palette = _gtk_css_value_compute (recolor->palette, property_id, provider, style, parent_style);
@@ -168,7 +168,7 @@ gtk_css_image_recolor_compute (GtkCssImage             *image,
   if (error)
     {
       GtkCssSection *section = gtk_css_style_get_section (style, property_id);
-      _gtk_style_provider_private_emit_error (provider, section, error);
+      gtk_style_provider_emit_error (provider, section, error);
       g_error_free (error);
     }
 

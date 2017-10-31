@@ -194,8 +194,7 @@ enum {
 };
 
 /* --- prototypes --- */
-static void     gtk_settings_provider_iface_init (GtkStyleProviderIface *iface);
-static void     gtk_settings_provider_private_init (GtkStyleProviderPrivateInterface *iface);
+static void     gtk_settings_provider_iface_init (GtkStyleProviderInterface *iface);
 
 static void     gtk_settings_finalize            (GObject               *object);
 static void     gtk_settings_get_property        (GObject               *object,
@@ -245,9 +244,7 @@ static GPtrArray *display_settings;
 G_DEFINE_TYPE_EXTENDED (GtkSettings, gtk_settings, G_TYPE_OBJECT, 0,
                         G_ADD_PRIVATE (GtkSettings)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
-                                               gtk_settings_provider_iface_init)
-                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
-                                               gtk_settings_provider_private_init));
+                                               gtk_settings_provider_iface_init));
 
 /* --- functions --- */
 static void
@@ -1072,19 +1069,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_KEYNAV_USE_CARET);
 }
 
-static void
-gtk_settings_provider_iface_init (GtkStyleProviderIface *iface)
-{
-}
-
 static GtkSettings *
-gtk_settings_style_provider_get_settings (GtkStyleProviderPrivate *provider)
+gtk_settings_style_provider_get_settings (GtkStyleProvider *provider)
 {
   return GTK_SETTINGS (provider);
 }
 
 static void
-gtk_settings_provider_private_init (GtkStyleProviderPrivateInterface *iface)
+gtk_settings_provider_iface_init (GtkStyleProviderInterface *iface)
 {
   iface->get_settings = gtk_settings_style_provider_get_settings;
 }
@@ -1331,7 +1323,7 @@ gtk_settings_set_property (GObject      *object,
 static void
 settings_invalidate_style (GtkSettings *settings)
 {
-  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (settings));
+  gtk_style_provider_changed (GTK_STYLE_PROVIDER (settings));
 }
 
 static void

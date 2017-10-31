@@ -50,11 +50,11 @@ gtk_css_value_ease_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_ease_compute (GtkCssValue             *value,
-                            guint                    property_id,
-                            GtkStyleProviderPrivate *provider,
-                            GtkCssStyle             *style,
-                            GtkCssStyle             *parent_style)
+gtk_css_value_ease_compute (GtkCssValue      *value,
+                            guint             property_id,
+                            GtkStyleProvider *provider,
+                            GtkCssStyle      *style,
+                            GtkCssStyle      *parent_style)
 {
   return _gtk_css_value_ref (value);
 }

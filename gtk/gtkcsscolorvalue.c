@@ -103,10 +103,10 @@ gtk_css_value_color_free (GtkCssValue *color)
 }
 
 static GtkCssValue *
-gtk_css_value_color_get_fallback (guint                    property_id,
-                                  GtkStyleProviderPrivate *provider,
-                                  GtkCssStyle             *style,
-                                  GtkCssStyle             *parent_style)
+gtk_css_value_color_get_fallback (guint             property_id,
+                                  GtkStyleProvider *provider,
+                                  GtkCssStyle      *style,
+                                  GtkCssStyle      *parent_style)
 {
   static const GdkRGBA transparent = { 0, 0, 0, 0 };
 
@@ -143,10 +143,10 @@ gtk_css_value_color_get_fallback (guint                    property_id,
 }
 
 GtkCssValue *
-_gtk_css_color_value_resolve (GtkCssValue             *color,
-                              GtkStyleProviderPrivate *provider,
-                              GtkCssValue             *current,
-                              GSList                  *cycle_list)
+_gtk_css_color_value_resolve (GtkCssValue      *color,
+                              GtkStyleProvider *provider,
+                              GtkCssValue      *current,
+                              GSList           *cycle_list)
 {
   GtkCssValue *value;
 
@@ -167,7 +167,7 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
         if (g_slist_find (cycle_list, color))
           return NULL;
 
-        named = _gtk_style_provider_private_get_color (provider, color->sym_col.name);
+        named = gtk_style_provider_get_color (provider, color->sym_col.name);
 	if (named == NULL)
 	  return NULL;
 
@@ -289,11 +289,11 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
 }
 
 static GtkCssValue *
-gtk_css_value_color_compute (GtkCssValue             *value,
-                             guint                    property_id,
-                             GtkStyleProviderPrivate *provider,
-                             GtkCssStyle             *style,
-                             GtkCssStyle             *parent_style)
+gtk_css_value_color_compute (GtkCssValue      *value,
+                             guint             property_id,
+                             GtkStyleProvider *provider,
+                             GtkCssStyle      *style,
+                             GtkCssStyle      *parent_style)
 {
   GtkCssValue *resolved, *current;
 

@@ -38,18 +38,18 @@ gtk_css_value_initial_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_initial_compute (GtkCssValue             *value,
-                               guint                    property_id,
-                               GtkStyleProviderPrivate *provider,
-                               GtkCssStyle             *style,
-                               GtkCssStyle             *parent_style)
+gtk_css_value_initial_compute (GtkCssValue      *value,
+                               guint             property_id,
+                               GtkStyleProvider *provider,
+                               GtkCssStyle      *style,
+                               GtkCssStyle      *parent_style)
 {
   GtkSettings *settings;
 
   switch (property_id)
     {
     case GTK_CSS_PROPERTY_DPI:
-      settings = _gtk_style_provider_private_get_settings (provider);
+      settings = gtk_style_provider_get_settings (provider);
       if (settings)
         {
           GdkScreen *screen = gdk_display_get_default_screen (_gtk_settings_get_display (settings));
@@ -61,7 +61,7 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
       break;
 
     case GTK_CSS_PROPERTY_FONT_FAMILY:
-      settings = _gtk_style_provider_private_get_settings (provider);
+      settings = gtk_style_provider_get_settings (provider);
       if (settings && gtk_settings_get_font_family (settings) != NULL)
         return _gtk_css_array_value_new (_gtk_css_string_value_new (gtk_settings_get_font_family (settings)));
       break;

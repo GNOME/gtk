@@ -41,11 +41,11 @@ gtk_css_value_bg_size_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_bg_size_compute (GtkCssValue             *value,
-                               guint                    property_id,
-                               GtkStyleProviderPrivate *provider,
-                               GtkCssStyle             *style,
-                               GtkCssStyle             *parent_style)
+gtk_css_value_bg_size_compute (GtkCssValue      *value,
+                               guint             property_id,
+                               GtkStyleProvider *provider,
+                               GtkCssStyle      *style,
+                               GtkCssStyle      *parent_style)
 {
   GtkCssValue *x, *y;
 

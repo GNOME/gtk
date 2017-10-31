@@ -457,11 +457,11 @@ gtk_css_image_radial_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_radial_compute (GtkCssImage             *image,
-                              guint                    property_id,
-                              GtkStyleProviderPrivate *provider,
-                              GtkCssStyle             *style,
-                              GtkCssStyle             *parent_style)
+gtk_css_image_radial_compute (GtkCssImage      *image,
+                              guint             property_id,
+                              GtkStyleProvider *provider,
+                              GtkCssStyle      *style,
+                              GtkCssStyle      *parent_style)
 {
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
   GtkCssImageRadial *copy;

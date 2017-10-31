@@ -118,11 +118,11 @@ gtk_css_value_win32_compute_size (const GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_win32_size_compute (GtkCssValue             *value,
-                                  guint                    property_id,
-                                  GtkStyleProviderPrivate *provider,
-                                  GtkCssStyle             *style,
-                                  GtkCssStyle             *parent_style)
+gtk_css_value_win32_size_compute (GtkCssValue      *value,
+                                  guint             property_id,
+                                  GtkStyleProvider *provider,
+                                  GtkCssStyle      *style,
+                                  GtkCssStyle      *parent_style)
 {
   return _gtk_css_number_value_new (value->scale * gtk_css_value_win32_compute_size (value), GTK_CSS_PX);
 }

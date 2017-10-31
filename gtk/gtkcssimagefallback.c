@@ -131,11 +131,11 @@ gtk_css_image_fallback_dispose (GObject *object)
 
 
 static GtkCssImage *
-gtk_css_image_fallback_compute (GtkCssImage             *image,
-                                guint                    property_id,
-                                GtkStyleProviderPrivate *provider,
-                                GtkCssStyle             *style,
-                                GtkCssStyle             *parent_style)
+gtk_css_image_fallback_compute (GtkCssImage      *image,
+                                guint             property_id,
+                                GtkStyleProvider *provider,
+                                GtkCssStyle      *style,
+                                GtkCssStyle      *parent_style)
 {
   GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
   GtkCssImageFallback *copy;

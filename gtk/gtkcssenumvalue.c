@@ -43,11 +43,11 @@ gtk_css_value_enum_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_enum_compute (GtkCssValue             *value,
-                            guint                    property_id,
-                            GtkStyleProviderPrivate *provider,
-                            GtkCssStyle             *style,
-                            GtkCssStyle             *parent_style)
+gtk_css_value_enum_compute (GtkCssValue      *value,
+                            guint             property_id,
+                            GtkStyleProvider *provider,
+                            GtkCssStyle      *style,
+                            GtkCssStyle      *parent_style)
 {
   return _gtk_css_value_ref (value);
 }
@@ -205,13 +205,13 @@ get_dpi (GtkCssStyle *style)
 #define DEFAULT_FONT_SIZE_PT 10
 
 double
-gtk_css_font_size_get_default_px (GtkStyleProviderPrivate *provider,
-                                  GtkCssStyle             *style)
+gtk_css_font_size_get_default_px (GtkStyleProvider *provider,
+                                  GtkCssStyle      *style)
 {
   GtkSettings *settings;
   int font_size;
 
-  settings = _gtk_style_provider_private_get_settings (provider);
+  settings = gtk_style_provider_get_settings (provider);
   if (settings == NULL)
     return DEFAULT_FONT_SIZE_PT * get_dpi (style) / 72.0;
 
@@ -225,11 +225,11 @@ gtk_css_font_size_get_default_px (GtkStyleProviderPrivate *provider,
 }
 
 static GtkCssValue *
-gtk_css_value_font_size_compute (GtkCssValue             *value,
-                                 guint                    property_id,
-                                 GtkStyleProviderPrivate *provider,
-                                 GtkCssStyle             *style,
-                                 GtkCssStyle             *parent_style)
+gtk_css_value_font_size_compute (GtkCssValue      *value,
+                                 guint             property_id,
+                                 GtkStyleProvider *provider,
+                                 GtkCssStyle      *style,
+                                 GtkCssStyle      *parent_style)
 {
   double font_size;
 
@@ -386,11 +386,11 @@ _gtk_css_font_style_value_get (const GtkCssValue *value)
 #define LIGHTER -2
 
 static GtkCssValue *
-gtk_css_value_font_weight_compute (GtkCssValue             *value,
-                                   guint                    property_id,
-                                   GtkStyleProviderPrivate *provider,
-                                   GtkCssStyle             *style,
-                                   GtkCssStyle             *parent_style)
+gtk_css_value_font_weight_compute (GtkCssValue      *value,
+                                   guint             property_id,
+                                   GtkStyleProvider *provider,
+                                   GtkCssStyle      *style,
+                                   GtkCssStyle      *parent_style)
 {
   PangoWeight new_weight;
   int parent_value;

@@ -43,10 +43,10 @@ GtkCssValue *   _gtk_css_color_value_new_current_color  (void);
 
 GtkCssValue *   _gtk_css_color_value_parse              (GtkCssParser   *parser);
 
-GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue             *color,
-                                                         GtkStyleProviderPrivate *provider,
-                                                         GtkCssValue             *current,
-                                                         GSList                  *cycle_list);
+GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue      *color,
+                                                         GtkStyleProvider *provider,
+                                                         GtkCssValue      *current,
+                                                         GSList           *cycle_list);
 
 
 G_END_DECLS

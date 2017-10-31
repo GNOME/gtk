@@ -100,7 +100,7 @@ gtk_css_path_node_update_style (GtkCssNode   *cssnode,
   return GTK_CSS_NODE_CLASS (gtk_css_path_node_parent_class)->update_style (cssnode, change, 0, style);
 }
 
-static GtkStyleProviderPrivate *
+static GtkStyleProvider *
 gtk_css_path_node_get_style_provider (GtkCssNode *node)
 {
   GtkCssPathNode *path_node = GTK_CSS_PATH_NODE (node);

@@ -435,16 +435,16 @@ _gtk_css_keyframes_print (GtkCssKeyframes *keyframes,
 }
 
 GtkCssKeyframes *
-_gtk_css_keyframes_compute (GtkCssKeyframes         *keyframes,
-                            GtkStyleProviderPrivate *provider,
-                            GtkCssStyle             *style,
-                            GtkCssStyle             *parent_style)
+_gtk_css_keyframes_compute (GtkCssKeyframes  *keyframes,
+                            GtkStyleProvider *provider,
+                            GtkCssStyle      *style,
+                            GtkCssStyle      *parent_style)
 {
   GtkCssKeyframes *resolved;
   guint k, p;
 
   g_return_val_if_fail (keyframes != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
   g_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
   g_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
 
