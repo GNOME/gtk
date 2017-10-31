@@ -250,7 +250,6 @@ gtk/gtkstatusbar.c
 gtk/gtkstylecontext.c
 gtk/gtkstyleproperty.c
 gtk/gtkstyleprovider.c
-gtk/gtkstyleproviderprivate.c
 gtk/gtkswitch.c
 gtk/gtktextbuffer.c
 gtk/gtktextbufferrichtext.c
