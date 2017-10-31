@@ -323,13 +323,13 @@ touch_release_in_button (GtkButton *button)
 
   if (gdk_event_get_event_type (event) != GDK_TOUCH_END)
     {
-      gdk_event_free (event);
+      g_object_unref (event);
       return FALSE;
     }
 
   gdk_event_get_coords (event, &x, &y);
 
-  gdk_event_free (event);
+  g_object_unref (event);
 
   if (gtk_widget_contains (GTK_WIDGET (button), x, y))
     return TRUE;

@@ -1225,7 +1225,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
  * 3. During a timeout handler, if you want to start a drag after the mouse
  * button is held down for some time.  Try to save the last event that you got
  * from the mouse, using gdk_event_copy(), and pass it to this function
- * (remember to free the event with gdk_event_free() when you are done).
+ * (remember to free the event with g_object_unref() when you are done).
  * If you can really not pass a real event, pass %NULL instead.
  *
  * Returns: (transfer none): the context for this drag

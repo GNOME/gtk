@@ -1416,7 +1416,7 @@ synth_crossing (GtkWidget       *widget,
   event->crossing.detail = notify_type;
 
   gtk_widget_event (widget, event);
-  gdk_event_free (event);
+  g_object_unref (event);
 }
 
 static GtkWidget *
@@ -1912,7 +1912,7 @@ gtk_main_do_event (GdkEvent *event)
   g_list_free_1 (tmp_list);
 
   if (rewritten_event)
-    gdk_event_free (rewritten_event);
+    g_object_unref (rewritten_event);
 }
 
 /**
@@ -2332,7 +2332,7 @@ gtk_device_grab_remove (GtkWidget *widget,
  *
  * Returns: (transfer full) (nullable): a copy of the current event, or
  *     %NULL if there is no current event. The returned event must be
- *     freed with gdk_event_free().
+ *     freed with g_object_unref().
  */
 GdkEvent*
 gtk_get_current_event (void)

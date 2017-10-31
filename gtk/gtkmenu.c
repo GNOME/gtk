@@ -1692,7 +1692,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
         menu_shell->priv->ignore_enter = TRUE;
 
       source_device = gdk_event_get_source_device (current_event);
-      gdk_event_free (current_event);
+      g_object_unref (current_event);
     }
   else
     menu_shell->priv->ignore_enter = TRUE;
@@ -1990,7 +1990,7 @@ gtk_menu_popup_at_rect (GtkMenu            *menu,
                            button,
                            activate_time);
 
-  g_clear_pointer (&current_event, gdk_event_free);
+  g_clear_object (&current_event);
 }
 
 /**
@@ -2083,7 +2083,7 @@ gtk_menu_popup_at_widget (GtkMenu        *menu,
                            button,
                            activate_time);
 
-  g_clear_pointer (&current_event, gdk_event_free);
+  g_clear_object (&current_event);
 }
 
 /**
@@ -2150,7 +2150,7 @@ gtk_menu_popup_at_pointer (GtkMenu        *menu,
                           GDK_GRAVITY_NORTH_WEST,
                           trigger_event);
 
-  g_clear_pointer (&current_event, gdk_event_free);
+  g_clear_object (&current_event);
 }
 
 static void

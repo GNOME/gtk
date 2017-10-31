@@ -3448,7 +3448,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
 
   /* Perform propagation state starting from the next child in the chain */
   gtk_propagate_event_internal (event_widget, press, next_child);
-  gdk_event_free (press);
+  g_object_unref (press);
 }
 
 static const GdkEvent *
@@ -6511,7 +6511,7 @@ _gtk_widget_captured_event (GtkWidget      *widget,
   g_object_unref (widget);
 
 out:
-  gdk_event_free (event_copy);
+  g_object_unref (event_copy);
 
   return return_val;
 }
@@ -6625,7 +6625,7 @@ gtk_widget_event_internal (GtkWidget      *widget,
 
   if (return_val == FALSE)
     return_val |= _gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
-  gdk_event_free (event_copy);
+  g_object_unref (event_copy);
 
   return return_val;
 }
@@ -10291,7 +10291,7 @@ synth_crossing (GtkWidget       *widget,
   if (widget)
     gtk_widget_event_internal (widget, event);
 
-  gdk_event_free (event);
+  g_object_unref (event);
 }
 
 /*
@@ -13321,7 +13321,7 @@ gtk_widget_get_opacity (GtkWidget *widget)
  *
  *   gtk_widget_send_focus_change (widget, fevent);
  *
- *   gdk_event_free (event);
+ *   g_object_unref (event);
  * ]|
  *
  * Returns: the return value from the event signal emission: %TRUE

@@ -423,7 +423,7 @@ gtk_menu_button_toggled (GtkToggleButton *button)
             gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
 
           if (event)
-            gdk_event_free (event);
+            g_object_unref (event);
         }
     }
   else if (priv->popover)
