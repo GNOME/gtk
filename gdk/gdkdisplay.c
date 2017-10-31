@@ -481,7 +481,7 @@ gdk_display_get_event (GdkDisplay *display)
  * 
  * Returns: (nullable): a copy of the first #GdkEvent on the event
  * queue, or %NULL if no events are in the queue. The returned
- * #GdkEvent should be freed with gdk_event_free().
+ * #GdkEvent should be freed with g_object_unref().
  *
  * Since: 2.2
  **/
@@ -495,7 +495,7 @@ gdk_display_peek_event (GdkDisplay *display)
   tmp_list = _gdk_event_queue_find_first (display);
   
   if (tmp_list)
-    return gdk_event_copy (tmp_list->data);
+    return g_object_ref (tmp_list->data);
   else
     return NULL;
 }
