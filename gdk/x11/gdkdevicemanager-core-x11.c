@@ -233,25 +233,6 @@ set_user_time (GdkWindow *window,
                                   gdk_event_get_time (event));
 }
 
-static gboolean
-set_screen_from_root (GdkDisplay *display,
-                      GdkEvent   *event,
-                      Window      xrootwin)
-{
-  GdkScreen *screen;
-
-  screen = _gdk_x11_display_screen_for_xrootwin (display, xrootwin);
-
-  if (screen)
-    {
-      gdk_event_set_screen (event, screen);
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static GdkCrossingMode
 translate_crossing_mode (int mode)
 {
@@ -488,11 +469,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           event->scroll.delta_x = 0;
           event->scroll.delta_y = 0;
 
-          if (!set_screen_from_root (display, event, xevent->xbutton.root))
-            {
-              return_val = FALSE;
-              break;
-            }
+          gdk_event_set_display (event, display);
 
           break;
 
@@ -509,8 +486,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           event->button.button = xevent->xbutton.button;
           event->button.device = device_manager->core_pointer;
 
-          if (!set_screen_from_root (display, event, xevent->xbutton.root))
-            return_val = FALSE;
+          gdk_event_set_display (event, display);
 
           break;
         }
@@ -552,8 +528,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       event->button.button = xevent->xbutton.button;
       event->button.device = device_manager->core_pointer;
 
-      if (!set_screen_from_root (display, event, xevent->xbutton.root))
-        return_val = FALSE;
+      gdk_event_set_display (event, display);
 
       break;
 
@@ -582,11 +557,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       event->motion.is_hint = xevent->xmotion.is_hint;
       event->motion.device = device_manager->core_pointer;
 
-      if (!set_screen_from_root (display, event, xevent->xbutton.root))
-        {
-          return_val = FALSE;
-          break;
-        }
+      gdk_event_set_display (event, display);
 
       break;
 
@@ -603,11 +574,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           break;
         }
 
-      if (!set_screen_from_root (display, event, xevent->xbutton.root))
-        {
-          return_val = FALSE;
-          break;
-        }
+      gdk_event_set_display (event, display);
 
       event->crossing.type = GDK_ENTER_NOTIFY;
       event->crossing.window = window;
@@ -647,11 +614,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           break;
         }
 
-      if (!set_screen_from_root (display, event, xevent->xbutton.root))
-        {
-          return_val = FALSE;
-          break;
-        }
+      gdk_event_set_display (event, display);
 
       event->crossing.type = GDK_LEAVE_NOTIFY;
       event->crossing.window = window;

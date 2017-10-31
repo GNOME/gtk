@@ -1307,7 +1307,6 @@ create_scroll_event (GdkWaylandSeat        *seat,
                      GdkDevice             *source_device,
                      gboolean               emulated)
 {
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event;
 
   event = gdk_event_new (GDK_SCROLL);
@@ -1316,7 +1315,7 @@ create_scroll_event (GdkWaylandSeat        *seat,
   gdk_event_set_source_device (event, source_device);
   event->scroll.time = pointer_info->time;
   event->scroll.state = device_get_modifiers (device);
-  gdk_event_set_screen (event, display->screen);
+  gdk_event_set_display (event, seat->display);
 
   gdk_event_set_pointer_emulated (event, emulated);
 
@@ -1579,7 +1578,7 @@ pointer_handle_motion (void              *data,
   event->motion.axes = NULL;
   event->motion.state = device_get_modifiers (seat->master_pointer);
   event->motion.is_hint = 0;
-  gdk_event_set_screen (event, display->screen);
+  gdk_event_set_display (event, seat->display);
 
   get_coordinates (seat->master_pointer,
                    &event->motion.x,
@@ -1647,7 +1646,7 @@ pointer_handle_button (void              *data,
   event->button.axes = NULL;
   event->button.state = device_get_modifiers (seat->master_pointer);
   event->button.button = gdk_button;
-  gdk_event_set_screen (event, display->screen);
+  gdk_event_set_display (event, seat->display);
 
   get_coordinates (seat->master_pointer,
                    &event->button.x,
@@ -2324,7 +2323,6 @@ _create_touch_event (GdkWaylandSeat       *seat,
                      GdkEventType          evtype,
                      uint32_t              time)
 {
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   gint x_root, y_root;
   GdkEvent *event;
 
@@ -2335,7 +2333,7 @@ _create_touch_event (GdkWaylandSeat       *seat,
   gdk_event_set_seat (event, GDK_SEAT (seat));
   event->touch.time = time;
   event->touch.state = device_get_modifiers (seat->touch_master);
-  gdk_event_set_screen (event, display->screen);
+  gdk_event_set_display (event, seat->display);
   event->touch.sequence = GDK_SLOT_TO_EVENT_SEQUENCE (touch->id);
 
   if (touch->initial_touch)
@@ -2530,7 +2528,6 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
                           gdouble                  dx,
                           gdouble                  dy)
 {
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event;
 
   if (!seat->pointer_info.focus)
@@ -2546,7 +2543,7 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
   gdk_event_set_seat (event, GDK_SEAT (seat));
   event->touchpad_swipe.time = _time;
   event->touchpad_swipe.state = device_get_modifiers (seat->master_pointer);
-  gdk_event_set_screen (event, display->screen);
+  gdk_event_set_display (event, seat->display);
   event->touchpad_swipe.dx = dx;
   event->touchpad_swipe.dy = dy;
   event->touchpad_swipe.n_fingers = n_fingers;
@@ -2633,7 +2630,6 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
                           gdouble                  scale,
                           gdouble                  angle_delta)
 {
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event;
 
   if (!seat->pointer_info.focus)
@@ -2649,7 +2645,7 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
   gdk_event_set_seat (event, GDK_SEAT (seat));
   event->touchpad_pinch.time = _time;
   event->touchpad_pinch.state = device_get_modifiers (seat->master_pointer);
-  gdk_event_set_screen (event, display->screen);
+  gdk_event_set_display (event, seat->display);
   event->touchpad_pinch.dx = dx;
   event->touchpad_pinch.dy = dy;
   event->touchpad_pinch.scale = scale;
@@ -3648,7 +3644,6 @@ tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
                                   guint                 button)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event;
 
   event = gdk_wayland_tablet_get_frame_event (tablet, evtype);
@@ -3659,7 +3654,7 @@ tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
   event->button.time = tablet->pointer_info.time;
   event->button.state = device_get_modifiers (tablet->master);
   event->button.button = button;
-  gdk_event_set_screen (event, display_wayland->screen);
+  gdk_event_set_display (event, seat->display);
 
   get_coordinates (tablet->master,
                    &event->button.x,
@@ -3711,7 +3706,6 @@ tablet_tool_handle_motion (void                      *data,
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tool->seat);
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkEvent *event;
 
   tablet->pointer_info.surface_x = wl_fixed_to_double (sx);
@@ -3730,7 +3724,7 @@ tablet_tool_handle_motion (void                      *data,
   event->motion.time = tablet->pointer_info.time;
   event->motion.state = device_get_modifiers (tablet->master);
   event->motion.is_hint = FALSE;
-  gdk_event_set_screen (event, display->screen);
+  gdk_event_set_display (event, seat->display);
 
   get_coordinates (tablet->master,
                    &event->motion.x,

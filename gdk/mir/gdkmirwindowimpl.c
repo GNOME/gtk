@@ -549,7 +549,7 @@ send_event (GdkWindow *window, GdkDevice *device, GdkEvent *event)
   display = gdk_window_get_display (window);
   gdk_event_set_device (event, device);
   gdk_event_set_source_device (event, device);
-  gdk_event_set_screen (event, gdk_display_get_default_screen (display));
+  gdk_event_set_display (event, display);
   event->any.window = g_object_ref (window);
 
   node = _gdk_event_queue_append (display, event);
