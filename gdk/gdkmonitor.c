@@ -267,7 +267,7 @@ gdk_monitor_get_display (GdkMonitor *monitor)
 /**
  * gdk_monitor_get_geometry:
  * @monitor: a #GdkMonitor
- * @geometry: (out): a #GdkRectangle to be filled wiht the monitor geometry
+ * @geometry: (out): a #GdkRectangle to be filled with the monitor geometry
  *
  * Retrieves the size and position of an individual monitor within the
  * display coordinate space. The returned geometry is in  ”application pixels”,
