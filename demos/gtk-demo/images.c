@@ -329,8 +329,8 @@ do_images (GtkWidget *do_widget)
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_screen (GTK_WINDOW (window),
-                             gtk_widget_get_screen (do_widget));
+      gtk_window_set_display (GTK_WINDOW (window),
+                              gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Images");
 
       g_signal_connect (window, "destroy",

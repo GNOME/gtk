@@ -287,7 +287,7 @@ gtk_drag_get_ipc_widget_for_screen (GdkScreen *screen)
   else
     {
       result = gtk_window_new (GTK_WINDOW_POPUP);
-      gtk_window_set_screen (GTK_WINDOW (result), screen);
+      gtk_window_set_display (GTK_WINDOW (result), gdk_screen_get_display (screen));
       gtk_window_resize (GTK_WINDOW (result), 1, 1);
       gtk_window_move (GTK_WINDOW (result), -99, -99);
       gtk_widget_show (result);
@@ -1545,13 +1545,13 @@ gtk_drag_set_icon_widget_internal (GdkDragContext *context,
 
   if (!info->icon_window)
     {
-      GdkScreen *screen;
+      GdkDisplay *display;
 
-      screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
+      display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
 
       info->icon_window = gtk_window_new (GTK_WINDOW_POPUP);
       gtk_window_set_type_hint (GTK_WINDOW (info->icon_window), GDK_WINDOW_TYPE_HINT_DND);
-      gtk_window_set_screen (GTK_WINDOW (info->icon_window), screen);
+      gtk_window_set_display (GTK_WINDOW (info->icon_window), display);
       gtk_widget_set_size_request (info->icon_window, 24, 24);
       gtk_style_context_remove_class (gtk_widget_get_style_context (info->icon_window), "background");
 

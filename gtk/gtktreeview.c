@@ -10752,13 +10752,13 @@ static void
 gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 {
   GtkWidget *frame, *vbox, *toplevel;
-  GdkScreen *screen;
+  GdkDisplay *display;
 
   if (tree_view->priv->search_custom_entry_set)
     return;
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tree_view));
-  screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
+  display = gtk_widget_get_display (GTK_WIDGET (tree_view));
 
    if (tree_view->priv->search_window != NULL)
      {
@@ -10769,13 +10769,13 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
          gtk_window_group_remove_window (gtk_window_get_group (GTK_WINDOW (tree_view->priv->search_window)),
                                          GTK_WINDOW (tree_view->priv->search_window));
 
-       gtk_window_set_screen (GTK_WINDOW (tree_view->priv->search_window), screen);
+       gtk_window_set_display (GTK_WINDOW (tree_view->priv->search_window), display);
 
        return;
      }
    
   tree_view->priv->search_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_screen (GTK_WINDOW (tree_view->priv->search_window), screen);
+  gtk_window_set_display (GTK_WINDOW (tree_view->priv->search_window), display);
 
   if (gtk_window_has_group (GTK_WINDOW (toplevel)))
     gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),

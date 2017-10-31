@@ -101,17 +101,16 @@ button_release_event_cb (GtkWidget       *widget,
  * window under the pointer, or NULL, if there is none.
  */
 static GtkWidget *
-query_for_toplevel (GdkScreen  *screen,
+query_for_toplevel (GdkDisplay *display,
                     const char *prompt)
 {
-  GdkDisplay *display = gdk_screen_get_display (screen);
   GtkWidget *popup, *label, *frame;
   GdkCursor *cursor;
   GtkWidget *toplevel = NULL;
   GdkDevice *device;
 
   popup = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_screen (GTK_WINDOW (popup), screen);
+  gtk_window_set_display (GTK_WINDOW (popup), display);
   gtk_window_set_modal (GTK_WINDOW (popup), TRUE);
   gtk_window_set_position (GTK_WINDOW (popup), GTK_WIN_POS_CENTER);
 
@@ -144,7 +143,7 @@ query_for_toplevel (GdkScreen  *screen,
       while (!clicked)
         g_main_context_iteration (NULL, TRUE);
 
-      toplevel = find_toplevel_at_pointer (gdk_screen_get_display (screen));
+      toplevel = find_toplevel_at_pointer (display);
       if (toplevel == popup)
         toplevel = NULL;
     }
@@ -162,17 +161,17 @@ query_for_toplevel (GdkScreen  *screen,
 static void
 query_change_display (ChangeDisplayInfo *info)
 {
-  GdkScreen *screen = gtk_widget_get_screen (info->window);
+  GdkDisplay *display = gtk_widget_get_display (info->window);
   GtkWidget *toplevel;
 
-  toplevel = query_for_toplevel (screen,
+  toplevel = query_for_toplevel (display,
                                  "Please select the toplevel\n"
-                                 "to move to the new screen");
+                                 "to move to the new display");
 
   if (toplevel)
-    gtk_window_set_screen (GTK_WINDOW (toplevel), gdk_display_get_default_screen (info->current_display));
+    gtk_window_set_display (GTK_WINDOW (toplevel), info->current_display);
   else
-    gdk_display_beep (gdk_screen_get_display (screen));
+    gdk_display_beep (display);
 }
 
 /* Called when the user clicks on a button in our dialog or

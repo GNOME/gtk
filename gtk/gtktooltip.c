@@ -1051,8 +1051,6 @@ static void
 gtk_tooltip_show_tooltip (GdkDisplay *display)
 {
   gint x, y;
-  GdkScreen *screen;
-
   GdkWindow *window;
   GtkWidget *tooltip_widget;
   GtkTooltip *tooltip;
@@ -1101,16 +1099,14 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
         tooltip->current_window = GTK_WINDOW (GTK_TOOLTIP (tooltip)->window);
     }
 
-  screen = gtk_widget_get_screen (tooltip_widget);
-
   /* FIXME: should use tooltip->current_window iso tooltip->window */
-  if (screen != gtk_widget_get_screen (tooltip->window))
+  if (display != gtk_widget_get_display (tooltip->window))
     {
       g_signal_handlers_disconnect_by_func (display,
                                             gtk_tooltip_display_closed,
                                             tooltip);
 
-      gtk_window_set_screen (GTK_WINDOW (tooltip->window), screen);
+      gtk_window_set_display (GTK_WINDOW (tooltip->window), display);
 
       g_signal_connect (display, "closed",
                         G_CALLBACK (gtk_tooltip_display_closed), tooltip);

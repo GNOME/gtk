@@ -224,9 +224,9 @@ void       gtk_menu_reorder_child         (GtkMenu             *menu,
                                            GtkWidget           *child,
                                            gint                position);
 
-GDK_AVAILABLE_IN_ALL
-void	   gtk_menu_set_screen		  (GtkMenu	       *menu,
-					   GdkScreen	       *screen);
+GDK_AVAILABLE_IN_3_94
+void	   gtk_menu_set_display           (GtkMenu	       *menu,
+					   GdkDisplay          *display);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_menu_attach                (GtkMenu             *menu,

@@ -390,7 +390,7 @@ create_glarea_window (GtkWidget *do_widget)
   int i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_screen (GTK_WINDOW (window), gtk_widget_get_screen (do_widget));
+  gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
   gtk_window_set_title (GTK_WINDOW (window), "OpenGL Area");
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 600);
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);

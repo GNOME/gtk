@@ -124,8 +124,8 @@ do_filtermodel (GtkWidget *do_widget)
       builder = gtk_builder_new_from_resource ("/filtermodel/filtermodel.ui");
       gtk_builder_connect_signals (builder, NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
-      gtk_window_set_screen (GTK_WINDOW (window),
-                             gtk_widget_get_screen (do_widget));
+      gtk_window_set_display (GTK_WINDOW (window),
+                              gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 

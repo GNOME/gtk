@@ -718,7 +718,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       gtk_window_set_modal (window, TRUE);
     }
   else if (priv->screen)
-    gtk_window_set_screen (GTK_WINDOW (dialog), priv->screen);
+    gtk_window_set_display (GTK_WINDOW (dialog), gdk_screen_get_display (priv->screen));
 
   gtk_widget_show (GTK_WIDGET (dialog));
 
@@ -886,7 +886,7 @@ gtk_mount_operation_ask_question_do_gtk (GtkMountOperation *op,
   g_object_notify (G_OBJECT (op), "is-showing");
 
   if (priv->parent_window == NULL && priv->screen)
-    gtk_window_set_screen (GTK_WINDOW (dialog), priv->screen);
+    gtk_window_set_display (GTK_WINDOW (dialog), gdk_screen_get_display (priv->screen));
 
   gtk_widget_show (dialog);
   g_object_ref (op);
@@ -1430,7 +1430,7 @@ create_show_processes_dialog (GtkMountOperation *op,
   g_object_notify (G_OBJECT (op), "is-showing");
 
   if (priv->parent_window == NULL && priv->screen)
-    gtk_window_set_screen (GTK_WINDOW (dialog), priv->screen);
+    gtk_window_set_display (GTK_WINDOW (dialog), gdk_screen_get_display (priv->screen));
 
   tree_view = gtk_tree_view_new ();
   /* TODO: should use EM's when gtk+ RI patches land */
@@ -1770,7 +1770,7 @@ gtk_mount_operation_set_screen (GtkMountOperation *op,
   priv->screen = g_object_ref (screen);
 
   if (priv->dialog)
-    gtk_window_set_screen (GTK_WINDOW (priv->dialog), screen);
+    gtk_window_set_display (GTK_WINDOW (priv->dialog), gdk_screen_get_display (screen));
 
   g_object_notify (G_OBJECT (op), "screen");
 }

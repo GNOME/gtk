@@ -188,7 +188,6 @@ struct _GtkWindowPrivate
   GtkWindow             *transient_parent;
   GtkWindowGeometryInfo *geometry_info;
   GtkWindowGroup        *group;
-  GdkScreen             *screen;
   GdkDisplay            *display;
   GtkApplication        *application;
 
@@ -309,7 +308,7 @@ enum {
   PROP_DESTROY_WITH_PARENT,
   PROP_ICON,
   PROP_ICON_NAME,
-  PROP_SCREEN,
+  PROP_DISPLAY,
   PROP_TYPE_HINT,
   PROP_SKIP_TASKBAR_HINT,
   PROP_SKIP_PAGER_HINT,
@@ -454,8 +453,6 @@ static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 						    GtkWidget  *window);
 static void gtk_window_transient_parent_unrealized (GtkWidget  *parent,
 						    GtkWidget  *window);
-
-static GdkScreen *gtk_window_check_screen (GtkWindow *window);
 
 static GtkWindowGeometryInfo* gtk_window_get_geometry_info         (GtkWindow    *window,
                                                                     gboolean      create);
@@ -981,11 +978,11 @@ gtk_window_class_init (GtkWindowClass *klass)
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  window_props[PROP_SCREEN] =
-      g_param_spec_object ("screen",
-                           P_("Screen"),
-                           P_("The screen where this window will be displayed"),
-                           GDK_TYPE_SCREEN,
+  window_props[PROP_DISPLAY] =
+      g_param_spec_object ("display",
+                           P_("Display"),
+                           P_("The display that will display this window"),
+                           GDK_TYPE_DISPLAY,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   window_props[PROP_IS_ACTIVE] =
@@ -1890,7 +1887,7 @@ gtk_window_init (GtkWindow *window)
   priv->gravity = GDK_GRAVITY_NORTH_WEST;
   priv->decorated = TRUE;
   priv->mnemonic_modifier = GDK_MOD1_MASK;
-  priv->screen = gdk_screen_get_default ();
+  priv->display = gdk_display_get_default ();
 
   priv->accept_focus = TRUE;
   priv->focus_on_map = TRUE;
@@ -1908,10 +1905,9 @@ gtk_window_init (GtkWindow *window)
   gtk_window_update_debugging ();
 
 #ifdef GDK_WINDOWING_X11
-  if (priv->screen)
-    g_signal_connect (gtk_settings_get_for_screen (priv->screen),
-                      "notify::gtk-application-prefer-dark-theme",
-                      G_CALLBACK (gtk_window_on_theme_variant_changed), window);
+  g_signal_connect (gtk_settings_get_for_display (priv->display),
+                    "notify::gtk-application-prefer-dark-theme",
+                    G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (window));
@@ -2017,8 +2013,8 @@ gtk_window_set_property (GObject      *object,
     case PROP_ICON_NAME:
       gtk_window_set_icon_name (window, g_value_get_string (value));
       break;
-    case PROP_SCREEN:
-      gtk_window_set_screen (window, g_value_get_object (value));
+    case PROP_DISPLAY:
+      gtk_window_set_display (window, g_value_get_object (value));
       break;
     case PROP_TYPE_HINT:
       gtk_window_set_type_hint (window,
@@ -2127,8 +2123,8 @@ gtk_window_get_property (GObject      *object,
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_window_get_icon_name (window));
       break;
-    case PROP_SCREEN:
-      g_value_set_object (value, priv->screen);
+    case PROP_DISPLAY:
+      g_value_set_object (value, priv->display);
       break;
     case PROP_IS_ACTIVE:
       g_value_set_boolean (value, priv->is_active);
@@ -3358,11 +3354,11 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 }
 
 static void
-gtk_window_transient_parent_screen_changed (GtkWindow	*parent,
-					    GParamSpec	*pspec,
-					    GtkWindow   *window)
+gtk_window_transient_parent_display_changed (GtkWindow	*parent,
+                                             GParamSpec *pspec,
+                                             GtkWindow  *window)
 {
-  gtk_window_set_screen (window, parent->priv->screen);
+  gtk_window_set_display (window, parent->priv->display);
 }
 
 static void       
@@ -3379,7 +3375,7 @@ gtk_window_unset_transient_for  (GtkWindow *window)
 					    gtk_window_transient_parent_unrealized,
 					    window);
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
-					    gtk_window_transient_parent_screen_changed,
+					    gtk_window_transient_parent_display_changed,
 					    window);
       g_signal_handlers_disconnect_by_func (priv->transient_parent,
 					    gtk_widget_destroyed,
@@ -3459,11 +3455,11 @@ gtk_window_set_transient_for  (GtkWindow *window,
       g_signal_connect (parent, "unrealize",
 			G_CALLBACK (gtk_window_transient_parent_unrealized),
 			window);
-      g_signal_connect (parent, "notify::screen",
-			G_CALLBACK (gtk_window_transient_parent_screen_changed),
+      g_signal_connect (parent, "notify::display",
+			G_CALLBACK (gtk_window_transient_parent_display_changed),
 			window);
 
-      gtk_window_set_screen (window, parent->priv->screen);
+      gtk_window_set_display (window, parent->priv->display);
 
       if (priv->destroy_with_parent)
         connect_parent_destroyed (window);
@@ -4076,10 +4072,8 @@ static gboolean
 gtk_window_supports_client_shadow (GtkWindow *window)
 {
   GdkDisplay *display;
-  GdkScreen *screen;
 
-  screen = _gtk_window_get_screen (window);
-  display = gdk_screen_get_display (screen);
+  display = window->priv->display;
 
   if (!gdk_display_is_rgba (display))
     return FALSE;
@@ -4090,7 +4084,8 @@ gtk_window_supports_client_shadow (GtkWindow *window)
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
     {
-      if (!gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern_static_string ("_GTK_FRAME_EXTENTS")))
+      if (!gdk_x11_screen_supports_net_wm_hint (gdk_display_get_default_screen (display),
+                                                gdk_atom_intern_static_string ("_GTK_FRAME_EXTENTS")))
         return FALSE;
     }
 #endif
@@ -5924,12 +5919,9 @@ gtk_window_finalize (GObject *object)
     }
 
 #ifdef GDK_WINDOWING_X11
-  if (priv->screen)
-    {
-      g_signal_handlers_disconnect_by_func (gtk_settings_get_for_screen (priv->screen),
-                                            gtk_window_on_theme_variant_changed,
-                                            window);
-    }
+  g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (priv->display),
+                                        gtk_window_on_theme_variant_changed,
+                                        window);
 #endif
 
   g_free (priv->startup_id);
@@ -8371,22 +8363,21 @@ get_center_monitor_of_window (GtkWindow *window)
    * stuff, or we could just be losers and assume you have a row
    * or column of monitors.
    */
-  display = gdk_screen_get_display (gtk_window_check_screen (window));
+  display = window->priv->display;
   return gdk_display_get_monitor (display, gdk_display_get_n_monitors (display) / 2);
 }
 
 static GdkMonitor *
 get_monitor_containing_pointer (GtkWindow *window)
 {
+  GtkWindowPrivate *priv = window->priv;
   gint px, py;
-  GdkDisplay *display;
   GdkDevice *pointer;
 
-  display = gdk_screen_get_display (gtk_window_check_screen (window));
-  pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+  pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
   gdk_device_get_position (pointer, NULL, &px, &py);
 
-  return gdk_display_get_monitor_at_point (display, px, py);
+  return gdk_display_get_monitor_at_point (priv->display, px, py);
 }
 
 static void
@@ -8462,10 +8453,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   GtkWindowPosition pos;
   GtkWidget *parent_widget;
   GtkWindowGeometryInfo *info;
-  GdkScreen *screen;
   int x, y;
-
-  screen = gtk_window_check_screen (window);
 
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
   gtk_window_compute_configure_request_size (window,
@@ -8516,7 +8504,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
         case GTK_WIN_POS_CENTER_ON_PARENT:
           {
-            GdkDisplay *display;
             GtkAllocation allocation;
             GdkWindow *gdk_window;
             GdkMonitor *monitor;
@@ -8525,9 +8512,8 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
             g_assert (_gtk_widget_get_mapped (parent_widget)); /* established earlier */
 
-            display = gdk_screen_get_display (screen);
             gdk_window = _gtk_widget_get_window (parent_widget);
-            monitor = gdk_display_get_monitor_at_window (display, gdk_window);
+            monitor = gdk_display_get_monitor_at_window (priv->display, gdk_window);
 
             gdk_window_get_origin (gdk_window, &ox, &oy);
 
@@ -8550,16 +8536,14 @@ gtk_window_compute_configure_request (GtkWindow    *window,
         case GTK_WIN_POS_MOUSE:
           {
             GdkRectangle area;
-            GdkDisplay *display;
             GdkDevice *pointer;
             GdkMonitor *monitor;
             gint px, py;
 
-            display = gdk_screen_get_display (screen);
-            pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+            pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
 
             gdk_device_get_position (pointer, NULL, &px, &py);
-            monitor = gdk_display_get_monitor_at_point (display, px, py);
+            monitor = gdk_display_get_monitor_at_point (priv->display, px, py);
 
             x = px - w / 2;
             y = py - h / 2;
@@ -9627,7 +9611,7 @@ gtk_window_fullscreen_on_monitor (GtkWindow *window,
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
-  gtk_window_set_screen (window, screen);
+  gtk_window_set_display (window, gdk_screen_get_display (screen));
 
   priv->initial_fullscreen_monitor = monitor;
   priv->fullscreen_initially = TRUE;
@@ -9941,31 +9925,31 @@ gtk_window_begin_move_drag  (GtkWindow *window,
 }
 
 /**
- * gtk_window_set_screen:
+ * gtk_window_set_display:
  * @window: a #GtkWindow.
- * @screen: a #GdkScreen.
+ * @display: a #GdkDisplay.
  *
- * Sets the #GdkScreen where the @window is displayed; if
+ * Sets the #GdkDisplay where the @window is displayed; if
  * the window is already mapped, it will be unmapped, and
- * then remapped on the new screen.
+ * then remapped on the new display.
  *
- * Since: 2.2
+ * Since: 3.94
  */
 void
-gtk_window_set_screen (GtkWindow *window,
-		       GdkScreen *screen)
+gtk_window_set_display (GtkWindow  *window,
+		        GdkDisplay *display)
 {
   GtkWindowPrivate *priv;
   GtkWidget *widget;
-  GdkScreen *previous_screen;
+  GdkDisplay *previous_display;
   gboolean was_mapped;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GDK_IS_DISPLAY (display));
 
   priv = window->priv;
 
-  if (screen == priv->screen)
+  if (display == priv->display)
     return;
 
   /* reset initial_fullscreen_monitor since they are relative to the screen */
@@ -9973,7 +9957,7 @@ gtk_window_set_screen (GtkWindow *window,
   
   widget = GTK_WIDGET (window);
 
-  previous_screen = priv->screen;
+  previous_display = priv->display;
 
   was_mapped = _gtk_widget_get_mapped (widget);
 
@@ -9983,23 +9967,17 @@ gtk_window_set_screen (GtkWindow *window,
     gtk_widget_unrealize (widget);
 
   gtk_window_free_key_hash (window);
-  priv->screen = screen;
-  if (screen != previous_screen)
-    {
+  priv->display = display;
 #ifdef GDK_WINDOWING_X11
-      if (previous_screen)
-        {
-          g_signal_handlers_disconnect_by_func (gtk_settings_get_for_screen (previous_screen),
-                                                gtk_window_on_theme_variant_changed, window);
-        }
-      g_signal_connect (gtk_settings_get_for_screen (screen),
-                        "notify::gtk-application-prefer-dark-theme",
-                        G_CALLBACK (gtk_window_on_theme_variant_changed), window);
+  g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (previous_display),
+                                        gtk_window_on_theme_variant_changed, window);
+  g_signal_connect (gtk_settings_get_for_display (display),
+                    "notify::gtk-application-prefer-dark-theme",
+                    G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
-      _gtk_widget_propagate_display_changed (widget, gdk_screen_get_display (previous_screen));
-    }
-  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SCREEN]);
+  _gtk_widget_propagate_display_changed (widget, previous_display);
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DISPLAY]);
 
   if (was_mapped)
     gtk_widget_map (widget);
@@ -10014,7 +9992,7 @@ gtk_window_set_theme_variant (GtkWindow *window)
   GdkWindow *gdk_window;
   gboolean   dark_theme_requested;
 
-  g_object_get (gtk_settings_get_for_screen (window->priv->screen),
+  g_object_get (gtk_settings_get_for_display (window->priv->display),
                 "gtk-application-prefer-dark-theme", &dark_theme_requested,
                 NULL);
 
@@ -10037,25 +10015,10 @@ gtk_window_on_theme_variant_changed (GtkSettings *settings,
 }
 #endif
 
-static GdkScreen *
-gtk_window_check_screen (GtkWindow *window)
+GdkDisplay *
+gtk_window_get_display (GtkWindow *window)
 {
-  GtkWindowPrivate *priv = window->priv;
-
-  if (priv->screen)
-    return priv->screen;
-  else
-    {
-      g_warning ("Screen for GtkWindow not set; you must always set\n"
-		 "a screen for a GtkWindow before using the window");
-      return NULL;
-    }
-}
-
-GdkScreen *
-_gtk_window_get_screen (GtkWindow *window)
-{
-  return window->priv->screen;
+  return window->priv->display;
 }
 
 /**
@@ -10315,13 +10278,12 @@ add_to_key_hash (GtkWindow      *window,
 static GtkKeyHash *
 gtk_window_get_key_hash (GtkWindow *window)
 {
-  GdkScreen *screen = gtk_window_check_screen (window);
   GtkKeyHash *key_hash = g_object_get_qdata (G_OBJECT (window), quark_gtk_window_key_hash);
   
   if (key_hash)
     return key_hash;
   
-  key_hash = _gtk_key_hash_new (gdk_keymap_get_for_display (gdk_screen_get_display (screen)),
+  key_hash = _gtk_key_hash_new (gdk_keymap_get_for_display (window->priv->display),
 				(GDestroyNotify)window_key_entry_destroy);
   _gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
   g_object_set_qdata (G_OBJECT (window), quark_gtk_window_key_hash, key_hash);

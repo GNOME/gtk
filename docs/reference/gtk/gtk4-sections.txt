@@ -1725,7 +1725,7 @@ GtkMenu
 GtkArrowPlacement
 gtk_menu_new
 gtk_menu_new_from_model
-gtk_menu_set_screen
+gtk_menu_set_display
 gtk_menu_reorder_child
 gtk_menu_attach
 gtk_menu_popup_at_rect
@@ -4727,7 +4727,7 @@ gtk_window_set_position
 gtk_window_set_transient_for
 gtk_window_set_attached_to
 gtk_window_set_destroy_with_parent
-gtk_window_set_screen
+gtk_window_set_display
 gtk_window_is_active
 gtk_window_is_maximized
 gtk_window_list_toplevels

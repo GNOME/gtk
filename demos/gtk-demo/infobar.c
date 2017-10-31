@@ -54,8 +54,8 @@ do_infobar (GtkWidget *do_widget)
       actions = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_screen (GTK_WINDOW (window),
-                             gtk_widget_get_screen (do_widget));
+      gtk_window_set_display (GTK_WINDOW (window),
+                              gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Info Bars");
 
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);

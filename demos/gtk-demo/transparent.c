@@ -20,8 +20,8 @@ do_transparent (GtkWidget *do_widget)
       GtkWidget *image;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_screen (GTK_WINDOW (window),
-                             gtk_widget_get_screen (do_widget));
+      gtk_window_set_display (GTK_WINDOW (window),
+                              gtk_widget_get_display (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 450, 450);
 
       g_signal_connect (window, "destroy",

@@ -1619,13 +1619,13 @@ on_status_toplevel_destroy (GtkWidget    *toplevel,
  * screen for the status window to match.
  */
 static void
-on_status_toplevel_notify_screen (GtkWindow    *toplevel,
-				  GParamSpec   *pspec,
-				  StatusWindow *status_window)
+on_status_toplevel_notify_display (GtkWindow    *toplevel,
+				   GParamSpec   *pspec,
+				   StatusWindow *status_window)
 {
   if (status_window->window)
-    gtk_window_set_screen (GTK_WINDOW (status_window->window),
-			   gtk_widget_get_screen (GTK_WIDGET (toplevel)));
+    gtk_window_set_display (GTK_WINDOW (status_window->window),
+			    gtk_widget_get_display (GTK_WIDGET (toplevel)));
 }
 
 /* Called when the toplevel window is moved; updates the position of
@@ -1675,7 +1675,7 @@ status_window_free (StatusWindow *status_window)
 					G_CALLBACK (on_status_toplevel_destroy),
 					status_window);
   g_signal_handlers_disconnect_by_func (status_window->toplevel,
-					G_CALLBACK (on_status_toplevel_notify_screen),
+					G_CALLBACK (on_status_toplevel_notify_display),
 					status_window);
   g_signal_handlers_disconnect_by_func (status_window->toplevel,
 					G_CALLBACK (on_status_toplevel_configure),
@@ -1711,8 +1711,8 @@ status_window_get (GtkWidget *toplevel)
   g_signal_connect (toplevel, "configure-event",
 		    G_CALLBACK (on_status_toplevel_configure),
 		    status_window);
-  g_signal_connect (toplevel, "notify::screen",
-		    G_CALLBACK (on_status_toplevel_notify_screen),
+  g_signal_connect (toplevel, "notify::display",
+		    G_CALLBACK (on_status_toplevel_notify_display),
 		    status_window);
   
   g_object_set_data (G_OBJECT (toplevel), "gtk-im-xim-status-window", status_window);
@@ -1740,8 +1740,8 @@ status_window_make_window (StatusWindow *status_window)
   
   gtk_container_add (GTK_CONTAINER (window), status_label);
   
-  gtk_window_set_screen (GTK_WINDOW (status_window->window),
-			 gtk_widget_get_screen (status_window->toplevel));
+  gtk_window_set_display (GTK_WINDOW (status_window->window),
+			  gtk_widget_get_display (status_window->toplevel));
 
   on_status_toplevel_configure (status_window->toplevel, NULL, status_window);
 }

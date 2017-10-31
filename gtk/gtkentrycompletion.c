@@ -1655,8 +1655,8 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
                                    GTK_WINDOW (completion->priv->popup_window));
     }
 
-  gtk_window_set_screen (GTK_WINDOW (completion->priv->popup_window),
-                         gtk_widget_get_screen (completion->priv->entry));
+  gtk_window_set_display (GTK_WINDOW (completion->priv->popup_window),
+                          gtk_widget_get_display (completion->priv->entry));
 
   if (completion->priv->device)
     {

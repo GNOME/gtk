@@ -1288,15 +1288,15 @@ gtk_menu_finalize (GObject *object)
 }
 
 static void
-menu_change_screen (GtkMenu   *menu,
-                    GdkScreen *new_screen)
+menu_change_display (GtkMenu    *menu,
+                     GdkDisplay *new_display)
 {
   GtkMenuPrivate *priv = menu->priv;
 
-  if (new_screen == gtk_widget_get_screen (GTK_WIDGET (menu)))
+  if (new_display == gtk_widget_get_display (GTK_WIDGET (menu)))
     return;
 
-  gtk_window_set_screen (GTK_WINDOW (priv->toplevel), new_screen);
+  gtk_window_set_display (GTK_WINDOW (priv->toplevel), new_display);
   priv->monitor_num = -1;
 }
 
@@ -1305,8 +1305,8 @@ attach_widget_display_changed (GtkWidget  *attach_widget,
                                GdkDisplay *previous_display,
                                GtkMenu    *menu)
 {
-  if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
-    menu_change_screen (menu, gtk_widget_get_screen (attach_widget));
+  if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-display"))
+    menu_change_display (menu, gtk_widget_get_display (attach_widget));
 }
 
 static void
@@ -1700,7 +1700,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
   parent_toplevel = NULL;
   if (parent_menu_shell)
     parent_toplevel = gtk_widget_get_toplevel (parent_menu_shell);
-  else if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
+  else if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-display"))
     {
       GtkWidget *attach_widget = gtk_menu_get_attach_widget (menu);
       if (attach_widget)
@@ -4295,27 +4295,27 @@ gtk_menu_select_item (GtkMenuShell *menu_shell,
 }
 
 /**
- * gtk_menu_set_screen:
+ * gtk_menu_set_display:
  * @menu: a #GtkMenu
- * @screen: (allow-none): a #GdkScreen, or %NULL if the screen should be
+ * @screen: (allow-none): a #GdkDisplay, or %NULL if the display should be
  *          determined by the widget the menu is attached to
  *
- * Sets the #GdkScreen on which the menu will be displayed.
+ * Sets the #GdkDisplay on which the menu will be displayed.
  *
- * Since: 2.2
+ * Since: 3.94
  */
 void
-gtk_menu_set_screen (GtkMenu   *menu,
-                     GdkScreen *screen)
+gtk_menu_set_display (GtkMenu    *menu,
+                      GdkDisplay *display)
 {
   g_return_if_fail (GTK_IS_MENU (menu));
-  g_return_if_fail (screen == NULL || GDK_IS_SCREEN (screen));
+  g_return_if_fail (display == NULL || GDK_IS_DISPLAY (display));
 
-  g_object_set_data (G_OBJECT (menu), I_("gtk-menu-explicit-screen"), screen);
+  g_object_set_data (G_OBJECT (menu), I_("gtk-menu-explicit-display"), display);
 
-  if (screen)
+  if (display)
     {
-      menu_change_screen (menu, screen);
+      menu_change_display (menu, display);
     }
   else
     {

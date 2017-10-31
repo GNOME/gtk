@@ -9266,7 +9266,7 @@ gtk_widget_get_screen (GtkWidget *widget)
   if (_gtk_widget_is_toplevel (toplevel))
     {
       if (GTK_IS_WINDOW (toplevel))
-	return _gtk_window_get_screen (GTK_WINDOW (toplevel));
+	return gdk_display_get_default_screen (gtk_window_get_display (GTK_WINDOW (toplevel)));
       else if (GTK_IS_INVISIBLE (toplevel))
 	return gtk_invisible_get_screen (GTK_INVISIBLE (widget));
     }

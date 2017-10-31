@@ -160,8 +160,8 @@ do_widgetbowl (GtkWidget *do_widget)
       gtk_fishbowl_set_use_icons (GTK_FISHBOWL (bowl), FALSE);
       info_label = GTK_WIDGET (gtk_builder_get_object (builder, "info_label"));
       allow_changes = GTK_WIDGET (gtk_builder_get_object (builder, "changes_allow"));
-      gtk_window_set_screen (GTK_WINDOW (window),
-                             gtk_widget_get_screen (do_widget));
+      gtk_window_set_display (GTK_WINDOW (window),
+                              gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 

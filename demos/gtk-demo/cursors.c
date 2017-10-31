@@ -81,8 +81,8 @@ do_cursors (GtkWidget *do_widget)
       GtkWidget *section;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_screen (GTK_WINDOW (window),
-                             gtk_widget_get_screen (do_widget));
+      gtk_window_set_display (GTK_WINDOW (window),
+                              gtk_widget_get_display (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Cursors");
       gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
 
