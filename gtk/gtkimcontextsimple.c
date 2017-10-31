@@ -1017,10 +1017,10 @@ check_emoji (GtkIMContextSimple *context_simple,
 static void
 beep_window (GdkWindow *window)
 {
-  GdkScreen *screen = gdk_window_get_screen (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   gboolean   beep;
 
-  g_object_get (gtk_settings_get_for_screen (screen),
+  g_object_get (gtk_settings_get_for_display (display),
                 "gtk-error-bell", &beep,
                 NULL);
 

@@ -1268,24 +1268,6 @@ gtk_settings_get_for_display (GdkDisplay *display)
 }
 
 /**
- * gtk_settings_get_for_screen:
- * @screen: a #GdkScreen.
- *
- * Gets the #GtkSettings object for @screen, creating it if necessary.
- *
- * Returns: (transfer none): a #GtkSettings object.
- *
- * Since: 2.2
- */
-GtkSettings *
-gtk_settings_get_for_screen (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return gtk_settings_get_for_display (gdk_screen_get_display (screen));
-}
-
-/**
  * gtk_settings_get_default:
  *
  * Gets the #GtkSettings object for the default display, creating
