@@ -208,12 +208,13 @@ entry {
     }
 
     &.flat {
-      &:focus, & {
+      &:focus, &:backdrop, &:disabled, & {
         min-height: 0;
         padding: 2px;
         background-image: none;
         border-color: transparent;
         border-radius: 0;
+        box-shadow: none;
       }
     }
 
