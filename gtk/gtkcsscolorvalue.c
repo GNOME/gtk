@@ -151,7 +151,7 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
   GtkCssValue *value;
 
   gtk_internal_return_val_if_fail (color != NULL, NULL);
-  gtk_internal_return_val_if_fail (provider == NULL || GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  gtk_internal_return_val_if_fail (provider == NULL || GTK_IS_STYLE_PROVIDER (provider), NULL);
 
   switch (color->type)
     {

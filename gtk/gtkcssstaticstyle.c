@@ -207,7 +207,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
   GtkCssValue *value;
 
   gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
-  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
   gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
   gtk_internal_return_if_fail (id < GTK_CSS_PROPERTY_N_PROPERTIES);
 

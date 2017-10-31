@@ -111,7 +111,7 @@ _gtk_css_lookup_resolve (GtkCssLookup      *lookup,
   guint i;
 
   gtk_internal_return_if_fail (lookup != NULL);
-  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
   gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
   gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
 

@@ -90,7 +90,7 @@ _gtk_css_value_compute (GtkCssValue      *value,
 {
 
   gtk_internal_return_val_if_fail (value != NULL, NULL);
-  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
   gtk_internal_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
 
