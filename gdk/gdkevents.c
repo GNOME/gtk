@@ -623,6 +623,8 @@ gdk_event_copy (const GdkEvent *event)
       if (event->button.axes)
         new_event->button.axes = g_memdup (event->button.axes,
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->any.device));
+      if (event->button.tool)
+        g_object_ref (new_event->button.tool);
       break;
 
     case GDK_TOUCH_BEGIN:
@@ -638,6 +640,8 @@ gdk_event_copy (const GdkEvent *event)
       if (event->motion.axes)
         new_event->motion.axes = g_memdup (event->motion.axes,
                                            sizeof (gdouble) * gdk_device_get_n_axes (event->any.device));
+      if (event->motion.tool)
+        g_object_ref (new_event->motion.tool);
       break;
 
     default:
@@ -2085,9 +2089,9 @@ gdk_event_set_device_tool (GdkEvent      *event,
 {
   if (event->any.type == GDK_BUTTON_PRESS ||
       event->any.type == GDK_BUTTON_RELEASE)
-    event->button.tool = tool;
+    g_set_object (&event->button.tool, tool);
   else if (event->any.type == GDK_MOTION_NOTIFY)
-    event->motion.tool = tool;
+    g_set_object (&event->motion.tool, tool);
 }
 
 void
