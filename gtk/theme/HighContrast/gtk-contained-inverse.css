@@ -90,7 +90,7 @@ spinbutton:not(.vertical) undershoot.left, entry undershoot.left { background-co
 
 spinbutton:not(.vertical) undershoot.right, entry undershoot.right { background-color: transparent; background-image: linear-gradient(to top, rgba(255, 255, 255, 0.2) 50%, rgba(0, 0, 0, 0.2) 50%); padding-right: 1px; background-size: 1px 10px; background-repeat: repeat-y; background-origin: content-box; background-position: right center; border: none; box-shadow: none; }
 
-spinbutton.flat:focus:not(.vertical), spinbutton.flat:not(.vertical), entry.flat:focus, entry.flat { min-height: 0; padding: 2px; background-image: none; border-color: transparent; border-radius: 0; }
+spinbutton.flat:focus:not(.vertical), spinbutton.flat:backdrop:not(.vertical), spinbutton.flat:disabled:not(.vertical), spinbutton.flat:not(.vertical), entry.flat:focus, entry.flat:backdrop, entry.flat:disabled, entry.flat { min-height: 0; padding: 2px; background-image: none; border-color: transparent; border-radius: 0; box-shadow: none; }
 
 spinbutton:focus:not(.vertical), entry:focus { background-color: transparent; border-style: solid; background-image: linear-gradient(to bottom, #090909, #111 90%); border-color: #ddd; box-shadow: inset 0 2px 2px -2px #090909, inset 0 0 0 1px #ddd; }
 
