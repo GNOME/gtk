@@ -364,7 +364,7 @@ text (guint n)
   PangoLayout *layout;
   int i;
 
-  context = gdk_pango_context_get ();
+  context = gdk_pango_context_get_for_display (gdk_display_get_default ());
 
   desc = pango_font_description_new ();
   pango_font_description_set_family (desc, "Cantarell");
