@@ -1796,9 +1796,9 @@ gtk_mount_operation_get_screen (GtkMountOperation *op)
   priv = op->priv;
 
   if (priv->dialog)
-    return gtk_window_get_screen (GTK_WINDOW (priv->dialog));
+    return gtk_widget_get_screen (GTK_WIDGET (priv->dialog));
   else if (priv->parent_window)
-    return gtk_window_get_screen (GTK_WINDOW (priv->parent_window));
+    return gtk_widget_get_screen (GTK_WIDGET (priv->parent_window));
   else if (priv->screen)
     return priv->screen;
   else

@@ -253,8 +253,6 @@ GdkGravity gtk_window_get_gravity              (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_window_set_screen	       (GtkWindow	    *window,
 						GdkScreen	    *screen);
-GDK_AVAILABLE_IN_ALL
-GdkScreen* gtk_window_get_screen	       (GtkWindow	    *window);
 
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_is_active                (GtkWindow           *window);

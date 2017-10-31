@@ -10052,24 +10052,6 @@ gtk_window_check_screen (GtkWindow *window)
     }
 }
 
-/**
- * gtk_window_get_screen:
- * @window: a #GtkWindow.
- *
- * Returns the #GdkScreen associated with @window.
- *
- * Returns: (transfer none): a #GdkScreen.
- *
- * Since: 2.2
- */
-GdkScreen*
-gtk_window_get_screen (GtkWindow *window)
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
-
-  return window->priv->screen;
-}
-
 GdkScreen *
 _gtk_window_get_screen (GtkWindow *window)
 {
