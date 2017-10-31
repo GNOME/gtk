@@ -8311,7 +8311,6 @@ main (int argc, char *argv[])
 {
   GtkCssProvider *provider, *memory_provider;
   GdkDisplay *display;
-  GdkScreen *screen;
   GtkBindingSet *binding_set;
   int i;
   gboolean done_benchmarks = FALSE;
@@ -8341,10 +8340,9 @@ main (int argc, char *argv[])
     g_warning ("Couldn't find file \"testgtk.css\".");
 
   display = gdk_display_get_default ();
-  screen = gdk_display_get_default_screen (display);
 
-  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (provider);
 
   gtk_accelerator_set_default_mod_mask (GDK_SHIFT_MASK |
@@ -8414,8 +8412,8 @@ main (int argc, char *argv[])
                                    "  font-size: 18px;\n"
                                    "}",
                                    -1);
-  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (memory_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
+  gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (memory_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
 
   create_main_window ();
 

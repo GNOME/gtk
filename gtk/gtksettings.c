@@ -1395,7 +1395,7 @@ gtk_settings_notify (GObject    *object,
     case PROP_FONT_NAME:
       settings_update_font_values (settings);
       settings_invalidate_style (settings);
-      gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
+      gtk_style_context_reset_widgets (priv->display);
       break;
     case PROP_KEY_THEME_NAME:
       settings_update_key_theme (settings);
@@ -1410,21 +1410,21 @@ gtk_settings_notify (GObject    *object,
        * widgets with gtk_widget_style_set(), and also causes more
        * recomputation than necessary.
        */
-      gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
+      gtk_style_context_reset_widgets (priv->display);
       break;
     case PROP_XFT_ANTIALIAS:
     case PROP_XFT_HINTING:
     case PROP_XFT_HINTSTYLE:
     case PROP_XFT_RGBA:
       settings_update_font_options (settings);
-      gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
+      gtk_style_context_reset_widgets (priv->display);
       break;
     case PROP_FONTCONFIG_TIMESTAMP:
       if (settings_update_fontconfig (settings))
-        gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
+        gtk_style_context_reset_widgets (priv->display);
       break;
     case PROP_ENABLE_ANIMATIONS:
-      gtk_style_context_reset_widgets (gdk_display_get_default_screen (priv->display));
+      gtk_style_context_reset_widgets (priv->display);
       break;
     case PROP_CURSOR_THEME_NAME:
     case PROP_CURSOR_THEME_SIZE:
@@ -2321,21 +2321,19 @@ settings_update_provider (GdkDisplay      *display,
 {
   if (display != NULL && *old != new)
     {
-      GdkScreen *screen = gdk_display_get_default_screen (display);
-
       if (*old)
         {
-          gtk_style_context_remove_provider_for_screen (screen,
-                                                        GTK_STYLE_PROVIDER (*old));
+          gtk_style_context_remove_provider_for_display (display,
+                                                         GTK_STYLE_PROVIDER (*old));
           g_object_unref (*old);
           *old = NULL;
         }
 
       if (new)
         {
-          gtk_style_context_add_provider_for_screen (screen,
-                                                     GTK_STYLE_PROVIDER (new),
-                                                     GTK_STYLE_PROVIDER_PRIORITY_THEME);
+          gtk_style_context_add_provider_for_display (display,
+                                                      GTK_STYLE_PROVIDER (new),
+                                                      GTK_STYLE_PROVIDER_PRIORITY_THEME);
           *old = g_object_ref (new);
         }
     }
@@ -2436,10 +2434,10 @@ gtk_settings_get_font_options (GtkSettings *settings)
   return settings->priv->font_options;
 }
 
-GdkScreen *
-_gtk_settings_get_screen (GtkSettings *settings)
+GdkDisplay *
+_gtk_settings_get_display (GtkSettings *settings)
 {
-  return gdk_display_get_default_screen (settings->priv->display);
+  return settings->priv->display;
 }
 
 static void

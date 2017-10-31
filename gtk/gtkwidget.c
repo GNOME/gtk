@@ -8469,7 +8469,7 @@ do_display_change (GtkWidget  *widget,
       _gtk_tooltip_hide (widget);
 
       if (new_display && priv->context)
-        gtk_style_context_set_screen (priv->context, gdk_display_get_default_screen (new_display));
+        gtk_style_context_set_display (priv->context, new_display);
 
       g_signal_emit (widget, widget_signals[DISPLAY_CHANGED], 0, old_display);
     }
@@ -14002,7 +14002,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
   if (G_UNLIKELY (priv->context == NULL))
     {
-      GdkScreen *screen;
+      GdkDisplay *display;
       GdkFrameClock *frame_clock;
 
       priv->context = gtk_style_context_new_for_node (priv->cssnode);
@@ -14011,9 +14011,9 @@ gtk_widget_get_style_context (GtkWidget *widget)
       gtk_style_context_set_state (priv->context, priv->state_flags);
       gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
-      screen = gtk_widget_get_screen (widget);
-      if (screen)
-        gtk_style_context_set_screen (priv->context, screen);
+      display = gtk_widget_get_display (widget);
+      if (display)
+        gtk_style_context_set_display (priv->context, display);
 
       frame_clock = gtk_widget_get_frame_clock (widget);
       if (frame_clock)

@@ -52,7 +52,7 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
       settings = _gtk_style_provider_private_get_settings (provider);
       if (settings)
         {
-          GdkScreen *screen = _gtk_settings_get_screen (settings);
+          GdkScreen *screen = gdk_display_get_default_screen (_gtk_settings_get_display (settings));
           double resolution = gdk_screen_get_resolution (screen);
 
           if (resolution > 0.0)

@@ -122,12 +122,12 @@ disable_toggled (GtkToggleButton       *button,
                  GtkInspectorCssEditor *ce)
 {
   if (gtk_toggle_button_get_active (button))
-    gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
-                                                  GTK_STYLE_PROVIDER (ce->priv->provider));
+    gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
+                                                   GTK_STYLE_PROVIDER (ce->priv->provider));
   else
-    gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                               GTK_STYLE_PROVIDER (ce->priv->provider),
-                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
+    gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                GTK_STYLE_PROVIDER (ce->priv->provider),
+                                                GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
 static gchar *
@@ -286,9 +286,9 @@ static void
 create_provider (GtkInspectorCssEditor *ce)
 {
   ce->priv->provider = gtk_css_provider_new ();
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (ce->priv->provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (ce->priv->provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
 
   g_signal_connect (ce->priv->provider, "parsing-error",
                     G_CALLBACK (show_parsing_error), ce);
@@ -297,8 +297,8 @@ create_provider (GtkInspectorCssEditor *ce)
 static void
 destroy_provider (GtkInspectorCssEditor *ce)
 {
-  gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
-                                                GTK_STYLE_PROVIDER (ce->priv->provider));
+  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
+                                                 GTK_STYLE_PROVIDER (ce->priv->provider));
   g_clear_object (&ce->priv->provider);
 }
 

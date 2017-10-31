@@ -615,9 +615,9 @@ main (int argc, char *argv[])
 
   css_provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (css_provider, css, -1);
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (css_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (css_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   win1 = test_nonzerox ();
   gtk_widget_show (win1);

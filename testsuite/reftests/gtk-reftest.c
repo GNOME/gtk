@@ -224,9 +224,9 @@ add_extra_css (const char *testname,
   provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
   gtk_css_provider_load_from_path (GTK_CSS_PROVIDER (provider),
                                    css_file);
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             provider,
-                                             GTK_STYLE_PROVIDER_PRIORITY_FORCE);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              provider,
+                                              GTK_STYLE_PROVIDER_PRIORITY_FORCE);
 
   g_free (css_file);
   
@@ -239,8 +239,8 @@ remove_extra_css (GtkStyleProvider *provider)
   if (provider == NULL)
     return;
 
-  gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
-                                                provider);
+  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
+                                                 provider);
 }
 
 static void

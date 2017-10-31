@@ -262,9 +262,9 @@ main (int argc, char *argv[])
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider, css, -1);
-  gtk_style_context_add_provider_for_screen (gtk_widget_get_screen (window),
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (window),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 
   list = gtk_list_box_new ();

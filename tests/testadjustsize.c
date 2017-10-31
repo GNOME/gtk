@@ -364,9 +364,9 @@ main (int argc, char *argv[])
     ".black-bg { background-color: black; }"
     ".red-bg { background-color: red; }"
     ".blue-bg { background-color: blue; }", -1);
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (provider);
   
   if (g_getenv ("RTL"))

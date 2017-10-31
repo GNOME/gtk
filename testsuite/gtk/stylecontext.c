@@ -346,13 +346,13 @@ test_style_priorities_equal (PrioritiesFixture *f,
 {
   GdkRGBA color, ref_color;
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (f->blue_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (f->blue_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
   gtk_style_context_add_provider (f->context, GTK_STYLE_PROVIDER (f->red_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-  /* When style providers are added to the screen as well as the style context
+  /* When style providers are added to the display as well as the style context
   the one specific to the style context should take priority */
   gdk_rgba_parse (&ref_color, "red");
   gtk_style_context_get_color (f->context, &color);
@@ -361,14 +361,14 @@ test_style_priorities_equal (PrioritiesFixture *f,
 }
 
 static void
-test_style_priorities_screen_only (PrioritiesFixture *f,
-                                   gconstpointer      unused)
+test_style_priorities_display_only (PrioritiesFixture *f,
+                                    gconstpointer      unused)
 {
   GdkRGBA color, ref_color;
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (f->blue_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (f->blue_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
 
   gdk_rgba_parse (&ref_color, "blue");
   gtk_style_context_get_color (f->context, &color);
@@ -392,14 +392,14 @@ test_style_priorities_context_only (PrioritiesFixture *f,
 }
 
 static void
-test_style_priorities_screen_higher (PrioritiesFixture *f,
-                                     gconstpointer      unused)
+test_style_priorities_display_higher (PrioritiesFixture *f,
+                                      gconstpointer      unused)
 {
   GdkRGBA color, ref_color;
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (f->blue_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER + 1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (f->blue_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER + 1);
   gtk_style_context_add_provider (f->context, GTK_STYLE_PROVIDER (f->red_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
 
@@ -415,9 +415,9 @@ test_style_priorities_context_higher (PrioritiesFixture *f,
 {
   GdkRGBA color, ref_color;
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (f->blue_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (f->blue_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
   gtk_style_context_add_provider (f->context, GTK_STYLE_PROVIDER (f->red_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_USER + 1);
 
@@ -428,17 +428,17 @@ test_style_priorities_context_higher (PrioritiesFixture *f,
 }
 
 static void
-test_style_priorities_two_screen (PrioritiesFixture *f,
-                                  gconstpointer      unused)
+test_style_priorities_two_display (PrioritiesFixture *f,
+                                   gconstpointer      unused)
 {
   GdkRGBA color, ref_color;
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (f->blue_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (f->red_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER + 1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (f->blue_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (f->red_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER + 1);
 
   gdk_rgba_parse (&ref_color, "red");
   gtk_style_context_get_color (f->context, &color);
@@ -464,17 +464,17 @@ test_style_priorities_two_context (PrioritiesFixture *f,
 }
 
 static void
-test_style_priorities_three_screen_higher (PrioritiesFixture *f,
-                                           gconstpointer      unused)
+test_style_priorities_three_display_higher (PrioritiesFixture *f,
+                                            gconstpointer      unused)
 {
   GdkRGBA color, ref_color;
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (f->blue_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (f->green_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER + 1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (f->blue_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (f->green_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER + 1);
   gtk_style_context_add_provider (f->context, GTK_STYLE_PROVIDER (f->red_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
 
@@ -490,9 +490,9 @@ test_style_priorities_three_context_higher (PrioritiesFixture *f,
 {
   GdkRGBA color, ref_color;
 
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (f->blue_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (f->blue_provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
   gtk_style_context_add_provider (f->context, GTK_STYLE_PROVIDER (f->red_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
   gtk_style_context_add_provider (f->context, GTK_STYLE_PROVIDER (f->green_provider),
@@ -522,13 +522,13 @@ main (int argc, char *argv[])
               (func), test_style_priorities_teardown)
 
   ADD_PRIORITIES_TEST ("equal", test_style_priorities_equal);
-  ADD_PRIORITIES_TEST ("screen-only", test_style_priorities_screen_only);
+  ADD_PRIORITIES_TEST ("display-only", test_style_priorities_display_only);
   ADD_PRIORITIES_TEST ("context-only", test_style_priorities_context_only);
-  ADD_PRIORITIES_TEST ("screen-higher", test_style_priorities_screen_higher);
+  ADD_PRIORITIES_TEST ("display-higher", test_style_priorities_display_higher);
   ADD_PRIORITIES_TEST ("context-higher", test_style_priorities_context_higher);
-  ADD_PRIORITIES_TEST ("two-screen", test_style_priorities_two_screen);
+  ADD_PRIORITIES_TEST ("two-display", test_style_priorities_two_display);
   ADD_PRIORITIES_TEST ("two-context", test_style_priorities_two_context);
-  ADD_PRIORITIES_TEST ("three-screen-higher", test_style_priorities_three_screen_higher);
+  ADD_PRIORITIES_TEST ("three-display-higher", test_style_priorities_three_display_higher);
   ADD_PRIORITIES_TEST ("three-context-higher", test_style_priorities_three_context_higher);
 
 #undef ADD_PRIORITIES_TEST

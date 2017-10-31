@@ -130,9 +130,9 @@ do_css_blendmodes (GtkWidget *do_widget)
       /* Setup the CSS provider for window */
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
 
-      gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                                 provider,
-                                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  provider,
+                                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
       setup_listbox (builder, provider);
     }

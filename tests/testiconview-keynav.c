@@ -216,16 +216,14 @@ static void
 set_styles (void)
 {
   GtkCssProvider *provider;
-  GdkScreen *screen;
 
   provider = gtk_css_provider_new ();
 
   gtk_css_provider_load_from_data (provider, CSS, -1);
 
-  screen = gdk_display_get_default_screen (gdk_display_get_default ());
-
-  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 int

@@ -116,9 +116,9 @@ load_ui_file (GFile *file, gboolean generate)
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_path (provider, css_file);
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_FORCE);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_FORCE);
 
   builder = gtk_builder_new_from_file (ui_file);
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
@@ -150,8 +150,8 @@ load_ui_file (GFile *file, gboolean generate)
   g_free (diff);
 
 out:
-  gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
-                                                GTK_STYLE_PROVIDER (provider));
+  gtk_style_context_remove_provider_for_display (gdk_display_get_default (),
+                                                 GTK_STYLE_PROVIDER (provider));
   g_object_unref (provider);
 
   g_free (output);

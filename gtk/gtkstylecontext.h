@@ -974,13 +974,13 @@ GType gtk_style_context_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkStyleContext * gtk_style_context_new (void);
 
-GDK_AVAILABLE_IN_ALL
-void gtk_style_context_add_provider_for_screen    (GdkScreen        *screen,
-                                                   GtkStyleProvider *provider,
-                                                   guint             priority);
-GDK_AVAILABLE_IN_ALL
-void gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
-                                                   GtkStyleProvider *provider);
+GDK_AVAILABLE_IN_3_94
+void gtk_style_context_add_provider_for_display    (GdkDisplay       *display,
+                                                    GtkStyleProvider *provider,
+                                                    guint             priority);
+GDK_AVAILABLE_IN_3_94
+void gtk_style_context_remove_provider_for_display (GdkDisplay       *display,
+                                                    GtkStyleProvider *provider);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_add_provider    (GtkStyleContext  *context,
@@ -1047,10 +1047,10 @@ gboolean gtk_style_context_has_class    (GtkStyleContext *context,
                                          const gchar     *class_name);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_style_context_set_screen (GtkStyleContext *context,
-                                          GdkScreen       *screen);
+void        gtk_style_context_set_display (GtkStyleContext *context,
+                                           GdkDisplay      *display);
 GDK_AVAILABLE_IN_ALL
-GdkScreen * gtk_style_context_get_screen (GtkStyleContext *context);
+GdkDisplay *gtk_style_context_get_display (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_3_8
 void           gtk_style_context_set_frame_clock (GtkStyleContext *context,
@@ -1085,7 +1085,7 @@ void gtk_style_context_get_margin           (GtkStyleContext *context,
                                              GtkBorder       *margin);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_style_context_reset_widgets        (GdkScreen       *screen);
+void gtk_style_context_reset_widgets        (GdkDisplay      *display);
 
 GDK_AVAILABLE_IN_3_4
 void        gtk_render_insertion_cursor

@@ -738,7 +738,7 @@ theme_changed_idle (gpointer user_data)
   g_signal_emit (icon_theme, signal_changed, 0);
 
   if (priv->screen && priv->is_screen_singleton)
-    gtk_style_context_reset_widgets (priv->screen);
+    gtk_style_context_reset_widgets (gdk_screen_get_display (priv->screen));
 
   priv->theme_changed_idle = 0;
 
