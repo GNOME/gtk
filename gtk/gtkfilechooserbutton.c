@@ -1539,17 +1539,15 @@ change_icon_theme (GtkFileChooserButton *button)
 static void
 gtk_file_chooser_button_style_updated (GtkWidget *widget)
 {
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  GtkCssStyleChange *change = gtk_style_context_get_change (context);
+
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_updated (widget);
 
-  if (gtk_widget_has_screen (widget))
-    {
-      /* We need to update the icon surface, but only in case
-       * the icon theme really changed. */
-      GtkStyleContext *context = gtk_widget_get_style_context (widget);
-      GtkCssStyleChange *change = gtk_style_context_get_change (context);
-      if (!change || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_ICON_THEME))
-        change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));
-    }
+  /* We need to update the icon surface, but only in case
+   * the icon theme really changed. */
+  if (!change || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_ICON_THEME))
+    change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));
 }
 
 static void

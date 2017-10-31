@@ -1305,8 +1305,7 @@ attach_widget_display_changed (GtkWidget  *attach_widget,
                                GdkDisplay *previous_display,
                                GtkMenu    *menu)
 {
-  if (gtk_widget_has_screen (attach_widget) &&
-      !g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
+  if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
     menu_change_screen (menu, gtk_widget_get_screen (attach_widget));
 }
 

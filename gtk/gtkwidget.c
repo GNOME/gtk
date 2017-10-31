@@ -697,7 +697,6 @@ static void             gtk_widget_real_state_flags_changed     (GtkWidget      
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
-static GdkScreen *      gtk_widget_get_screen_unchecked         (GtkWidget        *widget);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
                                                                  guint      signal_id);
 
@@ -9238,24 +9237,6 @@ gtk_widget_get_child_visible (GtkWidget *widget)
   return widget->priv->child_visible;
 }
 
-static GdkScreen *
-gtk_widget_get_screen_unchecked (GtkWidget *widget)
-{
-  GtkWidget *toplevel;
-
-  toplevel = _gtk_widget_get_toplevel (widget);
-
-  if (_gtk_widget_is_toplevel (toplevel))
-    {
-      if (GTK_IS_WINDOW (toplevel))
-	return _gtk_window_get_screen (GTK_WINDOW (toplevel));
-      else if (GTK_IS_INVISIBLE (toplevel))
-	return gtk_invisible_get_screen (GTK_INVISIBLE (widget));
-    }
-
-  return NULL;
-}
-
 /**
  * gtk_widget_get_screen:
  * @widget: a #GtkWidget
@@ -9276,38 +9257,21 @@ gtk_widget_get_screen_unchecked (GtkWidget *widget)
 GdkScreen*
 gtk_widget_get_screen (GtkWidget *widget)
 {
-  GdkScreen *screen;
+  GtkWidget *toplevel;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  screen = gtk_widget_get_screen_unchecked (widget);
+  toplevel = _gtk_widget_get_toplevel (widget);
 
-  if (screen)
-    return screen;
-  else
-    return gdk_screen_get_default ();
-}
-
-/**
- * gtk_widget_has_screen:
- * @widget: a #GtkWidget
- *
- * Checks whether there is a #GdkScreen is associated with
- * this widget. All toplevel widgets have an associated
- * screen, and all widgets added into a hierarchy with a toplevel
- * window at the top.
- *
- * Returns: %TRUE if there is a #GdkScreen associated
- *   with the widget.
- *
- * Since: 2.2
- **/
-gboolean
-gtk_widget_has_screen (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return (gtk_widget_get_screen_unchecked (widget) != NULL);
+  if (_gtk_widget_is_toplevel (toplevel))
+    {
+      if (GTK_IS_WINDOW (toplevel))
+	return _gtk_window_get_screen (GTK_WINDOW (toplevel));
+      else if (GTK_IS_INVISIBLE (toplevel))
+	return gtk_invisible_get_screen (GTK_INVISIBLE (widget));
+    }
+  
+  return gdk_screen_get_default ();
 }
 
 void
@@ -12618,7 +12582,6 @@ GtkClipboard *
 gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (gtk_widget_has_screen (widget), NULL);
 
   return gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
 					selection);

@@ -3779,14 +3779,11 @@ check_icon_theme (GtkFileChooserWidget *impl)
       return;
     }
 
-  if (gtk_widget_has_screen (GTK_WIDGET (impl)))
-    {
-      settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
-      priv->settings_signal_id = g_signal_connect (settings, "notify",
-                                                   G_CALLBACK (settings_notify_cb), impl);
+  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
+  priv->settings_signal_id = g_signal_connect (settings, "notify",
+                                               G_CALLBACK (settings_notify_cb), impl);
 
-      change_icon_theme (impl);
-    }
+  change_icon_theme (impl);
 
   profile_end ("end", NULL);
 }
@@ -3804,8 +3801,7 @@ gtk_file_chooser_widget_style_updated (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->style_updated (widget);
   profile_msg ("    parent class style_updated end", NULL);
 
-  if (gtk_widget_has_screen (GTK_WIDGET (impl)))
-    change_icon_theme (impl);
+  change_icon_theme (impl);
 
   emit_default_size_changed (impl);
 

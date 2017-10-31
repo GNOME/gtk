@@ -5234,11 +5234,8 @@ gtk_label_select_region_index (GtkLabel *label,
       priv->select_info->selection_anchor = anchor_index;
       priv->select_info->selection_end = end_index;
 
-      if (gtk_widget_has_screen (GTK_WIDGET (label)))
-        clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
-                                              GDK_SELECTION_PRIMARY);
-      else
-        clipboard = NULL;
+      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label),
+                                            GDK_SELECTION_PRIMARY);
 
       if (anchor_index != end_index)
         {

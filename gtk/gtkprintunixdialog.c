@@ -2315,21 +2315,18 @@ draw_collate (GtkDrawingArea *da,
 static void
 gtk_print_unix_dialog_style_updated (GtkWidget *widget)
 {
+  GtkPrintUnixDialog *dialog = (GtkPrintUnixDialog *)widget;
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  gint size;
+  gfloat scale;
+
   GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->style_updated (widget);
 
-  if (gtk_widget_has_screen (widget))
-    {
-      GtkPrintUnixDialog *dialog = (GtkPrintUnixDialog *)widget;
-      GtkPrintUnixDialogPrivate *priv = dialog->priv;
-      gint size;
-      gfloat scale;
+  gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
+  scale = size / 48.0;
 
-      gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
-      scale = size / 48.0;
-
-      gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (priv->collate_image), (50 + 20) * scale);
-      gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (priv->collate_image), (15 + 26) * scale);
-    }
+  gtk_drawing_area_set_content_width (GTK_DRAWING_AREA (priv->collate_image), (50 + 20) * scale);
+  gtk_drawing_area_set_content_height (GTK_DRAWING_AREA (priv->collate_image), (15 + 26) * scale);
 }
 
 static void

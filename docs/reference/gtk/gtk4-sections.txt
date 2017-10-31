@@ -4556,7 +4556,6 @@ gtk_widget_get_settings
 gtk_widget_get_clipboard
 gtk_widget_get_display
 gtk_widget_get_screen
-gtk_widget_has_screen
 gtk_widget_get_size_request
 gtk_widget_set_child_visible
 gtk_widget_set_size_request

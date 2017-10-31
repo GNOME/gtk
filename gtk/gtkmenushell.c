@@ -1525,11 +1525,10 @@ gtk_menu_shell_get_key_hash (GtkMenuShell *menu_shell,
   GtkMenuShellPrivate *priv = menu_shell->priv;
   GtkWidget *widget = GTK_WIDGET (menu_shell);
 
-  if (!priv->key_hash && create && gtk_widget_has_screen (widget))
+  if (!priv->key_hash && create)
     {
       GtkMnemonicHash *mnemonic_hash = gtk_menu_shell_get_mnemonic_hash (menu_shell, FALSE);
-      GdkScreen *screen = gtk_widget_get_screen (widget);
-      GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_screen_get_display (screen));
+      GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (widget));
 
       if (!mnemonic_hash)
         return NULL;

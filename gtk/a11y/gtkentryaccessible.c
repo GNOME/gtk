@@ -1263,9 +1263,6 @@ gtk_entry_accessible_copy_text (AtkEditableText *text,
   if (widget == NULL)
     return;
 
-  if (!gtk_widget_has_screen (widget))
-    return;
-
   editable = GTK_EDITABLE (widget);
   str = gtk_editable_get_chars (editable, start_pos, end_pos);
   clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_CLIPBOARD);
@@ -1285,9 +1282,6 @@ gtk_entry_accessible_cut_text (AtkEditableText *text,
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
-    return;
-
-  if (!gtk_widget_has_screen (widget))
     return;
 
   editable = GTK_EDITABLE (widget);
@@ -1351,9 +1345,6 @@ gtk_entry_accessible_paste_text (AtkEditableText *text,
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
-    return;
-
-  if (!gtk_widget_has_screen (widget))
     return;
 
   editable = GTK_EDITABLE (widget);
