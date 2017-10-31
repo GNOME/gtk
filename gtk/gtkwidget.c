@@ -9044,13 +9044,11 @@ gtk_widget_get_font_map (GtkWidget *widget)
 PangoContext *
 gtk_widget_create_pango_context (GtkWidget *widget)
 {
-  GdkDisplay *display;
   PangoContext *context;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  display = gtk_widget_get_display (widget);
-  context = gdk_pango_context_get_for_display (display);
+  context = pango_font_map_create_context (pango_cairo_font_map_get_default ());
   update_pango_context (widget, context);
   pango_context_set_language (context, gtk_get_default_language ());
 
