@@ -398,9 +398,9 @@ window_handle_exported (GtkWindow  *window,
 
   if (data->modal)
     {
-      GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (window));
+      GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (window));
 
-      data->grab_widget = gtk_invisible_new_for_screen (screen);
+      data->grab_widget = gtk_invisible_new_for_display (display);
       gtk_grab_add (GTK_WIDGET (data->grab_widget));
     }
 

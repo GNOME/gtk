@@ -277,7 +277,7 @@ gtk_inspector_on_inspect (GtkWidget          *button,
 
   if (!iw->invisible)
     {
-      iw->invisible = gtk_invisible_new_for_screen (gdk_screen_get_default ());
+      iw->invisible = gtk_invisible_new_for_display (gdk_display_get_default ());
       gtk_widget_realize (iw->invisible);
       gtk_widget_show (iw->invisible);
     }

@@ -45,13 +45,13 @@
 
 struct _GtkInvisiblePrivate
 {
-  GdkScreen    *screen;
+  GdkDisplay   *display;
   gboolean      has_user_ref_count;
 };
 
 enum {
   PROP_0,
-  PROP_SCREEN,
+  PROP_DISPLAY,
   LAST_ARG
 };
 
@@ -90,11 +90,11 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
   gobject_class->constructed = gtk_invisible_constructed;
 
   g_object_class_install_property (gobject_class,
-				   PROP_SCREEN,
-				   g_param_spec_object ("screen",
- 							P_("Screen"),
- 							P_("The screen where this window will be displayed"),
-							GDK_TYPE_SCREEN,
+				   PROP_DISPLAY,
+				   g_param_spec_object ("display",
+ 							P_("Display"),
+ 							P_("The display where this window will be displayed"),
+							GDK_TYPE_DISPLAY,
  							GTK_PARAM_READWRITE));
 }
 
@@ -112,7 +112,7 @@ gtk_invisible_init (GtkInvisible *invisible)
   g_object_ref_sink (invisible);
 
   priv->has_user_ref_count = TRUE;
-  priv->screen = gdk_screen_get_default ();
+  priv->display = gdk_display_get_default ();
 }
 
 static void
@@ -131,22 +131,22 @@ gtk_invisible_destroy (GtkWidget *widget)
 }
 
 /**
- * gtk_invisible_new_for_screen:
- * @screen: a #GdkScreen which identifies on which
- *	    the new #GtkInvisible will be created.
+ * gtk_invisible_new_for_display:
+ * @display: a #GdkDisplay which identifies on which
+ *	     the new #GtkInvisible will be created.
  *
- * Creates a new #GtkInvisible object for a specified screen
+ * Creates a new #GtkInvisible object for a specified display.
  *
  * Returns: a newly created #GtkInvisible object
  *
- * Since: 2.2
+ * Since: 3.94
  **/
 GtkWidget* 
-gtk_invisible_new_for_screen (GdkScreen *screen)
+gtk_invisible_new_for_display (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   
-  return g_object_new (GTK_TYPE_INVISIBLE, "screen", screen, NULL);
+  return g_object_new (GTK_TYPE_INVISIBLE, "display", display, NULL);
 }
 
 /**
@@ -163,64 +163,64 @@ gtk_invisible_new (void)
 }
 
 /**
- * gtk_invisible_set_screen:
+ * gtk_invisible_set_display:
  * @invisible: a #GtkInvisible.
- * @screen: a #GdkScreen.
+ * @display: a #GdkDisplay.
  *
- * Sets the #GdkScreen where the #GtkInvisible object will be displayed.
+ * Sets the #GdkDisplay where the #GtkInvisible object will be displayed.
  *
- * Since: 2.2
+ * Since: 3.94
  **/ 
 void
-gtk_invisible_set_screen (GtkInvisible *invisible,
-			  GdkScreen    *screen)
+gtk_invisible_set_display (GtkInvisible *invisible,
+			   GdkDisplay   *display)
 {
   GtkInvisiblePrivate *priv;
   GtkWidget *widget;
-  GdkScreen *previous_screen;
+  GdkDisplay *previous_display;
   gboolean was_realized;
 
   g_return_if_fail (GTK_IS_INVISIBLE (invisible));
-  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (GDK_IS_DISPLAY (display));
 
   priv = invisible->priv;
 
-  if (screen == priv->screen)
+  if (display == priv->display)
     return;
 
   widget = GTK_WIDGET (invisible);
 
-  previous_screen = priv->screen;
+  previous_display = priv->display;
   was_realized = gtk_widget_get_realized (widget);
 
   if (was_realized)
     gtk_widget_unrealize (widget);
 
-  priv->screen = screen;
-  if (screen != previous_screen)
-    _gtk_widget_propagate_display_changed (widget, gdk_screen_get_display (previous_screen));
-  g_object_notify (G_OBJECT (invisible), "screen");
+  priv->display = display;
+  if (display != previous_display)
+    _gtk_widget_propagate_display_changed (widget, previous_display);
+  g_object_notify (G_OBJECT (invisible), "display");
   
   if (was_realized)
     gtk_widget_realize (widget);
 }
 
 /**
- * gtk_invisible_get_screen:
+ * gtk_invisible_get_display:
  * @invisible: a #GtkInvisible.
  *
- * Returns the #GdkScreen object associated with @invisible
+ * Returns the #GdkDisplay object associated with @invisible
  *
- * Returns: (transfer none): the associated #GdkScreen.
+ * Returns: (transfer none): the associated #GdkDisplay.
  *
- * Since: 2.2
+ * Since: 3.94
  **/
-GdkScreen *
-gtk_invisible_get_screen (GtkInvisible *invisible)
+GdkDisplay *
+gtk_invisible_get_display (GtkInvisible *invisible)
 {
   g_return_val_if_fail (GTK_IS_INVISIBLE (invisible), NULL);
 
-  return invisible->priv->screen;
+  return invisible->priv->display;
 }
 
 static void
@@ -258,8 +258,8 @@ gtk_invisible_set_property  (GObject      *object,
   
   switch (prop_id)
     {
-    case PROP_SCREEN:
-      gtk_invisible_set_screen (invisible, g_value_get_object (value));
+    case PROP_DISPLAY:
+      gtk_invisible_set_display (invisible, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -278,8 +278,8 @@ gtk_invisible_get_property  (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_SCREEN:
-      g_value_set_object (value, priv->screen);
+    case PROP_DISPLAY:
+      g_value_set_object (value, priv->display);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -288,7 +288,7 @@ gtk_invisible_get_property  (GObject      *object,
 }
 
 /* We use a constructor here so that we can realize the invisible on
- * the correct screen after the “screen” property has been set
+ * the correct display after the “display” property has been set
  */
 static void
 gtk_invisible_constructed (GObject *object)

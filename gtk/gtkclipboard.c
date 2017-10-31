@@ -436,7 +436,7 @@ static GtkWidget *
 make_clipboard_widget (GdkDisplay *display, 
 		       gboolean    provider)
 {
-  GtkWidget *widget = gtk_invisible_new_for_screen (gdk_display_get_default_screen (display));
+  GtkWidget *widget = gtk_invisible_new_for_display (display);
 
   g_signal_connect (widget, "selection-received",
 		    G_CALLBACK (selection_received), NULL);
