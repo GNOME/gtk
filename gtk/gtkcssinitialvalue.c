@@ -52,11 +52,12 @@ gtk_css_value_initial_compute (GtkCssValue      *value,
       settings = gtk_style_provider_get_settings (provider);
       if (settings)
         {
-          GdkScreen *screen = gdk_display_get_default_screen (_gtk_settings_get_display (settings));
-          double resolution = gdk_screen_get_resolution (screen);
+          int dpi_int;
 
-          if (resolution > 0.0)
-            return _gtk_css_number_value_new (resolution, GTK_CSS_NUMBER);
+          g_object_get (settings, "gtk-xft-dpi", &dpi_int, NULL);
+
+          if (dpi_int > 0.0)
+            return _gtk_css_number_value_new (dpi_int / 1024., GTK_CSS_NUMBER);
         }
       break;
 

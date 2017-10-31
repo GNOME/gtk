@@ -214,7 +214,6 @@ static void    settings_update_double_click      (GtkSettings           *setting
 static void    settings_update_modules           (GtkSettings           *settings);
 
 static void    settings_update_cursor_theme      (GtkSettings           *settings);
-static void    settings_update_resolution        (GtkSettings           *settings);
 static void    settings_update_font_options      (GtkSettings           *settings);
 static void    settings_update_font_values       (GtkSettings           *settings);
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
@@ -1230,7 +1229,6 @@ gtk_settings_create_for_display (GdkDisplay *display)
   settings_update_modules (settings);
   settings_update_double_click (settings);
   settings_update_cursor_theme (settings);
-  settings_update_resolution (settings);
   settings_update_font_options (settings);
   settings_update_font_values (settings);
 
@@ -1379,7 +1377,6 @@ gtk_settings_notify (GObject    *object,
       settings_update_theme (settings);
       break;
     case PROP_XFT_DPI:
-      settings_update_resolution (settings);
       /* This is a hack because with gtk_rc_reset_styles() doesn't get
        * widgets with gtk_widget_style_set(), and also causes more
        * recomputation than necessary.
@@ -2250,32 +2247,6 @@ settings_update_fontconfig (GtkSettings *settings)
 #else
   return FALSE;
 #endif /* GDK_WINDOWING_X11 || GDK_WINDOWING_WAYLAND */
-}
-
-static void
-settings_update_resolution (GtkSettings *settings)
-{
-  GtkSettingsPrivate *priv = settings->priv;
-  gint dpi_int;
-  gdouble dpi;
-
-  /* We handle this here in the case that the dpi was set on the GtkSettings
-   * object by the application. Other cases are handled in
-   * xsettings-client.c:read-settings(). See comment there for the rationale.
-   */
-  if (priv->property_values[PROP_XFT_DPI - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
-    {
-      g_object_get (settings,
-                    "gtk-xft-dpi", &dpi_int,
-                    NULL);
-
-      if (dpi_int > 0)
-        dpi = dpi_int / 1024.;
-      else
-        dpi = -1.;
-
-      gdk_screen_set_resolution (gdk_display_get_default_screen (priv->display), dpi);
-    }
 }
 
 static void
