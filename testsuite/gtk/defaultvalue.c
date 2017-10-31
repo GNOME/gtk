@@ -274,7 +274,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_STYLE_CONTEXT) &&
-           strcmp (pspec->name, "screen") == 0)
+           strcmp (pspec->name, "display") == 0)
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT_BUFFER) &&
@@ -317,7 +317,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_WIDGET) &&
 	  (strcmp (pspec->name, "name") == 0 ||
-	   strcmp (pspec->name, "screen") == 0 ||
+	   strcmp (pspec->name, "display") == 0 ||
 	   strcmp (pspec->name, "style") == 0))
 	continue;
 
