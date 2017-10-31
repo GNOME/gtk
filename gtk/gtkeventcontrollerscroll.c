@@ -373,8 +373,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                         P_("Flags"),
                         GTK_TYPE_EVENT_CONTROLLER_SCROLL_FLAGS,
                         GTK_EVENT_CONTROLLER_SCROLL_NONE,
-                        G_PARAM_READWRITE |
-                        G_PARAM_CONSTRUCT_ONLY);
+                        G_PARAM_READWRITE);
 
   /**
    * GtkEventControllerScroll::scroll-begin:
