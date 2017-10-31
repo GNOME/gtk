@@ -224,17 +224,17 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   gchar *quoted_settings_filename;
   gboolean filename_used = FALSE;
   gboolean settings_used = FALSE;
-  GdkScreen *screen;
+  GdkDisplay *display;
   GError *error = NULL;
   gint fd;
   gboolean retval;
 
   cairo_surface_destroy (surface);
- 
+
   if (parent)
-    screen = gtk_window_get_screen (parent);
+    display = gtk_widget_get_display (GTK_WIDGET (parent));
   else
-    screen = gdk_screen_get_default ();
+    display = gdk_display_get_default ();
 
   fd = g_file_open_tmp ("settingsXXXXXX.ini", &settings_filename, &error);
   if (fd < 0) 
@@ -278,7 +278,7 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   if (!retval)
     goto out;
 
-  settings = gtk_settings_get_for_screen (screen);
+  settings = gtk_settings_get_for_display (display);
   g_object_get (settings, "gtk-print-preview-command", &preview_cmd, NULL);
 
   quoted_filename = g_shell_quote (filename);
@@ -298,8 +298,7 @@ gtk_print_operation_unix_launch_preview (GtkPrintOperation *op,
   if (error != NULL)
     goto out;
 
-  context = gdk_display_get_app_launch_context (gdk_screen_get_display (screen));
-  gdk_app_launch_context_set_screen (context, screen);
+  context = gdk_display_get_app_launch_context (display);
   g_app_info_launch (appinfo, NULL, G_APP_LAUNCH_CONTEXT (context), &error);
 
   g_object_unref (context);
