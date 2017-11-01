@@ -349,30 +349,6 @@ gdk_display_get_default (void)
 }
 
 /**
- * gdk_screen_get_default:
- *
- * Gets the default screen for the default display. (See
- * gdk_display_get_default ()).
- *
- * Returns: (nullable) (transfer none): a #GdkScreen, or %NULL if
- *     there is no default display.
- *
- * Since: 2.2
- */
-GdkScreen *
-gdk_screen_get_default (void)
-{
-  GdkDisplay *display;
-
-  display = gdk_display_get_default ();
-
-  if (display)
-    return GDK_DISPLAY_GET_CLASS (display)->get_default_screen (display);
-  else
-    return NULL;
-}
-
-/**
  * gdk_display_manager_set_default_display:
  * @manager: a #GdkDisplayManager
  * @display: a #GdkDisplay

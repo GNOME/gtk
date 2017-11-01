@@ -95,7 +95,6 @@ GdkDisplay
 gdk_display_open
 gdk_display_get_default
 gdk_display_get_name
-gdk_display_get_default_screen
 gdk_display_get_device_manager
 gdk_display_device_is_grabbed
 gdk_display_beep
@@ -171,7 +170,6 @@ gdk_display_manager_get_type
 <FILE>gdkscreen</FILE>
 <TITLE>GdkScreen</TITLE>
 GdkScreen
-gdk_screen_get_default
 gdk_screen_get_display
 
 <SUBSECTION Standard>

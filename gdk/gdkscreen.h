@@ -44,9 +44,6 @@ GType        gdk_screen_get_type              (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);
 
-GDK_AVAILABLE_IN_ALL
-GdkScreen *gdk_screen_get_default (void);
-
 G_END_DECLS
 
 #endif  /* __GDK_SCREEN_H__ */
