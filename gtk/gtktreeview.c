@@ -5321,7 +5321,6 @@ gtk_tree_view_snapshot (GtkWidget   *widget,
 
       gtk_style_context_get_color (context, &color);
       cairo_save (cr);
-      gtk_cairo_transform_to_window (cr, GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
       if (tree_view->priv->drag_column_window_state == DRAG_COLUMN_WINDOW_STATE_ORIGINAL)
         {
           cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.0);

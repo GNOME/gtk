@@ -965,11 +965,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_get_has_tooltip       (GtkWidget   *widget);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_cairo_transform_to_window    (cairo_t     *cr,
-                                             GtkWidget   *widget,
-                                             GdkWindow   *window);
-
-GDK_AVAILABLE_IN_ALL
 GType           gtk_requisition_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkRequisition *gtk_requisition_new      (void) G_GNUC_MALLOC;
