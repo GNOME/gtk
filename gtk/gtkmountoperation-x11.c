@@ -532,8 +532,8 @@ _gtk_mount_operation_lookup_context_get (GdkDisplay *display)
 
   mapping = NULL;
   mapping_length = 0;
-  get_window_list (GDK_DISPLAY_XDISPLAY (context->display),
-                   GDK_ROOT_WINDOW(),
+  get_window_list (gdk_x11_display_get_xdisplay (context->display),
+                   gdk_x11_display_get_xrootwindow (context->display),
                    gdk_x11_get_xatom_by_name_for_display (context->display,
                                                           "_NET_CLIENT_LIST"),
                    &mapping,

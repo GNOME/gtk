@@ -2179,7 +2179,44 @@ Display *
 gdk_x11_display_get_xdisplay (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
   return GDK_X11_DISPLAY (display)->xdisplay;
+}
+
+/**
+ * gdk_x11_display_get_xscreen:
+ * @display: (type GdkX11Display): a #GdkDisplay
+ *
+ * Returns the X Screen used by #GdkDisplay.
+ *
+ * Returns: (transfer none): an X Screen
+ *
+ * Since: 3.94
+ */
+Screen *
+gdk_x11_display_get_xscreen (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_X11_SCREEN (GDK_X11_DISPLAY (display)->screen)->xscreen;
+}
+
+/**
+ * gdk_x11_display_get_xrootwindow:
+ * @display: (type GdkX11Display): a #GdkDisplay
+ *
+ * Returns the root X window used by #GdkDisplay.
+ *
+ * Returns: (transfer none): an X Window
+ *
+ * Since: 3.94
+ */
+Window
+gdk_x11_display_get_xrootwindow (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
+
+  return GDK_SCREEN_XROOTWIN (GDK_X11_DISPLAY (display)->screen);
 }
 
 static void
