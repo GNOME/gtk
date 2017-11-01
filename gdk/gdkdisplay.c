@@ -44,20 +44,20 @@
 
 /**
  * SECTION:gdkdisplay
- * @Short_description: Controls a set of GdkScreens and their associated input devices
+ * @Short_description: Controls a set of monitors and their associated input devices
  * @Title: GdkDisplay
  *
  * #GdkDisplay objects purpose are two fold:
  *
  * - To manage and provide information about input devices (pointers and keyboards)
  *
- * - To manage and provide information about the available #GdkScreens
+ * - To manage and provide information about the available #GdkMonitors
  *
  * GdkDisplay objects are the GDK representation of an X Display,
  * which can be described as a workstation consisting of
  * a keyboard, a pointing device (such as a mouse) and one or more
  * screens.
- * It is used to open and keep track of various GdkScreen objects
+ * It is used to open and keep track of various GdkMonitor objects
  * currently instantiated by the application. It is also used to
  * access the keyboard(s) and mouse pointer(s) of the display.
  *
