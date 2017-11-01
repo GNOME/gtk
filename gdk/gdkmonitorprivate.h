@@ -42,6 +42,7 @@ struct _GdkMonitor {
   int scale_factor;
   int refresh_rate;
   GdkSubpixelLayout subpixel_layout;
+  gboolean valid;
 };
 
 struct _GdkMonitorClass {

@@ -49,6 +49,7 @@ enum {
   PROP_HEIGHT_MM,
   PROP_REFRESH_RATE,
   PROP_SUBPIXEL_LAYOUT,
+  PROP_VALID,
   LAST_PROP
 };
 
@@ -67,6 +68,7 @@ static void
 gdk_monitor_init (GdkMonitor *monitor)
 {
   monitor->scale_factor = 1;
+  monitor->valid = TRUE;
 }
 
 static void
@@ -121,6 +123,10 @@ gdk_monitor_get_property (GObject    *object,
 
     case PROP_SUBPIXEL_LAYOUT:
       g_value_set_enum (value, monitor->subpixel_layout);
+      break;
+
+    case PROP_VALID:
+      g_value_set_boolean (value, monitor->valid);
       break;
 
     default:
@@ -232,6 +238,12 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                        GDK_TYPE_SUBPIXEL_LAYOUT,
                        GDK_SUBPIXEL_LAYOUT_UNKNOWN,
                        G_PARAM_READABLE);
+  props[PROP_VALID] =
+    g_param_spec_boolean ("valid",
+                          "Valid",
+                          "Whether the monitor is still valid",
+                          TRUE,
+                          G_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
@@ -595,5 +607,27 @@ gdk_monitor_set_subpixel_layout (GdkMonitor        *monitor,
 void
 gdk_monitor_invalidate (GdkMonitor *monitor)
 {
+  monitor->valid = FALSE;
+  g_object_notify (G_OBJECT (monitor), "valid");
   g_signal_emit (monitor, signals[INVALIDATE], 0);
+}
+
+/**
+ * gdk_monitor_is_valid:
+ * @monitor: a #GdkMonitor
+ *
+ * Returns %TRUE if the @monitor object corresponds to a
+ * physical monitor. The @monitor becomes invalid when the
+ * physical monitor is unplugged or removed.
+ *
+ * Returns: %TRUE if the object corresponds to a physical monitor
+ *
+ * Since: 3.94
+ */
+gboolean
+gdk_monitor_is_valid (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), FALSE);
+
+  return monitor->valid;
 }
