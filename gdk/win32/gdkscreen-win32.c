@@ -183,7 +183,7 @@ gdk_win32_screen_get_display (GdkScreen *screen)
   return _gdk_display;
 }
 
-static GdkWindow *
+GdkWindow *
 gdk_win32_screen_get_root_window (GdkScreen *screen)
 {
   return GDK_WIN32_SCREEN (screen)->root_window;

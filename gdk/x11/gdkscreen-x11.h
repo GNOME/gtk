@@ -117,6 +117,7 @@ void gdk_x11_screen_get_work_area           (GdkScreen    *screen,
 gboolean gdk_x11_screen_get_setting         (GdkScreen    *screen,
                                              const char   *name,
                                              GValue       *value);
+GdkWindow *gdk_x11_screen_get_root_window   (GdkScreen *screen);
 
 G_END_DECLS
 

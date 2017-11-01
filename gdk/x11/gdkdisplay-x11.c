@@ -3135,6 +3135,12 @@ gdk_x11_display_get_setting (GdkDisplay  *display,
   return gdk_x11_screen_get_setting (GDK_X11_DISPLAY (display)->screen, name, value);
 }
 
+static GdkWindow *
+gdk_x11_display_get_root_window (GdkDisplay *display)
+{
+  return gdk_x11_screen_get_root_window (GDK_X11_DISPLAY (display)->screen);
+}
+
 static void
 gdk_x11_display_class_init (GdkX11DisplayClass * class)
 {
@@ -3196,6 +3202,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_monitor = gdk_x11_display_get_monitor;
   display_class->get_primary_monitor = gdk_x11_display_get_primary_monitor;
   display_class->get_setting = gdk_x11_display_get_setting;
+  display_class->get_root_window = gdk_x11_display_get_root_window;
 
   _gdk_x11_windowing_init ();
 }

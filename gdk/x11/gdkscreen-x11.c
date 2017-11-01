@@ -79,7 +79,7 @@ gdk_x11_screen_get_display (GdkScreen *screen)
   return GDK_X11_SCREEN (screen)->display;
 }
 
-static GdkWindow *
+GdkWindow *
 gdk_x11_screen_get_root_window (GdkScreen *screen)
 {
   return GDK_X11_SCREEN (screen)->root_window;

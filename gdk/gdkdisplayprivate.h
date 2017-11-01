@@ -224,6 +224,7 @@ struct _GdkDisplayClass
   gboolean               (*get_setting)                (GdkDisplay     *display,
                                                         const char     *name,
                                                         GValue         *value);
+  GdkWindow *            (*get_root_window)            (GdkDisplay     *display);
 
   /* Signals */
   void                   (*opened)                     (GdkDisplay     *display);
@@ -306,6 +307,8 @@ void                gdk_display_emit_opened           (GdkDisplay       *display
 
 void                gdk_display_setting_changed       (GdkDisplay       *display,
                                                        const char       *name);
+
+GList *             gdk_display_get_toplevel_windows  (GdkDisplay       *display);
 
 G_END_DECLS
 

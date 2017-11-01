@@ -989,6 +989,12 @@ gdk_wayland_display_get_setting (GdkDisplay  *display,
   return gdk_wayland_screen_get_setting (GDK_WAYLAND_DISPLAY (display)->screen, name, value);
 }
 
+static GdkWindow *
+gdk_wayland_display_get_root_window (GdkDisplay *display)
+{
+  return gdk_wayland_screen_get_root_window (GDK_WAYLAND_DISPLAY (display)->screen);
+}
+
 static void
 gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 {
@@ -1048,6 +1054,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_monitor = gdk_wayland_display_get_monitor;
   display_class->get_monitor_at_window = gdk_wayland_display_get_monitor_at_window;
   display_class->get_setting = gdk_wayland_display_get_setting;
+  display_class->get_root_window = gdk_wayland_display_get_root_window;
 }
 
 static void

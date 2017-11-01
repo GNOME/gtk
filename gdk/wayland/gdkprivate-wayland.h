@@ -213,6 +213,7 @@ GdkWindow *_gdk_wayland_screen_create_root_window (GdkScreen *screen,
 gboolean gdk_wayland_screen_get_setting (GdkScreen   *screen,
                                          const gchar *name,
                                          GValue      *value);
+GdkWindow *gdk_wayland_screen_get_root_window (GdkScreen *screen);
 
 GdkScreen *_gdk_wayland_screen_new (GdkDisplay *display);
 void _gdk_wayland_screen_add_output (GdkScreen        *screen,

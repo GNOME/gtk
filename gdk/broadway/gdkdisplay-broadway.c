@@ -316,6 +316,14 @@ gdk_broadway_display_get_setting (GdkDisplay *display,
   return FALSE;
 }
 
+static GdkWindow *
+gdk_broadway_display_get_root_window (GdkDisplay *display)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  return gdk_broadway_screen_get_root_window (broadway_display->default_screen);
+}
+
 static void
 gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 {
@@ -365,5 +373,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->get_monitor = gdk_broadway_display_get_monitor;
   display_class->get_primary_monitor = gdk_broadway_display_get_primary_monitor;
   display_class->get_setting = gdk_broadway_display_get_setting;
+  display_class->get_root_window = gdk_broadway_display_get_root_window;
 }
 

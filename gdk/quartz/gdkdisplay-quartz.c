@@ -248,6 +248,12 @@ gdk_quartz_display_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_quartz_display_parent_class)->finalize (object);
 }
 
+static GdkWindow *
+gdk_quartz_display_get_root_window (GdkDisplay *display)
+{
+  return _gdk_root;
+}
+`
 static void
 gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
 {
@@ -297,6 +303,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->get_monitor = gdk_quartz_display_get_monitor;
   display_class->get_primary_monitor = gdk_quartz_display_get_primary_monitor;
   display_class->get_setting = gdk_quartz_display_get_setting;
+  display_class->get_root_window = gdk_quartz_display_get_root_window;
 
   ProcessSerialNumber psn = { 0, kCurrentProcess };
 

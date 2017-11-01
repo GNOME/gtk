@@ -1238,6 +1238,12 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
                                         value);
 }
 
+static GdkWindow *
+gdk_win32_display_get_root_window (GdkDisplay *display)
+{
+  return gdk_win32_screen_get_root_window (GDK_WIN32_DISPLAY (display)->screen);
+}
+
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 {
@@ -1300,6 +1306,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
 #endif
 
   display_class->get_setting = gdk_win32_display_get_setting;
+  display_class->get_root_window = gdk_win32_display_get_root_window;
 
   _gdk_win32_windowing_init ();
 }
