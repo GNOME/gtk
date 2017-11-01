@@ -331,7 +331,7 @@ touch_release_in_button (GtkButton *button)
 
   gdk_event_free (event);
 
-  if (gtk_widget_contains (GTK_WIDGET (button), x, y));
+  if (gtk_widget_contains (GTK_WIDGET (button), x, y))
     return TRUE;
 
   return FALSE;
