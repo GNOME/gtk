@@ -27,8 +27,8 @@
  * OpenGL drawing context.
  *
  * #GdkGLContexts are created for a #GdkWindow using
- * gdk_window_create_gl_context(), and the context will match
- * the #GdkVisual of the window.
+ * gdk_window_create_gl_context(), and the context will match the
+ * the characteristics of the window.
  *
  * A #GdkGLContext is not tied to any particular normal framebuffer.
  * For instance, it cannot draw to the #GdkWindow back buffer. The GDK
