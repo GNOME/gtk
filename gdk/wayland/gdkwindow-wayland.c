@@ -614,14 +614,14 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   g_signal_emit (impl, signals[COMMITTED], 0);
 }
 
-static void
+void
 window_update_scale (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   guint32 scale;
   GSList *l;
+  GList *children, *c;
 
   if (display_wayland->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
     {
@@ -639,15 +639,15 @@ window_update_scale (GdkWindow *window)
 
   /* Notify app that scale changed */
   gdk_wayland_window_maybe_configure (window, window->width, window->height, scale);
-}
 
-static void
-on_monitors_changed (GdkScreen *screen,
-                     GdkWindow *window)
-{
-  window_update_scale (window);
+  children = gdk_window_get_children (window);
+  for (c = children; c; c = c->next)
+    {
+      GdkWindow *child = c->data;
+      window_update_scale (child);
+    }
+  g_list_free (children);
 }
-
 
 static void gdk_wayland_window_create_surface (GdkWindow *window);
 
@@ -702,14 +702,8 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   gdk_wayland_window_create_surface (window);
 
   frame_clock = gdk_window_get_frame_clock (window);
-
-  g_signal_connect (frame_clock, "before-paint",
-                    G_CALLBACK (on_frame_clock_before_paint), window);
-  g_signal_connect (frame_clock, "after-paint",
-                    G_CALLBACK (on_frame_clock_after_paint), window);
-
-  g_signal_connect (gdk_display_get_default_screen (display), "monitors-changed",
-                    G_CALLBACK (on_monitors_changed), window);
+  g_signal_connect (frame_clock, "before-paint", G_CALLBACK (on_frame_clock_before_paint), window);
+  g_signal_connect (frame_clock, "after-paint", G_CALLBACK (on_frame_clock_after_paint), window);
 }
 
 static void

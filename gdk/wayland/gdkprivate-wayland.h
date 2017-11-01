@@ -290,4 +290,7 @@ void gdk_wayland_window_inhibit_shortcuts (GdkWindow *window,
 void gdk_wayland_window_restore_shortcuts (GdkWindow *window,
                                            GdkSeat   *gdk_seat);
 
+void window_update_scale (GdkWindow *window);
+
+
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */

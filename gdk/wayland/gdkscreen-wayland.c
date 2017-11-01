@@ -698,8 +698,7 @@ output_handle_geometry (void             *data,
   if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
     {
       GdkDisplay *display = GDK_MONITOR (monitor)->display;
-      GdkWaylandScreen *screen = GDK_WAYLAND_SCREEN (gdk_display_get_default_screen (display));
-      g_signal_emit_by_name (screen, "monitors-changed");
+      window_update_scale (gdk_display_get_root_window (display));
     }
 }
 
@@ -709,7 +708,6 @@ output_handle_done (void             *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
   GdkDisplay *display = gdk_monitor_get_display (GDK_MONITOR (monitor));
-  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (gdk_display_get_default_screen (display));
 
   GDK_NOTE (MISC,
             g_message ("handle done output %d", monitor->id));
@@ -721,7 +719,7 @@ output_handle_done (void             *data,
       gdk_display_monitor_added (display, GDK_MONITOR (monitor));
     }
 
-  g_signal_emit_by_name (screen_wayland, "monitors-changed");
+  window_update_scale (gdk_display_get_root_window (display));
 }
 
 static void
@@ -748,10 +746,7 @@ output_handle_scale (void             *data,
   gdk_monitor_set_size (GDK_MONITOR (monitor), width / scale, height / scale);
 
   if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
-    {
-      GdkScreen *screen = gdk_display_get_default_screen (GDK_MONITOR (monitor)->display);
-      g_signal_emit_by_name (screen, "monitors-changed");
-    }
+    window_update_scale (gdk_display_get_root_window (GDK_MONITOR (monitor)->display));
 }
 
 static void
@@ -777,10 +772,7 @@ output_handle_mode (void             *data,
   gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh);
 
   if (width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
-    {
-      GdkScreen *screen = gdk_display_get_default_screen (GDK_MONITOR (monitor)->display);
-      g_signal_emit_by_name (screen, "monitors-changed");
-    }
+    window_update_scale (gdk_display_get_root_window (GDK_MONITOR (monitor)->display));
 }
 
 static const struct wl_output_listener output_listener =
@@ -879,8 +871,8 @@ _gdk_wayland_screen_remove_output (GdkScreen *screen,
       g_object_ref (monitor);
       g_ptr_array_remove (display_wayland->monitors, monitor);
       gdk_display_monitor_removed (GDK_DISPLAY (display_wayland), GDK_MONITOR (monitor));
+      window_update_scale (gdk_display_get_root_window (GDK_MONITOR (monitor)->display));
       g_object_unref (monitor);
-      g_signal_emit_by_name (screen_wayland, "monitors-changed");
     }
 }
 
