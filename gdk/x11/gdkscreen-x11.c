@@ -858,8 +858,6 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
 
       gdk_monitor_set_scale_factor (monitor, scale);
     }
-
-  g_signal_emit_by_name (GDK_SCREEN (x11_screen), "monitors-changed");
 }
 
 static void
@@ -887,10 +885,7 @@ init_randr_support (GdkScreen *screen)
 static void
 process_monitors_change (GdkScreen *screen)
 {
-  if (init_multihead (screen))
-    {
-      g_signal_emit_by_name (screen, "monitors-changed");
-    }
+  init_multihead (screen);
 }
 
 void

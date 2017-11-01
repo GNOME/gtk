@@ -41,9 +41,6 @@ struct _GdkScreenClass
   GObjectClass parent_class;
 
   GdkDisplay * (* get_display)           (GdkScreen *screen);
-
-  /* Signals: */
-  void (*monitors_changed) (GdkScreen *screen);
 };
 
 G_END_DECLS

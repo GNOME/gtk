@@ -136,14 +136,9 @@ gdk_win32_screen_init (GdkWin32Screen *win32_screen)
 void
 _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen)
 {
-  gboolean monitors_changed;
-
-  monitors_changed = _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
+  _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
 
   init_root_window_size (screen);
-
-  if (monitors_changed)
-    g_signal_emit_by_name (screen, "monitors-changed");
 }
 
 void

@@ -118,8 +118,6 @@ config_changed_cb (MirConnection *connection, void *data)
   GdkMirScreen *screen = data;
 
   update_display_config (screen);
-
-  g_signal_emit_by_name (screen, "monitors-changed");
 }
 
 GdkScreen *

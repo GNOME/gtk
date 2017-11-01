@@ -44,43 +44,11 @@
  */
 
 
-enum
-{
-  SIZE_CHANGED,
-  MONITORS_CHANGED,
-  LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL] = { 0 };
-
 G_DEFINE_TYPE (GdkScreen, gdk_screen, G_TYPE_OBJECT)
 
 static void
 gdk_screen_class_init (GdkScreenClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  /**
-   * GdkScreen::monitors-changed:
-   * @screen: the object on which the signal is emitted
-   *
-   * The ::monitors-changed signal is emitted when the number, size
-   * or position of the monitors attached to the screen change. 
-   *
-   * Only for X11 and OS X for now. A future implementation for Win32
-   * may be a possibility.
-   *
-   * Since: 2.14
-   */
-  signals[MONITORS_CHANGED] =
-    g_signal_new (g_intern_static_string ("monitors-changed"),
-		  G_OBJECT_CLASS_TYPE (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GdkScreenClass, monitors_changed),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE,
-		  0);
 }
 
 static void
@@ -88,7 +56,7 @@ gdk_screen_init (GdkScreen *screen)
 {
 }
 
-void 
+void
 _gdk_screen_close (GdkScreen *screen)
 {
   g_return_if_fail (GDK_IS_SCREEN (screen));

@@ -228,12 +228,6 @@ process_display_reconfiguration (GdkQuartzScreen *screen)
   gdk_quartz_screen_calculate_layout (GDK_QUARTZ_SCREEN (screen));
 
   _gdk_quartz_screen_update_window_sizes (GDK_SCREEN (screen));
-
-  if (screen->emit_monitors_changed)
-    {
-      g_signal_emit_by_name (screen, "monitors-changed");
-      screen->emit_monitors_changed = FALSE;
-    }
 }
 
 static gboolean
