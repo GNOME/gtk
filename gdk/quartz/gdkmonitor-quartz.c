@@ -30,7 +30,7 @@ static void
 gdk_quartz_monitor_get_workarea (GdkMonitor   *monitor,
                                  GdkRectangle *dest)
 {
-  GdkQuartzScreen *quartz_screen = GDK_QUARTZ_SCREEN(gdk_display_get_default_screen (monitor->display));
+  GdkQuartzScreen *quartz_screen = GDK_QUARTZ_SCREEN(_gdk_screen);
   GdkQuartzMonitor *quartz_monitor = GDK_QUARTZ_MONITOR(monitor);
 
   GDK_QUARTZ_ALLOC_POOL;

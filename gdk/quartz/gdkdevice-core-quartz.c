@@ -330,8 +330,8 @@ gdk_quartz_device_core_window_at_position (GdkDevice       *device,
   NSPoint point;
   gint x_tmp, y_tmp;
 
-  display = gdk_device_get_display (device);
-  screen = gdk_display_get_default_screen (display);
+  display = _gdk_display;
+  screen = _gdk_screen;
 
   /* Get mouse coordinates, find window under the mouse pointer */
   point = [NSEvent mouseLocation];
