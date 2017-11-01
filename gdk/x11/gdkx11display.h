@@ -83,6 +83,9 @@ void gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
 GDK_AVAILABLE_IN_ALL
 GdkDisplay   *gdk_x11_lookup_xdisplay (Display *xdisplay);
 
+GDK_AVAILABLE_IN_3_94
+GdkScreen  *gdk_x11_display_get_screen (GdkDisplay *display);
+
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_grab              (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL

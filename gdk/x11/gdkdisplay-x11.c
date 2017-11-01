@@ -2994,6 +2994,12 @@ gdk_x11_set_sm_client_id (const gchar *sm_client_id)
   g_slist_free (displays);
 }
 
+GdkScreen *
+gdk_x11_display_get_screen (GdkDisplay *display)
+{
+  return GDK_X11_DISPLAY (display)->screen;
+}
+
 static gint
 pop_error_trap (GdkDisplay *display,
                 gboolean    ignored)
