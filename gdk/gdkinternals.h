@@ -394,9 +394,6 @@ void       _gdk_window_process_updates_recurse (GdkWindow *window,
 
 void       _gdk_screen_close             (GdkScreen      *screen);
 
-GdkWindow *gdk_get_default_root_window (void);
-
-
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/
