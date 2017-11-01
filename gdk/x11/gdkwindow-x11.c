@@ -924,7 +924,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   display_x11 = GDK_X11_DISPLAY (display);
   xparent = GDK_WINDOW_XID (real_parent);
-  x11_screen = GDK_X11_SCREEN (gdk_display_get_default_screen (display));
+  x11_screen = GDK_X11_SCREEN (display_x11->screen);
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);

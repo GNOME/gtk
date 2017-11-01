@@ -282,7 +282,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
   ctx = GDK_APP_LAUNCH_CONTEXT (context);
 
   display = ctx->display;
-  screen = gdk_display_get_default_screen (ctx->display);
+  screen = GDK_X11_DISPLAY (display)->screen;
 
   fileinfo = NULL;
 
@@ -399,7 +399,7 @@ gdk_x11_app_launch_context_launch_failed (GAppLaunchContext *context,
 
   ctx = GDK_APP_LAUNCH_CONTEXT (context);
 
-  screen = gdk_display_get_default_screen (ctx->display);
+  screen = GDK_X11_DISPLAY (ctx->display)->screen;
 
   data = g_object_get_data (G_OBJECT (screen), "appinfo-startup-data");
 

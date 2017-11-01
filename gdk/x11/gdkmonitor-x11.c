@@ -21,6 +21,8 @@
 #include <gio/gio.h>
 
 #include "gdkmonitor-x11.h"
+#include "gdkx11display.h"
+#include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplayprivate.h"
 
@@ -61,7 +63,7 @@ static void
 gdk_x11_monitor_get_workarea (GdkMonitor   *monitor,
                               GdkRectangle *dest)
 {
-  GdkScreen *screen = gdk_display_get_default_screen (monitor->display);
+  GdkScreen *screen = GDK_X11_DISPLAY (monitor->display)->screen;
   GdkRectangle workarea;
 
   gdk_monitor_get_geometry (monitor, dest);

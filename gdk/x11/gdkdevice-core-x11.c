@@ -233,13 +233,15 @@ gdk_x11_device_core_warp (GdkDevice *device,
                           gdouble    x,
                           gdouble    y)
 {
+  GdkDisplay *display;
   Display *xdisplay;
   Window dest;
   GdkScreen *screen;
 
-  xdisplay = GDK_DISPLAY_XDISPLAY (gdk_device_get_display (device));
-  screen = gdk_display_get_default_screen (gdk_device_get_display (device));
-  dest = GDK_WINDOW_XID (gdk_display_get_root_window (gdk_device_get_display (device)));
+  display = gdk_device_get_display (device);
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  screen = GDK_X11_DISPLAY (display)->screen;
+  dest = GDK_WINDOW_XID (gdk_display_get_root_window (display));
 
   XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0,
                 round (x * GDK_X11_SCREEN (screen)->window_scale),
@@ -258,13 +260,13 @@ gdk_x11_device_core_query_state (GdkDevice        *device,
 {
   GdkWindowImplX11 *impl;
   GdkDisplay *display;
-  GdkScreen *default_screen;
+  GdkScreen *screen;
   Window xroot_window, xchild_window;
   int xroot_x, xroot_y, xwin_x, xwin_y;
   unsigned int xmask;
 
   display = gdk_device_get_display (device);
-  default_screen = gdk_display_get_default_screen (display);
+  screen = GDK_X11_DISPLAY (display)->screen;
   if (window == NULL)
     window = gdk_display_get_root_window (display);
   impl = GDK_WINDOW_IMPL_X11 (window->impl);
@@ -283,8 +285,8 @@ gdk_x11_device_core_query_state (GdkDevice        *device,
       Window xwindow, w;
 
       /* FIXME: untrusted clients not multidevice-safe */
-      xdisplay = GDK_SCREEN_XDISPLAY (default_screen);
-      xwindow = GDK_SCREEN_XROOTWIN (default_screen);
+      xdisplay = GDK_SCREEN_XDISPLAY (screen);
+      xwindow = GDK_SCREEN_XROOTWIN (screen);
 
       w = XCreateWindow (xdisplay, xwindow, 0, 0, 1, 1, 0,
                          CopyFromParent, InputOnly, CopyFromParent,
@@ -435,7 +437,7 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
 
   last = None;
   display = gdk_device_get_display (device);
-  screen = gdk_display_get_default_screen (display);
+  screen = GDK_X11_DISPLAY (display)->screen;
 
   /* This function really only works if the mouse pointer is held still
    * during its operation. If it moves from one leaf window to another

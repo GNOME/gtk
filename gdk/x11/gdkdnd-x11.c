@@ -562,7 +562,7 @@ static GdkWindowCache *
 gdk_window_cache_new (GdkDisplay *display)
 {
   XWindowAttributes xwa;
-  GdkScreen *screen = gdk_display_get_default_screen (display);
+  GdkScreen *screen = GDK_X11_DISPLAY (display)->screen;
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
   GdkWindow *root_window = gdk_display_get_root_window (display);
   GdkChildInfoX11 *children;
@@ -2111,7 +2111,7 @@ gdk_x11_drag_context_find_window (GdkDragContext  *context,
                                   gint             y_root,
                                   GdkDragProtocol *protocol)
 {
-  GdkX11Screen *screen_x11 = GDK_X11_SCREEN(gdk_display_get_default_screen (context->display));
+  GdkX11Screen *screen_x11 = GDK_X11_SCREEN(GDK_X11_DISPLAY (context->display)->screen);
   GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (context);
   GdkWindowCache *window_cache;
   GdkDisplay *display;

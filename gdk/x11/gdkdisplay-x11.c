@@ -2150,7 +2150,7 @@ _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
   GdkX11Display *display_x11;
   GList *l;
 
-  screen = gdk_display_get_default_screen (display);
+  screen = GDK_X11_DISPLAY (display)->screen;
 
   if (GDK_SCREEN_XROOTWIN (screen) == xrootwin)
     return screen;

@@ -427,7 +427,8 @@ gdk_x11_ungrab_server (void)
 gint
 gdk_x11_get_default_screen (void)
 {
-  return gdk_x11_screen_get_screen_number (gdk_screen_get_default ());
+  GdkDisplay *display = gdk_display_get_default ();
+  return gdk_x11_screen_get_screen_number (GDK_X11_DISPLAY (display)->screen);
 }
 
 /**
@@ -441,7 +442,8 @@ gdk_x11_get_default_screen (void)
 Window
 gdk_x11_get_default_root_xwindow (void)
 {
-  return GDK_SCREEN_XROOTWIN (gdk_screen_get_default ());
+  GdkDisplay *display = gdk_display_get_default ();
+  return GDK_SCREEN_XROOTWIN (GDK_X11_DISPLAY (display)->screen);
 }
 
 /**

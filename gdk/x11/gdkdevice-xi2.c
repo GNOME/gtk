@@ -337,7 +337,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   XIGroupState group_state;
 
   display = gdk_device_get_display (device);
-  default_screen = gdk_display_get_default_screen (display);
+  default_screen = GDK_X11_DISPLAY (display)->screen;
   if (window == NULL)
     window = gdk_display_get_root_window (display);
   impl = GDK_WINDOW_IMPL_X11 (window->impl);
@@ -505,7 +505,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
   Bool retval;
 
   display = gdk_device_get_display (device);
-  screen = gdk_display_get_default_screen (display);
+  screen = GDK_X11_DISPLAY (display)->screen;
 
   gdk_x11_display_error_trap_push (display);
 

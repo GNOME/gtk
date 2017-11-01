@@ -1315,7 +1315,7 @@ gdk_x11_display_get_glx_version (GdkDisplay *display,
   if (!GDK_IS_X11_DISPLAY (display))
     return FALSE;
 
-  if (!gdk_x11_screen_init_gl (gdk_display_get_default_screen (display)))
+  if (!gdk_x11_screen_init_gl (GDK_X11_DISPLAY (display)->screen))
     return FALSE;
 
   if (major != NULL)
