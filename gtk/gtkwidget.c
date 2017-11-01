@@ -1574,8 +1574,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * The ::map signal is emitted when @widget is going to be mapped, that is
    * when the widget is visible (which is controlled with
    * gtk_widget_set_visible()) and all its parents up to the toplevel widget
-   * are also visible. Once the map has occurred, #GtkWidget::map-event will
-   * be emitted.
+   * are also visible.
    *
    * The ::map signal can be used to determine whether a widget will be drawn,
    * for instance it can resume an animation that was stopped during the
