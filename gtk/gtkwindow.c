@@ -6995,8 +6995,8 @@ gtk_window_unrealize (GtkWidget *widget)
                         (GtkCallback) gtk_widget_unrealize,
                         NULL);
 
-  if (priv->renderer != NULL)
-    gsk_renderer_unrealize (priv->renderer);
+  gsk_renderer_unrealize (priv->renderer);
+  g_clear_object (&priv->renderer);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 
