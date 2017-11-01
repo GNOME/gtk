@@ -266,7 +266,7 @@ change_setting (GdkMirScreen *screen,
   else
     g_hash_table_remove (screen->current_settings, name);
 
-  gdk_display_setting_changed (gdk_screen_get_display (screen), name);
+  gdk_display_setting_changed (GDK_DISPLAY (GDK_MIR_SCREEN (screen)->display), name);
 }
 
 static const struct
