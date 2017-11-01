@@ -24,26 +24,19 @@
 
 #include "config.h"
 
-#include "gdkvisualprivate.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
+#include "gdkvisual-x11.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-struct _GdkX11Visual
-{
-  GdkVisual visual;
-
-  Visual *xvisual;
-};
-
 struct _GdkX11VisualClass
 {
-  GdkVisualClass visual_class;
+  GObjectClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkX11Visual, gdk_x11_visual, GDK_TYPE_VISUAL)
+G_DEFINE_TYPE (GdkX11Visual, gdk_x11_visual, G_TYPE_OBJECT)
 
 static void
 gdk_x11_visual_init (GdkX11Visual *x11_visual)
@@ -73,9 +66,9 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
   GdkX11Screen *x11_screen;
   XVisualInfo *visual_list;
   XVisualInfo visual_template;
-  GdkVisual *temp_visual;
+  GdkX11Visual *temp_visual;
   Visual *default_xvisual;
-  GdkVisual **visuals;
+  GdkX11Visual **visuals;
   int nxvisuals;
   int nvisuals;
   int i, j;
@@ -87,7 +80,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
   visual_template.screen = x11_screen->screen_num;
   visual_list = XGetVisualInfo (x11_screen->xdisplay, VisualScreenMask, &visual_template, &nxvisuals);
 
-  visuals = g_new (GdkVisual *, nxvisuals);
+  visuals = g_new (GdkX11Visual *, nxvisuals);
   for (i = 0; i < nxvisuals; i++)
     visuals[i] = g_object_new (GDK_TYPE_X11_VISUAL, NULL);
 
@@ -96,8 +89,6 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
   nvisuals = 0;
   for (i = 0; i < nxvisuals; i++)
     {
-      visuals[nvisuals]->screen = screen;
-
       if (visual_list[i].depth >= 1)
 	{
 #ifdef __cplusplus
@@ -306,7 +297,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
  *
  * Since: 2.2
  */
-GdkVisual *
+GdkX11Visual *
 gdk_x11_screen_lookup_visual (GdkScreen *screen,
                               VisualID   xvisualid)
 {
@@ -331,9 +322,9 @@ gdk_x11_screen_lookup_visual (GdkScreen *screen,
  * Returns: (transfer none): an Xlib Visual*.
  **/
 Visual *
-gdk_x11_visual_get_xvisual (GdkVisual *visual)
+gdk_x11_visual_get_xvisual (GdkX11Visual *visual)
 {
-  g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
+  g_return_val_if_fail (GDK_IS_X11_VISUAL (visual), NULL);
 
   return GDK_X11_VISUAL (visual)->xvisual;
 }

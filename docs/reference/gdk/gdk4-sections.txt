@@ -79,7 +79,6 @@ gdk_scroll_direction_get_type
 gdk_setting_action_get_type
 gdk_status_get_type
 gdk_visibility_state_get_type
-gdk_visual_type_get_type
 gdk_window_attributes_type_get_type
 gdk_window_edge_get_type
 gdk_window_hints_get_type
@@ -212,34 +211,6 @@ GDK_TYPE_RGBA
 
 <SUBSECTION Private>
 gdk_rgba_get_type
-</SECTION>
-
-<SECTION>
-<TITLE>Visuals</TITLE>
-<FILE>visuals</FILE>
-GdkVisual
-GdkVisualType
-GdkByteOrder
-gdk_visual_get_blue_pixel_details
-gdk_visual_get_depth
-gdk_visual_get_green_pixel_details
-gdk_visual_get_red_pixel_details
-gdk_visual_get_visual_type
-gdk_visual_get_screen
-
-<SUBSECTION Standard>
-GDK_TYPE_BYTE_ORDER
-GDK_TYPE_VISUAL_TYPE
-GDK_TYPE_VISUAL
-GDK_IS_VISUAL
-GDK_IS_VISUAL_CLASS
-GDK_VISUAL
-GDK_VISUAL_CLASS
-GDK_VISUAL_GET_CLASS
-
-<SUBSECTION Private>
-GdkVisualClass
-gdk_visual_get_type
 </SECTION>
 
 <SECTION>

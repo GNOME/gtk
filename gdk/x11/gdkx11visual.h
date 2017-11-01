@@ -43,24 +43,30 @@ G_BEGIN_DECLS
 #define GDK_IS_X11_VISUAL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_VISUAL))
 #define GDK_X11_VISUAL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_VISUAL, GdkX11VisualClass))
 
-#ifdef GDK_COMPILATION
 typedef struct _GdkX11Visual GdkX11Visual;
-#else
-typedef GdkVisual GdkX11Visual;
-#endif
 typedef struct _GdkX11VisualClass GdkX11VisualClass;
+
+typedef enum
+{
+  GDK_VISUAL_STATIC_GRAY,
+  GDK_VISUAL_GRAYSCALE,
+  GDK_VISUAL_STATIC_COLOR,
+  GDK_VISUAL_PSEUDO_COLOR,
+  GDK_VISUAL_TRUE_COLOR,
+  GDK_VISUAL_DIRECT_COLOR
+} GdkVisualType;
 
 GDK_AVAILABLE_IN_ALL
 GType    gdk_x11_visual_get_type          (void);
 
 GDK_AVAILABLE_IN_ALL
-Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
+Visual * gdk_x11_visual_get_xvisual       (GdkX11Visual *visual);
 
 #define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 
 GDK_AVAILABLE_IN_ALL
-GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
-                                         VisualID   xvisualid);
+GdkX11Visual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
+                                            VisualID   xvisualid);
 
 G_END_DECLS
 

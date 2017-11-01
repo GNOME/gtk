@@ -19,7 +19,6 @@
 #define __GDK_SCREEN_PRIVATE_H__
 
 #include "gdkscreen.h"
-#include "gdkvisual.h"
 
 G_BEGIN_DECLS
 

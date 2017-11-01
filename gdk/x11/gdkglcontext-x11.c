@@ -30,7 +30,7 @@
 #include "gdkx11screen.h"
 #include "gdkx11window.h"
 #include "gdkx11visual.h"
-#include "gdkvisualprivate.h"
+#include "gdkvisual-x11.h"
 #include "gdkx11property.h"
 #include <X11/Xatom.h>
 
@@ -956,7 +956,7 @@ struct glvisualinfo {
 };
 
 static gboolean
-visual_compatible (const GdkVisual *a, const GdkVisual *b)
+visual_compatible (const GdkX11Visual *a, const GdkX11Visual *b)
 {
   return a->type == b->type &&
     a->depth == b->depth &&
@@ -968,7 +968,7 @@ visual_compatible (const GdkVisual *a, const GdkVisual *b)
 }
 
 static gboolean
-visual_is_rgba (const GdkVisual *visual)
+visual_is_rgba (const GdkX11Visual *visual)
 {
   return
     visual->depth == 32 &&
@@ -979,12 +979,12 @@ visual_is_rgba (const GdkVisual *visual)
 
 /* This picks a compatible (as in has the same X visual details) visual
    that has "better" characteristics on the GL side */
-static GdkVisual *
+static GdkX11Visual *
 pick_better_visual_for_gl (GdkX11Screen *x11_screen,
                            struct glvisualinfo *gl_info,
-                           GdkVisual *compatible)
+                           GdkX11Visual *compatible)
 {
-  GdkVisual *visual;
+  GdkX11Visual *visual;
   int i;
   gboolean want_alpha = visual_is_rgba (compatible);
 
@@ -1138,7 +1138,7 @@ _gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
     {
       for (i = 0; i < x11_screen->nvisuals; i++)
         {
-          GdkVisual *visual = x11_screen->visuals[i];
+          GdkX11Visual *visual = x11_screen->visuals[i];
           int visual_id = gdk_x11_visual_get_xvisual (visual)->visualid;
 
           if (visual_id == system_visual_id)

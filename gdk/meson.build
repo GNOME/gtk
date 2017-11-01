@@ -32,7 +32,6 @@ gdk_public_sources = files([
   'gdkseat.c',
   'gdkseatdefault.c',
   'gdkselection.c',
-  'gdkvisual.c',
   'gdkvulkancontext.c',
   'gdkwindow.c',
   'gdkwindowimpl.c',

@@ -35,7 +35,6 @@
 #include "gdkscreenprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdeviceprivate.h"
-#include "gdkvisualprivate.h"
 #include "gdkmarshalers.h"
 #include "gdkframeclockidle.h"
 #include "gdkwindowimpl.h"

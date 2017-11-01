@@ -29,7 +29,7 @@
 
 #include "gdkwindow.h"
 #include "gdkwindowimpl.h"
-#include "gdkvisualprivate.h"
+#include "gdkvisual-x11.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkframeclockprivate.h"

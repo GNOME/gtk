@@ -24,7 +24,7 @@
 
 #include "gdkscreenprivate.h"
 #include "gdkx11screen.h"
-#include "gdkvisual.h"
+#include "gdkx11visual.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 
@@ -77,13 +77,13 @@ struct _GdkX11Screen
 
   /* Visual Part */
   gint nvisuals;
-  GdkVisual **visuals;
-  GdkVisual *system_visual;
+  GdkX11Visual **visuals;
+  GdkX11Visual *system_visual;
   gint available_depths[7];
   GdkVisualType available_types[6];
   gint16 navailable_depths;
   gint16 navailable_types;
-  GdkVisual *rgba_visual;
+  GdkX11Visual *rgba_visual;
 
   /* cache for window->translate vfunc */
   GC subwindow_gcs[32];
