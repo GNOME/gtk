@@ -182,7 +182,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
       GdkWindow *mouse_toplevel;
 
       if (window == NULL)
-        window = gdk_get_default_root_window ();
+        window = gdk_display_get_root_window (gdk_device_get_display (device));
 
       impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
       toplevel = impl->wrapper;
