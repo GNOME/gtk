@@ -135,12 +135,6 @@ static void    _gdk_win32_impl_release_dc (GdkWindowImplWin32 *impl);
 #define WINDOW_IS_TOPLEVEL(window)		   \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
-GdkScreen *
-GDK_WINDOW_SCREEN (GObject *win)
-{
-  return gdk_display_get_default_screen (gdk_display_get_default ());
-}
-
 struct _GdkWin32Window {
   GdkWindow parent;
 };
@@ -4292,7 +4286,6 @@ setup_drag_move_resize_context (GdkWindow                   *window,
             impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT ||
             impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP))
     {
-      GdkScreen *screen;
       GdkMonitor *monitor;
       gint wx, wy, wwidth, wheight;
       gint swx, swy, swwidth, swheight;
@@ -4302,7 +4295,6 @@ setup_drag_move_resize_context (GdkWindow                   *window,
       GdkDisplay *display;
 
       display = gdk_window_get_display (window);
-      screen = gdk_display_get_default_screen (display);
       monitor = gdk_display_get_monitor_at_window (display, window);
       gdk_window_get_geometry (window, &wx, &wy, &wwidth, &wheight);
 
