@@ -37,8 +37,6 @@ G_BEGIN_DECLS
 struct _GdkBroadwayDisplay
 {
   GdkDisplay parent_instance;
-  GdkScreen *default_screen;
-  GdkScreen **screens;
 
   GHashTable *id_ht;
   GList *toplevels;
@@ -56,6 +54,7 @@ struct _GdkBroadwayDisplay
   gpointer move_resize_data;
 
   GdkMonitor *monitor;
+  GdkWindow *root_window;
 };
 
 struct _GdkBroadwayDisplayClass

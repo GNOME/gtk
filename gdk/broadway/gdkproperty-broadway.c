@@ -30,7 +30,7 @@
 #include "gdkprivate.h"
 #include "gdkinternals.h"
 #include "gdkdisplay-broadway.h"
-#include "gdkscreen-broadway.h"
+#include "gdkprivate-broadway.h"
 #include "gdkselection.h"
 
 #include <string.h>

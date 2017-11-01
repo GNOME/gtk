@@ -14,7 +14,6 @@ gdk_broadway_sources = files([
   'gdkkeys-broadway.c',
   'gdkmonitor-broadway.c',
   'gdkproperty-broadway.c',
-  'gdkscreen-broadway.c',
   'gdkselection-broadway.c',
   'gdkwindow-broadway.c',
 ])

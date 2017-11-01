@@ -95,7 +95,6 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
   GdkDisplay *display;
   GdkBroadwayDisplay *display_broadway;
   GdkBroadwayDeviceManager *device_manager;
-  GdkScreen *screen;
   GdkWindow *window;
   GdkEvent *event = NULL;
   GList *node;
@@ -350,13 +349,11 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     break;
 
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
-    screen = gdk_display_get_default_screen (display);
     window = gdk_display_get_root_window (display);
     window->width = message->screen_resize_notify.width;
     window->height = message->screen_resize_notify.height;
-
     _gdk_window_update_size (window);
-    _gdk_broadway_screen_size_changed (screen, &message->screen_resize_notify);
+    _gdk_broadway_display_size_changed (display, &message->screen_resize_notify);
     break;
 
   case BROADWAY_EVENT_FOCUS:

@@ -26,7 +26,6 @@
 #include "config.h"
 
 #include "gdkwindow-broadway.h"
-#include "gdkscreen-broadway.h"
 
 #include "gdkbroadwaydisplay.h"
 #include "gdkdisplay.h"
@@ -196,19 +195,19 @@ gdk_window_impl_broadway_finalize (GObject *object)
 }
 
 void
-_gdk_broadway_screen_init_root_window (GdkScreen * screen)
+_gdk_broadway_display_init_root_window (GdkDisplay *display)
 {
   GdkWindow *window;
   GdkWindowImplBroadway *impl;
-  GdkBroadwayScreen *broadway_screen;
+  GdkBroadwayDisplay *broadway_display;
 
-  broadway_screen = GDK_BROADWAY_SCREEN (screen);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  g_assert (broadway_screen->root_window == NULL);
+  g_assert (broadway_display->root_window == NULL);
 
-  broadway_screen->root_window = g_object_new (GDK_TYPE_BROADWAY_WINDOW, NULL);
+  broadway_display->root_window = g_object_new (GDK_TYPE_BROADWAY_WINDOW, NULL);
 
-  window = broadway_screen->root_window;
+  window = broadway_display->root_window;
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_BROADWAY, NULL);
   window->impl_window = window;
 
@@ -227,7 +226,7 @@ _gdk_broadway_screen_init_root_window (GdkScreen * screen)
   window->height = 768;
   window->viewable = TRUE;
 
-  _gdk_window_update_size (broadway_screen->root_window);
+  _gdk_window_update_size (broadway_display->root_window);
 }
 
 static void

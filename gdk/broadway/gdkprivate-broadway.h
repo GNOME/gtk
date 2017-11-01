@@ -88,13 +88,12 @@ void _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
 gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
 					guint            keycode);
 
-void _gdk_broadway_screen_events_init   (GdkScreen *screen);
-void _gdk_broadway_screen_size_changed (GdkScreen *screen, 
-					BroadwayInputScreenResizeNotify *msg);
+void _gdk_broadway_display_size_changed (GdkDisplay *display,
+	                                 BroadwayInputScreenResizeNotify *msg);
 
 void _gdk_broadway_events_got_input      (BroadwayInputMsg *message);
 
-void _gdk_broadway_screen_init_root_window (GdkScreen *screen);
+void _gdk_broadway_display_init_root_window (GdkDisplay *display);
 void _gdk_broadway_display_init_dnd (GdkDisplay *display);
 GdkDisplay * _gdk_broadway_display_open (const gchar *display_name);
 void _gdk_broadway_display_queue_events (GdkDisplay *display);

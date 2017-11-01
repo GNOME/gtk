@@ -26,8 +26,6 @@
 
 #include "gdkdisplay.h"
 #include "gdkeventsource.h"
-#include "gdkscreen.h"
-#include "gdkscreen-broadway.h"
 #include "gdkmonitor-broadway.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
@@ -73,6 +71,38 @@ gdk_event_init (GdkDisplay *display)
   broadway_display->event_source = _gdk_broadway_event_source_new (display);
 }
 
+void
+_gdk_broadway_display_size_changed (GdkDisplay                      *display,
+                                    BroadwayInputScreenResizeNotify *msg)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+  GdkMonitor *monitor;
+  GdkRectangle size;
+  GList *toplevels, *l;
+
+  monitor = broadway_display->monitor;
+  gdk_monitor_get_geometry (monitor, &size);
+
+  if (msg->width == size.width && msg->height == size.height)
+    return;
+
+  gdk_monitor_set_size (monitor, msg->width, msg->height);
+  gdk_monitor_set_physical_size (monitor, msg->width * 25.4 / 96, msg->height * 25.4 / 96);
+
+  toplevels = gdk_display_get_toplevel_windows (display);
+  for (l = toplevels; l != NULL; l = l->next)
+    {
+      GdkWindow *toplevel = l->data;
+      GdkWindowImplBroadway *toplevel_impl = GDK_WINDOW_IMPL_BROADWAY (toplevel->impl);
+
+      if (toplevel_impl->maximized)
+        gdk_window_move_resize (toplevel, 0, 0, msg->width, msg->height);
+    }
+
+  g_list_free (toplevels);
+}
+
+
 GdkDisplay *
 _gdk_broadway_display_open (const gchar *display_name)
 {
@@ -83,17 +113,7 @@ _gdk_broadway_display_open (const gchar *display_name)
   display = g_object_new (GDK_TYPE_BROADWAY_DISPLAY, NULL);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  /* initialize the display's screens */
-  broadway_display->screens = g_new (GdkScreen *, 1);
-  broadway_display->screens[0] = _gdk_broadway_screen_new (display, 0);
-
-  /* We need to initialize events after we have the screen
-   * structures in places
-   */
-  _gdk_broadway_screen_events_init (broadway_display->screens[0]);
-
-  /*set the default screen */
-  broadway_display->default_screen = broadway_display->screens[0];
+  _gdk_broadway_display_init_root_window (broadway_display);
 
   display->device_manager = _gdk_broadway_device_manager_new (display);
 
@@ -123,14 +143,6 @@ gdk_broadway_display_get_name (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return (gchar *) "Broadway";
-}
-
-static GdkScreen *
-gdk_broadway_display_get_default_screen (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_BROADWAY_DISPLAY (display)->default_screen;
 }
 
 static void
@@ -178,7 +190,8 @@ gdk_broadway_display_dispose (GObject *object)
 {
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (object);
 
-  _gdk_screen_close (broadway_display->screens[0]);
+  if (broadway_display->root_window)
+    _gdk_window_destroy (broadway_display->root_window, TRUE);
 
   if (broadway_display->event_source)
     {
@@ -201,10 +214,7 @@ gdk_broadway_display_finalize (GObject *object)
 
   _gdk_broadway_cursor_display_finalize (GDK_DISPLAY(broadway_display));
 
-  /* Free all GdkScreens */
-  g_object_unref (broadway_display->screens[0]);
-  g_free (broadway_display->screens);
-
+  g_object_unref (broadway_display->root_window);
   g_object_unref (broadway_display->monitor);
 
   G_OBJECT_CLASS (gdk_broadway_display_parent_class)->finalize (object);
@@ -321,7 +331,7 @@ gdk_broadway_display_get_root_window (GdkDisplay *display)
 {
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  return GDK_BROADWAY_SCREEN (broadway_display->default_screen)->root_window;
+  return broadway_display->root_window;
 }
 
 static void
@@ -336,7 +346,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->window_type = GDK_TYPE_BROADWAY_WINDOW;
 
   display_class->get_name = gdk_broadway_display_get_name;
-  display_class->get_default_screen = gdk_broadway_display_get_default_screen;
   display_class->beep = gdk_broadway_display_beep;
   display_class->sync = gdk_broadway_display_sync;
   display_class->flush = gdk_broadway_display_flush;
@@ -375,4 +384,3 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->get_setting = gdk_broadway_display_get_setting;
   display_class->get_root_window = gdk_broadway_display_get_root_window;
 }
-
