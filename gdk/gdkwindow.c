@@ -238,8 +238,6 @@ gdk_window_init (GdkWindow *window)
                                                  NULL, g_object_unref);
 }
 
-static GQuark quark_pointer_window = 0;
-
 static void
 gdk_window_class_init (GdkWindowClass *klass)
 {
@@ -248,9 +246,6 @@ gdk_window_class_init (GdkWindowClass *klass)
   object_class->finalize = gdk_window_finalize;
   object_class->set_property = gdk_window_set_property;
   object_class->get_property = gdk_window_get_property;
-
-  quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
-
 
   /* Properties */
 
@@ -1271,9 +1266,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 
   display = gdk_window_get_display (window);
   screen = gdk_display_get_default_screen (display);
-  temp_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
-  if (temp_window == window)
-    g_object_set_qdata (G_OBJECT (screen), quark_pointer_window, NULL);
 
   switch (window->window_type)
     {
