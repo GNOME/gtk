@@ -180,7 +180,7 @@ get_current_desktop (GdkScreen *screen)
     return workspace;
 
   display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
-  win = XRootWindow (display, GDK_SCREEN_XNUMBER (screen));
+  win = XRootWindow (display, gdk_x11_screen_get_screen_number (screen));
 
   current_desktop = XInternAtom (display, "_NET_CURRENT_DESKTOP", True);
 
@@ -217,12 +217,10 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
   guchar         *ret_workarea = NULL;
   long           *workareas;
   int             result;
-  int             disp_screen;
   int             desktop;
   Display        *display;
 
   display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
-  disp_screen = GDK_SCREEN_XNUMBER (screen);
   root_window = gdk_display_get_root_window (gdk_screen_get_display (screen));
   workarea = XInternAtom (display, "_NET_WORKAREA", True);
 
@@ -239,7 +237,7 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
   if (workarea == None)
     return;
 
-  win = XRootWindow (display, disp_screen);
+  win = XRootWindow (display, gdk_x11_screen_get_screen_number (screen));
   result = XGetWindowProperty (display,
                                win,
                                workarea,
