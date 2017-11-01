@@ -45,9 +45,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);
 
 GDK_AVAILABLE_IN_ALL
-GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
-
-GDK_AVAILABLE_IN_ALL
 GdkScreen *gdk_screen_get_default (void);
 
 G_END_DECLS

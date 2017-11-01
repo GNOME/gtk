@@ -174,11 +174,7 @@ gdk_display_manager_get_type
 <TITLE>GdkScreen</TITLE>
 GdkScreen
 gdk_screen_get_default
-gdk_screen_get_root_window
 gdk_screen_get_display
-gdk_screen_get_toplevel_windows
-gdk_screen_get_resolution
-gdk_screen_set_resolution
 
 <SUBSECTION Standard>
 GDK_SCREEN

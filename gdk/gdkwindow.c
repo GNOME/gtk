@@ -1905,45 +1905,6 @@ gdk_window_remove_filter (GdkWindow     *window,
 }
 
 /**
- * gdk_screen_get_toplevel_windows:
- * @screen: The #GdkScreen where the toplevels are located.
- *
- * Obtains a list of all toplevel windows known to GDK on the screen @screen.
- * A toplevel window has no parent window.
- *
- * The returned list should be freed with g_list_free(), but
- * its elements need not be freed.
- *
- * Returns: (transfer container) (element-type GdkWindow):
- *     list of toplevel windows, free with g_list_free()
- *
- * Since: 2.2
- **/
-GList *
-gdk_screen_get_toplevel_windows (GdkScreen *screen)
-{
-  GdkWindow * root_window;
-  GList *new_list = NULL;
-  GList *tmp_list;
-
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  root_window = gdk_screen_get_root_window (screen);
-
-  tmp_list = root_window->children;
-  while (tmp_list)
-    {
-      GdkWindow *w = tmp_list->data;
-
-      if (w->window_type != GDK_WINDOW_FOREIGN)
-	new_list = g_list_prepend (new_list, w);
-      tmp_list = tmp_list->next;
-    }
-
-  return new_list;
-}
-
-/**
  * gdk_window_is_visible:
  * @window: a #GdkWindow
  *
