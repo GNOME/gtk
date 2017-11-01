@@ -180,7 +180,6 @@ gsk_gl_renderer_dispose (GObject *gobject)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (gobject);
 
-  g_clear_object (&self->gl_context);
   g_clear_pointer (&self->render_items, g_array_unref);
 
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (gobject);
@@ -412,7 +411,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   /* We don't need to iterate to destroy the associated GL resources,
    * as they will be dropped when we finalize the GskGLDriver
    */
-  g_clear_pointer (&self->render_items, g_array_unref);
+  g_array_set_size (self->render_items, 0);
 
   gsk_gl_renderer_destroy_buffers (self);
   gsk_gl_renderer_destroy_programs (self);
@@ -422,6 +421,8 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 
   if (self->gl_context == gdk_gl_context_get_current ())
     gdk_gl_context_clear_current ();
+
+  g_clear_object (&self->gl_context);
 }
 
 static GdkDrawingContext *
