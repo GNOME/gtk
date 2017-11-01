@@ -210,7 +210,7 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
       g_param_spec_object ("display",
                            P_("Display"),
                            P_("The associated GdkDisplay"),
-                           GDK_TYPE_SCREEN,
+                           GDK_TYPE_DISPLAY,
                            GTK_PARAM_READWRITE);
 
   properties[PROP_FRAME_CLOCK] =
