@@ -2982,14 +2982,11 @@ gtk_entry_realize (GtkWidget *widget)
 {
   GtkEntry *entry;
   GtkEntryPrivate *priv;
-  GtkAllocation text_allocation;
 
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->realize (widget);
 
   entry = GTK_ENTRY (widget);
   priv = entry->priv;
-
-  gtk_entry_get_text_allocation (entry, &text_allocation);
 
   gtk_im_context_set_client_widget (priv->im_context, widget);
 
