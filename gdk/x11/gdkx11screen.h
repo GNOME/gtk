@@ -62,9 +62,6 @@ GDK_AVAILABLE_IN_ALL
 const char* gdk_x11_screen_get_window_manager_name (GdkScreen *screen);
 
 GDK_AVAILABLE_IN_ALL
-gint     gdk_x11_get_default_screen       (void);
-
-GDK_AVAILABLE_IN_ALL
 gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
                                               GdkAtom    property);
 

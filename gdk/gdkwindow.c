@@ -92,9 +92,6 @@
  * region of the window wrt parent windows, in window-relative coordinates (clip_region).
  */
 
-/* This adds a local value to the GdkVisibilityState enum */
-#define GDK_VISIBILITY_NOT_VIEWABLE 3
-
 enum {
   MOVED_TO_RECT,
   LAST_SIGNAL

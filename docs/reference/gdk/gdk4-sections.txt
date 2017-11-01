@@ -797,7 +797,6 @@ GDK_TYPE_EVENT
 GDK_TYPE_NOTIFY_TYPE
 GDK_TYPE_PROPERTY_STATE
 GDK_TYPE_SCROLL_DIRECTION
-GDK_TYPE_VISIBILITY_STATE
 GDK_TYPE_WINDOW_STATE
 GDK_TYPE_OWNER_CHANGE
 
@@ -881,7 +880,6 @@ gdk_drag_context_get_type
 <INCLUDE>gdk/gdkx.h</INCLUDE>
 <TITLE>X Window System Interaction</TITLE>
 <FILE>x_interaction</FILE>
-GDK_ROOT_WINDOW
 GDK_WINDOW_XID
 GDK_DISPLAY_XDISPLAY
 GDK_CURSOR_XCURSOR
@@ -929,9 +927,6 @@ gdk_x11_window_get_desktop
 gdk_x11_window_set_utf8_property
 gdk_x11_window_set_frame_extents
 gdk_x11_window_set_frame_sync_enabled
-gdk_x11_get_default_root_xwindow
-gdk_x11_get_default_screen
-gdk_x11_get_default_xdisplay
 gdk_x11_grab_server
 gdk_x11_ungrab_server
 gdk_x11_cursor_get_xcursor

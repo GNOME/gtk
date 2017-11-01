@@ -36,18 +36,6 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
-Window   gdk_x11_get_default_root_xwindow (void);
-GDK_AVAILABLE_IN_ALL
-Display *gdk_x11_get_default_xdisplay     (void);
-
-/**
- * GDK_ROOT_WINDOW:
- *
- * Obtains the Xlib window id of the root window of the current screen.
- */
-#define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
-
 /**
  * GDK_XID_TO_POINTER:
  * @xid: XID to stuff into the pointer
