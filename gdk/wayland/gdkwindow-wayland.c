@@ -3318,7 +3318,6 @@ gdk_wayland_window_fullscreen_on_monitor (GdkWindow  *window,
                                           GdkMonitor *monitor)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkDisplay *display = gdk_window_get_display (window);
   struct wl_output *output = ((GdkWaylandMonitor *)monitor)->output;
 
   if (GDK_WINDOW_DESTROYED (window))

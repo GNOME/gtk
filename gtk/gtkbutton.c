@@ -313,7 +313,6 @@ multipress_pressed_cb (GtkGestureMultiPress *gesture,
 static gboolean
 touch_release_in_button (GtkButton *button)
 {
-  GtkAllocation allocation;
   GdkEvent *event;
   gdouble x, y;
 
@@ -329,11 +328,10 @@ touch_release_in_button (GtkButton *button)
     }
 
   gdk_event_get_coords (event, &x, &y);
-  gtk_widget_get_own_allocation (GTK_WIDGET (button), &allocation);
 
   gdk_event_free (event);
 
-  if (gdk_rectangle_contains_point (&allocation, x, y))
+  if (gtk_widget_contains (GTK_WIDGET (button), x, y));
     return TRUE;
 
   return FALSE;
@@ -370,17 +368,15 @@ multipress_gesture_update_cb (GtkGesture       *gesture,
                               GtkButton        *button)
 {
   GtkButtonPrivate *priv = button->priv;
-  GtkAllocation allocation;
   gboolean in_button;
   gdouble x, y;
 
   if (sequence != gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)))
     return;
 
-  gtk_widget_get_own_allocation (GTK_WIDGET (button), &allocation);
   gtk_gesture_get_point (gesture, sequence, &x, &y);
 
-  in_button = gdk_rectangle_contains_point (&allocation, x, y);
+  in_button = gtk_widget_contains (GTK_WIDGET (button), x, y);
 
   if (priv->in_button != in_button)
     {
