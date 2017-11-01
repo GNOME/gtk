@@ -66,7 +66,6 @@ gdk_public_headers = files([
   'gdkproperty.h',
   'gdkrectangle.h',
   'gdkrgba.h',
-  'gdkscreen.h',
   'gdkseat.h',
   'gdkselection.h',
   'gdkthreads.h',

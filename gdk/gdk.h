@@ -55,7 +55,6 @@
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkrectangle.h>
 #include <gdk/gdkrgba.h>
-#include <gdk/gdkscreen.h>
 #include <gdk/gdkseat.h>
 #include <gdk/gdkselection.h>
 #include <gdk/gdkthreads.h>

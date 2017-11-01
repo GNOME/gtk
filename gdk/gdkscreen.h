@@ -38,10 +38,8 @@ G_BEGIN_DECLS
 #define GDK_IS_SCREEN(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SCREEN))
 
 
-GDK_AVAILABLE_IN_ALL
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);
 
 G_END_DECLS
