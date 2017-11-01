@@ -214,7 +214,6 @@ _gdk_broadway_screen_init_root_window (GdkScreen * screen)
 
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
-  impl->screen = screen;
   impl->wrapper = window;
   impl->id = 0;
 
@@ -272,8 +271,6 @@ _gdk_broadway_display_create_window_impl (GdkDisplay    *display,
 					      window->window_type == GDK_WINDOW_TEMP);
   g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER(impl->id), window);
   impl->wrapper = window;
-
-  impl->screen = screen;
 
   g_assert (window->window_type == GDK_WINDOW_TOPLEVEL ||
 	    window->window_type == GDK_WINDOW_TEMP);

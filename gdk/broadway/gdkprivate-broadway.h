@@ -119,7 +119,6 @@ void _gdk_broadway_display_get_maximal_cursor_size (GdkDisplay *display,
 void       _gdk_broadway_display_create_window_impl     (GdkDisplay    *display,
 							 GdkWindow     *window,
 							 GdkWindow     *real_parent,
-							 GdkScreen     *screen,
 							 GdkEventMask   event_mask,
 							 GdkWindowAttr *attributes);
 gboolean _gdk_broadway_display_set_selection_owner (GdkDisplay *display,

@@ -48,12 +48,6 @@ gdk_broadway_screen_get_display (GdkScreen *screen)
   return GDK_BROADWAY_SCREEN (screen)->display;
 }
 
-static GdkWindow *
-gdk_broadway_screen_get_root_window (GdkScreen *screen)
-{
-  return GDK_BROADWAY_SCREEN (screen)->root_window;
-}
-
 void
 _gdk_broadway_screen_size_changed (GdkScreen                       *screen,
                                    BroadwayInputScreenResizeNotify *msg)

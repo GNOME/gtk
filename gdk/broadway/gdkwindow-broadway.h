@@ -47,7 +47,6 @@ struct _GdkWindowImplBroadway
   GdkWindowImpl parent_instance;
 
   GdkWindow *wrapper;
-  GdkScreen *screen;
 
   cairo_surface_t *surface;
   cairo_surface_t *last_surface;

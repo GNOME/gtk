@@ -321,7 +321,7 @@ gdk_broadway_display_get_root_window (GdkDisplay *display)
 {
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  return gdk_broadway_screen_get_root_window (broadway_display->default_screen);
+  return GDK_BROADWAY_SCREEN (broadway_display->default_screen)->root_window;
 }
 
 static void
