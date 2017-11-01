@@ -117,11 +117,3 @@ gdk_screen_get_display (GdkScreen *screen)
 
   return GDK_SCREEN_GET_CLASS (screen)->get_display (screen);
 }
-
-GdkWindow *
-gdk_screen_get_root_window (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
-}

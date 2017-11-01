@@ -614,7 +614,6 @@ _gdk_wayland_screen_class_init (GdkWaylandScreenClass *klass)
   object_class->finalize = gdk_wayland_screen_finalize;
 
   screen_class->get_display = gdk_wayland_screen_get_display;
-  screen_class->get_root_window = gdk_wayland_screen_get_root_window;
 }
 
 static void

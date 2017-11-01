@@ -292,12 +292,6 @@ gdk_quartz_screen_get_display (GdkScreen *screen)
   return _gdk_display;
 }
 
-static GdkWindow *
-gdk_quartz_screen_get_root_window (GdkScreen *screen)
-{
-  return _gdk_root;
-}
-
 static gint
 get_mm_from_pixels (NSScreen *screen, int pixels)
 {
@@ -318,5 +312,4 @@ gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
   object_class->finalize = gdk_quartz_screen_finalize;
 
   screen_class->get_display = gdk_quartz_screen_get_display;
-  screen_class->get_root_window = gdk_quartz_screen_get_root_window;
 }

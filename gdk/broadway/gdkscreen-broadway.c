@@ -139,6 +139,5 @@ gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
   object_class->finalize = gdk_broadway_screen_finalize;
 
   screen_class->get_display = gdk_broadway_screen_get_display;
-  screen_class->get_root_window = gdk_broadway_screen_get_root_window;
 }
 

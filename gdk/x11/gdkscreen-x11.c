@@ -1282,7 +1282,6 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
   object_class->finalize = gdk_x11_screen_finalize;
 
   screen_class->get_display = gdk_x11_screen_get_display;
-  screen_class->get_root_window = gdk_x11_screen_get_root_window;
 
   signals[WINDOW_MANAGER_CHANGED] =
     g_signal_new (g_intern_static_string ("window-manager-changed"),

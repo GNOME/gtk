@@ -204,5 +204,4 @@ gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
   object_class->finalize = gdk_win32_screen_finalize;
 
   screen_class->get_display = gdk_win32_screen_get_display;
-  screen_class->get_root_window = gdk_win32_screen_get_root_window;
 }
