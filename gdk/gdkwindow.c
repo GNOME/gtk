@@ -3375,13 +3375,6 @@ gdk_window_get_device_position (GdkWindow       *window,
   return window;
 }
 
-GdkWindow *
-gdk_get_default_root_window (void)
-{
-  return gdk_display_get_root_window (gdk_display_get_default ());
-}
-
-
 static gboolean
 gdk_window_raise_internal (GdkWindow *window)
 {

@@ -391,7 +391,6 @@ gdk_window_get_decorations
 GdkWMDecoration
 gdk_window_set_functions
 GdkWMFunction
-gdk_get_default_root_window
 
 <SUBSECTION>
 gdk_window_get_support_multidevice
