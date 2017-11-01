@@ -6769,13 +6769,13 @@ gdk_window_fullscreen (GdkWindow *window)
  * Since: UNRELEASED
  **/
 void
-gdk_window_fullscreen_on_monitor (GdkWindow      *window,
-                                  gint            monitor)
+gdk_window_fullscreen_on_monitor (GdkWindow  *window,
+                                  GdkMonitor *monitor)
 {
-  GdkDisplay *display = gdk_window_get_display (window);
-
-  g_return_if_fail (monitor >= 0);
-  g_return_if_fail (monitor < gdk_display_get_n_monitors (display));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_MONITOR (monitor));
+  g_return_if_fail (gdk_monitor_get_display (monitor) == gdk_window_get_display (window));
+  g_return_if_fail (gdk_monitor_is_valid (monitor));
 
   if (GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor != NULL)
     GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor (window, monitor);
