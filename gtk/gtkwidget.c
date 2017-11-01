@@ -700,6 +700,10 @@ static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
                                                                  guint      signal_id);
 
+static void             gtk_widget_get_origin_relative_to_parent(GtkWidget        *widget,
+                                                                 int              *origin_x,
+                                                                 int              *origin_y);
+
 static void             gtk_widget_real_set_has_tooltip         (GtkWidget *widget,
 								 gboolean   has_tooltip,
 								 gboolean   force);
@@ -728,15 +732,15 @@ static void             gtk_widget_buildable_custom_finished    (GtkBuildable   
 static void             gtk_widget_buildable_parser_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder);
 
-static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget         *widget);
+static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget        *widget);
 
-static void             gtk_widget_queue_tooltip_query          (GtkWidget *widget);
+static void             gtk_widget_queue_tooltip_query          (GtkWidget        *widget);
 
 
-static void             gtk_widget_adjust_baseline_allocation (GtkWidget         *widget,
-                                                               gint              *baseline);
+static void             gtk_widget_adjust_baseline_allocation   (GtkWidget        *widget,
+                                                                 gint             *baseline);
 
-static void                  template_data_free                 (GtkWidgetTemplate    *template_data);
+static void                  template_data_free                 (GtkWidgetTemplate*template_data);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
@@ -930,6 +934,19 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
     gtk_widget_snapshot_child (widget, child, snapshot);
 }
 
+static gboolean
+gtk_widget_real_contains (GtkWidget *widget,
+                          gdouble    x,
+                          gdouble    y)
+{
+  GtkAllocation own_alloc;
+
+  gtk_widget_get_own_allocation (widget, &own_alloc);
+  
+  /* XXX: This misses rounded rects */
+  return gdk_rectangle_contains_point (&own_alloc, x, y);
+}
+
 static GtkWidget *
 gtk_widget_real_pick (GtkWidget *widget,
                       gdouble    x,
@@ -943,27 +960,14 @@ gtk_widget_real_pick (GtkWidget *widget,
        child;
        child = _gtk_widget_get_prev_sibling (child))
     {
-      gdouble tx = x, ty = y;
-      GtkAllocation allocation;
+      int dx, dy;
 
-      if (gtk_widget_get_pass_through (child) ||
-          !gtk_widget_is_sensitive (child) ||
-          !gtk_widget_is_drawable (child))
-        continue;
+      gtk_widget_get_origin_relative_to_parent (child, &dx, &dy);
 
-      gtk_widget_get_outer_allocation (child, &allocation);
-
-      if (gdk_rectangle_contains_point (&allocation, tx, ty))
+      if (gtk_widget_contains (child, x - dx, y - dy))
         {
-          if (x_out && y_out)
-            {
-              GtkAllocation own_alloc;
-              gtk_widget_get_own_allocation (child, &own_alloc);
-
-              *x_out = own_alloc.x + (x - allocation.x);
-              *y_out = own_alloc.y + (y - allocation.y);
-            }
-
+          *x_out = x - dx;
+          *y_out = y - dy;
           return child;
         }
     }
@@ -1076,6 +1080,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->priv->accessible_role = ATK_ROLE_INVALID;
   klass->get_accessible = gtk_widget_real_get_accessible;
 
+  klass->contains = gtk_widget_real_contains;
   klass->pick = gtk_widget_real_pick;
 
   widget_props[PROP_NAME] =
@@ -13094,6 +13099,43 @@ gtk_widget_get_allocation (GtkWidget     *widget,
   priv = widget->priv;
 
   *allocation = priv->allocation;
+}
+
+/**
+ * gtk_widget_contains:
+ * @widget: the widget to query
+ * @x: X coordinate to test, relative to @widget's origin
+ * @y: Y coordinate to test, relative to @widget's origin
+ *
+ * Tests if the point at (@x, @y) is contained in @widget. Points
+ * inside the widget will respond to mouse and touch events, points
+ * outside will not.
+ *
+ * The coordinates for (@x, @y) must be in widget coordinates, so
+ * (0, 0) is assumed to be the top left of @widget's content area.
+ *
+ * Pass-through widgets and insensitive widgets do never respond to
+ * input and will therefor always return %FALSE here. See
+ * gtk_widget_set_pass_through() and gtk_widget_set_sensitive() for
+ * details about those functions.
+ *
+ * Returns: %TRUE if @widget contains (@x, @y).
+ *
+ * Since: 3.94
+ **/
+gboolean
+gtk_widget_contains (GtkWidget  *widget,
+                     gdouble     x,
+                     gdouble     y)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  if (gtk_widget_get_pass_through (widget) ||
+      !gtk_widget_is_sensitive (widget) ||
+      !gtk_widget_is_drawable (widget))
+    return FALSE;
+
+  return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
 }
 
 void

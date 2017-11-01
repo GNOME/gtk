@@ -467,6 +467,9 @@ struct _GtkWidgetClass
   void         (* snapshot)                    (GtkWidget            *widget,
                                                 GtkSnapshot          *snapshot);
 
+  gboolean     (* contains)                    (GtkWidget *widget,
+                                                gdouble    x,
+                                                gdouble    y);
   GtkWidget *  (* pick)                        (GtkWidget *widget,
                                                 gdouble    x,
                                                 gdouble    y,
@@ -882,6 +885,10 @@ gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
 					       gint       *dest_x,
 					       gint       *dest_y);
 
+GDK_AVAILABLE_IN_3_94
+gboolean     gtk_widget_contains              (GtkWidget  *widget,
+                                               gdouble     x,
+                                               gdouble     y);
 /* Hide widget and return TRUE.
  */
 GDK_AVAILABLE_IN_ALL
