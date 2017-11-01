@@ -53,6 +53,9 @@ typedef struct _GdkX11DisplayClass GdkX11DisplayClass;
 GDK_AVAILABLE_IN_ALL
 GType      gdk_x11_display_get_type            (void);
 
+GDK_AVAILABLE_IN_3_94
+GdkDisplay *  gdk_x11_display_open        (const char  *display_name);
+
 GDK_AVAILABLE_IN_ALL
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 

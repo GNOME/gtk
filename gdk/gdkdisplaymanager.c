@@ -276,7 +276,7 @@ static GdkBackend gdk_backends[] = {
   { "mir",      _gdk_mir_display_open },
 #endif
 #ifdef GDK_WINDOWING_X11
-  { "x11",      _gdk_x11_display_open },
+  { "x11",      gdk_x11_display_open },
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
   { "broadway", _gdk_broadway_display_open },

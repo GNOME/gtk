@@ -1532,8 +1532,20 @@ gdk_display_setup_window_visual (GdkDisplay *display,
   gdk_display_set_rgba (display, rgba);
 }
 
+/**
+ * gdk_x11_display_open:
+ * @display_name: (allow-none): name of the X display.
+ *     See the XOpenDisplay() for details.
+ *
+ * Tries to open a new display to the X server given by
+ * @display_name. If opening the display fails, %NULL is
+ * returned.
+ *
+ * Returns: (nullable) (transfer full): The new display or
+ *     %NULL on error.
+ **/
 GdkDisplay *
-_gdk_x11_display_open (const gchar *display_name)
+gdk_x11_display_open (const gchar *display_name)
 {
   Display *xdisplay;
   GdkDisplay *display;
