@@ -72,7 +72,6 @@ gdk_public_headers = files([
   'gdkselection.h',
   'gdkthreads.h',
   'gdktypes.h',
-  'gdkvisual.h',
   'gdkvulkancontext.h',
   'gdkwindow.h',
 ])

@@ -60,7 +60,6 @@
 #include <gdk/gdkselection.h>
 #include <gdk/gdkthreads.h>
 #include <gdk/gdktypes.h>
-#include <gdk/gdkvisual.h>
 #include <gdk/gdkvulkancontext.h>
 #include <gdk/gdkwindow.h>
 
