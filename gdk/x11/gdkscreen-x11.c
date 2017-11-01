@@ -841,7 +841,7 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
   root = x11_screen->root_window;
   GDK_WINDOW_IMPL_X11 (root->impl)->window_scale = scale;
 
-  toplevels = gdk_screen_get_toplevel_windows (GDK_SCREEN (x11_screen));
+  toplevels = gdk_display_get_toplevel_windows (x11_screen->display);
 
   for (l = toplevels; l != NULL; l = l->next)
     {
@@ -849,6 +849,8 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
 
       _gdk_x11_window_set_window_scale (window, scale);
     }
+
+  g_list_free (toplevels);
 
   for (i = 0; i < x11_display->monitors->len; i++)
     {

@@ -708,7 +708,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
   GdkEvent *event;
-  GdkScreen *screen;
+  GdkDisplay *display;
   GdkDevice *device;
 
   g_assert (_gdk_quartz_drag_source_context != NULL);
@@ -718,16 +718,16 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event->dnd.send_event = FALSE;
   event->dnd.context = g_object_ref (_gdk_quartz_drag_source_context);
 
-  screen = gdk_window_get_screen (event->dnd.window);
+  display = gdk_window_get_display (event->dnd.window);
 
-  if (screen)
+  if (display)
     {
       GList* windows, *list;
       gint gx, gy;
 
       event->dnd.context->dest_window = NULL;
 
-      windows = gdk_screen_get_toplevel_windows (screen);
+      windows = gdk_display_get_toplevel_windows (display);
       _gdk_quartz_window_nspoint_to_gdk_xy (aPoint, &gx, &gy);
 
       for (list = windows; list; list = list->next)
@@ -743,6 +743,8 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
           if (gx > wx && gy > wy && gx <= wx + ww && gy <= wy + wh)
             event->dnd.context->dest_window = win;
         }
+
+      g_list_free (windows);
     }
 
   device = gdk_drag_context_get_device (_gdk_quartz_drag_source_context);

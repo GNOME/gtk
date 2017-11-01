@@ -426,9 +426,9 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
 {
   GdkWindowImplX11 *impl;
   GdkDisplay *display;
-  GdkScreen *screen;
   Display *xdisplay;
   GdkWindow *window;
+  GdkScreen *screen;
   Window xwindow, root, child, last;
   int xroot_x, xroot_y, xwin_x, xwin_y;
   unsigned int xmask;
@@ -470,8 +470,7 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
 
       /* FIXME: untrusted clients case not multidevice-safe */
       pointer_window = None;
-      screen = gdk_display_get_default_screen (display);
-      toplevels = gdk_screen_get_toplevel_windows (screen);
+      toplevels = gdk_display_get_toplevel_windows (display);
       for (list = toplevels; list != NULL; list = list->next)
         {
           window = GDK_WINDOW (list->data);

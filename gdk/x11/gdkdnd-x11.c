@@ -581,14 +581,14 @@ gdk_window_cache_new (GdkDisplay *display)
   XGetWindowAttributes (xdisplay, GDK_WINDOW_XID (root_window), &xwa);
   result->old_event_mask = xwa.your_event_mask;
 
-  if (G_UNLIKELY (!GDK_X11_DISPLAY (GDK_X11_SCREEN (screen)->display)->trusted_client))
+  if (G_UNLIKELY (!GDK_X11_DISPLAY (display)->trusted_client))
     {
       GList *toplevel_windows, *list;
       GdkWindow *window;
       GdkWindowImplX11 *impl;
       gint x, y, width, height;
 
-      toplevel_windows = gdk_screen_get_toplevel_windows (screen);
+      toplevel_windows = gdk_display_get_toplevel_windows (display);
       for (list = toplevel_windows; list; list = list->next)
         {
           window = GDK_WINDOW (list->data);
@@ -609,7 +609,7 @@ gdk_window_cache_new (GdkDisplay *display)
   gdk_window_add_filter (root_window, gdk_window_cache_filter, result);
   gdk_window_add_filter (NULL, gdk_window_cache_shape_filter, result);
 
-  if (!_gdk_x11_get_window_child_info (gdk_screen_get_display (screen),
+  if (!_gdk_x11_get_window_child_info (display,
                                        GDK_WINDOW_XID (root_window),
                                        FALSE, NULL,
                                        &children, &nchildren))
@@ -632,7 +632,7 @@ gdk_window_cache_new (GdkDisplay *display)
    * the COW. We assume that the CM is using the COW (which is true for pretty
    * much any CM currently in use).
    */
-  if (gdk_display_is_composited (gdk_screen_get_display (screen)))
+  if (gdk_display_is_composited (display))
     {
       cow = XCompositeGetOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
       gdk_window_cache_add (result, cow, 0, 0, 

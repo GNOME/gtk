@@ -73,7 +73,7 @@ _gdk_broadway_screen_size_changed (GdkScreen                       *screen,
   gdk_monitor_set_size (monitor, msg->width, msg->height);
   gdk_monitor_set_physical_size (monitor, msg->width * 25.4 / 96, msg->height * 25.4 / 96);
 
-  toplevels = gdk_screen_get_toplevel_windows (screen);
+  toplevels = gdk_display_get_toplevel_windows (broadway_screen->display);
   for (l = toplevels; l != NULL; l = l->next)
     {
       GdkWindow *toplevel = l->data;
@@ -82,6 +82,8 @@ _gdk_broadway_screen_size_changed (GdkScreen                       *screen,
       if (toplevel_impl->maximized)
 	gdk_window_move_resize (toplevel, 0, 0, msg->width, msg->height);
     }
+
+  g_list_free (toplevels);
 }
 
 static void
