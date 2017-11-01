@@ -9966,6 +9966,9 @@ gtk_window_set_display (GtkWindow  *window,
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
 
+  if (priv->transient_parent && gtk_widget_get_display (GTK_WIDGET (priv->transient_parent)) != display)
+    gtk_window_set_transient_for (window, NULL);
+
   gtk_window_free_key_hash (window);
   priv->display = display;
 #ifdef GDK_WINDOWING_X11
