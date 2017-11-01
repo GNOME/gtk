@@ -2250,6 +2250,12 @@ gdk_display_setting_changed (GdkDisplay       *display,
   g_signal_emit (display, signals[SETTING_CHANGED], 0, name);
 }
 
+GdkWindow *
+gdk_display_get_root_window (GdkDisplay *display)
+{
+  return GDK_DISPLAY_GET_CLASS (display)->get_root_window (display);
+}
+
 GList *
 gdk_display_get_toplevel_windows (GdkDisplay *display)
 {
@@ -2257,7 +2263,7 @@ gdk_display_get_toplevel_windows (GdkDisplay *display)
   GList *new_list = NULL;
   GList *tmp_list;
 
-  root_window = GDK_DISPLAY_GET_CLASS (display)->get_root_window (display);
+  root_window = gdk_display_get_root_window (display);
 
   tmp_list = root_window->children;
   while (tmp_list)

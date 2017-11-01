@@ -22,6 +22,7 @@
 
 #include "gdkmonitor-x11.h"
 #include "gdkscreen-x11.h"
+#include "gdkdisplayprivate.h"
 
 
 G_DEFINE_TYPE (GdkX11Monitor, gdk_x11_monitor, GDK_TYPE_MONITOR)

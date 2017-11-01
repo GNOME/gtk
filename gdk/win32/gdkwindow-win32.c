@@ -486,7 +486,7 @@ _gdk_win32_window_enable_transparency (GdkWindow *window)
   if (!gdk_display_is_composited (gdk_window_get_display (window)))
     return FALSE;
 
-  if (window == gdk_screen_get_root_window (screen))
+  if (window == gdk_display_get_root_window (gdk_window_get_display (window)))
     return FALSE;
 
   thiswindow = GDK_WINDOW_HWND (window);

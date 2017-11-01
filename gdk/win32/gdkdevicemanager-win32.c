@@ -353,7 +353,7 @@ static void
 wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 {
   GdkDisplay *display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
-  GdkWindow *root = gdk_screen_get_root_window (gdk_display_get_default_screen (display));
+  GdkWindow *root = gdk_display_get_root_window (display);
   static gboolean wintab_initialized = FALSE;
   GdkDeviceWintab *device;
   WORD specversion;

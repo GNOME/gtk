@@ -333,12 +333,10 @@ gdk_broadway_device_window_at_position (GdkDevice       *device,
 					GdkModifierType *mask,
 					gboolean         get_toplevel)
 {
-  GdkScreen *screen;
   GdkWindow *root_window;
   GdkWindow *window;
 
-  screen = gdk_display_get_default_screen (gdk_device_get_display (device));
-  root_window = gdk_screen_get_root_window (screen);
+  root_window = gdk_display_get_root_window (gdk_device_get_display (device));
 
   gdk_broadway_device_query_state (device, root_window, &window, NULL, NULL, win_x, win_y, mask);
 

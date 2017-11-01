@@ -983,7 +983,7 @@ gdk_window_new (GdkDisplay    *display,
   g_return_val_if_fail (attributes != NULL, NULL);
 
   if (!parent)
-    parent = gdk_screen_get_root_window (gdk_display_get_default_screen (display));
+    parent = gdk_display_get_root_window (display);
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
 
@@ -3378,7 +3378,7 @@ gdk_window_get_device_position (GdkWindow       *window,
 GdkWindow *
 gdk_get_default_root_window (void)
 {
-  return gdk_screen_get_root_window (gdk_screen_get_default ());
+  return gdk_display_get_root_window (gdk_display_get_default ());
 }
 
 
@@ -4581,7 +4581,7 @@ gdk_window_get_geometry (GdkWindow *window,
   GdkWindowImplClass *impl_class;
 
   if (!window)
-    window = gdk_screen_get_root_window ((gdk_screen_get_default ()));
+    window = gdk_display_get_root_window ((gdk_display_get_default ()));
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -6162,17 +6162,11 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
 {
   GdkWindowImplClass *impl_class;
   cairo_surface_t *window_surface, *surface;
-  GdkDisplay *display;
-  GdkScreen *screen;
 
   g_return_val_if_fail (window ==NULL || GDK_IS_WINDOW (window), NULL);
 
   if (window == NULL)
-    {
-      display = gdk_display_get_default ();
-      screen = gdk_display_get_default_screen (display);
-      window = gdk_screen_get_root_window (screen);
-    }
+    window = gdk_display_get_root_window (gdk_display_get_default ());
 
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 

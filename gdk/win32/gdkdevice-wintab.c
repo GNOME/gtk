@@ -222,7 +222,7 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
   gint i;
 
   device = GDK_DEVICE (device_wintab);
-  root_window = gdk_screen_get_root_window (gdk_window_get_screen (window));
+  root_window = gdk_display_get_root_window (gdk_window_get_display (window));
   impl_window = _gdk_window_get_impl_window (window);
   temp_x = temp_y = 0;
 

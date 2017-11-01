@@ -2236,8 +2236,7 @@ broadcast_xmessage (GdkDisplay *display,
 		    const char *message)
 {
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
-  GdkScreen *screen = gdk_display_get_default_screen (display);
-  GdkWindow *root_window = gdk_screen_get_root_window (screen);
+  GdkWindow *root_window = gdk_display_get_root_window (display);
   Window xroot_window = GDK_WINDOW_XID (root_window);
   
   Atom type_atom;

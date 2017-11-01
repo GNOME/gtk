@@ -223,7 +223,7 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
 
   display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
   disp_screen = GDK_SCREEN_XNUMBER (screen);
-  root_window = gdk_screen_get_root_window (screen);
+  root_window = gdk_display_get_root_window (gdk_screen_get_display (screen));
   workarea = XInternAtom (display, "_NET_WORKAREA", True);
 
   /* Defaults in case of error */
@@ -923,7 +923,7 @@ _gdk_x11_screen_get_edge_monitors (GdkScreen *screen,
 {
 #ifdef HAVE_XFREE_XINERAMA
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  GdkWindow    *root_window = gdk_screen_get_root_window (screen);
+  GdkWindow    *root_window = gdk_display_get_root_window (gdk_screen_get_display (screen));
   gint          top_most_pos = gdk_window_get_height (root_window);
   gint          left_most_pos = gdk_window_get_width (root_window);
   gint          bottom_most_pos = 0;

@@ -351,7 +351,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
     screen = gdk_display_get_default_screen (display);
-    window = gdk_screen_get_root_window (screen);
+    window = gdk_display_get_root_window (display);
     window->width = message->screen_resize_notify.width;
     window->height = message->screen_resize_notify.height;
 

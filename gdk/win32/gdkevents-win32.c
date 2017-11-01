@@ -2169,7 +2169,7 @@ gdk_event_translate (MSG  *msg,
     {
       /* Apply global filters */
 
-      GdkFilterReturn result = apply_event_filters (window ? window : gdk_screen_get_root_window (gdk_display_get_default_screen (display)),
+      GdkFilterReturn result = apply_event_filters (window ? window : gdk_display_get_root_window (display),
                                                     msg,
                                                     &_gdk_default_filters);
 

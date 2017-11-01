@@ -679,7 +679,6 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
 {
   GdkX11DeviceManagerXI2 *device_manager;
   GdkDisplay *display;
-  GdkScreen *screen;
   GHashTable *masters, *slaves;
   Display *xdisplay;
   XIDeviceInfo *info, *dev;
@@ -736,7 +735,6 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   g_hash_table_destroy (slaves);
 
   /* Connect to hierarchy change events */
-  screen = gdk_display_get_default_screen (display);
   XISetMask (mask, XI_HierarchyChanged);
   XISetMask (mask, XI_DeviceChanged);
   XISetMask (mask, XI_PropertyEvent);
@@ -746,7 +744,7 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   event_mask.mask = mask;
 
   _gdk_x11_device_manager_xi2_select_events (GDK_DEVICE_MANAGER (object),
-                                             GDK_WINDOW_XID (gdk_screen_get_root_window (screen)),
+                                             GDK_WINDOW_XID (gdk_display_get_root_window (display)),
                                              &event_mask);
 }
 

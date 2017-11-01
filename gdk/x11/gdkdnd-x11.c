@@ -564,7 +564,7 @@ gdk_window_cache_new (GdkDisplay *display)
   XWindowAttributes xwa;
   GdkScreen *screen = gdk_display_get_default_screen (display);
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
-  GdkWindow *root_window = gdk_screen_get_root_window (screen);
+  GdkWindow *root_window = gdk_display_get_root_window (display);
   GdkChildInfoX11 *children;
   guint nchildren, i;
 #ifdef HAVE_XCOMPOSITE
@@ -649,7 +649,7 @@ gdk_window_cache_new (GdkDisplay *display)
 static void
 gdk_window_cache_destroy (GdkWindowCache *cache)
 {
-  GdkWindow *root_window = gdk_screen_get_root_window (gdk_display_get_default_screen (cache->display));
+  GdkWindow *root_window = gdk_display_get_root_window (cache->display);
 
   XSelectInput (GDK_WINDOW_XDISPLAY (root_window),
                 GDK_WINDOW_XID (root_window),
@@ -858,7 +858,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
   if (retval)
     return retval;
   else
-    return GDK_WINDOW_XID (gdk_screen_get_root_window (gdk_display_get_default_screen (cache->display)));
+    return GDK_WINDOW_XID (gdk_display_get_root_window (cache->display));
 }
 
 #ifdef G_ENABLE_DEBUG
@@ -2678,7 +2678,7 @@ drag_context_grab (GdkDragContext *context)
   if (!x11_context->ipc_window)
     return FALSE;
 
-  root = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (x11_context->ipc_window));
+  root = gdk_display_get_root_window (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
   seat = gdk_device_get_seat (gdk_drag_context_get_device (context));
 
 #ifdef XINPUT_2
@@ -2767,7 +2767,7 @@ drag_context_ungrab (GdkDragContext *context)
   gdk_seat_ungrab (x11_context->grab_seat);
 
   keyboard = gdk_seat_get_keyboard (x11_context->grab_seat);
-  root = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (x11_context->ipc_window));
+  root = gdk_display_get_root_window (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
   g_clear_object (&x11_context->grab_seat);
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
@@ -3030,7 +3030,7 @@ gdk_dnd_handle_key_event (GdkDragContext    *context,
    * to query it here. We could use XGetModifierMapping, but
    * that would be overkill.
    */
-  root_window = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (x11_context->ipc_window));
+  root_window = gdk_display_get_root_window (GDK_WINDOW_DISPLAY (x11_context->ipc_window));
   gdk_window_get_device_position (root_window, pointer, NULL, NULL, &state);
 
   if (dx != 0 || dy != 0)

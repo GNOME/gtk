@@ -379,10 +379,7 @@ _gdk_x11_window_get_property (GdkWindow   *window,
   g_return_val_if_fail (!window || GDK_WINDOW_IS_X11 (window), FALSE);
 
   if (!window)
-    {
-      GdkScreen *screen = gdk_screen_get_default ();
-      window = gdk_screen_get_root_window (screen);
-    }
+    window = gdk_display_get_root_window (gdk_display_get_default ());
   else if (!GDK_WINDOW_IS_X11 (window))
     return FALSE;
 
@@ -513,12 +510,7 @@ _gdk_x11_window_change_property (GdkWindow    *window,
   g_return_if_fail (!window || GDK_WINDOW_IS_X11 (window));
 
   if (!window)
-    {
-      GdkScreen *screen;
-      
-      screen = gdk_screen_get_default ();
-      window = gdk_screen_get_root_window (screen);
-    }
+    window = gdk_display_get_root_window (gdk_display_get_default ());
   else if (!GDK_WINDOW_IS_X11 (window))
     return;
 
@@ -568,10 +560,7 @@ _gdk_x11_window_delete_property (GdkWindow *window,
   g_return_if_fail (!window || GDK_WINDOW_IS_X11 (window));
 
   if (!window)
-    {
-      GdkScreen *screen = gdk_screen_get_default ();
-      window = gdk_screen_get_root_window (screen);
-    }
+    window = gdk_display_get_root_window (gdk_display_get_default ());
   else if (!GDK_WINDOW_IS_X11 (window))
     return;
 

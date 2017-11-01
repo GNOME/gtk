@@ -1136,7 +1136,7 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
   impl->window_scale = GDK_X11_SCREEN (screen)->window_scale;
 
   /* Always treat foreigns as toplevels */
-  win->parent = gdk_screen_get_root_window (screen);
+  win->parent = gdk_display_get_root_window (display);
 
   win->parent->children = g_list_concat (&win->children_list_node, win->parent->children);
 

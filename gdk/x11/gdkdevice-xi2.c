@@ -244,7 +244,7 @@ gdk_x11_device_xi2_get_state (GdkDevice       *device,
                   GdkWindow *root_window;
                   gint root_x, root_y;
 
-                  root_window = gdk_screen_get_root_window (gdk_display_get_default_screen (gdk_window_get_display (window)));
+                  root_window = gdk_display_get_root_window (gdk_window_get_display (window));
                   /* FIXME: Maybe root coords chaching should happen here */
                   gdk_window_get_origin (window, &root_x, &root_y);
                   _gdk_device_translate_screen_coord (device, window,
@@ -306,7 +306,7 @@ gdk_x11_device_xi2_warp (GdkDevice *device,
   Window dest;
   GdkScreen *screen = gdk_screen_get_default ();
 
-  dest = GDK_WINDOW_XID (gdk_screen_get_root_window (screen));
+  dest = GDK_WINDOW_XID (gdk_display_get_root_window (gdk_device_get_display (device)));
 
   XIWarpPointer (GDK_SCREEN_XDISPLAY (screen),
                  device_xi2->device_id,
@@ -339,7 +339,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   display = gdk_device_get_display (device);
   default_screen = gdk_display_get_default_screen (display);
   if (window == NULL)
-    window = gdk_screen_get_root_window (default_screen);
+    window = gdk_display_get_root_window (display);
   impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
   if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_SLAVE)

@@ -308,6 +308,7 @@ void                gdk_display_emit_opened           (GdkDisplay       *display
 void                gdk_display_setting_changed       (GdkDisplay       *display,
                                                        const char       *name);
 
+GdkWindow *         gdk_display_get_root_window       (GdkDisplay       *display);
 GList *             gdk_display_get_toplevel_windows  (GdkDisplay       *display);
 
 G_END_DECLS
