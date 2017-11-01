@@ -113,7 +113,7 @@ _gdk_broadway_display_open (const gchar *display_name)
   display = g_object_new (GDK_TYPE_BROADWAY_DISPLAY, NULL);
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  _gdk_broadway_display_init_root_window (broadway_display);
+  _gdk_broadway_display_init_root_window (display);
 
   display->device_manager = _gdk_broadway_device_manager_new (display);
 
