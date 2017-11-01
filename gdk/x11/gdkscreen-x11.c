@@ -179,7 +179,7 @@ get_current_desktop (GdkScreen *screen)
                                             gdk_atom_intern_static_string ("_NET_CURRENT_DESKTOP")))
     return workspace;
 
-  display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
+  display = GDK_DISPLAY_XDISPLAY (GDK_SCREEN_DISPLAY (screen));
   win = XRootWindow (display, gdk_x11_screen_get_screen_number (screen));
 
   current_desktop = XInternAtom (display, "_NET_CURRENT_DESKTOP", True);
@@ -220,8 +220,8 @@ gdk_x11_screen_get_work_area (GdkScreen    *screen,
   int             desktop;
   Display        *display;
 
-  display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
-  root_window = gdk_display_get_root_window (gdk_screen_get_display (screen));
+  display = GDK_SCREEN_XDISPLAY (screen);
+  root_window = gdk_display_get_root_window (GDK_SCREEN_DISPLAY (screen));
   workarea = XInternAtom (display, "_NET_WORKAREA", True);
 
   /* Defaults in case of error */
@@ -343,7 +343,7 @@ static gboolean
 init_randr15 (GdkScreen *screen, gboolean *changed)
 {
 #ifdef HAVE_RANDR15
-  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkDisplay *display = GDK_SCREEN_DISPLAY (screen);
   GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   XRRScreenResources *resources;
@@ -528,7 +528,7 @@ static gboolean
 init_randr13 (GdkScreen *screen, gboolean *changed)
 {
 #ifdef HAVE_RANDR
-  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkDisplay *display = GDK_SCREEN_DISPLAY (screen);
   GdkX11Display *x11_display = GDK_X11_DISPLAY (display);
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   XRRScreenResources *resources;
@@ -869,7 +869,7 @@ init_randr_support (GdkScreen *screen)
                 StructureNotifyMask);
 
 #ifdef HAVE_RANDR
-  if (!GDK_X11_DISPLAY (gdk_screen_get_display (screen))->have_randr12)
+  if (!GDK_X11_DISPLAY (GDK_SCREEN_DISPLAY (screen))->have_randr12)
     return;
 
   XRRSelectInput (GDK_SCREEN_XDISPLAY (screen),
@@ -893,7 +893,7 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
 #ifdef HAVE_RANDR
   GdkX11Display *display_x11;
 
-  display_x11 = GDK_X11_DISPLAY (gdk_screen_get_display (screen));
+  display_x11 = GDK_X11_DISPLAY (GDK_SCREEN_DISPLAY (screen));
 
   if (display_x11->have_randr13 && event->type == ConfigureNotify)
     return;
@@ -916,7 +916,7 @@ _gdk_x11_screen_get_edge_monitors (GdkScreen *screen,
 {
 #ifdef HAVE_XFREE_XINERAMA
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  GdkWindow    *root_window = gdk_display_get_root_window (gdk_screen_get_display (screen));
+  GdkWindow    *root_window = gdk_display_get_root_window (GDK_SCREEN_DISPLAY (screen));
   gint          top_most_pos = gdk_window_get_height (root_window);
   gint          left_most_pos = gdk_window_get_width (root_window);
   gint          bottom_most_pos = 0;

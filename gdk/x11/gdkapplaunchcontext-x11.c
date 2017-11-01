@@ -244,7 +244,7 @@ add_startup_timeout (GdkScreen  *screen,
     }
 
   sn_data = g_new (StartupNotificationData, 1);
-  sn_data->display = g_object_ref (gdk_screen_get_display (screen));
+  sn_data->display = g_object_ref (GDK_SCREEN_DISPLAY (screen));
   sn_data->startup_id = g_strdup (startup_id);
   g_get_current_time (&sn_data->time);
 

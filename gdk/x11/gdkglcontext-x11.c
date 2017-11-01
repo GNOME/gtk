@@ -785,7 +785,7 @@ gdk_x11_gl_context_init (GdkX11GLContext *self)
 gboolean
 gdk_x11_screen_init_gl (GdkScreen *screen)
 {
-  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkDisplay *display = GDK_SCREEN_DISPLAY (screen);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   Display *dpy;
   int error_base, event_base;

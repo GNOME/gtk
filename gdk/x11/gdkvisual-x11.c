@@ -268,7 +268,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
                                       RootWindow (x11_screen->xdisplay, x11_screen->screen_num),
                                       xvisual,
                                       AllocNone);
-          gdk_display_setup_window_visual (gdk_screen_get_display (screen),
+          gdk_display_setup_window_visual (GDK_SCREEN_DISPLAY (screen),
                                            x11_screen->rgba_visual->depth,
                                            GDK_X11_VISUAL (x11_screen->rgba_visual)->xvisual,
                                            colormap,
@@ -276,7 +276,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen,
         }
       else
         {
-          gdk_display_setup_window_visual (gdk_screen_get_display (screen),
+          gdk_display_setup_window_visual (GDK_SCREEN_DISPLAY (screen),
                                            DefaultDepth (x11_screen->xdisplay, x11_screen->screen_num),
                                            DefaultVisual (x11_screen->xdisplay, x11_screen->screen_num),
                                            DefaultColormap (x11_screen->xdisplay, x11_screen->screen_num),
