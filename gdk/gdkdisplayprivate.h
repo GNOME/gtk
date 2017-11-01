@@ -117,7 +117,6 @@ struct _GdkDisplayClass
   const char *vk_extension_name; /* Name of required windowing vulkan extension or %NULL (default) if Vulkan isn't supported */
 
   const gchar *              (*get_name)           (GdkDisplay *display);
-  GdkScreen *                (*get_default_screen) (GdkDisplay *display);
   void                       (*beep)               (GdkDisplay *display);
   void                       (*sync)               (GdkDisplay *display);
   void                       (*flush)              (GdkDisplay *display);

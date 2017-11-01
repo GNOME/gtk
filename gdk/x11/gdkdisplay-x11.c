@@ -1859,12 +1859,6 @@ gdk_x11_display_get_name (GdkDisplay *display)
   return (gchar *) DisplayString (GDK_X11_DISPLAY (display)->xdisplay);
 }
 
-static GdkScreen *
-gdk_x11_display_get_default_screen (GdkDisplay *display)
-{
-  return GDK_X11_DISPLAY (display)->screen;
-}
-
 gboolean
 _gdk_x11_display_is_root_window (GdkDisplay *display,
 				 Window      xroot_window)
@@ -3144,7 +3138,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
 #endif
 
   display_class->get_name = gdk_x11_display_get_name;
-  display_class->get_default_screen = gdk_x11_display_get_default_screen;
   display_class->beep = gdk_x11_display_beep;
   display_class->sync = gdk_x11_display_sync;
   display_class->flush = gdk_x11_display_flush;

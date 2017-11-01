@@ -530,14 +530,6 @@ gdk_win32_display_get_name (GdkDisplay *display)
   return display_name_cache;
 }
 
-static GdkScreen *
-gdk_win32_display_get_default_screen (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
-
-  return GDK_WIN32_DISPLAY (display)->screen;
-}
-
 static GdkWindow *
 gdk_win32_display_get_default_group (GdkDisplay *display)
 {
@@ -1256,7 +1248,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->window_type = GDK_TYPE_WIN32_WINDOW;
 
   display_class->get_name = gdk_win32_display_get_name;
-  display_class->get_default_screen = gdk_win32_display_get_default_screen;
   display_class->beep = gdk_win32_display_beep;
   display_class->sync = gdk_win32_display_sync;
   display_class->flush = gdk_win32_display_flush;

@@ -701,14 +701,6 @@ gdk_wayland_display_get_name (GdkDisplay *display)
   return name;
 }
 
-static GdkScreen *
-gdk_wayland_display_get_default_screen (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_WAYLAND_DISPLAY (display)->screen;
-}
-
 void
 gdk_wayland_display_system_bell (GdkDisplay *display,
                                  GdkWindow  *window)
@@ -1012,7 +1004,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
 #endif
 
   display_class->get_name = gdk_wayland_display_get_name;
-  display_class->get_default_screen = gdk_wayland_display_get_default_screen;
   display_class->beep = gdk_wayland_display_beep;
   display_class->sync = gdk_wayland_display_sync;
   display_class->flush = gdk_wayland_display_flush;

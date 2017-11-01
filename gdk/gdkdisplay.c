@@ -1156,24 +1156,6 @@ gdk_display_get_name (GdkDisplay *display)
 }
 
 /**
- * gdk_display_get_default_screen:
- * @display: a #GdkDisplay
- *
- * Get the default #GdkScreen for @display.
- *
- * Returns: (transfer none): the default #GdkScreen object for @display
- *
- * Since: 2.2
- */
-GdkScreen *
-gdk_display_get_default_screen (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_DISPLAY_GET_CLASS (display)->get_default_screen (display);
-}
-
-/**
  * gdk_display_beep:
  * @display: a #GdkDisplay
  *

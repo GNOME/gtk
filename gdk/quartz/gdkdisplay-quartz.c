@@ -92,12 +92,6 @@ gdk_quartz_display_get_name (GdkDisplay *display)
   return display_name;
 }
 
-static GdkScreen *
-gdk_quartz_display_get_default_screen (GdkDisplay *display)
-{
-  return _gdk_screen;
-}
-
 static void
 gdk_quartz_display_beep (GdkDisplay *display)
 {
@@ -266,7 +260,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->window_type = GDK_TYPE_QUARTZ_WINDOW;
 
   display_class->get_name = gdk_quartz_display_get_name;
-  display_class->get_default_screen = gdk_quartz_display_get_default_screen;
   display_class->beep = gdk_quartz_display_beep;
   display_class->sync = gdk_quartz_display_sync;
   display_class->flush = gdk_quartz_display_flush;

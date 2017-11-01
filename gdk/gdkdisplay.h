@@ -48,9 +48,6 @@ GDK_AVAILABLE_IN_ALL
 const gchar * gdk_display_get_name         (GdkDisplay *display);
 
 GDK_AVAILABLE_IN_ALL
-GdkScreen * gdk_display_get_default_screen (GdkDisplay  *display);
-
-GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_device_is_grabbed  (GdkDisplay  *display,
                                             GdkDevice   *device);
 GDK_AVAILABLE_IN_ALL
