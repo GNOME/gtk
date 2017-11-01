@@ -205,13 +205,10 @@ gtk_switch_multipress_gesture_released (GtkGestureMultiPress *gesture,
                                         GtkSwitch            *sw)
 {
   GdkEventSequence *sequence;
-  GdkRectangle own_alloc;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
-  gtk_widget_get_own_allocation (GTK_WIDGET (sw), &own_alloc);
-
-  if (gdk_rectangle_contains_point (&own_alloc, x, y) &&
+  if (gtk_widget_contains (GTK_WIDGET (sw), x, y) &&
       gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
     gtk_switch_begin_toggle_animation (sw);
 }
