@@ -348,11 +348,10 @@ gdk_wayland_window_update_size (GdkWindow *window,
 }
 
 GdkWindow *
-_gdk_wayland_screen_create_root_window (GdkScreen *screen,
-                                        int        width,
-                                        int        height)
+_gdk_wayland_display_create_root_window (GdkDisplay *display,
+                                         int        width,
+                                         int        height)
 {
-  GdkDisplay *display = gdk_screen_get_display (screen);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWindow *window;
   GdkWindowImplWayland *impl;
@@ -385,7 +384,6 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
   window->height = height;
   window->viewable = TRUE;
 
-  /* see init_randr_support() in gdkscreen-wayland.c */
   window->event_mask = GDK_STRUCTURE_MASK;
 
   return window;
@@ -518,7 +516,7 @@ frame_callback (void               *data,
       /* We pick a random output out of the outputs that the window touches
        * The rate here is in milli-hertz */
       int refresh_rate =
-        _gdk_wayland_screen_get_output_refresh_rate (display_wayland->screen,
+        gdk_wayland_display_get_output_refresh_rate (display_wayland,
                                                      impl->display_server.outputs->data);
       if (refresh_rate != 0)
         timings->refresh_interval = G_GINT64_CONSTANT(1000000000) / refresh_rate;
@@ -633,8 +631,7 @@ window_update_scale (GdkWindow *window)
   scale = 1;
   for (l = impl->display_server.outputs; l != NULL; l = l->next)
     {
-      guint32 output_scale =
-        _gdk_wayland_screen_get_output_scale (display_wayland->screen, l->data);
+      guint32 output_scale = gdk_wayland_display_get_output_scale (display_wayland, l->data);
       scale = MAX (scale, output_scale);
     }
 

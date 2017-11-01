@@ -4521,9 +4521,7 @@ pointer_surface_update_scale (GdkDevice *device)
   scale = 1;
   for (l = pointer->pointer_surface_outputs; l != NULL; l = l->next)
     {
-      guint32 output_scale =
-        _gdk_wayland_screen_get_output_scale (display_wayland->screen,
-                                              l->data);
+      guint32 output_scale = gdk_wayland_display_get_output_scale (display_wayland, l->data);
       scale = MAX (scale, output_scale);
     }
 

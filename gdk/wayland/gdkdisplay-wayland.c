@@ -33,10 +33,11 @@
 #include <sys/syscall.h>
 
 #include <glib.h>
+#include <gio/gio.h>
 #include "gdkwayland.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-wayland.h"
-#include "gdkscreen.h"
+#include "gdkmonitor-wayland.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanager.h"
@@ -50,6 +51,8 @@
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v1-client-protocol.h>
 #include <wayland/server-decoration-client-protocol.h>
+
+#include "wm-button-layout-translation.h"
 
 /**
  * SECTION:wayland_interaction
@@ -87,6 +90,7 @@
 #define MIN_SYSTEM_BELL_DELAY_MS 20
 
 #define GTK_SHELL1_VERSION       2
+#define OUTPUT_VERSION_WITH_DONE 2
 
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 
@@ -366,6 +370,14 @@ gdk_wayland_display_prefers_ssd (GdkDisplay *display)
   return FALSE;
 }
 
+static void gdk_wayland_display_set_has_gtk_shell (GdkWaylandDisplay *display_wayland);
+static void gdk_wayland_display_add_output        (GdkWaylandDisplay *display_wayland,
+                                                   guint32            id,
+                                                   struct wl_output  *output,
+                                                   guint32            version);
+static void gdk_wayland_display_remove_output     (GdkWaylandDisplay *display_wayland,
+                                                   guint32            id);
+
 static void
 gdk_registry_handle_global (void               *data,
                             struct wl_registry *registry,
@@ -404,17 +416,17 @@ gdk_registry_handle_global (void               *data,
   else if (strcmp (interface, "gtk_shell1") == 0)
     {
       display_wayland->gtk_shell =
-        wl_registry_bind(display_wayland->wl_registry, id,
-                         &gtk_shell1_interface,
-                         MIN (version, GTK_SHELL1_VERSION));
-      _gdk_wayland_screen_set_has_gtk_shell (display_wayland->screen);
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &gtk_shell1_interface,
+                          MIN (version, GTK_SHELL1_VERSION));
+      gdk_wayland_display_set_has_gtk_shell (display_wayland);
       display_wayland->gtk_shell_version = version;
     }
   else if (strcmp (interface, "wl_output") == 0)
     {
       output =
-        wl_registry_bind (display_wayland->wl_registry, id, &wl_output_interface, MIN (version, 2));
-      _gdk_wayland_screen_add_output (display_wayland->screen, id, output, MIN (version, 2));
+       wl_registry_bind (display_wayland->wl_registry, id, &wl_output_interface, MIN (version, 2));
+      gdk_wayland_display_add_output (display_wayland, id, output, MIN (version, 2));
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
   else if (strcmp (interface, "wl_seat") == 0)
@@ -518,7 +530,7 @@ gdk_registry_handle_global_remove (void               *data,
 
   GDK_NOTE (MISC, g_message ("remove global %u", id));
   _gdk_wayland_device_manager_remove_seat (display->device_manager, id);
-  _gdk_wayland_screen_remove_output (display_wayland->screen, id);
+  gdk_wayland_display_remove_output (display_wayland, id);
 
   g_hash_table_remove (display_wayland->known_globals, GUINT_TO_POINTER (id));
 
@@ -559,6 +571,8 @@ _gdk_wayland_display_prepare_cursor_themes (GdkWaylandDisplay *display_wayland)
   postpone_on_globals_closure (display_wayland, closure);
 }
 
+static void init_settings (GdkDisplay *display);
+
 GdkDisplay *
 _gdk_wayland_display_open (const gchar *display_name)
 {
@@ -586,8 +600,10 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   display_wayland->wl_display = wl_display;
-  display_wayland->screen = _gdk_wayland_screen_new (display);
+  display_wayland->root_window = _gdk_wayland_display_create_root_window (display, 0, 0);
   display_wayland->event_source = _gdk_wayland_display_event_source_new (display);
+
+  init_settings (display);
 
   display_wayland->known_globals =
     g_hash_table_new_full (NULL, NULL, NULL, g_free);
@@ -633,7 +649,8 @@ gdk_wayland_display_dispose (GObject *object)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
 
-  _gdk_screen_close (display_wayland->screen);
+  if (display_wayland->root_window)
+    _gdk_window_destroy (display_wayland->root_window, FALSE);
 
   if (display_wayland->event_source)
     {
@@ -669,7 +686,8 @@ gdk_wayland_display_finalize (GObject *object)
 
   _gdk_wayland_display_finalize_cursors (display_wayland);
 
-  g_object_unref (display_wayland->screen);
+  if (display_wayland->root_window)
+    g_object_unref (display_wayland->root_window);
 
   g_free (display_wayland->startup_notification_id);
   g_free (display_wayland->cursor_theme_name);
@@ -685,6 +703,8 @@ gdk_wayland_display_finalize (GObject *object)
     }
 
   g_ptr_array_free (display_wayland->monitors, TRUE);
+
+  g_hash_table_destroy (display_wayland->settings);
 
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->finalize (object);
 }
@@ -973,19 +993,15 @@ gdk_wayland_display_get_monitor_at_window (GdkDisplay *display,
   return NULL;
 }
 
-static gboolean
-gdk_wayland_display_get_setting (GdkDisplay  *display,
-                                 const gchar *name,
-                                 GValue      *value)
-{
-  return gdk_wayland_screen_get_setting (GDK_WAYLAND_DISPLAY (display)->screen, name, value);
-}
-
 static GdkWindow *
 gdk_wayland_display_get_root_window (GdkDisplay *display)
 {
-  return gdk_wayland_screen_get_root_window (GDK_WAYLAND_DISPLAY (display)->screen);
+  return GDK_WAYLAND_DISPLAY (display)->root_window;
 }
+
+static gboolean gdk_wayland_display_get_setting (GdkDisplay *display,
+                                                 const char *name,
+                                                 GValue     *value);
 
 static void
 gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
@@ -1382,4 +1398,740 @@ gdk_wayland_display_get_selection (GdkDisplay *display)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   return display_wayland->selection;
+}
+
+
+typedef enum
+{
+  GSD_FONT_ANTIALIASING_MODE_NONE,
+  GSD_FONT_ANTIALIASING_MODE_GRAYSCALE,
+  GSD_FONT_ANTIALIASING_MODE_RGBA
+} GsdFontAntialiasingMode;
+
+typedef enum
+{
+  GSD_FONT_HINTING_NONE,
+  GSD_FONT_HINTING_SLIGHT,
+  GSD_FONT_HINTING_MEDIUM,
+  GSD_FONT_HINTING_FULL
+} GsdFontHinting;
+
+typedef enum
+{
+  GSD_FONT_RGBA_ORDER_RGBA,
+  GSD_FONT_RGBA_ORDER_RGB,
+  GSD_FONT_RGBA_ORDER_BGR,
+  GSD_FONT_RGBA_ORDER_VRGB,
+  GSD_FONT_RGBA_ORDER_VBGR
+} GsdFontRgbaOrder;
+
+static gdouble
+get_dpi_from_gsettings (GdkWaylandDisplay *display_wayland)
+{
+  GSettings *settings;
+  gdouble factor;
+
+  settings = g_hash_table_lookup (display_wayland->settings,
+                                  "org.gnome.desktop.interface");
+  if (settings != NULL)
+    factor = g_settings_get_double (settings, "text-scaling-factor");
+  else
+    factor = 1.0;
+
+  return 96.0 * factor;
+}
+
+static void
+update_xft_settings (GdkDisplay *display)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GSettings *settings;
+  GsdFontAntialiasingMode antialiasing;
+  GsdFontHinting hinting;
+  GsdFontRgbaOrder order;
+  gboolean use_rgba = FALSE;
+  GsdXftSettings xft_settings;
+
+  settings = g_hash_table_lookup (display_wayland->settings,
+                                  "org.gnome.settings-daemon.plugins.xsettings");
+
+  if (settings)
+    {
+      antialiasing = g_settings_get_enum (settings, "antialiasing");
+      hinting = g_settings_get_enum (settings, "hinting");
+      order = g_settings_get_enum (settings, "rgba-order");
+    }
+  else
+    {
+      antialiasing = GSD_FONT_ANTIALIASING_MODE_GRAYSCALE;
+      hinting = GSD_FONT_HINTING_MEDIUM;
+      order = GSD_FONT_RGBA_ORDER_RGB;
+    }
+
+  xft_settings.hinting = (hinting != GSD_FONT_HINTING_NONE);
+  xft_settings.dpi = get_dpi_from_gsettings (display_wayland) * 1024; /* Xft wants 1/1024ths of an inch */
+
+  switch (hinting)
+    {
+    case GSD_FONT_HINTING_NONE:
+      xft_settings.hintstyle = "hintnone";
+      break;
+    case GSD_FONT_HINTING_SLIGHT:
+      xft_settings.hintstyle = "hintslight";
+      break;
+    case GSD_FONT_HINTING_MEDIUM:
+      xft_settings.hintstyle = "hintmedium";
+      break;
+    case GSD_FONT_HINTING_FULL:
+    default:
+      xft_settings.hintstyle = "hintfull";
+      break;
+    }
+
+  switch (order)
+    {
+    case GSD_FONT_RGBA_ORDER_RGBA:
+      xft_settings.rgba = "rgba";
+      break;
+    default:
+    case GSD_FONT_RGBA_ORDER_RGB:
+      xft_settings.rgba = "rgb";
+      break;
+    case GSD_FONT_RGBA_ORDER_BGR:
+      xft_settings.rgba = "bgr";
+      break;
+    case GSD_FONT_RGBA_ORDER_VRGB:
+      xft_settings.rgba = "vrgb";
+      break;
+    case GSD_FONT_RGBA_ORDER_VBGR:
+      xft_settings.rgba = "vbgr";
+      break;
+    }
+
+  switch (antialiasing)
+   {
+   default:
+   case GSD_FONT_ANTIALIASING_MODE_NONE:
+     xft_settings.antialias = FALSE;
+     break;
+   case GSD_FONT_ANTIALIASING_MODE_GRAYSCALE:
+     xft_settings.antialias = TRUE;
+     break;
+   case GSD_FONT_ANTIALIASING_MODE_RGBA:
+     xft_settings.antialias = TRUE;
+     use_rgba = TRUE;
+   }
+
+  if (!use_rgba)
+    xft_settings.rgba = "none";
+
+  if (display_wayland->xft_settings.antialias != xft_settings.antialias)
+    {
+      display_wayland->xft_settings.antialias = xft_settings.antialias;
+      gdk_display_setting_changed (display, "gtk-xft-antialias");
+    }
+
+  if (display_wayland->xft_settings.hinting != xft_settings.hinting)
+    {
+      display_wayland->xft_settings.hinting = xft_settings.hinting;
+      gdk_display_setting_changed (display, "gtk-xft-hinting");
+    }
+
+  if (display_wayland->xft_settings.hintstyle != xft_settings.hintstyle)
+    {
+      display_wayland->xft_settings.hintstyle = xft_settings.hintstyle;
+      gdk_display_setting_changed (display, "gtk-xft-hintstyle");
+    }
+
+  if (display_wayland->xft_settings.rgba != xft_settings.rgba)
+    {
+      display_wayland->xft_settings.rgba = xft_settings.rgba;
+      gdk_display_setting_changed (display, "gtk-xft-rgba");
+    }
+
+  if (display_wayland->xft_settings.dpi != xft_settings.dpi)
+    {
+      display_wayland->xft_settings.dpi = xft_settings.dpi;
+      gdk_display_setting_changed (display, "gtk-xft-dpi");
+    }
+}
+
+#define WM_SETTINGS_SCHEMA "org.gnome.desktop.wm.preferences"
+#define CLASSIC_WM_SETTINGS_SCHEMA "org.gnome.shell.extensions.classic-overrides"
+
+typedef struct _TranslationEntry TranslationEntry;
+struct _TranslationEntry {
+  gboolean valid;
+  const gchar *schema;
+  const gchar *key;
+  const gchar *setting;
+  GType type;
+  union {
+    const gchar *s;
+    gint         i;
+    gboolean     b;
+  } fallback;
+};
+
+static TranslationEntry translations[] = {
+  { FALSE, "org.gnome.desktop.interface", "gtk-theme", "gtk-theme-name" , G_TYPE_STRING, { .s = "Adwaita" } },
+  { FALSE, "org.gnome.desktop.interface", "icon-theme", "gtk-icon-theme-name", G_TYPE_STRING, { .s = "gnome" } },
+  { FALSE, "org.gnome.desktop.interface", "cursor-theme", "gtk-cursor-theme-name", G_TYPE_STRING, { .s = "Adwaita" } },
+  { FALSE, "org.gnome.desktop.interface", "cursor-size", "gtk-cursor-theme-size", G_TYPE_INT, { .i = 32 } },
+  { FALSE, "org.gnome.desktop.interface", "font-name", "gtk-font-name", G_TYPE_STRING, { .s = "Cantarell 11" } },
+  { FALSE, "org.gnome.desktop.interface", "cursor-blink", "gtk-cursor-blink", G_TYPE_BOOLEAN,  { .b = TRUE } },
+  { FALSE, "org.gnome.desktop.interface", "cursor-blink-time", "gtk-cursor-blink-time", G_TYPE_INT, { .i = 1200 } },
+  { FALSE, "org.gnome.desktop.interface", "cursor-blink-timeout", "gtk-cursor-blink-timeout", G_TYPE_INT, { .i = 3600 } },
+  { FALSE, "org.gnome.desktop.interface", "gtk-im-module", "gtk-im-module", G_TYPE_STRING, { .s = "simple" } },
+  { FALSE, "org.gnome.desktop.interface", "enable-animations", "gtk-enable-animations", G_TYPE_BOOLEAN, { .b = TRUE } },
+  { FALSE, "org.gnome.desktop.interface", "gtk-enable-primary-paste", "gtk-enable-primary-paste", G_TYPE_BOOLEAN, { .b = TRUE } },
+  { FALSE, "org.gnome.settings-daemon.peripherals.mouse", "double-click", "gtk-double-click-time", G_TYPE_INT, { .i = 400 } },
+  { FALSE, "org.gnome.settings-daemon.peripherals.mouse", "drag-threshold", "gtk-dnd-drag-threshold", G_TYPE_INT, {.i = 8 } },
+  { FALSE, "org.gnome.desktop.sound", "theme-name", "gtk-sound-theme-name", G_TYPE_STRING, { .s = "freedesktop" } },
+  { FALSE, "org.gnome.desktop.sound", "event-sounds", "gtk-enable-event-sounds", G_TYPE_BOOLEAN, { .b = TRUE } },
+  { FALSE, "org.gnome.desktop.sound", "input-feedback-sounds", "gtk-enable-input-feedback-sounds", G_TYPE_BOOLEAN, { . b = FALSE } },
+  { FALSE, "org.gnome.desktop.privacy", "recent-files-max-age", "gtk-recent-files-max-age", G_TYPE_INT, { .i = 30 } },
+  { FALSE, "org.gnome.desktop.privacy", "remember-recent-files",    "gtk-recent-files-enabled", G_TYPE_BOOLEAN, { .b = TRUE } },
+  { FALSE, WM_SETTINGS_SCHEMA, "button-layout",    "gtk-decoration-layout", G_TYPE_STRING, { .s = "menu:close" } },
+  { FALSE, CLASSIC_WM_SETTINGS_SCHEMA, "button-layout",   "gtk-decoration-layout", G_TYPE_STRING, { .s = "menu:close" } },
+  { FALSE, "org.gnome.settings-daemon.plugins.xsettings", "antialiasing", "gtk-xft-antialias", G_TYPE_NONE, { .i = 0 } },
+  { FALSE, "org.gnome.settings-daemon.plugins.xsettings", "hinting", "gtk-xft-hinting", G_TYPE_NONE, { .i = 0 } },
+  { FALSE, "org.gnome.settings-daemon.plugins.xsettings", "hinting", "gtk-xft-hintstyle", G_TYPE_NONE, { .i = 0 } },
+  { FALSE, "org.gnome.settings-daemon.plugins.xsettings", "rgba-order", "gtk-xft-rgba", G_TYPE_NONE, { .i = 0 } },
+  { FALSE, "org.gnome.desktop.interface", "text-scaling-factor", "gtk-xft-dpi" , G_TYPE_NONE, { .i = 0 } },
+  { FALSE, "org.gnome.desktop.wm.preferences", "action-double-click-titlebar", "gtk-titlebar-double-click", G_TYPE_STRING, { .s = "toggle-maximize" } },
+  { FALSE, "org.gnome.desktop.wm.preferences", "action-middle-click-titlebar", "gtk-titlebar-middle-click", G_TYPE_STRING, { .s = "none" } },
+  { FALSE, "org.gnome.desktop.wm.preferences", "action-right-click-titlebar", "gtk-titlebar-right-click", G_TYPE_STRING, { .s = "menu" } },
+  { FALSE, "org.gnome.desktop.a11y", "always-show-text-caret", "gtk-keynav-use-caret", G_TYPE_BOOLEAN, { .b = FALSE } }
+};
+
+static TranslationEntry *
+find_translation_entry_by_key (GSettings  *settings,
+                               const char *key)
+{
+  guint i;
+  char *schema;
+
+  g_object_get (settings, "schema", &schema, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (translations); i++)
+    {
+      if (g_str_equal (schema, translations[i].schema) &&
+          g_str_equal (key, translations[i].key))
+        {
+          g_free (schema);
+          return &translations[i];
+        }
+    }
+
+  g_free (schema);
+
+  return NULL;
+}
+
+static TranslationEntry *
+find_translation_entry_by_setting (const char *setting)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (translations); i++)
+    {
+      if (g_str_equal (setting, translations[i].setting))
+        return &translations[i];
+    }
+
+  return NULL;
+}
+
+static void
+settings_changed (GSettings  *settings,
+                  const char *key,
+                  GdkDisplay *display)
+{
+  TranslationEntry *entry;
+
+  entry = find_translation_entry_by_key (settings, key);
+
+  if (entry != NULL)
+    {
+      if (entry->type != G_TYPE_NONE)
+        gdk_display_setting_changed (display, entry->setting);
+      else
+        update_xft_settings (display);
+    }
+}
+
+static void
+init_settings (GdkDisplay *display)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GSettingsSchemaSource *source;
+  GSettingsSchema *schema;
+  GSettings *settings;
+  gint i;
+
+  display_wayland->settings = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
+
+  source = g_settings_schema_source_get_default ();
+  if (source == NULL)
+    return;
+
+  for (i = 0; i < G_N_ELEMENTS (translations); i++)
+    {
+      schema = g_settings_schema_source_lookup (source, translations[i].schema, TRUE);
+      if (!schema)
+        continue;
+
+      if (g_hash_table_lookup (display_wayland->settings, (gpointer)translations[i].schema) == NULL)
+        {
+          settings = g_settings_new_full (schema, NULL, NULL);
+          g_signal_connect (settings, "changed",
+                            G_CALLBACK (settings_changed), display);
+          g_hash_table_insert (display_wayland->settings, (gpointer)translations[i].schema, settings);
+        }
+
+      if (g_settings_schema_has_key (schema, translations[i].key))
+        translations[i].valid = TRUE;
+
+      g_settings_schema_unref (schema);
+    }
+
+  update_xft_settings (display);
+}
+
+static void
+gtk_shell_handle_capabilities (void              *data,
+                               struct gtk_shell1 *shell,
+                               uint32_t           capabilities)
+{
+  GdkDisplay *display = data;
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (data);
+
+  display_wayland->shell_capabilities = capabilities;
+
+  gdk_display_setting_changed (display, "gtk-shell-shows-app-menu");
+  gdk_display_setting_changed (display, "gtk-shell-shows-menubar");
+  gdk_display_setting_changed (display, "gtk-shell-shows-desktop");
+}
+
+struct gtk_shell1_listener gdk_display_gtk_shell_listener = {
+  gtk_shell_handle_capabilities
+};
+
+static void
+gdk_wayland_display_set_has_gtk_shell (GdkWaylandDisplay *display_wayland)
+{
+  gtk_shell1_add_listener (display_wayland->gtk_shell,
+                           &gdk_display_gtk_shell_listener,
+                           display_wayland);
+}
+
+static void
+set_value_from_entry (GdkDisplay       *display,
+                      TranslationEntry *entry,
+                      GValue           *value)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GSettings *settings;
+
+  settings = (GSettings *)g_hash_table_lookup (display_wayland->settings, entry->schema);
+  switch (entry->type)
+    {
+    case G_TYPE_STRING:
+      if (settings && entry->valid)
+        {
+          gchar *s;
+          s = g_settings_get_string (settings, entry->key);
+          g_value_set_string (value, s);
+          g_free (s);
+        }
+      else
+        {
+          g_value_set_static_string (value, entry->fallback.s);
+        }
+      break;
+    case G_TYPE_INT:
+      g_value_set_int (value, settings && entry->valid
+                              ? g_settings_get_int (settings, entry->key)
+                              : entry->fallback.i);
+      break;
+    case G_TYPE_BOOLEAN:
+      g_value_set_boolean (value, settings && entry->valid
+                                  ? g_settings_get_boolean (settings, entry->key)
+                                  : entry->fallback.b);
+      break;
+    case G_TYPE_NONE:
+      if (g_str_equal (entry->setting, "gtk-xft-antialias"))
+        g_value_set_int (value, display_wayland->xft_settings.antialias);
+      else if (g_str_equal (entry->setting, "gtk-xft-hinting"))
+        g_value_set_int (value, display_wayland->xft_settings.hinting);
+      else if (g_str_equal (entry->setting, "gtk-xft-hintstyle"))
+        g_value_set_static_string (value, display_wayland->xft_settings.hintstyle);
+      else if (g_str_equal (entry->setting, "gtk-xft-rgba"))
+        g_value_set_static_string (value, display_wayland->xft_settings.rgba);
+      else if (g_str_equal (entry->setting, "gtk-xft-dpi"))
+        g_value_set_int (value, display_wayland->xft_settings.dpi);
+      else
+        g_assert_not_reached ();
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+set_decoration_layout_from_entry (GdkDisplay       *display,
+                                  TranslationEntry *entry,
+                                  GValue           *value)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GSettings *settings = NULL;
+  const char *session;
+
+  /* Hack: until we get session-dependent defaults in GSettings,
+   *       swap out the usual schema for the "classic" one when
+   *       running in classic mode
+   */
+  session = g_getenv ("XDG_CURRENT_DESKTOP");
+  if (session && strstr (session, "GNOME-Classic"))
+    settings = (GSettings *)g_hash_table_lookup (display_wayland->settings, CLASSIC_WM_SETTINGS_SCHEMA);
+
+  if (settings == NULL)
+    settings = (GSettings *)g_hash_table_lookup (display_wayland->settings, WM_SETTINGS_SCHEMA);
+
+  if (settings)
+    {
+      gchar *s = g_settings_get_string (settings, entry->key);
+
+      translate_wm_button_layout_to_gtk (s);
+      g_value_set_string (value, s);
+
+      g_free (s);
+    }
+  else
+    {
+      g_value_set_static_string (value, entry->fallback.s);
+    }
+}
+
+static gboolean
+set_capability_setting (GdkDisplay                *display,
+                        GValue                    *value,
+                        enum gtk_shell1_capability test)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  g_value_set_boolean (value, (display_wayland->shell_capabilities & test) == test);
+
+  return TRUE;
+}
+
+static gboolean
+gdk_wayland_display_get_setting (GdkDisplay *display,
+                                 const char *name,
+                                 GValue     *value)
+{
+  TranslationEntry *entry;
+
+  entry = find_translation_entry_by_setting (name);
+  if (entry != NULL)
+    {
+      if (strcmp (name, "gtk-decoration-layout") == 0)
+        set_decoration_layout_from_entry (display, entry, value);
+      else
+        set_value_from_entry (display, entry, value);
+      return TRUE;
+   }
+
+  if (strcmp (name, "gtk-shell-shows-app-menu") == 0)
+    return set_capability_setting (display, value, GTK_SHELL1_CAPABILITY_GLOBAL_APP_MENU);
+
+  if (strcmp (name, "gtk-shell-shows-menubar") == 0)
+    return set_capability_setting (display, value, GTK_SHELL1_CAPABILITY_GLOBAL_MENU_BAR);
+
+  if (strcmp (name, "gtk-shell-shows-desktop") == 0)
+    return set_capability_setting (display, value, GTK_SHELL1_CAPABILITY_DESKTOP_ICONS);
+
+  if (strcmp (name, "gtk-dialogs-use-header") == 0)
+    {
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+#ifdef G_ENABLE_DEBUG
+
+static const char *
+subpixel_to_string (int layout)
+{
+  int i;
+  struct { int layout; const char *name; } layouts[] = {
+    { WL_OUTPUT_SUBPIXEL_UNKNOWN, "unknown" },
+    { WL_OUTPUT_SUBPIXEL_NONE, "none" },
+    { WL_OUTPUT_SUBPIXEL_HORIZONTAL_RGB, "rgb" },
+    { WL_OUTPUT_SUBPIXEL_HORIZONTAL_BGR, "bgr" },
+    { WL_OUTPUT_SUBPIXEL_VERTICAL_RGB, "vrgb" },
+    { WL_OUTPUT_SUBPIXEL_VERTICAL_BGR, "vbgr" },
+    { 0xffffffff, NULL }
+  };
+
+  for (i = 0; layouts[i].name; i++)
+    {
+      if (layouts[i].layout == layout)
+        return layouts[i].name;
+    }
+  return NULL;
+}
+
+static const char *
+transform_to_string (int transform)
+{
+  int i;
+  struct { int transform; const char *name; } transforms[] = {
+    { WL_OUTPUT_TRANSFORM_NORMAL, "normal" },
+    { WL_OUTPUT_TRANSFORM_90, "90" },
+    { WL_OUTPUT_TRANSFORM_180, "180" },
+    { WL_OUTPUT_TRANSFORM_270, "270" },
+    { WL_OUTPUT_TRANSFORM_FLIPPED, "flipped" },
+    { WL_OUTPUT_TRANSFORM_FLIPPED_90, "flipped 90" },
+    { WL_OUTPUT_TRANSFORM_FLIPPED_180, "flipped 180" },
+    { WL_OUTPUT_TRANSFORM_FLIPPED_270, "flipped 270" },
+    { 0xffffffff, NULL }
+  };
+
+  for (i = 0; transforms[i].name; i++)
+    {
+      if (transforms[i].transform == transform)
+        return transforms[i].name;
+    }
+  return NULL;
+}
+
+#endif
+
+static void
+output_handle_geometry (void             *data,
+                        struct wl_output *wl_output,
+                        int               x,
+                        int               y,
+                        int               physical_width,
+                        int               physical_height,
+                        int               subpixel,
+                        const char       *make,
+                        const char       *model,
+                        int32_t           transform)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle geometry output %d, position %d %d, phys. size %d %d, subpixel layout %s, manufacturer %s, model %s, transform %s",
+                       monitor->id, x, y, physical_width, physical_height, subpixel_to_string (subpixel), make, model, transform_to_string (transform)));
+
+  gdk_monitor_set_position (GDK_MONITOR (monitor), x, y);
+  gdk_monitor_set_physical_size (GDK_MONITOR (monitor), physical_width, physical_height);
+  gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor), subpixel);
+  gdk_monitor_set_manufacturer (GDK_MONITOR (monitor), make);
+  gdk_monitor_set_model (GDK_MONITOR (monitor), model);
+
+  if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
+    {
+      GdkDisplay *display = GDK_MONITOR (monitor)->display;
+      window_update_scale (GDK_WAYLAND_DISPLAY (display)->root_window);
+    }
+}
+
+static void
+output_handle_done (void             *data,
+                    struct wl_output *wl_output)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+  GdkDisplay *display = gdk_monitor_get_display (GDK_MONITOR (monitor));
+
+  GDK_NOTE (MISC,
+            g_message ("handle done output %d", monitor->id));
+
+  if (!monitor->added)
+    {
+      monitor->added = TRUE;
+      g_ptr_array_add (GDK_WAYLAND_DISPLAY (display)->monitors, monitor);
+      gdk_display_monitor_added (display, GDK_MONITOR (monitor));
+    }
+
+  window_update_scale (GDK_WAYLAND_DISPLAY (display)->root_window);
+}
+
+static void
+output_handle_scale (void             *data,
+                     struct wl_output *wl_output,
+                     int32_t           scale)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+  GdkRectangle previous_geometry;
+  int previous_scale;
+  int width;
+  int height;
+
+  GDK_NOTE (MISC,
+            g_message ("handle scale output %d, scale %d", monitor->id, scale));
+
+  gdk_monitor_get_geometry (GDK_MONITOR (monitor), &previous_geometry);
+  previous_scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+
+  width = previous_geometry.width * previous_scale;
+  height = previous_geometry.height * previous_scale;
+
+  gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), scale);
+  gdk_monitor_set_size (GDK_MONITOR (monitor), width / scale, height / scale);
+
+  if (GDK_MONITOR (monitor)->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
+    window_update_scale (GDK_WAYLAND_DISPLAY (GDK_MONITOR (monitor)->display)->root_window);
+}
+
+static void
+output_handle_mode (void             *data,
+                    struct wl_output *wl_output,
+                    uint32_t          flags,
+                    int               width,
+                    int               height,
+                    int               refresh)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+  int scale;
+
+  GDK_NOTE (MISC,
+            g_message ("handle mode output %d, size %d %d, rate %d",
+                       monitor->id, width, height, refresh));
+
+  if ((flags & WL_OUTPUT_MODE_CURRENT) == 0)
+    return;
+
+  scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+  gdk_monitor_set_size (GDK_MONITOR (monitor), width / scale, height / scale);
+  gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh);
+
+  if (width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
+    window_update_scale (GDK_WAYLAND_DISPLAY (GDK_MONITOR (monitor)->display)->root_window);
+}
+
+static const struct wl_output_listener output_listener =
+{
+  output_handle_geometry,
+  output_handle_mode,
+  output_handle_done,
+  output_handle_scale,
+};
+
+static void
+gdk_wayland_display_add_output (GdkWaylandDisplay *display_wayland,
+                                guint32            id,
+                                struct wl_output  *output,
+                                guint32            version)
+{
+  GdkWaylandMonitor *monitor;
+
+  monitor = g_object_new (GDK_TYPE_WAYLAND_MONITOR,
+                          "display", GDK_DISPLAY (display_wayland),
+                          NULL);
+
+  monitor->id = id;
+  monitor->output = output;
+  monitor->version = version;
+
+  if (monitor->version < OUTPUT_VERSION_WITH_DONE)
+    {
+      g_ptr_array_add (display_wayland->monitors, monitor);
+      gdk_display_monitor_added (GDK_DISPLAY (display_wayland), GDK_MONITOR (monitor));
+    }
+
+  wl_output_add_listener (output, &output_listener, monitor);
+}
+
+struct wl_output *
+gdk_wayland_display_get_wl_output (GdkDisplay *display,
+                                   gint        monitor_num)
+{
+  GdkWaylandMonitor *monitor;
+
+  monitor = GDK_WAYLAND_DISPLAY (display)->monitors->pdata[monitor_num];
+
+  return monitor->output;
+}
+
+static GdkWaylandMonitor *
+get_monitor_for_id (GdkWaylandDisplay *display_wayland,
+                    guint32            id)
+{
+  int i;
+
+  for (i = 0; i < display_wayland->monitors->len; i++)
+    {
+      GdkWaylandMonitor *monitor = display_wayland->monitors->pdata[i];
+
+      if (monitor->id == id)
+        return monitor;
+    }
+
+  return NULL;
+}
+
+static GdkWaylandMonitor *
+get_monitor_for_output (GdkWaylandDisplay *display_wayland,
+                        struct wl_output  *output)
+{
+  int i;
+
+  for (i = 0; i < display_wayland->monitors->len; i++)
+    {
+      GdkWaylandMonitor *monitor = display_wayland->monitors->pdata[i];
+
+      if (monitor->output == output)
+        return monitor;
+    }
+
+  return NULL;
+}
+
+static void
+gdk_wayland_display_remove_output (GdkWaylandDisplay *display_wayland,
+                                   guint32            id)
+{
+  GdkWaylandMonitor *monitor;
+
+  monitor = get_monitor_for_id (display_wayland, id);
+  if (monitor != NULL)
+    {
+      g_object_ref (monitor);
+      g_ptr_array_remove (display_wayland->monitors, monitor);
+      gdk_display_monitor_removed (GDK_DISPLAY (display_wayland), GDK_MONITOR (monitor));
+      window_update_scale (gdk_display_get_root_window (GDK_MONITOR (monitor)->display));
+      g_object_unref (monitor);
+    }
+}
+
+int
+gdk_wayland_display_get_output_refresh_rate (GdkWaylandDisplay *display_wayland,
+                                             struct wl_output  *output)
+{
+  GdkWaylandMonitor *monitor;
+
+  monitor = get_monitor_for_output (display_wayland, output);
+  if (monitor != NULL)
+    return gdk_monitor_get_refresh_rate (GDK_MONITOR (monitor));
+
+  return 0;
+}
+
+guint32
+gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland,
+				      struct wl_output  *output)
+{
+  GdkWaylandMonitor *monitor;
+
+  monitor = get_monitor_for_output (display_wayland, output);
+  if (monitor != NULL)
+    return gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+
+  return 0;
 }

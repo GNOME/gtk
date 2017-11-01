@@ -53,10 +53,23 @@ G_BEGIN_DECLS
 
 typedef struct _GdkWaylandSelection GdkWaylandSelection;
 
+typedef struct {
+        gboolean     antialias;
+        gboolean     hinting;
+        gint         dpi;
+        const gchar *rgba;
+        const gchar *hintstyle;
+} GsdXftSettings;
+
 struct _GdkWaylandDisplay
 {
   GdkDisplay parent_instance;
-  GdkScreen *screen;
+  GdkWindow *root_window;
+
+  GHashTable *settings;
+  GsdXftSettings xft_settings;
+
+  guint32    shell_capabilities;
 
   /* Startup notification */
   gchar *startup_notification_id;

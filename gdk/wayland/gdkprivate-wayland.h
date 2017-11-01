@@ -206,30 +206,16 @@ GdkAppLaunchContext *_gdk_wayland_display_get_app_launch_context (GdkDisplay *di
 
 GdkDisplay *_gdk_wayland_display_open (const gchar *display_name);
 
-GdkWindow *_gdk_wayland_screen_create_root_window (GdkScreen *screen,
-						   int width,
-						   int height);
+GdkWindow *_gdk_wayland_display_create_root_window (GdkDisplay *display,
+                                                    int         width,
+                                                    int         height);
 
-gboolean gdk_wayland_screen_get_setting (GdkScreen   *screen,
-                                         const gchar *name,
-                                         GValue      *value);
-GdkWindow *gdk_wayland_screen_get_root_window (GdkScreen *screen);
-
-GdkScreen *_gdk_wayland_screen_new (GdkDisplay *display);
-void _gdk_wayland_screen_add_output (GdkScreen        *screen,
-                                     guint32           id,
-                                     struct wl_output *output,
-				     guint32           version);
-void _gdk_wayland_screen_remove_output (GdkScreen *screen,
-                                        guint32 id);
-int _gdk_wayland_screen_get_output_refresh_rate (GdkScreen        *screen,
-                                                 struct wl_output *output);
-guint32 _gdk_wayland_screen_get_output_scale (GdkScreen        *screen,
-					      struct wl_output *output);
-struct wl_output *_gdk_wayland_screen_get_wl_output (GdkScreen *screen,
-                                                     gint monitor_num);
-
-void _gdk_wayland_screen_set_has_gtk_shell (GdkScreen       *screen);
+int gdk_wayland_display_get_output_refresh_rate (GdkWaylandDisplay *display_wayland,
+                                                 struct wl_output  *output);
+guint32 gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland,
+                                              struct wl_output  *output);
+struct wl_output *gdk_wayland_display_get_wl_output (GdkDisplay *display,
+                                                     int         monitor_num);
 
 void _gdk_wayland_window_set_grab_seat (GdkWindow      *window,
                                         GdkSeat        *seat);

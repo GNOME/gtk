@@ -8,7 +8,6 @@ gdk_wayland_sources = files([
   'gdkglcontext-wayland.c',
   'gdkkeys-wayland.c',
   'gdkmonitor-wayland.c',
-  'gdkscreen-wayland.c',
   'gdkselection-wayland.c',
   'gdkvulkancontext-wayland.c',
   'gdkwindow-wayland.c',
