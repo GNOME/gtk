@@ -1255,7 +1255,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 {
   GdkWindowImplClass *impl_class;
   GdkWindow *temp_window;
-  GdkScreen *screen;
   GdkDisplay *display;
   GList *tmp;
 
@@ -1265,7 +1264,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
     return;
 
   display = gdk_window_get_display (window);
-  screen = gdk_display_get_default_screen (display);
 
   switch (window->window_type)
     {
@@ -1274,7 +1272,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
       break;
 
     case GDK_WINDOW_ROOT:
-      if (!screen->closed)
+      if (!gdk_display_is_closed (display))
 	{
 	  g_error ("attempted to destroy root window");
 	  break;
@@ -6671,10 +6669,10 @@ gdk_window_fullscreen_on_monitor (GdkWindow  *window,
  *
  * The @mode argument is from the #GdkFullscreenMode enumeration.
  * If #GDK_FULLSCREEN_ON_ALL_MONITORS is specified, the fullscreen @window will
- * span over all monitors from the #GdkScreen.
+ * span over all monitors of the display.
  *
- * On X11, searches through the list of monitors from the #GdkScreen the ones
- * which delimit the 4 edges of the entire #GdkScreen and will ask the window
+ * On X11, searches through the list of monitors display the ones
+ * which delimit the 4 edges of the entire display and will ask the window
  * manager to span the @window over these monitors.
  *
  * If the XINERAMA extension is not available or not usable, this function
