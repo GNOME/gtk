@@ -304,9 +304,10 @@ gdk_x11_device_xi2_warp (GdkDevice *device,
 {
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   Window dest;
-  GdkScreen *screen = gdk_screen_get_default ();
+  GdkDisplay *display = gdk_device_get_display (device);
+  GdkScreen *screen = GDK_X11_DISPLAY (display)->screen;
 
-  dest = GDK_WINDOW_XID (gdk_display_get_root_window (gdk_device_get_display (device)));
+  dest = GDK_WINDOW_XID (gdk_display_get_root_window (display));
 
   XIWarpPointer (GDK_SCREEN_XDISPLAY (screen),
                  device_xi2->device_id,
