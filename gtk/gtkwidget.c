@@ -6749,7 +6749,6 @@ gtk_widget_event_internal (GtkWidget      *widget,
   /* Non input events get handled right away */
   switch ((guint) event->type)
     {
-    case GDK_VISIBILITY_NOTIFY:
     case GDK_EXPOSE:
     case GDK_NOTHING:
     case GDK_DELETE:
@@ -6823,7 +6822,6 @@ gtk_widget_emit_event_signals (GtkWidget      *widget,
         case GDK_PAD_RING:
         case GDK_PAD_STRIP:
         case GDK_PAD_GROUP_MODE:
-        case GDK_VISIBILITY_NOTIFY:
 	case GDK_EXPOSE:
 	case GDK_NOTHING:
 	  signal_num = -1;

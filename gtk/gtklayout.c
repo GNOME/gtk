@@ -74,9 +74,6 @@ struct _GtkLayoutPrivate
   guint vscroll_policy : 1;
 
   /* Properties */
-
-  GdkVisibilityState visibility;
-
   GList *children;
 
   gint scroll_x;
@@ -719,7 +716,6 @@ gtk_layout_init (GtkLayout *layout)
 
   priv->scroll_x = 0;
   priv->scroll_y = 0;
-  priv->visibility = GDK_VISIBILITY_PARTIAL;
 
   priv->freeze_count = 0;
 }

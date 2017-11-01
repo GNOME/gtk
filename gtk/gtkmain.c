@@ -1762,7 +1762,6 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_SELECTION_REQUEST:
     case GDK_SELECTION_NOTIFY:
     case GDK_CLIENT_EVENT:
-    case GDK_VISIBILITY_NOTIFY:
     case GDK_WINDOW_STATE:
     case GDK_GRAB_BROKEN:
     case GDK_DAMAGE:

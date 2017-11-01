@@ -300,7 +300,6 @@ static gchar *types[] =
   "GdkEvent ",
   "GdkEventKey ",
   "GtkTextView ",
-  "GdkEventVisibility ",
   "GdkBitmap ",
   "GtkTextChildAnchor ",
   "GArray ",

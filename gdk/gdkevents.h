@@ -123,7 +123,6 @@ G_BEGIN_DECLS
 
 typedef struct _GdkEventAny	    GdkEventAny;
 typedef struct _GdkEventExpose	    GdkEventExpose;
-typedef struct _GdkEventVisibility  GdkEventVisibility;
 typedef struct _GdkEventMotion	    GdkEventMotion;
 typedef struct _GdkEventButton	    GdkEventButton;
 typedef struct _GdkEventTouch       GdkEventTouch;
@@ -250,7 +249,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_DROP_START: a drop operation onto the window has started.
  * @GDK_DROP_FINISHED: the drop operation initiated by the window has completed.
  * @GDK_CLIENT_EVENT: a message has been received from another application.
- * @GDK_VISIBILITY_NOTIFY: the window visibility status has changed.
  * @GDK_SCROLL: the scroll wheel was turned
  * @GDK_WINDOW_STATE: the state of a window has changed. See #GdkWindowState
  *   for the possible window states
@@ -320,7 +318,6 @@ typedef enum
   GDK_DROP_START        = 26,
   GDK_DROP_FINISHED     = 27,
   GDK_CLIENT_EVENT	= 28,
-  GDK_VISIBILITY_NOTIFY = 29,
   GDK_SCROLL            = 31,
   GDK_WINDOW_STATE      = 32,
   GDK_OWNER_CHANGE      = 34,
@@ -339,21 +336,6 @@ typedef enum
   GDK_PAD_GROUP_MODE    = 47,
   GDK_EVENT_LAST        /* helper variable for decls */
 } GdkEventType;
-
-/**
- * GdkVisibilityState:
- * @GDK_VISIBILITY_UNOBSCURED: the window is completely visible.
- * @GDK_VISIBILITY_PARTIAL: the window is partially visible.
- * @GDK_VISIBILITY_FULLY_OBSCURED: the window is not visible at all.
- *
- * Specifies the visiblity status of a window for a #GdkEventVisibility.
- */
-typedef enum
-{
-  GDK_VISIBILITY_UNOBSCURED,
-  GDK_VISIBILITY_PARTIAL,
-  GDK_VISIBILITY_FULLY_OBSCURED
-} GdkVisibilityState;
 
 /**
  * GdkTouchpadGesturePhase:

@@ -73,29 +73,6 @@ struct _GdkEventExpose
 };
 
 /**
- * GdkEventVisibility:
- * @type: the type of the event (%GDK_VISIBILITY_NOTIFY).
- * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly.
- * @state: the new visibility state (%GDK_VISIBILITY_FULLY_OBSCURED,
- *   %GDK_VISIBILITY_PARTIAL or %GDK_VISIBILITY_UNOBSCURED).
- *
- * Generated when the window visibility status has changed.
- *
- * Deprecated: 3.12: Modern composited windowing systems with pervasive
- *     transparency make it impossible to track the visibility of a window
- *     reliably, so this event can not be guaranteed to provide useful
- *     information.
- */
-struct _GdkEventVisibility
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
-  GdkVisibilityState state;
-};
-
-/**
  * GdkEventMotion:
  * @type: the type of the event.
  * @window: the window which received the event.
@@ -753,7 +730,6 @@ struct _GdkEventPadGroupMode {
  * @type: the #GdkEventType
  * @any: a #GdkEventAny
  * @expose: a #GdkEventExpose
- * @visibility: a #GdkEventVisibility
  * @motion: a #GdkEventMotion
  * @button: a #GdkEventButton
  * @touch: a #GdkEventTouch
@@ -811,7 +787,6 @@ union _GdkEvent
   GdkEventType		    type;
   GdkEventAny		    any;
   GdkEventExpose	    expose;
-  GdkEventVisibility	    visibility;
   GdkEventMotion	    motion;
   GdkEventButton	    button;
   GdkEventTouch             touch;

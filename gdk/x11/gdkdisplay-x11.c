@@ -789,32 +789,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
             break;
 	  }
 #endif /* G_ENABLE_DEBUG */
-
-      if (window == NULL)
-        {
-          return_val = FALSE;
-          break;
-        }
-
-      event->visibility.type = GDK_VISIBILITY_NOTIFY;
-      event->visibility.window = window;
-
-      switch (xevent->xvisibility.state)
-	{
-	case VisibilityFullyObscured:
-	  event->visibility.state = GDK_VISIBILITY_FULLY_OBSCURED;
-	  break;
-
-	case VisibilityPartiallyObscured:
-	  event->visibility.state = GDK_VISIBILITY_PARTIAL;
-	  break;
-
-        default:
-	case VisibilityUnobscured:
-	  event->visibility.state = GDK_VISIBILITY_UNOBSCURED;
-	  break;
-	}
-
+      /* not handled */
+      return_val = FALSE;
       break;
 
     case CreateNotify:

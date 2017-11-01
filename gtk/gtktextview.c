@@ -9745,7 +9745,7 @@ text_window_realize (GtkTextWindow *win,
   window = gtk_widget_get_window (widget);
 
   win->window = gdk_window_new_child (window,
-                                      GDK_VISIBILITY_NOTIFY_MASK,
+                                      0,
                                       &win->allocation);
 
   gtk_widget_register_window (win->widget, win->window);
