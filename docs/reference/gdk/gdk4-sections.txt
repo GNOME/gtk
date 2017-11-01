@@ -4,7 +4,6 @@
 <SECTION>
 <TITLE>General</TITLE>
 <FILE>general</FILE>
-gdk_get_display_arg_name
 gdk_notify_startup_complete
 gdk_notify_startup_complete_with_id
 gdk_set_allowed_backends

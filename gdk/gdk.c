@@ -241,27 +241,6 @@ gdk_pre_parse (void)
     }
 }
 
-/**
- * gdk_get_display_arg_name:
- *
- * Gets the display name specified in the command line arguments passed
- * to gdk_init() or gdk_parse_args(), if any.
- *
- * Returns: (nullable): the display name, if specified explicitly,
- *   otherwise %NULL this string is owned by GTK+ and must not be
- *   modified or freed.
- *
- * Since: 2.2
- */
-const gchar *
-gdk_get_display_arg_name (void)
-{
-  if (!_gdk_display_arg_name)
-    _gdk_display_arg_name = g_strdup (_gdk_display_name);
-
-   return _gdk_display_arg_name;
-}
-
 /*< private >
  * gdk_display_open_default:
  *
@@ -285,7 +264,7 @@ gdk_display_open_default (void)
   if (display)
     return display;
 
-  display = gdk_display_open (gdk_get_display_arg_name ());
+  display = gdk_display_open (NULL);
 
   return display;
 }

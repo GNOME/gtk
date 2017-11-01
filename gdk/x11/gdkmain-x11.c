@@ -242,14 +242,14 @@ gdk_x_io_error (Display *display)
                  "most likely the X server was shut down or you killed/destroyed\n"
                  "the application.\n",
                  g_get_prgname (),
-                 display ? DisplayString (display) : gdk_get_display_arg_name ());
+                 display ? DisplayString (display) : NULL);
     }
   else
     {
       g_message ("%s: Fatal IO error %d (%s) on X server %s.\n",
                  g_get_prgname (),
                  errno, g_strerror (errno),
-                 display ? DisplayString (display) : gdk_get_display_arg_name ());
+                 display ? DisplayString (display) : NULL);
     }
 
   _exit (1);
