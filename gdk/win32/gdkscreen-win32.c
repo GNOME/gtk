@@ -158,7 +158,7 @@ _gdk_win32_screen_set_font_resolution (GdkWin32Screen *win32_screen)
   else
     {
       gint dpi = -1;
-      GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_screen_get_display (screen));
+      GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (screen->display);
       guint scale = _gdk_win32_display_get_monitor_scale_factor (win32_display, NULL, NULL, &dpi);
 
       /* If we have a scale that is at least 2, don't scale up the fonts */
