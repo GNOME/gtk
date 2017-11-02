@@ -4960,7 +4960,7 @@ gtk_label_set_selectable_hint (GtkLabel *label)
     {
       GdkCursor *cursor;
 
-      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
       gtk_widget_set_cursor (widget, cursor);
       g_object_unref (cursor);
     }
