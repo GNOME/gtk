@@ -842,9 +842,6 @@ fixup_event (GdkEvent *event)
        (event->any.type == GDK_SELECTION_REQUEST)) &&
       (event->selection.requestor != NULL))
     g_object_ref (event->selection.requestor);
-  if ((event->any.type == GDK_OWNER_CHANGE) &&
-      (event->owner_change.owner != NULL))
-    g_object_ref (event->owner_change.owner);
   event->any.send_event = InSendMessage ();
 }
 

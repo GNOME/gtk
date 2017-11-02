@@ -436,7 +436,6 @@ struct _GdkEventSelection
  * @type: the type of the event (%GDK_OWNER_CHANGE).
  * @window: the window which received the event
  * @send_event: %TRUE if the event was sent explicitly.
- * @owner: the new owner of the selection, or %NULL if there is none
  * @reason: the reason for the ownership change as a #GdkOwnerChange value
  * @selection: the atom identifying the selection
  * @time: the timestamp of the event
@@ -454,7 +453,6 @@ struct _GdkEventOwnerChange
   GdkEventType type;
   GdkWindow *window;
   gint8 send_event;
-  GdkWindow *owner;
   GdkOwnerChange reason;
   GdkAtom selection;
   guint32 time;

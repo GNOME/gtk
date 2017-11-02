@@ -1083,7 +1083,6 @@ emit_selection_owner_change (GdkWindow *window,
 
   event = gdk_event_new (GDK_OWNER_CHANGE);
   event->owner_change.window = g_object_ref (window);
-  event->owner_change.owner = NULL;
   event->owner_change.reason = GDK_OWNER_CHANGE_NEW_OWNER;
   event->owner_change.selection = atom;
   event->owner_change.time = GDK_CURRENT_TIME;

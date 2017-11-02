@@ -1155,18 +1155,13 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
 	  event->owner_change.type = GDK_OWNER_CHANGE;
 	  event->owner_change.window = window;
-          if (selection_notify->owner != None)
-            event->owner_change.owner = gdk_x11_window_foreign_new_for_display (display,
-                                                                                selection_notify->owner);
-          else
-            event->owner_change.owner = NULL;
 	  event->owner_change.reason = selection_notify->subtype;
-	  event->owner_change.selection = 
-	    gdk_x11_xatom_to_atom_for_display (display, 
+	  event->owner_change.selection =
+	    gdk_x11_xatom_to_atom_for_display (display,
 					       selection_notify->selection);
 	  event->owner_change.time = selection_notify->timestamp;
 	  event->owner_change.selection_time = selection_notify->selection_timestamp;
-	  
+
 	  return_val = TRUE;
 	}
       else
