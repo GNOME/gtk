@@ -388,30 +388,3 @@ _gdk_x11_region_get_xrectangles (const cairo_region_t *region,
   *n_rects = n;
   *rects = rectangles;
 }
-
-/**
- * gdk_x11_grab_server:
- * 
- * Call gdk_x11_display_grab() on the default display. 
- * To ungrab the server again, use gdk_x11_ungrab_server(). 
- *
- * gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.
- **/ 
-void
-gdk_x11_grab_server (void)
-{
-  gdk_x11_display_grab (gdk_display_get_default ());
-}
-
-/**
- * gdk_x11_ungrab_server:
- *
- * Ungrab the default display after it has been grabbed with 
- * gdk_x11_grab_server(). 
- **/
-void
-gdk_x11_ungrab_server (void)
-{
-  gdk_x11_display_ungrab (gdk_display_get_default ());
-}
-
