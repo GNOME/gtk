@@ -274,7 +274,7 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
   Display *dpy;
   GdkX11Screen *x11_screen;
 
-  x11_screen = (GdkX11Screen*)gdk_display_get_default_screen (event_source->display);
+  x11_screen = (GdkX11Screen *) gdk_x11_display_get_screen (event_source->display); 
 
   dpy = GDK_DISPLAY_XDISPLAY (event_source->display);
 
