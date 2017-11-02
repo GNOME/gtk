@@ -225,7 +225,7 @@ struct _GtkIconInfo
    */
   GdkPixbuf *pixbuf;
   GdkPixbuf *proxy_pixbuf;
-  GskTexture *texture;
+  GdkTexture *texture;
   GError *load_error;
   gdouble unscaled_scale;
   gdouble scale;
@@ -4014,7 +4014,7 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
  *
  * Since: 3.94
  */
-GskTexture *
+GdkTexture *
 gtk_icon_info_load_texture (GtkIconInfo *icon_info)
 {
   if (!icon_info->texture)
@@ -4022,7 +4022,7 @@ gtk_icon_info_load_texture (GtkIconInfo *icon_info)
       GdkPixbuf *pixbuf;
 
       pixbuf = gtk_icon_info_load_icon (icon_info, NULL);
-      icon_info->texture = gsk_texture_new_for_pixbuf (pixbuf);
+      icon_info->texture = gdk_texture_new_for_pixbuf (pixbuf);
       g_object_unref (pixbuf);
 
       g_object_add_weak_pointer (G_OBJECT (icon_info->texture), (void **)&icon_info->texture);

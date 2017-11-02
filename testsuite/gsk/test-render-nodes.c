@@ -521,7 +521,7 @@ load_node_file (GFile *file, gboolean generate)
   GskRenderNode *node;
   GskRenderer *renderer;
   GdkWindow *window;
-  GskTexture *texture = NULL;
+  GdkTexture *texture = NULL;
   cairo_surface_t *surface;
   char *png_file;
   cairo_surface_t *ref_surface;
@@ -554,9 +554,9 @@ load_node_file (GFile *file, gboolean generate)
   texture = gsk_renderer_render_texture (renderer, node, NULL);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        gsk_texture_get_width (texture),
-                                        gsk_texture_get_height (texture));
-  gsk_texture_download (texture,
+                                        gdk_texture_get_width (texture),
+                                        gdk_texture_get_height (texture));
+  gdk_texture_download (texture,
                         cairo_image_surface_get_data (surface),
                         cairo_image_surface_get_stride (surface));
   cairo_surface_mark_dirty (surface);

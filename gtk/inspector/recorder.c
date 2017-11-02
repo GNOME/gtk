@@ -32,9 +32,9 @@
 #include <gtk/gtktreeview.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
-#include <gsk/gsktextureprivate.h>
 #include <gsk/gskroundedrectprivate.h>
 
+#include <gdk/gdktextureprivate.h>
 #include "gtk/gtkdebug.h"
 
 #include "gtktreemodelrendernode.h"
@@ -161,7 +161,7 @@ node_type_name (GskRenderNodeType type)
       return "Repeating Linear Gradient";
     case GSK_BORDER_NODE:
       return "Border";
-    case GSK_TEXTURE_NODE:
+    case GDK_TEXTURE_NODE:
       return "Texture";
     case GSK_INSET_SHADOW_NODE:
       return "Inset Shadow";
@@ -304,20 +304,20 @@ populate_render_node_properties (GtkListStore  *store,
 
   switch (gsk_render_node_get_node_type (node))
     {
-    case GSK_TEXTURE_NODE:
+    case GDK_TEXTURE_NODE:
     case GSK_CAIRO_NODE:
       {
         const char *text;
         cairo_surface_t *surface;
         gboolean show_inline;
 
-        if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
+        if (gsk_render_node_get_node_type (node) == GDK_TEXTURE_NODE)
           {
-            GskTexture *texture;
+            GdkTexture *texture;
 
             text = "Texture";
-            texture = gsk_texture_node_get_texture (node);
-            surface = gsk_texture_download_surface (texture);
+            texture = gdk_texture_node_get_texture (node);
+            surface = gdk_texture_download_surface (texture);
           }
         else
           {

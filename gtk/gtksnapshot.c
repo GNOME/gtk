@@ -1216,7 +1216,7 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
 /**
  * gtk_snapshot_append_texture:
  * @snapshot: a #GtkSnapshot
- * @texture: the #GskTexture to render
+ * @texture: the #GdkTexture to render
  * @bounds: the bounds for the new node
  * @name: (transfer none): a printf() style format string for the name for the new node
  * @...: arguments to insert into the format string
@@ -1226,7 +1226,7 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
  **/
 void
 gtk_snapshot_append_texture (GtkSnapshot            *snapshot,
-                             GskTexture             *texture,
+                             GdkTexture             *texture,
                              const graphene_rect_t  *bounds,
                              const char             *name,
                              ...)
@@ -1236,11 +1236,11 @@ gtk_snapshot_append_texture (GtkSnapshot            *snapshot,
   graphene_rect_t real_bounds;
 
   g_return_if_fail (snapshot != NULL);
-  g_return_if_fail (GSK_IS_TEXTURE (texture));
+  g_return_if_fail (GDK_IS_TEXTURE (texture));
   g_return_if_fail (bounds != NULL);
 
   graphene_rect_offset_r (bounds, current_state->translate_x, current_state->translate_y, &real_bounds);
-  node = gsk_texture_node_new (texture, &real_bounds);
+  node = gdk_texture_node_new (texture, &real_bounds);
 
   if (name && snapshot->record_names)
     {
@@ -1502,9 +1502,9 @@ gtk_snapshot_render_icon (GtkSnapshot     *snapshot,
                           gdouble          x,
                           gdouble          y)
 {
-  GskTexture *texture;
+  GdkTexture *texture;
 
-  texture = gsk_texture_new_for_pixbuf (pixbuf);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
   gtk_snapshot_offset (snapshot, x, y);
   gtk_css_style_snapshot_icon_texture (gtk_style_context_lookup_style (context),
                                        snapshot,

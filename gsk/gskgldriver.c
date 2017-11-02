@@ -3,7 +3,7 @@
 #include "gskgldriverprivate.h"
 
 #include "gskdebugprivate.h"
-#include "gsktextureprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #include <gdk/gdk.h>
 #include <epoxy/gl.h>
@@ -15,7 +15,7 @@ typedef struct {
   GLuint min_filter;
   GLuint mag_filter;
   GArray *fbos;
-  GskTexture *user;
+  GdkTexture *user;
   gboolean in_use : 1;
 } Texture;
 
@@ -78,7 +78,7 @@ texture_free (gpointer data)
   Texture *t = data;
 
   if (t->user)
-    gsk_texture_clear_render_data (t->user);
+    gdk_texture_clear_render_data (t->user);
 
   g_clear_pointer (&t->fbos, g_array_unref);
   glDeleteTextures (1, &t->texture_id);
@@ -439,7 +439,7 @@ gsk_gl_driver_release_texture (gpointer data)
 
 int
 gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
-                                       GskTexture  *texture,
+                                       GdkTexture  *texture,
                                        int          min_filter,
                                        int          mag_filter)
 {
@@ -447,9 +447,9 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
   cairo_surface_t *surface;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), -1);
-  g_return_val_if_fail (GSK_IS_TEXTURE (texture), -1);
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), -1);
 
-  t = gsk_texture_get_render_data (texture, driver);
+  t = gdk_texture_get_render_data (texture, driver);
 
   if (t)
     {
@@ -457,12 +457,12 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *driver,
         return t->texture_id;
     }
   
-  t = create_texture (driver, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
+  t = create_texture (driver, gdk_texture_get_width (texture), gdk_texture_get_height (texture));
 
-  if (gsk_texture_set_render_data (texture, driver, t, gsk_gl_driver_release_texture))
+  if (gdk_texture_set_render_data (texture, driver, t, gsk_gl_driver_release_texture))
     t->user = texture;
 
-  surface = gsk_texture_download_surface (texture);
+  surface = gdk_texture_download_surface (texture);
   gsk_gl_driver_bind_source_texture (driver, t->texture_id);
   gsk_gl_driver_init_texture_with_surface (driver,
                                            t->texture_id,

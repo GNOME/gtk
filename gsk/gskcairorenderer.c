@@ -5,7 +5,7 @@
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gsktextureprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #ifdef G_ENABLE_DEBUG
 typedef struct {
@@ -70,12 +70,12 @@ gsk_cairo_renderer_do_render (GskRenderer   *renderer,
 #endif
 }
 
-static GskTexture *
+static GdkTexture *
 gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
                                    GskRenderNode         *root,
                                    const graphene_rect_t *viewport)
 {
-  GskTexture *texture;
+  GdkTexture *texture;
   cairo_surface_t *surface;
   cairo_t *cr;
 
@@ -88,7 +88,7 @@ gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
 
   cairo_destroy (cr);
 
-  texture = gsk_texture_new_for_surface (surface);
+  texture = gdk_texture_new_for_surface (surface);
   cairo_surface_destroy (surface);
 
   return texture;

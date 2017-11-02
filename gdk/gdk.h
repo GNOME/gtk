@@ -57,6 +57,7 @@
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkseat.h>
 #include <gdk/gdkselection.h>
+#include <gdk/gdktexture.h>
 #include <gdk/gdkthreads.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvulkancontext.h>

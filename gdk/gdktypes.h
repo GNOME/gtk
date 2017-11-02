@@ -131,7 +131,7 @@ typedef struct _GdkAtom            *GdkAtom;
 /* Forward declarations of commonly used types */
 typedef struct _GdkRGBA               GdkRGBA;
 typedef struct _GdkCursor             GdkCursor;
-typedef struct _GdkVisual             GdkVisual;
+typedef struct _GdkTexture            GdkTexture;
 typedef struct _GdkDevice             GdkDevice;
 typedef struct _GdkDragContext        GdkDragContext;
 

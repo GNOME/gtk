@@ -43,8 +43,8 @@ gsk_render_node_get_bounds
 <SUBSECTION Nodes>
 gsk_color_node_new
 gsk_color_node_peek_color
-gsk_texture_node_new
-gsk_texture_node_get_texture
+gdk_texture_node_new
+gdk_texture_node_get_texture
 gsk_linear_gradient_node_new
 gsk_linear_gradient_node_peek_start
 gsk_linear_gradient_node_peek_end
@@ -128,21 +128,6 @@ GSK_TYPE_BLEND_MODE
 gsk_serialization_error_quark
 GSK_SERIALIZATION_ERROR
 GSK_TYPE_SERIALIZATION_ERROR
-</SECTION>
-
-<SECTION>
-<FILE>GskTexture</FILE>
-gsk_texture_new_for_data
-gsk_texture_new_for_surface
-gsk_texture_new_for_pixbuf
-gsk_texture_get_width
-gsk_texture_get_height
-gsk_texture_download
-<SUBSECTION Standard>
-GskTexture
-gsk_texture_get_type
-GSK_TYPE_TEXTURE
-GSK_IS_TEXTURE
 </SECTION>
 
 <SECTION>

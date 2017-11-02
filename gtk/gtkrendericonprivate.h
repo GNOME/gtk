@@ -49,7 +49,7 @@ void    gtk_css_style_render_icon_surface       (GtkCssStyle            *style,
                                                  double                  y);
 void    gtk_css_style_snapshot_icon_texture     (GtkCssStyle            *style,
                                                  GtkSnapshot            *snapshot,
-                                                 GskTexture             *texture,
+                                                 GdkTexture             *texture,
                                                  double                  texture_scale,
                                                  graphene_matrix_t *     color_matrix,
                                                  graphene_vec4_t *       color_offset);

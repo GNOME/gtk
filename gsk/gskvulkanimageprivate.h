@@ -3,7 +3,6 @@
 
 #include <gdk/gdk.h>
 
-#include "gsk/gsktexture.h"
 #include "gsk/gskvulkancommandpoolprivate.h"
 
 G_BEGIN_DECLS
@@ -55,7 +54,7 @@ GskVulkanImage *        gsk_vulkan_image_new_for_texture                (GdkVulk
                                                                          gsize                   width,
                                                                          gsize                   height);
 
-GskTexture *            gsk_vulkan_image_download                       (GskVulkanImage         *self,
+GdkTexture *            gsk_vulkan_image_download                       (GskVulkanImage         *self,
                                                                          GskVulkanUploader      *uploader);
 
 gsize                   gsk_vulkan_image_get_width                      (GskVulkanImage         *self);

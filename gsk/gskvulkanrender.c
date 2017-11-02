@@ -629,7 +629,7 @@ gsk_vulkan_render_draw (GskVulkanRender *self)
     }
 }
 
-GskTexture *
+GdkTexture *
 gsk_vulkan_render_download_target (GskVulkanRender *self)
 {
   gsk_vulkan_uploader_reset (self->uploader);

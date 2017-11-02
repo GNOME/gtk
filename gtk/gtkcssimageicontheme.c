@@ -46,7 +46,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
                                    double       height)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
-  GskTexture *texture;
+  GdkTexture *texture;
   double texture_width, texture_height;
   gint size;
 
@@ -90,7 +90,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
           return;
         }
 
-      texture = gsk_texture_new_for_pixbuf (pixbuf);
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
 
       g_clear_object (&icon_theme->cached_texture);
       icon_theme->cached_size = size;
@@ -100,8 +100,8 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
       g_object_unref (icon_info);
     }
 
-  texture_width = (double) gsk_texture_get_width (texture) / icon_theme->scale;
-  texture_height = (double) gsk_texture_get_height (texture) / icon_theme->scale;
+  texture_width = (double) gdk_texture_get_width (texture) / icon_theme->scale;
+  texture_height = (double) gdk_texture_get_height (texture) / icon_theme->scale;
 
   gtk_snapshot_append_texture (snapshot,
                                texture,

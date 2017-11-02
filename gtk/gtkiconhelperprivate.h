@@ -46,7 +46,7 @@ struct _GtkIconHelper
   GtkWidget *owner;
   GtkCssNode *node;
   cairo_surface_t *rendered_surface;
-  GskTexture *texture;
+  GdkTexture *texture;
 };
 
 void gtk_icon_helper_init (GtkIconHelper *self,

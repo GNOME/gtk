@@ -371,7 +371,7 @@ gtk_icon_helper_ensure_surface (GtkIconHelper *self)
   self->rendered_surface = gtk_icon_helper_load_surface (self, scale);
 }
 
-static GskTexture *
+static GdkTexture *
 find_cached_texture (GtkIconHelper *self)
 {
   GtkIconTheme *icon_theme;
@@ -382,7 +382,7 @@ find_cached_texture (GtkIconHelper *self)
   int scale;
   GIcon *gicon;
   GtkIconInfo *info;
-  GskTexture *texture;
+  GdkTexture *texture;
 
   style = gtk_css_node_get_style (self->node);
   dir = gtk_widget_get_direction (self->owner);
@@ -464,7 +464,7 @@ gtk_icon_helper_ensure_texture (GtkIconHelper *self)
   map = cairo_surface_map_to_image (self->rendered_surface,
                                     &(GdkRectangle) { 0, 0, width * scale, height * scale});
 
-  self->texture = gsk_texture_new_for_data (cairo_image_surface_get_data (map),
+  self->texture = gdk_texture_new_for_data (cairo_image_surface_get_data (map),
                                                   width * scale,
                                                   height * scale,
                                                   cairo_image_surface_get_stride (map));
@@ -653,7 +653,7 @@ gtk_icon_helper_snapshot (GtkIconHelper *self,
                           GtkSnapshot   *snapshot)
 {
   GtkCssStyle *style;
-  GskTexture *texture;
+  GdkTexture *texture;
   graphene_matrix_t matrix;
   graphene_vec4_t offset;
 

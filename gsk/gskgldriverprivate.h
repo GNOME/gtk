@@ -5,8 +5,6 @@
 #include <gdk/gdk.h>
 #include <graphene.h>
 
-#include <gsk/gsktexture.h>
-
 G_BEGIN_DECLS
 
 #define GSK_TYPE_GL_DRIVER (gsk_gl_driver_get_type ())
@@ -26,7 +24,7 @@ void            gsk_gl_driver_begin_frame               (GskGLDriver     *driver
 void            gsk_gl_driver_end_frame                 (GskGLDriver     *driver);
 
 int             gsk_gl_driver_get_texture_for_texture   (GskGLDriver     *driver,
-                                                         GskTexture      *texture,
+                                                         GdkTexture      *texture,
                                                          int              min_filter,
                                                          int              mag_filter);
 int             gsk_gl_driver_create_texture            (GskGLDriver     *driver,

@@ -6,19 +6,20 @@
 #include "gskprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gsktextureprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanimageprivate.h"
 #include "gskvulkanpipelineprivate.h"
 #include "gskvulkanrenderprivate.h"
 #include "gskvulkanglyphcacheprivate.h"
 
+#include "gdk/gdktextureprivate.h"
+
 #include <graphene.h>
 
 typedef struct _GskVulkanTextureData GskVulkanTextureData;
 
 struct _GskVulkanTextureData {
-  GskTexture *texture;
+  GdkTexture *texture;
   GskVulkanImage *image;
   GskVulkanRenderer *renderer;
 };
@@ -144,7 +145,7 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
       GskVulkanTextureData *data = l->data;
 
       data->renderer = NULL;
-      gsk_texture_clear_render_data (data->texture);
+      gdk_texture_clear_render_data (data->texture);
     }
   g_clear_pointer (&self->textures, (GDestroyNotify) g_slist_free);
 
@@ -158,7 +159,7 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
   g_clear_object (&self->vulkan);
 }
 
-static GskTexture *
+static GdkTexture *
 gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
                                     GskRenderNode         *root,
                                     const graphene_rect_t *viewport)
@@ -166,7 +167,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GskVulkanRender *render;
   GskVulkanImage *image;
-  GskTexture *texture;
+  GdkTexture *texture;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
@@ -310,18 +311,18 @@ gsk_vulkan_renderer_clear_texture (gpointer p)
 
 GskVulkanImage *
 gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
-                                       GskTexture        *texture,
+                                       GdkTexture        *texture,
                                        GskVulkanUploader *uploader)
 {
   GskVulkanTextureData *data;
   cairo_surface_t *surface;
   GskVulkanImage *image;
 
-  data = gsk_texture_get_render_data (texture, self);
+  data = gdk_texture_get_render_data (texture, self);
   if (data)
     return g_object_ref (data->image);
 
-  surface = gsk_texture_download_surface (texture);
+  surface = gdk_texture_download_surface (texture);
   image = gsk_vulkan_image_new_from_data (uploader,
                                           cairo_image_surface_get_data (surface),
                                           cairo_image_surface_get_width (surface),
@@ -334,7 +335,7 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
   data->texture = texture;
   data->renderer = self;
 
-  if (gsk_texture_set_render_data (texture, self, data, gsk_vulkan_renderer_clear_texture))
+  if (gdk_texture_set_render_data (texture, self, data, gsk_vulkan_renderer_clear_texture))
     {
       g_object_ref (data->image);
       self->textures = g_slist_prepend (self->textures, data);

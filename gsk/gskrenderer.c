@@ -42,7 +42,6 @@
 #include "gskglrendererprivate.h"
 #include "gskprofilerprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gsktexture.h"
 
 #include "gskenumtypes.h"
 
@@ -110,7 +109,7 @@ gsk_renderer_real_unrealize (GskRenderer *self)
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, unrealize);
 }
 
-static GskTexture *
+static GdkTexture *
 gsk_renderer_real_render_texture (GskRenderer           *self,
                                   GskRenderNode         *root,
                                   const graphene_rect_t *viewport)
@@ -555,7 +554,7 @@ gsk_renderer_unrealize (GskRenderer *renderer)
  * @viewport: (allow-none): the section to draw or %NULL to use @root's bounds
  *
  * Renders the scene graph, described by a tree of #GskRenderNode instances,
- * to a #GskTexture.
+ * to a #GdkTexture.
  *
  * The @renderer will acquire a reference on the #GskRenderNode tree while
  * the rendering is in progress, and will make the tree immutable.
@@ -563,18 +562,18 @@ gsk_renderer_unrealize (GskRenderer *renderer)
  * If you want to apply any transformations to @root, you should put it into a 
  * transform node and pass that node instead.
  *
- * Returns: (transfer full): a #GskTexture with the rendered contents of @root.
+ * Returns: (transfer full): a #GdkTexture with the rendered contents of @root.
  *
  * Since: 3.90
  */
-GskTexture *
+GdkTexture *
 gsk_renderer_render_texture (GskRenderer           *renderer,
                              GskRenderNode         *root,
                              const graphene_rect_t *viewport)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
   graphene_rect_t real_viewport;
-  GskTexture *texture;
+  GdkTexture *texture;
 
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
   g_return_val_if_fail (priv->is_realized, NULL);

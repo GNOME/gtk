@@ -31,7 +31,7 @@ gtk_css_image_surface_get_width (GtkCssImage *image)
   if (surface->texture == NULL)
     return 0;
 
-  return gsk_texture_get_width (surface->texture);
+  return gdk_texture_get_width (surface->texture);
 }
 
 static int
@@ -42,7 +42,7 @@ gtk_css_image_surface_get_height (GtkCssImage *image)
   if (surface->texture == NULL)
     return 0;
 
-  return gsk_texture_get_height (surface->texture);
+  return gdk_texture_get_height (surface->texture);
 }
 
 static void
@@ -60,8 +60,8 @@ gtk_css_image_surface_snapshot (GtkCssImage *image,
                                surface->texture,
                                &GRAPHENE_RECT_INIT (0, 0, width, height),
                                "Surface Image %dx%d",
-                               gsk_texture_get_width (surface->texture),
-                               gsk_texture_get_height (surface->texture));
+                               gdk_texture_get_width (surface->texture),
+                               gdk_texture_get_height (surface->texture));
 }
 
 static void
@@ -101,7 +101,7 @@ _gtk_css_image_surface_init (GtkCssImageSurface *image_surface)
 }
 
 GtkCssImage *
-gtk_css_image_surface_new (GskTexture *texture)
+gtk_css_image_surface_new (GdkTexture *texture)
 {
   GtkCssImage *image;
 
@@ -117,11 +117,11 @@ GtkCssImage *
 gtk_css_image_surface_new_for_pixbuf (GdkPixbuf *pixbuf)
 {
   GtkCssImage *image;
-  GskTexture *texture;
+  GdkTexture *texture;
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
-  texture = gsk_texture_new_for_pixbuf (pixbuf);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
   image = gtk_css_image_surface_new (texture);
   g_object_unref (texture);
 

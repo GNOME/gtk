@@ -85,7 +85,7 @@ void                    gsk_vulkan_render_draw                          (GskVulk
 
 void                    gsk_vulkan_render_submit                        (GskVulkanRender        *self);
 
-GskTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
+GdkTexture *            gsk_vulkan_render_download_target               (GskVulkanRender        *self);
 VkFramebuffer           gsk_vulkan_render_get_framebuffer               (GskVulkanRender        *self,
                                                                          GskVulkanImage         *image);
 

@@ -42,7 +42,6 @@
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
-#include "gsktexture.h"
 
 #include <graphene-gobject.h>
 

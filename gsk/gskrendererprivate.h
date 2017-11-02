@@ -42,7 +42,7 @@ struct _GskRendererClass
                         GError **error);
   void (* unrealize) (GskRenderer *renderer);
 
-  GskTexture * (* render_texture) (GskRenderer           *renderer,
+  GdkTexture * (* render_texture) (GskRenderer           *renderer,
                                    GskRenderNode         *root,
                                    const graphene_rect_t *viewport);
   GdkDrawingContext * (* begin_draw_frame) (GskRenderer *renderer,

@@ -38,7 +38,7 @@ struct _GtkCssImageSurface
 {
   GtkCssImage parent;
 
-  GskTexture *texture; /* the texture we render */
+  GdkTexture *texture; /* the texture we render */
 };
 
 struct _GtkCssImageSurfaceClass
@@ -48,7 +48,7 @@ struct _GtkCssImageSurfaceClass
 
 GType          _gtk_css_image_surface_get_type             (void) G_GNUC_CONST;
 
-GtkCssImage *  gtk_css_image_surface_new                   (GskTexture      *texture);
+GtkCssImage *  gtk_css_image_surface_new                   (GdkTexture      *texture);
 GtkCssImage *  gtk_css_image_surface_new_for_pixbuf        (GdkPixbuf       *pixbuf);
 
 G_END_DECLS

@@ -10,7 +10,7 @@
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskshaderbuilderprivate.h"
-#include "gsktextureprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #include "gskprivate.h"
 
@@ -798,9 +798,9 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   switch (gsk_render_node_get_node_type (node))
     {
-    case GSK_TEXTURE_NODE:
+    case GDK_TEXTURE_NODE:
       {
-        GskTexture *texture = gsk_texture_node_get_texture (node);
+        GdkTexture *texture = gdk_texture_node_get_texture (node);
         int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
 
         get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
@@ -1167,13 +1167,13 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 #endif
 }
 
-static GskTexture *
+static GdkTexture *
 gsk_gl_renderer_render_texture (GskRenderer           *renderer,
                                 GskRenderNode         *root,
                                 const graphene_rect_t *viewport)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  GskTexture *texture;
+  GdkTexture *texture;
   cairo_surface_t *surface;
   cairo_t *cr;
 
@@ -1203,7 +1203,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
                           viewport->size.height);
   cairo_destroy (cr);
 
-  texture = gsk_texture_new_for_surface (surface);
+  texture = gdk_texture_new_for_surface (surface);
   cairo_surface_destroy (surface);
 
   return texture;

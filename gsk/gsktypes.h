@@ -27,6 +27,6 @@
 #include <gsk/gskenums.h>
 
 typedef struct _GskRenderer             GskRenderer;
-typedef struct _GskTexture              GskTexture;
+typedef struct _GdkTexture              GdkTexture;
 
 #endif /* __GSK_TYPES_H__ */

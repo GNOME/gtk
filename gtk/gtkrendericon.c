@@ -266,7 +266,7 @@ gtk_css_style_render_icon_get_extents (GtkCssStyle  *style,
 void
 gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
                                      GtkSnapshot       *snapshot,
-                                     GskTexture        *texture,
+                                     GdkTexture        *texture,
                                      double             texture_scale,
                                      graphene_matrix_t *color_matrix,
                                      graphene_vec4_t *  color_offset)
@@ -279,14 +279,14 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
-  g_return_if_fail (GSK_IS_TEXTURE (texture));
+  g_return_if_fail (GDK_IS_TEXTURE (texture));
   g_return_if_fail (texture_scale > 0);
 
   shadows_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW);
   transform_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_TRANSFORM);
   filter_value = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_FILTER);
-  width = gsk_texture_get_width (texture) / texture_scale;
-  height = gsk_texture_get_height (texture) / texture_scale;
+  width = gdk_texture_get_width (texture) / texture_scale;
+  height = gdk_texture_get_height (texture) / texture_scale;
 
   if (!gtk_css_transform_value_get_matrix (transform_value, &transform_matrix))
     return;
@@ -316,7 +316,7 @@ gtk_css_style_snapshot_icon_texture (GtkCssStyle       *style,
 
       gtk_snapshot_push_transform (snapshot, &m1, "Icon Transform");
 
-      graphene_rect_init (&bounds, 0, 0, gsk_texture_get_width (texture), gsk_texture_get_height (texture));
+      graphene_rect_init (&bounds, 0, 0, gdk_texture_get_width (texture), gdk_texture_get_height (texture));
       gtk_snapshot_append_texture (snapshot, texture, &bounds, "Icon");
 
       gtk_snapshot_pop (snapshot);

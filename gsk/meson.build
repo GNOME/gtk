@@ -17,8 +17,7 @@ gsk_public_sources = files([
   'gskrenderer.c',
   'gskrendernode.c',
   'gskrendernodeimpl.c',
-  'gskroundedrect.c',
-  'gsktexture.c',
+  'gskroundedrect.c'
 ])
 
 gsk_private_sources = files([
@@ -38,7 +37,6 @@ gsk_public_headers = files([
   'gskrenderer.h',
   'gskrendernode.h',
   'gskroundedrect.h',
-  'gsktexture.h',
   'gsktypes.h',
 ])
 
