@@ -167,24 +167,6 @@ gdk_display_manager_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gdkscreen</FILE>
-<TITLE>GdkScreen</TITLE>
-GdkScreen
-gdk_screen_get_display
-
-<SUBSECTION Standard>
-GDK_SCREEN
-GDK_IS_SCREEN
-GDK_TYPE_SCREEN
-GDK_SCREEN_CLASS
-GDK_IS_SCREEN_CLASS
-GDK_SCREEN_GET_CLASS
-<SUBSECTION Private>
-GdkScreenClass
-gdk_screen_get_type
-</SECTION>
-
-<SECTION>
 <TITLE>Pixbufs</TITLE>
 <FILE>pixbufs</FILE>
 gdk_pixbuf_get_from_surface
@@ -229,7 +211,6 @@ gdk_window_new_child
 gdk_window_destroy
 gdk_window_get_window_type
 gdk_window_get_display
-gdk_window_get_screen
 gdk_window_show
 gdk_window_show_unraised
 gdk_window_hide
