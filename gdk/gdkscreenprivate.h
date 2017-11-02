@@ -38,8 +38,6 @@ struct _GdkScreen
 struct _GdkScreenClass
 {
   GObjectClass parent_class;
-
-  GdkDisplay * (* get_display)           (GdkScreen *screen);
 };
 
 G_END_DECLS

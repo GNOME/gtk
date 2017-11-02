@@ -73,12 +73,6 @@ gdk_x11_screen_init (GdkX11Screen *screen)
 {
 }
 
-static GdkDisplay *
-gdk_x11_screen_get_display (GdkScreen *screen)
-{
-  return GDK_X11_SCREEN (screen)->display;
-}
-
 GdkWindow *
 gdk_x11_screen_get_root_window (GdkScreen *screen)
 {
@@ -1269,12 +1263,9 @@ static void
 gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
 
   object_class->dispose = gdk_x11_screen_dispose;
   object_class->finalize = gdk_x11_screen_finalize;
-
-  screen_class->get_display = gdk_x11_screen_get_display;
 
   signals[WINDOW_MANAGER_CHANGED] =
     g_signal_new (g_intern_static_string ("window-manager-changed"),

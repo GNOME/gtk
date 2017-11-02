@@ -280,12 +280,6 @@ display_reconfiguration_callback (CGDirectDisplayID            display,
     }
 }
 
-static GdkDisplay *
-gdk_quartz_screen_get_display (GdkScreen *screen)
-{
-  return _gdk_display;
-}
-
 static gint
 get_mm_from_pixels (NSScreen *screen, int pixels)
 {
@@ -300,10 +294,7 @@ static void
 gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
 
   object_class->dispose = gdk_quartz_screen_dispose;
   object_class->finalize = gdk_quartz_screen_finalize;
-
-  screen_class->get_display = gdk_quartz_screen_get_display;
 }

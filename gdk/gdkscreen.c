@@ -67,21 +67,3 @@ _gdk_screen_close (GdkScreen *screen)
       g_object_run_dispose (G_OBJECT (screen));
     }
 }
-
-/**
- * gdk_screen_get_display:
- * @screen: a #GdkScreen
- *
- * Gets the display to which the @screen belongs.
- *
- * Returns: (transfer none): the display to which @screen belongs
- *
- * Since: 2.2
- **/
-GdkDisplay *
-gdk_screen_get_display (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
-  return GDK_SCREEN_GET_CLASS (screen)->get_display (screen);
-}

@@ -40,8 +40,6 @@ G_BEGIN_DECLS
 
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
 
-GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);
-
 G_END_DECLS
 
 #endif  /* __GDK_SCREEN_H__ */

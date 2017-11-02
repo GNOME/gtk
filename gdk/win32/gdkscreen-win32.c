@@ -172,12 +172,6 @@ _gdk_win32_screen_set_font_resolution (GdkWin32Screen *win32_screen)
     _gdk_screen_set_resolution (screen, logpixelsx);
 }
 
-static GdkDisplay *
-gdk_win32_screen_get_display (GdkScreen *screen)
-{
-  return _gdk_display;
-}
-
 GdkWindow *
 gdk_win32_screen_get_root_window (GdkScreen *screen)
 {
@@ -194,9 +188,6 @@ static void
 gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
 
   object_class->finalize = gdk_win32_screen_finalize;
-
-  screen_class->get_display = gdk_win32_screen_get_display;
 }
