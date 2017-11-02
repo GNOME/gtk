@@ -123,7 +123,7 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
   NSArray *array;
   int i;
   int max_x, max_y;
-  GdkDisplay *display = gdk_screen_get_display (GDK_SCREEN (screen));
+  GdkDisplay *display = screen->display;
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (display);
 
   g_ptr_array_free (display_quartz->monitors, TRUE);
@@ -214,7 +214,7 @@ _gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
   _gdk_root->abs_x = 0;
   _gdk_root->abs_y = 0;
 
-  windows = gdk_display_get_toplevel_windows (gdk_screen_get_display (screen));
+  windows = gdk_display_get_toplevel_windows (GDK_QUARTZ_SCREEN (screen)->display);
 
   for (list = windows; list; list = list->next)
     _gdk_quartz_window_update_position (list->data);
