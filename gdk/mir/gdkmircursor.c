@@ -142,14 +142,6 @@ _gdk_mir_cursor_get_name (GdkCursor *cursor)
   return mir_cursor->name;
 }
 
-cairo_surface_t *
-gdk_mir_cursor_get_surface (GdkCursor *cursor,
-                            gdouble   *x_hot,
-                            gdouble   *y_hot)
-{
-  return NULL;
-}
-
 static void
 gdk_mir_cursor_init (GdkMirCursor *cursor)
 {
@@ -168,9 +160,7 @@ gdk_mir_cursor_finalize (GObject *object)
 static void
 gdk_mir_cursor_class_init (GdkMirCursorClass *klass)
 {
-  GdkCursorClass *cursor_class = GDK_CURSOR_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  cursor_class->get_surface = gdk_mir_cursor_get_surface;
   object_class->finalize = gdk_mir_cursor_finalize;
 }

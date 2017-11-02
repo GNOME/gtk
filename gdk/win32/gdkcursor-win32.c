@@ -896,27 +896,6 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
   return pixbuf;
 }
 
-static cairo_surface_t *
-_gdk_win32_cursor_get_surface (GdkCursor *cursor,
-			       gdouble *x_hot,
-			       gdouble *y_hot)
-{
-  GdkPixbuf *pixbuf;
-  cairo_surface_t *surface;
-
-  g_return_val_if_fail (cursor != NULL, NULL);
-
-  pixbuf = gdk_win32_icon_to_pixbuf_libgtk_only (((GdkWin32Cursor *) cursor)->hcursor, x_hot, y_hot);
-
-  if (pixbuf == NULL)
-    return NULL;
-
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
-  g_object_unref (pixbuf);
-
-  return surface;
-}
-
 GdkCursor *
 _gdk_win32_display_get_cursor_for_surface (GdkDisplay      *display,
 					   cairo_surface_t *surface,
@@ -1300,9 +1279,6 @@ static void
 gdk_win32_cursor_class_init(GdkWin32CursorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkCursorClass *cursor_class = GDK_CURSOR_CLASS (klass);
 
   object_class->finalize = _gdk_win32_cursor_finalize;
-
-  cursor_class->get_surface = _gdk_win32_cursor_get_surface;
 }

@@ -62,12 +62,6 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
 GDK_AVAILABLE_IN_3_94
 const char *gdk_cursor_get_name          (GdkCursor       *cursor);
-GDK_AVAILABLE_IN_ALL
-GdkPixbuf*  gdk_cursor_get_image         (GdkCursor       *cursor);
-GDK_AVAILABLE_IN_3_10
-cairo_surface_t *gdk_cursor_get_surface  (GdkCursor       *cursor,
-					  gdouble         *x_hot,
-					  gdouble         *y_hot);
 
 
 G_END_DECLS

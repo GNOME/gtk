@@ -160,10 +160,6 @@ _gdk_x11_cursor_display_finalize (GdkDisplay *display)
 
 G_DEFINE_TYPE (GdkX11Cursor, gdk_x11_cursor, GDK_TYPE_CURSOR)
 
-static cairo_surface_t *gdk_x11_cursor_get_surface (GdkCursor *cursor,
-						    gdouble   *x_hot,
-						    gdouble   *y_hot);
-
 static void
 gdk_x11_cursor_finalize (GObject *object)
 {
@@ -180,12 +176,9 @@ gdk_x11_cursor_finalize (GObject *object)
 static void
 gdk_x11_cursor_class_init (GdkX11CursorClass *xcursor_class)
 {
-  GdkCursorClass *cursor_class = GDK_CURSOR_CLASS (xcursor_class);
   GObjectClass *object_class = G_OBJECT_CLASS (xcursor_class);
 
   object_class->finalize = gdk_x11_cursor_finalize;
-
-  cursor_class->get_surface = gdk_x11_cursor_get_surface;
 }
 
 static void
@@ -258,64 +251,6 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 }
 
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
-
-static cairo_surface_t *
-gdk_x11_cursor_get_surface (GdkCursor *cursor,
-			    gdouble   *x_hot,
-			    gdouble   *y_hot)
-{
-  GdkDisplay *display;
-  Display *xdisplay;
-  XcursorImages *images;
-  XcursorImage *image;
-  gint size;
-  cairo_surface_t *surface;
-  gint scale;
-  gchar *theme;
-  const char *name;
-  
-  display = gdk_cursor_get_display (cursor);
-  xdisplay = GDK_DISPLAY_XDISPLAY (display);
-
-  size = XcursorGetDefaultSize (xdisplay);
-  theme = XcursorGetTheme (xdisplay);
-
-  name = gdk_cursor_get_name (cursor);
-  if (name)
-    images = XcursorLibraryLoadImages (name, theme, size);
-  else
-    images = NULL;
-
-  if (!images)
-    return NULL;
-
-  image = images->images[0];
-
-  /* Assume the currently set cursor was defined for the screen
-     scale */
-  scale =
-    gdk_monitor_get_scale_factor (gdk_display_get_primary_monitor (display));
-
-  surface = gdk_window_create_similar_image_surface (NULL,
-						     CAIRO_FORMAT_ARGB32,
-						     image->width,
-						     image->height,
-						     scale);
-
-  memcpy (cairo_image_surface_get_data (surface),
-	  image->pixels, 4 * image->width * image->height);
-
-  cairo_surface_mark_dirty (surface);
-
-  if (x_hot)
-    *x_hot = (double)image->xhot / scale;
-  if (y_hot)
-    *y_hot = (double)image->yhot / scale;
-
-  XcursorImagesDestroy (images);
-
-  return surface;
-}
 
 void
 _gdk_x11_cursor_update_theme (GdkCursor *cursor)
@@ -419,14 +354,6 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 }
 
 #else
-
-static cairo_surface_t *
-gdk_x11_cursor_get_surface (GdkCursor *cursor,
-			    gdouble *x_hot,
-			    gdouble *y_hot)
-{
-  return NULL;
-}
 
 void
 gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
