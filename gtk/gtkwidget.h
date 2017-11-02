@@ -743,6 +743,11 @@ void                  gtk_widget_get_allocated_size     (GtkWidget     *widget,
 GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_get_allocation         (GtkWidget     *widget,
                                                          GtkAllocation *allocation);
+GDK_AVAILABLE_IN_3_94
+int                   gtk_widget_get_width              (GtkWidget     *widget);
+GDK_AVAILABLE_IN_3_94
+int                   gtk_widget_get_height             (GtkWidget     *widget);
+
 GDK_AVAILABLE_IN_3_14
 void                  gtk_widget_get_clip               (GtkWidget     *widget,
                                                          GtkAllocation *clip);

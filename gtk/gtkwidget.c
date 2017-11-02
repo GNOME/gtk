@@ -15500,3 +15500,67 @@ gtk_widget_init_legacy_controller (GtkWidget *widget)
                           "gtk-widget-legacy-event-controller",
                           controller, g_object_unref);
 }
+
+/**
+ * gtk_widget_get_width:
+ * @widget: a #GtkWidget
+ *
+ * Returns the content width of the widget, as passed to its size-allocate implementation.
+ * This is the size you should be using in GtkWidgetClass.snapshot(). For pointer
+ * events, see gtk_widget_contains().
+ *
+ * Returns: The width of @widget
+ *
+ * Since: 3.94
+ */
+int
+gtk_widget_get_width (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  return priv->allocation.width -
+         margin.left  - margin.right -
+         border.left  - border.right -
+         padding.left - padding.right;
+}
+
+/**
+ * gtk_widget_get_height:
+ * @widget: a #GtkWidget
+ *
+ * Returns the content height of the widget, as passed to its size-allocate implementation.
+ * This is the size you should be using in GtkWidgetClass.snapshot(). For pointer
+ * events, see gtk_widget_contains().
+ *
+ * Returns: The height of @widget
+ *
+ * Since: 3.94
+ */
+int
+gtk_widget_get_height (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkBorder margin, border, padding;
+  GtkCssStyle *style;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
+
+  return priv->allocation.height -
+         margin.top  - margin.bottom -
+         border.top  - border.bottom -
+         padding.top - padding.bottom;
+}
