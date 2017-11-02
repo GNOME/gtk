@@ -85,22 +85,6 @@ _gdk_broadway_cursor_display_finalize (GdkDisplay *display)
 {
 }
 
-GdkCursor*
-_gdk_broadway_display_get_cursor_for_type (GdkDisplay    *display,
-					   GdkCursorType  cursor_type)
-{
-  GdkBroadwayCursor *private;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  private = g_object_new (GDK_TYPE_BROADWAY_CURSOR,
-                          "cursor-type", cursor_type,
-                          "display", display,
-			  NULL);
-
-  return GDK_CURSOR (private);
-}
-
 static cairo_surface_t *
 gdk_broadway_cursor_get_surface (GdkCursor *cursor,
 				 gdouble *x_hot,
