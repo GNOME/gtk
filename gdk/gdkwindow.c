@@ -4252,7 +4252,7 @@ gdk_window_set_cursor_internal (GdkWindow *window,
 
   if (window->window_type == GDK_WINDOW_ROOT ||
       window->window_type == GDK_WINDOW_FOREIGN)
-    GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_device_cursor (window, device, cursor);
+    GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, cursor);
   else
     {
       GdkPointerWindowInfo *pointer_info;
@@ -5136,7 +5136,6 @@ update_cursor (GdkDisplay *display,
 {
   GdkWindow *cursor_window, *parent, *toplevel;
   GdkWindow *pointer_window;
-  GdkWindowImplClass *impl_class;
   GdkPointerWindowInfo *pointer_info;
   GdkDeviceGrabInfo *grab;
   GdkCursor *cursor;
@@ -5177,8 +5176,7 @@ update_cursor (GdkDisplay *display,
   /* Set all cursors on toplevel, otherwise its tricky to keep track of
    * which native window has what cursor set. */
   toplevel = get_event_toplevel (pointer_window);
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (toplevel->impl);
-  impl_class->set_device_cursor (toplevel, device, cursor);
+  GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, toplevel, cursor);
 }
 
 static gboolean

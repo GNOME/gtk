@@ -66,7 +66,6 @@ struct _GdkWindowImplX11
 
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
   GdkCursor *cursor;
-  GHashTable *device_cursor;
 
   guint no_bg : 1;        /* Set when the window background is temporarily
                            * unset during resizing and scaling */

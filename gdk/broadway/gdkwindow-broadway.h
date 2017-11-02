@@ -53,7 +53,6 @@ struct _GdkWindowImplBroadway
   cairo_surface_t *ref_surface;
 
   GdkCursor *cursor;
-  GHashTable *device_cursor;
 
   int id;
 

@@ -2709,18 +2709,6 @@ gdk_window_wayland_move_to_rect (GdkWindow          *window,
 }
 
 static void
-gdk_window_wayland_set_device_cursor (GdkWindow *window,
-                                      GdkDevice *device,
-                                      GdkCursor *cursor)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  if (!GDK_WINDOW_DESTROYED (window))
-    GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, cursor);
-}
-
-static void
 gdk_window_wayland_get_geometry (GdkWindow *window,
                                  gint      *x,
                                  gint      *y,
@@ -3683,7 +3671,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->restack_toplevel = gdk_window_wayland_restack_toplevel;
   impl_class->move_resize = gdk_window_wayland_move_resize;
   impl_class->move_to_rect = gdk_window_wayland_move_to_rect;
-  impl_class->set_device_cursor = gdk_window_wayland_set_device_cursor;
   impl_class->get_geometry = gdk_window_wayland_get_geometry;
   impl_class->get_root_coords = gdk_window_wayland_get_root_coords;
   impl_class->get_device_state = gdk_window_wayland_get_device_state;

@@ -1268,27 +1268,6 @@ gdk_mir_window_impl_set_events (GdkWindow    *window,
 }
 
 static void
-gdk_mir_window_impl_set_device_cursor (GdkWindow *window,
-                                       GdkDevice *device,
-                                       GdkCursor *cursor)
-{
-  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-  MirConnection *connection = gdk_mir_display_get_mir_connection (impl->display);
-  MirWindowSpec *spec;
-  const gchar *cursor_name;
-
-  if (cursor)
-    cursor_name = _gdk_mir_cursor_get_name (cursor);
-  else
-    cursor_name = mir_default_cursor_name;
-
-  spec = mir_create_window_spec (connection);
-  mir_window_spec_set_cursor_name (spec, cursor_name);
-  mir_window_apply_spec (impl->mir_window, spec);
-  mir_window_spec_release (spec);
-}
-
-static void
 gdk_mir_window_impl_get_geometry (GdkWindow *window,
                                   gint      *x,
                                   gint      *y,
@@ -2246,7 +2225,6 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->move_to_rect = gdk_mir_window_impl_move_to_rect;
   impl_class->get_events = gdk_mir_window_impl_get_events;
   impl_class->set_events = gdk_mir_window_impl_set_events;
-  impl_class->set_device_cursor = gdk_mir_window_impl_set_device_cursor;
   impl_class->get_geometry = gdk_mir_window_impl_get_geometry;
   impl_class->get_root_coords = gdk_mir_window_impl_get_root_coords;
   impl_class->get_device_state = gdk_mir_window_impl_get_device_state;

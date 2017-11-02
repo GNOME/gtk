@@ -192,7 +192,6 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   GdkDisplay *display = gdk_display_get_default ();
 
   impl->toplevel_window_type = -1;
-  impl->cursor = NULL;
   impl->hicon_big = NULL;
   impl->hicon_small = NULL;
   impl->hint_flags = 0;
@@ -202,14 +201,6 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->num_transients = 0;
   impl->changing_state = FALSE;
   impl->window_scale = 1;
-
-  if (display != NULL)
-    /* Replace WM-defined default cursor with the default cursor
-     * from our theme. Otherwise newly-opened windows (such as popup
-     * menus of all kinds) will have WM-default cursor when they are
-     * first shown, which will be replaced by our cursor only later on.
-     */
-    impl->cursor = _gdk_win32_display_get_cursor_for_type (display, GDK_LEFT_PTR);
 }
 
 static void
@@ -228,8 +219,6 @@ gdk_window_impl_win32_finalize (GObject *object)
     {
       gdk_win32_handle_table_remove (window_impl->handle);
     }
-
-  g_clear_object (&window_impl->cursor);
 
   g_clear_pointer (&window_impl->snap_stash, g_free);
   g_clear_pointer (&window_impl->snap_stash_int, g_free);
@@ -2001,46 +1990,6 @@ _gdk_modal_current (void)
     }
 
   return NULL;
-}
-
-static void
-gdk_win32_window_set_device_cursor (GdkWindow *window,
-                                    GdkDevice *device,
-                                    GdkCursor *cursor)
-{
-  GdkWindowImplWin32 *impl;
-  GdkCursor *previous_cursor;
-
-  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  GDK_NOTE (MISC, g_print ("gdk_win32_window_set_cursor: %p: %p\n",
-			   GDK_WINDOW_HWND (window),
-			   cursor));
-
-  /* First get the old cursor, if any (we wait to free the old one
-   * since it may be the current cursor set in the Win32 API right
-   * now).
-   */
-  previous_cursor = impl->cursor;
-
-  if (cursor)
-    impl->cursor = g_object_ref (cursor);
-  else
-    /* Use default cursor otherwise. Don't just set NULL cursor,
-     * because that will just hide the cursor, which is not
-     * what the caller probably wanted.
-     */
-    impl->cursor = _gdk_win32_display_get_cursor_for_type (gdk_device_get_display (device),
-                                                           GDK_LEFT_PTR);
-
-  GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, impl->cursor);
-
-  /* Destroy the previous cursor */
-  if (previous_cursor != NULL)
-    g_object_unref (previous_cursor);
 }
 
 static void

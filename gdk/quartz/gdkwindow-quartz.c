@@ -1412,21 +1412,6 @@ gdk_window_quartz_restack_toplevel (GdkWindow *window,
 }
 
 static void
-gdk_window_quartz_set_device_cursor (GdkWindow *window,
-                                     GdkDevice *device,
-                                     GdkCursor *cursor)
-{
-  NSCursor *nscursor;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  nscursor = _gdk_quartz_cursor_get_ns_cursor (cursor);
-
-  [nscursor set];
-}
-
-static void
 gdk_window_quartz_get_geometry (GdkWindow *window,
                                 gint      *x,
                                 gint      *y,
@@ -2780,7 +2765,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->lower = gdk_window_quartz_lower;
   impl_class->restack_toplevel = gdk_window_quartz_restack_toplevel;
   impl_class->move_resize = gdk_window_quartz_move_resize;
-  impl_class->set_device_cursor = gdk_window_quartz_set_device_cursor;
   impl_class->get_geometry = gdk_window_quartz_get_geometry;
   impl_class->get_root_coords = gdk_window_quartz_get_root_coords;
   impl_class->get_device_state = gdk_window_quartz_get_device_state;

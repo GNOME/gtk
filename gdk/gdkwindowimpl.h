@@ -85,10 +85,6 @@ struct _GdkWindowImplClass
   void         (* set_events)           (GdkWindow       *window,
                                          GdkEventMask     event_mask);
 
-  void         (* set_device_cursor)    (GdkWindow       *window,
-                                         GdkDevice       *device,
-                                         GdkCursor       *cursor);
-
   void         (* get_geometry)         (GdkWindow       *window,
                                          gint            *x,
                                          gint            *y,

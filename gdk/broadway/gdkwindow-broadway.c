@@ -157,8 +157,6 @@ static void
 gdk_window_impl_broadway_init (GdkWindowImplBroadway *impl)
 {
   impl->toplevel_window_type = -1;
-  impl->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
-                                               (GDestroyNotify) g_object_unref);
 }
 
 static void
@@ -182,8 +180,6 @@ gdk_window_impl_broadway_finalize (GObject *object)
 
   if (impl->cursor)
     g_object_unref (impl->cursor);
-
-  g_hash_table_destroy (impl->device_cursor);
 
   broadway_display->toplevels = g_list_remove (broadway_display->toplevels, impl);
 
@@ -611,31 +607,6 @@ gdk_broadway_window_set_transient_for (GdkWindow *window,
 
   display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (impl->wrapper));
   _gdk_broadway_server_window_set_transient_for (display->server, impl->id, impl->transient_for);
-}
-
-static void
-gdk_window_broadway_set_device_cursor (GdkWindow *window,
-				       GdkDevice *device,
-				       GdkCursor *cursor)
-{
-  GdkWindowImplBroadway *impl;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-
-  if (!cursor)
-    g_hash_table_remove (impl->device_cursor, device);
-  else
-    {
-      _gdk_broadway_cursor_update_theme (cursor);
-      g_hash_table_replace (impl->device_cursor,
-                            device, g_object_ref (cursor));
-    }
-
-  if (!GDK_WINDOW_DESTROYED (window))
-    GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, cursor);
 }
 
 static void
@@ -1477,7 +1448,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->lower = gdk_window_broadway_lower;
   impl_class->restack_toplevel = gdk_window_broadway_restack_toplevel;
   impl_class->move_resize = gdk_window_broadway_move_resize;
-  impl_class->set_device_cursor = gdk_window_broadway_set_device_cursor;
   impl_class->get_geometry = gdk_window_broadway_get_geometry;
   impl_class->get_root_coords = gdk_window_broadway_get_root_coords;
   impl_class->get_device_state = gdk_window_broadway_get_device_state;
