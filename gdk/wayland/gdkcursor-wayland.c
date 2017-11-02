@@ -346,7 +346,6 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
     return GDK_CURSOR (g_object_ref (private));
 
   private = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
                           "display", display,
                           NULL);
 
@@ -407,7 +406,6 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
   cairo_t *cr;
 
   cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
-			 "cursor-type", GDK_CURSOR_IS_PIXMAP,
 			 "display", display_wayland,
 			 NULL);
   cursor->name = NULL;

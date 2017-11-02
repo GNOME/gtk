@@ -809,7 +809,6 @@ gdk_owner_change_get_type
 <TITLE>Cursors</TITLE>
 <FILE>cursors</FILE>
 GdkCursor
-GdkCursorType
 gdk_cursor_new_from_pixbuf
 gdk_cursor_new_from_surface
 gdk_cursor_new_from_name

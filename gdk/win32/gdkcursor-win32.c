@@ -539,7 +539,6 @@ cursor_new_from_hcursor (GdkDisplay    *display,
   GdkCursor *cursor;
 
   private = g_object_new (GDK_TYPE_WIN32_CURSOR,
-                          "cursor-type", cursor_type,
                           "display", display,
 			  NULL);
 

@@ -65,7 +65,6 @@
 
 enum {
   PROP_0,
-  PROP_CURSOR_TYPE,
   PROP_DISPLAY
 };
 
@@ -81,9 +80,6 @@ gdk_cursor_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_CURSOR_TYPE:
-      g_value_set_enum (value, cursor->type);
-      break;
     case PROP_DISPLAY:
       g_value_set_object (value, cursor->display);
       break;
@@ -103,9 +99,6 @@ gdk_cursor_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_CURSOR_TYPE:
-      cursor->type = g_value_get_enum (value);
-      break;
     case PROP_DISPLAY:
       cursor->display = g_value_get_object (value);
       /* check that implementations actually provide the display when constructing */
@@ -124,14 +117,6 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
 
   object_class->get_property = gdk_cursor_get_property;
   object_class->set_property = gdk_cursor_set_property;
-
-  g_object_class_install_property (object_class,
-				   PROP_CURSOR_TYPE,
-				   g_param_spec_enum ("cursor-type",
-                                                      P_("Cursor type"),
-                                                      P_("Standard cursor type"),
-                                                      GDK_TYPE_CURSOR_TYPE, GDK_X_CURSOR,
-                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
 				   PROP_DISPLAY,

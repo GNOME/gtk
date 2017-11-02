@@ -111,7 +111,6 @@ _gdk_broadway_display_get_cursor_for_surface (GdkDisplay *display,
   GdkCursor *cursor;
 
   private = g_object_new (GDK_TYPE_BROADWAY_CURSOR, 
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
                           "display", display,
                           NULL);
   cursor = (GdkCursor *) private;
@@ -126,7 +125,6 @@ _gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
   GdkBroadwayCursor *private;
 
   private = g_object_new (GDK_TYPE_BROADWAY_CURSOR,
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
                           "display", display,
                           NULL);
 

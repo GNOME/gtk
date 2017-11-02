@@ -72,7 +72,6 @@ static GSList* cursor_cache = NULL;
 struct cursor_cache_key
 {
   GdkDisplay* display;
-  GdkCursorType type;
   const char* name;
 };
 
@@ -98,33 +97,25 @@ cache_compare_func (gconstpointer listelem,
   GdkX11Cursor* cursor = (GdkX11Cursor*)listelem;
   struct cursor_cache_key* key = (struct cursor_cache_key*)target;
 
-  if ((cursor->cursor.type != key->type) ||
-      (gdk_cursor_get_display (GDK_CURSOR (cursor)) != key->display))
+  if (gdk_cursor_get_display (GDK_CURSOR (cursor)) != key->display)
     return 1; /* No match */
   
   /* Elements marked as pixmap must be named cursors 
    * (since we don't store normal pixmap cursors 
    */
-  if (key->type == GDK_CURSOR_IS_PIXMAP)
-    return strcmp (key->name, cursor->name);
-
-  return 0; /* Match */
+  return strcmp (key->name, cursor->name);
 }
 
 /* Returns the cursor if there is a match, NULL if not
- * For named cursors type shall be GDK_CURSOR_IS_PIXMAP
- * For unnamed, typed cursors, name shall be NULL
  */
 static GdkX11Cursor*
 find_in_cache (GdkDisplay    *display, 
-               GdkCursorType  type,
                const char    *name)
 {
   GSList* res;
   struct cursor_cache_key key;
 
   key.display = display;
-  key.type = type;
   key.name = name;
 
   res = g_slist_find_custom (cursor_cache, &key, cache_compare_func);
@@ -279,7 +270,7 @@ gdk_x11_cursor_get_surface (GdkCursor *cursor,
   GdkDisplay *display;
   Display *xdisplay;
   GdkX11Cursor *private;
-  XcursorImages *images = NULL;
+  XcursorImages *images;
   XcursorImage *image;
   gint size;
   cairo_surface_t *surface;
@@ -294,13 +285,10 @@ gdk_x11_cursor_get_surface (GdkCursor *cursor,
   size = XcursorGetDefaultSize (xdisplay);
   theme = XcursorGetTheme (xdisplay);
 
-  if (cursor->type == GDK_CURSOR_IS_PIXMAP)
-    {
-      if (private->name)
-        images = XcursorLibraryLoadImages (private->name, theme, size);
-    }
+  if (private->name)
+    images = XcursorLibraryLoadImages (private->name, theme, size);
   else
-    images = XcursorShapeLoadImages (cursor->type, theme, size);
+    images = NULL;
 
   if (!images)
     return NULL;
@@ -355,16 +343,8 @@ _gdk_x11_cursor_update_theme (GdkCursor *cursor)
 
   if (private->xcursor != None)
     {
-      if (cursor->type == GDK_BLANK_CURSOR)
-        return;
-
-      if (cursor->type == GDK_CURSOR_IS_PIXMAP)
-        {
-          if (private->name)
-            new_cursor = XcursorLibraryLoadCursor (xdisplay, private->name);
-        }
-      else 
-        new_cursor = XcursorShapeLoadCursor (xdisplay, cursor->type);
+      if (private->name)
+        new_cursor = XcursorLibraryLoadCursor (xdisplay, private->name);
       
       if (new_cursor != None)
         {
@@ -549,7 +529,6 @@ _gdk_x11_display_get_cursor_for_surface (GdkDisplay *display,
     }
 
   private = g_object_new (GDK_TYPE_X11_CURSOR, 
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
                           "display", display,
                           NULL);
   private->xcursor = xcursor;
@@ -632,7 +611,7 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
     }
   else
     {
-      private = find_in_cache (display, GDK_CURSOR_IS_PIXMAP, name);
+      private = find_in_cache (display, name);
 
       if (private)
         {
@@ -664,7 +643,6 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
     }
 
   private = g_object_new (GDK_TYPE_X11_CURSOR,
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
                           "display", display,
                           NULL);
   private->xcursor = xcursor;
@@ -728,7 +706,6 @@ gdk_cursor_new_from_pixmap (GdkDisplay     *display,
     xcursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),
                                    source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
   private = g_object_new (GDK_TYPE_X11_CURSOR,
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
                           "display", display,
                           NULL);
   private->xcursor = xcursor;
