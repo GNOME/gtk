@@ -502,10 +502,7 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
   if (!cursor)
     {
       guint scale = pointer->current_output_scale;
-      cursor =
-        _gdk_wayland_display_get_cursor_for_type_with_scale (seat->display,
-                                                             GDK_LEFT_PTR,
-                                                             scale);
+      cursor = _gdk_wayland_display_get_cursor_for_name_with_scale (seat->display, "default", scale);
     }
   else
     _gdk_wayland_cursor_set_scale (cursor, pointer->current_output_scale);
