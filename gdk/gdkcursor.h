@@ -60,6 +60,8 @@ GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 					  const gchar     *name);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
+GDK_AVAILABLE_IN_3_94
+const char *gdk_cursor_get_name          (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf*  gdk_cursor_get_image         (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_3_10

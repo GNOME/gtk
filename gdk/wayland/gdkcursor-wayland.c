@@ -49,7 +49,6 @@ typedef struct _GdkWaylandCursorClass GdkWaylandCursorClass;
 struct _GdkWaylandCursor
 {
   GdkCursor cursor;
-  gchar *name;
 
   struct
   {
@@ -144,22 +143,25 @@ _gdk_wayland_cursor_update (GdkWaylandDisplay *display_wayland,
 {
   struct wl_cursor *c;
   struct wl_cursor_theme *theme;
+  const char *name;
+
+  name = gdk_cursor_get_name (GDK_CURSOR (cursor));
 
   /* Do nothing if this is not a wl_cursor cursor. */
-  if (cursor->name == NULL)
+  if (name == NULL)
     return FALSE;
 
   theme = _gdk_wayland_display_get_scaled_cursor_theme (display_wayland,
                                                         cursor->scale);
-  c = wl_cursor_theme_get_cursor (theme, cursor->name);
+  c = wl_cursor_theme_get_cursor (theme, name);
   if (!c)
     {
       const char *fallback;
 
-      fallback = name_fallback (cursor->name);
+      fallback = name_fallback (name);
       if (fallback)
         {
-          c = wl_cursor_theme_get_cursor (theme, name_fallback (cursor->name));
+          c = wl_cursor_theme_get_cursor (theme, fallback);
           if (!c)
             c = wl_cursor_theme_get_cursor (theme, "left_ptr");
         }
@@ -167,7 +169,7 @@ _gdk_wayland_cursor_update (GdkWaylandDisplay *display_wayland,
 
   if (!c)
     {
-      g_message ("Unable to load %s from the cursor theme", cursor->name);
+      g_message ("Unable to load %s from the cursor theme", name);
       return FALSE;
     }
 
@@ -194,7 +196,6 @@ gdk_wayland_cursor_finalize (GObject *object)
 {
   GdkWaylandCursor *cursor = GDK_WAYLAND_CURSOR (object);
 
-  g_free (cursor->name);
   if (cursor->surface.cairo_surface)
     cairo_surface_destroy (cursor->surface.cairo_surface);
 
@@ -243,7 +244,7 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       return wl_cursor_image_get_buffer (image);
     }
-  else if (wayland_cursor->name == NULL) /* From surface */
+  else if (gdk_cursor_get_name (cursor) == NULL) /* From surface */
     {
       *hotspot_x =
         wayland_cursor->surface.hotspot_x / wayland_cursor->surface.scale;
@@ -309,7 +310,7 @@ _gdk_wayland_cursor_set_scale (GdkCursor *cursor,
   wayland_cursor->scale = scale;
 
   /* Blank cursor case */
-  if (g_strcmp0 (wayland_cursor->name, "none") == 0)
+  if (g_strcmp0 (gdk_cursor_get_name (cursor), "none") == 0)
     return;
 
   _gdk_wayland_cursor_update (display_wayland, wayland_cursor);
@@ -347,18 +348,17 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
 
   private = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
                           "display", display,
+                          "name", name,
                           NULL);
 
   /* Blank cursor case */
-  if (!name || g_str_equal (name, "none") || g_str_equal (name, "blank_cursor"))
+  if (g_str_equal (name, "none") || g_str_equal (name, "blank_cursor"))
     {
-      private->name = g_strdup ("none");
       private->scale = scale;
 
       return GDK_CURSOR (private);
     }
 
-  private->name = g_strdup (name);
   private->scale = scale;
 
   if (!_gdk_wayland_cursor_update (display_wayland, private))
@@ -369,7 +369,7 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
 
   /* Insert into cache. */
   g_hash_table_insert (display_wayland->cursor_cache,
-                       private->name,
+                       (gpointer) gdk_cursor_get_name (GDK_CURSOR (private)),
                        g_object_ref (private));
   return GDK_CURSOR (private);
 }
@@ -408,7 +408,6 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
   cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
 			 "display", display_wayland,
 			 NULL);
-  cursor->name = NULL;
   cursor->surface.hotspot_x = x;
   cursor->surface.hotspot_y = y;
 

@@ -813,6 +813,7 @@ gdk_cursor_new_from_pixbuf
 gdk_cursor_new_from_surface
 gdk_cursor_new_from_name
 gdk_cursor_get_display
+gdk_cursor_get_name
 gdk_cursor_get_image
 gdk_cursor_get_surface
 

@@ -126,6 +126,7 @@ _gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
 
   private = g_object_new (GDK_TYPE_BROADWAY_CURSOR,
                           "display", display,
+                          "name", name,
                           NULL);
 
   return GDK_CURSOR (private);

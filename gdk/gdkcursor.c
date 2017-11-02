@@ -65,7 +65,8 @@
 
 enum {
   PROP_0,
-  PROP_DISPLAY
+  PROP_DISPLAY,
+  PROP_NAME
 };
 
 G_DEFINE_ABSTRACT_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
@@ -82,6 +83,9 @@ gdk_cursor_get_property (GObject    *object,
     {
     case PROP_DISPLAY:
       g_value_set_object (value, cursor->display);
+      break;
+    case PROP_NAME:
+      g_value_set_string (value, cursor->name);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -104,10 +108,23 @@ gdk_cursor_set_property (GObject      *object,
       /* check that implementations actually provide the display when constructing */
       g_assert (cursor->display != NULL);
       break;
+    case PROP_NAME:
+      cursor->name = g_value_dup_string (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gdk_cursor_finalize (GObject *object)
+{
+  GdkCursor *cursor = GDK_CURSOR (object);
+
+  g_free (cursor->name);
+
+  G_OBJECT_CLASS (gdk_cursor_parent_class)->finalize (object);
 }
 
 static void
@@ -117,6 +134,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
 
   object_class->get_property = gdk_cursor_get_property;
   object_class->set_property = gdk_cursor_set_property;
+  object_class->finalize = gdk_cursor_finalize;
 
   g_object_class_install_property (object_class,
 				   PROP_DISPLAY,
@@ -124,6 +142,13 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                         P_("Display"),
                                                         P_("Display of this cursor"),
                                                         GDK_TYPE_DISPLAY,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_NAME,
+				   g_param_spec_string ("name",
+                                                        P_("Name"),
+                                                        P_("Name of this cursor"),
+                                                        NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
@@ -189,6 +214,7 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
                           const gchar *name)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
 
   return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_name (display, name);
 }
@@ -309,6 +335,7 @@ gdk_cursor_new_from_surface (GdkDisplay      *display,
   return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_surface (display,
 								  surface, x, y);
 }
+
 /**
  * gdk_cursor_get_display:
  * @cursor: a #GdkCursor.
@@ -319,13 +346,32 @@ gdk_cursor_new_from_surface (GdkDisplay      *display,
  *
  * Since: 2.2
  */
-
 GdkDisplay *
 gdk_cursor_get_display (GdkCursor *cursor)
 {
   g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
 
   return cursor->display;
+}
+
+/**
+ * gdk_cursor_get_name:
+ * @cursor: a #GdkCursor.
+ *
+ * Returns the name of the cursor. If the cursor is not a named cursor, %NULL
+ * will be returned and the surface property will be set.
+ *
+ * Returns: (transfer none): the name of the cursor or %NULL if it is not
+ *     a named cursor
+ *
+ * Since: 3.94
+ */
+const char *
+gdk_cursor_get_name (GdkCursor *cursor)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
+
+  return cursor->name;
 }
 
 /**

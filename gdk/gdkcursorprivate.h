@@ -40,6 +40,7 @@ struct _GdkCursor
   GObject parent_instance;
 
   GdkDisplay *display;
+  char *name;
 };
 
 struct _GdkCursorClass
