@@ -272,7 +272,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->store_clipboard = gdk_quartz_display_store_clipboard;
   display_class->supports_shapes = gdk_quartz_display_supports_shapes;
   display_class->supports_input_shapes = gdk_quartz_display_supports_input_shapes;
-  display_class->get_cursor_for_type = _gdk_quartz_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_quartz_display_get_cursor_for_name;
   display_class->get_cursor_for_surface = _gdk_quartz_display_get_cursor_for_surface;
   display_class->get_default_cursor_size = _gdk_quartz_display_get_default_cursor_size;

@@ -358,7 +358,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->store_clipboard = gdk_broadway_display_store_clipboard;
   display_class->supports_shapes = gdk_broadway_display_supports_shapes;
   display_class->supports_input_shapes = gdk_broadway_display_supports_input_shapes;
-  display_class->get_cursor_for_type = _gdk_broadway_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_broadway_display_get_cursor_for_name;
   display_class->get_cursor_for_surface = _gdk_broadway_display_get_cursor_for_surface;
   display_class->get_default_cursor_size = _gdk_broadway_display_get_default_cursor_size;

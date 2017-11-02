@@ -237,52 +237,6 @@ get_blank_cursor (GdkDisplay *display)
   return cursor;
 }
 
-GdkCursor*
-_gdk_x11_display_get_cursor_for_type (GdkDisplay    *display,
-                                      GdkCursorType  cursor_type)
-{
-  GdkX11Cursor *private;
-  Cursor xcursor;
-
-  if (gdk_display_is_closed (display))
-    {
-      xcursor = None;
-    }
-  else
-    {
-      private = find_in_cache (display, cursor_type, NULL);
-
-      if (private)
-        {
-          /* Cache had it, add a ref for this user */
-          g_object_ref (private);
-
-          return (GdkCursor*) private;
-        }
-      else
-        {
-          if (cursor_type != GDK_BLANK_CURSOR)
-            xcursor = XCreateFontCursor (GDK_DISPLAY_XDISPLAY (display),
-                                         cursor_type);
-          else
-            xcursor = get_blank_cursor (display);
-       }
-    }
-
-  private = g_object_new (GDK_TYPE_X11_CURSOR,
-                          "cursor-type", cursor_type,
-                          "display", display,
-                          NULL);
-  private->xcursor = xcursor;
-  private->name = NULL;
-  private->serial = theme_serial;
-
-  if (xcursor != None)
-    add_to_cache (private);
-
-  return GDK_CURSOR (private);
-}
-
 /**
  * gdk_x11_cursor_get_xdisplay:
  * @cursor: (type GdkX11Cursor): a #GdkCursor.
@@ -672,11 +626,12 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
     {
       xcursor = None;
     }
+  else if (strcmp (name, "none") == 0)
+    {
+      xcursor = get_blank_cursor (display);
+    }
   else
     {
-      if (strcmp (name, "none") == 0)
-        return _gdk_x11_display_get_cursor_for_type (display, GDK_BLANK_CURSOR);
-
       private = find_in_cache (display, GDK_CURSOR_IS_PIXMAP, name);
 
       if (private)

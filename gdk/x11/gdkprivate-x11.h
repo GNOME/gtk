@@ -230,8 +230,6 @@ GdkAtom _gdk_x11_display_manager_atom_intern   (GdkDisplayManager *manager,
 gchar * _gdk_x11_display_manager_get_atom_name (GdkDisplayManager *manager,
                                                 GdkAtom            atom);
 
-GdkCursor *_gdk_x11_display_get_cursor_for_type     (GdkDisplay    *display,
-                                                     GdkCursorType  type);
 GdkCursor *_gdk_x11_display_get_cursor_for_name     (GdkDisplay    *display,
                                                      const gchar   *name);
 GdkCursor *_gdk_x11_display_get_cursor_for_surface  (GdkDisplay    *display,

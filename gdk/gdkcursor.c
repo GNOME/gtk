@@ -148,44 +148,6 @@ gdk_cursor_init (GdkCursor *cursor)
 }
 
 /**
- * gdk_cursor_get_cursor_type:
- * @cursor:  a #GdkCursor
- *
- * Returns the cursor type for this cursor.
- *
- * Returns: a #GdkCursorType
- *
- * Since: 2.22
- **/
-GdkCursorType
-gdk_cursor_get_cursor_type (GdkCursor *cursor)
-{
-  g_return_val_if_fail (cursor != NULL, GDK_BLANK_CURSOR);
-
-  return cursor->type;
-}
-
-/**
- * gdk_cursor_new_for_display:
- * @display: the #GdkDisplay for which the cursor will be created
- * @cursor_type: cursor to create
- *
- * Creates a new cursor from the set of builtin cursors.
- *
- * Returns: a new #GdkCursor
- *
- * Since: 2.2
- **/
-GdkCursor*
-gdk_cursor_new_for_display (GdkDisplay    *display,
-                            GdkCursorType  cursor_type)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_type (display, cursor_type);
-}
-
-/**
  * gdk_cursor_new_from_name:
  * @display: the #GdkDisplay for which the cursor will be created
  * @name: the name of the cursor

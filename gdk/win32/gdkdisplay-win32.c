@@ -1263,7 +1263,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->supports_input_shapes = gdk_win32_display_supports_input_shapes;
 
   //? display_class->get_app_launch_context = _gdk_win32_display_get_app_launch_context;
-  display_class->get_cursor_for_type = _gdk_win32_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_win32_display_get_cursor_for_name;
   display_class->get_cursor_for_surface = _gdk_win32_display_get_cursor_for_surface;
   display_class->get_default_cursor_size = _gdk_win32_display_get_default_cursor_size;

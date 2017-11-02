@@ -222,9 +222,6 @@ GDK_AVAILABLE_IN_ALL
 GType      gdk_cursor_get_type           (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkCursor* gdk_cursor_new_for_display	 (GdkDisplay      *display,
-					  GdkCursorType    cursor_type);
-GDK_AVAILABLE_IN_ALL
 GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,
 					  GdkPixbuf       *pixbuf,
 					  gint             x,
@@ -245,8 +242,6 @@ GDK_AVAILABLE_IN_3_10
 cairo_surface_t *gdk_cursor_get_surface  (GdkCursor       *cursor,
 					  gdouble         *x_hot,
 					  gdouble         *y_hot);
-GDK_AVAILABLE_IN_ALL
-GdkCursorType gdk_cursor_get_cursor_type (GdkCursor       *cursor);
 
 
 G_END_DECLS
