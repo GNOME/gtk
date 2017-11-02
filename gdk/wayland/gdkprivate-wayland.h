@@ -63,8 +63,6 @@ void       _gdk_wayland_display_update_cursors (GdkWaylandDisplay *display);
 struct wl_cursor_theme * _gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *display_wayland,
                                                                        guint              scale);
 
-GdkCursor *_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
-						     GdkCursorType  cursor_type);
 GdkCursor *_gdk_wayland_display_get_cursor_for_type_with_scale (GdkDisplay    *display,
                                                                 GdkCursorType  cursor_type,
                                                                 guint          scale);

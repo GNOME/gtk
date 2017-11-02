@@ -99,8 +99,6 @@ GdkDisplay * _gdk_broadway_display_open (const gchar *display_name);
 void _gdk_broadway_display_queue_events (GdkDisplay *display);
 GdkDragProtocol _gdk_broadway_window_get_drag_protocol (GdkWindow *window,
 							GdkWindow **target);
-GdkCursor*_gdk_broadway_display_get_cursor_for_type (GdkDisplay    *display,
-						     GdkCursorType  cursor_type);
 GdkCursor*_gdk_broadway_display_get_cursor_for_name (GdkDisplay  *display,
 						     const gchar *name);
 GdkCursor *_gdk_broadway_display_get_cursor_for_surface (GdkDisplay *display,
