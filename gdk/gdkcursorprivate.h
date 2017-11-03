@@ -52,6 +52,10 @@ struct _GdkCursorClass
   GObjectClass parent_class;
 };
 
+guint                   gdk_cursor_hash                         (gconstpointer          pointer);
+gboolean                gdk_cursor_equal                        (gconstpointer          a,
+                                                                 gconstpointer          b);
+
 G_END_DECLS
 
 #endif /* __GDK_CURSOR_PRIVATE_H__ */

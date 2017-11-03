@@ -235,6 +235,52 @@ gdk_cursor_init (GdkCursor *cursor)
 {
 }
 
+guint
+gdk_cursor_hash (gconstpointer pointer)
+{
+  const GdkCursor *cursor = pointer;
+  guint hash;
+
+  if (cursor->fallback)
+    hash = gdk_cursor_hash (cursor->fallback) << 16;
+  else
+    hash = 0;
+
+  if (cursor->name)
+    hash ^= g_str_hash (cursor->name);
+  else if (cursor->texture)
+    hash ^= g_direct_hash (cursor->texture);
+
+  hash ^= (cursor->hotspot_x << 8) | cursor->hotspot_y;
+
+  return hash;
+}
+
+gboolean
+gdk_cursor_equal (gconstpointer a,
+                  gconstpointer b)
+{
+  const GdkCursor *ca = a;
+  const GdkCursor *cb = b;
+
+  if ((ca->fallback != NULL) != (cb->fallback != NULL))
+    return FALSE;
+  if (ca->fallback != NULL && !gdk_cursor_equal (ca->fallback, cb->fallback))
+    return FALSE;
+
+  if (g_strcmp0 (ca->name, cb->name) != 0)
+    return FALSE;
+
+  if (ca->texture != cb->texture)
+    return FALSE;
+
+  if (ca->hotspot_x != cb->hotspot_x ||
+      ca->hotspot_y != cb->hotspot_y)
+    return FALSE;
+
+  return TRUE;
+}
+
 /**
  * gdk_cursor_new_from_name:
  * @display: the #GdkDisplay for which the cursor will be created
