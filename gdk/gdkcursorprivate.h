@@ -40,6 +40,7 @@ struct _GdkCursor
   GObject parent_instance;
 
   GdkDisplay *display;
+  GdkCursor *fallback;
   char *name;
   GdkTexture *texture;
   int hotspot_x;

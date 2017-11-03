@@ -61,6 +61,8 @@ GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 GDK_AVAILABLE_IN_ALL
 GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
 GDK_AVAILABLE_IN_3_94
+GdkCursor * gdk_cursor_get_fallback      (GdkCursor	  *cursor);
+GDK_AVAILABLE_IN_3_94
 const char *gdk_cursor_get_name          (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_3_94
 GdkTexture *gdk_cursor_get_texture       (GdkCursor       *cursor);

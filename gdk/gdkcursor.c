@@ -38,34 +38,55 @@
 
 /**
  * SECTION:cursors
- * @Short_description: Standard and pixmap cursors
+ * @Short_description: Named and texture cursors
  * @Title: Cursors
  *
- * These functions are used to create and destroy cursors.
- * There is a number of standard cursors, but it is also
- * possible to construct new cursors from pixbufs. There
- * may be limitations as to what kinds of cursors can be
- * constructed on a given display, see
+ * These functions are used to create and destroy cursors. Cursors
+ * are immutable objects, so once you created them, there is no way
+ * to modify them later. Create a new cursor, when you want to change
+ * something about it.
+ *
+ * Cursors by themselves are not very interesting, they must be
+ * bound to a window for users to see them. This is done with
+ * gdk_window_set_cursor(). 
+ *
+ * Cursors are not bound to a given #GdkDisplay, so they can be shared.
+ * However, the appearance of cursors may vary when used on different
+ * platforms.
+ *
+ * There are multiple ways to create cursors. The platform's own cursors
+ * can be created with gdk_cursor_new_from_name(). That function lists
+ * the commonly available names that are shared with the CSS specification.
+ * Other names may be available, depending on the platform in use.  
+ * Another option to create a cursor is to use gdk_cursor_new_from_texture()
+ * and provide an image to use for the cursor. Depending on the #GdkDisplay
+ * in use, the type of supported images may be limited. See
  * gdk_display_supports_cursor_alpha(),
  * gdk_display_supports_cursor_color(),
  * gdk_display_get_default_cursor_size() and
- * gdk_display_get_maximal_cursor_size().
+ * gdk_display_get_maximal_cursor_size() for the limitations that might apply.
  *
- * Cursors by themselves are not very interesting, they must be be
- * bound to a window for users to see them. This is done with
- * gdk_window_set_cursor() or by setting the cursor member of the
- * #GdkWindowAttr passed to gdk_window_new().
+ * To ease work with unsupported cursors, a fallback cursor can be provided.
+ * If a #GdkWindow cannot use a cursor because of the reasons mentioned above,
+ * it will try the fallback cursor. Of course, fallback cursors can themselves
+ * have fallback cursors again, so it is possible to provide a chain of
+ * progressively easier to support cursors. If none of the provided cursors
+ * can be supported, the default cursor will be the ultimate fallback.
  */
 
 /**
  * GdkCursor:
  *
  * A #GdkCursor represents a cursor. Its contents are private.
+ *
+ * Cursors are immutable objects, so they can not change after
+ * they have been constructed.
  */
 
 enum {
   PROP_0,
   PROP_DISPLAY,
+  PROP_FALLBACK,
   PROP_HOTSPOT_X,
   PROP_HOTSPOT_Y,
   PROP_NAME,
@@ -86,6 +107,9 @@ gdk_cursor_get_property (GObject    *object,
     {
     case PROP_DISPLAY:
       g_value_set_object (value, cursor->display);
+      break;
+    case PROP_FALLBACK:
+      g_value_set_object (value, cursor->fallback);
       break;
     case PROP_HOTSPOT_X:
       g_value_set_int (value, cursor->hotspot_x);
@@ -120,6 +144,9 @@ gdk_cursor_set_property (GObject      *object,
       /* check that implementations actually provide the display when constructing */
       g_assert (cursor->display != NULL);
       break;
+    case PROP_FALLBACK:
+      cursor->fallback = g_value_dup_object (value);
+      break;
     case PROP_HOTSPOT_X:
       cursor->hotspot_x = g_value_get_int (value);
       break;
@@ -145,6 +172,7 @@ gdk_cursor_finalize (GObject *object)
 
   g_free (cursor->name);
   g_clear_object (&cursor->texture);
+  g_clear_object (&cursor->fallback);
 
   G_OBJECT_CLASS (gdk_cursor_parent_class)->finalize (object);
 }
@@ -164,6 +192,13 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                         P_("Display"),
                                                         P_("Display of this cursor"),
                                                         GDK_TYPE_DISPLAY,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_FALLBACK,
+				   g_param_spec_object ("fallback",
+                                                        P_("Fallback"),
+                                                        P_("Cursor image to fall back to if this cursor cannot be displayed"),
+                                                        GDK_TYPE_CURSOR,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
 				   PROP_HOTSPOT_X,
@@ -398,6 +433,31 @@ gdk_cursor_get_display (GdkCursor *cursor)
 }
 
 /**
+ * gdk_cursor_get_fallback:
+ * @cursor: a #GdkCursor.
+ *
+ * Returns the fallback for this @cursor. The fallback will be used if this
+ * cursor is not available on a given #GdkDisplay.
+ *
+ * For named cursors, this can happen when using nonstandard names or when
+ * using an incomplete cursor theme.
+ * For textured cursors, this can happen when the texture is too large or
+ * when the #GdkDisplay it is used on does not support textured cursors.
+ *
+ * Returns: (transfer none): the fallback of the cursor or %NULL to use
+ *     the default cursor as fallback.
+ *
+ * Since: 3.94
+ */
+GdkCursor *
+gdk_cursor_get_fallback (GdkCursor *cursor)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
+
+  return cursor->fallback;
+}
+
+/**
  * gdk_cursor_get_name:
  * @cursor: a #GdkCursor.
  *
@@ -415,26 +475,6 @@ gdk_cursor_get_name (GdkCursor *cursor)
   g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
 
   return cursor->name;
-}
-
-/**
- * gdk_cursor_get_texture:
- * @cursor: a #GdkCursor.
- *
- * Returns the texture shown by the cursor. If the cursor is a named cursor,
- * %NULL will be returned and the GdkCursor::name property will be set.
- *
- * Returns: (transfer none): the texture of the cursor or %NULL if it is
- *     a named cursor
- *
- * Since: 3.94
- */
-GdkTexture *
-gdk_cursor_get_texture (GdkCursor *cursor)
-{
-  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
-
-  return cursor->texture;
 }
 
 /**
