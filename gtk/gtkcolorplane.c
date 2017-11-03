@@ -56,8 +56,8 @@ sv_to_xy (GtkColorPlane *plane,
   gdouble s, v;
   gint width, height;
 
-  width = gtk_widget_get_allocated_width (GTK_WIDGET (plane));
-  height = gtk_widget_get_allocated_height (GTK_WIDGET (plane));
+  width = gtk_widget_get_width (GTK_WIDGET (plane));
+  height = gtk_widget_get_height (GTK_WIDGET (plane));
 
   s = gtk_adjustment_get_value (plane->priv->s_adj);
   v = gtk_adjustment_get_value (plane->priv->v_adj);
@@ -76,8 +76,8 @@ plane_snapshot (GtkWidget   *widget,
   cairo_t *cr;
 
   sv_to_xy (plane, &x, &y);
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (0, 0, width, height),
@@ -130,8 +130,8 @@ create_surface (GtkColorPlane *plane)
   if (!gtk_widget_get_realized (widget))
     return;
 
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
+  width = gtk_widget_get_width (widget);
+  height = gtk_widget_get_height (widget);
 
   surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
                                                CAIRO_CONTENT_COLOR,
@@ -252,8 +252,8 @@ update_color (GtkColorPlane *plane,
   GtkWidget *widget = GTK_WIDGET (plane);
   gdouble s, v;
 
-  s = CLAMP (1 - y * (1.0 / gtk_widget_get_allocated_height (widget)), 0, 1);
-  v = CLAMP (x * (1.0 / gtk_widget_get_allocated_width (widget)), 0, 1);
+  s = CLAMP (1 - y * (1.0 / gtk_widget_get_height (widget)), 0, 1);
+  v = CLAMP (x * (1.0 / gtk_widget_get_width (widget)), 0, 1);
   gtk_adjustment_set_value (plane->priv->s_adj, s);
   gtk_adjustment_set_value (plane->priv->v_adj, v);
 
