@@ -6191,8 +6191,8 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
           else
             gtk_widget_hide (page->tab_label);
         }
-      gtk_widget_set_visible (priv->header_widget,
-                              gtk_notebook_has_current_page (notebook));
+
+      gtk_widget_hide (priv->header_widget);
     }
   else
     {
