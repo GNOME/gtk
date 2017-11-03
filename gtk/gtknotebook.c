@@ -6208,7 +6208,6 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
     }
 
   gtk_notebook_update_tab_pos (notebook);
-  gtk_widget_reset_style (GTK_WIDGET (notebook));
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
   g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_SHOW_TABS]);
