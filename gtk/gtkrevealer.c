@@ -645,8 +645,8 @@ gtk_revealer_snapshot (GtkWidget   *widget,
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT(
                                   0, 0,
-                                  gtk_widget_get_allocated_width (widget),
-                                  gtk_widget_get_allocated_height (widget)
+                                  gtk_widget_get_width (widget),
+                                  gtk_widget_get_height (widget)
                               ),
                               "RevealerClip");
       gtk_widget_snapshot_child (widget, child, snapshot);
