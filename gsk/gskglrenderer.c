@@ -58,8 +58,6 @@ enum {
 
 typedef struct {
   int mode;
-  /* Back pointer to the node, only meant for comparison */
-  GskRenderNode *node;
 
   graphene_point3d_t min;
   graphene_point3d_t max;
@@ -75,9 +73,6 @@ typedef struct {
     struct {
       GdkRGBA color;
     } color_data;
-    struct {
-      int a,b;
-    } texture_data;
   };
 
   const char *name;
@@ -124,8 +119,6 @@ typedef enum {
   RENDER_SCISSOR
 } RenderMode;
 
-#define NUM_PROGRAMS 3
-
 struct _GskGLRenderer
 {
   GskRenderer parent_instance;
@@ -145,16 +138,9 @@ struct _GskGLRenderer
   GskGLProfiler *gl_profiler;
   GskShaderBuilder *shader_builder;
 
-  union {
-    struct {
-      Program blend_program;
-      Program blit_program;
-      Program color_program;
-    };
-    struct {
-      Program programs[NUM_PROGRAMS];
-    };
-  };
+  Program blend_program;
+  Program blit_program;
+  Program color_program;
 
   GArray *render_items;
 
@@ -654,20 +640,6 @@ get_gl_scaling_filters (GskRenderNode *node,
   *mag_filter_r = GL_NEAREST;
 }
 
-#if 0
-static gboolean
-check_in_frustum (const graphene_frustum_t *frustum,
-                  RenderItem               *item)
-{
-  graphene_box_t aabb;
-
-  graphene_box_init (&aabb, &item->min, &item->max);
-  graphene_matrix_transform_box (&item->mvp, &aabb, &aabb);
-
-  return graphene_frustum_intersects_box (frustum, &aabb);
-}
-#endif
-
 static float
 project_item (const graphene_matrix_t *projection,
               const graphene_matrix_t *modelview)
@@ -701,12 +673,6 @@ gsk_gl_renderer_add_render_item (GskGLRenderer           *self,
 
   memset (&item, 0, sizeof (RenderItem));
 
-  if (gsk_renderer_get_window (GSK_RENDERER (self)))
-    scale_factor = gdk_window_get_scale_factor (gsk_renderer_get_window (GSK_RENDERER (self)));
-  else
-    scale_factor = 1;
-
-  item.node = node;
   item.name = node->name != NULL ? node->name : "unnamed";
 
   /* The texture size */
